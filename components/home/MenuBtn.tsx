@@ -6,7 +6,7 @@ function BarItem({ className }: { className: string }) {
   return (
     <span
       className={cn(
-        'absolute block h-[2px] w-[18px] transform bg-current bg-white transition duration-300 ease-in-out',
+        'absolute block h-[2px] w-[18px] transform bg-blue-700 bg-current transition duration-300 ease-in-out',
         className,
       )}
     />

@@ -6,8 +6,8 @@ export default function Icon({
   src,
   className,
   title = '',
-  width = 16,
-  height = 16,
+  width = 24,
+  height = 24,
 }: {
   src: string;
   title?: string;
@@ -18,7 +18,7 @@ export default function Icon({
   return (
     <BaseImage
       src={src}
-      className={cn('h-4 w-4', className)}
+      className={cn('h-6 w-6', className)}
       width={width}
       height={height}
       alt={title || 'icon'}

@@ -14,7 +14,7 @@ const config = {
     },
     extend: {
       colors: {
-        'tap4-black': '#0F0E14',
+        'tap4-black': '#F6F6F9',
         'dark-bg': '#1E1B24',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

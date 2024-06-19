@@ -26,17 +26,25 @@ export default function Navigation() {
 
   return (
     <>
-      <header className='bg-frosted-glass sticky left-0 top-0 z-50 flex h-[64px] bg-[#252A464A] px-5 blur-[60%] filter lg:px-0'>
+      <header className='bg-frosted-glass sticky left-0 top-0 z-50 flex h-[64px] bg-[#dbe8fe] px-5 blur-[60%] filter lg:px-0'>
         <nav className='mx-auto flex max-w-pc flex-1 items-center'>
           <div>
-            <Link className='hover:opacity-80' href='/' title={t('title')}>
+            <Link className='flex justify-self-center hover:opacity-80' href='/' title={t('title')}>
               <BaseImage
-                src='/images/tap4-ai.svg'
+                src='/images/aitools.svg'
                 alt={t('title')}
                 title={t('title')}
                 width={64}
-                height={64}
+                height={16}
                 className='size-[58px] lg:size-16'
+              />
+              <BaseImage
+                src='/images/Aileron.svg'
+                alt={t('title')}
+                title={t('title')}
+                width={64}
+                height={16}
+                className='my-auto h-8 w-28 lg:h-8 lg:w-32'
               />
             </Link>
           </div>
@@ -47,9 +55,9 @@ export default function Navigation() {
                 <Link key={item.code} href={item.href} title={item.code}>
                   <li
                     className={cn(
-                      'flex h-full items-center text-white/40 hover:text-white',
+                      'flex h-full items-center text-blue-700 hover:text-blue-900',
                       pathname === item.href && 'text-white',
-                      pathname.includes(item.href) && item.href !== '/' && 'text-white',
+                      pathname.includes(item.href) && item.href !== '/' && 'text-blue-400',
                     )}
                   >
                     {item.label}
