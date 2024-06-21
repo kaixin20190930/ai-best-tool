@@ -5,7 +5,7 @@ export default function Page() {
   const t = useTranslations('FooterNavigation.termsConditions');
 
   return (
-    <div className='prose mx-auto p-6 text-gray-200 prose-headings:text-gray-200'>
+    <div className='prose mx-auto p-6 text-blue-500 prose-headings:text-blue-700'>
       <h1>{t('1-h1')}</h1>
       <p>{t('1-p')}</p>
 
