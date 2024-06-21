@@ -18,7 +18,7 @@ export const PAGE_SIZE = 20;
 export const FORM_PLACEHOLDER = 'https://aibesttool.com/';
 
 export const WEBSITE_EXAMPLE =
-  '<a href="https://tap4.ai/" title="Tap4 AI Tools Directory">Tap4 AI Tools Diresctory</a>';
+  '<a href="https://aibesttool.com/" title="AI Best Tools Directory">AI Best Tools Directory</a>';
 
 export const STARTUP_LIST = [
   {
