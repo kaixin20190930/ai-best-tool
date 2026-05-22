@@ -4,35 +4,46 @@
 
 @layer base {
     :root {
-        --background: 0 0% 100%;
-        --foreground: 222.2 84% 4.9%;
+        /* Core semantic tokens */
+        --background: 194 33% 98%;
+        --foreground: 208 27% 16%;
 
         --card: 0 0% 100%;
-        --card-foreground: 222.2 84% 4.9%;
+        --card-foreground: 208 27% 16%;
 
         --popover: 0 0% 100%;
-        --popover-foreground: 222.2 84% 4.9%;
+        --popover-foreground: 208 27% 16%;
 
-        --primary: 222.2 47.4% 11.2%;
-        --primary-foreground: 210 40% 98%;
+        --primary: 199 89% 37%;
+        --primary-foreground: 192 100% 99%;
 
-        --secondary: 210 40% 96.1%;
-        --secondary-foreground: 222.2 47.4% 11.2%;
+        --secondary: 191 44% 93%;
+        --secondary-foreground: 205 31% 20%;
 
-        --muted: 210 40% 96.1%;
-        --muted-foreground: 215.4 16.3% 46.9%;
+        --muted: 194 31% 95%;
+        --muted-foreground: 207 14% 43%;
 
-        --accent: 210 40% 96.1%;
-        --accent-foreground: 222.2 47.4% 11.2%;
+        --accent: 160 53% 91%;
+        --accent-foreground: 165 36% 20%;
 
-        --destructive: 0 84.2% 60.2%;
-        --destructive-foreground: 210 40% 98%;
+        --destructive: 0 73% 54%;
+        --destructive-foreground: 0 0% 100%;
 
-        --border: 214.3 31.8% 91.4%;
-        --input: 214.3 31.8% 91.4%;
-        --ring: 222.2 84% 4.9%;
+        --border: 197 24% 86%;
+        --input: 197 24% 86%;
+        --ring: 199 89% 37%;
 
-        --radius: 0.5rem;
+        --radius: 0.625rem;
+
+        /* Brand palette */
+        --brand-50: 192 70% 96%;
+        --brand-100: 193 68% 91%;
+        --brand-200: 194 59% 83%;
+        --brand-500: 199 89% 37%;
+        --brand-600: 202 91% 32%;
+        --brand-700: 204 89% 26%;
+        --mint-500: 160 84% 32%;
+        --slate-900: 210 33% 14%;
     }
 
     .dark {
@@ -71,8 +82,32 @@
         @apply border-border;
     }
 
+    html {
+        @apply antialiased;
+    }
+
     body {
         @apply bg-background text-foreground;
+        font-family:
+            'Plus Jakarta Sans',
+            'Manrope',
+            'Inter',
+            -apple-system,
+            BlinkMacSystemFont,
+            'Segoe UI',
+            sans-serif;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family:
+            'Manrope',
+            'Plus Jakarta Sans',
+            'Inter',
+            -apple-system,
+            BlinkMacSystemFont,
+            'Segoe UI',
+            sans-serif;
+        letter-spacing: 0;
     }
 }
 
@@ -88,6 +123,36 @@
     .bg-frosted-glass {
         @apply backdrop-blur-lg backdrop-filter;
     }
+
+    .theme-page {
+        background: linear-gradient(
+            180deg,
+            hsl(197 100% 98%) 0%,
+            hsl(205 56% 96%) 45%,
+            hsl(210 40% 98%) 100%
+        );
+    }
+
+    .theme-surface {
+        @apply bg-white ring-1 ring-slate-200 shadow-sm;
+    }
+
+    .theme-text-strong {
+        color: hsl(var(--slate-900));
+    }
+
+    .theme-text-muted {
+        color: hsl(var(--muted-foreground));
+    }
+
+    .theme-brand {
+        color: hsl(var(--brand-600));
+    }
+
+    .theme-brand-bg {
+        background-color: hsl(var(--brand-500));
+        color: hsl(var(--primary-foreground));
+    }
 }
 
 .tr-rounded {
@@ -96,4 +161,107 @@
 
 .filter-blue {
     filter: invert(41%) sepia(65%) saturate(1219%) hue-rotate(195deg) brightness(97%) contrast(99%)
+}
+
+/* Mobile Optimizations */
+@layer utilities {
+    /* Smooth scrolling for mobile */
+    @media (max-width: 1024px) {
+        html {
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+        }
+    }
+
+    /* Prevent text size adjustment on orientation change */
+    html {
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+    }
+
+    /* Improve tap highlight */
+    * {
+        -webkit-tap-highlight-color: rgba(59, 130, 246, 0.1);
+    }
+
+    /* Remove tap highlight for specific elements */
+    button, a {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Optimize font rendering on mobile */
+    body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+    }
+
+    /* Prevent zoom on input focus (iOS) */
+    @media (max-width: 768px) {
+        input[type="text"],
+        input[type="email"],
+        input[type="search"],
+        input[type="tel"],
+        input[type="url"],
+        input[type="password"],
+        textarea,
+        select {
+            font-size: 16px !important;
+        }
+    }
+
+    /* Improve scroll performance */
+    .scroll-container {
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: contain;
+    }
+
+    /* GPU acceleration for animations */
+    .gpu-accelerated {
+        transform: translateZ(0);
+        will-change: transform;
+    }
+
+    /* Safe area insets for notched devices */
+    @supports (padding: max(0px)) {
+        .safe-top {
+            padding-top: max(1rem, env(safe-area-inset-top));
+        }
+        
+        .safe-bottom {
+            padding-bottom: max(1rem, env(safe-area-inset-bottom));
+        }
+        
+        .safe-left {
+            padding-left: max(1rem, env(safe-area-inset-left));
+        }
+        
+        .safe-right {
+            padding-right: max(1rem, env(safe-area-inset-right));
+        }
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    * {
+        border-width: 2px;
+    }
+    
+    button,
+    a {
+        text-decoration: underline;
+    }
 }

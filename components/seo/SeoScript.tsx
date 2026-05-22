@@ -3,6 +3,10 @@ import Script from 'next/script';
 import { GOOGLE_TRACKING_ID } from '@/lib/env';
 
 export default function SeoScript() {
+  if (!GOOGLE_TRACKING_ID) {
+    return null;
+  }
+
   return (
     <>
       <Script strategy='afterInteractive' src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_TRACKING_ID}`} />
@@ -13,10 +17,26 @@ export default function SeoScript() {
           __html: `
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
+            
+            // Set default consent to denied
+            gtag('consent', 'default', {
+              'analytics_storage': 'denied'
+            });
+            
             gtag('js', new Date());
             gtag('config', '${GOOGLE_TRACKING_ID}', {
-            page_path: window.location.pathname,
+              page_path: window.location.pathname,
             });
+            
+            // Check if user has already consented
+            if (typeof window !== 'undefined') {
+              const consent = localStorage.getItem('cookie-consent');
+              if (consent === 'accepted') {
+                gtag('consent', 'update', {
+                  'analytics_storage': 'granted'
+                });
+              }
+            }
           `,
         }}
       />

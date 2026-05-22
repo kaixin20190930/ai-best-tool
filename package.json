@@ -9,7 +9,22 @@
     "lint": "next lint --cache",
     "lint:fix": "eslint --fix .",
     "prettier": "prettier --write .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "setup-db": "tsx scripts/setup-database.ts",
+    "migrate": "tsx scripts/migrate-data.ts",
+    "verify-migration": "tsx scripts/verify-migration.ts",
+    "apply-schema:neon": "tsx scripts/apply-schema-neon.ts",
+    "migrate:neon": "tsx scripts/migrate-data-neon.ts",
+    "verify:neon": "tsx scripts/verify-migration-neon.ts",
+    "perf:audit": "tsx scripts/performance-audit.ts",
+    "perf:vitals": "tsx scripts/verify-core-web-vitals.ts",
+    "seo:health-check": "tsx scripts/seo-health-check.ts",
+    "seo:audit": "tsx scripts/seo-audit.ts",
+    "seo:audit:quick": "tsx scripts/seo-audit-quick.ts",
+    "seo:performance": "tsx scripts/performance-audit.ts",
+    "seo:validate": "tsx scripts/validate-seo-complete.ts",
+    "test:regression": "tsx scripts/regression-test.ts",
+    "theme:audit": "bash scripts/theme-audit.sh"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -31,6 +46,8 @@
     "@radix-ui/react-slot": "1.0.2",
     "@supabase/ssr": "0.3.0",
     "@supabase/supabase-js": "2.43.2",
+    "@vercel/analytics": "1.6.1",
+    "@vercel/speed-insights": "1.3.1",
     "class-variance-authority": "0.7.0",
     "clsx": "2.1.0",
     "dayjs": "1.11.10",
@@ -52,12 +69,15 @@
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "4.2.1",
     "@tailwindcss/typography": "0.5.12",
+    "@types/jsdom": "27.0.0",
     "@types/node": "^20",
+    "@types/pg": "8.15.6",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@typescript-eslint/eslint-plugin": "^7.5.0",
     "@typescript-eslint/parser": "^7.5.0",
     "autoprefixer": "^10.0.1",
+    "dotenv": "17.2.3",
     "eslint": "^8",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-airbnb-typescript": "18.0.0",
@@ -65,10 +85,13 @@
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-prettier": "5.1.3",
     "husky": "9.0.11",
+    "jsdom": "24.1.3",
+    "pg": "8.16.3",
     "postcss": "^8",
     "prettier": "3.2.5",
     "prettier-plugin-tailwindcss": "0.5.13",
     "tailwindcss": "^3.3.0",
+    "tsx": "4.21.0",
     "typescript": "^5"
   }
 }

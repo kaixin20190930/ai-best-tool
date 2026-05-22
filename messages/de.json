@@ -21,7 +21,6 @@
     "contactUs": "Kontaktieren Sie uns"
   },
   "Faq": {
-    "title": "Häufig gestellte Fragen",
     "1": {
       "question": "Was ist das AI Best Tool Tools Verzeichnis?",
       "answer": "Das AI Best Tool Tools Verzeichnis - AIBestTool.com erstellt ein Verzeichnis von KI-Tools, das Ihnen hilft, Ihre Lieblings-KI-Tools zu finden. Sie können hier KI-Schreibtools, KI-Marketingtools, KI-Paraphrasierungstools, KI-SEO-Tools, KI-Lern-Tools, KI-Generator-Tools, KI-Forschungstools, KI-Kunsttools, KI-Musiktools, KI-Videotools, KI-Coding-Tools, KI-Fototools und mehr finden."
@@ -68,7 +67,8 @@
     "11": {
       "question": "Ist das WebUI des AI Best Tool Verzeichnisses Open Source?",
       "answer": "Ja, wir werden das WebUI des AI Best Tool Verzeichnisses auf GitHub (https://github.com/6677-ai/tap4-ai-webui) open source. Bitte geben Sie uns einen Stern."
-    }
+    },
+    "title": "Häufig gestellte Fragen"
   },
   "FooterNavigation": {
     "privacyPolicy": {
@@ -156,22 +156,41 @@
   },
   "Metadata": {
     "home": {
-      "title": "Holen Sie sich Ihre besten KI-Tools | AI Best Tool Verzeichnis",
-      "description": "Das AI Best Tool Verzeichnis ist ein Werkzeug, das ein kostenloses Verzeichnis von KI-Tools bietet. Holen Sie sich Ihre Lieblings-KI-Tools mit dem AI Best Tool Verzeichnis, das darauf abzielt, alle KI-Tools zu sammeln und das Beste für die Benutzer bereitzustellen.",
-      "keywords": "AI Best Tool Verzeichnis"
+      "title": "AI Best Tool - Entdecken Sie die besten KI-Tools 2024",
+      "description": "Entdecken Sie die besten KI-Tools von 2024. Durchsuchen Sie unser kuratiertes Verzeichnis von KI-Software und Anwendungen. Finden Sie heute das perfekte KI-Tool.",
+      "keywords": "AI Best Tool, KI-Tools, beste KI-Tools 2024, KI-Software, KI-Anwendungen"
     },
     "ai": {
       "titleSubfix": "AI Best Tool Verzeichnis"
     },
     "explore": {
-      "title": "Entdecken Sie die besten KI-Tools 2024 | AI Best Tool Verzeichnis",
-      "titlePrefix": "Erkunden Sie das AI Best Tool Verzeichnis",
-      "titleSuffix": "AI Best Tool Verzeichnis",
-      "description": "Das AI Best Tool Verzeichnis ist ein Werkzeug, das ein kostenloses Verzeichnis von KI-Tools bietet. Holen Sie sich Ihre Lieblings-KI-Tools mit dem AI Best Tool Verzeichnis, das darauf abzielt, alle KI-Tools zu sammeln und das Beste für die Benutzer bereitzustellen.",
-      "keywords": "AI Best Tool Verzeichnis"
+      "title": "Erkunden Sie die besten KI-Tools 2024 | AI Best Tool",
+      "description": "Durchsuchen und entdecken Sie die besten KI-Tools von 2024. Filtern Sie nach Kategorie, Preisgestaltung und Funktionen. Finden Sie KI-Tools für Schreiben, Marketing, Codierung, Design und mehr.",
+      "keywords": "KI-Tools erkunden, KI-Tool-Verzeichnis, beste KI-Tools 2024, KI-Software-Katalog, KI-Anwendungen"
+    },
+    "startup": {
+      "title": "Starten Sie Ihr Startup | Kostenlose Einreichungsseiten",
+      "description": "Entdecken Sie die ultimative Liste von Websites, um Ihr Startup online zu starten und zu bewerben. Kostenlose und kostenpflichtige Einreichungsseiten zur Steigerung der Produktsichtbarkeit und SEO.",
+      "keywords": "Startup-Start, Produktstart-Seiten, Startup-Werbung, kostenlose Einreichungsseiten, Startup-Marketing"
     },
     "submit": {
       "title": "Reichen Sie Ihr KI-Tool ein und erhalten Sie Traffic | AI Best Tool Verzeichnis"
+    }
+  },
+  "admin": {
+    "title": "Verwaltungspanel",
+    "backToSite": "Zurück zur Website",
+    "nav": {
+      "dashboard": "Dashboard",
+      "collection": "Sammlung",
+      "tools": "Werkzeuge",
+      "users": "Benutzer",
+      "analytics": "Analytik",
+      "emailTest": "Email Test",
+      "settings": "Einstellungen"
+    },
+    "dashboard": {
+      "title": "Verwaltungs-Dashboard"
     }
   }
 }

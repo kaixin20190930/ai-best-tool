@@ -1,0 +1,13 @@
+{
+  "name": "AI 代码审查",
+  "description": "让 AI 审查代码变更，检查是否可能影响现有功能",
+  "enabled": true,
+  "trigger": {
+    "type": "manual",
+    "description": "请求 AI 审查当前的代码变更"
+  },
+  "action": {
+    "type": "message",
+    "message": "请审查当前的代码变更（git diff），重点检查：\n1. 是否可能破坏现有的 SEO 功能（元数据、结构化数据、hreflang）\n2. 是否影响认证和用户功能\n3. 是否影响数据库查询和性能\n4. 是否遵循项目的代码规范和架构模式\n5. 是否需要更新相关的测试脚本\n\n如果发现潜在问题，请给出具体的修复建议。"
+  }
+}

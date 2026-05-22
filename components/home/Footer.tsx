@@ -19,7 +19,7 @@ function InfoLink({
     <Link
       href={href}
       title={title}
-      className='whitespace-nowrap text-xs text-blue-800 hover:opacity-70 lg:text-sm'
+      className='whitespace-nowrap text-xs text-slate-700 transition hover:text-slate-900 lg:text-sm'
       target={target}
       type={type}
     >
@@ -50,22 +50,22 @@ export default function Footer() {
   ];
 
   return (
-    <footer className='w-full bg-[#93bbfd]'>
+    <footer className='w-full border-t border-slate-200 bg-slate-100'>
       <div className='mx-auto flex min-h-[251px] max-w-pc flex-col items-center justify-between p-10 pb-5 lg:h-[180px] lg:flex-row lg:px-0 lg:pb-10'>
         <div className='flex flex-col items-center lg:items-stretch'>
-          <h1 className='text-xl font-bold text-blue-800 lg:h-8 lg:text-[32px]'>{t('title')}</h1>
-          <h2 className='text-xs text-blue-600'>{t('subTitle')}</h2>
+          <h1 className='text-xl font-bold text-slate-900 lg:h-8 lg:text-[32px]'>{t('title')}</h1>
+          <h2 className='text-xs text-slate-500'>{t('subTitle')}</h2>
         </div>
         <div className='mt-5 flex flex-col items-center gap-y-5 lg:mt-0 lg:flex-row lg:items-stretch lg:gap-x-10'>
           <div className='flex w-full flex-col gap-2'>
-            <h2 className='font-bold text-blue-800'>{t('support')}</h2>
+            <h2 className='font-bold text-slate-900'>{t('support')}</h2>
             {SupportLinks.map((item) => (
               <a
                 href={item.href}
                 key={item.href}
                 target='_blank'
                 rel='noreferrer'
-                className='text-xs text-blue-800 hover:opacity-70 lg:text-base'
+                className='text-xs text-slate-700 transition hover:text-slate-900 lg:text-base'
                 title={item.title}
               >
                 {item.title}
@@ -78,7 +78,7 @@ export default function Footer() {
             ))}
             <a
               href={`mailto:${CONTACT_US_EMAIL}`}
-              className='whitespace-nowrap text-xs text-blue-800 hover:opacity-70 lg:text-base'
+              className='whitespace-nowrap text-xs text-slate-700 transition hover:text-slate-900 lg:text-base'
               title={t('contactUs')}
               type='email'
             >

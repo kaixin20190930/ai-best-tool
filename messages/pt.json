@@ -21,7 +21,6 @@
     "contactUs": "Contate-nos"
   },
   "Faq": {
-    "title": "Perguntas Frequentes",
     "1": {
       "question": "O que é o Diretório de Ferramentas de IA do AiBestTool?",
       "answer": "O Diretório de Ferramentas de IA do AIBestTool - AIBestTool.com está construindo um diretório de ferramentas de IA que ajuda você a obter suas ferramentas de IA favoritas. Você pode obter ferramentas de escrita de IA, ferramentas de marketing de IA, ferramentas de parafraseamento de IA, ferramentas de SEO de IA, ferramentas de estudo de IA, ferramentas de geração de IA, ferramentas de pesquisa de IA, ferramentas de arte de IA, ferramentas de música de IA, ferramentas de vídeo de IA, ferramentas de codificação de IA, ferramentas de foto de IA e muito mais aqui."
@@ -68,7 +67,8 @@
     "11": {
       "question": "O webui do Diretório de IA do AIBestTool é de código aberto?",
       "answer": "Sim, vamos abrir o código-fonte do webui do Diretório de IA do AIBestTool no github (https://github.com/6677-ai/tap4-ai-webui). Por favor, nos dê uma estrela."
-    }
+    },
+    "title": "Perguntas Frequentes"
   },
   "FooterNavigation": {
     "privacyPolicy": {
@@ -164,14 +164,33 @@
       "titleSubfix": "Diretório de IA do AIBestTool"
     },
     "explore": {
-      "title": "Melhores Ferramentas de IA Explore 2024 | Diretório de IA do AIBestTool",
-      "titlePrefix": "Explorar Diretório de IA do AIBestTool",
-      "titleSuffix": "Diretório de IA do AIBestTool",
-      "description": "O Diretório de IA do AIBestTool é uma ferramenta que fornece um Diretório de Ferramentas de IA gratuito. Obtenha suas ferramentas de IA favoritas com o Diretório de IA do AIBestTool, o Diretório de IA do AIBestTool visa reunir todas as ferramentas de IA e fornecer o melhor para os usuários.",
-      "keywords": "Diretório de IA do AIBestTool"
+      "title": "Explore as Melhores Ferramentas de IA 2024 | AI Best Tool",
+      "description": "Navegue e descubra as melhores ferramentas de IA de 2024. Filtre por categoria, preço e recursos. Encontre ferramentas de IA para escrita, marketing, codificação, design e muito mais.",
+      "keywords": "explorar ferramentas de IA, diretório de ferramentas de IA, melhores ferramentas de IA 2024, catálogo de software de IA, aplicações de IA"
+    },
+    "startup": {
+      "title": "Lance Sua Startup | Sites de Envio Gratuitos",
+      "description": "Descubra a lista definitiva de sites para lançar e promover sua startup online. Sites de envio gratuitos e pagos para aumentar a visibilidade do produto e SEO.",
+      "keywords": "lançamento de startup, sites de lançamento de produtos, promoção de startup, sites de envio gratuitos, marketing de startup"
     },
     "submit": {
       "title": "Envie sua ferramenta de IA e obtenha Tráfego | Diretório de IA do AIBestTool"
+    }
+  },
+  "admin": {
+    "title": "Painel de Administração",
+    "backToSite": "Voltar ao Site",
+    "nav": {
+      "dashboard": "Painel de Controle",
+      "collection": "Coleta",
+      "tools": "Ferramentas",
+      "users": "Usuários",
+      "analytics": "Análises",
+      "emailTest": "Teste de Email",
+      "settings": "Configurações"
+    },
+    "dashboard": {
+      "title": "Painel de Controle de Administração"
     }
   }
 }

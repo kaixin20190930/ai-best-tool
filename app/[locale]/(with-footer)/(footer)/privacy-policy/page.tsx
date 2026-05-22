@@ -4,7 +4,8 @@ export default function Page() {
   const t = useTranslations('FooterNavigation.privacyPolicy');
 
   return (
-    <div className='prose mx-auto p-6 text-blue-500 prose-headings:text-blue-700'>
+    <div className='theme-page px-4 py-8 lg:px-6 lg:py-10'>
+      <div className='prose theme-surface mx-auto max-w-4xl rounded-lg p-6 text-slate-700 prose-headings:text-slate-950 prose-a:text-cyan-700 lg:p-8'>
       <h1>{t('1-h1')}</h1>
       <p>{t('1-p')}</p>
 
@@ -35,6 +36,7 @@ export default function Page() {
 
       <h2>{t('8-h2')}</h2>
       <p>{t('8-p')}</p>
+      </div>
     </div>
   );
 }

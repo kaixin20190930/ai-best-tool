@@ -1,34 +1,120 @@
 import Link from 'next/link';
-import { Heart } from 'lucide-react';
+import { Flame, Sparkles } from 'lucide-react';
 
 import { WebNavigationListRow } from '@/lib/data';
 
 import BaseImage from '../image/BaseImage';
+import FavoriteButton from '../FavoriteButton';
+import RatingStars from '../RatingStars';
 
-export default function WebNavCard({ name, thumbnailUrl, title, url, content }: WebNavigationListRow) {
+interface WebNavCardProps extends Omit<WebNavigationListRow, 'id'> {
+  id?: string;
+  isFavorited?: boolean;
+  toolId?: string;
+  averageRating?: number;
+  ratingCount?: number;
+  contextLabel?: 'latest' | 'popular';
+}
+
+function getFreshnessLabel(createdAt?: string, updatedAt?: string): string | null {
+  const referenceDate = updatedAt || createdAt;
+
+  if (!referenceDate) {
+    return null;
+  }
+
+  const timestamp = new Date(referenceDate).getTime();
+
+  if (Number.isNaN(timestamp)) {
+    return null;
+  }
+
+  const days = Math.max(
+    0,
+    Math.floor((Date.now() - timestamp) / (1000 * 60 * 60 * 24))
+  );
+
+  if (createdAt && days <= 14) {
+    return 'Recently added';
+  }
+
+  if (days === 0) {
+    return 'Updated today';
+  }
+
+  return `Updated ${days} days ago`;
+}
+
+export default function WebNavCard({ 
+  name, 
+  thumbnailUrl, 
+  title, 
+  url, 
+  content,
+  isFavorited = false,
+  toolId,
+  averageRating = 0,
+  ratingCount = 0,
+  createdAt,
+  updatedAt,
+  contextLabel,
+}: WebNavCardProps) {
+  const freshnessLabel = getFreshnessLabel(createdAt, updatedAt);
+
   return (
-    <div className='flex flex-col gap-5 rounded-[12px] border-2 border-blue-900 bg-[#60a5fa] p-3 shadow-md shadow-blue-800 hover:opacity-70 lg:p-5'>
+    <div className='flex h-full flex-col gap-4 rounded-lg bg-white p-3 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-md lg:p-4'>
       <Link href={`/ai/${name}`} title={title}>
         <BaseImage
           width={350}
           height={220}
           src={thumbnailUrl || ''}
-          alt={title}
+          alt={`${title} - AI tool screenshot and preview`}
           title={title}
-          className='aspect-[350/220] w-full justify-self-center rounded-[8px] bg-white/40 hover:opacity-70'
+          className='aspect-[350/220] w-full justify-self-center rounded-md bg-slate-100 object-cover'
+          sizes='(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 350px'
+          loading='lazy'
         />
       </Link>
       <div className='flex items-center justify-between'>
-        <a href={url} title={title} target='_blank' rel='noreferrer' className='hover:opacity-70'>
-          <h3 className='line-clamp-1 flex-1 text-lg font-bold text-gray-950 lg:text-xl'>{title}</h3>
+        <a href={url} title={title} target='_blank' rel='noreferrer' className='hover:text-slate-700'>
+          <h3 className='line-clamp-1 flex-1 text-base font-bold text-slate-950 lg:text-lg'>{title}</h3>
         </a>
-        <a href={url} title={title} target='_blank' rel='noreferrer' className='hover:opacity-70'>
-          <Heart className='size-7' stroke='#374151' />
-          <span className='sr-only'>{title}</span>
-        </a>
+        {toolId && (
+          <FavoriteButton 
+            toolId={toolId} 
+            initialState={isFavorited}
+          />
+        )}
       </div>
-      <div className='flex items-center justify-between'>
-        <p className='line-clamp-5 text-sm text-gray-700 lg:text-base'>{content}</p>
+      <div className='flex flex-col gap-3'>
+        {contextLabel === 'popular' && (
+          <span className='inline-flex w-fit items-center gap-1 rounded-full bg-amber-50 px-2 py-1 text-xs font-semibold text-amber-700'>
+            <Flame className='size-3.5' />
+            Trending
+          </span>
+        )}
+        {contextLabel === 'latest' && (
+          <span className='inline-flex w-fit items-center gap-1 rounded-full bg-cyan-50 px-2 py-1 text-xs font-semibold text-cyan-700'>
+            <Sparkles className='size-3.5' />
+            New
+          </span>
+        )}
+        {freshnessLabel && (
+          <span className='w-fit rounded-full bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-700'>
+            {freshnessLabel}
+          </span>
+        )}
+        <p className='line-clamp-4 text-sm leading-6 text-slate-600'>{content}</p>
+        {toolId && (
+          <RatingStars
+            toolId={toolId}
+            averageRating={averageRating}
+            ratingCount={ratingCount}
+            readonly={true}
+            size="sm"
+            showStats={true}
+          />
+        )}
       </div>
     </div>
   );

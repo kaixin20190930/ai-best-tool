@@ -67,6 +67,10 @@ GOOGLE_ADSENSE_URL="https://xxxx.googlesyndication.com/xxxxx/xxxxx"
 # Footer contact email
 CONTACT_US_EMAIL="contact@AIBestTools.com"
 
+# Optional: transactional email (submission status updates)
+RESEND_API_KEY="re_xxx"
+MAIL_FROM="AI Best Tool <no-reply@yourdomain.com>"
+
 # your supabase database url and key
 NEXT_PUBLIC_SUPABASE_URL="https://xxxyyyzzz.supabase.co"
 NEXT_PUBLIC_SUPABASE_ANON_KEY="XXX.YYY.ZZZ"

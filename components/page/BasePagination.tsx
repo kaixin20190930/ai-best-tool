@@ -35,7 +35,7 @@ function LinkTag({
       href={href}
       title={title}
       className={cn(
-        'flex-center size-8 rounded-[4px] border border-transparent bg-transparent text-white/40 hover:cursor-pointer hover:bg-[#2C2D36]',
+        'flex-center size-8 rounded-[4px] border border-transparent bg-transparent text-slate-500 hover:cursor-pointer hover:bg-slate-100',
         className,
       )}
     >
@@ -62,7 +62,7 @@ function itemRender({
       <LinkTag
         href={route}
         title={page.toString()}
-        className={page === currentPage ? 'border-white bg-[#2C2D36] text-white' : ''}
+        className={page === currentPage ? 'border-cyan-200 bg-cyan-50 text-cyan-800' : ''}
       >
         {page}
       </LinkTag>
@@ -117,7 +117,7 @@ export default function BasePagination({
 
   return (
     <Pagination
-      className={cn('[&>li]:flex-center flex gap-3 text-xs text-white', className)}
+      className={cn('[&>li]:flex-center flex gap-3 text-xs text-slate-700', className)}
       pageSize={pageSize}
       defaultCurrent={currentPage}
       total={total}

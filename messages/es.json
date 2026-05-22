@@ -21,7 +21,6 @@
     "contactUs": "Contáctanos"
   },
   "Faq": {
-    "title": "Preguntas Frecuentes",
     "1": {
       "question": "¿Qué es el Directorio de Herramientas de IA de AiBestTool?",
       "answer": "El Directorio de Herramientas de IA de AIBestTool - AIBestTool.com crea un directorio de herramientas de IA que te ayuda a encontrar tus herramientas de IA favoritas. Aquí puedes encontrar herramientas de escritura de IA, herramientas de marketing de IA, herramientas de parafraseo de IA, herramientas de SEO de IA, herramientas de aprendizaje de IA, herramientas generadoras de IA, herramientas de investigación de IA, herramientas de arte de IA, herramientas de música de IA, herramientas de video de IA, herramientas de codificación de IA, herramientas de fotografía de IA y más."
@@ -68,7 +67,8 @@
     "11": {
       "question": "¿Es de código abierto la interfaz de usuario web del Directorio de Herramientas de IA de AiBestTool?",
       "answer": "Sí, pondremos la interfaz de usuario web del Directorio de Herramientas de IA de AIBestTool en GitHub (https://github.com/6677-ai/tap4-ai-webui) de código abierto. ¡Por favor, danos una estrella!"
-    }
+    },
+    "title": "Preguntas Frecuentes"
   },
   "FooterNavigation": {
     "privacyPolicy": {
@@ -156,22 +156,41 @@
   },
   "Metadata": {
     "home": {
-      "title": "Obtén tus mejores Herramientas de IA | Directorio de IA de AIBestTool",
-      "description": "El Directorio de IA de AIBestTool es una herramienta que proporciona un Directorio gratuito de Herramientas de IA. Obtén tus herramientas de IA favoritas con el Directorio de IA de AIBestTool, el cual tiene como objetivo recopilar todas las herramientas de IA y ofrecer lo mejor para los usuarios.",
-      "keywords": "Directorio de IA de AIBestTool"
+      "title": "AI Best Tool - Descubre las Mejores Herramientas de IA 2024",
+      "description": "Descubre las mejores herramientas de IA de 2024. Explora nuestro directorio curado de software y aplicaciones con IA. Encuentra la herramienta perfecta hoy.",
+      "keywords": "AI Best Tool, herramientas de IA, mejores herramientas de IA 2024, software de IA, aplicaciones de IA"
     },
     "ai": {
       "titleSubfix": "Directorio de IA de AIBestTool"
     },
     "explore": {
-      "title": "Mejor Exploración de Herramientas de IA 2024 | Directorio de IA de AIBestTool",
-      "titlePrefix": "Explorar Directorio de IA de AIBestTool",
-      "titleSuffix": "Directorio de IA de AIBestTool",
-      "description": "El Directorio de IA de AIBestTool es una herramienta que proporciona un Directorio gratuito de Herramientas de IA. Obtén tus herramientas de IA favoritas con el Directorio de IA de AIBestTool, el cual tiene como objetivo recopilar todas las herramientas de IA y ofrecer lo mejor para los usuarios.",
-      "keywords": "Directorio de IA de AIBestTool"
+      "title": "Explora las Mejores Herramientas de IA 2024 | AI Best Tool",
+      "description": "Navega y descubre las mejores herramientas de IA de 2024. Filtra por categoría, precio y características. Encuentra herramientas de IA para escritura, marketing, codificación, diseño y más.",
+      "keywords": "explorar herramientas de IA, directorio de herramientas de IA, mejores herramientas de IA 2024, catálogo de software de IA, aplicaciones de IA"
+    },
+    "startup": {
+      "title": "Lanza tu Startup | Sitios de Envío Gratuitos",
+      "description": "Descubre la lista definitiva de sitios web para lanzar y promocionar tu startup en línea. Sitios de envío gratuitos y de pago para aumentar la visibilidad de tu producto y SEO.",
+      "keywords": "lanzamiento de startup, sitios de lanzamiento de productos, promoción de startup, sitios de envío gratuitos, marketing de startup"
     },
     "submit": {
       "title": "Envía tu herramienta de IA y obtén tráfico | Directorio de IA de AIBestTool"
+    }
+  },
+  "admin": {
+    "title": "Panel de Administración",
+    "backToSite": "Volver al Sitio",
+    "nav": {
+      "dashboard": "Panel de Control",
+      "collection": "Colección",
+      "tools": "Herramientas",
+      "users": "Usuarios",
+      "analytics": "Analíticas",
+      "emailTest": "Prueba de Email",
+      "settings": "Configuración"
+    },
+    "dashboard": {
+      "title": "Panel de Control de Administración"
     }
   }
 }

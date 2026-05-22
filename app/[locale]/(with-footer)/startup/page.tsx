@@ -3,6 +3,8 @@ import { useTranslations } from 'next-intl';
 
 import { formatTime } from '@/lib/utils/timeUtils';
 import Faq from '@/components/Faq';
+import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { generateBreadcrumbSchema } from '@/lib/seo/schema';
 
 import DesktopTable from './DesktopTable';
 import MobileTable from './MobileTable';
@@ -10,21 +12,31 @@ import MobileTable from './MobileTable';
 export default function Page() {
   const t = useTranslations('Startup');
 
+  // Generate BreadcrumbList schema for navigation hierarchy
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: baseUrl },
+    { name: 'Startup', url: `${baseUrl}/startup` },
+  ]);
+
   return (
-    <div className='flex flex-col'>
-      <div className='my-5 flex flex-col text-center lg:mx-auto lg:my-10 lg:gap-1'>
-        <h1 className='bg-clip-text text-2xl font-bold text-blue-700 lg:h-[56px] lg:text-5xl'>{t('title')}</h1>
-        <div>
-          <h2 className='text-balance text-xs font-bold text-blue-500 lg:text-sm'>{t('subTitle')}</h2>
-          <h2 className='text-balance text-xs font-bold text-blue-500 lg:text-sm'>{t('updateTime')}</h2>
-          <h2 className='text-balance text-xl font-bold text-blue-500'>
-            {formatTime(new Date().setDate(new Date().getDate() - 1), 'YYYY-MM-DD')}
-          </h2>
+    <>
+      <StructuredDataServer data={breadcrumbSchema} />
+      <div className='theme-page flex flex-col'>
+        <div className='my-5 flex flex-col text-center lg:mx-auto lg:my-10 lg:gap-1'>
+          <h1 className='bg-clip-text text-2xl font-bold text-slate-950 lg:h-[56px] lg:text-5xl'>{t('title')}</h1>
+          <div>
+            <h2 className='text-balance text-xs font-bold text-slate-500 lg:text-sm'>{t('subTitle')}</h2>
+            <h2 className='text-balance text-xs font-bold text-slate-500 lg:text-sm'>{t('updateTime')}</h2>
+            <h2 className='text-balance text-xl font-bold text-cyan-700'>
+              {formatTime(new Date().setDate(new Date().getDate() - 1), 'YYYY-MM-DD')}
+            </h2>
+          </div>
         </div>
+        <DesktopTable />
+        <MobileTable />
+        <Faq />
       </div>
-      <DesktopTable />
-      <MobileTable />
-      <Faq />
-    </div>
+    </>
   );
 }

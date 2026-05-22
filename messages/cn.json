@@ -121,6 +121,10 @@
     "title": "AI Best Tool - 发现2024年最佳AI工具",
     "subTitle": "在AI Best Tool工具目录中找到您喜爱的AI工具。AI工具列表每天由GPT-4o更新。现在免费提交以提升您的SEO。",
     "ai-navigate": "AI工具列表",
+    "latestTools": "最新收录的AI工具",
+    "latestToolsDescription": "最近通过审核并加入 AI Best Tool 目录的工具。",
+    "popularTools": "热门AI工具",
+    "popularToolsDescription": "根据访问、评分和使用信号优先展示的工具。",
     "exploreMore": "获取更多AI工具"
   },
   "Submit": {
@@ -130,9 +134,9 @@
     "url": "网站URL",
     "submit": "提交",
     "add": "添加",
-    "text": "到您的网站首页，然后您可以免费成功提交您的网站！",
+    "text": "到您的网站首页。我们会先审核您的提交，再展示到工具目录中。",
     "networkError": "网络错误",
-    "success": "成功"
+    "success": "已提交审核"
   },
   "Startup": {
     "title": "启动您的创业公司",
@@ -156,22 +160,41 @@
   },
   "Metadata": {
     "home": {
-      "title": "获取您的最佳AI工具 | AI Best Tool目录",
-      "description": "AI Best Tool目录是一款提供免费AI工具目录的工具。通过AI Best Tool目录获取您喜爱的AI工具，AI Best Tool目录旨在收集所有AI工具并为用户提供最佳服务。",
-      "keywords": "AI Best Tool目录"
+      "title": "AI Best Tool - 发现2024年最佳AI工具和应用",
+      "description": "发现2024年最佳AI工具。浏览我们精心策划的AI驱动软件和应用程序目录。立即找到适合您需求的完美AI工具，提升工作效率和创造力。免费探索最新AI技术，包括AI写作、AI设计、AI编程等多种工具。每日更新，为您提供最优质的AI工具推荐服务。",
+      "keywords": "AI Best Tool目录, AI工具, 2024最佳AI工具, AI软件, AI应用程序"
     },
     "ai": {
       "titleSubfix": "AI Best Tool目录"
     },
     "explore": {
-      "title": "2024年最佳AI工具探索 | AI Best Tool目录",
-      "titlePrefix": "AI Best Tool目录探索",
-      "titleSuffix": "AI Best Tool目录",
-      "description": "AI Best Tool目录是一款提供免费AI工具目录的工具。通过AI Best Tool目录获取您喜爱的AI工具，AI Best Tool目录旨在收集所有AI工具并为用户提供最佳服务。",
-      "keywords": "AI Best Tool目录"
+      "title": "探索2024年最佳AI工具 | AI Best Tool",
+      "description": "浏览并发现2024年最佳AI工具。按类别、定价和功能筛选。查找用于写作、营销、编码、设计等的AI工具。",
+      "keywords": "探索AI工具, AI工具目录, 2024最佳AI工具, AI软件目录, AI应用程序"
+    },
+    "startup": {
+      "title": "启动您的创业公司 | 免费提交网站",
+      "description": "发现在线启动和推广创业公司的终极网站列表。免费和付费提交网站，提升产品知名度和SEO。",
+      "keywords": "创业公司启动, 产品发布网站, 创业公司推广, 免费提交网站, 创业公司营销"
     },
     "submit": {
       "title": "提交您的AI工具并获取流量 | AI Best Tool目录"
+    }
+  },
+  "admin": {
+    "title": "管理后台",
+    "backToSite": "返回网站",
+    "nav": {
+      "dashboard": "仪表板",
+      "collection": "采集队列",
+      "tools": "工具管理",
+      "users": "用户管理",
+      "analytics": "数据分析",
+      "emailTest": "邮件测试",
+      "settings": "设置"
+    },
+    "dashboard": {
+      "title": "管理仪表板"
     }
   }
 }

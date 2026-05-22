@@ -1,31 +1,214 @@
-import { getWebNavigationList } from '@/network/webNavigation';
-
+import { getTools, ToolFilters, SortBy, getPopularTools } from '@/lib/services/tools';
+import type { Category } from '@/lib/services/categories';
+import type { Tag } from '@/lib/services/tags';
+import { toolToListRow, toolToRecommendation } from '@/lib/services/toolPresenter';
 import BasePagination from '@/components/page/BasePagination';
 import WebNavCardList from '@/components/webNav/WebNavCardList';
+import EmptyState from '@/components/EmptyState';
+import { trackSearch } from '@/app/actions/analytics';
+import ExploreControls from '@/components/explore/ExploreControls';
 
 const WEB_PAGE_SIZE = 20;
+const validSortOptions: SortBy[] = ['latest', 'popular', 'rating', 'views', 'clicks'];
 
 export const revalidate = 3600;
 
-export default async function ExploreList({ pageNum }: { pageNum?: string }) {
+interface ExploreListProps {
+  locale?: string;
+  pageNum?: string;
+  searchParams?: {
+    category?: string;
+    tags?: string;
+    pricing?: 'free' | 'freemium' | 'paid';
+    search?: string;
+    sort?: SortBy;
+  };
+  categories?: Category[];
+  tags?: Tag[];
+  forcedCategorySlug?: string;
+  basePath?: string;
+}
+
+function getLocalizedName(name: Record<string, string>, locale: string): string {
+  return name[locale] || name.en || name.zh || Object.values(name)[0] || '';
+}
+
+function getActiveFilters({
+  categories = [],
+  tags = [],
+  locale,
+  searchParams,
+  forcedCategorySlug,
+}: Pick<
+  ExploreListProps,
+  'categories' | 'tags' | 'locale' | 'searchParams' | 'forcedCategorySlug'
+>) {
+  const activeFilters: Array<{
+    key: 'category' | 'tags' | 'pricing' | 'search';
+    label: string;
+    value?: string;
+    locked?: boolean;
+  }> = [];
+
+  if (searchParams?.search) {
+    activeFilters.push({
+      key: 'search',
+      label: `Search: ${searchParams.search}`,
+    });
+  }
+
+  const categorySlug = forcedCategorySlug || searchParams?.category;
+  if (categorySlug) {
+    const category = categories.find((item) => item.slug === categorySlug);
+    activeFilters.push({
+      key: 'category',
+      label: category
+        ? `Category: ${getLocalizedName(category.name, locale || 'en')}`
+        : `Category: ${categorySlug}`,
+      locked: Boolean(forcedCategorySlug),
+    });
+  }
+
+  if (searchParams?.tags) {
+    const tagSlugs = searchParams.tags.split(',').filter(Boolean);
+    tagSlugs.forEach((tagSlug) => {
+      const tag = tags.find((item) => item.slug === tagSlug);
+      activeFilters.push({
+        key: 'tags',
+        label: tag
+          ? `Tag: ${getLocalizedName(tag.name, locale || 'en')}`
+          : `Tag: ${tagSlug}`,
+        value: tagSlug,
+      });
+    });
+  }
+
+  if (searchParams?.pricing) {
+    activeFilters.push({
+      key: 'pricing',
+      label: `Pricing: ${searchParams.pricing}`,
+    });
+  }
+
+  return activeFilters;
+}
+
+export default async function ExploreList({
+  locale = 'en',
+  pageNum,
+  searchParams,
+  categories,
+  tags,
+  forcedCategorySlug,
+  basePath = '/explore',
+}: ExploreListProps) {
   const currentPage = pageNum ? Number(pageNum) : 1;
 
-  const res = await getWebNavigationList({
-    pageNum: currentPage,
-    pageSize: WEB_PAGE_SIZE,
+  // Build filters from URL parameters
+  const filters: ToolFilters = {
+    status: 'published', // Only show published tools
+  };
+
+  if (forcedCategorySlug) {
+    filters.category = forcedCategorySlug;
+  } else if (searchParams?.category) {
+    filters.category = searchParams.category;
+  }
+
+  if (searchParams?.tags) {
+    filters.tags = searchParams.tags.split(',').filter(Boolean);
+  }
+
+  if (searchParams?.pricing) {
+    filters.pricing = searchParams.pricing;
+  }
+
+  if (searchParams?.search) {
+    filters.search = searchParams.search;
+  }
+
+  // Get sort option
+  const sortBy: SortBy =
+    searchParams?.sort && validSortOptions.includes(searchParams.sort)
+      ? searchParams.sort
+      : 'latest';
+
+  // Fetch tools from database
+  const result = await getTools(filters, { page: currentPage, pageSize: WEB_PAGE_SIZE }, sortBy);
+
+  // Track search if there's a search query
+  if (searchParams?.search) {
+    await trackSearch(searchParams.search, result.total);
+  }
+
+  const dataList = result.data.map((tool) => toolToListRow(tool, locale));
+  const activeFilters = getActiveFilters({
+    categories,
+    tags,
+    locale,
+    searchParams,
+    forcedCategorySlug,
   });
+
+  // Check if we have any active filters
+  const hasActiveFilters =
+    searchParams?.category || searchParams?.tags || searchParams?.pricing || searchParams?.search;
+
+  // If no results and filters are active, show empty state with recommendations
+  if (result.total === 0 && hasActiveFilters) {
+    // Get popular tools for recommendations
+    const popularTools = await getPopularTools(4);
+    const recommendedTools = popularTools.map((tool) => toolToRecommendation(tool, locale));
+
+    return (
+      <>
+        <ExploreControls
+          total={result.total}
+          visible={result.data.length}
+          sortBy={sortBy}
+          searchQuery={searchParams?.search}
+          activeFilters={activeFilters}
+          basePath={basePath}
+        />
+        <EmptyState
+          title='No tools found'
+          description='Try adjusting your filters or search query to find what you are looking for.'
+          showRecommendations
+          recommendedTools={recommendedTools}
+        />
+      </>
+    );
+  }
 
   return (
     <>
-      <WebNavCardList dataList={res.rows} />
-      <BasePagination
-        currentPage={currentPage}
-        pageSize={WEB_PAGE_SIZE}
-        total={20}
-        route='/explore'
-        subRoute='/page'
-        className='my-5 lg:my-10'
+      <ExploreControls
+        total={result.total}
+        visible={result.data.length}
+        sortBy={sortBy}
+        searchQuery={searchParams?.search}
+        activeFilters={activeFilters}
+        basePath={basePath}
       />
+
+      {/* Tool cards */}
+      <WebNavCardList
+        dataList={dataList}
+        contextLabel={sortBy === 'latest' ? 'latest' : sortBy === 'popular' ? 'popular' : undefined}
+      />
+
+      {/* Pagination */}
+      {result.total > WEB_PAGE_SIZE && (
+        <BasePagination
+          currentPage={currentPage}
+          pageSize={WEB_PAGE_SIZE}
+          total={result.total}
+          route={basePath}
+          subRoute='/page'
+          searchParamsKeys={['category', 'tags', 'pricing', 'search', 'sort']}
+          className='my-5 lg:my-10'
+        />
+      )}
     </>
   );
 }

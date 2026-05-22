@@ -1,0 +1,176 @@
+/**
+ * Test script to verify sitemap.xml generation
+ * 
+ * This script tests:
+ * 1. Sitemap includes all important pages
+ * 2. XML format is valid
+ * 3. lastModified dates are present
+ * 4. Priority values are appropriate
+ */
+
+import sitemap from '../app/sitemap';
+
+async function testSitemap() {
+  console.log('🔍 Testing sitemap generation...\n');
+
+  try {
+    // Generate sitemap
+    const sitemapEntries = await sitemap();
+
+    console.log(`✅ Sitemap generated successfully`);
+    console.log(`📊 Total entries: ${sitemapEntries.length}\n`);
+
+    // Test 1: Check if sitemap includes important pages
+    console.log('Test 1: Checking for important pages...');
+    const requiredPages = ['', 'explore', 'startup', 'submit', 'privacy-policy', 'terms-of-service'];
+    const missingPages: string[] = [];
+
+    for (const page of requiredPages) {
+      const found = sitemapEntries.some(entry => {
+        const url = new URL(entry.url);
+        const pathname = url.pathname.replace(/^\/[a-z]{2}\//, '/').replace(/^\//, '');
+        return pathname === page;
+      });
+
+      if (!found) {
+        missingPages.push(page);
+      }
+    }
+
+    if (missingPages.length === 0) {
+      console.log('✅ All required pages are present\n');
+    } else {
+      console.log(`❌ Missing pages: ${missingPages.join(', ')}\n`);
+    }
+
+    // Test 2: Verify all entries have required fields
+    console.log('Test 2: Verifying entry structure...');
+    let invalidEntries = 0;
+
+    for (const entry of sitemapEntries) {
+      if (!entry.url || !entry.lastModified || !entry.changeFrequency || entry.priority === undefined) {
+        invalidEntries++;
+      }
+    }
+
+    if (invalidEntries === 0) {
+      console.log('✅ All entries have required fields (url, lastModified, changeFrequency, priority)\n');
+    } else {
+      console.log(`❌ ${invalidEntries} entries are missing required fields\n`);
+    }
+
+    // Test 3: Verify lastModified dates are valid
+    console.log('Test 3: Verifying lastModified dates...');
+    let invalidDates = 0;
+
+    for (const entry of sitemapEntries) {
+      if (!(entry.lastModified instanceof Date) || isNaN(entry.lastModified.getTime())) {
+        invalidDates++;
+      }
+    }
+
+    if (invalidDates === 0) {
+      console.log('✅ All lastModified dates are valid\n');
+    } else {
+      console.log(`❌ ${invalidDates} entries have invalid dates\n`);
+    }
+
+    // Test 4: Verify priority values are appropriate (0.0 - 1.0)
+    console.log('Test 4: Verifying priority values...');
+    let invalidPriorities = 0;
+
+    for (const entry of sitemapEntries) {
+      if (entry.priority < 0 || entry.priority > 1) {
+        invalidPriorities++;
+      }
+    }
+
+    if (invalidPriorities === 0) {
+      console.log('✅ All priority values are within valid range (0.0 - 1.0)\n');
+    } else {
+      console.log(`❌ ${invalidPriorities} entries have invalid priority values\n`);
+    }
+
+    // Test 5: Check for duplicate URLs
+    console.log('Test 5: Checking for duplicate URLs...');
+    const urlSet = new Set<string>();
+    let duplicates = 0;
+
+    for (const entry of sitemapEntries) {
+      if (urlSet.has(entry.url)) {
+        duplicates++;
+      } else {
+        urlSet.add(entry.url);
+      }
+    }
+
+    if (duplicates === 0) {
+      console.log('✅ No duplicate URLs found\n');
+    } else {
+      console.log(`❌ Found ${duplicates} duplicate URLs\n`);
+    }
+
+    // Display sample entries
+    console.log('📋 Sample sitemap entries:');
+    console.log('─'.repeat(80));
+    
+    const samples = [
+      sitemapEntries.find(e => e.url.endsWith('/')), // Homepage
+      sitemapEntries.find(e => e.url.includes('/explore')), // Explore page
+      sitemapEntries.find(e => e.url.includes('/ai/')), // Tool page
+      sitemapEntries.find(e => e.url.includes('category=')), // Category page
+    ].filter(Boolean);
+
+    for (const entry of samples) {
+      if (entry) {
+        console.log(`URL: ${entry.url}`);
+        console.log(`Last Modified: ${entry.lastModified.toISOString()}`);
+        console.log(`Change Frequency: ${entry.changeFrequency}`);
+        console.log(`Priority: ${entry.priority}`);
+        console.log('─'.repeat(80));
+      }
+    }
+
+    // Summary
+    console.log('\n📊 Summary:');
+    console.log(`Total entries: ${sitemapEntries.length}`);
+    console.log(`Unique URLs: ${urlSet.size}`);
+    
+    const byPriority = sitemapEntries.reduce((acc, entry) => {
+      const key = entry.priority.toString();
+      acc[key] = (acc[key] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+    
+    console.log('\nEntries by priority:');
+    Object.entries(byPriority)
+      .sort(([a], [b]) => parseFloat(b) - parseFloat(a))
+      .forEach(([priority, count]) => {
+        console.log(`  ${priority}: ${count} entries`);
+      });
+
+    const totalTests = 5;
+    const passedTests = 
+      (missingPages.length === 0 ? 1 : 0) +
+      (invalidEntries === 0 ? 1 : 0) +
+      (invalidDates === 0 ? 1 : 0) +
+      (invalidPriorities === 0 ? 1 : 0) +
+      (duplicates === 0 ? 1 : 0);
+
+    console.log(`\n${passedTests === totalTests ? '✅' : '❌'} Tests passed: ${passedTests}/${totalTests}`);
+
+    if (passedTests === totalTests) {
+      console.log('\n🎉 All sitemap tests passed!');
+      process.exit(0);
+    } else {
+      console.log('\n⚠️  Some sitemap tests failed. Please review the output above.');
+      process.exit(1);
+    }
+
+  } catch (error) {
+    console.error('❌ Error testing sitemap:', error);
+    process.exit(1);
+  }
+}
+
+testSitemap();

@@ -21,7 +21,6 @@
     "contactUs": "Contactez-nous"
   },
   "Faq": {
-    "title": "FAQ",
     "1": {
       "question": "Qu'est-ce que le Répertoire des outils AI de AIBestTool ?",
       "answer": "Le Répertoire des outils AI de AIBestTool - AIBestTool.com est en train de construire un répertoire d'outils AI pour vous aider à obtenir vos outils AI préférés. Vous pouvez y trouver des outils d'écriture AI, des outils de marketing AI, des outils de réécriture AI, des outils SEO AI, des outils d'apprentissage AI, des outils de génération AI, des outils de recherche AI, des outils artistiques AI, des outils de musique AI, des outils vidéo AI, des outils de codage AI, des outils photo AI, etc."
@@ -68,7 +67,8 @@
     "11": {
       "question": "L'interface Web du Répertoire des outils AI de AIBestTool est-elle open source ?",
       "answer": "Oui, nous ouvrirons l'interface Web du Répertoire des outils AI de AIBestTool sur GitHub (https://github.com/6677-ai/tap4-ai-webui). Veuillez nous donner un étoile."
-    }
+    },
+    "title": "FAQ"
   },
   "FooterNavigation": {
     "privacyPolicy": {
@@ -156,22 +156,41 @@
   },
   "Metadata": {
     "home": {
-      "title": "Obtenez vos meilleurs outils AI | Répertoire des outils AI de AIBestTool",
-      "description": "Le Répertoire des outils AI de AIBestTool est un outil qui propose un répertoire gratuit d'outils AI. Obtenez vos outils AI préférés avec le Répertoire des outils AI de AIBestTool, qui vise à collecter tous les outils AI et à fournir le meilleur service aux utilisateurs.",
-      "keywords": "Répertoire des outils AI de AIBestTool"
+      "title": "AI Best Tool - Découvrez les Meilleurs Outils IA 2024",
+      "description": "Découvrez les meilleurs outils IA de 2024. Parcourez notre répertoire organisé de logiciels et applications IA. Trouvez l'outil IA parfait aujourd'hui.",
+      "keywords": "AI Best Tool, outils IA, meilleurs outils IA 2024, logiciels IA, applications IA"
     },
     "ai": {
       "titleSubfix": "Répertoire des outils AI de AIBestTool"
     },
     "explore": {
-      "title": "Découvrez les meilleurs outils AI de 2024 | Répertoire des outils AI de AIBestTool",
-      "titlePrefix": "Explorez le Répertoire des outils AI de AIBestTool",
-      "titleSuffix": "Répertoire des outils AI de AIBestTool",
-      "description": "Le Répertoire des outils AI de AIBestTool est un outil qui propose un répertoire gratuit d'outils AI. Obtenez vos outils AI préférés avec le Répertoire des outils AI de AIBestTool, qui vise à collecter tous les outils AI et à fournir le meilleur service aux utilisateurs.",
-      "keywords": "Répertoire des outils AI de AIBestTool"
+      "title": "Explorez les Meilleurs Outils IA 2024 | AI Best Tool",
+      "description": "Parcourez et découvrez les meilleurs outils IA de 2024. Filtrez par catégorie, tarification et fonctionnalités. Trouvez des outils IA pour l'écriture, le marketing, le codage, le design et plus encore.",
+      "keywords": "explorer outils IA, répertoire outils IA, meilleurs outils IA 2024, catalogue logiciels IA, applications IA"
+    },
+    "startup": {
+      "title": "Lancez Votre Startup | Sites de Soumission Gratuits",
+      "description": "Découvrez la liste ultime de sites web pour lancer et promouvoir votre startup en ligne. Sites de soumission gratuits et payants pour augmenter la visibilité de votre produit et le SEO.",
+      "keywords": "lancement startup, sites lancement produit, promotion startup, sites soumission gratuits, marketing startup"
     },
     "submit": {
       "title": "Soumettez votre outil AI et obtenez du trafic | Répertoire des outils AI de AIBestTool"
+    }
+  },
+  "admin": {
+    "title": "Panneau d'Administration",
+    "backToSite": "Retour au Site",
+    "nav": {
+      "dashboard": "Tableau de Bord",
+      "collection": "Collection",
+      "tools": "Outils",
+      "users": "Utilisateurs",
+      "analytics": "Analytiques",
+      "emailTest": "Test Email",
+      "settings": "Paramètres"
+    },
+    "dashboard": {
+      "title": "Tableau de Bord d'Administration"
     }
   }
 }

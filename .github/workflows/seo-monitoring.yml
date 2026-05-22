@@ -1,0 +1,176 @@
+name: SEO Monitoring
+
+on:
+  schedule:
+    # Run daily at 9 AM UTC (adjust for your timezone)
+    - cron: '0 9 * * *'
+  workflow_dispatch: # Allow manual trigger from GitHub UI
+
+jobs:
+  daily-health-check:
+    name: Daily SEO Health Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run SEO Health Check
+        id: health-check
+        run: |
+          npm run seo:health-check || echo "health_check_failed=true" >> $GITHUB_OUTPUT
+        continue-on-error: true
+      
+      - name: Upload Health Check Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seo-health-report-${{ github.run_number }}
+          path: .kiro/specs/seo-optimization/health-check-report.json
+          retention-days: 30
+      
+      - name: Create Issue on Failure
+        if: steps.health-check.outputs.health_check_failed == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = JSON.parse(fs.readFileSync('.kiro/specs/seo-optimization/health-check-report.json', 'utf8'));
+            
+            const failedChecks = report.results.filter(r => r.status === 'fail');
+            const warningChecks = report.results.filter(r => r.status === 'warning');
+            
+            let body = '## SEO Health Check Failed\n\n';
+            body += `**Health Score:** ${report.healthScore}%\n\n`;
+            
+            if (failedChecks.length > 0) {
+              body += '### ❌ Failed Checks\n\n';
+              failedChecks.forEach(check => {
+                body += `- **${check.name}**: ${check.message}\n`;
+              });
+              body += '\n';
+            }
+            
+            if (warningChecks.length > 0) {
+              body += '### ⚠️ Warnings\n\n';
+              warningChecks.forEach(check => {
+                body += `- **${check.name}**: ${check.message}\n`;
+              });
+              body += '\n';
+            }
+            
+            body += `\n**Report Date:** ${report.timestamp}\n`;
+            body += `**Run Number:** #${context.runNumber}\n`;
+            body += `\n[View Full Report](${context.payload.repository.html_url}/actions/runs/${context.runId})`;
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚨 SEO Health Check Failed - ${new Date().toISOString().split('T')[0]}`,
+              body: body,
+              labels: ['seo', 'monitoring', 'automated']
+            });
+      
+      - name: Comment on Existing Issues
+        if: steps.health-check.outputs.health_check_failed != 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Close any open SEO health check issues if check passes
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'seo,monitoring',
+              state: 'open'
+            });
+            
+            for (const issue of issues.data) {
+              if (issue.title.includes('SEO Health Check Failed')) {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  body: '✅ SEO health check is now passing. Closing this issue.'
+                });
+                
+                await github.rest.issues.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  state: 'closed'
+                });
+              }
+            }
+
+  weekly-comprehensive-audit:
+    name: Weekly SEO Audit
+    runs-on: ubuntu-latest
+    # Run every Monday at 8 AM UTC
+    if: github.event.schedule == '0 8 * * 1' || github.event_name == 'workflow_dispatch'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run Comprehensive SEO Audit
+        run: npm run seo:audit
+        continue-on-error: true
+      
+      - name: Upload Audit Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seo-audit-report-${{ github.run_number }}
+          path: |
+            .kiro/specs/seo-optimization/*.md
+            scripts/*.log
+          retention-days: 90
+
+  monthly-performance-audit:
+    name: Monthly Performance Audit
+    runs-on: ubuntu-latest
+    # Run on the 1st of each month at 7 AM UTC
+    if: github.event.schedule == '0 7 1 * *' || github.event_name == 'workflow_dispatch'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run Performance Audit
+        run: npm run seo:performance
+        continue-on-error: true
+      
+      - name: Upload Performance Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: performance-report-${{ github.run_number }}
+          path: .kiro/specs/seo-optimization/TASK_19_PERFORMANCE_REPORT.md
+          retention-days: 365

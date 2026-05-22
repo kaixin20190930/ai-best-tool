@@ -1,0 +1,196 @@
+'use server';
+
+import { revalidatePath } from 'next/cache';
+import { getPool } from '@/db/neon/client';
+import { requireAuth } from '@/lib/auth/middleware';
+import { createNotification } from '@/app/actions/notifications';
+import { sendTransactionalEmail } from '@/lib/services/mailer';
+import { shouldSendSubmissionStatusEmail } from '@/app/actions/userPreferences';
+
+interface SubmitToolInput {
+  website: string;
+  url: string;
+  categoryId?: string;
+  description?: string;
+  pricing?: string;
+  imageUrl?: string;
+  thumbnailUrl?: string;
+}
+
+interface SubmitToolResult {
+  success: boolean;
+  error?: string;
+}
+
+function normalizeUrl(url: string): string {
+  const trimmed = url.trim();
+  const withProtocol = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+  const parsed = new URL(withProtocol);
+
+  return parsed.toString();
+}
+
+function normalizeOptionalUrl(url?: string): string | null {
+  const trimmed = url?.trim();
+
+  if (!trimmed) {
+    return null;
+  }
+
+  return normalizeUrl(trimmed);
+}
+
+function slugify(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/https?:\/\//g, '')
+    .replace(/^www\./, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 80);
+}
+
+async function createUniqueToolSlug(base: string): Promise<string> {
+  const pool = getPool();
+  const normalizedBase = slugify(base) || 'ai-tool';
+  let candidate = normalizedBase;
+  let suffix = 2;
+
+  while (true) {
+    const existing = await pool.query('SELECT 1 FROM tools WHERE name = $1 LIMIT 1', [
+      candidate,
+    ]);
+
+    if (existing.rows.length === 0) {
+      return candidate;
+    }
+
+    candidate = `${normalizedBase}-${suffix}`;
+    suffix += 1;
+  }
+}
+
+export async function submitTool(input: SubmitToolInput): Promise<SubmitToolResult> {
+  try {
+    const user = await requireAuth();
+    const website = input.website.trim();
+    const description = input.description?.trim();
+    const pricing = input.pricing || 'freemium';
+    const categoryId = input.categoryId?.trim() || null;
+
+    if (website.length < 2) {
+      return { success: false, error: 'Please enter a valid tool name.' };
+    }
+
+    if (description && description.length > 800) {
+      return { success: false, error: 'Description is too long.' };
+    }
+
+    if (!['free', 'freemium', 'paid'].includes(pricing)) {
+      return { success: false, error: 'Please select a valid pricing option.' };
+    }
+
+    const url = normalizeUrl(input.url);
+    const imageUrl = normalizeOptionalUrl(input.imageUrl);
+    const thumbnailUrl = normalizeOptionalUrl(input.thumbnailUrl);
+    const urlHost = new URL(url).hostname.replace(/^www\./, '');
+    const slug = await createUniqueToolSlug(website || urlHost);
+    const title = { en: website, zh: website };
+    const content = {
+      en:
+        description ||
+        `${website} was submitted by its developer and is pending editorial review.`,
+      zh: description || `${website} 已由开发者提交，正在等待平台审核。`,
+    };
+    const detail = {
+      en:
+        description ||
+        `${website} is currently in the review queue. The AI Best Tool team will verify its product details, category, media, and pricing before publication.`,
+      zh:
+        description ||
+        `${website} 当前处于审核队列中。AI Best Tool 团队会在发布前核验产品信息、分类、媒体素材和定价。`,
+    };
+
+    const pool = getPool();
+
+    if (categoryId) {
+      const category = await pool.query('SELECT 1 FROM categories WHERE id = $1 LIMIT 1', [
+        categoryId,
+      ]);
+
+      if (category.rows.length === 0) {
+        return { success: false, error: 'Please select a valid category.' };
+      }
+    }
+
+    const features = {
+      submission: {
+        submittedByEmail: user.email || null,
+      },
+    };
+
+    await pool.query(
+      `
+        INSERT INTO tools (
+          name, title, content, detail, url, image_url, thumbnail_url,
+          category_id, tags, pricing, status, submitted_by, features
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+      `,
+      [
+        slug,
+        JSON.stringify(title),
+        JSON.stringify(content),
+        JSON.stringify(detail),
+        url,
+        imageUrl,
+        thumbnailUrl,
+        categoryId,
+        [],
+        pricing,
+        'pending',
+        user.id,
+        JSON.stringify(features),
+      ]
+    );
+
+    await createNotification(
+      user.id,
+      'submission_status',
+      'Submission in review / 你的提交正在审核',
+      `${website} has entered the review queue. / ${website} 已进入审核队列。`,
+      '/profile/submissions'
+    );
+
+    if (user.email && (await shouldSendSubmissionStatusEmail(user.id))) {
+      await sendTransactionalEmail({
+        to: user.email,
+        subject: `[AI Best Tool] ${website} is in review`,
+        text: `${website} has entered the review queue. You can track status in your submissions page.`,
+        html: `
+          <p>${website} has entered the review queue.</p>
+          <p>You can track status in your submissions page.</p>
+          <p><a href="${process.env.NEXT_PUBLIC_SITE_URL || ''}/profile/submissions">View submissions</a></p>
+        `,
+      });
+    }
+
+    revalidatePath('/admin/tools');
+    revalidatePath('/cn/admin/tools');
+    revalidatePath('/en/admin/tools');
+
+    return { success: true };
+  } catch (error) {
+    console.error('Error submitting tool:', error);
+
+    if (error instanceof TypeError) {
+      return { success: false, error: 'Please enter a valid website URL.' };
+    }
+
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to submit tool.',
+    };
+  }
+}

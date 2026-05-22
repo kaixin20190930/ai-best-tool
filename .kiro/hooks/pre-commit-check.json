@@ -1,0 +1,13 @@
+{
+  "name": "提交前快速检查",
+  "description": "在提交代码前运行快速的 SEO 和 lint 检查",
+  "enabled": true,
+  "trigger": {
+    "type": "manual",
+    "description": "提交前运行快速检查"
+  },
+  "action": {
+    "type": "command",
+    "command": "pnpm lint && pnpm seo:health-check"
+  }
+}

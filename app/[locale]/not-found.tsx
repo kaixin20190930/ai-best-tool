@@ -4,11 +4,15 @@ import { useTranslations } from 'next-intl';
 export default function NotFound() {
   const t = useTranslations('NotFound');
   return (
-    <div>
-      <h1>{t('title')}</h1>
-      <Link href='/' className='hover:cursor-pointer hover:opacity-80'>
-        {t('goHome')}
-      </Link>
-    </div>
+    <html>
+      <body>
+        <div className='theme-page flex min-h-screen flex-col items-center justify-center gap-4 p-4'>
+          <h1 className='text-4xl font-bold text-slate-900'>{t('title')}</h1>
+          <Link href='/' className='rounded-lg bg-cyan-600 px-6 py-3 text-white hover:bg-cyan-700'>
+            {t('goHome')}
+          </Link>
+        </div>
+      </body>
+    </html>
   );
 }

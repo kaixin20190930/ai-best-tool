@@ -21,7 +21,6 @@
     "contactUs": "聯繫我們"
   },
   "Faq": {
-    "title": "常見問題",
     "1": {
       "question": "AI Best Tool工具目錄是什麼？",
       "answer": "AI Best Tool工具目錄 - AIBestTool.com正在建立一個AI工具目錄，幫助您獲取您喜愛的AI工具。您可以在這裡找到AI寫作工具、AI營銷工具、AI改寫工具、AI SEO工具、AI學習工具、AI生成工具、AI研究工具、AI藝術工具、AI音樂工具、AI視頻工具、AI編碼工具、AI照片工具等。"
@@ -68,7 +67,8 @@
     "11": {
       "question": "AI Best Tool目錄的Web界面是開源的嗎？",
       "answer": "是的，我們將在github（https://github.com/6677-ai/tap4-ai-webui）上開源AI Best Tool目錄的Web界面。請給我們點贊。"
-    }
+    },
+    "title": "常見問題"
   },
   "FooterNavigation": {
     "privacyPolicy": {
@@ -164,14 +164,33 @@
       "titleSubfix": "AI Best Tool目錄"
     },
     "explore": {
-      "title": "2024年最佳AI工具探索 | AI Best Tool目錄",
-      "titlePrefix": "AI Best Tool目錄探索",
-      "titleSuffix": "AI Best Tool目錄",
-      "description": "AI Best Tool目錄是一款提供免費AI工具目錄的工具。通過AI Best Tool目錄獲取您喜愛的AI工具，AI Best Tool目錄旨在收集所有AI工具並為用戶提供最佳服務。",
-      "keywords": "AI Best Tool目錄"
+      "title": "探索2024年最佳AI工具 | AI Best Tool",
+      "description": "瀏覽並發現2024年最佳AI工具。按類別、定價和功能篩選。查找用於寫作、營銷、編碼、設計等的AI工具。",
+      "keywords": "探索AI工具, AI工具目錄, 2024最佳AI工具, AI軟體目錄, AI應用程式"
+    },
+    "startup": {
+      "title": "啟動您的創業公司 | 免費提交網站",
+      "description": "發現在線啟動和推廣創業公司的終極網站列表。免費和付費提交網站，提升產品知名度和SEO。",
+      "keywords": "創業公司啟動, 產品發布網站, 創業公司推廣, 免費提交網站, 創業公司營銷"
     },
     "submit": {
       "title": "提交您的AI工具並獲取流量 | AI Best Tool目錄"
+    }
+  },
+  "admin": {
+    "title": "管理後台",
+    "backToSite": "返回網站",
+    "nav": {
+      "dashboard": "儀表板",
+      "collection": "採集隊列",
+      "tools": "工具管理",
+      "users": "用戶管理",
+      "analytics": "數據分析",
+      "emailTest": "郵件測試",
+      "settings": "設置"
+    },
+    "dashboard": {
+      "title": "管理儀表板"
     }
   }
 }

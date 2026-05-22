@@ -23,16 +23,16 @@ export default function LocaleSwitcher() {
 
   return (
     <Select value={localeVal} defaultValue={currentLocale} onValueChange={onValueChange}>
-      <SelectTrigger className='flex h-8 w-[90px] items-center gap-1 rounded-[4px] border-blue-700 bg-[#bfd7fe] px-2 text-blue-700'>
-        <Icon className='filter-blue' src='/icons/global.svg' />
+      <SelectTrigger className='flex h-8 w-[90px] items-center gap-1 rounded-[4px] border-slate-300 bg-slate-100 px-2 text-slate-700'>
+        <Icon className='filter-blue' src='/icons/global.svg' alt='Language selector icon' title='Change language' />
         <SelectValue placeholder='locale'>{localeVal.toUpperCase()}</SelectValue>
       </SelectTrigger>
-      <SelectContent className='border-blue-700 bg-[#bfd7fe]'>
+      <SelectContent className='border-slate-300 bg-white'>
         {languages.map((language) => (
           <SelectItem
             value={language.lang}
             key={language.code}
-            className='text-blue-600 hover:cursor-pointer hover:!bg-white/20'
+            className='text-slate-700 hover:cursor-pointer hover:!bg-slate-100'
           >
             {language.label}
           </SelectItem>

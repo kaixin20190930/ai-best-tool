@@ -13,12 +13,12 @@ function NavDrawerItem({ isActive, name }: { isActive: boolean; name: string }) 
   return (
     <li
       className={cn(
-        'flex h-[28px] w-full items-center justify-between rounded-[4px] border border-transparent bg-gray-200 pl-[14px] pr-2',
-        isActive && 'border-blue-600 bg-[#93c5fd]',
+        'flex h-[32px] w-full items-center justify-between rounded-md border border-transparent bg-slate-100 pl-[14px] pr-2 transition-colors',
+        isActive && 'border-cyan-200 bg-cyan-50',
       )}
     >
-      <div className={cn('size-3 rounded-full bg-blue-500', isActive && 'bg-blue-800')} />
-      <div className={cn('text-sm text-blue-500', isActive && 'text-blue-700')}>{name}</div>
+      <div className={cn('size-2.5 rounded-full bg-slate-400', isActive && 'bg-cyan-600')} />
+      <div className={cn('text-sm text-slate-600', isActive && 'font-medium text-cyan-800')}>{name}</div>
     </li>
   );
 }
@@ -56,7 +56,7 @@ export default function NavigationDrawer({ open, setOpen }: { open: boolean; set
       />
       <div
         className={cn(
-          'fixed right-0 top-16 z-[99999] h-[calc(100%-64px)] w-[276px] transform bg-blue-300',
+          'theme-surface fixed right-0 top-16 z-[99999] h-[calc(100%-64px)] w-[276px] transform border-l border-slate-200 bg-white',
           isOpen ? 'translate-x-0' : 'translate-x-full',
         )}
       >

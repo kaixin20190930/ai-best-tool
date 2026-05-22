@@ -5,7 +5,8 @@ export default function Page() {
   const t = useTranslations('FooterNavigation.termsConditions');
 
   return (
-    <div className='prose mx-auto p-6 text-blue-500 prose-headings:text-blue-700'>
+    <div className='theme-page px-4 py-8 lg:px-6 lg:py-10'>
+      <div className='prose theme-surface mx-auto max-w-4xl rounded-lg p-6 text-slate-700 prose-headings:text-slate-950 prose-a:text-cyan-700 lg:p-8'>
       <h1>{t('1-h1')}</h1>
       <p>{t('1-p')}</p>
 
@@ -23,7 +24,7 @@ export default function Page() {
       <ul>
         <li>
           {t('4-p')}{' '}
-          <Link href='/terms-of-service' className='font-bold text-white hover:text-white'>
+          <Link href='/terms-of-service' className='font-bold text-cyan-700 hover:text-cyan-800'>
             {t('terms-of-service')}
           </Link>
         </li>
@@ -45,6 +46,7 @@ export default function Page() {
       </ul>
 
       <p>{t('last-p')}</p>
+      </div>
     </div>
   );
 }

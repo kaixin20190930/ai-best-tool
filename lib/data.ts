@@ -1,10 +1,12 @@
 export type WebNavigationListRow = {
   content: string;
+  createdAt?: string;
   id: string;
   imageUrl: string | null;
   name: string;
   thumbnailUrl: string | null;
   title: string;
+  updatedAt?: string;
   url: string;
 };
 

@@ -121,6 +121,10 @@
     "title": "AI Best Tool - Discover The Best AI Tools 2024",
     "subTitle": "Get your favorite AI tools in AI Best Tool Tools Directory. AI tools list are updated daily by GPT-4o. It's free to submit here to enhance your SEO now. ",
     "ai-navigate": "AI Tools List",
+    "latestTools": "Latest AI Tools",
+    "latestToolsDescription": "Recently reviewed tools from the AI Best Tool directory.",
+    "popularTools": "Popular AI Tools",
+    "popularToolsDescription": "Tools with stronger traffic, ratings, and usage signals.",
     "exploreMore": "Get More AI Tools"
   },
   "Submit": {
@@ -130,9 +134,9 @@
     "url": "Website URL",
     "submit": "Submit",
     "add": "Add",
-    "text": "to your website homepage, And then you can submit your website successfully for free！",
+    "text": "to your website homepage. We will review your submission before it appears in the directory.",
     "networkError": "Network Error",
-    "success": "success"
+    "success": "Submitted for review"
   },
   "Startup": {
     "title": "Kickstart Your Startup Launch",
@@ -156,22 +160,41 @@
   },
   "Metadata": {
     "home": {
-      "title": "Get your best AI Tools | AI Best Tool Directory",
-      "description": "AI Best Tool Directory is a tool provides free AI Tools Directory. Get your favorite AI tools with AI Best Tool Directory, AI Best Tool Directory aims to collect all the AI tools and provide the best for users.",
-      "keywords": "AI Best Tool Directory"
+      "title": "AI Best Tool - Discover Best AI Tools 2024",
+      "description": "Discover the best AI tools of 2024. Browse our curated directory of AI-powered software and applications. Find the perfect AI tool for your needs today.",
+      "keywords": "AI Best Tool Directory, AI tools, best AI tools 2024, AI software, AI applications"
     },
     "ai": {
       "titleSubfix": "AI Best Tool Directory"
     },
     "explore": {
-      "title": "Best AI Tools Explore 2024 | AI Best Tool Directory",
-      "titlePrefix": "AI Best Tool Directory Explore",
-      "titleSuffix": "AI Best Tool Directory",
-      "description": "AI Best Tool Directory is a tool provides free AI Tools Directory. Get your favorite AI tools with AI Best Tool Directory, AI Best Tool Directory aims to collect all the AI tools and provide the best for users.",
-      "keywords": "AI Best Tool Directory"
+      "title": "Explore Best AI Tools 2024 | AI Best Tool",
+      "description": "Browse and discover the best AI tools of 2024. Filter by category, pricing, and features. Find AI tools for writing, marketing, coding, design, and more.",
+      "keywords": "explore AI tools, AI tool directory, best AI tools 2024, AI software catalog, AI applications"
+    },
+    "startup": {
+      "title": "Launch Your Startup | Free Submission Sites",
+      "description": "Discover the ultimate list of websites to launch and promote your startup online. Free and paid submission sites to boost your product visibility and SEO.",
+      "keywords": "startup launch, product launch sites, startup promotion, free submission sites, startup marketing"
     },
     "submit": {
       "title": "Submit your AI tool and get Get Traffic | AI Best Tool Directory"
+    }
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "backToSite": "Back to Site",
+    "nav": {
+      "dashboard": "Dashboard",
+      "collection": "Collection",
+      "tools": "Tools",
+      "users": "Users",
+      "analytics": "Analytics",
+      "emailTest": "Email Test",
+      "settings": "Settings"
+    },
+    "dashboard": {
+      "title": "Admin Dashboard"
     }
   }
 }

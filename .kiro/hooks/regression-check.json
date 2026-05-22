@@ -1,0 +1,13 @@
+{
+  "name": "回归测试检查",
+  "description": "在代码变更后自动运行回归测试，确保新功能不会破坏已有功能",
+  "enabled": true,
+  "trigger": {
+    "type": "manual",
+    "description": "手动触发回归测试"
+  },
+  "action": {
+    "type": "command",
+    "command": "pnpm tsx scripts/regression-test.ts"
+  }
+}
