@@ -11,6 +11,8 @@ interface CommentInputProps {
   onCommentPosted?: () => void;
   onCancel?: () => void;
   placeholder?: string;
+  starterPrompts?: string[];
+  promptLabel?: string;
   autoFocus?: boolean;
 }
 
@@ -20,10 +22,23 @@ export default function CommentInput({
   onCommentPosted,
   onCancel,
   placeholder = 'Write a comment...',
+  starterPrompts = [],
+  promptLabel = 'Quick prompts',
   autoFocus = false
 }: CommentInputProps) {
   const [content, setContent] = useState('');
   const [isPending, startTransition] = useTransition();
+
+  const applyPrompt = (prompt: string) => {
+    setContent((current) => {
+      const trimmed = current.trim();
+      if (!trimmed) {
+        return prompt;
+      }
+
+      return `${trimmed}\n\n${prompt}`;
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,6 +67,27 @@ export default function CommentInput({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
+      {starterPrompts.length > 0 && (
+        <div className="space-y-2">
+          <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+            {promptLabel}
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {starterPrompts.slice(0, 4).map((prompt) => (
+              <button
+                key={prompt}
+                type="button"
+                onClick={() => applyPrompt(prompt)}
+                disabled={isPending}
+                className="rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-left text-xs font-medium text-cyan-800 transition-colors hover:bg-cyan-100 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {prompt}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       <textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}

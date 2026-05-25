@@ -1,0 +1,234 @@
+export type GuidePageConfig = {
+  href: string;
+  priority: number;
+  changeFrequency: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';
+  title: {
+    cn: string;
+    en: string;
+  };
+  desc: {
+    cn: string;
+    en: string;
+  };
+};
+
+export const GUIDE_PAGES: GuidePageConfig[] = [
+  {
+    href: '/guides/how-to-choose-ai-tools',
+    priority: 0.75,
+    changeFrequency: 'monthly',
+    title: {
+      cn: '如何选择 AI 工具',
+      en: 'How to choose AI tools',
+    },
+    desc: {
+      cn: '先看场景，再看价格、更新和评论。',
+      en: 'Start with use case, then check pricing, freshness, and comments.',
+    },
+  },
+  {
+    href: '/guides/free-ai-tools',
+    priority: 0.75,
+    changeFrequency: 'monthly',
+    title: {
+      cn: '免费 AI 工具怎么选',
+      en: 'Best free AI tools',
+    },
+    desc: {
+      cn: '适合想先试用、再决定是否升级的用户。',
+      en: 'Good for people who want to try before paying.',
+    },
+  },
+  {
+    href: '/guides/best-free-ai-tools',
+    priority: 0.78,
+    changeFrequency: 'weekly',
+    title: {
+      cn: '最佳免费 AI 工具',
+      en: 'Best free AI tools ranking',
+    },
+    desc: {
+      cn: '按实际可用性整理的免费工具榜单。',
+      en: 'A practical ranking of free tools based on usefulness.',
+    },
+  },
+  {
+    href: '/guides/ai-writing-tools',
+    priority: 0.74,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 写作工具推荐',
+      en: 'AI writing tools',
+    },
+    desc: {
+      cn: '适合内容创作、SEO、营销和日常写作。',
+      en: 'For content creation, SEO, marketing, and daily writing.',
+    },
+  },
+  {
+    href: '/guides/ai-writing-tools-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 写作工具对比',
+      en: 'AI writing tools comparison',
+    },
+    desc: {
+      cn: '把几款常见写作工具放在一起快速对照。',
+      en: 'Compare common writing tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-video-tools',
+    priority: 0.74,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 视频工具推荐',
+      en: 'AI video tools',
+    },
+    desc: {
+      cn: '适合剪辑、生成、配音和营销视频。',
+      en: 'For editing, generation, voiceover, and marketing clips.',
+    },
+  },
+  {
+    href: '/guides/ai-video-tools-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 视频工具对比',
+      en: 'AI video tools comparison',
+    },
+    desc: {
+      cn: '把几款常见视频工具放在一起快速对照。',
+      en: 'Compare common video tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-image-tools',
+    priority: 0.74,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 图像工具推荐',
+      en: 'AI image tools',
+    },
+    desc: {
+      cn: '适合生成、修图、设计和创意素材。',
+      en: 'For generation, editing, design, and creative assets.',
+    },
+  },
+  {
+    href: '/guides/ai-image-tools-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 图像工具对比',
+      en: 'AI image tools comparison',
+    },
+    desc: {
+      cn: '把几款常见图像工具放在一起快速对照。',
+      en: 'Compare common image tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-coding-tools',
+    priority: 0.74,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 编程工具推荐',
+      en: 'AI coding tools',
+    },
+    desc: {
+      cn: '适合代码补全、重构、调试和脚手架。',
+      en: 'For completion, refactoring, debugging, and scaffolding.',
+    },
+  },
+  {
+    href: '/guides/ai-coding-tools-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 编程工具对比',
+      en: 'AI coding tools comparison',
+    },
+    desc: {
+      cn: '把几款常见编程工具放在一起快速对照。',
+      en: 'Compare common coding tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-chatbot-tools',
+    priority: 0.74,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 聊天机器人推荐',
+      en: 'AI chatbots',
+    },
+    desc: {
+      cn: '适合问答、知识检索、写作和协作。',
+      en: 'For Q&A, knowledge retrieval, writing, and collaboration.',
+    },
+  },
+  {
+    href: '/guides/ai-chatbot-tools-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 聊天机器人对比',
+      en: 'AI chatbot comparison',
+    },
+    desc: {
+      cn: '把几款常见聊天机器人放在一起快速对照。',
+      en: 'Compare common chatbots side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-productivity-tools',
+    priority: 0.72,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 生产力工具推荐',
+      en: 'AI productivity tools',
+    },
+    desc: {
+      cn: '适合效率提升、任务管理和知识整理。',
+      en: 'For efficiency, task management, and knowledge organization.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-students',
+    priority: 0.72,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 学生工具推荐',
+      en: 'AI tools for students',
+    },
+    desc: {
+      cn: '适合学习、作业、总结和笔记协作。',
+      en: 'For learning, homework, summaries, and notes collaboration.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-small-business',
+    priority: 0.72,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 小企业工具推荐',
+      en: 'AI tools for small business',
+    },
+    desc: {
+      cn: '适合小团队、创业公司和独立商家。',
+      en: 'For small teams, startups, and solo businesses.',
+    },
+  },
+];
+
+export const FEATURED_GUIDE_HREFS = [
+  '/guides/how-to-choose-ai-tools',
+  '/guides/free-ai-tools',
+  '/guides/ai-writing-tools',
+  '/guides/ai-video-tools',
+  '/guides/ai-image-tools',
+  '/guides/ai-coding-tools',
+  '/guides/ai-chatbot-tools',
+] as const;

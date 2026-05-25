@@ -4,6 +4,7 @@ import { ExternalLink } from 'lucide-react';
 import { getMySubmittedTools, SubmittedTool } from '@/app/actions/submissions';
 import { getMySubmissionEmailPreference } from '@/app/actions/userPreferences';
 import EmptyState from '@/components/EmptyState';
+import { getListingPaymentMailto, listingConfig } from '@/lib/config/listing';
 import SubmissionEmailPreferenceToggle from './SubmissionEmailPreferenceToggle';
 
 export const metadata = {
@@ -71,6 +72,76 @@ function getStatusActionHint(status: SubmittedTool['status']) {
   }
 }
 
+type CommercialViewStatus =
+  | 'free'
+  | 'pending_payment'
+  | 'paid_waiting_review'
+  | 'live_featured'
+  | 'expired';
+
+function getRecord(value: unknown): Record<string, unknown> {
+  return value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
+}
+
+function getCommercialStatus(tool: SubmittedTool): CommercialViewStatus {
+  const features = getRecord(tool.features);
+  const submission = getRecord(features.submission);
+  const commercial = getRecord(submission.commercial);
+  const plan = String(commercial.plan || 'free');
+
+  if (plan !== 'standard_paid') return 'free';
+
+  const paymentConfirmed = commercial.paymentConfirmed === true;
+  const sponsored = commercial.isSponsoredPlacement === true;
+  const untilRaw = typeof commercial.featuredUntil === 'string' ? commercial.featuredUntil : '';
+  const until = untilRaw ? new Date(untilRaw) : null;
+  const now = new Date();
+
+  if (!paymentConfirmed) return 'pending_payment';
+  if (sponsored && until && !Number.isNaN(until.getTime()) && until >= now) return 'live_featured';
+  if (sponsored && until && !Number.isNaN(until.getTime()) && until < now) return 'expired';
+  return 'paid_waiting_review';
+}
+
+function getCommercialBadge(status: CommercialViewStatus) {
+  const styles: Record<CommercialViewStatus, string> = {
+    free: 'bg-slate-100 text-slate-700',
+    pending_payment: 'bg-amber-100 text-amber-800',
+    paid_waiting_review: 'bg-cyan-100 text-cyan-800',
+    live_featured: 'bg-emerald-100 text-emerald-800',
+    expired: 'bg-rose-100 text-rose-800',
+  };
+  const labels: Record<CommercialViewStatus, string> = {
+    free: listingConfig.plans.free.label,
+    pending_payment: 'Pending payment',
+    paid_waiting_review: 'Paid, under review',
+    live_featured: listingConfig.plans.standard_paid.featuredLabel,
+    expired: 'Featured expired',
+  };
+
+  return (
+    <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${styles[status]}`}>
+      {labels[status]}
+    </span>
+  );
+}
+
+function getCommercialPaymentUrl(tool: SubmittedTool): string | null {
+  const features = getRecord(tool.features);
+  const submission = getRecord(features.submission);
+  const commercial = getRecord(submission.commercial);
+  const candidates = ['paymentUrl', 'checkoutUrl', 'paymentLink'] as const;
+
+  for (const key of candidates) {
+    const value = commercial[key];
+    if (typeof value === 'string' && value.trim().length > 0) {
+      return value.trim();
+    }
+  }
+
+  return null;
+}
+
 export default async function SubmissionsPage() {
   const [result, submissionEmailEnabled] = await Promise.all([
     getMySubmittedTools(),
@@ -84,6 +155,7 @@ export default async function SubmissionsPage() {
     },
     { draft: 0, pending: 0, published: 0, rejected: 0 } as Record<SubmittedTool['status'], number>,
   );
+  const pendingPaymentMailto = getListingPaymentMailto('Complete Paid Submission');
 
   return (
     <div className="theme-page container mx-auto px-4 py-8">
@@ -118,7 +190,9 @@ export default async function SubmissionsPage() {
             <div className="rounded-lg bg-slate-50 p-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Pending review</p>
               <p className="mt-1 text-2xl font-bold text-amber-700">{statusStats.pending}</p>
-              <p className="mt-1 text-xs text-slate-500">Usually 1-3 business days</p>
+              <p className="mt-1 text-xs text-slate-500">
+                {listingConfig.plans.standard_paid.reviewWindow}
+              </p>
             </div>
             <div className="rounded-lg bg-slate-50 p-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Published</p>
@@ -128,7 +202,9 @@ export default async function SubmissionsPage() {
             <div className="rounded-lg bg-slate-50 p-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Draft</p>
               <p className="mt-1 text-2xl font-bold text-slate-700">{statusStats.draft}</p>
-              <p className="mt-1 text-xs text-slate-500">Can be improved and resubmitted</p>
+              <p className="mt-1 text-xs text-slate-500">
+                {listingConfig.plans.free.highlights[0]}
+              </p>
             </div>
             <div className="rounded-lg bg-slate-50 p-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Rejected</p>
@@ -155,6 +231,9 @@ export default async function SubmissionsPage() {
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
                     Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
+                    Commercial
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
                     Submitted
@@ -188,6 +267,9 @@ export default async function SubmissionsPage() {
                         {getStatusActionHint(tool.status)}
                       </p>
                     </td>
+                    <td className="px-6 py-4">
+                      {getCommercialBadge(getCommercialStatus(tool))}
+                    </td>
                     <td className="px-6 py-4 text-sm text-slate-500">
                       {new Date(tool.created_at).toLocaleDateString()}
                     </td>
@@ -199,6 +281,24 @@ export default async function SubmissionsPage() {
                         >
                           View listing
                         </Link>
+                      ) : getCommercialStatus(tool) === 'pending_payment' ? (
+                        getCommercialPaymentUrl(tool) ? (
+                          <a
+                            href={getCommercialPaymentUrl(tool)!}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center rounded-lg bg-cyan-700 px-3 py-1.5 text-sm font-semibold text-white hover:bg-cyan-800"
+                          >
+                            Complete payment
+                          </a>
+                        ) : (
+                          <a
+                            href={pendingPaymentMailto}
+                            className="text-sm font-medium text-cyan-700 hover:text-cyan-800"
+                          >
+                            Contact to pay
+                          </a>
+                        )
                       ) : (
                         <span className="text-sm text-slate-400">Awaiting review</span>
                       )}

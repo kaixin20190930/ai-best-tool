@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { getSiteMetrics, getTopTools } from '@/lib/services/admin/analytics';
 import { getOperationalStats, getToolsStats } from '@/app/actions/admin/tools';
+import { getCommentModerationSummary } from '@/app/actions/admin/comments';
 
 export async function generateMetadata({ params }: { params: { locale: string } }) {
   const t = await getTranslations({ locale: params.locale, namespace: 'admin' });
@@ -27,6 +28,7 @@ export default async function AdminDashboard() {
   const siteMetrics = await getSiteMetrics();
   const toolsStats = await getToolsStats();
   const operationalStats = await getOperationalStats();
+  const moderationSummary = await getCommentModerationSummary();
   const topTools = await getTopTools('views', 5);
 
   const metrics = [
@@ -129,6 +131,14 @@ export default async function AdminDashboard() {
       icon: AlertTriangle,
       color: 'red',
     },
+    {
+      name: 'Reported Comments',
+      value: moderationSummary.unresolvedReportedComments,
+      subtext: `${moderationSummary.autoHiddenComments} auto-hidden by threshold`,
+      href: '/admin/comments?sort=reports&reportState=unresolved',
+      icon: MessageSquare,
+      color: 'red',
+    },
   ];
 
   const getTitle = (tool: any) => {
@@ -182,7 +192,7 @@ export default async function AdminDashboard() {
           </div>
           <Sparkles className="hidden h-5 w-5 text-cyan-600 sm:block" />
         </div>
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-7">
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-8">
           {operations.map((operation) => (
             <Link
               key={operation.name}

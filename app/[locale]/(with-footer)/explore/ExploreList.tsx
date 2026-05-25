@@ -1,4 +1,10 @@
-import { getTools, ToolFilters, SortBy, getPopularTools } from '@/lib/services/tools';
+import {
+  getTools,
+  ToolFilters,
+  SortBy,
+  getPopularTools,
+  getActiveFeaturedTools,
+} from '@/lib/services/tools';
 import type { Category } from '@/lib/services/categories';
 import type { Tag } from '@/lib/services/tags';
 import { toolToListRow, toolToRecommendation } from '@/lib/services/toolPresenter';
@@ -135,13 +141,18 @@ export default async function ExploreList({
 
   // Fetch tools from database
   const result = await getTools(filters, { page: currentPage, pageSize: WEB_PAGE_SIZE }, sortBy);
+  const featuredTools = await getActiveFeaturedTools(filters, 6);
 
   // Track search if there's a search query
   if (searchParams?.search) {
     await trackSearch(searchParams.search, result.total);
   }
 
-  const dataList = result.data.map((tool) => toolToListRow(tool, locale));
+  const featuredList = featuredTools.map((tool) => toolToListRow(tool, locale));
+  const featuredIds = new Set(featuredList.map((item) => item.id));
+  const dataList = result.data
+    .map((tool) => toolToListRow(tool, locale))
+    .filter((item) => !featuredIds.has(item.id));
   const activeFilters = getActiveFilters({
     categories,
     tags,
@@ -184,12 +195,24 @@ export default async function ExploreList({
     <>
       <ExploreControls
         total={result.total}
-        visible={result.data.length}
+        visible={dataList.length}
         sortBy={sortBy}
         searchQuery={searchParams?.search}
         activeFilters={activeFilters}
         basePath={basePath}
       />
+
+      {featuredList.length > 0 && (
+        <section className='mb-6'>
+          <div className='mb-3 flex items-center justify-between'>
+            <h2 className='text-sm font-semibold uppercase tracking-wide text-fuchsia-700'>
+              Sponsored Picks
+            </h2>
+            <span className='text-xs text-slate-500'>Promoted listings</span>
+          </div>
+          <WebNavCardList dataList={featuredList} />
+        </section>
+      )}
 
       {/* Tool cards */}
       <WebNavCardList

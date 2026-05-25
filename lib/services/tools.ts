@@ -54,6 +54,18 @@ export interface ToolFilters {
  */
 export type SortBy = 'latest' | 'popular' | 'rating' | 'views' | 'clicks';
 
+const featuredActiveCondition = `
+  COALESCE(features->'submission'->'commercial'->>'isSponsoredPlacement', 'false') = 'true'
+  AND (
+    NULLIF(features->'submission'->'commercial'->>'featuredActiveFrom', '') IS NULL
+    OR NULLIF(features->'submission'->'commercial'->>'featuredActiveFrom', '')::timestamptz <= NOW()
+  )
+  AND (
+    NULLIF(features->'submission'->'commercial'->>'featuredUntil', '') IS NOT NULL
+    AND NULLIF(features->'submission'->'commercial'->>'featuredUntil', '')::timestamptz >= NOW()
+  )
+`;
+
 /**
  * 分页配置
  */
@@ -151,20 +163,51 @@ function buildWhereClause(filters: ToolFilters): { clause: string; params: any[]
  * 构建排序子句
  */
 function buildOrderByClause(sortBy: SortBy): string {
+  const featuredPriority = `
+    CASE
+      WHEN (${featuredActiveCondition}) THEN 0
+      ELSE 1
+    END
+  `;
+
   switch (sortBy) {
     case 'latest':
-      return 'ORDER BY created_at DESC';
+      return `ORDER BY ${featuredPriority}, created_at DESC`;
     case 'popular':
-      return 'ORDER BY (view_count + click_count * 2) DESC';
+      return `ORDER BY ${featuredPriority}, (view_count + click_count * 2) DESC`;
     case 'rating':
-      return 'ORDER BY average_rating DESC, rating_count DESC';
+      return `ORDER BY ${featuredPriority}, average_rating DESC, rating_count DESC`;
     case 'views':
-      return 'ORDER BY view_count DESC';
+      return `ORDER BY ${featuredPriority}, view_count DESC`;
     case 'clicks':
-      return 'ORDER BY click_count DESC';
+      return `ORDER BY ${featuredPriority}, click_count DESC`;
     default:
-      return 'ORDER BY created_at DESC';
+      return `ORDER BY ${featuredPriority}, created_at DESC`;
   }
+}
+
+export async function getActiveFeaturedTools(
+  filters: ToolFilters = {},
+  limit = 6
+): Promise<Tool[]> {
+  const mergedFilters: ToolFilters = { ...filters, status: 'published' };
+  const { clause, params } = buildWhereClause(mergedFilters);
+  const sql = `
+    SELECT 
+      id, name, title, content, detail, url, image_url as "imageUrl",
+      thumbnail_url as "thumbnailUrl", category_id as "categoryId", tags,
+      pricing, features, use_cases as "useCases", screenshots, video_url as "videoUrl",
+      status, submitted_by as "submittedBy", created_at as "createdAt",
+      updated_at as "updatedAt", view_count as "viewCount", click_count as "clickCount",
+      share_count as "shareCount", average_rating as "averageRating",
+      rating_count as "ratingCount"
+    FROM tools
+    ${clause ? `${clause} AND (${featuredActiveCondition})` : `WHERE ${featuredActiveCondition}`}
+    ORDER BY NULLIF(features->'submission'->'commercial'->>'featuredUntil', '')::timestamptz ASC, updated_at DESC
+    LIMIT $${params.length + 1}
+  `;
+  const result = await query<Tool>(sql, [...params, Math.max(1, Math.min(limit, 24))]);
+  return result.rows;
 }
 
 /**

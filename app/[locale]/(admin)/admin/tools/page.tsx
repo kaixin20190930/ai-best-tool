@@ -25,6 +25,8 @@ export default async function AdminToolsPage({
     overdue?: string;
     followedUp?: string;
     staleFollowUp?: string;
+    paidIntent?: string;
+    featuredIntent?: string;
     page?: string;
   };
 }) {
@@ -42,6 +44,8 @@ export default async function AdminToolsPage({
       ? false
       : undefined;
   const staleFollowUp = searchParams.staleFollowUp === '1';
+  const paidIntent = searchParams.paidIntent === '1';
+  const featuredIntent = searchParams.featuredIntent === '1';
   const quality =
     searchParams.quality === 'low' ||
     searchParams.quality === 'medium' ||
@@ -59,6 +63,8 @@ export default async function AdminToolsPage({
     overdue,
     followedUp,
     staleFollowUp,
+    paidIntent,
+    featuredIntent,
     page,
     pageSize: 20,
   });
@@ -125,6 +131,8 @@ export default async function AdminToolsPage({
           followedUp === true ? '1' : followedUp === false ? '0' : undefined
         }
         currentStaleFollowUp={staleFollowUp}
+        currentPaidIntent={paidIntent}
+        currentFeaturedIntent={featuredIntent}
       />
 
       {/* Tools Table */}

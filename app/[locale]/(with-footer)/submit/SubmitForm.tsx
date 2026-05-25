@@ -1,7 +1,7 @@
 'use client';
 
 /* eslint-disable react/jsx-props-no-spreading */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { submitTool } from '@/app/actions/submitTool';
+import { listingConfig } from '@/lib/config/listing';
 import type { Category } from '@/lib/services/categories';
 import { FORM_PLACEHOLDER, WEBSITE_EXAMPLE } from '@/lib/constants';
 import { cn } from '@/lib/utils';
@@ -59,6 +60,9 @@ const FormSchema = z.object({
       return false;
     }
   }),
+  submissionPlan: z.enum(['free', 'standard_paid']),
+  fastTrack: z.boolean(),
+  featuredDays: z.enum(['0', '3', '7', '14']),
 });
 
 function getLocalizedName(name: Record<string, string>, locale: string): string {
@@ -90,15 +94,45 @@ export default function SubmitForm({
       pricing: 'freemium',
       imageUrl: '',
       thumbnailUrl: '',
+      submissionPlan: 'free',
+      fastTrack: false,
+      featuredDays: '0',
     },
   });
+  const submissionPlan = form.watch('submissionPlan');
+  const fastTrack = form.watch('fastTrack');
+  const featuredDays = form.watch('featuredDays');
   const descriptionLength = form.watch('description')?.length || 0;
+  const selectedFeaturedDays = Number(featuredDays || '0');
+  const isPaidPlan = submissionPlan === 'standard_paid';
+  const selectedPlanLabel =
+    isPaidPlan
+      ? (isChinese ? '付费入驻' : listingConfig.plans.standard_paid.label)
+      : (isChinese ? '免费提交' : listingConfig.plans.free.label);
+  const planHighlights =
+    isPaidPlan
+      ? listingConfig.plans.standard_paid.highlights
+      : [
+          isChinese ? '正常审核队列' : listingConfig.plans.free.summary,
+          isChinese ? '适合先试水提交' : listingConfig.plans.free.highlights[0],
+          isChinese ? '不会占用付费前排资源' : listingConfig.plans.free.highlights[1],
+        ];
+
+  useEffect(() => {
+    if (!isPaidPlan) {
+      form.setValue('fastTrack', false, { shouldDirty: true });
+      form.setValue('featuredDays', '0', { shouldDirty: true });
+    }
+  }, [form, isPaidPlan]);
 
   const onSubmit = async (formData: z.infer<typeof FormSchema>) => {
     try {
       setLoading(true);
 
-      const result = await submitTool(formData);
+      const result = await submitTool({
+        ...formData,
+        featuredDays: Number(formData.featuredDays) as 0 | 3 | 7 | 14,
+      });
 
       if (!result.success) {
         toast.error(result.error || t('networkError'));
@@ -287,6 +321,214 @@ export default function SubmitForm({
                 </FormItem>
               )}
             />
+          </div>
+          <div className='rounded-lg border border-slate-200 bg-slate-50 p-4'>
+            <p className='text-sm font-semibold text-slate-900'>
+              {isChinese ? '入驻方案（MVP）' : 'Listing plan (MVP)'}
+            </p>
+            <p className='mt-1 text-xs text-slate-500'>
+              {isChinese
+                ? '先用上面的两张卡做主选择，再在下面微调审核和前排天数。'
+                : 'Use the two cards above as the main choice, then fine-tune review and featured days below.'}
+            </p>
+            <div className='mt-3 grid gap-3 md:grid-cols-2'>
+              <button
+                type='button'
+                onClick={() => form.setValue('submissionPlan', 'free', { shouldDirty: true })}
+                className={cn(
+                  'rounded-xl border p-4 text-left transition',
+                  !isPaidPlan
+                    ? 'border-cyan-300 bg-cyan-50 ring-1 ring-cyan-200'
+                    : 'border-slate-200 bg-white hover:border-slate-300',
+                )}
+              >
+                <div className='flex items-center justify-between gap-3'>
+                  <div>
+                    <p className='text-sm font-semibold text-slate-950'>
+                      {isChinese ? '免费提交' : listingConfig.plans.free.label}
+                    </p>
+                    <p className='mt-1 text-xs text-slate-500'>
+                      {isChinese
+                        ? '标准队列审核，适合先测试收录。'
+                        : `${listingConfig.plans.free.reviewWindow} review, good for testing the listing.`}
+                    </p>
+                  </div>
+                  <span
+                    className={cn(
+                      'rounded-full px-2.5 py-1 text-xs font-semibold',
+                      !isPaidPlan ? 'bg-cyan-100 text-cyan-800' : 'bg-slate-100 text-slate-600',
+                    )}
+                  >
+                    {isChinese ? '基础路径' : 'Base path'}
+                  </span>
+                </div>
+                <ul className='mt-3 space-y-1 text-sm text-slate-600'>
+                  <li className='flex items-start gap-2'>
+                    <span className='mt-1 h-1.5 w-1.5 rounded-full bg-cyan-600' />
+                    <span>{isChinese ? '进入标准审核' : listingConfig.plans.free.summary}</span>
+                  </li>
+                  <li className='flex items-start gap-2'>
+                    <span className='mt-1 h-1.5 w-1.5 rounded-full bg-cyan-600' />
+                    <span>{isChinese ? '适合先试水提交' : listingConfig.plans.free.highlights[0]}</span>
+                  </li>
+                  <li className='flex items-start gap-2'>
+                    <span className='mt-1 h-1.5 w-1.5 rounded-full bg-cyan-600' />
+                    <span>{isChinese ? '不占用付费前排资源' : listingConfig.plans.free.highlights[1]}</span>
+                  </li>
+                </ul>
+              </button>
+
+              <button
+                type='button'
+                onClick={() => form.setValue('submissionPlan', 'standard_paid', { shouldDirty: true })}
+                className={cn(
+                  'rounded-xl border p-4 text-left transition',
+                  isPaidPlan
+                    ? 'border-cyan-300 bg-cyan-50 ring-1 ring-cyan-200'
+                    : 'border-slate-200 bg-white hover:border-slate-300',
+                )}
+              >
+                <div className='flex items-center justify-between gap-3'>
+                  <div>
+                    <p className='text-sm font-semibold text-slate-950'>
+                      {isChinese ? '付费入驻' : listingConfig.plans.standard_paid.label}
+                    </p>
+                    <p className='mt-1 text-xs text-slate-500'>
+                      {isChinese
+                        ? '优先审核 + 前排展示，更适合想要转化的开发者。'
+                        : `${listingConfig.plans.standard_paid.reviewWindow} review with featured placement options.`}
+                    </p>
+                  </div>
+                  <span
+                    className={cn(
+                      'rounded-full px-2.5 py-1 text-xs font-semibold',
+                      isPaidPlan ? 'bg-cyan-100 text-cyan-800' : 'bg-slate-100 text-slate-600',
+                    )}
+                  >
+                    {isChinese ? '推荐' : 'Recommended'}
+                  </span>
+                </div>
+                <ul className='mt-3 space-y-1 text-sm text-slate-600'>
+                  <li className='flex items-start gap-2'>
+                    <span className='mt-1 h-1.5 w-1.5 rounded-full bg-cyan-600' />
+                    <span>{isChinese ? '更快审核' : listingConfig.plans.standard_paid.highlights[0]}</span>
+                  </li>
+                  <li className='flex items-start gap-2'>
+                    <span className='mt-1 h-1.5 w-1.5 rounded-full bg-cyan-600' />
+                    <span>{isChinese ? '可选前排窗口' : listingConfig.plans.standard_paid.highlights[1]}</span>
+                  </li>
+                  <li className='flex items-start gap-2'>
+                    <span className='mt-1 h-1.5 w-1.5 rounded-full bg-cyan-600' />
+                    <span>{isChinese ? '支持支付回调' : listingConfig.plans.standard_paid.highlights[2]}</span>
+                  </li>
+                </ul>
+              </button>
+            </div>
+            <div className='mt-3 grid gap-2'>
+              <FormField
+                control={form.control}
+                name='submissionPlan'
+                render={({ field }) => (
+                  <FormItem className='space-y-1'>
+                    <FormControl>
+                      <select
+                        className='h-[42px] w-full rounded-[8px] border border-slate-300 bg-white px-4 text-sm text-slate-900'
+                        {...field}
+                      >
+                        <option value='free'>
+                          {isChinese
+                            ? '免费提交（3-7天审核）'
+                            : `${listingConfig.plans.free.label} (${listingConfig.plans.free.reviewWindow})`}
+                        </option>
+                        <option value='standard_paid'>
+                          {isChinese
+                            ? '付费入驻（1-3天优先审核）'
+                            : `${listingConfig.plans.standard_paid.label} (${listingConfig.plans.standard_paid.reviewWindow})`}
+                        </option>
+                      </select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className='grid gap-2 lg:grid-cols-2'>
+                <FormField
+                  control={form.control}
+                  name='fastTrack'
+                  render={({ field }) => (
+                    <FormItem className='space-y-1'>
+                      <FormLabel className='text-xs'>{isChinese ? '加速审核' : 'Fast Track'}</FormLabel>
+                      <FormControl>
+                        <label className='flex h-[42px] items-center gap-2 rounded-[8px] border border-slate-300 bg-white px-3 text-sm text-slate-900'>
+                          <input
+                            type='checkbox'
+                            checked={field.value}
+                            onChange={(e) => field.onChange(e.target.checked)}
+                            disabled={!isPaidPlan}
+                          />
+                          {isChinese
+                            ? '24-48小时审核'
+                            : `24-48h review · ${listingConfig.plans.standard_paid.fastTrackLabel}`}
+                        </label>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name='featuredDays'
+                  render={({ field }) => (
+                    <FormItem className='space-y-1'>
+                      <FormLabel className='text-xs'>{isChinese ? '前排展示天数' : 'Featured days'}</FormLabel>
+                      <FormControl>
+                        <select
+                          className='h-[42px] w-full rounded-[8px] border border-slate-300 bg-white px-4 text-sm text-slate-900 disabled:bg-slate-100 disabled:text-slate-500'
+                          {...field}
+                          disabled={!isPaidPlan}
+                        >
+                          <option value='0'>{isChinese ? '不需要' : 'No featured slot'}</option>
+                          <option value='3'>3 days</option>
+                          <option value='7'>7 days</option>
+                          <option value='14'>14 days</option>
+                        </select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+            <div className='mt-4 rounded-lg bg-white p-3 ring-1 ring-slate-200'>
+              <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                {isChinese ? '当前方案概览' : 'Current plan snapshot'}
+              </p>
+              <div className='mt-2 flex flex-wrap items-center gap-2'>
+                <span className='inline-flex rounded-full bg-cyan-100 px-2.5 py-1 text-xs font-semibold text-cyan-800'>
+                  {selectedPlanLabel}
+                </span>
+                {submissionPlan === 'standard_paid' && fastTrack && (
+                  <span className='inline-flex rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-800'>
+                    {isChinese ? '加速审核' : 'Fast track enabled'}
+                  </span>
+                )}
+                {selectedFeaturedDays > 0 && (
+                  <span className='inline-flex rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-800'>
+                    {isChinese
+                      ? `前排 ${selectedFeaturedDays} 天`
+                      : `Featured ${selectedFeaturedDays} days`}
+                  </span>
+                )}
+              </div>
+              <ul className='mt-3 space-y-1 text-sm text-slate-600'>
+                {planHighlights.map((item) => (
+                  <li key={item} className='flex items-start gap-2'>
+                    <span className='mt-1 h-1.5 w-1.5 rounded-full bg-cyan-600' />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
         <div className='mt-5 flex flex-col gap-[10px] lg:gap-5'>

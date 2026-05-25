@@ -1,6 +1,7 @@
 import { type MetadataRoute } from 'next';
 import { locales } from '@/i18n';
 import { BASE_URL } from '@/lib/env';
+import { GUIDE_PAGES } from '@/lib/content/guides';
 import { getTools } from '@/lib/services/tools';
 import { getAllCategories } from '@/lib/services/categories';
 
@@ -44,7 +45,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // Generate static route entries for all locales
-  const staticSitemapEntries = staticRoutes.flatMap((route) =>
+  const guideRoutes = GUIDE_PAGES.map(({ href, priority, changeFrequency }) => ({
+    url: href.replace(/^\//, ''),
+    priority,
+    changeFrequency,
+  }));
+
+  const staticSitemapEntries = [...staticRoutes, ...guideRoutes].flatMap((route) =>
     locales.map((locale) => {
       const lang = locale === 'en' ? '' : `/${locale}`;
       const routeUrl = route.url === '' ? '' : `/${route.url}`;

@@ -10,6 +10,7 @@ export interface SubmittedTool {
   url: string;
   status: 'draft' | 'pending' | 'published' | 'rejected';
   pricing: string | null;
+  features: Record<string, unknown> | null;
   created_at: Date;
   updated_at: Date;
 }
@@ -24,7 +25,7 @@ export async function getMySubmittedTools(): Promise<{
     const pool = getPool();
     const result = await pool.query(
       `
-        SELECT id, name, title, url, status, pricing, created_at, updated_at
+        SELECT id, name, title, url, status, pricing, features, created_at, updated_at
         FROM tools
         WHERE submitted_by = $1
         ORDER BY created_at DESC

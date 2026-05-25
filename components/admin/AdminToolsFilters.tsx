@@ -13,6 +13,8 @@ interface AdminToolsFiltersProps {
   currentOverdue?: boolean;
   currentFollowedUp?: '0' | '1';
   currentStaleFollowUp?: boolean;
+  currentPaidIntent?: boolean;
+  currentFeaturedIntent?: boolean;
 }
 
 export default function AdminToolsFilters({
@@ -25,6 +27,8 @@ export default function AdminToolsFilters({
   currentOverdue,
   currentFollowedUp,
   currentStaleFollowUp,
+  currentPaidIntent,
+  currentFeaturedIntent,
 }: AdminToolsFiltersProps) {
   const router = useRouter();
 
@@ -40,6 +44,8 @@ export default function AdminToolsFilters({
     const nextOverdue = updates.overdue ?? currentOverdue;
     const nextFollowedUp = updates.followedUp ?? currentFollowedUp;
     const nextStaleFollowUp = updates.staleFollowUp ?? currentStaleFollowUp;
+    const nextPaidIntent = updates.paidIntent ?? currentPaidIntent;
+    const nextFeaturedIntent = updates.featuredIntent ?? currentFeaturedIntent;
 
     if (nextReady) {
       params.set('status', 'draft');
@@ -74,6 +80,12 @@ export default function AdminToolsFilters({
 
     if (nextStaleFollowUp && !nextReady) {
       params.set('staleFollowUp', '1');
+    }
+    if (nextPaidIntent && !nextReady) {
+      params.set('paidIntent', '1');
+    }
+    if (nextFeaturedIntent && !nextReady) {
+      params.set('featuredIntent', '1');
     }
 
     const queryString = params.toString();
@@ -203,6 +215,30 @@ export default function AdminToolsFilters({
             }`}
           >
             Stale follow-up
+          </button>
+          <button
+            type="button"
+            onClick={() => router.push(buildPath({ paidIntent: !currentPaidIntent, ready: false }))}
+            className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+              currentPaidIntent
+                ? 'bg-indigo-600 text-white'
+                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            }`}
+          >
+            Paid intent
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              router.push(buildPath({ featuredIntent: !currentFeaturedIntent, ready: false }))
+            }
+            className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+              currentFeaturedIntent
+                ? 'bg-fuchsia-600 text-white'
+                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            }`}
+          >
+            Featured intent
           </button>
           <button
             type="button"

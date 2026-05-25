@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useRouter } from '@/app/navigation';
 import { toast } from 'sonner';
 import {
+  activateCommercialPlacement,
   approveTool,
   improveDraftTool,
   markToolMediaNeeded,
@@ -60,6 +61,7 @@ export default function AdminToolEditForm({
   const [reviewLoading, setReviewLoading] = useState<'approve' | 'reject' | null>(
     null
   );
+  const [commercialLoading, setCommercialLoading] = useState(false);
 
   const getTitle = (data: any) => {
     if (typeof data === 'string') return data;
@@ -90,6 +92,8 @@ export default function AdminToolEditForm({
   const productHuntRedirectUrl = getString(collection.productHuntRedirectUrl);
   const externalUrl = getString(collection.externalUrl);
   const mediaReview = getNestedRecord(featureRecord.mediaReview);
+  const submissionFeature = getNestedRecord(featureRecord.submission);
+  const commercialFeature = getNestedRecord(submissionFeature.commercial);
   const mediaNeeded = mediaReview.needed === true;
   const mediaMarkedAt = getString(mediaReview.markedAt);
   const missingImage = !tool.image_url;
@@ -104,6 +108,33 @@ export default function AdminToolEditForm({
     typeof qualityScore === 'number' ||
     Boolean(suggestedCategorySlug) ||
     suggestedUseCases.length > 0;
+  const commercialPlan = getString(commercialFeature.plan) || 'free';
+  const commercialStatus =
+    getString(commercialFeature.status) ||
+    (commercialPlan === 'standard_paid' ? 'pending_payment_confirmation' : 'free_queue');
+  const featuredDaysRequested = String(
+    getNumber(commercialFeature.featuredDaysRequested) || 0
+  );
+  const fastTrackRequested = commercialFeature.fastTrackRequested === true;
+  const paymentConfirmed = commercialFeature.paymentConfirmed === true;
+  const isSponsoredPlacement = commercialFeature.isSponsoredPlacement === true;
+  const paymentUrl = getString(commercialFeature.paymentUrl) || '';
+  const featuredActiveFrom = getString(commercialFeature.featuredActiveFrom) || '';
+  const featuredUntil = getString(commercialFeature.featuredUntil) || '';
+  const [featuredFromInput, setFeaturedFromInput] = useState(featuredActiveFrom);
+  const [featuredUntilInput, setFeaturedUntilInput] = useState(featuredUntil);
+  const [featuredDaysInput, setFeaturedDaysInput] = useState(featuredDaysRequested);
+
+  const featuredPreview = useMemo(() => {
+    const from = featuredFromInput.trim();
+    const until = featuredUntilInput.trim();
+    if (!from || !until) return null;
+    const fromTs = new Date(from).getTime();
+    const untilTs = new Date(until).getTime();
+    if (!Number.isFinite(fromTs) || !Number.isFinite(untilTs)) return 'Invalid time format';
+    const days = Math.max(0, Math.round((untilTs - fromTs) / (24 * 60 * 60 * 1000)));
+    return `${days} day window`;
+  }, [featuredFromInput, featuredUntilInput]);
 
   const handleApprove = async () => {
     setReviewLoading('approve');
@@ -176,6 +207,19 @@ export default function AdminToolEditForm({
     }
   };
 
+  const handleActivateCommercial = async () => {
+    setCommercialLoading(true);
+    const result = await activateCommercialPlacement(tool.id);
+    setCommercialLoading(false);
+
+    if (result.success) {
+      toast.success('Commercial placement activated');
+      router.refresh();
+    } else {
+      toast.error(result.error || 'Failed to activate commercial placement');
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -192,6 +236,20 @@ export default function AdminToolEditForm({
     const tagsStr = String(formData.get('tags') || '');
     const pricing = String(formData.get('pricing') || 'free');
     const status = String(formData.get('status') || 'draft');
+    const formCommercialPlan = String(formData.get('commercial_plan') || 'free');
+    const formCommercialStatus = String(
+      formData.get('commercial_status') ||
+        (formCommercialPlan === 'standard_paid'
+          ? 'pending_payment_confirmation'
+          : 'free_queue')
+    );
+    const formFastTrackRequested = formData.get('fast_track_requested') === 'on';
+    const formFeaturedDaysRequested = Number(formData.get('featured_days_requested') || 0);
+    const formPaymentConfirmed = formData.get('payment_confirmed') === 'on';
+    const formSponsoredPlacement = formData.get('is_sponsored_placement') === 'on';
+    const formPaymentUrl = String(formData.get('payment_url') || '').trim();
+    const formFeaturedActiveFrom = String(formData.get('featured_active_from') || '').trim();
+    const formFeaturedUntil = String(formData.get('featured_until') || '').trim();
 
     const tags = tagsStr
       .split(',')
@@ -210,6 +268,18 @@ export default function AdminToolEditForm({
       tags,
       pricing,
       status,
+      commercialPlan:
+        formCommercialPlan === 'standard_paid' ? 'standard_paid' : 'free',
+      commercialStatus: formCommercialStatus,
+      fastTrackRequested: formFastTrackRequested,
+      featuredDaysRequested: [0, 3, 7, 14].includes(formFeaturedDaysRequested)
+        ? formFeaturedDaysRequested
+        : 0,
+      paymentConfirmed: formPaymentConfirmed,
+      paymentUrl: formPaymentUrl || null,
+      featuredActiveFrom: formFeaturedActiveFrom || null,
+      featuredUntil: formFeaturedUntil || null,
+      isSponsoredPlacement: formSponsoredPlacement,
     });
 
     setLoading(false);
@@ -612,6 +682,173 @@ export default function AdminToolEditForm({
               <option value="published">Published</option>
               <option value="rejected">Rejected</option>
             </select>
+          </div>
+        </div>
+      </div>
+
+      <div className="theme-surface rounded-lg border border-slate-200 p-6 shadow-sm">
+        <h2 className="mb-4 text-lg font-semibold text-slate-900">Commercial Listing</h2>
+        <div className="grid gap-4 md:grid-cols-2">
+          <div>
+            <label htmlFor="commercial_plan" className="block text-sm font-medium text-slate-700">
+              Submission Plan
+            </label>
+            <select
+              id="commercial_plan"
+              name="commercial_plan"
+              defaultValue={commercialPlan}
+              className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+            >
+              <option value="free">Free</option>
+              <option value="standard_paid">Standard Paid</option>
+            </select>
+          </div>
+          <div>
+            <label htmlFor="commercial_status" className="block text-sm font-medium text-slate-700">
+              Commercial Status
+            </label>
+            <input
+              type="text"
+              id="commercial_status"
+              name="commercial_status"
+              defaultValue={commercialStatus}
+              className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+            />
+          </div>
+          <div className="md:col-span-2">
+            <label htmlFor="payment_url" className="block text-sm font-medium text-slate-700">
+              Payment URL
+            </label>
+            <input
+              type="url"
+              id="payment_url"
+              name="payment_url"
+              defaultValue={paymentUrl}
+              placeholder="https://checkout.example.com/invoice/..."
+              className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+            />
+            <p className="mt-1 text-xs text-slate-500">
+              This is shown to the user on the submissions page when payment is pending.
+            </p>
+          </div>
+          <div>
+            <label
+              htmlFor="featured_days_requested"
+              className="block text-sm font-medium text-slate-700"
+            >
+              Featured Days Requested
+            </label>
+            <select
+              id="featured_days_requested"
+              name="featured_days_requested"
+              defaultValue={featuredDaysRequested}
+              className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+              onChange={(event) => setFeaturedDaysInput(event.target.value)}
+            >
+              <option value="0">0</option>
+              <option value="3">3</option>
+              <option value="7">7</option>
+              <option value="14">14</option>
+            </select>
+          </div>
+          <div className="space-y-2 pt-6">
+            <label className="flex items-center gap-2 text-sm text-slate-700">
+              <input
+                type="checkbox"
+                name="fast_track_requested"
+                defaultChecked={fastTrackRequested}
+              />
+              Fast Track Requested
+            </label>
+            <label className="flex items-center gap-2 text-sm text-slate-700">
+              <input
+                type="checkbox"
+                name="payment_confirmed"
+                defaultChecked={paymentConfirmed}
+              />
+              Payment Confirmed
+            </label>
+            <label className="flex items-center gap-2 text-sm text-slate-700">
+              <input
+                type="checkbox"
+                name="is_sponsored_placement"
+                defaultChecked={isSponsoredPlacement}
+              />
+              Sponsored Placement Active
+            </label>
+          </div>
+          <div>
+            <label htmlFor="featured_active_from" className="block text-sm font-medium text-slate-700">
+              Featured Active From (ISO)
+            </label>
+            <input
+              type="text"
+              id="featured_active_from"
+              name="featured_active_from"
+              value={featuredFromInput}
+              onChange={(event) => setFeaturedFromInput(event.target.value)}
+              placeholder="2026-05-22T00:00:00.000Z"
+              className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+            />
+          </div>
+          <div>
+            <label htmlFor="featured_until" className="block text-sm font-medium text-slate-700">
+              Featured Until (ISO)
+            </label>
+            <input
+              type="text"
+              id="featured_until"
+              name="featured_until"
+              value={featuredUntilInput}
+              onChange={(event) => setFeaturedUntilInput(event.target.value)}
+              placeholder="2026-05-29T00:00:00.000Z"
+              className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+            />
+          </div>
+          <div className="md:col-span-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  const days = Number(featuredDaysInput || '0');
+                  if (!Number.isFinite(days) || days <= 0) {
+                    toast.error('Please choose featured days first.');
+                    return;
+                  }
+                  const start = new Date();
+                  const end = new Date(start.getTime() + days * 24 * 60 * 60 * 1000);
+                  setFeaturedFromInput(start.toISOString());
+                  setFeaturedUntilInput(end.toISOString());
+                  toast.success('Featured window generated.');
+                }}
+                className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+              >
+                Auto-generate from now
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setFeaturedFromInput('');
+                  setFeaturedUntilInput('');
+                }}
+                className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+              >
+                Clear featured window
+              </button>
+              {featuredPreview && (
+                <span className="text-xs text-slate-500">{featuredPreview}</span>
+              )}
+            </div>
+            <div className="mt-2">
+              <button
+                type="button"
+                onClick={handleActivateCommercial}
+                disabled={commercialLoading || loading}
+                className="rounded-lg bg-emerald-600 px-3 py-2 text-sm font-medium text-white hover:bg-emerald-700 disabled:opacity-50"
+              >
+                {commercialLoading ? 'Activating...' : 'Activate Paid Placement Now'}
+              </button>
+            </div>
           </div>
         </div>
       </div>

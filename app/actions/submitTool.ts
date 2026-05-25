@@ -15,6 +15,9 @@ interface SubmitToolInput {
   pricing?: string;
   imageUrl?: string;
   thumbnailUrl?: string;
+  submissionPlan?: 'free' | 'standard_paid';
+  fastTrack?: boolean;
+  featuredDays?: 0 | 3 | 7 | 14;
 }
 
 interface SubmitToolResult {
@@ -77,6 +80,9 @@ export async function submitTool(input: SubmitToolInput): Promise<SubmitToolResu
     const website = input.website.trim();
     const description = input.description?.trim();
     const pricing = input.pricing || 'freemium';
+    const submissionPlan = input.submissionPlan || 'free';
+    const fastTrack = Boolean(input.fastTrack);
+    const featuredDays = input.featuredDays || 0;
     const categoryId = input.categoryId?.trim() || null;
 
     if (website.length < 2) {
@@ -89,6 +95,15 @@ export async function submitTool(input: SubmitToolInput): Promise<SubmitToolResu
 
     if (!['free', 'freemium', 'paid'].includes(pricing)) {
       return { success: false, error: 'Please select a valid pricing option.' };
+    }
+    if (!['free', 'standard_paid'].includes(submissionPlan)) {
+      return { success: false, error: 'Please select a valid submission plan.' };
+    }
+    if (![0, 3, 7, 14].includes(featuredDays)) {
+      return { success: false, error: 'Please select a valid featured duration.' };
+    }
+    if (submissionPlan === 'free' && fastTrack) {
+      return { success: false, error: 'Fast track is available for paid plan only.' };
     }
 
     const url = normalizeUrl(input.url);
@@ -127,6 +142,20 @@ export async function submitTool(input: SubmitToolInput): Promise<SubmitToolResu
     const features = {
       submission: {
         submittedByEmail: user.email || null,
+        commercial: {
+          plan: submissionPlan,
+          fastTrackRequested: submissionPlan === 'standard_paid' ? fastTrack : false,
+          featuredDaysRequested: featuredDays,
+          featuredRequested: featuredDays > 0,
+          status: submissionPlan === 'free' ? 'free_queue' : 'pending_payment_confirmation',
+          targetReviewSlaHours:
+            submissionPlan === 'standard_paid'
+              ? fastTrack
+                ? 48
+                : 72
+              : 24 * 5,
+          requestedAt: new Date().toISOString(),
+        },
       },
     };
 

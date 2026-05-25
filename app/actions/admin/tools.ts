@@ -400,6 +400,8 @@ export async function getAdminTools(filters?: {
   overdue?: boolean;
   followedUp?: boolean;
   staleFollowUp?: boolean;
+  paidIntent?: boolean;
+  featuredIntent?: boolean;
   page?: number;
   pageSize?: number;
 }): Promise<{ tools: AdminTool[]; total: number }> {
@@ -458,6 +460,14 @@ export async function getAdminTools(filters?: {
         AND (features->'followUp'->>'followedUpAt') IS NOT NULL
         AND (features->'followUp'->>'followedUpAt')::timestamptz <= NOW() - INTERVAL '3 days'
       `;
+    }
+
+    if (filters?.paidIntent) {
+      query += ` AND COALESCE(features->'submission'->'commercial'->>'plan', 'free') = 'standard_paid'`;
+    }
+
+    if (filters?.featuredIntent) {
+      query += ` AND COALESCE((features->'submission'->'commercial'->>'featuredDaysRequested')::int, 0) > 0`;
     }
 
     if (filters?.quality) {
@@ -721,6 +731,15 @@ export async function updateTool(
     tags?: string[];
     pricing?: string;
     status?: string;
+    commercialPlan?: 'free' | 'standard_paid';
+    commercialStatus?: string;
+    fastTrackRequested?: boolean;
+    featuredDaysRequested?: number;
+    paymentConfirmed?: boolean;
+    featuredActiveFrom?: string | null;
+    featuredUntil?: string | null;
+    isSponsoredPlacement?: boolean;
+    paymentUrl?: string | null;
   }
 ): Promise<{ success: boolean; error?: string }> {
   try {
@@ -740,6 +759,7 @@ export async function updateTool(
     const existingStatus = existingResult.rows[0].status as ToolStatus;
     const submittedBy = (existingResult.rows[0].submitted_by as string | null) || null;
     const existingTitleRaw = existingResult.rows[0].title;
+    const existingFeatures = getRecord(existingResult.rows[0].features);
     const submittedByEmail = getSubmittedByEmailFromFeatures(existingResult.rows[0].features);
     const nextStatus = assertStatus(data.status);
     const nextPricing = assertPricing(data.pricing);
@@ -812,6 +832,57 @@ export async function updateTool(
     if (nextStatus !== undefined) {
       updates.push(`status = $${paramIndex}`);
       params.push(nextStatus);
+      paramIndex++;
+    }
+
+    const shouldUpdateCommercial =
+      data.commercialPlan !== undefined ||
+      data.commercialStatus !== undefined ||
+      data.fastTrackRequested !== undefined ||
+      data.featuredDaysRequested !== undefined ||
+      data.paymentConfirmed !== undefined ||
+      data.featuredActiveFrom !== undefined ||
+      data.featuredUntil !== undefined ||
+      data.isSponsoredPlacement !== undefined ||
+      data.paymentUrl !== undefined;
+
+    if (shouldUpdateCommercial) {
+      const submission = getRecord(existingFeatures.submission);
+      const commercial = getRecord(submission.commercial);
+      const nextCommercial = {
+        ...commercial,
+        ...(data.commercialPlan !== undefined ? { plan: data.commercialPlan } : {}),
+        ...(data.commercialStatus !== undefined ? { status: data.commercialStatus } : {}),
+        ...(data.fastTrackRequested !== undefined
+          ? { fastTrackRequested: data.fastTrackRequested }
+          : {}),
+        ...(data.featuredDaysRequested !== undefined
+          ? { featuredDaysRequested: data.featuredDaysRequested }
+          : {}),
+        ...(data.paymentConfirmed !== undefined ? { paymentConfirmed: data.paymentConfirmed } : {}),
+        ...(data.featuredActiveFrom !== undefined
+          ? { featuredActiveFrom: normalizeNullableText(data.featuredActiveFrom) }
+          : {}),
+        ...(data.featuredUntil !== undefined
+          ? { featuredUntil: normalizeNullableText(data.featuredUntil) }
+          : {}),
+        ...(data.isSponsoredPlacement !== undefined
+          ? { isSponsoredPlacement: data.isSponsoredPlacement }
+          : {}),
+        ...(data.paymentUrl !== undefined ? { paymentUrl: normalizeNullableText(data.paymentUrl) } : {}),
+        updatedAt: new Date().toISOString(),
+      };
+
+      const nextFeatures = {
+        ...existingFeatures,
+        submission: {
+          ...submission,
+          commercial: nextCommercial,
+        },
+      };
+
+      updates.push(`features = $${paramIndex}`);
+      params.push(JSON.stringify(nextFeatures));
       paramIndex++;
     }
 
@@ -1172,6 +1243,126 @@ export async function getOperationalStats(
       pendingDeveloperSubmissions: 0,
       overduePendingSubmissions: 0,
       followedUpOverdueSubmissions: 0,
+    };
+  }
+}
+
+export async function cleanupExpiredSponsoredPlacementsBySystem(): Promise<{
+  success: boolean;
+  updated: number;
+  error?: string;
+}> {
+  try {
+    const pool = getPool();
+    const result = await pool.query(
+      `
+        UPDATE tools
+        SET
+          features = jsonb_set(
+            COALESCE(features, '{}'::jsonb),
+            '{submission,commercial,isSponsoredPlacement}',
+            'false'::jsonb,
+            true
+          ),
+          updated_at = NOW()
+        WHERE
+          COALESCE(features->'submission'->'commercial'->>'isSponsoredPlacement', 'false') = 'true'
+          AND NULLIF(features->'submission'->'commercial'->>'featuredUntil', '') IS NOT NULL
+          AND NULLIF(features->'submission'->'commercial'->>'featuredUntil', '')::timestamptz < NOW()
+      `
+    );
+
+    revalidateAdminToolPaths();
+    revalidatePublicToolPaths();
+
+    return { success: true, updated: result.rowCount || 0 };
+  } catch (error) {
+    console.error('Error cleaning expired sponsored placements:', error);
+    return {
+      success: false,
+      updated: 0,
+      error: error instanceof Error ? error.message : 'Failed to clean expired sponsored placements',
+    };
+  }
+}
+
+export async function activateCommercialPlacement(
+  toolId: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    await requireAdmin();
+    const activation = await activateCommercialPlacementBySystem(toolId, null);
+    if (!activation.success) {
+      return { success: false, error: activation.error };
+    }
+
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to activate commercial placement',
+    };
+  }
+}
+
+export async function activateCommercialPlacementBySystem(
+  toolId: string,
+  transactionId?: string | null
+): Promise<{ success: boolean; error?: string; name?: string }> {
+  try {
+    const pool = getPool();
+    const result = await pool.query('SELECT name, features FROM tools WHERE id = $1 LIMIT 1', [toolId]);
+    if (result.rows.length === 0) {
+      return { success: false, error: 'Tool not found' };
+    }
+
+    const row = result.rows[0];
+    const features = getRecord(row.features);
+    const submission = getRecord(features.submission);
+    const commercial = getRecord(submission.commercial);
+    const requestedDaysRaw = commercial.featuredDaysRequested;
+    const requestedDays =
+      typeof requestedDaysRaw === 'number'
+        ? requestedDaysRaw
+        : Number.parseInt(String(requestedDaysRaw ?? 0), 10) || 0;
+    const durationDays = [3, 7, 14].includes(requestedDays) ? requestedDays : 7;
+    const now = new Date();
+    const until = new Date(now.getTime() + durationDays * 24 * 60 * 60 * 1000);
+
+    const nextFeatures = {
+      ...features,
+      submission: {
+        ...submission,
+        commercial: {
+          ...commercial,
+          paymentConfirmed: true,
+          isSponsoredPlacement: true,
+          status: 'active',
+          featuredActiveFrom: now.toISOString(),
+          featuredUntil: until.toISOString(),
+          activatedAt: now.toISOString(),
+          ...(transactionId ? { transactionId } : {}),
+        },
+      },
+    };
+
+    await pool.query(
+      `
+        UPDATE tools
+        SET features = $2, updated_at = NOW()
+        WHERE id = $1
+      `,
+      [toolId, JSON.stringify(nextFeatures)]
+    );
+
+    revalidateAdminToolPaths();
+    revalidatePublicToolPaths(row.name);
+    return { success: true, name: row.name };
+  } catch (error) {
+    console.error('Error activating commercial placement:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to activate commercial placement',
     };
   }
 }

@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
 import { getWebNavigationDetail } from '@/network/webNavigation';
 import {
   ArrowUpRight,
@@ -12,6 +13,7 @@ import {
   Heart,
   Lightbulb,
   MousePointerClick,
+  MessageSquare,
   ShieldCheck,
   Sparkles,
   Star,
@@ -31,6 +33,7 @@ import TrackableLink from '@/components/TrackableLink';
 import ShareButton from '@/components/ShareButton';
 import { getUserRating } from '@/app/actions/ratings';
 import { isFavorited } from '@/app/actions/favorites';
+import { getCommentCount } from '@/app/actions/comments';
 import { getToolByName, getLocalizedField } from '@/lib/services/tools';
 import { toolToDetailData } from '@/lib/services/toolPresenter';
 import { createClient } from '@/lib/supabase/server';
@@ -46,6 +49,7 @@ import {
 } from '@/lib/seo/metadata';
 import { getCategoryById, getLocalizedField as getCategoryLocalizedField } from '@/lib/services/categories';
 import { getTagsBySlugs, getLocalizedField as getTagLocalizedField } from '@/lib/services/tags';
+import { listingConfig } from '@/lib/config/listing';
 
 // Revalidate every hour (3600 seconds) - ISR strategy
 export const revalidate = 3600;
@@ -153,6 +157,7 @@ export default async function Page({ params: { websiteName, locale } }: { params
   let userRating = null;
   let ratingStats = { averageRating: 0, ratingCount: 0 };
   let isFavoritedByUser = false;
+  let commentCount = 0;
   let toolStats = {
     viewCount: 0,
     clickCount: 0,
@@ -180,7 +185,7 @@ export default async function Page({ params: { websiteName, locale } }: { params
 
   if (toolId) {
     try {
-      [userRating, isFavoritedByUser, toolStats] = await Promise.all([
+      const [nextUserRating, nextIsFavoritedByUser, nextToolStats, nextCommentCount] = await Promise.all([
         getUserRating(toolId).catch(() => null),
         isFavorited(toolId).catch(() => false),
         getToolStats(toolId).catch(() => ({
@@ -190,8 +195,13 @@ export default async function Page({ params: { websiteName, locale } }: { params
           favoriteCount: 0,
           averageRating: 0,
           ratingCount: 0
-        }))
+        })),
+        getCommentCount(toolId).catch(() => 0),
       ]);
+      userRating = nextUserRating;
+      isFavoritedByUser = nextIsFavoritedByUser;
+      toolStats = nextToolStats;
+      commentCount = Number(nextCommentCount || 0);
       ratingStats = {
         averageRating: toolStats.averageRating,
         ratingCount: toolStats.ratingCount,
@@ -304,6 +314,19 @@ export default async function Page({ params: { websiteName, locale } }: { params
       tone: 'text-cyan-700 bg-cyan-50',
     },
   ];
+  const commentPromptLabel = locale === 'cn' ? '可以直接点一个开头' : 'Start with one of these';
+  const commentStarterPrompts =
+    locale === 'cn'
+      ? [
+          '你主要把它用在哪个场景？',
+          '最喜欢的一点是什么？',
+          '有没有踩坑或替代方案？',
+        ]
+      : [
+          'What do you mainly use it for?',
+          'What do you like most about it?',
+          'Any caveats or alternatives?',
+        ];
 
   return (
     <>
@@ -336,28 +359,76 @@ export default async function Page({ params: { websiteName, locale } }: { params
               </div>
 
               {toolId && (
-                <div className='flex flex-wrap items-center gap-3'>
-                  <RatingStars
-                    toolId={toolId}
-                    currentRating={userRating}
-                    averageRating={ratingStats.averageRating}
-                    ratingCount={ratingStats.ratingCount}
-                    readonly={false}
-                    size="md"
-                    showStats={true}
-                  />
-                  <FavoriteButton
-                    toolId={toolId}
-                    initialState={isFavoritedByUser}
-                    showLabel={true}
-                  />
-                  <ShareButton
-                    toolId={toolId}
-                    toolName={websiteName}
-                    toolTitle={data.title}
-                    toolDescription={data.content}
-                    userId={user?.id}
-                  />
+                <div className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm'>
+                  <div className='mb-3 flex flex-wrap items-center gap-2'>
+                    <span className='inline-flex items-center rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-700'>
+                      {locale === 'cn' ? '互动面板' : 'Action rail'}
+                    </span>
+                    <span className='text-sm text-slate-500'>
+                      {locale === 'cn'
+                        ? '收藏、分享、评分和讨论都在同一条行动带里。'
+                        : 'Save, share, rate, and discuss from one compact rail.'}
+                    </span>
+                  </div>
+
+                  <div className='grid gap-3 lg:grid-cols-[minmax(0,1.2fr)_auto] lg:items-center'>
+                    <div className='rounded-lg bg-slate-50 px-4 py-3 ring-1 ring-slate-200'>
+                      <div className='flex flex-wrap items-center gap-4'>
+                        <div className='min-w-0'>
+                          <p className='text-xs font-medium uppercase tracking-wide text-slate-500'>
+                            {locale === 'cn' ? '评分' : 'Rating'}
+                          </p>
+                          <div className='mt-1'>
+                            <RatingStars
+                              toolId={toolId}
+                              currentRating={userRating}
+                              averageRating={ratingStats.averageRating}
+                              ratingCount={ratingStats.ratingCount}
+                              readonly={false}
+                              size='md'
+                              showStats={true}
+                            />
+                          </div>
+                        </div>
+
+                        <div className='h-10 w-px bg-slate-200' />
+
+                        <div className='min-w-0'>
+                          <p className='text-xs font-medium uppercase tracking-wide text-slate-500'>
+                            {locale === 'cn' ? '收藏' : 'Save'}
+                          </p>
+                          <div className='mt-1'>
+                            <FavoriteButton
+                              toolId={toolId}
+                              initialState={isFavoritedByUser}
+                              showLabel={true}
+                              className='rounded-full bg-white px-3 py-2 ring-1 ring-slate-200 hover:ring-red-200'
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className='flex flex-wrap items-center gap-2'>
+                      <ShareButton
+                        toolId={toolId}
+                        toolName={websiteName}
+                        toolTitle={data.title}
+                        toolDescription={data.content}
+                        userId={user?.id}
+                        className='rounded-full'
+                      />
+                      <a
+                        href='#comments'
+                        className='inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-4 py-2 text-sm font-semibold text-cyan-800 transition hover:bg-cyan-100'
+                      >
+                        <MessageSquare className='size-4' />
+                        {commentCount > 0
+                          ? `${commentCount} ${locale === 'cn' ? '条讨论' : 'comments'}`
+                          : (locale === 'cn' ? '去讨论' : 'Discuss')}
+                      </a>
+                    </div>
+                  </div>
                 </div>
               )}
 
@@ -387,6 +458,7 @@ export default async function Page({ params: { websiteName, locale } }: { params
                 >
                   Find similar tools <CircleArrowRight className='size-4' />
                 </a>
+                {/* Discussion anchor is now surfaced in the action panel above */}
               </div>
             </section>
 
@@ -442,6 +514,25 @@ export default async function Page({ params: { websiteName, locale } }: { params
                     <p className='text-xs text-slate-500'>Saved</p>
                     <p className='font-semibold text-slate-950'>{toolStats.favoriteCount.toLocaleString()}</p>
                   </div>
+                </div>
+
+                <div className='mt-3 rounded-lg border border-cyan-100 bg-cyan-50 px-4 py-3'>
+                  <div className='flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
+                    <p className='text-sm text-cyan-900'>
+                      {locale === 'cn'
+                        ? '如果这是你的工具，可以考虑付费入驻，拿到优先审核和前排展示。'
+                        : 'If this is your tool, paid listing can unlock priority review and featured placement.'}
+                    </p>
+                    <Link
+                      href={`/${locale}/developer/listing`}
+                      className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-3 py-2 text-sm font-semibold text-white hover:bg-cyan-800'
+                    >
+                      {locale === 'cn' ? '查看入驻方案' : 'View listing plan'}
+                    </Link>
+                  </div>
+                  <p className='mt-2 text-xs text-cyan-900/70'>
+                    {listingConfig.plans.standard_paid.reviewWindow} • {listingConfig.plans.standard_paid.featuredLabel}
+                  </p>
                 </div>
               </div>
 
@@ -548,9 +639,62 @@ export default async function Page({ params: { websiteName, locale } }: { params
             {toolId && (
               <>
                 <RecommendedTools toolId={toolId} locale={locale} />
-                <section>
+                <section id='comments' className='scroll-mt-24'>
                   <Separator className='mb-8 border-t border-slate-200' />
-                  <CommentList toolId={toolId} currentUserId={user?.id} />
+                  <div className='mb-6 rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200'>
+                    <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
+                      <div>
+                        <h3 className='text-base font-semibold text-slate-900'>
+                          Join the discussion and follow updates
+                        </h3>
+                        <p className='mt-1 text-sm text-slate-600'>
+                          Save this tool, share it with your team, and leave your review.
+                        </p>
+                      </div>
+                      <div className='flex flex-wrap items-center gap-2'>
+                        {user ? (
+                          <>
+                            <FavoriteButton
+                              toolId={toolId}
+                              initialState={isFavoritedByUser}
+                              showLabel={true}
+                            />
+                            <ShareButton
+                              toolId={toolId}
+                              toolName={websiteName}
+                              toolTitle={data.title}
+                              toolDescription={data.content}
+                              userId={user.id}
+                            />
+                          </>
+                        ) : (
+                          <Link
+                            href={`/${locale}/login?redirect=/${locale}/ai/${websiteName}`}
+                            className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-2 text-sm font-semibold text-white hover:bg-cyan-800'
+                          >
+                            Log in to save and comment
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className='mb-4 rounded-lg border border-cyan-100 bg-cyan-50 p-4 text-sm leading-6 text-cyan-900'>
+                    {locale === 'cn'
+                      ? '欢迎写下真实体验：适合什么场景、哪里最好用、有什么坑，都会帮到后来的人。'
+                      : 'Share real usage notes: best use cases, what works well, and what to watch out for. That helps the next person a lot.'}
+                  </div>
+                  <CommentList
+                    toolId={toolId}
+                    currentUserId={user?.id}
+                    locale={locale}
+                    promptLabel={commentPromptLabel}
+                    starterPrompts={commentStarterPrompts}
+                    placeholder={
+                      locale === 'cn'
+                        ? '说说你的真实使用体验，比如适合什么场景、有什么优点或注意点。'
+                        : 'Tell us your real experience: best use cases, strengths, or anything to watch out for.'
+                    }
+                  />
                 </section>
               </>
             )}

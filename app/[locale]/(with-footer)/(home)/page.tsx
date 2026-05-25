@@ -9,8 +9,11 @@ import {
   Clock3,
   Compass,
   FolderOpen,
+  Heart,
+  MessageSquare,
   Rocket,
   Search as SearchIcon,
+  Share2,
   Sparkles,
   TrendingUp,
 } from 'lucide-react';
@@ -18,10 +21,14 @@ import { getTranslations } from 'next-intl/server';
 
 import Faq from '@/components/Faq';
 import Search from '@/components/Search';
+import CommunityPulse from '@/components/home/CommunityPulse';
 import WebNavCardList from '@/components/webNav/WebNavCardList';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { FEATURED_GUIDE_HREFS, GUIDE_PAGES } from '@/lib/content/guides';
+import { listingConfig } from '@/lib/config/listing';
 import { generateOrganizationSchema } from '@/lib/seo/schema';
 import { SEO_CONFIG } from '@/lib/seo/constants';
+import { getCommunityHighlights, getRecentDiscussions, getRisingTools } from '@/lib/services/community';
 import { getPopularTools } from '@/lib/services/tools';
 import { toolToListRow } from '@/lib/services/toolPresenter';
 import {
@@ -104,6 +111,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       .catch(() => []),
     getPopularCategories(8).catch(() => []),
   ]);
+  const communityHighlights = await getCommunityHighlights(3).catch(() => []);
+  const recentDiscussions = await getRecentDiscussions(3).catch(() => []);
+  const risingTools = await getRisingTools(3).catch(() => []);
   const totalVisibleTools = latestTools.total || latestTools.rows.length;
   const heroTitle = isChinese
     ? '发现最新、好用、真实可访问的 AI 工具'
@@ -147,6 +157,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       href: '/explore?sort=latest',
     },
   ];
+  const featuredGuidePages = FEATURED_GUIDE_HREFS.map((href) => GUIDE_PAGES.find((page) => page.href === href)).filter(
+    (page): page is (typeof GUIDE_PAGES)[number] => Boolean(page),
+  );
 
   // Generate Organization schema for homepage
   const organizationSchema = generateOrganizationSchema({
@@ -239,6 +252,34 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   {isChinese ? '提交/入驻工具' : 'Submit a tool'}
                   <Rocket className='size-4' />
                 </Link>
+                <Link
+                  href='/developer/listing'
+                  className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-cyan-800'
+                >
+                  {isChinese ? '开发者入驻' : 'Developer listing'}
+                  <BadgeCheck className='size-4' />
+                </Link>
+              </div>
+
+              <div className='mt-6 rounded-lg border border-cyan-100 bg-cyan-50 p-4'>
+                <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
+                  <div className='min-w-0'>
+                    <p className='text-sm font-semibold text-cyan-900'>
+                      {isChinese ? '如果你需要更快的节奏或更明显的曝光' : 'If you need faster timing or a bit more visibility'}
+                    </p>
+                    <p className='mt-1 text-sm leading-6 text-cyan-900/80'>
+                      {isChinese
+                        ? `${listingConfig.plans.standard_paid.label}：可以作为可选路径，适合发布期和活动期。`
+                        : `${listingConfig.plans.standard_paid.summary} ${listingConfig.plans.standard_paid.reviewWindow}.`}
+                    </p>
+                  </div>
+                  <Link
+                    href='/developer/listing'
+                    className='inline-flex shrink-0 items-center justify-center rounded-lg bg-cyan-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-cyan-800'
+                  >
+                    {isChinese ? '查看可选方案' : 'View optional plan'}
+                  </Link>
+                </div>
               </div>
             </div>
 
@@ -257,6 +298,77 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </aside>
           </div>
         </section>
+
+        <section className='mx-auto grid w-full max-w-7xl gap-3 px-4 py-0 lg:grid-cols-3 lg:px-6'>
+          <Link
+            href='/profile/favorites'
+            className='rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-md'
+          >
+            <div className='flex items-start gap-3'>
+              <span className='inline-flex rounded-lg bg-rose-50 p-2 text-rose-600'>
+                <Heart className='size-5' />
+              </span>
+              <div>
+                <p className='text-sm font-semibold text-slate-950'>
+                  {isChinese ? '收藏你喜欢的工具' : 'Save the tools you like'}
+                </p>
+                <p className='mt-1 text-sm leading-6 text-slate-600'>
+                  {isChinese
+                    ? '登录后即可收藏、回看和管理清单。'
+                    : 'Log in to save, revisit, and manage your shortlist.'}
+                </p>
+              </div>
+            </div>
+          </Link>
+          <Link
+            href='/explore?sort=popular'
+            className='rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-md'
+          >
+            <div className='flex items-start gap-3'>
+              <span className='inline-flex rounded-lg bg-cyan-50 p-2 text-cyan-700'>
+                <Share2 className='size-5' />
+              </span>
+              <div>
+                <p className='text-sm font-semibold text-slate-950'>
+                  {isChinese ? '分享给团队或朋友' : 'Share with your team'}
+                </p>
+                <p className='mt-1 text-sm leading-6 text-slate-600'>
+                  {isChinese
+                    ? '每个详情页都支持一键分享。'
+                    : 'Every tool detail page supports quick sharing.'}
+                </p>
+              </div>
+            </div>
+          </Link>
+          <Link
+            href='/developer/listing'
+            className='rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-md'
+          >
+            <div className='flex items-start gap-3'>
+              <span className='inline-flex rounded-lg bg-emerald-50 p-2 text-emerald-700'>
+                <MessageSquare className='size-5' />
+              </span>
+              <div>
+                <p className='text-sm font-semibold text-slate-950'>
+                  {isChinese ? '加入讨论和入驻' : 'Join the discussion and listing'}
+                </p>
+                <p className='mt-1 text-sm leading-6 text-slate-600'>
+                  {isChinese
+                    ? '先看说明，再提交和沟通付费入驻。'
+                    : 'Read the plan, then submit or contact us for paid listing.'}
+                </p>
+              </div>
+            </div>
+          </Link>
+        </section>
+
+        <CommunityPulse
+          locale={locale}
+          highlights={communityHighlights}
+          discussions={recentDiscussions}
+          risingTools={risingTools}
+          isChinese={isChinese}
+        />
 
         <div className='mx-auto flex w-full max-w-7xl flex-col gap-10 px-4 py-10 lg:px-6 lg:py-12'>
           {popularCategories.length > 0 && (
@@ -291,6 +403,41 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               </div>
             </section>
           )}
+
+          <section className='grid gap-4 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm lg:grid-cols-[1fr_auto] lg:items-center lg:p-8'>
+            <div>
+              <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+                {isChinese ? '选型指南' : 'Selection guide'}
+              </p>
+              <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+                {isChinese ? '先学会怎么选，再去看工具' : 'Learn how to choose before browsing tools'}
+              </h2>
+              <p className='mt-2 max-w-2xl text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '如果你还不确定该看哪些维度，这个指南会帮你先理清场景、价格、更新和评论。'
+                  : 'If you are unsure what to compare, this guide helps you sort out use case, pricing, freshness, and comments first.'}
+              </p>
+            </div>
+            <div className='flex flex-col gap-3 sm:flex-row'>
+              <Link
+                href='/guides/how-to-choose-ai-tools'
+                className='inline-flex items-center justify-center gap-2 rounded-lg bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800'
+              >
+                {isChinese ? '打开选型指南' : 'Open guide'}
+                <ArrowRight className='size-4' />
+              </Link>
+              {featuredGuidePages.slice(1).map((guide) => (
+                <Link
+                  key={guide.href}
+                  href={guide.href}
+                  className='inline-flex items-center justify-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-slate-800 ring-1 ring-slate-200 transition hover:bg-slate-100'
+                >
+                  {guide.title[isChinese ? 'cn' : 'en']}
+                  <ArrowRight className='size-4' />
+                </Link>
+              ))}
+            </div>
+          </section>
 
           <section>
             <div className='mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between'>

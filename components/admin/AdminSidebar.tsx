@@ -12,13 +12,19 @@ import {
   Settings,
   Home,
   Mail,
+  MessageSquare,
+  Search,
+  ReceiptText,
 } from 'lucide-react';
 
 const navigation = [
   { name: 'dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
   { name: 'collection', href: '/admin/collection', icon: ClipboardList },
   { name: 'tools', href: '/admin/tools', icon: Wrench },
+  { name: 'comments', href: '/admin/comments', icon: MessageSquare },
   { name: 'emailTest', href: '/admin/email-test', icon: Mail },
+  { name: 'searchConsole', href: '/admin/search-console', icon: Search },
+  { name: 'paymentCallbacks', href: '/admin/payment-callbacks', icon: ReceiptText },
   { name: 'users', href: '/admin/users', icon: Users },
   { name: 'analytics', href: '/admin/analytics', icon: BarChart3 },
   { name: 'settings', href: '/admin/settings', icon: Settings },

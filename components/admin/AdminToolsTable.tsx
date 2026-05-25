@@ -136,6 +136,8 @@ export default function AdminToolsTable({
   const getAuditSignals = (tool: AdminTool) => {
     const features = getFeatureRecord(tool);
     const collection = getNestedRecord(features.collection);
+    const submission = getNestedRecord(features.submission);
+    const commercial = getNestedRecord(submission.commercial);
     const mediaReview = getNestedRecord(features.mediaReview);
     const relevanceScore = getNumber(collection.relevanceScore);
     const qualityScore = getNumber(collection.qualityScore);
@@ -146,6 +148,29 @@ export default function AdminToolsTable({
       signals.push({
         label: 'Collected',
         className: 'bg-cyan-50 text-cyan-700',
+      });
+    }
+
+    const plan = commercial.plan;
+    if (plan === 'standard_paid') {
+      signals.push({
+        label: 'Paid intent',
+        className: 'bg-indigo-50 text-indigo-700',
+      });
+    }
+
+    if (commercial.fastTrackRequested === true) {
+      signals.push({
+        label: 'Fast track',
+        className: 'bg-blue-50 text-blue-700',
+      });
+    }
+
+    const featuredDaysRequested = getNumber(commercial.featuredDaysRequested);
+    if (typeof featuredDaysRequested === 'number' && featuredDaysRequested > 0) {
+      signals.push({
+        label: `Featured ${featuredDaysRequested}d`,
+        className: 'bg-fuchsia-50 text-fuchsia-700',
       });
     }
 

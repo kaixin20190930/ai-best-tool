@@ -1,0 +1,71 @@
+name: Production Health Monitor
+
+on:
+  schedule:
+    # Every 5 minutes
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  health-check:
+    name: Check Production Health Endpoints
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Validate required secret
+        run: |
+          if [ -z "${{ secrets.MONITOR_BASE_URL }}" ]; then
+            echo "MONITOR_BASE_URL is not set."
+            exit 1
+          fi
+
+      - name: Check /api/healthz
+        run: |
+          set -e
+          BASE_URL="${{ secrets.MONITOR_BASE_URL }}"
+          HTTP_CODE=$(curl -sS -o /tmp/healthz.json -w "%{http_code}" "$BASE_URL/api/healthz")
+          echo "healthz_http_code=$HTTP_CODE"
+          test "$HTTP_CODE" = "200"
+          grep -q '"ok":true' /tmp/healthz.json
+
+      - name: Check /api/monitor
+        run: |
+          set -e
+          BASE_URL="${{ secrets.MONITOR_BASE_URL }}"
+          if [ -n "${{ secrets.MONITOR_API_TOKEN }}" ]; then
+            HTTP_CODE=$(curl -sS -o /tmp/monitor.json -w "%{http_code}" \
+              -H "Authorization: Bearer ${{ secrets.MONITOR_API_TOKEN }}" \
+              "$BASE_URL/api/monitor")
+          else
+            HTTP_CODE=$(curl -sS -o /tmp/monitor.json -w "%{http_code}" "$BASE_URL/api/monitor")
+          fi
+          echo "monitor_http_code=$HTTP_CODE"
+          test "$HTTP_CODE" = "200"
+          grep -q '"ok":true' /tmp/monitor.json
+
+      - name: Check /api/health
+        run: |
+          set -e
+          BASE_URL="${{ secrets.MONITOR_BASE_URL }}"
+          HTTP_CODE=$(curl -sS -o /tmp/health.json -w "%{http_code}" "$BASE_URL/api/health")
+          echo "health_http_code=$HTTP_CODE"
+          test "$HTTP_CODE" = "200"
+          grep -q '"status":"healthy"' /tmp/health.json
+
+      - name: Notify Feishu on Failure (optional)
+        if: failure() && secrets.FEISHU_WEBHOOK_URL != ''
+        run: |
+          BASE_URL="${{ secrets.MONITOR_BASE_URL }}"
+          PAYLOAD=$(cat <<EOF
+          {
+            "msg_type": "text",
+            "content": {
+              "text": "AI Best Tool production health check failed.\nWorkflow: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\nTarget: ${BASE_URL}"
+            }
+          }
+          EOF
+          )
+          curl -sS -X POST "${{ secrets.FEISHU_WEBHOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            -d "$PAYLOAD"

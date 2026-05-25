@@ -1,0 +1,70 @@
+name: Comment Moderation Daily Report
+
+on:
+  schedule:
+    # Every day at 01:00 UTC
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+
+jobs:
+  send-daily-report:
+    name: Send Daily Moderation Report
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Validate required secret
+        run: |
+          if [ -z "${{ secrets.MONITOR_BASE_URL }}" ]; then
+            echo "MONITOR_BASE_URL is not set."
+            exit 1
+          fi
+
+      - name: Trigger report endpoint
+        run: |
+          set -e
+          BASE_URL="${{ secrets.MONITOR_BASE_URL }}"
+          ENDPOINT="$BASE_URL/api/monitor/comment-moderation-report"
+          if [ -n "${{ secrets.MONITOR_API_TOKEN }}" ]; then
+            HTTP_CODE=$(curl -sS -o /tmp/comment-report.json -w "%{http_code}" \
+              -H "Authorization: Bearer ${{ secrets.MONITOR_API_TOKEN }}" \
+              "$ENDPOINT")
+          else
+            HTTP_CODE=$(curl -sS -o /tmp/comment-report.json -w "%{http_code}" "$ENDPOINT")
+          fi
+          echo "comment_report_http_code=$HTTP_CODE"
+          test "$HTTP_CODE" = "200"
+          grep -q '"ok":true' /tmp/comment-report.json
+
+      - name: Cleanup expired sponsored placements
+        run: |
+          set -e
+          BASE_URL="${{ secrets.MONITOR_BASE_URL }}"
+          ENDPOINT="$BASE_URL/api/monitor/cleanup-sponsored"
+          if [ -n "${{ secrets.MONITOR_API_TOKEN }}" ]; then
+            HTTP_CODE=$(curl -sS -o /tmp/cleanup-sponsored.json -w "%{http_code}" \
+              -H "Authorization: Bearer ${{ secrets.MONITOR_API_TOKEN }}" \
+              "$ENDPOINT")
+          else
+            HTTP_CODE=$(curl -sS -o /tmp/cleanup-sponsored.json -w "%{http_code}" "$ENDPOINT")
+          fi
+          echo "cleanup_sponsored_http_code=$HTTP_CODE"
+          test "$HTTP_CODE" = "200"
+          grep -q '"ok":true' /tmp/cleanup-sponsored.json
+
+      - name: Notify Feishu on Failure (optional)
+        if: failure() && secrets.FEISHU_WEBHOOK_URL != ''
+        run: |
+          BASE_URL="${{ secrets.MONITOR_BASE_URL }}"
+          PAYLOAD=$(cat <<EOF
+          {
+            "msg_type": "text",
+            "content": {
+              "text": "AI Best Tool comment moderation daily report failed.\nWorkflow: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\nTarget: ${BASE_URL}/api/monitor/comment-moderation-report"
+            }
+          }
+          EOF
+          )
+          curl -sS -X POST "${{ secrets.FEISHU_WEBHOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            -d "$PAYLOAD"

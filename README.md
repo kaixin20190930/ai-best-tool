@@ -70,6 +70,24 @@ CONTACT_US_EMAIL="contact@AIBestTools.com"
 # Optional: transactional email (submission status updates)
 RESEND_API_KEY="re_xxx"
 MAIL_FROM="AI Best Tool <no-reply@yourdomain.com>"
+ADMIN_EMAILS="admin@example.com"
+
+# Optional: external monitor endpoint token for /api/monitor/* routes
+MONITOR_API_TOKEN="replace-with-a-long-random-token"
+
+# Optional: Google Search Console automation
+GSC_PROPERTY_URL="sc-domain:yourdomain.com"
+GSC_SITE_ORIGIN="https://yourdomain.com"
+GSC_DEFAULT_SITEMAP_URL="https://yourdomain.com/sitemap.xml"
+GSC_CLIENT_ID="your-google-oauth-client-id"
+GSC_CLIENT_SECRET="your-google-oauth-client-secret"
+GSC_REFRESH_TOKEN="your-google-oauth-refresh-token"
+
+# Optional: GitHub Actions production health monitor
+# Set these as GitHub repository secrets (not in .env):
+# - MONITOR_BASE_URL (e.g. https://yourdomain.com)
+# - MONITOR_API_TOKEN (if /api/monitor is protected)
+# - FEISHU_WEBHOOK_URL (optional, for failure alerts)
 
 # your supabase database url and key
 NEXT_PUBLIC_SUPABASE_URL="https://xxxyyyzzz.supabase.co"

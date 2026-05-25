@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { ThumbsUp, Reply, Edit, Trash2, MoreVertical } from 'lucide-react';
+import { ThumbsUp, Reply, Edit, Trash2, MoreVertical, Flag } from 'lucide-react';
 import { toast } from 'sonner';
 import { Comment } from '@/app/actions/comments';
-import { updateComment, deleteComment, likeComment } from '@/app/actions/comments';
+import { updateComment, deleteComment, likeComment, reportComment } from '@/app/actions/comments';
 import CommentInput from './CommentInput';
 import { Button } from '@/components/ui/button';
 import BaseImage from '@/components/image/BaseImage';
@@ -29,6 +29,7 @@ function formatTimeAgo(date: Date): string {
 interface CommentItemProps {
   comment: Comment;
   currentUserId?: string;
+  submitterId?: string | null;
   onReply?: () => void;
   onUpdate?: () => void;
   onDelete?: () => void;
@@ -37,6 +38,7 @@ interface CommentItemProps {
 export default function CommentItem({
   comment,
   currentUserId,
+  submitterId,
   onReply,
   onUpdate,
   onDelete
@@ -45,9 +47,12 @@ export default function CommentItem({
   const [isReplying, setIsReplying] = useState(false);
   const [editContent, setEditContent] = useState(comment.content);
   const [showMenu, setShowMenu] = useState(false);
+  const [likeCount, setLikeCount] = useState(comment.likes || 0);
+  const [viewerHasLiked, setViewerHasLiked] = useState(Boolean(comment.viewer_has_liked));
   const [isPending, startTransition] = useTransition();
 
   const isOwner = currentUserId === comment.user_id;
+  const isSubmitter = submitterId === comment.user_id;
   const username = comment.user?.user_metadata?.username || comment.user?.email?.split('@')[0] || 'Anonymous';
   const avatarUrl = comment.user?.user_metadata?.avatar_url;
 
@@ -55,7 +60,14 @@ export default function CommentItem({
     startTransition(async () => {
       const result = await likeComment(comment.id);
       if (result.success) {
-        toast.success('Comment liked');
+        if (typeof result.likes === 'number') {
+          setLikeCount(result.likes);
+        }
+        if (typeof result.liked === 'boolean') {
+          setViewerHasLiked(result.liked);
+        }
+        toast.success(result.message || 'Updated');
+        onUpdate?.();
       } else {
         toast.error(result.error || 'Failed to like comment');
       }
@@ -105,8 +117,19 @@ export default function CommentItem({
     setIsReplying(true);
   };
 
+  const handleReport = () => {
+    startTransition(async () => {
+      const result = await reportComment(comment.id);
+      if (result.success) {
+        toast.success(result.message || 'Reported');
+      } else {
+        toast.error(result.error || 'Failed to report comment');
+      }
+    });
+  };
+
   return (
-    <div className="space-y-3">
+    <div id={`comment-${comment.id}`} className="scroll-mt-28 space-y-3">
       <div className="flex gap-3">
         {/* Avatar */}
         <div className="flex-shrink-0">
@@ -131,6 +154,11 @@ export default function CommentItem({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="font-semibold text-slate-900">{username}</span>
+              {isSubmitter && (
+                <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-semibold text-emerald-700">
+                  Tool submitter
+                </span>
+              )}
               <span className="text-xs text-slate-500">
                 {formatTimeAgo(new Date(comment.created_at))}
               </span>
@@ -213,10 +241,12 @@ export default function CommentItem({
               <button
                 onClick={handleLike}
                 disabled={isPending}
-                className="flex items-center gap-1 text-sm text-slate-500 transition-colors hover:text-cyan-700"
+                className={`flex items-center gap-1 text-sm transition-colors ${
+                  viewerHasLiked ? 'text-cyan-700' : 'text-slate-500 hover:text-cyan-700'
+                }`}
               >
-                <ThumbsUp className="size-4" />
-                <span>{comment.likes > 0 ? comment.likes : 'Like'}</span>
+                <ThumbsUp className={`size-4 ${viewerHasLiked ? 'fill-current' : ''}`} />
+                <span>{likeCount > 0 ? likeCount : 'Like'}</span>
               </button>
 
               <button
@@ -226,6 +256,17 @@ export default function CommentItem({
                 <Reply className="size-4" />
                 <span>Reply</span>
               </button>
+
+              {!isOwner && (
+                <button
+                  onClick={handleReport}
+                  disabled={isPending}
+                  className="flex items-center gap-1 text-sm text-slate-500 transition-colors hover:text-rose-600"
+                >
+                  <Flag className="size-4" />
+                  <span>Report</span>
+                </button>
+              )}
             </div>
           )}
 
@@ -254,6 +295,7 @@ export default function CommentItem({
                   key={reply.id}
                   comment={reply}
                   currentUserId={currentUserId}
+                  submitterId={submitterId}
                   onReply={onReply}
                   onUpdate={onUpdate}
                   onDelete={onDelete}

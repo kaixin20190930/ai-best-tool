@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { MessageSquare } from 'lucide-react';
 import { Comment, getComments } from '@/app/actions/comments';
@@ -10,10 +11,24 @@ import Loading from '@/components/Loading';
 interface CommentListProps {
   toolId: string;
   currentUserId?: string;
+  placeholder?: string;
+  starterPrompts?: string[];
+  promptLabel?: string;
+  locale?: string;
 }
 
-export default function CommentList({ toolId, currentUserId }: CommentListProps) {
+export default function CommentList({
+  toolId,
+  currentUserId,
+  placeholder,
+  starterPrompts,
+  promptLabel,
+  locale = 'en',
+}: CommentListProps) {
   const [comments, setComments] = useState<Comment[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [submitterId, setSubmitterId] = useState<string | null>(null);
+  const [sort, setSort] = useState<'latest' | 'oldest' | 'helpful'>('latest');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -21,10 +36,12 @@ export default function CommentList({ toolId, currentUserId }: CommentListProps)
     setIsLoading(true);
     setError(null);
     
-    const result = await getComments(toolId);
+    const result = await getComments(toolId, sort);
     
     if (result.success) {
       setComments(result.comments);
+      setTotalCount(result.totalCount || result.comments.length);
+      setSubmitterId(result.submitterId || null);
     } else {
       setError(result.error || 'Failed to load comments');
     }
@@ -34,11 +51,16 @@ export default function CommentList({ toolId, currentUserId }: CommentListProps)
 
   useEffect(() => {
     loadComments();
-  }, [toolId]);
+  }, [toolId, sort]);
 
   const handleCommentUpdate = () => {
     loadComments();
   };
+
+  const topHelpfulComment = [...comments]
+    .filter((comment) => !comment.parent_id)
+    .sort((a, b) => (b.likes || 0) - (a.likes || 0))[0];
+  const isChinese = locale === 'cn' || locale === 'tw';
 
   if (isLoading) {
     return (
@@ -78,11 +100,48 @@ export default function CommentList({ toolId, currentUserId }: CommentListProps)
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center gap-2">
-        <MessageSquare className="size-6 text-slate-700" />
-        <h3 className="text-xl font-semibold text-slate-900">
-          Comments ({comments.length})
-        </h3>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-2">
+          <MessageSquare className="size-6 text-slate-700" />
+          <h3 className="text-xl font-semibold text-slate-900">
+            Comments ({totalCount})
+          </h3>
+        </div>
+        <div className="inline-flex rounded-lg bg-slate-100 p-1 text-sm">
+          <button
+            type="button"
+            onClick={() => setSort('latest')}
+            className={`rounded-md px-3 py-1.5 font-medium transition-colors ${
+              sort === 'latest'
+                ? 'bg-white text-slate-900 shadow-sm'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            Latest
+          </button>
+          <button
+            type="button"
+            onClick={() => setSort('helpful')}
+            className={`rounded-md px-3 py-1.5 font-medium transition-colors ${
+              sort === 'helpful'
+                ? 'bg-white text-slate-900 shadow-sm'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            Most helpful
+          </button>
+          <button
+            type="button"
+            onClick={() => setSort('oldest')}
+            className={`rounded-md px-3 py-1.5 font-medium transition-colors ${
+              sort === 'oldest'
+                ? 'bg-white text-slate-900 shadow-sm'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            Oldest
+          </button>
+        </div>
       </div>
 
       {/* Comment Input */}
@@ -90,9 +149,38 @@ export default function CommentList({ toolId, currentUserId }: CommentListProps)
         <CommentInput
           toolId={toolId}
           onCommentPosted={handleCommentUpdate}
-          placeholder="Share your thoughts about this tool..."
+          placeholder={placeholder || 'Share a real usage tip, a warning, or a workflow note...'}
+          starterPrompts={starterPrompts}
+          promptLabel={promptLabel}
         />
       </div>
+
+      {topHelpfulComment && (
+        <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+            <div className="min-w-0">
+              <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">
+                {isChinese ? '最有帮助的讨论' : 'Most helpful so far'}
+              </p>
+              <p className="mt-1 text-sm font-medium text-slate-900">
+                {topHelpfulComment.content.slice(0, 160)}
+                {topHelpfulComment.content.length > 160 ? '...' : ''}
+              </p>
+            </div>
+            <div className="flex shrink-0 items-center gap-2">
+              <span className="inline-flex items-center rounded-full bg-white px-3 py-1 text-xs font-semibold text-amber-700 ring-1 ring-amber-200">
+                {topHelpfulComment.likes || 0} {isChinese ? '个赞' : 'likes'}
+              </span>
+              <Link
+                href={`#comment-${topHelpfulComment.id}`}
+                className="inline-flex items-center rounded-full border border-amber-200 bg-white px-3 py-1 text-xs font-semibold text-amber-700 transition hover:bg-amber-100"
+              >
+                {isChinese ? '跳转到评论' : 'Jump to comment'}
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Comments List */}
       {comments.length === 0 ? (
@@ -102,15 +190,16 @@ export default function CommentList({ toolId, currentUserId }: CommentListProps)
         </div>
       ) : (
         <div className="space-y-6">
-          {comments.map((comment) => (
-            <CommentItem
-              key={comment.id}
-              comment={comment}
-              currentUserId={currentUserId}
-              onReply={handleCommentUpdate}
-              onUpdate={handleCommentUpdate}
-              onDelete={handleCommentUpdate}
-            />
+              {comments.map((comment) => (
+                <CommentItem
+                  key={comment.id}
+                  comment={comment}
+                  currentUserId={currentUserId}
+                  submitterId={submitterId}
+                  onReply={handleCommentUpdate}
+                  onUpdate={handleCommentUpdate}
+                  onDelete={handleCommentUpdate}
+                />
           ))}
         </div>
       )}

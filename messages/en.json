@@ -6,6 +6,7 @@
     "title": "AI Best Tool Tools Directory",
     "discover": "Discover AI",
     "submit": "Submit",
+    "developer": "Developer Listing",
     "newtools": "New Tools",
     "startup": "Startup",
     "menu": "menu"
@@ -188,9 +189,12 @@
       "dashboard": "Dashboard",
       "collection": "Collection",
       "tools": "Tools",
+      "comments": "Comments",
       "users": "Users",
       "analytics": "Analytics",
       "emailTest": "Email Test",
+      "searchConsole": "Search Console",
+      "paymentCallbacks": "Payment Callbacks",
       "settings": "Settings"
     },
     "dashboard": {

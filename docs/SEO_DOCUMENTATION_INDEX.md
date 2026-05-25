@@ -217,6 +217,17 @@ This documentation provides comprehensive guidance for implementing and maintain
 
 **When to use:** Quick lookup for validation commands
 
+#### 17. [Search Console Quick Start](./SEARCH_CONSOLE_QUICK_START.md)
+**Purpose:** Short release-time checklist for sitemap submission and URL inspection
+
+**Contents:**
+- Pre-submit checks
+- Sitemap submission steps
+- URL inspection targets
+- Search Console verification steps
+
+**When to use:** Right after deployment, when you want to submit sitemap and check indexing quickly
+
 ### For Monitoring and Maintenance
 
 #### 17. [SEO Monitoring Guide](./SEO_MONITORING_GUIDE.md)

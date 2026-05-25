@@ -168,6 +168,8 @@ CREATE TABLE IF NOT EXISTS comments (
   content TEXT NOT NULL,
   parent_id UUID REFERENCES comments(id) ON DELETE CASCADE,
   likes INTEGER DEFAULT 0,
+  is_hidden BOOLEAN NOT NULL DEFAULT FALSE,
+  hidden_reason TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -176,6 +178,77 @@ CREATE INDEX idx_comments_tool ON comments(tool_id);
 CREATE INDEX idx_comments_user ON comments(user_id);
 CREATE INDEX idx_comments_parent ON comments(parent_id);
 CREATE INDEX idx_comments_created_at ON comments(created_at DESC);
+
+-- 评论点赞明细（每个用户对每条评论最多点赞一次）
+CREATE TABLE IF NOT EXISTS comment_likes (
+  comment_id UUID NOT NULL REFERENCES comments(id) ON DELETE CASCADE,
+  user_id UUID NOT NULL, -- 关联到 auth.users
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  PRIMARY KEY (comment_id, user_id)
+);
+
+CREATE INDEX idx_comment_likes_user ON comment_likes(user_id);
+
+-- 评论举报明细（每个用户对每条评论最多举报一次）
+CREATE TABLE IF NOT EXISTS comment_reports (
+  comment_id UUID NOT NULL REFERENCES comments(id) ON DELETE CASCADE,
+  user_id UUID NOT NULL, -- 关联到 auth.users
+  reason TEXT,
+  resolved_at TIMESTAMP WITH TIME ZONE,
+  resolved_by UUID,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  PRIMARY KEY (comment_id, user_id)
+);
+
+CREATE INDEX idx_comment_reports_created_at ON comment_reports(created_at DESC);
+
+-- 评论治理操作日志
+CREATE TABLE IF NOT EXISTS comment_moderation_logs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  admin_user_id UUID, -- 关联到 auth.users（系统定时任务可为空）
+  action TEXT NOT NULL,
+  target_count INTEGER NOT NULL DEFAULT 1,
+  metadata JSONB,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX idx_comment_moderation_logs_created_at ON comment_moderation_logs(created_at DESC);
+
+-- 支付回调日志（商业化入驻）
+CREATE TABLE IF NOT EXISTS payment_callback_logs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  tool_id UUID,
+  transaction_id TEXT,
+  status TEXT NOT NULL CHECK (status IN ('success', 'failed')),
+  source TEXT,
+  error_message TEXT,
+  payload JSONB,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX idx_payment_callback_logs_created_at ON payment_callback_logs(created_at DESC);
+CREATE INDEX idx_payment_callback_logs_status ON payment_callback_logs(status);
+CREATE INDEX idx_payment_callback_logs_tool_id ON payment_callback_logs(tool_id);
+CREATE UNIQUE INDEX uq_payment_callback_logs_success_tx
+  ON payment_callback_logs(transaction_id)
+  WHERE transaction_id IS NOT NULL AND status = 'success';
+
+-- Google Search Console 调用日志
+CREATE TABLE IF NOT EXISTS google_search_console_logs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  operation TEXT NOT NULL CHECK (operation IN ('submit_sitemap', 'inspect_url')),
+  property_url TEXT NOT NULL,
+  target_url TEXT NOT NULL,
+  status TEXT NOT NULL CHECK (status IN ('success', 'failed')),
+  source TEXT,
+  response JSONB,
+  error_message TEXT,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX idx_google_search_console_logs_created_at ON google_search_console_logs(created_at DESC);
+CREATE INDEX idx_google_search_console_logs_operation ON google_search_console_logs(operation);
+CREATE INDEX idx_google_search_console_logs_status ON google_search_console_logs(status);
 
 -- ============================================
 -- 7. 分析表 (Analytics)

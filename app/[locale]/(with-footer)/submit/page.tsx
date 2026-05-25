@@ -1,9 +1,11 @@
 import React from 'react';
 import { Metadata } from 'next';
+import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { BadgeCheck, FileSearch, Send } from 'lucide-react';
 
 import Faq from '@/components/Faq';
+import { getListingPaymentMailto, listingConfig } from '@/lib/config/listing';
 import { getAllCategories } from '@/lib/services/categories';
 
 import SubmitForm from './SubmitForm';
@@ -39,13 +41,45 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {isChinese ? '开发者入驻' : 'Developer listing'}
             </p>
             <h3 className='mt-2 text-xl font-bold text-slate-950'>
-              {isChinese ? '付费加速审核与展示' : 'Paid review and placement'}
+              {isChinese ? '提交之后，还有可选的加速路径' : listingConfig.plans.standard_paid.label}
             </h3>
             <p className='mt-3 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '适合希望更快审核、补全资料、获得更好展示位置的 AI 工具开发者。'
-                : 'For AI tool developers who want faster review, listing support, and better placement options.'}
+                ? '先提交可以获得基础收录；如果你后面需要更快审核、活动期曝光或前排展示，再选择可选付费路径即可。'
+                : `${listingConfig.valueProposition} ${listingConfig.listingFeeLabel}.`}
             </p>
+            <div className='mt-4 grid gap-3'>
+              <div className='rounded-lg border border-slate-200 bg-slate-50 p-3'>
+                <p className='text-sm font-semibold text-slate-900'>
+                  {isChinese ? '免费提交' : listingConfig.plans.free.label}
+                </p>
+                <p className='mt-1 text-sm text-slate-600'>
+                  {isChinese
+                    ? '按正常队列审核，适合先试试收录和基础曝光。'
+                    : `${listingConfig.plans.free.summary} Ideal for testing listing and baseline exposure.`}
+                </p>
+              </div>
+              <div className='rounded-lg border border-cyan-100 bg-cyan-50 p-3'>
+                <p className='text-sm font-semibold text-cyan-900'>
+                  {isChinese ? '付费入驻' : listingConfig.plans.standard_paid.label}
+                </p>
+                <p className='mt-1 text-sm text-cyan-900'>
+                  {isChinese
+                    ? '优先审核 + 可选前排展示 + 支付后自动回调确认。'
+                    : `${listingConfig.plans.standard_paid.summary} Callback confirmation after payment.`}
+                </p>
+              </div>
+            </div>
+            <div className='mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3'>
+              <p className='text-sm font-semibold text-amber-900'>
+                {isChinese ? '什么时候会用到' : 'When it helps'}
+              </p>
+              <p className='mt-1 text-sm leading-6 text-amber-900'>
+                {isChinese
+                  ? '新品发布、活动期曝光、需要更快上线的团队，或者想把访客更多引导到官网的时候。'
+                  : 'New launches, campaign windows, faster turnaround, or when a team wants to send more visitors to its own site.'}
+              </p>
+            </div>
             <div className='mt-4 space-y-3 text-sm text-slate-700'>
               <div className='flex items-start gap-2'>
                 <Send className='mt-0.5 size-4 text-cyan-700' />
@@ -61,11 +95,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               </div>
             </div>
             <a
-              href='mailto:contact@AIBestTool.com?subject=Paid%20AI%20tool%20listing'
+              href={getListingPaymentMailto('Paid AI tool listing')}
               className='mt-5 inline-flex w-full items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '联系入驻' : 'Contact for listing'}
             </a>
+            <Link
+              href='/developer/listing'
+              className='mt-3 inline-flex w-full items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+            >
+              {isChinese ? '查看开发者入驻说明' : 'View developer listing details'}
+            </Link>
           </aside>
         </div>
       </div>

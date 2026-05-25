@@ -3,6 +3,7 @@ export type WebNavigationListRow = {
   createdAt?: string;
   id: string;
   imageUrl: string | null;
+  isFeatured?: boolean;
   name: string;
   thumbnailUrl: string | null;
   title: string;

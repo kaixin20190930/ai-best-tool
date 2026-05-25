@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Flame, Sparkles } from 'lucide-react';
+import { Flame, Sparkles, Megaphone } from 'lucide-react';
 
 import { WebNavigationListRow } from '@/lib/data';
 
@@ -58,6 +58,7 @@ export default function WebNavCard({
   createdAt,
   updatedAt,
   contextLabel,
+  isFeatured,
 }: WebNavCardProps) {
   const freshnessLabel = getFreshnessLabel(createdAt, updatedAt);
 
@@ -97,6 +98,12 @@ export default function WebNavCard({
           <span className='inline-flex w-fit items-center gap-1 rounded-full bg-cyan-50 px-2 py-1 text-xs font-semibold text-cyan-700'>
             <Sparkles className='size-3.5' />
             New
+          </span>
+        )}
+        {isFeatured && (
+          <span className='inline-flex w-fit items-center gap-1 rounded-full bg-fuchsia-50 px-2 py-1 text-xs font-semibold text-fuchsia-700'>
+            <Megaphone className='size-3.5' />
+            Featured
           </span>
         )}
         {freshnessLabel && (
