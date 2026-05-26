@@ -338,6 +338,45 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
       en: 'Compare common ecommerce tools side by side.',
     },
   },
+  {
+    href: '/guides/ai-productivity-tools-comparison',
+    priority: 0.74,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 生产力工具对比',
+      en: 'AI productivity tools comparison',
+    },
+    desc: {
+      cn: '把常见生产力工具放在一起快速对照。',
+      en: 'Compare common productivity tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-students-comparison',
+    priority: 0.74,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 学生工具对比',
+      en: 'AI tools for students comparison',
+    },
+    desc: {
+      cn: '把常见学生工具放在一起快速对照。',
+      en: 'Compare common student tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-small-business-comparison',
+    priority: 0.74,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 小企业工具对比',
+      en: 'AI tools for small business comparison',
+    },
+    desc: {
+      cn: '把常见小企业工具放在一起快速对照。',
+      en: 'Compare common small-business tools side by side.',
+    },
+  },
 ];
 
 export const FEATURED_GUIDE_HREFS = [
