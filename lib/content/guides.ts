@@ -221,6 +221,45 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
       en: 'For small teams, startups, and solo businesses.',
     },
   },
+  {
+    href: '/guides/ai-tools-for-creators',
+    priority: 0.73,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 创作者工具推荐',
+      en: 'AI tools for creators',
+    },
+    desc: {
+      cn: '适合独立创作者、博主和内容工作流。',
+      en: 'For solo creators, bloggers, and content workflows.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-marketing',
+    priority: 0.73,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 营销工具推荐',
+      en: 'AI tools for marketing',
+    },
+    desc: {
+      cn: '适合广告、增长、社媒和营销团队。',
+      en: 'For ads, growth, social, and marketing teams.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-agencies',
+    priority: 0.73,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 代理与服务团队工具推荐',
+      en: 'AI tools for agencies',
+    },
+    desc: {
+      cn: '适合代理商、服务团队和内容工作室。',
+      en: 'For agencies, service teams, and content studios.',
+    },
+  },
 ];
 
 export const FEATURED_GUIDE_HREFS = [
