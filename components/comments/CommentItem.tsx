@@ -7,7 +7,7 @@ import { Comment } from '@/app/actions/comments';
 import { updateComment, deleteComment, likeComment, reportComment } from '@/app/actions/comments';
 import CommentInput from './CommentInput';
 import { Button } from '@/components/ui/button';
-import BaseImage from '@/components/image/BaseImage';
+import { UserAvatar } from '@/components/auth/UserAvatar';
 
 // Simple time ago formatter
 function formatTimeAgo(date: Date): string {
@@ -133,19 +133,7 @@ export default function CommentItem({
       <div className="flex gap-3">
         {/* Avatar */}
         <div className="flex-shrink-0">
-          {avatarUrl ? (
-            <BaseImage
-              src={avatarUrl}
-              alt={`${username} profile avatar`}
-              width={40}
-              height={40}
-              className="size-10 rounded-full"
-            />
-          ) : (
-            <div className="flex size-10 items-center justify-center rounded-full bg-cyan-600 font-semibold text-white">
-              {username[0].toUpperCase()}
-            </div>
-          )}
+          <UserAvatar name={username} avatarUrl={avatarUrl} size={40} />
         </div>
 
         {/* Content */}

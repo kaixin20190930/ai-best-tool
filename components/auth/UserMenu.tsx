@@ -6,7 +6,7 @@ import type { User } from '@supabase/supabase-js';
 
 import { signOut } from '@/app/actions/auth';
 import { Button } from '@/components/ui/button';
-import BaseImage from '@/components/image/BaseImage';
+import { UserAvatar } from '@/components/auth/UserAvatar';
 
 interface UserMenuProps {
   user: User | null;
@@ -43,19 +43,7 @@ export function UserMenu({ user }: UserMenuProps) {
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 rounded-full hover:opacity-80"
       >
-        {avatar ? (
-          <BaseImage
-            src={avatar}
-            alt={`${username} profile avatar`}
-            width={32}
-            height={32}
-            className="h-8 w-8 rounded-full object-cover"
-          />
-        ) : (
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-cyan-600 text-sm font-medium text-white">
-            {username.charAt(0).toUpperCase()}
-          </div>
-        )}
+        <UserAvatar name={username} avatarUrl={avatar} size={32} />
         <span className="hidden text-sm font-medium lg:inline">{username}</span>
         <svg
           className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
