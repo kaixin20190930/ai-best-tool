@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 import { createClient } from '@/lib/supabase/server';
-import { authConfig, getOAuthRedirectUrl } from '@/lib/config/auth';
+import { authConfig, getOAuthRedirectUrl, getSiteUrl } from '@/lib/config/auth';
 
 function getAuthErrorMessage(error: unknown) {
   if (error instanceof Error && error.message === 'fetch failed') {
@@ -50,7 +50,7 @@ export async function signUp(formData: FormData) {
         data: {
           username,
         },
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+        emailRedirectTo: `${getSiteUrl()}/auth/callback`,
       },
     });
 
@@ -172,7 +172,7 @@ export async function resetPassword(formData: FormData) {
   }
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/reset-password`,
+    redirectTo: `${getSiteUrl()}/auth/reset-password`,
   });
 
   if (error) {
@@ -252,7 +252,7 @@ export async function resendVerificationEmail(email: string) {
     type: 'signup',
     email,
     options: {
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+      emailRedirectTo: `${getSiteUrl()}/auth/callback`,
     },
   });
 

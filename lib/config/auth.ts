@@ -51,7 +51,7 @@ export const authConfig = {
 
 // Site URL for OAuth redirects
 export const getSiteUrl = () => {
-  return process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  return (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000').replace(/\/$/, '');
 };
 
 // OAuth redirect URL

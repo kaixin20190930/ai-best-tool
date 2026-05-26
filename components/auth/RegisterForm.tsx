@@ -6,7 +6,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import Link from 'next/link';
 
-import { signUp, signInWithOAuth } from '@/app/actions/auth';
+import { signUp } from '@/app/actions/auth';
+import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -58,10 +59,31 @@ export function RegisterForm() {
     setIsLoading(true);
     setError(null);
 
-    const result = await signInWithOAuth(provider);
+    try {
+      const supabase = createClient();
+      const redirectTo = `${window.location.origin}/auth/callback`;
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo,
+        },
+      });
 
-    if (result?.error) {
-      setError(result.error);
+      if (error) {
+        setError(error.message);
+        setIsLoading(false);
+        return;
+      }
+
+      if (data?.url) {
+        window.location.assign(data.url);
+        return;
+      }
+
+      setError('OAuth sign-in did not return a redirect URL.');
+      setIsLoading(false);
+    } catch (oauthError) {
+      setError(oauthError instanceof Error ? oauthError.message : 'OAuth sign-in failed.');
       setIsLoading(false);
     }
   }
@@ -154,6 +176,7 @@ export function RegisterForm() {
 
       <div className="grid grid-cols-2 gap-4">
         <Button
+          type="button"
           variant="outline"
           onClick={() => handleOAuthSignIn('google')}
           disabled={isLoading}
@@ -180,6 +203,7 @@ export function RegisterForm() {
         </Button>
 
         <Button
+          type="button"
           variant="outline"
           onClick={() => handleOAuthSignIn('github')}
           disabled={isLoading}

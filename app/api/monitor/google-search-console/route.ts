@@ -4,16 +4,14 @@ import {
   inspectGoogleSearchConsoleUrlBySystem,
   submitGoogleSearchConsoleSitemapBySystem,
 } from '@/app/actions/admin/googleSearchConsole';
-
-function isAuthorized(request: NextRequest) {
-  const token = process.env.MONITOR_API_TOKEN;
-  if (!token) return true;
-  return request.headers.get('authorization') === `Bearer ${token}`;
-}
+import { isMonitorRequestAuthorized } from '@/lib/monitor/auth';
 
 export async function GET(request: NextRequest) {
-  if (!isAuthorized(request)) {
-    return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
+  if (!isMonitorRequestAuthorized(request)) {
+    return NextResponse.json(
+      { ok: false, error: 'Unauthorized: missing or invalid MONITOR_API_TOKEN' },
+      { status: 401 }
+    );
   }
 
   const { searchParams } = new URL(request.url);
@@ -28,10 +26,14 @@ export async function GET(request: NextRequest) {
       sitemapUrl,
       { propertyUrl, siteOrigin }
     );
-    if (!result.success) {
+    if (!('response' in result)) {
       return NextResponse.json({ ok: false, error: result.error || 'Sitemap submission failed' }, { status: 500 });
     }
-    return NextResponse.json({ ok: true, action, response: result.response });
+    return NextResponse.json({
+      ok: true,
+      action,
+      response: result.response,
+    });
   }
 
   if (action === 'inspect-url') {
@@ -39,10 +41,14 @@ export async function GET(request: NextRequest) {
       inspectionUrl,
       { propertyUrl, siteOrigin }
     );
-    if (!result.success) {
+    if (!('response' in result)) {
       return NextResponse.json({ ok: false, error: result.error || 'URL inspection failed' }, { status: 500 });
     }
-    return NextResponse.json({ ok: true, action, response: result.response });
+    return NextResponse.json({
+      ok: true,
+      action,
+      response: result.response,
+    });
   }
 
   return NextResponse.json(

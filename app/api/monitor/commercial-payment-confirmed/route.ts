@@ -4,12 +4,7 @@ import {
   hasSuccessfulPaymentCallbackByTransactionId,
   insertPaymentCallbackLog,
 } from '@/app/actions/admin/paymentCallbacks';
-
-function isAuthorized(request: NextRequest) {
-  const token = process.env.MONITOR_API_TOKEN;
-  if (!token) return true;
-  return request.headers.get('authorization') === `Bearer ${token}`;
-}
+import { isMonitorRequestAuthorized } from '@/lib/monitor/auth';
 
 async function writeCallbackLogSafe(
   input: Parameters<typeof insertPaymentCallbackLog>[0]
@@ -22,19 +17,22 @@ async function writeCallbackLogSafe(
 }
 
 export async function GET(request: NextRequest) {
-  if (!isAuthorized(request)) {
+  if (!isMonitorRequestAuthorized(request)) {
     await writeCallbackLogSafe({
       toolId: null,
       transactionId: null,
       status: 'failed',
       source: 'monitor-api',
-      errorMessage: 'Unauthorized',
+      errorMessage: 'Unauthorized: missing or invalid MONITOR_API_TOKEN',
       payload: {
         path: request.nextUrl.pathname,
         query: request.nextUrl.searchParams.toString(),
       },
     });
-    return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json(
+      { ok: false, error: 'Unauthorized: missing or invalid MONITOR_API_TOKEN' },
+      { status: 401 }
+    );
   }
 
   const { searchParams } = new URL(request.url);

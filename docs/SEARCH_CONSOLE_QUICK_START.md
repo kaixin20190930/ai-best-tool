@@ -8,6 +8,7 @@ Use this after a release that adds new pages, changes metadata, or updates the s
 - Confirm `/sitemap.xml` opens on the production domain.
 - Confirm the admin Search Console page is available at `/admin/search-console`.
 - Confirm `MONITOR_API_TOKEN` is set if you want monitor endpoints protected.
+- If `MONITOR_API_TOKEN` is set, direct browser requests to `/api/monitor` return `401` unless you send `Authorization: Bearer <token>`.
 
 ## Step 1: Submit Sitemap
 

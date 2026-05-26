@@ -129,7 +129,34 @@ async function runGoogleSearchConsoleOperation(
   } | undefined,
   executor: (client: ReturnType<typeof createGoogleSearchConsoleClient>) => Promise<Record<string, unknown>>
 ) {
-  const config = getGoogleSearchConsoleConfig(overrides);
+  let config: GoogleSearchConsoleClientConfig;
+
+  try {
+    config = getGoogleSearchConsoleConfig(overrides);
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : 'Google Search Console is not configured.';
+
+    try {
+      await insertGoogleSearchConsoleLog({
+        operation,
+        propertyUrl:
+          overrides?.propertyUrl?.trim() ||
+          process.env.GSC_PROPERTY_URL ||
+          process.env.NEXT_PUBLIC_SITE_URL ||
+          '',
+        targetUrl,
+        status: 'failed',
+        source,
+        errorMessage,
+      });
+    } catch {
+      // Logging should never turn a configuration error into a harder failure.
+    }
+
+    return { success: false, error: errorMessage };
+  }
+
   const client = createGoogleSearchConsoleClient(config);
 
   try {
@@ -158,7 +185,11 @@ async function runGoogleSearchConsoleOperation(
 }
 
 export async function submitGoogleSearchConsoleSitemapAction(formData: FormData) {
-  await requireAdmin();
+  try {
+    await requireAdmin();
+  } catch (error) {
+    return { success: false, error: error instanceof Error ? error.message : 'Unauthorized' };
+  }
 
   const sitemapUrl = String(formData.get('sitemapUrl') || '').trim();
   const propertyUrl = String(formData.get('propertyUrl') || '').trim() || undefined;
@@ -180,7 +211,11 @@ export async function submitGoogleSearchConsoleSitemapAction(formData: FormData)
 }
 
 export async function inspectGoogleSearchConsoleUrlAction(formData: FormData) {
-  await requireAdmin();
+  try {
+    await requireAdmin();
+  } catch (error) {
+    return { success: false, error: error instanceof Error ? error.message : 'Unauthorized' };
+  }
 
   const inspectionUrl = String(formData.get('inspectionUrl') || '').trim();
   const propertyUrl = String(formData.get('propertyUrl') || '').trim() || undefined;
@@ -250,7 +285,12 @@ export async function inspectGoogleSearchConsoleUrlBySystem(
 }
 
 export async function getGoogleSearchConsoleLogs(limit = 50) {
-  await requireAdmin();
+  try {
+    await requireAdmin();
+  } catch {
+    return [];
+  }
+
   await ensureGoogleSearchConsoleLogsTable();
 
   const result = await query(

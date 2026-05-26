@@ -33,8 +33,8 @@ export default function Footer() {
 
   const SupportLinks = [
     {
-      title: 'Sora',
-      href: 'https://www.soraainow.com',
+      title: 'Moxion',
+      href: 'https://moxion.ai',
     },
   ];
 

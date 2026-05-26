@@ -7,7 +7,7 @@ const localePattern = /^\/(en|cn|jp|de|es|fr|pt|ru|tw)(?=\/|$)/;
 
 const protectedRoutes = ['/profile', '/favorites', '/settings', '/submit'];
 const adminRoutes = ['/admin'];
-const authRoutes = ['/login', '/register'];
+const authRoutes = ['/login', '/register', '/auth'];
 
 function getPathParts(pathname: string) {
   const localeMatch = pathname.match(localePattern);
