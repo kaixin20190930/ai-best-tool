@@ -45,10 +45,6 @@ function copyCookies(source: NextResponse, target: NextResponse) {
   });
 }
 
-function hasSupabaseAuthCookie(request: NextRequest) {
-  return request.cookies.getAll().some((cookie) => cookie.name.startsWith('sb-') && cookie.name.endsWith('-auth-token'));
-}
-
 async function getCurrentUser(request: NextRequest) {
   let response = NextResponse.next({
     request: {
@@ -60,10 +56,6 @@ async function getCurrentUser(request: NextRequest) {
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!supabaseUrl || !supabaseAnonKey) {
-    return { user: null, response };
-  }
-
-  if (!hasSupabaseAuthCookie(request)) {
     return { user: null, response };
   }
 
