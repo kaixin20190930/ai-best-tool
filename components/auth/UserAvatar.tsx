@@ -34,6 +34,12 @@ export function UserAvatar({
       className={`inline-flex items-center justify-center overflow-hidden rounded-full bg-cyan-600 font-semibold text-white ${className}`}
       style={{ width: size, height: size }}
     >
+      {!shouldShowImage ? (
+        <span className="select-none" aria-hidden="true">
+          {initials}
+        </span>
+      ) : null}
+
       {shouldShowImage ? (
         <BaseImage
           src={avatarUrl as string}
@@ -44,11 +50,7 @@ export function UserAvatar({
           onError={() => setImageFailed(true)}
           unoptimized
         />
-      ) : (
-        <span className="select-none" aria-hidden="true">
-          {initials}
-        </span>
-      )}
+      ) : null}
     </div>
   );
 }
