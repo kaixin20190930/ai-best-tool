@@ -23,6 +23,12 @@ function matchesRoute(pathname: string, routes: string[]) {
   return routes.some((route) => pathWithoutLocale === route || pathWithoutLocale.startsWith(`${route}/`));
 }
 
+function isAuthCallbackRoute(pathname: string) {
+  const { pathWithoutLocale } = getPathParts(pathname);
+
+  return pathWithoutLocale === '/auth' || pathWithoutLocale.startsWith('/auth/');
+}
+
 function getLocalizedPath(pathname: string, targetPath: string) {
   const { locale } = getPathParts(pathname);
 
@@ -111,6 +117,7 @@ export async function middleware(request: NextRequest) {
   const isProtectedRoute = matchesRoute(pathname, protectedRoutes);
   const isAdminRoute = matchesRoute(pathname, adminRoutes);
   const isAuthRoute = matchesRoute(pathname, authRoutes);
+  const isCallbackRoute = isAuthCallbackRoute(pathname);
 
   if ((isProtectedRoute || isAdminRoute) && !user) {
     const redirectUrl = new URL(getLocalizedPath(pathname, '/login'), request.url);
@@ -133,6 +140,12 @@ export async function middleware(request: NextRequest) {
 
   if (isAuthRoute && user) {
     const response = NextResponse.redirect(new URL(getLocalizedPath(pathname, '/'), request.url));
+    copyCookies(sessionResponse, response);
+    return response;
+  }
+
+  if (isCallbackRoute) {
+    const response = NextResponse.next();
     copyCookies(sessionResponse, response);
     return response;
   }
