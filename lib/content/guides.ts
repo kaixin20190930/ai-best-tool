@@ -299,6 +299,45 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
       en: 'For ecommerce, stores, and product marketing.',
     },
   },
+  {
+    href: '/guides/ai-tools-for-designers-comparison',
+    priority: 0.74,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 设计工具对比',
+      en: 'AI design tools comparison',
+    },
+    desc: {
+      cn: '把常见设计工具放在一起快速对照。',
+      en: 'Compare common design tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-sales-comparison',
+    priority: 0.74,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 销售工具对比',
+      en: 'AI sales tools comparison',
+    },
+    desc: {
+      cn: '把常见销售工具放在一起快速对照。',
+      en: 'Compare common sales tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-ecommerce-comparison',
+    priority: 0.74,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 电商工具对比',
+      en: 'AI ecommerce tools comparison',
+    },
+    desc: {
+      cn: '把常见电商工具放在一起快速对照。',
+      en: 'Compare common ecommerce tools side by side.',
+    },
+  },
 ];
 
 export const FEATURED_GUIDE_HREFS = [
