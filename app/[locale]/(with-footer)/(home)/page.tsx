@@ -19,22 +19,19 @@ import {
 } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import Faq from '@/components/Faq';
-import Search from '@/components/Search';
-import CommunityPulse from '@/components/home/CommunityPulse';
-import WebNavCardList from '@/components/webNav/WebNavCardList';
-import { StructuredDataServer } from '@/components/seo/StructuredData';
-import { FEATURED_GUIDE_HREFS, GUIDE_PAGES } from '@/lib/content/guides';
 import { listingConfig } from '@/lib/config/listing';
-import { generateOrganizationSchema } from '@/lib/seo/schema';
+import { FEATURED_GUIDE_HREFS, GUIDE_PAGES } from '@/lib/content/guides';
 import { SEO_CONFIG } from '@/lib/seo/constants';
+import { generateOrganizationSchema } from '@/lib/seo/schema';
+import { getLocalizedField as getCategoryLocalizedField, getPopularCategories } from '@/lib/services/categories';
 import { getCommunityHighlights, getRecentDiscussions, getRisingTools } from '@/lib/services/community';
-import { getPopularTools } from '@/lib/services/tools';
 import { toolToListRow } from '@/lib/services/toolPresenter';
-import {
-  getPopularCategories,
-  getLocalizedField as getCategoryLocalizedField,
-} from '@/lib/services/categories';
+import { getPopularTools } from '@/lib/services/tools';
+import Faq from '@/components/Faq';
+import CommunityPulse from '@/components/home/CommunityPulse';
+import Search from '@/components/Search';
+import { StructuredDataServer } from '@/components/seo/StructuredData';
+import WebNavCardList from '@/components/webNav/WebNavCardList';
 
 const ScrollToTop = dynamic(() => import('@/components/page/ScrollToTop'), { ssr: false });
 
@@ -59,7 +56,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     },
     openGraph: {
       type: 'website',
-      locale: locale,
+      locale,
       url: siteUrl,
       siteName: 'AI Best Tool',
       title,
@@ -86,13 +83,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 
 export const revalidate = 3600;
 
-function SectionHeader({
-  title,
-  description,
-}: {
-  title: string;
-  description: string;
-}) {
+function SectionHeader({ title, description }: { title: string; description: string }) {
   return (
     <div className='mb-5 flex flex-col gap-2 lg:mb-6'>
       <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>{title}</h2>
@@ -193,16 +184,14 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 </span>
               </div>
 
-              <h1 className='max-w-4xl text-4xl font-bold leading-tight text-slate-950 lg:text-6xl'>
-                {heroTitle}
-              </h1>
-              <p className='mt-5 max-w-3xl text-base leading-7 text-slate-600 lg:text-lg'>
-                {heroSubtitle}
-              </p>
+              <h1 className='max-w-4xl text-4xl font-bold leading-tight text-slate-950 lg:text-6xl'>{heroTitle}</h1>
+              <p className='mt-5 max-w-3xl text-base leading-7 text-slate-600 lg:text-lg'>{heroSubtitle}</p>
 
               <div className='mt-7 max-w-2xl rounded-lg bg-slate-50 p-2 ring-1 ring-slate-200'>
                 <Search
-                  placeholder={isChinese ? '搜索 AI 工具、场景或产品名...' : 'Search AI tools, use cases, or product names...'}
+                  placeholder={
+                    isChinese ? '搜索 AI 工具、场景或产品名...' : 'Search AI tools, use cases, or product names...'
+                  }
                   className='p-0 sm:p-0'
                 />
               </div>
@@ -265,7 +254,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
                   <div className='min-w-0'>
                     <p className='text-sm font-semibold text-cyan-900'>
-                      {isChinese ? '如果你需要更快的节奏或更明显的曝光' : 'If you need faster timing or a bit more visibility'}
+                      {isChinese
+                        ? '如果你需要更快的节奏或更明显的曝光'
+                        : 'If you need faster timing or a bit more visibility'}
                     </p>
                     <p className='mt-1 text-sm leading-6 text-cyan-900/80'>
                       {isChinese
@@ -333,9 +324,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   {isChinese ? '分享给团队或朋友' : 'Share with your team'}
                 </p>
                 <p className='mt-1 text-sm leading-6 text-slate-600'>
-                  {isChinese
-                    ? '每个详情页都支持一键分享。'
-                    : 'Every tool detail page supports quick sharing.'}
+                  {isChinese ? '每个详情页都支持一键分享。' : 'Every tool detail page supports quick sharing.'}
                 </p>
               </div>
             </div>
@@ -375,7 +364,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <section>
               <SectionHeader
                 title={isChinese ? '按场景快速发现' : 'Browse by use case'}
-                description={isChinese ? '从热门分类进入，快速缩小选择范围。' : 'Start from popular categories and narrow the search quickly.'}
+                description={
+                  isChinese
+                    ? '从热门分类进入，快速缩小选择范围。'
+                    : 'Start from popular categories and narrow the search quickly.'
+                }
               />
               <div className='grid gap-3 sm:grid-cols-2 lg:grid-cols-4'>
                 {popularCategories.map((category) => (
@@ -404,8 +397,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </section>
           )}
 
-          <section className='grid gap-4 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm lg:grid-cols-[1fr_auto] lg:items-center lg:p-8'>
-            <div>
+          <section className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm lg:flex lg:items-center lg:gap-8 lg:p-8'>
+            <div className='min-w-0 lg:flex-1'>
               <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
                 {isChinese ? '选型指南' : 'Selection guide'}
               </p>
@@ -418,7 +411,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   : 'If you are unsure what to compare, this guide helps you sort out use case, pricing, freshness, and comments first.'}
               </p>
             </div>
-            <div className='flex flex-col gap-3 sm:flex-row'>
+            <div className='mt-6 grid gap-3 sm:grid-cols-2 lg:mt-0 lg:flex-[1.1] xl:grid-cols-3'>
               <Link
                 href='/guides/how-to-choose-ai-tools'
                 className='inline-flex items-center justify-center gap-2 rounded-lg bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800'
@@ -430,9 +423,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 <Link
                   key={guide.href}
                   href={guide.href}
-                  className='inline-flex items-center justify-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-slate-800 ring-1 ring-slate-200 transition hover:bg-slate-100'
+                  className='inline-flex min-w-0 items-center justify-between gap-2 rounded-lg bg-white px-5 py-3 text-left text-sm font-semibold text-slate-800 ring-1 ring-slate-200 transition hover:bg-slate-100'
                 >
-                  {guide.title[isChinese ? 'cn' : 'en']}
+                  <span className='min-w-0 break-words'>{guide.title[isChinese ? 'cn' : 'en']}</span>
                   <ArrowRight className='size-4' />
                 </Link>
               ))}
@@ -441,10 +434,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
           <section>
             <div className='mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between'>
-              <SectionHeader
-                title={t('latestTools')}
-                description={t('latestToolsDescription')}
-              />
+              <SectionHeader title={t('latestTools')} description={t('latestToolsDescription')} />
               <Link
                 href='/explore?sort=latest'
                 className='inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-slate-950'
@@ -459,10 +449,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           {popularTools.length > 0 && (
             <section>
               <div className='mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between'>
-                <SectionHeader
-                  title={t('popularTools')}
-                  description={t('popularToolsDescription')}
-                />
+                <SectionHeader title={t('popularTools')} description={t('popularToolsDescription')} />
                 <Link
                   href='/explore?sort=popular'
                   className='inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-slate-950'

@@ -1,18 +1,13 @@
-import {
-  getTools,
-  ToolFilters,
-  SortBy,
-  getPopularTools,
-  getActiveFeaturedTools,
-} from '@/lib/services/tools';
+import { dataList as curatedWebNavigationList } from '@/lib/data';
 import type { Category } from '@/lib/services/categories';
 import type { Tag } from '@/lib/services/tags';
 import { toolToListRow, toolToRecommendation } from '@/lib/services/toolPresenter';
+import { getActiveFeaturedTools, getPopularTools, getTools, SortBy, ToolFilters } from '@/lib/services/tools';
+import EmptyState from '@/components/EmptyState';
+import ExploreControls from '@/components/explore/ExploreControls';
 import BasePagination from '@/components/page/BasePagination';
 import WebNavCardList from '@/components/webNav/WebNavCardList';
-import EmptyState from '@/components/EmptyState';
 import { trackSearch } from '@/app/actions/analytics';
-import ExploreControls from '@/components/explore/ExploreControls';
 
 const WEB_PAGE_SIZE = 20;
 const validSortOptions: SortBy[] = ['latest', 'popular', 'rating', 'views', 'clicks'];
@@ -45,10 +40,7 @@ function getActiveFilters({
   locale,
   searchParams,
   forcedCategorySlug,
-}: Pick<
-  ExploreListProps,
-  'categories' | 'tags' | 'locale' | 'searchParams' | 'forcedCategorySlug'
->) {
+}: Pick<ExploreListProps, 'categories' | 'tags' | 'locale' | 'searchParams' | 'forcedCategorySlug'>) {
   const activeFilters: Array<{
     key: 'category' | 'tags' | 'pricing' | 'search';
     label: string;
@@ -68,9 +60,7 @@ function getActiveFilters({
     const category = categories.find((item) => item.slug === categorySlug);
     activeFilters.push({
       key: 'category',
-      label: category
-        ? `Category: ${getLocalizedName(category.name, locale || 'en')}`
-        : `Category: ${categorySlug}`,
+      label: category ? `Category: ${getLocalizedName(category.name, locale || 'en')}` : `Category: ${categorySlug}`,
       locked: Boolean(forcedCategorySlug),
     });
   }
@@ -81,9 +71,7 @@ function getActiveFilters({
       const tag = tags.find((item) => item.slug === tagSlug);
       activeFilters.push({
         key: 'tags',
-        label: tag
-          ? `Tag: ${getLocalizedName(tag.name, locale || 'en')}`
-          : `Tag: ${tagSlug}`,
+        label: tag ? `Tag: ${getLocalizedName(tag.name, locale || 'en')}` : `Tag: ${tagSlug}`,
         value: tagSlug,
       });
     });
@@ -135,9 +123,7 @@ export default async function ExploreList({
 
   // Get sort option
   const sortBy: SortBy =
-    searchParams?.sort && validSortOptions.includes(searchParams.sort)
-      ? searchParams.sort
-      : 'latest';
+    searchParams?.sort && validSortOptions.includes(searchParams.sort) ? searchParams.sort : 'latest';
 
   // Fetch tools from database
   const result = await getTools(filters, { page: currentPage, pageSize: WEB_PAGE_SIZE }, sortBy);
@@ -150,7 +136,7 @@ export default async function ExploreList({
 
   const featuredList = featuredTools.map((tool) => toolToListRow(tool, locale));
   const featuredIds = new Set(featuredList.map((item) => item.id));
-  const dataList = result.data
+  const liveDataList = result.data
     .map((tool) => toolToListRow(tool, locale))
     .filter((item) => !featuredIds.has(item.id));
   const activeFilters = getActiveFilters({
@@ -164,6 +150,20 @@ export default async function ExploreList({
   // Check if we have any active filters
   const hasActiveFilters =
     searchParams?.category || searchParams?.tags || searchParams?.pricing || searchParams?.search;
+  const useCuratedFallback = result.total === 0 && !hasActiveFilters;
+  const curatedFallbackList = curatedWebNavigationList.slice(
+    (currentPage - 1) * WEB_PAGE_SIZE,
+    currentPage * WEB_PAGE_SIZE,
+  );
+  const visibleList = useCuratedFallback ? curatedFallbackList : liveDataList;
+  const visibleTotal = useCuratedFallback ? curatedWebNavigationList.length : result.total;
+  let contextLabel: 'latest' | 'popular' | undefined;
+
+  if (sortBy === 'latest') {
+    contextLabel = 'latest';
+  } else if (sortBy === 'popular') {
+    contextLabel = 'popular';
+  }
 
   // If no results and filters are active, show empty state with recommendations
   if (result.total === 0 && hasActiveFilters) {
@@ -174,7 +174,7 @@ export default async function ExploreList({
     return (
       <>
         <ExploreControls
-          total={result.total}
+          total={visibleTotal}
           visible={result.data.length}
           sortBy={sortBy}
           searchQuery={searchParams?.search}
@@ -194,20 +194,24 @@ export default async function ExploreList({
   return (
     <>
       <ExploreControls
-        total={result.total}
-        visible={dataList.length}
+        total={visibleTotal}
+        visible={visibleList.length}
         sortBy={sortBy}
         searchQuery={searchParams?.search}
         activeFilters={activeFilters}
         basePath={basePath}
       />
 
+      {useCuratedFallback && (
+        <div className='mb-4 rounded-xl border border-cyan-100 bg-cyan-50 px-4 py-3 text-sm text-cyan-800'>
+          Live inventory is still syncing. Showing curated tools for now.
+        </div>
+      )}
+
       {featuredList.length > 0 && (
         <section className='mb-6'>
           <div className='mb-3 flex items-center justify-between'>
-            <h2 className='text-sm font-semibold uppercase tracking-wide text-fuchsia-700'>
-              Sponsored Picks
-            </h2>
+            <h2 className='text-sm font-semibold uppercase tracking-wide text-fuchsia-700'>Sponsored Picks</h2>
             <span className='text-xs text-slate-500'>Promoted listings</span>
           </div>
           <WebNavCardList dataList={featuredList} />
@@ -215,17 +219,14 @@ export default async function ExploreList({
       )}
 
       {/* Tool cards */}
-      <WebNavCardList
-        dataList={dataList}
-        contextLabel={sortBy === 'latest' ? 'latest' : sortBy === 'popular' ? 'popular' : undefined}
-      />
+      <WebNavCardList dataList={visibleList} contextLabel={contextLabel} />
 
       {/* Pagination */}
-      {result.total > WEB_PAGE_SIZE && (
+      {visibleTotal > WEB_PAGE_SIZE && (
         <BasePagination
           currentPage={currentPage}
           pageSize={WEB_PAGE_SIZE}
-          total={result.total}
+          total={visibleTotal}
           route={basePath}
           subRoute='/page'
           searchParamsKeys={['category', 'tags', 'pricing', 'search', 'sort']}
