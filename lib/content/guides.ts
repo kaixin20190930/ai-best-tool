@@ -260,6 +260,45 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
       en: 'For agencies, service teams, and content studios.',
     },
   },
+  {
+    href: '/guides/ai-tools-for-designers',
+    priority: 0.73,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 设计师工具推荐',
+      en: 'AI tools for designers',
+    },
+    desc: {
+      cn: '适合设计师、品牌和视觉工作流。',
+      en: 'For designers, brands, and visual workflows.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-sales',
+    priority: 0.73,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 销售工具推荐',
+      en: 'AI tools for sales',
+    },
+    desc: {
+      cn: '适合销售、线索跟进和客户沟通。',
+      en: 'For sales, lead follow-up, and customer communication.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-ecommerce',
+    priority: 0.73,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 电商工具推荐',
+      en: 'AI tools for ecommerce',
+    },
+    desc: {
+      cn: '适合电商、独立站和商品营销。',
+      en: 'For ecommerce, stores, and product marketing.',
+    },
+  },
 ];
 
 export const FEATURED_GUIDE_HREFS = [
