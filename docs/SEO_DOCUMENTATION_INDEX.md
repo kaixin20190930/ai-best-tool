@@ -634,6 +634,7 @@ npx tsx scripts/verify-related-tools-rendering.ts
 - [Final SEO Audit](./.kiro/specs/seo-optimization/FINAL_SEO_AUDIT.md)
 - [Maintenance Plan](./.kiro/specs/seo-optimization/MAINTENANCE_PLAN.md)
 - [Remaining Improvements](./.kiro/specs/seo-optimization/REMAINING_IMPROVEMENTS.md)
+- [Weekly Operations Runbook](./OPERATIONS_RUNBOOK.md)
 
 ### External Resources
 - [Google Search Central](https://developers.google.com/search)
