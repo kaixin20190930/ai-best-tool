@@ -228,9 +228,24 @@ This documentation provides comprehensive guidance for implementing and maintain
 
 **When to use:** Right after deployment, when you want to submit sitemap and check indexing quickly
 
+### For Tool Operations
+
+#### 18. [Tool Lifecycle Policy](./TOOL_LIFECYCLE_POLICY.md)
+**Purpose:** Operational policy for collecting, reviewing, publishing, archiving, and removing tools
+
+**Contents:**
+- Lifecycle states and definitions
+- Daily, weekly, monthly, and quarterly review cadence
+- Promotion, archive, and removal standards
+- Duplicate handling
+- Required operational fields
+- Admin UI actions and automation recommendations
+
+**When to use:** When operating the tool database and deciding whether a tool should be visible, archived, or removed
+
 ### For Monitoring and Maintenance
 
-#### 17. [SEO Monitoring Guide](./SEO_MONITORING_GUIDE.md)
+#### 19. [SEO Monitoring Guide](./SEO_MONITORING_GUIDE.md)
 **Purpose:** Comprehensive guide to SEO monitoring and maintenance
 
 **Contents:**
@@ -244,7 +259,7 @@ This documentation provides comprehensive guidance for implementing and maintain
 
 **When to use:** When setting up or maintaining SEO monitoring
 
-#### 18. [SEO Monitoring Setup](./SEO_MONITORING_SETUP.md)
+#### 20. [SEO Monitoring Setup](./SEO_MONITORING_SETUP.md)
 **Purpose:** Quick start guide for setting up SEO monitoring
 
 **Contents:**
