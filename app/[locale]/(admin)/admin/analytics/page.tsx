@@ -73,6 +73,22 @@ export default async function AdminAnalyticsPage({
     return 'Unclassified feedback';
   };
 
+  const getCategoryDisplayName = (category: (typeof topCategories)[number]) => {
+    if (typeof category.name === 'object' && category.name !== null) {
+      return category.name.en || category.name.zh || Object.values(category.name)[0] || category.slug;
+    }
+    return category.slug;
+  };
+
+  const getCategoryAction = (category: (typeof topCategories)[number]) => {
+    if (category.toolCount <= 10 && category.opportunityScore >= 200) return 'Add 5-10 solid tools';
+    if (category.views >= category.toolCount * 800) return 'Deepen supply with comparison pages';
+    if (category.comments >= category.toolCount) return 'Collect more user feedback';
+    return 'Backfill missing listings';
+  };
+
+  const focusCategories = topCategories.slice(0, 3);
+
   return (
     <div>
       <div className='mb-8'>
@@ -128,6 +144,54 @@ export default async function AdminAnalyticsPage({
               <Search className='h-6 w-6 text-amber-700' />
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Weekly Focus */}
+      <div className='mb-8'>
+        <div className='mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
+          <div>
+            <h2 className='text-lg font-semibold text-slate-900'>Weekly Focus</h2>
+            <p className='mt-1 text-sm text-slate-600'>
+              The three categories that look most worth investing in this week based on engagement and supply gap.
+            </p>
+          </div>
+          <div className='text-sm text-slate-500'>Updated from category opportunity metrics</div>
+        </div>
+        <div className='grid gap-4 md:grid-cols-3'>
+          {focusCategories.map((category, index) => (
+            <div key={category.id} className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <div className='text-xs font-medium uppercase tracking-wide text-slate-500'>Priority #{index + 1}</div>
+                  <h3 className='mt-1 text-base font-semibold text-slate-900'>{getCategoryDisplayName(category)}</h3>
+                  <p className='text-xs text-slate-500'>{category.slug}</p>
+                </div>
+                <span className='rounded-full bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-cyan-700'>
+                  {category.opportunityScore}
+                </span>
+              </div>
+
+              <div className='mt-4 space-y-2 text-sm text-slate-600'>
+                <div className='flex items-center justify-between'>
+                  <span>Tools</span>
+                  <span className='font-medium text-slate-900'>{category.toolCount}</span>
+                </div>
+                <div className='flex items-center justify-between'>
+                  <span>Views</span>
+                  <span className='font-medium text-slate-900'>{category.views.toLocaleString()}</span>
+                </div>
+                <div className='flex items-center justify-between'>
+                  <span>Comments</span>
+                  <span className='font-medium text-slate-900'>{category.comments.toLocaleString()}</span>
+                </div>
+              </div>
+
+              <div className='mt-4 rounded-md bg-slate-50 px-3 py-2 text-sm text-slate-700'>
+                {getCategoryAction(category)}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
