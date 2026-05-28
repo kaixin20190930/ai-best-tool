@@ -243,6 +243,19 @@ This documentation provides comprehensive guidance for implementing and maintain
 
 **When to use:** When operating the tool database and deciding whether a tool should be visible, archived, or removed
 
+#### 18a. [工具生命周期政策（中文）](./TOOL_LIFECYCLE_POLICY_CN.md)
+**Purpose:** 上述工具生命周期政策的中文版本
+
+**Contents:**
+- 生命周期状态与定义
+- 每日、每周、每月、每季度复查节奏
+- 发布、归档、删除标准
+- 重复处理
+- 必备运营字段
+- 后台动作与自动化建议
+
+**When to use:** 需要中文版本来做工具库日常运营决策时
+
 ### For Monitoring and Maintenance
 
 #### 19. [SEO Monitoring Guide](./SEO_MONITORING_GUIDE.md)
@@ -321,6 +334,21 @@ This documentation provides comprehensive guidance for implementing and maintain
 - Mobile performance
 
 **When to use:** When optimizing for mobile devices
+
+## 中文运营文档
+
+### 23. [每周运营手册（中文）](./OPERATIONS_RUNBOOK_CN.md)
+**Purpose:** “慢更新、稳运营”模式的中文执行手册
+
+**Contents:**
+- 每周怎么跑
+- 每月怎么复盘
+- 每季度怎么调整
+- 什么时候加内容
+- 什么时候补工具
+- 什么时候收一收，不再扩张
+
+**When to use:** 你想直接按中文节奏运营网站时
 
 ## Quick Start Guides
 
