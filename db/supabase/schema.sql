@@ -426,6 +426,7 @@ INSERT INTO categories (name, slug, description, order_index) VALUES
   ('{"en": "Chatbot", "zh": "聊天机器人"}', 'chatbot', '{"en": "AI-powered chatbots and conversational AI", "zh": "AI 驱动的聊天机器人"}', 3),
   ('{"en": "Life Assistant", "zh": "生活助手"}', 'life-assistant', '{"en": "Tools to help with daily life", "zh": "帮助日常生活的工具"}', 4),
   ('{"en": "Text & Writing", "zh": "文本与写作"}', 'text-writing', '{"en": "Writing and text processing tools", "zh": "写作和文本处理工具"}', 5),
+  ('{"en": "Web3", "zh": "Web3"}', 'web3', '{"en": "AI tools for Web3, crypto, agents, and on-chain workflows", "zh": "面向 Web3、加密、Agent 和链上工作流的 AI 工具"}', 6),
   ('{"en": "Other", "zh": "其他"}', 'other', '{"en": "Other AI tools", "zh": "其他 AI 工具"}', 99)
 ON CONFLICT (slug) DO NOTHING;
 
@@ -440,7 +441,14 @@ INSERT INTO tags (name, slug) VALUES
   ('{"en": "LLM", "zh": "大语言模型"}', 'llm'),
   ('{"en": "Image Generation", "zh": "图像生成"}', 'image-generation'),
   ('{"en": "Video", "zh": "视频"}', 'video'),
-  ('{"en": "Audio", "zh": "音频"}', 'audio')
+  ('{"en": "Audio", "zh": "音频"}', 'audio'),
+  ('{"en": "Web3", "zh": "Web3"}', 'web3'),
+  ('{"en": "Crypto", "zh": "加密"}', 'crypto'),
+  ('{"en": "DeFi", "zh": "DeFi"}', 'defi'),
+  ('{"en": "Blockchain", "zh": "区块链"}', 'blockchain'),
+  ('{"en": "MCP", "zh": "MCP"}', 'mcp'),
+  ('{"en": "Wallet", "zh": "钱包"}', 'wallet'),
+  ('{"en": "On-chain", "zh": "链上"}', 'onchain')
 ON CONFLICT (slug) DO NOTHING;
 
 -- ============================================
