@@ -31,6 +31,7 @@ import MediaGallery from '@/components/MediaGallery';
 import RecommendedTools from '@/components/RecommendedTools';
 import TrackableLink from '@/components/TrackableLink';
 import ShareButton from '@/components/ShareButton';
+import ToolFeedbackBar from '@/components/ToolFeedbackBar';
 import { getUserRating } from '@/app/actions/ratings';
 import { isFavorited } from '@/app/actions/favorites';
 import { getCommentCount } from '@/app/actions/comments';
@@ -62,10 +63,6 @@ export async function generateMetadata({
 }: {
   params: { locale: string; websiteName: string };
 }): Promise<Metadata> {
-  const t = await getTranslations({
-    locale,
-    namespace: 'Metadata.ai',
-  });
   const dbTool = await getToolByName(websiteName);
   const data = dbTool?.status === 'published'
     ? toolToDetailData(dbTool, locale)
@@ -83,7 +80,6 @@ export async function generateMetadata({
   // Get category name if available
   let toolCategory: string | undefined;
   if (dbTool?.categoryId) {
-    const { getCategoryById, getLocalizedField: getCategoryLocalizedField } = await import('@/lib/services/categories');
     const category = await getCategoryById(dbTool.categoryId);
     if (category) {
       toolCategory = getCategoryLocalizedField(category.name, locale);
@@ -269,14 +265,13 @@ export default async function Page({ params: { websiteName, locale } }: { params
       ? getLocalizedField(dbTool.detail, locale)
       : data?.detail || data?.content || '';
   const heroImage = data.thumbnailUrl || data.imageUrl || '';
-  const pricingLabel =
-    dbTool?.pricing === 'free'
-      ? 'Free'
-      : dbTool?.pricing === 'paid'
-        ? 'Paid'
-        : dbTool?.pricing === 'freemium'
-          ? 'Freemium'
-          : 'Check website';
+  const pricingLabel = dbTool?.pricing === 'free'
+    ? 'Free'
+    : dbTool?.pricing === 'paid'
+      ? 'Paid'
+      : dbTool?.pricing === 'freemium'
+        ? 'Freemium'
+        : 'Check website';
   const updatedAt = dbTool?.updatedAt || dbTool?.createdAt;
   const updatedLabel = updatedAt
     ? new Intl.DateTimeFormat(locale === 'cn' ? 'zh-CN' : 'en-US', {
@@ -327,6 +322,45 @@ export default async function Page({ params: { websiteName, locale } }: { params
           'What do you like most about it?',
           'Any caveats or alternatives?',
         ];
+  const commentLabel =
+    commentCount > 0 ? `${commentCount} ${locale === 'cn' ? '条讨论' : 'comments'}` : locale === 'cn' ? '去讨论' : 'Discuss';
+  const heroPreview = heroImage ? (
+    toolId ? (
+      <TrackableLink
+        href={data.url}
+        toolId={toolId}
+        userId={user?.id}
+        className='group relative block aspect-video w-full overflow-hidden bg-slate-100'
+      >
+        <BaseImage
+          title={data.title}
+          alt={`${data.title} interface preview`}
+          fill
+          src={heroImage}
+          className='object-cover transition-transform duration-300 group-hover:scale-105'
+        />
+      </TrackableLink>
+    ) : (
+      <a
+        href={data.url}
+        target='_blank'
+        rel='noreferrer'
+        className='group relative block aspect-video w-full overflow-hidden bg-slate-100'
+      >
+        <BaseImage
+          title={data.title}
+          alt={`${data.title} interface preview`}
+          fill
+          src={heroImage}
+          className='object-cover transition-transform duration-300 group-hover:scale-105'
+        />
+      </a>
+    )
+  ) : (
+    <div className='flex aspect-video items-center justify-center bg-slate-100 text-5xl font-bold text-slate-300'>
+      {data.title.slice(0, 1).toUpperCase()}
+    </div>
+  );
 
   return (
     <>
@@ -423,9 +457,7 @@ export default async function Page({ params: { websiteName, locale } }: { params
                         className='inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-4 py-2 text-sm font-semibold text-cyan-800 transition hover:bg-cyan-100'
                       >
                         <MessageSquare className='size-4' />
-                        {commentCount > 0
-                          ? `${commentCount} ${locale === 'cn' ? '条讨论' : 'comments'}`
-                          : (locale === 'cn' ? '去讨论' : 'Discuss')}
+                        {commentLabel}
                       </a>
                     </div>
                   </div>
@@ -464,43 +496,7 @@ export default async function Page({ params: { websiteName, locale } }: { params
 
             <aside className='space-y-4'>
               <div className='overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-slate-200'>
-                {heroImage ? (
-                  toolId ? (
-                    <TrackableLink
-                      href={data.url}
-                      toolId={toolId}
-                      userId={user?.id}
-                      className='group relative block aspect-video w-full overflow-hidden bg-slate-100'
-                    >
-                      <BaseImage
-                        title={data.title}
-                        alt={`${data.title} interface preview`}
-                        fill
-                        src={heroImage}
-                        className='object-cover transition-transform duration-300 group-hover:scale-105'
-                      />
-                    </TrackableLink>
-                  ) : (
-                    <a
-                      href={data.url}
-                      target='_blank'
-                      rel='noreferrer'
-                      className='group relative block aspect-video w-full overflow-hidden bg-slate-100'
-                    >
-                      <BaseImage
-                        title={data.title}
-                        alt={`${data.title} interface preview`}
-                        fill
-                        src={heroImage}
-                        className='object-cover transition-transform duration-300 group-hover:scale-105'
-                      />
-                    </a>
-                  )
-                ) : (
-                  <div className='flex aspect-video items-center justify-center bg-slate-100 text-5xl font-bold text-slate-300'>
-                    {data.title.slice(0, 1).toUpperCase()}
-                  </div>
-                )}
+                {heroPreview}
                 <div className='grid grid-cols-3 divide-x divide-slate-200 border-t border-slate-200 text-center'>
                   <div className='p-3'>
                     <p className='text-xs text-slate-500'>Views</p>
@@ -761,6 +757,12 @@ export default async function Page({ params: { websiteName, locale } }: { params
                 </p>
               </div>
             </div>
+
+            {toolId && (
+              <div className='rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200'>
+                <ToolFeedbackBar toolId={toolId} userId={user?.id} />
+              </div>
+            )}
           </aside>
         </div>
       </div>

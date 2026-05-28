@@ -33,6 +33,12 @@ export interface TrafficSource {
   percentage: number;
 }
 
+export interface FeedbackSignal {
+  type: string;
+  count: number;
+  percentage: number;
+}
+
 export interface CategoryMetric {
   id: string;
   slug: string;
@@ -427,6 +433,43 @@ export async function getTrafficSources(limit: number = 10): Promise<TrafficSour
     }));
   } catch (error) {
     console.error('Error fetching traffic sources:', error);
+    return [];
+  }
+}
+
+/**
+ * Get top feedback signals
+ */
+export async function getTopFeedbackSignals(limit: number = 10): Promise<FeedbackSignal[]> {
+  try {
+    const pool = getPool();
+
+    const result = await pool.query(
+      `
+      SELECT
+        COALESCE(metadata->>'type', 'unknown') as type,
+        COUNT(*) as count
+      FROM analytics
+      WHERE event_type = 'feedback'
+      GROUP BY COALESCE(metadata->>'type', 'unknown')
+      ORDER BY count DESC
+      LIMIT $1
+    `,
+      [limit]
+    );
+
+    const total = result.rows.reduce(
+      (sum, row) => sum + Number.parseInt(String(row.count || '0'), 10),
+      0
+    );
+
+    return result.rows.map((row) => ({
+      type: row.type,
+      count: Number.parseInt(String(row.count || '0'), 10),
+      percentage: total > 0 ? (Number.parseInt(String(row.count || '0'), 10) / total) * 100 : 0,
+    }));
+  } catch (error) {
+    console.error('Error fetching feedback signals:', error);
     return [];
   }
 }

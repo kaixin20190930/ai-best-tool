@@ -12,20 +12,7 @@ import { headers } from 'next/headers';
 /**
  * 分析事件类型
  */
-export type AnalyticsEventType = 'page_view' | 'tool_click' | 'search' | 'share';
-
-/**
- * 分析事件数据
- */
-interface AnalyticsEvent {
-  eventType: AnalyticsEventType;
-  toolId?: string;
-  userId?: string;
-  metadata?: Record<string, any>;
-  sessionId?: string;
-  userAgent?: string;
-  referrer?: string;
-}
+export type AnalyticsEventType = 'page_view' | 'tool_click' | 'search' | 'share' | 'feedback';
 
 /**
  * 追踪页面浏览
@@ -200,6 +187,47 @@ export async function trackShare(
     return { 
       success: false, 
       error: error instanceof Error ? error.message : 'Unknown error' 
+    };
+  }
+}
+
+/**
+ * 追踪轻量反馈
+ *
+ * @param toolId 工具 ID
+ * @param feedbackType 反馈类型
+ * @param userId 用户 ID（可选）
+ * @returns 是否成功
+ */
+export async function trackFeedback(
+  toolId: string,
+  feedbackType: 'helpful' | 'needs_update' | 'inaccurate',
+  userId?: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const headersList = await headers();
+    const userAgent = headersList.get('user-agent') || '';
+    const referrer = headersList.get('referer') || '';
+
+    await query(
+      `INSERT INTO analytics (event_type, tool_id, user_id, metadata, user_agent, referrer, timestamp)
+       VALUES ($1, $2, $3, $4, $5, $6, NOW())`,
+      [
+        'feedback',
+        toolId,
+        userId || null,
+        JSON.stringify({ type: feedbackType }),
+        userAgent,
+        referrer,
+      ]
+    );
+
+    return { success: true };
+  } catch (error) {
+    console.error('Error tracking feedback:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
     };
   }
 }

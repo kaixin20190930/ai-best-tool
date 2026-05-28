@@ -5,6 +5,7 @@ import {
   getSiteMetrics,
   getToolComplianceIssues,
   getTopCategories,
+  getTopFeedbackSignals,
   getTopSearches,
   getTopTools,
   getTrafficSources,
@@ -38,6 +39,7 @@ export default async function AdminAnalyticsPage({
   const topToolsByRating = await getTopTools('rating', 10);
   const topCategories = await getTopCategories(8);
   const complianceIssues = await getToolComplianceIssues(8);
+  const topFeedbackSignals = await getTopFeedbackSignals(10);
   const topSearches = await getTopSearches(10);
   const trafficSources = await getTrafficSources(10);
   const unresolvedOverdueCount = Math.max(
@@ -55,6 +57,20 @@ export default async function AdminAnalyticsPage({
       return tool.title.en || tool.title.zh || Object.values(tool.title)[0] || tool.name;
     }
     return tool.name;
+  };
+
+  const getFeedbackLabel = (type: string) => {
+    if (type === 'helpful') return 'Helpful';
+    if (type === 'needs_update') return 'Needs update';
+    if (type === 'inaccurate') return 'Inaccurate';
+    return type;
+  };
+
+  const getFeedbackDescription = (type: string) => {
+    if (type === 'helpful') return 'Users found the listing useful';
+    if (type === 'needs_update') return 'Users asked for fresher metadata';
+    if (type === 'inaccurate') return 'Users reported incorrect information';
+    return 'Unclassified feedback';
   };
 
   return (
@@ -368,6 +384,54 @@ export default async function AdminAnalyticsPage({
           {complianceIssues.length === 0 && (
             <div className='border-t border-slate-100 p-4 text-sm text-slate-500'>
               No published tools currently violate the intake checklist.
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Feedback Signals */}
+      <div className='mb-8'>
+        <div className='mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
+          <div>
+            <h2 className='text-lg font-semibold text-slate-900'>Feedback Signals</h2>
+            <p className='mt-1 text-sm text-slate-600'>
+              Lightweight reactions from tool pages. This helps us see whether listings feel helpful, stale, or
+              inaccurate.
+            </p>
+          </div>
+          <div className='text-sm text-slate-500'>Collected from quick feedback buttons on tool detail pages</div>
+        </div>
+        <div className='overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm'>
+          <table className='min-w-full divide-y divide-slate-200'>
+            <thead className='bg-slate-50'>
+              <tr>
+                <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                  Feedback Type
+                </th>
+                <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                  Count
+                </th>
+                <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                  Share
+                </th>
+              </tr>
+            </thead>
+            <tbody className='divide-y divide-slate-100 bg-white'>
+              {topFeedbackSignals.map((signal, index) => (
+                <tr key={signal.type} className={index === 0 ? 'bg-cyan-50/30' : ''}>
+                  <td className='px-4 py-4'>
+                    <div className='font-medium text-slate-900'>{getFeedbackLabel(signal.type)}</div>
+                    <div className='text-xs text-slate-500'>{getFeedbackDescription(signal.type)}</div>
+                  </td>
+                  <td className='px-4 py-4 text-right text-sm font-medium text-slate-900'>{signal.count}</td>
+                  <td className='px-4 py-4 text-right text-sm text-slate-500'>{signal.percentage.toFixed(1)}%</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {topFeedbackSignals.length === 0 && (
+            <div className='border-t border-slate-100 p-4 text-sm text-slate-500'>
+              No feedback captured yet. Add a few reactions on tool pages to start seeing signal here.
             </div>
           )}
         </div>
