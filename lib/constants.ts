@@ -15,10 +15,6 @@ export const NAV_LINKS = [
     code: 'developer',
     href: '/developer/listing',
   },
-  {
-    code: 'startup',
-    href: '/startup',
-  },
 ];
 
 export const PAGE_SIZE = 20;

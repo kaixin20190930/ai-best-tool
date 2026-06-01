@@ -28,9 +28,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const hreflangMetadata = generateHreflangMetadata(params.locale, '/explore');
 
   return {
-    title: 'Explore AI Tools | AI Best Tool',
+    title: 'Browse AI tools | AI Best Tool',
     description:
-      'Browse curated AI tools by category, pricing, and use case. Discover and compare the best tools for writing, coding, design, productivity, and more.',
+      'Browse curated AI tools by category, pricing, and use case. Compare tools for writing, coding, design, productivity, and more.',
     ...hreflangMetadata,
   };
 }

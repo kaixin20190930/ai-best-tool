@@ -107,11 +107,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const risingTools = await getRisingTools(3).catch(() => []);
   const totalVisibleTools = latestTools.total || latestTools.rows.length;
   const heroTitle = isChinese
-    ? '发现最新、好用、真实可访问的 AI 工具'
-    : 'Discover fresh, useful, and accessible AI tools';
+    ? '发现持续更新、好用且可直接访问的 AI 工具'
+    : 'Discover updated, useful, and directly accessible AI tools';
   const heroSubtitle = isChinese
-    ? 'AI Best Tool 持续收录市面上的 AI 产品，帮你按场景、热度和更新时间快速找到值得尝试的工具。'
-    : 'AI Best Tool tracks AI products across the market so you can find tools by use case, popularity, and freshness.';
+    ? '按场景、价格和更新频率筛选工具，快速找到更适合你的选择。'
+    : 'Filter by use case, pricing, and freshness to quickly find tools that fit your workflow.';
   const stats = [
     {
       label: isChinese ? '已收录工具' : 'Indexed tools',
@@ -407,8 +407,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               </h2>
               <p className='mt-2 max-w-2xl text-sm leading-6 text-slate-600'>
                 {isChinese
-                  ? '如果你还不确定该看哪些维度，这个指南会帮你先理清场景、价格、更新和评论。'
-                  : 'If you are unsure what to compare, this guide helps you sort out use case, pricing, freshness, and comments first.'}
+                  ? '如果你还不确定该看哪些维度，这个指南会先帮你理清场景、价格、更新和反馈。'
+                  : 'If you are unsure what to compare, this guide helps you sort out use case, pricing, freshness, and feedback first.'}
               </p>
             </div>
             <div className='mt-6 grid gap-3 sm:grid-cols-2 lg:mt-0 lg:flex-[1.1] xl:grid-cols-3'>
