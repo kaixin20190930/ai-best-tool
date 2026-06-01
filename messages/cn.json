@@ -51,16 +51,16 @@
       "answer": "AI工具列表将每天更新。"
     },
     "7": {
-      "question": "这里支持GPT-4o或Sora AI吗？",
-      "answer": "您可以在这里获取GPT-4o或Sora AI工具。这里有GPT-4o和Sora视频的介绍，您可以访问工具的网站。"
+      "question": "这里的 AI 工具说明是怎么整理的？",
+      "answer": "工具说明通过编辑审核与结构化整理持续维护，并在需要时配合自动化更新。"
     },
     "8": {
       "question": "故障排除",
       "answer": "如果内容没有出现，请尝试使用其他浏览器，清除缓存。如果问题仍然存在，请联系我们：contact@6677.ai。"
     },
     "9": {
-      "question": "AI Best Tool目录的内容是如何生成的？",
-      "answer": "AI工具的描述内容是由OpenAI的GPT-4o生成的。"
+      "question": "AI Best Tool 目录内容如何维护？",
+      "answer": "目录内容通过编辑审核、结构化数据和必要的自动化流程持续维护。"
     },
     "10": {
       "question": "AI工具的使用权是什么？",
