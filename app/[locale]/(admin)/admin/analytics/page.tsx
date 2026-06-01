@@ -97,7 +97,7 @@ export default async function AdminAnalyticsPage({
       </div>
 
       {/* Overview Metrics */}
-      <div className='mb-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4'>
+      <div className='mb-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-5'>
         <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
           <div className='flex items-center justify-between'>
             <div>
@@ -142,6 +142,18 @@ export default async function AdminAnalyticsPage({
             </div>
             <div className='rounded-full bg-amber-50 p-3'>
               <Search className='h-6 w-6 text-amber-700' />
+            </div>
+          </div>
+        </div>
+
+        <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
+          <div className='flex items-center justify-between'>
+            <div>
+              <p className='text-sm font-medium text-slate-600'>Total Users</p>
+              <p className='mt-2 text-3xl font-semibold text-slate-900'>{metrics.totalUsers.toLocaleString()}</p>
+            </div>
+            <div className='rounded-full bg-slate-100 p-3'>
+              <Globe className='h-6 w-6 text-slate-700' />
             </div>
           </div>
         </div>

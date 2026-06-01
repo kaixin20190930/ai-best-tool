@@ -1,4 +1,5 @@
 import { getPool } from '@/db/neon/client';
+import { createAdminClient } from '@/lib/supabase/admin';
 
 import { getToolQuality } from '@/lib/services/toolQuality';
 
@@ -78,13 +79,35 @@ export interface DateRangeMetrics {
 export async function getSiteMetrics(startDate?: Date, endDate?: Date): Promise<SiteMetrics> {
   try {
     const pool = getPool();
+    const supabase = createAdminClient();
 
     // Get total tools
     const toolsResult = await pool.query("SELECT COUNT(*) as count FROM tools WHERE status = 'published'");
 
-    // Get total users (from Supabase auth, we'll use a placeholder for now)
-    // In production, this would query Supabase auth or a users table
-    const usersCount = 0;
+    // Get total users from Supabase Auth
+    const perPage = 1000;
+    let page = 1;
+    let usersCount = 0;
+
+    while (true) {
+      const { data, error } = await supabase.auth.admin.listUsers({
+        page,
+        perPage,
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      const users = data.users ?? [];
+      usersCount += users.length;
+
+      if (users.length < perPage) {
+        break;
+      }
+
+      page += 1;
+    }
 
     // Get total views and unique visitors from analytics
     let analyticsQuery = `
