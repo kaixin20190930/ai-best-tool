@@ -469,6 +469,32 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-tools-for-dex-analytics',
+    priority: 0.73,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI DEX 分析工具推荐',
+      en: 'AI tools for DEX analytics',
+    },
+    desc: {
+      cn: '适合交易对分析、流动性观察和 DEX 研究。',
+      en: 'For pair analysis, liquidity observation, and DEX research.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-dex-analytics-comparison',
+    priority: 0.74,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI DEX 分析工具对比',
+      en: 'AI tools for DEX analytics comparison',
+    },
+    desc: {
+      cn: '把常见 DEX 分析工具放在一起快速对照。',
+      en: 'Compare common DEX analytics tools side by side.',
+    },
+  },
+  {
     href: '/guides/ai-productivity-tools-comparison',
     priority: 0.74,
     changeFrequency: 'weekly',
