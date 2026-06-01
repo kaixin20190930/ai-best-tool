@@ -13,7 +13,7 @@
   },
   "Footer": {
     "title": "AI Best Tool工具目录",
-    "subTitle": "发现2024年最佳AI工具，尽在AI Best Tool工具目录！",
+    "subTitle": "浏览、筛选并比较适合你的 AI 工具，持续更新的 AI 工具目录。",
     "support": "支持",
     "aibesttool": "AI Best Tool",
     "tattoo": "AI纹身生成器",
@@ -119,8 +119,8 @@
     "goHome": "回到首页"
   },
   "Home": {
-    "title": "AI Best Tool - 发现2024年最佳AI工具",
-    "subTitle": "在AI Best Tool工具目录中找到您喜爱的AI工具。AI工具列表每天由GPT-4o更新。现在免费提交以提升您的SEO。",
+    "title": "AI Best Tool - 探索精选 AI 工具",
+    "subTitle": "在 AI Best Tool 工具目录中找到适合你的 AI 工具。我们持续更新工具、分类和筛选，帮助你更快做决定。",
     "ai-navigate": "AI工具列表",
     "latestTools": "最新收录的AI工具",
     "latestToolsDescription": "最近通过审核并加入 AI Best Tool 目录的工具。",
@@ -161,9 +161,9 @@
   },
   "Metadata": {
     "home": {
-      "title": "AI Best Tool - 发现2024年最佳AI工具和应用",
-      "description": "发现2024年最佳AI工具。浏览我们精心策划的AI驱动软件和应用程序目录。立即找到适合您需求的完美AI工具，提升工作效率和创造力。免费探索最新AI技术，包括AI写作、AI设计、AI编程等多种工具。每日更新，为您提供最优质的AI工具推荐服务。",
-      "keywords": "AI Best Tool目录, AI工具, 2024最佳AI工具, AI软件, AI应用程序"
+      "title": "AI Best Tool - 探索精选 AI 工具和应用",
+      "description": "浏览我们精心策划的 AI 工具目录。找到适合写作、设计、编程、营销和生产力场景的工具，持续更新，方便比较。",
+      "keywords": "AI Best Tool目录, AI工具, AI软件, AI应用程序, AI工具目录"
     },
     "ai": {
       "titleSubfix": "AI Best Tool目录"
