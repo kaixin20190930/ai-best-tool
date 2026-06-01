@@ -75,6 +75,35 @@ function getPayloadText(
   return typeof value === 'string' && value.trim() ? value.trim() : undefined;
 }
 
+function getCandidateChecklist(candidate: CollectionCandidate) {
+  const detailMetadata = candidate.raw_payload.detailMetadata;
+  const detailRecord =
+    detailMetadata && typeof detailMetadata === 'object'
+      ? (detailMetadata as Record<string, unknown>)
+      : {};
+  const tags = Array.isArray(candidate.raw_payload.tags)
+    ? candidate.raw_payload.tags.filter((tag) => typeof tag === 'string' && tag.trim())
+    : [];
+  const description = typeof candidate.summary === 'string' ? candidate.summary.trim() : '';
+  const detailText =
+    typeof detailRecord.description === 'string'
+      ? detailRecord.description.trim()
+      : typeof candidate.raw_payload.detail === 'string'
+        ? candidate.raw_payload.detail.trim()
+        : '';
+
+  return [
+    candidate.raw_payload.category_id || candidate.raw_payload.categorySlug ? null : 'Missing category',
+    getPayloadText(candidate.raw_payload, 'imageUrl') ? null : 'Missing logo',
+    getPayloadText(candidate.raw_payload, 'externalUrl') || getPayloadText(candidate.raw_payload, 'canonicalUrl')
+      ? null
+      : 'Missing source URL',
+    description.length >= 80 ? null : 'Short description',
+    detailText.length >= 160 ? null : 'Short detail',
+    Array.isArray(tags) && tags.length > 0 ? null : 'Missing tags',
+  ].filter(Boolean) as string[];
+}
+
 const statusLabels: Array<{ label: string; value: CollectionCandidateStatus | 'all' }> = [
   { label: 'All', value: 'all' },
   { label: 'New', value: 'new' },
@@ -445,6 +474,7 @@ export default function AdminCollectionCandidatesTable({
                   <td className="px-6 py-4">
                     {(() => {
                       const isReadyToImport = candidate.status === 'new' && candidate.relevance_score >= 50 && candidate.quality_score >= 80;
+                      const checklist = getCandidateChecklist(candidate);
 
                       return (
                         <div className="mb-2">
@@ -457,6 +487,12 @@ export default function AdminCollectionCandidatesTable({
                           >
                             {isReadyToImport ? 'Ready to import' : 'Needs enrichment'}
                           </span>
+                          {!isReadyToImport && checklist.length > 0 ? (
+                            <p className="mt-2 max-w-48 text-xs text-amber-700">
+                              Needs: {checklist.slice(0, 3).join(', ')}
+                              {checklist.length > 3 ? '…' : ''}
+                            </p>
+                          ) : null}
                         </div>
                       );
                     })()}
@@ -576,6 +612,21 @@ export default function AdminCollectionCandidatesTable({
                             {getPayloadText(candidate.raw_payload, 'enrichmentStatus') ||
                               'Not enriched'}
                           </p>
+                          {getCandidateChecklist(candidate).length > 0 && (
+                            <div className="mt-2">
+                              <p className="font-semibold text-slate-900">Checklist</p>
+                              <div className="mt-2 flex flex-wrap gap-2">
+                                {getCandidateChecklist(candidate).map((item) => (
+                                  <span
+                                    key={item}
+                                    className="rounded-full bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700"
+                                  >
+                                    {item}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                           {getPayloadText(candidate.raw_payload, 'externalUrl') && (
                             <a
                               href={getPayloadText(candidate.raw_payload, 'externalUrl')}
