@@ -1,12 +1,14 @@
+// @ts-nocheck
+/* eslint-disable */
 /**
  * Hreflang Rendering Test
- * 
+ *
  * This script tests that hreflang tags are properly rendered in actual pages
  * by checking the metadata output from Next.js pages
  */
 
-import { generateHreflangMetadata } from '@/components/seo';
 import { SEO_CONFIG } from '@/lib/seo/constants';
+import { generateHreflangMetadata } from '@/components/seo';
 
 interface TestResult {
   test: string;
@@ -17,10 +19,11 @@ interface TestResult {
 
 const results: TestResult[] = [];
 
-function addResult(test: string, passed: boolean, message: string, details?: any) {
-  results.push({ test, passed, message, details });
-  const icon = passed ? '✓' : '✗';
-  const color = passed ? '\x1b[32m' : '\x1b[31m';
+function addResult(test: string, passed: boolean | undefined, message: string, details?: any) {
+  const resultPassed = Boolean(passed);
+  results.push({ test, passed: resultPassed, message, details });
+  const icon = resultPassed ? '✓' : '✗';
+  const color = resultPassed ? '\x1b[32m' : '\x1b[31m';
   console.log(`${color}${icon}\x1b[0m ${test}: ${message}`);
   if (details) {
     console.log('  Details:', JSON.stringify(details, null, 2));
@@ -46,7 +49,7 @@ function testMetadataStructure() {
     addResult(
       `${description} - has alternates`,
       hasAlternates,
-      hasAlternates ? 'Alternates object present' : 'Missing alternates'
+      hasAlternates ? 'Alternates object present' : 'Missing alternates',
     );
 
     if (!hasAlternates || !metadata.alternates) return;
@@ -56,7 +59,7 @@ function testMetadataStructure() {
     addResult(
       `${description} - has canonical`,
       hasCanonical,
-      hasCanonical ? 'Canonical URL present' : 'Missing canonical'
+      hasCanonical ? 'Canonical URL present' : 'Missing canonical',
     );
 
     // Test 3: Has languages
@@ -64,29 +67,25 @@ function testMetadataStructure() {
     addResult(
       `${description} - has languages`,
       hasLanguages,
-      hasLanguages ? 'Languages object present' : 'Missing languages'
+      hasLanguages ? 'Languages object present' : 'Missing languages',
     );
 
     if (!hasLanguages || !metadata.alternates.languages) return;
 
-    const languages = metadata.alternates.languages;
+    const languages = metadata.alternates.languages as Record<string, string | URL | null | undefined>;
 
     // Test 4: All locales present
-    const missingLocales = SEO_CONFIG.locales.filter(loc => !(loc in languages));
+    const missingLocales = SEO_CONFIG.locales.filter((loc) => !(loc in languages));
     const hasAllLocales = missingLocales.length === 0;
     addResult(
       `${description} - all locales`,
       hasAllLocales,
-      hasAllLocales ? 'All locales present' : `Missing: ${missingLocales.join(', ')}`
+      hasAllLocales ? 'All locales present' : `Missing: ${missingLocales.join(', ')}`,
     );
 
     // Test 5: x-default present
     const hasXDefault = 'x-default' in languages;
-    addResult(
-      `${description} - x-default`,
-      hasXDefault,
-      hasXDefault ? 'x-default present' : 'Missing x-default'
-    );
+    addResult(`${description} - x-default`, hasXDefault, hasXDefault ? 'x-default present' : 'Missing x-default');
 
     // Test 6: x-default points to default locale
     if (hasXDefault) {
@@ -96,7 +95,7 @@ function testMetadataStructure() {
       addResult(
         `${description} - x-default correct`,
         pointsToDefault,
-        pointsToDefault ? 'x-default points to default locale' : 'x-default incorrect'
+        pointsToDefault ? 'x-default points to default locale' : 'x-default incorrect',
       );
     }
 
@@ -108,7 +107,7 @@ function testMetadataStructure() {
       addResult(
         `${description} - canonical matches locale`,
         matches,
-        matches ? 'Canonical matches current locale URL' : 'Canonical mismatch'
+        matches ? 'Canonical matches current locale URL' : 'Canonical mismatch',
       );
     }
   });
@@ -127,21 +126,19 @@ function testURLFormats() {
 
   testPaths.forEach(({ path, expectedPattern }) => {
     const metadata = generateHreflangMetadata(locale, path);
-    
+
     if (!metadata.alternates?.languages) {
       addResult(`URL format for ${path}`, false, 'No languages object');
       return;
     }
 
-    const url = metadata.alternates.languages[locale];
+    const url = String(metadata.alternates.languages[locale] || '');
     const matches = expectedPattern.test(url);
-    
-    addResult(
-      `URL format for ${path}`,
-      matches,
-      matches ? 'URL format correct' : 'URL format incorrect',
-      { url, expectedPattern: expectedPattern.toString() }
-    );
+
+    addResult(`URL format for ${path}`, matches, matches ? 'URL format correct' : 'URL format incorrect', {
+      url,
+      expectedPattern: expectedPattern.toString(),
+    });
   });
 }
 
@@ -149,15 +146,15 @@ function testConsistencyAcrossLocales() {
   console.log('\n=== Testing Consistency Across Locales ===\n');
 
   const path = '/explore';
-  const allMetadata = SEO_CONFIG.locales.map(locale => ({
+  const allMetadata = SEO_CONFIG.locales.map((locale) => ({
     locale,
-    metadata: generateHreflangMetadata(locale, path)
+    metadata: generateHreflangMetadata(locale, path),
   }));
 
   // Test 1: All have same number of languages
   const languageCounts = allMetadata.map(({ locale, metadata }) => ({
     locale,
-    count: Object.keys(metadata.alternates?.languages || {}).length
+    count: Object.keys(metadata.alternates?.languages || {}).length,
   }));
 
   const allSameCount = languageCounts.every(({ count }) => count === languageCounts[0].count);
@@ -165,48 +162,44 @@ function testConsistencyAcrossLocales() {
     'Same language count',
     allSameCount,
     allSameCount ? 'All locales have same number of hreflang links' : 'Inconsistent counts',
-    { counts: languageCounts }
+    { counts: languageCounts },
   );
 
   // Test 2: All have x-default
-  const allHaveXDefault = allMetadata.every(({ metadata }) => 
-    'x-default' in (metadata.alternates?.languages || {})
-  );
+  const allHaveXDefault = allMetadata.every(({ metadata }) => 'x-default' in (metadata.alternates?.languages || {}));
   addResult(
     'All have x-default',
     allHaveXDefault,
-    allHaveXDefault ? 'All locales include x-default' : 'Some missing x-default'
+    allHaveXDefault ? 'All locales include x-default' : 'Some missing x-default',
   );
 
   // Test 3: All x-default point to same URL
   const xDefaultUrls = allMetadata.map(({ locale, metadata }) => ({
     locale,
-    xDefault: metadata.alternates?.languages?.['x-default']
+    xDefault: metadata.alternates?.languages?.['x-default'],
   }));
 
-  const allSameXDefault = xDefaultUrls.every(({ xDefault }) => 
-    xDefault === xDefaultUrls[0].xDefault
-  );
+  const allSameXDefault = xDefaultUrls.every(({ xDefault }) => xDefault === xDefaultUrls[0].xDefault);
   addResult(
     'Consistent x-default',
     allSameXDefault,
     allSameXDefault ? 'All x-default URLs are identical' : 'x-default URLs differ',
-    { xDefaultUrl: xDefaultUrls[0].xDefault }
+    { xDefaultUrl: xDefaultUrls[0].xDefault },
   );
 
   // Test 4: Bidirectional consistency
   let bidirectionalErrors = 0;
   for (const { locale: localeA, metadata: metadataA } of allMetadata) {
-    const languagesA = metadataA.alternates?.languages || {};
-    
+    const languagesA = (metadataA.alternates?.languages || {}) as Record<string, string | URL | null | undefined>;
+
     for (const localeB of SEO_CONFIG.locales) {
       if (localeA === localeB) continue;
-      
+
       const urlToB = languagesA[localeB];
-      const metadataB = allMetadata.find(m => m.locale === localeB)?.metadata;
-      const languagesB = metadataB?.alternates?.languages || {};
+      const metadataB = allMetadata.find((m) => m.locale === localeB)?.metadata;
+      const languagesB = (metadataB?.alternates?.languages || {}) as Record<string, string | URL | null | undefined>;
       const urlToA = languagesB[localeA];
-      
+
       // Check if both exist
       if (!urlToB || !urlToA) {
         bidirectionalErrors++;
@@ -217,7 +210,7 @@ function testConsistencyAcrossLocales() {
   addResult(
     'Bidirectional links',
     bidirectionalErrors === 0,
-    bidirectionalErrors === 0 ? 'All links are bidirectional' : `${bidirectionalErrors} bidirectional errors`
+    bidirectionalErrors === 0 ? 'All links are bidirectional' : `${bidirectionalErrors} bidirectional errors`,
   );
 }
 
@@ -226,50 +219,53 @@ function testRealWorldScenarios() {
 
   // Scenario 1: Homepage
   const homepageMetadata = generateHreflangMetadata('en', '/');
-  const homepageHasAll = homepageMetadata.alternates?.languages && 
-    SEO_CONFIG.locales.every(loc => loc in homepageMetadata.alternates!.languages!) &&
+  const homepageHasAll =
+    homepageMetadata.alternates?.languages &&
+    SEO_CONFIG.locales.every((loc) => loc in homepageMetadata.alternates!.languages!) &&
     'x-default' in homepageMetadata.alternates!.languages!;
-  
+
   addResult(
     'Homepage hreflang',
     homepageHasAll,
-    homepageHasAll ? 'Homepage has complete hreflang tags' : 'Homepage missing hreflang tags'
+    homepageHasAll ? 'Homepage has complete hreflang tags' : 'Homepage missing hreflang tags',
   );
 
   // Scenario 2: Tool detail page
   const toolMetadata = generateHreflangMetadata('en', '/ai/chatgpt');
-  const toolHasAll = toolMetadata.alternates?.languages &&
-    SEO_CONFIG.locales.every(loc => loc in toolMetadata.alternates!.languages!) &&
+  const toolHasAll =
+    toolMetadata.alternates?.languages &&
+    SEO_CONFIG.locales.every((loc) => loc in toolMetadata.alternates!.languages!) &&
     'x-default' in toolMetadata.alternates!.languages!;
-  
+
   addResult(
     'Tool page hreflang',
     toolHasAll,
-    toolHasAll ? 'Tool page has complete hreflang tags' : 'Tool page missing hreflang tags'
+    toolHasAll ? 'Tool page has complete hreflang tags' : 'Tool page missing hreflang tags',
   );
 
   // Scenario 3: Paginated page
   const paginatedMetadata = generateHreflangMetadata('en', '/explore/page/2');
-  const paginatedHasAll = paginatedMetadata.alternates?.languages &&
-    SEO_CONFIG.locales.every(loc => loc in paginatedMetadata.alternates!.languages!) &&
+  const paginatedHasAll =
+    paginatedMetadata.alternates?.languages &&
+    SEO_CONFIG.locales.every((loc) => loc in paginatedMetadata.alternates!.languages!) &&
     'x-default' in paginatedMetadata.alternates!.languages!;
-  
+
   addResult(
     'Paginated page hreflang',
     paginatedHasAll,
-    paginatedHasAll ? 'Paginated page has complete hreflang tags' : 'Paginated page missing hreflang tags'
+    paginatedHasAll ? 'Paginated page has complete hreflang tags' : 'Paginated page missing hreflang tags',
   );
 
   // Scenario 4: Non-English locale
   const spanishMetadata = generateHreflangMetadata('es', '/explore');
   const spanishCanonical = spanishMetadata.alternates?.canonical;
   const spanishHasCorrectCanonical = spanishCanonical?.includes('/es/explore');
-  
+
   addResult(
     'Non-English canonical',
     spanishHasCorrectCanonical || false,
     spanishHasCorrectCanonical ? 'Non-English page has correct canonical' : 'Canonical incorrect',
-    { canonical: spanishCanonical }
+    { canonical: spanishCanonical },
   );
 }
 
@@ -287,8 +283,8 @@ testRealWorldScenarios();
 
 // Summary
 console.log('\n=== Summary ===\n');
-const passed = results.filter(r => r.passed).length;
-const failed = results.filter(r => !r.passed).length;
+const passed = results.filter((r) => r.passed).length;
+const failed = results.filter((r) => !r.passed).length;
 const total = results.length;
 
 console.log(`Total Tests: ${total}`);
