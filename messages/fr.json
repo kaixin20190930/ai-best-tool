@@ -12,7 +12,7 @@
   },
   "Footer": {
     "title": "Répertoire des outils AI de AIBestTool",
-    "subTitle": "Découvrez les meilleurs outils AI de 2024 dans le Répertoire des outils AI de AIBestTool !",
+    "subTitle": "Explorez les meilleurs outils IA dans le répertoire AI Best Tool.",
     "support": "Soutien",
     "aibesttool": "AI Best Tool",
     "tattoo": "Générateur de Tatouages AI",
@@ -49,16 +49,16 @@
       "answer": "La liste des outils AI sera mise à jour quotidiennement."
     },
     "7": {
-      "question": "GPT-4o ou Sora AI sont-ils pris en charge ici ?",
-      "answer": "Vous pouvez obtenir des outils GPT-4o ou Sora AI ici. Il y a des vidéos d'introduction de GPT-4o et Sora, et vous pouvez accéder aux sites web des outils."
+      "question": "Puis-je trouver ici des outils liés à Sora ?",
+      "answer": "Vous pouvez parcourir des outils liés à Sora et à de nombreux autres cas d’usage de l’IA. Nous renvoyons toujours vers le site officiel de chaque outil."
     },
     "8": {
       "question": "Dépannage",
       "answer": "Si le contenu n'apparaît pas, essayez un autre navigateur et effacez le cache. Si le problème persiste, contactez-nous à : contact@6677.ai."
     },
     "9": {
-      "question": "Comment le contenu du Répertoire des outils AI de AIBestTool est-il généré ?",
-      "answer": "Le contenu descriptif des outils AI est généré par GPT-4o d'OpenAI."
+      "question": "Comment le contenu du répertoire AI Best Tool est-il maintenu ?",
+      "answer": "Les descriptions des outils sont maintenues par revue éditoriale, données structurées et flux de collecte automatisés."
     },
     "10": {
       "question": "Quelles sont les autorisations d'utilisation des outils AI ?",
@@ -118,8 +118,8 @@
     "goHome": "Retour à l'accueil"
   },
   "Home": {
-    "title": "AI Best Tool - Découvrez les meilleurs outils AI de 2024",
-    "subTitle": "Trouvez vos outils AI préférés dans le Répertoire des outils AI de AIBestTool. La liste des outils AI est mise à jour quotidiennement par GPT-4o. Soumettez gratuitement maintenant pour améliorer votre SEO.",
+    "title": "AI Best Tool - Découvrez les outils IA",
+    "subTitle": "Trouvez vos outils IA préférés dans le répertoire AI Best Tool. Parcourez les catégories, comparez les options et soumettez de nouveaux outils.",
     "ai-navigate": "Liste des outils AI",
     "exploreMore": "Obtenez plus d'outils AI"
   },
@@ -151,22 +151,22 @@
     }
   },
   "Explore": {
-    "title": "Découvrez les meilleurs outils AI de 2024",
-    "subTitle": "Trouvez vos outils AI préférés dans le Répertoire des outils AI de AIBestTool. La liste des outils AI est mise à jour quotidiennement par GPT-4o."
+    "title": "Explorez les outils IA",
+    "subTitle": "Parcourez le répertoire AI Best Tool pour trouver, filtrer et comparer des outils IA."
   },
   "Metadata": {
     "home": {
-      "title": "AI Best Tool - Découvrez les Meilleurs Outils IA 2024",
-      "description": "Découvrez les meilleurs outils IA de 2024. Parcourez notre répertoire organisé de logiciels et applications IA. Trouvez l'outil IA parfait aujourd'hui.",
-      "keywords": "AI Best Tool, outils IA, meilleurs outils IA 2024, logiciels IA, applications IA"
+      "title": "AI Best Tool | Répertoire d’outils IA",
+      "description": "AI Best Tool est un répertoire sélectionné d’outils IA. Explorez, comparez et découvrez des options utiles pour différents usages.",
+      "keywords": "AI Best Tool, répertoire d’outils IA, outils IA"
     },
     "ai": {
       "titleSubfix": "Répertoire des outils AI de AIBestTool"
     },
     "explore": {
-      "title": "Explorez les Meilleurs Outils IA 2024 | AI Best Tool",
-      "description": "Parcourez et découvrez les meilleurs outils IA de 2024. Filtrez par catégorie, tarification et fonctionnalités. Trouvez des outils IA pour l'écriture, le marketing, le codage, le design et plus encore.",
-      "keywords": "explorer outils IA, répertoire outils IA, meilleurs outils IA 2024, catalogue logiciels IA, applications IA"
+      "title": "Explorez les outils IA | AI Best Tool",
+      "description": "Parcourez et découvrez des outils IA. Filtrez par catégorie, prix et fonctionnalités pour trouver la bonne option.",
+      "keywords": "explorer outils IA, répertoire outils IA, catalogue logiciels IA, applications IA"
     },
     "startup": {
       "title": "Lancez Votre Startup | Sites de Soumission Gratuits",

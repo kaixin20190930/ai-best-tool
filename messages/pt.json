@@ -12,7 +12,7 @@
   },
   "Footer": {
     "title": "AIBestTool Diretório de Ferramentas de IA",
-    "subTitle": "Descubra as melhores ferramentas de IA de 2024 com o Diretório de Ferramentas de IA do AIBestTool!",
+    "subTitle": "Explore as melhores ferramentas de IA no diretório AI Best Tool.",
     "support": "Apoio",
     "aibesttool": "AI Best Tool",
     "tattoo": "Gerador de Tatuagens AI",
@@ -49,16 +49,16 @@
       "answer": "A lista de ferramentas de IA será atualizada diariamente."
     },
     "7": {
-      "question": "Ele suporta o GPT-4o ou Sora AI aqui?",
-      "answer": "Você pode obter a ferramenta GPT-4o ou Sora AI aqui. Aqui está a introdução do vídeo GPT-4o e Sora, e você pode visitar o site das ferramentas."
+      "question": "Posso encontrar ferramentas relacionadas ao Sora aqui?",
+      "answer": "Você pode navegar por ferramentas relacionadas ao Sora e a muitos outros casos de uso de IA. Sempre apontamos para o site oficial de cada ferramenta."
     },
     "8": {
       "question": "Resolução de problemas",
       "answer": "Se o conteúdo não estiver aparecendo, tente um navegador diferente, limpe seu cache. Se os problemas persistirem, entre em contato conosco em contact@6677.ai."
     },
     "9": {
-      "question": "Como o conteúdo do Diretório de IA do AIBestTool é gerado?",
-      "answer": "O conteúdo da descrição das ferramentas de IA é gerado pelo GPT-4o da OpenAI."
+      "question": "Como o conteúdo do diretório AI Best Tool é mantido?",
+      "answer": "As descrições das ferramentas são mantidas por revisão editorial, dados estruturados e fluxos de coleta automatizados."
     },
     "10": {
       "question": "Quais são os direitos de uso das ferramentas de IA?",
@@ -118,8 +118,8 @@
     "goHome": "ir para casa"
   },
   "Home": {
-    "title": "AIBestTool IA - Descubra As Melhores Ferramentas de IA 2024",
-    "subTitle": "Obtenha suas ferramentas de IA favoritas no Diretório de Ferramentas de IA do AIBestTool. A lista de ferramentas de IA é atualizada diariamente pelo GPT-4o. É grátis para enviar aqui e melhorar seu SEO agora.",
+    "title": "AI Best Tool - Descubra ferramentas de IA",
+    "subTitle": "Encontre suas ferramentas de IA favoritas no diretório AI Best Tool. Navegue por categorias, compare opções e envie novas ferramentas.",
     "ai-navigate": "Lista de Ferramentas de IA",
     "exploreMore": "Obter Mais Ferramentas de IA"
   },
@@ -151,22 +151,22 @@
     }
   },
   "Explore": {
-    "title": "Descubra as Melhores Ferramentas de IA 2024",
-    "subTitle": "Obtenha suas ferramentas de IA favoritas no Diretório de Ferramentas de IA do AIBestTool. A lista de ferramentas de IA é atualizada diariamente pelo GPT-4o."
+    "title": "Explore ferramentas de IA",
+    "subTitle": "Navegue pelo diretório AI Best Tool para encontrar, filtrar e comparar ferramentas de IA."
   },
   "Metadata": {
     "home": {
-      "title": "Obtenha suas melhores Ferramentas de IA | Diretório de IA do AIBestTool",
-      "description": "O Diretório de IA do AIBestTool é uma ferramenta que fornece um Diretório de Ferramentas de IA gratuito. Obtenha suas ferramentas de IA favoritas com o Diretório de IA do AIBestTool, o Diretório de IA do AIBestTool visa reunir todas as ferramentas de IA e fornecer o melhor para os usuários.",
-      "keywords": "Diretório de IA do AIBestTool"
+      "title": "AI Best Tool | Diretório de ferramentas de IA",
+      "description": "AI Best Tool é um diretório curado de ferramentas de IA. Explore, compare e descubra opções úteis para diferentes casos de uso.",
+      "keywords": "AI Best Tool, diretório de ferramentas de IA, ferramentas de IA"
     },
     "ai": {
       "titleSubfix": "Diretório de IA do AIBestTool"
     },
     "explore": {
-      "title": "Explore as Melhores Ferramentas de IA 2024 | AI Best Tool",
-      "description": "Navegue e descubra as melhores ferramentas de IA de 2024. Filtre por categoria, preço e recursos. Encontre ferramentas de IA para escrita, marketing, codificação, design e muito mais.",
-      "keywords": "explorar ferramentas de IA, diretório de ferramentas de IA, melhores ferramentas de IA 2024, catálogo de software de IA, aplicações de IA"
+      "title": "Explore ferramentas de IA | AI Best Tool",
+      "description": "Navegue e descubra ferramentas de IA. Filtre por categoria, preço e recursos para encontrar a opção certa.",
+      "keywords": "explorar ferramentas de IA, diretório de ferramentas de IA, catálogo de software de IA, aplicações de IA"
     },
     "startup": {
       "title": "Lance Sua Startup | Sites de Envio Gratuitos",

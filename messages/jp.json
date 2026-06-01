@@ -12,7 +12,7 @@
   },
   "Footer": {
     "title": "AI Best Tool ツールディレクトリ",
-    "subTitle": "AI Best Tool ツールディレクトリで2024年のベストAIツールを発見しましょう！",
+    "subTitle": "AI Best Tool ディレクトリで、最適なAIツールを探しましょう。",
     "support": "サポート",
     "aibesttool": "AI Best Tool",
     "tattoo": "AIタトゥージェネレーター",
@@ -49,16 +49,16 @@
       "answer": "AIツールのリストは毎日更新されます。"
     },
     "7": {
-      "question": "GPT-4oまたはSora AIはここでサポートされていますか？",
-      "answer": "GPT-4oまたはSora AIツールをここで入手できます。GPT-4oおよびSoraビデオの紹介があり、ツールのウェブサイトを訪問できます。"
+      "question": "ここでSora関連のツールを見つけられますか？",
+      "answer": "Soraや他の多くのAIユースケースに関連するツールを閲覧できます。各ツールの公式サイトへ直接リンクしています。"
     },
     "8": {
       "question": "トラブルシューティング",
       "answer": "コンテンツが表示されない場合は、異なるブラウザを試すか、キャッシュをクリアしてください。問題が解決しない場合は、contact@6677.ai までお問い合わせください。"
     },
     "9": {
-      "question": "AI Best Toolディレクトリのコンテンツはどのように生成されますか？",
-      "answer": "AIツールの説明のコンテンツは、OpenAIのGPT-4oによって生成されます。"
+      "question": "AI Best Tool ディレクトリの内容はどのように管理されていますか？",
+      "answer": "ツールの説明は、編集レビュー、構造化データ、自動収集ワークフローによって維持されています。"
     },
     "10": {
       "question": "AIツールの使用権は何ですか？",
@@ -118,8 +118,8 @@
     "goHome": "ホームへ"
   },
   "Home": {
-    "title": "AI Best Tool - 2024年のベストAIツールを発見する",
-    "subTitle": "AI Best Toolツールディレクトリでお気に入りのAIツールを手に入れましょう。 AIツールリストはGPT-4oによって毎日更新されます。 ここで無料で提出して、SEOを強化しましょう。",
+    "title": "AI Best Tool - AIツールを発見する",
+    "subTitle": "AI Best Tool ディレクトリでお気に入りのAIツールを見つけましょう。カテゴリごとに閲覧し、比較して、新しいツールを投稿できます。",
     "ai-navigate": "AIツールリスト",
     "exploreMore": "もっと多くのAIツールを入手する"
   },
@@ -151,22 +151,22 @@
     }
   },
   "Explore": {
-    "title": "2024年の最高のAIツールを発見する",
-    "subTitle": "AI Best Toolツールディレクトリ内のお気に入りのAIツールを見つける。 AIツールのリストはGPT-4oによって毎日更新されます。"
+    "title": "AIツールを探す",
+    "subTitle": "AI Best Tool ディレクトリで、AIツールを見つけ、絞り込み、比較できます。"
   },
   "Metadata": {
     "home": {
-      "title": "お気に入りのAIツールを入手 | AI Best Toolツールディレクトリ",
-      "description": "AI Best Toolツールディレクトリは、無料のAIツールディレクトリを提供するツールです。 AI Best Toolツールディレクトリでお気に入りのAIツールを入手しましょう。このディレクトリはすべてのAIツールを収集し、ユーザーに最高のサービスを提供することを目指しています。",
-      "keywords": "AI Best Toolツールディレクトリ"
+      "title": "AI Best Tool | AIツールディレクトリ",
+      "description": "AI Best Toolは、厳選されたAIツールのディレクトリです。さまざまな用途に合うツールを探して、比較して、発見できます。",
+      "keywords": "AI Best Tool, AIツールディレクトリ, AIツール"
     },
     "ai": {
       "titleSubfix": "AI Best Toolツールディレクトリ"
     },
     "explore": {
-      "title": "2024年最高のAIツールを探索 | AI Best Tool",
-      "description": "2024年の最高のAIツールを閲覧して発見します。カテゴリ、価格、機能でフィルタリング。ライティング、マーケティング、コーディング、デザインなどのAIツールを見つけます。",
-      "keywords": "AIツール探索, AIツールディレクトリ, 2024年最高のAIツール, AIソフトウェアカタログ, AIアプリケーション"
+      "title": "AIツールを探索 | AI Best Tool",
+      "description": "AIツールを閲覧して発見しましょう。カテゴリ、価格、機能で絞り込んで、最適なツールを見つけられます。",
+      "keywords": "AIツール探索, AIツールディレクトリ, AIソフトウェアカタログ, AIアプリケーション"
     },
     "startup": {
       "title": "スタートアップを立ち上げる | 無料投稿サイト",

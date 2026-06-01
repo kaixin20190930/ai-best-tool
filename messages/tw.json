@@ -12,7 +12,7 @@
   },
   "Footer": {
     "title": "AI Best Tool工具目錄",
-    "subTitle": "發現2024年最佳AI工具，盡在AI Best Tool工具目錄！",
+    "subTitle": "在 AI Best Tool 目錄中探索最佳 AI 工具。",
     "support": "支持",
     "aibesttool": "AI Best Tool",
     "tattoo": "AI紋身生成器",
@@ -49,16 +49,16 @@
       "answer": "AI工具列表將每天更新。"
     },
     "7": {
-      "question": "這裡支持GPT-4o或Sora AI嗎？",
-      "answer": "您可以在這裡找到GPT-4o或Sora AI工具。這裡有GPT-4o和Sora的介紹視頻，您可以訪問這些工具的網站。"
+      "question": "這裡能找到 Sora 相關工具嗎？",
+      "answer": "您可以瀏覽與 Sora 及更多 AI 使用場景相關的工具。我們會直接連到每個工具的官方網站。"
     },
     "8": {
       "question": "故障排除",
       "answer": "如果內容未顯示，請嘗試使用其他瀏覽器，清除緩存。如果問題仍然存在，請通過contact@6677.ai聯繫我們。"
     },
     "9": {
-      "question": "AI Best Tool目錄的內容是如何生成的？",
-      "answer": "AI工具描述的內容由OpenAI的GPT-4o生成。"
+      "question": "AI Best Tool 目錄的內容是如何維護的？",
+      "answer": "工具描述由編輯審核、結構化資料與自動化採集流程共同維護。"
     },
     "10": {
       "question": "AI工具的使用權限是什麼？",
@@ -118,8 +118,8 @@
     "goHome": "回到首頁"
   },
   "Home": {
-    "title": "AI Best Tool - 發現2024年最佳AI工具",
-    "subTitle": "在AI Best Tool工具目錄中找到您喜愛的AI工具。AI工具列表每天由GPT-4o更新。現在免費提交以提升您的SEO。",
+    "title": "AI Best Tool - 發現 AI 工具",
+    "subTitle": "在 AI Best Tool 目錄中找到您喜愛的 AI 工具。可依分類瀏覽、比較與提交新工具。",
     "ai-navigate": "AI工具列表",
     "exploreMore": "獲取更多AI工具"
   },
@@ -151,22 +151,22 @@
     }
   },
   "Explore": {
-    "title": "發現2024年最佳AI工具",
-    "subTitle": "在AI Best Tool工具目錄中找到您喜愛的AI工具。AI工具列表每天由GPT-4o更新。"
+    "title": "探索 AI 工具",
+    "subTitle": "在 AI Best Tool 目錄中搜尋、篩選並比較 AI 工具。"
   },
   "Metadata": {
     "home": {
-      "title": "獲取您的最佳AI工具 | AI Best Tool目錄",
-      "description": "AI Best Tool目錄是一款提供免費AI工具目錄的工具。通過AI Best Tool目錄獲取您喜愛的AI工具，AI Best Tool目錄旨在收集所有AI工具並為用戶提供最佳服務。",
-      "keywords": "AI Best Tool目錄"
+      "title": "AI Best Tool｜AI 工具目錄",
+      "description": "AI Best Tool 是一個精選的 AI 工具目錄。探索、比較並發現適合不同用途的實用工具。",
+      "keywords": "AI Best Tool, AI 工具目錄, AI 工具"
     },
     "ai": {
       "titleSubfix": "AI Best Tool目錄"
     },
     "explore": {
-      "title": "探索2024年最佳AI工具 | AI Best Tool",
-      "description": "瀏覽並發現2024年最佳AI工具。按類別、定價和功能篩選。查找用於寫作、營銷、編碼、設計等的AI工具。",
-      "keywords": "探索AI工具, AI工具目錄, 2024最佳AI工具, AI軟體目錄, AI應用程式"
+      "title": "探索 AI 工具 | AI Best Tool",
+      "description": "瀏覽並發現 AI 工具。按分類、價格與功能篩選，找到最合適的選項。",
+      "keywords": "探索 AI 工具, AI 工具目錄, AI 軟體目錄, AI 應用程式"
     },
     "startup": {
       "title": "啟動您的創業公司 | 免費提交網站",
