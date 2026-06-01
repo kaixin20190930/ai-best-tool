@@ -4,6 +4,10 @@ export const NAV_LINKS = [
     href: '/explore',
   },
   {
+    code: 'guides',
+    href: '/guides',
+  },
+  {
     code: 'submit',
     href: '/submit',
   },

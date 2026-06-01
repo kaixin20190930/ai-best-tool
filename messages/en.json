@@ -9,7 +9,8 @@
     "developer": "Developer Listing",
     "newtools": "New Tools",
     "startup": "Startup",
-    "menu": "menu"
+    "menu": "menu",
+    "guides": "Guides"
   },
   "Footer": {
     "title": "AI Best Tool Tools Directory",
@@ -22,7 +23,6 @@
     "contactUs": "Contact Us"
   },
   "Faq": {
-    "title": "Frequently Asked Questions",
     "1": {
       "question": "What is AI Best Tool Tools Directory?",
       "answer": "AI Best Tool Tools Directory - AIBestTool.com is building an ai tools directory that helps you get your favorite ai tools. It can get ai writing tools, ai markting tools, ai paraphrasing tools, ai seo tools, ai study tools, ai generator tools, ai research tools, ai art tools, ai music tools, ai video tools, ai coding tools, ai photo tools and more here."
@@ -69,7 +69,8 @@
     "11": {
       "question": "Does the webui of AI Best Tool Directory is open source?",
       "answer": "Yes, we will open source the webui of AI Best Tool Directory in the github(https://github.com/6677-ai/tap4-ai-webui). Please star us."
-    }
+    },
+    "title": "Frequently Asked Questions"
   },
   "FooterNavigation": {
     "privacyPolicy": {

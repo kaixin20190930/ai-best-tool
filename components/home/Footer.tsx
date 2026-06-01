@@ -33,6 +33,10 @@ export default function Footer() {
 
   const SupportLinks = [
     {
+      title: 'TripTrace',
+      href: 'https://triptrace.ai',
+    },
+    {
       title: 'Moxion',
       href: 'https://moxion.ai',
     },
