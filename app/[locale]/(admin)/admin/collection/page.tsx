@@ -109,7 +109,27 @@ export default async function AdminCollectionPage({
   const candidateStatus = getCandidateStatus(searchParams?.candidateStatus);
   const candidateScoreFilter = getCandidateScoreFilter(searchParams?.candidateScore);
   const candidatePage = getPage(searchParams?.candidatePage);
-  const [drafts, pending, sources, runs, candidatePageData, candidateStats, topCategories] = await Promise.all([
+  let drafts: Awaited<ReturnType<typeof getAdminTools>> = { tools: [], total: 0 };
+  let pending: Awaited<ReturnType<typeof getAdminTools>> = { tools: [], total: 0 };
+  let sources: Awaited<ReturnType<typeof listCollectionSources>> = [];
+  let runs: Awaited<ReturnType<typeof listCollectionRuns>> = [];
+  let candidatePageData: Awaited<ReturnType<typeof listCollectionCandidates>> = {
+    candidates: [],
+    total: 0,
+    page: candidatePage,
+    pageSize: 25,
+    totalPages: 1,
+  };
+  let candidateStats: Awaited<ReturnType<typeof getCollectionCandidateStats>> = {
+    new: 0,
+    imported: 0,
+    skipped: 0,
+    rejected: 0,
+  };
+  let topCategories: Awaited<ReturnType<typeof getTopCategories>> = [];
+  let loadError: string | null = null;
+
+  const results = await Promise.allSettled([
     getAdminTools({ status: 'draft', page: 1, pageSize: 50 }),
     getAdminTools({ status: 'pending', page: 1, pageSize: 50 }),
     listCollectionSources(),
@@ -118,6 +138,49 @@ export default async function AdminCollectionPage({
     getCollectionCandidateStats(),
     getTopCategories(3),
   ]);
+
+  if (results[0].status === 'fulfilled') {
+    drafts = results[0].value;
+  } else {
+    loadError = results[0].reason instanceof Error ? results[0].reason.message : 'Failed to load draft tools.';
+  }
+
+  if (results[1].status === 'fulfilled') {
+    pending = results[1].value;
+  } else {
+    loadError = results[1].reason instanceof Error ? results[1].reason.message : 'Failed to load pending tools.';
+  }
+
+  if (results[2].status === 'fulfilled') {
+    sources = results[2].value;
+  } else {
+    loadError = results[2].reason instanceof Error ? results[2].reason.message : 'Failed to load collection sources.';
+  }
+
+  if (results[3].status === 'fulfilled') {
+    runs = results[3].value;
+  } else {
+    loadError = results[3].reason instanceof Error ? results[3].reason.message : 'Failed to load collection runs.';
+  }
+
+  if (results[4].status === 'fulfilled') {
+    candidatePageData = results[4].value;
+  } else {
+    loadError = results[4].reason instanceof Error ? results[4].reason.message : 'Failed to load collection candidates.';
+  }
+
+  if (results[5].status === 'fulfilled') {
+    candidateStats = results[5].value;
+  } else {
+    loadError = results[5].reason instanceof Error ? results[5].reason.message : 'Failed to load candidate stats.';
+  }
+
+  if (results[6].status === 'fulfilled') {
+    topCategories = results[6].value;
+  } else {
+    loadError = results[6].reason instanceof Error ? results[6].reason.message : 'Failed to load category analytics.';
+  }
+
   const queue = [...drafts.tools, ...pending.tools].sort(
     (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   );
@@ -137,6 +200,12 @@ export default async function AdminCollectionPage({
           Import source URLs, research drafts, and move promising tools toward review.
         </p>
       </div>
+
+      {loadError && (
+        <div className="theme-surface mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+          Collection queue loaded with partial data: {loadError}
+        </div>
+      )}
 
       <div className="mb-6 grid gap-4 md:grid-cols-3">
         <div className="theme-surface rounded-lg border border-slate-200 p-5 shadow-sm">
