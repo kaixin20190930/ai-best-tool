@@ -53,23 +53,43 @@ export default async function AdminToolsPage({
       ? searchParams.quality
       : undefined;
 
-  const { tools, total } = await getAdminTools({
-    status,
-    search,
-    collected,
-    needsMedia,
-    quality,
-    ready,
-    overdue,
-    followedUp,
-    staleFollowUp,
-    paidIntent,
-    featuredIntent,
-    page,
-    pageSize: 20,
-  });
+  let tools: Awaited<ReturnType<typeof getAdminTools>>['tools'] = [];
+  let total = 0;
+  let stats: Awaited<ReturnType<typeof getToolsStats>> = {
+    total: 0,
+    published: 0,
+    pending: 0,
+    rejected: 0,
+    draft: 0,
+  };
+  let loadError: string | null = null;
 
-  const stats = await getToolsStats();
+  try {
+    const [toolResult, statsResult] = await Promise.all([
+      getAdminTools({
+        status,
+        search,
+        collected,
+        needsMedia,
+        quality,
+        ready,
+        overdue,
+        followedUp,
+        staleFollowUp,
+        paidIntent,
+        featuredIntent,
+        page,
+        pageSize: 20,
+      }),
+      getToolsStats(),
+    ]);
+
+    tools = toolResult.tools;
+    total = toolResult.total;
+    stats = statsResult;
+  } catch (error) {
+    loadError = error instanceof Error ? error.message : 'Failed to load admin tools.';
+  }
 
   return (
     <div>
@@ -89,6 +109,11 @@ export default async function AdminToolsPage({
       </div>
 
       {/* Stats Cards */}
+      {loadError && (
+        <div className="theme-surface mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+          Admin tools could not be loaded: {loadError}
+        </div>
+      )}
       <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <div className="theme-surface rounded-lg border border-slate-200 p-4 shadow-sm">
           <p className="text-sm font-medium text-slate-600">Total</p>
