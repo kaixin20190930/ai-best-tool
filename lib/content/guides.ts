@@ -495,6 +495,32 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-tools-for-protocol-analytics',
+    priority: 0.73,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 协议分析工具推荐',
+      en: 'AI tools for protocol analytics',
+    },
+    desc: {
+      cn: '适合协议健康观察、使用量分析和研究。',
+      en: 'For protocol health monitoring, usage analysis, and research.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-protocol-analytics-comparison',
+    priority: 0.74,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 协议分析工具对比',
+      en: 'AI tools for protocol analytics comparison',
+    },
+    desc: {
+      cn: '把常见协议分析工具放在一起快速对照。',
+      en: 'Compare common protocol analytics tools side by side.',
+    },
+  },
+  {
     href: '/guides/ai-productivity-tools-comparison',
     priority: 0.74,
     changeFrequency: 'weekly',
