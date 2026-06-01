@@ -5,6 +5,7 @@ import AdminCollectionCandidatesTable from '@/components/admin/AdminCollectionCa
 import AdminCollectionSourceForm from '@/components/admin/AdminCollectionSourceForm';
 import AdminCollectionSourcesTable from '@/components/admin/AdminCollectionSourcesTable';
 import { getToolQuality } from '@/lib/services/toolQuality';
+import { getTopCategories } from '@/lib/services/admin/analytics';
 import {
   CollectionCandidateScoreFilter,
   CollectionCandidateStatus,
@@ -75,6 +76,27 @@ function getCandidateScoreFilter(value: string | string[] | undefined) {
     : 'all';
 }
 
+function getCategoryDisplayName(category: { name: unknown; slug: string }) {
+  if (typeof category.name === 'object' && category.name !== null) {
+    const record = category.name as Record<string, string>;
+    return record.en || record.zh || Object.values(record)[0] || category.slug;
+  }
+
+  return category.slug;
+}
+
+function getCategoryAction(category: {
+  toolCount: number;
+  opportunityScore: number;
+  views: number;
+  comments: number;
+}) {
+  if (category.toolCount <= 10 && category.opportunityScore >= 200) return 'Add 5-10 solid tools';
+  if (category.views >= category.toolCount * 800) return 'Add comparison pages';
+  if (category.comments >= category.toolCount) return 'Strengthen feedback loops';
+  return 'Backfill missing listings';
+}
+
 export default async function AdminCollectionPage({
   searchParams,
 }: {
@@ -87,17 +109,25 @@ export default async function AdminCollectionPage({
   const candidateStatus = getCandidateStatus(searchParams?.candidateStatus);
   const candidateScoreFilter = getCandidateScoreFilter(searchParams?.candidateScore);
   const candidatePage = getPage(searchParams?.candidatePage);
-  const [drafts, pending, sources, runs, candidatePageData, candidateStats] = await Promise.all([
+  const [drafts, pending, sources, runs, candidatePageData, candidateStats, topCategories] = await Promise.all([
     getAdminTools({ status: 'draft', page: 1, pageSize: 50 }),
     getAdminTools({ status: 'pending', page: 1, pageSize: 50 }),
     listCollectionSources(),
     listCollectionRuns(15),
     listCollectionCandidates(25, candidateStatus, candidatePage, candidateScoreFilter),
     getCollectionCandidateStats(),
+    getTopCategories(3),
   ]);
   const queue = [...drafts.tools, ...pending.tools].sort(
     (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   );
+  const readyToImportCount = candidatePageData.candidates.filter(
+    (candidate) => candidate.status === 'new' && candidate.quality_score >= 80 && candidate.relevance_score >= 50,
+  ).length;
+  const needsEnrichmentCount = candidatePageData.candidates.filter(
+    (candidate) => candidate.status === 'new' && candidate.quality_score < 70,
+  ).length;
+  const focusCategories = topCategories.slice(0, 3);
 
   return (
     <div>
@@ -106,6 +136,70 @@ export default async function AdminCollectionPage({
         <p className="mt-2 text-slate-600">
           Import source URLs, research drafts, and move promising tools toward review.
         </p>
+      </div>
+
+      <div className="mb-6 grid gap-4 md:grid-cols-3">
+        <div className="theme-surface rounded-lg border border-slate-200 p-5 shadow-sm">
+          <p className="text-sm font-medium text-slate-600">Ready to import</p>
+          <p className="mt-2 text-3xl font-semibold text-slate-900">{readyToImportCount}</p>
+          <p className="mt-1 text-sm text-slate-500">High quality candidates on this page</p>
+        </div>
+        <div className="theme-surface rounded-lg border border-slate-200 p-5 shadow-sm">
+          <p className="text-sm font-medium text-slate-600">Needs enrichment</p>
+          <p className="mt-2 text-3xl font-semibold text-slate-900">{needsEnrichmentCount}</p>
+          <p className="mt-1 text-sm text-slate-500">Below the editorial minimum</p>
+        </div>
+        <div className="theme-surface rounded-lg border border-slate-200 p-5 shadow-sm">
+          <p className="text-sm font-medium text-slate-600">Import rule</p>
+          <p className="mt-2 text-sm leading-6 text-slate-600">
+            Only create drafts when a candidate has a clear category, screenshot, logo, description, detail copy,
+            pricing, and tags.
+          </p>
+        </div>
+      </div>
+
+      <div className="theme-surface mb-6 overflow-hidden rounded-lg border border-slate-200 shadow-sm">
+        <div className="border-b border-slate-200 px-6 py-4">
+          <h2 className="text-lg font-semibold text-slate-900">Weekly focus categories</h2>
+          <p className="mt-1 text-sm text-slate-600">
+            These are the categories worth backfilling first if we want the directory to feel fuller and more useful.
+          </p>
+        </div>
+        <div className="grid gap-4 p-6 md:grid-cols-3">
+          {focusCategories.map((category, index) => (
+            <div key={category.id} className="rounded-lg border border-slate-200 bg-white p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Priority #{index + 1}</p>
+                  <h3 className="mt-1 text-base font-semibold text-slate-900">
+                    {getCategoryDisplayName(category)}
+                  </h3>
+                  <p className="text-xs text-slate-500">{category.slug}</p>
+                </div>
+                <span className="rounded-full bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-cyan-700">
+                  {category.opportunityScore}
+                </span>
+              </div>
+              <div className="mt-4 space-y-2 text-sm text-slate-600">
+                <div className="flex items-center justify-between">
+                  <span>Tools</span>
+                  <span className="font-medium text-slate-900">{category.toolCount}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span>Views</span>
+                  <span className="font-medium text-slate-900">{category.views.toLocaleString()}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span>Comments</span>
+                  <span className="font-medium text-slate-900">{category.comments.toLocaleString()}</span>
+                </div>
+              </div>
+              <div className="mt-4 rounded-md bg-slate-50 px-3 py-2 text-sm text-slate-700">
+                {getCategoryAction(category)}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="grid gap-5 lg:grid-cols-2">

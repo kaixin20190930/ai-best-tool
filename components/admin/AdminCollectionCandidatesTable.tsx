@@ -443,6 +443,23 @@ export default function AdminCollectionCandidatesTable({
                     </p>
                   </td>
                   <td className="px-6 py-4">
+                    {(() => {
+                      const isReadyToImport = candidate.status === 'new' && candidate.relevance_score >= 50 && candidate.quality_score >= 80;
+
+                      return (
+                        <div className="mb-2">
+                          <span
+                            className={`rounded-full px-2 py-1 text-xs font-semibold ${
+                              isReadyToImport
+                                ? 'bg-emerald-50 text-emerald-700'
+                                : 'bg-amber-50 text-amber-700'
+                            }`}
+                          >
+                            {isReadyToImport ? 'Ready to import' : 'Needs enrichment'}
+                          </span>
+                        </div>
+                      );
+                    })()}
                     <div className="flex flex-col gap-1">
                       <span
                         className={`w-fit rounded-full px-2 py-1 text-xs font-semibold ring-1 ${getScoreClass(
