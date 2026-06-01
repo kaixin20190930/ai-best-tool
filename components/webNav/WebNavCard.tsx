@@ -63,11 +63,11 @@ export default function WebNavCard({
       <Link href={`/ai/${name}`} title={title}>
         <BaseImage
           width={350}
-          height={220}
+          height={160}
           src={thumbnailUrl || ''}
           alt={`${title} - AI tool screenshot and preview`}
           title={title}
-          className='aspect-[350/220] w-full justify-self-center rounded-md border border-slate-100 bg-slate-50 object-contain p-4'
+          className='aspect-[350/160] w-full justify-self-center rounded-xl border border-slate-100 bg-gradient-to-b from-slate-50 to-white object-contain p-2.5'
           sizes='(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 350px'
           loading='lazy'
         />
