@@ -391,6 +391,58 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-tools-for-on-chain-analysis',
+    priority: 0.73,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 链上分析工具推荐',
+      en: 'AI tools for on-chain analysis',
+    },
+    desc: {
+      cn: '适合地址追踪、资金流分析和研究。',
+      en: 'For address tracking, fund-flow analysis, and research.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-on-chain-analysis-comparison',
+    priority: 0.74,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 链上分析工具对比',
+      en: 'AI tools for on-chain analysis comparison',
+    },
+    desc: {
+      cn: '把常见链上分析工具放在一起快速对照。',
+      en: 'Compare common on-chain tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-wallet-monitoring',
+    priority: 0.73,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 钱包监控工具推荐',
+      en: 'AI tools for wallet monitoring',
+    },
+    desc: {
+      cn: '适合地址提醒、异常观察和风控监控。',
+      en: 'For address alerts, anomaly watching, and risk monitoring.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-wallet-monitoring-comparison',
+    priority: 0.74,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 钱包监控工具对比',
+      en: 'AI tools for wallet monitoring comparison',
+    },
+    desc: {
+      cn: '把常见钱包监控工具放在一起快速对照。',
+      en: 'Compare common wallet tools side by side.',
+    },
+  },
+  {
     href: '/guides/ai-productivity-tools-comparison',
     priority: 0.74,
     changeFrequency: 'weekly',
@@ -441,4 +493,5 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/ai-chatbot-tools',
   '/guides/ai-tools-for-web3',
   '/guides/ai-tools-for-crypto-research',
+  '/guides/ai-tools-for-on-chain-analysis',
 ] as const;
