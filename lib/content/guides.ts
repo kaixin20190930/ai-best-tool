@@ -339,6 +339,32 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-tools-for-web3',
+    priority: 0.73,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI Web3 工具推荐',
+      en: 'AI tools for Web3',
+    },
+    desc: {
+      cn: '适合链上数据、钱包工作流和 Crypto 研究。',
+      en: 'For on-chain data, wallet workflows, and crypto research.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-web3-comparison',
+    priority: 0.74,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI Web3 工具对比',
+      en: 'AI tools for Web3 comparison',
+    },
+    desc: {
+      cn: '把常见 Web3 工具放在一起快速对照。',
+      en: 'Compare common Web3 tools side by side.',
+    },
+  },
+  {
     href: '/guides/ai-productivity-tools-comparison',
     priority: 0.74,
     changeFrequency: 'weekly',
@@ -387,4 +413,5 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/ai-image-tools',
   '/guides/ai-coding-tools',
   '/guides/ai-chatbot-tools',
+  '/guides/ai-tools-for-web3',
 ] as const;
