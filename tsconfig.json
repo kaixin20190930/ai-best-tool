@@ -43,6 +43,7 @@
     "network/**/*.ts",
     "scripts/bootstrap-first-batch.ts",
     "scripts/publish-second-batch.ts",
+    "scripts/publish-third-batch.ts",
     "scripts/publish-first-batch.ts",
     "scripts/fix-missing-translations.ts",
     "scripts/test-hreflang-rendering.ts",
