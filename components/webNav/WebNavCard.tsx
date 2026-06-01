@@ -1,14 +1,13 @@
 import Link from 'next/link';
-import { Flame, Sparkles, Megaphone } from 'lucide-react';
+import { Flame, Megaphone, Sparkles } from 'lucide-react';
 
 import { WebNavigationListRow } from '@/lib/data';
 
-import BaseImage from '../image/BaseImage';
 import FavoriteButton from '../FavoriteButton';
+import BaseImage from '../image/BaseImage';
 import RatingStars from '../RatingStars';
 
 interface WebNavCardProps extends Omit<WebNavigationListRow, 'id'> {
-  id?: string;
   isFavorited?: boolean;
   toolId?: string;
   averageRating?: number;
@@ -29,10 +28,7 @@ function getFreshnessLabel(createdAt?: string, updatedAt?: string): string | nul
     return null;
   }
 
-  const days = Math.max(
-    0,
-    Math.floor((Date.now() - timestamp) / (1000 * 60 * 60 * 24))
-  );
+  const days = Math.max(0, Math.floor((Date.now() - timestamp) / (1000 * 60 * 60 * 24)));
 
   if (createdAt && days <= 14) {
     return 'Recently added';
@@ -45,11 +41,11 @@ function getFreshnessLabel(createdAt?: string, updatedAt?: string): string | nul
   return `Updated ${days} days ago`;
 }
 
-export default function WebNavCard({ 
-  name, 
-  thumbnailUrl, 
-  title, 
-  url, 
+export default function WebNavCard({
+  name,
+  thumbnailUrl,
+  title,
+  url,
   content,
   isFavorited = false,
   toolId,
@@ -71,7 +67,7 @@ export default function WebNavCard({
           src={thumbnailUrl || ''}
           alt={`${title} - AI tool screenshot and preview`}
           title={title}
-          className='aspect-[350/220] w-full justify-self-center rounded-md bg-slate-100 object-cover'
+          className='aspect-[350/220] w-full justify-self-center rounded-md border border-slate-100 bg-slate-50 object-contain p-4'
           sizes='(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 350px'
           loading='lazy'
         />
@@ -80,12 +76,7 @@ export default function WebNavCard({
         <a href={url} title={title} target='_blank' rel='noreferrer' className='hover:text-slate-700'>
           <h3 className='line-clamp-1 flex-1 text-base font-bold text-slate-950 lg:text-lg'>{title}</h3>
         </a>
-        {toolId && (
-          <FavoriteButton 
-            toolId={toolId} 
-            initialState={isFavorited}
-          />
-        )}
+        {toolId && <FavoriteButton toolId={toolId} initialState={isFavorited} />}
       </div>
       <div className='flex flex-col gap-3'>
         {contextLabel === 'popular' && (
@@ -117,9 +108,9 @@ export default function WebNavCard({
             toolId={toolId}
             averageRating={averageRating}
             ratingCount={ratingCount}
-            readonly={true}
-            size="sm"
-            showStats={true}
+            readonly
+            size='sm'
+            showStats
           />
         )}
       </div>
