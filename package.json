@@ -16,6 +16,7 @@
     "apply-schema:neon": "tsx scripts/apply-schema-neon.ts",
     "migrate:neon": "tsx scripts/migrate-data-neon.ts",
     "verify:neon": "tsx scripts/verify-migration-neon.ts",
+    "bootstrap:collection": "tsx scripts/bootstrap-first-batch.ts",
     "perf:audit": "tsx scripts/performance-audit.ts",
     "perf:vitals": "tsx scripts/verify-core-web-vitals.ts",
     "seo:health-check": "tsx scripts/seo-health-check.ts",

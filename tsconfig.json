@@ -41,11 +41,11 @@
     "lib/**/*.ts",
     "middlewares/**/*.ts",
     "network/**/*.ts",
+    "scripts/**/*.ts",
     ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
-    "**/__tests__/**",
-    "scripts/**"
+    "**/__tests__/**"
   ]
 }
