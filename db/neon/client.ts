@@ -1,6 +1,7 @@
+/* eslint-disable import/no-extraneous-dependencies, no-nested-ternary, @typescript-eslint/no-shadow, no-plusplus, no-await-in-loop, @typescript-eslint/no-use-before-define, no-promise-executor-return */
 /**
  * Neon Database Client
- * 
+ *
  * 提供服务端和客户端的数据库访问方法
  * 使用 pg Pool 进行连接池管理
  */
@@ -12,11 +13,11 @@ import { Pool, PoolClient, QueryResult, QueryResultRow } from 'pg';
  */
 function getPoolConfig() {
   const databaseUrl = process.env.DATABASE_URL;
-  
+
   if (!databaseUrl) {
     throw new Error('DATABASE_URL environment variable is not set');
   }
-  
+
   // 检查是否需要 SSL
   const needsSSL = databaseUrl.includes('sslmode=require') || databaseUrl.includes('neon.tech');
   const isPoolerConnection =
@@ -24,18 +25,15 @@ function getPoolConfig() {
     databaseUrl.includes('pooler.supabase.com') ||
     databaseUrl.includes('pooler.neon.tech');
   const configuredMax = Number.parseInt(process.env.DB_POOL_MAX || '', 10);
-  const max = Number.isFinite(configuredMax)
-    ? Math.max(configuredMax, 1)
-    : isPoolerConnection
-      ? 5
-      : 10;
-  
+  const max = Number.isFinite(configuredMax) ? Math.max(configuredMax, 1) : isPoolerConnection ? 1 : 10;
+
   return {
     connectionString: databaseUrl,
     ssl: needsSSL ? { rejectUnauthorized: false } : false,
     max,
-    idleTimeoutMillis: 30000, // 空闲连接超时时间
+    idleTimeoutMillis: isPoolerConnection ? 5000 : 30000, // 空闲连接超时时间
     connectionTimeoutMillis: 30000, // 连接超时时间
+    allowExitOnIdle: true,
   };
 }
 
@@ -50,19 +48,19 @@ export function getPool(): Pool {
   if (!pool) {
     const config = getPoolConfig();
     pool = new Pool(config);
-    
+
     // 监听连接池错误
     pool.on('error', (err) => {
       console.error('Unexpected error on idle client', err);
     });
   }
-  
+
   return pool;
 }
 
 /**
  * 执行数据库查询（带重试逻辑）
- * 
+ *
  * @param query SQL 查询语句
  * @param params 查询参数
  * @param maxRetries 最大重试次数
@@ -71,11 +69,11 @@ export function getPool(): Pool {
 export async function query<T extends QueryResultRow = any>(
   query: string,
   params?: any[],
-  maxRetries = 3
+  maxRetries = 3,
 ): Promise<QueryResult<T>> {
   const pool = getPool();
   let lastError: Error | null = null;
-  
+
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       const result = await pool.query<T>(query, params);
@@ -83,10 +81,10 @@ export async function query<T extends QueryResultRow = any>(
     } catch (error: any) {
       lastError = error;
       console.error(`Query attempt ${attempt} failed:`, error.message);
-      
+
       // 如果是连接错误，等待后重试
       if (attempt < maxRetries && isRetryableError(error)) {
-        const delay = Math.min(1000 * Math.pow(2, attempt - 1), 5000);
+        const delay = Math.min(1000 * 2 ** (attempt - 1), 5000);
         console.log(`Retrying in ${delay}ms...`);
         await sleep(delay);
       } else {
@@ -94,25 +92,20 @@ export async function query<T extends QueryResultRow = any>(
       }
     }
   }
-  
-  throw new DatabaseError(
-    `Query failed after ${maxRetries} attempts: ${lastError?.message}`,
-    lastError
-  );
+
+  throw new DatabaseError(`Query failed after ${maxRetries} attempts: ${lastError?.message}`, lastError);
 }
 
 /**
  * 执行事务
- * 
+ *
  * @param callback 事务回调函数
  * @returns 事务结果
  */
-export async function transaction<T>(
-  callback: (client: PoolClient) => Promise<T>
-): Promise<T> {
+export async function transaction<T>(callback: (client: PoolClient) => Promise<T>): Promise<T> {
   const pool = getPool();
   const client = await pool.connect();
-  
+
   try {
     await client.query('BEGIN');
     const result = await callback(client);
@@ -128,7 +121,7 @@ export async function transaction<T>(
 
 /**
  * 测试数据库连接
- * 
+ *
  * @returns 连接是否成功
  */
 export async function testConnection(): Promise<boolean> {
@@ -157,18 +150,10 @@ export async function closePool(): Promise<void> {
  * 判断错误是否可重试
  */
 function isRetryableError(error: any): boolean {
-  const retryableErrors = [
-    'ECONNREFUSED',
-    'ECONNRESET',
-    'ETIMEDOUT',
-    'ENOTFOUND',
-    'connection timeout',
-  ];
-  
+  const retryableErrors = ['ECONNREFUSED', 'ECONNRESET', 'ETIMEDOUT', 'ENOTFOUND', 'connection timeout'];
+
   return retryableErrors.some(
-    (errCode) =>
-      error.code === errCode ||
-      error.message?.toLowerCase().includes(errCode.toLowerCase())
+    (errCode) => error.code === errCode || error.message?.toLowerCase().includes(errCode.toLowerCase()),
   );
 }
 
@@ -184,7 +169,7 @@ function sleep(ms: number): Promise<void> {
  */
 export class DatabaseError extends Error {
   public originalError: Error | null;
-  
+
   constructor(message: string, originalError: Error | null = null) {
     super(message);
     this.name = 'DatabaseError';
@@ -217,11 +202,11 @@ export const clientDb = {
         ...options?.headers,
       },
     });
-    
+
     if (!response.ok) {
       throw new Error(`API request failed: ${response.statusText}`);
     }
-    
+
     return response.json();
   },
 };
