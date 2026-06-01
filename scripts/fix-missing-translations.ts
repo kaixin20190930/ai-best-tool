@@ -11,12 +11,13 @@
 import fs from 'fs';
 import path from 'path';
 
+interface TranslationLocaleUpdates extends Record<string, any> {
+  admin?: any;
+  other?: any;
+}
+
 interface TranslationUpdates {
-  [locale: string]: {
-    admin?: any;
-    other?: any;
-    [key: string]: any;
-  };
+  [locale: string]: TranslationLocaleUpdates;
 }
 
 // Admin section translations for each locale
