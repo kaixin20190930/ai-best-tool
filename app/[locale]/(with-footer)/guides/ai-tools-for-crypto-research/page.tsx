@@ -1,0 +1,221 @@
+import { Metadata } from 'next';
+import Link from 'next/link';
+import { BadgeDollarSign, ExternalLink, Search, Wallet } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
+
+import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
+import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import { StructuredDataServer } from '@/components/seo/StructuredData';
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: 'Metadata.home' });
+
+  return {
+    title:
+      locale === 'cn' || locale === 'tw'
+        ? 'AI Crypto 研究工具推荐 | AI Best Tool'
+        : `AI tools for crypto research | ${t('title')}`,
+    description:
+      locale === 'cn' || locale === 'tw'
+        ? '面向加密研究、链上跟踪和市场分析的 AI 工具选型指南。'
+        : 'A practical guide to AI tools for crypto research, on-chain tracking, and market analysis.',
+  };
+}
+
+export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+  const isChinese = locale === 'cn' || locale === 'tw';
+  const categories = await getAllCategories(true).catch(() => []);
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: `${siteUrl}/${locale}` },
+    { name: isChinese ? '选型指南' : 'Guides', url: `${siteUrl}/${locale}/guides/how-to-choose-ai-tools` },
+    {
+      name: isChinese ? '加密研究工具' : 'Crypto research tools',
+      url: `${siteUrl}/${locale}/guides/ai-tools-for-crypto-research`,
+    },
+  ]);
+
+  const faqs = [
+    {
+      question: isChinese ? 'Crypto 研究工具最适合用来做什么？' : 'What are crypto research tools best used for?',
+      answer: isChinese
+        ? '通常用于价格监控、代币研究、链上数据分析、地址追踪、项目筛选和市场情报整理。'
+        : 'They are commonly used for price monitoring, token research, on-chain analysis, address tracking, project screening, and market intelligence.',
+    },
+    {
+      question: isChinese ? '我应该先看什么？' : 'What should I check first?',
+      answer: isChinese
+        ? '先看它是否支持你关注的链、交易所、数据源和导出方式。'
+        : 'Start with supported chains, exchanges, data sources, and export options.',
+    },
+    {
+      question: isChinese ? '免费版够用吗？' : 'Is a free tier enough?',
+      answer: isChinese
+        ? '适合做基础观察；如果你需要更长历史、更多监控指标或 API，通常需要升级。'
+        : 'Good for basic observation. Longer history, more monitoring signals, and API access usually require paid plans.',
+    },
+    {
+      question: isChinese ? '我可以直接从这里找到 Crypto 工具吗？' : 'Can I find crypto tools directly from here?',
+      answer: isChinese
+        ? '可以。你可以先从搜索和分类页开始，再结合评论、截图和更新频率判断。'
+        : 'Yes. Start from search and categories, then judge with comments, screenshots, and update frequency.',
+    },
+  ];
+
+  const tips = isChinese
+    ? [
+        '先分清你是在看代币、钱包、链上活动还是市场情报。',
+        '看它支持的数据源是否覆盖你常用的平台。',
+        '如果要给团队使用，优先看 API、导出和监控能力。',
+      ]
+    : [
+        'Separate the use case first: tokens, wallets, on-chain activity, or market intelligence.',
+        'Check whether the data sources cover the platforms you actually use.',
+        'For team use, prioritize API access, exports, and monitoring.',
+      ];
+
+  return (
+    <>
+      <StructuredDataServer data={breadcrumbSchema} />
+      <StructuredDataServer data={generateFAQSchema(faqs)} />
+      <div className='theme-page mx-auto max-w-6xl px-4 py-8 lg:px-6 lg:py-12'>
+        <section className='rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm lg:p-10'>
+          <div className='flex flex-wrap items-center gap-2'>
+            <span className='inline-flex items-center gap-2 rounded-full bg-cyan-50 px-3 py-1 text-sm font-semibold text-cyan-700'>
+              <BadgeDollarSign className='size-4' />
+              {isChinese ? 'Crypto 研究工具推荐' : 'Crypto research tools'}
+            </span>
+            <span className='inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-sm font-semibold text-slate-700'>
+              <Wallet className='size-4' />
+              {isChinese ? '市场与链上结合' : 'Market plus on-chain'}
+            </span>
+          </div>
+
+          <h1 className='mt-4 max-w-4xl text-3xl font-bold tracking-tight text-slate-950 lg:text-5xl'>
+            {isChinese
+              ? 'AI Crypto 研究工具推荐：从代币观察到链上跟踪，怎么选更合适'
+              : 'AI tools for crypto research: how to choose for token watching and on-chain tracking'}
+          </h1>
+          <p className='mt-4 max-w-3xl text-base leading-7 text-slate-600 lg:text-lg'>
+            {isChinese
+              ? 'Crypto 研究工具重点不是“信息多”，而是能不能稳定连接你关注的数据源，并且方便你做观察、筛选和追踪。'
+              : 'Crypto research tools are not just about having lots of info. They need reliable access to the data sources you care about and make observation, filtering, and tracking easy.'}
+          </p>
+
+          <div className='mt-6 flex flex-wrap gap-3'>
+            <Link
+              href='/explore?search=crypto&sort=popular'
+              className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+            >
+              {isChinese ? '看 Crypto 工具' : 'Browse crypto tools'}
+              <ExternalLink className='size-4' />
+            </Link>
+            <Link
+              href='/guides/ai-tools-for-web3'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+            >
+              {isChinese ? '回到 Web3 指南' : 'Back to Web3 guide'}
+            </Link>
+            <Link
+              href='/guides/ai-tools-for-crypto-research-comparison'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+            >
+              {isChinese ? '看 Crypto 对比页' : 'Crypto comparison'}
+            </Link>
+          </div>
+        </section>
+
+        <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
+          <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '判断顺序' : 'How to judge'}
+            </p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+              {isChinese ? '先看数据源，再看追踪和提醒' : 'Start with data sources, then tracking and alerts'}
+            </h2>
+            <div className='mt-4 space-y-3'>
+              {tips.map((tip) => (
+                <div key={tip} className='rounded-lg bg-slate-50 p-4 text-sm leading-6 text-slate-700'>
+                  <div className='flex items-start gap-3'>
+                    <Search className='mt-0.5 size-4 shrink-0 text-emerald-600' />
+                    <span>{tip}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <aside className='rounded-[18px] border border-slate-200 bg-slate-50 p-6 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '先看这些分类' : 'Start here'}
+            </p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+              {isChinese ? 'Crypto 工具通常在这些分类里' : 'Crypto tools often sit in these categories'}
+            </h2>
+            <div className='mt-4 grid gap-2'>
+              {categories
+                .filter(
+                  (category) =>
+                    String(category.slug).includes('web3') ||
+                    String(getLocalizedField(category.name, 'en')).toLowerCase().includes('web3'),
+                )
+                .slice(0, 6)
+                .map((category) => (
+                  <Link
+                    key={category.id}
+                    href={`/categories/${category.slug}`}
+                    className='flex items-center justify-between rounded-lg border border-white bg-white px-4 py-3 text-sm text-slate-700 shadow-sm hover:bg-slate-100'
+                  >
+                    <span>{getLocalizedField(category.name, locale)}</span>
+                    <span className='text-xs text-slate-500'>
+                      {'toolCount' in category && typeof category.toolCount === 'number' ? category.toolCount : ''}
+                    </span>
+                  </Link>
+                ))}
+            </div>
+          </aside>
+        </section>
+
+        <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
+          <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? 'Crypto 工具看什么' : 'What matters for crypto tools'}
+            </p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+              {isChinese ? '能不能稳定帮你做研究和监控' : 'Can it reliably help with research and monitoring?'}
+            </h2>
+            <div className='mt-4 space-y-3 text-sm leading-6 text-slate-700'>
+              <p>
+                {isChinese
+                  ? 'Crypto 研究工具最重要的是数据源稳定、提醒清晰、过滤能力强。'
+                  : 'Stability of data sources, clear alerts, and strong filtering matter most.'}
+              </p>
+              <p>
+                {isChinese
+                  ? '如果你做研究或监控，优先看历史查询、导出、API 和告警能力。'
+                  : 'If you do research or monitoring, prioritize historical queries, exports, API access, and alerts.'}
+              </p>
+            </div>
+          </div>
+
+          <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '常见问题' : 'FAQ'}
+            </p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+              {isChinese ? 'Crypto 工具最常见的问题' : 'Common questions about crypto tools'}
+            </h2>
+            <div className='mt-4 space-y-4'>
+              {faqs.map((faq) => (
+                <div key={faq.question} className='rounded-lg border border-slate-200 bg-slate-50 p-4'>
+                  <p className='text-sm font-semibold text-slate-900'>{faq.question}</p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>{faq.answer}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </div>
+    </>
+  );
+}

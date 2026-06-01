@@ -365,6 +365,32 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-tools-for-crypto-research',
+    priority: 0.73,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI Crypto 研究工具推荐',
+      en: 'AI tools for crypto research',
+    },
+    desc: {
+      cn: '适合代币研究、链上跟踪和市场情报。',
+      en: 'For token research, on-chain tracking, and market intelligence.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-crypto-research-comparison',
+    priority: 0.74,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI Crypto 研究工具对比',
+      en: 'AI tools for crypto research comparison',
+    },
+    desc: {
+      cn: '把常见 Crypto 研究工具放在一起快速对照。',
+      en: 'Compare common crypto research tools side by side.',
+    },
+  },
+  {
     href: '/guides/ai-productivity-tools-comparison',
     priority: 0.74,
     changeFrequency: 'weekly',
@@ -414,4 +440,5 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/ai-coding-tools',
   '/guides/ai-chatbot-tools',
   '/guides/ai-tools-for-web3',
+  '/guides/ai-tools-for-crypto-research',
 ] as const;
