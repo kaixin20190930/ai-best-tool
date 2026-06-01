@@ -1,11 +1,12 @@
 import { Metadata } from 'next';
-import { SortBy } from '@/lib/services/tools';
+
+import { generateBreadcrumbSchema } from '@/lib/seo/schema';
 import { getAllCategories } from '@/lib/services/categories';
 import { getAllTags } from '@/lib/services/tags';
+import { SortBy } from '@/lib/services/tools';
 import FilterPanel from '@/components/FilterPanel';
-import { StructuredDataServer } from '@/components/seo/StructuredData';
-import { generateBreadcrumbSchema } from '@/lib/seo/schema';
 import { generateHreflangMetadata } from '@/components/seo';
+import { StructuredDataServer } from '@/components/seo/StructuredData';
 
 import ExploreList from './ExploreList';
 
@@ -28,7 +29,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: 'Explore AI Tools | AI Best Tool',
-    description: 'Browse our comprehensive directory of AI tools. Discover and compare the best AI-powered solutions for your productivity, creativity, and business needs.',
+    description:
+      'Browse curated AI tools by category, pricing, and use case. Discover and compare the best tools for writing, coding, design, productivity, and more.',
     ...hreflangMetadata,
   };
 }
@@ -57,12 +59,7 @@ export default async function Page({ params, searchParams }: PageProps) {
 
           {/* Main Content */}
           <main className='flex-1'>
-            <ExploreList
-              locale={params.locale}
-              searchParams={searchParams}
-              categories={categories}
-              tags={tags}
-            />
+            <ExploreList locale={params.locale} searchParams={searchParams} categories={categories} tags={tags} />
           </main>
         </div>
       </div>

@@ -156,8 +156,8 @@
     }
   },
   "Explore": {
-    "title": "发现2024年最佳AI工具",
-    "subTitle": "在AI Best Tool工具目录中找到您喜爱的AI工具。AI工具列表每天由GPT-4o更新。"
+    "title": "探索AI工具",
+    "subTitle": "在 AI Best Tool 工具目录中浏览、筛选并比较适合你的 AI 工具。"
   },
   "Metadata": {
     "home": {
@@ -169,9 +169,9 @@
       "titleSubfix": "AI Best Tool目录"
     },
     "explore": {
-      "title": "探索2024年最佳AI工具 | AI Best Tool",
-      "description": "浏览并发现2024年最佳AI工具。按类别、定价和功能筛选。查找用于写作、营销、编码、设计等的AI工具。",
-      "keywords": "探索AI工具, AI工具目录, 2024最佳AI工具, AI软件目录, AI应用程序"
+      "title": "探索 AI 工具 | AI Best Tool",
+      "description": "浏览精选 AI 工具。按类别、定价和功能筛选，找到适合写作、营销、编程、设计等场景的工具。",
+      "keywords": "探索AI工具, AI工具目录, AI软件目录, AI应用程序, AI工具筛选"
     },
     "startup": {
       "title": "启动您的创业公司 | 免费提交网站",
