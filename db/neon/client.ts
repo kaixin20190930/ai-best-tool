@@ -19,13 +19,23 @@ function getPoolConfig() {
   
   // 检查是否需要 SSL
   const needsSSL = databaseUrl.includes('sslmode=require') || databaseUrl.includes('neon.tech');
+  const isPoolerConnection =
+    databaseUrl.includes('.pooler.') ||
+    databaseUrl.includes('pooler.supabase.com') ||
+    databaseUrl.includes('pooler.neon.tech');
+  const configuredMax = Number.parseInt(process.env.DB_POOL_MAX || '', 10);
+  const max = Number.isFinite(configuredMax)
+    ? Math.max(configuredMax, 1)
+    : isPoolerConnection
+      ? 5
+      : 10;
   
   return {
     connectionString: databaseUrl,
     ssl: needsSSL ? { rejectUnauthorized: false } : false,
-    max: 20, // 最大连接数
+    max,
     idleTimeoutMillis: 30000, // 空闲连接超时时间
-    connectionTimeoutMillis: 10000, // 连接超时时间
+    connectionTimeoutMillis: 30000, // 连接超时时间
   };
 }
 
