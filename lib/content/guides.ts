@@ -443,6 +443,32 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-tools-for-defi-analytics',
+    priority: 0.73,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI DeFi 分析工具推荐',
+      en: 'AI tools for DeFi analytics',
+    },
+    desc: {
+      cn: '适合流动性监测、收益追踪和协议研究。',
+      en: 'For liquidity monitoring, yield tracking, and protocol research.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-defi-analytics-comparison',
+    priority: 0.74,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI DeFi 分析工具对比',
+      en: 'AI tools for DeFi analytics comparison',
+    },
+    desc: {
+      cn: '把常见 DeFi 分析工具放在一起快速对照。',
+      en: 'Compare common DeFi analytics tools side by side.',
+    },
+  },
+  {
     href: '/guides/ai-productivity-tools-comparison',
     priority: 0.74,
     changeFrequency: 'weekly',
@@ -494,4 +520,5 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/ai-tools-for-web3',
   '/guides/ai-tools-for-crypto-research',
   '/guides/ai-tools-for-on-chain-analysis',
+  '/guides/ai-tools-for-defi-analytics',
 ] as const;
