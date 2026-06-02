@@ -228,9 +228,20 @@ This documentation provides comprehensive guidance for implementing and maintain
 
 **When to use:** Right after deployment, when you want to submit sitemap and check indexing quickly
 
+#### 18. [Stripe Checkout Setup](./STRIPE_CHECKOUT_SETUP.md)
+**Purpose:** Step-by-step setup for paid listings and featured placement using Stripe Checkout
+
+**Contents:**
+- Stripe secret key and webhook setup
+- Checkout session flow
+- Webhook verification
+- Local Stripe CLI testing
+
+**When to use:** When you are ready to enable paid submission flow
+
 ### For Tool Operations
 
-#### 18. [Tool Lifecycle Policy](./TOOL_LIFECYCLE_POLICY.md)
+#### 19. [Tool Lifecycle Policy](./TOOL_LIFECYCLE_POLICY.md)
 **Purpose:** Operational policy for collecting, reviewing, publishing, archiving, and removing tools
 
 **Contents:**
@@ -243,7 +254,7 @@ This documentation provides comprehensive guidance for implementing and maintain
 
 **When to use:** When operating the tool database and deciding whether a tool should be visible, archived, or removed
 
-#### 18a. [工具生命周期政策（中文）](./TOOL_LIFECYCLE_POLICY_CN.md)
+#### 19a. [工具生命周期政策（中文）](./TOOL_LIFECYCLE_POLICY_CN.md)
 **Purpose:** 上述工具生命周期政策的中文版本
 
 **Contents:**
@@ -258,7 +269,7 @@ This documentation provides comprehensive guidance for implementing and maintain
 
 ### For Monitoring and Maintenance
 
-#### 19. [SEO Monitoring Guide](./SEO_MONITORING_GUIDE.md)
+#### 20. [SEO Monitoring Guide](./SEO_MONITORING_GUIDE.md)
 **Purpose:** Comprehensive guide to SEO monitoring and maintenance
 
 **Contents:**
@@ -272,7 +283,7 @@ This documentation provides comprehensive guidance for implementing and maintain
 
 **When to use:** When setting up or maintaining SEO monitoring
 
-#### 20. [SEO Monitoring Setup](./SEO_MONITORING_SETUP.md)
+#### 21. [SEO Monitoring Setup](./SEO_MONITORING_SETUP.md)
 **Purpose:** Quick start guide for setting up SEO monitoring
 
 **Contents:**
@@ -286,7 +297,7 @@ This documentation provides comprehensive guidance for implementing and maintain
 
 **When to use:** When initially setting up monitoring infrastructure
 
-#### 19. [SEO Alert Configuration](./SEO_ALERT_CONFIGURATION.md)
+#### 22. [SEO Alert Configuration](./SEO_ALERT_CONFIGURATION.md)
 **Purpose:** Detailed guide to configuring SEO alerts
 
 **Contents:**
@@ -299,7 +310,7 @@ This documentation provides comprehensive guidance for implementing and maintain
 
 **When to use:** When configuring or adjusting alert thresholds
 
-#### 20. [SEO Monthly Report Template](./SEO_MONTHLY_REPORT_TEMPLATE.md)
+#### 23. [SEO Monthly Report Template](./SEO_MONTHLY_REPORT_TEMPLATE.md)
 **Purpose:** Template for generating monthly SEO reports
 
 **Contents:**
@@ -313,7 +324,7 @@ This documentation provides comprehensive guidance for implementing and maintain
 
 **When to use:** When generating monthly SEO reports
 
-#### 21. [Caching Strategy](./CACHING_STRATEGY.md)
+#### 24. [Caching Strategy](./CACHING_STRATEGY.md)
 **Purpose:** Guide to caching implementation
 
 **Contents:**
