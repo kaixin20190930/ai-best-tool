@@ -560,6 +560,32 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-tools-for-meeting-notes',
+    priority: 0.74,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 会议纪要工具推荐',
+      en: 'AI tools for meeting notes',
+    },
+    desc: {
+      cn: '适合会议记录、纪要整理和行动项提取。',
+      en: 'For meeting transcription, note taking, and action-item extraction.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-meeting-notes-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 会议纪要工具对比',
+      en: 'AI tools for meeting notes comparison',
+    },
+    desc: {
+      cn: '把几款常见会议纪要工具放在一起快速对照。',
+      en: 'Compare common meeting notes tools side by side.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-students-comparison',
     priority: 0.74,
     changeFrequency: 'weekly',
@@ -596,6 +622,7 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/ai-coding-tools',
   '/guides/ai-chatbot-tools',
   '/guides/ai-seo-tools',
+  '/guides/ai-tools-for-meeting-notes',
   '/guides/ai-tools-for-web3',
   '/guides/ai-tools-for-crypto-research',
   '/guides/ai-tools-for-on-chain-analysis',
