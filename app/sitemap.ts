@@ -1,9 +1,10 @@
 import { type MetadataRoute } from 'next';
 import { locales } from '@/i18n';
-import { BASE_URL } from '@/lib/env';
+
 import { GUIDE_PAGES } from '@/lib/content/guides';
-import { getTools } from '@/lib/services/tools';
+import { BASE_URL } from '@/lib/env';
 import { getAllCategories } from '@/lib/services/categories';
+import { getTools } from '@/lib/services/tools';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static routes with their priorities and change frequencies
@@ -29,6 +30,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: 'submit',
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: 'pricing',
       changeFrequency: 'monthly',
       priority: 0.7,
     },
@@ -70,7 +76,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const toolsResult = await getTools(
       { status: 'published' },
       { page: 1, pageSize: 10000 }, // Get all tools
-      'latest'
+      'latest',
     );
 
     toolSitemapEntries = toolsResult.data.flatMap((tool) =>
