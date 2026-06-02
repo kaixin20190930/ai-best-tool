@@ -2,9 +2,10 @@
 
 import { revalidatePath } from 'next/cache';
 import { getPool } from '@/db/neon/client';
+
 import { requireAuth } from '@/lib/auth/middleware';
-import { createNotification } from '@/app/actions/notifications';
 import { sendTransactionalEmail } from '@/lib/services/mailer';
+import { createNotification, notifyAdminsOfSubmission } from '@/app/actions/notifications';
 import { shouldSendSubmissionStatusEmail } from '@/app/actions/userPreferences';
 
 interface SubmitToolInput {
@@ -54,24 +55,17 @@ function slugify(value: string): string {
     .slice(0, 80);
 }
 
-async function createUniqueToolSlug(base: string): Promise<string> {
+async function createUniqueToolSlug(base: string, suffix = 1): Promise<string> {
   const pool = getPool();
   const normalizedBase = slugify(base) || 'ai-tool';
-  let candidate = normalizedBase;
-  let suffix = 2;
+  const candidate = suffix === 1 ? normalizedBase : `${normalizedBase}-${suffix}`;
+  const existing = await pool.query('SELECT 1 FROM tools WHERE name = $1 LIMIT 1', [candidate]);
 
-  while (true) {
-    const existing = await pool.query('SELECT 1 FROM tools WHERE name = $1 LIMIT 1', [
-      candidate,
-    ]);
-
-    if (existing.rows.length === 0) {
-      return candidate;
-    }
-
-    candidate = `${normalizedBase}-${suffix}`;
-    suffix += 1;
+  if (existing.rows.length === 0) {
+    return candidate;
   }
+
+  return createUniqueToolSlug(base, suffix + 1);
 }
 
 export async function submitTool(input: SubmitToolInput): Promise<SubmitToolResult> {
@@ -113,9 +107,7 @@ export async function submitTool(input: SubmitToolInput): Promise<SubmitToolResu
     const slug = await createUniqueToolSlug(website || urlHost);
     const title = { en: website, zh: website };
     const content = {
-      en:
-        description ||
-        `${website} was submitted by its developer and is pending editorial review.`,
+      en: description || `${website} was submitted by its developer and is pending editorial review.`,
       zh: description || `${website} 已由开发者提交，正在等待平台审核。`,
     };
     const detail = {
@@ -123,16 +115,13 @@ export async function submitTool(input: SubmitToolInput): Promise<SubmitToolResu
         description ||
         `${website} is currently in the review queue. The AI Best Tool team will verify its product details, category, media, and pricing before publication.`,
       zh:
-        description ||
-        `${website} 当前处于审核队列中。AI Best Tool 团队会在发布前核验产品信息、分类、媒体素材和定价。`,
+        description || `${website} 当前处于审核队列中。AI Best Tool 团队会在发布前核验产品信息、分类、媒体素材和定价。`,
     };
 
     const pool = getPool();
 
     if (categoryId) {
-      const category = await pool.query('SELECT 1 FROM categories WHERE id = $1 LIMIT 1', [
-        categoryId,
-      ]);
+      const category = await pool.query('SELECT 1 FROM categories WHERE id = $1 LIMIT 1', [categoryId]);
 
       if (category.rows.length === 0) {
         return { success: false, error: 'Please select a valid category.' };
@@ -148,16 +137,15 @@ export async function submitTool(input: SubmitToolInput): Promise<SubmitToolResu
           featuredDaysRequested: featuredDays,
           featuredRequested: featuredDays > 0,
           status: submissionPlan === 'free' ? 'free_queue' : 'pending_payment_confirmation',
-          targetReviewSlaHours:
-            submissionPlan === 'standard_paid'
-              ? fastTrack
-                ? 48
-                : 72
-              : 24 * 5,
+          targetReviewSlaHours: 24 * 5,
           requestedAt: new Date().toISOString(),
         },
       },
     };
+
+    if (submissionPlan === 'standard_paid') {
+      features.submission.commercial.targetReviewSlaHours = fastTrack ? 48 : 72;
+    }
 
     await pool.query(
       `
@@ -181,16 +169,29 @@ export async function submitTool(input: SubmitToolInput): Promise<SubmitToolResu
         'pending',
         user.id,
         JSON.stringify(features),
-      ]
+      ],
     );
 
     await createNotification(
       user.id,
       'submission_status',
-      'Submission in review / 你的提交正在审核',
-      `${website} has entered the review queue. / ${website} 已进入审核队列。`,
-      '/profile/submissions'
+      submissionPlan === 'standard_paid'
+        ? 'Paid submission received / 付费提交已收到'
+        : 'Submission in review / 你的提交正在审核',
+      submissionPlan === 'standard_paid'
+        ? `${website} is in the review queue. Paid listing and featured placement will be handled from your submissions page. / ${website} 已进入审核队列。付费入驻与前排展示会在“我的提交”中继续处理。`
+        : `${website} has entered the review queue. / ${website} 已进入审核队列。`,
+      '/profile/submissions',
     );
+
+    await notifyAdminsOfSubmission({
+      toolName: slug,
+      toolTitle: website,
+      submittedByEmail: user.email || null,
+      submissionPlan,
+      fastTrack,
+      featuredDays,
+    });
 
     if (user.email && (await shouldSendSubmissionStatusEmail(user.id))) {
       await sendTransactionalEmail({
@@ -223,3 +224,5 @@ export async function submitTool(input: SubmitToolInput): Promise<SubmitToolResu
     };
   }
 }
+
+export default submitTool;

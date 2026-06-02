@@ -9,8 +9,10 @@
  * - Marking notifications as read
  * - Deleting notifications
  */
-
 import { query } from '@/db/neon/client';
+
+import { getAdminEmails } from '@/lib/auth/admin';
+import { createAdminClient } from '@/lib/supabase/admin';
 
 export interface Notification {
   id: string;
@@ -58,6 +60,70 @@ export async function createNotification(
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',
     };
+  }
+}
+
+async function getAdminUserIds(): Promise<string[]> {
+  const adminEmails = getAdminEmails();
+
+  if (adminEmails.length === 0) {
+    return [];
+  }
+
+  try {
+    const supabase = createAdminClient();
+    const { data, error } = await supabase.auth.admin.listUsers({
+      page: 1,
+      perPage: 1000,
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    return (data.users ?? [])
+      .filter((user) => {
+        const email = user.email?.toLowerCase().trim();
+        return !!email && adminEmails.includes(email);
+      })
+      .map((user) => user.id);
+  } catch (error) {
+    console.error('Error resolving admin user ids:', error);
+    return [];
+  }
+}
+
+export async function notifyAdminsOfSubmission(input: {
+  toolName: string;
+  toolTitle: string;
+  submittedByEmail?: string | null;
+  submissionPlan: 'free' | 'standard_paid';
+  fastTrack: boolean;
+  featuredDays: 0 | 3 | 7 | 14;
+}): Promise<void> {
+  try {
+    const adminIds = await getAdminUserIds();
+
+    if (adminIds.length === 0) {
+      return;
+    }
+
+    const displayName = input.toolTitle.trim() || input.toolName;
+    const isPaid = input.submissionPlan === 'standard_paid';
+    const title = isPaid
+      ? 'Paid submission awaiting review / 付费提交待处理'
+      : 'New submission awaiting review / 新提交待审核';
+    const content = isPaid
+      ? `${displayName} requested a paid listing${input.fastTrack ? ' with fast track' : ''}${input.featuredDays > 0 ? ` and ${input.featuredDays}-day featured placement` : ''}. Payment or confirmation is required before activating featured exposure. / ${displayName} 提交了付费入驻${input.fastTrack ? '（加速审核）' : ''}${input.featuredDays > 0 ? `，前排展示 ${input.featuredDays} 天` : ''}。请先完成付款或确认，再激活前排展示。`
+      : `${displayName} has entered the review queue. / ${displayName} 已进入审核队列。`;
+
+    await Promise.all(
+      adminIds.map((adminId) =>
+        createNotification(adminId, 'admin_submission', title, content, '/admin/tools?status=pending'),
+      ),
+    );
+  } catch (error) {
+    console.error('Error notifying admins of submission:', error);
   }
 }
 
@@ -212,11 +278,7 @@ export async function deleteNotification(
  * @param toolId Tool ID
  * @param toolTitle Tool title
  */
-export async function notifyNewToolInCategory(
-  categoryId: string,
-  toolId: string,
-  toolTitle: string,
-): Promise<void> {
+export async function notifyNewToolInCategory(categoryId: string, toolId: string, toolTitle: string): Promise<void> {
   try {
     // Get users who follow this category
     const result = await query(
@@ -261,13 +323,7 @@ export async function notifyToolUpdate(toolId: string, toolTitle: string): Promi
 
     // Create notifications for each user
     const notifications = result.rows.map((row) =>
-      createNotification(
-        row.user_id,
-        'tool_update',
-        'Tool Updated',
-        `${toolTitle} has been updated`,
-        `/ai/${toolId}`,
-      ),
+      createNotification(row.user_id, 'tool_update', 'Tool Updated', `${toolTitle} has been updated`, `/ai/${toolId}`),
     );
 
     await Promise.all(notifications);

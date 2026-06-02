@@ -9,14 +9,14 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-import { submitTool } from '@/app/actions/submitTool';
 import { listingConfig } from '@/lib/config/listing';
-import type { Category } from '@/lib/services/categories';
 import { FORM_PLACEHOLDER, WEBSITE_EXAMPLE } from '@/lib/constants';
+import type { Category } from '@/lib/services/categories';
 import { cn } from '@/lib/utils';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import Spinning from '@/components/Spinning';
+import { submitTool } from '@/app/actions/submitTool';
 
 const pricingOptions = [
   { value: 'free', label: 'Free' },
@@ -24,42 +24,31 @@ const pricingOptions = [
   { value: 'paid', label: 'Paid' },
 ];
 
+function isValidHttpUrl(value: string): boolean {
+  try {
+    const withProtocol = /^https?:\/\//i.test(value) ? value : `https://${value}`;
+    return !!new URL(withProtocol);
+  } catch {
+    return false;
+  }
+}
+
 const FormSchema = z.object({
   website: z.string().trim().min(2),
-  url: z.string().trim().refine((value) => {
-    try {
-      const withProtocol = /^https?:\/\//i.test(value) ? value : `https://${value}`;
-      new URL(withProtocol);
-      return true;
-    } catch {
-      return false;
-    }
-  }),
+  url: z.string().trim().refine(isValidHttpUrl),
   categoryId: z.string().optional(),
   description: z.string().trim().max(800).optional(),
   pricing: z.enum(['free', 'freemium', 'paid']),
-  imageUrl: z.string().trim().optional().refine((value) => {
-    if (!value) return true;
-
-    try {
-      const withProtocol = /^https?:\/\//i.test(value) ? value : `https://${value}`;
-      new URL(withProtocol);
-      return true;
-    } catch {
-      return false;
-    }
-  }),
-  thumbnailUrl: z.string().trim().optional().refine((value) => {
-    if (!value) return true;
-
-    try {
-      const withProtocol = /^https?:\/\//i.test(value) ? value : `https://${value}`;
-      new URL(withProtocol);
-      return true;
-    } catch {
-      return false;
-    }
-  }),
+  imageUrl: z
+    .string()
+    .trim()
+    .optional()
+    .refine((value) => !value || isValidHttpUrl(value)),
+  thumbnailUrl: z
+    .string()
+    .trim()
+    .optional()
+    .refine((value) => !value || isValidHttpUrl(value)),
   submissionPlan: z.enum(['free', 'standard_paid']),
   fastTrack: z.boolean(),
   featuredDays: z.enum(['0', '3', '7', '14']),
@@ -83,6 +72,8 @@ export default function SubmitForm({
 
   const [loading, setLoading] = useState(false);
   const [justSubmitted, setJustSubmitted] = useState(false);
+  const [lastSubmissionPlan, setLastSubmissionPlan] = useState<'free' | 'standard_paid'>('free');
+  const [lastFeaturedDays, setLastFeaturedDays] = useState<0 | 3 | 7 | 14>(0);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -105,18 +96,17 @@ export default function SubmitForm({
   const descriptionLength = form.watch('description')?.length || 0;
   const selectedFeaturedDays = Number(featuredDays || '0');
   const isPaidPlan = submissionPlan === 'standard_paid';
-  const selectedPlanLabel =
-    isPaidPlan
-      ? (isChinese ? '付费入驻' : listingConfig.plans.standard_paid.label)
-      : (isChinese ? '免费提交' : listingConfig.plans.free.label);
-  const planHighlights =
-    isPaidPlan
-      ? listingConfig.plans.standard_paid.highlights
-      : [
-          isChinese ? '正常审核队列' : listingConfig.plans.free.summary,
-          isChinese ? '适合先试水提交' : listingConfig.plans.free.highlights[0],
-          isChinese ? '不会占用付费前排资源' : listingConfig.plans.free.highlights[1],
-        ];
+  let selectedPlanLabel = isChinese ? '免费提交' : listingConfig.plans.free.label;
+  if (isPaidPlan) {
+    selectedPlanLabel = isChinese ? '付费入驻' : listingConfig.plans.standard_paid.label;
+  }
+  const planHighlights = isPaidPlan
+    ? listingConfig.plans.standard_paid.highlights
+    : [
+        isChinese ? '正常审核队列' : listingConfig.plans.free.summary,
+        isChinese ? '适合先试水提交' : listingConfig.plans.free.highlights[0],
+        isChinese ? '不会占用付费前排资源' : listingConfig.plans.free.highlights[1],
+      ];
 
   useEffect(() => {
     if (!isPaidPlan) {
@@ -140,6 +130,8 @@ export default function SubmitForm({
       }
 
       toast.success(t('success'));
+      setLastSubmissionPlan(formData.submissionPlan);
+      setLastFeaturedDays(Number(formData.featuredDays) as 0 | 3 | 7 | 14);
       form.reset();
       setJustSubmitted(true);
     } catch (error) {
@@ -164,6 +156,13 @@ export default function SubmitForm({
               <p className='font-semibold'>
                 {isChinese ? '提交成功，已进入审核队列。' : 'Submitted successfully and added to review queue.'}
               </p>
+              {lastSubmissionPlan === 'standard_paid' && (
+                <p className='mt-1 text-emerald-800/90'>
+                  {isChinese
+                    ? `你选择了付费入驻${lastFeaturedDays > 0 ? `，前排展示 ${lastFeaturedDays} 天` : ''}。请前往“我的提交”完成付款或查看支付链接。`
+                    : `You selected the paid listing${lastFeaturedDays > 0 ? ` with ${lastFeaturedDays} featured days` : ''}. Go to My Submissions to complete payment or view the payment link.`}
+                </p>
+              )}
               <div className='mt-2 flex flex-wrap items-center gap-3 text-sm'>
                 <Link href='/profile/submissions' className='font-semibold text-emerald-900 underline'>
                   {isChinese ? '查看我的提交状态' : 'View my submission status'}
@@ -459,7 +458,7 @@ export default function SubmitForm({
                     <FormItem className='space-y-1'>
                       <FormLabel className='text-xs'>{isChinese ? '加速审核' : 'Fast Track'}</FormLabel>
                       <FormControl>
-                        <label className='flex h-[42px] items-center gap-2 rounded-[8px] border border-slate-300 bg-white px-3 text-sm text-slate-900'>
+                        <div className='flex h-[42px] items-center gap-2 rounded-[8px] border border-slate-300 bg-white px-3 text-sm text-slate-900'>
                           <input
                             type='checkbox'
                             checked={field.value}
@@ -469,7 +468,7 @@ export default function SubmitForm({
                           {isChinese
                             ? '24-48小时审核'
                             : `24-48h review · ${listingConfig.plans.standard_paid.fastTrackLabel}`}
-                        </label>
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -514,9 +513,7 @@ export default function SubmitForm({
                 )}
                 {selectedFeaturedDays > 0 && (
                   <span className='inline-flex rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-800'>
-                    {isChinese
-                      ? `前排 ${selectedFeaturedDays} 天`
-                      : `Featured ${selectedFeaturedDays} days`}
+                    {isChinese ? `前排 ${selectedFeaturedDays} 天` : `Featured ${selectedFeaturedDays} days`}
                   </span>
                 )}
               </div>
