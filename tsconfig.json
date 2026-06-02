@@ -40,6 +40,7 @@
     "i18n.ts",
     "lib/**/*.ts",
     "middlewares/**/*.ts",
+    "middleware.ts",
     "network/**/*.ts",
     "scripts/bootstrap-first-batch.ts",
     "scripts/bootstrap-note-taking-batch.ts",

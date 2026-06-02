@@ -1,10 +1,11 @@
+import type { Viewport } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
-import type { Viewport } from 'next';
 
+import { isAdminUser } from '@/lib/auth/admin';
+import { createClient } from '@/lib/supabase/server';
 import { Toaster } from '@/components/ui/sonner';
 import Navigation from '@/components/home/Navigation';
-import { createClient } from '@/lib/supabase/server';
 
 import './globals.css';
 
@@ -12,8 +13,6 @@ import { Suspense } from 'react';
 
 import GoogleAdScript from '@/components/ad/GoogleAdScript';
 import SeoScript from '@/components/seo/SeoScript';
-import VercelAnalytics from '@/components/analytics/VercelAnalytics';
-import CookieConsent from '@/components/CookieConsent';
 
 import Loading from './loading';
 
@@ -37,18 +36,16 @@ export default async function RootLayout({
   params: { locale: string };
 }) {
   const messages = await getMessages();
-  
+
   // Get current user
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  const isAdmin = isAdminUser(user);
 
   return (
-    <html
-      lang={locale}
-      suppressHydrationWarning
-    >
+    <html lang={locale} suppressHydrationWarning>
       <body className='theme-page relative mx-auto flex min-h-screen flex-col text-slate-800'>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Toaster
@@ -62,7 +59,7 @@ export default async function RootLayout({
               },
             }}
           />
-          <Navigation user={user} />
+          <Navigation user={user} isAdmin={isAdmin} />
           <Suspense fallback={<Loading />}>{children}</Suspense>
         </NextIntlClientProvider>
         <SeoScript />

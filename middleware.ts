@@ -1,5 +1,5 @@
+import { NextResponse, type NextRequest } from 'next/server';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
-import { type NextRequest, NextResponse } from 'next/server';
 
 import intlMiddleware from './middlewares/intlMiddleware';
 
@@ -37,6 +37,12 @@ function getLocalizedPath(pathname: string, targetPath: string) {
   }
 
   return `/${locale}${targetPath}`;
+}
+
+function getLocalizedAdminDashboardPath(pathname: string) {
+  const { locale } = getPathParts(pathname);
+  const targetLocale = locale || 'cn';
+  return `/${targetLocale}/admin/dashboard`;
 }
 
 function copyCookies(source: NextResponse, target: NextResponse) {
@@ -99,7 +105,9 @@ async function getCurrentUser(request: NextRequest) {
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const needsAuthCheck =
-    matchesRoute(pathname, protectedRoutes) || matchesRoute(pathname, adminRoutes) || matchesRoute(pathname, authRoutes);
+    matchesRoute(pathname, protectedRoutes) ||
+    matchesRoute(pathname, adminRoutes) ||
+    matchesRoute(pathname, authRoutes);
 
   if (!needsAuthCheck) {
     return intlMiddleware(request);
@@ -125,6 +133,12 @@ export async function middleware(request: NextRequest) {
 
     if (userRole !== 'admin' && userRole !== 'moderator') {
       const response = NextResponse.redirect(new URL(getLocalizedPath(pathname, '/'), request.url));
+      copyCookies(sessionResponse, response);
+      return response;
+    }
+
+    if (getPathParts(pathname).pathWithoutLocale === '/admin') {
+      const response = NextResponse.rewrite(new URL(getLocalizedAdminDashboardPath(pathname), request.url));
       copyCookies(sessionResponse, response);
       return response;
     }

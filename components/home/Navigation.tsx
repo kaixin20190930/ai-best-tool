@@ -1,35 +1,57 @@
 'use client';
 
 import { useState } from 'react';
+import type { ComponentType } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 import type { User } from '@supabase/supabase-js';
+import { Shield } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import { NAV_LINKS } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 
+import { UserMenu } from '../auth/UserMenu';
 import BaseImage from '../image/BaseImage';
 import LocaleSwitcher from '../LocaleSwitcher';
-import { UserMenu } from '../auth/UserMenu';
 import NotificationBell from '../NotificationBell';
 import MenuBtn from './MenuBtn';
 import NavigationDrawer from './NavigationDrawer';
 
 interface NavigationProps {
   user?: User | null;
+  isAdmin?: boolean;
 }
 
-export default function Navigation({ user }: NavigationProps) {
+type NavLinkItem = {
+  code: string;
+  href: string;
+  label: string;
+  icon?: ComponentType<{ className?: string }>;
+};
+
+export default function Navigation({ user, isAdmin = false }: NavigationProps) {
   const t = useTranslations('Navigation');
   const pathname = usePathname();
 
   const [open, setOpen] = useState(false);
 
-  const NavLinks = NAV_LINKS.map((item) => ({
-    ...item,
-    label: t(`${item.code}`),
-  }));
+  const adminLink = isAdmin
+    ? {
+        code: 'admin',
+        href: '/admin',
+        icon: Shield,
+        label: 'Admin',
+      }
+    : null;
+
+  const NavLinks: NavLinkItem[] = [
+    ...NAV_LINKS.map((item) => ({
+      ...item,
+      label: t(`${item.code}`),
+    })),
+    ...(adminLink ? [adminLink] : []),
+  ];
 
   return (
     <>
@@ -62,12 +84,13 @@ export default function Navigation({ user }: NavigationProps) {
                 <Link key={item.code} href={item.href} title={item.code}>
                   <li
                     className={cn(
-                      'flex h-full items-center text-slate-700 transition-colors hover:text-slate-950',
+                      'flex h-full items-center gap-1 text-slate-700 transition-colors hover:text-slate-950',
                       pathname === item.href && 'text-cyan-700',
                       pathname.includes(item.href) && item.href !== '/' && 'text-cyan-700',
                     )}
                   >
-                    {item.label}
+                    {item.icon ? <item.icon className='h-4 w-4' /> : null}
+                    <span>{item.label}</span>
                   </li>
                 </Link>
               ))}
@@ -84,7 +107,7 @@ export default function Navigation({ user }: NavigationProps) {
           </div>
         </nav>
       </header>
-      <NavigationDrawer open={open} setOpen={setOpen} />
+      <NavigationDrawer open={open} setOpen={setOpen} isAdmin={isAdmin} />
     </>
   );
 }
