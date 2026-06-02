@@ -43,6 +43,7 @@
     "network/**/*.ts",
     "scripts/bootstrap-first-batch.ts",
     "scripts/bootstrap-note-taking-batch.ts",
+    "scripts/bootstrap-growth-batch.ts",
     "scripts/publish-second-batch.ts",
     "scripts/publish-third-batch.ts",
     "scripts/publish-first-batch.ts",
