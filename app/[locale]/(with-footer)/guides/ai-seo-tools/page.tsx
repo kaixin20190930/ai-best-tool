@@ -1,0 +1,219 @@
+import { Metadata } from 'next';
+import Link from 'next/link';
+import { CheckCircle2, ExternalLink, Search, Sparkles } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
+
+import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
+import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import { StructuredDataServer } from '@/components/seo/StructuredData';
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const t = await getTranslations({
+    locale,
+    namespace: 'Metadata.home',
+  });
+
+  return {
+    title: locale === 'cn' || locale === 'tw' ? 'AI SEO 工具推荐 | AI Best Tool' : `AI SEO tools | ${t('title')}`,
+    description:
+      locale === 'cn' || locale === 'tw'
+        ? '适合关键词研究、内容优化和排名跟踪的 AI 工具推荐与选型指南。'
+        : 'A practical guide to AI SEO tools for keyword research, content optimization, and rank tracking.',
+  };
+}
+
+export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+  const isChinese = locale === 'cn' || locale === 'tw';
+  const categories = await getAllCategories(true).catch(() => []);
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: `${siteUrl}/${locale}` },
+    { name: isChinese ? '指南总览' : 'Guides', url: `${siteUrl}/${locale}/guides` },
+    { name: isChinese ? 'SEO 工具' : 'SEO tools', url: `${siteUrl}/${locale}/guides/ai-seo-tools` },
+  ]);
+  const faqs = [
+    {
+      question: isChinese ? 'AI SEO 工具最适合什么任务？' : 'What tasks are AI SEO tools best for?',
+      answer: isChinese
+        ? '最适合关键词研究、内容规划、标题优化、摘要、内部链接建议和排名跟踪。'
+        : 'They are best for keyword research, content planning, headline optimization, summaries, internal linking suggestions, and rank tracking.',
+    },
+    {
+      question: isChinese ? '我应该先看什么？' : 'What should I check first?',
+      answer: isChinese
+        ? '先看它是否支持你真正要做的 SEO 工作流，比如关键词、内容、站内优化或 SERP 追踪。'
+        : 'Start with the SEO workflow you actually need, such as keywords, content, on-page optimization, or SERP tracking.',
+    },
+    {
+      question: isChinese ? '免费版够用吗？' : 'Are free SEO tools enough?',
+      answer: isChinese
+        ? '如果只是做基础研究，很多免费工具可以先用；如果你要批量分析、持续监控或团队协作，通常会更快碰到限制。'
+        : 'For basic research, many free tools are enough to start. If you need bulk analysis, ongoing monitoring, or team collaboration, you will likely hit limits sooner.',
+    },
+    {
+      question: isChinese ? '我可以直接从这里找到 SEO 工具吗？' : 'Can I find SEO tools directly from here?',
+      answer: isChinese
+        ? '可以。你可以先从 SEO 相关分类和搜索结果开始，再结合评论和截图判断。'
+        : 'Yes. Start from SEO-related categories and search results, then use comments and screenshots to decide.',
+    },
+  ];
+  const tips = isChinese
+    ? [
+        '先确认你是做关键词、内容优化、技术 SEO 还是排名监控。',
+        '看它是否支持中文、是否有模板、是否能保持建议稳定。',
+        '如果你要长期做内容增长，优先看导出、协作和数据更新频率。',
+      ]
+    : [
+        'Start with the workflow: keywords, content optimization, technical SEO, or rank monitoring.',
+        'Check whether it supports Chinese, has templates, and keeps recommendations stable.',
+        'If you plan to grow content long term, look at exports, collaboration, and data freshness.',
+      ];
+
+  return (
+    <>
+      <StructuredDataServer data={breadcrumbSchema} />
+      <StructuredDataServer data={generateFAQSchema(faqs)} />
+      <div className='theme-page mx-auto max-w-6xl px-4 py-8 lg:px-6 lg:py-12'>
+        <section className='rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm lg:p-10'>
+          <div className='flex flex-wrap items-center gap-2'>
+            <span className='inline-flex items-center gap-2 rounded-full bg-cyan-50 px-3 py-1 text-sm font-semibold text-cyan-700'>
+              <Sparkles className='size-4' />
+              {isChinese ? 'SEO 工具推荐' : 'SEO tools recommendations'}
+            </span>
+            <span className='inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-sm font-semibold text-slate-700'>
+              <Search className='size-4' />
+              {isChinese ? '流量增长优先' : 'Growth first'}
+            </span>
+          </div>
+
+          <h1 className='mt-4 max-w-4xl text-3xl font-bold tracking-tight text-slate-950 lg:text-5xl'>
+            {isChinese
+              ? 'AI SEO 工具推荐：从关键词到排名跟踪，怎么选更合适'
+              : 'AI SEO tools: how to choose for keywords and rank tracking'}
+          </h1>
+          <p className='mt-4 max-w-3xl text-base leading-7 text-slate-600 lg:text-lg'>
+            {isChinese
+              ? 'SEO 工具重点不是“报告多”，而是能不能稳定帮你做关键词研究、内容优化和排名跟踪。'
+              : 'SEO tools are not just about reports. They need to reliably support keyword research, content optimization, and rank tracking.'}
+          </p>
+
+          <div className='mt-6 flex flex-wrap gap-3'>
+            <Link
+              href='/explore?search=seo&sort=popular'
+              className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+            >
+              {isChinese ? '看 SEO 工具' : 'Browse SEO tools'}
+              <ExternalLink className='size-4' />
+            </Link>
+            <Link
+              href='/guides/ai-writing-tools'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+            >
+              {isChinese ? '回到写作指南' : 'Back to writing guide'}
+            </Link>
+            <Link
+              href='/guides/ai-seo-tools-comparison'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+            >
+              {isChinese ? '看 SEO 对比页' : 'SEO comparison'}
+            </Link>
+          </div>
+        </section>
+
+        <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
+          <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '判断顺序' : 'How to judge'}
+            </p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+              {isChinese
+                ? '先看场景，再看关键词和内容功能'
+                : 'Start with the use case, then keywords and content features'}
+            </h2>
+            <div className='mt-4 space-y-3'>
+              {tips.map((tip) => (
+                <div key={tip} className='rounded-lg bg-slate-50 p-4 text-sm leading-6 text-slate-700'>
+                  <div className='flex items-start gap-3'>
+                    <CheckCircle2 className='mt-0.5 size-4 shrink-0 text-emerald-600' />
+                    <span>{tip}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <aside className='rounded-[18px] border border-slate-200 bg-slate-50 p-6 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '先看这些分类' : 'Start here'}
+            </p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+              {isChinese ? 'SEO 工具通常在这些分类里' : 'SEO tools often sit in these categories'}
+            </h2>
+            <div className='mt-4 grid gap-2'>
+              {categories
+                .filter(
+                  (category) =>
+                    String(category.slug).includes('marketing') ||
+                    String(category.slug).includes('writing') ||
+                    String(getLocalizedField(category.name, 'en')).toLowerCase().includes('seo'),
+                )
+                .slice(0, 6)
+                .map((category) => (
+                  <Link
+                    key={category.id}
+                    href={`/categories/${category.slug}`}
+                    className='flex items-center justify-between rounded-lg border border-white bg-white px-4 py-3 text-sm text-slate-700 shadow-sm hover:bg-slate-100'
+                  >
+                    <span>{getLocalizedField(category.name, locale)}</span>
+                    <span className='text-xs text-slate-500'>
+                      {'toolCount' in category && typeof category.toolCount === 'number' ? category.toolCount : ''}
+                    </span>
+                  </Link>
+                ))}
+            </div>
+          </aside>
+        </section>
+
+        <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
+          <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? 'SEO 工具看什么' : 'What matters for SEO tools'}
+            </p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+              {isChinese ? '能不能稳定帮你做增长' : 'Can it reliably support growth work?'}
+            </h2>
+            <div className='mt-4 space-y-3 text-sm leading-6 text-slate-700'>
+              <p>
+                {isChinese
+                  ? 'SEO 工具最重要的是关键词、内容建议、排名和数据更新。'
+                  : 'Keywords, content guidance, rankings, and data freshness matter most.'}
+              </p>
+              <p>
+                {isChinese
+                  ? '如果你做内容增长，优先看导出、协作、监控和重复使用的工作流。'
+                  : 'If you do content growth, prioritize exports, collaboration, monitoring, and reusable workflows.'}
+              </p>
+            </div>
+          </div>
+
+          <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '常见问题' : 'FAQ'}
+            </p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+              {isChinese ? 'SEO 工具最常见的问题' : 'Common questions about SEO tools'}
+            </h2>
+            <div className='mt-4 space-y-4'>
+              {faqs.map((faq) => (
+                <div key={faq.question} className='rounded-lg border border-slate-200 bg-slate-50 p-4'>
+                  <p className='text-sm font-semibold text-slate-900'>{faq.question}</p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>{faq.answer}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </div>
+    </>
+  );
+}

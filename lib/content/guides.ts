@@ -79,6 +79,32 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-seo-tools',
+    priority: 0.74,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI SEO 工具推荐',
+      en: 'AI SEO tools',
+    },
+    desc: {
+      cn: '适合关键词研究、内容优化和排名跟踪。',
+      en: 'For keyword research, content optimization, and rank tracking.',
+    },
+  },
+  {
+    href: '/guides/ai-seo-tools-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI SEO 工具对比',
+      en: 'AI SEO tools comparison',
+    },
+    desc: {
+      cn: '把几款常见 SEO 工具放在一起快速对照。',
+      en: 'Compare common SEO tools side by side.',
+    },
+  },
+  {
     href: '/guides/ai-video-tools',
     priority: 0.74,
     changeFrequency: 'monthly',
@@ -569,8 +595,10 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/ai-image-tools',
   '/guides/ai-coding-tools',
   '/guides/ai-chatbot-tools',
+  '/guides/ai-seo-tools',
   '/guides/ai-tools-for-web3',
   '/guides/ai-tools-for-crypto-research',
   '/guides/ai-tools-for-on-chain-analysis',
   '/guides/ai-tools-for-defi-analytics',
+  '/guides/ai-seo-tools',
 ] as const;
