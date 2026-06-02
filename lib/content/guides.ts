@@ -586,6 +586,32 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-note-taking-tools',
+    priority: 0.74,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 记笔记工具推荐',
+      en: 'AI note taking tools',
+    },
+    desc: {
+      cn: '适合记笔记、会议助手和信息整理。',
+      en: 'For note taking, meeting assistants, and information organization.',
+    },
+  },
+  {
+    href: '/guides/ai-note-taking-tools-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 记笔记工具对比',
+      en: 'AI note taking tools comparison',
+    },
+    desc: {
+      cn: '把几款常见记笔记工具放在一起快速对照。',
+      en: 'Compare common note taking tools side by side.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-students-comparison',
     priority: 0.74,
     changeFrequency: 'weekly',
@@ -623,6 +649,7 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/ai-chatbot-tools',
   '/guides/ai-seo-tools',
   '/guides/ai-tools-for-meeting-notes',
+  '/guides/ai-note-taking-tools',
   '/guides/ai-tools-for-web3',
   '/guides/ai-tools-for-crypto-research',
   '/guides/ai-tools-for-on-chain-analysis',
