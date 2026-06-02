@@ -138,10 +138,21 @@ function getCommercialPaymentUrl(tool: SubmittedTool): string | null {
     }
   }
 
+  if (typeof window === 'undefined' && process.env.STRIPE_SECRET_KEY?.trim()) {
+    return `/api/payments/stripe/checkout?toolId=${encodeURIComponent(tool.id)}`;
+  }
+
   return null;
 }
 
-export default async function SubmissionsPage() {
+export default async function SubmissionsPage({
+  searchParams,
+}: {
+  searchParams?: {
+    payment?: string;
+    session_id?: string;
+  };
+}) {
   const [result, submissionEmailEnabled] = await Promise.all([getMySubmittedTools(), getMySubmissionEmailPreference()]);
   const tools = result.success ? result.tools : [];
   const pendingPaymentTools = tools.filter((tool) => getCommercialStatus(tool) === 'pending_payment');
@@ -155,6 +166,7 @@ export default async function SubmissionsPage() {
     { draft: 0, pending: 0, published: 0, rejected: 0 } as Record<SubmittedTool['status'], number>,
   );
   const pendingPaymentMailto = getListingPaymentMailto('Complete Paid Submission');
+  const paymentStatus = searchParams?.payment || '';
 
   return (
     <div className='theme-page container mx-auto px-4 py-8'>
@@ -170,6 +182,22 @@ export default async function SubmissionsPage() {
           Submit another tool
         </Link>
       </div>
+
+      {paymentStatus === 'success' && (
+        <section className='theme-surface mb-6 rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-emerald-900'>
+          <p className='text-sm font-semibold'>Payment completed</p>
+          <p className='mt-1 text-sm'>Your featured window has been activated and your submission is moving forward.</p>
+        </section>
+      )}
+
+      {paymentStatus === 'cancelled' && (
+        <section className='theme-surface mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4 text-amber-900'>
+          <p className='text-sm font-semibold'>Payment cancelled</p>
+          <p className='mt-1 text-sm'>
+            You can come back here anytime to complete payment and reserve your featured window.
+          </p>
+        </section>
+      )}
 
       {!result.success && (
         <div className='mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700'>

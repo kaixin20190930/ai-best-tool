@@ -72,6 +72,10 @@ RESEND_API_KEY="re_xxx"
 MAIL_FROM="AI Best Tool <no-reply@yourdomain.com>"
 ADMIN_EMAILS="admin@example.com"
 
+# Optional: Stripe Checkout for paid listings and featured placement
+STRIPE_SECRET_KEY="sk_live_xxx"
+STRIPE_WEBHOOK_SECRET="whsec_xxx"
+
 # Optional: external monitor endpoint token for /api/monitor/* routes
 MONITOR_API_TOKEN="replace-with-a-long-random-token"
 

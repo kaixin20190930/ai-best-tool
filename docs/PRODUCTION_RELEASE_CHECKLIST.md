@@ -28,6 +28,11 @@ Email:
 - `MAIL_FROM`
 - `ADMIN_EMAILS`
 
+Stripe checkout:
+
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+
 Monitor and scheduled jobs:
 
 - `MONITOR_API_TOKEN`
@@ -150,6 +155,8 @@ Comment moderation:
 Payment callbacks:
 
 - Open `/cn/admin/payment-callbacks`.
+- If Stripe is configured, test the Stripe checkout route from `/profile/submissions` using a paid submission.
+- If you need a direct monitor test, keep the existing `/api/monitor/commercial-payment-confirmed` path for manual callbacks or bridge integrations.
 - Trigger a test callback:
 
 ```bash
