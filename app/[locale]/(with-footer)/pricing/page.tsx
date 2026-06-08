@@ -1,7 +1,7 @@
 import type { ComponentType } from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, Clock3, CreditCard, Megaphone, Rocket, ShieldCheck, Sparkles } from 'lucide-react';
+import { ArrowRight, Clock3, CreditCard, Megaphone, Rocket, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { getListingPaymentMailto, listingConfig } from '@/lib/config/listing';
@@ -214,29 +214,19 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
                 description={priorityReview.summary}
               />
               {featuredWindows.map((item) => {
-                let featuredDescription = item.summary;
-                if (item.recommended) {
-                  featuredDescription = isChinese ? '最适合大多数发布场景。' : 'Best default for most launches.';
-                }
-
-                let featuredBadge = `${item.days} days`;
-                if (item.recommended) {
-                  featuredBadge = isChinese ? '推荐' : 'Recommended';
-                }
-
                 return (
                   <PricingCard
                     key={item.days}
                     icon={Megaphone}
                     title={item.label}
                     price={item.priceLabel}
-                    badge={featuredBadge}
+                    badge={`${item.days} ${isChinese ? '天' : 'days'}`}
                     bullets={[
                       item.summary,
                       isChinese ? '到期自动回收' : 'Automatically expires after the window',
                       isChinese ? '适合活动期和更新期' : 'Best for launches and updates',
                     ]}
-                    description={featuredDescription}
+                    description={item.summary}
                     highlighted={item.recommended}
                   />
                 );

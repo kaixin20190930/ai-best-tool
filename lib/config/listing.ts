@@ -90,7 +90,7 @@ export const listingConfig: ListingConfig = {
         days: 7,
         label: '7-day featured',
         priceLabel: '$49',
-        summary: 'Recommended for most launches.',
+        summary: 'Balanced visibility for a typical launch window.',
         recommended: true,
       },
       {
