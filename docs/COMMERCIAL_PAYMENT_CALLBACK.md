@@ -15,19 +15,24 @@ This document describes how to confirm a paid listing after payment succeeds.
 
 ## Behavior
 
-On success, the endpoint activates sponsored placement for the tool:
+On success, the endpoint confirms payment for the tool:
 
 - `paymentConfirmed = true`
-- `isSponsoredPlacement = true`
-- `status = active`
-- `featuredActiveFrom = now`
-- `featuredUntil = now + featuredDaysRequested` (fallback: 7 days)
+- if the tool is already published and a featured window was purchased:
+  - `isSponsoredPlacement = true`
+  - `status = active`
+  - `featuredActiveFrom = now`
+  - `featuredUntil = now + featuredDaysRequested`
+- if the tool is not yet published:
+  - payment is recorded
+  - the featured entitlement is reserved
+  - featured timing starts only after publish
 
 Important note:
 
-- This documents the **current implementation behavior**.
-- The recommended product rule is to start featured timing when the tool is actually published, not when payment succeeds.
-- See `docs/PAID_LISTING_MODEL.md` for the suggested future operating rule.
+- This now matches the recommended product rule:
+- featured timing starts when the tool is actually published, not merely when payment succeeds.
+- See `docs/PAID_LISTING_MODEL.md` for the broader operating model.
 
 ## Example
 

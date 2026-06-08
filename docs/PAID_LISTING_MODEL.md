@@ -205,26 +205,21 @@ Descriptions should be improved when:
 
 ### Current implemented behavior
 
-Today, featured placement becomes active when payment is confirmed.
+Featured timing now starts when the tool is **published**, not when payment succeeds.
 
 That means:
 
-- `paymentConfirmed = true`
-- `isSponsoredPlacement = true`
-- `featuredActiveFrom = payment success time`
-- `featuredUntil = payment success time + selected duration`
+- payment success reserves the entitlement
+- review happens next if the tool is still pending
+- featured window starts only after publish
 
-### Recommended operational rule
-
-For fairness, featured timing should ideally start when the tool is **published**, not when payment succeeds.
+### Operational rule
 
 Recommended policy:
 
 - payment success reserves the entitlement
 - review happens next
 - featured window starts only after publish
-
-This rule is recommended even if the current implementation still starts timing on payment confirmation.
 
 ### When a tool exits featured
 

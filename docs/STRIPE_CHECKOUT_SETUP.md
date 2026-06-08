@@ -35,7 +35,9 @@ In Vercel:
 2. The submission appears in `/profile/submissions`.
 3. Clicking **Complete payment** opens a Stripe Checkout Session.
 4. Stripe sends the webhook event after payment completes.
-5. The webhook activates the sponsored placement and writes a callback log.
+5. The webhook confirms payment, writes a callback log, and either:
+   - activates the featured window immediately if the tool is already published, or
+   - reserves the featured entitlement until the tool is approved and published.
 
 ## What this does not do yet
 

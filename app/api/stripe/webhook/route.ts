@@ -140,6 +140,7 @@ export async function POST(request: NextRequest) {
       SELECT
         id::text AS id,
         name,
+        status,
         title,
         submitted_by::text AS "submittedBy",
         features
@@ -201,11 +202,24 @@ export async function POST(request: NextRequest) {
 
   const submittedBy = typeof tool.submittedBy === 'string' ? tool.submittedBy : '';
   if (submittedBy) {
+    const commercial = getRecord(getRecord(getRecord(tool.features).submission).commercial);
+    const requestedDaysRaw = commercial.featuredDaysRequested;
+    const requestedDays =
+      typeof requestedDaysRaw === 'number'
+        ? requestedDaysRaw
+        : Number.parseInt(String(requestedDaysRaw ?? 0), 10) || 0;
+    const isPublished = tool.status === 'published';
+    const paymentMessage =
+      requestedDays > 0
+        ? isPublished
+          ? `${title} has been paid and the featured window is now active. / ${title} 已完成付款，前排展示已激活。`
+          : `${title} has been paid. The featured window is reserved and will start after approval. / ${title} 已完成付款，前排展示权益已保留，审核通过后开始计时。`
+        : `${title} has been paid and the paid listing is now recorded. / ${title} 已完成付款，付费入驻权益已记录。`;
     await createNotification(
       submittedBy,
       'payment_confirmation',
       'Payment confirmed / 付款已确认',
-      `${title} has been paid and the featured window is now active. / ${title} 已完成付款，前排展示已激活。`,
+      paymentMessage,
       '/profile/submissions',
     );
   }

@@ -6,6 +6,7 @@ import { getPool } from '@/db/neon/client';
 import { createNotification } from '@/app/actions/notifications';
 import { sendTransactionalEmail } from '@/lib/services/mailer';
 import { shouldSendSubmissionStatusEmail } from '@/app/actions/userPreferences';
+import { getPaidListingPublishGate } from '@/lib/services/toolQuality';
 
 const publicLocales = ['en', 'cn', 'tw', 'jp', 'de', 'es', 'fr', 'pt', 'ru'];
 const validStatuses = ['draft', 'pending', 'published', 'rejected'] as const;
@@ -131,6 +132,120 @@ function getStringArray(value: unknown): string[] {
   return Array.isArray(value)
     ? value.filter((item): item is string => typeof item === 'string' && item.trim().length > 0)
     : [];
+}
+
+function getCommercialFeature(features: unknown): Record<string, unknown> {
+  const featureRecord = getRecord(features);
+  const submission = getRecord(featureRecord.submission);
+  return getRecord(submission.commercial);
+}
+
+function isStandardPaidSubmission(features: unknown): boolean {
+  return getCommercialFeature(features).plan === 'standard_paid';
+}
+
+function getFeaturedDurationDays(commercial: Record<string, unknown>): number {
+  const requestedDaysRaw = commercial.featuredDaysRequested;
+  const requestedDays =
+    typeof requestedDaysRaw === 'number'
+      ? requestedDaysRaw
+      : Number.parseInt(String(requestedDaysRaw ?? 0), 10) || 0;
+
+  return [3, 7, 14].includes(requestedDays) ? requestedDays : 0;
+}
+
+function getPaidListingGateError(tool: {
+  category_id?: string | null;
+  image_url?: string | null;
+  thumbnail_url?: string | null;
+  content?: unknown;
+  detail?: unknown;
+  pricing?: string | null;
+  tags?: string[] | null;
+  features?: unknown;
+}): string | null {
+  if (!isStandardPaidSubmission(tool.features)) {
+    return null;
+  }
+
+  const gate = getPaidListingPublishGate(tool);
+
+  if (gate.ready) {
+    return null;
+  }
+
+  return `Paid listing is missing required publish fields: ${gate.blockers.join(', ')}`;
+}
+
+function buildCommercialStateForCurrentStatus(
+  commercial: Record<string, unknown>,
+  toolStatus: ToolStatus,
+  transactionId?: string | null
+): Record<string, unknown> {
+  const now = new Date();
+  const durationDays = getFeaturedDurationDays(commercial);
+  const paymentConfirmed = commercial.paymentConfirmed === true || Boolean(transactionId);
+  const isPublished = toolStatus === 'published';
+
+  const nextCommercial: Record<string, unknown> = {
+    ...commercial,
+    ...(transactionId ? { transactionId } : {}),
+  };
+
+  if (!paymentConfirmed) {
+    return nextCommercial;
+  }
+
+  nextCommercial.paymentConfirmed = true;
+  nextCommercial.paymentConfirmedAt =
+    typeof commercial.paymentConfirmedAt === 'string' && commercial.paymentConfirmedAt
+      ? commercial.paymentConfirmedAt
+      : now.toISOString();
+
+  if (!isPublished) {
+    nextCommercial.status = 'payment_confirmed_pending_review';
+    nextCommercial.featuredReservedAt =
+      typeof commercial.featuredReservedAt === 'string' && commercial.featuredReservedAt
+        ? commercial.featuredReservedAt
+        : now.toISOString();
+    nextCommercial.isSponsoredPlacement = false;
+    nextCommercial.featuredActiveFrom = null;
+    nextCommercial.featuredUntil = null;
+    return nextCommercial;
+  }
+
+  if (durationDays > 0) {
+    const existingFrom =
+      typeof commercial.featuredActiveFrom === 'string' && commercial.featuredActiveFrom
+        ? commercial.featuredActiveFrom
+        : '';
+    const existingUntil =
+      typeof commercial.featuredUntil === 'string' && commercial.featuredUntil
+        ? commercial.featuredUntil
+        : '';
+
+    const shouldGenerateWindow = !existingFrom || !existingUntil;
+    const activeFrom = shouldGenerateWindow ? now : new Date(existingFrom);
+    const activeUntil = shouldGenerateWindow
+      ? new Date(activeFrom.getTime() + durationDays * 24 * 60 * 60 * 1000)
+      : new Date(existingUntil);
+
+    nextCommercial.status = 'active';
+    nextCommercial.isSponsoredPlacement = true;
+    nextCommercial.featuredActiveFrom = activeFrom.toISOString();
+    nextCommercial.featuredUntil = activeUntil.toISOString();
+    nextCommercial.activatedAt =
+      typeof commercial.activatedAt === 'string' && commercial.activatedAt
+        ? commercial.activatedAt
+        : now.toISOString();
+    return nextCommercial;
+  }
+
+  nextCommercial.status = 'review_completed';
+  nextCommercial.isSponsoredPlacement = false;
+  nextCommercial.featuredActiveFrom = null;
+  nextCommercial.featuredUntil = null;
+  return nextCommercial;
 }
 
 function uniq(values: string[]): string[] {
@@ -629,12 +744,43 @@ export async function approveTool(
     await requireAdmin();
 
     const pool = getPool();
+    const existingResult = await pool.query(
+      `
+        SELECT id, name, submitted_by, title, features, category_id, image_url, thumbnail_url, content, detail, pricing, tags
+        FROM tools
+        WHERE id = $1
+        LIMIT 1
+      `,
+      [toolId]
+    );
+
+    if (existingResult.rows.length === 0) {
+      return { success: false, error: 'Tool not found' };
+    }
+
+    const existingRow = existingResult.rows[0];
+    const gateError = getPaidListingGateError(existingRow);
+    if (gateError) {
+      return { success: false, error: gateError };
+    }
+
+    const existingFeatures = getRecord(existingRow.features);
+    const submission = getRecord(existingFeatures.submission);
+    const commercial = getCommercialFeature(existingRow.features);
+    const nextFeatures = {
+      ...existingFeatures,
+      submission: {
+        ...submission,
+        commercial: buildCommercialStateForCurrentStatus(commercial, 'published'),
+      },
+    };
+
     const result = await pool.query(
       `UPDATE tools
-       SET status = $1, updated_at = NOW()
-       WHERE id = $2
+       SET status = $1, features = $2, updated_at = NOW()
+       WHERE id = $3
        RETURNING name, submitted_by, title, features`,
-      ['published', toolId]
+      ['published', JSON.stringify(nextFeatures), toolId]
     );
 
     if (result.rows[0]) {
@@ -747,7 +893,23 @@ export async function updateTool(
 
     const pool = getPool();
     const existingResult = await pool.query(
-      'SELECT name, status, submitted_by, title, features FROM tools WHERE id = $1',
+      `
+        SELECT
+          name,
+          status,
+          submitted_by,
+          title,
+          features,
+          category_id,
+          image_url,
+          thumbnail_url,
+          content,
+          detail,
+          pricing,
+          tags
+        FROM tools
+        WHERE id = $1
+      `,
       [toolId]
     );
 
@@ -764,6 +926,42 @@ export async function updateTool(
     const nextStatus = assertStatus(data.status);
     const nextPricing = assertPricing(data.pricing);
     const nextTags = normalizeTags(data.tags);
+    const nextCommercialPlan =
+      data.commercialPlan !== undefined
+        ? data.commercialPlan
+        : getCommercialFeature(existingResult.rows[0].features).plan;
+
+    const prospectiveTool = {
+      category_id:
+        data.category_id !== undefined ? normalizeNullableText(data.category_id) : existingResult.rows[0].category_id,
+      image_url:
+        data.image_url !== undefined ? normalizeNullableText(data.image_url) : existingResult.rows[0].image_url,
+      thumbnail_url:
+        data.thumbnail_url !== undefined
+          ? normalizeNullableText(data.thumbnail_url)
+          : existingResult.rows[0].thumbnail_url,
+      content: data.content !== undefined ? data.content : existingResult.rows[0].content,
+      detail: data.detail !== undefined ? data.detail : existingResult.rows[0].detail,
+      pricing: nextPricing !== undefined ? nextPricing : existingResult.rows[0].pricing,
+      tags: nextTags !== undefined ? nextTags : existingResult.rows[0].tags,
+      features: {
+        ...getRecord(existingResult.rows[0].features),
+        submission: {
+          ...getRecord(getRecord(existingResult.rows[0].features).submission),
+          commercial: {
+            ...getCommercialFeature(existingResult.rows[0].features),
+            ...(nextCommercialPlan ? { plan: nextCommercialPlan } : {}),
+          },
+        },
+      },
+    };
+
+    if (nextStatus === 'published') {
+      const gateError = getPaidListingGateError(prospectiveTool);
+      if (gateError) {
+        return { success: false, error: gateError };
+      }
+    }
 
     const updates: string[] = [];
     const params: any[] = [];
@@ -844,12 +1042,13 @@ export async function updateTool(
       data.featuredActiveFrom !== undefined ||
       data.featuredUntil !== undefined ||
       data.isSponsoredPlacement !== undefined ||
-      data.paymentUrl !== undefined;
+      data.paymentUrl !== undefined ||
+      nextStatus === 'published';
 
     if (shouldUpdateCommercial) {
       const submission = getRecord(existingFeatures.submission);
       const commercial = getRecord(submission.commercial);
-      const nextCommercial = {
+      let nextCommercial: Record<string, unknown> = {
         ...commercial,
         ...(data.commercialPlan !== undefined ? { plan: data.commercialPlan } : {}),
         ...(data.commercialStatus !== undefined ? { status: data.commercialStatus } : {}),
@@ -872,6 +1071,10 @@ export async function updateTool(
         ...(data.paymentUrl !== undefined ? { paymentUrl: normalizeNullableText(data.paymentUrl) } : {}),
         updatedAt: new Date().toISOString(),
       };
+
+      if (nextStatus === 'published') {
+        nextCommercial = buildCommercialStateForCurrentStatus(nextCommercial, 'published');
+      }
 
       const nextFeatures = {
         ...existingFeatures,
@@ -1311,7 +1514,7 @@ export async function activateCommercialPlacementBySystem(
 ): Promise<{ success: boolean; error?: string; name?: string }> {
   try {
     const pool = getPool();
-    const result = await pool.query('SELECT name, features FROM tools WHERE id = $1 LIMIT 1', [toolId]);
+    const result = await pool.query('SELECT name, status, features FROM tools WHERE id = $1 LIMIT 1', [toolId]);
     if (result.rows.length === 0) {
       return { success: false, error: 'Tool not found' };
     }
@@ -1320,29 +1523,15 @@ export async function activateCommercialPlacementBySystem(
     const features = getRecord(row.features);
     const submission = getRecord(features.submission);
     const commercial = getRecord(submission.commercial);
-    const requestedDaysRaw = commercial.featuredDaysRequested;
-    const requestedDays =
-      typeof requestedDaysRaw === 'number'
-        ? requestedDaysRaw
-        : Number.parseInt(String(requestedDaysRaw ?? 0), 10) || 0;
-    const durationDays = [3, 7, 14].includes(requestedDays) ? requestedDays : 7;
-    const now = new Date();
-    const until = new Date(now.getTime() + durationDays * 24 * 60 * 60 * 1000);
-
     const nextFeatures = {
       ...features,
       submission: {
         ...submission,
-        commercial: {
-          ...commercial,
-          paymentConfirmed: true,
-          isSponsoredPlacement: true,
-          status: 'active',
-          featuredActiveFrom: now.toISOString(),
-          featuredUntil: until.toISOString(),
-          activatedAt: now.toISOString(),
-          ...(transactionId ? { transactionId } : {}),
-        },
+        commercial: buildCommercialStateForCurrentStatus(
+          commercial,
+          row.status as ToolStatus,
+          transactionId
+        ),
       },
     };
 

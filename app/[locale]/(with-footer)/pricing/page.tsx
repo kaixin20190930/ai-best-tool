@@ -399,8 +399,8 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
             q={isChinese ? '支付成功后如何确认？' : 'How is payment confirmed?'}
             a={
               isChinese
-                ? '支付成功后，回调接口会写入记录并激活对应的前排窗口。'
-                : 'After payment succeeds, the callback endpoint writes a record and activates the selected featured window.'
+                ? '支付成功后，回调接口会写入记录。如果工具已发布，会立即开始前排；如果还在审核中，则先保留前排权益，等发布后再开始计时。'
+                : 'After payment succeeds, the callback endpoint writes a record. If the tool is already published, the featured window starts immediately. If it is still under review, the entitlement is reserved and the timer starts after publish.'
             }
           />
         </div>

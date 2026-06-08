@@ -15,6 +15,8 @@ interface ToolQualityCheck {
   points: number;
 }
 
+const paidListingRequiredKeys = ['category', 'screenshot', 'logo', 'description', 'detail', 'pricing', 'tags'] as const;
+
 function getText(value: unknown): string {
   if (typeof value === 'string') {
     return value;
@@ -87,5 +89,22 @@ export function getToolQuality(tool: ToolQualityInput): {
     score,
     checks,
     missingLabels: checks.filter((check) => !check.passed).map((check) => check.label),
+  };
+}
+
+export function getPaidListingPublishGate(tool: ToolQualityInput): {
+  ready: boolean;
+  blockers: string[];
+  checks: ToolQualityCheck[];
+} {
+  const quality = getToolQuality(tool);
+  const requiredChecks = quality.checks.filter((check) =>
+    paidListingRequiredKeys.includes(check.key as (typeof paidListingRequiredKeys)[number])
+  );
+
+  return {
+    ready: requiredChecks.every((check) => check.passed),
+    blockers: requiredChecks.filter((check) => !check.passed).map((check) => check.label),
+    checks: requiredChecks,
   };
 }

@@ -13,7 +13,7 @@ import {
   useToolImageAsThumbnail,
 } from '@/app/actions/admin/tools';
 import type { AdminTool } from '@/app/actions/admin/tools';
-import { getToolQuality } from '@/lib/services/toolQuality';
+import { getPaidListingPublishGate, getToolQuality } from '@/lib/services/toolQuality';
 
 interface Category {
   id: string;
@@ -124,6 +124,9 @@ export default function AdminToolEditForm({
   const [featuredFromInput, setFeaturedFromInput] = useState(featuredActiveFrom);
   const [featuredUntilInput, setFeaturedUntilInput] = useState(featuredUntil);
   const [featuredDaysInput, setFeaturedDaysInput] = useState(featuredDaysRequested);
+  const isPaidSubmission = commercialPlan === 'standard_paid';
+  const paidPublishGate = getPaidListingPublishGate(tool);
+  const paidPublishBlocked = isPaidSubmission && paidPublishGate.blockers.length > 0;
 
   const featuredPreview = useMemo(() => {
     const from = featuredFromInput.trim();
@@ -307,6 +310,11 @@ export default function AdminToolEditForm({
               <p className="mt-1 text-sm">
                 Review content, category, media, pricing, and collection context before publishing.
               </p>
+              {paidPublishBlocked && (
+                <p className="mt-2 text-sm font-medium text-yellow-900">
+                  Paid listing blockers: {paidPublishGate.blockers.join(', ')}. Save the missing details before publishing.
+                </p>
+              )}
             </div>
             {tool.status === 'pending' && (
               <div className="flex gap-2">
@@ -321,10 +329,14 @@ export default function AdminToolEditForm({
                 <button
                   type="button"
                   onClick={handleApprove}
-                  disabled={reviewLoading !== null || loading}
+                  disabled={reviewLoading !== null || loading || paidPublishBlocked}
                   className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 disabled:opacity-50"
                 >
-                  {reviewLoading === 'approve' ? 'Publishing...' : 'Approve & Publish'}
+                  {reviewLoading === 'approve'
+                    ? 'Publishing...'
+                    : paidPublishBlocked
+                      ? 'Save details before publish'
+                      : 'Approve & Publish'}
                 </button>
               </div>
             )}
@@ -688,6 +700,15 @@ export default function AdminToolEditForm({
 
       <div className="theme-surface rounded-lg border border-slate-200 p-6 shadow-sm">
         <h2 className="mb-4 text-lg font-semibold text-slate-900">Commercial Listing</h2>
+        {isPaidSubmission && (
+          <div className="mb-4 rounded-lg border border-cyan-100 bg-cyan-50 p-4 text-sm text-cyan-950">
+            <p className="font-semibold">Paid listing lifecycle</p>
+            <p className="mt-1 text-cyan-900">
+              Payment confirmation reserves the entitlement. The featured window now starts only after the tool is
+              published.
+            </p>
+          </div>
+        )}
         <div className="grid gap-4 md:grid-cols-2">
           <div>
             <label htmlFor="commercial_plan" className="block text-sm font-medium text-slate-700">
@@ -843,10 +864,16 @@ export default function AdminToolEditForm({
               <button
                 type="button"
                 onClick={handleActivateCommercial}
-                disabled={commercialLoading || loading}
+                disabled={commercialLoading || loading || !paymentConfirmed || tool.status !== 'published'}
                 className="rounded-lg bg-emerald-600 px-3 py-2 text-sm font-medium text-white hover:bg-emerald-700 disabled:opacity-50"
               >
-                {commercialLoading ? 'Activating...' : 'Activate Paid Placement Now'}
+                {commercialLoading
+                  ? 'Activating...'
+                  : !paymentConfirmed
+                    ? 'Awaiting payment confirmation'
+                    : tool.status !== 'published'
+                      ? 'Publish to start featured window'
+                      : 'Activate Paid Placement Now'}
               </button>
             </div>
           </div>

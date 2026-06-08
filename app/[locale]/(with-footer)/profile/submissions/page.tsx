@@ -71,7 +71,13 @@ function getStatusActionHint(status: SubmittedTool['status']) {
   }
 }
 
-type CommercialViewStatus = 'free' | 'pending_payment' | 'paid_waiting_review' | 'live_featured' | 'expired';
+type CommercialViewStatus =
+  | 'free'
+  | 'pending_payment'
+  | 'paid_waiting_review'
+  | 'paid_published'
+  | 'live_featured'
+  | 'expired';
 
 function getRecord(value: unknown): Record<string, unknown> {
   return value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
@@ -92,9 +98,10 @@ function getCommercialStatus(tool: SubmittedTool): CommercialViewStatus {
   const now = new Date();
 
   if (!paymentConfirmed) return 'pending_payment';
+  if (tool.status !== 'published') return 'paid_waiting_review';
   if (sponsored && until && !Number.isNaN(until.getTime()) && until >= now) return 'live_featured';
   if (sponsored && until && !Number.isNaN(until.getTime()) && until < now) return 'expired';
-  return 'paid_waiting_review';
+  return 'paid_published';
 }
 
 function getCommercialBadge(status: CommercialViewStatus) {
@@ -102,6 +109,7 @@ function getCommercialBadge(status: CommercialViewStatus) {
     free: 'bg-slate-100 text-slate-700',
     pending_payment: 'bg-amber-100 text-amber-800',
     paid_waiting_review: 'bg-cyan-100 text-cyan-800',
+    paid_published: 'bg-sky-100 text-sky-800',
     live_featured: 'bg-emerald-100 text-emerald-800',
     expired: 'bg-rose-100 text-rose-800',
   };
@@ -109,6 +117,7 @@ function getCommercialBadge(status: CommercialViewStatus) {
     free: listingConfig.plans.free.label,
     pending_payment: 'Pending payment',
     paid_waiting_review: 'Paid, under review',
+    paid_published: 'Paid listing',
     live_featured: listingConfig.plans.standard_paid.featuredLabel,
     expired: 'Featured expired',
   };
@@ -186,7 +195,10 @@ export default async function SubmissionsPage({
       {paymentStatus === 'success' && (
         <section className='theme-surface mb-6 rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-emerald-900'>
           <p className='text-sm font-semibold'>Payment completed</p>
-          <p className='mt-1 text-sm'>Your featured window has been activated and your submission is moving forward.</p>
+          <p className='mt-1 text-sm'>
+            Your payment was recorded successfully. Featured placement will start after approval, or immediately if the
+            tool is already published.
+          </p>
         </section>
       )}
 
