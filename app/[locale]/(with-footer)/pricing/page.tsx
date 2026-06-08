@@ -106,7 +106,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     title: isChinese ? 'Pricing | AI Best Tool' : `Pricing | ${t('title')}`,
     description: isChinese
       ? '查看 AI Best Tool 的免费提交、优先审核和前排展示定价。'
-      : 'See the recommended pricing for free submissions, priority review, and featured placement.',
+      : 'See pricing for free submissions, priority review, and featured placement.',
   };
 }
 
@@ -123,19 +123,19 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
           <div className='space-y-6 p-6 lg:p-10'>
             <div className='inline-flex items-center gap-2 rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-800'>
               <CreditCard className='size-3.5' />
-              {isChinese ? '推荐定价方案' : 'Recommended pricing'}
+              {isChinese ? '价格方案' : 'Pricing'}
             </div>
 
             <div className='space-y-4'>
               <h1 className='max-w-3xl text-3xl font-bold tracking-tight text-slate-950 lg:text-5xl'>
                 {isChinese
-                  ? '免费提交为基础，付费只在需要节奏和曝光时启用'
-                  : 'Keep free submissions as the base, and use paid options only when timing or visibility matters'}
+                  ? '选择适合你发布节奏的入驻方式'
+                  : 'Choose the listing option that fits your launch'}
               </h1>
               <p className='max-w-2xl text-base leading-7 text-slate-600 lg:text-lg'>
                 {isChinese
-                  ? '我们不建议一开始做订阅。对目录站来说，一次性入驻 + 时间窗口式前排，更清楚，也更不打扰用户。'
-                  : 'We do not recommend a subscription-first model. For a directory, one-time listing plus time-boxed featured placement is simpler and less intrusive.'}
+                  ? '从免费提交开始，或在需要更快审核和更强曝光时选择付费方案。'
+                  : 'Start with a free submission, or choose paid options when you need faster review and more visibility.'}
               </p>
             </div>
 
@@ -166,15 +166,12 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
               <div className='flex flex-wrap items-center justify-between gap-3'>
                 <div>
                   <p className='text-xs font-semibold uppercase tracking-wide text-cyan-800'>
-                    {isChinese ? '启动建议' : 'Launch recommendation'}
+                    {isChinese ? '热门选择' : 'Popular choices'}
                   </p>
                   <h2 className='mt-1 text-xl font-bold text-slate-950'>
-                    {isChinese ? '先定一个轻量但清晰的价格带' : 'Start with a simple, easy-to-understand price band'}
+                    {isChinese ? '常用方案一目了然' : 'Quick view of the most common options'}
                   </h2>
                 </div>
-                <span className='rounded-full bg-white px-3 py-1 text-xs font-semibold text-cyan-700 ring-1 ring-cyan-100'>
-                  {isChinese ? '建议值，可调整' : 'Suggested, adjustable'}
-                </span>
               </div>
 
               <div className='mt-4 grid gap-3 md:grid-cols-3'>
@@ -197,7 +194,7 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
           <aside className='border-t border-slate-200 bg-slate-50 p-6 lg:border-l lg:border-t-0 lg:p-10'>
             <div className='space-y-4'>
               <h2 className='text-xl font-bold text-slate-950'>
-                {isChinese ? '可直接执行的价格方案' : 'A pricing structure you can launch with now'}
+                {isChinese ? '入驻与曝光方案' : 'Listing and visibility options'}
               </h2>
 
               <PricingCard
@@ -265,8 +262,8 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
             {isChinese
-              ? '把免费、优先审核和前排窗口分开看'
-              : 'Keep free, priority review, and featured windows separate'}
+              ? '不同方案适合不同发布阶段'
+              : 'Pick the option that matches your launch stage'}
           </h2>
 
           <div className='mt-4 overflow-x-auto'>
@@ -321,10 +318,10 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
 
         <div className='rounded-[20px] border border-cyan-100 bg-cyan-50 p-6 shadow-sm'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-800'>
-            {isChinese ? '推荐流程' : 'Recommended flow'}
+            {isChinese ? '使用方式' : 'How it works'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '先提交，后决定是否加速' : 'Submit first, then decide whether to accelerate'}
+            {isChinese ? '提交、支付、发布都很清楚' : 'A simple path from submission to launch'}
           </h2>
           <div className='mt-4 space-y-3 text-sm text-slate-700'>
             <StepRow
@@ -333,27 +330,13 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
             />
             <StepRow
               index='2'
-              text={isChinese ? '如果在意时效，再切到优先审核。' : 'If timing matters, switch to priority review.'}
+              text={isChinese ? '需要更快审核时，可选择优先审核。' : 'Choose priority review when timing matters.'}
             />
             <StepRow
               index='3'
-              text={isChinese ? '发布期再选前排窗口。' : 'Add a featured window only for launch periods.'}
+              text={isChinese ? '需要更强曝光时，可增加前排展示窗口。' : 'Add a featured window when you want more visibility.'}
             />
-            <StepRow index='4' text={isChinese ? '支付后由回调确认。' : 'Payment is confirmed by callback.'} />
-          </div>
-
-          <div className='mt-6 rounded-2xl bg-white p-4 ring-1 ring-cyan-100'>
-            <div className='flex items-center gap-2'>
-              <ShieldCheck className='size-4 text-cyan-700' />
-              <p className='text-sm font-semibold text-slate-950'>
-                {isChinese ? '当前先以一次性收费为主' : 'Start with one-time pricing first'}
-              </p>
-            </div>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '对目录站来说，先用一次性费用更轻。等你确认开发者真的需要持续维护、月度曝光或多工具托管时，再增加月费或年度方案。'
-                : 'For a directory, one-time fees are lighter. Add subscriptions later only when developers clearly need recurring maintenance, monthly visibility, or multi-listing support.'}
-            </p>
+            <StepRow index='4' text={isChinese ? '支付确认后进入审核与展示流程。' : 'Payment confirmation moves your listing into review and visibility flow.'} />
           </div>
         </div>
       </section>
@@ -372,11 +355,11 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
 
         <div className='grid gap-3 lg:grid-cols-2'>
           <FaqCard
-            q={isChinese ? '为什么不直接做订阅？' : 'Why not launch with a subscription?'}
+            q={isChinese ? '付费方案包含什么？' : 'What is included in a paid listing?'}
             a={
               isChinese
-                ? '目录站更适合先做一次性入驻和时间窗口式前排，这样更轻、更容易成交，也不容易让用户觉得被持续收费。订阅更适合放在后面，用于持续维护、月度前排额度、认证开发者或多工具管理。'
-                : 'Directories work better with one-time listing and time-boxed featured placement first. It is lighter, easier to buy, and less likely to feel pushy. Subscriptions make more sense later for recurring maintenance, monthly featured credits, verified developer status, or multi-listing management.'
+                ? '付费方案可包含更快审核和固定天数的前排展示。具体权益会以你选择的方案为准。'
+                : 'Paid listings can include faster review and a fixed featured placement window, depending on the option you choose.'
             }
           />
           <FaqCard
@@ -410,15 +393,15 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
         <div className='flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between'>
           <div>
             <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '下一步' : 'Next step'}
+              {isChinese ? '开始入驻' : 'Get started'}
             </p>
             <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-              {isChinese ? '先把价格说清，再接支付网关' : 'Make the pricing clear before wiring payment'}
+              {isChinese ? '准备好后就可以提交' : 'Submit your tool when you are ready'}
             </h2>
             <p className='mt-2 max-w-2xl text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页先把“免费 / 优先审核 / 前排窗口 / 套餐”讲明白。等你确认最终价格后，我们再把 checkout provider 接上。'
-                : 'This page makes the free / priority / featured / bundle story clear. Once you confirm the final price points, we can wire in a checkout provider.'}
+                ? '先免费提交，或根据发布时间和曝光需求选择更合适的付费方案。'
+                : 'Start with a free submission, or choose a paid option based on your timeline and visibility goals.'}
             </p>
           </div>
           <div className='flex flex-col gap-3 sm:flex-row'>
@@ -433,7 +416,7 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
               href={paymentHref}
               className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
             >
-              {isChinese ? '联系确认价格' : 'Confirm pricing by email'}
+              {isChinese ? '联系商务' : 'Contact us'}
             </a>
           </div>
         </div>
