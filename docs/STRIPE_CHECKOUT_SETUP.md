@@ -1,6 +1,11 @@
 # Stripe Checkout Setup
 
-This project uses Stripe Checkout Sessions for paid listings and featured placement. The integration is designed for one-time payments, not subscriptions.
+This project uses Stripe Checkout Sessions for paid listings and featured placement. The current integration is designed for one-time payments, not subscriptions.
+
+For the recommended commercial model and future subscription roadmap, see:
+
+- `docs/PAID_LISTING_MODEL.md`
+- `docs/PAID_LISTING_MODEL_CN.md`
 
 ## What you need
 
@@ -32,6 +37,17 @@ In Vercel:
 4. Stripe sends the webhook event after payment completes.
 5. The webhook activates the sponsored placement and writes a callback log.
 
+## What this does not do yet
+
+This setup does **not** currently support:
+
+- recurring billing
+- monthly or annual plans
+- subscription cancellation lifecycle
+- grace period handling for failed renewals
+
+If subscriptions are added later, they should be implemented as a separate billing mode with their own Stripe products, webhook handling, and lifecycle logic.
+
 ## Local testing
 
 For local testing, use the Stripe CLI:
@@ -48,4 +64,3 @@ Then submit a test tool and complete payment with Stripe test card details.
 - `/admin/tools` shows the tool as paid / featured.
 - `/profile/submissions` shows the featured window as active.
 - The public tool page is visible again if you test on an existing submission.
-

@@ -346,13 +346,13 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
             <div className='flex items-center gap-2'>
               <ShieldCheck className='size-4 text-cyan-700' />
               <p className='text-sm font-semibold text-slate-950'>
-                {isChinese ? '这不是订阅页' : 'This is not a subscription page'}
+                {isChinese ? '当前先以一次性收费为主' : 'Start with one-time pricing first'}
               </p>
             </div>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '对目录站来说，先用一次性费用更轻；等你确定复购需求后，再考虑月费或年度维护包。'
-                : 'For a directory, one-time fees are lighter. You can add monthly or annual plans later if repeat demand appears.'}
+                ? '对目录站来说，先用一次性费用更轻。等你确认开发者真的需要持续维护、月度曝光或多工具托管时，再增加月费或年度方案。'
+                : 'For a directory, one-time fees are lighter. Add subscriptions later only when developers clearly need recurring maintenance, monthly visibility, or multi-listing support.'}
             </p>
           </div>
         </div>
@@ -375,8 +375,8 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
             q={isChinese ? '为什么不直接做订阅？' : 'Why not launch with a subscription?'}
             a={
               isChinese
-                ? '目录站更适合先做一次性入驻和时间窗口式前排，这样更轻、更容易成交，也不容易让用户觉得被持续收费。'
-                : 'Directories work better with one-time listing and time-boxed featured placement first. It is lighter, easier to buy, and less likely to feel pushy.'
+                ? '目录站更适合先做一次性入驻和时间窗口式前排，这样更轻、更容易成交，也不容易让用户觉得被持续收费。订阅更适合放在后面，用于持续维护、月度前排额度、认证开发者或多工具管理。'
+                : 'Directories work better with one-time listing and time-boxed featured placement first. It is lighter, easier to buy, and less likely to feel pushy. Subscriptions make more sense later for recurring maintenance, monthly featured credits, verified developer status, or multi-listing management.'
             }
           />
           <FaqCard

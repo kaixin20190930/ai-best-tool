@@ -33,6 +33,11 @@ Stripe checkout:
 - `STRIPE_SECRET_KEY`
 - `STRIPE_WEBHOOK_SECRET`
 
+Current scope note:
+
+- Stripe is currently used for one-time checkout, not subscriptions.
+- If recurring billing is added later, add separate release checks for subscription lifecycle, renewal failures, grace periods, and downgrade behavior.
+
 Monitor and scheduled jobs:
 
 - `MONITOR_API_TOKEN`
@@ -168,6 +173,7 @@ curl -X GET \
 - Confirm the tool is activated as sponsored.
 - Repeat the same transaction id and confirm the response is idempotent.
 - Confirm the callback appears in `/cn/admin/payment-callbacks`.
+- Confirm the paid listing does not bypass your metadata quality gate before public promotion.
 
 Search Console:
 

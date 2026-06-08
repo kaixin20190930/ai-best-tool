@@ -23,6 +23,12 @@ On success, the endpoint activates sponsored placement for the tool:
 - `featuredActiveFrom = now`
 - `featuredUntil = now + featuredDaysRequested` (fallback: 7 days)
 
+Important note:
+
+- This documents the **current implementation behavior**.
+- The recommended product rule is to start featured timing when the tool is actually published, not when payment succeeds.
+- See `docs/PAID_LISTING_MODEL.md` for the suggested future operating rule.
+
 ## Example
 
 ```bash

@@ -239,6 +239,32 @@ This documentation provides comprehensive guidance for implementing and maintain
 
 **When to use:** When you are ready to enable paid submission flow
 
+#### 18a. [Paid Listing Model](./PAID_LISTING_MODEL.md)
+**Purpose:** Defines the current one-time commercial model, paid listing rules, featured lifecycle, and the recommended future subscription roadmap
+
+**Contents:**
+- current one-time payment scope
+- free / priority / featured / bundle structure
+- paid submission quality gate
+- featured timing rules
+- archive / remove rules for paid listings
+- future subscription plan suggestions
+
+**When to use:** When deciding pricing, review rules, featured duration, refunds, or whether to add subscriptions
+
+#### 18b. [付费入驻与订阅模型（中文）](./PAID_LISTING_MODEL_CN.md)
+**Purpose:** 上述付费入驻和订阅模型的中文版本
+
+**Contents:**
+- 当前一次性收费范围
+- 免费 / 优先审核 / 前排 / 套餐结构
+- 付费提交通关门槛
+- 前排计时与退出规则
+- 归档 / 删除规则
+- 未来订阅设计建议
+
+**When to use:** 当你需要用中文规划付费策略、订阅路线和运营规则时
+
 ### For Tool Operations
 
 #### 19. [Tool Lifecycle Policy](./TOOL_LIFECYCLE_POLICY.md)
