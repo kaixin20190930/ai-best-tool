@@ -48,9 +48,7 @@ export default function SubmissionEmailPreferenceToggle({
       </div>
       {saving && <p className="mt-2 text-xs text-slate-500">Saving...</p>}
       {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
-      <p className="mt-2 text-xs text-slate-500">
-        This setting currently uses the existing notification preference field.
-      </p>
+      <p className="mt-2 text-xs text-slate-500">You can update this setting anytime.</p>
     </section>
   );
 }

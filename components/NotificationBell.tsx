@@ -141,7 +141,7 @@ export default function NotificationBell({ userId }: NotificationBellProps) {
                   className='flex items-center gap-1 text-sm text-cyan-700 hover:text-cyan-800'
                 >
                   <Check className='size-4' />
-                  Mark all read
+                  Mark all as read
                 </button>
               )}
             </div>
@@ -154,7 +154,7 @@ export default function NotificationBell({ userId }: NotificationBellProps) {
               {!loading && notifications.length === 0 && (
                 <div className='p-8 text-center text-slate-500'>
                   <Bell className='mx-auto mb-2 size-12 text-slate-300' />
-                  <p>No notifications yet</p>
+                  <p>No updates yet</p>
                 </div>
               )}
               {!loading && notifications.length > 0 && (

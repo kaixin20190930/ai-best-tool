@@ -176,10 +176,10 @@ export async function submitTool(input: SubmitToolInput): Promise<SubmitToolResu
       user.id,
       'submission_status',
       submissionPlan === 'standard_paid'
-        ? 'Paid submission received / 付费提交已收到'
-        : 'Submission in review / 你的提交正在审核',
+        ? 'Submission received / 已收到你的提交'
+        : 'Submission received / 已收到你的提交',
       submissionPlan === 'standard_paid'
-        ? `${website} is in the review queue. Paid listing and featured placement will be handled from your submissions page. / ${website} 已进入审核队列。付费入驻与前排展示会在“我的提交”中继续处理。`
+        ? `${website} is in the review queue. Payment, review status, and featured placement will continue from your submissions page. / ${website} 已进入审核队列。付款、审核状态与前排展示会在“我的提交”中继续处理。`
         : `${website} has entered the review queue. / ${website} 已进入审核队列。`,
       '/profile/submissions',
     );

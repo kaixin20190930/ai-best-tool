@@ -212,13 +212,13 @@ export async function POST(request: NextRequest) {
     const paymentMessage =
       requestedDays > 0
         ? isPublished
-          ? `${title} has been paid and the featured window is now active. / ${title} 已完成付款，前排展示已激活。`
-          : `${title} has been paid. The featured window is reserved and will start after approval. / ${title} 已完成付款，前排展示权益已保留，审核通过后开始计时。`
-        : `${title} has been paid and the paid listing is now recorded. / ${title} 已完成付款，付费入驻权益已记录。`;
+          ? `${title} has been paid. Featured placement is now active. / ${title} 已完成付款，前排展示现已生效。`
+          : `${title} has been paid. Featured placement will begin after approval. / ${title} 已完成付款，前排展示将在审核通过后开始。`
+        : `${title} has been paid and the listing is ready for review. / ${title} 已完成付款，提交已进入审核流程。`;
     await createNotification(
       submittedBy,
       'payment_confirmation',
-      'Payment confirmed / 付款已确认',
+      'Payment received / 已收到付款',
       paymentMessage,
       '/profile/submissions',
     );

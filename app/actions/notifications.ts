@@ -111,10 +111,10 @@ export async function notifyAdminsOfSubmission(input: {
     const displayName = input.toolTitle.trim() || input.toolName;
     const isPaid = input.submissionPlan === 'standard_paid';
     const title = isPaid
-      ? 'Paid submission awaiting review / 付费提交待处理'
-      : 'New submission awaiting review / 新提交待审核';
+      ? 'Paid submission received / 付费提交已收到'
+      : 'New submission received / 新提交已收到';
     const content = isPaid
-      ? `${displayName} requested a paid listing${input.fastTrack ? ' with fast track' : ''}${input.featuredDays > 0 ? ` and ${input.featuredDays}-day featured placement` : ''}. Payment or confirmation is required before activating featured exposure. / ${displayName} 提交了付费入驻${input.fastTrack ? '（加速审核）' : ''}${input.featuredDays > 0 ? `，前排展示 ${input.featuredDays} 天` : ''}。请先完成付款或确认，再激活前排展示。`
+      ? `${displayName} selected a paid listing${input.fastTrack ? ' with faster review' : ''}${input.featuredDays > 0 ? ` and ${input.featuredDays} featured days` : ''}. Review can continue after payment is confirmed. / ${displayName} 选择了付费入驻${input.fastTrack ? '（更快审核）' : ''}${input.featuredDays > 0 ? `，前排展示 ${input.featuredDays} 天` : ''}。付款确认后即可继续审核。`
       : `${displayName} has entered the review queue. / ${displayName} 已进入审核队列。`;
 
     await Promise.all(
