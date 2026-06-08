@@ -3,10 +3,13 @@ import { locales } from '@/i18n';
 
 import { GUIDE_PAGES } from '@/lib/content/guides';
 import { BASE_URL } from '@/lib/env';
+import { INDEXABLE_LOCALES } from '@/lib/seo/indexing';
 import { getAllCategories } from '@/lib/services/categories';
 import { getTools } from '@/lib/services/tools';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const sitemapLocales = locales.filter((locale) => INDEXABLE_LOCALES.includes(locale as (typeof INDEXABLE_LOCALES)[number]));
+
   // Static routes with their priorities and change frequencies
   const staticRoutes: Array<{
     url: string;
@@ -22,11 +25,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: 'explore',
       changeFrequency: 'daily',
       priority: 0.9,
-    },
-    {
-      url: 'startup',
-      changeFrequency: 'daily',
-      priority: 0.8,
     },
     {
       url: 'submit',
@@ -51,14 +49,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // Generate static route entries for all locales
-  const guideRoutes = GUIDE_PAGES.map(({ href, priority, changeFrequency }) => ({
+  const guideRoutes = GUIDE_PAGES.filter((page) => !page.href.includes('-comparison')).map(({ href, priority, changeFrequency }) => ({
     url: href.replace(/^\//, ''),
     priority,
     changeFrequency,
   }));
 
   const staticSitemapEntries = [...staticRoutes, ...guideRoutes].flatMap((route) =>
-    locales.map((locale) => {
+    sitemapLocales.map((locale) => {
       const lang = locale === 'en' ? '' : `/${locale}`;
       const routeUrl = route.url === '' ? '' : `/${route.url}`;
       return {
@@ -80,7 +78,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     );
 
     toolSitemapEntries = toolsResult.data.flatMap((tool) =>
-      locales.map((locale) => {
+      sitemapLocales.map((locale) => {
         const lang = locale === 'en' ? '' : `/${locale}`;
         return {
           url: `${BASE_URL}${lang}/ai/${tool.name}`,
@@ -100,7 +98,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const categories = await getAllCategories(false);
 
     categorySitemapEntries = categories.flatMap((category) =>
-      locales.map((locale) => {
+      sitemapLocales.map((locale) => {
         const lang = locale === 'en' ? '' : `/${locale}`;
         return {
           url: `${BASE_URL}${lang}/categories/${category.slug}`,

@@ -239,6 +239,17 @@ This documentation provides comprehensive guidance for implementing and maintain
 
 **When to use:** When you are ready to enable paid submission flow
 
+#### 19. [索引收口方案（中文）](./INDEXING_RECOVERY_PLAN_CN.md)
+**Purpose:** Explain how to reduce indexing noise and focus Google on the pages that matter most
+
+**Contents:**
+- Why large batches of low-priority URLs stay unindexed
+- Why pagination and comparison pages should not compete for indexing first
+- Why sitemap should focus on core locales and core pages
+- What to watch in Search Console over the next 1-2 weeks
+
+**When to use:** When coverage grows too fast, many URLs remain unindexed, or you need to decide which page types should be indexed first
+
 #### 18a. [Paid Listing Model](./PAID_LISTING_MODEL.md)
 **Purpose:** Defines the current one-time commercial model, paid listing rules, featured lifecycle, and the recommended future subscription roadmap
 

@@ -4,6 +4,7 @@ import { ArrowRight, CheckCircle2, Columns3, ExternalLink, Sparkles } from 'luci
 import { getTranslations } from 'next-intl/server';
 
 import { generateBreadcrumbSchema, generateFAQSchema, generateItemListSchema } from '@/lib/seo/schema';
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import { toolToListRow } from '@/lib/services/toolPresenter';
 import { getPopularTools, getTools, type Tool } from '@/lib/services/tools';
@@ -99,6 +100,7 @@ export async function buildComparisonMetadata(locale: string, title: string, des
   return {
     title: locale === 'cn' || locale === 'tw' ? `${title} | AI Best Tool` : `${title} | ${t('title')}`,
     description,
+    ...getNoindexMetadata(),
   };
 }
 
