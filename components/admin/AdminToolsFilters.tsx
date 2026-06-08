@@ -15,6 +15,7 @@ interface AdminToolsFiltersProps {
   currentStaleFollowUp?: boolean;
   currentPaidIntent?: boolean;
   currentFeaturedIntent?: boolean;
+  currentPaidBlockers?: boolean;
 }
 
 export default function AdminToolsFilters({
@@ -29,6 +30,7 @@ export default function AdminToolsFilters({
   currentStaleFollowUp,
   currentPaidIntent,
   currentFeaturedIntent,
+  currentPaidBlockers,
 }: AdminToolsFiltersProps) {
   const router = useRouter();
 
@@ -46,6 +48,7 @@ export default function AdminToolsFilters({
     const nextStaleFollowUp = updates.staleFollowUp ?? currentStaleFollowUp;
     const nextPaidIntent = updates.paidIntent ?? currentPaidIntent;
     const nextFeaturedIntent = updates.featuredIntent ?? currentFeaturedIntent;
+    const nextPaidBlockers = updates.paidBlockers ?? currentPaidBlockers;
 
     if (nextReady) {
       params.set('status', 'draft');
@@ -86,6 +89,9 @@ export default function AdminToolsFilters({
     }
     if (nextFeaturedIntent && !nextReady) {
       params.set('featuredIntent', '1');
+    }
+    if (nextPaidBlockers && !nextReady) {
+      params.set('paidBlockers', '1');
     }
 
     const queryString = params.toString();
@@ -239,6 +245,19 @@ export default function AdminToolsFilters({
             }`}
           >
             Featured intent
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              router.push(buildPath({ paidBlockers: !currentPaidBlockers, ready: false }))
+            }
+            className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+              currentPaidBlockers
+                ? 'bg-rose-600 text-white'
+                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            }`}
+          >
+            Paid blockers
           </button>
           <button
             type="button"

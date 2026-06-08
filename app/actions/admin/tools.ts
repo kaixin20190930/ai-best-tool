@@ -45,6 +45,25 @@ const publishReadySql = `
   )
 `;
 
+const paidPublishBlockedSql = `
+  (
+    COALESCE(features->'submission'->'commercial'->>'plan', 'free') = 'standard_paid'
+    AND (
+      category_id IS NULL
+      OR image_url IS NULL
+      OR image_url = ''
+      OR thumbnail_url IS NULL
+      OR thumbnail_url = ''
+      OR LENGTH(COALESCE(content->>'en', content->>'zh', content::text, '')) < 80
+      OR LENGTH(COALESCE(detail->>'en', detail->>'zh', detail::text, '')) < 160
+      OR pricing IS NULL
+      OR pricing = ''
+      OR array_length(tags, 1) IS NULL
+      OR array_length(tags, 1) = 0
+    )
+  )
+`;
+
 export interface AdminTool {
   id: string;
   name: string;
@@ -517,6 +536,7 @@ export async function getAdminTools(filters?: {
   staleFollowUp?: boolean;
   paidIntent?: boolean;
   featuredIntent?: boolean;
+  paidBlockers?: boolean;
   page?: number;
   pageSize?: number;
 }): Promise<{ tools: AdminTool[]; total: number }> {
@@ -583,6 +603,10 @@ export async function getAdminTools(filters?: {
 
     if (filters?.featuredIntent) {
       query += ` AND COALESCE((features->'submission'->'commercial'->>'featuredDaysRequested')::int, 0) > 0`;
+    }
+
+    if (filters?.paidBlockers) {
+      query += ` AND ${paidPublishBlockedSql}`;
     }
 
     if (filters?.quality) {

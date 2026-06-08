@@ -15,7 +15,7 @@ import {
 import type { AdminTool } from '@/app/actions/admin/tools';
 import { toast } from 'sonner';
 import BaseImage from '@/components/image/BaseImage';
-import { getToolQuality } from '@/lib/services/toolQuality';
+import { getPaidListingPublishGate, getToolQuality } from '@/lib/services/toolQuality';
 
 interface AdminToolsTableProps {
   tools: AdminTool[];
@@ -157,6 +157,14 @@ export default function AdminToolsTable({
         label: 'Paid intent',
         className: 'bg-indigo-50 text-indigo-700',
       });
+
+      const paidGate = getPaidListingPublishGate(tool);
+      if (!paidGate.ready) {
+        signals.push({
+          label: `Paid blockers: ${paidGate.blockers.length}`,
+          className: 'bg-rose-50 text-rose-700',
+        });
+      }
     }
 
     if (commercial.fastTrackRequested === true) {

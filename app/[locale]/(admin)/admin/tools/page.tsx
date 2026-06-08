@@ -27,6 +27,7 @@ export default async function AdminToolsPage({
     staleFollowUp?: string;
     paidIntent?: string;
     featuredIntent?: string;
+    paidBlockers?: string;
     page?: string;
   };
 }) {
@@ -46,6 +47,7 @@ export default async function AdminToolsPage({
   const staleFollowUp = searchParams.staleFollowUp === '1';
   const paidIntent = searchParams.paidIntent === '1';
   const featuredIntent = searchParams.featuredIntent === '1';
+  const paidBlockers = searchParams.paidBlockers === '1';
   const quality =
     searchParams.quality === 'low' ||
     searchParams.quality === 'medium' ||
@@ -78,6 +80,7 @@ export default async function AdminToolsPage({
         staleFollowUp,
         paidIntent,
         featuredIntent,
+        paidBlockers,
         page,
         pageSize: 20,
       }),
@@ -158,6 +161,7 @@ export default async function AdminToolsPage({
         currentStaleFollowUp={staleFollowUp}
         currentPaidIntent={paidIntent}
         currentFeaturedIntent={featuredIntent}
+        currentPaidBlockers={paidBlockers}
       />
 
       {/* Tools Table */}
