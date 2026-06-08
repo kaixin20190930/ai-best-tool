@@ -92,6 +92,7 @@ export default function AdminToolEditForm({
   const productHuntRedirectUrl = getString(collection.productHuntRedirectUrl);
   const externalUrl = getString(collection.externalUrl);
   const mediaReview = getNestedRecord(featureRecord.mediaReview);
+  const mediaReason = getString(mediaReview.reason);
   const submissionFeature = getNestedRecord(featureRecord.submission);
   const commercialFeature = getNestedRecord(submissionFeature.commercial);
   const mediaNeeded = mediaReview.needed === true;
@@ -500,6 +501,7 @@ export default function AdminToolEditForm({
               Marked at {new Date(mediaMarkedAt).toLocaleString()}
             </p>
           )}
+          {mediaReason && <p className="mt-2 text-xs text-violet-800">{mediaReason}</p>}
 
           <div className="mt-4 flex flex-wrap gap-2">
             <button

@@ -18,8 +18,8 @@ type ToolPricing = (typeof validPricing)[number];
 const toolQualityScoreSql = `
   (
     (CASE WHEN category_id IS NOT NULL THEN 20 ELSE 0 END) +
-    (CASE WHEN thumbnail_url IS NOT NULL AND thumbnail_url <> '' THEN 20 ELSE 0 END) +
-    (CASE WHEN image_url IS NOT NULL AND image_url <> '' THEN 15 ELSE 0 END) +
+    (CASE WHEN thumbnail_url IS NOT NULL AND thumbnail_url <> '' AND thumbnail_url NOT LIKE '%google.com/s2/favicons%' THEN 20 ELSE 0 END) +
+    (CASE WHEN image_url IS NOT NULL AND image_url <> '' AND image_url NOT LIKE '%google.com/s2/favicons%' THEN 15 ELSE 0 END) +
     (CASE WHEN LENGTH(COALESCE(content->>'en', content->>'zh', content::text, '')) >= 80 THEN 20 ELSE 0 END) +
     (CASE WHEN LENGTH(COALESCE(detail->>'en', detail->>'zh', detail::text, '')) >= 160 THEN 15 ELSE 0 END) +
     (CASE WHEN pricing IS NOT NULL AND pricing <> '' THEN 5 ELSE 0 END) +
@@ -31,8 +31,10 @@ const mediaNeededSql = `
   (
     image_url IS NULL
     OR image_url = ''
+    OR image_url LIKE '%google.com/s2/favicons%'
     OR thumbnail_url IS NULL
     OR thumbnail_url = ''
+    OR thumbnail_url LIKE '%google.com/s2/favicons%'
     OR features->'mediaReview'->>'needed' = 'true'
   )
 `;
@@ -52,8 +54,10 @@ const paidPublishBlockedSql = `
       category_id IS NULL
       OR image_url IS NULL
       OR image_url = ''
+      OR image_url LIKE '%google.com/s2/favicons%'
       OR thumbnail_url IS NULL
       OR thumbnail_url = ''
+      OR thumbnail_url LIKE '%google.com/s2/favicons%'
       OR LENGTH(COALESCE(content->>'en', content->>'zh', content::text, '')) < 80
       OR LENGTH(COALESCE(detail->>'en', detail->>'zh', detail::text, '')) < 160
       OR pricing IS NULL

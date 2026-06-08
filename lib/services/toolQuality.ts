@@ -1,3 +1,5 @@
+import { isPlaceholderMediaUrl } from '@/lib/services/mediaReview';
+
 interface ToolQualityInput {
   category_id?: string | null;
   image_url?: string | null;
@@ -48,13 +50,13 @@ export function getToolQuality(tool: ToolQualityInput): {
     {
       key: 'screenshot',
       label: 'Screenshot',
-      passed: Boolean(tool.thumbnail_url),
+      passed: Boolean(tool.thumbnail_url) && !isPlaceholderMediaUrl(tool.thumbnail_url),
       points: 20,
     },
     {
       key: 'logo',
       label: 'Logo',
-      passed: Boolean(tool.image_url),
+      passed: Boolean(tool.image_url) && !isPlaceholderMediaUrl(tool.image_url),
       points: 15,
     },
     {
