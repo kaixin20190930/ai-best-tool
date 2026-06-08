@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowUpRight, BarChart3, Globe, Layers3, Search, ShieldAlert, TrendingUp } from 'lucide-react';
 
 import {
+  getPriorityMediaQueue,
   getSiteMetrics,
   getToolComplianceIssues,
   getTopCategories,
@@ -39,6 +40,7 @@ export default async function AdminAnalyticsPage({
   const topToolsByRating = await getTopTools('rating', 10);
   const topCategories = await getTopCategories(8);
   const complianceIssues = await getToolComplianceIssues(8);
+  const priorityMediaQueue = await getPriorityMediaQueue(10);
   const topFeedbackSignals = await getTopFeedbackSignals(10);
   const topSearches = await getTopSearches(10);
   const trafficSources = await getTrafficSources(10);
@@ -384,6 +386,100 @@ export default async function AdminAnalyticsPage({
             <p className='text-sm font-medium text-slate-600'>Follow-up Rate</p>
             <p className='mt-2 text-3xl font-semibold text-emerald-600'>{overdueFollowUpRate}%</p>
           </div>
+        </div>
+      </div>
+
+      {/* Priority Media Queue */}
+      <div className='mb-8'>
+        <div className='mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
+          <div>
+            <h2 className='text-lg font-semibold text-slate-900'>Priority Media Queue</h2>
+            <p className='mt-1 text-sm text-slate-600'>
+              The published tools most worth fixing first when we want cleaner cards on the homepage, Explore, and
+              category pages.
+            </p>
+          </div>
+          <Link
+            href='/admin/tools?status=published&needsMedia=1'
+            className='inline-flex items-center gap-1 text-sm font-medium text-cyan-700 hover:text-cyan-800'
+          >
+            Open media queue
+            <ArrowUpRight className='h-4 w-4' />
+          </Link>
+        </div>
+        <div className='overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm'>
+          <table className='min-w-full divide-y divide-slate-200'>
+            <thead className='bg-slate-50'>
+              <tr>
+                <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                  Tool
+                </th>
+                <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                  Category
+                </th>
+                <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                  Media gaps
+                </th>
+                <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                  Exposure
+                </th>
+                <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                  Priority
+                </th>
+              </tr>
+            </thead>
+            <tbody className='divide-y divide-slate-100 bg-white'>
+              {priorityMediaQueue.map((tool, index) => (
+                <tr key={tool.id} className={index === 0 ? 'bg-violet-50/30' : ''}>
+                  <td className='px-4 py-4'>
+                    <div>
+                      <div className='font-medium text-slate-900'>
+                        {typeof tool.title === 'object' && tool.title !== null
+                          ? tool.title.en || tool.title.zh || Object.values(tool.title)[0] || tool.name
+                          : tool.name}
+                      </div>
+                      <div className='text-xs text-slate-500'>{tool.name}</div>
+                    </div>
+                  </td>
+                  <td className='px-4 py-4 text-sm text-slate-700'>
+                    {tool.categoryName && typeof tool.categoryName === 'object'
+                      ? tool.categoryName.en || tool.categoryName.zh || Object.values(tool.categoryName)[0]
+                      : tool.categorySlug || 'Uncategorized'}
+                  </td>
+                  <td className='px-4 py-4'>
+                    <div className='flex flex-wrap gap-2'>
+                      {tool.mediaIssues.map((issue) => (
+                        <span
+                          key={issue}
+                          className='rounded-full bg-violet-50 px-2 py-1 text-xs font-medium text-violet-700'
+                        >
+                          {issue}
+                        </span>
+                      ))}
+                    </div>
+                    {tool.mediaReason && <div className='mt-2 text-xs text-slate-500'>{tool.mediaReason}</div>}
+                  </td>
+                  <td className='px-4 py-4 text-right text-sm text-slate-700'>
+                    <div>{tool.views.toLocaleString()} views</div>
+                    <div className='text-xs text-slate-500'>{tool.clicks.toLocaleString()} clicks</div>
+                  </td>
+                  <td className='px-4 py-4 text-right'>
+                    <div className='inline-flex flex-col items-end gap-1'>
+                      <span className='rounded-full bg-violet-50 px-2 py-1 text-xs font-semibold text-violet-700'>
+                        {tool.priorityScore}
+                      </span>
+                      <span className='text-xs text-slate-500'>quality {tool.qualityScore}</span>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {priorityMediaQueue.length === 0 && (
+            <div className='border-t border-slate-100 p-4 text-sm text-slate-500'>
+              No urgent media gaps right now. Nice.
+            </div>
+          )}
         </div>
       </div>
 

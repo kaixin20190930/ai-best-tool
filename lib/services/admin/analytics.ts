@@ -2,6 +2,7 @@ import { getPool } from '@/db/neon/client';
 import { createAdminClient } from '@/lib/supabase/admin';
 
 import { getToolQuality } from '@/lib/services/toolQuality';
+import { getMediaIssueLabels, isPlaceholderMediaUrl } from '@/lib/services/mediaReview';
 
 export interface SiteMetrics {
   totalViews: number;
@@ -64,6 +65,21 @@ export interface ToolComplianceIssue {
   issues: string[];
   updatedAt: string;
   categoryName: Record<string, string> | null;
+}
+
+export interface MediaQueueItem {
+  id: string;
+  name: string;
+  title: any;
+  categorySlug: string | null;
+  categoryName: Record<string, string> | null;
+  views: number;
+  clicks: number;
+  qualityScore: number;
+  mediaIssues: string[];
+  mediaReason: string | null;
+  priorityScore: number;
+  updatedAt: string;
 }
 
 export interface DateRangeMetrics {
@@ -377,6 +393,125 @@ export async function getToolComplianceIssues(limit: number = 10): Promise<ToolC
     }));
   } catch (error) {
     console.error('Error fetching tool compliance issues:', error);
+    return [];
+  }
+}
+
+export async function getPriorityMediaQueue(limit: number = 12): Promise<MediaQueueItem[]> {
+  try {
+    const pool = getPool();
+
+    const result = await pool.query(
+      `
+        SELECT
+          t.id,
+          t.name,
+          t.title,
+          t.view_count as views,
+          t.click_count as clicks,
+          t.average_rating as rating,
+          t.rating_count as "ratingCount",
+          t.image_url as "imageUrl",
+          t.thumbnail_url as "thumbnailUrl",
+          t.features,
+          t.content,
+          t.detail,
+          t.pricing,
+          t.tags,
+          t.updated_at as "updatedAt",
+          c.slug as "categorySlug",
+          c.name as "categoryName"
+        FROM tools t
+        LEFT JOIN categories c ON c.id = t.category_id
+        WHERE t.status = 'published'
+          AND (
+            COALESCE(t.image_url, '') = ''
+            OR COALESCE(t.thumbnail_url, '') = ''
+            OR t.image_url LIKE '%google.com/s2/favicons%'
+            OR t.thumbnail_url LIKE '%google.com/s2/favicons%'
+            OR t.features->'mediaReview'->>'needed' = 'true'
+          )
+      `
+    );
+
+    const categoryWeight: Record<string, number> = {
+      web3: 90,
+      'text-writing': 80,
+      chatbot: 70,
+      productivity: 60,
+      'design-art': 45,
+      'life-assistant': 35,
+      other: 15,
+    };
+
+    const rows = result.rows
+      .map((row) => {
+        const features =
+          row.features && typeof row.features === 'object'
+            ? (row.features as Record<string, unknown>)
+            : {};
+        const mediaReview =
+          features.mediaReview && typeof features.mediaReview === 'object'
+            ? (features.mediaReview as Record<string, unknown>)
+            : {};
+        const mediaReviewNeeded = mediaReview.needed === true;
+        const mediaReason =
+          typeof mediaReview.reason === 'string' && mediaReview.reason.trim().length > 0
+            ? mediaReview.reason.trim()
+            : null;
+        const mediaIssues = getMediaIssueLabels({
+          imageUrl: row.imageUrl,
+          thumbnailUrl: row.thumbnailUrl,
+          mediaReviewNeeded,
+        });
+
+        const categorySlug =
+          typeof row.categorySlug === 'string' && row.categorySlug.length > 0 ? row.categorySlug : null;
+        const views = Number(row.views ?? 0);
+        const clicks = Number(row.clicks ?? 0);
+        const placeholderCount = [row.imageUrl, row.thumbnailUrl].filter((url) =>
+          isPlaceholderMediaUrl(typeof url === 'string' ? url : null)
+        ).length;
+        const missingCount = [row.imageUrl, row.thumbnailUrl].filter((url) => !url).length;
+        const qualityScore = getToolQuality({
+          category_id: categorySlug,
+          image_url: row.imageUrl,
+          thumbnail_url: row.thumbnailUrl,
+          content: row.content,
+          detail: row.detail,
+          pricing: row.pricing,
+          tags: row.tags,
+        }).score;
+
+        const priorityScore =
+          views +
+          clicks * 2 +
+          (categorySlug ? categoryWeight[categorySlug] ?? 25 : 25) +
+          missingCount * 35 +
+          placeholderCount * 20 +
+          (mediaReviewNeeded ? 20 : 0);
+
+        return {
+          id: row.id,
+          name: row.name,
+          title: row.title,
+          categorySlug,
+          categoryName: row.categoryName || null,
+          views,
+          clicks,
+          qualityScore,
+          mediaIssues,
+          mediaReason,
+          priorityScore,
+          updatedAt: row.updatedAt,
+        } satisfies MediaQueueItem;
+      })
+      .sort((a, b) => b.priorityScore - a.priorityScore || b.views - a.views || b.clicks - a.clicks)
+      .slice(0, limit);
+
+    return rows;
+  } catch (error) {
+    console.error('Error fetching priority media queue:', error);
     return [];
   }
 }
