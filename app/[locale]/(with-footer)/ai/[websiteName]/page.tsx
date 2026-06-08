@@ -516,18 +516,20 @@ export default async function Page({ params: { websiteName, locale } }: { params
                   <div className='flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
                     <p className='text-sm text-cyan-900'>
                       {locale === 'cn'
-                        ? '如果这是你的工具，可以考虑付费入驻，拿到优先审核和前排展示。'
-                        : 'If this is your tool, paid listing can unlock priority review and featured placement.'}
+                        ? '如果这是你的工具，可以查看提交与展示方案，补充资料并管理曝光方式。'
+                        : 'If this is your tool, review the listing options to submit updates and manage visibility.'}
                     </p>
                     <Link
                       href={`/${locale}/developer/listing`}
                       className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-3 py-2 text-sm font-semibold text-white hover:bg-cyan-800'
                     >
-                      {locale === 'cn' ? '查看入驻方案' : 'View listing plan'}
+                      {locale === 'cn' ? '查看提交方案' : 'View listing options'}
                     </Link>
                   </div>
                   <p className='mt-2 text-xs text-cyan-900/70'>
-                    {listingConfig.plans.standard_paid.reviewWindow} • {listingConfig.plans.standard_paid.featuredLabel}
+                    {locale === 'cn'
+                      ? `审核时效与展示方式会根据你选择的方案而定。`
+                      : 'Review timing and visibility depend on the option you choose.'}
                   </p>
                 </div>
               </div>

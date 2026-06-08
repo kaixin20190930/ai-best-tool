@@ -343,8 +343,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 </p>
                 <p className='mt-1 text-sm leading-6 text-slate-600'>
                   {isChinese
-                    ? '先看说明，再提交和沟通付费入驻。'
-                    : 'Read the plan, then submit or contact us for paid listing.'}
+                    ? '查看提交说明，按你的节奏提交工具或补充信息。'
+                    : 'Review the listing details, then submit your tool or add more information when ready.'}
                 </p>
               </div>
             </div>
@@ -469,8 +469,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               </h2>
               <p className='mt-2 max-w-2xl text-sm leading-6 text-slate-600'>
                 {isChinese
-                  ? '提交你的 AI 工具进入审核队列。后续可以扩展为付费入驻、推荐位和分类页曝光。'
-                  : 'Submit your AI tool for review. This can grow into paid listings, featured placements, and category exposure.'}
+                  ? '提交你的 AI 工具进入审核队列，并根据需要补充资料、更新信息或选择更多展示方式。'
+                  : 'Submit your AI tool for review, then add details, update information, or choose more visibility options when needed.'}
               </p>
             </div>
             <Link
