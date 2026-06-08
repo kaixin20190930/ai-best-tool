@@ -25,7 +25,6 @@ export type ListingConfig = {
       label: string;
       priceLabel: string;
       summary: string;
-      recommended?: boolean;
     }>;
     launchBundle: {
       label: string;
@@ -58,26 +57,26 @@ export const listingConfig: ListingConfig = {
   currencySymbol: '$',
   listingFeeLabel: 'One-time listing fee',
   valueProposition:
-    'Keep free submissions open, then offer one-time priority review and time-boxed featured placement when timing or visibility matters.',
+    'Free submissions stay open, with paid options for faster review and added visibility.',
   salesBullets: [
-    'Free submissions stay open for broad coverage.',
-    'Priority review is one-time, not recurring.',
-    'Featured placement is time-boxed and expires automatically.',
+    'Free submissions are reviewed in the standard queue.',
+    'Paid review shortens the review window for time-sensitive launches.',
+    'Featured placement runs for a fixed window and ends automatically.',
   ],
   pricingTiers: {
     free: {
       label: 'Free submission',
       priceLabel: '$0',
       reviewWindow: '3-7 days',
-      summary: 'Best for broad coverage and first-time submissions.',
-      highlights: ['Standard queue review', 'No featured slot reserved'],
+      summary: 'A standard review path for new listings.',
+      highlights: ['Standard review queue', 'No featured placement included'],
     },
     priorityReview: {
       label: 'Priority review',
       priceLabel: '$29 one-time',
       reviewWindow: '1-3 days',
-      summary: 'Faster review for teams that care about timing.',
-      highlights: ['Moves your submission ahead in the queue', 'Good for launches or time-sensitive updates'],
+      summary: 'A shorter review window for time-sensitive submissions.',
+      highlights: ['Shorter review window', 'Useful for launches, updates, and campaign timing'],
     },
     featuredWindows: [
       {
@@ -90,8 +89,7 @@ export const listingConfig: ListingConfig = {
         days: 7,
         label: '7-day featured',
         priceLabel: '$49',
-        summary: 'Balanced visibility for a typical launch window.',
-        recommended: true,
+        summary: 'A full week of added visibility.',
       },
       {
         days: 14,
@@ -103,8 +101,8 @@ export const listingConfig: ListingConfig = {
     launchBundle: {
       label: 'Launch bundle',
       priceLabel: '$99',
-      summary: 'Priority review + 14-day featured placement for launches that need maximum runway.',
-      highlights: ['Includes priority review', 'Includes a 14-day featured window', 'Simplest option for launch week'],
+      summary: 'Priority review plus 14 days of featured visibility.',
+      highlights: ['Includes priority review', 'Includes a 14-day featured window', 'Designed for launch periods'],
     },
   },
   plans: {
@@ -112,20 +110,20 @@ export const listingConfig: ListingConfig = {
       label: 'Free submission',
       summary: 'Reviewed in the standard queue.',
       reviewWindow: '3-7 days',
-      highlights: ['Good for first-time submissions', 'No featured slot reserved'],
+      highlights: ['Suitable for general submissions', 'No featured placement included'],
     },
     standard_paid: {
       label: 'Standard paid',
-      summary: 'Priority review with optional featured placement.',
+      summary: 'Shorter review with optional featured visibility.',
       reviewWindow: '1-3 days',
       highlights: [
-        'Priority review with shorter wait',
-        'Optional featured placement window',
-        'Supports payment confirmation workflow',
+        'Shorter review window',
+        'Optional featured placement',
+        'Secure payment confirmation',
       ],
-      fastTrackLabel: 'Fast track enabled',
+      fastTrackLabel: '24-48h review target',
       featuredLabel: 'Featured placement',
-      launchWindowLabel: 'Launch window',
+      launchWindowLabel: 'Featured window',
     },
   },
   supportEmail: 'contact@AIBestTool.com',

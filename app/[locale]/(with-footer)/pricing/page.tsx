@@ -227,7 +227,7 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
                       isChinese ? '适合活动期和更新期' : 'Best for launches and updates',
                     ]}
                     description={item.summary}
-                    highlighted={item.recommended}
+                    highlighted={item.days === 7}
                   />
                 );
               })}

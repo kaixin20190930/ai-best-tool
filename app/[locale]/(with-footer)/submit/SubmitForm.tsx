@@ -179,8 +179,8 @@ export default function SubmitForm({
           )}
           <div className='rounded-lg bg-slate-50 px-3 py-2 text-xs text-slate-600 ring-1 ring-slate-200'>
             {isChinese
-              ? '建议优先填写：产品名、官网、分类、定价与一句核心能力描述。'
-              : 'Recommended: name, website, category, pricing, and one clear capability sentence.'}
+              ? '如有，请尽量补充产品名、官网、分类、定价与一句核心能力描述。'
+              : 'If available, include the name, website, category, pricing, and one clear capability sentence.'}
           </div>
           <FormField
             control={form.control}
@@ -231,7 +231,7 @@ export default function SubmitForm({
                   />
                 </FormControl>
                 <div className='flex items-center justify-between text-xs text-slate-500'>
-                  <span>{isChinese ? '可选，但建议填写以提升审核效率。' : 'Optional, but helps review quality.'}</span>
+                  <span>{isChinese ? '可选，补充后会更方便审核。' : 'Optional, but helpful for review.'}</span>
                   <span>{descriptionLength}/800</span>
                 </div>
                 <FormMessage />
@@ -323,12 +323,12 @@ export default function SubmitForm({
           </div>
           <div className='rounded-lg border border-slate-200 bg-slate-50 p-4'>
             <p className='text-sm font-semibold text-slate-900'>
-              {isChinese ? '入驻方案（MVP）' : 'Listing plan (MVP)'}
+              {isChinese ? '提交方案' : 'Submission plan'}
             </p>
             <p className='mt-1 text-xs text-slate-500'>
               {isChinese
-                ? '先用上面的两张卡做主选择，再在下面微调审核和前排天数。'
-                : 'Use the two cards above as the main choice, then fine-tune review and featured days below.'}
+                ? '先选择提交方式，再按需要设置审核速度和前排展示天数。'
+                : 'Choose a submission type, then set review speed and featured days if needed.'}
             </p>
             <div className='mt-3 grid gap-3 md:grid-cols-2'>
               <button
@@ -348,8 +348,8 @@ export default function SubmitForm({
                     </p>
                     <p className='mt-1 text-xs text-slate-500'>
                       {isChinese
-                        ? '标准队列审核，适合先测试收录。'
-                        : `${listingConfig.plans.free.reviewWindow} review, good for testing the listing.`}
+                        ? '标准审核队列。'
+                        : `${listingConfig.plans.free.reviewWindow} review in the standard queue.`}
                     </p>
                   </div>
                   <span
@@ -358,21 +358,21 @@ export default function SubmitForm({
                       !isPaidPlan ? 'bg-cyan-100 text-cyan-800' : 'bg-slate-100 text-slate-600',
                     )}
                   >
-                    {isChinese ? '基础路径' : 'Base path'}
+                    {isChinese ? '标准' : 'Standard'}
                   </span>
                 </div>
                 <ul className='mt-3 space-y-1 text-sm text-slate-600'>
                   <li className='flex items-start gap-2'>
                     <span className='mt-1 h-1.5 w-1.5 rounded-full bg-cyan-600' />
-                    <span>{isChinese ? '进入标准审核' : listingConfig.plans.free.summary}</span>
+                    <span>{isChinese ? '进入标准审核队列' : listingConfig.plans.free.summary}</span>
                   </li>
                   <li className='flex items-start gap-2'>
                     <span className='mt-1 h-1.5 w-1.5 rounded-full bg-cyan-600' />
-                    <span>{isChinese ? '适合先试水提交' : listingConfig.plans.free.highlights[0]}</span>
+                    <span>{isChinese ? '适合常规收录' : listingConfig.plans.free.highlights[0]}</span>
                   </li>
                   <li className='flex items-start gap-2'>
                     <span className='mt-1 h-1.5 w-1.5 rounded-full bg-cyan-600' />
-                    <span>{isChinese ? '不占用付费前排资源' : listingConfig.plans.free.highlights[1]}</span>
+                    <span>{isChinese ? '不包含前排展示' : listingConfig.plans.free.highlights[1]}</span>
                   </li>
                 </ul>
               </button>
@@ -394,8 +394,8 @@ export default function SubmitForm({
                     </p>
                     <p className='mt-1 text-xs text-slate-500'>
                       {isChinese
-                        ? '优先审核 + 前排展示，更适合想要转化的开发者。'
-                        : `${listingConfig.plans.standard_paid.reviewWindow} review with featured placement options.`}
+                        ? '更短的审核周期，并可选择前排展示。'
+                        : `${listingConfig.plans.standard_paid.reviewWindow} review with optional featured visibility.`}
                     </p>
                   </div>
                   <span
@@ -404,7 +404,7 @@ export default function SubmitForm({
                       isPaidPlan ? 'bg-cyan-100 text-cyan-800' : 'bg-slate-100 text-slate-600',
                     )}
                   >
-                    {isChinese ? '推荐' : 'Recommended'}
+                    {isChinese ? '付费' : 'Paid'}
                   </span>
                 </div>
                 <ul className='mt-3 space-y-1 text-sm text-slate-600'>
@@ -414,11 +414,11 @@ export default function SubmitForm({
                   </li>
                   <li className='flex items-start gap-2'>
                     <span className='mt-1 h-1.5 w-1.5 rounded-full bg-cyan-600' />
-                    <span>{isChinese ? '可选前排窗口' : listingConfig.plans.standard_paid.highlights[1]}</span>
+                    <span>{isChinese ? '可选前排展示' : listingConfig.plans.standard_paid.highlights[1]}</span>
                   </li>
                   <li className='flex items-start gap-2'>
                     <span className='mt-1 h-1.5 w-1.5 rounded-full bg-cyan-600' />
-                    <span>{isChinese ? '支持支付回调' : listingConfig.plans.standard_paid.highlights[2]}</span>
+                    <span>{isChinese ? '支付状态自动确认' : listingConfig.plans.standard_paid.highlights[2]}</span>
                   </li>
                 </ul>
               </button>
@@ -441,7 +441,7 @@ export default function SubmitForm({
                         </option>
                         <option value='standard_paid'>
                           {isChinese
-                            ? '付费入驻（1-3天优先审核）'
+                            ? '付费入驻（1-3天审核）'
                             : `${listingConfig.plans.standard_paid.label} (${listingConfig.plans.standard_paid.reviewWindow})`}
                         </option>
                       </select>
@@ -456,7 +456,7 @@ export default function SubmitForm({
                   name='fastTrack'
                   render={({ field }) => (
                     <FormItem className='space-y-1'>
-                      <FormLabel className='text-xs'>{isChinese ? '加速审核' : 'Fast Track'}</FormLabel>
+                      <FormLabel className='text-xs'>{isChinese ? '加速审核' : 'Fast review'}</FormLabel>
                       <FormControl>
                         <div className='flex h-[42px] items-center gap-2 rounded-[8px] border border-slate-300 bg-white px-3 text-sm text-slate-900'>
                           <input
@@ -466,7 +466,7 @@ export default function SubmitForm({
                             disabled={!isPaidPlan}
                           />
                           {isChinese
-                            ? '24-48小时审核'
+                            ? '24-48 小时目标'
                             : `24-48h review · ${listingConfig.plans.standard_paid.fastTrackLabel}`}
                         </div>
                       </FormControl>
@@ -500,7 +500,7 @@ export default function SubmitForm({
             </div>
             <div className='mt-4 rounded-lg bg-white p-3 ring-1 ring-slate-200'>
               <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                {isChinese ? '当前方案概览' : 'Current plan snapshot'}
+                {isChinese ? '当前选择' : 'Current selection'}
               </p>
               <div className='mt-2 flex flex-wrap items-center gap-2'>
                 <span className='inline-flex rounded-full bg-cyan-100 px-2.5 py-1 text-xs font-semibold text-cyan-800'>
@@ -508,7 +508,7 @@ export default function SubmitForm({
                 </span>
                 {submissionPlan === 'standard_paid' && fastTrack && (
                   <span className='inline-flex rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-800'>
-                    {isChinese ? '加速审核' : 'Fast track enabled'}
+                    {isChinese ? '加速审核' : 'Fast review'}
                   </span>
                 )}
                 {selectedFeaturedDays > 0 && (

@@ -206,7 +206,7 @@ export default async function SubmissionsPage({
         <section className='theme-surface mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4 text-amber-900'>
           <p className='text-sm font-semibold'>Payment cancelled</p>
           <p className='mt-1 text-sm'>
-            You can come back here anytime to complete payment and reserve your featured window.
+            You can come back here anytime to complete payment and continue the listing process.
           </p>
         </section>
       )}
@@ -226,8 +226,8 @@ export default async function SubmissionsPage({
               <p className='text-sm font-semibold text-amber-900'>Payment required</p>
               <p className='mt-1 text-sm text-amber-900/80'>
                 You have {pendingPaymentTools.length} paid submission
-                {pendingPaymentTools.length > 1 ? 's' : ''} waiting for payment confirmation. Complete payment to keep
-                the featured window reserved.
+                {pendingPaymentTools.length > 1 ? 's' : ''} waiting for payment confirmation. Complete payment to
+                continue review and activate paid listing benefits.
               </p>
             </div>
             <div className='flex flex-wrap gap-2'>

@@ -41,11 +41,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {isChinese ? '开发者入驻' : 'Developer listing'}
             </p>
             <h3 className='mt-2 text-xl font-bold text-slate-950'>
-              {isChinese ? '提交之后，还有可选的加速路径' : listingConfig.plans.standard_paid.label}
+              {isChinese ? '选择适合你的提交方式' : 'Choose how you want to submit'}
             </h3>
             <p className='mt-3 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '先提交可以获得基础收录；如果你后面需要更快审核、活动期曝光或前排展示，再选择可选付费路径即可。'
+                ? '免费提交适合常规收录；如果你需要更快审核或额外曝光，也可以选择付费方案。'
                 : `${listingConfig.valueProposition} ${listingConfig.listingFeeLabel}.`}
             </p>
             <div className='mt-4 grid gap-3'>
@@ -55,8 +55,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 </p>
                 <p className='mt-1 text-sm text-slate-600'>
                   {isChinese
-                    ? '按正常队列审核，适合先试试收录和基础曝光。'
-                    : `${listingConfig.plans.free.summary} Ideal for testing listing and baseline exposure.`}
+                    ? '进入标准审核队列，适合常规收录。'
+                    : `${listingConfig.plans.free.summary} Suitable for general directory submissions.`}
                 </p>
               </div>
               <div className='rounded-lg border border-cyan-100 bg-cyan-50 p-3'>
@@ -65,18 +65,18 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 </p>
                 <p className='mt-1 text-sm text-cyan-900'>
                   {isChinese
-                    ? '优先审核 + 可选前排展示 + 支付后自动回调确认。'
-                    : `${listingConfig.plans.standard_paid.summary} Callback confirmation after payment.`}
+                    ? '更短的审核周期，并可选择前排展示。'
+                    : `${listingConfig.plans.standard_paid.summary} Payment status is confirmed automatically.`}
                 </p>
               </div>
             </div>
             <div className='mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3'>
               <p className='text-sm font-semibold text-amber-900'>
-                {isChinese ? '什么时候会用到' : 'When it helps'}
+                {isChinese ? '适合什么场景' : 'Best for'}
               </p>
               <p className='mt-1 text-sm leading-6 text-amber-900'>
                 {isChinese
-                  ? '新品发布、活动期曝光、需要更快上线的团队，或者想把访客更多引导到官网的时候。'
+                  ? '适合新品发布、活动期曝光，或希望更快完成审核并把更多访客引导到官网的团队。'
                   : 'New launches, campaign windows, faster turnaround, or when a team wants to send more visitors to its own site.'}
               </p>
             </div>
