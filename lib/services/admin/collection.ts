@@ -83,6 +83,10 @@ CREATE INDEX IF NOT EXISTS idx_collection_candidates_status_created
 
 CREATE INDEX IF NOT EXISTS idx_collection_candidates_status_scores
   ON collection_candidates(status, relevance_score DESC, quality_score DESC, created_at DESC);
+
+ALTER TABLE collection_sources ENABLE ROW LEVEL SECURITY;
+ALTER TABLE collection_runs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE collection_candidates ENABLE ROW LEVEL SECURITY;
 `;
 
 let schemaReady = false;

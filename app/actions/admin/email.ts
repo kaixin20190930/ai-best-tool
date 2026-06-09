@@ -118,4 +118,6 @@ async function ensureEmailTestLogTable() {
   await query(
     'CREATE INDEX IF NOT EXISTS idx_email_test_logs_created_at ON email_test_logs(created_at DESC)'
   );
+
+  await query('ALTER TABLE email_test_logs ENABLE ROW LEVEL SECURITY');
 }

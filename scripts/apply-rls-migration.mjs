@@ -26,7 +26,8 @@ if (!connectionString) {
 }
 
 const needsSSL = connectionString.includes('sslmode=require') || connectionString.includes('supabase.com');
-const migrationPath = path.join(cwd, 'db', 'supabase', 'migrations', '20260609_enable_rls_and_lock_sensitive_tables.sql');
+const requestedMigration = process.argv[2] || '20260609_enable_rls_and_lock_sensitive_tables.sql';
+const migrationPath = path.join(cwd, 'db', 'supabase', 'migrations', requestedMigration);
 const sql = fs.readFileSync(migrationPath, 'utf8');
 
 const pool = new Pool({
