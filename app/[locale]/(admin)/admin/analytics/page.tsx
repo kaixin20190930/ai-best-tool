@@ -426,6 +426,9 @@ export default async function AdminAnalyticsPage({
                 <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>
                   Priority
                 </th>
+                <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                  Action
+                </th>
               </tr>
             </thead>
             <tbody className='divide-y divide-slate-100 bg-white'>
@@ -470,6 +473,15 @@ export default async function AdminAnalyticsPage({
                       </span>
                       <span className='text-xs text-slate-500'>quality {tool.qualityScore}</span>
                     </div>
+                  </td>
+                  <td className='px-4 py-4 text-right'>
+                    <Link
+                      href={`/admin/tools/${tool.id}/edit`}
+                      className='inline-flex items-center gap-1 text-sm font-medium text-cyan-700 hover:text-cyan-800'
+                    >
+                      Edit
+                      <ArrowUpRight className='h-4 w-4' />
+                    </Link>
                   </td>
                 </tr>
               ))}
@@ -516,6 +528,9 @@ export default async function AdminAnalyticsPage({
                 <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>
                   Updated
                 </th>
+                <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                  Action
+                </th>
               </tr>
             </thead>
             <tbody className='divide-y divide-slate-100 bg-white'>
@@ -548,6 +563,15 @@ export default async function AdminAnalyticsPage({
                   <td className='px-4 py-4 text-right text-sm font-medium text-slate-900'>{tool.qualityScore}</td>
                   <td className='px-4 py-4 text-right text-sm text-slate-500'>
                     {new Date(tool.updatedAt).toLocaleDateString()}
+                  </td>
+                  <td className='px-4 py-4 text-right'>
+                    <Link
+                      href={`/admin/tools/${tool.id}/edit`}
+                      className='inline-flex items-center gap-1 text-sm font-medium text-cyan-700 hover:text-cyan-800'
+                    >
+                      Edit
+                      <ArrowUpRight className='h-4 w-4' />
+                    </Link>
                   </td>
                 </tr>
               ))}
