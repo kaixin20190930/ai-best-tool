@@ -309,33 +309,35 @@ CREATE TABLE IF NOT EXISTS user_preferences (
 -- 10. Row Level Security (RLS) 策略
 -- ============================================
 
--- ============================================
--- 注意: RLS 策略需要在启用 Supabase Auth 后配置
--- 如果遇到 "schema auth does not exist" 错误，
--- 请先在 Supabase Dashboard 中启用 Authentication，
--- 然后再执行以下 RLS 策略
--- ============================================
-
--- 暂时禁用 RLS，等 Auth 配置完成后再启用
--- 如需启用，请取消以下注释：
-
-/*
 -- 启用 RLS
+ALTER TABLE categories ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tags ENABLE ROW LEVEL SECURITY;
 ALTER TABLE tools ENABLE ROW LEVEL SECURITY;
 ALTER TABLE favorites ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ratings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE comments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE comment_likes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE comment_reports ENABLE ROW LEVEL SECURITY;
+ALTER TABLE comment_moderation_logs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE payment_callback_logs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE google_search_console_logs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE analytics ENABLE ROW LEVEL SECURITY;
 ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_preferences ENABLE ROW LEVEL SECURITY;
+
+-- Categories / Tags 公共读取
+CREATE POLICY "Anyone can view categories"
+  ON categories FOR SELECT
+  USING (true);
+
+CREATE POLICY "Anyone can view tags"
+  ON tags FOR SELECT
+  USING (true);
 
 -- Tools 表策略
 CREATE POLICY "Anyone can view published tools"
   ON tools FOR SELECT
-  USING (status = 'published');
-
-CREATE POLICY "Users can view their own tools"
-  ON tools FOR SELECT
-  USING (auth.uid() = submitted_by);
+  USING (status = 'published' OR auth.uid() = submitted_by);
 
 CREATE POLICY "Authenticated users can insert tools"
   ON tools FOR INSERT
@@ -343,6 +345,10 @@ CREATE POLICY "Authenticated users can insert tools"
 
 CREATE POLICY "Users can update their own tools"
   ON tools FOR UPDATE
+  USING (auth.uid() = submitted_by);
+
+CREATE POLICY "Users can delete their own tools"
+  ON tools FOR DELETE
   USING (auth.uid() = submitted_by);
 
 -- Favorites 表策略
@@ -359,9 +365,9 @@ CREATE POLICY "Users can delete their own favorites"
   USING (auth.uid() = user_id);
 
 -- Ratings 表策略
-CREATE POLICY "Anyone can view ratings"
+CREATE POLICY "Users can view their own ratings"
   ON ratings FOR SELECT
-  USING (true);
+  USING (auth.uid() = user_id);
 
 CREATE POLICY "Users can insert their own ratings"
   ON ratings FOR INSERT
@@ -378,7 +384,7 @@ CREATE POLICY "Users can delete their own ratings"
 -- Comments 表策略
 CREATE POLICY "Anyone can view comments"
   ON comments FOR SELECT
-  USING (true);
+  USING (COALESCE(is_hidden, false) = false OR auth.uid() = user_id);
 
 CREATE POLICY "Authenticated users can insert comments"
   ON comments FOR INSERT
@@ -390,6 +396,19 @@ CREATE POLICY "Users can update their own comments"
 
 CREATE POLICY "Users can delete their own comments"
   ON comments FOR DELETE
+  USING (auth.uid() = user_id);
+
+-- Comment likes 表策略
+CREATE POLICY "Users can view their own comment likes"
+  ON comment_likes FOR SELECT
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert their own comment likes"
+  ON comment_likes FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete their own comment likes"
+  ON comment_likes FOR DELETE
   USING (auth.uid() = user_id);
 
 -- Notifications 表策略
@@ -413,7 +432,6 @@ CREATE POLICY "Users can insert their own preferences"
 CREATE POLICY "Users can update their own preferences"
   ON user_preferences FOR UPDATE
   USING (auth.uid() = user_id);
-*/
 
 -- ============================================
 -- 11. 初始数据
