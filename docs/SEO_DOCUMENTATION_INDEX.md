@@ -398,6 +398,18 @@ This documentation provides comprehensive guidance for implementing and maintain
 
 **When to use:** 你想直接按中文节奏运营网站时
 
+### 24. [媒体补全执行手册（中文）](./MEDIA_BACKFILL_PLAYBOOK_CN.md)
+**Purpose:** 把“缺 logo / 缺截图 / 还在用 placeholder favicon”的问题变成每周固定执行动作
+
+**Contents:**
+- 什么时候需要跑媒体补全
+- 先看哪个后台面板
+- Top 5 补图队列怎么拉
+- 每条工具至少补什么
+- 每周怎么执行和复盘
+
+**When to use:** 你准备开始系统性补 logo、截图和卡片首图质量时
+
 ## Quick Start Guides
 
 ### Adding a New Page
