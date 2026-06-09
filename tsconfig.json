@@ -52,6 +52,7 @@
     "scripts/list-other-category-tools.ts",
     "scripts/split-other-categories.ts",
     "scripts/update-sigoo-and-bootstrap-voice-automation.ts",
+    "scripts/bootstrap-research-devtools-batch.ts",
     "scripts/fix-missing-translations.ts",
     "scripts/test-hreflang-rendering.ts",
     ".next/types/**/*.ts"
