@@ -427,6 +427,10 @@ INSERT INTO categories (name, slug, description, order_index) VALUES
   ('{"en": "Life Assistant", "zh": "生活助手"}', 'life-assistant', '{"en": "Tools to help with daily life", "zh": "帮助日常生活的工具"}', 4),
   ('{"en": "Text & Writing", "zh": "文本与写作"}', 'text-writing', '{"en": "Writing and text processing tools", "zh": "写作和文本处理工具"}', 5),
   ('{"en": "Web3", "zh": "Web3"}', 'web3', '{"en": "AI tools for Web3, crypto, agents, and on-chain workflows", "zh": "面向 Web3、加密、Agent 和链上工作流的 AI 工具"}', 6),
+  ('{"en": "Research", "zh": "研究"}', 'research', '{"en": "Tools for research, model discovery, datasets, and technical exploration", "zh": "面向研究、模型发现、数据集与技术探索的工具"}', 7),
+  ('{"en": "Voice", "zh": "语音"}', 'voice', '{"en": "Voice, speech, transcription, and audio-first AI tools", "zh": "面向语音、转录、音频工作流的 AI 工具"}', 8),
+  ('{"en": "Automation", "zh": "自动化"}', 'automation', '{"en": "Workflow automation, agents, and repeatable task orchestration", "zh": "面向工作流自动化、Agent 与可复用任务编排的工具"}', 9),
+  ('{"en": "Developer Tools", "zh": "开发者工具"}', 'developer-tools', '{"en": "APIs, model infrastructure, developer platforms, and technical tooling", "zh": "面向 API、模型基础设施、开发平台与技术工作流的工具"}', 10),
   ('{"en": "Other", "zh": "其他"}', 'other', '{"en": "Other AI tools", "zh": "其他 AI 工具"}', 99)
 ON CONFLICT (slug) DO NOTHING;
 

@@ -49,6 +49,8 @@
     "scripts/publish-second-batch.ts",
     "scripts/publish-third-batch.ts",
     "scripts/publish-first-batch.ts",
+    "scripts/list-other-category-tools.ts",
+    "scripts/split-other-categories.ts",
     "scripts/fix-missing-translations.ts",
     "scripts/test-hreflang-rendering.ts",
     ".next/types/**/*.ts"
