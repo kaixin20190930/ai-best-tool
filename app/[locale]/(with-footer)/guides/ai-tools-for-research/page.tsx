@@ -185,6 +185,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           }
           compareLinks={[
             {
+              href: '/guides/ai-tools-for-research-comparison',
+              title: isChinese ? '研究工具总对比' : 'Research tools comparison',
+              description: isChinese
+                ? '适合先快速横向看几款常见研究工具。'
+                : 'A fast side-by-side entry for common research tools.',
+            },
+            {
               href: '/guides/ai-seo-tools-comparison',
               title: isChinese ? 'SEO 研究工具对比' : 'SEO research tools comparison',
               description: isChinese
@@ -197,13 +204,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               description: isChinese
                 ? '适合链上信息、项目和 narrative 跟踪。'
                 : 'Best for on-chain, project, and narrative-driven research.',
-            },
-            {
-              href: '/guides/ai-writing-tools-comparison',
-              title: isChinese ? '写作工具对比' : 'Writing tools comparison',
-              description: isChinese
-                ? '适合研究完成后的整理、输出和成文阶段。'
-                : 'Useful once research moves into synthesis and writing output.',
             },
           ]}
         />

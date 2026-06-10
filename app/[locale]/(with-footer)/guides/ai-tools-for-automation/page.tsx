@@ -189,6 +189,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           }
           compareLinks={[
             {
+              href: '/guides/ai-tools-for-automation-comparison',
+              title: isChinese ? '自动化工具总对比' : 'Automation tools comparison',
+              description: isChinese
+                ? '适合先快速横向看几款常见自动化工具。'
+                : 'A fast side-by-side entry for common automation tools.',
+            },
+            {
               href: '/guides/ai-tools-for-developers',
               title: isChinese ? '开发者工具入口' : 'Developer tools guide',
               description: isChinese
@@ -201,13 +208,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               description: isChinese
                 ? '如果你的自动化重心在脚本和代码层，这里更有参考价值。'
                 : 'Helpful when your automations are still mostly code and script driven.',
-            },
-            {
-              href: '/guides/ai-tools-for-web3-analysis',
-              title: isChinese ? 'Web3 分析工具入口' : 'Web3 analysis guide',
-              description: isChinese
-                ? '适合把监控、告警和链上研究接进自动化流程。'
-                : 'Useful when monitoring, alerting, and on-chain research feed into automations.',
             },
           ]}
         />

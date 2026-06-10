@@ -274,6 +274,19 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-tools-for-research-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 研究工具对比',
+      en: 'AI tools for research comparison',
+    },
+    desc: {
+      cn: '把常见研究工具放在一起快速对照。',
+      en: 'Compare common research tools side by side.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-developers',
     priority: 0.75,
     changeFrequency: 'monthly',
@@ -287,6 +300,19 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-tools-for-developers-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 开发者工具对比',
+      en: 'AI tools for developers comparison',
+    },
+    desc: {
+      cn: '把常见开发者工具放在一起快速对照。',
+      en: 'Compare common developer tools side by side.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-automation',
     priority: 0.75,
     changeFrequency: 'monthly',
@@ -297,6 +323,19 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     desc: {
       cn: '适合流程编排、Agent 工作流和重复任务自动化。',
       en: 'For workflow orchestration, agent workflows, and repeatable automation.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-automation-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 自动化工具对比',
+      en: 'AI tools for automation comparison',
+    },
+    desc: {
+      cn: '把常见自动化工具放在一起快速对照。',
+      en: 'Compare common automation tools side by side.',
     },
   },
   {

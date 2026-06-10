@@ -187,6 +187,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           }
           compareLinks={[
             {
+              href: '/guides/ai-tools-for-developers-comparison',
+              title: isChinese ? '开发者工具总对比' : 'Developer tools comparison',
+              description: isChinese
+                ? '适合先横向看编码、模型接入和 API 工具。'
+                : 'A broad side-by-side look across coding, model access, and API tools.',
+            },
+            {
               href: '/guides/ai-coding-tools-comparison',
               title: isChinese ? '编程工具对比' : 'Coding tools comparison',
               description: isChinese
@@ -199,13 +206,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               description: isChinese
                 ? '更适合方案设计、解释和长上下文问答。'
                 : 'Better for planning, explanation, and long-context reasoning.',
-            },
-            {
-              href: '/guides/ai-tools-for-automation',
-              title: isChinese ? '自动化工具入口' : 'Automation tools guide',
-              description: isChinese
-                ? '如果你更在意流程编排和任务落地，从这里继续。'
-                : 'Continue here if orchestration and execution matter more than coding assistance.',
             },
           ]}
         />
