@@ -1,0 +1,210 @@
+import { Metadata } from 'next';
+import Link from 'next/link';
+import { ExternalLink, FileSearch, Search, ShieldCheck } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
+
+import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
+import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import { StructuredDataServer } from '@/components/seo/StructuredData';
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: 'Metadata.home' });
+
+  return {
+    title:
+      locale === 'cn' || locale === 'tw' ? 'AI 研究工具推荐 | AI Best Tool' : `AI tools for research | ${t('title')}`,
+    description:
+      locale === 'cn' || locale === 'tw'
+        ? '面向资料检索、信息核对、证据整理和研究工作流的 AI 工具指南。'
+        : 'A practical guide to AI tools for research, evidence-checking, analysis, and information discovery.',
+  };
+}
+
+export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+  const isChinese = locale === 'cn' || locale === 'tw';
+  const categories = await getAllCategories(true).catch(() => []);
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: `${siteUrl}/${locale}` },
+    { name: isChinese ? '指南' : 'Guides', url: `${siteUrl}/${locale}/guides` },
+    { name: isChinese ? '研究工具' : 'Research tools', url: `${siteUrl}/${locale}/guides/ai-tools-for-research` },
+  ]);
+  const faqs = [
+    {
+      question: isChinese ? 'AI 研究工具最适合做什么？' : 'What are AI research tools best for?',
+      answer: isChinese
+        ? '它们最适合做资料发现、快速概览、信息核对、竞品扫描、主题理解和建立研究起点。'
+        : 'They are best for discovery, quick overviews, evidence-checking, competitive scanning, topic understanding, and building a research starting point.',
+    },
+    {
+      question: isChinese ? '研究工具和聊天工具有什么区别？' : 'How are research tools different from chat tools?',
+      answer: isChinese
+        ? '研究工具更强调来源、证据、检索效率和信息发现；聊天工具更强调生成、对话和综合输出。'
+        : 'Research tools emphasize sources, evidence, discovery, and retrieval speed, while chat tools focus more on generation, conversation, and synthesis.',
+    },
+    {
+      question: isChinese ? '我应该先看什么？' : 'What should I check first?',
+      answer: isChinese
+        ? '先看它是否能帮你更快找到可靠信息，再看输出是否带来源、是否适合你的研究深度和工作流。'
+        : 'Start with whether it helps you find reliable information faster, then check source visibility, depth, and workflow fit.',
+    },
+    {
+      question: isChinese ? '免费版够用吗？' : 'Is a free tier enough?',
+      answer: isChinese
+        ? '轻量调研通常够用，但如果你做高频跟踪、深度分析或团队协作，通常会更快遇到限制。'
+        : 'Free tiers can be enough for light research, but deeper analysis, frequent tracking, and team workflows usually hit limits faster.',
+    },
+  ];
+  const tips = isChinese
+    ? [
+        '先分清你是做资料发现、证据核对，还是深度分析。',
+        '优先看来源是否透明、信息是否能回溯，而不只是回答是否“像真的”。',
+        '如果你会反复做研究，重点看收藏、导出、历史记录和后续整理能力。',
+      ]
+    : [
+        'Separate discovery, evidence-checking, and deeper analysis before comparing tools.',
+        'Prioritize source transparency and traceability, not only whether the answer sounds convincing.',
+        'If research is repeatable work, focus on exports, saved history, and downstream organization.',
+      ];
+
+  return (
+    <>
+      <StructuredDataServer data={breadcrumbSchema} />
+      <StructuredDataServer data={generateFAQSchema(faqs)} />
+      <div className='theme-page mx-auto max-w-6xl px-4 py-8 lg:px-6 lg:py-12'>
+        <section className='rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm lg:p-10'>
+          <div className='flex flex-wrap items-center gap-2'>
+            <span className='inline-flex items-center gap-2 rounded-full bg-cyan-50 px-3 py-1 text-sm font-semibold text-cyan-700'>
+              <Search className='size-4' />
+              {isChinese ? '研究工具推荐' : 'Research tools'}
+            </span>
+            <span className='inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-sm font-semibold text-slate-700'>
+              <ShieldCheck className='size-4' />
+              {isChinese ? '来源与证据优先' : 'Evidence-first'}
+            </span>
+          </div>
+
+          <h1 className='mt-4 max-w-4xl text-3xl font-bold tracking-tight text-slate-950 lg:text-5xl'>
+            {isChinese
+              ? 'AI 研究工具推荐：怎么选更适合资料发现和证据核对'
+              : 'AI tools for research: how to choose for discovery and evidence-checking'}
+          </h1>
+          <p className='mt-4 max-w-3xl text-base leading-7 text-slate-600 lg:text-lg'>
+            {isChinese
+              ? '研究工具的价值不只是“能回答问题”，而是能不能帮你更快发现信息、核对来源，并建立可继续深入的研究路径。'
+              : 'The value of research tools is not only that they answer questions. It is whether they help you discover information faster, verify sources, and build a path for deeper analysis.'}
+          </p>
+
+          <div className='mt-6 flex flex-wrap gap-3'>
+            <Link
+              href='/explore?search=research&sort=popular'
+              className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+            >
+              {isChinese ? '看研究类工具' : 'Browse research tools'}
+              <ExternalLink className='size-4' />
+            </Link>
+            <Link
+              href='/guides/ai-seo-tools'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+            >
+              {isChinese ? '看 SEO 研究工具' : 'SEO research tools'}
+            </Link>
+            <Link
+              href='/guides/ai-tools-for-crypto-research'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+            >
+              {isChinese ? '看 Crypto 研究工具' : 'Crypto research tools'}
+            </Link>
+          </div>
+        </section>
+
+        <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
+          <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '判断顺序' : 'How to judge'}
+            </p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+              {isChinese ? '先看来源，再看输出' : 'Start with sources, then the output'}
+            </h2>
+            <div className='mt-4 space-y-3'>
+              {tips.map((tip) => (
+                <div key={tip} className='rounded-lg bg-slate-50 p-4 text-sm leading-6 text-slate-700'>
+                  <div className='flex items-start gap-3'>
+                    <FileSearch className='mt-0.5 size-4 shrink-0 text-emerald-600' />
+                    <span>{tip}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <aside className='rounded-[18px] border border-slate-200 bg-slate-50 p-6 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '相关入口' : 'Start here'}
+            </p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+              {isChinese ? '研究类工具通常在这些分类里' : 'Research tools often sit in these categories'}
+            </h2>
+            <div className='mt-4 grid gap-2'>
+              {categories
+                .filter((category) => ['research', 'web3', 'text-writing'].includes(String(category.slug)))
+                .slice(0, 6)
+                .map((category) => (
+                  <Link
+                    key={category.id}
+                    href={`/categories/${category.slug}`}
+                    className='flex items-center justify-between rounded-lg border border-white bg-white px-4 py-3 text-sm text-slate-700 shadow-sm hover:bg-slate-100'
+                  >
+                    <span>{getLocalizedField(category.name, locale)}</span>
+                    <span className='text-xs text-slate-500'>
+                      {'toolCount' in category && typeof category.toolCount === 'number' ? category.toolCount : ''}
+                    </span>
+                  </Link>
+                ))}
+            </div>
+          </aside>
+        </section>
+
+        <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
+          <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '研究工具看什么' : 'What matters for research tools'}
+            </p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+              {isChinese ? '能不能帮你更快得到可信结论' : 'Can it help you reach trustworthy conclusions faster?'}
+            </h2>
+            <div className='mt-4 space-y-3 text-sm leading-6 text-slate-700'>
+              <p>
+                {isChinese
+                  ? '研究型工具最重要的不是回答“像不像”，而是信息来源是否清楚、范围是否够广，以及后续能不能继续追下去。'
+                  : 'The key is not whether the answer sounds convincing, but whether the source is clear, the coverage is broad enough, and the workflow lets you keep digging.'}
+              </p>
+              <p>
+                {isChinese
+                  ? '如果你做竞品、SEO、市场、Crypto 或知识型调研，优先看来源可回溯、收藏整理和导出能力。'
+                  : 'For SEO, competitive, market, crypto, or knowledge-heavy research, prioritize traceable sources, saved context, and export paths.'}
+              </p>
+            </div>
+          </div>
+
+          <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '常见问题' : 'FAQ'}
+            </p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+              {isChinese ? '研究工具最常见的问题' : 'Common questions about research tools'}
+            </h2>
+            <div className='mt-4 space-y-4'>
+              {faqs.map((faq) => (
+                <div key={faq.question} className='rounded-lg border border-slate-200 bg-slate-50 p-4'>
+                  <p className='text-sm font-semibold text-slate-900'>{faq.question}</p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>{faq.answer}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </div>
+    </>
+  );
+}

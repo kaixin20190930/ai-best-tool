@@ -261,6 +261,45 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-tools-for-research',
+    priority: 0.75,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 研究工具推荐',
+      en: 'AI tools for research',
+    },
+    desc: {
+      cn: '适合资料检索、分析、证据核对和研究工作流。',
+      en: 'For discovery, analysis, evidence-checking, and research workflows.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-developers',
+    priority: 0.75,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 开发者工具推荐',
+      en: 'AI tools for developers',
+    },
+    desc: {
+      cn: '适合编码、模型接入、调试、自动化和开发工作流。',
+      en: 'For coding, model access, debugging, automation, and developer workflows.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-automation',
+    priority: 0.75,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 自动化工具推荐',
+      en: 'AI tools for automation',
+    },
+    desc: {
+      cn: '适合流程编排、Agent 工作流和重复任务自动化。',
+      en: 'For workflow orchestration, agent workflows, and repeatable automation.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-marketing',
     priority: 0.73,
     changeFrequency: 'monthly',
@@ -375,6 +414,19 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     desc: {
       cn: '适合链上数据、钱包工作流和 Crypto 研究。',
       en: 'For on-chain data, wallet workflows, and crypto research.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-web3-analysis',
+    priority: 0.75,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI Web3 分析工具推荐',
+      en: 'AI tools for Web3 analysis',
+    },
+    desc: {
+      cn: '适合链上分析、协议观察、DeFi 研究和钱包监控。',
+      en: 'For on-chain analysis, protocol monitoring, DeFi research, and wallet tracking.',
     },
   },
   {
@@ -643,6 +695,9 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/how-to-choose-ai-tools',
   '/guides/free-ai-tools',
   '/guides/ai-writing-tools',
+  '/guides/ai-tools-for-research',
+  '/guides/ai-tools-for-developers',
+  '/guides/ai-tools-for-automation',
   '/guides/ai-video-tools',
   '/guides/ai-image-tools',
   '/guides/ai-coding-tools',
@@ -651,8 +706,8 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/ai-tools-for-meeting-notes',
   '/guides/ai-note-taking-tools',
   '/guides/ai-tools-for-web3',
+  '/guides/ai-tools-for-web3-analysis',
   '/guides/ai-tools-for-crypto-research',
   '/guides/ai-tools-for-on-chain-analysis',
   '/guides/ai-tools-for-defi-analytics',
-  '/guides/ai-seo-tools',
 ] as const;
