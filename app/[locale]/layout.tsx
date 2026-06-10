@@ -1,8 +1,9 @@
-import type { Viewport } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 
 import { isAdminUser } from '@/lib/auth/admin';
+import { getNoindexMetadata, isIndexableLocale } from '@/lib/seo/indexing';
 import { createClient } from '@/lib/supabase/server';
 import { Toaster } from '@/components/ui/sonner';
 import Navigation from '@/components/home/Navigation';
@@ -27,6 +28,16 @@ export const viewport: Viewport = {
     { media: '(prefers-color-scheme: dark)', color: 'hsl(197 100% 98%)' },
   ],
 };
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  if (!isIndexableLocale(locale)) {
+    return {
+      ...getNoindexMetadata(),
+    };
+  }
+
+  return {};
+}
 
 export default async function RootLayout({
   children,
