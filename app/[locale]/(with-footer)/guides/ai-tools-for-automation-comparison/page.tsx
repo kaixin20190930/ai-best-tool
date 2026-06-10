@@ -26,6 +26,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     breadcrumbLabel: { cn: '自动化工具对比', en: 'Automation tools comparison' },
     compareTitle: { cn: '几款常见自动化工具的快速对照', en: 'A quick side-by-side look at common automation tools' },
     compareSubtitle: { cn: 'Automation', en: 'Automation' },
+    preferredToolNames: ['n8n', 'make', 'zapier', 'pipedream'],
     tips: {
       cn: [
         '先看你做的是简单触发器、复杂编排还是持续运行的后台流程。',

@@ -175,7 +175,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '如果你现在是为了资料发现、证据核对、竞品分析或信息整理而来，先从这几类真实工具开始更容易建立判断。'
               : 'If you are here for discovery, evidence-checking, competitor analysis, or information synthesis, these tools are the fastest way to build context.'
           }
-          toolNames={['perplexity', 'chatgpt', 'claude', 'sigoo']}
+          toolNames={['perplexity', 'consensus', 'scite', 'notebooklm']}
           compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
           compareTitle={isChinese ? '再往下走的对比入口' : 'Next comparison paths'}
           compareDescription={

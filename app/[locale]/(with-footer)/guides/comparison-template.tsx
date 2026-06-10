@@ -3,11 +3,11 @@ import Link from 'next/link';
 import { ArrowRight, CheckCircle2, Columns3, ExternalLink, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { generateBreadcrumbSchema, generateFAQSchema, generateItemListSchema } from '@/lib/seo/schema';
 import { getNoindexMetadata } from '@/lib/seo/indexing';
+import { generateBreadcrumbSchema, generateFAQSchema, generateItemListSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import { toolToListRow } from '@/lib/services/toolPresenter';
-import { getPopularTools, getTools, type Tool } from '@/lib/services/tools';
+import { getPopularTools, getToolByNameCached, getTools, type Tool } from '@/lib/services/tools';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 
 type ComparisonConfig = {
@@ -46,6 +46,7 @@ type ComparisonConfig = {
     cn: string;
     en: string;
   };
+  preferredToolNames?: string[];
   tips: {
     cn: string[];
     en: string[];
@@ -124,14 +125,26 @@ export async function buildComparisonPageData(locale: string, config: Comparison
     })),
   );
 
-  const [queryResult, popularTools] = await Promise.all([
+  const [preferredTools, queryResult, popularTools] = await Promise.all([
+    config.preferredToolNames?.length
+      ? Promise.all(config.preferredToolNames.map((toolName) => getToolByNameCached(toolName).catch(() => null)))
+      : Promise.resolve([]),
     getTools({ search: config.searchQuery, status: 'published' }, { page: 1, pageSize: 4 }, 'popular').catch(
       () => null,
     ),
     getPopularTools(4).catch(() => []),
   ]);
 
-  const sourceTools = queryResult && queryResult.data.length > 0 ? queryResult.data : popularTools;
+  const preferredList = preferredTools.filter((tool): tool is Tool => Boolean(tool));
+  const searchList = queryResult?.data || [];
+  const fallbackList = searchList.length > 0 ? searchList : popularTools;
+  const mergedTools = [...preferredList, ...fallbackList].reduce<Tool[]>((acc, tool) => {
+    if (!acc.some((item) => item.id === tool.id)) {
+      acc.push(tool);
+    }
+    return acc;
+  }, []);
+  const sourceTools = mergedTools.slice(0, 4);
   const categoryMap = new Map(categories.map((category) => [category.id, category]));
   const tools: ComparisonTool[] = sourceTools.map((tool, index) => {
     const row = toolToListRow(tool, locale);

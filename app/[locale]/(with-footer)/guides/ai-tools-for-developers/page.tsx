@@ -177,7 +177,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '如果你要的是编码、模型接入、调试或 API 组合，这几款工具会比泛搜索更快把范围收窄。'
               : 'If your need is coding, model access, debugging, or API composition, these tools narrow the space much faster than broad search.'
           }
-          toolNames={['cursor', 'claude', 'chatgpt', 'openrouter']}
+          toolNames={['cursor', 'openrouter', 'langfuse', 'portkey']}
           compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
           compareTitle={isChinese ? '再往下的决策入口' : 'Next decision paths'}
           compareDescription={

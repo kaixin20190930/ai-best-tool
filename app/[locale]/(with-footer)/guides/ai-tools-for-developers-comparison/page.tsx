@@ -26,6 +26,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     breadcrumbLabel: { cn: '开发者工具对比', en: 'Developer tools comparison' },
     compareTitle: { cn: '几款常见开发者工具的快速对照', en: 'A quick side-by-side look at common developer tools' },
     compareSubtitle: { cn: 'Developer', en: 'Developer' },
+    preferredToolNames: ['cursor', 'openrouter', 'langfuse', 'portkey'],
     tips: {
       cn: [
         '先分清你的主要工作发生在编辑器、API 层还是自动化层。',

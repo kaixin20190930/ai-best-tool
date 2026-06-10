@@ -179,7 +179,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '如果你的核心问题是重复流程、跨工具同步或后台任务编排，先看这些工具会更接近真实使用场景。'
               : 'If your real problem is repeatable processes, cross-tool sync, or back-office orchestration, these tools are the most practical place to start.'
           }
-          toolNames={['n8n', 'make', 'openrouter', 'chatgpt']}
+          toolNames={['n8n', 'make', 'zapier', 'pipedream']}
           compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
           compareTitle={isChinese ? '继续缩小选择范围' : 'Narrow the choice further'}
           compareDescription={

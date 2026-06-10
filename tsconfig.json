@@ -53,6 +53,7 @@
     "scripts/split-other-categories.ts",
     "scripts/update-sigoo-and-bootstrap-voice-automation.ts",
     "scripts/bootstrap-research-devtools-batch.ts",
+    "scripts/bootstrap-research-dev-automation-wave-2.ts",
     "scripts/fix-missing-translations.ts",
     "scripts/test-hreflang-rendering.ts",
     "scripts/enrich-priority-tool-details.ts",

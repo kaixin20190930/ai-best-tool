@@ -26,6 +26,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     breadcrumbLabel: { cn: '研究工具对比', en: 'Research tools comparison' },
     compareTitle: { cn: '几款常见研究工具的快速对照', en: 'A quick side-by-side look at common research tools' },
     compareSubtitle: { cn: 'Research', en: 'Research' },
+    preferredToolNames: ['perplexity', 'consensus', 'scite', 'notebooklm'],
     tips: {
       cn: [
         '先确认你做的是资料发现、证据核对还是深度分析，不同工具的重点不同。',
