@@ -55,6 +55,7 @@
     "scripts/bootstrap-research-devtools-batch.ts",
     "scripts/fix-missing-translations.ts",
     "scripts/test-hreflang-rendering.ts",
+    "scripts/enrich-priority-tool-details.ts",
     ".next/types/**/*.ts"
   ],
   "exclude": [

@@ -57,7 +57,28 @@ export const revalidate = 3600;
 // Enable dynamic params for ISR
 export const dynamicParams = true;
 
-function getStringList(input: unknown): string[] {
+function getLocalizedText(input: unknown, locale: string, fallback = 'en'): string | null {
+  if (typeof input === 'string') {
+    const trimmed = input.trim();
+    return trimmed || null;
+  }
+
+  if (input && typeof input === 'object') {
+    const record = input as Record<string, unknown>;
+    const exact = record[locale];
+    if (typeof exact === 'string' && exact.trim()) return exact.trim();
+
+    const fallbackValue = record[fallback];
+    if (typeof fallbackValue === 'string' && fallbackValue.trim()) return fallbackValue.trim();
+
+    const firstString = Object.values(record).find((value) => typeof value === 'string' && value.trim());
+    if (typeof firstString === 'string') return firstString.trim();
+  }
+
+  return null;
+}
+
+function getStringList(input: unknown, locale = 'en', fallback = 'en'): string[] {
   if (Array.isArray(input)) {
     return input.map((item) => (typeof item === 'string' ? item.trim() : '')).filter(Boolean);
   }
@@ -68,7 +89,19 @@ function getStringList(input: unknown): string[] {
   }
 
   if (input && typeof input === 'object') {
-    return Object.values(input)
+    const record = input as Record<string, unknown>;
+    const localizedList = record[locale] ?? record[fallback];
+
+    if (Array.isArray(localizedList)) {
+      return localizedList.map((item) => (typeof item === 'string' ? item.trim() : '')).filter(Boolean);
+    }
+
+    if (typeof localizedList === 'string') {
+      const trimmed = localizedList.trim();
+      return trimmed ? [trimmed] : [];
+    }
+
+    return Object.values(record)
       .map((item) => (typeof item === 'string' ? item.trim() : ''))
       .filter(Boolean);
   }
@@ -76,7 +109,7 @@ function getStringList(input: unknown): string[] {
   return [];
 }
 
-function getFeatureEntries(input: unknown): Array<{ label: string; value?: string }> {
+function getFeatureEntries(input: unknown, locale = 'en', fallback = 'en'): Array<{ label: string; value?: string }> {
   if (Array.isArray(input)) {
     return input
       .filter((item): item is string => typeof item === 'string' && item.trim().length > 0)
@@ -84,12 +117,74 @@ function getFeatureEntries(input: unknown): Array<{ label: string; value?: strin
   }
 
   if (input && typeof input === 'object') {
-    return Object.entries(input)
-      .filter(([, value]) => typeof value === 'string' && value.trim().length > 0)
-      .map(([key, value]) => ({ label: key, value: value.trim() }));
+    const record = input as Record<string, unknown>;
+    const { localized } = record;
+
+    if (localized && typeof localized === 'object') {
+      const localizedRecord = localized as Record<string, unknown>;
+      const localizedEntries = localizedRecord[locale] ?? localizedRecord[fallback];
+
+      if (Array.isArray(localizedEntries)) {
+        return localizedEntries
+          .filter(
+            (item): item is { label: string; value?: string } =>
+              Boolean(item) &&
+              typeof item === 'object' &&
+              typeof (item as { label?: unknown }).label === 'string' &&
+              (item as { label: string }).label.trim().length > 0,
+          )
+          .map((item) => ({
+            label: item.label.trim(),
+            value: typeof item.value === 'string' && item.value.trim().length > 0 ? item.value.trim() : undefined,
+          }));
+      }
+    }
+
+    return Object.entries(record).flatMap(([key, value]) => {
+      if (typeof value !== 'string') return [];
+      const trimmed = value.trim();
+      return trimmed ? [{ label: key, value: trimmed }] : [];
+    });
   }
 
   return [];
+}
+
+function getEditorialReview(
+  input: unknown,
+  locale: string,
+  fallback = 'en',
+): {
+  reviewedAt: string | null;
+  reviewedBy: string | null;
+  summary: string | null;
+  trustNote: string | null;
+} | null {
+  if (!input || typeof input !== 'object') {
+    return null;
+  }
+
+  const { editorial } = input as Record<string, unknown>;
+  if (!editorial || typeof editorial !== 'object') {
+    return null;
+  }
+
+  const record = editorial as Record<string, unknown>;
+  const reviewedAt = typeof record.reviewedAt === 'string' ? record.reviewedAt : null;
+  const reviewedBy = typeof record.reviewedBy === 'string' ? record.reviewedBy : null;
+  const summary = getLocalizedText(record.summary, locale, fallback);
+  const trustNote = getLocalizedText(record.trustNote, locale, fallback);
+
+  if (!reviewedAt && !reviewedBy && !summary && !trustNote) {
+    return null;
+  }
+
+  return {
+    reviewedAt,
+    reviewedBy,
+    summary,
+    trustNote,
+  };
 }
 
 function inferBestFit(categorySlug: string | undefined, locale: string, useCases: string[]): string[] {
@@ -489,35 +584,40 @@ export default async function Page({
   const heroImage = data.thumbnailUrl || data.imageUrl || '';
   const pricingLabel = getPricingLabel(dbTool?.pricing);
   const updatedAt = dbTool?.updatedAt || dbTool?.createdAt;
+  const recentlyCheckedLabel = isChinese ? '最近检查' : 'Recently checked';
   const updatedLabel = updatedAt
     ? new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
         year: 'numeric',
         month: 'short',
         day: 'numeric',
       }).format(new Date(updatedAt))
-    : 'Recently checked';
+    : recentlyCheckedLabel;
+  let ratingLabel = isChinese ? '暂无评分' : 'No ratings yet';
+  if (ratingStats.ratingCount > 0) {
+    ratingLabel = `${ratingStats.averageRating.toFixed(1)} / 5`;
+  }
   const quickFacts = [
     {
-      label: 'Category',
+      label: isChinese ? '分类' : 'Category',
       value: categoryName,
       icon: FolderOpen,
       tone: 'text-sky-700 bg-sky-50',
     },
     {
-      label: 'Pricing',
+      label: isChinese ? '定价' : 'Pricing',
       value: pricingLabel,
       icon: DollarSign,
       tone: 'text-emerald-700 bg-emerald-50',
     },
     {
-      label: 'Updated',
+      label: isChinese ? '更新' : 'Updated',
       value: updatedLabel,
       icon: CalendarDays,
       tone: 'text-cyan-700 bg-cyan-50',
     },
     {
-      label: 'Rating',
-      value: ratingStats.ratingCount > 0 ? `${ratingStats.averageRating.toFixed(1)} / 5` : 'No ratings yet',
+      label: isChinese ? '评分' : 'Rating',
+      value: ratingLabel,
       icon: Star,
       tone: 'text-cyan-700 bg-cyan-50',
     },
@@ -532,11 +632,19 @@ export default async function Page({
   }
   const categorySlug = category?.slug;
   const tagLabels = tags.map((tag) => getTagLocalizedField(tag.name, locale));
-  const featureEntries = getFeatureEntries(dbTool?.features);
-  const useCaseList = getStringList(dbTool?.useCases);
+  const featureEntries = getFeatureEntries(dbTool?.features, locale);
+  const useCaseList = getStringList(dbTool?.useCases, locale);
   const bestFitList = inferBestFit(categorySlug, locale, useCaseList);
   const notIdealForList = inferNotIdealFor(categorySlug, locale);
   const officialSite = getOfficialSiteStatus(data.url, locale, dbTool?.status === 'published');
+  const editorialReview = getEditorialReview(dbTool?.features, locale);
+  const editorialReviewedLabel = editorialReview?.reviewedAt
+    ? new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      }).format(new Date(editorialReview.reviewedAt))
+    : null;
   const freshnessSummary = getFreshnessSummary(updatedAt || null, locale);
   const pricingSummary = getPricingSummary(dbTool?.pricing, locale);
   let mediaChecklistItem = 'Preview media is still limited, so check the official screenshots before deciding.';
@@ -621,7 +729,7 @@ export default async function Page({
               <div className='flex flex-wrap items-center gap-2'>
                 <span className='inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-sm font-medium text-slate-700 ring-1 ring-slate-200'>
                   <Sparkles className='size-4 text-emerald-600' />
-                  AI tool profile
+                  {isChinese ? '工具详情页' : 'AI tool profile'}
                 </span>
                 <span className='inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-sm font-medium text-slate-700 ring-1 ring-slate-200'>
                   <FolderOpen className='size-4 text-sky-600' />
@@ -730,7 +838,7 @@ export default async function Page({
                   href={`/${locale}/explore?search=${encodeURIComponent(data.title)}`}
                   className='inline-flex items-center justify-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-slate-800 ring-1 ring-slate-200 transition hover:bg-slate-100'
                 >
-                  Find similar tools <CircleArrowRight className='size-4' />
+                  {isChinese ? '找相似工具' : 'Find similar tools'} <CircleArrowRight className='size-4' />
                 </a>
                 {/* Discussion anchor is now surfaced in the action panel above */}
               </div>
@@ -741,15 +849,15 @@ export default async function Page({
                 {heroPreview}
                 <div className='grid grid-cols-3 divide-x divide-slate-200 border-t border-slate-200 text-center'>
                   <div className='p-3'>
-                    <p className='text-xs text-slate-500'>Views</p>
+                    <p className='text-xs text-slate-500'>{isChinese ? '浏览' : 'Views'}</p>
                     <p className='font-semibold text-slate-950'>{toolStats.viewCount.toLocaleString()}</p>
                   </div>
                   <div className='p-3'>
-                    <p className='text-xs text-slate-500'>Clicks</p>
+                    <p className='text-xs text-slate-500'>{isChinese ? '点击' : 'Clicks'}</p>
                     <p className='font-semibold text-slate-950'>{toolStats.clickCount.toLocaleString()}</p>
                   </div>
                   <div className='p-3'>
-                    <p className='text-xs text-slate-500'>Saved</p>
+                    <p className='text-xs text-slate-500'>{isChinese ? '收藏' : 'Saved'}</p>
                     <p className='font-semibold text-slate-950'>{toolStats.favoriteCount.toLocaleString()}</p>
                   </div>
                 </div>
@@ -795,7 +903,7 @@ export default async function Page({
           <div className='mx-auto flex max-w-7xl flex-wrap items-center gap-3 px-4 py-4 lg:px-6'>
             <span className='inline-flex items-center gap-2 text-sm font-semibold text-slate-700'>
               <TagIcon className='size-4 text-slate-500' />
-              Tags
+              {isChinese ? '标签' : 'Tags'}
             </span>
             {tags.length > 0 ? (
               tags.map((tag) => (
@@ -861,6 +969,23 @@ export default async function Page({
                   <p className='mt-3 text-sm leading-6 text-slate-600'>{pricingSummary}</p>
                 </div>
 
+                {editorialReview && (
+                  <div className='rounded-lg border border-slate-200 p-4'>
+                    <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                      {locale === 'cn' ? '编辑复核' : 'Editorial review'}
+                    </p>
+                    <p className='mt-2 text-lg font-semibold text-slate-950'>
+                      {editorialReviewedLabel || (locale === 'cn' ? '已复核' : 'Reviewed')}
+                    </p>
+                    {editorialReview.summary && (
+                      <p className='mt-3 text-sm leading-6 text-slate-600'>{editorialReview.summary}</p>
+                    )}
+                    {editorialReview.trustNote && (
+                      <p className='mt-2 text-sm leading-6 text-slate-600'>{editorialReview.trustNote}</p>
+                    )}
+                  </div>
+                )}
+
                 <div className='rounded-lg border border-slate-200 p-4'>
                   <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
                     {locale === 'cn' ? '适合谁' : 'Best fit'}
@@ -909,7 +1034,9 @@ export default async function Page({
               <section className='rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'>
                 <div className='mb-5 flex items-center gap-3'>
                   <CheckCircle className='size-6 text-emerald-600' />
-                  <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>Key Features</h2>
+                  <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>
+                    {isChinese ? '关键能力' : 'Key Features'}
+                  </h2>
                 </div>
                 <div className='grid gap-3 sm:grid-cols-2'>
                   {featureEntries.map((entry) => (
@@ -926,7 +1053,9 @@ export default async function Page({
               <section className='rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'>
                 <div className='mb-5 flex items-center gap-3'>
                   <Lightbulb className='size-6 text-cyan-600' />
-                  <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>Use Cases</h2>
+                  <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>
+                    {isChinese ? '适用场景' : 'Use Cases'}
+                  </h2>
                 </div>
                 <div className='grid gap-3 sm:grid-cols-2 lg:grid-cols-3'>
                   {useCaseList.map((value) => (
