@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import GuideActionSection from '@/components/guides/GuideActionSection';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
@@ -164,6 +165,48 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </aside>
         </section>
+
+        <GuideActionSection
+          locale={locale}
+          eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}
+          title={isChinese ? '更适合研究型工作的工具入口' : 'Tool entry points that fit research-heavy work'}
+          description={
+            isChinese
+              ? '如果你现在是为了资料发现、证据核对、竞品分析或信息整理而来，先从这几类真实工具开始更容易建立判断。'
+              : 'If you are here for discovery, evidence-checking, competitor analysis, or information synthesis, these tools are the fastest way to build context.'
+          }
+          toolNames={['perplexity', 'chatgpt', 'claude', 'sigoo']}
+          compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
+          compareTitle={isChinese ? '再往下走的对比入口' : 'Next comparison paths'}
+          compareDescription={
+            isChinese
+              ? '当你已经明确研究方向后，继续进入更窄的对比页，会比泛泛浏览更快。'
+              : 'Once your research direction is clearer, narrower comparison pages are usually more useful than broad browsing.'
+          }
+          compareLinks={[
+            {
+              href: '/guides/ai-seo-tools-comparison',
+              title: isChinese ? 'SEO 研究工具对比' : 'SEO research tools comparison',
+              description: isChinese
+                ? '适合关键词、SERP 和网站结构研究。'
+                : 'Best for keywords, SERP analysis, and site structure research.',
+            },
+            {
+              href: '/guides/ai-tools-for-crypto-research-comparison',
+              title: isChinese ? 'Crypto 研究工具对比' : 'Crypto research tools comparison',
+              description: isChinese
+                ? '适合链上信息、项目和 narrative 跟踪。'
+                : 'Best for on-chain, project, and narrative-driven research.',
+            },
+            {
+              href: '/guides/ai-writing-tools-comparison',
+              title: isChinese ? '写作工具对比' : 'Writing tools comparison',
+              description: isChinese
+                ? '适合研究完成后的整理、输出和成文阶段。'
+                : 'Useful once research moves into synthesis and writing output.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

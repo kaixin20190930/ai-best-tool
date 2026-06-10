@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import GuideActionSection from '@/components/guides/GuideActionSection';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
@@ -169,6 +170,50 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </aside>
         </section>
+
+        <GuideActionSection
+          locale={locale}
+          eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}
+          title={
+            isChinese ? '更贴近链上研究和监控的真实入口' : 'Real entry points for on-chain research and monitoring'
+          }
+          description={
+            isChinese
+              ? '如果你更关心协议、钱包、TVL、资金流和历史趋势，这几款工具会比泛 Web3 页面更快进入正题。'
+              : 'If you care more about protocols, wallets, TVL, fund flow, and historical change, these tools get you into the real work faster than a general Web3 page.'
+          }
+          toolNames={['dune', 'defillama', 'the-graph', 'openrouter']}
+          compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
+          compareTitle={isChinese ? '继续深入的对比入口' : 'Next comparison paths'}
+          compareDescription={
+            isChinese
+              ? '当你已经知道自己更偏 DeFi、协议还是链上分析时，继续进入更细的对比页会更有效。'
+              : 'Once you know whether your focus is DeFi, protocol monitoring, or on-chain research, narrower compare pages work better.'
+          }
+          compareLinks={[
+            {
+              href: '/guides/ai-tools-for-defi-analytics-comparison',
+              title: isChinese ? 'DeFi 分析工具对比' : 'DeFi analytics comparison',
+              description: isChinese
+                ? '更适合 TVL、协议变化和资金流研究。'
+                : 'Useful for TVL, protocol shifts, and capital-flow research.',
+            },
+            {
+              href: '/guides/ai-tools-for-on-chain-analysis-comparison',
+              title: isChinese ? '链上分析工具对比' : 'On-chain analysis comparison',
+              description: isChinese
+                ? '更适合地址、交易和异常活动观察。'
+                : 'Better for address-level, transaction-level, and anomaly-focused work.',
+            },
+            {
+              href: '/guides/ai-tools-for-protocol-analytics-comparison',
+              title: isChinese ? '协议分析工具对比' : 'Protocol analytics comparison',
+              description: isChinese
+                ? '更适合协议健康、增长和使用情况跟踪。'
+                : 'Useful for protocol health, growth, and usage tracking.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

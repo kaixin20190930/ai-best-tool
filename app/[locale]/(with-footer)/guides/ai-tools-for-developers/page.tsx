@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import GuideActionSection from '@/components/guides/GuideActionSection';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
@@ -166,6 +167,48 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </aside>
         </section>
+
+        <GuideActionSection
+          locale={locale}
+          eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}
+          title={isChinese ? '更贴近开发者工作流的真实入口' : 'Real entry points for developer workflows'}
+          description={
+            isChinese
+              ? '如果你要的是编码、模型接入、调试或 API 组合，这几款工具会比泛搜索更快把范围收窄。'
+              : 'If your need is coding, model access, debugging, or API composition, these tools narrow the space much faster than broad search.'
+          }
+          toolNames={['cursor', 'claude', 'chatgpt', 'openrouter']}
+          compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
+          compareTitle={isChinese ? '再往下的决策入口' : 'Next decision paths'}
+          compareDescription={
+            isChinese
+              ? '开发者通常不是只选一个工具，而是先明确主要工作位置，再进入相应的对比页。'
+              : 'Developers rarely choose by brand alone. It works better to pick the main workflow layer, then compare inside it.'
+          }
+          compareLinks={[
+            {
+              href: '/guides/ai-coding-tools-comparison',
+              title: isChinese ? '编程工具对比' : 'Coding tools comparison',
+              description: isChinese
+                ? '更适合编辑器内补全、重构和调试。'
+                : 'Best for editor-native completion, refactoring, and debugging.',
+            },
+            {
+              href: '/guides/ai-chatbot-tools-comparison',
+              title: isChinese ? '聊天工具对比' : 'Chatbot tools comparison',
+              description: isChinese
+                ? '更适合方案设计、解释和长上下文问答。'
+                : 'Better for planning, explanation, and long-context reasoning.',
+            },
+            {
+              href: '/guides/ai-tools-for-automation',
+              title: isChinese ? '自动化工具入口' : 'Automation tools guide',
+              description: isChinese
+                ? '如果你更在意流程编排和任务落地，从这里继续。'
+                : 'Continue here if orchestration and execution matter more than coding assistance.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

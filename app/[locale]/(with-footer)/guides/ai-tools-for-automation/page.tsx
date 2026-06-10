@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import GuideActionSection from '@/components/guides/GuideActionSection';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
@@ -168,6 +169,48 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </aside>
         </section>
+
+        <GuideActionSection
+          locale={locale}
+          eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}
+          title={isChinese ? '更适合自动化和编排的工具入口' : 'Tool entry points that fit automation and orchestration'}
+          description={
+            isChinese
+              ? '如果你的核心问题是重复流程、跨工具同步或后台任务编排，先看这些工具会更接近真实使用场景。'
+              : 'If your real problem is repeatable processes, cross-tool sync, or back-office orchestration, these tools are the most practical place to start.'
+          }
+          toolNames={['n8n', 'make', 'openrouter', 'chatgpt']}
+          compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
+          compareTitle={isChinese ? '继续缩小选择范围' : 'Narrow the choice further'}
+          compareDescription={
+            isChinese
+              ? '自动化往往要和开发、研究、内容生成一起看，所以接下来的入口也要围绕工作流而不是单点能力。'
+              : 'Automation usually intersects with development, research, and content work, so the next steps should stay workflow-first.'
+          }
+          compareLinks={[
+            {
+              href: '/guides/ai-tools-for-developers',
+              title: isChinese ? '开发者工具入口' : 'Developer tools guide',
+              description: isChinese
+                ? '适合需要 API、模型接入和工程配合的自动化团队。'
+                : 'Useful when automation depends on APIs, model routing, and engineering workflows.',
+            },
+            {
+              href: '/guides/ai-coding-tools-comparison',
+              title: isChinese ? '编程工具对比' : 'Coding tools comparison',
+              description: isChinese
+                ? '如果你的自动化重心在脚本和代码层，这里更有参考价值。'
+                : 'Helpful when your automations are still mostly code and script driven.',
+            },
+            {
+              href: '/guides/ai-tools-for-web3-analysis',
+              title: isChinese ? 'Web3 分析工具入口' : 'Web3 analysis guide',
+              description: isChinese
+                ? '适合把监控、告警和链上研究接进自动化流程。'
+                : 'Useful when monitoring, alerting, and on-chain research feed into automations.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
