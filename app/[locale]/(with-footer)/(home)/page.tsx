@@ -151,6 +151,43 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const featuredGuidePages = FEATURED_GUIDE_HREFS.map((href) => GUIDE_PAGES.find((page) => page.href === href)).filter(
     (page): page is (typeof GUIDE_PAGES)[number] => Boolean(page),
   );
+  const startHereLinks = [
+    {
+      href: '/guides/how-to-choose-ai-tools',
+      title: isChinese ? '先看选型指南' : 'Start with the selection guide',
+      description: isChinese
+        ? '先确认场景、价格和更新频率，再决定哪些工具值得继续比较。'
+        : 'Use case, pricing, and freshness first—then decide which tools are worth comparing.',
+    },
+    {
+      href: '/explore?sort=popular',
+      title: isChinese ? '浏览高关注工具' : 'Browse the most-visited tools',
+      description: isChinese
+        ? '从当前最常被浏览和讨论的工具开始，更容易快速建立判断。'
+        : 'Start from the tools people visit and discuss most to build context quickly.',
+    },
+    {
+      href: '/categories/productivity?sort=popular',
+      title: isChinese ? '看生产力分类' : 'Open the productivity category',
+      description: isChinese
+        ? '目前内容最厚、也最容易开始筛选的一类。'
+        : 'One of the densest categories, and the easiest place to begin narrowing down.',
+    },
+    {
+      href: '/categories/web3?sort=popular',
+      title: isChinese ? '看 Web3 分类' : 'Open the Web3 category',
+      description: isChinese
+        ? '如果你关心链上分析、研究或基础设施，这里最值得先看。'
+        : 'If you care about on-chain analysis, research, or infrastructure, start here.',
+    },
+    {
+      href: '/ai/chatgpt',
+      title: isChinese ? '查看一个完整详情页' : 'Review a complete tool page',
+      description: isChinese
+        ? '先看一条完整工具详情页长什么样，再决定后续比较方向。'
+        : 'See what a complete decision-ready tool page looks like before comparing others.',
+    },
+  ];
 
   // Generate Organization schema for homepage
   const organizationSchema = generateOrganizationSchema({
@@ -349,6 +386,34 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               </div>
             </div>
           </Link>
+        </section>
+
+        <section className='mx-auto mt-10 w-full max-w-7xl px-4 lg:px-6'>
+          <SectionHeader
+            title={isChinese ? '从这里开始' : 'Start here'}
+            description={
+              isChinese
+                ? '如果你是第一次来，先从这几个最值得收录、也最容易建立判断的页面开始。'
+                : 'If this is your first visit, start with these pages. They are the clearest entry points for both users and search engines.'
+            }
+          />
+          <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-5'>
+            {startHereLinks.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className='group rounded-[18px] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
+              >
+                <div className='flex items-start justify-between gap-3'>
+                  <div>
+                    <h3 className='text-base font-semibold text-slate-950'>{item.title}</h3>
+                    <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
+                  </div>
+                  <CircleChevronRight className='mt-0.5 size-5 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-slate-700' />
+                </div>
+              </Link>
+            ))}
+          </div>
         </section>
 
         <CommunityPulse
