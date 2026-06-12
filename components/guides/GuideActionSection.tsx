@@ -21,6 +21,10 @@ interface GuideActionSectionProps {
   compareTitle?: string;
   compareDescription?: string;
   compareLinks?: CompareLink[];
+  nextEyebrow?: string;
+  nextTitle?: string;
+  nextDescription?: string;
+  nextLinks?: CompareLink[];
 }
 
 export default async function GuideActionSection({
@@ -33,13 +37,17 @@ export default async function GuideActionSection({
   compareTitle,
   compareDescription,
   compareLinks = [],
+  nextEyebrow,
+  nextTitle,
+  nextDescription,
+  nextLinks = [],
 }: GuideActionSectionProps) {
   const tools = await Promise.all(toolNames.map((toolName) => getToolByNameCached(toolName).catch(() => null)));
   const toolCards = tools
     .filter((tool): tool is NonNullable<typeof tool> => Boolean(tool))
     .map((tool) => toolToListRow(tool, locale));
 
-  if (toolCards.length === 0 && compareLinks.length === 0) {
+  if (toolCards.length === 0 && compareLinks.length === 0 && nextLinks.length === 0) {
     return null;
   }
 
@@ -73,6 +81,40 @@ export default async function GuideActionSection({
 
           <div className='grid gap-4 lg:grid-cols-3'>
             {compareLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
+              >
+                <div className='flex items-start justify-between gap-3'>
+                  <div>
+                    <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>{link.title}</p>
+                    <p className='mt-2 text-sm leading-6 text-slate-600'>{link.description}</p>
+                  </div>
+                  <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {nextLinks.length > 0 && (
+        <div className='mt-8 border-t border-slate-200 pt-6'>
+          {nextTitle ? (
+            <div className='mb-4 flex flex-col gap-2'>
+              {nextEyebrow ? (
+                <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>{nextEyebrow}</p>
+              ) : null}
+              <h3 className='text-xl font-bold text-slate-950'>{nextTitle}</h3>
+              {nextDescription ? (
+                <p className='max-w-3xl text-sm leading-6 text-slate-600'>{nextDescription}</p>
+              ) : null}
+            </div>
+          ) : null}
+
+          <div className='grid gap-4 lg:grid-cols-3'>
+            {nextLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}

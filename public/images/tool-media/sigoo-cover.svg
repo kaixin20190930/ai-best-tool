@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1400" height="800" viewBox="0 0 1400 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sigoo-canvas" x1="80" y1="60" x2="1290" y2="748" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f0fdfa"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+    <linearGradient id="sigoo-panel" x1="896" y1="146" x2="1240" y2="514" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ccfbf1"/>
+      <stop offset="1" stop-color="#14b8a6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1400" height="800" rx="44" fill="url(#sigoo-canvas)"/>
+  <circle cx="1220" cy="120" r="132" fill="#ccfbf1" fill-opacity="0.78"/>
+  <circle cx="1136" cy="636" r="174" fill="#ccfbf1" fill-opacity="0.55"/>
+  <rect x="64" y="64" width="1272" height="672" rx="34" fill="white" stroke="#dbeafe" stroke-width="2"/>
+
+  <rect x="118" y="126" width="208" height="46" rx="23" fill="#ccfbf1"/>
+  <text x="222" y="155" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700" fill="#0f766e">SEO Intelligence</text>
+
+  <text x="118" y="256" font-family="Inter, Arial, sans-serif" font-size="84" font-weight="800" fill="#0f172a">Sigoo.ai</text>
+  <text x="118" y="324" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="600" fill="#0f766e">Keyword discovery to website planning</text>
+  <text x="118" y="398" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="500" fill="#475569">Built for indie hackers, AI builders, and SaaS founders</text>
+
+  <rect x="118" y="466" width="520" height="174" rx="30" fill="#f0fdfa" stroke="#ccfbf1" stroke-width="2"/>
+  <text x="158" y="530" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700" fill="#0f172a">Current focus</text>
+  <text x="158" y="578" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#475569">Discover keyword opportunities, map site structure,</text>
+  <text x="158" y="612" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#475569">and understand the competitive landscape before execution.</text>
+
+  <rect x="874" y="142" width="360" height="360" rx="42" fill="url(#sigoo-panel)"/>
+  <rect x="914" y="182" width="280" height="280" rx="34" fill="rgba(255,255,255,0.9)"/>
+  <text x="1054" y="344" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="108" font-weight="800" fill="#0f766e">Si</text>
+
+  <rect x="874" y="548" width="360" height="86" rx="28" fill="#ccfbf1"/>
+  <text x="1054" y="602" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700" fill="#0f766e">Editorial preview</text>
+</svg>

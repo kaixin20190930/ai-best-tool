@@ -78,8 +78,55 @@ export interface MediaQueueItem {
   qualityScore: number;
   mediaIssues: string[];
   mediaReason: string | null;
+  hasDecisionGuide: boolean;
   priorityScore: number;
   updatedAt: string;
+}
+
+function hasDecisionGuideSnapshot(features: Record<string, unknown>): boolean {
+  const decision =
+    features.decision && typeof features.decision === 'object'
+      ? (features.decision as Record<string, unknown>)
+      : null;
+
+  if (!decision) {
+    return false;
+  }
+
+  const compareAxes =
+    decision.compareAxes && typeof decision.compareAxes === 'object'
+      ? (decision.compareAxes as Record<string, unknown>)
+      : null;
+
+  const compareAxesEn = Array.isArray(compareAxes?.en) ? compareAxes.en : [];
+  const compareAxesZh = Array.isArray(compareAxes?.zh) ? compareAxes.zh : [];
+
+  const localizedFields = [
+    'officialSummary',
+    'freshnessSummary',
+    'pricingSummary',
+    'mediaSummary',
+    'communitySummary',
+  ];
+
+  if (compareAxesEn.length === 0 || compareAxesZh.length === 0) {
+    return false;
+  }
+
+  return localizedFields.every((field) => {
+    const value = decision[field];
+    if (!value || typeof value !== 'object') {
+      return false;
+    }
+
+    const localized = value as Record<string, unknown>;
+    return (
+      typeof localized.en === 'string' &&
+      localized.en.trim().length > 0 &&
+      typeof localized.zh === 'string' &&
+      localized.zh.trim().length > 0
+    );
+  });
 }
 
 export interface DateRangeMetrics {
@@ -459,6 +506,7 @@ export async function getPriorityMediaQueue(limit: number = 12): Promise<MediaQu
           typeof mediaReview.reason === 'string' && mediaReview.reason.trim().length > 0
             ? mediaReview.reason.trim()
             : null;
+        const hasDecisionGuide = hasDecisionGuideSnapshot(features);
         const mediaIssues = getMediaIssueLabels({
           imageUrl: row.imageUrl,
           thumbnailUrl: row.thumbnailUrl,
@@ -489,7 +537,8 @@ export async function getPriorityMediaQueue(limit: number = 12): Promise<MediaQu
           (categorySlug ? categoryWeight[categorySlug] ?? 25 : 25) +
           missingCount * 35 +
           placeholderCount * 20 +
-          (mediaReviewNeeded ? 20 : 0);
+          (mediaReviewNeeded ? 20 : 0) +
+          (hasDecisionGuide ? 55 : 0);
 
         return {
           id: row.id,
@@ -502,6 +551,7 @@ export async function getPriorityMediaQueue(limit: number = 12): Promise<MediaQu
           qualityScore,
           mediaIssues,
           mediaReason,
+          hasDecisionGuide,
           priorityScore,
           updatedAt: row.updatedAt,
         } satisfies MediaQueueItem;

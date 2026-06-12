@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+import { Link } from '@/app/navigation';
 import { GUIDE_PAGES } from '@/lib/content/guides';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getCategoryBySlug, getLocalizedField } from '@/lib/services/categories';
@@ -48,6 +48,107 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
     web3: ['/guides/ai-tools-for-web3', '/guides/ai-tools-for-web3-comparison'],
     research: ['/guides/ai-seo-tools', '/guides/ai-tools-for-crypto-research'],
   };
+  const representativeToolMap: Record<
+    string,
+    Array<{
+      href: string;
+      title: { cn: string; en: string };
+      description: { cn: string; en: string };
+    }>
+  > = {
+    productivity: [
+      {
+        href: '/ai/fathom',
+        title: {
+          cn: 'Fathom：会议纪要与会后跟进',
+          en: 'Fathom: meeting notes and follow-through',
+        },
+        description: {
+          cn: '适合先看 AI 是否真的减少了会后整理和跟进负担。',
+          en: 'A strong example if you want to judge whether AI really reduces post-meeting admin work.',
+        },
+      },
+      {
+        href: '/ai/gamma',
+        title: {
+          cn: 'Gamma：把想法变成可分享材料',
+          en: 'Gamma: turn rough ideas into shareable decks',
+        },
+        description: {
+          cn: '适合先看表达、演示和提案类工作流怎么被 AI 加速。',
+          en: 'Useful for evaluating AI-assisted communication, proposal, and presentation workflows.',
+        },
+      },
+      {
+        href: '/ai/notta',
+        title: {
+          cn: 'Notta：转录与整理入口',
+          en: 'Notta: transcription and organization',
+        },
+        description: {
+          cn: '更偏语音转录、会议记录和日常信息整理场景。',
+          en: 'A practical entry point for transcription, meeting capture, and day-to-day information cleanup.',
+        },
+      },
+      {
+        href: '/ai/motion',
+        title: {
+          cn: 'Motion：时间与任务安排',
+          en: 'Motion: planning and task scheduling',
+        },
+        description: {
+          cn: '适合判断 AI 是否真的在日程和任务推进上提升效率。',
+          en: 'Good for judging whether AI meaningfully improves planning and task execution.',
+        },
+      },
+    ],
+    web3: [
+      {
+        href: '/ai/dune',
+        title: {
+          cn: 'Dune：查询驱动的链上分析',
+          en: 'Dune: query-driven on-chain analytics',
+        },
+        description: {
+          cn: '如果你想先看“可查询的数据工作台”是什么样，这一页最有代表性。',
+          en: 'The clearest representative page if you want to evaluate a query-first on-chain research workflow.',
+        },
+      },
+      {
+        href: '/ai/defillama',
+        title: {
+          cn: 'DefiLlama：广覆盖市场与协议监控',
+          en: 'DefiLlama: protocol monitoring and market coverage',
+        },
+        description: {
+          cn: '适合先看广覆盖 DeFi 市场可见性和监控类工具。',
+          en: 'A strong entry point for monitoring-oriented DeFi and market coverage workflows.',
+        },
+      },
+      {
+        href: '/ai/the-graph',
+        title: {
+          cn: 'The Graph：面向构建者的数据基础设施',
+          en: 'The Graph: builder-facing data infrastructure',
+        },
+        description: {
+          cn: '如果你更关心 Web3 应用怎么取数，这一页最适合先看。',
+          en: 'The best first stop if your question is how apps and products access structured blockchain data.',
+        },
+      },
+      {
+        href: '/ai/nansen',
+        title: {
+          cn: 'Nansen：地址与资金流研究',
+          en: 'Nansen: wallet and flow intelligence',
+        },
+        description: {
+          cn: '更适合先看地址、钱包和资金流研究型使用场景。',
+          en: 'Useful when you want to compare address, wallet, and capital-flow research products.',
+        },
+      },
+    ],
+  };
   const relatedGuideHrefs = [
     '/guides/how-to-choose-ai-tools',
     ...(guideHrefMap[categorySlug] || []),
@@ -66,6 +167,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
       slug: String(item.slug),
       name: getLocalizedField(item.name, params.locale),
     }));
+  const representativeTools = representativeToolMap[categorySlug] || [];
   const helperBullets = isChinese
     ? [
         `先看工具是否真正适合 ${categoryName} 的工作流，而不只是“看起来很强”。`,
@@ -218,6 +320,32 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
             </h2>
             <div className='mt-5 space-y-3'>
               <Link
+                href='/new'
+                className='block rounded-lg border border-slate-200 bg-white p-4 transition hover:border-cyan-200 hover:bg-cyan-50/40'
+              >
+                <p className='text-sm font-semibold text-slate-900'>
+                  {isChinese ? '回到本周新增' : 'Return to new this week'}
+                </p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>
+                  {isChinese
+                    ? '如果你更想看最近补进和最近补厚的内容，先回本周新增页。'
+                    : 'Go back to the weekly additions page if you want the freshest recently added and recently improved listings.'}
+                </p>
+              </Link>
+              <Link
+                href='/explore?sort=latest'
+                className='block rounded-lg border border-slate-200 bg-white p-4 transition hover:border-cyan-200 hover:bg-cyan-50/40'
+              >
+                <p className='text-sm font-semibold text-slate-900'>
+                  {isChinese ? '回到全部探索' : 'Return to all Explore'}
+                </p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>
+                  {isChinese
+                    ? '如果这个分类还不够，再回到 Explore 扩大筛选范围。'
+                    : 'If this category is still too narrow, go back to Explore and widen the search.'}
+                </p>
+              </Link>
+              <Link
                 href={`/explore?search=${encodeURIComponent(categoryName)}&sort=popular`}
                 className='block rounded-lg border border-slate-200 bg-white p-4 transition hover:border-cyan-200 hover:bg-cyan-50/40'
               >
@@ -248,6 +376,36 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
             </div>
           </section>
         </div>
+
+        {representativeTools.length > 0 && (
+          <section className='theme-surface mb-8 rounded-lg border border-slate-200 p-6 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '代表工具入口' : 'Representative tool pages'}
+            </p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-900'>
+              {isChinese ? `先看这几个 ${categoryName} 代表页` : `Start with these ${categoryName} examples`}
+            </h2>
+            <p className='mt-3 max-w-3xl text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '如果你不想一开始就看太多卡片，这几个代表页能更快帮你建立“这一类工具到底怎么比较”的判断。'
+                : 'If you do not want to scan too many cards right away, these representative pages are the fastest way to understand how tools in this category should be compared.'}
+            </p>
+            <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+              {representativeTools.map((tool) => (
+                <Link
+                  key={tool.href}
+                  href={tool.href}
+                  className='rounded-lg border border-slate-200 bg-white p-4 transition hover:border-cyan-200 hover:bg-cyan-50/40'
+                >
+                  <p className='text-sm font-semibold text-slate-900'>{tool.title[isChinese ? 'cn' : 'en']}</p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {tool.description[isChinese ? 'cn' : 'en']}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
         <ExploreList
           locale={params.locale}

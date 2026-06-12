@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { Bell, X, Check } from 'lucide-react';
-import Link from 'next/link';
 import {
   getUserNotifications,
   getUnreadCount,
@@ -11,6 +10,7 @@ import {
   deleteNotification,
   type Notification,
 } from '@/app/actions/notifications';
+import { Link } from '@/app/navigation';
 
 interface NotificationBellProps {
   userId: string;
@@ -211,11 +211,11 @@ export default function NotificationBell({ userId }: NotificationBellProps) {
             {notifications.length > 0 && (
               <div className='border-t border-slate-200 p-2 text-center'>
                 <Link
-                  href='/profile/notifications'
+                  href='/profile'
                   onClick={() => setShowMenu(false)}
                   className='text-sm text-cyan-700 hover:text-cyan-800'
                 >
-                  View all notifications
+                  View profile
                 </Link>
               </div>
             )}

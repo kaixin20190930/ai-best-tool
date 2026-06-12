@@ -26,6 +26,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     breadcrumbLabel: { cn: '协议工具对比', en: 'Protocol tools comparison' },
     compareTitle: { cn: '几款常见协议工具的快速对照', en: 'A quick side-by-side look at common protocol tools' },
     compareSubtitle: { cn: 'Protocol', en: 'Protocol' },
+    preferredToolNames: ['messari', 'token-terminal', 'dune', 'defillama'],
     tips: {
       cn: [
         '先看协议覆盖和历史深度，再看是否支持你常用的链。',

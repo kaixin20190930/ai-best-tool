@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import fs from 'node:fs';
 
-import { getPool } from '@/db/neon/client';
+import { closePool, query } from '@/db/neon/client';
 
 function loadLocalEnv() {
   const envPath = '/Users/liukai/web/ai-best-tool/.env.local';
@@ -98,14 +98,121 @@ const updates: MediaUpdate[] = [
       'https://cdn.prod.website-files.com/628288c5cd3e8411b90a36a4/67111b6951504ebf1467be96_6708d064807b31c351b41284_share-og-image%20(1)-min.png',
     mediaReason: 'Official favicon and og preview added from public Copy.ai pages.',
   },
+  {
+    name: 'chatgpt',
+    imageUrl: 'https://chatgpt.com/favicon.ico',
+    thumbnailUrl: 'https://image.thum.io/get/width/1200/noanimate/https://chatgpt.com',
+    mediaReason: 'Official favicon and a live homepage screenshot were added for ChatGPT.',
+  },
+  {
+    name: 'defillama',
+    imageUrl: 'https://defillama.com/favicon.ico',
+    thumbnailUrl: 'https://image.thum.io/get/width/1200/noanimate/https://defillama.com',
+    mediaReason: 'Official favicon and a live homepage screenshot were added for DefiLlama.',
+  },
+  {
+    name: 'grammarly',
+    imageUrl: 'https://static-web.grammarly.com/cms/master/public/favicon-32x32.png',
+    thumbnailUrl: 'https://static-web.grammarly.com/1e6ajr2k4140/1kGiUxfxoLhCPH7wGcvknN/c218a7bbcdfc24301fbbfb6ae9892ec6/default_social_share.png',
+    mediaReason: 'Official favicon and social preview added from public Grammarly pages.',
+  },
+  {
+    name: 'bolt-new',
+    imageUrl: 'https://bolt.new/static/favicon-96x96.png',
+    thumbnailUrl: 'https://bolt.new/static/social_preview_index.jpg',
+    mediaReason: 'Official favicon and social preview added from public Bolt pages.',
+  },
+  {
+    name: 'phind',
+    imageUrl: 'https://www.phind.com/favicon.ico',
+    thumbnailUrl: 'https://image.thum.io/get/width/1200/noanimate/https://www.phind.com',
+    mediaReason: 'Official favicon and a live homepage screenshot were added for Phind.',
+  },
+  {
+    name: 'runway',
+    imageUrl: 'https://runwayml.com/icon.png?icon.0jyqwm2y10pec.png',
+    thumbnailUrl: 'https://runwayml.com/opengraph-image.png?opengraph-image.0bt75ga2._tb4.png',
+    mediaReason: 'Official favicon and social preview added from public Runway pages.',
+  },
+  {
+    name: 'lovable',
+    imageUrl: 'https://lovable.dev/favicon-96x96.png',
+    thumbnailUrl: 'https://lovable.dev/img/opengraph-image.png',
+    mediaReason: 'Official favicon and social preview added from public Lovable pages.',
+  },
+  {
+    name: 'gemini',
+    imageUrl: 'https://www.gstatic.com/lamda/images/gemini_sparkle_4g_512_lt_f94943af3be039176192d.png',
+    thumbnailUrl: 'https://www.gstatic.com/lamda/images/gemini_aurora_thumbnail_4g_e74822ff0ca4259beb718.png',
+    mediaReason: 'Official favicon and social preview added from public Gemini pages.',
+  },
+  {
+    name: 'gamma',
+    imageUrl: 'https://gamma.app/favicon.ico',
+    thumbnailUrl: 'https://image.thum.io/get/width/1200/noanimate/https://gamma.app',
+    mediaReason: 'Official favicon and a live homepage screenshot were added for Gamma.',
+  },
+  {
+    name: 'midjourney',
+    imageUrl: 'https://www.midjourney.com/favicon.ico',
+    thumbnailUrl: 'https://image.thum.io/get/width/1200/noanimate/https://www.midjourney.com',
+    mediaReason: 'Official favicon and a live homepage screenshot were added for Midjourney.',
+  },
+  {
+    name: 'copilot',
+    imageUrl: 'https://copilot.microsoft.com/static/cmc/favicon.ico',
+    thumbnailUrl: 'https://copilot.microsoft.com/static/cmc/images/meta-image.jpg',
+    mediaReason: 'Official favicon and social preview added from public Microsoft Copilot pages.',
+  },
+  {
+    name: 'notion-ai',
+    imageUrl: 'https://www.notion.so/front-static/favicon.ico',
+    thumbnailUrl: 'https://www.notion.com/front-static/meta/custom-agents-og.png',
+    mediaReason: 'Official favicon and social preview added from public Notion AI pages.',
+  },
+  {
+    name: 'v0',
+    imageUrl: 'https://v0.dev/assets/icon-light-32x32.png',
+    thumbnailUrl: 'https://v0.app/chat/api/og',
+    mediaReason: 'Official favicon and social preview added from public v0 pages.',
+  },
+  {
+    name: 'grok',
+    imageUrl: 'https://grok.com/images/favicon.ico',
+    thumbnailUrl: 'https://grok.com/icon-512x512.png',
+    mediaReason: 'Official favicon and social preview added from public Grok pages.',
+  },
+  {
+    name: 'cursor',
+    imageUrl: 'https://cursor.com/marketing-static/favicon.ico',
+    thumbnailUrl: 'https://cursor.com/marketing-static/og/opengraph-default.png',
+    mediaReason: 'Official favicon and social preview added from public Cursor pages.',
+  },
+  {
+    name: 'elevenlabs',
+    imageUrl: 'https://elevenlabs.io/favicon.ico?9c55860cee08706b',
+    thumbnailUrl: 'https://elevenlabs.io/cover.png',
+    mediaReason: 'Official favicon and social preview added from public ElevenLabs pages.',
+  },
+  {
+    name: 'perplexity',
+    imageUrl: 'https://www.perplexity.ai/favicon.ico',
+    thumbnailUrl: 'https://image.thum.io/get/width/1200/noanimate/https://www.perplexity.ai',
+    mediaReason: 'Official favicon and a live homepage screenshot were added for Perplexity.',
+  },
+  {
+    name: 'sigoo',
+    imageUrl: '/icons/tool-logos/sigoo.svg',
+    thumbnailUrl: '/images/tool-media/sigoo-cover.svg',
+    mediaReason: 'Locally hosted editorial media kit added for Sigoo while the public product site is still being finalized.',
+  },
 ];
 
 async function main() {
   loadLocalEnv();
-  const pool = getPool();
 
   for (const item of updates) {
-    const existing = await pool.query('SELECT id, features FROM tools WHERE name = $1 LIMIT 1', [item.name]);
+    const existing = await query('SELECT id, features FROM tools WHERE name = $1 LIMIT 1', [item.name]);
 
     if (existing.rows.length === 0) {
       continue;
@@ -120,7 +227,7 @@ async function main() {
         ? (features.mediaReview as Record<string, unknown>)
         : {};
 
-    await pool.query(
+    await query(
       `
         UPDATE tools
         SET image_url = $2,
@@ -146,7 +253,7 @@ async function main() {
     );
   }
 
-  const result = await pool.query(
+  const result = await query(
     `
       SELECT
         name,
@@ -154,16 +261,42 @@ async function main() {
         thumbnail_url,
         features->'mediaReview' as media_review
       FROM tools
-      WHERE name IN ('dune', 'moralis')
-         OR name IN ('alchemy', 'the-graph')
-         OR name IN ('thirdweb', 'quillbot', 'claude')
-         OR name IN ('wordtune', 'jasper', 'copy-ai')
+      WHERE name IN (
+        'dune',
+        'moralis',
+        'alchemy',
+        'the-graph',
+        'thirdweb',
+        'quillbot',
+        'claude',
+        'wordtune',
+        'jasper',
+        'copy-ai',
+        'chatgpt',
+        'defillama',
+        'grammarly',
+        'bolt-new',
+        'phind',
+        'runway',
+        'lovable',
+        'gemini',
+        'gamma',
+        'midjourney',
+        'copilot',
+        'notion-ai',
+        'v0',
+        'grok',
+        'cursor',
+        'elevenlabs',
+        'perplexity',
+        'sigoo'
+      )
       ORDER BY name
     `,
   );
 
   console.log(JSON.stringify(result.rows, null, 2));
-  await pool.end();
+  await closePool();
 }
 
 main().catch((error) => {

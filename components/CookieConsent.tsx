@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 
+import { Link } from '@/app/navigation';
+
 /**
  * Cookie Consent Banner Component
  *
@@ -71,12 +73,12 @@ export default function CookieConsent() {
                 We use cookies and similar technologies to improve your experience, analyze site traffic,
                 and personalize content. By clicking &quot;Accept&quot;, you consent to our use of cookies.
                 {' '}
-                <a
+                <Link
                   href='/privacy-policy'
                   className='text-cyan-700 underline hover:text-cyan-800'
                 >
                   Learn more
-                </a>
+                </Link>
               </p>
             </div>
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { BadgeCheck, FileSearch, Send } from 'lucide-react';
 
+import { Link } from '@/app/navigation';
 import Faq from '@/components/Faq';
 import { getListingPaymentMailto, listingConfig } from '@/lib/config/listing';
 import { getAllCategories } from '@/lib/services/categories';

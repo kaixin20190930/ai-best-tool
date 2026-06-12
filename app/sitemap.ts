@@ -27,6 +27,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
+      url: 'guides',
+      changeFrequency: 'weekly',
+      priority: 0.82,
+    },
+    {
+      url: 'new',
+      changeFrequency: 'daily',
+      priority: 0.85,
+    },
+    {
       url: 'submit',
       changeFrequency: 'monthly',
       priority: 0.7,
@@ -35,6 +45,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: 'pricing',
       changeFrequency: 'monthly',
       priority: 0.7,
+    },
+    {
+      url: 'developer/listing',
+      changeFrequency: 'monthly',
+      priority: 0.68,
     },
     {
       url: 'privacy-policy',

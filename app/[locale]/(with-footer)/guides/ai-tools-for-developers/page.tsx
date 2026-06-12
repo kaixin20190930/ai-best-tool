@@ -208,6 +208,36 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Better for planning, explanation, and long-context reasoning.',
             },
           ]}
+          nextEyebrow={isChinese ? '下一步入口' : 'Where to go next'}
+          nextTitle={isChinese ? '开发者方向确定后，下一步看这里' : 'Where to go once the developer workflow is clear'}
+          nextDescription={
+            isChinese
+              ? '如果你已经知道自己更偏开发、接入和调试，下一步就进入开发者分类、搜索页和本周新增。'
+              : 'If integration, coding, and debugging are clearly the main workflow, the next step is to enter the developer category, search results, and weekly additions.'
+          }
+          nextLinks={[
+            {
+              href: '/categories/developer-tools?sort=popular',
+              title: isChinese ? '进入 Developer Tools 分类' : 'Open the developer tools category',
+              description: isChinese
+                ? '直接看开发者类目录中的真实候选。'
+                : 'Go straight into the developer tools category for real candidates.',
+            },
+            {
+              href: '/explore?search=developer&sort=popular',
+              title: isChinese ? '搜索开发者工具' : 'Search developer tools',
+              description: isChinese
+                ? '回到 Explore，用更窄的开发者关键词继续找。'
+                : 'Return to Explore and keep narrowing the list with developer-focused search.',
+            },
+            {
+              href: '/new',
+              title: isChinese ? '看本周新增' : 'Check new this week',
+              description: isChinese
+                ? '顺手看看最近补进来的开发者工具。'
+                : 'See which recently added tools may fit modern developer workflows better.',
+            },
+          ]}
         />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>

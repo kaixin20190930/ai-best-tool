@@ -48,6 +48,7 @@ async function main() {
             ? tool.title.en || tool.title.zh || Object.values(tool.title)[0] || tool.name
             : tool.name,
         category: getCategoryName(tool.categoryName, tool.categorySlug),
+        decisionGuide: tool.hasDecisionGuide,
         mediaIssues: tool.mediaIssues,
         mediaReason: tool.mediaReason,
         views: tool.views,

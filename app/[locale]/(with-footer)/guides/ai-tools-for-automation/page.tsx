@@ -210,6 +210,36 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Helpful when your automations are still mostly code and script driven.',
             },
           ]}
+          nextEyebrow={isChinese ? '下一步入口' : 'Where to go next'}
+          nextTitle={isChinese ? '自动化方向确认后，下一步看这里' : 'Where to go once automation is clearly the direction'}
+          nextDescription={
+            isChinese
+              ? '如果你已经确认自己在看自动化和编排，下一步就去分类页、搜索页和本周新增看真实条目。'
+              : 'Once automation and orchestration are clearly the right lane, move into category pages, search results, and recent additions.'
+          }
+          nextLinks={[
+            {
+              href: '/categories/automation?sort=popular',
+              title: isChinese ? '进入 Automation 分类' : 'Open the automation category',
+              description: isChinese
+                ? '直接看自动化类目录里的真实工具和筛选结果。'
+                : 'Go straight into the automation category to compare real listings.',
+            },
+            {
+              href: '/explore?search=automation&sort=popular',
+              title: isChinese ? '搜索自动化工具' : 'Search automation tools',
+              description: isChinese
+                ? '回到 Explore，用自动化关键词继续扩大候选。'
+                : 'Return to Explore and widen the shortlist with an automation-focused search.',
+            },
+            {
+              href: '/new',
+              title: isChinese ? '看本周新增' : 'Check new this week',
+              description: isChinese
+                ? '看看最近有没有补进更接近你流程的新工具。'
+                : 'See whether recent additions introduced a tool that fits your workflow better.',
+            },
+          ]}
         />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>

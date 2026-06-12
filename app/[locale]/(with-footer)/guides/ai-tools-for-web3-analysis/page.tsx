@@ -182,7 +182,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '如果你更关心协议、钱包、TVL、资金流和历史趋势，这几款工具会比泛 Web3 页面更快进入正题。'
               : 'If you care more about protocols, wallets, TVL, fund flow, and historical change, these tools get you into the real work faster than a general Web3 page.'
           }
-          toolNames={['dune', 'defillama', 'the-graph', 'openrouter']}
+          toolNames={['dune', 'messari', 'debank', 'bubblemaps']}
           compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
           compareTitle={isChinese ? '继续深入的对比入口' : 'Next comparison paths'}
           compareDescription={
@@ -211,6 +211,36 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               description: isChinese
                 ? '更适合协议健康、增长和使用情况跟踪。'
                 : 'Useful for protocol health, growth, and usage tracking.',
+            },
+          ]}
+          nextEyebrow={isChinese ? '下一步入口' : 'Where to go next'}
+          nextTitle={isChinese ? 'Web3 分析方向确定后，下一步看这里' : 'Where to go once Web3 analysis is the clear direction'}
+          nextDescription={
+            isChinese
+              ? '如果你已经确定自己更偏链上分析和监控，下一步就进入 Web3 分类、搜索页和本周新增。'
+              : 'If on-chain analysis and monitoring are clearly the right lane, the next step is to use the Web3 category, targeted search, and recent additions.'
+          }
+          nextLinks={[
+            {
+              href: '/categories/web3?sort=popular',
+              title: isChinese ? '进入 Web3 分类' : 'Open the Web3 category',
+              description: isChinese
+                ? '直接进入 Web3 目录，继续比较真实候选。'
+                : 'Jump into the Web3 category to compare real listings.',
+            },
+            {
+              href: '/explore?search=web3&sort=popular',
+              title: isChinese ? '搜索更多 Web3 工具' : 'Search more Web3 tools',
+              description: isChinese
+                ? '回到 Explore，用 Web3 关键词扩大候选范围。'
+                : 'Return to Explore and widen the shortlist with a Web3-focused search.',
+            },
+            {
+              href: '/new',
+              title: isChinese ? '看本周新增' : 'Check new this week',
+              description: isChinese
+                ? '看看最近新增的链上工具里有没有更适合的选择。'
+                : 'Check whether recent additions include a better-fit on-chain tool.',
             },
           ]}
         />

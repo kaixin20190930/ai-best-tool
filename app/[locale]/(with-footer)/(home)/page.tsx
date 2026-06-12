@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
 import { getWebNavigationList } from '@/network/webNavigation';
 import {
   ArrowRight,
@@ -21,6 +20,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { listingConfig } from '@/lib/config/listing';
 import { FEATURED_GUIDE_HREFS, GUIDE_PAGES } from '@/lib/content/guides';
+import { Link } from '@/app/navigation';
 import { SEO_CONFIG } from '@/lib/seo/constants';
 import { generateOrganizationSchema } from '@/lib/seo/schema';
 import { getLocalizedField as getCategoryLocalizedField, getPopularCategories } from '@/lib/services/categories';
@@ -145,13 +145,20 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     {
       label: isChinese ? '最近更新' : 'Latest updates',
-      href: '/explore?sort=latest',
+      href: '/new',
     },
   ];
   const featuredGuidePages = FEATURED_GUIDE_HREFS.map((href) => GUIDE_PAGES.find((page) => page.href === href)).filter(
     (page): page is (typeof GUIDE_PAGES)[number] => Boolean(page),
   );
   const startHereLinks = [
+    {
+      href: '/new',
+      title: isChinese ? '查看本周新增' : 'See what is new this week',
+      description: isChinese
+        ? '如果你想最快知道这周补了哪些工具，这个入口最直接。'
+        : 'The fastest way to catch up on what we actually added this week.',
+    },
     {
       href: '/guides/how-to-choose-ai-tools',
       title: isChinese ? '先看选型指南' : 'Start with the selection guide',
@@ -501,10 +508,10 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <div className='mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between'>
               <SectionHeader title={t('latestTools')} description={t('latestToolsDescription')} />
               <Link
-                href='/explore?sort=latest'
+                href='/new'
                 className='inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-slate-950'
               >
-                {isChinese ? '查看最新' : 'View latest'}
+                {isChinese ? '查看本周新增' : 'View new this week'}
                 <Clock3 className='size-4' />
               </Link>
             </div>

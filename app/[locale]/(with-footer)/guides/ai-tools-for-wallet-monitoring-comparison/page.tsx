@@ -26,6 +26,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     breadcrumbLabel: { cn: '钱包监控工具对比', en: 'Wallet monitoring tools comparison' },
     compareTitle: { cn: '几款常见钱包监控工具的快速对照', en: 'A quick side-by-side look at common wallet tools' },
     compareSubtitle: { cn: '钱包监控', en: 'Wallet monitoring' },
+    preferredToolNames: ['debank', 'zapper', 'nansen', 'arkham'],
     tips: {
       cn: [
         '先看提醒速度和通知渠道，不同工具差异会很大。',

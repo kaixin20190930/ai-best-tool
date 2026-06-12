@@ -206,6 +206,36 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Best for on-chain, project, and narrative-driven research.',
             },
           ]}
+          nextEyebrow={isChinese ? '下一步入口' : 'Where to go next'}
+          nextTitle={isChinese ? '读完研究指南后，继续这样往下走' : 'How to continue after the research guide'}
+          nextDescription={
+            isChinese
+              ? '如果你已经确认自己更偏资料发现和证据核对，下一步就回到研究分类、搜索页和本周新增。'
+              : 'If discovery and evidence-checking are clearly your use case, move next into research categories, search results, and weekly additions.'
+          }
+          nextLinks={[
+            {
+              href: '/categories/research?sort=popular',
+              title: isChinese ? '进入 Research 分类' : 'Open the research category',
+              description: isChinese
+                ? '直接进入研究类目录，继续看更贴合的真实工具。'
+                : 'Open the research category to keep comparing better-matched tools.',
+            },
+            {
+              href: '/explore?search=research&sort=popular',
+              title: isChinese ? '搜索研究工具' : 'Search research tools',
+              description: isChinese
+                ? '用关键词回到 Explore 扩大候选范围。'
+                : 'Use a research-focused query in Explore to widen the shortlist.',
+            },
+            {
+              href: '/new',
+              title: isChinese ? '看本周新增' : 'Check new this week',
+              description: isChinese
+                ? '看看最近补进站里的研究类工具有没有更新选择。'
+                : 'See whether recent additions introduced better research-oriented options.',
+            },
+          ]}
         />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>

@@ -8,6 +8,7 @@ interface AdminToolsFiltersProps {
   currentSearch?: string;
   currentCollected?: boolean;
   currentNeedsMedia?: boolean;
+  currentNeedsDecision?: boolean;
   currentQuality?: string;
   currentReady?: boolean;
   currentOverdue?: boolean;
@@ -23,6 +24,7 @@ export default function AdminToolsFilters({
   currentSearch,
   currentCollected,
   currentNeedsMedia,
+  currentNeedsDecision,
   currentQuality,
   currentReady,
   currentOverdue,
@@ -41,6 +43,7 @@ export default function AdminToolsFilters({
     const nextSearch = updates.search ?? currentSearch;
     const nextCollected = updates.collected ?? currentCollected;
     const nextNeedsMedia = updates.needsMedia ?? currentNeedsMedia;
+    const nextNeedsDecision = updates.needsDecision ?? currentNeedsDecision;
     const nextQuality = updates.quality ?? currentQuality;
     const nextReady = updates.ready ?? currentReady;
     const nextOverdue = updates.overdue ?? currentOverdue;
@@ -67,6 +70,10 @@ export default function AdminToolsFilters({
 
     if (nextNeedsMedia && !nextReady) {
       params.set('needsMedia', '1');
+    }
+
+    if (nextNeedsDecision && !nextReady) {
+      params.set('needsDecision', '1');
     }
 
     if (nextQuality && nextQuality !== 'all' && !nextReady) {
@@ -170,6 +177,19 @@ export default function AdminToolsFilters({
             }`}
           >
             Needs media
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              router.push(buildPath({ needsDecision: !currentNeedsDecision, ready: false }))
+            }
+            className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+              currentNeedsDecision
+                ? 'bg-sky-700 text-white'
+                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            }`}
+          >
+            Needs decision copy
           </button>
           <button
             type="button"

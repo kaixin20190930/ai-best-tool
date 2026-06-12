@@ -57,6 +57,11 @@
     "scripts/fix-missing-translations.ts",
     "scripts/test-hreflang-rendering.ts",
     "scripts/enrich-priority-tool-details.ts",
+    "scripts/enrich-decision-snapshots.ts",
+    "scripts/enrich-wave-2-tool-details.ts",
+    "scripts/generate-wave-2-media.ts",
+    "scripts/bootstrap-writing-web3-wave-3.ts",
+    "scripts/bootstrap-writing-web3-wave-4.ts",
     ".next/types/**/*.ts"
   ],
   "exclude": [

@@ -388,6 +388,49 @@ The decision point here is whether you need a visually strong generator or a pro
     },
   },
   {
+    name: 'gamma',
+    title: 'Gamma',
+    categorySlug: 'productivity',
+    pricing: 'freemium',
+    tags: ['knowledge-work'],
+    content: {
+      en: 'An AI presentation and document tool for turning rough ideas into polished decks, pages, and communication assets quickly.',
+      zh: '一个用于把粗糙想法快速整理成更完整演示稿、页面和表达材料的 AI 演示与文档工具。',
+    },
+    detail: {
+      en: `Gamma matters most when the job is not only writing content, but packaging it into something presentable. It is especially relevant for founders, marketers, operators, and teams who need to move from scattered notes into something structured enough to share with clients, teammates, or stakeholders.
+
+This page should help users compare Gamma as a communication workflow product, not only a slide generator. The real question is whether it helps you go from idea to polished explanation faster than your current document or presentation stack.`,
+      zh: `Gamma 真正有价值的时候，并不是“帮你多写一点字”，而是帮你把内容包装成能拿出去沟通的形式。它特别适合创始人、营销、运营和团队把零散笔记更快整理成可以给客户、同事或利益相关方看的结构化材料。
+
+这页真正要帮助用户比较的是：Gamma 是不是一个“表达工作流产品”，而不只是一个幻灯片生成器。核心问题在于，它能不能比你当前的文档或演示工具更快把想法变成有完成度的说明。`,
+    },
+    useCases: {
+      en: ['Presentation drafting', 'Proposal packaging', 'Internal communication', 'Idea-to-deck workflows'],
+      zh: ['演示稿起草', '提案包装', '内部沟通材料', '想法到演示稿工作流'],
+    },
+    features: {
+      en: [
+        { label: 'Core focus', value: 'Turning rough content into polished communication assets quickly.' },
+        { label: 'Best for', value: 'Teams and solo operators who need cleaner decks and docs with less manual formatting.' },
+        { label: 'Decision angle', value: 'Compare on presentation speed, visual polish, and how easily it turns notes into something worth sharing.' },
+      ],
+      zh: [
+        { label: '核心定位', value: '把粗糙内容更快整理成更完整的表达材料。' },
+        { label: '更适合', value: '希望减少手工排版、快速产出更干净演示稿和文档的团队与个人。' },
+        { label: '比较重点', value: '重点比较出稿速度、视觉完成度，以及它是否容易把笔记变成可分享内容。' },
+      ],
+    },
+    editorialSummary: {
+      en: 'Reviewed as a communication workflow product rather than a generic slide toy.',
+      zh: '已按“表达工作流产品”而不是泛化的演示玩具来完成复核。',
+    },
+    trustNote: {
+      en: 'This listing emphasizes where Gamma is usually chosen in practice: faster communication packaging, not just prettier slides.',
+      zh: '本条目强调的是 Gamma 在真实场景里为什么会被选中：更快完成表达包装，而不只是做出更好看的幻灯片。',
+    },
+  },
+  {
     name: 'runway',
     title: 'Runway',
     categorySlug: 'design-art',
@@ -484,6 +527,92 @@ This page should help users distinguish Dune from more packaged intelligence pro
     trustNote: {
       en: 'This entry is positioned around query-driven research, which is where Dune is most meaningfully compared.',
       zh: '本条目围绕“查询驱动研究”来定位，这是 Dune 最常被认真比较的使用面。',
+    },
+  },
+  {
+    name: 'fathom',
+    title: 'Fathom',
+    categorySlug: 'productivity',
+    pricing: 'freemium',
+    tags: ['meeting-notes', 'knowledge-work'],
+    content: {
+      en: 'An AI meeting assistant for recording calls, creating notes, and helping teams turn conversations into follow-through.',
+      zh: '一个用于记录会议、生成纪要并帮助团队把对话转成后续行动的 AI 会议助手。',
+    },
+    detail: {
+      en: `Fathom becomes relevant when meetings are not just conversations but recurring operational work. It is especially useful for founders, sales teams, customer conversations, and cross-functional collaboration where note quality and follow-through speed matter.
+
+This page should help users compare Fathom as a workflow-reduction tool rather than just a transcription utility. The real question is whether it reduces the manual burden after meetings enough to change team habits.`,
+      zh: `当会议不只是聊天，而是重复性的运营工作时，Fathom 的价值会更明显。它尤其适合创始人、销售、客户沟通和跨团队协作场景，因为这些场景里纪要质量和后续跟进速度都很重要。
+
+这页应该帮助用户把 Fathom 看成一个“减少会后负担”的工作流工具，而不只是转录工具。真正的问题是：它能不能足够显著地减少会后手工整理，从而改变团队习惯。`,
+    },
+    useCases: {
+      en: ['Meeting notes', 'Call summaries', 'Sales follow-up', 'Team meeting workflows'],
+      zh: ['会议纪要', '通话总结', '销售跟进', '团队会议工作流'],
+    },
+    features: {
+      en: [
+        { label: 'Core focus', value: 'Reducing the note-taking and recap burden around recurring meetings.' },
+        { label: 'Best for', value: 'Teams that need cleaner call summaries and faster follow-through after conversations.' },
+        { label: 'Decision angle', value: 'Compare on summary usefulness, workflow fit, and whether it actually improves post-meeting execution.' },
+      ],
+      zh: [
+        { label: '核心定位', value: '减少重复会议中的记录和总结负担。' },
+        { label: '更适合', value: '需要更干净通话总结和更快会后执行的团队。' },
+        { label: '比较重点', value: '重点比较总结是否有用、是否贴合团队流程，以及它有没有真正改善会后执行。' },
+      ],
+    },
+    editorialSummary: {
+      en: 'Reviewed as a meeting-workflow tool rather than a pure transcription utility.',
+      zh: '已按“会议工作流工具”而不是纯转录工具来完成复核。',
+    },
+    trustNote: {
+      en: 'This listing is framed around meeting follow-through, because that is where the product usually earns its place.',
+      zh: '本条目围绕“会后跟进价值”来定位，因为这往往才是它真正被采用的原因。',
+    },
+  },
+  {
+    name: 'quillbot',
+    title: 'QuillBot',
+    categorySlug: 'text-writing',
+    pricing: 'freemium',
+    tags: ['ai-writing', 'knowledge-work'],
+    content: {
+      en: 'A writing helper for paraphrasing, rewriting, summarizing, and improving clarity in everyday text workflows.',
+      zh: '一个适合改写、释义、总结和提升表达清晰度的写作辅助工具。',
+    },
+    detail: {
+      en: `QuillBot is most useful when the job is improving or reshaping existing text rather than generating a whole workflow from scratch. Students, operators, marketers, and everyday writers often compare it when they want to rewrite faster, tighten wording, or make text easier to work with.
+
+This page should help users compare QuillBot as a text-improvement layer. The practical decision is whether you mainly need help creating content, or whether you more often need to refine and reshape what is already there.`,
+      zh: `当任务重点是“把已有文本改得更顺、更清楚、更适合当前语境”，而不是从零生成完整内容时，QuillBot 会更有代表性。学生、运营、营销和日常写作者，往往会在想更快改写、压缩措辞或让文本更容易处理时把它拿来比较。
+
+这页应该帮助用户把 QuillBot 看成一个“文本优化层”。实际决策点在于：你更常需要的是“创造内容”，还是“把已有内容改得更好用”。`,
+    },
+    useCases: {
+      en: ['Paraphrasing', 'Rewriting', 'Summaries', 'Clarity improvements'],
+      zh: ['释义改写', '文本重写', '摘要整理', '清晰度提升'],
+    },
+    features: {
+      en: [
+        { label: 'Core focus', value: 'Improving and reshaping existing text instead of serving as a full drafting engine.' },
+        { label: 'Best for', value: 'Users who repeatedly rewrite, polish, and tighten everyday writing.' },
+        { label: 'Decision angle', value: 'Compare on rewrite quality, clarity gains, and whether it saves time in repeated editing tasks.' },
+      ],
+      zh: [
+        { label: '核心定位', value: '优化和重塑已有文本，而不是完整起草引擎。' },
+        { label: '更适合', value: '经常要反复改写、润色和压缩日常文本的用户。' },
+        { label: '比较重点', value: '重点比较改写质量、清晰度提升，以及它是否在重复编辑任务里持续省时。' },
+      ],
+    },
+    editorialSummary: {
+      en: 'Reviewed as a rewrite-first writing tool rather than a broad general assistant.',
+      zh: '已按“改写优先的写作工具”而不是泛化通用助手来完成复核。',
+    },
+    trustNote: {
+      en: 'This entry highlights QuillBot’s practical role in repeated editing and paraphrasing work, which is where it is most meaningfully compared.',
+      zh: '本条目强调 QuillBot 在重复编辑和释义场景里的真实角色，因为这才是它最常被认真比较的地方。',
     },
   },
   {

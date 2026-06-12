@@ -533,6 +533,7 @@ export async function getAdminTools(filters?: {
   search?: string;
   collected?: boolean;
   needsMedia?: boolean;
+  needsDecision?: boolean;
   quality?: 'low' | 'medium' | 'high';
   ready?: boolean;
   overdue?: boolean;
@@ -576,6 +577,27 @@ export async function getAdminTools(filters?: {
 
     if (filters?.needsMedia) {
       query += ` AND ${mediaNeededSql}`;
+    }
+
+    if (filters?.needsDecision) {
+      query += `
+        AND (
+          features->'decision' IS NULL
+          OR jsonb_typeof(features->'decision') <> 'object'
+          OR COALESCE(jsonb_array_length(features->'decision'->'compareAxes'->'en'), 0) = 0
+          OR COALESCE(jsonb_array_length(features->'decision'->'compareAxes'->'zh'), 0) = 0
+          OR COALESCE(features->'decision'->'officialSummary'->>'en', '') = ''
+          OR COALESCE(features->'decision'->'officialSummary'->>'zh', '') = ''
+          OR COALESCE(features->'decision'->'freshnessSummary'->>'en', '') = ''
+          OR COALESCE(features->'decision'->'freshnessSummary'->>'zh', '') = ''
+          OR COALESCE(features->'decision'->'pricingSummary'->>'en', '') = ''
+          OR COALESCE(features->'decision'->'pricingSummary'->>'zh', '') = ''
+          OR COALESCE(features->'decision'->'mediaSummary'->>'en', '') = ''
+          OR COALESCE(features->'decision'->'mediaSummary'->>'zh', '') = ''
+          OR COALESCE(features->'decision'->'communitySummary'->>'en', '') = ''
+          OR COALESCE(features->'decision'->'communitySummary'->>'zh', '') = ''
+        )
+      `;
     }
 
     if (filters?.ready) {

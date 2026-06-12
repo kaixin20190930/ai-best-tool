@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { CheckCircle2, ExternalLink, FileText, PenLine, Sparkles } from 'lucide-react';
 
+import GuideActionSection from '@/components/guides/GuideActionSection';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
@@ -157,7 +158,10 @@ export default async function Page({
               {isChinese ? '写作类工具通常在这些分类里' : 'Writing tools often sit in these categories'}
             </h2>
             <div className='mt-4 grid gap-2'>
-              {categories.slice(0, 6).map((category) => (
+              {categories
+                .filter((category) => ['text-writing', 'productivity', 'research'].includes(String(category.slug)))
+                .slice(0, 6)
+                .map((category) => (
                 <Link
                   key={category.id}
                   href={`/categories/${category.slug}`}
@@ -167,13 +171,85 @@ export default async function Page({
                   <span className='text-xs text-slate-500'>
                     {'toolCount' in category && typeof category.toolCount === 'number'
                       ? category.toolCount
-                      : ''}
+                    : ''}
                   </span>
                 </Link>
-              ))}
+                ))}
             </div>
           </aside>
         </section>
+
+        <GuideActionSection
+          locale={locale}
+          eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}
+          title={isChinese ? '更贴近真实内容工作的写作工具入口' : 'Writing tool entry points that fit real content work'}
+          description={
+            isChinese
+              ? '如果你是为了博客、营销文案、日常改写或创意写作而来，先从这些更有代表性的工具开始，判断会更快。'
+              : 'If you are here for blogs, marketing copy, daily rewriting, or creative work, these more representative tools are the fastest place to start.'
+          }
+          toolNames={['jasper', 'copy-ai', 'sudowrite', 'koala-writer']}
+          compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
+          compareTitle={isChinese ? '接着缩小范围' : 'Narrow the shortlist next'}
+          compareDescription={
+            isChinese
+              ? '写作工具更适合按任务类型继续往下比，而不是只看热门度。'
+              : 'Writing tools are easier to choose by task type than by popularity alone.'
+          }
+          compareLinks={[
+            {
+              href: '/guides/ai-writing-tools-comparison',
+              title: isChinese ? '写作工具总对比' : 'Writing tools comparison',
+              description: isChinese
+                ? '适合快速横向看常见写作工具。'
+                : 'A fast side-by-side view of common writing tools.',
+            },
+            {
+              href: '/guides/ai-seo-tools-comparison',
+              title: isChinese ? 'SEO 工具对比' : 'SEO tools comparison',
+              description: isChinese
+                ? '如果你更关心搜索流量与内容结构，这里更有参考价值。'
+                : 'More useful if search traffic and content structure matter most.',
+            },
+            {
+              href: '/guides/best-free-ai-tools',
+              title: isChinese ? '最佳免费 AI 工具' : 'Best free AI tools',
+              description: isChinese
+                ? '适合想先试再决定的人。'
+                : 'Helpful if you want to try before committing.',
+            },
+          ]}
+          nextEyebrow={isChinese ? '下一步入口' : 'Where to go next'}
+          nextTitle={isChinese ? '读完写作指南后，继续这样缩小范围' : 'How to narrow the space after this writing guide'}
+          nextDescription={
+            isChinese
+              ? '如果你已经确认自己偏写作工作流，下一步就去分类页、搜索页和本周新增页看真实条目。'
+              : 'Once you know writing is the right workflow, move into category pages, search results, and weekly additions to compare real listings.'
+          }
+          nextLinks={[
+            {
+              href: '/categories/text-writing?sort=popular',
+              title: isChinese ? '进入写作分类' : 'Open the writing category',
+              description: isChinese
+                ? '从最接近写作场景的分类页继续筛选。'
+                : 'Keep filtering inside the category that maps most closely to writing workflows.',
+            },
+            {
+              href: '/explore?search=writing&sort=popular',
+              title: isChinese ? '搜索更多写作工具' : 'Search more writing tools',
+              description: isChinese
+                ? '回到探索页，按关键词继续扩大候选范围。'
+                : 'Return to Explore and widen the shortlist with a writing-focused search.',
+            },
+            {
+              href: '/new',
+              title: isChinese ? '看看本周新增' : 'Check new this week',
+              description: isChinese
+                ? '顺手看看最近补进来的内容里有没有更适合的新候选。'
+                : 'See whether recent additions introduced a stronger fit for your workflow.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

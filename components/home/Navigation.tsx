@@ -2,12 +2,12 @@
 
 import { useState } from 'react';
 import type { ComponentType } from 'react';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { User } from '@supabase/supabase-js';
 import { Shield } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
+import { Link } from '@/app/navigation';
 import { NAV_LINKS } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 

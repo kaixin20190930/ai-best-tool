@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import Link from 'next/link';
+import { Link } from '@/app/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { getFavorites } from '@/app/actions/favorites';
 import WebNavCard from '@/components/webNav/WebNavCard';
@@ -19,7 +19,7 @@ async function FavoritesList() {
     return (
       <div className="py-12 text-center">
         <h2 className="mb-4 text-2xl font-bold text-slate-900">Please log in to view your favorites</h2>
-        <Link 
+        <Link
           href="/login?redirect=/profile/favorites"
           className="inline-block rounded-lg bg-cyan-700 px-6 py-3 text-white transition-colors hover:bg-cyan-800"
         >

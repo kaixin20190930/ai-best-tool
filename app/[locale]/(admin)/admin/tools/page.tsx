@@ -20,6 +20,7 @@ export default async function AdminToolsPage({
     search?: string;
     collected?: string;
     needsMedia?: string;
+    needsDecision?: string;
     quality?: string;
     ready?: string;
     overdue?: string;
@@ -36,6 +37,7 @@ export default async function AdminToolsPage({
   const search = searchParams.search;
   const collected = searchParams.collected === '1';
   const needsMedia = searchParams.needsMedia === '1';
+  const needsDecision = searchParams.needsDecision === '1';
   const ready = searchParams.ready === '1';
   const overdue = searchParams.overdue === '1';
   const followedUp =
@@ -73,6 +75,7 @@ export default async function AdminToolsPage({
         search,
         collected,
         needsMedia,
+        needsDecision,
         quality,
         ready,
         overdue,
@@ -152,6 +155,7 @@ export default async function AdminToolsPage({
         currentSearch={search}
         currentCollected={collected}
         currentNeedsMedia={needsMedia}
+        currentNeedsDecision={needsDecision}
         currentQuality={quality}
         currentReady={ready}
         currentOverdue={overdue}

@@ -2,13 +2,13 @@
 
 /* eslint-disable react/jsx-props-no-spreading */
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
+import { Link } from '@/app/navigation';
 import { listingConfig } from '@/lib/config/listing';
 import { FORM_PLACEHOLDER, WEBSITE_EXAMPLE } from '@/lib/constants';
 import type { Category } from '@/lib/services/categories';

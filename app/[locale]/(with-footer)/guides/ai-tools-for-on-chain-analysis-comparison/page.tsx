@@ -26,6 +26,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     breadcrumbLabel: { cn: '链上分析工具对比', en: 'On-chain analysis tools comparison' },
     compareTitle: { cn: '几款常见链上分析工具的快速对照', en: 'A quick side-by-side look at common on-chain tools' },
     compareSubtitle: { cn: '链上分析', en: 'On-chain analysis' },
+    preferredToolNames: ['dune', 'nansen', 'arkham', 'bubblemaps'],
     tips: {
       cn: [
         '先看它支持的链和数据源，不同产品的覆盖面会差很多。',

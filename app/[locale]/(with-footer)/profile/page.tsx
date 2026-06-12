@@ -1,7 +1,7 @@
-import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { LayoutDashboard, Heart, MessageSquareText, Settings2 } from 'lucide-react';
 
+import { Link } from '@/app/navigation';
 import { getCurrentUserProfile } from '@/lib/services/user';
 
 export async function generateMetadata({ params }: { params: { locale: string } }) {

@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 
 import { resendVerificationEmail } from '@/app/actions/auth';
+import { Link } from '@/app/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 

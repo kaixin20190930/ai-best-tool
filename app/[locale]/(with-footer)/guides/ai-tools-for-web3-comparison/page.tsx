@@ -26,6 +26,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     breadcrumbLabel: { cn: 'Web3 工具对比', en: 'Web3 tools comparison' },
     compareTitle: { cn: '几款常见 Web3 工具的快速对照', en: 'A quick side-by-side look at common Web3 tools' },
     compareSubtitle: { cn: 'Web3', en: 'Web3' },
+    preferredToolNames: ['dune', 'messari', 'debank', 'bubblemaps'],
     tips: {
       cn: [
         '先看它支持的链和数据源，不同产品的覆盖面会差很多。',
@@ -49,8 +50,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       {
         question: { cn: '为什么只看 Web3 工具？', en: 'Why only Web3 tools?' },
         answer: {
-          cn: '因为 Web3 工具的意图比较明确，通常围绕链上分析、钱包和研究工作流，对比也更直接。',
-          en: 'Because Web3 tools usually map to clear needs around on-chain analysis, wallets, and research workflows, making comparison more direct.',
+          cn: '因为这几款分别覆盖了链上分析、研究情报、钱包可见性和关系可视化，对比维度更完整。',
+          en: 'Because together they cover on-chain analysis, research intelligence, wallet visibility, and relationship visualization.',
         },
       },
     ],

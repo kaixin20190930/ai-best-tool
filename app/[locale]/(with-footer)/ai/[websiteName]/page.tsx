@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getWebNavigationDetail } from '@/network/webNavigation';
 import {
@@ -22,6 +21,7 @@ import {
 import { getTranslations } from 'next-intl/server';
 
 import { SEO_CONFIG, SOCIAL_IMAGE_DIMENSIONS, ToolMetadata } from '@/lib/seo/constants';
+import { Link } from '@/app/navigation';
 import {
   generateCanonicalUrl,
   generateSocialImageUrl,
@@ -57,6 +57,12 @@ export const revalidate = 3600;
 // Enable dynamic params for ISR
 export const dynamicParams = true;
 
+function getLocaleVariants(locale: string): string[] {
+  if (locale === 'cn') return ['cn', 'zh'];
+  if (locale === 'zh') return ['zh', 'cn'];
+  return [locale];
+}
+
 function getLocalizedText(input: unknown, locale: string, fallback = 'en'): string | null {
   if (typeof input === 'string') {
     const trimmed = input.trim();
@@ -65,11 +71,15 @@ function getLocalizedText(input: unknown, locale: string, fallback = 'en'): stri
 
   if (input && typeof input === 'object') {
     const record = input as Record<string, unknown>;
-    const exact = record[locale];
-    if (typeof exact === 'string' && exact.trim()) return exact.trim();
+    for (const key of getLocaleVariants(locale)) {
+      const value = record[key];
+      if (typeof value === 'string' && value.trim()) return value.trim();
+    }
 
-    const fallbackValue = record[fallback];
-    if (typeof fallbackValue === 'string' && fallbackValue.trim()) return fallbackValue.trim();
+    for (const key of getLocaleVariants(fallback)) {
+      const value = record[key];
+      if (typeof value === 'string' && value.trim()) return value.trim();
+    }
 
     const firstString = Object.values(record).find((value) => typeof value === 'string' && value.trim());
     if (typeof firstString === 'string') return firstString.trim();
@@ -90,7 +100,11 @@ function getStringList(input: unknown, locale = 'en', fallback = 'en'): string[]
 
   if (input && typeof input === 'object') {
     const record = input as Record<string, unknown>;
-    const localizedList = record[locale] ?? record[fallback];
+    const localizedList =
+      [...getLocaleVariants(locale), ...getLocaleVariants(fallback)].reduce<unknown>(
+        (value, key) => value ?? record[key],
+        undefined,
+      );
 
     if (Array.isArray(localizedList)) {
       return localizedList.map((item) => (typeof item === 'string' ? item.trim() : '')).filter(Boolean);
@@ -122,7 +136,11 @@ function getFeatureEntries(input: unknown, locale = 'en', fallback = 'en'): Arra
 
     if (localized && typeof localized === 'object') {
       const localizedRecord = localized as Record<string, unknown>;
-      const localizedEntries = localizedRecord[locale] ?? localizedRecord[fallback];
+      const localizedEntries =
+        [...getLocaleVariants(locale), ...getLocaleVariants(fallback)].reduce<unknown>(
+          (value, key) => value ?? localizedRecord[key],
+          undefined,
+        );
 
       if (Array.isArray(localizedEntries)) {
         return localizedEntries
@@ -148,6 +166,24 @@ function getFeatureEntries(input: unknown, locale = 'en', fallback = 'en'): Arra
   }
 
   return [];
+}
+
+function getAudienceEntries(
+  input: unknown,
+  field: 'bestFit' | 'notIdealFor',
+  locale = 'en',
+  fallback = 'en',
+): string[] {
+  if (!input || typeof input !== 'object') {
+    return [];
+  }
+
+  const { audience } = input as Record<string, unknown>;
+  if (!audience || typeof audience !== 'object') {
+    return [];
+  }
+
+  return getStringList((audience as Record<string, unknown>)[field], locale, fallback);
 }
 
 function getEditorialReview(
@@ -185,6 +221,42 @@ function getEditorialReview(
     summary,
     trustNote,
   };
+}
+
+function getDecisionText(
+  input: unknown,
+  field: 'officialSummary' | 'freshnessSummary' | 'pricingSummary' | 'communitySummary' | 'mediaSummary',
+  locale: string,
+  fallback = 'en',
+): string | null {
+  if (!input || typeof input !== 'object') {
+    return null;
+  }
+
+  const { decision } = input as Record<string, unknown>;
+  if (!decision || typeof decision !== 'object') {
+    return null;
+  }
+
+  return getLocalizedText((decision as Record<string, unknown>)[field], locale, fallback);
+}
+
+function getDecisionList(
+  input: unknown,
+  field: 'compareAxes',
+  locale: string,
+  fallback = 'en',
+): string[] {
+  if (!input || typeof input !== 'object') {
+    return [];
+  }
+
+  const { decision } = input as Record<string, unknown>;
+  if (!decision || typeof decision !== 'object') {
+    return [];
+  }
+
+  return getStringList((decision as Record<string, unknown>)[field], locale, fallback);
 }
 
 function inferBestFit(categorySlug: string | undefined, locale: string, useCases: string[]): string[] {
@@ -366,6 +438,206 @@ function getOfficialSiteStatus(url: string, locale: string, isPublished: boolean
     summary,
     statusLabel,
   };
+}
+
+function getMediaCoverageSummary({
+  locale,
+  heroImage,
+  screenshotCount,
+  hasVideo,
+}: {
+  locale: string;
+  heroImage: string;
+  screenshotCount: number;
+  hasVideo: boolean;
+}) {
+  const isChinese = locale === 'cn';
+  const hasPreview = Boolean(heroImage);
+  const totalAssets = screenshotCount + (hasVideo ? 1 : 0) + (hasPreview ? 1 : 0);
+
+  if (screenshotCount >= 3 || (screenshotCount >= 1 && hasVideo)) {
+    return {
+      label: isChinese ? '预览较完整' : 'Strong preview coverage',
+      summary: isChinese
+        ? '已经有多张截图或视频，足够先判断界面、流程和复杂度。'
+        : 'There is enough visual coverage to judge the interface, workflow, and complexity before clicking through.',
+      evidence: isChinese
+        ? `${screenshotCount} 张截图${hasVideo ? '，含视频' : ''}`
+        : `${screenshotCount} screenshots${hasVideo ? ' plus video' : ''}`,
+    };
+  }
+
+  if (totalAssets > 0) {
+    return {
+      label: isChinese ? '预览一般' : 'Partial preview coverage',
+      summary: isChinese
+        ? '已经能大致看到产品长什么样，但做决定前仍建议打开官网再确认。'
+        : 'You can get a rough feel for the product, but it is still worth checking the official site before deciding.',
+      evidence: isChinese
+        ? `${screenshotCount} 张截图${hasPreview ? '，含封面预览' : ''}${hasVideo ? '，含视频' : ''}`
+        : `${screenshotCount} screenshots${hasPreview ? ', cover preview' : ''}${hasVideo ? ', video' : ''}`,
+    };
+  }
+
+  return {
+    label: isChinese ? '预览较少' : 'Limited preview coverage',
+    summary: isChinese
+      ? '当前媒体信息还不够，最终判断前更应该回到官网核对真实界面。'
+      : 'Visual coverage is still light, so the official site matters more before you make a final call.',
+    evidence: isChinese ? '暂无稳定截图或视频' : 'No stable screenshots or videos yet',
+  };
+}
+
+function getCommunitySignalSummary({
+  locale,
+  ratingCount,
+  commentCount,
+  favoriteCount,
+}: {
+  locale: string;
+  ratingCount: number;
+  commentCount: number;
+  favoriteCount: number;
+}) {
+  const isChinese = locale === 'cn';
+  const interactionCount = ratingCount + commentCount + favoriteCount;
+
+  if (ratingCount >= 5 || commentCount >= 3 || favoriteCount >= 20) {
+    return {
+      label: isChinese ? '已有真实互动' : 'Real user signal is forming',
+      summary: isChinese
+        ? '这条工具已经开始积累评分、讨论或收藏，适合把用户反馈一起纳入判断。'
+        : 'This listing already has enough ratings, discussion, or saves to add useful real-world signal to your decision.',
+    };
+  }
+
+  if (interactionCount > 0) {
+    return {
+      label: isChinese ? '开始有反馈' : 'Early user signal',
+      summary: isChinese
+        ? '已经有少量用户反馈，但更适合和相似工具一起横向比较。'
+        : 'There is some early feedback here, but it is still best used together with a side-by-side comparison.',
+    };
+  }
+
+  return {
+    label: isChinese ? '互动还少' : 'Limited user signal',
+    summary: isChinese
+      ? '目前互动数据不多，建议更看重官网信息、截图和相似工具对比。'
+      : 'Engagement is still light, so lean more on the official site, screenshots, and similar-tool comparison.',
+  };
+}
+
+function getComparisonSummary(categorySlug: string | undefined, locale: string) {
+  const isChinese = locale === 'cn';
+
+  switch (categorySlug) {
+    case 'web3':
+      return isChinese
+        ? '重点对比支持的链、钱包可见性、协议覆盖和研究深度。'
+        : 'Compare supported chains, wallet visibility, protocol coverage, and research depth first.';
+    case 'text-writing':
+      return isChinese
+        ? '重点对比适配的写作任务、免费额度、工作流顺手程度和输出稳定性。'
+        : 'Compare writing job fit, free-tier limits, workflow friction, and output consistency first.';
+    case 'developer-tools':
+      return isChinese
+        ? '重点对比接入成本、模型覆盖、可观测性深度和团队协作支持。'
+        : 'Compare integration cost, model coverage, observability depth, and team workflow support.';
+    case 'automation':
+      return isChinese
+        ? '重点对比触发方式、连接器覆盖、失败处理和可维护性。'
+        : 'Compare triggers, connector coverage, failure handling, and maintainability.';
+    case 'research':
+      return isChinese
+        ? '重点对比来源质量、证据链、资料锚定能力和搜索效率。'
+        : 'Compare source quality, evidence trails, grounding, and research speed.';
+    default:
+      return isChinese
+        ? '重点对比任务适配度、定价、更新频率和真实反馈。'
+        : 'Compare task fit, pricing, freshness, and real user feedback before choosing.';
+  }
+}
+
+function getCategoryGuideLink(categorySlug: string | undefined, locale: string) {
+  const isChinese = locale === 'cn';
+
+  switch (categorySlug) {
+    case 'web3':
+      return {
+        href: '/guides/ai-tools-for-web3',
+        title: isChinese ? '看 Web3 工具指南' : 'Open the Web3 tools guide',
+        description: isChinese
+          ? '如果你还在筛选方向，先看 Web3 分类工具怎么分层。'
+          : 'Use the guide to understand the main Web3 tool buckets before comparing products.',
+      };
+    case 'text-writing':
+      return {
+        href: '/guides/ai-writing-tools',
+        title: isChinese ? '看 AI 写作工具指南' : 'Open the AI writing guide',
+        description: isChinese
+          ? '先看常见写作场景和工具差异，再决定要试哪一类。'
+          : 'Review common writing workflows and tool differences before picking one.',
+      };
+    case 'developer-tools':
+      return {
+        href: '/guides/ai-tools-for-developers',
+        title: isChinese ? '看开发者工具指南' : 'Open the developer tools guide',
+        description: isChinese
+          ? '更适合先从集成、模型覆盖和工作流角度建立判断。'
+          : 'Start with integration, model coverage, and workflow fit before comparing products.',
+      };
+    case 'automation':
+      return {
+        href: '/guides/ai-tools-for-automation',
+        title: isChinese ? '看自动化工具指南' : 'Open the automation guide',
+        description: isChinese
+          ? '先看自动化工具适合接什么流程，再决定值不值得接入。'
+          : 'Review which workflows are worth automating before evaluating tools one by one.',
+      };
+    case 'research':
+      return {
+        href: '/guides/ai-tools-for-research',
+        title: isChinese ? '看研究工具指南' : 'Open the research tools guide',
+        description: isChinese
+          ? '先看资料来源、证据链和研究速度这几个关键维度。'
+          : 'Start with source quality, evidence trails, and research speed.',
+      };
+    case 'productivity':
+      return {
+        href: '/guides/ai-productivity-tools',
+        title: isChinese ? '看生产力工具指南' : 'Open the productivity guide',
+        description: isChinese
+          ? '先明确你要提效的是会议、任务还是知识整理。'
+          : 'Clarify whether you need meeting support, task follow-through, or knowledge organization first.',
+      };
+    case 'chatbot':
+      return {
+        href: '/guides/ai-chatbot-tools',
+        title: isChinese ? '看聊天工具指南' : 'Open the chatbot guide',
+        description: isChinese
+          ? '如果你还没决定要哪种助手，先看聊天工具的分工。'
+          : 'Review chatbot roles first if you are not yet sure which assistant style you need.',
+      };
+    case 'design-art':
+      return {
+        href: '/guides/ai-image-tools',
+        title: isChinese ? '看图像工具指南' : 'Open the image tools guide',
+        description: isChinese
+          ? '先看生成、修图和设计提案这几类工作流的差异。'
+          : 'Compare generation, editing, and design workflows before narrowing down tools.',
+      };
+    case 'voice':
+      return {
+        href: '/guides/ai-tools-for-meeting-notes',
+        title: isChinese ? '看语音与会议记录入口' : 'Open the voice and notes entry',
+        description: isChinese
+          ? '先从转录、会议纪要和语音工作流切入会更容易判断。'
+          : 'Start from transcription, meeting notes, and voice workflows to compare with more context.',
+      };
+    default:
+      return null;
+  }
 }
 
 function getPricingLabel(pricing: string | null | undefined): string {
@@ -631,13 +903,24 @@ export default async function Page({
     commentLabel = `${commentCount} ${isChinese ? '条讨论' : 'comments'}`;
   }
   const categorySlug = category?.slug;
+  const categoryGuideLink = getCategoryGuideLink(categorySlug, locale);
   const tagLabels = tags.map((tag) => getTagLocalizedField(tag.name, locale));
   const featureEntries = getFeatureEntries(dbTool?.features, locale);
   const useCaseList = getStringList(dbTool?.useCases, locale);
-  const bestFitList = inferBestFit(categorySlug, locale, useCaseList);
-  const notIdealForList = inferNotIdealFor(categorySlug, locale);
+  const bestFitOverride = getAudienceEntries(dbTool?.features, 'bestFit', locale);
+  const notIdealForOverride = getAudienceEntries(dbTool?.features, 'notIdealFor', locale);
+  const bestFitList = bestFitOverride.length > 0 ? bestFitOverride : inferBestFit(categorySlug, locale, useCaseList);
+  const notIdealForList =
+    notIdealForOverride.length > 0 ? notIdealForOverride : inferNotIdealFor(categorySlug, locale);
   const officialSite = getOfficialSiteStatus(data.url, locale, dbTool?.status === 'published');
   const editorialReview = getEditorialReview(dbTool?.features, locale);
+  const decisionCompareAxesOverride = getDecisionList(dbTool?.features, 'compareAxes', locale);
+  const decisionOfficialSummary = getDecisionText(dbTool?.features, 'officialSummary', locale);
+  const decisionFreshnessSummary = getDecisionText(dbTool?.features, 'freshnessSummary', locale);
+  const decisionPricingSummary = getDecisionText(dbTool?.features, 'pricingSummary', locale);
+  const decisionCommunitySummary = getDecisionText(dbTool?.features, 'communitySummary', locale);
+  const decisionMediaSummary = getDecisionText(dbTool?.features, 'mediaSummary', locale);
+  const officialSiteSummary = decisionOfficialSummary || officialSite.summary;
   const editorialReviewedLabel = editorialReview?.reviewedAt
     ? new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
         year: 'numeric',
@@ -645,8 +928,34 @@ export default async function Page({
         day: 'numeric',
       }).format(new Date(editorialReview.reviewedAt))
     : null;
-  const freshnessSummary = getFreshnessSummary(updatedAt || null, locale);
-  const pricingSummary = getPricingSummary(dbTool?.pricing, locale);
+  const freshnessSummary = decisionFreshnessSummary || getFreshnessSummary(updatedAt || null, locale);
+  const pricingSummary = decisionPricingSummary || getPricingSummary(dbTool?.pricing, locale);
+  const screenshotCount = dbTool?.screenshots?.length || 0;
+  const hasVideo = Boolean(dbTool?.videoUrl);
+  const mediaCoverageBase = getMediaCoverageSummary({
+    locale,
+    heroImage,
+    screenshotCount,
+    hasVideo,
+  });
+  const mediaCoverage = decisionMediaSummary
+    ? { ...mediaCoverageBase, summary: decisionMediaSummary }
+    : mediaCoverageBase;
+  const communitySignal = getCommunitySignalSummary({
+    locale,
+    ratingCount: ratingStats.ratingCount,
+    commentCount,
+    favoriteCount: toolStats.favoriteCount,
+  });
+  const communitySignalWithOverride = decisionCommunitySummary
+    ? { ...communitySignal, summary: decisionCommunitySummary }
+    : communitySignal;
+  const comparisonSummary = getComparisonSummary(categorySlug, locale);
+  const compareAxes = decisionCompareAxesOverride.length > 0
+    ? decisionCompareAxesOverride
+    : [
+        comparisonSummary,
+      ];
   let mediaChecklistItem = 'Preview media is still limited, so check the official screenshots before deciding.';
   if (heroImage) {
     mediaChecklistItem = isChinese
@@ -740,6 +1049,89 @@ export default async function Page({
               <div className='space-y-4'>
                 <h1 className='max-w-4xl text-4xl font-bold leading-tight text-slate-950 lg:text-6xl'>{data.title}</h1>
                 <p className='max-w-3xl text-base leading-7 text-slate-600 lg:text-lg'>{data.content}</p>
+              </div>
+
+              <div className='grid gap-3 md:grid-cols-3'>
+                {categorySlug ? (
+                  <Link
+                    href={`/categories/${categorySlug}?sort=latest`}
+                    className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
+                  >
+                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                      {isChinese ? '继续看分类' : 'Browse the category'}
+                    </p>
+                    <p className='mt-2 text-base font-semibold text-slate-950'>{categoryName}</p>
+                    <p className='mt-2 text-sm leading-6 text-slate-600'>
+                      {isChinese
+                        ? '回到这个分类，继续按时间或热门度筛选相似工具。'
+                        : 'Jump back to the category and keep comparing similar tools by latest or popularity.'}
+                    </p>
+                  </Link>
+                ) : (
+                  <Link
+                    href='/explore?sort=latest'
+                    className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
+                  >
+                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                      {isChinese ? '继续探索' : 'Keep exploring'}
+                    </p>
+                    <p className='mt-2 text-base font-semibold text-slate-950'>
+                      {isChinese ? '查看最新工具' : 'Browse the latest tools'}
+                    </p>
+                    <p className='mt-2 text-sm leading-6 text-slate-600'>
+                      {isChinese
+                        ? '如果还没确定方向，先回到最新收录页继续看。'
+                        : 'If you are still comparing directions, return to the latest tools index first.'}
+                    </p>
+                  </Link>
+                )}
+
+                {categoryGuideLink ? (
+                  <Link
+                    href={categoryGuideLink.href}
+                    className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
+                  >
+                    <p className='text-xs font-semibold uppercase tracking-wide text-emerald-700'>
+                      {isChinese ? '先看指南' : 'Read the guide first'}
+                    </p>
+                    <p className='mt-2 text-base font-semibold text-slate-950'>{categoryGuideLink.title}</p>
+                    <p className='mt-2 text-sm leading-6 text-slate-600'>{categoryGuideLink.description}</p>
+                  </Link>
+                ) : (
+                  <Link
+                    href='/guides/how-to-choose-ai-tools'
+                    className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
+                  >
+                    <p className='text-xs font-semibold uppercase tracking-wide text-emerald-700'>
+                      {isChinese ? '先看指南' : 'Read the guide first'}
+                    </p>
+                    <p className='mt-2 text-base font-semibold text-slate-950'>
+                      {isChinese ? '看 AI 工具选型指南' : 'Open the AI tool selection guide'}
+                    </p>
+                    <p className='mt-2 text-sm leading-6 text-slate-600'>
+                      {isChinese
+                        ? '如果你还没想清楚比较维度，先回到选型指南会更高效。'
+                        : 'If your comparison criteria are still fuzzy, the selection guide is the best next stop.'}
+                    </p>
+                  </Link>
+                )}
+
+                <Link
+                  href='/new'
+                  className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
+                >
+                  <p className='text-xs font-semibold uppercase tracking-wide text-sky-700'>
+                    {isChinese ? '本周新增' : 'New this week'}
+                  </p>
+                  <p className='mt-2 text-base font-semibold text-slate-950'>
+                    {isChinese ? '回看最近补进的工具' : 'See what was added this week'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {isChinese
+                      ? '从本周新增页继续走，可以更快发现最近补货和最近补厚的页面。'
+                      : 'Use the weekly additions page to discover recently added and recently improved listings.'}
+                  </p>
+                </Link>
               </div>
 
               {toolId && (
@@ -936,96 +1328,156 @@ export default async function Page({
                   {locale === 'cn' ? '决策参考' : 'Decision Guide'}
                 </h2>
               </div>
-              <div className='grid gap-4 lg:grid-cols-2 xl:grid-cols-3'>
-                <div className='rounded-lg border border-slate-200 p-4'>
-                  <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                    {locale === 'cn' ? '官方网站状态' : 'Official website status'}
-                  </p>
-                  <p className='mt-2 text-lg font-semibold text-slate-950'>{officialSite.hostname}</p>
-                  <div className='mt-2 flex flex-wrap items-center gap-2'>
-                    <span className='rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700'>
-                      {officialSite.secureLabel}
-                    </span>
-                    <span className='rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700'>
-                      {officialSite.statusLabel}
-                    </span>
+              <p className='mb-5 max-w-3xl text-sm leading-6 text-slate-600'>
+                {locale === 'cn'
+                  ? '这一组信息不是在替你下结论，而是帮你更快判断：它值不值得继续比较、试用或付费。'
+                  : 'This section is here to speed up your decision: whether this tool is worth comparing further, trialing, or paying for.'}
+              </p>
+              <div className='space-y-5'>
+                <div className='grid gap-4 xl:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]'>
+                  <div className='rounded-lg border border-slate-200 bg-slate-50 p-4 sm:p-5'>
+                    <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                      {locale === 'cn' ? '先看这三个判断' : 'Start with these three signals'}
+                    </p>
+                    <div className='mt-4 grid gap-3 sm:grid-cols-3'>
+                      <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
+                        <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                          {locale === 'cn' ? '官方网站状态' : 'Official website status'}
+                        </p>
+                        <p className='mt-2 text-base font-semibold text-slate-950'>{officialSite.hostname}</p>
+                        <div className='mt-2 flex flex-wrap items-center gap-2'>
+                          <span className='rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700'>
+                            {officialSite.secureLabel}
+                          </span>
+                          <span className='rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700'>
+                            {officialSite.statusLabel}
+                          </span>
+                        </div>
+                        <p className='mt-3 text-sm leading-6 text-slate-600'>{officialSiteSummary}</p>
+                      </div>
+
+                      <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
+                        <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                          {locale === 'cn' ? '最近更新信息' : 'Recent update'}
+                        </p>
+                        <p className='mt-2 text-base font-semibold text-slate-950'>{updatedLabel}</p>
+                        <p className='mt-3 text-sm leading-6 text-slate-600'>{freshnessSummary}</p>
+                      </div>
+
+                      <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
+                        <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                          {locale === 'cn' ? '定价快照' : 'Pricing snapshot'}
+                        </p>
+                        <p className='mt-2 text-base font-semibold text-slate-950'>{pricingLabel}</p>
+                        <p className='mt-3 text-sm leading-6 text-slate-600'>{pricingSummary}</p>
+                      </div>
+                    </div>
                   </div>
-                  <p className='mt-3 text-sm leading-6 text-slate-600'>{officialSite.summary}</p>
+
+                  <div className='grid gap-4'>
+                    <div className='rounded-lg border border-slate-200 p-4'>
+                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                        {locale === 'cn' ? '真实反馈信号' : 'User signal'}
+                      </p>
+                      <p className='mt-2 text-lg font-semibold text-slate-950'>{communitySignal.label}</p>
+                      <p className='mt-2 text-xs font-medium text-slate-500'>
+                        {locale === 'cn'
+                          ? `${ratingStats.ratingCount} 条评分 · ${commentCount} 条讨论 · ${toolStats.favoriteCount} 次收藏`
+                          : `${ratingStats.ratingCount} ratings · ${commentCount} comments · ${toolStats.favoriteCount} saves`}
+                      </p>
+                      <p className='mt-3 text-sm leading-6 text-slate-600'>{communitySignalWithOverride.summary}</p>
+                    </div>
+
+                    <div className='rounded-lg border border-slate-200 p-4'>
+                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                        {locale === 'cn' ? '预览覆盖' : 'Preview coverage'}
+                      </p>
+                      <p className='mt-2 text-lg font-semibold text-slate-950'>{mediaCoverage.label}</p>
+                      <p className='mt-2 text-xs font-medium text-slate-500'>{mediaCoverage.evidence}</p>
+                      <p className='mt-3 text-sm leading-6 text-slate-600'>{mediaCoverage.summary}</p>
+                    </div>
+
+                    {editorialReview && (
+                      <div className='rounded-lg border border-slate-200 p-4'>
+                        <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                          {locale === 'cn' ? '编辑复核' : 'Editorial review'}
+                        </p>
+                        <p className='mt-2 text-lg font-semibold text-slate-950'>
+                          {editorialReviewedLabel || (locale === 'cn' ? '已复核' : 'Reviewed')}
+                        </p>
+                        {editorialReview.summary && (
+                          <p className='mt-3 text-sm leading-6 text-slate-600'>{editorialReview.summary}</p>
+                        )}
+                        {editorialReview.trustNote && (
+                          <p className='mt-2 text-sm leading-6 text-slate-600'>{editorialReview.trustNote}</p>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
 
-                <div className='rounded-lg border border-slate-200 p-4'>
-                  <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                    {locale === 'cn' ? '最近更新信息' : 'Recent update'}
+                <div className='rounded-lg border border-cyan-100 bg-cyan-50 p-4 sm:p-5'>
+                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                    {locale === 'cn' ? '和相似工具怎么比' : 'How to compare it next'}
                   </p>
-                  <p className='mt-2 text-lg font-semibold text-slate-950'>{updatedLabel}</p>
-                  <p className='mt-3 text-sm leading-6 text-slate-600'>{freshnessSummary}</p>
-                </div>
-
-                <div className='rounded-lg border border-slate-200 p-4'>
-                  <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                    {locale === 'cn' ? '定价快照' : 'Pricing snapshot'}
+                  <p className='mt-2 text-lg font-semibold text-slate-950'>
+                    {locale === 'cn' ? '先横向看关键差异' : 'Compare the decision points first'}
                   </p>
-                  <p className='mt-2 text-lg font-semibold text-slate-950'>{pricingLabel}</p>
-                  <p className='mt-3 text-sm leading-6 text-slate-600'>{pricingSummary}</p>
+                  <div className='mt-3 flex flex-wrap gap-2'>
+                    {compareAxes.map((axis) => (
+                      <span
+                        key={axis}
+                        className='inline-flex rounded-full bg-white px-3 py-1 text-sm font-medium text-cyan-900 ring-1 ring-cyan-100'
+                      >
+                        {axis}
+                      </span>
+                    ))}
+                  </div>
+                  <p className='mt-3 text-sm leading-6 text-slate-600'>{comparisonSummary}</p>
                 </div>
 
-                {editorialReview && (
+                <div className='grid gap-4 lg:grid-cols-3'>
                   <div className='rounded-lg border border-slate-200 p-4'>
                     <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                      {locale === 'cn' ? '编辑复核' : 'Editorial review'}
+                      {locale === 'cn' ? '适合谁' : 'Best fit'}
                     </p>
-                    <p className='mt-2 text-lg font-semibold text-slate-950'>
-                      {editorialReviewedLabel || (locale === 'cn' ? '已复核' : 'Reviewed')}
-                    </p>
-                    {editorialReview.summary && (
-                      <p className='mt-3 text-sm leading-6 text-slate-600'>{editorialReview.summary}</p>
-                    )}
-                    {editorialReview.trustNote && (
-                      <p className='mt-2 text-sm leading-6 text-slate-600'>{editorialReview.trustNote}</p>
-                    )}
+                    <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
+                      {bestFitList.map((item) => (
+                        <li key={item} className='flex gap-2'>
+                          <CheckCircle className='mt-1 size-4 shrink-0 text-emerald-600' />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                )}
 
-                <div className='rounded-lg border border-slate-200 p-4'>
-                  <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                    {locale === 'cn' ? '适合谁' : 'Best fit'}
-                  </p>
-                  <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
-                    {bestFitList.map((item) => (
-                      <li key={item} className='flex gap-2'>
-                        <CheckCircle className='mt-1 size-4 shrink-0 text-emerald-600' />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                  <div className='rounded-lg border border-slate-200 p-4'>
+                    <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                      {locale === 'cn' ? '不太适合' : 'Less ideal for'}
+                    </p>
+                    <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
+                      {notIdealForList.map((item) => (
+                        <li key={item} className='flex gap-2'>
+                          <CircleArrowRight className='mt-1 size-4 shrink-0 text-slate-500' />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
 
-                <div className='rounded-lg border border-slate-200 p-4'>
-                  <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                    {locale === 'cn' ? '不太适合' : 'Less ideal for'}
-                  </p>
-                  <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
-                    {notIdealForList.map((item) => (
-                      <li key={item} className='flex gap-2'>
-                        <CircleArrowRight className='mt-1 size-4 shrink-0 text-slate-500' />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className='rounded-lg border border-slate-200 p-4'>
-                  <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                    {locale === 'cn' ? '选择前先核对' : 'Verify before choosing'}
-                  </p>
-                  <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
-                    {verificationChecklist.map((item) => (
-                      <li key={item} className='flex gap-2'>
-                        <ShieldCheck className='mt-1 size-4 shrink-0 text-cyan-600' />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  <div className='rounded-lg border border-slate-200 p-4'>
+                    <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                      {locale === 'cn' ? '选择前先核对' : 'Verify before choosing'}
+                    </p>
+                    <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
+                      {verificationChecklist.map((item) => (
+                        <li key={item} className='flex gap-2'>
+                          <ShieldCheck className='mt-1 size-4 shrink-0 text-cyan-600' />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </div>
             </section>
@@ -1069,7 +1521,9 @@ export default async function Page({
 
             {dbTool && ((dbTool.screenshots && dbTool.screenshots.length > 0) || dbTool.videoUrl) && (
               <section className='rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'>
-                <h2 className='mb-5 text-2xl font-bold text-slate-950 lg:text-3xl'>Screenshots & Videos</h2>
+                <h2 className='mb-5 text-2xl font-bold text-slate-950 lg:text-3xl'>
+                  {locale === 'cn' ? '截图与视频' : 'Screenshots & Videos'}
+                </h2>
                 <MediaGallery screenshots={dbTool.screenshots || []} videoUrl={dbTool.videoUrl} title={data.title} />
               </section>
             )}
@@ -1080,7 +1534,11 @@ export default async function Page({
                   toolId={toolId}
                   locale={locale}
                   categoryName={categoryName}
+                  categorySlug={categorySlug}
+                  compareAxes={compareAxes}
+                  pricing={dbTool?.pricing}
                   pricingLabel={pricingLabel}
+                  tagSlugs={dbTool?.tags || []}
                   tagLabels={tagLabels}
                 />
                 <section id='comments' className='scroll-mt-24'>
@@ -1089,10 +1547,12 @@ export default async function Page({
                     <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
                       <div>
                         <h3 className='text-base font-semibold text-slate-900'>
-                          Join the discussion and follow updates
+                          {locale === 'cn' ? '参与讨论，看看真实反馈' : 'Join the discussion and follow updates'}
                         </h3>
                         <p className='mt-1 text-sm text-slate-600'>
-                          Save this tool, share it with your team, and leave your review.
+                          {locale === 'cn'
+                            ? '收藏、分享给团队，或者直接留下你的真实使用体验。'
+                            : 'Save this tool, share it with your team, and leave your review.'}
                         </p>
                       </div>
                       <div className='flex flex-wrap items-center gap-2'>
@@ -1112,7 +1572,7 @@ export default async function Page({
                             href={`/${locale}/login?redirect=/${locale}/ai/${websiteName}`}
                             className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-2 text-sm font-semibold text-white hover:bg-cyan-800'
                           >
-                            Log in to save and comment
+                            {locale === 'cn' ? '登录后收藏和评论' : 'Log in to save and comment'}
                           </Link>
                         )}
                       </div>
@@ -1155,21 +1615,27 @@ export default async function Page({
                   <dd className='font-semibold text-slate-950'>{officialSite.secureLabel}</dd>
                 </div>
                 <div className='flex items-center justify-between gap-4'>
-                  <dt className='text-slate-500'>Pricing</dt>
+                  <dt className='text-slate-500'>{locale === 'cn' ? '定价' : 'Pricing'}</dt>
                   <dd className='font-semibold text-slate-950'>{pricingLabel}</dd>
                 </div>
                 <div className='flex items-center justify-between gap-4'>
-                  <dt className='text-slate-500'>Category</dt>
+                  <dt className='text-slate-500'>{locale === 'cn' ? '分类' : 'Category'}</dt>
                   <dd className='text-right font-semibold text-slate-950'>{categoryName}</dd>
                 </div>
                 <div className='flex items-center justify-between gap-4'>
-                  <dt className='text-slate-500'>Status</dt>
+                  <dt className='text-slate-500'>{locale === 'cn' ? '状态' : 'Status'}</dt>
                   <dd className='font-semibold text-emerald-700'>
-                    {dbTool?.status === 'published' ? 'Published' : 'Listed'}
+                    {dbTool?.status === 'published'
+                      ? locale === 'cn'
+                        ? '已公开'
+                        : 'Published'
+                      : locale === 'cn'
+                        ? '已收录'
+                        : 'Listed'}
                   </dd>
                 </div>
                 <div className='flex items-center justify-between gap-4'>
-                  <dt className='text-slate-500'>Last update</dt>
+                  <dt className='text-slate-500'>{locale === 'cn' ? '最近更新' : 'Last update'}</dt>
                   <dd className='text-right font-semibold text-slate-950'>{updatedLabel}</dd>
                 </div>
               </dl>
@@ -1180,7 +1646,7 @@ export default async function Page({
                   userId={user?.id}
                   className='mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700'
                 >
-                  Open official site <ArrowUpRight className='size-4' />
+                  {locale === 'cn' ? '打开官网' : 'Open official site'} <ArrowUpRight className='size-4' />
                 </TrackableLink>
               ) : (
                 <a
@@ -1189,26 +1655,29 @@ export default async function Page({
                   rel='noreferrer'
                   className='mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700'
                 >
-                  Open official site <ArrowUpRight className='size-4' />
+                  {locale === 'cn' ? '打开官网' : 'Open official site'} <ArrowUpRight className='size-4' />
                 </a>
               )}
             </div>
 
             <div className='rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200'>
-              <h2 className='text-base font-bold text-slate-950'>Engagement</h2>
+              <h2 className='text-base font-bold text-slate-950'>{locale === 'cn' ? '互动数据' : 'Engagement'}</h2>
               <div className='mt-4 space-y-3 text-sm text-slate-700'>
                 <p className='flex items-center gap-2'>
-                  <Eye className='size-4 text-slate-500' /> {toolStats.viewCount.toLocaleString()} views
+                  <Eye className='size-4 text-slate-500' /> {toolStats.viewCount.toLocaleString()}{' '}
+                  {locale === 'cn' ? '次浏览' : 'views'}
                 </p>
                 <p className='flex items-center gap-2'>
                   <MousePointerClick className='size-4 text-slate-500' /> {toolStats.clickCount.toLocaleString()}{' '}
-                  website clicks
+                  {locale === 'cn' ? '次官网点击' : 'website clicks'}
                 </p>
                 <p className='flex items-center gap-2'>
-                  <Heart className='size-4 text-slate-500' /> {toolStats.favoriteCount.toLocaleString()} saves
+                  <Heart className='size-4 text-slate-500' /> {toolStats.favoriteCount.toLocaleString()}{' '}
+                  {locale === 'cn' ? '次收藏' : 'saves'}
                 </p>
                 <p className='flex items-center gap-2'>
-                  <Star className='size-4 text-slate-500' /> {ratingStats.ratingCount.toLocaleString()} ratings
+                  <Star className='size-4 text-slate-500' /> {ratingStats.ratingCount.toLocaleString()}{' '}
+                  {locale === 'cn' ? '条评分' : 'ratings'}
                 </p>
               </div>
             </div>

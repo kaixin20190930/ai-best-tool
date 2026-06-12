@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { CheckCircle2, ExternalLink, Search, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import GuideActionSection from '@/components/guides/GuideActionSection';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -153,8 +154,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {categories
                 .filter(
                   (category) =>
-                    String(category.slug).includes('marketing') ||
-                    String(category.slug).includes('writing') ||
+                    ['text-writing', 'research', 'productivity'].includes(String(category.slug)) ||
                     String(getLocalizedField(category.name, 'en')).toLowerCase().includes('seo'),
                 )
                 .slice(0, 6)
@@ -173,6 +173,78 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </aside>
         </section>
+
+        <GuideActionSection
+          locale={locale}
+          eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}
+          title={isChinese ? '更贴近真实 SEO 内容工作的入口' : 'Real entry points for SEO content workflows'}
+          description={
+            isChinese
+              ? '如果你更关心关键词、内容 brief、页面优化和主题规划，这几款工具会比泛写作页更快进入正题。'
+              : 'If keywords, content briefs, page optimization, and topic planning matter most, these tools get you to the real work faster than a general writing page.'
+          }
+          toolNames={['surfer', 'frase', 'clearscope', 'marketmuse']}
+          compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
+          compareTitle={isChinese ? '继续缩小 SEO 候选范围' : 'Next SEO comparison paths'}
+          compareDescription={
+            isChinese
+              ? '当你已经知道自己更偏内容优化、brief 生成还是主题规划时，继续进入对比页会更有效。'
+              : 'Once you know whether content optimization, brief generation, or topic planning matters most, narrower compare pages work better.'
+          }
+          compareLinks={[
+            {
+              href: '/guides/ai-seo-tools-comparison',
+              title: isChinese ? 'SEO 工具总对比' : 'SEO tools comparison',
+              description: isChinese
+                ? '适合快速横向看常见 SEO 工具。'
+                : 'A fast side-by-side view of common SEO tools.',
+            },
+            {
+              href: '/guides/ai-writing-tools-comparison',
+              title: isChinese ? '写作工具对比' : 'Writing tools comparison',
+              description: isChinese
+                ? '如果你还在 SEO 与通用写作工具之间犹豫，这里更有参考价值。'
+                : 'Useful if you are still deciding between SEO-first and broader writing tools.',
+            },
+            {
+              href: '/guides/ai-tools-for-research-comparison',
+              title: isChinese ? '研究工具对比' : 'Research tools comparison',
+              description: isChinese
+                ? '更适合先做调研、再决定内容方向的人。'
+                : 'Better for teams that start with research before content production.',
+            },
+          ]}
+          nextEyebrow={isChinese ? '下一步入口' : 'Where to go next'}
+          nextTitle={isChinese ? '确定 SEO 方向后，下一步看这里' : 'Where to go once SEO is clearly the right lane'}
+          nextDescription={
+            isChinese
+              ? '如果你已经明确自己在做搜索流量和内容增长，下一步就去写作分类、搜索结果和本周新增看真实条目。'
+              : 'If search traffic and content growth are clearly the focus, the next step is to use the writing category, targeted search, and recent additions.'
+          }
+          nextLinks={[
+            {
+              href: '/categories/text-writing?sort=popular',
+              title: isChinese ? '进入写作分类' : 'Open the writing category',
+              description: isChinese
+                ? '从最接近 SEO 内容工作的分类页继续筛选。'
+                : 'Keep filtering inside the category that maps most closely to SEO content workflows.',
+            },
+            {
+              href: '/explore?search=seo&sort=popular',
+              title: isChinese ? '搜索更多 SEO 工具' : 'Search more SEO tools',
+              description: isChinese
+                ? '回到 Explore，用 SEO 关键词扩大候选范围。'
+                : 'Return to Explore and widen the shortlist with an SEO-focused search.',
+            },
+            {
+              href: '/new',
+              title: isChinese ? '看本周新增' : 'Check new this week',
+              description: isChinese
+                ? '看看最近补进来的条目里有没有更适合的新候选。'
+                : 'See whether recent additions introduced a better fit for your workflow.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

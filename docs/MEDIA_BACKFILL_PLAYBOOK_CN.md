@@ -61,6 +61,14 @@ pnpm exec tsx scripts/print-priority-media-queue.ts
 
 这会输出当前最值得先补图的 5 条工具。
 
+如果你想优先处理“已经有决策页内容、但前台媒体还不够像正式条目”的工具，运行：
+
+```bash
+pnpm exec tsx scripts/print-decision-media-queue.ts
+```
+
+这会输出“决策页优先补图队列”的 Top 5。
+
 ### 第二步：逐条处理
 
 对每条工具：

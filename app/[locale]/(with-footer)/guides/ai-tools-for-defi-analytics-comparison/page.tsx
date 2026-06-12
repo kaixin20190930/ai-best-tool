@@ -26,6 +26,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     breadcrumbLabel: { cn: 'DeFi 工具对比', en: 'DeFi tools comparison' },
     compareTitle: { cn: '几款常见 DeFi 工具的快速对照', en: 'A quick side-by-side look at common DeFi tools' },
     compareSubtitle: { cn: 'DeFi', en: 'DeFi' },
+    preferredToolNames: ['defillama', 'dune', 'token-terminal', 'nansen'],
     tips: {
       cn: [
         '先看协议覆盖和历史深度，再看是否支持你常用的链。',

@@ -1,5 +1,6 @@
-import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+
+import { Link } from '@/app/navigation';
 
 export default function NotFound() {
   const t = useTranslations('NotFound');

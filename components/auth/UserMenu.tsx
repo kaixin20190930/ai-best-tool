@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import type { User } from '@supabase/supabase-js';
 
 import { signOut } from '@/app/actions/auth';
+import { Link } from '@/app/navigation';
 import { Button } from '@/components/ui/button';
 import { UserAvatar } from '@/components/auth/UserAvatar';
 

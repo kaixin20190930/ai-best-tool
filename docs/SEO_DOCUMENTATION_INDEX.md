@@ -410,6 +410,28 @@ This documentation provides comprehensive guidance for implementing and maintain
 
 **When to use:** 你准备开始系统性补 logo、截图和卡片首图质量时
 
+### 25. [决策摘要填写手册（中文）](./DECISION_SNAPSHOT_PLAYBOOK_CN.md)
+**Purpose:** 统一工具详情页 `features.decision` 字段的填写标准，让页面更像真实选型页
+
+**Contents:**
+- `compareAxes` 等 6 个字段分别该怎么写
+- 每个字段推荐长度和写法边界
+- 写作类 / Web3 / 开发类 / 自动化类工具的填写重点
+- 什么时候该补、什么时候该更新
+
+### 26. [优先收录队列（中文）](./PRIORITY_INDEXING_QUEUE_CN.md)
+**Purpose:** 把“先推哪些 URL 给 Google”变成一份可直接执行的 Search Console 清单
+
+**Contents:**
+- 当前最值得优先收录的 20 个 URL
+- 按首页 / 分类 / guide / 工具详情页分层排序
+- 一周内怎么分批提交
+- 提交后应该看哪些状态
+- 哪些页现在不应该急着推
+- 如何通过脚本批量写回数据库
+
+**When to use:** 你或我准备给重点工具补“适合谁 / 官方可信度 / 定价判断 / 社区信号”这类决策信息时
+
 ## Quick Start Guides
 
 ### Adding a New Page
