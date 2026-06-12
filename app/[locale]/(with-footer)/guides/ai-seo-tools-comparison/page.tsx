@@ -26,6 +26,87 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     breadcrumbLabel: { cn: 'SEO 工具对比', en: 'SEO tools comparison' },
     compareTitle: { cn: '几款常见 SEO 工具的快速对照', en: 'A quick side-by-side look at common SEO tools' },
     compareSubtitle: { cn: 'SEO', en: 'SEO' },
+    decisionCards: [
+      {
+        title: { cn: '做关键词与主题规划', en: 'Keyword and topic planning' },
+        description: {
+          cn: '优先看关键词覆盖、SERP 意图拆解和内容 brief 是否真能进入你的内容流程。',
+          en: 'Focus on keyword coverage, SERP-intent breakdown, and whether the brief can actually move into your content workflow.',
+        },
+      },
+      {
+        title: { cn: '做内容优化与更新', en: 'Content optimization and refreshes' },
+        description: {
+          cn: '更该看页面建议是否稳定、可执行，以及你是否会持续回访这些建议。',
+          en: 'Look at whether optimization suggestions are stable, actionable, and worth revisiting over time.',
+        },
+      },
+      {
+        title: { cn: '做团队增长工作流', en: 'Team growth workflows' },
+        description: {
+          cn: 'API、导出、权限和历史数据会比一次性的“生成效果”更重要。',
+          en: 'API access, exports, permissions, and historical data matter more than a one-off flashy generation.',
+        },
+      },
+    ],
+    fitFor: [
+      {
+        title: { cn: '内容团队 / 独立站增长', en: 'Content teams and SEO-led growth' },
+        description: {
+          cn: '适合已经明确要做搜索流量、站点结构和持续内容产出的团队。',
+          en: 'Best for teams already committed to search traffic, site structure, and ongoing content output.',
+        },
+      },
+      {
+        title: { cn: '需要把调研接进写作的人', en: 'Research that needs to flow into writing' },
+        description: {
+          cn: '如果你不是单纯查词，而是要把主题研究快速变成内容计划，这类工具更有价值。',
+          en: 'Especially useful when topic research needs to become a real publishing plan quickly.',
+        },
+      },
+    ],
+    notFor: [
+      {
+        title: { cn: '只想偶尔写两篇内容的人', en: 'Occasional writers' },
+        description: {
+          cn: '如果你不是持续做内容增长，很多 SEO 套件会显得过重。',
+          en: 'If you are not running an ongoing content engine, many SEO suites will feel heavier than needed.',
+        },
+      },
+      {
+        title: { cn: '只需要纯文案润色的人', en: 'People who only need copy polishing' },
+        description: {
+          cn: '如果重点只是改写和润色，通常通用写作工具会更直接。',
+          en: 'If the goal is mostly rewriting and polishing, general writing tools are often a cleaner fit.',
+        },
+      },
+    ],
+    nextPaths: [
+      {
+        href: '/guides/ai-seo-tools',
+        title: { cn: '回到 SEO 选型指南', en: 'Back to the SEO guide' },
+        description: {
+          cn: '如果你还没想清楚该比哪些维度，先回到完整的 SEO 选型逻辑。',
+          en: 'Go back if you still need the full SEO decision logic before comparing tools.',
+        },
+      },
+      {
+        href: '/guides/ai-writing-tools-comparison',
+        title: { cn: '转去写作工具对比', en: 'Switch to writing tools comparison' },
+        description: {
+          cn: '如果你发现自己更偏内容产出，而不是 SEO 套件本身，这里更贴近真实决策。',
+          en: 'Move here if the real decision is about content production rather than SEO suites.',
+        },
+      },
+      {
+        href: '/explore?search=seo&sort=popular',
+        title: { cn: '继续看更多 SEO 候选', en: 'See more SEO candidates' },
+        description: {
+          cn: '当你已经知道方向，只需要扩大 shortlist 时，直接回 Explore 最快。',
+          en: 'The fastest next step once you know the direction and just need a wider shortlist.',
+        },
+      },
+    ],
     tips: {
       cn: [
         '先看关键词和排名功能，再看内容优化和历史数据。',

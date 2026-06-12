@@ -2,13 +2,13 @@ import { Metadata } from 'next';
 import { ArrowRight, CheckCircle2, Columns3, ExternalLink, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
 import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema, generateItemListSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import { toolToListRow } from '@/lib/services/toolPresenter';
 import { getPopularTools, getToolByNameCached, getTools, type Tool } from '@/lib/services/tools';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 type ComparisonConfig = {
   categoryLabel: {
@@ -46,6 +46,47 @@ type ComparisonConfig = {
     cn: string;
     en: string;
   };
+  decisionCards?: {
+    title: {
+      cn: string;
+      en: string;
+    };
+    description: {
+      cn: string;
+      en: string;
+    };
+  }[];
+  fitFor?: {
+    title: {
+      cn: string;
+      en: string;
+    };
+    description: {
+      cn: string;
+      en: string;
+    };
+  }[];
+  notFor?: {
+    title: {
+      cn: string;
+      en: string;
+    };
+    description: {
+      cn: string;
+      en: string;
+    };
+  }[];
+  nextPaths?: {
+    href: string;
+    title: {
+      cn: string;
+      en: string;
+    };
+    description: {
+      cn: string;
+      en: string;
+    };
+  }[];
   preferredToolNames?: string[];
   tips: {
     cn: string[];
@@ -171,6 +212,23 @@ export async function buildComparisonPageData(locale: string, config: Comparison
   );
 
   const tips = isChinese ? config.tips.cn : config.tips.en;
+  const decisionCards = (config.decisionCards || []).map((card) => ({
+    title: isChinese ? card.title.cn : card.title.en,
+    description: isChinese ? card.description.cn : card.description.en,
+  }));
+  const fitFor = (config.fitFor || []).map((item) => ({
+    title: isChinese ? item.title.cn : item.title.en,
+    description: isChinese ? item.description.cn : item.description.en,
+  }));
+  const notFor = (config.notFor || []).map((item) => ({
+    title: isChinese ? item.title.cn : item.title.en,
+    description: isChinese ? item.description.cn : item.description.en,
+  }));
+  const nextPaths = (config.nextPaths || []).map((item) => ({
+    href: item.href,
+    title: isChinese ? item.title.cn : item.title.en,
+    description: isChinese ? item.description.cn : item.description.en,
+  }));
 
   return {
     isChinese,
@@ -180,6 +238,10 @@ export async function buildComparisonPageData(locale: string, config: Comparison
     itemListSchema,
     tools,
     tips,
+    decisionCards,
+    fitFor,
+    notFor,
+    nextPaths,
     categories,
     config,
   };
@@ -192,6 +254,10 @@ export function ComparisonPage({
   itemListSchema,
   tools,
   tips,
+  decisionCards,
+  fitFor,
+  notFor,
+  nextPaths,
   categories,
   config,
   locale,
@@ -286,6 +352,61 @@ export function ComparisonPage({
           </aside>
         </section>
 
+        {(decisionCards.length > 0 || fitFor.length > 0 || notFor.length > 0) && (
+          <section className='mt-8 grid gap-4 lg:grid-cols-[1.15fr_0.85fr]'>
+            <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
+              <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+                {isChinese ? '按场景做决定' : 'Decide by workflow'}
+              </p>
+              <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+                {isChinese ? '不是看谁最火，而是看谁最贴你的任务' : 'The best tool is the one that matches the job'}
+              </h2>
+              <div className='mt-4 grid gap-3 md:grid-cols-3'>
+                {decisionCards.map((card) => (
+                  <div key={card.title} className='rounded-xl bg-slate-50 p-4'>
+                    <p className='text-sm font-semibold text-slate-950'>{card.title}</p>
+                    <p className='mt-2 text-sm leading-6 text-slate-600'>{card.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className='grid gap-4'>
+              {fitFor.length > 0 && (
+                <div className='rounded-[18px] border border-emerald-200 bg-emerald-50/60 p-6 shadow-sm'>
+                  <p className='text-sm font-semibold uppercase tracking-wide text-emerald-700'>
+                    {isChinese ? '更适合谁' : 'Best for'}
+                  </p>
+                  <div className='mt-4 space-y-3'>
+                    {fitFor.map((item) => (
+                      <div key={item.title} className='rounded-lg bg-white/80 p-4'>
+                        <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                        <p className='mt-1 text-sm leading-6 text-slate-600'>{item.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {notFor.length > 0 && (
+                <div className='rounded-[18px] border border-amber-200 bg-amber-50/60 p-6 shadow-sm'>
+                  <p className='text-sm font-semibold uppercase tracking-wide text-amber-700'>
+                    {isChinese ? '不太适合谁' : 'Probably not for'}
+                  </p>
+                  <div className='mt-4 space-y-3'>
+                    {notFor.map((item) => (
+                      <div key={item.title} className='rounded-lg bg-white/80 p-4'>
+                        <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                        <p className='mt-1 text-sm leading-6 text-slate-600'>{item.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
         <section className='mt-8'>
           <div className='mb-4 flex items-end justify-between gap-3'>
             <div>
@@ -350,6 +471,34 @@ export function ComparisonPage({
             ))}
           </div>
         </section>
+
+        {nextPaths.length > 0 && (
+          <section className='mt-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '下一步怎么走' : 'Where to go next'}
+            </p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+              {isChinese ? '把这页继续接到更窄的决策入口' : 'Move from this comparison into narrower intent paths'}
+            </h2>
+            <div className='mt-4 grid gap-4 lg:grid-cols-3'>
+              {nextPaths.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
+                >
+                  <div className='flex items-start justify-between gap-3'>
+                    <div>
+                      <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>{item.title}</p>
+                      <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
+                    </div>
+                    <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

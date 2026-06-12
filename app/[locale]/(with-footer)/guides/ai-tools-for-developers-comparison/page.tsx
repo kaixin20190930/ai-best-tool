@@ -27,6 +27,87 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     compareTitle: { cn: '几款常见开发者工具的快速对照', en: 'A quick side-by-side look at common developer tools' },
     compareSubtitle: { cn: 'Developer', en: 'Developer' },
     preferredToolNames: ['cursor', 'openrouter', 'langfuse', 'portkey'],
+    decisionCards: [
+      {
+        title: { cn: '工作主要在编辑器里', en: 'Most work happens in the editor' },
+        description: {
+          cn: '优先比较补全、重构、多文件上下文和真正落地代码的稳定性。',
+          en: 'Prioritize completion, refactoring, multi-file context, and the reliability of turning intent into working code.',
+        },
+      },
+      {
+        title: { cn: '工作主要在 API / 模型层', en: 'Most work happens in the API or model layer' },
+        description: {
+          cn: '重点看模型路由、可观测性、成本控制和团队接入方式。',
+          en: 'Focus on model routing, observability, cost control, and how teams integrate it.',
+        },
+      },
+      {
+        title: { cn: '工作主要在自动化与运维层', en: 'Most work happens in orchestration and ops' },
+        description: {
+          cn: '更该看日志、权限、失败处理和与现有基础设施的兼容性。',
+          en: 'Put more weight on logs, permissions, failure handling, and compatibility with existing infrastructure.',
+        },
+      },
+    ],
+    fitFor: [
+      {
+        title: { cn: '真实在交付产品的团队', en: 'Teams shipping real products' },
+        description: {
+          cn: '适合已经有仓库、接口、多人协作和生产约束的开发团队。',
+          en: 'Best for teams already working with repos, APIs, multi-person collaboration, and production constraints.',
+        },
+      },
+      {
+        title: { cn: '独立开发者与小团队', en: 'Indie hackers and small teams' },
+        description: {
+          cn: '如果你需要更快地把想法接进代码和工作流，这类对比会很直接。',
+          en: 'These comparisons are especially useful when you need to connect ideas to code and workflows faster.',
+        },
+      },
+    ],
+    notFor: [
+      {
+        title: { cn: '只想简单聊天问答的人', en: 'People who only want lightweight chat' },
+        description: {
+          cn: '如果重点只是提问和回答，开发者工具页通常太重了。',
+          en: 'If the goal is mostly chat-style Q&A, developer tooling pages will often feel too heavy.',
+        },
+      },
+      {
+        title: { cn: '暂时没有接入或协作需求的人', en: 'People without integration or team needs' },
+        description: {
+          cn: '如果你还没进入真实交付或接入阶段，可能先看通用编程或聊天工具更合适。',
+          en: 'If you are not yet integrating into real delivery workflows, general coding or chatbot pages may be a cleaner first stop.',
+        },
+      },
+    ],
+    nextPaths: [
+      {
+        href: '/guides/ai-coding-tools-comparison',
+        title: { cn: '转去编程工具对比', en: 'Go to coding tools comparison' },
+        description: {
+          cn: '如果真正的决策点在编辑器内编码体验，这页更高意图。',
+          en: 'A better high-intent path when the real decision is editor-native coding experience.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-automation-comparison',
+        title: { cn: '转去自动化工具对比', en: 'Go to automation tools comparison' },
+        description: {
+          cn: '如果你在找工作流编排、连接器和自动化执行层，这页更贴近目标。',
+          en: 'Move there if orchestration, connectors, and workflow execution are the real need.',
+        },
+      },
+      {
+        href: '/categories/developer-tools?sort=popular',
+        title: { cn: '回到 Developer Tools 分类', en: 'Return to the developer tools category' },
+        description: {
+          cn: '当你想扩大 shortlist 并回看真实条目时，直接回分类页。',
+          en: 'Go back to the category when you want a wider shortlist of real listings.',
+        },
+      },
+    ],
     tips: {
       cn: [
         '先分清你的主要工作发生在编辑器、API 层还是自动化层。',

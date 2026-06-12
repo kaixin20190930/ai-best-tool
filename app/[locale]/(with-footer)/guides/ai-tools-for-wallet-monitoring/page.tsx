@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import GuideActionSection from '@/components/guides/GuideActionSection';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
@@ -175,6 +176,80 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </aside>
         </section>
+
+        <GuideActionSection
+          locale={locale}
+          eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}
+          title={isChinese ? '更贴近监控与提醒工作的入口' : 'Real entry points for monitoring and alert workflows'}
+          description={
+            isChinese
+              ? '如果你最关心地址提醒、异常行为、风险观察和通知速度，这些工具会比泛 Web3 页更快把范围收窄。'
+              : 'If address alerts, anomaly behavior, risk observation, and notification speed matter most, these tools narrow the space faster than a broad Web3 page.'
+          }
+          toolNames={['debank', 'arkham', 'bubblemaps', 'defillama']}
+          compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
+          compareTitle={isChinese ? '监控意图更强的下一步入口' : 'Next paths for stronger monitoring intent'}
+          compareDescription={
+            isChinese
+              ? '当你已经明确自己是在做监控、预警和异动观察，而不是泛研究，继续进入更窄的比较页会更有效。'
+              : 'Once the real job is monitoring, alerts, and anomaly watching rather than broad research, narrower comparison pages work better.'
+          }
+          compareLinks={[
+            {
+              href: '/guides/ai-tools-for-wallet-monitoring-comparison',
+              title: isChinese ? '钱包监控工具对比' : 'Wallet monitoring comparison',
+              description: isChinese
+                ? '适合提醒、地址观察和异动监控的直接比较。'
+                : 'A direct side-by-side path for alerts, address watching, and anomaly monitoring.',
+            },
+            {
+              href: '/guides/ai-tools-for-on-chain-analysis-comparison',
+              title: isChinese ? '链上分析工具对比' : 'On-chain analysis comparison',
+              description: isChinese
+                ? '如果你开始需要更深的地址和资金流研究，这页更合适。'
+                : 'More useful when the work starts leaning toward deeper address and fund-flow research.',
+            },
+            {
+              href: '/guides/ai-tools-for-web3-comparison',
+              title: isChinese ? 'Web3 工具总对比' : 'Web3 tools comparison',
+              description: isChinese
+                ? '适合还没有完全确定自己是监控还是研究路径的人。'
+                : 'Good when the user is not yet fully narrowed into monitoring versus research.',
+            },
+          ]}
+          nextEyebrow={isChinese ? '下一步入口' : 'Where to go next'}
+          nextTitle={
+            isChinese ? '监控方向确定后，继续这样收窄' : 'How to narrow the space once monitoring is clearly the lane'
+          }
+          nextDescription={
+            isChinese
+              ? '如果你已经明确在找监控工具，下一步就回 Web3 分类、搜索结果和本周新增继续筛。'
+              : 'Once wallet monitoring is clearly the lane, the next step is to return to Web3 categories, search results, and weekly additions.'
+          }
+          nextLinks={[
+            {
+              href: '/categories/web3?sort=popular',
+              title: isChinese ? '进入 Web3 分类' : 'Open the Web3 category',
+              description: isChinese
+                ? '回到 Web3 目录继续看真实监控候选。'
+                : 'Return to the Web3 directory for real monitoring candidates.',
+            },
+            {
+              href: '/explore?search=wallet&sort=popular',
+              title: isChinese ? '搜索更多钱包工具' : 'Search more wallet tools',
+              description: isChinese
+                ? '回到 Explore，用更窄的钱包关键词扩大 shortlist。'
+                : 'Return to Explore and widen the shortlist with wallet-specific search.',
+            },
+            {
+              href: '/new',
+              title: isChinese ? '看本周新增' : 'Check new this week',
+              description: isChinese
+                ? '看看最近补进来的 Web3 工具里有没有更适合的新候选。'
+                : 'See whether recent Web3 additions introduced a stronger fit for monitoring work.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

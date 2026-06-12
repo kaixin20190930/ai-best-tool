@@ -1,26 +1,24 @@
-import Link from 'next/link';
 import { Metadata } from 'next';
+import Link from 'next/link';
+import { CheckCircle2, Code2, ExternalLink, Wrench } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
-import { CheckCircle2, Code2, ExternalLink, Wrench, Sparkles } from 'lucide-react';
 
-import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import GuideActionSection from '@/components/guides/GuideActionSection';
+import { StructuredDataServer } from '@/components/seo/StructuredData';
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
     locale,
     namespace: 'Metadata.home',
   });
 
   return {
-    title: locale === 'cn' || locale === 'tw'
-      ? 'AI 编程工具推荐 | AI Best Tool'
-      : `AI coding tools recommendations | ${t('title')}`,
+    title:
+      locale === 'cn' || locale === 'tw'
+        ? 'AI 编程工具推荐 | AI Best Tool'
+        : `AI coding tools recommendations | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
         ? '面向代码补全、调试、生成和工作流自动化的 AI 编程工具选型指南。'
@@ -28,11 +26,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
+export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
@@ -49,7 +43,9 @@ export default async function Page({
         : 'They are great for code completion, refactoring, code explanation, scaffolding, test assistance, and debugging. They speed things up a lot, but important logic still needs human review.',
     },
     {
-      question: isChinese ? '我应该先看 IDE 插件还是聊天式工具？' : 'Should I start with IDE plugins or chat-style tools?',
+      question: isChinese
+        ? '我应该先看 IDE 插件还是聊天式工具？'
+        : 'Should I start with IDE plugins or chat-style tools?',
       answer: isChinese
         ? '如果你主要在编辑器里写代码，先看 IDE 插件；如果你更常做方案设计、排查问题或生成脚手架，再重点看聊天式工具。'
         : 'If you mainly code in an editor, start with IDE plugins. If you spend more time designing solutions, debugging, or scaffolding, chat-style tools are a better first look.',
@@ -98,7 +94,9 @@ export default async function Page({
           </div>
 
           <h1 className='mt-4 max-w-4xl text-3xl font-bold tracking-tight text-slate-950 lg:text-5xl'>
-            {isChinese ? 'AI 编程工具推荐：怎么选更适合你的开发流程' : 'AI coding tools: how to choose one that fits your development workflow'}
+            {isChinese
+              ? 'AI 编程工具推荐：怎么选更适合你的开发流程'
+              : 'AI coding tools: how to choose one that fits your development workflow'}
           </h1>
           <p className='mt-4 max-w-3xl text-base leading-7 text-slate-600 lg:text-lg'>
             {isChinese
@@ -165,15 +163,87 @@ export default async function Page({
                 >
                   <span>{getLocalizedField(category.name, locale)}</span>
                   <span className='text-xs text-slate-500'>
-                    {'toolCount' in category && typeof category.toolCount === 'number'
-                      ? category.toolCount
-                      : ''}
+                    {'toolCount' in category && typeof category.toolCount === 'number' ? category.toolCount : ''}
                   </span>
                 </Link>
               ))}
             </div>
           </aside>
         </section>
+
+        <GuideActionSection
+          locale={locale}
+          eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}
+          title={isChinese ? '更贴近真实编码工作的入口' : 'Real entry points for coding workflows'}
+          description={
+            isChinese
+              ? '如果你要的是补全、重构、多文件修改和调试支持，这些工具会比泛开发者页更快进入正题。'
+              : 'If completion, refactoring, multi-file edits, and debugging matter most, these tools get you to the real decision faster than a broad developer page.'
+          }
+          toolNames={['cursor', 'phind', 'openrouter', 'portkey']}
+          compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
+          compareTitle={isChinese ? '编码意图更强的下一步入口' : 'Next paths for stronger coding intent'}
+          compareDescription={
+            isChinese
+              ? '当你已经明确工作主要发生在编辑器和仓库里，继续进入更窄的对比页会更有效。'
+              : 'Once the real work clearly happens in the editor and repository, narrower comparison pages work better.'
+          }
+          compareLinks={[
+            {
+              href: '/guides/ai-coding-tools-comparison',
+              title: isChinese ? '编程工具总对比' : 'Coding tools comparison',
+              description: isChinese
+                ? '适合快速横向看常见 AI 编程工具。'
+                : 'A fast side-by-side view of common AI coding tools.',
+            },
+            {
+              href: '/guides/ai-tools-for-developers-comparison',
+              title: isChinese ? '开发者工具对比' : 'Developer tools comparison',
+              description: isChinese
+                ? '如果你同时在看模型接入、日志和 API 工作流，这里更全。'
+                : 'More useful if model access, logs, and API workflows are also part of the decision.',
+            },
+            {
+              href: '/guides/ai-tools-for-automation-comparison',
+              title: isChinese ? '自动化工具对比' : 'Automation tools comparison',
+              description: isChinese
+                ? '适合开始从“写代码”转向“跑工作流”的用户。'
+                : 'Useful when the decision is shifting from writing code to running workflows.',
+            },
+          ]}
+          nextEyebrow={isChinese ? '下一步入口' : 'Where to go next'}
+          nextTitle={
+            isChinese ? '编码方向确定后，继续这样缩小范围' : 'How to narrow the space after coding is clearly the lane'
+          }
+          nextDescription={
+            isChinese
+              ? '如果你已经明确要找编码类助手，下一步就回分类页、搜索结果和本周新增看真实候选。'
+              : 'Once coding is clearly the right lane, the next step is to return to category pages, search results, and weekly additions for real candidates.'
+          }
+          nextLinks={[
+            {
+              href: '/categories/developer-tools?sort=popular',
+              title: isChinese ? '进入 Developer Tools 分类' : 'Open the developer tools category',
+              description: isChinese
+                ? '直接看开发者相关目录中的真实条目。'
+                : 'Go straight into the developer category for real listings.',
+            },
+            {
+              href: '/explore?search=coding&sort=popular',
+              title: isChinese ? '搜索更多编程工具' : 'Search more coding tools',
+              description: isChinese
+                ? '回到 Explore，用更窄的编码关键词扩大 shortlist。'
+                : 'Return to Explore and widen the shortlist with a coding-focused search.',
+            },
+            {
+              href: '/new',
+              title: isChinese ? '看本周新增' : 'Check new this week',
+              description: isChinese
+                ? '看看最近补进来的开发者工具有没有更适合的新候选。'
+                : 'See whether recent additions introduced a stronger fit for modern coding workflows.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

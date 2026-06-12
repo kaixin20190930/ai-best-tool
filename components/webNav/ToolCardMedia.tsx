@@ -2,8 +2,6 @@
 
 import { useMemo, useState } from 'react';
 
-import BaseImage from '@/components/image/BaseImage';
-
 type ToolCardMediaProps = {
   imageUrl?: string | null;
   name: string;
@@ -33,8 +31,12 @@ export default function ToolCardMedia({ imageUrl, name, thumbnailUrl, title }: T
   const [sourceIndex, setSourceIndex] = useState(0);
   const sources = useMemo(
     () =>
-      [thumbnailUrl, `/images/tool-media/${name}-editorial-cover.svg`, `/images/tool-media/${name}-cover.svg`, imageUrl]
-        .filter((value, index, array): value is string => Boolean(value) && array.indexOf(value) === index),
+      [
+        thumbnailUrl,
+        `/images/tool-media/${name}-editorial-cover.svg`,
+        `/images/tool-media/${name}-cover.svg`,
+        imageUrl,
+      ].filter((value, index, array): value is string => Boolean(value) && array.indexOf(value) === index),
     [imageUrl, name, thumbnailUrl],
   );
 
@@ -66,18 +68,15 @@ export default function ToolCardMedia({ imageUrl, name, thumbnailUrl, title }: T
   }
 
   return (
-    <BaseImage
-      width={350}
-      height={160}
+    <img
       src={currentSource}
       alt={`${title} - AI tool screenshot and preview`}
-      title={title}
       className={[
         'aspect-[350/160] w-full justify-self-center rounded-xl border border-slate-100 bg-gradient-to-b from-slate-50 to-white',
         isLogoLikeSource ? 'object-contain p-6' : 'object-contain p-2.5',
       ].join(' ')}
-      sizes='(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 350px'
       loading='lazy'
+      decoding='async'
       onError={() => {
         setSourceIndex((current) => {
           if (current < sources.length - 1) {

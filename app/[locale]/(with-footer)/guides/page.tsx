@@ -1,26 +1,20 @@
 import { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
 import { ArrowRight, BookOpen, CheckCircle2, Sparkles } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
-import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { FEATURED_GUIDE_HREFS, GUIDE_PAGES } from '@/lib/content/guides';
 import { generateBreadcrumbSchema } from '@/lib/seo/schema';
+import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
     locale,
     namespace: 'Metadata.home',
   });
 
   return {
-    title: locale === 'cn' || locale === 'tw'
-      ? 'AI 指南总览 | AI Best Tool'
-      : `AI guides hub | ${t('title')}`,
+    title: locale === 'cn' || locale === 'tw' ? 'AI 指南总览 | AI Best Tool' : `AI guides hub | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
         ? '汇总 AI 工具选型、免费工具和各类场景指南。'
@@ -28,11 +22,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
+export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const pickGuide = (href: string) => GUIDE_PAGES.find((item) => item.href === href);
@@ -137,9 +127,7 @@ export default async function Page({
               href='/categories/web3?sort=popular'
               className='rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-cyan-50/60'
             >
-              <p className='text-sm font-semibold text-slate-950'>
-                {isChinese ? '进入 Web3 分类' : 'Open Web3'}
-              </p>
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '进入 Web3 分类' : 'Open Web3'}</p>
               <p className='mt-2 text-sm leading-6 text-slate-600'>
                 {isChinese
                   ? '如果你更关心链上研究和分析，这里是最聚焦的入口。'
@@ -198,6 +186,104 @@ export default async function Page({
           </div>
         </section>
 
+        <section className='mt-8 grid gap-4 xl:grid-cols-2'>
+          <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? 'Developer 高意图入口' : 'High-intent developer paths'}
+            </p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+              {isChinese ? '开发者类流量，先导去这些页' : 'Best entry points for developer traffic'}
+            </h2>
+            <div className='mt-4 grid gap-3'>
+              {[
+                {
+                  href: '/guides/ai-tools-for-developers-comparison',
+                  title: isChinese ? '开发者工具总对比' : 'Developer tools comparison',
+                  desc: isChinese
+                    ? '适合还没确定自己更偏编辑器、API 还是基础设施的人。'
+                    : 'Best when the user has not yet decided between editor, API, or infrastructure paths.',
+                },
+                {
+                  href: '/guides/ai-coding-tools-comparison',
+                  title: isChinese ? '编程工具对比' : 'Coding tools comparison',
+                  desc: isChinese
+                    ? '更适合补全、重构、调试和真实代码实现意图。'
+                    : 'Higher intent for completion, refactoring, debugging, and real implementation work.',
+                },
+                {
+                  href: '/guides/ai-tools-for-automation-comparison',
+                  title: isChinese ? '自动化工具对比' : 'Automation tools comparison',
+                  desc: isChinese
+                    ? '适合连接器、工作流编排和自动执行场景。'
+                    : 'A sharper path for connectors, orchestration, and workflow execution.',
+                },
+              ].map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className='group rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-cyan-50/40'
+                >
+                  <div className='flex items-start justify-between gap-3'>
+                    <div>
+                      <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                      <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+                    </div>
+                    <ArrowRight className='size-4 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-slate-700' />
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? 'Web3 高意图入口' : 'High-intent Web3 paths'}
+            </p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+              {isChinese ? '链上与研究类流量，优先导去这些页' : 'Best entry points for Web3 and on-chain traffic'}
+            </h2>
+            <div className='mt-4 grid gap-3'>
+              {[
+                {
+                  href: '/guides/ai-tools-for-web3-comparison',
+                  title: isChinese ? 'Web3 工具总对比' : 'Web3 tools comparison',
+                  desc: isChinese
+                    ? '适合还没确定自己更偏研究、钱包还是协议分析的人。'
+                    : 'Best when the user has not yet narrowed into research, wallets, or protocol analytics.',
+                },
+                {
+                  href: '/guides/ai-tools-for-on-chain-analysis-comparison',
+                  title: isChinese ? '链上分析工具对比' : 'On-chain analysis comparison',
+                  desc: isChinese
+                    ? '更适合地址、资金流向和链上行为分析意图。'
+                    : 'Higher intent for address analysis, fund flow, and on-chain behavior work.',
+                },
+                {
+                  href: '/guides/ai-tools-for-crypto-research-comparison',
+                  title: isChinese ? 'Crypto 研究工具对比' : 'Crypto research comparison',
+                  desc: isChinese
+                    ? '适合项目调研、叙事跟踪和信息整合场景。'
+                    : 'A tighter fit for project research, narrative tracking, and information synthesis.',
+                },
+              ].map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className='group rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-cyan-50/40'
+                >
+                  <div className='flex items-start justify-between gap-3'>
+                    <div>
+                      <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                      <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+                    </div>
+                    <ArrowRight className='size-4 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-slate-700' />
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <section className='mt-8'>
           <div className='mb-4 flex items-end justify-between gap-4'>
             <div>
@@ -220,12 +306,8 @@ export default async function Page({
               >
                 <div className='flex items-center justify-between gap-3'>
                   <div>
-                    <h3 className='text-lg font-semibold text-slate-950'>
-                      {item.title[isChinese ? 'cn' : 'en']}
-                    </h3>
-                    <p className='mt-2 text-sm leading-6 text-slate-600'>
-                      {item.desc[isChinese ? 'cn' : 'en']}
-                    </p>
+                    <h3 className='text-lg font-semibold text-slate-950'>{item.title[isChinese ? 'cn' : 'en']}</h3>
+                    <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc[isChinese ? 'cn' : 'en']}</p>
                   </div>
                   <ArrowRight className='size-5 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-slate-700' />
                 </div>
@@ -243,12 +325,8 @@ export default async function Page({
             >
               <div className='flex items-center justify-between gap-3'>
                 <div>
-                  <h2 className='text-lg font-semibold text-slate-950'>
-                    {item.title[isChinese ? 'cn' : 'en']}
-                  </h2>
-                  <p className='mt-2 text-sm leading-6 text-slate-600'>
-                    {item.desc[isChinese ? 'cn' : 'en']}
-                  </p>
+                  <h2 className='text-lg font-semibold text-slate-950'>{item.title[isChinese ? 'cn' : 'en']}</h2>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc[isChinese ? 'cn' : 'en']}</p>
                 </div>
                 <ArrowRight className='size-5 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-slate-700' />
               </div>
@@ -278,7 +356,9 @@ export default async function Page({
             >
               <p className='text-sm font-semibold text-slate-950'>{isChinese ? '进入 Explore' : 'Open Explore'}</p>
               <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese ? '带着已经想清楚的标准回到总目录继续筛。' : 'Return to the full directory with clearer criteria.'}
+                {isChinese
+                  ? '带着已经想清楚的标准回到总目录继续筛。'
+                  : 'Return to the full directory with clearer criteria.'}
               </p>
             </Link>
             <Link
@@ -289,16 +369,22 @@ export default async function Page({
                 {isChinese ? '看生产力主分类' : 'Open the productivity category'}
               </p>
               <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese ? '从最成熟的一批工作流分类开始做比较。' : 'Start comparing inside one of the strongest workflow categories.'}
+                {isChinese
+                  ? '从最成熟的一批工作流分类开始做比较。'
+                  : 'Start comparing inside one of the strongest workflow categories.'}
               </p>
             </Link>
             <Link
               href='/new'
               className='rounded-lg border border-slate-200 bg-white p-4 transition hover:border-cyan-200 hover:bg-cyan-50/40'
             >
-              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '回到本周新增' : 'Return to New this week'}</p>
+              <p className='text-sm font-semibold text-slate-950'>
+                {isChinese ? '回到本周新增' : 'Return to New this week'}
+              </p>
               <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese ? '顺手看看最近新补进的内容有没有更合适的候选。' : 'Check whether recent additions introduced a better-fit candidate.'}
+                {isChinese
+                  ? '顺手看看最近新补进的内容有没有更合适的候选。'
+                  : 'Check whether recent additions introduced a better-fit candidate.'}
               </p>
             </Link>
           </div>

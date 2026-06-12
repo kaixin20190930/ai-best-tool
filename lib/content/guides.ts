@@ -300,6 +300,58 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-tools-for-model-routing',
+    priority: 0.77,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 模型路由工具推荐',
+      en: 'AI tools for model routing',
+    },
+    desc: {
+      cn: '适合多模型接入、成本控制、回退策略和路由工作流。',
+      en: 'For multi-model access, cost control, fallbacks, and routing workflows.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-model-routing-comparison',
+    priority: 0.78,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 模型路由工具对比',
+      en: 'AI tools for model routing comparison',
+    },
+    desc: {
+      cn: '把常见模型路由工具放在一起快速对照。',
+      en: 'Compare common model routing tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-api-observability',
+    priority: 0.77,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI API 可观测工具推荐',
+      en: 'AI tools for API observability',
+    },
+    desc: {
+      cn: '适合日志、调用监控、成本分析和质量追踪。',
+      en: 'For logs, request monitoring, cost analysis, and quality tracking.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-api-observability-comparison',
+    priority: 0.78,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI API 可观测工具对比',
+      en: 'AI tools for API observability comparison',
+    },
+    desc: {
+      cn: '把常见 API 可观测工具放在一起快速对照。',
+      en: 'Compare common API observability tools side by side.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-developers-comparison',
     priority: 0.76,
     changeFrequency: 'weekly',
