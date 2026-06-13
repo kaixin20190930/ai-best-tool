@@ -87,6 +87,69 @@ export async function POST(request: NextRequest) {
   const toolId = session?.metadata?.tool_id?.trim() || session?.client_reference_id?.trim() || '';
   const paymentStatus = session?.payment_status || '';
 
+  if (eventType === 'checkout.session.async_payment_failed') {
+    if (!toolId) {
+      await writeCallbackLogSafe({
+        toolId: null,
+        transactionId,
+        status: 'failed',
+        source: 'stripe-webhook',
+        errorMessage: 'Async payment failed but tool_id is missing from Stripe session metadata',
+        payload: {
+          eventType,
+          paymentStatus,
+          sessionId: transactionId,
+        },
+      });
+      return NextResponse.json({ ok: false, error: 'tool_id missing' }, { status: 400 });
+    }
+
+    const pool = getPool();
+    const toolResult = await pool.query(
+      `
+        SELECT
+          id::text AS id,
+          name,
+          title,
+          submitted_by::text AS "submittedBy"
+        FROM tools
+        WHERE id = $1
+        LIMIT 1
+      `,
+      [toolId],
+    );
+
+    const tool = toolResult.rows[0] as Record<string, unknown> | undefined;
+
+    await writeCallbackLogSafe({
+      toolId,
+      transactionId,
+      status: 'failed',
+      source: 'stripe-webhook',
+      errorMessage: 'Stripe async payment failed',
+      payload: {
+        eventType,
+        paymentStatus,
+        sessionId: transactionId,
+        toolName: tool?.name || null,
+      },
+    });
+
+    const submittedBy = typeof tool?.submittedBy === 'string' ? tool.submittedBy : '';
+    if (submittedBy) {
+      const title = getLocalizedTitle(tool?.title, String(tool?.name || 'AI Best Tool'));
+      await createNotification(
+        submittedBy,
+        'payment_failed',
+        'Payment failed / 付款失败',
+        `${title} did not complete payment. Please try the checkout again from your submissions page. / ${title} 支付未完成，请从“我的提交”重新发起付款。`,
+        '/profile/submissions',
+      );
+    }
+
+    return NextResponse.json({ ok: true, failed: true });
+  }
+
   if (!['checkout.session.completed', 'checkout.session.async_payment_succeeded'].includes(eventType)) {
     return NextResponse.json({ ok: true, skipped: true });
   }
@@ -205,16 +268,15 @@ export async function POST(request: NextRequest) {
     const commercial = getRecord(getRecord(getRecord(tool.features).submission).commercial);
     const requestedDaysRaw = commercial.featuredDaysRequested;
     const requestedDays =
-      typeof requestedDaysRaw === 'number'
-        ? requestedDaysRaw
-        : Number.parseInt(String(requestedDaysRaw ?? 0), 10) || 0;
+      typeof requestedDaysRaw === 'number' ? requestedDaysRaw : Number.parseInt(String(requestedDaysRaw ?? 0), 10) || 0;
     const isPublished = tool.status === 'published';
-    const paymentMessage =
-      requestedDays > 0
-        ? isPublished
-          ? `${title} has been paid. Featured placement is now active. / ${title} 已完成付款，前排展示现已生效。`
-          : `${title} has been paid. Featured placement will begin after approval. / ${title} 已完成付款，前排展示将在审核通过后开始。`
-        : `${title} has been paid and the listing is ready for review. / ${title} 已完成付款，提交已进入审核流程。`;
+    let paymentMessage = `${title} has been paid and the listing is ready for review. / ${title} 已完成付款，提交已进入审核流程。`;
+
+    if (requestedDays > 0) {
+      paymentMessage = isPublished
+        ? `${title} has been paid. Featured placement is now active. / ${title} 已完成付款，前排展示现已生效。`
+        : `${title} has been paid. Featured placement will begin after approval. / ${title} 已完成付款，前排展示将在审核通过后开始。`;
+    }
     await createNotification(
       submittedBy,
       'payment_confirmation',

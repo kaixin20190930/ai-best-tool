@@ -21,13 +21,25 @@ In the Stripe Dashboard:
    - `checkout.session.async_payment_failed` if you want to monitor delayed failures
 5. Copy the webhook signing secret (`whsec_...`).
 
-In Vercel:
+Production variables in Vercel:
 
 6. Add these environment variables:
    - `STRIPE_SECRET_KEY`
    - `STRIPE_WEBHOOK_SECRET`
    - `NEXT_PUBLIC_SITE_URL`
 7. Redeploy the app after saving the env vars.
+
+Recommended production values:
+
+- `NEXT_PUBLIC_SITE_URL=https://aibesttool.com`
+- `STRIPE_SECRET_KEY=sk_live_...`
+- `STRIPE_WEBHOOK_SECRET=whsec_...`
+
+Notes:
+
+- `STRIPE_PUBLISHABLE_KEY` is not required for the current server-side Checkout flow.
+- Keep test keys and live keys in separate Stripe modes. When you move to production, switch the dashboard and the webhook endpoint to live mode.
+- Make sure the webhook endpoint URL is exactly `https://aibesttool.com/api/stripe/webhook` or your canonical production domain equivalent.
 
 ## How the flow works
 

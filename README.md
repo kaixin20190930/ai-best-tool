@@ -73,8 +73,10 @@ MAIL_FROM="AI Best Tool <no-reply@yourdomain.com>"
 ADMIN_EMAILS="admin@example.com"
 
 # Optional: Stripe Checkout for paid listings and featured placement
+# Use live keys in production.
 STRIPE_SECRET_KEY="sk_live_xxx"
 STRIPE_WEBHOOK_SECRET="whsec_xxx"
+NEXT_PUBLIC_SITE_URL="https://aibesttool.com"
 
 # Optional: external monitor endpoint token for /api/monitor/* routes
 MONITOR_API_TOKEN="replace-with-a-long-random-token"

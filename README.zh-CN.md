@@ -71,6 +71,11 @@ CONTACT_US_EMAIL="contact@aibesttool.com"
 # supabase 数据库的 url 和 key
 NEXT_PUBLIC_SUPABASE_URL="https://xxxyyyzzz.supabase.co"
 NEXT_PUBLIC_SUPABASE_ANON_KEY="XXX.YYY.ZZZ"
+
+# Stripe 付费入驻和前排展示（生产环境使用 live key）
+STRIPE_SECRET_KEY="sk_live_xxx"
+STRIPE_WEBHOOK_SECRET="whsec_xxx"
+NEXT_PUBLIC_SITE_URL="https://aibesttool.com"
 ```
 
 #### （4）在开发模式下运行

@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
 
   if (!user) {
     const redirectUrl = new URL('/login', request.url);
-    redirectUrl.searchParams.set('redirect', '/profile/submissions');
+    redirectUrl.searchParams.set('redirect', `${request.nextUrl.pathname}${request.nextUrl.search}`);
     return NextResponse.redirect(redirectUrl);
   }
 
