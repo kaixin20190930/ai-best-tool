@@ -32,6 +32,72 @@ function humanizeTag(tag: string, isChinese: boolean): string {
     .join(' ');
 }
 
+function getLocalizedText(input: unknown, locale: string, fallback = 'en'): string | null {
+  if (typeof input === 'string') {
+    const trimmed = input.trim();
+    return trimmed || null;
+  }
+
+  if (input && typeof input === 'object') {
+    const record = input as Record<string, unknown>;
+    const direct = record[locale];
+    if (typeof direct === 'string' && direct.trim()) return direct.trim();
+
+    const fallbackValue = record[fallback];
+    if (typeof fallbackValue === 'string' && fallbackValue.trim()) return fallbackValue.trim();
+
+    const firstString = Object.values(record).find((value) => typeof value === 'string' && value.trim());
+    if (typeof firstString === 'string') return firstString.trim();
+  }
+
+  return null;
+}
+
+function getLocalizedList(input: unknown, locale: string, fallback = 'en'): string[] {
+  if (Array.isArray(input)) {
+    return input.map((item) => (typeof item === 'string' ? item.trim() : '')).filter(Boolean);
+  }
+
+  if (typeof input === 'string') {
+    const trimmed = input.trim();
+    return trimmed ? [trimmed] : [];
+  }
+
+  if (input && typeof input === 'object') {
+    const record = input as Record<string, unknown>;
+    const direct = record[locale];
+    if (Array.isArray(direct)) {
+      return direct.map((item) => (typeof item === 'string' ? item.trim() : '')).filter(Boolean);
+    }
+
+    const fallbackValue = record[fallback];
+    if (Array.isArray(fallbackValue)) {
+      return fallbackValue.map((item) => (typeof item === 'string' ? item.trim() : '')).filter(Boolean);
+    }
+  }
+
+  return [];
+}
+
+function getDecisionAxes(tool: Tool, locale: string, isChinese: boolean): string[] {
+  const axes = getLocalizedList(tool.features?.decision?.compareAxes, locale, isChinese ? 'zh' : 'en');
+  return axes.slice(0, 2);
+}
+
+function getBestFitSnippet(tool: Tool, locale: string, isChinese: boolean): string | null {
+  const bestFit = getLocalizedList(tool.features?.audience?.bestFit, locale, isChinese ? 'zh' : 'en');
+  if (bestFit.length > 0) {
+    return bestFit[0];
+  }
+
+  const useCases = getLocalizedList(tool.useCases, locale, isChinese ? 'zh' : 'en');
+  return useCases[0] || null;
+}
+
+function getEditorialSnippet(tool: Tool, locale: string, isChinese: boolean): string | null {
+  return getLocalizedText(tool.features?.editorial?.summary, locale, isChinese ? 'zh' : 'en');
+}
+
 function getCompareAxes(categorySlug: string | undefined, isChinese: boolean): string[] {
   switch (categorySlug) {
     case 'web3':
@@ -51,9 +117,7 @@ function getCompareAxes(categorySlug: string | undefined, isChinese: boolean): s
         ? ['连接器覆盖', '触发方式', '维护和失败处理']
         : ['Connector coverage', 'Trigger style', 'Maintenance and failure handling'];
     default:
-      return isChinese
-        ? ['任务适配度', '定价', '真实反馈']
-        : ['Task fit', 'Pricing', 'Real-world feedback'];
+      return isChinese ? ['任务适配度', '定价', '真实反馈'] : ['Task fit', 'Pricing', 'Real-world feedback'];
   }
 }
 
@@ -62,9 +126,21 @@ function getSimilarityReasons(
   currentPricing: Tool['pricing'] | undefined,
   currentTagSlugs: string[],
   isChinese: boolean,
+  locale: string,
 ) {
   const reasons: string[] = [];
   const sharedTags = tool.tags.filter((tag) => currentTagSlugs.includes(tag)).slice(0, 2);
+  const bestFitSnippet = getBestFitSnippet(tool, locale, isChinese);
+  const editorialSnippet = getEditorialSnippet(tool, locale, isChinese);
+  const decisionAxes = getDecisionAxes(tool, locale, isChinese);
+
+  if (bestFitSnippet) {
+    reasons.push(isChinese ? `更适合：${bestFitSnippet}` : `Best for: ${bestFitSnippet}`);
+  }
+
+  if (decisionAxes.length > 0) {
+    reasons.push(isChinese ? `先比：${decisionAxes.join('、')}` : `Compare on: ${decisionAxes.join(', ')}`);
+  }
 
   if (sharedTags.length > 0) {
     reasons.push(
@@ -82,13 +158,15 @@ function getSimilarityReasons(
     );
   }
 
-  if (reasons.length === 0) {
-    reasons.push(
-      isChinese ? '同类任务里常被一起比较' : 'Commonly compared in similar workflows',
-    );
+  if (reasons.length < 3 && editorialSnippet) {
+    reasons.push(editorialSnippet);
   }
 
-  return reasons;
+  if (reasons.length === 0) {
+    reasons.push(isChinese ? '同类任务里常被一起比较' : 'Commonly compared in similar workflows');
+  }
+
+  return reasons.slice(0, 3);
 }
 
 export default async function RecommendedTools({
@@ -113,7 +191,8 @@ export default async function RecommendedTools({
   const comparisonDescription = isChinese
     ? '先看同类工具的定价、使用场景和标签重合度，再决定哪一款更适合你的工作流。'
     : 'Compare pricing, workflow fit, and topic overlap before you commit to one option.';
-  const activeCompareAxes = compareAxes && compareAxes.length > 0 ? compareAxes : getCompareAxes(categorySlug, isChinese);
+  const activeCompareAxes =
+    compareAxes && compareAxes.length > 0 ? compareAxes : getCompareAxes(categorySlug, isChinese);
   let tagSummary = isChinese ? '通用工作流' : 'General workflows';
   if (tagLabels.length > 0) {
     tagSummary = tagLabels.slice(0, 3).join(isChinese ? '、' : ', ');
@@ -166,10 +245,10 @@ export default async function RecommendedTools({
       </div>
       <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
         {recommendedTools.map((tool) => {
-          const reasons = getSimilarityReasons(tool, pricing, tagSlugs, isChinese);
+          const reasons = getSimilarityReasons(tool, pricing, tagSlugs, isChinese, locale);
 
           return (
-            <div key={tool.id} className='space-y-3'>
+            <div key={tool.id} className='min-w-0 space-y-3'>
               <WebNavCard
                 name={tool.name}
                 title={getLocalizedField(tool.title, locale)}
@@ -185,7 +264,7 @@ export default async function RecommendedTools({
                 <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
                   {isChinese ? '为什么推荐它' : 'Why compare this one'}
                 </p>
-                <ul className='mt-2 space-y-1.5 text-sm leading-6 text-slate-700'>
+                <ul className='mt-2 space-y-1.5 break-words text-sm leading-6 text-slate-700'>
                   {reasons.map((reason) => (
                     <li key={reason}>{reason}</li>
                   ))}

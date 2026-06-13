@@ -29,6 +29,7 @@ function getInitials(label: string): string {
 
 export default function ToolCardMedia({ imageUrl, name, thumbnailUrl, title }: ToolCardMediaProps) {
   const [sourceIndex, setSourceIndex] = useState(0);
+  const [hasFailedAllSources, setHasFailedAllSources] = useState(false);
   const sources = useMemo(
     () =>
       [
@@ -42,15 +43,19 @@ export default function ToolCardMedia({ imageUrl, name, thumbnailUrl, title }: T
 
   const currentSource = sources[sourceIndex];
   const initials = getInitials(title);
+  const fallbackLabel = `${title} - preview unavailable`;
   const isLogoLikeSource =
     currentSource === imageUrl ||
     currentSource?.includes('/icons/tool-logos/') ||
     currentSource?.endsWith('.ico') ||
     currentSource?.includes('favicon');
 
-  if (!currentSource) {
+  if (!currentSource || hasFailedAllSources) {
     return (
-      <div className='flex aspect-[350/160] w-full justify-self-center overflow-hidden rounded-xl border border-slate-100 bg-gradient-to-br from-slate-50 via-white to-cyan-50 p-3'>
+      <div
+        className='flex aspect-[350/160] w-full justify-self-center overflow-hidden rounded-xl border border-slate-100 bg-gradient-to-br from-slate-50 via-white to-cyan-50 p-3'
+        aria-label={fallbackLabel}
+      >
         <div className='flex h-full w-full flex-col justify-between rounded-lg bg-white/60 p-3 ring-1 ring-white/80'>
           <div className='flex items-center justify-between gap-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400'>
             <span>Preview pending</span>
@@ -83,6 +88,7 @@ export default function ToolCardMedia({ imageUrl, name, thumbnailUrl, title }: T
             return current + 1;
           }
 
+          setHasFailedAllSources(true);
           return current;
         });
       }}

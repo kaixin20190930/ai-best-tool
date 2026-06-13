@@ -21,7 +21,6 @@ import {
 import { getTranslations } from 'next-intl/server';
 
 import { SEO_CONFIG, SOCIAL_IMAGE_DIMENSIONS, ToolMetadata } from '@/lib/seo/constants';
-import { Link } from '@/app/navigation';
 import {
   generateCanonicalUrl,
   generateSocialImageUrl,
@@ -50,6 +49,7 @@ import { getToolStats, trackPageView } from '@/app/actions/analytics';
 import { getCommentCount } from '@/app/actions/comments';
 import { isFavorited } from '@/app/actions/favorites';
 import { getUserRating } from '@/app/actions/ratings';
+import { Link } from '@/app/navigation';
 
 // Revalidate every hour (3600 seconds) - ISR strategy
 export const revalidate = 3600;
@@ -63,6 +63,16 @@ function getLocaleVariants(locale: string): string[] {
   return [locale];
 }
 
+function findLocalizedString(record: Record<string, unknown>, locales: string[]): string | null {
+  const match = locales.map((key) => record[key]).find((value) => typeof value === 'string' && value.trim());
+
+  if (typeof match === 'string') {
+    return match.trim();
+  }
+
+  return null;
+}
+
 function getLocalizedText(input: unknown, locale: string, fallback = 'en'): string | null {
   if (typeof input === 'string') {
     const trimmed = input.trim();
@@ -71,15 +81,11 @@ function getLocalizedText(input: unknown, locale: string, fallback = 'en'): stri
 
   if (input && typeof input === 'object') {
     const record = input as Record<string, unknown>;
-    for (const key of getLocaleVariants(locale)) {
-      const value = record[key];
-      if (typeof value === 'string' && value.trim()) return value.trim();
-    }
+    const localized = findLocalizedString(record, getLocaleVariants(locale));
+    if (localized) return localized;
 
-    for (const key of getLocaleVariants(fallback)) {
-      const value = record[key];
-      if (typeof value === 'string' && value.trim()) return value.trim();
-    }
+    const fallbackValue = findLocalizedString(record, getLocaleVariants(fallback));
+    if (fallbackValue) return fallbackValue;
 
     const firstString = Object.values(record).find((value) => typeof value === 'string' && value.trim());
     if (typeof firstString === 'string') return firstString.trim();
@@ -100,11 +106,9 @@ function getStringList(input: unknown, locale = 'en', fallback = 'en'): string[]
 
   if (input && typeof input === 'object') {
     const record = input as Record<string, unknown>;
-    const localizedList =
-      [...getLocaleVariants(locale), ...getLocaleVariants(fallback)].reduce<unknown>(
-        (value, key) => value ?? record[key],
-        undefined,
-      );
+    const localizedList = [...getLocaleVariants(locale), ...getLocaleVariants(fallback)]
+      .map((key) => record[key])
+      .find((value) => value !== undefined && value !== null);
 
     if (Array.isArray(localizedList)) {
       return localizedList.map((item) => (typeof item === 'string' ? item.trim() : '')).filter(Boolean);
@@ -136,11 +140,10 @@ function getFeatureEntries(input: unknown, locale = 'en', fallback = 'en'): Arra
 
     if (localized && typeof localized === 'object') {
       const localizedRecord = localized as Record<string, unknown>;
-      const localizedEntries =
-        [...getLocaleVariants(locale), ...getLocaleVariants(fallback)].reduce<unknown>(
-          (value, key) => value ?? localizedRecord[key],
-          undefined,
-        );
+      const localizedEntries = [...getLocaleVariants(locale), ...getLocaleVariants(fallback)].reduce<unknown>(
+        (value, key) => value ?? localizedRecord[key],
+        undefined,
+      );
 
       if (Array.isArray(localizedEntries)) {
         return localizedEntries
@@ -241,12 +244,7 @@ function getDecisionText(
   return getLocalizedText((decision as Record<string, unknown>)[field], locale, fallback);
 }
 
-function getDecisionList(
-  input: unknown,
-  field: 'compareAxes',
-  locale: string,
-  fallback = 'en',
-): string[] {
+function getDecisionList(input: unknown, field: 'compareAxes', locale: string, fallback = 'en'): string[] {
   if (!input || typeof input !== 'object') {
     return [];
   }
@@ -640,6 +638,504 @@ function getCategoryGuideLink(categorySlug: string | undefined, locale: string) 
   }
 }
 
+function getNextComparisonLinks(categorySlug: string | undefined, tagSlugs: string[], locale: string) {
+  const isChinese = locale === 'cn';
+  const tagSet = new Set(tagSlugs);
+  const hasAnyTag = (candidates: string[]) => candidates.some((tag) => tagSet.has(tag));
+
+  if (hasAnyTag(['sales', 'lead-generation', 'prospecting', 'sales-prospecting', 'outreach', 'cold-email', 'crm'])) {
+    if (hasAnyTag(['lead-generation', 'enrichment', 'lead-enrichment', 'contact-data', 'intent-data'])) {
+      return [
+        {
+          href: '/guides/ai-tools-for-lead-generation-comparison',
+          title: isChinese ? '获客工具对比' : 'Lead generation comparison',
+          description: isChinese
+            ? '适合继续比较找线索、补全联系人数据和筛选目标账户的效率。'
+            : 'Best for comparing prospect discovery, contact enrichment, and target-account filtering.',
+        },
+        {
+          href: '/guides/ai-tools-for-sales-prospecting-comparison',
+          title: isChinese ? '销售拓客工具对比' : 'Sales prospecting comparison',
+          description: isChinese
+            ? '如果工作已经进入外联准备、个性化和批量触达，这页更贴近目标。'
+            : 'Move here once the workflow shifts into outreach prep, personalization, and campaign execution.',
+        },
+        {
+          href: '/guides/ai-tools-for-sales-comparison',
+          title: isChinese ? '销售工具总对比' : 'Sales tools comparison',
+          description: isChinese
+            ? '回到更宽的销售工作流视角继续缩小 shortlist。'
+            : 'Return to the broader sales comparison to narrow the shortlist across workflows.',
+        },
+      ];
+    }
+
+    if (hasAnyTag(['prospecting', 'sales-prospecting', 'outreach', 'cold-email', 'personalization', 'sequencing'])) {
+      return [
+        {
+          href: '/guides/ai-tools-for-sales-prospecting-comparison',
+          title: isChinese ? '销售拓客工具对比' : 'Sales prospecting comparison',
+          description: isChinese
+            ? '适合继续比较个性化、邮件序列、外联节奏和团队执行效率。'
+            : 'Best for comparing personalization, email sequences, outreach cadence, and team execution.',
+        },
+        {
+          href: '/guides/ai-tools-for-lead-generation-comparison',
+          title: isChinese ? '获客工具对比' : 'Lead generation comparison',
+          description: isChinese
+            ? '如果你发现瓶颈更早，在线索发现和联系人补全，这页更适合。'
+            : 'Use this if the real bottleneck is earlier in the funnel around lead discovery and enrichment.',
+        },
+        {
+          href: '/guides/ai-tools-for-sales-comparison',
+          title: isChinese ? '销售工具总对比' : 'Sales tools comparison',
+          description: isChinese
+            ? '回到更宽的销售工具页继续看 CRM、跟进和转化工作流。'
+            : 'Return to the broader sales comparison for CRM, follow-up, and conversion workflows.',
+        },
+      ];
+    }
+
+    return [
+      {
+        href: '/guides/ai-tools-for-sales-comparison',
+        title: isChinese ? '销售工具总对比' : 'Sales tools comparison',
+        description: isChinese
+          ? '先从更宽的销售工作流视角比较，再决定要不要往线索或外联方向收窄。'
+          : 'Start from the wider sales workflow view before narrowing into lead-gen or prospecting.',
+      },
+      {
+        href: '/guides/ai-tools-for-lead-generation-comparison',
+        title: isChinese ? '获客工具对比' : 'Lead generation comparison',
+        description: isChinese
+          ? '如果你的核心问题是“先找到谁”，这条路径更自然。'
+          : 'A better path when the real question is who to target first.',
+      },
+      {
+        href: '/guides/ai-tools-for-sales-prospecting-comparison',
+        title: isChinese ? '销售拓客工具对比' : 'Sales prospecting comparison',
+        description: isChinese
+          ? '如果你的核心问题是“怎么触达和转化”，顺着这条走。'
+          : 'Use this if the core question is how to reach out and convert effectively.',
+      },
+    ];
+  }
+
+  if (categorySlug === 'web3') {
+    if (hasAnyTag(['token-research', 'fundamentals', 'narrative', 'crypto-research', 'market-research'])) {
+      return [
+        {
+          href: '/guides/ai-tools-for-token-research-comparison',
+          title: isChinese ? '代币研究工具对比' : 'Token research comparison',
+          description: isChinese
+            ? '适合继续看项目比较、指标框架和研究深度。'
+            : 'Best for project comparison, fundamentals framing, and research depth.',
+        },
+        {
+          href: '/guides/ai-tools-for-crypto-research-comparison',
+          title: isChinese ? 'Crypto 研究工具对比' : 'Crypto research comparison',
+          description: isChinese
+            ? '如果你的问题开始变宽，涉及市场叙事和情报整合，就走这条。'
+            : 'Move here once the job expands into broader market narratives and research synthesis.',
+        },
+        {
+          href: '/guides/ai-tools-for-protocol-analytics-comparison',
+          title: isChinese ? '协议分析工具对比' : 'Protocol analytics comparison',
+          description: isChinese
+            ? '更适合把 token 判断继续拉到协议健康和使用趋势。'
+            : 'A better next step if the decision shifts toward protocol health and usage trends.',
+        },
+      ];
+    }
+
+    if (hasAnyTag(['wallet-tracking', 'wallet-monitoring', 'smart-money', 'address-analysis', 'on-chain'])) {
+      return [
+        {
+          href: '/guides/ai-tools-for-wallet-monitoring-comparison',
+          title: isChinese ? '钱包监控工具对比' : 'Wallet monitoring comparison',
+          description: isChinese
+            ? '继续比较提醒能力、地址覆盖和持续跟踪效率。'
+            : 'Compare alerting, address coverage, and long-term monitoring fit.',
+        },
+        {
+          href: '/guides/ai-tools-for-wallet-research-comparison',
+          title: isChinese ? '钱包研究工具对比' : 'Wallet research comparison',
+          description: isChinese
+            ? '更适合看地址画像、资金路径和研究深度。'
+            : 'A stronger fit for address profiling, fund paths, and wallet-level research.',
+        },
+        {
+          href: '/guides/ai-tools-for-on-chain-analysis-comparison',
+          title: isChinese ? '链上分析工具对比' : 'On-chain analysis comparison',
+          description: isChinese
+            ? '如果你想把视角放大到交易和链上行为，这页更合适。'
+            : 'Use this when the scope expands toward transaction and on-chain behavior analysis.',
+        },
+      ];
+    }
+
+    return [
+      {
+        href: '/guides/ai-tools-for-web3-comparison',
+        title: isChinese ? 'Web3 工具总对比' : 'Web3 tools comparison',
+        description: isChinese
+          ? '先从更宽的 Web3 视角继续缩小 shortlist。'
+          : 'Start from a broader Web3 comparison to narrow the shortlist.',
+      },
+      {
+        href: '/guides/ai-tools-for-protocol-analytics-comparison',
+        title: isChinese ? '协议分析工具对比' : 'Protocol analytics comparison',
+        description: isChinese
+          ? '适合把判断收敛到协议层数据和趋势。'
+          : 'Good for narrowing the decision into protocol-level data and trends.',
+      },
+      {
+        href: '/guides/ai-tools-for-crypto-portfolio-tracking-comparison',
+        title: isChinese ? '加密资产追踪工具对比' : 'Crypto portfolio tracking comparison',
+        description: isChinese
+          ? '如果你的目标更偏资产监控和持仓整理，可以顺着这条走。'
+          : 'Follow this path if the job is more about holdings, monitoring, and portfolio workflows.',
+      },
+    ];
+  }
+
+  if (categorySlug === 'developer-tools') {
+    if (hasAnyTag(['observability', 'tracing', 'logs', 'monitoring', 'evals'])) {
+      return [
+        {
+          href: '/guides/ai-tools-for-api-observability-comparison',
+          title: isChinese ? 'API 可观测性工具对比' : 'API observability comparison',
+          description: isChinese
+            ? '重点比较 tracing、日志、调用监控和排障效率。'
+            : 'Compare tracing, logs, request monitoring, and debugging fit.',
+        },
+        {
+          href: '/guides/ai-tools-for-prompt-testing-comparison',
+          title: isChinese ? 'Prompt 测试工具对比' : 'Prompt testing comparison',
+          description: isChinese
+            ? '更适合继续看评测、回归测试和 prompt 迭代。'
+            : 'A stronger next step for evals, regression testing, and prompt iteration.',
+        },
+        {
+          href: '/guides/ai-tools-for-developers-comparison',
+          title: isChinese ? '开发者工具总对比' : 'Developer tools comparison',
+          description: isChinese
+            ? '回到更宽的开发者工具页继续缩小范围。'
+            : 'Jump back to the broader developer-tools comparison to narrow the field.',
+        },
+      ];
+    }
+
+    if (hasAnyTag(['routing', 'gateway', 'llm-gateway', 'model-routing', 'api-layer'])) {
+      return [
+        {
+          href: '/guides/ai-tools-for-model-routing-comparison',
+          title: isChinese ? '模型路由工具对比' : 'Model routing comparison',
+          description: isChinese
+            ? '适合继续比较供应商切换、回退策略和成本控制。'
+            : 'Best for comparing provider failover, routing strategy, and cost control.',
+        },
+        {
+          href: '/guides/ai-tools-for-api-observability-comparison',
+          title: isChinese ? 'API 可观测性工具对比' : 'API observability comparison',
+          description: isChinese
+            ? '如果你已经开始关心调用质量和稳定性，顺着这里走。'
+            : 'Move here when request quality and runtime visibility start to matter more.',
+        },
+        {
+          href: '/guides/ai-tools-for-developers-comparison',
+          title: isChinese ? '开发者工具总对比' : 'Developer tools comparison',
+          description: isChinese
+            ? '如果还没确定方向，先回到更宽的开发者对比页。'
+            : 'Use the broader developer comparison if the exact direction is still unclear.',
+        },
+      ];
+    }
+
+    if (hasAnyTag(['automation', 'workflow', 'agents', 'background-jobs', 'orchestration'])) {
+      return [
+        {
+          href: '/guides/ai-tools-for-automation-comparison',
+          title: isChinese ? '自动化工具对比' : 'Automation tools comparison',
+          description: isChinese
+            ? '继续比较触发方式、流程编排和可维护性。'
+            : 'Compare triggers, orchestration style, and maintainability next.',
+        },
+        {
+          href: '/guides/ai-tools-for-developers-comparison',
+          title: isChinese ? '开发者工具总对比' : 'Developer tools comparison',
+          description: isChinese
+            ? '把它放回更宽的开发者工作流里一起比较。'
+            : 'Put it back into the wider developer workflow comparison.',
+        },
+        {
+          href: '/guides/ai-tools-for-prompt-testing-comparison',
+          title: isChinese ? 'Prompt 测试工具对比' : 'Prompt testing comparison',
+          description: isChinese
+            ? '如果你更在意上线前验证质量，也可以继续走这条。'
+            : 'Use this if pre-launch validation and quality checks are the real job.',
+        },
+      ];
+    }
+
+    return [
+      {
+        href: '/guides/ai-tools-for-developers-comparison',
+        title: isChinese ? '开发者工具总对比' : 'Developer tools comparison',
+        description: isChinese
+          ? '先从更宽的开发者工具视角继续筛选。'
+          : 'Start from a broader developer-tools comparison to keep narrowing down.',
+      },
+      {
+        href: '/guides/ai-tools-for-api-observability-comparison',
+        title: isChinese ? 'API 可观测性工具对比' : 'API observability comparison',
+        description: isChinese
+          ? '适合继续比调用监控、日志和排障。'
+          : 'Useful if the next decision is about logs, tracing, and debugging.',
+      },
+      {
+        href: '/guides/ai-tools-for-model-routing-comparison',
+        title: isChinese ? '模型路由工具对比' : 'Model routing comparison',
+        description: isChinese
+          ? '适合继续比模型切换、供应商策略和成本。'
+          : 'Useful if the next choice is model routing, provider strategy, and cost.',
+      },
+    ];
+  }
+
+  if (categorySlug === 'text-writing') {
+    if (hasAnyTag(['seo', 'keyword-research', 'content-seo', 'blog-seo', 'serp-research'])) {
+      return [
+        {
+          href: '/guides/ai-seo-tools-comparison',
+          title: isChinese ? 'AI SEO 工具对比' : 'AI SEO tools comparison',
+          description: isChinese
+            ? '适合继续比较关键词研究、内容规划和站点结构判断。'
+            : 'Best for comparing keyword research, content planning, and site-structure workflows.',
+        },
+        {
+          href: '/guides/ai-writing-tools-comparison',
+          title: isChinese ? 'AI 写作工具对比' : 'AI writing tools comparison',
+          description: isChinese
+            ? '如果你还在比较写作体验、输出质量和升级门槛，继续走这里。'
+            : 'Use this if the next decision is about writing quality, workflow friction, and pricing tiers.',
+        },
+        {
+          href: '/guides/ai-tools-for-research-comparison',
+          title: isChinese ? '研究工具对比' : 'Research tools comparison',
+          description: isChinese
+            ? '当写作开始依赖资料整理、证据链和调研效率时，这页更贴近目标。'
+            : 'Move here when writing starts to depend on source gathering, evidence trails, and research speed.',
+        },
+      ];
+    }
+
+    return [
+      {
+        href: '/guides/ai-writing-tools-comparison',
+        title: isChinese ? 'AI 写作工具对比' : 'AI writing tools comparison',
+        description: isChinese
+          ? '继续比较写作任务适配度、输出质量和免费额度。'
+          : 'Compare writing-task fit, output quality, and free-tier limits next.',
+      },
+      {
+        href: '/guides/ai-seo-tools-comparison',
+        title: isChinese ? 'AI SEO 工具对比' : 'AI SEO tools comparison',
+        description: isChinese
+          ? '如果你的目标更偏自然搜索和内容规划，可以顺着这条走。'
+          : 'Follow this path if the real job is search traffic and content planning.',
+      },
+      {
+        href: '/guides/ai-tools-for-research-comparison',
+        title: isChinese ? '研究工具对比' : 'Research tools comparison',
+        description: isChinese
+          ? '当写作前的资料收集和核对变重要时，这页更合适。'
+          : 'A better next step once source gathering and verification matter more.',
+      },
+    ];
+  }
+
+  if (categorySlug === 'research') {
+    if (hasAnyTag(['seo', 'keyword-research', 'content-seo', 'search-intelligence'])) {
+      return [
+        {
+          href: '/guides/ai-seo-tools-comparison',
+          title: isChinese ? 'AI SEO 工具对比' : 'AI SEO tools comparison',
+          description: isChinese
+            ? '适合继续比较关键词、SERP 和内容结构判断。'
+            : 'Best for comparing keywords, SERP workflows, and content-structure planning.',
+        },
+        {
+          href: '/guides/ai-tools-for-research-comparison',
+          title: isChinese ? '研究工具对比' : 'Research tools comparison',
+          description: isChinese
+            ? '回到更宽的研究工具页继续看来源质量和证据链能力。'
+            : 'Return to the broader research comparison for source quality and evidence-trail fit.',
+        },
+        {
+          href: '/guides/ai-writing-tools-comparison',
+          title: isChinese ? 'AI 写作工具对比' : 'AI writing tools comparison',
+          description: isChinese
+            ? '如果研究的下一步是产出文章或页面，这页更贴近执行。'
+            : 'Useful when the research output becomes articles, briefs, or landing pages.',
+        },
+      ];
+    }
+
+    return [
+      {
+        href: '/guides/ai-tools-for-research-comparison',
+        title: isChinese ? '研究工具对比' : 'Research tools comparison',
+        description: isChinese
+          ? '继续比较资料来源、搜索效率和证据链完整度。'
+          : 'Compare source quality, research speed, and evidence trails next.',
+      },
+      {
+        href: '/guides/ai-writing-tools-comparison',
+        title: isChinese ? 'AI 写作工具对比' : 'AI writing tools comparison',
+        description: isChinese
+          ? '如果研究后要快速落稿或整理输出，可以继续走这里。'
+          : 'Use this if the next step is turning research into drafts or summaries.',
+      },
+      {
+        href: '/guides/ai-seo-tools-comparison',
+        title: isChinese ? 'AI SEO 工具对比' : 'AI SEO tools comparison',
+        description: isChinese
+          ? '当研究目标更偏搜索机会和内容布局，这页更合适。'
+          : 'A better fit when the real question is search opportunity and content structure.',
+      },
+    ];
+  }
+
+  if (categorySlug === 'automation') {
+    if (hasAnyTag(['routing', 'gateway', 'api-layer', 'llm-gateway', 'provider-routing'])) {
+      return [
+        {
+          href: '/guides/ai-tools-for-model-routing-comparison',
+          title: isChinese ? '模型路由工具对比' : 'Model routing comparison',
+          description: isChinese
+            ? '适合继续比较供应商切换、成本控制和失败回退策略。'
+            : 'Compare provider routing, fallback strategy, and cost control next.',
+        },
+        {
+          href: '/guides/ai-tools-for-automation-comparison',
+          title: isChinese ? '自动化工具对比' : 'Automation tools comparison',
+          description: isChinese
+            ? '回到更宽的自动化对比页继续看触发方式和可维护性。'
+            : 'Return to the broader automation comparison for triggers and maintainability.',
+        },
+        {
+          href: '/guides/ai-tools-for-api-observability-comparison',
+          title: isChinese ? 'API 可观测性工具对比' : 'API observability comparison',
+          description: isChinese
+            ? '如果你已经开始关心调用质量和稳定性，顺着这里走。'
+            : 'Move here when runtime quality and request visibility become more important.',
+        },
+      ];
+    }
+
+    return [
+      {
+        href: '/guides/ai-tools-for-automation-comparison',
+        title: isChinese ? '自动化工具对比' : 'Automation tools comparison',
+        description: isChinese
+          ? '继续比较触发方式、流程编排和长期维护成本。'
+          : 'Compare triggers, orchestration style, and long-term maintenance cost.',
+      },
+      {
+        href: '/guides/ai-tools-for-developers-comparison',
+        title: isChinese ? '开发者工具总对比' : 'Developer tools comparison',
+        description: isChinese
+          ? '如果这条自动化链路更偏工程化接入，回到开发者对比页。'
+          : 'Go here if the automation workflow is really an engineering integration problem.',
+      },
+      {
+        href: '/guides/ai-tools-for-model-routing-comparison',
+        title: isChinese ? '模型路由工具对比' : 'Model routing comparison',
+        description: isChinese
+          ? '当你的自动化开始依赖多模型与多供应商切换时，这页更贴近目标。'
+          : 'A better fit once the workflow depends on multi-model and multi-provider routing.',
+      },
+    ];
+  }
+
+  if (categorySlug === 'productivity') {
+    if (hasAnyTag(['meeting-notes', 'transcription', 'note-taking', 'meetings', 'voice-notes'])) {
+      return [
+        {
+          href: '/guides/ai-tools-for-meeting-notes-comparison',
+          title: isChinese ? '会议纪要工具对比' : 'Meeting notes comparison',
+          description: isChinese
+            ? '适合继续比较转录质量、摘要结构和会议后的执行效率。'
+            : 'Best for comparing transcription quality, summary structure, and follow-through after meetings.',
+        },
+        {
+          href: '/guides/ai-note-taking-tools-comparison',
+          title: isChinese ? 'AI 笔记工具对比' : 'AI note taking comparison',
+          description: isChinese
+            ? '如果你更在意笔记整理、知识沉淀和回顾效率，继续走这里。'
+            : 'Use this if the real job is note organization, knowledge capture, and review speed.',
+        },
+        {
+          href: '/guides/ai-productivity-tools-comparison',
+          title: isChinese ? 'AI 生产力工具对比' : 'AI productivity tools comparison',
+          description: isChinese
+            ? '回到更宽的生产力工具视角继续比较。'
+            : 'Return to the broader productivity comparison to compare across workflows.',
+        },
+      ];
+    }
+
+    return [
+      {
+        href: '/guides/ai-productivity-tools-comparison',
+        title: isChinese ? 'AI 生产力工具对比' : 'AI productivity tools comparison',
+        description: isChinese
+          ? '继续比较会议、任务推进和知识整理这几类工作流。'
+          : 'Compare meetings, task follow-through, and knowledge workflows next.',
+      },
+      {
+        href: '/guides/ai-note-taking-tools-comparison',
+        title: isChinese ? 'AI 笔记工具对比' : 'AI note taking comparison',
+        description: isChinese
+          ? '如果你更偏笔记和知识回顾，顺着这条走更自然。'
+          : 'A stronger fit when the job leans toward notes and knowledge review.',
+      },
+      {
+        href: '/guides/ai-tools-for-meeting-notes-comparison',
+        title: isChinese ? '会议纪要工具对比' : 'Meeting notes comparison',
+        description: isChinese
+          ? '如果目标更偏录音整理和会后追踪，这页更合适。'
+          : 'More useful when the real job is meeting capture and post-meeting follow-up.',
+      },
+    ];
+  }
+
+  return [
+    {
+      href: '/guides/how-to-choose-ai-tools',
+      title: isChinese ? 'AI 工具选型指南' : 'AI tool selection guide',
+      description: isChinese
+        ? '如果比较维度还不够明确，先回到选型指南更高效。'
+        : 'Return to the selection guide if your comparison criteria are still fuzzy.',
+    },
+    {
+      href: '/explore?sort=popular',
+      title: isChinese ? '热门工具探索页' : 'Popular tools explore page',
+      description: isChinese
+        ? '回到全站继续横向看同类条目。'
+        : 'Return to the directory and compare more listings side by side.',
+    },
+    {
+      href: '/new',
+      title: isChinese ? '本周新增工具' : 'New this week',
+      description: isChinese
+        ? '看看最近新增和最近补厚的工具页。'
+        : 'See recently added and recently improved listings.',
+    },
+  ];
+}
+
 function getPricingLabel(pricing: string | null | undefined): string {
   if (pricing === 'free') return 'Free';
   if (pricing === 'paid') return 'Paid';
@@ -864,6 +1360,10 @@ export default async function Page({
         day: 'numeric',
       }).format(new Date(updatedAt))
     : recentlyCheckedLabel;
+  let statusLabel = isChinese ? '已收录' : 'Listed';
+  if (dbTool?.status === 'published') {
+    statusLabel = isChinese ? '已公开' : 'Published';
+  }
   let ratingLabel = isChinese ? '暂无评分' : 'No ratings yet';
   if (ratingStats.ratingCount > 0) {
     ratingLabel = `${ratingStats.averageRating.toFixed(1)} / 5`;
@@ -910,8 +1410,7 @@ export default async function Page({
   const bestFitOverride = getAudienceEntries(dbTool?.features, 'bestFit', locale);
   const notIdealForOverride = getAudienceEntries(dbTool?.features, 'notIdealFor', locale);
   const bestFitList = bestFitOverride.length > 0 ? bestFitOverride : inferBestFit(categorySlug, locale, useCaseList);
-  const notIdealForList =
-    notIdealForOverride.length > 0 ? notIdealForOverride : inferNotIdealFor(categorySlug, locale);
+  const notIdealForList = notIdealForOverride.length > 0 ? notIdealForOverride : inferNotIdealFor(categorySlug, locale);
   const officialSite = getOfficialSiteStatus(data.url, locale, dbTool?.status === 'published');
   const editorialReview = getEditorialReview(dbTool?.features, locale);
   const decisionCompareAxesOverride = getDecisionList(dbTool?.features, 'compareAxes', locale);
@@ -951,11 +1450,8 @@ export default async function Page({
     ? { ...communitySignal, summary: decisionCommunitySummary }
     : communitySignal;
   const comparisonSummary = getComparisonSummary(categorySlug, locale);
-  const compareAxes = decisionCompareAxesOverride.length > 0
-    ? decisionCompareAxesOverride
-    : [
-        comparisonSummary,
-      ];
+  const compareAxes = decisionCompareAxesOverride.length > 0 ? decisionCompareAxesOverride : [comparisonSummary];
+  const nextComparisonLinks = getNextComparisonLinks(categorySlug, dbTool?.tags || [], locale);
   let mediaChecklistItem = 'Preview media is still limited, so check the official screenshots before deciding.';
   if (heroImage) {
     mediaChecklistItem = isChinese
@@ -1278,12 +1774,12 @@ export default async function Page({
 
               <div className='grid grid-cols-2 gap-3'>
                 {quickFacts.map((fact) => (
-                  <div key={fact.label} className='rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200'>
+                  <div key={fact.label} className='min-w-0 rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200'>
                     <div className={`mb-3 inline-flex rounded-lg p-2 ${fact.tone}`}>
                       <fact.icon className='size-4' />
                     </div>
-                    <p className='text-xs font-medium uppercase text-slate-500'>{fact.label}</p>
-                    <p className='mt-1 text-sm font-semibold text-slate-950'>{fact.value}</p>
+                    <p className='break-words text-xs font-medium uppercase text-slate-500'>{fact.label}</p>
+                    <p className='mt-1 break-words text-sm font-semibold text-slate-950'>{fact.value}</p>
                   </div>
                 ))}
               </div>
@@ -1299,12 +1795,15 @@ export default async function Page({
             </span>
             {tags.length > 0 ? (
               tags.map((tag) => (
-                <span key={tag.slug} className='rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700'>
+                <span
+                  key={tag.slug}
+                  className='max-w-full rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700'
+                >
                   {getTagLocalizedField(tag.name, locale)}
                 </span>
               ))
             ) : (
-              <span className='rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-600'>
+              <span className='max-w-full rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-600'>
                 {categoryName}
               </span>
             )}
@@ -1436,6 +1935,27 @@ export default async function Page({
                   <p className='mt-3 text-sm leading-6 text-slate-600'>{comparisonSummary}</p>
                 </div>
 
+                <div className='rounded-lg border border-slate-200 bg-white p-4 sm:p-5'>
+                  <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                    {locale === 'cn' ? '下一步入口' : 'Next paths'}
+                  </p>
+                  <p className='mt-2 text-lg font-semibold text-slate-950'>
+                    {locale === 'cn' ? '继续去更窄的比较页' : 'Continue into narrower comparison pages'}
+                  </p>
+                  <div className='mt-4 grid gap-3 lg:grid-cols-3'>
+                    {nextComparisonLinks.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className='rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:-translate-y-0.5 hover:bg-slate-100'
+                      >
+                        <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                        <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
                 <div className='grid gap-4 lg:grid-cols-3'>
                   <div className='rounded-lg border border-slate-200 p-4'>
                     <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
@@ -1541,7 +2061,7 @@ export default async function Page({
                   tagSlugs={dbTool?.tags || []}
                   tagLabels={tagLabels}
                 />
-                <section id='comments' className='scroll-mt-24'>
+                <section id='comments' className='scroll-mt-24 pt-4'>
                   <Separator className='mb-8 border-t border-slate-200' />
                   <div className='mb-6 rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200'>
                     <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
@@ -1624,15 +2144,7 @@ export default async function Page({
                 </div>
                 <div className='flex items-center justify-between gap-4'>
                   <dt className='text-slate-500'>{locale === 'cn' ? '状态' : 'Status'}</dt>
-                  <dd className='font-semibold text-emerald-700'>
-                    {dbTool?.status === 'published'
-                      ? locale === 'cn'
-                        ? '已公开'
-                        : 'Published'
-                      : locale === 'cn'
-                        ? '已收录'
-                        : 'Listed'}
-                  </dd>
+                  <dd className='font-semibold text-emerald-700'>{statusLabel}</dd>
                 </div>
                 <div className='flex items-center justify-between gap-4'>
                   <dt className='text-slate-500'>{locale === 'cn' ? '最近更新' : 'Last update'}</dt>

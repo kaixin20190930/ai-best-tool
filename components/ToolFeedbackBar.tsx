@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Flag, RefreshCw, ThumbsUp } from 'lucide-react';
 import { toast } from 'sonner';
+
 import { trackFeedback } from '@/app/actions/analytics';
 
 interface ToolFeedbackBarProps {
@@ -57,7 +58,7 @@ export default function ToolFeedbackBar({ toolId, userId, className = '' }: Tool
   return (
     <div className={`space-y-3 ${className}`}>
       <div className='text-sm font-semibold text-slate-900'>Quick feedback</div>
-      <div className='grid gap-2 sm:grid-cols-3'>
+      <div className='grid gap-2 md:grid-cols-3'>
         {feedbackOptions.map((option) => {
           const Icon = option.icon;
           const isSelected = selected === option.type;
@@ -68,15 +69,15 @@ export default function ToolFeedbackBar({ toolId, userId, className = '' }: Tool
               key={option.type}
               type='button'
               onClick={() => handleFeedback(option.type)}
-              className={`flex items-center gap-3 rounded-lg border px-3 py-3 text-left text-sm transition ${
+              className={`flex min-h-[8.5rem] items-start gap-3 rounded-lg border px-3 py-3 text-left text-sm transition ${
                 isSelected ? option.className : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
               }`}
               disabled={isLoading}
             >
-              <Icon className='size-4 shrink-0' />
-              <span className='min-w-0'>
+              <Icon className='mt-1 size-4 shrink-0' />
+              <span className='min-w-0 break-words leading-6'>
                 <span className='block font-medium'>{isLoading ? 'Saving...' : option.label}</span>
-                <span className='mt-0.5 block text-xs text-slate-500'>{option.description}</span>
+                <span className='mt-1 block text-xs text-slate-500'>{option.description}</span>
               </span>
             </button>
           );

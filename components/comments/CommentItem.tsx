@@ -1,18 +1,19 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { ThumbsUp, Reply, Edit, Trash2, MoreVertical, Flag } from 'lucide-react';
+import { Edit, Flag, MoreVertical, Reply, ThumbsUp, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { Comment } from '@/app/actions/comments';
-import { updateComment, deleteComment, likeComment, reportComment } from '@/app/actions/comments';
-import CommentInput from './CommentInput';
+
 import { Button } from '@/components/ui/button';
 import { UserAvatar } from '@/components/auth/UserAvatar';
+import { Comment, deleteComment, likeComment, reportComment, updateComment } from '@/app/actions/comments';
+
+import CommentInput from './CommentInput';
 
 // Simple time ago formatter
 function formatTimeAgo(date: Date): string {
   const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
-  
+
   if (seconds < 60) return 'just now';
   const minutes = Math.floor(seconds / 60);
   if (minutes < 60) return `${minutes}m ago`;
@@ -41,7 +42,7 @@ export default function CommentItem({
   submitterId,
   onReply,
   onUpdate,
-  onDelete
+  onDelete,
 }: CommentItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
@@ -98,7 +99,7 @@ export default function CommentItem({
   };
 
   const handleDelete = () => {
-    if (!confirm('Are you sure you want to delete this comment?')) {
+    if (typeof window !== 'undefined' && !window.confirm('Are you sure you want to delete this comment?')) {
       return;
     }
 
@@ -129,56 +130,56 @@ export default function CommentItem({
   };
 
   return (
-    <div id={`comment-${comment.id}`} className="scroll-mt-28 space-y-3">
-      <div className="flex gap-3">
+    <div id={`comment-${comment.id}`} className='scroll-mt-28 space-y-3'>
+      <div className='flex gap-3'>
         {/* Avatar */}
-        <div className="flex-shrink-0">
+        <div className='flex-shrink-0'>
           <UserAvatar name={username} avatarUrl={avatarUrl} size={40} />
         </div>
 
         {/* Content */}
-        <div className="flex-1 space-y-2">
+        <div className='min-w-0 flex-1 space-y-2'>
           {/* Header */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="font-semibold text-slate-900">{username}</span>
+          <div className='flex flex-wrap items-start justify-between gap-2'>
+            <div className='flex min-w-0 flex-wrap items-center gap-2'>
+              <span className='min-w-0 break-words font-semibold text-slate-900'>{username}</span>
               {isSubmitter && (
-                <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-semibold text-emerald-700">
+                <span className='rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-semibold text-emerald-700'>
                   Tool submitter
                 </span>
               )}
-              <span className="text-xs text-slate-500">
-                {formatTimeAgo(new Date(comment.created_at))}
-              </span>
-              {comment.updated_at !== comment.created_at && (
-                <span className="text-xs text-slate-400">(edited)</span>
-              )}
+              <span className='text-xs text-slate-500'>{formatTimeAgo(new Date(comment.created_at))}</span>
+              {comment.updated_at !== comment.created_at && <span className='text-xs text-slate-400'>(edited)</span>}
             </div>
 
             {/* Menu */}
             {isOwner && (
-              <div className="relative">
+              <div className='relative'>
                 <button
+                  type='button'
                   onClick={() => setShowMenu(!showMenu)}
-                  className="rounded p-1 hover:bg-slate-100"
+                  aria-label='Comment options'
+                  className='rounded p-1 hover:bg-slate-100'
                 >
-                  <MoreVertical className="size-4 text-slate-500" />
+                  <MoreVertical className='size-4 text-slate-500' />
                 </button>
 
                 {showMenu && (
-                  <div className="theme-surface absolute right-0 z-10 mt-1 w-32 rounded-lg border border-slate-200 shadow-sm">
+                  <div className='theme-surface absolute right-0 z-10 mt-1 w-32 rounded-lg border border-slate-200 shadow-sm'>
                     <button
+                      type='button'
                       onClick={handleEdit}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50"
+                      className='flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50'
                     >
-                      <Edit className="size-4" />
+                      <Edit className='size-4' />
                       Edit
                     </button>
                     <button
+                      type='button'
                       onClick={handleDelete}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-red-600 hover:bg-slate-50"
+                      className='flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-red-600 hover:bg-slate-50'
                     >
-                      <Trash2 className="size-4" />
+                      <Trash2 className='size-4' />
                       Delete
                     </button>
                   </div>
@@ -189,26 +190,22 @@ export default function CommentItem({
 
           {/* Comment Content */}
           {isEditing ? (
-            <div className="space-y-2">
+            <div className='space-y-2'>
               <textarea
                 value={editContent}
                 onChange={(e) => setEditContent(e.target.value)}
                 disabled={isPending}
                 maxLength={2000}
                 rows={3}
-                className="w-full rounded-lg border border-slate-300 p-2 text-sm focus:border-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-200"
+                className='w-full rounded-lg border border-slate-300 p-2 text-sm focus:border-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-200'
               />
-              <div className="flex gap-2">
-                <Button
-                  size="sm"
-                  onClick={handleSaveEdit}
-                  disabled={isPending}
-                >
+              <div className='flex gap-2'>
+                <Button size='sm' onClick={handleSaveEdit} disabled={isPending}>
                   Save
                 </Button>
                 <Button
-                  size="sm"
-                  variant="outline"
+                  size='sm'
+                  variant='outline'
                   onClick={() => {
                     setIsEditing(false);
                     setEditContent(comment.content);
@@ -220,13 +217,14 @@ export default function CommentItem({
               </div>
             </div>
           ) : (
-            <p className="text-sm whitespace-pre-wrap text-slate-700">{comment.content}</p>
+            <p className='whitespace-pre-wrap break-words text-sm text-slate-700'>{comment.content}</p>
           )}
 
           {/* Actions */}
           {!isEditing && (
-            <div className="flex items-center gap-4">
+            <div className='flex flex-wrap items-center gap-4'>
               <button
+                type='button'
                 onClick={handleLike}
                 disabled={isPending}
                 className={`flex items-center gap-1 text-sm transition-colors ${
@@ -238,20 +236,22 @@ export default function CommentItem({
               </button>
 
               <button
+                type='button'
                 onClick={handleReply}
-                className="flex items-center gap-1 text-sm text-slate-500 transition-colors hover:text-cyan-700"
+                className='flex items-center gap-1 text-sm text-slate-500 transition-colors hover:text-cyan-700'
               >
-                <Reply className="size-4" />
+                <Reply className='size-4' />
                 <span>Reply</span>
               </button>
 
               {!isOwner && (
                 <button
+                  type='button'
                   onClick={handleReport}
                   disabled={isPending}
-                  className="flex items-center gap-1 text-sm text-slate-500 transition-colors hover:text-rose-600"
+                  className='flex items-center gap-1 text-sm text-slate-500 transition-colors hover:text-rose-600'
                 >
-                  <Flag className="size-4" />
+                  <Flag className='size-4' />
                   <span>Report</span>
                 </button>
               )}
@@ -260,7 +260,7 @@ export default function CommentItem({
 
           {/* Reply Input */}
           {isReplying && (
-            <div className="mt-3">
+            <div className='mt-3'>
               <CommentInput
                 toolId={comment.tool_id}
                 parentId={comment.id}
@@ -277,7 +277,7 @@ export default function CommentItem({
 
           {/* Replies */}
           {comment.replies && comment.replies.length > 0 && (
-            <div className="mt-4 space-y-4 border-l-2 border-slate-200 pl-4">
+            <div className='mt-4 space-y-4 border-l-2 border-slate-200 pl-4'>
               {comment.replies.map((reply) => (
                 <CommentItem
                   key={reply.id}

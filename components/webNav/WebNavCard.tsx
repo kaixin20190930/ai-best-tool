@@ -42,6 +42,8 @@ function getFreshnessLabel(createdAt?: string, updatedAt?: string): string | nul
 }
 
 export default function WebNavCard({
+  compareHref,
+  compareLabel,
   name,
   imageUrl,
   thumbnailUrl,
@@ -64,9 +66,9 @@ export default function WebNavCard({
       <Link href={`/ai/${name}`} title={title}>
         <ToolCardMedia imageUrl={imageUrl} name={name} thumbnailUrl={thumbnailUrl} title={title} />
       </Link>
-      <div className='flex items-center justify-between'>
-        <a href={url} title={title} target='_blank' rel='noreferrer' className='hover:text-slate-700'>
-          <h3 className='line-clamp-1 flex-1 text-base font-bold text-slate-950 lg:text-lg'>{title}</h3>
+      <div className='flex min-w-0 items-center justify-between gap-3'>
+        <a href={url} title={title} target='_blank' rel='noreferrer' className='min-w-0 flex-1 hover:text-slate-700'>
+          <h3 className='line-clamp-1 break-words text-base font-bold text-slate-950 lg:text-lg'>{title}</h3>
         </a>
         {toolId && <FavoriteButton toolId={toolId} initialState={isFavorited} />}
       </div>
@@ -94,7 +96,16 @@ export default function WebNavCard({
             {freshnessLabel}
           </span>
         )}
-        <p className='line-clamp-4 text-sm leading-6 text-slate-600'>{content}</p>
+        <p className='line-clamp-4 break-words text-sm leading-6 text-slate-600'>{content}</p>
+        {compareHref && compareLabel && (
+          <Link
+            href={compareHref}
+            className='inline-flex w-fit items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-200 hover:text-slate-950'
+          >
+            <Sparkles className='size-3.5 text-cyan-700' />
+            {compareLabel}
+          </Link>
+        )}
         {toolId && (
           <RatingStars
             toolId={toolId}
