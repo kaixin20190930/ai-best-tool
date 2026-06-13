@@ -211,6 +211,20 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                     : 'Higher intent for completion, refactoring, debugging, and real implementation work.',
                 },
                 {
+                  href: '/guides/ai-tools-for-code-review-comparison',
+                  title: isChinese ? '代码审查工具对比' : 'Code review tools comparison',
+                  desc: isChinese
+                    ? '适合 PR 审查、风险提示和 review 反馈场景。'
+                    : 'A sharper path for PR review, risk checks, and review feedback.',
+                },
+                {
+                  href: '/guides/ai-tools-for-prompt-testing-comparison',
+                  title: isChinese ? 'Prompt 测试工具对比' : 'Prompt testing tools comparison',
+                  desc: isChinese
+                    ? '适合提示词评估、A/B 测试和回归验证场景。'
+                    : 'A sharper path for prompt evaluation, A/B tests, and regression checks.',
+                },
+                {
                   href: '/guides/ai-tools-for-automation-comparison',
                   title: isChinese ? '自动化工具对比' : 'Automation tools comparison',
                   desc: isChinese
@@ -264,6 +278,20 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   desc: isChinese
                     ? '适合项目调研、叙事跟踪和信息整合场景。'
                     : 'A tighter fit for project research, narrative tracking, and information synthesis.',
+                },
+                {
+                  href: '/guides/ai-tools-for-crypto-portfolio-tracking-comparison',
+                  title: isChinese ? 'Crypto 资产追踪工具对比' : 'Crypto portfolio tracking comparison',
+                  desc: isChinese
+                    ? '适合持仓看板、多钱包归集和组合观察。'
+                    : 'A tighter fit for dashboards, multi-wallet rollups, and portfolio monitoring.',
+                },
+                {
+                  href: '/guides/ai-tools-for-protocol-analytics-comparison',
+                  title: isChinese ? '协议分析工具对比' : 'Protocol analytics comparison',
+                  desc: isChinese
+                    ? '适合协议健康、使用量和趋势研究。'
+                    : 'A tighter fit for protocol health, usage, and trend research.',
                 },
               ].map((item) => (
                 <Link

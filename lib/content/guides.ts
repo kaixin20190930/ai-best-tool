@@ -326,6 +326,32 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-tools-for-prompt-testing',
+    priority: 0.77,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI Prompt 测试工具推荐',
+      en: 'AI tools for prompt testing',
+    },
+    desc: {
+      cn: '适合提示词评估、A/B 测试、版本对比和质量验证。',
+      en: 'For prompt evaluation, A/B testing, version comparison, and quality validation.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-prompt-testing-comparison',
+    priority: 0.78,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI Prompt 测试工具对比',
+      en: 'AI tools for prompt testing comparison',
+    },
+    desc: {
+      cn: '把常见 prompt 测试工具放在一起快速对照。',
+      en: 'Compare common prompt testing tools side by side.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-api-observability',
     priority: 0.77,
     changeFrequency: 'weekly',
@@ -349,6 +375,32 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     desc: {
       cn: '把常见 API 可观测工具放在一起快速对照。',
       en: 'Compare common API observability tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-code-review',
+    priority: 0.77,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 代码审查工具推荐',
+      en: 'AI tools for code review',
+    },
+    desc: {
+      cn: '适合 PR 审查、变更解释、风险检查和代码反馈。',
+      en: 'For PR review, change explanation, risk checks, and code feedback.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-code-review-comparison',
+    priority: 0.78,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 代码审查工具对比',
+      en: 'AI tools for code review comparison',
+    },
+    desc: {
+      cn: '把常见代码审查工具放在一起快速对照。',
+      en: 'Compare common code review tools side by side.',
     },
   },
   {
@@ -612,6 +664,32 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-tools-for-crypto-portfolio-tracking',
+    priority: 0.74,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI Crypto 资产追踪工具推荐',
+      en: 'AI tools for crypto portfolio tracking',
+    },
+    desc: {
+      cn: '适合资产看板、持仓跟踪、钱包归集和组合观察。',
+      en: 'For portfolio dashboards, holdings tracking, wallet rollups, and allocation monitoring.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-crypto-portfolio-tracking-comparison',
+    priority: 0.75,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI Crypto 资产追踪工具对比',
+      en: 'AI tools for crypto portfolio tracking comparison',
+    },
+    desc: {
+      cn: '把常见 Crypto 资产追踪工具放在一起快速对照。',
+      en: 'Compare common crypto portfolio tracking tools side by side.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-defi-analytics',
     priority: 0.73,
     changeFrequency: 'monthly',
@@ -789,6 +867,8 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/ai-tools-for-research',
   '/guides/ai-tools-for-developers',
   '/guides/ai-tools-for-automation',
+  '/guides/ai-tools-for-code-review',
+  '/guides/ai-tools-for-prompt-testing',
   '/guides/ai-video-tools',
   '/guides/ai-image-tools',
   '/guides/ai-coding-tools',
@@ -799,6 +879,7 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/ai-tools-for-web3',
   '/guides/ai-tools-for-web3-analysis',
   '/guides/ai-tools-for-crypto-research',
+  '/guides/ai-tools-for-crypto-portfolio-tracking',
   '/guides/ai-tools-for-on-chain-analysis',
   '/guides/ai-tools-for-defi-analytics',
 ] as const;

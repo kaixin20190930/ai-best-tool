@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import GuideActionSection from '@/components/guides/GuideActionSection';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
@@ -174,6 +175,52 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </aside>
         </section>
+
+        <GuideActionSection
+          locale={locale}
+          eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}
+          title={
+            isChinese ? '更贴近协议健康与使用量研究的入口' : 'Real entry points for protocol health and usage research'
+          }
+          description={
+            isChinese
+              ? '如果你关心的是协议覆盖、历史数据、趋势观察和对比研究，这几款工具会比泛 Web3 页更快把范围收窄。'
+              : 'If protocol coverage, historical data, trend watching, and comparative research matter most, these tools narrow the field faster than a broad Web3 page.'
+          }
+          toolNames={['messari', 'token-terminal', 'dune', 'defillama']}
+          compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
+          compareTitle={
+            isChinese ? '协议分析意图更强的下一步入口' : 'Next paths for stronger protocol-analytics intent'
+          }
+          compareDescription={
+            isChinese
+              ? '当你已经明确自己是在找协议分析工具，而不是钱包监控或泛研究工具，继续进入更窄的比较页会更有效。'
+              : 'Once the real job is protocol analytics rather than wallet monitoring or broad research, narrower comparison pages work better.'
+          }
+          compareLinks={[
+            {
+              href: '/guides/ai-tools-for-protocol-analytics-comparison',
+              title: isChinese ? '协议分析工具对比' : 'Protocol analytics comparison',
+              description: isChinese
+                ? '适合直接横向看协议覆盖、历史深度和研究贴合度。'
+                : 'A direct side-by-side path for protocol coverage, history depth, and research fit.',
+            },
+            {
+              href: '/guides/ai-tools-for-defi-analytics-comparison',
+              title: isChinese ? 'DeFi 分析工具对比' : 'DeFi analytics comparison',
+              description: isChinese
+                ? '如果你发现问题更偏 DeFi 资金和协议细分，这页更合适。'
+                : 'More useful if the real decision is shifting toward DeFi-specific protocol and fund analysis.',
+            },
+            {
+              href: '/guides/ai-tools-for-web3-comparison',
+              title: isChinese ? 'Web3 工具总对比' : 'Web3 tools comparison',
+              description: isChinese
+                ? '适合还没完全确定自己在选协议、钱包还是研究工具。'
+                : 'Good when you are not yet fully narrowed into protocol, wallet, or research tooling.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
