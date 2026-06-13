@@ -352,6 +352,32 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-tools-for-evals',
+    priority: 0.77,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI Evals 工具推荐',
+      en: 'AI tools for evals',
+    },
+    desc: {
+      cn: '适合结果评估、输出质量验证、评分体系和验收流程。',
+      en: 'For output evaluation, quality validation, scoring systems, and acceptance workflows.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-evals-comparison',
+    priority: 0.78,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI Evals 工具对比',
+      en: 'AI tools for evals comparison',
+    },
+    desc: {
+      cn: '把常见 evals 工具放在一起快速对照。',
+      en: 'Compare common evals tools side by side.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-api-observability',
     priority: 0.77,
     changeFrequency: 'weekly',
@@ -612,6 +638,32 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-tools-for-wallet-research',
+    priority: 0.74,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 钱包研究工具推荐',
+      en: 'AI tools for wallet research',
+    },
+    desc: {
+      cn: '适合地址研究、钱包画像、行为判断和链上线索分析。',
+      en: 'For address research, wallet profiling, behavior analysis, and on-chain clue discovery.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-wallet-research-comparison',
+    priority: 0.75,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 钱包研究工具对比',
+      en: 'AI tools for wallet research comparison',
+    },
+    desc: {
+      cn: '把常见钱包研究工具放在一起快速对照。',
+      en: 'Compare common wallet research tools side by side.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-on-chain-analysis',
     priority: 0.73,
     changeFrequency: 'monthly',
@@ -869,6 +921,7 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/ai-tools-for-automation',
   '/guides/ai-tools-for-code-review',
   '/guides/ai-tools-for-prompt-testing',
+  '/guides/ai-tools-for-evals',
   '/guides/ai-video-tools',
   '/guides/ai-image-tools',
   '/guides/ai-coding-tools',
@@ -879,6 +932,7 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/ai-tools-for-web3',
   '/guides/ai-tools-for-web3-analysis',
   '/guides/ai-tools-for-crypto-research',
+  '/guides/ai-tools-for-wallet-research',
   '/guides/ai-tools-for-crypto-portfolio-tracking',
   '/guides/ai-tools-for-on-chain-analysis',
   '/guides/ai-tools-for-defi-analytics',

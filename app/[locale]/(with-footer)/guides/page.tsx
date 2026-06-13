@@ -225,6 +225,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                     : 'A sharper path for prompt evaluation, A/B tests, and regression checks.',
                 },
                 {
+                  href: '/guides/ai-tools-for-evals-comparison',
+                  title: isChinese ? 'Evals 工具对比' : 'Evals tools comparison',
+                  desc: isChinese
+                    ? '适合结果评分、验收标准和质量验证场景。'
+                    : 'A sharper path for output scoring, acceptance standards, and quality validation.',
+                },
+                {
                   href: '/guides/ai-tools-for-automation-comparison',
                   title: isChinese ? '自动化工具对比' : 'Automation tools comparison',
                   desc: isChinese
@@ -285,6 +292,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   desc: isChinese
                     ? '适合持仓看板、多钱包归集和组合观察。'
                     : 'A tighter fit for dashboards, multi-wallet rollups, and portfolio monitoring.',
+                },
+                {
+                  href: '/guides/ai-tools-for-wallet-research-comparison',
+                  title: isChinese ? '钱包研究工具对比' : 'Wallet research comparison',
+                  desc: isChinese
+                    ? '适合地址画像、链上线索和行为研究。'
+                    : 'A tighter fit for address profiles, on-chain clues, and wallet behavior research.',
                 },
                 {
                   href: '/guides/ai-tools-for-protocol-analytics-comparison',
