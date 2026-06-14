@@ -1267,9 +1267,19 @@ export default async function Page({
     }
   }
 
+  function getDisplayTagLabel(tag: { slug: string; name: Record<string, string> }): string {
+    const localizedLabel = getTagLocalizedField(tag.name, locale).trim();
+
+    if (localizedLabel) {
+      return localizedLabel;
+    }
+
+    return humanizeTagSlug(tag.slug);
+  }
+
   const displayTagLabels =
     tags.length > 0
-      ? tags.map((tag) => getTagLocalizedField(tag.name, locale))
+      ? tags.map((tag) => getDisplayTagLabel(tag)).filter(Boolean)
       : (dbTool?.tags || []).map((tagSlug) => humanizeTagSlug(tagSlug)).filter(Boolean);
 
   if (toolId) {
@@ -1409,7 +1419,7 @@ export default async function Page({
   }
   const categorySlug = category?.slug;
   const categoryGuideLink = getCategoryGuideLink(categorySlug, locale);
-  const tagLabels = tags.map((tag) => getTagLocalizedField(tag.name, locale));
+  const tagLabels = tags.map((tag) => getDisplayTagLabel(tag)).filter(Boolean);
   const featureEntries = getFeatureEntries(dbTool?.features, locale);
   const useCaseList = getStringList(dbTool?.useCases, locale);
   const bestFitOverride = getAudienceEntries(dbTool?.features, 'bestFit', locale);

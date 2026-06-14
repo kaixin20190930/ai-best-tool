@@ -50,7 +50,7 @@ export default function BaseImage(props: ImageProps) {
     <Image
       {...props}
       alt={altText}
-      className={`${props.className || ''} transition-opacity duration-200 ${hasLoaded ? 'opacity-100' : 'opacity-0'}`}
+      className={`${props.className || ''} transition-opacity duration-200 ${hasLoaded ? 'visible opacity-100' : 'invisible opacity-0'}`}
       // SVG previews are more stable when served directly instead of through the optimizer.
       unoptimized={props.unoptimized ?? isSvg}
       // Use lazy loading by default unless priority is set

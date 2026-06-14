@@ -92,7 +92,7 @@ export default function ToolCardMedia({ imageUrl, name, thumbnailUrl, title }: T
       className={[
         'aspect-[350/160] w-full justify-self-center rounded-xl border border-slate-100 bg-gradient-to-b from-slate-50 to-white object-contain transition-opacity duration-200',
         isLogoLikeSource ? 'p-6' : 'p-2.5',
-        hasLoaded ? 'opacity-100' : 'opacity-0',
+        hasLoaded ? 'visible opacity-100' : 'invisible opacity-0',
       ].join(' ')}
       loading='lazy'
       decoding='async'

@@ -264,14 +264,14 @@ export default async function RecommendedTools({
                 <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
                   {isChinese ? '为什么推荐它' : 'Why compare this one'}
                 </p>
-                <div className='mt-2 flex flex-wrap gap-2'>
+                <div className='mt-2 space-y-2'>
                   {reasons.map((reason) => (
-                    <span
+                    <div
                       key={reason}
-                      className='inline-flex max-w-full rounded-full bg-slate-50 px-3 py-1 text-xs leading-5 text-slate-700 ring-1 ring-slate-200'
+                      className='rounded-lg bg-slate-50 px-3 py-2 text-xs leading-5 text-slate-700 ring-1 ring-slate-200'
                     >
                       {reason}
-                    </span>
+                    </div>
                   ))}
                 </div>
               </div>
