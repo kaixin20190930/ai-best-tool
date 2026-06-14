@@ -10,7 +10,7 @@
   "plugins": ["prettier"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "./tsconfig.json"
+    "project": "./tsconfig.eslint.json"
   },
   "rules": {
     "react/react-in-jsx-scope": "off",
@@ -22,5 +22,27 @@
     "operator-linebreak": "off",
     "react/require-default-props": "off",
     "object-curly-newline": "off"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["scripts/**/*.ts"],
+      "rules": {
+        "no-console": "off",
+        "no-restricted-syntax": "off",
+        "no-continue": "off",
+        "no-await-in-loop": "off",
+        "no-trailing-spaces": "off",
+        "arrow-parens": "off",
+        "no-plusplus": "off",
+        "no-restricted-globals": "off",
+        "padded-blocks": "off",
+        "function-call-argument-newline": "off",
+        "prefer-destructuring": "off",
+        "prefer-template": "off",
+        "import/no-extraneous-dependencies": "off",
+        "@typescript-eslint/comma-dangle": "off",
+        "prefer-const": "off"
+      }
+    }
+  ]
 }

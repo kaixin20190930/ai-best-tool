@@ -1,6 +1,6 @@
 /**
  * Test script to verify sitemap.xml generation
- * 
+ *
  * This script tests:
  * 1. Sitemap includes all important pages
  * 2. XML format is valid
@@ -17,7 +17,7 @@ async function testSitemap() {
     // Generate sitemap
     const sitemapEntries = await sitemap();
 
-    console.log(`✅ Sitemap generated successfully`);
+    console.log('✅ Sitemap generated successfully');
     console.log(`📊 Total entries: ${sitemapEntries.length}\n`);
 
     // Test 1: Check if sitemap includes important pages
@@ -26,7 +26,7 @@ async function testSitemap() {
     const missingPages: string[] = [];
 
     for (const page of requiredPages) {
-      const found = sitemapEntries.some(entry => {
+      const found = sitemapEntries.some((entry) => {
         const url = new URL(entry.url);
         const pathname = url.pathname.replace(/^\/[a-z]{2}\//, '/').replace(/^\//, '');
         return pathname === page;
@@ -80,7 +80,8 @@ async function testSitemap() {
     let invalidPriorities = 0;
 
     for (const entry of sitemapEntries) {
-      if (entry.priority < 0 || entry.priority > 1) {
+      const priority = entry.priority ?? 0;
+      if (priority < 0 || priority > 1) {
         invalidPriorities++;
       }
     }
@@ -113,20 +114,23 @@ async function testSitemap() {
     // Display sample entries
     console.log('📋 Sample sitemap entries:');
     console.log('─'.repeat(80));
-    
+
     const samples = [
-      sitemapEntries.find(e => e.url.endsWith('/')), // Homepage
-      sitemapEntries.find(e => e.url.includes('/explore')), // Explore page
-      sitemapEntries.find(e => e.url.includes('/ai/')), // Tool page
-      sitemapEntries.find(e => e.url.includes('category=')), // Category page
+      sitemapEntries.find((e) => e.url.endsWith('/')), // Homepage
+      sitemapEntries.find((e) => e.url.includes('/explore')), // Explore page
+      sitemapEntries.find((e) => e.url.includes('/ai/')), // Tool page
+      sitemapEntries.find((e) => e.url.includes('category=')), // Category page
     ].filter(Boolean);
 
     for (const entry of samples) {
       if (entry) {
+        const lastModified = new Date(entry.lastModified ?? 0);
+        const changeFrequency = entry.changeFrequency ?? 'n/a';
+        const priority = entry.priority ?? 0;
         console.log(`URL: ${entry.url}`);
-        console.log(`Last Modified: ${entry.lastModified.toISOString()}`);
-        console.log(`Change Frequency: ${entry.changeFrequency}`);
-        console.log(`Priority: ${entry.priority}`);
+        console.log(`Last Modified: ${lastModified.toISOString()}`);
+        console.log(`Change Frequency: ${changeFrequency}`);
+        console.log(`Priority: ${priority}`);
         console.log('─'.repeat(80));
       }
     }
@@ -135,13 +139,16 @@ async function testSitemap() {
     console.log('\n📊 Summary:');
     console.log(`Total entries: ${sitemapEntries.length}`);
     console.log(`Unique URLs: ${urlSet.size}`);
-    
-    const byPriority = sitemapEntries.reduce((acc, entry) => {
-      const key = entry.priority.toString();
-      acc[key] = (acc[key] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-    
+
+    const byPriority = sitemapEntries.reduce(
+      (acc, entry) => {
+        const key = String(entry.priority ?? 0);
+        acc[key] = (acc[key] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
+
     console.log('\nEntries by priority:');
     Object.entries(byPriority)
       .sort(([a], [b]) => parseFloat(b) - parseFloat(a))
@@ -150,7 +157,7 @@ async function testSitemap() {
       });
 
     const totalTests = 5;
-    const passedTests = 
+    const passedTests =
       (missingPages.length === 0 ? 1 : 0) +
       (invalidEntries === 0 ? 1 : 0) +
       (invalidDates === 0 ? 1 : 0) +
@@ -166,7 +173,6 @@ async function testSitemap() {
       console.log('\n⚠️  Some sitemap tests failed. Please review the output above.');
       process.exit(1);
     }
-
   } catch (error) {
     console.error('❌ Error testing sitemap:', error);
     process.exit(1);
