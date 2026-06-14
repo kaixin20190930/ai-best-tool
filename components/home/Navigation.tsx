@@ -7,9 +7,9 @@ import type { User } from '@supabase/supabase-js';
 import { Shield } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-import { Link } from '@/app/navigation';
 import { NAV_LINKS } from '@/lib/constants';
 import { cn } from '@/lib/utils';
+import { Link } from '@/app/navigation';
 
 import { UserMenu } from '../auth/UserMenu';
 import BaseImage from '../image/BaseImage';
@@ -57,15 +57,15 @@ export default function Navigation({ user, isAdmin = false }: NavigationProps) {
     <>
       <header className='bg-frosted-glass sticky left-0 top-0 z-50 flex h-[64px] border-b border-slate-200/80 bg-white/85 px-5 lg:px-0'>
         <nav className='mx-auto flex max-w-pc flex-1 items-center'>
-          <div>
-            <Link className='flex justify-self-center hover:opacity-80' href='/' title={t('title')}>
+          <div className='min-w-0 shrink-0'>
+            <Link className='flex items-center gap-2 justify-self-center hover:opacity-80' href='/' title={t('title')}>
               <BaseImage
                 src='/images/aitools.svg'
                 alt='AI Best Tool logo icon - discover and explore AI tools'
                 title={t('title')}
                 width={64}
                 height={16}
-                className='size-[58px] lg:size-16'
+                className='h-8 w-8 shrink-0 sm:h-12 sm:w-12 lg:h-16 lg:w-16'
               />
               <BaseImage
                 src='/images/Aileron.svg'
@@ -73,7 +73,7 @@ export default function Navigation({ user, isAdmin = false }: NavigationProps) {
                 title={t('title')}
                 width={64}
                 height={16}
-                className='my-auto h-8 w-28 lg:h-8 lg:w-32'
+                className='hidden h-8 w-28 sm:block lg:h-8 lg:w-32'
               />
             </Link>
           </div>
