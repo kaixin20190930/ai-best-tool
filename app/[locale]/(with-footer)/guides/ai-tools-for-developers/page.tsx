@@ -168,6 +168,56 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </aside>
         </section>
 
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '直接进入对比' : 'Jump into comparison'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '如果你已经知道自己的工作层，就直接进下一页'
+              : 'If you already know your workflow layer, go straight to the next page'}
+          </h2>
+          <div className='mt-4 grid gap-3 md:grid-cols-3'>
+            <Link
+              href='/guides/ai-tools-for-developers-comparison'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>
+                {isChinese ? '开发者总对比' : 'Developer comparison'}
+              </p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '适合还没完全确定自己是在找编码、模型接入还是运维层工具。'
+                  : 'Best if you still need a broad view across coding, model access, and ops tooling.'}
+              </p>
+            </Link>
+            <Link
+              href='/guides/ai-coding-tools-comparison'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>
+                {isChinese ? '编程工具对比' : 'Coding tools comparison'}
+              </p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '当你的主要动作发生在编辑器里，这页更高意图。'
+                  : 'A better fit when most of the work happens inside the editor.'}
+              </p>
+            </Link>
+            <Link
+              href='/categories/developer-tools?sort=popular'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '开发者分类' : 'Developer category'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '如果你想先浏览真实条目，再回头比较，就从这里开始。'
+                  : 'Browse real listings first, then come back and compare when ready.'}
+              </p>
+            </Link>
+          </div>
+        </section>
+
         <section className='mt-8 rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '先看这些决策点' : 'Start with these decision points'}

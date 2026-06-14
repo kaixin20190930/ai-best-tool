@@ -170,6 +170,54 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </aside>
         </section>
 
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '直接进入对比' : 'Jump into comparison'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '如果你已经知道自己要比什么，就直接进下一页'
+              : 'If you already know what to compare, go straight to the next page'}
+          </h2>
+          <div className='mt-4 grid gap-3 md:grid-cols-3'>
+            <Link
+              href='/guides/ai-tools-for-web3-comparison'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? 'Web3 总对比' : 'Web3 comparison'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '适合还没完全确定自己更偏链上分析、钱包监控还是研究。'
+                  : 'Best if you still need a broad side-by-side view across research, wallet, and protocol workflows.'}
+              </p>
+            </Link>
+            <Link
+              href='/guides/ai-tools-for-on-chain-analysis-comparison'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>
+                {isChinese ? '链上分析对比' : 'On-chain analysis comparison'}
+              </p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '当你的核心问题已经是地址、流向和协议行为时，这页更高意图。'
+                  : 'A better fit once the real need is addresses, fund flow, and protocol behavior.'}
+              </p>
+            </Link>
+            <Link
+              href='/categories/web3?sort=popular'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? 'Web3 分类' : 'Web3 category'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '如果你想先浏览真实条目，再回过头来比较，就走这里。'
+                  : 'Browse real listings first, then come back and compare when you are ready.'}
+              </p>
+            </Link>
+          </div>
+        </section>
+
         <section className='mt-8 rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '先看这些决策点' : 'Start with these decision points'}
