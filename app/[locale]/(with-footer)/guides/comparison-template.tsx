@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { ArrowRight, CheckCircle2, Columns3, ExternalLink, Sparkles } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Clock3, Columns3, ExternalLink, Globe2, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { getNoindexMetadata } from '@/lib/seo/indexing';
@@ -172,6 +172,19 @@ function getRatingDisplay(averageRating: unknown, isChinese: boolean): string {
   }
 
   return isChinese ? '暂无' : 'N/A';
+}
+
+function formatUpdatedAt(updatedAt?: string): string {
+  if (!updatedAt) return '';
+
+  const parsed = new Date(updatedAt);
+  if (Number.isNaN(parsed.getTime())) return '';
+
+  return new Intl.DateTimeFormat('en', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  }).format(parsed);
 }
 
 export async function buildComparisonMetadata(locale: string, title: string, description: string): Promise<Metadata> {
@@ -523,6 +536,39 @@ export function ComparisonPage({
                       </div>
                       <p className='mt-2 text-sm leading-6 text-slate-600'>{tool.summary}</p>
 
+                      <div className='mt-4 flex flex-wrap items-center gap-2 text-xs'>
+                        <span className='inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 font-medium text-slate-600'>
+                          <Globe2 className='size-3.5' />
+                          {isChinese ? '官网' : 'Official site'}
+                          <a
+                            href={tool.url}
+                            target='_blank'
+                            rel='noreferrer'
+                            className='ml-1 inline-flex items-center gap-1 font-semibold text-cyan-700 hover:text-cyan-800'
+                          >
+                            {new URL(tool.url).hostname.replace(/^www\./, '')}
+                            <ExternalLink className='size-3' />
+                          </a>
+                        </span>
+                        {tool.updatedAt ? (
+                          <span className='inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 font-medium text-slate-600'>
+                            <Clock3 className='size-3.5' />
+                            {isChinese ? '最近更新' : 'Updated'}
+                            <span className='font-semibold text-slate-800'>{formatUpdatedAt(tool.updatedAt)}</span>
+                          </span>
+                        ) : null}
+                        <span className='inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 font-medium text-emerald-700'>
+                          {isChinese ? '价格' : 'Pricing'}:
+                          <span className='font-semibold'>{getPricingLabel(tool.pricing, isChinese)}</span>
+                        </span>
+                        {tool.isFeatured ? (
+                          <span className='inline-flex items-center gap-1 rounded-full bg-violet-50 px-2.5 py-1 font-medium text-violet-700'>
+                            <Sparkles className='size-3.5' />
+                            {isChinese ? '当前展示位' : 'Featured now'}
+                          </span>
+                        ) : null}
+                      </div>
+
                       {tool.selectionNote ? (
                         <div className='mt-4 grid gap-3 md:grid-cols-3'>
                           <div className='rounded-xl border border-emerald-200 bg-emerald-50/70 p-3'>
@@ -568,6 +614,20 @@ export function ComparisonPage({
                         </div>
                         <div className='mt-1 font-semibold text-slate-900'>
                           {tool.categoryLabel || (isChinese ? '未分类' : 'Uncategorized')}
+                        </div>
+                      </div>
+                      <div className='rounded-xl bg-slate-50 p-3 lg:col-span-2'>
+                        <div className='text-xs uppercase tracking-wide text-slate-500'>
+                          {isChinese ? '官网状态' : 'Website status'}
+                        </div>
+                        <div className='mt-1 font-semibold text-slate-900'>
+                          {(() => {
+                            if (tool.url) {
+                              return isChinese ? '可访问' : 'Available';
+                            }
+
+                            return isChinese ? '缺失' : 'Missing';
+                          })()}
                         </div>
                       </div>
                     </div>
