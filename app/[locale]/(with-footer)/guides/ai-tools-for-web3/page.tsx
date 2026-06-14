@@ -170,6 +170,68 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </aside>
         </section>
 
+        <section className='mt-8 rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '先看这些决策点' : 'Start with these decision points'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先判断你真正要解决的 Web3 工作' : 'First decide what Web3 job you are really solving'}
+          </h2>
+          <div className='mt-4 grid gap-3 lg:grid-cols-3'>
+            <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+              <p className='text-sm font-semibold text-slate-950'>
+                {isChinese ? '链上研究与分析' : 'On-chain research and analysis'}
+              </p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '如果你在看地址、资金流、协议行为，先走研究和链上分析入口。'
+                  : 'If your work is about addresses, fund flow, or protocol behavior, go through research and on-chain analysis first.'}
+              </p>
+            </div>
+            <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+              <p className='text-sm font-semibold text-slate-950'>
+                {isChinese ? '钱包监控与资产变化' : 'Wallet monitoring and asset changes'}
+              </p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '如果你更关心资产波动、持仓和提醒，就继续看钱包监控相关对比。'
+                  : 'If asset changes, holdings, and alerts matter more, move into wallet monitoring comparisons.'}
+              </p>
+            </div>
+            <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+              <p className='text-sm font-semibold text-slate-950'>
+                {isChinese ? '开发接入与自动化' : 'Developer integration and automation'}
+              </p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '如果你要把 Web3 数据接进产品或脚本，优先看 API、导出和自动化能力。'
+                  : 'If you need to plug Web3 data into products or scripts, prioritize APIs, exports, and automation.'}
+              </p>
+            </div>
+          </div>
+          <div className='mt-5 flex flex-wrap gap-3'>
+            <Link
+              href='/guides/ai-tools-for-web3-comparison'
+              className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+            >
+              {isChinese ? '进入 Web3 对比页' : 'Open Web3 comparison'}
+              <ExternalLink className='size-4' />
+            </Link>
+            <Link
+              href='/guides/ai-tools-for-on-chain-analysis-comparison'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+            >
+              {isChinese ? '看链上分析对比' : 'On-chain analysis comparison'}
+            </Link>
+            <Link
+              href='/guides/ai-tools-for-wallet-monitoring-comparison'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+            >
+              {isChinese ? '看钱包监控对比' : 'Wallet monitoring comparison'}
+            </Link>
+          </div>
+        </section>
+
         <GuideActionSection
           locale={locale}
           eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}

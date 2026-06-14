@@ -168,6 +168,68 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </aside>
         </section>
 
+        <section className='mt-8 rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '先看这些决策点' : 'Start with these decision points'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先判断你真实的开发工作发生在哪一层' : 'First locate where your real development work happens'}
+          </h2>
+          <div className='mt-4 grid gap-3 lg:grid-cols-3'>
+            <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+              <p className='text-sm font-semibold text-slate-950'>
+                {isChinese ? '编辑器内编程' : 'Editor-native coding'}
+              </p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '如果你的主要动作发生在 IDE 里，先看编码和重构体验，再进更窄的编程对比。'
+                  : 'If your main work happens inside the IDE, start with coding and refactoring experience before narrowing down.'}
+              </p>
+            </div>
+            <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+              <p className='text-sm font-semibold text-slate-950'>
+                {isChinese ? '模型接入与路由' : 'Model access and routing'}
+              </p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '如果你要统一多模型、控成本或做切换，优先进入模型路由相关入口。'
+                  : 'If you are unifying models, controlling cost, or switching providers, move first into model routing paths.'}
+              </p>
+            </div>
+            <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+              <p className='text-sm font-semibold text-slate-950'>
+                {isChinese ? '生产与可观测性' : 'Production and observability'}
+              </p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '如果已经上线，就该看日志、追踪、权限和失败处理这类真正会影响交付的东西。'
+                  : 'If you are already in production, focus on logs, tracing, permissions, and failure handling.'}
+              </p>
+            </div>
+          </div>
+          <div className='mt-5 flex flex-wrap gap-3'>
+            <Link
+              href='/guides/ai-tools-for-developers-comparison'
+              className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+            >
+              {isChinese ? '进入开发者对比页' : 'Open developer comparison'}
+              <ExternalLink className='size-4' />
+            </Link>
+            <Link
+              href='/guides/ai-coding-tools-comparison'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+            >
+              {isChinese ? '看编程工具对比' : 'Coding tools comparison'}
+            </Link>
+            <Link
+              href='/guides/ai-tools-for-model-routing-comparison'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+            >
+              {isChinese ? '看模型路由对比' : 'Model routing comparison'}
+            </Link>
+          </div>
+        </section>
+
         <GuideActionSection
           locale={locale}
           eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}
