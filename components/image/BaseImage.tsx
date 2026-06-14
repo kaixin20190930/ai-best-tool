@@ -21,6 +21,7 @@ function generateAltFromSrc(src: string | undefined): string {
 
 export default function BaseImage(props: ImageProps) {
   const [hasError, setHasError] = useState(false);
+  const [hasLoaded, setHasLoaded] = useState(false);
   const srcValue = typeof props.src === 'string' ? props.src : '';
   const isSvg = /\.svg(?:\?.*)?$/i.test(srcValue);
   const fallbackText = props.alt || generateAltFromSrc(props.src as string);
@@ -49,6 +50,7 @@ export default function BaseImage(props: ImageProps) {
     <Image
       {...props}
       alt={altText}
+      className={`${props.className || ''} transition-opacity duration-200 ${hasLoaded ? 'opacity-100' : 'opacity-0'}`}
       // SVG previews are more stable when served directly instead of through the optimizer.
       unoptimized={props.unoptimized ?? isSvg}
       // Use lazy loading by default unless priority is set
@@ -61,6 +63,10 @@ export default function BaseImage(props: ImageProps) {
           : props.blurDataURL ??
             'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2YzZjRmNiIvPjwvc3ZnPg=='
       }
+      onLoad={(event) => {
+        setHasLoaded(true);
+        props.onLoad?.(event);
+      }}
       onError={(event) => {
         setHasError(true);
         props.onError?.(event);

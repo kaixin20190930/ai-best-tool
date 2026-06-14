@@ -5,6 +5,7 @@ import { getPool } from '@/db/neon/client';
 
 import { requireAuth } from '@/lib/auth/middleware';
 import { sendTransactionalEmail } from '@/lib/services/mailer';
+import { ensureTagsExist } from '@/lib/services/tags';
 import { createNotification, notifyAdminsOfSubmission } from '@/app/actions/notifications';
 import { shouldSendSubmissionStatusEmail } from '@/app/actions/userPreferences';
 
@@ -195,6 +196,8 @@ export async function submitTool(input: SubmitToolInput): Promise<SubmitToolResu
         JSON.stringify(features),
       ],
     );
+
+    await ensureTagsExist(tags);
 
     await createNotification(
       user.id,

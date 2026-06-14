@@ -161,6 +161,12 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'image-to-video.moxion.ai',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'runwayml.com',
         port: '',
         pathname: '/**',

@@ -199,7 +199,7 @@ export default async function RecommendedTools({
   }
 
   return (
-    <section className='mb-8'>
+    <section className='mb-12'>
       <div className='mb-6 rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
         <h2 className='text-2xl font-bold text-slate-900 lg:text-3xl'>{comparisonTitle}</h2>
         <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>{comparisonDescription}</p>
@@ -264,11 +264,16 @@ export default async function RecommendedTools({
                 <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
                   {isChinese ? '为什么推荐它' : 'Why compare this one'}
                 </p>
-                <ul className='mt-2 space-y-1.5 break-words text-sm leading-6 text-slate-700'>
+                <div className='mt-2 flex flex-wrap gap-2'>
                   {reasons.map((reason) => (
-                    <li key={reason}>{reason}</li>
+                    <span
+                      key={reason}
+                      className='inline-flex max-w-full rounded-full bg-slate-50 px-3 py-1 text-xs leading-5 text-slate-700 ring-1 ring-slate-200'
+                    >
+                      {reason}
+                    </span>
                   ))}
-                </ul>
+                </div>
               </div>
             </div>
           );

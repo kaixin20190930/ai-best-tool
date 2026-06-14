@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 type ToolCardMediaProps = {
   imageUrl?: string | null;
@@ -30,6 +30,7 @@ function getInitials(label: string): string {
 export default function ToolCardMedia({ imageUrl, name, thumbnailUrl, title }: ToolCardMediaProps) {
   const [sourceIndex, setSourceIndex] = useState(0);
   const [hasFailedAllSources, setHasFailedAllSources] = useState(false);
+  const [hasLoaded, setHasLoaded] = useState(false);
   const sources = useMemo(
     () =>
       [
@@ -49,6 +50,10 @@ export default function ToolCardMedia({ imageUrl, name, thumbnailUrl, title }: T
     currentSource?.includes('/icons/tool-logos/') ||
     currentSource?.endsWith('.ico') ||
     currentSource?.includes('favicon');
+
+  useEffect(() => {
+    setHasLoaded(false);
+  }, [currentSource]);
 
   if (!currentSource || hasFailedAllSources) {
     return (
@@ -77,11 +82,15 @@ export default function ToolCardMedia({ imageUrl, name, thumbnailUrl, title }: T
       src={currentSource}
       alt={`${title} - AI tool screenshot and preview`}
       className={[
-        'aspect-[350/160] w-full justify-self-center rounded-xl border border-slate-100 bg-gradient-to-b from-slate-50 to-white',
-        isLogoLikeSource ? 'object-contain p-6' : 'object-contain p-2.5',
+        'aspect-[350/160] w-full justify-self-center rounded-xl border border-slate-100 bg-gradient-to-b from-slate-50 to-white object-contain transition-opacity duration-200',
+        isLogoLikeSource ? 'p-6' : 'p-2.5',
+        hasLoaded ? 'opacity-100' : 'opacity-0',
       ].join(' ')}
       loading='lazy'
       decoding='async'
+      onLoad={() => {
+        setHasLoaded(true);
+      }}
       onError={() => {
         setSourceIndex((current) => {
           if (current < sources.length - 1) {

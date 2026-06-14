@@ -29,7 +29,7 @@ import {
 } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateSoftwareSchema } from '@/lib/seo/schema';
 import { getCategoryById, getLocalizedField as getCategoryLocalizedField } from '@/lib/services/categories';
-import { getLocalizedField as getTagLocalizedField, getTagsBySlugs } from '@/lib/services/tags';
+import { getLocalizedField as getTagLocalizedField, getTagsBySlugs, humanizeTagSlug } from '@/lib/services/tags';
 import { toolToDetailData } from '@/lib/services/toolPresenter';
 import { getLocalizedField, getToolByName } from '@/lib/services/tools';
 import { createClient } from '@/lib/supabase/server';
@@ -1267,6 +1267,11 @@ export default async function Page({
     }
   }
 
+  const displayTagLabels =
+    tags.length > 0
+      ? tags.map((tag) => getTagLocalizedField(tag.name, locale))
+      : (dbTool?.tags || []).map((tagSlug) => humanizeTagSlug(tagSlug)).filter(Boolean);
+
   if (toolId) {
     try {
       const [nextUserRating, nextIsFavoritedByUser, nextToolStats, nextCommentCount] = await Promise.all([
@@ -1793,13 +1798,13 @@ export default async function Page({
               <TagIcon className='size-4 text-slate-500' />
               {isChinese ? '标签' : 'Tags'}
             </span>
-            {tags.length > 0 ? (
-              tags.map((tag) => (
+            {displayTagLabels.length > 0 ? (
+              displayTagLabels.map((label) => (
                 <span
-                  key={tag.slug}
+                  key={label}
                   className='max-w-full rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700'
                 >
-                  {getTagLocalizedField(tag.name, locale)}
+                  {label}
                 </span>
               ))
             ) : (

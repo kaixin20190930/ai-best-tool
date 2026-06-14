@@ -16,21 +16,21 @@ const feedbackOptions = [
   {
     type: 'helpful' as const,
     label: 'Helpful',
-    description: 'This page helped me decide',
+    description: 'Helped me decide',
     icon: ThumbsUp,
     className: 'border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100',
   },
   {
     type: 'needs_update' as const,
     label: 'Needs update',
-    description: 'Price, screenshot, or description is stale',
+    description: 'Price, screenshot, or copy is stale',
     icon: RefreshCw,
     className: 'border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100',
   },
   {
     type: 'inaccurate' as const,
     label: 'Inaccurate',
-    description: 'This listing has incorrect info',
+    description: 'Incorrect info',
     icon: Flag,
     className: 'border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100',
   },
@@ -58,7 +58,7 @@ export default function ToolFeedbackBar({ toolId, userId, className = '' }: Tool
   return (
     <div className={`space-y-3 ${className}`}>
       <div className='text-sm font-semibold text-slate-900'>Quick feedback</div>
-      <div className='grid gap-3 sm:grid-cols-2 lg:grid-cols-3'>
+      <div className='grid gap-3 md:grid-cols-3'>
         {feedbackOptions.map((option) => {
           const Icon = option.icon;
           const isSelected = selected === option.type;
@@ -69,16 +69,18 @@ export default function ToolFeedbackBar({ toolId, userId, className = '' }: Tool
               key={option.type}
               type='button'
               onClick={() => handleFeedback(option.type)}
-              className={`flex min-h-[9.5rem] flex-col items-start gap-3 rounded-lg border px-4 py-4 text-left text-sm transition ${
+              className={`flex min-h-[7.5rem] flex-col items-start gap-2 rounded-lg border px-4 py-4 text-left text-sm transition ${
                 isSelected ? option.className : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
               }`}
               disabled={isLoading}
             >
-              <Icon className='size-4 shrink-0' />
-              <span className='min-w-0 break-words leading-6'>
-                <span className='block font-medium leading-5'>{isLoading ? 'Saving...' : option.label}</span>
-                <span className='mt-1 block text-xs leading-5 text-slate-500'>{option.description}</span>
-              </span>
+              <div className='flex min-w-0 items-start gap-3'>
+                <Icon className='mt-0.5 size-4 shrink-0' />
+                <span className='min-w-0 break-words'>
+                  <span className='block font-medium leading-5'>{isLoading ? 'Saving...' : option.label}</span>
+                  <span className='mt-1 block text-xs leading-5 text-slate-500'>{option.description}</span>
+                </span>
+              </div>
             </button>
           );
         })}
