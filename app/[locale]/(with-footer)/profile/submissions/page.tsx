@@ -79,29 +79,93 @@ type CommercialViewStatus =
   | 'live_featured'
   | 'expired';
 
+type CommercialDetails = {
+  plan: string;
+  paymentConfirmed: boolean;
+  sponsored: boolean;
+  featuredDaysRequested: 0 | 3 | 7 | 14;
+  featuredUntil: Date | null;
+};
+
 function getRecord(value: unknown): Record<string, unknown> {
   return value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
 }
 
-function getCommercialStatus(tool: SubmittedTool): CommercialViewStatus {
+function getCommercialDetails(tool: SubmittedTool): CommercialDetails {
   const features = getRecord(tool.features);
   const submission = getRecord(features.submission);
   const commercial = getRecord(submission.commercial);
-  const plan = String(commercial.plan || 'free');
-
-  if (plan !== 'standard_paid') return 'free';
-
-  const paymentConfirmed = commercial.paymentConfirmed === true;
-  const sponsored = commercial.isSponsoredPlacement === true;
   const untilRaw = typeof commercial.featuredUntil === 'string' ? commercial.featuredUntil : '';
   const until = untilRaw ? new Date(untilRaw) : null;
+  const featuredDaysRequested = (() => {
+    const parsed = Number.parseInt(String(commercial.featuredDaysRequested ?? 0), 10);
+    if (parsed === 3 || parsed === 7 || parsed === 14) return parsed;
+    return 0;
+  })();
+
+  return {
+    plan: String(commercial.plan || 'free'),
+    paymentConfirmed: commercial.paymentConfirmed === true,
+    sponsored: commercial.isSponsoredPlacement === true,
+    featuredDaysRequested,
+    featuredUntil: until && !Number.isNaN(until.getTime()) ? until : null,
+  };
+}
+
+function getCommercialStatus(tool: SubmittedTool): CommercialViewStatus {
+  const details = getCommercialDetails(tool);
   const now = new Date();
 
-  if (!paymentConfirmed) return 'pending_payment';
+  if (details.plan !== 'standard_paid') return 'free';
+
+  if (!details.paymentConfirmed) return 'pending_payment';
   if (tool.status !== 'published') return 'paid_waiting_review';
-  if (sponsored && until && !Number.isNaN(until.getTime()) && until >= now) return 'live_featured';
-  if (sponsored && until && !Number.isNaN(until.getTime()) && until < now) return 'expired';
+  if (
+    details.sponsored &&
+    details.featuredUntil &&
+    !Number.isNaN(details.featuredUntil.getTime()) &&
+    details.featuredUntil >= now
+  ) {
+    return 'live_featured';
+  }
+  if (
+    details.sponsored &&
+    details.featuredUntil &&
+    !Number.isNaN(details.featuredUntil.getTime()) &&
+    details.featuredUntil < now
+  ) {
+    return 'expired';
+  }
   return 'paid_published';
+}
+
+function getDaysLeft(until: Date | null): number | null {
+  if (!until) return null;
+  const diff = until.getTime() - Date.now();
+  if (Number.isNaN(diff)) return null;
+  return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+}
+
+function getCommercialDetailLine(status: CommercialViewStatus, details: CommercialDetails): string {
+  const daysLeft = getDaysLeft(details.featuredUntil);
+
+  switch (status) {
+    case 'pending_payment':
+      return 'Stripe checkout is ready in your submission record.';
+    case 'paid_waiting_review':
+      return 'Payment is recorded and the listing is waiting for review.';
+    case 'live_featured':
+      return daysLeft === null
+        ? 'Featured placement is live.'
+        : `Featured placement is live and ends in ${daysLeft} day${daysLeft === 1 ? '' : 's'}.`;
+    case 'expired':
+      return 'The featured window ended. You can renew when needed.';
+    case 'paid_published':
+      return 'Paid submission published without an active featured window.';
+    case 'free':
+    default:
+      return 'Standard submission with no paid placement.';
+  }
 }
 
 function getCommercialBadge(status: CommercialViewStatus) {
@@ -165,6 +229,7 @@ export default async function SubmissionsPage({
   const [result, submissionEmailEnabled] = await Promise.all([getMySubmittedTools(), getMySubmissionEmailPreference()]);
   const tools = result.success ? result.tools : [];
   const pendingPaymentTools = tools.filter((tool) => getCommercialStatus(tool) === 'pending_payment');
+  const featuredTools = tools.filter((tool) => getCommercialStatus(tool) === 'live_featured');
   const firstPendingPaymentTool = pendingPaymentTools[0] || null;
   const firstPendingPaymentUrl = firstPendingPaymentTool ? getCommercialPaymentUrl(firstPendingPaymentTool) : null;
   const statusStats = tools.reduce(
@@ -259,6 +324,29 @@ export default async function SubmissionsPage({
         </section>
       )}
 
+      {featuredTools.length > 0 && (
+        <section className='theme-surface mb-6 rounded-lg border border-cyan-200 bg-cyan-50 p-4'>
+          <div className='flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between'>
+            <div>
+              <p className='text-sm font-semibold text-cyan-900'>
+                {featuredTools.length > 1 ? 'Active featured placements' : 'Active featured placement'}
+              </p>
+              <p className='mt-1 text-sm text-cyan-900/80'>
+                {featuredTools.length > 1
+                  ? 'Some of your paid listings are currently in a featured window.'
+                  : 'One of your paid listings is currently in a featured window.'}
+              </p>
+            </div>
+            <Link
+              href='/pricing'
+              className='inline-flex items-center justify-center rounded-lg border border-cyan-300 bg-white px-4 py-2 text-sm font-semibold text-cyan-900 hover:bg-cyan-100'
+            >
+              Review listing options
+            </Link>
+          </div>
+        </section>
+      )}
+
       {result.success && tools.length > 0 && (
         <section className='theme-surface mb-6 rounded-lg border border-slate-200 p-4'>
           <div className='grid gap-3 sm:grid-cols-2 lg:grid-cols-4'>
@@ -316,6 +404,7 @@ export default async function SubmissionsPage({
                   <tr key={tool.id} className='hover:bg-slate-50'>
                     {(() => {
                       const commercialStatus = getCommercialStatus(tool);
+                      const commercialDetails = getCommercialDetails(tool);
                       const paymentUrl = commercialStatus === 'pending_payment' ? getCommercialPaymentUrl(tool) : null;
 
                       let actionContent: JSX.Element | null = null;
@@ -370,7 +459,19 @@ export default async function SubmissionsPage({
                             <p className='mt-2 max-w-xs text-sm text-slate-500'>{getStatusDescription(tool.status)}</p>
                             <p className='mt-1 max-w-xs text-xs text-slate-400'>{getStatusActionHint(tool.status)}</p>
                           </td>
-                          <td className='px-6 py-4'>{getCommercialBadge(getCommercialStatus(tool))}</td>
+                          <td className='px-6 py-4'>
+                            <div className='space-y-2'>
+                              {getCommercialBadge(getCommercialStatus(tool))}
+                              <p className='max-w-xs text-xs leading-5 text-slate-500'>
+                                {getCommercialDetailLine(commercialStatus, commercialDetails)}
+                              </p>
+                              {commercialDetails.featuredDaysRequested > 0 && (
+                                <p className='text-xs text-slate-400'>
+                                  Featured window: {commercialDetails.featuredDaysRequested} days
+                                </p>
+                              )}
+                            </div>
+                          </td>
                           <td className='px-6 py-4 text-sm text-slate-500'>
                             {new Date(tool.created_at).toLocaleDateString()}
                           </td>
