@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
+import { isPlaceholderMediaUrl } from '@/lib/services/mediaReview';
+
 type ToolCardMediaProps = {
   imageUrl?: string | null;
   name: string;
@@ -34,11 +36,17 @@ export default function ToolCardMedia({ imageUrl, name, thumbnailUrl, title }: T
   const sources = useMemo(
     () =>
       [
+        imageUrl,
         thumbnailUrl,
         `/images/tool-media/${name}-editorial-cover.svg`,
         `/images/tool-media/${name}-cover.svg`,
-        imageUrl,
-      ].filter((value, index, array): value is string => Boolean(value) && array.indexOf(value) === index),
+      ].filter((value, index, array): value is string => {
+        if (!value || array.indexOf(value) !== index) {
+          return false;
+        }
+
+        return !isPlaceholderMediaUrl(value);
+      }),
     [imageUrl, name, thumbnailUrl],
   );
 
