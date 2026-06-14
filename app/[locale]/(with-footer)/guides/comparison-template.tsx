@@ -381,6 +381,55 @@ export function ComparisonPage({
           </div>
         </section>
 
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '直接进入对比' : 'Jump into comparison'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '如果你已经知道要比什么，就直接走下一步'
+              : 'If you already know what to compare, go straight to the next step'}
+          </h2>
+          <div className='mt-4 grid gap-3 md:grid-cols-3'>
+            <Link
+              href={config.guideHref}
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '回到指南' : 'Back to guide'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '如果你还想先看完整选型逻辑，就先回这页。'
+                  : 'Go back here if you still want the broader selection logic.'}
+              </p>
+            </Link>
+            <Link
+              href={config.altBrowseHref}
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '继续浏览工具' : 'Browse more tools'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '如果你想先扩大 shortlist，再回来比较，就从这里继续。'
+                  : 'Widen the shortlist first, then return when you are ready.'}
+              </p>
+            </Link>
+            <Link
+              href={nextPaths[0]?.href || config.guideHref}
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>
+                {nextPaths[0]?.title || (isChinese ? '下一个入口' : 'Next entry point')}
+              </p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {nextPaths[0]?.description ||
+                  (isChinese
+                    ? '如果你已经确定下一步方向，就直接去更窄的入口。'
+                    : 'If the next direction is clear, move into the narrower path.')}
+              </p>
+            </Link>
+          </div>
+        </section>
+
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
             <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
