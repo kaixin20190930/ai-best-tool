@@ -243,7 +243,7 @@ export default async function RecommendedTools({
           </div>
         </div>
       </div>
-      <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
+      <div className='grid gap-4 lg:grid-cols-2 xl:grid-cols-3'>
         {recommendedTools.map((tool) => {
           const reasons = getSimilarityReasons(tool, pricing, tagSlugs, isChinese, locale);
 

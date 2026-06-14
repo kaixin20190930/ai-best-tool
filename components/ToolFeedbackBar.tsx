@@ -58,7 +58,7 @@ export default function ToolFeedbackBar({ toolId, userId, className = '' }: Tool
   return (
     <div className={`space-y-3 ${className}`}>
       <div className='text-sm font-semibold text-slate-900'>Quick feedback</div>
-      <div className='grid gap-3 md:grid-cols-3'>
+      <div className='grid gap-3 lg:grid-cols-3'>
         {feedbackOptions.map((option) => {
           const Icon = option.icon;
           const isSelected = selected === option.type;
@@ -69,7 +69,7 @@ export default function ToolFeedbackBar({ toolId, userId, className = '' }: Tool
               key={option.type}
               type='button'
               onClick={() => handleFeedback(option.type)}
-              className={`flex min-h-[7.5rem] flex-col items-start gap-2 rounded-lg border px-4 py-4 text-left text-sm transition ${
+              className={`flex min-h-[6.5rem] flex-col items-start gap-2 rounded-lg border px-4 py-4 text-left text-sm transition ${
                 isSelected ? option.className : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
               }`}
               disabled={isLoading}
