@@ -187,7 +187,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '如果你关心的是协议覆盖、历史数据、趋势观察和对比研究，这几款工具会比泛 Web3 页更快把范围收窄。'
               : 'If protocol coverage, historical data, trend watching, and comparative research matter most, these tools narrow the field faster than a broad Web3 page.'
           }
-          toolNames={['messari', 'token-terminal', 'dune', 'defillama']}
+          toolNames={['messari', 'footprint', 'token-terminal', 'defillama']}
           compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
           compareTitle={
             isChinese ? '协议分析意图更强的下一步入口' : 'Next paths for stronger protocol-analytics intent'
@@ -218,6 +218,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               description: isChinese
                 ? '适合还没完全确定自己在选协议、钱包还是研究工具。'
                 : 'Good when you are not yet fully narrowed into protocol, wallet, or research tooling.',
+            },
+          ]}
+          nextEyebrow={isChinese ? '下一步入口' : 'Where to go next'}
+          nextTitle={
+            isChinese
+              ? '协议方向明确后，继续这样收窄'
+              : 'How to narrow the space once protocol analytics is clearly the lane'
+          }
+          nextDescription={
+            isChinese
+              ? '如果你已经明确在找协议工具，下一步就回 Web3 分类、搜索结果和本周新增继续筛。'
+              : 'Once protocol analytics is clearly the lane, the next step is to use Web3 categories, search results, and weekly additions to compare real candidates.'
+          }
+          nextLinks={[
+            {
+              href: '/categories/web3?sort=popular',
+              title: isChinese ? '进入 Web3 分类' : 'Open the Web3 category',
+              description: isChinese
+                ? '回到 Web3 目录继续看真实协议条目。'
+                : 'Return to the Web3 directory for real protocol-oriented listings.',
+            },
+            {
+              href: '/explore?search=protocol&sort=popular',
+              title: isChinese ? '搜索更多协议工具' : 'Search more protocol tools',
+              description: isChinese
+                ? '回到 Explore，用更窄的 protocol 关键词扩大 shortlist。'
+                : 'Return to Explore and widen the shortlist with protocol-specific search.',
+            },
+            {
+              href: '/new',
+              title: isChinese ? '看本周新增' : 'Check new this week',
+              description: isChinese
+                ? '看看最近补进来的 Web3 / 研究工具里有没有更合适的新候选。'
+                : 'See whether recent Web3 and research additions introduced a stronger fit.',
             },
           ]}
         />

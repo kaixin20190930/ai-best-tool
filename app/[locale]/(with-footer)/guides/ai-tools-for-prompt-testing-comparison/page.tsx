@@ -89,24 +89,82 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
       {
-        href: '/explore?search=prompt&sort=popular',
-        title: { cn: '继续看更多 prompt 候选', en: 'See more prompt candidates' },
+        href: '/guides/ai-tools-for-evals-comparison',
+        title: { cn: '转去评估工具对比', en: 'Go to evals tools comparison' },
         description: {
-          cn: '当你只想扩大 shortlist 时，直接回 Explore 最快。',
-          en: 'The fastest next step once you only need a wider shortlist.',
+          cn: '如果你的问题已经从 prompt 测试扩展到更广的验证体系，这页更自然。',
+          en: 'A more natural next step when the job expands from prompt testing into a broader evaluation system.',
         },
       },
     ],
+    toolSelectionNotes: {
+      langfuse: {
+        bestFor: {
+          cn: '想把 prompt 迭代、线上行为和评估闭环连在一起的产品团队。',
+          en: 'Product teams that want prompt iteration, production behavior, and evaluation loops connected together.',
+        },
+        whyPickIt: {
+          cn: '它适合把“测试 prompt”这件事放进持续迭代流程，而不是做几次孤立实验。',
+          en: 'It fits teams that want prompt testing inside a continuing iteration loop rather than as isolated experiments.',
+        },
+        watchOut: {
+          cn: '如果你只是想临时做 A/B 对比，它可能会比当前需求更完整。',
+          en: 'It may be more complete than necessary if the need is only occasional A/B comparison.',
+        },
+      },
+      langsmith: {
+        bestFor: {
+          cn: '更关心链路调试、评估集和复杂应用行为验证的团队。',
+          en: 'Teams more focused on trace debugging, eval datasets, and validating complex application behavior.',
+        },
+        whyPickIt: {
+          cn: '它很适合把 prompt 测试延伸成系统级验证，而不只是比较两版文案。',
+          en: 'It is a strong choice when prompt testing needs to grow into system-level validation rather than just comparing two prompt versions.',
+        },
+        watchOut: {
+          cn: '如果系统还很轻，或者并没有复杂链路，门槛会显得偏高。',
+          en: 'The overhead can feel high when the system is still light and does not need deep workflow tracing.',
+        },
+      },
+      helicone: {
+        bestFor: {
+          cn: '想先把请求表现、成本和 prompt 变化的效果看清楚的小团队。',
+          en: 'Small teams that first want clearer visibility into request behavior, spend, and the impact of prompt changes.',
+        },
+        whyPickIt: {
+          cn: '它很适合把 prompt 调整和线上结果先对上号，帮助做早期判断。',
+          en: 'It is practical for connecting prompt changes with live results early on.',
+        },
+        watchOut: {
+          cn: '如果你需要更重的实验管理和评估组织能力，后面可能仍会继续补别的层。',
+          en: 'You may still need another layer later if experiment management and eval organization become central.',
+        },
+      },
+      portkey: {
+        bestFor: {
+          cn: '把 prompt 测试和网关治理、限额、模型策略一起看待的团队。',
+          en: 'Teams treating prompt testing together with gateway governance, quotas, and model strategy.',
+        },
+        whyPickIt: {
+          cn: '它适合把“怎么测”与“怎么管模型出口”放在同一套决策里。',
+          en: 'It helps when the team wants testing decisions and model-access governance in the same layer.',
+        },
+        watchOut: {
+          cn: '如果你只需要轻量实验，它可能会比当前阶段更平台化。',
+          en: 'It may feel more platform-heavy than needed for lightweight experiments.',
+        },
+      },
+    },
     tips: {
       cn: [
-        '先看评估方式，再看 prompt 版本管理。',
-        '如果是团队使用，重点看结果复盘和共享能力。',
-        '比“能不能跑”更重要的是能不能稳定复现和比较。',
+        '先看评估方式，再看 prompt 版本管理和结果沉淀方式。',
+        '如果是团队使用，重点看结果复盘、共享和验收流程是否顺手。',
+        '比“能不能跑”更重要的是能不能稳定复现、比较和持续验证。',
       ],
       en: [
-        'Start with evaluation style, then move to prompt versioning.',
-        'For team use, focus on review and sharing of results.',
-        'More important than whether it can run is whether it can reproduce and compare reliably.',
+        'Start with evaluation style, then move to prompt versioning and result organization.',
+        'For team use, focus on review, sharing, and signoff workflow for results.',
+        'More important than whether it can run is whether it can reproduce, compare, and validate reliably over time.',
       ],
     },
     faqs: [

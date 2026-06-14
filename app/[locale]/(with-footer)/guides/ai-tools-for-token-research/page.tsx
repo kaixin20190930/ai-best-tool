@@ -1,0 +1,218 @@
+import { Metadata } from 'next';
+import Link from 'next/link';
+import { Coins, ExternalLink, SearchCheck, TrendingUp } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
+
+import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
+import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import GuideActionSection from '@/components/guides/GuideActionSection';
+import { StructuredDataServer } from '@/components/seo/StructuredData';
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: 'Metadata.home' });
+
+  return {
+    title:
+      locale === 'cn' || locale === 'tw'
+        ? 'AI 代币研究工具推荐 | AI Best Tool'
+        : `AI tools for token research | ${t('title')}`,
+    description:
+      locale === 'cn' || locale === 'tw'
+        ? '面向代币观察、叙事跟踪、项目比较和链上信息整理的 AI 工具选型指南。'
+        : 'A practical guide to AI tools for token research, narrative tracking, project comparison, and on-chain intelligence workflows.',
+  };
+}
+
+export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+  const isChinese = locale === 'cn' || locale === 'tw';
+  const categories = await getAllCategories(true).catch(() => []);
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: `${siteUrl}/${locale}` },
+    { name: isChinese ? '指南' : 'Guides', url: `${siteUrl}/${locale}/guides` },
+    {
+      name: isChinese ? '代币研究工具' : 'Token research tools',
+      url: `${siteUrl}/${locale}/guides/ai-tools-for-token-research`,
+    },
+  ]);
+  const faqs = [
+    {
+      question: isChinese ? '代币研究工具最适合做什么？' : 'What are token research tools best for?',
+      answer: isChinese
+        ? '适合做代币观察、叙事整理、基本面对比、链上行为参考和项目跟踪。'
+        : 'They are best for token watching, narrative synthesis, fundamentals comparison, on-chain context, and project tracking.',
+    },
+    {
+      question: isChinese ? '它和泛 Crypto 研究有什么区别？' : 'How is this different from broad crypto research?',
+      answer: isChinese
+        ? 'Crypto 研究更宽，可能包括协议、钱包、市场和新闻；代币研究更聚焦于具体项目与 token 本身。'
+        : 'Crypto research is broader and may include protocols, wallets, markets, and news. Token research is narrower and more focused on specific tokens and projects.',
+    },
+    {
+      question: isChinese ? '我应该先看哪些维度？' : 'What should I check first?',
+      answer: isChinese
+        ? '先看你更重视代币叙事、基本面、链上持有人结构，还是价格与流动性周边信息。'
+        : 'Start by deciding whether the priority is narrative, fundamentals, holder structure, or surrounding price and liquidity context.',
+    },
+    {
+      question: isChinese ? '适合长期跟踪吗？' : 'Is this useful for long-term tracking?',
+      answer: isChinese
+        ? '很适合，尤其当你要持续比较同赛道项目、跟踪指标变化和观察市场预期时。'
+        : 'Yes, especially when you need to compare projects over time, watch metric changes, and follow how market expectations shift.',
+    },
+  ];
+  const tips = isChinese
+    ? [
+        '先分清你在做的是叙事研究、代币基本面比较，还是链上持有人结构判断。',
+        '看它是否能把市场信息、协议指标和链上行为放在一个更可用的视角里。',
+        '如果你会持续跟踪一个赛道，优先看历史数据、导出和对比效率。',
+      ]
+    : [
+        'Separate narrative research, token-fundamental comparison, and holder-structure analysis before comparing tools.',
+        'Look for tools that connect market context, protocol metrics, and on-chain behavior into one usable view.',
+        'If you track a sector over time, prioritize history depth, exports, and comparison efficiency.',
+      ];
+
+  return (
+    <>
+      <StructuredDataServer data={breadcrumbSchema} />
+      <StructuredDataServer data={generateFAQSchema(faqs)} />
+      <div className='theme-page mx-auto max-w-6xl px-4 py-8 lg:px-6 lg:py-12'>
+        <section className='rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm lg:p-10'>
+          <div className='flex flex-wrap items-center gap-2'>
+            <span className='inline-flex items-center gap-2 rounded-full bg-cyan-50 px-3 py-1 text-sm font-semibold text-cyan-700'>
+              <Coins className='size-4' />
+              {isChinese ? '代币研究工具推荐' : 'Token research tools'}
+            </span>
+            <span className='inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-sm font-semibold text-slate-700'>
+              <TrendingUp className='size-4' />
+              {isChinese ? '代币与项目判断优先' : 'Token and project judgment first'}
+            </span>
+          </div>
+
+          <h1 className='mt-4 max-w-4xl text-3xl font-bold tracking-tight text-slate-950 lg:text-5xl'>
+            {isChinese
+              ? 'AI 代币研究工具推荐：从叙事判断到项目比较，怎么选更合适'
+              : 'AI tools for token research: how to choose from narratives to project comparison'}
+          </h1>
+          <p className='mt-4 max-w-3xl text-base leading-7 text-slate-600 lg:text-lg'>
+            {isChinese
+              ? '代币研究工具真正要解决的，不是给你更多图表，而是帮助你更快把“这个 token 值不值得继续看”判断清楚。'
+              : 'Token-research tools are not mainly about showing more charts. The real job is helping you judge faster whether a token or project deserves more of your attention.'}
+          </p>
+
+          <div className='mt-6 flex flex-wrap gap-3'>
+            <Link
+              href='/explore?search=token&sort=popular'
+              className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+            >
+              {isChinese ? '看代币研究相关工具' : 'Browse token-research tools'}
+              <ExternalLink className='size-4' />
+            </Link>
+            <Link
+              href='/guides/ai-tools-for-crypto-research'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+            >
+              {isChinese ? '回到 Crypto 研究指南' : 'Back to crypto research guide'}
+            </Link>
+            <Link
+              href='/guides/ai-tools-for-token-research-comparison'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+            >
+              {isChinese ? '看代币研究对比页' : 'Token research comparison'}
+            </Link>
+          </div>
+        </section>
+
+        <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
+          <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '判断顺序' : 'How to judge'}
+            </p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+              {isChinese ? '先看研究视角，再看数据深度' : 'Start with the research angle, then data depth'}
+            </h2>
+            <div className='mt-4 space-y-3'>
+              {tips.map((tip) => (
+                <div key={tip} className='rounded-lg bg-slate-50 p-4 text-sm leading-6 text-slate-700'>
+                  <div className='flex items-start gap-3'>
+                    <SearchCheck className='mt-0.5 size-4 shrink-0 text-emerald-600' />
+                    <span>{tip}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <aside className='rounded-[18px] border border-slate-200 bg-slate-50 p-6 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '相关分类' : 'Start here'}
+            </p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+              {isChinese ? '代币研究工具通常会落在这些分类里' : 'Token-research tools often sit in these categories'}
+            </h2>
+            <div className='mt-4 grid gap-2'>
+              {categories
+                .filter((category) => ['web3', 'research', 'developer-tools'].includes(String(category.slug)))
+                .slice(0, 6)
+                .map((category) => (
+                  <Link
+                    key={category.id}
+                    href={`/categories/${category.slug}`}
+                    className='flex items-center justify-between rounded-lg border border-white bg-white px-4 py-3 text-sm text-slate-700 shadow-sm hover:bg-slate-100'
+                  >
+                    <span>{getLocalizedField(category.name, locale)}</span>
+                    <span className='text-xs text-slate-500'>
+                      {'toolCount' in category && typeof category.toolCount === 'number' ? category.toolCount : ''}
+                    </span>
+                  </Link>
+                ))}
+            </div>
+          </aside>
+        </section>
+
+        <GuideActionSection
+          locale={locale}
+          eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}
+          title={isChinese ? '更贴近代币研究的真实入口' : 'Real entry points for token research'}
+          description={
+            isChinese
+              ? '如果你关心的是 token 的基本面、项目比较和市场语境，而不是泛看板浏览，这几款工具会更快把范围收窄。'
+              : 'If the real job is token fundamentals, project comparison, and market context rather than broad dashboard browsing, these tools narrow the field faster.'
+          }
+          toolNames={['messari', 'token-terminal', 'defillama', 'nansen']}
+          compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
+          compareTitle={isChinese ? '代币研究意图更强的下一步入口' : 'Next paths for stronger token-research intent'}
+          compareDescription={
+            isChinese
+              ? '当你已经明确自己在看 token，而不是泛链上分析或钱包监控，继续进入更窄的比较页会更有效。'
+              : 'Once the real job is token research rather than broad on-chain analysis or wallet monitoring, narrower comparison pages work better.'
+          }
+          compareLinks={[
+            {
+              href: '/guides/ai-tools-for-token-research-comparison',
+              title: isChinese ? '代币研究工具对比' : 'Token research comparison',
+              description: isChinese
+                ? '适合直接横向看项目比较、指标框架和研究深度。'
+                : 'A direct side-by-side path for project comparison, metric framing, and research depth.',
+            },
+            {
+              href: '/guides/ai-tools-for-crypto-research-comparison',
+              title: isChinese ? 'Crypto 研究工具对比' : 'Crypto research comparison',
+              description: isChinese
+                ? '如果你发现问题更宽，开始涉及市场叙事和情报整合，这页更合适。'
+                : 'More useful if the question broadens into market narratives and research synthesis.',
+            },
+            {
+              href: '/guides/ai-tools-for-protocol-analytics-comparison',
+              title: isChinese ? '协议分析工具对比' : 'Protocol analytics comparison',
+              description: isChinese
+                ? '如果真实研究点更偏协议健康和使用趋势，这页更贴近目标。'
+                : 'Move there if the real research question is more about protocol health and usage trends.',
+            },
+          ]}
+        />
+      </div>
+    </>
+  );
+}

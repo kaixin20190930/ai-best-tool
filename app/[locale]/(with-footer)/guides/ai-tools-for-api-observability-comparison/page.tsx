@@ -30,6 +30,36 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     compareSubtitle: { cn: 'API observability', en: 'API observability' },
     preferredToolNames: ['langfuse', 'helicone', 'portkey', 'langsmith'],
+    comparisonDimensions: [
+      {
+        title: { cn: '日志可读性', en: 'Log readability' },
+        description: {
+          cn: '先看能不能快速找到一次调用为什么失败，而不是只看有没有日志。',
+          en: 'Check whether you can quickly tell why a request failed, not just whether logs exist.',
+        },
+      },
+      {
+        title: { cn: '成本可见性', en: 'Cost visibility' },
+        description: {
+          cn: '调用量、模型使用和费用分布越清楚，团队越容易做预算治理。',
+          en: 'The clearer usage, model mix, and spend distribution are, the easier it is to control budget.',
+        },
+      },
+      {
+        title: { cn: '评估与反馈闭环', en: 'Evaluation and feedback loops' },
+        description: {
+          cn: '如果你要持续优化提示词和输出，评估、评分和回放能力会变得很重要。',
+          en: 'If you want to continuously improve prompts and outputs, evaluation, scoring, and replay become important.',
+        },
+      },
+      {
+        title: { cn: '生产接入深度', en: 'Production integration depth' },
+        description: {
+          cn: '一旦要进真实生产，权限、保留周期、导出和告警就是硬指标。',
+          en: 'Once it enters production, permissions, retention, exports, and alerting are hard requirements.',
+        },
+      },
+    ],
     decisionCards: [
       {
         title: { cn: '看请求日志与调试', en: 'Request logs and debugging' },
@@ -89,24 +119,82 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
       {
-        href: '/explore?search=observability&sort=popular',
-        title: { cn: '继续看更多可观测候选', en: 'See more observability candidates' },
+        href: '/guides/ai-tools-for-automation-comparison',
+        title: { cn: '转去自动化工具对比', en: 'Go to automation tools comparison' },
         description: {
-          cn: '当你只需要扩大 shortlist 时，直接回 Explore 最快。',
-          en: 'The fastest next step once you only need a wider shortlist.',
+          cn: '如果你的问题已经不只是日志，而是告警、执行和故障处理链路，这页更合适。',
+          en: 'Move there if the real problem is no longer just logs, but alerting, execution, and failure handling.',
         },
       },
     ],
+    toolSelectionNotes: {
+      langfuse: {
+        bestFor: {
+          cn: '已经上线 AI 请求、开始关心提示词质量、追踪链路和评估闭环的产品团队。',
+          en: 'Product teams already shipping AI requests and now caring about prompt quality, traces, and evaluation loops.',
+        },
+        whyPickIt: {
+          cn: '它更像一套围绕生产日志与质量迭代的工作台，适合把“模型表现”真正运营起来。',
+          en: 'It works like a production-focused workspace for logs and quality iteration, which helps teams actually operate model performance.',
+        },
+        watchOut: {
+          cn: '如果你现在只想先看成本，不打算做评估或提示词治理，它可能会比你当前需求更深。',
+          en: 'It may be deeper than needed if you mainly want cost visibility and are not ready for evaluation or prompt governance yet.',
+        },
+      },
+      helicone: {
+        bestFor: {
+          cn: '想先把请求日志、使用量和成本分布看清楚的开发者与小团队。',
+          en: 'Developers and small teams that first want clearer request logs, usage visibility, and cost breakdowns.',
+        },
+        whyPickIt: {
+          cn: '它更偏轻量接入和成本可见性，适合先把真实流量与花费跑明白。',
+          en: 'It leans toward lighter integration and cost visibility, which is great for making real traffic and spend understandable first.',
+        },
+        watchOut: {
+          cn: '如果你要的是更重的评估、实验和团队工作流，后面多半还会继续扩工具栈。',
+          en: 'You may still need more tooling later if evaluation, experimentation, and team workflow become first-class needs.',
+        },
+      },
+      portkey: {
+        bestFor: {
+          cn: '把可观测和网关治理放在一起看，需要路由、限额与追踪一体化的团队。',
+          en: 'Teams that want observability and gateway governance together, with routing, limits, and traces in one layer.',
+        },
+        whyPickIt: {
+          cn: '它不是单纯看日志，而是把模型出口控制和观测结合起来，适合更接近平台层的决策。',
+          en: 'It is not only about logs; it combines model-access control and observability, which fits more platform-level decisions.',
+        },
+        watchOut: {
+          cn: '如果你只想补一个简单日志层，它可能会显得比当前阶段更重。',
+          en: 'It can feel heavier than necessary when all you want is a simple logging layer.',
+        },
+      },
+      langsmith: {
+        bestFor: {
+          cn: '已经把重点放在链路调试、评估集和复杂应用行为分析上的团队。',
+          en: 'Teams already focused on trace debugging, evaluation sets, and analyzing complex application behavior.',
+        },
+        whyPickIt: {
+          cn: '它更适合把“应用是怎么一步步走到这个结果”的问题追清楚。',
+          en: 'It is especially strong when the key question is how the application arrived at a result step by step.',
+        },
+        watchOut: {
+          cn: '如果你的系统还很轻，或者并不需要复杂链路分析，使用门槛会显得偏高。',
+          en: 'If the system is still lightweight or does not need deep trace analysis, the overhead may feel high.',
+        },
+      },
+    },
     tips: {
       cn: [
-        '先看日志和追踪，再看成本与质量指标。',
-        '如果是团队使用，重点看权限、保留周期和告警能力。',
-        '比“图表多”更重要的是能不能真正支持调试和治理。',
+        '先分清你是在补日志排障、成本治理，还是提示词质量与评估闭环。',
+        '如果是团队使用，重点看权限、保留周期、导出方式和告警能力。',
+        '比“图表多”更重要的是它能不能真实支持调试、治理和复盘。',
       ],
       en: [
-        'Start with logs and tracing, then move to cost and quality metrics.',
-        'For team use, focus on permissions, retention, and alerting.',
-        'More important than lots of charts is whether the tool truly supports debugging and governance.',
+        'Start by separating logging and debugging needs from cost governance and prompt-quality evaluation loops.',
+        'For team use, focus on permissions, retention, export options, and alerting.',
+        'More important than lots of charts is whether the tool truly supports debugging, governance, and review.',
       ],
     },
     faqs: [

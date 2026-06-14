@@ -56,6 +56,16 @@ type ComparisonConfig = {
       en: string;
     };
   }[];
+  comparisonDimensions?: {
+    title: {
+      cn: string;
+      en: string;
+    };
+    description: {
+      cn: string;
+      en: string;
+    };
+  }[];
   fitFor?: {
     title: {
       cn: string;
@@ -88,6 +98,24 @@ type ComparisonConfig = {
     };
   }[];
   preferredToolNames?: string[];
+  allowPopularFallback?: boolean;
+  toolSelectionNotes?: Record<
+    string,
+    {
+      bestFor: {
+        cn: string;
+        en: string;
+      };
+      whyPickIt: {
+        cn: string;
+        en: string;
+      };
+      watchOut: {
+        cn: string;
+        en: string;
+      };
+    }
+  >;
   tips: {
     cn: string[];
     en: string[];
@@ -111,6 +139,11 @@ type ComparisonTool = ReturnType<typeof toolToListRow> & {
   averageRating: number;
   ratingCount: number;
   summary: string;
+  selectionNote?: {
+    bestFor: string;
+    whyPickIt: string;
+    watchOut: string;
+  };
 };
 
 function getPricingLabel(pricing: Tool['pricing'], isChinese: boolean): string {
@@ -125,9 +158,17 @@ function getPricingLabel(pricing: Tool['pricing'], isChinese: boolean): string {
   return isChinese ? '付费' : 'Paid';
 }
 
-function getRatingDisplay(averageRating: number, isChinese: boolean): string {
-  if (averageRating) {
-    return `${averageRating.toFixed(1)}★`;
+function getRatingDisplay(averageRating: unknown, isChinese: boolean): string {
+  let normalizedRating = NaN;
+
+  if (typeof averageRating === 'number') {
+    normalizedRating = averageRating;
+  } else if (typeof averageRating === 'string') {
+    normalizedRating = Number(averageRating);
+  }
+
+  if (Number.isFinite(normalizedRating) && normalizedRating > 0) {
+    return `${normalizedRating.toFixed(1)}★`;
   }
 
   return isChinese ? '暂无' : 'N/A';
@@ -150,12 +191,13 @@ export async function buildComparisonPageData(locale: string, config: Comparison
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const comparisonPath = config.guideHref.endsWith('-comparison') ? config.guideHref : `${config.guideHref}-comparison`;
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
     { name: isChinese ? '指南' : 'Guides', url: `${siteUrl}/${locale}/guides` },
     {
       name: isChinese ? config.breadcrumbLabel.cn : config.breadcrumbLabel.en,
-      url: `${siteUrl}/${locale}${config.guideHref}`,
+      url: `${siteUrl}/${locale}${comparisonPath}`,
     },
   ]);
 
@@ -178,7 +220,10 @@ export async function buildComparisonPageData(locale: string, config: Comparison
 
   const preferredList = preferredTools.filter((tool): tool is Tool => Boolean(tool));
   const searchList = queryResult?.data || [];
-  const fallbackList = searchList.length > 0 ? searchList : popularTools;
+  let fallbackList = searchList;
+  if (fallbackList.length === 0) {
+    fallbackList = config.allowPopularFallback === false ? [] : popularTools;
+  }
   const mergedTools = [...preferredList, ...fallbackList].reduce<Tool[]>((acc, tool) => {
     if (!acc.some((item) => item.id === tool.id)) {
       acc.push(tool);
@@ -189,6 +234,16 @@ export async function buildComparisonPageData(locale: string, config: Comparison
   const categoryMap = new Map(categories.map((category) => [category.id, category]));
   const tools: ComparisonTool[] = sourceTools.map((tool, index) => {
     const row = toolToListRow(tool, locale);
+    let selectionNote: ComparisonTool['selectionNote'] | undefined;
+    const noteSource = config.toolSelectionNotes?.[tool.name];
+    if (noteSource) {
+      selectionNote = {
+        bestFor: isChinese ? noteSource.bestFor.cn : noteSource.bestFor.en,
+        whyPickIt: isChinese ? noteSource.whyPickIt.cn : noteSource.whyPickIt.en,
+        watchOut: isChinese ? noteSource.watchOut.cn : noteSource.watchOut.en,
+      };
+    }
+
     return {
       ...row,
       rank: index + 1,
@@ -200,6 +255,7 @@ export async function buildComparisonPageData(locale: string, config: Comparison
       averageRating: tool.averageRating,
       ratingCount: tool.ratingCount,
       summary: row.content,
+      selectionNote,
     };
   });
 
@@ -229,6 +285,10 @@ export async function buildComparisonPageData(locale: string, config: Comparison
     title: isChinese ? item.title.cn : item.title.en,
     description: isChinese ? item.description.cn : item.description.en,
   }));
+  const comparisonDimensions = (config.comparisonDimensions || []).map((item) => ({
+    title: isChinese ? item.title.cn : item.title.en,
+    description: isChinese ? item.description.cn : item.description.en,
+  }));
 
   return {
     isChinese,
@@ -239,6 +299,7 @@ export async function buildComparisonPageData(locale: string, config: Comparison
     tools,
     tips,
     decisionCards,
+    comparisonDimensions,
     fitFor,
     notFor,
     nextPaths,
@@ -255,6 +316,7 @@ export function ComparisonPage({
   tools,
   tips,
   decisionCards,
+  comparisonDimensions,
   fitFor,
   notFor,
   nextPaths,
@@ -407,6 +469,25 @@ export function ComparisonPage({
           </section>
         )}
 
+        {comparisonDimensions.length > 0 && (
+          <section className='mt-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '先看比较维度' : 'Comparison dimensions'}
+            </p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+              {isChinese ? '选工具时先盯住这几个关键点' : 'Watch these decision points first'}
+            </h2>
+            <div className='mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+              {comparisonDimensions.map((item) => (
+                <div key={item.title} className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+                  <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
         <section className='mt-8'>
           <div className='mb-4 flex items-end justify-between gap-3'>
             <div>
@@ -420,56 +501,107 @@ export function ComparisonPage({
             <p className='text-sm text-slate-500'>{isChinese ? `${tools.length} 个工具` : `${tools.length} tools`}</p>
           </div>
 
-          <div className='grid gap-4'>
-            {tools.map((tool) => (
-              <div key={tool.id} className='rounded-[18px] border border-slate-200 bg-white p-5 shadow-sm'>
-                <div className='flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between'>
-                  <div className='min-w-0 flex-1'>
-                    <div className='flex flex-wrap items-center gap-2'>
-                      <span className='inline-flex size-8 items-center justify-center rounded-full bg-cyan-50 text-sm font-bold text-cyan-700'>
-                        {tool.rank}
-                      </span>
-                      <Link
-                        href={`/ai/${tool.name}`}
-                        className='text-lg font-semibold text-slate-950 hover:text-cyan-700'
-                      >
-                        {tool.title}
-                      </Link>
-                      <span className='rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700'>
-                        {getPricingLabel(tool.pricing, isChinese)}
-                      </span>
-                    </div>
-                    <p className='mt-2 text-sm leading-6 text-slate-600'>{tool.summary}</p>
-                  </div>
+          {tools.length > 0 ? (
+            <div className='grid gap-4'>
+              {tools.map((tool) => (
+                <div key={tool.id} className='rounded-[18px] border border-slate-200 bg-white p-5 shadow-sm'>
+                  <div className='flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between'>
+                    <div className='min-w-0 flex-1'>
+                      <div className='flex flex-wrap items-center gap-2'>
+                        <span className='inline-flex size-8 items-center justify-center rounded-full bg-cyan-50 text-sm font-bold text-cyan-700'>
+                          {tool.rank}
+                        </span>
+                        <Link
+                          href={`/ai/${tool.name}`}
+                          className='text-lg font-semibold text-slate-950 hover:text-cyan-700'
+                        >
+                          {tool.title}
+                        </Link>
+                        <span className='rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700'>
+                          {getPricingLabel(tool.pricing, isChinese)}
+                        </span>
+                      </div>
+                      <p className='mt-2 text-sm leading-6 text-slate-600'>{tool.summary}</p>
 
-                  <div className='grid gap-3 text-sm text-slate-600 lg:w-[320px] lg:grid-cols-2'>
-                    <div className='rounded-xl bg-slate-50 p-3'>
-                      <div className='text-xs uppercase tracking-wide text-slate-500'>
-                        {isChinese ? '评分' : 'Rating'}
-                      </div>
-                      <div className='mt-1 font-semibold text-slate-900'>
-                        {getRatingDisplay(tool.averageRating, isChinese)}
-                      </div>
+                      {tool.selectionNote ? (
+                        <div className='mt-4 grid gap-3 md:grid-cols-3'>
+                          <div className='rounded-xl border border-emerald-200 bg-emerald-50/70 p-3'>
+                            <div className='text-xs font-semibold uppercase tracking-wide text-emerald-700'>
+                              {isChinese ? '更适合' : 'Best for'}
+                            </div>
+                            <div className='mt-1 text-sm leading-6 text-slate-700'>{tool.selectionNote.bestFor}</div>
+                          </div>
+                          <div className='rounded-xl border border-cyan-200 bg-cyan-50/70 p-3'>
+                            <div className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                              {isChinese ? '为什么会选它' : 'Why pick it'}
+                            </div>
+                            <div className='mt-1 text-sm leading-6 text-slate-700'>{tool.selectionNote.whyPickIt}</div>
+                          </div>
+                          <div className='rounded-xl border border-amber-200 bg-amber-50/70 p-3'>
+                            <div className='text-xs font-semibold uppercase tracking-wide text-amber-700'>
+                              {isChinese ? '要注意' : 'Watch out'}
+                            </div>
+                            <div className='mt-1 text-sm leading-6 text-slate-700'>{tool.selectionNote.watchOut}</div>
+                          </div>
+                        </div>
+                      ) : null}
                     </div>
-                    <div className='rounded-xl bg-slate-50 p-3'>
-                      <div className='text-xs uppercase tracking-wide text-slate-500'>
-                        {isChinese ? '评分数' : 'Reviews'}
+
+                    <div className='grid gap-3 text-sm text-slate-600 lg:w-[320px] lg:grid-cols-2'>
+                      <div className='rounded-xl bg-slate-50 p-3'>
+                        <div className='text-xs uppercase tracking-wide text-slate-500'>
+                          {isChinese ? '评分' : 'Rating'}
+                        </div>
+                        <div className='mt-1 font-semibold text-slate-900'>
+                          {getRatingDisplay(tool.averageRating, isChinese)}
+                        </div>
                       </div>
-                      <div className='mt-1 font-semibold text-slate-900'>{tool.ratingCount || 0}</div>
-                    </div>
-                    <div className='rounded-xl bg-slate-50 p-3 lg:col-span-2'>
-                      <div className='text-xs uppercase tracking-wide text-slate-500'>
-                        {isChinese ? '分类' : 'Category'}
+                      <div className='rounded-xl bg-slate-50 p-3'>
+                        <div className='text-xs uppercase tracking-wide text-slate-500'>
+                          {isChinese ? '评分数' : 'Reviews'}
+                        </div>
+                        <div className='mt-1 font-semibold text-slate-900'>{tool.ratingCount || 0}</div>
                       </div>
-                      <div className='mt-1 font-semibold text-slate-900'>
-                        {tool.categoryLabel || (isChinese ? '未分类' : 'Uncategorized')}
+                      <div className='rounded-xl bg-slate-50 p-3 lg:col-span-2'>
+                        <div className='text-xs uppercase tracking-wide text-slate-500'>
+                          {isChinese ? '分类' : 'Category'}
+                        </div>
+                        <div className='mt-1 font-semibold text-slate-900'>
+                          {tool.categoryLabel || (isChinese ? '未分类' : 'Uncategorized')}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
+              ))}
+            </div>
+          ) : (
+            <div className='rounded-[18px] border border-dashed border-slate-300 bg-slate-50 p-6'>
+              <p className='text-base font-semibold text-slate-950'>
+                {isChinese ? '这一组工具还在继续补货中' : 'This tool cluster is still being expanded'}
+              </p>
+              <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '当前目录里还没有足够多可直接横向比较的条目。你可以先看上面的决策说明，再进入搜索或相邻的 comparison 页面继续缩小范围。'
+                  : 'There are not enough directly comparable listings in this cluster yet. Use the decision guidance above, then continue through search or adjacent comparison pages to narrow the field.'}
+              </p>
+              <div className='mt-4 flex flex-wrap gap-3'>
+                <Link
+                  href={config.altBrowseHref}
+                  className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+                >
+                  {isChinese ? config.altBrowseLabel.cn : config.altBrowseLabel.en}
+                  <ArrowRight className='size-4' />
+                </Link>
+                <Link
+                  href={config.guideHref}
+                  className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100'
+                >
+                  {isChinese ? config.backGuideLabel.cn : config.backGuideLabel.en}
+                </Link>
               </div>
-            ))}
-          </div>
+            </div>
+          )}
         </section>
 
         {nextPaths.length > 0 && (

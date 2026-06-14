@@ -521,6 +521,32 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-tools-for-lead-generation',
+    priority: 0.77,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 获客工具推荐',
+      en: 'AI tools for lead generation',
+    },
+    desc: {
+      cn: '适合线索发现、名单整理、补全和初步筛选。',
+      en: 'For lead discovery, list building, enrichment, and early qualification.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-sales-prospecting',
+    priority: 0.77,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 销售拓客工具推荐',
+      en: 'AI tools for sales prospecting',
+    },
+    desc: {
+      cn: '适合外联准备、个性化触达和 prospecting 工作流。',
+      en: 'For outreach prep, personalization, and sales prospecting workflows.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-ecommerce',
     priority: 0.73,
     changeFrequency: 'monthly',
@@ -557,6 +583,32 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     desc: {
       cn: '把常见销售工具放在一起快速对照。',
       en: 'Compare common sales tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-lead-generation-comparison',
+    priority: 0.78,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 获客工具对比',
+      en: 'AI lead generation tools comparison',
+    },
+    desc: {
+      cn: '把常见获客工具放在一起快速对照。',
+      en: 'Compare common lead-generation tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-sales-prospecting-comparison',
+    priority: 0.78,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 销售拓客工具对比',
+      en: 'AI sales prospecting tools comparison',
+    },
+    desc: {
+      cn: '把常见销售拓客工具放在一起快速对照。',
+      en: 'Compare common sales prospecting tools side by side.',
     },
   },
   {
@@ -635,6 +687,32 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     desc: {
       cn: '把常见 Crypto 研究工具放在一起快速对照。',
       en: 'Compare common crypto research tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-token-research',
+    priority: 0.78,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 代币研究工具推荐',
+      en: 'AI tools for token research',
+    },
+    desc: {
+      cn: '适合代币观察、项目比较、叙事整理和基本面研究。',
+      en: 'For token watching, project comparison, narrative synthesis, and fundamentals research.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-token-research-comparison',
+    priority: 0.79,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 代币研究工具对比',
+      en: 'AI token research tools comparison',
+    },
+    desc: {
+      cn: '把常见代币研究工具放在一起快速对照。',
+      en: 'Compare common token-research tools side by side.',
     },
   },
   {
@@ -919,6 +997,7 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/ai-tools-for-research',
   '/guides/ai-tools-for-developers',
   '/guides/ai-tools-for-automation',
+  '/guides/ai-tools-for-lead-generation',
   '/guides/ai-tools-for-code-review',
   '/guides/ai-tools-for-prompt-testing',
   '/guides/ai-tools-for-evals',
@@ -932,6 +1011,7 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/ai-tools-for-web3',
   '/guides/ai-tools-for-web3-analysis',
   '/guides/ai-tools-for-crypto-research',
+  '/guides/ai-tools-for-token-research',
   '/guides/ai-tools-for-wallet-research',
   '/guides/ai-tools-for-crypto-portfolio-tracking',
   '/guides/ai-tools-for-on-chain-analysis',

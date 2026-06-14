@@ -89,24 +89,82 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
       {
-        href: '/explore?search=code%20review&sort=popular',
-        title: { cn: '继续看更多代码审查候选', en: 'See more code review candidates' },
+        href: '/guides/ai-tools-for-prompt-testing-comparison',
+        title: { cn: '转去 Prompt 测试对比', en: 'Go to prompt testing comparison' },
         description: {
-          cn: '当你只想扩大 shortlist 时，直接回 Explore 最快。',
-          en: 'The fastest next step once you only need a wider shortlist.',
+          cn: '如果你的 review 已经延伸到 AI 输出质量、评估和回归验证，这页更贴近后续流程。',
+          en: 'A better path when review work starts overlapping with output quality, evals, and regression checks.',
         },
       },
     ],
+    toolSelectionNotes: {
+      cursor: {
+        bestFor: {
+          cn: '已经主要在编辑器里 review 改动、顺手修改代码和补充说明的开发者。',
+          en: 'Developers who mostly review changes inside the editor and often jump directly into code fixes or explanations.',
+        },
+        whyPickIt: {
+          cn: '它把 review 和改代码放得很近，适合快速理解改动并立刻处理。',
+          en: 'It keeps review close to editing, which is useful when understanding a diff and fixing it happen almost together.',
+        },
+        watchOut: {
+          cn: '如果团队重点在 PR 线程、协作节奏和多人审批，它并不天然替代完整的 review 流程。',
+          en: 'It does not automatically replace a full PR-centric review workflow when collaboration and approvals are the real center of gravity.',
+        },
+      },
+      claude: {
+        bestFor: {
+          cn: '需要更长上下文、想让工具帮助解释改动意图和潜在风险的人。',
+          en: 'People who want longer-context help for understanding change intent and surfacing possible risks.',
+        },
+        whyPickIt: {
+          cn: '它更适合把 diff 放进更完整的上下文里去理解，而不只是做一句话点评。',
+          en: 'It works well when the diff needs to be understood in fuller context rather than reduced to a quick comment.',
+        },
+        watchOut: {
+          cn: '如果你要的是严格贴合 PR 流程的自动化落地，仍然要配合具体的工作流工具。',
+          en: 'You will still need more workflow-specific tooling if the goal is tighter PR-process automation.',
+        },
+      },
+      phind: {
+        bestFor: {
+          cn: '更偏技术排查、想把 review 问题延伸成定位和修复线索的开发者。',
+          en: 'Developers who lean technical and want review findings to turn into debugging and fix-oriented investigation.',
+        },
+        whyPickIt: {
+          cn: '它适合把“这里可能有问题”继续追成“为什么会这样、应该怎么改”。',
+          en: 'It is useful when you want to turn a possible issue into a deeper why-and-how-to-fix thread.',
+        },
+        watchOut: {
+          cn: '如果你更看重团队 review 反馈的一致性，它未必是最顺手的入口。',
+          en: 'It may not be the cleanest first stop when the main need is consistent team review feedback.',
+        },
+      },
+      chatgpt: {
+        bestFor: {
+          cn: '想快速做 PR 解释、review 草稿或改动总结的人。',
+          en: 'People who want quick PR explanations, review drafts, or change summaries.',
+        },
+        whyPickIt: {
+          cn: '它很适合把 review 讨论先拉起来，尤其是在你还没完全确定问题表达方式的时候。',
+          en: 'It is a practical way to get a review discussion started, especially when you have not fully shaped the issue yet.',
+        },
+        watchOut: {
+          cn: '如果没有配合代码上下文和真实 diff，反馈很容易变得泛。',
+          en: 'Feedback can become generic quickly if it is not grounded in enough code context and the real diff.',
+        },
+      },
+    },
     tips: {
       cn: [
-        '先看 diff 理解和风险提示，再看评论质量。',
-        '如果是团队使用，重点看噪音控制和协作贴合度。',
-        '比“会不会说”更重要的是能不能让 review 更稳更快。',
+        '先看 diff 理解和风险提示，再看评论质量与可执行性。',
+        '如果是团队使用，重点看噪音控制、协作贴合度和 review 节奏。',
+        '比“会不会说”更重要的是能不能让 review 过程更稳、更快、更一致。',
       ],
       en: [
-        'Start with diff understanding and risk checks, then move to comment quality.',
-        'For team use, focus on noise control and collaboration fit.',
-        'More important than sounding smart is whether the tool makes review steadier and faster.',
+        'Start with diff understanding and risk checks, then move to comment quality and actionability.',
+        'For team use, focus on noise control, collaboration fit, and review rhythm.',
+        'More important than sounding smart is whether the tool makes review steadier, faster, and more consistent.',
       ],
     },
     faqs: [

@@ -29,7 +29,37 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       en: 'A quick side-by-side look at common model routing tools',
     },
     compareSubtitle: { cn: 'Model routing', en: 'Model routing' },
-    preferredToolNames: ['openrouter', 'portkey', 'helicone', 'langfuse'],
+    preferredToolNames: ['openrouter', 'portkey', 'together-ai', 'helicone'],
+    comparisonDimensions: [
+      {
+        title: { cn: '供应商覆盖', en: 'Provider coverage' },
+        description: {
+          cn: '先看能接多少模型供应商，以及切换时会不会把你锁得太死。',
+          en: 'Check how many model providers are supported and whether switching creates unnecessary lock-in.',
+        },
+      },
+      {
+        title: { cn: '回退与容错', en: 'Fallbacks and resilience' },
+        description: {
+          cn: '路由工具的价值很大一部分在于它能不能稳住失败场景。',
+          en: 'A big part of routing value is whether it stays stable when things fail.',
+        },
+      },
+      {
+        title: { cn: '成本与策略治理', en: 'Cost and policy governance' },
+        description: {
+          cn: '如果模型很多，限额、预算和规则控制就会成为核心能力。',
+          en: 'With many models in play, quotas, budgets, and rule control quickly become core capabilities.',
+        },
+      },
+      {
+        title: { cn: '团队与生产集成', en: 'Team and production integration' },
+        description: {
+          cn: '如果它要进生产，权限、日志、审计和交接成本就不能忽略。',
+          en: 'If it is going to production, permissions, logs, audits, and handoff cost cannot be ignored.',
+        },
+      },
+    ],
     decisionCards: [
       {
         title: { cn: '做统一模型出口', en: 'Unified model access' },
@@ -89,24 +119,82 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
       {
-        href: '/explore?search=model&sort=popular',
-        title: { cn: '继续看更多路由候选', en: 'See more routing candidates' },
+        href: '/guides/ai-tools-for-evals',
+        title: { cn: '转去评估工具指南', en: 'Go to evals tools guide' },
         description: {
-          cn: '当你只需要扩大 shortlist 时，直接回 Explore 最快。',
-          en: 'The fastest next step once you only need a wider shortlist.',
+          cn: '如果你已经不只是选模型出口，而是开始验证输出质量和策略效果，这页更顺。',
+          en: 'A better path when the job now includes validating output quality and strategy performance, not only model access.',
         },
       },
     ],
+    toolSelectionNotes: {
+      openrouter: {
+        bestFor: {
+          cn: '想统一接多个模型供应商，并保留切换自由度的独立开发者和产品团队。',
+          en: 'Indie hackers and product teams that want one access layer across multiple model providers while keeping switching flexibility.',
+        },
+        whyPickIt: {
+          cn: '它更像统一模型入口，适合先把“接得上、换得动”这件事做好。',
+          en: 'It behaves like a unified model access layer, which is great for solving model access and switching first.',
+        },
+        watchOut: {
+          cn: '如果你已经进入企业级治理、限额和审计阶段，通常还会继续补网关层能力。',
+          en: 'You will often need a fuller gateway layer later if enterprise-grade governance, limits, and audits become important.',
+        },
+      },
+      portkey: {
+        bestFor: {
+          cn: '既要做多模型路由，又要做配额、回退、团队权限和出口治理的团队。',
+          en: 'Teams that need multi-model routing plus quotas, fallbacks, team permissions, and model-access governance.',
+        },
+        whyPickIt: {
+          cn: '它把网关、路由和治理放在同一层，适合从“能接模型”走向“能管模型”。',
+          en: 'It brings gateway, routing, and governance into one layer, which helps teams move from model access toward model control.',
+        },
+        watchOut: {
+          cn: '如果你只是验证一个 MVP，它可能比当前阶段真正需要的更重一些。',
+          en: 'It can be heavier than necessary when you are only validating an MVP.',
+        },
+      },
+      'together-ai': {
+        bestFor: {
+          cn: '更偏开放模型、推理平台和模型选择灵活性的开发团队。',
+          en: 'Developer teams leaning toward open models, inference platforms, and broader model choice flexibility.',
+        },
+        whyPickIt: {
+          cn: '它把路由决策拉近到模型平台层，适合把“用哪类模型”也纳入技术决策。',
+          en: 'It pulls the routing decision closer to the model-platform layer, which is useful when model family choice itself matters.',
+        },
+        watchOut: {
+          cn: '如果你真正的问题只是统一出口和简单切换，不一定需要平台层这么深。',
+          en: 'You may not need this much platform depth if the real need is only unified access and simple switching.',
+        },
+      },
+      helicone: {
+        bestFor: {
+          cn: '想把路由策略和成本可见性一起看清楚的小团队与早期产品。',
+          en: 'Small teams and early products that want routing strategy and cost visibility understood together.',
+        },
+        whyPickIt: {
+          cn: '它能帮助你更快看到不同模型调用的花费与请求表现，方便做早期策略调整。',
+          en: 'It helps teams quickly see spend and request behavior across models, which is useful for early routing decisions.',
+        },
+        watchOut: {
+          cn: '如果你要的是更完整的网关治理和策略控制，后面还是可能继续上更重的一层。',
+          en: 'You may still add a fuller gateway layer later if governance and routing controls become more demanding.',
+        },
+      },
+    },
     tips: {
       cn: [
-        '先看模型支持和供应商切换，再看回退与缓存。',
-        '如果你要长期上线，重点看日志、权限和成本治理。',
-        '比“接得快”更重要的是后续是否方便替换与维护。',
+        '先分清你是在解决统一接入、回退稳定性，还是企业级限额和治理。',
+        '如果你要长期上线，重点看日志、权限、缓存、配额和成本治理。',
+        '比“接得快”更重要的是后续是否方便替换、扩供应商和持续维护。',
       ],
       en: [
-        'Start with model and provider support, then fallback and caching controls.',
-        'If this will run long term, focus on logs, permissions, and cost governance.',
-        'More important than quick setup is whether the system stays replaceable and maintainable later.',
+        'Start by separating unified access, fallback stability, and enterprise governance needs.',
+        'If this will run long term, focus on logs, permissions, caching, quotas, and cost governance.',
+        'More important than quick setup is whether the system stays replaceable, extensible, and maintainable later.',
       ],
     },
     faqs: [

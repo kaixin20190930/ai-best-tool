@@ -1,12 +1,12 @@
 import React from 'react';
 import { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
 import { BadgeCheck, FileSearch, Send } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
-import Faq from '@/components/Faq';
 import { getListingPaymentMailto, listingConfig } from '@/lib/config/listing';
 import { getAllCategories } from '@/lib/services/categories';
+import Faq from '@/components/Faq';
+import { Link } from '@/app/navigation';
 
 import SubmitForm from './SubmitForm';
 
@@ -41,11 +41,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {isChinese ? '开发者入驻' : 'Developer listing'}
             </p>
             <h3 className='mt-2 text-xl font-bold text-slate-950'>
-              {isChinese ? '选择适合你的提交方式' : 'Choose how you want to submit'}
+              {isChinese ? '选择提交方式和展示节奏' : 'Choose your submission and visibility setup'}
             </h3>
             <p className='mt-3 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '免费提交适合常规收录；如果你需要更快审核或额外曝光，也可以选择付费方案。'
+                ? '免费提交适合常规收录；如果你需要更快审核或前排展示，也可以选择付费方案。'
                 : `${listingConfig.valueProposition} ${listingConfig.listingFeeLabel}.`}
             </p>
             <div className='mt-4 grid gap-3'>
@@ -65,15 +65,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 </p>
                 <p className='mt-1 text-sm text-cyan-900'>
                   {isChinese
-                    ? '更短的审核周期，并可选择前排展示。'
+                    ? '更短的审核周期，并可选择固定天数的前排展示。'
                     : `${listingConfig.plans.standard_paid.summary} Payment status is confirmed automatically.`}
                 </p>
               </div>
             </div>
             <div className='mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3'>
-              <p className='text-sm font-semibold text-amber-900'>
-                {isChinese ? '适合什么场景' : 'Best for'}
-              </p>
+              <p className='text-sm font-semibold text-amber-900'>{isChinese ? '适合什么场景' : 'Best for'}</p>
               <p className='mt-1 text-sm leading-6 text-amber-900'>
                 {isChinese
                   ? '适合新品发布、活动期曝光，或希望更快完成审核并把更多访客引导到官网的团队。'
@@ -87,19 +85,28 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               </div>
               <div className='flex items-start gap-2'>
                 <FileSearch className='mt-0.5 size-4 text-cyan-700' />
-                <p>{isChinese ? '我们会审核链接、分类与内容质量。' : 'We review URL, category, and content quality.'}</p>
+                <p>
+                  {isChinese ? '我们会审核链接、分类与内容质量。' : 'We review URL, category, and content quality.'}
+                </p>
               </div>
               <div className='flex items-start gap-2'>
                 <BadgeCheck className='mt-0.5 size-4 text-cyan-700' />
-                <p>{isChinese ? '通过后发布到目录并持续获取曝光。' : 'Approved tools are published in the directory.'}</p>
+                <p>
+                  {isChinese ? '通过后发布到目录并持续获取曝光。' : 'Approved tools are published in the directory.'}
+                </p>
               </div>
             </div>
             <a
               href={getListingPaymentMailto('Paid AI tool listing')}
               className='mt-5 inline-flex w-full items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
-              {isChinese ? '联系入驻' : 'Contact for listing'}
+              {isChinese ? '联系付费入驻' : 'Contact paid listing'}
             </a>
+            <p className='mt-3 text-xs leading-5 text-slate-500'>
+              {isChinese
+                ? '付款会在“我的提交”里继续处理，不会在这里直接完成。'
+                : 'Payment is completed from My Submissions after you submit, not directly on this page.'}
+            </p>
             <Link
               href='/developer/listing'
               className='mt-3 inline-flex w-full items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'

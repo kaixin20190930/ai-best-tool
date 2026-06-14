@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation';
 
-import { Link } from '@/app/navigation';
 import { GUIDE_PAGES } from '@/lib/content/guides';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getCategoryBySlug, getLocalizedField } from '@/lib/services/categories';
@@ -8,6 +7,7 @@ import { getAllTags } from '@/lib/services/tags';
 import { SortBy } from '@/lib/services/tools';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import ExploreList from '@/app/[locale]/(with-footer)/explore/ExploreList';
+import { Link } from '@/app/navigation';
 
 export interface CategoryContentProps {
   params: { locale: string; slug: string };
@@ -160,6 +160,10 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
       (page, index, pages): page is (typeof GUIDE_PAGES)[number] => Boolean(page) && pages.indexOf(page) === index,
     )
     .slice(0, 4);
+  const comparisonGuides = (guideHrefMap[categorySlug] || [])
+    .map((href) => GUIDE_PAGES.find((page) => page.href === href))
+    .filter((page): page is (typeof GUIDE_PAGES)[number] => Boolean(page))
+    .filter((page) => page.href.endsWith('-comparison'));
   const adjacentCategories = categories
     .filter((item) => item.slug !== category.slug)
     .slice(0, 4)
@@ -284,6 +288,34 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
           </section>
         </div>
 
+        {comparisonGuides.length > 0 && (
+          <section className='theme-surface mb-8 rounded-lg border border-slate-200 p-6 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '先做对比' : 'Compare first'}
+            </p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-900'>
+              {isChinese ? `${categoryName} 最值得先看的对比页` : `Best comparison pages for ${categoryName}`}
+            </h2>
+            <p className='mt-3 max-w-3xl text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '如果你已经知道自己在这个分类里要比较什么，先看对比页再回列表，会更快收敛到真正合适的工具。'
+                : 'If you already know what you need to compare inside this category, start with the comparison page first and then come back to the list.'}
+            </p>
+            <div className='mt-5 grid gap-3 md:grid-cols-2'>
+              {comparisonGuides.map((guide) => (
+                <Link
+                  key={guide.href}
+                  href={guide.href}
+                  className='rounded-lg border border-slate-200 bg-white p-4 transition hover:border-cyan-200 hover:bg-cyan-50/40'
+                >
+                  <p className='text-sm font-semibold text-slate-900'>{guide.title[isChinese ? 'cn' : 'en']}</p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>{guide.desc[isChinese ? 'cn' : 'en']}</p>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
         <div className='mb-8 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]'>
           <section className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
             <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
@@ -398,9 +430,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
                   className='rounded-lg border border-slate-200 bg-white p-4 transition hover:border-cyan-200 hover:bg-cyan-50/40'
                 >
                   <p className='text-sm font-semibold text-slate-900'>{tool.title[isChinese ? 'cn' : 'en']}</p>
-                  <p className='mt-2 text-sm leading-6 text-slate-600'>
-                    {tool.description[isChinese ? 'cn' : 'en']}
-                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>{tool.description[isChinese ? 'cn' : 'en']}</p>
                 </Link>
               ))}
             </div>

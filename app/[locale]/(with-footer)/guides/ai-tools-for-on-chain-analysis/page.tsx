@@ -184,7 +184,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '如果你最关心地址追踪、资金流、协议健康和大户行为，这些工具会比泛 Web3 页更快进入高意图决策。'
               : 'If address tracking, fund flow, protocol health, and whale behavior matter most, these tools narrow the space faster than a broad Web3 page.'
           }
-          toolNames={['dune', 'defillama', 'arkham', 'messari']}
+          toolNames={['dune', 'nansen', 'defillama', 'arkham']}
           compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
           compareTitle={isChinese ? '链上意图更强的下一步入口' : 'Next paths for stronger on-chain intent'}
           compareDescription={

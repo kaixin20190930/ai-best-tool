@@ -42,6 +42,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     '/guides/ai-seo-tools',
     '/guides/ai-note-taking-tools',
     '/guides/ai-tools-for-automation',
+    '/guides/ai-tools-for-lead-generation',
+    '/guides/ai-tools-for-sales-prospecting',
   ]
     .map((href) => pickGuide(href))
     .filter((item): item is (typeof GUIDE_PAGES)[number] => Boolean(item));
@@ -49,6 +51,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     '/guides/ai-tools-for-web3',
     '/guides/ai-tools-for-web3-analysis',
     '/guides/ai-tools-for-crypto-research',
+    '/guides/ai-tools-for-token-research',
     '/guides/ai-tools-for-on-chain-analysis',
   ]
     .map((href) => pickGuide(href))
@@ -232,6 +235,20 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                     : 'A sharper path for output scoring, acceptance standards, and quality validation.',
                 },
                 {
+                  href: '/guides/ai-tools-for-lead-generation-comparison',
+                  title: isChinese ? '获客工具对比' : 'Lead generation comparison',
+                  desc: isChinese
+                    ? '适合名单发现、补全和初步筛选场景。'
+                    : 'A sharper path for list discovery, enrichment, and early qualification.',
+                },
+                {
+                  href: '/guides/ai-tools-for-sales-prospecting-comparison',
+                  title: isChinese ? '销售拓客工具对比' : 'Sales prospecting comparison',
+                  desc: isChinese
+                    ? '适合个性化触达、外联准备和 prospecting。'
+                    : 'A sharper path for personalized outreach, outbound prep, and prospecting.',
+                },
+                {
                   href: '/guides/ai-tools-for-automation-comparison',
                   title: isChinese ? '自动化工具对比' : 'Automation tools comparison',
                   desc: isChinese
@@ -292,6 +309,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   desc: isChinese
                     ? '适合持仓看板、多钱包归集和组合观察。'
                     : 'A tighter fit for dashboards, multi-wallet rollups, and portfolio monitoring.',
+                },
+                {
+                  href: '/guides/ai-tools-for-token-research-comparison',
+                  title: isChinese ? '代币研究工具对比' : 'Token research comparison',
+                  desc: isChinese
+                    ? '更适合项目比较、叙事判断和 token 基本面研究。'
+                    : 'A tighter fit for project comparison, token narratives, and fundamentals research.',
                 },
                 {
                   href: '/guides/ai-tools-for-wallet-research-comparison',

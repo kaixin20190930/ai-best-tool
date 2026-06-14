@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import GuideActionSection from '@/components/guides/GuideActionSection';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
@@ -175,6 +176,84 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </aside>
         </section>
+
+        <GuideActionSection
+          locale={locale}
+          eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}
+          title={isChinese ? '更贴近 Crypto 研究工作的入口' : 'Real entry points for crypto research workflows'}
+          description={
+            isChinese
+              ? '如果你更关心项目资料、链上跟踪、市场情报和赛道判断，这几款工具会比泛 Web3 页更快把范围收窄。'
+              : 'If project materials, on-chain tracking, market intelligence, and sector judgment matter most, these tools narrow the field faster than a broad Web3 page.'
+          }
+          toolNames={['messari', 'defillama', 'dune', 'nansen']}
+          compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
+          compareTitle={
+            isChinese ? 'Crypto 研究意图更强的下一步入口' : 'Next paths for stronger crypto-research intent'
+          }
+          compareDescription={
+            isChinese
+              ? '当你已经明确自己是在做 Crypto 研究，而不是泛浏览，继续进入更窄的比较页会更有效。'
+              : 'Once the real job is crypto research rather than broad browsing, narrower comparison pages work better.'
+          }
+          compareLinks={[
+            {
+              href: '/guides/ai-tools-for-crypto-research-comparison',
+              title: isChinese ? 'Crypto 研究工具对比' : 'Crypto research comparison',
+              description: isChinese
+                ? '适合直接横向看市场研究、链上跟踪和研究框架。'
+                : 'A direct side-by-side path for market research, on-chain tracking, and research framing.',
+            },
+            {
+              href: '/guides/ai-tools-for-token-research-comparison',
+              title: isChinese ? '代币研究工具对比' : 'Token research comparison',
+              description: isChinese
+                ? '如果问题开始收窄到具体 token、项目比较和基本面判断，这页更合适。'
+                : 'More useful when the decision narrows into specific tokens, project comparison, and fundamentals judgment.',
+            },
+            {
+              href: '/guides/ai-tools-for-wallet-research-comparison',
+              title: isChinese ? '钱包研究工具对比' : 'Wallet research comparison',
+              description: isChinese
+                ? '如果研究重点开始转向地址画像、资金路径和钱包行为，这页更贴近目标。'
+                : 'A better fit when research shifts into address profiles, fund paths, and wallet behavior.',
+            },
+          ]}
+          nextEyebrow={isChinese ? '下一步入口' : 'Where to go next'}
+          nextTitle={
+            isChinese
+              ? '研究方向明确后，继续这样收窄'
+              : 'How to narrow the space once crypto research is clearly the lane'
+          }
+          nextDescription={
+            isChinese
+              ? '如果你已经明确在找 Crypto 研究工具，下一步就回 Web3 分类、搜索结果和本周新增继续筛。'
+              : 'Once crypto research is clearly the lane, the next step is to use Web3 categories, search results, and weekly additions to compare real candidates.'
+          }
+          nextLinks={[
+            {
+              href: '/categories/web3?sort=popular',
+              title: isChinese ? '进入 Web3 分类' : 'Open the Web3 category',
+              description: isChinese
+                ? '回到 Web3 目录继续看真实研究条目。'
+                : 'Return to the Web3 directory for real research-oriented listings.',
+            },
+            {
+              href: '/explore?search=crypto&sort=popular',
+              title: isChinese ? '搜索更多 Crypto 工具' : 'Search more crypto tools',
+              description: isChinese
+                ? '回到 Explore，用更窄的 crypto 关键词扩大 shortlist。'
+                : 'Return to Explore and widen the shortlist with crypto-specific search.',
+            },
+            {
+              href: '/new',
+              title: isChinese ? '看本周新增' : 'Check new this week',
+              description: isChinese
+                ? '看看最近补进来的 Web3 / 研究工具里有没有更合适的新候选。'
+                : 'See whether recent Web3 and research additions introduced a stronger fit.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

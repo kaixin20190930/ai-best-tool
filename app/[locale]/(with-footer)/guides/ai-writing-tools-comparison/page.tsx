@@ -53,6 +53,36 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    comparisonDimensions: [
+      {
+        title: { cn: '语气控制', en: 'Tone control' },
+        description: {
+          cn: '如果你要保持品牌口吻一致，这个能力比单纯的生成速度更重要。',
+          en: 'If brand voice consistency matters, tone control is more important than raw generation speed.',
+        },
+      },
+      {
+        title: { cn: '改写与润色', en: 'Rewriting and polishing' },
+        description: {
+          cn: '重点看它能不能把已有内容改得更顺、更短或者更像人写，而不是只会扩写。',
+          en: 'Check whether it can improve clarity, shorten copy, or make text feel more natural instead of only expanding it.',
+        },
+      },
+      {
+        title: { cn: '长文稳定性', en: 'Long-form stability' },
+        description: {
+          cn: '如果你常写文章、邮件和落地页，长篇内容是否稳定会直接影响可持续性。',
+          en: 'For articles, emails, and landing pages, long-form stability directly affects whether the tool is sustainable to use.',
+        },
+      },
+      {
+        title: { cn: '模板和速度', en: 'Templates and speed' },
+        description: {
+          cn: '短内容和批量任务更看模板、切换成本和起稿速度。',
+          en: 'Short-form and batch tasks depend more on templates, low switching cost, and quick first drafts.',
+        },
+      },
+    ],
     fitFor: [
       {
         title: { cn: '持续写内容的人', en: 'People publishing regularly' },
@@ -95,6 +125,14 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
       {
+        href: '/guides/ai-tools-for-research-comparison',
+        title: { cn: '转去研究工具对比', en: 'Switch to research tools comparison' },
+        description: {
+          cn: '如果你现在的瓶颈其实在资料整理、事实核对和主题理解，而不是写作本身，这页更合适。',
+          en: 'Move there if the real bottleneck is discovery, fact-checking, and topic understanding rather than writing itself.',
+        },
+      },
+      {
         href: '/guides/ai-seo-tools-comparison',
         title: { cn: '转去 SEO 工具对比', en: 'Switch to SEO tools comparison' },
         description: {
@@ -102,23 +140,75 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           en: 'Move there if the real decision is about search-driven planning rather than general writing.',
         },
       },
-      {
-        href: '/explore?search=writing&sort=popular',
-        title: { cn: '继续看更多写作工具', en: 'See more writing candidates' },
-        description: {
-          cn: '当你已经知道方向，只需要扩大候选列表时，直接去 Explore。',
-          en: 'Go straight to Explore once you know the lane and just need more real candidates.',
+    ],
+    toolSelectionNotes: {
+      grammarly: {
+        bestFor: {
+          cn: '更重视改写、润色、语法一致性和日常写作质量的人。',
+          en: 'People who care most about rewriting, polish, grammar consistency, and everyday writing quality.',
+        },
+        whyPickIt: {
+          cn: '它更像稳定的编辑层助手，适合融入每天都会发生的写作动作里。',
+          en: 'It behaves more like a dependable editing-layer assistant that fits daily writing habits.',
+        },
+        watchOut: {
+          cn: '如果你期待它承担重度长文规划或 SEO 研究，它通常不是最强入口。',
+          en: 'It is usually not the strongest entry point when long-form planning or SEO research is the real need.',
         },
       },
-    ],
+      frase: {
+        bestFor: {
+          cn: '既要内容起稿，又要兼顾搜索意图和主题调研的人。',
+          en: 'People who need drafting plus search intent and topic research in the same workflow.',
+        },
+        whyPickIt: {
+          cn: '它把写作和 SEO 连接得更紧，适合内容增长型工作流。',
+          en: 'It connects writing and SEO more tightly, which makes it strong for growth-oriented content workflows.',
+        },
+        watchOut: {
+          cn: '如果你只是做轻量社媒文案或简单改写，它可能比你需要的更完整。',
+          en: 'It can be more suite-like than necessary for lightweight social copy or simple rewrites.',
+        },
+      },
+      rytr: {
+        bestFor: {
+          cn: '想快速起稿、试模板、用较低门槛覆盖多种短内容任务的人。',
+          en: 'People who want quick drafts, template-driven work, and lower-friction coverage for many short-form tasks.',
+        },
+        whyPickIt: {
+          cn: '上手快、任务切换轻，适合先把内容跑起来。',
+          en: 'It is fast to pick up and easy to switch across tasks, which helps get content moving quickly.',
+        },
+        watchOut: {
+          cn: '如果你要求更强的品牌语气控制或更深的长文稳定性，仍然值得继续比较。',
+          en: 'You may still want to compare further if brand voice control or long-form stability matters a lot.',
+        },
+      },
+      sudowrite: {
+        bestFor: {
+          cn: '更偏创意写作、叙事发散和风格探索的人。',
+          en: 'People leaning toward creative writing, narrative ideation, and style exploration.',
+        },
+        whyPickIt: {
+          cn: '它的价值更在发散和续写，而不是标准化内容生产。',
+          en: 'Its strength is expansion and continuation rather than standardized content production.',
+        },
+        watchOut: {
+          cn: '如果你的目标是稳定产出营销内容或 SEO 页面，它可能不是最直接的选择。',
+          en: 'It may not be the most direct pick if the goal is consistent marketing output or SEO pages.',
+        },
+      },
+    },
     tips: {
       cn: [
         '先分清你是在做博客、营销文案、改写，还是创意写作。',
+        '再分清你需要的是编辑层、内容执行层，还是创意发散层工具。',
         '如果你想先试再买，优先看免费版本的限制和输出是否稳定。',
         '长期使用时，更应该看任务适配度，而不是只看一次生成效果。',
       ],
       en: [
         'Separate blogs, marketing copy, rewriting, and creative writing before comparing tools.',
+        'Then separate editing-layer tools from execution-layer and creative-ideation tools.',
         'If you want to try before paying, focus on free-tier limits and output stability.',
         'For long-term use, fit to the task matters more than one impressive generation.',
       ],

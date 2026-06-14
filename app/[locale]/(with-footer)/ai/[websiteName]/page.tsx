@@ -2061,7 +2061,7 @@ export default async function Page({
                   tagSlugs={dbTool?.tags || []}
                   tagLabels={tagLabels}
                 />
-                <section id='comments' className='scroll-mt-24 pt-4'>
+                <section id='comments' className='scroll-mt-28 pt-8'>
                   <Separator className='mb-8 border-t border-slate-200' />
                   <div className='mb-6 rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200'>
                     <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>

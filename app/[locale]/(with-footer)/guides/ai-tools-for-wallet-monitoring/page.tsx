@@ -186,7 +186,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '如果你最关心地址提醒、异常行为、风险观察和通知速度，这些工具会比泛 Web3 页更快把范围收窄。'
               : 'If address alerts, anomaly behavior, risk observation, and notification speed matter most, these tools narrow the space faster than a broad Web3 page.'
           }
-          toolNames={['debank', 'arkham', 'bubblemaps', 'defillama']}
+          toolNames={['debank', 'nansen', 'arkham', 'bubblemaps']}
           compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
           compareTitle={isChinese ? '监控意图更强的下一步入口' : 'Next paths for stronger monitoring intent'}
           compareDescription={

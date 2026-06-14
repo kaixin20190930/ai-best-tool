@@ -29,6 +29,36 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       en: 'A quick side-by-side look at common meeting notes tools',
     },
     compareSubtitle: { cn: 'Meeting notes', en: 'Meeting notes' },
+    comparisonDimensions: [
+      {
+        title: { cn: '转写准确度', en: 'Transcription accuracy' },
+        description: {
+          cn: '先看能不能稳定听清多人发言、口音和噪音环境下的内容。',
+          en: 'Check whether the tool can reliably handle multiple speakers, accents, and noisy environments.',
+        },
+      },
+      {
+        title: { cn: '纪要整理速度', en: 'Cleanup speed' },
+        description: {
+          cn: '真正省时间的，不只是转写，而是能不能快速整理出可发给团队的纪要。',
+          en: 'The real time saver is not just transcription, but whether it can quickly turn notes into something shareable.',
+        },
+      },
+      {
+        title: { cn: '行动项提取', en: 'Action item extraction' },
+        description: {
+          cn: '如果你要把会议转成执行结果，行动项、负责人和截止时间就非常关键。',
+          en: 'If meetings need to turn into execution, action items, owners, and due dates become critical.',
+        },
+      },
+      {
+        title: { cn: '团队协作与导出', en: 'Collaboration and exports' },
+        description: {
+          cn: '多人一起用的时候，分享、权限、搜索和导出往往决定能不能长期用。',
+          en: 'For team use, sharing, permissions, search, and exports often determine whether the tool sticks.',
+        },
+      },
+    ],
     tips: {
       cn: [
         '先看支持的会议平台和录音格式，再看转写准确度。',

@@ -182,7 +182,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '如果你更关心多钱包归集、组合分布和资产看板，这几款工具会比泛 Web3 页更快把范围收窄。'
               : 'If multi-wallet rollups, allocation views, and portfolio dashboards matter most, these tools narrow the field faster than a broad Web3 page.'
           }
-          toolNames={['debank', 'zapper', 'nansen', 'defillama']}
+          toolNames={['debank', 'zerion', 'zapper', 'nansen']}
           compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
           compareTitle={
             isChinese ? '资产追踪意图更强的下一步入口' : 'Next paths for stronger portfolio-tracking intent'

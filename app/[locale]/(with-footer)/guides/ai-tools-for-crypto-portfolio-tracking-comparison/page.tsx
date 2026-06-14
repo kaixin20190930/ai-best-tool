@@ -34,7 +34,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       en: 'A quick side-by-side look at common portfolio tracking tools',
     },
     compareSubtitle: { cn: 'Portfolio tracking', en: 'Portfolio tracking' },
-    preferredToolNames: ['debank', 'zapper', 'nansen', 'defillama'],
+    preferredToolNames: ['debank', 'zerion', 'zapper', 'nansen'],
     decisionCards: [
       {
         title: { cn: '看多钱包和多链支持', en: 'Wallet and chain coverage' },
@@ -102,6 +102,64 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    toolSelectionNotes: {
+      debank: {
+        bestFor: {
+          cn: '想快速看清钱包持仓、协议暴露和日常组合状态的人。',
+          en: 'People who want a fast read on wallet holdings, protocol exposure, and day-to-day portfolio state.',
+        },
+        whyPickIt: {
+          cn: '它更像组合可见性的起点层，适合把“我现在到底持有什么”先整理清楚。',
+          en: 'It behaves like a starting layer for portfolio visibility, which helps answer what you actually hold right now.',
+        },
+        watchOut: {
+          cn: '如果你真正要的是更深的地址关系或聪明钱研究，它通常只是第一站。',
+          en: 'It is usually the first stop rather than the deepest layer if you need smart-money or address-relationship research.',
+        },
+      },
+      zerion: {
+        bestFor: {
+          cn: '更在意跨链仓位、资产分配和组合界面清晰度的活跃持仓用户。',
+          en: 'Active holders who care about cross-chain positions, allocations, and a cleaner portfolio interface.',
+        },
+        whyPickIt: {
+          cn: '它在钱包优先和组合清晰度上很直接，适合长期盯仓位变化的人。',
+          en: 'It is especially direct on wallet-first portfolio clarity, which suits people tracking positions over time.',
+        },
+        watchOut: {
+          cn: '如果你更在意协议研究或深度链上分析，它会显得不够厚。',
+          en: 'It can feel too light if the real work is protocol research or deeper on-chain analysis.',
+        },
+      },
+      zapper: {
+        bestFor: {
+          cn: '希望从钱包视角快速看资产、协议和动作概览的人。',
+          en: 'People who want a quick wallet-first overview of assets, protocols, and activity.',
+        },
+        whyPickIt: {
+          cn: '它适合用作组合和地址工作的中间层，介于轻量可见性和更深研究之间。',
+          en: 'It works well as a middle layer between lightweight portfolio visibility and deeper Web3 research.',
+        },
+        watchOut: {
+          cn: '如果你主要要做预警、实体归因或重研究输出，仍值得继续比下去。',
+          en: 'You may still want to compare further if alerting, entity attribution, or heavier research output matters more.',
+        },
+      },
+      nansen: {
+        bestFor: {
+          cn: '不仅看持仓，还要结合行为、资金流和聪明钱信号一起判断的人。',
+          en: 'People who want holdings views plus behavior, fund-flow context, and smart-money signals.',
+        },
+        whyPickIt: {
+          cn: '它把组合观察往研究和信号判断那一侧拉得更深。',
+          en: 'It pushes portfolio tracking further toward signal interpretation and research depth.',
+        },
+        watchOut: {
+          cn: '如果你只是想看自己的钱包和资产分布，它可能比需求更重。',
+          en: 'It can feel heavier than necessary if you mostly want a clean view of your own wallets and allocations.',
+        },
+      },
+    },
     tips: {
       cn: [
         '先看支持的钱包和链，再看资产归类和历史视图。',

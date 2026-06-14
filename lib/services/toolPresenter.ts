@@ -1,4 +1,5 @@
 import { WebNavigationDetailData, WebNavigationListRow } from '@/lib/data';
+import { getComparisonCtaFromTags } from '@/lib/services/comparisonCta';
 import { Tool } from '@/lib/services/tools';
 
 const localeAliases: Record<string, string[]> = {
@@ -19,27 +20,24 @@ export function getLocalizedToolValue(field: Record<string, string> | null | und
 
 export function toolToListRow(tool: Tool, locale = 'en'): WebNavigationListRow {
   const featureRecord =
-    tool.features && typeof tool.features === 'object'
-      ? (tool.features as Record<string, unknown>)
+    tool.features && typeof tool.features === 'object' ? (tool.features as Record<string, unknown>) : {};
+  const submission =
+    featureRecord.submission && typeof featureRecord.submission === 'object'
+      ? (featureRecord.submission as Record<string, unknown>)
       : {};
-  const submission = featureRecord.submission && typeof featureRecord.submission === 'object'
-    ? (featureRecord.submission as Record<string, unknown>)
-    : {};
-  const commercial = submission.commercial && typeof submission.commercial === 'object'
-    ? (submission.commercial as Record<string, unknown>)
-    : {};
+  const commercial =
+    submission.commercial && typeof submission.commercial === 'object'
+      ? (submission.commercial as Record<string, unknown>)
+      : {};
   const featuredUntil = typeof commercial.featuredUntil === 'string' ? commercial.featuredUntil : '';
-  const featuredActiveFrom =
-    typeof commercial.featuredActiveFrom === 'string' ? commercial.featuredActiveFrom : '';
+  const featuredActiveFrom = typeof commercial.featuredActiveFrom === 'string' ? commercial.featuredActiveFrom : '';
   const isSponsored = commercial.isSponsoredPlacement === true;
   const nowTs = Date.now();
   const fromTs = featuredActiveFrom ? new Date(featuredActiveFrom).getTime() : Number.NEGATIVE_INFINITY;
   const untilTs = featuredUntil ? new Date(featuredUntil).getTime() : Number.NaN;
   const isFeatured =
-    isSponsored &&
-    Number.isFinite(untilTs) &&
-    untilTs >= nowTs &&
-    (!Number.isFinite(fromTs) || fromTs <= nowTs);
+    isSponsored && Number.isFinite(untilTs) && untilTs >= nowTs && (!Number.isFinite(fromTs) || fromTs <= nowTs);
+  const comparisonCta = getComparisonCtaFromTags(tool.tags || [], locale);
 
   return {
     id: tool.id,
@@ -52,6 +50,7 @@ export function toolToListRow(tool: Tool, locale = 'en'): WebNavigationListRow {
     thumbnailUrl: tool.thumbnailUrl || tool.imageUrl,
     isFeatured,
     updatedAt: tool.updatedAt?.toISOString?.(),
+    ...comparisonCta,
   };
 }
 

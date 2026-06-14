@@ -26,7 +26,37 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     breadcrumbLabel: { cn: '开发者工具对比', en: 'Developer tools comparison' },
     compareTitle: { cn: '几款常见开发者工具的快速对照', en: 'A quick side-by-side look at common developer tools' },
     compareSubtitle: { cn: 'Developer', en: 'Developer' },
-    preferredToolNames: ['cursor', 'openrouter', 'langfuse', 'portkey'],
+    preferredToolNames: ['cursor', 'openrouter', 'modal', 'langfuse'],
+    comparisonDimensions: [
+      {
+        title: { cn: '编辑器内体验', en: 'Editor-native experience' },
+        description: {
+          cn: '如果主要工作在编辑器里，补全、多文件上下文和重构稳定性是第一判断点。',
+          en: 'If most of the work happens inside the editor, completion, multi-file context, and refactoring stability are the first things to judge.',
+        },
+      },
+      {
+        title: { cn: '模型与接入层', en: 'Model and access layer' },
+        description: {
+          cn: '如果你在做多模型接入或平台统一，路由、成本控制和切换灵活性比单一能力更关键。',
+          en: 'If you are unifying multiple models or platforms, routing, cost control, and switching flexibility matter more than one isolated feature.',
+        },
+      },
+      {
+        title: { cn: '执行与运维', en: 'Execution and operations' },
+        description: {
+          cn: '当工具要进入生产，日志、失败处理、权限和系统兼容性会迅速变成主角。',
+          en: 'Once the tool is in production, logs, failure handling, permissions, and system compatibility quickly become the main factors.',
+        },
+      },
+      {
+        title: { cn: '团队协作成本', en: 'Team collaboration cost' },
+        description: {
+          cn: '如果多人一起用，真正要看的是接入维护、共享成本和日常治理是否顺手。',
+          en: 'For team use, the real question is whether setup, sharing, and day-to-day governance feel manageable.',
+        },
+      },
+    ],
     decisionCards: [
       {
         title: { cn: '工作主要在编辑器里', en: 'Most work happens in the editor' },
@@ -100,6 +130,14 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
       {
+        href: '/guides/ai-tools-for-api-observability-comparison',
+        title: { cn: '转去 API 可观测对比', en: 'Go to API observability comparison' },
+        description: {
+          cn: '如果你已经走到日志、成本和质量治理这一步，这页更贴近真实交付。',
+          en: 'A better next step if logs, cost, and quality governance are already part of the delivery workflow.',
+        },
+      },
+      {
         href: '/categories/developer-tools?sort=popular',
         title: { cn: '回到 Developer Tools 分类', en: 'Return to the developer tools category' },
         description: {
@@ -108,14 +146,72 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    toolSelectionNotes: {
+      cursor: {
+        bestFor: {
+          cn: '主要工作发生在编辑器里、希望更快写出和修改真实代码的开发者。',
+          en: 'Developers whose main work happens in the editor and who want to ship and edit real code faster.',
+        },
+        whyPickIt: {
+          cn: '它直接作用在编码体验上，适合把想法快速落到代码里。',
+          en: 'It acts directly on the coding experience, which makes it great for turning intent into code quickly.',
+        },
+        watchOut: {
+          cn: '如果真正的问题在 API、模型平台或后台执行，它不会解决最深的一层。',
+          en: 'It will not solve the deepest layer if the real bottleneck is APIs, model platforms, or backend execution.',
+        },
+      },
+      openrouter: {
+        bestFor: {
+          cn: '想统一接多个模型、做切换和比较的开发者与产品团队。',
+          en: 'Developers and product teams that want unified access across multiple models and providers.',
+        },
+        whyPickIt: {
+          cn: '它更像模型接入层，有利于保留模型选择和切换灵活性。',
+          en: 'It behaves more like a model-access layer, which keeps model choice and switching flexible.',
+        },
+        watchOut: {
+          cn: '如果你的主要问题不是模型接入，而是可观测性或工作流执行，仍要继续比较。',
+          en: 'You may still need to compare further if observability or workflow execution is the real concern.',
+        },
+      },
+      modal: {
+        bestFor: {
+          cn: '需要跑 GPU 任务、推理或更重后台执行工作负载的团队。',
+          en: 'Teams running GPU workloads, inference, or heavier backend execution jobs.',
+        },
+        whyPickIt: {
+          cn: '它把开发者决策拉向执行与部署层，适合真正上线 AI 功能的场景。',
+          en: 'It pulls the decision toward execution and deployment, which fits real AI product delivery.',
+        },
+        watchOut: {
+          cn: '如果你还停留在编辑器辅助或轻量实验阶段，它可能会显得过重。',
+          en: 'It can feel heavy if you are still mostly in editor assistance or lightweight experimentation mode.',
+        },
+      },
+      langfuse: {
+        bestFor: {
+          cn: '已经进入生产，开始关心日志、提示词质量和评估链路的团队。',
+          en: 'Teams already in production and now caring about logs, prompt quality, and evaluation loops.',
+        },
+        whyPickIt: {
+          cn: '它把“看清系统怎么工作”这件事做得更直接。',
+          en: 'It makes it easier to see how the AI system is actually behaving in practice.',
+        },
+        watchOut: {
+          cn: '如果你还没真正上线请求和工作流，它可能会显得偏早。',
+          en: 'It may feel premature if you have not yet reached real request volume and production workflows.',
+        },
+      },
+    },
     tips: {
       cn: [
-        '先分清你的主要工作发生在编辑器、API 层还是自动化层。',
+        '先分清你的主要工作发生在编辑器、模型接入层、执行层还是可观测层。',
         '如果你要团队使用，优先看权限、日志、私有仓库支持和接入维护成本。',
         '如果你会长期依赖它，重点看上下文能力、模型选择和稳定性。',
       ],
       en: [
-        'Start with whether your work happens mainly in the editor, the API layer, or the orchestration layer.',
+        'Start with whether your work happens mainly in the editor, model-access layer, execution layer, or observability layer.',
         'For team use, prioritize permissions, logs, private repo support, and maintenance cost.',
         'If you will rely on it long term, focus on context depth, model choice, and stability.',
       ],

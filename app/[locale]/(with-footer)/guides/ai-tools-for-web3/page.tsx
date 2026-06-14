@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import GuideActionSection from '@/components/guides/GuideActionSection';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
@@ -168,6 +169,80 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </aside>
         </section>
+
+        <GuideActionSection
+          locale={locale}
+          eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}
+          title={isChinese ? '更贴近 Web3 决策的真实入口' : 'Real entry points for Web3 decisions'}
+          description={
+            isChinese
+              ? '如果你已经知道自己关心的是链上数据、协议研究、钱包监控或资产变化，这几款工具会比泛 AI 列表更快把范围收窄。'
+              : 'If you already know the work is about on-chain data, protocol research, wallet monitoring, or asset movement, these tools narrow the space much faster than a broad AI list.'
+          }
+          toolNames={['dune', 'defillama', 'debank', 'messari']}
+          compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
+          compareTitle={isChinese ? 'Web3 方向更明确后的下一步' : 'Next paths once the Web3 direction is clearer'}
+          compareDescription={
+            isChinese
+              ? '当你已经不是在泛泛看榜单，而是真的要决定研究、监控或分析工具时，继续进入更窄的对比页会更有效。'
+              : 'Once you are not just browsing but actually choosing research, monitoring, or analytics tooling, narrower comparison pages become much more useful.'
+          }
+          compareLinks={[
+            {
+              href: '/guides/ai-tools-for-web3-comparison',
+              title: isChinese ? 'Web3 工具总对比' : 'Web3 tools comparison',
+              description: isChinese
+                ? '适合还没完全确定自己更偏协议、钱包还是研究。'
+                : 'Best when you still need a broad side-by-side look across research, wallet, and protocol workflows.',
+            },
+            {
+              href: '/guides/ai-tools-for-on-chain-analysis-comparison',
+              title: isChinese ? '链上分析工具对比' : 'On-chain analysis comparison',
+              description: isChinese
+                ? '如果你已经明确要看地址、资金流和链上行为，这页更高意图。'
+                : 'A stronger fit when the real decision is about addresses, fund flow, and on-chain behavior.',
+            },
+            {
+              href: '/guides/ai-tools-for-crypto-research-comparison',
+              title: isChinese ? 'Crypto 研究工具对比' : 'Crypto research comparison',
+              description: isChinese
+                ? '如果你更偏项目判断、叙事追踪和资料整合，这页更贴近目标。'
+                : 'A better path when project analysis, narrative tracking, and information synthesis matter more.',
+            },
+          ]}
+          nextEyebrow={isChinese ? '下一步入口' : 'Where to go next'}
+          nextTitle={
+            isChinese ? '确定是 Web3 之后，继续这样收窄' : 'How to narrow the space once Web3 is clearly the lane'
+          }
+          nextDescription={
+            isChinese
+              ? '如果你已经确认自己要找的是 Web3 工具，下一步就进入 Web3 分类、精准搜索和最近新增，开始比较真实候选。'
+              : 'Once Web3 is clearly the lane, the next step is to use the category, focused search, and recent additions to compare real candidates.'
+          }
+          nextLinks={[
+            {
+              href: '/categories/web3?sort=popular',
+              title: isChinese ? '进入 Web3 分类' : 'Open the Web3 category',
+              description: isChinese
+                ? '直接进入 Web3 目录，继续看真实条目。'
+                : 'Jump into the Web3 category and compare actual listings.',
+            },
+            {
+              href: '/explore?search=web3&sort=popular',
+              title: isChinese ? '搜索更多 Web3 工具' : 'Search more Web3 tools',
+              description: isChinese
+                ? '回到 Explore，用更窄的 Web3 关键词继续扩大 shortlist。'
+                : 'Return to Explore and widen the shortlist with tighter Web3 queries.',
+            },
+            {
+              href: '/new',
+              title: isChinese ? '看本周新增' : 'Check new this week',
+              description: isChinese
+                ? '顺手看最近补进来的 Web3 和开发者工具。'
+                : 'See which newly added Web3 and developer tools might be more current.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

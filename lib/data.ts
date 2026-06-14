@@ -1,4 +1,6 @@
 export type WebNavigationListRow = {
+  compareHref?: string;
+  compareLabel?: string;
   content: string;
   createdAt?: string;
   id: string;

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1400" height="800" viewBox="0 0 1400 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="canvas-alchemy" x1="72" y1="64" x2="1288" y2="738" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#faf7ff"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+    <linearGradient id="panel-alchemy" x1="918" y1="148" x2="1248" y2="516" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ede9fe"/>
+      <stop offset="1" stop-color="#7c3aed"/>
+    </linearGradient>
+  </defs>
+  <rect width="1400" height="800" rx="44" fill="url(#canvas-alchemy)"/>
+  <circle cx="1232" cy="140" r="136" fill="#ede9fe" fill-opacity="0.74"/>
+  <circle cx="1110" cy="650" r="170" fill="#ede9fe" fill-opacity="0.5"/>
+  <rect x="64" y="64" width="1272" height="672" rx="34" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+
+  <rect x="116" y="120" width="260" height="46" rx="23" fill="#ede9fe"/>
+  <text x="246" y="149" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700" fill="#6d28d9">Web3</text>
+
+  <text x="116" y="252" font-family="Inter, Arial, sans-serif" font-size="82" font-weight="800" fill="#0f172a">Alchemy</text>
+  <text x="116" y="318" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="600" fill="#6d28d9">Chain infrastructure</text>
+  <text x="116" y="392" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="500" fill="#475569">Blockchain APIs, indexed data, and production-grade Web3 app tooling</text>
+
+  <rect x="116" y="460" width="520" height="170" rx="28" fill="#faf7ff" stroke="#ede9fe" stroke-width="2"/>
+  <text x="156" y="524" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700" fill="#0f172a">Editorial coverage ready</text>
+  <text x="156" y="572" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#475569">Stable local media, decision framing,</text>
+  <text x="156" y="606" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#475569">and category-aligned tool positioning.</text>
+
+  <rect x="896" y="146" width="332" height="332" rx="40" fill="url(#panel-alchemy)"/>
+  <rect x="934" y="184" width="256" height="256" rx="34" fill="rgba(255,255,255,0.88)"/>
+  <text x="1062" y="336" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="104" font-weight="800" fill="#6d28d9">Al</text>
+
+  <rect x="896" y="532" width="332" height="88" rx="28" fill="#ede9fe"/>
+  <text x="1062" y="587" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700" fill="#6d28d9">Published seed</text>
+</svg>

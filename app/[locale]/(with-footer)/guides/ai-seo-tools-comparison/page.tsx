@@ -26,6 +26,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     breadcrumbLabel: { cn: 'SEO 工具对比', en: 'SEO tools comparison' },
     compareTitle: { cn: '几款常见 SEO 工具的快速对照', en: 'A quick side-by-side look at common SEO tools' },
     compareSubtitle: { cn: 'SEO', en: 'SEO' },
+    preferredToolNames: ['surfer', 'frase', 'clearscope', 'marketmuse'],
     decisionCards: [
       {
         title: { cn: '做关键词与主题规划', en: 'Keyword and topic planning' },
@@ -46,6 +47,36 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         description: {
           cn: 'API、导出、权限和历史数据会比一次性的“生成效果”更重要。',
           en: 'API access, exports, permissions, and historical data matter more than a one-off flashy generation.',
+        },
+      },
+    ],
+    comparisonDimensions: [
+      {
+        title: { cn: '关键词覆盖', en: 'Keyword coverage' },
+        description: {
+          cn: '先看它能不能把相关词、长尾词和主题集群一起铺开，而不是只给你一个单点建议。',
+          en: 'Check whether it covers primary terms, long-tail variants, and topic clusters instead of single-point advice.',
+        },
+      },
+      {
+        title: { cn: '内容 brief 质量', en: 'Content brief quality' },
+        description: {
+          cn: '好的 SEO 工具要能把 intent、结构和可执行建议一起给出来。',
+          en: 'A strong SEO tool should give you intent, structure, and actionable guidance together.',
+        },
+      },
+      {
+        title: { cn: '页面优化动作', en: 'On-page optimization' },
+        description: {
+          cn: '如果你要持续优化现有内容，就要看建议是否稳定、清楚、能重复使用。',
+          en: 'If you are refreshing existing content, check whether recommendations are stable, clear, and reusable.',
+        },
+      },
+      {
+        title: { cn: '团队可用性', en: 'Team usability' },
+        description: {
+          cn: '导出、权限、协作和历史数据会直接影响团队能不能把它用进日常流程。',
+          en: 'Exports, permissions, collaboration, and historical data affect whether the team can actually adopt it.',
         },
       },
     ],
@@ -91,6 +122,14 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
       {
+        href: '/guides/ai-tools-for-research-comparison',
+        title: { cn: '转去研究工具对比', en: 'Switch to research tools comparison' },
+        description: {
+          cn: '如果你现在更需要做 SERP 调研、竞品观察和资料发现，而不是直接写内容，这页更贴近真实工作流。',
+          en: 'Move here if discovery, SERP research, and competitor analysis matter more than direct content production right now.',
+        },
+      },
+      {
         href: '/guides/ai-writing-tools-comparison',
         title: { cn: '转去写作工具对比', en: 'Switch to writing tools comparison' },
         description: {
@@ -98,23 +137,75 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           en: 'Move here if the real decision is about content production rather than SEO suites.',
         },
       },
-      {
-        href: '/explore?search=seo&sort=popular',
-        title: { cn: '继续看更多 SEO 候选', en: 'See more SEO candidates' },
-        description: {
-          cn: '当你已经知道方向，只需要扩大 shortlist 时，直接回 Explore 最快。',
-          en: 'The fastest next step once you know the direction and just need a wider shortlist.',
+    ],
+    toolSelectionNotes: {
+      surfer: {
+        bestFor: {
+          cn: '已经在稳定产出 SEO 内容、希望把 brief 和页面优化接到日常写作流程的团队。',
+          en: 'Teams already publishing SEO content regularly and wanting briefs plus on-page optimization inside a repeatable workflow.',
+        },
+        whyPickIt: {
+          cn: '它更像内容执行层工具，适合把关键词意图直接接到写作和更新动作里。',
+          en: 'It behaves more like an execution-layer tool that turns keyword intent directly into writing and refresh actions.',
+        },
+        watchOut: {
+          cn: '如果你现在还停留在纯关键词调研阶段，它可能会显得比你当前需要更重。',
+          en: 'It can feel heavier than necessary if you are still mostly doing early-stage keyword research.',
         },
       },
-    ],
+      frase: {
+        bestFor: {
+          cn: '既要做主题调研，又要快速产出 brief 和首稿的小团队或个人站长。',
+          en: 'Small teams and solo operators who need both topic research and fast brief-to-draft execution.',
+        },
+        whyPickIt: {
+          cn: '调研和写作之间衔接很顺，适合内容节奏快、需要快速试题的工作流。',
+          en: 'It connects research and writing smoothly, which fits faster publishing cycles well.',
+        },
+        watchOut: {
+          cn: '如果你更看重企业级协作、权限和更深的数据治理，可能还要继续比较。',
+          en: 'You may want to keep comparing if enterprise collaboration, permissions, or deeper data governance matter more.',
+        },
+      },
+      clearscope: {
+        bestFor: {
+          cn: '已经有内容流程，只想把现有页面和文章做得更稳、更一致的团队。',
+          en: 'Teams that already have a content engine and mainly want steadier, more consistent optimization on existing work.',
+        },
+        whyPickIt: {
+          cn: '它更偏质量控制和内容优化，适合把已有内容往更高标准打磨。',
+          en: 'It leans toward quality control and optimization, making it strong for refining existing content.',
+        },
+        watchOut: {
+          cn: '如果你更需要从零开始找题、做主题地图，它不一定是最先上的那个。',
+          en: 'It may not be the first tool to pick if topic discovery and planning from scratch are the real bottlenecks.',
+        },
+      },
+      marketmuse: {
+        bestFor: {
+          cn: '更重视站点结构、主题覆盖和内容资产规划的内容团队。',
+          en: 'Content teams that care more about site structure, topic coverage, and long-range content planning.',
+        },
+        whyPickIt: {
+          cn: '它更接近内容策略层，而不是单篇文章层，适合做体系化内容布局。',
+          en: 'It sits closer to strategy than single-article execution, which helps with system-level content planning.',
+        },
+        watchOut: {
+          cn: '如果你只想尽快优化几篇页面，它可能不如更轻量的执行型工具直接。',
+          en: 'It can feel less direct than lighter execution tools when the goal is simply to improve a handful of pages quickly.',
+        },
+      },
+    },
     tips: {
       cn: [
-        '先看关键词和排名功能，再看内容优化和历史数据。',
+        '先分清你在选调研工具、内容执行工具，还是站点策略工具。',
+        '再看关键词和排名功能，最后才看历史数据和协作能力。',
         '如果你要团队使用，关注 API、导出、权限和协作能力。',
         '更看重长期使用时，关注更新频率、评分和实际评论。',
       ],
       en: [
-        'Start with keyword and ranking features, then check content optimization and historical data.',
+        'First separate research tools, execution tools, and strategy-layer tools.',
+        'Then compare keyword and ranking features before worrying about history and collaboration.',
         'For team use, look at API access, exports, permissions, and collaboration.',
         'For long-term use, pay attention to freshness, ratings, and real comments.',
       ],

@@ -20,7 +20,6 @@ import { getTranslations } from 'next-intl/server';
 
 import { listingConfig } from '@/lib/config/listing';
 import { FEATURED_GUIDE_HREFS, GUIDE_PAGES } from '@/lib/content/guides';
-import { Link } from '@/app/navigation';
 import { SEO_CONFIG } from '@/lib/seo/constants';
 import { generateOrganizationSchema } from '@/lib/seo/schema';
 import { getLocalizedField as getCategoryLocalizedField, getPopularCategories } from '@/lib/services/categories';
@@ -32,6 +31,7 @@ import CommunityPulse from '@/components/home/CommunityPulse';
 import Search from '@/components/Search';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import WebNavCardList from '@/components/webNav/WebNavCardList';
+import { Link } from '@/app/navigation';
 
 const ScrollToTop = dynamic(() => import('@/components/page/ScrollToTop'), { ssr: false });
 
@@ -151,6 +151,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const featuredGuidePages = FEATURED_GUIDE_HREFS.map((href) => GUIDE_PAGES.find((page) => page.href === href)).filter(
     (page): page is (typeof GUIDE_PAGES)[number] => Boolean(page),
   );
+  const comparisonGuideHrefs = [
+    '/guides/ai-writing-tools-comparison',
+    '/guides/ai-seo-tools-comparison',
+    '/guides/ai-tools-for-research-comparison',
+    '/guides/ai-tools-for-developers-comparison',
+    '/guides/ai-tools-for-web3-comparison',
+    '/guides/ai-tools-for-sales-comparison',
+  ] as const;
+  const comparisonGuidePages = comparisonGuideHrefs
+    .map((href) => GUIDE_PAGES.find((page) => page.href === href))
+    .filter((page): page is (typeof GUIDE_PAGES)[number] => Boolean(page));
   const startHereLinks = [
     {
       href: '/new',
@@ -397,11 +408,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <section className='mx-auto mt-10 w-full max-w-7xl px-4 lg:px-6'>
           <SectionHeader
-            title={isChinese ? '从这里开始' : 'Start here'}
+            title={isChinese ? '按分类找工具' : 'Browse by category'}
             description={
               isChinese
-                ? '如果你是第一次来，先从这几个最值得收录、也最容易建立判断的页面开始。'
-                : 'If this is your first visit, start with these pages. They are the clearest entry points for both users and search engines.'
+                ? '如果你还没有明确目标，可以先从这些更容易建立判断的分类入口开始。'
+                : 'If you do not have a specific goal yet, start from category pages to narrow the field first.'
             }
           />
           <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-5'>
@@ -417,6 +428,39 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                     <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
                   </div>
                   <CircleChevronRight className='mt-0.5 size-5 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-slate-700' />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <section className='rounded-[18px] border border-slate-200 bg-white px-4 py-6 shadow-sm lg:px-6'>
+          <SectionHeader
+            title={isChinese ? '按任务比较' : 'Compare by task'}
+            description={
+              isChinese
+                ? '如果你已经知道大概方向，直接从这些高意图对比页开始，会更快做出判断。'
+                : 'If you already know the rough direction, start from these high-intent comparison pages and decide faster.'
+            }
+          />
+          <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-3'>
+            {comparisonGuidePages.map((guide) => (
+              <Link
+                key={guide.href}
+                href={guide.href}
+                className='group rounded-[18px] border border-slate-200 bg-gradient-to-br from-white to-slate-50 p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
+              >
+                <div className='flex items-start justify-between gap-3'>
+                  <div className='min-w-0'>
+                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                      {isChinese ? 'Comparison' : 'Comparison'}
+                    </p>
+                    <h3 className='mt-1 text-base font-semibold text-slate-950'>
+                      {guide.title[isChinese ? 'cn' : 'en']}
+                    </h3>
+                    <p className='mt-2 text-sm leading-6 text-slate-600'>{guide.desc[isChinese ? 'cn' : 'en']}</p>
+                  </div>
+                  <ArrowRight className='mt-1 size-5 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-slate-700' />
                 </div>
               </Link>
             ))}

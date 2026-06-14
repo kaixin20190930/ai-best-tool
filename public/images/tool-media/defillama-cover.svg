@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1400" height="800" viewBox="0 0 1400 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="canvas-defillama" x1="72" y1="64" x2="1288" y2="738" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f7fbff"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+    <linearGradient id="panel-defillama" x1="918" y1="148" x2="1248" y2="516" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#dbeafe"/>
+      <stop offset="1" stop-color="#2563eb"/>
+    </linearGradient>
+  </defs>
+  <rect width="1400" height="800" rx="44" fill="url(#canvas-defillama)"/>
+  <circle cx="1232" cy="140" r="136" fill="#dbeafe" fill-opacity="0.74"/>
+  <circle cx="1110" cy="650" r="170" fill="#dbeafe" fill-opacity="0.5"/>
+  <rect x="64" y="64" width="1272" height="672" rx="34" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+
+  <rect x="116" y="120" width="260" height="46" rx="23" fill="#dbeafe"/>
+  <text x="246" y="149" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700" fill="#1d4ed8">Web3</text>
+
+  <text x="116" y="252" font-family="Inter, Arial, sans-serif" font-size="82" font-weight="800" fill="#0f172a">DefiLlama</text>
+  <text x="116" y="318" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="600" fill="#1d4ed8">DeFi market scan</text>
+  <text x="116" y="392" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="500" fill="#475569">Scan protocol scale, sector movement, and ecosystem shifts before deeper crypto research</text>
+
+  <rect x="116" y="460" width="520" height="170" rx="28" fill="#f7fbff" stroke="#dbeafe" stroke-width="2"/>
+  <text x="156" y="524" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700" fill="#0f172a">Editorial research ready</text>
+  <text x="156" y="572" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#475569">Localized detail copy, decision framing,</text>
+  <text x="156" y="606" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#475569">and stable local media for guide-driven traffic.</text>
+
+  <rect x="896" y="146" width="332" height="332" rx="40" fill="url(#panel-defillama)"/>
+  <rect x="934" y="184" width="256" height="256" rx="34" fill="rgba(255,255,255,0.88)"/>
+  <text x="1062" y="336" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="104" font-weight="800" fill="#1d4ed8">DL</text>
+
+  <rect x="896" y="532" width="332" height="88" rx="28" fill="#dbeafe"/>
+  <text x="1062" y="587" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700" fill="#1d4ed8">Web3 research wave</text>
+</svg>

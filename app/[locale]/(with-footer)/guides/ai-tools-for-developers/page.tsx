@@ -201,11 +201,18 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Best for editor-native completion, refactoring, and debugging.',
             },
             {
-              href: '/guides/ai-chatbot-tools-comparison',
-              title: isChinese ? '聊天工具对比' : 'Chatbot tools comparison',
+              href: '/guides/ai-tools-for-model-routing-comparison',
+              title: isChinese ? '模型路由工具对比' : 'Model routing comparison',
               description: isChinese
-                ? '更适合方案设计、解释和长上下文问答。'
-                : 'Better for planning, explanation, and long-context reasoning.',
+                ? '如果你真正关心的是模型切换、成本控制和 API 调度，这页更贴开发流程。'
+                : 'A better fit when model switching, cost control, and API routing are the real workflow concerns.',
+            },
+            {
+              href: '/guides/ai-tools-for-api-observability-comparison',
+              title: isChinese ? 'API 可观测性工具对比' : 'API observability comparison',
+              description: isChinese
+                ? '更适合日志、追踪、调试和线上模型调用可见性。'
+                : 'More useful for logs, tracing, debugging, and production visibility of model calls.',
             },
           ]}
           nextEyebrow={isChinese ? '下一步入口' : 'Where to go next'}

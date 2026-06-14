@@ -129,13 +129,13 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
             <div className='space-y-4'>
               <h1 className='max-w-3xl text-3xl font-bold tracking-tight text-slate-950 lg:text-5xl'>
                 {isChinese
-                  ? '选择适合你发布节奏的入驻方式'
-                  : 'Choose the listing option that fits your launch'}
+                  ? '选择适合你的入驻和前排展示方案'
+                  : 'Choose the listing and featured placement option that fits you'}
               </h1>
               <p className='max-w-2xl text-base leading-7 text-slate-600 lg:text-lg'>
                 {isChinese
-                  ? '从免费提交开始，或在需要更快审核和更强曝光时选择付费方案。'
-                  : 'Start with a free submission, or choose paid options when you need faster review and more visibility.'}
+                  ? '免费提交、优先审核、固定天数前排展示，都在这里一次看清。'
+                  : 'Free submission, priority review, and fixed featured windows are all laid out here.'}
               </p>
             </div>
 
@@ -152,24 +152,49 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
                 href={submitHref}
                 className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-5 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
               >
-                {isChinese ? '先去免费提交' : 'Start free submission'}
+                {isChinese ? '先去提交页' : 'Go to submit page'}
               </Link>
               <a
                 href={paymentHref}
                 className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-cyan-50 px-5 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
               >
-                {isChinese ? '联系付费入驻' : 'Contact for paid listing'}
+                {isChinese ? '联系付费方案' : 'Contact paid options'}
               </a>
+            </div>
+
+            <div className='rounded-2xl border border-slate-200 bg-slate-50 p-5'>
+              <p className='text-sm font-semibold text-slate-950'>
+                {isChinese ? '付款在哪里发生' : 'Where payment happens'}
+              </p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '先在提交页选择免费或付费方案；提交后，付费订单会在「我的提交」里生成 Stripe 结账链接。'
+                  : 'Pick free or paid on the submit page first; after submission, paid orders generate a Stripe checkout link inside My Submissions.'}
+              </p>
+              <div className='mt-4 flex flex-wrap gap-3'>
+                <Link
+                  href='/profile/submissions'
+                  className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+                >
+                  {isChinese ? '查看我的提交' : 'View my submissions'}
+                </Link>
+                <Link
+                  href={submitHref}
+                  className='inline-flex items-center justify-center rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800'
+                >
+                  {isChinese ? '去提交工具' : 'Submit a tool'}
+                </Link>
+              </div>
             </div>
 
             <div className='rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5'>
               <div className='flex flex-wrap items-center justify-between gap-3'>
                 <div>
                   <p className='text-xs font-semibold uppercase tracking-wide text-cyan-800'>
-                    {isChinese ? '热门选择' : 'Popular choices'}
+                    {isChinese ? '常用方案' : 'Common plans'}
                   </p>
                   <h2 className='mt-1 text-xl font-bold text-slate-950'>
-                    {isChinese ? '常用方案一目了然' : 'Quick view of the most common options'}
+                    {isChinese ? '适合大多数提交场景的方案' : 'The options most teams actually use'}
                   </h2>
                 </div>
               </div>
@@ -213,24 +238,22 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
                 bullets={priorityReview.highlights}
                 description={priorityReview.summary}
               />
-              {featuredWindows.map((item) => {
-                return (
-                  <PricingCard
-                    key={item.days}
-                    icon={Megaphone}
-                    title={item.label}
-                    price={item.priceLabel}
-                    badge={`${item.days} ${isChinese ? '天' : 'days'}`}
-                    bullets={[
-                      item.summary,
-                      isChinese ? '到期自动回收' : 'Automatically expires after the window',
-                      isChinese ? '适合活动期和更新期' : 'Best for launches and updates',
-                    ]}
-                    description={item.summary}
-                    highlighted={item.days === 7}
-                  />
-                );
-              })}
+              {featuredWindows.map((item) => (
+                <PricingCard
+                  key={item.days}
+                  icon={Megaphone}
+                  title={item.label}
+                  price={item.priceLabel}
+                  badge={`${item.days} ${isChinese ? '天' : 'days'}`}
+                  bullets={[
+                    item.summary,
+                    isChinese ? '到期自动回收' : 'Automatically expires after the window',
+                    isChinese ? '适合活动期和更新期' : 'Best for launches and updates',
+                  ]}
+                  description={item.summary}
+                  highlighted={item.days === 7}
+                />
+              ))}
               <PricingCard
                 icon={Rocket}
                 title={launchBundle.label}
@@ -251,9 +274,7 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
             {isChinese ? '价格对比' : 'Plan comparison'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese
-              ? '不同方案适合不同发布阶段'
-              : 'Pick the option that matches your launch stage'}
+            {isChinese ? '每个方案都有清楚的用途' : 'Each option has a clear purpose'}
           </h2>
 
           <div className='mt-4 overflow-x-auto'>
@@ -286,10 +307,10 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
                   ['Featured slot', 'No', 'Optional add-on', 'Yes', 'Yes'],
                   [
                     'Best for',
-                    isChinese ? '先试水' : 'Testing the waters',
-                    isChinese ? '赶发布节奏' : 'Release timing',
-                    isChinese ? '大多数发布期' : 'Most launches',
-                    isChinese ? '重点发布' : 'Launch week',
+                    isChinese ? '先免费提交' : 'Free submission first',
+                    isChinese ? '需要更快审核' : 'Need faster review',
+                    isChinese ? '需要固定前排窗口' : 'Need a fixed featured window',
+                    isChinese ? '审核 + 前排一起要' : 'Need review plus visibility',
                   ],
                 ].map((row) => (
                   <tr key={row[0]}>
@@ -308,10 +329,12 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
 
         <div className='rounded-[20px] border border-cyan-100 bg-cyan-50 p-6 shadow-sm'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-800'>
-            {isChinese ? '使用方式' : 'How it works'}
+            {isChinese ? '流程' : 'Workflow'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '提交、支付、发布都很清楚' : 'A simple path from submission to launch'}
+            {isChinese
+              ? '提交、审核、付款、展示都能对应上'
+              : 'Submission, review, payment, and placement all stay clear'}
           </h2>
           <div className='mt-4 space-y-3 text-sm text-slate-700'>
             <StepRow
@@ -320,13 +343,24 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
             />
             <StepRow
               index='2'
-              text={isChinese ? '需要更快审核时，可选择优先审核。' : 'Choose priority review when timing matters.'}
+              text={isChinese ? '需要更快审核时，选择优先审核。' : 'Choose priority review when timing matters.'}
             />
             <StepRow
               index='3'
-              text={isChinese ? '需要更强曝光时，可增加前排展示窗口。' : 'Add a featured window when you want more visibility.'}
+              text={
+                isChinese
+                  ? '需要更强曝光时，加上前排展示窗口。'
+                  : 'Add a featured window when you want more visibility.'
+              }
             />
-            <StepRow index='4' text={isChinese ? '支付确认后进入审核与展示流程。' : 'Payment confirmation moves your listing into review and visibility flow.'} />
+            <StepRow
+              index='4'
+              text={
+                isChinese
+                  ? '支付确认后，系统会把权益写入提交状态。'
+                  : 'Payment confirmation is written back into your submission status.'
+              }
+            />
           </div>
         </div>
       </section>
@@ -338,7 +372,7 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
               {isChinese ? '常见问题' : 'FAQ'}
             </p>
             <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-              {isChinese ? '定价应该怎么理解' : 'How to think about pricing'}
+              {isChinese ? '入驻和前排怎么理解' : 'How to think about listing and featured placement'}
             </h2>
           </div>
         </div>
@@ -372,7 +406,7 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
             q={isChinese ? '支付成功后如何确认？' : 'How is payment confirmed?'}
             a={
               isChinese
-                ? '支付成功后，回调接口会写入记录。如果工具已发布，会立即开始前排；如果还在审核中，则先保留前排权益，等发布后再开始计时。'
+                ? '支付成功后，回调接口会写入记录。如果工具已发布，前排会立即开始；如果还在审核中，会先保留权益，发布后再开始计时。'
                 : 'After payment succeeds, the callback endpoint writes a record. If the tool is already published, the featured window starts immediately. If it is still under review, the entitlement is reserved and the timer starts after publish.'
             }
           />

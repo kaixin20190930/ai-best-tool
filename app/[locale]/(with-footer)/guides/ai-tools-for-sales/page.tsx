@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import GuideActionSection from '@/components/guides/GuideActionSection';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
@@ -203,6 +204,48 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </div>
         </section>
+
+        <GuideActionSection
+          locale={locale}
+          eyebrow={isChinese ? '先看这些候选' : 'Recommended candidates'}
+          title={isChinese ? '当前更贴近销售工作流的真实条目' : 'Current listings closer to real sales workflows'}
+          description={
+            isChinese
+              ? '如果你要判断的是线索、跟进、外联和流程衔接，这几款会比泛聊天工具更接近真实销售工作。'
+              : 'If the decision is really about leads, follow-up, outreach, and workflow fit, these listings sit closer to real sales work than broad assistant tools.'
+          }
+          toolNames={['apollo-io', 'clay', 'outreach', 'lemlist']}
+          compareEyebrow={isChinese ? '继续缩小范围' : 'Narrow next'}
+          compareTitle={isChinese ? '按更具体任务进入' : 'Move into narrower task-specific paths'}
+          compareDescription={
+            isChinese
+              ? '当你已经知道自己偏获客、拓客还是泛销售管理，继续进入更窄的 comparison 页会更省时间。'
+              : 'Once you know the job leans more toward lead generation, prospecting, or broader sales process, narrower comparison pages save time.'
+          }
+          compareLinks={[
+            {
+              href: '/guides/ai-tools-for-lead-generation-comparison',
+              title: isChinese ? '获客工具对比' : 'Lead generation comparison',
+              description: isChinese
+                ? '更适合名单发现、补全和早期筛选。'
+                : 'Best for list discovery, enrichment, and early qualification.',
+            },
+            {
+              href: '/guides/ai-tools-for-sales-prospecting-comparison',
+              title: isChinese ? '销售拓客工具对比' : 'Sales prospecting comparison',
+              description: isChinese
+                ? '更适合个性化外联、触达准备和回应率提升。'
+                : 'Best for personalized outreach, contact prep, and response quality.',
+            },
+            {
+              href: '/guides/ai-tools-for-sales-comparison',
+              title: isChinese ? '销售工具对比' : 'Sales tools comparison',
+              description: isChinese
+                ? '如果你要整体横向看销售候选，这里最直接。'
+                : 'The most direct path if you want a broad side-by-side sales shortlist.',
+            },
+          ]}
+        />
       </div>
     </>
   );
