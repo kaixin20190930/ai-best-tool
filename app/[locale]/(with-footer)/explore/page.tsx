@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 
-import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema } from '@/lib/seo/schema';
 import { getAllCategories } from '@/lib/services/categories';
 import { getAllTags } from '@/lib/services/tags';
@@ -8,6 +7,7 @@ import { SortBy } from '@/lib/services/tools';
 import FilterPanel from '@/components/FilterPanel';
 import { generateHreflangMetadata } from '@/components/seo';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 import ExploreList from './ExploreList';
 
@@ -118,6 +118,61 @@ export default async function Page({ params, searchParams }: PageProps) {
                   : 'If your comparison criteria are still fuzzy, the guide is the fastest way to build context.'}
               </p>
             </Link>
+          </div>
+        </section>
+
+        <section className='mb-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '更细的分类入口' : 'Focused category entry points'}
+          </p>
+          <h2 className='mt-2 text-2xl font-bold text-slate-950'>
+            {isChinese ? '如果方向已经清楚，就直接去细分类' : 'When the direction is clear, jump to focused categories'}
+          </h2>
+          <p className='mt-3 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? 'Research、Voice、Automation 和 Developer Tools 这些分类更适合高意图筛选，不必先在大类里绕一圈。'
+              : 'Research, Voice, Automation, and Developer Tools are stronger for high-intent browsing, so you do not need to stay in the broad buckets first.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/categories/research?sort=popular',
+                title: isChinese ? '看研究分类' : 'Open research',
+                description: isChinese
+                  ? '适合模型发现、资料检索和研究型工作流。'
+                  : 'A better fit for model discovery, source gathering, and research workflows.',
+              },
+              {
+                href: '/categories/voice?sort=popular',
+                title: isChinese ? '看语音分类' : 'Open voice',
+                description: isChinese
+                  ? '适合转录、播客、配音和音频优先场景。'
+                  : 'A better fit for transcription, podcasting, dubbing, and audio-first workflows.',
+              },
+              {
+                href: '/categories/automation?sort=popular',
+                title: isChinese ? '看自动化分类' : 'Open automation',
+                description: isChinese
+                  ? '适合工作流编排、Agent 和重复任务自动执行。'
+                  : 'A better fit for orchestration, agents, and repeatable task automation.',
+              },
+              {
+                href: '/categories/developer-tools?sort=popular',
+                title: isChinese ? '看开发者工具分类' : 'Open developer tools',
+                description: isChinese
+                  ? '适合 API、模型基础设施和开发型工作流。'
+                  : 'A better fit for APIs, model infrastructure, and developer workflows.',
+              },
+            ].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className='rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-cyan-50/60'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
+              </Link>
+            ))}
           </div>
         </section>
 

@@ -206,6 +206,36 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         : 'See what a complete decision-ready tool page looks like before comparing others.',
     },
   ];
+  const focusedCategoryLinks = [
+    {
+      href: '/categories/research?sort=popular',
+      title: isChinese ? '看研究分类' : 'Open research',
+      description: isChinese
+        ? '适合模型发现、资料检索和更重研究型的工作流。'
+        : 'A better fit for model discovery, source gathering, and deeper research workflows.',
+    },
+    {
+      href: '/categories/voice?sort=popular',
+      title: isChinese ? '看语音分类' : 'Open voice',
+      description: isChinese
+        ? '适合转录、播客、配音和语音优先的场景。'
+        : 'A better fit for transcription, podcasting, dubbing, and audio-first workflows.',
+    },
+    {
+      href: '/categories/automation?sort=popular',
+      title: isChinese ? '看自动化分类' : 'Open automation',
+      description: isChinese
+        ? '适合工作流编排、Agent 和重复任务自动执行。'
+        : 'A better fit for orchestration, agents, and repeatable task automation.',
+    },
+    {
+      href: '/categories/developer-tools?sort=popular',
+      title: isChinese ? '看开发者工具分类' : 'Open developer tools',
+      description: isChinese
+        ? '适合 API、模型基础设施和开发型工作流。'
+        : 'A better fit for APIs, model infrastructure, and developer workflows.',
+    },
+  ];
 
   // Generate Organization schema for homepage
   const organizationSchema = generateOrganizationSchema({
@@ -417,6 +447,34 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           />
           <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-5'>
             {startHereLinks.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className='group rounded-[18px] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
+              >
+                <div className='flex items-start justify-between gap-3'>
+                  <div>
+                    <h3 className='text-base font-semibold text-slate-950'>{item.title}</h3>
+                    <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
+                  </div>
+                  <CircleChevronRight className='mt-0.5 size-5 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-slate-700' />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <section className='mx-auto mt-10 w-full max-w-7xl px-4 lg:px-6'>
+          <SectionHeader
+            title={isChinese ? '更细的分类入口' : 'More focused categories'}
+            description={
+              isChinese
+                ? '如果你已经知道自己更偏研究、语音、自动化或开发者工具，可以直接从这里进入。'
+                : 'If you already know you are closer to research, voice, automation, or developer tooling, jump in here.'
+            }
+          />
+          <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
+            {focusedCategoryLinks.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}

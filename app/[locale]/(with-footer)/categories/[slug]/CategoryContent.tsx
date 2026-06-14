@@ -45,8 +45,11 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
     'video-generator': ['/guides/ai-video-tools', '/guides/ai-video-tools-comparison'],
     'image-generator': ['/guides/ai-image-tools', '/guides/ai-image-tools-comparison'],
     coding: ['/guides/ai-coding-tools', '/guides/ai-coding-tools-comparison'],
+    research: ['/guides/ai-tools-for-research', '/guides/ai-tools-for-research-comparison', '/guides/ai-seo-tools'],
+    voice: ['/guides/ai-video-tools', '/guides/ai-video-tools-comparison'],
+    automation: ['/guides/ai-tools-for-automation', '/guides/ai-tools-for-automation-comparison'],
+    'developer-tools': ['/guides/ai-tools-for-developers', '/guides/ai-tools-for-developers-comparison'],
     web3: ['/guides/ai-tools-for-web3', '/guides/ai-tools-for-web3-comparison'],
-    research: ['/guides/ai-seo-tools', '/guides/ai-tools-for-crypto-research'],
   };
   const representativeToolMap: Record<
     string,
@@ -148,6 +151,190 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
         },
       },
     ],
+    research: [
+      {
+        href: '/ai/perplexity',
+        title: {
+          cn: 'Perplexity：更适合来源和研究起点',
+          en: 'Perplexity: source-friendly research starting point',
+        },
+        description: {
+          cn: '适合先看搜索、来源和答案组织方式是否满足研究需要。',
+          en: 'A strong entry point if you want to judge search, citations, and answer structure for research work.',
+        },
+      },
+      {
+        href: '/ai/elicit',
+        title: {
+          cn: 'Elicit：证据驱动研究入口',
+          en: 'Elicit: evidence-driven research',
+        },
+        description: {
+          cn: '更适合文献梳理、证据提取和研究型调研。',
+          en: 'A better fit for literature review, evidence gathering, and source-heavy research.',
+        },
+      },
+      {
+        href: '/ai/papers-with-code',
+        title: {
+          cn: 'Papers with Code：论文与实现结合',
+          en: 'Papers with Code: papers plus implementations',
+        },
+        description: {
+          cn: '适合先看模型、论文和 benchmark 是否能连到一起。',
+          en: 'Useful when you care about linking papers, models, and benchmarks together.',
+        },
+      },
+      {
+        href: '/ai/hugging-face',
+        title: {
+          cn: 'Hugging Face：模型发现和生态探索',
+          en: 'Hugging Face: model discovery and ecosystem exploration',
+        },
+        description: {
+          cn: '适合研究模型、数据集和开源 AI 资源。',
+          en: 'A better fit for models, datasets, and open-source AI ecosystem discovery.',
+        },
+      },
+    ],
+    voice: [
+      {
+        href: '/ai/elevenlabs',
+        title: {
+          cn: 'ElevenLabs：语音合成与克隆',
+          en: 'ElevenLabs: speech synthesis and cloning',
+        },
+        description: {
+          cn: '适合先看音色、语音自然度和生产可用性。',
+          en: 'Useful for judging voice quality, naturalness, and production readiness.',
+        },
+      },
+      {
+        href: '/ai/descript',
+        title: {
+          cn: 'Descript：音频编辑与转写',
+          en: 'Descript: audio editing and transcription',
+        },
+        description: {
+          cn: '适合转录、音频编辑和播客工作流。',
+          en: 'A better fit for transcription, audio editing, and podcast workflows.',
+        },
+      },
+      {
+        href: '/ai/notta',
+        title: {
+          cn: 'Notta：会议转写入口',
+          en: 'Notta: meeting transcription',
+        },
+        description: {
+          cn: '适合语音记录、会议纪要和多语言转写。',
+          en: 'A practical entry point for meeting capture, notes, and multilingual transcription.',
+        },
+      },
+      {
+        href: '/ai/elevenlabs-conversational-ai',
+        title: {
+          cn: '语音对话 Agent',
+          en: 'Voice conversational agents',
+        },
+        description: {
+          cn: '适合把语音接入客服、助手和实时交互场景。',
+          en: 'Useful when voice needs to power assistants, support, or real-time interaction.',
+        },
+      },
+    ],
+    automation: [
+      {
+        href: '/ai/n8n',
+        title: {
+          cn: 'n8n：工作流自动化',
+          en: 'n8n: workflow automation',
+        },
+        description: {
+          cn: '适合看可视化编排和自动化深度。',
+          en: 'A solid entry point for visual orchestration and automation depth.',
+        },
+      },
+      {
+        href: '/ai/zapier',
+        title: {
+          cn: 'Zapier：连接器优先自动化',
+          en: 'Zapier: connector-first automation',
+        },
+        description: {
+          cn: '适合连接器覆盖和快速搭建流程。',
+          en: 'A better fit for connector coverage and fast workflow setup.',
+        },
+      },
+      {
+        href: '/ai/make',
+        title: {
+          cn: 'Make：可视化编排',
+          en: 'Make: visual orchestration',
+        },
+        description: {
+          cn: '适合复杂分支、条件和任务流编排。',
+          en: 'Useful for branching logic, conditions, and more complex flows.',
+        },
+      },
+      {
+        href: '/ai/ifttt',
+        title: {
+          cn: 'IFTTT：轻量触发自动化',
+          en: 'IFTTT: lightweight trigger automation',
+        },
+        description: {
+          cn: '适合简单触发器和日常自动化。',
+          en: 'A good fit for simple triggers and lightweight daily automations.',
+        },
+      },
+    ],
+    'developer-tools': [
+      {
+        href: '/ai/cursor',
+        title: {
+          cn: 'Cursor：开发者编辑器入口',
+          en: 'Cursor: developer editor entry point',
+        },
+        description: {
+          cn: '适合看编辑器内 AI 辅助是否真正提升编码效率。',
+          en: 'Good for judging whether editor-native AI really improves coding speed.',
+        },
+      },
+      {
+        href: '/ai/alchemy',
+        title: {
+          cn: 'Alchemy：基础设施和 API',
+          en: 'Alchemy: infrastructure and APIs',
+        },
+        description: {
+          cn: '适合开发者基础设施、API 和链路可用性。',
+          en: 'A better fit for infrastructure, APIs, and operational reliability.',
+        },
+      },
+      {
+        href: '/ai/pinecone',
+        title: {
+          cn: 'Pinecone：向量和检索',
+          en: 'Pinecone: vector and retrieval',
+        },
+        description: {
+          cn: '适合检索、RAG 和数据层工作流。',
+          en: 'Useful for retrieval, RAG, and data-layer workflows.',
+        },
+      },
+      {
+        href: '/ai/v0',
+        title: {
+          cn: 'v0：前端与原型生成',
+          en: 'v0: frontend and prototype generation',
+        },
+        description: {
+          cn: '适合前端原型、界面生成和快速出图。',
+          en: 'A practical entry point for frontend prototypes, interface generation, and quick UI drafting.',
+        },
+      },
+    ],
   };
   const relatedGuideHrefs = [
     '/guides/how-to-choose-ai-tools',
@@ -183,6 +370,13 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
         'Prefer tools with real screenshots, clear pricing, and recent updates.',
         'If you are a developer, submit first and use feedback to refine positioning.',
       ];
+  if (categorySlug === 'other') {
+    helperBullets.unshift(
+      isChinese
+        ? 'Other 只是临时兜底分类，尽量先把工具重新放回 Research、Voice、Automation、Developer Tools、Web3 或更具体的场景分类。'
+        : 'Other is a temporary fallback bucket; prefer moving tools into Research, Voice, Automation, Developer Tools, Web3, or a more specific scenario category.',
+    );
+  }
   const faqs = [
     {
       question: isChinese
@@ -287,6 +481,46 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
             </div>
           </section>
         </div>
+
+        {categorySlug === 'other' && (
+          <section className='theme-surface mb-8 rounded-lg border border-amber-200 bg-amber-50/60 p-6 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-amber-700'>
+              {isChinese ? 'Other 只是兜底桶' : 'Other is only a fallback bucket'}
+            </p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-900'>
+              {isChinese
+                ? '如果能归类，就尽量不要留在 Other'
+                : 'If a tool can be categorized, avoid leaving it in Other'}
+            </h2>
+            <p className='mt-3 max-w-3xl text-sm leading-6 text-slate-700'>
+              {isChinese
+                ? '更好的做法是把它拆进 Research、Voice、Automation、Developer Tools 或 Web3 这些更具体的场景里。这样筛选、SEO 和后续运营都会更清楚。'
+                : 'The better move is to move it into Research, Voice, Automation, Developer Tools, or Web3 so filtering, SEO, and ongoing operations stay clearer.'}
+            </p>
+            <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+              {[
+                { href: '/categories/research?sort=popular', label: isChinese ? 'Research' : 'Research' },
+                { href: '/categories/voice?sort=popular', label: isChinese ? 'Voice' : 'Voice' },
+                { href: '/categories/automation?sort=popular', label: isChinese ? 'Automation' : 'Automation' },
+                {
+                  href: '/categories/developer-tools?sort=popular',
+                  label: isChinese ? 'Developer Tools' : 'Developer Tools',
+                },
+              ].map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className='rounded-lg border border-amber-200 bg-white p-4 transition hover:border-amber-300 hover:bg-amber-100/50'
+                >
+                  <p className='text-sm font-semibold text-slate-950'>{item.label}</p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {isChinese ? '点进去看更具体的子分类入口。' : 'Jump in and work from a more specific bucket.'}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
         {comparisonGuides.length > 0 && (
           <section className='theme-surface mb-8 rounded-lg border border-slate-200 p-6 shadow-sm'>
