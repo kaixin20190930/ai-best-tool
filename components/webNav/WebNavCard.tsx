@@ -8,6 +8,8 @@ import RatingStars from '../RatingStars';
 import ToolCardMedia from './ToolCardMedia';
 
 interface WebNavCardProps extends Omit<WebNavigationListRow, 'id'> {
+  compareHref?: string;
+  compareLabel?: string;
   isFavorited?: boolean;
   toolId?: string;
   averageRating?: number;
