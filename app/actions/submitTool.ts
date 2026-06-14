@@ -13,6 +13,7 @@ interface SubmitToolInput {
   url: string;
   categoryId?: string;
   description?: string;
+  tags?: string;
   pricing?: string;
   imageUrl?: string;
   thumbnailUrl?: string;
@@ -42,6 +43,28 @@ function normalizeOptionalUrl(url?: string): string | null {
   }
 
   return normalizeUrl(trimmed);
+}
+
+function normalizeTags(tags?: string): string[] {
+  if (!tags) {
+    return [];
+  }
+
+  return tags
+    .split(',')
+    .map((tag) =>
+      tag
+        .trim()
+        .toLowerCase()
+        .replace(/https?:\/\//g, '')
+        .replace(/\s+/g, '-')
+        .replace(/[^a-z0-9-]+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-+|-+$/g, ''),
+    )
+    .filter(Boolean)
+    .filter((tag, index, array) => array.indexOf(tag) === index)
+    .slice(0, 12);
 }
 
 function slugify(value: string): string {
@@ -103,6 +126,7 @@ export async function submitTool(input: SubmitToolInput): Promise<SubmitToolResu
     const url = normalizeUrl(input.url);
     const imageUrl = normalizeOptionalUrl(input.imageUrl);
     const thumbnailUrl = normalizeOptionalUrl(input.thumbnailUrl);
+    const tags = normalizeTags(input.tags);
     const urlHost = new URL(url).hostname.replace(/^www\./, '');
     const slug = await createUniqueToolSlug(website || urlHost);
     const title = { en: website, zh: website };
@@ -164,7 +188,7 @@ export async function submitTool(input: SubmitToolInput): Promise<SubmitToolResu
         imageUrl,
         thumbnailUrl,
         categoryId,
-        [],
+        tags,
         pricing,
         'pending',
         user.id,

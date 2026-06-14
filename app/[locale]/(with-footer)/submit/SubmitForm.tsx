@@ -8,7 +8,6 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-import { Link } from '@/app/navigation';
 import { listingConfig } from '@/lib/config/listing';
 import { FORM_PLACEHOLDER, WEBSITE_EXAMPLE } from '@/lib/constants';
 import type { Category } from '@/lib/services/categories';
@@ -17,6 +16,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import Spinning from '@/components/Spinning';
 import { submitTool } from '@/app/actions/submitTool';
+import { Link } from '@/app/navigation';
 
 const pricingOptions = [
   { value: 'free', label: 'Free' },
@@ -38,6 +38,7 @@ const FormSchema = z.object({
   url: z.string().trim().refine(isValidHttpUrl),
   categoryId: z.string().optional(),
   description: z.string().trim().max(800).optional(),
+  tags: z.string().trim().max(200).optional(),
   pricing: z.enum(['free', 'freemium', 'paid']),
   imageUrl: z
     .string()
@@ -82,6 +83,7 @@ export default function SubmitForm({
       url: '',
       categoryId: '',
       description: '',
+      tags: '',
       pricing: 'freemium',
       imageUrl: '',
       thumbnailUrl: '',
@@ -179,8 +181,8 @@ export default function SubmitForm({
           )}
           <div className='rounded-lg bg-slate-50 px-3 py-2 text-xs text-slate-600 ring-1 ring-slate-200'>
             {isChinese
-              ? '如有，请尽量补充产品名、官网、分类、定价与一句核心能力描述。'
-              : 'If available, include the name, website, category, pricing, and one clear capability sentence.'}
+              ? '如有，请尽量补充产品名、官网、分类、定价、Logo、截图和一句核心能力描述。'
+              : 'If available, include the name, website, category, pricing, logo, screenshot, and one clear capability sentence.'}
           </div>
           <FormField
             control={form.control}
@@ -285,6 +287,32 @@ export default function SubmitForm({
               )}
             />
           </div>
+          <FormField
+            control={form.control}
+            name='tags'
+            render={({ field }) => (
+              <FormItem className='space-y-1'>
+                <FormLabel>Tags</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder={
+                      isChinese
+                        ? '例如：gif-tools, video-to-gif, creator-tools'
+                        : 'e.g. gif-tools, video-to-gif, creator-tools'
+                    }
+                    className='h-[42px] w-full rounded-[8px] border border-slate-300 bg-white p-5 text-slate-900'
+                    {...field}
+                  />
+                </FormControl>
+                <div className='text-xs text-slate-500'>
+                  {isChinese
+                    ? '多个标签用英文逗号分隔，建议填 3-8 个，最好使用短横线格式。'
+                    : 'Use commas to separate tags. 3-8 tags is a good range, preferably in kebab-case.'}
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <div className='grid gap-3 lg:grid-cols-2'>
             <FormField
               control={form.control}
@@ -322,9 +350,7 @@ export default function SubmitForm({
             />
           </div>
           <div className='rounded-lg border border-slate-200 bg-slate-50 p-4'>
-            <p className='text-sm font-semibold text-slate-900'>
-              {isChinese ? '提交方案' : 'Submission plan'}
-            </p>
+            <p className='text-sm font-semibold text-slate-900'>{isChinese ? '提交方案' : 'Submission plan'}</p>
             <p className='mt-1 text-xs text-slate-500'>
               {isChinese
                 ? '先选择提交方式，再按需要设置审核速度和前排展示天数。'
@@ -544,8 +570,8 @@ export default function SubmitForm({
           </p>
           <p className='text-xs text-slate-500'>
             {isChinese
-              ? '提交后你可以继续补充 Logo 和截图，我们会在审核中参考。'
-              : 'You can still add logo and screenshot later; we include them during review.'}
+              ? '提交后仍可补充 Logo 和截图；如果是付费入驻，付款会在“我的提交”里继续处理。'
+              : 'You can still add logo and screenshot later; paid listing payment is handled from My Submissions.'}
           </p>
         </div>
       </form>
