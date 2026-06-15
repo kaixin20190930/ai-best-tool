@@ -100,6 +100,15 @@ export default async function AdminAnalyticsPage({
     return 'Other';
   };
 
+  const getPageAction = (pageType: string) => {
+    if (pageType === 'home') return 'Tighten the first fold and routing into compare pages';
+    if (pageType === 'tool_detail') return 'Improve trust signals, comparisons, and feedback prompts';
+    if (pageType === 'guide') return 'Add more comparison guides and internal links';
+    if (pageType === 'category') return 'Backfill supply and strengthen category filters';
+    if (pageType === 'explore') return 'Improve zero-results guidance and sorting clarity';
+    return 'Review where these visits should be reassigned';
+  };
+
   const focusCategories = topCategories.slice(0, 3);
   const pageSummaryOrder = ['home', 'tool_detail', 'guide', 'category', 'explore', 'other'] as const;
   const pageSummaryMap = new Map(pageAccessReport.summary.map((item) => [item.pageType, item]));
@@ -114,6 +123,56 @@ export default async function AdminAnalyticsPage({
       percentage: item?.percentage || 0,
     };
   });
+  const topPriorityPage = pageSummaryItems
+    .filter((item) => item.views > 0)
+    .sort((a, b) => b.views - a.views)[0];
+  const detailShare = pageSummaryMap.get('tool_detail')?.percentage || 0;
+  const guideShare = pageSummaryMap.get('guide')?.percentage || 0;
+  const homeShare = pageSummaryMap.get('home')?.percentage || 0;
+  const categoryShare = pageSummaryMap.get('category')?.percentage || 0;
+  const exploreShare = pageSummaryMap.get('explore')?.percentage || 0;
+  const pageFocusSignals = [
+    {
+      label: 'Homepage',
+      value: homeShare,
+      summary:
+        homeShare > 0
+          ? 'First-fold CTA and category entry points matter most here.'
+          : 'Still too little data, but keep the entry rail concise.',
+    },
+    {
+      label: 'Tool detail',
+      value: detailShare,
+      summary:
+        detailShare > 0
+          ? 'Trust snapshots, comparison blocks, and feedback matter most here.'
+          : 'More product detail traffic will tell us which trust modules work.',
+    },
+    {
+      label: 'Guides',
+      value: guideShare,
+      summary:
+        guideShare > 0
+          ? 'Comparison-style guides and internal links should keep growing.'
+          : 'This is a good place to add more high-intent decision pages.',
+    },
+    {
+      label: 'Categories',
+      value: categoryShare,
+      summary:
+        categoryShare > 0
+          ? 'Backfilling supply inside categories should be a weekly habit.'
+          : 'Category pages need more inventory or they will stay thin.',
+    },
+    {
+      label: 'Explore',
+      value: exploreShare,
+      summary:
+        exploreShare > 0
+          ? 'Filters, sorting, and empty states deserve steady polish.'
+          : 'Explore traffic is light, so SEO and routing into it matter more.',
+    },
+  ];
 
   return (
     <div>
@@ -200,6 +259,27 @@ export default async function AdminAnalyticsPage({
           </div>
         </div>
 
+        <div className='mb-4 rounded-lg border border-cyan-100 bg-cyan-50 p-4 shadow-sm'>
+          <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between'>
+            <div>
+              <div className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>Current focus</div>
+              <div className='mt-1 text-base font-semibold text-slate-950'>
+                {topPriorityPage
+                  ? `${topPriorityPage.label} is currently the most visited page type`
+                  : 'No page view data yet'}
+              </div>
+              <p className='mt-1 text-sm leading-6 text-slate-600'>
+                {topPriorityPage
+                  ? getPageAction(topPriorityPage.pageType)
+                  : 'Once traffic grows, this report will show which page family deserves the next round of work.'}
+              </p>
+            </div>
+            <div className='rounded-full bg-white px-3 py-1 text-sm font-semibold text-cyan-800 ring-1 ring-cyan-100'>
+              {topPriorityPage ? `${topPriorityPage.views.toLocaleString()} views` : 'Waiting for data'}
+            </div>
+          </div>
+        </div>
+
         <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-3'>
           {pageSummaryItems.map((item) => (
             <div key={item.pageType} className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
@@ -213,6 +293,24 @@ export default async function AdminAnalyticsPage({
                 </div>
               </div>
               <div className='mt-3 text-sm text-slate-600'>{item.uniqueVisitors.toLocaleString()} unique visitors</div>
+              <p className='mt-3 text-sm leading-6 text-slate-600'>{getPageAction(item.pageType)}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className='mt-4 grid gap-4 lg:grid-cols-2'>
+          {pageFocusSignals.map((signal) => (
+            <div key={signal.label} className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <div className='text-xs font-medium uppercase tracking-wide text-slate-500'>{signal.label}</div>
+                  <div className='mt-2 text-2xl font-semibold text-slate-900'>{signal.value.toFixed(1)}%</div>
+                </div>
+                <div className='rounded-full bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-600'>
+                  Share
+                </div>
+              </div>
+              <p className='mt-3 text-sm leading-6 text-slate-600'>{signal.summary}</p>
             </div>
           ))}
         </div>
@@ -233,6 +331,9 @@ export default async function AdminAnalyticsPage({
                 <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>
                   Visitors
                 </th>
+                <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                  Next action
+                </th>
               </tr>
             </thead>
             <tbody className='divide-y divide-slate-100 bg-white'>
@@ -246,6 +347,7 @@ export default async function AdminAnalyticsPage({
                   <td className='px-4 py-3 text-right text-sm text-slate-600'>
                     {page.uniqueVisitors.toLocaleString()}
                   </td>
+                  <td className='px-4 py-3 text-sm text-slate-600'>{getPageAction(page.pageType)}</td>
                 </tr>
               ))}
             </tbody>
