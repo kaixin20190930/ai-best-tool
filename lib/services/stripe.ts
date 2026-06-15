@@ -38,16 +38,16 @@ export function getStripeWebhookSecret(): string {
 }
 
 export function getStripeListingAmountCents(featuredDays: 0 | 3 | 7 | 14, fastTrack: boolean): number {
-  const priorityReview = 2900;
+  const priorityReview = listingConfig.pricingTiers.priorityReview.amountCents;
   const featuredAmountByDays: Record<0 | 3 | 7 | 14, number> = {
     0: 0,
-    3: 2900,
-    7: 4900,
-    14: 7900,
+    3: listingConfig.pricingTiers.featuredWindows.find((item) => item.days === 3)?.amountCents || 0,
+    7: listingConfig.pricingTiers.featuredWindows.find((item) => item.days === 7)?.amountCents || 0,
+    14: listingConfig.pricingTiers.featuredWindows.find((item) => item.days === 14)?.amountCents || 0,
   };
 
   if (fastTrack && featuredDays === 14) {
-    return 9900;
+    return listingConfig.pricingTiers.launchBundle.amountCents;
   }
 
   return priorityReview + featuredAmountByDays[featuredDays];

@@ -403,6 +403,14 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
             }
           />
           <FaqCard
+            q={isChinese ? '老工具还能再次买前排吗？' : 'Can an existing listing buy featured placement again?'}
+            a={
+              isChinese
+                ? '可以。前排是按固定窗口计费的，已经收录的工具也能在后续重新购买新的前排窗口。'
+                : 'Yes. Featured placement is sold as a fixed window, so an existing listing can purchase a new featured window later.'
+            }
+          />
+          <FaqCard
             q={isChinese ? '支付成功后如何确认？' : 'How is payment confirmed?'}
             a={
               isChinese

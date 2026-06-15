@@ -9,6 +9,7 @@ export type ListingConfig = {
     free: {
       label: string;
       priceLabel: string;
+      amountCents: number;
       reviewWindow: string;
       summary: string;
       highlights: string[];
@@ -16,6 +17,7 @@ export type ListingConfig = {
     priorityReview: {
       label: string;
       priceLabel: string;
+      amountCents: number;
       reviewWindow: string;
       summary: string;
       highlights: string[];
@@ -24,11 +26,13 @@ export type ListingConfig = {
       days: 3 | 7 | 14;
       label: string;
       priceLabel: string;
+      amountCents: number;
       summary: string;
     }>;
     launchBundle: {
       label: string;
       priceLabel: string;
+      amountCents: number;
       summary: string;
       highlights: string[];
     };
@@ -56,8 +60,7 @@ export type ListingConfig = {
 export const listingConfig: ListingConfig = {
   currencySymbol: '$',
   listingFeeLabel: 'One-time listing fee',
-  valueProposition:
-    'Free submissions stay open, with paid options for faster review and added visibility.',
+  valueProposition: 'Free submissions stay open, with paid options for faster review and added visibility.',
   salesBullets: [
     'Free submissions are reviewed in the standard queue.',
     'Paid review shortens the review window for time-sensitive launches.',
@@ -67,40 +70,46 @@ export const listingConfig: ListingConfig = {
     free: {
       label: 'Free submission',
       priceLabel: '$0',
+      amountCents: 0,
       reviewWindow: '3-7 days',
       summary: 'A standard review path for new listings.',
       highlights: ['Standard review queue', 'No featured placement included'],
     },
     priorityReview: {
       label: 'Priority review',
-      priceLabel: '$29 one-time',
+      priceLabel: '$9 one-time',
+      amountCents: 900,
       reviewWindow: '1-3 days',
-      summary: 'A shorter review window for time-sensitive submissions.',
+      summary: 'A smaller one-time fee for time-sensitive submissions.',
       highlights: ['Shorter review window', 'Useful for launches, updates, and campaign timing'],
     },
     featuredWindows: [
       {
         days: 3,
         label: '3-day featured',
-        priceLabel: '$29',
+        priceLabel: '$9',
+        amountCents: 900,
         summary: 'Short burst for a quick announcement.',
       },
       {
         days: 7,
         label: '7-day featured',
-        priceLabel: '$49',
+        priceLabel: '$19',
+        amountCents: 1900,
         summary: 'A full week of added visibility.',
       },
       {
         days: 14,
         label: '14-day featured',
-        priceLabel: '$79',
+        priceLabel: '$29',
+        amountCents: 2900,
         summary: 'Longer visibility for bigger campaigns.',
       },
     ],
     launchBundle: {
       label: 'Launch bundle',
-      priceLabel: '$99',
+      priceLabel: '$39',
+      amountCents: 3900,
       summary: 'Priority review plus 14 days of featured visibility.',
       highlights: ['Includes priority review', 'Includes a 14-day featured window', 'Designed for launch periods'],
     },
@@ -116,11 +125,7 @@ export const listingConfig: ListingConfig = {
       label: 'Standard paid',
       summary: 'Shorter review with optional featured visibility.',
       reviewWindow: '1-3 days',
-      highlights: [
-        'Shorter review window',
-        'Optional featured placement',
-        'Secure payment confirmation',
-      ],
+      highlights: ['Shorter review window', 'Optional featured placement', 'Secure payment confirmation'],
       fastTrackLabel: '24-48h review target',
       featuredLabel: 'Featured placement',
       launchWindowLabel: 'Featured window',
