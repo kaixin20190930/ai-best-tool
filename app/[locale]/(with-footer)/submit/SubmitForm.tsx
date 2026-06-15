@@ -1,7 +1,7 @@
 'use client';
 
 /* eslint-disable react/jsx-props-no-spreading */
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
@@ -59,6 +59,17 @@ function getLocalizedName(name: Record<string, string>, locale: string): string 
   return name[locale] || name.en || name.zh || Object.values(name)[0] || '';
 }
 
+function slugifyTag(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/https?:\/\//g, '')
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 export default function SubmitForm({
   categories,
   locale,
@@ -98,6 +109,54 @@ export default function SubmitForm({
   const descriptionLength = form.watch('description')?.length || 0;
   const selectedFeaturedDays = Number(featuredDays || '0');
   const isPaidPlan = submissionPlan === 'standard_paid';
+  const selectedCategoryId = form.watch('categoryId');
+  const selectedCategory = categories.find((category) => category.id === selectedCategoryId);
+
+  const suggestedTags = useMemo(() => {
+    const bySlug: Record<string, string[]> = {
+      'text-writing': ['writing', 'copywriting', 'content-generation', 'blogging', 'editor'],
+      productivity: ['productivity', 'note-taking', 'meeting-notes', 'workflow', 'planning'],
+      'developer-tools': ['developer-tools', 'api', 'debugging', 'code-review', 'automation'],
+      automation: ['automation', 'workflow', 'no-code', 'integrations', 'trigger'],
+      research: ['research', 'search', 'knowledge-base', 'analysis', 'discovery'],
+      'design-art': ['design', 'image-generation', 'creative', 'branding', 'visual'],
+      web3: ['web3', 'crypto', 'on-chain-analysis', 'defi', 'token-research', 'wallet-monitoring'],
+      chatbot: ['chatbot', 'assistant', 'llm', 'prompting', 'conversation'],
+      voice: ['voice', 'speech-to-text', 'text-to-speech', 'audio', 'transcription'],
+      video: ['video', 'editing', 'screenshot', 'gif', 'content-creation'],
+    };
+
+    const categorySlug = selectedCategory?.slug || '';
+    const categoryTags = categorySlug ? bySlug[categorySlug] || [] : [];
+    const generalTags = ['ai-tools', 'saas', 'website'];
+
+    return [...categoryTags, ...generalTags]
+      .map(slugifyTag)
+      .filter(Boolean)
+      .filter((tag, index, array) => array.indexOf(tag) === index)
+      .slice(0, 8);
+  }, [selectedCategory]);
+
+  const currentTags = (form.watch('tags') || '')
+    .split(',')
+    .map((tag) => slugifyTag(tag))
+    .filter(Boolean);
+
+  const updateTags = (nextTags: string[]) => {
+    form.setValue('tags', nextTags.join(', '), { shouldDirty: true, shouldValidate: true });
+  };
+
+  const handleSuggestedTagClick = (tag: string) => {
+    const normalized = slugifyTag(tag);
+    if (!normalized) return;
+    if (currentTags.includes(normalized)) return;
+    updateTags([...currentTags, normalized]);
+  };
+
+  const handleRemoveTag = (tag: string) => {
+    updateTags(currentTags.filter((item) => item !== tag));
+  };
+
   let selectedPlanLabel = isChinese ? '免费提交' : listingConfig.plans.free.label;
   if (isPaidPlan) {
     selectedPlanLabel = isChinese ? '付费入驻' : listingConfig.plans.standard_paid.label;
@@ -308,6 +367,47 @@ export default function SubmitForm({
                   {isChinese
                     ? '多个标签用英文逗号分隔，建议填 3-8 个，最好使用短横线格式。'
                     : 'Use commas to separate tags. 3-8 tags is a good range, preferably in kebab-case.'}
+                </div>
+                <div className='rounded-lg border border-slate-200 bg-slate-50 p-3'>
+                  <div className='flex flex-wrap items-center gap-2 text-xs text-slate-600'>
+                    <span className='font-semibold text-slate-700'>{isChinese ? '建议标签' : 'Suggested tags'}</span>
+                    <span>{isChinese ? '点击即可添加到输入框' : 'Click to add to the field'}</span>
+                  </div>
+                  <div className='mt-2 flex flex-wrap gap-2'>
+                    {suggestedTags.map((tag) => {
+                      const isActive = currentTags.includes(tag);
+                      return (
+                        <button
+                          key={tag}
+                          type='button'
+                          onClick={() => handleSuggestedTagClick(tag)}
+                          className={cn(
+                            'rounded-full px-3 py-1 text-xs font-semibold transition',
+                            isActive
+                              ? 'bg-cyan-100 text-cyan-800 ring-1 ring-cyan-200'
+                              : 'bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-cyan-50 hover:text-cyan-800',
+                          )}
+                        >
+                          {tag}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {currentTags.length > 0 && (
+                    <div className='mt-3 flex flex-wrap gap-2'>
+                      {currentTags.map((tag) => (
+                        <button
+                          key={tag}
+                          type='button'
+                          onClick={() => handleRemoveTag(tag)}
+                          className='inline-flex items-center gap-2 rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold text-white'
+                        >
+                          {tag}
+                          <span className='text-white/80'>×</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 <FormMessage />
               </FormItem>
