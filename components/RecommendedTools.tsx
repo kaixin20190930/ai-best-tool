@@ -260,7 +260,7 @@ export default async function RecommendedTools({
                 averageRating={tool.averageRating}
                 ratingCount={tool.ratingCount}
               />
-              <div className='rounded-lg border border-slate-200 bg-white p-3 shadow-sm'>
+              <div className='overflow-hidden rounded-lg border border-slate-200 bg-white p-3 shadow-sm'>
                 <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
                   {isChinese ? '为什么推荐它' : 'Why compare this one'}
                 </p>

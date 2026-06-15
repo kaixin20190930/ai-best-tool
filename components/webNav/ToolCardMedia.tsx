@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { isPlaceholderMediaUrl } from '@/lib/services/mediaReview';
+import BaseImage from '@/components/image/BaseImage';
 
 type ToolCardMediaProps = {
   imageUrl?: string | null;
@@ -86,29 +87,33 @@ export default function ToolCardMedia({ imageUrl, name, thumbnailUrl, title }: T
   }
 
   return (
-    <img
-      src={currentSource}
-      alt={`${title} - AI tool screenshot and preview`}
-      className={[
-        'aspect-[350/160] w-full justify-self-center rounded-xl border border-slate-100 bg-gradient-to-b from-slate-50 to-white object-contain transition-opacity duration-200',
-        isLogoLikeSource ? 'p-6' : 'p-2.5',
-        hasLoaded ? 'visible opacity-100' : 'invisible opacity-0',
-      ].join(' ')}
-      loading='lazy'
-      decoding='async'
-      onLoad={() => {
-        setHasLoaded(true);
-      }}
-      onError={() => {
-        setSourceIndex((current) => {
-          if (current < sources.length - 1) {
-            return current + 1;
-          }
+    <div className='relative aspect-[350/160] w-full overflow-hidden rounded-xl border border-slate-100 bg-gradient-to-b from-slate-50 to-white'>
+      <BaseImage
+        src={currentSource}
+        alt={`${title} - AI tool screenshot and preview`}
+        fill
+        loading='lazy'
+        decoding='async'
+        unoptimized={currentSource.endsWith('.svg')}
+        className={[
+          'object-contain transition-opacity duration-200',
+          isLogoLikeSource ? 'p-6' : 'p-2.5',
+          hasLoaded ? 'visible opacity-100' : 'invisible opacity-0',
+        ].join(' ')}
+        onLoad={() => {
+          setHasLoaded(true);
+        }}
+        onError={() => {
+          setSourceIndex((current) => {
+            if (current < sources.length - 1) {
+              return current + 1;
+            }
 
-          setHasFailedAllSources(true);
-          return current;
-        });
-      }}
-    />
+            setHasFailedAllSources(true);
+            return current;
+          });
+        }}
+      />
+    </div>
   );
 }

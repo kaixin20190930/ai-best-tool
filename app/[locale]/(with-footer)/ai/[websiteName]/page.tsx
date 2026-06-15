@@ -1255,6 +1255,13 @@ export default async function Page({
   // Get category and tags information
   let category = null;
   let tags: Array<{ slug: string; name: Record<string, string> }> = [];
+  const fallbackTagSlugs = data.tagName
+    ? data.tagName
+        .split(',')
+        .map((tag) => tag.trim())
+        .filter(Boolean)
+    : [];
+  const tagSlugsForDisplay = dbTool?.tags && dbTool.tags.length > 0 ? dbTool.tags : fallbackTagSlugs;
 
   if (dbTool) {
     // Fetch category if available
@@ -1263,8 +1270,8 @@ export default async function Page({
     }
 
     // Fetch tags if available
-    if (dbTool.tags && dbTool.tags.length > 0) {
-      tags = await getTagsBySlugs(dbTool.tags);
+    if (tagSlugsForDisplay.length > 0) {
+      tags = await getTagsBySlugs(tagSlugsForDisplay);
     }
   }
 
@@ -1281,7 +1288,7 @@ export default async function Page({
   const displayTagLabels =
     tags.length > 0
       ? tags.map((tag) => getDisplayTagLabel(tag)).filter(Boolean)
-      : (dbTool?.tags || []).map((tagSlug) => humanizeTagSlug(tagSlug)).filter(Boolean);
+      : tagSlugsForDisplay.map((tagSlug) => humanizeTagSlug(tagSlug)).filter(Boolean);
 
   if (toolId) {
     try {
@@ -1417,7 +1424,10 @@ export default async function Page({
   }
   const categorySlug = category?.slug;
   const categoryGuideLink = getCategoryGuideLink(categorySlug, locale);
-  const tagLabels = tags.map((tag) => getDisplayTagLabel(tag)).filter(Boolean);
+  const tagLabels =
+    tags.length > 0
+      ? tags.map((tag) => getDisplayTagLabel(tag)).filter(Boolean)
+      : tagSlugsForDisplay.map((tagSlug) => humanizeTagSlug(tagSlug)).filter(Boolean);
   const featureEntries = getFeatureEntries(dbTool?.features, locale);
   const useCaseList = getStringList(dbTool?.useCases, locale);
   const bestFitOverride = getAudienceEntries(dbTool?.features, 'bestFit', locale);
@@ -2072,7 +2082,7 @@ export default async function Page({
                   compareAxes={compareAxes}
                   pricing={dbTool?.pricing}
                   pricingLabel={pricingLabel}
-                  tagSlugs={dbTool?.tags || []}
+                  tagSlugs={tagSlugsForDisplay}
                   tagLabels={tagLabels}
                 />
                 <section id='comments' className='scroll-mt-28 pt-8'>

@@ -58,7 +58,7 @@ export default function ToolFeedbackBar({ toolId, userId, className = '' }: Tool
   return (
     <div className={`space-y-3 ${className}`}>
       <div className='text-sm font-semibold text-slate-900'>Quick feedback</div>
-      <div className='grid gap-3 sm:grid-cols-2 xl:grid-cols-3'>
+      <div className='grid gap-3 sm:grid-cols-2 lg:grid-cols-3'>
         {feedbackOptions.map((option) => {
           const Icon = option.icon;
           const isSelected = selected === option.type;
@@ -69,7 +69,7 @@ export default function ToolFeedbackBar({ toolId, userId, className = '' }: Tool
               key={option.type}
               type='button'
               onClick={() => handleFeedback(option.type)}
-              className={`flex min-h-[8.5rem] flex-col items-start justify-between gap-4 rounded-lg border px-4 py-4 text-left text-sm transition ${
+              className={`flex min-h-[10rem] flex-col items-start justify-between gap-4 rounded-lg border px-4 py-4 text-left text-sm transition ${
                 isSelected ? option.className : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
               }`}
               disabled={isLoading}
@@ -77,10 +77,10 @@ export default function ToolFeedbackBar({ toolId, userId, className = '' }: Tool
               <div className='flex min-w-0 items-start gap-3'>
                 <Icon className='mt-0.5 size-4 shrink-0' />
                 <div className='min-w-0 space-y-1'>
-                  <span className='block break-words font-medium leading-5'>
+                  <span className='block break-words text-base font-medium leading-6'>
                     {isLoading ? 'Saving...' : option.label}
                   </span>
-                  <span className='block break-words text-xs leading-5 text-slate-500'>{option.description}</span>
+                  <span className='block break-words text-sm leading-6 text-slate-500'>{option.description}</span>
                 </div>
               </div>
             </button>

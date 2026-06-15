@@ -3,7 +3,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
 export type ImageProps = React.ComponentProps<typeof Image>;
@@ -25,6 +25,11 @@ export default function BaseImage(props: ImageProps) {
   const srcValue = typeof props.src === 'string' ? props.src : '';
   const isSvg = /\.svg(?:\?.*)?$/i.test(srcValue);
   const fallbackText = props.alt || generateAltFromSrc(props.src as string);
+
+  useEffect(() => {
+    setHasError(false);
+    setHasLoaded(false);
+  }, [props.src]);
 
   // Ensure alt text is always present and descriptive
   const altText = props.alt || (props.title as string) || generateAltFromSrc(props.src as string);
