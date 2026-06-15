@@ -64,7 +64,7 @@ export default function NavigationDrawer({
   const adminLink = isAdmin
     ? {
         code: 'admin',
-        href: '/admin',
+        href: '/admin/dashboard',
         icon: Shield,
         label: 'Admin',
       }

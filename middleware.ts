@@ -138,7 +138,7 @@ export async function middleware(request: NextRequest) {
     }
 
     if (getPathParts(pathname).pathWithoutLocale === '/admin') {
-      const response = NextResponse.rewrite(new URL(getLocalizedAdminDashboardPath(pathname), request.url));
+      const response = NextResponse.redirect(new URL(getLocalizedAdminDashboardPath(pathname), request.url));
       copyCookies(sessionResponse, response);
       return response;
     }

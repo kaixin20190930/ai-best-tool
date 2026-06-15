@@ -39,7 +39,7 @@ export default function Navigation({ user, isAdmin = false }: NavigationProps) {
   const adminLink = isAdmin
     ? {
         code: 'admin',
-        href: '/admin',
+        href: '/admin/dashboard',
         icon: Shield,
         label: 'Admin',
       }
