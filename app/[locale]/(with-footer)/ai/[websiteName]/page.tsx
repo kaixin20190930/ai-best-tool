@@ -2145,6 +2145,63 @@ export default async function Page({
           </main>
 
           <aside className='space-y-4 lg:sticky lg:top-24 lg:self-start'>
+            <div className='rounded-lg border border-cyan-100 bg-cyan-50 p-5 shadow-sm'>
+              <h2 className='text-base font-bold text-slate-950'>
+                {locale === 'cn' ? '决策摘要' : 'Decision Snapshot'}
+              </h2>
+              <div className='mt-4 space-y-4'>
+                <div>
+                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                    {locale === 'cn' ? '适合谁' : 'Best fit'}
+                  </p>
+                  <div className='mt-2 flex flex-wrap gap-2'>
+                    {(bestFitList.slice(0, 2).length > 0 ? bestFitList.slice(0, 2) : [categoryName]).map((item) => (
+                      <span
+                        key={item}
+                        className='rounded-full bg-white px-3 py-1 text-xs font-medium text-slate-700 ring-1 ring-cyan-100'
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                    {locale === 'cn' ? '不太适合' : 'Less ideal for'}
+                  </p>
+                  <div className='mt-2 flex flex-wrap gap-2'>
+                    {(notIdealForList.slice(0, 2).length > 0 ? notIdealForList.slice(0, 2) : verificationChecklist.slice(0, 2)).map(
+                      (item) => (
+                        <span
+                          key={item}
+                          className='rounded-full bg-white px-3 py-1 text-xs font-medium text-slate-700 ring-1 ring-cyan-100'
+                        >
+                          {item}
+                        </span>
+                      ),
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                    {locale === 'cn' ? '先比这几项' : 'Compare first'}
+                  </p>
+                  <div className='mt-2 flex flex-wrap gap-2'>
+                    {compareAxes.slice(0, 3).map((axis) => (
+                      <span
+                        key={axis}
+                        className='rounded-full bg-white px-3 py-1 text-xs font-medium text-cyan-900 ring-1 ring-cyan-100'
+                      >
+                        {axis}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div className='rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200'>
               <h2 className='text-base font-bold text-slate-950'>
                 {locale === 'cn' ? '可信度快照' : 'Trust Snapshot'}
