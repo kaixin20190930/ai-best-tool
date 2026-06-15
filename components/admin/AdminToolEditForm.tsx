@@ -50,6 +50,17 @@ function getStringArray(value: unknown) {
     : [];
 }
 
+function slugifyTag(value: string) {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/https?:\/\//g, '')
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 export default function AdminToolEditForm({
   tool,
   categories,
@@ -95,6 +106,8 @@ export default function AdminToolEditForm({
   const mediaReason = getString(mediaReview.reason);
   const submissionFeature = getNestedRecord(featureRecord.submission);
   const commercialFeature = getNestedRecord(submissionFeature.commercial);
+  const [categoryIdValue, setCategoryIdValue] = useState(tool.category_id || '');
+  const [tagsValue, setTagsValue] = useState(tool.tags.join(', '));
   const mediaNeeded = mediaReview.needed === true;
   const mediaMarkedAt = getString(mediaReview.markedAt);
   const missingImage = !tool.image_url;
@@ -128,6 +141,47 @@ export default function AdminToolEditForm({
   const isPaidSubmission = commercialPlan === 'standard_paid';
   const paidPublishGate = getPaidListingPublishGate(tool);
   const paidPublishBlocked = isPaidSubmission && paidPublishGate.blockers.length > 0;
+  const selectedCategory = categories.find((category) => category.id === categoryIdValue);
+  const currentTags = tagsValue
+    .split(',')
+    .map((tag) => slugifyTag(tag))
+    .filter(Boolean);
+
+  const suggestedTags = useMemo(() => {
+    const bySlug: Record<string, string[]> = {
+      'text-writing': ['writing', 'copywriting', 'content-generation', 'blogging', 'editor'],
+      productivity: ['productivity', 'note-taking', 'meeting-notes', 'workflow', 'planning'],
+      'developer-tools': ['developer-tools', 'api', 'debugging', 'code-review', 'automation'],
+      automation: ['automation', 'workflow', 'no-code', 'integrations', 'trigger'],
+      research: ['research', 'search', 'knowledge-base', 'analysis', 'discovery'],
+      'design-art': ['design', 'image-generation', 'creative', 'branding', 'visual'],
+      web3: ['web3', 'crypto', 'on-chain-analysis', 'defi', 'token-research', 'wallet-monitoring'],
+      chatbot: ['chatbot', 'assistant', 'llm', 'prompting', 'conversation'],
+      voice: ['voice', 'speech-to-text', 'text-to-speech', 'audio', 'transcription'],
+      video: ['video', 'editing', 'screenshot', 'gif', 'content-creation'],
+    };
+
+    const categorySlug = selectedCategory?.slug || '';
+    const categoryTags = categorySlug ? bySlug[categorySlug] || [] : [];
+    const generalTags = ['ai-tools', 'saas', 'website'];
+
+    return [...categoryTags, ...generalTags]
+      .map(slugifyTag)
+      .filter(Boolean)
+      .filter((tag, index, array) => array.indexOf(tag) === index)
+      .slice(0, 8);
+  }, [selectedCategory]);
+
+  const appendTag = (tag: string) => {
+    const normalized = slugifyTag(tag);
+    if (!normalized || currentTags.includes(normalized)) return;
+    const nextTags = [...currentTags, normalized].join(', ');
+    setTagsValue(nextTags);
+  };
+
+  const removeTag = (tag: string) => {
+    setTagsValue(currentTags.filter((item) => item !== tag).join(', '));
+  };
 
   const featuredPreview = useMemo(() => {
     const from = featuredFromInput.trim();
@@ -638,7 +692,8 @@ export default function AdminToolEditForm({
             <select
               id="category_id"
               name="category_id"
-              defaultValue={tool.category_id || ''}
+              value={categoryIdValue}
+              onChange={(e) => setCategoryIdValue(e.target.value)}
               className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
             >
               <option value="">Select a category</option>
@@ -660,9 +715,50 @@ export default function AdminToolEditForm({
               type="text"
               id="tags"
               name="tags"
-              defaultValue={tool.tags.join(', ')}
+              value={tagsValue}
+              onChange={(e) => setTagsValue(e.target.value)}
               className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
             />
+          </div>
+          <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-slate-600">
+              <span className="font-semibold text-slate-700">Suggested tags</span>
+              <span>Click to add</span>
+            </div>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {suggestedTags.map((tag) => {
+                const active = currentTags.includes(tag);
+                return (
+                  <button
+                    key={tag}
+                    type="button"
+                    onClick={() => appendTag(tag)}
+                    className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
+                      active
+                        ? 'bg-cyan-100 text-cyan-800 ring-1 ring-cyan-200'
+                        : 'bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-cyan-50 hover:text-cyan-800'
+                    }`}
+                  >
+                    {tag}
+                  </button>
+                );
+              })}
+            </div>
+            {currentTags.length > 0 && (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {currentTags.map((tag) => (
+                  <button
+                    key={tag}
+                    type="button"
+                    onClick={() => removeTag(tag)}
+                    className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold text-white"
+                  >
+                    {tag}
+                    <span className="text-white/80">×</span>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           <div>
