@@ -269,6 +269,8 @@ CREATE INDEX idx_analytics_event ON analytics(event_type);
 CREATE INDEX idx_analytics_tool ON analytics(tool_id);
 CREATE INDEX idx_analytics_timestamp ON analytics(timestamp DESC);
 CREATE INDEX idx_analytics_session ON analytics(session_id);
+CREATE INDEX idx_analytics_page_type ON analytics ((metadata->>'page_type'));
+CREATE INDEX idx_analytics_page_path ON analytics ((metadata->>'page_path'));
 
 -- ============================================
 -- 8. 通知表 (Notifications)

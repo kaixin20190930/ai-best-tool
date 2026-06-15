@@ -34,6 +34,7 @@ import { toolToDetailData } from '@/lib/services/toolPresenter';
 import { getLocalizedField, getToolByName } from '@/lib/services/tools';
 import { createClient } from '@/lib/supabase/server';
 import { Separator } from '@/components/ui/separator';
+import PageViewTracker from '@/components/analytics/PageViewTracker';
 import CommentList from '@/components/comments/CommentList';
 import FavoriteButton from '@/components/FavoriteButton';
 import BaseImage from '@/components/image/BaseImage';
@@ -45,7 +46,7 @@ import { StructuredDataServer } from '@/components/seo/StructuredData';
 import ShareButton from '@/components/ShareButton';
 import ToolFeedbackBar from '@/components/ToolFeedbackBar';
 import TrackableLink from '@/components/TrackableLink';
-import { getToolStats, trackPageView } from '@/app/actions/analytics';
+import { getToolStats } from '@/app/actions/analytics';
 import { getCommentCount } from '@/app/actions/comments';
 import { isFavorited } from '@/app/actions/favorites';
 import { getUserRating } from '@/app/actions/ratings';
@@ -1308,9 +1309,6 @@ export default async function Page({
     } catch (error) {
       console.error('Error fetching tool data:', error);
     }
-
-    // Track page view (fire and forget)
-    trackPageView(toolId, user?.id).catch((err) => console.error('Failed to track page view:', err));
   }
 
   // Generate SoftwareApplication schema for tool pages
@@ -1538,6 +1536,7 @@ export default async function Page({
 
   return (
     <>
+      <PageViewTracker toolId={toolId} />
       {/* Structured Data for SEO */}
       {softwareSchema && <StructuredDataServer data={softwareSchema} />}
       <StructuredDataServer data={breadcrumbSchema} />

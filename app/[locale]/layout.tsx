@@ -13,6 +13,7 @@ import './globals.css';
 import { Suspense } from 'react';
 
 import GoogleAdScript from '@/components/ad/GoogleAdScript';
+import PageViewTracker from '@/components/analytics/PageViewTracker';
 import SeoScript from '@/components/seo/SeoScript';
 
 import Loading from './loading';
@@ -71,6 +72,7 @@ export default async function RootLayout({
             }}
           />
           <Navigation user={user} isAdmin={isAdmin} />
+          <PageViewTracker />
           <Suspense fallback={<Loading />}>{children}</Suspense>
         </NextIntlClientProvider>
         <SeoScript />

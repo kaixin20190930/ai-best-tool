@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowUpRight, BarChart3, Globe, Layers3, Search, ShieldAlert, TrendingUp } from 'lucide-react';
 
 import {
+  getPageAccessReport,
   getPriorityMediaQueue,
   getSiteMetrics,
   getToolComplianceIssues,
@@ -34,6 +35,7 @@ export default async function AdminAnalyticsPage({
   } as const;
   const rangeLabel = rangeLabelMap[range as keyof typeof rangeLabelMap];
   const metrics = await getSiteMetrics();
+  const pageAccessReport = await getPageAccessReport(range, 10);
   const operationalStats = await getOperationalStats(range);
   const funnel = await getSubmissionFunnelStats(range);
   const topToolsByViews = await getTopTools('views', 10);
@@ -89,7 +91,29 @@ export default async function AdminAnalyticsPage({
     return 'Backfill missing listings';
   };
 
+  const getPageSummaryLabel = (pageType: string) => {
+    if (pageType === 'home') return 'Home';
+    if (pageType === 'tool_detail') return 'Tool detail';
+    if (pageType === 'guide') return 'Guides';
+    if (pageType === 'category') return 'Category pages';
+    if (pageType === 'explore') return 'Explore';
+    return 'Other';
+  };
+
   const focusCategories = topCategories.slice(0, 3);
+  const pageSummaryOrder = ['home', 'tool_detail', 'guide', 'category', 'explore', 'other'] as const;
+  const pageSummaryMap = new Map(pageAccessReport.summary.map((item) => [item.pageType, item]));
+  const pageSummaryItems = pageSummaryOrder.map((pageType) => {
+    const item = pageSummaryMap.get(pageType);
+
+    return {
+      pageType,
+      label: getPageSummaryLabel(pageType),
+      views: item?.views || 0,
+      uniqueVisitors: item?.uniqueVisitors || 0,
+      percentage: item?.percentage || 0,
+    };
+  });
 
   return (
     <div>
@@ -161,6 +185,74 @@ export default async function AdminAnalyticsPage({
         </div>
       </div>
 
+      {/* Page Access Report */}
+      <div className='mb-8'>
+        <div className='mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
+          <div>
+            <h2 className='text-lg font-semibold text-slate-900'>Page Access Report</h2>
+            <p className='mt-1 text-sm text-slate-600'>
+              Where people actually spend time across homepage, detail pages, and guides.
+            </p>
+          </div>
+          <div className='text-sm text-slate-500'>
+            {pageAccessReport.totalViews.toLocaleString()} page views ·{' '}
+            {pageAccessReport.totalUniqueVisitors.toLocaleString()} visitors
+          </div>
+        </div>
+
+        <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-3'>
+          {pageSummaryItems.map((item) => (
+            <div key={item.pageType} className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <div className='text-xs font-medium uppercase tracking-wide text-slate-500'>{item.label}</div>
+                  <div className='mt-2 text-3xl font-semibold text-slate-900'>{item.views.toLocaleString()}</div>
+                </div>
+                <div className='rounded-full bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-cyan-700'>
+                  {item.percentage.toFixed(1)}%
+                </div>
+              </div>
+              <div className='mt-3 text-sm text-slate-600'>{item.uniqueVisitors.toLocaleString()} unique visitors</div>
+            </div>
+          ))}
+        </div>
+
+        <div className='mt-4 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm'>
+          <table className='min-w-full divide-y divide-slate-200'>
+            <thead className='bg-slate-50'>
+              <tr>
+                <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                  Page
+                </th>
+                <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                  Type
+                </th>
+                <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                  Views
+                </th>
+                <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                  Visitors
+                </th>
+              </tr>
+            </thead>
+            <tbody className='divide-y divide-slate-100 bg-white'>
+              {pageAccessReport.topPages.map((page) => (
+                <tr key={`${page.pageType}:${page.pagePath}`} className='hover:bg-slate-50'>
+                  <td className='px-4 py-3 text-sm text-slate-900'>{page.pagePath}</td>
+                  <td className='px-4 py-3 text-sm text-slate-600'>{page.label}</td>
+                  <td className='px-4 py-3 text-right text-sm font-medium text-slate-900'>
+                    {page.views.toLocaleString()}
+                  </td>
+                  <td className='px-4 py-3 text-right text-sm text-slate-600'>
+                    {page.uniqueVisitors.toLocaleString()}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       {/* Weekly Focus */}
       <div className='mb-8'>
         <div className='mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
@@ -177,7 +269,9 @@ export default async function AdminAnalyticsPage({
             <div key={category.id} className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
               <div className='flex items-start justify-between gap-3'>
                 <div>
-                  <div className='text-xs font-medium uppercase tracking-wide text-slate-500'>Priority #{index + 1}</div>
+                  <div className='text-xs font-medium uppercase tracking-wide text-slate-500'>
+                    Priority #{index + 1}
+                  </div>
                   <h3 className='mt-1 text-base font-semibold text-slate-900'>{getCategoryDisplayName(category)}</h3>
                   <p className='text-xs text-slate-500'>{category.slug}</p>
                 </div>

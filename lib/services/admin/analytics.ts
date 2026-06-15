@@ -1,8 +1,8 @@
 import { getPool } from '@/db/neon/client';
-import { createAdminClient } from '@/lib/supabase/admin';
 
-import { getToolQuality } from '@/lib/services/toolQuality';
 import { getMediaIssueLabels, isPlaceholderMediaUrl } from '@/lib/services/mediaReview';
+import { getToolQuality } from '@/lib/services/toolQuality';
+import { createAdminClient } from '@/lib/supabase/admin';
 
 export interface SiteMetrics {
   totalViews: number;
@@ -33,6 +33,29 @@ export interface TrafficSource {
   source: string;
   visits: number;
   percentage: number;
+}
+
+export interface PageAccessSummary {
+  pageType: string;
+  label: string;
+  views: number;
+  uniqueVisitors: number;
+  percentage: number;
+}
+
+export interface PageAccessPage {
+  pagePath: string;
+  pageType: string;
+  label: string;
+  views: number;
+  uniqueVisitors: number;
+}
+
+export interface PageAccessReport {
+  summary: PageAccessSummary[];
+  topPages: PageAccessPage[];
+  totalViews: number;
+  totalUniqueVisitors: number;
 }
 
 export interface FeedbackSignal {
@@ -85,9 +108,7 @@ export interface MediaQueueItem {
 
 function hasDecisionGuideSnapshot(features: Record<string, unknown>): boolean {
   const decision =
-    features.decision && typeof features.decision === 'object'
-      ? (features.decision as Record<string, unknown>)
-      : null;
+    features.decision && typeof features.decision === 'object' ? (features.decision as Record<string, unknown>) : null;
 
   if (!decision) {
     return false;
@@ -101,13 +122,7 @@ function hasDecisionGuideSnapshot(features: Record<string, unknown>): boolean {
   const compareAxesEn = Array.isArray(compareAxes?.en) ? compareAxes.en : [];
   const compareAxesZh = Array.isArray(compareAxes?.zh) ? compareAxes.zh : [];
 
-  const localizedFields = [
-    'officialSummary',
-    'freshnessSummary',
-    'pricingSummary',
-    'mediaSummary',
-    'communitySummary',
-  ];
+  const localizedFields = ['officialSummary', 'freshnessSummary', 'pricingSummary', 'mediaSummary', 'communitySummary'];
 
   if (compareAxesEn.length === 0 || compareAxesZh.length === 0) {
     return false;
@@ -152,6 +167,7 @@ export async function getSiteMetrics(startDate?: Date, endDate?: Date): Promise<
     let page = 1;
     let usersCount = 0;
 
+    /* eslint-disable no-await-in-loop */
     while (true) {
       const { data, error } = await supabase.auth.admin.listUsers({
         page,
@@ -171,6 +187,7 @@ export async function getSiteMetrics(startDate?: Date, endDate?: Date): Promise<
 
       page += 1;
     }
+    /* eslint-enable no-await-in-loop */
 
     // Get total views and unique visitors from analytics
     let analyticsQuery = `
@@ -478,7 +495,7 @@ export async function getPriorityMediaQueue(limit: number = 12): Promise<MediaQu
             OR t.thumbnail_url LIKE '%google.com/s2/favicons%'
             OR t.features->'mediaReview'->>'needed' = 'true'
           )
-      `
+      `,
     );
 
     const categoryWeight: Record<string, number> = {
@@ -494,9 +511,7 @@ export async function getPriorityMediaQueue(limit: number = 12): Promise<MediaQu
     const rows = result.rows
       .map((row) => {
         const features =
-          row.features && typeof row.features === 'object'
-            ? (row.features as Record<string, unknown>)
-            : {};
+          row.features && typeof row.features === 'object' ? (row.features as Record<string, unknown>) : {};
         const mediaReview =
           features.mediaReview && typeof features.mediaReview === 'object'
             ? (features.mediaReview as Record<string, unknown>)
@@ -518,7 +533,7 @@ export async function getPriorityMediaQueue(limit: number = 12): Promise<MediaQu
         const views = Number(row.views ?? 0);
         const clicks = Number(row.clicks ?? 0);
         const placeholderCount = [row.imageUrl, row.thumbnailUrl].filter((url) =>
-          isPlaceholderMediaUrl(typeof url === 'string' ? url : null)
+          isPlaceholderMediaUrl(typeof url === 'string' ? url : null),
         ).length;
         const missingCount = [row.imageUrl, row.thumbnailUrl].filter((url) => !url).length;
         const qualityScore = getToolQuality({
@@ -663,13 +678,10 @@ export async function getTopFeedbackSignals(limit: number = 10): Promise<Feedbac
       ORDER BY count DESC
       LIMIT $1
     `,
-      [limit]
+      [limit],
     );
 
-    const total = result.rows.reduce(
-      (sum, row) => sum + Number.parseInt(String(row.count || '0'), 10),
-      0
-    );
+    const total = result.rows.reduce((sum, row) => sum + Number.parseInt(String(row.count || '0'), 10), 0);
 
     return result.rows.map((row) => ({
       type: row.type,
@@ -742,5 +754,133 @@ export async function getRecentActivity(limit: number = 20) {
   } catch (error) {
     console.error('Error fetching recent activity:', error);
     return [];
+  }
+}
+
+function getPageTypeLabel(pageType: string): string {
+  if (pageType === 'home') return 'Home';
+  if (pageType === 'tool_detail') return 'Tool detail';
+  if (pageType === 'guide') return 'Guide';
+  if (pageType === 'category') return 'Category';
+  if (pageType === 'explore') return 'Explore';
+  return 'Other';
+}
+
+function buildPageViewDateCondition(range: 'all' | '7d' | '30d'): string {
+  if (range === '7d') {
+    return "AND a.timestamp >= NOW() - INTERVAL '7 days'";
+  }
+
+  if (range === '30d') {
+    return "AND a.timestamp >= NOW() - INTERVAL '30 days'";
+  }
+
+  return '';
+}
+
+/**
+ * Get page-level access report
+ */
+export async function getPageAccessReport(
+  range: 'all' | '7d' | '30d' = 'all',
+  limit: number = 10,
+): Promise<PageAccessReport> {
+  try {
+    const pool = getPool();
+    const dateCondition = buildPageViewDateCondition(range);
+
+    const baseCte = `
+      WITH page_views AS (
+        SELECT
+          a.session_id,
+          COALESCE(
+            NULLIF(a.metadata->>'page_type', ''),
+            CASE WHEN a.tool_id IS NOT NULL THEN 'tool_detail' ELSE 'other' END
+          ) AS page_type,
+          COALESCE(
+            NULLIF(a.metadata->>'page_path', ''),
+            CASE
+              WHEN a.tool_id IS NOT NULL THEN CONCAT('/ai/', COALESCE(t.name, a.tool_id::text))
+              ELSE 'unknown'
+            END
+          ) AS page_path
+        FROM analytics a
+        LEFT JOIN tools t ON a.tool_id = t.id
+        WHERE a.event_type = 'page_view' ${dateCondition}
+      )
+    `;
+
+    const summaryResult = await pool.query(
+      `
+      ${baseCte}
+      SELECT
+        page_type,
+        COUNT(*)::int AS views,
+        COUNT(DISTINCT session_id)::int AS unique_visitors
+      FROM page_views
+      GROUP BY page_type
+      ORDER BY views DESC
+    `,
+    );
+
+    const topPagesResult = await pool.query(
+      `
+      ${baseCte}
+      SELECT
+        page_path,
+        page_type,
+        COUNT(*)::int AS views,
+        COUNT(DISTINCT session_id)::int AS unique_visitors
+      FROM page_views
+      GROUP BY page_path, page_type
+      ORDER BY views DESC
+      LIMIT $1
+    `,
+      [limit],
+    );
+
+    const totalsResult = await pool.query(
+      `
+      ${baseCte}
+      SELECT
+        COUNT(*)::int AS total_views,
+        COUNT(DISTINCT session_id)::int AS total_unique_visitors
+      FROM page_views
+    `,
+    );
+
+    const totalViews = Number.parseInt(String(totalsResult.rows[0]?.total_views || '0'), 10);
+
+    return {
+      summary: summaryResult.rows.map((row) => {
+        const views = Number.parseInt(String(row.views || '0'), 10);
+        const uniqueVisitors = Number.parseInt(String(row.unique_visitors || '0'), 10);
+
+        return {
+          pageType: row.page_type,
+          label: getPageTypeLabel(row.page_type),
+          views,
+          uniqueVisitors,
+          percentage: totalViews > 0 ? (views / totalViews) * 100 : 0,
+        };
+      }),
+      topPages: topPagesResult.rows.map((row) => ({
+        pagePath: row.page_path,
+        pageType: row.page_type,
+        label: getPageTypeLabel(row.page_type),
+        views: Number.parseInt(String(row.views || '0'), 10),
+        uniqueVisitors: Number.parseInt(String(row.unique_visitors || '0'), 10),
+      })),
+      totalViews,
+      totalUniqueVisitors: Number.parseInt(String(totalsResult.rows[0]?.total_unique_visitors || '0'), 10),
+    };
+  } catch (error) {
+    console.error('Error fetching page access report:', error);
+    return {
+      summary: [],
+      topPages: [],
+      totalViews: 0,
+      totalUniqueVisitors: 0,
+    };
   }
 }
