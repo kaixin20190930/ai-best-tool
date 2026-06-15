@@ -69,15 +69,21 @@ export default function ToolFeedbackBar({ toolId, userId, className = '' }: Tool
               key={option.type}
               type='button'
               onClick={() => handleFeedback(option.type)}
-              className={`flex min-h-[10rem] flex-col items-start justify-between gap-4 rounded-lg border px-4 py-4 text-left text-sm transition ${
+              className={`flex min-h-[11rem] flex-col justify-between gap-4 rounded-lg border px-4 py-4 text-left text-sm transition ${
                 isSelected ? option.className : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
               }`}
               disabled={isLoading}
             >
-              <div className='flex min-w-0 items-start gap-3'>
-                <Icon className='mt-0.5 size-4 shrink-0' />
+              <div className='flex min-w-0 flex-col gap-3'>
+                <span
+                  className={`inline-flex size-10 items-center justify-center rounded-full ring-1 ${
+                    isSelected ? 'bg-white/70 ring-current/15' : 'bg-slate-50 ring-slate-200'
+                  }`}
+                >
+                  <Icon className='size-4 shrink-0' />
+                </span>
                 <div className='min-w-0 space-y-1'>
-                  <span className='block break-words text-base font-medium leading-6'>
+                  <span className='block break-words text-base font-semibold leading-6'>
                     {isLoading ? 'Saving...' : option.label}
                   </span>
                   <span className='block break-words text-sm leading-6 text-slate-500'>{option.description}</span>
