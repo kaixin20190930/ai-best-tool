@@ -2085,9 +2085,9 @@ export default async function Page({
                   tagSlugs={tagSlugsForDisplay}
                   tagLabels={tagLabels}
                 />
-                <div aria-hidden='true' className='h-20 lg:h-24' />
-                <section id='comments' className='relative isolate clear-both scroll-mt-28 pt-12'>
-                  <Separator className='mb-8 border-t border-slate-200' />
+                <div aria-hidden='true' className='h-28 lg:h-36' />
+                <section id='comments' className='relative isolate clear-both scroll-mt-28 pt-16'>
+                  <Separator className='mb-10 border-t border-slate-200' />
                   <div className='mb-6 rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200'>
                     <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
                       <div>
