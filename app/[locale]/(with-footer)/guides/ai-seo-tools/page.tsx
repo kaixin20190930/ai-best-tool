@@ -1,11 +1,11 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { CheckCircle2, ExternalLink, Search, Sparkles } from 'lucide-react';
+import { ArrowRight, CheckCircle2, ExternalLink, Search, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import GuideActionSection from '@/components/guides/GuideActionSection';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import GuideActionSection from '@/components/guides/GuideActionSection';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
@@ -172,6 +172,73 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 ))}
             </div>
           </aside>
+        </section>
+
+        <section className='mt-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '下一步怎么走' : 'Next step'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '把 SEO 入口接到比较页和真实条目'
+              : 'Move from the SEO guide into comparisons and real listings'}
+          </h2>
+          <div className='mt-4 grid gap-4 lg:grid-cols-3'>
+            <Link
+              href='/guides/ai-seo-tools-comparison'
+              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
+            >
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
+                    {isChinese ? '看 SEO 工具对比' : 'Compare SEO tools'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {isChinese
+                      ? '当关键词和内容方向清楚后，就进入横向对比。'
+                      : 'Once the keyword and content direction is clear, move into side-by-side comparison.'}
+                  </p>
+                </div>
+                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
+              </div>
+            </Link>
+            <Link
+              href='/categories/text-writing?sort=popular'
+              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
+            >
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
+                    {isChinese ? '进入写作分类' : 'Open the writing category'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {isChinese
+                      ? '如果你想先看更接近内容生产的真实条目，这里更顺手。'
+                      : 'If you want to inspect real listings closer to content work first, this is a cleaner stop.'}
+                  </p>
+                </div>
+                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
+              </div>
+            </Link>
+            <Link
+              href='/explore?search=seo&sort=popular'
+              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
+            >
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
+                    {isChinese ? '搜索更多 SEO 工具' : 'Search more SEO tools'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {isChinese
+                      ? '如果你还要扩大候选范围，可以回到搜索页继续看。'
+                      : 'Use the search page to widen the candidate set a bit further.'}
+                  </p>
+                </div>
+                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
+              </div>
+            </Link>
+          </div>
         </section>
 
         <GuideActionSection

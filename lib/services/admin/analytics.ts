@@ -51,11 +51,37 @@ export interface PageAccessPage {
   uniqueVisitors: number;
 }
 
+export interface PageAccessFamily {
+  pageType: string;
+  label: string;
+  views: number;
+  uniqueVisitors: number;
+  percentage: number;
+  topPages: PageAccessPage[];
+}
+
 export interface PageAccessReport {
   summary: PageAccessSummary[];
   topPages: PageAccessPage[];
+  familyBreakdown: PageAccessFamily[];
   totalViews: number;
   totalUniqueVisitors: number;
+}
+
+export interface PageAccessTrendItem {
+  pageType: string;
+  label: string;
+  currentViews: number;
+  previousViews: number;
+  changePercent: number;
+}
+
+export interface PageAccessTrend {
+  items: PageAccessTrendItem[];
+  currentViews: number;
+  previousViews: number;
+  currentUniqueVisitors: number;
+  previousUniqueVisitors: number;
 }
 
 export interface FeedbackSignal {
@@ -835,8 +861,40 @@ export async function getPageAccessReport(
       GROUP BY page_path, page_type
       ORDER BY views DESC
       LIMIT $1
-    `,
+      `,
       [limit],
+    );
+
+    const familyTopPagesResult = await pool.query(
+      `
+      ${baseCte}
+      , page_page_views AS (
+        SELECT
+          page_path,
+          page_type,
+          COUNT(*)::int AS views,
+          COUNT(DISTINCT session_id)::int AS unique_visitors
+        FROM page_views
+        GROUP BY page_path, page_type
+      ),
+      ranked_page_views AS (
+        SELECT
+          page_path,
+          page_type,
+          views,
+          unique_visitors,
+          ROW_NUMBER() OVER (PARTITION BY page_type ORDER BY views DESC, page_path ASC) AS page_rank
+        FROM page_page_views
+      )
+      SELECT
+        page_path,
+        page_type,
+        views,
+        unique_visitors,
+        page_rank
+      FROM ranked_page_views
+      ORDER BY page_type ASC, views DESC, page_path ASC
+    `,
     );
 
     const totalsResult = await pool.query(
@@ -850,6 +908,26 @@ export async function getPageAccessReport(
     );
 
     const totalViews = Number.parseInt(String(totalsResult.rows[0]?.total_views || '0'), 10);
+    const familyTopPagesByType = new Map<string, PageAccessPage[]>();
+
+    familyTopPagesResult.rows.forEach((row) => {
+      const pageType = String(row.page_type || 'other');
+      const pageRank = Number.parseInt(String(row.page_rank || '0'), 10);
+
+      if (pageRank > 3) {
+        return;
+      }
+
+      const existing = familyTopPagesByType.get(pageType) || [];
+      existing.push({
+        pagePath: row.page_path,
+        pageType,
+        label: getPageTypeLabel(pageType),
+        views: Number.parseInt(String(row.views || '0'), 10),
+        uniqueVisitors: Number.parseInt(String(row.unique_visitors || '0'), 10),
+      });
+      familyTopPagesByType.set(pageType, existing);
+    });
 
     return {
       summary: summaryResult.rows.map((row) => {
@@ -871,6 +949,20 @@ export async function getPageAccessReport(
         views: Number.parseInt(String(row.views || '0'), 10),
         uniqueVisitors: Number.parseInt(String(row.unique_visitors || '0'), 10),
       })),
+      familyBreakdown: summaryResult.rows.map((row) => {
+        const pageType = String(row.page_type || 'other');
+        const views = Number.parseInt(String(row.views || '0'), 10);
+        const uniqueVisitors = Number.parseInt(String(row.unique_visitors || '0'), 10);
+
+        return {
+          pageType,
+          label: getPageTypeLabel(pageType),
+          views,
+          uniqueVisitors,
+          percentage: totalViews > 0 ? (views / totalViews) * 100 : 0,
+          topPages: familyTopPagesByType.get(pageType) || [],
+        };
+      }),
       totalViews,
       totalUniqueVisitors: Number.parseInt(String(totalsResult.rows[0]?.total_unique_visitors || '0'), 10),
     };
@@ -879,8 +971,123 @@ export async function getPageAccessReport(
     return {
       summary: [],
       topPages: [],
+      familyBreakdown: [],
       totalViews: 0,
       totalUniqueVisitors: 0,
+    };
+  }
+}
+
+/**
+ * Get page access trend comparing current vs previous period.
+ */
+export async function getPageAccessTrend(range: '7d' | '30d' = '7d'): Promise<PageAccessTrend> {
+  try {
+    const pool = getPool();
+    const currentInterval = range === '30d' ? '30 days' : '7 days';
+    const previousInterval = range === '30d' ? '30 days' : '7 days';
+
+    const result = await pool.query(
+      `
+      WITH base AS (
+        SELECT
+          COALESCE(
+            NULLIF(metadata->>'page_type', ''),
+            CASE WHEN tool_id IS NOT NULL THEN 'tool_detail' ELSE 'other' END
+          ) AS page_type,
+          session_id,
+          timestamp
+        FROM analytics
+        WHERE event_type = 'page_view'
+      ),
+      scoped AS (
+        SELECT
+          CASE
+            WHEN timestamp >= NOW() - INTERVAL '${currentInterval}' THEN 'current'
+            WHEN timestamp >= NOW() - INTERVAL '${currentInterval}' - INTERVAL '${previousInterval}' THEN 'previous'
+            ELSE NULL
+          END AS period,
+          page_type,
+          session_id
+        FROM base
+        WHERE timestamp >= NOW() - INTERVAL '${currentInterval}' - INTERVAL '${previousInterval}'
+      ),
+      aggregated AS (
+        SELECT
+          period,
+          page_type,
+          COUNT(*)::int AS views,
+          COUNT(DISTINCT session_id)::int AS unique_visitors
+        FROM scoped
+        WHERE period IS NOT NULL
+        GROUP BY period, page_type
+      )
+      SELECT * FROM aggregated
+    `,
+    );
+
+    const countsByPeriod = new Map<string, Map<string, { views: number; uniqueVisitors: number }>>();
+    let currentViews = 0;
+    let previousViews = 0;
+    let currentUniqueVisitors = 0;
+    let previousUniqueVisitors = 0;
+
+    result.rows.forEach((row) => {
+      const period = String(row.period || 'current');
+      const pageType = String(row.page_type || 'other');
+      const views = Number.parseInt(String(row.views || '0'), 10);
+      const uniqueVisitors = Number.parseInt(String(row.unique_visitors || '0'), 10);
+
+      if (!countsByPeriod.has(period)) {
+        countsByPeriod.set(period, new Map());
+      }
+      countsByPeriod.get(period)!.set(pageType, { views, uniqueVisitors });
+
+      if (period === 'current') {
+        currentViews += views;
+        currentUniqueVisitors += uniqueVisitors;
+      } else if (period === 'previous') {
+        previousViews += views;
+        previousUniqueVisitors += uniqueVisitors;
+      }
+    });
+
+    const pageTypes = ['home', 'tool_detail', 'guide', 'category', 'explore', 'other'];
+    const items = pageTypes.map((pageType) => {
+      const current = countsByPeriod.get('current')?.get(pageType)?.views || 0;
+      const previous = countsByPeriod.get('previous')?.get(pageType)?.views || 0;
+      let changePercent = 0;
+
+      if (previous > 0) {
+        changePercent = ((current - previous) / previous) * 100;
+      } else if (current > 0) {
+        changePercent = 100;
+      }
+
+      return {
+        pageType,
+        label: getPageTypeLabel(pageType),
+        currentViews: current,
+        previousViews: previous,
+        changePercent,
+      };
+    });
+
+    return {
+      items,
+      currentViews,
+      previousViews,
+      currentUniqueVisitors,
+      previousUniqueVisitors,
+    };
+  } catch (error) {
+    console.error('Error fetching page access trend:', error);
+    return {
+      items: [],
+      currentViews: 0,
+      previousViews: 0,
+      currentUniqueVisitors: 0,
+      previousUniqueVisitors: 0,
     };
   }
 }

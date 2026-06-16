@@ -215,6 +215,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Move there if the real decision is more about holdings and portfolio views.',
             },
           ]}
+          nextEyebrow={isChinese ? '下一步入口' : 'Where to go next'}
+          nextTitle={
+            isChinese
+              ? '钱包研究方向明确后，继续这样收窄'
+              : 'How to narrow the space once wallet research is clearly the lane'
+          }
+          nextDescription={
+            isChinese
+              ? '如果你已经确认自己要找的是钱包研究工具，下一步就回 Web3 分类、精准搜索和本周新增继续筛。'
+              : 'Once wallet research is clearly the lane, the next step is to use Web3 categories, focused search, and weekly additions to compare real candidates.'
+          }
+          nextLinks={[
+            {
+              href: '/categories/web3?sort=popular',
+              title: isChinese ? '进入 Web3 分类' : 'Open the Web3 category',
+              description: isChinese
+                ? '回到 Web3 目录继续看真实钱包研究条目。'
+                : 'Return to the Web3 directory for real wallet-research candidates.',
+            },
+            {
+              href: '/explore?search=wallet&sort=popular',
+              title: isChinese ? '搜索更多钱包工具' : 'Search more wallet tools',
+              description: isChinese
+                ? '回到 Explore，用更窄的钱包关键词扩大 shortlist。'
+                : 'Return to Explore and widen the shortlist with wallet-specific search.',
+            },
+            {
+              href: '/new',
+              title: isChinese ? '看本周新增' : 'Check new this week',
+              description: isChinese
+                ? '看看最近补进来的 Web3 工具里有没有更适合的新候选。'
+                : 'See whether recent Web3 additions introduced a stronger fit for wallet research.',
+            },
+          ]}
         />
       </div>
     </>

@@ -187,6 +187,136 @@ function formatUpdatedAt(updatedAt?: string): string {
   }).format(parsed);
 }
 
+function buildDefaultDecisionCards(comparisonLabel: { cn: string; en: string }) {
+  return [
+    {
+      title: {
+        cn: '先看场景',
+        en: 'Start with the workflow',
+      },
+      description: {
+        cn: `${comparisonLabel.cn} 不只是比功能，更要看它是否真的贴合你的工作流。`,
+        en: `${comparisonLabel.en} is not just about features; it is about whether the tool fits the job you actually need to do.`,
+      },
+    },
+    {
+      title: {
+        cn: '再看限制',
+        en: 'Check the limits',
+      },
+      description: {
+        cn: '免费额度、使用限制、集成成本和学习曲线，通常比“宣传功能”更能决定你最后会不会继续用。',
+        en: 'Free-tier limits, usage caps, integration cost, and learning curve usually matter more than marketing claims.',
+      },
+    },
+    {
+      title: {
+        cn: '最后看可信度',
+        en: 'Confirm trust signals',
+      },
+      description: {
+        cn: '定价、更新频率、截图和真实反馈会帮助你判断这款工具是不是值得继续比较。',
+        en: 'Pricing, freshness, screenshots, and real feedback tell you whether it is worth more of your time.',
+      },
+    },
+  ];
+}
+
+function buildDefaultComparisonDimensions() {
+  return [
+    {
+      title: {
+        cn: '任务适配度',
+        en: 'Task fit',
+      },
+      description: {
+        cn: '这款工具到底是不是为你的核心工作流设计的。',
+        en: 'Whether the tool was built for your core workflow or only looks adjacent.',
+      },
+    },
+    {
+      title: {
+        cn: '定价门槛',
+        en: 'Pricing threshold',
+      },
+      description: {
+        cn: '免费能不能试出价值，付费后提升是否足够明确。',
+        en: 'Whether the free tier is enough to validate value and whether paid tiers are clearly better.',
+      },
+    },
+    {
+      title: {
+        cn: '更新与稳定性',
+        en: 'Freshness and stability',
+      },
+      description: {
+        cn: '最近更新、官网状态和是否还在维护，都会影响长期可用性。',
+        en: 'Recent updates, official site status, and active maintenance all affect long-term usability.',
+      },
+    },
+    {
+      title: {
+        cn: '真实反馈',
+        en: 'Real-world feedback',
+      },
+      description: {
+        cn: '评论、评分和收藏信号会告诉你它是否真的被人持续使用。',
+        en: 'Reviews, ratings, and saves reveal whether people actually keep using it.',
+      },
+    },
+  ];
+}
+
+function buildDefaultFitFor() {
+  return [
+    {
+      title: {
+        cn: '需求明确的人',
+        en: 'People with a clear job to do',
+      },
+      description: {
+        cn: '已经知道自己要解决什么问题，想快速收敛到最合适的工具。',
+        en: 'People who already know the job they need to solve and want to narrow the shortlist quickly.',
+      },
+    },
+    {
+      title: {
+        cn: '愿意对比的人',
+        en: 'People willing to compare',
+      },
+      description: {
+        cn: '愿意先看几项关键维度，再决定要不要试用或付费。',
+        en: 'People who are willing to compare a few decision points before trying or paying.',
+      },
+    },
+  ];
+}
+
+function buildDefaultNotFor() {
+  return [
+    {
+      title: {
+        cn: '只是随便看看的人',
+        en: 'People just browsing',
+      },
+      description: {
+        cn: '如果你还没确定自己的核心场景，先回到总指南会更高效。',
+        en: 'If your use case is still fuzzy, start from the broader guide first.',
+      },
+    },
+    {
+      title: {
+        cn: '只看宣传卖点的人',
+        en: 'People chasing marketing claims',
+      },
+      description: {
+        cn: '单看宣传页很容易误判，最好结合截图、评论和定价一起判断。',
+        en: 'Marketing copy alone is misleading; check screenshots, reviews, and pricing too.',
+      },
+    },
+  ];
+}
+
 export async function buildComparisonMetadata(locale: string, title: string, description: string): Promise<Metadata> {
   const t = await getTranslations({
     locale,
@@ -280,16 +410,23 @@ export async function buildComparisonPageData(locale: string, config: Comparison
     isChinese ? `${config.comparisonLabel.cn} comparison` : `${config.comparisonLabel.en} comparison`,
   );
 
-  const tips = isChinese ? config.tips.cn : config.tips.en;
-  const decisionCards = (config.decisionCards || []).map((card) => ({
+  const tipSource = isChinese ? config.tips.cn : config.tips.en;
+  const tips = tipSource.length > 0 ? tipSource : [];
+  const decisionCardsSource =
+    config.decisionCards && config.decisionCards.length > 0
+      ? config.decisionCards
+      : buildDefaultDecisionCards(config.comparisonLabel);
+  const decisionCards = decisionCardsSource.map((card) => ({
     title: isChinese ? card.title.cn : card.title.en,
     description: isChinese ? card.description.cn : card.description.en,
   }));
-  const fitFor = (config.fitFor || []).map((item) => ({
+  const fitForSource = config.fitFor && config.fitFor.length > 0 ? config.fitFor : buildDefaultFitFor();
+  const fitFor = fitForSource.map((item) => ({
     title: isChinese ? item.title.cn : item.title.en,
     description: isChinese ? item.description.cn : item.description.en,
   }));
-  const notFor = (config.notFor || []).map((item) => ({
+  const notForSource = config.notFor && config.notFor.length > 0 ? config.notFor : buildDefaultNotFor();
+  const notFor = notForSource.map((item) => ({
     title: isChinese ? item.title.cn : item.title.en,
     description: isChinese ? item.description.cn : item.description.en,
   }));
@@ -298,7 +435,11 @@ export async function buildComparisonPageData(locale: string, config: Comparison
     title: isChinese ? item.title.cn : item.title.en,
     description: isChinese ? item.description.cn : item.description.en,
   }));
-  const comparisonDimensions = (config.comparisonDimensions || []).map((item) => ({
+  const comparisonDimensionsSource =
+    config.comparisonDimensions && config.comparisonDimensions.length > 0
+      ? config.comparisonDimensions
+      : buildDefaultComparisonDimensions();
+  const comparisonDimensions = comparisonDimensionsSource.map((item) => ({
     title: isChinese ? item.title.cn : item.title.en,
     description: isChinese ? item.description.cn : item.description.en,
   }));
@@ -337,6 +478,19 @@ export function ComparisonPage({
   config,
   locale,
 }: Awaited<ReturnType<typeof buildComparisonPageData>> & { locale: string }) {
+  const firstTool = tools[0] || null;
+  const firstToolHref = firstTool ? `/ai/${firstTool.name}` : config.guideHref;
+  let firstToolDescription = '';
+  if (isChinese) {
+    firstToolDescription = firstTool
+      ? `直接看 ${firstTool.title} 的页面，确认截图、定价和反馈。`
+      : '没有可直接打开的条目时，先返回指南页继续。';
+  } else {
+    firstToolDescription = firstTool
+      ? `Open ${firstTool.title} to check screenshots, pricing, and feedback.`
+      : 'If no tool is ready yet, go back to the guide first.';
+  }
+
   return (
     <>
       <StructuredDataServer data={breadcrumbSchema} />
@@ -426,6 +580,69 @@ export function ComparisonPage({
                     ? '如果你已经确定下一步方向，就直接去更窄的入口。'
                     : 'If the next direction is clear, move into the narrower path.')}
               </p>
+            </Link>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '下一步怎么走' : 'Next step'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '把比较页接到更具体的决策路径' : 'Move this comparison into a more specific decision path'}
+          </h2>
+          <div className='mt-4 grid gap-4 lg:grid-cols-3'>
+            <Link
+              href={config.guideHref}
+              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
+            >
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
+                    {isChinese ? '回到指南页' : 'Back to the guide'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {isChinese
+                      ? '如果你还想先看完整选型逻辑，就先回上一级。'
+                      : 'Go back one level if you want the broader selection logic first.'}
+                  </p>
+                </div>
+                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
+              </div>
+            </Link>
+
+            <Link
+              href={config.altBrowseHref}
+              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
+            >
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
+                    {isChinese ? '扩大 shortlist' : 'Expand the shortlist'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {isChinese
+                      ? '先多看几个同类工具，再回来对照关键维度。'
+                      : 'Browse a few more related tools, then come back and compare the key points.'}
+                  </p>
+                </div>
+                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
+              </div>
+            </Link>
+
+            <Link
+              href={firstToolHref}
+              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
+            >
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
+                    {isChinese ? '打开一个工具详情' : 'Open a tool detail'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>{firstToolDescription}</p>
+                </div>
+                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
+              </div>
             </Link>
           </div>
         </section>

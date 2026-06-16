@@ -3,6 +3,7 @@ import { ArrowUpRight, BarChart3, Globe, Layers3, Search, ShieldAlert, TrendingU
 
 import {
   getPageAccessReport,
+  getPageAccessTrend,
   getPriorityMediaQueue,
   getSiteMetrics,
   getToolComplianceIssues,
@@ -21,12 +22,17 @@ export async function generateMetadata() {
 }
 
 export default async function AdminAnalyticsPage({
+  params,
   searchParams,
 }: {
+  params?: {
+    locale?: string;
+  };
   searchParams?: {
     range?: string;
   };
 }) {
+  const locale = params?.locale || 'en';
   const range = searchParams?.range === '7d' || searchParams?.range === '30d' ? searchParams.range : 'all';
   const rangeLabelMap = {
     all: 'All time',
@@ -36,6 +42,7 @@ export default async function AdminAnalyticsPage({
   const rangeLabel = rangeLabelMap[range as keyof typeof rangeLabelMap];
   const metrics = await getSiteMetrics();
   const pageAccessReport = await getPageAccessReport(range, 10);
+  const pageAccessTrend = await getPageAccessTrend(range === 'all' ? '30d' : range);
   const operationalStats = await getOperationalStats(range);
   const funnel = await getSubmissionFunnelStats(range);
   const topToolsByViews = await getTopTools('views', 10);
@@ -109,9 +116,134 @@ export default async function AdminAnalyticsPage({
     return 'Review where these visits should be reassigned';
   };
 
+  const getPageRecommendations = (pageType: string) => {
+    if (pageType === 'home') {
+      return ['Top-fold CTA', 'Compare rail', 'Category shortcuts'];
+    }
+    if (pageType === 'tool_detail') {
+      return ['Trust blocks', 'Pricing clarity', 'Feedback prompts'];
+    }
+    if (pageType === 'guide') {
+      return ['Comparison links', 'Decision blocks', 'Internal links'];
+    }
+    if (pageType === 'category') {
+      return ['Representative tools', 'Filter cleanup', 'Cross-links'];
+    }
+    if (pageType === 'explore') {
+      return ['Empty-state copy', 'Sort clarity', 'Query routing'];
+    }
+
+    return ['Reassign page type', 'Inspect entry path', 'Check indexing intent'];
+  };
+
+  const getPageTrendSummary = (pageType: string) => {
+    if (pageType === 'home') return 'If home is rising, keep the first fold and routing sharp.';
+    if (pageType === 'guide') return 'If guides are rising, keep adding comparison pages and deeper links.';
+    if (pageType === 'category') return 'If category pages are rising, keep backfilling supply and examples.';
+    if (pageType === 'tool_detail') return 'If detail pages are rising, trust signals and feedback loops matter most.';
+    if (pageType === 'explore') return 'If Explore is rising, tighten filters and empty-state guidance.';
+    return 'Watch this family to see where the next clean-up or expansion belongs.';
+  };
+
+  const getPagePrioritySummary = (pageType: string) => {
+    if (pageType === 'home') return 'Tighten the hero, top routing, and comparison rail.';
+    if (pageType === 'guide') return 'Add more comparison pages and route deeper into category pages.';
+    if (pageType === 'category') return 'Backfill more tools, representative examples, and related comparisons.';
+    if (pageType === 'tool_detail') return 'Improve trust blocks, pricing clarity, and feedback prompts.';
+    if (pageType === 'explore') return 'Refine filters, empty states, and query-to-page routing.';
+    return 'Keep this family under review and reassign pages where needed.';
+  };
+
+  const getFamilyLandingHref = (pageType: string) => {
+    if (pageType === 'home') return `/${locale}`;
+    if (pageType === 'guide') return `/${locale}/guides`;
+    if (pageType === 'category') return `/${locale}/categories`;
+    if (pageType === 'explore') return `/${locale}/explore`;
+    return `/${locale}/ai`;
+  };
+
+  const getPriorityBadgeClass = (priority: string) => {
+    if (priority === 'High') return 'bg-rose-50 text-rose-700';
+    if (priority === 'Medium') return 'bg-amber-50 text-amber-700';
+    return 'bg-cyan-50 text-cyan-700';
+  };
+
+  const getPeriodChangeLabel = (currentViews: number, previousViews: number) => {
+    if (previousViews > 0) {
+      return `${(((currentViews - previousViews) / previousViews) * 100).toFixed(1)}%`;
+    }
+
+    if (currentViews > 0) {
+      return '100.0%';
+    }
+
+    return '0.0%';
+  };
+
+  const getPageFocusSummary = (pageType: string, hasData: boolean) => {
+    if (pageType === 'home') {
+      return hasData
+        ? 'First-fold CTA and category entry points matter most here.'
+        : 'Still too little data, but keep the entry rail concise.';
+    }
+    if (pageType === 'tool_detail') {
+      return hasData
+        ? 'Trust snapshots, comparison blocks, and feedback matter most here.'
+        : 'More product detail traffic will tell us which trust modules work.';
+    }
+    if (pageType === 'guide') {
+      return hasData
+        ? 'Comparison-style guides and internal links should keep growing.'
+        : 'This is a good place to add more high-intent decision pages.';
+    }
+    if (pageType === 'category') {
+      return hasData
+        ? 'Backfilling supply inside categories should be a weekly habit.'
+        : 'Category pages need more inventory or they will stay thin.';
+    }
+    if (pageType === 'explore') {
+      return hasData
+        ? 'Filters, sorting, and empty states deserve steady polish.'
+        : 'Explore traffic is light, so SEO and routing into it matter more.';
+    }
+
+    return hasData
+      ? 'Watch how this family behaves before deciding where to invest.'
+      : 'This family is still too small to read confidently.';
+  };
+
+  const getPageQueuePriority = (pageType: string) => {
+    if (pageType === 'tool_detail') return 'High';
+    if (pageType === 'guide') return 'High';
+    if (pageType === 'home') return 'Medium';
+    if (pageType === 'category') return 'Medium';
+    if (pageType === 'explore') return 'Low';
+    return 'Low';
+  };
+
+  const getPageQueueReason = (pageType: string) => {
+    if (pageType === 'tool_detail') {
+      return 'These pages convert the most intent into clicks, favorites, and submissions.';
+    }
+    if (pageType === 'guide') {
+      return 'These pages help users decide and can push traffic into comparison and detail pages.';
+    }
+    if (pageType === 'home') {
+      return 'The homepage controls first impressions and where traffic flows next.';
+    }
+    if (pageType === 'category') {
+      return 'Category pages need enough supply and clear filters to stay useful.';
+    }
+    if (pageType === 'explore') {
+      return 'Explore is useful, but it usually needs less immediate attention than conversion pages.';
+    }
+    return 'These visits need a manual review to understand where they should be routed.';
+  };
+
   const focusCategories = topCategories.slice(0, 3);
   const pageSummaryOrder = ['home', 'tool_detail', 'guide', 'category', 'explore', 'other'] as const;
   const pageSummaryMap = new Map(pageAccessReport.summary.map((item) => [item.pageType, item]));
+  const familyBreakdownMap = new Map(pageAccessReport.familyBreakdown.map((item) => [item.pageType, item]));
   const pageSummaryItems = pageSummaryOrder.map((pageType) => {
     const item = pageSummaryMap.get(pageType);
 
@@ -123,56 +255,73 @@ export default async function AdminAnalyticsPage({
       percentage: item?.percentage || 0,
     };
   });
-  const topPriorityPage = pageSummaryItems
-    .filter((item) => item.views > 0)
-    .sort((a, b) => b.views - a.views)[0];
+  const topPriorityPage = pageSummaryItems.filter((item) => item.views > 0).sort((a, b) => b.views - a.views)[0];
   const detailShare = pageSummaryMap.get('tool_detail')?.percentage || 0;
   const guideShare = pageSummaryMap.get('guide')?.percentage || 0;
   const homeShare = pageSummaryMap.get('home')?.percentage || 0;
   const categoryShare = pageSummaryMap.get('category')?.percentage || 0;
   const exploreShare = pageSummaryMap.get('explore')?.percentage || 0;
+  const familyBreakdownItems = pageSummaryOrder.map((pageType) => {
+    const item = familyBreakdownMap.get(pageType);
+
+    return {
+      pageType,
+      label: getPageSummaryLabel(pageType),
+      views: item?.views || 0,
+      uniqueVisitors: item?.uniqueVisitors || 0,
+      percentage: item?.percentage || 0,
+      topPages: item?.topPages || [],
+    };
+  });
+  const pageWorkQueueItems = familyBreakdownItems
+    .filter((item) => item.views > 0)
+    .sort((a, b) => b.views - a.views)
+    .slice(0, 5)
+    .map((item) => ({
+      ...item,
+      topPage: item.topPages[0] || null,
+      nextAction: getPageAction(item.pageType),
+      priority: getPageQueuePriority(item.pageType),
+      reason: getPageQueueReason(item.pageType),
+    }));
+  const pageTrendItems = pageAccessTrend.items.filter((item) => item.currentViews > 0 || item.previousViews > 0);
+  const contentPriorityItems = [...pageTrendItems]
+    .sort((a, b) => b.currentViews - a.currentViews || b.changePercent - a.changePercent)
+    .slice(0, 3);
   const pageFocusSignals = [
     {
       label: 'Homepage',
       value: homeShare,
-      summary:
-        homeShare > 0
-          ? 'First-fold CTA and category entry points matter most here.'
-          : 'Still too little data, but keep the entry rail concise.',
+      summary: getPageFocusSummary('home', homeShare > 0),
     },
     {
       label: 'Tool detail',
       value: detailShare,
-      summary:
-        detailShare > 0
-          ? 'Trust snapshots, comparison blocks, and feedback matter most here.'
-          : 'More product detail traffic will tell us which trust modules work.',
+      summary: getPageFocusSummary('tool_detail', detailShare > 0),
     },
     {
       label: 'Guides',
       value: guideShare,
-      summary:
-        guideShare > 0
-          ? 'Comparison-style guides and internal links should keep growing.'
-          : 'This is a good place to add more high-intent decision pages.',
+      summary: getPageFocusSummary('guide', guideShare > 0),
     },
     {
       label: 'Categories',
       value: categoryShare,
-      summary:
-        categoryShare > 0
-          ? 'Backfilling supply inside categories should be a weekly habit.'
-          : 'Category pages need more inventory or they will stay thin.',
+      summary: getPageFocusSummary('category', categoryShare > 0),
     },
     {
       label: 'Explore',
       value: exploreShare,
-      summary:
-        exploreShare > 0
-          ? 'Filters, sorting, and empty states deserve steady polish.'
-          : 'Explore traffic is light, so SEO and routing into it matter more.',
+      summary: getPageFocusSummary('explore', exploreShare > 0),
     },
   ];
+  const toLocalizedPath = (pagePath: string) => {
+    if (!pagePath || pagePath === 'unknown') {
+      return null;
+    }
+
+    return `/${locale}${pagePath.startsWith('/') ? pagePath : `/${pagePath}`}`;
+  };
 
   return (
     <div>
@@ -280,6 +429,39 @@ export default async function AdminAnalyticsPage({
           </div>
         </div>
 
+        <div className='mb-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Views, current period</p>
+            <p className='mt-2 text-3xl font-semibold text-slate-900'>
+              {pageAccessTrend.currentViews.toLocaleString()}
+            </p>
+            <p className='mt-2 text-sm text-slate-500'>
+              Previous period: {pageAccessTrend.previousViews.toLocaleString()}
+            </p>
+          </div>
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Unique visitors, current period</p>
+            <p className='mt-2 text-3xl font-semibold text-slate-900'>
+              {pageAccessTrend.currentUniqueVisitors.toLocaleString()}
+            </p>
+            <p className='mt-2 text-sm text-slate-500'>
+              Previous period: {pageAccessTrend.previousUniqueVisitors.toLocaleString()}
+            </p>
+          </div>
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Period change</p>
+            <p className='mt-2 text-3xl font-semibold text-slate-900'>
+              {getPeriodChangeLabel(pageAccessTrend.currentViews, pageAccessTrend.previousViews)}
+            </p>
+            <p className='mt-2 text-sm text-slate-500'>All page families combined</p>
+          </div>
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Tracked families</p>
+            <p className='mt-2 text-3xl font-semibold text-slate-900'>{pageTrendItems.length}</p>
+            <p className='mt-2 text-sm text-slate-500'>home, detail, guide, category, explore, other</p>
+          </div>
+        </div>
+
         <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-3'>
           {pageSummaryItems.map((item) => (
             <div key={item.pageType} className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
@@ -298,6 +480,127 @@ export default async function AdminAnalyticsPage({
           ))}
         </div>
 
+        <div className='mt-4 grid gap-4 md:grid-cols-2'>
+          {pageTrendItems.map((item) => (
+            <div key={item.pageType} className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <div className='text-xs font-medium uppercase tracking-wide text-slate-500'>{item.label}</div>
+                  <div className='mt-2 text-2xl font-semibold text-slate-900'>{item.currentViews.toLocaleString()}</div>
+                  <p className='mt-1 text-sm text-slate-500'>Previous: {item.previousViews.toLocaleString()} views</p>
+                </div>
+                <div
+                  className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
+                    item.changePercent >= 0 ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'
+                  }`}
+                >
+                  {item.changePercent >= 0 ? '+' : ''}
+                  {item.changePercent.toFixed(1)}%
+                </div>
+              </div>
+              <p className='mt-3 text-sm leading-6 text-slate-600'>{getPageTrendSummary(item.pageType)}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className='mt-4 rounded-lg border border-cyan-100 bg-cyan-50/60 p-5 shadow-sm'>
+          <div className='flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
+            <div>
+              <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>Content priority</p>
+              <h3 className='mt-1 text-xl font-bold text-slate-950'>What to work on next</h3>
+            </div>
+            <p className='max-w-2xl text-sm leading-6 text-slate-600'>
+              This turns the page report into a short work queue: where traffic is already showing up, where to deepen,
+              and which page family should get the next pass.
+            </p>
+          </div>
+          <div className='mt-4 grid gap-3 md:grid-cols-3'>
+            {contentPriorityItems.map((item) => (
+              <div key={item.pageType} className='rounded-lg border border-white bg-white p-4 shadow-sm'>
+                <div className='flex items-start justify-between gap-3'>
+                  <div>
+                    <p className='text-sm font-semibold text-slate-950'>{item.label}</p>
+                    <p className='mt-1 text-xs text-slate-500'>{item.currentViews.toLocaleString()} views</p>
+                  </div>
+                  <span
+                    className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
+                      item.changePercent >= 0 ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'
+                    }`}
+                  >
+                    {item.changePercent >= 0 ? '+' : ''}
+                    {item.changePercent.toFixed(1)}%
+                  </span>
+                </div>
+                <p className='mt-3 text-sm leading-6 text-slate-600'>{getPagePrioritySummary(item.pageType)}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className='mt-4 grid gap-4 xl:grid-cols-2'>
+          {familyBreakdownItems.map((item) => (
+            <div key={item.pageType} className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <div className='text-xs font-medium uppercase tracking-wide text-slate-500'>{item.label}</div>
+                  <div className='mt-2 text-2xl font-semibold text-slate-900'>{item.views.toLocaleString()}</div>
+                  <p className='mt-1 text-sm text-slate-600'>{item.uniqueVisitors.toLocaleString()} unique visitors</p>
+                </div>
+                <div className='rounded-full bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-cyan-700'>
+                  {item.percentage.toFixed(1)}%
+                </div>
+              </div>
+
+              <div className='mt-4 space-y-2'>
+                {item.topPages.length > 0 ? (
+                  item.topPages.map((page) => (
+                    <div
+                      key={`${item.pageType}:${page.pagePath}`}
+                      className='rounded-lg border border-slate-200 bg-slate-50 px-3 py-2'
+                    >
+                      <div className='flex items-start justify-between gap-3'>
+                        <div>
+                          <p className='text-sm font-medium text-slate-900'>
+                            {toLocalizedPath(page.pagePath) ? (
+                              <Link
+                                href={toLocalizedPath(page.pagePath)!}
+                                className='hover:text-cyan-700 hover:underline'
+                              >
+                                {page.pagePath}
+                              </Link>
+                            ) : (
+                              page.pagePath
+                            )}
+                          </p>
+                          <p className='mt-1 text-xs text-slate-500'>
+                            {page.views.toLocaleString()} views · {page.uniqueVisitors.toLocaleString()} visitors
+                          </p>
+                        </div>
+                        {toLocalizedPath(page.pagePath) ? (
+                          <Link
+                            href={toLocalizedPath(page.pagePath)!}
+                            className='rounded-full bg-white px-2 py-0.5 text-xs font-semibold text-slate-600 hover:text-cyan-700'
+                          >
+                            Open
+                          </Link>
+                        ) : (
+                          <span className='rounded-full bg-white px-2 py-0.5 text-xs font-semibold text-slate-600'>
+                            Top
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className='rounded-lg border border-dashed border-slate-200 bg-slate-50 px-3 py-4 text-sm text-slate-500'>
+                    No page-level data yet for this family.
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
         <div className='mt-4 grid gap-4 lg:grid-cols-2'>
           {pageFocusSignals.map((signal) => (
             <div key={signal.label} className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
@@ -306,9 +609,7 @@ export default async function AdminAnalyticsPage({
                   <div className='text-xs font-medium uppercase tracking-wide text-slate-500'>{signal.label}</div>
                   <div className='mt-2 text-2xl font-semibold text-slate-900'>{signal.value.toFixed(1)}%</div>
                 </div>
-                <div className='rounded-full bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-600'>
-                  Share
-                </div>
+                <div className='rounded-full bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-600'>Share</div>
               </div>
               <p className='mt-3 text-sm leading-6 text-slate-600'>{signal.summary}</p>
             </div>
@@ -339,7 +640,15 @@ export default async function AdminAnalyticsPage({
             <tbody className='divide-y divide-slate-100 bg-white'>
               {pageAccessReport.topPages.map((page) => (
                 <tr key={`${page.pageType}:${page.pagePath}`} className='hover:bg-slate-50'>
-                  <td className='px-4 py-3 text-sm text-slate-900'>{page.pagePath}</td>
+                  <td className='px-4 py-3 text-sm text-slate-900'>
+                    {toLocalizedPath(page.pagePath) ? (
+                      <Link href={toLocalizedPath(page.pagePath)!} className='hover:text-cyan-700 hover:underline'>
+                        {page.pagePath}
+                      </Link>
+                    ) : (
+                      page.pagePath
+                    )}
+                  </td>
                   <td className='px-4 py-3 text-sm text-slate-600'>{page.label}</td>
                   <td className='px-4 py-3 text-right text-sm font-medium text-slate-900'>
                     {page.views.toLocaleString()}
@@ -352,6 +661,82 @@ export default async function AdminAnalyticsPage({
               ))}
             </tbody>
           </table>
+        </div>
+
+        <div className='mt-4 rounded-lg border border-cyan-100 bg-cyan-50/60 p-5 shadow-sm'>
+          <div className='flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
+            <div>
+              <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>Page work queue</p>
+              <h3 className='mt-1 text-xl font-bold text-slate-950'>What to work on first</h3>
+            </div>
+            <p className='max-w-2xl text-sm leading-6 text-slate-600'>
+              This is the operational version of the report: the page families getting the most visits and the next
+              content move for each one.
+            </p>
+          </div>
+
+          <div className='mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3'>
+            {pageWorkQueueItems.length > 0 ? (
+              pageWorkQueueItems.map((item) => (
+                <div key={item.pageType} className='rounded-lg border border-white bg-white p-4 shadow-sm'>
+                  <div className='flex items-start justify-between gap-3'>
+                    <div>
+                      <p className='text-sm font-semibold text-slate-950'>{item.label}</p>
+                      <p className='mt-1 text-xs text-slate-500'>
+                        {item.views.toLocaleString()} views · {item.uniqueVisitors.toLocaleString()} visitors
+                      </p>
+                    </div>
+                    <div className='flex flex-col items-end gap-2'>
+                      <span
+                        className={`rounded-full px-2.5 py-1 text-xs font-semibold ${getPriorityBadgeClass(item.priority)}`}
+                      >
+                        {item.priority} priority
+                      </span>
+                      <span className='rounded-full bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-cyan-700'>
+                        {item.percentage.toFixed(1)}%
+                      </span>
+                    </div>
+                  </div>
+
+                  <p className='mt-3 text-sm leading-6 text-slate-600'>{item.reason}</p>
+                  <p className='mt-2 text-sm font-medium text-slate-800'>{item.nextAction}</p>
+                  <div className='mt-3 flex flex-wrap gap-2'>
+                    {getPageRecommendations(item.pageType).map((recommendation) => (
+                      <span
+                        key={`${item.pageType}:${recommendation}`}
+                        className='rounded-full bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-cyan-700'
+                      >
+                        {recommendation}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className='mt-4 flex flex-wrap gap-2'>
+                    {item.topPage && toLocalizedPath(item.topPage.pagePath) ? (
+                      <Link
+                        href={toLocalizedPath(item.topPage.pagePath)!}
+                        className='inline-flex items-center gap-1 rounded-lg bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800'
+                      >
+                        Open top page
+                        <ArrowUpRight className='h-4 w-4' />
+                      </Link>
+                    ) : null}
+                    <Link
+                      href={getFamilyLandingHref(item.pageType)}
+                      className='inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:border-cyan-200 hover:text-cyan-700'
+                    >
+                      Open family
+                      <ArrowUpRight className='h-4 w-4' />
+                    </Link>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className='rounded-lg border border-dashed border-cyan-200 bg-white p-4 text-sm text-slate-500'>
+                No page-level queue yet. Once page views land, the highest-traffic families will show up here.
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

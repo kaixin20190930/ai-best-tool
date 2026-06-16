@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { Code2, ExternalLink, Layers3, Workflow } from 'lucide-react';
+import { ArrowRight, Code2, ExternalLink, Layers3, Workflow } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
@@ -276,6 +276,73 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看模型路由对比' : 'Model routing comparison'}
+            </Link>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '下一步怎么走' : 'Next step'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '把开发者入口接到比较页和真实条目'
+              : 'Move from the developer guide into comparisons and real listings'}
+          </h2>
+          <div className='mt-4 grid gap-4 lg:grid-cols-3'>
+            <Link
+              href='/guides/ai-tools-for-developers-comparison'
+              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
+            >
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
+                    {isChinese ? '看开发者对比页' : 'Compare developer tools'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {isChinese
+                      ? '如果你已经知道自己偏编码、模型接入还是可观测性，就直接对比。'
+                      : 'If coding, model access, or observability is already clear, move straight into comparison.'}
+                  </p>
+                </div>
+                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
+              </div>
+            </Link>
+            <Link
+              href='/categories/developer-tools?sort=popular'
+              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
+            >
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
+                    {isChinese ? '进入 Developer 分类' : 'Open the developer category'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {isChinese
+                      ? '先浏览真实条目，再回来缩小候选。'
+                      : 'Browse real listings first, then come back to narrow the shortlist.'}
+                  </p>
+                </div>
+                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
+              </div>
+            </Link>
+            <Link
+              href='/explore?search=developer&sort=popular'
+              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
+            >
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
+                    {isChinese ? '搜索更多开发者工具' : 'Search more developer tools'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {isChinese
+                      ? '如果你想扩大候选池，可以回到探索页继续看。'
+                      : 'Use Explore to widen the shortlist a bit further.'}
+                  </p>
+                </div>
+                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
+              </div>
             </Link>
           </div>
         </section>

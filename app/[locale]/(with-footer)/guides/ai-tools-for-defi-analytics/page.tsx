@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import GuideActionSection from '@/components/guides/GuideActionSection';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
@@ -214,6 +215,80 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </div>
         </section>
+
+        <GuideActionSection
+          locale={locale}
+          eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}
+          title={isChinese ? '更贴近 DeFi 决策的真实入口' : 'Real entry points for DeFi decisions'}
+          description={
+            isChinese
+              ? '如果你已经知道自己关心的是流动性、收益、协议监控或资金流，这几款工具会比泛 Web3 页面更快收窄范围。'
+              : 'If your focus is liquidity, yield, protocol monitoring, or fund flow, these tools narrow the field faster than a broad Web3 page.'
+          }
+          toolNames={['defillama', 'debank', 'dune', 'messari']}
+          compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
+          compareTitle={isChinese ? 'DeFi 方向更明确后的下一步' : 'Next paths once DeFi is the clear lane'}
+          compareDescription={
+            isChinese
+              ? '当你不是泛泛浏览，而是真的要决定监控、研究还是分析工具时，继续进入更窄的对比页会更有效。'
+              : 'Once you are actually choosing between monitoring, research, and analytics tools, narrower comparison pages work better.'
+          }
+          compareLinks={[
+            {
+              href: '/guides/ai-tools-for-defi-analytics-comparison',
+              title: isChinese ? 'DeFi 工具总对比' : 'DeFi tools comparison',
+              description: isChinese
+                ? '适合还没完全确定自己更偏协议、收益还是资金流。'
+                : 'Best when you still need a broad side-by-side view across protocols, yield, and fund flow.',
+            },
+            {
+              href: '/guides/ai-tools-for-protocol-analytics-comparison',
+              title: isChinese ? '协议分析工具对比' : 'Protocol analytics comparison',
+              description: isChinese
+                ? '如果你已经明确更偏协议健康、指标看板和长期跟踪，这页更高意图。'
+                : 'A stronger fit when protocol health, dashboards, and long-term tracking are the real need.',
+            },
+            {
+              href: '/guides/ai-tools-for-crypto-research-comparison',
+              title: isChinese ? 'Crypto 研究工具对比' : 'Crypto research comparison',
+              description: isChinese
+                ? '如果你更偏项目判断、信息整合和链上观察，这页更贴近目标。'
+                : 'A better path when project judgment, synthesis, and on-chain observation matter more.',
+            },
+          ]}
+          nextEyebrow={isChinese ? '下一步入口' : 'Where to go next'}
+          nextTitle={
+            isChinese ? 'DeFi 方向明确后，继续这样收窄' : 'How to narrow the space once DeFi is clearly the lane'
+          }
+          nextDescription={
+            isChinese
+              ? '如果你已经确认自己要找的是 DeFi 工具，下一步就进入 Web3 分类、精准搜索和最近新增，开始比较真实候选。'
+              : 'Once DeFi is clearly the lane, use the category, focused search, and recent additions to compare real candidates.'
+          }
+          nextLinks={[
+            {
+              href: '/categories/web3?sort=popular',
+              title: isChinese ? '进入 Web3 分类' : 'Open the Web3 category',
+              description: isChinese
+                ? '回到 Web3 目录继续看真实条目。'
+                : 'Return to the Web3 directory to compare actual listings.',
+            },
+            {
+              href: '/explore?search=defi&sort=popular',
+              title: isChinese ? '搜索更多 DeFi 工具' : 'Search more DeFi tools',
+              description: isChinese
+                ? '回到 Explore，用更窄的 DeFi 关键词继续扩大 shortlist。'
+                : 'Return to Explore and widen the shortlist with DeFi-focused search.',
+            },
+            {
+              href: '/new',
+              title: isChinese ? '看本周新增' : 'Check new this week',
+              description: isChinese
+                ? '看看最近补进来的 Web3 和 DeFi 工具里有没有更合适的新候选。'
+                : 'See whether recent Web3 and DeFi additions introduced a stronger fit.',
+            },
+          ]}
+        />
       </div>
     </>
   );

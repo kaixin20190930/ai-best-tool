@@ -46,9 +46,21 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
     'image-generator': ['/guides/ai-image-tools', '/guides/ai-image-tools-comparison'],
     coding: ['/guides/ai-coding-tools', '/guides/ai-coding-tools-comparison'],
     research: ['/guides/ai-tools-for-research', '/guides/ai-tools-for-research-comparison', '/guides/ai-seo-tools'],
-    voice: ['/guides/ai-video-tools', '/guides/ai-video-tools-comparison'],
+    marketing: [
+      '/guides/ai-tools-for-marketing',
+      '/guides/ai-tools-for-marketing-comparison',
+      '/guides/ai-writing-tools',
+    ],
+    voice: ['/guides/ai-tools-for-voice', '/guides/ai-tools-for-voice-comparison'],
     automation: ['/guides/ai-tools-for-automation', '/guides/ai-tools-for-automation-comparison'],
-    'developer-tools': ['/guides/ai-tools-for-developers', '/guides/ai-tools-for-developers-comparison'],
+    'developer-tools': [
+      '/guides/ai-tools-for-developers',
+      '/guides/ai-tools-for-developers-comparison',
+      '/guides/ai-tools-for-model-routing',
+      '/guides/ai-tools-for-model-routing-comparison',
+      '/guides/ai-tools-for-api-observability',
+      '/guides/ai-tools-for-api-observability-comparison',
+    ],
     web3: ['/guides/ai-tools-for-web3', '/guides/ai-tools-for-web3-comparison'],
   };
   const representativeToolMap: Record<
@@ -346,7 +358,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
     .filter(
       (page, index, pages): page is (typeof GUIDE_PAGES)[number] => Boolean(page) && pages.indexOf(page) === index,
     )
-    .slice(0, 4);
+    .slice(0, 3);
   const comparisonGuides = (guideHrefMap[categorySlug] || [])
     .map((href) => GUIDE_PAGES.find((page) => page.href === href))
     .filter((page): page is (typeof GUIDE_PAGES)[number] => Boolean(page))
@@ -358,7 +370,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
       slug: String(item.slug),
       name: getLocalizedField(item.name, params.locale),
     }));
-  const representativeTools = representativeToolMap[categorySlug] || [];
+  const representativeTools = (representativeToolMap[categorySlug] || []).slice(0, 3);
   const helperBullets = isChinese
     ? [
         `先看工具是否真正适合 ${categoryName} 的工作流，而不只是“看起来很强”。`,
@@ -482,6 +494,98 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
           </section>
         </div>
 
+        {(comparisonGuides[0] || relatedGuides[0] || representativeTools[0]) && (
+          <section className='theme-surface mb-8 rounded-lg border border-cyan-100 bg-cyan-50/50 p-6 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '更高意图路径' : 'Higher-intent path'}
+            </p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-900'>
+              {isChinese
+                ? '先看对比，再看指南，最后看工具详情'
+                : 'Compare first, read the guide, then open the tool page'}
+            </h2>
+            <p className='mt-3 max-w-3xl text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '如果你已经确定大方向，这条路径能让你更快从“这个分类到底适合谁”走到“具体该看哪些工具”。'
+                : 'If you already know the broad direction, this path moves you from category-level context to the exact tools worth opening.'}
+            </p>
+            <div className='mt-5 grid gap-3 md:grid-cols-3'>
+              {comparisonGuides[0] && (
+                <Link
+                  href={comparisonGuides[0].href}
+                  className='rounded-lg border border-cyan-200 bg-white p-4 transition hover:border-cyan-300 hover:bg-cyan-50/60'
+                >
+                  <p className='text-sm font-semibold text-slate-900'>
+                    {isChinese ? '1. 先看对比页' : '1. Start with comparison'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {comparisonGuides[0].title[isChinese ? 'cn' : 'en']}
+                  </p>
+                </Link>
+              )}
+              {relatedGuides[0] && (
+                <Link
+                  href={relatedGuides[0].href}
+                  className='rounded-lg border border-cyan-200 bg-white p-4 transition hover:border-cyan-300 hover:bg-cyan-50/60'
+                >
+                  <p className='text-sm font-semibold text-slate-900'>
+                    {isChinese ? '2. 再看指南页' : '2. Read the guide'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {relatedGuides[0].title[isChinese ? 'cn' : 'en']}
+                  </p>
+                </Link>
+              )}
+              {representativeTools[0] && (
+                <Link
+                  href={representativeTools[0].href}
+                  className='rounded-lg border border-cyan-200 bg-white p-4 transition hover:border-cyan-300 hover:bg-cyan-50/60'
+                >
+                  <p className='text-sm font-semibold text-slate-900'>
+                    {isChinese ? '3. 最后看工具详情' : '3. Open the tool page'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {representativeTools[0].title[isChinese ? 'cn' : 'en']}
+                  </p>
+                </Link>
+              )}
+            </div>
+            <p className='mt-4 text-xs leading-5 text-slate-500'>
+              {isChinese
+                ? '这条路径只展示最短的一步链路，避免把比较页、指南页和工具页同时铺得太散。'
+                : 'This path keeps the chain short so comparison, guide, and tool pages do not compete for attention at the same time.'}
+            </p>
+          </section>
+        )}
+
+        {comparisonGuides.length > 0 && (
+          <section className='theme-surface mb-8 rounded-lg border border-slate-200 p-6 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '先做对比' : 'Compare first'}
+            </p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-900'>
+              {isChinese ? `${categoryName} 最值得先看的对比页` : `Best comparison pages for ${categoryName}`}
+            </h2>
+            <p className='mt-3 max-w-3xl text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '如果你已经知道自己在这个分类里要比较什么，先看对比页再回列表，会更快收敛到真正合适的工具。'
+                : 'If you already know what you need to compare inside this category, start with the comparison page first and then come back to the list.'}
+            </p>
+            <div className='mt-5 grid gap-3 md:grid-cols-2'>
+              {comparisonGuides.map((guide) => (
+                <Link
+                  key={guide.href}
+                  href={guide.href}
+                  className='rounded-lg border border-slate-200 bg-white p-4 transition hover:border-cyan-200 hover:bg-cyan-50/40'
+                >
+                  <p className='text-sm font-semibold text-slate-900'>{guide.title[isChinese ? 'cn' : 'en']}</p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>{guide.desc[isChinese ? 'cn' : 'en']}</p>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
         {categorySlug === 'other' && (
           <section className='theme-surface mb-8 rounded-lg border border-amber-200 bg-amber-50/60 p-6 shadow-sm'>
             <p className='text-sm font-semibold uppercase tracking-wide text-amber-700'>
@@ -516,34 +620,6 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
                   <p className='mt-2 text-sm leading-6 text-slate-600'>
                     {isChinese ? '点进去看更具体的子分类入口。' : 'Jump in and work from a more specific bucket.'}
                   </p>
-                </Link>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {comparisonGuides.length > 0 && (
-          <section className='theme-surface mb-8 rounded-lg border border-slate-200 p-6 shadow-sm'>
-            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '先做对比' : 'Compare first'}
-            </p>
-            <h2 className='mt-1 text-2xl font-bold text-slate-900'>
-              {isChinese ? `${categoryName} 最值得先看的对比页` : `Best comparison pages for ${categoryName}`}
-            </h2>
-            <p className='mt-3 max-w-3xl text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '如果你已经知道自己在这个分类里要比较什么，先看对比页再回列表，会更快收敛到真正合适的工具。'
-                : 'If you already know what you need to compare inside this category, start with the comparison page first and then come back to the list.'}
-            </p>
-            <div className='mt-5 grid gap-3 md:grid-cols-2'>
-              {comparisonGuides.map((guide) => (
-                <Link
-                  key={guide.href}
-                  href={guide.href}
-                  className='rounded-lg border border-slate-200 bg-white p-4 transition hover:border-cyan-200 hover:bg-cyan-50/40'
-                >
-                  <p className='text-sm font-semibold text-slate-900'>{guide.title[isChinese ? 'cn' : 'en']}</p>
-                  <p className='mt-2 text-sm leading-6 text-slate-600'>{guide.desc[isChinese ? 'cn' : 'en']}</p>
                 </Link>
               ))}
             </div>

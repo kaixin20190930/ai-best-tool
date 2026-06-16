@@ -8,7 +8,29 @@ import { getAllCategories } from '@/lib/services/categories';
 import { getTools } from '@/lib/services/tools';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const sitemapLocales = locales.filter((locale) => INDEXABLE_LOCALES.includes(locale as (typeof INDEXABLE_LOCALES)[number]));
+  const sitemapLocales = locales.filter((locale) =>
+    INDEXABLE_LOCALES.includes(locale as (typeof INDEXABLE_LOCALES)[number]),
+  );
+  const featuredMainPages = new Set([
+    '/guides/how-to-choose-ai-tools',
+    '/guides/free-ai-tools',
+    '/guides/best-free-ai-tools',
+    '/guides/ai-writing-tools',
+    '/guides/ai-seo-tools',
+    '/guides/ai-video-tools',
+    '/guides/ai-image-tools',
+    '/guides/ai-coding-tools',
+    '/guides/ai-chatbot-tools',
+    '/guides/ai-productivity-tools',
+    '/guides/ai-tools-for-research',
+    '/guides/ai-tools-for-developers',
+    '/guides/ai-tools-for-automation',
+    '/guides/ai-tools-for-web3',
+    '/guides/ai-tools-for-marketing',
+    '/guides/ai-tools-for-sales',
+    '/guides/ai-tools-for-voice',
+    '/guides/ai-note-taking-tools',
+  ]);
 
   // Static routes with their priorities and change frequencies
   const staticRoutes: Array<{
@@ -32,24 +54,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.82,
     },
     {
-      url: 'new',
-      changeFrequency: 'daily',
-      priority: 0.85,
-    },
-    {
-      url: 'submit',
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    {
       url: 'pricing',
       changeFrequency: 'monthly',
       priority: 0.7,
-    },
-    {
-      url: 'developer/listing',
-      changeFrequency: 'monthly',
-      priority: 0.68,
     },
     {
       url: 'privacy-policy',
@@ -64,11 +71,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // Generate static route entries for all locales
-  const guideRoutes = GUIDE_PAGES.filter((page) => !page.href.includes('-comparison')).map(({ href, priority, changeFrequency }) => ({
-    url: href.replace(/^\//, ''),
-    priority,
-    changeFrequency,
-  }));
+  const guideRoutes = GUIDE_PAGES.filter((page) => !page.href.includes('-comparison'))
+    .filter((page) => featuredMainPages.has(page.href))
+    .map(({ href, priority, changeFrequency }) => ({
+      url: href.replace(/^\//, ''),
+      priority,
+      changeFrequency,
+    }));
 
   const staticSitemapEntries = [...staticRoutes, ...guideRoutes].flatMap((route) =>
     sitemapLocales.map((locale) => {

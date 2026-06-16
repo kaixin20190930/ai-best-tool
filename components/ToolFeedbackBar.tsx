@@ -58,7 +58,7 @@ export default function ToolFeedbackBar({ toolId, userId, className = '' }: Tool
   return (
     <div className={`space-y-3 ${className}`}>
       <div className='text-sm font-semibold text-slate-900'>Quick feedback</div>
-      <div className='grid gap-3 sm:grid-cols-2 lg:grid-cols-3'>
+      <div className='grid gap-3'>
         {feedbackOptions.map((option) => {
           const Icon = option.icon;
           const isSelected = selected === option.type;
@@ -69,25 +69,27 @@ export default function ToolFeedbackBar({ toolId, userId, className = '' }: Tool
               key={option.type}
               type='button'
               onClick={() => handleFeedback(option.type)}
-              className={`flex min-h-[11rem] flex-col justify-between gap-4 rounded-lg border px-4 py-4 text-left text-sm transition ${
+              className={`flex min-h-[7.5rem] flex-row items-start gap-3 rounded-lg border px-4 py-4 text-left text-sm transition ${
                 isSelected ? option.className : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
               }`}
               disabled={isLoading}
             >
-              <div className='flex min-w-0 flex-col gap-3'>
+              <div
+                className={`flex size-10 shrink-0 items-center justify-center rounded-full ring-1 ${
+                  isSelected ? 'ring-current/15 bg-white/70' : 'bg-slate-50 ring-slate-200'
+                }`}
+              >
+                <Icon className='size-4 shrink-0' />
+              </div>
+              <div className='min-w-0 space-y-1'>
                 <span
-                  className={`inline-flex size-10 items-center justify-center rounded-full ring-1 ${
-                    isSelected ? 'bg-white/70 ring-current/15' : 'bg-slate-50 ring-slate-200'
+                  className={`block break-words text-base font-semibold leading-6 ${
+                    isSelected ? 'text-current' : 'text-slate-900'
                   }`}
                 >
-                  <Icon className='size-4 shrink-0' />
+                  {isLoading ? 'Saving...' : option.label}
                 </span>
-                <div className='min-w-0 space-y-1'>
-                  <span className='block break-words text-base font-semibold leading-6'>
-                    {isLoading ? 'Saving...' : option.label}
-                  </span>
-                  <span className='block break-words text-sm leading-6 text-slate-500'>{option.description}</span>
-                </div>
+                <span className='block break-words text-sm leading-6 text-slate-500'>{option.description}</span>
               </div>
             </button>
           );

@@ -4,6 +4,7 @@
  */
 
 import { SEO_CONFIG, SEO_CONSTRAINTS, TITLE_SEPARATOR } from './constants';
+import { INDEXABLE_LOCALES } from './indexing';
 
 /**
  * Generate an optimized page title
@@ -24,10 +25,7 @@ export function generateTitle(
   }
 
   // If page title alone is within optimal range, use it
-  if (
-    pageTitle.length >= SEO_CONSTRAINTS.TITLE_MIN_LENGTH &&
-    pageTitle.length <= SEO_CONSTRAINTS.TITLE_MAX_LENGTH
-  ) {
+  if (pageTitle.length >= SEO_CONSTRAINTS.TITLE_MIN_LENGTH && pageTitle.length <= SEO_CONSTRAINTS.TITLE_MAX_LENGTH) {
     return pageTitle;
   }
 
@@ -36,12 +34,9 @@ export function generateTitle(
 
   // If full title is too long, truncate page title
   if (fullTitle.length > SEO_CONSTRAINTS.TITLE_MAX_LENGTH) {
-    const maxPageTitleLength =
-      SEO_CONSTRAINTS.TITLE_MAX_LENGTH - siteName.length - separator.length - 2; // 2 for spaces
+    const maxPageTitleLength = SEO_CONSTRAINTS.TITLE_MAX_LENGTH - siteName.length - separator.length - 2; // 2 for spaces
     const truncatedPageTitle =
-      pageTitle.length > maxPageTitleLength
-        ? `${pageTitle.substring(0, maxPageTitleLength - 3)}...`
-        : pageTitle;
+      pageTitle.length > maxPageTitleLength ? `${pageTitle.substring(0, maxPageTitleLength - 3)}...` : pageTitle;
     return `${truncatedPageTitle} ${separator} ${siteName}`;
   }
 
@@ -68,10 +63,7 @@ export function generateDescription(
   const cleanContent = content.replace(/\s+/g, ' ').trim();
 
   // If content is within optimal range, return as-is
-  if (
-    cleanContent.length >= SEO_CONSTRAINTS.DESCRIPTION_MIN_LENGTH &&
-    cleanContent.length <= maxLength
-  ) {
+  if (cleanContent.length >= SEO_CONSTRAINTS.DESCRIPTION_MIN_LENGTH && cleanContent.length <= maxLength) {
     return cleanContent;
   }
 
@@ -105,10 +97,7 @@ export function generateDescription(
  * @param baseUrl - Optional base URL (defaults to SEO_CONFIG.siteUrl)
  * @returns Absolute image URL
  */
-export function generateSocialImageUrl(
-  imagePath: string,
-  baseUrl: string = SEO_CONFIG.siteUrl,
-): string {
+export function generateSocialImageUrl(imagePath: string, baseUrl: string = SEO_CONFIG.siteUrl): string {
   if (!imagePath) {
     return `${baseUrl}${SEO_CONFIG.defaultImage}`;
   }
@@ -174,11 +163,7 @@ export function generateToolTitle(toolName: string, category?: string): string {
  * @param category - Optional category name
  * @returns Optimized tool description
  */
-export function generateToolDescription(
-  toolName: string,
-  description: string,
-  category?: string,
-): string {
+export function generateToolDescription(toolName: string, description: string, category?: string): string {
   if (!description) {
     return generateDescription(
       `Discover ${toolName}${category ? `, a ${category} AI tool` : ', an AI tool'} that helps you achieve more. Explore features, pricing, and reviews.`,
@@ -207,12 +192,10 @@ export function generateAlternateLocales(
   currentLocale: string,
   baseUrl: string = SEO_CONFIG.siteUrl,
 ): Array<{ locale: string; url: string }> {
-  return SEO_CONFIG.locales
-    .filter((locale) => locale !== currentLocale)
-    .map((locale) => ({
-      locale,
-      url: generateCanonicalUrl(`/${locale}${path}`, baseUrl),
-    }));
+  return INDEXABLE_LOCALES.filter((locale) => locale !== currentLocale).map((locale) => ({
+    locale,
+    url: generateCanonicalUrl(`/${locale}${path}`, baseUrl),
+  }));
 }
 
 /**
@@ -232,15 +215,12 @@ export function generateHreflangLinks(
   const hreflangLinks: Record<string, string> = {};
 
   // Add all locales including current one
-  SEO_CONFIG.locales.forEach((locale) => {
+  INDEXABLE_LOCALES.forEach((locale) => {
     hreflangLinks[locale] = generateCanonicalUrl(`/${locale}${path}`, baseUrl);
   });
 
   // Add x-default pointing to the default locale
-  hreflangLinks['x-default'] = generateCanonicalUrl(
-    `/${SEO_CONFIG.defaultLocale}${path}`,
-    baseUrl,
-  );
+  hreflangLinks['x-default'] = generateCanonicalUrl(`/${SEO_CONFIG.defaultLocale}${path}`, baseUrl);
 
   return hreflangLinks;
 }

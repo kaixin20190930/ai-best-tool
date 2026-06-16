@@ -199,7 +199,7 @@ export default async function RecommendedTools({
   }
 
   return (
-    <section className='mb-16'>
+    <section className='mb-20'>
       <div className='mb-6 rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
         <h2 className='text-2xl font-bold text-slate-900 lg:text-3xl'>{comparisonTitle}</h2>
         <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>{comparisonDescription}</p>
@@ -266,10 +266,10 @@ export default async function RecommendedTools({
                 </p>
                 <div className='mt-2 space-y-2'>
                   {reasons.map((reason) => (
-                <div
-                  key={reason}
-                  className='min-h-[3.25rem] rounded-lg bg-slate-50 px-3 py-2 text-xs leading-5 text-slate-700 ring-1 ring-slate-200'
-                >
+                    <div
+                      key={reason}
+                      className='min-h-[4rem] break-words rounded-lg bg-slate-50 px-3 py-2 text-xs leading-5 text-slate-700 ring-1 ring-slate-200'
+                    >
                       {reason}
                     </div>
                   ))}

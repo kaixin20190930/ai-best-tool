@@ -196,7 +196,19 @@ This documentation provides comprehensive guidance for implementing and maintain
 
 ### For Validation
 
-#### 15. [SEO Validation Guide](./SEO_VALIDATION_GUIDE.md)
+#### 15. [SEO Indexing Policy (CN)](./SEO_INDEXING_POLICY_CN.md)
+**Purpose:** Define which pages should be included in sitemap, which pages should stay as internal traffic pages, and which pages should never enter the index surface.
+
+**Contents:**
+- Sitemap inclusion rules
+- Internal traffic page strategy
+- Noindex page categories
+- Multilingual indexing boundaries
+- Promotion and maintenance cadence
+
+**When to use:** When deciding whether a page should be indexed, added to sitemap, or kept as an internal navigation target
+
+#### 16. [SEO Validation Guide](./SEO_VALIDATION_GUIDE.md)
 **Purpose:** Complete guide to validating SEO implementation
 
 **Contents:**
@@ -207,7 +219,7 @@ This documentation provides comprehensive guidance for implementing and maintain
 
 **When to use:** When validating SEO implementation
 
-#### 16. [SEO Validation Quick Reference](./SEO_VALIDATION_QUICK_REFERENCE.md)
+#### 17. [SEO Validation Quick Reference](./SEO_VALIDATION_QUICK_REFERENCE.md)
 **Purpose:** Quick reference for validation commands
 
 **Contents:**
@@ -217,7 +229,7 @@ This documentation provides comprehensive guidance for implementing and maintain
 
 **When to use:** Quick lookup for validation commands
 
-#### 17. [Search Console Quick Start](./SEARCH_CONSOLE_QUICK_START.md)
+#### 18. [Search Console Quick Start](./SEARCH_CONSOLE_QUICK_START.md)
 **Purpose:** Short release-time checklist for sitemap submission and URL inspection
 
 **Contents:**

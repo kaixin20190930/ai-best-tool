@@ -1,27 +1,24 @@
-import Link from 'next/link';
 import { Metadata } from 'next';
+import Link from 'next/link';
+import { ArrowRight, CheckCircle2, ExternalLink, FileText, PenLine } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
-import { CheckCircle2, ExternalLink, FileText, PenLine, Sparkles } from 'lucide-react';
 
-import GuideActionSection from '@/components/guides/GuideActionSection';
-import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import GuideActionSection from '@/components/guides/GuideActionSection';
+import { StructuredDataServer } from '@/components/seo/StructuredData';
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
     locale,
     namespace: 'Metadata.home',
   });
 
   return {
-    title: locale === 'cn' || locale === 'tw'
-      ? 'AI 写作工具推荐 | AI Best Tool'
-      : `AI writing tools recommendations | ${t('title')}`,
+    title:
+      locale === 'cn' || locale === 'tw'
+        ? 'AI 写作工具推荐 | AI Best Tool'
+        : `AI writing tools recommendations | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
         ? '适合内容创作、SEO、营销和日常写作的 AI 工具推荐与选型指南。'
@@ -29,11 +26,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
+export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
@@ -99,7 +92,9 @@ export default async function Page({
           </div>
 
           <h1 className='mt-4 max-w-4xl text-3xl font-bold tracking-tight text-slate-950 lg:text-5xl'>
-            {isChinese ? 'AI 写作工具推荐：怎么选才适合你的内容工作流' : 'AI writing tools: how to choose one that fits your content workflow'}
+            {isChinese
+              ? 'AI 写作工具推荐：怎么选才适合你的内容工作流'
+              : 'AI writing tools: how to choose one that fits your content workflow'}
           </h1>
           <p className='mt-4 max-w-3xl text-base leading-7 text-slate-600 lg:text-lg'>
             {isChinese
@@ -162,27 +157,94 @@ export default async function Page({
                 .filter((category) => ['text-writing', 'productivity', 'research'].includes(String(category.slug)))
                 .slice(0, 6)
                 .map((category) => (
-                <Link
-                  key={category.id}
-                  href={`/categories/${category.slug}`}
-                  className='flex items-center justify-between rounded-lg border border-white bg-white px-4 py-3 text-sm text-slate-700 shadow-sm hover:bg-slate-100'
-                >
-                  <span>{getLocalizedField(category.name, locale)}</span>
-                  <span className='text-xs text-slate-500'>
-                    {'toolCount' in category && typeof category.toolCount === 'number'
-                      ? category.toolCount
-                    : ''}
-                  </span>
-                </Link>
+                  <Link
+                    key={category.id}
+                    href={`/categories/${category.slug}`}
+                    className='flex items-center justify-between rounded-lg border border-white bg-white px-4 py-3 text-sm text-slate-700 shadow-sm hover:bg-slate-100'
+                  >
+                    <span>{getLocalizedField(category.name, locale)}</span>
+                    <span className='text-xs text-slate-500'>
+                      {'toolCount' in category && typeof category.toolCount === 'number' ? category.toolCount : ''}
+                    </span>
+                  </Link>
                 ))}
             </div>
           </aside>
         </section>
 
+        <section className='mt-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '下一步怎么走' : 'Next step'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '把写作入口接到比较页和真实条目'
+              : 'Move from the writing guide into comparisons and real listings'}
+          </h2>
+          <div className='mt-4 grid gap-4 lg:grid-cols-3'>
+            <Link
+              href='/guides/ai-writing-tools-comparison'
+              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
+            >
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
+                    {isChinese ? '看写作工具对比' : 'Compare writing tools'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {isChinese
+                      ? '当你已经知道自己要写什么，下一步就去横向看几款常见工具。'
+                      : 'Once the writing job is clear, compare a few common tools side by side.'}
+                  </p>
+                </div>
+                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
+              </div>
+            </Link>
+            <Link
+              href='/categories/text-writing?sort=popular'
+              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
+            >
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
+                    {isChinese ? '进入写作分类' : 'Open the writing category'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {isChinese
+                      ? '如果你想先看真实条目，再回来做判断，这里更直接。'
+                      : 'Browse real listings first, then return when you are ready to compare.'}
+                  </p>
+                </div>
+                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
+              </div>
+            </Link>
+            <Link
+              href='/explore?search=writing&sort=popular'
+              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
+            >
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
+                    {isChinese ? '搜索更多写作工具' : 'Search more writing tools'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {isChinese
+                      ? '想把候选范围扩大一点，可以回到探索页继续筛。'
+                      : 'Use the search page to widen the shortlist a bit further.'}
+                  </p>
+                </div>
+                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
+              </div>
+            </Link>
+          </div>
+        </section>
+
         <GuideActionSection
           locale={locale}
           eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}
-          title={isChinese ? '更贴近真实内容工作的写作工具入口' : 'Writing tool entry points that fit real content work'}
+          title={
+            isChinese ? '更贴近真实内容工作的写作工具入口' : 'Writing tool entry points that fit real content work'
+          }
           description={
             isChinese
               ? '如果你是为了博客、营销文案、日常改写或创意写作而来，先从这些更有代表性的工具开始，判断会更快。'
@@ -214,13 +276,13 @@ export default async function Page({
             {
               href: '/guides/best-free-ai-tools',
               title: isChinese ? '最佳免费 AI 工具' : 'Best free AI tools',
-              description: isChinese
-                ? '适合想先试再决定的人。'
-                : 'Helpful if you want to try before committing.',
+              description: isChinese ? '适合想先试再决定的人。' : 'Helpful if you want to try before committing.',
             },
           ]}
           nextEyebrow={isChinese ? '下一步入口' : 'Where to go next'}
-          nextTitle={isChinese ? '读完写作指南后，继续这样缩小范围' : 'How to narrow the space after this writing guide'}
+          nextTitle={
+            isChinese ? '读完写作指南后，继续这样缩小范围' : 'How to narrow the space after this writing guide'
+          }
           nextDescription={
             isChinese
               ? '如果你已经确认自己偏写作工作流，下一步就去分类页、搜索页和本周新增页看真实条目。'

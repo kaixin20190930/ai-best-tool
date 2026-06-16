@@ -129,7 +129,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       icon: Rocket,
     },
   ];
-  const quickSearches = ['video', 'writing', 'image', 'coding', 'chatbot'];
+  const quickSearches = ['video', 'writing', 'web3', 'coding', 'chatbot'];
   const quickFilters = [
     {
       label: isChinese ? '免费工具' : 'Free tools',
@@ -155,9 +155,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     '/guides/ai-writing-tools-comparison',
     '/guides/ai-seo-tools-comparison',
     '/guides/ai-tools-for-research-comparison',
-    '/guides/ai-tools-for-developers-comparison',
-    '/guides/ai-tools-for-web3-comparison',
-    '/guides/ai-tools-for-sales-comparison',
   ] as const;
   const comparisonGuidePages = comparisonGuideHrefs
     .map((href) => GUIDE_PAGES.find((page) => page.href === href))
@@ -375,6 +372,44 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </div>
         </section>
 
+        <section className='mx-auto -mt-2 w-full max-w-7xl px-4 lg:px-6'>
+          <div className='rounded-[18px] border border-slate-200 bg-white p-5 shadow-sm lg:p-6'>
+            <div className='flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between'>
+              <div>
+                <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+                  {isChinese ? '优先收录入口' : 'Priority indexing paths'}
+                </p>
+                <h2 className='mt-1 text-xl font-bold text-slate-950 lg:text-2xl'>
+                  {isChinese ? '先把最该收录的页面推给搜索引擎' : 'Send the most important pages to search first'}
+                </h2>
+              </div>
+              <p className='max-w-2xl text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '这里优先放更能代表站点主题的内容页，帮助 Google 先理解你真正想做的目录和指南。'
+                  : 'These are the pages that best represent the site so crawlers understand the directory and guide structure first.'}
+              </p>
+            </div>
+
+            <div className='mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3'>
+              {featuredGuidePages.slice(0, 6).map((page) => (
+                <Link
+                  key={page.href}
+                  href={page.href}
+                  className='group rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-cyan-50/40'
+                >
+                  <div className='flex items-start justify-between gap-3'>
+                    <div>
+                      <p className='text-sm font-semibold text-slate-950'>{page.title[isChinese ? 'cn' : 'en']}</p>
+                      <p className='mt-2 text-sm leading-6 text-slate-600'>{page.desc[isChinese ? 'cn' : 'en']}</p>
+                    </div>
+                    <CircleChevronRight className='mt-0.5 size-5 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-slate-700' />
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <section className='mx-auto grid w-full max-w-7xl gap-3 px-4 py-0 lg:grid-cols-3 lg:px-6'>
           <Link
             href='/profile/favorites'
@@ -511,7 +546,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 <div className='flex items-start justify-between gap-3'>
                   <div className='min-w-0'>
                     <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                      {isChinese ? 'Comparison' : 'Comparison'}
+                      {isChinese ? '先做对比' : 'Compare first'}
                     </p>
                     <h3 className='mt-1 text-base font-semibold text-slate-950'>
                       {guide.title[isChinese ? 'cn' : 'en']}
