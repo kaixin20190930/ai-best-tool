@@ -2085,7 +2085,7 @@ export default async function Page({
                   tagSlugs={tagSlugsForDisplay}
                   tagLabels={tagLabels}
                 />
-                <section id='comments' className='scroll-mt-28 pt-12'>
+                <section id='comments' className='mt-16 scroll-mt-28 pt-12'>
                   <Separator className='mb-8 border-t border-slate-200' />
                   <div className='mb-6 rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200'>
                     <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
@@ -2171,16 +2171,17 @@ export default async function Page({
                     {locale === 'cn' ? '不太适合' : 'Less ideal for'}
                   </p>
                   <div className='mt-2 flex flex-wrap gap-2'>
-                    {(notIdealForList.slice(0, 2).length > 0 ? notIdealForList.slice(0, 2) : verificationChecklist.slice(0, 2)).map(
-                      (item) => (
-                        <span
-                          key={item}
-                          className='rounded-full bg-white px-3 py-1 text-xs font-medium text-slate-700 ring-1 ring-cyan-100'
-                        >
-                          {item}
-                        </span>
-                      ),
-                    )}
+                    {(notIdealForList.slice(0, 2).length > 0
+                      ? notIdealForList.slice(0, 2)
+                      : verificationChecklist.slice(0, 2)
+                    ).map((item) => (
+                      <span
+                        key={item}
+                        className='rounded-full bg-white px-3 py-1 text-xs font-medium text-slate-700 ring-1 ring-cyan-100'
+                      >
+                        {item}
+                      </span>
+                    ))}
                   </div>
                 </div>
 
