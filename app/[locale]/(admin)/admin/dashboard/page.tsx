@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { getSiteMetrics, getTopTools } from '@/lib/services/admin/analytics';
+import { getPageAccessReport, getSiteMetrics, getTopTools } from '@/lib/services/admin/analytics';
 import { getCommentModerationSummary } from '@/app/actions/admin/comments';
 import { getOperationalStats, getToolsStats } from '@/app/actions/admin/tools';
 
@@ -32,6 +32,7 @@ export default async function AdminDashboard() {
   const operationalStats = await getOperationalStats();
   const moderationSummary = await getCommentModerationSummary();
   const topTools = await getTopTools('views', 5);
+  const pageAccessReport = await getPageAccessReport('30d', 6);
 
   const metrics = [
     {
@@ -150,6 +151,27 @@ export default async function AdminDashboard() {
     }
     return tool.name;
   };
+
+  const pageSummaryOrder = ['home', 'tool_detail', 'guide', 'category', 'explore'] as const;
+  const pageSummaryMap = new Map(pageAccessReport.summary.map((item) => [item.pageType, item]));
+  const getPageSnapshotLabel = (pageType: (typeof pageSummaryOrder)[number]) => {
+    if (pageType === 'home') return 'Home';
+    if (pageType === 'tool_detail') return 'Detail';
+    if (pageType === 'guide') return 'Guides';
+    if (pageType === 'category') return 'Categories';
+    return 'Explore';
+  };
+  const pageSnapshotItems = pageSummaryOrder.map((pageType) => {
+    const item = pageSummaryMap.get(pageType);
+
+    return {
+      pageType,
+      label: getPageSnapshotLabel(pageType),
+      views: item?.views || 0,
+      percentage: item?.percentage || 0,
+    };
+  });
+  const topPagePaths = pageAccessReport.topPages.slice(0, 4);
 
   return (
     <div>
@@ -275,6 +297,60 @@ export default async function AdminDashboard() {
               <h3 className='font-medium text-slate-900'>View Analytics</h3>
               <p className='mt-1 text-sm text-slate-600'>Check detailed site analytics and reports</p>
             </a>
+          </div>
+        </div>
+      </div>
+
+      <div className='mt-8'>
+        <div className='mb-4 flex items-center justify-between'>
+          <div>
+            <h2 className='text-lg font-semibold text-slate-900'>Page Access Snapshot</h2>
+            <p className='mt-1 text-sm text-slate-600'>
+              Quick read on homepage, detail pages, guides, categories, and Explore.
+            </p>
+          </div>
+          <Link href='/admin/analytics' className='text-sm font-medium text-cyan-700 hover:underline'>
+            Open full report
+          </Link>
+        </div>
+
+        <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-5'>
+          {pageSnapshotItems.map((item) => (
+            <div key={item.pageType} className='theme-surface rounded-lg border border-slate-200 p-4 shadow-sm'>
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-xs font-medium uppercase tracking-wide text-slate-500'>{item.label}</p>
+                  <p className='mt-2 text-2xl font-semibold text-slate-900'>{item.views.toLocaleString()}</p>
+                </div>
+                <span className='rounded-full bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-cyan-700'>
+                  {item.percentage.toFixed(1)}%
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className='mt-4 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm'>
+          <div className='border-b border-slate-200 px-5 py-4'>
+            <p className='text-sm font-semibold text-slate-900'>Top viewed pages</p>
+            <p className='mt-1 text-sm text-slate-600'>The exact pages people are landing on most often.</p>
+          </div>
+          <div className='divide-y divide-slate-100'>
+            {topPagePaths.map((page) => (
+              <div
+                key={`${page.pageType}:${page.pagePath}`}
+                className='flex items-center justify-between gap-4 px-5 py-4'
+              >
+                <div className='min-w-0'>
+                  <p className='truncate font-medium text-slate-900'>{page.pagePath}</p>
+                  <p className='mt-1 text-sm text-slate-500'>{page.label}</p>
+                </div>
+                <div className='flex shrink-0 items-center gap-3 text-sm text-slate-600'>
+                  <span>{page.views.toLocaleString()} views</span>
+                  <span>{page.uniqueVisitors.toLocaleString()} visitors</span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
