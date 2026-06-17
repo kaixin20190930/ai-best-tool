@@ -60,11 +60,11 @@ export type ListingConfig = {
 export const listingConfig: ListingConfig = {
   currencySymbol: '$',
   listingFeeLabel: 'One-time listing fee',
-  valueProposition: 'Free submissions stay open, with paid options for faster review and added visibility.',
+  valueProposition: 'Free submissions stay open, with paid options for faster review and a fixed visibility window.',
   salesBullets: [
-    'Free submissions are reviewed in the standard queue.',
-    'Paid review shortens the review window for time-sensitive launches.',
-    'Featured placement runs for a fixed window and ends automatically.',
+    'Free submissions stay in the standard queue until reviewed.',
+    'Paid review is for launches that cannot wait.',
+    'Featured placement gives you a fixed visibility window that ends automatically.',
   ],
   pricingTiers: {
     free: {

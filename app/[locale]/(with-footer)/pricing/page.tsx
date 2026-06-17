@@ -105,8 +105,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
   return {
     title: isChinese ? 'Pricing | AI Best Tool' : `Pricing | ${t('title')}`,
     description: isChinese
-      ? '查看 AI Best Tool 的免费提交、优先审核和前排展示定价。'
-      : 'See pricing for free submissions, priority review, and featured placement.',
+      ? '查看 AI Best Tool 的免费提交、加速审核和固定前排展示定价。'
+      : 'See pricing for free submissions, faster review, and fixed featured placement windows.',
   };
 }
 
@@ -129,13 +129,13 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
             <div className='space-y-4'>
               <h1 className='max-w-3xl text-3xl font-bold tracking-tight text-slate-950 lg:text-5xl'>
                 {isChinese
-                  ? '选择适合你的入驻和前排展示方案'
-                  : 'Choose the listing and featured placement option that fits you'}
+                  ? '更快审核，更清楚曝光，按你的发布时间付费'
+                  : 'Get reviewed faster and reserve visibility when timing matters'}
               </h1>
               <p className='max-w-2xl text-base leading-7 text-slate-600 lg:text-lg'>
                 {isChinese
-                  ? '免费提交、优先审核、固定天数前排展示，都在这里一次看清。'
-                  : 'Free submission, priority review, and fixed featured windows are all laid out here.'}
+                  ? '免费提交继续开放；需要赶发布时间时，可以用付费审核和固定天数前排把结果做得更稳。'
+                  : 'Free submissions stay open. When launch timing matters, paid review and fixed featured windows make the outcome clearer.'}
               </p>
             </div>
 
@@ -169,7 +169,7 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
               <p className='mt-2 text-sm leading-6 text-slate-600'>
                 {isChinese
                   ? '先在提交页选择免费或付费方案；提交后，付费订单会在「我的提交」里生成 Stripe 结账链接。'
-                  : 'Pick free or paid on the submit page first; after submission, paid orders generate a Stripe checkout link inside My Submissions.'}
+                  : 'Choose free or paid on the submit page first; after submission, paid orders generate a Stripe checkout link inside My Submissions.'}
               </p>
               <div className='mt-4 flex flex-wrap gap-3'>
                 <Link
@@ -191,10 +191,10 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
               <div className='flex flex-wrap items-center justify-between gap-3'>
                 <div>
                   <p className='text-xs font-semibold uppercase tracking-wide text-cyan-800'>
-                    {isChinese ? '常用方案' : 'Common plans'}
+                    {isChinese ? '常见购买原因' : 'Why people pay'}
                   </p>
                   <h2 className='mt-1 text-xl font-bold text-slate-950'>
-                    {isChinese ? '适合大多数提交场景的方案' : 'The options most teams actually use'}
+                    {isChinese ? '最常见的 3 个付费理由' : 'The three most common reasons to pay'}
                   </h2>
                 </div>
               </div>
@@ -271,17 +271,17 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
       <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_360px]'>
         <div className='rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '价格对比' : 'Plan comparison'}
+            {isChinese ? '你买到什么' : 'What you actually get'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '每个方案都有清楚的用途' : 'Each option has a clear purpose'}
+            {isChinese ? '每个方案对应一个明确结果' : 'Each option maps to a concrete outcome'}
           </h2>
 
           <div className='mt-4 overflow-x-auto'>
             <table className='min-w-full border-separate border-spacing-0 text-left text-sm'>
               <thead>
                 <tr className='text-slate-500'>
-                  <th className='border-b border-slate-200 px-4 py-3 font-medium'>Feature</th>
+                  <th className='border-b border-slate-200 px-4 py-3 font-medium'>{isChinese ? '结果' : 'Outcome'}</th>
                   <th className='border-b border-slate-200 px-4 py-3 font-medium'>{free.label}</th>
                   <th className='border-b border-slate-200 px-4 py-3 font-medium'>{priorityReview.label}</th>
                   <th className='border-b border-slate-200 px-4 py-3 font-medium'>{featuredWindows[1].label}</th>
@@ -291,22 +291,22 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
               <tbody>
                 {[
                   [
-                    'Price',
+                    isChinese ? '价格' : 'Price',
                     free.priceLabel,
                     priorityReview.priceLabel,
                     featuredWindows[1].priceLabel,
                     launchBundle.priceLabel,
                   ],
                   [
-                    'Review speed',
+                    isChinese ? '审核速度' : 'Review speed',
                     free.reviewWindow,
                     priorityReview.reviewWindow,
                     featuredWindows[1].summary,
                     isChinese ? 'Priority review + featured window' : 'Priority review + featured window',
                   ],
-                  ['Featured slot', 'No', 'Optional add-on', 'Yes', 'Yes'],
+                  [isChinese ? '前排展示' : 'Featured slot', 'No', 'Optional add-on', 'Yes', 'Yes'],
                   [
-                    'Best for',
+                    isChinese ? '更适合' : 'Best for',
                     isChinese ? '先免费提交' : 'Free submission first',
                     isChinese ? '需要更快审核' : 'Need faster review',
                     isChinese ? '需要固定前排窗口' : 'Need a fixed featured window',
@@ -372,7 +372,7 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
               {isChinese ? '常见问题' : 'FAQ'}
             </p>
             <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-              {isChinese ? '入驻和前排怎么理解' : 'How to think about listing and featured placement'}
+              {isChinese ? '怎么买最划算' : 'How to choose the right option'}
             </h2>
           </div>
         </div>
@@ -382,8 +382,8 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
             q={isChinese ? '付费方案包含什么？' : 'What is included in a paid listing?'}
             a={
               isChinese
-                ? '付费方案可包含更快审核和固定天数的前排展示。具体权益会以你选择的方案为准。'
-                : 'Paid listings can include faster review and a fixed featured placement window, depending on the option you choose.'
+                ? '付费方案通常包含更快审核、固定天数前排展示，或两者一起打包。你拿到的是明确的审核时效和可预期的曝光窗口。'
+                : 'Paid listings typically include faster review, a fixed featured window, or both bundled together. You get a clear review timeline and a predictable visibility window.'
             }
           />
           <FaqCard
@@ -391,7 +391,7 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
             a={
               isChinese
                 ? '不会。每次前排都是明确的天数窗口，到期后自动回收。'
-                : 'No. Each featured window has a clear number of days and expires automatically.'
+                : 'No. Each featured window has a fixed number of days and expires automatically.'
             }
           />
           <FaqCard
@@ -399,7 +399,7 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
             a={
               isChinese
                 ? '可以。先免费提交，后续再根据发布节奏升级为优先审核或前排。'
-                : 'Yes. Start with a free submission, then upgrade to priority review or featured placement when needed.'
+                : 'Yes. Start with a free submission, then upgrade to priority review or featured placement when the timing makes sense.'
             }
           />
           <FaqCard
