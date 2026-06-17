@@ -624,6 +624,42 @@ export default function SubmitForm({
                 />
               </div>
             </div>
+            <div className='mt-4 rounded-lg border border-cyan-100 bg-cyan-50 p-4'>
+              <p className='text-sm font-semibold text-cyan-950'>
+                {isChinese ? '付费之后会发生什么' : 'What happens after paid submission'}
+              </p>
+              <div className='mt-3 grid gap-3 text-sm text-cyan-950/90 lg:grid-cols-3'>
+                <div className='rounded-xl border border-cyan-100 bg-white p-3'>
+                  <p className='font-semibold'>{isChinese ? '1. 先提交' : '1. Submit first'}</p>
+                  <p className='mt-1 leading-6'>
+                    {isChinese
+                      ? '先把工具提交进审核队列，系统会保留你的付费权益。'
+                      : 'Your tool enters the review queue while the paid entitlement is reserved.'}
+                  </p>
+                </div>
+                <div className='rounded-xl border border-cyan-100 bg-white p-3'>
+                  <p className='font-semibold'>{isChinese ? '2. 再完成付款' : '2. Complete payment'}</p>
+                  <p className='mt-1 leading-6'>
+                    {isChinese
+                      ? '前往“我的提交”完成支付后，审核和前排窗口会按订单生效。'
+                      : 'Complete payment in My Submissions, then review and featured timing become active.'}
+                  </p>
+                </div>
+                <div className='rounded-xl border border-cyan-100 bg-white p-3'>
+                  <p className='font-semibold'>{isChinese ? '3. 通过后展示' : '3. Show after approval'}</p>
+                  <p className='mt-1 leading-6'>
+                    {isChinese
+                      ? '通过后会发布到目录；如果你选了前排，窗口会在发布后开始计算。'
+                      : 'Approved tools publish to the directory; featured time starts after publish.'}
+                  </p>
+                </div>
+              </div>
+              <p className='mt-3 text-xs leading-5 text-cyan-950/70'>
+                {isChinese
+                  ? '如果 Logo 或截图暂时还没准备好，也可以先提交；只是更完整的素材通常会让审核更顺、转化更好。'
+                  : 'You can still submit without a logo or screenshot, but complete media usually helps review and conversion.'}
+              </p>
+            </div>
             <div className='mt-4 rounded-lg bg-white p-3 ring-1 ring-slate-200'>
               <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
                 {isChinese ? '当前选择' : 'Current selection'}
