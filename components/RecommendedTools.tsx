@@ -14,6 +14,31 @@ interface RecommendedToolsProps {
   tagLabels?: string[];
 }
 
+type SimilarityReasonKind = 'best-fit' | 'compare' | 'tags' | 'pricing' | 'editorial' | 'fallback';
+
+type SimilarityReason = {
+  kind: SimilarityReasonKind;
+  text: string;
+};
+
+function getReasonLabel(kind: SimilarityReasonKind, isChinese: boolean): string {
+  switch (kind) {
+    case 'best-fit':
+      return isChinese ? '更适合' : 'Best fit';
+    case 'compare':
+      return isChinese ? '先比' : 'Compare on';
+    case 'tags':
+      return isChinese ? '重合标签' : 'Shared tags';
+    case 'pricing':
+      return isChinese ? '定价相近' : 'Same pricing';
+    case 'editorial':
+      return isChinese ? '编辑补充' : 'Editorial note';
+    case 'fallback':
+    default:
+      return isChinese ? '通用参考' : 'General reference';
+  }
+}
+
 function getPricingLabel(pricing: Tool['pricing'] | undefined, isChinese: boolean): string {
   if (pricing === 'free') return isChinese ? '免费' : 'Free';
   if (pricing === 'freemium') return isChinese ? '免费增值' : 'Freemium';
@@ -128,42 +153,53 @@ function getSimilarityReasons(
   isChinese: boolean,
   locale: string,
 ) {
-  const reasons: string[] = [];
+  const reasons: SimilarityReason[] = [];
   const sharedTags = tool.tags.filter((tag) => currentTagSlugs.includes(tag)).slice(0, 2);
   const bestFitSnippet = getBestFitSnippet(tool, locale, isChinese);
   const editorialSnippet = getEditorialSnippet(tool, locale, isChinese);
   const decisionAxes = getDecisionAxes(tool, locale, isChinese);
 
   if (bestFitSnippet) {
-    reasons.push(isChinese ? `更适合：${bestFitSnippet}` : `Best for: ${bestFitSnippet}`);
+    reasons.push({
+      kind: 'best-fit',
+      text: isChinese ? `更适合：${bestFitSnippet}` : `Best for: ${bestFitSnippet}`,
+    });
   }
 
   if (decisionAxes.length > 0) {
-    reasons.push(isChinese ? `先比：${decisionAxes.join('、')}` : `Compare on: ${decisionAxes.join(', ')}`);
+    reasons.push({
+      kind: 'compare',
+      text: isChinese ? `先比：${decisionAxes.join('、')}` : `Compare on: ${decisionAxes.join(', ')}`,
+    });
   }
 
   if (sharedTags.length > 0) {
-    reasons.push(
-      isChinese
+    reasons.push({
+      kind: 'tags',
+      text: isChinese
         ? `重合标签：${sharedTags.map((tag) => humanizeTag(tag, true)).join('、')}`
         : `Shared tags: ${sharedTags.map((tag) => humanizeTag(tag, false)).join(', ')}`,
-    );
+    });
   }
 
   if (currentPricing && tool.pricing === currentPricing) {
-    reasons.push(
-      isChinese
+    reasons.push({
+      kind: 'pricing',
+      text: isChinese
         ? `同样是${getPricingLabel(tool.pricing, true)}模式`
         : `Same ${getPricingLabel(tool.pricing, false).toLowerCase()} pricing model`,
-    );
+    });
   }
 
   if (reasons.length < 3 && editorialSnippet) {
-    reasons.push(editorialSnippet);
+    reasons.push({ kind: 'editorial', text: editorialSnippet });
   }
 
   if (reasons.length === 0) {
-    reasons.push(isChinese ? '同类任务里常被一起比较' : 'Commonly compared in similar workflows');
+    reasons.push({
+      kind: 'fallback',
+      text: isChinese ? '同类任务里常被一起比较' : 'Commonly compared in similar workflows',
+    });
   }
 
   return reasons.slice(0, 3);
@@ -267,10 +303,13 @@ export default async function RecommendedTools({
                 <div className='mt-2 space-y-2'>
                   {reasons.map((reason) => (
                     <div
-                      key={reason}
-                      className='min-h-[4rem] break-words rounded-lg bg-slate-50 px-3 py-2 text-xs leading-5 text-slate-700 ring-1 ring-slate-200'
+                      key={`${reason.kind}-${reason.text}`}
+                      className='rounded-lg bg-slate-50 px-3 py-2 text-xs leading-5 text-slate-700 ring-1 ring-slate-200'
                     >
-                      {reason}
+                      <p className='text-[10px] font-semibold uppercase tracking-wide text-slate-500'>
+                        {getReasonLabel(reason.kind, isChinese)}
+                      </p>
+                      <p className='mt-1 break-words text-sm text-slate-800'>{reason.text}</p>
                     </div>
                   ))}
                 </div>
