@@ -3,20 +3,28 @@ import {
   AlertTriangle,
   CheckCircle2,
   Eye,
+  Heart,
   Home,
   Image,
   Inbox,
   MessageSquare,
+  MousePointerClick,
   Search,
+  Send,
   Sparkles,
   Star,
   Wrench,
 } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { getPageAccessReport, getSiteMetrics, getTopTools } from '@/lib/services/admin/analytics';
+import {
+  getConversionSnapshot,
+  getPageAccessReport,
+  getSiteMetrics,
+  getTopTools,
+} from '@/lib/services/admin/analytics';
 import { getCommentModerationSummary } from '@/app/actions/admin/comments';
-import { getOperationalStats, getToolsStats } from '@/app/actions/admin/tools';
+import { getOperationalStats, getSubmissionFunnelStats, getToolsStats } from '@/app/actions/admin/tools';
 
 export async function generateMetadata({ params }: { params: { locale: string } }) {
   const t = await getTranslations({ locale: params.locale, namespace: 'admin' });
@@ -33,6 +41,8 @@ export default async function AdminDashboard() {
   const moderationSummary = await getCommentModerationSummary();
   const topTools = await getTopTools('views', 5);
   const pageAccessReport = await getPageAccessReport('30d', 6);
+  const conversionSnapshot = await getConversionSnapshot('30d');
+  const submissionFunnel = await getSubmissionFunnelStats('30d');
 
   const metrics = [
     {
@@ -172,6 +182,50 @@ export default async function AdminDashboard() {
     };
   });
   const topPagePaths = pageAccessReport.topPages.slice(0, 4);
+  const conversionCards = [
+    {
+      name: 'Page Views',
+      value: conversionSnapshot.pageViews,
+      subtext: 'All tracked landing and detail traffic',
+      icon: Eye,
+      color: 'blue',
+    },
+    {
+      name: 'Tool Clicks',
+      value: conversionSnapshot.toolClicks,
+      subtext: `${conversionSnapshot.pageToClickRate.toFixed(1)}% of page views`,
+      icon: MousePointerClick,
+      color: 'green',
+    },
+    {
+      name: 'Searches',
+      value: conversionSnapshot.searches,
+      subtext: 'Users showing active intent',
+      icon: Search,
+      color: 'purple',
+    },
+    {
+      name: 'Favorites',
+      value: conversionSnapshot.favorites,
+      subtext: 'Saved for later evaluation',
+      icon: Heart,
+      color: 'red',
+    },
+    {
+      name: 'Shares',
+      value: conversionSnapshot.shares,
+      subtext: 'Passed to a teammate or audience',
+      icon: Send,
+      color: 'yellow',
+    },
+    {
+      name: 'Paid Submissions',
+      value: conversionSnapshot.paidSubmissions,
+      subtext: `${conversionSnapshot.paidSubmissionRate.toFixed(1)}% of all submissions`,
+      icon: Wrench,
+      color: 'gray',
+    },
+  ];
 
   return (
     <div>
@@ -297,6 +351,76 @@ export default async function AdminDashboard() {
               <h3 className='font-medium text-slate-900'>View Analytics</h3>
               <p className='mt-1 text-sm text-slate-600'>Check detailed site analytics and reports</p>
             </a>
+          </div>
+        </div>
+      </div>
+
+      <div className='mt-8'>
+        <div className='mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
+          <div>
+            <h2 className='text-lg font-semibold text-slate-900'>Conversion Snapshot</h2>
+            <p className='mt-1 text-sm text-slate-600'>
+              Quick read on traffic, intent, and whether users are moving toward submission and payment.
+            </p>
+          </div>
+          <Link href='/admin/analytics?range=30d' className='text-sm font-medium text-cyan-700 hover:underline'>
+            Open full funnel
+          </Link>
+        </div>
+
+        <div className='grid gap-4 lg:grid-cols-[1.5fr_1fr]'>
+          <div className='grid gap-4 sm:grid-cols-2 xl:grid-cols-3'>
+            {conversionCards.map((card) => (
+              <div key={card.name} className='theme-surface rounded-lg border border-slate-200 p-4 shadow-sm'>
+                <div className='flex items-start justify-between gap-3'>
+                  <div>
+                    <p className='text-sm font-medium text-slate-600'>{card.name}</p>
+                    <p className='mt-2 text-3xl font-semibold text-slate-900'>{card.value.toLocaleString()}</p>
+                  </div>
+                  <div className={`rounded-full p-2 ${getColorClasses(card.color)}`}>
+                    <card.icon className='h-5 w-5' />
+                  </div>
+                </div>
+                <p className='mt-3 text-sm text-slate-500'>{card.subtext}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
+            <div className='flex items-center justify-between gap-3'>
+              <div>
+                <h3 className='text-base font-semibold text-slate-900'>Developer Submission Funnel</h3>
+                <p className='mt-1 text-sm text-slate-600'>
+                  A quick look at whether paid intent is turning into live listings.
+                </p>
+              </div>
+              <Sparkles className='h-5 w-5 text-cyan-600' />
+            </div>
+
+            <div className='mt-4 grid grid-cols-2 gap-3'>
+              <div className='rounded-lg border border-slate-200 bg-white p-3'>
+                <p className='text-xs font-medium uppercase tracking-wide text-slate-500'>Submitted</p>
+                <p className='mt-2 text-2xl font-semibold text-slate-900'>{submissionFunnel.totalSubmitted}</p>
+              </div>
+              <div className='rounded-lg border border-slate-200 bg-white p-3'>
+                <p className='text-xs font-medium uppercase tracking-wide text-slate-500'>Published</p>
+                <p className='mt-2 text-2xl font-semibold text-emerald-700'>{submissionFunnel.published}</p>
+              </div>
+              <div className='rounded-lg border border-slate-200 bg-white p-3'>
+                <p className='text-xs font-medium uppercase tracking-wide text-slate-500'>Paid Intent</p>
+                <p className='mt-2 text-2xl font-semibold text-cyan-700'>{conversionSnapshot.paidSubmissions}</p>
+              </div>
+              <div className='rounded-lg border border-slate-200 bg-white p-3'>
+                <p className='text-xs font-medium uppercase tracking-wide text-slate-500'>Avg Review Time</p>
+                <p className='mt-2 text-2xl font-semibold text-violet-700'>{submissionFunnel.avgReviewHours}h</p>
+              </div>
+            </div>
+
+            <div className='mt-4 rounded-lg bg-cyan-50 p-4 text-sm leading-6 text-slate-700'>
+              Publish rate: <span className='font-semibold text-cyan-900'>{submissionFunnel.publishedRate}%</span> ·
+              Paid submission rate:{' '}
+              <span className='font-semibold text-cyan-900'>{conversionSnapshot.paidSubmissionRate.toFixed(1)}%</span>
+            </div>
           </div>
         </div>
       </div>

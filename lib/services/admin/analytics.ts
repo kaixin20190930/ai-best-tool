@@ -177,6 +177,20 @@ export interface DateRangeMetrics {
   searches: number;
 }
 
+export interface ConversionSnapshot {
+  pageViews: number;
+  toolClicks: number;
+  searches: number;
+  favorites: number;
+  shares: number;
+  submissions: number;
+  publishedSubmissions: number;
+  paidSubmissions: number;
+  pageToClickRate: number;
+  submissionPublishRate: number;
+  paidSubmissionRate: number;
+}
+
 /**
  * Get overall site metrics
  */
@@ -750,6 +764,104 @@ export async function getMetricsOverTime(days: number = 30): Promise<DateRangeMe
   } catch (error) {
     console.error('Error fetching metrics over time:', error);
     return [];
+  }
+}
+
+/**
+ * Get a compact conversion snapshot for the dashboard.
+ */
+export async function getConversionSnapshot(range: '7d' | '30d' | 'all' = '30d'): Promise<ConversionSnapshot> {
+  try {
+    const pool = getPool();
+    const getDateCondition = (column: 'timestamp' | 'created_at') => {
+      if (range === '7d') {
+        return `AND ${column} >= NOW() - INTERVAL '7 days'`;
+      }
+
+      if (range === '30d') {
+        return `AND ${column} >= NOW() - INTERVAL '30 days'`;
+      }
+
+      return '';
+    };
+
+    const analyticsDateCondition = getDateCondition('timestamp');
+    const createdAtDateCondition = getDateCondition('created_at');
+
+    const analyticsResult = await pool.query(
+      `
+      SELECT
+        COUNT(*) FILTER (WHERE event_type = 'page_view' ${analyticsDateCondition})::int AS page_views,
+        COUNT(*) FILTER (WHERE event_type = 'tool_click' ${analyticsDateCondition})::int AS tool_clicks,
+        COUNT(*) FILTER (WHERE event_type = 'search' ${analyticsDateCondition})::int AS searches,
+        COUNT(*) FILTER (WHERE event_type = 'share' ${analyticsDateCondition})::int AS shares
+      FROM analytics
+    `,
+    );
+
+    const favoritesResult = await pool.query(
+      `
+      SELECT COUNT(*)::int AS favorites
+      FROM favorites
+      WHERE 1 = 1 ${createdAtDateCondition}
+    `,
+    );
+
+    const submissionsResult = await pool.query(
+      `
+      SELECT
+        COUNT(*) FILTER (WHERE submitted_by IS NOT NULL ${createdAtDateCondition})::int AS submissions,
+        COUNT(*) FILTER (WHERE submitted_by IS NOT NULL AND status = 'published' ${createdAtDateCondition})::int AS published_submissions,
+        COUNT(*) FILTER (
+          WHERE submitted_by IS NOT NULL
+            AND COALESCE(features->'submission'->'commercial'->>'plan', 'free') = 'standard_paid'
+            ${createdAtDateCondition}
+        )::int AS paid_submissions
+      FROM tools
+    `,
+    );
+
+    const row = analyticsResult.rows[0] || {};
+    const favoriteRow = favoritesResult.rows[0] || {};
+    const submissionRow = submissionsResult.rows[0] || {};
+
+    const pageViews = Number.parseInt(String(row.page_views || '0'), 10);
+    const toolClicks = Number.parseInt(String(row.tool_clicks || '0'), 10);
+    const searches = Number.parseInt(String(row.searches || '0'), 10);
+    const shares = Number.parseInt(String(row.shares || '0'), 10);
+    const favorites = Number.parseInt(String(favoriteRow.favorites || '0'), 10);
+    const submissions = Number.parseInt(String(submissionRow.submissions || '0'), 10);
+    const publishedSubmissions = Number.parseInt(String(submissionRow.published_submissions || '0'), 10);
+    const paidSubmissions = Number.parseInt(String(submissionRow.paid_submissions || '0'), 10);
+
+    return {
+      pageViews,
+      toolClicks,
+      searches,
+      favorites,
+      shares,
+      submissions,
+      publishedSubmissions,
+      paidSubmissions,
+      pageToClickRate: pageViews > 0 ? (toolClicks / pageViews) * 100 : 0,
+      submissionPublishRate: submissions > 0 ? (publishedSubmissions / submissions) * 100 : 0,
+      paidSubmissionRate: submissions > 0 ? (paidSubmissions / submissions) * 100 : 0,
+    };
+  } catch (error) {
+    console.error('Error fetching conversion snapshot:', error);
+    return {
+      pageViews: 0,
+      toolClicks: 0,
+      searches: 0,
+      favorites: 0,
+      shares: 0,
+      submissions: 0,
+      publishedSubmissions: 0,
+      paidSubmissions: 0,
+      pageToClickRate: 0,
+      submissionPublishRate: 0,
+      paidSubmissionRate: 0,
+    };
   }
 }
 
