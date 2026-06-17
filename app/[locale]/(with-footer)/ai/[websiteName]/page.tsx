@@ -2085,22 +2085,22 @@ export default async function Page({
                   tagSlugs={tagSlugsForDisplay}
                   tagLabels={tagLabels}
                 />
-                <div aria-hidden='true' className='h-28 lg:h-36' />
+                <div aria-hidden='true' className='h-20 lg:h-24' />
                 <section id='comments' className='relative isolate clear-both scroll-mt-28 pt-16'>
                   <Separator className='mb-10 border-t border-slate-200' />
-                  <div className='mb-6 rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200'>
-                    <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
-                      <div>
+                  <div className='mb-4 rounded-lg bg-white p-3 shadow-sm ring-1 ring-slate-200 sm:p-4'>
+                    <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-3'>
+                      <div className='max-w-2xl'>
                         <h3 className='text-base font-semibold text-slate-900'>
                           {locale === 'cn' ? '参与讨论，看看真实反馈' : 'Join the discussion and follow updates'}
                         </h3>
-                        <p className='mt-1 text-sm text-slate-600'>
+                        <p className='mt-1 text-sm leading-6 text-slate-600'>
                           {locale === 'cn'
                             ? '收藏、分享给团队，或者直接留下你的真实使用体验。'
                             : 'Save this tool, share it with your team, and leave your review.'}
                         </p>
                       </div>
-                      <div className='flex flex-wrap items-center gap-2'>
+                      <div className='flex flex-wrap items-center gap-2 sm:pt-0.5'>
                         {user ? (
                           <>
                             <FavoriteButton toolId={toolId} initialState={isFavoritedByUser} showLabel />
@@ -2123,7 +2123,7 @@ export default async function Page({
                       </div>
                     </div>
                   </div>
-                  <div className='mb-4 rounded-lg border border-cyan-100 bg-cyan-50 p-4 text-sm leading-6 text-cyan-900'>
+                  <div className='mb-4 rounded-lg border border-cyan-100 bg-cyan-50 px-4 py-3 text-sm leading-6 text-cyan-900'>
                     {locale === 'cn'
                       ? '欢迎写下真实体验：适合什么场景、哪里最好用、有什么坑，都会帮到后来的人。'
                       : 'Share real usage notes: best use cases, what works well, and what to watch out for. That helps the next person a lot.'}
