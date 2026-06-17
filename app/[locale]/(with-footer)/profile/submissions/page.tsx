@@ -284,6 +284,35 @@ export default async function SubmissionsPage({
 
       <SubmissionEmailPreferenceToggle initialEnabled={submissionEmailEnabled} />
 
+      <section className='theme-surface mb-6 rounded-lg border border-cyan-200 bg-cyan-50 p-4'>
+        <div className='flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between'>
+          <div className='max-w-2xl'>
+            <p className='text-sm font-semibold text-cyan-900'>
+              {paymentStatus === 'success' ? 'Payment received' : 'What to do next'}
+            </p>
+            <p className='mt-1 text-sm leading-6 text-cyan-900/80'>
+              {tools.length === 0
+                ? 'Once you submit a tool, this page becomes the place to finish payment, watch review status, and renew featured placement.'
+                : 'Use this page to complete payment, check review progress, and see when a featured window is active or expired.'}
+            </p>
+          </div>
+          <div className='grid gap-2 text-sm text-cyan-900 lg:min-w-[320px]'>
+            <div className='rounded-lg border border-cyan-100 bg-white px-3 py-2'>
+              <span className='font-semibold'>1.</span>{' '}
+              {pendingPaymentTools.length > 0 ? 'Complete payment' : 'Check review status'}
+            </div>
+            <div className='rounded-lg border border-cyan-100 bg-white px-3 py-2'>
+              <span className='font-semibold'>2.</span>{' '}
+              {statusStats.draft > 0 ? 'Improve draft details' : 'Wait for approval or publishing'}
+            </div>
+            <div className='rounded-lg border border-cyan-100 bg-white px-3 py-2'>
+              <span className='font-semibold'>3.</span> Renew featured placement only when you want a new visibility
+              window
+            </div>
+          </div>
+        </div>
+      </section>
+
       {pendingPaymentTools.length > 0 && (
         <section className='theme-surface mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4'>
           <div className='flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between'>
