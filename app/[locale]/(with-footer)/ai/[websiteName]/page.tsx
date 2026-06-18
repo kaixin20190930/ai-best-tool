@@ -2122,7 +2122,9 @@ export default async function Page({
                             href={`/${locale}/login?redirect=/${locale}/ai/${websiteName}`}
                             className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-2 text-sm font-semibold text-white hover:bg-cyan-800'
                           >
-                            {locale === 'cn' ? '登录后收藏和评论' : 'Log in to save and comment'}
+                            {locale === 'cn'
+                              ? '登录后收藏、评论并关注更新'
+                              : 'Log in to save, comment, and follow updates'}
                           </Link>
                         )}
                       </div>
@@ -2130,8 +2132,8 @@ export default async function Page({
                   </div>
                   <div className='mb-4 rounded-lg border border-cyan-100 bg-cyan-50 px-4 py-3 text-sm leading-6 text-cyan-900'>
                     {locale === 'cn'
-                      ? '欢迎写下真实体验：适合什么场景、哪里最好用、有什么坑，都会帮到后来的人。'
-                      : 'Share real usage notes: best use cases, what works well, and what to watch out for. That helps the next person a lot.'}
+                      ? '欢迎写下真实体验：适合什么场景、哪里最好用、有什么坑，都会帮到后来的人。你也能更快收到后续更新。'
+                      : 'Share real usage notes: best use cases, what works well, and what to watch out for. That helps the next person a lot, and keeps you closer to future updates.'}
                   </div>
                   <CommentList
                     toolId={toolId}
