@@ -1754,6 +1754,11 @@ export default async function Page({
                 </a>
                 {/* Discussion anchor is now surfaced in the action panel above */}
               </div>
+              <p className='max-w-3xl text-sm leading-6 text-slate-500'>
+                {locale === 'cn'
+                  ? '最稳的下一步：先看官网，再拿相似工具和评论做对比。'
+                  : 'Best next step: open the official site first, then compare similar tools and comments.'}
+              </p>
             </section>
 
             <aside className='space-y-4'>
