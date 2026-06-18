@@ -2155,6 +2155,11 @@ export default async function Page({
               <h2 className='text-base font-bold text-slate-950'>
                 {locale === 'cn' ? '决策摘要' : 'Decision Snapshot'}
               </h2>
+              <p className='mt-2 text-sm leading-6 text-cyan-900/75'>
+                {locale === 'cn'
+                  ? '先看这块，再决定要不要继续点官网、看相似工具，还是直接收藏。'
+                  : 'Use this box to decide whether to visit the official site, compare similar tools, or save it for later.'}
+              </p>
               <div className='mt-4 space-y-4'>
                 <div>
                   <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
