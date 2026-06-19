@@ -1701,6 +1701,11 @@ export default async function Page({
                               className='rounded-full bg-white px-3 py-2 ring-1 ring-slate-200 hover:ring-red-200'
                             />
                           </div>
+                          <p className='mt-2 max-w-[12rem] text-xs leading-5 text-slate-500'>
+                            {locale === 'cn'
+                              ? '先收藏，之后可以回到收藏夹再对比。'
+                              : 'Save first, then come back to compare later.'}
+                          </p>
                         </div>
                       </div>
                     </div>
