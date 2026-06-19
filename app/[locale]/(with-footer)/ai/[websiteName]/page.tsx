@@ -2246,6 +2246,11 @@ export default async function Page({
                   <dd className='text-right font-semibold text-slate-950'>{updatedLabel}</dd>
                 </div>
               </dl>
+              <p className='mt-4 rounded-lg bg-slate-50 px-3 py-2 text-xs leading-5 text-slate-600'>
+                {locale === 'cn'
+                  ? '如果还在犹豫，先收藏，再去看 2 个相似工具。'
+                  : 'If you are still unsure, save it first, then review two similar tools.'}
+              </p>
               {toolId ? (
                 <TrackableLink
                   href={data.url}
