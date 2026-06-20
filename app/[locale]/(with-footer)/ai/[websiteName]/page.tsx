@@ -1741,7 +1741,7 @@ export default async function Page({
                     href={data.url}
                     toolId={toolId}
                     userId={user?.id}
-                    className='inline-flex items-center justify-center gap-2 rounded-lg bg-slate-950 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800'
+                    className='inline-flex items-center justify-center gap-2 rounded-lg bg-slate-950 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800'
                   >
                     {t('visitWebsite')} <ArrowUpRight className='size-4' />
                   </TrackableLink>
@@ -1750,14 +1750,14 @@ export default async function Page({
                     href={data.url}
                     target='_blank'
                     rel='noreferrer'
-                    className='inline-flex items-center justify-center gap-2 rounded-lg bg-slate-950 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800'
+                    className='inline-flex items-center justify-center gap-2 rounded-lg bg-slate-950 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800'
                   >
                     {t('visitWebsite')} <ArrowUpRight className='size-4' />
                   </a>
                 )}
                 <a
                   href={`/${locale}/explore?search=${encodeURIComponent(data.title)}`}
-                  className='inline-flex items-center justify-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-slate-800 ring-1 ring-slate-200 transition hover:bg-slate-100'
+                  className='inline-flex items-center justify-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-medium text-slate-700 ring-1 ring-slate-200 transition hover:bg-slate-100'
                 >
                   {isChinese ? '找相似工具' : 'Find similar tools'} <CircleArrowRight className='size-4' />
                 </a>
