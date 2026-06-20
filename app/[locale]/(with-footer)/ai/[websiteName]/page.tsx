@@ -1416,8 +1416,12 @@ export default async function Page({
   ];
   const commentPromptLabel = isChinese ? '可以直接点一个开头' : 'Start with one of these';
   const commentStarterPrompts = isChinese
-    ? ['你主要把它用在哪个场景？', '最喜欢的一点是什么？', '有没有踩坑或替代方案？']
-    : ['What do you mainly use it for?', 'What do you like most about it?', 'Any caveats or alternatives?'];
+    ? ['这款工具最适合什么场景？', '你会先收藏还是先去官网？', '和相似工具比，差异最明显在哪？']
+    : [
+        'What scenario is this tool best for?',
+        'Would you save it first or open the official site?',
+        'What stands out most versus similar tools?',
+      ];
   let commentLabel = isChinese ? '去讨论' : 'Discuss';
   if (commentCount > 0) {
     commentLabel = `${commentCount} ${isChinese ? '条讨论' : 'comments'}`;
