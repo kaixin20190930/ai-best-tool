@@ -2137,8 +2137,8 @@ export default async function Page({
                   </div>
                   <div className='mb-4 rounded-lg border border-cyan-100 bg-cyan-50 px-4 py-3 text-sm leading-6 text-cyan-900'>
                     {locale === 'cn'
-                      ? '欢迎写下真实体验：适合什么场景、哪里最好用、有什么坑，都会帮到后来的人。你也能更快收到后续更新。'
-                      : 'Share real usage notes: best use cases, what works well, and what to watch out for. That helps the next person a lot, and keeps you closer to future updates.'}
+                      ? '先看官网和相似工具，再回来写真实体验：适合什么场景、哪里最好用、有什么坑，都会帮到后来的人。'
+                      : 'Open the official site and compare similar tools first, then come back and share what really worked, what didn’t, and what to watch out for.'}
                   </div>
                   <CommentList
                     toolId={toolId}
