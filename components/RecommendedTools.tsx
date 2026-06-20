@@ -225,8 +225,8 @@ export default async function RecommendedTools({
   const isChinese = locale === 'cn';
   const comparisonTitle = isChinese ? '相似工具对比' : 'Compare Similar Tools';
   const comparisonDescription = isChinese
-    ? '先看同类工具的定价、使用场景和标签重合度，再决定哪一款更适合你的工作流。'
-    : 'Compare pricing, workflow fit, and topic overlap before you commit to one option.';
+    ? '先把同类工具放在一起比，再决定哪一款更适合你的工作流。'
+    : 'Put similar tools side by side first, then decide which one fits your workflow best.';
   const activeCompareAxes =
     compareAxes && compareAxes.length > 0 ? compareAxes : getCompareAxes(categorySlug, isChinese);
   let tagSummary = isChinese ? '通用工作流' : 'General workflows';
@@ -302,8 +302,8 @@ export default async function RecommendedTools({
                 </p>
                 <p className='mt-1 text-xs leading-5 text-slate-500'>
                   {isChinese
-                    ? '先看这几条，再决定要不要继续点官网。'
-                    : 'Read these signals first, then decide whether to open the official site.'}
+                    ? '先看这几条，再决定要不要继续点官网或继续比较。'
+                    : 'Read these signals first, then decide whether to open the official site or keep comparing.'}
                 </p>
                 <div className='mt-2 space-y-2'>
                   {reasons.map((reason) => (
