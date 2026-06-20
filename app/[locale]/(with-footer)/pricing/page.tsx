@@ -154,6 +154,12 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
               >
                 {isChinese ? '先去提交页' : 'Go to submit page'}
               </Link>
+              <Link
+                href={`/${locale}/developer/listing`}
+                className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+              >
+                {isChinese ? '认领条目' : 'Claim listing'}
+              </Link>
               <a
                 href={paymentHref}
                 className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-cyan-50 px-5 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
