@@ -300,6 +300,11 @@ export default async function RecommendedTools({
                 <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
                   {isChinese ? '为什么推荐它' : 'Why compare this one'}
                 </p>
+                <p className='mt-1 text-xs leading-5 text-slate-500'>
+                  {isChinese
+                    ? '先看这几条，再决定要不要继续点官网。'
+                    : 'Read these signals first, then decide whether to open the official site.'}
+                </p>
                 <div className='mt-2 space-y-2'>
                   {reasons.map((reason) => (
                     <div
