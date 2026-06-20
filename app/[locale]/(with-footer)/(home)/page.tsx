@@ -536,6 +536,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'If you already know the rough direction, start from these high-intent comparison pages and decide faster.'
             }
           />
+          <p className='-mt-2 mb-4 text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '先比定价、场景和真实反馈，再决定要不要点进单个工具。'
+              : 'Compare pricing, use case, and real feedback first, then decide whether to open a single tool page.'}
+          </p>
           <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-3'>
             {comparisonGuidePages.map((guide) => (
               <Link
