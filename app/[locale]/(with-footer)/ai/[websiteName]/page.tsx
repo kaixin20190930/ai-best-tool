@@ -2256,6 +2256,11 @@ export default async function Page({
                   ? '如果还在犹豫，先收藏，再去看 2 个相似工具。'
                   : 'If you are still unsure, save it first, then review two similar tools.'}
               </p>
+              <p className='mt-2 text-xs leading-5 text-slate-500'>
+                {locale === 'cn'
+                  ? '收藏后回访，比较会轻松很多。'
+                  : 'Saving it now makes the later comparison much easier.'}
+              </p>
               {toolId ? (
                 <TrackableLink
                   href={data.url}
