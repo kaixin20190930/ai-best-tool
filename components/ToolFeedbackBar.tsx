@@ -16,14 +16,14 @@ const feedbackOptions = [
   {
     type: 'helpful' as const,
     label: 'Helpful',
-    description: 'Helped me decide',
+    description: 'Helped me choose',
     icon: ThumbsUp,
     className: 'border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100',
   },
   {
     type: 'needs_update' as const,
     label: 'Needs update',
-    description: 'Price, screenshot, or copy is stale',
+    description: 'Price, media, or copy is stale',
     icon: RefreshCw,
     className: 'border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100',
   },
@@ -69,7 +69,7 @@ export default function ToolFeedbackBar({ toolId, userId, className = '' }: Tool
               key={option.type}
               type='button'
               onClick={() => handleFeedback(option.type)}
-              className={`flex min-h-[7.5rem] flex-row items-start gap-3 rounded-lg border px-4 py-4 text-left text-sm transition ${
+              className={`flex min-h-[6.25rem] flex-row items-start gap-3 rounded-lg border px-4 py-3 text-left text-sm transition ${
                 isSelected ? option.className : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
               }`}
               disabled={isLoading}
@@ -81,15 +81,15 @@ export default function ToolFeedbackBar({ toolId, userId, className = '' }: Tool
               >
                 <Icon className='size-4 shrink-0' />
               </div>
-              <div className='min-w-0 space-y-1'>
+              <div className='min-w-0 space-y-0.5'>
                 <span
-                  className={`block break-words text-base font-semibold leading-6 ${
+                  className={`block break-words text-[0.98rem] font-semibold leading-5 ${
                     isSelected ? 'text-current' : 'text-slate-900'
                   }`}
                 >
                   {isLoading ? 'Saving...' : option.label}
                 </span>
-                <span className='block break-words text-sm leading-6 text-slate-500'>{option.description}</span>
+                <span className='block break-words text-xs leading-5 text-slate-500'>{option.description}</span>
               </div>
             </button>
           );
