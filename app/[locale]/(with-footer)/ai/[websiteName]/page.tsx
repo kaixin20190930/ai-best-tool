@@ -2099,10 +2099,16 @@ export default async function Page({
                   tagSlugs={tagSlugsForDisplay}
                   tagLabels={tagLabels}
                 />
-                <div aria-hidden='true' className='h-20 lg:h-24' />
-                <section id='comments' className='relative isolate clear-both scroll-mt-28 pt-16'>
+                <div className='my-10 flex items-center gap-3 lg:my-12'>
+                  <span className='h-px flex-1 bg-slate-200' />
+                  <span className='whitespace-nowrap text-xs font-semibold uppercase tracking-[0.2em] text-slate-400'>
+                    {locale === 'cn' ? '对比后继续看真实反馈' : 'Compare first, then read real feedback'}
+                  </span>
+                  <span className='h-px flex-1 bg-slate-200' />
+                </div>
+                <section id='comments' className='relative isolate clear-both scroll-mt-28 pt-12'>
                   <Separator className='mb-10 border-t border-slate-200' />
-                  <div className='mb-4 rounded-lg bg-white p-3 shadow-sm ring-1 ring-slate-200 sm:p-4'>
+                  <div className='mb-3 rounded-lg bg-white p-3 shadow-sm ring-1 ring-slate-200 sm:p-4'>
                     <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-3'>
                       <div className='max-w-2xl'>
                         <h3 className='text-base font-semibold text-slate-900'>
