@@ -1,3 +1,4 @@
+import { getComparisonCtaFromTags } from '@/lib/services/comparisonCta';
 import { getRecommendedTools } from '@/lib/services/recommendations';
 import { getLocalizedField, Tool } from '@/lib/services/tools';
 import WebNavCard from '@/components/webNav/WebNavCard';
@@ -282,6 +283,7 @@ export default async function RecommendedTools({
       <div className='grid gap-6 lg:grid-cols-2 2xl:grid-cols-3'>
         {recommendedTools.map((tool) => {
           const reasons = getSimilarityReasons(tool, pricing, tagSlugs, isChinese, locale);
+          const comparisonCta = getComparisonCtaFromTags(tool.tags, locale);
 
           return (
             <div key={tool.id} className='min-w-0 space-y-3'>
@@ -295,6 +297,8 @@ export default async function RecommendedTools({
                 toolId={tool.id}
                 averageRating={tool.averageRating}
                 ratingCount={tool.ratingCount}
+                compareHref={comparisonCta.compareHref}
+                compareLabel={comparisonCta.compareLabel}
               />
               <div className='overflow-hidden rounded-lg border border-slate-200 bg-white p-3 shadow-sm'>
                 <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
