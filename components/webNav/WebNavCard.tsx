@@ -5,6 +5,7 @@ import { WebNavigationListRow } from '@/lib/data';
 
 import FavoriteButton from '../FavoriteButton';
 import RatingStars from '../RatingStars';
+import TrackableLink from '../TrackableLink';
 import ToolCardMedia from './ToolCardMedia';
 
 interface WebNavCardProps extends Omit<WebNavigationListRow, 'id'> {
@@ -15,6 +16,7 @@ interface WebNavCardProps extends Omit<WebNavigationListRow, 'id'> {
   averageRating?: number;
   ratingCount?: number;
   contextLabel?: 'latest' | 'popular';
+  locale?: string;
 }
 
 function getFreshnessLabel(createdAt?: string, updatedAt?: string): string | null {
@@ -59,9 +61,13 @@ export default function WebNavCard({
   createdAt,
   updatedAt,
   contextLabel,
+  locale = 'en',
   isFeatured,
 }: WebNavCardProps) {
   const freshnessLabel = getFreshnessLabel(createdAt, updatedAt);
+  const isChinese = locale === 'cn' || locale === 'tw';
+  const officialSiteLabel = isChinese ? '打开官网' : 'Open official site';
+  const compareActionLabel = compareLabel || (isChinese ? '查看比较' : 'Compare');
 
   return (
     <div className='flex h-full flex-col gap-4 rounded-lg bg-white p-3 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-md lg:p-4'>
@@ -99,15 +105,37 @@ export default function WebNavCard({
           </span>
         )}
         <p className='line-clamp-4 break-words text-sm leading-6 text-slate-600'>{content}</p>
-        {compareHref && compareLabel && (
-          <Link
-            href={compareHref}
-            className='inline-flex w-fit items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-200 hover:text-slate-950'
-          >
-            <Sparkles className='size-3.5 text-cyan-700' />
-            {compareLabel}
-          </Link>
-        )}
+        <div className='flex flex-wrap gap-2'>
+          {toolId ? (
+            <TrackableLink
+              href={url}
+              toolId={toolId}
+              className='inline-flex items-center gap-2 rounded-full bg-slate-950 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-slate-800'
+            >
+              {officialSiteLabel}
+              <Sparkles className='size-3.5' />
+            </TrackableLink>
+          ) : (
+            <a
+              href={url}
+              target='_blank'
+              rel='noreferrer'
+              className='inline-flex items-center gap-2 rounded-full bg-slate-950 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-slate-800'
+            >
+              {officialSiteLabel}
+              <Sparkles className='size-3.5' />
+            </a>
+          )}
+          {compareHref && compareLabel && (
+            <Link
+              href={compareHref}
+              className='inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-200 hover:text-slate-950'
+            >
+              <Sparkles className='size-3.5 text-cyan-700' />
+              {compareActionLabel}
+            </Link>
+          )}
+        </div>
         {toolId && (
           <RatingStars
             toolId={toolId}

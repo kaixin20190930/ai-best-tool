@@ -299,6 +299,7 @@ export default async function RecommendedTools({
                 ratingCount={tool.ratingCount}
                 compareHref={comparisonCta.compareHref}
                 compareLabel={comparisonCta.compareLabel}
+                locale={locale}
               />
               <div className='overflow-hidden rounded-lg border border-slate-200 bg-white p-3 shadow-sm'>
                 <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
