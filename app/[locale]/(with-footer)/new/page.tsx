@@ -2,11 +2,11 @@ import type { Metadata } from 'next';
 import { ArrowRight, Clock3, FolderOpen, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
-import WebNavCardList from '@/components/webNav/WebNavCardList';
 import { getAllCategories, getLocalizedField as getLocalizedCategoryField } from '@/lib/services/categories';
 import { toolToListRow } from '@/lib/services/toolPresenter';
 import { getLatestTools } from '@/lib/services/tools';
+import WebNavCardList from '@/components/webNav/WebNavCardList';
+import { Link } from '@/app/navigation';
 
 export const revalidate = 3600;
 
@@ -29,6 +29,10 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       : 'Catch up on the newest AI tools added to AI Best Tool this week and see the latest reviewed additions in one place.',
     alternates: {
       canonical: './new',
+    },
+    robots: {
+      index: false,
+      follow: true,
     },
   };
 }
@@ -139,7 +143,10 @@ export default async function NewToolsPage({ params: { locale } }: { params: { l
               </div>
               <div className='rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200'>
                 <p className='text-sm text-slate-500'>{isChinese ? '继续探索' : 'Keep exploring'}</p>
-                <Link href='/guides' className='mt-3 inline-flex items-center gap-2 text-sm font-semibold text-cyan-700 hover:text-cyan-800'>
+                <Link
+                  href='/guides'
+                  className='mt-3 inline-flex items-center gap-2 text-sm font-semibold text-cyan-700 hover:text-cyan-800'
+                >
                   <FolderOpen className='size-4' />
                   {t('guides')}
                 </Link>
@@ -166,18 +173,26 @@ export default async function NewToolsPage({ params: { locale } }: { params: { l
               href='/explore?sort=latest'
               className='rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-cyan-50/60'
             >
-              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '继续看全部最新' : 'Browse all latest tools'}</p>
+              <p className='text-sm font-semibold text-slate-950'>
+                {isChinese ? '继续看全部最新' : 'Browse all latest tools'}
+              </p>
               <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese ? '回到探索页，按最新排序继续扩大范围。' : 'Return to Explore and keep scanning the newest listings.'}
+                {isChinese
+                  ? '回到探索页，按最新排序继续扩大范围。'
+                  : 'Return to Explore and keep scanning the newest listings.'}
               </p>
             </Link>
             <Link
               href='/categories/productivity?sort=latest'
               className='rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-cyan-50/60'
             >
-              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '进入生产力分类' : 'Open productivity'}</p>
+              <p className='text-sm font-semibold text-slate-950'>
+                {isChinese ? '进入生产力分类' : 'Open productivity'}
+              </p>
               <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese ? '如果你想优先看实用型工具，这是最稳的入口之一。' : 'A strong next stop if you want practical, high-frequency workflows first.'}
+                {isChinese
+                  ? '如果你想优先看实用型工具，这是最稳的入口之一。'
+                  : 'A strong next stop if you want practical, high-frequency workflows first.'}
               </p>
             </Link>
             <Link
@@ -186,16 +201,22 @@ export default async function NewToolsPage({ params: { locale } }: { params: { l
             >
               <p className='text-sm font-semibold text-slate-950'>{isChinese ? '进入 Web3 分类' : 'Open Web3'}</p>
               <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese ? '如果你关注链上研究和数据工具，这里最值得继续深挖。' : 'The best next stop for on-chain research, analytics, and infra workflows.'}
+                {isChinese
+                  ? '如果你关注链上研究和数据工具，这里最值得继续深挖。'
+                  : 'The best next stop for on-chain research, analytics, and infra workflows.'}
               </p>
             </Link>
             <Link
               href='/guides/how-to-choose-ai-tools'
               className='rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-cyan-50/60'
             >
-              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '回到选型指南' : 'Return to the guide'}</p>
+              <p className='text-sm font-semibold text-slate-950'>
+                {isChinese ? '回到选型指南' : 'Return to the guide'}
+              </p>
               <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese ? '如果你已经看花了，先回指南重新确认比较维度。' : 'If the choices are getting noisy, reset your criteria with the guide.'}
+                {isChinese
+                  ? '如果你已经看花了，先回指南重新确认比较维度。'
+                  : 'If the choices are getting noisy, reset your criteria with the guide.'}
               </p>
             </Link>
           </div>
@@ -238,7 +259,10 @@ export default async function NewToolsPage({ params: { locale } }: { params: { l
 
             <div className='grid gap-6'>
               {groupedThisWeek.map((group) => (
-                <div key={group.categoryId} className='rounded-[18px] border border-slate-200 bg-white p-5 shadow-sm lg:p-6'>
+                <div
+                  key={group.categoryId}
+                  className='rounded-[18px] border border-slate-200 bg-white p-5 shadow-sm lg:p-6'
+                >
                   <div className='mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between'>
                     <div>
                       <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

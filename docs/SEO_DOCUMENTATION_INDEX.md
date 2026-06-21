@@ -208,7 +208,17 @@ This documentation provides comprehensive guidance for implementing and maintain
 
 **When to use:** When deciding whether a page should be indexed, added to sitemap, or kept as an internal navigation target
 
-#### 16. [SEO Validation Guide](./SEO_VALIDATION_GUIDE.md)
+#### 16. [SEO Indexing Control Table Template (CN)](./SEO_INDEXING_CONTROL_TABLE_TEMPLATE_CN.md)
+**Purpose:** A practical operating template for weekly decisions on whether a URL should stay internal, remain noindex, or move into sitemap.
+
+**Contents:**
+- Recommended columns for the control table
+- Status definitions
+- Upgrade and downgrade rules
+- Weekly review workflow
+
+**When to use:** When you want a simple operational sheet instead of reading policy docs each time
+#### 17. [SEO Validation Guide](./SEO_VALIDATION_GUIDE.md)
 **Purpose:** Complete guide to validating SEO implementation
 
 **Contents:**

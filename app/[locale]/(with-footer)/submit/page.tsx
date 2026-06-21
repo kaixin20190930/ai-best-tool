@@ -18,6 +18,10 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 
   return {
     title: t('title'),
+    robots: {
+      index: false,
+      follow: true,
+    },
   };
 }
 

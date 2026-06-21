@@ -107,6 +107,10 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     description: isChinese
       ? '查看 AI Best Tool 的免费提交、加速审核和固定前排展示定价。'
       : 'See pricing for free submissions, faster review, and fixed featured placement windows.',
+    robots: {
+      index: false,
+      follow: true,
+    },
   };
 }
 

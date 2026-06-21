@@ -12,6 +12,10 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     description: isChinese
       ? '认领你的工具条目，先留资，再决定是否需要更快审核或前排展示。'
       : 'Claim your tool listing, leave your details first, then decide whether you need faster review or featured placement.',
+    robots: {
+      index: false,
+      follow: true,
+    },
   };
 }
 

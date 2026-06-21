@@ -59,15 +59,16 @@ export interface ToolMetadata {
 function getSiteUrl(): string {
   if (typeof window !== 'undefined') {
     // Client-side: use window.location.origin
-    return window.location.origin;
+    return window.location.origin.replace(/\/$/, '');
   }
-  
+
   // Server-side: use environment variables
-  return (
+  const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL ||
     (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '') ||
-    'https://aibesttool.com'
-  );
+    'https://aibesttool.com';
+
+  return siteUrl.replace(/\/$/, '');
 }
 
 /**

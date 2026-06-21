@@ -4,7 +4,8 @@ import { locales } from '@/i18n';
 import { GUIDE_PAGES } from '@/lib/content/guides';
 import { BASE_URL } from '@/lib/env';
 import { INDEXABLE_LOCALES } from '@/lib/seo/indexing';
-import { getAllCategories } from '@/lib/services/categories';
+import { getAllCategories, type CategoryWithCount } from '@/lib/services/categories';
+import { getToolQuality } from '@/lib/services/toolQuality';
 import { getTools } from '@/lib/services/tools';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -53,21 +54,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly',
       priority: 0.82,
     },
-    {
-      url: 'pricing',
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    {
-      url: 'privacy-policy',
-      changeFrequency: 'monthly',
-      priority: 0.3,
-    },
-    {
-      url: 'terms-of-service',
-      changeFrequency: 'monthly',
-      priority: 0.3,
-    },
   ];
 
   // Generate static route entries for all locales
@@ -101,7 +87,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       'latest',
     );
 
-    toolSitemapEntries = toolsResult.data.flatMap((tool) =>
+    const eligibleTools = toolsResult.data.filter((tool) => {
+      const quality = getToolQuality({
+        category_id: tool.categoryId,
+        image_url: tool.imageUrl,
+        thumbnail_url: tool.thumbnailUrl,
+        content: tool.content,
+        detail: tool.detail,
+        pricing: tool.pricing,
+        tags: tool.tags,
+      });
+
+      return quality.score >= 80;
+    });
+
+    toolSitemapEntries = eligibleTools.flatMap((tool) =>
       sitemapLocales.map((locale) => {
         const lang = locale === 'en' ? '' : `/${locale}`;
         return {
@@ -119,9 +119,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fetch all categories for category pages
   let categorySitemapEntries: MetadataRoute.Sitemap = [];
   try {
-    const categories = await getAllCategories(false);
+    const categories = (await getAllCategories(true)) as CategoryWithCount[];
+    const eligibleCategories = categories.filter((category) => category.toolCount >= 3);
 
-    categorySitemapEntries = categories.flatMap((category) =>
+    categorySitemapEntries = eligibleCategories.flatMap((category) =>
       sitemapLocales.map((locale) => {
         const lang = locale === 'en' ? '' : `/${locale}`;
         return {
