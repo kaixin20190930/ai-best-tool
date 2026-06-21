@@ -6,6 +6,8 @@ import { ArrowRight, Clock3, Heart, MessageSquare, Share2, Sparkles, TrendingUp 
 
 import { CommunityHighlight, RecentDiscussion } from '@/lib/services/community';
 
+import TrackableCompareLink from '../TrackableCompareLink';
+
 type ViewMode = 'hot' | 'recent' | 'rising';
 
 interface CommunityPulseProps {
@@ -46,12 +48,14 @@ function getActiveContent(
 }
 
 function CardActions({
+  toolId,
   detailHref,
   detailLabel,
   compareHref,
   compareLabel,
   compareFallbackLabel,
 }: {
+  toolId: string;
   detailHref: string;
   detailLabel: string;
   compareHref?: string;
@@ -68,13 +72,14 @@ function CardActions({
         <ArrowRight className='size-3.5' />
       </Link>
       {compareHref && compareLabel && (
-        <Link
+        <TrackableCompareLink
           href={compareHref}
+          toolId={toolId}
           className='inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-200 hover:text-slate-950'
         >
           <Sparkles className='size-3.5 text-cyan-700' />
           {compareLabel || compareFallbackLabel}
-        </Link>
+        </TrackableCompareLink>
       )}
     </div>
   );
@@ -150,6 +155,7 @@ export default function CommunityPulse({
                   </span>
                 </div>
                 <CardActions
+                  toolId={tool.id}
                   detailHref={`/ai/${tool.name}`}
                   detailLabel={isChinese ? '看工具详情' : 'View tool'}
                   compareHref={tool.compareHref}
@@ -199,6 +205,7 @@ export default function CommunityPulse({
                   </span>
                 </div>
                 <CardActions
+                  toolId={item.id}
                   detailHref={`/ai/${toolName}#comments`}
                   detailLabel={isChinese ? '看讨论' : 'Read discussion'}
                   compareHref={compareHref}
@@ -248,6 +255,7 @@ export default function CommunityPulse({
                   </span>
                 </div>
                 <CardActions
+                  toolId={tool.id}
                   detailHref={`/ai/${tool.name}`}
                   detailLabel={isChinese ? '看工具详情' : 'View tool'}
                   compareHref={tool.compareHref}

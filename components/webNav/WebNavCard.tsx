@@ -5,6 +5,7 @@ import { WebNavigationListRow } from '@/lib/data';
 
 import FavoriteButton from '../FavoriteButton';
 import RatingStars from '../RatingStars';
+import TrackableCompareLink from '../TrackableCompareLink';
 import TrackableLink from '../TrackableLink';
 import ToolCardMedia from './ToolCardMedia';
 
@@ -127,13 +128,14 @@ export default function WebNavCard({
             </a>
           )}
           {compareHref && compareLabel && (
-            <Link
+            <TrackableCompareLink
               href={compareHref}
+              toolId={toolId || name}
               className='inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-200 hover:text-slate-950'
             >
               <Sparkles className='size-3.5 text-cyan-700' />
               {compareActionLabel}
-            </Link>
+            </TrackableCompareLink>
           )}
         </div>
         {toolId && (
