@@ -6,8 +6,39 @@ import { requireAdmin } from '@/lib/auth/middleware';
 import { getPool } from '@/db/neon/client';
 
 const validClaimStatuses = ['unclaimed', 'pending', 'claimed', 'rejected'] as const;
+const validClaimRecordStatuses = ['new', 'contacted', 'claimed', 'invalid'] as const;
 
 type ClaimStatus = (typeof validClaimStatuses)[number];
+type ClaimRecordStatus = (typeof validClaimRecordStatuses)[number];
+
+export type AdminToolClaim = {
+  id: string;
+  toolId: string | null;
+  toolName: string | null;
+  toolStatus: string | null;
+  listingName: string;
+  email: string;
+  company: string | null;
+  website: string | null;
+  note: string | null;
+  sourcePath: string | null;
+  sourceLocale: string | null;
+  status: ClaimRecordStatus;
+  claimedAt: string | null;
+  reviewedAt: string | null;
+  reviewedBy: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type AdminToolClaimsSummary = {
+  total: number;
+  newCount: number;
+  contactedCount: number;
+  claimedCount: number;
+  invalidCount: number;
+  linkedCount: number;
+};
 
 function normalizeNullableText(value: string | null | undefined): string | null {
   if (value === undefined || value === null) {
@@ -29,6 +60,140 @@ function normalizeClaimedAt(value: string | null): string | null {
 
   const date = new Date(value);
   return Number.isNaN(date.getTime()) ? null : date.toISOString();
+}
+
+function normalizeClaimRecordStatus(value: string): ClaimRecordStatus | null {
+  return (validClaimRecordStatuses as readonly string[]).includes(value)
+    ? (value as ClaimRecordStatus)
+    : null;
+}
+
+function buildClaimWhereClause(filters: { status?: string; search?: string }) {
+  const clauses: string[] = [];
+  const params: unknown[] = [];
+  let index = 1;
+
+  const status = filters.status ? normalizeClaimRecordStatus(filters.status) : null;
+  if (status) {
+    clauses.push(`tc.status = $${index}`);
+    params.push(status);
+    index += 1;
+  }
+
+  const search = filters.search?.trim();
+  if (search) {
+    clauses.push(`(
+      tc.listing_name ILIKE $${index}
+      OR tc.email ILIKE $${index}
+      OR COALESCE(tc.company, '') ILIKE $${index}
+      OR COALESCE(tc.website, '') ILIKE $${index}
+      OR COALESCE(tc.source_path, '') ILIKE $${index}
+      OR COALESCE(t.name, '') ILIKE $${index}
+    )`);
+    params.push(`%${search}%`);
+    index += 1;
+  }
+
+  return { clauses, params, nextIndex: index };
+}
+
+export async function getAdminToolClaims(filters?: {
+  status?: string;
+  search?: string;
+  limit?: number;
+}): Promise<{ claims: AdminToolClaim[]; total: number }> {
+  try {
+    await requireAdmin();
+
+    const pool = getPool();
+    const limit = Math.max(Math.min(filters?.limit || 50, 200), 1);
+    const { clauses, params, nextIndex } = buildClaimWhereClause({
+      status: filters?.status,
+      search: filters?.search,
+    });
+    const whereClause = clauses.length > 0 ? `WHERE ${clauses.join(' AND ')}` : '';
+
+    const countResult = await pool.query(
+      `
+        SELECT COUNT(*)::int AS count
+        FROM tool_claims tc
+        LEFT JOIN tools t ON t.id = tc.tool_id
+        ${whereClause}
+      `,
+      params,
+    );
+
+    const result = await pool.query(
+      `
+        SELECT
+          tc.id::text AS id,
+          tc.tool_id::text AS "toolId",
+          t.name AS "toolName",
+          t.status AS "toolStatus",
+          tc.listing_name AS "listingName",
+          tc.email,
+          tc.company,
+          tc.website,
+          tc.note,
+          tc.source_path AS "sourcePath",
+          tc.source_locale AS "sourceLocale",
+          tc.status,
+          tc.claimed_at AS "claimedAt",
+          tc.reviewed_at AS "reviewedAt",
+          tc.reviewed_by::text AS "reviewedBy",
+          tc.created_at AS "createdAt",
+          tc.updated_at AS "updatedAt"
+        FROM tool_claims tc
+        LEFT JOIN tools t ON t.id = tc.tool_id
+        ${whereClause}
+        ORDER BY tc.created_at DESC
+        LIMIT $${nextIndex} OFFSET $${nextIndex + 1}
+      `,
+      [...params, limit, 0],
+    );
+
+    return {
+      claims: result.rows as AdminToolClaim[],
+      total: Number(countResult.rows[0]?.count || 0),
+    };
+  } catch (error) {
+    console.error('Error fetching admin tool claims:', error);
+    throw error;
+  }
+}
+
+export async function getAdminToolClaimsSummary(): Promise<AdminToolClaimsSummary> {
+  try {
+    await requireAdmin();
+
+    const pool = getPool();
+    const result = await pool.query(
+      `
+        SELECT
+          COUNT(*)::int AS total,
+          COUNT(*) FILTER (WHERE status = 'new')::int AS "newCount",
+          COUNT(*) FILTER (WHERE status = 'contacted')::int AS "contactedCount",
+          COUNT(*) FILTER (WHERE status = 'claimed')::int AS "claimedCount",
+          COUNT(*) FILTER (WHERE status = 'invalid')::int AS "invalidCount",
+          COUNT(*) FILTER (WHERE tool_id IS NOT NULL)::int AS "linkedCount"
+        FROM tool_claims
+      `,
+    );
+
+    const row = result.rows[0] || {};
+
+    return {
+      total: Number(row.total || 0),
+      newCount: Number(row.newCount || 0),
+      contactedCount: Number(row.contactedCount || 0),
+      claimedCount: Number(row.claimedCount || 0),
+      invalidCount: Number(row.invalidCount || 0),
+      linkedCount: Number(row.linkedCount || 0),
+    };
+  } catch (error) {
+    console.error('Error fetching admin tool claims summary:', error);
+    throw error;
+  }
 }
 
 export async function updateToolClaimInfo(input: {
@@ -85,6 +250,75 @@ export async function updateToolClaimInfo(input: {
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to update tool claim info.',
+    };
+  }
+}
+
+export async function updateToolClaimStatus(input: {
+  claimId: string;
+  status: string;
+  toolId?: string | null;
+  ownerEmail?: string | null;
+}): Promise<{ success: boolean; error?: string }> {
+  try {
+    const adminUser = await requireAdmin();
+    const status = normalizeClaimRecordStatus(input.status);
+
+    if (!status) {
+      return { success: false, error: 'Invalid claim status.' };
+    }
+
+    const pool = getPool();
+    const current = await pool.query(
+      `
+        SELECT tc.tool_id, tc.email, tc.claimed_at, tc.status
+        FROM tool_claims tc
+        WHERE tc.id = $1
+      `,
+      [input.claimId],
+    );
+
+    if (current.rowCount === 0) {
+      return { success: false, error: 'Claim not found.' };
+    }
+
+    const row = current.rows[0];
+    const nextClaimedAt = status === 'claimed' ? row.claimed_at || new Date().toISOString() : row.claimed_at;
+    const nextToolId = input.toolId || row.tool_id;
+
+    await pool.query(
+      `
+        UPDATE tool_claims
+        SET status = $1, claimed_at = $2, reviewed_at = NOW(), reviewed_by = $3, updated_at = NOW()
+        WHERE id = $4
+      `,
+      [status, nextClaimedAt, adminUser.id, input.claimId],
+    );
+
+    if (status === 'claimed' && nextToolId) {
+      await pool.query(
+        `
+          UPDATE tools
+          SET
+            owner_email = COALESCE($1, owner_email),
+            claim_status = 'claimed',
+            claimed_at = COALESCE(claimed_at, NOW()),
+            updated_at = NOW()
+          WHERE id = $2
+        `,
+        [input.ownerEmail || row.email || null, nextToolId],
+      );
+    }
+
+    revalidatePath('/admin/claims');
+    revalidatePath('/admin/tools');
+
+    return { success: true };
+  } catch (error) {
+    console.error('Error updating claim status:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to update claim status.',
     };
   }
 }

@@ -223,6 +223,7 @@ export default async function AdminDashboard() {
       value: conversionSnapshot.claimLeads,
       subtext: 'Owners leaving contact details',
       icon: Sparkles,
+      href: '/admin/claims',
       color: 'blue',
     },
     {
