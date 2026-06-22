@@ -34,7 +34,14 @@ export async function generateMetadata({ params }: { params: { locale: string } 
   };
 }
 
-export default async function AdminDashboard() {
+export default async function AdminDashboard({
+  params,
+}: {
+  params?: {
+    locale?: string;
+  };
+}) {
+  const locale = params?.locale || 'en';
   const siteMetrics = await getSiteMetrics();
   const toolsStats = await getToolsStats();
   const operationalStats = await getOperationalStats();
@@ -171,6 +178,27 @@ export default async function AdminDashboard() {
     if (pageType === 'category') return 'Categories';
     return 'Explore';
   };
+  const getConversionPageLabel = (pageType: string) => {
+    if (pageType === 'pricing') return 'Pricing';
+    if (pageType === 'submit') return 'Submit';
+    if (pageType === 'developer_listing') return 'Claim listing';
+    if (pageType === 'profile_submissions') return 'Submissions';
+    return 'Conversion page';
+  };
+  const getConversionPageAction = (pageType: string) => {
+    if (pageType === 'pricing') return 'Keep the offer sharp and the CTA obvious';
+    if (pageType === 'submit') return 'Reduce friction and reinforce review expectations';
+    if (pageType === 'developer_listing') return 'Capture claims and follow up quickly';
+    if (pageType === 'profile_submissions') return 'Make payment status and next steps obvious';
+    return 'Review where this page should send users next';
+  };
+  const getConversionPageHref = (pageType: string) => {
+    if (pageType === 'pricing') return `/${locale}/pricing`;
+    if (pageType === 'submit') return `/${locale}/submit`;
+    if (pageType === 'developer_listing') return `/${locale}/developer/listing`;
+    if (pageType === 'profile_submissions') return `/${locale}/profile/submissions`;
+    return `/${locale}`;
+  };
   const pageSnapshotItems = pageSummaryOrder.map((pageType) => {
     const item = pageSummaryMap.get(pageType);
 
@@ -179,6 +207,19 @@ export default async function AdminDashboard() {
       label: getPageSnapshotLabel(pageType),
       views: item?.views || 0,
       percentage: item?.percentage || 0,
+    };
+  });
+  const conversionPageOrder = ['pricing', 'submit', 'developer_listing', 'profile_submissions'] as const;
+  const conversionPageItems = conversionPageOrder.map((pageType) => {
+    const item = pageSummaryMap.get(pageType);
+
+    return {
+      pageType,
+      label: getConversionPageLabel(pageType),
+      views: item?.views || 0,
+      percentage: item?.percentage || 0,
+      action: getConversionPageAction(pageType),
+      href: getConversionPageHref(pageType),
     };
   });
   const topPagePaths = pageAccessReport.topPages.slice(0, 4);
@@ -268,6 +309,40 @@ export default async function AdminDashboard() {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className='mt-8'>
+        <div className='mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
+          <div>
+            <h2 className='text-lg font-semibold text-slate-900'>Conversion Pages</h2>
+            <p className='mt-1 text-sm text-slate-600'>
+              The pages that should move people from interest into submission, claim, or payment.
+            </p>
+          </div>
+          <Link href={`/${locale}/pricing`} className='text-sm font-medium text-cyan-700 hover:underline'>
+            Open pricing page
+          </Link>
+        </div>
+        <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
+          {conversionPageItems.map((item) => (
+            <Link
+              key={item.pageType}
+              href={item.href}
+              className='theme-surface rounded-lg border border-slate-200 p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-cyan-200 hover:shadow-md'
+            >
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-sm font-medium text-slate-600'>{item.label}</p>
+                  <p className='mt-2 text-3xl font-semibold text-slate-900'>{item.views.toLocaleString()}</p>
+                </div>
+                <span className='rounded-full bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-cyan-700'>
+                  {item.percentage.toFixed(1)}%
+                </span>
+              </div>
+              <p className='mt-3 text-sm leading-6 text-slate-600'>{item.action}</p>
+            </Link>
+          ))}
+        </div>
       </div>
 
       <div className='mt-8'>
