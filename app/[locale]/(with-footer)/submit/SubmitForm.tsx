@@ -161,13 +161,14 @@ export default function SubmitForm({
   if (isPaidPlan) {
     selectedPlanLabel = isChinese ? '付费入驻' : listingConfig.plans.standard_paid.label;
   }
-  const planHighlights = isPaidPlan
-    ? listingConfig.plans.standard_paid.highlights
-    : [
-        isChinese ? '正常审核队列' : listingConfig.plans.free.summary,
-        isChinese ? '适合先试水提交' : listingConfig.plans.free.highlights[0],
-        isChinese ? '不会占用付费前排资源' : listingConfig.plans.free.highlights[1],
-      ];
+  let planHighlights = listingConfig.plans.standard_paid.highlights;
+  if (!isPaidPlan) {
+    planHighlights = [
+      isChinese ? '正常审核队列' : listingConfig.plans.free.summary,
+      isChinese ? '适合先试水提交' : listingConfig.plans.free.highlights[0],
+      isChinese ? '不会占用付费前排资源' : listingConfig.plans.free.highlights[1],
+    ];
+  }
 
   useEffect(() => {
     if (!isPaidPlan) {

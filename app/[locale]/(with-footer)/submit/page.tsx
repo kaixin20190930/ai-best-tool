@@ -45,11 +45,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {isChinese ? '开发者入驻' : 'Developer listing'}
             </p>
             <h3 className='mt-2 text-xl font-bold text-slate-950'>
-              {isChinese ? '选择提交方式和展示节奏' : 'Choose your submission and visibility setup'}
+              {isChinese ? '先选审核路径，再决定是否加速' : 'Choose a review path before you submit'}
             </h3>
             <p className='mt-3 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '免费提交适合常规收录；如果你需要更快审核或前排展示，也可以选择付费方案。'
+                ? '免费提交适合常规收录；付费方案只会更快审核和提供固定展示窗口，不会自动通过审核。'
                 : `${listingConfig.valueProposition} ${listingConfig.listingFeeLabel}.`}
             </p>
             <div className='mt-4 grid gap-3'>
@@ -58,9 +58,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   {isChinese ? '免费提交' : listingConfig.plans.free.label}
                 </p>
                 <p className='mt-1 text-sm text-slate-600'>
-                  {isChinese
-                    ? '进入标准审核队列，适合常规收录。'
-                    : `${listingConfig.plans.free.summary} Suitable for general directory submissions.`}
+                  {isChinese ? '进入标准审核队列，适合常规收录。' : `${listingConfig.plans.free.summary}`}
                 </p>
               </div>
               <div className='rounded-lg border border-cyan-100 bg-cyan-50 p-3'>
@@ -70,7 +68,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 <p className='mt-1 text-sm text-cyan-900'>
                   {isChinese
                     ? '更短的审核周期，并可选择固定天数的前排展示。'
-                    : `${listingConfig.plans.standard_paid.summary} Payment status is confirmed automatically.`}
+                    : `${listingConfig.plans.standard_paid.summary}`}
                 </p>
               </div>
             </div>

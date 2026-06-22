@@ -138,8 +138,8 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
               </h1>
               <p className='max-w-2xl text-base leading-7 text-slate-600 lg:text-lg'>
                 {isChinese
-                  ? '免费提交继续开放；需要赶发布时间时，可以用付费审核和固定天数前排把结果做得更稳。'
-                  : 'Free submissions stay open. When launch timing matters, paid review and fixed featured windows make the outcome clearer.'}
+                  ? '免费提交继续开放；付费只买更快审核和固定曝光窗口，不买保证通过或保证流量。'
+                  : 'Free submissions stay open. Paid options buy faster review and a fixed visibility window, not guaranteed approval or traffic.'}
               </p>
             </div>
 
@@ -174,12 +174,12 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
 
             <div className='rounded-2xl border border-slate-200 bg-slate-50 p-5'>
               <p className='text-sm font-semibold text-slate-950'>
-                {isChinese ? '付款在哪里发生' : 'Where payment happens'}
+                {isChinese ? '付款如何发生' : 'How checkout works'}
               </p>
               <p className='mt-2 text-sm leading-6 text-slate-600'>
                 {isChinese
-                  ? '先在提交页选择免费或付费方案；提交后，付费订单会在「我的提交」里生成 Stripe 结账链接。'
-                  : 'Choose free or paid on the submit page first; after submission, paid orders generate a Stripe checkout link inside My Submissions.'}
+                  ? '先在提交页选择免费或付费方案；提交后，系统会在「我的提交」里生成 Stripe 结账链接。'
+                  : 'Choose free or paid on the submit page first; after submission, the system generates a Stripe checkout link inside My Submissions.'}
               </p>
               <div className='mt-4 flex flex-wrap gap-3'>
                 <Link
@@ -204,7 +204,7 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
                     {isChinese ? '常见购买原因' : 'Why people pay'}
                   </p>
                   <h2 className='mt-1 text-xl font-bold text-slate-950'>
-                    {isChinese ? '最常见的 3 个付费理由' : 'The three most common reasons to pay'}
+                    {isChinese ? '三个最常见的购买场景' : 'Three common purchase scenarios'}
                   </h2>
                 </div>
               </div>
@@ -342,9 +342,7 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
             {isChinese ? '流程' : 'Workflow'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese
-              ? '提交、审核、付款、展示都能对应上'
-              : 'Submission, review, payment, and placement all stay clear'}
+            {isChinese ? '提交、审核、付款、展示都能对应上' : 'Submission, review, payment, and placement stay clear'}
           </h2>
           <div className='mt-4 space-y-3 text-sm text-slate-700'>
             <StepRow
@@ -382,7 +380,7 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
               {isChinese ? '常见问题' : 'FAQ'}
             </p>
             <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-              {isChinese ? '怎么买最划算' : 'How to choose the right option'}
+              {isChinese ? '怎么买最划算' : 'Choose the right option'}
             </h2>
           </div>
         </div>
