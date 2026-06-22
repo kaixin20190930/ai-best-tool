@@ -13,6 +13,7 @@ import {
   useToolImageAsThumbnail,
 } from '@/app/actions/admin/tools';
 import type { AdminTool } from '@/app/actions/admin/tools';
+import { updateToolClaimInfo } from '@/app/actions/admin/claims';
 import { getPaidListingPublishGate, getToolQuality } from '@/lib/services/toolQuality';
 
 interface Category {
@@ -25,6 +26,12 @@ interface AdminToolEditFormProps {
   tool: AdminTool;
   categories: Category[];
 }
+
+type ClaimInfoTool = AdminTool & {
+  owner_email?: string | null;
+  claim_status?: string | null;
+  claimed_at?: string | null;
+};
 
 function getFeatureRecord(features: AdminTool['features']) {
   return features && typeof features === 'object'
@@ -73,6 +80,11 @@ export default function AdminToolEditForm({
     null
   );
   const [commercialLoading, setCommercialLoading] = useState(false);
+  const [claimLoading, setClaimLoading] = useState(false);
+  const claimTool = tool as ClaimInfoTool;
+  const [claimOwnerEmail, setClaimOwnerEmail] = useState(claimTool.owner_email || '');
+  const [claimStatus, setClaimStatus] = useState(claimTool.claim_status || 'unclaimed');
+  const [claimedAt, setClaimedAt] = useState(claimTool.claimed_at || '');
 
   const getTitle = (data: any) => {
     if (typeof data === 'string') return data;
@@ -275,6 +287,24 @@ export default function AdminToolEditForm({
       router.refresh();
     } else {
       toast.error(result.error || 'Failed to activate commercial placement');
+    }
+  };
+
+  const handleSaveClaimInfo = async () => {
+    setClaimLoading(true);
+    const result = await updateToolClaimInfo({
+      toolId: tool.id,
+      ownerEmail: claimOwnerEmail,
+      claimStatus,
+      claimedAt,
+    });
+    setClaimLoading(false);
+
+    if (result.success) {
+      toast.success('Claim info saved');
+      router.refresh();
+    } else {
+      toast.error(result.error || 'Failed to save claim info');
     }
   };
 
@@ -792,6 +822,67 @@ export default function AdminToolEditForm({
               <option value="published">Published</option>
               <option value="rejected">Rejected</option>
             </select>
+          </div>
+        </div>
+      </div>
+
+      <div className="theme-surface rounded-lg border border-slate-200 p-6 shadow-sm">
+        <h2 className="mb-4 text-lg font-semibold text-slate-900">Claim Ownership</h2>
+        <div className="grid gap-4 md:grid-cols-2">
+          <div>
+            <label htmlFor="owner_email" className="block text-sm font-medium text-slate-700">
+              Owner Email
+            </label>
+            <input
+              type="email"
+              id="owner_email"
+              name="owner_email"
+              value={claimOwnerEmail}
+              onChange={(event) => setClaimOwnerEmail(event.target.value)}
+              placeholder="owner@example.com"
+              className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+            />
+          </div>
+          <div>
+            <label htmlFor="claim_status" className="block text-sm font-medium text-slate-700">
+              Claim Status
+            </label>
+            <select
+              id="claim_status"
+              name="claim_status"
+              value={claimStatus}
+              onChange={(event) => setClaimStatus(event.target.value)}
+              className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+            >
+              <option value="unclaimed">Unclaimed</option>
+              <option value="pending">Pending</option>
+              <option value="claimed">Claimed</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+          <div>
+            <label htmlFor="claimed_at" className="block text-sm font-medium text-slate-700">
+              Claimed At (ISO)
+            </label>
+            <input
+              type="text"
+              id="claimed_at"
+              name="claimed_at"
+              value={claimedAt}
+              onChange={(event) => setClaimedAt(event.target.value)}
+              placeholder="2026-06-22T00:00:00.000Z"
+              className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+            />
+          </div>
+          <div className="flex items-end">
+            <button
+              type="button"
+              onClick={handleSaveClaimInfo}
+              disabled={claimLoading || loading}
+              className="rounded-lg bg-cyan-600 px-4 py-2 text-sm font-medium text-white hover:bg-cyan-700 disabled:opacity-50"
+            >
+              {claimLoading ? 'Saving claim info...' : 'Save Claim Info'}
+            </button>
           </div>
         </div>
       </div>
