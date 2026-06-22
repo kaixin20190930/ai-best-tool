@@ -3,7 +3,17 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { query } from '@/db/neon/client';
 
-type PageViewType = 'home' | 'tool_detail' | 'guide' | 'category' | 'explore' | 'other';
+type PageViewType =
+  | 'home'
+  | 'tool_detail'
+  | 'guide'
+  | 'category'
+  | 'explore'
+  | 'pricing'
+  | 'submit'
+  | 'developer_listing'
+  | 'profile_submissions'
+  | 'other';
 
 function normalizePagePath(pagePath: unknown): string {
   if (typeof pagePath !== 'string') {
@@ -25,6 +35,10 @@ function normalizePageType(pageType: unknown): PageViewType {
     pageType === 'guide' ||
     pageType === 'category' ||
     pageType === 'explore' ||
+    pageType === 'pricing' ||
+    pageType === 'submit' ||
+    pageType === 'developer_listing' ||
+    pageType === 'profile_submissions' ||
     pageType === 'other'
   ) {
     return pageType;

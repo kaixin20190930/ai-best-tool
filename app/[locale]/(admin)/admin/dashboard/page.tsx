@@ -219,6 +219,13 @@ export default async function AdminDashboard() {
       color: 'yellow',
     },
     {
+      name: 'Claim Leads',
+      value: conversionSnapshot.claimLeads,
+      subtext: 'Owners leaving contact details',
+      icon: Sparkles,
+      color: 'blue',
+    },
+    {
       name: 'Paid Submissions',
       value: conversionSnapshot.paidSubmissions,
       subtext: `${conversionSnapshot.paidSubmissionRate.toFixed(1)}% of all submissions`,

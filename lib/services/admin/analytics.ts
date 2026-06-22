@@ -183,6 +183,7 @@ export interface ConversionSnapshot {
   searches: number;
   favorites: number;
   shares: number;
+  claimLeads: number;
   submissions: number;
   publishedSubmissions: number;
   paidSubmissions: number;
@@ -807,6 +808,14 @@ export async function getConversionSnapshot(range: '7d' | '30d' | 'all' = '30d')
     `,
     );
 
+    const claimsResult = await pool.query(
+      `
+      SELECT COUNT(*)::int AS claim_leads
+      FROM tool_claims
+      WHERE 1 = 1 ${createdAtDateCondition}
+    `,
+    );
+
     const submissionsResult = await pool.query(
       `
       SELECT
@@ -830,6 +839,7 @@ export async function getConversionSnapshot(range: '7d' | '30d' | 'all' = '30d')
     const searches = Number.parseInt(String(row.searches || '0'), 10);
     const shares = Number.parseInt(String(row.shares || '0'), 10);
     const favorites = Number.parseInt(String(favoriteRow.favorites || '0'), 10);
+    const claimLeads = Number.parseInt(String(claimsResult.rows[0]?.claim_leads || '0'), 10);
     const submissions = Number.parseInt(String(submissionRow.submissions || '0'), 10);
     const publishedSubmissions = Number.parseInt(String(submissionRow.published_submissions || '0'), 10);
     const paidSubmissions = Number.parseInt(String(submissionRow.paid_submissions || '0'), 10);
@@ -840,6 +850,7 @@ export async function getConversionSnapshot(range: '7d' | '30d' | 'all' = '30d')
       searches,
       favorites,
       shares,
+      claimLeads,
       submissions,
       publishedSubmissions,
       paidSubmissions,
@@ -855,6 +866,7 @@ export async function getConversionSnapshot(range: '7d' | '30d' | 'all' = '30d')
       searches: 0,
       favorites: 0,
       shares: 0,
+      claimLeads: 0,
       submissions: 0,
       publishedSubmissions: 0,
       paidSubmissions: 0,
@@ -901,6 +913,10 @@ function getPageTypeLabel(pageType: string): string {
   if (pageType === 'guide') return 'Guide';
   if (pageType === 'category') return 'Category';
   if (pageType === 'explore') return 'Explore';
+  if (pageType === 'pricing') return 'Pricing';
+  if (pageType === 'submit') return 'Submit';
+  if (pageType === 'developer_listing') return 'Claim listing';
+  if (pageType === 'profile_submissions') return 'Submissions';
   return 'Other';
 }
 

@@ -3,6 +3,7 @@ import { getPool } from '@/db/neon/client';
 
 import { createStripeCheckoutSession, isStripeConfigured } from '@/lib/services/stripe';
 import { createClient } from '@/lib/supabase/server';
+import { trackCommerceEvent } from '@/app/actions/analytics';
 
 export const runtime = 'nodejs';
 
@@ -99,6 +100,18 @@ export async function GET(request: NextRequest) {
       successUrl: `${siteUrl}/profile/submissions?payment=success&session_id={CHECKOUT_SESSION_ID}`,
       cancelUrl: `${siteUrl}/profile/submissions?payment=cancelled`,
     });
+
+    await trackCommerceEvent(
+      'checkout_create',
+      {
+        toolTitle,
+        featuredDays,
+        fastTrack,
+        sessionId: session.id,
+      },
+      toolId,
+      user.id,
+    );
 
     return NextResponse.redirect(session.url, { status: 302 });
   } catch (error) {

@@ -60,6 +60,9 @@ CREATE TABLE IF NOT EXISTS tools (
   -- 状态管理
   status VARCHAR(20) DEFAULT 'pending', -- 'draft', 'pending', 'published', 'rejected'
   submitted_by UUID, -- 关联到 auth.users，但不使用外键约束避免 schema 问题
+  owner_email VARCHAR(255),
+  claim_status VARCHAR(30) DEFAULT 'unclaimed',
+  claimed_at TIMESTAMP WITH TIME ZONE,
   
   -- 时间戳
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
@@ -81,6 +84,7 @@ CREATE INDEX idx_tools_category ON tools(category_id);
 CREATE INDEX idx_tools_status ON tools(status);
 CREATE INDEX idx_tools_name ON tools(name);
 CREATE INDEX idx_tools_created_at ON tools(created_at DESC);
+CREATE INDEX idx_tools_claim_status ON tools(claim_status);
 CREATE INDEX idx_tools_tags ON tools USING GIN(tags);
 CREATE INDEX idx_tools_search ON tools USING GIN(search_vector);
 
@@ -233,6 +237,32 @@ CREATE UNIQUE INDEX uq_payment_callback_logs_success_tx
   ON payment_callback_logs(transaction_id)
   WHERE transaction_id IS NOT NULL AND status = 'success';
 
+-- ============================================
+-- 7. 工具认领表 (Tool Claims)
+-- ============================================
+CREATE TABLE IF NOT EXISTS tool_claims (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  tool_id UUID REFERENCES tools(id) ON DELETE SET NULL,
+  listing_name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  company VARCHAR(255),
+  website VARCHAR(500),
+  note TEXT,
+  source_path VARCHAR(255),
+  source_locale VARCHAR(20),
+  status VARCHAR(30) NOT NULL DEFAULT 'new', -- 'new', 'contacted', 'claimed', 'invalid'
+  claimed_at TIMESTAMP WITH TIME ZONE,
+  reviewed_at TIMESTAMP WITH TIME ZONE,
+  reviewed_by UUID,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX idx_tool_claims_status ON tool_claims(status);
+CREATE INDEX idx_tool_claims_email ON tool_claims(email);
+CREATE INDEX idx_tool_claims_tool ON tool_claims(tool_id);
+CREATE INDEX idx_tool_claims_created_at ON tool_claims(created_at DESC);
+
 -- Google Search Console 调用日志
 CREATE TABLE IF NOT EXISTS google_search_console_logs (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -251,7 +281,7 @@ CREATE INDEX idx_google_search_console_logs_operation ON google_search_console_l
 CREATE INDEX idx_google_search_console_logs_status ON google_search_console_logs(status);
 
 -- ============================================
--- 7. 分析表 (Analytics)
+-- 8. 分析表 (Analytics)
 -- ============================================
 CREATE TABLE IF NOT EXISTS analytics (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -273,7 +303,7 @@ CREATE INDEX idx_analytics_page_type ON analytics ((metadata->>'page_type'));
 CREATE INDEX idx_analytics_page_path ON analytics ((metadata->>'page_path'));
 
 -- ============================================
--- 8. 通知表 (Notifications)
+-- 9. 通知表 (Notifications)
 -- ============================================
 CREATE TABLE IF NOT EXISTS notifications (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -292,7 +322,7 @@ CREATE INDEX idx_notifications_read ON notifications(read);
 CREATE INDEX idx_notifications_created_at ON notifications(created_at DESC);
 
 -- ============================================
--- 9. 用户配置表 (User Preferences)
+-- 10. 用户配置表 (User Preferences)
 -- ============================================
 CREATE TABLE IF NOT EXISTS user_preferences (
   user_id UUID PRIMARY KEY, -- 关联到 auth.users
@@ -308,7 +338,7 @@ CREATE TABLE IF NOT EXISTS user_preferences (
 );
 
 -- ============================================
--- 10. Row Level Security (RLS) 策略
+-- 11. Row Level Security (RLS) 策略
 -- ============================================
 
 -- 启用 RLS

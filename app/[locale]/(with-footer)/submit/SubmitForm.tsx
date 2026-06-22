@@ -628,6 +628,11 @@ export default function SubmitForm({
               <p className='text-sm font-semibold text-cyan-950'>
                 {isChinese ? '付费之后会发生什么' : 'What happens after paid submission'}
               </p>
+              <p className='mt-2 text-xs leading-5 text-cyan-950/75'>
+                {isChinese
+                  ? '付费不会自动通过审核。它只会带来更快的审核响应和一个固定的曝光窗口。'
+                  : 'Payment does not auto-approve the submission. It only buys a faster review response and a fixed visibility window.'}
+              </p>
               <div className='mt-3 grid gap-3 text-sm text-cyan-950/90 lg:grid-cols-3'>
                 <div className='rounded-xl border border-cyan-100 bg-white p-3'>
                   <p className='font-semibold'>{isChinese ? '1. 先提交' : '1. Submit first'}</p>

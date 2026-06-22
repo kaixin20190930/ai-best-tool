@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ArrowRight, CheckCircle2, Mail, ShieldCheck, Sparkles } from 'lucide-react';
 
 import { getListingPaymentMailto } from '@/lib/config/listing';
+import ClaimListingForm from '@/components/developer/ClaimListingForm';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const isChinese = locale === 'cn' || locale === 'tw';
@@ -22,6 +23,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default function DeveloperListingPage({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const mailtoHref = getListingPaymentMailto('Claim listing interest');
+  const sourcePath = `/${locale}/developer/listing`;
 
   const points = isChinese
     ? [
@@ -123,6 +125,45 @@ export default function DeveloperListingPage({ params: { locale } }: { params: {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className='mt-8 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]'>
+        <div className='rounded-[20px] border border-slate-200 bg-slate-50 p-6 shadow-sm'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '认领表单' : 'Claim form'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '留下信息，我们先人工核对' : 'Leave your details and we will review manually'}
+          </h2>
+          <p className='mt-2 max-w-2xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '先提交邮箱、公司和官网，方便我们确认这条 listing 是否属于你。确认后再决定是否需要优先审核或前排窗口。'
+              : 'Leave your email, company, and website so we can verify whether the listing belongs to you. We can decide later whether priority review or a featured window makes sense.'}
+          </p>
+
+          <div className='mt-5 grid gap-3 text-sm text-slate-700 sm:grid-cols-2'>
+            <div className='rounded-xl border border-white bg-white p-4'>
+              <p className='font-semibold text-slate-950'>{isChinese ? '会记录什么' : 'What we save'}</p>
+              <p className='mt-1 leading-6'>
+                {isChinese
+                  ? '邮箱、公司、官网、备注、来源页和提交时间。'
+                  : 'Email, company, website, note, source page, and submission time.'}
+              </p>
+            </div>
+            <div className='rounded-xl border border-white bg-white p-4'>
+              <p className='font-semibold text-slate-950'>{isChinese ? '接下来做什么' : 'What happens next'}</p>
+              <p className='mt-1 leading-6'>
+                {isChinese
+                  ? '我们会人工核对，再决定是否联系你或更新认领状态。'
+                  : 'We will review it manually, then decide whether to follow up or update the claim status.'}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <ClaimListingForm locale={locale} sourcePath={sourcePath} />
         </div>
       </section>
     </div>

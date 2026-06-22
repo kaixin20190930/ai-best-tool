@@ -11,7 +11,72 @@ import { query } from '@/db/neon/client';
 /**
  * 分析事件类型
  */
-export type AnalyticsEventType = 'page_view' | 'tool_click' | 'compare_click' | 'search' | 'share' | 'feedback';
+export type AnalyticsEventType =
+  | 'page_view'
+  | 'tool_click'
+  | 'compare_click'
+  | 'search'
+  | 'share'
+  | 'feedback'
+  | 'pricing_view'
+  | 'submit_view'
+  | 'checkout_create'
+  | 'payment_success'
+  | 'publish_success'
+  | 'claim_submit';
+
+async function getRequestContext() {
+  const headersList = await headers();
+  return {
+    userAgent: headersList.get('user-agent') || '',
+    referrer: headersList.get('referer') || '',
+  };
+}
+
+async function insertAnalyticsEvent(
+  eventType: AnalyticsEventType,
+  input: {
+    toolId?: string | null;
+    userId?: string | null;
+    metadata?: Record<string, unknown>;
+  } = {},
+): Promise<void> {
+  const { userAgent, referrer } = await getRequestContext();
+
+  await query(
+    `INSERT INTO analytics (event_type, tool_id, user_id, metadata, user_agent, referrer, timestamp)
+     VALUES ($1, $2, $3, $4, $5, $6, NOW())`,
+    [
+      eventType,
+      input.toolId || null,
+      input.userId || null,
+      input.metadata ? JSON.stringify(input.metadata) : null,
+      userAgent,
+      referrer,
+    ],
+  );
+}
+
+export async function trackCommerceEvent(
+  eventType: Exclude<
+    AnalyticsEventType,
+    'page_view' | 'tool_click' | 'compare_click' | 'search' | 'share' | 'feedback'
+  >,
+  metadata: Record<string, unknown> = {},
+  toolId?: string | null,
+  userId?: string | null,
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    await insertAnalyticsEvent(eventType, { toolId, userId, metadata });
+    return { success: true };
+  } catch (error) {
+    console.error(`Error tracking ${eventType}:`, error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    };
+  }
+}
 
 /**
  * 追踪页面浏览
@@ -22,17 +87,7 @@ export type AnalyticsEventType = 'page_view' | 'tool_click' | 'compare_click' | 
  */
 export async function trackPageView(toolId: string, userId?: string): Promise<{ success: boolean; error?: string }> {
   try {
-    // 获取请求头信息
-    const headersList = await headers();
-    const userAgent = headersList.get('user-agent') || '';
-    const referrer = headersList.get('referer') || '';
-
-    // 记录分析事件
-    await query(
-      `INSERT INTO analytics (event_type, tool_id, user_id, user_agent, referrer, timestamp)
-       VALUES ($1, $2, $3, $4, $5, NOW())`,
-      ['page_view', toolId, userId || null, userAgent, referrer],
-    );
+    await insertAnalyticsEvent('page_view', { toolId, userId });
 
     // 增加工具的浏览量
     await query(
@@ -61,17 +116,7 @@ export async function trackPageView(toolId: string, userId?: string): Promise<{ 
  */
 export async function trackToolClick(toolId: string, userId?: string): Promise<{ success: boolean; error?: string }> {
   try {
-    // 获取请求头信息
-    const headersList = await headers();
-    const userAgent = headersList.get('user-agent') || '';
-    const referrer = headersList.get('referer') || '';
-
-    // 记录分析事件
-    await query(
-      `INSERT INTO analytics (event_type, tool_id, user_id, user_agent, referrer, timestamp)
-       VALUES ($1, $2, $3, $4, $5, NOW())`,
-      ['tool_click', toolId, userId || null, userAgent, referrer],
-    );
+    await insertAnalyticsEvent('tool_click', { toolId, userId });
 
     // 增加工具的点击量
     await query(
@@ -105,15 +150,7 @@ export async function trackComparisonClick(
   userId?: string,
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const headersList = await headers();
-    const userAgent = headersList.get('user-agent') || '';
-    const referrer = headersList.get('referer') || '';
-
-    await query(
-      `INSERT INTO analytics (event_type, tool_id, user_id, metadata, user_agent, referrer, timestamp)
-       VALUES ($1, $2, $3, $4, $5, $6, NOW())`,
-      ['compare_click', toolId, userId || null, JSON.stringify({ compareHref }), userAgent, referrer],
-    );
+    await insertAnalyticsEvent('compare_click', { toolId, userId, metadata: { compareHref } });
 
     return { success: true };
   } catch (error) {
@@ -139,17 +176,10 @@ export async function trackSearch(
   userId?: string,
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    // 获取请求头信息
-    const headersList = await headers();
-    const userAgent = headersList.get('user-agent') || '';
-    const referrer = headersList.get('referer') || '';
-
-    // 记录分析事件
-    await query(
-      `INSERT INTO analytics (event_type, user_id, metadata, user_agent, referrer, timestamp)
-       VALUES ($1, $2, $3, $4, $5, NOW())`,
-      ['search', userId || null, JSON.stringify({ query: searchQuery, resultCount }), userAgent, referrer],
-    );
+    await insertAnalyticsEvent('search', {
+      userId,
+      metadata: { query: searchQuery, resultCount },
+    });
 
     return { success: true };
   } catch (error) {
@@ -175,17 +205,7 @@ export async function trackShare(
   userId?: string,
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    // 获取请求头信息
-    const headersList = await headers();
-    const userAgent = headersList.get('user-agent') || '';
-    const referrer = headersList.get('referer') || '';
-
-    // 记录分析事件
-    await query(
-      `INSERT INTO analytics (event_type, tool_id, user_id, metadata, user_agent, referrer, timestamp)
-       VALUES ($1, $2, $3, $4, $5, $6, NOW())`,
-      ['share', toolId, userId || null, JSON.stringify({ platform }), userAgent, referrer],
-    );
+    await insertAnalyticsEvent('share', { toolId, userId, metadata: { platform } });
 
     // 增加工具的分享量
     await query(
@@ -219,15 +239,7 @@ export async function trackFeedback(
   userId?: string,
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const headersList = await headers();
-    const userAgent = headersList.get('user-agent') || '';
-    const referrer = headersList.get('referer') || '';
-
-    await query(
-      `INSERT INTO analytics (event_type, tool_id, user_id, metadata, user_agent, referrer, timestamp)
-       VALUES ($1, $2, $3, $4, $5, $6, NOW())`,
-      ['feedback', toolId, userId || null, JSON.stringify({ type: feedbackType }), userAgent, referrer],
-    );
+    await insertAnalyticsEvent('feedback', { toolId, userId, metadata: { type: feedbackType } });
 
     return { success: true };
   } catch (error) {

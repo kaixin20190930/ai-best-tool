@@ -60,11 +60,12 @@ export type ListingConfig = {
 export const listingConfig: ListingConfig = {
   currencySymbol: '$',
   listingFeeLabel: 'One-time listing fee',
-  valueProposition: 'Free submissions stay open, with paid options for faster review and a fixed visibility window.',
+  valueProposition:
+    'Free submissions stay open. Paid options buy faster review and a fixed visibility window, not guaranteed placement.',
   salesBullets: [
     'Free submissions stay in the standard queue until reviewed.',
-    'Paid review is for launches that cannot wait.',
-    'Featured placement gives you a fixed visibility window that ends automatically.',
+    'Paid review is for launches, updates, and timing-sensitive submissions.',
+    'Featured placement gives you a fixed visibility window and ends automatically.',
   ],
   pricingTiers: {
     free: {
@@ -72,7 +73,7 @@ export const listingConfig: ListingConfig = {
       priceLabel: '$0',
       amountCents: 0,
       reviewWindow: '3-7 days',
-      summary: 'A standard review path for new listings.',
+      summary: 'Standard review for new listings and general submissions.',
       highlights: ['Standard review queue', 'No featured placement included'],
     },
     priorityReview: {
@@ -80,8 +81,8 @@ export const listingConfig: ListingConfig = {
       priceLabel: '$9 one-time',
       amountCents: 900,
       reviewWindow: '1-3 days',
-      summary: 'A smaller one-time fee for time-sensitive submissions.',
-      highlights: ['Shorter review window', 'Useful for launches, updates, and campaign timing'],
+      summary: 'A smaller one-time fee for time-sensitive submissions that need a faster response.',
+      highlights: ['Shorter review window', 'Best for launches, updates, and campaign timing'],
     },
     featuredWindows: [
       {
@@ -110,20 +111,20 @@ export const listingConfig: ListingConfig = {
       label: 'Launch bundle',
       priceLabel: '$39',
       amountCents: 3900,
-      summary: 'Priority review plus 14 days of featured visibility.',
+      summary: 'Priority review plus 14 days of featured visibility for a launch window.',
       highlights: ['Includes priority review', 'Includes a 14-day featured window', 'Designed for launch periods'],
     },
   },
   plans: {
     free: {
       label: 'Free submission',
-      summary: 'Reviewed in the standard queue.',
+      summary: 'Reviewed in the standard queue with no visibility guarantee.',
       reviewWindow: '3-7 days',
       highlights: ['Suitable for general submissions', 'No featured placement included'],
     },
     standard_paid: {
       label: 'Standard paid',
-      summary: 'Shorter review with optional featured visibility.',
+      summary: 'Shorter review with optional featured visibility and a fixed time window.',
       reviewWindow: '1-3 days',
       highlights: ['Shorter review window', 'Optional featured placement', 'Secure payment confirmation'],
       fastTrackLabel: '24-48h review target',

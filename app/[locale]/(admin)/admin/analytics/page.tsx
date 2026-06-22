@@ -104,6 +104,10 @@ export default async function AdminAnalyticsPage({
     if (pageType === 'guide') return 'Guides';
     if (pageType === 'category') return 'Category pages';
     if (pageType === 'explore') return 'Explore';
+    if (pageType === 'pricing') return 'Pricing';
+    if (pageType === 'submit') return 'Submit';
+    if (pageType === 'developer_listing') return 'Claim listing';
+    if (pageType === 'profile_submissions') return 'Submissions';
     return 'Other';
   };
 
@@ -113,6 +117,10 @@ export default async function AdminAnalyticsPage({
     if (pageType === 'guide') return 'Add more comparison guides and internal links';
     if (pageType === 'category') return 'Backfill supply and strengthen category filters';
     if (pageType === 'explore') return 'Improve zero-results guidance and sorting clarity';
+    if (pageType === 'pricing') return 'Tighten the pricing story and route into submit';
+    if (pageType === 'submit') return 'Reduce friction and reinforce review expectations';
+    if (pageType === 'developer_listing') return 'Capture claims and route owners into follow-up';
+    if (pageType === 'profile_submissions') return 'Make payment status and renewal paths obvious';
     return 'Review where these visits should be reassigned';
   };
 
@@ -132,6 +140,18 @@ export default async function AdminAnalyticsPage({
     if (pageType === 'explore') {
       return ['Empty-state copy', 'Sort clarity', 'Query routing'];
     }
+    if (pageType === 'pricing') {
+      return ['Review timing', 'Outcome clarity', 'Submit CTA'];
+    }
+    if (pageType === 'submit') {
+      return ['Review rules', 'Payment explanation', 'FAQ clarity'];
+    }
+    if (pageType === 'developer_listing') {
+      return ['Claim form', 'Owner follow-up', 'Lead tracking'];
+    }
+    if (pageType === 'profile_submissions') {
+      return ['Payment state', 'Renewal hints', 'Status clarity'];
+    }
 
     return ['Reassign page type', 'Inspect entry path', 'Check indexing intent'];
   };
@@ -142,6 +162,10 @@ export default async function AdminAnalyticsPage({
     if (pageType === 'category') return 'If category pages are rising, keep backfilling supply and examples.';
     if (pageType === 'tool_detail') return 'If detail pages are rising, trust signals and feedback loops matter most.';
     if (pageType === 'explore') return 'If Explore is rising, tighten filters and empty-state guidance.';
+    if (pageType === 'pricing') return 'If Pricing is rising, keep the offer tight and the CTA obvious.';
+    if (pageType === 'submit') return 'If Submit is rising, remove friction and clarify review expectations.';
+    if (pageType === 'developer_listing') return 'If Claim Listing is rising, follow up fast on new leads.';
+    if (pageType === 'profile_submissions') return 'If Submissions is rising, ensure payment state is easy to read.';
     return 'Watch this family to see where the next clean-up or expansion belongs.';
   };
 
@@ -151,6 +175,10 @@ export default async function AdminAnalyticsPage({
     if (pageType === 'category') return 'Backfill more tools, representative examples, and related comparisons.';
     if (pageType === 'tool_detail') return 'Improve trust blocks, pricing clarity, and feedback prompts.';
     if (pageType === 'explore') return 'Refine filters, empty states, and query-to-page routing.';
+    if (pageType === 'pricing') return 'Keep the pricing offer sharp and the next step obvious.';
+    if (pageType === 'submit') return 'Make the submission flow feel safe, clear, and predictable.';
+    if (pageType === 'developer_listing') return 'Turn claims into follow-up conversations quickly.';
+    if (pageType === 'profile_submissions') return 'Make payment completion and renewal pathways obvious.';
     return 'Keep this family under review and reassign pages where needed.';
   };
 
@@ -159,6 +187,10 @@ export default async function AdminAnalyticsPage({
     if (pageType === 'guide') return `/${locale}/guides`;
     if (pageType === 'category') return `/${locale}/categories`;
     if (pageType === 'explore') return `/${locale}/explore`;
+    if (pageType === 'pricing') return `/${locale}/pricing`;
+    if (pageType === 'submit') return `/${locale}/submit`;
+    if (pageType === 'developer_listing') return `/${locale}/developer/listing`;
+    if (pageType === 'profile_submissions') return `/${locale}/profile/submissions`;
     return `/${locale}/ai`;
   };
 
@@ -206,6 +238,26 @@ export default async function AdminAnalyticsPage({
         ? 'Filters, sorting, and empty states deserve steady polish.'
         : 'Explore traffic is light, so SEO and routing into it matter more.';
     }
+    if (pageType === 'pricing') {
+      return hasData
+        ? 'Offer clarity and the submit CTA matter most here.'
+        : 'Pricing needs a sharper offer story before it can convert reliably.';
+    }
+    if (pageType === 'submit') {
+      return hasData
+        ? 'Review expectations and payment explanation are the key levers.'
+        : 'Submission needs more reassurance and fewer surprises.';
+    }
+    if (pageType === 'developer_listing') {
+      return hasData
+        ? 'Claim capture and fast follow-up matter most here.'
+        : 'Claim interest is small, so keep the form lightweight.';
+    }
+    if (pageType === 'profile_submissions') {
+      return hasData
+        ? 'Payment status, featured timing, and renewal paths should be obvious.'
+        : 'Submissions needs clearer payment state and next steps.';
+    }
 
     return hasData
       ? 'Watch how this family behaves before deciding where to invest.'
@@ -215,8 +267,12 @@ export default async function AdminAnalyticsPage({
   const getPageQueuePriority = (pageType: string) => {
     if (pageType === 'tool_detail') return 'High';
     if (pageType === 'guide') return 'High';
+    if (pageType === 'pricing') return 'High';
+    if (pageType === 'submit') return 'High';
     if (pageType === 'home') return 'Medium';
     if (pageType === 'category') return 'Medium';
+    if (pageType === 'developer_listing') return 'Medium';
+    if (pageType === 'profile_submissions') return 'Medium';
     if (pageType === 'explore') return 'Low';
     return 'Low';
   };

@@ -3,7 +3,17 @@
 import { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 
-type PageViewType = 'home' | 'tool_detail' | 'guide' | 'category' | 'explore' | 'other';
+type PageViewType =
+  | 'home'
+  | 'tool_detail'
+  | 'guide'
+  | 'category'
+  | 'explore'
+  | 'pricing'
+  | 'submit'
+  | 'developer_listing'
+  | 'profile_submissions'
+  | 'other';
 
 const localePattern = /^\/(en|cn|jp|de|es|fr|pt|ru|tw)(?=\/|$)/;
 
@@ -19,6 +29,10 @@ function getPageType(pathname: string): PageViewType {
   if (normalizedPath.startsWith('/ai/')) return 'tool_detail';
   if (normalizedPath.startsWith('/categories')) return 'category';
   if (normalizedPath.startsWith('/explore')) return 'explore';
+  if (normalizedPath.startsWith('/pricing')) return 'pricing';
+  if (normalizedPath.startsWith('/submit')) return 'submit';
+  if (normalizedPath.startsWith('/developer/listing')) return 'developer_listing';
+  if (normalizedPath.startsWith('/profile/submissions')) return 'profile_submissions';
 
   return 'other';
 }

@@ -7,6 +7,7 @@ import {
   insertPaymentCallbackLog,
 } from '@/app/actions/admin/paymentCallbacks';
 import { activateCommercialPlacementBySystem } from '@/app/actions/admin/tools';
+import { trackCommerceEvent } from '@/app/actions/analytics';
 import { createNotification } from '@/app/actions/notifications';
 
 export const runtime = 'nodejs';
@@ -264,6 +265,18 @@ export async function POST(request: NextRequest) {
   });
 
   const submittedBy = typeof tool.submittedBy === 'string' ? tool.submittedBy : '';
+  await trackCommerceEvent(
+    'payment_success',
+    {
+      transactionId,
+      eventType,
+      paymentStatus,
+      toolName: activation.name || tool.name || null,
+    },
+    toolId,
+    submittedBy || null,
+  );
+
   if (submittedBy) {
     const commercial = getRecord(getRecord(getRecord(tool.features).submission).commercial);
     const requestedDaysRaw = commercial.featuredDaysRequested;
