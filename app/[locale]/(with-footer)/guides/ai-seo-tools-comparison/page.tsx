@@ -1,3 +1,5 @@
+import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
+
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
@@ -228,5 +230,10 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     ],
   });
 
-  return ComparisonPage({ ...data, locale });
+  return (
+    <>
+      {ComparisonPage({ ...data, locale })}
+      <GuideSubmissionPath locale={locale} ctaPrefix='ai_seo_tools_comparison' />
+    </>
+  );
 }

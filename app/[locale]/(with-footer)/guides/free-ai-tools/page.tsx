@@ -1,26 +1,22 @@
-import Link from 'next/link';
 import { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
+import Link from 'next/link';
 import { CheckCircle2, ExternalLink, FileText, Sparkles } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 
-import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
+import { StructuredDataServer } from '@/components/seo/StructuredData';
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
     locale,
     namespace: 'Metadata.home',
   });
 
   return {
-    title: locale === 'cn' || locale === 'tw'
-      ? '免费 AI 工具怎么选 | AI Best Tool'
-      : `Best free AI tools | ${t('title')}`,
+    title:
+      locale === 'cn' || locale === 'tw' ? '免费 AI 工具怎么选 | AI Best Tool' : `Best free AI tools | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
         ? '帮你挑选真正值得试的免费 AI 工具：先看场景，再看限制、更新和评论。'
@@ -28,11 +24,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
+export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
@@ -129,7 +121,9 @@ export default async function Page({
               {isChinese ? '判断顺序' : 'How to judge'}
             </p>
             <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-              {isChinese ? '先看限制，再看有没有继续用的价值' : 'Check limits first, then decide whether it is worth keeping'}
+              {isChinese
+                ? '先看限制，再看有没有继续用的价值'
+                : 'Check limits first, then decide whether it is worth keeping'}
             </h2>
             <div className='mt-4 space-y-3'>
               {tips.map((tip) => (
@@ -159,9 +153,7 @@ export default async function Page({
                 >
                   <span>{getLocalizedField(category.name, locale)}</span>
                   <span className='text-xs text-slate-500'>
-                    {'toolCount' in category && typeof category.toolCount === 'number'
-                      ? category.toolCount
-                      : ''}
+                    {'toolCount' in category && typeof category.toolCount === 'number' ? category.toolCount : ''}
                   </span>
                 </Link>
               ))}
@@ -208,6 +200,7 @@ export default async function Page({
             </div>
           </div>
         </section>
+        <GuideSubmissionPath locale={locale} ctaPrefix='free_ai_tools' />
       </div>
     </>
   );

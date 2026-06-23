@@ -1,3 +1,5 @@
+import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
+
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
@@ -263,22 +265,25 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   });
 
   return (
-    <ComparisonPage
-      isChinese={data.isChinese}
-      breadcrumbSchema={data.breadcrumbSchema}
-      faqSchema={data.faqSchema}
-      itemListSchema={data.itemListSchema}
-      tools={data.tools}
-      tips={data.tips}
-      decisionCards={data.decisionCards}
-      comparisonDimensions={data.comparisonDimensions}
-      fitFor={data.fitFor}
-      notFor={data.notFor}
-      nextPaths={data.nextPaths}
-      categories={data.categories}
-      config={data.config}
-      siteUrl={data.siteUrl}
-      locale={locale}
-    />
+    <>
+      <ComparisonPage
+        isChinese={data.isChinese}
+        breadcrumbSchema={data.breadcrumbSchema}
+        faqSchema={data.faqSchema}
+        itemListSchema={data.itemListSchema}
+        tools={data.tools}
+        tips={data.tips}
+        decisionCards={data.decisionCards}
+        comparisonDimensions={data.comparisonDimensions}
+        fitFor={data.fitFor}
+        notFor={data.notFor}
+        nextPaths={data.nextPaths}
+        categories={data.categories}
+        config={data.config}
+        siteUrl={data.siteUrl}
+        locale={locale}
+      />
+      <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_marketing_comparison' />
+    </>
   );
 }

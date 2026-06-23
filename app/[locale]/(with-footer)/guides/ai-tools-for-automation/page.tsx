@@ -6,6 +6,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import GuideActionSection from '@/components/guides/GuideActionSection';
+import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
@@ -211,7 +212,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             },
           ]}
           nextEyebrow={isChinese ? '下一步入口' : 'Where to go next'}
-          nextTitle={isChinese ? '自动化方向确认后，下一步看这里' : 'Where to go once automation is clearly the direction'}
+          nextTitle={
+            isChinese ? '自动化方向确认后，下一步看这里' : 'Where to go once automation is clearly the direction'
+          }
           nextDescription={
             isChinese
               ? '如果你已经确认自己在看自动化和编排，下一步就去分类页、搜索页和本周新增看真实条目。'
@@ -281,6 +284,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </div>
         </section>
+        <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_automation' />
       </div>
     </>
   );

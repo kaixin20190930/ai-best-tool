@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
@@ -207,6 +208,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </div>
         </section>
+        <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_agencies' />
       </div>
     </>
   );

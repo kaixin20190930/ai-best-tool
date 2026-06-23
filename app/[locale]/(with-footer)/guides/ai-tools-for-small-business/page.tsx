@@ -1,26 +1,24 @@
-import Link from 'next/link';
 import { Metadata } from 'next';
+import Link from 'next/link';
+import { BriefcaseBusiness, CheckCircle2, ExternalLink, TrendingUp } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
-import { CheckCircle2, ExternalLink, BriefcaseBusiness, TrendingUp, Sparkles } from 'lucide-react';
 
-import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
+import { StructuredDataServer } from '@/components/seo/StructuredData';
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
     locale,
     namespace: 'Metadata.home',
   });
 
   return {
-    title: locale === 'cn' || locale === 'tw'
-      ? 'AI 小企业工具推荐 | AI Best Tool'
-      : `AI tools for small business | ${t('title')}`,
+    title:
+      locale === 'cn' || locale === 'tw'
+        ? 'AI 小企业工具推荐 | AI Best Tool'
+        : `AI tools for small business | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
         ? '面向小团队、创业公司和独立商家的 AI 工具选型指南。'
@@ -28,18 +26,17 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
+export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
     { name: isChinese ? '选型指南' : 'Guides', url: `${siteUrl}/${locale}/guides/how-to-choose-ai-tools` },
-    { name: isChinese ? '小企业工具' : 'Small business tools', url: `${siteUrl}/${locale}/guides/ai-tools-for-small-business` },
+    {
+      name: isChinese ? '小企业工具' : 'Small business tools',
+      url: `${siteUrl}/${locale}/guides/ai-tools-for-small-business`,
+    },
   ]);
   const faqs = [
     {
@@ -61,24 +58,26 @@ export default async function Page({
         : 'Free tiers can be enough for testing and light work. If you need team permissions, automation, or support, you may hit limits sooner.',
     },
     {
-      question: isChinese ? '我可以直接从这里找到适合小企业的工具吗？' : 'Can I find small-business-friendly tools directly from here?',
+      question: isChinese
+        ? '我可以直接从这里找到适合小企业的工具吗？'
+        : 'Can I find small-business-friendly tools directly from here?',
       answer: isChinese
         ? '可以。你可以先从搜索和分类开始，再结合评论、截图和更新频率判断。'
         : 'Yes. Start from search and categories, then judge with comments, screenshots, and update frequency.',
     },
   ];
   const faqSchema = generateFAQSchema(faqs);
-  const tips = isChinese
-    ? [
-        '先分清场景：营销、客服、内容、运营、设计、自动化。',
-        '看它是否能接入你现在已经在用的工具。',
-        '如果你会多人协作，优先看权限、共享和后台管理能力。',
-      ]
-    : [
-        'Separate the use case first: marketing, support, content, operations, design, or automation.',
-        'Check whether it connects to the tools you already use.',
-        'If multiple people will use it, prioritize permissions, sharing, and admin features.',
-      ];
+  const chineseTips = [
+    '先分清场景：营销、客服、内容、运营、设计、自动化。',
+    '看它是否能接入你现在已经在用的工具。',
+    '如果你会多人协作，优先看权限、共享和后台管理能力。',
+  ];
+  const englishTips = [
+    'Separate the use case first: marketing, support, content, operations, design, or automation.',
+    'Check whether it connects to the tools you already use.',
+    'If multiple people will use it, prioritize permissions, sharing, and admin features.',
+  ];
+  const tips = isChinese ? chineseTips : englishTips;
 
   return (
     <>
@@ -98,7 +97,9 @@ export default async function Page({
           </div>
 
           <h1 className='mt-4 max-w-4xl text-3xl font-bold tracking-tight text-slate-950 lg:text-5xl'>
-            {isChinese ? 'AI 小企业工具推荐：怎么选更适合团队和生意' : 'AI tools for small business: how to choose one for your team and business'}
+            {isChinese
+              ? 'AI 小企业工具推荐：怎么选更适合团队和生意'
+              : 'AI tools for small business: how to choose one for your team and business'}
           </h1>
           <p className='mt-4 max-w-3xl text-base leading-7 text-slate-600 lg:text-lg'>
             {isChinese
@@ -159,9 +160,7 @@ export default async function Page({
                 >
                   <span>{getLocalizedField(category.name, locale)}</span>
                   <span className='text-xs text-slate-500'>
-                    {'toolCount' in category && typeof category.toolCount === 'number'
-                      ? category.toolCount
-                      : ''}
+                    {'toolCount' in category && typeof category.toolCount === 'number' ? category.toolCount : ''}
                   </span>
                 </Link>
               ))}
@@ -208,6 +207,7 @@ export default async function Page({
             </div>
           </div>
         </section>
+        <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_small_business' />
       </div>
     </>
   );

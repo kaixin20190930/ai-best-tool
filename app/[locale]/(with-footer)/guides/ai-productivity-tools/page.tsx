@@ -1,26 +1,24 @@
-import Link from 'next/link';
 import { Metadata } from 'next';
+import Link from 'next/link';
+import { CheckCircle2, ExternalLink, Timer, Workflow } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
-import { CheckCircle2, ExternalLink, Sparkles, Timer, Workflow } from 'lucide-react';
 
-import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
+import { StructuredDataServer } from '@/components/seo/StructuredData';
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
     locale,
     namespace: 'Metadata.home',
   });
 
   return {
-    title: locale === 'cn' || locale === 'tw'
-      ? 'AI 生产力工具推荐 | AI Best Tool'
-      : `AI productivity tools recommendations | ${t('title')}`,
+    title:
+      locale === 'cn' || locale === 'tw'
+        ? 'AI 生产力工具推荐 | AI Best Tool'
+        : `AI productivity tools recommendations | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
         ? '面向效率提升、任务管理、写作协作和知识整理的 AI 生产力工具选型指南。'
@@ -28,11 +26,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
+export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
@@ -68,17 +62,17 @@ export default async function Page({
     },
   ];
   const faqSchema = generateFAQSchema(faqs);
-  const tips = isChinese
-    ? [
-        '先分清你的任务：待办、会议纪要、文档协作、知识整理、邮件或自动化。',
-        '看它是否能接到你已经在用的工作工具。',
-        '如果你每天都要用，优先看稳定性、协作和自动化，而不是单次演示效果。',
-      ]
-    : [
-        'Separate your task first: to-dos, notes, docs collaboration, knowledge organization, email, or automation.',
-        'Check whether it connects to the tools you already use.',
-        'If you will use it every day, prioritize stability, collaboration, and automation over demo flair.',
-      ];
+  const chineseTips = [
+    '先分清你的任务：待办、会议纪要、文档协作、知识整理、邮件或自动化。',
+    '看它是否能接到你已经在用的工作工具。',
+    '如果你每天都要用，优先看稳定性、协作和自动化，而不是单次演示效果。',
+  ];
+  const englishTips = [
+    'Separate your task first: to-dos, notes, docs collaboration, knowledge organization, email, or automation.',
+    'Check whether it connects to the tools you already use.',
+    'If you will use it every day, prioritize stability, collaboration, and automation over demo flair.',
+  ];
+  const tips = isChinese ? chineseTips : englishTips;
 
   return (
     <>
@@ -98,7 +92,9 @@ export default async function Page({
           </div>
 
           <h1 className='mt-4 max-w-4xl text-3xl font-bold tracking-tight text-slate-950 lg:text-5xl'>
-            {isChinese ? 'AI 生产力工具推荐：怎么选才真正省时间' : 'AI productivity tools: how to choose one that actually saves time'}
+            {isChinese
+              ? 'AI 生产力工具推荐：怎么选才真正省时间'
+              : 'AI productivity tools: how to choose one that actually saves time'}
           </h1>
           <p className='mt-4 max-w-3xl text-base leading-7 text-slate-600 lg:text-lg'>
             {isChinese
@@ -159,9 +155,7 @@ export default async function Page({
                 >
                   <span>{getLocalizedField(category.name, locale)}</span>
                   <span className='text-xs text-slate-500'>
-                    {'toolCount' in category && typeof category.toolCount === 'number'
-                      ? category.toolCount
-                      : ''}
+                    {'toolCount' in category && typeof category.toolCount === 'number' ? category.toolCount : ''}
                   </span>
                 </Link>
               ))}
@@ -208,6 +202,7 @@ export default async function Page({
             </div>
           </div>
         </section>
+        <GuideSubmissionPath locale={locale} ctaPrefix='ai_productivity_tools' />
       </div>
     </>
   );

@@ -1,26 +1,24 @@
-import Link from 'next/link';
 import { Metadata } from 'next';
+import Link from 'next/link';
+import { CheckCircle2, ExternalLink, MessageSquare, Users } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
-import { CheckCircle2, ExternalLink, MessageSquare, Sparkles, Users } from 'lucide-react';
 
-import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
+import { StructuredDataServer } from '@/components/seo/StructuredData';
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
     locale,
     namespace: 'Metadata.home',
   });
 
   return {
-    title: locale === 'cn' || locale === 'tw'
-      ? 'AI 聊天机器人推荐 | AI Best Tool'
-      : `AI chatbot tools recommendations | ${t('title')}`,
+    title:
+      locale === 'cn' || locale === 'tw'
+        ? 'AI 聊天机器人推荐 | AI Best Tool'
+        : `AI chatbot tools recommendations | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
         ? '面向问答、写作、知识检索和工作协作的 AI 聊天机器人选型指南。'
@@ -28,11 +26,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
+export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
@@ -68,17 +62,17 @@ export default async function Page({
     },
   ];
   const faqSchema = generateFAQSchema(faqs);
-  const tips = isChinese
-    ? [
-        '先分清用途：通用问答、写作、知识库、团队协作，重点会不同。',
-        '看它是否支持你的语言、上下文长度和知识源接入。',
-        '如果是团队使用，优先看权限、协作和知识管理能力。',
-      ]
-    : [
-        'Separate the use case first: general Q&A, writing, knowledge base, or collaboration all require different features.',
-        'Check language support, context length, and knowledge-source integration.',
-        'For teams, prioritize permissions, collaboration, and knowledge management.',
-      ];
+  const chineseTips = [
+    '先分清用途：通用问答、写作、知识库、团队协作，重点会不同。',
+    '看它是否支持你的语言、上下文长度和知识源接入。',
+    '如果是团队使用，优先看权限、协作和知识管理能力。',
+  ];
+  const englishTips = [
+    'Separate the use case first: general Q&A, writing, knowledge base, or collaboration all require different features.',
+    'Check language support, context length, and knowledge-source integration.',
+    'For teams, prioritize permissions, collaboration, and knowledge management.',
+  ];
+  const tips = isChinese ? chineseTips : englishTips;
 
   return (
     <>
@@ -98,7 +92,9 @@ export default async function Page({
           </div>
 
           <h1 className='mt-4 max-w-4xl text-3xl font-bold tracking-tight text-slate-950 lg:text-5xl'>
-            {isChinese ? 'AI 聊天机器人推荐：怎么选更适合你的日常工作流' : 'AI chatbots: how to choose one that fits your daily workflow'}
+            {isChinese
+              ? 'AI 聊天机器人推荐：怎么选更适合你的日常工作流'
+              : 'AI chatbots: how to choose one that fits your daily workflow'}
           </h1>
           <p className='mt-4 max-w-3xl text-base leading-7 text-slate-600 lg:text-lg'>
             {isChinese
@@ -165,9 +161,7 @@ export default async function Page({
                 >
                   <span>{getLocalizedField(category.name, locale)}</span>
                   <span className='text-xs text-slate-500'>
-                    {'toolCount' in category && typeof category.toolCount === 'number'
-                      ? category.toolCount
-                      : ''}
+                    {'toolCount' in category && typeof category.toolCount === 'number' ? category.toolCount : ''}
                   </span>
                 </Link>
               ))}
@@ -214,6 +208,7 @@ export default async function Page({
             </div>
           </div>
         </section>
+        <GuideSubmissionPath locale={locale} ctaPrefix='ai_chatbot_tools' />
       </div>
     </>
   );

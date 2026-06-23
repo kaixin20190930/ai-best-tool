@@ -1,26 +1,22 @@
-import Link from 'next/link';
 import { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
+import Link from 'next/link';
 import { CheckCircle2, ExternalLink, FileText, Sparkles } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 
-import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
+import { StructuredDataServer } from '@/components/seo/StructuredData';
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
     locale,
     namespace: 'Metadata.home',
   });
 
   return {
-    title: locale === 'cn' || locale === 'tw'
-      ? '如何选择 AI 工具 | AI Best Tool'
-      : `How to choose AI tools | ${t('title')}`,
+    title:
+      locale === 'cn' || locale === 'tw' ? '如何选择 AI 工具 | AI Best Tool' : `How to choose AI tools | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
         ? '一个实用的 AI 工具选型指南：先看场景，再看价格、更新、截图和评论。'
@@ -28,11 +24,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
+export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
@@ -97,7 +89,9 @@ export default async function Page({
           </div>
 
           <h1 className='mt-4 max-w-4xl text-3xl font-bold tracking-tight text-slate-950 lg:text-5xl'>
-            {isChinese ? '如何选择一个真正适合你的 AI 工具' : 'How to choose an AI tool that actually fits your workflow'}
+            {isChinese
+              ? '如何选择一个真正适合你的 AI 工具'
+              : 'How to choose an AI tool that actually fits your workflow'}
           </h1>
           <p className='mt-4 max-w-3xl text-base leading-7 text-slate-600 lg:text-lg'>
             {isChinese
@@ -158,9 +152,7 @@ export default async function Page({
                 >
                   <span>{getLocalizedField(category.name, locale)}</span>
                   <span className='text-xs text-slate-500'>
-                    {'toolCount' in category && typeof category.toolCount === 'number'
-                      ? category.toolCount
-                      : ''}
+                    {'toolCount' in category && typeof category.toolCount === 'number' ? category.toolCount : ''}
                   </span>
                 </Link>
               ))}
@@ -207,6 +199,7 @@ export default async function Page({
             </div>
           </div>
         </section>
+        <GuideSubmissionPath locale={locale} ctaPrefix='how_to_choose_ai_tools' />
       </div>
     </>
   );

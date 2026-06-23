@@ -1,28 +1,24 @@
-import Link from 'next/link';
 import { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
+import Link from 'next/link';
 import { ArrowRight, CheckCircle2, ExternalLink, Star } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 
-import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
-import { getTools } from '@/lib/services/tools';
-import { toolToListRow } from '@/lib/services/toolPresenter';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import { toolToListRow } from '@/lib/services/toolPresenter';
+import { getTools } from '@/lib/services/tools';
+import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
+import { StructuredDataServer } from '@/components/seo/StructuredData';
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
     locale,
     namespace: 'Metadata.home',
   });
 
   return {
-    title: locale === 'cn' || locale === 'tw'
-      ? '最佳免费 AI 工具 | AI Best Tool'
-      : `Best free AI tools | ${t('title')}`,
+    title:
+      locale === 'cn' || locale === 'tw' ? '最佳免费 AI 工具 | AI Best Tool' : `Best free AI tools | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
         ? '一份按实际可用性整理的免费 AI 工具榜单。'
@@ -30,17 +26,16 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
+export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
     { name: isChinese ? '指南' : 'Guides', url: `${siteUrl}/${locale}/guides` },
-    { name: isChinese ? '最佳免费 AI 工具' : 'Best free AI tools', url: `${siteUrl}/${locale}/guides/best-free-ai-tools` },
+    {
+      name: isChinese ? '最佳免费 AI 工具' : 'Best free AI tools',
+      url: `${siteUrl}/${locale}/guides/best-free-ai-tools`,
+    },
   ]);
   const faqSchema = generateFAQSchema([
     {
@@ -64,11 +59,7 @@ export default async function Page({
   ]);
 
   const [result, categories] = await Promise.all([
-    getTools(
-      { pricing: 'free', status: 'published' },
-      { page: 1, pageSize: 8 },
-      'popular'
-    ),
+    getTools({ pricing: 'free', status: 'published' }, { page: 1, pageSize: 8 }, 'popular'),
     getAllCategories(true).catch(() => []),
   ]);
 
@@ -78,25 +69,26 @@ export default async function Page({
     ...toolToListRow(tool, locale),
     rank: index + 1,
     pricing: tool.pricing,
-    categoryLabel: tool.categoryId && categoryMap.has(tool.categoryId)
-      ? getLocalizedField(categoryMap.get(tool.categoryId)!.name, locale)
-      : '',
+    categoryLabel:
+      tool.categoryId && categoryMap.has(tool.categoryId)
+        ? getLocalizedField(categoryMap.get(tool.categoryId)!.name, locale)
+        : '',
     averageRating: tool.averageRating,
     ratingCount: tool.ratingCount,
     viewCount: tool.viewCount,
   }));
 
-  const tips = isChinese
-    ? [
-        '先看是不是免费可长期用，而不只是试用。',
-        '优先看最近是否更新、是否有截图、是否能直接上手。',
-        '如果有同类工具，先对比更新和评分，再决定试用顺序。',
-      ]
-    : [
-        'Check whether it is truly free to use, not just a temporary trial.',
-        'Prefer recent updates, screenshots, and low-friction onboarding.',
-        'If similar tools exist, compare freshness and ratings before trying.',
-      ];
+  const chineseTips = [
+    '先看是不是免费可长期用，而不只是试用。',
+    '优先看最近是否更新、是否有截图、是否能直接上手。',
+    '如果有同类工具，先对比更新和评分，再决定试用顺序。',
+  ];
+  const englishTips = [
+    'Check whether it is truly free to use, not just a temporary trial.',
+    'Prefer recent updates, screenshots, and low-friction onboarding.',
+    'If similar tools exist, compare freshness and ratings before trying.',
+  ];
+  const tips = isChinese ? chineseTips : englishTips;
 
   return (
     <>
@@ -204,35 +196,43 @@ export default async function Page({
           </div>
 
           <div className='grid gap-4 lg:grid-cols-2'>
-            {rankedTools.map((tool) => (
-              <Link
-                key={tool.id}
-                href={`/ai/${tool.name}`}
-                className='group rounded-[18px] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
-              >
-                <div className='flex items-start gap-4'>
-                  <div className='flex size-12 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-cyan-700'>
-                    <span className='text-sm font-bold'>#{tool.rank}</span>
-                  </div>
-                  <div className='min-w-0 flex-1'>
-                    <div className='flex flex-wrap items-center gap-2'>
-                      <h3 className='text-lg font-semibold text-slate-950'>{tool.title}</h3>
-                      <span className='rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700'>
-                        {isChinese ? '免费' : 'Free'}
-                      </span>
+            {rankedTools.map((tool) => {
+              let ratingLabel = isChinese ? '暂无评分' : 'No rating yet';
+              if (tool.averageRating) {
+                ratingLabel = `${tool.averageRating.toFixed(1)}★`;
+              }
+
+              return (
+                <Link
+                  key={tool.id}
+                  href={`/ai/${tool.name}`}
+                  className='group rounded-[18px] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
+                >
+                  <div className='flex items-start gap-4'>
+                    <div className='flex size-12 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-cyan-700'>
+                      <span className='text-sm font-bold'>#{tool.rank}</span>
                     </div>
-                    <p className='mt-2 line-clamp-2 text-sm leading-6 text-slate-600'>{tool.content}</p>
-                    <div className='mt-4 flex flex-wrap items-center gap-3 text-xs text-slate-500'>
-                      <span>{tool.averageRating ? `${tool.averageRating.toFixed(1)}★` : (isChinese ? '暂无评分' : 'No rating yet')}</span>
-                      <span>{tool.ratingCount ? `${tool.ratingCount} ${isChinese ? '条评分' : 'ratings'}` : ''}</span>
-                      <span>{tool.categoryLabel}</span>
+                    <div className='min-w-0 flex-1'>
+                      <div className='flex flex-wrap items-center gap-2'>
+                        <h3 className='text-lg font-semibold text-slate-950'>{tool.title}</h3>
+                        <span className='rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700'>
+                          {isChinese ? '免费' : 'Free'}
+                        </span>
+                      </div>
+                      <p className='mt-2 line-clamp-2 text-sm leading-6 text-slate-600'>{tool.content}</p>
+                      <div className='mt-4 flex flex-wrap items-center gap-3 text-xs text-slate-500'>
+                        <span>{ratingLabel}</span>
+                        <span>{tool.ratingCount ? `${tool.ratingCount} ${isChinese ? '条评分' : 'ratings'}` : ''}</span>
+                        <span>{tool.categoryLabel}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </div>
         </section>
+        <GuideSubmissionPath locale={locale} ctaPrefix='best_free_ai_tools' />
       </div>
     </>
   );

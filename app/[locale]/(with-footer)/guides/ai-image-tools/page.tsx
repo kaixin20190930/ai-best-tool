@@ -1,26 +1,24 @@
-import Link from 'next/link';
 import { Metadata } from 'next';
+import Link from 'next/link';
+import { CheckCircle2, ExternalLink, Image as ImageIcon, Palette } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
-import { CheckCircle2, ExternalLink, Image as ImageIcon, Palette, Sparkles } from 'lucide-react';
 
-import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
+import { StructuredDataServer } from '@/components/seo/StructuredData';
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
     locale,
     namespace: 'Metadata.home',
   });
 
   return {
-    title: locale === 'cn' || locale === 'tw'
-      ? 'AI 图像工具推荐 | AI Best Tool'
-      : `AI image tools recommendations | ${t('title')}`,
+    title:
+      locale === 'cn' || locale === 'tw'
+        ? 'AI 图像工具推荐 | AI Best Tool'
+        : `AI image tools recommendations | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
         ? '面向生成、修图、设计和创意工作的 AI 图像工具选型指南。'
@@ -28,11 +26,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
+export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
@@ -68,17 +62,17 @@ export default async function Page({
     },
   ];
   const faqSchema = generateFAQSchema(faqs);
-  const tips = isChinese
-    ? [
-        '先分清你的任务：生成、修图、抠图、海报、营销图，会影响你看什么功能。',
-        '看它是否支持高分辨率、风格控制和商用导出。',
-        '如果你长期要用，优先看批量、模板和授权限制，而不只是出图效果。',
-      ]
-    : [
-        'Start by separating your task: generation, editing, background removal, posters, or marketing assets all need different features.',
-        'Check high-resolution support, style control, and commercial exports.',
-        'If you will use it regularly, look at batch workflows, templates, and license limits, not only output quality.',
-      ];
+  const chineseTips = [
+    '先分清你的任务：生成、修图、抠图、海报、营销图，会影响你看什么功能。',
+    '看它是否支持高分辨率、风格控制和商用导出。',
+    '如果你长期要用，优先看批量、模板和授权限制，而不只是出图效果。',
+  ];
+  const englishTips = [
+    'Start by separating your task: generation, editing, background removal, posters, or marketing assets all need different features.',
+    'Check high-resolution support, style control, and commercial exports.',
+    'If you will use it regularly, look at batch workflows, templates, and license limits, not only output quality.',
+  ];
+  const tips = isChinese ? chineseTips : englishTips;
 
   return (
     <>
@@ -98,7 +92,9 @@ export default async function Page({
           </div>
 
           <h1 className='mt-4 max-w-4xl text-3xl font-bold tracking-tight text-slate-950 lg:text-5xl'>
-            {isChinese ? 'AI 图像工具推荐：怎么选更适合你的创作流程' : 'AI image tools: how to choose one that fits your creative workflow'}
+            {isChinese
+              ? 'AI 图像工具推荐：怎么选更适合你的创作流程'
+              : 'AI image tools: how to choose one that fits your creative workflow'}
           </h1>
           <p className='mt-4 max-w-3xl text-base leading-7 text-slate-600 lg:text-lg'>
             {isChinese
@@ -165,9 +161,7 @@ export default async function Page({
                 >
                   <span>{getLocalizedField(category.name, locale)}</span>
                   <span className='text-xs text-slate-500'>
-                    {'toolCount' in category && typeof category.toolCount === 'number'
-                      ? category.toolCount
-                      : ''}
+                    {'toolCount' in category && typeof category.toolCount === 'number' ? category.toolCount : ''}
                   </span>
                 </Link>
               ))}
@@ -214,6 +208,7 @@ export default async function Page({
             </div>
           </div>
         </section>
+        <GuideSubmissionPath locale={locale} ctaPrefix='ai_image_tools' />
       </div>
     </>
   );

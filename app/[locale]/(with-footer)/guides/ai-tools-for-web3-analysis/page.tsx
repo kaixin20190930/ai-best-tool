@@ -6,6 +6,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import GuideActionSection from '@/components/guides/GuideActionSection';
+import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
@@ -214,7 +215,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             },
           ]}
           nextEyebrow={isChinese ? '下一步入口' : 'Where to go next'}
-          nextTitle={isChinese ? 'Web3 分析方向确定后，下一步看这里' : 'Where to go once Web3 analysis is the clear direction'}
+          nextTitle={
+            isChinese ? 'Web3 分析方向确定后，下一步看这里' : 'Where to go once Web3 analysis is the clear direction'
+          }
           nextDescription={
             isChinese
               ? '如果你已经确定自己更偏链上分析和监控，下一步就进入 Web3 分类、搜索页和本周新增。'
@@ -284,6 +287,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </div>
         </section>
+        <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_web3_analysis' />
       </div>
     </>
   );

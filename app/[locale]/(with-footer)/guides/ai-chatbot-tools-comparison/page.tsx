@@ -1,28 +1,26 @@
-import Link from 'next/link';
 import { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
+import Link from 'next/link';
 import { ArrowRight, CheckCircle2, Columns3, ExternalLink, Sparkles } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 
-import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { generateBreadcrumbSchema, generateFAQSchema, generateItemListSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
-import { getTools } from '@/lib/services/tools';
 import { toolToListRow } from '@/lib/services/toolPresenter';
+import { getTools } from '@/lib/services/tools';
+import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
+import { StructuredDataServer } from '@/components/seo/StructuredData';
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
     locale,
     namespace: 'Metadata.home',
   });
 
   return {
-    title: locale === 'cn' || locale === 'tw'
-      ? 'AI 聊天机器人对比 | AI Best Tool'
-      : `AI chatbot tools comparison | ${t('title')}`,
+    title:
+      locale === 'cn' || locale === 'tw'
+        ? 'AI 聊天机器人对比 | AI Best Tool'
+        : `AI chatbot tools comparison | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
         ? '对比几款常见的 AI 聊天机器人，帮你更快选出适合的一个。'
@@ -30,17 +28,16 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
+export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
     { name: isChinese ? '指南' : 'Guides', url: `${siteUrl}/${locale}/guides` },
-    { name: isChinese ? '聊天机器人对比' : 'Chatbot comparison', url: `${siteUrl}/${locale}/guides/ai-chatbot-tools-comparison` },
+    {
+      name: isChinese ? '聊天机器人对比' : 'Chatbot comparison',
+      url: `${siteUrl}/${locale}/guides/ai-chatbot-tools-comparison`,
+    },
   ]);
 
   const faqSchema = generateFAQSchema([
@@ -59,11 +56,7 @@ export default async function Page({
   ]);
 
   const [toolsResult, categories] = await Promise.all([
-    getTools(
-      { search: 'chat', status: 'published' },
-      { page: 1, pageSize: 4 },
-      'popular'
-    ),
+    getTools({ search: 'chat', status: 'published' }, { page: 1, pageSize: 4 }, 'popular'),
     getAllCategories(true).catch(() => []),
   ]);
 
@@ -74,9 +67,10 @@ export default async function Page({
       ...row,
       rank: index + 1,
       pricing: tool.pricing,
-      categoryLabel: tool.categoryId && categoryMap.has(tool.categoryId)
-        ? getLocalizedField(categoryMap.get(tool.categoryId)!.name, locale)
-        : '',
+      categoryLabel:
+        tool.categoryId && categoryMap.has(tool.categoryId)
+          ? getLocalizedField(categoryMap.get(tool.categoryId)!.name, locale)
+          : '',
       averageRating: tool.averageRating,
       ratingCount: tool.ratingCount,
       summary: row.content,
@@ -88,7 +82,7 @@ export default async function Page({
       name: tool.title,
       url: `${siteUrl}/${locale}/ai/${tool.name}`,
     })),
-    isChinese ? 'AI chatbot comparison' : 'AI chatbot comparison'
+    isChinese ? 'AI chatbot comparison' : 'AI chatbot comparison',
   );
 
   const tips = isChinese
@@ -177,11 +171,17 @@ export default async function Page({
               {isChinese ? '聊天机器人相关入口' : 'Chatbot-related entry points'}
             </h2>
             <div className='mt-4 grid gap-2'>
-              <Link href='/guides' className='flex items-center justify-between rounded-lg border border-white bg-white px-4 py-3 text-sm text-slate-700 shadow-sm hover:bg-slate-100'>
+              <Link
+                href='/guides'
+                className='flex items-center justify-between rounded-lg border border-white bg-white px-4 py-3 text-sm text-slate-700 shadow-sm hover:bg-slate-100'
+              >
                 <span>{isChinese ? '指南总览' : 'Guides hub'}</span>
                 <ArrowRight className='size-4 text-slate-400' />
               </Link>
-              <Link href='/guides/best-free-ai-tools' className='flex items-center justify-between rounded-lg border border-white bg-white px-4 py-3 text-sm text-slate-700 shadow-sm hover:bg-slate-100'>
+              <Link
+                href='/guides/best-free-ai-tools'
+                className='flex items-center justify-between rounded-lg border border-white bg-white px-4 py-3 text-sm text-slate-700 shadow-sm hover:bg-slate-100'
+              >
                 <span>{isChinese ? '最佳免费 AI 工具' : 'Best free AI tools'}</span>
                 <ArrowRight className='size-4 text-slate-400' />
               </Link>
@@ -199,61 +199,74 @@ export default async function Page({
                 {isChinese ? '几款常见聊天机器人的快速对照' : 'A quick side-by-side look at common chatbots'}
               </h2>
             </div>
-            <p className='text-sm text-slate-500'>
-              {isChinese ? `${tools.length} 个工具` : `${tools.length} tools`}
-            </p>
+            <p className='text-sm text-slate-500'>{isChinese ? `${tools.length} 个工具` : `${tools.length} tools`}</p>
           </div>
 
           <div className='grid gap-4'>
-            {tools.map((tool, index) => (
-              <div key={tool.id} className='rounded-[18px] border border-slate-200 bg-white p-5 shadow-sm'>
-                <div className='flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between'>
-                  <div className='min-w-0 flex-1'>
-                    <div className='flex flex-wrap items-center gap-2'>
-                      <span className='inline-flex size-8 items-center justify-center rounded-full bg-cyan-50 text-sm font-bold text-cyan-700'>
-                        {index + 1}
-                      </span>
-                      <Link href={`/ai/${tool.name}`} className='text-lg font-semibold text-slate-950 hover:text-cyan-700'>
-                        {tool.title}
-                      </Link>
-                      <span className='rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700'>
-                        {tool.pricing === 'free' ? (isChinese ? '免费' : 'Free') : tool.pricing === 'freemium' ? (isChinese ? '免费增值' : 'Freemium') : (isChinese ? '付费' : 'Paid')}
-                      </span>
+            {tools.map((tool, index) => {
+              let pricingLabel = isChinese ? '付费' : 'Paid';
+              if (tool.pricing === 'free') {
+                pricingLabel = isChinese ? '免费' : 'Free';
+              } else if (tool.pricing === 'freemium') {
+                pricingLabel = isChinese ? '免费增值' : 'Freemium';
+              }
+              let ratingLabel = 'N/A';
+              if (isChinese) {
+                ratingLabel = '暂无';
+              }
+              if (tool.averageRating) {
+                ratingLabel = `${tool.averageRating.toFixed(1)}★`;
+              }
+              return (
+                <div key={tool.id} className='rounded-[18px] border border-slate-200 bg-white p-5 shadow-sm'>
+                  <div className='flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between'>
+                    <div className='min-w-0 flex-1'>
+                      <div className='flex flex-wrap items-center gap-2'>
+                        <span className='inline-flex size-8 items-center justify-center rounded-full bg-cyan-50 text-sm font-bold text-cyan-700'>
+                          {index + 1}
+                        </span>
+                        <Link
+                          href={`/ai/${tool.name}`}
+                          className='text-lg font-semibold text-slate-950 hover:text-cyan-700'
+                        >
+                          {tool.title}
+                        </Link>
+                        <span className='rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700'>
+                          {pricingLabel}
+                        </span>
+                      </div>
+                      <p className='mt-2 text-sm leading-6 text-slate-600'>{tool.summary}</p>
                     </div>
-                    <p className='mt-2 text-sm leading-6 text-slate-600'>{tool.summary}</p>
-                  </div>
 
-                  <div className='grid gap-3 text-sm text-slate-600 lg:w-[320px] lg:grid-cols-2'>
-                    <div className='rounded-xl bg-slate-50 p-3'>
-                      <div className='text-xs uppercase tracking-wide text-slate-500'>
-                        {isChinese ? '评分' : 'Rating'}
+                    <div className='grid gap-3 text-sm text-slate-600 lg:w-[320px] lg:grid-cols-2'>
+                      <div className='rounded-xl bg-slate-50 p-3'>
+                        <div className='text-xs uppercase tracking-wide text-slate-500'>
+                          {isChinese ? '评分' : 'Rating'}
+                        </div>
+                        <div className='mt-1 font-semibold text-slate-900'>{ratingLabel}</div>
                       </div>
-                      <div className='mt-1 font-semibold text-slate-900'>
-                        {tool.averageRating ? `${tool.averageRating.toFixed(1)}★` : (isChinese ? '暂无' : 'N/A')}
+                      <div className='rounded-xl bg-slate-50 p-3'>
+                        <div className='text-xs uppercase tracking-wide text-slate-500'>
+                          {isChinese ? '评分数' : 'Reviews'}
+                        </div>
+                        <div className='mt-1 font-semibold text-slate-900'>{tool.ratingCount || 0}</div>
                       </div>
-                    </div>
-                    <div className='rounded-xl bg-slate-50 p-3'>
-                      <div className='text-xs uppercase tracking-wide text-slate-500'>
-                        {isChinese ? '评分数' : 'Reviews'}
-                      </div>
-                      <div className='mt-1 font-semibold text-slate-900'>
-                        {tool.ratingCount || 0}
-                      </div>
-                    </div>
-                    <div className='rounded-xl bg-slate-50 p-3 lg:col-span-2'>
-                      <div className='text-xs uppercase tracking-wide text-slate-500'>
-                        {isChinese ? '分类' : 'Category'}
-                      </div>
-                      <div className='mt-1 font-semibold text-slate-900'>
-                        {tool.categoryLabel || (isChinese ? '未分类' : 'Uncategorized')}
+                      <div className='rounded-xl bg-slate-50 p-3 lg:col-span-2'>
+                        <div className='text-xs uppercase tracking-wide text-slate-500'>
+                          {isChinese ? '分类' : 'Category'}
+                        </div>
+                        <div className='mt-1 font-semibold text-slate-900'>
+                          {tool.categoryLabel || (isChinese ? '未分类' : 'Uncategorized')}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
+        <GuideSubmissionPath locale={locale} ctaPrefix='ai_chatbot_tools_comparison' />
       </div>
     </>
   );
