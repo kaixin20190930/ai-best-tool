@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 
@@ -99,25 +100,113 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/explore?search=developer&sort=popular'
+              ctaId='developer_guide_browse_tools'
+              ctaLabel='Developer guide browse tools'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '看开发者工具' : 'Browse developer tools'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-coding-tools'
+              ctaId='developer_guide_coding'
+              ctaLabel='Developer guide coding'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看编程工具' : 'Coding tools'}
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-tools-for-automation'
+              ctaId='developer_guide_automation'
+              ctaLabel='Developer guide automation'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看自动化工具' : 'Automation tools'}
-            </Link>
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/submit'
+              ctaId='developer_guide_submit'
+              ctaLabel='Developer guide submit'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '提交你的工具' : 'Submit your tool'}
+            </TrackableCtaLink>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图路径' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先看对比，再回到工具页和提交页' : 'Compare first, then move into tool pages and submission'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己在找编辑器、模型接入、自动化或可观测性，这里不要停留太久，直接去更窄的比较页。'
+              : 'If you already know you are looking for editor, model-access, automation, or observability tools, do not linger here. Move straight into the narrower comparison pages.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/guides/ai-coding-tools-comparison',
+                title: isChinese ? '编程工具对比' : 'Coding tools comparison',
+                desc: isChinese ? '编辑器内工作流优先。' : 'Prioritize editor-native workflows.',
+              },
+              {
+                href: '/guides/ai-tools-for-developers-comparison',
+                title: isChinese ? '开发者工具总对比' : 'Developer tools comparison',
+                desc: isChinese ? '模型、API、执行层一起看。' : 'Compare model, API, and execution layers together.',
+              },
+              {
+                href: '/guides/ai-tools-for-automation-comparison',
+                title: isChinese ? '自动化工具对比' : 'Automation tools comparison',
+                desc: isChinese ? '流程编排和长期维护。' : 'Workflow orchestration and long-term maintenance.',
+              },
+              {
+                href: '/guides/ai-tools-for-api-observability-comparison',
+                title: isChinese ? 'API 可观测对比' : 'API observability comparison',
+                desc: isChinese ? '日志、成本和质量治理。' : 'Logs, cost, and quality governance.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`developer_guide_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+          <div className='mt-5 flex flex-wrap gap-3'>
+            <TrackableCtaLink
+              href='/submit'
+              ctaId='developer_guide_submit_secondary'
+              ctaLabel='Developer guide submit secondary'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+            >
+              {isChinese ? '提交你的工具' : 'Submit your tool'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/developer/listing'
+              ctaId='developer_guide_claim'
+              ctaLabel='Developer guide claim'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg border border-emerald-200 bg-white px-4 py-3 text-sm font-semibold text-emerald-800 hover:bg-emerald-50'
+            >
+              {isChinese ? '认领条目' : 'Claim listing'}
+            </TrackableCtaLink>
           </div>
         </section>
 
