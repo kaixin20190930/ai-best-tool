@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { requireAdmin } from '@/lib/auth/middleware';
 import { getPool } from '@/db/neon/client';
 import { createNotification } from '@/app/actions/notifications';
+import { trackCommerceEvent } from '@/app/actions/analytics';
 import { sendTransactionalEmail } from '@/lib/services/mailer';
 import { shouldSendSubmissionStatusEmail } from '@/app/actions/userPreferences';
 import { getPaidListingPublishGate } from '@/lib/services/toolQuality';
@@ -426,17 +427,26 @@ async function notifySubmissionStatusChange(
   status: ToolStatus,
   toolName: string,
   toolTitle?: string,
-  submittedByEmail?: string | null
+  submittedByEmail?: string | null,
+  reason?: string | null,
 ) {
   if (!submittedBy) {
     return;
   }
 
   const displayName = toolTitle?.trim() || toolName;
+  const rejectionReason = reason?.trim() || '';
   const profileLink = '/profile/submissions';
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
   const profileUrl = `${siteUrl}${profileLink}`;
   const toolUrl = `${siteUrl}/ai/${toolName}`;
+  const escapeHtml = (value: string) =>
+    value
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
 
   try {
     if (status === 'published') {
@@ -462,20 +472,28 @@ async function notifySubmissionStatusChange(
     }
 
     if (status === 'rejected') {
+      const hasReason = rejectionReason.length > 0;
+      const reasonText = hasReason ? `Reason: ${rejectionReason}\n` : '';
+      const reasonHtmlBlock = hasReason ? `<p><strong>Reason:</strong> ${escapeHtml(rejectionReason)}</p>` : '';
+      const notificationContent = rejectionReason
+        ? `${displayName} was reviewed but not published yet. Reason: ${rejectionReason} / ${displayName} 已审核但暂未发布。原因：${rejectionReason}`
+        : `${displayName} was reviewed but not published yet. Please refine details and resubmit. / ${displayName} 已审核但暂未发布，请完善信息后重新提交。`;
+
       await createNotification(
         submittedBy,
         'submission_status',
         'Submission needs updates / 你的提交需要调整',
-        `${displayName} was reviewed but not published yet. Please refine details and resubmit. / ${displayName} 已审核但暂未发布，请完善信息后重新提交。`,
+        notificationContent,
         profileLink
       );
       if (submittedByEmail && (await shouldSendSubmissionStatusEmail(submittedBy))) {
         await sendTransactionalEmail({
           to: submittedByEmail,
           subject: `[AI Best Tool] ${displayName} needs updates`,
-          text: `${displayName} was reviewed but not published yet. Please refine details and resubmit.`,
+          text: `${displayName} was reviewed but not published yet.\n${reasonText}Please refine details and resubmit.`,
           html: `
             <p>${displayName} was reviewed but not published yet.</p>
+            ${reasonHtmlBlock}
             <p>Please refine details and resubmit.</p>
             <p><a href="${profileUrl}">View submission status</a></p>
           `,
@@ -839,6 +857,15 @@ export async function approveTool(
         typeof row.title === 'object' && row.title !== null
           ? (row.title.en || row.title.zh || '')
           : '';
+      await trackCommerceEvent(
+        'publish_success',
+        {
+          status: 'published',
+          title: localizedTitle || row.name || null,
+        },
+        toolId,
+        row.submitted_by ?? null,
+      );
       await notifySubmissionStatusChange(
         row.submitted_by ?? null,
         'published',
@@ -872,12 +899,21 @@ export async function rejectTool(
     await requireAdmin();
 
     const pool = getPool();
+    const rejectionReason = reason?.trim() || null;
     const result = await pool.query(
       `UPDATE tools
-       SET status = $1, updated_at = NOW()
+       SET status = $1,
+           updated_at = NOW(),
+           features = jsonb_set(
+             COALESCE(features, '{}'::jsonb),
+             '{submission,review}',
+             COALESCE(features->'submission'->'review', '{}'::jsonb)
+               || jsonb_build_object('rejectionReason', NULLIF($3::text, ''), 'rejectedAt', NOW()),
+             true
+           )
        WHERE id = $2
        RETURNING name, submitted_by, title, features`,
-      ['rejected', toolId]
+      ['rejected', toolId, rejectionReason]
     );
 
     if (result.rows[0]) {
@@ -891,12 +927,10 @@ export async function rejectTool(
         'rejected',
         row.name,
         localizedTitle,
-        getSubmittedByEmailFromFeatures(row.features)
+        getSubmittedByEmailFromFeatures(row.features),
+        reason,
       );
     }
-
-    // TODO: Send notification to submitter with reason
-    void reason;
 
     revalidateAdminToolPaths();
 

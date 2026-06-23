@@ -51,8 +51,9 @@ export default function AdminToolsTable({
       return;
     }
 
+    const reason = window.prompt('Optional rejection reason to share with the submitter:') || '';
     setLoading(toolId);
-    const result = await rejectTool(toolId);
+    const result = await rejectTool(toolId, reason);
     setLoading(null);
 
     if (result.success) {
@@ -127,6 +128,19 @@ export default function AdminToolsTable({
 
   const getNestedRecord = (value: unknown) => {
     return value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
+  };
+
+  const getSubmissionReview = (tool: AdminTool) => {
+    const features = getFeatureRecord(tool);
+    const submission = getNestedRecord(features.submission);
+    return getNestedRecord(submission.review);
+  };
+
+  const getRejectionReason = (tool: AdminTool) => {
+    const review = getSubmissionReview(tool);
+    return typeof review.rejectionReason === 'string' && review.rejectionReason.trim().length > 0
+      ? review.rejectionReason.trim()
+      : null;
   };
 
   const getNumber = (value: unknown) => {
@@ -548,6 +562,12 @@ export default function AdminToolsTable({
                 </td>
                 <td className="px-6 py-4">
                   {getStatusBadge(tool.status)}
+                  {tool.status === 'rejected' && getRejectionReason(tool) && (
+                    <div className="mt-2 max-w-xs rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs leading-5 text-red-800">
+                      <p className="font-semibold">Reason</p>
+                      <p className="mt-1 break-words">{getRejectionReason(tool)}</p>
+                    </div>
+                  )}
                   {pendingOverdue && (
                     <div className="mt-1 inline-flex rounded-full bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-700">
                       Overdue &gt; 48h

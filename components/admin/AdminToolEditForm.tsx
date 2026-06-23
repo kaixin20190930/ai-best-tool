@@ -118,8 +118,12 @@ export default function AdminToolEditForm({
   const mediaReason = getString(mediaReview.reason);
   const submissionFeature = getNestedRecord(featureRecord.submission);
   const commercialFeature = getNestedRecord(submissionFeature.commercial);
+  const submissionReview = getNestedRecord(submissionFeature.review);
+  const rejectionReason = getString(submissionReview.rejectionReason);
+  const rejectionReasonAt = getString(submissionReview.rejectedAt);
   const [categoryIdValue, setCategoryIdValue] = useState(tool.category_id || '');
   const [tagsValue, setTagsValue] = useState(tool.tags.join(', '));
+  const [rejectionReasonInput, setRejectionReasonInput] = useState(rejectionReason || '');
   const mediaNeeded = mediaReview.needed === true;
   const mediaMarkedAt = getString(mediaReview.markedAt);
   const missingImage = !tool.image_url;
@@ -226,7 +230,7 @@ export default function AdminToolEditForm({
     }
 
     setReviewLoading('reject');
-    const result = await rejectTool(tool.id);
+    const result = await rejectTool(tool.id, rejectionReasonInput);
     setReviewLoading(null);
 
     if (result.success) {
@@ -402,27 +406,40 @@ export default function AdminToolEditForm({
               )}
             </div>
             {tool.status === 'pending' && (
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={handleReject}
-                  disabled={reviewLoading !== null || loading}
-                  className="rounded-lg border border-red-200 bg-white px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50 disabled:opacity-50"
-                >
-                  {reviewLoading === 'reject' ? 'Rejecting...' : 'Reject'}
-                </button>
-                <button
-                  type="button"
-                  onClick={handleApprove}
-                  disabled={reviewLoading !== null || loading || paidPublishBlocked}
-                  className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 disabled:opacity-50"
-                >
-                  {reviewLoading === 'approve'
-                    ? 'Publishing...'
-                    : paidPublishBlocked
-                      ? 'Save details before publish'
-                      : 'Approve & Publish'}
-                </button>
+              <div className="space-y-3">
+                <label htmlFor="rejection_reason" className="block text-sm font-medium text-slate-700">
+                  Rejection reason
+                </label>
+                <textarea
+                  id="rejection_reason"
+                  value={rejectionReasonInput}
+                  onChange={(event) => setRejectionReasonInput(event.target.value)}
+                  placeholder="Optional. Add the main reason so the submitter can fix it faster."
+                  rows={3}
+                  className="block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+                />
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={handleReject}
+                    disabled={reviewLoading !== null || loading}
+                    className="rounded-lg border border-red-200 bg-white px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50 disabled:opacity-50"
+                  >
+                    {reviewLoading === 'reject' ? 'Rejecting...' : 'Reject'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleApprove}
+                    disabled={reviewLoading !== null || loading || paidPublishBlocked}
+                    className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 disabled:opacity-50"
+                  >
+                    {reviewLoading === 'approve'
+                      ? 'Publishing...'
+                      : paidPublishBlocked
+                        ? 'Save details before publish'
+                        : 'Approve & Publish'}
+                  </button>
+                </div>
               </div>
             )}
             {tool.status === 'draft' && (
@@ -472,6 +489,18 @@ export default function AdminToolEditForm({
                 ))}
               </div>
             </div>
+          )}
+        </div>
+      )}
+
+      {tool.status === 'rejected' && (
+        <div className="rounded-lg border border-red-100 bg-red-50 p-4 text-red-950">
+          <p className="text-sm font-semibold">Rejection details</p>
+          <p className="mt-1 text-sm text-red-900">
+            {rejectionReason || 'No rejection reason was recorded for this tool.'}
+          </p>
+          {rejectionReasonAt && (
+            <p className="mt-2 text-xs text-red-800">Recorded at {new Date(rejectionReasonAt).toLocaleString()}</p>
           )}
         </div>
       )}
