@@ -4,6 +4,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { FEATURED_GUIDE_HREFS, GUIDE_PAGES } from '@/lib/content/guides';
 import { generateBreadcrumbSchema } from '@/lib/seo/schema';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
 
@@ -105,6 +106,49 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '把选型、免费工具和各类场景指南收在一起，先帮助用户理清思路，再进入具体工具和分类。'
               : 'A single place for selection tips, free tools, and use-case guides so people can sort out their needs before diving into tools and categories.'}
           </p>
+
+          <div className='mt-6 flex flex-wrap gap-3'>
+            <TrackableCtaLink
+              href='/guides/ai-coding-tools-comparison'
+              ctaId='guides_hub_coding_comparison'
+              ctaLabel='Guides hub coding comparison'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+            >
+              {isChinese ? '先看编程对比' : 'Start with coding comparison'}
+              <ArrowRight className='size-4' />
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/guides/ai-tools-for-research-comparison'
+              ctaId='guides_hub_research_comparison'
+              ctaLabel='Guides hub research comparison'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+            >
+              {isChinese ? '看研究对比' : 'Open research comparison'}
+              <ArrowRight className='size-4' />
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/submit'
+              ctaId='guides_hub_submit'
+              ctaLabel='Guides hub submit'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '提交你的工具' : 'Submit your tool'}
+              <ArrowRight className='size-4' />
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/developer/listing'
+              ctaId='guides_hub_claim'
+              ctaLabel='Guides hub claim'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800 hover:bg-emerald-100'
+            >
+              {isChinese ? '认领条目' : 'Claim listing'}
+              <ArrowRight className='size-4' />
+            </TrackableCtaLink>
+          </div>
 
           <div className='mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
             <Link
@@ -627,6 +671,62 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           ))}
         </section>
 
+        <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '先看高意图对比页' : 'High-intent comparison pages'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '优先进入最容易推动决策的 comparison 页'
+              : 'Start with the comparison pages that move decisions fastest'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果用户已经知道自己要比什么，就不要再绕路去泛指南，直接给他更窄、更高意图的入口。'
+              : 'If a user already knows what they are comparing, do not send them back to broad guides. Give them a narrower, higher-intent path.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/guides/ai-coding-tools-comparison',
+                title: isChinese ? '编程工具对比' : 'Coding tools comparison',
+                desc: isChinese
+                  ? '补全、重构、调试和代码工作流。'
+                  : 'Completion, refactoring, debugging, and code workflows.',
+              },
+              {
+                href: '/guides/ai-tools-for-research-comparison',
+                title: isChinese ? '研究工具对比' : 'Research tools comparison',
+                desc: isChinese ? '资料发现、证据核对和分析整理。' : 'Discovery, evidence-checking, and synthesis.',
+              },
+              {
+                href: '/guides/ai-video-tools-comparison',
+                title: isChinese ? '视频工具对比' : 'Video tools comparison',
+                desc: isChinese
+                  ? '剪辑、生成、配音和短视频流程。'
+                  : 'Editing, generation, voiceover, and short-form workflows.',
+              },
+              {
+                href: '/guides/ai-writing-tools-comparison',
+                title: isChinese ? '写作工具对比' : 'Writing tools comparison',
+                desc: isChinese ? '内容、SEO、营销和编辑工作流。' : 'Content, SEO, marketing, and editing workflows.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`guides_hub_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-lg border border-white bg-white p-4 transition hover:border-cyan-200 hover:bg-white'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </section>
+
         <section className='mt-8 rounded-[18px] border border-slate-200 bg-slate-50 p-6 shadow-sm lg:p-8'>
           <div className='flex items-start gap-3'>
             <CheckCircle2 className='mt-1 size-5 shrink-0 text-emerald-600' />
@@ -680,6 +780,27 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   : 'Check whether recent additions introduced a better-fit candidate.'}
               </p>
             </Link>
+          </div>
+
+          <div className='mt-5 flex flex-wrap gap-3'>
+            <TrackableCtaLink
+              href='/submit'
+              ctaId='guides_hub_submit_footer'
+              ctaLabel='Guides hub submit footer'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+            >
+              {isChinese ? '提交你的工具' : 'Submit your tool'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/developer/listing'
+              ctaId='guides_hub_claim_footer'
+              ctaLabel='Guides hub claim footer'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg border border-emerald-200 bg-white px-4 py-3 text-sm font-semibold text-emerald-800 hover:bg-emerald-50'
+            >
+              {isChinese ? '认领条目' : 'Claim listing'}
+            </TrackableCtaLink>
           </div>
         </section>
       </div>
