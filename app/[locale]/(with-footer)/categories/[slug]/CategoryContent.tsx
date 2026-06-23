@@ -349,6 +349,64 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
       },
     ],
   };
+  const decisionFocusMap: Record<string, { cn: string; en: string }[]> = {
+    'developer-tools': [
+      {
+        cn: '先看接入成本、API 覆盖和文档质量。',
+        en: 'Start with integration cost, API coverage, and documentation quality.',
+      },
+      {
+        cn: '再看是否支持调试、可观测性和团队协作。',
+        en: 'Then check debugging, observability, and team workflow support.',
+      },
+      {
+        cn: '最后回到对比页看模型路由和工作流深度。',
+        en: 'Finish by comparing model routing and workflow depth.',
+      },
+    ],
+    research: [
+      {
+        cn: '先看来源透明度、引用和证据链。',
+        en: 'Start with source transparency, citations, and evidence trails.',
+      },
+      {
+        cn: '再看是否适合文献、竞品和主题研究。',
+        en: 'Then check whether it fits literature, competitor, and topic research.',
+      },
+      {
+        cn: '最后回到对比页看检索广度和上下文能力。',
+        en: 'Finish by comparing retrieval breadth and context handling.',
+      },
+    ],
+    voice: [
+      {
+        cn: '先看转录质量、音色自然度和导出稳定性。',
+        en: 'Start with transcription quality, voice naturalness, and export stability.',
+      },
+      {
+        cn: '再看是否适合会议、播客或实时对话。',
+        en: 'Then check whether it fits meetings, podcasts, or live conversation.',
+      },
+      {
+        cn: '最后回到对比页看生产可用性和长期成本。',
+        en: 'Finish by comparing production readiness and long-term cost.',
+      },
+    ],
+    'text-writing': [
+      {
+        cn: '先看写作任务适配度和输出质量。',
+        en: 'Start with writing-task fit and output quality.',
+      },
+      {
+        cn: '再看 SEO、营销或编辑工作流是否顺手。',
+        en: 'Then check whether SEO, marketing, or editing workflows feel natural.',
+      },
+      {
+        cn: '最后回到对比页看免费额度和升级门槛。',
+        en: 'Finish by comparing free-tier limits and upgrade thresholds.',
+      },
+    ],
+  };
   const relatedGuideHrefs = [
     '/guides/how-to-choose-ai-tools',
     ...(guideHrefMap[categorySlug] || []),
@@ -373,6 +431,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
       name: getLocalizedField(item.name, params.locale),
     }));
   const representativeTools = (representativeToolMap[categorySlug] || []).slice(0, 3);
+  const decisionFocus = decisionFocusMap[categorySlug] || [];
   const helperBullets = isChinese
     ? [
         `先看工具是否真正适合 ${categoryName} 的工作流，而不只是“看起来很强”。`,
@@ -518,6 +577,46 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
             </div>
           </section>
         </div>
+
+        {decisionFocus.length > 0 && (
+          <section className='theme-surface mb-8 rounded-lg border border-cyan-100 bg-cyan-50/50 p-6 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '先看这几个判断点' : 'Decision points to check first'}
+            </p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-900'>
+              {isChinese
+                ? `把 ${categoryName} 分类先比清楚`
+                : `Compare the ${categoryName} category with a sharper lens`}
+            </h2>
+            <div className='mt-4 grid gap-3 md:grid-cols-3'>
+              {decisionFocus.map((item) => (
+                <div key={item.cn} className='rounded-lg border border-white bg-white p-4'>
+                  <p className='text-sm leading-6 text-slate-700'>{item[isChinese ? 'cn' : 'en']}</p>
+                </div>
+              ))}
+            </div>
+            <div className='mt-5 flex flex-wrap gap-3'>
+              <TrackableCtaLink
+                href={primaryComparisonGuide?.href || '/guides/how-to-choose-ai-tools'}
+                ctaId={`category_${categorySlug}_decision_compare`}
+                ctaLabel={`Category ${categorySlug} decision compare`}
+                pageType='category'
+                className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+              >
+                {isChinese ? '去看对比页' : 'Open the comparison page'}
+              </TrackableCtaLink>
+              <TrackableCtaLink
+                href='/submit'
+                ctaId={`category_${categorySlug}_decision_submit`}
+                ctaLabel={`Category ${categorySlug} decision submit`}
+                pageType='category'
+                className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
+              >
+                {isChinese ? '提交你的工具' : 'Submit your tool'}
+              </TrackableCtaLink>
+            </div>
+          </section>
+        )}
 
         {(comparisonGuides[0] || relatedGuides[0] || representativeTools[0]) && (
           <section className='theme-surface mb-8 rounded-lg border border-cyan-100 bg-cyan-50/50 p-6 shadow-sm'>
