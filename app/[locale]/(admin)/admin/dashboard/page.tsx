@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import {
+  ArrowRight,
   AlertTriangle,
   CheckCircle2,
   Eye,
@@ -237,6 +238,13 @@ export default async function AdminDashboard({
       subtext: `${conversionSnapshot.pageToClickRate.toFixed(1)}% of page views`,
       icon: MousePointerClick,
       color: 'green',
+    },
+    {
+      name: 'CTA Clicks',
+      value: conversionSnapshot.ctaClicks,
+      subtext: `${conversionSnapshot.pageToCtaRate.toFixed(1)}% of page views`,
+      icon: ArrowRight,
+      color: 'blue',
     },
     {
       name: 'Searches',

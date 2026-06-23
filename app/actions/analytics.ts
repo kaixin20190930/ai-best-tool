@@ -18,12 +18,18 @@ export type AnalyticsEventType =
   | 'search'
   | 'share'
   | 'feedback'
+  | 'cta_click'
   | 'pricing_view'
   | 'submit_view'
   | 'checkout_create'
   | 'payment_success'
   | 'publish_success'
   | 'claim_submit';
+
+type CommerceEventType = Exclude<
+AnalyticsEventType,
+'page_view' | 'tool_click' | 'compare_click' | 'search' | 'share' | 'feedback'
+>;
 
 async function getRequestContext() {
   const headersList = await headers();
@@ -58,10 +64,7 @@ async function insertAnalyticsEvent(
 }
 
 export async function trackCommerceEvent(
-  eventType: Exclude<
-    AnalyticsEventType,
-    'page_view' | 'tool_click' | 'compare_click' | 'search' | 'share' | 'feedback'
-  >,
+  eventType: CommerceEventType,
   metadata: Record<string, unknown> = {},
   toolId?: string | null,
   userId?: string | null,
@@ -71,6 +74,31 @@ export async function trackCommerceEvent(
     return { success: true };
   } catch (error) {
     console.error(`Error tracking ${eventType}:`, error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    };
+  }
+}
+
+/**
+ * 追踪 CTA 点击
+ *
+ * @param metadata CTA 元数据
+ * @param toolId 工具 ID（可选）
+ * @param userId 用户 ID（可选）
+ * @returns 是否成功
+ */
+export async function trackCtaClick(
+  metadata: Record<string, unknown> = {},
+  toolId?: string | null,
+  userId?: string,
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    await insertAnalyticsEvent('cta_click', { toolId, userId, metadata });
+    return { success: true };
+  } catch (error) {
+    console.error('Error tracking CTA click:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',

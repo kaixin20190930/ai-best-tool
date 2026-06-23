@@ -9,6 +9,8 @@ type PageViewType =
   | 'guide'
   | 'category'
   | 'explore'
+  | 'best_ai_tools'
+  | 'best_ai_tools_topic'
   | 'pricing'
   | 'submit'
   | 'developer_listing'
@@ -35,6 +37,8 @@ function normalizePageType(pageType: unknown): PageViewType {
     pageType === 'guide' ||
     pageType === 'category' ||
     pageType === 'explore' ||
+    pageType === 'best_ai_tools' ||
+    pageType === 'best_ai_tools_topic' ||
     pageType === 'pricing' ||
     pageType === 'submit' ||
     pageType === 'developer_listing' ||

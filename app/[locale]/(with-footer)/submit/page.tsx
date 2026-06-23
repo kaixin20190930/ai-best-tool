@@ -6,7 +6,7 @@ import { getTranslations } from 'next-intl/server';
 import { getListingPaymentMailto, listingConfig } from '@/lib/config/listing';
 import { getAllCategories } from '@/lib/services/categories';
 import Faq from '@/components/Faq';
-import { Link } from '@/app/navigation';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 
 import SubmitForm from './SubmitForm';
 
@@ -98,23 +98,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 </p>
               </div>
             </div>
-            <a
+            <TrackableCtaLink
               href={getListingPaymentMailto('Paid AI tool listing')}
+              ctaId='submit_contact_paid_listing'
+              ctaLabel='Contact paid listing'
+              pageType='submit'
               className='mt-5 inline-flex w-full items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '联系付费入驻' : 'Contact paid listing'}
-            </a>
+            </TrackableCtaLink>
             <p className='mt-3 text-xs leading-5 text-slate-500'>
               {isChinese
                 ? '付款会在“我的提交”里继续处理，不会在这里直接完成。'
                 : 'Payment is completed from My Submissions after you submit, not directly on this page.'}
             </p>
-            <Link
+            <TrackableCtaLink
               href='/developer/listing'
+              ctaId='submit_view_developer_listing'
+              ctaLabel='View developer listing details'
+              pageType='submit'
               className='mt-3 inline-flex w-full items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '查看开发者入驻说明' : 'View developer listing details'}
-            </Link>
+            </TrackableCtaLink>
           </aside>
         </div>
       </div>

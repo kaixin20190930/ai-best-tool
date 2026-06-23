@@ -180,6 +180,7 @@ export interface DateRangeMetrics {
 export interface ConversionSnapshot {
   pageViews: number;
   toolClicks: number;
+  ctaClicks: number;
   searches: number;
   favorites: number;
   shares: number;
@@ -188,8 +189,54 @@ export interface ConversionSnapshot {
   publishedSubmissions: number;
   paidSubmissions: number;
   pageToClickRate: number;
+  pageToCtaRate: number;
   submissionPublishRate: number;
   paidSubmissionRate: number;
+}
+
+export interface CtaClickSummary {
+  pageType: string;
+  label: string;
+  clicks: number;
+  uniqueVisitors: number;
+  percentage: number;
+}
+
+export interface CtaClickItem {
+  ctaId: string;
+  ctaLabel: string;
+  pageType: string;
+  pageLabel: string;
+  href: string | null;
+  clicks: number;
+  uniqueVisitors: number;
+  percentage: number;
+}
+
+export interface CtaClickReport {
+  summary: CtaClickSummary[];
+  topCtas: CtaClickItem[];
+  totalClicks: number;
+  totalUniqueVisitors: number;
+}
+
+export interface CtaClickTrendItem {
+  ctaId: string;
+  ctaLabel: string;
+  pageType: string;
+  pageLabel: string;
+  href: string | null;
+  currentClicks: number;
+  previousClicks: number;
+  changePercent: number;
+}
+
+export interface CtaClickTrend {
+  items: CtaClickTrendItem[];
+  currentClicks: number;
+  previousClicks: number;
+  currentUniqueVisitors: number;
+  previousUniqueVisitors: number;
 }
 
 /**
@@ -794,6 +841,7 @@ export async function getConversionSnapshot(range: '7d' | '30d' | 'all' = '30d')
       SELECT
         COUNT(*) FILTER (WHERE event_type = 'page_view' ${analyticsDateCondition})::int AS page_views,
         COUNT(*) FILTER (WHERE event_type = 'tool_click' ${analyticsDateCondition})::int AS tool_clicks,
+        COUNT(*) FILTER (WHERE event_type = 'cta_click' ${analyticsDateCondition})::int AS cta_clicks,
         COUNT(*) FILTER (WHERE event_type = 'search' ${analyticsDateCondition})::int AS searches,
         COUNT(*) FILTER (WHERE event_type = 'share' ${analyticsDateCondition})::int AS shares
       FROM analytics
@@ -836,6 +884,7 @@ export async function getConversionSnapshot(range: '7d' | '30d' | 'all' = '30d')
 
     const pageViews = Number.parseInt(String(row.page_views || '0'), 10);
     const toolClicks = Number.parseInt(String(row.tool_clicks || '0'), 10);
+    const ctaClicks = Number.parseInt(String(row.cta_clicks || '0'), 10);
     const searches = Number.parseInt(String(row.searches || '0'), 10);
     const shares = Number.parseInt(String(row.shares || '0'), 10);
     const favorites = Number.parseInt(String(favoriteRow.favorites || '0'), 10);
@@ -847,6 +896,7 @@ export async function getConversionSnapshot(range: '7d' | '30d' | 'all' = '30d')
     return {
       pageViews,
       toolClicks,
+      ctaClicks,
       searches,
       favorites,
       shares,
@@ -855,6 +905,7 @@ export async function getConversionSnapshot(range: '7d' | '30d' | 'all' = '30d')
       publishedSubmissions,
       paidSubmissions,
       pageToClickRate: pageViews > 0 ? (toolClicks / pageViews) * 100 : 0,
+      pageToCtaRate: pageViews > 0 ? (ctaClicks / pageViews) * 100 : 0,
       submissionPublishRate: submissions > 0 ? (publishedSubmissions / submissions) * 100 : 0,
       paidSubmissionRate: submissions > 0 ? (paidSubmissions / submissions) * 100 : 0,
     };
@@ -863,6 +914,7 @@ export async function getConversionSnapshot(range: '7d' | '30d' | 'all' = '30d')
     return {
       pageViews: 0,
       toolClicks: 0,
+      ctaClicks: 0,
       searches: 0,
       favorites: 0,
       shares: 0,
@@ -871,6 +923,7 @@ export async function getConversionSnapshot(range: '7d' | '30d' | 'all' = '30d')
       publishedSubmissions: 0,
       paidSubmissions: 0,
       pageToClickRate: 0,
+      pageToCtaRate: 0,
       submissionPublishRate: 0,
       paidSubmissionRate: 0,
     };
@@ -913,10 +966,27 @@ function getPageTypeLabel(pageType: string): string {
   if (pageType === 'guide') return 'Guide';
   if (pageType === 'category') return 'Category';
   if (pageType === 'explore') return 'Explore';
+  if (pageType === 'best_ai_tools') return 'Top lists';
+  if (pageType === 'best_ai_tools_topic') return 'Top list topic';
   if (pageType === 'pricing') return 'Pricing';
   if (pageType === 'submit') return 'Submit';
   if (pageType === 'developer_listing') return 'Claim listing';
   if (pageType === 'profile_submissions') return 'Submissions';
+  return 'Other';
+}
+
+function getCtaPageTypeLabel(pageType: string): string {
+  if (pageType === 'best_ai_tools') return 'Top lists';
+  if (pageType === 'best_ai_tools_topic') return 'Top list topic';
+  if (pageType === 'pricing') return 'Pricing';
+  if (pageType === 'submit') return 'Submit';
+  if (pageType === 'developer_listing') return 'Claim listing';
+  if (pageType === 'profile_submissions') return 'Submissions';
+  if (pageType === 'home') return 'Home';
+  if (pageType === 'tool_detail') return 'Tool detail';
+  if (pageType === 'guide') return 'Guide';
+  if (pageType === 'category') return 'Category';
+  if (pageType === 'explore') return 'Explore';
   return 'Other';
 }
 
@@ -1107,6 +1177,245 @@ export async function getPageAccessReport(
 }
 
 /**
+ * Get a compact CTA click report.
+ */
+export async function getCtaClickReport(
+  range: 'all' | '7d' | '30d' = '30d',
+  limit: number = 8,
+): Promise<CtaClickReport> {
+  try {
+    const pool = getPool();
+    const dateCondition = buildPageViewDateCondition(range);
+
+    const baseCte = `
+      WITH cta_clicks AS (
+        SELECT
+          a.session_id,
+          COALESCE(NULLIF(a.metadata->>'page_type', ''), 'other') AS page_type,
+          COALESCE(NULLIF(a.metadata->>'cta_id', ''), 'unknown') AS cta_id,
+          COALESCE(NULLIF(a.metadata->>'cta_label', ''), NULLIF(a.metadata->>'cta_id', ''), 'Unknown CTA') AS cta_label,
+          NULLIF(a.metadata->>'href', '') AS href
+        FROM analytics a
+        WHERE a.event_type = 'cta_click' ${dateCondition}
+      )
+    `;
+
+    const summaryResult = await pool.query(
+      `
+      ${baseCte}
+      SELECT
+        page_type,
+        COUNT(*)::int AS clicks,
+        COUNT(DISTINCT session_id)::int AS unique_visitors
+      FROM cta_clicks
+      GROUP BY page_type
+      ORDER BY clicks DESC
+    `,
+    );
+
+    const topCtasResult = await pool.query(
+      `
+      ${baseCte}
+      SELECT
+        cta_id,
+        cta_label,
+        page_type,
+        href,
+        COUNT(*)::int AS clicks,
+        COUNT(DISTINCT session_id)::int AS unique_visitors
+      FROM cta_clicks
+      GROUP BY cta_id, cta_label, page_type, href
+      ORDER BY clicks DESC, cta_label ASC
+      LIMIT $1
+      `,
+      [limit],
+    );
+
+    const totalsResult = await pool.query(
+      `
+      ${baseCte}
+      SELECT
+        COUNT(*)::int AS total_clicks,
+        COUNT(DISTINCT session_id)::int AS total_unique_visitors
+      FROM cta_clicks
+    `,
+    );
+
+    const totalClicks = Number.parseInt(String(totalsResult.rows[0]?.total_clicks || '0'), 10);
+
+    return {
+      summary: summaryResult.rows.map((row) => {
+        const clicks = Number.parseInt(String(row.clicks || '0'), 10);
+
+        return {
+          pageType: String(row.page_type || 'other'),
+          label: getCtaPageTypeLabel(String(row.page_type || 'other')),
+          clicks,
+          uniqueVisitors: Number.parseInt(String(row.unique_visitors || '0'), 10),
+          percentage: totalClicks > 0 ? (clicks / totalClicks) * 100 : 0,
+        };
+      }),
+      topCtas: topCtasResult.rows.map((row) => {
+        const clicks = Number.parseInt(String(row.clicks || '0'), 10);
+
+        return {
+          ctaId: String(row.cta_id || 'unknown'),
+          ctaLabel: String(row.cta_label || 'Unknown CTA'),
+          pageType: String(row.page_type || 'other'),
+          pageLabel: getCtaPageTypeLabel(String(row.page_type || 'other')),
+          href: row.href ? String(row.href) : null,
+          clicks,
+          uniqueVisitors: Number.parseInt(String(row.unique_visitors || '0'), 10),
+          percentage: totalClicks > 0 ? (clicks / totalClicks) * 100 : 0,
+        };
+      }),
+      totalClicks,
+      totalUniqueVisitors: Number.parseInt(String(totalsResult.rows[0]?.total_unique_visitors || '0'), 10),
+    };
+  } catch (error) {
+    console.error('Error fetching CTA click report:', error);
+    return {
+      summary: [],
+      topCtas: [],
+      totalClicks: 0,
+      totalUniqueVisitors: 0,
+    };
+  }
+}
+
+/**
+ * Get CTA click trend comparing current vs previous period.
+ */
+export async function getCtaClickTrend(range: '7d' | '30d' = '7d'): Promise<CtaClickTrend> {
+  try {
+    const pool = getPool();
+    const currentInterval = range === '30d' ? '30 days' : '7 days';
+    const previousInterval = range === '30d' ? '30 days' : '7 days';
+
+    const result = await pool.query(
+      `
+      WITH base AS (
+        SELECT
+          COALESCE(NULLIF(metadata->>'page_type', ''), 'other') AS page_type,
+          COALESCE(NULLIF(metadata->>'cta_id', ''), 'unknown') AS cta_id,
+          COALESCE(NULLIF(metadata->>'cta_label', ''), NULLIF(metadata->>'cta_id', ''), 'Unknown CTA') AS cta_label,
+          NULLIF(metadata->>'href', '') AS href,
+          session_id,
+          timestamp
+        FROM analytics
+        WHERE event_type = 'cta_click'
+      ),
+      scoped AS (
+        SELECT
+          CASE
+            WHEN timestamp >= NOW() - INTERVAL '${currentInterval}' THEN 'current'
+            WHEN timestamp >= NOW() - INTERVAL '${currentInterval}' - INTERVAL '${previousInterval}' THEN 'previous'
+            ELSE NULL
+          END AS period,
+          page_type,
+          cta_id,
+          cta_label,
+          href,
+          session_id
+        FROM base
+        WHERE timestamp >= NOW() - INTERVAL '${currentInterval}' - INTERVAL '${previousInterval}'
+      ),
+      aggregated AS (
+        SELECT
+          period,
+          page_type,
+          cta_id,
+          cta_label,
+          href,
+          COUNT(*)::int AS clicks,
+          COUNT(DISTINCT session_id)::int AS unique_visitors
+        FROM scoped
+        WHERE period IS NOT NULL
+        GROUP BY period, page_type, cta_id, cta_label, href
+      )
+      SELECT * FROM aggregated
+    `,
+    );
+
+    const countsByPeriod = new Map<string, Map<string, { clicks: number; uniqueVisitors: number }>>();
+    const metaByKey = new Map<string, { ctaId: string; ctaLabel: string; pageType: string; href: string | null }>();
+    let currentClicks = 0;
+    let previousClicks = 0;
+    let currentUniqueVisitors = 0;
+    let previousUniqueVisitors = 0;
+
+    result.rows.forEach((row) => {
+      const period = String(row.period || 'current');
+      const pageType = String(row.page_type || 'other');
+      const ctaId = String(row.cta_id || 'unknown');
+      const ctaLabel = String(row.cta_label || ctaId);
+      const href = row.href ? String(row.href) : null;
+      const clicks = Number.parseInt(String(row.clicks || '0'), 10);
+      const uniqueVisitors = Number.parseInt(String(row.unique_visitors || '0'), 10);
+      const key = `${pageType}:${ctaId}:${ctaLabel}:${href || ''}`;
+
+      if (!countsByPeriod.has(period)) {
+        countsByPeriod.set(period, new Map());
+      }
+
+      countsByPeriod.get(period)!.set(key, { clicks, uniqueVisitors });
+      metaByKey.set(key, { ctaId, ctaLabel, pageType, href });
+
+      if (period === 'current') {
+        currentClicks += clicks;
+        currentUniqueVisitors += uniqueVisitors;
+      } else if (period === 'previous') {
+        previousClicks += clicks;
+        previousUniqueVisitors += uniqueVisitors;
+      }
+    });
+
+    const items = Array.from(metaByKey.entries())
+      .map(([key, meta]) => {
+        const current = countsByPeriod.get('current')?.get(key)?.clicks || 0;
+        const previous = countsByPeriod.get('previous')?.get(key)?.clicks || 0;
+        let changePercent = 0;
+
+        if (previous > 0) {
+          changePercent = ((current - previous) / previous) * 100;
+        } else if (current > 0) {
+          changePercent = 100;
+        }
+
+        return {
+          ctaId: meta.ctaId,
+          ctaLabel: meta.ctaLabel,
+          pageType: meta.pageType,
+          pageLabel: getCtaPageTypeLabel(meta.pageType),
+          href: meta.href,
+          currentClicks: current,
+          previousClicks: previous,
+          changePercent,
+        };
+      })
+      .sort((a, b) => b.currentClicks - a.currentClicks || b.changePercent - a.changePercent)
+      .slice(0, 8);
+
+    return {
+      items,
+      currentClicks,
+      previousClicks,
+      currentUniqueVisitors,
+      previousUniqueVisitors,
+    };
+  } catch (error) {
+    console.error('Error fetching CTA click trend:', error);
+    return {
+      items: [],
+      currentClicks: 0,
+      previousClicks: 0,
+      currentUniqueVisitors: 0,
+      previousUniqueVisitors: 0,
+    };
+  }
+}
+
+/**
  * Get page access trend comparing current vs previous period.
  */
 export async function getPageAccessTrend(range: '7d' | '30d' = '7d'): Promise<PageAccessTrend> {
@@ -1180,7 +1489,16 @@ export async function getPageAccessTrend(range: '7d' | '30d' = '7d'): Promise<Pa
       }
     });
 
-    const pageTypes = ['home', 'tool_detail', 'guide', 'category', 'explore', 'other'];
+    const pageTypes = [
+      'home',
+      'tool_detail',
+      'guide',
+      'category',
+      'explore',
+      'best_ai_tools',
+      'best_ai_tools_topic',
+      'other',
+    ];
     const items = pageTypes.map((pageType) => {
       const current = countsByPeriod.get('current')?.get(pageType)?.views || 0;
       const previous = countsByPeriod.get('previous')?.get(pageType)?.views || 0;

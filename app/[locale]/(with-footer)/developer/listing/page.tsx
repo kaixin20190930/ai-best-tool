@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { ArrowRight, CheckCircle2, Mail, ShieldCheck, Sparkles } from 'lucide-react';
 
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import { getListingPaymentMailto } from '@/lib/config/listing';
 import ClaimListingForm from '@/components/developer/ClaimListingForm';
 
@@ -26,16 +26,8 @@ export default function DeveloperListingPage({ params: { locale } }: { params: {
   const sourcePath = `/${locale}/developer/listing`;
 
   const points = isChinese
-    ? [
-        '先确认这条 listing 是不是你的。',
-        '留下邮箱、公司和官网，方便后续人工跟进。',
-        '需要时再讨论更快审核或前排窗口。',
-      ]
-    : [
-        'Confirm whether this listing is yours.',
-        'Leave your email, company, and website so we can follow up.',
-        'Decide later whether you want faster review or a featured window.',
-      ];
+    ? ['先确认这条 listing 是不是你的。', '留下邮箱、公司和官网，方便后续人工跟进。', '需要时再讨论更快审核或前排窗口。']
+    : ['Confirm whether this listing is yours.', 'Leave your email, company, and website so we can follow up.', 'Decide later whether you want faster review or a featured window.'];
 
   return (
     <div className='theme-page mx-auto max-w-pc px-4 py-8 lg:px-0'>
@@ -68,20 +60,26 @@ export default function DeveloperListingPage({ params: { locale } }: { params: {
             </div>
 
             <div className='flex flex-wrap gap-3'>
-              <Link
+              <TrackableCtaLink
                 href={`/${locale}/submit`}
+                ctaId='developer_listing_go_submit'
+                ctaLabel='Go to submit'
+                pageType='developer_listing'
                 className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-5 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
               >
                 {isChinese ? '去提交页' : 'Go to submit'}
                 <ArrowRight className='ml-2 size-4' />
-              </Link>
-              <a
+              </TrackableCtaLink>
+              <TrackableCtaLink
                 href={mailtoHref}
+                ctaId='developer_listing_email_claim'
+                ctaLabel='Claim by email'
+                pageType='developer_listing'
                 className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-cyan-50 px-5 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
               >
                 <Mail className='mr-2 size-4' />
                 {isChinese ? '发邮件认领' : 'Claim by email'}
-              </a>
+              </TrackableCtaLink>
             </div>
           </div>
 

@@ -1,9 +1,9 @@
 import type { ComponentType } from 'react';
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { ArrowRight, Clock3, CreditCard, Megaphone, Rocket, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import { getListingPaymentMailto, listingConfig } from '@/lib/config/listing';
 
 function PricingMiniCard({
@@ -152,24 +152,33 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
             </div>
 
             <div className='flex flex-wrap gap-3'>
-              <Link
+              <TrackableCtaLink
                 href={submitHref}
+                ctaId='pricing_submit'
+                ctaLabel='Go to submit page'
+                pageType='pricing'
                 className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-5 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
               >
                 {isChinese ? '先去提交页' : 'Go to submit page'}
-              </Link>
-              <Link
+              </TrackableCtaLink>
+              <TrackableCtaLink
                 href={`/${locale}/developer/listing`}
+                ctaId='pricing_claim'
+                ctaLabel='Claim listing'
+                pageType='pricing'
                 className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
               >
                 {isChinese ? '认领条目' : 'Claim listing'}
-              </Link>
-              <a
+              </TrackableCtaLink>
+              <TrackableCtaLink
                 href={paymentHref}
+                ctaId='pricing_contact_paid_options'
+                ctaLabel='Contact paid options'
+                pageType='pricing'
                 className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-cyan-50 px-5 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
               >
                 {isChinese ? '联系付费方案' : 'Contact paid options'}
-              </a>
+              </TrackableCtaLink>
             </div>
 
             <div className='rounded-2xl border border-slate-200 bg-slate-50 p-5'>
@@ -182,18 +191,24 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
                   : 'Choose free or paid on the submit page first; after submission, the system generates a Stripe checkout link inside My Submissions.'}
               </p>
               <div className='mt-4 flex flex-wrap gap-3'>
-                <Link
+                <TrackableCtaLink
                   href='/profile/submissions'
+                  ctaId='pricing_view_submissions'
+                  ctaLabel='View my submissions'
+                  pageType='pricing'
                   className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50'
                 >
                   {isChinese ? '查看我的提交' : 'View my submissions'}
-                </Link>
-                <Link
+                </TrackableCtaLink>
+                <TrackableCtaLink
                   href={submitHref}
+                  ctaId='pricing_submit_again'
+                  ctaLabel='Submit a tool'
+                  pageType='pricing'
                   className='inline-flex items-center justify-center rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800'
                 >
                   {isChinese ? '去提交工具' : 'Submit a tool'}
-                </Link>
+                </TrackableCtaLink>
               </div>
             </div>
 
@@ -445,19 +460,25 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
             </p>
           </div>
           <div className='flex flex-col gap-3 sm:flex-row'>
-            <Link
+            <TrackableCtaLink
               href={submitHref}
+              ctaId='pricing_submit_footer'
+              ctaLabel='Go to submit page'
+              pageType='pricing'
               className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '去提交页' : 'Go to submit page'}
               <ArrowRight className='ml-2 size-4' />
-            </Link>
-            <a
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href={paymentHref}
+              ctaId='pricing_contact_footer'
+              ctaLabel='Contact us'
+              pageType='pricing'
               className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
             >
               {isChinese ? '联系商务' : 'Contact us'}
-            </a>
+            </TrackableCtaLink>
           </div>
         </div>
       </section>

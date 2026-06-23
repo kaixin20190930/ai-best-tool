@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { ArrowUpRight, BarChart3, Globe, Layers3, Search, ShieldAlert, TrendingUp } from 'lucide-react';
 
 import {
+  getCtaClickReport,
+  getCtaClickTrend,
   getPageAccessReport,
   getPageAccessTrend,
   getPriorityMediaQueue,
@@ -42,6 +44,8 @@ export default async function AdminAnalyticsPage({
   const rangeLabel = rangeLabelMap[range as keyof typeof rangeLabelMap];
   const metrics = await getSiteMetrics();
   const pageAccessReport = await getPageAccessReport(range, 10);
+  const ctaClickReport = await getCtaClickReport(range, 8);
+  const ctaClickTrend = await getCtaClickTrend(range === 'all' ? '30d' : range);
   const pageAccessTrend = await getPageAccessTrend(range === 'all' ? '30d' : range);
   const operationalStats = await getOperationalStats(range);
   const funnel = await getSubmissionFunnelStats(range);
@@ -104,6 +108,8 @@ export default async function AdminAnalyticsPage({
     if (pageType === 'guide') return 'Guides';
     if (pageType === 'category') return 'Category pages';
     if (pageType === 'explore') return 'Explore';
+    if (pageType === 'best_ai_tools') return 'Top lists';
+    if (pageType === 'best_ai_tools_topic') return 'Top list topic';
     if (pageType === 'pricing') return 'Pricing';
     if (pageType === 'submit') return 'Submit';
     if (pageType === 'developer_listing') return 'Claim listing';
@@ -117,6 +123,8 @@ export default async function AdminAnalyticsPage({
     if (pageType === 'guide') return 'Add more comparison guides and internal links';
     if (pageType === 'category') return 'Backfill supply and strengthen category filters';
     if (pageType === 'explore') return 'Improve zero-results guidance and sorting clarity';
+    if (pageType === 'best_ai_tools') return 'Route visitors into narrower topic lists';
+    if (pageType === 'best_ai_tools_topic') return 'Push visitors into detail pages and official sites';
     if (pageType === 'pricing') return 'Tighten the pricing story and route into submit';
     if (pageType === 'submit') return 'Reduce friction and reinforce review expectations';
     if (pageType === 'developer_listing') return 'Capture claims and route owners into follow-up';
@@ -162,6 +170,8 @@ export default async function AdminAnalyticsPage({
     if (pageType === 'category') return 'If category pages are rising, keep backfilling supply and examples.';
     if (pageType === 'tool_detail') return 'If detail pages are rising, trust signals and feedback loops matter most.';
     if (pageType === 'explore') return 'If Explore is rising, tighten filters and empty-state guidance.';
+    if (pageType === 'best_ai_tools') return 'If top lists are rising, keep the hub focused and the topic paths clear.';
+    if (pageType === 'best_ai_tools_topic') return 'If topic pages are rising, keep tool cards and external CTAs sharp.';
     if (pageType === 'pricing') return 'If Pricing is rising, keep the offer tight and the CTA obvious.';
     if (pageType === 'submit') return 'If Submit is rising, remove friction and clarify review expectations.';
     if (pageType === 'developer_listing') return 'If Claim Listing is rising, follow up fast on new leads.';
@@ -175,6 +185,8 @@ export default async function AdminAnalyticsPage({
     if (pageType === 'category') return 'Backfill more tools, representative examples, and related comparisons.';
     if (pageType === 'tool_detail') return 'Improve trust blocks, pricing clarity, and feedback prompts.';
     if (pageType === 'explore') return 'Refine filters, empty states, and query-to-page routing.';
+    if (pageType === 'best_ai_tools') return 'Keep the hub concise and route readers into topic lists quickly.';
+    if (pageType === 'best_ai_tools_topic') return 'Keep the topic page useful and make the detail CTA obvious.';
     if (pageType === 'pricing') return 'Keep the pricing offer sharp and the next step obvious.';
     if (pageType === 'submit') return 'Make the submission flow feel safe, clear, and predictable.';
     if (pageType === 'developer_listing') return 'Turn claims into follow-up conversations quickly.';
@@ -264,11 +276,51 @@ export default async function AdminAnalyticsPage({
       : 'This family is still too small to read confidently.';
   };
 
+  const getCtaAction = (ctaId: string) => {
+    if (ctaId === 'best_tools_submit' || ctaId === 'ai-coding-tools_submit' || ctaId === 'ai-video-tools_submit') {
+      return 'Moves list visitors into the submit flow.';
+    }
+    if (ctaId === 'best_tools_pricing') {
+      return 'Sends list visitors into the pricing page.';
+    }
+    if (ctaId.endsWith('_back')) {
+      return 'Routes readers back to the list hub.';
+    }
+    if (ctaId === 'pricing_submit' || ctaId === 'pricing_submit_footer' || ctaId === 'pricing_submit_again') {
+      return 'Pushes interested visitors into the submit flow.';
+    }
+    if (ctaId === 'pricing_claim') {
+      return 'Routes owners into the claim listing flow.';
+    }
+    if (ctaId === 'pricing_contact_paid_options' || ctaId === 'pricing_contact_footer') {
+      return 'Opens the paid listing contact path.';
+    }
+    if (ctaId === 'pricing_view_submissions') {
+      return 'Shows users their current submission status.';
+    }
+    if (ctaId === 'submit_contact_paid_listing') {
+      return 'Starts the paid listing contact flow from submit.';
+    }
+    if (ctaId === 'submit_view_developer_listing') {
+      return 'Moves users toward the developer listing claim page.';
+    }
+    if (ctaId === 'developer_listing_go_submit') {
+      return 'Moves owners from claim interest into the submit flow.';
+    }
+    if (ctaId === 'developer_listing_email_claim') {
+      return 'Lets owners claim by email when they prefer a direct route.';
+    }
+
+    return 'Review whether this CTA should send users somewhere clearer.';
+  };
+
   const getPageQueuePriority = (pageType: string) => {
     if (pageType === 'tool_detail') return 'High';
     if (pageType === 'guide') return 'High';
     if (pageType === 'pricing') return 'High';
     if (pageType === 'submit') return 'High';
+    if (pageType === 'best_ai_tools') return 'High';
+    if (pageType === 'best_ai_tools_topic') return 'High';
     if (pageType === 'home') return 'Medium';
     if (pageType === 'category') return 'Medium';
     if (pageType === 'developer_listing') return 'Medium';
@@ -290,6 +342,12 @@ export default async function AdminAnalyticsPage({
     if (pageType === 'category') {
       return 'Category pages need enough supply and clear filters to stay useful.';
     }
+    if (pageType === 'best_ai_tools') {
+      return 'The hub should funnel visitors into the most relevant topic lists.';
+    }
+    if (pageType === 'best_ai_tools_topic') {
+      return 'Topic pages should make the detail-page and official-site CTA obvious.';
+    }
     if (pageType === 'explore') {
       return 'Explore is useful, but it usually needs less immediate attention than conversion pages.';
     }
@@ -297,7 +355,16 @@ export default async function AdminAnalyticsPage({
   };
 
   const focusCategories = topCategories.slice(0, 3);
-  const pageSummaryOrder = ['home', 'tool_detail', 'guide', 'category', 'explore', 'other'] as const;
+  const pageSummaryOrder = [
+    'home',
+    'tool_detail',
+    'guide',
+    'category',
+    'explore',
+    'best_ai_tools',
+    'best_ai_tools_topic',
+    'other',
+  ] as const;
   const pageSummaryMap = new Map(pageAccessReport.summary.map((item) => [item.pageType, item]));
   const familyBreakdownMap = new Map(pageAccessReport.familyBreakdown.map((item) => [item.pageType, item]));
   const pageSummaryItems = pageSummaryOrder.map((pageType) => {
@@ -371,6 +438,9 @@ export default async function AdminAnalyticsPage({
       summary: getPageFocusSummary('explore', exploreShare > 0),
     },
   ];
+  const ctaTopItems = ctaClickReport.topCtas.slice(0, 6);
+  const ctaPageSummaryItems = ctaClickReport.summary.slice(0, 4);
+  const ctaTrendItems = ctaClickTrend.items.slice(0, 6);
   const toLocalizedPath = (pagePath: string) => {
     if (!pagePath || pagePath === 'unknown') {
       return null;
@@ -378,6 +448,8 @@ export default async function AdminAnalyticsPage({
 
     return `/${locale}${pagePath.startsWith('/') ? pagePath : `/${pagePath}`}`;
   };
+
+  const isInternalHref = (href: string) => href.startsWith('/');
 
   return (
     <div>
@@ -446,6 +518,221 @@ export default async function AdminAnalyticsPage({
               <Globe className='h-6 w-6 text-slate-700' />
             </div>
           </div>
+        </div>
+      </div>
+
+      <div className='mb-8'>
+        <div className='mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
+          <div>
+            <h2 className='text-lg font-semibold text-slate-900'>CTA Clicks</h2>
+            <p className='mt-1 text-sm text-slate-600'>
+              Which call-to-action buttons are actually moving people into the next step.
+            </p>
+          </div>
+          <div className='text-sm text-slate-500'>
+            {ctaClickReport.totalClicks.toLocaleString()} clicks ·{' '}
+            {ctaClickReport.totalUniqueVisitors.toLocaleString()} visitors
+          </div>
+        </div>
+
+        <div className='mb-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>CTA clicks</p>
+            <p className='mt-2 text-3xl font-semibold text-slate-900'>{ctaClickReport.totalClicks.toLocaleString()}</p>
+            <p className='mt-2 text-sm text-slate-500'>All tracked CTA events in this range</p>
+          </div>
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Unique visitors</p>
+            <p className='mt-2 text-3xl font-semibold text-slate-900'>
+              {ctaClickReport.totalUniqueVisitors.toLocaleString()}
+            </p>
+            <p className='mt-2 text-sm text-slate-500'>Sessions that clicked at least one CTA</p>
+          </div>
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Top CTA share</p>
+            <p className='mt-2 text-3xl font-semibold text-slate-900'>
+              {ctaTopItems[0]?.percentage.toFixed(1) || '0.0'}%
+            </p>
+            <p className='mt-2 text-sm text-slate-500'>Share of all CTA clicks</p>
+          </div>
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>CTA families</p>
+            <p className='mt-2 text-3xl font-semibold text-slate-900'>{ctaPageSummaryItems.length}</p>
+            <p className='mt-2 text-sm text-slate-500'>Pricing, submit, claim, and submissions</p>
+          </div>
+        </div>
+
+        <div className='grid gap-4 lg:grid-cols-[1.1fr_0.9fr]'>
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <div className='flex items-end justify-between gap-3'>
+              <div>
+                <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>Top CTA buttons</p>
+                <h3 className='mt-1 text-xl font-bold text-slate-950'>What people click most</h3>
+              </div>
+              <p className='text-sm text-slate-500'>Ranked by total clicks</p>
+            </div>
+
+            <div className='mt-4 space-y-3'>
+              {ctaTopItems.length > 0 ? (
+                ctaTopItems.map((item) => (
+                  <div key={`${item.ctaId}:${item.pageType}`} className='rounded-lg border border-slate-200 p-4'>
+                    <div className='flex items-start justify-between gap-3'>
+                      <div>
+                        <p className='text-sm font-semibold text-slate-950'>{item.ctaLabel}</p>
+                        <p className='mt-1 text-xs text-slate-500'>
+                          {item.pageLabel} · {item.clicks.toLocaleString()} clicks ·{' '}
+                          {item.uniqueVisitors.toLocaleString()} visitors
+                        </p>
+                      </div>
+                      <span className='rounded-full bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-cyan-700'>
+                        {item.percentage.toFixed(1)}%
+                      </span>
+                    </div>
+                    <p className='mt-3 text-sm leading-6 text-slate-600'>{getCtaAction(item.ctaId)}</p>
+                    {(() => {
+                      if (!item.href) {
+                        return null;
+                      }
+
+                      if (isInternalHref(item.href)) {
+                        return (
+                          <Link
+                            href={item.href}
+                            className='mt-3 inline-flex items-center gap-1 text-sm font-medium text-cyan-700 hover:underline'
+                          >
+                            Open target
+                            <ArrowUpRight className='h-4 w-4' />
+                          </Link>
+                        );
+                      }
+
+                      return (
+                        <a
+                          href={item.href}
+                          target='_blank'
+                          rel='noreferrer'
+                          className='mt-3 inline-flex items-center gap-1 text-sm font-medium text-cyan-700 hover:underline'
+                        >
+                          Open target
+                          <ArrowUpRight className='h-4 w-4' />
+                        </a>
+                      );
+                    })()}
+                  </div>
+                ))
+              ) : (
+                <div className='rounded-lg border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-500'>
+                  No CTA click data yet.
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <div className='flex items-end justify-between gap-3'>
+              <div>
+                <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>By page family</p>
+                <h3 className='mt-1 text-xl font-bold text-slate-950'>Where CTA clicks happen</h3>
+              </div>
+              <p className='text-sm text-slate-500'>Distribution by page type</p>
+            </div>
+
+            <div className='mt-4 space-y-3'>
+              {ctaPageSummaryItems.length > 0 ? (
+                ctaPageSummaryItems.map((item) => (
+                  <div key={item.pageType} className='rounded-lg border border-slate-200 p-4'>
+                    <div className='flex items-start justify-between gap-3'>
+                      <div>
+                        <p className='text-sm font-semibold text-slate-950'>{item.label}</p>
+                        <p className='mt-1 text-xs text-slate-500'>
+                          {item.clicks.toLocaleString()} clicks · {item.uniqueVisitors.toLocaleString()} visitors
+                        </p>
+                      </div>
+                      <span className='rounded-full bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-cyan-700'>
+                        {item.percentage.toFixed(1)}%
+                      </span>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className='rounded-lg border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-500'>
+                  No page family CTA data yet.
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className='mb-8'>
+        <div className='mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
+          <div>
+            <h2 className='text-lg font-semibold text-slate-900'>CTA Momentum</h2>
+            <p className='mt-1 text-sm text-slate-600'>
+              Which buttons are gaining or losing traction versus the previous period.
+            </p>
+          </div>
+          <div className='text-sm text-slate-500'>
+            {ctaClickTrend.currentClicks.toLocaleString()} current · {ctaClickTrend.previousClicks.toLocaleString()} previous
+          </div>
+        </div>
+
+        <div className='mb-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Current clicks</p>
+            <p className='mt-2 text-3xl font-semibold text-slate-900'>{ctaClickTrend.currentClicks.toLocaleString()}</p>
+            <p className='mt-2 text-sm text-slate-500'>Current range only</p>
+          </div>
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Previous clicks</p>
+            <p className='mt-2 text-3xl font-semibold text-slate-900'>{ctaClickTrend.previousClicks.toLocaleString()}</p>
+            <p className='mt-2 text-sm text-slate-500'>Comparable previous range</p>
+          </div>
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Current visitors</p>
+            <p className='mt-2 text-3xl font-semibold text-slate-900'>
+              {ctaClickTrend.currentUniqueVisitors.toLocaleString()}
+            </p>
+            <p className='mt-2 text-sm text-slate-500'>Sessions that clicked a CTA</p>
+          </div>
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Previous visitors</p>
+            <p className='mt-2 text-3xl font-semibold text-slate-900'>
+              {ctaClickTrend.previousUniqueVisitors.toLocaleString()}
+            </p>
+            <p className='mt-2 text-sm text-slate-500'>Comparable previous sessions</p>
+          </div>
+        </div>
+
+        <div className='grid gap-4 lg:grid-cols-2'>
+          {ctaTrendItems.length > 0 ? (
+            ctaTrendItems.map((item) => (
+              <div key={`${item.ctaId}:${item.pageType}`} className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+                <div className='flex items-start justify-between gap-3'>
+                  <div>
+                    <p className='text-sm font-semibold text-slate-950'>{item.ctaLabel}</p>
+                    <p className='mt-1 text-xs text-slate-500'>
+                      {item.pageLabel} · {item.currentClicks.toLocaleString()} current ·{' '}
+                      {item.previousClicks.toLocaleString()} previous
+                    </p>
+                  </div>
+                  <div
+                    className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
+                      item.changePercent >= 0 ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'
+                    }`}
+                  >
+                    {item.changePercent >= 0 ? '+' : ''}
+                    {item.changePercent.toFixed(1)}%
+                  </div>
+                </div>
+                <p className='mt-3 text-sm leading-6 text-slate-600'>{getCtaAction(item.ctaId)}</p>
+              </div>
+            ))
+          ) : (
+            <div className='rounded-lg border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-500'>
+              No CTA trend data yet.
+            </div>
+          )}
         </div>
       </div>
 

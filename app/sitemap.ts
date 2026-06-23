@@ -3,6 +3,7 @@ import { locales } from '@/i18n';
 
 import { GUIDE_PAGES } from '@/lib/content/guides';
 import { BASE_URL } from '@/lib/env';
+import { topListTopics } from '@/lib/data/topLists';
 import { INDEXABLE_LOCALES } from '@/lib/seo/indexing';
 import { getAllCategories, type CategoryWithCount } from '@/lib/services/categories';
 import { getToolQuality } from '@/lib/services/toolQuality';
@@ -31,6 +32,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/guides/ai-tools-for-sales',
     '/guides/ai-tools-for-voice',
     '/guides/ai-note-taking-tools',
+    '/best-ai-tools',
   ]);
 
   // Static routes with their priorities and change frequencies
@@ -54,6 +56,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly',
       priority: 0.82,
     },
+    {
+      url: 'best-ai-tools',
+      changeFrequency: 'weekly',
+      priority: 0.78,
+    },
   ];
 
   // Generate static route entries for all locales
@@ -65,7 +72,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency,
     }));
 
-  const staticSitemapEntries = [...staticRoutes, ...guideRoutes].flatMap((route) =>
+  const topListRoutes = topListTopics.map((topic) => ({
+    url: `best-ai-tools/${topic.key}`,
+    priority: 0.8,
+    changeFrequency: 'weekly' as const,
+  }));
+
+  const staticSitemapEntries = [...staticRoutes, ...guideRoutes, ...topListRoutes].flatMap((route) =>
     sitemapLocales.map((locale) => {
       const lang = locale === 'en' ? '' : `/${locale}`;
       const routeUrl = route.url === '' ? '' : `/${route.url}`;

@@ -9,6 +9,8 @@ type PageViewType =
   | 'guide'
   | 'category'
   | 'explore'
+  | 'best_ai_tools'
+  | 'best_ai_tools_topic'
   | 'pricing'
   | 'submit'
   | 'developer_listing'
@@ -29,6 +31,8 @@ function getPageType(pathname: string): PageViewType {
   if (normalizedPath.startsWith('/ai/')) return 'tool_detail';
   if (normalizedPath.startsWith('/categories')) return 'category';
   if (normalizedPath.startsWith('/explore')) return 'explore';
+  if (normalizedPath === '/best-ai-tools') return 'best_ai_tools';
+  if (normalizedPath.startsWith('/best-ai-tools/')) return 'best_ai_tools_topic';
   if (normalizedPath.startsWith('/pricing')) return 'pricing';
   if (normalizedPath.startsWith('/submit')) return 'submit';
   if (normalizedPath.startsWith('/developer/listing')) return 'developer_listing';
