@@ -7,6 +7,7 @@ import { generateBreadcrumbSchema, generateFAQSchema, generateItemListSchema } f
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import { toolToListRow } from '@/lib/services/toolPresenter';
 import { getPopularTools, getToolByNameCached, getTools, type Tool } from '@/lib/services/tools';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
 
@@ -532,6 +533,26 @@ export function ComparisonPage({
               {isChinese ? config.altBrowseLabel.cn : config.altBrowseLabel.en}
               <ArrowRight className='size-4' />
             </Link>
+            <TrackableCtaLink
+              href='/submit'
+              ctaId='comparison_submit'
+              ctaLabel='Comparison submit'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '提交你的工具' : 'Submit your tool'}
+              <ArrowRight className='size-4' />
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/developer/listing'
+              ctaId='comparison_claim'
+              ctaLabel='Comparison claim'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800 hover:bg-emerald-100'
+            >
+              {isChinese ? '认领条目' : 'Claim listing'}
+              <ArrowRight className='size-4' />
+            </TrackableCtaLink>
           </div>
         </section>
 
@@ -581,6 +602,40 @@ export function ComparisonPage({
                     : 'If the next direction is clear, move into the narrower path.')}
               </p>
             </Link>
+          </div>
+          <div className='mt-4 grid gap-3 md:grid-cols-2'>
+            <TrackableCtaLink
+              href='/submit'
+              ctaId='comparison_submit_secondary'
+              ctaLabel='Comparison submit secondary'
+              pageType='guide'
+              className='rounded-xl border border-cyan-200 bg-white p-4 shadow-sm hover:bg-cyan-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>
+                {isChinese ? '把你的工具提交进来' : 'Get your tool submitted'}
+              </p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '如果你已经在比较竞争对手，下一步就该把自己的工具放进队列。'
+                  : 'If you are comparing competitors already, the next step is to get your own tool into the queue.'}
+              </p>
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/developer/listing'
+              ctaId='comparison_claim_secondary'
+              ctaLabel='Comparison claim secondary'
+              pageType='guide'
+              className='rounded-xl border border-emerald-200 bg-white p-4 shadow-sm hover:bg-emerald-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>
+                {isChinese ? '先认领条目，再安排跟进' : 'Claim the listing, then follow up'}
+              </p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '工具方可以先留资，后面再决定要不要加速审核或做前排展示。'
+                  : 'Owners can leave details first, then decide whether faster review or featured placement makes sense.'}
+              </p>
+            </TrackableCtaLink>
           </div>
         </section>
 
