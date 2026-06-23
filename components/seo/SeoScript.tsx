@@ -17,8 +17,15 @@ export default function SeoScript() {
           __html: `
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
+            window.gtag = gtag;
 
             gtag('js', new Date());
+            gtag('consent', 'default', {
+              analytics_storage: 'granted',
+              ad_storage: 'denied',
+              ad_user_data: 'denied',
+              ad_personalization: 'denied',
+            });
             gtag('config', '${GOOGLE_TRACKING_ID}', {
               page_path: window.location.pathname,
             });
