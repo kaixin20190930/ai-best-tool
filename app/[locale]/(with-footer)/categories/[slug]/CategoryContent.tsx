@@ -5,6 +5,7 @@ import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getCategoryBySlug, getLocalizedField } from '@/lib/services/categories';
 import { getAllTags } from '@/lib/services/tags';
 import { SortBy } from '@/lib/services/tools';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import ExploreList from '@/app/[locale]/(with-footer)/explore/ExploreList';
 import { Link } from '@/app/navigation';
@@ -363,6 +364,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
     .map((href) => GUIDE_PAGES.find((page) => page.href === href))
     .filter((page): page is (typeof GUIDE_PAGES)[number] => Boolean(page))
     .filter((page) => page.href.endsWith('-comparison'));
+  const primaryComparisonGuide = comparisonGuides[0] || relatedGuides[0] || null;
   const adjacentCategories = categories
     .filter((item) => item.slug !== category.slug)
     .slice(0, 4)
@@ -450,12 +452,35 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
                 </p>
               )}
             </div>
-            <Link
-              href='/submit'
-              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
-            >
-              {isChinese ? '提交这个分类的工具' : 'Submit a tool'}
-            </Link>
+            <div className='flex flex-wrap gap-3 lg:justify-end'>
+              <TrackableCtaLink
+                href={primaryComparisonGuide?.href || '/guides/how-to-choose-ai-tools'}
+                ctaId={`category_${categorySlug}_comparison`}
+                ctaLabel={`Category ${categorySlug} comparison`}
+                pageType='category'
+                className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+              >
+                {isChinese ? '先看对比页' : 'Start with comparison'}
+              </TrackableCtaLink>
+              <TrackableCtaLink
+                href='/submit'
+                ctaId={`category_${categorySlug}_submit`}
+                ctaLabel={`Category ${categorySlug} submit`}
+                pageType='category'
+                className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+              >
+                {isChinese ? '提交这个分类的工具' : 'Submit a tool'}
+              </TrackableCtaLink>
+              <TrackableCtaLink
+                href='/developer/listing'
+                ctaId={`category_${categorySlug}_claim`}
+                ctaLabel={`Category ${categorySlug} claim`}
+                pageType='category'
+                className='inline-flex items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800 hover:bg-emerald-100'
+              >
+                {isChinese ? '认领条目' : 'Claim listing'}
+              </TrackableCtaLink>
+            </div>
           </div>
         </div>
 
@@ -582,6 +607,26 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
                   <p className='mt-2 text-sm leading-6 text-slate-600'>{guide.desc[isChinese ? 'cn' : 'en']}</p>
                 </Link>
               ))}
+            </div>
+            <div className='mt-5 flex flex-wrap gap-3'>
+              <TrackableCtaLink
+                href='/submit'
+                ctaId={`category_${categorySlug}_submit_compare`}
+                ctaLabel={`Category ${categorySlug} submit compare`}
+                pageType='category'
+                className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+              >
+                {isChinese ? '看完对比后去提交' : 'Submit after comparing'}
+              </TrackableCtaLink>
+              <TrackableCtaLink
+                href='/developer/listing'
+                ctaId={`category_${categorySlug}_claim_compare`}
+                ctaLabel={`Category ${categorySlug} claim compare`}
+                pageType='category'
+                className='inline-flex items-center justify-center rounded-lg border border-emerald-200 bg-white px-4 py-3 text-sm font-semibold text-emerald-800 hover:bg-emerald-50'
+              >
+                {isChinese ? '工具方先来认领' : 'Owners can claim here'}
+              </TrackableCtaLink>
             </div>
           </section>
         )}
