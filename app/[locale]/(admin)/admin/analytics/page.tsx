@@ -20,6 +20,7 @@ import {
   getSubmissionFunnelStats,
   getSubmissionRejectionReasonStats,
 } from '@/app/actions/admin/tools';
+import { getAdminToolClaimsSummary } from '@/app/actions/admin/claims';
 
 export async function generateMetadata() {
   return {
@@ -54,6 +55,7 @@ export default async function AdminAnalyticsPage({
   const operationalStats = await getOperationalStats(range);
   const funnel = await getSubmissionFunnelStats(range);
   const rejectionReasons = await getSubmissionRejectionReasonStats(range, 5);
+  const claimSummary = await getAdminToolClaimsSummary();
   const topToolsByViews = await getTopTools('views', 10);
   const topToolsByRating = await getTopTools('rating', 10);
   const topCategories = await getTopCategories(8);
@@ -231,6 +233,17 @@ export default async function AdminAnalyticsPage({
             100,
         )
       : 0;
+  const claimStatusRows = [
+    { key: 'new', label: 'New', count: claimSummary.newCount, tone: 'cyan' },
+    { key: 'contacted', label: 'Contacted', count: claimSummary.contactedCount, tone: 'blue' },
+    { key: 'claimed', label: 'Claimed', count: claimSummary.claimedCount, tone: 'emerald' },
+    { key: 'invalid', label: 'Invalid', count: claimSummary.invalidCount, tone: 'rose' },
+  ].map((item) => ({
+    ...item,
+    share: claimSummary.total > 0 ? Math.round((item.count / claimSummary.total) * 100) : 0,
+  }));
+  const claimResolutionRate =
+    claimSummary.total > 0 ? Math.round(((claimSummary.claimedCount + claimSummary.invalidCount) / claimSummary.total) * 100) : 0;
 
   const getPeriodChangeLabel = (currentViews: number, previousViews: number) => {
     if (previousViews > 0) {
@@ -1290,6 +1303,80 @@ export default async function AdminAnalyticsPage({
           <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
             <p className='text-sm font-medium text-slate-600'>Avg Review Time</p>
             <p className='mt-2 text-3xl font-semibold text-violet-700'>{funnel.avgReviewHours}h</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Claim Lead Funnel */}
+      <div className='mb-8'>
+        <div className='mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
+          <div>
+            <h2 className='text-lg font-semibold text-slate-900'>Claim Lead Funnel</h2>
+            <p className='mt-1 text-sm text-slate-600'>
+              How owner requests are moving through the queue, from fresh leads to contacted, claimed, or invalid.
+            </p>
+          </div>
+          <Link
+            href='/admin/claims'
+            className='inline-flex items-center gap-1 text-sm font-medium text-cyan-700 hover:text-cyan-800'
+          >
+            Open claim queue
+            <ArrowUpRight className='h-4 w-4' />
+          </Link>
+        </div>
+        <div className='grid gap-6 lg:grid-cols-[1.2fr_0.8fr]'>
+          <div className='overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm'>
+            <div className='border-b border-slate-200 px-4 py-3'>
+              <div className='flex items-center justify-between gap-3'>
+                <p className='text-sm font-semibold text-slate-900'>Status distribution</p>
+                <p className='text-xs text-slate-500'>{claimSummary.total} total claims</p>
+              </div>
+            </div>
+            <div className='divide-y divide-slate-100'>
+              {claimStatusRows.length > 0 ? (
+                claimStatusRows.map((item) => (
+                  <div key={item.key} className='px-4 py-4'>
+                    <div className='flex items-start justify-between gap-4'>
+                      <div className='min-w-0'>
+                        <p className='text-sm font-medium text-slate-900'>{item.label}</p>
+                        <p className='mt-1 text-xs text-slate-500'>{item.count} claims</p>
+                      </div>
+                      <p className='shrink-0 text-sm font-semibold text-slate-700'>{item.share}%</p>
+                    </div>
+                    <div className='mt-3 h-2 overflow-hidden rounded-full bg-slate-100'>
+                      <div
+                        className={`h-full rounded-full ${
+                          item.key === 'claimed'
+                            ? 'bg-emerald-500'
+                            : item.key === 'contacted'
+                              ? 'bg-cyan-500'
+                              : item.key === 'invalid'
+                                ? 'bg-rose-500'
+                                : 'bg-blue-500'
+                        }`}
+                        style={{ width: `${Math.max(item.share, item.count > 0 ? 8 : 0)}%` }}
+                      />
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className='px-4 py-8 text-sm text-slate-500'>No claim leads recorded yet.</div>
+              )}
+            </div>
+          </div>
+          <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-1'>
+            <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
+              <p className='text-sm font-medium text-slate-600'>Claim Resolution Rate</p>
+              <p className='mt-2 text-3xl font-semibold text-emerald-600'>{claimResolutionRate}%</p>
+              <p className='mt-2 text-sm text-slate-500'>Claimed or marked invalid out of all claim leads.</p>
+            </div>
+            <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
+              <p className='text-sm font-medium text-slate-600'>Open Backlog</p>
+              <p className='mt-2 text-3xl font-semibold text-amber-600'>{claimSummary.newCount}</p>
+              <p className='mt-2 text-sm text-slate-500'>
+                Fresh request volume that still needs a response.
+              </p>
+            </div>
           </div>
         </div>
       </div>
