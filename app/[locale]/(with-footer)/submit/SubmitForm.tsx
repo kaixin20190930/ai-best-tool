@@ -694,6 +694,42 @@ export default function SubmitForm({
                 ))}
               </ul>
             </div>
+            <div className='mt-4 rounded-lg border border-rose-100 bg-rose-50 p-4'>
+              <p className='text-sm font-semibold text-rose-950'>
+                {isChinese ? '常见拒绝原因' : 'Common rejection reasons'}
+              </p>
+              <p className='mt-2 text-xs leading-5 text-rose-950/80'>
+                {isChinese
+                  ? '我们会尽量人工补齐信息，但下面这些问题最容易让审核停住。'
+                  : 'We try to fill gaps manually, but these issues most often stall review.'}
+              </p>
+              <ul className='mt-3 space-y-2 text-sm text-rose-950/90'>
+                {[
+                  isChinese
+                    ? '官网无法访问、跳转异常，或明显不是产品主页。'
+                    : 'The website is unreachable, redirects strangely, or is not the product homepage.',
+                  isChinese
+                    ? '条目和已有工具重复，或看起来只是换了个名字。'
+                    : 'The listing is a duplicate or only a renamed copy of an existing tool.',
+                  isChinese
+                    ? '简介过于笼统，看不出实际用途、适用人群或核心工作流。'
+                    : 'The description is too vague to understand the use case, audience, or workflow.',
+                  isChinese
+                    ? '图片、截图、分类、定价等基础信息缺失太多。'
+                    : 'Too many basics are missing, such as images, screenshots, category, or pricing.',
+                ].map((item) => (
+                  <li key={item} className='flex items-start gap-2'>
+                    <span className='mt-1 h-1.5 w-1.5 rounded-full bg-rose-600' />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className='mt-3 text-xs leading-5 text-rose-950/75'>
+                {isChinese
+                  ? '付费不会绕过这些门槛，它只会缩短响应时间并提供固定曝光窗口。'
+                  : 'Paid options do not bypass these gates; they only shorten response time and reserve a fixed visibility window.'}
+              </p>
+            </div>
           </div>
         </div>
         <div className='mt-5 flex flex-col gap-[10px] lg:gap-5'>
