@@ -15,7 +15,11 @@ import {
   getTopTools,
   getTrafficSources,
 } from '@/lib/services/admin/analytics';
-import { getOperationalStats, getSubmissionFunnelStats } from '@/app/actions/admin/tools';
+import {
+  getOperationalStats,
+  getSubmissionFunnelStats,
+  getSubmissionRejectionReasonStats,
+} from '@/app/actions/admin/tools';
 
 export async function generateMetadata() {
   return {
@@ -49,6 +53,7 @@ export default async function AdminAnalyticsPage({
   const pageAccessTrend = await getPageAccessTrend(range === 'all' ? '30d' : range);
   const operationalStats = await getOperationalStats(range);
   const funnel = await getSubmissionFunnelStats(range);
+  const rejectionReasons = await getSubmissionRejectionReasonStats(range, 5);
   const topToolsByViews = await getTopTools('views', 10);
   const topToolsByRating = await getTopTools('rating', 10);
   const topCategories = await getTopCategories(8);
@@ -211,6 +216,21 @@ export default async function AdminAnalyticsPage({
     if (priority === 'Medium') return 'bg-amber-50 text-amber-700';
     return 'bg-cyan-50 text-cyan-700';
   };
+
+  const rejectionReasonRows = rejectionReasons.reasons.map((item) => ({
+    ...item,
+    share: rejectionReasons.totalRejected > 0 ? Math.round((item.count / rejectionReasons.totalRejected) * 100) : 0,
+  }));
+  const rejectionReasonCoverage =
+    rejectionReasons.totalRejected > 0
+      ? Math.round(
+          (rejectionReasonRows
+            .filter((item) => item.reason !== 'No reason recorded')
+            .reduce((sum, item) => sum + item.count, 0) /
+            rejectionReasons.totalRejected) *
+            100,
+        )
+      : 0;
 
   const getPeriodChangeLabel = (currentViews: number, previousViews: number) => {
     if (previousViews > 0) {
@@ -1270,6 +1290,71 @@ export default async function AdminAnalyticsPage({
           <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
             <p className='text-sm font-medium text-slate-600'>Avg Review Time</p>
             <p className='mt-2 text-3xl font-semibold text-violet-700'>{funnel.avgReviewHours}h</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Rejection Reasons */}
+      <div className='mb-8'>
+        <div className='mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
+          <div>
+            <h2 className='text-lg font-semibold text-slate-900'>Rejection Reasons</h2>
+            <p className='mt-1 text-sm text-slate-600'>
+              The main reasons submissions get rejected, so we can tell whether the review queue is blocking on the
+              same few issues.
+            </p>
+          </div>
+          <Link
+            href='/admin/tools?status=rejected'
+            className='inline-flex items-center gap-1 text-sm font-medium text-cyan-700 hover:text-cyan-800'
+          >
+            Open rejected tools
+            <ArrowUpRight className='h-4 w-4' />
+          </Link>
+        </div>
+        <div className='grid gap-6 lg:grid-cols-[1.2fr_0.8fr]'>
+          <div className='overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm'>
+            <div className='border-b border-slate-200 px-4 py-3'>
+              <div className='flex items-center justify-between gap-3'>
+                <p className='text-sm font-semibold text-slate-900'>Top reasons</p>
+                <p className='text-xs text-slate-500'>{rejectionReasons.totalRejected} rejected in this range</p>
+              </div>
+            </div>
+            <div className='divide-y divide-slate-100'>
+              {rejectionReasonRows.length > 0 ? (
+                rejectionReasonRows.map((item) => (
+                  <div key={item.reason} className='px-4 py-4'>
+                    <div className='flex items-start justify-between gap-4'>
+                      <div className='min-w-0'>
+                        <p className='break-words text-sm font-medium text-slate-900'>{item.reason}</p>
+                        <p className='mt-1 text-xs text-slate-500'>{item.count} submissions</p>
+                      </div>
+                      <p className='shrink-0 text-sm font-semibold text-slate-700'>{item.share}%</p>
+                    </div>
+                    <div className='mt-3 h-2 overflow-hidden rounded-full bg-slate-100'>
+                      <div
+                        className='h-full rounded-full bg-rose-500'
+                        style={{ width: `${Math.max(item.share, item.count > 0 ? 8 : 0)}%` }}
+                      />
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className='px-4 py-8 text-sm text-slate-500'>No rejection reasons recorded in this range.</div>
+              )}
+            </div>
+          </div>
+          <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-1'>
+            <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
+              <p className='text-sm font-medium text-slate-600'>Rejected Submissions</p>
+              <p className='mt-2 text-3xl font-semibold text-red-600'>{rejectionReasons.totalRejected}</p>
+              <p className='mt-2 text-sm text-slate-500'>Tracks rejected tools with recorded review reasons.</p>
+            </div>
+            <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
+              <p className='text-sm font-medium text-slate-600'>Reason Coverage</p>
+              <p className='mt-2 text-3xl font-semibold text-cyan-700'>{rejectionReasonCoverage}%</p>
+              <p className='mt-2 text-sm text-slate-500'>How many rejections already have a usable written reason.</p>
+            </div>
           </div>
         </div>
       </div>

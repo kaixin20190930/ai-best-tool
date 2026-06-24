@@ -1709,3 +1709,69 @@ export async function getSubmissionFunnelStats(
     };
   }
 }
+
+export async function getSubmissionRejectionReasonStats(
+  range: '7d' | '30d' | 'all' = 'all',
+  limit: number = 5,
+): Promise<{
+  totalRejected: number;
+  reasons: Array<{
+    reason: string;
+    count: number;
+  }>;
+}> {
+  try {
+    await requireAdmin();
+
+    const pool = getPool();
+    const normalizedLimit = Math.max(Math.min(limit, 20), 1);
+    const createdAtFilter =
+      range === '7d'
+        ? `AND created_at >= NOW() - INTERVAL '7 days'`
+        : range === '30d'
+          ? `AND created_at >= NOW() - INTERVAL '30 days'`
+          : '';
+
+    const [summaryResult, reasonsResult] = await Promise.all([
+      pool.query(`
+        SELECT COUNT(*)::int AS total_rejected
+        FROM tools
+        WHERE submitted_by IS NOT NULL
+          AND status = 'rejected'
+          ${createdAtFilter}
+      `),
+      pool.query(
+        `
+        SELECT
+          COALESCE(
+            NULLIF(TRIM(features->'submission'->'review'->>'rejectionReason'), ''),
+            'No reason recorded'
+          ) AS reason,
+          COUNT(*)::int AS count
+        FROM tools
+        WHERE submitted_by IS NOT NULL
+          AND status = 'rejected'
+          ${createdAtFilter}
+        GROUP BY 1
+        ORDER BY count DESC, reason ASC
+        LIMIT $1
+      `,
+        [normalizedLimit],
+      ),
+    ]);
+
+    return {
+      totalRejected: Number(summaryResult.rows[0]?.total_rejected || 0),
+      reasons: reasonsResult.rows.map((row) => ({
+        reason: String(row.reason || 'No reason recorded'),
+        count: Number(row.count || 0),
+      })),
+    };
+  } catch (error) {
+    console.error('Error fetching submission rejection reason stats:', error);
+    return {
+      totalRejected: 0,
+      reasons: [],
+    };
+  }
+}
