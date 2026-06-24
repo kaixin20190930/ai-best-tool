@@ -43,6 +43,15 @@ function isValidUrl(value: string): boolean {
   }
 }
 
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 export async function submitClaimListing(input: ClaimListingInput): Promise<ClaimListingResult> {
   try {
     const listingName = normalizeText(input.listingName);
@@ -116,6 +125,36 @@ export async function submitClaimListing(input: ClaimListingInput): Promise<Clai
       website,
       sourcePath,
       sourceLocale,
+    });
+
+    await sendTransactionalEmail({
+      to: email,
+      subject: `[AI Best Tool] We received your claim request / 我们已收到你的认领申请`,
+      text: [
+        `Thanks for claiming ${listingName}.`,
+        '',
+        'We received your request and will review it manually.',
+        'If we need anything else, we will follow up by email.',
+        '',
+        'Claim details:',
+        `- Listing: ${listingName}`,
+        `- Company: ${company || '-'}`,
+        `- Website: ${website || '-'}`,
+        `- Source path: ${sourcePath || '-'}`,
+        `- Source locale: ${sourceLocale || '-'}`,
+      ].join('\n'),
+      html: `
+        <p>Thanks for claiming <strong>${escapeHtml(listingName)}</strong>.</p>
+        <p>We received your request and will review it manually. If we need anything else, we will follow up by email.</p>
+        <p><strong>Claim details</strong></p>
+        <ul>
+          <li><strong>Listing:</strong> ${escapeHtml(listingName)}</li>
+          <li><strong>Company:</strong> ${company ? escapeHtml(company) : '-'}</li>
+          <li><strong>Website:</strong> ${website ? escapeHtml(website) : '-'}</li>
+          <li><strong>Source path:</strong> ${sourcePath ? escapeHtml(sourcePath) : '-'}</li>
+          <li><strong>Source locale:</strong> ${sourceLocale ? escapeHtml(sourceLocale) : '-'}</li>
+        </ul>
+      `,
     });
 
     const { supportEmail } = listingConfig;
