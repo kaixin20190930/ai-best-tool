@@ -1,6 +1,8 @@
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { getAdminToolById } from '@/app/actions/admin/tools';
+import { getToolStats } from '@/app/actions/analytics';
+import { getCommentCount } from '@/app/actions/comments';
 import { getAllCategories } from '@/lib/services/categories';
 import AdminToolEditForm from '@/components/admin/AdminToolEditForm';
 
@@ -23,7 +25,11 @@ export default async function AdminToolEditPage({
     notFound();
   }
 
-  const categories = await getAllCategories();
+  const [categories, toolStats, commentCount] = await Promise.all([
+    getAllCategories(),
+    getToolStats(tool.id),
+    getCommentCount(tool.id),
+  ]);
 
   return (
     <div>
@@ -32,7 +38,7 @@ export default async function AdminToolEditPage({
         <p className="mt-2 text-slate-600">Update tool information and settings</p>
       </div>
 
-      <AdminToolEditForm tool={tool} categories={categories} />
+      <AdminToolEditForm tool={tool} categories={categories} toolStats={toolStats} commentCount={commentCount} />
     </div>
   );
 }

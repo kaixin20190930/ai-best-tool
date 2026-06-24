@@ -25,6 +25,15 @@ interface Category {
 interface AdminToolEditFormProps {
   tool: AdminTool;
   categories: Category[];
+  toolStats: {
+    viewCount: number;
+    clickCount: number;
+    shareCount: number;
+    favoriteCount: number;
+    averageRating: number;
+    ratingCount: number;
+  };
+  commentCount: number;
 }
 
 type ClaimInfoTool = AdminTool & {
@@ -71,6 +80,8 @@ function slugifyTag(value: string) {
 export default function AdminToolEditForm({
   tool,
   categories,
+  toolStats,
+  commentCount,
 }: AdminToolEditFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -209,6 +220,14 @@ export default function AdminToolEditForm({
     const days = Math.max(0, Math.round((untilTs - fromTs) / (24 * 60 * 60 * 1000)));
     return `${days} day window`;
   }, [featuredFromInput, featuredUntilInput]);
+  const ownerStatusLabel =
+    claimTool.claim_status === 'claimed'
+      ? 'Claimed'
+      : claimTool.claim_status === 'pending'
+        ? 'Pending'
+        : claimTool.claim_status === 'rejected'
+          ? 'Rejected'
+          : 'Unclaimed';
 
   const handleApprove = async () => {
     setReviewLoading('approve');
@@ -638,6 +657,70 @@ export default function AdminToolEditForm({
           </div>
         </div>
       )}
+
+      <div className="theme-surface rounded-lg border border-slate-200 p-6 shadow-sm">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900">Owner Dashboard V1</h2>
+            <p className="mt-1 text-sm text-slate-600">
+              A lightweight performance snapshot for the current listing owner or operator.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <span className="rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-700">
+              {ownerStatusLabel}
+            </span>
+            {claimTool.owner_email ? (
+              <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+                {claimTool.owner_email}
+              </span>
+            ) : null}
+          </div>
+        </div>
+
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-6">
+          {[
+            { label: 'Views', value: toolStats.viewCount, tone: 'blue' },
+            { label: 'Clicks', value: toolStats.clickCount, tone: 'cyan' },
+            { label: 'Favorites', value: toolStats.favoriteCount, tone: 'rose' },
+            { label: 'Shares', value: toolStats.shareCount, tone: 'amber' },
+            { label: 'Comments', value: commentCount, tone: 'emerald' },
+            { label: 'Ratings', value: toolStats.ratingCount, tone: 'violet' },
+          ].map((item) => (
+            <div key={item.label} className="rounded-xl border border-slate-200 bg-white p-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">{item.label}</p>
+              <p
+                className={`mt-2 text-2xl font-semibold ${
+                  item.tone === 'blue'
+                    ? 'text-blue-700'
+                    : item.tone === 'cyan'
+                      ? 'text-cyan-700'
+                      : item.tone === 'rose'
+                        ? 'text-rose-700'
+                        : item.tone === 'amber'
+                          ? 'text-amber-700'
+                          : item.tone === 'emerald'
+                            ? 'text-emerald-700'
+                            : 'text-violet-700'
+                }`}
+              >
+                {item.value}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
+          <p className="font-semibold text-slate-900">What this tells the owner</p>
+          <p className="mt-1">
+            This is the first pass at an owner-facing summary: reach, engagement, and whether the listing is getting
+            social proof or discussion.
+          </p>
+          <p className="mt-2 text-xs text-slate-500">
+            Average rating: {toolStats.averageRating.toFixed(1)} · visible comments: {commentCount}
+          </p>
+        </div>
+      </div>
 
       <div className="theme-surface rounded-lg border border-slate-200 p-6 shadow-sm">
         <h2 className="mb-4 text-lg font-semibold text-slate-900">Basic Information</h2>
