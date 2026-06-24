@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
-import { getAdminToolClaims, getAdminToolClaimsSummary } from '@/app/actions/admin/claims';
 import AdminClaimsTable from '@/components/admin/AdminClaimsTable';
+import { getAdminToolClaims, getAdminToolClaimsSummary } from '@/app/actions/admin/claims';
 
 function getToneClass(tone: string): string {
   if (tone === 'emerald') return 'text-emerald-700';
@@ -64,19 +64,16 @@ export default async function AdminClaimsPage({
         {[
           { label: 'All leads', value: summary.total, tone: 'slate' },
           { label: 'New', value: summary.newCount, tone: 'cyan' },
+          { label: 'Fresh new', value: summary.freshNewCount, tone: 'blue' },
+          { label: 'Overdue new', value: summary.overdueNewCount, tone: 'rose' },
           { label: 'Contacted', value: summary.contactedCount, tone: 'blue' },
           { label: 'Claimed', value: summary.claimedCount, tone: 'emerald' },
           { label: 'Invalid', value: summary.invalidCount, tone: 'rose' },
           { label: 'Linked', value: summary.linkedCount, tone: 'amber' },
         ].map((item) => (
-          <div
-            key={item.label}
-            className='theme-surface rounded-2xl border border-slate-200 p-4 shadow-sm'
-          >
+          <div key={item.label} className='theme-surface rounded-2xl border border-slate-200 p-4 shadow-sm'>
             <p className='text-sm font-medium text-slate-600'>{item.label}</p>
-            <p className={`mt-2 text-3xl font-semibold ${getToneClass(item.tone)}`}>
-              {item.value}
-            </p>
+            <p className={`mt-2 text-3xl font-semibold ${getToneClass(item.tone)}`}>{item.value}</p>
           </div>
         ))}
       </div>

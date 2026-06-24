@@ -1,9 +1,9 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { getPool } from '@/db/neon/client';
 
 import { requireAdmin } from '@/lib/auth/middleware';
-import { getPool } from '@/db/neon/client';
 
 const validClaimStatuses = ['unclaimed', 'pending', 'claimed', 'rejected'] as const;
 const validClaimRecordStatuses = ['new', 'contacted', 'claimed', 'invalid'] as const;
@@ -38,6 +38,8 @@ export type AdminToolClaimsSummary = {
   claimedCount: number;
   invalidCount: number;
   linkedCount: number;
+  overdueNewCount: number;
+  freshNewCount: number;
 };
 
 function normalizeNullableText(value: string | null | undefined): string | null {
@@ -63,9 +65,7 @@ function normalizeClaimedAt(value: string | null): string | null {
 }
 
 function normalizeClaimRecordStatus(value: string): ClaimRecordStatus | null {
-  return (validClaimRecordStatuses as readonly string[]).includes(value)
-    ? (value as ClaimRecordStatus)
-    : null;
+  return (validClaimRecordStatuses as readonly string[]).includes(value) ? (value as ClaimRecordStatus) : null;
 }
 
 function buildClaimWhereClause(filters: { status?: string; search?: string }) {
@@ -172,6 +172,8 @@ export async function getAdminToolClaimsSummary(): Promise<AdminToolClaimsSummar
         SELECT
           COUNT(*)::int AS total,
           COUNT(*) FILTER (WHERE status = 'new')::int AS "newCount",
+          COUNT(*) FILTER (WHERE status = 'new' AND created_at <= NOW() - INTERVAL '48 hours')::int AS "overdueNewCount",
+          COUNT(*) FILTER (WHERE status = 'new' AND created_at >= NOW() - INTERVAL '24 hours')::int AS "freshNewCount",
           COUNT(*) FILTER (WHERE status = 'contacted')::int AS "contactedCount",
           COUNT(*) FILTER (WHERE status = 'claimed')::int AS "claimedCount",
           COUNT(*) FILTER (WHERE status = 'invalid')::int AS "invalidCount",
@@ -189,6 +191,8 @@ export async function getAdminToolClaimsSummary(): Promise<AdminToolClaimsSummar
       claimedCount: Number(row.claimedCount || 0),
       invalidCount: Number(row.invalidCount || 0),
       linkedCount: Number(row.linkedCount || 0),
+      overdueNewCount: Number(row.overdueNewCount || 0),
+      freshNewCount: Number(row.freshNewCount || 0),
     };
   } catch (error) {
     console.error('Error fetching admin tool claims summary:', error);
@@ -213,10 +217,7 @@ export async function updateToolClaimInfo(input: {
 
     const ownerEmail = normalizeNullableText(input.ownerEmail);
     const claimedAtInput = normalizeClaimedAt(input.claimedAt ?? null);
-    const claimedAt =
-      claimStatus === 'claimed'
-        ? claimedAtInput || new Date().toISOString()
-        : claimedAtInput;
+    const claimedAt = claimStatus === 'claimed' ? claimedAtInput || new Date().toISOString() : claimedAtInput;
 
     const pool = getPool();
     const result = await pool.query(
@@ -230,12 +231,7 @@ export async function updateToolClaimInfo(input: {
         WHERE id = $4
         RETURNING name
       `,
-      [
-        ownerEmail,
-        claimStatus,
-        claimStatus === 'unclaimed' ? null : claimedAt,
-        input.toolId,
-      ],
+      [ownerEmail, claimStatus, claimStatus === 'unclaimed' ? null : claimedAt, input.toolId],
     );
 
     if (result.rowCount === 0) {

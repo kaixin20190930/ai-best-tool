@@ -35,6 +35,17 @@ function formatDate(value: string | null) {
   return new Date(value).toLocaleString();
 }
 
+function isOlderThanHours(value: string | null, hours: number) {
+  if (!value) return false;
+
+  const timestamp = new Date(value).getTime();
+  if (!Number.isFinite(timestamp)) {
+    return false;
+  }
+
+  return Date.now() - timestamp >= hours * 60 * 60 * 1000;
+}
+
 export default function AdminClaimsTable({ claims }: AdminClaimsTableProps) {
   const [pendingId, setPendingId] = useState<string | null>(null);
 
@@ -80,6 +91,8 @@ export default function AdminClaimsTable({ claims }: AdminClaimsTableProps) {
             <tbody className='divide-y divide-slate-200'>
               {claims.map((claim) => {
                 const isPending = pendingId === claim.id;
+                const overdueNew = claim.status === 'new' && isOlderThanHours(claim.createdAt, 48);
+                const freshNew = claim.status === 'new' && !isOlderThanHours(claim.createdAt, 24);
 
                 return (
                   <tr key={claim.id} className='align-top'>
@@ -109,7 +122,12 @@ export default function AdminClaimsTable({ claims }: AdminClaimsTableProps) {
                       <div>{claim.email}</div>
                       {claim.company && <div className='mt-1 text-xs text-slate-500'>{claim.company}</div>}
                       {claim.website && (
-                        <a className='mt-1 block text-xs text-cyan-700 hover:underline' href={claim.website} target='_blank' rel='noreferrer'>
+                        <a
+                          className='mt-1 block text-xs text-cyan-700 hover:underline'
+                          href={claim.website}
+                          target='_blank'
+                          rel='noreferrer'
+                        >
                           {claim.website}
                         </a>
                       )}
@@ -117,9 +135,7 @@ export default function AdminClaimsTable({ claims }: AdminClaimsTableProps) {
                     <td className='px-4 py-4 text-slate-600'>
                       <div className='text-xs'>{claim.sourceLocale || '-'}</div>
                       <div className='mt-1 text-xs'>{claim.sourcePath || '-'}</div>
-                      <div className='mt-2 text-xs text-slate-500'>
-                        {claim.note || 'No note'}
-                      </div>
+                      <div className='mt-2 text-xs text-slate-500'>{claim.note || 'No note'}</div>
                     </td>
                     <td className='px-4 py-4'>
                       <span
@@ -127,21 +143,25 @@ export default function AdminClaimsTable({ claims }: AdminClaimsTableProps) {
                       >
                         {statusLabelMap[claim.status]}
                       </span>
-                      <div className='mt-2 text-xs text-slate-500'>
-                        Claimed at: {formatDate(claim.claimedAt)}
-                      </div>
-                      <div className='mt-1 text-xs text-slate-500'>
-                        Reviewed at: {formatDate(claim.reviewedAt)}
-                      </div>
+                      {overdueNew && (
+                        <div className='mt-2 inline-flex rounded-full bg-rose-100 px-2.5 py-1 text-xs font-semibold text-rose-700'>
+                          Overdue &gt; 48h
+                        </div>
+                      )}
+                      {freshNew && (
+                        <div className='mt-2 inline-flex rounded-full bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-700'>
+                          Fresh &lt; 24h
+                        </div>
+                      )}
+                      <div className='mt-2 text-xs text-slate-500'>Claimed at: {formatDate(claim.claimedAt)}</div>
+                      <div className='mt-1 text-xs text-slate-500'>Reviewed at: {formatDate(claim.reviewedAt)}</div>
                       {claim.reviewedBy && (
                         <div className='mt-1 text-xs text-slate-500'>
                           Reviewed by: <span className='font-mono'>{claim.reviewedBy.slice(0, 8)}</span>
                         </div>
                       )}
                     </td>
-                    <td className='px-4 py-4 text-xs text-slate-500'>
-                      {formatDate(claim.updatedAt)}
-                    </td>
+                    <td className='px-4 py-4 text-xs text-slate-500'>{formatDate(claim.updatedAt)}</td>
                     <td className='px-4 py-4'>
                       <div className='flex flex-wrap gap-2'>
                         {(['contacted', 'claimed', 'invalid'] as const).map((status) => (
