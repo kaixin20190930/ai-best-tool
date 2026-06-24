@@ -87,13 +87,23 @@ export default function AdminClaimsTable({ claims }: AdminClaimsTableProps) {
                       <div className='font-semibold text-slate-950'>{claim.listingName}</div>
                       <div className='mt-1 text-xs text-slate-500'>
                         {claim.toolName ? (
-                          <Link href={`/admin/tools?search=${encodeURIComponent(claim.toolName)}`} className='text-cyan-700 hover:underline'>
+                          <Link
+                            href={`/admin/tools?search=${encodeURIComponent(claim.toolName)}`}
+                            className='text-cyan-700 hover:underline'
+                          >
                             Linked tool: {claim.toolName}
                           </Link>
                         ) : (
                           'No linked tool'
                         )}
                       </div>
+                      {claim.toolId && (
+                        <div className='mt-1 text-xs text-slate-500'>
+                          <Link href={`/admin/tools/${claim.toolId}/edit`} className='text-cyan-700 hover:underline'>
+                            Open linked tool
+                          </Link>
+                        </div>
+                      )}
                     </td>
                     <td className='px-4 py-4 text-slate-700'>
                       <div>{claim.email}</div>
@@ -123,6 +133,11 @@ export default function AdminClaimsTable({ claims }: AdminClaimsTableProps) {
                       <div className='mt-1 text-xs text-slate-500'>
                         Reviewed at: {formatDate(claim.reviewedAt)}
                       </div>
+                      {claim.reviewedBy && (
+                        <div className='mt-1 text-xs text-slate-500'>
+                          Reviewed by: <span className='font-mono'>{claim.reviewedBy.slice(0, 8)}</span>
+                        </div>
+                      )}
                     </td>
                     <td className='px-4 py-4 text-xs text-slate-500'>
                       {formatDate(claim.updatedAt)}
