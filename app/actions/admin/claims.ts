@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { getPool } from '@/db/neon/client';
 
 import { requireAdmin } from '@/lib/auth/middleware';
+import { sendTransactionalEmail } from '@/lib/services/mailer';
 
 const validClaimStatuses = ['unclaimed', 'pending', 'claimed', 'rejected'] as const;
 const validClaimRecordStatuses = ['new', 'contacted', 'claimed', 'invalid'] as const;
@@ -66,6 +67,63 @@ function normalizeClaimedAt(value: string | null): string | null {
 
 function normalizeClaimRecordStatus(value: string): ClaimRecordStatus | null {
   return (validClaimRecordStatuses as readonly string[]).includes(value) ? (value as ClaimRecordStatus) : null;
+}
+
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+async function notifyClaimStatusChange(input: {
+  email: string;
+  listingName: string;
+  status: ClaimRecordStatus;
+}): Promise<void> {
+  const displayName = input.listingName.trim() || 'your listing';
+
+  if (input.status === 'new') {
+    return;
+  }
+
+  const bodyMap: Record<Exclude<ClaimRecordStatus, 'new'>, { subject: string; text: string; html: string }> = {
+    contacted: {
+      subject: `[AI Best Tool] We reviewed ${displayName}`,
+      text: `${displayName} has been reviewed and we are reaching out. We will continue from here if we need anything else.`,
+      html: `
+        <p>${escapeHtml(displayName)} has been reviewed and we are reaching out.</p>
+        <p>We will continue from here if we need anything else.</p>
+      `,
+    },
+    claimed: {
+      subject: `[AI Best Tool] ${displayName} was claimed`,
+      text: `${displayName} has been marked as claimed. We have linked the owner details and will continue from there.`,
+      html: `
+        <p>${escapeHtml(displayName)} has been marked as claimed.</p>
+        <p>We have linked the owner details and will continue from there.</p>
+      `,
+    },
+    invalid: {
+      subject: `[AI Best Tool] ${displayName} needs correction`,
+      text: `${displayName} was marked invalid. Please reply if the listing details need to be corrected or if you want to provide updated ownership information.`,
+      html: `
+        <p>${escapeHtml(displayName)} was marked invalid.</p>
+        <p>Please reply if the listing details need to be corrected or if you want to provide updated ownership information.</p>
+      `,
+    },
+  };
+
+  const message = bodyMap[input.status];
+
+  await sendTransactionalEmail({
+    to: input.email,
+    subject: message.subject,
+    text: message.text,
+    html: message.html,
+  });
 }
 
 function buildClaimWhereClause(filters: { status?: string; search?: string }) {
@@ -267,7 +325,7 @@ export async function updateToolClaimStatus(input: {
     const pool = getPool();
     const current = await pool.query(
       `
-        SELECT tc.tool_id, tc.email, tc.claimed_at, tc.status
+        SELECT tc.tool_id, tc.email, tc.claimed_at, tc.status, tc.listing_name
         FROM tool_claims tc
         WHERE tc.id = $1
       `,
@@ -305,6 +363,12 @@ export async function updateToolClaimStatus(input: {
         [input.ownerEmail || row.email || null, nextToolId],
       );
     }
+
+    await notifyClaimStatusChange({
+      email: row.email,
+      listingName: String(row.listing_name || ''),
+      status,
+    });
 
     revalidatePath('/admin/claims');
     revalidatePath('/admin/tools');
