@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import {
-  ArrowRight,
   AlertTriangle,
+  ArrowRight,
   CheckCircle2,
   Eye,
   Heart,
@@ -270,7 +270,10 @@ export default async function AdminDashboard({
     {
       name: 'Claim Leads',
       value: conversionSnapshot.claimLeads,
-      subtext: 'Owners leaving contact details',
+      subtext:
+        conversionSnapshot.overdueClaimLeads > 0
+          ? `${conversionSnapshot.overdueClaimLeads} overdue / ${conversionSnapshot.freshClaimLeads} fresh`
+          : `${conversionSnapshot.freshClaimLeads} fresh leads`,
       icon: Sparkles,
       href: '/admin/claims',
       color: 'blue',

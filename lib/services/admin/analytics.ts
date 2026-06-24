@@ -185,6 +185,8 @@ export interface ConversionSnapshot {
   favorites: number;
   shares: number;
   claimLeads: number;
+  freshClaimLeads: number;
+  overdueClaimLeads: number;
   submissions: number;
   publishedSubmissions: number;
   paidSubmissions: number;
@@ -858,7 +860,10 @@ export async function getConversionSnapshot(range: '7d' | '30d' | 'all' = '30d')
 
     const claimsResult = await pool.query(
       `
-      SELECT COUNT(*)::int AS claim_leads
+      SELECT
+        COUNT(*)::int AS claim_leads,
+        COUNT(*) FILTER (WHERE status = 'new' AND created_at >= NOW() - INTERVAL '24 hours')::int AS fresh_claim_leads,
+        COUNT(*) FILTER (WHERE status = 'new' AND created_at <= NOW() - INTERVAL '48 hours')::int AS overdue_claim_leads
       FROM tool_claims
       WHERE 1 = 1 ${createdAtDateCondition}
     `,
@@ -889,6 +894,8 @@ export async function getConversionSnapshot(range: '7d' | '30d' | 'all' = '30d')
     const shares = Number.parseInt(String(row.shares || '0'), 10);
     const favorites = Number.parseInt(String(favoriteRow.favorites || '0'), 10);
     const claimLeads = Number.parseInt(String(claimsResult.rows[0]?.claim_leads || '0'), 10);
+    const freshClaimLeads = Number.parseInt(String(claimsResult.rows[0]?.fresh_claim_leads || '0'), 10);
+    const overdueClaimLeads = Number.parseInt(String(claimsResult.rows[0]?.overdue_claim_leads || '0'), 10);
     const submissions = Number.parseInt(String(submissionRow.submissions || '0'), 10);
     const publishedSubmissions = Number.parseInt(String(submissionRow.published_submissions || '0'), 10);
     const paidSubmissions = Number.parseInt(String(submissionRow.paid_submissions || '0'), 10);
@@ -901,6 +908,8 @@ export async function getConversionSnapshot(range: '7d' | '30d' | 'all' = '30d')
       favorites,
       shares,
       claimLeads,
+      freshClaimLeads,
+      overdueClaimLeads,
       submissions,
       publishedSubmissions,
       paidSubmissions,
@@ -919,6 +928,8 @@ export async function getConversionSnapshot(range: '7d' | '30d' | 'all' = '30d')
       favorites: 0,
       shares: 0,
       claimLeads: 0,
+      freshClaimLeads: 0,
+      overdueClaimLeads: 0,
       submissions: 0,
       publishedSubmissions: 0,
       paidSubmissions: 0,
