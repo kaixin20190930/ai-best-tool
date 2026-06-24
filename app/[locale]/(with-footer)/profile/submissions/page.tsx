@@ -434,7 +434,12 @@ export default async function SubmissionsPage({
                     {(() => {
                       const commercialStatus = getCommercialStatus(tool);
                       const commercialDetails = getCommercialDetails(tool);
-                      const paymentUrl = commercialStatus === 'pending_payment' ? getCommercialPaymentUrl(tool) : null;
+                      const paymentUrl =
+                        commercialStatus === 'pending_payment' ||
+                        commercialStatus === 'live_featured' ||
+                        commercialStatus === 'expired'
+                          ? getCommercialPaymentUrl(tool)
+                          : null;
 
                       let actionContent: JSX.Element | null = null;
 
@@ -463,6 +468,42 @@ export default async function SubmissionsPage({
                             className='text-sm font-medium text-cyan-700 hover:text-cyan-800'
                           >
                             Contact to pay
+                          </a>
+                        );
+                      } else if (commercialStatus === 'live_featured') {
+                        actionContent = paymentUrl ? (
+                          <a
+                            href={paymentUrl}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                            className='inline-flex items-center rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-emerald-700'
+                          >
+                            Renew featured
+                          </a>
+                        ) : (
+                          <a
+                            href={pendingPaymentMailto}
+                            className='text-sm font-medium text-cyan-700 hover:text-cyan-800'
+                          >
+                            Contact to renew
+                          </a>
+                        );
+                      } else if (commercialStatus === 'expired') {
+                        actionContent = paymentUrl ? (
+                          <a
+                            href={paymentUrl}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                            className='inline-flex items-center rounded-lg bg-rose-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-rose-700'
+                          >
+                            Renew visibility
+                          </a>
+                        ) : (
+                          <a
+                            href={pendingPaymentMailto}
+                            className='text-sm font-medium text-cyan-700 hover:text-cyan-800'
+                          >
+                            Contact to renew
                           </a>
                         );
                       } else {
