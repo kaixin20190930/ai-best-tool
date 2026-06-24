@@ -543,6 +543,19 @@ function getSubmittedByEmailFromFeatures(features: unknown): string | null {
   return typeof email === 'string' && email.trim().length > 0 ? email.trim() : null;
 }
 
+function isValidEmail(value: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 /**
  * Get all tools for admin (including pending, rejected, etc.)
  */
@@ -1569,6 +1582,311 @@ export async function cleanupExpiredSponsoredPlacementsBySystem(): Promise<{
       success: false,
       updated: 0,
       error: error instanceof Error ? error.message : 'Failed to clean expired sponsored placements',
+    };
+  }
+}
+
+type FeaturedRenewalReminderType = 'featured_ending_3d' | 'featured_ending_1d';
+
+async function ensureFeaturedRenewalReminderLogTable() {
+  const pool = getPool();
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS featured_renewal_reminder_logs (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      tool_id UUID NOT NULL,
+      reminder_type TEXT NOT NULL,
+      featured_until TIMESTAMPTZ NOT NULL,
+      recipient_email TEXT NOT NULL,
+      sent_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+
+  await pool.query(`
+    CREATE UNIQUE INDEX IF NOT EXISTS uq_featured_renewal_reminder_logs
+    ON featured_renewal_reminder_logs(tool_id, reminder_type, featured_until)
+  `);
+
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS idx_featured_renewal_reminder_logs_sent_at
+    ON featured_renewal_reminder_logs(sent_at DESC)
+  `);
+}
+
+async function hasFeaturedRenewalReminderBeenSent(
+  toolId: string,
+  reminderType: FeaturedRenewalReminderType,
+  featuredUntil: string,
+): Promise<boolean> {
+  const pool = getPool();
+  const result = await pool.query(
+    `
+      SELECT 1
+      FROM featured_renewal_reminder_logs
+      WHERE tool_id = $1
+        AND reminder_type = $2
+        AND featured_until = $3::timestamptz
+      LIMIT 1
+    `,
+    [toolId, reminderType, featuredUntil],
+  );
+
+  return (result.rowCount || 0) > 0;
+}
+
+async function recordFeaturedRenewalReminderLog(input: {
+  toolId: string;
+  reminderType: FeaturedRenewalReminderType;
+  featuredUntil: string;
+  recipientEmail: string;
+}) {
+  const pool = getPool();
+  await pool.query(
+    `
+      INSERT INTO featured_renewal_reminder_logs (
+        tool_id,
+        reminder_type,
+        featured_until,
+        recipient_email
+      )
+      VALUES ($1, $2, $3::timestamptz, $4)
+      ON CONFLICT (tool_id, reminder_type, featured_until) DO NOTHING
+    `,
+    [input.toolId, input.reminderType, input.featuredUntil, input.recipientEmail],
+  );
+}
+
+export async function sendFeaturedRenewalRemindersBySystem(): Promise<{
+  success: boolean;
+  sent: number;
+  skipped: number;
+  error?: string;
+}> {
+  try {
+    const pool = getPool();
+    await ensureFeaturedRenewalReminderLogTable();
+
+    const result = await pool.query(
+      `
+        SELECT
+          t.id::text AS id,
+          t.name,
+          t.title,
+          t.submitted_by::text AS "submittedBy",
+          t.owner_email AS "ownerEmail",
+          t.features,
+          NULLIF(t.features->'submission'->'commercial'->>'featuredUntil', '')::timestamptz AS "featuredUntil"
+        FROM tools t
+        WHERE COALESCE(t.features->'submission'->'commercial'->>'isSponsoredPlacement', 'false') = 'true'
+          AND NULLIF(t.features->'submission'->'commercial'->>'featuredUntil', '') IS NOT NULL
+          AND NULLIF(t.features->'submission'->'commercial'->>'featuredUntil', '')::timestamptz > NOW()
+          AND NULLIF(t.features->'submission'->'commercial'->>'featuredUntil', '')::timestamptz <= NOW() + INTERVAL '72 hours'
+        ORDER BY "featuredUntil" ASC
+      `,
+    );
+
+    const candidates = result.rows as Array<{
+      id: string;
+      name: string;
+      title: unknown;
+      submittedBy: string | null;
+      ownerEmail: string | null;
+      features: unknown;
+      featuredUntil: string;
+    }>;
+
+    const reminderTasks = await Promise.all(
+      candidates.map(async (tool) => {
+        const daysLeft = Math.max(
+          1,
+          Math.ceil((new Date(tool.featuredUntil).getTime() - Date.now()) / (1000 * 60 * 60 * 24)),
+        );
+        const reminderType: FeaturedRenewalReminderType =
+          daysLeft <= 1 ? 'featured_ending_1d' : 'featured_ending_3d';
+        const titleRecord =
+          tool.title && typeof tool.title === 'object'
+            ? (tool.title as Record<string, unknown>)
+            : null;
+        const displayName =
+          (typeof titleRecord?.en === 'string' && titleRecord.en.trim()) ||
+          (typeof titleRecord?.zh === 'string' && titleRecord.zh.trim()) ||
+          tool.name;
+        const submittedByEmail = getSubmittedByEmailFromFeatures(tool.features);
+        const recipientEmail = [tool.ownerEmail, submittedByEmail]
+          .find((value): value is string => typeof value === 'string' && isValidEmail(value.trim()))
+          ?.trim()
+          .toLowerCase();
+
+        if (!recipientEmail) {
+          return { sent: 0, skipped: 1 };
+        }
+
+        const reminderAlreadySent = await hasFeaturedRenewalReminderBeenSent(
+          tool.id,
+          reminderType,
+          tool.featuredUntil,
+        );
+
+        if (reminderAlreadySent) {
+          return { sent: 0, skipped: 1 };
+        }
+
+        const subject =
+          reminderType === 'featured_ending_1d'
+            ? `[AI Best Tool] Featured placement ends tomorrow / 前排展示明天结束`
+            : `[AI Best Tool] Featured placement ends soon / 前排展示即将结束`;
+        const text = [
+          `${displayName} currently has a featured window ending on ${new Date(tool.featuredUntil).toISOString()}.`,
+          `There are about ${daysLeft} day${daysLeft === 1 ? '' : 's'} left.`,
+          '',
+          'If you want to keep the extra visibility, you can renew from My Submissions.',
+        ].join('\n');
+        const html = `
+          <p><strong>${escapeHtml(displayName)}</strong> currently has a featured window ending on ${escapeHtml(
+            new Date(tool.featuredUntil).toISOString(),
+          )}.</p>
+          <p>There are about ${daysLeft} day${daysLeft === 1 ? '' : 's'} left.</p>
+          <p>If you want to keep the extra visibility, you can renew from My Submissions.</p>
+        `;
+
+        const emailResult = await sendTransactionalEmail({
+          to: recipientEmail,
+          subject,
+          text,
+          html,
+        });
+
+        if (emailResult.success) {
+          await recordFeaturedRenewalReminderLog({
+            toolId: tool.id,
+            reminderType,
+            featuredUntil: tool.featuredUntil,
+            recipientEmail,
+          });
+        }
+
+        return {
+          sent: emailResult.success ? 1 : 0,
+          skipped: emailResult.success ? 0 : 1,
+        };
+      }),
+    );
+
+    return {
+      success: true,
+      sent: reminderTasks.reduce((sum, item) => sum + item.sent, 0),
+      skipped: reminderTasks.reduce((sum, item) => sum + item.skipped, 0),
+    };
+  } catch (error) {
+    console.error('Error sending featured renewal reminders:', error);
+    return {
+      success: false,
+      sent: 0,
+      skipped: 0,
+      error: error instanceof Error ? error.message : 'Failed to send featured renewal reminders',
+    };
+  }
+}
+
+export async function getFeaturedPlacementStats(): Promise<{
+  liveCount: number;
+  reservedCount: number;
+  expiringSoonCount: number;
+  totalViews: number;
+  totalClicks: number;
+  placements: Array<{
+    id: string;
+    name: string;
+    title: string;
+    views: number;
+    clicks: number;
+    activeFrom: string | null;
+    featuredUntil: string | null;
+    daysLeft: number | null;
+    state: 'live' | 'reserved' | 'expired';
+  }>;
+}> {
+  try {
+    await requireAdmin();
+
+    const pool = getPool();
+    const result = await pool.query(
+      `
+        SELECT
+          t.id::text AS id,
+          t.name,
+          t.title,
+          t.view_count::int AS views,
+          t.click_count::int AS clicks,
+          COALESCE(t.features->'submission'->'commercial'->>'isSponsoredPlacement', 'false') = 'true' AS is_sponsored_placement,
+          NULLIF(t.features->'submission'->'commercial'->>'featuredActiveFrom', '')::timestamptz AS "featuredActiveFrom",
+          NULLIF(t.features->'submission'->'commercial'->>'featuredUntil', '')::timestamptz AS "featuredUntil",
+          NULLIF(t.features->'submission'->'commercial'->>'featuredReservedAt', '')::timestamptz AS "featuredReservedAt"
+        FROM tools t
+        WHERE COALESCE(t.features->'submission'->'commercial'->>'featuredReservedAt', '') <> ''
+           OR COALESCE(t.features->'submission'->'commercial'->>'isSponsoredPlacement', 'false') = 'true'
+        ORDER BY "featuredUntil" ASC NULLS LAST, t.updated_at DESC
+      `,
+    );
+
+    const now = Date.now();
+    const placements = result.rows
+      .map((row) => {
+        const featuredActiveFrom =
+          typeof row.featuredActiveFrom === 'string' && row.featuredActiveFrom ? row.featuredActiveFrom : null;
+        const featuredUntil =
+          typeof row.featuredUntil === 'string' && row.featuredUntil ? row.featuredUntil : null;
+        const activeFromTime = featuredActiveFrom ? new Date(featuredActiveFrom).getTime() : null;
+        const untilTime = featuredUntil ? new Date(featuredUntil).getTime() : null;
+        const isSponsoredPlacement = row.is_sponsored_placement === true || row.is_sponsored_placement === 'true';
+        const title = getLocalizedText(row.title) || row.name;
+        const isLive =
+          isSponsoredPlacement &&
+          activeFromTime !== null &&
+          untilTime !== null &&
+          activeFromTime <= now &&
+          untilTime > now;
+        const isReserved = !isSponsoredPlacement && Boolean(row.featuredReservedAt);
+        const daysLeft = untilTime ? Math.max(0, Math.ceil((untilTime - now) / (1000 * 60 * 60 * 24))) : null;
+
+        return {
+          id: row.id,
+          name: row.name,
+          title,
+          views: Number(row.views || 0),
+          clicks: Number(row.clicks || 0),
+          activeFrom: featuredActiveFrom,
+          featuredUntil,
+          daysLeft,
+          state: (isLive ? 'live' : isReserved ? 'reserved' : 'expired') as
+            | 'live'
+            | 'reserved'
+            | 'expired',
+        };
+      })
+      .filter((item) => item.state !== 'expired' || item.featuredUntil !== null);
+
+    const livePlacements = placements.filter((item) => item.state === 'live');
+    const reservedPlacements = placements.filter((item) => item.state === 'reserved');
+    const expiringSoonCount = livePlacements.filter((item) => (item.daysLeft ?? Number.MAX_SAFE_INTEGER) <= 3).length;
+
+    return {
+      liveCount: livePlacements.length,
+      reservedCount: reservedPlacements.length,
+      expiringSoonCount,
+      totalViews: livePlacements.reduce((sum, item) => sum + item.views, 0),
+      totalClicks: livePlacements.reduce((sum, item) => sum + item.clicks, 0),
+      placements: livePlacements,
+    };
+  } catch (error) {
+    console.error('Error fetching featured placement stats:', error);
+    return {
+      liveCount: 0,
+      reservedCount: 0,
+      expiringSoonCount: 0,
+      totalViews: 0,
+      totalClicks: 0,
+      placements: [],
     };
   }
 }

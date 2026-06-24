@@ -17,6 +17,7 @@ import {
 } from '@/lib/services/admin/analytics';
 import {
   getOperationalStats,
+  getFeaturedPlacementStats,
   getSubmissionFunnelStats,
   getSubmissionRejectionReasonStats,
 } from '@/app/actions/admin/tools';
@@ -55,6 +56,7 @@ export default async function AdminAnalyticsPage({
   const operationalStats = await getOperationalStats(range);
   const funnel = await getSubmissionFunnelStats(range);
   const rejectionReasons = await getSubmissionRejectionReasonStats(range, 5);
+  const featuredPlacementStats = await getFeaturedPlacementStats();
   const claimSummary = await getAdminToolClaimsSummary();
   const topToolsByViews = await getTopTools('views', 10);
   const topToolsByRating = await getTopTools('rating', 10);
@@ -244,6 +246,13 @@ export default async function AdminAnalyticsPage({
   }));
   const claimResolutionRate =
     claimSummary.total > 0 ? Math.round(((claimSummary.claimedCount + claimSummary.invalidCount) / claimSummary.total) * 100) : 0;
+  const featuredExpiringSoon = featuredPlacementStats.placements
+    .filter((item) => item.daysLeft !== null && item.daysLeft <= 3)
+    .sort((a, b) => (a.daysLeft || 0) - (b.daysLeft || 0));
+  const featuredClickThroughRate =
+    featuredPlacementStats.totalViews > 0
+      ? Math.round((featuredPlacementStats.totalClicks / featuredPlacementStats.totalViews) * 100)
+      : 0;
 
   const getPeriodChangeLabel = (currentViews: number, previousViews: number) => {
     if (previousViews > 0) {
@@ -1441,6 +1450,133 @@ export default async function AdminAnalyticsPage({
               <p className='text-sm font-medium text-slate-600'>Reason Coverage</p>
               <p className='mt-2 text-3xl font-semibold text-cyan-700'>{rejectionReasonCoverage}%</p>
               <p className='mt-2 text-sm text-slate-500'>How many rejections already have a usable written reason.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Featured Statistics */}
+      <div className='mb-8'>
+        <div className='mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
+          <div>
+            <h2 className='text-lg font-semibold text-slate-900'>Featured Statistics</h2>
+            <p className='mt-1 text-sm text-slate-600'>
+              Live featured placements, renewal pressure, and current view/click totals for the sponsored inventory.
+            </p>
+          </div>
+          <Link
+            href={`/${locale}/profile/submissions`}
+            className='inline-flex items-center gap-1 text-sm font-medium text-cyan-700 hover:text-cyan-800'
+          >
+            Open renewal view
+            <ArrowUpRight className='h-4 w-4' />
+          </Link>
+        </div>
+
+        <div className='mb-4 rounded-lg border border-cyan-100 bg-cyan-50 p-4 shadow-sm'>
+          <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between'>
+            <div>
+              <div className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>Tracking note</div>
+              <div className='mt-1 text-base font-semibold text-slate-950'>
+                Featured stats use current tool view and click totals as a proxy for exposure.
+              </div>
+              <p className='mt-1 text-sm leading-6 text-slate-600'>
+                We do not yet track a separate impression event for sponsored slots, so this panel keeps the
+                operational view honest while still showing whether featured inventory is getting used.
+              </p>
+            </div>
+            <div className='rounded-full bg-white px-3 py-1 text-sm font-semibold text-cyan-800 ring-1 ring-cyan-100'>
+              {featuredPlacementStats.liveCount} live placements
+            </div>
+          </div>
+        </div>
+
+        <div className='grid gap-4 sm:grid-cols-2 xl:grid-cols-4'>
+          <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Live Placements</p>
+            <p className='mt-2 text-3xl font-semibold text-slate-900'>{featuredPlacementStats.liveCount}</p>
+            <p className='mt-2 text-sm text-slate-500'>Currently running featured windows.</p>
+          </div>
+          <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Reserved Placements</p>
+            <p className='mt-2 text-3xl font-semibold text-amber-600'>{featuredPlacementStats.reservedCount}</p>
+            <p className='mt-2 text-sm text-slate-500'>Paid but waiting for publication or activation.</p>
+          </div>
+          <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Featured Views</p>
+            <p className='mt-2 text-3xl font-semibold text-cyan-700'>
+              {featuredPlacementStats.totalViews.toLocaleString()}
+            </p>
+            <p className='mt-2 text-sm text-slate-500'>Current view totals across live placements.</p>
+          </div>
+          <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Featured CTR</p>
+            <p className='mt-2 text-3xl font-semibold text-emerald-600'>{featuredClickThroughRate}%</p>
+            <p className='mt-2 text-sm text-slate-500'>
+              Clicks divided by views for the live featured set.
+            </p>
+          </div>
+        </div>
+
+        <div className='mt-4 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]'>
+          <div className='overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm'>
+            <div className='border-b border-slate-200 px-4 py-3'>
+              <div className='flex items-center justify-between gap-3'>
+                <p className='text-sm font-semibold text-slate-900'>Live placements</p>
+                <p className='text-xs text-slate-500'>
+                  {featuredPlacementStats.totalClicks.toLocaleString()} clicks tracked
+                </p>
+              </div>
+            </div>
+            <div className='divide-y divide-slate-100'>
+              {featuredPlacementStats.placements.length > 0 ? (
+                featuredPlacementStats.placements.map((item) => (
+                  <div key={item.id} className='px-4 py-4'>
+                    <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between'>
+                      <div className='min-w-0'>
+                        <p className='text-sm font-medium text-slate-900'>{item.title}</p>
+                        <p className='mt-1 text-xs text-slate-500'>{item.name}</p>
+                        <p className='mt-2 text-xs text-slate-500'>
+                          Ends{' '}
+                          {item.featuredUntil ? new Date(item.featuredUntil).toLocaleString() : 'unknown'}
+                          {item.daysLeft !== null ? ` · ${item.daysLeft} day${item.daysLeft === 1 ? '' : 's'} left` : ''}
+                        </p>
+                      </div>
+                      <div className='flex shrink-0 gap-2'>
+                        <span className='rounded-full bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-cyan-700'>
+                          {item.views.toLocaleString()} views
+                        </span>
+                        <span className='rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700'>
+                          {item.clicks.toLocaleString()} clicks
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className='px-4 py-8 text-sm text-slate-500'>No live featured placements right now.</div>
+              )}
+            </div>
+          </div>
+
+          <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-1'>
+            <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
+              <p className='text-sm font-medium text-slate-600'>Expiring in 3 days</p>
+              <p className='mt-2 text-3xl font-semibold text-rose-600'>{featuredPlacementStats.expiringSoonCount}</p>
+              <p className='mt-2 text-sm text-slate-500'>Featured windows that need a renewal nudge.</p>
+            </div>
+            <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
+              <p className='text-sm font-medium text-slate-600'>Top renewal pressure</p>
+              <p className='mt-2 text-3xl font-semibold text-slate-900'>
+                {featuredExpiringSoon.length > 0 ? featuredExpiringSoon[0].title : 'None'}
+              </p>
+              <p className='mt-2 text-sm text-slate-500'>
+                {featuredExpiringSoon.length > 0
+                  ? featuredExpiringSoon[0].daysLeft === 1
+                    ? 'Ends tomorrow.'
+                    : `Ends in ${featuredExpiringSoon[0].daysLeft} days.`
+                  : 'No featured window is close enough to need a reminder yet.'}
+              </p>
             </div>
           </div>
         </div>
