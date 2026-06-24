@@ -110,9 +110,7 @@ export async function notifyAdminsOfSubmission(input: {
 
     const displayName = input.toolTitle.trim() || input.toolName;
     const isPaid = input.submissionPlan === 'standard_paid';
-    const title = isPaid
-      ? 'Paid submission received / 付费提交已收到'
-      : 'New submission received / 新提交已收到';
+    const title = isPaid ? 'Paid submission received / 付费提交已收到' : 'New submission received / 新提交已收到';
     const content = isPaid
       ? `${displayName} selected a paid listing${input.fastTrack ? ' with faster review' : ''}${input.featuredDays > 0 ? ` and ${input.featuredDays} featured days` : ''}. Review can continue after payment is confirmed. / ${displayName} 选择了付费入驻${input.fastTrack ? '（更快审核）' : ''}${input.featuredDays > 0 ? `，前排展示 ${input.featuredDays} 天` : ''}。付款确认后即可继续审核。`
       : `${displayName} has entered the review queue. / ${displayName} 已进入审核队列。`;
@@ -124,6 +122,42 @@ export async function notifyAdminsOfSubmission(input: {
     );
   } catch (error) {
     console.error('Error notifying admins of submission:', error);
+  }
+}
+
+export async function notifyAdminsOfClaimLead(input: {
+  listingName: string;
+  email: string;
+  company?: string | null;
+  website?: string | null;
+  sourcePath?: string | null;
+  sourceLocale?: string | null;
+}): Promise<void> {
+  try {
+    const adminIds = await getAdminUserIds();
+
+    if (adminIds.length === 0) {
+      return;
+    }
+
+    const displayName = input.listingName.trim() || 'Unnamed listing';
+    const title = 'New claim lead received / 新认领线索已收到';
+    const content = [
+      `${displayName} requested ownership verification.`,
+      input.company ? `Company: ${input.company}` : '',
+      input.website ? `Website: ${input.website}` : '',
+      input.sourceLocale ? `Locale: ${input.sourceLocale}` : '',
+      input.sourcePath ? `Source: ${input.sourcePath}` : '',
+      `${displayName} 已提交认领请求，建议尽快跟进。`,
+    ]
+      .filter(Boolean)
+      .join(' / ');
+
+    await Promise.all(
+      adminIds.map((adminId) => createNotification(adminId, 'admin_claim', title, content, '/admin/claims?status=new')),
+    );
+  } catch (error) {
+    console.error('Error notifying admins of claim lead:', error);
   }
 }
 

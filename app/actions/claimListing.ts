@@ -5,6 +5,7 @@ import { query } from '@/db/neon/client';
 
 import { listingConfig } from '@/lib/config/listing';
 import { sendTransactionalEmail } from '@/lib/services/mailer';
+import { notifyAdminsOfClaimLead } from '@/app/actions/notifications';
 
 export interface ClaimListingInput {
   listingName: string;
@@ -107,6 +108,15 @@ export async function submitClaimListing(input: ClaimListingInput): Promise<Clai
         referrer,
       ],
     );
+
+    await notifyAdminsOfClaimLead({
+      listingName,
+      email,
+      company,
+      website,
+      sourcePath,
+      sourceLocale,
+    });
 
     const { supportEmail } = listingConfig;
     if (supportEmail) {
