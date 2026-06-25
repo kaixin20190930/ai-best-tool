@@ -47,10 +47,23 @@ function getSuggestionLabel(suggestion: AdminOutreachQueueItem['suggestion']) {
 export default function AdminOutreachQueueTable({ items, locale }: AdminOutreachQueueTableProps) {
   const router = useRouter();
   const [pendingId, setPendingId] = useState<string | null>(null);
+  const [notesById, setNotesById] = useState<Record<string, string>>(() =>
+    Object.fromEntries(items.map((item) => [item.id, item.outreachNote || ''])),
+  );
+  const [followUpById, setFollowUpById] = useState<Record<string, string>>(() =>
+    Object.fromEntries(
+      items.map((item) => [item.id, item.outreachNextFollowUpAt ? item.outreachNextFollowUpAt.slice(0, 10) : '']),
+    ),
+  );
 
   const handleStatusChange = async (toolId: string, status: OutreachStatus) => {
     setPendingId(toolId);
-    const result = await updateOutreachStatus({ toolId, status });
+    const result = await updateOutreachStatus({
+      toolId,
+      status,
+      note: notesById[toolId] || '',
+      nextFollowUpAt: followUpById[toolId] || null,
+    });
     setPendingId(null);
 
     if (result.success) {
@@ -58,6 +71,24 @@ export default function AdminOutreachQueueTable({ items, locale }: AdminOutreach
       router.refresh();
     } else {
       toast.error(result.error || 'Failed to update outreach status.');
+    }
+  };
+
+  const handleSaveDetails = async (toolId: string, currentStatus: OutreachStatus) => {
+    setPendingId(toolId);
+    const result = await updateOutreachStatus({
+      toolId,
+      status: currentStatus,
+      note: notesById[toolId] || '',
+      nextFollowUpAt: followUpById[toolId] || null,
+    });
+    setPendingId(null);
+
+    if (result.success) {
+      toast.success('Outreach details saved.');
+      router.refresh();
+    } else {
+      toast.error(result.error || 'Failed to save outreach details.');
     }
   };
 
@@ -108,7 +139,7 @@ export default function AdminOutreachQueueTable({ items, locale }: AdminOutreach
                     </span>
                   </td>
                   <td className='px-4 py-4 align-top'>
-                    <div className='min-w-[180px]'>
+                    <div className='min-w-[240px]'>
                       <span
                         className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${getStatusBadgeClasses(item.outreachStatus)}`}
                       >
@@ -127,6 +158,39 @@ export default function AdminOutreachQueueTable({ items, locale }: AdminOutreach
                             {isPending ? 'Saving...' : statusLabelMap[status]}
                           </button>
                         ))}
+                      </div>
+                      <div className='mt-3 space-y-2'>
+                        <textarea
+                          value={notesById[item.id] || ''}
+                          onChange={(event) =>
+                            setNotesById((current) => ({
+                              ...current,
+                              [item.id]: event.target.value,
+                            }))}
+                          rows={3}
+                          placeholder='Add a short outreach note...'
+                          className='w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-700'
+                        />
+                        <div className='flex items-center gap-2'>
+                          <input
+                            type='date'
+                            value={followUpById[item.id] || ''}
+                            onChange={(event) =>
+                              setFollowUpById((current) => ({
+                                ...current,
+                                [item.id]: event.target.value,
+                              }))}
+                            className='rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-700'
+                          />
+                          <button
+                            type='button'
+                            onClick={() => handleSaveDetails(item.id, item.outreachStatus)}
+                            disabled={isPending}
+                            className='rounded-lg bg-slate-900 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60'
+                          >
+                            {isPending ? 'Saving...' : 'Save'}
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </td>

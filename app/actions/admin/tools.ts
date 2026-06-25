@@ -115,6 +115,8 @@ export interface AdminOutreachQueueItem {
   reason: string;
   outreachStatus: OutreachStatus;
   outreachUpdatedAt: string | null;
+  outreachNote: string | null;
+  outreachNextFollowUpAt: string | null;
 }
 
 function parseCount(value: unknown): number {
@@ -2371,6 +2373,8 @@ export async function getDeveloperOutreachQueue(
           COALESCE(t.features->'submission'->>'submittedByEmail', '') AS "submittedByEmail",
           COALESCE(t.features->'outreach'->>'status', 'not_started') AS "outreachStatus",
           NULLIF(t.features->'outreach'->>'updatedAt', '') AS "outreachUpdatedAt",
+          NULLIF(t.features->'outreach'->>'note', '') AS "outreachNote",
+          NULLIF(t.features->'outreach'->>'nextFollowUpAt', '') AS "outreachNextFollowUpAt",
           GREATEST(0, FLOOR(EXTRACT(EPOCH FROM (NOW() - t.updated_at)) / 86400))::int AS "daysSinceUpdate"
         FROM tools t
         LEFT JOIN favorite_counts fc ON fc.tool_id = t.id
@@ -2415,6 +2419,12 @@ export async function getDeveloperOutreachQueue(
           typeof row.outreachUpdatedAt === 'string' && row.outreachUpdatedAt.trim().length > 0
             ? row.outreachUpdatedAt
             : null;
+        const outreachNote =
+          typeof row.outreachNote === 'string' && row.outreachNote.trim().length > 0 ? row.outreachNote.trim() : null;
+        const outreachNextFollowUpAt =
+          typeof row.outreachNextFollowUpAt === 'string' && row.outreachNextFollowUpAt.trim().length > 0
+            ? row.outreachNextFollowUpAt
+            : null;
 
         let suggestion: 'claim_listing' | 'featured_pitch' | 'content_collab' = 'claim_listing';
         let reason = 'Unclaimed published tool with a reachable contact.';
@@ -2442,6 +2452,8 @@ export async function getDeveloperOutreachQueue(
           reason,
           outreachStatus,
           outreachUpdatedAt,
+          outreachNote,
+          outreachNextFollowUpAt,
         };
       })
       .filter((item): item is NonNullable<typeof item> => item !== null);
@@ -2454,6 +2466,8 @@ export async function getDeveloperOutreachQueue(
 export async function updateOutreachStatus(input: {
   toolId: string;
   status: OutreachStatus;
+  note?: string;
+  nextFollowUpAt?: string | null;
 }): Promise<{ success: boolean; error?: string }> {
   try {
     await requireAdmin();
@@ -2467,6 +2481,13 @@ export async function updateOutreachStatus(input: {
       return { success: false, error: 'Invalid outreach status.' };
     }
 
+    const note = normalizeNullableText(input.note);
+    const nextFollowUpAt = normalizeNullableText(input.nextFollowUpAt ?? undefined);
+    const parsedFollowUpAt =
+      nextFollowUpAt && !Number.isNaN(new Date(nextFollowUpAt).getTime())
+        ? new Date(nextFollowUpAt).toISOString()
+        : null;
+
     const pool = getPool();
     const result = await pool.query(
       `
@@ -2478,7 +2499,9 @@ export async function updateOutreachStatus(input: {
             COALESCE(features->'outreach', '{}'::jsonb)
               || jsonb_build_object(
                 'status', $2::text,
-                'updatedAt', NOW()::text
+                'updatedAt', NOW()::text,
+                'note', $3::text,
+                'nextFollowUpAt', $4::text
               ),
             true
           ),
@@ -2486,7 +2509,7 @@ export async function updateOutreachStatus(input: {
         WHERE id::text = $1
         RETURNING name
       `,
-      [toolId, input.status],
+      [toolId, input.status, note, parsedFollowUpAt],
     );
 
     if (result.rowCount === 0) {
