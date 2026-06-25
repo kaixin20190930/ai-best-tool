@@ -403,6 +403,39 @@ export default async function AdminAnalyticsPage({
     return 'Review whether this CTA should send users somewhere clearer.';
   };
 
+  const getPageFamilyPrimaryHref = (pageType: string) => {
+    if (pageType === 'home') return `/${locale}`;
+    if (pageType === 'tool_detail') return `/${locale}/ai`;
+    if (pageType === 'guide') return `/${locale}/guides`;
+    if (pageType === 'category') return `/${locale}/categories`;
+    if (pageType === 'explore') return `/${locale}/explore`;
+    if (pageType === 'best_ai_tools') return `/${locale}/best-ai-tools`;
+    if (pageType === 'best_ai_tools_topic') return `/${locale}/best-ai-tools/ai-coding-tools`;
+    if (pageType === 'pricing') return `/${locale}/pricing`;
+    if (pageType === 'submit') return `/${locale}/submit`;
+    if (pageType === 'developer_listing') return `/${locale}/developer/listing`;
+    if (pageType === 'profile_submissions') return `/${locale}/profile/submissions`;
+    return null;
+  };
+
+  const getPageFamilySecondaryHref = (pageType: string) => {
+    if (pageType === 'pricing' || pageType === 'submit' || pageType === 'profile_submissions') return '/admin/tools';
+    if (pageType === 'developer_listing') return '/admin/claims?status=new';
+    if (pageType === 'tool_detail' || pageType === 'guide' || pageType === 'best_ai_tools_topic') {
+      return '/admin/tools';
+    }
+    if (pageType === 'category' || pageType === 'explore' || pageType === 'best_ai_tools') return '/admin/analytics';
+    return null;
+  };
+
+  const getPageFamilySecondaryLabel = (pageType: string) => {
+    if (pageType === 'developer_listing') return 'Open claim queue';
+    if (pageType === 'pricing' || pageType === 'submit' || pageType === 'profile_submissions') return 'Open tools';
+    if (pageType === 'tool_detail' || pageType === 'guide' || pageType === 'best_ai_tools_topic') return 'Review tools';
+    if (pageType === 'category' || pageType === 'explore' || pageType === 'best_ai_tools') return 'Open analytics';
+    return 'Open admin';
+  };
+
   const getPageFamilyFunnelAction = (item: {
     pageType: string;
     views: number;
@@ -954,6 +987,15 @@ export default async function AdminAnalyticsPage({
                 ? `${topDownstreamFamily.downstreamConversions} downstream conversions from ${topDownstreamFamily.views} views`
                 : 'No claim or checkout activity recorded yet.'}
             </p>
+            {topDownstreamFamily && getPageFamilyPrimaryHref(topDownstreamFamily.pageType) && (
+              <Link
+                href={getPageFamilyPrimaryHref(topDownstreamFamily.pageType)!}
+                className='mt-3 inline-flex items-center gap-1 text-sm font-medium text-cyan-700 hover:text-cyan-800'
+              >
+                Open page
+                <ArrowUpRight className='h-4 w-4' />
+              </Link>
+            )}
           </div>
           <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
             <p className='text-sm font-medium text-slate-600'>Strongest CTA rate</p>
@@ -965,6 +1007,15 @@ export default async function AdminAnalyticsPage({
                 ? `${topCtaRateFamily.ctaClicks} CTA clicks from ${topCtaRateFamily.views} views`
                 : 'No family has both views and CTA data yet.'}
             </p>
+            {topCtaRateFamily && getPageFamilyPrimaryHref(topCtaRateFamily.pageType) && (
+              <Link
+                href={getPageFamilyPrimaryHref(topCtaRateFamily.pageType)!}
+                className='mt-3 inline-flex items-center gap-1 text-sm font-medium text-cyan-700 hover:text-cyan-800'
+              >
+                Open page
+                <ArrowUpRight className='h-4 w-4' />
+              </Link>
+            )}
           </div>
           <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
             <p className='text-sm font-medium text-slate-600'>Biggest visible leak</p>
@@ -976,6 +1027,15 @@ export default async function AdminAnalyticsPage({
                 ? `${biggestLeakFamily.ctaClicks} CTA clicks but no claim or checkout progression yet`
                 : 'No page family is currently stuck between click and downstream action.'}
             </p>
+            {biggestLeakFamily && getPageFamilySecondaryHref(biggestLeakFamily.pageType) && (
+              <Link
+                href={getPageFamilySecondaryHref(biggestLeakFamily.pageType)!}
+                className='mt-3 inline-flex items-center gap-1 text-sm font-medium text-cyan-700 hover:text-cyan-800'
+              >
+                {getPageFamilySecondaryLabel(biggestLeakFamily.pageType)}
+                <ArrowUpRight className='h-4 w-4' />
+              </Link>
+            )}
           </div>
         </div>
 
@@ -998,6 +1058,7 @@ export default async function AdminAnalyticsPage({
                     <th className='px-4 py-3'>Checkout starts</th>
                     <th className='px-4 py-3'>Rates</th>
                     <th className='px-4 py-3'>Action</th>
+                    <th className='px-4 py-3'>Open</th>
                   </tr>
                 </thead>
                 <tbody className='divide-y divide-slate-100'>
@@ -1036,6 +1097,28 @@ export default async function AdminAnalyticsPage({
                         </div>
                       </td>
                       <td className='px-4 py-4 text-xs leading-5 text-slate-500'>{getPageFamilyFunnelAction(item)}</td>
+                      <td className='px-4 py-4'>
+                        <div className='flex min-w-[140px] flex-col items-start gap-2 text-xs font-medium'>
+                          {getPageFamilyPrimaryHref(item.pageType) && (
+                            <Link
+                              href={getPageFamilyPrimaryHref(item.pageType)!}
+                              className='inline-flex items-center gap-1 text-cyan-700 hover:text-cyan-800'
+                            >
+                              Open page
+                              <ArrowUpRight className='h-3.5 w-3.5' />
+                            </Link>
+                          )}
+                          {getPageFamilySecondaryHref(item.pageType) && (
+                            <Link
+                              href={getPageFamilySecondaryHref(item.pageType)!}
+                              className='inline-flex items-center gap-1 text-slate-600 hover:text-slate-900'
+                            >
+                              {getPageFamilySecondaryLabel(item.pageType)}
+                              <ArrowUpRight className='h-3.5 w-3.5' />
+                            </Link>
+                          )}
+                        </div>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -2036,6 +2119,36 @@ export default async function AdminAnalyticsPage({
           </div>
         </div>
 
+        <div className='mb-4 rounded-lg border border-amber-200 bg-amber-50 p-4 shadow-sm'>
+          <div className='flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between'>
+            <div>
+              <p className='text-xs font-semibold uppercase tracking-wide text-amber-700'>Operating order</p>
+              <p className='mt-1 text-base font-semibold text-slate-950'>
+                Handle warm claim leads first, then use the outreach queue for cold-start owner contact.
+              </p>
+              <p className='mt-1 text-sm leading-6 text-slate-600'>
+                {claimSummary.newCount > 0
+                  ? `${claimSummary.newCount} new claim leads are still waiting in the queue. Clear those first, then work through the outreach list below.`
+                  : 'The claim queue is not blocked by new leads right now, so this is a good window for scheduled owner outreach.'}
+              </p>
+            </div>
+            <div className='flex flex-wrap gap-2'>
+              <Link
+                href='/admin/claims?status=new'
+                className='inline-flex items-center justify-center rounded-lg bg-amber-600 px-3 py-2 text-sm font-semibold text-white hover:bg-amber-700'
+              >
+                Open new claims
+              </Link>
+              <Link
+                href='/admin/claims?status=contacted'
+                className='inline-flex items-center justify-center rounded-lg border border-amber-200 bg-white px-3 py-2 text-sm font-semibold text-amber-800 hover:bg-amber-100'
+              >
+                Open contacted claims
+              </Link>
+            </div>
+          </div>
+        </div>
+
         <div className='overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm'>
           <table className='min-w-full divide-y divide-slate-200'>
             <thead className='bg-slate-50'>
@@ -2054,6 +2167,9 @@ export default async function AdminAnalyticsPage({
                 </th>
                 <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>
                   Priority
+                </th>
+                <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                  Actions
                 </th>
               </tr>
             </thead>
@@ -2090,11 +2206,36 @@ export default async function AdminAnalyticsPage({
                         <span className='text-xs text-slate-500'>{item.daysSinceUpdate}d since update</span>
                       </div>
                     </td>
+                    <td className='px-4 py-4 align-top'>
+                      <div className='flex min-w-[160px] flex-col items-start gap-2 text-xs font-medium'>
+                        <Link
+                          href={`/admin/tools/${item.id}/edit`}
+                          className='inline-flex items-center gap-1 text-cyan-700 hover:text-cyan-800'
+                        >
+                          Review tool
+                          <ArrowUpRight className='h-3.5 w-3.5' />
+                        </Link>
+                        <Link
+                          href={`/${locale}/ai/${item.name}`}
+                          className='inline-flex items-center gap-1 text-slate-700 hover:text-slate-900'
+                        >
+                          Open public page
+                          <ArrowUpRight className='h-3.5 w-3.5' />
+                        </Link>
+                        <a
+                          href={`mailto:${item.contactEmail}`}
+                          className='inline-flex items-center gap-1 text-slate-500 hover:text-slate-900'
+                        >
+                          Draft email
+                          <ArrowUpRight className='h-3.5 w-3.5' />
+                        </a>
+                      </div>
+                    </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5} className='px-4 py-8 text-sm text-slate-500'>
+                  <td colSpan={6} className='px-4 py-8 text-sm text-slate-500'>
                     No outreach candidates right now.
                   </td>
                 </tr>
