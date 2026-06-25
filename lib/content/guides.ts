@@ -469,6 +469,32 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-tools-for-agents',
+    priority: 0.77,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI Agent 工具推荐',
+      en: 'AI tools for agents',
+    },
+    desc: {
+      cn: '适合 Agent 工作流、任务编排、工具调用和执行治理。',
+      en: 'For agent workflows, task orchestration, tool use, and execution governance.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-agents-comparison',
+    priority: 0.78,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI Agent 工具对比',
+      en: 'AI tools for agents comparison',
+    },
+    desc: {
+      cn: '把常见 Agent 方向工具放在一起快速对照。',
+      en: 'Compare common agent-oriented tools side by side.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-marketing',
     priority: 0.73,
     changeFrequency: 'monthly',
@@ -1035,7 +1061,9 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/ai-writing-tools',
   '/guides/ai-tools-for-research',
   '/guides/ai-tools-for-developers',
+  '/guides/ai-tools-for-agents',
   '/guides/ai-tools-for-automation',
+  '/guides/ai-tools-for-agents-comparison',
   '/guides/ai-tools-for-sales',
   '/guides/ai-tools-for-lead-generation',
   '/guides/ai-tools-for-sales-comparison',

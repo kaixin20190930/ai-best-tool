@@ -48,6 +48,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     '/guides/ai-tools-for-voice',
     '/guides/ai-tools-for-voice-comparison',
     '/guides/ai-tools-for-automation',
+    '/guides/ai-tools-for-agents',
+    '/guides/ai-tools-for-agents-comparison',
     '/guides/ai-tools-for-lead-generation',
     '/guides/ai-tools-for-sales-prospecting',
   ]
@@ -230,6 +232,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               '/guides/ai-writing-tools',
               '/guides/ai-seo-tools',
               '/guides/ai-tools-for-developers',
+              '/guides/ai-tools-for-agents',
               '/guides/ai-tools-for-web3',
               '/guides/ai-tools-for-research',
               '/guides/ai-tools-for-automation',
@@ -632,6 +635,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 desc: isChinese
                   ? '先看编辑器、API、自动化和基础设施这一层。'
                   : 'Start with the editor, API, automation, and infrastructure layer.',
+              },
+              {
+                href: '/guides/ai-tools-for-agents',
+                title: isChinese ? 'Agent 工具指南' : 'Agent tools guide',
+                desc: isChinese
+                  ? '适合任务编排、工具调用和执行闭环。'
+                  : 'Best for task orchestration, tool use, and execution loops.',
               },
               {
                 href: '/guides/ai-tools-for-model-routing',
