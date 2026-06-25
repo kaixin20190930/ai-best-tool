@@ -2363,6 +2363,9 @@ export default async function AdminAnalyticsPage({
                     Claim→paid
                   </th>
                   <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                    Claim→live
+                  </th>
+                  <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>
                     Paid
                   </th>
                   <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>
@@ -2388,6 +2391,10 @@ export default async function AdminAnalyticsPage({
                     <td className='px-4 py-4 text-right align-top text-sm text-slate-700'>{item.claimedCount}</td>
                     <td className='px-4 py-4 text-right align-top'>
                       <p className='text-sm font-semibold text-emerald-700'>{item.claimToPaidRate}%</p>
+                      <p className='mt-1 text-xs text-slate-500'>of claimed leads</p>
+                    </td>
+                    <td className='px-4 py-4 text-right align-top'>
+                      <p className='text-sm font-semibold text-violet-700'>{item.claimToFeaturedLiveRate}%</p>
                       <p className='mt-1 text-xs text-slate-500'>of claimed leads</p>
                     </td>
                     <td className='px-4 py-4 text-right align-top text-sm text-slate-700'>{item.paymentConfirmedCount}</td>
