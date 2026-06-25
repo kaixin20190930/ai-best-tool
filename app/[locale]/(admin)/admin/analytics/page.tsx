@@ -22,6 +22,7 @@ import {
   getDeveloperOutreachQueue,
   getFeaturedPlacementStats,
   getOperationalStats,
+  getOutreachHistorySummary,
   getSubmissionFunnelStats,
   getSubmissionRejectionReasonStats,
 } from '@/app/actions/admin/tools';
@@ -62,6 +63,7 @@ export default async function AdminAnalyticsPage({
   const rejectionReasons = await getSubmissionRejectionReasonStats(range, 5);
   const featuredPlacementStats = await getFeaturedPlacementStats();
   const outreachQueue = await getDeveloperOutreachQueue(12);
+  const outreachHistorySummary = await getOutreachHistorySummary();
   const claimSummary = await getAdminToolClaimsSummary();
   const topToolsByViews = await getTopTools('views', 10);
   const topToolsByRating = await getTopTools('rating', 10);
@@ -276,8 +278,8 @@ export default async function AdminAnalyticsPage({
     (item) => item.outreachStatus === 'contacted' || item.outreachStatus === 'waiting_reply' || item.outreachStatus === 'follow_up_due',
   ).length;
   const outreachClosedRate =
-    outreachQueue.length > 0
-      ? Math.round((outreachQueue.filter((item) => item.outreachStatus === 'closed').length / outreachQueue.length) * 100)
+    outreachHistorySummary.totalTracked > 0
+      ? Math.round((outreachHistorySummary.closedCount / outreachHistorySummary.totalTracked) * 100)
       : 0;
   const outreachClosedReasonLabelMap = {
     claimed: 'Claimed listing',
@@ -285,16 +287,33 @@ export default async function AdminAnalyticsPage({
     invalid_contact: 'Invalid contact',
     not_interested: 'Not interested',
   } as const;
+  const getClosedReasonCount = (
+    key: keyof typeof outreachClosedReasonLabelMap,
+    source: {
+      claimedCount: number;
+      noReplyCount: number;
+      invalidContactCount: number;
+      notInterestedCount: number;
+    },
+  ) => {
+    if (key === 'claimed') return source.claimedCount;
+    if (key === 'no_reply') return source.noReplyCount;
+    if (key === 'invalid_contact') return source.invalidContactCount;
+    return source.notInterestedCount;
+  };
   const outreachClosedReasonRows = Object.entries(outreachClosedReasonLabelMap)
     .map(([key, label]) => ({
       key,
       label,
-      count: outreachQueue.filter((item) => item.outreachStatus === 'closed' && item.outreachClosedReason === key).length,
+      count: getClosedReasonCount(key as keyof typeof outreachClosedReasonLabelMap, {
+        claimedCount: outreachHistorySummary.claimedCount,
+        noReplyCount: outreachHistorySummary.noReplyCount,
+        invalidContactCount: outreachHistorySummary.invalidContactCount,
+        notInterestedCount: outreachHistorySummary.notInterestedCount,
+      }),
     }))
     .filter((item) => item.count > 0);
-  const outreachUnclassifiedClosedCount = outreachQueue.filter(
-    (item) => item.outreachStatus === 'closed' && !item.outreachClosedReason,
-  ).length;
+  const outreachUnclassifiedClosedCount = outreachHistorySummary.unclassifiedClosedCount;
   const commercialEntryRows = commercialIntentReport.sources.map((item) => ({
     ...item,
     downstreamConversions: item.claimSubmissions + item.checkoutStarts,
@@ -375,14 +394,17 @@ export default async function AdminAnalyticsPage({
   const recentOutreachActiveCount = recentOutreachActivity.filter(
     (item) => item.outreachStatus === 'contacted' || item.outreachStatus === 'waiting_reply' || item.outreachStatus === 'follow_up_due',
   ).length;
-  const recentOutreachClosedCount = recentOutreachActivity.filter((item) => item.outreachStatus === 'closed').length;
+  const recentOutreachClosedCount = outreachHistorySummary.recentClosedCount;
   const recentOutreachClosedReasonRows = Object.entries(outreachClosedReasonLabelMap)
     .map(([key, label]) => ({
       key,
       label,
-      count: recentOutreachActivity.filter(
-        (item) => item.outreachStatus === 'closed' && item.outreachClosedReason === key,
-      ).length,
+      count: getClosedReasonCount(key as keyof typeof outreachClosedReasonLabelMap, {
+        claimedCount: outreachHistorySummary.recentClaimedCount,
+        noReplyCount: outreachHistorySummary.recentNoReplyCount,
+        invalidContactCount: outreachHistorySummary.recentInvalidContactCount,
+        notInterestedCount: outreachHistorySummary.recentNotInterestedCount,
+      }),
     }))
     .filter((item) => item.count > 0);
   const recentOutreachStartedCount = recentOutreachActivity.filter((item) => item.outreachStatus !== 'not_started').length;
@@ -2370,7 +2392,9 @@ export default async function AdminAnalyticsPage({
             <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
               <p className='text-sm font-medium text-slate-600'>Closed share</p>
               <p className='mt-2 text-3xl font-semibold text-emerald-600'>{outreachClosedRate}%</p>
-              <p className='mt-2 text-sm text-slate-500'>How much of the visible queue has already been worked to a closed outcome.</p>
+              <p className='mt-2 text-sm text-slate-500'>
+                Historical close rate across all tracked outreach leads, including listings that were later claimed and left the active queue.
+              </p>
               {(outreachClosedReasonRows.length > 0 || outreachUnclassifiedClosedCount > 0) && (
                 <div className='mt-3 flex flex-wrap gap-2'>
                   {outreachClosedReasonRows.map((item) => (
@@ -2385,6 +2409,7 @@ export default async function AdminAnalyticsPage({
                   )}
                 </div>
               )}
+              <p className='mt-3 text-xs text-slate-500'>{outreachHistorySummary.totalTracked} tracked outreach leads in history.</p>
             </div>
           </div>
         </div>

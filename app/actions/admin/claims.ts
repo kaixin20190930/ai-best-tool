@@ -285,6 +285,20 @@ export async function updateToolClaimInfo(input: {
           owner_email = $1,
           claim_status = $2,
           claimed_at = $3,
+          features = CASE
+            WHEN $2 = 'claimed' THEN jsonb_set(
+              COALESCE(features, '{}'::jsonb),
+              '{outreach}',
+              COALESCE(features->'outreach', '{}'::jsonb)
+                || jsonb_build_object(
+                  'status', 'closed',
+                  'updatedAt', NOW()::text,
+                  'closedReason', 'claimed'
+                ),
+              true
+            )
+            ELSE COALESCE(features, '{}'::jsonb)
+          END,
           updated_at = NOW()
         WHERE id = $4
         RETURNING name
@@ -297,6 +311,7 @@ export async function updateToolClaimInfo(input: {
     }
 
     revalidatePath('/admin/tools');
+    revalidatePath('/admin/analytics');
 
     return { success: true };
   } catch (error) {
@@ -357,6 +372,17 @@ export async function updateToolClaimStatus(input: {
             owner_email = COALESCE($1, owner_email),
             claim_status = 'claimed',
             claimed_at = COALESCE(claimed_at, NOW()),
+            features = jsonb_set(
+              COALESCE(features, '{}'::jsonb),
+              '{outreach}',
+              COALESCE(features->'outreach', '{}'::jsonb)
+                || jsonb_build_object(
+                  'status', 'closed',
+                  'updatedAt', NOW()::text,
+                  'closedReason', 'claimed'
+                ),
+              true
+            ),
             updated_at = NOW()
           WHERE id = $2
         `,
@@ -372,6 +398,7 @@ export async function updateToolClaimStatus(input: {
 
     revalidatePath('/admin/claims');
     revalidatePath('/admin/tools');
+    revalidatePath('/admin/analytics');
 
     return { success: true };
   } catch (error) {

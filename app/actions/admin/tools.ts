@@ -122,6 +122,21 @@ export interface AdminOutreachQueueItem {
   outreachClosedReason: OutreachClosedReason | null;
 }
 
+export interface AdminOutreachHistorySummary {
+  totalTracked: number;
+  closedCount: number;
+  claimedCount: number;
+  noReplyCount: number;
+  invalidContactCount: number;
+  notInterestedCount: number;
+  unclassifiedClosedCount: number;
+  recentClosedCount: number;
+  recentClaimedCount: number;
+  recentNoReplyCount: number;
+  recentInvalidContactCount: number;
+  recentNotInterestedCount: number;
+}
+
 function getOutreachFollowUpPriority(value: string | null): number {
   if (!value) return 3;
 
@@ -2582,6 +2597,79 @@ export async function updateOutreachStatus(input: {
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to update outreach status.',
+    };
+  }
+}
+
+export async function getOutreachHistorySummary(): Promise<AdminOutreachHistorySummary> {
+  try {
+    await requireAdmin();
+
+    const pool = getPool();
+    const result = await pool.query(
+      `
+        WITH outreach_history AS (
+          SELECT
+            COALESCE(t.features->'outreach'->>'status', 'not_started') AS status,
+            NULLIF(t.features->'outreach'->>'closedReason', '') AS "closedReason",
+            NULLIF(t.features->'outreach'->>'updatedAt', '')::timestamptz AS "updatedAt"
+          FROM tools t
+          WHERE
+            t.features ? 'outreach'
+            AND (
+              COALESCE(t.features->'outreach'->>'status', 'not_started') <> 'not_started'
+              OR NULLIF(t.features->'outreach'->>'closedReason', '') IS NOT NULL
+              OR NULLIF(t.features->'outreach'->>'updatedAt', '') IS NOT NULL
+            )
+        )
+        SELECT
+          COUNT(*)::int AS "totalTracked",
+          COUNT(*) FILTER (WHERE status = 'closed')::int AS "closedCount",
+          COUNT(*) FILTER (WHERE status = 'closed' AND "closedReason" = 'claimed')::int AS "claimedCount",
+          COUNT(*) FILTER (WHERE status = 'closed' AND "closedReason" = 'no_reply')::int AS "noReplyCount",
+          COUNT(*) FILTER (WHERE status = 'closed' AND "closedReason" = 'invalid_contact')::int AS "invalidContactCount",
+          COUNT(*) FILTER (WHERE status = 'closed' AND "closedReason" = 'not_interested')::int AS "notInterestedCount",
+          COUNT(*) FILTER (WHERE status = 'closed' AND "closedReason" IS NULL)::int AS "unclassifiedClosedCount",
+          COUNT(*) FILTER (WHERE status = 'closed' AND "updatedAt" >= NOW() - INTERVAL '7 days')::int AS "recentClosedCount",
+          COUNT(*) FILTER (WHERE status = 'closed' AND "closedReason" = 'claimed' AND "updatedAt" >= NOW() - INTERVAL '7 days')::int AS "recentClaimedCount",
+          COUNT(*) FILTER (WHERE status = 'closed' AND "closedReason" = 'no_reply' AND "updatedAt" >= NOW() - INTERVAL '7 days')::int AS "recentNoReplyCount",
+          COUNT(*) FILTER (WHERE status = 'closed' AND "closedReason" = 'invalid_contact' AND "updatedAt" >= NOW() - INTERVAL '7 days')::int AS "recentInvalidContactCount",
+          COUNT(*) FILTER (WHERE status = 'closed' AND "closedReason" = 'not_interested' AND "updatedAt" >= NOW() - INTERVAL '7 days')::int AS "recentNotInterestedCount"
+        FROM outreach_history
+      `,
+    );
+
+    const row = result.rows[0] || {};
+
+    return {
+      totalTracked: Number(row.totalTracked || 0),
+      closedCount: Number(row.closedCount || 0),
+      claimedCount: Number(row.claimedCount || 0),
+      noReplyCount: Number(row.noReplyCount || 0),
+      invalidContactCount: Number(row.invalidContactCount || 0),
+      notInterestedCount: Number(row.notInterestedCount || 0),
+      unclassifiedClosedCount: Number(row.unclassifiedClosedCount || 0),
+      recentClosedCount: Number(row.recentClosedCount || 0),
+      recentClaimedCount: Number(row.recentClaimedCount || 0),
+      recentNoReplyCount: Number(row.recentNoReplyCount || 0),
+      recentInvalidContactCount: Number(row.recentInvalidContactCount || 0),
+      recentNotInterestedCount: Number(row.recentNotInterestedCount || 0),
+    };
+  } catch (error) {
+    console.error('Error fetching outreach history summary:', error);
+    return {
+      totalTracked: 0,
+      closedCount: 0,
+      claimedCount: 0,
+      noReplyCount: 0,
+      invalidContactCount: 0,
+      notInterestedCount: 0,
+      unclassifiedClosedCount: 0,
+      recentClosedCount: 0,
+      recentClaimedCount: 0,
+      recentNoReplyCount: 0,
+      recentInvalidContactCount: 0,
+      recentNotInterestedCount: 0,
     };
   }
 }
