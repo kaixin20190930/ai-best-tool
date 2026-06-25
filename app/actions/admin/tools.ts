@@ -148,6 +148,14 @@ export interface AdminOutreachClassificationItem {
   outreachClosedReason: OutreachClosedReason | null;
 }
 
+export interface AdminOutreachCommercialBridgeSummary {
+  claimedFromOutreachCount: number;
+  paidPlanCount: number;
+  paymentConfirmedCount: number;
+  featuredReservedCount: number;
+  featuredLiveCount: number;
+}
+
 function getOutreachFollowUpPriority(value: string | null): number {
   if (!value) return 3;
 
@@ -2735,6 +2743,58 @@ export async function getOutreachNeedsClassification(
   } catch (error) {
     console.error('Error fetching outreach items needing classification:', error);
     return [];
+  }
+}
+
+export async function getOutreachCommercialBridgeSummary(): Promise<AdminOutreachCommercialBridgeSummary> {
+  try {
+    await requireAdmin();
+
+    const pool = getPool();
+    const result = await pool.query(
+      `
+        SELECT
+          COUNT(*) FILTER (
+            WHERE COALESCE(t.features->'outreach'->>'closedReason', '') = 'claimed'
+          )::int AS "claimedFromOutreachCount",
+          COUNT(*) FILTER (
+            WHERE COALESCE(t.features->'outreach'->>'closedReason', '') = 'claimed'
+              AND COALESCE(t.features->'submission'->'commercial'->>'plan', 'free') = 'standard_paid'
+          )::int AS "paidPlanCount",
+          COUNT(*) FILTER (
+            WHERE COALESCE(t.features->'outreach'->>'closedReason', '') = 'claimed'
+              AND COALESCE(t.features->'submission'->'commercial'->>'paymentConfirmed', 'false') = 'true'
+          )::int AS "paymentConfirmedCount",
+          COUNT(*) FILTER (
+            WHERE COALESCE(t.features->'outreach'->>'closedReason', '') = 'claimed'
+              AND NULLIF(t.features->'submission'->'commercial'->>'featuredReservedAt', '') IS NOT NULL
+          )::int AS "featuredReservedCount",
+          COUNT(*) FILTER (
+            WHERE COALESCE(t.features->'outreach'->>'closedReason', '') = 'claimed'
+              AND COALESCE(t.features->'submission'->'commercial'->>'isSponsoredPlacement', 'false') = 'true'
+          )::int AS "featuredLiveCount"
+        FROM tools t
+      `,
+    );
+
+    const row = result.rows[0] || {};
+
+    return {
+      claimedFromOutreachCount: Number(row.claimedFromOutreachCount || 0),
+      paidPlanCount: Number(row.paidPlanCount || 0),
+      paymentConfirmedCount: Number(row.paymentConfirmedCount || 0),
+      featuredReservedCount: Number(row.featuredReservedCount || 0),
+      featuredLiveCount: Number(row.featuredLiveCount || 0),
+    };
+  } catch (error) {
+    console.error('Error fetching outreach commercial bridge summary:', error);
+    return {
+      claimedFromOutreachCount: 0,
+      paidPlanCount: 0,
+      paymentConfirmedCount: 0,
+      featuredReservedCount: 0,
+      featuredLiveCount: 0,
+    };
   }
 }
 

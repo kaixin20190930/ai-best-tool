@@ -23,6 +23,7 @@ import {
   getDeveloperOutreachQueue,
   getFeaturedPlacementStats,
   getOperationalStats,
+  getOutreachCommercialBridgeSummary,
   getOutreachHistorySummary,
   getOutreachNeedsClassification,
   getSubmissionFunnelStats,
@@ -65,6 +66,7 @@ export default async function AdminAnalyticsPage({
   const rejectionReasons = await getSubmissionRejectionReasonStats(range, 5);
   const featuredPlacementStats = await getFeaturedPlacementStats();
   const outreachQueue = await getDeveloperOutreachQueue(12);
+  const outreachCommercialBridge = await getOutreachCommercialBridgeSummary();
   const outreachHistorySummary = await getOutreachHistorySummary();
   const outreachNeedsClassification =
     outreachHistorySummary.unclassifiedClosedCount > 0 ? await getOutreachNeedsClassification(12) : [];
@@ -284,6 +286,14 @@ export default async function AdminAnalyticsPage({
   const outreachClosedRate =
     outreachHistorySummary.totalTracked > 0
       ? Math.round((outreachHistorySummary.closedCount / outreachHistorySummary.totalTracked) * 100)
+      : 0;
+  const outreachPaidPlanRate =
+    outreachCommercialBridge.claimedFromOutreachCount > 0
+      ? Math.round((outreachCommercialBridge.paidPlanCount / outreachCommercialBridge.claimedFromOutreachCount) * 100)
+      : 0;
+  const outreachPaymentConfirmedRate =
+    outreachCommercialBridge.claimedFromOutreachCount > 0
+      ? Math.round((outreachCommercialBridge.paymentConfirmedCount / outreachCommercialBridge.claimedFromOutreachCount) * 100)
       : 0;
   const outreachClosedReasonLabelMap = {
     claimed: 'Claimed listing',
@@ -2251,6 +2261,42 @@ export default async function AdminAnalyticsPage({
             <p className='mt-2 text-sm text-slate-500'>
               {outreachOverdueCount} overdue · {outreachDueTodayCount} due today
             </p>
+          </div>
+        </div>
+
+        <div className='mb-4 rounded-lg border border-cyan-200 bg-cyan-50 p-5 shadow-sm'>
+          <div className='flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
+            <div>
+              <p className='text-sm font-semibold text-slate-900'>Outreach to revenue bridge</p>
+              <p className='mt-1 text-sm text-slate-600'>
+                What happened after outreach-driven claims: did they stay free, enter the paid path, confirm payment, or turn into featured inventory?
+              </p>
+            </div>
+            <p className='text-xs text-slate-500'>
+              {outreachCommercialBridge.claimedFromOutreachCount} outreach-led claims tracked so far
+            </p>
+          </div>
+          <div className='mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4'>
+            <div className='rounded-lg border border-cyan-200 bg-white p-4'>
+              <p className='text-sm font-medium text-slate-600'>Paid plan chosen</p>
+              <p className='mt-2 text-3xl font-semibold text-cyan-700'>{outreachCommercialBridge.paidPlanCount}</p>
+              <p className='mt-2 text-sm text-slate-500'>{outreachPaidPlanRate}% of outreach-led claims moved onto the paid listing plan.</p>
+            </div>
+            <div className='rounded-lg border border-cyan-200 bg-white p-4'>
+              <p className='text-sm font-medium text-slate-600'>Payment confirmed</p>
+              <p className='mt-2 text-3xl font-semibold text-emerald-600'>{outreachCommercialBridge.paymentConfirmedCount}</p>
+              <p className='mt-2 text-sm text-slate-500'>{outreachPaymentConfirmedRate}% of outreach-led claims completed payment.</p>
+            </div>
+            <div className='rounded-lg border border-cyan-200 bg-white p-4'>
+              <p className='text-sm font-medium text-slate-600'>Featured reserved</p>
+              <p className='mt-2 text-3xl font-semibold text-amber-700'>{outreachCommercialBridge.featuredReservedCount}</p>
+              <p className='mt-2 text-sm text-slate-500'>Paid outreach claims that reserved a featured window, even if not live yet.</p>
+            </div>
+            <div className='rounded-lg border border-cyan-200 bg-white p-4'>
+              <p className='text-sm font-medium text-slate-600'>Featured live</p>
+              <p className='mt-2 text-3xl font-semibold text-violet-700'>{outreachCommercialBridge.featuredLiveCount}</p>
+              <p className='mt-2 text-sm text-slate-500'>Outreach-led claims currently running as sponsored placements.</p>
+            </div>
           </div>
         </div>
 
