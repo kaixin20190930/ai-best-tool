@@ -179,6 +179,20 @@ export interface AdminOutreachExecutorSummaryItem {
   featuredLiveCount: number;
 }
 
+export interface AdminPaidListingBlockerItem {
+  id: string;
+  name: string;
+  title: string;
+  updatedAt: string;
+  blockers: string[];
+}
+
+export interface AdminPaidListingBlockerSummary {
+  totalBlocked: number;
+  blockerCounts: { label: string; count: number }[];
+  items: AdminPaidListingBlockerItem[];
+}
+
 function getOutreachFollowUpPriority(value: string | null): number {
   if (!value) return 3;
 
@@ -2946,6 +2960,84 @@ export async function getOutreachExecutorSummary(
   } catch (error) {
     console.error('Error fetching outreach executor summary:', error);
     return [];
+  }
+}
+
+export async function getPaidListingBlockerSummary(
+  limit = 8
+): Promise<AdminPaidListingBlockerSummary> {
+  try {
+    await requireAdmin();
+
+    const pool = getPool();
+    const normalizedLimit = Math.max(1, Math.min(limit, 20));
+    const result = await pool.query(
+      `
+        SELECT
+          t.id::text AS id,
+          t.name,
+          t.title,
+          t.updated_at AS "updatedAt",
+          t.category_id,
+          t.image_url,
+          t.thumbnail_url,
+          t.content,
+          t.detail,
+          t.pricing,
+          t.tags
+        FROM tools t
+        WHERE COALESCE(t.features->'submission'->'commercial'->>'plan', 'free') = 'standard_paid'
+          AND (
+            t.category_id IS NULL
+            OR t.image_url IS NULL
+            OR t.image_url = ''
+            OR t.image_url LIKE '%google.com/s2/favicons%'
+            OR t.thumbnail_url IS NULL
+            OR t.thumbnail_url = ''
+            OR t.thumbnail_url LIKE '%google.com/s2/favicons%'
+            OR LENGTH(COALESCE(t.content->>'en', t.content->>'zh', t.content::text, '')) < 80
+            OR LENGTH(COALESCE(t.detail->>'en', t.detail->>'zh', t.detail::text, '')) < 160
+            OR t.pricing IS NULL
+            OR t.pricing = ''
+            OR array_length(t.tags, 1) IS NULL
+            OR array_length(t.tags, 1) = 0
+          )
+        ORDER BY t.updated_at DESC
+        LIMIT $1
+      `,
+      [normalizedLimit],
+    );
+
+    const blockerCounts = new Map<string, number>();
+    const items = result.rows.map((row) => {
+      const gate = getPaidListingPublishGate(row);
+      gate.blockers.forEach((label) => {
+        blockerCounts.set(label, (blockerCounts.get(label) || 0) + 1);
+      });
+
+      return {
+        id: String(row.id),
+        name: String(row.name || ''),
+        title: getLocalizedText(row.title) || String(row.name || ''),
+        updatedAt: typeof row.updatedAt === 'string' ? row.updatedAt : new Date(row.updatedAt).toISOString(),
+        blockers: gate.blockers,
+      };
+    });
+
+    return {
+      totalBlocked: items.length,
+      blockerCounts: Array.from(blockerCounts.entries())
+        .map(([label, count]) => ({ label, count }))
+        .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label)),
+      items,
+    };
+  } catch (error) {
+    console.error('Error fetching paid listing blocker summary:', error);
+    return {
+      totalBlocked: 0,
+      blockerCounts: [],
+      items: [],
+    };
   }
 }
 

@@ -26,6 +26,7 @@ import {
   getOutreachCommercialBridgeSummary,
   getOutreachHistorySummary,
   getOutreachExecutorSummary,
+  getPaidListingBlockerSummary,
   getOutreachNeedsClassification,
   getSubmissionFunnelStats,
   getSubmissionRejectionReasonStats,
@@ -69,6 +70,7 @@ export default async function AdminAnalyticsPage({
   const outreachQueue = await getDeveloperOutreachQueue(12);
   const outreachCommercialBridge = await getOutreachCommercialBridgeSummary();
   const outreachExecutors = await getOutreachExecutorSummary(5);
+  const paidListingBlockers = await getPaidListingBlockerSummary(8);
   const outreachHistorySummary = await getOutreachHistorySummary();
   const outreachNeedsClassification =
     outreachHistorySummary.unclassifiedClosedCount > 0 ? await getOutreachNeedsClassification(12) : [];
@@ -2188,6 +2190,131 @@ export default async function AdminAnalyticsPage({
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Paid Listing Blockers */}
+      <div className='mb-8'>
+        <div className='mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
+          <div>
+            <h2 className='text-lg font-semibold text-slate-900'>Paid Listing Blockers</h2>
+            <p className='mt-1 text-sm text-slate-600'>
+              Standard-paid submissions that are still missing the metadata needed to publish cleanly.
+            </p>
+          </div>
+          <Link
+            href='/admin/tools?paidBlockers=1'
+            className='inline-flex items-center gap-1 text-sm font-medium text-cyan-700 hover:text-cyan-800'
+          >
+            Open blocker queue
+            <ArrowUpRight className='h-4 w-4' />
+          </Link>
+        </div>
+
+        <div className='grid gap-4 xl:grid-cols-[0.9fr_1.1fr]'>
+          <div className='grid gap-4 sm:grid-cols-2 xl:grid-cols-1'>
+            <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
+              <p className='text-sm font-medium text-slate-600'>Blocked paid listings</p>
+              <p className='mt-2 text-3xl font-semibold text-rose-600'>{paidListingBlockers.totalBlocked}</p>
+              <p className='mt-2 text-sm text-slate-500'>Standard-paid tools that are not yet ready to publish.</p>
+            </div>
+            <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
+              <p className='text-sm font-medium text-slate-600'>Top blocker</p>
+              <p className='mt-2 text-3xl font-semibold text-slate-900'>
+                {paidListingBlockers.blockerCounts.length > 0 ? paidListingBlockers.blockerCounts[0].label : 'None'}
+              </p>
+              <p className='mt-2 text-sm text-slate-500'>
+                {paidListingBlockers.blockerCounts.length > 0
+                  ? `${paidListingBlockers.blockerCounts[0].count} tools still need this field.`
+                  : 'No blocker backlog is visible right now.'}
+              </p>
+            </div>
+          </div>
+
+          <div className='overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm'>
+            <div className='border-b border-slate-200 px-4 py-3'>
+              <div className='flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
+                <div>
+                  <p className='text-sm font-semibold text-slate-900'>Most common missing fields</p>
+                  <p className='mt-1 text-xs text-slate-500'>Based on the current blocker queue.</p>
+                </div>
+                <p className='text-xs text-slate-500'>{paidListingBlockers.blockerCounts.length} blocker types</p>
+              </div>
+            </div>
+            <div className='p-4'>
+              {paidListingBlockers.blockerCounts.length > 0 ? (
+                <div className='flex flex-wrap gap-2'>
+                  {paidListingBlockers.blockerCounts.map((item) => (
+                    <span
+                      key={item.label}
+                      className='inline-flex rounded-full bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-700'
+                    >
+                      {item.label}: {item.count}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <p className='text-sm text-slate-500'>No paid listing blockers are visible.</p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {paidListingBlockers.items.length > 0 && (
+          <div className='mt-4 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm'>
+            <div className='border-b border-slate-200 px-4 py-3'>
+              <p className='text-sm font-semibold text-slate-900'>Tools needing a cleanup pass</p>
+              <p className='mt-1 text-xs text-slate-500'>
+                Fix the blocker fields first, then the listing can move back into the normal paid publish flow.
+              </p>
+            </div>
+            <table className='min-w-full divide-y divide-slate-200'>
+              <thead className='bg-slate-50'>
+                <tr>
+                  <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>Tool</th>
+                  <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>Blockers</th>
+                  <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>Updated</th>
+                  <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>Action</th>
+                </tr>
+              </thead>
+              <tbody className='divide-y divide-slate-100 bg-white'>
+                {paidListingBlockers.items.map((item) => (
+                  <tr key={item.id}>
+                    <td className='px-4 py-4 align-top'>
+                      <div>
+                        <p className='text-sm font-medium text-slate-900'>{item.title}</p>
+                        <p className='mt-1 text-xs text-slate-500'>{item.name}</p>
+                      </div>
+                    </td>
+                    <td className='px-4 py-4 align-top'>
+                      <div className='flex flex-wrap gap-2'>
+                        {item.blockers.map((blocker) => (
+                          <span
+                            key={blocker}
+                            className='inline-flex rounded-full bg-rose-50 px-2.5 py-1 text-xs font-semibold text-rose-700'
+                          >
+                            {blocker}
+                          </span>
+                        ))}
+                      </div>
+                    </td>
+                    <td className='px-4 py-4 align-top text-sm text-slate-600'>
+                      {new Date(item.updatedAt).toLocaleString()}
+                    </td>
+                    <td className='px-4 py-4 align-top text-right'>
+                      <Link
+                        href={`/admin/tools/${item.id}/edit`}
+                        className='inline-flex items-center gap-1 text-sm font-medium text-cyan-700 hover:text-cyan-800'
+                      >
+                        Review tool
+                        <ArrowUpRight className='h-4 w-4' />
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       {/* Moderation SLA */}
