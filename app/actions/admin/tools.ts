@@ -120,6 +120,7 @@ export interface AdminOutreachQueueItem {
   outreachNote: string | null;
   outreachNextFollowUpAt: string | null;
   outreachClosedReason: OutreachClosedReason | null;
+  outreachUpdatedByEmail: string | null;
 }
 
 export interface AdminOutreachHistorySummary {
@@ -146,6 +147,7 @@ export interface AdminOutreachClassificationItem {
   outreachUpdatedAt: string | null;
   outreachNote: string | null;
   outreachClosedReason: OutreachClosedReason | null;
+  outreachUpdatedByEmail: string | null;
 }
 
 export interface AdminOutreachCommercialBridgeSummary {
@@ -162,6 +164,7 @@ export interface AdminOutreachCommercialBridgeSummary {
   previousFeaturedReservedCount: number;
   recentFeaturedLiveCount: number;
   previousFeaturedLiveCount: number;
+  recentUpdatedByEmail: string | null;
 }
 
 function getOutreachFollowUpPriority(value: string | null): number {
@@ -2437,6 +2440,7 @@ export async function getDeveloperOutreachQueue(
           NULLIF(t.features->'outreach'->>'note', '') AS "outreachNote",
           NULLIF(t.features->'outreach'->>'nextFollowUpAt', '') AS "outreachNextFollowUpAt",
           NULLIF(t.features->'outreach'->>'closedReason', '') AS "outreachClosedReason",
+          NULLIF(t.features->'outreach'->>'updatedByEmail', '') AS "outreachUpdatedByEmail",
           GREATEST(0, FLOOR(EXTRACT(EPOCH FROM (NOW() - t.updated_at)) / 86400))::int AS "daysSinceUpdate"
         FROM tools t
         LEFT JOIN favorite_counts fc ON fc.tool_id = t.id
@@ -2491,6 +2495,10 @@ export async function getDeveloperOutreachQueue(
           typeof row.outreachClosedReason === 'string' && validOutreachClosedReasons.includes(row.outreachClosedReason)
             ? (row.outreachClosedReason as OutreachClosedReason)
             : null;
+        const outreachUpdatedByEmail =
+          typeof row.outreachUpdatedByEmail === 'string' && row.outreachUpdatedByEmail.trim().length > 0
+            ? row.outreachUpdatedByEmail.trim().toLowerCase()
+            : null;
 
         let suggestion: 'claim_listing' | 'featured_pitch' | 'content_collab' = 'claim_listing';
         let reason = 'Unclaimed published tool with a reachable contact.';
@@ -2521,6 +2529,7 @@ export async function getDeveloperOutreachQueue(
           outreachNote,
           outreachNextFollowUpAt,
           outreachClosedReason,
+          outreachUpdatedByEmail,
         };
       })
       .filter((item): item is NonNullable<typeof item> => item !== null)
@@ -2555,7 +2564,7 @@ export async function updateOutreachStatus(input: {
   closedReason?: OutreachClosedReason | null;
 }): Promise<{ success: boolean; error?: string }> {
   try {
-    await requireAdmin();
+    const adminUser = await requireAdmin();
 
     const toolId = input.toolId.trim();
     if (!toolId) {
@@ -2569,6 +2578,7 @@ export async function updateOutreachStatus(input: {
     const note = normalizeNullableText(input.note);
     const nextFollowUpAt = normalizeNullableText(input.nextFollowUpAt ?? undefined);
     const closedReason = normalizeNullableText(input.closedReason ?? undefined);
+    const updatedByEmail = normalizeNullableText(adminUser.email || adminUser.id || undefined);
     const parsedFollowUpAt =
       nextFollowUpAt && !Number.isNaN(new Date(nextFollowUpAt).getTime())
         ? new Date(nextFollowUpAt).toISOString()
@@ -2590,6 +2600,7 @@ export async function updateOutreachStatus(input: {
               || jsonb_build_object(
                 'status', $2::text,
                 'updatedAt', NOW()::text,
+                'updatedByEmail', $6::text,
                 'note', $3::text,
                 'nextFollowUpAt', $4::text,
                 'closedReason', $5::text
@@ -2600,7 +2611,7 @@ export async function updateOutreachStatus(input: {
         WHERE id::text = $1
         RETURNING name
       `,
-      [toolId, input.status, note, parsedFollowUpAt, normalizedClosedReason],
+      [toolId, input.status, note, parsedFollowUpAt, normalizedClosedReason, updatedByEmail],
     );
 
     if (result.rowCount === 0) {
@@ -2720,7 +2731,8 @@ export async function getOutreachNeedsClassification(
           COALESCE(t.features->'submission'->>'submittedByEmail', '') AS "submittedByEmail",
           NULLIF(t.features->'outreach'->>'updatedAt', '') AS "outreachUpdatedAt",
           NULLIF(t.features->'outreach'->>'note', '') AS "outreachNote",
-          NULLIF(t.features->'outreach'->>'closedReason', '') AS "outreachClosedReason"
+          NULLIF(t.features->'outreach'->>'closedReason', '') AS "outreachClosedReason",
+          NULLIF(t.features->'outreach'->>'updatedByEmail', '') AS "outreachUpdatedByEmail"
         FROM tools t
         WHERE COALESCE(t.features->'outreach'->>'status', 'not_started') = 'closed'
           AND NULLIF(t.features->'outreach'->>'closedReason', '') IS NULL
@@ -2746,6 +2758,10 @@ export async function getOutreachNeedsClassification(
       outreachClosedReason:
         typeof row.outreachClosedReason === 'string' && validOutreachClosedReasons.includes(row.outreachClosedReason)
           ? (row.outreachClosedReason as OutreachClosedReason)
+          : null,
+      outreachUpdatedByEmail:
+        typeof row.outreachUpdatedByEmail === 'string' && row.outreachUpdatedByEmail.trim().length > 0
+          ? row.outreachUpdatedByEmail.trim().toLowerCase()
           : null,
     }));
   } catch (error) {
@@ -2828,6 +2844,7 @@ export async function getOutreachCommercialBridgeSummary(): Promise<AdminOutreac
       previousFeaturedReservedCount: Number(row.previousFeaturedReservedCount || 0),
       recentFeaturedLiveCount: Number(row.recentFeaturedLiveCount || 0),
       previousFeaturedLiveCount: Number(row.previousFeaturedLiveCount || 0),
+      recentUpdatedByEmail: null,
     };
   } catch (error) {
     console.error('Error fetching outreach commercial bridge summary:', error);
@@ -2845,6 +2862,7 @@ export async function getOutreachCommercialBridgeSummary(): Promise<AdminOutreac
       previousFeaturedReservedCount: 0,
       recentFeaturedLiveCount: 0,
       previousFeaturedLiveCount: 0,
+      recentUpdatedByEmail: null,
     };
   }
 }

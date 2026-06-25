@@ -265,7 +265,7 @@ export async function updateToolClaimInfo(input: {
   claimedAt?: string | null;
 }): Promise<{ success: boolean; error?: string }> {
   try {
-    await requireAdmin();
+    const adminUser = await requireAdmin();
 
     const claimStatus = normalizeClaimStatus(input.claimStatus ?? 'unclaimed');
 
@@ -276,6 +276,7 @@ export async function updateToolClaimInfo(input: {
     const ownerEmail = normalizeNullableText(input.ownerEmail);
     const claimedAtInput = normalizeClaimedAt(input.claimedAt ?? null);
     const claimedAt = claimStatus === 'claimed' ? claimedAtInput || new Date().toISOString() : claimedAtInput;
+    const updatedByEmail = normalizeNullableText(adminUser.email || adminUser.id || undefined);
 
     const pool = getPool();
     const result = await pool.query(
@@ -293,7 +294,8 @@ export async function updateToolClaimInfo(input: {
                 || jsonb_build_object(
                   'status', 'closed',
                   'updatedAt', NOW()::text,
-                  'closedReason', 'claimed'
+                  'closedReason', 'claimed',
+                  'updatedByEmail', $5::text
                 ),
               true
             )
@@ -303,7 +305,7 @@ export async function updateToolClaimInfo(input: {
         WHERE id = $4
         RETURNING name
       `,
-      [ownerEmail, claimStatus, claimStatus === 'unclaimed' ? null : claimedAt, input.toolId],
+      [ownerEmail, claimStatus, claimStatus === 'unclaimed' ? null : claimedAt, input.toolId, updatedByEmail],
     );
 
     if (result.rowCount === 0) {
@@ -354,6 +356,7 @@ export async function updateToolClaimStatus(input: {
     const row = current.rows[0];
     const nextClaimedAt = status === 'claimed' ? row.claimed_at || new Date().toISOString() : row.claimed_at;
     const nextToolId = input.toolId || row.tool_id;
+    const updatedByEmail = normalizeNullableText(adminUser.email || adminUser.id || undefined);
 
     await pool.query(
       `
@@ -379,14 +382,15 @@ export async function updateToolClaimStatus(input: {
                 || jsonb_build_object(
                   'status', 'closed',
                   'updatedAt', NOW()::text,
-                  'closedReason', 'claimed'
+                  'closedReason', 'claimed',
+                  'updatedByEmail', $3::text
                 ),
               true
             ),
             updated_at = NOW()
           WHERE id = $2
         `,
-        [input.ownerEmail || row.email || null, nextToolId],
+        [input.ownerEmail || row.email || null, nextToolId, updatedByEmail],
       );
     }
 

@@ -94,6 +94,9 @@ export default function AdminOutreachClassificationTable({
                     <p className='text-sm font-medium text-slate-900'>{item.title}</p>
                     <p className='mt-1 text-xs text-slate-500'>{item.name}</p>
                     <p className='mt-2 text-xs text-slate-500'>{formatUpdatedAt(item.outreachUpdatedAt)}</p>
+                    {item.outreachUpdatedByEmail && (
+                      <p className='mt-1 text-xs text-slate-500'>Updated by {item.outreachUpdatedByEmail}</p>
+                    )}
                   </div>
                 </td>
                 <td className='px-4 py-4 align-top'>

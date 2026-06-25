@@ -202,6 +202,9 @@ export default function AdminOutreachQueueTable({ items, locale }: AdminOutreach
                         {statusLabelMap[item.outreachStatus]}
                       </span>
                       <p className='mt-2 text-xs text-slate-500'>{formatUpdatedAt(item.outreachUpdatedAt)}</p>
+                      {item.outreachUpdatedByEmail && (
+                        <p className='mt-1 text-xs text-slate-500'>Updated by {item.outreachUpdatedByEmail}</p>
+                      )}
                       {followUpTiming && (
                         <div
                           className={`mt-2 inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${followUpTiming.className}`}
