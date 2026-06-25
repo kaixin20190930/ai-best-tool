@@ -25,6 +25,7 @@ import {
   getOperationalStats,
   getOutreachCommercialBridgeSummary,
   getOutreachHistorySummary,
+  getOutreachExecutorSummary,
   getOutreachNeedsClassification,
   getSubmissionFunnelStats,
   getSubmissionRejectionReasonStats,
@@ -67,6 +68,7 @@ export default async function AdminAnalyticsPage({
   const featuredPlacementStats = await getFeaturedPlacementStats();
   const outreachQueue = await getDeveloperOutreachQueue(12);
   const outreachCommercialBridge = await getOutreachCommercialBridgeSummary();
+  const outreachExecutors = await getOutreachExecutorSummary(5);
   const outreachHistorySummary = await getOutreachHistorySummary();
   const outreachNeedsClassification =
     outreachHistorySummary.unclassifiedClosedCount > 0 ? await getOutreachNeedsClassification(12) : [];
@@ -2329,6 +2331,67 @@ export default async function AdminAnalyticsPage({
           <p className='mt-3 text-xs text-slate-500'>
             {outreachPaidPlanRate}% of outreach-led claims are on the paid plan and {outreachPaymentConfirmedRate}% have payment confirmed.
           </p>
+        </div>
+
+        <div className='mb-4 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm'>
+          <div className='border-b border-slate-200 px-4 py-3'>
+            <div className='flex items-center justify-between gap-3'>
+              <div>
+                <p className='text-sm font-semibold text-slate-900'>Outreach executor mix</p>
+                <p className='mt-1 text-sm text-slate-500'>
+                  Who is moving the outreach queue, and whether their work is reaching claims and revenue outcomes.
+                </p>
+              </div>
+              <p className='text-xs text-slate-500'>{outreachExecutors.length} executors with recent activity</p>
+            </div>
+          </div>
+          {outreachExecutors.length > 0 ? (
+            <table className='min-w-full divide-y divide-slate-200'>
+              <thead className='bg-slate-50'>
+                <tr>
+                  <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>Executor</th>
+                  <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                    Recent 7d
+                  </th>
+                  <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                    Total updates
+                  </th>
+                  <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                    Claims
+                  </th>
+                  <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                    Paid
+                  </th>
+                  <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                    Featured live
+                  </th>
+                </tr>
+              </thead>
+              <tbody className='divide-y divide-slate-100 bg-white'>
+                {outreachExecutors.map((item) => (
+                  <tr key={item.executorEmail}>
+                    <td className='px-4 py-4 align-top'>
+                      <div>
+                        <p className='text-sm font-medium text-slate-900'>{item.executorEmail}</p>
+                        <p className='mt-1 text-xs text-slate-500'>
+                          {item.recentUpdates > 0 ? 'Active this week' : 'No updates in the last week'}
+                        </p>
+                      </div>
+                    </td>
+                    <td className='px-4 py-4 text-right align-top text-sm font-semibold text-cyan-700'>
+                      {item.recentUpdates}
+                    </td>
+                    <td className='px-4 py-4 text-right align-top text-sm text-slate-700'>{item.totalUpdates}</td>
+                    <td className='px-4 py-4 text-right align-top text-sm text-slate-700'>{item.claimedCount}</td>
+                    <td className='px-4 py-4 text-right align-top text-sm text-slate-700'>{item.paymentConfirmedCount}</td>
+                    <td className='px-4 py-4 text-right align-top text-sm text-slate-700'>{item.featuredLiveCount}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div className='px-4 py-8 text-sm text-slate-500'>No executor data is available yet.</div>
+          )}
         </div>
 
         <div className='mb-4 rounded-lg border border-amber-200 bg-amber-50 p-4 shadow-sm'>

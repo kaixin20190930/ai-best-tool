@@ -164,7 +164,17 @@ export interface AdminOutreachCommercialBridgeSummary {
   previousFeaturedReservedCount: number;
   recentFeaturedLiveCount: number;
   previousFeaturedLiveCount: number;
-  recentUpdatedByEmail: string | null;
+}
+
+export interface AdminOutreachExecutorSummaryItem {
+  executorEmail: string;
+  totalUpdates: number;
+  recentUpdates: number;
+  claimedCount: number;
+  paidPlanCount: number;
+  paymentConfirmedCount: number;
+  featuredReservedCount: number;
+  featuredLiveCount: number;
 }
 
 function getOutreachFollowUpPriority(value: string | null): number {
@@ -2844,7 +2854,6 @@ export async function getOutreachCommercialBridgeSummary(): Promise<AdminOutreac
       previousFeaturedReservedCount: Number(row.previousFeaturedReservedCount || 0),
       recentFeaturedLiveCount: Number(row.recentFeaturedLiveCount || 0),
       previousFeaturedLiveCount: Number(row.previousFeaturedLiveCount || 0),
-      recentUpdatedByEmail: null,
     };
   } catch (error) {
     console.error('Error fetching outreach commercial bridge summary:', error);
@@ -2862,8 +2871,73 @@ export async function getOutreachCommercialBridgeSummary(): Promise<AdminOutreac
       previousFeaturedReservedCount: 0,
       recentFeaturedLiveCount: 0,
       previousFeaturedLiveCount: 0,
-      recentUpdatedByEmail: null,
     };
+  }
+}
+
+export async function getOutreachExecutorSummary(
+  limit = 5
+): Promise<AdminOutreachExecutorSummaryItem[]> {
+  try {
+    await requireAdmin();
+
+    const pool = getPool();
+    const normalizedLimit = Math.max(1, Math.min(limit, 20));
+    const result = await pool.query(
+      `
+        WITH executor_rows AS (
+          SELECT
+            COALESCE(NULLIF(t.features->'outreach'->>'updatedByEmail', ''), 'unknown') AS executor_email,
+            COALESCE(t.features->'outreach'->>'status', 'not_started') AS status,
+            COALESCE(t.features->'outreach'->>'closedReason', '') AS closed_reason,
+            COALESCE(t.features->'submission'->'commercial'->>'plan', 'free') AS plan,
+            COALESCE(t.features->'submission'->'commercial'->>'paymentConfirmed', 'false') AS payment_confirmed,
+            COALESCE(t.features->'submission'->'commercial'->>'isSponsoredPlacement', 'false') AS is_sponsored_placement,
+            NULLIF(t.features->'outreach'->>'updatedAt', '')::timestamptz AS outreach_updated_at,
+            NULLIF(t.features->'submission'->'commercial'->>'paymentConfirmedAt', '')::timestamptz AS payment_confirmed_at,
+            NULLIF(t.features->'submission'->'commercial'->>'featuredReservedAt', '')::timestamptz AS featured_reserved_at,
+            NULLIF(t.features->'submission'->'commercial'->>'activatedAt', '')::timestamptz AS activated_at
+          FROM tools t
+          WHERE NULLIF(t.features->'outreach'->>'updatedByEmail', '') IS NOT NULL
+        )
+        SELECT
+          executor_email AS "executorEmail",
+          COUNT(*)::int AS "totalUpdates",
+          COUNT(*) FILTER (WHERE outreach_updated_at >= NOW() - INTERVAL '7 days')::int AS "recentUpdates",
+          COUNT(*) FILTER (WHERE status = 'closed' AND closed_reason = 'claimed')::int AS "claimedCount",
+          COUNT(*) FILTER (
+            WHERE status = 'closed' AND closed_reason = 'claimed' AND plan = 'standard_paid'
+          )::int AS "paidPlanCount",
+          COUNT(*) FILTER (
+            WHERE status = 'closed' AND closed_reason = 'claimed' AND payment_confirmed = 'true'
+          )::int AS "paymentConfirmedCount",
+          COUNT(*) FILTER (
+            WHERE status = 'closed' AND closed_reason = 'claimed' AND featured_reserved_at IS NOT NULL
+          )::int AS "featuredReservedCount",
+          COUNT(*) FILTER (
+            WHERE status = 'closed' AND closed_reason = 'claimed' AND is_sponsored_placement = 'true'
+          )::int AS "featuredLiveCount"
+        FROM executor_rows
+        GROUP BY executor_email
+        ORDER BY "recentUpdates" DESC, "totalUpdates" DESC, executor_email ASC
+        LIMIT $1
+      `,
+      [normalizedLimit],
+    );
+
+    return result.rows.map((row) => ({
+      executorEmail: String(row.executorEmail || 'unknown'),
+      totalUpdates: Number(row.totalUpdates || 0),
+      recentUpdates: Number(row.recentUpdates || 0),
+      claimedCount: Number(row.claimedCount || 0),
+      paidPlanCount: Number(row.paidPlanCount || 0),
+      paymentConfirmedCount: Number(row.paymentConfirmedCount || 0),
+      featuredReservedCount: Number(row.featuredReservedCount || 0),
+      featuredLiveCount: Number(row.featuredLiveCount || 0),
+    }));
+  } catch (error) {
+    console.error('Error fetching outreach executor summary:', error);
+    return [];
   }
 }
 
