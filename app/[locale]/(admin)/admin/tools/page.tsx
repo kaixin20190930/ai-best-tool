@@ -1,6 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
-import { getAdminTools, getToolsStats } from '@/app/actions/admin/tools';
+import { getAdminTools, getPaidListingBlockerSummary, getToolsStats } from '@/app/actions/admin/tools';
 import AdminToolsTable from '@/components/admin/AdminToolsTable';
 import AdminToolsFilters from '@/components/admin/AdminToolsFilters';
 
@@ -66,10 +66,15 @@ export default async function AdminToolsPage({
     rejected: 0,
     draft: 0,
   };
+  let paidBlockerSummary: Awaited<ReturnType<typeof getPaidListingBlockerSummary>> = {
+    totalBlocked: 0,
+    blockerCounts: [],
+    items: [],
+  };
   let loadError: string | null = null;
 
   try {
-    const [toolResult, statsResult] = await Promise.all([
+    const [toolResult, statsResult, blockerResult] = await Promise.all([
       getAdminTools({
         status,
         search,
@@ -88,11 +93,13 @@ export default async function AdminToolsPage({
         pageSize: 20,
       }),
       getToolsStats(),
+      getPaidListingBlockerSummary(8),
     ]);
 
     tools = toolResult.tools;
     total = toolResult.total;
     stats = statsResult;
+    paidBlockerSummary = blockerResult;
   } catch (error) {
     loadError = error instanceof Error ? error.message : 'Failed to load admin tools.';
   }
@@ -120,7 +127,7 @@ export default async function AdminToolsPage({
           Admin tools could not be loaded: {loadError}
         </div>
       )}
-      <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
         <div className="theme-surface rounded-lg border border-slate-200 p-4 shadow-sm">
           <p className="text-sm font-medium text-slate-600">Total</p>
           <p className="mt-2 text-2xl font-semibold text-slate-900">{stats.total}</p>
@@ -147,7 +154,22 @@ export default async function AdminToolsPage({
           <p className="text-sm font-medium text-slate-600">Draft</p>
           <p className="mt-2 text-2xl font-semibold text-slate-600">{stats.draft}</p>
         </div>
+        <div className="theme-surface rounded-lg border border-slate-200 p-4 shadow-sm">
+          <p className="text-sm font-medium text-slate-600">Paid blockers</p>
+          <p className="mt-2 text-2xl font-semibold text-rose-600">{paidBlockerSummary.totalBlocked}</p>
+          <p className="mt-2 text-xs text-slate-500">
+            {paidBlockerSummary.blockerCounts.length > 0
+              ? `${paidBlockerSummary.blockerCounts[0].label} is the top missing field.`
+              : 'No blocker backlog right now.'}
+          </p>
+        </div>
       </div>
+
+      {paidBlockerSummary.blockerCounts.length > 0 && (
+        <div className="mb-6 rounded-lg border border-rose-100 bg-rose-50 px-4 py-3 text-sm text-rose-800">
+          Most common paid blockers: {paidBlockerSummary.blockerCounts.map((item) => `${item.label} (${item.count})`).join(' · ')}
+        </div>
+      )}
 
       {/* Filters */}
       <AdminToolsFilters
