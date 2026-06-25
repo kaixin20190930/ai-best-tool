@@ -241,6 +241,32 @@ export interface CtaClickTrend {
   previousUniqueVisitors: number;
 }
 
+export interface CommercialIntentSource {
+  sourcePath: string;
+  pageType: string;
+  pageLabel: string;
+  submitClicks: number;
+  claimClicks: number;
+  claimSubmissions: number;
+  checkoutStarts: number;
+  totalIntentActions: number;
+}
+
+export interface CommercialIntentReport {
+  sources: CommercialIntentSource[];
+  totalSubmitClicks: number;
+  totalClaimClicks: number;
+  totalClaimSubmissions: number;
+  totalCheckoutStarts: number;
+}
+
+type CommercialIntentCounts = {
+  submitClicks: number;
+  claimClicks: number;
+  claimSubmissions: number;
+  checkoutStarts: number;
+};
+
 /**
  * Get overall site metrics
  */
@@ -1013,6 +1039,46 @@ function buildPageViewDateCondition(range: 'all' | '7d' | '30d'): string {
   return '';
 }
 
+function normalizeSourcePath(value: string | null | undefined): string {
+  const trimmed = (value || '').trim();
+
+  if (!trimmed) {
+    return 'unknown';
+  }
+
+  const withoutOrigin = trimmed.replace(/^https?:\/\/[^/]+/i, '');
+  const pathOnly = withoutOrigin.split('?')[0]?.split('#')[0] || '';
+  const normalized = (pathOnly || '/').replace(/^\/(en|cn|jp|de|es|fr|pt|ru|tw)(?=\/|$)/, '') || '/';
+  return normalized;
+}
+
+function inferPageTypeFromSourcePath(sourcePath: string): string {
+  if (sourcePath === '/') return 'home';
+  if (sourcePath.startsWith('/guides')) return 'guide';
+  if (sourcePath.startsWith('/ai/')) return 'tool_detail';
+  if (sourcePath.startsWith('/categories')) return 'category';
+  if (sourcePath.startsWith('/explore')) return 'explore';
+  if (sourcePath === '/best-ai-tools') return 'best_ai_tools';
+  if (sourcePath.startsWith('/best-ai-tools/')) return 'best_ai_tools_topic';
+  if (sourcePath.startsWith('/pricing')) return 'pricing';
+  if (sourcePath.startsWith('/submit')) return 'submit';
+  if (sourcePath.startsWith('/developer/listing')) return 'developer_listing';
+  if (sourcePath.startsWith('/profile/submissions')) return 'profile_submissions';
+  return 'other';
+}
+
+function buildAnalyticsDateCondition(range: 'all' | '7d' | '30d', column: string): string {
+  if (range === '7d') {
+    return `AND ${column} >= NOW() - INTERVAL '7 days'`;
+  }
+
+  if (range === '30d') {
+    return `AND ${column} >= NOW() - INTERVAL '30 days'`;
+  }
+
+  return '';
+}
+
 /**
  * Get page-level access report
  */
@@ -1422,6 +1488,157 @@ export async function getCtaClickTrend(range: '7d' | '30d' = '7d'): Promise<CtaC
       previousClicks: 0,
       currentUniqueVisitors: 0,
       previousUniqueVisitors: 0,
+    };
+  }
+}
+
+/**
+ * Get the source pages that drive claim and payment intent.
+ */
+export async function getCommercialIntentReport(
+  range: 'all' | '7d' | '30d' = '30d',
+  limit: number = 10,
+): Promise<CommercialIntentReport> {
+  try {
+    const pool = getPool();
+    const dateCondition = buildAnalyticsDateCondition(range, 'timestamp');
+    const rowsBySource = new Map<string, CommercialIntentCounts>();
+
+    const addCount = (
+      sourcePathRaw: string | null | undefined,
+      key: 'submitClicks' | 'claimClicks' | 'claimSubmissions' | 'checkoutStarts',
+      countRaw: unknown,
+    ) => {
+      const sourcePath = normalizeSourcePath(sourcePathRaw);
+      const count = Number.parseInt(String(countRaw || '0'), 10);
+
+      if (count <= 0) {
+        return;
+      }
+
+      const existing = rowsBySource.get(sourcePath) || {
+        submitClicks: 0,
+        claimClicks: 0,
+        claimSubmissions: 0,
+        checkoutStarts: 0,
+      };
+      existing[key] += count;
+      rowsBySource.set(sourcePath, existing);
+    };
+
+    const [ctaResult, claimResult, checkoutResult] = await Promise.all([
+      pool.query(
+        `
+        SELECT
+          COALESCE(
+            NULLIF(metadata->>'source_path', ''),
+            NULLIF(regexp_replace(COALESCE(referrer, ''), '^https?://[^/]+', ''), '')
+          ) AS source_path,
+          CASE
+            WHEN COALESCE(metadata->>'href', '') LIKE '%/submit%' THEN 'submit_click'
+            WHEN COALESCE(metadata->>'href', '') LIKE '%/developer/listing%' THEN 'claim_click'
+            ELSE 'other'
+          END AS click_type,
+          COUNT(*)::int AS count
+        FROM analytics
+        WHERE event_type = 'cta_click'
+          ${dateCondition}
+          AND (
+            COALESCE(metadata->>'href', '') LIKE '%/submit%'
+            OR COALESCE(metadata->>'href', '') LIKE '%/developer/listing%'
+          )
+        GROUP BY 1, 2
+      `,
+      ),
+      pool.query(
+        `
+        SELECT
+          COALESCE(
+            NULLIF(metadata->>'sourcePath', ''),
+            NULLIF(metadata->>'source_path', ''),
+            NULLIF(regexp_replace(COALESCE(referrer, ''), '^https?://[^/]+', ''), '')
+          ) AS source_path,
+          COUNT(*)::int AS count
+        FROM analytics
+        WHERE event_type = 'claim_submit'
+          ${dateCondition}
+        GROUP BY 1
+      `,
+      ),
+      pool.query(
+        `
+        SELECT
+          COALESCE(
+            NULLIF(metadata->>'sourcePath', ''),
+            NULLIF(metadata->>'source_path', ''),
+            NULLIF(regexp_replace(COALESCE(referrer, ''), '^https?://[^/]+', ''), '')
+          ) AS source_path,
+          COUNT(*)::int AS count
+        FROM analytics
+        WHERE event_type = 'checkout_create'
+          ${dateCondition}
+        GROUP BY 1
+      `,
+      ),
+    ]);
+
+    ctaResult.rows.forEach((row) => {
+      const clickType = String(row.click_type || 'other');
+      if (clickType === 'submit_click') {
+        addCount(row.source_path, 'submitClicks', row.count);
+      } else if (clickType === 'claim_click') {
+        addCount(row.source_path, 'claimClicks', row.count);
+      }
+    });
+
+    claimResult.rows.forEach((row) => {
+      addCount(row.source_path, 'claimSubmissions', row.count);
+    });
+
+    checkoutResult.rows.forEach((row) => {
+      addCount(row.source_path, 'checkoutStarts', row.count);
+    });
+
+    const rankedSources = Array.from(rowsBySource.entries())
+      .map(([sourcePath, counts]) => {
+        const pageType = inferPageTypeFromSourcePath(sourcePath);
+        return {
+          sourcePath,
+          pageType,
+          pageLabel: getPageTypeLabel(pageType),
+          submitClicks: counts.submitClicks,
+          claimClicks: counts.claimClicks,
+          claimSubmissions: counts.claimSubmissions,
+          checkoutStarts: counts.checkoutStarts,
+          totalIntentActions:
+            counts.submitClicks + counts.claimClicks + counts.claimSubmissions * 2 + counts.checkoutStarts * 2,
+        };
+      })
+      .sort(
+        (a, b) =>
+          b.checkoutStarts - a.checkoutStarts ||
+          b.claimSubmissions - a.claimSubmissions ||
+          b.totalIntentActions - a.totalIntentActions ||
+          a.sourcePath.localeCompare(b.sourcePath),
+      );
+
+    const sources = rankedSources.slice(0, limit);
+
+    return {
+      sources,
+      totalSubmitClicks: rankedSources.reduce((sum, item) => sum + item.submitClicks, 0),
+      totalClaimClicks: rankedSources.reduce((sum, item) => sum + item.claimClicks, 0),
+      totalClaimSubmissions: rankedSources.reduce((sum, item) => sum + item.claimSubmissions, 0),
+      totalCheckoutStarts: rankedSources.reduce((sum, item) => sum + item.checkoutStarts, 0),
+    };
+  } catch (error) {
+    console.error('Error fetching commercial intent report:', error);
+    return {
+      sources: [],
+      totalSubmitClicks: 0,
+      totalClaimClicks: 0,
+      totalClaimSubmissions: 0,
+      totalCheckoutStarts: 0,
     };
   }
 }

@@ -1,7 +1,8 @@
 'use client';
 
-import Link from 'next/link';
 import type { ReactNode } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 import { trackCtaClick } from '@/app/actions/analytics';
 
@@ -30,13 +31,22 @@ export default function TrackableCtaLink({
   toolId,
   userId,
 }: TrackableCtaLinkProps) {
+  const pathname = usePathname() || '';
+
   const handleClick = () => {
+    const normalizedPathname = pathname || href;
+    const localeMatch = normalizedPathname.match(/^\/(en|cn|jp|de|es|fr|pt|ru|tw)(?=\/|$)/);
+    const sourceLocale = localeMatch?.[1] || null;
+    const sourcePath = normalizedPathname.replace(/^\/(en|cn|jp|de|es|fr|pt|ru|tw)(?=\/|$)/, '') || '/';
+
     trackCtaClick(
       {
         cta_id: ctaId,
         cta_label: ctaLabel,
         page_type: pageType,
         href,
+        source_path: sourcePath,
+        source_locale: sourceLocale,
       },
       toolId,
       userId,

@@ -11,6 +11,24 @@ function getRecord(value: unknown): Record<string, unknown> {
   return value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
 }
 
+function getSourceMetadataFromReferrer(referrer: string): { sourcePath: string | null; sourceLocale: string | null } {
+  if (!referrer) {
+    return { sourcePath: null, sourceLocale: null };
+  }
+
+  try {
+    const url = new URL(referrer);
+    const pathname = url.pathname || '/';
+    const localeMatch = pathname.match(/^\/(en|cn|jp|de|es|fr|pt|ru|tw)(?=\/|$)/);
+    const sourceLocale = localeMatch?.[1] || null;
+    const sourcePath = pathname.replace(/^\/(en|cn|jp|de|es|fr|pt|ru|tw)(?=\/|$)/, '') || '/';
+
+    return { sourcePath, sourceLocale };
+  } catch {
+    return { sourcePath: null, sourceLocale: null };
+  }
+}
+
 function getCommercialValue(tool: Record<string, unknown>, key: string): unknown {
   const features = getRecord(tool.features);
   const submission = getRecord(features.submission);
@@ -101,6 +119,8 @@ export async function GET(request: NextRequest) {
       cancelUrl: `${siteUrl}/profile/submissions?payment=cancelled`,
     });
 
+    const { sourcePath, sourceLocale } = getSourceMetadataFromReferrer(request.headers.get('referer') || '');
+
     await trackCommerceEvent(
       'checkout_create',
       {
@@ -108,6 +128,8 @@ export async function GET(request: NextRequest) {
         featuredDays,
         fastTrack,
         sessionId: session.id,
+        sourcePath,
+        sourceLocale,
       },
       toolId,
       user.id,

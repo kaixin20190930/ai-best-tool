@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowUpRight, BarChart3, Globe, Layers3, Search, ShieldAlert, TrendingUp } from 'lucide-react';
 
 import {
+  getCommercialIntentReport,
   getCtaClickReport,
   getCtaClickTrend,
   getPageAccessReport,
@@ -15,14 +16,14 @@ import {
   getTopTools,
   getTrafficSources,
 } from '@/lib/services/admin/analytics';
+import { getAdminToolClaimsSummary } from '@/app/actions/admin/claims';
 import {
   getDeveloperOutreachQueue,
-  getOperationalStats,
   getFeaturedPlacementStats,
+  getOperationalStats,
   getSubmissionFunnelStats,
   getSubmissionRejectionReasonStats,
 } from '@/app/actions/admin/tools';
-import { getAdminToolClaimsSummary } from '@/app/actions/admin/claims';
 
 export async function generateMetadata() {
   return {
@@ -53,6 +54,7 @@ export default async function AdminAnalyticsPage({
   const pageAccessReport = await getPageAccessReport(range, 10);
   const ctaClickReport = await getCtaClickReport(range, 8);
   const ctaClickTrend = await getCtaClickTrend(range === 'all' ? '30d' : range);
+  const commercialIntentReport = await getCommercialIntentReport(range, 10);
   const pageAccessTrend = await getPageAccessTrend(range === 'all' ? '30d' : range);
   const operationalStats = await getOperationalStats(range);
   const funnel = await getSubmissionFunnelStats(range);
@@ -182,7 +184,8 @@ export default async function AdminAnalyticsPage({
     if (pageType === 'tool_detail') return 'If detail pages are rising, trust signals and feedback loops matter most.';
     if (pageType === 'explore') return 'If Explore is rising, tighten filters and empty-state guidance.';
     if (pageType === 'best_ai_tools') return 'If top lists are rising, keep the hub focused and the topic paths clear.';
-    if (pageType === 'best_ai_tools_topic') return 'If topic pages are rising, keep tool cards and external CTAs sharp.';
+    if (pageType === 'best_ai_tools_topic')
+      return 'If topic pages are rising, keep tool cards and external CTAs sharp.';
     if (pageType === 'pricing') return 'If Pricing is rising, keep the offer tight and the CTA obvious.';
     if (pageType === 'submit') return 'If Submit is rising, remove friction and clarify review expectations.';
     if (pageType === 'developer_listing') return 'If Claim Listing is rising, follow up fast on new leads.';
@@ -227,15 +230,12 @@ export default async function AdminAnalyticsPage({
     ...item,
     share: rejectionReasons.totalRejected > 0 ? Math.round((item.count / rejectionReasons.totalRejected) * 100) : 0,
   }));
+  const recordedRejectionCount = rejectionReasonRows
+    .filter((item) => item.reason !== 'No reason recorded')
+    .reduce((sum, item) => sum + item.count, 0);
   const rejectionReasonCoverage =
     rejectionReasons.totalRejected > 0
-      ? Math.round(
-          (rejectionReasonRows
-            .filter((item) => item.reason !== 'No reason recorded')
-            .reduce((sum, item) => sum + item.count, 0) /
-            rejectionReasons.totalRejected) *
-            100,
-        )
+      ? Math.round((recordedRejectionCount / rejectionReasons.totalRejected) * 100)
       : 0;
   const claimStatusRows = [
     { key: 'new', label: 'New', count: claimSummary.newCount, tone: 'cyan' },
@@ -247,10 +247,41 @@ export default async function AdminAnalyticsPage({
     share: claimSummary.total > 0 ? Math.round((item.count / claimSummary.total) * 100) : 0,
   }));
   const claimResolutionRate =
-    claimSummary.total > 0 ? Math.round(((claimSummary.claimedCount + claimSummary.invalidCount) / claimSummary.total) * 100) : 0;
+    claimSummary.total > 0
+      ? Math.round(((claimSummary.claimedCount + claimSummary.invalidCount) / claimSummary.total) * 100)
+      : 0;
+  const commercialEntryRows = commercialIntentReport.sources.map((item) => ({
+    ...item,
+    downstreamConversions: item.claimSubmissions + item.checkoutStarts,
+  }));
+  const commercialEntryShareBase =
+    commercialIntentReport.totalClaimSubmissions + commercialIntentReport.totalCheckoutStarts;
+  const getCommercialSourceAction = (item: (typeof commercialEntryRows)[number]) => {
+    if (item.checkoutStarts > 0) return 'Keep this route clean and reduce payment friction';
+    if (item.claimSubmissions > 0) return 'Follow up fast and route qualified owners into paid paths';
+    if (item.submitClicks + item.claimClicks >= 3)
+      return 'Strengthen the next step copy so intent turns into form completion';
+    return 'Watch this source until it proves real downstream intent';
+  };
+  const getClaimStatusToneClass = (key: string) => {
+    if (key === 'claimed') return 'bg-emerald-500';
+    if (key === 'contacted') return 'bg-cyan-500';
+    if (key === 'invalid') return 'bg-rose-500';
+    return 'bg-blue-500';
+  };
+  const getOutreachSuggestionToneClass = (suggestion: (typeof outreachQueue)[number]['suggestion']) => {
+    if (suggestion === 'featured_pitch') return 'bg-cyan-50 text-cyan-700';
+    if (suggestion === 'content_collab') return 'bg-emerald-50 text-emerald-700';
+    return 'bg-amber-50 text-amber-700';
+  };
   const featuredExpiringSoon = featuredPlacementStats.placements
     .filter((item) => item.daysLeft !== null && item.daysLeft <= 3)
     .sort((a, b) => (a.daysLeft || 0) - (b.daysLeft || 0));
+  let featuredRenewalText = 'No featured window is close enough to need a reminder yet.';
+  if (featuredExpiringSoon.length > 0) {
+    featuredRenewalText =
+      featuredExpiringSoon[0].daysLeft === 1 ? 'Ends tomorrow.' : `Ends in ${featuredExpiringSoon[0].daysLeft} days.`;
+  }
   const featuredClickThroughRate =
     featuredPlacementStats.totalViews > 0
       ? Math.round((featuredPlacementStats.totalClicks / featuredPlacementStats.totalViews) * 100)
@@ -579,8 +610,8 @@ export default async function AdminAnalyticsPage({
             </p>
           </div>
           <div className='text-sm text-slate-500'>
-            {ctaClickReport.totalClicks.toLocaleString()} clicks ·{' '}
-            {ctaClickReport.totalUniqueVisitors.toLocaleString()} visitors
+            {ctaClickReport.totalClicks.toLocaleString()} clicks · {ctaClickReport.totalUniqueVisitors.toLocaleString()}{' '}
+            visitors
           </div>
         </div>
 
@@ -722,7 +753,8 @@ export default async function AdminAnalyticsPage({
             </p>
           </div>
           <div className='text-sm text-slate-500'>
-            {ctaClickTrend.currentClicks.toLocaleString()} current · {ctaClickTrend.previousClicks.toLocaleString()} previous
+            {ctaClickTrend.currentClicks.toLocaleString()} current · {ctaClickTrend.previousClicks.toLocaleString()}{' '}
+            previous
           </div>
         </div>
 
@@ -734,7 +766,9 @@ export default async function AdminAnalyticsPage({
           </div>
           <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
             <p className='text-sm font-medium text-slate-600'>Previous clicks</p>
-            <p className='mt-2 text-3xl font-semibold text-slate-900'>{ctaClickTrend.previousClicks.toLocaleString()}</p>
+            <p className='mt-2 text-3xl font-semibold text-slate-900'>
+              {ctaClickTrend.previousClicks.toLocaleString()}
+            </p>
             <p className='mt-2 text-sm text-slate-500'>Comparable previous range</p>
           </div>
           <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
@@ -756,7 +790,10 @@ export default async function AdminAnalyticsPage({
         <div className='grid gap-4 lg:grid-cols-2'>
           {ctaTrendItems.length > 0 ? (
             ctaTrendItems.map((item) => (
-              <div key={`${item.ctaId}:${item.pageType}`} className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+              <div
+                key={`${item.ctaId}:${item.pageType}`}
+                className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'
+              >
                 <div className='flex items-start justify-between gap-3'>
                   <div>
                     <p className='text-sm font-semibold text-slate-950'>{item.ctaLabel}</p>
@@ -1361,15 +1398,7 @@ export default async function AdminAnalyticsPage({
                     </div>
                     <div className='mt-3 h-2 overflow-hidden rounded-full bg-slate-100'>
                       <div
-                        className={`h-full rounded-full ${
-                          item.key === 'claimed'
-                            ? 'bg-emerald-500'
-                            : item.key === 'contacted'
-                              ? 'bg-cyan-500'
-                              : item.key === 'invalid'
-                                ? 'bg-rose-500'
-                                : 'bg-blue-500'
-                        }`}
+                        className={`h-full rounded-full ${getClaimStatusToneClass(item.key)}`}
                         style={{ width: `${Math.max(item.share, item.count > 0 ? 8 : 0)}%` }}
                       />
                     </div>
@@ -1389,8 +1418,110 @@ export default async function AdminAnalyticsPage({
             <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
               <p className='text-sm font-medium text-slate-600'>Open Backlog</p>
               <p className='mt-2 text-3xl font-semibold text-amber-600'>{claimSummary.newCount}</p>
+              <p className='mt-2 text-sm text-slate-500'>Fresh request volume that still needs a response.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Commercial Entry Sources */}
+      <div className='mb-8'>
+        <div className='mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
+          <div>
+            <h2 className='text-lg font-semibold text-slate-900'>Commercial Entry Sources</h2>
+            <p className='mt-1 text-sm text-slate-600'>
+              Which source pages are actually sending owners into claim submission or paid checkout, not just collecting
+              shallow CTA clicks.
+            </p>
+          </div>
+          <Link
+            href='/admin/analytics'
+            className='inline-flex items-center gap-1 text-sm font-medium text-cyan-700 hover:text-cyan-800'
+          >
+            View full analytics
+            <ArrowUpRight className='h-4 w-4' />
+          </Link>
+        </div>
+        <div className='grid gap-6 lg:grid-cols-[1.35fr_0.65fr]'>
+          <div className='overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm'>
+            <div className='border-b border-slate-200 px-4 py-3'>
+              <div className='flex items-center justify-between gap-3'>
+                <p className='text-sm font-semibold text-slate-900'>Top source pages</p>
+                <p className='text-xs text-slate-500'>{rangeLabel} tracked sources</p>
+              </div>
+            </div>
+            {commercialEntryRows.length > 0 ? (
+              <div className='overflow-x-auto'>
+                <table className='min-w-full divide-y divide-slate-200 text-sm'>
+                  <thead className='bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                    <tr>
+                      <th className='px-4 py-3'>Source page</th>
+                      <th className='px-4 py-3'>Submit CTA</th>
+                      <th className='px-4 py-3'>Claim CTA</th>
+                      <th className='px-4 py-3'>Claim leads</th>
+                      <th className='px-4 py-3'>Checkout starts</th>
+                      <th className='px-4 py-3'>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className='divide-y divide-slate-100'>
+                    {commercialEntryRows.map((item) => {
+                      const share =
+                        commercialEntryShareBase > 0
+                          ? Math.round((item.downstreamConversions / commercialEntryShareBase) * 100)
+                          : 0;
+
+                      return (
+                        <tr key={item.sourcePath} className='align-top'>
+                          <td className='px-4 py-4'>
+                            <div className='min-w-[220px]'>
+                              <p className='text-sm font-medium text-slate-900'>{item.sourcePath}</p>
+                              <p className='mt-1 text-xs text-slate-500'>{item.pageLabel}</p>
+                              <p className='mt-2 text-xs font-medium text-cyan-700'>
+                                {share}% of downstream conversions
+                              </p>
+                            </div>
+                          </td>
+                          <td className='px-4 py-4 font-semibold text-slate-700'>{item.submitClicks}</td>
+                          <td className='px-4 py-4 font-semibold text-slate-700'>{item.claimClicks}</td>
+                          <td className='px-4 py-4 font-semibold text-emerald-700'>{item.claimSubmissions}</td>
+                          <td className='px-4 py-4 font-semibold text-violet-700'>{item.checkoutStarts}</td>
+                          <td className='px-4 py-4 text-xs leading-5 text-slate-500'>
+                            {getCommercialSourceAction(item)}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div className='px-4 py-8 text-sm text-slate-500'>
+                No commercial entry source data recorded in this range.
+              </div>
+            )}
+          </div>
+          <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-1'>
+            <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
+              <p className='text-sm font-medium text-slate-600'>Tracked Claim Leads</p>
+              <p className='mt-2 text-3xl font-semibold text-emerald-600'>
+                {commercialIntentReport.totalClaimSubmissions}
+              </p>
+              <p className='mt-2 text-sm text-slate-500'>Claim forms submitted with a known source page.</p>
+            </div>
+            <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
+              <p className='text-sm font-medium text-slate-600'>Checkout Starts</p>
+              <p className='mt-2 text-3xl font-semibold text-violet-700'>
+                {commercialIntentReport.totalCheckoutStarts}
+              </p>
+              <p className='mt-2 text-sm text-slate-500'>Stripe sessions created from the owner payment path.</p>
+            </div>
+            <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
+              <p className='text-sm font-medium text-slate-600'>Intent Clicks</p>
+              <p className='mt-2 text-3xl font-semibold text-cyan-700'>
+                {commercialIntentReport.totalSubmitClicks + commercialIntentReport.totalClaimClicks}
+              </p>
               <p className='mt-2 text-sm text-slate-500'>
-                Fresh request volume that still needs a response.
+                CTA clicks heading toward submit or claim before form completion.
               </p>
             </div>
           </div>
@@ -1403,8 +1534,8 @@ export default async function AdminAnalyticsPage({
           <div>
             <h2 className='text-lg font-semibold text-slate-900'>Rejection Reasons</h2>
             <p className='mt-1 text-sm text-slate-600'>
-              The main reasons submissions get rejected, so we can tell whether the review queue is blocking on the
-              same few issues.
+              The main reasons submissions get rejected, so we can tell whether the review queue is blocking on the same
+              few issues.
             </p>
           </div>
           <Link
@@ -1488,8 +1619,8 @@ export default async function AdminAnalyticsPage({
                 Featured stats use current tool view and click totals as a proxy for exposure.
               </div>
               <p className='mt-1 text-sm leading-6 text-slate-600'>
-                We do not yet track a separate impression event for sponsored slots, so this panel keeps the
-                operational view honest while still showing whether featured inventory is getting used.
+                We do not yet track a separate impression event for sponsored slots, so this panel keeps the operational
+                view honest while still showing whether featured inventory is getting used.
               </p>
             </div>
             <div className='rounded-full bg-white px-3 py-1 text-sm font-semibold text-cyan-800 ring-1 ring-cyan-100'>
@@ -1519,9 +1650,7 @@ export default async function AdminAnalyticsPage({
           <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
             <p className='text-sm font-medium text-slate-600'>Featured CTR</p>
             <p className='mt-2 text-3xl font-semibold text-emerald-600'>{featuredClickThroughRate}%</p>
-            <p className='mt-2 text-sm text-slate-500'>
-              Clicks divided by views for the live featured set.
-            </p>
+            <p className='mt-2 text-sm text-slate-500'>Clicks divided by views for the live featured set.</p>
           </div>
         </div>
 
@@ -1544,9 +1673,10 @@ export default async function AdminAnalyticsPage({
                         <p className='text-sm font-medium text-slate-900'>{item.title}</p>
                         <p className='mt-1 text-xs text-slate-500'>{item.name}</p>
                         <p className='mt-2 text-xs text-slate-500'>
-                          Ends{' '}
-                          {item.featuredUntil ? new Date(item.featuredUntil).toLocaleString() : 'unknown'}
-                          {item.daysLeft !== null ? ` · ${item.daysLeft} day${item.daysLeft === 1 ? '' : 's'} left` : ''}
+                          Ends {item.featuredUntil ? new Date(item.featuredUntil).toLocaleString() : 'unknown'}
+                          {item.daysLeft !== null
+                            ? ` · ${item.daysLeft} day${item.daysLeft === 1 ? '' : 's'} left`
+                            : ''}
                         </p>
                       </div>
                       <div className='flex shrink-0 gap-2'>
@@ -1577,13 +1707,7 @@ export default async function AdminAnalyticsPage({
               <p className='mt-2 text-3xl font-semibold text-slate-900'>
                 {featuredExpiringSoon.length > 0 ? featuredExpiringSoon[0].title : 'None'}
               </p>
-              <p className='mt-2 text-sm text-slate-500'>
-                {featuredExpiringSoon.length > 0
-                  ? featuredExpiringSoon[0].daysLeft === 1
-                    ? 'Ends tomorrow.'
-                    : `Ends in ${featuredExpiringSoon[0].daysLeft} days.`
-                  : 'No featured window is close enough to need a reminder yet.'}
-              </p>
+              <p className='mt-2 text-sm text-slate-500'>{featuredRenewalText}</p>
             </div>
           </div>
         </div>
@@ -1644,14 +1768,18 @@ export default async function AdminAnalyticsPage({
           <div className='theme-surface rounded-lg border border-slate-200 p-5 shadow-sm'>
             <p className='text-sm font-medium text-slate-600'>Queued this week</p>
             <p className='mt-2 text-3xl font-semibold text-slate-900'>{outreachQueue.length}</p>
-            <p className='mt-2 text-sm text-slate-500'>High-signal unclaimed published tools with reachable contacts.</p>
+            <p className='mt-2 text-sm text-slate-500'>
+              High-signal unclaimed published tools with reachable contacts.
+            </p>
           </div>
           <div className='theme-surface rounded-lg border border-slate-200 p-5 shadow-sm'>
             <p className='text-sm font-medium text-slate-600'>Featured-ready leads</p>
             <p className='mt-2 text-3xl font-semibold text-cyan-700'>
               {outreachQueue.filter((item) => item.suggestion === 'featured_pitch').length}
             </p>
-            <p className='mt-2 text-sm text-slate-500'>Traffic-backed listings where a featured pitch is easier to justify.</p>
+            <p className='mt-2 text-sm text-slate-500'>
+              Traffic-backed listings where a featured pitch is easier to justify.
+            </p>
           </div>
           <div className='theme-surface rounded-lg border border-slate-200 p-5 shadow-sm'>
             <p className='text-sm font-medium text-slate-600'>Content-collab leads</p>
@@ -1666,11 +1794,21 @@ export default async function AdminAnalyticsPage({
           <table className='min-w-full divide-y divide-slate-200'>
             <thead className='bg-slate-50'>
               <tr>
-                <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>Tool</th>
-                <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>Contact</th>
-                <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>Suggestion</th>
-                <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>Signals</th>
-                <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>Priority</th>
+                <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                  Tool
+                </th>
+                <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                  Contact
+                </th>
+                <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                  Suggestion
+                </th>
+                <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                  Signals
+                </th>
+                <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                  Priority
+                </th>
               </tr>
             </thead>
             <tbody className='divide-y divide-slate-100 bg-white'>
@@ -1687,24 +1825,18 @@ export default async function AdminAnalyticsPage({
                     <td className='px-4 py-4 align-top text-sm text-slate-700'>{item.contactEmail}</td>
                     <td className='px-4 py-4 align-top'>
                       <span
-                        className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
-                          item.suggestion === 'featured_pitch'
-                            ? 'bg-cyan-50 text-cyan-700'
-                            : item.suggestion === 'content_collab'
-                              ? 'bg-emerald-50 text-emerald-700'
-                              : 'bg-amber-50 text-amber-700'
-                        }`}
+                        className={`rounded-full px-2.5 py-1 text-xs font-semibold ${getOutreachSuggestionToneClass(item.suggestion)}`}
                       >
                         {outreachSuggestionLabel(item.suggestion)}
                       </span>
                     </td>
-                    <td className='px-4 py-4 align-top text-right text-sm text-slate-700'>
+                    <td className='px-4 py-4 text-right align-top text-sm text-slate-700'>
                       <div>{item.views.toLocaleString()} views</div>
                       <div className='text-xs text-slate-500'>
                         {item.clicks} clicks · {item.favorites} favs · {item.comments} comments
                       </div>
                     </td>
-                    <td className='px-4 py-4 align-top text-right'>
+                    <td className='px-4 py-4 text-right align-top'>
                       <div className='inline-flex flex-col items-end gap-1'>
                         <span className='rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700'>
                           {item.priorityScore}
