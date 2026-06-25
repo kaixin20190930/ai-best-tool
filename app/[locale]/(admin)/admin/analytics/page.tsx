@@ -403,6 +403,30 @@ export default async function AdminAnalyticsPage({
     return 'Review whether this CTA should send users somewhere clearer.';
   };
 
+  const getPageFamilyFunnelAction = (item: {
+    pageType: string;
+    views: number;
+    ctaClicks: number;
+    downstreamConversions: number;
+    checkoutStarts: number;
+    claimLeads: number;
+  }) => {
+    if (item.checkoutStarts > 0) {
+      return 'This family already drives paid intent, so protect the path and reduce checkout friction.';
+    }
+    if (item.claimLeads > 0) {
+      return 'This family is producing owner leads, so keep follow-up fast and route qualified owners onward.';
+    }
+    if (item.ctaClicks > 0 && item.downstreamConversions === 0) {
+      return 'People are clicking, but not finishing the next step. Tighten the destination page and form clarity.';
+    }
+    if (item.views > 0 && item.ctaClicks === 0) {
+      return 'Traffic is landing here without moving. Strengthen the CTA placement and next-step promise.';
+    }
+
+    return getPageAction(item.pageType);
+  };
+
   const getPageQueuePriority = (pageType: string) => {
     if (pageType === 'tool_detail') return 'High';
     if (pageType === 'guide') return 'High';
@@ -530,6 +554,81 @@ export default async function AdminAnalyticsPage({
   const ctaTopItems = ctaClickReport.topCtas.slice(0, 6);
   const ctaPageSummaryItems = ctaClickReport.summary.slice(0, 4);
   const ctaTrendItems = ctaClickTrend.items.slice(0, 6);
+  const ctaPageSummaryMap = new Map(ctaClickReport.summary.map((item) => [item.pageType, item]));
+  const commercialFamilyMap = new Map<
+    string,
+    Record<'submitClicks' | 'claimClicks' | 'claimLeads' | 'checkoutStarts', number>
+  >();
+
+  commercialIntentReport.sources.forEach((item) => {
+    const current = commercialFamilyMap.get(item.pageType) || {
+      submitClicks: 0,
+      claimClicks: 0,
+      claimLeads: 0,
+      checkoutStarts: 0,
+    };
+
+    current.submitClicks += item.submitClicks;
+    current.claimClicks += item.claimClicks;
+    current.claimLeads += item.claimSubmissions;
+    current.checkoutStarts += item.checkoutStarts;
+    commercialFamilyMap.set(item.pageType, current);
+  });
+
+  const highIntentPageFamilyOrder = [
+    'pricing',
+    'submit',
+    'developer_listing',
+    'profile_submissions',
+    'tool_detail',
+    'guide',
+    'best_ai_tools',
+    'best_ai_tools_topic',
+    'home',
+    'category',
+    'explore',
+  ];
+  const highIntentPageFamilies = highIntentPageFamilyOrder
+    .map((pageType) => {
+      const pageSummary = pageSummaryMap.get(pageType);
+      const ctaSummary = ctaPageSummaryMap.get(pageType);
+      const commercialSummary = commercialFamilyMap.get(pageType);
+      const views = pageSummary?.views || 0;
+      const uniqueVisitors = pageSummary?.uniqueVisitors || 0;
+      const ctaClicks = ctaSummary?.clicks || 0;
+      const submitClicks = commercialSummary?.submitClicks || 0;
+      const claimClicks = commercialSummary?.claimClicks || 0;
+      const claimLeads = commercialSummary?.claimLeads || 0;
+      const checkoutStarts = commercialSummary?.checkoutStarts || 0;
+      const downstreamConversions = claimLeads + checkoutStarts;
+
+      return {
+        pageType,
+        label: getPageSummaryLabel(pageType),
+        views,
+        uniqueVisitors,
+        ctaClicks,
+        submitClicks,
+        claimClicks,
+        claimLeads,
+        checkoutStarts,
+        downstreamConversions,
+        viewToCtaRate: views > 0 ? Math.round((ctaClicks / views) * 100 * 10) / 10 : 0,
+        viewToDownstreamRate: views > 0 ? Math.round((downstreamConversions / views) * 100 * 10) / 10 : 0,
+        ctaToDownstreamRate: ctaClicks > 0 ? Math.round((downstreamConversions / ctaClicks) * 100 * 10) / 10 : 0,
+      };
+    })
+    .filter((item) => item.views > 0 || item.ctaClicks > 0 || item.downstreamConversions > 0);
+  const highIntentPageFamilyRows = [...highIntentPageFamilies]
+    .sort((a, b) => b.downstreamConversions - a.downstreamConversions || b.ctaClicks - a.ctaClicks || b.views - a.views)
+    .slice(0, 6);
+  const topDownstreamFamily = highIntentPageFamilyRows[0] || null;
+  const topCtaRateFamily = [...highIntentPageFamilies]
+    .filter((item) => item.views > 0 && item.ctaClicks > 0)
+    .sort((a, b) => b.viewToCtaRate - a.viewToCtaRate || b.ctaClicks - a.ctaClicks)[0];
+  const biggestLeakFamily = [...highIntentPageFamilies]
+    .filter((item) => item.views > 0 && item.ctaClicks > 0 && item.downstreamConversions === 0)
+    .sort((a, b) => b.ctaClicks - a.ctaClicks || b.views - a.views)[0];
   const toLocalizedPath = (pagePath: string) => {
     if (!pagePath || pagePath === 'unknown') {
       return null;
@@ -826,6 +925,125 @@ export default async function AdminAnalyticsPage({
           ) : (
             <div className='rounded-lg border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-500'>
               No CTA trend data yet.
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className='mb-8'>
+        <div className='mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
+          <div>
+            <h2 className='text-lg font-semibold text-slate-900'>High-Intent Page Funnel</h2>
+            <p className='mt-1 text-sm text-slate-600'>
+              A page-family view of traffic, CTA engagement, and downstream owner or payment intent.
+            </p>
+          </div>
+          <div className='text-sm text-slate-500'>
+            {highIntentPageFamilies.length} tracked families · {rangeLabel}
+          </div>
+        </div>
+
+        <div className='mb-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3'>
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Best downstream family</p>
+            <p className='mt-2 text-2xl font-semibold text-slate-900'>
+              {topDownstreamFamily?.label || 'Waiting for data'}
+            </p>
+            <p className='mt-2 text-sm text-slate-500'>
+              {topDownstreamFamily
+                ? `${topDownstreamFamily.downstreamConversions} downstream conversions from ${topDownstreamFamily.views} views`
+                : 'No claim or checkout activity recorded yet.'}
+            </p>
+          </div>
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Strongest CTA rate</p>
+            <p className='mt-2 text-2xl font-semibold text-slate-900'>
+              {topCtaRateFamily ? `${topCtaRateFamily.label} · ${topCtaRateFamily.viewToCtaRate}%` : 'Waiting for data'}
+            </p>
+            <p className='mt-2 text-sm text-slate-500'>
+              {topCtaRateFamily
+                ? `${topCtaRateFamily.ctaClicks} CTA clicks from ${topCtaRateFamily.views} views`
+                : 'No family has both views and CTA data yet.'}
+            </p>
+          </div>
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Biggest visible leak</p>
+            <p className='mt-2 text-2xl font-semibold text-slate-900'>
+              {biggestLeakFamily?.label || 'No obvious leak'}
+            </p>
+            <p className='mt-2 text-sm text-slate-500'>
+              {biggestLeakFamily
+                ? `${biggestLeakFamily.ctaClicks} CTA clicks but no claim or checkout progression yet`
+                : 'No page family is currently stuck between click and downstream action.'}
+            </p>
+          </div>
+        </div>
+
+        <div className='overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm'>
+          <div className='border-b border-slate-200 px-4 py-3'>
+            <div className='flex items-center justify-between gap-3'>
+              <p className='text-sm font-semibold text-slate-900'>Page family conversion ladder</p>
+              <p className='text-xs text-slate-500'>Views -&gt; CTA -&gt; claim or checkout</p>
+            </div>
+          </div>
+          {highIntentPageFamilyRows.length > 0 ? (
+            <div className='overflow-x-auto'>
+              <table className='min-w-full divide-y divide-slate-200 text-sm'>
+                <thead className='bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                  <tr>
+                    <th className='px-4 py-3'>Page family</th>
+                    <th className='px-4 py-3'>Views</th>
+                    <th className='px-4 py-3'>CTA clicks</th>
+                    <th className='px-4 py-3'>Claim leads</th>
+                    <th className='px-4 py-3'>Checkout starts</th>
+                    <th className='px-4 py-3'>Rates</th>
+                    <th className='px-4 py-3'>Action</th>
+                  </tr>
+                </thead>
+                <tbody className='divide-y divide-slate-100'>
+                  {highIntentPageFamilyRows.map((item) => (
+                    <tr key={item.pageType} className='align-top'>
+                      <td className='px-4 py-4'>
+                        <div className='min-w-[180px]'>
+                          <p className='text-sm font-medium text-slate-900'>{item.label}</p>
+                          <p className='mt-1 text-xs text-slate-500'>{item.uniqueVisitors} unique visitors</p>
+                        </div>
+                      </td>
+                      <td className='px-4 py-4 font-semibold text-slate-900'>{item.views}</td>
+                      <td className='px-4 py-4'>
+                        <div className='min-w-[90px]'>
+                          <p className='font-semibold text-slate-900'>{item.ctaClicks}</p>
+                          <p className='mt-1 text-xs text-slate-500'>
+                            {item.submitClicks} submit · {item.claimClicks} claim
+                          </p>
+                        </div>
+                      </td>
+                      <td className='px-4 py-4 font-semibold text-emerald-700'>{item.claimLeads}</td>
+                      <td className='px-4 py-4 font-semibold text-violet-700'>{item.checkoutStarts}</td>
+                      <td className='px-4 py-4'>
+                        <div className='min-w-[150px] text-xs leading-5 text-slate-500'>
+                          <p>
+                            View -&gt; CTA: <span className='font-semibold text-slate-900'>{item.viewToCtaRate}%</span>
+                          </p>
+                          <p className='mt-1'>
+                            View -&gt; downstream:{' '}
+                            <span className='font-semibold text-emerald-700'>{item.viewToDownstreamRate}%</span>
+                          </p>
+                          <p className='mt-1'>
+                            CTA -&gt; downstream:{' '}
+                            <span className='font-semibold text-cyan-700'>{item.ctaToDownstreamRate}%</span>
+                          </p>
+                        </div>
+                      </td>
+                      <td className='px-4 py-4 text-xs leading-5 text-slate-500'>{getPageFamilyFunnelAction(item)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className='px-4 py-8 text-sm text-slate-500'>
+              No high-intent page family data has been recorded in this range.
             </div>
           )}
         </div>
