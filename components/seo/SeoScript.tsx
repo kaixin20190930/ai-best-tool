@@ -1,5 +1,3 @@
-import Script from 'next/script';
-
 import { GOOGLE_TRACKING_ID } from '@/lib/env';
 
 export default function SeoScript() {
@@ -9,26 +7,15 @@ export default function SeoScript() {
 
   return (
     <>
-      <Script strategy='afterInteractive' src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_TRACKING_ID}`} />
-      <Script
-        id='gtag-init'
-        strategy='afterInteractive'
+      <script async src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_TRACKING_ID}`} />
+      <script
         dangerouslySetInnerHTML={{
           __html: `
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             window.gtag = gtag;
-
             gtag('js', new Date());
-            gtag('consent', 'default', {
-              analytics_storage: 'granted',
-              ad_storage: 'denied',
-              ad_user_data: 'denied',
-              ad_personalization: 'denied',
-            });
-            gtag('config', '${GOOGLE_TRACKING_ID}', {
-              page_path: window.location.pathname,
-            });
+            gtag('config', '${GOOGLE_TRACKING_ID}');
           `,
         }}
       />

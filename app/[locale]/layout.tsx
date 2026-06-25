@@ -58,6 +58,9 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
+      <head>
+        <SeoScript />
+      </head>
       <body className='theme-page relative mx-auto flex min-h-screen flex-col text-slate-800'>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Toaster
@@ -75,7 +78,6 @@ export default async function RootLayout({
           <PageViewTracker />
           <Suspense fallback={<Loading />}>{children}</Suspense>
         </NextIntlClientProvider>
-        <SeoScript />
         <GoogleAdScript />
       </body>
     </html>
