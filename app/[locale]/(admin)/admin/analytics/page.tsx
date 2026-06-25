@@ -252,6 +252,33 @@ export default async function AdminAnalyticsPage({
     claimSummary.total > 0
       ? Math.round(((claimSummary.claimedCount + claimSummary.invalidCount) / claimSummary.total) * 100)
       : 0;
+  const outreachStatusRows = [
+    { key: 'not_started', label: 'Not started', count: outreachQueue.filter((item) => item.outreachStatus === 'not_started').length },
+    { key: 'contacted', label: 'Contacted', count: outreachQueue.filter((item) => item.outreachStatus === 'contacted').length },
+    {
+      key: 'waiting_reply',
+      label: 'Waiting reply',
+      count: outreachQueue.filter((item) => item.outreachStatus === 'waiting_reply').length,
+    },
+    {
+      key: 'follow_up_due',
+      label: 'Follow-up due',
+      count: outreachQueue.filter((item) => item.outreachStatus === 'follow_up_due').length,
+    },
+    { key: 'closed', label: 'Closed', count: outreachQueue.filter((item) => item.outreachStatus === 'closed').length },
+  ].map((item) => ({
+    ...item,
+    share: outreachQueue.length > 0 ? Math.round((item.count / outreachQueue.length) * 100) : 0,
+  }));
+  const outreachStartedCount = outreachQueue.filter((item) => item.outreachStatus !== 'not_started').length;
+  const outreachStartedRate = outreachQueue.length > 0 ? Math.round((outreachStartedCount / outreachQueue.length) * 100) : 0;
+  const outreachActiveCount = outreachQueue.filter(
+    (item) => item.outreachStatus === 'contacted' || item.outreachStatus === 'waiting_reply' || item.outreachStatus === 'follow_up_due',
+  ).length;
+  const outreachClosedRate =
+    outreachQueue.length > 0
+      ? Math.round((outreachQueue.filter((item) => item.outreachStatus === 'closed').length / outreachQueue.length) * 100)
+      : 0;
   const commercialEntryRows = commercialIntentReport.sources.map((item) => ({
     ...item,
     downstreamConversions: item.claimSubmissions + item.checkoutStarts,
@@ -278,6 +305,13 @@ export default async function AdminAnalyticsPage({
     if (key === 'contacted') return 'bg-cyan-500';
     if (key === 'invalid') return 'bg-rose-500';
     return 'bg-blue-500';
+  };
+  const getOutreachStatusToneClass = (key: string) => {
+    if (key === 'contacted') return 'bg-cyan-500';
+    if (key === 'waiting_reply') return 'bg-blue-500';
+    if (key === 'follow_up_due') return 'bg-amber-500';
+    if (key === 'closed') return 'bg-emerald-500';
+    return 'bg-slate-400';
   };
   const featuredExpiringSoon = featuredPlacementStats.placements
     .filter((item) => item.daysLeft !== null && item.daysLeft <= 3)
@@ -2170,6 +2204,57 @@ export default async function AdminAnalyticsPage({
               >
                 Open contacted claims
               </Link>
+            </div>
+          </div>
+        </div>
+
+        <div className='mb-4 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]'>
+          <div className='overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm'>
+            <div className='border-b border-slate-200 px-4 py-3'>
+              <div className='flex items-center justify-between gap-3'>
+                <p className='text-sm font-semibold text-slate-900'>Queue status funnel</p>
+                <p className='text-xs text-slate-500'>{outreachQueue.length} visible leads</p>
+              </div>
+            </div>
+            <div className='divide-y divide-slate-100'>
+              {outreachStatusRows.length > 0 ? (
+                outreachStatusRows.map((item) => (
+                  <div key={item.key} className='px-4 py-4'>
+                    <div className='flex items-start justify-between gap-4'>
+                      <div className='min-w-0'>
+                        <p className='text-sm font-medium text-slate-900'>{item.label}</p>
+                        <p className='mt-1 text-xs text-slate-500'>{item.count} leads</p>
+                      </div>
+                      <p className='shrink-0 text-sm font-semibold text-slate-700'>{item.share}%</p>
+                    </div>
+                    <div className='mt-3 h-2 overflow-hidden rounded-full bg-slate-100'>
+                      <div
+                        className={`h-full rounded-full ${getOutreachStatusToneClass(item.key)}`}
+                        style={{ width: `${Math.max(item.share, item.count > 0 ? 8 : 0)}%` }}
+                      />
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className='px-4 py-8 text-sm text-slate-500'>No outreach leads are visible in the queue yet.</div>
+              )}
+            </div>
+          </div>
+          <div className='grid gap-4 sm:grid-cols-3 lg:grid-cols-1'>
+            <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
+              <p className='text-sm font-medium text-slate-600'>Started outreach</p>
+              <p className='mt-2 text-3xl font-semibold text-cyan-700'>{outreachStartedRate}%</p>
+              <p className='mt-2 text-sm text-slate-500'>{outreachStartedCount} of these leads already have first-touch progress.</p>
+            </div>
+            <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
+              <p className='text-sm font-medium text-slate-600'>Active conversations</p>
+              <p className='mt-2 text-3xl font-semibold text-blue-600'>{outreachActiveCount}</p>
+              <p className='mt-2 text-sm text-slate-500'>Leads currently sitting in contacted, waiting-reply, or follow-up-needed states.</p>
+            </div>
+            <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
+              <p className='text-sm font-medium text-slate-600'>Closed share</p>
+              <p className='mt-2 text-3xl font-semibold text-emerald-600'>{outreachClosedRate}%</p>
+              <p className='mt-2 text-sm text-slate-500'>How much of the visible queue has already been worked to a closed outcome.</p>
             </div>
           </div>
         </div>
