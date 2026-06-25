@@ -279,6 +279,22 @@ export default async function AdminAnalyticsPage({
     outreachQueue.length > 0
       ? Math.round((outreachQueue.filter((item) => item.outreachStatus === 'closed').length / outreachQueue.length) * 100)
       : 0;
+  const outreachClosedReasonLabelMap = {
+    claimed: 'Claimed listing',
+    no_reply: 'No reply',
+    invalid_contact: 'Invalid contact',
+    not_interested: 'Not interested',
+  } as const;
+  const outreachClosedReasonRows = Object.entries(outreachClosedReasonLabelMap)
+    .map(([key, label]) => ({
+      key,
+      label,
+      count: outreachQueue.filter((item) => item.outreachStatus === 'closed' && item.outreachClosedReason === key).length,
+    }))
+    .filter((item) => item.count > 0);
+  const outreachUnclassifiedClosedCount = outreachQueue.filter(
+    (item) => item.outreachStatus === 'closed' && !item.outreachClosedReason,
+  ).length;
   const commercialEntryRows = commercialIntentReport.sources.map((item) => ({
     ...item,
     downstreamConversions: item.claimSubmissions + item.checkoutStarts,
@@ -360,6 +376,15 @@ export default async function AdminAnalyticsPage({
     (item) => item.outreachStatus === 'contacted' || item.outreachStatus === 'waiting_reply' || item.outreachStatus === 'follow_up_due',
   ).length;
   const recentOutreachClosedCount = recentOutreachActivity.filter((item) => item.outreachStatus === 'closed').length;
+  const recentOutreachClosedReasonRows = Object.entries(outreachClosedReasonLabelMap)
+    .map(([key, label]) => ({
+      key,
+      label,
+      count: recentOutreachActivity.filter(
+        (item) => item.outreachStatus === 'closed' && item.outreachClosedReason === key,
+      ).length,
+    }))
+    .filter((item) => item.count > 0);
   const recentOutreachStartedCount = recentOutreachActivity.filter((item) => item.outreachStatus !== 'not_started').length;
   const recentOutreachStatusRows = [
     { key: 'contacted', label: 'Touched', count: recentOutreachActivity.filter((item) => item.outreachStatus === 'contacted').length },
@@ -2288,6 +2313,15 @@ export default async function AdminAnalyticsPage({
               <span className='text-sm text-slate-500'>No recent outreach status changes are visible yet.</span>
             )}
           </div>
+          {(recentOutreachClosedReasonRows.length > 0 || recentOutreachClosedCount > 0) && (
+            <div className='mt-3 flex flex-wrap gap-2'>
+              {recentOutreachClosedReasonRows.map((item) => (
+                <span key={item.key} className='inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700'>
+                  {item.label}: {item.count}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className='mb-4 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]'>
@@ -2337,6 +2371,20 @@ export default async function AdminAnalyticsPage({
               <p className='text-sm font-medium text-slate-600'>Closed share</p>
               <p className='mt-2 text-3xl font-semibold text-emerald-600'>{outreachClosedRate}%</p>
               <p className='mt-2 text-sm text-slate-500'>How much of the visible queue has already been worked to a closed outcome.</p>
+              {(outreachClosedReasonRows.length > 0 || outreachUnclassifiedClosedCount > 0) && (
+                <div className='mt-3 flex flex-wrap gap-2'>
+                  {outreachClosedReasonRows.map((item) => (
+                    <span key={item.key} className='inline-flex rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700'>
+                      {item.label}: {item.count}
+                    </span>
+                  ))}
+                  {outreachUnclassifiedClosedCount > 0 && (
+                    <span className='inline-flex rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700'>
+                      Unclassified: {outreachUnclassifiedClosedCount}
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>

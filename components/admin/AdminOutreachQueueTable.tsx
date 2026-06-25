@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 
 import {
   updateOutreachStatus,
+  type OutreachClosedReason,
   type AdminOutreachQueueItem,
   type OutreachStatus,
 } from '@/app/actions/admin/tools';
@@ -23,6 +24,12 @@ const statusLabelMap: Record<OutreachStatus, string> = {
   waiting_reply: 'Waiting reply',
   follow_up_due: 'Follow-up due',
   closed: 'Closed',
+};
+const closedReasonLabelMap: Record<OutreachClosedReason, string> = {
+  claimed: 'Claimed listing',
+  no_reply: 'No reply',
+  invalid_contact: 'Invalid contact',
+  not_interested: 'Not interested',
 };
 
 function getStatusBadgeClasses(status: OutreachStatus): string {
@@ -86,14 +93,24 @@ export default function AdminOutreachQueueTable({ items, locale }: AdminOutreach
       items.map((item) => [item.id, item.outreachNextFollowUpAt ? item.outreachNextFollowUpAt.slice(0, 10) : '']),
     ),
   );
+  const [closedReasonById, setClosedReasonById] = useState<Record<string, string>>(() =>
+    Object.fromEntries(items.map((item) => [item.id, item.outreachClosedReason || ''])),
+  );
 
   const handleStatusChange = async (toolId: string, status: OutreachStatus) => {
+    const closedReason = closedReasonById[toolId] || '';
+    if (status === 'closed' && !closedReason) {
+      toast.error('Choose a closed result before marking this outreach as closed.');
+      return;
+    }
+
     setPendingId(toolId);
     const result = await updateOutreachStatus({
       toolId,
       status,
       note: notesById[toolId] || '',
       nextFollowUpAt: followUpById[toolId] || null,
+      closedReason: status === 'closed' ? (closedReason as OutreachClosedReason) : null,
     });
     setPendingId(null);
 
@@ -106,12 +123,19 @@ export default function AdminOutreachQueueTable({ items, locale }: AdminOutreach
   };
 
   const handleSaveDetails = async (toolId: string, currentStatus: OutreachStatus) => {
+    const closedReason = closedReasonById[toolId] || '';
+    if (currentStatus === 'closed' && !closedReason) {
+      toast.error('Add a closed result so we know how this outreach ended.');
+      return;
+    }
+
     setPendingId(toolId);
     const result = await updateOutreachStatus({
       toolId,
       status: currentStatus,
       note: notesById[toolId] || '',
       nextFollowUpAt: followUpById[toolId] || null,
+      closedReason: currentStatus === 'closed' ? (closedReason as OutreachClosedReason) : null,
     });
     setPendingId(null);
 
@@ -185,6 +209,11 @@ export default function AdminOutreachQueueTable({ items, locale }: AdminOutreach
                           {followUpTiming.label}
                         </div>
                       )}
+                      {item.outreachStatus === 'closed' && item.outreachClosedReason && (
+                        <div className='mt-2 inline-flex rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700'>
+                          {closedReasonLabelMap[item.outreachClosedReason]}
+                        </div>
+                      )}
                       <div className='mt-3 flex flex-wrap gap-2'>
                         {(['contacted', 'waiting_reply', 'follow_up_due', 'closed'] as const).map((status) => (
                           <button
@@ -221,6 +250,22 @@ export default function AdminOutreachQueueTable({ items, locale }: AdminOutreach
                               }))}
                             className='rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-700'
                           />
+                          <select
+                            value={closedReasonById[item.id] || ''}
+                            onChange={(event) =>
+                              setClosedReasonById((current) => ({
+                                ...current,
+                                [item.id]: event.target.value,
+                              }))}
+                            className='rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-700'
+                          >
+                            <option value=''>Closed result</option>
+                            {Object.entries(closedReasonLabelMap).map(([value, label]) => (
+                              <option key={value} value={value}>
+                                {label}
+                              </option>
+                            ))}
+                          </select>
                           <button
                             type='button'
                             onClick={() => handleSaveDetails(item.id, item.outreachStatus)}

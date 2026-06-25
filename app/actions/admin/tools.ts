@@ -19,10 +19,12 @@ const validOutreachStatuses = [
   'follow_up_due',
   'closed',
 ] as const;
+const validOutreachClosedReasons = ['claimed', 'no_reply', 'invalid_contact', 'not_interested'] as const;
 
 type ToolStatus = (typeof validStatuses)[number];
 type ToolPricing = (typeof validPricing)[number];
 export type OutreachStatus = (typeof validOutreachStatuses)[number];
+export type OutreachClosedReason = (typeof validOutreachClosedReasons)[number];
 
 const toolQualityScoreSql = `
   (
@@ -117,6 +119,7 @@ export interface AdminOutreachQueueItem {
   outreachUpdatedAt: string | null;
   outreachNote: string | null;
   outreachNextFollowUpAt: string | null;
+  outreachClosedReason: OutreachClosedReason | null;
 }
 
 function getOutreachFollowUpPriority(value: string | null): number {
@@ -2391,6 +2394,7 @@ export async function getDeveloperOutreachQueue(
           NULLIF(t.features->'outreach'->>'updatedAt', '') AS "outreachUpdatedAt",
           NULLIF(t.features->'outreach'->>'note', '') AS "outreachNote",
           NULLIF(t.features->'outreach'->>'nextFollowUpAt', '') AS "outreachNextFollowUpAt",
+          NULLIF(t.features->'outreach'->>'closedReason', '') AS "outreachClosedReason",
           GREATEST(0, FLOOR(EXTRACT(EPOCH FROM (NOW() - t.updated_at)) / 86400))::int AS "daysSinceUpdate"
         FROM tools t
         LEFT JOIN favorite_counts fc ON fc.tool_id = t.id
@@ -2441,6 +2445,10 @@ export async function getDeveloperOutreachQueue(
           typeof row.outreachNextFollowUpAt === 'string' && row.outreachNextFollowUpAt.trim().length > 0
             ? row.outreachNextFollowUpAt
             : null;
+        const outreachClosedReason =
+          typeof row.outreachClosedReason === 'string' && validOutreachClosedReasons.includes(row.outreachClosedReason)
+            ? (row.outreachClosedReason as OutreachClosedReason)
+            : null;
 
         let suggestion: 'claim_listing' | 'featured_pitch' | 'content_collab' = 'claim_listing';
         let reason = 'Unclaimed published tool with a reachable contact.';
@@ -2470,6 +2478,7 @@ export async function getDeveloperOutreachQueue(
           outreachUpdatedAt,
           outreachNote,
           outreachNextFollowUpAt,
+          outreachClosedReason,
         };
       })
       .filter((item): item is NonNullable<typeof item> => item !== null)
@@ -2501,6 +2510,7 @@ export async function updateOutreachStatus(input: {
   status: OutreachStatus;
   note?: string;
   nextFollowUpAt?: string | null;
+  closedReason?: OutreachClosedReason | null;
 }): Promise<{ success: boolean; error?: string }> {
   try {
     await requireAdmin();
@@ -2516,9 +2526,14 @@ export async function updateOutreachStatus(input: {
 
     const note = normalizeNullableText(input.note);
     const nextFollowUpAt = normalizeNullableText(input.nextFollowUpAt ?? undefined);
+    const closedReason = normalizeNullableText(input.closedReason ?? undefined);
     const parsedFollowUpAt =
       nextFollowUpAt && !Number.isNaN(new Date(nextFollowUpAt).getTime())
         ? new Date(nextFollowUpAt).toISOString()
+        : null;
+    const normalizedClosedReason =
+      input.status === 'closed' && closedReason && validOutreachClosedReasons.includes(closedReason as OutreachClosedReason)
+        ? closedReason
         : null;
 
     const pool = getPool();
@@ -2534,7 +2549,8 @@ export async function updateOutreachStatus(input: {
                 'status', $2::text,
                 'updatedAt', NOW()::text,
                 'note', $3::text,
-                'nextFollowUpAt', $4::text
+                'nextFollowUpAt', $4::text,
+                'closedReason', $5::text
               ),
             true
           ),
@@ -2542,7 +2558,7 @@ export async function updateOutreachStatus(input: {
         WHERE id::text = $1
         RETURNING name
       `,
-      [toolId, input.status, note, parsedFollowUpAt],
+      [toolId, input.status, note, parsedFollowUpAt, normalizedClosedReason],
     );
 
     if (result.rowCount === 0) {
