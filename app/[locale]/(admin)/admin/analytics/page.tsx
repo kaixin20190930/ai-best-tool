@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowUpRight, BarChart3, Globe, Layers3, Search, ShieldAlert, TrendingUp } from 'lucide-react';
 
+import AdminOutreachClassificationTable from '@/components/admin/AdminOutreachClassificationTable';
 import AdminOutreachQueueTable from '@/components/admin/AdminOutreachQueueTable';
 import {
   getCommercialIntentReport,
@@ -23,6 +24,7 @@ import {
   getFeaturedPlacementStats,
   getOperationalStats,
   getOutreachHistorySummary,
+  getOutreachNeedsClassification,
   getSubmissionFunnelStats,
   getSubmissionRejectionReasonStats,
 } from '@/app/actions/admin/tools';
@@ -64,6 +66,8 @@ export default async function AdminAnalyticsPage({
   const featuredPlacementStats = await getFeaturedPlacementStats();
   const outreachQueue = await getDeveloperOutreachQueue(12);
   const outreachHistorySummary = await getOutreachHistorySummary();
+  const outreachNeedsClassification =
+    outreachHistorySummary.unclassifiedClosedCount > 0 ? await getOutreachNeedsClassification(12) : [];
   const claimSummary = await getAdminToolClaimsSummary();
   const topToolsByViews = await getTopTools('views', 10);
   const topToolsByRating = await getTopTools('rating', 10);
@@ -2415,6 +2419,21 @@ export default async function AdminAnalyticsPage({
         </div>
 
         <AdminOutreachQueueTable items={outreachQueue} locale={locale} />
+
+        {outreachNeedsClassification.length > 0 && (
+          <div className='mt-6'>
+            <div className='mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
+              <div>
+                <h3 className='text-base font-semibold text-slate-900'>Historical close outcomes to classify</h3>
+                <p className='mt-1 text-sm text-slate-600'>
+                  Older outreach records are already closed, but still missing the reason. Classify them here so the historical funnel stays trustworthy.
+                </p>
+              </div>
+              <div className='text-sm text-slate-500'>{outreachHistorySummary.unclassifiedClosedCount} still unclassified</div>
+            </div>
+            <AdminOutreachClassificationTable items={outreachNeedsClassification} locale={locale} />
+          </div>
+        )}
       </div>
 
       {/* Priority Media Queue */}

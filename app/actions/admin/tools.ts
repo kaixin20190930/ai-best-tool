@@ -137,6 +137,17 @@ export interface AdminOutreachHistorySummary {
   recentNotInterestedCount: number;
 }
 
+export interface AdminOutreachClassificationItem {
+  id: string;
+  name: string;
+  title: string;
+  contactEmail: string;
+  claimStatus: string | null;
+  outreachUpdatedAt: string | null;
+  outreachNote: string | null;
+  outreachClosedReason: OutreachClosedReason | null;
+}
+
 function getOutreachFollowUpPriority(value: string | null): number {
   if (!value) return 3;
 
@@ -2671,6 +2682,59 @@ export async function getOutreachHistorySummary(): Promise<AdminOutreachHistoryS
       recentInvalidContactCount: 0,
       recentNotInterestedCount: 0,
     };
+  }
+}
+
+export async function getOutreachNeedsClassification(
+  limit = 20
+): Promise<AdminOutreachClassificationItem[]> {
+  try {
+    await requireAdmin();
+
+    const pool = getPool();
+    const normalizedLimit = Math.max(1, Math.min(limit, 50));
+    const result = await pool.query(
+      `
+        SELECT
+          t.id::text AS id,
+          t.name,
+          t.title,
+          t.claim_status AS "claimStatus",
+          t.owner_email AS "ownerEmail",
+          COALESCE(t.features->'submission'->>'submittedByEmail', '') AS "submittedByEmail",
+          NULLIF(t.features->'outreach'->>'updatedAt', '') AS "outreachUpdatedAt",
+          NULLIF(t.features->'outreach'->>'note', '') AS "outreachNote",
+          NULLIF(t.features->'outreach'->>'closedReason', '') AS "outreachClosedReason"
+        FROM tools t
+        WHERE COALESCE(t.features->'outreach'->>'status', 'not_started') = 'closed'
+          AND NULLIF(t.features->'outreach'->>'closedReason', '') IS NULL
+        ORDER BY NULLIF(t.features->'outreach'->>'updatedAt', '')::timestamptz DESC NULLS LAST, t.updated_at DESC
+        LIMIT $1
+      `,
+      [normalizedLimit],
+    );
+
+    return result.rows.map((row) => ({
+      id: String(row.id),
+      name: String(row.name || ''),
+      title: getLocalizedText(row.title) || String(row.name || ''),
+      contactEmail:
+        [row.ownerEmail, row.submittedByEmail]
+          .find((value): value is string => typeof value === 'string' && isValidEmail(value.trim()))
+          ?.trim()
+          .toLowerCase() || '',
+      claimStatus: typeof row.claimStatus === 'string' ? row.claimStatus : null,
+      outreachUpdatedAt:
+        typeof row.outreachUpdatedAt === 'string' && row.outreachUpdatedAt.trim().length > 0 ? row.outreachUpdatedAt : null,
+      outreachNote: typeof row.outreachNote === 'string' && row.outreachNote.trim().length > 0 ? row.outreachNote.trim() : null,
+      outreachClosedReason:
+        typeof row.outreachClosedReason === 'string' && validOutreachClosedReasons.includes(row.outreachClosedReason)
+          ? (row.outreachClosedReason as OutreachClosedReason)
+          : null,
+    }));
+  } catch (error) {
+    console.error('Error fetching outreach items needing classification:', error);
+    return [];
   }
 }
 
