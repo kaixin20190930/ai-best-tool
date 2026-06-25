@@ -265,7 +265,14 @@ export default function SubmitForm({
                 </p>
               )}
               <div className='mt-2 flex flex-wrap items-center gap-3 text-sm'>
-                <Link href='/profile/submissions' className='font-semibold text-emerald-900 underline'>
+                <Link
+                  href={
+                    lastSubmissionPlan === 'standard_paid'
+                      ? '/profile/submissions?focus=payment'
+                      : '/profile/submissions'
+                  }
+                  className='font-semibold text-emerald-900 underline'
+                >
                   {isChinese ? '查看我的提交状态' : 'View my submission status'}
                 </Link>
                 <button

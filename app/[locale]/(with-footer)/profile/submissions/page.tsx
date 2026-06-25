@@ -224,6 +224,7 @@ export default async function SubmissionsPage({
   searchParams?: {
     payment?: string;
     session_id?: string;
+    focus?: string;
   };
 }) {
   const [result, submissionEmailEnabled] = await Promise.all([getMySubmittedTools(), getMySubmissionEmailPreference()]);
@@ -232,6 +233,7 @@ export default async function SubmissionsPage({
   const featuredTools = tools.filter((tool) => getCommercialStatus(tool) === 'live_featured');
   const firstPendingPaymentTool = pendingPaymentTools[0] || null;
   const firstPendingPaymentUrl = firstPendingPaymentTool ? getCommercialPaymentUrl(firstPendingPaymentTool) : null;
+  const focusedSection = searchParams?.focus === 'payment' ? 'payment' : '';
   const statusStats = tools.reduce(
     (acc, tool) => {
       acc[tool.status] += 1;
@@ -314,7 +316,11 @@ export default async function SubmissionsPage({
       </section>
 
       {pendingPaymentTools.length > 0 && (
-        <section className='theme-surface mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4'>
+        <section
+          className={`theme-surface mb-6 rounded-lg border p-4 ${
+            focusedSection === 'payment' ? 'border-amber-300 bg-amber-100' : 'border-amber-200 bg-amber-50'
+          }`}
+        >
           <div className='flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between'>
             <div>
               <p className='text-sm font-semibold text-amber-900'>Payment required</p>
@@ -323,6 +329,11 @@ export default async function SubmissionsPage({
                 {pendingPaymentTools.length > 1 ? 's' : ''} waiting for payment confirmation. Complete payment to
                 continue review and activate paid listing benefits.
               </p>
+              {firstPendingPaymentTool && (
+                <p className='mt-2 text-sm font-medium text-amber-950'>
+                  Next payment target: {getTitle(firstPendingPaymentTool)}
+                </p>
+              )}
             </div>
             <div className='flex flex-wrap gap-2'>
               {firstPendingPaymentUrl ? (
@@ -430,7 +441,12 @@ export default async function SubmissionsPage({
               </thead>
               <tbody className='divide-y divide-slate-200 bg-white'>
                 {result.tools.map((tool) => (
-                  <tr key={tool.id} className='hover:bg-slate-50'>
+                  <tr
+                    key={tool.id}
+                    className={`hover:bg-slate-50 ${
+                      focusedSection === 'payment' && firstPendingPaymentTool?.id === tool.id ? 'bg-amber-50/70' : ''
+                    }`}
+                  >
                     {(() => {
                       const commercialStatus = getCommercialStatus(tool);
                       const commercialDetails = getCommercialDetails(tool);
