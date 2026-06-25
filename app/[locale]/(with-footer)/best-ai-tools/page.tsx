@@ -11,8 +11,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
   return {
     title: isChinese ? 'Top AI Tools | AI Best Tool' : 'Top AI Tools | AI Best Tool',
     description: isChinese
-      ? '按用途整理的 AI 工具榜单：写作、开发、研究和视频。'
-      : 'Purpose-driven AI tool rankings for writing, coding, research, and video.',
+      ? '按用途整理的 AI 工具榜单：Agent、写作、开发、模型路由、研究和视频。'
+      : 'Purpose-driven AI tool rankings for agents, coding, model routing, research, writing, and video.',
   };
 }
 

@@ -1,6 +1,7 @@
 export type TopListTopicKey =
   | 'ai-agent-tools'
   | 'ai-coding-tools'
+  | 'ai-model-routing-tools'
   | 'ai-video-tools'
   | 'ai-research-tools'
   | 'ai-writing-tools';
@@ -49,6 +50,21 @@ export const topListTopics: TopListTopicConfig[] = [
     comparisonHref: '/guides/ai-coding-tools-comparison',
     comparisonLabel: 'Compare coding tools',
     nextStep: 'Compare coding tools, inspect product pages, then move into submission or pricing.',
+  },
+  {
+    key: 'ai-model-routing-tools',
+    categorySlug: 'developer-tools',
+    title: 'Best AI Model Routing Tools',
+    description: 'The most useful tools for multi-model access, fallbacks, routing strategy, and cost governance.',
+    summary: 'A practical shortlist for teams choosing the right model gateway, routing layer, or fallback stack.',
+    ctaLabel: 'Go to model routing list',
+    ctaDescription:
+      'Use this list when the decision is about model gateways, fallback controls, provider flexibility, and routing governance.',
+    guideHref: '/guides/ai-tools-for-model-routing',
+    guideLabel: 'Back to model routing guide',
+    comparisonHref: '/guides/ai-tools-for-model-routing-comparison',
+    comparisonLabel: 'Compare model routing tools',
+    nextStep: 'Compare model routing tools, inspect detail pages, then move into submission or pricing.',
   },
   {
     key: 'ai-video-tools',

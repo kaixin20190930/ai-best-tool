@@ -1,13 +1,14 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { ExternalLink, GitBranch, Layers3, Route } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Metadata.home' });
@@ -64,15 +65,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-        '先分清你要的是统一出口、成本治理，还是模型回退与策略控制。',
-        '看它是否支持你真实会用的模型和供应商，而不是只看列表长不长。',
-        '如果是团队使用，优先看权限、日志、缓存、回退和接入维护成本。',
-      ]
+      '先分清你要的是统一出口、成本治理，还是模型回退与策略控制。',
+      '看它是否支持你真实会用的模型和供应商，而不是只看列表长不长。',
+      '如果是团队使用，优先看权限、日志、缓存、回退和接入维护成本。',
+    ]
     : [
-        'Separate unified access, cost governance, and fallback control before comparing tools.',
-        'Check whether it supports the providers and models you will actually use, not just a long list.',
-        'For team use, prioritize permissions, logs, caching, fallbacks, and maintenance cost.',
-      ];
+      'Separate unified access, cost governance, and fallback control before comparing tools.',
+      'Check whether it supports the providers and models you will actually use, not just a long list.',
+      'For team use, prioritize permissions, logs, caching, fallbacks, and maintenance cost.',
+    ];
 
   return (
     <>
@@ -103,25 +104,43 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/explore?search=model&sort=popular'
+              ctaId='model_routing_guide_browse_tools'
+              ctaLabel='Model routing guide browse tools'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '看模型路由工具' : 'Browse model routing tools'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-tools-for-developers'
+              ctaId='model_routing_guide_developers'
+              ctaLabel='Model routing guide developers'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '回到开发者指南' : 'Back to developer guide'}
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-tools-for-model-routing-comparison'
+              ctaId='model_routing_guide_comparison'
+              ctaLabel='Model routing guide comparison'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看模型路由对比页' : 'Model routing comparison'}
-            </Link>
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-model-routing-tools'
+              ctaId='model_routing_guide_top_list'
+              ctaLabel='Model routing guide top list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看模型路由榜单' : 'Open model routing ranking'}
+            </TrackableCtaLink>
           </div>
         </section>
 
@@ -198,6 +217,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'A direct side-by-side path for routing, fallbacks, and model access strategy.',
             },
             {
+              href: '/best-ai-tools/ai-model-routing-tools',
+              title: isChinese ? '模型路由榜单' : 'Model routing ranking',
+              description: isChinese
+                ? '适合已经确认方向、只想更快缩小 shortlist 的用户。'
+                : 'Useful when the direction is clear and the goal is to narrow the shortlist faster.',
+            },
+            {
               href: '/guides/ai-tools-for-api-observability-comparison',
               title: isChinese ? 'API 可观测工具对比' : 'API observability comparison',
               description: isChinese
@@ -213,6 +239,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             },
           ]}
         />
+
+        <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先用榜单缩小模型路由 shortlist' : 'Use the ranking to narrow your model routing shortlist first'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己要比的是模型出口、回退和成本治理，榜单页会比泛目录更快进入决策。'
+              : 'If the decision is already about model access, fallbacks, and cost governance, the ranking page gets to a decision faster than a broad directory.'}
+          </p>
+          <div className='mt-5 flex flex-wrap gap-3'>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-model-routing-tools'
+              ctaId='model_routing_guide_ranking_primary'
+              ctaLabel='Model routing guide ranking primary'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+            >
+              {isChinese ? '进入模型路由榜单' : 'Open model routing ranking'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/guides/ai-tools-for-model-routing-comparison'
+              ctaId='model_routing_guide_ranking_secondary'
+              ctaLabel='Model routing guide ranking secondary'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
+            >
+              {isChinese ? '继续看对比页' : 'Continue to comparison'}
+            </TrackableCtaLink>
+          </div>
+        </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
