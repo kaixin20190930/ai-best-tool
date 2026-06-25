@@ -5,8 +5,8 @@ import { getTranslations } from 'next-intl/server';
 
 import { getListingPaymentMailto, listingConfig } from '@/lib/config/listing';
 import { getAllCategories } from '@/lib/services/categories';
-import Faq from '@/components/Faq';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import Faq from '@/components/Faq';
 
 import SubmitForm from './SubmitForm';
 
@@ -25,13 +25,25 @@ export async function generateMetadata({ params: { locale } }: { params: { local
   };
 }
 
-export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+export default async function Page({
+  params: { locale },
+  searchParams,
+}: {
+  params: { locale: string };
+  searchParams?: { intent?: string };
+}) {
   const t = await getTranslations({
     locale,
     namespace: 'Submit',
   });
   const categories = await getAllCategories();
   const isChinese = locale === 'cn' || locale === 'tw';
+  let initialIntent: 'default' | 'paid' | 'claim' = 'default';
+  if (searchParams?.intent === 'paid') {
+    initialIntent = 'paid';
+  } else if (searchParams?.intent === 'claim') {
+    initialIntent = 'claim';
+  }
 
   return (
     <div className='theme-page mx-auto max-w-pc'>
@@ -39,7 +51,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         <h1 className='text-5xl font-bold text-slate-950'>{t('title')}</h1>
         <h2 className='mt-[5px] text-sm font-bold text-slate-500 lg:my-3'>{t('subTitle')}</h2>
         <div className='grid w-full items-start gap-5 px-3 lg:grid-cols-[minmax(0,560px)_320px] lg:px-0'>
-          <SubmitForm categories={categories} locale={locale} className='mx-0' />
+          <SubmitForm categories={categories} locale={locale} className='mx-0' initialIntent={initialIntent} />
           <aside className='theme-surface rounded-[12px] p-5 text-slate-900'>
             <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '开发者入驻' : 'Developer listing'}
@@ -113,7 +125,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Payment is completed from My Submissions after you submit, not directly on this page.'}
             </p>
             <TrackableCtaLink
-              href='/developer/listing'
+              href={`/${locale}/developer/listing?intent=claim`}
               ctaId='submit_view_developer_listing'
               ctaLabel='View developer listing details'
               pageType='submit'

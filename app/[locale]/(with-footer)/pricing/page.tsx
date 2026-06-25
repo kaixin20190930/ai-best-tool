@@ -3,8 +3,8 @@ import type { Metadata } from 'next';
 import { ArrowRight, Clock3, CreditCard, Megaphone, Rocket, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import { getListingPaymentMailto, listingConfig } from '@/lib/config/listing';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 
 function PricingMiniCard({
   title,
@@ -116,7 +116,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 
 export default function PricingPage({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
-  const submitHref = '/submit';
+  const submitHref = `/${locale}/submit?intent=paid`;
+  const claimHref = `/${locale}/developer/listing?intent=claim`;
   const paymentHref = getListingPaymentMailto('AI Best Tool pricing');
   const { free, priorityReview, featuredWindows, launchBundle } = listingConfig.pricingTiers;
 
@@ -162,7 +163,7 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
                 {isChinese ? '先去提交页' : 'Go to submit page'}
               </TrackableCtaLink>
               <TrackableCtaLink
-                href={`/${locale}/developer/listing`}
+                href={claimHref}
                 ctaId='pricing_claim'
                 ctaLabel='Claim listing'
                 pageType='pricing'
@@ -192,7 +193,7 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
               </p>
               <div className='mt-4 flex flex-wrap gap-3'>
                 <TrackableCtaLink
-                  href='/profile/submissions'
+                  href={`/${locale}/profile/submissions`}
                   ctaId='pricing_view_submissions'
                   ctaLabel='View my submissions'
                   pageType='pricing'

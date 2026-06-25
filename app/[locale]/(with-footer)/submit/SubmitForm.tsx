@@ -74,10 +74,12 @@ export default function SubmitForm({
   categories,
   locale,
   className,
+  initialIntent = 'default',
 }: {
   categories: Category[];
   locale: string;
   className?: string;
+  initialIntent?: 'default' | 'paid' | 'claim';
 }) {
   const t = useTranslations('Submit');
   const isChinese = locale === 'cn' || locale === 'tw';
@@ -111,6 +113,14 @@ export default function SubmitForm({
   const isPaidPlan = submissionPlan === 'standard_paid';
   const selectedCategoryId = form.watch('categoryId');
   const selectedCategory = categories.find((category) => category.id === selectedCategoryId);
+
+  useEffect(() => {
+    if (initialIntent !== 'paid') {
+      return;
+    }
+
+    form.setValue('submissionPlan', 'standard_paid');
+  }, [form, initialIntent]);
 
   const suggestedTags = useMemo(() => {
     const bySlug: Record<string, string[]> = {
@@ -169,6 +179,22 @@ export default function SubmitForm({
       isChinese ? '不会占用付费前排资源' : listingConfig.plans.free.highlights[1],
     ];
   }
+  let intentBanner: { title: string; body: string } | null = null;
+  if (initialIntent === 'paid') {
+    intentBanner = {
+      title: isChinese ? '你是从价格页进入的' : 'You came from pricing',
+      body: isChinese
+        ? '我们已经把表单切到付费入驻路径。这里先提交工具，付款会在“我的提交”里继续完成。'
+        : 'The form is already set to the paid listing path. Submit first here, then complete payment from My Submissions.',
+    };
+  } else if (initialIntent === 'claim') {
+    intentBanner = {
+      title: isChinese ? '你可能更适合先认领' : 'You may want to claim first',
+      body: isChinese
+        ? '如果这是你们已经存在的条目，先认领通常比重新提交更合适。认领后再决定是否需要付费加速。'
+        : 'If this listing already exists and belongs to your team, claiming it is often the better first step. Decide on paid acceleration after that.',
+    };
+  }
 
   useEffect(() => {
     if (!isPaidPlan) {
@@ -213,6 +239,19 @@ export default function SubmitForm({
         )}
       >
         <div className='space-y-3 lg:space-y-5'>
+          {intentBanner && (
+            <div className='rounded-lg border border-cyan-200 bg-cyan-50 p-4 text-sm text-cyan-950'>
+              <p className='font-semibold'>{intentBanner.title}</p>
+              <p className='mt-1 leading-6 text-cyan-900/80'>{intentBanner.body}</p>
+              {initialIntent === 'claim' && (
+                <div className='mt-2'>
+                  <Link href='/developer/listing?intent=claim' className='font-semibold text-cyan-900 underline'>
+                    {isChinese ? '先去认领页' : 'Go to claim listing first'}
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
           {justSubmitted && (
             <div className='rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800'>
               <p className='font-semibold'>
