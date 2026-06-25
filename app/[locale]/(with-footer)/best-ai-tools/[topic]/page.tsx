@@ -67,6 +67,20 @@ export default async function BestAiToolsTopicPage({
   const toolCount = category && 'toolCount' in category ? category.toolCount : toolsResult.total;
   const categoryName = category ? getLocalizedField(category.name, locale) : topic.title;
   const tools = toolsResult.data;
+  let nextStepCardValue = 'Compare then submit';
+  if (topic.key === 'ai-agent-tools') {
+    nextStepCardValue = isChinese ? '先对比 Agent，再进详情' : 'Compare agents, then inspect details';
+  } else if (isChinese) {
+    nextStepCardValue = '先对比，再提交';
+  }
+
+  let nextStepDescription = topic.nextStep;
+  if (isChinese) {
+    nextStepDescription =
+      topic.key === 'ai-agent-tools'
+        ? 'Agent 榜单页不是终点，它最适合把你送进 Agent 对比页、详情页和提交页。'
+        : '榜单页不是终点，它的作用是把你带到更窄的选择页。';
+  }
 
   return (
     <div className='theme-page mx-auto max-w-pc px-4 py-8 lg:px-0'>
@@ -96,7 +110,7 @@ export default async function BestAiToolsTopicPage({
                 },
                 {
                   label: isChinese ? '下一步' : 'Next step',
-                  value: isChinese ? 'Compare then submit' : 'Compare then submit',
+                  value: nextStepCardValue,
                 },
               ].map((item) => (
                 <div key={item.label} className='rounded-xl border border-white/10 bg-white/5 p-4'>
@@ -118,13 +132,22 @@ export default async function BestAiToolsTopicPage({
                 <ArrowRight className='ml-2 size-4' />
               </TrackableCtaLink>
               <TrackableCtaLink
-                href={`/${locale}/best-ai-tools`}
-                ctaId={`${topic.key}_back`}
-                ctaLabel='Back to top lists'
+                href={`/${locale}${topic.comparisonHref}`}
+                ctaId={`${topic.key}_comparison`}
+                ctaLabel='Open comparison'
                 pageType='best_ai_tools_topic'
                 className='inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/15'
               >
-                {isChinese ? '返回榜单首页' : 'Back to all lists'}
+                {isChinese ? '进入对比页' : topic.comparisonLabel}
+              </TrackableCtaLink>
+              <TrackableCtaLink
+                href={`/${locale}${topic.guideHref}`}
+                ctaId={`${topic.key}_guide`}
+                ctaLabel='Back to guide'
+                pageType='best_ai_tools_topic'
+                className='inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10'
+              >
+                {isChinese ? '返回指南页' : topic.guideLabel}
               </TrackableCtaLink>
             </div>
           </div>
@@ -243,10 +266,28 @@ export default async function BestAiToolsTopicPage({
             {isChinese ? '从榜单进到详情，再进到提交' : 'Move from ranking into detail, then into submission'}
           </h2>
           <p className='mt-2 text-sm leading-6 text-slate-700'>
-            {isChinese
-              ? '榜单页不是终点，它的作用是把你带到更窄的选择页。'
-              : 'This page is a bridge, not the end point. It should get visitors into a narrower choice.'}
+            {nextStepDescription}
           </p>
+          <div className='mt-4 flex flex-wrap gap-3'>
+            <TrackableCtaLink
+              href={`/${locale}${topic.comparisonHref}`}
+              ctaId={`${topic.key}_comparison_sidebar`}
+              ctaLabel='Open comparison sidebar'
+              pageType='best_ai_tools_topic'
+              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+            >
+              {isChinese ? '先看对比' : topic.comparisonLabel}
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href={`/${locale}${topic.guideHref}`}
+              ctaId={`${topic.key}_guide_sidebar`}
+              ctaLabel='Open guide sidebar'
+              pageType='best_ai_tools_topic'
+              className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
+            >
+              {isChinese ? '回到指南' : topic.guideLabel}
+            </TrackableCtaLink>
+          </div>
         </div>
       </section>
     </div>
