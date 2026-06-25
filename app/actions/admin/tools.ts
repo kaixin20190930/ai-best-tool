@@ -7,7 +7,7 @@ import { createNotification } from '@/app/actions/notifications';
 import { trackCommerceEvent } from '@/app/actions/analytics';
 import { sendTransactionalEmail } from '@/lib/services/mailer';
 import { shouldSendSubmissionStatusEmail } from '@/app/actions/userPreferences';
-import { getPaidListingPublishGate } from '@/lib/services/toolQuality';
+import { getPaidListingPublishGate, getToolQuality } from '@/lib/services/toolQuality';
 
 const publicLocales = ['en', 'cn', 'tw', 'jp', 'de', 'es', 'fr', 'pt', 'ru'];
 const validStatuses = ['draft', 'pending', 'published', 'rejected'] as const;
@@ -1588,6 +1588,7 @@ export async function cleanupExpiredSponsoredPlacementsBySystem(): Promise<{
 
 type FeaturedRenewalReminderType = 'featured_ending_3d' | 'featured_ending_1d';
 type ClaimInviteReminderType = 'claim_invite_7d';
+type ProfileUpdateReminderType = 'profile_update_30d';
 
 async function ensureFeaturedRenewalReminderLogTable() {
   const pool = getPool();
@@ -1717,6 +1718,75 @@ async function recordClaimInviteReminderLog(input: {
       ON CONFLICT (tool_id, reminder_type) DO NOTHING
     `,
     [input.toolId, input.reminderType, input.recipientEmail],
+  );
+}
+
+async function ensureProfileUpdateReminderLogTable() {
+  const pool = getPool();
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS profile_update_reminder_logs (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      tool_id UUID NOT NULL,
+      reminder_type TEXT NOT NULL,
+      recipient_email TEXT NOT NULL,
+      quality_score INT NOT NULL,
+      missing_labels TEXT[] NOT NULL DEFAULT '{}',
+      sent_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+
+  await pool.query(`
+    CREATE UNIQUE INDEX IF NOT EXISTS uq_profile_update_reminder_logs
+    ON profile_update_reminder_logs(tool_id, reminder_type)
+  `);
+
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS idx_profile_update_reminder_logs_sent_at
+    ON profile_update_reminder_logs(sent_at DESC)
+  `);
+}
+
+async function hasProfileUpdateReminderBeenSent(
+  toolId: string,
+  reminderType: ProfileUpdateReminderType,
+): Promise<boolean> {
+  const pool = getPool();
+  const result = await pool.query(
+    `
+      SELECT 1
+      FROM profile_update_reminder_logs
+      WHERE tool_id = $1
+        AND reminder_type = $2
+      LIMIT 1
+    `,
+    [toolId, reminderType],
+  );
+
+  return (result.rowCount || 0) > 0;
+}
+
+async function recordProfileUpdateReminderLog(input: {
+  toolId: string;
+  reminderType: ProfileUpdateReminderType;
+  recipientEmail: string;
+  qualityScore: number;
+  missingLabels: string[];
+}) {
+  const pool = getPool();
+  await pool.query(
+    `
+      INSERT INTO profile_update_reminder_logs (
+        tool_id,
+        reminder_type,
+        recipient_email,
+        quality_score,
+        missing_labels
+      )
+      VALUES ($1, $2, $3, $4, $5::text[])
+      ON CONFLICT (tool_id, reminder_type) DO NOTHING
+    `,
+    [input.toolId, input.reminderType, input.recipientEmail, input.qualityScore, input.missingLabels],
   );
 }
 
@@ -1975,6 +2045,166 @@ export async function sendClaimInvitesBySystem(): Promise<{
       sent: 0,
       skipped: 0,
       error: error instanceof Error ? error.message : 'Failed to send claim invites',
+    };
+  }
+}
+
+export async function sendProfileUpdateRemindersBySystem(): Promise<{
+  success: boolean;
+  sent: number;
+  skipped: number;
+  error?: string;
+}> {
+  try {
+    const pool = getPool();
+    await ensureProfileUpdateReminderLogTable();
+
+    const result = await pool.query(
+      `
+        SELECT
+          t.id::text AS id,
+          t.name,
+          t.title,
+          t.url,
+          t.image_url,
+          t.thumbnail_url,
+          t.category_id,
+          t.content,
+          t.detail,
+          t.pricing,
+          t.tags,
+          t.updated_at AS "updatedAt",
+          t.owner_email AS "ownerEmail",
+          t.submitted_by::text AS "submittedBy",
+          t.features
+        FROM tools t
+        WHERE t.status = 'published'
+          AND t.updated_at <= NOW() - INTERVAL '30 days'
+          AND (
+            COALESCE(t.owner_email, '') <> ''
+            OR COALESCE(t.features->'submission'->>'submittedByEmail', '') <> ''
+          )
+        ORDER BY t.updated_at ASC
+      `,
+    );
+
+    const candidates = result.rows as Array<{
+      id: string;
+      name: string;
+      title: unknown;
+      url: string;
+      image_url: string | null;
+      thumbnail_url: string | null;
+      category_id: string | null;
+      content: unknown;
+      detail: unknown;
+      pricing: string | null;
+      tags: string[] | null;
+      updatedAt: string;
+      ownerEmail: string | null;
+      submittedBy: string | null;
+      features: unknown;
+    }>;
+
+    const reminderTasks = await Promise.all(
+      candidates.map(async (tool) => {
+        const reminderType: ProfileUpdateReminderType = 'profile_update_30d';
+        const recipientEmail = [tool.ownerEmail, getSubmittedByEmailFromFeatures(tool.features)]
+          .find((value): value is string => typeof value === 'string' && isValidEmail(value.trim()))
+          ?.trim()
+          .toLowerCase();
+
+        if (!recipientEmail) {
+          return { sent: 0, skipped: 1 };
+        }
+
+        if (await hasProfileUpdateReminderBeenSent(tool.id, reminderType)) {
+          return { sent: 0, skipped: 1 };
+        }
+
+        const quality = getToolQuality({
+          category_id: tool.category_id,
+          image_url: tool.image_url,
+          thumbnail_url: tool.thumbnail_url,
+          content: tool.content,
+          detail: tool.detail,
+          pricing: tool.pricing,
+          tags: tool.tags,
+        });
+
+        if (quality.missingLabels.length === 0) {
+          return { sent: 0, skipped: 1 };
+        }
+
+        const titleRecord =
+          tool.title && typeof tool.title === 'object'
+            ? (tool.title as Record<string, unknown>)
+            : null;
+        const displayName =
+          (typeof titleRecord?.en === 'string' && titleRecord.en.trim()) ||
+          (typeof titleRecord?.zh === 'string' && titleRecord.zh.trim()) ||
+          tool.name;
+        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+        const submissionsUrl = `${siteUrl.replace(/\/$/, '')}/en/profile/submissions`;
+        const missingList = quality.missingLabels.join(', ');
+
+        const subject = `[AI Best Tool] Update your listing / 更新你的工具资料`;
+        const text = [
+          `${displayName} is live on AI Best Tool, but the listing still has some gaps that may limit trust and conversion.`,
+          '',
+          `Current quality score: ${quality.score}/100`,
+          `Suggested updates: ${missingList}`,
+          '',
+          'You can review and update the listing from your submissions page:',
+          submissionsUrl,
+          '',
+          `Listing URL: ${tool.url}`,
+        ].join('\n');
+        const html = `
+          <p><strong>${escapeHtml(displayName)}</strong> is live on AI Best Tool, but the listing still has a few gaps that may limit trust and conversion.</p>
+          <p><strong>Current quality score:</strong> ${quality.score}/100</p>
+          <p><strong>Suggested updates:</strong> ${escapeHtml(missingList)}</p>
+          <p>You can review and update the listing from your submissions page:</p>
+          <p><a href="${submissionsUrl}">${submissionsUrl}</a></p>
+          <p><strong>Listing URL:</strong> ${escapeHtml(tool.url)}</p>
+        `;
+
+        const emailResult = await sendTransactionalEmail({
+          to: recipientEmail,
+          subject,
+          text,
+          html,
+        });
+
+        if (emailResult.success) {
+          await recordProfileUpdateReminderLog({
+            toolId: tool.id,
+            reminderType,
+            recipientEmail,
+            qualityScore: quality.score,
+            missingLabels: quality.missingLabels,
+          });
+        }
+
+        return {
+          sent: emailResult.success ? 1 : 0,
+          skipped: emailResult.success ? 0 : 1,
+        };
+      }),
+    );
+
+    return {
+      success: true,
+      sent: reminderTasks.reduce((sum, item) => sum + item.sent, 0),
+      skipped: reminderTasks.reduce((sum, item) => sum + item.skipped, 0),
+    };
+  } catch (error) {
+    console.error('Error sending profile update reminders:', error);
+    return {
+      success: false,
+      sent: 0,
+      skipped: 0,
+      error: error instanceof Error ? error.message : 'Failed to send profile update reminders',
     };
   }
 }
