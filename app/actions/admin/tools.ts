@@ -12,9 +12,17 @@ import { getPaidListingPublishGate, getToolQuality } from '@/lib/services/toolQu
 const publicLocales = ['en', 'cn', 'tw', 'jp', 'de', 'es', 'fr', 'pt', 'ru'];
 const validStatuses = ['draft', 'pending', 'published', 'rejected'] as const;
 const validPricing = ['free', 'freemium', 'paid'] as const;
+const validOutreachStatuses = [
+  'not_started',
+  'contacted',
+  'waiting_reply',
+  'follow_up_due',
+  'closed',
+] as const;
 
 type ToolStatus = (typeof validStatuses)[number];
 type ToolPricing = (typeof validPricing)[number];
+export type OutreachStatus = (typeof validOutreachStatuses)[number];
 
 const toolQualityScoreSql = `
   (
@@ -90,6 +98,23 @@ export interface AdminTool {
   click_count: number;
   average_rating: number;
   rating_count: number;
+}
+
+export interface AdminOutreachQueueItem {
+  id: string;
+  name: string;
+  title: string;
+  contactEmail: string;
+  views: number;
+  clicks: number;
+  favorites: number;
+  comments: number;
+  daysSinceUpdate: number;
+  suggestion: 'claim_listing' | 'featured_pitch' | 'content_collab';
+  priorityScore: number;
+  reason: string;
+  outreachStatus: OutreachStatus;
+  outreachUpdatedAt: string | null;
 }
 
 function parseCount(value: unknown): number {
@@ -2314,22 +2339,7 @@ export async function getFeaturedPlacementStats(): Promise<{
 
 export async function getDeveloperOutreachQueue(
   limit: number = 20,
-): Promise<
-  Array<{
-    id: string;
-    name: string;
-    title: string;
-    contactEmail: string;
-    views: number;
-    clicks: number;
-    favorites: number;
-    comments: number;
-    daysSinceUpdate: number;
-    suggestion: 'claim_listing' | 'featured_pitch' | 'content_collab';
-    priorityScore: number;
-    reason: string;
-  }>
-> {
+): Promise<AdminOutreachQueueItem[]> {
   try {
     await requireAdmin();
 
@@ -2359,6 +2369,8 @@ export async function getDeveloperOutreachQueue(
           COALESCE(cc.comments, 0)::int AS comments,
           t.owner_email AS "ownerEmail",
           COALESCE(t.features->'submission'->>'submittedByEmail', '') AS "submittedByEmail",
+          COALESCE(t.features->'outreach'->>'status', 'not_started') AS "outreachStatus",
+          NULLIF(t.features->'outreach'->>'updatedAt', '') AS "outreachUpdatedAt",
           GREATEST(0, FLOOR(EXTRACT(EPOCH FROM (NOW() - t.updated_at)) / 86400))::int AS "daysSinceUpdate"
         FROM tools t
         LEFT JOIN favorite_counts fc ON fc.tool_id = t.id
@@ -2396,6 +2408,13 @@ export async function getDeveloperOutreachQueue(
         const comments = Number(row.comments || 0);
         const daysSinceUpdate = Number(row.daysSinceUpdate || 0);
         const priorityScore = views + clicks * 3 + favorites * 8 + comments * 10;
+        const outreachStatus = validOutreachStatuses.includes(row.outreachStatus)
+          ? (row.outreachStatus as OutreachStatus)
+          : 'not_started';
+        const outreachUpdatedAt =
+          typeof row.outreachUpdatedAt === 'string' && row.outreachUpdatedAt.trim().length > 0
+            ? row.outreachUpdatedAt
+            : null;
 
         let suggestion: 'claim_listing' | 'featured_pitch' | 'content_collab' = 'claim_listing';
         let reason = 'Unclaimed published tool with a reachable contact.';
@@ -2421,12 +2440,77 @@ export async function getDeveloperOutreachQueue(
           suggestion,
           priorityScore,
           reason,
+          outreachStatus,
+          outreachUpdatedAt,
         };
       })
       .filter((item): item is NonNullable<typeof item> => item !== null);
   } catch (error) {
     console.error('Error fetching developer outreach queue:', error);
     return [];
+  }
+}
+
+export async function updateOutreachStatus(input: {
+  toolId: string;
+  status: OutreachStatus;
+}): Promise<{ success: boolean; error?: string }> {
+  try {
+    await requireAdmin();
+
+    const toolId = input.toolId.trim();
+    if (!toolId) {
+      return { success: false, error: 'Tool id is required.' };
+    }
+
+    if (!validOutreachStatuses.includes(input.status)) {
+      return { success: false, error: 'Invalid outreach status.' };
+    }
+
+    const pool = getPool();
+    const result = await pool.query(
+      `
+        UPDATE tools
+        SET
+          features = jsonb_set(
+            COALESCE(features, '{}'::jsonb),
+            '{outreach}',
+            COALESCE(features->'outreach', '{}'::jsonb)
+              || jsonb_build_object(
+                'status', $2::text,
+                'updatedAt', NOW()::text
+              ),
+            true
+          ),
+          updated_at = NOW()
+        WHERE id::text = $1
+        RETURNING name
+      `,
+      [toolId, input.status],
+    );
+
+    if (result.rowCount === 0) {
+      return { success: false, error: 'Tool not found.' };
+    }
+
+    revalidateAdminToolPaths();
+    revalidatePath('/admin/analytics');
+    for (const locale of publicLocales) {
+      revalidatePath(`/${locale}/admin/analytics`);
+    }
+
+    const toolName = String(result.rows[0]?.name || '');
+    if (toolName) {
+      revalidatePublicToolPaths(toolName);
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error('Error updating outreach status:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to update outreach status.',
+    };
   }
 }
 

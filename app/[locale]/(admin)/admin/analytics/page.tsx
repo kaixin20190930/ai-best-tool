@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowUpRight, BarChart3, Globe, Layers3, Search, ShieldAlert, TrendingUp } from 'lucide-react';
 
+import AdminOutreachQueueTable from '@/components/admin/AdminOutreachQueueTable';
 import {
   getCommercialIntentReport,
   getCtaClickReport,
@@ -278,11 +279,6 @@ export default async function AdminAnalyticsPage({
     if (key === 'invalid') return 'bg-rose-500';
     return 'bg-blue-500';
   };
-  const getOutreachSuggestionToneClass = (suggestion: (typeof outreachQueue)[number]['suggestion']) => {
-    if (suggestion === 'featured_pitch') return 'bg-cyan-50 text-cyan-700';
-    if (suggestion === 'content_collab') return 'bg-emerald-50 text-emerald-700';
-    return 'bg-amber-50 text-amber-700';
-  };
   const featuredExpiringSoon = featuredPlacementStats.placements
     .filter((item) => item.daysLeft !== null && item.daysLeft <= 3)
     .sort((a, b) => (a.daysLeft || 0) - (b.daysLeft || 0));
@@ -295,12 +291,6 @@ export default async function AdminAnalyticsPage({
     featuredPlacementStats.totalViews > 0
       ? Math.round((featuredPlacementStats.totalClicks / featuredPlacementStats.totalViews) * 100)
       : 0;
-  const outreachSuggestionLabel = (value: (typeof outreachQueue)[number]['suggestion']) => {
-    if (value === 'featured_pitch') return 'Featured pitch';
-    if (value === 'content_collab') return 'Content collab';
-    return 'Claim listing';
-  };
-
   const getPeriodChangeLabel = (currentViews: number, previousViews: number) => {
     if (previousViews > 0) {
       return `${(((currentViews - previousViews) / previousViews) * 100).toFixed(1)}%`;
@@ -589,8 +579,8 @@ export default async function AdminAnalyticsPage({
   const ctaTrendItems = ctaClickTrend.items.slice(0, 6);
   const ctaPageSummaryMap = new Map(ctaClickReport.summary.map((item) => [item.pageType, item]));
   const commercialFamilyMap = new Map<
-    string,
-    Record<'submitClicks' | 'claimClicks' | 'claimLeads' | 'checkoutStarts', number>
+  string,
+  { submitClicks: number; claimClicks: number; claimLeads: number; checkoutStarts: number }
   >();
 
   commercialIntentReport.sources.forEach((item) => {
@@ -2149,100 +2139,7 @@ export default async function AdminAnalyticsPage({
           </div>
         </div>
 
-        <div className='overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm'>
-          <table className='min-w-full divide-y divide-slate-200'>
-            <thead className='bg-slate-50'>
-              <tr>
-                <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                  Tool
-                </th>
-                <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                  Contact
-                </th>
-                <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                  Suggestion
-                </th>
-                <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                  Signals
-                </th>
-                <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                  Priority
-                </th>
-                <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className='divide-y divide-slate-100 bg-white'>
-              {outreachQueue.length > 0 ? (
-                outreachQueue.map((item) => (
-                  <tr key={item.id}>
-                    <td className='px-4 py-4 align-top'>
-                      <div>
-                        <p className='text-sm font-medium text-slate-900'>{item.title}</p>
-                        <p className='mt-1 text-xs text-slate-500'>{item.name}</p>
-                        <p className='mt-2 text-xs leading-5 text-slate-500'>{item.reason}</p>
-                      </div>
-                    </td>
-                    <td className='px-4 py-4 align-top text-sm text-slate-700'>{item.contactEmail}</td>
-                    <td className='px-4 py-4 align-top'>
-                      <span
-                        className={`rounded-full px-2.5 py-1 text-xs font-semibold ${getOutreachSuggestionToneClass(item.suggestion)}`}
-                      >
-                        {outreachSuggestionLabel(item.suggestion)}
-                      </span>
-                    </td>
-                    <td className='px-4 py-4 text-right align-top text-sm text-slate-700'>
-                      <div>{item.views.toLocaleString()} views</div>
-                      <div className='text-xs text-slate-500'>
-                        {item.clicks} clicks · {item.favorites} favs · {item.comments} comments
-                      </div>
-                    </td>
-                    <td className='px-4 py-4 text-right align-top'>
-                      <div className='inline-flex flex-col items-end gap-1'>
-                        <span className='rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700'>
-                          {item.priorityScore}
-                        </span>
-                        <span className='text-xs text-slate-500'>{item.daysSinceUpdate}d since update</span>
-                      </div>
-                    </td>
-                    <td className='px-4 py-4 align-top'>
-                      <div className='flex min-w-[160px] flex-col items-start gap-2 text-xs font-medium'>
-                        <Link
-                          href={`/admin/tools/${item.id}/edit`}
-                          className='inline-flex items-center gap-1 text-cyan-700 hover:text-cyan-800'
-                        >
-                          Review tool
-                          <ArrowUpRight className='h-3.5 w-3.5' />
-                        </Link>
-                        <Link
-                          href={`/${locale}/ai/${item.name}`}
-                          className='inline-flex items-center gap-1 text-slate-700 hover:text-slate-900'
-                        >
-                          Open public page
-                          <ArrowUpRight className='h-3.5 w-3.5' />
-                        </Link>
-                        <a
-                          href={`mailto:${item.contactEmail}`}
-                          className='inline-flex items-center gap-1 text-slate-500 hover:text-slate-900'
-                        >
-                          Draft email
-                          <ArrowUpRight className='h-3.5 w-3.5' />
-                        </a>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={6} className='px-4 py-8 text-sm text-slate-500'>
-                    No outreach candidates right now.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+        <AdminOutreachQueueTable items={outreachQueue} locale={locale} />
       </div>
 
       {/* Priority Media Queue */}
