@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { ArrowRight, CheckCircle2, Mail, ShieldCheck, Sparkles } from 'lucide-react';
 
-import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import { getListingPaymentMailto } from '@/lib/config/listing';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import ClaimListingForm from '@/components/developer/ClaimListingForm';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
@@ -20,14 +20,52 @@ export async function generateMetadata({ params: { locale } }: { params: { local
   };
 }
 
-export default function DeveloperListingPage({ params: { locale } }: { params: { locale: string } }) {
+export default function DeveloperListingPage({
+  params: { locale },
+  searchParams,
+}: {
+  params: { locale: string };
+  searchParams?: { intent?: string };
+}) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const mailtoHref = getListingPaymentMailto('Claim listing interest');
   const sourcePath = `/${locale}/developer/listing`;
+  const submitHref = `/${locale}/submit?intent=claim`;
+  const pricingHref = `/${locale}/pricing`;
+  let initialIntent: 'default' | 'claim' | 'paid' = 'default';
+  if (searchParams?.intent === 'claim') {
+    initialIntent = 'claim';
+  } else if (searchParams?.intent === 'paid') {
+    initialIntent = 'paid';
+  }
 
   const points = isChinese
-    ? ['先确认这条 listing 是不是你的。', '留下邮箱、公司和官网，方便后续人工跟进。', '需要时再讨论更快审核或前排窗口。']
-    : ['Confirm whether this listing is yours.', 'Leave your email, company, and website so we can follow up.', 'Decide later whether you want faster review or a featured window.'];
+    ? [
+        '先确认这条 listing 是不是你的。',
+        '留下邮箱、公司和官网，方便后续人工跟进。',
+        '需要时再讨论更快审核或前排窗口。',
+      ]
+    : [
+        'Confirm whether this listing is yours.',
+        'Leave your email, company, and website so we can follow up.',
+        'Decide later whether you want faster review or a featured window.',
+      ];
+  let intentBanner: { title: string; body: string } | null = null;
+  if (initialIntent === 'claim') {
+    intentBanner = {
+      title: isChinese ? '你是从提交页过来的' : 'You came from submit',
+      body: isChinese
+        ? '如果目录里已经有你的工具，认领通常比重新提交更省力。先留下信息，我们再决定后续是更新条目还是走付费加速。'
+        : 'If your tool is already in the directory, claiming it is usually easier than submitting a duplicate. Leave your details first, then we can decide whether to update the listing or discuss paid acceleration.',
+    };
+  } else if (initialIntent === 'paid') {
+    intentBanner = {
+      title: isChinese ? '你是从价格页过来的' : 'You came from pricing',
+      body: isChinese
+        ? '认领适合“条目已经存在”的情况。如果目录里还没有你的工具，更适合先走提交流程。'
+        : 'Claiming fits best when the listing already exists. If your tool is not in the directory yet, the submission path is usually the better first step.',
+    };
+  }
 
   return (
     <div className='theme-page mx-auto max-w-pc px-4 py-8 lg:px-0'>
@@ -39,6 +77,12 @@ export default function DeveloperListingPage({ params: { locale } }: { params: {
 
         <div className='mt-5 grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center'>
           <div className='space-y-5'>
+            {intentBanner && (
+              <div className='rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm text-cyan-950'>
+                <p className='font-semibold'>{intentBanner.title}</p>
+                <p className='mt-1 leading-6 text-cyan-900/80'>{intentBanner.body}</p>
+              </div>
+            )}
             <h1 className='text-3xl font-bold tracking-tight text-slate-950 lg:text-5xl'>
               {isChinese ? '先认领，再决定要不要加速' : 'Claim first, then decide whether to speed things up'}
             </h1>
@@ -59,9 +103,28 @@ export default function DeveloperListingPage({ params: { locale } }: { params: {
               ))}
             </div>
 
+            <div className='grid gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:grid-cols-2'>
+              <div className='rounded-xl border border-white bg-white p-4'>
+                <p className='text-sm font-semibold text-slate-950'>{isChinese ? '适合认领' : 'Use claim when'}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>
+                  {isChinese
+                    ? '目录里已经有你的工具，只是还没有把 owner 信息和后续更新路径建立起来。'
+                    : 'Your tool is already in the directory, but owner details and update workflow are not connected yet.'}
+                </p>
+              </div>
+              <div className='rounded-xl border border-white bg-white p-4'>
+                <p className='text-sm font-semibold text-slate-950'>{isChinese ? '适合提交' : 'Use submit when'}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>
+                  {isChinese
+                    ? '目录里还没有这个工具，或者你希望新增一个全新的条目。'
+                    : 'The tool is not in the directory yet, or you want to create a completely new listing.'}
+                </p>
+              </div>
+            </div>
+
             <div className='flex flex-wrap gap-3'>
               <TrackableCtaLink
-                href={`/${locale}/submit`}
+                href={submitHref}
                 ctaId='developer_listing_go_submit'
                 ctaLabel='Go to submit'
                 pageType='developer_listing'
@@ -79,6 +142,15 @@ export default function DeveloperListingPage({ params: { locale } }: { params: {
               >
                 <Mail className='mr-2 size-4' />
                 {isChinese ? '发邮件认领' : 'Claim by email'}
+              </TrackableCtaLink>
+              <TrackableCtaLink
+                href={pricingHref}
+                ctaId='developer_listing_view_pricing'
+                ctaLabel='View pricing options'
+                pageType='developer_listing'
+                className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+              >
+                {isChinese ? '看价格方案' : 'View pricing'}
               </TrackableCtaLink>
             </div>
           </div>
@@ -161,7 +233,7 @@ export default function DeveloperListingPage({ params: { locale } }: { params: {
         </div>
 
         <div>
-          <ClaimListingForm locale={locale} sourcePath={sourcePath} />
+          <ClaimListingForm locale={locale} sourcePath={sourcePath} initialIntent={initialIntent} />
         </div>
       </section>
     </div>

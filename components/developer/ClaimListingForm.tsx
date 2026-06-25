@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, type FormEvent } from 'react';
+import Link from 'next/link';
 import { toast } from 'sonner';
 
 import { cn } from '@/lib/utils';
@@ -9,9 +10,10 @@ import { submitClaimListing } from '@/app/actions/claimListing';
 type ClaimListingFormProps = {
   locale: string;
   sourcePath: string;
+  initialIntent?: 'default' | 'claim' | 'paid';
 };
 
-export default function ClaimListingForm({ locale, sourcePath }: ClaimListingFormProps) {
+export default function ClaimListingForm({ locale, sourcePath, initialIntent = 'default' }: ClaimListingFormProps) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -65,6 +67,15 @@ export default function ClaimListingForm({ locale, sourcePath }: ClaimListingFor
   };
 
   if (submitted) {
+    let nextStepText = isChinese
+      ? '如果认领确认后还需要更快审核或前排展示，再回到价格页或提交页即可。'
+      : 'If you later need faster review or featured visibility, you can return to pricing or the submission flow after claim confirmation.';
+    if (initialIntent === 'paid') {
+      nextStepText = isChinese
+        ? '如果目录里还没有这个工具，下一步更适合回到提交页。若条目已存在，我们会先人工跟进认领。'
+        : 'If the tool is not in the directory yet, the next best step is usually to go back to the submission flow. If it already exists, we will continue with manual claim follow-up.';
+    }
+
     return (
       <div className='rounded-2xl border border-emerald-200 bg-emerald-50 p-6 shadow-sm'>
         <p className='text-sm font-semibold text-emerald-900'>{isChinese ? '已收到认领信息' : 'Claim received'}</p>
@@ -73,6 +84,21 @@ export default function ClaimListingForm({ locale, sourcePath }: ClaimListingFor
             ? '我们会先人工核对，再决定是否需要进一步联系。'
             : 'We will review the details manually and follow up when needed.'}
         </p>
+        <p className='mt-2 text-sm leading-6 text-emerald-900/80'>{nextStepText}</p>
+        <div className='mt-4 flex flex-wrap items-center gap-3'>
+          <Link
+            href={`/${locale}/pricing`}
+            className='inline-flex items-center justify-center rounded-lg border border-emerald-200 bg-white px-4 py-2 text-sm font-semibold text-emerald-800 hover:bg-emerald-100'
+          >
+            {isChinese ? '查看价格页' : 'View pricing'}
+          </Link>
+          <Link
+            href={`/${locale}/submit?intent=claim`}
+            className='inline-flex items-center justify-center rounded-lg border border-emerald-200 bg-white px-4 py-2 text-sm font-semibold text-emerald-800 hover:bg-emerald-100'
+          >
+            {isChinese ? '转到提交页' : 'Go to submit'}
+          </Link>
+        </div>
         <button
           type='button'
           onClick={() => setSubmitted(false)}
