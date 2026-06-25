@@ -127,6 +127,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {isChinese ? '看开发者工具' : 'Developer tools'}
             </TrackableCtaLink>
             <TrackableCtaLink
+              href='/best-ai-tools/ai-agent-tools'
+              ctaId='agent_guide_top_list'
+              ctaLabel='Agent guide top list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看 Agent 榜单' : 'Open agent ranking'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/submit'
               ctaId='agent_guide_submit'
               ctaLabel='Agent guide submit'
@@ -279,6 +288,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               description: isChinese ? '先快速横向看一组更贴近 Agent 的工具。' : 'A fast side-by-side look at tools closer to agent workflows.',
             },
             {
+              href: '/best-ai-tools/ai-agent-tools',
+              title: isChinese ? 'Agent 榜单入口' : 'Agent ranking list',
+              description: isChinese
+                ? '适合已经确认方向，只想快速缩小 shortlist 的用户。'
+                : 'Useful when the direction is already clear and the goal is to narrow the shortlist quickly.',
+            },
+            {
               href: '/guides/ai-tools-for-automation-comparison',
               title: isChinese ? '自动化工具对比' : 'Automation tools comparison',
               description: isChinese
@@ -305,6 +321,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               href: '/categories/automation?sort=popular',
               title: isChinese ? '进入 Automation 分类' : 'Open the automation category',
               description: isChinese ? '看更接近执行和编排层的真实工具。' : 'See real listings closer to execution and orchestration.',
+            },
+            {
+              href: '/best-ai-tools/ai-agent-tools',
+              title: isChinese ? '进入 Agent 榜单' : 'Open the agent ranking',
+              description: isChinese ? '先看一组更高意图的 Agent shortlist。' : 'Start with a higher-intent agent shortlist.',
             },
             {
               href: '/explore?search=agent&sort=popular',

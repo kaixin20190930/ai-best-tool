@@ -1,4 +1,9 @@
-export type TopListTopicKey = 'ai-coding-tools' | 'ai-video-tools' | 'ai-research-tools' | 'ai-writing-tools';
+export type TopListTopicKey =
+  | 'ai-agent-tools'
+  | 'ai-coding-tools'
+  | 'ai-video-tools'
+  | 'ai-research-tools'
+  | 'ai-writing-tools';
 
 export type TopListTopicConfig = {
   key: TopListTopicKey;
@@ -11,6 +16,16 @@ export type TopListTopicConfig = {
 };
 
 export const topListTopics: TopListTopicConfig[] = [
+  {
+    key: 'ai-agent-tools',
+    categorySlug: 'automation',
+    title: 'Best AI Agent Tools',
+    description: 'The most useful tools for agent workflows, tool use, orchestration, and runtime control.',
+    summary: 'A practical shortlist for teams building multi-step execution flows instead of one-off prompts.',
+    ctaLabel: 'Go to agent list',
+    ctaDescription:
+      'Use this list when the decision is about agent orchestration, execution loops, tool calling, and production-ready control.',
+  },
   {
     key: 'ai-coding-tools',
     categorySlug: 'developer-tools',
