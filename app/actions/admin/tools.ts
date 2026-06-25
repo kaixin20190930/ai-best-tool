@@ -1587,6 +1587,7 @@ export async function cleanupExpiredSponsoredPlacementsBySystem(): Promise<{
 }
 
 type FeaturedRenewalReminderType = 'featured_ending_3d' | 'featured_ending_1d';
+type ClaimInviteReminderType = 'claim_invite_7d';
 
 async function ensureFeaturedRenewalReminderLogTable() {
   const pool = getPool();
@@ -1653,6 +1654,69 @@ async function recordFeaturedRenewalReminderLog(input: {
       ON CONFLICT (tool_id, reminder_type, featured_until) DO NOTHING
     `,
     [input.toolId, input.reminderType, input.featuredUntil, input.recipientEmail],
+  );
+}
+
+async function ensureClaimInviteReminderLogTable() {
+  const pool = getPool();
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS claim_invite_reminder_logs (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      tool_id UUID NOT NULL,
+      reminder_type TEXT NOT NULL,
+      recipient_email TEXT NOT NULL,
+      sent_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+
+  await pool.query(`
+    CREATE UNIQUE INDEX IF NOT EXISTS uq_claim_invite_reminder_logs
+    ON claim_invite_reminder_logs(tool_id, reminder_type)
+  `);
+
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS idx_claim_invite_reminder_logs_sent_at
+    ON claim_invite_reminder_logs(sent_at DESC)
+  `);
+}
+
+async function hasClaimInviteReminderBeenSent(
+  toolId: string,
+  reminderType: ClaimInviteReminderType,
+): Promise<boolean> {
+  const pool = getPool();
+  const result = await pool.query(
+    `
+      SELECT 1
+      FROM claim_invite_reminder_logs
+      WHERE tool_id = $1
+        AND reminder_type = $2
+      LIMIT 1
+    `,
+    [toolId, reminderType],
+  );
+
+  return (result.rowCount || 0) > 0;
+}
+
+async function recordClaimInviteReminderLog(input: {
+  toolId: string;
+  reminderType: ClaimInviteReminderType;
+  recipientEmail: string;
+}) {
+  const pool = getPool();
+  await pool.query(
+    `
+      INSERT INTO claim_invite_reminder_logs (
+        tool_id,
+        reminder_type,
+        recipient_email
+      )
+      VALUES ($1, $2, $3)
+      ON CONFLICT (tool_id, reminder_type) DO NOTHING
+    `,
+    [input.toolId, input.reminderType, input.recipientEmail],
   );
 }
 
@@ -1784,6 +1848,133 @@ export async function sendFeaturedRenewalRemindersBySystem(): Promise<{
       sent: 0,
       skipped: 0,
       error: error instanceof Error ? error.message : 'Failed to send featured renewal reminders',
+    };
+  }
+}
+
+export async function sendClaimInvitesBySystem(): Promise<{
+  success: boolean;
+  sent: number;
+  skipped: number;
+  error?: string;
+}> {
+  try {
+    const pool = getPool();
+    await ensureClaimInviteReminderLogTable();
+
+    const result = await pool.query(
+      `
+        SELECT
+          t.id::text AS id,
+          t.name,
+          t.title,
+          t.url,
+          t.created_at AS "createdAt",
+          t.owner_email AS "ownerEmail",
+          t.claim_status AS "claimStatus",
+          t.features,
+          COALESCE(t.features->'submission'->>'submittedByEmail', '') AS "submittedByEmail"
+        FROM tools t
+        WHERE t.status = 'published'
+          AND COALESCE(t.claim_status, 'unclaimed') = 'unclaimed'
+          AND COALESCE(t.owner_email, '') = ''
+          AND COALESCE(t.features->'submission'->>'submittedByEmail', '') <> ''
+          AND t.created_at <= NOW() - INTERVAL '7 days'
+        ORDER BY t.created_at ASC
+      `,
+    );
+
+    const candidates = result.rows as Array<{
+      id: string;
+      name: string;
+      title: unknown;
+      url: string;
+      createdAt: string;
+      ownerEmail: string | null;
+      claimStatus: string | null;
+      features: unknown;
+      submittedByEmail: string;
+    }>;
+
+    const reminderTasks = await Promise.all(
+      candidates.map(async (tool) => {
+        const reminderType: ClaimInviteReminderType = 'claim_invite_7d';
+        const recipientEmail = tool.submittedByEmail.trim().toLowerCase();
+
+        if (!isValidEmail(recipientEmail)) {
+          return { sent: 0, skipped: 1 };
+        }
+
+        if (await hasClaimInviteReminderBeenSent(tool.id, reminderType)) {
+          return { sent: 0, skipped: 1 };
+        }
+
+        const titleRecord =
+          tool.title && typeof tool.title === 'object'
+            ? (tool.title as Record<string, unknown>)
+            : null;
+        const displayName =
+          (typeof titleRecord?.en === 'string' && titleRecord.en.trim()) ||
+          (typeof titleRecord?.zh === 'string' && titleRecord.zh.trim()) ||
+          tool.name;
+        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+        const claimUrl = `${siteUrl.replace(/\/$/, '')}/en/developer/listing`;
+
+        const subject = `[AI Best Tool] Claim your listing / 认领你的条目`;
+        const text = [
+          `We have a listing that may belong to you: ${displayName}.`,
+          '',
+          'If this is your product, you can claim it here:',
+          claimUrl,
+          '',
+          'Claim details:',
+          `- Listing: ${displayName}`,
+          `- Listing URL: ${tool.url}`,
+          '',
+          'If this is not your tool, you can ignore this email.',
+        ].join('\n');
+        const html = `
+          <p>We have a listing that may belong to you: <strong>${escapeHtml(displayName)}</strong>.</p>
+          <p>If this is your product, you can claim it here:</p>
+          <p><a href="${claimUrl}">${claimUrl}</a></p>
+          <p><strong>Listing URL:</strong> ${escapeHtml(tool.url)}</p>
+          <p>If this is not your tool, you can ignore this email.</p>
+        `;
+
+        const emailResult = await sendTransactionalEmail({
+          to: recipientEmail,
+          subject,
+          text,
+          html,
+        });
+
+        if (emailResult.success) {
+          await recordClaimInviteReminderLog({
+            toolId: tool.id,
+            reminderType,
+            recipientEmail,
+          });
+        }
+
+        return {
+          sent: emailResult.success ? 1 : 0,
+          skipped: emailResult.success ? 0 : 1,
+        };
+      }),
+    );
+
+    return {
+      success: true,
+      sent: reminderTasks.reduce((sum, item) => sum + item.sent, 0),
+      skipped: reminderTasks.reduce((sum, item) => sum + item.skipped, 0),
+    };
+  } catch (error) {
+    console.error('Error sending claim invites:', error);
+    return {
+      success: false,
+      sent: 0,
+      skipped: 0,
+      error: error instanceof Error ? error.message : 'Failed to send claim invites',
     };
   }
 }
