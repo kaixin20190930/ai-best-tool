@@ -65,15 +65,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const faqSchema = generateFAQSchema(faqs);
   const tips = isChinese
     ? [
-        '先确认写作任务类型：博客、邮件、社媒、SEO、广告文案，需求会很不一样。',
-        '看它是否支持中文、是否有模板、是否能保持语气一致。',
-        '如果你要长期写内容，优先看导出、协作和限制，而不是只看生成速度。',
-      ]
+      '先确认写作任务类型：博客、邮件、社媒、SEO、广告文案，需求会很不一样。',
+      '看它是否支持中文、是否有模板、是否能保持语气一致。',
+      '如果你要长期写内容，优先看导出、协作和限制，而不是只看生成速度。',
+    ]
     : [
-        'Start with the content type: blog, email, social, SEO, or ad copy all have different needs.',
-        'Check whether it supports Chinese, templates, and consistent tone.',
-        'If you plan to write regularly, look at export, collaboration, and limits, not just generation speed.',
-      ];
+      'Start with the content type: blog, email, social, SEO, or ad copy all have different needs.',
+      'Check whether it supports Chinese, templates, and consistent tone.',
+      'If you plan to write regularly, look at export, collaboration, and limits, not just generation speed.',
+    ];
 
   return (
     <>
@@ -123,6 +123,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             >
               {isChinese ? '看写作工具对比' : 'Compare writing tools'}
             </Link>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-writing-tools'
+              ctaId='writing_guide_top_list'
+              ctaLabel='Writing guide top list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看写作榜单' : 'Open writing ranking'}
+            </TrackableCtaLink>
           </div>
         </section>
 

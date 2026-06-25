@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 
@@ -122,6 +123,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             >
               {isChinese ? '看视频工具对比' : 'Compare video tools'}
             </Link>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-video-tools'
+              ctaId='video_guide_top_list'
+              ctaLabel='Video guide top list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看视频榜单' : 'Open video ranking'}
+            </TrackableCtaLink>
           </div>
         </section>
 

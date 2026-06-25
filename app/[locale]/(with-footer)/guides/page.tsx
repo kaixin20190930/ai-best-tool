@@ -3,6 +3,7 @@ import { ArrowRight, BookOpen, CheckCircle2, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { FEATURED_GUIDE_HREFS, GUIDE_PAGES } from '@/lib/content/guides';
+import { topListTopics } from '@/lib/data/topLists';
 import { generateBreadcrumbSchema } from '@/lib/seo/schema';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -251,6 +252,44 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   </div>
                 </Link>
               ))}
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
+          <div className='flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between'>
+            <div>
+              <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+                {isChinese ? '高意图榜单' : 'High-intent top lists'}
+              </p>
+              <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+                {isChinese ? '先用榜单缩小范围，再进入详情和提交' : 'Use ranked lists to narrow the field before detail and submission'}
+              </h2>
+            </div>
+            <p className='max-w-3xl text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '这几页更适合已经明确要找编程、视频、研究或写作工具的人，能更快把流量送进下一步。'
+                : 'These pages fit visitors who already know they need coding, video, research, or writing tools and are ready to narrow down faster.'}
+            </p>
+          </div>
+
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {topListTopics.map((topic) => (
+              <TrackableCtaLink
+                key={topic.key}
+                href={`/best-ai-tools/${topic.key}`}
+                ctaId={`guides_hub_top_list_${topic.key}`}
+                ctaLabel={topic.title}
+                pageType='guide'
+                className='rounded-lg border border-slate-200 bg-slate-50 p-4 text-left transition hover:border-cyan-200 hover:bg-cyan-50/60'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{topic.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{topic.summary}</p>
+                <p className='mt-3 inline-flex items-center gap-1 text-sm font-semibold text-cyan-700'>
+                  {isChinese ? '进入榜单' : topic.ctaLabel}
+                  <ArrowRight className='size-4' />
+                </p>
+              </TrackableCtaLink>
+            ))}
           </div>
         </section>
 

@@ -59,15 +59,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-        '先分清你是做资料发现、证据核对，还是深度分析。',
-        '优先看来源是否透明、信息是否能回溯，而不只是回答是否“像真的”。',
-        '如果你会反复做研究，重点看收藏、导出、历史记录和后续整理能力。',
-      ]
+      '先分清你是做资料发现、证据核对，还是深度分析。',
+      '优先看来源是否透明、信息是否能回溯，而不只是回答是否“像真的”。',
+      '如果你会反复做研究，重点看收藏、导出、历史记录和后续整理能力。',
+    ]
     : [
-        'Separate discovery, evidence-checking, and deeper analysis before comparing tools.',
-        'Prioritize source transparency and traceability, not only whether the answer sounds convincing.',
-        'If research is repeatable work, focus on exports, saved history, and downstream organization.',
-      ];
+      'Separate discovery, evidence-checking, and deeper analysis before comparing tools.',
+      'Prioritize source transparency and traceability, not only whether the answer sounds convincing.',
+      'If research is repeatable work, focus on exports, saved history, and downstream organization.',
+    ];
 
   return (
     <>
@@ -125,6 +125,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看 Crypto 研究工具' : 'Crypto research tools'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-research-tools'
+              ctaId='research_guide_top_list'
+              ctaLabel='Research guide top list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看研究榜单' : 'Open research ranking'}
             </TrackableCtaLink>
             <TrackableCtaLink
               href='/submit'

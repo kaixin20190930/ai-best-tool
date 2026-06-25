@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -67,15 +68,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const faqSchema = generateFAQSchema(faqs);
   const tips = isChinese
     ? [
-        '先分清你的任务：补全、重构、调试、生成脚手架，需求差异很大。',
-        '看它是否支持你的语言、编辑器和仓库工作流。',
-        '如果你会长期使用，优先看上下文长度、团队协作和私有仓库支持。',
-      ]
+      '先分清你的任务：补全、重构、调试、生成脚手架，需求差异很大。',
+      '看它是否支持你的语言、编辑器和仓库工作流。',
+      '如果你会长期使用，优先看上下文长度、团队协作和私有仓库支持。',
+    ]
     : [
-        'Start by separating your task: completion, refactoring, debugging, or scaffolding all need different features.',
-        'Check language support, editor support, and repository workflow fit.',
-        'If you plan to use it regularly, pay attention to context length, collaboration, and private repository support.',
-      ];
+      'Start by separating your task: completion, refactoring, debugging, or scaffolding all need different features.',
+      'Check language support, editor support, and repository workflow fit.',
+      'If you plan to use it regularly, pay attention to context length, collaboration, and private repository support.',
+    ];
 
   return (
     <>
@@ -125,6 +126,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             >
               {isChinese ? '看编程工具对比' : 'Compare coding tools'}
             </Link>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-coding-tools'
+              ctaId='coding_guide_top_list'
+              ctaLabel='Coding guide top list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看编程榜单' : 'Open coding ranking'}
+            </TrackableCtaLink>
           </div>
         </section>
 
