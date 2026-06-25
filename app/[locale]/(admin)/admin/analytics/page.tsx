@@ -184,8 +184,9 @@ export default async function AdminAnalyticsPage({
     if (pageType === 'tool_detail') return 'If detail pages are rising, trust signals and feedback loops matter most.';
     if (pageType === 'explore') return 'If Explore is rising, tighten filters and empty-state guidance.';
     if (pageType === 'best_ai_tools') return 'If top lists are rising, keep the hub focused and the topic paths clear.';
-    if (pageType === 'best_ai_tools_topic')
+    if (pageType === 'best_ai_tools_topic') {
       return 'If topic pages are rising, keep tool cards and external CTAs sharp.';
+    }
     if (pageType === 'pricing') return 'If Pricing is rising, keep the offer tight and the CTA obvious.';
     if (pageType === 'submit') return 'If Submit is rising, remove friction and clarify review expectations.';
     if (pageType === 'developer_listing') return 'If Claim Listing is rising, follow up fast on new leads.';
@@ -253,14 +254,22 @@ export default async function AdminAnalyticsPage({
   const commercialEntryRows = commercialIntentReport.sources.map((item) => ({
     ...item,
     downstreamConversions: item.claimSubmissions + item.checkoutStarts,
+    ctaClicks: item.submitClicks + item.claimClicks,
+    pageToCtaRate:
+      item.pageViews > 0 ? Math.round(((item.submitClicks + item.claimClicks) / item.pageViews) * 100 * 10) / 10 : 0,
+    pageToDownstreamRate:
+      item.pageViews > 0
+        ? Math.round(((item.claimSubmissions + item.checkoutStarts) / item.pageViews) * 100 * 10) / 10
+        : 0,
   }));
   const commercialEntryShareBase =
     commercialIntentReport.totalClaimSubmissions + commercialIntentReport.totalCheckoutStarts;
   const getCommercialSourceAction = (item: (typeof commercialEntryRows)[number]) => {
     if (item.checkoutStarts > 0) return 'Keep this route clean and reduce payment friction';
     if (item.claimSubmissions > 0) return 'Follow up fast and route qualified owners into paid paths';
-    if (item.submitClicks + item.claimClicks >= 3)
+    if (item.submitClicks + item.claimClicks >= 3) {
       return 'Strengthen the next step copy so intent turns into form completion';
+    }
     return 'Watch this source until it proves real downstream intent';
   };
   const getClaimStatusToneClass = (key: string) => {
@@ -1456,10 +1465,12 @@ export default async function AdminAnalyticsPage({
                   <thead className='bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>
                     <tr>
                       <th className='px-4 py-3'>Source page</th>
+                      <th className='px-4 py-3'>Page views</th>
                       <th className='px-4 py-3'>Submit CTA</th>
                       <th className='px-4 py-3'>Claim CTA</th>
                       <th className='px-4 py-3'>Claim leads</th>
                       <th className='px-4 py-3'>Checkout starts</th>
+                      <th className='px-4 py-3'>Page → next step</th>
                       <th className='px-4 py-3'>Action</th>
                     </tr>
                   </thead>
@@ -1481,10 +1492,27 @@ export default async function AdminAnalyticsPage({
                               </p>
                             </div>
                           </td>
+                          <td className='px-4 py-4'>
+                            <div className='min-w-[110px]'>
+                              <p className='font-semibold text-slate-900'>{item.pageViews}</p>
+                              <p className='mt-1 text-xs text-slate-500'>{item.uniqueVisitors} unique</p>
+                            </div>
+                          </td>
                           <td className='px-4 py-4 font-semibold text-slate-700'>{item.submitClicks}</td>
                           <td className='px-4 py-4 font-semibold text-slate-700'>{item.claimClicks}</td>
                           <td className='px-4 py-4 font-semibold text-emerald-700'>{item.claimSubmissions}</td>
                           <td className='px-4 py-4 font-semibold text-violet-700'>{item.checkoutStarts}</td>
+                          <td className='px-4 py-4'>
+                            <div className='min-w-[150px] text-xs leading-5 text-slate-500'>
+                              <p>
+                                CTA rate: <span className='font-semibold text-slate-900'>{item.pageToCtaRate}%</span>
+                              </p>
+                              <p className='mt-1'>
+                                Downstream rate:{' '}
+                                <span className='font-semibold text-emerald-700'>{item.pageToDownstreamRate}%</span>
+                              </p>
+                            </div>
+                          </td>
                           <td className='px-4 py-4 text-xs leading-5 text-slate-500'>
                             {getCommercialSourceAction(item)}
                           </td>

@@ -245,6 +245,8 @@ export interface CommercialIntentSource {
   sourcePath: string;
   pageType: string;
   pageLabel: string;
+  pageViews: number;
+  uniqueVisitors: number;
   submitClicks: number;
   claimClicks: number;
   claimSubmissions: number;
@@ -261,6 +263,8 @@ export interface CommercialIntentReport {
 }
 
 type CommercialIntentCounts = {
+  pageViews: number;
+  uniqueVisitors: number;
   submitClicks: number;
   claimClicks: number;
   claimSubmissions: number;
@@ -1517,6 +1521,8 @@ export async function getCommercialIntentReport(
       }
 
       const existing = rowsBySource.get(sourcePath) || {
+        pageViews: 0,
+        uniqueVisitors: 0,
         submitClicks: 0,
         claimClicks: 0,
         claimSubmissions: 0,
@@ -1526,7 +1532,26 @@ export async function getCommercialIntentReport(
       rowsBySource.set(sourcePath, existing);
     };
 
-    const [ctaResult, claimResult, checkoutResult] = await Promise.all([
+    const [pageViewResult, ctaResult, claimResult, checkoutResult] = await Promise.all([
+      pool.query(
+        `
+        SELECT
+          COALESCE(
+            NULLIF(metadata->>'page_path', ''),
+            CASE
+              WHEN tool_id IS NOT NULL THEN CONCAT('/ai/', COALESCE(t.name, tool_id::text))
+              ELSE NULL
+            END
+          ) AS source_path,
+          COUNT(*)::int AS views,
+          COUNT(DISTINCT session_id)::int AS unique_visitors
+        FROM analytics a
+        LEFT JOIN tools t ON a.tool_id = t.id
+        WHERE event_type = 'page_view'
+          ${dateCondition}
+        GROUP BY 1
+      `,
+      ),
       pool.query(
         `
         SELECT
@@ -1582,6 +1607,22 @@ export async function getCommercialIntentReport(
       ),
     ]);
 
+    pageViewResult.rows.forEach((row) => {
+      const sourcePath = normalizeSourcePath(row.source_path);
+      const existing = rowsBySource.get(sourcePath) || {
+        pageViews: 0,
+        uniqueVisitors: 0,
+        submitClicks: 0,
+        claimClicks: 0,
+        claimSubmissions: 0,
+        checkoutStarts: 0,
+      };
+
+      existing.pageViews += Number.parseInt(String(row.views || '0'), 10);
+      existing.uniqueVisitors += Number.parseInt(String(row.unique_visitors || '0'), 10);
+      rowsBySource.set(sourcePath, existing);
+    });
+
     ctaResult.rows.forEach((row) => {
       const clickType = String(row.click_type || 'other');
       if (clickType === 'submit_click') {
@@ -1606,6 +1647,8 @@ export async function getCommercialIntentReport(
           sourcePath,
           pageType,
           pageLabel: getPageTypeLabel(pageType),
+          pageViews: counts.pageViews,
+          uniqueVisitors: counts.uniqueVisitors,
           submitClicks: counts.submitClicks,
           claimClicks: counts.claimClicks,
           claimSubmissions: counts.claimSubmissions,
