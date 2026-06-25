@@ -1,4 +1,5 @@
 export type TopListTopicKey =
+  | 'ai-api-observability-tools'
   | 'ai-agent-tools'
   | 'ai-coding-tools'
   | 'ai-model-routing-tools'
@@ -22,6 +23,21 @@ export type TopListTopicConfig = {
 };
 
 export const topListTopics: TopListTopicConfig[] = [
+  {
+    key: 'ai-api-observability-tools',
+    categorySlug: 'developer-tools',
+    title: 'Best AI API Observability Tools',
+    description: 'The most useful tools for request logs, tracing, cost visibility, and quality monitoring.',
+    summary: 'A practical shortlist for teams debugging real AI traffic, tracking costs, and improving production quality.',
+    ctaLabel: 'Go to observability list',
+    ctaDescription:
+      'Use this list when the decision is about logs, traces, spend visibility, and production-quality feedback loops.',
+    guideHref: '/guides/ai-tools-for-api-observability',
+    guideLabel: 'Back to observability guide',
+    comparisonHref: '/guides/ai-tools-for-api-observability-comparison',
+    comparisonLabel: 'Compare observability tools',
+    nextStep: 'Compare observability tools, inspect detail pages, then move into submission or pricing.',
+  },
   {
     key: 'ai-agent-tools',
     categorySlug: 'automation',
