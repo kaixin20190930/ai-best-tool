@@ -154,6 +154,14 @@ export interface AdminOutreachCommercialBridgeSummary {
   paymentConfirmedCount: number;
   featuredReservedCount: number;
   featuredLiveCount: number;
+  recentClaimedFromOutreachCount: number;
+  previousClaimedFromOutreachCount: number;
+  recentPaymentConfirmedCount: number;
+  previousPaymentConfirmedCount: number;
+  recentFeaturedReservedCount: number;
+  previousFeaturedReservedCount: number;
+  recentFeaturedLiveCount: number;
+  previousFeaturedLiveCount: number;
 }
 
 function getOutreachFollowUpPriority(value: string | null): number {
@@ -2753,27 +2761,54 @@ export async function getOutreachCommercialBridgeSummary(): Promise<AdminOutreac
     const pool = getPool();
     const result = await pool.query(
       `
+        WITH bridge AS (
+          SELECT
+            NULLIF(t.features->'outreach'->>'updatedAt', '')::timestamptz AS "outreachUpdatedAt",
+            NULLIF(t.features->'submission'->'commercial'->>'paymentConfirmedAt', '')::timestamptz AS "paymentConfirmedAt",
+            NULLIF(t.features->'submission'->'commercial'->>'featuredReservedAt', '')::timestamptz AS "featuredReservedAt",
+            NULLIF(t.features->'submission'->'commercial'->>'activatedAt', '')::timestamptz AS "activatedAt",
+            COALESCE(t.features->'outreach'->>'closedReason', '') AS "closedReason",
+            COALESCE(t.features->'submission'->'commercial'->>'plan', 'free') AS "plan",
+            COALESCE(t.features->'submission'->'commercial'->>'paymentConfirmed', 'false') AS "paymentConfirmed",
+            COALESCE(t.features->'submission'->'commercial'->>'isSponsoredPlacement', 'false') AS "isSponsoredPlacement"
+          FROM tools t
+          WHERE COALESCE(t.features->'outreach'->>'closedReason', '') = 'claimed'
+        )
         SELECT
+          COUNT(*)::int AS "claimedFromOutreachCount",
+          COUNT(*) FILTER (WHERE plan = 'standard_paid')::int AS "paidPlanCount",
+          COUNT(*) FILTER (WHERE paymentConfirmed = 'true')::int AS "paymentConfirmedCount",
+          COUNT(*) FILTER (WHERE "featuredReservedAt" IS NOT NULL)::int AS "featuredReservedCount",
+          COUNT(*) FILTER (WHERE isSponsoredPlacement = 'true')::int AS "featuredLiveCount",
           COUNT(*) FILTER (
-            WHERE COALESCE(t.features->'outreach'->>'closedReason', '') = 'claimed'
-          )::int AS "claimedFromOutreachCount",
+            WHERE "outreachUpdatedAt" >= NOW() - INTERVAL '7 days'
+          )::int AS "recentClaimedFromOutreachCount",
           COUNT(*) FILTER (
-            WHERE COALESCE(t.features->'outreach'->>'closedReason', '') = 'claimed'
-              AND COALESCE(t.features->'submission'->'commercial'->>'plan', 'free') = 'standard_paid'
-          )::int AS "paidPlanCount",
+            WHERE "outreachUpdatedAt" >= NOW() - INTERVAL '14 days'
+              AND "outreachUpdatedAt" < NOW() - INTERVAL '7 days'
+          )::int AS "previousClaimedFromOutreachCount",
           COUNT(*) FILTER (
-            WHERE COALESCE(t.features->'outreach'->>'closedReason', '') = 'claimed'
-              AND COALESCE(t.features->'submission'->'commercial'->>'paymentConfirmed', 'false') = 'true'
-          )::int AS "paymentConfirmedCount",
+            WHERE "paymentConfirmedAt" >= NOW() - INTERVAL '7 days'
+          )::int AS "recentPaymentConfirmedCount",
           COUNT(*) FILTER (
-            WHERE COALESCE(t.features->'outreach'->>'closedReason', '') = 'claimed'
-              AND NULLIF(t.features->'submission'->'commercial'->>'featuredReservedAt', '') IS NOT NULL
-          )::int AS "featuredReservedCount",
+            WHERE "paymentConfirmedAt" >= NOW() - INTERVAL '14 days'
+              AND "paymentConfirmedAt" < NOW() - INTERVAL '7 days'
+          )::int AS "previousPaymentConfirmedCount",
           COUNT(*) FILTER (
-            WHERE COALESCE(t.features->'outreach'->>'closedReason', '') = 'claimed'
-              AND COALESCE(t.features->'submission'->'commercial'->>'isSponsoredPlacement', 'false') = 'true'
-          )::int AS "featuredLiveCount"
-        FROM tools t
+            WHERE "featuredReservedAt" >= NOW() - INTERVAL '7 days'
+          )::int AS "recentFeaturedReservedCount",
+          COUNT(*) FILTER (
+            WHERE "featuredReservedAt" >= NOW() - INTERVAL '14 days'
+              AND "featuredReservedAt" < NOW() - INTERVAL '7 days'
+          )::int AS "previousFeaturedReservedCount",
+          COUNT(*) FILTER (
+            WHERE "activatedAt" >= NOW() - INTERVAL '7 days'
+          )::int AS "recentFeaturedLiveCount",
+          COUNT(*) FILTER (
+            WHERE "activatedAt" >= NOW() - INTERVAL '14 days'
+              AND "activatedAt" < NOW() - INTERVAL '7 days'
+          )::int AS "previousFeaturedLiveCount"
+        FROM bridge
       `,
     );
 
@@ -2785,6 +2820,14 @@ export async function getOutreachCommercialBridgeSummary(): Promise<AdminOutreac
       paymentConfirmedCount: Number(row.paymentConfirmedCount || 0),
       featuredReservedCount: Number(row.featuredReservedCount || 0),
       featuredLiveCount: Number(row.featuredLiveCount || 0),
+      recentClaimedFromOutreachCount: Number(row.recentClaimedFromOutreachCount || 0),
+      previousClaimedFromOutreachCount: Number(row.previousClaimedFromOutreachCount || 0),
+      recentPaymentConfirmedCount: Number(row.recentPaymentConfirmedCount || 0),
+      previousPaymentConfirmedCount: Number(row.previousPaymentConfirmedCount || 0),
+      recentFeaturedReservedCount: Number(row.recentFeaturedReservedCount || 0),
+      previousFeaturedReservedCount: Number(row.previousFeaturedReservedCount || 0),
+      recentFeaturedLiveCount: Number(row.recentFeaturedLiveCount || 0),
+      previousFeaturedLiveCount: Number(row.previousFeaturedLiveCount || 0),
     };
   } catch (error) {
     console.error('Error fetching outreach commercial bridge summary:', error);
@@ -2794,6 +2837,14 @@ export async function getOutreachCommercialBridgeSummary(): Promise<AdminOutreac
       paymentConfirmedCount: 0,
       featuredReservedCount: 0,
       featuredLiveCount: 0,
+      recentClaimedFromOutreachCount: 0,
+      previousClaimedFromOutreachCount: 0,
+      recentPaymentConfirmedCount: 0,
+      previousPaymentConfirmedCount: 0,
+      recentFeaturedReservedCount: 0,
+      previousFeaturedReservedCount: 0,
+      recentFeaturedLiveCount: 0,
+      previousFeaturedLiveCount: 0,
     };
   }
 }

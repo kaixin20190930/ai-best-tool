@@ -295,6 +295,14 @@ export default async function AdminAnalyticsPage({
     outreachCommercialBridge.claimedFromOutreachCount > 0
       ? Math.round((outreachCommercialBridge.paymentConfirmedCount / outreachCommercialBridge.claimedFromOutreachCount) * 100)
       : 0;
+  const getTrendLabel = (current: number, previous: number) => {
+    if (current === 0 && previous === 0) return 'No activity in either period';
+    if (previous === 0) return `${current} in the last 7d · no prior 7d baseline`;
+
+    const change = Math.round(((current - previous) / previous) * 100);
+    const sign = change > 0 ? '+' : '';
+    return `${current} in the last 7d · ${sign}${change}% vs prior 7d`;
+  };
   const outreachClosedReasonLabelMap = {
     claimed: 'Claimed listing',
     no_reply: 'No reply',
@@ -2278,26 +2286,49 @@ export default async function AdminAnalyticsPage({
           </div>
           <div className='mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4'>
             <div className='rounded-lg border border-cyan-200 bg-white p-4'>
-              <p className='text-sm font-medium text-slate-600'>Paid plan chosen</p>
-              <p className='mt-2 text-3xl font-semibold text-cyan-700'>{outreachCommercialBridge.paidPlanCount}</p>
-              <p className='mt-2 text-sm text-slate-500'>{outreachPaidPlanRate}% of outreach-led claims moved onto the paid listing plan.</p>
+              <p className='text-sm font-medium text-slate-600'>Outreach claims</p>
+              <p className='mt-2 text-3xl font-semibold text-cyan-700'>{outreachCommercialBridge.claimedFromOutreachCount}</p>
+              <p className='mt-2 text-sm text-slate-500'>
+                {getTrendLabel(
+                  outreachCommercialBridge.recentClaimedFromOutreachCount,
+                  outreachCommercialBridge.previousClaimedFromOutreachCount,
+                )}
+              </p>
             </div>
             <div className='rounded-lg border border-cyan-200 bg-white p-4'>
               <p className='text-sm font-medium text-slate-600'>Payment confirmed</p>
               <p className='mt-2 text-3xl font-semibold text-emerald-600'>{outreachCommercialBridge.paymentConfirmedCount}</p>
-              <p className='mt-2 text-sm text-slate-500'>{outreachPaymentConfirmedRate}% of outreach-led claims completed payment.</p>
+              <p className='mt-2 text-sm text-slate-500'>
+                {getTrendLabel(
+                  outreachCommercialBridge.recentPaymentConfirmedCount,
+                  outreachCommercialBridge.previousPaymentConfirmedCount,
+                )}
+              </p>
             </div>
             <div className='rounded-lg border border-cyan-200 bg-white p-4'>
               <p className='text-sm font-medium text-slate-600'>Featured reserved</p>
               <p className='mt-2 text-3xl font-semibold text-amber-700'>{outreachCommercialBridge.featuredReservedCount}</p>
-              <p className='mt-2 text-sm text-slate-500'>Paid outreach claims that reserved a featured window, even if not live yet.</p>
+              <p className='mt-2 text-sm text-slate-500'>
+                {getTrendLabel(
+                  outreachCommercialBridge.recentFeaturedReservedCount,
+                  outreachCommercialBridge.previousFeaturedReservedCount,
+                )}
+              </p>
             </div>
             <div className='rounded-lg border border-cyan-200 bg-white p-4'>
               <p className='text-sm font-medium text-slate-600'>Featured live</p>
               <p className='mt-2 text-3xl font-semibold text-violet-700'>{outreachCommercialBridge.featuredLiveCount}</p>
-              <p className='mt-2 text-sm text-slate-500'>Outreach-led claims currently running as sponsored placements.</p>
+              <p className='mt-2 text-sm text-slate-500'>
+                {getTrendLabel(
+                  outreachCommercialBridge.recentFeaturedLiveCount,
+                  outreachCommercialBridge.previousFeaturedLiveCount,
+                )}
+              </p>
             </div>
           </div>
+          <p className='mt-3 text-xs text-slate-500'>
+            {outreachPaidPlanRate}% of outreach-led claims are on the paid plan and {outreachPaymentConfirmedRate}% have payment confirmed.
+          </p>
         </div>
 
         <div className='mb-4 rounded-lg border border-amber-200 bg-amber-50 p-4 shadow-sm'>
