@@ -171,6 +171,7 @@ export interface AdminOutreachExecutorSummaryItem {
   totalUpdates: number;
   recentUpdates: number;
   claimedCount: number;
+  claimToPaidRate: number;
   paidPlanCount: number;
   paymentConfirmedCount: number;
   featuredReservedCount: number;
@@ -2930,6 +2931,8 @@ export async function getOutreachExecutorSummary(
       totalUpdates: Number(row.totalUpdates || 0),
       recentUpdates: Number(row.recentUpdates || 0),
       claimedCount: Number(row.claimedCount || 0),
+      claimToPaidRate:
+        Number(row.claimedCount || 0) > 0 ? Math.round((Number(row.paidPlanCount || 0) / Number(row.claimedCount || 0)) * 100) : 0,
       paidPlanCount: Number(row.paidPlanCount || 0),
       paymentConfirmedCount: Number(row.paymentConfirmedCount || 0),
       featuredReservedCount: Number(row.featuredReservedCount || 0),
