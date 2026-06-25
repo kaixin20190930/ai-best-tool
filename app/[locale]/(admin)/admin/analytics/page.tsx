@@ -7,6 +7,7 @@ import {
   getCommercialIntentReport,
   getCtaClickReport,
   getCtaClickTrend,
+  getAgentJourneyReport,
   getPageAccessReport,
   getPageAccessTrend,
   getPriorityMediaQueue,
@@ -62,6 +63,7 @@ export default async function AdminAnalyticsPage({
   const ctaClickReport = await getCtaClickReport(range, 8);
   const ctaClickTrend = await getCtaClickTrend(range === 'all' ? '30d' : range);
   const commercialIntentReport = await getCommercialIntentReport(range, 10);
+  const agentJourneyReport = await getAgentJourneyReport(range);
   const pageAccessTrend = await getPageAccessTrend(range === 'all' ? '30d' : range);
   const operationalStats = await getOperationalStats(range);
   const funnel = await getSubmissionFunnelStats(range);
@@ -91,6 +93,7 @@ export default async function AdminAnalyticsPage({
     operationalStats.overduePendingSubmissions > 0
       ? Math.round((operationalStats.followedUpOverdueSubmissions / operationalStats.overduePendingSubmissions) * 100)
       : 100;
+  const topAgentJourneySource = agentJourneyReport.sources[0] || null;
 
   const getTitle = (tool: any) => {
     if (typeof tool.title === 'string') return tool.title;
@@ -1278,6 +1281,155 @@ export default async function AdminAnalyticsPage({
             <div className='px-4 py-8 text-sm text-slate-500'>
               No high-intent page family data has been recorded in this range.
             </div>
+          )}
+        </div>
+      </div>
+
+      <div className='mb-8'>
+        <div className='mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
+          <div>
+            <h2 className='text-lg font-semibold text-slate-900'>Agent Journey</h2>
+            <p className='mt-1 text-sm text-slate-600'>
+              A focused read on the new Agent content path: guide, comparison, and top list.
+            </p>
+          </div>
+          <div className='text-sm text-slate-500'>
+            {agentJourneyReport.totalPageViews.toLocaleString()} views · {rangeLabel}
+          </div>
+        </div>
+
+        <div className='mb-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Agent comparison clicks</p>
+            <p className='mt-2 text-3xl font-semibold text-slate-900'>
+              {agentJourneyReport.totalComparisonClicks.toLocaleString()}
+            </p>
+            <p className='mt-2 text-sm text-slate-500'>Guide and list traffic that moved into the comparison page</p>
+          </div>
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Agent ranking clicks</p>
+            <p className='mt-2 text-3xl font-semibold text-slate-900'>
+              {agentJourneyReport.totalRankingClicks.toLocaleString()}
+            </p>
+            <p className='mt-2 text-sm text-slate-500'>Guide traffic that narrowed into the agent top list</p>
+          </div>
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Downstream commercial actions</p>
+            <p className='mt-2 text-3xl font-semibold text-slate-900'>
+              {(
+                agentJourneyReport.totalSubmitClicks +
+                agentJourneyReport.totalClaimClicks +
+                agentJourneyReport.totalClaimSubmissions +
+                agentJourneyReport.totalCheckoutStarts
+              ).toLocaleString()}
+            </p>
+            <p className='mt-2 text-sm text-slate-500'>Submit, claim, claim submit, and checkout actions from this path</p>
+          </div>
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Top Agent source</p>
+            <p className='mt-2 text-2xl font-semibold text-slate-900'>
+              {topAgentJourneySource?.label || 'Waiting for data'}
+            </p>
+            <p className='mt-2 text-sm text-slate-500'>
+              {topAgentJourneySource
+                ? `${topAgentJourneySource.totalIntentActions} tracked next-step actions`
+                : 'No Agent-specific intent data recorded yet.'}
+            </p>
+          </div>
+        </div>
+
+        <div className='overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm'>
+          <div className='border-b border-slate-200 px-4 py-3'>
+            <div className='flex items-center justify-between gap-3'>
+              <p className='text-sm font-semibold text-slate-900'>Agent path ladder</p>
+              <p className='text-xs text-slate-500'>Views -&gt; compare / ranking -&gt; submit / claim / checkout</p>
+            </div>
+          </div>
+          {agentJourneyReport.sources.length > 0 ? (
+            <div className='overflow-x-auto'>
+              <table className='min-w-full divide-y divide-slate-200 text-sm'>
+                <thead className='bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                  <tr>
+                    <th className='px-4 py-3'>Source</th>
+                    <th className='px-4 py-3'>Views</th>
+                    <th className='px-4 py-3'>Mid-funnel</th>
+                    <th className='px-4 py-3'>Commercial intent</th>
+                    <th className='px-4 py-3'>Path</th>
+                  </tr>
+                </thead>
+                <tbody className='divide-y divide-slate-100'>
+                  {agentJourneyReport.sources.map((item) => {
+                    const midFunnelTotal = item.comparisonClicks + item.rankingClicks;
+                    const commercialTotal =
+                      item.submitClicks + item.claimClicks + item.claimSubmissions + item.checkoutStarts;
+                    const midFunnelRate =
+                      item.pageViews > 0 ? Math.round((midFunnelTotal / item.pageViews) * 100) : 0;
+                    const commercialRate =
+                      item.pageViews > 0 ? Math.round((commercialTotal / item.pageViews) * 100) : 0;
+
+                    return (
+                      <tr key={item.sourcePath} className='align-top'>
+                        <td className='px-4 py-4'>
+                          <div className='min-w-[180px]'>
+                            <p className='text-sm font-medium text-slate-900'>{item.label}</p>
+                            <p className='mt-1 text-xs text-slate-500'>{item.sourcePath}</p>
+                          </div>
+                        </td>
+                        <td className='px-4 py-4'>
+                          <p className='font-semibold text-slate-900'>{item.pageViews}</p>
+                          <p className='mt-1 text-xs text-slate-500'>{item.uniqueVisitors} visitors</p>
+                        </td>
+                        <td className='px-4 py-4'>
+                          <div className='min-w-[170px] text-xs leading-5 text-slate-500'>
+                            <p>
+                              Compare: <span className='font-semibold text-cyan-700'>{item.comparisonClicks}</span>
+                            </p>
+                            <p className='mt-1'>
+                              Ranking: <span className='font-semibold text-cyan-700'>{item.rankingClicks}</span>
+                            </p>
+                            <p className='mt-1'>
+                              Mid-funnel rate: <span className='font-semibold text-slate-900'>{midFunnelRate}%</span>
+                            </p>
+                          </div>
+                        </td>
+                        <td className='px-4 py-4'>
+                          <div className='min-w-[180px] text-xs leading-5 text-slate-500'>
+                            <p>
+                              Submit: <span className='font-semibold text-slate-900'>{item.submitClicks}</span>
+                            </p>
+                            <p className='mt-1'>
+                              Claim: <span className='font-semibold text-slate-900'>{item.claimClicks}</span>
+                            </p>
+                            <p className='mt-1'>
+                              Claim submit: <span className='font-semibold text-emerald-700'>{item.claimSubmissions}</span>
+                            </p>
+                            <p className='mt-1'>
+                              Checkout: <span className='font-semibold text-violet-700'>{item.checkoutStarts}</span>
+                            </p>
+                          </div>
+                        </td>
+                        <td className='px-4 py-4'>
+                          <div className='min-w-[180px] text-xs leading-5 text-slate-500'>
+                            <p>
+                              View -&gt; mid-funnel: <span className='font-semibold text-cyan-700'>{midFunnelRate}%</span>
+                            </p>
+                            <p className='mt-1'>
+                              View -&gt; commercial: <span className='font-semibold text-emerald-700'>{commercialRate}%</span>
+                            </p>
+                            <p className='mt-1'>
+                              Total next-step actions:{' '}
+                              <span className='font-semibold text-slate-900'>{item.totalIntentActions}</span>
+                            </p>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className='px-4 py-8 text-sm text-slate-500'>No Agent journey data has been recorded in this range.</div>
           )}
         </div>
       </div>

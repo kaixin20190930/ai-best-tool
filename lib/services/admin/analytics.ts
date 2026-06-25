@@ -262,6 +262,31 @@ export interface CommercialIntentReport {
   totalCheckoutStarts: number;
 }
 
+export interface AgentJourneySource {
+  sourcePath: string;
+  label: string;
+  pageViews: number;
+  uniqueVisitors: number;
+  comparisonClicks: number;
+  rankingClicks: number;
+  submitClicks: number;
+  claimClicks: number;
+  claimSubmissions: number;
+  checkoutStarts: number;
+  totalIntentActions: number;
+}
+
+export interface AgentJourneyReport {
+  sources: AgentJourneySource[];
+  totalPageViews: number;
+  totalComparisonClicks: number;
+  totalRankingClicks: number;
+  totalSubmitClicks: number;
+  totalClaimClicks: number;
+  totalClaimSubmissions: number;
+  totalCheckoutStarts: number;
+}
+
 type CommercialIntentCounts = {
   pageViews: number;
   uniqueVisitors: number;
@@ -270,6 +295,33 @@ type CommercialIntentCounts = {
   claimSubmissions: number;
   checkoutStarts: number;
 };
+
+type AgentJourneyCounts = {
+  label: string;
+  pageViews: number;
+  uniqueVisitors: number;
+  comparisonClicks: number;
+  rankingClicks: number;
+  submitClicks: number;
+  claimClicks: number;
+  claimSubmissions: number;
+  checkoutStarts: number;
+};
+
+const agentJourneyPages = [
+  {
+    sourcePath: '/guides/ai-tools-for-agents',
+    label: 'Agent guide',
+  },
+  {
+    sourcePath: '/guides/ai-tools-for-agents-comparison',
+    label: 'Agent comparison',
+  },
+  {
+    sourcePath: '/best-ai-tools/ai-agent-tools',
+    label: 'Agent top list',
+  },
+] as const;
 
 /**
  * Get overall site metrics
@@ -1678,6 +1730,210 @@ export async function getCommercialIntentReport(
     console.error('Error fetching commercial intent report:', error);
     return {
       sources: [],
+      totalSubmitClicks: 0,
+      totalClaimClicks: 0,
+      totalClaimSubmissions: 0,
+      totalCheckoutStarts: 0,
+    };
+  }
+}
+
+export async function getAgentJourneyReport(range: 'all' | '7d' | '30d' = '30d'): Promise<AgentJourneyReport> {
+  try {
+    const pool = getPool();
+    const dateCondition = buildAnalyticsDateCondition(range, 'timestamp');
+    const rowsBySource = new Map<string, AgentJourneyCounts>(
+      agentJourneyPages.map((item) => [
+        item.sourcePath,
+        {
+          label: item.label,
+          pageViews: 0,
+          uniqueVisitors: 0,
+          comparisonClicks: 0,
+          rankingClicks: 0,
+          submitClicks: 0,
+          claimClicks: 0,
+          claimSubmissions: 0,
+          checkoutStarts: 0,
+        },
+      ]),
+    );
+
+    const agentSourcePaths = agentJourneyPages.map((item) => item.sourcePath);
+
+    const [pageViewResult, ctaResult, claimResult, checkoutResult] = await Promise.all([
+      pool.query(
+        `
+        SELECT
+          COALESCE(
+            NULLIF(metadata->>'page_path', ''),
+            CASE
+              WHEN tool_id IS NOT NULL THEN CONCAT('/ai/', COALESCE(t.name, tool_id::text))
+              ELSE NULL
+            END
+          ) AS source_path,
+          COUNT(*)::int AS views,
+          COUNT(DISTINCT session_id)::int AS unique_visitors
+        FROM analytics a
+        LEFT JOIN tools t ON a.tool_id = t.id
+        WHERE event_type = 'page_view'
+          ${dateCondition}
+          AND COALESCE(NULLIF(metadata->>'page_path', ''), '') = ANY($1)
+        GROUP BY 1
+      `,
+        [agentSourcePaths],
+      ),
+      pool.query(
+        `
+        SELECT
+          COALESCE(
+            NULLIF(metadata->>'source_path', ''),
+            NULLIF(regexp_replace(COALESCE(referrer, ''), '^https?://[^/]+', ''), '')
+          ) AS source_path,
+          CASE
+            WHEN COALESCE(metadata->>'href', '') LIKE '%/guides/ai-tools-for-agents-comparison%' THEN 'comparison_click'
+            WHEN COALESCE(metadata->>'href', '') LIKE '%/best-ai-tools/ai-agent-tools%' THEN 'ranking_click'
+            WHEN COALESCE(metadata->>'href', '') LIKE '%/submit%' THEN 'submit_click'
+            WHEN COALESCE(metadata->>'href', '') LIKE '%/developer/listing%' THEN 'claim_click'
+            ELSE 'other'
+          END AS click_type,
+          COUNT(*)::int AS count
+        FROM analytics
+        WHERE event_type = 'cta_click'
+          ${dateCondition}
+          AND COALESCE(
+            NULLIF(metadata->>'source_path', ''),
+            NULLIF(regexp_replace(COALESCE(referrer, ''), '^https?://[^/]+', ''), '')
+          ) = ANY($1)
+        GROUP BY 1, 2
+      `,
+        [agentSourcePaths],
+      ),
+      pool.query(
+        `
+        SELECT
+          COALESCE(
+            NULLIF(metadata->>'sourcePath', ''),
+            NULLIF(metadata->>'source_path', ''),
+            NULLIF(regexp_replace(COALESCE(referrer, ''), '^https?://[^/]+', ''), '')
+          ) AS source_path,
+          COUNT(*)::int AS count
+        FROM analytics
+        WHERE event_type = 'claim_submit'
+          ${dateCondition}
+          AND COALESCE(
+            NULLIF(metadata->>'sourcePath', ''),
+            NULLIF(metadata->>'source_path', ''),
+            NULLIF(regexp_replace(COALESCE(referrer, ''), '^https?://[^/]+', ''), '')
+          ) = ANY($1)
+        GROUP BY 1
+      `,
+        [agentSourcePaths],
+      ),
+      pool.query(
+        `
+        SELECT
+          COALESCE(
+            NULLIF(metadata->>'sourcePath', ''),
+            NULLIF(metadata->>'source_path', ''),
+            NULLIF(regexp_replace(COALESCE(referrer, ''), '^https?://[^/]+', ''), '')
+          ) AS source_path,
+          COUNT(*)::int AS count
+        FROM analytics
+        WHERE event_type = 'checkout_create'
+          ${dateCondition}
+          AND COALESCE(
+            NULLIF(metadata->>'sourcePath', ''),
+            NULLIF(metadata->>'source_path', ''),
+            NULLIF(regexp_replace(COALESCE(referrer, ''), '^https?://[^/]+', ''), '')
+          ) = ANY($1)
+        GROUP BY 1
+      `,
+        [agentSourcePaths],
+      ),
+    ]);
+
+    pageViewResult.rows.forEach((row) => {
+      const sourcePath = normalizeSourcePath(row.source_path);
+      const existing = rowsBySource.get(sourcePath);
+      if (!existing) return;
+
+      existing.pageViews += Number.parseInt(String(row.views || '0'), 10);
+      existing.uniqueVisitors += Number.parseInt(String(row.unique_visitors || '0'), 10);
+    });
+
+    ctaResult.rows.forEach((row) => {
+      const sourcePath = normalizeSourcePath(row.source_path);
+      const existing = rowsBySource.get(sourcePath);
+      if (!existing) return;
+
+      const count = Number.parseInt(String(row.count || '0'), 10);
+      const clickType = String(row.click_type || 'other');
+
+      if (clickType === 'comparison_click') existing.comparisonClicks += count;
+      if (clickType === 'ranking_click') existing.rankingClicks += count;
+      if (clickType === 'submit_click') existing.submitClicks += count;
+      if (clickType === 'claim_click') existing.claimClicks += count;
+    });
+
+    claimResult.rows.forEach((row) => {
+      const sourcePath = normalizeSourcePath(row.source_path);
+      const existing = rowsBySource.get(sourcePath);
+      if (!existing) return;
+      existing.claimSubmissions += Number.parseInt(String(row.count || '0'), 10);
+    });
+
+    checkoutResult.rows.forEach((row) => {
+      const sourcePath = normalizeSourcePath(row.source_path);
+      const existing = rowsBySource.get(sourcePath);
+      if (!existing) return;
+      existing.checkoutStarts += Number.parseInt(String(row.count || '0'), 10);
+    });
+
+    const sources = Array.from(rowsBySource.entries())
+      .map(([sourcePath, counts]) => ({
+        sourcePath,
+        label: counts.label,
+        pageViews: counts.pageViews,
+        uniqueVisitors: counts.uniqueVisitors,
+        comparisonClicks: counts.comparisonClicks,
+        rankingClicks: counts.rankingClicks,
+        submitClicks: counts.submitClicks,
+        claimClicks: counts.claimClicks,
+        claimSubmissions: counts.claimSubmissions,
+        checkoutStarts: counts.checkoutStarts,
+        totalIntentActions:
+          counts.comparisonClicks +
+          counts.rankingClicks +
+          counts.submitClicks +
+          counts.claimClicks +
+          counts.claimSubmissions * 2 +
+          counts.checkoutStarts * 2,
+      }))
+      .sort(
+        (a, b) =>
+          b.totalIntentActions - a.totalIntentActions ||
+          b.pageViews - a.pageViews ||
+          a.sourcePath.localeCompare(b.sourcePath),
+      );
+
+    return {
+      sources,
+      totalPageViews: sources.reduce((sum, item) => sum + item.pageViews, 0),
+      totalComparisonClicks: sources.reduce((sum, item) => sum + item.comparisonClicks, 0),
+      totalRankingClicks: sources.reduce((sum, item) => sum + item.rankingClicks, 0),
+      totalSubmitClicks: sources.reduce((sum, item) => sum + item.submitClicks, 0),
+      totalClaimClicks: sources.reduce((sum, item) => sum + item.claimClicks, 0),
+      totalClaimSubmissions: sources.reduce((sum, item) => sum + item.claimSubmissions, 0),
+      totalCheckoutStarts: sources.reduce((sum, item) => sum + item.checkoutStarts, 0),
+    };
+  } catch (error) {
+    console.error('Error fetching agent journey report:', error);
+    return {
+      sources: [],
+      totalPageViews: 0,
+      totalComparisonClicks: 0,
+      totalRankingClicks: 0,
       totalSubmitClicks: 0,
       totalClaimClicks: 0,
       totalClaimSubmissions: 0,
