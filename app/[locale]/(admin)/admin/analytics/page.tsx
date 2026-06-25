@@ -348,6 +348,36 @@ export default async function AdminAnalyticsPage({
     return targetStart.getTime() < todayStart.getTime();
   }).length;
   const outreachDueTodayCount = outreachDueRows.length - outreachOverdueCount;
+  const sevenDaysAgo = new Date(todayStart);
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+  const recentOutreachActivity = outreachQueue.filter((item) => {
+    if (!item.outreachUpdatedAt) return false;
+
+    const updatedAt = new Date(item.outreachUpdatedAt);
+    return !Number.isNaN(updatedAt.getTime()) && updatedAt.getTime() >= sevenDaysAgo.getTime();
+  });
+  const recentOutreachActiveCount = recentOutreachActivity.filter(
+    (item) => item.outreachStatus === 'contacted' || item.outreachStatus === 'waiting_reply' || item.outreachStatus === 'follow_up_due',
+  ).length;
+  const recentOutreachClosedCount = recentOutreachActivity.filter((item) => item.outreachStatus === 'closed').length;
+  const recentOutreachStartedCount = recentOutreachActivity.filter((item) => item.outreachStatus !== 'not_started').length;
+  const recentOutreachStatusRows = [
+    { key: 'contacted', label: 'Touched', count: recentOutreachActivity.filter((item) => item.outreachStatus === 'contacted').length },
+    {
+      key: 'waiting_reply',
+      label: 'Waiting reply',
+      count: recentOutreachActivity.filter((item) => item.outreachStatus === 'waiting_reply').length,
+    },
+    {
+      key: 'follow_up_due',
+      label: 'Follow-up due',
+      count: recentOutreachActivity.filter((item) => item.outreachStatus === 'follow_up_due').length,
+    },
+    { key: 'closed', label: 'Closed', count: recentOutreachClosedCount },
+  ].filter((item) => item.count > 0);
+  const latestOutreachUpdate = recentOutreachActivity
+    .slice()
+    .sort((a, b) => new Date(b.outreachUpdatedAt || 0).getTime() - new Date(a.outreachUpdatedAt || 0).getTime())[0];
   const getPeriodChangeLabel = (currentViews: number, previousViews: number) => {
     if (previousViews > 0) {
       return `${(((currentViews - previousViews) / previousViews) * 100).toFixed(1)}%`;
@@ -2205,6 +2235,58 @@ export default async function AdminAnalyticsPage({
                 Open contacted claims
               </Link>
             </div>
+          </div>
+        </div>
+
+        <div className='mb-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+          <div className='flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
+            <div>
+              <p className='text-sm font-semibold text-slate-900'>Last 7 days of outreach movement</p>
+              <p className='mt-1 text-sm text-slate-500'>
+                This shows whether the visible queue is actually moving, not just how big it is.
+              </p>
+            </div>
+            <p className='text-xs text-slate-500'>
+              {latestOutreachUpdate?.outreachUpdatedAt
+                ? `Latest action ${new Date(latestOutreachUpdate.outreachUpdatedAt).toLocaleString()}`
+                : 'No outreach updates recorded in the last 7 days'}
+            </p>
+          </div>
+          <div className='mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4'>
+            <div className='rounded-lg border border-slate-200 bg-slate-50 p-4'>
+              <p className='text-sm font-medium text-slate-600'>Leads touched</p>
+              <p className='mt-2 text-3xl font-semibold text-cyan-700'>{recentOutreachStartedCount}</p>
+              <p className='mt-2 text-sm text-slate-500'>Visible leads with any outreach update in the last week.</p>
+            </div>
+            <div className='rounded-lg border border-slate-200 bg-slate-50 p-4'>
+              <p className='text-sm font-medium text-slate-600'>Still active</p>
+              <p className='mt-2 text-3xl font-semibold text-blue-600'>{recentOutreachActiveCount}</p>
+              <p className='mt-2 text-sm text-slate-500'>Recent touches that are still mid-conversation or need follow-up.</p>
+            </div>
+            <div className='rounded-lg border border-slate-200 bg-slate-50 p-4'>
+              <p className='text-sm font-medium text-slate-600'>Closed this week</p>
+              <p className='mt-2 text-3xl font-semibold text-emerald-600'>{recentOutreachClosedCount}</p>
+              <p className='mt-2 text-sm text-slate-500'>Visible leads that reached a closed state within the last 7 days.</p>
+            </div>
+            <div className='rounded-lg border border-slate-200 bg-slate-50 p-4'>
+              <p className='text-sm font-medium text-slate-600'>Due now in active work</p>
+              <p className='mt-2 text-3xl font-semibold text-amber-700'>{outreachDueRows.length}</p>
+              <p className='mt-2 text-sm text-slate-500'>Use this with the weekly movement numbers to spot stalled follow-ups.</p>
+            </div>
+          </div>
+          <div className='mt-4 flex flex-wrap gap-2'>
+            {recentOutreachStatusRows.length > 0 ? (
+              recentOutreachStatusRows.map((item) => (
+                <span
+                  key={item.key}
+                  className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${getOutreachStatusToneClass(item.key)} text-white`}
+                >
+                  {item.label}: {item.count}
+                </span>
+              ))
+            ) : (
+              <span className='text-sm text-slate-500'>No recent outreach status changes are visible yet.</span>
+            )}
           </div>
         </div>
 
