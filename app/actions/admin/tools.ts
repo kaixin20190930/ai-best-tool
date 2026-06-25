@@ -2312,6 +2312,124 @@ export async function getFeaturedPlacementStats(): Promise<{
   }
 }
 
+export async function getDeveloperOutreachQueue(
+  limit: number = 20,
+): Promise<
+  Array<{
+    id: string;
+    name: string;
+    title: string;
+    contactEmail: string;
+    views: number;
+    clicks: number;
+    favorites: number;
+    comments: number;
+    daysSinceUpdate: number;
+    suggestion: 'claim_listing' | 'featured_pitch' | 'content_collab';
+    priorityScore: number;
+    reason: string;
+  }>
+> {
+  try {
+    await requireAdmin();
+
+    const pool = getPool();
+    const normalizedLimit = Math.max(1, Math.min(limit, 50));
+    const result = await pool.query(
+      `
+        WITH favorite_counts AS (
+          SELECT tool_id, COUNT(*)::int AS favorites
+          FROM favorites
+          GROUP BY tool_id
+        ),
+        comment_counts AS (
+          SELECT tool_id, COUNT(*)::int AS comments
+          FROM comments
+          WHERE status = 'approved'
+          GROUP BY tool_id
+        )
+        SELECT
+          t.id::text AS id,
+          t.name,
+          t.title,
+          t.url,
+          t.view_count::int AS views,
+          t.click_count::int AS clicks,
+          COALESCE(fc.favorites, 0)::int AS favorites,
+          COALESCE(cc.comments, 0)::int AS comments,
+          t.owner_email AS "ownerEmail",
+          COALESCE(t.features->'submission'->>'submittedByEmail', '') AS "submittedByEmail",
+          GREATEST(0, FLOOR(EXTRACT(EPOCH FROM (NOW() - t.updated_at)) / 86400))::int AS "daysSinceUpdate"
+        FROM tools t
+        LEFT JOIN favorite_counts fc ON fc.tool_id = t.id
+        LEFT JOIN comment_counts cc ON cc.tool_id = t.id
+        WHERE t.status = 'published'
+          AND COALESCE(t.claim_status, 'unclaimed') = 'unclaimed'
+          AND (
+            COALESCE(t.owner_email, '') <> ''
+            OR COALESCE(t.features->'submission'->>'submittedByEmail', '') <> ''
+          )
+        ORDER BY
+          (COALESCE(t.view_count, 0) + COALESCE(t.click_count, 0) * 3 + COALESCE(fc.favorites, 0) * 8 + COALESCE(cc.comments, 0) * 10) DESC,
+          t.updated_at ASC
+        LIMIT $1
+      `,
+      [normalizedLimit],
+    );
+
+    return result.rows
+      .map((row) => {
+        const title = getLocalizedText(row.title) || row.name;
+        const contactEmail =
+          [row.ownerEmail, row.submittedByEmail]
+            .find((value): value is string => typeof value === 'string' && isValidEmail(value.trim()))
+            ?.trim()
+            .toLowerCase() || '';
+
+        if (!contactEmail) {
+          return null;
+        }
+
+        const views = Number(row.views || 0);
+        const clicks = Number(row.clicks || 0);
+        const favorites = Number(row.favorites || 0);
+        const comments = Number(row.comments || 0);
+        const daysSinceUpdate = Number(row.daysSinceUpdate || 0);
+        const priorityScore = views + clicks * 3 + favorites * 8 + comments * 10;
+
+        let suggestion: 'claim_listing' | 'featured_pitch' | 'content_collab' = 'claim_listing';
+        let reason = 'Unclaimed published tool with a reachable contact.';
+
+        if (comments >= 2 || favorites >= 5) {
+          suggestion = 'content_collab';
+          reason = 'Users are already engaging with this listing, which makes collaboration outreach more credible.';
+        } else if (views >= 150 || clicks >= 20) {
+          suggestion = 'featured_pitch';
+          reason = 'This listing is already getting traffic, so a featured pitch has a stronger conversion story.';
+        }
+
+        return {
+          id: row.id,
+          name: row.name,
+          title,
+          contactEmail,
+          views,
+          clicks,
+          favorites,
+          comments,
+          daysSinceUpdate,
+          suggestion,
+          priorityScore,
+          reason,
+        };
+      })
+      .filter((item): item is NonNullable<typeof item> => item !== null);
+  } catch (error) {
+    console.error('Error fetching developer outreach queue:', error);
+    return [];
+  }
+}
+
 export async function activateCommercialPlacement(
   toolId: string
 ): Promise<{ success: boolean; error?: string }> {

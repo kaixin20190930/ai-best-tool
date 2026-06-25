@@ -16,6 +16,7 @@ import {
   getTrafficSources,
 } from '@/lib/services/admin/analytics';
 import {
+  getDeveloperOutreachQueue,
   getOperationalStats,
   getFeaturedPlacementStats,
   getSubmissionFunnelStats,
@@ -57,6 +58,7 @@ export default async function AdminAnalyticsPage({
   const funnel = await getSubmissionFunnelStats(range);
   const rejectionReasons = await getSubmissionRejectionReasonStats(range, 5);
   const featuredPlacementStats = await getFeaturedPlacementStats();
+  const outreachQueue = await getDeveloperOutreachQueue(12);
   const claimSummary = await getAdminToolClaimsSummary();
   const topToolsByViews = await getTopTools('views', 10);
   const topToolsByRating = await getTopTools('rating', 10);
@@ -253,6 +255,11 @@ export default async function AdminAnalyticsPage({
     featuredPlacementStats.totalViews > 0
       ? Math.round((featuredPlacementStats.totalClicks / featuredPlacementStats.totalViews) * 100)
       : 0;
+  const outreachSuggestionLabel = (value: (typeof outreachQueue)[number]['suggestion']) => {
+    if (value === 'featured_pitch') return 'Featured pitch';
+    if (value === 'content_collab') return 'Content collab';
+    return 'Claim listing';
+  };
 
   const getPeriodChangeLabel = (currentViews: number, previousViews: number) => {
     if (previousViews > 0) {
@@ -1618,6 +1625,104 @@ export default async function AdminAnalyticsPage({
             <p className='text-sm font-medium text-slate-600'>Follow-up Rate</p>
             <p className='mt-2 text-3xl font-semibold text-emerald-600'>{overdueFollowUpRate}%</p>
           </div>
+        </div>
+      </div>
+
+      {/* Developer Outreach Queue */}
+      <div className='mb-8'>
+        <div className='mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
+          <div>
+            <h2 className='text-lg font-semibold text-slate-900'>Developer Outreach Queue</h2>
+            <p className='mt-1 text-sm text-slate-600'>
+              A lightweight weekly contact queue for claim invites, featured pitches, and content collaboration.
+            </p>
+          </div>
+          <div className='text-sm text-slate-500'>Target: 20 teams per week</div>
+        </div>
+
+        <div className='mb-4 grid gap-4 md:grid-cols-3'>
+          <div className='theme-surface rounded-lg border border-slate-200 p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Queued this week</p>
+            <p className='mt-2 text-3xl font-semibold text-slate-900'>{outreachQueue.length}</p>
+            <p className='mt-2 text-sm text-slate-500'>High-signal unclaimed published tools with reachable contacts.</p>
+          </div>
+          <div className='theme-surface rounded-lg border border-slate-200 p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Featured-ready leads</p>
+            <p className='mt-2 text-3xl font-semibold text-cyan-700'>
+              {outreachQueue.filter((item) => item.suggestion === 'featured_pitch').length}
+            </p>
+            <p className='mt-2 text-sm text-slate-500'>Traffic-backed listings where a featured pitch is easier to justify.</p>
+          </div>
+          <div className='theme-surface rounded-lg border border-slate-200 p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Content-collab leads</p>
+            <p className='mt-2 text-3xl font-semibold text-emerald-600'>
+              {outreachQueue.filter((item) => item.suggestion === 'content_collab').length}
+            </p>
+            <p className='mt-2 text-sm text-slate-500'>Listings already getting discussion or saves from users.</p>
+          </div>
+        </div>
+
+        <div className='overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm'>
+          <table className='min-w-full divide-y divide-slate-200'>
+            <thead className='bg-slate-50'>
+              <tr>
+                <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>Tool</th>
+                <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>Contact</th>
+                <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>Suggestion</th>
+                <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>Signals</th>
+                <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>Priority</th>
+              </tr>
+            </thead>
+            <tbody className='divide-y divide-slate-100 bg-white'>
+              {outreachQueue.length > 0 ? (
+                outreachQueue.map((item) => (
+                  <tr key={item.id}>
+                    <td className='px-4 py-4 align-top'>
+                      <div>
+                        <p className='text-sm font-medium text-slate-900'>{item.title}</p>
+                        <p className='mt-1 text-xs text-slate-500'>{item.name}</p>
+                        <p className='mt-2 text-xs leading-5 text-slate-500'>{item.reason}</p>
+                      </div>
+                    </td>
+                    <td className='px-4 py-4 align-top text-sm text-slate-700'>{item.contactEmail}</td>
+                    <td className='px-4 py-4 align-top'>
+                      <span
+                        className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
+                          item.suggestion === 'featured_pitch'
+                            ? 'bg-cyan-50 text-cyan-700'
+                            : item.suggestion === 'content_collab'
+                              ? 'bg-emerald-50 text-emerald-700'
+                              : 'bg-amber-50 text-amber-700'
+                        }`}
+                      >
+                        {outreachSuggestionLabel(item.suggestion)}
+                      </span>
+                    </td>
+                    <td className='px-4 py-4 align-top text-right text-sm text-slate-700'>
+                      <div>{item.views.toLocaleString()} views</div>
+                      <div className='text-xs text-slate-500'>
+                        {item.clicks} clicks · {item.favorites} favs · {item.comments} comments
+                      </div>
+                    </td>
+                    <td className='px-4 py-4 align-top text-right'>
+                      <div className='inline-flex flex-col items-end gap-1'>
+                        <span className='rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700'>
+                          {item.priorityScore}
+                        </span>
+                        <span className='text-xs text-slate-500'>{item.daysSinceUpdate}d since update</span>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={5} className='px-4 py-8 text-sm text-slate-500'>
+                    No outreach candidates right now.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
 
