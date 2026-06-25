@@ -119,6 +119,22 @@ export interface AdminOutreachQueueItem {
   outreachNextFollowUpAt: string | null;
 }
 
+function getOutreachFollowUpPriority(value: string | null): number {
+  if (!value) return 3;
+
+  const target = new Date(value);
+  if (Number.isNaN(target.getTime())) return 3;
+
+  const today = new Date();
+  const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const startOfTarget = new Date(target.getFullYear(), target.getMonth(), target.getDate());
+  const diffDays = Math.round((startOfTarget.getTime() - startOfToday.getTime()) / (24 * 60 * 60 * 1000));
+
+  if (diffDays < 0) return 0;
+  if (diffDays === 0) return 1;
+  return 2;
+}
+
 function parseCount(value: unknown): number {
   return Number.parseInt(String(value ?? 0), 10);
 }
@@ -2456,7 +2472,24 @@ export async function getDeveloperOutreachQueue(
           outreachNextFollowUpAt,
         };
       })
-      .filter((item): item is NonNullable<typeof item> => item !== null);
+      .filter((item): item is NonNullable<typeof item> => item !== null)
+      .sort((a, b) => {
+        const priorityDiff =
+          getOutreachFollowUpPriority(a.outreachNextFollowUpAt) - getOutreachFollowUpPriority(b.outreachNextFollowUpAt);
+
+        if (priorityDiff !== 0) {
+          return priorityDiff;
+        }
+
+        const aFollowUp = a.outreachNextFollowUpAt ? new Date(a.outreachNextFollowUpAt).getTime() : Number.POSITIVE_INFINITY;
+        const bFollowUp = b.outreachNextFollowUpAt ? new Date(b.outreachNextFollowUpAt).getTime() : Number.POSITIVE_INFINITY;
+
+        if (aFollowUp !== bFollowUp) {
+          return aFollowUp - bFollowUp;
+        }
+
+        return b.priorityScore - a.priorityScore || a.daysSinceUpdate - b.daysSinceUpdate;
+      });
   } catch (error) {
     console.error('Error fetching developer outreach queue:', error);
     return [];

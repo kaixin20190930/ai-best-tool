@@ -291,6 +291,29 @@ export default async function AdminAnalyticsPage({
     featuredPlacementStats.totalViews > 0
       ? Math.round((featuredPlacementStats.totalClicks / featuredPlacementStats.totalViews) * 100)
       : 0;
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+  const outreachDueRows = outreachQueue.filter((item) => {
+    if (!item.outreachNextFollowUpAt) return false;
+
+    const target = new Date(item.outreachNextFollowUpAt);
+    if (Number.isNaN(target.getTime())) return false;
+
+    const targetStart = new Date(target);
+    targetStart.setHours(0, 0, 0, 0);
+    return targetStart.getTime() <= todayStart.getTime();
+  });
+  const outreachOverdueCount = outreachQueue.filter((item) => {
+    if (!item.outreachNextFollowUpAt) return false;
+
+    const target = new Date(item.outreachNextFollowUpAt);
+    if (Number.isNaN(target.getTime())) return false;
+
+    const targetStart = new Date(target);
+    targetStart.setHours(0, 0, 0, 0);
+    return targetStart.getTime() < todayStart.getTime();
+  }).length;
+  const outreachDueTodayCount = outreachDueRows.length - outreachOverdueCount;
   const getPeriodChangeLabel = (currentViews: number, previousViews: number) => {
     if (previousViews > 0) {
       return `${(((currentViews - previousViews) / previousViews) * 100).toFixed(1)}%`;
@@ -2083,7 +2106,7 @@ export default async function AdminAnalyticsPage({
           <div className='text-sm text-slate-500'>Target: 20 teams per week</div>
         </div>
 
-        <div className='mb-4 grid gap-4 md:grid-cols-3'>
+        <div className='mb-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
           <div className='theme-surface rounded-lg border border-slate-200 p-5 shadow-sm'>
             <p className='text-sm font-medium text-slate-600'>Queued this week</p>
             <p className='mt-2 text-3xl font-semibold text-slate-900'>{outreachQueue.length}</p>
@@ -2107,6 +2130,13 @@ export default async function AdminAnalyticsPage({
             </p>
             <p className='mt-2 text-sm text-slate-500'>Listings already getting discussion or saves from users.</p>
           </div>
+          <div className='theme-surface rounded-lg border border-slate-200 p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Follow-up due now</p>
+            <p className='mt-2 text-3xl font-semibold text-amber-700'>{outreachDueRows.length}</p>
+            <p className='mt-2 text-sm text-slate-500'>
+              {outreachOverdueCount} overdue · {outreachDueTodayCount} due today
+            </p>
+          </div>
         </div>
 
         <div className='mb-4 rounded-lg border border-amber-200 bg-amber-50 p-4 shadow-sm'>
@@ -2120,6 +2150,11 @@ export default async function AdminAnalyticsPage({
                 {claimSummary.newCount > 0
                   ? `${claimSummary.newCount} new claim leads are still waiting in the queue. Clear those first, then work through the outreach list below.`
                   : 'The claim queue is not blocked by new leads right now, so this is a good window for scheduled owner outreach.'}
+              </p>
+              <p className='mt-1 text-sm leading-6 text-slate-600'>
+                {outreachDueRows.length > 0
+                  ? `${outreachDueRows.length} outreach follow-ups already need attention, so those items are pinned to the top of the queue.`
+                  : 'No outreach follow-ups are due today, so the queue stays ordered by overall signal strength.'}
               </p>
             </div>
             <div className='flex flex-wrap gap-2'>

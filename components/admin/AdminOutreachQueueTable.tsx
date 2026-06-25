@@ -38,6 +38,37 @@ function formatUpdatedAt(value: string | null) {
   return new Date(value).toLocaleString();
 }
 
+function getFollowUpTiming(value: string | null): { label: string; className: string } | null {
+  if (!value) return null;
+
+  const target = new Date(value);
+  if (Number.isNaN(target.getTime())) return null;
+
+  const today = new Date();
+  const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const startOfTarget = new Date(target.getFullYear(), target.getMonth(), target.getDate());
+  const diffDays = Math.round((startOfTarget.getTime() - startOfToday.getTime()) / (24 * 60 * 60 * 1000));
+
+  if (diffDays < 0) {
+    return {
+      label: `Overdue since ${startOfTarget.toLocaleDateString()}`,
+      className: 'bg-rose-100 text-rose-700',
+    };
+  }
+
+  if (diffDays === 0) {
+    return {
+      label: 'Follow up today',
+      className: 'bg-amber-100 text-amber-700',
+    };
+  }
+
+  return {
+    label: `Next follow-up ${startOfTarget.toLocaleDateString()}`,
+    className: 'bg-slate-100 text-slate-700',
+  };
+}
+
 function getSuggestionLabel(suggestion: AdminOutreachQueueItem['suggestion']) {
   if (suggestion === 'featured_pitch') return 'Featured pitch';
   if (suggestion === 'content_collab') return 'Content collab';
@@ -122,6 +153,7 @@ export default function AdminOutreachQueueTable({ items, locale }: AdminOutreach
           {items.length > 0 ? (
             items.map((item) => {
               const isPending = pendingId === item.id;
+              const followUpTiming = getFollowUpTiming(item.outreachNextFollowUpAt);
 
               return (
                 <tr key={item.id}>
@@ -146,6 +178,13 @@ export default function AdminOutreachQueueTable({ items, locale }: AdminOutreach
                         {statusLabelMap[item.outreachStatus]}
                       </span>
                       <p className='mt-2 text-xs text-slate-500'>{formatUpdatedAt(item.outreachUpdatedAt)}</p>
+                      {followUpTiming && (
+                        <div
+                          className={`mt-2 inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${followUpTiming.className}`}
+                        >
+                          {followUpTiming.label}
+                        </div>
+                      )}
                       <div className='mt-3 flex flex-wrap gap-2'>
                         {(['contacted', 'waiting_reply', 'follow_up_due', 'closed'] as const).map((status) => (
                           <button
