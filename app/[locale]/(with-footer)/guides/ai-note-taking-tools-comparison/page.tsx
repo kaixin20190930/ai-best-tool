@@ -22,6 +22,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'note',
     guideHref: '/guides/ai-note-taking-tools',
+    rankingHref: '/best-ai-tools/ai-note-taking-tools',
+    rankingLabel: { cn: '转去笔记榜单页', en: 'Open the note-taking ranking' },
     backGuideLabel: { cn: '回到记笔记指南', en: 'Back to note taking guide' },
     altBrowseHref: '/explore?search=note&sort=popular',
     altBrowseLabel: { cn: '浏览更多记笔记工具', en: 'Browse more note taking tools' },
@@ -114,6 +116,14 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       },
     ],
     nextPaths: [
+      {
+        href: '/best-ai-tools/ai-note-taking-tools',
+        title: { cn: '先看笔记榜单页', en: 'Start with the note-taking ranking' },
+        description: {
+          cn: '如果你想先确认这一类里最值得看的候选，再回来细比，就先去榜单页。',
+          en: 'Open the ranking page first if you want the strongest candidates before returning to compare details.',
+        },
+      },
       {
         href: '/guides/ai-tools-for-meeting-notes',
         title: { cn: '回到会议助手指南', en: 'Back to meeting notes guide' },

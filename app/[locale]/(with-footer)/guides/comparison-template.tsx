@@ -26,6 +26,11 @@ type ComparisonConfig = {
   };
   searchQuery: string;
   guideHref: string;
+  rankingHref?: string;
+  rankingLabel?: {
+    cn: string;
+    en: string;
+  };
   backGuideLabel: {
     cn: string;
     en: string;
@@ -533,6 +538,17 @@ export function ComparisonPage({
               {isChinese ? config.altBrowseLabel.cn : config.altBrowseLabel.en}
               <ArrowRight className='size-4' />
             </Link>
+            {config.rankingHref ? (
+              <Link
+                href={config.rankingHref}
+                className='inline-flex items-center justify-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-900 hover:bg-amber-100'
+              >
+                {isChinese
+                  ? config.rankingLabel?.cn || '查看榜单页'
+                  : config.rankingLabel?.en || 'Open the ranking page'}
+                <ArrowRight className='size-4' />
+              </Link>
+            ) : null}
             <TrackableCtaLink
               href='/submit'
               ctaId='comparison_submit'
@@ -577,17 +593,37 @@ export function ComparisonPage({
                   : 'Go back here if you still want the broader selection logic.'}
               </p>
             </Link>
-            <Link
-              href={config.altBrowseHref}
-              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-            >
-              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '继续浏览工具' : 'Browse more tools'}</p>
-              <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '如果你想先扩大 shortlist，再回来比较，就从这里继续。'
-                  : 'Widen the shortlist first, then return when you are ready.'}
-              </p>
-            </Link>
+            {config.rankingHref ? (
+              <Link
+                href={config.rankingHref}
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>
+                  {isChinese
+                    ? config.rankingLabel?.cn || '转去榜单页'
+                    : config.rankingLabel?.en || 'Open the ranking page'}
+                </p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>
+                  {isChinese
+                    ? '如果你想先看这一类里更强的 shortlist，再回来做细比，就先去榜单页。'
+                    : 'Open the ranking page first if you want a stronger shortlist before returning for the detailed comparison.'}
+                </p>
+              </Link>
+            ) : (
+              <Link
+                href={config.altBrowseHref}
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>
+                  {isChinese ? '继续浏览工具' : 'Browse more tools'}
+                </p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>
+                  {isChinese
+                    ? '如果你想先扩大 shortlist，再回来比较，就从这里继续。'
+                    : 'Widen the shortlist first, then return when you are ready.'}
+                </p>
+              </Link>
+            )}
             <Link
               href={nextPaths[0]?.href || config.guideHref}
               className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'

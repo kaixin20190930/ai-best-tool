@@ -22,12 +22,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'productivity',
     guideHref: '/guides/ai-productivity-tools',
+    rankingHref: '/best-ai-tools/ai-productivity-tools',
+    rankingLabel: { cn: '转去生产力榜单页', en: 'Open the productivity ranking' },
     backGuideLabel: { cn: '回到生产力指南', en: 'Back to productivity guide' },
     altBrowseHref: '/explore?search=productivity&sort=popular',
     altBrowseLabel: { cn: '浏览更多生产力工具', en: 'Browse more productivity tools' },
     breadcrumbLabel: { cn: '生产力工具对比', en: 'Productivity tools comparison' },
     compareTitle: { cn: '几款常见生产力工具的快速对照', en: 'A quick side-by-side look at common productivity tools' },
     compareSubtitle: { cn: '生产力', en: 'productivity' },
+    nextPaths: [
+      {
+        href: '/best-ai-tools/ai-productivity-tools',
+        title: { cn: '先看生产力榜单页', en: 'Start with the productivity ranking' },
+        description: {
+          cn: '如果你想先拿到更稳的 shortlist，再回来细比，就先走榜单页。',
+          en: 'Go through the ranking first if you want a stronger shortlist before returning for the side-by-side comparison.',
+        },
+      },
+      {
+        href: '/guides/ai-note-taking-tools-comparison',
+        title: { cn: '转去笔记工具对比', en: 'Switch to note-taking comparison' },
+        description: {
+          cn: '如果你的效率问题更像记录、归档和检索，而不是泛生产力，这页更贴近。',
+          en: 'Move there if your productivity bottleneck is really about capture, archive, and retrieval.',
+        },
+      },
+      {
+        href: '/guides/ai-writing-tools-comparison',
+        title: { cn: '转去写作工具对比', en: 'Switch to writing comparison' },
+        description: {
+          cn: '如果你现在卡在内容起稿和改写，而不是任务管理，这页会更直接。',
+          en: 'Go there if the main friction is drafting and rewriting rather than broad task management.',
+        },
+      },
+    ],
     tips: {
       cn: [
         '先看你是做任务管理、笔记整理、知识管理还是协作，不同场景侧重点不一样。',

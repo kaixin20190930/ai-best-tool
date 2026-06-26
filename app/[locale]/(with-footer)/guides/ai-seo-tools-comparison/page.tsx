@@ -22,6 +22,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'seo',
     guideHref: '/guides/ai-seo-tools',
+    rankingHref: '/best-ai-tools/ai-seo-tools',
+    rankingLabel: { cn: '转去 SEO 榜单页', en: 'Open the SEO ranking' },
     backGuideLabel: { cn: '回到 SEO 指南', en: 'Back to SEO guide' },
     altBrowseHref: '/explore?search=seo&sort=popular',
     altBrowseLabel: { cn: '浏览更多 SEO 工具', en: 'Browse more SEO tools' },
@@ -115,6 +117,14 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       },
     ],
     nextPaths: [
+      {
+        href: '/best-ai-tools/ai-seo-tools',
+        title: { cn: '先看 SEO 榜单页', en: 'Start with the SEO ranking' },
+        description: {
+          cn: '如果你想先收紧 shortlist，再回比较页做细分判断，就先去榜单页。',
+          en: 'Go through the ranking first if you want a tighter shortlist before making the detailed comparison.',
+        },
+      },
       {
         href: '/guides/ai-seo-tools',
         title: { cn: '回到 SEO 选型指南', en: 'Back to the SEO guide' },

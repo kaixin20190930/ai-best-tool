@@ -22,6 +22,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'writing',
     guideHref: '/guides/ai-writing-tools',
+    rankingHref: '/best-ai-tools/ai-writing-tools',
+    rankingLabel: { cn: '转去写作榜单页', en: 'Open the writing ranking' },
     backGuideLabel: { cn: '回到写作指南', en: 'Back to writing guide' },
     altBrowseHref: '/explore?search=writing&sort=popular',
     altBrowseLabel: { cn: '浏览更多写作工具', en: 'Browse more writing tools' },
@@ -118,6 +120,14 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       },
     ],
     nextPaths: [
+      {
+        href: '/best-ai-tools/ai-writing-tools',
+        title: { cn: '先看写作榜单页', en: 'Start with the writing ranking' },
+        description: {
+          cn: '如果你想先看更强的 shortlist，再回来细比，就先走榜单页。',
+          en: 'Open the ranking page first if you want a tighter shortlist before comparing tools in detail.',
+        },
+      },
       {
         href: '/guides/ai-writing-tools',
         title: { cn: '回到写作选型指南', en: 'Back to the writing guide' },
