@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { CheckCircle2, Code2, ExternalLink, Wrench } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -201,6 +201,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           }
           compareLinks={[
             {
+              href: '/best-ai-tools/ai-coding-tools',
+              title: isChinese ? '编程工具榜单' : 'Coding tools ranking',
+              description: isChinese
+                ? '先收窄到更高相关的编程候选，再决定要不要继续进入横向对比。'
+                : 'Narrow to the highest-fit coding candidates first, then decide whether you need a deeper side-by-side comparison.',
+            },
+            {
               href: '/guides/ai-coding-tools-comparison',
               title: isChinese ? '编程工具总对比' : 'Coding tools comparison',
               description: isChinese
@@ -228,10 +235,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           }
           nextDescription={
             isChinese
-              ? '如果你已经明确要找编码类助手，下一步就回分类页、搜索结果和本周新增看真实候选。'
-              : 'Once coding is clearly the right lane, the next step is to return to category pages, search results, and weekly additions for real candidates.'
+              ? '如果你已经明确要找编码类助手，下一步就看编程榜单、分类页和搜索结果里的真实候选。'
+              : 'Once coding is clearly the right lane, the next step is to use the coding ranking, category page, and search results to compare real candidates.'
           }
           nextLinks={[
+            {
+              href: '/best-ai-tools/ai-coding-tools',
+              title: isChinese ? '进入编程榜单' : 'Open the coding ranking',
+              description: isChinese
+                ? '先从更高相关的编程候选集合开始。'
+                : 'Start with the highest-fit coding shortlist.',
+            },
             {
               href: '/categories/developer-tools?sort=popular',
               title: isChinese ? '进入 Developer Tools 分类' : 'Open the developer tools category',
@@ -245,13 +259,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               description: isChinese
                 ? '回到 Explore，用更窄的编码关键词扩大 shortlist。'
                 : 'Return to Explore and widen the shortlist with a coding-focused search.',
-            },
-            {
-              href: '/new',
-              title: isChinese ? '看本周新增' : 'Check new this week',
-              description: isChinese
-                ? '看看最近补进来的开发者工具有没有更适合的新候选。'
-                : 'See whether recent additions introduced a stronger fit for modern coding workflows.',
             },
           ]}
         />

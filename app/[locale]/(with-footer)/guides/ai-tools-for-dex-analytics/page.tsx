@@ -1,10 +1,11 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { BarChart4, ExternalLink, Layers3, TrendingUp } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 
@@ -55,15 +56,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-        '先分清你是在看交易对、池子，还是整体流动性。',
-        '看它是否支持你常用的链和 DEX 数据。',
-        '如果给团队使用，优先看 API、导出、告警和历史追踪能力。',
-      ]
+      '先分清你是在看交易对、池子，还是整体流动性。',
+      '看它是否支持你常用的链和 DEX 数据。',
+      '如果给团队使用，优先看 API、导出、告警和历史追踪能力。',
+    ]
     : [
-        'Separate the use case first: pairs, pools, or overall liquidity.',
-        'Check whether it supports the chains and DEX data you actually use.',
-        'For team use, prioritize API access, exports, alerts, and historical tracking.',
-      ];
+      'Separate the use case first: pairs, pools, or overall liquidity.',
+      'Check whether it supports the chains and DEX data you actually use.',
+      'For team use, prioritize API access, exports, alerts, and historical tracking.',
+    ];
 
   return (
     <>
@@ -100,25 +101,43 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/explore?search=dex&sort=popular'
+              ctaId='dex_analytics_guide_browse_tools'
+              ctaLabel='DEX analytics guide browse tools'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '看 DEX 工具' : 'Browse DEX tools'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-web3-tools'
+              ctaId='dex_analytics_guide_top_list'
+              ctaLabel='DEX analytics guide Web3 top list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看 Web3 榜单' : 'Open Web3 ranking'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-tools-for-defi-analytics'
+              ctaId='dex_analytics_guide_defi'
+              ctaLabel='DEX analytics guide DeFi guide'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '回到 DeFi 指南' : 'Back to DeFi guide'}
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-tools-for-dex-analytics-comparison'
+              ctaId='dex_analytics_guide_comparison'
+              ctaLabel='DEX analytics guide comparison'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看 DEX 对比页' : 'DEX comparison'}
-            </Link>
+            </TrackableCtaLink>
           </div>
         </section>
 
@@ -171,6 +190,50 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 ))}
             </div>
           </aside>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图入口' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '如果你已经知道自己在找 DEX 工具，先走 Web3 榜单' : 'If DEX is already the lane, open the Web3 ranking first'}
+          </h2>
+          <div className='mt-4 grid gap-3 md:grid-cols-3'>
+            <Link
+              href='/best-ai-tools/ai-web3-tools'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? 'Web3 榜单' : 'Web3 ranking'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '先看更高相关的 Web3 候选，再决定是否进入 DEX 的窄对比。'
+                  : 'Start with the highest-fit Web3 candidates, then decide whether you need the narrower DEX comparison.'}
+              </p>
+            </Link>
+            <Link
+              href='/guides/ai-tools-for-dex-analytics-comparison'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? 'DEX 对比页' : 'DEX comparison'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '当你已经有候选，直接比较交易对、池子和流动性能力。'
+                  : 'Once you already have candidates, compare pair, pool, and liquidity capabilities side by side.'}
+              </p>
+            </Link>
+            <Link
+              href='/categories/web3?sort=popular'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? 'Web3 分类' : 'Web3 category'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '直接浏览真实 Web3 条目，再回头收窄到 DEX 候选。'
+                  : 'Browse real Web3 listings first, then narrow back down to DEX-specific candidates.'}
+              </p>
+            </Link>
+          </div>
         </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>

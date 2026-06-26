@@ -1,10 +1,11 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { CheckCircle2, ExternalLink, Paintbrush, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 
@@ -61,15 +62,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const faqSchema = generateFAQSchema(faqs);
   const tips = isChinese
     ? [
-        '先分清你是在做品牌、营销图、海报、UI 还是社媒素材。',
-        '看它能不能稳定输出风格一致的视觉。',
-        '如果要商业使用，优先看授权、分辨率和批量能力。',
-      ]
+      '先分清你是在做品牌、营销图、海报、UI 还是社媒素材。',
+      '看它能不能稳定输出风格一致的视觉。',
+      '如果要商业使用，优先看授权、分辨率和批量能力。',
+    ]
     : [
-        'Separate the use case first: brand, marketing assets, posters, UI, or social visuals.',
-        'Check whether it can keep styles consistent.',
-        'If you use it commercially, prioritize licensing, resolution, and batch workflows.',
-      ];
+      'Separate the use case first: brand, marketing assets, posters, UI, or social visuals.',
+      'Check whether it can keep styles consistent.',
+      'If you use it commercially, prioritize licensing, resolution, and batch workflows.',
+    ];
 
   return (
     <>
@@ -100,25 +101,43 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/explore?search=design&sort=popular'
+              ctaId='designers_guide_browse_tools'
+              ctaLabel='Designers guide browse tools'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '看设计工具' : 'Browse design tools'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-image-tools'
+              ctaId='designers_guide_top_list'
+              ctaLabel='Designers guide image top list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看图像榜单' : 'Open image ranking'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/how-to-choose-ai-tools'
+              ctaId='designers_guide_selection_guide'
+              ctaLabel='Designers guide selection guide'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '回到选型指南' : 'Back to selection guide'}
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-image-tools'
+              ctaId='designers_guide_image_guide'
+              ctaLabel='Designers guide image guide'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看图像工具' : 'Image tools'}
-            </Link>
+            </TrackableCtaLink>
           </div>
         </section>
 
@@ -164,6 +183,50 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ))}
             </div>
           </aside>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图入口' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '如果你已经知道自己在找设计工具，先看图像榜单' : 'If design is already the lane, open the image ranking first'}
+          </h2>
+          <div className='mt-4 grid gap-3 md:grid-cols-3'>
+            <Link
+              href='/best-ai-tools/ai-image-tools'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '图像榜单' : 'Image ranking'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '先收窄到更高相关的视觉候选，再决定具体走品牌、海报还是素材流程。'
+                  : 'Start with the highest-fit visual candidates, then decide whether your workflow is more about brand, posters, or assets.'}
+              </p>
+            </Link>
+            <Link
+              href='/guides/ai-image-tools'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '图像工具指南' : 'Image tools guide'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '如果你更偏生成、编辑和素材处理，这条路径更直接。'
+                  : 'A better path if generation, editing, and asset production are the real needs.'}
+              </p>
+            </Link>
+            <Link
+              href='/categories/design-art?sort=popular'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '设计分类' : 'Design category'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '直接浏览真实设计条目，再回头比较高相关候选。'
+                  : 'Browse real design listings first, then come back to compare the stronger candidates.'}
+              </p>
+            </Link>
+          </div>
         </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
