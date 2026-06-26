@@ -1,10 +1,11 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
-import { CheckCircle2, ExternalLink, NotebookPen, Workflow } from 'lucide-react';
+import { ArrowRight, CheckCircle2, ExternalLink, NotebookPen, Workflow } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 
@@ -61,15 +62,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-        '先确认你是要记会议、记灵感，还是整理知识。',
-        '看它是否能接到你现在用的文档、会议或剪藏工具。',
-        '如果你每天都会用，优先看协作、导出和搜索，而不是只看界面好不好看。',
-      ]
+      '先确认你是要记会议、记灵感，还是整理知识。',
+      '看它是否能接到你现在用的文档、会议或剪藏工具。',
+      '如果你每天都会用，优先看协作、导出和搜索，而不是只看界面好不好看。',
+    ]
     : [
-        'Start with the job: meetings, ideas, or knowledge organization.',
-        'Check whether it connects to the docs, meeting, or clipping tools you already use.',
-        'If you will use it every day, prioritize collaboration, exports, and search over surface polish.',
-      ];
+      'Start with the job: meetings, ideas, or knowledge organization.',
+      'Check whether it connects to the docs, meeting, or clipping tools you already use.',
+      'If you will use it every day, prioritize collaboration, exports, and search over surface polish.',
+    ];
 
   return (
     <>
@@ -100,25 +101,113 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/explore?search=note&sort=popular'
+              ctaId='note_taking_guide_browse_tools'
+              ctaLabel='Note taking guide browse tools'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '看记笔记工具' : 'Browse note taking tools'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-tools-for-meeting-notes'
+              ctaId='note_taking_guide_meeting_notes'
+              ctaLabel='Note taking guide meeting notes'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '回到会议纪要指南' : 'Back to meeting notes guide'}
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-note-taking-tools-comparison'
+              ctaId='note_taking_guide_compare'
+              ctaLabel='Note taking guide compare'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看记笔记对比页' : 'Note taking comparison'}
-            </Link>
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-note-taking-tools'
+              ctaId='note_taking_guide_top_list'
+              ctaLabel='Note taking guide top list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看记笔记榜单' : 'Open note taking ranking'}
+            </TrackableCtaLink>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图路径' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先看榜单，再进入对比页和真实条目' : 'Start with the ranking, then move into comparison and real listings'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经明确自己要解决的是会议记录、灵感整理或知识归档，就不要停在总览页，直接进入更窄的筛选路径。'
+              : 'If meetings, idea capture, or knowledge organization are already the job to solve, move quickly into narrower selection paths.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-note-taking-tools',
+                title: isChinese ? '记笔记榜单' : 'Note taking ranking',
+                desc: isChinese ? '直接看高意图 shortlist。' : 'Go straight to the high-intent shortlist.',
+              },
+              {
+                href: '/guides/ai-note-taking-tools-comparison',
+                title: isChinese ? '记笔记工具对比' : 'Note taking comparison',
+                desc: isChinese ? '横向看记录、整理和搜索。' : 'Compare capture, organization, and search side by side.',
+              },
+              {
+                href: '/guides/ai-tools-for-meeting-notes-comparison',
+                title: isChinese ? '会议纪要对比' : 'Meeting notes comparison',
+                desc: isChinese ? '更偏会议记录与回看。' : 'Better for meeting capture and follow-up.',
+              },
+              {
+                href: '/guides/ai-tools-for-research-comparison',
+                title: isChinese ? '研究工具对比' : 'Research tools comparison',
+                desc: isChinese ? '更偏资料整理和知识沉淀。' : 'Better for research and knowledge synthesis.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`note_taking_guide_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+          <div className='mt-5 flex flex-wrap gap-3'>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-note-taking-tools'
+              ctaId='note_taking_guide_top_list_secondary'
+              ctaLabel='Note taking guide top list secondary'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+            >
+              {isChinese ? '打开记笔记榜单' : 'Open note taking ranking'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/submit'
+              ctaId='note_taking_guide_submit'
+              ctaLabel='Note taking guide submit'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
+            >
+              {isChinese ? '提交你的工具' : 'Submit your tool'}
+            </TrackableCtaLink>
           </div>
         </section>
 
@@ -211,6 +300,82 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '下一步怎么走' : 'Next step'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '把记笔记入口接到榜单、比较页和真实条目'
+              : 'Move from the note taking guide into rankings, comparisons, and real listings'}
+          </h2>
+          <div className='mt-4 grid gap-4 lg:grid-cols-3'>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-note-taking-tools'
+              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
+              ctaId='note_taking_guide_ranking_next'
+              ctaLabel='Note taking guide ranking next'
+              pageType='guide'
+            >
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
+                    {isChinese ? '看记笔记榜单' : 'Open note taking ranking'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {isChinese
+                      ? '如果你已经是高意图筛选，直接看 shortlist 会更快。'
+                      : 'If intent is already high, the shortlist is the fastest next step.'}
+                  </p>
+                </div>
+                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
+              </div>
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/guides/ai-note-taking-tools-comparison'
+              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
+              ctaId='note_taking_guide_compare_next'
+              ctaLabel='Note taking guide compare next'
+              pageType='guide'
+            >
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
+                    {isChinese ? '看记笔记工具对比' : 'Compare note taking tools'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {isChinese
+                      ? '当记录场景已经清楚，就进入横向对比。'
+                      : 'Once the capture workflow is clear, move into side-by-side comparison.'}
+                  </p>
+                </div>
+                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
+              </div>
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/categories/productivity?sort=popular'
+              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
+              ctaId='note_taking_guide_category'
+              ctaLabel='Note taking guide category'
+              pageType='guide'
+            >
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
+                    {isChinese ? '进入 Productivity 分类' : 'Open the productivity category'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {isChinese
+                      ? '先看真实条目，再回来缩窄候选。'
+                      : 'Browse real listings first, then come back to narrow the shortlist.'}
+                  </p>
+                </div>
+                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
+              </div>
+            </TrackableCtaLink>
           </div>
         </section>
         <GuideSubmissionPath locale={locale} ctaPrefix='ai_note_taking_tools' />

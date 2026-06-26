@@ -10,6 +10,7 @@ export type TopListTopicKey =
   | 'ai-lead-generation-tools'
   | 'ai-marketing-tools'
   | 'ai-model-routing-tools'
+  | 'ai-note-taking-tools'
   | 'ai-prompt-testing-tools'
   | 'ai-sales-prospecting-tools'
   | 'ai-small-business-tools'
@@ -198,6 +199,21 @@ export const topListTopics: TopListTopicConfig[] = [
     comparisonHref: '/guides/ai-tools-for-model-routing-comparison',
     comparisonLabel: 'Compare model routing tools',
     nextStep: 'Compare model routing tools, inspect detail pages, then move into submission or pricing.',
+  },
+  {
+    key: 'ai-note-taking-tools',
+    categorySlug: 'productivity',
+    title: 'Best AI Note Taking Tools',
+    description: 'The most useful tools for meeting capture, idea logging, searchable notes, and knowledge organization.',
+    summary: 'A practical shortlist for people turning meetings, notes, and scattered inputs into reusable knowledge.',
+    ctaLabel: 'Go to note taking list',
+    ctaDescription:
+      'Use this list when the decision is about capture speed, summaries, search, exports, and long-term knowledge workflow fit.',
+    guideHref: '/guides/ai-note-taking-tools',
+    guideLabel: 'Back to note taking guide',
+    comparisonHref: '/guides/ai-note-taking-tools-comparison',
+    comparisonLabel: 'Compare note taking tools',
+    nextStep: 'Compare note taking tools, inspect detail pages, then move into submission or pricing.',
   },
   {
     key: 'ai-prompt-testing-tools',
