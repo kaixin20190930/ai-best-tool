@@ -4,6 +4,7 @@ export type TopListTopicKey =
   | 'ai-agent-tools'
   | 'ai-coding-tools'
   | 'ai-code-review-tools'
+  | 'ai-creator-tools'
   | 'ai-ecommerce-tools'
   | 'ai-evals-tools'
   | 'ai-lead-generation-tools'
@@ -105,6 +106,21 @@ export const topListTopics: TopListTopicConfig[] = [
     comparisonHref: '/guides/ai-tools-for-code-review-comparison',
     comparisonLabel: 'Compare code review tools',
     nextStep: 'Compare code review tools, inspect detail pages, then move into submission or pricing.',
+  },
+  {
+    key: 'ai-creator-tools',
+    categorySlug: 'productivity',
+    title: 'Best AI Creator Tools',
+    description: 'The most useful tools for content planning, scripting, thumbnails, editing, repurposing, and creator workflows.',
+    summary: 'A practical shortlist for creators who need to publish more consistently, reuse content faster, and keep output quality high.',
+    ctaLabel: 'Go to creator list',
+    ctaDescription:
+      'Use this list when the decision is about content workflow, repurposing speed, batch publishing, and creator-tool fit.',
+    guideHref: '/guides/ai-tools-for-creators',
+    guideLabel: 'Back to creator guide',
+    comparisonHref: '/guides/ai-tools-for-creators-comparison',
+    comparisonLabel: 'Compare creator tools',
+    nextStep: 'Compare creator tools, inspect detail pages, then move into submission or pricing.',
   },
   {
     key: 'ai-ecommerce-tools',

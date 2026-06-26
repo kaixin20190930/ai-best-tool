@@ -1,12 +1,13 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { CheckCircle2, ExternalLink, PenTool, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
@@ -101,25 +102,52 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/explore?search=creator&sort=popular'
+              ctaId='creators_guide_browse_tools'
+              ctaLabel='Creators guide browse tools'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '看创作者工具' : 'Browse creator tools'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/how-to-choose-ai-tools'
+              ctaId='creators_guide_choose'
+              ctaLabel='Creators guide choose'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '回到选型指南' : 'Back to selection guide'}
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-writing-tools'
+              ctaId='creators_guide_writing'
+              ctaLabel='Creators guide writing'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看写作工具' : 'Writing tools'}
-            </Link>
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/guides/ai-tools-for-creators-comparison'
+              ctaId='creators_guide_comparison'
+              ctaLabel='Creators guide comparison'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+            >
+              {isChinese ? '看创作者工具对比' : 'Compare creator tools'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-creator-tools'
+              ctaId='creators_guide_top_list'
+              ctaLabel='Creators guide top list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看创作者榜单' : 'Open creator ranking'}
+            </TrackableCtaLink>
           </div>
         </section>
 
@@ -204,6 +232,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先用榜单缩小 creator shortlist' : 'Use the ranking to narrow your creator shortlist first'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己在比选题、脚本、封面、剪辑和再包装，榜单页会比泛目录更快进入决策。'
+              : 'If the decision is already about ideation, scripting, thumbnails, editing, and repurposing, the ranking page gets to a decision faster than a broad directory.'}
+          </p>
+          <div className='mt-5 flex flex-wrap gap-3'>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-creator-tools'
+              ctaId='creators_guide_ranking_primary'
+              ctaLabel='Creators guide ranking primary'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+            >
+              {isChinese ? '进入创作者榜单' : 'Open creator ranking'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/guides/ai-tools-for-creators-comparison'
+              ctaId='creators_guide_ranking_secondary'
+              ctaLabel='Creators guide ranking secondary'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
+            >
+              {isChinese ? '继续看对比页' : 'Continue to comparison'}
+            </TrackableCtaLink>
           </div>
         </section>
         <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_creators' />
