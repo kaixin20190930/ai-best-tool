@@ -1,5 +1,6 @@
 export type TopListTopicKey =
   | 'ai-api-observability-tools'
+  | 'ai-agency-tools'
   | 'ai-agent-tools'
   | 'ai-coding-tools'
   | 'ai-code-review-tools'
@@ -31,6 +32,21 @@ export type TopListTopicConfig = {
 };
 
 export const topListTopics: TopListTopicConfig[] = [
+  {
+    key: 'ai-agency-tools',
+    categorySlug: 'productivity',
+    title: 'Best AI Agency Tools',
+    description: 'The most useful tools for agency delivery, client collaboration, content production, and service-team workflows.',
+    summary: 'A practical shortlist for teams that need to deliver client work faster, keep projects organized, and produce in volume without losing consistency.',
+    ctaLabel: 'Go to agency list',
+    ctaDescription:
+      'Use this list when the decision is about delivery workflow, client separation, project coordination, and repeatable service output.',
+    guideHref: '/guides/ai-tools-for-agencies',
+    guideLabel: 'Back to agency guide',
+    comparisonHref: '/guides/ai-tools-for-agencies-comparison',
+    comparisonLabel: 'Compare agency tools',
+    nextStep: 'Compare agency tools, inspect detail pages, then move into submission or pricing.',
+  },
   {
     key: 'ai-api-observability-tools',
     categorySlug: 'developer-tools',
