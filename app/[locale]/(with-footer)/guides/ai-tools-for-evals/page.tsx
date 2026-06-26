@@ -1,13 +1,14 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { ClipboardCheck, ExternalLink, Layers3, Scale } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Metadata.home' });
@@ -62,15 +63,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-        '先分清你要的是验收打分、数据集评估，还是版本回归判断。',
-        '看它能不能把输出、评分标准和样本绑定到一起复盘。',
-        '如果会进入团队流程，优先看共享、验收和接入 CI / 发布流程的便利性。',
-      ]
+      '先分清你要的是验收打分、数据集评估，还是版本回归判断。',
+      '看它能不能把输出、评分标准和样本绑定到一起复盘。',
+      '如果会进入团队流程，优先看共享、验收和接入 CI / 发布流程的便利性。',
+    ]
     : [
-        'Separate acceptance scoring, dataset evaluation, and regression judgment before comparing tools.',
-        'Look for tools that bind outputs, scoring rules, and samples together for review.',
-        'If the work feeds team process, prioritize sharing, signoff, and fit with CI or release flow.',
-      ];
+      'Separate acceptance scoring, dataset evaluation, and regression judgment before comparing tools.',
+      'Look for tools that bind outputs, scoring rules, and samples together for review.',
+      'If the work feeds team process, prioritize sharing, signoff, and fit with CI or release flow.',
+    ];
 
   return (
     <>
@@ -101,25 +102,43 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/explore?search=eval&sort=popular'
+              ctaId='evals_guide_browse_tools'
+              ctaLabel='Evals guide browse tools'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '看 evals 工具' : 'Browse evals tools'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-tools-for-developers'
+              ctaId='evals_guide_developers'
+              ctaLabel='Evals guide developers'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '回到开发者指南' : 'Back to developer guide'}
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-tools-for-evals-comparison'
+              ctaId='evals_guide_comparison'
+              ctaLabel='Evals guide comparison'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看 evals 对比页' : 'Evals comparison'}
-            </Link>
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-evals-tools'
+              ctaId='evals_guide_top_list'
+              ctaLabel='Evals guide top list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看 evals 榜单' : 'Open evals ranking'}
+            </TrackableCtaLink>
           </div>
         </section>
 
@@ -200,6 +219,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'A direct side-by-side path for scoring, datasets, and acceptance workflows.',
             },
             {
+              href: '/best-ai-tools/ai-evals-tools',
+              title: isChinese ? 'Evals 榜单' : 'Evals ranking',
+              description: isChinese
+                ? '适合已经确认方向、只想快速缩小 shortlist 的用户。'
+                : 'Useful when the direction is clear and the goal is to narrow the shortlist faster.',
+            },
+            {
               href: '/guides/ai-tools-for-prompt-testing-comparison',
               title: isChinese ? 'Prompt 测试工具对比' : 'Prompt testing comparison',
               description: isChinese
@@ -215,6 +241,41 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             },
           ]}
         />
+
+        <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先用榜单缩小 evals shortlist' : 'Use the ranking to narrow your evals shortlist first'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己要比的是输出评分、数据集验证和上线验收，榜单页会比泛目录更快进入决策。'
+              : 'If the decision is already about output scoring, dataset validation, and release acceptance, the ranking page gets to a decision faster than a broad directory.'}
+          </p>
+          <div className='mt-5 flex flex-wrap gap-3'>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-evals-tools'
+              ctaId='evals_guide_ranking_primary'
+              ctaLabel='Evals guide ranking primary'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+            >
+              {isChinese ? '进入 evals 榜单' : 'Open evals ranking'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/guides/ai-tools-for-evals-comparison'
+              ctaId='evals_guide_ranking_secondary'
+              ctaLabel='Evals guide ranking secondary'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
+            >
+              {isChinese ? '继续看对比页' : 'Continue to comparison'}
+            </TrackableCtaLink>
+          </div>
+        </section>
+
         <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_evals' />
       </div>
     </>

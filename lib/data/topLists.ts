@@ -2,6 +2,7 @@ export type TopListTopicKey =
   | 'ai-api-observability-tools'
   | 'ai-agent-tools'
   | 'ai-coding-tools'
+  | 'ai-evals-tools'
   | 'ai-model-routing-tools'
   | 'ai-prompt-testing-tools'
   | 'ai-video-tools'
@@ -67,6 +68,21 @@ export const topListTopics: TopListTopicConfig[] = [
     comparisonHref: '/guides/ai-coding-tools-comparison',
     comparisonLabel: 'Compare coding tools',
     nextStep: 'Compare coding tools, inspect product pages, then move into submission or pricing.',
+  },
+  {
+    key: 'ai-evals-tools',
+    categorySlug: 'developer-tools',
+    title: 'Best AI Evals Tools',
+    description: 'The most useful tools for output scoring, dataset evaluation, regression checks, and release acceptance.',
+    summary: 'A practical shortlist for teams validating AI quality, comparing versions, and making release decisions with more confidence.',
+    ctaLabel: 'Go to evals list',
+    ctaDescription:
+      'Use this list when the decision is about output validation, scoring systems, dataset review, and release acceptance workflow.',
+    guideHref: '/guides/ai-tools-for-evals',
+    guideLabel: 'Back to evals guide',
+    comparisonHref: '/guides/ai-tools-for-evals-comparison',
+    comparisonLabel: 'Compare evals tools',
+    nextStep: 'Compare evals tools, inspect detail pages, then move into submission or pricing.',
   },
   {
     key: 'ai-model-routing-tools',
