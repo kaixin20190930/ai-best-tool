@@ -1,10 +1,11 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { Activity, ExternalLink, Layers3, Search } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -64,15 +65,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-        '先分清你需要的是地址追踪、资金流、鲸鱼监控还是项目研究。',
-        '看它的数据源和历史覆盖是否足够完整。',
-        '如果要团队使用，优先看 API、导出、告警和权限控制。',
-      ]
+      '先分清你需要的是地址追踪、资金流、鲸鱼监控还是项目研究。',
+      '看它的数据源和历史覆盖是否足够完整。',
+      '如果要团队使用，优先看 API、导出、告警和权限控制。',
+    ]
     : [
-        'Separate the use case first: address tracking, fund flow, whale monitoring, or project research.',
-        'Check whether the data sources and history coverage are complete enough.',
-        'For team use, prioritize API access, exports, alerts, and permission controls.',
-      ];
+      'Separate the use case first: address tracking, fund flow, whale monitoring, or project research.',
+      'Check whether the data sources and history coverage are complete enough.',
+      'For team use, prioritize API access, exports, alerts, and permission controls.',
+    ];
 
   return (
     <>
@@ -103,25 +104,43 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/explore?search=on-chain&sort=popular'
+              ctaId='on_chain_analysis_guide_browse_tools'
+              ctaLabel='On-chain analysis guide browse tools'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '看链上分析工具' : 'Browse on-chain tools'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-web3-tools'
+              ctaId='on_chain_analysis_guide_top_list'
+              ctaLabel='On-chain analysis guide Web3 top list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看 Web3 榜单' : 'Open Web3 ranking'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-tools-for-web3'
+              ctaId='on_chain_analysis_guide_web3'
+              ctaLabel='On-chain analysis guide Web3 guide'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '回到 Web3 指南' : 'Back to Web3 guide'}
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-tools-for-on-chain-analysis-comparison'
+              ctaId='on_chain_analysis_guide_comparison'
+              ctaLabel='On-chain analysis guide comparison'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看链上分析对比页' : 'On-chain comparison'}
-            </Link>
+            </TrackableCtaLink>
           </div>
         </section>
 
@@ -195,6 +214,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           }
           compareLinks={[
             {
+              href: '/best-ai-tools/ai-web3-tools',
+              title: isChinese ? 'Web3 工具榜单' : 'Web3 tools ranking',
+              description: isChinese
+                ? '先缩到更高相关的 Web3 候选，再决定要不要继续下钻到链上分析对比。'
+                : 'Narrow to the highest-fit Web3 candidates first, then decide whether you need a deeper on-chain comparison.',
+            },
+            {
               href: '/guides/ai-tools-for-on-chain-analysis-comparison',
               title: isChinese ? '链上分析工具对比' : 'On-chain analysis comparison',
               description: isChinese
@@ -222,10 +248,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           }
           nextDescription={
             isChinese
-              ? '如果你已经明确在找链上研究工具，下一步就回 Web3 分类、搜索结果和本周新增看真实候选。'
-              : 'Once on-chain analysis is clearly the right lane, the next step is to use Web3 categories, search results, and weekly additions to compare real candidates.'
+              ? '如果你已经明确在找链上研究工具，下一步就看 Web3 榜单、分类和搜索结果里的真实候选。'
+              : 'Once on-chain analysis is clearly the right lane, the next step is to use the Web3 ranking, category, and search results to compare real candidates.'
           }
           nextLinks={[
+            {
+              href: '/best-ai-tools/ai-web3-tools',
+              title: isChinese ? '进入 Web3 榜单' : 'Open the Web3 ranking',
+              description: isChinese
+                ? '先从更高相关的 Web3 候选集合开始。'
+                : 'Start with the highest-fit Web3 shortlist.',
+            },
             {
               href: '/categories/web3?sort=popular',
               title: isChinese ? '进入 Web3 分类' : 'Open the Web3 category',
@@ -239,13 +272,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               description: isChinese
                 ? '回到 Explore，用更窄的链上关键词扩大 shortlist。'
                 : 'Return to Explore and widen the shortlist with on-chain-specific search.',
-            },
-            {
-              href: '/new',
-              title: isChinese ? '看本周新增' : 'Check new this week',
-              description: isChinese
-                ? '看看最近补进来的 Web3 / 研究工具里有没有更合适的新候选。'
-                : 'See whether recent Web3 and research additions introduced a stronger fit.',
             },
           ]}
         />
