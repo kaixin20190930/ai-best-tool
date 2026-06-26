@@ -12,6 +12,7 @@ export type TopListTopicKey =
   | 'ai-image-tools'
   | 'ai-lead-generation-tools'
   | 'ai-marketing-tools'
+  | 'ai-meeting-notes-tools'
   | 'ai-model-routing-tools'
   | 'ai-note-taking-tools'
   | 'ai-productivity-tools'
@@ -234,6 +235,21 @@ export const topListTopics: TopListTopicConfig[] = [
     comparisonHref: '/guides/ai-tools-for-marketing-comparison',
     comparisonLabel: 'Compare marketing tools',
     nextStep: 'Compare marketing tools, inspect detail pages, then move into submission or pricing.',
+  },
+  {
+    key: 'ai-meeting-notes-tools',
+    categorySlug: 'productivity',
+    title: 'Best AI Meeting Notes Tools',
+    description: 'The most useful tools for meeting transcription, note cleanup, action items, and follow-up workflows.',
+    summary: 'A practical shortlist for teams turning meetings into searchable notes, action lists, and cleaner follow-through.',
+    ctaLabel: 'Go to meeting notes list',
+    ctaDescription:
+      'Use this list when the decision is about transcription quality, summary cleanup, action extraction, and team follow-up fit.',
+    guideHref: '/guides/ai-tools-for-meeting-notes',
+    guideLabel: 'Back to meeting notes guide',
+    comparisonHref: '/guides/ai-tools-for-meeting-notes-comparison',
+    comparisonLabel: 'Compare meeting notes tools',
+    nextStep: 'Compare meeting notes tools, inspect detail pages, then move into submission or pricing.',
   },
   {
     key: 'ai-model-routing-tools',
