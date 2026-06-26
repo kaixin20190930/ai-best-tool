@@ -13,6 +13,7 @@ export type TopListTopicKey =
   | 'ai-marketing-tools'
   | 'ai-model-routing-tools'
   | 'ai-note-taking-tools'
+  | 'ai-productivity-tools'
   | 'ai-prompt-testing-tools'
   | 'ai-sales-prospecting-tools'
   | 'ai-small-business-tools'
@@ -246,6 +247,21 @@ export const topListTopics: TopListTopicConfig[] = [
     comparisonHref: '/guides/ai-note-taking-tools-comparison',
     comparisonLabel: 'Compare note taking tools',
     nextStep: 'Compare note taking tools, inspect detail pages, then move into submission or pricing.',
+  },
+  {
+    key: 'ai-productivity-tools',
+    categorySlug: 'productivity',
+    title: 'Best AI Productivity Tools',
+    description: 'The most useful tools for daily efficiency, task management, knowledge work, collaboration, and lightweight automation.',
+    summary: 'A practical shortlist for people trying to reduce repetitive work, keep information organized, and move faster across everyday workflows.',
+    ctaLabel: 'Go to productivity list',
+    ctaDescription:
+      'Use this list when the decision is about workflow fit, collaboration depth, automation potential, and long-term daily usefulness.',
+    guideHref: '/guides/ai-productivity-tools',
+    guideLabel: 'Back to productivity guide',
+    comparisonHref: '/guides/ai-productivity-tools-comparison',
+    comparisonLabel: 'Compare productivity tools',
+    nextStep: 'Compare productivity tools, inspect detail pages, then move into submission or pricing.',
   },
   {
     key: 'ai-prompt-testing-tools',
