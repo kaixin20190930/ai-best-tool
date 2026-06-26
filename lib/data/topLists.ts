@@ -13,6 +13,7 @@ export type TopListTopicKey =
   | 'ai-prompt-testing-tools'
   | 'ai-sales-prospecting-tools'
   | 'ai-small-business-tools'
+  | 'ai-voice-tools'
   | 'ai-video-tools'
   | 'ai-research-tools'
   | 'ai-writing-tools';
@@ -241,6 +242,21 @@ export const topListTopics: TopListTopicConfig[] = [
     comparisonHref: '/guides/ai-tools-for-small-business-comparison',
     comparisonLabel: 'Compare small-business tools',
     nextStep: 'Compare small-business tools, inspect detail pages, then move into submission or pricing.',
+  },
+  {
+    key: 'ai-voice-tools',
+    categorySlug: 'voice',
+    title: 'Best AI Voice Tools',
+    description: 'The most useful tools for voice synthesis, transcription, dubbing, meeting capture, and conversational voice.',
+    summary: 'A practical shortlist for teams choosing between speech generation, transcription accuracy, and product-grade voice workflows.',
+    ctaLabel: 'Go to voice list',
+    ctaDescription:
+      'Use this list when the decision is about voice quality, language coverage, latency, transcription accuracy, and workflow fit.',
+    guideHref: '/guides/ai-tools-for-voice',
+    guideLabel: 'Back to voice guide',
+    comparisonHref: '/guides/ai-tools-for-voice-comparison',
+    comparisonLabel: 'Compare voice tools',
+    nextStep: 'Compare voice tools, inspect detail pages, then move into submission or pricing.',
   },
   {
     key: 'ai-video-tools',

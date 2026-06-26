@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { ArrowRight, AudioLines, ExternalLink, Mic, MicVocal } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -57,15 +57,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-        '先分清你是在做配音、转写、会议记录，还是语音对话。',
-        '看它支持哪些语言、声音风格和导出格式。',
-        '如果要长期使用，重点看延迟、准确度和批量能力，而不只是试听效果。',
-      ]
+      '先分清你是在做配音、转写、会议记录，还是语音对话。',
+      '看它支持哪些语言、声音风格和导出格式。',
+      '如果要长期使用，重点看延迟、准确度和批量能力，而不只是试听效果。',
+    ]
     : [
-        'Separate dubbing, transcription, meeting capture, and conversational voice use cases first.',
-        'Check language support, voice styles, and export formats.',
-        'For long-term use, prioritize latency, accuracy, and bulk workflows over demo polish.',
-      ];
+      'Separate dubbing, transcription, meeting capture, and conversational voice use cases first.',
+      'Check language support, voice styles, and export formats.',
+      'For long-term use, prioritize latency, accuracy, and bulk workflows over demo polish.',
+    ];
 
   return (
     <>
@@ -126,6 +126,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {isChinese ? '看语音工具对比' : 'Compare voice tools'}
             </TrackableCtaLink>
             <TrackableCtaLink
+              href='/best-ai-tools/ai-voice-tools'
+              ctaId='voice_guide_top_list'
+              ctaLabel='Voice guide top list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看语音榜单' : 'Open voice ranking'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/submit'
               ctaId='voice_guide_submit'
               ctaLabel='Voice guide submit'
@@ -151,6 +160,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
           <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
             {[
+              {
+                href: '/best-ai-tools/ai-voice-tools',
+                title: isChinese ? '语音工具榜单' : 'Voice tools ranking',
+                desc: isChinese ? '直接看高意图 shortlist。' : 'Go straight to the high-intent shortlist.',
+              },
               {
                 href: '/guides/ai-tools-for-voice-comparison',
                 title: isChinese ? '语音工具对比' : 'Voice tools comparison',
@@ -189,11 +203,20 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </div>
           <div className='mt-5 flex flex-wrap gap-3'>
             <TrackableCtaLink
+              href='/best-ai-tools/ai-voice-tools'
+              ctaId='voice_guide_top_list_secondary'
+              ctaLabel='Voice guide top list secondary'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+            >
+              {isChinese ? '打开语音榜单' : 'Open voice ranking'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/submit'
               ctaId='voice_guide_submit_secondary'
               ctaLabel='Voice guide submit secondary'
               pageType='guide'
-              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+              className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
             >
               {isChinese ? '提交你的工具' : 'Submit your tool'}
             </TrackableCtaLink>
@@ -267,10 +290,31 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
             {isChinese
-              ? '把语音入口接到比较页和真实条目'
-              : 'Move from the voice guide into comparisons and real listings'}
+              ? '把语音入口接到榜单、比较页和真实条目'
+              : 'Move from the voice guide into rankings, comparisons, and real listings'}
           </h2>
           <div className='mt-4 grid gap-4 lg:grid-cols-3'>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-voice-tools'
+              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
+              ctaId='voice_guide_ranking_next'
+              ctaLabel='Voice guide ranking next'
+              pageType='guide'
+            >
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
+                    {isChinese ? '看语音工具榜单' : 'Open voice ranking'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {isChinese
+                      ? '如果你已经是高意图筛选，直接看 shortlist 会更快。'
+                      : 'If intent is already high, the shortlist is the fastest next step.'}
+                  </p>
+                </div>
+                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
+              </div>
+            </TrackableCtaLink>
             <TrackableCtaLink
               href='/guides/ai-tools-for-voice-comparison'
               className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
@@ -308,27 +352,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                     {isChinese
                       ? '先看真实条目，再回来收敛到更窄的候选。'
                       : 'Browse real listings first, then come back to narrow the shortlist.'}
-                  </p>
-                </div>
-                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
-              </div>
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/explore?search=voice&sort=popular'
-              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
-              ctaId='voice_guide_search'
-              ctaLabel='Voice guide search'
-              pageType='guide'
-            >
-              <div className='flex items-start justify-between gap-3'>
-                <div>
-                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
-                    {isChinese ? '搜索更多语音工具' : 'Search more voice tools'}
-                  </p>
-                  <p className='mt-2 text-sm leading-6 text-slate-600'>
-                    {isChinese
-                      ? '如果你想扩大候选范围，可以回到探索页继续筛。'
-                      : 'Use Explore to widen the shortlist a little further.'}
                   </p>
                 </div>
                 <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
