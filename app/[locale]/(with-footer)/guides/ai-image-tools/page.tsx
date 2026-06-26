@@ -1,10 +1,11 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
-import { CheckCircle2, ExternalLink, Image as ImageIcon, Palette } from 'lucide-react';
+import { ArrowRight, CheckCircle2, ExternalLink, Image as ImageIcon, Palette } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 
@@ -103,25 +104,113 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/explore?search=image&sort=popular'
+              ctaId='image_guide_browse_tools'
+              ctaLabel='Image guide browse tools'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '看图像类工具' : 'Browse image tools'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/how-to-choose-ai-tools'
+              ctaId='image_guide_selection'
+              ctaLabel='Image guide selection'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '回到选型指南' : 'Back to selection guide'}
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-image-tools-comparison'
+              ctaId='image_guide_compare'
+              ctaLabel='Image guide compare'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看图像工具对比' : 'Compare image tools'}
-            </Link>
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-image-tools'
+              ctaId='image_guide_top_list'
+              ctaLabel='Image guide top list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看图像榜单' : 'Open image ranking'}
+            </TrackableCtaLink>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图路径' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先看榜单，再进入对比页和真实条目' : 'Start with the ranking, then move into comparison and real listings'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己是做生成、修图、抠图还是品牌素材，就不要停在总览页，直接进入更窄的筛选路径。'
+              : 'If generation, editing, cutouts, or brand assets are already the job to solve, move straight into narrower selection paths.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-image-tools',
+                title: isChinese ? '图像工具榜单' : 'Image tools ranking',
+                desc: isChinese ? '直接看高意图 shortlist。' : 'Go straight to the high-intent shortlist.',
+              },
+              {
+                href: '/guides/ai-image-tools-comparison',
+                title: isChinese ? '图像工具对比' : 'Image tools comparison',
+                desc: isChinese ? '横向看生成、修图和设计能力。' : 'Compare generation, editing, and design side by side.',
+              },
+              {
+                href: '/guides/ai-video-tools-comparison',
+                title: isChinese ? '视频工具对比' : 'Video tools comparison',
+                desc: isChinese ? '如果素材会进视频工作流，这里更贴近。' : 'Useful when image assets feed into video workflows.',
+              },
+              {
+                href: '/guides/ai-tools-for-marketing-comparison',
+                title: isChinese ? '营销工具对比' : 'Marketing tools comparison',
+                desc: isChinese ? '如果重点是营销素材和 campaign 输出。' : 'Better for campaign assets and marketing output.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`image_guide_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+          <div className='mt-5 flex flex-wrap gap-3'>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-image-tools'
+              ctaId='image_guide_top_list_secondary'
+              ctaLabel='Image guide top list secondary'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+            >
+              {isChinese ? '打开图像榜单' : 'Open image ranking'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/submit'
+              ctaId='image_guide_submit'
+              ctaLabel='Image guide submit'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
+            >
+              {isChinese ? '提交你的工具' : 'Submit your tool'}
+            </TrackableCtaLink>
           </div>
         </section>
 
@@ -206,6 +295,82 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '下一步怎么走' : 'Next step'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '把图像入口接到榜单、比较页和真实条目'
+              : 'Move from the image guide into rankings, comparisons, and real listings'}
+          </h2>
+          <div className='mt-4 grid gap-4 lg:grid-cols-3'>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-image-tools'
+              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
+              ctaId='image_guide_ranking_next'
+              ctaLabel='Image guide ranking next'
+              pageType='guide'
+            >
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
+                    {isChinese ? '看图像工具榜单' : 'Open image ranking'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {isChinese
+                      ? '如果你已经是高意图筛选，直接看 shortlist 会更快。'
+                      : 'If intent is already high, the shortlist is the fastest next step.'}
+                  </p>
+                </div>
+                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
+              </div>
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/guides/ai-image-tools-comparison'
+              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
+              ctaId='image_guide_compare_next'
+              ctaLabel='Image guide compare next'
+              pageType='guide'
+            >
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
+                    {isChinese ? '看图像工具对比' : 'Compare image tools'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {isChinese
+                      ? '当创作任务已经清楚，就进入横向对比。'
+                      : 'Once the creative task is clear, move into side-by-side comparison.'}
+                  </p>
+                </div>
+                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
+              </div>
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/categories/design-art?sort=popular'
+              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
+              ctaId='image_guide_category'
+              ctaLabel='Image guide category'
+              pageType='guide'
+            >
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
+                    {isChinese ? '进入 Design 分类' : 'Open the design category'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {isChinese
+                      ? '先看真实条目，再回来缩窄候选。'
+                      : 'Browse real listings first, then come back to narrow the shortlist.'}
+                  </p>
+                </div>
+                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
+              </div>
+            </TrackableCtaLink>
           </div>
         </section>
         <GuideSubmissionPath locale={locale} ctaPrefix='ai_image_tools' />

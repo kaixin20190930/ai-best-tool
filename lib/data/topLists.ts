@@ -7,6 +7,7 @@ export type TopListTopicKey =
   | 'ai-creator-tools'
   | 'ai-ecommerce-tools'
   | 'ai-evals-tools'
+  | 'ai-image-tools'
   | 'ai-lead-generation-tools'
   | 'ai-marketing-tools'
   | 'ai-model-routing-tools'
@@ -154,6 +155,21 @@ export const topListTopics: TopListTopicConfig[] = [
     comparisonHref: '/guides/ai-tools-for-evals-comparison',
     comparisonLabel: 'Compare evals tools',
     nextStep: 'Compare evals tools, inspect detail pages, then move into submission or pricing.',
+  },
+  {
+    key: 'ai-image-tools',
+    categorySlug: 'design-art',
+    title: 'Best AI Image Tools',
+    description: 'The most useful tools for image generation, editing, background removal, design assets, and creative workflows.',
+    summary: 'A practical shortlist for people creating visual assets, refining existing images, and scaling creative output with more control.',
+    ctaLabel: 'Go to image list',
+    ctaDescription:
+      'Use this list when the decision is about generation quality, editing control, resolution, licensing, and creative workflow fit.',
+    guideHref: '/guides/ai-image-tools',
+    guideLabel: 'Back to image guide',
+    comparisonHref: '/guides/ai-image-tools-comparison',
+    comparisonLabel: 'Compare image tools',
+    nextStep: 'Compare image tools, inspect detail pages, then move into submission or pricing.',
   },
   {
     key: 'ai-lead-generation-tools',
