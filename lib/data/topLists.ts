@@ -6,6 +6,7 @@ export type TopListTopicKey =
   | 'ai-evals-tools'
   | 'ai-model-routing-tools'
   | 'ai-prompt-testing-tools'
+  | 'ai-sales-prospecting-tools'
   | 'ai-video-tools'
   | 'ai-research-tools'
   | 'ai-writing-tools';
@@ -129,6 +130,21 @@ export const topListTopics: TopListTopicConfig[] = [
     comparisonHref: '/guides/ai-tools-for-prompt-testing-comparison',
     comparisonLabel: 'Compare prompt testing tools',
     nextStep: 'Compare prompt testing tools, inspect detail pages, then move into submission or pricing.',
+  },
+  {
+    key: 'ai-sales-prospecting-tools',
+    categorySlug: 'productivity',
+    title: 'Best AI Sales Prospecting Tools',
+    description: 'The most useful tools for outreach prep, personalization, contact prioritization, and outbound workflow support.',
+    summary: 'A practical shortlist for teams trying to contact the right buyers with stronger context, better openers, and steadier outbound flow.',
+    ctaLabel: 'Go to prospecting list',
+    ctaDescription:
+      'Use this list when the decision is about outreach preparation, message personalization, prioritization, and prospecting workflow fit.',
+    guideHref: '/guides/ai-tools-for-sales-prospecting',
+    guideLabel: 'Back to sales prospecting guide',
+    comparisonHref: '/guides/ai-tools-for-sales-prospecting-comparison',
+    comparisonLabel: 'Compare sales prospecting tools',
+    nextStep: 'Compare sales prospecting tools, inspect detail pages, then move into submission or pricing.',
   },
   {
     key: 'ai-video-tools',
