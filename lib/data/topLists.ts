@@ -5,6 +5,7 @@ export type TopListTopicKey =
   | 'ai-code-review-tools'
   | 'ai-evals-tools'
   | 'ai-lead-generation-tools'
+  | 'ai-marketing-tools'
   | 'ai-model-routing-tools'
   | 'ai-prompt-testing-tools'
   | 'ai-sales-prospecting-tools'
@@ -116,6 +117,21 @@ export const topListTopics: TopListTopicConfig[] = [
     comparisonHref: '/guides/ai-tools-for-lead-generation-comparison',
     comparisonLabel: 'Compare lead generation tools',
     nextStep: 'Compare lead generation tools, inspect detail pages, then move into submission or pricing.',
+  },
+  {
+    key: 'ai-marketing-tools',
+    categorySlug: 'marketing',
+    title: 'Best AI Marketing Tools',
+    description: 'The most useful tools for ads, email, social content, growth workflows, and marketing operations.',
+    summary: 'A practical shortlist for teams scaling campaigns, content, and channel execution without losing speed or brand consistency.',
+    ctaLabel: 'Go to marketing list',
+    ctaDescription:
+      'Use this list when the decision is about campaign execution, channel coverage, batch content production, and marketing workflow fit.',
+    guideHref: '/guides/ai-tools-for-marketing',
+    guideLabel: 'Back to marketing guide',
+    comparisonHref: '/guides/ai-tools-for-marketing-comparison',
+    comparisonLabel: 'Compare marketing tools',
+    nextStep: 'Compare marketing tools, inspect detail pages, then move into submission or pricing.',
   },
   {
     key: 'ai-model-routing-tools',

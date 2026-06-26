@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { ArrowRight, CheckCircle2, ExternalLink, Megaphone, TrendingUp } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
@@ -7,6 +6,7 @@ import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
@@ -62,15 +62,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const faqSchema = generateFAQSchema(faqs);
   const tips = isChinese
     ? [
-        '先分清你做的是投放、增长、社媒、邮件还是内容营销。',
-        '看它是否能接到你已有的广告、邮件和 CRM 工具。',
-        '如果你要持续迭代，优先看模板、批量、权限和品牌一致性。',
-      ]
+      '先分清你做的是投放、增长、社媒、邮件还是内容营销。',
+      '看它是否能接到你已有的广告、邮件和 CRM 工具。',
+      '如果你要持续迭代，优先看模板、批量、权限和品牌一致性。',
+    ]
     : [
-        'Separate the work first: ads, growth, social, email, or content marketing all need different tools.',
-        'Check whether it plugs into your ad, email, and CRM stack.',
-        'If you will iterate often, prioritize templates, batch workflows, permissions, and brand consistency.',
-      ];
+      'Separate the work first: ads, growth, social, email, or content marketing all need different tools.',
+      'Check whether it plugs into your ad, email, and CRM stack.',
+      'If you will iterate often, prioritize templates, batch workflows, permissions, and brand consistency.',
+    ];
 
   return (
     <>
@@ -101,31 +101,52 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/explore?search=marketing&sort=popular'
+              ctaId='marketing_guide_browse_tools'
+              ctaLabel='Marketing guide browse tools'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '看营销工具' : 'Browse marketing tools'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/how-to-choose-ai-tools'
+              ctaId='marketing_guide_choose'
+              ctaLabel='Marketing guide choose'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '回到选型指南' : 'Back to selection guide'}
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-writing-tools'
+              ctaId='marketing_guide_writing'
+              ctaLabel='Marketing guide writing'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看写作工具' : 'Writing tools'}
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-tools-for-marketing-comparison'
+              ctaId='marketing_guide_comparison'
+              ctaLabel='Marketing guide comparison'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看营销工具对比' : 'Compare marketing tools'}
-            </Link>
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-marketing-tools'
+              ctaId='marketing_guide_top_list'
+              ctaLabel='Marketing guide top list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看营销榜单' : 'Open marketing ranking'}
+            </TrackableCtaLink>
           </div>
         </section>
 
@@ -237,6 +258,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
               </div>
             </Link>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先用榜单缩小 marketing shortlist' : 'Use the ranking to narrow your marketing shortlist first'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己要比的是广告、邮件、社媒和增长工作流，榜单页会比泛目录更快进入决策。'
+              : 'If the decision is already about ads, email, social, and growth workflows, the ranking page gets to a decision faster than a broad directory.'}
+          </p>
+          <div className='mt-5 flex flex-wrap gap-3'>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-marketing-tools'
+              ctaId='marketing_guide_ranking_primary'
+              ctaLabel='Marketing guide ranking primary'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+            >
+              {isChinese ? '进入营销榜单' : 'Open marketing ranking'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/guides/ai-tools-for-marketing-comparison'
+              ctaId='marketing_guide_ranking_secondary'
+              ctaLabel='Marketing guide ranking secondary'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
+            >
+              {isChinese ? '继续看对比页' : 'Continue to comparison'}
+            </TrackableCtaLink>
           </div>
         </section>
 
