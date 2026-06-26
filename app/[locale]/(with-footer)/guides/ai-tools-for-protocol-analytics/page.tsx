@@ -1,10 +1,11 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { BarChart3, ExternalLink, Layers3, ShieldCheck } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -56,15 +57,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-        '先分清你是在看协议健康、使用量，还是研究趋势。',
-        '看它是否支持你关心的链和数据源。',
-        '如果给团队使用，优先看 API、导出、告警和历史追踪能力。',
-      ]
+      '先分清你是在看协议健康、使用量，还是研究趋势。',
+      '看它是否支持你关心的链和数据源。',
+      '如果给团队使用，优先看 API、导出、告警和历史追踪能力。',
+    ]
     : [
-        'Separate the use case first: protocol health, usage, or trend research.',
-        'Check whether it supports the chains and data sources you actually care about.',
-        'For team use, prioritize API access, exports, alerts, and historical tracking.',
-      ];
+      'Separate the use case first: protocol health, usage, or trend research.',
+      'Check whether it supports the chains and data sources you actually care about.',
+      'For team use, prioritize API access, exports, alerts, and historical tracking.',
+    ];
 
   return (
     <>
@@ -104,25 +105,43 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/explore?search=protocol&sort=popular'
+              ctaId='protocol_analytics_guide_browse_tools'
+              ctaLabel='Protocol analytics guide browse tools'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '看协议工具' : 'Browse protocol tools'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-web3-tools'
+              ctaId='protocol_analytics_guide_top_list'
+              ctaLabel='Protocol analytics guide Web3 top list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看 Web3 榜单' : 'Open Web3 ranking'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-tools-for-defi-analytics'
+              ctaId='protocol_analytics_guide_defi'
+              ctaLabel='Protocol analytics guide DeFi guide'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '回到 DeFi 指南' : 'Back to DeFi guide'}
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-tools-for-protocol-analytics-comparison'
+              ctaId='protocol_analytics_guide_comparison'
+              ctaLabel='Protocol analytics guide comparison'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看协议对比页' : 'Protocol comparison'}
-            </Link>
+            </TrackableCtaLink>
           </div>
         </section>
 
@@ -200,6 +219,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           }
           compareLinks={[
             {
+              href: '/best-ai-tools/ai-web3-tools',
+              title: isChinese ? 'Web3 工具榜单' : 'Web3 tools ranking',
+              description: isChinese
+                ? '先看更高相关的 Web3 候选，再决定是否进入更窄的协议分析对比。'
+                : 'Start with the highest-fit Web3 candidates, then decide whether you need the narrower protocol-analytics comparison.',
+            },
+            {
               href: '/guides/ai-tools-for-protocol-analytics-comparison',
               title: isChinese ? '协议分析工具对比' : 'Protocol analytics comparison',
               description: isChinese
@@ -229,10 +255,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           }
           nextDescription={
             isChinese
-              ? '如果你已经明确在找协议工具，下一步就回 Web3 分类、搜索结果和本周新增继续筛。'
-              : 'Once protocol analytics is clearly the lane, the next step is to use Web3 categories, search results, and weekly additions to compare real candidates.'
+              ? '如果你已经明确在找协议工具，下一步就看 Web3 榜单、分类和搜索结果继续筛。'
+              : 'Once protocol analytics is clearly the lane, the next step is to use the Web3 ranking, category, and search results to compare real candidates.'
           }
           nextLinks={[
+            {
+              href: '/best-ai-tools/ai-web3-tools',
+              title: isChinese ? '进入 Web3 榜单' : 'Open the Web3 ranking',
+              description: isChinese
+                ? '先从更高相关的 Web3 候选集合开始。'
+                : 'Start with the highest-fit Web3 shortlist.',
+            },
             {
               href: '/categories/web3?sort=popular',
               title: isChinese ? '进入 Web3 分类' : 'Open the Web3 category',
@@ -246,13 +279,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               description: isChinese
                 ? '回到 Explore，用更窄的 protocol 关键词扩大 shortlist。'
                 : 'Return to Explore and widen the shortlist with protocol-specific search.',
-            },
-            {
-              href: '/new',
-              title: isChinese ? '看本周新增' : 'Check new this week',
-              description: isChinese
-                ? '看看最近补进来的 Web3 / 研究工具里有没有更合适的新候选。'
-                : 'See whether recent Web3 and research additions introduced a stronger fit.',
             },
           ]}
         />

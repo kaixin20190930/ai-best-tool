@@ -1,10 +1,11 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { ExternalLink, Layers3, PieChart, WalletCards } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -64,15 +65,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-        '先分清你要的是组合看板、钱包归集，还是更偏交易与提醒。',
-        '看资产归类和多链支持是否覆盖你的真实持仓结构。',
-        '如果要长期看组合，重点看刷新频率、历史视图和导出能力。',
-      ]
+      '先分清你要的是组合看板、钱包归集，还是更偏交易与提醒。',
+      '看资产归类和多链支持是否覆盖你的真实持仓结构。',
+      '如果要长期看组合，重点看刷新频率、历史视图和导出能力。',
+    ]
     : [
-        'Separate portfolio dashboards, wallet rollups, and alert workflows before comparing tools.',
-        'Check whether asset grouping and multichain support match your real holdings structure.',
-        'For long-term tracking, prioritize refresh cadence, historical views, and export capabilities.',
-      ];
+      'Separate portfolio dashboards, wallet rollups, and alert workflows before comparing tools.',
+      'Check whether asset grouping and multichain support match your real holdings structure.',
+      'For long-term tracking, prioritize refresh cadence, historical views, and export capabilities.',
+    ];
 
   return (
     <>
@@ -103,25 +104,43 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/explore?search=portfolio&sort=popular'
+              ctaId='portfolio_tracking_guide_browse_tools'
+              ctaLabel='Portfolio tracking guide browse tools'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '看资产追踪工具' : 'Browse portfolio tracking tools'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-web3-tools'
+              ctaId='portfolio_tracking_guide_top_list'
+              ctaLabel='Portfolio tracking guide Web3 top list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看 Web3 榜单' : 'Open Web3 ranking'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-tools-for-web3'
+              ctaId='portfolio_tracking_guide_web3'
+              ctaLabel='Portfolio tracking guide Web3 guide'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '回到 Web3 指南' : 'Back to Web3 guide'}
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-tools-for-crypto-portfolio-tracking-comparison'
+              ctaId='portfolio_tracking_guide_comparison'
+              ctaLabel='Portfolio tracking guide comparison'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看资产追踪对比页' : 'Portfolio comparison'}
-            </Link>
+            </TrackableCtaLink>
           </div>
         </section>
 
@@ -195,6 +214,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           }
           compareLinks={[
             {
+              href: '/best-ai-tools/ai-web3-tools',
+              title: isChinese ? 'Web3 工具榜单' : 'Web3 tools ranking',
+              description: isChinese
+                ? '先看更高相关的 Web3 候选，再决定是否进入更窄的资产追踪对比。'
+                : 'Start with the highest-fit Web3 candidates, then decide whether you need the narrower portfolio-tracking comparison.',
+            },
+            {
               href: '/guides/ai-tools-for-crypto-portfolio-tracking-comparison',
               title: isChinese ? '资产追踪工具对比' : 'Portfolio tracking comparison',
               description: isChinese
@@ -224,10 +250,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           }
           nextDescription={
             isChinese
-              ? '如果你已经明确在找组合和持仓工具，下一步就回 Web3 分类、搜索结果和本周新增继续筛。'
-              : 'Once portfolio tracking is clearly the lane, the next step is to return to Web3 categories, search results, and weekly additions.'
+              ? '如果你已经明确在找组合和持仓工具，下一步就看 Web3 榜单、分类和搜索结果继续筛。'
+              : 'Once portfolio tracking is clearly the lane, the next step is to use the Web3 ranking, category, and search results.'
           }
           nextLinks={[
+            {
+              href: '/best-ai-tools/ai-web3-tools',
+              title: isChinese ? '进入 Web3 榜单' : 'Open the Web3 ranking',
+              description: isChinese
+                ? '先从更高相关的 Web3 候选集合开始。'
+                : 'Start with the highest-fit Web3 shortlist.',
+            },
             {
               href: '/categories/web3?sort=popular',
               title: isChinese ? '进入 Web3 分类' : 'Open the Web3 category',
@@ -241,13 +274,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               description: isChinese
                 ? '回到 Explore，用更窄的组合关键词继续扩大 shortlist。'
                 : 'Return to Explore and widen the shortlist with more portfolio-specific search.',
-            },
-            {
-              href: '/new',
-              title: isChinese ? '看本周新增' : 'Check new this week',
-              description: isChinese
-                ? '看看最近补进来的 Web3 工具里有没有更好的资产追踪候选。'
-                : 'See whether recent Web3 additions introduced a stronger fit for portfolio tracking.',
             },
           ]}
         />
