@@ -1,12 +1,13 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { ArrowRight, CheckCircle2, ExternalLink, Star } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import { toolToListRow } from '@/lib/services/toolPresenter';
 import { getTools } from '@/lib/services/tools';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 
@@ -117,19 +118,69 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/guides/free-ai-tools'
+              ctaId='best_free_tools_guide_intro'
+              ctaLabel='Best free tools guide intro'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '看免费工具指南' : 'Read the free tools guide'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/explore?pricing=free&sort=popular'
+              ctaId='best_free_tools_browse'
+              ctaLabel='Best free tools browse'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '浏览免费工具' : 'Browse free tools'}
               <ArrowRight className='size-4' />
+            </TrackableCtaLink>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图入口' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '从免费榜单走向真实候选的下一步' : 'The next step after the free ranking'}
+          </h2>
+          <div className='mt-4 grid gap-3 md:grid-cols-3'>
+            <Link
+              href='/explore?pricing=free&sort=popular'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '免费筛选页' : 'Free filter'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '当榜单不够细时，继续用免费过滤后的 Explore 扩大候选。'
+                  : 'If the ranking is still too broad, widen the shortlist in Explore with the free filter applied.'}
+              </p>
+            </Link>
+            <Link
+              href='/guides/free-ai-tools'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '免费指南' : 'Free tools guide'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '回到判断页，再看限制、更新和评论这些筛选标准。'
+                  : 'Return to the judging guide for limits, freshness, and review-based filtering criteria.'}
+              </p>
+            </Link>
+            <Link
+              href='/categories/productivity?sort=popular'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '常见类目' : 'Popular category'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '如果你已经知道场景，直接进入最贴近的类目更快。'
+                  : 'If the use case is already clear, jumping into the closest category is faster.'}
+              </p>
             </Link>
           </div>
         </section>

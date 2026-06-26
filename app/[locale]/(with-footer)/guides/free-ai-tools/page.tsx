@@ -1,10 +1,11 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { CheckCircle2, ExternalLink, FileText, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 
@@ -62,15 +63,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const faqSchema = generateFAQSchema(faqs);
   const tips = isChinese
     ? [
-        '先看免费额度和限制，避免选到“看起来免费、实际上用不了”的工具。',
-        '优先选择最近有更新、评论正常、截图清晰的工具。',
-        '如果你是第一次尝试，用免费工具先验证场景最稳妥。',
-      ]
+      '先看免费额度和限制，避免选到“看起来免费、实际上用不了”的工具。',
+      '优先选择最近有更新、评论正常、截图清晰的工具。',
+      '如果你是第一次尝试，用免费工具先验证场景最稳妥。',
+    ]
     : [
-        'Check quotas and limits first so you do not pick a tool that looks free but is unusable in practice.',
-        'Prefer tools with recent updates, real comments, and clear screenshots.',
-        'If you are trying a workflow for the first time, free tools are the safest place to start.',
-      ];
+      'Check quotas and limits first so you do not pick a tool that looks free but is unusable in practice.',
+      'Prefer tools with recent updates, real comments, and clear screenshots.',
+      'If you are trying a workflow for the first time, free tools are the safest place to start.',
+    ];
 
   return (
     <>
@@ -99,18 +100,77 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/explore?pricing=free&sort=popular'
+              ctaId='free_tools_guide_browse_tools'
+              ctaLabel='Free tools guide browse tools'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '看免费工具' : 'View free tools'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/guides/best-free-ai-tools'
+              ctaId='free_tools_guide_best_free'
+              ctaLabel='Free tools guide best free list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看免费榜单' : 'Open free ranking'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/categories/productivity'
+              ctaId='free_tools_guide_category'
+              ctaLabel='Free tools guide category'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '先看一个类目' : 'Start with a category'}
+            </TrackableCtaLink>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图入口' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '如果你已经确定先试免费工具，先看榜单再进筛选' : 'If free tools are already the lane, open the ranking before filtering'}
+          </h2>
+          <div className='mt-4 grid gap-3 md:grid-cols-3'>
+            <Link
+              href='/guides/best-free-ai-tools'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '免费榜单' : 'Free ranking'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '先看真正值得试的免费工具，再决定进哪个分类继续筛。'
+                  : 'Start with free tools that are actually worth trying, then decide which category to narrow into.'}
+              </p>
+            </Link>
+            <Link
+              href='/explore?pricing=free&sort=popular'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '免费筛选页' : 'Free filter'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '如果你更想直接刷更多候选，就先进入免费过滤后的 Explore。'
+                  : 'If you prefer browsing more candidates directly, jump into Explore with the free filter applied.'}
+              </p>
+            </Link>
+            <Link
+              href='/categories/productivity?sort=popular'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '类目入口' : 'Category entry'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '如果你已经有场景，就从最相关的类目继续筛。'
+                  : 'If the use case is already clear, continue from the closest-matching category.'}
+              </p>
             </Link>
           </div>
         </section>

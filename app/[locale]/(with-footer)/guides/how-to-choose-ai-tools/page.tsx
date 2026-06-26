@@ -1,10 +1,11 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { CheckCircle2, ExternalLink, FileText, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 
@@ -61,15 +62,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const faqSchema = generateFAQSchema(faqs);
   const tips = isChinese
     ? [
-        '先锁定一个真实场景，不要先看功能清单。',
-        '优先看最近更新、截图和评论，而不是只看首页文案。',
-        '如果你在比较多个工具，先从分类页和搜索结果缩小范围。',
-      ]
+      '先锁定一个真实场景，不要先看功能清单。',
+      '优先看最近更新、截图和评论，而不是只看首页文案。',
+      '如果你在比较多个工具，先从分类页和搜索结果缩小范围。',
+    ]
     : [
-        'Start from a real use case, not a feature checklist.',
-        'Prefer fresh updates, screenshots, and comments over homepage claims.',
-        'If you are comparing tools, narrow the field with category pages and search.',
-      ];
+      'Start from a real use case, not a feature checklist.',
+      'Prefer fresh updates, screenshots, and comments over homepage claims.',
+      'If you are comparing tools, narrow the field with category pages and search.',
+    ];
 
   return (
     <>
@@ -100,18 +101,77 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/explore'
+              ctaId='choose_tools_guide_browse_tools'
+              ctaLabel='Choose tools guide browse tools'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '去浏览工具' : 'Browse tools'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/best-ai-tools'
+              ctaId='choose_tools_guide_rankings_hub'
+              ctaLabel='Choose tools guide rankings hub'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看榜单总页' : 'Open rankings hub'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides'
+              ctaId='choose_tools_guide_all_guides'
+              ctaLabel='Choose tools guide all guides'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '查看全部指南' : 'See all guides'}
+            </TrackableCtaLink>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图入口' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '如果你已经知道要比哪一类，直接进榜单或类目' : 'If you already know the lane, jump straight into rankings or categories'}
+          </h2>
+          <div className='mt-4 grid gap-3 md:grid-cols-3'>
+            <Link
+              href='/best-ai-tools'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '榜单总页' : 'Rankings hub'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '如果你要快速进入 shortlist，榜单页通常比泛浏览更快。'
+                  : 'If the goal is a shortlist fast, the rankings hub is usually quicker than broad browsing.'}
+              </p>
+            </Link>
+            <Link
+              href='/guides'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '指南总览' : 'Guides hub'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '如果你还没想清楚方向，就先从专题指南里继续缩小范围。'
+                  : 'If the direction is still fuzzy, keep narrowing through the topic guides first.'}
+              </p>
+            </Link>
+            <Link
+              href='/explore'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? 'Explore' : 'Explore'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '如果你更想从真实条目和筛选开始，就直接进 Explore。'
+                  : 'If you prefer starting from real listings and filters, go straight into Explore.'}
+              </p>
             </Link>
           </div>
         </section>
