@@ -16,6 +16,7 @@ export type TopListTopicKey =
   | 'ai-voice-tools'
   | 'ai-video-tools'
   | 'ai-research-tools'
+  | 'ai-seo-tools'
   | 'ai-writing-tools';
 
 export type TopListTopicConfig = {
@@ -285,6 +286,21 @@ export const topListTopics: TopListTopicConfig[] = [
     comparisonHref: '/guides/ai-tools-for-research-comparison',
     comparisonLabel: 'Compare research tools',
     nextStep: 'Compare research tools, inspect product pages, then move into submission or pricing.',
+  },
+  {
+    key: 'ai-seo-tools',
+    categorySlug: 'text-writing',
+    title: 'Best AI SEO Tools',
+    description: 'The most useful tools for keyword research, content briefs, optimization workflows, and rank tracking.',
+    summary: 'A practical shortlist for teams growing search traffic through research, content planning, and repeatable SEO execution.',
+    ctaLabel: 'Go to SEO list',
+    ctaDescription:
+      'Use this list when the decision is about keyword coverage, content optimization, SERP workflow fit, and long-term SEO execution.',
+    guideHref: '/guides/ai-seo-tools',
+    guideLabel: 'Back to SEO guide',
+    comparisonHref: '/guides/ai-seo-tools-comparison',
+    comparisonLabel: 'Compare SEO tools',
+    nextStep: 'Compare SEO tools, inspect detail pages, then move into submission or pricing.',
   },
   {
     key: 'ai-writing-tools',

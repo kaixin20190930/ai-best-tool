@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { ArrowRight, CheckCircle2, ExternalLink, Search, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -61,15 +61,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-        '先确认你是做关键词、内容优化、技术 SEO 还是排名监控。',
-        '看它是否支持中文、是否有模板、是否能保持建议稳定。',
-        '如果你要长期做内容增长，优先看导出、协作和数据更新频率。',
-      ]
+      '先确认你是做关键词、内容优化、技术 SEO 还是排名监控。',
+      '看它是否支持中文、是否有模板、是否能保持建议稳定。',
+      '如果你要长期做内容增长，优先看导出、协作和数据更新频率。',
+    ]
     : [
-        'Start with the workflow: keywords, content optimization, technical SEO, or rank monitoring.',
-        'Check whether it supports Chinese, has templates, and keeps recommendations stable.',
-        'If you plan to grow content long term, look at exports, collaboration, and data freshness.',
-      ];
+      'Start with the workflow: keywords, content optimization, technical SEO, or rank monitoring.',
+      'Check whether it supports Chinese, has templates, and keeps recommendations stable.',
+      'If you plan to grow content long term, look at exports, collaboration, and data freshness.',
+    ];
 
   return (
     <>
@@ -100,25 +100,43 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/explore?search=seo&sort=popular'
+              ctaId='seo_guide_browse_tools'
+              ctaLabel='SEO guide browse tools'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '看 SEO 工具' : 'Browse SEO tools'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-writing-tools'
+              ctaId='seo_guide_writing'
+              ctaLabel='SEO guide writing'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '回到写作指南' : 'Back to writing guide'}
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-seo-tools-comparison'
+              ctaId='seo_guide_compare'
+              ctaLabel='SEO guide compare'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看 SEO 对比页' : 'SEO comparison'}
-            </Link>
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-seo-tools'
+              ctaId='seo_guide_top_list'
+              ctaLabel='SEO guide top list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看 SEO 榜单' : 'Open SEO ranking'}
+            </TrackableCtaLink>
           </div>
         </section>
 
@@ -181,12 +199,36 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
             {isChinese
-              ? '把 SEO 入口接到比较页和真实条目'
-              : 'Move from the SEO guide into comparisons and real listings'}
+              ? '把 SEO 入口接到榜单、比较页和真实条目'
+              : 'Move from the SEO guide into rankings, comparisons, and real listings'}
           </h2>
           <div className='mt-4 grid gap-4 lg:grid-cols-3'>
-            <Link
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-seo-tools'
+              ctaId='seo_guide_ranking_next'
+              ctaLabel='SEO guide ranking next'
+              pageType='guide'
+              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
+            >
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
+                    {isChinese ? '看 SEO 榜单' : 'Open SEO ranking'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {isChinese
+                      ? '如果你已经是高意图筛选，直接看 shortlist 会更快。'
+                      : 'If intent is already high, the shortlist is the fastest next step.'}
+                  </p>
+                </div>
+                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
+              </div>
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-seo-tools-comparison'
+              ctaId='seo_guide_compare_next'
+              ctaLabel='SEO guide compare next'
+              pageType='guide'
               className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
             >
               <div className='flex items-start justify-between gap-3'>
@@ -202,9 +244,12 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 </div>
                 <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
               </div>
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/categories/text-writing?sort=popular'
+              ctaId='seo_guide_category'
+              ctaLabel='SEO guide category'
+              pageType='guide'
               className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
             >
               <div className='flex items-start justify-between gap-3'>
@@ -220,25 +265,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 </div>
                 <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
               </div>
-            </Link>
-            <Link
-              href='/explore?search=seo&sort=popular'
-              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
-            >
-              <div className='flex items-start justify-between gap-3'>
-                <div>
-                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
-                    {isChinese ? '搜索更多 SEO 工具' : 'Search more SEO tools'}
-                  </p>
-                  <p className='mt-2 text-sm leading-6 text-slate-600'>
-                    {isChinese
-                      ? '如果你还要扩大候选范围，可以回到搜索页继续看。'
-                      : 'Use the search page to widen the candidate set a bit further.'}
-                  </p>
-                </div>
-                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
-              </div>
-            </Link>
+            </TrackableCtaLink>
           </div>
         </section>
 
@@ -260,6 +287,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               : 'Once you know whether content optimization, brief generation, or topic planning matters most, narrower compare pages work better.'
           }
           compareLinks={[
+            {
+              href: '/best-ai-tools/ai-seo-tools',
+              title: isChinese ? 'SEO 榜单' : 'SEO ranking',
+              description: isChinese
+                ? '直接进高意图 shortlist，再决定要不要细比。'
+                : 'Jump into the high-intent shortlist before deciding whether to compare deeper.',
+            },
             {
               href: '/guides/ai-seo-tools-comparison',
               title: isChinese ? 'SEO 工具总对比' : 'SEO tools comparison',
@@ -286,10 +320,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           nextTitle={isChinese ? '确定 SEO 方向后，下一步看这里' : 'Where to go once SEO is clearly the right lane'}
           nextDescription={
             isChinese
-              ? '如果你已经明确自己在做搜索流量和内容增长，下一步就去写作分类、搜索结果和本周新增看真实条目。'
-              : 'If search traffic and content growth are clearly the focus, the next step is to use the writing category, targeted search, and recent additions.'
+              ? '如果你已经明确自己在做搜索流量和内容增长，下一步就去榜单、写作分类和搜索结果看真实条目。'
+              : 'If search traffic and content growth are clearly the focus, the next step is to use the ranking, writing category, and targeted search.'
           }
           nextLinks={[
+            {
+              href: '/best-ai-tools/ai-seo-tools',
+              title: isChinese ? '打开 SEO 榜单' : 'Open SEO ranking',
+              description: isChinese
+                ? '先看 shortlist，再回到分类或对比页收敛。'
+                : 'Start with the shortlist, then return to category or comparison pages to narrow further.',
+            },
             {
               href: '/categories/text-writing?sort=popular',
               title: isChinese ? '进入写作分类' : 'Open the writing category',
@@ -303,13 +344,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               description: isChinese
                 ? '回到 Explore，用 SEO 关键词扩大候选范围。'
                 : 'Return to Explore and widen the shortlist with an SEO-focused search.',
-            },
-            {
-              href: '/new',
-              title: isChinese ? '看本周新增' : 'Check new this week',
-              description: isChinese
-                ? '看看最近补进来的条目里有没有更适合的新候选。'
-                : 'See whether recent additions introduced a better fit for your workflow.',
             },
           ]}
         />
