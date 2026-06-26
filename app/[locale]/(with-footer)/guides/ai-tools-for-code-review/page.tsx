@@ -1,13 +1,14 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { ExternalLink, GitPullRequest, Layers3, ShieldAlert } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Metadata.home' });
@@ -64,15 +65,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-        '先分清你要的是 PR 解释、风险检查，还是团队协作反馈。',
-        '看它是否能围绕 diff、文件上下文和项目结构给建议，而不是泛泛而谈。',
-        '对团队来说，比“会不会说”更重要的是噪音控制和评论可执行性。',
-      ]
+      '先分清你要的是 PR 解释、风险检查，还是团队协作反馈。',
+      '看它是否能围绕 diff、文件上下文和项目结构给建议，而不是泛泛而谈。',
+      '对团队来说，比“会不会说”更重要的是噪音控制和评论可执行性。',
+    ]
     : [
-        'Separate PR explanation, risk checking, and collaboration feedback before comparing tools.',
-        'Look for suggestions grounded in diffs, file context, and project structure rather than generic advice.',
-        'For teams, noise control and actionable comments matter more than flashy output.',
-      ];
+      'Separate PR explanation, risk checking, and collaboration feedback before comparing tools.',
+      'Look for suggestions grounded in diffs, file context, and project structure rather than generic advice.',
+      'For teams, noise control and actionable comments matter more than flashy output.',
+    ];
 
   return (
     <>
@@ -103,25 +104,43 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/explore?search=code%20review&sort=popular'
+              ctaId='code_review_guide_browse_tools'
+              ctaLabel='Code review guide browse tools'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '看代码审查工具' : 'Browse code review tools'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-tools-for-developers'
+              ctaId='code_review_guide_developers'
+              ctaLabel='Code review guide developers'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '回到开发者指南' : 'Back to developer guide'}
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-tools-for-code-review-comparison'
+              ctaId='code_review_guide_comparison'
+              ctaLabel='Code review guide comparison'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看代码审查对比页' : 'Code review comparison'}
-            </Link>
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-code-review-tools'
+              ctaId='code_review_guide_top_list'
+              ctaLabel='Code review guide top list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看代码审查榜单' : 'Open code review ranking'}
+            </TrackableCtaLink>
           </div>
         </section>
 
@@ -198,6 +217,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'A direct side-by-side path for PR understanding, risk checks, and feedback quality.',
             },
             {
+              href: '/best-ai-tools/ai-code-review-tools',
+              title: isChinese ? '代码审查榜单' : 'Code review ranking',
+              description: isChinese
+                ? '适合已经确认方向、只想快速缩小 shortlist 的用户。'
+                : 'Useful when the direction is clear and the goal is to narrow the shortlist faster.',
+            },
+            {
               href: '/guides/ai-coding-tools-comparison',
               title: isChinese ? '编程工具对比' : 'Coding tools comparison',
               description: isChinese
@@ -245,6 +271,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             },
           ]}
         />
+
+        <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先用榜单缩小代码审查 shortlist' : 'Use the ranking to narrow your code review shortlist first'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己要比的是 PR 理解、风险提示和 review 反馈，榜单页会比泛目录更快进入决策。'
+              : 'If the decision is already about PR understanding, risk checks, and review feedback, the ranking page gets to a decision faster than a broad directory.'}
+          </p>
+          <div className='mt-5 flex flex-wrap gap-3'>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-code-review-tools'
+              ctaId='code_review_guide_ranking_primary'
+              ctaLabel='Code review guide ranking primary'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+            >
+              {isChinese ? '进入代码审查榜单' : 'Open code review ranking'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/guides/ai-tools-for-code-review-comparison'
+              ctaId='code_review_guide_ranking_secondary'
+              ctaLabel='Code review guide ranking secondary'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
+            >
+              {isChinese ? '继续看对比页' : 'Continue to comparison'}
+            </TrackableCtaLink>
+          </div>
+        </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

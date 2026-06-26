@@ -2,6 +2,7 @@ export type TopListTopicKey =
   | 'ai-api-observability-tools'
   | 'ai-agent-tools'
   | 'ai-coding-tools'
+  | 'ai-code-review-tools'
   | 'ai-evals-tools'
   | 'ai-model-routing-tools'
   | 'ai-prompt-testing-tools'
@@ -68,6 +69,21 @@ export const topListTopics: TopListTopicConfig[] = [
     comparisonHref: '/guides/ai-coding-tools-comparison',
     comparisonLabel: 'Compare coding tools',
     nextStep: 'Compare coding tools, inspect product pages, then move into submission or pricing.',
+  },
+  {
+    key: 'ai-code-review-tools',
+    categorySlug: 'developer-tools',
+    title: 'Best AI Code Review Tools',
+    description: 'The most useful tools for PR understanding, risk checks, review feedback, and team review workflows.',
+    summary: 'A practical shortlist for teams trying to reduce review cost, surface risk faster, and keep feedback actionable.',
+    ctaLabel: 'Go to code review list',
+    ctaDescription:
+      'Use this list when the decision is about PR review quality, change understanding, risk flags, and team feedback flow.',
+    guideHref: '/guides/ai-tools-for-code-review',
+    guideLabel: 'Back to code review guide',
+    comparisonHref: '/guides/ai-tools-for-code-review-comparison',
+    comparisonLabel: 'Compare code review tools',
+    nextStep: 'Compare code review tools, inspect detail pages, then move into submission or pricing.',
   },
   {
     key: 'ai-evals-tools',
