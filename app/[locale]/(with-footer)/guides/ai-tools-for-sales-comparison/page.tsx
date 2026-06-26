@@ -22,6 +22,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'sales',
     guideHref: '/guides/ai-tools-for-sales',
+    rankingHref: '/best-ai-tools/ai-sales-prospecting-tools',
+    rankingLabel: { cn: '转去销售相关榜单页', en: 'Open the sales ranking' },
     backGuideLabel: { cn: '回到销售指南', en: 'Back to sales guide' },
     altBrowseHref: '/explore?search=sales&sort=popular',
     altBrowseLabel: { cn: '浏览更多销售工具', en: 'Browse more sales tools' },

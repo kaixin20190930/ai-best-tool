@@ -22,6 +22,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'code review',
     guideHref: '/guides/ai-tools-for-code-review',
+    rankingHref: '/best-ai-tools/ai-code-review-tools',
+    rankingLabel: { cn: '转去代码审查榜单页', en: 'Open the code review ranking' },
     backGuideLabel: { cn: '回到代码审查指南', en: 'Back to code review guide' },
     altBrowseHref: '/explore?search=code%20review&sort=popular',
     altBrowseLabel: { cn: '浏览更多代码审查工具', en: 'Browse more code review tools' },

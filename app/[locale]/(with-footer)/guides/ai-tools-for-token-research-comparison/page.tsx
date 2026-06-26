@@ -22,6 +22,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'token',
     guideHref: '/guides/ai-tools-for-token-research',
+    rankingHref: '/best-ai-tools/ai-web3-tools',
+    rankingLabel: { cn: '转去 Web3 榜单页', en: 'Open the Web3 ranking' },
     backGuideLabel: { cn: '回到代币研究指南', en: 'Back to token research guide' },
     altBrowseHref: '/explore?search=token&sort=popular',
     altBrowseLabel: { cn: '浏览更多代币研究相关工具', en: 'Browse more token-research tools' },

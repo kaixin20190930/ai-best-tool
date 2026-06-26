@@ -22,6 +22,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'research',
     guideHref: '/guides/ai-tools-for-research',
+    rankingHref: '/best-ai-tools/ai-research-tools',
+    rankingLabel: { cn: '转去研究榜单页', en: 'Open the research ranking' },
     backGuideLabel: { cn: '回到研究工具指南', en: 'Back to research guide' },
     altBrowseHref: '/explore?search=research&sort=popular',
     altBrowseLabel: { cn: '浏览更多研究工具', en: 'Browse more research tools' },

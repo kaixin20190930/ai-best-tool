@@ -2,12 +2,12 @@ import { Metadata } from 'next';
 import { CheckCircle2, ExternalLink, FileText, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
@@ -62,15 +62,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const faqSchema = generateFAQSchema(faqs);
   const tips = isChinese
     ? [
-      '先锁定一个真实场景，不要先看功能清单。',
-      '优先看最近更新、截图和评论，而不是只看首页文案。',
-      '如果你在比较多个工具，先从分类页和搜索结果缩小范围。',
-    ]
+        '先锁定一个真实场景，不要先看功能清单。',
+        '优先看最近更新、截图和评论，而不是只看首页文案。',
+        '如果你在比较多个工具，先从分类页和搜索结果缩小范围。',
+      ]
     : [
-      'Start from a real use case, not a feature checklist.',
-      'Prefer fresh updates, screenshots, and comments over homepage claims.',
-      'If you are comparing tools, narrow the field with category pages and search.',
-    ];
+        'Start from a real use case, not a feature checklist.',
+        'Prefer fresh updates, screenshots, and comments over homepage claims.',
+        'If you are comparing tools, narrow the field with category pages and search.',
+      ];
 
   return (
     <>
@@ -112,7 +112,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               <ExternalLink className='size-4' />
             </TrackableCtaLink>
             <TrackableCtaLink
-              href='/best-ai-tools'
+              href='/best-ai-tools/'
               ctaId='choose_tools_guide_rankings_hub'
               ctaLabel='Choose tools guide rankings hub'
               pageType='guide'
@@ -137,11 +137,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {isChinese ? '高意图入口' : 'High-intent path'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '如果你已经知道要比哪一类，直接进榜单或类目' : 'If you already know the lane, jump straight into rankings or categories'}
+            {isChinese
+              ? '如果你已经知道要比哪一类，直接进榜单或类目'
+              : 'If you already know the lane, jump straight into rankings or categories'}
           </h2>
           <div className='mt-4 grid gap-3 md:grid-cols-3'>
             <Link
-              href='/best-ai-tools'
+              href='/best-ai-tools/'
               className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
             >
               <p className='text-sm font-semibold text-slate-950'>{isChinese ? '榜单总页' : 'Rankings hub'}</p>
@@ -151,10 +153,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   : 'If the goal is a shortlist fast, the rankings hub is usually quicker than broad browsing.'}
               </p>
             </Link>
-            <Link
-              href='/guides'
-              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-            >
+            <Link href='/guides' className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'>
               <p className='text-sm font-semibold text-slate-950'>{isChinese ? '指南总览' : 'Guides hub'}</p>
               <p className='mt-2 text-sm leading-6 text-slate-600'>
                 {isChinese
@@ -162,10 +161,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   : 'If the direction is still fuzzy, keep narrowing through the topic guides first.'}
               </p>
             </Link>
-            <Link
-              href='/explore'
-              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-            >
+            <Link href='/explore' className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'>
               <p className='text-sm font-semibold text-slate-950'>{isChinese ? 'Explore' : 'Explore'}</p>
               <p className='mt-2 text-sm leading-6 text-slate-600'>
                 {isChinese

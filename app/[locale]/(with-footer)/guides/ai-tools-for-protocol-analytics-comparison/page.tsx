@@ -22,6 +22,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'protocol',
     guideHref: '/guides/ai-tools-for-protocol-analytics',
+    rankingHref: '/best-ai-tools/ai-web3-tools',
+    rankingLabel: { cn: '转去 Web3 榜单页', en: 'Open the Web3 ranking' },
     backGuideLabel: { cn: '回到协议指南', en: 'Back to protocol guide' },
     altBrowseHref: '/explore?search=protocol&sort=popular',
     altBrowseLabel: { cn: '浏览更多协议工具', en: 'Browse more protocol tools' },

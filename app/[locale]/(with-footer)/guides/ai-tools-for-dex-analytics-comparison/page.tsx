@@ -22,6 +22,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'dex',
     guideHref: '/guides/ai-tools-for-dex-analytics',
+    rankingHref: '/best-ai-tools/ai-web3-tools',
+    rankingLabel: { cn: '转去 Web3 榜单页', en: 'Open the Web3 ranking' },
     backGuideLabel: { cn: '回到 DEX 指南', en: 'Back to DEX guide' },
     altBrowseHref: '/explore?search=dex&sort=popular',
     altBrowseLabel: { cn: '浏览更多 DEX 工具', en: 'Browse more DEX tools' },

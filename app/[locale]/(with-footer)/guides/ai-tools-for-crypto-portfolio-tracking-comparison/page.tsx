@@ -27,6 +27,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'portfolio',
     guideHref: '/guides/ai-tools-for-crypto-portfolio-tracking',
+    rankingHref: '/best-ai-tools/ai-web3-tools',
+    rankingLabel: { cn: '转去 Web3 榜单页', en: 'Open the Web3 ranking' },
     backGuideLabel: { cn: '回到资产追踪指南', en: 'Back to portfolio tracking guide' },
     altBrowseHref: '/explore?search=portfolio&sort=popular',
     altBrowseLabel: { cn: '浏览更多资产追踪工具', en: 'Browse more portfolio tools' },

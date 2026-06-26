@@ -22,6 +22,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'marketing',
     guideHref: '/guides/ai-tools-for-marketing',
+    rankingHref: '/best-ai-tools/ai-marketing-tools',
+    rankingLabel: { cn: '转去营销榜单页', en: 'Open the marketing ranking' },
     backGuideLabel: { cn: '回到营销指南', en: 'Back to marketing guide' },
     altBrowseHref: '/explore?search=marketing&sort=popular',
     altBrowseLabel: { cn: '浏览更多营销工具', en: 'Browse more marketing tools' },

@@ -2,7 +2,6 @@ import { Metadata } from 'next';
 import { ArrowRight, CheckCircle2, ExternalLink, Star } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import { toolToListRow } from '@/lib/services/toolPresenter';
@@ -10,6 +9,7 @@ import { getTools } from '@/lib/services/tools';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
@@ -136,6 +136,16 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '浏览免费工具' : 'Browse free tools'}
+              <ArrowRight className='size-4' />
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/best-ai-tools/'
+              ctaId='best_free_tools_rankings_hub'
+              ctaLabel='Best free tools rankings hub'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看总榜单' : 'Open rankings hub'}
               <ArrowRight className='size-4' />
             </TrackableCtaLink>
           </div>

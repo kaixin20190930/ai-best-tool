@@ -22,6 +22,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'lead',
     guideHref: '/guides/ai-tools-for-lead-generation',
+    rankingHref: '/best-ai-tools/ai-lead-generation-tools',
+    rankingLabel: { cn: '转去获客榜单页', en: 'Open the lead-gen ranking' },
     backGuideLabel: { cn: '回到获客指南', en: 'Back to lead-gen guide' },
     altBrowseHref: '/explore?search=lead&sort=popular',
     altBrowseLabel: { cn: '浏览更多获客相关工具', en: 'Browse more lead-gen tools' },

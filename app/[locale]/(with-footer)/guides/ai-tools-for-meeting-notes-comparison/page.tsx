@@ -22,6 +22,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'meeting',
     guideHref: '/guides/ai-tools-for-meeting-notes',
+    rankingHref: '/best-ai-tools/ai-meeting-notes-tools',
+    rankingLabel: { cn: '转去会议纪要榜单页', en: 'Open the meeting notes ranking' },
     backGuideLabel: { cn: '回到会议指南', en: 'Back to meeting guide' },
     altBrowseHref: '/explore?search=meeting&sort=popular',
     altBrowseLabel: { cn: '浏览更多会议纪要工具', en: 'Browse more meeting notes tools' },

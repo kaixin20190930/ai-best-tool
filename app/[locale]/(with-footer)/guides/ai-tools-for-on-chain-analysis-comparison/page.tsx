@@ -22,6 +22,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'on-chain',
     guideHref: '/guides/ai-tools-for-on-chain-analysis',
+    rankingHref: '/best-ai-tools/ai-web3-tools',
+    rankingLabel: { cn: '转去 Web3 榜单页', en: 'Open the Web3 ranking' },
     backGuideLabel: { cn: '回到链上分析指南', en: 'Back to on-chain guide' },
     altBrowseHref: '/explore?search=on-chain&sort=popular',
     altBrowseLabel: { cn: '浏览更多链上分析工具', en: 'Browse more on-chain tools' },

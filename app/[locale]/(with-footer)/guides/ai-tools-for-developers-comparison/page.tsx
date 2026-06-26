@@ -22,6 +22,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'developer',
     guideHref: '/guides/ai-tools-for-developers',
+    rankingHref: '/best-ai-tools/ai-coding-tools',
+    rankingLabel: { cn: '转去编程榜单页', en: 'Open the coding ranking' },
     backGuideLabel: { cn: '回到开发者工具指南', en: 'Back to developer tools guide' },
     altBrowseHref: '/explore?search=developer&sort=popular',
     altBrowseLabel: { cn: '浏览更多开发者工具', en: 'Browse more developer tools' },

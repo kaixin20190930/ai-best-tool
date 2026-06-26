@@ -22,6 +22,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'crypto',
     guideHref: '/guides/ai-tools-for-crypto-research',
+    rankingHref: '/best-ai-tools/ai-web3-tools',
+    rankingLabel: { cn: '转去 Web3 榜单页', en: 'Open the Web3 ranking' },
     backGuideLabel: { cn: '回到 Crypto 指南', en: 'Back to crypto guide' },
     altBrowseHref: '/explore?search=crypto&sort=popular',
     altBrowseLabel: { cn: '浏览更多 Crypto 工具', en: 'Browse more crypto tools' },

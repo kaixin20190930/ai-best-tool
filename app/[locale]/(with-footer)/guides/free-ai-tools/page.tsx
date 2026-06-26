@@ -2,12 +2,12 @@ import { Metadata } from 'next';
 import { CheckCircle2, ExternalLink, FileText, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
@@ -63,15 +63,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const faqSchema = generateFAQSchema(faqs);
   const tips = isChinese
     ? [
-      '先看免费额度和限制，避免选到“看起来免费、实际上用不了”的工具。',
-      '优先选择最近有更新、评论正常、截图清晰的工具。',
-      '如果你是第一次尝试，用免费工具先验证场景最稳妥。',
-    ]
+        '先看免费额度和限制，避免选到“看起来免费、实际上用不了”的工具。',
+        '优先选择最近有更新、评论正常、截图清晰的工具。',
+        '如果你是第一次尝试，用免费工具先验证场景最稳妥。',
+      ]
     : [
-      'Check quotas and limits first so you do not pick a tool that looks free but is unusable in practice.',
-      'Prefer tools with recent updates, real comments, and clear screenshots.',
-      'If you are trying a workflow for the first time, free tools are the safest place to start.',
-    ];
+        'Check quotas and limits first so you do not pick a tool that looks free but is unusable in practice.',
+        'Prefer tools with recent updates, real comments, and clear screenshots.',
+        'If you are trying a workflow for the first time, free tools are the safest place to start.',
+      ];
 
   return (
     <>
@@ -120,6 +120,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {isChinese ? '看免费榜单' : 'Open free ranking'}
             </TrackableCtaLink>
             <TrackableCtaLink
+              href='/best-ai-tools/'
+              ctaId='free_tools_guide_rankings_hub'
+              ctaLabel='Free tools guide rankings hub'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+            >
+              {isChinese ? '看总榜单' : 'Open rankings hub'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/categories/productivity'
               ctaId='free_tools_guide_category'
               ctaLabel='Free tools guide category'
@@ -136,7 +145,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {isChinese ? '高意图入口' : 'High-intent path'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '如果你已经确定先试免费工具，先看榜单再进筛选' : 'If free tools are already the lane, open the ranking before filtering'}
+            {isChinese
+              ? '如果你已经确定先试免费工具，先看榜单再进筛选'
+              : 'If free tools are already the lane, open the ranking before filtering'}
           </h2>
           <div className='mt-4 grid gap-3 md:grid-cols-3'>
             <Link

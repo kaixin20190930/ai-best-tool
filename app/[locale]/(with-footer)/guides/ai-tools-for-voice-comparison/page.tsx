@@ -22,6 +22,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'voice',
     guideHref: '/guides/ai-tools-for-voice',
+    rankingHref: '/best-ai-tools/ai-voice-tools',
+    rankingLabel: { cn: '转去语音榜单页', en: 'Open the voice ranking' },
     backGuideLabel: { cn: '回到语音指南', en: 'Back to voice guide' },
     altBrowseHref: '/explore?search=voice&sort=popular',
     altBrowseLabel: { cn: '浏览更多语音工具', en: 'Browse more voice tools' },

@@ -22,6 +22,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'automation',
     guideHref: '/guides/ai-tools-for-automation',
+    rankingHref: '/best-ai-tools/ai-automation-tools',
+    rankingLabel: { cn: '转去自动化榜单页', en: 'Open the automation ranking' },
     backGuideLabel: { cn: '回到自动化工具指南', en: 'Back to automation guide' },
     altBrowseHref: '/explore?search=automation&sort=popular',
     altBrowseLabel: { cn: '浏览更多自动化工具', en: 'Browse more automation tools' },

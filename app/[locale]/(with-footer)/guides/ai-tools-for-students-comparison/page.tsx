@@ -22,6 +22,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'student',
     guideHref: '/guides/ai-tools-for-students',
+    rankingHref: '/best-ai-tools/ai-student-tools',
+    rankingLabel: { cn: '转去学生榜单页', en: 'Open the student ranking' },
     backGuideLabel: { cn: '回到学生指南', en: 'Back to student guide' },
     altBrowseHref: '/explore?search=student&sort=popular',
     altBrowseLabel: { cn: '浏览更多学生工具', en: 'Browse more student tools' },

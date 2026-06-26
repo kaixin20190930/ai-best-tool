@@ -22,6 +22,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'design',
     guideHref: '/guides/ai-tools-for-designers',
+    rankingHref: '/best-ai-tools/ai-image-tools',
+    rankingLabel: { cn: '转去设计榜单页', en: 'Open the design ranking' },
     backGuideLabel: { cn: '回到设计指南', en: 'Back to design guide' },
     altBrowseHref: '/explore?search=design&sort=popular',
     altBrowseLabel: { cn: '浏览更多设计工具', en: 'Browse more design tools' },

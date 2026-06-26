@@ -22,11 +22,16 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'agent',
     guideHref: '/guides/ai-tools-for-agents',
+    rankingHref: '/best-ai-tools/ai-agent-tools',
+    rankingLabel: { cn: '转去 Agent 榜单页', en: 'Open the agent ranking' },
     backGuideLabel: { cn: '回到 Agent 工具指南', en: 'Back to agent tools guide' },
     altBrowseHref: '/explore?search=agent&sort=popular',
     altBrowseLabel: { cn: '浏览更多 Agent 工具', en: 'Browse more agent tools' },
     breadcrumbLabel: { cn: 'Agent 工具对比', en: 'Agent tools comparison' },
-    compareTitle: { cn: '几款常见 Agent 方向工具的快速对照', en: 'A quick side-by-side look at common agent-oriented tools' },
+    compareTitle: {
+      cn: '几款常见 Agent 方向工具的快速对照',
+      en: 'A quick side-by-side look at common agent-oriented tools',
+    },
     compareSubtitle: { cn: 'Agent', en: 'Agent' },
     preferredToolNames: ['n8n', 'openrouter', 'langfuse', 'portkey'],
     comparisonDimensions: [

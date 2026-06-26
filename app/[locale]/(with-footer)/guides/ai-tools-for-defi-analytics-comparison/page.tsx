@@ -22,6 +22,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'defi',
     guideHref: '/guides/ai-tools-for-defi-analytics',
+    rankingHref: '/best-ai-tools/ai-web3-tools',
+    rankingLabel: { cn: '转去 Web3 榜单页', en: 'Open the Web3 ranking' },
     backGuideLabel: { cn: '回到 DeFi 指南', en: 'Back to DeFi guide' },
     altBrowseHref: '/explore?search=defi&sort=popular',
     altBrowseLabel: { cn: '浏览更多 DeFi 工具', en: 'Browse more DeFi tools' },

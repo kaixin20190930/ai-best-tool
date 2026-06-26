@@ -22,6 +22,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'wallet',
     guideHref: '/guides/ai-tools-for-wallet-monitoring',
+    rankingHref: '/best-ai-tools/ai-web3-tools',
+    rankingLabel: { cn: '转去 Web3 榜单页', en: 'Open the Web3 ranking' },
     backGuideLabel: { cn: '回到钱包监控指南', en: 'Back to wallet guide' },
     altBrowseHref: '/explore?search=wallet&sort=popular',
     altBrowseLabel: { cn: '浏览更多钱包工具', en: 'Browse more wallet tools' },
