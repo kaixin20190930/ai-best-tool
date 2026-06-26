@@ -10,6 +10,7 @@ export type TopListTopicKey =
   | 'ai-model-routing-tools'
   | 'ai-prompt-testing-tools'
   | 'ai-sales-prospecting-tools'
+  | 'ai-small-business-tools'
   | 'ai-video-tools'
   | 'ai-research-tools'
   | 'ai-writing-tools';
@@ -193,6 +194,21 @@ export const topListTopics: TopListTopicConfig[] = [
     comparisonHref: '/guides/ai-tools-for-sales-prospecting-comparison',
     comparisonLabel: 'Compare sales prospecting tools',
     nextStep: 'Compare sales prospecting tools, inspect detail pages, then move into submission or pricing.',
+  },
+  {
+    key: 'ai-small-business-tools',
+    categorySlug: 'productivity',
+    title: 'Best AI Small Business Tools',
+    description: 'The most useful tools for small-team operations, customer support, content, automation, and everyday business workflows.',
+    summary: 'A practical shortlist for teams that need to save time, reduce repetitive work, and run more of the business with fewer people.',
+    ctaLabel: 'Go to small-business list',
+    ctaDescription:
+      'Use this list when the decision is about practical day-to-day workflow fit, team efficiency, support, and lightweight automation.',
+    guideHref: '/guides/ai-tools-for-small-business',
+    guideLabel: 'Back to small-business guide',
+    comparisonHref: '/guides/ai-tools-for-small-business-comparison',
+    comparisonLabel: 'Compare small-business tools',
+    nextStep: 'Compare small-business tools, inspect detail pages, then move into submission or pricing.',
   },
   {
     key: 'ai-video-tools',
