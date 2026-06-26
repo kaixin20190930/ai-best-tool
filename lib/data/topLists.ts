@@ -20,6 +20,7 @@ export type TopListTopicKey =
   | 'ai-sales-prospecting-tools'
   | 'ai-small-business-tools'
   | 'ai-student-tools'
+  | 'ai-web3-tools'
   | 'ai-voice-tools'
   | 'ai-video-tools'
   | 'ai-research-tools'
@@ -355,6 +356,22 @@ export const topListTopics: TopListTopicConfig[] = [
     comparisonHref: '/guides/ai-tools-for-students-comparison',
     comparisonLabel: 'Compare student tools',
     nextStep: 'Compare student tools, inspect detail pages, then move into submission or pricing.',
+  },
+  {
+    key: 'ai-web3-tools',
+    categorySlug: 'web3',
+    title: 'Best AI Web3 Tools',
+    description: 'The most useful tools for on-chain analysis, wallet monitoring, protocol research, alerts, and Web3 data workflows.',
+    summary:
+      'A practical shortlist for teams and individuals working with wallets, DeFi protocols, token flows, and crypto research workflows.',
+    ctaLabel: 'Go to Web3 list',
+    ctaDescription:
+      'Use this list when the decision is about on-chain visibility, wallet tracking, protocol research, alerts, and Web3 workflow fit.',
+    guideHref: '/guides/ai-tools-for-web3',
+    guideLabel: 'Back to Web3 guide',
+    comparisonHref: '/guides/ai-tools-for-web3-comparison',
+    comparisonLabel: 'Compare Web3 tools',
+    nextStep: 'Compare Web3 tools, inspect detail pages, then move into submission or pricing.',
   },
   {
     key: 'ai-voice-tools',

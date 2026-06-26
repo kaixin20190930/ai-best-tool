@@ -1,10 +1,11 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { CircleDollarSign, ExternalLink, Globe, Layers3 } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -53,15 +54,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-        '先分清你需要的是链上分析、钱包、数据 API 还是自动化工作流。',
-        '看它有没有稳定的数据源和足够清楚的定价。',
-        '如果要给团队使用，优先看 API、导出和历史查询能力。',
-      ]
+      '先分清你需要的是链上分析、钱包、数据 API 还是自动化工作流。',
+      '看它有没有稳定的数据源和足够清楚的定价。',
+      '如果要给团队使用，优先看 API、导出和历史查询能力。',
+    ]
     : [
-        'Separate the need first: on-chain analytics, wallets, data APIs, or automation workflows.',
-        'Check whether it has stable data sources and clear pricing.',
-        'For team use, prioritize API access, exports, and historical queries.',
-      ];
+      'Separate the need first: on-chain analytics, wallets, data APIs, or automation workflows.',
+      'Check whether it has stable data sources and clear pricing.',
+      'For team use, prioritize API access, exports, and historical queries.',
+    ];
 
   return (
     <>
@@ -98,25 +99,43 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/explore?search=web3&sort=popular'
+              ctaId='web3_guide_browse_tools'
+              ctaLabel='Web3 guide browse tools'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '看 Web3 工具' : 'Browse Web3 tools'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-web3-tools'
+              ctaId='web3_guide_top_list'
+              ctaLabel='Web3 guide top list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看 Web3 榜单' : 'Open Web3 ranking'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/how-to-choose-ai-tools'
+              ctaId='web3_guide_selection_guide'
+              ctaLabel='Web3 guide selection guide'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '回到选型指南' : 'Back to selection guide'}
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-tools-for-web3-comparison'
+              ctaId='web3_guide_comparison'
+              ctaLabel='Web3 guide comparison'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看 Web3 对比页' : 'Web3 comparison'}
-            </Link>
+            </TrackableCtaLink>
           </div>
         </section>
 
@@ -173,6 +192,50 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图入口' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '如果你已经确认要找 Web3 工具，先走榜单再进对比' : 'If Web3 is already the lane, open the ranking before the comparison'}
+          </h2>
+          <div className='mt-4 grid gap-3 md:grid-cols-3'>
+            <Link
+              href='/best-ai-tools/ai-web3-tools'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? 'Web3 榜单' : 'Web3 ranking'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '先看高相关候选，再决定要不要进入更细的研究、监控和分析对比。'
+                  : 'Start with the highest-fit candidates, then decide whether you need narrower research, monitoring, or analytics comparisons.'}
+              </p>
+            </Link>
+            <Link
+              href='/guides/ai-tools-for-web3-comparison'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? 'Web3 对比页' : 'Web3 comparison'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '当你已经有几款候选，直接横向比较研究、钱包和协议相关能力。'
+                  : 'Once you already have a few candidates, compare research, wallet, and protocol capabilities side by side.'}
+              </p>
+            </Link>
+            <Link
+              href='/categories/web3?sort=popular'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? 'Web3 分类' : 'Web3 category'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '如果你更想直接刷真实条目，就从分类页继续扩 shortlist。'
+                  : 'If you prefer browsing real listings first, use the category page to widen the shortlist.'}
+              </p>
+            </Link>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '直接进入对比' : 'Jump into comparison'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
@@ -181,6 +244,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               : 'If you already know what to compare, go straight to the next page'}
           </h2>
           <div className='mt-4 grid gap-3 md:grid-cols-3'>
+            <Link
+              href='/best-ai-tools/ai-web3-tools'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? 'Web3 榜单' : 'Web3 ranking'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '先把高相关候选看一遍，再决定进入哪种更窄的 Web3 对比。'
+                  : 'Review the highest-fit candidates first, then decide which narrower Web3 comparison to open.'}
+              </p>
+            </Link>
             <Link
               href='/guides/ai-tools-for-web3-comparison'
               className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
@@ -203,17 +277,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 {isChinese
                   ? '当你的核心问题已经是地址、流向和协议行为时，这页更高意图。'
                   : 'A better fit once the real need is addresses, fund flow, and protocol behavior.'}
-              </p>
-            </Link>
-            <Link
-              href='/categories/web3?sort=popular'
-              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-            >
-              <p className='text-sm font-semibold text-slate-950'>{isChinese ? 'Web3 分类' : 'Web3 category'}</p>
-              <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '如果你想先浏览真实条目，再回过头来比较，就走这里。'
-                  : 'Browse real listings first, then come back and compare when you are ready.'}
               </p>
             </Link>
           </div>
@@ -300,6 +363,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           }
           compareLinks={[
             {
+              href: '/best-ai-tools/ai-web3-tools',
+              title: isChinese ? 'Web3 工具榜单' : 'Web3 tools ranking',
+              description: isChinese
+                ? '先快速收窄到更高相关的候选，再决定进入哪条对比路径。'
+                : 'Narrow to the most relevant candidates first, then choose the comparison path that fits.',
+            },
+            {
               href: '/guides/ai-tools-for-web3-comparison',
               title: isChinese ? 'Web3 工具总对比' : 'Web3 tools comparison',
               description: isChinese
@@ -327,10 +397,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           }
           nextDescription={
             isChinese
-              ? '如果你已经确认自己要找的是 Web3 工具，下一步就进入 Web3 分类、精准搜索和最近新增，开始比较真实候选。'
-              : 'Once Web3 is clearly the lane, the next step is to use the category, focused search, and recent additions to compare real candidates.'
+              ? '如果你已经确认自己要找的是 Web3 工具，下一步就进入榜单、分类和精准搜索，开始比较真实候选。'
+              : 'Once Web3 is clearly the lane, the next step is to use the ranking, category, and focused search to compare real candidates.'
           }
           nextLinks={[
+            {
+              href: '/best-ai-tools/ai-web3-tools',
+              title: isChinese ? '进入 Web3 榜单' : 'Open the Web3 ranking',
+              description: isChinese
+                ? '直接看更高相关的 Web3 候选集合。'
+                : 'Start with the highest-fit Web3 shortlist.',
+            },
             {
               href: '/categories/web3?sort=popular',
               title: isChinese ? '进入 Web3 分类' : 'Open the Web3 category',
@@ -344,13 +421,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               description: isChinese
                 ? '回到 Explore，用更窄的 Web3 关键词继续扩大 shortlist。'
                 : 'Return to Explore and widen the shortlist with tighter Web3 queries.',
-            },
-            {
-              href: '/new',
-              title: isChinese ? '看本周新增' : 'Check new this week',
-              description: isChinese
-                ? '顺手看最近补进来的 Web3 和开发者工具。'
-                : 'See which newly added Web3 and developer tools might be more current.',
             },
           ]}
         />
