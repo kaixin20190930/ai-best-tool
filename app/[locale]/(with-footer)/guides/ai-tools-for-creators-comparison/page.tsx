@@ -22,12 +22,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'creator',
     guideHref: '/guides/ai-tools-for-creators',
+    rankingHref: '/best-ai-tools/ai-creator-tools',
+    rankingLabel: { cn: '转去创作者榜单页', en: 'Open the creator ranking' },
     backGuideLabel: { cn: '回到创作者指南', en: 'Back to creator guide' },
     altBrowseHref: '/explore?search=creator&sort=popular',
     altBrowseLabel: { cn: '浏览更多创作者工具', en: 'Browse more creator tools' },
     breadcrumbLabel: { cn: '创作者工具对比', en: 'Creator tools comparison' },
     compareTitle: { cn: '几款常见创作者工具的快速对照', en: 'A quick side-by-side look at common creator tools' },
     compareSubtitle: { cn: '创作者', en: 'Creator' },
+    nextPaths: [
+      {
+        href: '/best-ai-tools/ai-creator-tools',
+        title: { cn: '先看创作者榜单页', en: 'Start with the creator ranking' },
+        description: {
+          cn: '如果你想先确认最值得看的候选，再回来比内容工作流，就先去榜单页。',
+          en: 'Open the ranking first if you want the strongest candidates before comparing content workflows.',
+        },
+      },
+      {
+        href: '/guides/ai-video-tools-comparison',
+        title: { cn: '转去视频工具对比', en: 'Switch to video tools comparison' },
+        description: {
+          cn: '如果你的重点是视频脚本、剪辑和成片，这页更贴近真实工作流。',
+          en: 'Move there if scripting, editing, and final video output are the real bottlenecks.',
+        },
+      },
+      {
+        href: '/guides/ai-writing-tools-comparison',
+        title: { cn: '转去写作工具对比', en: 'Switch to writing tools comparison' },
+        description: {
+          cn: '如果你更偏文案、长文和改写，这页会更直接。',
+          en: 'Go there if the workflow is more about copy, long-form writing, and rewriting.',
+        },
+      },
+    ],
     tips: {
       cn: [
         '先看你的内容类型：短视频、长文、播客、社媒或图文。',

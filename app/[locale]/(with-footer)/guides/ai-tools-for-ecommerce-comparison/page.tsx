@@ -22,12 +22,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'ecommerce',
     guideHref: '/guides/ai-tools-for-ecommerce',
+    rankingHref: '/best-ai-tools/ai-ecommerce-tools',
+    rankingLabel: { cn: '转去电商榜单页', en: 'Open the ecommerce ranking' },
     backGuideLabel: { cn: '回到电商指南', en: 'Back to ecommerce guide' },
     altBrowseHref: '/explore?search=ecommerce&sort=popular',
     altBrowseLabel: { cn: '浏览更多电商工具', en: 'Browse more ecommerce tools' },
     breadcrumbLabel: { cn: '电商工具对比', en: 'Ecommerce tools comparison' },
     compareTitle: { cn: '几款常见电商工具的快速对照', en: 'A quick side-by-side look at common ecommerce tools' },
     compareSubtitle: { cn: '电商', en: 'ecommerce' },
+    nextPaths: [
+      {
+        href: '/best-ai-tools/ai-ecommerce-tools',
+        title: { cn: '先看电商榜单页', en: 'Start with the ecommerce ranking' },
+        description: {
+          cn: '如果你想先把 shortlist 收紧，再回来比商品、营销和客服能力，就先去榜单页。',
+          en: 'Open the ranking first if you want a tighter shortlist before comparing product, marketing, and support workflows.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-marketing-comparison',
+        title: { cn: '转去营销工具对比', en: 'Switch to marketing comparison' },
+        description: {
+          cn: '如果你现在更偏流量获取和广告内容，而不是店铺执行，这页更贴近。',
+          en: 'Go there if the bottleneck is more about acquisition and campaign content than store execution.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-small-business-comparison',
+        title: { cn: '转去小企业工具对比', en: 'Switch to small-business comparison' },
+        description: {
+          cn: '如果你是更广义的经营视角，而不是纯电商，这页会更自然。',
+          en: 'Move there if the decision is broader business operations rather than pure ecommerce.',
+        },
+      },
+    ],
     tips: {
       cn: [
         '先看你要处理的是商品、客服、营销还是运营，不同场景侧重点不一样。',

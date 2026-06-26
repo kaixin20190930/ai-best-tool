@@ -22,12 +22,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'agency',
     guideHref: '/guides/ai-tools-for-agencies',
+    rankingHref: '/best-ai-tools/ai-agency-tools',
+    rankingLabel: { cn: '转去代理榜单页', en: 'Open the agency ranking' },
     backGuideLabel: { cn: '回到代理指南', en: 'Back to agency guide' },
     altBrowseHref: '/explore?search=agency&sort=popular',
     altBrowseLabel: { cn: '浏览更多代理工具', en: 'Browse more agency tools' },
     breadcrumbLabel: { cn: '代理工具对比', en: 'Agency tools comparison' },
     compareTitle: { cn: '几款常见代理工具的快速对照', en: 'A quick side-by-side look at common agency tools' },
     compareSubtitle: { cn: '代理', en: 'Agency' },
+    nextPaths: [
+      {
+        href: '/best-ai-tools/ai-agency-tools',
+        title: { cn: '先看代理榜单页', en: 'Start with the agency ranking' },
+        description: {
+          cn: '如果你想先看更稳的 shortlist，再回来比交付和协作，就先去榜单页。',
+          en: 'Start with the ranking if you want a tighter shortlist before comparing delivery and collaboration fit.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-small-business-comparison',
+        title: { cn: '转去小企业工具对比', en: 'Switch to small-business comparison' },
+        description: {
+          cn: '如果你的需求更偏老板视角的营销与运营，而不是代理交付，这页更贴近。',
+          en: 'Go there if the need is closer to owner-led marketing and operations than client delivery.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-creators-comparison',
+        title: { cn: '转去创作者工具对比', en: 'Switch to creator tools comparison' },
+        description: {
+          cn: '如果你主要在做内容工作室式生产，这页会更直接。',
+          en: 'Move there if the real workflow is closer to content-studio production.',
+        },
+      },
+    ],
     tips: {
       cn: [
         '先看你的交付模式：代理商、服务团队、内容工作室或顾问。',

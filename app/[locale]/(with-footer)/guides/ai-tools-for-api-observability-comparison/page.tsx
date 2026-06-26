@@ -22,6 +22,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'observability',
     guideHref: '/guides/ai-tools-for-api-observability',
+    rankingHref: '/best-ai-tools/ai-api-observability-tools',
+    rankingLabel: { cn: '转去可观测榜单页', en: 'Open the observability ranking' },
     backGuideLabel: { cn: '回到 API 可观测指南', en: 'Back to API observability guide' },
     altBrowseHref: '/explore?search=observability&sort=popular',
     altBrowseLabel: { cn: '浏览更多可观测工具', en: 'Browse more observability tools' },
@@ -104,6 +106,14 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       },
     ],
     nextPaths: [
+      {
+        href: '/best-ai-tools/ai-api-observability-tools',
+        title: { cn: '先看可观测榜单页', en: 'Start with the observability ranking' },
+        description: {
+          cn: '如果你想先拿到更可信的 shortlist，再回来做细比，就先去榜单页。',
+          en: 'Open the ranking first if you want a stronger shortlist before returning for the detailed comparison.',
+        },
+      },
       {
         href: '/guides/ai-tools-for-model-routing-comparison',
         title: { cn: '转去模型路由工具对比', en: 'Switch to model routing comparison' },

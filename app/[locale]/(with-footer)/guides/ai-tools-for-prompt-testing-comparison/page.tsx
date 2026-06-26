@@ -22,6 +22,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'prompt',
     guideHref: '/guides/ai-tools-for-prompt-testing',
+    rankingHref: '/best-ai-tools/ai-prompt-testing-tools',
+    rankingLabel: { cn: '转去 Prompt 榜单页', en: 'Open the prompt testing ranking' },
     backGuideLabel: { cn: '回到 Prompt 测试指南', en: 'Back to prompt testing guide' },
     altBrowseHref: '/explore?search=prompt&sort=popular',
     altBrowseLabel: { cn: '浏览更多 prompt 测试工具', en: 'Browse more prompt testing tools' },
@@ -74,6 +76,14 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       },
     ],
     nextPaths: [
+      {
+        href: '/best-ai-tools/ai-prompt-testing-tools',
+        title: { cn: '先看 Prompt 榜单页', en: 'Start with the prompt testing ranking' },
+        description: {
+          cn: '如果你想先把 shortlist 收紧，再回来比较版本和实验流程，就先去榜单页。',
+          en: 'Open the ranking first if you want a tighter shortlist before comparing versions and experiment flows.',
+        },
+      },
       {
         href: '/guides/ai-tools-for-api-observability-comparison',
         title: { cn: '转去 API 可观测工具对比', en: 'Switch to API observability comparison' },

@@ -22,6 +22,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'business',
     guideHref: '/guides/ai-tools-for-small-business',
+    rankingHref: '/best-ai-tools/ai-small-business-tools',
+    rankingLabel: { cn: '转去小企业榜单页', en: 'Open the small-business ranking' },
     backGuideLabel: { cn: '回到小企业指南', en: 'Back to small-business guide' },
     altBrowseHref: '/explore?search=business&sort=popular',
     altBrowseLabel: { cn: '浏览更多小企业工具', en: 'Browse more small-business tools' },
@@ -31,6 +33,32 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       en: 'A quick side-by-side look at common small-business tools',
     },
     compareSubtitle: { cn: '小企业', en: 'small business' },
+    nextPaths: [
+      {
+        href: '/best-ai-tools/ai-small-business-tools',
+        title: { cn: '先看小企业榜单页', en: 'Start with the small-business ranking' },
+        description: {
+          cn: '如果你想先看这一类里更稳的 shortlist，再回来细比，就先去榜单页。',
+          en: 'Start with the ranking if you want the strongest shortlist before returning for a deeper comparison.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-ecommerce-comparison',
+        title: { cn: '转去电商工具对比', en: 'Switch to ecommerce comparison' },
+        description: {
+          cn: '如果你的业务更偏商品、店铺和客服场景，这页更贴近。',
+          en: 'Go there if the workflow is more about products, storefronts, and customer support.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-marketing-comparison',
+        title: { cn: '转去营销工具对比', en: 'Switch to marketing comparison' },
+        description: {
+          cn: '如果当前核心问题在获客和内容增长，而不是泛运营，这页会更直接。',
+          en: 'Move there if acquisition and content growth matter more than broad operations right now.',
+        },
+      },
+    ],
     tips: {
       cn: [
         '先看你是做营销、客服、内容还是流程自动化，不同场景侧重点不一样。',

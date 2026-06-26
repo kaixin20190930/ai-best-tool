@@ -22,6 +22,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     searchQuery: 'eval',
     guideHref: '/guides/ai-tools-for-evals',
+    rankingHref: '/best-ai-tools/ai-evals-tools',
+    rankingLabel: { cn: '转去 Evals 榜单页', en: 'Open the evals ranking' },
     backGuideLabel: { cn: '回到 Evals 指南', en: 'Back to evals guide' },
     altBrowseHref: '/explore?search=eval&sort=popular',
     altBrowseLabel: { cn: '浏览更多 evals 工具', en: 'Browse more evals tools' },
@@ -74,6 +76,14 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       },
     ],
     nextPaths: [
+      {
+        href: '/best-ai-tools/ai-evals-tools',
+        title: { cn: '先看 Evals 榜单页', en: 'Start with the evals ranking' },
+        description: {
+          cn: '如果你想先确认值得进 shortlist 的候选，再回来细比评分逻辑，就先走榜单页。',
+          en: 'Start with the ranking if you want the most likely shortlist candidates before comparing scoring logic in detail.',
+        },
+      },
       {
         href: '/guides/ai-tools-for-prompt-testing-comparison',
         title: { cn: '转去 Prompt 测试工具对比', en: 'Switch to prompt testing comparison' },
