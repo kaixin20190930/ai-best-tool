@@ -1,10 +1,11 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { BarChart3, ExternalLink, Layers3, PieChart } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -56,15 +57,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-        '先分清你是在看协议、池子、收益，还是整体资金流。',
-        '看它是否支持你常用的链和协议数据。',
-        '如果给团队使用，优先看 API、导出、告警和历史追踪能力。',
-      ]
+      '先分清你是在看协议、池子、收益，还是整体资金流。',
+      '看它是否支持你常用的链和协议数据。',
+      '如果给团队使用，优先看 API、导出、告警和历史追踪能力。',
+    ]
     : [
-        'Separate the use case first: protocols, pools, yields, or overall fund flow.',
-        'Check whether it supports the chains and protocol data you actually use.',
-        'For team use, prioritize API access, exports, alerts, and historical tracking.',
-      ];
+      'Separate the use case first: protocols, pools, yields, or overall fund flow.',
+      'Check whether it supports the chains and protocol data you actually use.',
+      'For team use, prioritize API access, exports, alerts, and historical tracking.',
+    ];
 
   return (
     <>
@@ -104,25 +105,43 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/explore?search=defi&sort=popular'
+              ctaId='defi_analytics_guide_browse_tools'
+              ctaLabel='DeFi analytics guide browse tools'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '看 DeFi 工具' : 'Browse DeFi tools'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-web3-tools'
+              ctaId='defi_analytics_guide_top_list'
+              ctaLabel='DeFi analytics guide Web3 top list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看 Web3 榜单' : 'Open Web3 ranking'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-tools-for-web3'
+              ctaId='defi_analytics_guide_web3'
+              ctaLabel='DeFi analytics guide Web3 guide'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '回到 Web3 指南' : 'Back to Web3 guide'}
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-tools-for-defi-analytics-comparison'
+              ctaId='defi_analytics_guide_comparison'
+              ctaLabel='DeFi analytics guide comparison'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看 DeFi 对比页' : 'DeFi comparison'}
-            </Link>
+            </TrackableCtaLink>
           </div>
         </section>
 
@@ -236,6 +255,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           }
           compareLinks={[
             {
+              href: '/best-ai-tools/ai-web3-tools',
+              title: isChinese ? 'Web3 工具榜单' : 'Web3 tools ranking',
+              description: isChinese
+                ? '先把更高相关的 Web3 候选看一遍，再决定是否进入更窄的 DeFi 对比。'
+                : 'Review the highest-fit Web3 candidates first, then decide whether you need a narrower DeFi comparison.',
+            },
+            {
               href: '/guides/ai-tools-for-defi-analytics-comparison',
               title: isChinese ? 'DeFi 工具总对比' : 'DeFi tools comparison',
               description: isChinese
@@ -263,10 +289,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           }
           nextDescription={
             isChinese
-              ? '如果你已经确认自己要找的是 DeFi 工具，下一步就进入 Web3 分类、精准搜索和最近新增，开始比较真实候选。'
-              : 'Once DeFi is clearly the lane, use the category, focused search, and recent additions to compare real candidates.'
+              ? '如果你已经确认自己要找的是 DeFi 工具，下一步就进入 Web3 榜单、分类和精准搜索，开始比较真实候选。'
+              : 'Once DeFi is clearly the lane, use the Web3 ranking, category, and focused search to compare real candidates.'
           }
           nextLinks={[
+            {
+              href: '/best-ai-tools/ai-web3-tools',
+              title: isChinese ? '进入 Web3 榜单' : 'Open the Web3 ranking',
+              description: isChinese
+                ? '先从更高相关的 Web3 候选集合开始。'
+                : 'Start with the highest-fit Web3 shortlist.',
+            },
             {
               href: '/categories/web3?sort=popular',
               title: isChinese ? '进入 Web3 分类' : 'Open the Web3 category',
@@ -280,13 +313,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               description: isChinese
                 ? '回到 Explore，用更窄的 DeFi 关键词继续扩大 shortlist。'
                 : 'Return to Explore and widen the shortlist with DeFi-focused search.',
-            },
-            {
-              href: '/new',
-              title: isChinese ? '看本周新增' : 'Check new this week',
-              description: isChinese
-                ? '看看最近补进来的 Web3 和 DeFi 工具里有没有更合适的新候选。'
-                : 'See whether recent Web3 and DeFi additions introduced a stronger fit.',
             },
           ]}
         />

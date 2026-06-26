@@ -1,10 +1,11 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { Coins, ExternalLink, SearchCheck, TrendingUp } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -64,15 +65,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-        '先分清你在做的是叙事研究、代币基本面比较，还是链上持有人结构判断。',
-        '看它是否能把市场信息、协议指标和链上行为放在一个更可用的视角里。',
-        '如果你会持续跟踪一个赛道，优先看历史数据、导出和对比效率。',
-      ]
+      '先分清你在做的是叙事研究、代币基本面比较，还是链上持有人结构判断。',
+      '看它是否能把市场信息、协议指标和链上行为放在一个更可用的视角里。',
+      '如果你会持续跟踪一个赛道，优先看历史数据、导出和对比效率。',
+    ]
     : [
-        'Separate narrative research, token-fundamental comparison, and holder-structure analysis before comparing tools.',
-        'Look for tools that connect market context, protocol metrics, and on-chain behavior into one usable view.',
-        'If you track a sector over time, prioritize history depth, exports, and comparison efficiency.',
-      ];
+      'Separate narrative research, token-fundamental comparison, and holder-structure analysis before comparing tools.',
+      'Look for tools that connect market context, protocol metrics, and on-chain behavior into one usable view.',
+      'If you track a sector over time, prioritize history depth, exports, and comparison efficiency.',
+    ];
 
   return (
     <>
@@ -103,25 +104,43 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/explore?search=token&sort=popular'
+              ctaId='token_research_guide_browse_tools'
+              ctaLabel='Token research guide browse tools'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '看代币研究相关工具' : 'Browse token-research tools'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-web3-tools'
+              ctaId='token_research_guide_top_list'
+              ctaLabel='Token research guide Web3 top list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看 Web3 榜单' : 'Open Web3 ranking'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-tools-for-crypto-research'
+              ctaId='token_research_guide_crypto_research'
+              ctaLabel='Token research guide crypto research guide'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '回到 Crypto 研究指南' : 'Back to crypto research guide'}
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-tools-for-token-research-comparison'
+              ctaId='token_research_guide_comparison'
+              ctaLabel='Token research guide comparison'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看代币研究对比页' : 'Token research comparison'}
-            </Link>
+            </TrackableCtaLink>
           </div>
         </section>
 
@@ -190,6 +209,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               : 'Once the real job is token research rather than broad on-chain analysis or wallet monitoring, narrower comparison pages work better.'
           }
           compareLinks={[
+            {
+              href: '/best-ai-tools/ai-web3-tools',
+              title: isChinese ? 'Web3 工具榜单' : 'Web3 tools ranking',
+              description: isChinese
+                ? '先从更高相关的 Web3 候选开始，再继续下钻到代币研究对比。'
+                : 'Start with the highest-fit Web3 candidates, then move deeper into token-research comparisons.',
+            },
             {
               href: '/guides/ai-tools-for-token-research-comparison',
               title: isChinese ? '代币研究工具对比' : 'Token research comparison',
