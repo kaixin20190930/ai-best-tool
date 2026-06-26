@@ -2,6 +2,7 @@ export type TopListTopicKey =
   | 'ai-api-observability-tools'
   | 'ai-agency-tools'
   | 'ai-agent-tools'
+  | 'ai-automation-tools'
   | 'ai-chatbot-tools'
   | 'ai-coding-tools'
   | 'ai-code-review-tools'
@@ -83,6 +84,21 @@ export const topListTopics: TopListTopicConfig[] = [
     comparisonHref: '/guides/ai-tools-for-agents-comparison',
     comparisonLabel: 'Compare agent tools',
     nextStep: 'Compare agent tools, inspect details, then move into submission or pricing.',
+  },
+  {
+    key: 'ai-automation-tools',
+    categorySlug: 'automation',
+    title: 'Best AI Automation Tools',
+    description: 'The most useful tools for workflow orchestration, repeatable tasks, trigger-based processes, and cross-tool automation.',
+    summary: 'A practical shortlist for people turning recurring manual work into reliable workflows that teams can actually maintain.',
+    ctaLabel: 'Go to automation list',
+    ctaDescription:
+      'Use this list when the decision is about workflow repeatability, integrations, trigger logic, observability, and maintainability.',
+    guideHref: '/guides/ai-tools-for-automation',
+    guideLabel: 'Back to automation guide',
+    comparisonHref: '/guides/ai-tools-for-automation-comparison',
+    comparisonLabel: 'Compare automation tools',
+    nextStep: 'Compare automation tools, inspect detail pages, then move into submission or pricing.',
   },
   {
     key: 'ai-chatbot-tools',

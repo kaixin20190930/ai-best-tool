@@ -1,10 +1,11 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { Bot, ExternalLink, RefreshCw, Workflow } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -63,15 +64,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-        '先分清你是在做简单触发器、复杂编排，还是 Agent 式后台流程。',
-        '重点看集成范围、触发条件、失败重试和日志能力。',
-        '如果团队会长期维护，优先看可读性、权限和流程可交接性。',
-      ]
+      '先分清你是在做简单触发器、复杂编排，还是 Agent 式后台流程。',
+      '重点看集成范围、触发条件、失败重试和日志能力。',
+      '如果团队会长期维护，优先看可读性、权限和流程可交接性。',
+    ]
     : [
-        'Separate simple triggers, complex orchestration, and agent-style back-office flows before comparing tools.',
-        'Focus on integrations, trigger logic, retries, and logging.',
-        'For long-term team use, prioritize readability, permissions, and handoff-friendly workflows.',
-      ];
+      'Separate simple triggers, complex orchestration, and agent-style back-office flows before comparing tools.',
+      'Focus on integrations, trigger logic, retries, and logging.',
+      'For long-term team use, prioritize readability, permissions, and handoff-friendly workflows.',
+    ];
 
   return (
     <>
@@ -102,25 +103,113 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/explore?search=automation&sort=popular'
+              ctaId='automation_guide_browse_tools'
+              ctaLabel='Automation guide browse tools'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '看自动化工具' : 'Browse automation tools'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-tools-for-developers'
+              ctaId='automation_guide_developers'
+              ctaLabel='Automation guide developers'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看开发者工具' : 'Developer tools'}
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-coding-tools'
+              ctaId='automation_guide_coding'
+              ctaLabel='Automation guide coding'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看编程工具' : 'Coding tools'}
-            </Link>
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-automation-tools'
+              ctaId='automation_guide_top_list'
+              ctaLabel='Automation guide top list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看自动化榜单' : 'Open automation ranking'}
+            </TrackableCtaLink>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图路径' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先看榜单，再进入对比页和真实条目' : 'Start with the ranking, then move into comparison and real listings'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经明确自己要解决的是重复流程、触发器或后台任务，就不要停在总览页，直接进入更窄的筛选路径。'
+              : 'If the job is clearly repeatable workflows, triggers, or back-office runs, move straight into narrower selection paths.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-automation-tools',
+                title: isChinese ? '自动化工具榜单' : 'Automation ranking',
+                desc: isChinese ? '直接看高意图 shortlist。' : 'Go straight to the high-intent shortlist.',
+              },
+              {
+                href: '/guides/ai-tools-for-automation-comparison',
+                title: isChinese ? '自动化工具对比' : 'Automation comparison',
+                desc: isChinese ? '横向看触发、编排和维护。' : 'Compare triggers, orchestration, and maintainability side by side.',
+              },
+              {
+                href: '/guides/ai-tools-for-developers-comparison',
+                title: isChinese ? '开发者工具对比' : 'Developer tools comparison',
+                desc: isChinese ? '如果流程已深入 API 和工程层。' : 'Better when workflows reach APIs and engineering layers.',
+              },
+              {
+                href: '/guides/ai-tools-for-api-observability-comparison',
+                title: isChinese ? 'API 可观测对比' : 'API observability comparison',
+                desc: isChinese ? '如果重点是日志、失败和成本可见性。' : 'Better for logs, failures, and cost visibility.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`automation_guide_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+          <div className='mt-5 flex flex-wrap gap-3'>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-automation-tools'
+              ctaId='automation_guide_top_list_secondary'
+              ctaLabel='Automation guide top list secondary'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+            >
+              {isChinese ? '打开自动化榜单' : 'Open automation ranking'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/submit'
+              ctaId='automation_guide_submit'
+              ctaLabel='Automation guide submit'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
+            >
+              {isChinese ? '提交你的工具' : 'Submit your tool'}
+            </TrackableCtaLink>
           </div>
         </section>
 
@@ -190,6 +279,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           }
           compareLinks={[
             {
+              href: '/best-ai-tools/ai-automation-tools',
+              title: isChinese ? '自动化榜单' : 'Automation ranking',
+              description: isChinese
+                ? '先看高意图 shortlist，再决定要不要细比。'
+                : 'Start with the high-intent shortlist before deciding whether to compare deeper.',
+            },
+            {
               href: '/guides/ai-tools-for-automation-comparison',
               title: isChinese ? '自动化工具总对比' : 'Automation tools comparison',
               description: isChinese
@@ -217,10 +313,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           }
           nextDescription={
             isChinese
-              ? '如果你已经确认自己在看自动化和编排，下一步就去分类页、搜索页和本周新增看真实条目。'
-              : 'Once automation and orchestration are clearly the right lane, move into category pages, search results, and recent additions.'
+              ? '如果你已经确认自己在看自动化和编排，下一步就去榜单、分类页和搜索页看真实条目。'
+              : 'Once automation and orchestration are clearly the right lane, move into the ranking, category pages, and search results.'
           }
           nextLinks={[
+            {
+              href: '/best-ai-tools/ai-automation-tools',
+              title: isChinese ? '打开自动化榜单' : 'Open automation ranking',
+              description: isChinese
+                ? '先看 shortlist，再回到分类或对比页收敛。'
+                : 'Start with the shortlist, then return to category or comparison pages to narrow further.',
+            },
             {
               href: '/categories/automation?sort=popular',
               title: isChinese ? '进入 Automation 分类' : 'Open the automation category',
@@ -234,13 +337,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               description: isChinese
                 ? '回到 Explore，用自动化关键词继续扩大候选。'
                 : 'Return to Explore and widen the shortlist with an automation-focused search.',
-            },
-            {
-              href: '/new',
-              title: isChinese ? '看本周新增' : 'Check new this week',
-              description: isChinese
-                ? '看看最近有没有补进更接近你流程的新工具。'
-                : 'See whether recent additions introduced a tool that fits your workflow better.',
             },
           ]}
         />
