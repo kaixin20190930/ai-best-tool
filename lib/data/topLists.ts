@@ -3,6 +3,7 @@ export type TopListTopicKey =
   | 'ai-agent-tools'
   | 'ai-coding-tools'
   | 'ai-model-routing-tools'
+  | 'ai-prompt-testing-tools'
   | 'ai-video-tools'
   | 'ai-research-tools'
   | 'ai-writing-tools';
@@ -81,6 +82,21 @@ export const topListTopics: TopListTopicConfig[] = [
     comparisonHref: '/guides/ai-tools-for-model-routing-comparison',
     comparisonLabel: 'Compare model routing tools',
     nextStep: 'Compare model routing tools, inspect detail pages, then move into submission or pricing.',
+  },
+  {
+    key: 'ai-prompt-testing-tools',
+    categorySlug: 'developer-tools',
+    title: 'Best AI Prompt Testing Tools',
+    description: 'The most useful tools for prompt evaluation, A/B tests, regression checks, and validation workflows.',
+    summary: 'A practical shortlist for teams comparing prompt versions, running evals, and validating quality before release.',
+    ctaLabel: 'Go to prompt testing list',
+    ctaDescription:
+      'Use this list when the decision is about prompt experiments, version comparisons, regression checks, and evaluation workflow.',
+    guideHref: '/guides/ai-tools-for-prompt-testing',
+    guideLabel: 'Back to prompt testing guide',
+    comparisonHref: '/guides/ai-tools-for-prompt-testing-comparison',
+    comparisonLabel: 'Compare prompt testing tools',
+    nextStep: 'Compare prompt testing tools, inspect detail pages, then move into submission or pricing.',
   },
   {
     key: 'ai-video-tools',
