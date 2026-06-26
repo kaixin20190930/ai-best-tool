@@ -1,10 +1,11 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
-import { CheckCircle2, ExternalLink, MessageSquare, Users } from 'lucide-react';
+import { ArrowRight, CheckCircle2, ExternalLink, MessageSquare, Users } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 
@@ -103,25 +104,113 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/explore?search=chatbot&sort=popular'
+              ctaId='chatbot_guide_browse_tools'
+              ctaLabel='Chatbot guide browse tools'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '看聊天机器人' : 'Browse chatbots'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/how-to-choose-ai-tools'
+              ctaId='chatbot_guide_selection'
+              ctaLabel='Chatbot guide selection'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '回到选型指南' : 'Back to selection guide'}
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-chatbot-tools-comparison'
+              ctaId='chatbot_guide_compare'
+              ctaLabel='Chatbot guide compare'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看聊天机器人对比' : 'Compare chatbots'}
-            </Link>
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-chatbot-tools'
+              ctaId='chatbot_guide_top_list'
+              ctaLabel='Chatbot guide top list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看聊天机器人榜单' : 'Open chatbot ranking'}
+            </TrackableCtaLink>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图路径' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先看榜单，再进入对比页和真实条目' : 'Start with the ranking, then move into comparison and real listings'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己主要在用聊天机器人做问答、写作或知识检索，就别停在总览页，直接进入更窄的筛选路径。'
+              : 'If chat is already the main way you handle Q&A, writing, or knowledge retrieval, move straight into narrower selection paths.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-chatbot-tools',
+                title: isChinese ? '聊天机器人榜单' : 'Chatbot ranking',
+                desc: isChinese ? '直接看高意图 shortlist。' : 'Go straight to the high-intent shortlist.',
+              },
+              {
+                href: '/guides/ai-chatbot-tools-comparison',
+                title: isChinese ? '聊天机器人对比' : 'Chatbot comparison',
+                desc: isChinese ? '横向看回答、知识和协作。' : 'Compare answers, knowledge, and collaboration side by side.',
+              },
+              {
+                href: '/guides/ai-writing-tools-comparison',
+                title: isChinese ? '写作工具对比' : 'Writing tools comparison',
+                desc: isChinese ? '如果重点偏写作产出，这里更贴近。' : 'Better if the real job is drafting and content output.',
+              },
+              {
+                href: '/guides/ai-tools-for-research-comparison',
+                title: isChinese ? '研究工具对比' : 'Research tools comparison',
+                desc: isChinese ? '如果重点偏资料检索和核对，这里更贴近。' : 'Better for discovery, retrieval, and validation workflows.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`chatbot_guide_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+          <div className='mt-5 flex flex-wrap gap-3'>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-chatbot-tools'
+              ctaId='chatbot_guide_top_list_secondary'
+              ctaLabel='Chatbot guide top list secondary'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+            >
+              {isChinese ? '打开聊天机器人榜单' : 'Open chatbot ranking'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/submit'
+              ctaId='chatbot_guide_submit'
+              ctaLabel='Chatbot guide submit'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
+            >
+              {isChinese ? '提交你的工具' : 'Submit your tool'}
+            </TrackableCtaLink>
           </div>
         </section>
 
@@ -206,6 +295,82 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '下一步怎么走' : 'Next step'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '把聊天入口接到榜单、比较页和真实条目'
+              : 'Move from the chatbot guide into rankings, comparisons, and real listings'}
+          </h2>
+          <div className='mt-4 grid gap-4 lg:grid-cols-3'>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-chatbot-tools'
+              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
+              ctaId='chatbot_guide_ranking_next'
+              ctaLabel='Chatbot guide ranking next'
+              pageType='guide'
+            >
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
+                    {isChinese ? '看聊天机器人榜单' : 'Open chatbot ranking'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {isChinese
+                      ? '如果你已经是高意图筛选，直接看 shortlist 会更快。'
+                      : 'If intent is already high, the shortlist is the fastest next step.'}
+                  </p>
+                </div>
+                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
+              </div>
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/guides/ai-chatbot-tools-comparison'
+              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
+              ctaId='chatbot_guide_compare_next'
+              ctaLabel='Chatbot guide compare next'
+              pageType='guide'
+            >
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
+                    {isChinese ? '看聊天机器人对比' : 'Compare chatbots'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {isChinese
+                      ? '当用途已经清楚，就进入横向对比。'
+                      : 'Once the use case is clear, move into side-by-side comparison.'}
+                  </p>
+                </div>
+                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
+              </div>
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/categories/chatbot?sort=popular'
+              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
+              ctaId='chatbot_guide_category'
+              ctaLabel='Chatbot guide category'
+              pageType='guide'
+            >
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
+                    {isChinese ? '进入 Chatbot 分类' : 'Open the chatbot category'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {isChinese
+                      ? '先看真实条目，再回来缩窄候选。'
+                      : 'Browse real listings first, then come back to narrow the shortlist.'}
+                  </p>
+                </div>
+                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
+              </div>
+            </TrackableCtaLink>
           </div>
         </section>
         <GuideSubmissionPath locale={locale} ctaPrefix='ai_chatbot_tools' />

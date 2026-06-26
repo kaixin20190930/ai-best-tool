@@ -87,15 +87,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
   const tips = isChinese
     ? [
-        '先看你是用来问答、写作、知识库还是团队协作，不同场景侧重点不一样。',
-        '如果你想先试再买，优先看免费版本的限制和回答稳定性。',
-        '更看重长期使用时，关注更新频率、评分和实际评论。',
-      ]
+      '先看你是用来问答、写作、知识库还是团队协作，不同场景侧重点不一样。',
+      '如果你想先试再买，优先看免费版本的限制和回答稳定性。',
+      '更看重长期使用时，关注更新频率、评分和实际评论。',
+    ]
     : [
-        'Start with your use case: Q&A, writing, knowledge base, or collaboration all need different things.',
-        'If you want to try before paying, focus on free-tier limits and answer reliability.',
-        'For long-term use, pay attention to freshness, ratings, and real comments.',
-      ];
+      'Start with your use case: Q&A, writing, knowledge base, or collaboration all need different things.',
+      'If you want to try before paying, focus on free-tier limits and answer reliability.',
+      'For long-term use, pay attention to freshness, ratings, and real comments.',
+    ];
 
   return (
     <>

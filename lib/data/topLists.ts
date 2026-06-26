@@ -2,6 +2,7 @@ export type TopListTopicKey =
   | 'ai-api-observability-tools'
   | 'ai-agency-tools'
   | 'ai-agent-tools'
+  | 'ai-chatbot-tools'
   | 'ai-coding-tools'
   | 'ai-code-review-tools'
   | 'ai-creator-tools'
@@ -81,6 +82,21 @@ export const topListTopics: TopListTopicConfig[] = [
     comparisonHref: '/guides/ai-tools-for-agents-comparison',
     comparisonLabel: 'Compare agent tools',
     nextStep: 'Compare agent tools, inspect details, then move into submission or pricing.',
+  },
+  {
+    key: 'ai-chatbot-tools',
+    categorySlug: 'chatbot',
+    title: 'Best AI Chatbot Tools',
+    description: 'The most useful tools for Q&A, writing help, knowledge retrieval, collaboration, and daily chat workflows.',
+    summary: 'A practical shortlist for people who use chat as the main entry point for research, drafting, and team knowledge work.',
+    ctaLabel: 'Go to chatbot list',
+    ctaDescription:
+      'Use this list when the decision is about answer quality, context length, knowledge integration, and chat workflow fit.',
+    guideHref: '/guides/ai-chatbot-tools',
+    guideLabel: 'Back to chatbot guide',
+    comparisonHref: '/guides/ai-chatbot-tools-comparison',
+    comparisonLabel: 'Compare chatbot tools',
+    nextStep: 'Compare chatbot tools, inspect detail pages, then move into submission or pricing.',
   },
   {
     key: 'ai-coding-tools',
