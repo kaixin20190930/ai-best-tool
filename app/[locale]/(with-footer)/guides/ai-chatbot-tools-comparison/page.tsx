@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { ArrowRight, CheckCircle2, Columns3, ExternalLink, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
@@ -7,8 +6,10 @@ import { generateBreadcrumbSchema, generateFAQSchema, generateItemListSchema } f
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import { toolToListRow } from '@/lib/services/toolPresenter';
 import { getTools } from '@/lib/services/tools';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
@@ -87,15 +88,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
   const tips = isChinese
     ? [
-      '先看你是用来问答、写作、知识库还是团队协作，不同场景侧重点不一样。',
-      '如果你想先试再买，优先看免费版本的限制和回答稳定性。',
-      '更看重长期使用时，关注更新频率、评分和实际评论。',
-    ]
+        '先看你是用来问答、写作、知识库还是团队协作，不同场景侧重点不一样。',
+        '如果你想先试再买，优先看免费版本的限制和回答稳定性。',
+        '更看重长期使用时，关注更新频率、评分和实际评论。',
+      ]
     : [
-      'Start with your use case: Q&A, writing, knowledge base, or collaboration all need different things.',
-      'If you want to try before paying, focus on free-tier limits and answer reliability.',
-      'For long-term use, pay attention to freshness, ratings, and real comments.',
-    ];
+        'Start with your use case: Q&A, writing, knowledge base, or collaboration all need different things.',
+        'If you want to try before paying, focus on free-tier limits and answer reliability.',
+        'For long-term use, pay attention to freshness, ratings, and real comments.',
+      ];
 
   return (
     <>
@@ -126,19 +127,80 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/guides/ai-chatbot-tools'
+              ctaId='chatbot_comparison_guide'
+              ctaLabel='Chatbot comparison guide'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '回到聊天机器人指南' : 'Back to chatbot guide'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-chatbot-tools'
+              ctaId='chatbot_comparison_ranking'
+              ctaLabel='Chatbot comparison ranking'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看聊天榜单' : 'Open chatbot ranking'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/explore?search=chatbot&sort=popular'
+              ctaId='chatbot_comparison_browse'
+              ctaLabel='Chatbot comparison browse'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '浏览更多聊天机器人' : 'Browse more chatbots'}
               <ArrowRight className='size-4' />
+            </TrackableCtaLink>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图入口' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '对比之后，回到榜单和真实候选继续收窄'
+              : 'After the comparison, narrow down through the ranking and real candidates'}
+          </h2>
+          <div className='mt-4 grid gap-3 md:grid-cols-3'>
+            <Link
+              href='/best-ai-tools/ai-chatbot-tools'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '聊天榜单' : 'Chatbot ranking'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '先回到高相关榜单，再决定最终 shortlist。'
+                  : 'Return to the highest-fit ranking before deciding on the final shortlist.'}
+              </p>
+            </Link>
+            <Link
+              href='/guides/ai-chatbot-tools'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '聊天指南' : 'Chatbot guide'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '如果你还想重新按场景判断，再回指南页。'
+                  : 'If you want to re-check the use case framing, go back to the guide.'}
+              </p>
+            </Link>
+            <Link
+              href='/explore?search=chatbot&sort=popular'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '更多候选' : 'More candidates'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '如果榜单还不够，就继续在 Explore 里扩候选。'
+                  : 'If the ranking is still too narrow, widen the shortlist in Explore.'}
+              </p>
             </Link>
           </div>
         </section>
