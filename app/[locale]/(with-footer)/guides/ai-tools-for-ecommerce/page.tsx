@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { CheckCircle2, ExternalLink, ShoppingBag, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
@@ -7,6 +6,7 @@ import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Metadata.home' });
@@ -59,15 +59,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const faqSchema = generateFAQSchema(faqs);
   const tips = isChinese
     ? [
-        '先分清你要处理的是商品、客服、营销还是运营。',
-        '看它是否能支持批量和品牌一致性。',
-        '如果你在独立站或多渠道销售，优先看导出、自动化和协作。',
-      ]
+      '先分清你要处理的是商品、客服、营销还是运营。',
+      '看它是否能支持批量和品牌一致性。',
+      '如果你在独立站或多渠道销售，优先看导出、自动化和协作。',
+    ]
     : [
-        'Separate the job first: products, support, marketing, or operations.',
-        'Check whether it supports batch workflows and brand consistency.',
-        'If you sell through stores or multiple channels, prioritize exports, automation, and collaboration.',
-      ];
+      'Separate the job first: products, support, marketing, or operations.',
+      'Check whether it supports batch workflows and brand consistency.',
+      'If you sell through stores or multiple channels, prioritize exports, automation, and collaboration.',
+    ];
 
   return (
     <>
@@ -98,25 +98,52 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/explore?search=ecommerce&sort=popular'
+              ctaId='ecommerce_guide_browse_tools'
+              ctaLabel='Ecommerce guide browse tools'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '看电商工具' : 'Browse ecommerce tools'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/how-to-choose-ai-tools'
+              ctaId='ecommerce_guide_choose'
+              ctaLabel='Ecommerce guide choose'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '回到选型指南' : 'Back to selection guide'}
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-productivity-tools'
+              ctaId='ecommerce_guide_productivity'
+              ctaLabel='Ecommerce guide productivity'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看生产力工具' : 'Productivity tools'}
-            </Link>
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/guides/ai-tools-for-ecommerce-comparison'
+              ctaId='ecommerce_guide_comparison'
+              ctaLabel='Ecommerce guide comparison'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+            >
+              {isChinese ? '看电商工具对比' : 'Compare ecommerce tools'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-ecommerce-tools'
+              ctaId='ecommerce_guide_top_list'
+              ctaLabel='Ecommerce guide top list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看电商榜单' : 'Open ecommerce ranking'}
+            </TrackableCtaLink>
           </div>
         </section>
 
@@ -162,6 +189,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ))}
             </div>
           </aside>
+        </section>
+
+        <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先用榜单缩小 ecommerce shortlist' : 'Use the ranking to narrow your ecommerce shortlist first'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己要比的是商品内容、客服、运营和转化流程，榜单页会比泛目录更快进入决策。'
+              : 'If the decision is already about product content, support, store operations, and conversion workflows, the ranking page gets to a decision faster than a broad directory.'}
+          </p>
+          <div className='mt-5 flex flex-wrap gap-3'>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-ecommerce-tools'
+              ctaId='ecommerce_guide_ranking_primary'
+              ctaLabel='Ecommerce guide ranking primary'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+            >
+              {isChinese ? '进入电商榜单' : 'Open ecommerce ranking'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/guides/ai-tools-for-ecommerce-comparison'
+              ctaId='ecommerce_guide_ranking_secondary'
+              ctaLabel='Ecommerce guide ranking secondary'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
+            >
+              {isChinese ? '继续看对比页' : 'Continue to comparison'}
+            </TrackableCtaLink>
+          </div>
         </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>

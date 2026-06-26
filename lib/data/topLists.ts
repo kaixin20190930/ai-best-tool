@@ -3,6 +3,7 @@ export type TopListTopicKey =
   | 'ai-agent-tools'
   | 'ai-coding-tools'
   | 'ai-code-review-tools'
+  | 'ai-ecommerce-tools'
   | 'ai-evals-tools'
   | 'ai-lead-generation-tools'
   | 'ai-marketing-tools'
@@ -87,6 +88,21 @@ export const topListTopics: TopListTopicConfig[] = [
     comparisonHref: '/guides/ai-tools-for-code-review-comparison',
     comparisonLabel: 'Compare code review tools',
     nextStep: 'Compare code review tools, inspect detail pages, then move into submission or pricing.',
+  },
+  {
+    key: 'ai-ecommerce-tools',
+    categorySlug: 'ecommerce',
+    title: 'Best AI Ecommerce Tools',
+    description: 'The most useful tools for product copy, merchandising, support, store operations, and conversion workflows.',
+    summary: 'A practical shortlist for teams improving product pages, customer experience, and store operations without losing brand consistency.',
+    ctaLabel: 'Go to ecommerce list',
+    ctaDescription:
+      'Use this list when the decision is about product content, support automation, merchandising, and ecommerce workflow fit.',
+    guideHref: '/guides/ai-tools-for-ecommerce',
+    guideLabel: 'Back to ecommerce guide',
+    comparisonHref: '/guides/ai-tools-for-ecommerce-comparison',
+    comparisonLabel: 'Compare ecommerce tools',
+    nextStep: 'Compare ecommerce tools, inspect detail pages, then move into submission or pricing.',
   },
   {
     key: 'ai-evals-tools',
