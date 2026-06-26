@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { ExternalLink, Filter, SearchCheck, Users } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
@@ -8,6 +7,7 @@ import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Metadata.home' });
@@ -64,15 +64,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-        '先分清你要的是找新名单、补全信息，还是给已有名单做优先级排序。',
-        '看它的数据源是不是覆盖你真正要接触的人群，而不是泛泛给出一堆名字。',
-        '如果后面还要进销售流程，优先看导出、去重和 CRM 或邮件工具的衔接。',
-      ]
+      '先分清你要的是找新名单、补全信息，还是给已有名单做优先级排序。',
+      '看它的数据源是不是覆盖你真正要接触的人群，而不是泛泛给出一堆名字。',
+      '如果后面还要进销售流程，优先看导出、去重和 CRM 或邮件工具的衔接。',
+    ]
     : [
-        'Separate list discovery, enrichment, and prioritization before comparing tools.',
-        'Check whether the data sources really cover the audience you sell to, not just a generic pile of names.',
-        'If leads will move into a sales workflow next, prioritize export quality, deduplication, and CRM or email fit.',
-      ];
+      'Separate list discovery, enrichment, and prioritization before comparing tools.',
+      'Check whether the data sources really cover the audience you sell to, not just a generic pile of names.',
+      'If leads will move into a sales workflow next, prioritize export quality, deduplication, and CRM or email fit.',
+    ];
 
   return (
     <>
@@ -103,25 +103,43 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/explore?search=lead&sort=popular'
+              ctaId='lead_generation_guide_browse_tools'
+              ctaLabel='Lead generation guide browse tools'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '看获客相关工具' : 'Browse lead-gen tools'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-tools-for-sales'
+              ctaId='lead_generation_guide_sales'
+              ctaLabel='Lead generation guide sales'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '回到销售工具指南' : 'Back to sales guide'}
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-tools-for-lead-generation-comparison'
+              ctaId='lead_generation_guide_comparison'
+              ctaLabel='Lead generation guide comparison'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看获客对比页' : 'Lead-gen comparison'}
-            </Link>
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-lead-generation-tools'
+              ctaId='lead_generation_guide_top_list'
+              ctaLabel='Lead generation guide top list'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看获客榜单' : 'Open lead-gen ranking'}
+            </TrackableCtaLink>
           </div>
         </section>
 
@@ -200,6 +218,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Best for comparing list sources, filtering depth, and export quality.',
             },
             {
+              href: '/best-ai-tools/ai-lead-generation-tools',
+              title: isChinese ? '获客榜单' : 'Lead-gen ranking',
+              description: isChinese
+                ? '适合已经确认方向、只想快速缩小 shortlist 的用户。'
+                : 'Useful when the direction is clear and the goal is to narrow the shortlist faster.',
+            },
+            {
               href: '/guides/ai-tools-for-sales-prospecting-comparison',
               title: isChinese ? '销售拓客工具对比' : 'Sales prospecting comparison',
               description: isChinese
@@ -247,6 +272,42 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             },
           ]}
         />
+
+        <div className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
+          <section className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '高意图榜单' : 'High-intent ranking'}
+            </p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+              {isChinese ? '先用榜单缩小 lead-gen shortlist' : 'Use the ranking to narrow your lead-gen shortlist first'}
+            </h2>
+            <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '如果你已经知道自己要比的是名单来源、线索筛选和信息补全，榜单页会比泛销售目录更快进入决策。'
+                : 'If the decision is already about list sources, qualification, and enrichment, the ranking page gets to a decision faster than a broad sales directory.'}
+            </p>
+            <div className='mt-5 flex flex-wrap gap-3'>
+              <TrackableCtaLink
+                href='/best-ai-tools/ai-lead-generation-tools'
+                ctaId='lead_generation_guide_ranking_primary'
+                ctaLabel='Lead generation guide ranking primary'
+                pageType='guide'
+                className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+              >
+                {isChinese ? '进入获客榜单' : 'Open lead-gen ranking'}
+              </TrackableCtaLink>
+              <TrackableCtaLink
+                href='/guides/ai-tools-for-lead-generation-comparison'
+                ctaId='lead_generation_guide_ranking_secondary'
+                ctaLabel='Lead generation guide ranking secondary'
+                pageType='guide'
+                className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
+              >
+                {isChinese ? '继续看对比页' : 'Continue to comparison'}
+              </TrackableCtaLink>
+            </div>
+          </section>
+        </div>
 
         <div className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
           <section className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>

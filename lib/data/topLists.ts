@@ -4,6 +4,7 @@ export type TopListTopicKey =
   | 'ai-coding-tools'
   | 'ai-code-review-tools'
   | 'ai-evals-tools'
+  | 'ai-lead-generation-tools'
   | 'ai-model-routing-tools'
   | 'ai-prompt-testing-tools'
   | 'ai-sales-prospecting-tools'
@@ -100,6 +101,21 @@ export const topListTopics: TopListTopicConfig[] = [
     comparisonHref: '/guides/ai-tools-for-evals-comparison',
     comparisonLabel: 'Compare evals tools',
     nextStep: 'Compare evals tools, inspect detail pages, then move into submission or pricing.',
+  },
+  {
+    key: 'ai-lead-generation-tools',
+    categorySlug: 'productivity',
+    title: 'Best AI Lead Generation Tools',
+    description: 'The most useful tools for list discovery, enrichment, filtering, and early lead qualification.',
+    summary: 'A practical shortlist for teams trying to find better-fit buyers, clean lists faster, and improve downstream sales quality.',
+    ctaLabel: 'Go to lead-gen list',
+    ctaDescription:
+      'Use this list when the decision is about finding leads, enriching data, filtering quality, and preparing cleaner handoffs into sales workflow.',
+    guideHref: '/guides/ai-tools-for-lead-generation',
+    guideLabel: 'Back to lead-gen guide',
+    comparisonHref: '/guides/ai-tools-for-lead-generation-comparison',
+    comparisonLabel: 'Compare lead generation tools',
+    nextStep: 'Compare lead generation tools, inspect detail pages, then move into submission or pricing.',
   },
   {
     key: 'ai-model-routing-tools',
