@@ -18,6 +18,7 @@ export type TopListTopicKey =
   | 'ai-prompt-testing-tools'
   | 'ai-sales-prospecting-tools'
   | 'ai-small-business-tools'
+  | 'ai-student-tools'
   | 'ai-voice-tools'
   | 'ai-video-tools'
   | 'ai-research-tools'
@@ -323,6 +324,21 @@ export const topListTopics: TopListTopicConfig[] = [
     comparisonHref: '/guides/ai-tools-for-small-business-comparison',
     comparisonLabel: 'Compare small-business tools',
     nextStep: 'Compare small-business tools, inspect detail pages, then move into submission or pricing.',
+  },
+  {
+    key: 'ai-student-tools',
+    categorySlug: 'productivity',
+    title: 'Best AI Student Tools',
+    description: 'The most useful tools for learning, writing, summarizing, note organization, and study collaboration.',
+    summary: 'A practical shortlist for students who want to study faster, organize information better, and reduce friction in everyday schoolwork.',
+    ctaLabel: 'Go to student list',
+    ctaDescription:
+      'Use this list when the decision is about study workflows, writing support, note organization, citations, and affordability.',
+    guideHref: '/guides/ai-tools-for-students',
+    guideLabel: 'Back to student guide',
+    comparisonHref: '/guides/ai-tools-for-students-comparison',
+    comparisonLabel: 'Compare student tools',
+    nextStep: 'Compare student tools, inspect detail pages, then move into submission or pricing.',
   },
   {
     key: 'ai-voice-tools',
