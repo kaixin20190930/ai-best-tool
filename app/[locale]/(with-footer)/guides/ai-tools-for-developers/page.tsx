@@ -61,15 +61,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-        '先分清你是在找编码辅助、模型接入，还是自动化和基础设施能力。',
-        '优先看是否适配现有编辑器、仓库、API 和部署方式。',
-        '如果是团队长期使用，重点看权限、可观测性和集成维护成本。',
-      ]
+      '先分清你是在找编码辅助、模型接入，还是自动化和基础设施能力。',
+      '优先看是否适配现有编辑器、仓库、API 和部署方式。',
+      '如果是团队长期使用，重点看权限、可观测性和集成维护成本。',
+    ]
     : [
-        'Separate coding, model access, automation, and infrastructure needs before comparing tools.',
-        'Check fit with your editor, repository, API surface, and deployment path.',
-        'For team use, focus on permissions, observability, and integration maintenance cost.',
-      ];
+      'Separate coding, model access, automation, and infrastructure needs before comparing tools.',
+      'Check fit with your editor, repository, API surface, and deployment path.',
+      'For team use, focus on permissions, observability, and integration maintenance cost.',
+    ];
 
   return (
     <>
@@ -136,6 +136,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
             >
               {isChinese ? '提交你的工具' : 'Submit your tool'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-coding-tools'
+              ctaId='developer_guide_coding_ranking'
+              ctaLabel='Developer guide coding ranking'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {isChinese ? '看开发者相关榜单' : 'Open developer rankings'}
             </TrackableCtaLink>
           </div>
         </section>
@@ -255,6 +264,91 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 ))}
             </div>
           </aside>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent rankings'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '方向已明确时，直接进更窄的榜单页' : 'When the lane is clear, jump straight into the narrower ranking pages'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己在比编码、审查、日志、路由、评估或 agent 工作流，榜单页会比泛开发者目录更快进入决策。'
+              : 'If the decision is already about coding, review, logs, routing, evals, or agent workflow, the ranking pages get to a decision faster than a broad developer directory.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-3'>
+            {[
+              {
+                href: '/best-ai-tools/ai-coding-tools',
+                title: isChinese ? '编程工具榜单' : 'Coding ranking',
+                desc: isChinese ? '编辑器、调试和实现效率。' : 'Editor workflows, debugging, and implementation speed.',
+              },
+              {
+                href: '/best-ai-tools/ai-code-review-tools',
+                title: isChinese ? '代码审查榜单' : 'Code review ranking',
+                desc: isChinese ? 'PR 理解、风险提示和 review 反馈。' : 'PR understanding, risk checks, and review feedback.',
+              },
+              {
+                href: '/best-ai-tools/ai-api-observability-tools',
+                title: isChinese ? '可观测榜单' : 'Observability ranking',
+                desc: isChinese ? '日志、追踪、成本和质量治理。' : 'Logs, tracing, cost, and quality governance.',
+              },
+              {
+                href: '/best-ai-tools/ai-model-routing-tools',
+                title: isChinese ? '模型路由榜单' : 'Model routing ranking',
+                desc: isChinese ? '网关、回退和多模型治理。' : 'Gateways, fallbacks, and multi-model governance.',
+              },
+              {
+                href: '/best-ai-tools/ai-prompt-testing-tools',
+                title: isChinese ? 'Prompt 测试榜单' : 'Prompt testing ranking',
+                desc: isChinese ? '版本对比、A/B 测试和回归检查。' : 'Version comparison, A/B tests, and regression checks.',
+              },
+              {
+                href: '/best-ai-tools/ai-evals-tools',
+                title: isChinese ? 'Evals 榜单' : 'Evals ranking',
+                desc: isChinese ? '输出评分、数据集验证和上线验收。' : 'Output scoring, dataset validation, and release acceptance.',
+              },
+              {
+                href: '/best-ai-tools/ai-agent-tools',
+                title: isChinese ? 'Agent 榜单' : 'Agent ranking',
+                desc: isChinese ? '工具调用、执行循环和自动化控制。' : 'Tool use, execution loops, and automation control.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`developer_guide_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+          <div className='mt-5 flex flex-wrap gap-3'>
+            <TrackableCtaLink
+              href='/best-ai-tools'
+              ctaId='developer_guide_rankings_hub'
+              ctaLabel='Developer guide rankings hub'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+            >
+              {isChinese ? '打开榜单总页' : 'Open rankings hub'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/guides/ai-tools-for-developers-comparison'
+              ctaId='developer_guide_rankings_comparison'
+              ctaLabel='Developer guide rankings comparison'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
+            >
+              {isChinese ? '继续看总对比页' : 'Continue to comparison'}
+            </TrackableCtaLink>
+          </div>
         </section>
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
