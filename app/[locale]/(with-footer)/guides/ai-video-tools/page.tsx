@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { CheckCircle2, Clapperboard, ExternalLink, Film } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -104,25 +104,34 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/explore?search=video&sort=popular'
+              ctaId='video_guide_browse_tools'
+              ctaLabel='Video guide browse tools'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '看视频类工具' : 'Browse video tools'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/how-to-choose-ai-tools'
+              ctaId='video_guide_selection_guide'
+              ctaLabel='Video guide selection guide'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '回到选型指南' : 'Back to selection guide'}
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-video-tools-comparison'
+              ctaId='video_guide_comparison'
+              ctaLabel='Video guide comparison'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看视频工具对比' : 'Compare video tools'}
-            </Link>
+            </TrackableCtaLink>
             <TrackableCtaLink
               href='/best-ai-tools/ai-video-tools'
               ctaId='video_guide_top_list'
@@ -132,6 +141,50 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             >
               {isChinese ? '看视频榜单' : 'Open video ranking'}
             </TrackableCtaLink>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图入口' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '如果视频已经是明确方向，先看榜单再进对比' : 'If video is already the lane, open the ranking before the comparison'}
+          </h2>
+          <div className='mt-4 grid gap-3 md:grid-cols-3'>
+            <Link
+              href='/best-ai-tools/ai-video-tools'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '视频榜单' : 'Video ranking'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '先收窄到更高相关的视频候选，再决定具体比剪辑、生成还是配音。'
+                  : 'Start with the highest-fit video candidates, then decide whether editing, generation, or voiceover matters most.'}
+              </p>
+            </Link>
+            <Link
+              href='/guides/ai-video-tools-comparison'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '视频对比页' : 'Video comparison'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '当你已经有几款候选，直接横向比较工作流和导出能力。'
+                  : 'Once you already have candidates, compare workflow fit and export capability side by side.'}
+              </p>
+            </Link>
+            <Link
+              href='/categories/video?sort=popular'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '视频分类' : 'Video category'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '先浏览真实视频条目，再回头收窄到高相关候选。'
+                  : 'Browse real video listings first, then come back to narrow into the stronger candidates.'}
+              </p>
+            </Link>
           </div>
         </section>
 

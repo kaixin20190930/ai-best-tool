@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { ArrowRight, CheckCircle2, ExternalLink, FileText, PenLine } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -104,25 +104,34 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
 
           <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
+            <TrackableCtaLink
               href='/explore?search=writing&sort=popular'
+              ctaId='writing_guide_browse_tools'
+              ctaLabel='Writing guide browse tools'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
             >
               {isChinese ? '看写作类工具' : 'Browse writing tools'}
               <ExternalLink className='size-4' />
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/free-ai-tools'
+              ctaId='writing_guide_free_tools'
+              ctaLabel='Writing guide free tools'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '先看免费工具' : 'Start with free tools'}
-            </Link>
-            <Link
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/guides/ai-writing-tools-comparison'
+              ctaId='writing_guide_comparison'
+              ctaLabel='Writing guide comparison'
+              pageType='guide'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '看写作工具对比' : 'Compare writing tools'}
-            </Link>
+            </TrackableCtaLink>
             <TrackableCtaLink
               href='/best-ai-tools/ai-writing-tools'
               ctaId='writing_guide_top_list'
@@ -270,6 +279,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           }
           compareLinks={[
             {
+              href: '/best-ai-tools/ai-writing-tools',
+              title: isChinese ? '写作工具榜单' : 'Writing tools ranking',
+              description: isChinese
+                ? '先收窄到更高相关的写作候选，再决定进入哪条更细的比较路径。'
+                : 'Start with the highest-fit writing candidates, then decide which narrower comparison path fits best.',
+            },
+            {
               href: '/guides/ai-writing-tools-comparison',
               title: isChinese ? '写作工具总对比' : 'Writing tools comparison',
               description: isChinese
@@ -295,10 +311,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           }
           nextDescription={
             isChinese
-              ? '如果你已经确认自己偏写作工作流，下一步就去分类页、搜索页和本周新增页看真实条目。'
-              : 'Once you know writing is the right workflow, move into category pages, search results, and weekly additions to compare real listings.'
+              ? '如果你已经确认自己偏写作工作流，下一步就去写作榜单、分类页和搜索页看真实条目。'
+              : 'Once you know writing is the right workflow, move into the writing ranking, category page, and search results to compare real listings.'
           }
           nextLinks={[
+            {
+              href: '/best-ai-tools/ai-writing-tools',
+              title: isChinese ? '进入写作榜单' : 'Open the writing ranking',
+              description: isChinese
+                ? '先从更高相关的写作候选集合开始。'
+                : 'Start with the highest-fit writing shortlist.',
+            },
             {
               href: '/categories/text-writing?sort=popular',
               title: isChinese ? '进入写作分类' : 'Open the writing category',
@@ -312,13 +335,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               description: isChinese
                 ? '回到探索页，按关键词继续扩大候选范围。'
                 : 'Return to Explore and widen the shortlist with a writing-focused search.',
-            },
-            {
-              href: '/new',
-              title: isChinese ? '看看本周新增' : 'Check new this week',
-              description: isChinese
-                ? '顺手看看最近补进来的内容里有没有更适合的新候选。'
-                : 'See whether recent additions introduced a stronger fit for your workflow.',
             },
           ]}
         />

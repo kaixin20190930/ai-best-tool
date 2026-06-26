@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { ArrowRight, ExternalLink, FileSearch, Search, ShieldCheck } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -359,6 +359,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           }
           compareLinks={[
             {
+              href: '/best-ai-tools/ai-research-tools',
+              title: isChinese ? '研究工具榜单' : 'Research tools ranking',
+              description: isChinese
+                ? '先收窄到更高相关的研究候选，再决定进入哪条更窄的对比路径。'
+                : 'Start with the highest-fit research candidates, then choose the narrower comparison path that fits.',
+            },
+            {
               href: '/guides/ai-tools-for-research-comparison',
               title: isChinese ? '研究工具总对比' : 'Research tools comparison',
               description: isChinese
@@ -384,10 +391,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           nextTitle={isChinese ? '读完研究指南后，继续这样往下走' : 'How to continue after the research guide'}
           nextDescription={
             isChinese
-              ? '如果你已经确认自己更偏资料发现和证据核对，下一步就回到研究分类、搜索页和本周新增。'
-              : 'If discovery and evidence-checking are clearly your use case, move next into research categories, search results, and weekly additions.'
+              ? '如果你已经确认自己更偏资料发现和证据核对，下一步就看研究榜单、分类和搜索页。'
+              : 'If discovery and evidence-checking are clearly your use case, move next into the research ranking, category, and search results.'
           }
           nextLinks={[
+            {
+              href: '/best-ai-tools/ai-research-tools',
+              title: isChinese ? '进入研究榜单' : 'Open the research ranking',
+              description: isChinese
+                ? '先从更高相关的研究候选集合开始。'
+                : 'Start with the highest-fit research shortlist.',
+            },
             {
               href: '/categories/research?sort=popular',
               title: isChinese ? '进入 Research 分类' : 'Open the research category',
@@ -401,13 +415,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               description: isChinese
                 ? '用关键词回到 Explore 扩大候选范围。'
                 : 'Use a research-focused query in Explore to widen the shortlist.',
-            },
-            {
-              href: '/new',
-              title: isChinese ? '看本周新增' : 'Check new this week',
-              description: isChinese
-                ? '看看最近补进站里的研究类工具有没有更新选择。'
-                : 'See whether recent additions introduced better research-oriented options.',
             },
           ]}
         />
