@@ -65,6 +65,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     .map((href) => pickGuide(href))
     .filter((item): item is (typeof GUIDE_PAGES)[number] => Boolean(item));
   const commercialGuides = [
+    '/guides/ai-tools-for-content-creation',
+    '/guides/ai-tools-for-content-creation-comparison',
     '/guides/ai-tools-for-marketing',
     '/guides/ai-tools-for-marketing-comparison',
     '/guides/ai-tools-for-sales',
@@ -151,6 +153,63 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {isChinese ? '认领条目' : 'Claim listing'}
               <ArrowRight className='size-4' />
             </TrackableCtaLink>
+          </div>
+
+          <div className='mt-6 rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5'>
+            <div className='flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between'>
+              <div>
+                <p className='text-sm font-semibold uppercase tracking-wide text-cyan-800'>
+                  {isChinese ? '优先对比入口' : 'Priority comparison paths'}
+                </p>
+                <h2 className='mt-1 text-xl font-bold text-slate-950'>
+                  {isChinese
+                    ? '先看这四个最容易转化的比较页'
+                    : 'Start with the four most conversion-friendly comparisons'}
+                </h2>
+              </div>
+              <p className='max-w-2xl text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '如果用户已经有明确方向，先看对比页通常比先看总指南更快接近决策。'
+                  : 'When the user already has a direction, comparison pages usually get to a decision faster than a broad guide.'}
+              </p>
+            </div>
+            <div className='mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+              {[
+                {
+                  href: '/guides/ai-coding-tools-comparison',
+                  title: isChinese ? 'AI 编程工具对比' : 'AI coding tools comparison',
+                  desc: isChinese
+                    ? '适合先看编码、调试和重构差异。'
+                    : 'Best for coding, debugging, and refactoring differences.',
+                },
+                {
+                  href: '/guides/ai-video-tools-comparison',
+                  title: isChinese ? 'AI 视频工具对比' : 'AI video tools comparison',
+                  desc: isChinese
+                    ? '适合看生成、剪辑和成片流程。'
+                    : 'Best for generation, editing, and final output workflows.',
+                },
+                {
+                  href: '/guides/ai-tools-for-research-comparison',
+                  title: isChinese ? 'AI 研究工具对比' : 'AI research tools comparison',
+                  desc: isChinese ? '适合先看来源、证据和检索。' : 'Best for sources, evidence, and retrieval.',
+                },
+                {
+                  href: '/guides/ai-writing-tools-comparison',
+                  title: isChinese ? 'AI 写作工具对比' : 'AI writing tools comparison',
+                  desc: isChinese ? '适合先看起草、改写和编辑。' : 'Best for drafting, rewriting, and editing.',
+                },
+              ].map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className='rounded-xl border border-cyan-100 bg-white p-4 transition hover:border-cyan-300 hover:bg-white hover:shadow-sm'
+                >
+                  <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+                </Link>
+              ))}
+            </div>
           </div>
 
           <div className='mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
@@ -265,7 +324,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 {isChinese ? '高意图榜单' : 'High-intent top lists'}
               </p>
               <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-                {isChinese ? '先用榜单缩小范围，再进入详情和提交' : 'Use ranked lists to narrow the field before detail and submission'}
+                {isChinese
+                  ? '先用榜单缩小范围，再进入详情和提交'
+                  : 'Use ranked lists to narrow the field before detail and submission'}
               </h2>
             </div>
             <p className='max-w-3xl text-sm leading-6 text-slate-600'>
@@ -449,6 +510,69 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                     : 'Higher intent for completion, refactoring, debugging, and real implementation work.',
                 },
                 {
+                  href: '/guides/cursor-alternatives-comparison',
+                  title: isChinese ? 'Cursor 替代方案对比' : 'Cursor alternatives comparison',
+                  desc: isChinese
+                    ? '更贴近编辑器内补全、重构和上下文协作。'
+                    : 'Closer to editor-first completion, refactoring, and context-aware collaboration.',
+                },
+                {
+                  href: '/guides/chatgpt-alternatives-comparison',
+                  title: isChinese ? 'ChatGPT 替代方案对比' : 'ChatGPT alternatives comparison',
+                  desc: isChinese
+                    ? '更适合聊天、写作、研究和多模型切换的候选。'
+                    : 'Better for chat, writing, research, and multi-model switching candidates.',
+                },
+                {
+                  href: '/guides/claude-alternatives-comparison',
+                  title: isChinese ? 'Claude 替代方案对比' : 'Claude alternatives comparison',
+                  desc: isChinese
+                    ? '更适合长上下文、分析和代码理解。'
+                    : 'Better for long context, analysis, and code understanding.',
+                },
+                {
+                  href: '/guides/gemini-alternatives-comparison',
+                  title: isChinese ? 'Gemini 替代方案对比' : 'Gemini alternatives comparison',
+                  desc: isChinese
+                    ? '更适合 Google 生态、移动入口和多设备切换。'
+                    : 'Better for Google ecosystem, mobile entry, and multi-device switching.',
+                },
+                {
+                  href: '/guides/poe-alternatives-comparison',
+                  title: isChinese ? 'Poe 替代方案对比' : 'Poe alternatives comparison',
+                  desc: isChinese
+                    ? '更适合多模型聚合和并排比较。'
+                    : 'Better for multi-model aggregation and side-by-side comparison.',
+                },
+                {
+                  href: '/guides/sora-alternatives-comparison',
+                  title: isChinese ? 'Sora 替代方案对比' : 'Sora alternatives comparison',
+                  desc: isChinese
+                    ? '更适合视频生成、角色运动和多模态工作流。'
+                    : 'Better for video generation, character motion, and multimodal workflows.',
+                },
+                {
+                  href: '/guides/adobe-alternatives-comparison',
+                  title: isChinese ? 'Adobe 替代方案对比' : 'Adobe alternatives comparison',
+                  desc: isChinese
+                    ? '更适合创作套件、视觉资产和内容生产。'
+                    : 'Better for creative suites, visual assets, and content production.',
+                },
+                {
+                  href: '/guides/notion-alternatives-comparison',
+                  title: isChinese ? 'Notion 替代方案对比' : 'Notion alternatives comparison',
+                  desc: isChinese
+                    ? '更适合知识库、文档协作和工作区管理。'
+                    : 'Better for knowledge bases, document collaboration, and workspace management.',
+                },
+                {
+                  href: '/guides/character-ai-alternatives-comparison',
+                  title: isChinese ? 'Character AI 替代方案对比' : 'Character AI alternatives comparison',
+                  desc: isChinese
+                    ? '更适合角色对话、沉浸式互动和通用聊天。'
+                    : 'Better for character chat, immersive interaction, and general conversation.',
+                },
+                {
                   href: '/guides/ai-tools-for-code-review-comparison',
                   title: isChinese ? '代码审查工具对比' : 'Code review tools comparison',
                   desc: isChinese
@@ -484,11 +608,39 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                     : 'A sharper path for personalized outreach, outbound prep, and prospecting.',
                 },
                 {
+                  href: '/guides/salesforce-einstein-alternatives-comparison',
+                  title: isChinese ? 'Salesforce Einstein 替代方案对比' : 'Salesforce Einstein alternatives comparison',
+                  desc: isChinese
+                    ? '更适合 CRM、销售自动化和企业工作流。'
+                    : 'Better for CRM, sales automation, and enterprise workflows.',
+                },
+                {
                   href: '/guides/ai-tools-for-automation-comparison',
                   title: isChinese ? '自动化工具对比' : 'Automation tools comparison',
                   desc: isChinese
                     ? '适合连接器、工作流编排和自动执行场景。'
                     : 'A sharper path for connectors, orchestration, and workflow execution.',
+                },
+                {
+                  href: '/guides/zapier-alternatives-comparison',
+                  title: isChinese ? 'Zapier 替代方案对比' : 'Zapier alternatives comparison',
+                  desc: isChinese
+                    ? '更适合连接器、工作流编排和自动化。'
+                    : 'Better for connectors, orchestration, and automation workflows.',
+                },
+                {
+                  href: '/guides/make-alternatives-comparison',
+                  title: isChinese ? 'Make 替代方案对比' : 'Make alternatives comparison',
+                  desc: isChinese
+                    ? '更适合可视化编排和中等复杂度流程。'
+                    : 'Better for visual orchestration and medium-complexity workflows.',
+                },
+                {
+                  href: '/guides/n8n-alternatives-comparison',
+                  title: isChinese ? 'n8n 替代方案对比' : 'n8n alternatives comparison',
+                  desc: isChinese
+                    ? '更适合可控、自建和开发者导向的工作流。'
+                    : 'Better for controllable, self-hosted, and developer-oriented workflows.',
                 },
               ].map((item) => (
                 <Link
@@ -749,6 +901,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 desc: isChinese ? '资料发现、证据核对和分析整理。' : 'Discovery, evidence-checking, and synthesis.',
               },
               {
+                href: '/guides/perplexity-alternatives-comparison',
+                title: isChinese ? 'Perplexity 替代方案对比' : 'Perplexity alternatives comparison',
+                desc: isChinese
+                  ? '更适合资料发现、证据核对和研究工作流。'
+                  : 'Better for discovery, evidence-checking, and research workflows.',
+              },
+              {
                 href: '/guides/ai-video-tools-comparison',
                 title: isChinese ? '视频工具对比' : 'Video tools comparison',
                 desc: isChinese
@@ -756,9 +915,100 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   : 'Editing, generation, voiceover, and short-form workflows.',
               },
               {
+                href: '/guides/ai-tools-for-meeting-notes-comparison',
+                title: isChinese ? '会议纪要工具对比' : 'Meeting notes tools comparison',
+                desc: isChinese
+                  ? '转写、纪要整理和行动项提取。'
+                  : 'Transcription, note cleanup, and action-item extraction.',
+              },
+              {
+                href: '/guides/ai-note-taking-tools-comparison',
+                title: isChinese ? '记笔记工具对比' : 'Note taking tools comparison',
+                desc: isChinese
+                  ? '记录、整理和知识归档工作流。'
+                  : 'Capture, organization, and knowledge archiving workflows.',
+              },
+              {
+                href: '/guides/ai-tools-for-voice-comparison',
+                title: isChinese ? '语音工具对比' : 'Voice tools comparison',
+                desc: isChinese
+                  ? '语音合成、转写和对话入口。'
+                  : 'Voice synthesis, transcription, and conversational entry points.',
+              },
+              {
+                href: '/guides/suno-alternatives-comparison',
+                title: isChinese ? 'Suno 替代方案对比' : 'Suno alternatives comparison',
+                desc: isChinese
+                  ? '更适合音乐生成、歌曲创作和音频工作流。'
+                  : 'Better for music generation, songwriting, and audio workflows.',
+              },
+              {
+                href: '/guides/elevenlabs-alternatives-comparison',
+                title: isChinese ? 'ElevenLabs 替代方案对比' : 'ElevenLabs alternatives comparison',
+                desc: isChinese
+                  ? '更适合语音合成、声音库和音频工作流。'
+                  : 'Better for voice synthesis, voice libraries, and audio workflows.',
+              },
+              {
+                href: '/guides/descript-alternatives-comparison',
+                title: isChinese ? 'Descript 替代方案对比' : 'Descript alternatives comparison',
+                desc: isChinese
+                  ? '更适合音频编辑、转写和播客流程。'
+                  : 'Better for audio editing, transcription, and podcast workflows.',
+              },
+              {
+                href: '/guides/notta-alternatives-comparison',
+                title: isChinese ? 'Notta 替代方案对比' : 'Notta alternatives comparison',
+                desc: isChinese
+                  ? '更适合会议转写、录音整理和知识归档。'
+                  : 'Better for meeting transcription, recording cleanup, and knowledge archiving.',
+              },
+              {
                 href: '/guides/ai-writing-tools-comparison',
                 title: isChinese ? '写作工具对比' : 'Writing tools comparison',
                 desc: isChinese ? '内容、SEO、营销和编辑工作流。' : 'Content, SEO, marketing, and editing workflows.',
+              },
+              {
+                href: '/guides/ai-tools-for-content-creation-comparison',
+                title: isChinese ? '内容创作工具对比' : 'Content creation tools comparison',
+                desc: isChinese
+                  ? '脚本、封面、批量发布和品牌一致性。'
+                  : 'Scripts, covers, batch publishing, and brand consistency.',
+              },
+              {
+                href: '/guides/grammarly-alternatives-comparison',
+                title: isChinese ? 'Grammarly 替代方案对比' : 'Grammarly alternatives comparison',
+                desc: isChinese
+                  ? '更适合改写、润色和日常写作。'
+                  : 'Better for rewriting, polishing, and everyday writing.',
+              },
+              {
+                href: '/guides/jasper-alternatives-comparison',
+                title: isChinese ? 'Jasper 替代方案对比' : 'Jasper alternatives comparison',
+                desc: isChinese
+                  ? '更适合品牌文案、活动素材和营销写作。'
+                  : 'Better for brand copy, campaign assets, and marketing writing.',
+              },
+              {
+                href: '/guides/copy-ai-alternatives-comparison',
+                title: isChinese ? 'Copy.ai 替代方案对比' : 'Copy.ai alternatives comparison',
+                desc: isChinese
+                  ? '更适合快速起稿、批量变体和营销内容。'
+                  : 'Better for fast drafting, bulk variations, and marketing content.',
+              },
+              {
+                href: '/guides/mailchimp-alternatives-comparison',
+                title: isChinese ? 'Mailchimp 替代方案对比' : 'Mailchimp alternatives comparison',
+                desc: isChinese
+                  ? '更适合邮件营销、自动化和受众管理。'
+                  : 'Better for email marketing, automation, and audience management.',
+              },
+              {
+                href: '/guides/hubspot-alternatives-comparison',
+                title: isChinese ? 'HubSpot 替代方案对比' : 'HubSpot alternatives comparison',
+                desc: isChinese
+                  ? '更适合 CRM、营销自动化和流程编排。'
+                  : 'Better for CRM, marketing automation, and workflow orchestration.',
               },
             ].map((item) => (
               <TrackableCtaLink
