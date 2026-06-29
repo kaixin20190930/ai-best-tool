@@ -1,0 +1,220 @@
+import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
+
+import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
+  return buildComparisonMetadata(
+    locale,
+    locale === 'cn' || locale === 'tw' ? 'Zapier 替代方案对比' : 'Zapier alternatives comparison',
+    locale === 'cn' || locale === 'tw'
+      ? '对比几款更常被拿来替代 Zapier 的 AI 工具，帮你更快判断自动化、连接器和工作流编排该怎么选。'
+      : 'Compare AI tools that are commonly used as Zapier alternatives so you can choose the right fit for automation, connectors, and workflow orchestration.',
+  );
+}
+
+export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+  const data = await buildComparisonPageData(locale, {
+    categoryLabel: { cn: '自动化工具', en: 'Automation tools' },
+    comparisonLabel: { cn: 'Zapier 替代方案对比', en: 'Zapier alternatives comparison' },
+    description: {
+      cn: '如果你已经在比较 Zapier 这类自动化入口，这一页会把常见替代项放在一起看，帮助你判断是要简单连接器、复杂编排，还是更开发者友好的自动化工作流。',
+      en: 'If you are already comparing Zapier-style automation entry points, this page puts the common alternatives side by side so you can decide whether you need simple connectors, complex orchestration, or a more developer-friendly automation workflow.',
+    },
+    searchQuery: 'automation',
+    guideHref: '/guides/ai-tools-for-automation',
+    rankingHref: '/best-ai-tools/ai-automation-tools',
+    rankingLabel: { cn: '转去自动化榜单页', en: 'Open the automation ranking' },
+    backGuideLabel: { cn: '回到自动化工具指南', en: 'Back to automation guide' },
+    altBrowseHref: '/explore?search=automation&sort=popular',
+    altBrowseLabel: { cn: '浏览更多自动化工具', en: 'Browse more automation tools' },
+    breadcrumbLabel: { cn: 'Zapier 替代方案对比', en: 'Zapier alternatives comparison' },
+    compareTitle: {
+      cn: '几款常见 Zapier 替代项的快速对照',
+      en: 'A quick side-by-side look at common Zapier alternatives',
+    },
+    compareSubtitle: { cn: 'Zapier', en: 'Zapier' },
+    preferredToolNames: ['zapier', 'make', 'n8n', 'pipedream'],
+    decisionCards: [
+      {
+        title: { cn: '先看是不是简单连接器', en: 'Simple connectors first' },
+        description: {
+          cn: 'Zapier 的吸引力通常在于简单、快和覆盖面广；如果你要的是更深的逻辑，可能要再比较。',
+          en: 'Zapier usually wins on simplicity, speed, and broad coverage; if you need deeper logic, keep comparing.',
+        },
+      },
+      {
+        title: { cn: '再看是不是要复杂编排', en: 'Complex orchestration' },
+        description: {
+          cn: '如果流程里有分支、重试、异常处理和多步骤协调，维护性会比模板数量更重要。',
+          en: 'When workflows need branching, retries, failure handling, and coordination, maintainability matters more than template count.',
+        },
+      },
+      {
+        title: { cn: '最后看是否适合长期跑团队流程', en: 'Team workflow durability' },
+        description: {
+          cn: '长期自动化要看日志、权限、交接和可观测性，不然很快就会变成“只有一个人会修”。',
+          en: 'Long-running automation needs logs, permissions, handoff, and observability, or it quickly becomes something only one person can fix.',
+        },
+      },
+    ],
+    fitFor: [
+      {
+        title: { cn: '需要尽快跑通流程的人', en: 'People who need to get workflows running fast' },
+        description: {
+          cn: '适合先验证“能不能连起来”，再去考虑更复杂的维护问题。',
+          en: 'A good fit when the first question is whether the workflow can run at all, before worrying about deeper maintenance.',
+        },
+      },
+      {
+        title: { cn: '准备把 AI 接进运营的人', en: 'Teams bringing AI into operations' },
+        description: {
+          cn: '如果你的流程已经开始触及后端、表格、消息或销售系统，这页会很实用。',
+          en: 'Useful when workflows reach backend systems, spreadsheets, messaging, or sales tools.',
+        },
+      },
+    ],
+    notFor: [
+      {
+        title: { cn: '只做一次性小任务的人', en: 'People doing only one-off small tasks' },
+        description: {
+          cn: '如果流程不会重复，自动化工具通常投入会偏大。',
+          en: 'If the task will not repeat, automation tools often feel too expensive in setup time.',
+        },
+      },
+      {
+        title: { cn: '还没定流程的人', en: 'People who have not defined the workflow yet' },
+        description: {
+          cn: '如果触发条件和输入输出还不稳定，先把流程想清楚更重要。',
+          en: 'If triggers and inputs/outputs are still unclear, clarifying the workflow comes first.',
+        },
+      },
+    ],
+    nextPaths: [
+      {
+        href: '/guides/ai-tools-for-automation-comparison',
+        title: { cn: '转去自动化工具总对比', en: 'Go to automation tools comparison' },
+        description: {
+          cn: '如果你要把候选范围再拉宽一点，这页更适合。',
+          en: 'Use this when you want a broader shortlist.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-developers-comparison',
+        title: { cn: '转去开发者工具对比', en: 'Go to developer tools comparison' },
+        description: {
+          cn: '如果你已经在考虑 API、自定义和代码化工作流，这条路径更贴近。',
+          en: 'Move here if APIs, customization, and code-like workflows are the real focus.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-sales-comparison',
+        title: { cn: '转去销售工具对比', en: 'Go to sales tools comparison' },
+        description: {
+          cn: '如果自动化的终点是销售跟进和 CRM，这页也很顺。',
+          en: 'A good next stop if automation is really feeding sales follow-up and CRM.',
+        },
+      },
+      {
+        href: '/guides/n8n-alternatives-comparison',
+        title: { cn: '转去 n8n 替代方案对比', en: 'Go to n8n alternatives comparison' },
+        description: {
+          cn: '如果你发现自己要的是更可控、更偏底座的工作流，这页更贴近。',
+          en: 'Move here when the workflow is becoming more controllable and infrastructure-like.',
+        },
+      },
+    ],
+    toolSelectionNotes: {
+      zapier: {
+        bestFor: {
+          cn: '想快速把常见 SaaS 工具连起来、尽快验证自动化价值的团队。',
+          en: 'Teams that want to connect common SaaS tools quickly and validate automation value fast.',
+        },
+        whyPickIt: {
+          cn: '它更偏快上手、低门槛和常见场景覆盖。',
+          en: 'It leans toward fast onboarding, low friction, and strong common-scenario coverage.',
+        },
+        watchOut: {
+          cn: '如果你后面要做复杂逻辑、细权限或更深的自定义，可能会比较快遇到边界。',
+          en: 'You may hit limits relatively quickly once workflows need deeper logic, tighter permissions, or heavier customization.',
+        },
+      },
+      make: {
+        bestFor: {
+          cn: '想在可视化编排和中等复杂度流程之间找到平衡的人。',
+          en: 'People who want a balance between visual orchestration and medium-complexity workflow control.',
+        },
+        whyPickIt: {
+          cn: '它很适合把多工具流程搭得足够清楚，又不至于马上走进太重的工程化。',
+          en: 'It is great for building multi-step flows clearly without immediately moving into a heavier engineering mindset.',
+        },
+        watchOut: {
+          cn: '如果流程非常深、非常定制，后面可能还是会往更开发导向的方向走。',
+          en: 'You may still move toward more developer-oriented tooling later if workflows become very deep or custom.',
+        },
+      },
+      n8n: {
+        bestFor: {
+          cn: '想做更灵活、更可控、可长期维护流程的个人开发者和团队。',
+          en: 'Indie builders and teams that want more flexible, controllable, and maintainable workflows over time.',
+        },
+        whyPickIt: {
+          cn: '它更适合把自动化当成自己的系统一部分来经营。',
+          en: 'It fits teams that want automation to become part of their own system rather than a temporary shortcut.',
+        },
+        watchOut: {
+          cn: '如果你只想最快搭一个轻量流程，上手成本可能会比更模板化的工具高一点。',
+          en: 'The setup overhead can be a bit higher than more template-first tools when you only need a lightweight workflow quickly.',
+        },
+      },
+      pipedream: {
+        bestFor: {
+          cn: '既要自动化，又希望保留代码级自定义和 API 灵活性的开发者。',
+          en: 'Developers who want automation plus code-level customization and API flexibility.',
+        },
+        whyPickIt: {
+          cn: '它把“工作流编排”和“开发者可编程性”连得比较近。',
+          en: 'It brings workflow orchestration and developer programmability closer together.',
+        },
+        watchOut: {
+          cn: '如果使用者主要是非技术团队，维护和交接门槛可能会更高。',
+          en: 'The maintenance and handoff cost can be higher when the main operators are non-technical teams.',
+        },
+      },
+    },
+    tips: {
+      cn: [
+        '先判断你是在买连接器，还是在买可维护的工作流引擎。',
+        '如果流程会长期跑，日志、权限和失败恢复要提前看。',
+        '当流程开始和 AI、API、销售或运营系统联动时，才是真正比较的开始。',
+      ],
+      en: [
+        'First decide whether you need connectors or a maintainable workflow engine.',
+        'If workflows will run long term, check logs, permissions, and failure recovery early.',
+        'The real comparison starts when the workflow has to connect AI, APIs, sales, or operations systems.',
+      ],
+    },
+    faqs: [
+      {
+        question: { cn: '为什么单独做 Zapier 替代方案页？', en: 'Why make a separate Zapier alternatives page?' },
+        answer: {
+          cn: '因为很多用户已经明确在找自动化和工作流编排工具，这类意图很接近转化。',
+          en: 'Because many users are explicitly looking for automation and workflow-orchestration tools, which is close to conversion intent.',
+        },
+      },
+      {
+        question: { cn: '你们比较的依据是什么？', en: 'What do you compare?' },
+        answer: {
+          cn: '我们主要看集成范围、编排复杂度、稳定性、可维护性和真实反馈。',
+          en: 'We compare integration coverage, orchestration complexity, stability, maintainability, and real feedback.',
+        },
+      },
+    ],
+  });
+
+  return (
+    <>
+      {ComparisonPage({ ...data, locale })}
+      <GuideSubmissionPath locale={locale} ctaPrefix='zapier_alternatives_comparison' />
+    </>
+  );
+}
