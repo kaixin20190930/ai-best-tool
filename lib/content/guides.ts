@@ -66,6 +66,19 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-tools-for-content-creation',
+    priority: 0.74,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 内容创作工具推荐',
+      en: 'AI tools for content creation',
+    },
+    desc: {
+      cn: '适合脚本、封面、改写、批量发布和多渠道内容。',
+      en: 'For scripts, thumbnails, rewriting, batch publishing, and multi-channel content.',
+    },
+  },
+  {
     href: '/guides/ai-writing-tools-comparison',
     priority: 0.76,
     changeFrequency: 'weekly',
@@ -76,6 +89,19 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     desc: {
       cn: '把几款常见写作工具放在一起快速对照。',
       en: 'Compare common writing tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-content-creation-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 内容创作工具对比',
+      en: 'AI content creation tools comparison',
+    },
+    desc: {
+      cn: '把脚本、封面和内容工作流放在一起快速对照。',
+      en: 'Compare scripts, covers, and content workflows side by side.',
     },
   },
   {
@@ -466,6 +492,19 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     desc: {
       cn: '把常见自动化工具放在一起快速对照。',
       en: 'Compare common automation tools side by side.',
+    },
+  },
+  {
+    href: '/guides/n8n-alternatives-comparison',
+    priority: 0.77,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'n8n 替代方案对比',
+      en: 'n8n alternatives comparison',
+    },
+    desc: {
+      cn: '把常见 n8n 替代项放在一起快速对照。',
+      en: 'Compare common n8n alternatives side by side.',
     },
   },
   {
@@ -1053,12 +1092,326 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
       en: 'Compare common small-business tools side by side.',
     },
   },
+  {
+    href: '/guides/ai-tools-for-agencies-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 代理与服务团队工具对比',
+      en: 'AI tools for agencies comparison',
+    },
+    desc: {
+      cn: '把代理交付、客户协作和内容生产工具放在一起快速对照。',
+      en: 'Compare agency delivery, client collaboration, and content production tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-creators-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 创作者工具对比',
+      en: 'AI tools for creators comparison',
+    },
+    desc: {
+      cn: '把创作、再包装和发布工具放在一起快速对照。',
+      en: 'Compare tools for creation, repurposing, and publishing side by side.',
+    },
+  },
+  {
+    href: '/guides/adobe-alternatives-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'Adobe 替代方案对比',
+      en: 'Adobe alternatives comparison',
+    },
+    desc: {
+      cn: '把常见 Adobe 替代工具放在一起快速对照。',
+      en: 'Compare common Adobe alternatives side by side.',
+    },
+  },
+  {
+    href: '/guides/character-ai-alternatives-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'Character AI 替代方案对比',
+      en: 'Character AI alternatives comparison',
+    },
+    desc: {
+      cn: '把常见 Character AI 替代工具放在一起快速对照。',
+      en: 'Compare common Character AI alternatives side by side.',
+    },
+  },
+  {
+    href: '/guides/chatgpt-alternatives-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'ChatGPT 替代方案对比',
+      en: 'ChatGPT alternatives comparison',
+    },
+    desc: {
+      cn: '把常见 ChatGPT 替代工具放在一起快速对照。',
+      en: 'Compare common ChatGPT alternatives side by side.',
+    },
+  },
+  {
+    href: '/guides/claude-alternatives-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'Claude 替代方案对比',
+      en: 'Claude alternatives comparison',
+    },
+    desc: {
+      cn: '把常见 Claude 替代工具放在一起快速对照。',
+      en: 'Compare common Claude alternatives side by side.',
+    },
+  },
+  {
+    href: '/guides/copy-ai-alternatives-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'Copy.ai 替代方案对比',
+      en: 'Copy.ai alternatives comparison',
+    },
+    desc: {
+      cn: '把常见 Copy.ai 替代工具放在一起快速对照。',
+      en: 'Compare common Copy.ai alternatives side by side.',
+    },
+  },
+  {
+    href: '/guides/cursor-alternatives-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'Cursor 替代方案对比',
+      en: 'Cursor alternatives comparison',
+    },
+    desc: {
+      cn: '把常见 Cursor 替代工具放在一起快速对照。',
+      en: 'Compare common Cursor alternatives side by side.',
+    },
+  },
+  {
+    href: '/guides/descript-alternatives-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'Descript 替代方案对比',
+      en: 'Descript alternatives comparison',
+    },
+    desc: {
+      cn: '把常见 Descript 替代工具放在一起快速对照。',
+      en: 'Compare common Descript alternatives side by side.',
+    },
+  },
+  {
+    href: '/guides/elevenlabs-alternatives-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'ElevenLabs 替代方案对比',
+      en: 'ElevenLabs alternatives comparison',
+    },
+    desc: {
+      cn: '把常见 ElevenLabs 替代工具放在一起快速对照。',
+      en: 'Compare common ElevenLabs alternatives side by side.',
+    },
+  },
+  {
+    href: '/guides/gemini-alternatives-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'Gemini 替代方案对比',
+      en: 'Gemini alternatives comparison',
+    },
+    desc: {
+      cn: '把常见 Gemini 替代工具放在一起快速对照。',
+      en: 'Compare common Gemini alternatives side by side.',
+    },
+  },
+  {
+    href: '/guides/grammarly-alternatives-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'Grammarly 替代方案对比',
+      en: 'Grammarly alternatives comparison',
+    },
+    desc: {
+      cn: '把常见 Grammarly 替代工具放在一起快速对照。',
+      en: 'Compare common Grammarly alternatives side by side.',
+    },
+  },
+  {
+    href: '/guides/hubspot-alternatives-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'HubSpot 替代方案对比',
+      en: 'HubSpot alternatives comparison',
+    },
+    desc: {
+      cn: '把常见 HubSpot 替代工具放在一起快速对照。',
+      en: 'Compare common HubSpot alternatives side by side.',
+    },
+  },
+  {
+    href: '/guides/jasper-alternatives-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'Jasper 替代方案对比',
+      en: 'Jasper alternatives comparison',
+    },
+    desc: {
+      cn: '把常见 Jasper 替代工具放在一起快速对照。',
+      en: 'Compare common Jasper alternatives side by side.',
+    },
+  },
+  {
+    href: '/guides/mailchimp-alternatives-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'Mailchimp 替代方案对比',
+      en: 'Mailchimp alternatives comparison',
+    },
+    desc: {
+      cn: '把常见 Mailchimp 替代工具放在一起快速对照。',
+      en: 'Compare common Mailchimp alternatives side by side.',
+    },
+  },
+  {
+    href: '/guides/make-alternatives-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'Make 替代方案对比',
+      en: 'Make alternatives comparison',
+    },
+    desc: {
+      cn: '把常见 Make 替代工具放在一起快速对照。',
+      en: 'Compare common Make alternatives side by side.',
+    },
+  },
+  {
+    href: '/guides/notion-alternatives-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'Notion 替代方案对比',
+      en: 'Notion alternatives comparison',
+    },
+    desc: {
+      cn: '把常见 Notion 替代工具放在一起快速对照。',
+      en: 'Compare common Notion alternatives side by side.',
+    },
+  },
+  {
+    href: '/guides/notta-alternatives-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'Notta 替代方案对比',
+      en: 'Notta alternatives comparison',
+    },
+    desc: {
+      cn: '把常见 Notta 替代工具放在一起快速对照。',
+      en: 'Compare common Notta alternatives side by side.',
+    },
+  },
+  {
+    href: '/guides/perplexity-alternatives-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'Perplexity 替代方案对比',
+      en: 'Perplexity alternatives comparison',
+    },
+    desc: {
+      cn: '把常见 Perplexity 替代工具放在一起快速对照。',
+      en: 'Compare common Perplexity alternatives side by side.',
+    },
+  },
+  {
+    href: '/guides/poe-alternatives-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'Poe 替代方案对比',
+      en: 'Poe alternatives comparison',
+    },
+    desc: {
+      cn: '把常见 Poe 替代工具放在一起快速对照。',
+      en: 'Compare common Poe alternatives side by side.',
+    },
+  },
+  {
+    href: '/guides/salesforce-einstein-alternatives-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'Salesforce Einstein 替代方案对比',
+      en: 'Salesforce Einstein alternatives comparison',
+    },
+    desc: {
+      cn: '把常见 Salesforce Einstein 替代工具放在一起快速对照。',
+      en: 'Compare common Salesforce Einstein alternatives side by side.',
+    },
+  },
+  {
+    href: '/guides/sora-alternatives-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'Sora 替代方案对比',
+      en: 'Sora alternatives comparison',
+    },
+    desc: {
+      cn: '把常见 Sora 替代工具放在一起快速对照。',
+      en: 'Compare common Sora alternatives side by side.',
+    },
+  },
+  {
+    href: '/guides/suno-alternatives-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'Suno 替代方案对比',
+      en: 'Suno alternatives comparison',
+    },
+    desc: {
+      cn: '把常见 Suno 替代工具放在一起快速对照。',
+      en: 'Compare common Suno alternatives side by side.',
+    },
+  },
+  {
+    href: '/guides/zapier-alternatives-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'Zapier 替代方案对比',
+      en: 'Zapier alternatives comparison',
+    },
+    desc: {
+      cn: '把常见 Zapier 替代工具放在一起快速对照。',
+      en: 'Compare common Zapier alternatives side by side.',
+    },
+  },
 ];
 
 export const FEATURED_GUIDE_HREFS = [
   '/guides/how-to-choose-ai-tools',
   '/guides/free-ai-tools',
   '/guides/ai-writing-tools',
+  '/guides/ai-tools-for-content-creation',
+  '/guides/ai-tools-for-content-creation-comparison',
   '/guides/ai-tools-for-research',
   '/guides/ai-tools-for-developers',
   '/guides/ai-tools-for-agents',
@@ -1092,4 +1445,7 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/ai-tools-for-crypto-portfolio-tracking',
   '/guides/ai-tools-for-on-chain-analysis',
   '/guides/ai-tools-for-defi-analytics',
+  '/guides/chatgpt-alternatives-comparison',
+  '/guides/claude-alternatives-comparison',
+  '/guides/cursor-alternatives-comparison',
 ] as const;
