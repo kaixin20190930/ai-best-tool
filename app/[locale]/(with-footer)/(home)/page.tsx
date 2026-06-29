@@ -152,6 +152,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     (page): page is (typeof GUIDE_PAGES)[number] => Boolean(page),
   );
   const comparisonGuideHrefs = [
+    '/guides/ai-tools-for-content-creation-comparison',
     '/guides/ai-writing-tools-comparison',
     '/guides/ai-seo-tools-comparison',
     '/guides/ai-tools-for-research-comparison',
@@ -166,6 +167,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       description: isChinese
         ? '如果你想最快知道这周补了哪些工具，这个入口最直接。'
         : 'The fastest way to catch up on what we actually added this week.',
+    },
+    {
+      href: '/guides/ai-tools-for-content-creation-comparison',
+      title: isChinese ? '看内容创作对比' : 'Open content creation comparison',
+      description: isChinese
+        ? '如果你已经在做脚本、封面或多渠道发布，这里会更快进入决策。'
+        : 'If you are already working on scripts, thumbnails, or multi-channel publishing, this gets to a decision faster.',
     },
     {
       href: '/guides/how-to-choose-ai-tools',
@@ -354,6 +362,31 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   </Link>
                 </div>
               </div>
+
+              {comparisonGuidePages.length > 0 && (
+                <div className='mt-4 rounded-lg border border-slate-200 bg-white p-4 shadow-sm'>
+                  <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+                    {isChinese ? '先看对比' : 'Compare first'}
+                  </p>
+                  <p className='mt-1 text-sm leading-6 text-slate-600'>
+                    {isChinese
+                      ? '如果你已经知道大方向，先从这些比较页开始会更快。'
+                      : 'If the direction is already clear, these comparison pages are the faster start.'}
+                  </p>
+                  <div className='mt-3 flex flex-wrap gap-2'>
+                    {comparisonGuidePages.map((guide) => (
+                      <Link
+                        key={guide.href}
+                        href={guide.href}
+                        className='inline-flex items-center gap-2 rounded-full bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700 ring-1 ring-slate-200 hover:bg-cyan-50 hover:text-cyan-700'
+                      >
+                        {guide.title[isChinese ? 'cn' : 'en']}
+                        <ArrowRight className='size-4' />
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             <aside className='grid content-start gap-3'>
