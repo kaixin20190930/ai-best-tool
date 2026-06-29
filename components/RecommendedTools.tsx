@@ -280,13 +280,13 @@ export default async function RecommendedTools({
           </div>
         </div>
       </div>
-      <div className='grid items-start gap-6 lg:grid-cols-2 2xl:grid-cols-3'>
+      <div className='columns-1 gap-6 lg:columns-2 2xl:columns-3'>
         {recommendedTools.map((tool) => {
           const reasons = getSimilarityReasons(tool, pricing, tagSlugs, isChinese, locale);
           const comparisonCta = getComparisonCtaFromTags(tool.tags, locale);
 
           return (
-            <div key={tool.id} className='min-w-0 space-y-3 self-start'>
+            <div key={tool.id} className='mb-6 break-inside-avoid space-y-3'>
               <WebNavCard
                 name={tool.name}
                 title={getLocalizedField(tool.title, locale)}
