@@ -176,6 +176,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <div className='mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
               {[
                 {
+                  href: '/guides/ai-tools-for-content-creation-comparison',
+                  title: isChinese ? 'AI 内容创作工具对比' : 'AI content creation tools comparison',
+                  desc: isChinese
+                    ? '适合先看脚本、封面和多渠道发布差异。'
+                    : 'Best for scripts, thumbnails, and multi-channel publishing differences.',
+                },
+                {
                   href: '/guides/ai-coding-tools-comparison',
                   title: isChinese ? 'AI 编程工具对比' : 'AI coding tools comparison',
                   desc: isChinese
@@ -289,6 +296,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {[
               '/guides/how-to-choose-ai-tools',
               '/guides/ai-writing-tools',
+              '/guides/ai-tools-for-content-creation',
               '/guides/ai-seo-tools',
               '/guides/ai-tools-for-developers',
               '/guides/ai-tools-for-agents',
