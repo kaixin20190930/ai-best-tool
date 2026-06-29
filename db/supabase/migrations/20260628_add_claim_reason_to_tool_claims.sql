@@ -1,0 +1,2 @@
+ALTER TABLE tool_claims
+  ADD COLUMN IF NOT EXISTS claim_reason VARCHAR(80);
