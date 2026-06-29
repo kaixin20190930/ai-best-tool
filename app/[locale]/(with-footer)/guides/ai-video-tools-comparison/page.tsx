@@ -56,13 +56,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
   ]);
 
-  const [toolsResult, categories] = await Promise.all([
+  const [toolsResult, categoriesResult] = await Promise.allSettled([
     getTools({ search: 'video', status: 'published' }, { page: 1, pageSize: 4 }, 'popular'),
-    getAllCategories(true).catch(() => []),
+    getAllCategories(true),
   ]);
 
+  const categories = categoriesResult.status === 'fulfilled' ? categoriesResult.value : [];
   const categoryMap = new Map(categories.map((category) => [category.id, category]));
-  const tools = toolsResult.data.map((tool, index) => {
+  const tools = toolsResult.status === 'fulfilled' ? toolsResult.value.data : [];
+  const toolRows = tools.map((tool, index) => {
     const row = toolToListRow(tool, locale);
     return {
       ...row,
@@ -79,7 +81,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   });
 
   const itemListSchema = generateItemListSchema(
-    tools.map((tool) => ({
+    toolRows.map((tool) => ({
       name: tool.title,
       url: `${siteUrl}/${locale}/ai/${tool.name}`,
     })),
@@ -265,7 +267,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </div>
 
           <div className='grid gap-4'>
-            {tools.map((tool, index) => {
+            {toolRows.map((tool, index) => {
               let pricingLabel = isChinese ? '付费' : 'Paid';
               if (tool.pricing === 'free') {
                 pricingLabel = isChinese ? '免费' : 'Free';

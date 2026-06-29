@@ -59,14 +59,18 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
   ]);
 
-  const [result, categories] = await Promise.all([
+  const [result, categoriesResult] = await Promise.allSettled([
     getTools({ pricing: 'free', status: 'published' }, { page: 1, pageSize: 8 }, 'popular'),
-    getAllCategories(true).catch(() => []),
+    getAllCategories(true),
   ]);
 
+  const totalTools = result.status === 'fulfilled' ? result.value.total : 0;
+  const categories = categoriesResult.status === 'fulfilled' ? categoriesResult.value : [];
   const categoryMap = new Map(categories.map((category) => [category.id, category]));
 
-  const rankedTools = result.data.map((tool, index) => ({
+  const tools = result.status === 'fulfilled' ? result.value.data : [];
+
+  const rankedTools = tools.map((tool, index) => ({
     ...toolToListRow(tool, locale),
     rank: index + 1,
     pricing: tool.pricing,
@@ -252,7 +256,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               </h2>
             </div>
             <p className='text-sm text-slate-500'>
-              {isChinese ? `共 ${result.total} 个免费工具` : `${result.total} free tools`}
+              {isChinese ? `共 ${totalTools} 个免费工具` : `${totalTools} free tools`}
             </p>
           </div>
 
