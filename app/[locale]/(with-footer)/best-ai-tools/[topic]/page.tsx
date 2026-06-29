@@ -5,7 +5,9 @@ import { ArrowRight, CheckCircle2, Sparkles, Star, Target } from 'lucide-react';
 
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import TrackableLink from '@/components/TrackableLink';
+import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { getCategoryBySlug } from '@/lib/services/categories';
+import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getLocalizedField, getTools } from '@/lib/services/tools';
 import { getTopListTopic, topListTopics } from '@/lib/data/topLists';
 
@@ -34,8 +36,13 @@ export async function generateMetadata({
   };
 }): Promise<Metadata> {
   const topic = getTopListTopic(params.topic);
-  const title = topic?.title || 'Best AI Tools';
-  const description = topic?.description || 'A focused shortlist of useful AI tools.';
+  const isChinese = params.locale === 'cn' || params.locale === 'tw';
+  const title = topic?.title || (isChinese ? 'AI 工具榜单' : 'Best AI tools');
+  const description =
+    topic?.description ||
+    (isChinese
+      ? '按用途整理的 AI 工具榜单，帮助你更快缩小候选。'
+      : 'A focused shortlist of useful AI tools, organized by use case.');
 
   return {
     title,
@@ -59,14 +66,47 @@ export default async function BestAiToolsTopicPage({
     notFound();
   }
 
-  const [category, toolsResult] = await Promise.all([
+  const [categoryResult, toolsResult] = await Promise.allSettled([
     getCategoryBySlug(topic.categorySlug, true),
     getTools({ category: topic.categorySlug, status: 'published' }, { page: 1, pageSize: 8 }, 'popular'),
   ]);
 
-  const toolCount = category && 'toolCount' in category ? category.toolCount : toolsResult.total;
+  const category = categoryResult.status === 'fulfilled' ? categoryResult.value : null;
+  const tools = toolsResult.status === 'fulfilled' ? toolsResult.value.data : [];
+  const toolCount: number =
+    category && 'toolCount' in category
+      ? Number(category.toolCount || 0)
+      : toolsResult.status === 'fulfilled'
+      ? Number(toolsResult.value.total || 0)
+      : 0;
+
   const categoryName = category ? getLocalizedField(category.name, locale) : topic.title;
-  const tools = toolsResult.data;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: `${siteUrl}/${locale}` },
+    { name: isChinese ? '榜单页' : 'Rankings', url: `${siteUrl}/${locale}/best-ai-tools` },
+    { name: topic.title, url: `${siteUrl}/${locale}/best-ai-tools/${topic.key}` },
+  ]);
+  const faqSchema = generateFAQSchema([
+    {
+      question: isChinese ? '这个榜单是怎么选出来的？' : 'How is this ranking selected?',
+      answer: isChinese
+        ? '我们优先看分类匹配度、实际使用强度、详情页可读性，以及用户下一步是否容易继续比较或提交。'
+        : 'We prioritize category fit, practical usage strength, detail-page clarity, and whether the page naturally leads to comparison or submission.',
+    },
+    {
+      question: isChinese ? '为什么要先看榜单，再看详情页？' : 'Why start with a ranking before opening detail pages?',
+      answer: isChinese
+        ? '榜单能先帮你缩小范围，详情页再帮你确认适合谁、哪里不适合、以及有哪些替代方案。'
+        : 'The ranking narrows the field first, then detail pages help confirm fit, trade-offs, and alternatives.',
+    },
+    {
+      question: isChinese ? '下一步通常该做什么？' : 'What is the usual next step?',
+      answer: isChinese
+        ? '先比较几个候选，再打开详情页和官网；如果你是工具方，则可以继续提交、认领或查看定价。'
+        : 'Compare a few candidates, then open detail pages and the official site; if you are the tool owner, continue to submit, claim, or review pricing.',
+    },
+  ]);
   let nextStepCardValue = 'Compare then submit';
   if (topic.key === 'ai-agent-tools') {
     nextStepCardValue = isChinese ? '先对比 Agent，再进详情' : 'Compare agents, then inspect details';
@@ -84,6 +124,8 @@ export default async function BestAiToolsTopicPage({
 
   return (
     <div className='theme-page mx-auto max-w-pc px-4 py-8 lg:px-0'>
+      <StructuredDataServer data={breadcrumbSchema} />
+      <StructuredDataServer data={faqSchema} />
       <section className='overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm'>
         <div className='grid gap-0 lg:grid-cols-[1.1fr_0.9fr]'>
           <div className='space-y-6 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950 p-6 text-white lg:p-10'>
@@ -184,10 +226,10 @@ export default async function BestAiToolsTopicPage({
             </div>
 
             <div className='mt-4 grid gap-3 sm:grid-cols-2'>
-              {tools.map((tool, index) => {
-                const title = getLocalizedText(tool.title, locale);
-                const content = getLocalizedText(tool.content, locale);
-                const detailHref = `/${locale}/ai/${tool.name}`;
+                {tools.map((tool, index) => {
+                  const title = getLocalizedText(tool.title, locale);
+                  const content = getLocalizedText(tool.content, locale);
+                  const detailHref = `/${locale}/ai/${tool.name}`;
 
                 return (
                   <div key={tool.id} className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
@@ -221,7 +263,14 @@ export default async function BestAiToolsTopicPage({
                     </div>
                   </div>
                 );
-              })}
+                })}
+              {tools.length === 0 && (
+                <div className='rounded-2xl border border-dashed border-slate-300 bg-white p-5 text-sm leading-6 text-slate-600'>
+                  {isChinese
+                    ? '当前没有可展示的工具数据，但这个榜单页仍可正常打开。'
+                    : 'No tool data is available right now, but the list page still opens safely.'}
+                </div>
+              )}
             </div>
           </div>
         </div>
