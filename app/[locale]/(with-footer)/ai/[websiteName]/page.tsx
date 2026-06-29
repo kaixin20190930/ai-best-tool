@@ -529,6 +529,115 @@ function getCommunitySignalSummary({
   };
 }
 
+function getMarketDemandSummary({
+  locale,
+  viewCount,
+  clickCount,
+}: {
+  locale: string;
+  viewCount: number;
+  clickCount: number;
+}) {
+  const isChinese = locale === 'cn';
+  const clickRate = viewCount > 0 ? clickCount / viewCount : 0;
+
+  if (clickCount >= 50 || clickRate >= 0.08) {
+    return {
+      label: isChinese ? '需求很强' : 'Strong demand',
+      summary: isChinese
+        ? '浏览和官网点击都比较活跃，说明这条工具已经吸引到明显的关注。'
+        : 'Views and outbound clicks are active enough to show clear user interest.',
+      evidence: isChinese
+        ? `${viewCount.toLocaleString()} 次浏览 · ${clickCount.toLocaleString()} 次官网点击`
+        : `${viewCount.toLocaleString()} views · ${clickCount.toLocaleString()} website clicks`,
+    };
+  }
+
+  if (clickCount >= 10 || clickRate >= 0.03) {
+    return {
+      label: isChinese ? '开始有需求' : 'Early demand',
+      summary: isChinese
+        ? '已经能看到一定点击意愿，适合继续观察它能不能转成更稳定的访问。'
+        : 'There is enough click-through to suggest the listing is starting to earn attention.',
+      evidence: isChinese
+        ? `${viewCount.toLocaleString()} 次浏览 · ${clickCount.toLocaleString()} 次官网点击`
+        : `${viewCount.toLocaleString()} views · ${clickCount.toLocaleString()} website clicks`,
+    };
+  }
+
+  return {
+    label: isChinese ? '需求还早' : 'Early signal',
+    summary: isChinese
+      ? '目前还处于早期信号阶段，更适合先把内容、截图和对比页补完整。'
+      : 'This is still early signal territory, so keep improving the page, screenshots, and comparison paths.',
+    evidence: isChinese
+      ? `${viewCount.toLocaleString()} 次浏览 · ${clickCount.toLocaleString()} 次官网点击`
+      : `${viewCount.toLocaleString()} views · ${clickCount.toLocaleString()} website clicks`,
+  };
+}
+
+function getMarketMomentumSummary({
+  locale,
+  updatedAt,
+  screenshotCount,
+  hasVideo,
+}: {
+  locale: string;
+  updatedAt: Date | string | null | undefined;
+  screenshotCount: number;
+  hasVideo: boolean;
+}) {
+  const isChinese = locale === 'cn';
+
+  if (!updatedAt) {
+    return {
+      label: isChinese ? '更新时间待补' : 'Refresh signal missing',
+      summary: isChinese
+        ? '还没有明确的更新时间信号，建议先把最新资料和媒体补齐。'
+        : 'There is no clear freshness signal yet, so the next improvement is to refresh the listing materials.',
+      evidence: isChinese
+        ? `${screenshotCount.toLocaleString()} 张截图${hasVideo ? ' · 含视频' : ''}`
+        : `${screenshotCount.toLocaleString()} screenshots${hasVideo ? ' · video included' : ''}`,
+    };
+  }
+
+  const diffDays = Math.max(0, Math.floor((Date.now() - new Date(updatedAt).getTime()) / (1000 * 60 * 60 * 24)));
+
+  if (diffDays <= 14 || screenshotCount >= 3 || hasVideo) {
+    return {
+      label: isChinese ? '维护活跃' : 'Actively maintained',
+      summary: isChinese
+        ? '最近有更新，且媒体覆盖也更完整，通常说明这页还在持续维护。'
+        : 'Recent updates and broader media coverage suggest the listing is still being maintained.',
+      evidence: isChinese
+        ? `${diffDays} 天内更新 · ${screenshotCount.toLocaleString()} 张截图${hasVideo ? ' · 含视频' : ''}`
+        : `Updated ${diffDays} days ago · ${screenshotCount.toLocaleString()} screenshots${hasVideo ? ' · video included' : ''}`,
+    };
+  }
+
+  if (diffDays <= 60) {
+    return {
+      label: isChinese ? '有一定新鲜度' : 'Moderately fresh',
+      summary: isChinese
+        ? '资料还不算旧，但最终判断前最好再确认官网是否有变化。'
+        : 'The listing is not stale, but it is still worth checking the official site for changes.',
+      evidence: isChinese
+        ? `${diffDays} 天前更新 · ${screenshotCount.toLocaleString()} 张截图`
+        : `Updated ${diffDays} days ago · ${screenshotCount.toLocaleString()} screenshots`,
+    };
+  }
+
+  return {
+    label: isChinese ? '更新偏旧' : 'Stale signal',
+    summary: isChinese
+      ? '这页资料相对久了，建议把它放在相似工具和官网核对之后再判断。'
+      : 'The page is relatively old, so compare it with similar tools and the official site before deciding.',
+    evidence: isChinese
+      ? `${diffDays} 天前更新 · ${screenshotCount.toLocaleString()} 张截图`
+      : `Updated ${diffDays} days ago · ${screenshotCount.toLocaleString()} screenshots`,
+  };
+}
+
 function getComparisonSummary(categorySlug: string | undefined, locale: string) {
   const isChinese = locale === 'cn';
 
@@ -1478,6 +1587,17 @@ export default async function Page({
   const communitySignalWithOverride = decisionCommunitySummary
     ? { ...communitySignal, summary: decisionCommunitySummary }
     : communitySignal;
+  const marketDemand = getMarketDemandSummary({
+    locale,
+    viewCount: toolStats.viewCount,
+    clickCount: toolStats.clickCount,
+  });
+  const marketMomentum = getMarketMomentumSummary({
+    locale,
+    updatedAt,
+    screenshotCount,
+    hasVideo,
+  });
   const comparisonSummary = getComparisonSummary(categorySlug, locale);
   const compareAxes = decisionCompareAxesOverride.length > 0 ? decisionCompareAxesOverride : [comparisonSummary];
   const nextComparisonLinks = getNextComparisonLinks(categorySlug, dbTool?.tags || [], locale);
@@ -2045,6 +2165,61 @@ export default async function Page({
                       ))}
                     </ul>
                   </div>
+                </div>
+              </div>
+            </section>
+
+            <section className='rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'>
+              <div className='mb-5 flex items-center gap-3'>
+                <Sparkles className='size-6 text-emerald-600' />
+                <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>
+                  {locale === 'cn' ? '市场信号' : 'Market Signals'}
+                </h2>
+              </div>
+              <p className='max-w-3xl text-sm leading-6 text-slate-600'>
+                {locale === 'cn'
+                  ? '这组信号不是在替你下结论，而是告诉你：这个条目现在是“值得继续看”，还是“先放一放”。'
+                  : 'These signals do not make the decision for you; they tell you whether this listing deserves another look or can wait.'}
+              </p>
+              <div className='mt-5 grid gap-4 lg:grid-cols-3'>
+                <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+                  <div className='flex items-center gap-2'>
+                    <Eye className='size-4 text-slate-500' />
+                    <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                      {locale === 'cn' ? '需求热度' : 'Demand pulse'}
+                    </p>
+                  </div>
+                  <p className='mt-3 text-lg font-semibold text-slate-950'>{marketDemand.label}</p>
+                  <p className='mt-2 text-xs font-medium text-slate-500'>{marketDemand.evidence}</p>
+                  <p className='mt-3 text-sm leading-6 text-slate-600'>{marketDemand.summary}</p>
+                </div>
+
+                <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+                  <div className='flex items-center gap-2'>
+                    <Heart className='size-4 text-slate-500' />
+                    <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                      {locale === 'cn' ? '真实互动' : 'Community traction'}
+                    </p>
+                  </div>
+                  <p className='mt-3 text-lg font-semibold text-slate-950'>{communitySignal.label}</p>
+                  <p className='mt-2 text-xs font-medium text-slate-500'>
+                    {locale === 'cn'
+                      ? `${ratingStats.ratingCount} 条评分 · ${commentCount} 条讨论 · ${toolStats.favoriteCount} 次收藏`
+                      : `${ratingStats.ratingCount} ratings · ${commentCount} comments · ${toolStats.favoriteCount} saves`}
+                  </p>
+                  <p className='mt-3 text-sm leading-6 text-slate-600'>{communitySignalWithOverride.summary}</p>
+                </div>
+
+                <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+                  <div className='flex items-center gap-2'>
+                    <CalendarDays className='size-4 text-slate-500' />
+                    <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                      {locale === 'cn' ? '维护节奏' : 'Maintenance rhythm'}
+                    </p>
+                  </div>
+                  <p className='mt-3 text-lg font-semibold text-slate-950'>{marketMomentum.label}</p>
+                  <p className='mt-2 text-xs font-medium text-slate-500'>{marketMomentum.evidence}</p>
+                  <p className='mt-3 text-sm leading-6 text-slate-600'>{marketMomentum.summary}</p>
                 </div>
               </div>
             </section>
