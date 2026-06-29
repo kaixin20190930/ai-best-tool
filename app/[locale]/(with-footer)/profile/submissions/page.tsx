@@ -84,6 +84,7 @@ type CommercialDetails = {
   paymentConfirmed: boolean;
   sponsored: boolean;
   featuredDaysRequested: 0 | 3 | 7 | 14;
+  featuredActiveFrom: Date | null;
   featuredUntil: Date | null;
 };
 
@@ -102,12 +103,15 @@ function getCommercialDetails(tool: SubmittedTool): CommercialDetails {
     if (parsed === 3 || parsed === 7 || parsed === 14) return parsed;
     return 0;
   })();
+  const activeFromRaw = typeof commercial.featuredActiveFrom === 'string' ? commercial.featuredActiveFrom : '';
+  const activeFrom = activeFromRaw ? new Date(activeFromRaw) : null;
 
   return {
     plan: String(commercial.plan || 'free'),
     paymentConfirmed: commercial.paymentConfirmed === true,
     sponsored: commercial.isSponsoredPlacement === true,
     featuredDaysRequested,
+    featuredActiveFrom: activeFrom && !Number.isNaN(activeFrom.getTime()) ? activeFrom : null,
     featuredUntil: until && !Number.isNaN(until.getTime()) ? until : null,
   };
 }
@@ -151,15 +155,24 @@ function getCommercialDetailLine(status: CommercialViewStatus, details: Commerci
 
   switch (status) {
     case 'pending_payment':
-      return 'Stripe checkout is ready in your submission record.';
+      return details.featuredDaysRequested > 0
+        ? `Stripe checkout is ready. Featured placement will start after approval and run for ${details.featuredDaysRequested} days.`
+        : 'Stripe checkout is ready in your submission record.';
     case 'paid_waiting_review':
-      return 'Payment is recorded and the listing is waiting for review.';
+      return details.featuredDaysRequested > 0
+        ? 'Payment is recorded. The listing is waiting for review before the featured window starts.'
+        : 'Payment is recorded and the listing is waiting for review.';
     case 'live_featured':
-      return daysLeft === null
-        ? 'Featured placement is live.'
+      if (daysLeft === null) {
+        return 'Featured placement is live.';
+      }
+      return details.featuredActiveFrom
+        ? `Featured placement runs from ${details.featuredActiveFrom.toLocaleDateString()} to ${details.featuredUntil?.toLocaleDateString() || 'unknown'}.`
         : `Featured placement is live and ends in ${daysLeft} day${daysLeft === 1 ? '' : 's'}.`;
     case 'expired':
-      return 'The featured window ended. You can renew when needed.';
+      return details.featuredUntil
+        ? `The featured window ended on ${details.featuredUntil.toLocaleDateString()}. You can renew when needed.`
+        : 'The featured window ended. You can renew when needed.';
     case 'paid_published':
       return 'Paid submission published without an active featured window.';
     case 'free':
@@ -219,15 +232,30 @@ function getCommercialPaymentUrl(tool: SubmittedTool): string | null {
 }
 
 export default async function SubmissionsPage({
+  params,
   searchParams,
 }: {
+  params?: {
+    locale?: string;
+  };
   searchParams?: {
     payment?: string;
     session_id?: string;
     focus?: string;
   };
 }) {
-  const [result, submissionEmailEnabled] = await Promise.all([getMySubmittedTools(), getMySubmissionEmailPreference()]);
+  const locale = params?.locale || 'en';
+  const isChinese = locale === 'cn' || locale === 'tw';
+  const [resultPromise, submissionEmailEnabledPromise] = await Promise.allSettled([
+    getMySubmittedTools(),
+    getMySubmissionEmailPreference(),
+  ]);
+  const result =
+    resultPromise.status === 'fulfilled'
+      ? resultPromise.value
+      : { success: false, tools: [], error: 'Unable to load your submissions.' };
+  const submissionEmailEnabled =
+    submissionEmailEnabledPromise.status === 'fulfilled' ? submissionEmailEnabledPromise.value : true;
   const tools = result.success ? result.tools : [];
   const pendingPaymentTools = tools.filter((tool) => getCommercialStatus(tool) === 'pending_payment');
   const featuredTools = tools.filter((tool) => getCommercialStatus(tool) === 'live_featured');
@@ -243,6 +271,80 @@ export default async function SubmissionsPage({
   );
   const pendingPaymentMailto = getListingPaymentMailto('Complete Paid Submission');
   const paymentStatus = searchParams?.payment || '';
+  const featuredOverview = featuredTools
+    .map((tool) => ({
+      tool,
+      details: getCommercialDetails(tool),
+    }))
+    .sort((a, b) => {
+      const aTime = a.details.featuredUntil?.getTime() ?? Number.POSITIVE_INFINITY;
+      const bTime = b.details.featuredUntil?.getTime() ?? Number.POSITIVE_INFINITY;
+      return aTime - bTime;
+    });
+  const nextFeaturedRenewal = featuredOverview[0] || null;
+  const nextFeaturedDaysLeft = nextFeaturedRenewal ? getDaysLeft(nextFeaturedRenewal.details.featuredUntil) : null;
+  const expiredFeaturedCount = tools.filter((tool) => getCommercialStatus(tool) === 'expired').length;
+  const featuredNeedsAttention = Boolean(
+    expiredFeaturedCount > 0 || (typeof nextFeaturedDaysLeft === 'number' && nextFeaturedDaysLeft <= 3),
+  );
+  const activeFeaturedCount = featuredTools.length;
+  let nextAction = {
+    label: 'Keep an eye on review',
+    text: 'Your queue is moving, so the main job is to watch for review updates and follow-up messages.',
+    href: '/profile',
+  };
+  if (pendingPaymentTools.length > 0) {
+    nextAction = {
+      label: 'Complete payment',
+      text: `You have ${pendingPaymentTools.length} paid submission${pendingPaymentTools.length > 1 ? 's' : ''} waiting for payment confirmation.`,
+      href: firstPendingPaymentUrl || pendingPaymentMailto,
+    };
+  } else if (featuredTools.length > 0) {
+    nextAction = {
+      label: 'Review featured timing',
+      text: `You currently have ${featuredTools.length} active featured placement${featuredTools.length > 1 ? 's' : ''}.`,
+      href: '/pricing',
+    };
+  } else if (statusStats.draft > 0) {
+    nextAction = {
+      label: 'Finish draft details',
+      text: `You still have ${statusStats.draft} draft submission${statusStats.draft > 1 ? 's' : ''} that can be refined and resubmitted.`,
+      href: '/submit',
+    };
+  }
+
+  let featuredAttentionText = '';
+  if (expiredFeaturedCount > 0) {
+    if (isChinese) {
+      featuredAttentionText = `${expiredFeaturedCount} 个前排展示已过期，建议尽快续期。`;
+    } else {
+      featuredAttentionText = `${expiredFeaturedCount} featured placement${expiredFeaturedCount > 1 ? 's are' : ' is'} expired. Renew soon.`;
+    }
+  } else if (nextFeaturedDaysLeft !== null) {
+    if (isChinese) {
+      featuredAttentionText = `距离到期还剩 ${nextFeaturedDaysLeft} 天，建议提前准备续期。`;
+    } else {
+      featuredAttentionText = `This featured window ends in ${nextFeaturedDaysLeft} day${nextFeaturedDaysLeft === 1 ? '' : 's'}.`;
+    }
+  } else if (isChinese) {
+    featuredAttentionText = '当前展示时间接近结束，请检查续期设置。';
+  } else {
+    featuredAttentionText = 'This featured window is close to ending. Please review renewal settings.';
+  }
+
+  let featuredWindowEndText = 'No end date set';
+  if (nextFeaturedRenewal.details.featuredUntil) {
+    featuredWindowEndText = nextFeaturedRenewal.details.featuredUntil.toLocaleDateString();
+  } else if (isChinese) {
+    featuredWindowEndText = '暂无结束时间';
+  }
+
+  let featuredButtonText = 'Review renewal options';
+  if (featuredNeedsAttention) {
+    featuredButtonText = isChinese ? '立即续期' : 'Renew now';
+  } else if (isChinese) {
+    featuredButtonText = '查看续期方案';
+  }
 
   return (
     <div className='theme-page container mx-auto px-4 py-8'>
@@ -285,6 +387,114 @@ export default async function SubmissionsPage({
       )}
 
       <SubmissionEmailPreferenceToggle initialEnabled={submissionEmailEnabled} />
+
+      <section className='mb-6 grid gap-4 lg:grid-cols-[1.2fr_0.8fr]'>
+        <div className='theme-surface rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>Next action</p>
+          <h2 className='mt-2 text-2xl font-bold text-slate-950'>{nextAction.label}</h2>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>{nextAction.text}</p>
+          <div className='mt-4 flex flex-wrap gap-3'>
+            <a
+              href={nextAction.href}
+              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-2 text-sm font-semibold text-white hover:bg-cyan-800'
+            >
+              Take action
+            </a>
+            <Link
+              href='/profile'
+              className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+            >
+              Back to profile
+            </Link>
+          </div>
+        </div>
+
+        <div className='theme-surface rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-slate-500'>Current focus</p>
+          <div className='mt-3 grid gap-3 text-sm'>
+            <div className='rounded-xl border border-slate-200 bg-slate-50 p-3'>
+              <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>Pending payment</p>
+              <p className='mt-1 text-2xl font-bold text-amber-700'>{pendingPaymentTools.length}</p>
+            </div>
+            <div className='rounded-xl border border-slate-200 bg-slate-50 p-3'>
+              <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>Featured live</p>
+              <p className='mt-1 text-2xl font-bold text-emerald-700'>{activeFeaturedCount}</p>
+            </div>
+            <div className='rounded-xl border border-slate-200 bg-slate-50 p-3'>
+              <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>Draft / rejected</p>
+              <p className='mt-1 text-2xl font-bold text-rose-700'>{statusStats.draft + statusStats.rejected}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {(nextFeaturedRenewal || expiredFeaturedCount > 0) && (
+        <section className='mb-6 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]'>
+          <div
+            className={`theme-surface rounded-lg p-5 shadow-sm ${
+              featuredNeedsAttention ? 'border border-amber-300 bg-amber-50' : 'border border-emerald-200 bg-emerald-50'
+            }`}
+          >
+            <p
+              className={`text-sm font-semibold uppercase tracking-wide ${
+                featuredNeedsAttention ? 'text-amber-700' : 'text-emerald-700'
+              }`}
+            >
+              Featured timing
+            </p>
+            {nextFeaturedRenewal ? (
+              <>
+                <h2 className='mt-2 text-2xl font-bold text-slate-950'>{getTitle(nextFeaturedRenewal.tool)}</h2>
+                <p className='mt-2 text-sm leading-6 text-emerald-950/80'>
+                  {getCommercialDetailLine(getCommercialStatus(nextFeaturedRenewal.tool), nextFeaturedRenewal.details)}
+                </p>
+                {featuredNeedsAttention && (
+                  <p className='mt-2 rounded-lg bg-white/80 px-3 py-2 text-sm font-semibold text-amber-900 ring-1 ring-amber-200'>
+                    {featuredAttentionText}
+                  </p>
+                )}
+                <p className='mt-2 text-sm text-emerald-950/80'>Featured window: {featuredWindowEndText}</p>
+                <div className='mt-4 flex flex-wrap gap-3'>
+                  <Link
+                    href='/pricing'
+                    className='inline-flex items-center justify-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700'
+                  >
+                    {featuredButtonText}
+                  </Link>
+                  <Link
+                    href='/profile'
+                    className='inline-flex items-center justify-center rounded-lg border border-emerald-200 bg-white px-4 py-2 text-sm font-semibold text-emerald-800 hover:bg-emerald-100'
+                  >
+                    {isChinese ? '回到个人中心' : 'Back to profile'}
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <p className='mt-2 text-sm leading-6 text-emerald-950/80'>
+                {isChinese ? '当前没有正在生效的前排展示。' : 'You do not currently have an active featured placement.'}
+              </p>
+            )}
+          </div>
+
+          <div className='theme-surface rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-slate-500'>Renewal focus</p>
+            <div className='mt-3 grid gap-3 text-sm'>
+              <div className='rounded-xl border border-slate-200 bg-slate-50 p-3'>
+                <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>Active featured</p>
+                <p className='mt-1 text-2xl font-bold text-emerald-700'>{featuredTools.length}</p>
+              </div>
+              <div className='rounded-xl border border-slate-200 bg-slate-50 p-3'>
+                <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>Expired featured</p>
+                <p className='mt-1 text-2xl font-bold text-rose-700'>{expiredFeaturedCount}</p>
+              </div>
+              <div className='rounded-xl border border-slate-200 bg-slate-50 p-3'>
+                <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>Pending payment</p>
+                <p className='mt-1 text-2xl font-bold text-amber-700'>{pendingPaymentTools.length}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className='theme-surface mb-6 rounded-lg border border-cyan-200 bg-cyan-50 p-4'>
         <div className='flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between'>
@@ -554,6 +764,16 @@ export default async function SubmissionsPage({
                               {commercialDetails.featuredDaysRequested > 0 && (
                                 <p className='text-xs text-slate-400'>
                                   Featured window: {commercialDetails.featuredDaysRequested} days
+                                </p>
+                              )}
+                              {commercialDetails.featuredActiveFrom && (
+                                <p className='text-xs text-slate-400'>
+                                  Starts: {commercialDetails.featuredActiveFrom.toLocaleDateString()}
+                                </p>
+                              )}
+                              {commercialDetails.featuredUntil && (
+                                <p className='text-xs text-slate-400'>
+                                  Ends: {commercialDetails.featuredUntil.toLocaleDateString()}
                                 </p>
                               )}
                             </div>
