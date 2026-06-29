@@ -95,13 +95,20 @@ function SectionHeader({ title, description }: { title: string; description: str
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const t = await getTranslations('Home');
   const isChinese = locale === 'cn' || locale === 'tw';
-  const [latestTools, popularTools, popularCategories] = await Promise.all([
+  const [latestToolsResult, popularToolsResult, popularCategoriesResult] = await Promise.allSettled([
     getWebNavigationList({ locale, pageNum: 1, pageSize: 12 }),
-    getPopularTools(6)
-      .then((tools) => tools.map((tool) => toolToListRow(tool, locale)))
-      .catch(() => []),
-    getPopularCategories(8).catch(() => []),
+    getPopularTools(6),
+    getPopularCategories(8),
   ]);
+  const latestTools =
+    latestToolsResult.status === 'fulfilled'
+      ? latestToolsResult.value
+      : { code: 200, msg: 'success', rows: [], total: 0 };
+  const popularTools =
+    popularToolsResult.status === 'fulfilled'
+      ? popularToolsResult.value.map((tool) => toolToListRow(tool, locale))
+      : [];
+  const popularCategories = popularCategoriesResult.status === 'fulfilled' ? popularCategoriesResult.value : [];
   const communityHighlights = await getCommunityHighlights(3).catch(() => []);
   const recentDiscussions = await getRecentDiscussions(3).catch(() => []);
   const risingTools = await getRisingTools(3).catch(() => []);

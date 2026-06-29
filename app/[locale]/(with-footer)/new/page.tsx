@@ -40,10 +40,9 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function NewToolsPage({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const t = await getTranslations('Navigation');
-  const [latestTools, categories] = await Promise.all([
-    getLatestTools(24).catch(() => []),
-    getAllCategories(false).catch(() => []),
-  ]);
+  const [latestToolsResult, categoriesResult] = await Promise.allSettled([getLatestTools(24), getAllCategories(false)]);
+  const latestTools = latestToolsResult.status === 'fulfilled' ? latestToolsResult.value : [];
+  const categories = categoriesResult.status === 'fulfilled' ? categoriesResult.value : [];
   const categoryMap = new Map(categories.map((category) => [category.id, category]));
   const rows = latestTools.map((tool) => toolToListRow(tool, locale));
   const thisWeekRows = rows.filter((row) => isWithinLastDays(row.createdAt, 7));
