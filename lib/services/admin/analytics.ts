@@ -1063,7 +1063,8 @@ function getPageTypeLabel(pageType: string): string {
   if (pageType === 'best_ai_tools_topic') return 'Top list topic';
   if (pageType === 'pricing') return 'Pricing';
   if (pageType === 'submit') return 'Submit';
-  if (pageType === 'developer_listing') return 'Claim listing';
+  if (pageType === 'claim_listing') return 'Claim listing';
+  if (pageType === 'profile') return 'Profile';
   if (pageType === 'profile_submissions') return 'Submissions';
   return 'Other';
 }
@@ -1073,7 +1074,8 @@ function getCtaPageTypeLabel(pageType: string): string {
   if (pageType === 'best_ai_tools_topic') return 'Top list topic';
   if (pageType === 'pricing') return 'Pricing';
   if (pageType === 'submit') return 'Submit';
-  if (pageType === 'developer_listing') return 'Claim listing';
+  if (pageType === 'claim_listing') return 'Claim listing';
+  if (pageType === 'profile') return 'Profile';
   if (pageType === 'profile_submissions') return 'Submissions';
   if (pageType === 'home') return 'Home';
   if (pageType === 'tool_detail') return 'Tool detail';
@@ -1118,7 +1120,8 @@ function inferPageTypeFromSourcePath(sourcePath: string): string {
   if (sourcePath.startsWith('/best-ai-tools/')) return 'best_ai_tools_topic';
   if (sourcePath.startsWith('/pricing')) return 'pricing';
   if (sourcePath.startsWith('/submit')) return 'submit';
-  if (sourcePath.startsWith('/developer/listing')) return 'developer_listing';
+  if (sourcePath.startsWith('/developer/listing')) return 'claim_listing';
+  if (sourcePath.startsWith('/profile') && !sourcePath.startsWith('/profile/submissions')) return 'profile';
   if (sourcePath.startsWith('/profile/submissions')) return 'profile_submissions';
   return 'other';
 }
@@ -1153,7 +1156,7 @@ export async function getPageAccessReport(
           COALESCE(
             NULLIF(a.metadata->>'page_type', ''),
             CASE WHEN a.tool_id IS NOT NULL THEN 'tool_detail' ELSE 'other' END
-          ) AS page_type,
+          ) AS raw_page_type,
           COALESCE(
             NULLIF(a.metadata->>'page_path', ''),
             CASE
@@ -1164,6 +1167,16 @@ export async function getPageAccessReport(
         FROM analytics a
         LEFT JOIN tools t ON a.tool_id = t.id
         WHERE a.event_type = 'page_view' ${dateCondition}
+      ),
+      normalized_page_views AS (
+        SELECT
+          session_id,
+          CASE
+            WHEN raw_page_type = 'developer_listing' THEN 'claim_listing'
+            ELSE raw_page_type
+          END AS page_type,
+          page_path
+        FROM page_views
       )
     `;
 
@@ -1174,7 +1187,7 @@ export async function getPageAccessReport(
         page_type,
         COUNT(*)::int AS views,
         COUNT(DISTINCT session_id)::int AS unique_visitors
-      FROM page_views
+      FROM normalized_page_views
       GROUP BY page_type
       ORDER BY views DESC
     `,
@@ -1188,7 +1201,7 @@ export async function getPageAccessReport(
         page_type,
         COUNT(*)::int AS views,
         COUNT(DISTINCT session_id)::int AS unique_visitors
-      FROM page_views
+      FROM normalized_page_views
       GROUP BY page_path, page_type
       ORDER BY views DESC
       LIMIT $1
@@ -1205,7 +1218,7 @@ export async function getPageAccessReport(
           page_type,
           COUNT(*)::int AS views,
           COUNT(DISTINCT session_id)::int AS unique_visitors
-        FROM page_views
+        FROM normalized_page_views
         GROUP BY page_path, page_type
       ),
       ranked_page_views AS (
@@ -1234,7 +1247,7 @@ export async function getPageAccessReport(
       SELECT
         COUNT(*)::int AS total_views,
         COUNT(DISTINCT session_id)::int AS total_unique_visitors
-      FROM page_views
+      FROM normalized_page_views
     `,
     );
 
@@ -2024,6 +2037,9 @@ export async function getPageAccessTrend(range: '7d' | '30d' = '7d'): Promise<Pa
       'explore',
       'best_ai_tools',
       'best_ai_tools_topic',
+      'claim_listing',
+      'profile',
+      'profile_submissions',
       'other',
     ];
     const items = pageTypes.map((pageType) => {

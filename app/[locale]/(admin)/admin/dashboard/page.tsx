@@ -25,7 +25,14 @@ import {
   getTopTools,
 } from '@/lib/services/admin/analytics';
 import { getCommentModerationSummary } from '@/app/actions/admin/comments';
-import { getOperationalStats, getSubmissionFunnelStats, getToolsStats } from '@/app/actions/admin/tools';
+import {
+  getFeaturedPlacementStats,
+  getOperationalStats,
+  getPaidListingBlockerSummary,
+  getDeveloperOutreachQueue,
+  getSubmissionFunnelStats,
+  getToolsStats,
+} from '@/app/actions/admin/tools';
 
 export async function generateMetadata({ params }: { params: { locale: string } }) {
   const t = await getTranslations({ locale: params.locale, namespace: 'admin' });
@@ -47,6 +54,12 @@ export default async function AdminDashboard({
   const toolsStats = await getToolsStats();
   const operationalStats = await getOperationalStats();
   const moderationSummary = await getCommentModerationSummary();
+  const paidListingBlockers = await getPaidListingBlockerSummary(8);
+  const featuredPlacementStats = await getFeaturedPlacementStats();
+  const outreachQueue = await getDeveloperOutreachQueue(8);
+  const outreachDueCount = outreachQueue.filter((item) => item.outreachStatus === 'follow_up_due').length;
+  const outreachFeaturedCount = outreachQueue.filter((item) => item.suggestion === 'featured_pitch').length;
+  const outreachClaimCount = outreachQueue.filter((item) => item.suggestion === 'claim_listing').length;
   const topTools = await getTopTools('views', 5);
   const pageAccessReport = await getPageAccessReport('30d', 6);
   const conversionSnapshot = await getConversionSnapshot('30d');
@@ -80,6 +93,23 @@ export default async function AdminDashboard({
       icon: Star,
       subtext: 'Total ratings given',
       color: 'yellow',
+    },
+    {
+      name: 'Claimed Tools',
+      value: toolsStats.claimed.toString(),
+      icon: Sparkles,
+      subtext: 'Tools already tied to an owner flow',
+      color: 'green',
+    },
+    {
+      name: 'Paid Blockers',
+      value: paidListingBlockers.totalBlocked.toString(),
+      icon: AlertTriangle,
+      subtext:
+        paidListingBlockers.blockerCounts.length > 0
+          ? `${paidListingBlockers.blockerCounts[0].label} is the top missing field`
+          : 'No blocker backlog right now',
+      color: 'red',
     },
   ];
 
@@ -145,6 +175,14 @@ export default async function AdminDashboard({
       color: 'blue',
     },
     {
+      name: 'Email Ops',
+      value: 'Open',
+      subtext: 'Claim invites and featured renewal reminders',
+      href: '/admin/analytics#email-ops',
+      icon: Send,
+      color: 'gray',
+    },
+    {
       name: 'Pending > 48h',
       value: operationalStats.overduePendingSubmissions,
       subtext: 'Escalated pending submissions',
@@ -161,6 +199,21 @@ export default async function AdminDashboard({
       color: 'red',
     },
   ];
+
+  const featuredHealthTone =
+    featuredPlacementStats.expiringSoonCount > 0 ? 'rose' : featuredPlacementStats.liveCount > 0 ? 'emerald' : 'slate';
+  const featuredHealthLabel =
+    featuredPlacementStats.expiringSoonCount > 0
+      ? 'Needs renewal attention'
+      : featuredPlacementStats.liveCount > 0
+      ? 'Healthy featured activity'
+      : 'No live featured windows';
+  const featuredHealthBody =
+    featuredPlacementStats.expiringSoonCount > 0
+      ? `${featuredPlacementStats.expiringSoonCount} live featured window${featuredPlacementStats.expiringSoonCount === 1 ? ' needs' : ' need'} attention.`
+      : featuredPlacementStats.liveCount > 0
+      ? `${featuredPlacementStats.liveCount} live featured window${featuredPlacementStats.liveCount === 1 ? '' : 's'} are running right now.`
+      : 'No currently active featured placement needs attention.';
 
   const getTitle = (tool: any) => {
     if (typeof tool.title === 'string') return tool.title;
@@ -182,21 +235,22 @@ export default async function AdminDashboard({
   const getConversionPageLabel = (pageType: string) => {
     if (pageType === 'pricing') return 'Pricing';
     if (pageType === 'submit') return 'Submit';
-    if (pageType === 'developer_listing') return 'Claim listing';
+    if (pageType === 'claim_listing' || pageType === 'developer_listing') return 'Claim listing';
     if (pageType === 'profile_submissions') return 'Submissions';
     return 'Conversion page';
   };
   const getConversionPageAction = (pageType: string) => {
     if (pageType === 'pricing') return 'Keep the offer sharp and the CTA obvious';
     if (pageType === 'submit') return 'Reduce friction and reinforce review expectations';
-    if (pageType === 'developer_listing') return 'Capture claims and follow up quickly';
+    if (pageType === 'claim_listing' || pageType === 'developer_listing')
+      return 'Capture claims and follow up quickly';
     if (pageType === 'profile_submissions') return 'Make payment status and next steps obvious';
     return 'Review where this page should send users next';
   };
   const getConversionPageHref = (pageType: string) => {
     if (pageType === 'pricing') return `/${locale}/pricing`;
     if (pageType === 'submit') return `/${locale}/submit`;
-    if (pageType === 'developer_listing') return `/${locale}/developer/listing`;
+    if (pageType === 'claim_listing' || pageType === 'developer_listing') return `/${locale}/developer/listing`;
     if (pageType === 'profile_submissions') return `/${locale}/profile/submissions`;
     return `/${locale}`;
   };
@@ -210,7 +264,7 @@ export default async function AdminDashboard({
       percentage: item?.percentage || 0,
     };
   });
-  const conversionPageOrder = ['pricing', 'submit', 'developer_listing', 'profile_submissions'] as const;
+  const conversionPageOrder = ['pricing', 'submit', 'claim_listing', 'profile_submissions'] as const;
   const conversionPageItems = conversionPageOrder.map((pageType) => {
     const item = pageSummaryMap.get(pageType);
 
@@ -287,6 +341,63 @@ export default async function AdminDashboard({
     },
   ];
 
+  const todayFocus = [
+    {
+      name: 'Claim follow-up',
+      value: toolsStats.claimPending + toolsStats.claimUnclaimed,
+      subtext:
+        conversionSnapshot.overdueClaimLeads > 0
+          ? `${conversionSnapshot.overdueClaimLeads} overdue claim lead${conversionSnapshot.overdueClaimLeads === 1 ? '' : 's'}`
+          : `${conversionSnapshot.freshClaimLeads} fresh claim lead${conversionSnapshot.freshClaimLeads === 1 ? '' : 's'}`,
+      action: 'Open claim queue',
+      href: '/admin/claims',
+      tone: 'cyan',
+    },
+    {
+      name: 'Featured renewal',
+      value: featuredPlacementStats.expiringSoonCount,
+      subtext:
+        featuredPlacementStats.liveCount > 0
+          ? `${featuredPlacementStats.liveCount} live featured window${featuredPlacementStats.liveCount === 1 ? '' : 's'}`
+          : 'No live featured windows right now',
+      action: 'Open expiring featured',
+      href: '/admin/owners?status=featured_expiring',
+      tone: 'amber',
+    },
+    {
+      name: 'Review backlog',
+      value: operationalStats.overduePendingSubmissions,
+      subtext: `${operationalStats.pendingDeveloperSubmissions} developer submissions waiting`,
+      action: 'Open review queue',
+      href: '/admin/tools?status=pending',
+      tone: 'rose',
+    },
+    {
+      name: 'Outreach due',
+      value: outreachDueCount,
+      subtext: 'Follow-ups already due today',
+      action: 'Open due outreach',
+      href: '/admin/analytics?outreach=due_today#outreach-queue',
+      tone: 'cyan',
+    },
+    {
+      name: 'Outreach claim',
+      value: outreachClaimCount,
+      subtext: 'Warm owner leads that need a claim invite',
+      action: 'Open claim focus',
+      href: '/admin/analytics?outreach=claim#outreach-queue',
+      tone: 'emerald',
+    },
+    {
+      name: 'Outreach featured',
+      value: outreachFeaturedCount,
+      subtext: 'Traffic-backed leads fit for a featured pitch',
+      action: 'Open featured focus',
+      href: '/admin/analytics?outreach=featured#outreach-queue',
+      tone: 'violet',
+    },
+  ];
+
   return (
     <div>
       <div className='mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between'>
@@ -303,7 +414,7 @@ export default async function AdminDashboard({
         </Link>
       </div>
 
-      <div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-4'>
+      <div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6'>
         {metrics.map((metric) => (
           <div key={metric.name} className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
             <div className='flex items-center justify-between'>
@@ -320,6 +431,51 @@ export default async function AdminDashboard({
             </div>
           </div>
         ))}
+      </div>
+
+      <div className='mt-8'>
+        <div className='mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
+          <div>
+            <h2 className='text-lg font-semibold text-slate-900'>Today&apos;s Focus</h2>
+            <p className='mt-1 text-sm text-slate-600'>The fastest paths to revenue or cleanup right now.</p>
+          </div>
+          <Link href='/admin/owners' className='text-sm font-medium text-cyan-700 hover:underline'>
+            Open owner dashboard
+          </Link>
+        </div>
+        <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
+          {todayFocus.map((item) => (
+            <Link
+              key={item.name}
+              href={item.href}
+              className='theme-surface rounded-lg border border-slate-200 p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-cyan-200 hover:shadow-md'
+            >
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-sm font-medium text-slate-600'>{item.name}</p>
+                  <p className='mt-2 text-3xl font-semibold text-slate-900'>{item.value}</p>
+                </div>
+                <span
+                  className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
+                    item.tone === 'amber'
+                      ? 'bg-amber-50 text-amber-700'
+                      : item.tone === 'emerald'
+                        ? 'bg-emerald-50 text-emerald-700'
+                      : item.tone === 'rose'
+                        ? 'bg-rose-50 text-rose-700'
+                        : item.tone === 'violet'
+                          ? 'bg-violet-50 text-violet-700'
+                        : 'bg-cyan-50 text-cyan-700'
+                  }`}
+                >
+                  Focus
+                </span>
+              </div>
+              <p className='mt-3 text-sm leading-6 text-slate-600'>{item.subtext}</p>
+              <p className='mt-3 text-sm font-semibold text-cyan-700'>{item.action}</p>
+            </Link>
+          ))}
+        </div>
       </div>
 
       <div className='mt-8'>
@@ -388,6 +544,187 @@ export default async function AdminDashboard({
         </div>
       </div>
 
+      <div className='mt-8 rounded-[20px] border border-cyan-100 bg-cyan-50 p-5 shadow-sm'>
+        <div className='flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between'>
+          <div>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {locale === 'cn' || locale === 'tw' ? '商业快捷入口' : 'Commercial shortcuts'}
+            </p>
+            <h2 className='mt-1 text-xl font-bold text-slate-950'>
+              {locale === 'cn' || locale === 'tw'
+                ? '先处理认领、清理和续期'
+                : 'Handle claims, cleanup, and renewals first'}
+            </h2>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {locale === 'cn' || locale === 'tw'
+                ? '这几个入口是现在最接近收入或阻塞解除的地方。'
+                : 'These are the fastest paths to revenue or removing blockers.'}
+            </p>
+          </div>
+          <Link
+            href='/admin/cleanup'
+            className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100'
+          >
+            {locale === 'cn' || locale === 'tw' ? '打开清理队列' : 'Open cleanup queue'}
+          </Link>
+        </div>
+        <div className='mt-4 flex flex-wrap gap-2 text-xs font-semibold'>
+          <Link
+            href='/admin/claims'
+            className='rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-cyan-700 hover:bg-cyan-100'
+          >
+            {locale === 'cn' || locale === 'tw' ? '认领队列' : 'Claim queue'}
+          </Link>
+          <Link
+            href='/admin/owners'
+            className='rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-slate-700 hover:bg-slate-100'
+          >
+            {locale === 'cn' || locale === 'tw' ? 'Owner 看板' : 'Owner dashboard'}
+          </Link>
+          <Link
+            href='/admin/cleanup'
+            className='rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-slate-700 hover:bg-slate-100'
+          >
+            {locale === 'cn' || locale === 'tw' ? '清理队列' : 'Cleanup queue'}
+          </Link>
+          <Link
+            href='/admin/analytics#outreach-queue'
+            className='rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-emerald-700 hover:bg-emerald-100'
+          >
+            {locale === 'cn' || locale === 'tw' ? '外联队列' : 'Outreach queue'}
+          </Link>
+        </div>
+      </div>
+
+      <div className='mt-8 rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm'>
+        <div className='flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between'>
+          <div className='max-w-3xl'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>Owner / Featured health</p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-950'>Commercial flow health at a glance</h2>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              Keep an eye on claimed tools, live featured windows, and renewals that need attention.
+            </p>
+          </div>
+          <div className='flex flex-wrap gap-3'>
+            <Link
+              href='/admin/owners'
+              className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+            >
+              Open owner dashboard
+            </Link>
+            <Link
+              href='/admin/analytics#email-ops'
+              className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-2 text-sm font-semibold text-cyan-700 hover:bg-cyan-100'
+            >
+              Open email ops
+            </Link>
+          </div>
+        </div>
+
+        <div className='mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
+          <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+            <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>Claimed tools</p>
+            <p className='mt-2 text-3xl font-bold text-slate-950'>{toolsStats.claimed}</p>
+            <p className='mt-1 text-sm text-slate-600'>Connected to an owner flow</p>
+          </div>
+          <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+            <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>Live featured</p>
+            <p className='mt-2 text-3xl font-bold text-amber-700'>{featuredPlacementStats.liveCount}</p>
+            <p className='mt-1 text-sm text-slate-600'>
+              {featuredPlacementStats.totalViews.toLocaleString()} views · {featuredPlacementStats.totalClicks.toLocaleString()} clicks
+            </p>
+          </div>
+          <div
+            className={`rounded-xl border p-4 ${
+              featuredHealthTone === 'rose'
+                ? 'border-rose-200 bg-rose-50'
+                : featuredHealthTone === 'emerald'
+                ? 'border-emerald-200 bg-emerald-50'
+                : 'border-slate-200 bg-slate-50'
+            }`}
+          >
+            <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>Featured health</p>
+            <p
+              className={`mt-2 text-lg font-bold ${
+                featuredHealthTone === 'rose'
+                  ? 'text-rose-700'
+                  : featuredHealthTone === 'emerald'
+                  ? 'text-emerald-700'
+                  : 'text-slate-900'
+              }`}
+            >
+              {featuredHealthLabel}
+            </p>
+            <p className='mt-1 text-sm text-slate-600'>{featuredHealthBody}</p>
+          </div>
+          <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+            <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>Renewals due</p>
+            <p className='mt-2 text-3xl font-bold text-rose-700'>{featuredPlacementStats.expiringSoonCount}</p>
+            <p className='mt-1 text-sm text-slate-600'>Needs a reminder in the next 3 days</p>
+          </div>
+        </div>
+
+        <div className='mt-4 flex flex-wrap gap-2 text-xs font-semibold'>
+          <Link
+            href='/admin/owners?status=featured_active'
+            className='rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-cyan-700 hover:bg-cyan-100'
+          >
+            Open active featured
+          </Link>
+          <Link
+            href='/admin/owners?status=featured_expiring'
+            className='rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-amber-700 hover:bg-amber-100'
+          >
+            Open expiring soon
+          </Link>
+          <Link
+            href='/admin/owners?status=featured_expired'
+            className='rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-slate-700 hover:bg-slate-100'
+          >
+            Open expired
+          </Link>
+        </div>
+      </div>
+
+      <div className='mt-8 rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm'>
+        <div className='flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between'>
+          <div className='max-w-3xl'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>Claim health</p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-950'>Owner mapping</h2>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>Claimed, pending, rejected, and unclaimed.</p>
+          </div>
+          <Link
+            href='/admin/tools'
+            className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+          >
+            Open tools table
+          </Link>
+        </div>
+
+        <div className='mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
+          <Link href='/admin/tools?claimStatus=claimed' className='rounded-xl border border-emerald-200 bg-emerald-50 p-4'>
+            <p className='text-xs font-semibold uppercase tracking-wide text-emerald-700'>Claimed</p>
+            <p className='mt-2 text-3xl font-bold text-emerald-700'>{toolsStats.claimed}</p>
+            <p className='mt-1 text-sm text-slate-600'>Owner linked</p>
+          </Link>
+          <Link href='/admin/tools?claimStatus=pending' className='rounded-xl border border-amber-200 bg-amber-50 p-4'>
+            <p className='text-xs font-semibold uppercase tracking-wide text-amber-800'>Claim pending</p>
+            <p className='mt-2 text-3xl font-bold text-amber-700'>{toolsStats.claimPending}</p>
+            <p className='mt-1 text-sm text-slate-600'>Needs review</p>
+          </Link>
+          <Link href='/admin/tools?claimStatus=rejected' className='rounded-xl border border-rose-200 bg-rose-50 p-4'>
+            <p className='text-xs font-semibold uppercase tracking-wide text-rose-700'>Claim rejected</p>
+            <p className='mt-2 text-3xl font-bold text-rose-700'>{toolsStats.claimRejected}</p>
+            <p className='mt-1 text-sm text-slate-600'>Needs cleanup</p>
+          </Link>
+          <Link href='/admin/tools?claimStatus=unclaimed' className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+            <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>Unclaimed</p>
+            <p className='mt-2 text-3xl font-bold text-slate-900'>{toolsStats.claimUnclaimed}</p>
+            <p className='mt-1 text-sm text-slate-600'>No owner yet</p>
+          </Link>
+        </div>
+      </div>
+
       <div className='mt-8 grid gap-6 lg:grid-cols-2'>
         {/* Top Tools */}
         <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
@@ -419,28 +756,49 @@ export default async function AdminDashboard({
           <div className='mt-4 space-y-3'>
             <a
               href='/admin/collection'
-              className='block rounded-lg border border-slate-200 p-4 hover:border-cyan-200 hover:bg-cyan-50/50'
+              className='block rounded-xl border border-slate-200 bg-slate-50 p-4 transition hover:-translate-y-0.5 hover:border-cyan-200 hover:bg-cyan-50/50'
             >
               <h3 className='font-medium text-slate-900'>Collect New Tools</h3>
               <p className='mt-1 text-sm text-slate-600'>Import URLs and research draft tools</p>
             </a>
             <a
               href='/admin/tools'
-              className='block rounded-lg border border-slate-200 p-4 hover:border-cyan-200 hover:bg-cyan-50/50'
+              className='block rounded-xl border border-slate-200 bg-slate-50 p-4 transition hover:-translate-y-0.5 hover:border-cyan-200 hover:bg-cyan-50/50'
             >
               <h3 className='font-medium text-slate-900'>Review Tools</h3>
               <p className='mt-1 text-sm text-slate-600'>{toolsStats.pending} tools pending review</p>
             </a>
             <a
               href='/admin/tools?status=published'
-              className='block rounded-lg border border-slate-200 p-4 hover:border-cyan-200 hover:bg-cyan-50/50'
+              className='block rounded-xl border border-slate-200 bg-slate-50 p-4 transition hover:-translate-y-0.5 hover:border-cyan-200 hover:bg-cyan-50/50'
             >
               <h3 className='font-medium text-slate-900'>Manage Published Tools</h3>
               <p className='mt-1 text-sm text-slate-600'>{toolsStats.published} published tools</p>
             </a>
             <a
+              href='/admin/owners'
+              className='block rounded-xl border border-slate-200 bg-slate-50 p-4 transition hover:-translate-y-0.5 hover:border-cyan-200 hover:bg-cyan-50/50'
+            >
+              <h3 className='font-medium text-slate-900'>Tool Owner Dashboard</h3>
+              <p className='mt-1 text-sm text-slate-600'>{toolsStats.claimed} claimed tools in the owner flow</p>
+            </a>
+            <a
+              href='/admin/cleanup'
+              className='block rounded-xl border border-slate-200 bg-slate-50 p-4 transition hover:-translate-y-0.5 hover:border-rose-200 hover:bg-rose-50/50'
+            >
+              <h3 className='font-medium text-slate-900'>Cleanup Queue</h3>
+              <p className='mt-1 text-sm text-slate-600'>{paidListingBlockers.totalBlocked} paid listings need cleanup</p>
+            </a>
+            <a
+              href='/admin/claims'
+              className='block rounded-xl border border-slate-200 bg-slate-50 p-4 transition hover:-translate-y-0.5 hover:border-cyan-200 hover:bg-cyan-50/50'
+            >
+              <h3 className='font-medium text-slate-900'>Claim Leads</h3>
+              <p className='mt-1 text-sm text-slate-600'>Review {conversionSnapshot.claimLeads} claim leads</p>
+            </a>
+            <a
               href='/admin/analytics'
-              className='block rounded-lg border border-slate-200 p-4 hover:border-cyan-200 hover:bg-cyan-50/50'
+              className='block rounded-xl border border-slate-200 bg-slate-50 p-4 transition hover:-translate-y-0.5 hover:border-cyan-200 hover:bg-cyan-50/50'
             >
               <h3 className='font-medium text-slate-900'>View Analytics</h3>
               <p className='mt-1 text-sm text-slate-600'>Check detailed site analytics and reports</p>

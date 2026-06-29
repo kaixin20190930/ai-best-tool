@@ -13,7 +13,8 @@ type PageViewType =
   | 'best_ai_tools_topic'
   | 'pricing'
   | 'submit'
-  | 'developer_listing'
+  | 'claim_listing'
+  | 'profile'
   | 'profile_submissions'
   | 'other';
 
@@ -41,7 +42,8 @@ function normalizePageType(pageType: unknown): PageViewType {
     pageType === 'best_ai_tools_topic' ||
     pageType === 'pricing' ||
     pageType === 'submit' ||
-    pageType === 'developer_listing' ||
+    pageType === 'claim_listing' ||
+    pageType === 'profile' ||
     pageType === 'profile_submissions' ||
     pageType === 'other'
   ) {

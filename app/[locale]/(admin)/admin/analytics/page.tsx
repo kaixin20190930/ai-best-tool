@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowUpRight, BarChart3, Globe, Layers3, Search, ShieldAlert, TrendingUp } from 'lucide-react';
 
 import AdminOutreachClassificationTable from '@/components/admin/AdminOutreachClassificationTable';
+import AdminEmailOpsPanel from '@/components/admin/AdminEmailOpsPanel';
 import AdminOutreachQueueTable from '@/components/admin/AdminOutreachQueueTable';
 import {
   getCommercialIntentReport,
@@ -22,6 +23,7 @@ import {
 import { getAdminToolClaimsSummary } from '@/app/actions/admin/claims';
 import {
   getDeveloperOutreachQueue,
+  getEmailOpsSummaryBySystem,
   getFeaturedPlacementStats,
   getOperationalStats,
   getOutreachCommercialBridgeSummary,
@@ -48,10 +50,18 @@ export default async function AdminAnalyticsPage({
   };
   searchParams?: {
     range?: string;
+    outreach?: string;
   };
 }) {
   const locale = params?.locale || 'en';
   const range = searchParams?.range === '7d' || searchParams?.range === '30d' ? searchParams.range : 'all';
+  const outreachFocus =
+    searchParams?.outreach === 'due_today' ||
+    searchParams?.outreach === 'featured' ||
+    searchParams?.outreach === 'claim' ||
+    searchParams?.outreach === 'collab'
+      ? searchParams.outreach
+      : 'all';
   const rangeLabelMap = {
     all: 'All time',
     '7d': 'Last 7d',
@@ -70,6 +80,7 @@ export default async function AdminAnalyticsPage({
   const rejectionReasons = await getSubmissionRejectionReasonStats(range, 5);
   const featuredPlacementStats = await getFeaturedPlacementStats();
   const outreachQueue = await getDeveloperOutreachQueue(12);
+  const emailOpsSummary = await getEmailOpsSummaryBySystem();
   const outreachCommercialBridge = await getOutreachCommercialBridgeSummary();
   const outreachExecutors = await getOutreachExecutorSummary(5);
   const paidListingBlockers = await getPaidListingBlockerSummary(8);
@@ -141,7 +152,7 @@ export default async function AdminAnalyticsPage({
     if (pageType === 'best_ai_tools_topic') return 'Top list topic';
     if (pageType === 'pricing') return 'Pricing';
     if (pageType === 'submit') return 'Submit';
-    if (pageType === 'developer_listing') return 'Claim listing';
+    if (pageType === 'claim_listing' || pageType === 'developer_listing') return 'Claim listing';
     if (pageType === 'profile_submissions') return 'Submissions';
     return 'Other';
   };
@@ -156,7 +167,8 @@ export default async function AdminAnalyticsPage({
     if (pageType === 'best_ai_tools_topic') return 'Push visitors into detail pages and official sites';
     if (pageType === 'pricing') return 'Tighten the pricing story and route into submit';
     if (pageType === 'submit') return 'Reduce friction and reinforce review expectations';
-    if (pageType === 'developer_listing') return 'Capture claims and route owners into follow-up';
+    if (pageType === 'claim_listing' || pageType === 'developer_listing')
+      return 'Capture claims and route owners into follow-up';
     if (pageType === 'profile_submissions') return 'Make payment status and renewal paths obvious';
     return 'Review where these visits should be reassigned';
   };
@@ -183,7 +195,7 @@ export default async function AdminAnalyticsPage({
     if (pageType === 'submit') {
       return ['Review rules', 'Payment explanation', 'FAQ clarity'];
     }
-    if (pageType === 'developer_listing') {
+    if (pageType === 'claim_listing' || pageType === 'developer_listing') {
       return ['Claim form', 'Owner follow-up', 'Lead tracking'];
     }
     if (pageType === 'profile_submissions') {
@@ -205,7 +217,8 @@ export default async function AdminAnalyticsPage({
     }
     if (pageType === 'pricing') return 'If Pricing is rising, keep the offer tight and the CTA obvious.';
     if (pageType === 'submit') return 'If Submit is rising, remove friction and clarify review expectations.';
-    if (pageType === 'developer_listing') return 'If Claim Listing is rising, follow up fast on new leads.';
+    if (pageType === 'claim_listing' || pageType === 'developer_listing')
+      return 'If Claim Listing is rising, follow up fast on new leads.';
     if (pageType === 'profile_submissions') return 'If Submissions is rising, ensure payment state is easy to read.';
     return 'Watch this family to see where the next clean-up or expansion belongs.';
   };
@@ -220,7 +233,8 @@ export default async function AdminAnalyticsPage({
     if (pageType === 'best_ai_tools_topic') return 'Keep the topic page useful and make the detail CTA obvious.';
     if (pageType === 'pricing') return 'Keep the pricing offer sharp and the next step obvious.';
     if (pageType === 'submit') return 'Make the submission flow feel safe, clear, and predictable.';
-    if (pageType === 'developer_listing') return 'Turn claims into follow-up conversations quickly.';
+    if (pageType === 'claim_listing' || pageType === 'developer_listing')
+      return 'Turn claims into follow-up conversations quickly.';
     if (pageType === 'profile_submissions') return 'Make payment completion and renewal pathways obvious.';
     return 'Keep this family under review and reassign pages where needed.';
   };
@@ -232,7 +246,7 @@ export default async function AdminAnalyticsPage({
     if (pageType === 'explore') return `/${locale}/explore`;
     if (pageType === 'pricing') return `/${locale}/pricing`;
     if (pageType === 'submit') return `/${locale}/submit`;
-    if (pageType === 'developer_listing') return `/${locale}/developer/listing`;
+    if (pageType === 'claim_listing' || pageType === 'developer_listing') return `/${locale}/developer/listing`;
     if (pageType === 'profile_submissions') return `/${locale}/profile/submissions`;
     return `/${locale}/ai`;
   };
@@ -389,6 +403,15 @@ export default async function AdminAnalyticsPage({
     featuredPlacementStats.totalViews > 0
       ? Math.round((featuredPlacementStats.totalClicks / featuredPlacementStats.totalViews) * 100)
       : 0;
+  const featuredRenewalAlert =
+    featuredPlacementStats.expiringSoonCount > 0
+      ? featuredPlacementStats.expiringSoonCount === 1
+        ? '1 featured window needs a renewal nudge'
+        : `${featuredPlacementStats.expiringSoonCount} featured windows need a renewal nudge`
+      : featuredPlacementStats.liveCount > 0
+      ? `${featuredPlacementStats.liveCount} featured placements are live`
+      : 'No active featured windows right now';
+  const featuredRenewalUrgent = featuredPlacementStats.expiringSoonCount > 0;
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0);
   const outreachDueRows = outreachQueue.filter((item) => {
@@ -412,6 +435,13 @@ export default async function AdminAnalyticsPage({
     return targetStart.getTime() < todayStart.getTime();
   }).length;
   const outreachDueTodayCount = outreachDueRows.length - outreachOverdueCount;
+  const outreachFocusItems = outreachQueue.filter((item) => {
+    if (outreachFocus === 'all') return true;
+    if (outreachFocus === 'due_today') return item.outreachStatus === 'follow_up_due';
+    if (outreachFocus === 'featured') return item.suggestion === 'featured_pitch';
+    if (outreachFocus === 'collab') return item.suggestion === 'content_collab';
+    return item.suggestion === 'claim_listing';
+  });
   const sevenDaysAgo = new Date(todayStart);
   sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
   const recentOutreachActivity = outreachQueue.filter((item) => {
@@ -502,7 +532,7 @@ export default async function AdminAnalyticsPage({
         ? 'Review expectations and payment explanation are the key levers.'
         : 'Submission needs more reassurance and fewer surprises.';
     }
-    if (pageType === 'developer_listing') {
+    if (pageType === 'claim_listing' || pageType === 'developer_listing') {
       return hasData
         ? 'Claim capture and fast follow-up matter most here.'
         : 'Claim interest is small, so keep the form lightweight.';
@@ -517,6 +547,74 @@ export default async function AdminAnalyticsPage({
       ? 'Watch how this family behaves before deciding where to invest.'
       : 'This family is still too small to read confidently.';
   };
+  const buildOutreachHref = (focus: string) => {
+    const params = new URLSearchParams();
+    if (range !== 'all') params.set('range', range);
+    if (focus !== 'all') params.set('outreach', focus);
+    const query = params.toString();
+    return query ? `/admin/analytics?${query}` : '/admin/analytics';
+  };
+  const getOutreachFocusAdvice = (focus: string) => {
+    if (focus === 'due_today') {
+      return locale === 'cn' || locale === 'tw'
+        ? ['先处理今天到期的跟进。', '优先发给已经有 owner 线索的条目。', '发完后立刻回填状态和备注。']
+        : ['Handle today’s follow-ups first.', 'Prioritize leads with an existing owner signal.', 'Update status and notes immediately after sending.'];
+    }
+
+    if (focus === 'featured') {
+      return locale === 'cn' || locale === 'tw'
+        ? ['先发给流量已经起来的条目。', '把前排价值和当前曝光挂钩。', '只保留最容易成交的 3-5 条。']
+        : ['Start with listings that already have traffic.', 'Tie the featured pitch to existing visibility.', 'Keep only the easiest 3-5 wins in the batch.'];
+    }
+
+    if (focus === 'collab') {
+      return locale === 'cn' || locale === 'tw'
+        ? ['先找容易合作的内容条目。', '用用户互动或讨论信号做切入。', '目标是约下一次更深的沟通。']
+        : ['Start with collaboration-friendly listings.', 'Use user engagement or discussion signals as the hook.', 'The goal is a deeper follow-up conversation.'];
+    }
+
+    return locale === 'cn' || locale === 'tw'
+      ? ['先从认领邀请开始。', '优先联系还未认领的公开条目。', '把能快速转成 owner 的线索放在前面。']
+      : ['Start with claim invites.', 'Prioritize public listings that are still unclaimed.', 'Keep the fastest owner-conversion leads at the top.'];
+  };
+  const outreachFocusAdvice = getOutreachFocusAdvice(outreachFocus);
+  const outreachFocusCards = [
+    {
+      key: 'all',
+      label: 'All leads',
+      count: outreachQueue.length,
+      tone: 'slate',
+      subtext: 'Everything in the weekly contact queue',
+    },
+    {
+      key: 'due_today',
+      label: 'Due today',
+      count: outreachDueTodayCount,
+      tone: 'amber',
+      subtext: `${outreachOverdueCount} overdue`,
+    },
+    {
+      key: 'featured',
+      label: 'Featured pitch',
+      count: outreachQueue.filter((item) => item.suggestion === 'featured_pitch').length,
+      tone: 'cyan',
+      subtext: 'Traffic-backed opportunities',
+    },
+    {
+      key: 'claim',
+      label: 'Claim invite',
+      count: outreachQueue.filter((item) => item.suggestion === 'claim_listing').length,
+      tone: 'emerald',
+      subtext: 'Warm owner follow-ups',
+    },
+    {
+      key: 'collab',
+      label: 'Content collab',
+      count: outreachQueue.filter((item) => item.suggestion === 'content_collab').length,
+      tone: 'violet',
+      subtext: 'Engagement-led outreach',
+    },
+  ];
 
   const getCtaAction = (ctaId: string) => {
     if (ctaId === 'best_tools_submit' || ctaId === 'ai-coding-tools_submit' || ctaId === 'ai-video-tools_submit') {
@@ -566,14 +664,14 @@ export default async function AdminAnalyticsPage({
     if (pageType === 'best_ai_tools_topic') return `/${locale}/best-ai-tools/ai-coding-tools`;
     if (pageType === 'pricing') return `/${locale}/pricing`;
     if (pageType === 'submit') return `/${locale}/submit`;
-    if (pageType === 'developer_listing') return `/${locale}/developer/listing`;
+    if (pageType === 'claim_listing' || pageType === 'developer_listing') return `/${locale}/developer/listing`;
     if (pageType === 'profile_submissions') return `/${locale}/profile/submissions`;
     return null;
   };
 
   const getPageFamilySecondaryHref = (pageType: string) => {
     if (pageType === 'pricing' || pageType === 'submit' || pageType === 'profile_submissions') return '/admin/tools';
-    if (pageType === 'developer_listing') return '/admin/claims?status=new';
+    if (pageType === 'claim_listing' || pageType === 'developer_listing') return '/admin/claims?status=new';
     if (pageType === 'tool_detail' || pageType === 'guide' || pageType === 'best_ai_tools_topic') {
       return '/admin/tools';
     }
@@ -582,7 +680,7 @@ export default async function AdminAnalyticsPage({
   };
 
   const getPageFamilySecondaryLabel = (pageType: string) => {
-    if (pageType === 'developer_listing') return 'Open claim queue';
+    if (pageType === 'claim_listing' || pageType === 'developer_listing') return 'Open claim queue';
     if (pageType === 'pricing' || pageType === 'submit' || pageType === 'profile_submissions') return 'Open tools';
     if (pageType === 'tool_detail' || pageType === 'guide' || pageType === 'best_ai_tools_topic') return 'Review tools';
     if (pageType === 'category' || pageType === 'explore' || pageType === 'best_ai_tools') return 'Open analytics';
@@ -622,7 +720,7 @@ export default async function AdminAnalyticsPage({
     if (pageType === 'best_ai_tools_topic') return 'High';
     if (pageType === 'home') return 'Medium';
     if (pageType === 'category') return 'Medium';
-    if (pageType === 'developer_listing') return 'Medium';
+    if (pageType === 'claim_listing' || pageType === 'developer_listing') return 'Medium';
     if (pageType === 'profile_submissions') return 'Medium';
     if (pageType === 'explore') return 'Low';
     return 'Low';
@@ -745,6 +843,7 @@ export default async function AdminAnalyticsPage({
   string,
   { submitClicks: number; claimClicks: number; claimLeads: number; checkoutStarts: number }
   >();
+  const topCommercialSource = commercialIntentReport.sources[0] || null;
 
   commercialIntentReport.sources.forEach((item) => {
     const current = commercialFamilyMap.get(item.pageType) || {
@@ -764,7 +863,7 @@ export default async function AdminAnalyticsPage({
   const highIntentPageFamilyOrder = [
     'pricing',
     'submit',
-    'developer_listing',
+    'claim_listing',
     'profile_submissions',
     'tool_detail',
     'guide',
@@ -891,6 +990,85 @@ export default async function AdminAnalyticsPage({
             <div className='rounded-full bg-slate-100 p-3'>
               <Globe className='h-6 w-6 text-slate-700' />
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div className='mb-8'>
+        <div className='mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
+          <div>
+            <h2 className='text-lg font-semibold text-slate-900'>Commercial intent snapshot</h2>
+            <p className='mt-1 text-sm text-slate-600'>
+              One quick read on whether the site is producing submit, claim, and checkout intent.
+            </p>
+          </div>
+          <div className='text-sm text-slate-500'>
+            {commercialIntentReport.sources.length > 0 ? 'Top source is highlighted below' : 'Waiting for funnel data'}
+          </div>
+        </div>
+
+        <div className='mb-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Submit clicks</p>
+            <p className='mt-2 text-3xl font-semibold text-slate-900'>
+              {commercialIntentReport.totalSubmitClicks.toLocaleString()}
+            </p>
+            <p className='mt-2 text-sm text-slate-500'>Visitors moving into the submission path</p>
+          </div>
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Claim clicks</p>
+            <p className='mt-2 text-3xl font-semibold text-slate-900'>
+              {commercialIntentReport.totalClaimClicks.toLocaleString()}
+            </p>
+            <p className='mt-2 text-sm text-slate-500'>Visitors choosing the claim listing path</p>
+          </div>
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Claim submissions</p>
+            <p className='mt-2 text-3xl font-semibold text-emerald-700'>
+              {commercialIntentReport.totalClaimSubmissions.toLocaleString()}
+            </p>
+            <p className='mt-2 text-sm text-slate-500'>Owner leads captured through the claim form</p>
+          </div>
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <p className='text-sm font-medium text-slate-600'>Checkout starts</p>
+            <p className='mt-2 text-3xl font-semibold text-violet-700'>
+              {commercialIntentReport.totalCheckoutStarts.toLocaleString()}
+            </p>
+            <p className='mt-2 text-sm text-slate-500'>Paid intent that reached Stripe checkout</p>
+          </div>
+        </div>
+
+        <div className='grid gap-4 lg:grid-cols-[1.15fr_0.85fr]'>
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>Top commercial source</p>
+            <h3 className='mt-1 text-xl font-bold text-slate-950'>
+              {topCommercialSource?.pageLabel || 'Waiting for data'}
+            </h3>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {topCommercialSource
+                ? `${topCommercialSource.totalIntentActions} intent actions from ${topCommercialSource.pageViews} views.`
+                : 'No commercial intent data has been recorded yet.'}
+            </p>
+            {topCommercialSource && getPageFamilyPrimaryHref(topCommercialSource.pageType) && (
+              <Link
+                href={getPageFamilyPrimaryHref(topCommercialSource.pageType)!}
+                className='mt-3 inline-flex items-center gap-1 text-sm font-medium text-cyan-700 hover:text-cyan-800'
+              >
+                Open source page
+                <ArrowUpRight className='h-4 w-4' />
+              </Link>
+            )}
+          </div>
+          <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>What this means</p>
+            <h3 className='mt-1 text-xl font-bold text-slate-950'>
+              {topCommercialSource ? 'Follow the strongest commercial page family' : 'Wait for enough data to rank the family'}
+            </h3>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {topCommercialSource
+                ? 'If submit clicks are rising but claim or checkout stay flat, the landing page probably needs a clearer next step. If claim or checkout leads are rising, the offer and route are doing their job.'
+                : 'Once the site records more claim and checkout intent, this block will show which family deserves the next round of work.'}
+            </p>
           </div>
         </div>
       </div>
@@ -1936,7 +2114,9 @@ export default async function AdminAnalyticsPage({
                 key={item.key}
                 href={item.key === 'all' ? '/admin/analytics' : `/admin/analytics?range=${item.key}`}
                 className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-                  range === item.key ? 'bg-cyan-700 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                  range === item.key
+                    ? 'border border-cyan-200 bg-cyan-50 text-cyan-800'
+                    : 'border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100'
                 }`}
               >
                 {item.label}
@@ -2242,6 +2422,30 @@ export default async function AdminAnalyticsPage({
           </Link>
         </div>
 
+        <div
+          className={`mb-4 rounded-2xl border px-4 py-3 text-sm ${
+            featuredRenewalUrgent ? 'border-amber-200 bg-amber-50 text-amber-900' : 'border-slate-200 bg-white text-slate-700'
+          }`}
+        >
+          <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
+            <p className='font-semibold'>{featuredRenewalAlert}</p>
+            <div className='flex flex-wrap gap-2'>
+              <Link
+                href={`/${locale}/profile/submissions`}
+                className='inline-flex items-center justify-center rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50'
+              >
+                Open renewals
+              </Link>
+              <Link
+                href={`/${locale}/pricing`}
+                className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-xs font-semibold text-cyan-800 hover:bg-cyan-100'
+              >
+                Review pricing
+              </Link>
+            </div>
+          </div>
+        </div>
+
         <div className='mb-4 rounded-lg border border-cyan-100 bg-cyan-50 p-4 shadow-sm'>
           <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between'>
             <div>
@@ -2354,7 +2558,7 @@ export default async function AdminAnalyticsPage({
             </p>
           </div>
           <Link
-            href='/admin/tools?paidBlockers=1'
+            href='/admin/cleanup'
             className='inline-flex items-center gap-1 text-sm font-medium text-cyan-700 hover:text-cyan-800'
           >
             Open blocker queue
@@ -2509,7 +2713,7 @@ export default async function AdminAnalyticsPage({
       </div>
 
       {/* Developer Outreach Queue */}
-      <div className='mb-8'>
+      <div className='mb-8' id='outreach-queue'>
         <div className='mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
           <div>
             <h2 className='text-lg font-semibold text-slate-900'>Developer Outreach Queue</h2>
@@ -2517,13 +2721,73 @@ export default async function AdminAnalyticsPage({
               A lightweight weekly contact queue for claim invites, featured pitches, and content collaboration.
             </p>
           </div>
-          <div className='text-sm text-slate-500'>Target: 20 teams per week</div>
+          <div className='flex flex-wrap items-center gap-2 text-sm text-slate-500'>
+            <span>Target: 20 teams per week</span>
+            <span className='rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700'>
+              Showing {outreachFocusItems.length} / {outreachQueue.length}
+            </span>
+          </div>
+        </div>
+
+        <div className='mb-4 flex flex-wrap gap-2'>
+          {outreachFocusCards.map((item) => (
+            <Link
+              key={item.key}
+              href={buildOutreachHref(item.key)}
+              className={`rounded-lg px-3 py-1.5 text-sm font-medium ${
+                outreachFocus === item.key
+                  ? item.tone === 'amber'
+                    ? 'bg-amber-600 text-white'
+                    : item.tone === 'cyan'
+                      ? 'bg-cyan-700 text-white'
+                      : item.tone === 'emerald'
+                        ? 'bg-emerald-600 text-white'
+                        : item.tone === 'violet'
+                          ? 'bg-violet-600 text-white'
+                          : 'bg-slate-700 text-white'
+                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+              }`}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+
+        <div className='mb-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm'>
+          <div className='flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between'>
+            <div>
+              <p className='text-sm font-semibold text-slate-900'>
+                {locale === 'cn' || locale === 'tw' ? '当前执行建议' : 'Current playbook'}
+              </p>
+              <p className='mt-1 text-sm text-slate-600'>
+                {locale === 'cn' || locale === 'tw'
+                  ? '选一个 focus 之后，先按这个顺序处理最容易见效的 3 步。'
+                  : 'After choosing a focus, use these three steps to get the fastest win.'}
+              </p>
+            </div>
+            <Link
+              href={buildOutreachHref(outreachFocus)}
+              className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-cyan-800 hover:bg-cyan-100'
+            >
+              {locale === 'cn' || locale === 'tw' ? '保持当前 focus' : 'Keep current focus'}
+            </Link>
+          </div>
+          <div className='mt-4 grid gap-3 md:grid-cols-3'>
+            {outreachFocusAdvice.map((item, index) => (
+              <div key={item} className='rounded-xl border border-slate-200 bg-slate-50 p-3'>
+                <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                  {locale === 'cn' || locale === 'tw' ? `步骤 ${index + 1}` : `Step ${index + 1}`}
+                </p>
+                <p className='mt-2 text-sm leading-6 text-slate-700'>{item}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className='mb-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
           <div className='theme-surface rounded-lg border border-slate-200 p-5 shadow-sm'>
             <p className='text-sm font-medium text-slate-600'>Queued this week</p>
-            <p className='mt-2 text-3xl font-semibold text-slate-900'>{outreachQueue.length}</p>
+            <p className='mt-2 text-3xl font-semibold text-slate-900'>{outreachFocusItems.length}</p>
             <p className='mt-2 text-sm text-slate-500'>
               High-signal unclaimed published tools with reachable contacts.
             </p>
@@ -2551,6 +2815,10 @@ export default async function AdminAnalyticsPage({
               {outreachOverdueCount} overdue · {outreachDueTodayCount} due today
             </p>
           </div>
+        </div>
+
+        <div className='mb-4' id='email-ops'>
+          <AdminEmailOpsPanel summary={emailOpsSummary} />
         </div>
 
         <div className='mb-4 rounded-lg border border-cyan-200 bg-cyan-50 p-5 shadow-sm'>
@@ -2708,7 +2976,7 @@ export default async function AdminAnalyticsPage({
             <div className='flex flex-wrap gap-2'>
               <Link
                 href='/admin/claims?status=new'
-                className='inline-flex items-center justify-center rounded-lg bg-amber-600 px-3 py-2 text-sm font-semibold text-white hover:bg-amber-700'
+                className='inline-flex items-center justify-center rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-800 hover:bg-amber-100'
               >
                 Open new claims
               </Link>
@@ -2851,7 +3119,7 @@ export default async function AdminAnalyticsPage({
           </div>
         </div>
 
-        <AdminOutreachQueueTable items={outreachQueue} locale={locale} />
+        <AdminOutreachQueueTable items={outreachFocusItems} locale={locale} />
 
         {outreachNeedsClassification.length > 0 && (
           <div className='mt-6'>
