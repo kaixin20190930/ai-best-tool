@@ -153,6 +153,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   );
   const comparisonGuideHrefs = [
     '/guides/ai-tools-for-content-creation-comparison',
+    '/guides/chatgpt-alternatives-comparison',
+    '/guides/claude-alternatives-comparison',
+    '/guides/cursor-alternatives-comparison',
     '/guides/ai-writing-tools-comparison',
     '/guides/ai-seo-tools-comparison',
     '/guides/ai-tools-for-research-comparison',
