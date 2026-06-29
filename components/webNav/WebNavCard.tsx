@@ -71,7 +71,7 @@ export default function WebNavCard({
   const compareActionLabel = compareLabel || (isChinese ? '查看比较' : 'Compare');
 
   return (
-    <div className='flex h-full flex-col gap-4 rounded-lg bg-white p-3 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-md lg:p-4'>
+    <div className='flex flex-col gap-4 rounded-lg bg-white p-3 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-md lg:p-4'>
       <Link href={`/ai/${name}`} title={title}>
         <ToolCardMedia imageUrl={imageUrl} name={name} thumbnailUrl={thumbnailUrl} title={title} />
       </Link>

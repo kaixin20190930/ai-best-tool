@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getWebNavigationDetail } from '@/network/webNavigation';
 import {
+  ArrowRight,
   ArrowUpRight,
   CalendarDays,
   CheckCircle,
@@ -17,6 +18,7 @@ import {
   Sparkles,
   Star,
   Tag as TagIcon,
+  Target,
 } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
@@ -1975,10 +1977,17 @@ export default async function Page({
 
                 <div className='rounded-lg border border-slate-200 bg-white p-4 sm:p-5'>
                   <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                    {locale === 'cn' ? '下一步入口' : 'Next paths'}
+                    {locale === 'cn' ? '替代方案' : 'Alternatives'}
                   </p>
                   <p className='mt-2 text-lg font-semibold text-slate-950'>
-                    {locale === 'cn' ? '继续去更窄的比较页' : 'Continue into narrower comparison pages'}
+                    {locale === 'cn'
+                      ? '如果这款不合适，直接看更窄的比较页'
+                      : 'If this is not the right fit, jump to narrower comparison pages'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>
+                    {locale === 'cn'
+                      ? '这组入口适合用来替换当前 shortlist，而不是继续围着同一个工具打转。'
+                      : 'Use these pages to replace the current shortlist instead of circling the same tool.'}
                   </p>
                   <div className='mt-4 grid gap-3 lg:grid-cols-3'>
                     {nextComparisonLinks.map((item) => (
@@ -2035,6 +2044,84 @@ export default async function Page({
                         </li>
                       ))}
                     </ul>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section className='rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'>
+              <div className='mb-5 flex items-center gap-3'>
+                <Target className='size-6 text-cyan-600' />
+                <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>
+                  {locale === 'cn' ? '快速决策' : 'Quick decision'}
+                </h2>
+              </div>
+              <p className='max-w-3xl text-sm leading-6 text-slate-600'>
+                {locale === 'cn'
+                  ? '先看这四块，再决定要不要继续比、直接打开官网，还是回到更窄的对比页。'
+                  : 'Use these four cards to decide whether to keep comparing, open the official site, or jump to a narrower alternative page.'}
+              </p>
+              <div className='mt-5 grid gap-4 lg:grid-cols-2 xl:grid-cols-4'>
+                <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                    {locale === 'cn' ? '适合谁' : 'Suitable for'}
+                  </p>
+                  <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
+                    {(bestFitList.length > 0 ? bestFitList : [categoryName]).slice(0, 4).map((item) => (
+                      <li key={item} className='flex gap-2'>
+                        <CheckCircle className='mt-1 size-4 shrink-0 text-emerald-600' />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                    {locale === 'cn' ? '不太适合' : 'Not suitable for'}
+                  </p>
+                  <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
+                    {(notIdealForList.length > 0 ? notIdealForList : verificationChecklist).slice(0, 4).map((item) => (
+                      <li key={item} className='flex gap-2'>
+                        <CircleArrowRight className='mt-1 size-4 shrink-0 text-slate-500' />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                    {locale === 'cn' ? '替代方案' : 'Alternatives'}
+                  </p>
+                  <div className='mt-3 space-y-3'>
+                    {nextComparisonLinks.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className='block rounded-lg border border-white bg-white p-3 transition hover:-translate-y-0.5 hover:bg-slate-50'
+                      >
+                        <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                        <p className='mt-1 text-sm leading-6 text-slate-600'>{item.description}</p>
+                        <span className='mt-3 inline-flex items-center gap-1 rounded-full bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-cyan-700'>
+                          {locale === 'cn' ? '打开这个替代页' : 'Open this alternative'}
+                          <ArrowRight className='size-3.5' />
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                    {locale === 'cn' ? '定价快照' : 'Pricing snapshot'}
+                  </p>
+                  <p className='mt-3 text-base font-semibold text-slate-950'>{pricingLabel}</p>
+                  <p className='mt-2 text-sm leading-6 text-slate-700'>{pricingSummary}</p>
+                  <div className='mt-4 rounded-lg border border-white bg-white p-3 text-sm leading-6 text-slate-600'>
+                    {locale === 'cn'
+                      ? '如果价格、试用和升级门槛都合适，再继续看详情和官网。'
+                      : 'If pricing, trial access, and upgrade limits look right, continue into the detail page and the official site.'}
                   </div>
                 </div>
               </div>
@@ -2106,63 +2193,6 @@ export default async function Page({
                   </span>
                   <span className='h-px flex-1 bg-slate-200' />
                 </div>
-                <section id='comments' className='relative isolate clear-both scroll-mt-28 pt-12'>
-                  <Separator className='mb-10 border-t border-slate-200' />
-                  <div className='mb-3 rounded-lg bg-white p-3 shadow-sm ring-1 ring-slate-200 sm:p-4'>
-                    <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-3'>
-                      <div className='max-w-2xl'>
-                        <h3 className='text-base font-semibold text-slate-900'>
-                          {locale === 'cn' ? '参与讨论，看看真实反馈' : 'Join the discussion and follow updates'}
-                        </h3>
-                        <p className='mt-1 text-sm leading-6 text-slate-600'>
-                          {locale === 'cn'
-                            ? '收藏、分享给团队，或者直接留下你的真实使用体验。'
-                            : 'Save this tool, share it with your team, and leave your review.'}
-                        </p>
-                      </div>
-                      <div className='flex flex-wrap items-center gap-2 sm:pt-0.5'>
-                        {user ? (
-                          <>
-                            <FavoriteButton toolId={toolId} initialState={isFavoritedByUser} showLabel />
-                            <ShareButton
-                              toolId={toolId}
-                              toolName={websiteName}
-                              toolTitle={data.title}
-                              toolDescription={data.content}
-                              userId={user.id}
-                            />
-                          </>
-                        ) : (
-                          <Link
-                            href={`/${locale}/login?redirect=/${locale}/ai/${websiteName}`}
-                            className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-2 text-sm font-semibold text-white hover:bg-cyan-800'
-                          >
-                            {locale === 'cn'
-                              ? '登录后收藏、评论并关注更新'
-                              : 'Log in to save, comment, and follow updates'}
-                          </Link>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className='mb-4 rounded-lg border border-cyan-100 bg-cyan-50 px-4 py-3 text-sm leading-6 text-cyan-900'>
-                    {locale === 'cn'
-                      ? '先看官网和相似工具，再回来写真实体验：适合什么场景、哪里最好用、有什么坑，都会帮到后来的人。'
-                      : 'Open the official site and compare similar tools first, then come back and share what really worked, what didn’t, and what to watch out for.'}
-                  </div>
-                  <CommentList
-                    toolId={toolId}
-                    currentUserId={user?.id}
-                    locale={locale}
-                    promptLabel={commentPromptLabel}
-                    starterPrompts={commentStarterPrompts}
-                    placeholder={
-                      locale === 'cn'
-                        ? '说说你的真实使用体验，比如适合什么场景、有什么优点或注意点。'
-                        : 'Tell us your real experience: best use cases, strengths, or anything to watch out for.'
-                    }
-                  />
-                </section>
               </>
             )}
           </main>
@@ -2180,7 +2210,7 @@ export default async function Page({
               <div className='mt-4 space-y-4'>
                 <div>
                   <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                    {locale === 'cn' ? '适合谁' : 'Best fit'}
+                    {locale === 'cn' ? '适合谁' : 'Suitable for'}
                   </p>
                   <div className='mt-2 flex flex-wrap gap-2'>
                     {(bestFitList.slice(0, 2).length > 0 ? bestFitList.slice(0, 2) : [categoryName]).map((item) => (
@@ -2196,7 +2226,7 @@ export default async function Page({
 
                 <div>
                   <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                    {locale === 'cn' ? '不太适合' : 'Less ideal for'}
+                    {locale === 'cn' ? '不太适合' : 'Not suitable for'}
                   </p>
                   <div className='mt-2 flex flex-wrap gap-2'>
                     {(notIdealForList.slice(0, 2).length > 0
@@ -2211,6 +2241,13 @@ export default async function Page({
                       </span>
                     ))}
                   </div>
+                </div>
+
+                <div>
+                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                    {locale === 'cn' ? '定价快照' : 'Pricing snapshot'}
+                  </p>
+                  <p className='mt-2 text-sm leading-6 text-slate-700'>{pricingSummary}</p>
                 </div>
 
                 <div>
@@ -2321,6 +2358,64 @@ export default async function Page({
             )}
           </aside>
         </div>
+
+        {toolId && (
+          <section id='comments' className='mx-auto mt-12 max-w-7xl scroll-mt-28 px-4 pb-12 lg:px-6'>
+            <Separator className='mb-10 border-t border-slate-200' />
+            <div className='mb-3 rounded-lg bg-white p-3 shadow-sm ring-1 ring-slate-200 sm:p-4'>
+              <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-3'>
+                <div className='max-w-2xl'>
+                  <h3 className='text-base font-semibold text-slate-900'>
+                    {locale === 'cn' ? '参与讨论，看看真实反馈' : 'Join the discussion and follow updates'}
+                  </h3>
+                  <p className='mt-1 text-sm leading-6 text-slate-600'>
+                    {locale === 'cn'
+                      ? '收藏、分享给团队，或者直接留下你的真实使用体验。'
+                      : 'Save this tool, share it with your team, and leave your review.'}
+                  </p>
+                </div>
+                <div className='flex flex-wrap items-center gap-2 sm:pt-0.5'>
+                  {user ? (
+                    <>
+                      <FavoriteButton toolId={toolId} initialState={isFavoritedByUser} showLabel />
+                      <ShareButton
+                        toolId={toolId}
+                        toolName={websiteName}
+                        toolTitle={data.title}
+                        toolDescription={data.content}
+                        userId={user.id}
+                      />
+                    </>
+                  ) : (
+                    <Link
+                      href={`/${locale}/login?redirect=/${locale}/ai/${websiteName}`}
+                      className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-2 text-sm font-semibold text-white hover:bg-cyan-800'
+                    >
+                      {locale === 'cn' ? '登录后收藏、评论并关注更新' : 'Log in to save, comment, and follow updates'}
+                    </Link>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className='mb-4 rounded-lg border border-cyan-100 bg-cyan-50 px-4 py-3 text-sm leading-6 text-cyan-900'>
+              {locale === 'cn'
+                ? '先看官网和相似工具，再回来写真实体验：适合什么场景、哪里最好用、有什么坑，都会帮到后来的人。'
+                : 'Open the official site and compare similar tools first, then come back and share what really worked, what didn’t, and what to watch out for.'}
+            </div>
+            <CommentList
+              toolId={toolId}
+              currentUserId={user?.id}
+              locale={locale}
+              promptLabel={commentPromptLabel}
+              starterPrompts={commentStarterPrompts}
+              placeholder={
+                locale === 'cn'
+                  ? '说说你的真实使用体验，比如适合什么场景、有什么优点或注意点。'
+                  : 'Tell us your real experience: best use cases, strengths, or anything to watch out for.'
+              }
+            />
+          </section>
+        )}
       </div>
     </>
   );
