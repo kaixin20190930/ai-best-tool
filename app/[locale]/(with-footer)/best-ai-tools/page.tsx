@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, Layers3, Sparkles, Star, Target } from 'lucide-react';
 
-import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import { topListTopics } from '@/lib/data/topLists';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const isChinese = locale === 'cn' || locale === 'tw';
@@ -18,6 +18,10 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 
 export default function BestAiToolsPage({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
+  const priorityTopicKeys = ['ai-content-creation-tools', 'ai-coding-tools', 'ai-video-tools', 'ai-writing-tools'];
+  const priorityTopics = priorityTopicKeys
+    .map((key) => topListTopics.find((topic) => topic.key === key))
+    .filter((topic): topic is (typeof topListTopics)[number] => Boolean(topic));
 
   return (
     <div className='theme-page mx-auto max-w-pc px-4 py-8 lg:px-0'>
@@ -86,6 +90,35 @@ export default function BestAiToolsPage({ params: { locale } }: { params: { loca
           </div>
 
           <div className='bg-slate-50 p-6 lg:p-10'>
+            <div className='rounded-2xl border border-cyan-100 bg-cyan-50 p-5'>
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-sm font-semibold uppercase tracking-wide text-cyan-800'>
+                    {isChinese ? '优先榜单' : 'Priority lists'}
+                  </p>
+                  <h2 className='mt-1 text-xl font-bold text-slate-950'>
+                    {isChinese ? '先看这四个高意图榜单' : 'Start with the four highest-intent lists'}
+                  </h2>
+                </div>
+              </div>
+              <div className='mt-4 grid gap-3 sm:grid-cols-2'>
+                {priorityTopics.map((topic) => (
+                  <Link
+                    key={topic.key}
+                    href={`/${locale}/best-ai-tools/${topic.key}`}
+                    className='rounded-xl border border-cyan-100 bg-white p-4 transition hover:border-cyan-300 hover:shadow-sm'
+                  >
+                    <p className='text-sm font-semibold text-slate-950'>{topic.title}</p>
+                    <p className='mt-1 text-xs leading-5 text-slate-500'>{topic.description}</p>
+                    <p className='mt-3 inline-flex items-center gap-1 text-sm font-semibold text-cyan-700'>
+                      {isChinese ? '打开榜单' : 'Open list'}
+                      <ArrowRight className='size-4' />
+                    </p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
             <div className='grid gap-4 sm:grid-cols-2'>
               {topListTopics.map((topic) => (
                 <Link
