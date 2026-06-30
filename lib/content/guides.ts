@@ -1729,6 +1729,110 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
       en: 'Compare common Zapier alternatives side by side.',
     },
   },
+  {
+    href: '/guides/writing-tools',
+    priority: 0.74,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 写作工具推荐',
+      en: 'AI writing tools',
+    },
+    desc: {
+      cn: '适合写作、改写、内容生成和文案工作流。',
+      en: 'For writing, rewriting, content generation, and copy workflows.',
+    },
+  },
+  {
+    href: '/guides/developer-tools',
+    priority: 0.75,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 开发者工具推荐',
+      en: 'AI developer tools',
+    },
+    desc: {
+      cn: '适合编码、调试、自动化和开发工作流。',
+      en: 'For coding, debugging, automation, and developer workflows.',
+    },
+  },
+  {
+    href: '/guides/research-tools',
+    priority: 0.75,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 研究工具推荐',
+      en: 'AI research tools',
+    },
+    desc: {
+      cn: '适合资料检索、分析、证据核对和研究工作流。',
+      en: 'For discovery, analysis, evidence-checking, and research workflows.',
+    },
+  },
+  {
+    href: '/guides/marketing-tools',
+    priority: 0.73,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 营销工具推荐',
+      en: 'AI marketing tools',
+    },
+    desc: {
+      cn: '适合广告、增长、社媒和营销团队。',
+      en: 'For ads, growth, social, and marketing teams.',
+    },
+  },
+  {
+    href: '/guides/sales-tools',
+    priority: 0.73,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 销售工具推荐',
+      en: 'AI sales tools',
+    },
+    desc: {
+      cn: '适合销售、线索跟进和客户沟通。',
+      en: 'For sales, lead follow-up, and customer communication.',
+    },
+  },
+  {
+    href: '/guides/voice-tools',
+    priority: 0.74,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 语音工具推荐',
+      en: 'AI voice tools',
+    },
+    desc: {
+      cn: '适合语音合成、转写、配音和对话助手。',
+      en: 'For voice synthesis, transcription, dubbing, and conversational assistants.',
+    },
+  },
+  {
+    href: '/guides/automation-tools',
+    priority: 0.75,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 自动化工具推荐',
+      en: 'AI automation tools',
+    },
+    desc: {
+      cn: '适合流程编排、Agent 工作流和重复任务自动化。',
+      en: 'For workflow orchestration, agent workflows, and repeatable automation.',
+    },
+  },
+  {
+    href: '/guides/agent-tools',
+    priority: 0.77,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI Agent 工具推荐',
+      en: 'AI agent tools',
+    },
+    desc: {
+      cn: '适合 Agent 工作流、任务编排、工具调用和执行治理。',
+      en: 'For agent workflows, task orchestration, tool use, and execution governance.',
+    },
+  },
 ];
 
 export const FEATURED_GUIDE_HREFS = [
