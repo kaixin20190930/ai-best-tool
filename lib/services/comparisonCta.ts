@@ -36,6 +36,34 @@ export function getComparisonCtaFromTags(tags: string[] = [], locale = 'en'): Co
     };
   }
 
+  if (hasAnyTag(['agency', 'client-service', 'consultancy', 'service-team', 'studio'])) {
+    return {
+      compareHref: '/guides/ai-tools-for-agencies-comparison',
+      compareLabel: isChinese ? '去比较代理工具' : 'Compare agency tools',
+    };
+  }
+
+  if (hasAnyTag(['ecommerce', 'shopify', 'store', 'merchandising', 'checkout', 'cart', 'conversion'])) {
+    return {
+      compareHref: '/guides/ai-tools-for-ecommerce-comparison',
+      compareLabel: isChinese ? '去比较电商工具' : 'Compare ecommerce tools',
+    };
+  }
+
+  if (hasAnyTag(['small-business', 'small team', 'solopreneur', 'solo-founder', 'owner-operator', 'startup-ops'])) {
+    return {
+      compareHref: '/guides/ai-tools-for-small-business-comparison',
+      compareLabel: isChinese ? '去比较小企业工具' : 'Compare small-business tools',
+    };
+  }
+
+  if (hasAnyTag(['creator', 'content-creator', 'blogger', 'youtube', 'creator-workflow'])) {
+    return {
+      compareHref: '/guides/ai-tools-for-creators-comparison',
+      compareLabel: isChinese ? '去比较创作者工具' : 'Compare creator tools',
+    };
+  }
+
   if (hasAnyTag(['wallet-tracking', 'wallet-monitoring', 'smart-money', 'address-analysis'])) {
     return {
       compareHref: '/guides/ai-tools-for-wallet-monitoring-comparison',
