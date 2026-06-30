@@ -190,6 +190,25 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                     : 'Best for coding, debugging, and refactoring differences.',
                 },
                 {
+                  href: '/guides/ai-tools-for-agents-comparison',
+                  title: isChinese ? 'AI Agent 工具对比' : 'AI agent tools comparison',
+                  desc: isChinese
+                    ? '适合看执行、调用和控制差异。'
+                    : 'Best for execution, tool use, and control differences.',
+                },
+                {
+                  href: '/guides/ai-tools-for-api-observability-comparison',
+                  title: isChinese ? 'AI API 可观测性工具对比' : 'AI API observability tools comparison',
+                  desc: isChinese ? '适合看日志、追踪和成本可见度。' : 'Best for logs, tracing, and cost visibility.',
+                },
+                {
+                  href: '/guides/ai-tools-for-model-routing-comparison',
+                  title: isChinese ? 'AI 模型路由工具对比' : 'AI model routing tools comparison',
+                  desc: isChinese
+                    ? '适合看多模型接入、回退与治理。'
+                    : 'Best for model access, fallbacks, and governance.',
+                },
+                {
                   href: '/guides/ai-video-tools-comparison',
                   title: isChinese ? 'AI 视频工具对比' : 'AI video tools comparison',
                   desc: isChinese
@@ -453,8 +472,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               </h2>
               <p className='mt-2 text-sm leading-6 text-slate-600'>
                 {isChinese
-                  ? '先看总选型，再按工作流或行业进入更具体的指南，最后回到分类页或工具详情页做真实比较。'
-                  : 'Start with selection logic, move into workflow or industry-specific guides, then return to categories and tool pages for real comparisons.'}
+                  ? '先看总选型，再按工作流或行业进入更具体的指南，最后回到分类页、榜单页或工具详情页做真实比较。'
+                  : 'Start with selection logic, move into workflow or industry-specific guides, then return to categories, ranked lists, and tool pages for real comparisons.'}
               </p>
             </div>
           </div>
