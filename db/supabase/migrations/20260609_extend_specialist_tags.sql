@@ -7,9 +7,13 @@ INSERT INTO tags (name, slug) VALUES
   ('{"en": "Speech to Text", "zh": "语音转文字"}', 'speech-to-text'),
   ('{"en": "Text to Speech", "zh": "文字转语音"}', 'text-to-speech'),
   ('{"en": "Workflow Automation", "zh": "工作流自动化"}', 'workflow-automation'),
+  ('{"en": "Agency", "zh": "代理"}', 'agency'),
+  ('{"en": "Creator", "zh": "创作者"}', 'creator'),
   ('{"en": "Voice", "zh": "语音"}', 'voice'),
   ('{"en": "Automation", "zh": "自动化"}', 'automation'),
   ('{"en": "Research", "zh": "研究"}', 'research'),
-  ('{"en": "Developer Tools", "zh": "开发者工具"}', 'developer-tools')
+  ('{"en": "Developer Tools", "zh": "开发者工具"}', 'developer-tools'),
+  ('{"en": "Ecommerce", "zh": "电商"}', 'ecommerce'),
+  ('{"en": "Small Business", "zh": "小企业"}', 'small-business')
 ON CONFLICT (slug) DO UPDATE SET
   name = EXCLUDED.name;
