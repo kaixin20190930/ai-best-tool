@@ -1,0 +1,154 @@
+import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
+
+import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
+  return buildComparisonMetadata(
+    locale,
+    locale === 'cn' || locale === 'tw' ? 'AI 客服工具对比' : 'AI customer support tools comparison',
+    locale === 'cn' || locale === 'tw'
+      ? '对比几款常见的 AI 客服工作流工具，帮你更快判断回复、分流和知识库能力。'
+      : 'Compare common AI customer support workflow tools to judge replies, triage, and knowledge-base fit faster.',
+  );
+}
+
+export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+  const data = await buildComparisonPageData(locale, {
+    categoryLabel: { cn: '客服工具', en: 'Customer support tools' },
+    comparisonLabel: { cn: 'AI 客服工具对比', en: 'AI customer support tools comparison' },
+    description: {
+      cn: '如果你已经知道自己要比的是客服回复、知识库接入、工单分流和人工接手，这一页会帮你把常见候选放在一起看，减少反复试错。',
+      en: 'If you already know the workflow is about replies, knowledge-base access, ticket triage, and human handoff, this page helps you compare common options side by side and reduce trial-and-error.',
+    },
+    searchQuery: 'support',
+    guideHref: '/guides/ai-tools-for-customer-support',
+    rankingHref: '/best-ai-tools/ai-small-business-tools',
+    rankingLabel: { cn: '转去小企业榜单页', en: 'Open the small-business ranking' },
+    backGuideLabel: { cn: '回到客服指南', en: 'Back to customer support guide' },
+    altBrowseHref: '/explore?search=support&sort=popular',
+    altBrowseLabel: { cn: '浏览更多客服工具', en: 'Browse more support tools' },
+    breadcrumbLabel: { cn: '客服工具对比', en: 'Customer support tools comparison' },
+    compareTitle: { cn: '几款常见客服工具的快速对照', en: 'A quick side-by-side look at common support tools' },
+    compareSubtitle: { cn: '客服工作流', en: 'Support workflow' },
+    preferredToolNames: ['chatgpt-mac', 'anthropic', 'gemini', 'notion'],
+    toolSelectionNotes: {
+      'chatgpt-mac': {
+        bestFor: {
+          cn: '快速写回复草稿和通用支持场景',
+          en: 'Fast reply drafts and general support use cases',
+        },
+        whyPickIt: {
+          cn: '适合把一线客服的上下文快速整理成可发出的回答。',
+          en: 'Good for turning frontline context into a sendable response quickly.',
+        },
+        watchOut: {
+          cn: '如果你需要严格的工单流程和知识库治理，还要继续看集成能力。',
+          en: 'If you need strict ticketing workflows and knowledge-base governance, keep checking integrations.',
+        },
+      },
+      anthropic: {
+        bestFor: {
+          cn: '较长上下文、政策解释和更稳的文本推理',
+          en: 'Long context, policy explanation, and steadier text reasoning',
+        },
+        whyPickIt: {
+          cn: '适合处理较复杂的客服规则、退款政策和多段对话。',
+          en: 'Well suited for complex support policies, refunds, and multi-turn conversations.',
+        },
+        watchOut: {
+          cn: '如果要直接接入工单或知识库，还是要看你现有系统怎么连。',
+          en: 'If you need direct ticketing or knowledge-base integration, check how your current stack connects.',
+        },
+      },
+      gemini: {
+        bestFor: {
+          cn: 'Google 生态里的支持协作和文档场景',
+          en: 'Support collaboration and document-heavy workflows in the Google ecosystem',
+        },
+        whyPickIt: {
+          cn: '适合和 Gmail、Docs、Drive 这类环境一起用。',
+          en: 'A practical fit if your team already works in Gmail, Docs, and Drive.',
+        },
+        watchOut: {
+          cn: '如果你的客服流程更依赖专门工单系统，先确认联动是否顺手。',
+          en: 'If your support process depends on dedicated ticketing, make sure the handoff feels natural.',
+        },
+      },
+      notion: {
+        bestFor: {
+          cn: '内部知识库、FAQ 管理和处理规范沉淀',
+          en: 'Internal knowledge bases, FAQ management, and process documentation',
+        },
+        whyPickIt: {
+          cn: '适合把客服话术、政策和常见问题整理成团队可复用的知识页。',
+          en: 'Great for turning support scripts, policies, and FAQs into reusable team docs.',
+        },
+        watchOut: {
+          cn: '如果你要的是实时工单响应，Notion 更像知识底座而不是前台客服系统。',
+          en: 'If you need live ticket response, Notion is more of a knowledge layer than a frontline support system.',
+        },
+      },
+    },
+    nextPaths: [
+      {
+        href: '/guides/ai-tools-for-customer-support',
+        title: { cn: '先看客服指南', en: 'Start with the support guide' },
+        description: {
+          cn: '如果你还在定义比较维度，先回到指南页更容易建立判断。',
+          en: 'If you still need to define comparison criteria, start from the guide first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-automation-comparison',
+        title: { cn: '转去自动化工具对比', en: 'Switch to automation comparison' },
+        description: {
+          cn: '如果你真正想比的是分流、通知和自动化流，这一页更贴近。',
+          en: 'Go there if the real need is triage, notifications, and automation flows.',
+        },
+      },
+      {
+        href: '/guides/ai-chatbot-tools-comparison',
+        title: { cn: '转去聊天机器人对比', en: 'Switch to chatbot comparison' },
+        description: {
+          cn: '如果你更关心通用问答和对话体验，这页更适合。',
+          en: 'Move there if general Q&A and conversational quality matter more.',
+        },
+      },
+    ],
+    tips: {
+      cn: [
+        '先看回复、分流、知识库和人工接手，别只盯着模型输出。',
+        '如果你已经有工单系统，优先看集成和权限，而不是单点功能。',
+        '长期使用时，政策更新、可追踪性和团队协作通常比“好看回答”更重要。',
+      ],
+      en: [
+        'Start with replies, triage, knowledge-base access, and human handoff rather than only raw model output.',
+        'If you already have ticketing software, prioritize integrations and permissions over isolated features.',
+        'For long-term use, policy updates, traceability, and team collaboration usually matter more than “nice-looking” answers.',
+      ],
+    },
+    faqs: [
+      {
+        question: { cn: '你们比较的重点是什么？', en: 'What do you compare?' },
+        answer: {
+          cn: '我们主要看回复质量、知识库接入、工单分流、人工接手和团队协作。',
+          en: 'We compare reply quality, knowledge-base access, ticket triage, human handoff, and team collaboration.',
+        },
+      },
+      {
+        question: { cn: '为什么客服要单独看？', en: 'Why compare support tools separately?' },
+        answer: {
+          cn: '因为客服场景更看重上下文、语气、规则和流程，和通用聊天工具并不完全一样。',
+          en: 'Because support work depends more on context, tone, rules, and workflow than a generic chat experience.',
+        },
+      },
+    ],
+  });
+
+  return (
+    <>
+      {ComparisonPage({ ...data, locale })}
+      <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_customer_support_comparison' />
+    </>
+  );
+}

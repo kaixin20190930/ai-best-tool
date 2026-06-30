@@ -326,6 +326,32 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-tools-for-customer-support',
+    priority: 0.73,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 客服工具推荐',
+      en: 'AI tools for customer support',
+    },
+    desc: {
+      cn: '适合回复草稿、知识库问答、分流和客服自动化。',
+      en: 'For reply drafts, knowledge-base Q&A, triage, and support automation.',
+    },
+  },
+  {
+    href: '/guides/ai-tools-for-customer-support-comparison',
+    priority: 0.77,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 客服工具对比',
+      en: 'AI customer support tools comparison',
+    },
+    desc: {
+      cn: '把常见客服工作流工具放在一起快速对照。',
+      en: 'Compare common customer support workflow tools side by side.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-creators',
     priority: 0.73,
     changeFrequency: 'monthly',
@@ -1877,6 +1903,8 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/ai-tools-for-sales-comparison',
   '/guides/ai-sales-tools-comparison',
   '/guides/ai-tools-for-lead-generation-comparison',
+  '/guides/ai-tools-for-customer-support',
+  '/guides/ai-tools-for-customer-support-comparison',
   '/guides/ai-tools-for-code-review',
   '/guides/ai-tools-for-prompt-testing',
   '/guides/ai-tools-for-evals',

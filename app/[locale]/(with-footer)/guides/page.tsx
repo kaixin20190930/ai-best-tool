@@ -82,6 +82,14 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ]
     .map((href) => pickGuide(href))
     .filter((item): item is (typeof GUIDE_PAGES)[number] => Boolean(item));
+  const supportGuides = [
+    '/guides/ai-tools-for-customer-support',
+    '/guides/ai-tools-for-customer-support-comparison',
+    '/guides/ai-chatbot-tools-comparison',
+    '/guides/ai-tools-for-automation-comparison',
+  ]
+    .map((href) => pickGuide(href))
+    .filter((item): item is (typeof GUIDE_PAGES)[number] => Boolean(item));
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
     { name: isChinese ? '指南总览' : 'Guides', url: `${siteUrl}/${locale}/guides` },
@@ -289,6 +297,44 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   : 'The sharpest entry point for on-chain analysis, research, and infra workflows.'}
               </p>
             </Link>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
+          <div className='flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between'>
+            <div>
+              <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+                {isChinese ? '客服与运营路径' : 'Support and operations paths'}
+              </p>
+              <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+                {isChinese
+                  ? '如果你的业务里有客服和分流，这几页最值得先看'
+                  : 'If support and triage matter in your business, start with these pages'}
+              </h2>
+            </div>
+            <p className='max-w-3xl text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '客服场景通常和知识库、自动化和团队协作一起出现，单独看一页往往不够。'
+                : 'Support work usually shows up alongside knowledge bases, automation, and team collaboration, so one page is rarely enough.'}
+            </p>
+          </div>
+
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {supportGuides.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className='group rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-cyan-50/60'
+              >
+                <div className='flex items-start justify-between gap-3'>
+                  <div>
+                    <p className='text-sm font-semibold text-slate-950'>{item.title[isChinese ? 'cn' : 'en']}</p>
+                    <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc[isChinese ? 'cn' : 'en']}</p>
+                  </div>
+                  <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-slate-700' />
+                </div>
+              </Link>
+            ))}
           </div>
         </section>
 
