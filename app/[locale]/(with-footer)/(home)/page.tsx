@@ -172,9 +172,12 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     '/guides/ai-tools-for-sales-comparison',
     '/guides/ai-tools-for-lead-generation-comparison',
     '/guides/ai-tools-for-sales-prospecting-comparison',
+    '/guides/ai-tools-for-research-comparison',
+    '/guides/ai-tools-for-developers-comparison',
+    '/guides/ai-tools-for-api-observability-comparison',
+    '/guides/ai-tools-for-model-routing-comparison',
     '/guides/ai-tools-for-meeting-notes-comparison',
     '/guides/ai-tools-for-voice-comparison',
-    '/guides/ai-tools-for-research-comparison',
   ] as const;
   const comparisonGuidePages = comparisonGuideHrefs
     .map((href) => GUIDE_PAGES.find((page) => page.href === href))
