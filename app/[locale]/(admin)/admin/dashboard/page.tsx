@@ -64,10 +64,10 @@ export default async function AdminDashboard({
   const pageAccessReport = await getPageAccessReport('30d', 6);
   const conversionSnapshot = await getConversionSnapshot('30d');
   const submissionFunnel = await getSubmissionFunnelStats('30d');
-  const claimedToolsCount = Number((toolsStats as { claimed?: number }).claimed ?? 0);
-  const claimPendingCount = Number((toolsStats as { claimPending?: number }).claimPending ?? 0);
-  const claimRejectedCount = Number((toolsStats as { claimRejected?: number }).claimRejected ?? 0);
-  const claimUnclaimedCount = Number((toolsStats as { claimUnclaimed?: number }).claimUnclaimed ?? 0);
+  const claimedToolsCount = toolsStats.claimed;
+  const claimPendingCount = toolsStats.claimPending;
+  const claimRejectedCount = toolsStats.claimRejected;
+  const claimUnclaimedCount = toolsStats.claimUnclaimed;
 
   const metrics = [
     {
@@ -114,6 +114,37 @@ export default async function AdminDashboard({
           ? `${paidListingBlockers.blockerCounts[0].label} is the top missing field`
           : 'No blocker backlog right now',
       color: 'red',
+    },
+  ];
+
+  const claimHealthCards = [
+    {
+      name: 'Claimed',
+      value: claimedToolsCount,
+      subtext: 'Already tied to an owner email',
+      href: '/admin/owners?status=owner_email',
+      tone: 'emerald',
+    },
+    {
+      name: 'Pending',
+      value: claimPendingCount,
+      subtext: 'Waiting for manual confirmation',
+      href: '/admin/claims?status=pending',
+      tone: 'amber',
+    },
+    {
+      name: 'Rejected',
+      value: claimRejectedCount,
+      subtext: 'Claims that need correction or follow-up',
+      href: '/admin/claims?status=rejected',
+      tone: 'rose',
+    },
+    {
+      name: 'Unclaimed',
+      value: claimUnclaimedCount,
+      subtext: 'Potential owner leads still open',
+      href: '/admin/owners?status=unclaimed',
+      tone: 'slate',
     },
   ];
 
@@ -477,11 +508,48 @@ export default async function AdminDashboard({
       <div className='mt-8'>
         <div className='mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
           <div>
-            <h2 className='text-lg font-semibold text-slate-900'>Today&apos;s Focus</h2>
-            <p className='mt-1 text-sm text-slate-600'>The fastest paths to revenue or cleanup right now.</p>
+            <h2 className='text-lg font-semibold text-slate-900'>Owner Health</h2>
+            <p className='mt-1 text-sm text-slate-600'>
+              The claim lifecycle at a glance, so operators can follow up without digging through tables.
+            </p>
           </div>
           <Link href='/admin/owners' className='text-sm font-medium text-cyan-700 hover:underline'>
             Open owner dashboard
+          </Link>
+        </div>
+        <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
+          {claimHealthCards.map((item) => (
+            <Link
+              key={item.name}
+              href={item.href}
+              className='theme-surface rounded-lg border border-slate-200 p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-cyan-200 hover:shadow-md'
+            >
+              <div className='flex items-start justify-between gap-3'>
+                <div>
+                  <p className='text-sm font-medium text-slate-600'>{item.name}</p>
+                  <p className='mt-2 text-3xl font-semibold text-slate-900'>{item.value}</p>
+                </div>
+                <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${getFocusToneClasses(item.tone)}`}>
+                  Claim
+                </span>
+              </div>
+              <p className='mt-3 text-sm leading-6 text-slate-600'>{item.subtext}</p>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      <div className='mt-8'>
+        <div className='mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
+          <div>
+            <h2 className='text-lg font-semibold text-slate-900'>Today&apos;s Focus</h2>
+            <p className='mt-1 text-sm text-slate-600'>The fastest paths to revenue or cleanup right now.</p>
+          </div>
+          <Link
+            href='/admin/analytics?outreach=claim#outreach-queue'
+            className='text-sm font-medium text-cyan-700 hover:underline'
+          >
+            Open claim outreach
           </Link>
         </div>
         <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
