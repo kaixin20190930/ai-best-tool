@@ -136,6 +136,18 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ]
     .map((href) => pickGuide(href))
     .filter((item): item is (typeof GUIDE_PAGES)[number] => Boolean(item));
+  const businessGuides = [
+    '/guides/ai-productivity-tools',
+    '/guides/ai-productivity-tools-comparison',
+    '/guides/ai-tools-for-small-business',
+    '/guides/ai-tools-for-small-business-comparison',
+    '/guides/ai-tools-for-ecommerce',
+    '/guides/ai-tools-for-ecommerce-comparison',
+    '/guides/ai-tools-for-students',
+    '/guides/ai-tools-for-students-comparison',
+  ]
+    .map((href) => pickGuide(href))
+    .filter((item): item is (typeof GUIDE_PAGES)[number] => Boolean(item));
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
     { name: isChinese ? '指南总览' : 'Guides', url: `${siteUrl}/${locale}/guides` },
@@ -519,6 +531,44 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
           <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-3'>
             {creativeGuides.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className='group rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-cyan-50/60'
+              >
+                <div className='flex items-start justify-between gap-3'>
+                  <div>
+                    <p className='text-sm font-semibold text-slate-950'>{item.title[isChinese ? 'cn' : 'en']}</p>
+                    <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc[isChinese ? 'cn' : 'en']}</p>
+                  </div>
+                  <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-slate-700' />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
+          <div className='flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between'>
+            <div>
+              <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+                {isChinese ? '商业与效率路径' : 'Business and productivity paths'}
+              </p>
+              <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+                {isChinese
+                  ? '如果你的目标是效率、店铺和小团队，这几页最值得先看'
+                  : 'If your goal is efficiency, stores, and small teams, start with these pages'}
+              </h2>
+            </div>
+            <p className='max-w-3xl text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '生产力、电商、小企业和学生场景经常是同一批用户，先把这些入口前置可以更快送到比较页。'
+                : 'Productivity, ecommerce, small business, and student workflows often share the same users, and surfacing them early helps push people toward comparison pages faster.'}
+            </p>
+          </div>
+
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {businessGuides.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
