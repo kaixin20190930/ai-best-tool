@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import { getSearchHistory, getSearchSuggestions } from '@/app/actions/search';
+import { clearSearchHistory, getSearchHistory, getSearchSuggestions } from '@/app/actions/search';
 
 interface SearchProps {
   onSearch?: (query: string) => void;
@@ -25,6 +25,7 @@ export default function Search({
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [showSuggestionsList, setShowSuggestionsList] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isClearingHistory, setIsClearingHistory] = useState(false);
   const suggestionsRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -127,8 +128,21 @@ export default function Search({
   };
 
   const handleInputFocus = () => {
-    if (suggestions.length > 0) {
+    if (suggestions.length > 0 || recentSearches.length > 0) {
       setShowSuggestionsList(true);
+    }
+  };
+
+  const handleClearRecentSearches = async () => {
+    try {
+      setIsClearingHistory(true);
+      await clearSearchHistory(undefined);
+      setRecentSearches([]);
+      setShowSuggestionsList(false);
+    } catch (error) {
+      console.error('Failed to clear search history:', error);
+    } finally {
+      setIsClearingHistory(false);
     }
   };
 
@@ -178,7 +192,17 @@ export default function Search({
                   className='absolute z-10 mt-1 w-full rounded-md border border-slate-200 bg-white shadow-lg'
                 >
                   <div className='border-b border-slate-100 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                    Recent searches
+                    <div className='flex items-center justify-between gap-3'>
+                      <span>Recent searches</span>
+                      <button
+                        type='button'
+                        onClick={handleClearRecentSearches}
+                        disabled={isClearingHistory}
+                        className='text-[11px] font-medium normal-case tracking-normal text-cyan-700 hover:text-cyan-800 disabled:cursor-not-allowed disabled:opacity-50'
+                      >
+                        {isClearingHistory ? 'Clearing...' : 'Clear'}
+                      </button>
+                    </div>
                   </div>
                   <div className='max-h-60 overflow-auto p-2'>
                     {recentSearches.map((recent) => (
