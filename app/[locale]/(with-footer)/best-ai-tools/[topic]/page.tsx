@@ -3,13 +3,13 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowRight, CheckCircle2, Sparkles, Star, Target } from 'lucide-react';
 
-import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
-import TrackableLink from '@/components/TrackableLink';
-import { StructuredDataServer } from '@/components/seo/StructuredData';
-import { getCategoryBySlug } from '@/lib/services/categories';
-import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
-import { getLocalizedField, getTools } from '@/lib/services/tools';
 import { getTopListTopic, topListTopics } from '@/lib/data/topLists';
+import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
+import { getCategoryBySlug } from '@/lib/services/categories';
+import { getLocalizedField, getTools } from '@/lib/services/tools';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import { StructuredDataServer } from '@/components/seo/StructuredData';
+import TrackableLink from '@/components/TrackableLink';
 
 function getPricingLabel(pricing: string | undefined, isChinese: boolean) {
   if (pricing === 'free') return isChinese ? '免费' : 'Free';
@@ -72,13 +72,18 @@ export default async function BestAiToolsTopicPage({
   ]);
 
   const category = categoryResult.status === 'fulfilled' ? categoryResult.value : null;
-  const tools = toolsResult.status === 'fulfilled' ? toolsResult.value.data : [];
-  const toolCount: number =
-    category && 'toolCount' in category
-      ? Number(category.toolCount || 0)
-      : toolsResult.status === 'fulfilled'
-      ? Number(toolsResult.value.total || 0)
-      : 0;
+  const tools =
+    toolsResult.status === 'fulfilled'
+      ? toolsResult.value.data.filter((tool): tool is (typeof toolsResult.value.data)[number] =>
+          Boolean(tool?.id && tool?.name && tool?.url && tool?.title && tool?.content),
+        )
+      : [];
+  let toolCount = 0;
+  if (category && 'toolCount' in category) {
+    toolCount = Number(category.toolCount || 0);
+  } else if (toolsResult.status === 'fulfilled') {
+    toolCount = Number(toolsResult.value.total || 0);
+  }
 
   const categoryName = category ? getLocalizedField(category.name, locale) : topic.title;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
@@ -202,9 +207,7 @@ export default async function BestAiToolsTopicPage({
                   <p className='text-sm font-semibold text-slate-950'>
                     {isChinese ? '这个榜单看什么' : 'What this list is for'}
                   </p>
-                  <p className='mt-1 text-sm leading-6 text-slate-600'>
-                    {topic.ctaDescription}
-                  </p>
+                  <p className='mt-1 text-sm leading-6 text-slate-600'>{topic.ctaDescription}</p>
                 </div>
               </div>
             </div>
@@ -213,9 +216,7 @@ export default async function BestAiToolsTopicPage({
               <div className='flex items-start gap-3'>
                 <CheckCircle2 className='mt-0.5 size-5 text-cyan-700' />
                 <div>
-                  <p className='text-sm font-semibold text-slate-950'>
-                    {isChinese ? '筛选规则' : 'Selection rules'}
-                  </p>
+                  <p className='text-sm font-semibold text-slate-950'>{isChinese ? '筛选规则' : 'Selection rules'}</p>
                   <p className='mt-1 text-sm leading-6 text-slate-600'>
                     {isChinese
                       ? '优先按真实使用强度、分类相关度和可比较性排序。'
@@ -226,18 +227,16 @@ export default async function BestAiToolsTopicPage({
             </div>
 
             <div className='mt-4 grid gap-3 sm:grid-cols-2'>
-                {tools.map((tool, index) => {
-                  const title = getLocalizedText(tool.title, locale);
-                  const content = getLocalizedText(tool.content, locale);
-                  const detailHref = `/${locale}/ai/${tool.name}`;
+              {tools.map((tool, index) => {
+                const title = getLocalizedText(tool.title, locale);
+                const content = getLocalizedText(tool.content, locale);
+                const detailHref = `/${locale}/ai/${tool.name}`;
 
                 return (
                   <div key={tool.id} className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
                     <div className='flex items-start justify-between gap-3'>
                       <div>
-                        <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                          #{index + 1}
-                        </p>
+                        <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>#{index + 1}</p>
                         <p className='mt-2 text-base font-semibold text-slate-950'>{title}</p>
                       </div>
                       <div className='rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700'>
@@ -263,7 +262,7 @@ export default async function BestAiToolsTopicPage({
                     </div>
                   </div>
                 );
-                })}
+              })}
               {tools.length === 0 && (
                 <div className='rounded-2xl border border-dashed border-slate-300 bg-white p-5 text-sm leading-6 text-slate-600'>
                   {isChinese
@@ -314,9 +313,7 @@ export default async function BestAiToolsTopicPage({
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
             {isChinese ? '从榜单进到详情，再进到提交' : 'Move from ranking into detail, then into submission'}
           </h2>
-          <p className='mt-2 text-sm leading-6 text-slate-700'>
-            {nextStepDescription}
-          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-700'>{nextStepDescription}</p>
           <div className='mt-4 flex flex-wrap gap-3'>
             <TrackableCtaLink
               href={`/${locale}${topic.comparisonHref}`}
