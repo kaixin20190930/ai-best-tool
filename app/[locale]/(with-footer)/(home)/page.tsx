@@ -176,6 +176,10 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     '/guides/ai-tools-for-developers-comparison',
     '/guides/ai-tools-for-api-observability-comparison',
     '/guides/ai-tools-for-model-routing-comparison',
+    '/guides/ai-tools-for-creators-comparison',
+    '/guides/ai-image-tools-comparison',
+    '/guides/ai-video-tools-comparison',
+    '/guides/ai-tools-for-designers-comparison',
     '/guides/ai-tools-for-meeting-notes-comparison',
     '/guides/ai-tools-for-voice-comparison',
   ] as const;
