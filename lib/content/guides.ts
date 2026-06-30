@@ -521,6 +521,19 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-agent-tools',
+    priority: 0.77,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI Agent 工具推荐',
+      en: 'AI agent tools',
+    },
+    desc: {
+      cn: '适合 Agent 工作流、任务编排、工具调用和执行治理。',
+      en: 'For agent workflows, task orchestration, tool use, and execution governance.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-agents-comparison',
     priority: 0.78,
     changeFrequency: 'weekly',
@@ -1448,6 +1461,7 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/ai-tools-for-research',
   '/guides/ai-tools-for-developers',
   '/guides/ai-tools-for-agents',
+  '/guides/ai-agent-tools',
   '/guides/ai-tools-for-automation',
   '/guides/ai-tools-for-agents-comparison',
   '/guides/ai-agent-tools-comparison',
