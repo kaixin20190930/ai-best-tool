@@ -1,9 +1,18 @@
+import type { Metadata } from 'next';
+
 import DeveloperToolsPage, {
   generateMetadata as generateDeveloperToolsMetadata,
 } from '../ai-tools-for-developers/page';
 
-export function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
-  return generateDeveloperToolsMetadata({ params: { locale } });
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const metadata = await generateDeveloperToolsMetadata({ params: { locale } });
+  return {
+    ...metadata,
+    alternates: {
+      ...metadata.alternates,
+      canonical: `/${locale}/guides/ai-tools-for-developers`,
+    },
+  };
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
