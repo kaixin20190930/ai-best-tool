@@ -300,12 +300,64 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-research-tools',
+    priority: 0.75,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 研究工具推荐',
+      en: 'AI research tools',
+    },
+    desc: {
+      cn: '适合资料检索、分析、证据核对和研究工作流。',
+      en: 'For discovery, analysis, evidence-checking, and research workflows.',
+    },
+  },
+  {
+    href: '/guides/ai-research-tools',
+    priority: 0.75,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 研究工具推荐',
+      en: 'AI research tools',
+    },
+    desc: {
+      cn: '适合资料检索、分析、证据核对和研究工作流。',
+      en: 'For discovery, analysis, evidence-checking, and research workflows.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-research-comparison',
     priority: 0.76,
     changeFrequency: 'weekly',
     title: {
       cn: 'AI 研究工具对比',
       en: 'AI tools for research comparison',
+    },
+    desc: {
+      cn: '把常见研究工具放在一起快速对照。',
+      en: 'Compare common research tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-research-tools-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 研究工具对比',
+      en: 'AI research tools comparison',
+    },
+    desc: {
+      cn: '把常见研究工具放在一起快速对照。',
+      en: 'Compare common research tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-research-tools-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 研究工具对比',
+      en: 'AI research tools comparison',
     },
     desc: {
       cn: '把常见研究工具放在一起快速对照。',
@@ -339,12 +391,64 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-model-routing-tools',
+    priority: 0.77,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 模型路由工具推荐',
+      en: 'AI model routing tools',
+    },
+    desc: {
+      cn: '适合多模型接入、成本控制、回退策略和路由工作流。',
+      en: 'For multi-model access, cost control, fallbacks, and routing workflows.',
+    },
+  },
+  {
+    href: '/guides/ai-model-routing-tools',
+    priority: 0.77,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 模型路由工具推荐',
+      en: 'AI model routing tools',
+    },
+    desc: {
+      cn: '适合多模型接入、成本控制、回退策略和路由工作流。',
+      en: 'For multi-model access, cost control, fallbacks, and routing workflows.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-model-routing-comparison',
     priority: 0.78,
     changeFrequency: 'weekly',
     title: {
       cn: 'AI 模型路由工具对比',
       en: 'AI tools for model routing comparison',
+    },
+    desc: {
+      cn: '把常见模型路由工具放在一起快速对照。',
+      en: 'Compare common model routing tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-model-routing-tools-comparison',
+    priority: 0.78,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 模型路由工具对比',
+      en: 'AI model routing tools comparison',
+    },
+    desc: {
+      cn: '把常见模型路由工具放在一起快速对照。',
+      en: 'Compare common model routing tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-model-routing-tools-comparison',
+    priority: 0.78,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 模型路由工具对比',
+      en: 'AI model routing tools comparison',
     },
     desc: {
       cn: '把常见模型路由工具放在一起快速对照。',
@@ -391,12 +495,64 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-evals-tools',
+    priority: 0.77,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI Evals 工具推荐',
+      en: 'AI evals tools',
+    },
+    desc: {
+      cn: '适合结果评估、输出质量验证、评分体系和验收流程。',
+      en: 'For output evaluation, quality validation, scoring systems, and acceptance workflows.',
+    },
+  },
+  {
+    href: '/guides/ai-evals-tools',
+    priority: 0.77,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI Evals 工具推荐',
+      en: 'AI evals tools',
+    },
+    desc: {
+      cn: '适合结果评估、输出质量验证、评分体系和验收流程。',
+      en: 'For output evaluation, quality validation, scoring systems, and acceptance workflows.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-evals-comparison',
     priority: 0.78,
     changeFrequency: 'weekly',
     title: {
       cn: 'AI Evals 工具对比',
       en: 'AI tools for evals comparison',
+    },
+    desc: {
+      cn: '把常见 evals 工具放在一起快速对照。',
+      en: 'Compare common evals tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-evals-tools-comparison',
+    priority: 0.78,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI Evals 工具对比',
+      en: 'AI evals tools comparison',
+    },
+    desc: {
+      cn: '把常见 evals 工具放在一起快速对照。',
+      en: 'Compare common evals tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-evals-tools-comparison',
+    priority: 0.78,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI Evals 工具对比',
+      en: 'AI evals tools comparison',
     },
     desc: {
       cn: '把常见 evals 工具放在一起快速对照。',
@@ -417,12 +573,64 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-api-observability-tools',
+    priority: 0.77,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI API 可观测工具推荐',
+      en: 'AI API observability tools',
+    },
+    desc: {
+      cn: '适合日志、调用监控、成本分析和质量追踪。',
+      en: 'For logs, request monitoring, cost analysis, and quality tracking.',
+    },
+  },
+  {
+    href: '/guides/ai-api-observability-tools',
+    priority: 0.77,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI API 可观测工具推荐',
+      en: 'AI API observability tools',
+    },
+    desc: {
+      cn: '适合日志、调用监控、成本分析和质量追踪。',
+      en: 'For logs, request monitoring, cost analysis, and quality tracking.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-api-observability-comparison',
     priority: 0.78,
     changeFrequency: 'weekly',
     title: {
       cn: 'AI API 可观测工具对比',
       en: 'AI tools for API observability comparison',
+    },
+    desc: {
+      cn: '把常见 API 可观测工具放在一起快速对照。',
+      en: 'Compare common API observability tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-api-observability-tools-comparison',
+    priority: 0.78,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI API 可观测工具对比',
+      en: 'AI API observability tools comparison',
+    },
+    desc: {
+      cn: '把常见 API 可观测工具放在一起快速对照。',
+      en: 'Compare common API observability tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-api-observability-tools-comparison',
+    priority: 0.78,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI API 可观测工具对比',
+      en: 'AI API observability tools comparison',
     },
     desc: {
       cn: '把常见 API 可观测工具放在一起快速对照。',
@@ -443,12 +651,64 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-code-review-tools',
+    priority: 0.77,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 代码审查工具推荐',
+      en: 'AI code review tools',
+    },
+    desc: {
+      cn: '适合 PR 审查、变更解释、风险检查和代码反馈。',
+      en: 'For PR review, change explanation, risk checks, and code feedback.',
+    },
+  },
+  {
+    href: '/guides/ai-code-review-tools',
+    priority: 0.77,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 代码审查工具推荐',
+      en: 'AI code review tools',
+    },
+    desc: {
+      cn: '适合 PR 审查、变更解释、风险检查和代码反馈。',
+      en: 'For PR review, change explanation, risk checks, and code feedback.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-code-review-comparison',
     priority: 0.78,
     changeFrequency: 'weekly',
     title: {
       cn: 'AI 代码审查工具对比',
       en: 'AI tools for code review comparison',
+    },
+    desc: {
+      cn: '把常见代码审查工具放在一起快速对照。',
+      en: 'Compare common code review tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-code-review-tools-comparison',
+    priority: 0.78,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 代码审查工具对比',
+      en: 'AI code review tools comparison',
+    },
+    desc: {
+      cn: '把常见代码审查工具放在一起快速对照。',
+      en: 'Compare common code review tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-code-review-tools-comparison',
+    priority: 0.78,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 代码审查工具对比',
+      en: 'AI code review tools comparison',
     },
     desc: {
       cn: '把常见代码审查工具放在一起快速对照。',
@@ -781,6 +1041,32 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-web3-tools',
+    priority: 0.73,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI Web3 工具推荐',
+      en: 'AI web3 tools',
+    },
+    desc: {
+      cn: '适合链上数据、钱包工作流和 Crypto 研究。',
+      en: 'For on-chain data, wallet workflows, and crypto research.',
+    },
+  },
+  {
+    href: '/guides/ai-web3-tools',
+    priority: 0.73,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI Web3 工具推荐',
+      en: 'AI web3 tools',
+    },
+    desc: {
+      cn: '适合链上数据、钱包工作流和 Crypto 研究。',
+      en: 'For on-chain data, wallet workflows, and crypto research.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-web3-analysis',
     priority: 0.75,
     changeFrequency: 'monthly',
@@ -800,6 +1086,32 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     title: {
       cn: 'AI Web3 工具对比',
       en: 'AI tools for Web3 comparison',
+    },
+    desc: {
+      cn: '把常见 Web3 工具放在一起快速对照。',
+      en: 'Compare common Web3 tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-web3-tools-comparison',
+    priority: 0.74,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI Web3 工具对比',
+      en: 'AI web3 tools comparison',
+    },
+    desc: {
+      cn: '把常见 Web3 工具放在一起快速对照。',
+      en: 'Compare common Web3 tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-web3-tools-comparison',
+    priority: 0.74,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI Web3 工具对比',
+      en: 'AI web3 tools comparison',
     },
     desc: {
       cn: '把常见 Web3 工具放在一起快速对照。',
