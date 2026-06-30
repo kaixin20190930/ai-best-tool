@@ -26,10 +26,10 @@ import {
 } from '@/lib/services/admin/analytics';
 import { getCommentModerationSummary } from '@/app/actions/admin/comments';
 import {
+  getDeveloperOutreachQueue,
   getFeaturedPlacementStats,
   getOperationalStats,
   getPaidListingBlockerSummary,
-  getDeveloperOutreachQueue,
   getSubmissionFunnelStats,
   getToolsStats,
 } from '@/app/actions/admin/tools';
@@ -64,6 +64,7 @@ export default async function AdminDashboard({
   const pageAccessReport = await getPageAccessReport('30d', 6);
   const conversionSnapshot = await getConversionSnapshot('30d');
   const submissionFunnel = await getSubmissionFunnelStats('30d');
+  const claimedToolsCount = Number((toolsStats as { claimed?: number }).claimed ?? 0);
 
   const metrics = [
     {
@@ -200,20 +201,58 @@ export default async function AdminDashboard({
     },
   ];
 
-  const featuredHealthTone =
-    featuredPlacementStats.expiringSoonCount > 0 ? 'rose' : featuredPlacementStats.liveCount > 0 ? 'emerald' : 'slate';
-  const featuredHealthLabel =
-    featuredPlacementStats.expiringSoonCount > 0
-      ? 'Needs renewal attention'
-      : featuredPlacementStats.liveCount > 0
-      ? 'Healthy featured activity'
-      : 'No live featured windows';
-  const featuredHealthBody =
-    featuredPlacementStats.expiringSoonCount > 0
-      ? `${featuredPlacementStats.expiringSoonCount} live featured window${featuredPlacementStats.expiringSoonCount === 1 ? ' needs' : ' need'} attention.`
-      : featuredPlacementStats.liveCount > 0
-      ? `${featuredPlacementStats.liveCount} live featured window${featuredPlacementStats.liveCount === 1 ? '' : 's'} are running right now.`
-      : 'No currently active featured placement needs attention.';
+  let featuredHealthTone = 'slate';
+  let featuredHealthLabel = 'No live featured windows';
+  let featuredHealthBody = 'No currently active featured placement needs attention.';
+
+  if (featuredPlacementStats.expiringSoonCount > 0) {
+    featuredHealthTone = 'rose';
+    featuredHealthLabel = 'Needs renewal attention';
+    featuredHealthBody = `${featuredPlacementStats.expiringSoonCount} live featured window${
+      featuredPlacementStats.expiringSoonCount === 1 ? ' needs' : ' need'
+    } attention.`;
+  } else if (featuredPlacementStats.liveCount > 0) {
+    featuredHealthTone = 'emerald';
+    featuredHealthLabel = 'Healthy featured activity';
+    featuredHealthBody = `${featuredPlacementStats.liveCount} live featured window${
+      featuredPlacementStats.liveCount === 1 ? '' : 's'
+    } are running right now.`;
+  }
+
+  const getFeaturedHealthClasses = (tone: string) => {
+    switch (tone) {
+      case 'rose':
+        return {
+          card: 'border-rose-200 bg-rose-50',
+          text: 'text-rose-700',
+        };
+      case 'emerald':
+        return {
+          card: 'border-emerald-200 bg-emerald-50',
+          text: 'text-emerald-700',
+        };
+      default:
+        return {
+          card: 'border-slate-200 bg-slate-50',
+          text: 'text-slate-900',
+        };
+    }
+  };
+
+  const getFocusToneClasses = (tone: string) => {
+    switch (tone) {
+      case 'amber':
+        return 'bg-amber-50 text-amber-700';
+      case 'emerald':
+        return 'bg-emerald-50 text-emerald-700';
+      case 'rose':
+        return 'bg-rose-50 text-rose-700';
+      case 'violet':
+        return 'bg-violet-50 text-violet-700';
+      default:
+        return 'bg-cyan-50 text-cyan-700';
+    }
+  };
 
   const getTitle = (tool: any) => {
     if (typeof tool.title === 'string') return tool.title;
@@ -242,8 +281,7 @@ export default async function AdminDashboard({
   const getConversionPageAction = (pageType: string) => {
     if (pageType === 'pricing') return 'Keep the offer sharp and the CTA obvious';
     if (pageType === 'submit') return 'Reduce friction and reinforce review expectations';
-    if (pageType === 'claim_listing' || pageType === 'developer_listing')
-      return 'Capture claims and follow up quickly';
+    if (pageType === 'claim_listing' || pageType === 'developer_listing') return 'Capture claims and follow up quickly';
     if (pageType === 'profile_submissions') return 'Make payment status and next steps obvious';
     return 'Review where this page should send users next';
   };
@@ -455,19 +493,7 @@ export default async function AdminDashboard({
                   <p className='text-sm font-medium text-slate-600'>{item.name}</p>
                   <p className='mt-2 text-3xl font-semibold text-slate-900'>{item.value}</p>
                 </div>
-                <span
-                  className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
-                    item.tone === 'amber'
-                      ? 'bg-amber-50 text-amber-700'
-                      : item.tone === 'emerald'
-                        ? 'bg-emerald-50 text-emerald-700'
-                      : item.tone === 'rose'
-                        ? 'bg-rose-50 text-rose-700'
-                        : item.tone === 'violet'
-                          ? 'bg-violet-50 text-violet-700'
-                        : 'bg-cyan-50 text-cyan-700'
-                  }`}
-                >
+                <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${getFocusToneClasses(item.tone)}`}>
                   Focus
                 </span>
               </div>
@@ -624,35 +650,20 @@ export default async function AdminDashboard({
         <div className='mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
           <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
             <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>Claimed tools</p>
-            <p className='mt-2 text-3xl font-bold text-slate-950'>{toolsStats.claimed}</p>
+            <p className='mt-2 text-3xl font-bold text-slate-950'>{claimedToolsCount}</p>
             <p className='mt-1 text-sm text-slate-600'>Connected to an owner flow</p>
           </div>
           <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
             <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>Live featured</p>
             <p className='mt-2 text-3xl font-bold text-amber-700'>{featuredPlacementStats.liveCount}</p>
             <p className='mt-1 text-sm text-slate-600'>
-              {featuredPlacementStats.totalViews.toLocaleString()} views · {featuredPlacementStats.totalClicks.toLocaleString()} clicks
+              {featuredPlacementStats.totalViews.toLocaleString()} views ·{' '}
+              {featuredPlacementStats.totalClicks.toLocaleString()} clicks
             </p>
           </div>
-          <div
-            className={`rounded-xl border p-4 ${
-              featuredHealthTone === 'rose'
-                ? 'border-rose-200 bg-rose-50'
-                : featuredHealthTone === 'emerald'
-                ? 'border-emerald-200 bg-emerald-50'
-                : 'border-slate-200 bg-slate-50'
-            }`}
-          >
+          <div className={`rounded-xl border p-4 ${getFeaturedHealthClasses(featuredHealthTone).card}`}>
             <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>Featured health</p>
-            <p
-              className={`mt-2 text-lg font-bold ${
-                featuredHealthTone === 'rose'
-                  ? 'text-rose-700'
-                  : featuredHealthTone === 'emerald'
-                  ? 'text-emerald-700'
-                  : 'text-slate-900'
-              }`}
-            >
+            <p className={`mt-2 text-lg font-bold ${getFeaturedHealthClasses(featuredHealthTone).text}`}>
               {featuredHealthLabel}
             </p>
             <p className='mt-1 text-sm text-slate-600'>{featuredHealthBody}</p>
@@ -702,7 +713,10 @@ export default async function AdminDashboard({
         </div>
 
         <div className='mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
-          <Link href='/admin/tools?claimStatus=claimed' className='rounded-xl border border-emerald-200 bg-emerald-50 p-4'>
+          <Link
+            href='/admin/tools?claimStatus=claimed'
+            className='rounded-xl border border-emerald-200 bg-emerald-50 p-4'
+          >
             <p className='text-xs font-semibold uppercase tracking-wide text-emerald-700'>Claimed</p>
             <p className='mt-2 text-3xl font-bold text-emerald-700'>{toolsStats.claimed}</p>
             <p className='mt-1 text-sm text-slate-600'>Owner linked</p>
@@ -717,7 +731,10 @@ export default async function AdminDashboard({
             <p className='mt-2 text-3xl font-bold text-rose-700'>{toolsStats.claimRejected}</p>
             <p className='mt-1 text-sm text-slate-600'>Needs cleanup</p>
           </Link>
-          <Link href='/admin/tools?claimStatus=unclaimed' className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+          <Link
+            href='/admin/tools?claimStatus=unclaimed'
+            className='rounded-xl border border-slate-200 bg-slate-50 p-4'
+          >
             <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>Unclaimed</p>
             <p className='mt-2 text-3xl font-bold text-slate-900'>{toolsStats.claimUnclaimed}</p>
             <p className='mt-1 text-sm text-slate-600'>No owner yet</p>
@@ -780,14 +797,16 @@ export default async function AdminDashboard({
               className='block rounded-xl border border-slate-200 bg-slate-50 p-4 transition hover:-translate-y-0.5 hover:border-cyan-200 hover:bg-cyan-50/50'
             >
               <h3 className='font-medium text-slate-900'>Tool Owner Dashboard</h3>
-              <p className='mt-1 text-sm text-slate-600'>{toolsStats.claimed} claimed tools in the owner flow</p>
+              <p className='mt-1 text-sm text-slate-600'>{claimedToolsCount} claimed tools in the owner flow</p>
             </a>
             <a
               href='/admin/cleanup'
               className='block rounded-xl border border-slate-200 bg-slate-50 p-4 transition hover:-translate-y-0.5 hover:border-rose-200 hover:bg-rose-50/50'
             >
               <h3 className='font-medium text-slate-900'>Cleanup Queue</h3>
-              <p className='mt-1 text-sm text-slate-600'>{paidListingBlockers.totalBlocked} paid listings need cleanup</p>
+              <p className='mt-1 text-sm text-slate-600'>
+                {paidListingBlockers.totalBlocked} paid listings need cleanup
+              </p>
             </a>
             <a
               href='/admin/claims'
