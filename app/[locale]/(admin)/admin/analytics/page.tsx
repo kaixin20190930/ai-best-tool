@@ -1,14 +1,11 @@
 import Link from 'next/link';
 import { ArrowUpRight, BarChart3, Globe, Layers3, Search, ShieldAlert, TrendingUp } from 'lucide-react';
 
-import AdminOutreachClassificationTable from '@/components/admin/AdminOutreachClassificationTable';
-import AdminEmailOpsPanel from '@/components/admin/AdminEmailOpsPanel';
-import AdminOutreachQueueTable from '@/components/admin/AdminOutreachQueueTable';
 import {
+  getAgentJourneyReport,
   getCommercialIntentReport,
   getCtaClickReport,
   getCtaClickTrend,
-  getAgentJourneyReport,
   getPageAccessReport,
   getPageAccessTrend,
   getPriorityMediaQueue,
@@ -20,17 +17,20 @@ import {
   getTopTools,
   getTrafficSources,
 } from '@/lib/services/admin/analytics';
+import { getEmailOpsSummaryBySystem } from '@/lib/services/admin/emailOps';
+import AdminEmailOpsPanel from '@/components/admin/AdminEmailOpsPanel';
+import AdminOutreachClassificationTable from '@/components/admin/AdminOutreachClassificationTable';
+import AdminOutreachQueueTable from '@/components/admin/AdminOutreachQueueTable';
 import { getAdminToolClaimsSummary } from '@/app/actions/admin/claims';
 import {
   getDeveloperOutreachQueue,
-  getEmailOpsSummaryBySystem,
   getFeaturedPlacementStats,
   getOperationalStats,
   getOutreachCommercialBridgeSummary,
-  getOutreachHistorySummary,
   getOutreachExecutorSummary,
-  getPaidListingBlockerSummary,
+  getOutreachHistorySummary,
   getOutreachNeedsClassification,
+  getPaidListingBlockerSummary,
   getSubmissionFunnelStats,
   getSubmissionRejectionReasonStats,
 } from '@/app/actions/admin/tools';
@@ -282,8 +282,16 @@ export default async function AdminAnalyticsPage({
       ? Math.round(((claimSummary.claimedCount + claimSummary.invalidCount) / claimSummary.total) * 100)
       : 0;
   const outreachStatusRows = [
-    { key: 'not_started', label: 'Not started', count: outreachQueue.filter((item) => item.outreachStatus === 'not_started').length },
-    { key: 'contacted', label: 'Contacted', count: outreachQueue.filter((item) => item.outreachStatus === 'contacted').length },
+    {
+      key: 'not_started',
+      label: 'Not started',
+      count: outreachQueue.filter((item) => item.outreachStatus === 'not_started').length,
+    },
+    {
+      key: 'contacted',
+      label: 'Contacted',
+      count: outreachQueue.filter((item) => item.outreachStatus === 'contacted').length,
+    },
     {
       key: 'waiting_reply',
       label: 'Waiting reply',
@@ -300,9 +308,13 @@ export default async function AdminAnalyticsPage({
     share: outreachQueue.length > 0 ? Math.round((item.count / outreachQueue.length) * 100) : 0,
   }));
   const outreachStartedCount = outreachQueue.filter((item) => item.outreachStatus !== 'not_started').length;
-  const outreachStartedRate = outreachQueue.length > 0 ? Math.round((outreachStartedCount / outreachQueue.length) * 100) : 0;
+  const outreachStartedRate =
+    outreachQueue.length > 0 ? Math.round((outreachStartedCount / outreachQueue.length) * 100) : 0;
   const outreachActiveCount = outreachQueue.filter(
-    (item) => item.outreachStatus === 'contacted' || item.outreachStatus === 'waiting_reply' || item.outreachStatus === 'follow_up_due',
+    (item) =>
+      item.outreachStatus === 'contacted' ||
+      item.outreachStatus === 'waiting_reply' ||
+      item.outreachStatus === 'follow_up_due',
   ).length;
   const outreachClosedRate =
     outreachHistorySummary.totalTracked > 0
@@ -314,7 +326,9 @@ export default async function AdminAnalyticsPage({
       : 0;
   const outreachPaymentConfirmedRate =
     outreachCommercialBridge.claimedFromOutreachCount > 0
-      ? Math.round((outreachCommercialBridge.paymentConfirmedCount / outreachCommercialBridge.claimedFromOutreachCount) * 100)
+      ? Math.round(
+          (outreachCommercialBridge.paymentConfirmedCount / outreachCommercialBridge.claimedFromOutreachCount) * 100,
+        )
       : 0;
   const getTrendLabel = (current: number, previous: number) => {
     if (current === 0 && previous === 0) return 'No activity in either period';
@@ -399,18 +413,21 @@ export default async function AdminAnalyticsPage({
     featuredRenewalText =
       featuredExpiringSoon[0].daysLeft === 1 ? 'Ends tomorrow.' : `Ends in ${featuredExpiringSoon[0].daysLeft} days.`;
   }
-  const featuredClickThroughRate =
-    featuredPlacementStats.totalViews > 0
-      ? Math.round((featuredPlacementStats.totalClicks / featuredPlacementStats.totalViews) * 100)
-      : 0;
-  const featuredRenewalAlert =
-    featuredPlacementStats.expiringSoonCount > 0
-      ? featuredPlacementStats.expiringSoonCount === 1
+  let featuredClickThroughRate = 0;
+  if (featuredPlacementStats.totalViews > 0) {
+    featuredClickThroughRate = Math.round(
+      (featuredPlacementStats.totalClicks / featuredPlacementStats.totalViews) * 100,
+    );
+  }
+  let featuredRenewalAlert = 'No active featured windows right now';
+  if (featuredPlacementStats.expiringSoonCount > 0) {
+    featuredRenewalAlert =
+      featuredPlacementStats.expiringSoonCount === 1
         ? '1 featured window needs a renewal nudge'
-        : `${featuredPlacementStats.expiringSoonCount} featured windows need a renewal nudge`
-      : featuredPlacementStats.liveCount > 0
-      ? `${featuredPlacementStats.liveCount} featured placements are live`
-      : 'No active featured windows right now';
+        : `${featuredPlacementStats.expiringSoonCount} featured windows need a renewal nudge`;
+  } else if (featuredPlacementStats.liveCount > 0) {
+    featuredRenewalAlert = `${featuredPlacementStats.liveCount} featured placements are live`;
+  }
   const featuredRenewalUrgent = featuredPlacementStats.expiringSoonCount > 0;
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0);
@@ -451,7 +468,10 @@ export default async function AdminAnalyticsPage({
     return !Number.isNaN(updatedAt.getTime()) && updatedAt.getTime() >= sevenDaysAgo.getTime();
   });
   const recentOutreachActiveCount = recentOutreachActivity.filter(
-    (item) => item.outreachStatus === 'contacted' || item.outreachStatus === 'waiting_reply' || item.outreachStatus === 'follow_up_due',
+    (item) =>
+      item.outreachStatus === 'contacted' ||
+      item.outreachStatus === 'waiting_reply' ||
+      item.outreachStatus === 'follow_up_due',
   ).length;
   const recentOutreachClosedCount = outreachHistorySummary.recentClosedCount;
   const recentOutreachClosedReasonRows = Object.entries(outreachClosedReasonLabelMap)
@@ -466,9 +486,15 @@ export default async function AdminAnalyticsPage({
       }),
     }))
     .filter((item) => item.count > 0);
-  const recentOutreachStartedCount = recentOutreachActivity.filter((item) => item.outreachStatus !== 'not_started').length;
+  const recentOutreachStartedCount = recentOutreachActivity.filter(
+    (item) => item.outreachStatus !== 'not_started',
+  ).length;
   const recentOutreachStatusRows = [
-    { key: 'contacted', label: 'Touched', count: recentOutreachActivity.filter((item) => item.outreachStatus === 'contacted').length },
+    {
+      key: 'contacted',
+      label: 'Touched',
+      count: recentOutreachActivity.filter((item) => item.outreachStatus === 'contacted').length,
+    },
     {
       key: 'waiting_reply',
       label: 'Waiting reply',
@@ -543,39 +569,64 @@ export default async function AdminAnalyticsPage({
         : 'Submissions needs clearer payment state and next steps.';
     }
 
-    return hasData
-      ? 'Watch how this family behaves before deciding where to invest.'
-      : 'This family is still too small to read confidently.';
+    if (hasData) {
+      return 'Watch how this family behaves before deciding where to invest.';
+    }
+    return 'This family is still too small to read confidently.';
+  };
+  const getOutreachToneClass = (tone: string, active: boolean) => {
+    if (!active) return 'bg-slate-100 text-slate-700 hover:bg-slate-200';
+    if (tone === 'amber') return 'bg-amber-600 text-white';
+    if (tone === 'cyan') return 'bg-cyan-700 text-white';
+    if (tone === 'emerald') return 'bg-emerald-600 text-white';
+    if (tone === 'violet') return 'bg-violet-600 text-white';
+    return 'bg-slate-700 text-white';
   };
   const buildOutreachHref = (focus: string) => {
-    const params = new URLSearchParams();
-    if (range !== 'all') params.set('range', range);
-    if (focus !== 'all') params.set('outreach', focus);
-    const query = params.toString();
+    const queryParams = new URLSearchParams();
+    if (range !== 'all') queryParams.set('range', range);
+    if (focus !== 'all') queryParams.set('outreach', focus);
+    const query = queryParams.toString();
     return query ? `/admin/analytics?${query}` : '/admin/analytics';
   };
   const getOutreachFocusAdvice = (focus: string) => {
     if (focus === 'due_today') {
       return locale === 'cn' || locale === 'tw'
         ? ['先处理今天到期的跟进。', '优先发给已经有 owner 线索的条目。', '发完后立刻回填状态和备注。']
-        : ['Handle today’s follow-ups first.', 'Prioritize leads with an existing owner signal.', 'Update status and notes immediately after sending.'];
+        : [
+            'Handle today’s follow-ups first.',
+            'Prioritize leads with an existing owner signal.',
+            'Update status and notes immediately after sending.',
+          ];
     }
 
     if (focus === 'featured') {
       return locale === 'cn' || locale === 'tw'
         ? ['先发给流量已经起来的条目。', '把前排价值和当前曝光挂钩。', '只保留最容易成交的 3-5 条。']
-        : ['Start with listings that already have traffic.', 'Tie the featured pitch to existing visibility.', 'Keep only the easiest 3-5 wins in the batch.'];
+        : [
+            'Start with listings that already have traffic.',
+            'Tie the featured pitch to existing visibility.',
+            'Keep only the easiest 3-5 wins in the batch.',
+          ];
     }
 
     if (focus === 'collab') {
       return locale === 'cn' || locale === 'tw'
         ? ['先找容易合作的内容条目。', '用用户互动或讨论信号做切入。', '目标是约下一次更深的沟通。']
-        : ['Start with collaboration-friendly listings.', 'Use user engagement or discussion signals as the hook.', 'The goal is a deeper follow-up conversation.'];
+        : [
+            'Start with collaboration-friendly listings.',
+            'Use user engagement or discussion signals as the hook.',
+            'The goal is a deeper follow-up conversation.',
+          ];
     }
 
     return locale === 'cn' || locale === 'tw'
       ? ['先从认领邀请开始。', '优先联系还未认领的公开条目。', '把能快速转成 owner 的线索放在前面。']
-      : ['Start with claim invites.', 'Prioritize public listings that are still unclaimed.', 'Keep the fastest owner-conversion leads at the top.'];
+      : [
+          'Start with claim invites.',
+          'Prioritize public listings that are still unclaimed.',
+          'Keep the fastest owner-conversion leads at the top.',
+        ];
   };
   const outreachFocusAdvice = getOutreachFocusAdvice(outreachFocus);
   const outreachFocusCards = [
@@ -840,8 +891,8 @@ export default async function AdminAnalyticsPage({
   const ctaTrendItems = ctaClickTrend.items.slice(0, 6);
   const ctaPageSummaryMap = new Map(ctaClickReport.summary.map((item) => [item.pageType, item]));
   const commercialFamilyMap = new Map<
-  string,
-  { submitClicks: number; claimClicks: number; claimLeads: number; checkoutStarts: number }
+    string,
+    { submitClicks: number; claimClicks: number; claimLeads: number; checkoutStarts: number }
   >();
   const topCommercialSource = commercialIntentReport.sources[0] || null;
 
@@ -1062,7 +1113,9 @@ export default async function AdminAnalyticsPage({
           <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
             <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>What this means</p>
             <h3 className='mt-1 text-xl font-bold text-slate-950'>
-              {topCommercialSource ? 'Follow the strongest commercial page family' : 'Wait for enough data to rank the family'}
+              {topCommercialSource
+                ? 'Follow the strongest commercial page family'
+                : 'Wait for enough data to rank the family'}
             </h3>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {topCommercialSource
@@ -1501,7 +1554,9 @@ export default async function AdminAnalyticsPage({
                 agentJourneyReport.totalCheckoutStarts
               ).toLocaleString()}
             </p>
-            <p className='mt-2 text-sm text-slate-500'>Submit, claim, claim submit, and checkout actions from this path</p>
+            <p className='mt-2 text-sm text-slate-500'>
+              Submit, claim, claim submit, and checkout actions from this path
+            </p>
           </div>
           <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
             <p className='text-sm font-medium text-slate-600'>Top Agent source</p>
@@ -1540,8 +1595,7 @@ export default async function AdminAnalyticsPage({
                     const midFunnelTotal = item.comparisonClicks + item.rankingClicks;
                     const commercialTotal =
                       item.submitClicks + item.claimClicks + item.claimSubmissions + item.checkoutStarts;
-                    const midFunnelRate =
-                      item.pageViews > 0 ? Math.round((midFunnelTotal / item.pageViews) * 100) : 0;
+                    const midFunnelRate = item.pageViews > 0 ? Math.round((midFunnelTotal / item.pageViews) * 100) : 0;
                     const commercialRate =
                       item.pageViews > 0 ? Math.round((commercialTotal / item.pageViews) * 100) : 0;
 
@@ -1579,7 +1633,8 @@ export default async function AdminAnalyticsPage({
                               Claim: <span className='font-semibold text-slate-900'>{item.claimClicks}</span>
                             </p>
                             <p className='mt-1'>
-                              Claim submit: <span className='font-semibold text-emerald-700'>{item.claimSubmissions}</span>
+                              Claim submit:{' '}
+                              <span className='font-semibold text-emerald-700'>{item.claimSubmissions}</span>
                             </p>
                             <p className='mt-1'>
                               Checkout: <span className='font-semibold text-violet-700'>{item.checkoutStarts}</span>
@@ -1589,10 +1644,12 @@ export default async function AdminAnalyticsPage({
                         <td className='px-4 py-4'>
                           <div className='min-w-[180px] text-xs leading-5 text-slate-500'>
                             <p>
-                              View -&gt; mid-funnel: <span className='font-semibold text-cyan-700'>{midFunnelRate}%</span>
+                              View -&gt; mid-funnel:{' '}
+                              <span className='font-semibold text-cyan-700'>{midFunnelRate}%</span>
                             </p>
                             <p className='mt-1'>
-                              View -&gt; commercial: <span className='font-semibold text-emerald-700'>{commercialRate}%</span>
+                              View -&gt; commercial:{' '}
+                              <span className='font-semibold text-emerald-700'>{commercialRate}%</span>
                             </p>
                             <p className='mt-1'>
                               Total next-step actions:{' '}
@@ -1607,7 +1664,9 @@ export default async function AdminAnalyticsPage({
               </table>
             </div>
           ) : (
-            <div className='px-4 py-8 text-sm text-slate-500'>No Agent journey data has been recorded in this range.</div>
+            <div className='px-4 py-8 text-sm text-slate-500'>
+              No Agent journey data has been recorded in this range.
+            </div>
           )}
         </div>
       </div>
@@ -2424,7 +2483,9 @@ export default async function AdminAnalyticsPage({
 
         <div
           className={`mb-4 rounded-2xl border px-4 py-3 text-sm ${
-            featuredRenewalUrgent ? 'border-amber-200 bg-amber-50 text-amber-900' : 'border-slate-200 bg-white text-slate-700'
+            featuredRenewalUrgent
+              ? 'border-amber-200 bg-amber-50 text-amber-900'
+              : 'border-slate-200 bg-white text-slate-700'
           }`}
         >
           <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
@@ -2626,10 +2687,18 @@ export default async function AdminAnalyticsPage({
             <table className='min-w-full divide-y divide-slate-200'>
               <thead className='bg-slate-50'>
                 <tr>
-                  <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>Tool</th>
-                  <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>Blockers</th>
-                  <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>Updated</th>
-                  <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>Action</th>
+                  <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                    Tool
+                  </th>
+                  <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                    Blockers
+                  </th>
+                  <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                    Updated
+                  </th>
+                  <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                    Action
+                  </th>
                 </tr>
               </thead>
               <tbody className='divide-y divide-slate-100 bg-white'>
@@ -2656,7 +2725,7 @@ export default async function AdminAnalyticsPage({
                     <td className='px-4 py-4 align-top text-sm text-slate-600'>
                       {new Date(item.updatedAt).toLocaleString()}
                     </td>
-                    <td className='px-4 py-4 align-top text-right'>
+                    <td className='px-4 py-4 text-right align-top'>
                       <Link
                         href={`/admin/tools/${item.id}/edit`}
                         className='inline-flex items-center gap-1 text-sm font-medium text-cyan-700 hover:text-cyan-800'
@@ -2734,19 +2803,10 @@ export default async function AdminAnalyticsPage({
             <Link
               key={item.key}
               href={buildOutreachHref(item.key)}
-              className={`rounded-lg px-3 py-1.5 text-sm font-medium ${
-                outreachFocus === item.key
-                  ? item.tone === 'amber'
-                    ? 'bg-amber-600 text-white'
-                    : item.tone === 'cyan'
-                      ? 'bg-cyan-700 text-white'
-                      : item.tone === 'emerald'
-                        ? 'bg-emerald-600 text-white'
-                        : item.tone === 'violet'
-                          ? 'bg-violet-600 text-white'
-                          : 'bg-slate-700 text-white'
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-              }`}
+              className={`rounded-lg px-3 py-1.5 text-sm font-medium ${getOutreachToneClass(
+                item.tone,
+                outreachFocus === item.key,
+              )}`}
             >
               {item.label}
             </Link>
@@ -2826,7 +2886,8 @@ export default async function AdminAnalyticsPage({
             <div>
               <p className='text-sm font-semibold text-slate-900'>Outreach to revenue bridge</p>
               <p className='mt-1 text-sm text-slate-600'>
-                What happened after outreach-driven claims: did they stay free, enter the paid path, confirm payment, or turn into featured inventory?
+                What happened after outreach-driven claims: did they stay free, enter the paid path, confirm payment, or
+                turn into featured inventory?
               </p>
             </div>
             <p className='text-xs text-slate-500'>
@@ -2836,7 +2897,9 @@ export default async function AdminAnalyticsPage({
           <div className='mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4'>
             <div className='rounded-lg border border-cyan-200 bg-white p-4'>
               <p className='text-sm font-medium text-slate-600'>Outreach claims</p>
-              <p className='mt-2 text-3xl font-semibold text-cyan-700'>{outreachCommercialBridge.claimedFromOutreachCount}</p>
+              <p className='mt-2 text-3xl font-semibold text-cyan-700'>
+                {outreachCommercialBridge.claimedFromOutreachCount}
+              </p>
               <p className='mt-2 text-sm text-slate-500'>
                 {getTrendLabel(
                   outreachCommercialBridge.recentClaimedFromOutreachCount,
@@ -2846,7 +2909,9 @@ export default async function AdminAnalyticsPage({
             </div>
             <div className='rounded-lg border border-cyan-200 bg-white p-4'>
               <p className='text-sm font-medium text-slate-600'>Payment confirmed</p>
-              <p className='mt-2 text-3xl font-semibold text-emerald-600'>{outreachCommercialBridge.paymentConfirmedCount}</p>
+              <p className='mt-2 text-3xl font-semibold text-emerald-600'>
+                {outreachCommercialBridge.paymentConfirmedCount}
+              </p>
               <p className='mt-2 text-sm text-slate-500'>
                 {getTrendLabel(
                   outreachCommercialBridge.recentPaymentConfirmedCount,
@@ -2856,7 +2921,9 @@ export default async function AdminAnalyticsPage({
             </div>
             <div className='rounded-lg border border-cyan-200 bg-white p-4'>
               <p className='text-sm font-medium text-slate-600'>Featured reserved</p>
-              <p className='mt-2 text-3xl font-semibold text-amber-700'>{outreachCommercialBridge.featuredReservedCount}</p>
+              <p className='mt-2 text-3xl font-semibold text-amber-700'>
+                {outreachCommercialBridge.featuredReservedCount}
+              </p>
               <p className='mt-2 text-sm text-slate-500'>
                 {getTrendLabel(
                   outreachCommercialBridge.recentFeaturedReservedCount,
@@ -2866,7 +2933,9 @@ export default async function AdminAnalyticsPage({
             </div>
             <div className='rounded-lg border border-cyan-200 bg-white p-4'>
               <p className='text-sm font-medium text-slate-600'>Featured live</p>
-              <p className='mt-2 text-3xl font-semibold text-violet-700'>{outreachCommercialBridge.featuredLiveCount}</p>
+              <p className='mt-2 text-3xl font-semibold text-violet-700'>
+                {outreachCommercialBridge.featuredLiveCount}
+              </p>
               <p className='mt-2 text-sm text-slate-500'>
                 {getTrendLabel(
                   outreachCommercialBridge.recentFeaturedLiveCount,
@@ -2876,7 +2945,8 @@ export default async function AdminAnalyticsPage({
             </div>
           </div>
           <p className='mt-3 text-xs text-slate-500'>
-            {outreachPaidPlanRate}% of outreach-led claims are on the paid plan and {outreachPaymentConfirmedRate}% have payment confirmed.
+            {outreachPaidPlanRate}% of outreach-led claims are on the paid plan and {outreachPaymentConfirmedRate}% have
+            payment confirmed.
           </p>
         </div>
 
@@ -2896,7 +2966,9 @@ export default async function AdminAnalyticsPage({
             <table className='min-w-full divide-y divide-slate-200'>
               <thead className='bg-slate-50'>
                 <tr>
-                  <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>Executor</th>
+                  <th className='px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                    Executor
+                  </th>
                   <th className='px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500'>
                     Recent 7d
                   </th>
@@ -2944,7 +3016,9 @@ export default async function AdminAnalyticsPage({
                       <p className='text-sm font-semibold text-violet-700'>{item.claimToFeaturedLiveRate}%</p>
                       <p className='mt-1 text-xs text-slate-500'>of claimed leads</p>
                     </td>
-                    <td className='px-4 py-4 text-right align-top text-sm text-slate-700'>{item.paymentConfirmedCount}</td>
+                    <td className='px-4 py-4 text-right align-top text-sm text-slate-700'>
+                      {item.paymentConfirmedCount}
+                    </td>
                     <td className='px-4 py-4 text-right align-top text-sm text-slate-700'>{item.featuredLiveCount}</td>
                   </tr>
                 ))}
@@ -3013,17 +3087,23 @@ export default async function AdminAnalyticsPage({
             <div className='rounded-lg border border-slate-200 bg-slate-50 p-4'>
               <p className='text-sm font-medium text-slate-600'>Still active</p>
               <p className='mt-2 text-3xl font-semibold text-blue-600'>{recentOutreachActiveCount}</p>
-              <p className='mt-2 text-sm text-slate-500'>Recent touches that are still mid-conversation or need follow-up.</p>
+              <p className='mt-2 text-sm text-slate-500'>
+                Recent touches that are still mid-conversation or need follow-up.
+              </p>
             </div>
             <div className='rounded-lg border border-slate-200 bg-slate-50 p-4'>
               <p className='text-sm font-medium text-slate-600'>Closed this week</p>
               <p className='mt-2 text-3xl font-semibold text-emerald-600'>{recentOutreachClosedCount}</p>
-              <p className='mt-2 text-sm text-slate-500'>Visible leads that reached a closed state within the last 7 days.</p>
+              <p className='mt-2 text-sm text-slate-500'>
+                Visible leads that reached a closed state within the last 7 days.
+              </p>
             </div>
             <div className='rounded-lg border border-slate-200 bg-slate-50 p-4'>
               <p className='text-sm font-medium text-slate-600'>Due now in active work</p>
               <p className='mt-2 text-3xl font-semibold text-amber-700'>{outreachDueRows.length}</p>
-              <p className='mt-2 text-sm text-slate-500'>Use this with the weekly movement numbers to spot stalled follow-ups.</p>
+              <p className='mt-2 text-sm text-slate-500'>
+                Use this with the weekly movement numbers to spot stalled follow-ups.
+              </p>
             </div>
           </div>
           <div className='mt-4 flex flex-wrap gap-2'>
@@ -3043,7 +3123,10 @@ export default async function AdminAnalyticsPage({
           {(recentOutreachClosedReasonRows.length > 0 || recentOutreachClosedCount > 0) && (
             <div className='mt-3 flex flex-wrap gap-2'>
               {recentOutreachClosedReasonRows.map((item) => (
-                <span key={item.key} className='inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700'>
+                <span
+                  key={item.key}
+                  className='inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700'
+                >
                   {item.label}: {item.count}
                 </span>
               ))}
@@ -3087,23 +3170,31 @@ export default async function AdminAnalyticsPage({
             <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
               <p className='text-sm font-medium text-slate-600'>Started outreach</p>
               <p className='mt-2 text-3xl font-semibold text-cyan-700'>{outreachStartedRate}%</p>
-              <p className='mt-2 text-sm text-slate-500'>{outreachStartedCount} of these leads already have first-touch progress.</p>
+              <p className='mt-2 text-sm text-slate-500'>
+                {outreachStartedCount} of these leads already have first-touch progress.
+              </p>
             </div>
             <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
               <p className='text-sm font-medium text-slate-600'>Active conversations</p>
               <p className='mt-2 text-3xl font-semibold text-blue-600'>{outreachActiveCount}</p>
-              <p className='mt-2 text-sm text-slate-500'>Leads currently sitting in contacted, waiting-reply, or follow-up-needed states.</p>
+              <p className='mt-2 text-sm text-slate-500'>
+                Leads currently sitting in contacted, waiting-reply, or follow-up-needed states.
+              </p>
             </div>
             <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
               <p className='text-sm font-medium text-slate-600'>Closed share</p>
               <p className='mt-2 text-3xl font-semibold text-emerald-600'>{outreachClosedRate}%</p>
               <p className='mt-2 text-sm text-slate-500'>
-                Historical close rate across all tracked outreach leads, including listings that were later claimed and left the active queue.
+                Historical close rate across all tracked outreach leads, including listings that were later claimed and
+                left the active queue.
               </p>
               {(outreachClosedReasonRows.length > 0 || outreachUnclassifiedClosedCount > 0) && (
                 <div className='mt-3 flex flex-wrap gap-2'>
                   {outreachClosedReasonRows.map((item) => (
-                    <span key={item.key} className='inline-flex rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700'>
+                    <span
+                      key={item.key}
+                      className='inline-flex rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700'
+                    >
                       {item.label}: {item.count}
                     </span>
                   ))}
@@ -3114,7 +3205,9 @@ export default async function AdminAnalyticsPage({
                   )}
                 </div>
               )}
-              <p className='mt-3 text-xs text-slate-500'>{outreachHistorySummary.totalTracked} tracked outreach leads in history.</p>
+              <p className='mt-3 text-xs text-slate-500'>
+                {outreachHistorySummary.totalTracked} tracked outreach leads in history.
+              </p>
             </div>
           </div>
         </div>
@@ -3127,10 +3220,13 @@ export default async function AdminAnalyticsPage({
               <div>
                 <h3 className='text-base font-semibold text-slate-900'>Historical close outcomes to classify</h3>
                 <p className='mt-1 text-sm text-slate-600'>
-                  Older outreach records are already closed, but still missing the reason. Classify them here so the historical funnel stays trustworthy.
+                  Older outreach records are already closed, but still missing the reason. Classify them here so the
+                  historical funnel stays trustworthy.
                 </p>
               </div>
-              <div className='text-sm text-slate-500'>{outreachHistorySummary.unclassifiedClosedCount} still unclassified</div>
+              <div className='text-sm text-slate-500'>
+                {outreachHistorySummary.unclassifiedClosedCount} still unclassified
+              </div>
             </div>
             <AdminOutreachClassificationTable items={outreachNeedsClassification} locale={locale} />
           </div>
