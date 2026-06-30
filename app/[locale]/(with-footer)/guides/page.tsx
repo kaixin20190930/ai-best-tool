@@ -64,7 +64,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ]
     .map((href) => pickGuide(href))
     .filter((item): item is (typeof GUIDE_PAGES)[number] => Boolean(item));
-  const commercialGuides = [
+  const growthCommercialGuides = [
     '/guides/ai-tools-for-content-creation',
     '/guides/ai-tools-for-content-creation-comparison',
     '/guides/ai-tools-for-marketing',
@@ -145,6 +145,18 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     '/guides/ai-tools-for-ecommerce-comparison',
     '/guides/ai-tools-for-students',
     '/guides/ai-tools-for-students-comparison',
+  ]
+    .map((href) => pickGuide(href))
+    .filter((item): item is (typeof GUIDE_PAGES)[number] => Boolean(item));
+  const agencyCommercialGuides = [
+    '/guides/ai-tools-for-agencies',
+    '/guides/ai-tools-for-agencies-comparison',
+    '/guides/ai-tools-for-lead-generation',
+    '/guides/ai-tools-for-lead-generation-comparison',
+    '/guides/ai-tools-for-sales-prospecting',
+    '/guides/ai-tools-for-sales-prospecting-comparison',
+    '/guides/ai-tools-for-ecommerce',
+    '/guides/ai-tools-for-ecommerce-comparison',
   ]
     .map((href) => pickGuide(href))
     .filter((item): item is (typeof GUIDE_PAGES)[number] => Boolean(item));
@@ -569,6 +581,44 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
           <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
             {businessGuides.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className='group rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-cyan-50/60'
+              >
+                <div className='flex items-start justify-between gap-3'>
+                  <div>
+                    <p className='text-sm font-semibold text-slate-950'>{item.title[isChinese ? 'cn' : 'en']}</p>
+                    <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc[isChinese ? 'cn' : 'en']}</p>
+                  </div>
+                  <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-slate-700' />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
+          <div className='flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between'>
+            <div>
+              <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+                {isChinese ? '商业与服务路径' : 'Commercial and agency paths'}
+              </p>
+              <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+                {isChinese
+                  ? '如果你在做服务交付、获客或店铺经营，这几页最值得先看'
+                  : 'If you are running services, acquisition, or store operations, start with these pages'}
+              </h2>
+            </div>
+            <p className='max-w-3xl text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '代理服务、获客、销售外联和电商往往都是同一条商业链路，先把这些入口前置更容易把用户送到比较页。'
+                : 'Agency work, lead generation, sales outreach, and ecommerce are often part of the same commercial chain, and surfacing them early helps move users into comparison pages faster.'}
+            </p>
+          </div>
+
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {growthCommercialGuides.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -1073,7 +1123,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               : 'If a user is already thinking about acquisition, sales, validation, evaluation, or distribution, these pages turn search traffic into actual decision-making faster than broad tool pages.'}
           </p>
           <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-3'>
-            {commercialGuides.map((item) => (
+            {agencyCommercialGuides.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
