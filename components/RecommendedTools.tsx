@@ -236,7 +236,7 @@ export default async function RecommendedTools({
   }
 
   return (
-    <section className='mb-24 pb-2'>
+    <section className='mb-20 pb-1'>
       <div className='mb-6 rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
         <h2 className='text-2xl font-bold text-slate-900 lg:text-3xl'>{comparisonTitle}</h2>
         <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>{comparisonDescription}</p>
@@ -283,6 +283,7 @@ export default async function RecommendedTools({
       <div className='grid items-start gap-6 md:grid-cols-2 xl:grid-cols-3'>
         {recommendedTools.map((tool) => {
           const reasons = getSimilarityReasons(tool, pricing, tagSlugs, isChinese, locale);
+          const visibleReasons = reasons.slice(0, 2);
           const comparisonCta = getComparisonCtaFromTags(tool.tags, locale);
 
           return (
@@ -301,20 +302,18 @@ export default async function RecommendedTools({
                 compareLabel={comparisonCta.compareLabel}
                 locale={locale}
               />
-              <div className='overflow-hidden rounded-lg border border-slate-200 bg-white p-3 shadow-sm'>
-                <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                  {isChinese ? '为什么推荐它' : 'Why compare this one'}
-                </p>
-                <p className='mt-1 text-xs leading-5 text-slate-500'>
-                  {isChinese
-                    ? '先看这几条，再决定要不要继续点官网或继续比较。'
-                    : 'Read these signals first, then decide whether to open the official site or keep comparing.'}
-                </p>
+              <div className='overflow-hidden rounded-xl border border-slate-200 bg-slate-50/80 p-3 shadow-sm'>
+                <div className='flex items-center justify-between gap-2'>
+                  <p className='text-[10px] font-semibold uppercase tracking-wide text-slate-500'>
+                    {isChinese ? '为什么推荐它' : 'Why compare this one'}
+                  </p>
+                  <p className='text-[10px] font-medium text-slate-400'>{isChinese ? '先看再决定' : 'Read first'}</p>
+                </div>
                 <div className='mt-2 space-y-2'>
-                  {reasons.map((reason) => (
+                  {visibleReasons.map((reason) => (
                     <div
                       key={`${reason.kind}-${reason.text}`}
-                      className='rounded-lg bg-slate-50 px-3 py-2 text-xs leading-5 text-slate-700 ring-1 ring-slate-200'
+                      className='rounded-lg bg-white px-3 py-2 text-xs leading-5 text-slate-700 ring-1 ring-slate-200'
                     >
                       <p className='text-[10px] font-semibold uppercase tracking-wide text-slate-500'>
                         {getReasonLabel(reason.kind, isChinese)}

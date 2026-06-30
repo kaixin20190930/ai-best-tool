@@ -2535,7 +2535,7 @@ export default async function Page({
         </div>
 
         {toolId && (
-          <section id='comments' className='mx-auto mt-12 max-w-7xl scroll-mt-28 px-4 pb-12 lg:px-6'>
+          <section id='comments' className='mx-auto mt-16 max-w-7xl scroll-mt-28 px-4 pb-12 lg:mt-20 lg:px-6'>
             <Separator className='mb-10 border-t border-slate-200' />
             <div className='mb-3 rounded-lg bg-white p-3 shadow-sm ring-1 ring-slate-200 sm:p-4'>
               <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-3'>
