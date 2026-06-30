@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { getSearchSuggestions } from '@/app/actions/search';
+
+import { getSearchHistory, getSearchSuggestions } from '@/app/actions/search';
 
 interface SearchProps {
   onSearch?: (query: string) => void;
@@ -11,16 +12,17 @@ interface SearchProps {
   className?: string;
 }
 
-export default function Search({ 
-  onSearch, 
-  placeholder = 'Search AI tools...', 
+export default function Search({
+  onSearch,
+  placeholder = 'Search AI tools...',
   showSuggestions = true,
-  className = ''
+  className = '',
 }: SearchProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(searchParams.get('search') || '');
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [showSuggestionsList, setShowSuggestionsList] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const suggestionsRef = useRef<HTMLDivElement>(null);
@@ -47,6 +49,23 @@ export default function Search({
     const debounceTimer = setTimeout(loadSuggestions, 300);
     return () => clearTimeout(debounceTimer);
   }, [query, showSuggestions]);
+
+  // Load recent searches once so logged-in users can quickly rerun them.
+  useEffect(() => {
+    const loadRecentSearches = async () => {
+      try {
+        const history = await getSearchHistory(undefined, 5);
+        setRecentSearches(history);
+      } catch (error) {
+        console.error('Failed to load search history:', error);
+        setRecentSearches([]);
+      }
+    };
+
+    if (showSuggestions) {
+      loadRecentSearches();
+    }
+  }, [showSuggestions]);
 
   // Close suggestions when clicking outside
   useEffect(() => {
@@ -92,7 +111,7 @@ export default function Search({
   const handleSuggestionClick = (suggestion: string) => {
     setQuery(suggestion);
     setShowSuggestionsList(false);
-    
+
     if (onSearch) {
       onSearch(suggestion);
     } else {
@@ -115,7 +134,7 @@ export default function Search({
 
   return (
     <div className={`flex flex-1 items-center justify-center p-4 sm:p-6 ${className}`}>
-      <div className='w-full max-w-lg relative'>
+      <div className='relative w-full max-w-lg'>
         <form className='sm:flex sm:items-center' onSubmit={handleSubmit}>
           <div className='relative w-full'>
             <input
@@ -130,16 +149,16 @@ export default function Search({
               type='search'
               autoComplete='off'
             />
-            
+
             {/* Suggestions dropdown */}
             {showSuggestionsList && suggestions.length > 0 && (
               <div
                 ref={suggestionsRef}
                 className='absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border border-slate-200 bg-white shadow-lg'
               >
-                {suggestions.map((suggestion, index) => (
+                {suggestions.map((suggestion) => (
                   <button
-                    key={index}
+                    key={suggestion}
                     type='button'
                     onClick={() => handleSuggestionClick(suggestion)}
                     className='w-full px-4 py-3 text-left text-base text-slate-800 hover:bg-slate-100 focus:bg-slate-100 focus:outline-none active:bg-slate-200 sm:py-2 sm:text-sm'
@@ -149,28 +168,47 @@ export default function Search({
                 ))}
               </div>
             )}
+
+            {showSuggestionsList &&
+              query.trim().length < 2 &&
+              recentSearches.length > 0 &&
+              suggestions.length === 0 && (
+                <div
+                  ref={suggestionsRef}
+                  className='absolute z-10 mt-1 w-full rounded-md border border-slate-200 bg-white shadow-lg'
+                >
+                  <div className='border-b border-slate-100 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                    Recent searches
+                  </div>
+                  <div className='max-h-60 overflow-auto p-2'>
+                    {recentSearches.map((recent) => (
+                      <button
+                        key={recent}
+                        type='button'
+                        onClick={() => handleSuggestionClick(recent)}
+                        className='flex w-full items-center rounded-md px-3 py-2 text-left text-sm text-slate-800 hover:bg-slate-100 focus:bg-slate-100 focus:outline-none'
+                      >
+                        {recent}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
           </div>
 
           <button
             type='submit'
             disabled={isLoading}
-            className='mt-3 inline-flex w-full items-center justify-center rounded-md border border-transparent bg-cyan-700 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:ring-offset-2 sm:ml-3 sm:mt-0 sm:w-auto sm:px-4 sm:py-2 sm:text-sm disabled:cursor-not-allowed disabled:opacity-50 active:bg-cyan-900 touch-manipulation'
+            className='mt-3 inline-flex w-full touch-manipulation items-center justify-center rounded-md border border-transparent bg-cyan-700 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:ring-offset-2 active:bg-cyan-900 disabled:cursor-not-allowed disabled:opacity-50 sm:ml-3 sm:mt-0 sm:w-auto sm:px-4 sm:py-2 sm:text-sm'
           >
             {isLoading ? (
               <svg
-                className='animate-spin size-5 sm:size-[18px]'
+                className='size-5 animate-spin sm:size-[18px]'
                 xmlns='http://www.w3.org/2000/svg'
                 fill='none'
                 viewBox='0 0 24 24'
               >
-                <circle
-                  className='opacity-25'
-                  cx='12'
-                  cy='12'
-                  r='10'
-                  stroke='currentColor'
-                  strokeWidth='4'
-                />
+                <circle className='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='4' />
                 <path
                   className='opacity-75'
                   fill='currentColor'
