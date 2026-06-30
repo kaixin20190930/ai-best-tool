@@ -97,7 +97,7 @@ export default async function AdminDashboard({
     },
     {
       name: 'Claimed Tools',
-      value: toolsStats.claimed.toString(),
+      value: claimedToolsCount.toString(),
       icon: Sparkles,
       subtext: 'Tools already tied to an owner flow',
       color: 'green',
@@ -718,7 +718,7 @@ export default async function AdminDashboard({
             className='rounded-xl border border-emerald-200 bg-emerald-50 p-4'
           >
             <p className='text-xs font-semibold uppercase tracking-wide text-emerald-700'>Claimed</p>
-            <p className='mt-2 text-3xl font-bold text-emerald-700'>{toolsStats.claimed}</p>
+            <p className='mt-2 text-3xl font-bold text-emerald-700'>{claimedToolsCount}</p>
             <p className='mt-1 text-sm text-slate-600'>Owner linked</p>
           </Link>
           <Link href='/admin/tools?claimStatus=pending' className='rounded-xl border border-amber-200 bg-amber-50 p-4'>
