@@ -482,12 +482,38 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-automation-tools',
+    priority: 0.75,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 自动化工具推荐',
+      en: 'AI automation tools',
+    },
+    desc: {
+      cn: '适合流程编排、Agent 工作流和重复任务自动化。',
+      en: 'For workflow orchestration, agent workflows, and repeatable automation.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-automation-comparison',
     priority: 0.76,
     changeFrequency: 'weekly',
     title: {
       cn: 'AI 自动化工具对比',
       en: 'AI tools for automation comparison',
+    },
+    desc: {
+      cn: '把常见自动化工具放在一起快速对照。',
+      en: 'Compare common automation tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-automation-tools-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 自动化工具对比',
+      en: 'AI automation tools comparison',
     },
     desc: {
       cn: '把常见自动化工具放在一起快速对照。',
@@ -1463,8 +1489,11 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/ai-tools-for-agents',
   '/guides/ai-agent-tools',
   '/guides/ai-tools-for-automation',
+  '/guides/ai-automation-tools',
   '/guides/ai-tools-for-agents-comparison',
   '/guides/ai-agent-tools-comparison',
+  '/guides/ai-tools-for-automation-comparison',
+  '/guides/ai-automation-tools-comparison',
   '/guides/ai-tools-for-sales',
   '/guides/ai-tools-for-lead-generation',
   '/guides/ai-tools-for-sales-comparison',
