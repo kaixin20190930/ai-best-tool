@@ -64,10 +64,16 @@ export default async function AdminDashboard({
   const pageAccessReport = await getPageAccessReport('30d', 6);
   const conversionSnapshot = await getConversionSnapshot('30d');
   const submissionFunnel = await getSubmissionFunnelStats('30d');
-  const claimedToolsCount = toolsStats.claimed;
-  const claimPendingCount = toolsStats.claimPending;
-  const claimRejectedCount = toolsStats.claimRejected;
-  const claimUnclaimedCount = toolsStats.claimUnclaimed;
+  const claimStats = toolsStats as unknown as {
+    claimed: number;
+    claimPending: number;
+    claimRejected: number;
+    claimUnclaimed: number;
+  };
+  const claimedToolsCount = claimStats.claimed;
+  const claimPendingCount = claimStats.claimPending;
+  const claimRejectedCount = claimStats.claimRejected;
+  const claimUnclaimedCount = claimStats.claimUnclaimed;
 
   const metrics = [
     {
