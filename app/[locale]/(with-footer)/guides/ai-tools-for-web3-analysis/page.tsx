@@ -2,13 +2,13 @@ import { Metadata } from 'next';
 import { Activity, BarChart3, ExternalLink, Wallet } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Metadata.home' });
@@ -65,15 +65,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-      '先分清你是在做链上分析、协议观察、钱包监控还是 DeFi 研究。',
-      '优先看数据深度、覆盖范围、历史查询和监控能力。',
-      '如果结论要给团队反复复用，重点看导出、分享和后续追踪能力。',
-    ]
+        '先分清你是在做链上分析、协议观察、钱包监控还是 DeFi 研究。',
+        '优先看数据深度、覆盖范围、历史查询和监控能力。',
+        '如果结论要给团队反复复用，重点看导出、分享和后续追踪能力。',
+      ]
     : [
-      'Separate on-chain analysis, protocol monitoring, wallet tracking, and DeFi research before comparing tools.',
-      'Prioritize depth, coverage, history, and monitoring.',
-      'If your conclusions need to be reused by a team, focus on exports, sharing, and follow-up tracking.',
-    ];
+        'Separate on-chain analysis, protocol monitoring, wallet tracking, and DeFi research before comparing tools.',
+        'Prioritize depth, coverage, history, and monitoring.',
+        'If your conclusions need to be reused by a team, focus on exports, sharing, and follow-up tracking.',
+      ];
 
   return (
     <>
@@ -226,6 +226,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Useful for TVL, protocol shifts, and capital-flow research.',
             },
             {
+              href: '/guides/ai-tools-for-web3-analysis-comparison',
+              title: isChinese ? 'Web3 分析工具对比' : 'Web3 analysis comparison',
+              description: isChinese
+                ? '更适合链上研究、协议监控、钱包追踪和异常观察。'
+                : 'Better for on-chain research, protocol monitoring, wallet tracking, and anomaly observation.',
+            },
+            {
               href: '/guides/ai-tools-for-on-chain-analysis-comparison',
               title: isChinese ? '链上分析工具对比' : 'On-chain analysis comparison',
               description: isChinese
@@ -238,6 +245,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               description: isChinese
                 ? '更适合协议健康、增长和使用情况跟踪。'
                 : 'Useful for protocol health, growth, and usage tracking.',
+            },
+            {
+              href: '/guides/ai-tools-for-web3-analysis-comparison',
+              title: isChinese ? 'Web3 分析工具对比' : 'Web3 analysis comparison',
+              description: isChinese
+                ? '当你已经锁定 Web3 分析方向，这里是更窄的比较入口。'
+                : 'A narrower comparison path once Web3 analysis is your clear direction.',
             },
           ]}
           nextEyebrow={isChinese ? '下一步入口' : 'Where to go next'}

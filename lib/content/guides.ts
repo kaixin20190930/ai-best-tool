@@ -1015,6 +1015,19 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-tools-for-web3-analysis-comparison',
+    priority: 0.74,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI Web3 分析工具对比',
+      en: 'AI tools for Web3 analysis comparison',
+    },
+    desc: {
+      cn: '把常见 Web3 分析工具放在一起快速对照。',
+      en: 'Compare common Web3 analysis tools side by side.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-web3-comparison',
     priority: 0.74,
     changeFrequency: 'weekly',
@@ -1925,6 +1938,7 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/ai-tools-for-voice-comparison',
   '/guides/ai-tools-for-web3',
   '/guides/ai-tools-for-web3-analysis',
+  '/guides/ai-tools-for-web3-analysis-comparison',
   '/guides/ai-tools-for-crypto-research',
   '/guides/ai-tools-for-token-research',
   '/guides/ai-tools-for-wallet-research',
