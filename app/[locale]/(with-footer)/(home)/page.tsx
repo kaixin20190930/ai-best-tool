@@ -168,6 +168,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     '/guides/poe-alternatives-comparison',
     '/guides/ai-writing-tools-comparison',
     '/guides/ai-seo-tools-comparison',
+    '/guides/ai-tools-for-meeting-notes-comparison',
+    '/guides/ai-tools-for-voice-comparison',
     '/guides/ai-tools-for-research-comparison',
   ] as const;
   const comparisonGuidePages = comparisonGuideHrefs
