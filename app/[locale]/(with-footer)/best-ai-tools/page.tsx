@@ -18,7 +18,16 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 
 export default function BestAiToolsPage({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
-  const priorityTopicKeys = ['ai-content-creation-tools', 'ai-coding-tools', 'ai-video-tools', 'ai-writing-tools'];
+  const priorityTopicKeys = [
+    'ai-coding-tools',
+    'ai-agent-tools',
+    'ai-api-observability-tools',
+    'ai-model-routing-tools',
+    'ai-research-tools',
+    'ai-content-creation-tools',
+    'ai-video-tools',
+    'ai-writing-tools',
+  ];
   const priorityTopics = priorityTopicKeys
     .map((key) => topListTopics.find((topic) => topic.key === key))
     .filter((topic): topic is (typeof topListTopics)[number] => Boolean(topic));
@@ -51,8 +60,8 @@ export default function BestAiToolsPage({ params: { locale } }: { params: { loca
                   text: isChinese ? '每页只解决一个选择问题' : 'Each page answers one decision',
                 },
                 {
-                  title: isChinese ? '可比较' : 'Comparable',
-                  text: isChinese ? '保留可对比的工具特征' : 'Keeps tools comparable',
+                  title: isChinese ? '高意图主题' : 'High-intent topics',
+                  text: isChinese ? '优先放最容易转化的榜单' : 'Front-load the lists most likely to convert',
                 },
                 {
                   title: isChinese ? '可转化' : 'Conversion-friendly',
@@ -97,11 +106,11 @@ export default function BestAiToolsPage({ params: { locale } }: { params: { loca
                     {isChinese ? '优先榜单' : 'Priority lists'}
                   </p>
                   <h2 className='mt-1 text-xl font-bold text-slate-950'>
-                    {isChinese ? '先看这四个高意图榜单' : 'Start with the four highest-intent lists'}
+                    {isChinese ? '先看这几个高意图榜单' : 'Start with the highest-intent lists'}
                   </h2>
                 </div>
               </div>
-              <div className='mt-4 grid gap-3 sm:grid-cols-2'>
+              <div className='mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4'>
                 {priorityTopics.map((topic) => (
                   <Link
                     key={topic.key}
@@ -153,7 +162,7 @@ export default function BestAiToolsPage({ params: { locale } }: { params: { loca
                   </p>
                   <p className='mt-1 text-sm leading-6 text-slate-600'>
                     {isChinese
-                      ? '先看榜单，再进详情页比较关键差异，最后再去提交或付费。'
+                      ? '先看榜单，再进详情页比较关键差异，最后再去提交、认领或付费。'
                       : 'Scan the list, compare the key differences in detail pages, then move into submit or paid options.'}
                   </p>
                 </div>
