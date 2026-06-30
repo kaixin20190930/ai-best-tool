@@ -534,6 +534,19 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-agent-tools-comparison',
+    priority: 0.78,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI Agent 工具对比',
+      en: 'AI agent tools comparison',
+    },
+    desc: {
+      cn: '把常见 Agent 方向工具放在一起快速对照。',
+      en: 'Compare common agent-oriented tools side by side.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-marketing',
     priority: 0.73,
     changeFrequency: 'monthly',
@@ -1437,6 +1450,7 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/ai-tools-for-agents',
   '/guides/ai-tools-for-automation',
   '/guides/ai-tools-for-agents-comparison',
+  '/guides/ai-agent-tools-comparison',
   '/guides/ai-tools-for-sales',
   '/guides/ai-tools-for-lead-generation',
   '/guides/ai-tools-for-sales-comparison',
