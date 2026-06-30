@@ -1,7 +1,16 @@
+import type { Metadata } from 'next';
+
 import ChatbotToolsPage, { generateMetadata as generateChatbotToolsMetadata } from '../ai-chatbot-tools/page';
 
-export function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
-  return generateChatbotToolsMetadata({ params: { locale } });
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const metadata = await generateChatbotToolsMetadata({ params: { locale } });
+  return {
+    ...metadata,
+    alternates: {
+      ...metadata.alternates,
+      canonical: `/${locale}/guides/ai-chatbot-tools`,
+    },
+  };
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
