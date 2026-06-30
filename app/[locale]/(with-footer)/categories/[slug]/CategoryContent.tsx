@@ -22,14 +22,25 @@ export interface CategoryContentProps {
 }
 
 export default async function CategoryContent({ params, pageNum, searchParams }: CategoryContentProps) {
-  const [category, categories, tags] = await Promise.all([
+  const [categoryResult, categoriesResult, tagsResult] = await Promise.allSettled([
     getCategoryBySlug(params.slug, true),
     getAllCategories(true),
     getAllTags('count'),
   ]);
+  const category = categoryResult.status === 'fulfilled' ? categoryResult.value : null;
+  const categories = categoriesResult.status === 'fulfilled' ? categoriesResult.value : [];
+  const tags = tagsResult.status === 'fulfilled' ? tagsResult.value : [];
 
   if (!category) {
     notFound();
+  }
+  let categoryToolCount = 0;
+  if ('toolCount' in category) {
+    if (typeof category.toolCount === 'number') {
+      categoryToolCount = category.toolCount;
+    } else {
+      categoryToolCount = Number(category.toolCount) || 0;
+    }
   }
 
   const categoryName = getLocalizedField(category.name, params.locale);
@@ -423,8 +434,19 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
     .filter((page): page is (typeof GUIDE_PAGES)[number] => Boolean(page))
     .filter((page) => page.href.endsWith('-comparison'));
   const primaryComparisonGuide = comparisonGuides[0] || relatedGuides[0] || null;
+  const priorityCategorySlugs = ['developer-tools', 'research', 'voice', 'text-writing'];
   const adjacentCategories = categories
     .filter((item) => item.slug !== category.slug)
+    .sort((a, b) => {
+      const aPriority = priorityCategorySlugs.indexOf(String(a.slug));
+      const bPriority = priorityCategorySlugs.indexOf(String(b.slug));
+
+      if (aPriority === -1 && bPriority === -1) return 0;
+      if (aPriority === -1) return 1;
+      if (bPriority === -1) return -1;
+
+      return aPriority - bPriority;
+    })
     .slice(0, 4)
     .map((item) => ({
       slug: String(item.slug),
@@ -505,9 +527,9 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
                 {isChinese ? `Best ${categoryName} AI 工具` : `Best ${categoryName} AI tools`}
               </h1>
               <p className='mt-3 text-slate-600'>{categoryDescription}</p>
-              {'toolCount' in category && (
+              {categoryToolCount > 0 && (
                 <p className='mt-4 text-sm font-medium text-slate-500'>
-                  {category.toolCount} {isChinese ? '个已发布工具' : 'published tools'}
+                  {categoryToolCount} {isChinese ? '个已发布工具' : 'published tools'}
                 </p>
               )}
             </div>
