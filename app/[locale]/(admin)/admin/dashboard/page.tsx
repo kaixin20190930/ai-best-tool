@@ -65,6 +65,9 @@ export default async function AdminDashboard({
   const conversionSnapshot = await getConversionSnapshot('30d');
   const submissionFunnel = await getSubmissionFunnelStats('30d');
   const claimedToolsCount = Number((toolsStats as { claimed?: number }).claimed ?? 0);
+  const claimPendingCount = Number((toolsStats as { claimPending?: number }).claimPending ?? 0);
+  const claimRejectedCount = Number((toolsStats as { claimRejected?: number }).claimRejected ?? 0);
+  const claimUnclaimedCount = Number((toolsStats as { claimUnclaimed?: number }).claimUnclaimed ?? 0);
 
   const metrics = [
     {
@@ -382,7 +385,7 @@ export default async function AdminDashboard({
   const todayFocus = [
     {
       name: 'Claim follow-up',
-      value: toolsStats.claimPending + toolsStats.claimUnclaimed,
+      value: claimPendingCount + claimUnclaimedCount,
       subtext:
         conversionSnapshot.overdueClaimLeads > 0
           ? `${conversionSnapshot.overdueClaimLeads} overdue claim lead${conversionSnapshot.overdueClaimLeads === 1 ? '' : 's'}`
@@ -723,12 +726,12 @@ export default async function AdminDashboard({
           </Link>
           <Link href='/admin/tools?claimStatus=pending' className='rounded-xl border border-amber-200 bg-amber-50 p-4'>
             <p className='text-xs font-semibold uppercase tracking-wide text-amber-800'>Claim pending</p>
-            <p className='mt-2 text-3xl font-bold text-amber-700'>{toolsStats.claimPending}</p>
+            <p className='mt-2 text-3xl font-bold text-amber-700'>{claimPendingCount}</p>
             <p className='mt-1 text-sm text-slate-600'>Needs review</p>
           </Link>
           <Link href='/admin/tools?claimStatus=rejected' className='rounded-xl border border-rose-200 bg-rose-50 p-4'>
             <p className='text-xs font-semibold uppercase tracking-wide text-rose-700'>Claim rejected</p>
-            <p className='mt-2 text-3xl font-bold text-rose-700'>{toolsStats.claimRejected}</p>
+            <p className='mt-2 text-3xl font-bold text-rose-700'>{claimRejectedCount}</p>
             <p className='mt-1 text-sm text-slate-600'>Needs cleanup</p>
           </Link>
           <Link
@@ -736,7 +739,7 @@ export default async function AdminDashboard({
             className='rounded-xl border border-slate-200 bg-slate-50 p-4'
           >
             <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>Unclaimed</p>
-            <p className='mt-2 text-3xl font-bold text-slate-900'>{toolsStats.claimUnclaimed}</p>
+            <p className='mt-2 text-3xl font-bold text-slate-900'>{claimUnclaimedCount}</p>
             <p className='mt-1 text-sm text-slate-600'>No owner yet</p>
           </Link>
         </div>
