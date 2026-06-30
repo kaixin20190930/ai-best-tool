@@ -58,6 +58,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const web3Guides = [
     '/guides/ai-tools-for-web3',
     '/guides/ai-tools-for-web3-analysis',
+    '/guides/ai-tools-for-web3-analysis-comparison',
     '/guides/ai-tools-for-crypto-research',
     '/guides/ai-tools-for-token-research',
     '/guides/ai-tools-for-on-chain-analysis',
@@ -1046,6 +1047,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   desc: isChinese
                     ? '适合还没确定自己更偏研究、钱包还是协议分析的人。'
                     : 'Best when the user has not yet narrowed into research, wallets, or protocol analytics.',
+                },
+                {
+                  href: '/guides/ai-tools-for-web3-analysis-comparison',
+                  title: isChinese ? 'Web3 分析工具对比' : 'Web3 analysis comparison',
+                  desc: isChinese
+                    ? '更适合已经明确要做链上研究和协议监控的人。'
+                    : 'Better once the user already knows they need on-chain research and protocol monitoring.',
                 },
                 {
                   href: '/guides/ai-tools-for-on-chain-analysis-comparison',
