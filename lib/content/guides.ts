@@ -599,6 +599,19 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-marketing-tools',
+    priority: 0.73,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 营销工具推荐',
+      en: 'AI marketing tools',
+    },
+    desc: {
+      cn: '适合广告、增长、社媒和营销团队。',
+      en: 'For ads, growth, social, and marketing teams.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-agencies',
     priority: 0.73,
     changeFrequency: 'monthly',
@@ -631,6 +644,19 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     title: {
       cn: 'AI 销售工具推荐',
       en: 'AI tools for sales',
+    },
+    desc: {
+      cn: '适合销售、线索跟进和客户沟通。',
+      en: 'For sales, lead follow-up, and customer communication.',
+    },
+  },
+  {
+    href: '/guides/ai-sales-tools',
+    priority: 0.73,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'AI 销售工具推荐',
+      en: 'AI sales tools',
     },
     desc: {
       cn: '适合销售、线索跟进和客户沟通。',
@@ -1093,6 +1119,32 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-marketing-tools-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 营销工具对比',
+      en: 'AI marketing tools comparison',
+    },
+    desc: {
+      cn: '把几款常见营销工具放在一起快速对照。',
+      en: 'Compare common marketing tools side by side.',
+    },
+  },
+  {
+    href: '/guides/ai-sales-tools-comparison',
+    priority: 0.74,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 销售工具对比',
+      en: 'AI sales tools comparison',
+    },
+    desc: {
+      cn: '把几款常见销售工具放在一起快速对照。',
+      en: 'Compare common sales tools side by side.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-voice',
     priority: 0.74,
     changeFrequency: 'monthly',
@@ -1495,8 +1547,10 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/ai-tools-for-automation-comparison',
   '/guides/ai-automation-tools-comparison',
   '/guides/ai-tools-for-sales',
+  '/guides/ai-sales-tools',
   '/guides/ai-tools-for-lead-generation',
   '/guides/ai-tools-for-sales-comparison',
+  '/guides/ai-sales-tools-comparison',
   '/guides/ai-tools-for-lead-generation-comparison',
   '/guides/ai-tools-for-code-review',
   '/guides/ai-tools-for-prompt-testing',
@@ -1510,7 +1564,9 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/ai-seo-tools',
   '/guides/ai-tools-for-meeting-notes',
   '/guides/ai-tools-for-marketing',
+  '/guides/ai-marketing-tools',
   '/guides/ai-tools-for-marketing-comparison',
+  '/guides/ai-marketing-tools-comparison',
   '/guides/ai-tools-for-voice',
   '/guides/ai-note-taking-tools',
   '/guides/ai-tools-for-voice-comparison',
