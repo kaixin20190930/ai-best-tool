@@ -1611,6 +1611,21 @@ export default async function Page({
     const comparisonSummary = getComparisonSummary(categorySlug, locale);
     const compareAxes = decisionCompareAxesOverride.length > 0 ? decisionCompareAxesOverride : [comparisonSummary];
     const nextComparisonLinks = getNextComparisonLinks(categorySlug, dbTool?.tags || [], locale);
+    const primaryComparisonLink = nextComparisonLinks[0] || null;
+    let decisionBestFitText =
+      locale === 'cn' ? '先看这个工具是不是匹配你的场景' : 'Check whether this tool matches your workflow first';
+    if (bestFitList.length > 0) {
+      const [firstBestFit] = bestFitList;
+      decisionBestFitText = firstBestFit;
+    }
+    let decisionNotIdealText =
+      locale === 'cn'
+        ? '如果你的需求更窄，先看更细的对比页'
+        : 'If your need is narrower, start from a more specific comparison';
+    if (notIdealForList.length > 0) {
+      const [firstNotIdeal] = notIdealForList;
+      decisionNotIdealText = firstNotIdeal;
+    }
     let mediaChecklistItem = 'Preview media is still limited, so check the official screenshots before deciding.';
     if (heroImage) {
       mediaChecklistItem = isChinese
@@ -1954,6 +1969,29 @@ export default async function Page({
                       <p className='mt-1 break-words text-sm font-semibold text-slate-950'>{fact.value}</p>
                     </div>
                   ))}
+                </div>
+
+                <div className='rounded-lg border border-cyan-100 bg-cyan-50 px-4 py-4 shadow-sm'>
+                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                    {isChinese ? '快速判断' : 'Decision snapshot'}
+                  </p>
+                  <p className='mt-2 text-base font-semibold text-slate-950'>{decisionBestFitText}</p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>{decisionNotIdealText}</p>
+                  <div className='mt-3 grid gap-2 text-sm text-slate-700'>
+                    <div className='rounded-lg bg-white px-3 py-2 ring-1 ring-slate-200'>
+                      <span className='font-semibold text-slate-950'>{isChinese ? '重点比较' : 'Compare first'}:</span>{' '}
+                      {compareAxes[0]}
+                    </div>
+                    {primaryComparisonLink && (
+                      <Link
+                        href={primaryComparisonLink.href}
+                        className='inline-flex items-center justify-between rounded-lg bg-white px-3 py-2 font-semibold text-cyan-700 ring-1 ring-cyan-200 transition hover:bg-cyan-50'
+                      >
+                        <span>{primaryComparisonLink.title}</span>
+                        <ArrowRight className='size-4' />
+                      </Link>
+                    )}
+                  </div>
                 </div>
               </aside>
             </div>
