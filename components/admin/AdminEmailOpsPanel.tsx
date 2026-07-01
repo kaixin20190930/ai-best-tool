@@ -113,6 +113,30 @@ export default function AdminEmailOpsPanel({ summary }: { summary: EmailOpsSumma
           {summary.error || 'Email ops summary is currently unavailable.'}
         </div>
       )}
+      <div className='rounded-2xl border border-slate-200 bg-white p-4 shadow-sm'>
+        <div className='flex flex-wrap items-center justify-between gap-3'>
+          <div>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>Email ops snapshot</p>
+            <p className='mt-1 text-sm leading-6 text-slate-600'>
+              Keep the two recurring jobs visible so claim follow-up and featured renewals stay on schedule.
+            </p>
+          </div>
+          <div className='flex flex-wrap gap-2 text-xs font-semibold text-slate-600'>
+            <span className='rounded-full bg-cyan-50 px-3 py-1 ring-1 ring-cyan-100'>
+              {summary.claimInvitesSent24h} claim invites in 24h
+            </span>
+            <span className='rounded-full bg-amber-50 px-3 py-1 ring-1 ring-amber-100'>
+              {summary.featuredRenewalsSent24h} renewal reminders in 24h
+            </span>
+            <span className='rounded-full bg-slate-100 px-3 py-1'>
+              Claim last sent: {formatLastSent(summary.claimInvitesLastSentAt)}
+            </span>
+            <span className='rounded-full bg-slate-100 px-3 py-1'>
+              Renewal last sent: {formatLastSent(summary.featuredRenewalsLastSentAt)}
+            </span>
+          </div>
+        </div>
+      </div>
       <div className='grid gap-4 lg:grid-cols-2'>
         <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
           <div className='flex items-start justify-between gap-3'>
