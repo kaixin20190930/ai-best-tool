@@ -283,9 +283,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                     : 'Best for execution, tool use, and control differences.',
                 },
                 {
-                  href: '/guides/ai-tools-for-api-observability-comparison',
-                  title: isChinese ? 'AI API 可观测性工具对比' : 'AI API observability tools comparison',
-                  desc: isChinese ? '适合看日志、追踪和成本可见度。' : 'Best for logs, tracing, and cost visibility.',
+                  href: '/guides/ai-tools-for-code-review-comparison',
+                  title: isChinese ? 'AI 代码评审工具对比' : 'AI code review tools comparison',
+                  desc: isChinese
+                    ? '适合看审查、批注和团队协作。'
+                    : 'Best for review, comments, and team collaboration.',
                 },
                 {
                   href: '/guides/ai-tools-for-model-routing-comparison',
