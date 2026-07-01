@@ -105,7 +105,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
   return {
     title: isChinese ? 'Pricing | AI Best Tool' : `Pricing | ${t('title')}`,
     description: isChinese
-      ? '查看 AI Best Tool 的免费提交、加速审核和固定前排展示定价。'
+      ? '查看 AI Best Tool 的免费提交、加速审核和固定前排展示定价。我们只卖审核速度和固定窗口，不卖保证流量。'
       : 'See pricing for free submissions, faster review, and fixed featured placement windows.',
     robots: {
       index: false,
@@ -132,6 +132,15 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
             </div>
 
             <div className='space-y-4'>
+              <div className='rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm leading-6 text-cyan-950'>
+                <p className='font-semibold'>{isChinese ? '先分流，再付费' : 'Pick the right path first'}</p>
+                <p className='mt-1 text-cyan-900/85'>
+                  {isChinese
+                    ? '如果目录里已经有你的工具，先去认领页；如果是新条目，先去提交页。付费只买更快审核和固定曝光窗口，不是广告位。'
+                    : 'If the listing already exists, claim it first. If it is a new listing, go through submit first. Paid options only buy faster review and a fixed visibility window.'}
+                </p>
+              </div>
+
               <h1 className='max-w-3xl text-3xl font-bold tracking-tight text-slate-950 lg:text-5xl'>
                 {isChinese
                   ? '更快审核，更清楚曝光，按你的发布时间付费'
@@ -139,9 +148,17 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
               </h1>
               <p className='max-w-2xl text-base leading-7 text-slate-600 lg:text-lg'>
                 {isChinese
-                  ? '免费提交继续开放；付费只买更快审核和固定曝光窗口，不买保证通过或保证流量。'
+                  ? '免费提交继续开放；付费只买更快审核和固定曝光窗口，不买保证通过、保证流量或长期广告位。'
                   : 'Free submissions stay open. Paid options buy faster review and a fixed visibility window, not guaranteed approval or traffic.'}
               </p>
+              <div className='rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-950'>
+                <p className='font-semibold'>{isChinese ? '前排提醒' : 'Featured reminder'}</p>
+                <p className='mt-1'>
+                  {isChinese
+                    ? '前排展示是固定天数窗口，不会自动续期，也不是按点击或按曝光计费的广告位。接近到期时，请回到“我的提交”查看续期提示。'
+                    : 'Featured placement is a fixed-day window and does not renew automatically. When it nears expiry, check My Submissions for renewal prompts.'}
+                </p>
+              </div>
             </div>
 
             <div className='grid gap-3 sm:grid-cols-3'>
@@ -213,6 +230,31 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
               </div>
             </div>
 
+            <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
+              <p className='text-sm font-semibold text-slate-950'>
+                {isChinese ? '这次没有买到什么' : 'What this is not'}
+              </p>
+              <div className='mt-3 grid gap-3 sm:grid-cols-3'>
+                {[
+                  isChinese ? '不是永久广告位' : 'Not a permanent ad slot',
+                  isChinese ? '不是保证通过' : 'Not guaranteed approval',
+                  isChinese ? '不是保证流量' : 'Not guaranteed traffic',
+                ].map((item) => (
+                  <div
+                    key={item}
+                    className='rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-700'
+                  >
+                    {item}
+                  </div>
+                ))}
+              </div>
+              <p className='mt-3 text-xs leading-5 text-slate-500'>
+                {isChinese
+                  ? '我们卖的是更快审核和固定窗口，不是广告位、长期包量，或任何形式的流量保证。'
+                  : 'The product here is faster review and a fixed window, not an ad slot, a long-term bundle, or any traffic guarantee.'}
+              </p>
+            </div>
+
             <div className='rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5'>
               <div className='flex flex-wrap items-center justify-between gap-3'>
                 <div>
@@ -245,7 +287,7 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
           <aside className='border-t border-slate-200 bg-slate-50 p-6 lg:border-l lg:border-t-0 lg:p-10'>
             <div className='space-y-4'>
               <h2 className='text-xl font-bold text-slate-950'>
-                {isChinese ? '入驻与曝光方案' : 'Listing and visibility options'}
+                {isChinese ? '这些方案各自买到什么' : 'What each plan buys'}
               </h2>
 
               <PricingCard
@@ -300,7 +342,7 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
             {isChinese ? '你买到什么' : 'What you actually get'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '每个方案对应一个明确结果' : 'Each option maps to a concrete outcome'}
+            {isChinese ? '每个方案只对应一个明确结果' : 'Each option buys one concrete outcome'}
           </h2>
 
           <div className='mt-4 overflow-x-auto'>
@@ -331,6 +373,7 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
                     isChinese ? 'Priority review + featured window' : 'Priority review + featured window',
                   ],
                   [isChinese ? '前排展示' : 'Featured slot', 'No', 'Optional add-on', 'Yes', 'Yes'],
+                  [isChinese ? '是否自动通过' : 'Auto-approval', 'No', 'No', 'No', 'No'],
                   [
                     isChinese ? '更适合' : 'Best for',
                     isChinese ? '先免费提交' : 'Free submission first',
@@ -355,15 +398,19 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
 
         <div className='rounded-[20px] border border-cyan-100 bg-cyan-50 p-6 shadow-sm'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-800'>
-            {isChinese ? '流程' : 'Workflow'}
+            {isChinese ? '付款后会发生什么' : 'What happens after you pay'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '提交、审核、付款、展示都能对应上' : 'Submission, review, payment, and placement stay clear'}
+            {isChinese ? '每一步都能对应到明确结果' : 'Each step maps to a clear outcome'}
           </h2>
           <div className='mt-4 space-y-3 text-sm text-slate-700'>
             <StepRow
               index='1'
-              text={isChinese ? '免费提交先进入审核队列。' : 'Free submission enters the queue first.'}
+              text={
+                isChinese
+                  ? '先在提交页选方案，系统会记录你的付费意图。'
+                  : 'Choose a plan on the submit page and the system records your intent.'
+              }
             />
             <StepRow
               index='2'
@@ -381,8 +428,8 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
               index='4'
               text={
                 isChinese
-                  ? '支付确认后，系统会把权益写入提交状态。'
-                  : 'Payment confirmation is written back into your submission status.'
+                  ? '支付确认后，权益会写回提交状态，不会自动通过审核。'
+                  : 'Payment confirmation is written back into your submission status, but it does not auto-approve the listing.'
               }
             />
           </div>
@@ -406,16 +453,16 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
             q={isChinese ? '付费方案包含什么？' : 'What is included in a paid listing?'}
             a={
               isChinese
-                ? '付费方案通常包含更快审核、固定天数前排展示，或两者一起打包。你拿到的是明确的审核时效和可预期的曝光窗口。'
-                : 'Paid listings typically include faster review, a fixed featured window, or both bundled together. You get a clear review timeline and a predictable visibility window.'
+                ? '付费方案包含更快审核、固定天数前排展示，或两者打包。你买到的是更明确的审核时效和曝光窗口，不是广告位、通过保证或流量保证。'
+                : 'Paid listings include faster review, a fixed featured window, or both bundled together. You get a clearer review timeline and visibility window, not an ad slot, guaranteed approval, or guaranteed traffic.'
             }
           />
           <FaqCard
             q={isChinese ? '前排会自动续期吗？' : 'Does featured placement renew automatically?'}
             a={
               isChinese
-                ? '不会。每次前排都是明确的天数窗口，到期后自动回收。'
-                : 'No. Each featured window has a fixed number of days and expires automatically.'
+                ? '不会。每次前排都是明确的天数窗口，到期后自动回收。接近到期时可以回到“我的提交”查看续期提醒。'
+                : 'No. Each featured window has a fixed number of days and expires automatically. When it nears expiry, check My Submissions for renewal prompts.'
             }
           />
           <FaqCard

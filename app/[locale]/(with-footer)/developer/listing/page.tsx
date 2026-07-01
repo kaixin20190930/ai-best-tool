@@ -93,6 +93,38 @@ export default function DeveloperListingPage({
             </p>
 
             <div className='grid gap-3 sm:grid-cols-3'>
+              {[
+                isChinese ? '先留联系方式' : 'Start with contact details',
+                isChinese ? '人工核对 owner 身份' : 'Manual owner verification',
+                isChinese ? '确认后再谈加速' : 'Discuss acceleration later',
+              ].map((item) => (
+                <div
+                  key={item}
+                  className='rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-700'
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+
+            <div className='rounded-2xl border border-cyan-100 bg-cyan-50 p-4 text-sm leading-6 text-cyan-950'>
+              <p className='font-semibold'>{isChinese ? '我们最先确认的 3 件事' : 'Three things we confirm first'}</p>
+              <ul className='mt-2 space-y-2'>
+                <li>{isChinese ? '这条 listing 是否真的是你的。' : 'Whether this listing actually belongs to you.'}</li>
+                <li>
+                  {isChinese
+                    ? '你是要更新资料、合并重复项，还是接手 owner。'
+                    : 'Whether you need an update, duplicate merge, or owner handoff.'}
+                </li>
+                <li>
+                  {isChinese
+                    ? '后面是否需要更快审核或固定曝光。'
+                    : 'Whether faster review or fixed visibility is needed later.'}
+                </li>
+              </ul>
+            </div>
+
+            <div className='grid gap-3 sm:grid-cols-3'>
               {points.map((point) => (
                 <div
                   key={point}
@@ -123,6 +155,13 @@ export default function DeveloperListingPage({
             </div>
 
             <div className='flex flex-wrap gap-3'>
+              <a
+                href='#claim-form'
+                className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-5 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+              >
+                {isChinese ? '去填写认领表单' : 'Go to claim form'}
+                <ArrowRight className='ml-2 size-4' />
+              </a>
               <TrackableCtaLink
                 href={submitHref}
                 ctaId='developer_listing_go_submit'
@@ -233,7 +272,9 @@ export default function DeveloperListingPage({
         </div>
 
         <div>
-          <ClaimListingForm locale={locale} sourcePath={sourcePath} initialIntent={initialIntent} />
+          <div id='claim-form'>
+            <ClaimListingForm locale={locale} sourcePath={sourcePath} initialIntent={initialIntent} />
+          </div>
         </div>
       </section>
     </div>

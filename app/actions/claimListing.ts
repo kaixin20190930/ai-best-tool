@@ -12,6 +12,7 @@ export interface ClaimListingInput {
   email: string;
   company?: string;
   website?: string;
+  claimReason?: string;
   note?: string;
   sourcePath?: string;
   sourceLocale?: string;
@@ -58,6 +59,7 @@ export async function submitClaimListing(input: ClaimListingInput): Promise<Clai
     const email = normalizeText(input.email).toLowerCase();
     const company = normalizeText(input.company);
     const website = normalizeText(input.website);
+    const claimReason = normalizeText(input.claimReason);
     const note = normalizeText(input.note);
     const sourcePath = normalizeText(input.sourcePath);
     const sourceLocale = normalizeText(input.sourceLocale);
@@ -83,6 +85,7 @@ export async function submitClaimListing(input: ClaimListingInput): Promise<Clai
           email,
           company,
           website,
+          claim_reason,
           note,
           source_path,
           source_locale,
@@ -90,10 +93,19 @@ export async function submitClaimListing(input: ClaimListingInput): Promise<Clai
           created_at,
           updated_at
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, 'new', NOW(), NOW())
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'new', NOW(), NOW())
         RETURNING id::text AS id
       `,
-      [listingName, email, company || null, website || null, note || null, sourcePath || null, sourceLocale || null],
+      [
+        listingName,
+        email,
+        company || null,
+        website || null,
+        claimReason || null,
+        note || null,
+        sourcePath || null,
+        sourceLocale || null,
+      ],
     );
 
     const claimId = String(result.rows[0]?.id || '');
@@ -109,6 +121,7 @@ export async function submitClaimListing(input: ClaimListingInput): Promise<Clai
           listingName,
           company: company || null,
           website: website || null,
+          claimReason: claimReason || null,
           sourcePath: sourcePath || null,
           sourceLocale: sourceLocale || null,
           claimId,
@@ -123,13 +136,14 @@ export async function submitClaimListing(input: ClaimListingInput): Promise<Clai
       email,
       company,
       website,
+      claimReason,
       sourcePath,
       sourceLocale,
     });
 
     await sendTransactionalEmail({
       to: email,
-      subject: `[AI Best Tool] We received your claim request / 我们已收到你的认领申请`,
+      subject: '[AI Best Tool] We received your claim request / 我们已收到你的认领申请',
       text: [
         `Thanks for claiming ${listingName}.`,
         '',
@@ -140,6 +154,7 @@ export async function submitClaimListing(input: ClaimListingInput): Promise<Clai
         `- Listing: ${listingName}`,
         `- Company: ${company || '-'}`,
         `- Website: ${website || '-'}`,
+        `- Claim reason: ${claimReason || '-'}`,
         `- Source path: ${sourcePath || '-'}`,
         `- Source locale: ${sourceLocale || '-'}`,
       ].join('\n'),
@@ -151,6 +166,7 @@ export async function submitClaimListing(input: ClaimListingInput): Promise<Clai
           <li><strong>Listing:</strong> ${escapeHtml(listingName)}</li>
           <li><strong>Company:</strong> ${company ? escapeHtml(company) : '-'}</li>
           <li><strong>Website:</strong> ${website ? escapeHtml(website) : '-'}</li>
+          <li><strong>Claim reason:</strong> ${claimReason ? escapeHtml(claimReason) : '-'}</li>
           <li><strong>Source path:</strong> ${sourcePath ? escapeHtml(sourcePath) : '-'}</li>
           <li><strong>Source locale:</strong> ${sourceLocale ? escapeHtml(sourceLocale) : '-'}</li>
         </ul>
@@ -167,6 +183,7 @@ export async function submitClaimListing(input: ClaimListingInput): Promise<Clai
           `Email: ${email}`,
           `Company: ${company || '-'}`,
           `Website: ${website || '-'}`,
+          `Claim reason: ${claimReason || '-'}`,
           `Source path: ${sourcePath || '-'}`,
           `Source locale: ${sourceLocale || '-'}`,
           `Note: ${note || '-'}`,
@@ -176,6 +193,7 @@ export async function submitClaimListing(input: ClaimListingInput): Promise<Clai
           <p><strong>Email:</strong> ${email}</p>
           <p><strong>Company:</strong> ${company || '-'}</p>
           <p><strong>Website:</strong> ${website || '-'}</p>
+          <p><strong>Claim reason:</strong> ${claimReason || '-'}</p>
           <p><strong>Source path:</strong> ${sourcePath || '-'}</p>
           <p><strong>Source locale:</strong> ${sourceLocale || '-'}</p>
           <p><strong>Note:</strong> ${note || '-'}</p>

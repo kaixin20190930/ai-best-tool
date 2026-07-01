@@ -130,6 +130,7 @@ export async function notifyAdminsOfClaimLead(input: {
   email: string;
   company?: string | null;
   website?: string | null;
+  claimReason?: string | null;
   sourcePath?: string | null;
   sourceLocale?: string | null;
 }): Promise<void> {
@@ -146,6 +147,7 @@ export async function notifyAdminsOfClaimLead(input: {
       `${displayName} requested ownership verification.`,
       input.company ? `Company: ${input.company}` : '',
       input.website ? `Website: ${input.website}` : '',
+      input.claimReason ? `Reason: ${input.claimReason}` : '',
       input.sourceLocale ? `Locale: ${input.sourceLocale}` : '',
       input.sourcePath ? `Source: ${input.sourcePath}` : '',
       `${displayName} 已提交认领请求，建议尽快跟进。`,

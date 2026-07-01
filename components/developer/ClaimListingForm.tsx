@@ -13,6 +13,14 @@ type ClaimListingFormProps = {
   initialIntent?: 'default' | 'claim' | 'paid';
 };
 
+const claimReasonOptions = [
+  { value: 'ownership_update', zh: '我是 owner，需要更新条目', en: 'I am the owner and need to update the listing' },
+  { value: 'profile_correction', zh: '我要修正资料 / 联系方式', en: 'I need to correct details or contact info' },
+  { value: 'duplicate_merge', zh: '这是一条重复收录，需要合并', en: 'This is a duplicate and should be merged' },
+  { value: 'agency_client', zh: '我是代理方 / 代运营', en: 'I am an agency or operating on behalf of the client' },
+  { value: 'other', zh: '其他', en: 'Other' },
+] as const;
+
 export default function ClaimListingForm({ locale, sourcePath, initialIntent = 'default' }: ClaimListingFormProps) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const [loading, setLoading] = useState(false);
@@ -22,6 +30,7 @@ export default function ClaimListingForm({ locale, sourcePath, initialIntent = '
     email: '',
     company: '',
     website: '',
+    claimReason: initialIntent === 'paid' ? 'ownership_update' : 'profile_correction',
     note: '',
   });
 
@@ -57,6 +66,7 @@ export default function ClaimListingForm({ locale, sourcePath, initialIntent = '
         email: '',
         company: '',
         website: '',
+        claimReason: initialIntent === 'paid' ? 'ownership_update' : 'profile_correction',
         note: '',
       });
     } catch (error) {
@@ -112,6 +122,28 @@ export default function ClaimListingForm({ locale, sourcePath, initialIntent = '
 
   return (
     <form onSubmit={handleSubmit} className='space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
+      <label htmlFor='claim-reason' className='block space-y-2 text-sm font-medium text-slate-700'>
+        <span>{isChinese ? '认领原因' : 'Claim reason'}</span>
+        <select
+          id='claim-reason'
+          required
+          value={form.claimReason}
+          onChange={(event) => updateField('claimReason', event.target.value)}
+          className='h-11 w-full rounded-lg border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none ring-0 focus:border-cyan-400'
+        >
+          {claimReasonOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {isChinese ? option.zh : option.en}
+            </option>
+          ))}
+        </select>
+        <p className='text-xs leading-5 text-slate-500'>
+          {isChinese
+            ? '这能帮助我们更快判断是 owner 认领、资料修正，还是重复条目合并。'
+            : 'This helps us tell ownership claims, profile corrections, and duplicate merges apart.'}
+        </p>
+      </label>
+
       <div className='grid gap-4 md:grid-cols-2'>
         <label htmlFor='claim-listing-name' className='space-y-2 text-sm font-medium text-slate-700'>
           <span>{isChinese ? '工具名称' : 'Listing name'}</span>

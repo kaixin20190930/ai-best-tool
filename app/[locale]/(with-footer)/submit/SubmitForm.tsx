@@ -745,9 +745,7 @@ export default function SubmitForm({
                 {isChinese ? '常见拒绝原因' : 'Common rejection reasons'}
               </p>
               <p className='mt-2 text-xs leading-5 text-rose-950/80'>
-                {isChinese
-                  ? '我们会尽量人工补齐信息，但下面这些问题最容易让审核停住。'
-                  : 'We try to fill gaps manually, but these issues most often stall review.'}
+                {isChinese ? '下面这些问题最容易让审核停住。' : 'These issues most often stall review.'}
               </p>
               <ul className='mt-3 space-y-2 text-sm text-rose-950/90'>
                 {[
