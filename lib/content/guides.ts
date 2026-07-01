@@ -1922,6 +1922,7 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/ai-tools-for-marketing-comparison',
   '/guides/ai-tools-for-sales-comparison',
   '/guides/ai-tools-for-lead-generation-comparison',
+  '/guides/ai-tools-for-ecommerce-comparison',
   '/guides/ai-tools-for-small-business-comparison',
   '/guides/ai-tools-for-developers-comparison',
   '/guides/ai-tools-for-research-comparison',

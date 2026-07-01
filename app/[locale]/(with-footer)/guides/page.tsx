@@ -304,11 +304,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                     : 'Best for generation, editing, and final output workflows.',
                 },
                 {
-                  href: '/guides/ai-tools-for-small-business-comparison',
-                  title: isChinese ? 'AI 小企业工具对比' : 'AI small business tools comparison',
+                  href: '/guides/ai-tools-for-ecommerce-comparison',
+                  title: isChinese ? 'AI 电商工具对比' : 'AI ecommerce tools comparison',
                   desc: isChinese
-                    ? '适合先看是否能支撑运营、协作和付费决策。'
-                    : 'Best for operations, collaboration, and paid-decision workflows.',
+                    ? '适合先看商品、转化和店铺运营。'
+                    : 'Best for product, conversion, and store operations.',
                 },
                 {
                   href: '/guides/ai-tools-for-marketing-comparison',
