@@ -1260,70 +1260,78 @@ export async function generateMetadata({
 }: {
   params: { locale: string; websiteName: string };
 }): Promise<Metadata> {
-  const dbTool = await getToolByName(websiteName);
-  const data =
-    dbTool?.status === 'published'
-      ? toolToDetailData(dbTool, locale)
-      : (await getWebNavigationDetail(websiteName, locale)).data;
+  try {
+    const dbTool = await getToolByName(websiteName);
+    const data =
+      dbTool?.status === 'published'
+        ? toolToDetailData(dbTool, locale)
+        : (await getWebNavigationDetail(websiteName, locale)).data;
 
-  // Get localized content if available
-  const toolTitle = dbTool
-    ? getLocalizedField(dbTool.title, locale) || data?.title || websiteName
-    : data?.title || websiteName;
+    // Get localized content if available
+    const toolTitle = dbTool
+      ? getLocalizedField(dbTool.title, locale) || data?.title || websiteName
+      : data?.title || websiteName;
 
-  const toolDescription = dbTool
-    ? getLocalizedField(dbTool.content, locale) || data?.content || ''
-    : data?.content || '';
+    const toolDescription = dbTool
+      ? getLocalizedField(dbTool.content, locale) || data?.content || ''
+      : data?.content || '';
 
-  // Get category name if available
-  let toolCategory: string | undefined;
-  if (dbTool?.categoryId) {
-    const category = await getCategoryById(dbTool.categoryId);
-    if (category) {
-      toolCategory = getCategoryLocalizedField(category.name, locale);
+    // Get category name if available
+    let toolCategory: string | undefined;
+    if (dbTool?.categoryId) {
+      const category = await getCategoryById(dbTool.categoryId);
+      if (category) {
+        toolCategory = getCategoryLocalizedField(category.name, locale);
+      }
     }
+
+    // Generate optimized title and description using SEO utilities
+    const optimizedTitle = generateToolTitle(toolTitle, toolCategory);
+    const optimizedDescription = generateToolDescription(toolTitle, toolDescription, toolCategory);
+
+    // Generate canonical URL
+    const canonicalUrl = generateCanonicalUrl(`/${locale}/ai/${websiteName}`);
+
+    // Generate optimized social image URL
+    const toolImage = data?.thumbnailUrl || data?.imageUrl || SEO_CONFIG.defaultImage;
+    const socialImageUrl = generateSocialImageUrl(toolImage);
+
+    return {
+      title: optimizedTitle,
+      description: optimizedDescription,
+      alternates: {
+        canonical: canonicalUrl,
+      },
+      openGraph: {
+        title: optimizedTitle,
+        description: optimizedDescription,
+        url: canonicalUrl,
+        siteName: SEO_CONFIG.siteName,
+        images: [
+          {
+            url: socialImageUrl,
+            width: SOCIAL_IMAGE_DIMENSIONS.OPEN_GRAPH.width,
+            height: SOCIAL_IMAGE_DIMENSIONS.OPEN_GRAPH.height,
+            alt: toolTitle,
+          },
+        ],
+        locale,
+        type: 'website',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: optimizedTitle,
+        description: optimizedDescription,
+        images: [socialImageUrl],
+      },
+    };
+  } catch (error) {
+    console.error('Tool detail metadata failed to render:', error);
+    return {
+      title: websiteName,
+      description: 'AI tool profile',
+    };
   }
-
-  // Generate optimized title and description using SEO utilities
-  const optimizedTitle = generateToolTitle(toolTitle, toolCategory);
-  const optimizedDescription = generateToolDescription(toolTitle, toolDescription, toolCategory);
-
-  // Generate canonical URL
-  const canonicalUrl = generateCanonicalUrl(`/${locale}/ai/${websiteName}`);
-
-  // Generate optimized social image URL
-  const toolImage = data?.thumbnailUrl || data?.imageUrl || SEO_CONFIG.defaultImage;
-  const socialImageUrl = generateSocialImageUrl(toolImage);
-
-  return {
-    title: optimizedTitle,
-    description: optimizedDescription,
-    alternates: {
-      canonical: canonicalUrl,
-    },
-    openGraph: {
-      title: optimizedTitle,
-      description: optimizedDescription,
-      url: canonicalUrl,
-      siteName: SEO_CONFIG.siteName,
-      images: [
-        {
-          url: socialImageUrl,
-          width: SOCIAL_IMAGE_DIMENSIONS.OPEN_GRAPH.width,
-          height: SOCIAL_IMAGE_DIMENSIONS.OPEN_GRAPH.height,
-          alt: toolTitle,
-        },
-      ],
-      locale,
-      type: 'website',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: optimizedTitle,
-      description: optimizedDescription,
-      images: [socialImageUrl],
-    },
-  };
 }
 
 export default async function Page({
@@ -1331,805 +1339,922 @@ export default async function Page({
 }: {
   params: { websiteName: string; locale: string };
 }) {
-  const t = await getTranslations('Startup.detail');
-  const isChinese = locale === 'cn';
-  const dbTool = await getToolByName(websiteName);
-  const data =
-    dbTool?.status === 'published'
-      ? toolToDetailData(dbTool, locale)
-      : (await getWebNavigationDetail(websiteName, locale)).data;
+  try {
+    const t = await getTranslations('Startup.detail');
+    const isChinese = locale === 'cn';
+    const dbTool = await getToolByName(websiteName);
+    const data =
+      dbTool?.status === 'published'
+        ? toolToDetailData(dbTool, locale)
+        : (await getWebNavigationDetail(websiteName, locale)).data;
 
-  if (!data) notFound();
+    if (!data) notFound();
 
-  // Get current user
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser().catch(() => ({ data: { user: null } }));
+    // Get current user
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser().catch(() => ({ data: { user: null } }));
 
-  const toolId = dbTool?.id;
+    const toolId = dbTool?.id;
 
-  // Get rating and favorite data if tool exists in database
-  let userRating = null;
-  let ratingStats = { averageRating: 0, ratingCount: 0 };
-  let isFavoritedByUser = false;
-  let commentCount = 0;
-  let toolStats = {
-    viewCount: 0,
-    clickCount: 0,
-    shareCount: 0,
-    favoriteCount: 0,
-    averageRating: 0,
-    ratingCount: 0,
-  };
-
-  // Get category and tags information
-  let category = null;
-  let tags: Array<{ slug: string; name: Record<string, string> }> = [];
-  const fallbackTagSlugs = data.tagName
-    ? data.tagName
-        .split(',')
-        .map((tag) => tag.trim())
-        .filter(Boolean)
-    : [];
-  const tagSlugsForDisplay = dbTool?.tags && dbTool.tags.length > 0 ? dbTool.tags : fallbackTagSlugs;
-
-  if (dbTool) {
-    // Fetch category if available
-    if (dbTool.categoryId) {
-      category = await getCategoryById(dbTool.categoryId);
-    }
-
-    // Fetch tags if available
-    if (tagSlugsForDisplay.length > 0) {
-      tags = await getTagsBySlugs(tagSlugsForDisplay);
-    }
-  }
-
-  function getDisplayTagLabel(tag: { slug: string; name: Record<string, string> }): string {
-    const localizedLabel = getTagLocalizedField(tag.name, locale).trim();
-
-    if (localizedLabel) {
-      return localizedLabel;
-    }
-
-    return humanizeTagSlug(tag.slug);
-  }
-
-  const displayTagLabels =
-    tags.length > 0
-      ? tags.map((tag) => getDisplayTagLabel(tag)).filter(Boolean)
-      : tagSlugsForDisplay.map((tagSlug) => humanizeTagSlug(tagSlug)).filter(Boolean);
-
-  if (toolId) {
-    try {
-      const [nextUserRating, nextIsFavoritedByUser, nextToolStats, nextCommentCount] = await Promise.all([
-        getUserRating(toolId).catch(() => null),
-        isFavorited(toolId).catch(() => false),
-        getToolStats(toolId).catch(() => ({
-          viewCount: 0,
-          clickCount: 0,
-          shareCount: 0,
-          favoriteCount: 0,
-          averageRating: 0,
-          ratingCount: 0,
-        })),
-        getCommentCount(toolId).catch(() => 0),
-      ]);
-      userRating = nextUserRating;
-      isFavoritedByUser = nextIsFavoritedByUser;
-      toolStats = nextToolStats;
-      commentCount = Number(nextCommentCount || 0);
-      ratingStats = {
-        averageRating: toolStats.averageRating,
-        ratingCount: toolStats.ratingCount,
-      };
-    } catch (error) {
-      console.error('Error fetching tool data:', error);
-    }
-  }
-
-  // Generate SoftwareApplication schema for tool pages
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-  const toolUrl = `${baseUrl}/${locale}/ai/${websiteName}`;
-  const toolImageUrl = data.thumbnailUrl || data.imageUrl || '';
-
-  let softwareSchema = null;
-  if (dbTool) {
-    // Get localized title and description
-    const localizedTitle = getLocalizedField(dbTool.title, locale);
-    const localizedDescription = getLocalizedField(dbTool.content, locale);
-    const localizedDetail = getLocalizedField(dbTool.detail, locale);
-
-    const toolMetadata: ToolMetadata = {
-      name: localizedTitle || data.title,
-      description: localizedDescription || data.content,
-      longDescription: localizedDetail || data.detail,
-      category: category ? getCategoryLocalizedField(category.name, locale) : 'AI Tool',
-      tags: dbTool.tags || [],
-      pricing: {
-        type: dbTool.pricing as 'free' | 'paid' | 'freemium',
-        price: undefined,
-        currency: 'USD',
-      },
-      rating:
-        ratingStats.ratingCount > 0
-          ? {
-              value: ratingStats.averageRating,
-              count: ratingStats.ratingCount,
-            }
-          : undefined,
-      image: toolImageUrl.startsWith('http') ? toolImageUrl : `${baseUrl}${toolImageUrl}`,
-      url: toolUrl,
-      officialUrl: data.url,
-      datePublished: dbTool.createdAt?.toISOString?.(),
-      dateModified: dbTool.updatedAt?.toISOString?.(),
+    // Get rating and favorite data if tool exists in database
+    let userRating = null;
+    let ratingStats = { averageRating: 0, ratingCount: 0 };
+    let isFavoritedByUser = false;
+    let commentCount = 0;
+    let toolStats = {
+      viewCount: 0,
+      clickCount: 0,
+      shareCount: 0,
+      favoriteCount: 0,
+      averageRating: 0,
+      ratingCount: 0,
     };
 
-    softwareSchema = generateSoftwareSchema(toolMetadata);
-  }
+    // Get category and tags information
+    let category = null;
+    let tags: Array<{ slug: string; name: Record<string, string> }> = [];
+    const fallbackTagSlugs = data.tagName
+      ? data.tagName
+          .split(',')
+          .map((tag) => tag.trim())
+          .filter(Boolean)
+      : [];
+    const tagSlugsForDisplay = dbTool?.tags && dbTool.tags.length > 0 ? dbTool.tags : fallbackTagSlugs;
 
-  // Generate BreadcrumbList schema for navigation hierarchy
-  const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: 'Home', url: `${baseUrl}/${locale}` },
-    { name: 'AI Tools', url: `${baseUrl}/${locale}/explore` },
-    { name: data.title, url: toolUrl },
-  ]);
-  const categoryName = category ? getCategoryLocalizedField(category.name, locale) : data.categoryName || 'AI Tool';
-  const detailMarkdown =
-    dbTool && getLocalizedField(dbTool.detail, locale)
-      ? getLocalizedField(dbTool.detail, locale)
-      : data?.detail || data?.content || '';
-  const heroImage = data.thumbnailUrl || data.imageUrl || '';
-  const pricingLabel = getPricingLabel(dbTool?.pricing);
-  const updatedAt = dbTool?.updatedAt || dbTool?.createdAt;
-  const recentlyCheckedLabel = isChinese ? '最近检查' : 'Recently checked';
-  const updatedLabel = updatedAt
-    ? new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      }).format(new Date(updatedAt))
-    : recentlyCheckedLabel;
-  let statusLabel = isChinese ? '已收录' : 'Listed';
-  if (dbTool?.status === 'published') {
-    statusLabel = isChinese ? '已公开' : 'Published';
-  }
-  let ratingLabel = isChinese ? '暂无评分' : 'No ratings yet';
-  if (ratingStats.ratingCount > 0) {
-    ratingLabel = `${ratingStats.averageRating.toFixed(1)} / 5`;
-  }
-  const quickFacts = [
-    {
-      label: isChinese ? '分类' : 'Category',
-      value: categoryName,
-      icon: FolderOpen,
-      tone: 'text-sky-700 bg-sky-50',
-    },
-    {
-      label: isChinese ? '定价' : 'Pricing',
-      value: pricingLabel,
-      icon: DollarSign,
-      tone: 'text-emerald-700 bg-emerald-50',
-    },
-    {
-      label: isChinese ? '更新' : 'Updated',
-      value: updatedLabel,
-      icon: CalendarDays,
-      tone: 'text-cyan-700 bg-cyan-50',
-    },
-    {
-      label: isChinese ? '评分' : 'Rating',
-      value: ratingLabel,
-      icon: Star,
-      tone: 'text-cyan-700 bg-cyan-50',
-    },
-  ];
-  const commentPromptLabel = isChinese ? '可以直接点一个开头' : 'Start with one of these';
-  const commentStarterPrompts = isChinese
-    ? ['这款工具最适合什么场景？', '你会先收藏还是先去官网？', '和相似工具比，差异最明显在哪？']
-    : [
-        'What scenario is this tool best for?',
-        'Would you save it first or open the official site?',
-        'What stands out most versus similar tools?',
-      ];
-  let commentLabel = isChinese ? '去讨论' : 'Discuss';
-  if (commentCount > 0) {
-    commentLabel = `${commentCount} ${isChinese ? '条讨论' : 'comments'}`;
-  }
-  const categorySlug = category?.slug;
-  const categoryGuideLink = getCategoryGuideLink(categorySlug, locale);
-  const tagLabels =
-    tags.length > 0
-      ? tags.map((tag) => getDisplayTagLabel(tag)).filter(Boolean)
-      : tagSlugsForDisplay.map((tagSlug) => humanizeTagSlug(tagSlug)).filter(Boolean);
-  const featureEntries = getFeatureEntries(dbTool?.features, locale);
-  const useCaseList = getStringList(dbTool?.useCases, locale);
-  const bestFitOverride = getAudienceEntries(dbTool?.features, 'bestFit', locale);
-  const notIdealForOverride = getAudienceEntries(dbTool?.features, 'notIdealFor', locale);
-  const bestFitList = bestFitOverride.length > 0 ? bestFitOverride : inferBestFit(categorySlug, locale, useCaseList);
-  const notIdealForList = notIdealForOverride.length > 0 ? notIdealForOverride : inferNotIdealFor(categorySlug, locale);
-  const officialSite = getOfficialSiteStatus(data.url, locale, dbTool?.status === 'published');
-  const editorialReview = getEditorialReview(dbTool?.features, locale);
-  const decisionCompareAxesOverride = getDecisionList(dbTool?.features, 'compareAxes', locale);
-  const decisionOfficialSummary = getDecisionText(dbTool?.features, 'officialSummary', locale);
-  const decisionFreshnessSummary = getDecisionText(dbTool?.features, 'freshnessSummary', locale);
-  const decisionPricingSummary = getDecisionText(dbTool?.features, 'pricingSummary', locale);
-  const decisionCommunitySummary = getDecisionText(dbTool?.features, 'communitySummary', locale);
-  const decisionMediaSummary = getDecisionText(dbTool?.features, 'mediaSummary', locale);
-  const officialSiteSummary = decisionOfficialSummary || officialSite.summary;
-  const editorialReviewedLabel = editorialReview?.reviewedAt
-    ? new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      }).format(new Date(editorialReview.reviewedAt))
-    : null;
-  const freshnessSummary = decisionFreshnessSummary || getFreshnessSummary(updatedAt || null, locale);
-  const pricingSummary = decisionPricingSummary || getPricingSummary(dbTool?.pricing, locale);
-  const screenshotCount = dbTool?.screenshots?.length || 0;
-  const hasVideo = Boolean(dbTool?.videoUrl);
-  const mediaCoverageBase = getMediaCoverageSummary({
-    locale,
-    heroImage,
-    screenshotCount,
-    hasVideo,
-  });
-  const mediaCoverage = decisionMediaSummary
-    ? { ...mediaCoverageBase, summary: decisionMediaSummary }
-    : mediaCoverageBase;
-  const communitySignal = getCommunitySignalSummary({
-    locale,
-    ratingCount: ratingStats.ratingCount,
-    commentCount,
-    favoriteCount: toolStats.favoriteCount,
-  });
-  const communitySignalWithOverride = decisionCommunitySummary
-    ? { ...communitySignal, summary: decisionCommunitySummary }
-    : communitySignal;
-  const marketDemand = getMarketDemandSummary({
-    locale,
-    viewCount: toolStats.viewCount,
-    clickCount: toolStats.clickCount,
-  });
-  const marketMomentum = getMarketMomentumSummary({
-    locale,
-    updatedAt,
-    screenshotCount,
-    hasVideo,
-  });
-  const comparisonSummary = getComparisonSummary(categorySlug, locale);
-  const compareAxes = decisionCompareAxesOverride.length > 0 ? decisionCompareAxesOverride : [comparisonSummary];
-  const nextComparisonLinks = getNextComparisonLinks(categorySlug, dbTool?.tags || [], locale);
-  let mediaChecklistItem = 'Preview media is still limited, so check the official screenshots before deciding.';
-  if (heroImage) {
-    mediaChecklistItem = isChinese
-      ? '已有预览图，可先看产品界面是否与你的工作流匹配。'
-      : 'A preview image is available, so you can sanity-check the interface fit.';
-  } else if (isChinese) {
-    mediaChecklistItem = '预览图仍待补充，最终选择前建议再看官网截图。';
-  }
+    if (dbTool) {
+      // Fetch category if available
+      if (dbTool.categoryId) {
+        category = await getCategoryById(dbTool.categoryId);
+      }
 
-  let ratingChecklistItem = 'Ratings are still light, so compare comments and similar tools as well.';
-  if (ratingStats.ratingCount > 0) {
-    ratingChecklistItem = isChinese
-      ? `已有 ${ratingStats.ratingCount} 条评分，可一起参考真实反馈。`
-      : `${ratingStats.ratingCount} ratings are already available as extra social proof.`;
-  } else if (isChinese) {
-    ratingChecklistItem = '评分还不多，建议结合评论和相似工具一起比较。';
-  }
+      // Fetch tags if available
+      if (tagSlugsForDisplay.length > 0) {
+        tags = await getTagsBySlugs(tagSlugsForDisplay);
+      }
+    }
 
-  let commentChecklistItem = 'Discussion is still light, so a side-by-side comparison matters more here.';
-  if (commentCount > 0) {
-    commentChecklistItem = isChinese
-      ? `已有 ${commentCount} 条讨论，适合先看别人踩过哪些坑。`
-      : `${commentCount} discussion threads can help surface trade-offs quickly.`;
-  } else if (isChinese) {
-    commentChecklistItem = '讨论还不多，更适合先拿它和相似工具做横向比较。';
-  }
-  const verificationChecklist = [mediaChecklistItem, ratingChecklistItem, commentChecklistItem];
-  let heroPreview = (
-    <div className='flex aspect-video items-center justify-center bg-slate-100 text-5xl font-bold text-slate-300'>
-      {data.title.slice(0, 1).toUpperCase()}
-    </div>
-  );
+    const getDisplayTagLabel = (tag: { slug: string; name: Record<string, string> }): string => {
+      const localizedLabel = getTagLocalizedField(tag.name, locale).trim();
 
-  if (heroImage) {
-    const heroImageNode = (
-      <BaseImage
-        title={data.title}
-        alt={`${data.title} interface preview`}
-        fill
-        src={heroImage}
-        className='object-cover transition-transform duration-300 group-hover:scale-105'
-      />
-    );
+      if (localizedLabel) {
+        return localizedLabel;
+      }
+
+      return humanizeTagSlug(tag.slug);
+    };
+
+    const displayTagLabels =
+      tags.length > 0
+        ? tags.map((tag) => getDisplayTagLabel(tag)).filter(Boolean)
+        : tagSlugsForDisplay.map((tagSlug) => humanizeTagSlug(tagSlug)).filter(Boolean);
 
     if (toolId) {
-      heroPreview = (
-        <TrackableLink
-          href={data.url}
-          toolId={toolId}
-          userId={user?.id}
-          className='group relative block aspect-video w-full overflow-hidden bg-slate-100'
-        >
-          {heroImageNode}
-        </TrackableLink>
-      );
-    } else {
-      heroPreview = (
-        <a
-          href={data.url}
-          target='_blank'
-          rel='noreferrer'
-          className='group relative block aspect-video w-full overflow-hidden bg-slate-100'
-        >
-          {heroImageNode}
-        </a>
-      );
+      try {
+        const [nextUserRating, nextIsFavoritedByUser, nextToolStats, nextCommentCount] = await Promise.all([
+          getUserRating(toolId).catch(() => null),
+          isFavorited(toolId).catch(() => false),
+          getToolStats(toolId).catch(() => ({
+            viewCount: 0,
+            clickCount: 0,
+            shareCount: 0,
+            favoriteCount: 0,
+            averageRating: 0,
+            ratingCount: 0,
+          })),
+          getCommentCount(toolId).catch(() => 0),
+        ]);
+        userRating = nextUserRating;
+        isFavoritedByUser = nextIsFavoritedByUser;
+        toolStats = nextToolStats;
+        commentCount = Number(nextCommentCount || 0);
+        ratingStats = {
+          averageRating: toolStats.averageRating,
+          ratingCount: toolStats.ratingCount,
+        };
+      } catch (error) {
+        console.error('Error fetching tool data:', error);
+      }
     }
-  }
 
-  return (
-    <>
-      <PageViewTracker toolId={toolId} />
-      {/* Structured Data for SEO */}
-      {softwareSchema && <StructuredDataServer data={softwareSchema} />}
-      <StructuredDataServer data={breadcrumbSchema} />
+    // Generate SoftwareApplication schema for tool pages
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    const toolUrl = `${baseUrl}/${locale}/ai/${websiteName}`;
+    const toolImageUrl = data.thumbnailUrl || data.imageUrl || '';
 
-      <div className='w-full bg-slate-50'>
-        <div className='mx-auto max-w-7xl px-4 py-8 lg:px-6 lg:py-12'>
-          <div className='grid gap-8 lg:grid-cols-[minmax(0,1fr)_460px] lg:items-start'>
-            <section className='space-y-6'>
-              <div className='flex flex-wrap items-center gap-2'>
-                <span className='inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-sm font-medium text-slate-700 ring-1 ring-slate-200'>
-                  <Sparkles className='size-4 text-emerald-600' />
-                  {isChinese ? '工具详情页' : 'AI tool profile'}
-                </span>
-                <span className='inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-sm font-medium text-slate-700 ring-1 ring-slate-200'>
-                  <FolderOpen className='size-4 text-sky-600' />
+    let softwareSchema = null;
+    if (dbTool) {
+      // Get localized title and description
+      const localizedTitle = getLocalizedField(dbTool.title, locale);
+      const localizedDescription = getLocalizedField(dbTool.content, locale);
+      const localizedDetail = getLocalizedField(dbTool.detail, locale);
+
+      const toolMetadata: ToolMetadata = {
+        name: localizedTitle || data.title,
+        description: localizedDescription || data.content,
+        longDescription: localizedDetail || data.detail,
+        category: category ? getCategoryLocalizedField(category.name, locale) : 'AI Tool',
+        tags: dbTool.tags || [],
+        pricing: {
+          type: dbTool.pricing as 'free' | 'paid' | 'freemium',
+          price: undefined,
+          currency: 'USD',
+        },
+        rating:
+          ratingStats.ratingCount > 0
+            ? {
+                value: ratingStats.averageRating,
+                count: ratingStats.ratingCount,
+              }
+            : undefined,
+        image: toolImageUrl.startsWith('http') ? toolImageUrl : `${baseUrl}${toolImageUrl}`,
+        url: toolUrl,
+        officialUrl: data.url,
+        datePublished: dbTool.createdAt?.toISOString?.(),
+        dateModified: dbTool.updatedAt?.toISOString?.(),
+      };
+
+      softwareSchema = generateSoftwareSchema(toolMetadata);
+    }
+
+    // Generate BreadcrumbList schema for navigation hierarchy
+    const breadcrumbSchema = generateBreadcrumbSchema([
+      { name: 'Home', url: `${baseUrl}/${locale}` },
+      { name: 'AI Tools', url: `${baseUrl}/${locale}/explore` },
+      { name: data.title, url: toolUrl },
+    ]);
+    const categoryName = category ? getCategoryLocalizedField(category.name, locale) : data.categoryName || 'AI Tool';
+    const detailMarkdown =
+      dbTool && getLocalizedField(dbTool.detail, locale)
+        ? getLocalizedField(dbTool.detail, locale)
+        : data?.detail || data?.content || '';
+    const heroImage = data.thumbnailUrl || data.imageUrl || '';
+    const pricingLabel = getPricingLabel(dbTool?.pricing);
+    const updatedAt = dbTool?.updatedAt || dbTool?.createdAt;
+    const recentlyCheckedLabel = isChinese ? '最近检查' : 'Recently checked';
+    const updatedLabel = updatedAt
+      ? new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        }).format(new Date(updatedAt))
+      : recentlyCheckedLabel;
+    let statusLabel = isChinese ? '已收录' : 'Listed';
+    if (dbTool?.status === 'published') {
+      statusLabel = isChinese ? '已公开' : 'Published';
+    }
+    let ratingLabel = isChinese ? '暂无评分' : 'No ratings yet';
+    if (ratingStats.ratingCount > 0) {
+      ratingLabel = `${ratingStats.averageRating.toFixed(1)} / 5`;
+    }
+    const quickFacts = [
+      {
+        label: isChinese ? '分类' : 'Category',
+        value: categoryName,
+        icon: FolderOpen,
+        tone: 'text-sky-700 bg-sky-50',
+      },
+      {
+        label: isChinese ? '定价' : 'Pricing',
+        value: pricingLabel,
+        icon: DollarSign,
+        tone: 'text-emerald-700 bg-emerald-50',
+      },
+      {
+        label: isChinese ? '更新' : 'Updated',
+        value: updatedLabel,
+        icon: CalendarDays,
+        tone: 'text-cyan-700 bg-cyan-50',
+      },
+      {
+        label: isChinese ? '评分' : 'Rating',
+        value: ratingLabel,
+        icon: Star,
+        tone: 'text-cyan-700 bg-cyan-50',
+      },
+    ];
+    const commentPromptLabel = isChinese ? '可以直接点一个开头' : 'Start with one of these';
+    const commentStarterPrompts = isChinese
+      ? ['这款工具最适合什么场景？', '你会先收藏还是先去官网？', '和相似工具比，差异最明显在哪？']
+      : [
+          'What scenario is this tool best for?',
+          'Would you save it first or open the official site?',
+          'What stands out most versus similar tools?',
+        ];
+    let commentLabel = isChinese ? '去讨论' : 'Discuss';
+    if (commentCount > 0) {
+      commentLabel = `${commentCount} ${isChinese ? '条讨论' : 'comments'}`;
+    }
+    const categorySlug = category?.slug;
+    const categoryGuideLink = getCategoryGuideLink(categorySlug, locale);
+    const tagLabels =
+      tags.length > 0
+        ? tags.map((tag) => getDisplayTagLabel(tag)).filter(Boolean)
+        : tagSlugsForDisplay.map((tagSlug) => humanizeTagSlug(tagSlug)).filter(Boolean);
+    const featureEntries = getFeatureEntries(dbTool?.features, locale);
+    const useCaseList = getStringList(dbTool?.useCases, locale);
+    const bestFitOverride = getAudienceEntries(dbTool?.features, 'bestFit', locale);
+    const notIdealForOverride = getAudienceEntries(dbTool?.features, 'notIdealFor', locale);
+    const bestFitList = bestFitOverride.length > 0 ? bestFitOverride : inferBestFit(categorySlug, locale, useCaseList);
+    const notIdealForList =
+      notIdealForOverride.length > 0 ? notIdealForOverride : inferNotIdealFor(categorySlug, locale);
+    const officialSite = getOfficialSiteStatus(data.url, locale, dbTool?.status === 'published');
+    const editorialReview = getEditorialReview(dbTool?.features, locale);
+    const decisionCompareAxesOverride = getDecisionList(dbTool?.features, 'compareAxes', locale);
+    const decisionOfficialSummary = getDecisionText(dbTool?.features, 'officialSummary', locale);
+    const decisionFreshnessSummary = getDecisionText(dbTool?.features, 'freshnessSummary', locale);
+    const decisionPricingSummary = getDecisionText(dbTool?.features, 'pricingSummary', locale);
+    const decisionCommunitySummary = getDecisionText(dbTool?.features, 'communitySummary', locale);
+    const decisionMediaSummary = getDecisionText(dbTool?.features, 'mediaSummary', locale);
+    const officialSiteSummary = decisionOfficialSummary || officialSite.summary;
+    const editorialReviewedLabel = editorialReview?.reviewedAt
+      ? new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        }).format(new Date(editorialReview.reviewedAt))
+      : null;
+    const freshnessSummary = decisionFreshnessSummary || getFreshnessSummary(updatedAt || null, locale);
+    const pricingSummary = decisionPricingSummary || getPricingSummary(dbTool?.pricing, locale);
+    const screenshotCount = dbTool?.screenshots?.length || 0;
+    const hasVideo = Boolean(dbTool?.videoUrl);
+    const mediaCoverageBase = getMediaCoverageSummary({
+      locale,
+      heroImage,
+      screenshotCount,
+      hasVideo,
+    });
+    const mediaCoverage = decisionMediaSummary
+      ? { ...mediaCoverageBase, summary: decisionMediaSummary }
+      : mediaCoverageBase;
+    const communitySignal = getCommunitySignalSummary({
+      locale,
+      ratingCount: ratingStats.ratingCount,
+      commentCount,
+      favoriteCount: toolStats.favoriteCount,
+    });
+    const communitySignalWithOverride = decisionCommunitySummary
+      ? { ...communitySignal, summary: decisionCommunitySummary }
+      : communitySignal;
+    const marketDemand = getMarketDemandSummary({
+      locale,
+      viewCount: toolStats.viewCount,
+      clickCount: toolStats.clickCount,
+    });
+    const marketMomentum = getMarketMomentumSummary({
+      locale,
+      updatedAt,
+      screenshotCount,
+      hasVideo,
+    });
+    const comparisonSummary = getComparisonSummary(categorySlug, locale);
+    const compareAxes = decisionCompareAxesOverride.length > 0 ? decisionCompareAxesOverride : [comparisonSummary];
+    const nextComparisonLinks = getNextComparisonLinks(categorySlug, dbTool?.tags || [], locale);
+    let mediaChecklistItem = 'Preview media is still limited, so check the official screenshots before deciding.';
+    if (heroImage) {
+      mediaChecklistItem = isChinese
+        ? '已有预览图，可先看产品界面是否与你的工作流匹配。'
+        : 'A preview image is available, so you can sanity-check the interface fit.';
+    } else if (isChinese) {
+      mediaChecklistItem = '预览图仍待补充，最终选择前建议再看官网截图。';
+    }
+
+    let ratingChecklistItem = 'Ratings are still light, so compare comments and similar tools as well.';
+    if (ratingStats.ratingCount > 0) {
+      ratingChecklistItem = isChinese
+        ? `已有 ${ratingStats.ratingCount} 条评分，可一起参考真实反馈。`
+        : `${ratingStats.ratingCount} ratings are already available as extra social proof.`;
+    } else if (isChinese) {
+      ratingChecklistItem = '评分还不多，建议结合评论和相似工具一起比较。';
+    }
+
+    let commentChecklistItem = 'Discussion is still light, so a side-by-side comparison matters more here.';
+    if (commentCount > 0) {
+      commentChecklistItem = isChinese
+        ? `已有 ${commentCount} 条讨论，适合先看别人踩过哪些坑。`
+        : `${commentCount} discussion threads can help surface trade-offs quickly.`;
+    } else if (isChinese) {
+      commentChecklistItem = '讨论还不多，更适合先拿它和相似工具做横向比较。';
+    }
+    const verificationChecklist = [mediaChecklistItem, ratingChecklistItem, commentChecklistItem];
+    let heroPreview = (
+      <div className='flex aspect-video items-center justify-center bg-slate-100 text-5xl font-bold text-slate-300'>
+        {data.title.slice(0, 1).toUpperCase()}
+      </div>
+    );
+
+    if (heroImage) {
+      const heroImageNode = (
+        <BaseImage
+          title={data.title}
+          alt={`${data.title} interface preview`}
+          fill
+          src={heroImage}
+          className='object-cover transition-transform duration-300 group-hover:scale-105'
+        />
+      );
+
+      if (toolId) {
+        heroPreview = (
+          <TrackableLink
+            href={data.url}
+            toolId={toolId}
+            userId={user?.id}
+            className='group relative block aspect-video w-full overflow-hidden bg-slate-100'
+          >
+            {heroImageNode}
+          </TrackableLink>
+        );
+      } else {
+        heroPreview = (
+          <a
+            href={data.url}
+            target='_blank'
+            rel='noreferrer'
+            className='group relative block aspect-video w-full overflow-hidden bg-slate-100'
+          >
+            {heroImageNode}
+          </a>
+        );
+      }
+    }
+
+    return (
+      <>
+        <PageViewTracker toolId={toolId} />
+        {/* Structured Data for SEO */}
+        {softwareSchema && <StructuredDataServer data={softwareSchema} />}
+        <StructuredDataServer data={breadcrumbSchema} />
+
+        <div className='w-full bg-slate-50'>
+          <div className='mx-auto max-w-7xl px-4 py-8 lg:px-6 lg:py-12'>
+            <div className='grid gap-8 lg:grid-cols-[minmax(0,1fr)_460px] lg:items-start'>
+              <section className='space-y-6'>
+                <div className='flex flex-wrap items-center gap-2'>
+                  <span className='inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-sm font-medium text-slate-700 ring-1 ring-slate-200'>
+                    <Sparkles className='size-4 text-emerald-600' />
+                    {isChinese ? '工具详情页' : 'AI tool profile'}
+                  </span>
+                  <span className='inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-sm font-medium text-slate-700 ring-1 ring-slate-200'>
+                    <FolderOpen className='size-4 text-sky-600' />
+                    {categoryName}
+                  </span>
+                </div>
+
+                <div className='space-y-4'>
+                  <h1 className='max-w-4xl text-4xl font-bold leading-tight text-slate-950 lg:text-6xl'>
+                    {data.title}
+                  </h1>
+                  <p className='max-w-3xl text-base leading-7 text-slate-600 lg:text-lg'>{data.content}</p>
+                </div>
+
+                <div className='grid gap-3 md:grid-cols-3'>
+                  {categorySlug ? (
+                    <Link
+                      href={`/categories/${categorySlug}?sort=latest`}
+                      className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
+                    >
+                      <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                        {isChinese ? '继续看分类' : 'Browse the category'}
+                      </p>
+                      <p className='mt-2 text-base font-semibold text-slate-950'>{categoryName}</p>
+                      <p className='mt-2 text-sm leading-6 text-slate-600'>
+                        {isChinese
+                          ? '回到这个分类，继续按时间或热门度筛选相似工具。'
+                          : 'Jump back to the category and keep comparing similar tools by latest or popularity.'}
+                      </p>
+                    </Link>
+                  ) : (
+                    <Link
+                      href='/explore?sort=latest'
+                      className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
+                    >
+                      <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                        {isChinese ? '继续探索' : 'Keep exploring'}
+                      </p>
+                      <p className='mt-2 text-base font-semibold text-slate-950'>
+                        {isChinese ? '查看最新工具' : 'Browse the latest tools'}
+                      </p>
+                      <p className='mt-2 text-sm leading-6 text-slate-600'>
+                        {isChinese
+                          ? '如果还没确定方向，先回到最新收录页继续看。'
+                          : 'If you are still comparing directions, return to the latest tools index first.'}
+                      </p>
+                    </Link>
+                  )}
+
+                  {categoryGuideLink ? (
+                    <Link
+                      href={categoryGuideLink.href}
+                      className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
+                    >
+                      <p className='text-xs font-semibold uppercase tracking-wide text-emerald-700'>
+                        {isChinese ? '先看指南' : 'Read the guide first'}
+                      </p>
+                      <p className='mt-2 text-base font-semibold text-slate-950'>{categoryGuideLink.title}</p>
+                      <p className='mt-2 text-sm leading-6 text-slate-600'>{categoryGuideLink.description}</p>
+                    </Link>
+                  ) : (
+                    <Link
+                      href='/guides/how-to-choose-ai-tools'
+                      className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
+                    >
+                      <p className='text-xs font-semibold uppercase tracking-wide text-emerald-700'>
+                        {isChinese ? '先看指南' : 'Read the guide first'}
+                      </p>
+                      <p className='mt-2 text-base font-semibold text-slate-950'>
+                        {isChinese ? '看 AI 工具选型指南' : 'Open the AI tool selection guide'}
+                      </p>
+                      <p className='mt-2 text-sm leading-6 text-slate-600'>
+                        {isChinese
+                          ? '如果你还没想清楚比较维度，先回到选型指南会更高效。'
+                          : 'If your comparison criteria are still fuzzy, the selection guide is the best next stop.'}
+                      </p>
+                    </Link>
+                  )}
+
+                  <Link
+                    href='/new'
+                    className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
+                  >
+                    <p className='text-xs font-semibold uppercase tracking-wide text-sky-700'>
+                      {isChinese ? '本周新增' : 'New this week'}
+                    </p>
+                    <p className='mt-2 text-base font-semibold text-slate-950'>
+                      {isChinese ? '回看最近补进的工具' : 'See what was added this week'}
+                    </p>
+                    <p className='mt-2 text-sm leading-6 text-slate-600'>
+                      {isChinese
+                        ? '从本周新增页继续走，可以更快发现最近补货和最近补厚的页面。'
+                        : 'Use the weekly additions page to discover recently added and recently improved listings.'}
+                    </p>
+                  </Link>
+                </div>
+
+                {toolId && (
+                  <div className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm'>
+                    <div className='mb-3 flex flex-wrap items-center gap-2'>
+                      <span className='inline-flex items-center rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-700'>
+                        {locale === 'cn' ? '互动面板' : 'Action rail'}
+                      </span>
+                      <span className='text-sm text-slate-500'>
+                        {locale === 'cn'
+                          ? '收藏、分享、评分和讨论都在同一条行动带里。'
+                          : 'Save, share, rate, and discuss from one compact rail.'}
+                      </span>
+                    </div>
+
+                    <div className='grid gap-3 lg:grid-cols-[minmax(0,1.2fr)_auto] lg:items-center'>
+                      <div className='rounded-lg bg-slate-50 px-4 py-3 ring-1 ring-slate-200'>
+                        <div className='flex flex-wrap items-center gap-4'>
+                          <div className='min-w-0'>
+                            <p className='text-xs font-medium uppercase tracking-wide text-slate-500'>
+                              {locale === 'cn' ? '评分' : 'Rating'}
+                            </p>
+                            <div className='mt-1'>
+                              <RatingStars
+                                toolId={toolId}
+                                currentRating={userRating}
+                                averageRating={ratingStats.averageRating}
+                                ratingCount={ratingStats.ratingCount}
+                                readonly={false}
+                                size='md'
+                                showStats
+                              />
+                            </div>
+                          </div>
+
+                          <div className='h-10 w-px bg-slate-200' />
+
+                          <div className='min-w-0'>
+                            <p className='text-xs font-medium uppercase tracking-wide text-slate-500'>
+                              {locale === 'cn' ? '收藏' : 'Save'}
+                            </p>
+                            <div className='mt-1'>
+                              <FavoriteButton
+                                toolId={toolId}
+                                initialState={isFavoritedByUser}
+                                showLabel
+                                className='rounded-full bg-white px-3 py-2 ring-1 ring-slate-200 hover:ring-red-200'
+                              />
+                            </div>
+                            <p className='mt-2 max-w-[12rem] text-xs leading-5 text-slate-500'>
+                              {locale === 'cn'
+                                ? '先收藏，之后可以回到收藏夹再对比。'
+                                : 'Save first, then come back to compare later.'}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className='flex flex-wrap items-center gap-2'>
+                        <ShareButton
+                          toolId={toolId}
+                          toolName={websiteName}
+                          toolTitle={data.title}
+                          toolDescription={data.content}
+                          userId={user?.id}
+                          className='rounded-full'
+                        />
+                        <a
+                          href='#comments'
+                          className='inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-4 py-2 text-sm font-semibold text-cyan-800 transition hover:bg-cyan-100'
+                        >
+                          <MessageSquare className='size-4' />
+                          {commentLabel}
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className='flex flex-col gap-3 sm:flex-row sm:items-center'>
+                  {toolId ? (
+                    <TrackableLink
+                      href={data.url}
+                      toolId={toolId}
+                      userId={user?.id}
+                      className='inline-flex items-center justify-center gap-2 rounded-lg bg-slate-950 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800'
+                    >
+                      {t('visitWebsite')} <ArrowUpRight className='size-4' />
+                    </TrackableLink>
+                  ) : (
+                    <a
+                      href={data.url}
+                      target='_blank'
+                      rel='noreferrer'
+                      className='inline-flex items-center justify-center gap-2 rounded-lg bg-slate-950 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800'
+                    >
+                      {t('visitWebsite')} <ArrowUpRight className='size-4' />
+                    </a>
+                  )}
+                  <a
+                    href={`/${locale}/explore?search=${encodeURIComponent(data.title)}`}
+                    className='inline-flex items-center justify-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-medium text-slate-700 ring-1 ring-slate-200 transition hover:bg-slate-100'
+                  >
+                    {isChinese ? '找相似工具' : 'Find similar tools'} <CircleArrowRight className='size-4' />
+                  </a>
+                  {/* Discussion anchor is now surfaced in the action panel above */}
+                </div>
+                <p className='max-w-3xl text-sm leading-6 text-slate-500'>
+                  {locale === 'cn'
+                    ? '最稳的下一步：先看官网，再拿相似工具和评论做对比。'
+                    : 'Best next step: open the official site first, then compare similar tools and comments.'}
+                </p>
+              </section>
+
+              <aside className='space-y-4'>
+                <div className='overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-slate-200'>
+                  {heroPreview}
+                  <div className='grid grid-cols-3 divide-x divide-slate-200 border-t border-slate-200 text-center'>
+                    <div className='p-3'>
+                      <p className='text-xs text-slate-500'>{isChinese ? '浏览' : 'Views'}</p>
+                      <p className='font-semibold text-slate-950'>{toolStats.viewCount.toLocaleString()}</p>
+                    </div>
+                    <div className='p-3'>
+                      <p className='text-xs text-slate-500'>{isChinese ? '点击' : 'Clicks'}</p>
+                      <p className='font-semibold text-slate-950'>{toolStats.clickCount.toLocaleString()}</p>
+                    </div>
+                    <div className='p-3'>
+                      <p className='text-xs text-slate-500'>{isChinese ? '收藏' : 'Saved'}</p>
+                      <p className='font-semibold text-slate-950'>{toolStats.favoriteCount.toLocaleString()}</p>
+                    </div>
+                  </div>
+
+                  <div className='mt-3 rounded-lg border border-cyan-100 bg-cyan-50 px-4 py-3'>
+                    <div className='flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
+                      <p className='text-sm text-cyan-900'>
+                        {locale === 'cn'
+                          ? '如果这是你的工具，可以查看提交与展示方案，补充资料并管理曝光方式。'
+                          : 'If this is your tool, review the listing options to submit updates and manage visibility.'}
+                      </p>
+                      <Link
+                        href={`/${locale}/developer/listing`}
+                        className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-3 py-2 text-sm font-semibold text-white hover:bg-cyan-800'
+                      >
+                        {locale === 'cn' ? '查看提交方案' : 'View listing options'}
+                      </Link>
+                    </div>
+                    <p className='mt-2 text-xs text-cyan-900/70'>
+                      {locale === 'cn'
+                        ? '审核时效与展示方式会根据你选择的方案而定。'
+                        : 'Review timing and visibility depend on the option you choose.'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className='grid grid-cols-2 gap-3'>
+                  {quickFacts.map((fact) => (
+                    <div key={fact.label} className='min-w-0 rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200'>
+                      <div className={`mb-3 inline-flex rounded-lg p-2 ${fact.tone}`}>
+                        <fact.icon className='size-4' />
+                      </div>
+                      <p className='break-words text-xs font-medium uppercase text-slate-500'>{fact.label}</p>
+                      <p className='mt-1 break-words text-sm font-semibold text-slate-950'>{fact.value}</p>
+                    </div>
+                  ))}
+                </div>
+              </aside>
+            </div>
+          </div>
+
+          <div className='border-y border-slate-200 bg-white'>
+            <div className='mx-auto flex max-w-7xl flex-wrap items-center gap-3 px-4 py-4 lg:px-6'>
+              <span className='inline-flex items-center gap-2 text-sm font-semibold text-slate-700'>
+                <TagIcon className='size-4 text-slate-500' />
+                {isChinese ? '标签' : 'Tags'}
+              </span>
+              {displayTagLabels.length > 0 ? (
+                displayTagLabels.map((label) => (
+                  <span
+                    key={label}
+                    className='max-w-full rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700'
+                  >
+                    {label}
+                  </span>
+                ))
+              ) : (
+                <span className='max-w-full rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-600'>
                   {categoryName}
                 </span>
-              </div>
-
-              <div className='space-y-4'>
-                <h1 className='max-w-4xl text-4xl font-bold leading-tight text-slate-950 lg:text-6xl'>{data.title}</h1>
-                <p className='max-w-3xl text-base leading-7 text-slate-600 lg:text-lg'>{data.content}</p>
-              </div>
-
-              <div className='grid gap-3 md:grid-cols-3'>
-                {categorySlug ? (
-                  <Link
-                    href={`/categories/${categorySlug}?sort=latest`}
-                    className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
-                  >
-                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                      {isChinese ? '继续看分类' : 'Browse the category'}
-                    </p>
-                    <p className='mt-2 text-base font-semibold text-slate-950'>{categoryName}</p>
-                    <p className='mt-2 text-sm leading-6 text-slate-600'>
-                      {isChinese
-                        ? '回到这个分类，继续按时间或热门度筛选相似工具。'
-                        : 'Jump back to the category and keep comparing similar tools by latest or popularity.'}
-                    </p>
-                  </Link>
-                ) : (
-                  <Link
-                    href='/explore?sort=latest'
-                    className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
-                  >
-                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                      {isChinese ? '继续探索' : 'Keep exploring'}
-                    </p>
-                    <p className='mt-2 text-base font-semibold text-slate-950'>
-                      {isChinese ? '查看最新工具' : 'Browse the latest tools'}
-                    </p>
-                    <p className='mt-2 text-sm leading-6 text-slate-600'>
-                      {isChinese
-                        ? '如果还没确定方向，先回到最新收录页继续看。'
-                        : 'If you are still comparing directions, return to the latest tools index first.'}
-                    </p>
-                  </Link>
-                )}
-
-                {categoryGuideLink ? (
-                  <Link
-                    href={categoryGuideLink.href}
-                    className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
-                  >
-                    <p className='text-xs font-semibold uppercase tracking-wide text-emerald-700'>
-                      {isChinese ? '先看指南' : 'Read the guide first'}
-                    </p>
-                    <p className='mt-2 text-base font-semibold text-slate-950'>{categoryGuideLink.title}</p>
-                    <p className='mt-2 text-sm leading-6 text-slate-600'>{categoryGuideLink.description}</p>
-                  </Link>
-                ) : (
-                  <Link
-                    href='/guides/how-to-choose-ai-tools'
-                    className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
-                  >
-                    <p className='text-xs font-semibold uppercase tracking-wide text-emerald-700'>
-                      {isChinese ? '先看指南' : 'Read the guide first'}
-                    </p>
-                    <p className='mt-2 text-base font-semibold text-slate-950'>
-                      {isChinese ? '看 AI 工具选型指南' : 'Open the AI tool selection guide'}
-                    </p>
-                    <p className='mt-2 text-sm leading-6 text-slate-600'>
-                      {isChinese
-                        ? '如果你还没想清楚比较维度，先回到选型指南会更高效。'
-                        : 'If your comparison criteria are still fuzzy, the selection guide is the best next stop.'}
-                    </p>
-                  </Link>
-                )}
-
-                <Link
-                  href='/new'
-                  className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
-                >
-                  <p className='text-xs font-semibold uppercase tracking-wide text-sky-700'>
-                    {isChinese ? '本周新增' : 'New this week'}
-                  </p>
-                  <p className='mt-2 text-base font-semibold text-slate-950'>
-                    {isChinese ? '回看最近补进的工具' : 'See what was added this week'}
-                  </p>
-                  <p className='mt-2 text-sm leading-6 text-slate-600'>
-                    {isChinese
-                      ? '从本周新增页继续走，可以更快发现最近补货和最近补厚的页面。'
-                      : 'Use the weekly additions page to discover recently added and recently improved listings.'}
-                  </p>
-                </Link>
-              </div>
-
-              {toolId && (
-                <div className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm'>
-                  <div className='mb-3 flex flex-wrap items-center gap-2'>
-                    <span className='inline-flex items-center rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-700'>
-                      {locale === 'cn' ? '互动面板' : 'Action rail'}
-                    </span>
-                    <span className='text-sm text-slate-500'>
-                      {locale === 'cn'
-                        ? '收藏、分享、评分和讨论都在同一条行动带里。'
-                        : 'Save, share, rate, and discuss from one compact rail.'}
-                    </span>
-                  </div>
-
-                  <div className='grid gap-3 lg:grid-cols-[minmax(0,1.2fr)_auto] lg:items-center'>
-                    <div className='rounded-lg bg-slate-50 px-4 py-3 ring-1 ring-slate-200'>
-                      <div className='flex flex-wrap items-center gap-4'>
-                        <div className='min-w-0'>
-                          <p className='text-xs font-medium uppercase tracking-wide text-slate-500'>
-                            {locale === 'cn' ? '评分' : 'Rating'}
-                          </p>
-                          <div className='mt-1'>
-                            <RatingStars
-                              toolId={toolId}
-                              currentRating={userRating}
-                              averageRating={ratingStats.averageRating}
-                              ratingCount={ratingStats.ratingCount}
-                              readonly={false}
-                              size='md'
-                              showStats
-                            />
-                          </div>
-                        </div>
-
-                        <div className='h-10 w-px bg-slate-200' />
-
-                        <div className='min-w-0'>
-                          <p className='text-xs font-medium uppercase tracking-wide text-slate-500'>
-                            {locale === 'cn' ? '收藏' : 'Save'}
-                          </p>
-                          <div className='mt-1'>
-                            <FavoriteButton
-                              toolId={toolId}
-                              initialState={isFavoritedByUser}
-                              showLabel
-                              className='rounded-full bg-white px-3 py-2 ring-1 ring-slate-200 hover:ring-red-200'
-                            />
-                          </div>
-                          <p className='mt-2 max-w-[12rem] text-xs leading-5 text-slate-500'>
-                            {locale === 'cn'
-                              ? '先收藏，之后可以回到收藏夹再对比。'
-                              : 'Save first, then come back to compare later.'}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className='flex flex-wrap items-center gap-2'>
-                      <ShareButton
-                        toolId={toolId}
-                        toolName={websiteName}
-                        toolTitle={data.title}
-                        toolDescription={data.content}
-                        userId={user?.id}
-                        className='rounded-full'
-                      />
-                      <a
-                        href='#comments'
-                        className='inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-4 py-2 text-sm font-semibold text-cyan-800 transition hover:bg-cyan-100'
-                      >
-                        <MessageSquare className='size-4' />
-                        {commentLabel}
-                      </a>
-                    </div>
-                  </div>
-                </div>
               )}
-
-              <div className='flex flex-col gap-3 sm:flex-row sm:items-center'>
-                {toolId ? (
-                  <TrackableLink
-                    href={data.url}
-                    toolId={toolId}
-                    userId={user?.id}
-                    className='inline-flex items-center justify-center gap-2 rounded-lg bg-slate-950 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800'
-                  >
-                    {t('visitWebsite')} <ArrowUpRight className='size-4' />
-                  </TrackableLink>
-                ) : (
-                  <a
-                    href={data.url}
-                    target='_blank'
-                    rel='noreferrer'
-                    className='inline-flex items-center justify-center gap-2 rounded-lg bg-slate-950 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800'
-                  >
-                    {t('visitWebsite')} <ArrowUpRight className='size-4' />
-                  </a>
-                )}
-                <a
-                  href={`/${locale}/explore?search=${encodeURIComponent(data.title)}`}
-                  className='inline-flex items-center justify-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-medium text-slate-700 ring-1 ring-slate-200 transition hover:bg-slate-100'
-                >
-                  {isChinese ? '找相似工具' : 'Find similar tools'} <CircleArrowRight className='size-4' />
-                </a>
-                {/* Discussion anchor is now surfaced in the action panel above */}
-              </div>
-              <p className='max-w-3xl text-sm leading-6 text-slate-500'>
-                {locale === 'cn'
-                  ? '最稳的下一步：先看官网，再拿相似工具和评论做对比。'
-                  : 'Best next step: open the official site first, then compare similar tools and comments.'}
-              </p>
-            </section>
-
-            <aside className='space-y-4'>
-              <div className='overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-slate-200'>
-                {heroPreview}
-                <div className='grid grid-cols-3 divide-x divide-slate-200 border-t border-slate-200 text-center'>
-                  <div className='p-3'>
-                    <p className='text-xs text-slate-500'>{isChinese ? '浏览' : 'Views'}</p>
-                    <p className='font-semibold text-slate-950'>{toolStats.viewCount.toLocaleString()}</p>
-                  </div>
-                  <div className='p-3'>
-                    <p className='text-xs text-slate-500'>{isChinese ? '点击' : 'Clicks'}</p>
-                    <p className='font-semibold text-slate-950'>{toolStats.clickCount.toLocaleString()}</p>
-                  </div>
-                  <div className='p-3'>
-                    <p className='text-xs text-slate-500'>{isChinese ? '收藏' : 'Saved'}</p>
-                    <p className='font-semibold text-slate-950'>{toolStats.favoriteCount.toLocaleString()}</p>
-                  </div>
-                </div>
-
-                <div className='mt-3 rounded-lg border border-cyan-100 bg-cyan-50 px-4 py-3'>
-                  <div className='flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
-                    <p className='text-sm text-cyan-900'>
-                      {locale === 'cn'
-                        ? '如果这是你的工具，可以查看提交与展示方案，补充资料并管理曝光方式。'
-                        : 'If this is your tool, review the listing options to submit updates and manage visibility.'}
-                    </p>
-                    <Link
-                      href={`/${locale}/developer/listing`}
-                      className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-3 py-2 text-sm font-semibold text-white hover:bg-cyan-800'
-                    >
-                      {locale === 'cn' ? '查看提交方案' : 'View listing options'}
-                    </Link>
-                  </div>
-                  <p className='mt-2 text-xs text-cyan-900/70'>
-                    {locale === 'cn'
-                      ? '审核时效与展示方式会根据你选择的方案而定。'
-                      : 'Review timing and visibility depend on the option you choose.'}
-                  </p>
-                </div>
-              </div>
-
-              <div className='grid grid-cols-2 gap-3'>
-                {quickFacts.map((fact) => (
-                  <div key={fact.label} className='min-w-0 rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200'>
-                    <div className={`mb-3 inline-flex rounded-lg p-2 ${fact.tone}`}>
-                      <fact.icon className='size-4' />
-                    </div>
-                    <p className='break-words text-xs font-medium uppercase text-slate-500'>{fact.label}</p>
-                    <p className='mt-1 break-words text-sm font-semibold text-slate-950'>{fact.value}</p>
-                  </div>
-                ))}
-              </div>
-            </aside>
+            </div>
           </div>
-        </div>
 
-        <div className='border-y border-slate-200 bg-white'>
-          <div className='mx-auto flex max-w-7xl flex-wrap items-center gap-3 px-4 py-4 lg:px-6'>
-            <span className='inline-flex items-center gap-2 text-sm font-semibold text-slate-700'>
-              <TagIcon className='size-4 text-slate-500' />
-              {isChinese ? '标签' : 'Tags'}
-            </span>
-            {displayTagLabels.length > 0 ? (
-              displayTagLabels.map((label) => (
-                <span
-                  key={label}
-                  className='max-w-full rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700'
-                >
-                  {label}
-                </span>
-              ))
-            ) : (
-              <span className='max-w-full rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-600'>
-                {categoryName}
-              </span>
-            )}
-          </div>
-        </div>
+          <div className='mx-auto grid max-w-7xl gap-8 px-4 py-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:px-6 lg:py-12'>
+            <main className='space-y-8'>
+              <section className='rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'>
+                <div className='mb-5 flex items-center gap-3'>
+                  <ShieldCheck className='size-6 text-emerald-600' />
+                  <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>{t('introduction')}</h2>
+                </div>
+                <MarkdownProse markdown={detailMarkdown} className='text-base leading-7 text-slate-700' />
+              </section>
 
-        <div className='mx-auto grid max-w-7xl gap-8 px-4 py-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:px-6 lg:py-12'>
-          <main className='space-y-8'>
-            <section className='rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'>
-              <div className='mb-5 flex items-center gap-3'>
-                <ShieldCheck className='size-6 text-emerald-600' />
-                <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>{t('introduction')}</h2>
-              </div>
-              <MarkdownProse markdown={detailMarkdown} className='text-base leading-7 text-slate-700' />
-            </section>
-
-            <section className='rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'>
-              <div className='mb-5 flex items-center gap-3'>
-                <ShieldCheck className='size-6 text-cyan-600' />
-                <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>
-                  {locale === 'cn' ? '决策参考' : 'Decision Guide'}
-                </h2>
-              </div>
-              <p className='mb-5 max-w-3xl text-sm leading-6 text-slate-600'>
-                {locale === 'cn'
-                  ? '这一组信息不是在替你下结论，而是帮你更快判断：它值不值得继续比较、试用或付费。'
-                  : 'This section is here to speed up your decision: whether this tool is worth comparing further, trialing, or paying for.'}
-              </p>
-              <div className='space-y-5'>
-                <div className='grid gap-4 xl:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]'>
-                  <div className='rounded-lg border border-slate-200 bg-slate-50 p-4 sm:p-5'>
-                    <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                      {locale === 'cn' ? '先看这三个判断' : 'Start with these three signals'}
-                    </p>
-                    <div className='mt-4 grid gap-3 sm:grid-cols-3'>
-                      <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
-                        <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                          {locale === 'cn' ? '官方网站状态' : 'Official website status'}
-                        </p>
-                        <p className='mt-2 text-base font-semibold text-slate-950'>{officialSite.hostname}</p>
-                        <div className='mt-2 flex flex-wrap items-center gap-2'>
-                          <span className='rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700'>
-                            {officialSite.secureLabel}
-                          </span>
-                          <span className='rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700'>
-                            {officialSite.statusLabel}
-                          </span>
+              <section className='rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'>
+                <div className='mb-5 flex items-center gap-3'>
+                  <ShieldCheck className='size-6 text-cyan-600' />
+                  <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>
+                    {locale === 'cn' ? '决策参考' : 'Decision Guide'}
+                  </h2>
+                </div>
+                <p className='mb-5 max-w-3xl text-sm leading-6 text-slate-600'>
+                  {locale === 'cn'
+                    ? '这一组信息不是在替你下结论，而是帮你更快判断：它值不值得继续比较、试用或付费。'
+                    : 'This section is here to speed up your decision: whether this tool is worth comparing further, trialing, or paying for.'}
+                </p>
+                <div className='space-y-5'>
+                  <div className='grid gap-4 xl:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]'>
+                    <div className='rounded-lg border border-slate-200 bg-slate-50 p-4 sm:p-5'>
+                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                        {locale === 'cn' ? '先看这三个判断' : 'Start with these three signals'}
+                      </p>
+                      <div className='mt-4 grid gap-3 sm:grid-cols-3'>
+                        <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
+                          <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                            {locale === 'cn' ? '官方网站状态' : 'Official website status'}
+                          </p>
+                          <p className='mt-2 text-base font-semibold text-slate-950'>{officialSite.hostname}</p>
+                          <div className='mt-2 flex flex-wrap items-center gap-2'>
+                            <span className='rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700'>
+                              {officialSite.secureLabel}
+                            </span>
+                            <span className='rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700'>
+                              {officialSite.statusLabel}
+                            </span>
+                          </div>
+                          <p className='mt-3 text-sm leading-6 text-slate-600'>{officialSiteSummary}</p>
                         </div>
-                        <p className='mt-3 text-sm leading-6 text-slate-600'>{officialSiteSummary}</p>
-                      </div>
 
-                      <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
-                        <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                          {locale === 'cn' ? '最近更新信息' : 'Recent update'}
-                        </p>
-                        <p className='mt-2 text-base font-semibold text-slate-950'>{updatedLabel}</p>
-                        <p className='mt-3 text-sm leading-6 text-slate-600'>{freshnessSummary}</p>
-                      </div>
+                        <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
+                          <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                            {locale === 'cn' ? '最近更新信息' : 'Recent update'}
+                          </p>
+                          <p className='mt-2 text-base font-semibold text-slate-950'>{updatedLabel}</p>
+                          <p className='mt-3 text-sm leading-6 text-slate-600'>{freshnessSummary}</p>
+                        </div>
 
-                      <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
-                        <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                          {locale === 'cn' ? '定价快照' : 'Pricing snapshot'}
-                        </p>
-                        <p className='mt-2 text-base font-semibold text-slate-950'>{pricingLabel}</p>
-                        <p className='mt-3 text-sm leading-6 text-slate-600'>{pricingSummary}</p>
+                        <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
+                          <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                            {locale === 'cn' ? '定价快照' : 'Pricing snapshot'}
+                          </p>
+                          <p className='mt-2 text-base font-semibold text-slate-950'>{pricingLabel}</p>
+                          <p className='mt-3 text-sm leading-6 text-slate-600'>{pricingSummary}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div className='grid gap-4'>
-                    <div className='rounded-lg border border-slate-200 p-4'>
-                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                        {locale === 'cn' ? '真实反馈信号' : 'User signal'}
-                      </p>
-                      <p className='mt-2 text-lg font-semibold text-slate-950'>{communitySignal.label}</p>
-                      <p className='mt-2 text-xs font-medium text-slate-500'>
-                        {locale === 'cn'
-                          ? `${ratingStats.ratingCount} 条评分 · ${commentCount} 条讨论 · ${toolStats.favoriteCount} 次收藏`
-                          : `${ratingStats.ratingCount} ratings · ${commentCount} comments · ${toolStats.favoriteCount} saves`}
-                      </p>
-                      <p className='mt-3 text-sm leading-6 text-slate-600'>{communitySignalWithOverride.summary}</p>
-                    </div>
-
-                    <div className='rounded-lg border border-slate-200 p-4'>
-                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                        {locale === 'cn' ? '预览覆盖' : 'Preview coverage'}
-                      </p>
-                      <p className='mt-2 text-lg font-semibold text-slate-950'>{mediaCoverage.label}</p>
-                      <p className='mt-2 text-xs font-medium text-slate-500'>{mediaCoverage.evidence}</p>
-                      <p className='mt-3 text-sm leading-6 text-slate-600'>{mediaCoverage.summary}</p>
-                    </div>
-
-                    {editorialReview && (
+                    <div className='grid gap-4'>
                       <div className='rounded-lg border border-slate-200 p-4'>
                         <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                          {locale === 'cn' ? '编辑复核' : 'Editorial review'}
+                          {locale === 'cn' ? '真实反馈信号' : 'User signal'}
                         </p>
-                        <p className='mt-2 text-lg font-semibold text-slate-950'>
-                          {editorialReviewedLabel || (locale === 'cn' ? '已复核' : 'Reviewed')}
+                        <p className='mt-2 text-lg font-semibold text-slate-950'>{communitySignal.label}</p>
+                        <p className='mt-2 text-xs font-medium text-slate-500'>
+                          {locale === 'cn'
+                            ? `${ratingStats.ratingCount} 条评分 · ${commentCount} 条讨论 · ${toolStats.favoriteCount} 次收藏`
+                            : `${ratingStats.ratingCount} ratings · ${commentCount} comments · ${toolStats.favoriteCount} saves`}
                         </p>
-                        {editorialReview.summary && (
-                          <p className='mt-3 text-sm leading-6 text-slate-600'>{editorialReview.summary}</p>
-                        )}
-                        {editorialReview.trustNote && (
-                          <p className='mt-2 text-sm leading-6 text-slate-600'>{editorialReview.trustNote}</p>
-                        )}
+                        <p className='mt-3 text-sm leading-6 text-slate-600'>{communitySignalWithOverride.summary}</p>
                       </div>
-                    )}
-                  </div>
-                </div>
 
-                <div className='rounded-lg border border-cyan-100 bg-cyan-50 p-4 sm:p-5'>
-                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                    {locale === 'cn' ? '和相似工具怎么比' : 'How to compare it next'}
-                  </p>
-                  <p className='mt-2 text-lg font-semibold text-slate-950'>
-                    {locale === 'cn' ? '先横向看关键差异' : 'Compare the decision points first'}
-                  </p>
-                  <div className='mt-3 flex flex-wrap gap-2'>
-                    {compareAxes.map((axis) => (
-                      <span
-                        key={axis}
-                        className='inline-flex rounded-full bg-white px-3 py-1 text-sm font-medium text-cyan-900 ring-1 ring-cyan-100'
-                      >
-                        {axis}
-                      </span>
-                    ))}
-                  </div>
-                  <p className='mt-3 text-sm leading-6 text-slate-600'>{comparisonSummary}</p>
-                </div>
+                      <div className='rounded-lg border border-slate-200 p-4'>
+                        <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                          {locale === 'cn' ? '预览覆盖' : 'Preview coverage'}
+                        </p>
+                        <p className='mt-2 text-lg font-semibold text-slate-950'>{mediaCoverage.label}</p>
+                        <p className='mt-2 text-xs font-medium text-slate-500'>{mediaCoverage.evidence}</p>
+                        <p className='mt-3 text-sm leading-6 text-slate-600'>{mediaCoverage.summary}</p>
+                      </div>
 
-                <div className='rounded-lg border border-slate-200 bg-white p-4 sm:p-5'>
-                  <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                    {locale === 'cn' ? '替代方案' : 'Alternatives'}
-                  </p>
-                  <p className='mt-2 text-lg font-semibold text-slate-950'>
-                    {locale === 'cn'
-                      ? '如果这款不合适，直接看更窄的比较页'
-                      : 'If this is not the right fit, jump to narrower comparison pages'}
-                  </p>
-                  <p className='mt-2 text-sm leading-6 text-slate-600'>
-                    {locale === 'cn'
-                      ? '这组入口适合用来替换当前 shortlist，而不是继续围着同一个工具打转。'
-                      : 'Use these pages to replace the current shortlist instead of circling the same tool.'}
-                  </p>
-                  <div className='mt-4 grid gap-3 lg:grid-cols-3'>
-                    {nextComparisonLinks.map((item) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className='rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:-translate-y-0.5 hover:bg-slate-100'
-                      >
-                        <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
-                        <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
-                      </Link>
-                    ))}
+                      {editorialReview && (
+                        <div className='rounded-lg border border-slate-200 p-4'>
+                          <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                            {locale === 'cn' ? '编辑复核' : 'Editorial review'}
+                          </p>
+                          <p className='mt-2 text-lg font-semibold text-slate-950'>
+                            {editorialReviewedLabel || (locale === 'cn' ? '已复核' : 'Reviewed')}
+                          </p>
+                          {editorialReview.summary && (
+                            <p className='mt-3 text-sm leading-6 text-slate-600'>{editorialReview.summary}</p>
+                          )}
+                          {editorialReview.trustNote && (
+                            <p className='mt-2 text-sm leading-6 text-slate-600'>{editorialReview.trustNote}</p>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
 
-                <div className='grid gap-4 lg:grid-cols-3'>
-                  <div className='rounded-lg border border-slate-200 p-4'>
+                  <div className='rounded-lg border border-cyan-100 bg-cyan-50 p-4 sm:p-5'>
+                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                      {locale === 'cn' ? '和相似工具怎么比' : 'How to compare it next'}
+                    </p>
+                    <p className='mt-2 text-lg font-semibold text-slate-950'>
+                      {locale === 'cn' ? '先横向看关键差异' : 'Compare the decision points first'}
+                    </p>
+                    <div className='mt-3 flex flex-wrap gap-2'>
+                      {compareAxes.map((axis) => (
+                        <span
+                          key={axis}
+                          className='inline-flex rounded-full bg-white px-3 py-1 text-sm font-medium text-cyan-900 ring-1 ring-cyan-100'
+                        >
+                          {axis}
+                        </span>
+                      ))}
+                    </div>
+                    <p className='mt-3 text-sm leading-6 text-slate-600'>{comparisonSummary}</p>
+                  </div>
+
+                  <div className='rounded-lg border border-slate-200 bg-white p-4 sm:p-5'>
                     <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                      {locale === 'cn' ? '适合谁' : 'Best fit'}
+                      {locale === 'cn' ? '替代方案' : 'Alternatives'}
+                    </p>
+                    <p className='mt-2 text-lg font-semibold text-slate-950'>
+                      {locale === 'cn'
+                        ? '如果这款不合适，直接看更窄的比较页'
+                        : 'If this is not the right fit, jump to narrower comparison pages'}
+                    </p>
+                    <p className='mt-2 text-sm leading-6 text-slate-600'>
+                      {locale === 'cn'
+                        ? '这组入口适合用来替换当前 shortlist，而不是继续围着同一个工具打转。'
+                        : 'Use these pages to replace the current shortlist instead of circling the same tool.'}
+                    </p>
+                    <div className='mt-4 grid gap-3 lg:grid-cols-3'>
+                      {nextComparisonLinks.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className='rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:-translate-y-0.5 hover:bg-slate-100'
+                        >
+                          <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                          <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className='grid gap-4 lg:grid-cols-3'>
+                    <div className='rounded-lg border border-slate-200 p-4'>
+                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                        {locale === 'cn' ? '适合谁' : 'Best fit'}
+                      </p>
+                      <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
+                        {bestFitList.map((item) => (
+                          <li key={item} className='flex gap-2'>
+                            <CheckCircle className='mt-1 size-4 shrink-0 text-emerald-600' />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className='rounded-lg border border-slate-200 p-4'>
+                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                        {locale === 'cn' ? '不太适合' : 'Less ideal for'}
+                      </p>
+                      <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
+                        {notIdealForList.map((item) => (
+                          <li key={item} className='flex gap-2'>
+                            <CircleArrowRight className='mt-1 size-4 shrink-0 text-slate-500' />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className='rounded-lg border border-slate-200 p-4'>
+                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                        {locale === 'cn' ? '选择前先核对' : 'Verify before choosing'}
+                      </p>
+                      <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
+                        {verificationChecklist.map((item) => (
+                          <li key={item} className='flex gap-2'>
+                            <ShieldCheck className='mt-1 size-4 shrink-0 text-cyan-600' />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section className='rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'>
+                <div className='mb-5 flex items-center gap-3'>
+                  <Sparkles className='size-6 text-emerald-600' />
+                  <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>
+                    {locale === 'cn' ? '市场信号' : 'Market Signals'}
+                  </h2>
+                </div>
+                <p className='max-w-3xl text-sm leading-6 text-slate-600'>
+                  {locale === 'cn'
+                    ? '这组信号不是在替你下结论，而是告诉你：这个条目现在是“值得继续看”，还是“先放一放”。'
+                    : 'These signals do not make the decision for you; they tell you whether this listing deserves another look or can wait.'}
+                </p>
+                <div className='mt-5 grid gap-4 lg:grid-cols-3'>
+                  <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+                    <div className='flex items-center gap-2'>
+                      <Eye className='size-4 text-slate-500' />
+                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                        {locale === 'cn' ? '需求热度' : 'Demand pulse'}
+                      </p>
+                    </div>
+                    <p className='mt-3 text-lg font-semibold text-slate-950'>{marketDemand.label}</p>
+                    <p className='mt-2 text-xs font-medium text-slate-500'>{marketDemand.evidence}</p>
+                    <p className='mt-3 text-sm leading-6 text-slate-600'>{marketDemand.summary}</p>
+                  </div>
+
+                  <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+                    <div className='flex items-center gap-2'>
+                      <Heart className='size-4 text-slate-500' />
+                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                        {locale === 'cn' ? '真实互动' : 'Community traction'}
+                      </p>
+                    </div>
+                    <p className='mt-3 text-lg font-semibold text-slate-950'>{communitySignal.label}</p>
+                    <p className='mt-2 text-xs font-medium text-slate-500'>
+                      {locale === 'cn'
+                        ? `${ratingStats.ratingCount} 条评分 · ${commentCount} 条讨论 · ${toolStats.favoriteCount} 次收藏`
+                        : `${ratingStats.ratingCount} ratings · ${commentCount} comments · ${toolStats.favoriteCount} saves`}
+                    </p>
+                    <p className='mt-3 text-sm leading-6 text-slate-600'>{communitySignalWithOverride.summary}</p>
+                  </div>
+
+                  <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+                    <div className='flex items-center gap-2'>
+                      <CalendarDays className='size-4 text-slate-500' />
+                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                        {locale === 'cn' ? '维护节奏' : 'Maintenance rhythm'}
+                      </p>
+                    </div>
+                    <p className='mt-3 text-lg font-semibold text-slate-950'>{marketMomentum.label}</p>
+                    <p className='mt-2 text-xs font-medium text-slate-500'>{marketMomentum.evidence}</p>
+                    <p className='mt-3 text-sm leading-6 text-slate-600'>{marketMomentum.summary}</p>
+                  </div>
+                </div>
+              </section>
+
+              <section className='rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'>
+                <div className='mb-5 flex items-center gap-3'>
+                  <Target className='size-6 text-cyan-600' />
+                  <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>
+                    {locale === 'cn' ? '快速决策' : 'Quick decision'}
+                  </h2>
+                </div>
+                <p className='max-w-3xl text-sm leading-6 text-slate-600'>
+                  {locale === 'cn'
+                    ? '先看这四块，再决定要不要继续比、直接打开官网，还是回到更窄的对比页。'
+                    : 'Use these four cards to decide whether to keep comparing, open the official site, or jump to a narrower alternative page.'}
+                </p>
+                <div className='mt-5 grid gap-4 lg:grid-cols-2 xl:grid-cols-4'>
+                  <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                      {locale === 'cn' ? '适合谁' : 'Suitable for'}
                     </p>
                     <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
-                      {bestFitList.map((item) => (
+                      {(bestFitList.length > 0 ? bestFitList : [categoryName]).slice(0, 4).map((item) => (
                         <li key={item} className='flex gap-2'>
                           <CheckCircle className='mt-1 size-4 shrink-0 text-emerald-600' />
                           <span>{item}</span>
@@ -2138,460 +2263,377 @@ export default async function Page({
                     </ul>
                   </div>
 
-                  <div className='rounded-lg border border-slate-200 p-4'>
-                    <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                      {locale === 'cn' ? '不太适合' : 'Less ideal for'}
+                  <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                      {locale === 'cn' ? '不太适合' : 'Not suitable for'}
                     </p>
                     <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
-                      {notIdealForList.map((item) => (
-                        <li key={item} className='flex gap-2'>
-                          <CircleArrowRight className='mt-1 size-4 shrink-0 text-slate-500' />
-                          <span>{item}</span>
-                        </li>
-                      ))}
+                      {(notIdealForList.length > 0 ? notIdealForList : verificationChecklist)
+                        .slice(0, 4)
+                        .map((item) => (
+                          <li key={item} className='flex gap-2'>
+                            <CircleArrowRight className='mt-1 size-4 shrink-0 text-slate-500' />
+                            <span>{item}</span>
+                          </li>
+                        ))}
                     </ul>
                   </div>
 
-                  <div className='rounded-lg border border-slate-200 p-4'>
-                    <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                      {locale === 'cn' ? '选择前先核对' : 'Verify before choosing'}
+                  <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                      {locale === 'cn' ? '替代方案' : 'Alternatives'}
                     </p>
-                    <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
-                      {verificationChecklist.map((item) => (
-                        <li key={item} className='flex gap-2'>
-                          <ShieldCheck className='mt-1 size-4 shrink-0 text-cyan-600' />
-                          <span>{item}</span>
-                        </li>
+                    <div className='mt-3 space-y-3'>
+                      {nextComparisonLinks.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className='block rounded-lg border border-white bg-white p-3 transition hover:-translate-y-0.5 hover:bg-slate-50'
+                        >
+                          <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                          <p className='mt-1 text-sm leading-6 text-slate-600'>{item.description}</p>
+                          <span className='mt-3 inline-flex items-center gap-1 rounded-full bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-cyan-700'>
+                            {locale === 'cn' ? '打开这个替代页' : 'Open this alternative'}
+                            <ArrowRight className='size-3.5' />
+                          </span>
+                        </Link>
                       ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <section className='rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'>
-              <div className='mb-5 flex items-center gap-3'>
-                <Sparkles className='size-6 text-emerald-600' />
-                <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>
-                  {locale === 'cn' ? '市场信号' : 'Market Signals'}
-                </h2>
-              </div>
-              <p className='max-w-3xl text-sm leading-6 text-slate-600'>
-                {locale === 'cn'
-                  ? '这组信号不是在替你下结论，而是告诉你：这个条目现在是“值得继续看”，还是“先放一放”。'
-                  : 'These signals do not make the decision for you; they tell you whether this listing deserves another look or can wait.'}
-              </p>
-              <div className='mt-5 grid gap-4 lg:grid-cols-3'>
-                <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
-                  <div className='flex items-center gap-2'>
-                    <Eye className='size-4 text-slate-500' />
-                    <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                      {locale === 'cn' ? '需求热度' : 'Demand pulse'}
-                    </p>
-                  </div>
-                  <p className='mt-3 text-lg font-semibold text-slate-950'>{marketDemand.label}</p>
-                  <p className='mt-2 text-xs font-medium text-slate-500'>{marketDemand.evidence}</p>
-                  <p className='mt-3 text-sm leading-6 text-slate-600'>{marketDemand.summary}</p>
-                </div>
-
-                <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
-                  <div className='flex items-center gap-2'>
-                    <Heart className='size-4 text-slate-500' />
-                    <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                      {locale === 'cn' ? '真实互动' : 'Community traction'}
-                    </p>
-                  </div>
-                  <p className='mt-3 text-lg font-semibold text-slate-950'>{communitySignal.label}</p>
-                  <p className='mt-2 text-xs font-medium text-slate-500'>
-                    {locale === 'cn'
-                      ? `${ratingStats.ratingCount} 条评分 · ${commentCount} 条讨论 · ${toolStats.favoriteCount} 次收藏`
-                      : `${ratingStats.ratingCount} ratings · ${commentCount} comments · ${toolStats.favoriteCount} saves`}
-                  </p>
-                  <p className='mt-3 text-sm leading-6 text-slate-600'>{communitySignalWithOverride.summary}</p>
-                </div>
-
-                <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
-                  <div className='flex items-center gap-2'>
-                    <CalendarDays className='size-4 text-slate-500' />
-                    <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                      {locale === 'cn' ? '维护节奏' : 'Maintenance rhythm'}
-                    </p>
-                  </div>
-                  <p className='mt-3 text-lg font-semibold text-slate-950'>{marketMomentum.label}</p>
-                  <p className='mt-2 text-xs font-medium text-slate-500'>{marketMomentum.evidence}</p>
-                  <p className='mt-3 text-sm leading-6 text-slate-600'>{marketMomentum.summary}</p>
-                </div>
-              </div>
-            </section>
-
-            <section className='rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'>
-              <div className='mb-5 flex items-center gap-3'>
-                <Target className='size-6 text-cyan-600' />
-                <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>
-                  {locale === 'cn' ? '快速决策' : 'Quick decision'}
-                </h2>
-              </div>
-              <p className='max-w-3xl text-sm leading-6 text-slate-600'>
-                {locale === 'cn'
-                  ? '先看这四块，再决定要不要继续比、直接打开官网，还是回到更窄的对比页。'
-                  : 'Use these four cards to decide whether to keep comparing, open the official site, or jump to a narrower alternative page.'}
-              </p>
-              <div className='mt-5 grid gap-4 lg:grid-cols-2 xl:grid-cols-4'>
-                <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
-                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                    {locale === 'cn' ? '适合谁' : 'Suitable for'}
-                  </p>
-                  <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
-                    {(bestFitList.length > 0 ? bestFitList : [categoryName]).slice(0, 4).map((item) => (
-                      <li key={item} className='flex gap-2'>
-                        <CheckCircle className='mt-1 size-4 shrink-0 text-emerald-600' />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
-                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                    {locale === 'cn' ? '不太适合' : 'Not suitable for'}
-                  </p>
-                  <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
-                    {(notIdealForList.length > 0 ? notIdealForList : verificationChecklist).slice(0, 4).map((item) => (
-                      <li key={item} className='flex gap-2'>
-                        <CircleArrowRight className='mt-1 size-4 shrink-0 text-slate-500' />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
-                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                    {locale === 'cn' ? '替代方案' : 'Alternatives'}
-                  </p>
-                  <div className='mt-3 space-y-3'>
-                    {nextComparisonLinks.map((item) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className='block rounded-lg border border-white bg-white p-3 transition hover:-translate-y-0.5 hover:bg-slate-50'
-                      >
-                        <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
-                        <p className='mt-1 text-sm leading-6 text-slate-600'>{item.description}</p>
-                        <span className='mt-3 inline-flex items-center gap-1 rounded-full bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-cyan-700'>
-                          {locale === 'cn' ? '打开这个替代页' : 'Open this alternative'}
-                          <ArrowRight className='size-3.5' />
-                        </span>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-
-                <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
-                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                    {locale === 'cn' ? '定价快照' : 'Pricing snapshot'}
-                  </p>
-                  <p className='mt-3 text-base font-semibold text-slate-950'>{pricingLabel}</p>
-                  <p className='mt-2 text-sm leading-6 text-slate-700'>{pricingSummary}</p>
-                  <div className='mt-4 rounded-lg border border-white bg-white p-3 text-sm leading-6 text-slate-600'>
-                    {locale === 'cn'
-                      ? '如果价格、试用和升级门槛都合适，再继续看详情和官网。'
-                      : 'If pricing, trial access, and upgrade limits look right, continue into the detail page and the official site.'}
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            {featureEntries.length > 0 && (
-              <section className='rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'>
-                <div className='mb-5 flex items-center gap-3'>
-                  <CheckCircle className='size-6 text-emerald-600' />
-                  <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>
-                    {isChinese ? '关键能力' : 'Key Features'}
-                  </h2>
-                </div>
-                <div className='grid gap-3 sm:grid-cols-2'>
-                  {featureEntries.map((entry) => (
-                    <div key={entry.label} className='rounded-lg border border-slate-200 p-4'>
-                      <h3 className='font-semibold text-slate-950'>{entry.label}</h3>
-                      {entry.value && <p className='mt-2 text-sm leading-6 text-slate-600'>{entry.value}</p>}
                     </div>
-                  ))}
-                </div>
-              </section>
-            )}
+                  </div>
 
-            {useCaseList.length > 0 && (
-              <section className='rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'>
-                <div className='mb-5 flex items-center gap-3'>
-                  <Lightbulb className='size-6 text-cyan-600' />
-                  <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>
-                    {isChinese ? '适用场景' : 'Use Cases'}
-                  </h2>
-                </div>
-                <div className='grid gap-3 sm:grid-cols-2 lg:grid-cols-3'>
-                  {useCaseList.map((value) => (
-                    <div key={value} className='rounded-lg bg-cyan-50 p-4 ring-1 ring-cyan-100'>
-                      <h3 className='font-semibold text-slate-950'>{value}</h3>
+                  <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                      {locale === 'cn' ? '定价快照' : 'Pricing snapshot'}
+                    </p>
+                    <p className='mt-3 text-base font-semibold text-slate-950'>{pricingLabel}</p>
+                    <p className='mt-2 text-sm leading-6 text-slate-700'>{pricingSummary}</p>
+                    <div className='mt-4 rounded-lg border border-white bg-white p-3 text-sm leading-6 text-slate-600'>
+                      {locale === 'cn'
+                        ? '如果价格、试用和升级门槛都合适，再继续看详情和官网。'
+                        : 'If pricing, trial access, and upgrade limits look right, continue into the detail page and the official site.'}
                     </div>
-                  ))}
+                  </div>
                 </div>
               </section>
-            )}
 
-            {dbTool && ((dbTool.screenshots && dbTool.screenshots.length > 0) || dbTool.videoUrl) && (
-              <section className='rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'>
-                <h2 className='mb-5 text-2xl font-bold text-slate-950 lg:text-3xl'>
-                  {locale === 'cn' ? '截图与视频' : 'Screenshots & Videos'}
-                </h2>
-                <MediaGallery screenshots={dbTool.screenshots || []} videoUrl={dbTool.videoUrl} title={data.title} />
-              </section>
-            )}
-
-            {toolId && (
-              <>
-                <RecommendedTools
-                  toolId={toolId}
-                  locale={locale}
-                  categoryName={categoryName}
-                  categorySlug={categorySlug}
-                  compareAxes={compareAxes}
-                  pricing={dbTool?.pricing}
-                  pricingLabel={pricingLabel}
-                  tagSlugs={tagSlugsForDisplay}
-                  tagLabels={tagLabels}
-                />
-                <div className='my-10 flex items-center gap-3 lg:my-12'>
-                  <span className='h-px flex-1 bg-slate-200' />
-                  <span className='whitespace-nowrap text-xs font-semibold uppercase tracking-[0.2em] text-slate-400'>
-                    {locale === 'cn' ? '对比后继续看真实反馈' : 'Compare first, then read real feedback'}
-                  </span>
-                  <span className='h-px flex-1 bg-slate-200' />
-                </div>
-              </>
-            )}
-          </main>
-
-          <aside className='space-y-4 lg:sticky lg:top-24 lg:self-start'>
-            <div className='rounded-lg border border-cyan-100 bg-cyan-50 p-5 shadow-sm'>
-              <h2 className='text-base font-bold text-slate-950'>
-                {locale === 'cn' ? '决策摘要' : 'Decision Snapshot'}
-              </h2>
-              <p className='mt-2 text-sm leading-6 text-cyan-900/75'>
-                {locale === 'cn'
-                  ? '先看这块，再决定要不要继续点官网、看相似工具，还是直接收藏。'
-                  : 'Use this box to decide whether to visit the official site, compare similar tools, or save it for later.'}
-              </p>
-              <div className='mt-4 space-y-4'>
-                <div>
-                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                    {locale === 'cn' ? '适合谁' : 'Suitable for'}
-                  </p>
-                  <div className='mt-2 flex flex-wrap gap-2'>
-                    {(bestFitList.slice(0, 2).length > 0 ? bestFitList.slice(0, 2) : [categoryName]).map((item) => (
-                      <span
-                        key={item}
-                        className='rounded-full bg-white px-3 py-1 text-xs font-medium text-slate-700 ring-1 ring-cyan-100'
-                      >
-                        {item}
-                      </span>
+              {featureEntries.length > 0 && (
+                <section className='rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'>
+                  <div className='mb-5 flex items-center gap-3'>
+                    <CheckCircle className='size-6 text-emerald-600' />
+                    <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>
+                      {isChinese ? '关键能力' : 'Key Features'}
+                    </h2>
+                  </div>
+                  <div className='grid gap-3 sm:grid-cols-2'>
+                    {featureEntries.map((entry) => (
+                      <div key={entry.label} className='rounded-lg border border-slate-200 p-4'>
+                        <h3 className='font-semibold text-slate-950'>{entry.label}</h3>
+                        {entry.value && <p className='mt-2 text-sm leading-6 text-slate-600'>{entry.value}</p>}
+                      </div>
                     ))}
                   </div>
-                </div>
-
-                <div>
-                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                    {locale === 'cn' ? '不太适合' : 'Not suitable for'}
-                  </p>
-                  <div className='mt-2 flex flex-wrap gap-2'>
-                    {(notIdealForList.slice(0, 2).length > 0
-                      ? notIdealForList.slice(0, 2)
-                      : verificationChecklist.slice(0, 2)
-                    ).map((item) => (
-                      <span
-                        key={item}
-                        className='rounded-full bg-white px-3 py-1 text-xs font-medium text-slate-700 ring-1 ring-cyan-100'
-                      >
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                    {locale === 'cn' ? '定价快照' : 'Pricing snapshot'}
-                  </p>
-                  <p className='mt-2 text-sm leading-6 text-slate-700'>{pricingSummary}</p>
-                </div>
-
-                <div>
-                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                    {locale === 'cn' ? '先比这几项' : 'Compare first'}
-                  </p>
-                  <div className='mt-2 flex flex-wrap gap-2'>
-                    {compareAxes.slice(0, 3).map((axis) => (
-                      <span
-                        key={axis}
-                        className='rounded-full bg-white px-3 py-1 text-xs font-medium text-cyan-900 ring-1 ring-cyan-100'
-                      >
-                        {axis}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className='rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200'>
-              <h2 className='text-base font-bold text-slate-950'>
-                {locale === 'cn' ? '可信度快照' : 'Trust Snapshot'}
-              </h2>
-              <dl className='mt-4 space-y-3 text-sm'>
-                <div className='flex items-center justify-between gap-4'>
-                  <dt className='text-slate-500'>{locale === 'cn' ? '官网域名' : 'Official domain'}</dt>
-                  <dd className='text-right font-semibold text-slate-950'>{officialSite.hostname}</dd>
-                </div>
-                <div className='flex items-center justify-between gap-4'>
-                  <dt className='text-slate-500'>{locale === 'cn' ? '链接安全' : 'Connection'}</dt>
-                  <dd className='font-semibold text-slate-950'>{officialSite.secureLabel}</dd>
-                </div>
-                <div className='flex items-center justify-between gap-4'>
-                  <dt className='text-slate-500'>{locale === 'cn' ? '定价' : 'Pricing'}</dt>
-                  <dd className='font-semibold text-slate-950'>{pricingLabel}</dd>
-                </div>
-                <div className='flex items-center justify-between gap-4'>
-                  <dt className='text-slate-500'>{locale === 'cn' ? '分类' : 'Category'}</dt>
-                  <dd className='text-right font-semibold text-slate-950'>{categoryName}</dd>
-                </div>
-                <div className='flex items-center justify-between gap-4'>
-                  <dt className='text-slate-500'>{locale === 'cn' ? '状态' : 'Status'}</dt>
-                  <dd className='font-semibold text-emerald-700'>{statusLabel}</dd>
-                </div>
-                <div className='flex items-center justify-between gap-4'>
-                  <dt className='text-slate-500'>{locale === 'cn' ? '最近更新' : 'Last update'}</dt>
-                  <dd className='text-right font-semibold text-slate-950'>{updatedLabel}</dd>
-                </div>
-              </dl>
-              <p className='mt-4 rounded-lg bg-slate-50 px-3 py-2 text-xs leading-5 text-slate-600'>
-                {locale === 'cn'
-                  ? '如果还在犹豫，先收藏，再去看 2 个相似工具。'
-                  : 'If you are still unsure, save it first, then review two similar tools.'}
-              </p>
-              <p className='mt-2 text-xs leading-5 text-slate-500'>
-                {locale === 'cn'
-                  ? '收藏后回访，比较会轻松很多。'
-                  : 'Saving it now makes the later comparison much easier.'}
-              </p>
-              {toolId ? (
-                <TrackableLink
-                  href={data.url}
-                  toolId={toolId}
-                  userId={user?.id}
-                  className='mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700'
-                >
-                  {locale === 'cn' ? '打开官网' : 'Open official site'} <ArrowUpRight className='size-4' />
-                </TrackableLink>
-              ) : (
-                <a
-                  href={data.url}
-                  target='_blank'
-                  rel='noreferrer'
-                  className='mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700'
-                >
-                  {locale === 'cn' ? '打开官网' : 'Open official site'} <ArrowUpRight className='size-4' />
-                </a>
+                </section>
               )}
-            </div>
 
-            <div className='rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200'>
-              <h2 className='text-base font-bold text-slate-950'>{locale === 'cn' ? '互动数据' : 'Engagement'}</h2>
-              <div className='mt-4 space-y-3 text-sm text-slate-700'>
-                <p className='flex items-center gap-2'>
-                  <Eye className='size-4 text-slate-500' /> {toolStats.viewCount.toLocaleString()}{' '}
-                  {locale === 'cn' ? '次浏览' : 'views'}
+              {useCaseList.length > 0 && (
+                <section className='rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'>
+                  <div className='mb-5 flex items-center gap-3'>
+                    <Lightbulb className='size-6 text-cyan-600' />
+                    <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>
+                      {isChinese ? '适用场景' : 'Use Cases'}
+                    </h2>
+                  </div>
+                  <div className='grid gap-3 sm:grid-cols-2 lg:grid-cols-3'>
+                    {useCaseList.map((value) => (
+                      <div key={value} className='rounded-lg bg-cyan-50 p-4 ring-1 ring-cyan-100'>
+                        <h3 className='font-semibold text-slate-950'>{value}</h3>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {dbTool && ((dbTool.screenshots && dbTool.screenshots.length > 0) || dbTool.videoUrl) && (
+                <section className='rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'>
+                  <h2 className='mb-5 text-2xl font-bold text-slate-950 lg:text-3xl'>
+                    {locale === 'cn' ? '截图与视频' : 'Screenshots & Videos'}
+                  </h2>
+                  <MediaGallery screenshots={dbTool.screenshots || []} videoUrl={dbTool.videoUrl} title={data.title} />
+                </section>
+              )}
+
+              {toolId && (
+                <>
+                  <RecommendedTools
+                    toolId={toolId}
+                    locale={locale}
+                    categoryName={categoryName}
+                    categorySlug={categorySlug}
+                    compareAxes={compareAxes}
+                    pricing={dbTool?.pricing}
+                    pricingLabel={pricingLabel}
+                    tagSlugs={tagSlugsForDisplay}
+                    tagLabels={tagLabels}
+                  />
+                  <div className='my-10 flex items-center gap-3 lg:my-12'>
+                    <span className='h-px flex-1 bg-slate-200' />
+                    <span className='whitespace-nowrap text-xs font-semibold uppercase tracking-[0.2em] text-slate-400'>
+                      {locale === 'cn' ? '对比后继续看真实反馈' : 'Compare first, then read real feedback'}
+                    </span>
+                    <span className='h-px flex-1 bg-slate-200' />
+                  </div>
+                </>
+              )}
+            </main>
+
+            <aside className='space-y-4 lg:sticky lg:top-24 lg:self-start'>
+              <div className='rounded-lg border border-cyan-100 bg-cyan-50 p-5 shadow-sm'>
+                <h2 className='text-base font-bold text-slate-950'>
+                  {locale === 'cn' ? '决策摘要' : 'Decision Snapshot'}
+                </h2>
+                <p className='mt-2 text-sm leading-6 text-cyan-900/75'>
+                  {locale === 'cn'
+                    ? '先看这块，再决定要不要继续点官网、看相似工具，还是直接收藏。'
+                    : 'Use this box to decide whether to visit the official site, compare similar tools, or save it for later.'}
                 </p>
-                <p className='flex items-center gap-2'>
-                  <MousePointerClick className='size-4 text-slate-500' /> {toolStats.clickCount.toLocaleString()}{' '}
-                  {locale === 'cn' ? '次官网点击' : 'website clicks'}
-                </p>
-                <p className='flex items-center gap-2'>
-                  <Heart className='size-4 text-slate-500' /> {toolStats.favoriteCount.toLocaleString()}{' '}
-                  {locale === 'cn' ? '次收藏' : 'saves'}
-                </p>
-                <p className='flex items-center gap-2'>
-                  <Star className='size-4 text-slate-500' /> {ratingStats.ratingCount.toLocaleString()}{' '}
-                  {locale === 'cn' ? '条评分' : 'ratings'}
-                </p>
+                <div className='mt-4 space-y-4'>
+                  <div>
+                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                      {locale === 'cn' ? '适合谁' : 'Suitable for'}
+                    </p>
+                    <div className='mt-2 flex flex-wrap gap-2'>
+                      {(bestFitList.slice(0, 2).length > 0 ? bestFitList.slice(0, 2) : [categoryName]).map((item) => (
+                        <span
+                          key={item}
+                          className='rounded-full bg-white px-3 py-1 text-xs font-medium text-slate-700 ring-1 ring-cyan-100'
+                        >
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                      {locale === 'cn' ? '不太适合' : 'Not suitable for'}
+                    </p>
+                    <div className='mt-2 flex flex-wrap gap-2'>
+                      {(notIdealForList.slice(0, 2).length > 0
+                        ? notIdealForList.slice(0, 2)
+                        : verificationChecklist.slice(0, 2)
+                      ).map((item) => (
+                        <span
+                          key={item}
+                          className='rounded-full bg-white px-3 py-1 text-xs font-medium text-slate-700 ring-1 ring-cyan-100'
+                        >
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                      {locale === 'cn' ? '定价快照' : 'Pricing snapshot'}
+                    </p>
+                    <p className='mt-2 text-sm leading-6 text-slate-700'>{pricingSummary}</p>
+                  </div>
+
+                  <div>
+                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                      {locale === 'cn' ? '先比这几项' : 'Compare first'}
+                    </p>
+                    <div className='mt-2 flex flex-wrap gap-2'>
+                      {compareAxes.slice(0, 3).map((axis) => (
+                        <span
+                          key={axis}
+                          className='rounded-full bg-white px-3 py-1 text-xs font-medium text-cyan-900 ring-1 ring-cyan-100'
+                        >
+                          {axis}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
 
-            {toolId && (
               <div className='rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200'>
-                <ToolFeedbackBar toolId={toolId} userId={user?.id} />
+                <h2 className='text-base font-bold text-slate-950'>
+                  {locale === 'cn' ? '可信度快照' : 'Trust Snapshot'}
+                </h2>
+                <dl className='mt-4 space-y-3 text-sm'>
+                  <div className='flex items-center justify-between gap-4'>
+                    <dt className='text-slate-500'>{locale === 'cn' ? '官网域名' : 'Official domain'}</dt>
+                    <dd className='text-right font-semibold text-slate-950'>{officialSite.hostname}</dd>
+                  </div>
+                  <div className='flex items-center justify-between gap-4'>
+                    <dt className='text-slate-500'>{locale === 'cn' ? '链接安全' : 'Connection'}</dt>
+                    <dd className='font-semibold text-slate-950'>{officialSite.secureLabel}</dd>
+                  </div>
+                  <div className='flex items-center justify-between gap-4'>
+                    <dt className='text-slate-500'>{locale === 'cn' ? '定价' : 'Pricing'}</dt>
+                    <dd className='font-semibold text-slate-950'>{pricingLabel}</dd>
+                  </div>
+                  <div className='flex items-center justify-between gap-4'>
+                    <dt className='text-slate-500'>{locale === 'cn' ? '分类' : 'Category'}</dt>
+                    <dd className='text-right font-semibold text-slate-950'>{categoryName}</dd>
+                  </div>
+                  <div className='flex items-center justify-between gap-4'>
+                    <dt className='text-slate-500'>{locale === 'cn' ? '状态' : 'Status'}</dt>
+                    <dd className='font-semibold text-emerald-700'>{statusLabel}</dd>
+                  </div>
+                  <div className='flex items-center justify-between gap-4'>
+                    <dt className='text-slate-500'>{locale === 'cn' ? '最近更新' : 'Last update'}</dt>
+                    <dd className='text-right font-semibold text-slate-950'>{updatedLabel}</dd>
+                  </div>
+                </dl>
+                <p className='mt-4 rounded-lg bg-slate-50 px-3 py-2 text-xs leading-5 text-slate-600'>
+                  {locale === 'cn'
+                    ? '如果还在犹豫，先收藏，再去看 2 个相似工具。'
+                    : 'If you are still unsure, save it first, then review two similar tools.'}
+                </p>
+                <p className='mt-2 text-xs leading-5 text-slate-500'>
+                  {locale === 'cn'
+                    ? '收藏后回访，比较会轻松很多。'
+                    : 'Saving it now makes the later comparison much easier.'}
+                </p>
+                {toolId ? (
+                  <TrackableLink
+                    href={data.url}
+                    toolId={toolId}
+                    userId={user?.id}
+                    className='mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700'
+                  >
+                    {locale === 'cn' ? '打开官网' : 'Open official site'} <ArrowUpRight className='size-4' />
+                  </TrackableLink>
+                ) : (
+                  <a
+                    href={data.url}
+                    target='_blank'
+                    rel='noreferrer'
+                    className='mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700'
+                  >
+                    {locale === 'cn' ? '打开官网' : 'Open official site'} <ArrowUpRight className='size-4' />
+                  </a>
+                )}
               </div>
-            )}
-          </aside>
-        </div>
 
-        {toolId && (
-          <section id='comments' className='mx-auto mt-16 max-w-7xl scroll-mt-28 px-4 pb-12 lg:mt-20 lg:px-6'>
-            <Separator className='mb-10 border-t border-slate-200' />
-            <div className='mb-3 rounded-lg bg-white p-3 shadow-sm ring-1 ring-slate-200 sm:p-4'>
-              <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-3'>
-                <div className='max-w-2xl'>
-                  <h3 className='text-base font-semibold text-slate-900'>
-                    {locale === 'cn' ? '参与讨论，看看真实反馈' : 'Join the discussion and follow updates'}
-                  </h3>
-                  <p className='mt-1 text-sm leading-6 text-slate-600'>
-                    {locale === 'cn'
-                      ? '收藏、分享给团队，或者直接留下你的真实使用体验。'
-                      : 'Save this tool, share it with your team, and leave your review.'}
+              <div className='rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200'>
+                <h2 className='text-base font-bold text-slate-950'>{locale === 'cn' ? '互动数据' : 'Engagement'}</h2>
+                <div className='mt-4 space-y-3 text-sm text-slate-700'>
+                  <p className='flex items-center gap-2'>
+                    <Eye className='size-4 text-slate-500' /> {toolStats.viewCount.toLocaleString()}{' '}
+                    {locale === 'cn' ? '次浏览' : 'views'}
+                  </p>
+                  <p className='flex items-center gap-2'>
+                    <MousePointerClick className='size-4 text-slate-500' /> {toolStats.clickCount.toLocaleString()}{' '}
+                    {locale === 'cn' ? '次官网点击' : 'website clicks'}
+                  </p>
+                  <p className='flex items-center gap-2'>
+                    <Heart className='size-4 text-slate-500' /> {toolStats.favoriteCount.toLocaleString()}{' '}
+                    {locale === 'cn' ? '次收藏' : 'saves'}
+                  </p>
+                  <p className='flex items-center gap-2'>
+                    <Star className='size-4 text-slate-500' /> {ratingStats.ratingCount.toLocaleString()}{' '}
+                    {locale === 'cn' ? '条评分' : 'ratings'}
                   </p>
                 </div>
-                <div className='flex flex-wrap items-center gap-2 sm:pt-0.5'>
-                  {user ? (
-                    <>
-                      <FavoriteButton toolId={toolId} initialState={isFavoritedByUser} showLabel />
-                      <ShareButton
-                        toolId={toolId}
-                        toolName={websiteName}
-                        toolTitle={data.title}
-                        toolDescription={data.content}
-                        userId={user.id}
-                      />
-                    </>
-                  ) : (
-                    <Link
-                      href={`/${locale}/login?redirect=/${locale}/ai/${websiteName}`}
-                      className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-2 text-sm font-semibold text-white hover:bg-cyan-800'
-                    >
-                      {locale === 'cn' ? '登录后收藏、评论并关注更新' : 'Log in to save, comment, and follow updates'}
-                    </Link>
-                  )}
+              </div>
+
+              {toolId && (
+                <div className='rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200'>
+                  <ToolFeedbackBar toolId={toolId} userId={user?.id} />
+                </div>
+              )}
+            </aside>
+          </div>
+
+          {toolId && (
+            <section id='comments' className='mx-auto mt-16 max-w-7xl scroll-mt-28 px-4 pb-12 lg:mt-20 lg:px-6'>
+              <Separator className='mb-10 border-t border-slate-200' />
+              <div className='mb-3 rounded-lg bg-white p-3 shadow-sm ring-1 ring-slate-200 sm:p-4'>
+                <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-3'>
+                  <div className='max-w-2xl'>
+                    <h3 className='text-base font-semibold text-slate-900'>
+                      {locale === 'cn' ? '参与讨论，看看真实反馈' : 'Join the discussion and follow updates'}
+                    </h3>
+                    <p className='mt-1 text-sm leading-6 text-slate-600'>
+                      {locale === 'cn'
+                        ? '收藏、分享给团队，或者直接留下你的真实使用体验。'
+                        : 'Save this tool, share it with your team, and leave your review.'}
+                    </p>
+                  </div>
+                  <div className='flex flex-wrap items-center gap-2 sm:pt-0.5'>
+                    {user ? (
+                      <>
+                        <FavoriteButton toolId={toolId} initialState={isFavoritedByUser} showLabel />
+                        <ShareButton
+                          toolId={toolId}
+                          toolName={websiteName}
+                          toolTitle={data.title}
+                          toolDescription={data.content}
+                          userId={user.id}
+                        />
+                      </>
+                    ) : (
+                      <Link
+                        href={`/${locale}/login?redirect=/${locale}/ai/${websiteName}`}
+                        className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-2 text-sm font-semibold text-white hover:bg-cyan-800'
+                      >
+                        {locale === 'cn' ? '登录后收藏、评论并关注更新' : 'Log in to save, comment, and follow updates'}
+                      </Link>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className='mb-4 rounded-lg border border-cyan-100 bg-cyan-50 px-4 py-3 text-sm leading-6 text-cyan-900'>
-              {locale === 'cn'
-                ? '先看官网和相似工具，再回来写真实体验：适合什么场景、哪里最好用、有什么坑，都会帮到后来的人。'
-                : 'Open the official site and compare similar tools first, then come back and share what really worked, what didn’t, and what to watch out for.'}
-            </div>
-            <CommentList
-              toolId={toolId}
-              currentUserId={user?.id}
-              locale={locale}
-              promptLabel={commentPromptLabel}
-              starterPrompts={commentStarterPrompts}
-              placeholder={
-                locale === 'cn'
-                  ? '说说你的真实使用体验，比如适合什么场景、有什么优点或注意点。'
-                  : 'Tell us your real experience: best use cases, strengths, or anything to watch out for.'
-              }
-            />
-          </section>
-        )}
+              <div className='mb-4 rounded-lg border border-cyan-100 bg-cyan-50 px-4 py-3 text-sm leading-6 text-cyan-900'>
+                {locale === 'cn'
+                  ? '先看官网和相似工具，再回来写真实体验：适合什么场景、哪里最好用、有什么坑，都会帮到后来的人。'
+                  : 'Open the official site and compare similar tools first, then come back and share what really worked, what didn’t, and what to watch out for.'}
+              </div>
+              <CommentList
+                toolId={toolId}
+                currentUserId={user?.id}
+                locale={locale}
+                promptLabel={commentPromptLabel}
+                starterPrompts={commentStarterPrompts}
+                placeholder={
+                  locale === 'cn'
+                    ? '说说你的真实使用体验，比如适合什么场景、有什么优点或注意点。'
+                    : 'Tell us your real experience: best use cases, strengths, or anything to watch out for.'
+                }
+              />
+            </section>
+          )}
+        </div>
+      </>
+    );
+  } catch (error) {
+    console.error('Tool detail page failed to render:', error);
+    return (
+      <div className='mx-auto max-w-5xl px-4 py-12 lg:px-0'>
+        <section className='rounded-3xl border border-slate-200 bg-white p-8 shadow-sm'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>AI tool profile</p>
+          <h1 className='mt-2 text-3xl font-bold text-slate-950'>This tool page is temporarily unavailable</h1>
+          <p className='mt-3 max-w-2xl text-sm leading-6 text-slate-600'>
+            The listing could not finish loading right now, but you can still return to explore or search similar tools.
+          </p>
+          <div className='mt-6 flex flex-wrap gap-3'>
+            <Link
+              href={`/${locale}/explore`}
+              className='inline-flex items-center justify-center rounded-lg bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800'
+            >
+              Explore tools
+            </Link>
+            <Link
+              href={`/${locale}/best-ai-tools`}
+              className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:border-cyan-200 hover:text-cyan-700'
+            >
+              Back to rankings
+            </Link>
+          </div>
+        </section>
       </div>
-    </>
-  );
+    );
+  }
 }
