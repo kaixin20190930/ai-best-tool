@@ -5,6 +5,10 @@ import AdminClaimsTable from '@/components/admin/AdminClaimsTable';
 import type { AdminToolClaim } from '@/app/actions/admin/claims';
 import { getAdminToolClaims, getAdminToolClaimsSummary } from '@/app/actions/admin/claims';
 
+type AdminToolClaimWithReason = AdminToolClaim & {
+  claimReason?: string | null;
+};
+
 function getToneClass(tone: string): string {
   if (tone === 'emerald') return 'text-emerald-700';
   if (tone === 'cyan') return 'text-cyan-700';
@@ -40,11 +44,11 @@ function isOlderThanHours(value: string | null, hours: number) {
   return Date.now() - timestamp >= hours * 60 * 60 * 1000;
 }
 
-function isOverdueNewClaim(claim: AdminToolClaim): boolean {
+function isOverdueNewClaim(claim: AdminToolClaimWithReason): boolean {
   return claim.status === 'new' && isOlderThanHours(claim.createdAt, 48);
 }
 
-function getClaimPriorityScore(claim: AdminToolClaim): number {
+function getClaimPriorityScore(claim: AdminToolClaimWithReason): number {
   let score = 0;
 
   if (claim.status === 'new') score += 40;
@@ -61,7 +65,7 @@ function getClaimPriorityScore(claim: AdminToolClaim): number {
   return score;
 }
 
-function getPriorityReason(claim: AdminToolClaim): string {
+function getPriorityReason(claim: AdminToolClaimWithReason): string {
   if (claim.status === 'new' && isOlderThanHours(claim.createdAt, 48)) {
     return 'New lead overdue for more than 48 hours.';
   }
@@ -198,7 +202,7 @@ function getClaimReasonTone(reason: string | null): string {
   return 'bg-slate-100 text-slate-600';
 }
 
-function buildClaimFollowUpText(claim: AdminToolClaim): string {
+function buildClaimFollowUpText(claim: AdminToolClaimWithReason): string {
   const title = claim.listingName || 'Unnamed listing';
   return [
     `Follow up: ${title}`,
@@ -214,7 +218,7 @@ function buildClaimFollowUpText(claim: AdminToolClaim): string {
   ].join('\n');
 }
 
-function buildClaimMailto(claim: AdminToolClaim): string {
+function buildClaimMailto(claim: AdminToolClaimWithReason): string {
   const title = claim.listingName || 'Unnamed listing';
   const subject = encodeURIComponent(`[AI Best Tool] Follow-up on ${title}`);
   const body = encodeURIComponent(buildClaimFollowUpText(claim));
@@ -261,7 +265,7 @@ export default async function AdminClaimsPage({
     freshNewCount: 0,
     linkedCount: 0,
   };
-  let claims: AdminToolClaim[] = [];
+  let claims: AdminToolClaimWithReason[] = [];
   let loadError: string | null = null;
 
   try {
@@ -273,7 +277,7 @@ export default async function AdminClaimsPage({
       reason,
       limit: 100,
     });
-    claims = result.claims;
+    claims = result.claims as AdminToolClaimWithReason[];
   } catch (error) {
     loadError = error instanceof Error ? error.message : 'Failed to load claims queue.';
   }
