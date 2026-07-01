@@ -183,7 +183,7 @@ type ClaimReasonAggregate = {
   overdueNewCount: number;
 };
 
-function getClaimReasonLabel(reason: string | null): string {
+function getClaimReasonLabel(reason: string | null | undefined): string {
   if (!reason) return 'Unknown';
   if (reason === 'ownership_update') return 'Ownership update';
   if (reason === 'profile_correction') return 'Profile correction';
@@ -193,7 +193,7 @@ function getClaimReasonLabel(reason: string | null): string {
   return reason;
 }
 
-function getClaimReasonTone(reason: string | null): string {
+function getClaimReasonTone(reason: string | null | undefined): string {
   if (reason === 'ownership_update') return 'bg-emerald-100 text-emerald-700';
   if (reason === 'profile_correction') return 'bg-cyan-100 text-cyan-700';
   if (reason === 'duplicate_merge') return 'bg-amber-100 text-amber-700';
