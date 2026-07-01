@@ -1,14 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { toast } from 'sonner';
 
 import {
   updateOutreachStatus,
-  type OutreachClosedReason,
   type AdminOutreachQueueItem,
+  type OutreachClosedReason,
   type OutreachStatus,
 } from '@/app/actions/admin/tools';
 import { useRouter } from '@/app/navigation';
@@ -82,8 +82,33 @@ function getSuggestionLabel(suggestion: AdminOutreachQueueItem['suggestion']) {
   return 'Claim listing';
 }
 
+function getNextStepLabel(item: AdminOutreachQueueItem) {
+  if (item.outreachStatus === 'closed' && item.outreachClosedReason === 'claimed') {
+    return 'Owner confirmed. Move to claim cleanup.';
+  }
+
+  if (item.outreachStatus === 'closed') {
+    return 'Closed out. Keep for future reactivation only.';
+  }
+
+  if (item.outreachStatus === 'follow_up_due') {
+    return 'Follow up now and update the note.';
+  }
+
+  if (item.suggestion === 'featured_pitch') {
+    return 'Pitch featured placement while traffic is already present.';
+  }
+
+  if (item.suggestion === 'content_collab') {
+    return 'Use engagement signals to start a collaboration conversation.';
+  }
+
+  return 'Send a claim invite and confirm the owner email.';
+}
+
 export default function AdminOutreachQueueTable({ items, locale }: AdminOutreachQueueTableProps) {
   const router = useRouter();
+  const isChinese = locale === 'cn' || locale === 'tw';
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [notesById, setNotesById] = useState<Record<string, string>>(() =>
     Object.fromEntries(items.map((item) => [item.id, item.outreachNote || ''])),
@@ -96,6 +121,235 @@ export default function AdminOutreachQueueTable({ items, locale }: AdminOutreach
   const [closedReasonById, setClosedReasonById] = useState<Record<string, string>>(() =>
     Object.fromEntries(items.map((item) => [item.id, item.outreachClosedReason || ''])),
   );
+
+  useEffect(() => {
+    setPendingId(null);
+    setNotesById(Object.fromEntries(items.map((item) => [item.id, item.outreachNote || ''])));
+    setFollowUpById(
+      Object.fromEntries(
+        items.map((item) => [item.id, item.outreachNextFollowUpAt ? item.outreachNextFollowUpAt.slice(0, 10) : '']),
+      ),
+    );
+    setClosedReasonById(Object.fromEntries(items.map((item) => [item.id, item.outreachClosedReason || ''])));
+  }, [items]);
+
+  const copyText = async (text: string, successMessage: string, errorMessage: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success(successMessage);
+    } catch {
+      toast.error(errorMessage);
+    }
+  };
+
+  const copyContactBatch = async () => {
+    if (items.length === 0) {
+      toast.error('No outreach items in the current batch.');
+      return;
+    }
+
+    const text = items
+      .map(
+        (item, index) => `${index + 1}. ${item.contactEmail} — ${item.title} (${getSuggestionLabel(item.suggestion)})`,
+      )
+      .join('\n');
+    await copyText(text, `Copied ${items.length} contact${items.length === 1 ? '' : 's'}.`, 'Failed to copy contacts.');
+  };
+
+  const copyBatchDraft = async () => {
+    if (items.length === 0) {
+      toast.error('No outreach items in the current batch.');
+      return;
+    }
+
+    const topItems = items.slice(0, 8);
+    const text = [
+      isChinese
+        ? `Subject: [AI Best Tool] 外联批次跟进（${topItems.length} 条）`
+        : `Subject: [AI Best Tool] Outreach batch follow-up (${topItems.length} lead${topItems.length === 1 ? '' : 's'})`,
+      '',
+      isChinese ? '你好,' : 'Hi,',
+      '',
+      isChinese
+        ? '我们正在跟进一批看起来适合认领、前排展示或合作联系的条目。'
+        : 'We are reaching out about a few listings that look like a strong fit for claim, featured, or collaboration follow-up.',
+      isChinese ? '当前批次如下：' : 'Here is the current batch:',
+      '',
+      ...topItems.map((item) =>
+        [
+          `${isChinese ? '•' : '-'} ${item.title}`,
+          `  ${isChinese ? '邮箱' : 'Email'}: ${item.contactEmail}`,
+          `  ${isChinese ? '建议' : 'Suggestion'}: ${getSuggestionLabel(item.suggestion)}`,
+          `  ${isChinese ? '下一步' : 'Next step'}: ${getNextStepLabel(item)}`,
+          '',
+        ].join('\n'),
+      ),
+      isChinese ? '谢谢，' : 'Best,',
+      'AI Best Tool',
+    ].join('\n');
+
+    await copyText(text, 'Copied batch outreach draft.', 'Failed to copy batch draft.');
+  };
+
+  const copyClaimBatchDraft = async () => {
+    const claimItems = items.filter((item) => item.suggestion === 'claim_listing');
+    if (claimItems.length === 0) {
+      toast.error('No claim invite leads in the current batch.');
+      return;
+    }
+
+    const topItems = claimItems.slice(0, 8);
+    const text = [
+      isChinese
+        ? `Subject: [AI Best Tool] 认领跟进（${topItems.length} 条）`
+        : `Subject: [AI Best Tool] Claim follow-up (${topItems.length} lead${topItems.length === 1 ? '' : 's'})`,
+      '',
+      isChinese ? '你好,' : 'Hi,',
+      '',
+      isChinese
+        ? '我们找到几条看起来还未认领的条目，想确认一下正确的 owner 联系方式。'
+        : 'We found a few listings that still look unclaimed, and we wanted to confirm the right owner contact.',
+      isChinese
+        ? '如果其中有一条属于你，请回复这封邮件，我们会继续处理：'
+        : 'If one of these belongs to you, reply and we will continue from there:',
+      '',
+      ...topItems.map((item) =>
+        [
+          `${isChinese ? '•' : '-'} ${item.title}`,
+          `  ${isChinese ? '邮箱' : 'Email'}: ${item.contactEmail}`,
+          `  ${isChinese ? '下一步' : 'Next step'}: ${getNextStepLabel(item)}`,
+          '',
+        ].join('\n'),
+      ),
+      isChinese ? '谢谢，' : 'Best,',
+      'AI Best Tool',
+    ].join('\n');
+
+    await copyText(text, 'Copied claim batch draft.', 'Failed to copy claim draft.');
+  };
+
+  const copyFeaturedBatchDraft = async () => {
+    const featuredItems = items.filter((item) => item.suggestion === 'featured_pitch');
+    if (featuredItems.length === 0) {
+      toast.error('No featured pitch leads in the current batch.');
+      return;
+    }
+
+    const topItems = featuredItems.slice(0, 8);
+    const text = [
+      isChinese
+        ? `Subject: [AI Best Tool] 前排展示跟进（${topItems.length} 条）`
+        : `Subject: [AI Best Tool] Featured placement follow-up (${topItems.length} lead${topItems.length === 1 ? '' : 's'})`,
+      '',
+      isChinese ? '你好,' : 'Hi,',
+      '',
+      isChinese
+        ? '这些条目已经开始有流量，前排展示会是一个比较顺手的下一步。'
+        : 'These listings are already getting traffic, so a featured placement could be a straightforward next step.',
+      isChinese ? '当前批次里信号最强的条目如下：' : 'Here are the highest-signal entries in this batch:',
+      '',
+      ...topItems.map((item) =>
+        [
+          `${isChinese ? '•' : '-'} ${item.title}`,
+          `  ${isChinese ? '邮箱' : 'Email'}: ${item.contactEmail}`,
+          `  ${isChinese ? '下一步' : 'Next step'}: ${getNextStepLabel(item)}`,
+          '',
+        ].join('\n'),
+      ),
+      isChinese ? '谢谢，' : 'Best,',
+      'AI Best Tool',
+    ].join('\n');
+
+    await copyText(text, 'Copied featured pitch draft.', 'Failed to copy featured pitch draft.');
+  };
+
+  const copyShortClaimDraft = async () => {
+    const claimItems = items.filter((item) => item.suggestion === 'claim_listing');
+    if (claimItems.length === 0) {
+      toast.error('No claim invite leads in the current batch.');
+      return;
+    }
+
+    const topItems = claimItems.slice(0, 5);
+    const text = [
+      isChinese ? '认领短版：' : 'Short claim draft:',
+      isChinese
+        ? '你好，我们在确认这几条列表的 owner：'
+        : 'Hi, we are confirming the owner contact for a few listings:',
+      '',
+      ...topItems.map((item) => `${isChinese ? '•' : '-'} ${item.title} · ${item.contactEmail}`),
+      '',
+      isChinese
+        ? '如果其中一条属于你，请回复我。'
+        : 'If one of these belongs to you, please reply and we will continue.',
+    ].join('\n');
+
+    await copyText(text, 'Copied short claim draft.', 'Failed to copy short claim draft.');
+  };
+
+  const copyShortFeaturedDraft = async () => {
+    const featuredItems = items.filter((item) => item.suggestion === 'featured_pitch');
+    if (featuredItems.length === 0) {
+      toast.error('No featured pitch leads in the current batch.');
+      return;
+    }
+
+    const topItems = featuredItems.slice(0, 5);
+    const text = [
+      isChinese ? '前排短版：' : 'Short featured draft:',
+      isChinese
+        ? '你好，这几条已经有流量，前排可能是顺手的下一步：'
+        : 'Hi, these listings already have traffic and featured placement may be the next step:',
+      '',
+      ...topItems.map((item) => `${isChinese ? '•' : '-'} ${item.title} · ${item.contactEmail}`),
+      '',
+      isChinese ? '如果你愿意，我们可以一起推进。' : 'If you are interested, we can move this forward.',
+    ].join('\n');
+
+    await copyText(text, 'Copied short featured draft.', 'Failed to copy short featured draft.');
+  };
+
+  const copyDmClaimDraft = async () => {
+    const claimItems = items.filter((item) => item.suggestion === 'claim_listing');
+    if (claimItems.length === 0) {
+      toast.error('No claim invite leads in the current batch.');
+      return;
+    }
+
+    const topItems = claimItems.slice(0, 3);
+    const text = [
+      isChinese ? '认领私信：' : 'Claim DM:',
+      isChinese ? '你好，想确认一下这几条是否属于你：' : 'Hi, checking whether these listings belong to you:',
+      '',
+      ...topItems.map((item) => `${isChinese ? '•' : '-'} ${item.title}`),
+      '',
+      isChinese ? '如果是的话，回我一下就行。' : 'If so, just reply here and I will continue.',
+    ].join('\n');
+
+    await copyText(text, 'Copied claim DM.', 'Failed to copy claim DM.');
+  };
+
+  const copyDmFeaturedDraft = async () => {
+    const featuredItems = items.filter((item) => item.suggestion === 'featured_pitch');
+    if (featuredItems.length === 0) {
+      toast.error('No featured pitch leads in the current batch.');
+      return;
+    }
+
+    const topItems = featuredItems.slice(0, 3);
+    const text = [
+      isChinese ? '前排私信：' : 'Featured DM:',
+      isChinese
+        ? '你好，这几条已经开始有流量，前排可能是个合适的下一步：'
+        : 'Hi, these listings already have traffic and featured could be a good next step:',
+      '',
+      ...topItems.map((item) => `${isChinese ? '•' : '-'} ${item.title}`),
+      '',
+      isChinese ? '如果你愿意，我们可以继续聊。' : 'If you are interested, we can keep going.',
+    ].join('\n');
+
+    await copyText(text, 'Copied featured DM.', 'Failed to copy featured DM.');
+  };
 
   const handleStatusChange = async (toolId: string, status: OutreachStatus) => {
     const closedReason = closedReasonById[toolId] || '';
@@ -149,6 +403,78 @@ export default function AdminOutreachQueueTable({ items, locale }: AdminOutreach
 
   return (
     <div className='overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm'>
+      <div className='flex flex-col gap-3 border-b border-slate-200 px-4 py-4 sm:flex-row sm:items-center sm:justify-between'>
+        <div>
+          <p className='text-sm font-semibold text-slate-900'>Batch actions</p>
+          <p className='mt-1 text-sm text-slate-500'>
+            Copy the current batch contacts or a short draft for fast outreach.
+          </p>
+        </div>
+        <div className='flex flex-col gap-2'>
+          <div className='flex flex-wrap gap-2'>
+            <button
+              type='button'
+              onClick={copyContactBatch}
+              className='rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50'
+            >
+              Copy contacts
+            </button>
+            <button
+              type='button'
+              onClick={copyBatchDraft}
+              className='rounded-lg bg-cyan-700 px-3 py-2 text-xs font-semibold text-white hover:bg-cyan-800'
+            >
+              Copy batch draft
+            </button>
+          </div>
+          <div className='flex flex-wrap gap-2'>
+            <button
+              type='button'
+              onClick={copyClaimBatchDraft}
+              className='rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-800 hover:bg-emerald-100'
+            >
+              Copy claim draft
+            </button>
+            <button
+              type='button'
+              onClick={copyShortClaimDraft}
+              className='rounded-lg border border-emerald-100 bg-white px-3 py-2 text-xs font-semibold text-emerald-700 hover:bg-emerald-50'
+            >
+              Copy short claim
+            </button>
+            <button
+              type='button'
+              onClick={copyDmClaimDraft}
+              className='rounded-lg border border-emerald-100 bg-white px-3 py-2 text-xs font-semibold text-emerald-700 hover:bg-emerald-50'
+            >
+              Copy claim DM
+            </button>
+          </div>
+          <div className='flex flex-wrap gap-2'>
+            <button
+              type='button'
+              onClick={copyFeaturedBatchDraft}
+              className='rounded-lg border border-violet-200 bg-violet-50 px-3 py-2 text-xs font-semibold text-violet-800 hover:bg-violet-100'
+            >
+              Copy featured draft
+            </button>
+            <button
+              type='button'
+              onClick={copyShortFeaturedDraft}
+              className='rounded-lg border border-violet-100 bg-white px-3 py-2 text-xs font-semibold text-violet-700 hover:bg-violet-50'
+            >
+              Copy short featured
+            </button>
+            <button
+              type='button'
+              onClick={copyDmFeaturedDraft}
+              className='rounded-lg border border-violet-100 bg-white px-3 py-2 text-xs font-semibold text-violet-700 hover:bg-violet-50'
+            >
+              Copy featured DM
+            </button>
+          </div>
+        </div>
+      </div>
       <table className='min-w-full divide-y divide-slate-200'>
         <thead className='bg-slate-50'>
           <tr>
@@ -190,9 +516,10 @@ export default function AdminOutreachQueueTable({ items, locale }: AdminOutreach
                   </td>
                   <td className='px-4 py-4 align-top text-sm text-slate-700'>{item.contactEmail}</td>
                   <td className='px-4 py-4 align-top'>
-                    <span className='rounded-full px-2.5 py-1 text-xs font-semibold bg-slate-100 text-slate-700'>
+                    <span className='rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700'>
                       {getSuggestionLabel(item.suggestion)}
                     </span>
+                    <p className='mt-2 text-xs leading-5 text-slate-500'>{getNextStepLabel(item)}</p>
                   </td>
                   <td className='px-4 py-4 align-top'>
                     <div className='min-w-[240px]'>
@@ -237,7 +564,8 @@ export default function AdminOutreachQueueTable({ items, locale }: AdminOutreach
                             setNotesById((current) => ({
                               ...current,
                               [item.id]: event.target.value,
-                            }))}
+                            }))
+                          }
                           rows={3}
                           placeholder='Add a short outreach note...'
                           className='w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-700'
@@ -250,7 +578,8 @@ export default function AdminOutreachQueueTable({ items, locale }: AdminOutreach
                               setFollowUpById((current) => ({
                                 ...current,
                                 [item.id]: event.target.value,
-                              }))}
+                              }))
+                            }
                             className='rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-700'
                           />
                           <select
@@ -259,7 +588,8 @@ export default function AdminOutreachQueueTable({ items, locale }: AdminOutreach
                               setClosedReasonById((current) => ({
                                 ...current,
                                 [item.id]: event.target.value,
-                              }))}
+                              }))
+                            }
                             className='rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-700'
                           >
                             <option value=''>Closed result</option>
