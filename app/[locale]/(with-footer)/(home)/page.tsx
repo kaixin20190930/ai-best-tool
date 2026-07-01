@@ -20,12 +20,14 @@ import { getTranslations } from 'next-intl/server';
 
 import { listingConfig } from '@/lib/config/listing';
 import { FEATURED_GUIDE_HREFS, GUIDE_PAGES } from '@/lib/content/guides';
+import { topListTopics } from '@/lib/data/topLists';
 import { SEO_CONFIG } from '@/lib/seo/constants';
 import { generateOrganizationSchema } from '@/lib/seo/schema';
 import { getLocalizedField as getCategoryLocalizedField, getPopularCategories } from '@/lib/services/categories';
 import { getCommunityHighlights, getRecentDiscussions, getRisingTools } from '@/lib/services/community';
 import { toolToListRow } from '@/lib/services/toolPresenter';
 import { getPopularTools } from '@/lib/services/tools';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import Faq from '@/components/Faq';
 import CommunityPulse from '@/components/home/CommunityPulse';
 import Search from '@/components/Search';
@@ -205,6 +207,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const comparisonGuidePages = comparisonGuideHrefs
     .map((href) => GUIDE_PAGES.find((page) => page.href === href))
     .filter((page): page is (typeof GUIDE_PAGES)[number] => Boolean(page));
+  const priorityTopListKeys = [
+    'ai-coding-tools',
+    'ai-agent-tools',
+    'ai-research-tools',
+    'ai-video-tools',
+    'ai-writing-tools',
+    'ai-content-creation-tools',
+  ] as const;
+  const priorityTopListTopics = priorityTopListKeys
+    .map((key) => topListTopics.find((topic) => topic.key === key))
+    .filter((topic): topic is (typeof topListTopics)[number] => Boolean(topic));
   const startHereLinks = [
     {
       href: '/new',
@@ -639,6 +652,45 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   <ArrowRight className='mt-1 size-5 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-slate-700' />
                 </div>
               </Link>
+            ))}
+          </div>
+        </section>
+
+        <section className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
+          <div className='flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between'>
+            <div>
+              <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+                {isChinese ? '高意图榜单' : 'High-intent top lists'}
+              </p>
+              <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+                {isChinese ? '先看最容易做决定的榜单' : 'Start with the lists that make the decision easier'}
+              </h2>
+            </div>
+            <p className='max-w-3xl text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '如果用户已经知道自己要找编程、Agent、研究、视频或写作工具，先看榜单会比先看总目录更快。'
+                : 'When visitors already know they need coding, agent, research, video, or writing tools, a ranked list gets them there faster than the full directory.'}
+            </p>
+          </div>
+
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-3'>
+            {priorityTopListTopics.map((topic) => (
+              <TrackableCtaLink
+                key={topic.key}
+                href={`/${locale}/best-ai-tools/${topic.key}`}
+                ctaId={`home_top_list_${topic.key}`}
+                ctaLabel={topic.title}
+                pageType='home'
+                className='group rounded-xl border border-slate-200 bg-slate-50 p-4 text-left transition hover:-translate-y-0.5 hover:border-cyan-200 hover:bg-cyan-50/60'
+              >
+                <div className='flex items-start justify-between gap-3'>
+                  <div>
+                    <p className='text-sm font-semibold text-slate-950'>{topic.title}</p>
+                    <p className='mt-2 text-sm leading-6 text-slate-600'>{topic.summary}</p>
+                  </div>
+                  <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-slate-700' />
+                </div>
+              </TrackableCtaLink>
             ))}
           </div>
         </section>
