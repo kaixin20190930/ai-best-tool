@@ -581,7 +581,7 @@ export default async function AdminDashboard({
         value: outreachDueCount,
         subtext: 'Follow-ups already due today',
         action: 'Open due outreach',
-        href: '/admin/analytics?outreach=due_today#outreach-queue',
+        href: '/admin/outreach?focus=due_today',
         tone: 'cyan',
       },
       {
@@ -589,7 +589,7 @@ export default async function AdminDashboard({
         value: outreachClaimCount,
         subtext: 'Warm owner leads that need a claim invite',
         action: 'Open claim focus',
-        href: '/admin/analytics?outreach=claim#outreach-queue',
+        href: '/admin/outreach?focus=claim',
         tone: 'emerald',
       },
       {
@@ -597,7 +597,7 @@ export default async function AdminDashboard({
         value: outreachFeaturedCount,
         subtext: 'Traffic-backed leads fit for a featured pitch',
         action: 'Open featured focus',
-        href: '/admin/analytics?outreach=featured#outreach-queue',
+        href: '/admin/outreach?focus=featured',
         tone: 'violet',
       },
     ];
@@ -677,11 +677,8 @@ export default async function AdminDashboard({
               <h2 className='text-lg font-semibold text-slate-900'>Today&apos;s Focus</h2>
               <p className='mt-1 text-sm text-slate-600'>The fastest paths to revenue or cleanup right now.</p>
             </div>
-            <Link
-              href='/admin/analytics?outreach=claim#outreach-queue'
-              className='text-sm font-medium text-cyan-700 hover:underline'
-            >
-              Open claim outreach
+            <Link href='/admin/outreach?focus=claim' className='text-sm font-medium text-cyan-700 hover:underline'>
+              Open outreach queue
             </Link>
           </div>
           <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
@@ -817,7 +814,7 @@ export default async function AdminDashboard({
               {locale === 'cn' || locale === 'tw' ? '清理队列' : 'Cleanup queue'}
             </Link>
             <Link
-              href='/admin/analytics#outreach-queue'
+              href='/admin/outreach'
               className='rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-emerald-700 hover:bg-emerald-100'
             >
               {locale === 'cn' || locale === 'tw' ? '外联队列' : 'Outreach queue'}
