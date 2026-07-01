@@ -846,6 +846,19 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-tools-for-marketing-comparison',
+    priority: 0.77,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 营销工具对比',
+      en: 'AI marketing tools comparison',
+    },
+    desc: {
+      cn: '把常见营销工具放在一起快速对照。',
+      en: 'Compare common marketing tools side by side.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-agencies',
     priority: 0.73,
     changeFrequency: 'monthly',
