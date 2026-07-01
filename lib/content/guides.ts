@@ -339,6 +339,19 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/ai-tools-for-small-business-comparison',
+    priority: 0.76,
+    changeFrequency: 'weekly',
+    title: {
+      cn: 'AI 小企业工具对比',
+      en: 'AI small business tools comparison',
+    },
+    desc: {
+      cn: '把常见小企业工具放在一起快速对照。',
+      en: 'Compare common small-business tools side by side.',
+    },
+  },
+  {
     href: '/guides/ai-tools-for-customer-support',
     priority: 0.73,
     changeFrequency: 'monthly',
@@ -1894,6 +1907,7 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/ai-writing-tools',
   '/guides/ai-tools-for-content-creation',
   '/guides/ai-tools-for-content-creation-comparison',
+  '/guides/ai-tools-for-small-business-comparison',
   '/guides/chatgpt-alternatives-comparison',
   '/guides/claude-alternatives-comparison',
   '/guides/cursor-alternatives-comparison',
