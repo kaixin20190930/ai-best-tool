@@ -143,6 +143,16 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               <ArrowRight className='size-4' />
             </TrackableCtaLink>
             <TrackableCtaLink
+              href='/guides/best-free-ai-tools-comparison'
+              ctaId='best_free_tools_compare'
+              ctaLabel='Best free tools comparison'
+              pageType='guide'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+            >
+              {isChinese ? '看免费工具对比' : 'Compare free tools'}
+              <ArrowRight className='size-4' />
+            </TrackableCtaLink>
+            <TrackableCtaLink
               href='/best-ai-tools/'
               ctaId='best_free_tools_rankings_hub'
               ctaLabel='Best free tools rankings hub'
@@ -172,6 +182,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 {isChinese
                   ? '当榜单不够细时，继续用免费过滤后的 Explore 扩大候选。'
                   : 'If the ranking is still too broad, widen the shortlist in Explore with the free filter applied.'}
+              </p>
+            </Link>
+            <Link
+              href='/guides/best-free-ai-tools-comparison'
+              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '免费对比页' : 'Free comparison'}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '如果你已经有几个候选，这一页能帮你直接横向比较。'
+                  : 'If you already have a shortlist, this page helps you compare side by side.'}
               </p>
             </Link>
             <Link

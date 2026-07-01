@@ -53,6 +53,19 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/best-free-ai-tools-comparison',
+    priority: 0.77,
+    changeFrequency: 'weekly',
+    title: {
+      cn: '最佳免费 AI 工具对比',
+      en: 'Best free AI tools comparison',
+    },
+    desc: {
+      cn: '把常见免费 AI 工具放在一起快速对照。',
+      en: 'Compare common free AI tools side by side.',
+    },
+  },
+  {
     href: '/guides/ai-writing-tools',
     priority: 0.74,
     changeFrequency: 'monthly',
@@ -1877,6 +1890,7 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
 export const FEATURED_GUIDE_HREFS = [
   '/guides/how-to-choose-ai-tools',
   '/guides/free-ai-tools',
+  '/guides/best-free-ai-tools-comparison',
   '/guides/ai-writing-tools',
   '/guides/ai-tools-for-content-creation',
   '/guides/ai-tools-for-content-creation-comparison',
