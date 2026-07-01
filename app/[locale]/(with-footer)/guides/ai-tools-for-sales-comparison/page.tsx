@@ -119,6 +119,14 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           en: 'Better for personalized outreach, contact strategy, and prospecting execution.',
         },
       },
+      {
+        href: '/guides/salesforce-einstein-alternatives-comparison',
+        title: { cn: '转去 Salesforce Einstein 替代方案对比', en: 'Go to Salesforce Einstein alternatives comparison' },
+        description: {
+          cn: '如果你的重点已经变成 CRM 和企业流程，这条路径更贴近。',
+          en: 'A better fit once the real need is CRM and enterprise workflows.',
+        },
+      },
     ],
     tips: {
       cn: [

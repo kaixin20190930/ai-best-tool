@@ -149,6 +149,22 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           en: 'Browse real listings first, then come back to compare when ready.',
         },
       },
+      {
+        href: '/guides/mailchimp-alternatives-comparison',
+        title: { cn: '转去 Mailchimp 替代方案对比', en: 'Go to Mailchimp alternatives comparison' },
+        description: {
+          cn: '如果你的重点已经变成邮件营销和自动化，这条路径更高意图。',
+          en: 'A higher-intent path if your focus has shifted to email marketing and automation.',
+        },
+      },
+      {
+        href: '/guides/hubspot-alternatives-comparison',
+        title: { cn: '转去 HubSpot 替代方案对比', en: 'Go to HubSpot alternatives comparison' },
+        description: {
+          cn: '如果你的重点已经变成 CRM、营销自动化和流程编排，这条路径更贴近。',
+          en: 'A better path when the real need is CRM, marketing automation, and workflow orchestration.',
+        },
+      },
     ],
     toolSelectionNotes: {
       jasper: {

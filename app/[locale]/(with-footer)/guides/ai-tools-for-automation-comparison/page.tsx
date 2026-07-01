@@ -149,6 +149,30 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           en: 'Go back to the category when you want a wider shortlist of real listings.',
         },
       },
+      {
+        href: '/guides/zapier-alternatives-comparison',
+        title: { cn: '转去 Zapier 替代方案对比', en: 'Go to Zapier alternatives comparison' },
+        description: {
+          cn: '如果你的重点已经变成连接器和流程编排，这条路径更高意图。',
+          en: 'A higher-intent path once connectors and workflow orchestration are the real focus.',
+        },
+      },
+      {
+        href: '/guides/make-alternatives-comparison',
+        title: { cn: '转去 Make 替代方案对比', en: 'Go to Make alternatives comparison' },
+        description: {
+          cn: '如果你更在意可视化编排和中等复杂度流程，这条路径更贴近。',
+          en: 'A better fit when visual orchestration and medium-complexity workflows are the real need.',
+        },
+      },
+      {
+        href: '/guides/n8n-alternatives-comparison',
+        title: { cn: '转去 n8n 替代方案对比', en: 'Go to n8n alternatives comparison' },
+        description: {
+          cn: '如果你的目标更偏可控、可自建和开发者导向，这条路径更高意图。',
+          en: 'A higher-intent path when control, self-hosting, and developer-oriented workflows matter most.',
+        },
+      },
     ],
     toolSelectionNotes: {
       n8n: {
