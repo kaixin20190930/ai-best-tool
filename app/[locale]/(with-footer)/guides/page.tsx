@@ -262,6 +262,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                     : 'Best for scripts, thumbnails, and multi-channel publishing differences.',
                 },
                 {
+                  href: '/guides/best-free-ai-tools-comparison',
+                  title: isChinese ? '最佳免费 AI 工具对比' : 'Best free AI tools comparison',
+                  desc: isChinese
+                    ? '适合先把免费候选放在一起，快速筛出值得长期试用的工具。'
+                    : 'Best for putting free candidates side by side and filtering the ones worth keeping.',
+                },
+                {
                   href: '/guides/ai-coding-tools-comparison',
                   title: isChinese ? 'AI 编程工具对比' : 'AI coding tools comparison',
                   desc: isChinese
