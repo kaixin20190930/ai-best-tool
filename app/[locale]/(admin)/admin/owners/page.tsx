@@ -256,6 +256,9 @@ export default async function AdminOwnersPage({
     const ownerFollowUps = pendingTools.length + ownerLinkedTools.length;
     const revenueActions = activeFeaturedTools.length + expiringFeaturedTools.length + expiredFeaturedTools.length;
     const cleanupActions = unclaimedPublishedTools.length;
+    const followUpQueue = filteredTools
+      .filter((tool) => tool.claimStatus === 'pending' || (Boolean(tool.ownerEmail) && tool.claimStatus !== 'claimed'))
+      .slice(0, 3);
 
     const summaryCards = [
       {
@@ -549,6 +552,73 @@ export default async function AdminOwnersPage({
                 {isChinese ? '去清理队列' : 'Go to cleanup'}
               </Link>
             </div>
+          </div>
+        </div>
+
+        <div className='rounded-2xl border border-cyan-100 bg-cyan-50 p-5 shadow-sm'>
+          <div className='flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between'>
+            <div>
+              <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+                {isChinese ? '跟进队列' : 'Follow-up queue'}
+              </p>
+              <h3 className='mt-1 text-xl font-bold text-slate-950'>
+                {isChinese ? '先处理最有可能成交的认领' : 'Work the highest-intent claims first'}
+              </h3>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '把待确认和已有 owner 邮箱的条目放到最前面，先把能推进的先推进。'
+                  : 'Put pending claims and items with an owner email at the front of the line so the easiest wins move first.'}
+              </p>
+            </div>
+            <div className='flex flex-wrap gap-2'>
+              <Link
+                href='/admin/claims?status=pending'
+                className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-3 py-2 text-sm font-semibold text-cyan-700 hover:bg-cyan-50'
+              >
+                {isChinese ? '打开待确认' : 'Open pending'}
+              </Link>
+              <Link
+                href='/admin/email-ops'
+                className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+              >
+                {isChinese ? '去邮件运营' : 'Go to email ops'}
+              </Link>
+            </div>
+          </div>
+
+          <div className='mt-4 grid gap-3 lg:grid-cols-3'>
+            {followUpQueue.map((tool) => (
+              <div key={tool.id} className='rounded-xl border border-white bg-white p-4 shadow-sm'>
+                <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                  {getClaimStatusLabel(tool.claimStatus, isChinese)}
+                </p>
+                <p className='mt-2 text-base font-semibold text-slate-950'>{getTitle(tool.title, tool.name)}</p>
+                <p className='mt-1 text-sm text-slate-600'>{tool.name}</p>
+                <div className='mt-3 flex flex-wrap gap-2 text-xs font-semibold'>
+                  {tool.ownerEmail ? (
+                    <span className='rounded-full bg-cyan-50 px-2.5 py-1 text-cyan-700'>
+                      {isChinese ? '有 owner 邮箱' : 'Owner email set'}
+                    </span>
+                  ) : (
+                    <span className='rounded-full bg-slate-100 px-2.5 py-1 text-slate-600'>
+                      {isChinese ? '待补邮箱' : 'Missing owner email'}
+                    </span>
+                  )}
+                  {tool.claimedAt && (
+                    <span className='rounded-full bg-slate-100 px-2.5 py-1 text-slate-600'>
+                      {isChinese ? `认领于 ${formatDate(tool.claimedAt)}` : `Claimed ${formatDate(tool.claimedAt)}`}
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))}
+            {followUpQueue.length === 0 && (
+              <div className='rounded-xl border border-dashed border-cyan-200 bg-white p-4 text-sm text-slate-600 lg:col-span-3'>
+                {isChinese
+                  ? '当前筛选下没有待跟进条目。'
+                  : 'There are no immediate follow-up items in the current filter.'}
+              </div>
+            )}
           </div>
         </div>
 
