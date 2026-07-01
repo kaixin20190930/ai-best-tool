@@ -75,6 +75,17 @@ export default async function ProfilePage({ params }: { params: { locale: string
     : null;
   const featuredNeedsAttention =
     expiredFeaturedTools.length > 0 || (nextFeaturedDaysLeft !== null && nextFeaturedDaysLeft <= 3);
+  const submissionsHref = featuredNeedsAttention ? '/profile/submissions?focus=payment' : '/profile/submissions';
+  let nextStepButtonLabel = isChinese ? '查看提交状态' : 'Check submissions';
+  if (featuredNeedsAttention) {
+    nextStepButtonLabel = isChinese ? '处理付费 / 续期' : 'Handle payment / renewal';
+  }
+  let paymentRenewalTitle = isChinese
+    ? '把提交、付费和续期放在同一条路径里'
+    : 'Keep submissions, payments, and renewals on one path';
+  if (featuredNeedsAttention) {
+    paymentRenewalTitle = isChinese ? '有展示窗口快到期，先去处理续期' : 'Your visibility window needs attention';
+  }
   let accountInfoText: string;
   if (!profile) {
     accountInfoText = isChinese ? '暂无用户信息。' : 'No user information available.';
@@ -311,10 +322,10 @@ export default async function ProfilePage({ params }: { params: { locale: string
             </p>
             <div className='mt-4 flex flex-wrap gap-3'>
               <Link
-                href='/profile/submissions'
+                href={submissionsHref}
                 className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-2 text-sm font-semibold text-white hover:bg-cyan-800'
               >
-                {isChinese ? '查看提交状态' : 'Check submissions'}
+                {nextStepButtonLabel}
               </Link>
               <Link
                 href='/developer/listing'
@@ -445,6 +456,36 @@ export default async function ProfilePage({ params }: { params: { locale: string
                   {isChinese ? '查看续期方案' : 'View renewal options'}
                 </Link>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <div className='mt-6 rounded-2xl border border-amber-100 bg-amber-50 p-5 shadow-sm'>
+          <div className='flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between'>
+            <div className='max-w-2xl'>
+              <p className='text-sm font-semibold uppercase tracking-wide text-amber-700'>
+                {isChinese ? '付费与续期' : 'Payment and renewal'}
+              </p>
+              <h3 className='mt-2 text-xl font-bold text-slate-950'>{paymentRenewalTitle}</h3>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '提交后如果需要支付或续期，可以直接跳到“我的提交”处理，不必在几个页面之间来回找。'
+                  : 'After submitting, you can go straight to My Submissions to pay or renew instead of bouncing between pages.'}
+              </p>
+            </div>
+            <div className='flex flex-wrap gap-3'>
+              <Link
+                href={submissionsHref}
+                className='inline-flex items-center justify-center rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-700'
+              >
+                {isChinese ? '打开我的提交' : 'Open My Submissions'}
+              </Link>
+              <Link
+                href='/pricing'
+                className='inline-flex items-center justify-center rounded-lg border border-amber-200 bg-white px-4 py-2 text-sm font-semibold text-amber-900 hover:bg-amber-100'
+              >
+                {isChinese ? '查看定价与续期' : 'View pricing and renew'}
+              </Link>
             </div>
           </div>
         </div>
