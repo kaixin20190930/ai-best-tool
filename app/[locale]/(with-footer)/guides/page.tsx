@@ -1060,6 +1060,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <div className='mt-4 grid gap-3'>
               {[
                 {
+                  href: '/guides/ai-tools-for-token-research-comparison',
+                  title: isChinese ? '代币研究工具对比' : 'Token research comparison',
+                  desc: isChinese
+                    ? '更适合项目比较、叙事判断和 token 基本面研究。'
+                    : 'A tighter fit for project comparison, token narratives, and fundamentals research.',
+                },
+                {
                   href: '/guides/ai-tools-for-web3-comparison',
                   title: isChinese ? 'Web3 工具总对比' : 'Web3 tools comparison',
                   desc: isChinese
@@ -1093,13 +1100,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   desc: isChinese
                     ? '适合持仓看板、多钱包归集和组合观察。'
                     : 'A tighter fit for dashboards, multi-wallet rollups, and portfolio monitoring.',
-                },
-                {
-                  href: '/guides/ai-tools-for-token-research-comparison',
-                  title: isChinese ? '代币研究工具对比' : 'Token research comparison',
-                  desc: isChinese
-                    ? '更适合项目比较、叙事判断和 token 基本面研究。'
-                    : 'A tighter fit for project comparison, token narratives, and fundamentals research.',
                 },
                 {
                   href: '/guides/ai-tools-for-wallet-research-comparison',
