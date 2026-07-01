@@ -35,19 +35,27 @@ export async function generateMetadata({
     topic: string;
   };
 }): Promise<Metadata> {
-  const topic = getTopListTopic(params.topic);
-  const isChinese = params.locale === 'cn' || params.locale === 'tw';
-  const title = topic?.title || (isChinese ? 'AI 工具榜单' : 'Best AI tools');
-  const description =
-    topic?.description ||
-    (isChinese
-      ? '按用途整理的 AI 工具榜单，帮助你更快缩小候选。'
-      : 'A focused shortlist of useful AI tools, organized by use case.');
+  try {
+    const topic = getTopListTopic(params.topic);
+    const isChinese = params.locale === 'cn' || params.locale === 'tw';
+    const title = topic?.title || (isChinese ? 'AI 工具榜单' : 'Best AI tools');
+    const description =
+      topic?.description ||
+      (isChinese
+        ? '按用途整理的 AI 工具榜单，帮助你更快缩小候选。'
+        : 'A focused shortlist of useful AI tools, organized by use case.');
 
-  return {
-    title,
-    description,
-  };
+    return {
+      title,
+      description,
+    };
+  } catch (error) {
+    console.error('Best AI tools topic metadata failed to render:', error);
+    return {
+      title: 'Best AI tools',
+      description: 'A focused shortlist of useful AI tools, organized by use case.',
+    };
+  }
 }
 
 export default async function BestAiToolsTopicPage({
@@ -343,6 +351,30 @@ export default async function BestAiToolsTopicPage({
     );
   } catch (error) {
     console.error('Best AI tools topic page failed to render:', error);
-    notFound();
+    return (
+      <div className='theme-page mx-auto max-w-pc px-4 py-8 lg:px-0'>
+        <section className='rounded-[28px] border border-slate-200 bg-white p-8 shadow-sm'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>Best AI tools</p>
+          <h1 className='mt-2 text-3xl font-bold text-slate-950'>This ranking page is temporarily unavailable</h1>
+          <p className='mt-3 max-w-2xl text-sm leading-6 text-slate-600'>
+            The topic page could not finish loading right now, but the rest of the site remains available.
+          </p>
+          <div className='mt-6 flex flex-wrap gap-3'>
+            <Link
+              href={`/${params.locale || 'en'}/best-ai-tools`}
+              className='inline-flex items-center justify-center rounded-lg bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800'
+            >
+              Back to rankings
+            </Link>
+            <Link
+              href={`/${params.locale || 'en'}/submit`}
+              className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:border-cyan-200 hover:text-cyan-700'
+            >
+              Submit a tool
+            </Link>
+          </div>
+        </section>
+      </div>
+    );
   }
 }
