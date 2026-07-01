@@ -71,17 +71,17 @@ export default function WebNavCard({
   const compareActionLabel = compareLabel || (isChinese ? '查看比较' : 'Compare');
 
   return (
-    <div className='flex flex-col gap-4 rounded-lg bg-white p-3 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-md lg:p-4'>
+    <div className='flex h-fit flex-col gap-3 rounded-lg bg-white p-3 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-md lg:p-3.5'>
       <Link href={`/ai/${name}`} title={title}>
         <ToolCardMedia imageUrl={imageUrl} name={name} thumbnailUrl={thumbnailUrl} title={title} />
       </Link>
-      <div className='flex min-w-0 items-center justify-between gap-3'>
+      <div className='flex min-w-0 items-center justify-between gap-2.5'>
         <a href={url} title={title} target='_blank' rel='noreferrer' className='min-w-0 flex-1 hover:text-slate-700'>
           <h3 className='line-clamp-1 break-words text-base font-bold text-slate-950 lg:text-lg'>{title}</h3>
         </a>
         {toolId && <FavoriteButton toolId={toolId} initialState={isFavorited} />}
       </div>
-      <div className='flex flex-col gap-3'>
+      <div className='flex flex-col gap-2.5'>
         {contextLabel === 'popular' && (
           <span className='inline-flex w-fit items-center gap-1 rounded-full bg-amber-50 px-2 py-1 text-xs font-semibold text-amber-700'>
             <Flame className='size-3.5' />
@@ -105,7 +105,7 @@ export default function WebNavCard({
             {freshnessLabel}
           </span>
         )}
-        <p className='line-clamp-4 break-words text-sm leading-6 text-slate-600'>{content}</p>
+        <p className='line-clamp-3 break-words text-sm leading-6 text-slate-600'>{content}</p>
         <div className='flex flex-wrap gap-2'>
           {toolId ? (
             <TrackableLink

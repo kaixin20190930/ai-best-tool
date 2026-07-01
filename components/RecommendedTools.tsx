@@ -236,7 +236,7 @@ export default async function RecommendedTools({
   }
 
   return (
-    <section className='mb-20 pb-1'>
+    <section className='mb-16 pb-0'>
       <div className='mb-6 rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
         <h2 className='text-2xl font-bold text-slate-900 lg:text-3xl'>{comparisonTitle}</h2>
         <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>{comparisonDescription}</p>
@@ -280,14 +280,14 @@ export default async function RecommendedTools({
           </div>
         </div>
       </div>
-      <div className='grid items-start gap-6 md:grid-cols-2 xl:grid-cols-3'>
+      <div className='grid items-start gap-5 md:grid-cols-2 xl:grid-cols-3'>
         {recommendedTools.map((tool) => {
           const reasons = getSimilarityReasons(tool, pricing, tagSlugs, isChinese, locale);
           const visibleReasons = reasons.slice(0, 2);
           const comparisonCta = getComparisonCtaFromTags(tool.tags, locale);
 
           return (
-            <div key={tool.id} className='flex flex-col gap-3 self-start'>
+            <div key={tool.id} className='flex h-fit flex-col gap-3 self-start'>
               <WebNavCard
                 name={tool.name}
                 title={getLocalizedField(tool.title, locale)}

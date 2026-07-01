@@ -2375,7 +2375,7 @@ export default async function Page({
                     tagSlugs={tagSlugsForDisplay}
                     tagLabels={tagLabels}
                   />
-                  <div className='my-10 flex items-center gap-3 lg:my-12'>
+                  <div className='my-14 flex items-center gap-3 lg:my-16'>
                     <span className='h-px flex-1 bg-slate-200' />
                     <span className='whitespace-nowrap text-xs font-semibold uppercase tracking-[0.2em] text-slate-400'>
                       {locale === 'cn' ? '对比后继续看真实反馈' : 'Compare first, then read real feedback'}
@@ -2549,7 +2549,7 @@ export default async function Page({
           </div>
 
           {toolId && (
-            <section id='comments' className='mx-auto mt-16 max-w-7xl scroll-mt-28 px-4 pb-12 lg:mt-20 lg:px-6'>
+            <section id='comments' className='mx-auto mt-20 max-w-7xl scroll-mt-28 px-4 pb-12 lg:mt-24 lg:px-6'>
               <Separator className='mb-10 border-t border-slate-200' />
               <div className='mb-3 rounded-lg bg-white p-3 shadow-sm ring-1 ring-slate-200 sm:p-4'>
                 <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-3'>
