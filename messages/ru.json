@@ -185,9 +185,13 @@
       "dashboard": "Панель Управления",
       "collection": "Сбор",
       "tools": "Инструменты",
+      "cleanup": "Cleanup",
+      "owners": "Владельцы",
       "users": "Пользователи",
       "analytics": "Аналитика",
       "emailTest": "Тест Email",
+      "emailOps": "Email Ops",
+      "outreach": "Outreach",
       "settings": "Настройки"
     },
     "dashboard": {

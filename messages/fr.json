@@ -185,9 +185,13 @@
       "dashboard": "Tableau de Bord",
       "collection": "Collection",
       "tools": "Outils",
+      "cleanup": "Cleanup",
+      "owners": "Owners",
       "users": "Utilisateurs",
       "analytics": "Analytiques",
       "emailTest": "Test Email",
+      "emailOps": "Ops Email",
+      "outreach": "Outreach",
       "settings": "Paramètres"
     },
     "dashboard": {

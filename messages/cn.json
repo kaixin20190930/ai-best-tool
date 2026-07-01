@@ -189,12 +189,17 @@
     "backToSite": "返回网站",
     "nav": {
       "dashboard": "仪表板",
+      "claims": "认领队列",
       "collection": "采集队列",
       "tools": "工具管理",
+      "cleanup": "待补资料",
+      "owners": "认领面板",
       "comments": "评论治理",
       "users": "用户管理",
       "analytics": "数据分析",
       "emailTest": "邮件测试",
+      "emailOps": "邮件运营",
+      "outreach": "外联队列",
       "searchConsole": "搜索控制台",
       "paymentCallbacks": "支付回调",
       "settings": "设置"

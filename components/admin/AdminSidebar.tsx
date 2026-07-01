@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
+  AlertTriangle,
+  BadgeCheck,
   BarChart3,
   ClipboardList,
   Home,
@@ -21,14 +23,19 @@ import NotificationBell from '@/components/NotificationBell';
 
 const navigation = [
   { name: 'dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
+  { name: 'claims', href: '/admin/claims', icon: BadgeCheck },
+  { name: 'owners', href: '/admin/owners', icon: Users },
+  { name: 'cleanup', href: '/admin/cleanup', icon: AlertTriangle },
+  { name: 'analytics', href: '/admin/analytics', icon: BarChart3 },
   { name: 'collection', href: '/admin/collection', icon: ClipboardList },
   { name: 'tools', href: '/admin/tools', icon: Wrench },
   { name: 'comments', href: '/admin/comments', icon: MessageSquare },
   { name: 'emailTest', href: '/admin/email-test', icon: Mail },
+  { name: 'emailOps', href: '/admin/email-ops', icon: Mail },
+  { name: 'outreach', href: '/admin/outreach', icon: Mail },
   { name: 'searchConsole', href: '/admin/search-console', icon: Search },
   { name: 'paymentCallbacks', href: '/admin/payment-callbacks', icon: ReceiptText },
   { name: 'users', href: '/admin/users', icon: Users },
-  { name: 'analytics', href: '/admin/analytics', icon: BarChart3 },
   { name: 'settings', href: '/admin/settings', icon: Settings },
 ];
 

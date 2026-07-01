@@ -183,11 +183,16 @@
     "backToSite": "返回網站",
     "nav": {
       "dashboard": "儀表板",
+      "claims": "認領隊列",
       "collection": "採集隊列",
       "tools": "工具管理",
+      "cleanup": "待補資料",
+      "owners": "認領面板",
       "users": "用戶管理",
       "analytics": "數據分析",
       "emailTest": "郵件測試",
+      "emailOps": "郵件營運",
+      "outreach": "外聯隊列",
       "settings": "設置"
     },
     "dashboard": {

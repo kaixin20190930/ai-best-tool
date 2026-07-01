@@ -189,12 +189,17 @@
     "backToSite": "Back to Site",
     "nav": {
       "dashboard": "Dashboard",
+      "claims": "Claims",
       "collection": "Collection",
       "tools": "Tools",
+      "cleanup": "Cleanup",
+      "owners": "Owners",
       "comments": "Comments",
       "users": "Users",
       "analytics": "Analytics",
       "emailTest": "Email Test",
+      "emailOps": "Email Ops",
+      "outreach": "Outreach",
       "searchConsole": "Search Console",
       "paymentCallbacks": "Payment Callbacks",
       "settings": "Settings"

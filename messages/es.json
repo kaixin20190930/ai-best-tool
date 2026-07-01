@@ -185,9 +185,13 @@
       "dashboard": "Panel de Control",
       "collection": "Colección",
       "tools": "Herramientas",
+      "cleanup": "Cleanup",
+      "owners": "Propietarios",
       "users": "Usuarios",
       "analytics": "Analíticas",
       "emailTest": "Prueba de Email",
+      "emailOps": "Operaciones de Email",
+      "outreach": "Outreach",
       "settings": "Configuración"
     },
     "dashboard": {
