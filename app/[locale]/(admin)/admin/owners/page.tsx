@@ -422,7 +422,7 @@ export default async function AdminOwnersPage({
             </div>
             <div className='flex flex-wrap gap-2 text-xs font-semibold'>
               <Link
-                href='/admin/analytics#email-ops'
+                href='/admin/email-ops'
                 className='rounded-full bg-white px-3 py-1.5 text-cyan-700 ring-1 ring-cyan-200 hover:bg-cyan-50'
               >
                 {isChinese ? '去邮件运营' : 'Go to email ops'}
@@ -687,7 +687,7 @@ export default async function AdminOwnersPage({
                           {isChinese ? '编辑条目' : 'Edit tool'}
                         </Link>
                         <Link
-                          href='/admin/analytics#email-ops'
+                          href='/admin/email-ops'
                           className='inline-flex items-center justify-center rounded-lg border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-900 hover:bg-amber-100'
                         >
                           {isChinese ? '发续期提醒' : 'Send renewal reminder'}

@@ -412,7 +412,7 @@ export default async function AdminDashboard({
         name: 'Email Ops',
         value: 'Open',
         subtext: 'Claim invites and featured renewal reminders',
-        href: '/admin/analytics#email-ops',
+        href: '/admin/email-ops',
         icon: Send,
         color: 'gray',
       },
@@ -842,7 +842,7 @@ export default async function AdminDashboard({
                 Open owner dashboard
               </Link>
               <Link
-                href='/admin/analytics#email-ops'
+                href='/admin/email-ops'
                 className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-2 text-sm font-semibold text-cyan-700 hover:bg-cyan-100'
               >
                 Open email ops

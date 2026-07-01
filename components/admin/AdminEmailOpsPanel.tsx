@@ -195,7 +195,7 @@ export default function AdminEmailOpsPanel({ summary }: { summary: EmailOpsSumma
                   Open claim queue
                 </Link>
                 <Link
-                  href='/admin/analytics#email-ops'
+                  href='/admin/email-ops'
                   className='rounded-full bg-cyan-50 px-3 py-1.5 text-cyan-700 ring-1 ring-cyan-100 hover:bg-cyan-100'
                 >
                   Stay on email ops
@@ -260,7 +260,7 @@ export default function AdminEmailOpsPanel({ summary }: { summary: EmailOpsSumma
                   Open submissions
                 </Link>
                 <Link
-                  href='/admin/analytics#email-ops'
+                  href='/admin/email-ops'
                   className='rounded-full bg-amber-50 px-3 py-1.5 text-amber-700 ring-1 ring-amber-100 hover:bg-amber-100'
                 >
                   Stay on email ops
