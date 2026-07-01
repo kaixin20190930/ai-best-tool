@@ -35,11 +35,18 @@ import {
 } from '@/app/actions/admin/tools';
 
 export async function generateMetadata({ params }: { params: { locale: string } }) {
-  const t = await getTranslations({ locale: params.locale, namespace: 'admin' });
+  try {
+    const t = await getTranslations({ locale: params.locale, namespace: 'admin' });
 
-  return {
-    title: t('dashboard.title'),
-  };
+    return {
+      title: t('dashboard.title'),
+    };
+  } catch (error) {
+    console.error('Failed to load admin dashboard metadata:', error);
+    return {
+      title: 'Dashboard',
+    };
+  }
 }
 
 export default async function AdminDashboard({
@@ -50,20 +57,106 @@ export default async function AdminDashboard({
   };
 }) {
   const locale = params?.locale || 'en';
-  const siteMetrics = await getSiteMetrics();
-  const toolsStats = await getToolsStats();
-  const operationalStats = await getOperationalStats();
-  const moderationSummary = await getCommentModerationSummary();
-  const paidListingBlockers = await getPaidListingBlockerSummary(8);
-  const featuredPlacementStats = await getFeaturedPlacementStats();
-  const outreachQueue = await getDeveloperOutreachQueue(8);
+  const [
+    siteMetrics,
+    toolsStats,
+    operationalStats,
+    moderationSummary,
+    paidListingBlockers,
+    featuredPlacementStats,
+    outreachQueue,
+    topTools,
+    pageAccessReport,
+    conversionSnapshot,
+    submissionFunnel,
+  ] = await Promise.all([
+    getSiteMetrics().catch(() => ({
+      totalViews: 0,
+      uniqueVisitors: 0,
+      totalTools: 0,
+      totalUsers: 0,
+      totalComments: 0,
+      totalRatings: 0,
+    })),
+    getToolsStats().catch(() => ({
+      total: 0,
+      published: 0,
+      pending: 0,
+      rejected: 0,
+      draft: 0,
+      claimed: 0,
+      claimPending: 0,
+      claimRejected: 0,
+      claimUnclaimed: 0,
+    })),
+    getOperationalStats().catch(() => ({
+      candidatesLast24h: 0,
+      newCandidates: 0,
+      draftTools: 0,
+      collectedDrafts: 0,
+      needsMediaDrafts: 0,
+      lowQualityDrafts: 0,
+      readyDrafts: 0,
+      pendingDeveloperSubmissions: 0,
+      overduePendingSubmissions: 0,
+      followedUpOverdueSubmissions: 0,
+    })),
+    getCommentModerationSummary().catch(() => ({
+      unresolvedReportedComments: 0,
+      autoHiddenComments: 0,
+    })),
+    getPaidListingBlockerSummary(8).catch(() => ({
+      totalBlocked: 0,
+      blockerCounts: [],
+      items: [],
+    })),
+    getFeaturedPlacementStats().catch(() => ({
+      liveCount: 0,
+      reservedCount: 0,
+      expiringSoonCount: 0,
+      totalViews: 0,
+      totalClicks: 0,
+      placements: [],
+    })),
+    getDeveloperOutreachQueue(8).catch(() => []),
+    getTopTools('views', 5).catch(() => []),
+    getPageAccessReport('30d', 6).catch(() => ({
+      summary: [],
+      topPages: [],
+      familyBreakdown: [],
+      totalViews: 0,
+      totalUniqueVisitors: 0,
+    })),
+    getConversionSnapshot('30d').catch(() => ({
+      pageViews: 0,
+      toolClicks: 0,
+      ctaClicks: 0,
+      searches: 0,
+      favorites: 0,
+      shares: 0,
+      claimLeads: 0,
+      freshClaimLeads: 0,
+      overdueClaimLeads: 0,
+      submissions: 0,
+      publishedSubmissions: 0,
+      paidSubmissions: 0,
+      pageToClickRate: 0,
+      pageToCtaRate: 0,
+      submissionPublishRate: 0,
+      paidSubmissionRate: 0,
+    })),
+    getSubmissionFunnelStats('30d').catch(() => ({
+      totalSubmitted: 0,
+      pending: 0,
+      published: 0,
+      rejected: 0,
+      publishedRate: 0,
+      avgReviewHours: 0,
+    })),
+  ]);
   const outreachDueCount = outreachQueue.filter((item) => item.outreachStatus === 'follow_up_due').length;
   const outreachFeaturedCount = outreachQueue.filter((item) => item.suggestion === 'featured_pitch').length;
   const outreachClaimCount = outreachQueue.filter((item) => item.suggestion === 'claim_listing').length;
-  const topTools = await getTopTools('views', 5);
-  const pageAccessReport = await getPageAccessReport('30d', 6);
-  const conversionSnapshot = await getConversionSnapshot('30d');
-  const submissionFunnel = await getSubmissionFunnelStats('30d');
   const claimStats = toolsStats as unknown as {
     claimed: number;
     claimPending: number;
