@@ -302,14 +302,23 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                     : 'Best for generation, editing, and final output workflows.',
                 },
                 {
-                  href: '/guides/ai-tools-for-research-comparison',
-                  title: isChinese ? 'AI 研究工具对比' : 'AI research tools comparison',
-                  desc: isChinese ? '适合先看来源、证据和检索。' : 'Best for sources, evidence, and retrieval.',
+                  href: '/guides/ai-tools-for-small-business-comparison',
+                  title: isChinese ? 'AI 小企业工具对比' : 'AI small business tools comparison',
+                  desc: isChinese
+                    ? '适合先看是否能支撑运营、协作和付费决策。'
+                    : 'Best for operations, collaboration, and paid-decision workflows.',
                 },
                 {
-                  href: '/guides/ai-writing-tools-comparison',
-                  title: isChinese ? 'AI 写作工具对比' : 'AI writing tools comparison',
-                  desc: isChinese ? '适合先看起草、改写和编辑。' : 'Best for drafting, rewriting, and editing.',
+                  href: '/guides/ai-tools-for-marketing-comparison',
+                  title: isChinese ? 'AI 营销工具对比' : 'AI marketing tools comparison',
+                  desc: isChinese ? '适合先看广告、增长和社媒工作流。' : 'Best for ads, growth, and social workflows.',
+                },
+                {
+                  href: '/guides/ai-tools-for-sales-comparison',
+                  title: isChinese ? 'AI 销售工具对比' : 'AI sales tools comparison',
+                  desc: isChinese
+                    ? '适合先看线索、跟进和转化效率。'
+                    : 'Best for leads, follow-up, and conversion efficiency.',
                 },
               ].map((item) => (
                 <Link
