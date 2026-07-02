@@ -94,6 +94,9 @@ export interface AdminTool {
   status: string;
   features: Record<string, unknown> | null;
   submitted_by: string | null;
+  ownerEmail: string | null;
+  claimStatus: string | null;
+  claimedAt: string | null;
   created_at: Date;
   updated_at: Date;
   view_count: number;
@@ -678,6 +681,7 @@ function escapeHtml(value: string): string {
  */
 export async function getAdminTools(filters?: {
   status?: string;
+  claimStatus?: string;
   search?: string;
   collected?: boolean;
   needsMedia?: boolean;
@@ -717,6 +721,23 @@ export async function getAdminTools(filters?: {
       query += ` AND (name ILIKE $${paramIndex} OR title::text ILIKE $${paramIndex})`;
       params.push(`%${search}%`);
       paramIndex++;
+    }
+
+    const claimStatus =
+      filters?.claimStatus === 'claimed' ||
+      filters?.claimStatus === 'pending' ||
+      filters?.claimStatus === 'rejected' ||
+      filters?.claimStatus === 'unclaimed'
+        ? filters.claimStatus
+        : undefined;
+    if (claimStatus) {
+      if (claimStatus === 'unclaimed') {
+        query += ` AND COALESCE(claim_status, 'unclaimed') = 'unclaimed'`;
+      } else {
+        query += ` AND COALESCE(claim_status, 'unclaimed') = $${paramIndex}`;
+        params.push(claimStatus);
+        paramIndex++;
+      }
     }
 
     if (filters?.collected) {
@@ -1526,6 +1547,10 @@ export async function getToolsStats(): Promise<{
   pending: number;
   rejected: number;
   draft: number;
+  claimed: number;
+  claimPending: number;
+  claimRejected: number;
+  claimUnclaimed: number;
 }> {
   try {
     await requireAdmin();
@@ -1537,7 +1562,11 @@ export async function getToolsStats(): Promise<{
         COUNT(*) FILTER (WHERE status = 'published') as published,
         COUNT(*) FILTER (WHERE status = 'pending') as pending,
         COUNT(*) FILTER (WHERE status = 'rejected') as rejected,
-        COUNT(*) FILTER (WHERE status = 'draft') as draft
+        COUNT(*) FILTER (WHERE status = 'draft') as draft,
+        COUNT(*) FILTER (WHERE COALESCE(claim_status, 'unclaimed') = 'claimed') as claimed,
+        COUNT(*) FILTER (WHERE COALESCE(claim_status, 'unclaimed') = 'pending') as claim_pending,
+        COUNT(*) FILTER (WHERE COALESCE(claim_status, 'unclaimed') = 'rejected') as claim_rejected,
+        COUNT(*) FILTER (WHERE COALESCE(claim_status, 'unclaimed') = 'unclaimed') as claim_unclaimed
       FROM tools
     `);
 
@@ -1547,6 +1576,10 @@ export async function getToolsStats(): Promise<{
       pending: parseCount(result.rows[0].pending),
       rejected: parseCount(result.rows[0].rejected),
       draft: parseCount(result.rows[0].draft),
+      claimed: parseCount(result.rows[0].claimed),
+      claimPending: parseCount(result.rows[0].claim_pending),
+      claimRejected: parseCount(result.rows[0].claim_rejected),
+      claimUnclaimed: parseCount(result.rows[0].claim_unclaimed),
     };
   } catch (error) {
     console.error('Error fetching tools stats:', error);
@@ -1556,6 +1589,10 @@ export async function getToolsStats(): Promise<{
       pending: 0,
       rejected: 0,
       draft: 0,
+      claimed: 0,
+      claimPending: 0,
+      claimRejected: 0,
+      claimUnclaimed: 0,
     };
   }
 }
@@ -1905,6 +1942,57 @@ async function recordProfileUpdateReminderLog(input: {
     `,
     [input.toolId, input.reminderType, input.recipientEmail, input.qualityScore, input.missingLabels],
   );
+}
+
+export async function getEmailOpsSummaryBySystem(): Promise<{
+  success: boolean;
+  claimInvitesSent24h: number;
+  claimInvitesLastSentAt: string | null;
+  featuredRenewalsSent24h: number;
+  featuredRenewalsLastSentAt: string | null;
+  error?: string;
+}> {
+  try {
+    const pool = getPool();
+    await Promise.all([ensureClaimInviteReminderLogTable(), ensureFeaturedRenewalReminderLogTable()]);
+
+    const [claimInviteResult, featuredRenewalResult] = await Promise.all([
+      pool.query(
+        `
+          SELECT
+            COUNT(*) FILTER (WHERE sent_at >= NOW() - INTERVAL '24 hours')::int AS sent_24h,
+            MAX(sent_at) AS last_sent_at
+          FROM claim_invite_reminder_logs
+        `,
+      ),
+      pool.query(
+        `
+          SELECT
+            COUNT(*) FILTER (WHERE sent_at >= NOW() - INTERVAL '24 hours')::int AS sent_24h,
+            MAX(sent_at) AS last_sent_at
+          FROM featured_renewal_reminder_logs
+        `,
+      ),
+    ]);
+
+    return {
+      success: true,
+      claimInvitesSent24h: Number(claimInviteResult.rows[0]?.sent_24h || 0),
+      claimInvitesLastSentAt: claimInviteResult.rows[0]?.last_sent_at || null,
+      featuredRenewalsSent24h: Number(featuredRenewalResult.rows[0]?.sent_24h || 0),
+      featuredRenewalsLastSentAt: featuredRenewalResult.rows[0]?.last_sent_at || null,
+    };
+  } catch (error) {
+    console.error('Error loading email ops summary:', error);
+    return {
+      success: false,
+      claimInvitesSent24h: 0,
+      claimInvitesLastSentAt: null,
+      featuredRenewalsSent24h: 0,
+      featuredRenewalsLastSentAt: null,
+      error: error instanceof Error ? error.message : 'Failed to load email ops summary',
+    };
+  }
 }
 
 export async function sendFeaturedRenewalRemindersBySystem(): Promise<{
