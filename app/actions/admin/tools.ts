@@ -3067,25 +3067,6 @@ export async function getPaidListingBlockerSummary(
   }
 }
 
-export async function activateCommercialPlacement(
-  toolId: string
-): Promise<{ success: boolean; error?: string }> {
-  try {
-    await requireAdmin();
-    const activation = await activateCommercialPlacementBySystem(toolId, null);
-    if (!activation.success) {
-      return { success: false, error: activation.error };
-    }
-
-    return { success: true };
-  } catch (error) {
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Failed to activate commercial placement',
-    };
-  }
-}
-
 export async function activateCommercialPlacementBySystem(
   toolId: string,
   transactionId?: string | null
@@ -3127,6 +3108,25 @@ export async function activateCommercialPlacementBySystem(
     return { success: true, name: row.name };
   } catch (error) {
     console.error('Error activating commercial placement:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to activate commercial placement',
+    };
+  }
+}
+
+export async function activateCommercialPlacement(
+  toolId: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    await requireAdmin();
+    const activation = await activateCommercialPlacementBySystem(toolId, null);
+    if (!activation.success) {
+      return { success: false, error: activation.error };
+    }
+
+    return { success: true };
+  } catch (error) {
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to activate commercial placement',
