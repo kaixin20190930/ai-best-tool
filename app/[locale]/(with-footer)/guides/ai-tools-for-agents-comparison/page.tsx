@@ -119,6 +119,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-agent-tools',
+        title: { cn: '先看 Agent 榜单', en: 'Start with the agent ranking' },
+        description: {
+          cn: '如果你已经确认要看 Agent 工作流，先把 shortlist 缩小。',
+          en: 'If agent workflows are clearly the lane, narrow the shortlist first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-agents',
+        title: { cn: '回到 Agent 指南', en: 'Return to the agent guide' },
+        description: {
+          cn: '先回到更高层判断，再重新对比具体工具。',
+          en: 'Step back to the broader guide, then re-compare specific tools.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-automation-comparison',
+        title: { cn: '转去自动化对比', en: 'Go to automation comparison' },
+        description: {
+          cn: '如果实际流程更固定，自动化层通常更合适。',
+          en: 'If the workflow is more fixed than adaptive, the automation layer is often the better fit.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-api-observability-comparison',
+        title: { cn: '转去 API 可观测对比', en: 'Go to API observability comparison' },
+        description: {
+          cn: '如果你在意运行中的日志、成本和质量治理，这页更高意图。',
+          en: 'A better path when runtime logs, cost, and quality governance are the real concern.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-tools-for-automation-comparison',
