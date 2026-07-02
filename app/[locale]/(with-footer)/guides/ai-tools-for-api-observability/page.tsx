@@ -2,9 +2,9 @@ import { Metadata } from 'next';
 import { Activity, ExternalLink, Layers3, ScrollText } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -65,15 +65,37 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-      '先分清你更关心的是日志、成本、质量，还是提示词与模型表现。',
-      '看它是否能方便地接进现有 API、网关和生产环境。',
-      '如果是团队使用，优先看权限、追踪、保留周期和告警能力。',
-    ]
+        '先分清你更关心的是日志、成本、质量，还是提示词与模型表现。',
+        '看它是否能方便地接进现有 API、网关和生产环境。',
+        '如果是团队使用，优先看权限、追踪、保留周期和告警能力。',
+      ]
     : [
-      'Separate whether logs, cost, quality, or prompt and model behavior matter most.',
-      'Check how easily it fits your API, gateway, and production environment.',
-      'For team use, prioritize permissions, tracing, retention, and alerting.',
-    ];
+        'Separate whether logs, cost, quality, or prompt and model behavior matter most.',
+        'Check how easily it fits your API, gateway, and production environment.',
+        'For team use, prioritize permissions, tracing, retention, and alerting.',
+      ];
+  const quickStarts = [
+    {
+      href: '/best-ai-tools/ai-api-observability-tools',
+      title: isChinese ? '可观测榜单' : 'Observability ranking',
+      desc: isChinese ? '先看 shortlist，再决定要不要细比。' : 'Start with the shortlist before comparing deeper.',
+    },
+    {
+      href: '/guides/ai-tools-for-api-observability-comparison',
+      title: isChinese ? '可观测对比页' : 'Observability comparison',
+      desc: isChinese ? '日志、成本和质量追踪一页看完。' : 'Compare logs, cost, and quality tracking.',
+    },
+    {
+      href: '/ai/langfuse',
+      title: 'Langfuse',
+      desc: isChinese ? '日志、追踪和评估闭环。' : 'Logs, traces, and evaluation loops.',
+    },
+    {
+      href: '/ai/helicone',
+      title: 'Helicone',
+      desc: isChinese ? '成本可见性和请求分析。' : 'Cost visibility and request analysis.',
+    },
+  ];
 
   return (
     <>
@@ -191,6 +213,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </aside>
         </section>
 
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '先看这些入口' : 'Start here'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '从榜单、对比页和代表工具开始收窄'
+              : 'Narrow from ranking, comparison, and representative tools'}
+          </h2>
+          <div className='mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {quickStarts.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:border-cyan-200 hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
+
         <GuideActionSection
           locale={locale}
           eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}
@@ -247,7 +292,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {isChinese ? '高意图榜单' : 'High-intent ranking'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '先用榜单缩小可观测 shortlist' : 'Use the ranking to narrow your observability shortlist first'}
+            {isChinese
+              ? '先用榜单缩小可观测 shortlist'
+              : 'Use the ranking to narrow your observability shortlist first'}
           </h2>
           <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
             {isChinese

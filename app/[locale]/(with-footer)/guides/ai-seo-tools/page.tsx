@@ -2,12 +2,12 @@ import { Metadata } from 'next';
 import { ArrowRight, CheckCircle2, ExternalLink, Search, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
@@ -61,15 +61,37 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-      '先确认你是做关键词、内容优化、技术 SEO 还是排名监控。',
-      '看它是否支持中文、是否有模板、是否能保持建议稳定。',
-      '如果你要长期做内容增长，优先看导出、协作和数据更新频率。',
-    ]
+        '先确认你是做关键词、内容优化、技术 SEO 还是排名监控。',
+        '看它是否支持中文、是否有模板、是否能保持建议稳定。',
+        '如果你要长期做内容增长，优先看导出、协作和数据更新频率。',
+      ]
     : [
-      'Start with the workflow: keywords, content optimization, technical SEO, or rank monitoring.',
-      'Check whether it supports Chinese, has templates, and keeps recommendations stable.',
-      'If you plan to grow content long term, look at exports, collaboration, and data freshness.',
-    ];
+        'Start with the workflow: keywords, content optimization, technical SEO, or rank monitoring.',
+        'Check whether it supports Chinese, has templates, and keeps recommendations stable.',
+        'If you plan to grow content long term, look at exports, collaboration, and data freshness.',
+      ];
+  const quickStarts = [
+    {
+      href: '/best-ai-tools/ai-seo-tools',
+      title: isChinese ? 'SEO 榜单' : 'SEO ranking',
+      desc: isChinese ? '先看 shortlist，再决定要不要细比。' : 'Start with the shortlist before comparing deeper.',
+    },
+    {
+      href: '/guides/ai-seo-tools-comparison',
+      title: isChinese ? 'SEO 对比页' : 'SEO comparison',
+      desc: isChinese ? '关键词、内容和排名功能一页看完。' : 'Compare keyword, content, and ranking features.',
+    },
+    {
+      href: '/ai/surfer',
+      title: 'Surfer',
+      desc: isChinese ? '内容优化和页面建议。' : 'Content optimization and page-level guidance.',
+    },
+    {
+      href: '/ai/clearscope',
+      title: 'Clearscope',
+      desc: isChinese ? '更偏稳定的内容优化。' : 'More focused on consistent content optimization.',
+    },
+  ];
 
   return (
     <>
@@ -266,6 +288,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
               </div>
             </TrackableCtaLink>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '先看这些入口' : 'Start here'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '从榜单、对比页和代表工具开始收窄'
+              : 'Narrow from ranking, comparison, and representative tools'}
+          </h2>
+          <div className='mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {quickStarts.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:border-cyan-200 hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </Link>
+            ))}
           </div>
         </section>
 
