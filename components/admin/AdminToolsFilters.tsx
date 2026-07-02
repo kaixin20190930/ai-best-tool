@@ -1,10 +1,12 @@
 'use client';
 
-import { useRouter } from '@/app/navigation';
 import { Search } from 'lucide-react';
+
+import { useRouter } from '@/app/navigation';
 
 interface AdminToolsFiltersProps {
   currentStatus?: string;
+  currentClaimStatus?: string;
   currentSearch?: string;
   currentCollected?: boolean;
   currentNeedsMedia?: boolean;
@@ -21,6 +23,7 @@ interface AdminToolsFiltersProps {
 
 export default function AdminToolsFilters({
   currentStatus,
+  currentClaimStatus,
   currentSearch,
   currentCollected,
   currentNeedsMedia,
@@ -40,6 +43,7 @@ export default function AdminToolsFilters({
     const params = new URLSearchParams();
 
     const nextStatus = updates.status ?? currentStatus;
+    const nextClaimStatus = updates.claimStatus ?? currentClaimStatus;
     const nextSearch = updates.search ?? currentSearch;
     const nextCollected = updates.collected ?? currentCollected;
     const nextNeedsMedia = updates.needsMedia ?? currentNeedsMedia;
@@ -62,6 +66,10 @@ export default function AdminToolsFilters({
 
     if (nextSearch) {
       params.set('search', String(nextSearch));
+    }
+
+    if (nextClaimStatus && nextClaimStatus !== 'all') {
+      params.set('claimStatus', String(nextClaimStatus));
     }
 
     if (nextCollected) {
@@ -125,6 +133,14 @@ export default function AdminToolsFilters({
     { value: 'draft', label: 'Draft' },
   ];
 
+  const claimStatuses = [
+    { value: 'all', label: 'All claim states' },
+    { value: 'claimed', label: 'Claimed' },
+    { value: 'pending', label: 'Claim pending' },
+    { value: 'rejected', label: 'Claim rejected' },
+    { value: 'unclaimed', label: 'Unclaimed' },
+  ];
+
   const qualityFilters = [
     { value: 'all', label: 'All quality' },
     { value: 'low', label: 'Low quality' },
@@ -132,20 +148,32 @@ export default function AdminToolsFilters({
     { value: 'high', label: 'High quality' },
   ];
 
+  const activeClasses = 'border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100';
+  const toneClasses = {
+    cyan: 'border-cyan-200 bg-cyan-50 text-cyan-700 hover:bg-cyan-100',
+    indigo: 'border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100',
+    violet: 'border-violet-200 bg-violet-50 text-violet-700 hover:bg-violet-100',
+    amber: 'border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100',
+    rose: 'border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100',
+    emerald: 'border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100',
+    sky: 'border-sky-200 bg-sky-50 text-sky-700 hover:bg-sky-100',
+    slate: activeClasses,
+  } as const;
+
   return (
-    <div className="theme-surface mb-6 rounded-lg border border-slate-200 p-4 shadow-sm">
-      <div className="flex flex-col gap-4">
+    <div className='theme-surface mb-6 rounded-lg border border-slate-200 p-4 shadow-sm'>
+      <div className='flex flex-col gap-4'>
         {/* Status Filter */}
-        <div className="flex flex-wrap gap-2">
+        <div className='flex flex-wrap gap-2'>
           {statuses.map((status) => (
             <button
               key={status.value}
+              type='button'
               onClick={() => handleStatusChange(status.value)}
-              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                (currentStatus === status.value ||
-                  (!currentStatus && status.value === 'all'))
-                  ? 'bg-cyan-600 text-white'
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+              className={`rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
+                currentStatus === status.value || (!currentStatus && status.value === 'all')
+                  ? toneClasses.cyan
+                  : activeClasses
               }`}
             >
               {status.label}
@@ -153,76 +181,77 @@ export default function AdminToolsFilters({
           ))}
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className='flex flex-wrap gap-2'>
+          {claimStatuses.map((claimStatus) => (
+            <button
+              key={claimStatus.value}
+              type='button'
+              onClick={() => router.push(buildPath({ claimStatus: claimStatus.value }))}
+              className={`rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
+                (currentClaimStatus || 'all') === claimStatus.value ? toneClasses.indigo : activeClasses
+              }`}
+            >
+              {claimStatus.label}
+            </button>
+          ))}
+        </div>
+
+        <div className='flex flex-wrap gap-2'>
           <button
-            type="button"
+            type='button'
             onClick={() => router.push(buildPath({ collected: !currentCollected }))}
-            className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-              currentCollected
-                ? 'bg-cyan-600 text-white'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+              currentCollected ? toneClasses.cyan : activeClasses
             }`}
           >
             Collected
           </button>
           <button
-            type="button"
-            onClick={() =>
-              router.push(buildPath({ needsMedia: !currentNeedsMedia, ready: false }))
-            }
-            className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-              currentNeedsMedia
-                ? 'bg-violet-600 text-white'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            type='button'
+            onClick={() => router.push(buildPath({ needsMedia: !currentNeedsMedia, ready: false }))}
+            className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+              currentNeedsMedia ? toneClasses.violet : activeClasses
             }`}
           >
             Needs media
           </button>
           <button
-            type="button"
-            onClick={() =>
-              router.push(buildPath({ needsDecision: !currentNeedsDecision, ready: false }))
-            }
-            className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-              currentNeedsDecision
-                ? 'bg-sky-700 text-white'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            type='button'
+            onClick={() => router.push(buildPath({ needsDecision: !currentNeedsDecision, ready: false }))}
+            className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+              currentNeedsDecision ? toneClasses.sky : activeClasses
             }`}
           >
             Needs decision copy
           </button>
           <button
-            type="button"
+            type='button'
             onClick={() => router.push(buildPath({ overdue: !currentOverdue, ready: false }))}
-            className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-              currentOverdue
-                ? 'bg-amber-600 text-white'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+              currentOverdue ? toneClasses.amber : activeClasses
             }`}
           >
             Pending &gt; 48h
           </button>
           <button
-            type="button"
+            type='button'
             onClick={() =>
               router.push(
                 buildPath({
                   overdue: true,
                   followedUp: currentFollowedUp === '0' ? undefined : '0',
                   ready: false,
-                })
+                }),
               )
             }
-            className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-              currentFollowedUp === '0' && currentOverdue
-                ? 'bg-red-600 text-white'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+              currentFollowedUp === '0' && currentOverdue ? toneClasses.rose : activeClasses
             }`}
-            >
+          >
             Unfollowed overdue
           </button>
           <button
-            type="button"
+            type='button'
             onClick={() =>
               router.push(
                 buildPath({
@@ -231,56 +260,44 @@ export default function AdminToolsFilters({
                   followedUp: !currentStaleFollowUp ? '1' : undefined,
                   overdue: false,
                   ready: false,
-                })
+                }),
               )
             }
-            className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-              currentStaleFollowUp
-                ? 'bg-amber-700 text-white'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+              currentStaleFollowUp ? toneClasses.amber : activeClasses
             }`}
           >
             Stale follow-up
           </button>
           <button
-            type="button"
+            type='button'
             onClick={() => router.push(buildPath({ paidIntent: !currentPaidIntent, ready: false }))}
-            className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-              currentPaidIntent
-                ? 'bg-indigo-600 text-white'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+              currentPaidIntent ? toneClasses.indigo : activeClasses
             }`}
           >
             Paid intent
           </button>
           <button
-            type="button"
-            onClick={() =>
-              router.push(buildPath({ featuredIntent: !currentFeaturedIntent, ready: false }))
-            }
-            className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-              currentFeaturedIntent
-                ? 'bg-fuchsia-600 text-white'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            type='button'
+            onClick={() => router.push(buildPath({ featuredIntent: !currentFeaturedIntent, ready: false }))}
+            className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+              currentFeaturedIntent ? toneClasses.violet : activeClasses
             }`}
           >
             Featured intent
           </button>
           <button
-            type="button"
-            onClick={() =>
-              router.push(buildPath({ paidBlockers: !currentPaidBlockers, ready: false }))
-            }
-            className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-              currentPaidBlockers
-                ? 'bg-rose-600 text-white'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            type='button'
+            onClick={() => router.push(buildPath({ paidBlockers: !currentPaidBlockers, ready: false }))}
+            className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+              currentPaidBlockers ? toneClasses.rose : activeClasses
             }`}
           >
             Paid blockers
           </button>
           <button
-            type="button"
+            type='button'
             onClick={() =>
               router.push(
                 buildPath({
@@ -288,13 +305,11 @@ export default function AdminToolsFilters({
                   status: 'draft',
                   needsMedia: false,
                   quality: 'all',
-                })
+                }),
               )
             }
-            className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-              currentReady
-                ? 'bg-emerald-600 text-white'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+              currentReady ? toneClasses.emerald : activeClasses
             }`}
           >
             Ready to publish
@@ -302,12 +317,10 @@ export default function AdminToolsFilters({
           {qualityFilters.map((quality) => (
             <button
               key={quality.value}
-              type="button"
+              type='button'
               onClick={() => router.push(buildPath({ quality: quality.value, ready: false }))}
-              className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                (currentQuality || 'all') === quality.value
-                  ? 'bg-slate-900 text-white'
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+              className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+                (currentQuality || 'all') === quality.value ? toneClasses.slate : activeClasses
               }`}
             >
               {quality.label}
@@ -316,20 +329,20 @@ export default function AdminToolsFilters({
         </div>
 
         {/* Search */}
-        <form onSubmit={handleSearchChange} className="flex gap-2">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+        <form onSubmit={handleSearchChange} className='flex gap-2'>
+          <div className='relative'>
+            <Search className='absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400' />
             <input
-              type="text"
-              name="search"
+              type='text'
+              name='search'
               defaultValue={currentSearch}
-              placeholder="Search tools..."
-              className="rounded-lg border border-slate-300 py-2 pl-10 pr-4 text-sm focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+              placeholder='Search tools...'
+              className='rounded-lg border border-slate-300 py-2 pl-10 pr-4 text-sm focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200'
             />
           </div>
           <button
-            type="submit"
-            className="rounded-lg bg-cyan-600 px-4 py-2 text-sm font-medium text-white hover:bg-cyan-700"
+            type='submit'
+            className='rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-2 text-sm font-medium text-cyan-700 hover:bg-cyan-100'
           >
             Search
           </button>
