@@ -64,15 +64,45 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-      '先分清你要的是找新名单、补全信息，还是给已有名单做优先级排序。',
-      '看它的数据源是不是覆盖你真正要接触的人群，而不是泛泛给出一堆名字。',
-      '如果后面还要进销售流程，优先看导出、去重和 CRM 或邮件工具的衔接。',
-    ]
+        '先分清你要的是找新名单、补全信息，还是给已有名单做优先级排序。',
+        '看它的数据源是不是覆盖你真正要接触的人群，而不是泛泛给出一堆名字。',
+        '如果后面还要进销售流程，优先看导出、去重和 CRM 或邮件工具的衔接。',
+      ]
     : [
-      'Separate list discovery, enrichment, and prioritization before comparing tools.',
-      'Check whether the data sources really cover the audience you sell to, not just a generic pile of names.',
-      'If leads will move into a sales workflow next, prioritize export quality, deduplication, and CRM or email fit.',
-    ];
+        'Separate list discovery, enrichment, and prioritization before comparing tools.',
+        'Check whether the data sources really cover the audience you sell to, not just a generic pile of names.',
+        'If leads will move into a sales workflow next, prioritize export quality, deduplication, and CRM or email fit.',
+      ];
+  const highIntentLanes = [
+    {
+      href: '/guides/ai-tools-for-lead-generation-comparison',
+      title: isChinese ? '先看获客对比页' : 'Start with lead-gen comparison',
+      desc: isChinese
+        ? '先看名单来源、筛选深度和导出质量。'
+        : 'Compare list sources, filtering depth, and export quality first.',
+    },
+    {
+      href: '/best-ai-tools/ai-lead-generation-tools',
+      title: isChinese ? '再看获客榜单' : 'Open the lead-gen ranking',
+      desc: isChinese
+        ? '如果方向已经确定，先用榜单快速收敛 shortlist。'
+        : 'Use the ranking to narrow the shortlist once the direction is clear.',
+    },
+    {
+      href: '/guides/ai-tools-for-sales-prospecting-comparison',
+      title: isChinese ? '销售拓客对比页' : 'Sales prospecting comparison',
+      desc: isChinese
+        ? '如果真实任务已经接近外联准备，这页更贴近。'
+        : 'A better fit once the work shifts toward outbound prep.',
+    },
+    {
+      href: '/guides/ai-tools-for-sales-comparison',
+      title: isChinese ? '销售工具对比页' : 'Sales tools comparison',
+      desc: isChinese
+        ? '如果你在做跟进、管道和 CRM，这页更合适。'
+        : 'More useful if the job has moved into follow-up, pipeline, and CRM work.',
+    },
+  ];
 
   return (
     <>
@@ -140,6 +170,34 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             >
               {isChinese ? '看获客榜单' : 'Open lead-gen ranking'}
             </TrackableCtaLink>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图入口' : 'High-intent paths'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '先走最短路径，再决定要不要继续细比'
+              : 'Take the shortest path first, then decide whether to compare deeper'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '获客页最适合承接已经很明确的需求：名单发现、信息补全、初筛，或者已经要往销售流程走。'
+              : 'This page is best for users with a clear job already: list discovery, enrichment, early qualification, or a move into sales workflows.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {highIntentLanes.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:border-cyan-200 hover:bg-cyan-50/60'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </Link>
+            ))}
           </div>
         </section>
 
@@ -279,7 +337,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {isChinese ? '高意图榜单' : 'High-intent ranking'}
             </p>
             <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-              {isChinese ? '先用榜单缩小 lead-gen shortlist' : 'Use the ranking to narrow your lead-gen shortlist first'}
+              {isChinese
+                ? '先用榜单缩小 lead-gen shortlist'
+                : 'Use the ranking to narrow your lead-gen shortlist first'}
             </h2>
             <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
               {isChinese
