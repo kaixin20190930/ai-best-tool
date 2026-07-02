@@ -1944,57 +1944,6 @@ async function recordProfileUpdateReminderLog(input: {
   );
 }
 
-export async function getEmailOpsSummaryBySystem(): Promise<{
-  success: boolean;
-  claimInvitesSent24h: number;
-  claimInvitesLastSentAt: string | null;
-  featuredRenewalsSent24h: number;
-  featuredRenewalsLastSentAt: string | null;
-  error?: string;
-}> {
-  try {
-    const pool = getPool();
-    await Promise.all([ensureClaimInviteReminderLogTable(), ensureFeaturedRenewalReminderLogTable()]);
-
-    const [claimInviteResult, featuredRenewalResult] = await Promise.all([
-      pool.query(
-        `
-          SELECT
-            COUNT(*) FILTER (WHERE sent_at >= NOW() - INTERVAL '24 hours')::int AS sent_24h,
-            MAX(sent_at) AS last_sent_at
-          FROM claim_invite_reminder_logs
-        `,
-      ),
-      pool.query(
-        `
-          SELECT
-            COUNT(*) FILTER (WHERE sent_at >= NOW() - INTERVAL '24 hours')::int AS sent_24h,
-            MAX(sent_at) AS last_sent_at
-          FROM featured_renewal_reminder_logs
-        `,
-      ),
-    ]);
-
-    return {
-      success: true,
-      claimInvitesSent24h: Number(claimInviteResult.rows[0]?.sent_24h || 0),
-      claimInvitesLastSentAt: claimInviteResult.rows[0]?.last_sent_at || null,
-      featuredRenewalsSent24h: Number(featuredRenewalResult.rows[0]?.sent_24h || 0),
-      featuredRenewalsLastSentAt: featuredRenewalResult.rows[0]?.last_sent_at || null,
-    };
-  } catch (error) {
-    console.error('Error loading email ops summary:', error);
-    return {
-      success: false,
-      claimInvitesSent24h: 0,
-      claimInvitesLastSentAt: null,
-      featuredRenewalsSent24h: 0,
-      featuredRenewalsLastSentAt: null,
-      error: error instanceof Error ? error.message : 'Failed to load email ops summary',
-    };
-  }
-}
-
 export async function sendFeaturedRenewalRemindersBySystem(): Promise<{
   success: boolean;
   sent: number;
