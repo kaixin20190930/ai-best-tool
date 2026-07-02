@@ -42,6 +42,15 @@ export type AdminToolClaimsSummary = {
   linkedCount: number;
   overdueNewCount: number;
   freshNewCount: number;
+  reasonCounts: {
+    claimReason: string | null;
+    total: number;
+    newCount: number;
+    contactedCount: number;
+    claimedCount: number;
+    invalidCount: number;
+    overdueNewCount: number;
+  }[];
 };
 
 function normalizeNullableText(value: string | null | undefined): string | null {
@@ -242,20 +251,37 @@ export async function getAdminToolClaimsSummary(): Promise<AdminToolClaimsSummar
     await requireAdmin();
 
     const pool = getPool();
-    const result = await pool.query(
-      `
-        SELECT
-          COUNT(*)::int AS total,
-          COUNT(*) FILTER (WHERE status = 'new')::int AS "newCount",
-          COUNT(*) FILTER (WHERE status = 'new' AND created_at <= NOW() - INTERVAL '48 hours')::int AS "overdueNewCount",
-          COUNT(*) FILTER (WHERE status = 'new' AND created_at >= NOW() - INTERVAL '24 hours')::int AS "freshNewCount",
-          COUNT(*) FILTER (WHERE status = 'contacted')::int AS "contactedCount",
-          COUNT(*) FILTER (WHERE status = 'claimed')::int AS "claimedCount",
-          COUNT(*) FILTER (WHERE status = 'invalid')::int AS "invalidCount",
-          COUNT(*) FILTER (WHERE tool_id IS NOT NULL)::int AS "linkedCount"
-        FROM tool_claims
-      `,
-    );
+    const [result, reasonResult] = await Promise.all([
+      pool.query(
+        `
+          SELECT
+            COUNT(*)::int AS total,
+            COUNT(*) FILTER (WHERE status = 'new')::int AS "newCount",
+            COUNT(*) FILTER (WHERE status = 'new' AND created_at <= NOW() - INTERVAL '48 hours')::int AS "overdueNewCount",
+            COUNT(*) FILTER (WHERE status = 'new' AND created_at >= NOW() - INTERVAL '24 hours')::int AS "freshNewCount",
+            COUNT(*) FILTER (WHERE status = 'contacted')::int AS "contactedCount",
+            COUNT(*) FILTER (WHERE status = 'claimed')::int AS "claimedCount",
+            COUNT(*) FILTER (WHERE status = 'invalid')::int AS "invalidCount",
+            COUNT(*) FILTER (WHERE tool_id IS NOT NULL)::int AS "linkedCount"
+          FROM tool_claims
+        `,
+      ),
+      pool.query(
+        `
+          SELECT
+            NULLIF(claim_reason, '') AS "claimReason",
+            COUNT(*)::int AS total,
+            COUNT(*) FILTER (WHERE status = 'new')::int AS "newCount",
+            COUNT(*) FILTER (WHERE status = 'new' AND created_at <= NOW() - INTERVAL '48 hours')::int AS "overdueNewCount",
+            COUNT(*) FILTER (WHERE status = 'contacted')::int AS "contactedCount",
+            COUNT(*) FILTER (WHERE status = 'claimed')::int AS "claimedCount",
+            COUNT(*) FILTER (WHERE status = 'invalid')::int AS "invalidCount"
+          FROM tool_claims
+          GROUP BY NULLIF(claim_reason, '')
+          ORDER BY total DESC, "overdueNewCount" DESC, "claimReason" ASC NULLS LAST
+        `,
+      ),
+    ]);
 
     const row = result.rows[0] || {};
 
@@ -268,6 +294,16 @@ export async function getAdminToolClaimsSummary(): Promise<AdminToolClaimsSummar
       linkedCount: Number(row.linkedCount || 0),
       overdueNewCount: Number(row.overdueNewCount || 0),
       freshNewCount: Number(row.freshNewCount || 0),
+      reasonCounts: reasonResult.rows.map((reasonRow) => ({
+        claimReason:
+          typeof reasonRow.claimReason === 'string' && reasonRow.claimReason.trim() ? reasonRow.claimReason : null,
+        total: Number(reasonRow.total || 0),
+        newCount: Number(reasonRow.newCount || 0),
+        contactedCount: Number(reasonRow.contactedCount || 0),
+        claimedCount: Number(reasonRow.claimedCount || 0),
+        invalidCount: Number(reasonRow.invalidCount || 0),
+        overdueNewCount: Number(reasonRow.overdueNewCount || 0),
+      })),
     };
   } catch (error) {
     console.error('Error fetching admin tool claims summary:', error);

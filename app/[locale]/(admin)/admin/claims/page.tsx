@@ -9,6 +9,8 @@ type AdminToolClaimWithReason = AdminToolClaim & {
   claimReason?: string | null;
 };
 
+type AdminToolClaimsSummary = Awaited<ReturnType<typeof getAdminToolClaimsSummary>>;
+
 function getToneClass(tone: string): string {
   if (tone === 'emerald') return 'text-emerald-700';
   if (tone === 'cyan') return 'text-cyan-700';
@@ -258,7 +260,7 @@ export default async function AdminClaimsPage({
     searchParams?.reason === 'other'
       ? searchParams.reason
       : 'all';
-  let summary = {
+  let summary: AdminToolClaimsSummary = {
     total: 0,
     newCount: 0,
     contactedCount: 0,
@@ -267,6 +269,7 @@ export default async function AdminClaimsPage({
     overdueNewCount: 0,
     freshNewCount: 0,
     linkedCount: 0,
+    reasonCounts: [],
   };
   let claims: AdminToolClaimWithReason[] = [];
   let loadError: string | null = null;
@@ -333,6 +336,7 @@ export default async function AdminClaimsPage({
   const topReasons = Array.from(reasonMap.values())
     .sort((a, b) => b.total - a.total || b.newCount - a.newCount)
     .slice(0, 6);
+  const globalTopReasons = status === 'all' && reason === 'all' && !search ? summary.reasonCounts : topReasons;
   const claimRate = summary.total > 0 ? Math.round((summary.claimedCount / summary.total) * 100) : 0;
   const activeQueue = summary.newCount + summary.contactedCount;
   const overdueRate = summary.newCount > 0 ? Math.round((summary.overdueNewCount / summary.newCount) * 100) : 0;
@@ -632,8 +636,8 @@ export default async function AdminClaimsPage({
                 Why people are claiming listings, so the queue can focus on the highest-confidence owner leads first.
               </p>
               <div className='mt-4 space-y-3'>
-                {topReasons.length > 0 ? (
-                  topReasons.map((reasonItem) => (
+                {globalTopReasons.length > 0 ? (
+                  globalTopReasons.map((reasonItem) => (
                     <div
                       key={reasonItem.claimReason || 'unknown'}
                       className='rounded-xl border border-slate-200 bg-slate-50 p-4'
