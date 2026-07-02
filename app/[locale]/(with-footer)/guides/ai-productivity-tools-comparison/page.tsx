@@ -56,6 +56,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-productivity-tools',
+        title: { cn: '先看生产力榜单', en: 'Start with the productivity ranking' },
+        description: {
+          cn: '如果你已经确认是效率提升场景，先缩小 shortlist 再细比。',
+          en: 'If efficiency is clearly the lane, narrow the shortlist before comparing details.',
+        },
+      },
+      {
+        href: '/guides/ai-productivity-tools',
+        title: { cn: '回到生产力指南', en: 'Return to the productivity guide' },
+        description: {
+          cn: '先回到更高层判断，再重新看候选。',
+          en: 'Step back to the broader guide, then re-review candidates.',
+        },
+      },
+      {
+        href: '/guides/ai-note-taking-tools-comparison',
+        title: { cn: '转去笔记工具对比', en: 'Go to note taking comparison' },
+        description: {
+          cn: '如果你的效率问题其实是记录和归档，这条更高意图。',
+          en: 'A better fit if your productivity problem is really about capture and archiving.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-automation-comparison',
+        title: { cn: '转去自动化对比', en: 'Go to automation comparison' },
+        description: {
+          cn: '如果你要省时间主要靠流程自动化，这页更贴近。',
+          en: 'A tighter path when the real time-saver is workflow automation.',
+        },
+      },
+    ],
     tips: {
       cn: [
         '先看你是做任务管理、笔记整理、知识管理还是协作，不同场景侧重点不一样。',

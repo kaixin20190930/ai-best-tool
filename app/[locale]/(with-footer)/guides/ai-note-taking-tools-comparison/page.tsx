@@ -149,6 +149,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-note-taking-tools',
+        title: { cn: '先看记笔记榜单', en: 'Start with the note-taking ranking' },
+        description: {
+          cn: '如果你已经确认是记录和整理场景，先缩小 shortlist。',
+          en: 'If capture and organization are clearly the lane, narrow the shortlist first.',
+        },
+      },
+      {
+        href: '/guides/ai-note-taking-tools',
+        title: { cn: '回到记笔记指南', en: 'Return to the note taking guide' },
+        description: {
+          cn: '先回到更高层判断，再重新看候选。',
+          en: 'Step back to the broader guide, then re-review candidates.',
+        },
+      },
+      {
+        href: '/guides/ai-productivity-tools-comparison',
+        title: { cn: '转去生产力对比', en: 'Go to productivity comparison' },
+        description: {
+          cn: '如果你的问题更大其实是效率工具，这条更自然。',
+          en: 'A better fit if the broader need is productivity tooling.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-meeting-notes',
+        title: { cn: '转去会议纪要指南', en: 'Go to meeting notes guide' },
+        description: {
+          cn: '如果核心是会议记录和回看，这页更贴近。',
+          en: 'A tighter path when the real need is meeting capture and review.',
+        },
+      },
+    ],
     toolSelectionNotes: {
       fireflies: {
         bestFor: {
