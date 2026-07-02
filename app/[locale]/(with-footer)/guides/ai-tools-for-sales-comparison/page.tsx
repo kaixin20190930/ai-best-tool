@@ -102,6 +102,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-sales-prospecting-tools',
+        title: { cn: '先看销售榜单', en: 'Start with the sales ranking' },
+        description: {
+          cn: '如果你已经确认是销售场景，先把 shortlist 缩到更高相关。',
+          en: 'If sales is clearly the lane, narrow the shortlist to higher-fit tools first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-sales',
+        title: { cn: '回到销售指南', en: 'Return to the sales guide' },
+        description: {
+          cn: '先回到更高层判断，再重新看候选。',
+          en: 'Step back to the broader guide, then re-review candidates.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-lead-generation-comparison',
+        title: { cn: '转去获客对比', en: 'Go to lead generation comparison' },
+        description: {
+          cn: '如果你的重点其实是名单来源和补全，这条更高意图。',
+          en: 'A better fit when list sourcing and enrichment are the real priorities.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-sales-prospecting-comparison',
+        title: { cn: '转去销售拓客对比', en: 'Go to sales prospecting comparison' },
+        description: {
+          cn: '如果你更关心个性化外联与触达策略，这条更接近目标。',
+          en: 'A tighter path when personalized outreach and contact strategy matter more.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-tools-for-lead-generation-comparison',
