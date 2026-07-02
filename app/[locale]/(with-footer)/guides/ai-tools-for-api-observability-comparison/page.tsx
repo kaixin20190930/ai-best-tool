@@ -105,6 +105,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-api-observability-tools',
+        title: { cn: '先看可观测榜单', en: 'Start with the observability ranking' },
+        description: {
+          cn: '如果你想先缩小 shortlist，再回来横向对比，这条最省时间。',
+          en: 'Use this first if you want a tighter shortlist before the side-by-side comparison.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-api-observability',
+        title: { cn: '回到可观测指南', en: 'Return to the observability guide' },
+        description: {
+          cn: '先回到更高层的判断，再重新对比具体工具。',
+          en: 'Step back to the broader guide, then re-compare specific tools.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-model-routing-comparison',
+        title: { cn: '转去模型路由对比', en: 'Go to model routing comparison' },
+        description: {
+          cn: '如果真正的决策点是统一出口和回退策略，这条更相关。',
+          en: 'A better fit if unified access and fallback strategy are the real decision points.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-developers-comparison',
+        title: { cn: '转去开发者工具对比', en: 'Go to developer tools comparison' },
+        description: {
+          cn: '如果你还在开发者工具和可观测工具之间摇摆，这条更自然。',
+          en: 'Useful when you are still weighing developer tooling against observability tooling.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/best-ai-tools/ai-api-observability-tools',
