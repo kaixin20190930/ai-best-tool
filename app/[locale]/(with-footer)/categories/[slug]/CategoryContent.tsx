@@ -434,7 +434,18 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
     .filter((page): page is (typeof GUIDE_PAGES)[number] => Boolean(page))
     .filter((page) => page.href.endsWith('-comparison'));
   const primaryComparisonGuide = comparisonGuides[0] || relatedGuides[0] || null;
-  const priorityCategorySlugs = ['developer-tools', 'research', 'voice', 'text-writing'];
+  const priorityCategorySlugs = [
+    'developer-tools',
+    'research',
+    'voice',
+    'text-writing',
+    'productivity',
+    'chatbot',
+    'marketing',
+    'design-art',
+    'image-generator',
+    'video-generator',
+  ];
   const adjacentCategories = categories
     .filter((item) => item.slug !== category.slug)
     .sort((a, b) => {
@@ -479,6 +490,151 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
           },
         },
         representativeToolMap.coding?.[0],
+      ],
+      productivity: [
+        {
+          href: '/guides/ai-productivity-tools-comparison',
+          title: {
+            cn: '先看对比页',
+            en: 'Start with comparison',
+          },
+          description: {
+            cn: '先看会议、任务和日程效率的差别。',
+            en: 'Compare meeting, task, and scheduling efficiency first.',
+          },
+        },
+        {
+          href: '/guides/ai-productivity-tools',
+          title: {
+            cn: '再看指南页',
+            en: 'Read the guide',
+          },
+          description: {
+            cn: '把生产力工具的典型工作流先串起来。',
+            en: 'Get the productivity workflow context before browsing deeper.',
+          },
+        },
+        representativeToolMap.productivity?.[0],
+      ],
+      chatbot: [
+        {
+          href: '/guides/ai-chatbot-tools-comparison',
+          title: {
+            cn: '先看对比页',
+            en: 'Start with comparison',
+          },
+          description: {
+            cn: '先看对话质量、模型接入和场景适配。',
+            en: 'Compare conversation quality, model access, and use-case fit first.',
+          },
+        },
+        {
+          href: '/guides/ai-chatbot-tools',
+          title: {
+            cn: '再看指南页',
+            en: 'Read the guide',
+          },
+          description: {
+            cn: '先把聊天机器人和客服/助手类场景拆开。',
+            en: 'Separate chatbot use cases from support and assistant workflows first.',
+          },
+        },
+      ],
+      marketing: [
+        {
+          href: '/guides/ai-tools-for-marketing-comparison',
+          title: {
+            cn: '先看对比页',
+            en: 'Start with comparison',
+          },
+          description: {
+            cn: '先看营销、内容和增长工作流差异。',
+            en: 'Compare marketing, content, and growth workflows first.',
+          },
+        },
+        {
+          href: '/guides/ai-tools-for-marketing',
+          title: {
+            cn: '再看指南页',
+            en: 'Read the guide',
+          },
+          description: {
+            cn: '把营销工具的场景先拆清楚。',
+            en: 'Clarify the marketing use case before scanning tools.',
+          },
+        },
+      ],
+      'design-art': [
+        {
+          href: '/guides/ai-tools-for-designers-comparison',
+          title: {
+            cn: '先看对比页',
+            en: 'Start with comparison',
+          },
+          description: {
+            cn: '先看设计、创意和生产效率的差别。',
+            en: 'Compare design, creative, and production efficiency first.',
+          },
+        },
+        {
+          href: '/guides/ai-tools-for-designers',
+          title: {
+            cn: '再看指南页',
+            en: 'Read the guide',
+          },
+          description: {
+            cn: '先把设计类 AI 的典型用途串起来。',
+            en: 'Understand the design AI use case before browsing tools.',
+          },
+        },
+      ],
+      'image-generator': [
+        {
+          href: '/guides/ai-image-tools-comparison',
+          title: {
+            cn: '先看对比页',
+            en: 'Start with comparison',
+          },
+          description: {
+            cn: '先看出图质量、风格控制和生成速度。',
+            en: 'Compare image quality, style control, and generation speed first.',
+          },
+        },
+        {
+          href: '/guides/ai-image-tools',
+          title: {
+            cn: '再看指南页',
+            en: 'Read the guide',
+          },
+          description: {
+            cn: '先把图片生成场景和创意流程理顺。',
+            en: 'Understand the image-generation workflow before browsing tools.',
+          },
+        },
+      ],
+      'video-generator': [
+        {
+          href: '/guides/ai-video-tools-comparison',
+          title: {
+            cn: '先看对比页',
+            en: 'Start with comparison',
+          },
+          description: {
+            cn: '先看视频生成质量、时长和编辑能力。',
+            en: 'Compare output quality, duration, and editing depth first.',
+          },
+        },
+        {
+          href: '/guides/ai-video-tools',
+          title: {
+            cn: '再看指南页',
+            en: 'Read the guide',
+          },
+          description: {
+            cn: '先把视频创作和生成工作流拆开。',
+            en: 'Separate video creation workflows before scanning tools.',
+          },
+        },
       ],
       research: [
         {
