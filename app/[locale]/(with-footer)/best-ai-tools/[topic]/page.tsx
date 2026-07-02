@@ -40,11 +40,16 @@ export async function generateMetadata({
     const topic = getTopListTopic(params.topic);
     const isChinese = params.locale === 'cn' || params.locale === 'tw';
     const title = topic?.title || (isChinese ? 'AI 工具榜单' : 'Best AI tools');
-    const description =
-      topic?.description ||
-      (isChinese
+    let description = topic?.description;
+    if (topic?.key === 'ai-automation-tools') {
+      description = isChinese
+        ? 'AI 自动化工具榜单，覆盖工作流编排、触发器、跨工具连接和可维护的重复流程。'
+        : 'AI automation tools ranking for workflow orchestration, triggers, cross-tool connections, and maintainable repeatable processes.';
+    } else if (!description) {
+      description = isChinese
         ? '按用途整理的 AI 工具榜单，帮助你更快缩小候选。'
-        : 'A focused shortlist of useful AI tools, organized by use case.');
+        : 'A focused shortlist of useful AI tools, organized by use case.';
+    }
 
     return {
       title,
@@ -138,6 +143,29 @@ export default async function BestAiToolsTopicPage({
           ? 'Agent 榜单页不是终点，它最适合把你送进 Agent 对比页、详情页和提交页。'
           : '榜单页不是终点，它的作用是把你带到更窄的选择页。';
     }
+    const isAutomationTopic = topic.key === 'ai-automation-tools';
+    const automationExamples = [
+      {
+        name: 'n8n',
+        href: `/${locale}/ai/n8n`,
+        hint: isChinese ? '更适合自托管和可视化编排' : 'Best when you want self-hosted, visual orchestration',
+      },
+      {
+        name: 'Zapier',
+        href: `/${locale}/ai/zapier`,
+        hint: isChinese ? '更适合快速连接常见 SaaS' : 'Best for quickly connecting common SaaS apps',
+      },
+      {
+        name: 'Make',
+        href: `/${locale}/ai/make`,
+        hint: isChinese ? '适合复杂的多步流程' : 'Useful for more complex multi-step flows',
+      },
+      {
+        name: 'Pipedream',
+        href: `/${locale}/ai/pipedream`,
+        hint: isChinese ? '适合 API 驱动和开发者工作流' : 'Good for API-driven and developer workflows',
+      },
+    ];
 
     return (
       <div className='theme-page mx-auto max-w-pc px-4 py-8 lg:px-0'>
@@ -156,6 +184,26 @@ export default async function BestAiToolsTopicPage({
                 <p className='max-w-2xl text-base leading-7 text-slate-200 lg:text-lg'>{topic.description}</p>
                 <p className='max-w-2xl text-sm leading-6 text-slate-300'>{topic.summary}</p>
               </div>
+
+              {isAutomationTopic && (
+                <div className='rounded-2xl border border-white/10 bg-white/5 p-4'>
+                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-100/80'>
+                    {isChinese ? '常见自动化入口' : 'Common automation starting points'}
+                  </p>
+                  <div className='mt-3 grid gap-3 sm:grid-cols-2'>
+                    {automationExamples.map((tool) => (
+                      <Link
+                        key={tool.name}
+                        href={tool.href}
+                        className='rounded-xl border border-white/10 bg-slate-950/30 p-3 transition hover:border-cyan-300/40 hover:bg-slate-950/50'
+                      >
+                        <p className='text-sm font-semibold text-white'>{tool.name}</p>
+                        <p className='mt-1 text-xs leading-5 text-slate-300'>{tool.hint}</p>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className='grid gap-3 sm:grid-cols-3'>
                 {[
