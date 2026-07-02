@@ -301,6 +301,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         : 'A better fit for APIs, model infrastructure, and developer workflows.',
     },
   ];
+  const highIntentLanes = [
+    {
+      href: '/best-ai-tools/ai-coding-tools',
+      comparisonHref: '/guides/ai-coding-tools-comparison',
+      title: isChinese ? '编程工具' : 'Coding tools',
+      description: isChinese
+        ? '适合补全、调试、重构和编辑器工作流。'
+        : 'Best for completion, debugging, refactoring, and editor workflows.',
+    },
+    {
+      href: '/best-ai-tools/ai-research-tools',
+      comparisonHref: '/guides/ai-tools-for-research-comparison',
+      title: isChinese ? '研究工具' : 'Research tools',
+      description: isChinese
+        ? '适合资料发现、证据核对和研究沉淀。'
+        : 'Best for discovery, evidence-checking, and research synthesis.',
+    },
+    {
+      href: '/best-ai-tools/ai-web3-tools',
+      comparisonHref: '/guides/ai-tools-for-web3-comparison',
+      title: isChinese ? 'Web3 工具' : 'Web3 tools',
+      description: isChinese
+        ? '适合链上分析、钱包监控和协议研究。'
+        : 'Best for on-chain analysis, wallet monitoring, and protocol research.',
+    },
+    {
+      href: '/best-ai-tools/ai-automation-tools',
+      comparisonHref: '/guides/ai-tools-for-automation-comparison',
+      title: isChinese ? '自动化工具' : 'Automation tools',
+      description: isChinese
+        ? '适合重复流程、触发器和跨工具联动。'
+        : 'Best for repeatable workflows, triggers, and cross-tool orchestration.',
+    },
+  ];
 
   // Generate Organization schema for homepage
   const organizationSchema = generateOrganizationSchema({
@@ -462,6 +496,50 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 </div>
               ))}
             </aside>
+          </div>
+        </section>
+
+        <section className='mx-auto mt-4 w-full max-w-7xl px-4 lg:px-6'>
+          <div className='rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-5 shadow-sm lg:p-6'>
+            <div className='flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between'>
+              <div>
+                <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+                  {isChinese ? '高意图主线' : 'High-intent lanes'}
+                </p>
+                <h2 className='mt-1 text-xl font-bold text-slate-950 lg:text-2xl'>
+                  {isChinese ? '先看最容易转化的四条主题线' : 'Start with the four highest-converting themes'}
+                </h2>
+              </div>
+              <p className='max-w-2xl text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '这几条线最适合先收窄到榜单，再去指南和对比页。'
+                  : 'These are the easiest paths to narrow down from ranking into guides and comparison pages.'}
+              </p>
+            </div>
+            <div className='mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+              {highIntentLanes.map((lane) => (
+                <div key={lane.href} className='rounded-xl border border-white bg-white p-4 shadow-sm'>
+                  <p className='text-sm font-semibold text-slate-950'>{lane.title}</p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>{lane.description}</p>
+                  <div className='mt-4 flex flex-wrap gap-2'>
+                    <Link
+                      href={lane.href}
+                      className='inline-flex items-center gap-1 rounded-full bg-slate-950 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-800'
+                    >
+                      {isChinese ? '看榜单' : 'Open ranking'}
+                      <ArrowRight className='size-3.5' />
+                    </Link>
+                    <Link
+                      href={lane.comparisonHref}
+                      className='inline-flex items-center gap-1 rounded-full bg-cyan-50 px-3 py-2 text-xs font-semibold text-cyan-700 hover:bg-cyan-100'
+                    >
+                      {isChinese ? '看对比' : 'Compare'}
+                      <ArrowRight className='size-3.5' />
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
