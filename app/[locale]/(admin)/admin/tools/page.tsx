@@ -56,13 +56,13 @@ export default async function AdminToolsPage({
   const paidIntent = searchParams.paidIntent === '1';
   const featuredIntent = searchParams.featuredIntent === '1';
   const paidBlockers = searchParams.paidBlockers === '1';
-  let currentFollowedUp: string | undefined;
+  let currentFollowedUp: '0' | '1' | undefined;
   if (followedUp === true) {
     currentFollowedUp = '1';
   } else if (followedUp === false) {
     currentFollowedUp = '0';
   }
-  let quality: string | undefined;
+  let quality: 'low' | 'medium' | 'high' | undefined;
   if (searchParams.quality === 'low' || searchParams.quality === 'medium' || searchParams.quality === 'high') {
     quality = searchParams.quality;
   }

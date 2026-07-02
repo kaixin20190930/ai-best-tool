@@ -21,6 +21,7 @@ export type AdminToolClaim = {
   email: string;
   company: string | null;
   website: string | null;
+  claimReason: string | null;
   note: string | null;
   sourcePath: string | null;
   sourceLocale: string | null;
@@ -126,7 +127,12 @@ async function notifyClaimStatusChange(input: {
   });
 }
 
-function buildClaimWhereClause(filters: { status?: string; search?: string }) {
+function normalizeClaimReason(value: string): string | null {
+  const allowed = ['ownership_update', 'profile_correction', 'duplicate_merge', 'agency_client', 'other'];
+  return allowed.includes(value) ? value : null;
+}
+
+function buildClaimWhereClause(filters: { status?: string; search?: string; reason?: string }) {
   const clauses: string[] = [];
   const params: unknown[] = [];
   let index = 1;
@@ -145,10 +151,18 @@ function buildClaimWhereClause(filters: { status?: string; search?: string }) {
       OR tc.email ILIKE $${index}
       OR COALESCE(tc.company, '') ILIKE $${index}
       OR COALESCE(tc.website, '') ILIKE $${index}
+      OR COALESCE(tc.claim_reason, '') ILIKE $${index}
       OR COALESCE(tc.source_path, '') ILIKE $${index}
       OR COALESCE(t.name, '') ILIKE $${index}
     )`);
     params.push(`%${search}%`);
+    index += 1;
+  }
+
+  const reason = filters.reason ? normalizeClaimReason(filters.reason) : null;
+  if (reason) {
+    clauses.push(`COALESCE(tc.claim_reason, '') = $${index}`);
+    params.push(reason);
     index += 1;
   }
 
@@ -158,6 +172,7 @@ function buildClaimWhereClause(filters: { status?: string; search?: string }) {
 export async function getAdminToolClaims(filters?: {
   status?: string;
   search?: string;
+  reason?: string;
   limit?: number;
 }): Promise<{ claims: AdminToolClaim[]; total: number }> {
   try {
@@ -168,6 +183,7 @@ export async function getAdminToolClaims(filters?: {
     const { clauses, params, nextIndex } = buildClaimWhereClause({
       status: filters?.status,
       search: filters?.search,
+      reason: filters?.reason,
     });
     const whereClause = clauses.length > 0 ? `WHERE ${clauses.join(' AND ')}` : '';
 
@@ -192,6 +208,7 @@ export async function getAdminToolClaims(filters?: {
           tc.email,
           tc.company,
           tc.website,
+          tc.claim_reason AS "claimReason",
           tc.note,
           tc.source_path AS "sourcePath",
           tc.source_locale AS "sourceLocale",

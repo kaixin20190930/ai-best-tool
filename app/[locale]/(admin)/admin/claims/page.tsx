@@ -108,12 +108,15 @@ function getSourceLabel(sourcePath: string | null): string {
 
 function getSourceAction(sourcePath: string | null): string {
   if (!sourcePath) return 'Inspect the lead manually and confirm where users are entering from.';
-  if (sourcePath.includes('/pricing'))
+  if (sourcePath.includes('/pricing')) {
     return 'These leads likely have paid intent, so respond quickly and route toward claim resolution.';
-  if (sourcePath.includes('/submit'))
+  }
+  if (sourcePath.includes('/submit')) {
     return 'Clarify whether the user should claim an existing listing or create a new one.';
-  if (sourcePath.includes('/developer/listing'))
+  }
+  if (sourcePath.includes('/developer/listing')) {
     return 'Keep this path focused on owner confirmation and fast follow-up.';
+  }
   return 'Watch whether this source keeps producing qualified owner requests.';
 }
 
