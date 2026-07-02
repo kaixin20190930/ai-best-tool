@@ -90,6 +90,32 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       desc: isChinese ? '更适合证据驱动和文献梳理。' : 'Good for evidence-driven literature review.',
     },
   ];
+  const highIntentPaths = [
+    {
+      href: '/best-ai-tools/ai-research-tools',
+      title: isChinese ? '先看研究榜单' : 'Start with research ranking',
+      desc: isChinese ? '先从更高相关的 shortlist 开始。' : 'Start with the highest-fit shortlist first.',
+    },
+    {
+      href: '/guides/ai-tools-for-research-comparison',
+      title: isChinese ? '再看研究对比页' : 'Open research comparison',
+      desc: isChinese
+        ? '资料发现、证据核对和分析路径一页收敛。'
+        : 'Narrow discovery, evidence-checking, and analysis paths in one place.',
+    },
+    {
+      href: '/guides/ai-seo-tools-comparison',
+      title: isChinese ? 'SEO 研究对比' : 'SEO research comparison',
+      desc: isChinese
+        ? '适合关键词、SERP 和内容结构研究。'
+        : 'Best for keywords, SERP, and content structure research.',
+    },
+    {
+      href: '/guides/ai-tools-for-crypto-research-comparison',
+      title: isChinese ? 'Crypto 研究对比' : 'Crypto research comparison',
+      desc: isChinese ? '项目、协议和 narrative 跟踪更顺。' : 'Better for project, protocol, and narrative tracking.',
+    },
+  ];
 
   return (
     <>
@@ -243,6 +269,34 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 key={item.href}
                 href={item.href}
                 className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '先看这些入口' : 'Start here first'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '先走最短路径，再决定要不要继续深比'
+              : 'Take the shortest path first, then decide whether to compare deeper'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己在找资料发现或证据核对工具，这一块会更快把你带回榜单、对比页和相邻研究入口。'
+              : 'If you already know you need discovery or evidence-checking tools, this section gets you back to the ranking, comparison, and adjacent research paths faster.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {highIntentPaths.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:border-cyan-200 hover:bg-cyan-50/60'
               >
                 <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
                 <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
