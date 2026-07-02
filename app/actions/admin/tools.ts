@@ -556,13 +556,6 @@ async function notifySubmissionStatusChange(
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
   const profileUrl = `${siteUrl}${profileLink}`;
   const toolUrl = `${siteUrl}/ai/${toolName}`;
-  const escapeHtml = (value: string) =>
-    value
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
 
   try {
     if (status === 'published') {
