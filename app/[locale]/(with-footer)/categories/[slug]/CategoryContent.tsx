@@ -453,6 +453,166 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
       name: getLocalizedField(item.name, params.locale),
     }));
   const representativeTools = (representativeToolMap[categorySlug] || []).slice(0, 3);
+  const highIntentEntryPoints = (
+    {
+      coding: [
+        {
+          href: '/guides/ai-coding-tools-comparison',
+          title: {
+            cn: '先看对比页',
+            en: 'Start with comparison',
+          },
+          description: {
+            cn: '先把编辑器、代码生成和工作流集成的差异看清楚。',
+            en: 'Compare editors, code generation, and workflow integration first.',
+          },
+        },
+        {
+          href: '/guides/ai-coding-tools',
+          title: {
+            cn: '再看指南页',
+            en: 'Read the guide',
+          },
+          description: {
+            cn: '把这个分类里常见的使用场景先串起来。',
+            en: 'Get the category context before narrowing down tools.',
+          },
+        },
+        representativeToolMap.coding?.[0],
+      ],
+      research: [
+        {
+          href: '/guides/ai-tools-for-research-comparison',
+          title: {
+            cn: '先看对比页',
+            en: 'Start with comparison',
+          },
+          description: {
+            cn: '先看来源、引用和检索广度的差别。',
+            en: 'Compare sources, citations, and retrieval breadth first.',
+          },
+        },
+        {
+          href: '/guides/ai-tools-for-research',
+          title: {
+            cn: '再看指南页',
+            en: 'Read the guide',
+          },
+          description: {
+            cn: '把研究型搜索和证据整理的路径先理顺。',
+            en: 'Understand the research workflow before scanning tools.',
+          },
+        },
+        representativeToolMap.research?.[0],
+      ],
+      automation: [
+        {
+          href: '/guides/ai-tools-for-automation-comparison',
+          title: {
+            cn: '先看对比页',
+            en: 'Start with comparison',
+          },
+          description: {
+            cn: '先看工作流、触发器和编排能力的差异。',
+            en: 'Compare workflow depth, triggers, and orchestration first.',
+          },
+        },
+        {
+          href: '/guides/ai-tools-for-automation',
+          title: {
+            cn: '再看指南页',
+            en: 'Read the guide',
+          },
+          description: {
+            cn: '先把自动化场景拆清楚，再选工具。',
+            en: 'Clarify the automation use case before picking a tool.',
+          },
+        },
+        representativeToolMap.automation?.[0],
+      ],
+      web3: [
+        {
+          href: '/guides/ai-tools-for-web3-comparison',
+          title: {
+            cn: '先看对比页',
+            en: 'Start with comparison',
+          },
+          description: {
+            cn: '先看链上研究、监控和数据基础设施的差别。',
+            en: 'Compare on-chain research, monitoring, and infrastructure first.',
+          },
+        },
+        {
+          href: '/guides/ai-tools-for-web3',
+          title: {
+            cn: '再看指南页',
+            en: 'Read the guide',
+          },
+          description: {
+            cn: '把 Web3 工具的主要工作流先梳理出来。',
+            en: 'Understand the main Web3 workflows before narrowing the list.',
+          },
+        },
+        representativeToolMap.web3?.[0],
+      ],
+      'developer-tools': [
+        {
+          href: '/guides/ai-tools-for-developers-comparison',
+          title: {
+            cn: '先看对比页',
+            en: 'Start with comparison',
+          },
+          description: {
+            cn: '先看接入成本、API 覆盖和团队协作。',
+            en: 'Compare integration cost, API coverage, and team workflow support first.',
+          },
+        },
+        {
+          href: '/guides/ai-tools-for-developers',
+          title: {
+            cn: '再看指南页',
+            en: 'Read the guide',
+          },
+          description: {
+            cn: '先把开发者工具分成编辑器、基础设施和观测几类。',
+            en: 'Split the space into editor, infrastructure, and observability buckets first.',
+          },
+        },
+        representativeToolMap['developer-tools']?.[0],
+      ],
+      'text-writing': [
+        {
+          href: '/guides/ai-writing-tools-comparison',
+          title: {
+            cn: '先看对比页',
+            en: 'Start with comparison',
+          },
+          description: {
+            cn: '先看写作质量、风格控制和编辑工作流。',
+            en: 'Compare writing quality, style control, and editing workflows first.',
+          },
+        },
+        {
+          href: '/guides/ai-writing-tools',
+          title: {
+            cn: '再看指南页',
+            en: 'Read the guide',
+          },
+          description: {
+            cn: '先把 SEO、营销和内容写作场景分开。',
+            en: 'Separate SEO, marketing, and content-writing use cases first.',
+          },
+        },
+        representativeToolMap['text-writing']?.[0],
+      ],
+    }[categorySlug] || []
+  )
+    .filter(Boolean)
+    .slice(0, 3) as Array<{
+    href: string;
+    title: { cn: string; en: string };
+    description: { cn: string; en: string };
+  }>;
   const decisionFocus = decisionFocusMap[categorySlug] || [];
   const helperBullets = isChinese
     ? [
@@ -599,6 +759,34 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
             </div>
           </section>
         </div>
+
+        {highIntentEntryPoints.length > 0 && (
+          <section className='theme-surface mb-8 rounded-lg border border-cyan-100 bg-cyan-50/50 p-6 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '先看这几个入口' : 'Start here first'}
+            </p>
+            <h2 className='mt-1 text-2xl font-bold text-slate-900'>
+              {isChinese ? `把 ${categoryName} 分类先看清楚` : `Get clarity on ${categoryName} before browsing deeper`}
+            </h2>
+            <p className='mt-3 max-w-3xl text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '先从对比页、指南页和代表工具开始，能更快收敛到真正值得打开的页面。'
+                : 'Start with comparison pages, guides, and representative tools to narrow in on the pages that are most worth opening.'}
+            </p>
+            <div className='mt-5 grid gap-3 md:grid-cols-3'>
+              {highIntentEntryPoints.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className='rounded-lg border border-cyan-200 bg-white p-4 transition hover:border-cyan-300 hover:bg-cyan-50/60'
+                >
+                  <p className='text-sm font-semibold text-slate-900'>{item.title[isChinese ? 'cn' : 'en']}</p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description[isChinese ? 'cn' : 'en']}</p>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
         {decisionFocus.length > 0 && (
           <section className='theme-surface mb-8 rounded-lg border border-cyan-100 bg-cyan-50/50 p-6 shadow-sm'>
