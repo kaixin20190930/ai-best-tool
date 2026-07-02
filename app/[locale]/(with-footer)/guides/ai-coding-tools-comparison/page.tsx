@@ -99,6 +99,30 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         'If you want to try before paying, focus on free-tier limits and context length.',
         'For long-term use, pay attention to freshness, ratings, and real comments.',
       ];
+  const quickStarts = [
+    {
+      href: '/best-ai-tools/ai-coding-tools',
+      title: isChinese ? '编程榜单' : 'Coding ranking',
+      desc: isChinese ? '先看 shortlist，再回比较页。' : 'Start with the shortlist, then come back to compare.',
+    },
+    {
+      href: '/guides/ai-coding-tools',
+      title: isChinese ? '编程指南' : 'Coding guide',
+      desc: isChinese
+        ? '重新确认是补全、调试还是脚手架。'
+        : 'Re-check whether the task is completion, debugging, or scaffolding.',
+    },
+    {
+      href: '/ai/cursor',
+      title: 'Cursor',
+      desc: isChinese ? '适合编辑器内编码和重构。' : 'Great for editor-based coding and refactoring.',
+    },
+    {
+      href: '/ai/github-copilot',
+      title: 'GitHub Copilot',
+      desc: isChinese ? '适合补全、解释和日常编码。' : 'Useful for completion, explanation, and daily coding.',
+    },
+  ];
 
   return (
     <>
@@ -107,6 +131,27 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       <StructuredDataServer data={itemListSchema} />
 
       <div className='theme-page mx-auto max-w-6xl px-4 py-8 lg:px-6 lg:py-12'>
+        <section className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '先看这些入口' : 'Start here'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '从榜单、指南和代表工具开始收窄' : 'Narrow from ranking, guide, and representative tools'}
+          </h2>
+          <div className='mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {quickStarts.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
+
         <section className='rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm lg:p-10'>
           <div className='flex flex-wrap items-center gap-2'>
             <span className='inline-flex items-center gap-2 rounded-full bg-cyan-50 px-3 py-1 text-sm font-semibold text-cyan-700'>
