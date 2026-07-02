@@ -152,6 +152,12 @@ type ComparisonTool = ReturnType<typeof toolToListRow> & {
   };
 };
 
+type ComparisonPageData = Awaited<ReturnType<typeof buildComparisonPageData>>;
+type ComparisonPageProps = Omit<ComparisonPageData, 'highIntentPaths'> & {
+  highIntentPaths?: ComparisonPageData['highIntentPaths'];
+  locale: string;
+};
+
 function getPricingLabel(pricing: Tool['pricing'], isChinese: boolean): string {
   if (pricing === 'free') {
     return isChinese ? '免费' : 'Free';
@@ -452,6 +458,43 @@ export async function buildComparisonPageData(locale: string, config: Comparison
     title: isChinese ? item.title.cn : item.title.en,
     description: isChinese ? item.description.cn : item.description.en,
   }));
+  let rankingEntryTitle = 'Browse more tools';
+  let rankingEntryDescription = 'Browse a few more related tools, then come back and compare the key points.';
+  if (isChinese) {
+    rankingEntryTitle = config.rankingHref ? '转去榜单页' : '继续浏览工具';
+    rankingEntryDescription = config.rankingHref
+      ? '如果你想先看这一类里更强的 shortlist，再回来做细比，就先去榜单页。'
+      : '先多看几个同类工具，再回来对照关键维度。';
+  } else if (config.rankingHref) {
+    rankingEntryTitle = 'Open the ranking page';
+    rankingEntryDescription =
+      'Open the ranking page first if you want a stronger shortlist before returning for the detailed comparison.';
+  }
+  const nextEntryTitle = nextPaths[0]?.title || (isChinese ? '下一个入口' : 'Next entry point');
+  const nextEntryDescription =
+    nextPaths[0]?.description ||
+    (isChinese
+      ? '如果你已经确定下一步方向，就直接去更窄的入口。'
+      : 'If the next direction is clear, move into the narrower path.');
+  const highIntentPaths = [
+    {
+      href: config.guideHref,
+      title: isChinese ? '回到指南页' : 'Back to the guide',
+      description: isChinese
+        ? '如果你还想先看完整选型逻辑，就先回上一级。'
+        : 'Go back one level if you still want the broader selection logic first.',
+    },
+    {
+      href: config.rankingHref || config.altBrowseHref,
+      title: rankingEntryTitle,
+      description: rankingEntryDescription,
+    },
+    {
+      href: nextPaths[0]?.href || config.altBrowseHref,
+      title: nextEntryTitle,
+      description: nextEntryDescription,
+    },
+  ];
   const comparisonDimensionsSource =
     config.comparisonDimensions && config.comparisonDimensions.length > 0
       ? config.comparisonDimensions
@@ -474,6 +517,7 @@ export async function buildComparisonPageData(locale: string, config: Comparison
     fitFor,
     notFor,
     nextPaths,
+    highIntentPaths,
     categories,
     config,
   };
@@ -491,12 +535,53 @@ export function ComparisonPage({
   fitFor,
   notFor,
   nextPaths,
+  highIntentPaths: highIntentPathsInput = [],
   categories,
   config,
   locale,
-}: Awaited<ReturnType<typeof buildComparisonPageData>> & { locale: string }) {
+}: ComparisonPageProps) {
   const firstTool = tools[0] || null;
   const firstToolHref = firstTool ? `/ai/${firstTool.name}` : config.guideHref;
+  let rankingEntryTitle = 'Browse more tools';
+  let rankingEntryDescription = 'Browse a few more related tools, then come back and compare the key points.';
+  if (isChinese) {
+    rankingEntryTitle = config.rankingHref ? '转去榜单页' : '继续浏览工具';
+    rankingEntryDescription = config.rankingHref
+      ? '如果你想先看这一类里更强的 shortlist，再回来做细比，就先去榜单页。'
+      : '先多看几个同类工具，再回来对照关键维度。';
+  } else if (config.rankingHref) {
+    rankingEntryTitle = 'Open the ranking page';
+    rankingEntryDescription =
+      'Open the ranking page first if you want a stronger shortlist before returning for the detailed comparison.';
+  }
+  const nextEntryTitle = nextPaths[0]?.title || (isChinese ? '下一个入口' : 'Next entry point');
+  const nextEntryDescription =
+    nextPaths[0]?.description ||
+    (isChinese
+      ? '如果你已经确定下一步方向，就直接去更窄的入口。'
+      : 'If the next direction is clear, move into the narrower path.');
+  const highIntentPaths =
+    highIntentPathsInput.length > 0
+      ? highIntentPathsInput
+      : [
+          {
+            href: config.guideHref,
+            title: isChinese ? '回到指南页' : 'Back to the guide',
+            description: isChinese
+              ? '如果你还想先看完整选型逻辑，就先回上一级。'
+              : 'Go back one level if you still want the broader selection logic first.',
+          },
+          {
+            href: config.rankingHref || config.altBrowseHref,
+            title: rankingEntryTitle,
+            description: rankingEntryDescription,
+          },
+          {
+            href: nextPaths[0]?.href || config.altBrowseHref,
+            title: nextEntryTitle,
+            description: nextEntryDescription,
+          },
+        ];
   let firstToolDescription = '';
   if (isChinese) {
     firstToolDescription = firstTool
@@ -683,6 +768,34 @@ export function ComparisonPage({
                   : 'Owners can leave details first, then decide whether faster review or featured placement makes sense.'}
               </p>
             </TrackableCtaLink>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图路径' : 'High-intent paths'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '先走最短路径，再决定要不要继续细比'
+              : 'Take the shortest path first, then decide whether to compare deeper'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己要比什么，这里会把你更快送回指南、榜单和具体工具页。'
+              : 'If you already know what you need to compare, this section gets you back to the guide, ranking, or tool page faster.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-3'>
+            {highIntentPaths.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:border-cyan-200 hover:bg-cyan-50/60'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
+              </Link>
+            ))}
           </div>
         </section>
 
