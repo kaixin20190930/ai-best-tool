@@ -21,6 +21,8 @@ export default function BestAiToolsPage({ params: { locale } }: { params: { loca
   const priorityTopicKeys = [
     'ai-coding-tools',
     'ai-agent-tools',
+    'ai-chatbot-tools',
+    'ai-image-tools',
     'ai-api-observability-tools',
     'ai-model-routing-tools',
     'ai-research-tools',
