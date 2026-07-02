@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 
+import { BASE_URL } from './lib/env';
 import intlMiddleware from './middlewares/intlMiddleware';
 
 const localePattern = /^\/(en|cn|jp|de|es|fr|pt|ru|tw)(?=\/|$)/;
@@ -43,6 +44,15 @@ function getLocalizedAdminDashboardPath(pathname: string) {
   const { locale } = getPathParts(pathname);
   const targetLocale = locale || 'cn';
   return `/${targetLocale}/admin/dashboard`;
+}
+
+function getPreferredHost() {
+  try {
+    const hostname = new URL(BASE_URL).hostname.toLowerCase();
+    return hostname.startsWith('www.') ? hostname.slice(4) : hostname;
+  } catch {
+    return '';
+  }
 }
 
 function copyCookies(source: NextResponse, target: NextResponse) {
@@ -103,6 +113,18 @@ async function getCurrentUser(request: NextRequest) {
 }
 
 export async function middleware(request: NextRequest) {
+  const preferredHost = getPreferredHost();
+  if (preferredHost && request.nextUrl.hostname.toLowerCase() !== preferredHost) {
+    const currentHost = request.nextUrl.hostname.toLowerCase();
+    const isWwwVariant = currentHost === `www.${preferredHost}`;
+    if (isWwwVariant) {
+      const redirectUrl = request.nextUrl.clone();
+      redirectUrl.hostname = preferredHost;
+      redirectUrl.protocol = 'https:';
+      return NextResponse.redirect(redirectUrl, 308);
+    }
+  }
+
   const { pathname } = request.nextUrl;
   const needsAuthCheck =
     matchesRoute(pathname, protectedRoutes) ||
