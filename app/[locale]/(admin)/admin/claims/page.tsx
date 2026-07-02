@@ -270,6 +270,7 @@ export default async function AdminClaimsPage({
     freshNewCount: 0,
     linkedCount: 0,
     reasonCounts: [],
+    sourceCounts: [],
   };
   let claims: AdminToolClaimWithReason[] = [];
   let loadError: string | null = null;
@@ -333,6 +334,7 @@ export default async function AdminClaimsPage({
   const topSources = Array.from(sourceMap.values())
     .sort((a, b) => b.total - a.total || b.newCount - a.newCount || b.overdueNewCount - a.overdueNewCount)
     .slice(0, 6);
+  const globalTopSources = status === 'all' && reason === 'all' && !search ? summary.sourceCounts : topSources;
   const topReasons = Array.from(reasonMap.values())
     .sort((a, b) => b.total - a.total || b.newCount - a.newCount)
     .slice(0, 6);
@@ -693,8 +695,8 @@ export default async function AdminClaimsPage({
                 routing.
               </p>
               <div className='mt-4 space-y-3'>
-                {topSources.length > 0 ? (
-                  topSources.map((source) => (
+                {globalTopSources.length > 0 ? (
+                  globalTopSources.map((source) => (
                     <div
                       key={source.sourcePath || 'unknown'}
                       className='rounded-xl border border-slate-200 bg-slate-50 p-4'

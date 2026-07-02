@@ -51,6 +51,15 @@ export type AdminToolClaimsSummary = {
     invalidCount: number;
     overdueNewCount: number;
   }[];
+  sourceCounts: {
+    sourcePath: string | null;
+    total: number;
+    newCount: number;
+    contactedCount: number;
+    claimedCount: number;
+    invalidCount: number;
+    overdueNewCount: number;
+  }[];
 };
 
 function normalizeNullableText(value: string | null | undefined): string | null {
@@ -251,7 +260,7 @@ export async function getAdminToolClaimsSummary(): Promise<AdminToolClaimsSummar
     await requireAdmin();
 
     const pool = getPool();
-    const [result, reasonResult] = await Promise.all([
+    const [result, reasonResult, sourceResult] = await Promise.all([
       pool.query(
         `
           SELECT
@@ -281,6 +290,21 @@ export async function getAdminToolClaimsSummary(): Promise<AdminToolClaimsSummar
           ORDER BY total DESC, "overdueNewCount" DESC, "claimReason" ASC NULLS LAST
         `,
       ),
+      pool.query(
+        `
+          SELECT
+            NULLIF(source_path, '') AS "sourcePath",
+            COUNT(*)::int AS total,
+            COUNT(*) FILTER (WHERE status = 'new')::int AS "newCount",
+            COUNT(*) FILTER (WHERE status = 'new' AND created_at <= NOW() - INTERVAL '48 hours')::int AS "overdueNewCount",
+            COUNT(*) FILTER (WHERE status = 'contacted')::int AS "contactedCount",
+            COUNT(*) FILTER (WHERE status = 'claimed')::int AS "claimedCount",
+            COUNT(*) FILTER (WHERE status = 'invalid')::int AS "invalidCount"
+          FROM tool_claims
+          GROUP BY NULLIF(source_path, '')
+          ORDER BY total DESC, "overdueNewCount" DESC, "sourcePath" ASC NULLS LAST
+        `,
+      ),
     ]);
 
     const row = result.rows[0] || {};
@@ -303,6 +327,16 @@ export async function getAdminToolClaimsSummary(): Promise<AdminToolClaimsSummar
         claimedCount: Number(reasonRow.claimedCount || 0),
         invalidCount: Number(reasonRow.invalidCount || 0),
         overdueNewCount: Number(reasonRow.overdueNewCount || 0),
+      })),
+      sourceCounts: sourceResult.rows.map((sourceRow) => ({
+        sourcePath:
+          typeof sourceRow.sourcePath === 'string' && sourceRow.sourcePath.trim() ? sourceRow.sourcePath : null,
+        total: Number(sourceRow.total || 0),
+        newCount: Number(sourceRow.newCount || 0),
+        contactedCount: Number(sourceRow.contactedCount || 0),
+        claimedCount: Number(sourceRow.claimedCount || 0),
+        invalidCount: Number(sourceRow.invalidCount || 0),
+        overdueNewCount: Number(sourceRow.overdueNewCount || 0),
       })),
     };
   } catch (error) {
