@@ -92,6 +92,34 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       desc: isChinese ? '更偏稳定的内容优化。' : 'More focused on consistent content optimization.',
     },
   ];
+  const highIntentPaths = [
+    {
+      href: '/best-ai-tools/ai-seo-tools',
+      title: isChinese ? '先看 SEO 榜单' : 'Start with SEO ranking',
+      desc: isChinese
+        ? '先用 shortlist 缩小候选，再回到对比页。'
+        : 'Use the shortlist first, then return to comparison.',
+    },
+    {
+      href: '/guides/ai-seo-tools-comparison',
+      title: isChinese ? '再看 SEO 对比页' : 'Open SEO comparison',
+      desc: isChinese
+        ? '关键词、内容和排名能力一页收敛。'
+        : 'Narrow keywords, content, and rank tracking in one place.',
+    },
+    {
+      href: '/guides/ai-writing-tools-comparison',
+      title: isChinese ? '写作工具对比' : 'Writing tools comparison',
+      desc: isChinese
+        ? '如果内容生产也是主线，先看这页更顺。'
+        : 'Useful when content production is part of the SEO workflow.',
+    },
+    {
+      href: '/categories/text-writing?sort=popular',
+      title: isChinese ? '进入写作分类' : 'Open writing category',
+      desc: isChinese ? '直接看更接近内容增长工作的真实条目。' : 'Inspect real listings closer to content growth work.',
+    },
+  ];
 
   return (
     <>
@@ -306,6 +334,34 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 key={item.href}
                 href={item.href}
                 className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:border-cyan-200 hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图路径' : 'High-intent paths'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '先走最短路径，再决定要不要继续细比'
+              : 'Take the shortest path first, then decide whether to compare deeper'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经确定自己在做 SEO，这里会把你更快送到榜单、对比页和更接近内容工作的分类页。'
+              : 'If SEO is already the lane, this section gets you faster to the ranking, comparison, and content-adjacent category pages.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {highIntentPaths.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:border-cyan-200 hover:bg-cyan-50/60'
               >
                 <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
                 <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
