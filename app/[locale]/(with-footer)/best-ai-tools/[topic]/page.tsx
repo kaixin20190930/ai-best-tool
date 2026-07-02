@@ -270,6 +270,50 @@ export default async function BestAiToolsTopicPage({
         hint: isChinese ? '适合技术问答和代码检索' : 'Good for technical Q&A and code retrieval',
       },
     ];
+    const observabilityExamples = [
+      {
+        name: 'Langfuse',
+        href: `/${locale}/ai/langfuse`,
+        hint: isChinese ? '适合日志、追踪和质量闭环' : 'Best for logs, traces, and quality loops',
+      },
+      {
+        name: 'Helicone',
+        href: `/${locale}/ai/helicone`,
+        hint: isChinese ? '适合成本可见性和请求分析' : 'Good for cost visibility and request analysis',
+      },
+      {
+        name: 'Portkey',
+        href: `/${locale}/ai/portkey`,
+        hint: isChinese ? '适合网关治理和模型路由' : 'Useful for gateway governance and model routing',
+      },
+      {
+        name: 'LangSmith',
+        href: `/${locale}/ai/langsmith`,
+        hint: isChinese ? '适合回放、评估和调试' : 'Great for replay, evals, and debugging',
+      },
+    ];
+    const seoExamples = [
+      {
+        name: 'Surfer',
+        href: `/${locale}/ai/surfer`,
+        hint: isChinese ? '适合内容优化和 brief 执行' : 'Good for content optimization and brief execution',
+      },
+      {
+        name: 'Frase',
+        href: `/${locale}/ai/frase`,
+        hint: isChinese ? '适合研究到写作的衔接' : 'Useful for research-to-writing workflows',
+      },
+      {
+        name: 'Clearscope',
+        href: `/${locale}/ai/clearscope`,
+        hint: isChinese ? '适合页面优化和稳定迭代' : 'Great for on-page optimization and repeatable iteration',
+      },
+      {
+        name: 'MarketMuse',
+        href: `/${locale}/ai/marketmuse`,
+        hint: isChinese ? '适合主题规划和内容策略' : 'Best for topic planning and content strategy',
+      },
+    ];
 
     return (
       <div className='theme-page mx-auto max-w-pc px-4 py-8 lg:px-0'>
@@ -376,6 +420,46 @@ export default async function BestAiToolsTopicPage({
                   </p>
                   <div className='mt-3 grid gap-3 sm:grid-cols-2'>
                     {codingExamples.map((tool) => (
+                      <Link
+                        key={tool.name}
+                        href={tool.href}
+                        className='rounded-xl border border-white/10 bg-slate-950/30 p-3 transition hover:border-cyan-300/40 hover:bg-slate-950/50'
+                      >
+                        <p className='text-sm font-semibold text-white'>{tool.name}</p>
+                        <p className='mt-1 text-xs leading-5 text-slate-300'>{tool.hint}</p>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {topic.key === 'ai-api-observability-tools' && (
+                <div className='rounded-2xl border border-white/10 bg-white/5 p-4'>
+                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-100/80'>
+                    {isChinese ? '常见可观测入口' : 'Common observability starting points'}
+                  </p>
+                  <div className='mt-3 grid gap-3 sm:grid-cols-2'>
+                    {observabilityExamples.map((tool) => (
+                      <Link
+                        key={tool.name}
+                        href={tool.href}
+                        className='rounded-xl border border-white/10 bg-slate-950/30 p-3 transition hover:border-cyan-300/40 hover:bg-slate-950/50'
+                      >
+                        <p className='text-sm font-semibold text-white'>{tool.name}</p>
+                        <p className='mt-1 text-xs leading-5 text-slate-300'>{tool.hint}</p>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {topic.key === 'ai-seo-tools' && (
+                <div className='rounded-2xl border border-white/10 bg-white/5 p-4'>
+                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-100/80'>
+                    {isChinese ? '常见 SEO 入口' : 'Common SEO starting points'}
+                  </p>
+                  <div className='mt-3 grid gap-3 sm:grid-cols-2'>
+                    {seoExamples.map((tool) => (
                       <Link
                         key={tool.name}
                         href={tool.href}
