@@ -2,13 +2,13 @@ import { Metadata } from 'next';
 import { CheckCircle2, Code2, ExternalLink, Wrench } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
@@ -23,8 +23,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
         : `AI coding tools recommendations | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
-        ? '面向代码补全、调试、生成和工作流自动化的 AI 编程工具选型指南。'
-        : 'A practical guide to AI tools for code completion, debugging, generation, and workflow automation.',
+        ? '面向代码补全、调试、生成和工作流自动化的 AI 编程工具选型指南，先看榜单再进对比。'
+        : 'A practical guide to AI tools for code completion, debugging, generation, and workflow automation, with a path from guide to ranking and comparison.',
   };
 }
 
@@ -68,15 +68,37 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const faqSchema = generateFAQSchema(faqs);
   const tips = isChinese
     ? [
-      '先分清你的任务：补全、重构、调试、生成脚手架，需求差异很大。',
-      '看它是否支持你的语言、编辑器和仓库工作流。',
-      '如果你会长期使用，优先看上下文长度、团队协作和私有仓库支持。',
-    ]
+        '先分清你的任务：补全、重构、调试、生成脚手架，需求差异很大。',
+        '看它是否支持你的语言、编辑器和仓库工作流。',
+        '如果你会长期使用，优先看上下文长度、团队协作和私有仓库支持。',
+      ]
     : [
-      'Start by separating your task: completion, refactoring, debugging, or scaffolding all need different features.',
-      'Check language support, editor support, and repository workflow fit.',
-      'If you plan to use it regularly, pay attention to context length, collaboration, and private repository support.',
-    ];
+        'Start by separating your task: completion, refactoring, debugging, or scaffolding all need different features.',
+        'Check language support, editor support, and repository workflow fit.',
+        'If you plan to use it regularly, pay attention to context length, collaboration, and private repository support.',
+      ];
+  const quickStarts = [
+    {
+      href: '/best-ai-tools/ai-coding-tools',
+      title: isChinese ? '编程榜单' : 'Coding ranking',
+      desc: isChinese ? '先看 editor-native shortlist。' : 'Start with the editor-native shortlist.',
+    },
+    {
+      href: '/guides/ai-coding-tools-comparison',
+      title: isChinese ? '编程对比页' : 'Coding comparison',
+      desc: isChinese ? '编辑器、补全和重构工作流。' : 'Compare editor, completion, and refactoring workflows.',
+    },
+    {
+      href: '/ai/cursor',
+      title: 'Cursor',
+      desc: isChinese ? '适合编辑器内编码和重构。' : 'Great for editor-based coding and refactoring.',
+    },
+    {
+      href: '/ai/github-copilot',
+      title: 'GitHub Copilot',
+      desc: isChinese ? '适合补全、解释和日常编码。' : 'Useful for completion, explanation, and daily coding.',
+    },
+  ];
 
   return (
     <>
@@ -135,6 +157,18 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             >
               {isChinese ? '看编程榜单' : 'Open coding ranking'}
             </TrackableCtaLink>
+          </div>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {quickStarts.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </Link>
+            ))}
           </div>
         </section>
 

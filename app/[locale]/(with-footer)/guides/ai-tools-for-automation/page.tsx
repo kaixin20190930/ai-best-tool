@@ -2,13 +2,13 @@ import { Metadata } from 'next';
 import { Bot, ExternalLink, RefreshCw, Workflow } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Metadata.home' });
@@ -20,8 +20,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
         : `AI tools for automation | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
-        ? '面向工作流编排、Agent 任务、重复流程和跨工具自动化的 AI 工具指南。'
-        : 'A practical guide to AI tools for workflow orchestration, agent tasks, repeatable processes, and cross-tool automation.',
+        ? '面向工作流编排、Agent 任务、重复流程和跨工具自动化的 AI 工具指南，先看榜单再进对比页。'
+        : 'A practical guide to AI tools for workflow orchestration, agent tasks, repeatable processes, and cross-tool automation, with a path from guide to ranking and comparison.',
   };
 }
 
@@ -64,15 +64,37 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-      '先分清你是在做简单触发器、复杂编排，还是 Agent 式后台流程。',
-      '重点看集成范围、触发条件、失败重试和日志能力。',
-      '如果团队会长期维护，优先看可读性、权限和流程可交接性。',
-    ]
+        '先分清你是在做简单触发器、复杂编排，还是 Agent 式后台流程。',
+        '重点看集成范围、触发条件、失败重试和日志能力。',
+        '如果团队会长期维护，优先看可读性、权限和流程可交接性。',
+      ]
     : [
-      'Separate simple triggers, complex orchestration, and agent-style back-office flows before comparing tools.',
-      'Focus on integrations, trigger logic, retries, and logging.',
-      'For long-term team use, prioritize readability, permissions, and handoff-friendly workflows.',
-    ];
+        'Separate simple triggers, complex orchestration, and agent-style back-office flows before comparing tools.',
+        'Focus on integrations, trigger logic, retries, and logging.',
+        'For long-term team use, prioritize readability, permissions, and handoff-friendly workflows.',
+      ];
+  const quickStarts = [
+    {
+      href: '/best-ai-tools/ai-automation-tools',
+      title: isChinese ? '自动化榜单' : 'Automation ranking',
+      desc: isChinese ? '先看 shortlist，再进更细对比。' : 'Start with the shortlist before deeper comparison.',
+    },
+    {
+      href: '/guides/ai-tools-for-automation-comparison',
+      title: isChinese ? '自动化对比页' : 'Automation comparison',
+      desc: isChinese ? '触发器、编排和长期维护。' : 'Triggers, orchestration, and long-term maintenance.',
+    },
+    {
+      href: '/ai/n8n',
+      title: 'n8n',
+      desc: isChinese ? '更适合可视化和自托管。' : 'Good for visual and self-hosted automation.',
+    },
+    {
+      href: '/ai/pipedream',
+      title: 'Pipedream',
+      desc: isChinese ? '适合 API 驱动和开发者工作流。' : 'Useful for API-driven developer workflows.',
+    },
+  ];
 
   return (
     <>
@@ -148,7 +170,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {isChinese ? '高意图路径' : 'High-intent path'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '先看榜单，再进入对比页和真实条目' : 'Start with the ranking, then move into comparison and real listings'}
+            {isChinese
+              ? '先看榜单，再进入对比页和真实条目'
+              : 'Start with the ranking, then move into comparison and real listings'}
           </h2>
           <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
             {isChinese
@@ -165,17 +189,23 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {
                 href: '/guides/ai-tools-for-automation-comparison',
                 title: isChinese ? '自动化工具对比' : 'Automation comparison',
-                desc: isChinese ? '横向看触发、编排和维护。' : 'Compare triggers, orchestration, and maintainability side by side.',
+                desc: isChinese
+                  ? '横向看触发、编排和维护。'
+                  : 'Compare triggers, orchestration, and maintainability side by side.',
               },
               {
                 href: '/guides/ai-tools-for-developers-comparison',
                 title: isChinese ? '开发者工具对比' : 'Developer tools comparison',
-                desc: isChinese ? '如果流程已深入 API 和工程层。' : 'Better when workflows reach APIs and engineering layers.',
+                desc: isChinese
+                  ? '如果流程已深入 API 和工程层。'
+                  : 'Better when workflows reach APIs and engineering layers.',
               },
               {
                 href: '/guides/ai-tools-for-api-observability-comparison',
                 title: isChinese ? 'API 可观测对比' : 'API observability comparison',
-                desc: isChinese ? '如果重点是日志、失败和成本可见性。' : 'Better for logs, failures, and cost visibility.',
+                desc: isChinese
+                  ? '如果重点是日志、失败和成本可见性。'
+                  : 'Better for logs, failures, and cost visibility.',
               },
             ].map((item) => (
               <TrackableCtaLink
@@ -210,6 +240,18 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             >
               {isChinese ? '提交你的工具' : 'Submit your tool'}
             </TrackableCtaLink>
+          </div>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {quickStarts.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </Link>
+            ))}
           </div>
         </section>
 
