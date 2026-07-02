@@ -1,4 +1,5 @@
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
+import { Link } from '@/app/navigation';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
 
@@ -241,8 +242,66 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     ],
   });
 
+  const quickStarts = [
+    {
+      href: '/best-ai-tools/ai-research-tools',
+      title: locale === 'cn' || locale === 'tw' ? '研究榜单' : 'Research ranking',
+      desc:
+        locale === 'cn' || locale === 'tw'
+          ? '先看 shortlist，再回比较页。'
+          : 'Start with the shortlist, then come back to compare.',
+    },
+    {
+      href: '/guides/ai-tools-for-research',
+      title: locale === 'cn' || locale === 'tw' ? '研究指南' : 'Research guide',
+      desc:
+        locale === 'cn' || locale === 'tw'
+          ? '重新确认是发现、核对还是分析。'
+          : 'Re-check whether the job is discovery, verification, or analysis.',
+    },
+    {
+      href: '/ai/perplexity',
+      title: 'Perplexity',
+      desc:
+        locale === 'cn' || locale === 'tw'
+          ? '更适合带来源的起点研究。'
+          : 'A source-friendly starting point for research.',
+    },
+    {
+      href: '/ai/notebooklm',
+      title: 'NotebookLM',
+      desc:
+        locale === 'cn' || locale === 'tw'
+          ? '适合整理已有资料并做问答。'
+          : 'Great for organizing existing materials and asking grounded questions.',
+    },
+  ];
+
   return (
     <>
+      <section className='mx-auto mt-8 max-w-6xl rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:px-8 lg:py-8'>
+        <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+          {locale === 'cn' || locale === 'tw' ? '先看这些入口' : 'Start here'}
+        </p>
+        <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+          {locale === 'cn' || locale === 'tw'
+            ? '从榜单、指南和代表工具开始收窄'
+            : 'Narrow from ranking, guide, and representative tools'}
+        </h2>
+        <div className='mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+          {quickStarts.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:bg-slate-50'
+            >
+              <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       {ComparisonPage({ ...data, locale })}
       <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_research_comparison' />
     </>

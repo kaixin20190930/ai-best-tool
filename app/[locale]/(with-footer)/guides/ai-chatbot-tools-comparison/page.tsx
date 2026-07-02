@@ -99,6 +99,28 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         'If you want to try before paying, focus on free-tier limits and answer reliability.',
         'For long-term use, pay attention to freshness, ratings, and real comments.',
       ];
+  const quickStarts = [
+    {
+      href: '/best-ai-tools/ai-chatbot-tools',
+      title: isChinese ? '聊天榜单' : 'Chatbot ranking',
+      desc: isChinese ? '先看 shortlist，再决定最终候选。' : 'Start with the shortlist before finalizing candidates.',
+    },
+    {
+      href: '/guides/ai-chatbot-tools',
+      title: isChinese ? '聊天指南' : 'Chatbot guide',
+      desc: isChinese ? '重新确认用途和判断顺序。' : 'Re-check use case and selection order.',
+    },
+    {
+      href: '/ai/chatgpt',
+      title: 'ChatGPT',
+      desc: isChinese ? '通用问答和写作入口。' : 'General Q&A and writing entry point.',
+    },
+    {
+      href: '/ai/claude',
+      title: 'Claude',
+      desc: isChinese ? '更适合长文档和协作写作。' : 'Good for long documents and collaborative writing.',
+    },
+  ];
 
   return (
     <>
@@ -204,6 +226,27 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   : 'If the ranking is still too narrow, widen the shortlist in Explore.'}
               </p>
             </Link>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '先看这些入口' : 'Start here'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '从榜单、指南和代表工具开始收窄' : 'Narrow from ranking, guide, and representative tools'}
+          </h2>
+          <div className='mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {quickStarts.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </Link>
+            ))}
           </div>
         </section>
 
