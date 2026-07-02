@@ -45,6 +45,14 @@ export async function generateMetadata({
       description = isChinese
         ? 'AI 自动化工具榜单，覆盖工作流编排、触发器、跨工具连接和可维护的重复流程。'
         : 'AI automation tools ranking for workflow orchestration, triggers, cross-tool connections, and maintainable repeatable processes.';
+    } else if (topic?.key === 'ai-research-tools') {
+      description = isChinese
+        ? 'AI 研究工具榜单，覆盖资料发现、证据核对、快速概览和更深的研究工作流。'
+        : 'AI research tools ranking for discovery, evidence-checking, quick overviews, and deeper analysis workflows.';
+    } else if (topic?.key === 'ai-chatbot-tools') {
+      description = isChinese
+        ? 'AI 聊天机器人榜单，覆盖问答、写作辅助、知识检索和日常协作入口。'
+        : 'AI chatbot tools ranking for Q&A, writing assistance, knowledge retrieval, and daily collaboration entry points.';
     } else if (!description) {
       description = isChinese
         ? '按用途整理的 AI 工具榜单，帮助你更快缩小候选。'
@@ -166,6 +174,50 @@ export default async function BestAiToolsTopicPage({
         hint: isChinese ? '适合 API 驱动和开发者工作流' : 'Good for API-driven and developer workflows',
       },
     ];
+    const researchExamples = [
+      {
+        name: 'Perplexity',
+        href: `/${locale}/ai/perplexity`,
+        hint: isChinese ? '适合快速发现来源和做起点研究' : 'Best for source-friendly discovery and starting research',
+      },
+      {
+        name: 'Elicit',
+        href: `/${locale}/ai/elicit`,
+        hint: isChinese ? '适合证据驱动和文献梳理' : 'Good for evidence-driven literature review',
+      },
+      {
+        name: 'Hugging Face',
+        href: `/${locale}/ai/hugging-face`,
+        hint: isChinese ? '适合模型、数据集和生态探索' : 'Useful for models, datasets, and ecosystem exploration',
+      },
+      {
+        name: 'Papers with Code',
+        href: `/${locale}/ai/papers-with-code`,
+        hint: isChinese ? '适合论文与实现一起看' : 'Best when papers and implementations should be reviewed together',
+      },
+    ];
+    const chatbotExamples = [
+      {
+        name: 'ChatGPT',
+        href: `/${locale}/ai/chatgpt`,
+        hint: isChinese ? '通用问答和写作入口' : 'General Q&A and writing entry point',
+      },
+      {
+        name: 'Claude',
+        href: `/${locale}/ai/claude`,
+        hint: isChinese ? '适合长文档和协作写作' : 'Good for long documents and collaborative writing',
+      },
+      {
+        name: 'Gemini',
+        href: `/${locale}/ai/gemini`,
+        hint: isChinese ? '适合多模态和日常问答' : 'Useful for multimodal and daily Q&A',
+      },
+      {
+        name: 'Perplexity',
+        href: `/${locale}/ai/perplexity`,
+        hint: isChinese ? '适合带来源的检索和研究' : 'Useful for source-backed retrieval and research',
+      },
+    ];
 
     return (
       <div className='theme-page mx-auto max-w-pc px-4 py-8 lg:px-0'>
@@ -192,6 +244,46 @@ export default async function BestAiToolsTopicPage({
                   </p>
                   <div className='mt-3 grid gap-3 sm:grid-cols-2'>
                     {automationExamples.map((tool) => (
+                      <Link
+                        key={tool.name}
+                        href={tool.href}
+                        className='rounded-xl border border-white/10 bg-slate-950/30 p-3 transition hover:border-cyan-300/40 hover:bg-slate-950/50'
+                      >
+                        <p className='text-sm font-semibold text-white'>{tool.name}</p>
+                        <p className='mt-1 text-xs leading-5 text-slate-300'>{tool.hint}</p>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {topic.key === 'ai-research-tools' && (
+                <div className='rounded-2xl border border-white/10 bg-white/5 p-4'>
+                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-100/80'>
+                    {isChinese ? '常见研究入口' : 'Common research starting points'}
+                  </p>
+                  <div className='mt-3 grid gap-3 sm:grid-cols-2'>
+                    {researchExamples.map((tool) => (
+                      <Link
+                        key={tool.name}
+                        href={tool.href}
+                        className='rounded-xl border border-white/10 bg-slate-950/30 p-3 transition hover:border-cyan-300/40 hover:bg-slate-950/50'
+                      >
+                        <p className='text-sm font-semibold text-white'>{tool.name}</p>
+                        <p className='mt-1 text-xs leading-5 text-slate-300'>{tool.hint}</p>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {topic.key === 'ai-chatbot-tools' && (
+                <div className='rounded-2xl border border-white/10 bg-white/5 p-4'>
+                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-100/80'>
+                    {isChinese ? '常见聊天机器人入口' : 'Common chatbot starting points'}
+                  </p>
+                  <div className='mt-3 grid gap-3 sm:grid-cols-2'>
+                    {chatbotExamples.map((tool) => (
                       <Link
                         key={tool.name}
                         href={tool.href}
