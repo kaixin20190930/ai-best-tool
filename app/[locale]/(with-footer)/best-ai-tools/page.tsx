@@ -95,6 +95,15 @@ export default function BestAiToolsPage({ params: { locale } }: { params: { loca
               >
                 {isChinese ? '查看定价' : 'View pricing'}
               </TrackableCtaLink>
+              <TrackableCtaLink
+                href={`/${locale}/developer/listing`}
+                ctaId='best_tools_claim'
+                ctaLabel='Claim listing'
+                pageType='best_ai_tools'
+                className='inline-flex items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 px-5 py-3 text-sm font-semibold text-emerald-800 hover:bg-emerald-100'
+              >
+                {isChinese ? '认领条目' : 'Claim listing'}
+              </TrackableCtaLink>
             </div>
           </div>
 
@@ -173,7 +182,9 @@ export default function BestAiToolsPage({ params: { locale } }: { params: { loca
               <div>
                 <p className='text-sm font-semibold text-slate-950'>{isChinese ? '下一步' : 'Next step'}</p>
                 <p className='mt-1 text-sm text-slate-600'>
-                  {isChinese ? '选一个主题开始比较' : 'Pick a topic and start comparing'}
+                  {isChinese
+                    ? '选一个主题开始比较，或者直接进入认领 / 提交路径。'
+                    : 'Pick a topic, or go straight to claim or submit.'}
                 </p>
               </div>
               <Star className='size-5 text-amber-500' />
