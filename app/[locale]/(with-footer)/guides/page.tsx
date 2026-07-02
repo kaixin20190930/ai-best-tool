@@ -1465,6 +1465,27 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   ? '更适合 CRM、营销自动化和流程编排。'
                   : 'Better for CRM, marketing automation, and workflow orchestration.',
               },
+              {
+                href: '/guides/ai-tools-for-customer-support-comparison',
+                title: isChinese ? '客服工具对比' : 'Customer support tools comparison',
+                desc: isChinese
+                  ? '更适合工单、知识库和客服分流。'
+                  : 'Better for tickets, knowledge bases, and support triage.',
+              },
+              {
+                href: '/guides/ai-tools-for-sales-prospecting-comparison',
+                title: isChinese ? '销售拓客工具对比' : 'Sales prospecting tools comparison',
+                desc: isChinese
+                  ? '更适合外联、线索筛选和销售工作流。'
+                  : 'Better for outreach, lead qualification, and sales workflows.',
+              },
+              {
+                href: '/guides/ai-tools-for-lead-generation-comparison',
+                title: isChinese ? '获客工具对比' : 'Lead generation tools comparison',
+                desc: isChinese
+                  ? '更适合线索捕获、转化和自动化流转。'
+                  : 'Better for lead capture, conversion, and automated routing.',
+              },
             ].map((item) => (
               <TrackableCtaLink
                 key={item.href}
