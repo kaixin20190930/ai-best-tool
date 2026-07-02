@@ -31,7 +31,17 @@ interface SubmitToolResult {
 function normalizeUrl(url: string): string {
   const trimmed = url.trim();
   const withProtocol = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
-  const parsed = new URL(withProtocol);
+  const parsed = (() => {
+    try {
+      return new URL(withProtocol);
+    } catch {
+      return null;
+    }
+  })();
+
+  if (!parsed) {
+    throw new TypeError('Invalid URL');
+  }
 
   return parsed.toString();
 }
@@ -128,7 +138,13 @@ export async function submitTool(input: SubmitToolInput): Promise<SubmitToolResu
     const imageUrl = normalizeOptionalUrl(input.imageUrl);
     const thumbnailUrl = normalizeOptionalUrl(input.thumbnailUrl);
     const tags = normalizeTags(input.tags);
-    const urlHost = new URL(url).hostname.replace(/^www\./, '');
+    const urlHost = (() => {
+      try {
+        return new URL(url).hostname.replace(/^www\./, '');
+      } catch {
+        return '';
+      }
+    })();
     const slug = await createUniqueToolSlug(website || urlHost);
     const title = { en: website, zh: website };
     const content = {

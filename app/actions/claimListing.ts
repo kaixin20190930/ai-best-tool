@@ -44,6 +44,15 @@ function isValidUrl(value: string): boolean {
   }
 }
 
+function getUrlHostname(value: string): string {
+  try {
+    const withProtocol = /^https?:\/\//i.test(value) ? value : `https://${value}`;
+    return new URL(withProtocol).hostname.replace(/^www\./, '');
+  } catch {
+    return '';
+  }
+}
+
 function escapeHtml(value: string): string {
   return value
     .replace(/&/g, '&amp;')
@@ -73,6 +82,8 @@ export async function submitClaimListing(input: ClaimListingInput): Promise<Clai
     if (website && !isValidUrl(website)) {
       return { success: false, error: 'Please enter a valid website URL.' };
     }
+
+    const websiteHostname = website ? getUrlHostname(website) : '';
 
     const headersList = await headers();
     const userAgent = headersList.get('user-agent') || '';
@@ -154,6 +165,7 @@ export async function submitClaimListing(input: ClaimListingInput): Promise<Clai
         `- Listing: ${listingName}`,
         `- Company: ${company || '-'}`,
         `- Website: ${website || '-'}`,
+        `- Website host: ${websiteHostname || '-'}`,
         `- Claim reason: ${claimReason || '-'}`,
         `- Source path: ${sourcePath || '-'}`,
         `- Source locale: ${sourceLocale || '-'}`,
@@ -166,6 +178,7 @@ export async function submitClaimListing(input: ClaimListingInput): Promise<Clai
           <li><strong>Listing:</strong> ${escapeHtml(listingName)}</li>
           <li><strong>Company:</strong> ${company ? escapeHtml(company) : '-'}</li>
           <li><strong>Website:</strong> ${website ? escapeHtml(website) : '-'}</li>
+          <li><strong>Website host:</strong> ${websiteHostname ? escapeHtml(websiteHostname) : '-'}</li>
           <li><strong>Claim reason:</strong> ${claimReason ? escapeHtml(claimReason) : '-'}</li>
           <li><strong>Source path:</strong> ${sourcePath ? escapeHtml(sourcePath) : '-'}</li>
           <li><strong>Source locale:</strong> ${sourceLocale ? escapeHtml(sourceLocale) : '-'}</li>
@@ -183,6 +196,7 @@ export async function submitClaimListing(input: ClaimListingInput): Promise<Clai
           `Email: ${email}`,
           `Company: ${company || '-'}`,
           `Website: ${website || '-'}`,
+          `Website host: ${websiteHostname || '-'}`,
           `Claim reason: ${claimReason || '-'}`,
           `Source path: ${sourcePath || '-'}`,
           `Source locale: ${sourceLocale || '-'}`,
@@ -193,6 +207,7 @@ export async function submitClaimListing(input: ClaimListingInput): Promise<Clai
           <p><strong>Email:</strong> ${email}</p>
           <p><strong>Company:</strong> ${company || '-'}</p>
           <p><strong>Website:</strong> ${website || '-'}</p>
+          <p><strong>Website host:</strong> ${websiteHostname || '-'}</p>
           <p><strong>Claim reason:</strong> ${claimReason || '-'}</p>
           <p><strong>Source path:</strong> ${sourcePath || '-'}</p>
           <p><strong>Source locale:</strong> ${sourceLocale || '-'}</p>
