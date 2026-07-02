@@ -53,6 +53,14 @@ export async function generateMetadata({
       description = isChinese
         ? 'AI 聊天机器人榜单，覆盖问答、写作辅助、知识检索和日常协作入口。'
         : 'AI chatbot tools ranking for Q&A, writing assistance, knowledge retrieval, and daily collaboration entry points.';
+    } else if (topic?.key === 'ai-web3-tools') {
+      description = isChinese
+        ? 'AI Web3 工具榜单，覆盖链上数据、钱包监控、协议研究、告警和 Crypto 工作流。'
+        : 'AI Web3 tools ranking for on-chain data, wallet monitoring, protocol research, alerts, and crypto workflows.';
+    } else if (topic?.key === 'ai-coding-tools') {
+      description = isChinese
+        ? 'AI 编程工具榜单，覆盖编码辅助、调试、重构、编辑器体验和开发工作流。'
+        : 'AI coding tools ranking for coding assistance, debugging, refactoring, editor experience, and development workflows.';
     } else if (!description) {
       description = isChinese
         ? '按用途整理的 AI 工具榜单，帮助你更快缩小候选。'
@@ -218,6 +226,50 @@ export default async function BestAiToolsTopicPage({
         hint: isChinese ? '适合带来源的检索和研究' : 'Useful for source-backed retrieval and research',
       },
     ];
+    const web3Examples = [
+      {
+        name: 'DefiLlama',
+        href: `/${locale}/ai/defillama`,
+        hint: isChinese ? '适合协议和市场覆盖' : 'Best for protocol and market coverage',
+      },
+      {
+        name: 'Dune',
+        href: `/${locale}/ai/dune`,
+        hint: isChinese ? '适合查询驱动的链上分析' : 'Good for query-driven on-chain analysis',
+      },
+      {
+        name: 'Nansen',
+        href: `/${locale}/ai/nansen`,
+        hint: isChinese ? '适合地址和资金流研究' : 'Useful for wallet and flow intelligence',
+      },
+      {
+        name: 'The Graph',
+        href: `/${locale}/ai/the-graph`,
+        hint: isChinese ? '适合数据基础设施和检索层' : 'Best for data infrastructure and query layers',
+      },
+    ];
+    const codingExamples = [
+      {
+        name: 'Cursor',
+        href: `/${locale}/ai/cursor`,
+        hint: isChinese ? '适合编辑器内编码和重构' : 'Great for editor-based coding and refactoring',
+      },
+      {
+        name: 'Bolt.new',
+        href: `/${locale}/ai/bolt-new`,
+        hint: isChinese ? '适合快速原型和浏览器内构建' : 'Useful for rapid prototyping in the browser',
+      },
+      {
+        name: 'GitHub Copilot',
+        href: `/${locale}/ai/github-copilot`,
+        hint: isChinese ? '适合补全、解释和日常编码' : 'Useful for completion, explanation, and daily coding',
+      },
+      {
+        name: 'Phind',
+        href: `/${locale}/ai/phind`,
+        hint: isChinese ? '适合技术问答和代码检索' : 'Good for technical Q&A and code retrieval',
+      },
+    ];
 
     return (
       <div className='theme-page mx-auto max-w-pc px-4 py-8 lg:px-0'>
@@ -284,6 +336,46 @@ export default async function BestAiToolsTopicPage({
                   </p>
                   <div className='mt-3 grid gap-3 sm:grid-cols-2'>
                     {chatbotExamples.map((tool) => (
+                      <Link
+                        key={tool.name}
+                        href={tool.href}
+                        className='rounded-xl border border-white/10 bg-slate-950/30 p-3 transition hover:border-cyan-300/40 hover:bg-slate-950/50'
+                      >
+                        <p className='text-sm font-semibold text-white'>{tool.name}</p>
+                        <p className='mt-1 text-xs leading-5 text-slate-300'>{tool.hint}</p>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {topic.key === 'ai-web3-tools' && (
+                <div className='rounded-2xl border border-white/10 bg-white/5 p-4'>
+                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-100/80'>
+                    {isChinese ? '常见 Web3 入口' : 'Common Web3 starting points'}
+                  </p>
+                  <div className='mt-3 grid gap-3 sm:grid-cols-2'>
+                    {web3Examples.map((tool) => (
+                      <Link
+                        key={tool.name}
+                        href={tool.href}
+                        className='rounded-xl border border-white/10 bg-slate-950/30 p-3 transition hover:border-cyan-300/40 hover:bg-slate-950/50'
+                      >
+                        <p className='text-sm font-semibold text-white'>{tool.name}</p>
+                        <p className='mt-1 text-xs leading-5 text-slate-300'>{tool.hint}</p>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {topic.key === 'ai-coding-tools' && (
+                <div className='rounded-2xl border border-white/10 bg-white/5 p-4'>
+                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-100/80'>
+                    {isChinese ? '常见编程入口' : 'Common coding starting points'}
+                  </p>
+                  <div className='mt-3 grid gap-3 sm:grid-cols-2'>
+                    {codingExamples.map((tool) => (
                       <Link
                         key={tool.name}
                         href={tool.href}
