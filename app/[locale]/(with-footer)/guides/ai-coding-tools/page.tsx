@@ -297,6 +297,84 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           ]}
         />
 
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先用榜单缩小 coding shortlist' : 'Use the ranking to narrow your coding shortlist first'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己主要在找代码补全、重构或调试助手，榜单页会比泛目录更快进入决策。'
+              : 'If you already know you need completion, refactoring, or debugging help, the ranking page gets to a decision faster than a broad directory.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-coding-tools',
+                title: isChinese ? '编程榜单' : 'Coding ranking',
+                desc: isChinese
+                  ? '先从 editor-native shortlist 开始。'
+                  : 'Start with the editor-native shortlist first.',
+              },
+              {
+                href: '/guides/ai-coding-tools-comparison',
+                title: isChinese ? '编程对比页' : 'Coding comparison',
+                desc: isChinese
+                  ? '横向看补全、重构和调试。'
+                  : 'Compare completion, refactoring, and debugging side by side.',
+              },
+              {
+                href: '/categories/developer-tools?sort=popular',
+                title: isChinese ? 'Developer Tools 分类' : 'Developer Tools category',
+                desc: isChinese
+                  ? '先看真实条目再收窄 shortlist。'
+                  : 'Browse real listings before narrowing the shortlist.',
+              },
+              {
+                href: '/guides/ai-tools-for-developers-comparison',
+                title: isChinese ? '开发者工具对比' : 'Developer tools comparison',
+                desc: isChinese
+                  ? '如果你的范围已扩到 API 和工作流层。'
+                  : 'A better fit if the scope includes API and workflow layers.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`coding_guide_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+          <div className='mt-5 flex flex-wrap gap-3'>
+            <TrackableCtaLink
+              href='/best-ai-tools/ai-coding-tools'
+              ctaId='coding_guide_top_list_secondary'
+              ctaLabel='Coding guide top list secondary'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+            >
+              {isChinese ? '进入编程榜单' : 'Open the coding ranking'}
+            </TrackableCtaLink>
+            <TrackableCtaLink
+              href='/submit'
+              ctaId='coding_guide_submit'
+              ctaLabel='Coding guide submit'
+              pageType='guide'
+              className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
+            >
+              {isChinese ? '提交你的工具' : 'Submit your tool'}
+            </TrackableCtaLink>
+          </div>
+        </section>
+
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
             <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
