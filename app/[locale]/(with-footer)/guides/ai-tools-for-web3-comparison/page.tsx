@@ -7,8 +7,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     locale,
     locale === 'cn' || locale === 'tw' ? 'AI Web3 工具对比' : 'AI tools for Web3 comparison',
     locale === 'cn' || locale === 'tw'
-      ? '对比几款常见的 Web3 AI 工具，帮你更快选出适合链上工作流的一个。'
-      : 'Compare common Web3 AI tools to choose the one that fits your on-chain workflow best.',
+      ? '对比几款常见的 Web3 AI 工具，先从指南和榜单收窄，再选出适合链上工作流的一个。'
+      : 'Compare common Web3 AI tools, narrowing from guide and ranking first, to choose the one that fits your on-chain workflow best.',
   );
 }
 
@@ -17,8 +17,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     categoryLabel: { cn: 'Web3 工具', en: 'Web3 tools' },
     comparisonLabel: { cn: 'AI Web3 工具对比', en: 'AI tools for Web3 comparison' },
     description: {
-      cn: '如果你已经知道自己要做链上分析、钱包工作流或 Crypto 研究，这一页会帮你把几款常见工具放在一起看。',
-      en: 'If you already know you need on-chain analysis, wallet workflows, or crypto research, this page helps you compare a few common tools side by side.',
+      cn: '如果你已经知道自己要做链上分析、钱包工作流或 Crypto 研究，这一页会帮你把几款常见工具放在一起看，并回到榜单和指南。',
+      en: 'If you already know you need on-chain analysis, wallet workflows, or crypto research, this page helps you compare a few common tools side by side and routes you back to the guide and ranking.',
     },
     searchQuery: 'web3',
     guideHref: '/guides/ai-tools-for-web3',
@@ -35,8 +35,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       {
         title: { cn: '链覆盖与数据源', en: 'Chain coverage and data sources' },
         description: {
-          cn: '先看它支持哪些链、数据源够不够深，以及能不能覆盖你真正关心的协议或地址。',
-          en: 'Check which chains it supports, how deep the data sources go, and whether it covers the protocols or addresses you care about.',
+          cn: '先看它支持哪些链、数据源够不够深，以及能不能覆盖你真正关心的协议或地址。看完后再回到榜单对照。',
+          en: 'Check which chains it supports, how deep the data sources go, and whether it covers the protocols or addresses you care about, then return to the ranking to compare fit.',
         },
       },
       {
@@ -145,8 +145,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         href: '/guides/ai-tools-for-wallet-monitoring-comparison',
         title: { cn: '转去钱包监控对比', en: 'Go to wallet monitoring comparison' },
         description: {
-          cn: '如果你关心的是大户、地址风险和异动提醒，就继续走这条路。',
-          en: 'Continue here if whales, wallet risk, and anomaly alerts are the real priority.',
+          cn: '如果你关心的是大户、地址风险和异动提醒，就继续走这条路，再回榜单收口。',
+          en: 'Continue here if whales, wallet risk, and anomaly alerts are the real priority, then return to the ranking to narrow down again.',
         },
       },
     ],

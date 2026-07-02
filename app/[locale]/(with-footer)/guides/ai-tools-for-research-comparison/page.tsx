@@ -7,8 +7,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     locale,
     locale === 'cn' || locale === 'tw' ? 'AI 研究工具对比' : 'AI tools for research comparison',
     locale === 'cn' || locale === 'tw'
-      ? '对比几款常见的 AI 研究工具，帮你更快选出适合资料发现、证据核对和分析工作流的一个。'
-      : 'Compare common AI research tools to choose the one that fits discovery, evidence-checking, and analysis workflows best.',
+      ? '对比几款常见的 AI 研究工具，先从指南和榜单收窄，再选出适合资料发现、证据核对和分析工作流的一个。'
+      : 'Compare common AI research tools, narrowing from guide and ranking first, to choose the one that fits discovery, evidence-checking, and analysis workflows best.',
   );
 }
 
@@ -17,8 +17,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     categoryLabel: { cn: '研究工具', en: 'Research tools' },
     comparisonLabel: { cn: 'AI 研究工具对比', en: 'AI tools for research comparison' },
     description: {
-      cn: '如果你已经知道自己要做资料发现、信息核对或竞品研究，这一页会帮你把几款常见工具放在一起看。',
-      en: 'If you already know you need discovery, evidence-checking, or competitor research, this page helps you compare a few common tools side by side.',
+      cn: '如果你已经知道自己要做资料发现、信息核对或竞品研究，这一页会帮你把几款常见工具放在一起看，并回到榜单和指南。',
+      en: 'If you already know you need discovery, evidence-checking, or competitor research, this page helps you compare a few common tools side by side and routes you back to the guide and ranking.',
     },
     searchQuery: 'research',
     guideHref: '/guides/ai-tools-for-research',
@@ -35,8 +35,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       {
         title: { cn: '检索广度', en: 'Retrieval breadth' },
         description: {
-          cn: '先看它能不能快速把相关主题、来源和上下文打开，而不只是给你一个答案。',
-          en: 'Check whether it can quickly surface relevant themes, sources, and context rather than just one answer.',
+          cn: '先看它能不能快速把相关主题、来源和上下文打开，而不只是给你一个答案。看完后再回到榜单对照。',
+          en: 'Check whether it can quickly surface relevant themes, sources, and context rather than just one answer, then return to the ranking to compare fit.',
         },
       },
       {
@@ -148,8 +148,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         href: '/categories/research?sort=popular',
         title: { cn: '回到 Research 分类', en: 'Return to the research category' },
         description: {
-          cn: '当你想扩大 shortlist 并回看更多真实条目时，直接回分类页。',
-          en: 'Go back to the category when you want a wider shortlist of real listings.',
+          cn: '当你想扩大 shortlist 并回看更多真实条目时，直接回分类页，再回榜单收口。',
+          en: 'Go back to the category when you want a wider shortlist of real listings, then return to the ranking to narrow down again.',
         },
       },
     ],
