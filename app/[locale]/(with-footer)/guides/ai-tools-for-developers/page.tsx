@@ -2,12 +2,12 @@ import { Metadata } from 'next';
 import { ArrowRight, Code2, ExternalLink, Layers3, Workflow } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Metadata.home' });
@@ -19,8 +19,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
         : `AI tools for developers | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
-        ? '面向编码、模型接入、API 工作流、调试和自动化的 AI 开发者工具指南。'
-        : 'A practical guide to AI tools for developers, including coding, model access, APIs, debugging, and automation.',
+        ? '面向编码、模型接入、API 工作流、调试和自动化的 AI 开发者工具指南，先看榜单再进对比。'
+        : 'A practical guide to AI tools for developers, including coding, model access, APIs, debugging, and automation, with a path from guide to ranking and comparison.',
   };
 }
 
@@ -61,15 +61,37 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-      '先分清你是在找编码辅助、模型接入，还是自动化和基础设施能力。',
-      '优先看是否适配现有编辑器、仓库、API 和部署方式。',
-      '如果是团队长期使用，重点看权限、可观测性和集成维护成本。',
-    ]
+        '先分清你是在找编码辅助、模型接入，还是自动化和基础设施能力。',
+        '优先看是否适配现有编辑器、仓库、API 和部署方式。',
+        '如果是团队长期使用，重点看权限、可观测性和集成维护成本。',
+      ]
     : [
-      'Separate coding, model access, automation, and infrastructure needs before comparing tools.',
-      'Check fit with your editor, repository, API surface, and deployment path.',
-      'For team use, focus on permissions, observability, and integration maintenance cost.',
-    ];
+        'Separate coding, model access, automation, and infrastructure needs before comparing tools.',
+        'Check fit with your editor, repository, API surface, and deployment path.',
+        'For team use, focus on permissions, observability, and integration maintenance cost.',
+      ];
+  const quickStarts = [
+    {
+      href: '/best-ai-tools/ai-coding-tools',
+      title: isChinese ? '编程榜单' : 'Coding ranking',
+      desc: isChinese ? '先看 editor-native shortlist。' : 'Start with the editor-native shortlist.',
+    },
+    {
+      href: '/guides/ai-tools-for-developers-comparison',
+      title: isChinese ? '开发者对比页' : 'Developer comparison',
+      desc: isChinese ? '模型、API、执行层一起看。' : 'Compare model, API, and execution layers.',
+    },
+    {
+      href: '/ai/cursor',
+      title: 'Cursor',
+      desc: isChinese ? '适合编辑器内编码和重构。' : 'Great for editor-based coding and refactoring.',
+    },
+    {
+      href: '/ai/github-copilot',
+      title: 'GitHub Copilot',
+      desc: isChinese ? '适合补全、解释和日常编码。' : 'Useful for completion, explanation, and daily coding.',
+    },
+  ];
 
   return (
     <>
@@ -146,6 +168,18 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             >
               {isChinese ? '看开发者相关榜单' : 'Open developer rankings'}
             </TrackableCtaLink>
+          </div>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {quickStarts.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </Link>
+            ))}
           </div>
         </section>
 
@@ -271,7 +305,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {isChinese ? '高意图榜单' : 'High-intent rankings'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '方向已明确时，直接进更窄的榜单页' : 'When the lane is clear, jump straight into the narrower ranking pages'}
+            {isChinese
+              ? '方向已明确时，直接进更窄的榜单页'
+              : 'When the lane is clear, jump straight into the narrower ranking pages'}
           </h2>
           <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
             {isChinese
@@ -288,7 +324,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {
                 href: '/best-ai-tools/ai-code-review-tools',
                 title: isChinese ? '代码审查榜单' : 'Code review ranking',
-                desc: isChinese ? 'PR 理解、风险提示和 review 反馈。' : 'PR understanding, risk checks, and review feedback.',
+                desc: isChinese
+                  ? 'PR 理解、风险提示和 review 反馈。'
+                  : 'PR understanding, risk checks, and review feedback.',
               },
               {
                 href: '/best-ai-tools/ai-api-observability-tools',
@@ -303,17 +341,23 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {
                 href: '/best-ai-tools/ai-prompt-testing-tools',
                 title: isChinese ? 'Prompt 测试榜单' : 'Prompt testing ranking',
-                desc: isChinese ? '版本对比、A/B 测试和回归检查。' : 'Version comparison, A/B tests, and regression checks.',
+                desc: isChinese
+                  ? '版本对比、A/B 测试和回归检查。'
+                  : 'Version comparison, A/B tests, and regression checks.',
               },
               {
                 href: '/best-ai-tools/ai-evals-tools',
                 title: isChinese ? 'Evals 榜单' : 'Evals ranking',
-                desc: isChinese ? '输出评分、数据集验证和上线验收。' : 'Output scoring, dataset validation, and release acceptance.',
+                desc: isChinese
+                  ? '输出评分、数据集验证和上线验收。'
+                  : 'Output scoring, dataset validation, and release acceptance.',
               },
               {
                 href: '/best-ai-tools/ai-agent-tools',
                 title: isChinese ? 'Agent 榜单' : 'Agent ranking',
-                desc: isChinese ? '工具调用、执行循环和自动化控制。' : 'Tool use, execution loops, and automation control.',
+                desc: isChinese
+                  ? '工具调用、执行循环和自动化控制。'
+                  : 'Tool use, execution loops, and automation control.',
               },
             ].map((item) => (
               <TrackableCtaLink

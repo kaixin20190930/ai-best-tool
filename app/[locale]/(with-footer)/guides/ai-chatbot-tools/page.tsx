@@ -2,12 +2,12 @@ import { Metadata } from 'next';
 import { ArrowRight, CheckCircle2, ExternalLink, MessageSquare, Users } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
@@ -22,8 +22,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
         : `AI chatbot tools recommendations | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
-        ? '面向问答、写作、知识检索和工作协作的 AI 聊天机器人选型指南。'
-        : 'A practical guide to AI chatbots for Q&A, writing, knowledge retrieval, and collaboration.',
+        ? '面向问答、写作、知识检索和工作协作的 AI 聊天机器人选型指南，先看榜单再看对比。'
+        : 'A practical guide to AI chatbots for Q&A, writing, knowledge retrieval, and collaboration, with a path from guide to ranking and comparison.',
   };
 }
 
@@ -74,6 +74,28 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     'For teams, prioritize permissions, collaboration, and knowledge management.',
   ];
   const tips = isChinese ? chineseTips : englishTips;
+  const quickStarts = [
+    {
+      href: '/best-ai-tools/ai-chatbot-tools',
+      title: isChinese ? '聊天机器人榜单' : 'Chatbot ranking',
+      desc: isChinese ? '先看 shortlist，再看具体产品。' : 'Start with the shortlist before product pages.',
+    },
+    {
+      href: '/guides/ai-chatbot-tools-comparison',
+      title: isChinese ? '聊天机器人对比页' : 'Chatbot comparison',
+      desc: isChinese ? '先比回答、知识和协作。' : 'Compare answers, knowledge, and collaboration.',
+    },
+    {
+      href: '/ai/chatgpt',
+      title: 'ChatGPT',
+      desc: isChinese ? '通用问答和写作入口。' : 'General Q&A and writing entry point.',
+    },
+    {
+      href: '/ai/claude',
+      title: 'Claude',
+      desc: isChinese ? '更适合长文档和协作写作。' : 'Good for long documents and collaborative writing.',
+    },
+  ];
 
   return (
     <>
@@ -149,7 +171,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {isChinese ? '高意图路径' : 'High-intent path'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '先看榜单，再进入对比页和真实条目' : 'Start with the ranking, then move into comparison and real listings'}
+            {isChinese
+              ? '先看榜单，再进入对比页和真实条目'
+              : 'Start with the ranking, then move into comparison and real listings'}
           </h2>
           <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
             {isChinese
@@ -166,17 +190,23 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {
                 href: '/guides/ai-chatbot-tools-comparison',
                 title: isChinese ? '聊天机器人对比' : 'Chatbot comparison',
-                desc: isChinese ? '横向看回答、知识和协作。' : 'Compare answers, knowledge, and collaboration side by side.',
+                desc: isChinese
+                  ? '横向看回答、知识和协作。'
+                  : 'Compare answers, knowledge, and collaboration side by side.',
               },
               {
                 href: '/guides/ai-writing-tools-comparison',
                 title: isChinese ? '写作工具对比' : 'Writing tools comparison',
-                desc: isChinese ? '如果重点偏写作产出，这里更贴近。' : 'Better if the real job is drafting and content output.',
+                desc: isChinese
+                  ? '如果重点偏写作产出，这里更贴近。'
+                  : 'Better if the real job is drafting and content output.',
               },
               {
                 href: '/guides/ai-tools-for-research-comparison',
                 title: isChinese ? '研究工具对比' : 'Research tools comparison',
-                desc: isChinese ? '如果重点偏资料检索和核对，这里更贴近。' : 'Better for discovery, retrieval, and validation workflows.',
+                desc: isChinese
+                  ? '如果重点偏资料检索和核对，这里更贴近。'
+                  : 'Better for discovery, retrieval, and validation workflows.',
               },
             ].map((item) => (
               <TrackableCtaLink
@@ -211,6 +241,18 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             >
               {isChinese ? '提交你的工具' : 'Submit your tool'}
             </TrackableCtaLink>
+          </div>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {quickStarts.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </Link>
+            ))}
           </div>
         </section>
 

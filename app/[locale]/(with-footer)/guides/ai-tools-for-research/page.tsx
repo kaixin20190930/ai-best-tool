@@ -2,12 +2,12 @@ import { Metadata } from 'next';
 import { ArrowRight, ExternalLink, FileSearch, Search, ShieldCheck } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Metadata.home' });
@@ -17,8 +17,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw' ? 'AI 研究工具推荐 | AI Best Tool' : `AI tools for research | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
-        ? '面向资料检索、信息核对、证据整理和研究工作流的 AI 工具指南。'
-        : 'A practical guide to AI tools for research, evidence-checking, analysis, and information discovery.',
+        ? '面向资料检索、信息核对、证据整理和研究工作流的 AI 工具指南，先看榜单再进对比页。'
+        : 'A practical guide to AI tools for research, evidence-checking, analysis, and information discovery, with a path from guide to ranking and comparison.',
   };
 }
 
@@ -59,15 +59,37 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-      '先分清你是做资料发现、证据核对，还是深度分析。',
-      '优先看来源是否透明、信息是否能回溯，而不只是回答是否“像真的”。',
-      '如果你会反复做研究，重点看收藏、导出、历史记录和后续整理能力。',
-    ]
+        '先分清你是做资料发现、证据核对，还是深度分析。',
+        '优先看来源是否透明、信息是否能回溯，而不只是回答是否“像真的”。',
+        '如果你会反复做研究，重点看收藏、导出、历史记录和后续整理能力。',
+      ]
     : [
-      'Separate discovery, evidence-checking, and deeper analysis before comparing tools.',
-      'Prioritize source transparency and traceability, not only whether the answer sounds convincing.',
-      'If research is repeatable work, focus on exports, saved history, and downstream organization.',
-    ];
+        'Separate discovery, evidence-checking, and deeper analysis before comparing tools.',
+        'Prioritize source transparency and traceability, not only whether the answer sounds convincing.',
+        'If research is repeatable work, focus on exports, saved history, and downstream organization.',
+      ];
+  const quickStarts = [
+    {
+      href: '/best-ai-tools/ai-research-tools',
+      title: isChinese ? '研究榜单' : 'Research ranking',
+      desc: isChinese ? '先看 shortlist，再决定要不要深比。' : 'Start with the shortlist before comparing deeper.',
+    },
+    {
+      href: '/guides/ai-tools-for-research-comparison',
+      title: isChinese ? '研究对比页' : 'Research comparison',
+      desc: isChinese ? '资料发现、来源和证据核对。' : 'Discovery, sources, and evidence-checking.',
+    },
+    {
+      href: '/ai/perplexity',
+      title: 'Perplexity',
+      desc: isChinese ? '更适合带来源的起点研究。' : 'A source-friendly starting point for research.',
+    },
+    {
+      href: '/ai/elicit',
+      title: 'Elicit',
+      desc: isChinese ? '更适合证据驱动和文献梳理。' : 'Good for evidence-driven literature review.',
+    },
+  ];
 
   return (
     <>
@@ -214,6 +236,18 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             >
               {isChinese ? '认领条目' : 'Claim listing'}
             </TrackableCtaLink>
+          </div>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {quickStarts.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </Link>
+            ))}
           </div>
         </section>
 

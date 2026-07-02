@@ -2,13 +2,13 @@ import { Metadata } from 'next';
 import { CircleDollarSign, ExternalLink, Globe, Layers3 } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Metadata.home' });
@@ -17,8 +17,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     title: locale === 'cn' || locale === 'tw' ? 'AI Web3 工具推荐 | AI Best Tool' : `AI tools for Web3 | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
-        ? '面向 Web3、链上数据、钱包和 Crypto 工作流的 AI 工具选型指南。'
-        : 'A practical guide to AI tools for Web3, on-chain data, wallets, and crypto workflows.',
+        ? '面向 Web3、链上数据、钱包和 Crypto 工作流的 AI 工具选型指南，先看榜单再进对比页。'
+        : 'A practical guide to AI tools for Web3, on-chain data, wallets, and crypto workflows, with a path from guide to ranking and comparison.',
   };
 }
 
@@ -54,15 +54,37 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-      '先分清你需要的是链上分析、钱包、数据 API 还是自动化工作流。',
-      '看它有没有稳定的数据源和足够清楚的定价。',
-      '如果要给团队使用，优先看 API、导出和历史查询能力。',
-    ]
+        '先分清你需要的是链上分析、钱包、数据 API 还是自动化工作流。',
+        '看它有没有稳定的数据源和足够清楚的定价。',
+        '如果要给团队使用，优先看 API、导出和历史查询能力。',
+      ]
     : [
-      'Separate the need first: on-chain analytics, wallets, data APIs, or automation workflows.',
-      'Check whether it has stable data sources and clear pricing.',
-      'For team use, prioritize API access, exports, and historical queries.',
-    ];
+        'Separate the need first: on-chain analytics, wallets, data APIs, or automation workflows.',
+        'Check whether it has stable data sources and clear pricing.',
+        'For team use, prioritize API access, exports, and historical queries.',
+      ];
+  const quickStarts = [
+    {
+      href: '/best-ai-tools/ai-web3-tools',
+      title: isChinese ? 'Web3 榜单' : 'Web3 ranking',
+      desc: isChinese ? '先看 shortlist，再进更细对比。' : 'Start with the shortlist before deeper comparison.',
+    },
+    {
+      href: '/guides/ai-tools-for-web3-comparison',
+      title: isChinese ? 'Web3 对比页' : 'Web3 comparison',
+      desc: isChinese ? '链上数据、钱包和协议能力。' : 'On-chain data, wallets, and protocol capabilities.',
+    },
+    {
+      href: '/ai/defillama',
+      title: 'DefiLlama',
+      desc: isChinese ? '适合协议和市场覆盖。' : 'Good for protocol and market coverage.',
+    },
+    {
+      href: '/ai/dune',
+      title: 'Dune',
+      desc: isChinese ? '适合查询驱动的链上分析。' : 'Useful for query-driven on-chain analysis.',
+    },
+  ];
 
   return (
     <>
@@ -137,6 +159,18 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {isChinese ? '看 Web3 对比页' : 'Web3 comparison'}
             </TrackableCtaLink>
           </div>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {quickStarts.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </Link>
+            ))}
+          </div>
         </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
@@ -195,7 +229,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {isChinese ? '高意图入口' : 'High-intent path'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '如果你已经确认要找 Web3 工具，先走榜单再进对比' : 'If Web3 is already the lane, open the ranking before the comparison'}
+            {isChinese
+              ? '如果你已经确认要找 Web3 工具，先走榜单再进对比'
+              : 'If Web3 is already the lane, open the ranking before the comparison'}
           </h2>
           <div className='mt-4 grid gap-3 md:grid-cols-3'>
             <Link
