@@ -210,6 +210,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const priorityTopListKeys = [
     'ai-coding-tools',
     'ai-agent-tools',
+    'ai-chatbot-tools',
+    'ai-image-tools',
     'ai-research-tools',
     'ai-video-tools',
     'ai-writing-tools',
