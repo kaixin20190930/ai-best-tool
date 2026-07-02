@@ -186,16 +186,16 @@ export default async function AdminDashboard({
     const outreachDueCount = outreachQueue.filter((item) => item.outreachStatus === 'follow_up_due').length;
     const outreachFeaturedCount = outreachQueue.filter((item) => item.suggestion === 'featured_pitch').length;
     const outreachClaimCount = outreachQueue.filter((item) => item.suggestion === 'claim_listing').length;
-    const claimStats = toolsStats as unknown as {
+    const claimStats = toolsStats as unknown as Partial<{
       claimed: number;
       claimPending: number;
       claimRejected: number;
       claimUnclaimed: number;
-    };
-    const claimedToolsCount = claimStats.claimed;
-    const claimPendingCount = claimStats.claimPending;
-    const claimRejectedCount = claimStats.claimRejected;
-    const claimUnclaimedCount = claimStats.claimUnclaimed;
+    }>;
+    const claimedToolsCount = claimStats.claimed ?? 0;
+    const claimPendingCount = claimStats.claimPending ?? 0;
+    const claimRejectedCount = claimStats.claimRejected ?? 0;
+    const claimUnclaimedCount = claimStats.claimUnclaimed ?? 0;
 
     const getColorClasses = (color: string) => {
       const colors = {
