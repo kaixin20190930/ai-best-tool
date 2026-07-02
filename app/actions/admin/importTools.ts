@@ -1,8 +1,8 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-
 import { getPool } from '@/db/neon/client';
+
 import { requireAdmin } from '@/lib/auth/middleware';
 
 interface ImportToolInput {
@@ -10,10 +10,23 @@ interface ImportToolInput {
   source?: string;
 }
 
+function parseUrlSafely(url: string): URL | null {
+  try {
+    return new URL(url);
+  } catch {
+    return null;
+  }
+}
+
 function normalizeUrl(url: string): string {
   const trimmed = url.trim();
   const withProtocol = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
-  return new URL(withProtocol).toString();
+  const parsed = parseUrlSafely(withProtocol);
+  if (!parsed) {
+    throw new TypeError('Invalid URL');
+  }
+
+  return parsed.toString();
 }
 
 function slugify(value: string): string {
@@ -30,24 +43,37 @@ function slugify(value: string): string {
 async function createUniqueSlug(base: string): Promise<string> {
   const pool = getPool();
   const normalizedBase = slugify(base) || 'ai-tool';
-  let candidate = normalizedBase;
-  let suffix = 2;
+  const existing = await pool.query('SELECT name FROM tools WHERE name = $1 OR name LIKE $2', [
+    normalizedBase,
+    `${normalizedBase}-%`,
+  ]);
+  const existingNames = new Set(existing.rows.map((row) => String(row.name || '')).filter(Boolean));
 
-  while (true) {
-    const existing = await pool.query('SELECT 1 FROM tools WHERE name = $1 LIMIT 1', [
-      candidate,
-    ]);
-
-    if (existing.rows.length === 0) {
-      return candidate;
-    }
-
-    candidate = `${normalizedBase}-${suffix}`;
-    suffix += 1;
+  if (!existingNames.has(normalizedBase)) {
+    return normalizedBase;
   }
+
+  const suffixes = Array.from(existingNames)
+    .map((name) => {
+      const match = name.match(new RegExp(`^${normalizedBase}-(\\d+)$`));
+      return match ? Number(match[1]) : 0;
+    })
+    .filter((value) => Number.isFinite(value) && value > 0)
+    .sort((left, right) => left - right);
+
+  const nextSuffix =
+    suffixes.reduce((candidate, suffix) => {
+      if (suffix === candidate) {
+        return candidate + 1;
+      }
+
+      return candidate;
+    }, 2) || 2;
+
+  return `${normalizedBase}-${nextSuffix}`;
 }
 
-export async function importToolUrl({
+export default async function importToolUrl({
   url,
   source,
 }: ImportToolInput): Promise<{ success: boolean; id?: string; error?: string }> {
@@ -55,7 +81,10 @@ export async function importToolUrl({
     await requireAdmin();
 
     const normalizedUrl = normalizeUrl(url);
-    const parsed = new URL(normalizedUrl);
+    const parsed = parseUrlSafely(normalizedUrl);
+    if (!parsed) {
+      throw new TypeError('Invalid URL');
+    }
     const host = parsed.hostname.replace(/^www\./, '');
     const sourceName = source?.trim() || 'Manual import';
     const slug = await createUniqueSlug(host);
@@ -87,7 +116,7 @@ export async function importToolUrl({
         [],
         'freemium',
         'draft',
-      ]
+      ],
     );
 
     revalidatePath('/admin/collection');
