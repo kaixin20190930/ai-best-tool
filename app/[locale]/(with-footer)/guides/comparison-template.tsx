@@ -103,6 +103,17 @@ type ComparisonConfig = {
       en: string;
     };
   }[];
+  highIntentPaths?: {
+    href: string;
+    title: {
+      cn: string;
+      en: string;
+    };
+    description: {
+      cn: string;
+      en: string;
+    };
+  }[];
   preferredToolNames?: string[];
   allowPopularFallback?: boolean;
   toolSelectionNotes?: Record<

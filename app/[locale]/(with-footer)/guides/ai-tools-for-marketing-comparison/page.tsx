@@ -116,6 +116,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-marketing-tools',
+        title: { cn: '先看营销榜单', en: 'Start with the marketing ranking' },
+        description: {
+          cn: '如果你已经明确是营销场景，先用榜单把 shortlist 缩小。',
+          en: 'If marketing is the lane, use the ranking to narrow the shortlist first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-marketing',
+        title: { cn: '回到营销指南', en: 'Return to the marketing guide' },
+        description: {
+          cn: '先回到更高层的判断，再重新对比渠道和流程。',
+          en: 'Step back to the broader guide, then re-compare channels and workflows.',
+        },
+      },
+      {
+        href: '/categories/marketing?sort=popular',
+        title: { cn: '看 Marketing 分类', en: 'Open the Marketing category' },
+        description: {
+          cn: '先看真实条目，再决定要不要继续对比。',
+          en: 'Browse real listings first, then decide whether to keep comparing.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-sales-comparison',
+        title: { cn: '转去销售工具对比', en: 'Go to sales tools comparison' },
+        description: {
+          cn: '如果真正的需求更偏外联、跟进和 CRM，这条更高意图。',
+          en: 'A better next step if outreach, follow-up, and CRM are the real need.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-writing-tools-comparison',
