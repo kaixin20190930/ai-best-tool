@@ -180,6 +180,17 @@ function getRatingDisplay(averageRating: unknown, isChinese: boolean): string {
   return isChinese ? '暂无' : 'N/A';
 }
 
+function getHostnameLabel(url: string): string {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return url
+      .replace(/^https?:\/\//i, '')
+      .replace(/\/.*$/, '')
+      .replace(/^www\./, '');
+  }
+}
+
 function formatUpdatedAt(updatedAt?: string): string {
   if (!updatedAt) return '';
 
@@ -903,7 +914,7 @@ export function ComparisonPage({
                             rel='noreferrer'
                             className='ml-1 inline-flex items-center gap-1 font-semibold text-cyan-700 hover:text-cyan-800'
                           >
-                            {new URL(tool.url).hostname.replace(/^www\./, '')}
+                            {getHostnameLabel(tool.url)}
                             <ExternalLink className='size-3' />
                           </a>
                         </span>

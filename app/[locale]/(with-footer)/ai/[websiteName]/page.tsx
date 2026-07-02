@@ -410,9 +410,20 @@ function getFreshnessSummary(updatedAt: Date | string | null | undefined, locale
 }
 
 function getOfficialSiteStatus(url: string, locale: string, isPublished: boolean) {
-  const parsed = new URL(url);
-  const hostname = parsed.hostname.replace(/^www\./, '');
-  const secure = parsed.protocol === 'https:';
+  let hostname = '';
+  let secure = false;
+
+  try {
+    const parsed = new URL(url);
+    hostname = parsed.hostname.replace(/^www\./, '');
+    secure = parsed.protocol === 'https:';
+  } catch {
+    hostname = url
+      .replace(/^https?:\/\//i, '')
+      .replace(/\/.*$/, '')
+      .replace(/^www\./, '');
+  }
+
   const isChinese = locale === 'cn';
 
   let summary = '';
