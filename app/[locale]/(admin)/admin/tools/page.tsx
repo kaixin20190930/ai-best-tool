@@ -5,6 +5,18 @@ import AdminToolsFilters from '@/components/admin/AdminToolsFilters';
 import AdminToolsTable from '@/components/admin/AdminToolsTable';
 import { getAdminTools, getPaidListingBlockerSummary, getToolsStats } from '@/app/actions/admin/tools';
 
+type AdminToolStats = {
+  total: number;
+  published: number;
+  pending: number;
+  rejected: number;
+  draft: number;
+  claimed: number;
+  claimPending: number;
+  claimRejected: number;
+  claimUnclaimed: number;
+};
+
 export async function generateMetadata({ params }: { params: { locale: string } }) {
   const t = await getTranslations({ locale: params.locale, namespace: 'admin' });
 
@@ -69,7 +81,7 @@ export default async function AdminToolsPage({
 
   let tools: Awaited<ReturnType<typeof getAdminTools>>['tools'] = [];
   let total = 0;
-  let stats: Awaited<ReturnType<typeof getToolsStats>> = {
+  let stats: AdminToolStats = {
     total: 0,
     published: 0,
     pending: 0,
@@ -113,7 +125,18 @@ export default async function AdminToolsPage({
 
     tools = toolResult.tools;
     total = toolResult.total;
-    stats = statsResult;
+    const statsData = statsResult as Partial<AdminToolStats>;
+    stats = {
+      total: statsData.total ?? 0,
+      published: statsData.published ?? 0,
+      pending: statsData.pending ?? 0,
+      rejected: statsData.rejected ?? 0,
+      draft: statsData.draft ?? 0,
+      claimed: statsData.claimed ?? 0,
+      claimPending: statsData.claimPending ?? 0,
+      claimRejected: statsData.claimRejected ?? 0,
+      claimUnclaimed: statsData.claimUnclaimed ?? 0,
+    };
     paidBlockerSummary = blockerResult;
   } catch (error) {
     loadError = error instanceof Error ? error.message : 'Failed to load admin tools.';
