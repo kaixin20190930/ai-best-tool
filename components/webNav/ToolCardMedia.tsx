@@ -10,6 +10,7 @@ type ToolCardMediaProps = {
   name: string;
   thumbnailUrl?: string | null;
   title: string;
+  compact?: boolean;
 };
 
 function getInitials(label: string): string {
@@ -30,7 +31,7 @@ function getInitials(label: string): string {
   );
 }
 
-export default function ToolCardMedia({ imageUrl, name, thumbnailUrl, title }: ToolCardMediaProps) {
+export default function ToolCardMedia({ imageUrl, name, thumbnailUrl, title, compact = false }: ToolCardMediaProps) {
   const [sourceIndex, setSourceIndex] = useState(0);
   const [hasFailedAllSources, setHasFailedAllSources] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
@@ -59,6 +60,10 @@ export default function ToolCardMedia({ imageUrl, name, thumbnailUrl, title }: T
     currentSource?.includes('/icons/tool-logos/') ||
     currentSource?.endsWith('.ico') ||
     currentSource?.includes('favicon');
+  const containerPaddingClass = compact ? 'p-2.5' : 'p-3';
+  const aspectClass = compact ? 'aspect-[350/132]' : 'aspect-[350/160]';
+  const previewPaddingClass = compact ? 'p-2' : 'p-2.5';
+  const logoPaddingClass = compact ? 'p-4' : 'p-6';
 
   useEffect(() => {
     setHasLoaded(false);
@@ -67,16 +72,22 @@ export default function ToolCardMedia({ imageUrl, name, thumbnailUrl, title }: T
   if (!currentSource || hasFailedAllSources) {
     return (
       <div
-        className='flex aspect-[350/160] w-full justify-self-center overflow-hidden rounded-xl border border-slate-100 bg-gradient-to-br from-slate-50 via-white to-cyan-50 p-3'
+        className={`flex ${aspectClass} w-full justify-self-center overflow-hidden rounded-xl border border-slate-100 bg-gradient-to-br from-slate-50 via-white to-cyan-50 ${containerPaddingClass}`}
         aria-label={fallbackLabel}
       >
-        <div className='flex h-full w-full flex-col justify-between rounded-lg bg-white/60 p-3 ring-1 ring-white/80'>
+        <div
+          className={`flex h-full w-full flex-col justify-between rounded-lg bg-white/60 ${containerPaddingClass} ring-1 ring-white/80`}
+        >
           <div className='flex items-center justify-between gap-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400'>
             <span>Preview pending</span>
             <span className='rounded-full bg-slate-900 px-2 py-1 text-[9px] text-white'>{name}</span>
           </div>
           <div className='flex flex-1 items-center justify-center'>
-            <div className='flex h-20 w-20 items-center justify-center rounded-2xl bg-slate-950 text-2xl font-black text-white shadow-sm'>
+            <div
+              className={`flex ${
+                compact ? 'h-16 w-16 text-xl' : 'h-20 w-20 text-2xl'
+              } items-center justify-center rounded-2xl bg-slate-950 font-black text-white shadow-sm`}
+            >
               {initials}
             </div>
           </div>
@@ -87,7 +98,9 @@ export default function ToolCardMedia({ imageUrl, name, thumbnailUrl, title }: T
   }
 
   return (
-    <div className='relative aspect-[350/160] w-full overflow-hidden rounded-xl border border-slate-100 bg-gradient-to-b from-slate-50 to-white'>
+    <div
+      className={`relative ${aspectClass} w-full overflow-hidden rounded-xl border border-slate-100 bg-gradient-to-b from-slate-50 to-white`}
+    >
       <BaseImage
         src={currentSource}
         alt={`${title} - AI tool screenshot and preview`}
@@ -97,7 +110,7 @@ export default function ToolCardMedia({ imageUrl, name, thumbnailUrl, title }: T
         unoptimized={currentSource.endsWith('.svg')}
         className={[
           'object-contain transition-opacity duration-200',
-          isLogoLikeSource ? 'p-6' : 'p-2.5',
+          isLogoLikeSource ? logoPaddingClass : previewPaddingClass,
           hasLoaded ? 'visible opacity-100' : 'invisible opacity-0',
         ].join(' ')}
         onLoad={() => {

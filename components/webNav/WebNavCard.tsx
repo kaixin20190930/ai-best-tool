@@ -18,6 +18,7 @@ interface WebNavCardProps extends Omit<WebNavigationListRow, 'id'> {
   ratingCount?: number;
   contextLabel?: 'latest' | 'popular';
   locale?: string;
+  density?: 'regular' | 'compact';
 }
 
 function getFreshnessLabel(createdAt?: string, updatedAt?: string): string | null {
@@ -64,24 +65,36 @@ export default function WebNavCard({
   contextLabel,
   locale = 'en',
   isFeatured,
+  density = 'regular',
 }: WebNavCardProps) {
   const freshnessLabel = getFreshnessLabel(createdAt, updatedAt);
   const isChinese = locale === 'cn' || locale === 'tw';
   const officialSiteLabel = isChinese ? '打开官网' : 'Open official site';
   const compareActionLabel = compareLabel || (isChinese ? '查看比较' : 'Compare');
+  const isCompact = density === 'compact';
 
   return (
-    <div className='flex h-fit flex-col gap-3 rounded-lg bg-white p-3 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-md lg:p-3.5'>
+    <div
+      className={`flex h-fit flex-col rounded-lg bg-white shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-md ${
+        isCompact ? 'gap-2.5 p-2.5 lg:p-3' : 'gap-3 p-3 lg:p-3.5'
+      }`}
+    >
       <Link href={`/ai/${name}`} title={title}>
-        <ToolCardMedia imageUrl={imageUrl} name={name} thumbnailUrl={thumbnailUrl} title={title} />
+        <ToolCardMedia imageUrl={imageUrl} name={name} thumbnailUrl={thumbnailUrl} title={title} compact={isCompact} />
       </Link>
       <div className='flex min-w-0 items-center justify-between gap-2.5'>
         <a href={url} title={title} target='_blank' rel='noreferrer' className='min-w-0 flex-1 hover:text-slate-700'>
-          <h3 className='line-clamp-1 break-words text-base font-bold text-slate-950 lg:text-lg'>{title}</h3>
+          <h3
+            className={`line-clamp-1 break-words font-bold text-slate-950 ${
+              isCompact ? 'text-sm lg:text-base' : 'text-base lg:text-lg'
+            }`}
+          >
+            {title}
+          </h3>
         </a>
         {toolId && <FavoriteButton toolId={toolId} initialState={isFavorited} />}
       </div>
-      <div className='flex flex-col gap-2.5'>
+      <div className={`flex flex-col ${isCompact ? 'gap-2' : 'gap-2.5'}`}>
         {contextLabel === 'popular' && (
           <span className='inline-flex w-fit items-center gap-1 rounded-full bg-amber-50 px-2 py-1 text-xs font-semibold text-amber-700'>
             <Flame className='size-3.5' />
@@ -105,13 +118,17 @@ export default function WebNavCard({
             {freshnessLabel}
           </span>
         )}
-        <p className='line-clamp-3 break-words text-sm leading-6 text-slate-600'>{content}</p>
+        <p className={`break-words text-sm leading-6 text-slate-600 ${isCompact ? 'line-clamp-2' : 'line-clamp-3'}`}>
+          {content}
+        </p>
         <div className='flex flex-wrap gap-2'>
           {toolId ? (
             <TrackableLink
               href={url}
               toolId={toolId}
-              className='inline-flex items-center gap-2 rounded-full bg-slate-950 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-slate-800'
+              className={`inline-flex items-center gap-2 rounded-full bg-slate-950 px-3 text-xs font-semibold text-white transition hover:bg-slate-800 ${
+                isCompact ? 'py-1' : 'py-1.5'
+              }`}
             >
               {officialSiteLabel}
               <Sparkles className='size-3.5' />
@@ -121,7 +138,9 @@ export default function WebNavCard({
               href={url}
               target='_blank'
               rel='noreferrer'
-              className='inline-flex items-center gap-2 rounded-full bg-slate-950 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-slate-800'
+              className={`inline-flex items-center gap-2 rounded-full bg-slate-950 px-3 text-xs font-semibold text-white transition hover:bg-slate-800 ${
+                isCompact ? 'py-1' : 'py-1.5'
+              }`}
             >
               {officialSiteLabel}
               <Sparkles className='size-3.5' />
@@ -131,14 +150,16 @@ export default function WebNavCard({
             <TrackableCompareLink
               href={compareHref}
               toolId={toolId || name}
-              className='inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-200 hover:text-slate-950'
+              className={`inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 text-xs font-semibold text-slate-700 transition hover:bg-slate-200 hover:text-slate-950 ${
+                isCompact ? 'py-1' : 'py-1.5'
+              }`}
             >
               <Sparkles className='size-3.5 text-cyan-700' />
               {compareActionLabel}
             </TrackableCompareLink>
           )}
         </div>
-        {toolId && (
+        {toolId && !isCompact && (
           <RatingStars
             toolId={toolId}
             averageRating={averageRating}

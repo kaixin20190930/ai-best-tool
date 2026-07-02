@@ -236,8 +236,8 @@ export default async function RecommendedTools({
   }
 
   return (
-    <section className='mb-16 pb-0'>
-      <div className='mb-6 rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+    <section className='mb-20 pb-0'>
+      <div className='mb-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
         <h2 className='text-2xl font-bold text-slate-900 lg:text-3xl'>{comparisonTitle}</h2>
         <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>{comparisonDescription}</p>
         <div className='mt-4 grid gap-3 sm:grid-cols-3'>
@@ -287,7 +287,10 @@ export default async function RecommendedTools({
           const comparisonCta = getComparisonCtaFromTags(tool.tags, locale);
 
           return (
-            <div key={tool.id} className='flex h-fit flex-col gap-3 self-start'>
+            <div
+              key={tool.id}
+              className='flex h-fit flex-col gap-0 self-start overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm'
+            >
               <WebNavCard
                 name={tool.name}
                 title={getLocalizedField(tool.title, locale)}
@@ -301,8 +304,9 @@ export default async function RecommendedTools({
                 compareHref={comparisonCta.compareHref}
                 compareLabel={comparisonCta.compareLabel}
                 locale={locale}
+                density='compact'
               />
-              <div className='overflow-hidden rounded-xl border border-slate-200 bg-slate-50/80 p-3 shadow-sm'>
+              <div className='border-t border-slate-200 bg-slate-50/80 px-3 py-3'>
                 <div className='flex items-center justify-between gap-2'>
                   <p className='text-[10px] font-semibold uppercase tracking-wide text-slate-500'>
                     {isChinese ? '为什么推荐它' : 'Why compare this one'}
