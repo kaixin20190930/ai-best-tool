@@ -229,6 +229,27 @@ function getStringValue(value: unknown): string | undefined {
   return typeof value === 'string' && value.trim() ? value.trim() : undefined;
 }
 
+function parseUrlSafely(url: string | null | undefined, baseUrl?: string): URL | null {
+  if (!url) {
+    return null;
+  }
+
+  try {
+    return baseUrl ? new URL(url, baseUrl) : new URL(url);
+  } catch {
+    return null;
+  }
+}
+
+function getHostnameSafely(url: string | null | undefined): string {
+  const parsed = parseUrlSafely(url);
+  if (parsed) {
+    return parsed.hostname.replace(/^www\./, '');
+  }
+
+  return (url || '').replace(/^https?:\/\//i, '').replace(/\/.*$/, '').replace(/^www\./, '');
+}
+
 function getStoredDetailMetadata(
   rawPayload: Record<string, unknown> | null | undefined
 ): CandidateDetailMetadata {
@@ -285,13 +306,7 @@ export function scoreCollectionCandidate(input: {
   rawPayload?: Record<string, unknown> | null;
 }): CandidateScore {
   const text = buildCandidateText(input);
-  const host = (() => {
-    try {
-      return new URL(input.url).hostname.replace(/^www\./, '');
-    } catch {
-      return '';
-    }
-  })();
+  const host = getHostnameSafely(input.url);
 
   const strongAiTerms = [
     'ai',
@@ -558,7 +573,10 @@ function getOgImageUrl(html: string, pageUrl: string): string | undefined {
 }
 
 function extractLikelyExternalUrl(html: string, pageUrl: string): string | undefined {
-  const page = new URL(pageUrl);
+  const page = parseUrlSafely(pageUrl);
+  if (!page) {
+    return undefined;
+  }
   const anchors = Array.from(html.matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi));
   const preferredText = /(visit|website|official|launch|open|try|go to|learn more|get started)/i;
   let firstExternal: string | undefined;
@@ -570,7 +588,10 @@ function extractLikelyExternalUrl(html: string, pageUrl: string): string | undef
       continue;
     }
 
-    const parsed = new URL(url);
+    const parsed = parseUrlSafely(url);
+    if (!parsed) {
+      continue;
+    }
 
     if (parsed.hostname === page.hostname || !isUsefulCandidateUrl(url, pageUrl)) {
       continue;
@@ -724,8 +745,11 @@ function toAbsoluteUrl(url: string, baseUrl: string): string | null {
 }
 
 function isUsefulCandidateUrl(url: string, sourceUrl: string): boolean {
-  const parsed = new URL(url);
-  const source = new URL(sourceUrl);
+  const parsed = parseUrlSafely(url);
+  const source = parseUrlSafely(sourceUrl);
+  if (!parsed || !source) {
+    return false;
+  }
   const path = parsed.pathname.toLowerCase();
   const blockedPathParts = [
     '/login',
@@ -799,7 +823,10 @@ function parseRssCandidates(xml: string, sourceUrl: string): ScrapedCandidate[] 
 
 function parseHtmlCandidates(html: string, sourceUrl: string): ScrapedCandidate[] {
   const candidates = new Map<string, ScrapedCandidate>();
-  const source = new URL(sourceUrl);
+  const source = parseUrlSafely(sourceUrl);
+  if (!source) {
+    return [];
+  }
   const anchorPattern = /<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi;
 
   for (const match of Array.from(html.matchAll(anchorPattern))) {
@@ -810,7 +837,10 @@ function parseHtmlCandidates(html: string, sourceUrl: string): ScrapedCandidate[
       continue;
     }
 
-    const parsed = new URL(url);
+    const parsed = parseUrlSafely(url);
+    if (!parsed) {
+      continue;
+    }
     const isDirectoryDetail =
       parsed.hostname === source.hostname &&
       /\/(posts?|products?|tool|tools|ai|apps?)\//i.test(parsed.pathname);
@@ -1287,7 +1317,10 @@ export async function importCollectionCandidateToDraft(
     return { toolId: candidate.tool_id };
   }
 
-  const parsed = new URL(candidate.normalized_url);
+  const parsed = parseUrlSafely(candidate.normalized_url);
+  if (!parsed) {
+    throw new Error(`Invalid normalized URL for collection candidate: ${candidate.normalized_url}`);
+  }
   const storedDetailMetadata = getStoredDetailMetadata(candidate.raw_payload);
   const detailMetadata =
     storedDetailMetadata.title ||
