@@ -73,6 +73,27 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         'Check whether it can preserve context, follow brand tone, and hand off to humans smoothly.',
         'If you connect tickets, email, or knowledge bases, prioritize integrations, permissions, and auditability.',
       ];
+  const highIntentPaths = [
+    {
+      href: '/guides/ai-tools-for-customer-support-comparison',
+      title: isChinese ? '先看客服对比页' : 'Start with support comparison',
+      desc: isChinese ? '先看回复、分流和知识库接入差别。' : 'Compare replies, triage, and knowledge-base fit first.',
+    },
+    {
+      href: '/guides/ai-tools-for-automation-comparison',
+      title: isChinese ? '再看自动化对比页' : 'Then compare automation',
+      desc: isChinese
+        ? '如果你的需求包含通知、分流或自动化接手，这页更贴近。'
+        : 'Useful when notifications, routing, or automated follow-up matter.',
+    },
+    {
+      href: '/best-ai-tools/ai-small-business-tools',
+      title: isChinese ? '打开小企业榜单' : 'Open the small-business ranking',
+      desc: isChinese
+        ? '如果想快速缩小 shortlist，先看榜单更省时间。'
+        : 'Use the ranking first when you want a faster shortlist.',
+    },
+  ];
 
   return (
     <>
@@ -192,6 +213,34 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 ))}
             </div>
           </aside>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图路径' : 'High-intent paths'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '先走最短路径，再决定要不要继续比较'
+              : 'Take the shortest path first, then decide whether to compare deeper'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '客服页最适合已经明确任务的人：回复草稿、知识库问答、工单分流，或者要开始接自动化。'
+              : 'This page works best for people with a clear support job already: reply drafts, knowledge-base Q&A, ticket triage, or a move into automation.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-3'>
+            {highIntentPaths.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:border-cyan-200 hover:bg-cyan-50/60'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </Link>
+            ))}
+          </div>
         </section>
 
         <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
