@@ -80,6 +80,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-lead-generation-tools',
+        title: { cn: '先看获客榜单', en: 'Start with the lead-gen ranking' },
+        description: {
+          cn: '如果获客已经是明确目标，先用榜单缩小 shortlist。',
+          en: 'If lead generation is clearly the goal, narrow the shortlist with the ranking first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-lead-generation',
+        title: { cn: '回到获客指南', en: 'Back to the lead-gen guide' },
+        description: {
+          cn: '如果你还想先把名单、筛选和线索质量理清，可以回到指南页。',
+          en: 'Go back if you still need to clarify lists, filtering, and lead quality first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-sales-prospecting-comparison',
+        title: { cn: '转去销售拓客对比', en: 'Go to sales prospecting comparison' },
+        description: {
+          cn: '如果你已经从找名单走到找人和触达，这条更高意图。',
+          en: 'A higher-intent path once the work shifts from list building to targeting and outreach.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-sales-comparison',
+        title: { cn: '转去销售工具对比', en: 'Go to sales tools comparison' },
+        description: {
+          cn: '如果流程已经进入 CRM、跟进和成交阶段，这页更贴近。',
+          en: 'Move there once the workflow has moved into CRM, follow-up, and closing.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-tools-for-sales-prospecting-comparison',

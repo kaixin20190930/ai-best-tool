@@ -33,6 +33,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       en: 'A quick side-by-side look at common small-business tools',
     },
     compareSubtitle: { cn: '小企业', en: 'small business' },
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-small-business-tools',
+        title: { cn: '先看小企业榜单', en: 'Start with the small-business ranking' },
+        description: {
+          cn: '如果你已经确定是小企业场景，先用榜单缩小 shortlist。',
+          en: 'If small-business use is clear, narrow the shortlist with the ranking first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-small-business',
+        title: { cn: '回到小企业指南', en: 'Back to the small-business guide' },
+        description: {
+          cn: '如果你还想先理清营销、客服、内容和运营差异，可以回到指南页。',
+          en: 'Go back if you still need to clarify marketing, support, content, and operations differences first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-marketing-comparison',
+        title: { cn: '转去营销工具对比', en: 'Go to marketing tools comparison' },
+        description: {
+          cn: '如果你现在最在意获客和内容增长，这条更高意图。',
+          en: 'A higher-intent path when acquisition and content growth matter most.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-ecommerce-comparison',
+        title: { cn: '转去电商工具对比', en: 'Go to ecommerce comparison' },
+        description: {
+          cn: '如果你的业务更偏商品、店铺和客服场景，这页更贴近。',
+          en: 'Move there if the workflow is more about products, storefronts, and customer support.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/best-ai-tools/ai-small-business-tools',

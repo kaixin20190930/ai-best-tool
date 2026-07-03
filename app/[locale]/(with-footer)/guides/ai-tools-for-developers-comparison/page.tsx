@@ -116,6 +116,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-coding-tools',
+        title: { cn: '先看编程榜单', en: 'Start with the coding ranking' },
+        description: {
+          cn: '如果编码体验是关键，先用榜单缩小 shortlist。',
+          en: 'If coding experience is key, narrow the shortlist with the ranking first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-developers',
+        title: { cn: '回到开发者指南', en: 'Back to the developer guide' },
+        description: {
+          cn: '如果你还想先把编辑器、模型层和运维层理清，可以回到指南页。',
+          en: 'Go back if you still need to clarify editor, model-layer, and ops-layer needs first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-automation-comparison',
+        title: { cn: '转去自动化工具对比', en: 'Go to automation comparison' },
+        description: {
+          cn: '如果你的开发重点已经变成流程编排和后台执行，这条更高意图。',
+          en: 'A higher-intent path when the real need is orchestration and backend execution.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-api-observability-comparison',
+        title: { cn: '转去 API 可观测对比', en: 'Go to API observability comparison' },
+        description: {
+          cn: '如果你已经在关心日志、错误和成本，这页更贴近真实交付。',
+          en: 'Move there once logs, errors, and cost visibility are part of the workflow.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-coding-tools-comparison',

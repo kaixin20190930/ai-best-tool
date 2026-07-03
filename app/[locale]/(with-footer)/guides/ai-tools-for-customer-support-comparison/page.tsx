@@ -89,6 +89,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     },
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-small-business-tools',
+        title: { cn: '先看小企业榜单', en: 'Start with the small-business ranking' },
+        description: {
+          cn: '如果客服已经是确定需求，先用榜单缩小 shortlist。',
+          en: 'If support is already the clear need, narrow the shortlist with the ranking first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-customer-support',
+        title: { cn: '回到客服指南', en: 'Back to the support guide' },
+        description: {
+          cn: '如果你还要先理清回复、知识库和分流规则，可以回到指南页。',
+          en: 'Go back if you still need to clarify replies, knowledge base, and routing rules first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-automation-comparison',
+        title: { cn: '转去自动化工具对比', en: 'Go to automation comparison' },
+        description: {
+          cn: '如果你要解决的是分流、通知和自动回复，这页更高意图。',
+          en: 'A higher-intent path when triage, notifications, and auto-replies are the real need.',
+        },
+      },
+      {
+        href: '/guides/ai-chatbot-tools-comparison',
+        title: { cn: '转去聊天机器人对比', en: 'Go to chatbot comparison' },
+        description: {
+          cn: '如果你更关心通用问答和对话体验，这页更适合。',
+          en: 'Move there if general Q&A and conversational quality matter more.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-tools-for-customer-support',
