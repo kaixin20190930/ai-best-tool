@@ -34,6 +34,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     compareSubtitle: { cn: 'HubSpot', en: 'HubSpot' },
     preferredToolNames: ['hubspot', 'mailchimp', 'jasper', 'copy-ai'],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-sales-tools',
+        title: { cn: '先看销售榜单', en: 'Start with the sales ranking' },
+        description: {
+          cn: '如果你已经明确在找 CRM/销售系统，先用榜单收窄。',
+          en: 'If CRM and sales systems are already the goal, use the ranking first to narrow candidates.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-sales-comparison',
+        title: { cn: '转去销售工具总对比', en: 'Go to sales tools comparison' },
+        description: {
+          cn: '如果你要把候选范围再拉宽一点，这页更适合。',
+          en: 'Use this when you want a broader shortlist.',
+        },
+      },
+      {
+        href: '/guides/mailchimp-alternatives-comparison',
+        title: { cn: '转去 Mailchimp 替代方案对比', en: 'Go to Mailchimp alternatives comparison' },
+        description: {
+          cn: '如果你更偏邮件营销和自动化，这条路径更高意图。',
+          en: 'A higher-intent path when email marketing and automation are the real need.',
+        },
+      },
+      {
+        href: '/guides/salesforce-einstein-alternatives-comparison',
+        title: { cn: '转去 Salesforce Einstein 替代方案对比', en: 'Go to Salesforce Einstein alternatives comparison' },
+        description: {
+          cn: '如果你的需求已经进入企业级 CRM，这页更贴近。',
+          en: 'Move here when the need has moved into enterprise CRM territory.',
+        },
+      },
+    ],
     decisionCards: [
       {
         title: { cn: '先看是不是要系统级营销', en: 'System-level marketing' },

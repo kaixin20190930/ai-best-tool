@@ -34,6 +34,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     compareSubtitle: { cn: 'Mailchimp', en: 'Mailchimp' },
     preferredToolNames: ['mailchimp', 'hubspot', 'jasper', 'copy-ai'],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-marketing-tools',
+        title: { cn: '先看营销榜单', en: 'Start with the marketing ranking' },
+        description: {
+          cn: '如果你已经明确在找邮件营销工具，先用榜单收口。',
+          en: 'If email marketing tools are already the goal, use the ranking to narrow down first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-marketing-comparison',
+        title: { cn: '转去营销工具总对比', en: 'Go to marketing tools comparison' },
+        description: {
+          cn: '如果你要把候选范围再拉宽一点，这页更适合。',
+          en: 'Use this when you want a broader shortlist.',
+        },
+      },
+      {
+        href: '/guides/hubspot-alternatives-comparison',
+        title: { cn: '转去 HubSpot 替代方案对比', en: 'Go to HubSpot alternatives comparison' },
+        description: {
+          cn: '如果你后面会走向 CRM 和更完整的营销系统，这条路径更高意图。',
+          en: 'A higher-intent path when CRM and a fuller marketing system are the real need.',
+        },
+      },
+      {
+        href: '/guides/copy-ai-alternatives-comparison',
+        title: { cn: '转去 Copy.ai 替代方案对比', en: 'Go to Copy.ai alternatives comparison' },
+        description: {
+          cn: '如果你同时也在看文案起稿和内容生成，这页也值得继续看。',
+          en: 'Move here if you are also comparing drafting and content-generation tools.',
+        },
+      },
+    ],
     decisionCards: [
       {
         title: { cn: '先看是不是做邮件营销', en: 'Email marketing first' },

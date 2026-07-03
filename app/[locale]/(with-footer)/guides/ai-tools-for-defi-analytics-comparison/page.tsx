@@ -31,6 +31,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     compareTitle: { cn: '几款常见 DeFi 工具的快速对照', en: 'A quick side-by-side look at common DeFi tools' },
     compareSubtitle: { cn: 'DeFi', en: 'DeFi' },
     preferredToolNames: ['defillama', 'dune', 'token-terminal', 'nansen'],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-web3-tools',
+        title: { cn: '先看 Web3 榜单', en: 'Start with the Web3 ranking' },
+        description: {
+          cn: '如果你已经明确要做 DeFi 或链上分析，先用榜单缩小候选。',
+          en: 'If DeFi or on-chain analysis is already the goal, use the ranking first to narrow candidates.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-web3-analysis-comparison',
+        title: { cn: '转去 Web3 分析对比', en: 'Go to Web3 analysis comparison' },
+        description: {
+          cn: '如果你的核心问题已经变成链上研究、协议监控和钱包追踪，这页更高意图。',
+          en: 'A higher-intent path when the real need is on-chain research, protocol monitoring, and wallet tracking.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-protocol-analytics-comparison',
+        title: { cn: '转去协议分析对比', en: 'Go to protocol analytics comparison' },
+        description: {
+          cn: '如果你更关心协议健康和长期指标，这条路径更贴近。',
+          en: 'Move here if protocol health and recurring metrics are the real focus.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-dex-analytics-comparison',
+        title: { cn: '转去 DEX 分析对比', en: 'Go to DEX analytics comparison' },
+        description: {
+          cn: '如果你正在看交易对和流动性工作流，这页也值得继续看。',
+          en: 'Use this when trading pairs and liquidity workflows are the real decision.',
+        },
+      },
+    ],
     tips: {
       cn: [
         '先看协议覆盖和历史深度，再看是否支持你常用的链。',

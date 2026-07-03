@@ -34,6 +34,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     compareSubtitle: { cn: 'Zapier', en: 'Zapier' },
     preferredToolNames: ['zapier', 'make', 'n8n', 'pipedream'],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-automation-tools',
+        title: { cn: '先看自动化榜单', en: 'Start with the automation ranking' },
+        description: {
+          cn: '如果你已经确定要做自动化选型，先用榜单收口。',
+          en: 'If automation selection is already the goal, use the ranking to narrow things down first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-automation-comparison',
+        title: { cn: '转去自动化工具总对比', en: 'Go to automation tools comparison' },
+        description: {
+          cn: '如果你要把候选范围再拉宽一点，这页更适合。',
+          en: 'Use this when you want a broader shortlist.',
+        },
+      },
+      {
+        href: '/guides/n8n-alternatives-comparison',
+        title: { cn: '转去 n8n 替代方案对比', en: 'Go to n8n alternatives comparison' },
+        description: {
+          cn: '如果你更在意控制感和长期维护，这条路径更高意图。',
+          en: 'A higher-intent path when control and long-term maintenance matter more.',
+        },
+      },
+      {
+        href: '/guides/make-alternatives-comparison',
+        title: { cn: '转去 Make 替代方案对比', en: 'Go to Make alternatives comparison' },
+        description: {
+          cn: '如果你更想看可视化编排和中等复杂度流程，这页更贴近。',
+          en: 'Move here if visual orchestration and medium-complexity workflows are the real need.',
+        },
+      },
+    ],
     decisionCards: [
       {
         title: { cn: '先看是不是简单连接器', en: 'Simple connectors first' },

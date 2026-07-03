@@ -30,6 +30,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     breadcrumbLabel: { cn: 'DEX 工具对比', en: 'DEX tools comparison' },
     compareTitle: { cn: '几款常见 DEX 工具的快速对照', en: 'A quick side-by-side look at common DEX tools' },
     compareSubtitle: { cn: 'DEX', en: 'DEX' },
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-web3-tools',
+        title: { cn: '先看 Web3 榜单', en: 'Start with the Web3 ranking' },
+        description: {
+          cn: '如果你已经明确在做 DEX 或链上研究，先用榜单把 shortlist 收窄。',
+          en: 'If DEX or on-chain research is already the goal, use the ranking to narrow the shortlist first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-web3-analysis-comparison',
+        title: { cn: '转去 Web3 分析对比', en: 'Go to Web3 analysis comparison' },
+        description: {
+          cn: '如果你的问题已经扩大到协议、钱包和资金流，这页更高意图。',
+          en: 'A higher-intent path when the question expands to protocols, wallets, and fund flows.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-defi-analytics-comparison',
+        title: { cn: '转去 DeFi 分析对比', en: 'Go to DeFi analytics comparison' },
+        description: {
+          cn: '如果你更关心收益、池子和协议层指标，这页更贴近。',
+          en: 'Move here if yield, pools, and protocol metrics matter more.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-protocol-analytics-comparison',
+        title: { cn: '转去协议分析对比', en: 'Go to protocol analytics comparison' },
+        description: {
+          cn: '如果你要的是长期协议监控和仪表盘，这条路径更合适。',
+          en: 'Use this when long-term protocol monitoring and dashboards are the real need.',
+        },
+      },
+    ],
     tips: {
       cn: [
         '先看交易对和池子覆盖，再看是否支持你常用的链。',

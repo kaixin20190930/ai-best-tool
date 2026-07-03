@@ -34,6 +34,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     compareSubtitle: { cn: 'n8n', en: 'n8n' },
     preferredToolNames: ['n8n', 'make', 'zapier', 'pipedream'],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-automation-tools',
+        title: { cn: '先看自动化榜单', en: 'Start with the automation ranking' },
+        description: {
+          cn: '如果你已经明确要做自动化选型，先用榜单收窄候选。',
+          en: 'If automation selection is already the goal, use the ranking first to narrow candidates.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-automation-comparison',
+        title: { cn: '转去自动化工具总对比', en: 'Go to automation tools comparison' },
+        description: {
+          cn: '如果你要把候选范围再拉宽一点，这页更适合。',
+          en: 'Use this when you want a broader shortlist.',
+        },
+      },
+      {
+        href: '/guides/zapier-alternatives-comparison',
+        title: { cn: '转去 Zapier 替代方案对比', en: 'Go to Zapier alternatives comparison' },
+        description: {
+          cn: '如果你更在意简单连接器和快上手，这条路径更高意图。',
+          en: 'A higher-intent path when simple connectors and fast onboarding matter more.',
+        },
+      },
+      {
+        href: '/guides/make-alternatives-comparison',
+        title: { cn: '转去 Make 替代方案对比', en: 'Go to Make alternatives comparison' },
+        description: {
+          cn: '如果你更看重可视化编排和中等复杂度工作流，这页更贴近。',
+          en: 'Move here if visual orchestration and medium-complexity workflows are the real need.',
+        },
+      },
+    ],
     decisionCards: [
       {
         title: { cn: '先看是不是可控的工作流底座', en: 'Controlled workflow base first' },
