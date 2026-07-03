@@ -2,19 +2,20 @@ import { Metadata } from 'next';
 import { Bot, ExternalLink, Orbit, Workflow } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
+import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
-import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
-import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Metadata.home' });
 
   return {
-    title: locale === 'cn' || locale === 'tw' ? 'AI Agent 工具推荐 | AI Best Tool' : `AI tools for agents | ${t('title')}`,
+    title:
+      locale === 'cn' || locale === 'tw' ? 'AI Agent 工具推荐 | AI Best Tool' : `AI tools for agents | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
         ? '面向 Agent 工作流、任务编排、模型调用、状态追踪和执行闭环的 AI 工具指南。'
@@ -59,15 +60,39 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-      '先判断你要的是固定自动化，还是需要自主决策和多轮执行的 Agent。',
-      '如果 Agent 会长期运行，优先看状态、日志、失败恢复和人工接管能力。',
-      '不要只看模型效果，更要看工具调用、上下文保持和执行闭环是否稳定。',
-    ]
+        '先判断你要的是固定自动化，还是需要自主决策和多轮执行的 Agent。',
+        '如果 Agent 会长期运行，优先看状态、日志、失败恢复和人工接管能力。',
+        '不要只看模型效果，更要看工具调用、上下文保持和执行闭环是否稳定。',
+      ]
     : [
-      'Start by separating fixed automation from agent-style execution that needs reasoning and iteration.',
-      'If the agent will run continuously, prioritize state, logs, failure recovery, and human override.',
-      'Do not judge only on model output. Tool use, context persistence, and execution reliability matter more.',
-    ];
+        'Start by separating fixed automation from agent-style execution that needs reasoning and iteration.',
+        'If the agent will run continuously, prioritize state, logs, failure recovery, and human override.',
+        'Do not judge only on model output. Tool use, context persistence, and execution reliability matter more.',
+      ];
+  const highIntentPaths = [
+    {
+      href: '/best-ai-tools/ai-agent-tools',
+      title: isChinese ? '先看 Agent 榜单' : 'Start with the agent ranking',
+      desc: isChinese ? '先用 shortlist 缩小范围。' : 'Use the shortlist to narrow the field first.',
+    },
+    {
+      href: '/guides/ai-tools-for-agents-comparison',
+      title: isChinese ? 'Agent 工具对比' : 'Agent tools comparison',
+      desc: isChinese ? '多步骤执行和工具调用一起看。' : 'Compare execution loops and tool use together.',
+    },
+    {
+      href: '/guides/ai-tools-for-automation-comparison',
+      title: isChinese ? '自动化工具对比' : 'Automation tools comparison',
+      desc: isChinese ? '如果流程更固定、触发器更重要。' : 'Useful when triggers and fixed flows matter more.',
+    },
+    {
+      href: '/guides/ai-tools-for-model-routing-comparison',
+      title: isChinese ? '模型路由对比' : 'Model routing comparison',
+      desc: isChinese
+        ? '如果 Agent 需要多模型切换和回退。'
+        : 'Use this when agents need multi-model switching and fallback control.',
+    },
+  ];
 
   return (
     <>
@@ -152,7 +177,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {isChinese ? '高意图路径' : 'High-intent path'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '先看 Agent 对比，再落到条目与提交' : 'Compare agent paths first, then move into listings and submission'}
+            {isChinese
+              ? '先看 Agent 对比，再落到条目与提交'
+              : 'Compare agent paths first, then move into listings and submission'}
           </h2>
           <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
             {isChinese
@@ -223,7 +250,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {isChinese ? '判断顺序' : 'How to judge'}
             </p>
             <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-              {isChinese ? '先看是否真的需要“决策后执行”' : 'Start with whether you really need reason-then-execute loops'}
+              {isChinese
+                ? '先看是否真的需要“决策后执行”'
+                : 'Start with whether you really need reason-then-execute loops'}
             </h2>
             <div className='mt-4 space-y-3'>
               {tips.map((tip) => (
@@ -285,7 +314,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               href: '/guides/ai-tools-for-agents-comparison',
               title: isChinese ? 'Agent 工具总对比' : 'Agent tools comparison',
-              description: isChinese ? '先快速横向看一组更贴近 Agent 的工具。' : 'A fast side-by-side look at tools closer to agent workflows.',
+              description: isChinese
+                ? '先快速横向看一组更贴近 Agent 的工具。'
+                : 'A fast side-by-side look at tools closer to agent workflows.',
             },
             {
               href: '/best-ai-tools/ai-agent-tools',
@@ -310,7 +341,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             },
           ]}
           nextEyebrow={isChinese ? '下一步入口' : 'Where to go next'}
-          nextTitle={isChinese ? '确认是 Agent 方向后，下一步看这里' : 'Where to go once agent workflows are clearly the direction'}
+          nextTitle={
+            isChinese
+              ? '确认是 Agent 方向后，下一步看这里'
+              : 'Where to go once agent workflows are clearly the direction'
+          }
           nextDescription={
             isChinese
               ? '如果你已经确认自己在看 Agent 工作流，下一步就去分类页、搜索页和本周新增里看真实条目。'
@@ -320,25 +355,62 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               href: '/categories/automation?sort=popular',
               title: isChinese ? '进入 Automation 分类' : 'Open the automation category',
-              description: isChinese ? '看更接近执行和编排层的真实工具。' : 'See real listings closer to execution and orchestration.',
+              description: isChinese
+                ? '看更接近执行和编排层的真实工具。'
+                : 'See real listings closer to execution and orchestration.',
             },
             {
               href: '/best-ai-tools/ai-agent-tools',
               title: isChinese ? '进入 Agent 榜单' : 'Open the agent ranking',
-              description: isChinese ? '先看一组更高意图的 Agent shortlist。' : 'Start with a higher-intent agent shortlist.',
+              description: isChinese
+                ? '先看一组更高意图的 Agent shortlist。'
+                : 'Start with a higher-intent agent shortlist.',
             },
             {
               href: '/explore?search=agent&sort=popular',
               title: isChinese ? '搜索 Agent 工具' : 'Search agent tools',
-              description: isChinese ? '回到 Explore，用 Agent 关键词继续扩大候选。' : 'Return to Explore and widen the shortlist with an agent-focused search.',
+              description: isChinese
+                ? '回到 Explore，用 Agent 关键词继续扩大候选。'
+                : 'Return to Explore and widen the shortlist with an agent-focused search.',
             },
             {
               href: '/new',
               title: isChinese ? '看本周新增' : 'Check new this week',
-              description: isChinese ? '看看最近是否补进了更贴近 Agent 的条目。' : 'See whether recent additions introduced listings closer to agent use cases.',
+              description: isChinese
+                ? '看看最近是否补进了更贴近 Agent 的条目。'
+                : 'See whether recent additions introduced listings closer to agent use cases.',
             },
           ]}
         />
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图路径' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先看榜单和对比，再回到 Agent 页' : 'Compare first, then come back to agent pages'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己要找的是 Agent，而不是纯自动化，就别在总览页停太久，直接进入更窄的榜单和对比页。'
+              : 'If the real need is agents rather than plain automation, move quickly into the narrower ranking and comparison pages.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {highIntentPaths.map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`agent_guide_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
