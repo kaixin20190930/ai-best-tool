@@ -96,6 +96,28 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       desc: isChinese ? '成本可见性和请求分析。' : 'Cost visibility and request analysis.',
     },
   ];
+  const highIntentPaths = [
+    {
+      href: '/best-ai-tools/ai-api-observability-tools',
+      title: isChinese ? '先看可观测榜单' : 'Start with observability ranking',
+      desc: isChinese ? '先用 shortlist 缩小范围。' : 'Use the shortlist to narrow the field first.',
+    },
+    {
+      href: '/guides/ai-tools-for-api-observability-comparison',
+      title: isChinese ? '可观测对比页' : 'Observability comparison',
+      desc: isChinese ? '日志、成本和质量追踪一起看。' : 'Compare logs, cost, and quality tracking together.',
+    },
+    {
+      href: '/guides/ai-tools-for-model-routing-comparison',
+      title: isChinese ? '模型路由对比' : 'Model routing comparison',
+      desc: isChinese ? '如果你同时在看接入和治理。' : 'Useful when access and governance overlap.',
+    },
+    {
+      href: '/guides/ai-tools-for-developers-comparison',
+      title: isChinese ? '开发者工具对比' : 'Developer tools comparison',
+      desc: isChinese ? '更广的开发者工作流入口。' : 'A broader developer workflow entry point.',
+    },
+  ];
 
   return (
     <>
@@ -360,6 +382,35 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图路径' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先看榜单和对比，再回到可观测页' : 'Compare first, then come back to observability pages'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己要看日志、追踪、成本和质量治理，就直接去更窄的榜单和对比页。'
+              : 'If the real focus is logs, tracing, cost, and quality governance, move straight into the narrower ranking and comparison pages.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {highIntentPaths.map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`api_observability_guide_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
           </div>
         </section>
         <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_api_observability' />
