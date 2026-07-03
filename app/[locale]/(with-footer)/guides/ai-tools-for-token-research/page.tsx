@@ -2,13 +2,13 @@ import { Metadata } from 'next';
 import { Coins, ExternalLink, SearchCheck, TrendingUp } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Metadata.home' });
@@ -65,15 +65,39 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-      '先分清你在做的是叙事研究、代币基本面比较，还是链上持有人结构判断。',
-      '看它是否能把市场信息、协议指标和链上行为放在一个更可用的视角里。',
-      '如果你会持续跟踪一个赛道，优先看历史数据、导出和对比效率。',
-    ]
+        '先分清你在做的是叙事研究、代币基本面比较，还是链上持有人结构判断。',
+        '看它是否能把市场信息、协议指标和链上行为放在一个更可用的视角里。',
+        '如果你会持续跟踪一个赛道，优先看历史数据、导出和对比效率。',
+      ]
     : [
-      'Separate narrative research, token-fundamental comparison, and holder-structure analysis before comparing tools.',
-      'Look for tools that connect market context, protocol metrics, and on-chain behavior into one usable view.',
-      'If you track a sector over time, prioritize history depth, exports, and comparison efficiency.',
-    ];
+        'Separate narrative research, token-fundamental comparison, and holder-structure analysis before comparing tools.',
+        'Look for tools that connect market context, protocol metrics, and on-chain behavior into one usable view.',
+        'If you track a sector over time, prioritize history depth, exports, and comparison efficiency.',
+      ];
+  const highIntentPaths = [
+    {
+      href: '/best-ai-tools/ai-web3-tools',
+      title: isChinese ? '先看 Web3 榜单' : 'Start with Web3 ranking',
+      desc: isChinese ? '先用 shortlist 缩小范围。' : 'Use the shortlist to narrow the field first.',
+    },
+    {
+      href: '/guides/ai-tools-for-token-research-comparison',
+      title: isChinese ? '代币研究对比' : 'Token research comparison',
+      desc: isChinese ? '项目、指标和研究深度一起看。' : 'Compare projects, metrics, and research depth together.',
+    },
+    {
+      href: '/guides/ai-tools-for-crypto-research-comparison',
+      title: isChinese ? 'Crypto 研究对比' : 'Crypto research comparison',
+      desc: isChinese
+        ? '如果问题更宽，叙事和情报整合也要看。'
+        : 'Use this when the question broadens to narratives and synthesis.',
+    },
+    {
+      href: '/guides/ai-tools-for-protocol-analytics-comparison',
+      title: isChinese ? '协议分析对比' : 'Protocol analytics comparison',
+      desc: isChinese ? '如果重点转向协议健康和使用趋势。' : 'Best when protocol health and usage trends matter more.',
+    },
+  ];
 
   return (
     <>
@@ -189,6 +213,35 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 ))}
             </div>
           </aside>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图路径' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先看榜单和对比，再回到代币研究页' : 'Compare first, then come back to token research pages'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己在看 token 叙事、项目对比或持有人结构，就直接去更窄的榜单和对比页。'
+              : 'If the real job is token narratives, project comparison, or holder structure, move straight into the narrower ranking and comparison pages.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {highIntentPaths.map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`token_research_guide_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
         </section>
 
         <GuideActionSection

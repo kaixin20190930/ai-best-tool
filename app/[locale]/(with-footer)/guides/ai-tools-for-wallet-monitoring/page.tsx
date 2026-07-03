@@ -2,13 +2,13 @@ import { Metadata } from 'next';
 import { BellRing, ExternalLink, Layers3, Search } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Metadata.home' });
@@ -67,15 +67,41 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-      '先分清你需要的是提醒、监控还是风控观察。',
-      '看它支持的链和通知渠道是否覆盖你的实际使用场景。',
-      '如果要给团队使用，优先看多地址、标签和导出能力。',
-    ]
+        '先分清你需要的是提醒、监控还是风控观察。',
+        '看它支持的链和通知渠道是否覆盖你的实际使用场景。',
+        '如果要给团队使用，优先看多地址、标签和导出能力。',
+      ]
     : [
-      'Separate the need first: alerts, monitoring, or risk observation.',
-      'Check whether supported chains and notification channels match your workflow.',
-      'For team use, prioritize multi-address support, tagging, and export capabilities.',
-    ];
+        'Separate the need first: alerts, monitoring, or risk observation.',
+        'Check whether supported chains and notification channels match your workflow.',
+        'For team use, prioritize multi-address support, tagging, and export capabilities.',
+      ];
+  const highIntentPaths = [
+    {
+      href: '/best-ai-tools/ai-web3-tools',
+      title: isChinese ? '先看 Web3 榜单' : 'Start with Web3 ranking',
+      desc: isChinese ? '先用 shortlist 缩小范围。' : 'Use the shortlist to narrow the field first.',
+    },
+    {
+      href: '/guides/ai-tools-for-wallet-monitoring-comparison',
+      title: isChinese ? '钱包监控对比' : 'Wallet monitoring comparison',
+      desc: isChinese
+        ? '提醒、地址观察和异动监控一起看。'
+        : 'Compare alerts, address watching, and anomaly monitoring together.',
+    },
+    {
+      href: '/guides/ai-tools-for-on-chain-analysis-comparison',
+      title: isChinese ? '链上分析对比' : 'On-chain analysis comparison',
+      desc: isChinese
+        ? '如果你开始更关心资金流和地址研究。'
+        : 'Useful when fund flow and address research matter more.',
+    },
+    {
+      href: '/guides/ai-tools-for-web3-comparison',
+      title: isChinese ? 'Web3 工具对比' : 'Web3 tools comparison',
+      desc: isChinese ? '如果你想先看更宽的 Web3 入口。' : 'Use this when you want a broader Web3 starting point.',
+    },
+  ];
 
   return (
     <>
@@ -195,6 +221,37 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 ))}
             </div>
           </aside>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图路径' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '先看榜单和对比，再回到钱包监控页'
+              : 'Compare first, then come back to wallet monitoring pages'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己要做的是提醒、地址观察或异动监控，就直接去更窄的榜单和对比页。'
+              : 'If the real job is alerts, address watching, or anomaly monitoring, move straight into the narrower ranking and comparison pages.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {highIntentPaths.map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`wallet_monitoring_guide_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
         </section>
 
         <GuideActionSection
