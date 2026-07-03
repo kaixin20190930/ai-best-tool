@@ -2,9 +2,9 @@ import { Metadata } from 'next';
 import { ClipboardCheck, ExternalLink, Layers3, Scale } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -63,15 +63,43 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-      '先分清你要的是验收打分、数据集评估，还是版本回归判断。',
-      '看它能不能把输出、评分标准和样本绑定到一起复盘。',
-      '如果会进入团队流程，优先看共享、验收和接入 CI / 发布流程的便利性。',
-    ]
+        '先分清你要的是验收打分、数据集评估，还是版本回归判断。',
+        '看它能不能把输出、评分标准和样本绑定到一起复盘。',
+        '如果会进入团队流程，优先看共享、验收和接入 CI / 发布流程的便利性。',
+      ]
     : [
-      'Separate acceptance scoring, dataset evaluation, and regression judgment before comparing tools.',
-      'Look for tools that bind outputs, scoring rules, and samples together for review.',
-      'If the work feeds team process, prioritize sharing, signoff, and fit with CI or release flow.',
-    ];
+        'Separate acceptance scoring, dataset evaluation, and regression judgment before comparing tools.',
+        'Look for tools that bind outputs, scoring rules, and samples together for review.',
+        'If the work feeds team process, prioritize sharing, signoff, and fit with CI or release flow.',
+      ];
+  const highIntentPaths = [
+    {
+      href: '/best-ai-tools/ai-evals-tools',
+      title: isChinese ? '先看 evals 榜单' : 'Start with evals ranking',
+      desc: isChinese ? '先用 shortlist 缩小范围。' : 'Use the shortlist to narrow the field first.',
+    },
+    {
+      href: '/guides/ai-tools-for-evals-comparison',
+      title: isChinese ? 'Evals 对比页' : 'Evals comparison',
+      desc: isChinese
+        ? '评分、数据集和验收流程一起看。'
+        : 'Compare scoring, datasets, and acceptance workflows together.',
+    },
+    {
+      href: '/guides/ai-tools-for-prompt-testing-comparison',
+      title: isChinese ? 'Prompt 测试对比' : 'Prompt testing comparison',
+      desc: isChinese
+        ? '如果你更关注提示词版本和 A/B 对比。'
+        : 'Useful when prompt versions and A/B comparisons matter more.',
+    },
+    {
+      href: '/guides/ai-tools-for-api-observability-comparison',
+      title: isChinese ? 'API 可观测对比' : 'API observability comparison',
+      desc: isChinese
+        ? '如果你要把质量和线上请求一起看。'
+        : 'Use this when quality and production requests belong together.',
+    },
+  ];
 
   return (
     <>
@@ -187,6 +215,35 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 ))}
             </div>
           </aside>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图路径' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先看榜单和对比，再回到 evals 页' : 'Compare first, then come back to evals pages'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己要做的是输出评分、数据集验证或上线验收，就直接去更窄的榜单和对比页。'
+              : 'If the real job is output scoring, dataset validation, or release acceptance, move straight into the narrower ranking and comparison pages.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {highIntentPaths.map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`evals_guide_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
         </section>
 
         <GuideActionSection

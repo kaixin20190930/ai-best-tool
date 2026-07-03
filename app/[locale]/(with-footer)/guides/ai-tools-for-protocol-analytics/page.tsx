@@ -2,13 +2,13 @@ import { Metadata } from 'next';
 import { BarChart3, ExternalLink, Layers3, ShieldCheck } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Metadata.home' });
@@ -57,15 +57,37 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-      '先分清你是在看协议健康、使用量，还是研究趋势。',
-      '看它是否支持你关心的链和数据源。',
-      '如果给团队使用，优先看 API、导出、告警和历史追踪能力。',
-    ]
+        '先分清你是在看协议健康、使用量，还是研究趋势。',
+        '看它是否支持你关心的链和数据源。',
+        '如果给团队使用，优先看 API、导出、告警和历史追踪能力。',
+      ]
     : [
-      'Separate the use case first: protocol health, usage, or trend research.',
-      'Check whether it supports the chains and data sources you actually care about.',
-      'For team use, prioritize API access, exports, alerts, and historical tracking.',
-    ];
+        'Separate the use case first: protocol health, usage, or trend research.',
+        'Check whether it supports the chains and data sources you actually care about.',
+        'For team use, prioritize API access, exports, alerts, and historical tracking.',
+      ];
+  const highIntentPaths = [
+    {
+      href: '/best-ai-tools/ai-web3-tools',
+      title: isChinese ? '先看 Web3 榜单' : 'Start with Web3 ranking',
+      desc: isChinese ? '先用 shortlist 缩小范围。' : 'Use the shortlist to narrow the field first.',
+    },
+    {
+      href: '/guides/ai-tools-for-protocol-analytics-comparison',
+      title: isChinese ? '协议分析对比' : 'Protocol analytics comparison',
+      desc: isChinese ? '协议覆盖、历史和趋势一起看。' : 'Compare coverage, history, and trends together.',
+    },
+    {
+      href: '/guides/ai-tools-for-defi-analytics-comparison',
+      title: isChinese ? 'DeFi 对比页' : 'DeFi comparison',
+      desc: isChinese ? '如果问题更偏 TVL 和资金流。' : 'Best when TVL and capital flow matter most.',
+    },
+    {
+      href: '/guides/ai-tools-for-web3-analysis-comparison',
+      title: isChinese ? 'Web3 分析对比' : 'Web3 analysis comparison',
+      desc: isChinese ? '链上研究和监控更聚焦。' : 'Keep on-chain research and monitoring in focus.',
+    },
+  ];
 
   return (
     <>
@@ -194,6 +216,35 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 ))}
             </div>
           </aside>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图路径' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先看榜单和对比，再回到协议页面' : 'Compare first, then come back to protocol pages'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己是在做协议分析，就别在总览页停太久，直接去更窄的榜单和对比页。'
+              : 'If protocol analytics is already the real task, move straight into the narrower ranking and comparison pages.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {highIntentPaths.map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`protocol_analytics_guide_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
         </section>
 
         <GuideActionSection

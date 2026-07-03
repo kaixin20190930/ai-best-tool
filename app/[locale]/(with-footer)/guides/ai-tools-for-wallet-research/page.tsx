@@ -2,13 +2,13 @@ import { Metadata } from 'next';
 import { ExternalLink, Layers3, SearchCheck, Wallet } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Metadata.home' });
@@ -65,15 +65,37 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-      '先分清你要的是地址画像、关系线索，还是资金路径研究。',
-      '看它是否有足够好的标签体系，而不是只有裸交易数据。',
-      '如果你会长期跟踪某类钱包，优先看历史、搜索和笔记整理效率。',
-    ]
+        '先分清你要的是地址画像、关系线索，还是资金路径研究。',
+        '看它是否有足够好的标签体系，而不是只有裸交易数据。',
+        '如果你会长期跟踪某类钱包，优先看历史、搜索和笔记整理效率。',
+      ]
     : [
-      'Separate address profiling, relationship clues, and fund-path research before comparing tools.',
-      'Look for strong labeling systems rather than only raw transaction data.',
-      'If you track wallet clusters over time, prioritize history depth, search, and note-taking efficiency.',
-    ];
+        'Separate address profiling, relationship clues, and fund-path research before comparing tools.',
+        'Look for strong labeling systems rather than only raw transaction data.',
+        'If you track wallet clusters over time, prioritize history depth, search, and note-taking efficiency.',
+      ];
+  const highIntentPaths = [
+    {
+      href: '/best-ai-tools/ai-web3-tools',
+      title: isChinese ? '先看 Web3 榜单' : 'Start with Web3 ranking',
+      desc: isChinese ? '先用 shortlist 缩小范围。' : 'Use the shortlist to narrow the field first.',
+    },
+    {
+      href: '/guides/ai-tools-for-wallet-research-comparison',
+      title: isChinese ? '钱包研究对比' : 'Wallet research comparison',
+      desc: isChinese ? '画像、标签和关系线索一起看。' : 'Compare profiling, labels, and clues together.',
+    },
+    {
+      href: '/guides/ai-tools-for-wallet-monitoring-comparison',
+      title: isChinese ? '钱包监控对比' : 'Wallet monitoring comparison',
+      desc: isChinese ? '如果重点转向提醒和异动。' : 'Best when alerts and anomalies matter more.',
+    },
+    {
+      href: '/guides/ai-tools-for-crypto-portfolio-tracking-comparison',
+      title: isChinese ? '资产追踪对比' : 'Portfolio tracking comparison',
+      desc: isChinese ? '如果重点转向组合和持仓视图。' : 'Useful when the real job is portfolio and holdings views.',
+    },
+  ];
 
   return (
     <>
@@ -191,6 +213,35 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 ))}
             </div>
           </aside>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图路径' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先看榜单和对比，再回到钱包研究页' : 'Compare first, then come back to wallet research pages'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己是在做地址研究，就别在总览页停太久，直接去更窄的榜单和对比页。'
+              : 'If wallet research is already the real task, move straight into the narrower ranking and comparison pages.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {highIntentPaths.map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`wallet_research_guide_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
         </section>
 
         <GuideActionSection
