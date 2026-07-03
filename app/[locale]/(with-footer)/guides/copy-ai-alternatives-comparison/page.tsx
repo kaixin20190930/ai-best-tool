@@ -89,6 +89,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-marketing-tools',
+        title: { cn: '先看营销榜单', en: 'Start with the marketing ranking' },
+        description: {
+          cn: '如果你已经明确是在找营销文案工具，先用榜单收窄。',
+          en: 'If marketing copy tools are clearly the goal, use the ranking first to narrow the shortlist.',
+        },
+      },
+      {
+        href: '/guides/jasper-alternatives-comparison',
+        title: { cn: '转去 Jasper 替代方案对比', en: 'Go to Jasper alternatives comparison' },
+        description: {
+          cn: '如果你在营销写作和品牌文案之间权衡，这页更合适。',
+          en: 'Use this when you are weighing marketing writing and brand copy options.',
+        },
+      },
+      {
+        href: '/guides/ai-writing-tools-comparison',
+        title: { cn: '转去写作工具对比', en: 'Go to writing tools comparison' },
+        description: {
+          cn: '如果你还要继续往长文和内容生产扩展，这条路径更稳。',
+          en: 'Move here if you want to expand into long-form and content production.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-marketing-comparison',
+        title: { cn: '转去营销工具总对比', en: 'Go to marketing tools comparison' },
+        description: {
+          cn: '如果你要把候选范围再拉宽一点，这页更适合。',
+          en: 'Use this when you want a broader shortlist.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-tools-for-marketing-comparison',

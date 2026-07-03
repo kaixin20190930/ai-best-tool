@@ -89,6 +89,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-chatbot-tools',
+        title: { cn: '先看聊天榜单', en: 'Start with the chatbot ranking' },
+        description: {
+          cn: '如果你已经确定在聊天入口里选型，先用榜单收口。',
+          en: 'If you are already choosing a chat entry point, use the ranking to narrow things down first.',
+        },
+      },
+      {
+        href: '/guides/chatgpt-alternatives-comparison',
+        title: { cn: '转去 ChatGPT 替代方案对比', en: 'Go to ChatGPT alternatives comparison' },
+        description: {
+          cn: '如果你更关心通用聊天入口，这条路径更合适。',
+          en: 'Use this when you care more about general-purpose chat entry points.',
+        },
+      },
+      {
+        href: '/guides/claude-alternatives-comparison',
+        title: { cn: '转去 Claude 替代方案对比', en: 'Go to Claude alternatives comparison' },
+        description: {
+          cn: '如果你更在意长上下文和分析，这页更高意图。',
+          en: 'A higher-intent path when long context and analysis matter more.',
+        },
+      },
+      {
+        href: '/guides/ai-chatbot-tools-comparison',
+        title: { cn: '转去聊天机器人总对比', en: 'Go to chatbot comparison' },
+        description: {
+          cn: '如果你想重新拉宽候选范围，再从总对比里筛。',
+          en: 'Broaden the shortlist again through the wider chatbot comparison.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/chatgpt-alternatives-comparison',

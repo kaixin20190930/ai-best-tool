@@ -89,6 +89,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-creator-tools',
+        title: { cn: '先看创作者榜单', en: 'Start with the creator ranking' },
+        description: {
+          cn: '如果你已经明确要做音乐或创作工具选型，先用榜单收窄。',
+          en: 'If music or creator tools are already the target, use the ranking first to narrow the shortlist.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-voice-comparison',
+        title: { cn: '转去语音工具对比', en: 'Go to voice tools comparison' },
+        description: {
+          cn: '如果你的需求其实更偏配音、转写或音频处理，这页更贴近。',
+          en: 'Move here if dubbing, transcription, or audio handling is the real need.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-creators-comparison',
+        title: { cn: '转去创作者工具对比', en: 'Go to creators comparison' },
+        description: {
+          cn: '如果你想把音乐、视频和创作工作流放回更宽的入口，再看这页。',
+          en: 'Use this when you want to place music, video, and creative workflows into a broader entry point.',
+        },
+      },
+      {
+        href: '/guides/ai-video-tools-comparison',
+        title: { cn: '转去视频工具对比', en: 'Go to video tools comparison' },
+        description: {
+          cn: '如果你的最终产出会进入视频或多媒体内容，这条路径更高意图。',
+          en: 'A higher-intent path when the output eventually feeds video or multimedia content.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-tools-for-voice-comparison',

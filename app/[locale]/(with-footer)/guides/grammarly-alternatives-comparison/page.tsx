@@ -89,6 +89,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-writing-tools',
+        title: { cn: '先看写作榜单', en: 'Start with the writing ranking' },
+        description: {
+          cn: '如果你已经明确是在选写作工具，先用榜单缩小候选。',
+          en: 'If writing tools are clearly the goal, use the ranking first to narrow candidates.',
+        },
+      },
+      {
+        href: '/guides/ai-writing-tools-comparison',
+        title: { cn: '转去写作工具总对比', en: 'Go to writing tools comparison' },
+        description: {
+          cn: '如果你要把候选范围继续拉宽，这页更适合。',
+          en: 'Use this when you want to broaden the shortlist further.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-research-comparison',
+        title: { cn: '转去研究工具对比', en: 'Go to research tools comparison' },
+        description: {
+          cn: '如果你的任务其实已经变成找资料和核对事实，可以转到研究页。',
+          en: 'Move here if your real job has shifted toward sourcing and fact-checking.',
+        },
+      },
+      {
+        href: '/guides/ai-seo-tools-comparison',
+        title: { cn: '转去 SEO 工具对比', en: 'Go to SEO tools comparison' },
+        description: {
+          cn: '如果你写的是搜索流量内容，SEO 页更贴近。',
+          en: 'A better fit when the writing task is really about search-driven content.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-writing-tools-comparison',

@@ -89,6 +89,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-marketing-tools',
+        title: { cn: '先看营销榜单', en: 'Start with the marketing ranking' },
+        description: {
+          cn: '如果你已经明确要做营销文案选型，先用榜单收口。',
+          en: 'If marketing copy selection is already the goal, use the ranking to narrow down first.',
+        },
+      },
+      {
+        href: '/guides/copy-ai-alternatives-comparison',
+        title: { cn: '转去 Copy.ai 替代方案对比', en: 'Go to Copy.ai alternatives comparison' },
+        description: {
+          cn: '如果你更偏快速起稿和多变体，这条路更高意图。',
+          en: 'A higher-intent path when fast drafting and many variations are the real priority.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-marketing-comparison',
+        title: { cn: '转去营销工具总对比', en: 'Go to marketing tools comparison' },
+        description: {
+          cn: '如果你想把候选范围再拉宽一点，这页更适合。',
+          en: 'Use this when you want a broader shortlist.',
+        },
+      },
+      {
+        href: '/guides/ai-writing-tools-comparison',
+        title: { cn: '转去写作工具对比', en: 'Go to writing tools comparison' },
+        description: {
+          cn: '如果你后面会走向长文、SEO 或内容生产，这页也值得继续看。',
+          en: 'Move here if your work shifts toward long-form, SEO, or content production.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-tools-for-marketing-comparison',

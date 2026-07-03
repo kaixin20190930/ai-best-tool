@@ -89,6 +89,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-productivity-tools',
+        title: { cn: '先看生产力榜单', en: 'Start with the productivity ranking' },
+        description: {
+          cn: '如果你已经明确在选生产力/工作区工具，先用榜单收窄。',
+          en: 'If productivity or workspace tools are already the goal, use the ranking first to narrow candidates.',
+        },
+      },
+      {
+        href: '/guides/ai-productivity-tools-comparison',
+        title: { cn: '转去生产力工具总对比', en: 'Go to productivity tools comparison' },
+        description: {
+          cn: '如果你要把候选范围再拉宽一点，这页更适合。',
+          en: 'Use this when you want a broader shortlist.',
+        },
+      },
+      {
+        href: '/guides/ai-note-taking-tools-comparison',
+        title: { cn: '转去记笔记工具对比', en: 'Go to note-taking tools comparison' },
+        description: {
+          cn: '如果你的重点其实是会议、记录和回看笔记，这条路径更贴近。',
+          en: 'Switch here if meetings, capture, and note retrieval are the real focus.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-meeting-notes',
+        title: { cn: '转去会议助手指南', en: 'Go to meeting notes guide' },
+        description: {
+          cn: '如果你要把知识整理和会议记录连起来看，这页更顺。',
+          en: 'Move here if you want to connect knowledge organization with meeting capture.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-productivity-tools-comparison',
