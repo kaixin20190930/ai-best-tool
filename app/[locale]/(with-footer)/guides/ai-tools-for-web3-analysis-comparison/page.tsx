@@ -34,6 +34,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     compareSubtitle: { cn: 'Web3 分析', en: 'Web3 analysis' },
     preferredToolNames: ['dune', 'nansen', 'debank', 'bubblemaps'],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-web3-tools',
+        title: { cn: '先看 Web3 榜单', en: 'Start with the Web3 ranking' },
+        description: {
+          cn: '如果你已经明确要做 Web3 分析，先用榜单缩小 shortlist。',
+          en: 'If Web3 analysis is clearly the goal, narrow the shortlist with the ranking first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-web3-analysis',
+        title: { cn: '回到 Web3 分析指南', en: 'Back to the Web3 analysis guide' },
+        description: {
+          cn: '如果你还想先理清协议、钱包和资金流分析，可以回到指南页。',
+          en: 'Go back if you still need to clarify protocol, wallet, and fund-flow analysis first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-on-chain-analysis-comparison',
+        title: { cn: '转去链上分析对比', en: 'Go to on-chain analysis comparison' },
+        description: {
+          cn: '如果你的决策已经转向链上研究本身，这页更高意图。',
+          en: 'A higher-intent path once the decision moves directly into on-chain research.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-wallet-research-comparison',
+        title: { cn: '转去钱包研究对比', en: 'Go to wallet research comparison' },
+        description: {
+          cn: '如果你更关心地址画像和行为判断，这页更贴近。',
+          en: 'Move there if address profiling and behavior analysis are the real focus.',
+        },
+      },
+    ],
     tips: {
       cn: [
         '先分清你更关心协议、钱包、资金流还是可视化研究。',

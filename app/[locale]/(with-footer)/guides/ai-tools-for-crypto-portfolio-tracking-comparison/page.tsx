@@ -80,6 +80,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-web3-tools',
+        title: { cn: '先看 Web3 榜单', en: 'Start with the Web3 ranking' },
+        description: {
+          cn: '如果资产追踪已经是明确目标，先用榜单缩小 shortlist。',
+          en: 'If portfolio tracking is the clear goal, narrow the shortlist with the ranking first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-crypto-portfolio-tracking',
+        title: { cn: '回到资产追踪指南', en: 'Back to the portfolio tracking guide' },
+        description: {
+          cn: '如果你还想先理清多钱包、组合视图和历史观察，可以回到指南页。',
+          en: 'Go back if you still need to clarify multi-wallet views, portfolio clarity, and historical tracking first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-wallet-monitoring-comparison',
+        title: { cn: '转去钱包监控对比', en: 'Go to wallet monitoring comparison' },
+        description: {
+          cn: '如果你真正要的是异动提醒和行为预警，这条更高意图。',
+          en: 'A higher-intent path when alerts and behavior monitoring are the real need.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-wallet-research-comparison',
+        title: { cn: '转去钱包研究对比', en: 'Go to wallet research comparison' },
+        description: {
+          cn: '如果你已经从持仓视图转向地址画像和行为判断，这页更贴近。',
+          en: 'Move there once the workflow shifts from holdings views to address profiling and behavior analysis.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-tools-for-wallet-monitoring-comparison',
