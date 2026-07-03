@@ -31,6 +31,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     compareTitle: { cn: '几款常见语音工具的快速对照', en: 'A quick side-by-side look at common voice tools' },
     compareSubtitle: { cn: '语音工具', en: 'Voice tools' },
     preferredToolNames: ['elevenlabs', 'descript', 'notta', 'elevenlabs-conversational-ai'],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-voice-tools',
+        title: { cn: '先看语音榜单', en: 'Start with the voice ranking' },
+        description: {
+          cn: '如果语音已经是明确目标，先用榜单缩小 shortlist。',
+          en: 'If voice is clearly the goal, narrow the shortlist with the ranking first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-voice',
+        title: { cn: '回到语音指南', en: 'Back to the voice guide' },
+        description: {
+          cn: '如果你还想先理清配音、转写和对话场景，可以回到指南页。',
+          en: 'Go back if you still need to clarify dubbing, transcription, and conversational use cases first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-meeting-notes-comparison',
+        title: { cn: '转去会议纪要对比', en: 'Go to meeting notes comparison' },
+        description: {
+          cn: '如果你现在更关心转写和会议整理，这页更高意图。',
+          en: 'A higher-intent path when transcription and meeting cleanup are the real need.',
+        },
+      },
+      {
+        href: '/guides/ai-note-taking-tools-comparison',
+        title: { cn: '转去记笔记工具对比', en: 'Go to note taking comparison' },
+        description: {
+          cn: '如果你的目标是捕捉和整理，而不是纯语音输出，这页更贴近。',
+          en: 'Move there if capture and organization matter more than pure voice output.',
+        },
+      },
+    ],
     comparisonDimensions: [
       {
         title: { cn: '音质与自然度', en: 'Quality and naturalness' },

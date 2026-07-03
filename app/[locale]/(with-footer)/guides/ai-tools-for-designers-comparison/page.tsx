@@ -30,6 +30,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     breadcrumbLabel: { cn: '设计工具对比', en: 'Design tools comparison' },
     compareTitle: { cn: '几款常见设计工具的快速对照', en: 'A quick side-by-side look at common design tools' },
     compareSubtitle: { cn: '设计', en: 'design' },
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-image-tools',
+        title: { cn: '先看设计榜单', en: 'Start with the design ranking' },
+        description: {
+          cn: '如果视觉设计已经是明确目标，先用榜单缩小 shortlist。',
+          en: 'If design is clearly the goal, narrow the shortlist with the ranking first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-designers',
+        title: { cn: '回到设计指南', en: 'Back to the design guide' },
+        description: {
+          cn: '如果你还想先理清品牌视觉、海报和 UI 需求，可以回到指南页。',
+          en: 'Go back if you still need to clarify brand visuals, posters, and UI needs first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-image-tools-comparison',
+        title: { cn: '转去图像工具对比', en: 'Go to image tools comparison' },
+        description: {
+          cn: '如果你的工作更偏图像生成和编辑，这页更高意图。',
+          en: 'A higher-intent path when image generation and editing are the real task.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-content-creation-comparison',
+        title: { cn: '转去内容创作工具对比', en: 'Go to content creation tools comparison' },
+        description: {
+          cn: '如果设计其实是内容生产的一部分，这页更顺。',
+          en: 'Move there if design is really part of a larger content production workflow.',
+        },
+      },
+    ],
     tips: {
       cn: [
         '先看你是做品牌、海报、社媒素材还是 UI 视觉，不同场景侧重点不一样。',

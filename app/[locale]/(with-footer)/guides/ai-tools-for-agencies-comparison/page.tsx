@@ -30,6 +30,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     breadcrumbLabel: { cn: '代理工具对比', en: 'Agency tools comparison' },
     compareTitle: { cn: '几款常见代理工具的快速对照', en: 'A quick side-by-side look at common agency tools' },
     compareSubtitle: { cn: '代理', en: 'Agency' },
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-agency-tools',
+        title: { cn: '先看代理榜单', en: 'Start with the agency ranking' },
+        description: {
+          cn: '如果代理交付已经是明确目标，先用榜单缩小 shortlist。',
+          en: 'If agency delivery is clearly the goal, narrow the shortlist with the ranking first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-agencies',
+        title: { cn: '回到代理指南', en: 'Back to the agency guide' },
+        description: {
+          cn: '如果你还想先理清交付、协作和客户隔离，可以回到指南页。',
+          en: 'Go back if you still need to clarify delivery, collaboration, and client separation first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-small-business-comparison',
+        title: { cn: '转去小企业工具对比', en: 'Go to small-business comparison' },
+        description: {
+          cn: '如果你的需求更偏老板视角的经营与运营，而不是代理交付，这页更贴近。',
+          en: 'Move there if the need is more owner-led operations than agency delivery.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-creators-comparison',
+        title: { cn: '转去创作者工具对比', en: 'Go to creator tools comparison' },
+        description: {
+          cn: '如果你其实在做内容工作室式生产，这页更顺。',
+          en: 'A better fit if your workflow is really more like content-studio production.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/best-ai-tools/ai-agency-tools',

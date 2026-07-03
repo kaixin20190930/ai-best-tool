@@ -30,6 +30,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     breadcrumbLabel: { cn: '电商工具对比', en: 'Ecommerce tools comparison' },
     compareTitle: { cn: '几款常见电商工具的快速对照', en: 'A quick side-by-side look at common ecommerce tools' },
     compareSubtitle: { cn: '电商', en: 'ecommerce' },
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-ecommerce-tools',
+        title: { cn: '先看电商榜单', en: 'Start with the ecommerce ranking' },
+        description: {
+          cn: '如果电商已经是明确目标，先用榜单缩小 shortlist。',
+          en: 'If ecommerce is clearly the goal, narrow the shortlist with the ranking first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-ecommerce',
+        title: { cn: '回到电商指南', en: 'Back to the ecommerce guide' },
+        description: {
+          cn: '如果你还想先理清商品、营销和客服差异，可以回到指南页。',
+          en: 'Go back if you still need to clarify products, marketing, and support differences first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-small-business-comparison',
+        title: { cn: '转去小企业工具对比', en: 'Go to small-business comparison' },
+        description: {
+          cn: '如果你的视角更偏整体经营而不是纯电商，这页更自然。',
+          en: 'Move there if the decision is broader business operations rather than pure ecommerce.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-marketing-comparison',
+        title: { cn: '转去营销工具对比', en: 'Go to marketing tools comparison' },
+        description: {
+          cn: '如果你现在最在意流量获取和广告内容，这页更贴近。',
+          en: 'A better fit when acquisition and campaign content are the real priorities.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/best-ai-tools/ai-ecommerce-tools',

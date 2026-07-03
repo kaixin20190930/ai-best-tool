@@ -33,6 +33,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       en: 'A quick side-by-side look at common meeting notes tools',
     },
     compareSubtitle: { cn: 'Meeting notes', en: 'Meeting notes' },
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-meeting-notes-tools',
+        title: { cn: '先看会议纪要榜单', en: 'Start with the meeting notes ranking' },
+        description: {
+          cn: '如果会议纪要已经是明确目标，先用榜单缩小 shortlist。',
+          en: 'If meeting notes are clearly the goal, narrow the shortlist with the ranking first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-meeting-notes',
+        title: { cn: '回到会议指南', en: 'Back to the meeting guide' },
+        description: {
+          cn: '如果你还想先理清转写、整理和行动项提取，可以回到指南页。',
+          en: 'Go back if you still need to clarify transcription, cleanup, and action-item extraction first.',
+        },
+      },
+      {
+        href: '/guides/ai-note-taking-tools-comparison',
+        title: { cn: '转去记笔记工具对比', en: 'Go to note taking comparison' },
+        description: {
+          cn: '如果你更关注记录、归档和知识整理，这页更高意图。',
+          en: 'A higher-intent path when capture, archiving, and knowledge organization matter more.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-voice-comparison',
+        title: { cn: '转去语音工具对比', en: 'Go to voice tools comparison' },
+        description: {
+          cn: '如果你现在更关心转写或语音输入，这页也更贴近。',
+          en: 'Move there if transcription or voice input is the real priority.',
+        },
+      },
+    ],
     comparisonDimensions: [
       {
         title: { cn: '转写准确度', en: 'Transcription accuracy' },
