@@ -89,6 +89,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-chatbot-tools',
+        title: { cn: '先看聊天榜单', en: 'Start with the chatbot ranking' },
+        description: {
+          cn: '如果你已经明确是在找聊天入口，先用榜单缩小候选。',
+          en: 'If a chat entry point is already the goal, use the ranking first to narrow down.',
+        },
+      },
+      {
+        href: '/guides/ai-chatbot-tools-comparison',
+        title: { cn: '转去聊天机器人总对比', en: 'Go to chatbot comparison' },
+        description: {
+          cn: '如果你要把候选范围再拉宽一点，这页更适合。',
+          en: 'Use this when you want a broader shortlist.',
+        },
+      },
+      {
+        href: '/guides/chatgpt-alternatives-comparison',
+        title: { cn: '转去 ChatGPT 替代方案对比', en: 'Go to ChatGPT alternatives comparison' },
+        description: {
+          cn: '如果你更在意通用聊天和工作流，这条路径更高意图。',
+          en: 'A higher-intent path when general chat and workflow fit matter more.',
+        },
+      },
+      {
+        href: '/guides/poe-alternatives-comparison',
+        title: { cn: '转去 Poe 替代方案对比', en: 'Go to Poe alternatives comparison' },
+        description: {
+          cn: '如果你更关心多模型并排和聚合入口，这页也值得继续看。',
+          en: 'Move here if multi-model comparison and aggregation are also part of the decision.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-chatbot-tools-comparison',

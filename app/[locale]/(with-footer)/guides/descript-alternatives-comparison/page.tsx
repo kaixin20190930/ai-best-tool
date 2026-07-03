@@ -89,6 +89,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-voice-tools',
+        title: { cn: '先看语音榜单', en: 'Start with the voice ranking' },
+        description: {
+          cn: '如果你已经明确在找音频编辑或播客工具，先用榜单收窄。',
+          en: 'If audio editing or podcast tools are already the goal, use the ranking first to narrow candidates.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-voice-comparison',
+        title: { cn: '转去语音工具总对比', en: 'Go to voice tools comparison' },
+        description: {
+          cn: '如果你要把候选范围再拉宽一点，这页更适合。',
+          en: 'Use this when you want a broader shortlist.',
+        },
+      },
+      {
+        href: '/guides/notta-alternatives-comparison',
+        title: { cn: '转去 Notta 替代方案对比', en: 'Go to Notta alternatives comparison' },
+        description: {
+          cn: '如果你更关心转写和会议整理，这条路径更高意图。',
+          en: 'A higher-intent path when transcription and meeting cleanup matter more.',
+        },
+      },
+      {
+        href: '/guides/elevenlabs-alternatives-comparison',
+        title: { cn: '转去 ElevenLabs 替代方案对比', en: 'Go to ElevenLabs alternatives comparison' },
+        description: {
+          cn: '如果你最终其实更在意高质量语音合成，这页更贴近。',
+          en: 'Move here if high-quality voice synthesis is the real need.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-tools-for-voice-comparison',

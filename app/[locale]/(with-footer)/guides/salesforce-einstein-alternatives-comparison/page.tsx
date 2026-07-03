@@ -94,6 +94,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-sales-tools',
+        title: { cn: '先看销售榜单', en: 'Start with the sales ranking' },
+        description: {
+          cn: '如果你已经明确在找销售/CRM 系统，先用榜单收窄候选。',
+          en: 'If sales or CRM systems are already the goal, use the ranking first to narrow candidates.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-sales-comparison',
+        title: { cn: '转去销售工具总对比', en: 'Go to sales tools comparison' },
+        description: {
+          cn: '如果你要把候选范围再拉宽一点，这页更适合。',
+          en: 'Use this when you want a broader shortlist.',
+        },
+      },
+      {
+        href: '/guides/hubspot-alternatives-comparison',
+        title: { cn: '转去 HubSpot 替代方案对比', en: 'Go to HubSpot alternatives comparison' },
+        description: {
+          cn: '如果你更关注 CRM 加营销自动化，这条路径更高意图。',
+          en: 'A higher-intent path when CRM plus marketing automation is the real need.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-sales-prospecting-comparison',
+        title: { cn: '转去销售拓客对比', en: 'Go to sales prospecting comparison' },
+        description: {
+          cn: '如果你更偏外联和线索编排，这页也值得继续看。',
+          en: 'Move here if outbound and lead orchestration are part of the decision.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-tools-for-sales-comparison',

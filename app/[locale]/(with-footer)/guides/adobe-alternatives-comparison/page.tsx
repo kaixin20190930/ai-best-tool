@@ -89,6 +89,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-image-tools',
+        title: { cn: '先看图像榜单', en: 'Start with the image ranking' },
+        description: {
+          cn: '如果你已经明确在找创作工具，先用榜单收窄。',
+          en: 'If creative tools are already the goal, use the ranking first to narrow candidates.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-creators-comparison',
+        title: { cn: '转去创作者工具对比', en: 'Go to creators comparison' },
+        description: {
+          cn: '如果你要把候选范围再拉宽一点，这页更适合。',
+          en: 'Use this when you want a broader shortlist.',
+        },
+      },
+      {
+        href: '/guides/ai-image-tools-comparison',
+        title: { cn: '转去图像工具总对比', en: 'Go to image tools comparison' },
+        description: {
+          cn: '如果你更偏静态视觉资产，这条路径更高意图。',
+          en: 'A higher-intent path when static visual assets are the real need.',
+        },
+      },
+      {
+        href: '/guides/ai-video-tools-comparison',
+        title: { cn: '转去视频工具总对比', en: 'Go to video tools comparison' },
+        description: {
+          cn: '如果你的产出更偏视频和动态内容，这页也值得继续看。',
+          en: 'Move here if your output is more about video and motion content.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-image-tools-comparison',

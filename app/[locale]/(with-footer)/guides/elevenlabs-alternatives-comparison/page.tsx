@@ -89,6 +89,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-voice-tools',
+        title: { cn: '先看语音榜单', en: 'Start with the voice ranking' },
+        description: {
+          cn: '如果你已经明确在找语音合成工具，先用榜单收窄。',
+          en: 'If voice synthesis tools are already the goal, use the ranking first to narrow candidates.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-voice-comparison',
+        title: { cn: '转去语音工具总对比', en: 'Go to voice tools comparison' },
+        description: {
+          cn: '如果你要把候选范围再拉宽一点，这页更适合。',
+          en: 'Use this when you want a broader shortlist.',
+        },
+      },
+      {
+        href: '/guides/descript-alternatives-comparison',
+        title: { cn: '转去 Descript 替代方案对比', en: 'Go to Descript alternatives comparison' },
+        description: {
+          cn: '如果你更在意音频编辑和转写，这条路径更高意图。',
+          en: 'A higher-intent path when audio editing and transcription matter more.',
+        },
+      },
+      {
+        href: '/guides/notta-alternatives-comparison',
+        title: { cn: '转去 Notta 替代方案对比', en: 'Go to Notta alternatives comparison' },
+        description: {
+          cn: '如果你同时也在看会议记录和知识归档，这页也值得继续看。',
+          en: 'Move here if meeting capture and knowledge archiving are also part of the decision.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-tools-for-voice-comparison',
