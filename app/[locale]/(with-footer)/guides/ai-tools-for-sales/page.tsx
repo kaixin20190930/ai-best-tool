@@ -59,15 +59,37 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const faqSchema = generateFAQSchema(faqs);
   const tips = isChinese
     ? [
-      '先分清你是做线索、跟进、成交还是客户维系。',
-      '看它是否能接入 CRM、邮箱、通话或表单流程。',
-      '如果是团队使用，优先看权限、记录和分工能力。',
-    ]
+        '先分清你是做线索、跟进、成交还是客户维系。',
+        '看它是否能接入 CRM、邮箱、通话或表单流程。',
+        '如果是团队使用，优先看权限、记录和分工能力。',
+      ]
     : [
-      'Separate the job first: leads, follow-up, closing, or account management.',
-      'Check whether it plugs into CRM, email, calls, or forms.',
-      'For teams, prioritize permissions, history, and assignment workflows.',
-    ];
+        'Separate the job first: leads, follow-up, closing, or account management.',
+        'Check whether it plugs into CRM, email, calls, or forms.',
+        'For teams, prioritize permissions, history, and assignment workflows.',
+      ];
+  const highIntentPaths = [
+    {
+      href: '/best-ai-tools/ai-sales-tools',
+      title: isChinese ? '先看销售榜单' : 'Start with sales ranking',
+      desc: isChinese ? '先用 shortlist 缩小范围。' : 'Use the shortlist to narrow the field first.',
+    },
+    {
+      href: '/guides/ai-tools-for-sales-comparison',
+      title: isChinese ? '销售工具对比' : 'Sales tools comparison',
+      desc: isChinese ? '线索、跟进、协作一起看。' : 'Compare leads, follow-up, and collaboration together.',
+    },
+    {
+      href: '/guides/ai-tools-for-lead-generation-comparison',
+      title: isChinese ? '获客工具对比' : 'Lead generation comparison',
+      desc: isChinese ? '如果重点是找线索和补全名单。' : 'Best when the job is finding and enriching leads.',
+    },
+    {
+      href: '/guides/ai-tools-for-sales-prospecting-comparison',
+      title: isChinese ? '销售拓客对比' : 'Sales prospecting comparison',
+      desc: isChinese ? '如果你要更聚焦外联和拓展。' : 'Use this for outreach-heavy prospecting workflows.',
+    },
+  ];
 
   return (
     <>
@@ -184,6 +206,35 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </aside>
         </section>
 
+        <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图路径' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先看榜单和对比，再回到销售页' : 'Compare first, then come back to sales pages'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己在找线索、外联或跟进工具，就直接去更窄的榜单和对比页。'
+              : 'If you already know you are looking for leads, outreach, or follow-up tools, go straight to the narrower ranking and comparison pages.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {highIntentPaths.map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`sales_guide_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </section>
+
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
             <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
@@ -272,7 +323,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {isChinese ? '高意图榜单' : 'High-intent rankings'}
             </p>
             <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-              {isChinese ? '方向明确时，直接进更窄的销售榜单页' : 'When the lane is clear, jump straight into the narrower sales ranking pages'}
+              {isChinese
+                ? '方向明确时，直接进更窄的销售榜单页'
+                : 'When the lane is clear, jump straight into the narrower sales ranking pages'}
             </h2>
             <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
               {isChinese
@@ -284,12 +337,16 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 {
                   href: '/best-ai-tools/ai-lead-generation-tools',
                   title: isChinese ? '获客榜单' : 'Lead-gen ranking',
-                  desc: isChinese ? '名单发现、信息补全和线索初筛。' : 'List discovery, enrichment, and early qualification.',
+                  desc: isChinese
+                    ? '名单发现、信息补全和线索初筛。'
+                    : 'List discovery, enrichment, and early qualification.',
                 },
                 {
                   href: '/best-ai-tools/ai-sales-prospecting-tools',
                   title: isChinese ? '销售拓客榜单' : 'Prospecting ranking',
-                  desc: isChinese ? '个性化外联、触达准备和联系策略。' : 'Personalized outreach, contact prep, and outbound strategy.',
+                  desc: isChinese
+                    ? '个性化外联、触达准备和联系策略。'
+                    : 'Personalized outreach, contact prep, and outbound strategy.',
                 },
               ].map((item) => (
                 <TrackableCtaLink

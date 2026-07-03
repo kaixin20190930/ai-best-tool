@@ -92,7 +92,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       desc: isChinese ? '适合补全、解释和日常编码。' : 'Useful for completion, explanation, and daily coding.',
     },
   ];
-
   return (
     <>
       <StructuredDataServer data={breadcrumbSchema} />

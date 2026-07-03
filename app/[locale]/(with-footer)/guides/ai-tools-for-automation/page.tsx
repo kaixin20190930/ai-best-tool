@@ -95,6 +95,28 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       desc: isChinese ? '适合 API 驱动和开发者工作流。' : 'Useful for API-driven developer workflows.',
     },
   ];
+  const highIntentPaths = [
+    {
+      href: '/best-ai-tools/ai-automation-tools',
+      title: isChinese ? '先看自动化榜单' : 'Start with automation ranking',
+      desc: isChinese ? '先用 shortlist 缩小范围。' : 'Use the shortlist to narrow the field first.',
+    },
+    {
+      href: '/guides/ai-tools-for-automation-comparison',
+      title: isChinese ? '自动化工具对比' : 'Automation tools comparison',
+      desc: isChinese ? '触发器、编排和维护一起看。' : 'Compare triggers, orchestration, and maintenance together.',
+    },
+    {
+      href: '/guides/ai-tools-for-developers-comparison',
+      title: isChinese ? '开发者工具对比' : 'Developer tools comparison',
+      desc: isChinese ? '如果要把自动化和开发流程放一起看。' : 'Use this when automation and development overlap.',
+    },
+    {
+      href: '/guides/ai-tools-for-api-observability-comparison',
+      title: isChinese ? 'API 可观测对比' : 'API observability comparison',
+      desc: isChinese ? '日志、成本和异常处理。' : 'Logs, cost, and exception handling.',
+    },
+  ];
 
   return (
     <>
@@ -300,6 +322,35 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 ))}
             </div>
           </aside>
+        </section>
+
+        <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图路径' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先看榜单和对比，再回到自动化页' : 'Compare first, then come back to automation pages'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己在找工作流编排、Agent 任务或后台自动化，不要在这里停太久，直接去更窄的入口。'
+              : 'If you already know you are looking for workflow orchestration, agent tasks, or back-office automation, move quickly into the narrower entry points.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {highIntentPaths.map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`automation_guide_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
         </section>
 
         <GuideActionSection

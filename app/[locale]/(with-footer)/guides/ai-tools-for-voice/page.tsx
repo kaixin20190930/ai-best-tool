@@ -2,11 +2,11 @@ import { Metadata } from 'next';
 import { ArrowRight, AudioLines, ExternalLink, Mic, MicVocal } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Metadata.home' });
@@ -57,15 +57,37 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-      '先分清你是在做配音、转写、会议记录，还是语音对话。',
-      '看它支持哪些语言、声音风格和导出格式。',
-      '如果要长期使用，重点看延迟、准确度和批量能力，而不只是试听效果。',
-    ]
+        '先分清你是在做配音、转写、会议记录，还是语音对话。',
+        '看它支持哪些语言、声音风格和导出格式。',
+        '如果要长期使用，重点看延迟、准确度和批量能力，而不只是试听效果。',
+      ]
     : [
-      'Separate dubbing, transcription, meeting capture, and conversational voice use cases first.',
-      'Check language support, voice styles, and export formats.',
-      'For long-term use, prioritize latency, accuracy, and bulk workflows over demo polish.',
-    ];
+        'Separate dubbing, transcription, meeting capture, and conversational voice use cases first.',
+        'Check language support, voice styles, and export formats.',
+        'For long-term use, prioritize latency, accuracy, and bulk workflows over demo polish.',
+      ];
+  const highIntentPaths = [
+    {
+      href: '/best-ai-tools/ai-voice-tools',
+      title: isChinese ? '先看语音榜单' : 'Start with voice ranking',
+      desc: isChinese ? '先用 shortlist 缩小范围。' : 'Use the shortlist to narrow the field first.',
+    },
+    {
+      href: '/guides/ai-tools-for-voice-comparison',
+      title: isChinese ? '语音工具对比' : 'Voice tools comparison',
+      desc: isChinese ? '转写、配音、对话一起看。' : 'Compare transcription, dubbing, and conversation together.',
+    },
+    {
+      href: '/guides/elevenlabs-alternatives-comparison',
+      title: isChinese ? 'ElevenLabs 替代对比' : 'ElevenLabs alternatives',
+      desc: isChinese ? '如果你更关注合成和声音质量。' : 'Best when synthesis and voice quality are the focus.',
+    },
+    {
+      href: '/guides/notta-alternatives-comparison',
+      title: isChinese ? 'Notta 替代对比' : 'Notta alternatives',
+      desc: isChinese ? '如果重点是转写和会议记录。' : 'Use this when transcription and meeting notes matter more.',
+    },
+  ];
 
   return (
     <>
@@ -282,6 +304,35 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 ))}
             </div>
           </aside>
+        </section>
+
+        <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图路径' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先看榜单和对比，再回到语音页' : 'Compare first, then come back to voice pages'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己在找转写、配音或对话工具，就直接去更窄的榜单和对比页。'
+              : 'If you already know you are looking for transcription, dubbing, or conversational tools, move straight into the narrower ranking and comparison pages.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {highIntentPaths.map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`voice_guide_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
         </section>
 
         <section className='mt-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>

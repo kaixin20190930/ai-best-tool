@@ -62,15 +62,37 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const faqSchema = generateFAQSchema(faqs);
   const tips = isChinese
     ? [
-      '先分清你做的是投放、增长、社媒、邮件还是内容营销。',
-      '看它是否能接到你已有的广告、邮件和 CRM 工具。',
-      '如果你要持续迭代，优先看模板、批量、权限和品牌一致性。',
-    ]
+        '先分清你做的是投放、增长、社媒、邮件还是内容营销。',
+        '看它是否能接到你已有的广告、邮件和 CRM 工具。',
+        '如果你要持续迭代，优先看模板、批量、权限和品牌一致性。',
+      ]
     : [
-      'Separate the work first: ads, growth, social, email, or content marketing all need different tools.',
-      'Check whether it plugs into your ad, email, and CRM stack.',
-      'If you will iterate often, prioritize templates, batch workflows, permissions, and brand consistency.',
-    ];
+        'Separate the work first: ads, growth, social, email, or content marketing all need different tools.',
+        'Check whether it plugs into your ad, email, and CRM stack.',
+        'If you will iterate often, prioritize templates, batch workflows, permissions, and brand consistency.',
+      ];
+  const highIntentPaths = [
+    {
+      href: '/best-ai-tools/ai-marketing-tools',
+      title: isChinese ? '先看营销榜单' : 'Start with marketing ranking',
+      desc: isChinese ? '先用 shortlist 缩小范围。' : 'Use the shortlist to narrow the field first.',
+    },
+    {
+      href: '/guides/ai-tools-for-marketing-comparison',
+      title: isChinese ? '营销工具对比' : 'Marketing tools comparison',
+      desc: isChinese ? '广告、邮件、社媒一起看。' : 'Compare ads, email, and social together.',
+    },
+    {
+      href: '/guides/ai-writing-tools-comparison',
+      title: isChinese ? '写作工具对比' : 'Writing tools comparison',
+      desc: isChinese ? '如果核心是文案和内容产出。' : 'Best when copy and content production are the focus.',
+    },
+    {
+      href: '/guides/ai-tools-for-lead-generation-comparison',
+      title: isChinese ? '获客工具对比' : 'Lead generation comparison',
+      desc: isChinese ? '如果重点转向线索捕获和补全。' : 'Use this when lead capture and enrichment matter more.',
+    },
+  ];
 
   return (
     <>
@@ -194,6 +216,35 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </aside>
         </section>
 
+        <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图路径' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先看榜单和对比，再回到分类页' : 'Compare first, then come back to categories'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己在找广告、邮件、社媒或内容工具，不要在这里停太久，直接去更窄的榜单和对比页。'
+              : 'If you already know you are looking for ads, email, social, or content tools, do not linger here. Move into the narrower ranking and comparison pages.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {highIntentPaths.map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`marketing_guide_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </section>
+
         <section className='mt-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '下一步怎么走' : 'Next step'}
@@ -266,7 +317,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {isChinese ? '高意图榜单' : 'High-intent ranking'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '先用榜单缩小 marketing shortlist' : 'Use the ranking to narrow your marketing shortlist first'}
+            {isChinese
+              ? '先用榜单缩小 marketing shortlist'
+              : 'Use the ranking to narrow your marketing shortlist first'}
           </h2>
           <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
             {isChinese
