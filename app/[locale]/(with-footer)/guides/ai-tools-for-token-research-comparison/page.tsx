@@ -116,6 +116,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-web3-tools',
+        title: { cn: '先看 Web3 榜单', en: 'Start with the Web3 ranking' },
+        description: {
+          cn: '如果代币研究已经是明确目标，先用榜单缩小 shortlist。',
+          en: 'If token research is clearly the goal, narrow the shortlist with the ranking first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-token-research',
+        title: { cn: '回到代币研究指南', en: 'Back to the token research guide' },
+        description: {
+          cn: '如果你还要先理清项目比较、基本面和研究框架，可以回到指南页。',
+          en: 'Go back if you still need to clarify project comparison, fundamentals, and research framing first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-crypto-research-comparison',
+        title: { cn: '转去 Crypto 研究对比', en: 'Go to crypto research comparison' },
+        description: {
+          cn: '如果你发现自己其实还在做更广的市场研究，这条更高意图。',
+          en: 'A higher-intent path if your work is still broader crypto market research.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-on-chain-analysis-comparison',
+        title: { cn: '转去链上分析对比', en: 'Go to on-chain analysis comparison' },
+        description: {
+          cn: '如果你的研究开始延伸到地址、资金路径和行为判断，这页更贴近。',
+          en: 'Move there once the work extends into addresses, fund paths, and behavior analysis.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-tools-for-crypto-research-comparison',

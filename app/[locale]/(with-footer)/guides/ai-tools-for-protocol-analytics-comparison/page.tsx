@@ -116,6 +116,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-web3-tools',
+        title: { cn: '先看 Web3 榜单', en: 'Start with the Web3 ranking' },
+        description: {
+          cn: '如果协议分析已经是明确目标，先用榜单缩小 shortlist。',
+          en: 'If protocol analytics is clearly the goal, narrow the shortlist with the ranking first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-protocol-analytics',
+        title: { cn: '回到协议分析指南', en: 'Back to the protocol guide' },
+        description: {
+          cn: '如果你还想先理清协议健康、趋势和研究范围，可以回到指南页。',
+          en: 'Go back if you still need to clarify protocol health, trends, and research scope first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-on-chain-analysis-comparison',
+        title: { cn: '转去链上分析对比', en: 'Go to on-chain analysis comparison' },
+        description: {
+          cn: '如果你现在更关心地址和资金流，这条更高意图。',
+          en: 'A higher-intent path when addresses and fund flows become the real focus.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-defi-analytics-comparison',
+        title: { cn: '转去 DeFi 分析对比', en: 'Go to DeFi analytics comparison' },
+        description: {
+          cn: '如果你的重点已经变成 DeFi 协议与流动性，这页更顺。',
+          en: 'Move there when the real need shifts toward DeFi protocols and liquidity.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-tools-for-defi-analytics-comparison',

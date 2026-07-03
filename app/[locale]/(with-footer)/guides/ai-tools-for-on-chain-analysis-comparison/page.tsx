@@ -116,6 +116,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-web3-tools',
+        title: { cn: '先看 Web3 榜单', en: 'Start with the Web3 ranking' },
+        description: {
+          cn: '如果链上分析已经是明确目标，先用榜单缩小 shortlist。',
+          en: 'If on-chain analysis is clearly the goal, narrow the shortlist with the ranking first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-on-chain-analysis',
+        title: { cn: '回到链上分析指南', en: 'Back to the on-chain guide' },
+        description: {
+          cn: '如果你还要先理清地址追踪、资金流和项目研究，可以回到指南页。',
+          en: 'Go back if you still need to clarify address tracking, fund flows, and project research first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-wallet-research-comparison',
+        title: { cn: '转去钱包研究对比', en: 'Go to wallet research comparison' },
+        description: {
+          cn: '如果你现在更关心地址画像和行为判断，这条更高意图。',
+          en: 'A higher-intent path when the real need is address profiling and behavior analysis.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-protocol-analytics-comparison',
+        title: { cn: '转去协议分析对比', en: 'Go to protocol analytics comparison' },
+        description: {
+          cn: '如果你的判断开始偏协议健康、使用量和趋势，这页更贴近。',
+          en: 'Move there when the decision leans toward protocol health, usage, and trends.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-tools-for-protocol-analytics-comparison',
