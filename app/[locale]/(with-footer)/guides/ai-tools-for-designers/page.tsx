@@ -2,12 +2,12 @@ import { Metadata } from 'next';
 import { CheckCircle2, ExternalLink, Paintbrush, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Metadata.home' });
@@ -62,15 +62,37 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const faqSchema = generateFAQSchema(faqs);
   const tips = isChinese
     ? [
-      '先分清你是在做品牌、营销图、海报、UI 还是社媒素材。',
-      '看它能不能稳定输出风格一致的视觉。',
-      '如果要商业使用，优先看授权、分辨率和批量能力。',
-    ]
+        '先分清你是在做品牌、营销图、海报、UI 还是社媒素材。',
+        '看它能不能稳定输出风格一致的视觉。',
+        '如果要商业使用，优先看授权、分辨率和批量能力。',
+      ]
     : [
-      'Separate the use case first: brand, marketing assets, posters, UI, or social visuals.',
-      'Check whether it can keep styles consistent.',
-      'If you use it commercially, prioritize licensing, resolution, and batch workflows.',
-    ];
+        'Separate the use case first: brand, marketing assets, posters, UI, or social visuals.',
+        'Check whether it can keep styles consistent.',
+        'If you use it commercially, prioritize licensing, resolution, and batch workflows.',
+      ];
+  const highIntentPaths = [
+    {
+      href: '/best-ai-tools/ai-image-tools',
+      title: isChinese ? '先看图像榜单' : 'Start with image ranking',
+      desc: isChinese ? '先用 shortlist 缩小范围。' : 'Use the shortlist to narrow the field first.',
+    },
+    {
+      href: '/guides/ai-image-tools',
+      title: isChinese ? '图像工具指南' : 'Image tools guide',
+      desc: isChinese ? '生成、编辑和素材处理一起看。' : 'Compare generation, editing, and asset workflows together.',
+    },
+    {
+      href: '/guides/ai-tools-for-content-creation-comparison',
+      title: isChinese ? '内容创作对比' : 'Content creation comparison',
+      desc: isChinese ? '如果设计和内容生产交叉。' : 'Useful when design and content production overlap.',
+    },
+    {
+      href: '/guides/ai-video-tools-comparison',
+      title: isChinese ? '视频工具对比' : 'Video tools comparison',
+      desc: isChinese ? '如果重点转向视频素材和剪辑。' : 'Use this when video assets and editing matter more.',
+    },
+  ];
 
   return (
     <>
@@ -185,12 +207,43 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </aside>
         </section>
 
+        <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图路径' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先看榜单和对比，再回到设计页' : 'Compare first, then come back to design pages'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己要做品牌、海报、UI 或社媒视觉，就直接去更窄的榜单和对比页。'
+              : 'If the real need is brand visuals, posters, UI, or social assets, move straight into the narrower ranking and comparison pages.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {highIntentPaths.map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`designers_guide_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </section>
+
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '高意图入口' : 'High-intent path'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '如果你已经知道自己在找设计工具，先看图像榜单' : 'If design is already the lane, open the image ranking first'}
+            {isChinese
+              ? '如果你已经知道自己在找设计工具，先看图像榜单'
+              : 'If design is already the lane, open the image ranking first'}
           </h2>
           <div className='mt-4 grid gap-3 md:grid-cols-3'>
             <Link

@@ -2,9 +2,9 @@ import { Metadata } from 'next';
 import { ExternalLink, GitPullRequest, Layers3, ShieldAlert } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -65,15 +65,41 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-      '先分清你要的是 PR 解释、风险检查，还是团队协作反馈。',
-      '看它是否能围绕 diff、文件上下文和项目结构给建议，而不是泛泛而谈。',
-      '对团队来说，比“会不会说”更重要的是噪音控制和评论可执行性。',
-    ]
+        '先分清你要的是 PR 解释、风险检查，还是团队协作反馈。',
+        '看它是否能围绕 diff、文件上下文和项目结构给建议，而不是泛泛而谈。',
+        '对团队来说，比“会不会说”更重要的是噪音控制和评论可执行性。',
+      ]
     : [
-      'Separate PR explanation, risk checking, and collaboration feedback before comparing tools.',
-      'Look for suggestions grounded in diffs, file context, and project structure rather than generic advice.',
-      'For teams, noise control and actionable comments matter more than flashy output.',
-    ];
+        'Separate PR explanation, risk checking, and collaboration feedback before comparing tools.',
+        'Look for suggestions grounded in diffs, file context, and project structure rather than generic advice.',
+        'For teams, noise control and actionable comments matter more than flashy output.',
+      ];
+  const highIntentPaths = [
+    {
+      href: '/best-ai-tools/ai-code-review-tools',
+      title: isChinese ? '先看代码审查榜单' : 'Start with code review ranking',
+      desc: isChinese ? '先用 shortlist 缩小范围。' : 'Use the shortlist to narrow the field first.',
+    },
+    {
+      href: '/guides/ai-tools-for-code-review-comparison',
+      title: isChinese ? '代码审查对比页' : 'Code review comparison',
+      desc: isChinese
+        ? 'PR 理解、风险提示和反馈质量一起看。'
+        : 'Compare PR understanding, risk flags, and feedback quality together.',
+    },
+    {
+      href: '/guides/ai-coding-tools-comparison',
+      title: isChinese ? '编程工具对比' : 'Coding tools comparison',
+      desc: isChinese
+        ? '如果重点在实现速度和编辑器内工作流。'
+        : 'Useful when implementation speed and editor workflows matter most.',
+    },
+    {
+      href: '/guides/ai-tools-for-developers-comparison',
+      title: isChinese ? '开发者工具对比' : 'Developer tools comparison',
+      desc: isChinese ? '更广的开发者工作流入口。' : 'A broader developer workflow entry point.',
+    },
+  ];
 
   return (
     <>
@@ -191,6 +217,35 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </aside>
         </section>
 
+        <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图路径' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先看榜单和对比，再回到代码审查页' : 'Compare first, then come back to code review pages'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你的真实需求是 PR 解释、风险检查或者团队 review 反馈，就直接去更窄的榜单和对比页。'
+              : 'If the real need is PR explanation, risk checks, or team review feedback, move straight into the narrower ranking and comparison pages.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {highIntentPaths.map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`code_review_guide_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </section>
+
         <GuideActionSection
           locale={locale}
           eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}
@@ -277,7 +332,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {isChinese ? '高意图榜单' : 'High-intent ranking'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '先用榜单缩小代码审查 shortlist' : 'Use the ranking to narrow your code review shortlist first'}
+            {isChinese
+              ? '先用榜单缩小代码审查 shortlist'
+              : 'Use the ranking to narrow your code review shortlist first'}
           </h2>
           <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
             {isChinese
