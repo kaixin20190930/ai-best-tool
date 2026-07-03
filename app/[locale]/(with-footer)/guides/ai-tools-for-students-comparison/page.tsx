@@ -30,6 +30,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     breadcrumbLabel: { cn: '学生工具对比', en: 'Student tools comparison' },
     compareTitle: { cn: '几款常见学生工具的快速对照', en: 'A quick side-by-side look at common student tools' },
     compareSubtitle: { cn: '学生', en: 'students' },
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-student-tools',
+        title: { cn: '先看学生榜单', en: 'Start with the student ranking' },
+        description: {
+          cn: '如果学生工具已经是明确目标，先用榜单缩小 shortlist。',
+          en: 'If student tools are clearly the goal, narrow the shortlist with the ranking first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-students',
+        title: { cn: '回到学生指南', en: 'Back to the student guide' },
+        description: {
+          cn: '如果你还想先理清学习、作业和笔记整理需求，可以回到指南页。',
+          en: 'Go back if you still need to clarify study, homework, and note-organizing needs first.',
+        },
+      },
+      {
+        href: '/guides/ai-note-taking-tools-comparison',
+        title: { cn: '转去记笔记工具对比', en: 'Go to note taking comparison' },
+        description: {
+          cn: '如果你的需求更偏笔记整理和知识沉淀，这页更高意图。',
+          en: 'A higher-intent path when note organization and knowledge capture matter more.',
+        },
+      },
+      {
+        href: '/guides/ai-writing-tools-comparison',
+        title: { cn: '转去写作工具对比', en: 'Go to writing tools comparison' },
+        description: {
+          cn: '如果你现在更关心作业写作和表达，这页更贴近。',
+          en: 'Move there if writing quality and expression are the real focus.',
+        },
+      },
+    ],
     tips: {
       cn: [
         '先看你是做学习总结、作业辅助、笔记整理还是论文写作，不同场景侧重点不一样。',

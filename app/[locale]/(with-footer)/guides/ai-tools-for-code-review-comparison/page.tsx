@@ -75,6 +75,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-code-review-tools',
+        title: { cn: '先看代码审查榜单', en: 'Start with the code review ranking' },
+        description: {
+          cn: '如果代码审查已经是明确目标，先用榜单缩小 shortlist。',
+          en: 'If code review is clearly the goal, narrow the shortlist with the ranking first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-code-review',
+        title: { cn: '回到代码审查指南', en: 'Back to the code review guide' },
+        description: {
+          cn: '如果你还想先理清 diff 理解、风险提示和协作流程，可以回到指南页。',
+          en: 'Go back if you still need to clarify diff understanding, risk checks, and collaboration flow first.',
+        },
+      },
+      {
+        href: '/guides/ai-coding-tools-comparison',
+        title: { cn: '转去编程工具对比', en: 'Go to coding tools comparison' },
+        description: {
+          cn: '如果你的问题其实更偏实现效率，这页更高意图。',
+          en: 'A higher-intent path when the real need is implementation speed rather than review depth.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-prompt-testing-comparison',
+        title: { cn: '转去 Prompt 测试对比', en: 'Go to prompt testing comparison' },
+        description: {
+          cn: '如果 review 开始延伸到 AI 输出质量和回归验证，这页更顺。',
+          en: 'Move there when review starts overlapping with output quality and regression checks.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-coding-tools-comparison',

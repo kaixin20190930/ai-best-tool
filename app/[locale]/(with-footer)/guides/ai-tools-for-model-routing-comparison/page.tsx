@@ -105,6 +105,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-model-routing-tools',
+        title: { cn: '先看模型路由榜单', en: 'Start with the model routing ranking' },
+        description: {
+          cn: '如果模型路由已经是明确目标，先用榜单缩小 shortlist。',
+          en: 'If model routing is clearly the goal, narrow the shortlist with the ranking first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-model-routing',
+        title: { cn: '回到模型路由指南', en: 'Back to the model routing guide' },
+        description: {
+          cn: '如果你还要先理清统一接入、回退和成本治理，可以回到指南页。',
+          en: 'Go back if you still need to clarify unified access, fallback behavior, and cost governance first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-api-observability-comparison',
+        title: { cn: '转去 API 可观测对比', en: 'Go to API observability comparison' },
+        description: {
+          cn: '如果你更关心日志、成本和质量追踪，这页更高意图。',
+          en: 'A higher-intent path when logs, cost, and quality tracking matter more.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-evals-comparison',
+        title: { cn: '转去 Evals 对比', en: 'Go to evals comparison' },
+        description: {
+          cn: '如果你已经不只是选模型，而是开始验证输出质量，这页更贴近。',
+          en: 'Move there once the job expands beyond model access into output-quality validation.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/best-ai-tools/ai-model-routing-tools',

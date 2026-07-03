@@ -31,6 +31,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     compareTitle: { cn: '免费 AI 工具的快速对照', en: 'A quick side-by-side look at free AI tools' },
     compareSubtitle: { cn: '免费工具', en: 'Free tools' },
     preferredToolNames: ['chatgpt', 'gemini', 'claude', 'perplexity', 'poe', 'copilot'],
+    highIntentPaths: [
+      {
+        href: '/guides/best-free-ai-tools',
+        title: { cn: '回到免费工具指南', en: 'Back to the free tools guide' },
+        description: {
+          cn: '如果你还要先理清要看哪些免费能力，可以回到指南页。',
+          en: 'Go back if you still need to clarify which free capabilities matter most.',
+        },
+      },
+      {
+        href: '/guides/ai-writing-tools-comparison',
+        title: { cn: '转去写作工具对比', en: 'Go to writing tools comparison' },
+        description: {
+          cn: '如果你其实最在意写作和改写能力，这页更高意图。',
+          en: 'A higher-intent path when writing and rewriting are the real priorities.',
+        },
+      },
+      {
+        href: '/guides/ai-productivity-tools-comparison',
+        title: { cn: '转去生产力工具对比', en: 'Go to productivity tools comparison' },
+        description: {
+          cn: '如果你想把免费工具放进日常工作流，这页更贴近。',
+          en: 'Move there if you want free tools that fit into daily productivity workflows.',
+        },
+      },
+      {
+        href: '/explore?pricing=free&sort=popular',
+        title: { cn: '继续看更多免费候选', en: 'See more free candidates' },
+        description: {
+          cn: '当你只想扩大免费 shortlist 时，直接回 Explore 最快。',
+          en: 'The fastest next step when you only need a wider free shortlist.',
+        },
+      },
+    ],
     decisionCards: [
       {
         title: { cn: '先看是否真免费', en: 'Check if it is truly free' },

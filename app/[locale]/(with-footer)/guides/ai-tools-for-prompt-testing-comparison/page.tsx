@@ -75,6 +75,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-prompt-testing-tools',
+        title: { cn: '先看 Prompt 榜单', en: 'Start with the prompt testing ranking' },
+        description: {
+          cn: '如果 Prompt 测试已经是明确目标，先用榜单缩小 shortlist。',
+          en: 'If prompt testing is clearly the goal, narrow the shortlist with the ranking first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-prompt-testing',
+        title: { cn: '回到 Prompt 测试指南', en: 'Back to the prompt testing guide' },
+        description: {
+          cn: '如果你还要先理清评估方式、版本管理和协作流程，可以回到指南页。',
+          en: 'Go back if you still need to clarify evaluation style, version management, and collaboration flow first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-evals-comparison',
+        title: { cn: '转去 Evals 对比', en: 'Go to evals comparison' },
+        description: {
+          cn: '如果你的问题已经从 prompt 测试扩展到更广的验证体系，这页更高意图。',
+          en: 'A higher-intent path when the job expands from prompt testing into broader evaluation systems.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-api-observability-comparison',
+        title: { cn: '转去 API 可观测对比', en: 'Go to API observability comparison' },
+        description: {
+          cn: '如果你更关心请求、日志和质量追踪，这页更贴近。',
+          en: 'Move there when requests, logs, and quality tracking become the real focus.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/best-ai-tools/ai-prompt-testing-tools',

@@ -75,6 +75,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-evals-tools',
+        title: { cn: '先看 Evals 榜单', en: 'Start with the evals ranking' },
+        description: {
+          cn: '如果 evals 已经是明确目标，先用榜单缩小 shortlist。',
+          en: 'If evals are clearly the goal, narrow the shortlist with the ranking first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-evals',
+        title: { cn: '回到 Evals 指南', en: 'Back to the evals guide' },
+        description: {
+          cn: '如果你还想先理清评分逻辑、数据集和验收流程，可以回到指南页。',
+          en: 'Go back if you still need to clarify scoring logic, datasets, and acceptance workflows first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-prompt-testing-comparison',
+        title: { cn: '转去 Prompt 测试对比', en: 'Go to prompt testing comparison' },
+        description: {
+          cn: '如果你现在更关心 prompt 版本和 A/B 比较，这页更高意图。',
+          en: 'A higher-intent path when prompt versions and A/B comparisons become the real focus.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-api-observability-comparison',
+        title: { cn: '转去 API 可观测对比', en: 'Go to API observability comparison' },
+        description: {
+          cn: '如果你更关心上线后的请求与质量观察，这页更贴近。',
+          en: 'Move there if post-deploy request and quality visibility are the real priority.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/best-ai-tools/ai-evals-tools',
