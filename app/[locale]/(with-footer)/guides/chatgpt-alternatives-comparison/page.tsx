@@ -89,6 +89,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-chatbot-tools',
+        title: { cn: '先看聊天榜单', en: 'Start with the chatbot ranking' },
+        description: {
+          cn: '如果你已经明确是在选聊天入口，先用榜单收窄候选。',
+          en: 'If you are already choosing a chat entry point, use the ranking first to narrow candidates.',
+        },
+      },
+      {
+        href: '/guides/ai-chatbot-tools-comparison',
+        title: { cn: '转去聊天机器人总对比', en: 'Go to chatbot comparison' },
+        description: {
+          cn: '如果你想把候选范围再拉宽一点，这页更适合继续筛选。',
+          en: 'Use this when you want to broaden the shortlist one more step.',
+        },
+      },
+      {
+        href: '/guides/ai-writing-tools-comparison',
+        title: { cn: '转去写作工具对比', en: 'Go to writing tools comparison' },
+        description: {
+          cn: '如果你其实更常用在写作和内容生成，这条路径更贴近任务。',
+          en: 'Move here if the real job is more about writing and content generation.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-research-comparison',
+        title: { cn: '转去研究工具对比', en: 'Go to research tools comparison' },
+        description: {
+          cn: '如果你在意的是资料核对和检索，而不只是聊天，继续看研究页。',
+          en: 'If evidence gathering matters more than chatting, continue into the research tools page.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-chatbot-tools-comparison',

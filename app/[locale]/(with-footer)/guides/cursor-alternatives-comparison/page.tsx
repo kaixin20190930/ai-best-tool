@@ -89,6 +89,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-coding-tools',
+        title: { cn: '先看编程榜单', en: 'Start with the coding ranking' },
+        description: {
+          cn: '如果你已经明确要在 IDE 里找 AI 代码工作流，先用榜单收窄。',
+          en: 'If you already want an AI coding workflow inside the IDE, use the ranking first to narrow down.',
+        },
+      },
+      {
+        href: '/guides/ai-coding-tools-comparison',
+        title: { cn: '转去编程工具总对比', en: 'Go to coding tools comparison' },
+        description: {
+          cn: '如果你想把候选面拉大一点，再重新收敛 shortlist，这页更合适。',
+          en: 'Use this when you want a broader candidate set before narrowing back down.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-code-review-comparison',
+        title: { cn: '转去代码审查对比', en: 'Go to code review comparison' },
+        description: {
+          cn: '如果你的主要诉求已经变成 PR 审查和反馈质量，这条路径更贴近目标。',
+          en: 'Move here if your real need is PR review and better feedback quality.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-developers-comparison',
+        title: { cn: '回到开发者工具总对比', en: 'Back to developer tools comparison' },
+        description: {
+          cn: '如果你还想从更宽的开发者工作流角度判断，再回这个页。',
+          en: 'Return here if you want the broader developer-workflow view again.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-coding-tools-comparison',

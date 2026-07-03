@@ -101,6 +101,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-web3-tools',
+        title: { cn: '先看 Web3 榜单', en: 'Start with the Web3 ranking' },
+        description: {
+          cn: '如果你已经明确要做 Web3 工具选型，先用榜单把 shortlist 收窄。',
+          en: 'If Web3 tooling is clearly the goal, use the ranking first to narrow the shortlist.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-web3-analysis-comparison',
+        title: { cn: '转去 Web3 分析对比', en: 'Go to Web3 analysis comparison' },
+        description: {
+          cn: '如果你的决策更偏链上研究、协议监控和钱包追踪，这页更高意图。',
+          en: 'A higher-intent path when the decision is really about on-chain research, protocol monitoring, and wallet tracking.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-wallet-research-comparison',
+        title: { cn: '转去钱包研究对比', en: 'Go to wallet research comparison' },
+        description: {
+          cn: '如果你更关心地址画像和行为判断，继续看这条路。',
+          en: 'Move here if address profiling and behavior analysis are the real focus.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-crypto-research-comparison',
+        title: { cn: '转去 Crypto 研究对比', en: 'Go to crypto research comparison' },
+        description: {
+          cn: '如果你想把链上研究范围再拉宽一点，这页也值得继续看。',
+          en: 'Use this when you want to broaden the research shortlist a little further.',
+        },
+      },
+    ],
     notFor: [
       {
         title: { cn: '只想看泛 AI 榜单的人', en: 'People browsing broad AI lists' },

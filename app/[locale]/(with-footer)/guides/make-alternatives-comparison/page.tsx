@@ -89,6 +89,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-automation-tools',
+        title: { cn: '先看自动化榜单', en: 'Start with the automation ranking' },
+        description: {
+          cn: '如果你已经确定是在选自动化工具，先用榜单收窄候选。',
+          en: 'If automation is already the target, use the ranking first to narrow the candidates.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-automation-comparison',
+        title: { cn: '转去自动化工具总对比', en: 'Go to automation tools comparison' },
+        description: {
+          cn: '如果你要把候选范围再拉宽一点，这页更适合。',
+          en: 'Use this when you want a broader shortlist.',
+        },
+      },
+      {
+        href: '/guides/zapier-alternatives-comparison',
+        title: { cn: '转去 Zapier 替代方案对比', en: 'Go to Zapier alternatives comparison' },
+        description: {
+          cn: '如果你更在意低门槛连接器，这条路径更高意图。',
+          en: 'A higher-intent path when low-friction connectors are the real need.',
+        },
+      },
+      {
+        href: '/guides/n8n-alternatives-comparison',
+        title: { cn: '转去 n8n 替代方案对比', en: 'Go to n8n alternatives comparison' },
+        description: {
+          cn: '如果你后面会走更复杂或更开发者导向的流程，这条路也更顺。',
+          en: 'Move here when the workflow is moving toward deeper or more developer-oriented automation.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-tools-for-automation-comparison',

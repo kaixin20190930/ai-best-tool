@@ -89,6 +89,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-chatbot-tools',
+        title: { cn: '先看聊天榜单', en: 'Start with the chatbot ranking' },
+        description: {
+          cn: '如果你已经决定在聊天入口里选型，先用榜单收口。',
+          en: 'If you are already choosing a chat entry point, use the ranking to narrow things down first.',
+        },
+      },
+      {
+        href: '/guides/chatgpt-alternatives-comparison',
+        title: { cn: '转去 ChatGPT 替代方案对比', en: 'Go to ChatGPT alternatives comparison' },
+        description: {
+          cn: '如果你其实是在几个主流聊天入口里权衡，这条路很合适。',
+          en: 'Use this when you are really weighing the major chat-entry options.',
+        },
+      },
+      {
+        href: '/guides/cursor-alternatives-comparison',
+        title: { cn: '转去 Cursor 替代方案对比', en: 'Go to Cursor alternatives comparison' },
+        description: {
+          cn: '如果你的工作流更偏编辑器和代码协作，去看 Cursor 页。',
+          en: 'Move here if your workflow is more editor and code-collaboration focused.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-research-comparison',
+        title: { cn: '转去研究工具对比', en: 'Go to research tools comparison' },
+        description: {
+          cn: '如果你更看重资料核对而不是纯聊天，也可以继续看研究页。',
+          en: 'If evidence-checking matters more than chat, continue into the research tools page.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-chatbot-tools-comparison',
