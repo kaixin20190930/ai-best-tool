@@ -119,6 +119,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-content-creation-tools',
+        title: { cn: '先看内容创作榜单', en: 'Start with the content creation ranking' },
+        description: {
+          cn: '如果你已经确定是内容创作场景，先用榜单缩小 shortlist。',
+          en: 'If content creation is clearly the lane, narrow the shortlist with the ranking first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-creators-comparison',
+        title: { cn: '转去创作者工具对比', en: 'Go to creator tools comparison' },
+        description: {
+          cn: '如果你更关心的是多渠道发布和创作者工作流，这页更贴近。',
+          en: 'A better fit when multi-channel publishing and creator workflows are the real decision.',
+        },
+      },
+      {
+        href: '/guides/ai-writing-tools-comparison',
+        title: { cn: '转去写作工具对比', en: 'Go to writing tools comparison' },
+        description: {
+          cn: '如果你更偏文本起稿、改写和文案执行，这页更直接。',
+          en: 'Move there if drafting, rewriting, and copy execution are the real tasks.',
+        },
+      },
+      {
+        href: '/guides/ai-seo-tools-comparison',
+        title: { cn: '转去 SEO 工具对比', en: 'Go to SEO tools comparison' },
+        description: {
+          cn: '如果你的内容产出最终是为了搜索流量，这条路更高意图。',
+          en: 'A higher-intent path when the content workflow is really about search traffic.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-tools-for-creators-comparison',

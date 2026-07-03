@@ -117,6 +117,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-automation-tools',
+        title: { cn: '先看自动化榜单', en: 'Start with the automation ranking' },
+        description: {
+          cn: '如果自动化已经是确定目标，先用榜单收紧 shortlist。',
+          en: 'If automation is the clear goal, narrow the shortlist with the ranking first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-automation',
+        title: { cn: '回到自动化指南', en: 'Back to the automation guide' },
+        description: {
+          cn: '如果你还想先理清流程和使用场景，可以回到指南页。',
+          en: 'Go back if you still need to clarify the workflow and use case first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-developers-comparison',
+        title: { cn: '转去开发者工具对比', en: 'Go to developer tools comparison' },
+        description: {
+          cn: '如果你的自动化已经深入 API、脚本和执行层，这条更高意图。',
+          en: 'A higher-intent path when automation already reaches APIs, scripts, and execution.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-api-observability-comparison',
+        title: { cn: '转去 API 可观测对比', en: 'Go to API observability comparison' },
+        description: {
+          cn: '如果你现在更关心日志、成本和失败诊断，这页更贴近。',
+          en: 'Move there if logs, cost visibility, and failure diagnosis matter more right now.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-tools-for-developers-comparison',

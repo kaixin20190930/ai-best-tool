@@ -30,13 +30,55 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     breadcrumbLabel: { cn: '创作者工具对比', en: 'Creator tools comparison' },
     compareTitle: { cn: '几款常见创作者工具的快速对照', en: 'A quick side-by-side look at common creator tools' },
     compareSubtitle: { cn: '创作者', en: 'Creator' },
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-creator-tools',
+        title: { cn: '先看创作者榜单', en: 'Start with the creator ranking' },
+        description: {
+          cn: '如果创作者工具已经是明确目标，先用榜单缩小 shortlist。',
+          en: 'If creator tools are clearly the target, narrow the shortlist with the ranking first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-content-creation-comparison',
+        title: { cn: '转去内容创作工具对比', en: 'Go to content creation tools comparison' },
+        description: {
+          cn: '如果你更在意脚本、封面和批量生产，这页更贴近。',
+          en: 'A better fit when scripts, thumbnails, and batch production are the real priorities.',
+        },
+      },
+      {
+        href: '/guides/ai-video-tools-comparison',
+        title: { cn: '转去视频工具对比', en: 'Go to video tools comparison' },
+        description: {
+          cn: '如果视频脚本、剪辑和成片是主要工作流，这页更直接。',
+          en: 'Move there if video scripting, editing, and final output are the main workflow.',
+        },
+      },
+      {
+        href: '/guides/ai-writing-tools-comparison',
+        title: { cn: '转去写作工具对比', en: 'Go to writing tools comparison' },
+        description: {
+          cn: '如果你更偏文案、长文和改写，这页更直接。',
+          en: 'Go there if the workflow is more about copy, long-form writing, and rewriting.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/best-ai-tools/ai-creator-tools',
         title: { cn: '先看创作者榜单页', en: 'Start with the creator ranking' },
         description: {
-          cn: '如果你想先确认最值得看的候选，再回来比内容工作流，就先去榜单页。',
-          en: 'Open the ranking first if you want the strongest candidates before comparing content workflows.',
+          cn: '如果你想先收紧 shortlist，再回来细看工作流，就先去榜单页。',
+          en: 'Open the ranking first if you want a tighter shortlist before comparing workflows.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-content-creation-comparison',
+        title: { cn: '转去内容创作工具对比', en: 'Switch to content creation tools comparison' },
+        description: {
+          cn: '如果你更在意脚本、封面和批量内容生产，这页更贴近。',
+          en: 'Move there if scripts, thumbnails, and batch content production are the real priorities.',
         },
       },
       {

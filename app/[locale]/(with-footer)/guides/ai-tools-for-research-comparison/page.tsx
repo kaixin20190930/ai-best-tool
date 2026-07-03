@@ -120,6 +120,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-research-tools',
+        title: { cn: '先看研究榜单', en: 'Start with the research ranking' },
+        description: {
+          cn: '如果研究是明确目标，先用榜单收窄 shortlist。',
+          en: 'If research is clearly the goal, narrow the shortlist with the ranking first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-research',
+        title: { cn: '回到研究指南', en: 'Back to the research guide' },
+        description: {
+          cn: '如果你还要先把资料发现、证据核对和分析方向理清，可以回到指南页。',
+          en: 'Go back if you still need to clarify discovery, evidence-checking, and analysis direction.',
+        },
+      },
+      {
+        href: '/guides/ai-seo-tools-comparison',
+        title: { cn: '转去 SEO 工具对比', en: 'Go to SEO tools comparison' },
+        description: {
+          cn: '如果你的研究已经收窄到关键词、SERP 和网站结构，这条更高意图。',
+          en: 'A higher-intent path when the research is really about keywords, SERP, and site structure.',
+        },
+      },
+      {
+        href: '/guides/ai-writing-tools-comparison',
+        title: { cn: '转去写作工具对比', en: 'Go to writing tools comparison' },
+        description: {
+          cn: '如果下一步是把研究结果变成内容输出，这页更顺。',
+          en: 'Move there when the next step is turning research into content output.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/guides/ai-seo-tools-comparison',

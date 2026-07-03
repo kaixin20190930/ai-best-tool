@@ -116,6 +116,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         },
       },
     ],
+    highIntentPaths: [
+      {
+        href: '/best-ai-tools/ai-seo-tools',
+        title: { cn: '先看 SEO 榜单', en: 'Start with the SEO ranking' },
+        description: {
+          cn: '如果你已经明确是 SEO 场景，先用榜单缩小 shortlist。',
+          en: 'If SEO is clearly the lane, narrow the shortlist with the ranking first.',
+        },
+      },
+      {
+        href: '/guides/ai-seo-tools',
+        title: { cn: '回到 SEO 指南', en: 'Back to the SEO guide' },
+        description: {
+          cn: '如果你还想先把关键词、结构和内容策略理清，可以回到指南页。',
+          en: 'Go back if you still want to clarify keywords, structure, and content strategy first.',
+        },
+      },
+      {
+        href: '/guides/ai-tools-for-research-comparison',
+        title: { cn: '转去研究工具对比', en: 'Go to research tools comparison' },
+        description: {
+          cn: '如果你现在更偏 SERP、竞品和资料发现，这条更高意图。',
+          en: 'A higher-intent path when SERP research, competitors, and discovery are the real needs.',
+        },
+      },
+      {
+        href: '/guides/ai-writing-tools-comparison',
+        title: { cn: '转去写作工具对比', en: 'Go to writing tools comparison' },
+        description: {
+          cn: '如果你发现自己其实是在找写作和改写工具，而不是 SEO 套件，这页更直接。',
+          en: 'Move there if the real decision is about writing and rewriting rather than SEO suites.',
+        },
+      },
+    ],
     nextPaths: [
       {
         href: '/best-ai-tools/ai-seo-tools',
