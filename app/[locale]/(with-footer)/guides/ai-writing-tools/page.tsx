@@ -2,12 +2,12 @@ import { Metadata } from 'next';
 import { ArrowRight, CheckCircle2, ExternalLink, FileText, PenLine } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
@@ -65,15 +65,39 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const faqSchema = generateFAQSchema(faqs);
   const tips = isChinese
     ? [
-      '先确认写作任务类型：博客、邮件、社媒、SEO、广告文案，需求会很不一样。',
-      '看它是否支持中文、是否有模板、是否能保持语气一致。',
-      '如果你要长期写内容，优先看导出、协作和限制，而不是只看生成速度。',
-    ]
+        '先确认写作任务类型：博客、邮件、社媒、SEO、广告文案，需求会很不一样。',
+        '看它是否支持中文、是否有模板、是否能保持语气一致。',
+        '如果你要长期写内容，优先看导出、协作和限制，而不是只看生成速度。',
+      ]
     : [
-      'Start with the content type: blog, email, social, SEO, or ad copy all have different needs.',
-      'Check whether it supports Chinese, templates, and consistent tone.',
-      'If you plan to write regularly, look at export, collaboration, and limits, not just generation speed.',
-    ];
+        'Start with the content type: blog, email, social, SEO, or ad copy all have different needs.',
+        'Check whether it supports Chinese, templates, and consistent tone.',
+        'If you plan to write regularly, look at export, collaboration, and limits, not just generation speed.',
+      ];
+  const highIntentPaths = [
+    {
+      href: '/best-ai-tools/ai-writing-tools',
+      title: isChinese ? '先看写作榜单' : 'Start with writing ranking',
+      desc: isChinese ? '先用 shortlist 缩小范围。' : 'Use the shortlist to narrow the field first.',
+    },
+    {
+      href: '/guides/ai-writing-tools-comparison',
+      title: isChinese ? '写作工具对比页' : 'Writing tools comparison',
+      desc: isChinese ? '博客、邮件和广告文案一起看。' : 'Compare blogs, email, and ad copy together.',
+    },
+    {
+      href: '/guides/ai-tools-for-content-creation-comparison',
+      title: isChinese ? '内容创作对比' : 'Content creation comparison',
+      desc: isChinese ? '如果写作和内容生产交叉。' : 'Useful when writing and content production overlap.',
+    },
+    {
+      href: '/guides/ai-seo-tools-comparison',
+      title: isChinese ? 'SEO 研究对比' : 'SEO research comparison',
+      desc: isChinese
+        ? '如果写作目标更偏排名和内容优化。'
+        : 'Best when the writing job is tied to rankings and optimization.',
+    },
+  ];
 
   return (
     <>
@@ -189,6 +213,35 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 ))}
             </div>
           </aside>
+        </section>
+
+        <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图路径' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先看榜单和对比，再回到写作页' : 'Compare first, then come back to writing pages'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己是在写博客、邮件、社媒或广告文案，就直接去更窄的榜单和对比页。'
+              : 'If the real job is blogs, email, social posts, or ad copy, move straight into the narrower ranking and comparison pages.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {highIntentPaths.map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`writing_guide_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
         </section>
 
         <section className='mt-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
