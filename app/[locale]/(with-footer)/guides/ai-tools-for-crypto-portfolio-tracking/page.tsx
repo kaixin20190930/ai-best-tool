@@ -2,13 +2,13 @@ import { Metadata } from 'next';
 import { ExternalLink, Layers3, PieChart, WalletCards } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Metadata.home' });
@@ -65,15 +65,41 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-      '先分清你要的是组合看板、钱包归集，还是更偏交易与提醒。',
-      '看资产归类和多链支持是否覆盖你的真实持仓结构。',
-      '如果要长期看组合，重点看刷新频率、历史视图和导出能力。',
-    ]
+        '先分清你要的是组合看板、钱包归集，还是更偏交易与提醒。',
+        '看资产归类和多链支持是否覆盖你的真实持仓结构。',
+        '如果要长期看组合，重点看刷新频率、历史视图和导出能力。',
+      ]
     : [
-      'Separate portfolio dashboards, wallet rollups, and alert workflows before comparing tools.',
-      'Check whether asset grouping and multichain support match your real holdings structure.',
-      'For long-term tracking, prioritize refresh cadence, historical views, and export capabilities.',
-    ];
+        'Separate portfolio dashboards, wallet rollups, and alert workflows before comparing tools.',
+        'Check whether asset grouping and multichain support match your real holdings structure.',
+        'For long-term tracking, prioritize refresh cadence, historical views, and export capabilities.',
+      ];
+  const highIntentPaths = [
+    {
+      href: '/best-ai-tools/ai-web3-tools',
+      title: isChinese ? '先看 Web3 榜单' : 'Start with Web3 ranking',
+      desc: isChinese ? '先用 shortlist 缩小范围。' : 'Use the shortlist to narrow the field first.',
+    },
+    {
+      href: '/guides/ai-tools-for-crypto-portfolio-tracking-comparison',
+      title: isChinese ? '资产追踪对比页' : 'Portfolio tracking comparison',
+      desc: isChinese
+        ? '组合视图、多钱包和历史能力一起看。'
+        : 'Compare portfolio views, multi-wallet support, and history together.',
+    },
+    {
+      href: '/guides/ai-tools-for-wallet-monitoring-comparison',
+      title: isChinese ? '钱包监控对比' : 'Wallet monitoring comparison',
+      desc: isChinese ? '如果重点转向提醒和异动。' : 'Best when alerts and anomalies matter more.',
+    },
+    {
+      href: '/guides/ai-tools-for-web3-comparison',
+      title: isChinese ? 'Web3 工具总对比' : 'Web3 tools comparison',
+      desc: isChinese
+        ? '如果还在追踪、研究和监控之间摇摆。'
+        : 'Useful when tracking, research, and monitoring are still being weighed.',
+    },
+  ];
 
   return (
     <>
@@ -191,6 +217,37 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 ))}
             </div>
           </aside>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图路径' : 'High-intent path'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '先看榜单和对比，再回到资产追踪页'
+              : 'Compare first, then come back to portfolio tracking pages'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己是在找组合和持仓工具，就别在总览页停太久，直接去更窄的榜单和对比页。'
+              : 'If portfolio tracking is already the real task, move straight into the narrower ranking and comparison pages.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {highIntentPaths.map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`portfolio_tracking_guide_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
         </section>
 
         <GuideActionSection
