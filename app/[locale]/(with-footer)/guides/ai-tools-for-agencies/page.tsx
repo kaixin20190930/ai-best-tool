@@ -74,6 +74,30 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         'Check whether it supports project breakdown, client separation, bulk delivery, and versioning.',
         'If multiple people collaborate, prioritize permissions, sharing, auditability, and export flows.',
       ];
+  const highIntentPaths = [
+    {
+      href: '/guides/ai-tools-for-content-creation-comparison',
+      title: isChinese ? '内容创作对比' : 'Content creation comparison',
+      desc: isChinese ? '如果你交付里有大量内容产出。' : 'Useful when content production is a big part of delivery.',
+    },
+    {
+      href: '/guides/ai-tools-for-marketing-comparison',
+      title: isChinese ? '营销工具对比' : 'Marketing tools comparison',
+      desc: isChinese ? '如果你需要更强的获客和文案工作流。' : 'Best when acquisition and copy workflows matter more.',
+    },
+    {
+      href: '/guides/ai-tools-for-automation-comparison',
+      title: isChinese ? '自动化工具对比' : 'Automation tools comparison',
+      desc: isChinese
+        ? '如果你想把批量交付和流程串起来。'
+        : 'Helpful for connecting bulk delivery and repeatable workflows.',
+    },
+    {
+      href: '/best-ai-tools/ai-agency-tools',
+      title: isChinese ? '代理榜单' : 'Agency ranking',
+      desc: isChinese ? '先用榜单缩小 shortlist。' : 'Use the shortlist to narrow the field first.',
+    },
+  ];
 
   return (
     <>
@@ -268,6 +292,34 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             >
               {isChinese ? '继续看对比页' : 'Continue to comparison'}
             </TrackableCtaLink>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图路径' : 'High-intent paths'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '先走最短路径，再决定要不要继续细比'
+              : 'Take the shortest path first, then decide whether to compare deeper'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己的工作主要是内容、营销、自动化或客户交付，就直接去更窄的页。'
+              : 'If your work is mainly content, marketing, automation, or client delivery, move directly into the narrower pages.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {highIntentPaths.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:border-cyan-200 hover:bg-cyan-50/60'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </Link>
+            ))}
           </div>
         </section>
         <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_agencies' />

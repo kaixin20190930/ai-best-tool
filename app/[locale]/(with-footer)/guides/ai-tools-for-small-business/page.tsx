@@ -79,6 +79,30 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     'If multiple people will use it, prioritize permissions, sharing, and admin features.',
   ];
   const tips = isChinese ? chineseTips : englishTips;
+  const highIntentPaths = [
+    {
+      href: '/guides/ai-tools-for-marketing-comparison',
+      title: isChinese ? '营销工具对比' : 'Marketing tools comparison',
+      desc: isChinese ? '如果你最先要解决获客和文案。' : 'Best when acquisition and copy are the first concern.',
+    },
+    {
+      href: '/guides/ai-tools-for-automation-comparison',
+      title: isChinese ? '自动化工具对比' : 'Automation tools comparison',
+      desc: isChinese
+        ? '如果你更关心省时间和接流程。'
+        : 'Useful when saving time and connecting workflows matter most.',
+    },
+    {
+      href: '/guides/ai-tools-for-customer-support-comparison',
+      title: isChinese ? '客服工具对比' : 'Customer support comparison',
+      desc: isChinese ? '如果你要先处理回复和支持问题。' : 'Best when replies and support workflows come first.',
+    },
+    {
+      href: '/best-ai-tools/ai-small-business-tools',
+      title: isChinese ? '小企业榜单' : 'Small-business ranking',
+      desc: isChinese ? '先用 shortlist 缩小范围。' : 'Use the shortlist to narrow the field first.',
+    },
+  ];
 
   return (
     <>
@@ -238,7 +262,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {isChinese ? '高意图榜单' : 'High-intent ranking'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '先用榜单缩小 small-business shortlist' : 'Use the ranking to narrow your small-business shortlist first'}
+            {isChinese
+              ? '先用榜单缩小 small-business shortlist'
+              : 'Use the ranking to narrow your small-business shortlist first'}
           </h2>
           <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
             {isChinese
@@ -264,6 +290,34 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             >
               {isChinese ? '继续看对比页' : 'Continue to comparison'}
             </TrackableCtaLink>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图路径' : 'High-intent paths'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '先走最短路径，再决定要不要继续细比'
+              : 'Take the shortest path first, then decide whether to compare deeper'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己更偏营销、自动化、客服或小企业 shortlist，就直接去更窄的页。'
+              : 'If you already know the work leans toward marketing, automation, support, or a small-business shortlist, move directly into the narrower pages.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {highIntentPaths.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:border-cyan-200 hover:bg-cyan-50/60'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </Link>
+            ))}
           </div>
         </section>
         <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_small_business' />
