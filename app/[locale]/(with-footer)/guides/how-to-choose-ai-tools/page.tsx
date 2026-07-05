@@ -255,6 +255,59 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </div>
         </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '先看榜单，再回到选型指南继续缩小范围'
+              : 'Start with the ranking, then come back here to narrow the field'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经确定要找 AI 工具，但还没锁定具体方向，先看榜单会比只读概览更快进入决策。'
+              : 'If you already know you need an AI tool but have not narrowed the lane yet, the ranking gets you to a decision faster than the overview alone.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/',
+                title: isChinese ? '榜单总页' : 'Rankings hub',
+                desc: isChinese ? '先缩小 shortlist。' : 'Start with the shortlist first.',
+              },
+              {
+                href: '/guides/ai-tools-for-automation',
+                title: isChinese ? '自动化工具指南' : 'Automation guide',
+                desc: isChinese ? '如果你更在意流程串联。' : 'Best when workflows and triggers matter more.',
+              },
+              {
+                href: '/guides/ai-tools-for-developers',
+                title: isChinese ? '开发者工具指南' : 'Developer guide',
+                desc: isChinese ? '如果你更在意模型和工程接入。' : 'Better when model and engineering fit is key.',
+              },
+              {
+                href: '/guides/ai-tools-for-marketing',
+                title: isChinese ? '营销工具指南' : 'Marketing guide',
+                desc: isChinese ? '如果你在找增长和内容方向。' : 'Useful when growth and content are the target.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`choose_tools_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </section>
+
         <GuideSubmissionPath locale={locale} ctaPrefix='how_to_choose_ai_tools' />
       </div>
     </>
