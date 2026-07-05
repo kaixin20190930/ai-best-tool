@@ -277,6 +277,64 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </div>
         </section>
 
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先用榜单缩小自动化 shortlist' : 'Use the ranking to narrow your automation shortlist first'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经明确是在比工作流编排、Agent 任务和后台自动化，先看榜单会比泛目录更快进入决策。'
+              : 'If the decision is already about workflow orchestration, agent tasks, and back-office automation, the ranking gets you to a decision faster than a broad directory.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-automation-tools',
+                title: isChinese ? '自动化工具榜单' : 'Automation tools ranking',
+                desc: isChinese
+                  ? '先收窄到更高相关的自动化候选。'
+                  : 'Start with the highest-fit automation candidates first.',
+              },
+              {
+                href: '/guides/ai-tools-for-automation-comparison',
+                title: isChinese ? '自动化工具对比' : 'Automation tools comparison',
+                desc: isChinese
+                  ? '触发器、编排和维护一起看。'
+                  : 'Compare triggers, orchestration, and maintenance together.',
+              },
+              {
+                href: '/guides/ai-tools-for-developers-comparison',
+                title: isChinese ? '开发者工具对比' : 'Developer tools comparison',
+                desc: isChinese
+                  ? '如果流程已深入 API 和工程层。'
+                  : 'Useful when workflows reach APIs and engineering layers.',
+              },
+              {
+                href: '/guides/ai-tools-for-api-observability-comparison',
+                title: isChinese ? 'API 可观测对比' : 'API observability comparison',
+                desc: isChinese
+                  ? '如果重点是日志、失败和成本可见性。'
+                  : 'Best for logs, failures, and cost visibility.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`automation_guide_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </section>
+
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
             <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
