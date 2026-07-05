@@ -238,6 +238,60 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先用榜单缩小设计 shortlist' : 'Use the ranking to narrow your design shortlist first'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经明确是在比品牌、海报、UI 或社媒视觉，先看榜单会比泛目录更快进入决策。'
+              : 'If the decision is already about brand work, posters, UI, or social visuals, the ranking gets you to a decision faster than a broad directory.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-image-tools',
+                title: isChinese ? '图像工具榜单' : 'Image ranking',
+                desc: isChinese
+                  ? '先收窄到更高相关的视觉候选。'
+                  : 'Start with the highest-fit visual candidates first.',
+              },
+              {
+                href: '/guides/ai-image-tools',
+                title: isChinese ? '图像工具指南' : 'Image tools guide',
+                desc: isChinese ? '生成、编辑和素材处理一起看。' : 'Compare generation, editing, and assets together.',
+              },
+              {
+                href: '/guides/ai-tools-for-content-creation-comparison',
+                title: isChinese ? '内容创作对比' : 'Content creation comparison',
+                desc: isChinese ? '如果设计和内容生产交叉。' : 'Useful when design and content production overlap.',
+              },
+              {
+                href: '/guides/ai-video-tools-comparison',
+                title: isChinese ? '视频工具对比' : 'Video tools comparison',
+                desc: isChinese
+                  ? '如果重点转向视频素材和剪辑。'
+                  : 'Use this when video assets and editing matter more.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`designers_guide_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '高意图入口' : 'High-intent path'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
