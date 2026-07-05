@@ -2,12 +2,12 @@ import { Metadata } from 'next';
 import { ArrowRight, CheckCircle2, ExternalLink, Image as ImageIcon, Palette } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
@@ -149,7 +149,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {isChinese ? '高意图路径' : 'High-intent path'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '先看榜单，再进入对比页和真实条目' : 'Start with the ranking, then move into comparison and real listings'}
+            {isChinese
+              ? '先看榜单，再进入对比页和真实条目'
+              : 'Start with the ranking, then move into comparison and real listings'}
           </h2>
           <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
             {isChinese
@@ -166,17 +168,23 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {
                 href: '/guides/ai-image-tools-comparison',
                 title: isChinese ? '图像工具对比' : 'Image tools comparison',
-                desc: isChinese ? '横向看生成、修图和设计能力。' : 'Compare generation, editing, and design side by side.',
+                desc: isChinese
+                  ? '横向看生成、修图和设计能力。'
+                  : 'Compare generation, editing, and design side by side.',
               },
               {
                 href: '/guides/ai-video-tools-comparison',
                 title: isChinese ? '视频工具对比' : 'Video tools comparison',
-                desc: isChinese ? '如果素材会进视频工作流，这里更贴近。' : 'Useful when image assets feed into video workflows.',
+                desc: isChinese
+                  ? '如果素材会进视频工作流，这里更贴近。'
+                  : 'Useful when image assets feed into video workflows.',
               },
               {
                 href: '/guides/ai-tools-for-marketing-comparison',
                 title: isChinese ? '营销工具对比' : 'Marketing tools comparison',
-                desc: isChinese ? '如果重点是营销素材和 campaign 输出。' : 'Better for campaign assets and marketing output.',
+                desc: isChinese
+                  ? '如果重点是营销素材和 campaign 输出。'
+                  : 'Better for campaign assets and marketing output.',
               },
             ].map((item) => (
               <TrackableCtaLink
@@ -211,6 +219,58 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             >
               {isChinese ? '提交你的工具' : 'Submit your tool'}
             </TrackableCtaLink>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先用榜单缩小图像 shortlist' : 'Use the ranking to narrow your image shortlist first'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己更偏生成、修图、品牌素材或商用输出，榜单页会比泛目录更快进入决策。'
+              : 'If the decision is already about generation, editing, brand assets, or commercial output, the ranking page gets to a decision faster than a broad directory.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-image-tools',
+                title: isChinese ? '图像工具榜单' : 'Image tools ranking',
+                desc: isChinese ? '直接看高意图 shortlist。' : 'Go straight to the high-intent shortlist.',
+              },
+              {
+                href: '/best-ai-tools/ai-design-tools',
+                title: isChinese ? '设计工具榜单' : 'Design tools ranking',
+                desc: isChinese ? '如果你也要看品牌和版式。' : 'Useful when branding and layout also matter.',
+              },
+              {
+                href: '/guides/ai-image-tools-comparison',
+                title: isChinese ? '图像工具对比' : 'Image tools comparison',
+                desc: isChinese
+                  ? '横向看生成、修图和设计能力。'
+                  : 'Compare generation, editing, and design side by side.',
+              },
+              {
+                href: '/guides/ai-video-tools-comparison',
+                title: isChinese ? '视频工具对比' : 'Video tools comparison',
+                desc: isChinese ? '如果素材会进视频工作流。' : 'Useful when image assets feed into video workflows.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`image_guide_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
           </div>
         </section>
 
