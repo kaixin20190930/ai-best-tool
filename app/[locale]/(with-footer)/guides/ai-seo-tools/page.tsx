@@ -321,6 +321,58 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先用榜单缩小 SEO shortlist' : 'Use the ranking to narrow your SEO shortlist first'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经明确自己是在找关键词研究、内容优化或排名跟踪工具，先看榜单会比泛目录更快进入决策。'
+              : 'If the decision is already about keyword research, content optimization, or rank tracking, the ranking gets you to a decision faster than a broad directory.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-seo-tools',
+                title: isChinese ? 'SEO 榜单' : 'SEO ranking',
+                desc: isChinese ? '先看最值得试的候选。' : 'Start with the most relevant candidates first.',
+              },
+              {
+                href: '/guides/ai-seo-tools-comparison',
+                title: isChinese ? 'SEO 对比' : 'SEO comparison',
+                desc: isChinese ? '关键词、内容和排名一起比。' : 'Compare keywords, content, and ranking together.',
+              },
+              {
+                href: '/guides/ai-writing-tools-comparison',
+                title: isChinese ? '写作对比' : 'Writing comparison',
+                desc: isChinese ? '如果内容生产也是重点。' : 'Useful when content production is also a core task.',
+              },
+              {
+                href: '/categories/text-writing?sort=popular',
+                title: isChinese ? '写作分类' : 'Writing category',
+                desc: isChinese
+                  ? '直接看更接近内容增长工作的条目。'
+                  : 'Inspect listings closer to content growth work.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`seo_guide_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '先看这些入口' : 'Start here'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
