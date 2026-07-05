@@ -220,6 +220,58 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </div>
         </section>
 
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '先看榜单，再决定要不要继续看免费工具'
+              : 'Start with the ranking, then decide whether to keep exploring free tools'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经确定自己要先从免费方案开始，先用榜单缩小 shortlist，会比直接翻分类更快。'
+              : 'If you already know you want to start with free options, using the ranking to narrow the shortlist is faster than browsing categories first.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-free-tools',
+                title: isChinese ? '免费工具榜单' : 'Free tools ranking',
+                desc: isChinese ? '先锁定值得试的 shortlist。' : 'Start with the tools worth trying first.',
+              },
+              {
+                href: '/guides/free-ai-tools',
+                title: isChinese ? '免费工具指南' : 'Free tools guide',
+                desc: isChinese ? '看限制、更新和使用场景。' : 'Review limits, freshness, and use cases.',
+              },
+              {
+                href: '/guides/best-free-ai-tools-comparison',
+                title: isChinese ? '免费工具对比' : 'Free tools comparison',
+                desc: isChinese ? '横向对比几个候选。' : 'Compare a few candidates side by side.',
+              },
+              {
+                href: '/categories/productivity?sort=popular',
+                title: isChinese ? '生产力分类' : 'Productivity category',
+                desc: isChinese ? '如果想直接看相关类目。' : 'Useful when you want the closest category first.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`best_free_ai_tools_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </section>
+
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
             <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
