@@ -2,12 +2,12 @@ import { Metadata } from 'next';
 import { BarChart4, ExternalLink, Layers3, TrendingUp } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Metadata.home' });
@@ -56,15 +56,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-      '先分清你是在看交易对、池子，还是整体流动性。',
-      '看它是否支持你常用的链和 DEX 数据。',
-      '如果给团队使用，优先看 API、导出、告警和历史追踪能力。',
-    ]
+        '先分清你是在看交易对、池子，还是整体流动性。',
+        '看它是否支持你常用的链和 DEX 数据。',
+        '如果给团队使用，优先看 API、导出、告警和历史追踪能力。',
+      ]
     : [
-      'Separate the use case first: pairs, pools, or overall liquidity.',
-      'Check whether it supports the chains and DEX data you actually use.',
-      'For team use, prioritize API access, exports, alerts, and historical tracking.',
-    ];
+        'Separate the use case first: pairs, pools, or overall liquidity.',
+        'Check whether it supports the chains and DEX data you actually use.',
+        'For team use, prioritize API access, exports, alerts, and historical tracking.',
+      ];
 
   return (
     <>
@@ -197,7 +197,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {isChinese ? '高意图入口' : 'High-intent path'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '如果你已经知道自己在找 DEX 工具，先走 Web3 榜单' : 'If DEX is already the lane, open the Web3 ranking first'}
+            {isChinese
+              ? '如果你已经知道自己在找 DEX 工具，先走 Web3 榜单'
+              : 'If DEX is already the lane, open the Web3 ranking first'}
           </h2>
           <div className='mt-4 grid gap-3 md:grid-cols-3'>
             <Link
@@ -233,6 +235,58 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   : 'Browse real Web3 listings first, then narrow back down to DEX-specific candidates.'}
               </p>
             </Link>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先用榜单缩小 DEX shortlist' : 'Use the ranking to narrow your DEX shortlist first'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经明确是在找交易对、池子或流动性观察工具，先看榜单会比只看入口页更快进入决策。'
+              : 'If the decision is already about pairs, pools, or liquidity observation tools, the ranking gets you to a decision faster than an entry page alone.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-web3-tools',
+                title: isChinese ? 'Web3 榜单' : 'Web3 ranking',
+                desc: isChinese ? '先看最值得试的候选。' : 'Start with the most relevant candidates first.',
+              },
+              {
+                href: '/guides/ai-tools-for-dex-analytics-comparison',
+                title: isChinese ? 'DEX 对比' : 'DEX comparison',
+                desc: isChinese ? '交易对、池子和流动性一起看。' : 'Compare pairs, pools, and liquidity together.',
+              },
+              {
+                href: '/guides/ai-tools-for-defi-analytics-comparison',
+                title: isChinese ? 'DeFi 对比' : 'DeFi comparison',
+                desc: isChinese ? '如果你还想把协议层一起看。' : 'Useful when the protocol layer is also in scope.',
+              },
+              {
+                href: '/categories/web3?sort=popular',
+                title: isChinese ? 'Web3 分类' : 'Web3 category',
+                desc: isChinese
+                  ? '先看真实条目，再缩窄到 DEX 候选。'
+                  : 'Browse real listings first, then narrow back to DEX candidates.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`dex_analytics_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
           </div>
         </section>
 
