@@ -2,12 +2,12 @@ import { Metadata } from 'next';
 import { ArrowRight, CheckCircle2, ExternalLink, Timer, Workflow } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
@@ -149,7 +149,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {isChinese ? '高意图路径' : 'High-intent path'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '先看榜单，再进入对比页和真实条目' : 'Start with the ranking, then move into comparison and real listings'}
+            {isChinese
+              ? '先看榜单，再进入对比页和真实条目'
+              : 'Start with the ranking, then move into comparison and real listings'}
           </h2>
           <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
             {isChinese
@@ -166,17 +168,23 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {
                 href: '/guides/ai-productivity-tools-comparison',
                 title: isChinese ? '生产力工具对比' : 'Productivity comparison',
-                desc: isChinese ? '横向看效率、协作和自动化。' : 'Compare efficiency, collaboration, and automation side by side.',
+                desc: isChinese
+                  ? '横向看效率、协作和自动化。'
+                  : 'Compare efficiency, collaboration, and automation side by side.',
               },
               {
                 href: '/guides/ai-note-taking-tools-comparison',
                 title: isChinese ? '记笔记工具对比' : 'Note taking comparison',
-                desc: isChinese ? '如果重点偏记录和整理，这里更贴近。' : 'Better when capture and organization matter most.',
+                desc: isChinese
+                  ? '如果重点偏记录和整理，这里更贴近。'
+                  : 'Better when capture and organization matter most.',
               },
               {
                 href: '/guides/ai-tools-for-automation-comparison',
                 title: isChinese ? '自动化工具对比' : 'Automation tools comparison',
-                desc: isChinese ? '如果重点偏流程自动化，这里更贴近。' : 'Better when automation is the main job to solve.',
+                desc: isChinese
+                  ? '如果重点偏流程自动化，这里更贴近。'
+                  : 'Better when automation is the main job to solve.',
               },
             ].map((item) => (
               <TrackableCtaLink
@@ -211,6 +219,62 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             >
               {isChinese ? '提交你的工具' : 'Submit your tool'}
             </TrackableCtaLink>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '先用榜单缩小 productivity shortlist'
+              : 'Use the ranking to narrow your productivity shortlist first'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经明确是在找能节省日常时间的工具，先看榜单会比只看总览更快进入决策。'
+              : 'If the decision is already about tools that save daily time, the ranking gets you to a decision faster than an overview alone.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-productivity-tools',
+                title: isChinese ? '生产力榜单' : 'Productivity ranking',
+                desc: isChinese ? '先看真正值得试的候选。' : 'Start with the most relevant candidates first.',
+              },
+              {
+                href: '/guides/ai-productivity-tools-comparison',
+                title: isChinese ? '生产力对比' : 'Productivity comparison',
+                desc: isChinese
+                  ? '效率、协作和自动化一起看。'
+                  : 'Compare efficiency, collaboration, and automation together.',
+              },
+              {
+                href: '/guides/ai-note-taking-tools-comparison',
+                title: isChinese ? '记笔记对比' : 'Note-taking comparison',
+                desc: isChinese ? '如果任务偏记录和整理。' : 'Useful when capture and organization matter most.',
+              },
+              {
+                href: '/guides/ai-tools-for-automation-comparison',
+                title: isChinese ? '自动化对比' : 'Automation comparison',
+                desc: isChinese
+                  ? '如果真正要解决的是重复流程。'
+                  : 'Best when the real job is repetitive workflow automation.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`productivity_guide_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
           </div>
         </section>
 
