@@ -305,6 +305,58 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </div>
         </section>
 
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先用榜单缩小 research shortlist' : 'Use the ranking to narrow your research shortlist first'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己更偏资料发现、证据核对或竞品分析，榜单页会比泛目录更快进入决策。'
+              : 'If the decision is already about discovery, evidence-checking, or competitor analysis, the ranking page gets to a decision faster than a broad directory.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-research-tools',
+                title: isChinese ? '研究工具榜单' : 'Research tools ranking',
+                desc: isChinese ? '直接看高意图 shortlist。' : 'Go straight to the high-intent shortlist.',
+              },
+              {
+                href: '/best-ai-tools/ai-seo-tools',
+                title: isChinese ? 'SEO 研究榜单' : 'SEO research ranking',
+                desc: isChinese ? '如果关键词和 SERP 是重点。' : 'Best when keywords and SERP are the focus.',
+              },
+              {
+                href: '/guides/ai-tools-for-research-comparison',
+                title: isChinese ? '研究工具对比' : 'Research tools comparison',
+                desc: isChinese
+                  ? '横向看来源、证据和工作流。'
+                  : 'Compare sources, evidence, and workflow side by side.',
+              },
+              {
+                href: '/guides/ai-tools-for-crypto-research-comparison',
+                title: isChinese ? 'Crypto 研究对比' : 'Crypto research comparison',
+                desc: isChinese ? '如果重点偏链上和项目跟踪。' : 'Better for on-chain and project-tracking workflows.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`research_guide_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </section>
+
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
             <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
