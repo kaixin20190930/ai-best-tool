@@ -287,6 +287,58 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </div>
         </section>
 
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先用榜单缩小 DeFi shortlist' : 'Use the ranking to narrow your DeFi shortlist first'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经明确是在找流动性、收益或协议分析工具，先看榜单会比只看总览更快进入决策。'
+              : 'If the decision is already about liquidity, yield, or protocol analysis tools, the ranking gets you to a decision faster than an overview alone.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-web3-tools',
+                title: isChinese ? 'Web3 榜单' : 'Web3 ranking',
+                desc: isChinese ? '先看最值得试的候选。' : 'Start with the most relevant candidates first.',
+              },
+              {
+                href: '/guides/ai-tools-for-defi-analytics-comparison',
+                title: isChinese ? 'DeFi 对比' : 'DeFi comparison',
+                desc: isChinese ? '流动性、收益和协议一起看。' : 'Compare liquidity, yield, and protocols together.',
+              },
+              {
+                href: '/guides/ai-tools-for-protocol-analytics-comparison',
+                title: isChinese ? '协议分析对比' : 'Protocol analytics comparison',
+                desc: isChinese ? '如果重点偏协议健康和趋势。' : 'Useful when protocol health and trends matter more.',
+              },
+              {
+                href: '/guides/ai-tools-for-web3-analysis-comparison',
+                title: isChinese ? 'Web3 分析对比' : 'Web3 analysis comparison',
+                desc: isChinese
+                  ? '如果重点偏链上研究和监控。'
+                  : 'Useful when on-chain research and monitoring matter more.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`defi_analytics_guide_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </section>
+
         <GuideActionSection
           locale={locale}
           eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}
