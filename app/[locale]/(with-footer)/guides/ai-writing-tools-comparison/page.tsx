@@ -1,3 +1,4 @@
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -280,6 +281,71 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
+        <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '先看榜单，再决定是继续看写作工具还是切到相邻入口'
+              : 'Start with the ranking, then decide whether to keep comparing writing tools or switch to an adjacent path'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '如果写作已经是确定需求，先收紧 shortlist 往往比继续横向浏览更多页面更有效。'
+              : 'If writing is already the clear need, narrowing the shortlist first is usually better than continuing to browse more pages horizontally.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-writing-tools',
+                title: locale === 'cn' || locale === 'tw' ? '写作工具榜单' : 'Writing tools ranking',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '先看更高意图候选。'
+                    : 'Start with the highest-intent candidates first.',
+              },
+              {
+                href: '/guides/ai-writing-tools',
+                title: locale === 'cn' || locale === 'tw' ? '写作指南' : 'Writing guide',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '重新确认起稿、改写还是长文。'
+                    : 'Re-check whether the task is drafting, rewriting, or long-form writing.',
+              },
+              {
+                href: '/guides/ai-tools-for-content-creation-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '内容创作对比' : 'Content creation comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '当写作已经要进入内容流程。'
+                    : 'Useful when writing is part of a broader content workflow.',
+              },
+              {
+                href: '/guides/ai-seo-tools-comparison',
+                title: locale === 'cn' || locale === 'tw' ? 'SEO 工具对比' : 'SEO tools comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果核心已经变成搜索内容规划。'
+                    : 'Better when the real need is search-driven content planning.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`writing_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </div>
+      </section>
       <GuideSubmissionPath locale={locale} ctaPrefix='ai_writing_tools_comparison' />
     </>
   );
