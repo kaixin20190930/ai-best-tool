@@ -324,6 +324,60 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       <div className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <section className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先用榜单缩小 voice shortlist' : 'Use the ranking to narrow your voice shortlist first'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经明确是在找配音、转写或语音对话工具，先看榜单会比只看对比页更快进入决策。'
+              : 'If the decision is already about dubbing, transcription, or conversational voice, the ranking gets you to a decision faster than a comparison page alone.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-voice-tools',
+                title: isChinese ? '语音榜单' : 'Voice ranking',
+                desc: isChinese ? '先看最值得试的候选。' : 'Start with the most relevant candidates first.',
+              },
+              {
+                href: '/guides/ai-tools-for-voice-comparison',
+                title: isChinese ? '语音对比' : 'Voice comparison',
+                desc: isChinese
+                  ? '配音、转写和对话一起看。'
+                  : 'Compare dubbing, transcription, and conversational use together.',
+              },
+              {
+                href: '/guides/ai-tools-for-meeting-notes-comparison',
+                title: isChinese ? '会议纪要对比' : 'Meeting notes comparison',
+                desc: isChinese
+                  ? '如果重点偏转写和整理。'
+                  : 'Useful when transcription and cleanup are the real focus.',
+              },
+              {
+                href: '/guides/ai-video-tools-comparison',
+                title: isChinese ? '视频工具对比' : 'Video tools comparison',
+                desc: isChinese ? '如果语音是视频工作流的一部分。' : 'Useful when voice is part of a video workflow.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`voice_comparison_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </section>
+
+        <section className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '高意图路径' : 'High-intent path'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
