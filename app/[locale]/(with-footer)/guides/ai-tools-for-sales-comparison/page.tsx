@@ -1,3 +1,4 @@
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -195,6 +196,71 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <div className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
+        <section className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '先用榜单缩小 sales shortlist'
+              : 'Use the ranking to narrow your sales shortlist first'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '如果你已经明确是在找销售、获客或外联工具，先看榜单会比只看对比页更快进入决策。'
+              : 'If the decision is already about sales, lead generation, or outreach tools, the ranking gets you to a decision faster than a comparison page alone.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-sales-prospecting-tools',
+                title: locale === 'cn' || locale === 'tw' ? '销售榜单' : 'Sales ranking',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '先看最值得试的候选。'
+                    : 'Start with the most relevant candidates first.',
+              },
+              {
+                href: '/guides/ai-tools-for-sales-prospecting-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '销售拓客对比' : 'Sales prospecting comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '个性化外联和触达策略一起看。'
+                    : 'Compare personalized outreach and contact strategy together.',
+              },
+              {
+                href: '/guides/ai-tools-for-lead-generation-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '获客对比' : 'Lead generation comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果重点是名单来源和补全。'
+                    : 'Useful when list sourcing and enrichment matter more.',
+              },
+              {
+                href: '/guides/salesforce-einstein-alternatives-comparison',
+                title: locale === 'cn' || locale === 'tw' ? 'CRM 对比' : 'CRM comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果已经进入 CRM 和企业流程。'
+                    : 'Useful when CRM and enterprise workflow are the real need.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`sales_comparison_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </section>
+      </div>
       <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_sales_comparison' />
     </>
   );
