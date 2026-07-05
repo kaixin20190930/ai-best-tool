@@ -373,6 +373,60 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </div>
         </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先用榜单缩小协议 shortlist' : 'Use the ranking to narrow your protocol shortlist first'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经明确是在比协议健康、历史数据、趋势和研究能力，先看榜单会比泛 Web3 目录更快进入决策。'
+              : 'If the decision is already about protocol health, historical data, trends, and research capability, the ranking gets you to a decision faster than a broad Web3 directory.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-web3-tools',
+                title: isChinese ? 'Web3 工具榜单' : 'Web3 tools ranking',
+                desc: isChinese
+                  ? '先从更高相关的 Web3 候选开始。'
+                  : 'Start with the highest-fit Web3 candidates first.',
+              },
+              {
+                href: '/best-ai-tools/ai-api-observability-tools',
+                title: isChinese ? '可观测榜单' : 'Observability ranking',
+                desc: isChinese
+                  ? '如果你还要看日志、追踪和质量治理。'
+                  : 'Useful when logs, tracing, and quality governance are also in scope.',
+              },
+              {
+                href: '/guides/ai-tools-for-protocol-analytics-comparison',
+                title: isChinese ? '协议分析对比' : 'Protocol analytics comparison',
+                desc: isChinese ? '协议覆盖、历史和趋势一起看。' : 'Compare coverage, history, and trends together.',
+              },
+              {
+                href: '/guides/ai-tools-for-defi-analytics-comparison',
+                title: isChinese ? 'DeFi 分析对比' : 'DeFi analytics comparison',
+                desc: isChinese ? '如果问题更偏 TVL 和资金流。' : 'Best when TVL and capital flow matter most.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`protocol_analytics_guide_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </section>
         <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_protocol_analytics' />
       </div>
     </>
