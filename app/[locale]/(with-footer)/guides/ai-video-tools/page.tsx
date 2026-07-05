@@ -2,12 +2,12 @@ import { Metadata } from 'next';
 import { CheckCircle2, Clapperboard, ExternalLink, Film } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
@@ -149,7 +149,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {isChinese ? '高意图入口' : 'High-intent path'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '如果视频已经是明确方向，先看榜单再进对比' : 'If video is already the lane, open the ranking before the comparison'}
+            {isChinese
+              ? '如果视频已经是明确方向，先看榜单再进对比'
+              : 'If video is already the lane, open the ranking before the comparison'}
           </h2>
           <div className='mt-4 grid gap-3 md:grid-cols-3'>
             <Link
@@ -230,6 +232,62 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ))}
             </div>
           </aside>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '先看榜单，再决定是剪辑、生成还是配音'
+              : 'Start with the ranking, then decide whether editing, generation, or voiceover is the lane'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经确定视频是主任务，先看榜单会比直接翻分类更快收窄 shortlist。'
+              : 'If video is already the main task, the ranking gets you to a shorter shortlist faster than browsing categories first.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-video-tools',
+                title: isChinese ? '视频工具榜单' : 'Video tools ranking',
+                desc: isChinese ? '先收窄到更高相关候选。' : 'Start with the most relevant candidates first.',
+              },
+              {
+                href: '/guides/ai-video-tools-comparison',
+                title: isChinese ? '视频工具对比' : 'Video tools comparison',
+                desc: isChinese ? '剪辑、生成和配音一起看。' : 'Compare editing, generation, and voiceover together.',
+              },
+              {
+                href: '/guides/ai-writing-tools-comparison',
+                title: isChinese ? '写作工具对比' : 'Writing tools comparison',
+                desc: isChinese
+                  ? '如果你的脚本和文案还要一起比。'
+                  : 'Useful when scripts and copy are also part of the decision.',
+              },
+              {
+                href: '/guides/ai-tools-for-content-creation-comparison',
+                title: isChinese ? '内容创作对比' : 'Content creation comparison',
+                desc: isChinese
+                  ? '如果还在内容生产和视频生产之间摇摆。'
+                  : 'Best when content production and video production overlap.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`video_tools_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
         </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
