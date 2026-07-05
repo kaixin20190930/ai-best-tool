@@ -250,6 +250,64 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </div>
         </section>
 
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '先用榜单缩小资产追踪 shortlist'
+              : 'Use the ranking to narrow your portfolio tracking shortlist first'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经明确是在比组合看板、多钱包归集和历史视图，先看榜单会比泛 Web3 目录更快进入决策。'
+              : 'If the decision is already about portfolio dashboards, multi-wallet rollups, and historical views, the ranking gets you to a decision faster than a broad Web3 directory.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-web3-tools',
+                title: isChinese ? 'Web3 工具榜单' : 'Web3 tools ranking',
+                desc: isChinese
+                  ? '先从更高相关的 Web3 候选开始。'
+                  : 'Start with the highest-fit Web3 candidates first.',
+              },
+              {
+                href: '/guides/ai-tools-for-crypto-portfolio-tracking-comparison',
+                title: isChinese ? '资产追踪对比' : 'Portfolio tracking comparison',
+                desc: isChinese
+                  ? '组合、多钱包和历史一起看。'
+                  : 'Compare portfolios, multi-wallet support, and history together.',
+              },
+              {
+                href: '/guides/ai-tools-for-wallet-monitoring-comparison',
+                title: isChinese ? '钱包监控对比' : 'Wallet monitoring comparison',
+                desc: isChinese ? '如果你开始更关心提醒和异动。' : 'Useful when alerts and anomalies matter more.',
+              },
+              {
+                href: '/guides/ai-tools-for-web3-comparison',
+                title: isChinese ? 'Web3 工具总对比' : 'Web3 tools comparison',
+                desc: isChinese
+                  ? '如果你还在追踪、研究和监控之间比较。'
+                  : 'Helpful when tracking, research, and monitoring are still in play.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`portfolio_tracking_guide_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </section>
+
         <GuideActionSection
           locale={locale}
           eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}
