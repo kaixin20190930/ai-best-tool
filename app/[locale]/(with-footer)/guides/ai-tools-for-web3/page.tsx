@@ -272,6 +272,64 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '先看榜单，再决定是链上分析、钱包还是研究'
+              : 'Start with the ranking, then decide whether analytics, wallets, or research is the lane'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道 Web3 是主方向，先看榜单会比直接翻分类更快收窄 shortlist。'
+              : 'If Web3 is already the main direction, the ranking gets you to a shorter shortlist faster than browsing categories first.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-web3-tools',
+                title: isChinese ? 'Web3 工具榜单' : 'Web3 tools ranking',
+                desc: isChinese ? '先收窄到更高相关候选。' : 'Start with the most relevant candidates first.',
+              },
+              {
+                href: '/guides/ai-tools-for-web3-comparison',
+                title: isChinese ? 'Web3 工具对比' : 'Web3 tools comparison',
+                desc: isChinese
+                  ? '链上数据、钱包和协议一起看。'
+                  : 'Compare on-chain data, wallets, and protocols together.',
+              },
+              {
+                href: '/guides/ai-tools-for-on-chain-analysis-comparison',
+                title: isChinese ? '链上分析对比' : 'On-chain analysis comparison',
+                desc: isChinese
+                  ? '如果重点是地址、资金流和协议行为。'
+                  : 'Best when addresses, fund flow, and protocol behavior matter.',
+              },
+              {
+                href: '/guides/ai-tools-for-crypto-research-comparison',
+                title: isChinese ? 'Crypto 研究对比' : 'Crypto research comparison',
+                desc: isChinese
+                  ? '如果重点偏项目判断和研究整合。'
+                  : 'Useful when project analysis and synthesis are the real need.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`web3_tools_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '直接进入对比' : 'Jump into comparison'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
