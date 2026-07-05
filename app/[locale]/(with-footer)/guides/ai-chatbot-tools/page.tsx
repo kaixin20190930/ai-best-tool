@@ -340,6 +340,60 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </div>
         </section>
 
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先用榜单缩小聊天机器人 shortlist' : 'Use the ranking to narrow your chatbot shortlist first'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经知道自己更偏问答、写作、知识检索或团队协作，榜单页会比泛目录更快进入决策。'
+              : 'If the decision is already about Q&A, writing, knowledge retrieval, or team collaboration, the ranking page gets to a decision faster than a broad directory.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-chatbot-tools',
+                title: isChinese ? '聊天机器人榜单' : 'Chatbot ranking',
+                desc: isChinese ? '直接看高意图 shortlist。' : 'Go straight to the high-intent shortlist.',
+              },
+              {
+                href: '/best-ai-tools/ai-writing-tools',
+                title: isChinese ? '写作工具榜单' : 'Writing tools ranking',
+                desc: isChinese ? '如果你的核心场景偏写作。' : 'Best when drafting and writing are the main task.',
+              },
+              {
+                href: '/guides/ai-chatbot-tools-comparison',
+                title: isChinese ? '聊天机器人对比' : 'Chatbot comparison',
+                desc: isChinese
+                  ? '横向看回答、知识和协作。'
+                  : 'Compare answers, knowledge, and collaboration side by side.',
+              },
+              {
+                href: '/guides/ai-tools-for-research-comparison',
+                title: isChinese ? '研究工具对比' : 'Research tools comparison',
+                desc: isChinese
+                  ? '如果重点偏资料检索和核对。'
+                  : 'Better for discovery, retrieval, and validation workflows.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`chatbot_guide_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </section>
+
         <section className='mt-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '下一步怎么走' : 'Next step'}
