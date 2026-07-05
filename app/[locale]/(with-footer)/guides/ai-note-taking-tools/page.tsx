@@ -2,12 +2,12 @@ import { Metadata } from 'next';
 import { ArrowRight, CheckCircle2, ExternalLink, NotebookPen, Workflow } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
@@ -62,15 +62,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-      '先确认你是要记会议、记灵感，还是整理知识。',
-      '看它是否能接到你现在用的文档、会议或剪藏工具。',
-      '如果你每天都会用，优先看协作、导出和搜索，而不是只看界面好不好看。',
-    ]
+        '先确认你是要记会议、记灵感，还是整理知识。',
+        '看它是否能接到你现在用的文档、会议或剪藏工具。',
+        '如果你每天都会用，优先看协作、导出和搜索，而不是只看界面好不好看。',
+      ]
     : [
-      'Start with the job: meetings, ideas, or knowledge organization.',
-      'Check whether it connects to the docs, meeting, or clipping tools you already use.',
-      'If you will use it every day, prioritize collaboration, exports, and search over surface polish.',
-    ];
+        'Start with the job: meetings, ideas, or knowledge organization.',
+        'Check whether it connects to the docs, meeting, or clipping tools you already use.',
+        'If you will use it every day, prioritize collaboration, exports, and search over surface polish.',
+      ];
 
   return (
     <>
@@ -146,7 +146,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {isChinese ? '高意图路径' : 'High-intent path'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '先看榜单，再进入对比页和真实条目' : 'Start with the ranking, then move into comparison and real listings'}
+            {isChinese
+              ? '先看榜单，再进入对比页和真实条目'
+              : 'Start with the ranking, then move into comparison and real listings'}
           </h2>
           <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
             {isChinese
@@ -163,7 +165,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {
                 href: '/guides/ai-note-taking-tools-comparison',
                 title: isChinese ? '记笔记工具对比' : 'Note taking comparison',
-                desc: isChinese ? '横向看记录、整理和搜索。' : 'Compare capture, organization, and search side by side.',
+                desc: isChinese
+                  ? '横向看记录、整理和搜索。'
+                  : 'Compare capture, organization, and search side by side.',
               },
               {
                 href: '/guides/ai-tools-for-meeting-notes-comparison',
@@ -378,6 +382,63 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '先用榜单缩小 note taking shortlist'
+              : 'Use the ranking to narrow your note taking shortlist first'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经明确是在找记笔记、信息整理或知识沉淀工具，先看榜单会比只看总览更快进入决策。'
+              : 'If the decision is already about note taking, information organization, or knowledge capture, the ranking gets you to a decision faster than an overview alone.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-note-taking-tools',
+                title: isChinese ? '记笔记榜单' : 'Note taking ranking',
+                desc: isChinese ? '先看最值得试的候选。' : 'Start with the most relevant candidates first.',
+              },
+              {
+                href: '/guides/ai-note-taking-tools-comparison',
+                title: isChinese ? '记笔记对比' : 'Note taking comparison',
+                desc: isChinese ? '记录、整理和搜索一起看。' : 'Compare capture, organization, and search together.',
+              },
+              {
+                href: '/guides/ai-tools-for-meeting-notes-comparison',
+                title: isChinese ? '会议纪要对比' : 'Meeting notes comparison',
+                desc: isChinese
+                  ? '如果重点偏会议记录和回看。'
+                  : 'Useful when meetings and follow-up are the real focus.',
+              },
+              {
+                href: '/guides/ai-tools-for-research-comparison',
+                title: isChinese ? '研究工具对比' : 'Research tools comparison',
+                desc: isChinese
+                  ? '如果重点偏资料整理和知识沉淀。'
+                  : 'Useful when research and knowledge synthesis matter more.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`note_taking_guide_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </section>
+
         <GuideSubmissionPath locale={locale} ctaPrefix='ai_note_taking_tools' />
       </div>
     </>
