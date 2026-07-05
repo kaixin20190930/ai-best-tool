@@ -244,6 +244,62 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </div>
         </section>
 
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先用榜单缩小写作 shortlist' : 'Use the ranking to narrow your writing shortlist first'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经明确是在比博客、邮件、长文改写或 SEO 内容，先看更窄的榜单会比泛目录更快做决定。'
+              : 'If the decision is already about blogs, emails, long-form rewriting, or SEO content, a narrower ranking gets you to a decision faster than a broad directory.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-writing-tools',
+                title: isChinese ? '写作工具榜单' : 'Writing tools ranking',
+                desc: isChinese
+                  ? '先收窄到更高相关的写作候选。'
+                  : 'Start with the highest-fit writing candidates first.',
+              },
+              {
+                href: '/best-ai-tools/ai-marketing-tools',
+                title: isChinese ? '营销工具榜单' : 'Marketing tools ranking',
+                desc: isChinese
+                  ? '如果写作和营销投放一起考虑。'
+                  : 'Useful when writing is tied to campaigns and performance copy.',
+              },
+              {
+                href: '/guides/ai-writing-tools-comparison',
+                title: isChinese ? '写作工具对比' : 'Writing tools comparison',
+                desc: isChinese ? '博客、邮件和广告文案一起看。' : 'Compare blogs, email, and ad copy together.',
+              },
+              {
+                href: '/guides/ai-tools-for-content-creation-comparison',
+                title: isChinese ? '内容创作对比' : 'Content creation comparison',
+                desc: isChinese
+                  ? '如果写作和内容生产交叉，这里更合适。'
+                  : 'A better fit when writing and content production overlap.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`writing_guide_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </section>
+
         <section className='mt-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '下一步怎么走' : 'Next step'}
