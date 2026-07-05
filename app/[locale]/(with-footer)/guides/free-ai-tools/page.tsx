@@ -186,6 +186,58 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </div>
         </section>
 
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese ? '先用榜单缩小 free shortlist' : 'Use the ranking to narrow your free shortlist first'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经明确自己要找免费工具，先看榜单会比只刷目录更快进入决策。'
+              : 'If the decision is already about free tools, the ranking gets you to a decision faster than browsing a directory alone.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/guides/best-free-ai-tools',
+                title: isChinese ? '免费榜单' : 'Free ranking',
+                desc: isChinese ? '先看真正值得试的免费工具。' : 'Start with free tools worth trying.',
+              },
+              {
+                href: '/explore?pricing=free&sort=popular',
+                title: isChinese ? '免费筛选页' : 'Free filter',
+                desc: isChinese ? '直接筛出免费候选。' : 'Filter to free candidates directly.',
+              },
+              {
+                href: '/categories/productivity?sort=popular',
+                title: isChinese ? '生产力分类' : 'Productivity category',
+                desc: isChinese ? '如果你的场景偏效率和日常。' : 'Useful when the use case is productivity-focused.',
+              },
+              {
+                href: '/guides/ai-productivity-tools-comparison',
+                title: isChinese ? '生产力对比' : 'Productivity comparison',
+                desc: isChinese
+                  ? '如果免费工具也在生产力范围里。'
+                  : 'Helpful when free tools are being compared in a productivity lane.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`free_tools_guide_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </section>
+
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
             <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
