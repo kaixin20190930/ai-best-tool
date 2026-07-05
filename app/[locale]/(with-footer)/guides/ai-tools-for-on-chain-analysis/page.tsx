@@ -252,6 +252,64 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </div>
         </section>
 
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '先用榜单缩小链上分析 shortlist'
+              : 'Use the ranking to narrow your on-chain analysis shortlist first'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经明确是在比地址追踪、资金流分析和鲸鱼监控，先看榜单会比泛目录更快进入决策。'
+              : 'If the decision is already about address tracking, fund-flow analysis, and whale monitoring, the ranking gets you to a decision faster than a broad directory.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-web3-tools',
+                title: isChinese ? 'Web3 工具榜单' : 'Web3 tools ranking',
+                desc: isChinese
+                  ? '先收窄到更高相关的 Web3 候选。'
+                  : 'Start with the highest-fit Web3 candidates first.',
+              },
+              {
+                href: '/guides/ai-tools-for-on-chain-analysis-comparison',
+                title: isChinese ? '链上分析对比' : 'On-chain analysis comparison',
+                desc: isChinese
+                  ? '地址、资金流和行为一起看。'
+                  : 'Compare addresses, fund flows, and behavior together.',
+              },
+              {
+                href: '/guides/ai-tools-for-wallet-monitoring-comparison',
+                title: isChinese ? '钱包监控对比' : 'Wallet monitoring comparison',
+                desc: isChinese ? '如果你开始更关心提醒和异动。' : 'Useful when alerts and anomalies matter more.',
+              },
+              {
+                href: '/guides/ai-tools-for-protocol-analytics-comparison',
+                title: isChinese ? '协议分析对比' : 'Protocol analytics comparison',
+                desc: isChinese
+                  ? '如果资金流和协议健康要一起看。'
+                  : 'Helpful when fund flow and protocol health belong together.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`on_chain_analysis_guide_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </section>
+
         <GuideActionSection
           locale={locale}
           eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}
