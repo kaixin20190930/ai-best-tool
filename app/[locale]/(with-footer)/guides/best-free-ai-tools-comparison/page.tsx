@@ -1,3 +1,4 @@
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -179,6 +180,71 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
+        <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '先把免费入口收紧，再决定要不要继续横向试用'
+              : 'Tighten the free-entry path first, then decide whether to keep trying more tools horizontally'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '如果你就是想找能长期试用的免费工具，先从更高意图入口收口通常更快。'
+              : 'If you are looking for free tools you can actually keep using, starting with higher-intent entry points is usually faster.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/guides/best-free-ai-tools',
+                title: locale === 'cn' || locale === 'tw' ? '免费工具指南' : 'Free tools guide',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '先确认免费层的判断标准。'
+                    : 'First confirm the criteria for judging the free tier.',
+              },
+              {
+                href: '/best-ai-tools/ai-research-tools',
+                title: locale === 'cn' || locale === 'tw' ? '研究榜单' : 'Research ranking',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果你更关心研究与资料发现。'
+                    : 'Useful when research and discovery are the real need.',
+              },
+              {
+                href: '/guides/ai-writing-tools-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '写作工具对比' : 'Writing tools comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果你更在意输出和改写能力。'
+                    : 'Best when output and rewriting are the main priorities.',
+              },
+              {
+                href: '/guides/ai-productivity-tools-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '生产力工具对比' : 'Productivity tools comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果你要把免费工具放进日常工作流。'
+                    : 'Use this when free tools need to fit into daily workflows.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`free_tools_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </div>
+      </section>
       <GuideSubmissionPath locale={locale} ctaPrefix='best_free_ai_tools_comparison' />
     </>
   );
