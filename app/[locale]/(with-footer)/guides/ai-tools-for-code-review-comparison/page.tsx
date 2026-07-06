@@ -1,3 +1,4 @@
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -226,6 +227,71 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
+        <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '先看榜单，再决定是继续看代码审查工具还是切到相邻入口'
+              : 'Start with the ranking, then decide whether to keep comparing code review tools or switch to an adjacent path'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '如果代码审查已经是明确目标，先收紧 shortlist 往往比继续横向浏览更多页面更有效。'
+              : 'If code review is already the goal, narrowing the shortlist first is usually better than continuing to browse more pages horizontally.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-code-review-tools',
+                title: locale === 'cn' || locale === 'tw' ? '代码审查榜单' : 'Code review ranking',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '先收窄到更高相关的候选。'
+                    : 'Start with the most relevant candidates first.',
+              },
+              {
+                href: '/guides/ai-tools-for-code-review',
+                title: locale === 'cn' || locale === 'tw' ? '代码审查指南' : 'Code review guide',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '重新确认是 diff 理解还是风险提示。'
+                    : 'Re-check whether the need is diff understanding or risk checks.',
+              },
+              {
+                href: '/guides/ai-coding-tools-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '编程工具对比' : 'Coding tools comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果你的重点其实更偏实现效率。'
+                    : 'Useful when implementation speed is actually the priority.',
+              },
+              {
+                href: '/guides/ai-tools-for-prompt-testing-comparison',
+                title: locale === 'cn' || locale === 'tw' ? 'Prompt 测试对比' : 'Prompt testing comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果 review 开始延伸到 AI 输出验证。'
+                    : 'Better when review work overlaps with AI output validation.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`code_review_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </div>
+      </section>
       <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_code_review_comparison' />
     </>
   );
