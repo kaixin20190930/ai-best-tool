@@ -1,3 +1,4 @@
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -264,6 +265,71 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
+        <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '先看榜单，再决定是继续看 API 可观测工具还是切到相邻入口'
+              : 'Start with the ranking, then decide whether to keep comparing API observability tools or switch to an adjacent path'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '如果你已经明确要做日志、成本和质量治理，先收紧 shortlist 往往比继续横向浏览更多页面更有效。'
+              : 'If logs, cost, and quality governance are already the goals, narrowing the shortlist first is usually better than continuing to browse more pages horizontally.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-api-observability-tools',
+                title: locale === 'cn' || locale === 'tw' ? '可观测工具榜单' : 'Observability ranking',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '先看更高意图候选。'
+                    : 'Start with the highest-intent candidates first.',
+              },
+              {
+                href: '/guides/ai-tools-for-api-observability',
+                title: locale === 'cn' || locale === 'tw' ? 'API 可观测指南' : 'API observability guide',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '重新确认你要的是日志、成本还是评估。'
+                    : 'Re-check whether you need logs, cost, or evaluation.',
+              },
+              {
+                href: '/guides/ai-tools-for-model-routing-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '模型路由对比' : 'Model routing comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '当你更关心统一出口和回退策略。'
+                    : 'Useful when unified access and fallback strategy matter more.',
+              },
+              {
+                href: '/guides/ai-tools-for-developers-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '开发者工具对比' : 'Developer tools comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果你还在开发者与可观测之间权衡。'
+                    : 'Better when you are still weighing developer tooling against observability.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`observability_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </div>
+      </section>
       <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_api_observability_comparison' />
     </>
   );
