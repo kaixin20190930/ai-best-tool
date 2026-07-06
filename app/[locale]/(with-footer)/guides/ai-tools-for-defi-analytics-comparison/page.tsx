@@ -1,3 +1,4 @@
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -98,6 +99,71 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
+        <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '先看榜单，再决定是否继续看 DeFi 工具或切到相邻入口'
+              : 'Start with the ranking, then decide whether to keep comparing DeFi tools or switch to an adjacent path'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '如果 DeFi 已经是明确目标，先收紧 shortlist 往往比继续横向浏览更多页面更有效。'
+              : 'If DeFi is already the goal, narrowing the shortlist first is usually better than continuing to browse more pages horizontally.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-web3-tools',
+                title: locale === 'cn' || locale === 'tw' ? 'Web3 榜单' : 'Web3 ranking',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '先收窄到更高相关的候选。'
+                    : 'Start with the most relevant candidates first.',
+              },
+              {
+                href: '/guides/ai-tools-for-defi-analytics',
+                title: locale === 'cn' || locale === 'tw' ? 'DeFi 指南' : 'DeFi guide',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '重新确认是流动性、收益还是协议研究。'
+                    : 'Re-check whether the task is liquidity, yield, or protocol research.',
+              },
+              {
+                href: '/guides/ai-tools-for-protocol-analytics-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '协议分析对比' : 'Protocol analytics comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果你的重点已经变成协议健康和指标。'
+                    : 'Useful when protocol health and metrics are the real focus.',
+              },
+              {
+                href: '/guides/ai-tools-for-dex-analytics-comparison',
+                title: locale === 'cn' || locale === 'tw' ? 'DEX 分析对比' : 'DEX analytics comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果你更关心交易对和流动性工作流。'
+                    : 'Better when trading pairs and liquidity workflows matter more.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`defi_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </div>
+      </section>
       <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_defi_analytics_comparison' />
     </>
   );
