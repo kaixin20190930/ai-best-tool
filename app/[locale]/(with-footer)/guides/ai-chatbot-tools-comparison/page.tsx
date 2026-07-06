@@ -373,6 +373,63 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             })}
           </div>
         </section>
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '先回榜单，再决定是否继续看聊天机器人或切到相邻入口'
+              : 'Return to the ranking first, then decide whether to keep comparing chatbots or switch to an adjacent path'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经明确要选聊天机器人，先收紧 shortlist 往往比继续横向浏览更多页面更有效。'
+              : 'If chatbots are already the goal, narrowing the shortlist first is usually better than browsing more pages horizontally.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-chatbot-tools',
+                title: isChinese ? '聊天榜单' : 'Chatbot ranking',
+                desc: isChinese ? '先收窄到更高相关的候选。' : 'Start with the most relevant candidates first.',
+              },
+              {
+                href: '/guides/ai-chatbot-tools',
+                title: isChinese ? '聊天指南' : 'Chatbot guide',
+                desc: isChinese
+                  ? '重新确认是问答、写作还是协作。'
+                  : 'Re-check whether the job is Q&A, writing, or collaboration.',
+              },
+              {
+                href: '/guides/ai-tools-for-agents-comparison',
+                title: isChinese ? 'Agent 对比' : 'Agent comparison',
+                desc: isChinese
+                  ? '如果你要的是更偏执行和自动化的入口。'
+                  : 'Useful when execution and automation matter more than plain chat.',
+              },
+              {
+                href: '/guides/ai-writing-tools-comparison',
+                title: isChinese ? '写作对比' : 'Writing comparison',
+                desc: isChinese
+                  ? '如果你的真实需求更偏写作和润色。'
+                  : 'Better when writing and editing are the real need.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`chatbot_comparison_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </section>
         <GuideSubmissionPath locale={locale} ctaPrefix='ai_chatbot_tools_comparison' />
       </div>
     </>
