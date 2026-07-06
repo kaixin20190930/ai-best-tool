@@ -1,3 +1,4 @@
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -97,6 +98,71 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
+        <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '先看榜单，再决定是否继续看设计工具或切到相邻入口'
+              : 'Start with the ranking, then decide whether to keep comparing design tools or switch to an adjacent path'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '如果设计已经是明确目标，先收紧 shortlist 往往比继续横向浏览更多页面更有效。'
+              : 'If design is already the goal, narrowing the shortlist first is usually better than continuing to browse more pages horizontally.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-image-tools',
+                title: locale === 'cn' || locale === 'tw' ? '设计榜单' : 'Design ranking',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '先收窄到更高相关的候选。'
+                    : 'Start with the most relevant candidates first.',
+              },
+              {
+                href: '/guides/ai-tools-for-designers',
+                title: locale === 'cn' || locale === 'tw' ? '设计指南' : 'Design guide',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '重新确认是品牌视觉、海报还是 UI。'
+                    : 'Re-check whether the job is brand visuals, posters, or UI.',
+              },
+              {
+                href: '/guides/ai-tools-for-image-tools-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '图像工具对比' : 'Image tools comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果你的工作更偏图像生成和编辑。'
+                    : 'Useful when image generation and editing are the real task.',
+              },
+              {
+                href: '/guides/ai-tools-for-content-creation-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '内容创作对比' : 'Content creation comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果设计其实是更大内容生产流程的一部分。'
+                    : 'Better when design is part of a larger content production workflow.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`design_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </div>
+      </section>
       <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_designers_comparison' />
     </>
   );
