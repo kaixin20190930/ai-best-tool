@@ -1,3 +1,4 @@
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -264,6 +265,71 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
+        <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '先看榜单，再决定是继续看模型路由还是切到相邻入口'
+              : 'Start with the ranking, then decide whether to keep comparing model routing tools or switch to an adjacent path'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '如果模型接入和路由治理已经是明确目标，先收紧 shortlist 往往比继续横向浏览更多页面更有效。'
+              : 'If model access and routing governance are already the goal, narrowing the shortlist first is usually better than continuing to browse more pages horizontally.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-model-routing-tools',
+                title: locale === 'cn' || locale === 'tw' ? '模型路由榜单' : 'Model routing ranking',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '先收窄到更高相关的候选。'
+                    : 'Start with the most relevant candidates first.',
+              },
+              {
+                href: '/guides/ai-tools-for-model-routing',
+                title: locale === 'cn' || locale === 'tw' ? '模型路由指南' : 'Model routing guide',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '重新确认是统一接入、回退还是治理。'
+                    : 'Re-check whether the need is unified access, fallback, or governance.',
+              },
+              {
+                href: '/guides/ai-tools-for-api-observability-comparison',
+                title: locale === 'cn' || locale === 'tw' ? 'API 可观测对比' : 'API observability comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '当你更关心日志、成本和质量追踪。'
+                    : 'Useful when logs, cost, and quality tracking matter more.',
+              },
+              {
+                href: '/guides/ai-tools-for-evals-comparison',
+                title: locale === 'cn' || locale === 'tw' ? 'Evals 对比' : 'Evals comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果你已经开始验证输出质量。'
+                    : 'Better once output-quality validation becomes part of the decision.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`model_routing_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </div>
+      </section>
       <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_model_routing_comparison' />
     </>
   );
