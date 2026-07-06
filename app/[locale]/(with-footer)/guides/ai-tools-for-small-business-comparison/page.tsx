@@ -1,3 +1,4 @@
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -126,6 +127,71 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
+        <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '先看榜单，再决定是继续看小企业工具还是切到相邻入口'
+              : 'Start with the ranking, then decide whether to keep comparing small-business tools or switch to an adjacent path'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '如果小企业场景已经确定，先收紧 shortlist 往往比继续横向浏览更多页面更有效。'
+              : 'If the small-business use case is already clear, narrowing the shortlist first is usually better than continuing to browse more pages horizontally.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-small-business-tools',
+                title: locale === 'cn' || locale === 'tw' ? '小企业榜单' : 'Small-business ranking',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '先收窄到更高相关的候选。'
+                    : 'Start with the most relevant candidates first.',
+              },
+              {
+                href: '/guides/ai-tools-for-small-business',
+                title: locale === 'cn' || locale === 'tw' ? '小企业指南' : 'Small-business guide',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '重新确认是营销、客服还是运营。'
+                    : 'Re-check whether the need is marketing, support, or operations.',
+              },
+              {
+                href: '/guides/ai-tools-for-marketing-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '营销工具对比' : 'Marketing tools comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果当前核心是获客和内容增长。'
+                    : 'Useful when acquisition and content growth are the real focus.',
+              },
+              {
+                href: '/guides/ai-tools-for-ecommerce-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '电商工具对比' : 'Ecommerce tools comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果业务更偏商品、店铺和客服。'
+                    : 'Better when the workflow is more about products, storefronts, and support.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`small_business_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </div>
+      </section>
       <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_small_business_comparison' />
     </>
   );
