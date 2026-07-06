@@ -1,3 +1,4 @@
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -240,6 +241,71 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
+        <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '先收紧营销起稿入口，再决定要不要继续看更广的营销工具'
+              : 'Tighten the marketing-drafting entry first, then decide whether to keep browsing broader marketing tools'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '如果你已经明确是在找起稿、变体或营销文案工具，先看更高意图入口通常更省时间。'
+              : 'If the task is clearly drafting, variations, or marketing copy tools, starting with higher-intent entry points usually saves time.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-marketing-tools',
+                title: locale === 'cn' || locale === 'tw' ? '营销榜单' : 'Marketing ranking',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '先把候选范围收紧。'
+                    : 'Use this to narrow the candidate set first.',
+              },
+              {
+                href: '/guides/jasper-alternatives-comparison',
+                title: locale === 'cn' || locale === 'tw' ? 'Jasper 替代方案' : 'Jasper alternatives',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果你更关心品牌文案和营销生产。'
+                    : 'Best when brand copy and marketing production are the real focus.',
+              },
+              {
+                href: '/guides/ai-writing-tools-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '写作工具对比' : 'Writing tools comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果你需要更长文本和内容生产。'
+                    : 'Use this when longer-form content production matters more.',
+              },
+              {
+                href: '/guides/ai-tools-for-marketing-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '营销工具对比' : 'Marketing tools comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果你要继续扩大营销候选。'
+                    : 'Choose this when you want a broader marketing shortlist.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`copy_ai_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </div>
+      </section>
       <GuideSubmissionPath locale={locale} ctaPrefix='copy_ai_alternatives_comparison' />
     </>
   );
