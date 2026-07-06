@@ -207,6 +207,64 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </div>
         </section>
 
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '先看榜单，再决定是继续看视频工具还是切到相邻入口'
+              : 'Start with the ranking, then decide whether to keep comparing video tools or switch to an adjacent path'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果视频工具已经是明确目标，先收紧 shortlist 往往比继续横向浏览更多页面更有效。'
+              : 'If video tools are already the goal, narrowing the shortlist first is usually better than continuing to browse more pages horizontally.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-video-tools',
+                title: isChinese ? '视频榜单' : 'Video ranking',
+                desc: isChinese ? '先收窄到更高相关的候选。' : 'Start with the most relevant candidates first.',
+              },
+              {
+                href: '/guides/ai-video-tools',
+                title: isChinese ? '视频工具指南' : 'Video tools guide',
+                desc: isChinese
+                  ? '重新确认是剪辑、生成还是配音。'
+                  : 'Re-check whether you need editing, generation, or voiceover.',
+              },
+              {
+                href: '/guides/ai-tools-for-designers-comparison',
+                title: isChinese ? '设计工具对比' : 'Design tools comparison',
+                desc: isChinese
+                  ? '如果视频流程也包含视觉设计。'
+                  : 'Useful when the workflow also includes visual design.',
+              },
+              {
+                href: '/guides/ai-image-tools-comparison',
+                title: isChinese ? '图像工具对比' : 'Image tools comparison',
+                desc: isChinese
+                  ? '如果你其实也在比静态视觉资产。'
+                  : 'Better when static visual assets are part of the decision.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`video_comparison_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </section>
+
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
             <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
