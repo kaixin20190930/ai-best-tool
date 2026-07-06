@@ -1,3 +1,4 @@
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -240,6 +241,71 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
+        <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '先看榜单，再决定是继续看 Gemini 替代方案还是切到相邻入口'
+              : 'Start with the ranking, then decide whether to keep comparing Gemini alternatives or switch to an adjacent path'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '如果你已经明确是在找 Gemini 的替代入口，先收紧 shortlist 往往比继续横向浏览更多页面更有效。'
+              : 'If you already know you want a Gemini alternative, narrowing the shortlist first is usually better than continuing to browse more pages horizontally.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-chatbot-tools',
+                title: locale === 'cn' || locale === 'tw' ? '聊天工具榜单' : 'Chatbot ranking',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '先看更高意图候选。'
+                    : 'Start with the highest-intent candidates first.',
+              },
+              {
+                href: '/guides/ai-chatbot-tools-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '聊天机器人总对比' : 'Chatbot comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '重新确认聊天入口与功能侧重点。'
+                    : 'Re-check the chat entry and feature priorities.',
+              },
+              {
+                href: '/guides/chatgpt-alternatives-comparison',
+                title: locale === 'cn' || locale === 'tw' ? 'ChatGPT 替代方案对比' : 'ChatGPT alternatives comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果你要的是通用聊天入口。'
+                    : 'Useful when you want a more general-purpose chat entry.',
+              },
+              {
+                href: '/guides/claude-alternatives-comparison',
+                title: locale === 'cn' || locale === 'tw' ? 'Claude 替代方案对比' : 'Claude alternatives comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果你更在意长上下文和分析。'
+                    : 'Better when long context and analysis matter more.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`gemini_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </div>
+      </section>
       <GuideSubmissionPath locale={locale} ctaPrefix='gemini_alternatives_comparison' />
     </>
   );
