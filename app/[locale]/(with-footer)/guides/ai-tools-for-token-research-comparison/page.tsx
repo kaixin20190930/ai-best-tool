@@ -1,3 +1,4 @@
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -275,6 +276,71 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
+        <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '先把代币研究入口收紧，再决定是否切去更广的 Crypto 研究'
+              : 'Tighten the token-research entry first, then decide whether to switch into broader crypto research'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '如果你的目标已经很明确是项目比较、基本面和 token 研究深度，先从更高意图入口收口通常更快。'
+              : 'If the goal is clearly project comparison, fundamentals, and token-research depth, starting with higher-intent entry points is usually faster.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-web3-tools',
+                title: locale === 'cn' || locale === 'tw' ? 'Web3 榜单' : 'Web3 ranking',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '先收窄候选项目和工具。'
+                    : 'Use this to narrow the candidate set first.',
+              },
+              {
+                href: '/guides/ai-tools-for-crypto-research-comparison',
+                title: locale === 'cn' || locale === 'tw' ? 'Crypto 研究对比' : 'Crypto research comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果你的问题其实还在更大的市场研究层。'
+                    : 'Best when the real question is still broader market research.',
+              },
+              {
+                href: '/guides/ai-tools-for-protocol-analytics-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '协议分析对比' : 'Protocol analytics comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果你更关心协议健康、收入和长期指标。'
+                    : 'Choose this when protocol health, revenue, and longer-term metrics matter more.',
+              },
+              {
+                href: '/guides/ai-tools-for-on-chain-analysis-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '链上分析对比' : 'On-chain analysis comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果研究已经转向地址、资金路径和行为。'
+                    : 'Use this once the workflow shifts to addresses, fund paths, and behavior analysis.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`token_research_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </div>
+      </section>
       <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_token_research_comparison' />
     </>
   );
