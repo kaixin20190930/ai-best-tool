@@ -1,3 +1,4 @@
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -243,6 +244,69 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
+        <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '先收紧研究入口，再决定要不要切回更广的资料发现'
+              : 'Tighten the research entry first, then decide whether to switch back to broader discovery'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '如果你已经明确是在做资料发现、证据核对或研究工作流，先看更高意图入口通常更快。'
+              : 'If you already know you need discovery, evidence-checking, or a research workflow, starting with higher-intent entry points is usually faster.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-research-tools',
+                title: locale === 'cn' || locale === 'tw' ? '研究榜单' : 'Research ranking',
+                desc:
+                  locale === 'cn' || locale === 'tw' ? '先把候选范围收紧。' : 'Start by narrowing the candidate set.',
+              },
+              {
+                href: '/guides/ai-tools-for-research-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '研究工具对比' : 'Research tools comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果你要继续扩大研究型工具的候选。'
+                    : 'Use this when you want to widen the research-tool shortlist.',
+              },
+              {
+                href: '/guides/ai-tools-for-crypto-research-comparison',
+                title: locale === 'cn' || locale === 'tw' ? 'Crypto 研究对比' : 'Crypto research comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果研究已经偏向链上、项目和市场情报。'
+                    : 'Best when the work shifts toward on-chain, project, and market intelligence.',
+              },
+              {
+                href: '/guides/ai-writing-tools-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '写作工具对比' : 'Writing tools comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果下一步是把研究整理成内容。'
+                    : 'Use this when the next step is turning research into content.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`perplexity_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </div>
+      </section>
       <GuideSubmissionPath locale={locale} ctaPrefix='perplexity_alternatives_comparison' />
     </>
   );
