@@ -1,3 +1,4 @@
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -240,6 +241,71 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
+        <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '先看榜单，再决定是继续看 Claude 替代还是切到相邻入口'
+              : 'Start with the ranking, then decide whether to keep comparing Claude alternatives or switch to an adjacent path'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '如果你已经明确要做长上下文或分析型工作，先收紧 shortlist 往往比继续横向浏览更有效。'
+              : 'If long context or analysis is already the goal, narrowing the shortlist first is usually better than continuing to browse horizontally.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-chatbot-tools',
+                title: locale === 'cn' || locale === 'tw' ? '聊天榜单' : 'Chat ranking',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '先收窄到更值得试用的聊天候选。'
+                    : 'Narrow to the most trial-worthy chat candidates first.',
+              },
+              {
+                href: '/guides/chatgpt-alternatives-comparison',
+                title: locale === 'cn' || locale === 'tw' ? 'ChatGPT 替代方案' : 'ChatGPT alternatives',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果你更需要通用助手。'
+                    : 'Useful when you need a general-purpose assistant.',
+              },
+              {
+                href: '/guides/cursor-alternatives-comparison',
+                title: locale === 'cn' || locale === 'tw' ? 'Cursor 替代方案' : 'Cursor alternatives',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果需求开始偏代码和编辑器工作流。'
+                    : 'A better path when coding and editor workflows matter more.',
+              },
+              {
+                href: '/guides/ai-tools-for-research-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '研究工具对比' : 'Research tools comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果你要把聊天转成研究和核对。'
+                    : 'Useful when chat needs to turn into research and evidence-checking.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`claude_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </div>
+      </section>
       <GuideSubmissionPath locale={locale} ctaPrefix='claude_alternatives_comparison' />
     </>
   );

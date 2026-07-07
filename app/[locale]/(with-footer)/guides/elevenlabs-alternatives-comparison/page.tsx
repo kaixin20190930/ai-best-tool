@@ -1,3 +1,4 @@
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -243,6 +244,71 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
+        <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '先看榜单，再决定是继续看 ElevenLabs 替代还是切到相邻入口'
+              : 'Start with the ranking, then decide whether to keep comparing ElevenLabs alternatives or switch to an adjacent path'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '如果你已经明确要做语音合成或音频工作流，先收紧 shortlist 往往比继续横向浏览更有效。'
+              : 'If voice synthesis or audio workflow is already the goal, narrowing the shortlist first is usually better than continuing to browse horizontally.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-voice-tools',
+                title: locale === 'cn' || locale === 'tw' ? '语音榜单' : 'Voice ranking',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '先收窄到更值得试用的语音候选。'
+                    : 'Narrow to the most trial-worthy voice candidates first.',
+              },
+              {
+                href: '/guides/ai-tools-for-voice-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '语音工具对比' : 'Voice tools comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果你要看更广的语音工作流。'
+                    : 'Useful when you want to compare the broader voice workflow.',
+              },
+              {
+                href: '/guides/notta-alternatives-comparison',
+                title: locale === 'cn' || locale === 'tw' ? 'Notta 替代方案' : 'Notta alternatives',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果你的场景更偏转写和会议整理。'
+                    : 'A better path when transcription and meeting cleanup are the real need.',
+              },
+              {
+                href: '/guides/ai-video-tools-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '视频工具对比' : 'Video tools comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果语音只是更大内容流程的一部分。'
+                    : 'Useful when voice is only one part of a bigger content workflow.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`elevenlabs_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </div>
+      </section>
       <GuideSubmissionPath locale={locale} ctaPrefix='elevenlabs_alternatives_comparison' />
     </>
   );
