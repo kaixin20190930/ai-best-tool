@@ -1,3 +1,4 @@
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -274,6 +275,71 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
+        <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '先看榜单，再决定是继续看记笔记工具还是切到相邻入口'
+              : 'Start with the ranking, then decide whether to keep comparing note-taking tools or switch to an adjacent path'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '如果你已经明确要做会议记录、知识整理或信息回收，先收紧 shortlist 往往比继续横向浏览更有效。'
+              : 'If meeting capture, knowledge organization, or information retrieval is already the goal, narrowing the shortlist first is usually better than continuing to browse horizontally.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-note-taking-tools',
+                title: locale === 'cn' || locale === 'tw' ? '记笔记榜单' : 'Note-taking ranking',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '先收窄到更适合记录和整理的候选。'
+                    : 'Narrow to the tools best suited for capture and organization first.',
+              },
+              {
+                href: '/guides/ai-tools-for-meeting-notes-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '会议纪要对比' : 'Meeting notes comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果你的场景更偏会议录音和纪要。'
+                    : 'Useful when the real need is meeting recording and summarization.',
+              },
+              {
+                href: '/guides/ai-tools-for-research-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '研究工具对比' : 'Research tools comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果整理完笔记后还要继续做资料核对。'
+                    : 'A better path when notes need to turn into deeper research and checking.',
+              },
+              {
+                href: '/guides/notion-alternatives-comparison',
+                title: locale === 'cn' || locale === 'tw' ? 'Notion 替代方案' : 'Notion alternatives',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果你要把记录纳入更大的知识工作流。'
+                    : 'Useful when note-taking needs to fit into a broader knowledge workflow.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`note_taking_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </div>
+      </section>
       <GuideSubmissionPath locale={locale} ctaPrefix='ai_note_taking_tools_comparison' />
     </>
   );
