@@ -247,6 +247,7 @@ CREATE TABLE IF NOT EXISTS tool_claims (
   email VARCHAR(255) NOT NULL,
   company VARCHAR(255),
   website VARCHAR(500),
+  claim_reason VARCHAR(80),
   note TEXT,
   source_path VARCHAR(255),
   source_locale VARCHAR(20),
@@ -356,6 +357,9 @@ ALTER TABLE google_search_console_logs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE analytics ENABLE ROW LEVEL SECURITY;
 ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_preferences ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS claim_invite_reminder_logs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS featured_renewal_reminder_logs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS profile_update_reminder_logs ENABLE ROW LEVEL SECURITY;
 
 -- Categories / Tags 公共读取
 CREATE POLICY "Anyone can view categories"

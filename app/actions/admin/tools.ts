@@ -1748,6 +1748,10 @@ async function ensureFeaturedRenewalReminderLogTable() {
   `);
 
   await pool.query(`
+    ALTER TABLE IF EXISTS featured_renewal_reminder_logs ENABLE ROW LEVEL SECURITY
+  `);
+
+  await pool.query(`
     CREATE UNIQUE INDEX IF NOT EXISTS uq_featured_renewal_reminder_logs
     ON featured_renewal_reminder_logs(tool_id, reminder_type, featured_until)
   `);
@@ -1815,6 +1819,10 @@ async function ensureClaimInviteReminderLogTable() {
   `);
 
   await pool.query(`
+    ALTER TABLE IF EXISTS claim_invite_reminder_logs ENABLE ROW LEVEL SECURITY
+  `);
+
+  await pool.query(`
     CREATE UNIQUE INDEX IF NOT EXISTS uq_claim_invite_reminder_logs
     ON claim_invite_reminder_logs(tool_id, reminder_type)
   `);
@@ -1877,6 +1885,10 @@ async function ensureProfileUpdateReminderLogTable() {
       missing_labels TEXT[] NOT NULL DEFAULT '{}',
       sent_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
+  `);
+
+  await pool.query(`
+    ALTER TABLE IF EXISTS profile_update_reminder_logs ENABLE ROW LEVEL SECURITY
   `);
 
   await pool.query(`
