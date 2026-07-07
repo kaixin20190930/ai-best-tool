@@ -1,3 +1,4 @@
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -176,6 +177,71 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
+        <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '先看榜单，再决定是继续做 evals 还是切到相邻入口'
+              : 'Start with the ranking, then decide whether to keep working on evals or switch to an adjacent path'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '如果你已经明确要做输出质量验证和上线前判断，先收紧 shortlist 往往比继续横向浏览更有效。'
+              : 'If output validation and pre-release judgment are already the goal, narrowing the shortlist first is usually better than continuing to browse horizontally.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-evals-tools',
+                title: locale === 'cn' || locale === 'tw' ? 'Evals 榜单' : 'Evals ranking',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '先收窄到更值得细看的候选。'
+                    : 'Narrow to the candidates most worth reviewing first.',
+              },
+              {
+                href: '/guides/ai-tools-for-prompt-testing-comparison',
+                title: locale === 'cn' || locale === 'tw' ? 'Prompt 测试对比' : 'Prompt testing comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果你更关注 prompt 版本和 A/B 对比。'
+                    : 'Useful when the real decision is prompt versions and A/B comparisons.',
+              },
+              {
+                href: '/guides/ai-tools-for-api-observability-comparison',
+                title: locale === 'cn' || locale === 'tw' ? 'API 可观测对比' : 'API observability comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果你更关心上线后的请求与质量观察。'
+                    : 'Useful when post-deploy request and quality visibility matter more.',
+              },
+              {
+                href: '/guides/ai-tools-for-agents-comparison',
+                title: locale === 'cn' || locale === 'tw' ? 'Agent 工具对比' : 'Agent tools comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '当验证不只是分数，而是多步骤工作流。'
+                    : 'A better path when validation expands from scores into multi-step workflows.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`evals_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </div>
+      </section>
       <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_evals_comparison' />
     </>
   );
