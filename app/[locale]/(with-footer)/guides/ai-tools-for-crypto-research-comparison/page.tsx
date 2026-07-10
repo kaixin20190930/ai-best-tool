@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -279,6 +280,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '这页先看真实可验证的 Crypto 研究信号，再继续判断是否需要更完整的链上和资料结合视图。'
+            : 'This page looks at verifiable crypto-research signals first, then helps you decide whether a fuller blend of on-chain and source-context views is needed.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '研究框架' : 'Research framing',
+            value: locale === 'cn' || locale === 'tw' ? '是否能收拢信息' : 'Can it organize scattered info',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '真正好的研究页，是能把碎信息变成判断起点。'
+                : 'Good research pages turn fragments into a usable starting point.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '链上与资料' : 'On-chain and source context',
+            value: locale === 'cn' || locale === 'tw' ? '是否能放在一起看' : 'Can they be viewed together',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '只看链上不够，资料和叙事也要一起看。'
+                : 'Chain data alone is not enough; source context matters too.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '持续追踪' : 'Long-term tracking',
+            value: locale === 'cn' || locale === 'tw' ? '历史和导出是否稳定' : 'Are history and exports stable',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果不能复盘，研究就很难长期用。'
+                : 'If it cannot be revisited, research will not last long.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
