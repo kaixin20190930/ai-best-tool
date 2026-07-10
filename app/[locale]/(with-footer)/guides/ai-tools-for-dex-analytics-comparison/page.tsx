@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -98,6 +99,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '这页先看真实可验证的 DEX 分析信号，再继续判断是不是要深挖交易对、流动性和链上观察。'
+            : 'This page looks at verifiable DEX-analysis signals first, then helps you decide whether to go deeper into pairs, liquidity, and on-chain monitoring.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '交易对覆盖' : 'Pair coverage',
+            value: locale === 'cn' || locale === 'tw' ? '是否覆盖你常看的池子' : 'Whether it covers the pools you actually watch',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先确认它是不是你真正在看的链和池子，而不是泛泛数据。'
+                : 'Confirm the actual chains and pools matter to you, not just generic coverage.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '流动性与趋势' : 'Liquidity and trends',
+            value: locale === 'cn' || locale === 'tw' ? '能否看出变化趋势' : 'Can it show trend changes clearly',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果趋势和历史不够稳，分析页就很难长期使用。'
+                : 'If trend and history signals are weak, the page is hard to rely on long term.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '研究输出' : 'Research output',
+            value: locale === 'cn' || locale === 'tw' ? '导出、分享、API' : 'Exports, sharing, and API',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '团队要复用时，这些会比功能清单更重要。'
+                : 'For team reuse, these matter more than the feature list.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

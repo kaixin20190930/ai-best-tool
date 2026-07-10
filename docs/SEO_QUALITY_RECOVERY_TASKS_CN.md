@@ -258,6 +258,10 @@ Google 不会因为内容由 AI 辅助生成就直接惩罚页面，但会压低
 - `/guides/ai-tools-for-ecommerce-comparison`
 - `/guides/ai-tools-for-lead-generation-comparison`
 - `/guides/ai-tools-for-evals-comparison`
+- `/guides/ai-tools-for-agents-comparison`
+- `/guides/ai-tools-for-dex-analytics-comparison`
+- `/guides/ai-tools-for-web3-analysis-comparison`
+- `/guides/ai-tools-for-protocol-analytics-comparison`
 - `/guides/ai-video-tools-comparison`
 - `/guides/ai-productivity-tools-comparison`
 - `/guides/ai-note-taking-tools-comparison`

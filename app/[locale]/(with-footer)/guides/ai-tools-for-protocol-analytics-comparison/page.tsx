@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -278,6 +279,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '这页先看真实可验证的协议分析信号，再继续判断是否需要长期监控、趋势追踪和研究输出。'
+            : 'This page looks at verifiable protocol-analysis signals first, then helps you decide whether long-term monitoring, trend tracking, and research output are needed.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '协议覆盖' : 'Protocol coverage',
+            value: locale === 'cn' || locale === 'tw' ? '是否覆盖你的研究对象' : 'Whether it covers your research targets',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '研究页最怕覆盖面不对，先确认对象。'
+                : 'Research pages fail fast when the coverage target is wrong.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '趋势稳定性' : 'Trend stability',
+            value: locale === 'cn' || locale === 'tw' ? '长期趋势和历史是否可复用' : 'Whether trends and history are reusable',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '稳定的趋势视图比一次性截图更有价值。'
+                : 'Stable trend views are more useful than one-off screenshots.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '研究产出' : 'Research output',
+            value: locale === 'cn' || locale === 'tw' ? '导出、分享、API' : 'Exports, sharing, and API',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果要做团队研究，这些就是落地门槛。'
+                : 'If this supports team research, these are the practical thresholds.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

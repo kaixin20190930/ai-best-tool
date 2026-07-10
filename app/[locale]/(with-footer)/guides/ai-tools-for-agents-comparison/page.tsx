@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -279,6 +280,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '这页先看真实可验证的 Agent 工作流信号，再继续判断是否真的需要编排、执行和治理层。'
+            : 'This page looks at verifiable agent-workflow signals first, then helps you decide whether orchestration, execution, and governance are truly needed.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '编排能力' : 'Orchestration',
+            value: locale === 'cn' || locale === 'tw' ? '多步骤任务与工具调用' : 'Multi-step tasks and tool use',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先确认它是不是真的能跑完整闭环，而不是只会单轮输出。'
+                : 'Confirm it can actually complete loops, not just single-turn output.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '上下文与状态' : 'Context and state',
+            value: locale === 'cn' || locale === 'tw' ? '跨步骤保留任务状态' : 'Keeps task state across steps',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '没有状态管理，Agent 往往只会变成更贵的 prompt。'
+                : 'Without state, an agent often becomes an expensive prompt wrapper.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '可观测与治理' : 'Observability and governance',
+            value: locale === 'cn' || locale === 'tw' ? '日志、追踪、成本' : 'Logs, traces, and cost',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '真要上生产，这些通常比 demo 表现更关键。'
+                : 'For production, these usually matter more than demo quality.',
+          },
+        ]}
+      />
       <div className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <section className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

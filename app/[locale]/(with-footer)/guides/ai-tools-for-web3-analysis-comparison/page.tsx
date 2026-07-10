@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -102,6 +103,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '这页先看真实可验证的 Web3 分析信号，再继续判断是不是要做协议监控、钱包追踪或资金流研究。'
+            : 'This page looks at verifiable Web3-analysis signals first, then helps you decide whether protocol monitoring, wallet tracking, or fund-flow research is the real need.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '覆盖范围' : 'Coverage',
+            value: locale === 'cn' || locale === 'tw' ? '协议、钱包、资金流' : 'Protocols, wallets, and fund flows',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先看你要研究的对象是不是都能覆盖到。'
+                : 'Confirm the objects you care about are all actually covered.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '历史深度' : 'Historical depth',
+            value: locale === 'cn' || locale === 'tw' ? '趋势与回看是否稳定' : 'Whether trends and history feel stable',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '没有稳定历史，研究页很难长期依赖。'
+                : 'Without stable history, the research page is hard to trust long term.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '团队输出' : 'Team output',
+            value: locale === 'cn' || locale === 'tw' ? '导出、分享、告警' : 'Exports, sharing, and alerts',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果要团队复用，这些比单次查询更重要。'
+                : 'If the work will be reused by a team, these matter more than a one-off query.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
