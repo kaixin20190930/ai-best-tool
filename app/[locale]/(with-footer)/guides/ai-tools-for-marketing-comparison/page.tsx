@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -335,6 +336,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         config={data.config}
         siteUrl={data.siteUrl}
         locale={locale}
+      />
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '营销对比页要围绕渠道覆盖、产出效率、协作权限和品牌一致性来判断，不要只看工具有多少模板。这个页继续可索引，但会把写作、销售和自动化路径分层。'
+            : 'This marketing comparison page should judge channel coverage, output efficiency, collaboration, and brand consistency instead of counting templates. Keep it indexable, but separate writing, sales, and automation paths.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '验证重点' : 'Validation focus',
+            value: locale === 'cn' || locale === 'tw' ? '渠道、产出、品牌' : 'Channels, output, brand',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '确认它是不是在服务广告、邮件或社媒工作流。'
+                : 'Confirm it serves ads, email, or social workflows.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '合并策略' : 'Merge strategy',
+            value: locale === 'cn' || locale === 'tw' ? '分流到写作/销售' : 'Route to writing/sales',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果只是文案生成，就转到写作页。'
+                : 'If the need is only copy generation, move to writing pages.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '后续增量' : 'Next increments',
+            value: locale === 'cn' || locale === 'tw' ? '真实渠道案例、样本' : 'Real channel cases, samples',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '补真实投放、邮件和增长实验样本。'
+                : 'Add real ads, email, and growth experiment examples.',
+          },
+        ]}
       />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>

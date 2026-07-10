@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { Link } from '@/app/navigation';
 
@@ -332,6 +333,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       </section>
 
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? 'Web3 工具比较最重要的是数据可信度、链上覆盖和研究流程，而不是单纯谁的界面更花。'
+            : 'Web3 tool comparison should focus on data trustworthiness, on-chain coverage, and research workflow rather than just who has the flashiest UI.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '数据可信度' : 'Data trust',
+            value: locale === 'cn' || locale === 'tw' ? '先看数据来源与可验证性' : 'Check source quality and verifiability first',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '链上工具最怕数据看起来很全，实际却不准。'
+                : 'The biggest risk is data that looks comprehensive but is not actually reliable.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '链上覆盖' : 'On-chain coverage',
+            value: locale === 'cn' || locale === 'tw' ? '看能否覆盖关键协议' : 'See whether it covers key protocols',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '覆盖面直接影响研究结果是否可用。'
+                : 'Coverage directly affects whether the research result is usable.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '研究流程' : 'Research workflow',
+            value: locale === 'cn' || locale === 'tw' ? '看是否适合持续分析' : 'Check whether it supports ongoing analysis',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '导出、收藏和历史跟踪很关键。'
+                : 'Export, saves, and historical tracking matter a lot.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

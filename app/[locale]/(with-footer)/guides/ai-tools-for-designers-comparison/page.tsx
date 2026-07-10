@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -98,6 +99,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '设计工具的判断重点通常不是“谁功能最多”，而是品牌一致性、输出可控性、迭代速度和团队交付流程是否匹配。'
+            : 'Design tool decisions are usually not about who has the most features, but about brand consistency, output control, iteration speed, and whether the workflow fits how the team ships work.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '输出一致性' : 'Output consistency',
+            value: locale === 'cn' || locale === 'tw' ? '优先看品牌与视觉统一度' : 'Prioritize brand and visual consistency',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '比起炫技，更重要的是同一项目里风格能否稳定。'
+                : 'Stability across the same project matters more than flashy demos.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '迭代效率' : 'Iteration speed',
+            value: locale === 'cn' || locale === 'tw' ? '看修改和重做是否顺手' : 'Check whether edits and redo loops feel fast',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '设计工作往往不是一次生成完成，而是来回调。'
+                : 'Design work is usually a loop of edits rather than a one-shot output.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '交付贴合' : 'Delivery fit',
+            value: locale === 'cn' || locale === 'tw' ? '看是否适合团队交付链路' : 'See whether it fits the team delivery chain',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '能否顺手接入素材、审阅和协作流程很关键。'
+                : 'How well it plugs into assets, review, and collaboration is key.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

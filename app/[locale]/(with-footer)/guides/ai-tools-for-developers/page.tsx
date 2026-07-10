@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -181,6 +182,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ))}
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先判断开发者工具是否真的能融入编辑器、API、自动化和发布流程，而不是只看“能写代码”的表面能力。'
+              : 'This page checks whether a developer tool truly fits the editor, APIs, automation, and release path rather than only claiming it can write code.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证范围' : 'Checked scope',
+              value: isChinese ? '编辑器、API、自动化、发布' : 'Editor, API, automation, release',
+              note: isChinese
+                ? '先看它是否适配真实构建流程。'
+                : 'First check whether it fits the real build workflow.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '保留索引，接榜单与对比页' : 'Indexable with ranking and comparison paths',
+              note: isChinese
+                ? '让用户从总览走向更具体的选择。'
+                : 'Move users from overview to more specific choices.',
+            },
+            {
+              label: isChinese ? '下一步增强' : 'Next enrichment',
+              value: isChinese ? '补真实工作流、仓库与调试案例' : 'Add real workflows, repos, and debugging cases',
+              note: isChinese
+                ? '用可执行证据替代泛泛的卖点。'
+                : 'Replace generic selling points with executable evidence.',
+            },
+          ]}
+        />
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

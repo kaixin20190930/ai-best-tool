@@ -6,6 +6,7 @@ import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -309,6 +310,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ))}
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '链上分析页要围绕地址追踪、资金流和行为复盘来做，不要和协议分析、钱包监控混成一页。这个页继续保持可索引，但会把钱包研究、协议分析和监控入口分层，减少重复。'
+              : 'This on-chain analysis page should stay focused on address tracking, fund flow, and behavior review instead of blending with protocol analytics or wallet monitoring. Keep it indexable, but layer wallet research, protocol analytics, and monitoring paths to reduce overlap.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证重点' : 'Validation focus',
+              value: isChinese ? '追踪、资金流、复盘' : 'Tracking, fund flow, review',
+              note: isChinese
+                ? '先确认它是否真能支撑复盘和研究。'
+                : 'Confirm it really supports review and research.',
+            },
+            {
+              label: isChinese ? '合并策略' : 'Merge strategy',
+              value: isChinese ? '分流到协议/钱包页' : 'Route to protocol/wallet pages',
+              note: isChinese
+                ? '如果真正需求更像协议健康或钱包监控，就转页。'
+                : 'If the real job is protocol health or wallet monitoring, route elsewhere.',
+            },
+            {
+              label: isChinese ? '后续增量' : 'Next increments',
+              value: isChinese ? '真实地址案例、图谱、截图' : 'Real address cases, charts, screenshots',
+              note: isChinese
+                ? '补真实链上案例和可验证图谱。'
+                : 'Add real on-chain cases and verifiable visuals.',
+            },
+          ]}
+        />
 
         <GuideActionSection
           locale={locale}

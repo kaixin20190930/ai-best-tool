@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -163,6 +164,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先判断客服工具是否真的能保留上下文、控制语气并顺利接管，而不是只输出看起来流畅的回答。'
+              : 'This page checks whether support tools truly preserve context, keep tone consistent, and hand off smoothly instead of only producing fluent replies.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证范围' : 'Checked scope',
+              value: isChinese ? '回复、知识库、分流、接手' : 'Replies, knowledge base, triage, handoff',
+              note: isChinese
+                ? '先看它能不能减少客服的重复工作。'
+                : 'First see whether it reduces repetitive support work.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '保留索引，接榜单与对比页' : 'Indexable with ranking and comparison paths',
+              note: isChinese
+                ? '让用户走向更窄的客服决策。'
+                : 'Move users toward narrower support decisions.',
+            },
+            {
+              label: isChinese ? '下一步增强' : 'Next enrichment',
+              value: isChinese ? '补真实工单、知识库和接手案例' : 'Add real tickets, knowledge-base, and handoff cases',
+              note: isChinese
+                ? '让页面更像真实支持文档。'
+                : 'Make the page feel closer to real support docs.',
+            },
+          ]}
+        />
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

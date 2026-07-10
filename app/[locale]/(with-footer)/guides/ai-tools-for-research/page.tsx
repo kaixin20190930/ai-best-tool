@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -194,6 +195,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先判断研究工具是否真的能帮助发现资料、核对证据和追溯来源，而不是只会生成看起来正确的答案。'
+              : 'This page checks whether a research tool truly helps discover material, verify evidence, and trace sources instead of merely producing plausible answers.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证范围' : 'Checked scope',
+              value: isChinese ? '来源、证据、发现、回溯' : 'Sources, evidence, discovery, traceability',
+              note: isChinese
+                ? '研究工具的第一标准是能不能让信息回得去。'
+                : 'The first standard is whether information can be traced back.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '核心研究入口保留索引' : 'Core research entry kept indexable',
+              note: isChinese
+                ? '它和研究榜单、对比页一起构成高意图研究入口。'
+                : 'It works with rankings and comparisons as a high-intent research entry path.',
+            },
+            {
+              label: isChinese ? '下一步补强' : 'Next enrichment',
+              value: isChinese ? '补真实案例和来源说明' : 'Add real cases and source notes',
+              note: isChinese
+                ? '后续会把评论、收藏和 owner 信号继续接到这页。'
+                : 'Next, comments, saves, and owner signals should be connected to this page.',
+            },
+          ]}
+        />
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

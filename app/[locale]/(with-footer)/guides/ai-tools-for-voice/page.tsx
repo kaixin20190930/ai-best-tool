@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
 
@@ -253,6 +254,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先判断语音工具是否真的能帮你完成转写、配音、对话和导出，而不是只听起来好听。'
+              : 'This page checks whether voice tools truly help with transcription, dubbing, conversation, and export rather than only sounding good.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证范围' : 'Checked scope',
+              value: isChinese ? '转写、配音、对话、导出' : 'Transcription, dubbing, conversation, export',
+              note: isChinese
+                ? '先看它是否能稳定进入工作流。'
+                : 'First see whether it fits your workflow reliably.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '核心页保留索引' : 'Core page kept indexable',
+              note: isChinese
+                ? '让语音意图清楚，和会议纪要页分开。'
+                : 'Keep the voice intent clear and separate from meeting-notes pages.',
+            },
+            {
+              label: isChinese ? '下一步补强' : 'Next enrichment',
+              value: isChinese ? '补真实配音与转写案例' : 'Add real dubbing and transcription cases',
+              note: isChinese
+                ? '后续优先补样例音频、字幕样例和语言覆盖。'
+                : 'Next, add sample audio, caption examples, and language coverage notes.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

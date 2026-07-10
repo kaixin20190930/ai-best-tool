@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -159,6 +160,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先判断销售工具是否真的能串起线索、跟进、沟通和 CRM，而不是只会生成漂亮文案。'
+              : 'This page checks whether sales tools truly connect leads, follow-up, communication, and CRM instead of only generating polished copy.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证范围' : 'Checked scope',
+              value: isChinese ? '线索、跟进、沟通、CRM' : 'Leads, follow-up, communication, CRM',
+              note: isChinese
+                ? '先看它是否贴合你的销售流程。'
+                : 'First see whether it fits your sales workflow.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '保留索引，接榜单与对比页' : 'Indexable with ranking and comparison paths',
+              note: isChinese
+                ? '把销售意图导向更窄的路径。'
+                : 'Route sales intent into narrower paths.',
+            },
+            {
+              label: isChinese ? '下一步增强' : 'Next enrichment',
+              value: isChinese ? '补真实销售流程、整合和案例' : 'Add real sales workflows, integrations, and cases',
+              note: isChinese
+                ? '让页面更像真实运营文档。'
+                : 'Make the page feel closer to real ops notes.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

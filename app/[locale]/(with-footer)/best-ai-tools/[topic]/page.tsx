@@ -9,6 +9,7 @@ import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getCategoryBySlug } from '@/lib/services/categories';
 import { getLocalizedField, getTools } from '@/lib/services/tools';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import TrackableLink from '@/components/TrackableLink';
 
@@ -602,6 +603,38 @@ export default async function BestAiToolsTopicPage({
             </div>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这个榜单页先说明排序依据、用途边界和下一步怎么继续比较，避免用户把榜单当成纯流量页。'
+              : 'This ranking page explains the sorting basis, use-case boundaries, and the next comparison step so users do not treat it as a pure traffic page.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证范围' : 'Checked scope',
+              value: isChinese ? '排序、边界、下一步' : 'Ranking, boundaries, next step',
+              note: isChinese
+                ? '先让榜单页说清楚自己为什么这样排。'
+                : 'Make the ranking page explain why it is ordered this way.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '榜单页保留索引' : 'Ranking page kept indexable',
+              note: isChinese
+                ? '承接高意图主题搜索，不要让它变成空壳页。'
+                : 'Capture high-intent topic searches instead of leaving it as a thin shell page.',
+            },
+            {
+              label: isChinese ? '下一步增强' : 'Next enrichment',
+              value: isChinese ? '补方法、评论和筛选说明' : 'Add method notes, comments, and filtering notes',
+              note: isChinese
+                ? '让榜单更像决策页。'
+                : 'Make the ranking feel like a decision page.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_360px]'>
           <div className='rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm'>

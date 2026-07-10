@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -139,6 +140,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先检查免费额度、限制、更新频率、评论和截图，避免把“免费”误读成“足够用”。'
+              : 'This page prioritizes free quotas, limits, freshness, comments, and screenshots so that "free" is not mistaken for "enough".'
+          }
+          items={[
+            {
+              label: isChinese ? '验证范围' : 'Checked scope',
+              value: isChinese ? '免费额度、限制、更新、评论' : 'Free quota, limits, freshness, comments',
+              note: isChinese
+                ? '免费页不是价格页，而是先帮用户判断时间值不值得花。'
+                : 'A free-tools page should help users decide whether the time investment is worth it.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '核心免费入口保留索引' : 'Core free entry kept indexable',
+              note: isChinese
+                ? '与免费榜单、分类页一起构成高意图入口。'
+                : 'It works with the free ranking and category pages as a high-intent entry path.',
+            },
+            {
+              label: isChinese ? '下一步补强' : 'Next enrichment',
+              value: isChinese ? '补真实更新与验证日期' : 'Add real update and verification dates',
+              note: isChinese
+                ? '后续继续补评论、收藏、截图和 owner 认领信号。'
+                : 'Next iterations should add comments, saves, screenshots, and owner-claim signals.',
+            },
+          ]}
+        />
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

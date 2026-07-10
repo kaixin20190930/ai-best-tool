@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -124,6 +125,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '代理与服务团队页要围绕交付、协作和客户隔离来判断，而不是单纯看产出功能。'
+            : 'Agency and service-team comparison should be judged around delivery, collaboration, and client separation rather than output features alone.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '交付流程' : 'Delivery workflow',
+            value: locale === 'cn' || locale === 'tw' ? '看能否稳定交付' : 'See whether it can deliver consistently',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '交付稳定性比单点功能更重要。'
+                : 'Delivery stability matters more than isolated features.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '客户隔离' : 'Client separation',
+            value: locale === 'cn' || locale === 'tw' ? '看能否分客户管理' : 'Check whether clients can be separated cleanly',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '代理场景里这是硬需求。'
+                : 'This is a hard requirement in agency workflows.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '协作与审计' : 'Collaboration and audit',
+            value: locale === 'cn' || locale === 'tw' ? '看多人能否顺手接力' : 'See whether multiple people can hand off smoothly',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '多人协作和留痕决定能不能长期用。'
+                : 'Collaboration and traceability decide long-term adoption.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

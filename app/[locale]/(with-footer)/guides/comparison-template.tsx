@@ -8,6 +8,7 @@ import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import { toolToListRow } from '@/lib/services/toolPresenter';
 import { getPopularTools, getToolByNameCached, getTools, type Tool } from '@/lib/services/tools';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
 
@@ -678,6 +679,38 @@ export function ComparisonPage({
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '比较页先说清比较依据、样本边界和下一步怎么缩小候选，避免它变成单纯的列表堆叠。'
+              : 'The comparison page should explain the comparison basis, sample boundaries, and the next narrowing step so it does not become a simple list dump.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证范围' : 'Checked scope',
+              value: isChinese ? '比较依据、样本边界、下一步' : 'Basis, sample boundaries, next step',
+              note: isChinese
+                ? '先让用户知道这一页为什么值得看。'
+                : 'Make it clear why this page is worth reading.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '比较页保留索引' : 'Comparison page kept indexable',
+              note: isChinese
+                ? '承接高意图对比搜索。'
+                : 'Capture high-intent comparison searches.',
+            },
+            {
+              label: isChinese ? '下一步增强' : 'Next enrichment',
+              value: isChinese ? '补真实样本、评论和决策说明' : 'Add real samples, comments, and decision notes',
+              note: isChinese
+                ? '把比较页做成可决策页面。'
+                : 'Turn the page into a real decision aid.',
+            },
+          ]}
+        />
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

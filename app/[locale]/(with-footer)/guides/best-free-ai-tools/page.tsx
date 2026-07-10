@@ -7,6 +7,7 @@ import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import { toolToListRow } from '@/lib/services/toolPresenter';
 import { getTools } from '@/lib/services/tools';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -164,6 +165,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先检查免费工具的真实可用性：是否真的免费、限制是否清晰、更新是否还在继续、评分和评论是否可信。'
+              : 'This page checks whether free tools are actually usable: whether they are truly free, whether limits are clear, whether updates are still active, and whether ratings and comments are trustworthy.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证范围' : 'Checked scope',
+              value: isChinese ? '免费额度、限制、更新、评分' : 'Free quota, limits, freshness, ratings',
+              note: isChinese
+                ? '“免费”必须和“可长期用”区分开。'
+                : '"Free" needs to be separated from "usable long term".',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '核心免费榜单保留索引' : 'Core free ranking kept indexable',
+              note: isChinese
+                ? '这页和免费工具指南一起，构成重要的高意图入口。'
+                : 'Together with the free-tools guide, this forms a high-intent entry path.',
+            },
+            {
+              label: isChinese ? '下一步补强' : 'Next enrichment',
+              value: isChinese ? '补真实评论和更新时间' : 'Add real comments and update dates',
+              note: isChinese
+                ? '后续会把用户反馈、收藏和 owner 认领信号继续补上。'
+                : 'Next, user feedback, saves, and owner-claim signals should be added.',
+            },
+          ]}
+        />
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -278,6 +279,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? 'SEO 工具对比不该只看功能表，而要看关键词研究、内容优化、排名跟踪和团队落地是否真的能接上。'
+            : 'SEO tool comparison should not stop at feature lists; it should verify whether keyword research, content optimization, rank tracking, and team adoption actually fit together.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '关键词研究' : 'Keyword research',
+            value: locale === 'cn' || locale === 'tw' ? '先确认覆盖和意图拆解' : 'Check coverage and intent breakdown first',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '找词和分意图比花哨的生成更重要。'
+                : 'Finding the right queries and intents matters more than flashy generation.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '内容优化' : 'Content optimization',
+            value: locale === 'cn' || locale === 'tw' ? '看建议是否可执行' : 'See whether the recommendations are actionable',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '真正有用的是能直接进入内容流程的建议。'
+                : 'The useful ones are the recommendations that actually flow into publishing.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '长期维护' : 'Long-term maintenance',
+            value: locale === 'cn' || locale === 'tw' ? '看更新与稳定性' : 'Check freshness and stability',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? 'SEO 工具要能长期跟着搜索变化走。'
+                : 'SEO tools need to keep up with search changes over time.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

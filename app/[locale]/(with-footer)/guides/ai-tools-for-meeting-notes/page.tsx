@@ -6,6 +6,7 @@ import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 
@@ -147,6 +148,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先判断会议纪要工具是否真的能接住转写、整理和行动项，而不是只展示看起来正确的总结。'
+              : 'This page checks whether a meeting notes tool truly handles transcription, cleanup, and action items instead of only showing summaries that look correct.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证范围' : 'Checked scope',
+              value: isChinese ? '转写、整理、行动项、协作' : 'Transcription, cleanup, action items, collaboration',
+              note: isChinese
+                ? '先确认它是否稳稳接入你的会议记录流程。'
+                : 'First confirm that it fits your meeting capture workflow.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '保留索引，配合榜单与对比页' : 'Indexable with ranking and comparison paths',
+              note: isChinese
+                ? '它会把用户继续引向更窄的高意图路径。'
+                : 'It funnels users into narrower high-intent paths.',
+            },
+            {
+              label: isChinese ? '下一步增强' : 'Next enrichment',
+              value: isChinese ? '补真实案例、样例纪要和评论' : 'Add real cases, sample notes, and comments',
+              note: isChinese
+                ? '用真实使用痕迹替代空泛描述。'
+                : 'Replace generic copy with real usage evidence.',
+            },
+          ]}
+        />
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
@@ -385,6 +418,58 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
               </div>
             </TrackableCtaLink>
+          </div>
+        </section>
+
+        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {isChinese
+              ? '先用榜单缩小 meeting notes shortlist'
+              : 'Use the ranking to narrow your meeting notes shortlist first'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你已经明确是在找转写、纪要整理或行动项抽取工具，先看榜单会比只看总览更快进入决策。'
+              : 'If the decision is already about transcription, cleanup, or action extraction, the ranking gets you to a decision faster than an overview alone.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-meeting-notes-tools',
+                title: isChinese ? '会议纪要榜单' : 'Meeting notes ranking',
+                desc: isChinese ? '先看最值得试的候选。' : 'Start with the most relevant candidates first.',
+              },
+              {
+                href: '/guides/ai-tools-for-meeting-notes-comparison',
+                title: isChinese ? '会议纪要对比' : 'Meeting notes comparison',
+                desc: isChinese ? '转写、整理和行动项一起看。' : 'Compare transcription, cleanup, and action items together.',
+              },
+              {
+                href: '/guides/ai-note-taking-tools-comparison',
+                title: isChinese ? '记笔记对比' : 'Note-taking comparison',
+                desc: isChinese ? '如果重点偏长期记录与沉淀。' : 'Useful when long-term note capture matters more.',
+              },
+              {
+                href: '/guides/ai-productivity-tools-comparison',
+                title: isChinese ? '生产力对比' : 'Productivity comparison',
+                desc: isChinese ? '如果重点偏日常效率和协作。' : 'Useful when daily productivity and collaboration matter more.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`meeting_notes_guide_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
           </div>
         </section>
         <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_meeting_notes' />

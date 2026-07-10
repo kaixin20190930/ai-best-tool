@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -273,6 +274,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ))}
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先检查页面是否能帮助用户完成真实图像决策：生成、修图、商用授权和品牌素材，而不是只看出图效果。'
+              : 'This page prioritizes whether the guide helps with a real image decision: generation, editing, commercial licensing, and brand assets rather than just output quality.'
+          }
+          items={[
+            {
+              label: isChinese ? '判断维度' : 'Decision signals',
+              value: isChinese ? '生成、修图、授权、品牌' : 'Generation, editing, licensing, brand',
+              note: isChinese
+                ? '重点看是否能支撑创作与商用两种场景。'
+                : 'We care about whether the tool supports both creative and commercial use.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '核心页保留索引' : 'Keep the core page indexable',
+              note: isChinese
+                ? '让图像意图更清楚，减少和视频、设计页重复。'
+                : 'Make the image intent explicit so it overlaps less with video and design pages.',
+            },
+            {
+              label: isChinese ? '下一步补强' : 'Next enrichment',
+              value: isChinese ? '补真实创作案例' : 'Add real creative cases',
+              note: isChinese
+                ? '后续优先补真实图片样本、商用限制和品牌模板。'
+                : 'Next, priority additions are real image samples, commercial limits, and brand templates.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

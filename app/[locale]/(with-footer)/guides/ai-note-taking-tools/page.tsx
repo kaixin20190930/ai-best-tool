@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -140,6 +141,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先判断笔记工具是否能稳定接入会议、灵感和知识整理工作流，而不是只看界面和演示。'
+              : 'This page checks whether note taking tools can reliably fit meetings, idea capture, and knowledge organization workflows instead of just looking polished in demos.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证范围' : 'Checked scope',
+              value: isChinese ? '记录、整理、搜索、协作' : 'Capture, organization, search, collaboration',
+              note: isChinese
+                ? '笔记类工具最重要的是后续能不能找得回来。'
+                : 'The key question is whether notes can be found and reused later.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '核心笔记入口保留索引' : 'Core note taking entry kept indexable',
+              note: isChinese
+                ? '和记笔记榜单、会议纪要页一起支撑高意图流量。'
+                : 'It supports high-intent traffic together with the ranking and meeting-notes pages.',
+            },
+            {
+              label: isChinese ? '下一步补强' : 'Next enrichment',
+              value: isChinese ? '补真实会议和整理场景' : 'Add real meeting and organization scenarios',
+              note: isChinese
+                ? '后续会把评论、收藏和验证日期继续补厚。'
+                : 'Next, comments, saves, and verification dates should be added.',
+            },
+          ]}
+        />
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

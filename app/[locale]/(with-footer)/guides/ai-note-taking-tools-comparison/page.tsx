@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -275,6 +276,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '先确认记笔记工具在会议记录、灵感捕捉和知识整理里的真实覆盖，再继续看对比。'
+            : 'Check whether these tools really cover meeting capture, idea logging, and knowledge organization before continuing.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '记录方式' : 'Capture mode',
+            value: locale === 'cn' || locale === 'tw' ? '会议、灵感、知识' : 'Meetings, ideas, knowledge',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先看它是不是你真实会用的输入口。'
+                : 'Check whether this matches the way you actually capture information.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '整理和搜索' : 'Organization',
+            value: locale === 'cn' || locale === 'tw' ? '整理、检索、归档' : 'Organize, search, archive',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '能不能把内容真正找回来很关键。'
+                : 'Being able to find things later is crucial.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '真实增量' : 'Real increments',
+            value: locale === 'cn' || locale === 'tw' ? '评论、案例、认领' : 'Comments, cases, claims',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '用这些信号补强页面可信度。'
+                : 'Use these signals to strengthen credibility.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

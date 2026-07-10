@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -276,6 +277,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '开发者工具的比较重点不是功能数，而是能否把编码、调试、协作和工作流整合到一个顺手的链路里。'
+            : 'Developer tools should be judged less by feature count and more by whether they integrate coding, debugging, collaboration, and workflow into something actually smooth.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '编码效率' : 'Coding efficiency',
+            value: locale === 'cn' || locale === 'tw' ? '看它能否缩短路径' : 'See whether it shortens the path',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '真正好用的工具通常是减少切换。'
+                : 'The best tools usually reduce context switches.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '调试支持' : 'Debug support',
+            value: locale === 'cn' || locale === 'tw' ? '看能否继续推进问题' : 'Check whether it helps move the issue forward',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '能解释、定位、建议下一步会更有价值。'
+                : 'Tools that explain, locate, and suggest next steps are more useful.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '协作整合' : 'Collaboration fit',
+            value: locale === 'cn' || locale === 'tw' ? '看是否适合团队使用' : 'See whether it fits team use',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '权限、共享和历史记录决定能不能长期落地。'
+                : 'Permissions, sharing, and history decide long-term adoption.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

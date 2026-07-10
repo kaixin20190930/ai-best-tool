@@ -7,6 +7,7 @@ import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import { toolToListRow } from '@/lib/services/toolPresenter';
 import { getTools } from '@/lib/services/tools';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -295,6 +296,32 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </aside>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '先确认聊天机器人在问答、写作、知识库和协作里的真实覆盖，再继续比较。'
+              : 'Check whether these chatbots truly cover Q&A, writing, knowledge base, and collaboration before continuing.'
+          }
+          items={[
+            {
+              label: isChinese ? '主用途' : 'Primary use',
+              value: isChinese ? '问答、写作、协作' : 'Q&A, writing, collaboration',
+              note: isChinese ? '先看它是不是你真正会用的入口。' : 'Check whether it is a real entry point for your workflow.',
+            },
+            {
+              label: isChinese ? '长期价值' : 'Long-term value',
+              value: isChinese ? '回答稳定性、更新、评论' : 'Answer reliability, freshness, comments',
+              note: isChinese ? '别只看一次回答。' : 'Do not optimize for one good answer.',
+            },
+            {
+              label: isChinese ? '真实增量' : 'Real increments',
+              value: isChinese ? '案例、场景、owner 认领' : 'Cases, use cases, owner claims',
+              note: isChinese ? '把页面补成可验证的内容。' : 'Make the page more verifiable.',
+            },
+          ]}
+        />
 
         <section className='mt-8'>
           <div className='mb-4 flex items-end justify-between gap-3'>

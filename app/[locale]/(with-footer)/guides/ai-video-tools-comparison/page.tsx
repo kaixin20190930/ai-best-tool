@@ -3,6 +3,7 @@ import { ArrowRight, CheckCircle2, Columns3, ExternalLink, Sparkles } from 'luci
 import { getTranslations } from 'next-intl/server';
 
 import { generateBreadcrumbSchema, generateFAQSchema, generateItemListSchema } from '@/lib/seo/schema';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import { toolToListRow } from '@/lib/services/toolPresenter';
 import { getTools } from '@/lib/services/tools';
@@ -310,6 +311,31 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </aside>
         </section>
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '先确认视频工具在剪辑、生成、配音和短视频营销里的真实覆盖，再继续看对比。'
+              : 'Check whether these tools actually cover editing, generation, voiceover, and short-form marketing before continuing.'
+          }
+          items={[
+            {
+              label: isChinese ? '工作流' : 'Workflow',
+              value: isChinese ? '剪辑、生成、配音' : 'Editing, generation, voiceover',
+              note: isChinese ? '先看它能不能接住你的主流程。' : 'Check whether it fits the main workflow first.',
+            },
+            {
+              label: isChinese ? '长期使用' : 'Long-term',
+              value: isChinese ? '导出、更新、评论' : 'Export, freshness, comments',
+              note: isChinese ? '持续做视频时这些比标题更重要。' : 'These matter more than labels for ongoing video work.',
+            },
+            {
+              label: isChinese ? '真实增量' : 'Real increments',
+              value: isChinese ? '案例、场景、owner 认领' : 'Cases, use cases, owner claims',
+              note: isChinese ? '把 AI 内容补成更可信的页面。' : 'Use them to make the page more credible.',
+            },
+          ]}
+        />
 
         <section className='mt-8'>
           <div className='mb-4 flex items-end justify-between gap-3'>

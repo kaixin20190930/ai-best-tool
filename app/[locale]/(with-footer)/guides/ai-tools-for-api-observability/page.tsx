@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -234,6 +235,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </aside>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先检查页面是否能帮助用户完成真实可观测判断：日志、调用追踪、成本分析、质量追踪和生产决策，而不是只看图表数量。'
+              : 'This page prioritizes whether the guide helps with a real observability decision: logs, request tracing, cost analysis, quality tracking, and production decisions rather than chart count.'
+          }
+          items={[
+            {
+              label: isChinese ? '判断维度' : 'Decision signals',
+              value: isChinese ? '日志、追踪、成本、质量' : 'Logs, traces, cost, quality',
+              note: isChinese
+                ? '重点看它是否能把生产请求变成可判断的证据。'
+                : 'We care about whether production requests become decision-ready evidence.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '保留可索引' : 'Keep it indexable',
+              note: isChinese
+                ? '把可观测目标写清楚，减少和模型路由页的重复。'
+                : 'Make the observability intent explicit so it overlaps less with routing pages.',
+            },
+            {
+              label: isChinese ? '下一步补强' : 'Next enrichment',
+              value: isChinese ? '补真实监控案例' : 'Add real monitoring cases',
+              note: isChinese
+                ? '后续优先补生产日志样例、告警规则和团队复盘。'
+                : 'Next, priority additions are production log examples, alert rules, and team retros.',
+            },
+          ]}
+        />
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

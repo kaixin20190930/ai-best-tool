@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -216,6 +217,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </aside>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先检查页面是否能帮助用户完成真实模型路由选择：统一出口、回退、成本治理和可替换策略，而不是只看模型列表长度。'
+              : 'This page prioritizes whether the guide helps with a real model-routing decision: unified access, fallback, cost governance, and replaceable strategy rather than model list length.'
+          }
+          items={[
+            {
+              label: isChinese ? '判断维度' : 'Decision signals',
+              value: isChinese ? '路由、回退、成本、接入' : 'Routing, fallback, cost, integration',
+              note: isChinese
+                ? '重点看能否支撑真实生产治理，而不是只做模型目录。'
+                : 'We care about whether the tool supports real production governance, not only a model directory.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '核心页保留索引' : 'Keep the core page indexable',
+              note: isChinese
+                ? '把模型路由意图写清楚，减少和开发者页、可观测页重叠。'
+                : 'Make the routing intent explicit so it overlaps less with developer and observability pages.',
+            },
+            {
+              label: isChinese ? '下一步补强' : 'Next enrichment',
+              value: isChinese ? '补真实路由案例' : 'Add real routing cases',
+              note: isChinese
+                ? '后续优先补回退链路、成本优化和团队使用记录。'
+                : 'Next, priority additions are fallback flows, cost optimization notes, and team usage examples.',
+            },
+          ]}
+        />
 
         <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -214,6 +215,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </aside>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先判断 Web3 分析工具是否真的能让链上变化、协议状态和风险观察更清晰，而不是只看图表数量。'
+              : 'This page checks whether Web3 analysis tools truly make on-chain changes, protocol state, and risk observation clearer rather than only offering more charts.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证范围' : 'Checked scope',
+              value: isChinese ? '链上、协议、风险、追踪' : 'On-chain, protocol, risk, tracking',
+              note: isChinese
+                ? '重点看能否支撑持续观察。'
+                : 'Focus on whether it supports ongoing observation.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '核心页保留索引' : 'Core page kept indexable',
+              note: isChinese
+                ? '与 DEX、DeFi 和钱包页形成清晰分工。'
+                : 'Keep a clear split from DEX, DeFi, and wallet pages.',
+            },
+            {
+              label: isChinese ? '下一步补强' : 'Next enrichment',
+              value: isChinese ? '补真实研究与监控案例' : 'Add real research and monitoring cases',
+              note: isChinese
+                ? '后续优先补链上样本、监控面板和研究笔记。'
+                : 'Next, add on-chain examples, monitoring panels, and research notes.',
+            },
+          ]}
+        />
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

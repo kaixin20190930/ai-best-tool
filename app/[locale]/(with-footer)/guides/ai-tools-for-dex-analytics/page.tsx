@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -289,6 +290,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ))}
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先判断 DEX 分析工具是否真的能让交易对、池子和流动性观察更清晰，而不是只看图表数量。'
+              : 'This page checks whether DEX analytics tools truly make pair, pool, and liquidity observation clearer rather than only offering more charts.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证范围' : 'Checked scope',
+              value: isChinese ? '交易对、池子、流动性、追踪' : 'Pairs, pools, liquidity, tracking',
+              note: isChinese
+                ? '重点看能否支撑持续观察和比较。'
+                : 'Focus on whether it supports ongoing observation and comparison.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '核心页保留索引' : 'Core page kept indexable',
+              note: isChinese
+                ? '与 Web3 分析和 DeFi 页形成清晰分工。'
+                : 'Keep a clear split from Web3 analysis and DeFi pages.',
+            },
+            {
+              label: isChinese ? '下一步补强' : 'Next enrichment',
+              value: isChinese ? '补真实交易与池子样例' : 'Add real pair and pool examples',
+              note: isChinese
+                ? '后续优先补监控截图、历史变化和流动性追踪。'
+                : 'Next, add monitoring screenshots, historical changes, and liquidity tracking.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

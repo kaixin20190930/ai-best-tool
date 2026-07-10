@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -265,6 +266,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '这页先看真实可验证的模型路由信号，再继续判断是否需要统一入口、回退控制和成本治理。'
+            : 'This page looks at verifiable model-routing signals first, then helps you decide whether unified access, fallback control, and cost governance are really needed.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '供应商覆盖' : 'Provider coverage',
+            value: locale === 'cn' || locale === 'tw' ? '先确认能接多少模型' : 'Confirm how many models it can actually cover',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先看能不能稳住多供应商接入和切换自由度。'
+                : 'Start with whether multi-provider access and switching flexibility are actually there.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '容错能力' : 'Fallback handling',
+            value: locale === 'cn' || locale === 'tw' ? '回退与失败处理要可见' : 'Fallbacks and failures should be visible',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果失败场景都说不清，后面再比高级功能意义不大。'
+                : 'If failure behavior is unclear, feature depth is less useful.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '生产治理' : 'Production governance',
+            value: locale === 'cn' || locale === 'tw' ? '日志、限额、审计' : 'Logs, limits, and audits',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '真正上生产时，治理能力会比“接得快”更关键。'
+                : 'Once in production, governance matters more than quick setup.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

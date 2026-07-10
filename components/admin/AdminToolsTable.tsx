@@ -108,6 +108,38 @@ export default function AdminToolsTable({
     return tool.name;
   };
 
+  const getClaimStatusLabel = (claimStatus: string | null | undefined) => {
+    if (claimStatus === 'claimed') return 'Claimed';
+    if (claimStatus === 'pending') return 'Pending claim';
+    if (claimStatus === 'rejected') return 'Claim rejected';
+    return 'Unclaimed';
+  };
+
+  const getClaimStatusTone = (claimStatus: string | null | undefined) => {
+    if (claimStatus === 'claimed') return 'bg-emerald-50 text-emerald-700';
+    if (claimStatus === 'pending') return 'bg-amber-50 text-amber-700';
+    if (claimStatus === 'rejected') return 'bg-rose-50 text-rose-700';
+    return 'bg-slate-100 text-slate-600';
+  };
+
+  const getOwnerLabel = (tool: AdminTool) => {
+    return tool.ownerEmail || 'No owner';
+  };
+
+  const getClaimStatusHref = (claimStatus: string | null | undefined) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (!claimStatus || claimStatus === 'unclaimed') {
+      params.set('claimStatus', 'unclaimed');
+    } else {
+      params.set('claimStatus', claimStatus);
+    }
+
+    params.delete('page');
+    const query = params.toString();
+    return `/admin/tools${query ? `?${query}` : ''}`;
+  };
+
   const getContent = (tool: AdminTool) => {
     if (typeof tool.content === 'string') return tool.content;
     if (typeof tool.content === 'object' && tool.content !== null) {
@@ -179,6 +211,29 @@ export default function AdminToolsTable({
           className: 'bg-rose-50 text-rose-700',
         });
       }
+    }
+
+    const claimStatus = tool.claimStatus || 'unclaimed';
+    if (claimStatus === 'claimed') {
+      signals.push({
+        label: 'Owner claimed',
+        className: 'bg-emerald-50 text-emerald-700',
+      });
+    } else if (claimStatus === 'pending') {
+      signals.push({
+        label: 'Claim pending',
+        className: 'bg-amber-50 text-amber-700',
+      });
+    } else if (claimStatus === 'rejected') {
+      signals.push({
+        label: 'Claim rejected',
+        className: 'bg-rose-50 text-rose-700',
+      });
+    } else {
+      signals.push({
+        label: 'Owner missing',
+        className: 'bg-slate-100 text-slate-600',
+      });
     }
 
     if (commercial.fastTrackRequested === true) {
@@ -422,7 +477,7 @@ export default function AdminToolsTable({
             type="button"
             onClick={handleBulkPublish}
             disabled={selectedIds.length === 0 || loading === 'bulk-publish'}
-            className="inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700 hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <CheckCheck className="h-4 w-4" />
             {loading === 'bulk-publish'
@@ -445,7 +500,7 @@ export default function AdminToolsTable({
             type="button"
             onClick={handleBulkFollowUp}
             disabled={loading === 'bulk-followup'}
-            className="inline-flex items-center justify-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-100 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading === 'bulk-followup' ? 'Saving...' : 'Mark followed up'}
           </button>
@@ -467,6 +522,9 @@ export default function AdminToolsTable({
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
                 Tool
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
+                Owner
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
                 Audit
@@ -492,20 +550,20 @@ export default function AdminToolsTable({
               const staleFollowUp = isFollowUpStale(tool);
 
               return (
-              <tr
-                key={tool.id}
-                className={
-                  publishReady
-                    ? 'bg-emerald-50/50 hover:bg-emerald-50'
-                    : pendingOverdue
-                    ? 'bg-red-50/60 hover:bg-red-50'
-                    : staleFollowUp
-                    ? 'bg-amber-50/40 hover:bg-amber-50'
-                    : tool.status === 'pending'
-                    ? 'bg-amber-50/60 hover:bg-amber-50'
-                    : 'hover:bg-slate-50'
-                }
-              >
+                <tr
+                  key={tool.id}
+                  className={
+                    publishReady
+                      ? 'bg-emerald-50/50 hover:bg-emerald-50'
+                      : pendingOverdue
+                        ? 'bg-red-50/60 hover:bg-red-50'
+                        : staleFollowUp
+                          ? 'bg-amber-50/40 hover:bg-amber-50'
+                          : tool.status === 'pending'
+                            ? 'bg-amber-50/60 hover:bg-amber-50'
+                            : 'hover:bg-slate-50'
+                  }
+                >
                 <td className="px-6 py-4">
                   <input
                     type="checkbox"
@@ -540,6 +598,31 @@ export default function AdminToolsTable({
                         </div>
                       )}
                     </div>
+                  </div>
+                </td>
+                <td className="px-6 py-4">
+                  <div className="flex flex-wrap gap-2">
+                    <span
+                      className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${getClaimStatusTone(tool.claimStatus)}`}
+                    >
+                      {getClaimStatusLabel(tool.claimStatus)}
+                    </span>
+                    <span className="inline-flex rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700">
+                      {getOwnerLabel(tool)}
+                    </span>
+                  </div>
+                  {tool.claimedAt && (
+                    <div className="mt-2 text-xs text-slate-500">
+                      Claimed: {new Date(tool.claimedAt).toLocaleDateString()}
+                    </div>
+                  )}
+                  <div className="mt-2">
+                    <Link
+                      href={getClaimStatusHref(tool.claimStatus)}
+                      className="inline-flex rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-600 hover:bg-slate-50"
+                    >
+                      View claim filter
+                    </Link>
                   </div>
                 </td>
                 <td className="px-6 py-4">
@@ -604,12 +687,12 @@ export default function AdminToolsTable({
                 </td>
                 <td className="px-6 py-4 text-right">
                   <div className="flex items-center justify-end gap-2">
-                    {tool.status === 'pending' && (
+                  {tool.status === 'pending' && (
                       <>
                         <button
                           onClick={() => handleApprove(tool.id)}
                           disabled={loading === tool.id}
-                          className="rounded p-1 text-green-600 hover:bg-green-50 disabled:opacity-50"
+                          className="rounded border border-emerald-200 bg-emerald-50 p-1 text-emerald-700 hover:bg-emerald-100 disabled:opacity-50"
                           title="Approve"
                         >
                           <Check className="h-5 w-5" />
@@ -617,7 +700,7 @@ export default function AdminToolsTable({
                         <button
                           onClick={() => handleReject(tool.id)}
                           disabled={loading === tool.id}
-                          className="rounded p-1 text-red-600 hover:bg-red-50 disabled:opacity-50"
+                          className="rounded border border-rose-200 bg-rose-50 p-1 text-rose-700 hover:bg-rose-100 disabled:opacity-50"
                           title="Reject"
                         >
                           <X className="h-5 w-5" />
@@ -626,7 +709,7 @@ export default function AdminToolsTable({
                     )}
                     <Link
                       href={`/admin/tools/${tool.id}/edit`}
-                      className="rounded p-1 text-cyan-700 hover:bg-cyan-50"
+                      className="rounded border border-slate-200 bg-slate-50 p-1 text-slate-700 hover:bg-slate-100"
                       title="Edit"
                     >
                       <Edit className="h-5 w-5" />
@@ -635,7 +718,7 @@ export default function AdminToolsTable({
                       href={tool.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="rounded p-1 text-slate-600 hover:bg-slate-50"
+                      className="rounded border border-slate-200 bg-white p-1 text-slate-600 hover:bg-slate-50"
                       title="Visit Website"
                     >
                       <ExternalLink className="h-5 w-5" />
@@ -643,7 +726,7 @@ export default function AdminToolsTable({
                     <button
                       onClick={() => handleDelete(tool.id)}
                       disabled={loading === tool.id}
-                      className="rounded p-1 text-red-600 hover:bg-red-50 disabled:opacity-50"
+                      className="rounded border border-rose-200 bg-rose-50 p-1 text-rose-700 hover:bg-rose-100 disabled:opacity-50"
                       title="Delete"
                     >
                       <Trash2 className="h-5 w-5" />
@@ -668,7 +751,7 @@ export default function AdminToolsTable({
             {currentPage > 1 && (
               <Link
                 href={getPageHref(currentPage - 1)}
-                className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
               >
                 Previous
               </Link>
@@ -676,7 +759,7 @@ export default function AdminToolsTable({
             {currentPage < totalPages && (
               <Link
                 href={getPageHref(currentPage + 1)}
-                className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
               >
                 Next
               </Link>

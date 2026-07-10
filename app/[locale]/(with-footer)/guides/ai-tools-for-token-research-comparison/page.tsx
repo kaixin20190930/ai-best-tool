@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -276,6 +277,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '代币研究对比页要围绕项目比较、基本面判断、长期跟踪和研究复盘来判断，不要只看指标数量。它会继续保留索引，但把更广的 Crypto 研究路径分层。'
+            : 'This token research comparison page should focus on project comparison, fundamentals, long-term tracking, and research review instead of metric count alone. Keep it indexable, but separate broader crypto research paths.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '验证重点' : 'Validation focus',
+            value: locale === 'cn' || locale === 'tw' ? '项目、基本面、复盘' : 'Projects, fundamentals, review',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先确认它是不是能帮助你解释一个 token。'
+                : 'Confirm it helps you explain a token.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '合并策略' : 'Merge strategy',
+            value: locale === 'cn' || locale === 'tw' ? '分流到 Crypto / On-chain' : 'Route to crypto / on-chain',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果你还在看更宽的市场或地址行为，就转到更窄页。'
+                : 'If the real work is broader market or address behavior, move to narrower pages.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '后续增量' : 'Next increments',
+            value: locale === 'cn' || locale === 'tw' ? '案例、来源、评论' : 'Cases, sources, comments',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '补上研究场景和实体信号。'
+                : 'Add research scenarios and entity signals.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

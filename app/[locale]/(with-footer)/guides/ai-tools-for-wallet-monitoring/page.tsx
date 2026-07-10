@@ -6,6 +6,7 @@ import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -311,6 +312,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ))}
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '钱包监控页要围绕提醒、阈值、异常和通知渠道来做，不要和钱包研究页混在一起。这个页继续保持可索引，但会把更适合监控的高意图入口和更窄的对比页优先露出。'
+              : 'This wallet monitoring page should stay focused on alerts, thresholds, anomalies, and notification channels instead of blending into wallet research. Keep it indexable, but surface the monitoring-intent paths and narrower comparisons first.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证重点' : 'Validation focus',
+              value: isChinese ? '提醒、阈值、异常' : 'Alerts, thresholds, anomalies',
+              note: isChinese
+                ? '确认它是否真能满足持续观察和及时通知。'
+                : 'Confirm it actually supports ongoing watching and timely notifications.',
+            },
+            {
+              label: isChinese ? '合并策略' : 'Merge strategy',
+              value: isChinese ? '分流到研究页' : 'Route to research pages',
+              note: isChinese
+                ? '如果真正需求是研究地址关系，就转到研究页。'
+                : 'If the real job is research, move to the research pages.',
+            },
+            {
+              label: isChinese ? '后续增量' : 'Next increments',
+              value: isChinese ? '告警案例、截图、阈值' : 'Alert cases, screenshots, thresholds',
+              note: isChinese
+                ? '补真实提醒案例和通知截图，增强非 AI 内容。'
+                : 'Add real alert examples and notification screenshots for non-AI signal.',
+            },
+          ]}
+        />
 
         <GuideActionSection
           locale={locale}

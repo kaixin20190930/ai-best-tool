@@ -6,6 +6,7 @@ import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -246,6 +247,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ))}
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '协议分析页要围绕协议健康、使用量和趋势观察来做，不要和链上分析、DeFi 分析混在一起。这个页继续可索引，但会把更窄的协议和 DeFi 路径分层处理。'
+              : 'This protocol analytics page should stay centered on protocol health, usage, and trend watching rather than blending into on-chain or DeFi analysis. Keep it indexable, but separate narrower protocol and DeFi paths clearly.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证重点' : 'Validation focus',
+              value: isChinese ? '健康、使用量、趋势' : 'Health, usage, trends',
+              note: isChinese
+                ? '确认它是否真的能支撑长期观察。'
+                : 'Confirm it actually supports long-term monitoring.',
+            },
+            {
+              label: isChinese ? '合并策略' : 'Merge strategy',
+              value: isChinese ? '分流到 DeFi/链上页' : 'Route to DeFi/on-chain pages',
+              note: isChinese
+                ? '如果需求更偏资金流或地址追踪，就转过去。'
+                : 'If the need leans toward fund flow or address tracking, route there.',
+            },
+            {
+              label: isChinese ? '后续增量' : 'Next increments',
+              value: isChinese ? '协议案例、曲线、周期' : 'Protocol cases, charts, periods',
+              note: isChinese
+                ? '补真实协议趋势和周期性证据。'
+                : 'Add real protocol trend and time-series evidence.',
+            },
+          ]}
+        />
 
         <GuideActionSection
           locale={locale}

@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -216,6 +217,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '先确认内容创作工具在真实工作流里的覆盖范围，再决定要不要继续看内容创作对比。'
+            : 'Check whether these tools really cover your content workflow before continuing to compare content creation options.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '工作流连接' : 'Workflow fit',
+            value: locale === 'cn' || locale === 'tw' ? '脚本、封面、改写、发布' : 'Scripts, thumbnails, rewriting, publishing',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '优先看这些步骤能不能连起来。'
+                : 'Check whether these steps actually connect.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '长期使用' : 'Long-term use',
+            value: locale === 'cn' || locale === 'tw' ? '导出、协作、品牌一致性' : 'Export, collaboration, brand consistency',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '持续发布时这些通常比单次效果更重要。'
+                : 'These often matter more than a single impressive result when you publish continuously.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '真实增量' : 'Real increments',
+            value: locale === 'cn' || locale === 'tw' ? '评论、案例、使用场景' : 'Comments, cases, use cases',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '用真实信号补足 AI 写作内容。'
+                : 'Use real signals to complement the AI-written page copy.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
 
@@ -171,6 +172,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先判断营销工具是否真的能串起广告、邮件、社媒和落地页，而不是只生成看起来不错的文案。'
+              : 'This page checks whether marketing tools truly connect ads, email, social, and landing pages instead of only generating copy that looks good.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证范围' : 'Checked scope',
+              value: isChinese ? '广告、邮件、社媒、落地页' : 'Ads, email, social, landing pages',
+              note: isChinese
+                ? '先看它是否能嵌入你的渠道栈。'
+                : 'First check whether it fits your channel stack.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '保留索引，接榜单与对比页' : 'Indexable with ranking and comparison paths',
+              note: isChinese
+                ? '把增长意图导向更具体的选择。'
+                : 'Guide growth intent into more specific choices.',
+            },
+            {
+              label: isChinese ? '下一步增强' : 'Next enrichment',
+              value: isChinese ? '补真实投放、内容和报告样例' : 'Add real campaign, content, and reporting examples',
+              note: isChinese
+                ? '减少空泛的营销话术。'
+                : 'Reduce generic marketing talk.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

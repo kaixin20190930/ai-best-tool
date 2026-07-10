@@ -6,6 +6,7 @@ import { generateBreadcrumbSchema, generateFAQSchema, generateItemListSchema } f
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import { toolToListRow } from '@/lib/services/toolPresenter';
 import { getTools } from '@/lib/services/tools';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -205,6 +206,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '编程工具的判断重点通常不是“写得更像”，而是上下文理解、编辑器联动、调试效率和团队工作流是否真的更顺。'
+              : 'Coding tool decisions are usually not about sounding smarter, but about context understanding, editor integration, debugging speed, and whether the team workflow actually feels smoother.'
+          }
+          items={[
+            {
+              label: isChinese ? '上下文理解' : 'Context understanding',
+              value: isChinese ? '优先看是否真懂仓库和 diff' : 'Check whether it truly understands the repo and diff',
+              note: isChinese
+                ? '代码建议要能跟当前上下文对上，而不是只给通用答案。'
+                : 'Code suggestions need to match the current context instead of giving generic answers.',
+            },
+            {
+              label: isChinese ? '编辑器联动' : 'Editor integration',
+              value: isChinese ? '看是否顺手融入日常编码' : 'See whether it fits daily coding naturally',
+              note: isChinese
+                ? '真正有用的工具通常不是多一个按钮，而是少一次切换。'
+                : 'Useful tools often remove a context switch rather than add another button.',
+            },
+            {
+              label: isChinese ? '调试与重构' : 'Debugging and refactoring',
+              value: isChinese ? '看它能不能帮你继续往下走' : 'Check whether it helps you move forward',
+              note: isChinese
+                ? '调试、解释和重构比单纯补全更能体现真实价值。'
+                : 'Debugging, explanation, and refactoring show more real value than autocomplete alone.',
+            },
+          ]}
+        />
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

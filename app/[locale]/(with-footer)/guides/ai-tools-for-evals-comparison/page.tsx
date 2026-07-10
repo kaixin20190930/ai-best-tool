@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -177,6 +178,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '先确认输出质量验证和验收流程的真实覆盖，再继续看对比。'
+            : 'Check whether output validation and acceptance workflows are covered in practice before continuing.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '评分逻辑' : 'Scoring logic',
+            value: locale === 'cn' || locale === 'tw' ? '质量判断方式' : 'Quality judgment method',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '不是只看跑不跑得起来。'
+                : 'This is not only about whether it runs.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '流程贴合' : 'Workflow fit',
+            value: locale === 'cn' || locale === 'tw' ? '样本、结果、规则' : 'Samples, outputs, rules',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '把复盘和验收连起来。'
+                : 'Connect review and signoff in one flow.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '真实增量' : 'Real increments',
+            value: locale === 'cn' || locale === 'tw' ? '评论、场景、案例' : 'Comments, context, cases',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '补足 AI 内容的可信度。'
+                : 'Use them to strengthen page credibility.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

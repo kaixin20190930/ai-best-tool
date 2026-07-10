@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -171,6 +172,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ))}
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先判断编程工具是否真的进入开发流程：编辑器支持、仓库上下文、多文件修改、测试调试、隐私和团队协作。'
+              : 'This page checks whether a coding tool actually fits the development workflow: editor support, repository context, multi-file edits, testing/debugging, privacy, and team collaboration.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证范围' : 'Checked scope',
+              value: isChinese ? '编辑器、仓库、上下文、团队' : 'Editor, repository, context, team fit',
+              note: isChinese
+                ? '编程工具不能只看 demo，必须看能否稳定进入日常开发。'
+                : 'Coding tools cannot be judged by demos alone; they need to fit daily development.',
+            },
+            {
+              label: isChinese ? '代表工具' : 'Representative tools',
+              value: 'Cursor, GitHub Copilot',
+              note: isChinese
+                ? '优先把代表性详情页补到可验证状态，再扩到更多开发者工具。'
+                : 'Representative detail pages should be enriched first before expanding to more developer tools.',
+            },
+            {
+              label: isChinese ? '下一步补强' : 'Next enrichment',
+              value: isChinese ? '补充限制和适合团队' : 'Add limits and team fit',
+              note: isChinese
+                ? '下一轮会补免费额度、私有仓库支持、团队协作和真实评论信号。'
+                : 'Next pass should add free-tier limits, private repo support, team features, and real feedback signals.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

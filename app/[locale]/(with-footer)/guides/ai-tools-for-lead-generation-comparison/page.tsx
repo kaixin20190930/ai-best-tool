@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -174,6 +175,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '先确认获客、名单和线索质量的真实覆盖，再继续看对比页。'
+            : 'Check whether acquisition, list building, and lead quality are actually covered before continuing.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '名单质量' : 'List quality',
+            value: locale === 'cn' || locale === 'tw' ? '命中率、可用性' : 'Match rate, usability',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '不要只看数量。'
+                : 'Do not focus on count alone.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '下游成本' : 'Downstream cost',
+            value: locale === 'cn' || locale === 'tw' ? '导出、清洗、CRM' : 'Export, cleanup, CRM',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '真正费用常在后面。'
+                : 'The real cost often appears later.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '真人信号' : 'Human signals',
+            value: locale === 'cn' || locale === 'tw' ? '评论、案例、场景' : 'Comments, cases, use cases',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '比功能列表更能判断是否贴合。'
+                : 'Often a better fit signal than feature lists.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

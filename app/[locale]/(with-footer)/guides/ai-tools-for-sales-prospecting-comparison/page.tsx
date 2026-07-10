@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -174,6 +175,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '销售拓客对比页要围绕名单来源、个性化外联、触达节奏和回应率来判断，不要只看自动化程度。它会继续保留索引，但把更窄的获客和销售路径分层。'
+            : 'This sales prospecting comparison page should focus on list sourcing, outreach personalization, cadence, and response quality instead of automation level alone. Keep it indexable, but separate narrower lead-gen and sales paths.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '验证重点' : 'Validation focus',
+            value: locale === 'cn' || locale === 'tw' ? '名单、外联、回应率' : 'Lists, outreach, response quality',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先确认它是不是能帮助你联系对的人。'
+                : 'Confirm it helps you contact the right people.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '合并策略' : 'Merge strategy',
+            value: locale === 'cn' || locale === 'tw' ? '分流到获客/销售' : 'Route to lead-gen / sales',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果你更缺名单，就转获客页。'
+                : 'If the real gap is lists, move to lead-gen pages.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '后续增量' : 'Next increments',
+            value: locale === 'cn' || locale === 'tw' ? '真实外联、案例、反馈' : 'Real outreach, cases, feedback',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '补上真人外联样本。'
+                : 'Add genuine outreach examples.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

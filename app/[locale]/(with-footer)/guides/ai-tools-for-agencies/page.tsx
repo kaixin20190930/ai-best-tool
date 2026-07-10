@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -176,6 +177,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '代理页要围绕交付、分工、客户隔离和批量输出来做，不要和泛生产力页混在一起。这个页继续可索引，但会把内容创作、营销和自动化路径优先分层。'
+              : 'This agency page should stay centered on delivery, role splitting, client separation, and bulk output rather than blending into generic productivity. Keep it indexable, but layer content creation, marketing, and automation paths first.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证重点' : 'Validation focus',
+              value: isChinese ? '交付、分工、隔离' : 'Delivery, roles, separation',
+              note: isChinese
+                ? '确认它是不是能支撑团队交付。'
+                : 'Confirm it supports team delivery.',
+            },
+            {
+              label: isChinese ? '合并策略' : 'Merge strategy',
+              value: isChinese ? '分流到内容/营销' : 'Route to content/marketing',
+              note: isChinese
+                ? '如果需求更偏生产内容，就转到更窄页。'
+                : 'If the need is mostly content production, move to a narrower page.',
+            },
+            {
+              label: isChinese ? '后续增量' : 'Next increments',
+              value: isChinese ? '项目案例、权限、流程' : 'Project cases, permissions, workflows',
+              note: isChinese
+                ? '补真实交付案例和团队流程。'
+                : 'Add real delivery cases and team workflows.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

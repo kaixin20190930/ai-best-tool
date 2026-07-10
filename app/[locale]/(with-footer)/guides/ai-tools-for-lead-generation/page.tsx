@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -250,6 +251,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </aside>
         </section>
 
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先检查页面是否能帮助用户完成真实获客判断：名单来源、筛选深度、导出质量和后续销售衔接，而不是只看联系人数量。'
+              : 'This page prioritizes whether the guide helps with a real lead-gen decision: list sources, filtering depth, export quality, and sales workflow fit rather than raw contact count.'
+          }
+          items={[
+            {
+              label: isChinese ? '判断维度' : 'Decision signals',
+              value: isChinese ? '来源、筛选、导出、衔接' : 'Sources, filtering, exports, workflow fit',
+              note: isChinese
+                ? '重点看它能否把线索变成可用名单。'
+                : 'We care about whether it turns leads into usable lists.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '核心页保留索引' : 'Keep the core page indexable',
+              note: isChinese
+                ? '让获客意图清楚，减少和销售页的重复。'
+                : 'Make the lead-gen intent explicit so it overlaps less with sales pages.',
+            },
+            {
+              label: isChinese ? '下一步补强' : 'Next enrichment',
+              value: isChinese ? '补真实获客案例' : 'Add real lead-gen cases',
+              note: isChinese
+                ? '后续优先补名单样例、筛选规则和外联前流程。'
+                : 'Next, priority additions are list examples, filtering rules, and pre-outreach workflow notes.',
+            },
+          ]}
+        />
+
         <GuideActionSection
           locale={locale}
           eyebrow={isChinese ? '继续缩小范围' : 'Narrow next'}
@@ -327,6 +360,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               description: isChinese
                 ? '如果你已经进入 enrichment、打标签和 GTM 工作流，这个入口更顺。'
                 : 'A better next step once the job has moved into enrichment, scoring, and GTM workflow design.',
+            },
+          ]}
+        />
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先检查页面是否能帮助用户完成真实获客判断：名单来源、筛选深度、导出质量和后续销售衔接，而不是只看联系人数量。'
+              : 'This page prioritizes whether the guide helps with a real lead-gen decision: list sources, filtering depth, export quality, and sales workflow fit rather than raw contact count.'
+          }
+          items={[
+            {
+              label: isChinese ? '判断维度' : 'Decision signals',
+              value: isChinese ? '来源、筛选、导出、衔接' : 'Sources, filtering, exports, workflow fit',
+              note: isChinese
+                ? '重点看它能否把线索变成可用名单。'
+                : 'We care about whether it turns leads into usable lists.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '核心页保留索引' : 'Keep the core page indexable',
+              note: isChinese
+                ? '让获客意图清楚，减少和销售页的重复。'
+                : 'Make the lead-gen intent explicit so it overlaps less with sales pages.',
+            },
+            {
+              label: isChinese ? '下一步补强' : 'Next enrichment',
+              value: isChinese ? '补真实获客案例' : 'Add real lead-gen cases',
+              note: isChinese
+                ? '后续优先补名单样例、筛选规则和外联前流程。'
+                : 'Next, priority additions are list examples, filtering rules, and pre-outreach workflow notes.',
             },
           ]}
         />

@@ -9,6 +9,27 @@ const localePattern = /^\/(en|cn|jp|de|es|fr|pt|ru|tw)(?=\/|$)/;
 const protectedRoutes = ['/profile', '/favorites', '/settings', '/submit'];
 const adminRoutes = ['/admin'];
 const authRoutes = ['/login', '/register', '/auth'];
+const indexableGuidePaths = new Set([
+  '/guides/how-to-choose-ai-tools',
+  '/guides/free-ai-tools',
+  '/guides/best-free-ai-tools',
+  '/guides/ai-writing-tools',
+  '/guides/ai-seo-tools',
+  '/guides/ai-video-tools',
+  '/guides/ai-image-tools',
+  '/guides/ai-coding-tools',
+  '/guides/ai-chatbot-tools',
+  '/guides/ai-productivity-tools',
+  '/guides/ai-tools-for-research',
+  '/guides/ai-tools-for-developers',
+  '/guides/ai-tools-for-automation',
+  '/guides/ai-tools-for-web3',
+  '/guides/ai-tools-for-marketing',
+  '/guides/ai-tools-for-sales',
+  '/guides/ai-tools-for-voice',
+  '/guides/ai-note-taking-tools',
+]);
+const noindexPublicRoutes = ['/pricing', '/submit', '/developer/listing', '/new'];
 
 function getPathParts(pathname: string) {
   const localeMatch = pathname.match(localePattern);
@@ -22,6 +43,28 @@ function matchesRoute(pathname: string, routes: string[]) {
   const { pathWithoutLocale } = getPathParts(pathname);
 
   return routes.some((route) => pathWithoutLocale === route || pathWithoutLocale.startsWith(`${route}/`));
+}
+
+function shouldNoindexPublicPath(pathname: string) {
+  const { pathWithoutLocale } = getPathParts(pathname);
+
+  if (noindexPublicRoutes.some((route) => pathWithoutLocale === route || pathWithoutLocale.startsWith(`${route}/`))) {
+    return true;
+  }
+
+  if (pathWithoutLocale.startsWith('/guides/') && !indexableGuidePaths.has(pathWithoutLocale)) {
+    return true;
+  }
+
+  return false;
+}
+
+function withIndexingHeaders(request: NextRequest, response: NextResponse) {
+  if (shouldNoindexPublicPath(request.nextUrl.pathname)) {
+    response.headers.set('X-Robots-Tag', 'noindex, follow');
+  }
+
+  return response;
 }
 
 function isAuthCallbackRoute(pathname: string) {
@@ -132,7 +175,7 @@ export async function middleware(request: NextRequest) {
     matchesRoute(pathname, authRoutes);
 
   if (!needsAuthCheck) {
-    return intlMiddleware(request);
+    return withIndexingHeaders(request, intlMiddleware(request));
   }
 
   const { user, response: sessionResponse } = await getCurrentUser(request);
@@ -175,12 +218,12 @@ export async function middleware(request: NextRequest) {
   if (isCallbackRoute) {
     const response = NextResponse.next();
     copyCookies(sessionResponse, response);
-    return response;
+    return withIndexingHeaders(request, response);
   }
 
   const response = intlMiddleware(request);
   copyCookies(sessionResponse, response);
-  return response;
+  return withIndexingHeaders(request, response);
 }
 
 export const config = {

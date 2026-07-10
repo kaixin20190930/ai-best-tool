@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -338,6 +339,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ))}
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? 'DeFi 分析页要围绕流动性、收益和协议行为来做，不要和协议总览、链上分析混成一页。这个页继续可索引，但会把协议分析、链上分析和 Web3 路径分层处理。'
+              : 'This DeFi analytics page should stay centered on liquidity, yield, and protocol behavior rather than blending into a generic protocol overview or on-chain analysis page. Keep it indexable, but layer protocol analytics, on-chain analysis, and Web3 paths clearly.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证重点' : 'Validation focus',
+              value: isChinese ? '流动性、收益、协议行为' : 'Liquidity, yield, protocol behavior',
+              note: isChinese
+                ? '先确认它是不是在做 DeFi 的核心判断。'
+                : 'Confirm it makes the core DeFi judgment.',
+            },
+            {
+              label: isChinese ? '合并策略' : 'Merge strategy',
+              value: isChinese ? '分流到协议/链上页' : 'Route to protocol/on-chain pages',
+              note: isChinese
+                ? '如果重点其实是协议健康或地址追踪，就转页。'
+                : 'If the real need is protocol health or address tracking, route elsewhere.',
+            },
+            {
+              label: isChinese ? '后续增量' : 'Next increments',
+              value: isChinese ? '真实协议案例、收益曲线' : 'Real protocol cases, yield charts',
+              note: isChinese
+                ? '补真实 DeFi 协议与收益跟踪例子。'
+                : 'Add real DeFi protocol and yield-tracking examples.',
+            },
+          ]}
+        />
 
         <GuideActionSection
           locale={locale}

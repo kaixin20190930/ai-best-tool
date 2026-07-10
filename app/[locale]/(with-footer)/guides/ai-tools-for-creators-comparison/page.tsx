@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -132,6 +133,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '先确认创作者工具在真实工作流中的覆盖，再决定要不要继续横向比较。'
+            : 'Check whether these tools truly cover creator workflows before comparing horizontally further.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '产出方式' : 'Output mode',
+            value: locale === 'cn' || locale === 'tw' ? '持续产出、再包装、发布' : 'Sustained output, repurposing, publishing',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '创作者更在意整条流程。'
+                : 'Creators care more about the full workflow.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '资产感' : 'Asset quality',
+            value: locale === 'cn' || locale === 'tw' ? '一个想法 -> 一组资产' : 'One idea -> a set of assets',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '看它能不能把单点输入变成可复用内容。'
+                : 'Check whether single inputs become reusable content.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '真人增量' : 'Human signals',
+            value: locale === 'cn' || locale === 'tw' ? '评论、案例、owner 认领' : 'Comments, cases, owner claims',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '把 AI 描述补成更可信的页面。'
+                : 'Use them to make the page feel more credible.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

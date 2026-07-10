@@ -44,6 +44,7 @@ import MarkdownProse from '@/components/MarkdownProse';
 import MediaGallery from '@/components/MediaGallery';
 import RatingStars from '@/components/RatingStars';
 import RecommendedTools from '@/components/RecommendedTools';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import ShareButton from '@/components/ShareButton';
 import ToolFeedbackBar from '@/components/ToolFeedbackBar';
@@ -1817,6 +1818,38 @@ export default async function Page({
                     </p>
                   </Link>
                 </div>
+
+                <GuideEvidencePanel
+                  locale={locale}
+                  scope={
+                    isChinese
+                      ? '这页优先说明这个工具到底适合什么真实工作流，是否有足够的截图、评论、更新时间和使用信号，而不是只展示营销式简介。'
+                      : 'This page focuses on what real workflow the tool fits, whether there are enough screenshots, comments, freshness, and usage signals instead of only a marketing-style summary.'
+                  }
+                  items={[
+                    {
+                      label: isChinese ? '验证范围' : 'Checked scope',
+                      value: isChinese ? '用途、评论、截图、更新' : 'Use case, comments, screenshots, freshness',
+                      note: isChinese
+                        ? '先判断它是否解决了你真正要做的事。'
+                        : 'First judge whether it solves the thing you actually need to do.',
+                    },
+                    {
+                      label: isChinese ? '索引策略' : 'Indexing strategy',
+                      value: isChinese ? '详情页保留索引' : 'Tool detail kept indexable',
+                      note: isChinese
+                        ? '让 Google 更容易理解这个工具页的真实主题。'
+                        : 'Helps Google better understand the real topic of the page.',
+                    },
+                    {
+                      label: isChinese ? '下一步增强' : 'Next enrichment',
+                      value: isChinese ? '补真实使用场景与 owner 认领' : 'Add real usage cases and owner claims',
+                      note: isChinese
+                        ? '用真实信号替代泛泛介绍。'
+                        : 'Replace generic intro copy with real signals.',
+                    },
+                  ]}
+                />
 
                 {toolId && (
                   <div className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm'>

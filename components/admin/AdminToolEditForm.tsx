@@ -450,7 +450,7 @@ export default function AdminToolEditForm({
                     type="button"
                     onClick={handleApprove}
                     disabled={reviewLoading !== null || loading || paidPublishBlocked}
-                    className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 disabled:opacity-50"
+                    className="rounded-lg border border-green-200 bg-green-50 px-4 py-2 text-sm font-medium text-green-700 hover:bg-green-100 disabled:opacity-50"
                   >
                     {reviewLoading === 'approve'
                       ? 'Publishing...'
@@ -466,7 +466,7 @@ export default function AdminToolEditForm({
                 type="button"
                 onClick={handleImproveDraft}
                 disabled={improveLoading || loading}
-                className="rounded-lg bg-cyan-600 px-4 py-2 text-sm font-medium text-white hover:bg-cyan-700 disabled:opacity-50"
+                className="rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-2 text-sm font-medium text-cyan-700 hover:bg-cyan-100 disabled:opacity-50"
               >
                 {improveLoading ? 'Improving...' : 'Improve draft'}
               </button>
@@ -649,7 +649,7 @@ export default function AdminToolEditForm({
                 type="button"
                 onClick={handleUseImageAsThumbnail}
                 disabled={mediaLoading !== null || loading}
-                className="rounded-lg bg-violet-600 px-3 py-2 text-sm font-semibold text-white hover:bg-violet-700 disabled:opacity-50"
+                className="rounded-lg border border-violet-200 bg-violet-50 px-3 py-2 text-sm font-semibold text-violet-800 hover:bg-violet-100 disabled:opacity-50"
               >
                 {mediaLoading === 'thumbnail' ? 'Filling...' : 'Use image as thumbnail'}
               </button>
@@ -991,7 +991,7 @@ export default function AdminToolEditForm({
               type="button"
               onClick={handleSaveClaimInfo}
               disabled={claimLoading || loading}
-              className="rounded-lg bg-cyan-600 px-4 py-2 text-sm font-medium text-white hover:bg-cyan-700 disabled:opacity-50"
+              className="rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-2 text-sm font-medium text-cyan-700 hover:bg-cyan-100 disabled:opacity-50"
             >
               {claimLoading ? 'Saving claim info...' : 'Save Claim Info'}
             </button>
@@ -1143,7 +1143,7 @@ export default function AdminToolEditForm({
                   setFeaturedUntilInput(end.toISOString());
                   toast.success('Featured window generated.');
                 }}
-                className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
               >
                 Auto-generate from now
               </button>
@@ -1153,7 +1153,7 @@ export default function AdminToolEditForm({
                   setFeaturedFromInput('');
                   setFeaturedUntilInput('');
                 }}
-                className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
               >
                 Clear featured window
               </button>
@@ -1166,7 +1166,7 @@ export default function AdminToolEditForm({
                 type="button"
                 onClick={handleActivateCommercial}
                 disabled={commercialLoading || loading || !paymentConfirmed || tool.status !== 'published'}
-                className="rounded-lg bg-emerald-600 px-3 py-2 text-sm font-medium text-white hover:bg-emerald-700 disabled:opacity-50"
+                className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700 hover:bg-emerald-100 disabled:opacity-50"
               >
                 {commercialLoading
                   ? 'Activating...'
@@ -1185,14 +1185,14 @@ export default function AdminToolEditForm({
         <button
           type="button"
           onClick={() => router.back()}
-          className="rounded-lg border border-slate-300 px-6 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+          className="rounded-lg border border-slate-200 bg-slate-50 px-6 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={loading}
-          className="rounded-lg bg-cyan-600 px-6 py-2 text-sm font-medium text-white hover:bg-cyan-700 disabled:opacity-50"
+          className="rounded-lg border border-cyan-200 bg-cyan-50 px-6 py-2 text-sm font-medium text-cyan-700 hover:bg-cyan-100 disabled:opacity-50"
         >
           {loading ? 'Saving...' : 'Save Changes'}
         </button>

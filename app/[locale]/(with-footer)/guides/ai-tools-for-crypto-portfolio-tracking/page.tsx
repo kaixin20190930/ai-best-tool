@@ -6,6 +6,7 @@ import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -307,6 +308,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ))}
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '资产追踪页要围绕组合看板、多钱包归集和持仓观察来做，不要和钱包监控混成一页。这个页继续可索引，但会把更窄的钱包监控、链上分析和 Web3 路径分层露出。'
+              : 'This portfolio tracking page should stay centered on portfolio views, multi-wallet rollups, and holdings observation instead of blending into wallet monitoring. Keep it indexable, but surface the narrower wallet monitoring, on-chain analysis, and Web3 paths separately.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证重点' : 'Validation focus',
+              value: isChinese ? '组合、归集、持仓' : 'Portfolio, rollups, holdings',
+              note: isChinese
+                ? '确认它是不是服务“看全局”这个任务。'
+                : 'Confirm it serves the “see the whole portfolio” job.',
+            },
+            {
+              label: isChinese ? '合并策略' : 'Merge strategy',
+              value: isChinese ? '分流到监控/分析' : 'Route to monitoring/analysis',
+              note: isChinese
+                ? '如果重点其实是提醒或资金流，就转到更窄页。'
+                : 'If the real need is alerts or fund flow, move to a narrower page.',
+            },
+            {
+              label: isChinese ? '后续增量' : 'Next increments',
+              value: isChinese ? '真实钱包结构、看板、截图' : 'Real wallet setups, dashboards, screenshots',
+              note: isChinese
+                ? '补真实组合结构和看板例子。'
+                : 'Add real portfolio structures and dashboard examples.',
+            },
+          ]}
+        />
 
         <GuideActionSection
           locale={locale}

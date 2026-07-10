@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { Link } from '@/app/navigation';
 
@@ -338,6 +339,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       </section>
 
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '研究对比页要围绕资料发现、引用可追溯和分析复盘来判断，不要只看答案速度。它会继续保留索引，但会把更窄的 SEO 和写作路径分层。'
+            : 'This research comparison page should focus on discovery, source traceability, and analysis review instead of answer speed alone. Keep it indexable, but separate narrower SEO and writing paths.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '验证重点' : 'Validation focus',
+            value: locale === 'cn' || locale === 'tw' ? '发现、引用、复盘' : 'Discovery, citations, review',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先确认它是不是能帮你找资料和核对来源。'
+                : 'Confirm it helps you find sources and verify claims.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '合并策略' : 'Merge strategy',
+            value: locale === 'cn' || locale === 'tw' ? '分流到 SEO / 写作' : 'Route to SEO / writing',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果你其实在做搜索流量或内容输出，就转到更窄页。'
+                : 'If the real job is search traffic or content output, move to narrower pages.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '后续增量' : 'Next increments',
+            value: locale === 'cn' || locale === 'tw' ? '真实案例、来源、评论' : 'Cases, sources, comments',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '把研究场景和真人反馈一起补上。'
+                : 'Add research scenarios and human feedback together.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

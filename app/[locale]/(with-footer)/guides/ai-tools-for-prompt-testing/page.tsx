@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -190,6 +191,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </aside>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先检查页面是否能帮助用户完成真实 prompt 测试判断：版本对比、评估数据集、回归验证和团队复盘，而不是只看单次输出。'
+              : 'This page prioritizes whether the guide helps with a real prompt-testing decision: version comparison, eval datasets, regression checks, and team retros rather than a single output.'
+          }
+          items={[
+            {
+              label: isChinese ? '判断维度' : 'Decision signals',
+              value: isChinese ? '版本、数据集、回归、复盘' : 'Versioning, datasets, regression, retros',
+              note: isChinese
+                ? '重点看是否能把 prompt 测试变成可复现、可讨论的流程。'
+                : 'We care about whether prompt testing becomes repeatable and reviewable.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '保留可索引' : 'Keep it indexable',
+              note: isChinese
+                ? '让 prompt 测试意图清楚，避免和可观测页抢相似意图。'
+                : 'Make the prompt-testing intent explicit so it overlaps less with observability pages.',
+            },
+            {
+              label: isChinese ? '下一步补强' : 'Next enrichment',
+              value: isChinese ? '补真实测试样本' : 'Add real test samples',
+              note: isChinese
+                ? '后续优先补 prompt 版本、评分案例和复盘记录。'
+                : 'Next, priority additions are prompt versions, scoring examples, and retrospective notes.',
+            },
+          ]}
+        />
 
         <GuideActionSection
           locale={locale}

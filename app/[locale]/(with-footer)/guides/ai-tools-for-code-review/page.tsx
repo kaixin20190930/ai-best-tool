@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -216,6 +217,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </aside>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先检查页面是否能帮助用户完成真实 code review 判断：是否围绕 diff、文件上下文、风险提示、反馈可执行性来展开，而不是只看“会不会生成代码”。'
+              : 'This page prioritizes whether the guide helps with a real code review decision: diffs, file context, risk flags, and actionable feedback rather than only code generation ability.'
+          }
+          items={[
+            {
+              label: isChinese ? '判断维度' : 'Decision signals',
+              value: isChinese ? 'PR 理解、风险、反馈' : 'PR understanding, risk, feedback',
+              note: isChinese
+                ? '重点看工具是否能把改动解释清楚，并指出真正的风险。'
+                : 'We care about whether the tool explains changes clearly and flags real risk.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '保留可索引入口' : 'Keep the guide indexable',
+              note: isChinese
+                ? '把 review 意图写清楚，减少与广义编程页的重叠。'
+                : 'Make the review intent explicit so it overlaps less with generic coding pages.',
+            },
+            {
+              label: isChinese ? '下一步补强' : 'Next enrichment',
+              value: isChinese ? '补真实 PR 与模板' : 'Add real PRs and templates',
+              note: isChinese
+                ? '后续优先补真实 PR 案例、团队复盘和常见评论模板。'
+                : 'Next, priority additions are real PR examples, team retros, and common review templates.',
+            },
+          ]}
+        />
 
         <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

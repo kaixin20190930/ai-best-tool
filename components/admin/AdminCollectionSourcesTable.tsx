@@ -123,7 +123,7 @@ export default function AdminCollectionSourcesTable({
                       type="button"
                       disabled={loadingId === source.id}
                       onClick={() => runNow(source.id)}
-                      className="rounded-lg bg-cyan-600 px-3 py-2 text-sm font-semibold text-white hover:bg-cyan-700 disabled:opacity-50"
+                      className="rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-sm font-semibold text-cyan-700 hover:bg-cyan-100 disabled:opacity-50"
                     >
                       Run now
                     </button>

@@ -31,6 +31,7 @@ import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import Faq from '@/components/Faq';
 import CommunityPulse from '@/components/home/CommunityPulse';
 import Search from '@/components/Search';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import WebNavCardList from '@/components/webNav/WebNavCardList';
 import { Link } from '@/app/navigation';
@@ -498,6 +499,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </aside>
           </div>
         </section>
+
+        <div className='mx-auto mt-4 w-full max-w-7xl px-4 lg:px-6'>
+          <GuideEvidencePanel
+            locale={locale}
+            scope={
+              isChinese
+                ? '首页先交代站点的更新、收录和筛选逻辑，避免只剩下泛泛的 AI 目录感。'
+                : 'The homepage should explain updates, inventory, and filtering logic so it does not feel like a generic AI directory.'
+            }
+            items={[
+              {
+                label: isChinese ? '验证范围' : 'Checked scope',
+                value: isChinese ? '更新、收录、筛选逻辑' : 'Updates, inventory, filtering logic',
+                note: isChinese
+                  ? '先让首页说清楚自己是谁。'
+                  : 'Make the homepage clearly state what it is.',
+              },
+              {
+                label: isChinese ? '索引策略' : 'Indexing strategy',
+                value: isChinese ? '首页保持索引' : 'Homepage kept indexable',
+                note: isChinese
+                  ? '承接品牌词与泛入口流量。'
+                  : 'Captures brand and broad-entry traffic.',
+              },
+              {
+                label: isChinese ? '下一步增强' : 'Next enrichment',
+                value: isChinese ? '补真实更新、分类和社区信号' : 'Add real updates, categories, and community signals',
+                note: isChinese
+                  ? '减少首页的目录感空洞。'
+                  : 'Reduce the empty-directory feel on the homepage.',
+              },
+            ]}
+          />
+        </div>
 
         <section className='mx-auto mt-4 w-full max-w-7xl px-4 lg:px-6'>
           <div className='rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-5 shadow-sm lg:p-6'>

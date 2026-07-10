@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -183,6 +184,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '客服对比页应该看回复质量、分流、知识库接入和人工接手是否顺畅，而不只是模型输出是否漂亮。'
+            : 'The support comparison page should judge reply quality, triage, knowledge-base access, and human handoff instead of just pretty outputs.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '回复质量' : 'Reply quality',
+            value: locale === 'cn' || locale === 'tw' ? '先看能不能稳妥回答' : 'Check whether it can answer safely and clearly',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '客服最怕答非所问。'
+                : 'Support teams cannot afford off-target replies.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '工单分流' : 'Ticket triage',
+            value: locale === 'cn' || locale === 'tw' ? '看能否分到正确队列' : 'See whether it routes to the right queue',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '分流正确，后面的人工处理才会省力。'
+                : 'Good triage makes the rest of the human workflow much easier.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '知识库接入' : 'Knowledge-base fit',
+            value: locale === 'cn' || locale === 'tw' ? '看是否能复用已有知识' : 'Check whether existing knowledge can be reused',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '接得上知识库，客服效率才会稳定。'
+                : 'Support efficiency only scales when the knowledge base is usable.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

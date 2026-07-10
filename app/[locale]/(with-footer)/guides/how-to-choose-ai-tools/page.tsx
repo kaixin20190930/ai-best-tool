@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -131,6 +132,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先检查页面是否能帮用户完成真实选型：是否有明确场景、价格或限制、最近更新、截图/评论，以及能否继续进入分类、榜单或工具详情。'
+              : 'This page prioritizes whether a tool can support a real selection decision: use case fit, pricing or limits, freshness, screenshots or comments, and clear next steps into categories, rankings, or tool pages.'
+          }
+          items={[
+            {
+              label: isChinese ? '判断维度' : 'Decision signals',
+              value: isChinese ? '场景、价格、更新、截图、评论' : 'Use case, pricing, freshness, media, feedback',
+              note: isChinese
+                ? '不只看官网宣传，优先看能帮助用户做选择的可验证信号。'
+                : 'We look beyond homepage claims and prioritize signals that help people make a decision.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '核心指南保留索引' : 'Core guide kept indexable',
+              note: isChinese
+                ? '同义或较薄的 guide 已进入 noindex / 合并候选，避免互相竞争。'
+                : 'Thin or overlapping guides are kept as noindex / merge candidates to reduce internal competition.',
+            },
+            {
+              label: isChinese ? '下一步补强' : 'Next enrichment',
+              value: isChinese ? '接入真实评论与 owner 信号' : 'Add reviews and owner signals',
+              note: isChinese
+                ? '后续优先把评论、收藏、认领和最近验证日期补到核心详情页。'
+                : 'Next, priority detail pages will receive review, save, claim, and verification-date signals.',
+            },
+          ]}
+        />
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -167,6 +168,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先检查写作场景、语气稳定性、模板能力、限制和更新信号，避免只看“生成速度”。'
+              : 'This page focuses on writing scenarios, tone stability, templates, limits, and freshness so generation speed is not the only factor.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证范围' : 'Checked scope',
+              value: isChinese ? '场景、语气、模板、限制' : 'Use case, tone, templates, limits',
+              note: isChinese
+                ? '写作工具应该按工作流来分，不是只看“会不会写”。'
+                : 'Writing tools should be judged by workflow fit, not just whether they can write.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '核心写作入口保留索引' : 'Core writing entry kept indexable',
+              note: isChinese
+                ? '与写作榜单、对比页、内容创作页一起支撑长尾流量。'
+                : 'It supports long-tail traffic together with rankings, comparisons, and content-creation pages.',
+            },
+            {
+              label: isChinese ? '下一步补强' : 'Next enrichment',
+              value: isChinese ? '补真实案例与反馈' : 'Add real cases and feedback',
+              note: isChinese
+                ? '后续会逐步把内容类型、实际限制和评论信号补得更完整。'
+                : 'Next, we should add more content types, real limits, and feedback signals.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

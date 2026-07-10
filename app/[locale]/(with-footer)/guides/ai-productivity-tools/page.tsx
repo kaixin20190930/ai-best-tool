@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -143,6 +144,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先判断工具是否真的能让日常工作更轻：能否接入现有流程、是否有稳定协作、是否支持自动化和长期使用。'
+              : 'This page judges whether a tool truly lightens daily work: integration with existing workflows, collaboration stability, automation support, and long-term usability.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证范围' : 'Checked scope',
+              value: isChinese ? '工作流、协作、自动化、稳定性' : 'Workflow, collaboration, automation, stability',
+              note: isChinese
+                ? '生产力页应该减少重复劳动，而不是展示更多功能。'
+                : 'A productivity page should reduce repeated work, not just display more features.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '核心生产力入口保留索引' : 'Core productivity entry kept indexable',
+              note: isChinese
+                ? '与分类和榜单一起，形成高频搜索入口。'
+                : 'Together with categories and rankings, it forms a frequent-search entry path.',
+            },
+            {
+              label: isChinese ? '下一步补强' : 'Next enrichment',
+              value: isChinese ? '补真实场景和反馈' : 'Add real scenarios and feedback',
+              note: isChinese
+                ? '后续会继续补评论、收藏、认领和验证日期。'
+                : 'Next, comments, saves, claims, and verification dates should be added.',
+            },
+          ]}
+        />
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

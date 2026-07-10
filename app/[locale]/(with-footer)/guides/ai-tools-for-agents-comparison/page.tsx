@@ -1,3 +1,4 @@
+import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -278,6 +279,71 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <div className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
+        <section className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '高意图榜单' : 'High-intent ranking'}
+          </p>
+          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '先用榜单缩小 agent shortlist'
+              : 'Use the ranking to narrow your agent shortlist first'}
+          </h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '如果你已经明确是在找 Agent 编排、执行和治理工具，先看榜单会比只看对比页更快进入决策。'
+              : 'If the decision is already about agent orchestration, execution, and governance tools, the ranking gets you to a decision faster than a comparison page alone.'}
+          </p>
+          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {[
+              {
+                href: '/best-ai-tools/ai-agent-tools',
+                title: locale === 'cn' || locale === 'tw' ? 'Agent 榜单' : 'Agent ranking',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '先看最值得试的候选。'
+                    : 'Start with the most relevant candidates first.',
+              },
+              {
+                href: '/guides/ai-tools-for-agents-comparison',
+                title: locale === 'cn' || locale === 'tw' ? 'Agent 对比' : 'Agent comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '任务编排、状态和治理一起看。'
+                    : 'Compare orchestration, state, and governance together.',
+              },
+              {
+                href: '/guides/ai-tools-for-automation-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '自动化对比' : 'Automation comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果流程更固定，优先看这页。'
+                    : 'Useful when the workflow is more fixed than adaptive.',
+              },
+              {
+                href: '/guides/ai-tools-for-api-observability-comparison',
+                title: locale === 'cn' || locale === 'tw' ? '可观测对比' : 'Observability comparison',
+                desc:
+                  locale === 'cn' || locale === 'tw'
+                    ? '如果你也在看日志、成本和质量治理。'
+                    : 'Useful when logs, cost, and quality governance are also in scope.',
+              },
+            ].map((item) => (
+              <TrackableCtaLink
+                key={item.href}
+                href={item.href}
+                ctaId={`agent_comparison_ranking_${item.href.split('/').pop()}`}
+                ctaLabel={item.title}
+                pageType='guide'
+                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </TrackableCtaLink>
+            ))}
+          </div>
+        </section>
+      </div>
       <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_agents_comparison' />
     </>
   );

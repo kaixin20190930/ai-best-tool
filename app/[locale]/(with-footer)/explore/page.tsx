@@ -5,6 +5,7 @@ import { getAllCategories } from '@/lib/services/categories';
 import { getAllTags } from '@/lib/services/tags';
 import { SortBy } from '@/lib/services/tools';
 import FilterPanel from '@/components/FilterPanel';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import { generateHreflangMetadata } from '@/components/seo';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -120,6 +121,38 @@ export default async function Page({ params, searchParams }: PageProps) {
             </Link>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={params.locale}
+          scope={
+            isChinese
+              ? '探索页要同时交代筛选逻辑、真实更新和下一步去哪里，而不是只给一张搜索表。'
+              : 'The explore page should explain filtering logic, freshness, and the next step instead of acting like a plain search table.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证范围' : 'Checked scope',
+              value: isChinese ? '筛选、更新、下一步' : 'Filtering, freshness, next step',
+              note: isChinese
+                ? '先让用户知道怎样更快筛。'
+                : 'Help users understand how to narrow down faster.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '探索页保留索引' : 'Explore page kept indexable',
+              note: isChinese
+                ? '承接大盘流量和内部导航。'
+                : 'Capture broad traffic and internal navigation.',
+            },
+            {
+              label: isChinese ? '下一步增强' : 'Next enrichment',
+              value: isChinese ? '补热门筛选、真实讨论和更新说明' : 'Add popular filters, real discussions, and update notes',
+              note: isChinese
+                ? '让探索页更像决策中枢。'
+                : 'Make explore feel more like a decision hub.',
+            },
+          ]}
+        />
 
         <section className='mb-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

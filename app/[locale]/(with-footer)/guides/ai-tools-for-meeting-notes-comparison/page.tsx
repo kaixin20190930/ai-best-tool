@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -131,6 +132,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '这页先看真实可验证的会议纪要信号，再继续判断是转写、整理还是行动项提取更值得投入。'
+            : 'This page looks at verifiable meeting-notes signals first, then helps you decide whether transcription, cleanup, or action-item extraction deserves more focus.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '转写质量' : 'Transcription quality',
+            value: locale === 'cn' || locale === 'tw' ? '多人和噪音环境下是否稳定' : 'Stable with multiple speakers and noise',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先确认它能不能把会议说清楚，再比其他功能。'
+                : 'Confirm it can actually capture the meeting before comparing extras.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '整理效率' : 'Cleanup speed',
+            value: locale === 'cn' || locale === 'tw' ? '能否快速生成可分享纪要' : 'Can it produce shareable notes quickly',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果整理步骤还很重，真实节省时间就有限。'
+                : 'If cleanup is still heavy, the time savings will be limited.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '协作导出' : 'Collaboration and export',
+            value: locale === 'cn' || locale === 'tw' ? '分享、权限、导出是否顺手' : 'Sharing, permissions, and exports',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '团队长期用时，这些比表面功能更重要。'
+                : 'For long-term team use, these matter more than surface features.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

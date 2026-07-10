@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
 
@@ -146,6 +147,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '电商页要围绕商品、客服、营销和运营的真实工作流来做，不是单纯堆工具。这个页继续可索引，但会把营销、自动化、客服和榜单入口分层处理，避免和生产力页互相抢词。'
+              : 'This ecommerce page should stay centered on real product, support, marketing, and operations workflows rather than merely stacking tools. Keep it indexable, but layer the marketing, automation, support, and ranking paths to avoid competing with productivity pages.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证重点' : 'Validation focus',
+              value: isChinese ? '商品、客服、活动' : 'Products, support, campaigns',
+              note: isChinese
+                ? '先确认它是不是在服务电商真实工作流。'
+                : 'Confirm it serves actual ecommerce workflows.',
+            },
+            {
+              label: isChinese ? '合并策略' : 'Merge strategy',
+              value: isChinese ? '分流到营销/自动化' : 'Route to marketing/automation',
+              note: isChinese
+                ? '如果目标更偏增长或流程，转去更窄的页。'
+                : 'If the goal leans toward growth or workflow automation, move to narrower pages.',
+            },
+            {
+              label: isChinese ? '后续增量' : 'Next increments',
+              value: isChinese ? '商品案例、渠道截图' : 'Product cases, channel screenshots',
+              note: isChinese
+                ? '补真实商品、渠道和运营例子。'
+                : 'Add real product, channel, and operations examples.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

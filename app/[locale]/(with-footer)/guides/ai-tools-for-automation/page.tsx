@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -186,6 +187,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先判断自动化工具是否真的能稳定跑流程、可追踪、可维护，而不是只会把步骤串起来。'
+              : 'This page checks whether an automation tool can truly run workflows reliably, stay traceable, and remain maintainable rather than merely chaining steps together.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证范围' : 'Checked scope',
+              value: isChinese ? '触发器、编排、重试、日志' : 'Triggers, orchestration, retries, logging',
+              note: isChinese
+                ? '重点不是能不能连，而是能不能长期跑。'
+                : 'The question is not only whether it connects, but whether it can run long term.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '保留索引，接榜单和对比页' : 'Indexable with ranking and comparison paths',
+              note: isChinese
+                ? '它会把用户继续引到更窄的自动化入口。'
+                : 'It routes users into narrower automation entry points.',
+            },
+            {
+              label: isChinese ? '下一步增强' : 'Next enrichment',
+              value: isChinese ? '补流程案例、失败模式和真实配置' : 'Add workflow examples, failure modes, and real configs',
+              note: isChinese
+                ? '把抽象流程变成可验证的内容。'
+                : 'Turn abstract workflows into verifiable content.',
+            },
+          ]}
+        />
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

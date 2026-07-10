@@ -6,6 +6,7 @@ import { getAllCategories, getCategoryBySlug, getLocalizedField } from '@/lib/se
 import { getAllTags } from '@/lib/services/tags';
 import { SortBy } from '@/lib/services/tools';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import ExploreList from '@/app/[locale]/(with-footer)/explore/ExploreList';
 import { Link } from '@/app/navigation';
@@ -880,6 +881,38 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
             </div>
           </div>
         </div>
+
+        <GuideEvidencePanel
+          locale={params.locale}
+          scope={
+            isChinese
+              ? '这页先交代分类到底覆盖哪些真实场景、目前的代表工具是什么、以及用户接下来该去哪里比较。'
+              : 'This page explains which real scenarios the category covers, what representative tools matter, and where users should compare next.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证范围' : 'Checked scope',
+              value: isChinese ? '场景、代表工具、比较入口' : 'Scenarios, representative tools, comparison entry',
+              note: isChinese
+                ? '先让分类页说清楚自己解决什么问题。'
+                : 'Make the category page state the problem it actually solves.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '分类页保留索引' : 'Category page kept indexable',
+              note: isChinese
+                ? '承接高意图分类搜索与探索流量。'
+                : 'Captures high-intent category search and exploration traffic.',
+            },
+            {
+              label: isChinese ? '下一步增强' : 'Next enrichment',
+              value: isChinese ? '补代表工具、真实对比和评论' : 'Add representative tools, real comparisons, and comments',
+              note: isChinese
+                ? '把抽象分类变成可行动的选择页。'
+                : 'Turn an abstract category into an actionable selection page.',
+            },
+          ]}
+        />
 
         <div className='mb-8 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]'>
           <section className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>

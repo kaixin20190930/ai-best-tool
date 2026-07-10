@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -214,6 +215,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </aside>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先检查页面是否能帮助用户完成真实内容创作决策：是否有明确内容格式、批量发布、品牌一致性、导出限制和后续进入对比页的路径。'
+              : 'This page prioritizes whether the guide helps with a real content-creation decision: content format, batch publishing, brand consistency, export limits, and next steps into comparison pages.'
+          }
+          items={[
+            {
+              label: isChinese ? '判断维度' : 'Decision signals',
+              value: isChinese ? '格式、批量、品牌、导出' : 'Format, batch, brand, export',
+              note: isChinese
+                ? '重点看工具是否能把脚本、封面和发布串成稳定流程。'
+                : 'We care about whether the tool turns scripts, thumbnails, and publishing into a stable workflow.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '保持可索引' : 'Keep it indexable',
+              note: isChinese
+                ? '让内容创作意图清晰，减少和写作、视频页的重复。'
+                : 'Keep the content-creation intent clear and reduce overlap with writing or video pages.',
+            },
+            {
+              label: isChinese ? '下一步补强' : 'Next enrichment',
+              value: isChinese ? '补真实工作流' : 'Add real workflows',
+              note: isChinese
+                ? '后续优先补真实案例、品牌模板和批量发布经验。'
+                : 'Next, priority additions are real use cases, brand templates, and batch-publishing notes.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

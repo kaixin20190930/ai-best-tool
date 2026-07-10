@@ -7,6 +7,7 @@ import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import { toolToListRow } from '@/lib/services/toolPresenter';
 import { getTools } from '@/lib/services/tools';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -161,6 +162,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '图像工具比较重点不是“谁更会出图”，而是是否能稳定控制风格、编辑、迭代和团队交付。'
+              : 'Image tool comparison is less about who can generate prettier images and more about stable style control, editing, iteration, and delivery workflow.'
+          }
+          items={[
+            {
+              label: isChinese ? '风格控制' : 'Style control',
+              value: isChinese ? '优先看一致性' : 'Prioritize consistency',
+              note: isChinese
+                ? '同一项目里是否能保持统一风格是核心。'
+                : 'Whether the same project can stay visually coherent is the core question.',
+            },
+            {
+              label: isChinese ? '编辑效率' : 'Editing speed',
+              value: isChinese ? '看修改是否顺手' : 'Check whether edits feel easy',
+              note: isChinese
+                ? '很多图像工作都在反复修改里完成。'
+                : 'A lot of image work is really iterative editing.',
+            },
+            {
+              label: isChinese ? '交付链路' : 'Delivery chain',
+              value: isChinese ? '看能否接入素材与协作' : 'See whether it fits assets and collaboration',
+              note: isChinese
+                ? '能否顺手进入设计流程比单次演示更重要。'
+                : 'How well it fits into the design process matters more than one-off demos.',
+            },
+          ]}
+        />
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -216,6 +217,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </aside>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先检查页面是否能帮助用户完成真实 evals 判断：是否有明确评分标准、数据集、验收门槛、版本回归路径，以及是否能继续进入对比页或榜单页。'
+              : 'This page prioritizes whether the guide helps with a real evals decision: clear scoring rules, datasets, acceptance thresholds, regression paths, and next steps into comparison or ranking pages.'
+          }
+          items={[
+            {
+              label: isChinese ? '判断维度' : 'Decision signals',
+              value: isChinese ? '评分标准、数据集、验收、回归' : 'Scoring, datasets, acceptance, regression',
+              note: isChinese
+                ? '不只看工具功能，而是看它能否把结果质量变成可重复判断。'
+                : 'We focus on whether the tool turns output quality into a repeatable decision.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '核心指南保留索引' : 'Core guide kept indexable',
+              note: isChinese
+                ? '薄内容或重复内容避免抢占同类页面的抓取预算。'
+                : 'Thin or repetitive content should not compete for crawl budget with stronger pages.',
+            },
+            {
+              label: isChinese ? '下一步补强' : 'Next enrichment',
+              value: isChinese ? '补真实样本与复盘' : 'Add real samples and retros',
+              note: isChinese
+                ? '后续优先补评估样本、评分模板、验收清单和复盘笔记。'
+                : 'Next, priority additions are evaluation samples, scoring templates, acceptance checklists, and retrospective notes.',
+            },
+          ]}
+        />
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

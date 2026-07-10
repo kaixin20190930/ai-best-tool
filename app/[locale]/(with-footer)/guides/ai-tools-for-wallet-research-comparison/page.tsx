@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -241,6 +242,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '钱包研究对比页要围绕地址画像、标签、关系线索和研究复盘来判断，不要只看链上数据量。这个页继续可索引，但会把监控和资产追踪路径分层。'
+            : 'This wallet research comparison page should judge address profiling, labels, relationship clues, and research review instead of just looking at data volume. Keep it indexable, but separate monitoring and portfolio-tracking paths.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '验证重点' : 'Validation focus',
+            value: locale === 'cn' || locale === 'tw' ? '画像、标签、线索' : 'Profiles, labels, clues',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '确认它是不是能帮助你解释一个地址。'
+                : 'Confirm it helps you explain an address.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '合并策略' : 'Merge strategy',
+            value: locale === 'cn' || locale === 'tw' ? '分流到监控/追踪' : 'Route to monitoring/tracking',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果需求更偏提醒或组合，就转页。'
+                : 'If the need leans toward alerts or holdings, move to a narrower page.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '后续增量' : 'Next increments',
+            value: locale === 'cn' || locale === 'tw' ? '真实地址案例、图谱' : 'Real address cases, charts',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '补真实地址研究样本和关系图。'
+                : 'Add real address research examples and relationship graphs.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -189,6 +190,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </Link>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先判断视频工具是否真的能让剪辑、生成、字幕、配音和导出更快完成，而不是只看预览效果。'
+              : 'This page checks whether video tools truly speed up editing, generation, captions, voiceover, and export instead of only looking good in previews.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证范围' : 'Checked scope',
+              value: isChinese ? '剪辑、生成、字幕、配音、导出' : 'Editing, generation, captions, voiceover, export',
+              note: isChinese
+                ? '视频页最重要的是能否稳定进入制作流程。'
+                : 'The key question is whether it can reliably fit into production.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '核心视频入口保留索引' : 'Core video entry kept indexable',
+              note: isChinese
+                ? '与视频榜单、对比页一起，构成高意图内容入口。'
+                : 'It works with rankings and comparisons as a high-intent content entry path.',
+            },
+            {
+              label: isChinese ? '下一步补强' : 'Next enrichment',
+              value: isChinese ? '补真实案例、模板与限制' : 'Add real cases, templates, and limits',
+              note: isChinese
+                ? '后续继续补评论、收藏、截图和验证日期。'
+                : 'Next, comments, saves, screenshots, and verification dates should be added.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

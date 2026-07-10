@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -227,6 +228,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '代码审查工具的核心不是“多说几句”，而是能不能把 diff、风险提示、团队协作和 review 节奏串起来，减少噪音。'
+            : 'The core of code review tools is not saying more, but whether they can connect diff understanding, risk signals, team collaboration, and review rhythm without adding noise.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? 'Diff 理解' : 'Diff understanding',
+            value: locale === 'cn' || locale === 'tw' ? '先看能不能讲清改动本身' : 'Check whether it can explain the change itself',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果连改动都解释不清，后面的建议就很难稳定。'
+                : 'If it cannot explain the change clearly, the rest of the feedback will not hold up well.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '风险噪音比' : 'Risk-to-noise ratio',
+            value: locale === 'cn' || locale === 'tw' ? '看提醒是否真有价值' : 'Check whether warnings are actually useful',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '能减少漏检才算好，而不是只是制造更多 comment。'
+                : 'It is only good if it reduces misses instead of creating more comments.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '团队协作' : 'Team collaboration',
+            value: locale === 'cn' || locale === 'tw' ? '看是否贴合 PR 流程' : 'See whether it matches PR workflow',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '审批、评论和交接流程越顺，团队越容易长期用。'
+                : 'The smoother the approval, comments, and handoff flow, the more likely the team will keep using it.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

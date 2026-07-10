@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -172,6 +173,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ))}
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先判断 Web3 工具是否真的能接入链上数据、钱包、协议研究和团队工作流，而不是只看概念。'
+              : 'This page checks whether a Web3 tool truly fits on-chain data, wallets, protocol research, and team workflows instead of just sounding promising.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证范围' : 'Checked scope',
+              value: isChinese ? '链上数据、钱包、协议、API' : 'On-chain data, wallets, protocols, APIs',
+              note: isChinese
+                ? 'Web3 工具必须能稳定处理数据源和权限问题。'
+                : 'Web3 tools need to handle data sources and permissions reliably.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '核心 Web3 入口保留索引' : 'Core Web3 entry kept indexable',
+              note: isChinese
+                ? '它和 Web3 榜单、对比页一起，组成差异化搜索入口。'
+                : 'It works with rankings and comparisons as a differentiated search entry path.',
+            },
+            {
+              label: isChinese ? '下一步补强' : 'Next enrichment',
+              value: isChinese ? '补真实链上场景和验证' : 'Add real on-chain scenarios and verification',
+              note: isChinese
+                ? '后续会继续补评论、收藏和 owner 认领信号。'
+                : 'Next, comments, saves, and owner-claim signals should be added.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

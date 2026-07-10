@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -268,6 +269,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先检查页面是否能帮助用户完成真实 crypto 研究判断：数据源、链上追踪、市场情报和导出能力，而不是只看信息量。'
+              : 'This page prioritizes whether the guide helps with a real crypto-research decision: data sources, on-chain tracking, market intelligence, and export ability rather than raw information volume.'
+          }
+          items={[
+            {
+              label: isChinese ? '判断维度' : 'Decision signals',
+              value: isChinese ? '数据源、链上、情报、导出' : 'Sources, on-chain, intelligence, exports',
+              note: isChinese
+                ? '重点看它是否能支撑持续研究，而不只是一次性浏览。'
+                : 'We care about whether it supports ongoing research, not just one-time browsing.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '核心页保留索引' : 'Keep the core page indexable',
+              note: isChinese
+                ? '把研究意图写清楚，减少与代币页的相互竞争。'
+                : 'Make the research intent explicit so it overlaps less with token-specific pages.',
+            },
+            {
+              label: isChinese ? '下一步补强' : 'Next enrichment',
+              value: isChinese ? '补真实研究案例' : 'Add real research cases',
+              note: isChinese
+                ? '后续优先补研究笔记、链上样例和监控清单。'
+                : 'Next, priority additions are research notes, on-chain examples, and monitoring checklists.',
+            },
+          ]}
+        />
 
         <GuideActionSection
           locale={locale}

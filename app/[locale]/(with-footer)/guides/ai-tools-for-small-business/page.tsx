@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -292,6 +293,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '小企业页要围绕协作、自动化、支持和效率来做，不是把所有企业工具都混在一起。这个页继续可索引，但会把营销、客服和自动化的更窄入口优先露出，减少和泛生产力页的重复。'
+              : 'This small-business page should stay focused on collaboration, automation, support, and efficiency rather than blending every business tool together. Keep it indexable, but surface the narrower marketing, support, and automation paths first to reduce overlap with generic productivity pages.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证重点' : 'Validation focus',
+              value: isChinese ? '协作、自动化、支持' : 'Collaboration, automation, support',
+              note: isChinese
+                ? '确认它是不是解决了团队日常工作。'
+                : 'Confirm it solves day-to-day team work.',
+            },
+            {
+              label: isChinese ? '合并策略' : 'Merge strategy',
+              value: isChinese ? '分流到营销/客服/自动化' : 'Route to marketing/support/automation',
+              note: isChinese
+                ? '如果目标更窄，就交给对应专题页。'
+                : 'If the need is narrower, hand it to the matching topic page.',
+            },
+            {
+              label: isChinese ? '后续增量' : 'Next increments',
+              value: isChinese ? '真实团队案例、权限、截图' : 'Real team cases, permissions, screenshots',
+              note: isChinese
+                ? '补真实团队流程，减少模板化表述。'
+                : 'Add real team workflows to reduce templated wording.',
+            },
+          ]}
+        />
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

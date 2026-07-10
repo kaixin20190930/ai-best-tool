@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -191,6 +192,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </aside>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '销售拓客页要围绕触达准备、个性化和外呼前判断来做，不要只输出模板化外联。这个页继续可索引，但会把获客、销售和更窄的 prospecting 路径分层。'
+              : 'This sales prospecting page should stay centered on outreach prep, personalization, and pre-contact judgment rather than template-heavy outbound copy. Keep it indexable, but layer lead-gen, sales, and narrower prospecting paths clearly.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证重点' : 'Validation focus',
+              value: isChinese ? '触达准备、个性化' : 'Outreach prep, personalization',
+              note: isChinese
+                ? '确认它是不是在提高回复质量。'
+                : 'Confirm it improves reply quality.',
+            },
+            {
+              label: isChinese ? '合并策略' : 'Merge strategy',
+              value: isChinese ? '分流到获客/销售' : 'Route to lead gen/sales',
+              note: isChinese
+                ? '如果需求更像找线索，就转到获客页。'
+                : 'If the need is more about finding leads, move to lead-gen pages.',
+            },
+            {
+              label: isChinese ? '后续增量' : 'Next increments',
+              value: isChinese ? '案例、回复率、模板' : 'Cases, reply rates, templates',
+              note: isChinese
+                ? '补真实触达案例和个性化样本。'
+                : 'Add real outreach cases and personalization samples.',
+            },
+          ]}
+        />
 
         <GuideActionSection
           locale={locale}

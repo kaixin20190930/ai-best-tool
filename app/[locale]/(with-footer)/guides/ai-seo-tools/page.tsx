@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -189,6 +190,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先判断 SEO 工具是否能覆盖真实增长工作流：关键词研究、内容优化、排名跟踪、导出协作和数据更新频率。'
+              : 'This page focuses on whether an SEO tool supports a real growth workflow: keyword research, content optimization, rank tracking, exports, collaboration, and data freshness.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证范围' : 'Checked scope',
+              value: isChinese ? '关键词、内容、排名、协作' : 'Keywords, content, ranking, collaboration',
+              note: isChinese
+                ? '把 SEO 工具拆成具体工作流，而不是按“AI SEO”这个大词泛泛推荐。'
+                : 'We split SEO tools by workflow instead of recommending broadly around the generic AI SEO label.',
+            },
+            {
+              label: isChinese ? '优先入口' : 'Priority paths',
+              value: isChinese ? '榜单、对比、写作分类' : 'Ranking, comparison, writing category',
+              note: isChinese
+                ? '用户可以从指南进入更高意图的榜单和对比页，减少空泛浏览。'
+                : 'Users can move from guide to ranking and comparison pages instead of staying in broad browsing.',
+            },
+            {
+              label: isChinese ? '质量风险' : 'Quality risk',
+              value: isChinese ? '避免薄 SEO 内容' : 'Avoid thin SEO content',
+              note: isChinese
+                ? '后续会把真实 GSC 观察、页面表现和评论信号接入这类页面。'
+                : 'Next iterations should connect GSC observations, page performance, and feedback signals to this guide.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

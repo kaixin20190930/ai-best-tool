@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -98,6 +99,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '学生对比页要围绕学习、作业、笔记整理和论文写作来判断，不要只看输出是否“聪明”。它会继续保留索引，但把更窄的笔记和写作路径分层。'
+            : 'This student comparison page should focus on study, homework, note organization, and paper writing instead of whether the output sounds clever. Keep it indexable, but separate narrower note-taking and writing paths.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '验证重点' : 'Validation focus',
+            value: locale === 'cn' || locale === 'tw' ? '学习、作业、笔记' : 'Study, homework, notes',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先确认它是不是能帮学生完成真实任务。'
+                : 'Confirm it helps students finish real tasks.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '合并策略' : 'Merge strategy',
+            value: locale === 'cn' || locale === 'tw' ? '分流到笔记/写作' : 'Route to note-taking/writing',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果真实需要更偏记录或表达，就转到更窄页。'
+                : 'If the real need is capture or expression, move to narrower pages.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '后续增量' : 'Next increments',
+            value: locale === 'cn' || locale === 'tw' ? '真实作业场景、反馈' : 'Real study cases, feedback',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '补学生真实使用痕迹。'
+                : 'Add genuine student usage signals.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

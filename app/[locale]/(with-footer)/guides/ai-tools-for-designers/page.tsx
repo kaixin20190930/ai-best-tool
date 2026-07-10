@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -162,6 +163,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '设计页要围绕品牌、视觉控制、输出类型和商业授权来做，不要只看“能不能出图”。这个页继续可索引，但会把图像、视频和内容创作路径优先分层。'
+              : 'This design page should stay centered on brand, visual control, output type, and commercial rights rather than only asking whether it can make images. Keep it indexable, but layer image, video, and content-creation paths separately.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证重点' : 'Validation focus',
+              value: isChinese ? '品牌、视觉、授权' : 'Brand, visuals, licensing',
+              note: isChinese
+                ? '确认它是不是能稳定输出可商用视觉。'
+                : 'Confirm it can reliably produce commercially usable visuals.',
+            },
+            {
+              label: isChinese ? '合并策略' : 'Merge strategy',
+              value: isChinese ? '分流到图像/视频' : 'Route to image/video',
+              note: isChinese
+                ? '如果目标更偏生成和编辑，就去更窄页。'
+                : 'If the goal is mostly generation and editing, move to narrower pages.',
+            },
+            {
+              label: isChinese ? '后续增量' : 'Next increments',
+              value: isChinese ? '品牌案例、样片、授权' : 'Brand cases, samples, licensing',
+              note: isChinese
+                ? '补真实品牌和设计交付样例。'
+                : 'Add real brand and delivery examples.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

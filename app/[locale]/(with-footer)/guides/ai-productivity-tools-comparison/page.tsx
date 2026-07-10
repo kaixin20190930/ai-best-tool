@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -124,6 +125,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '先确认生产力工具是否真的覆盖任务、笔记、知识管理和协作，再继续看对比。'
+            : 'Check whether these tools really cover tasks, notes, knowledge management, and collaboration before continuing.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '核心场景' : 'Core use case',
+            value: locale === 'cn' || locale === 'tw' ? '任务、笔记、协作' : 'Tasks, notes, collaboration',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先分清你到底要解决什么。'
+                : 'First separate the actual problem you need to solve.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '使用成本' : 'Usage cost',
+            value: locale === 'cn' || locale === 'tw' ? '免费限制、协作深度' : 'Free limits, collaboration depth',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '长期使用时这会越来越重要。'
+                : 'This becomes more important over time.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '真实信号' : 'Real signals',
+            value: locale === 'cn' || locale === 'tw' ? '评论、案例、认领' : 'Comments, cases, claims',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '用真人信号补足 AI 页面。'
+                : 'Use human signals to complement the AI-written page.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

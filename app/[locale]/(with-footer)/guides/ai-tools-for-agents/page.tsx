@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -171,6 +172,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先判断 Agent 工具是否真的能保持上下文、调用工具和处理执行闭环，而不是只看单轮回答的表面效果。'
+              : 'This page checks whether agent tools truly keep context, call tools, and close the execution loop rather than only producing a good single-turn answer.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证范围' : 'Checked scope',
+              value: isChinese ? '多步骤、工具调用、状态、接管' : 'Multi-step tasks, tool use, state, handoff',
+              note: isChinese
+                ? '先看它是否适合长期执行。'
+                : 'First check whether it fits long-running execution.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '保留索引，接榜单与对比页' : 'Indexable with ranking and comparison paths',
+              note: isChinese
+                ? '把高意图访问导向更窄的 Agent 路径。'
+                : 'Guide high-intent visitors into narrower agent paths.',
+            },
+            {
+              label: isChinese ? '下一步增强' : 'Next enrichment',
+              value: isChinese ? '补真实工作流、失败恢复和日志样例' : 'Add real workflows, recovery cases, and log samples',
+              note: isChinese
+                ? '让页面出现真实执行信号。'
+                : 'Make the page reflect real execution signals.',
+            },
+          ]}
+        />
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

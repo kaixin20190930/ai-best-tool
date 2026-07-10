@@ -6,6 +6,7 @@ import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -299,6 +300,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ))}
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '钱包研究页要围绕地址画像、关系线索、资金路径和历史判断来做，不是把所有 Web3 工具都平铺出来。这个页继续保留可索引，但会优先把更窄的钱包研究、钱包监控和资产追踪入口分流出去。'
+              : 'This wallet research page should stay focused on address profiling, relationship clues, fund paths, and historical interpretation rather than flattening every Web3 tool into one list. Keep it indexable, but route people toward narrower wallet research, wallet monitoring, and portfolio tracking paths first.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证重点' : 'Validation focus',
+              value: isChinese ? '画像、线索、历史' : 'Profiles, clues, history',
+              note: isChinese
+                ? '先验证它是否真能把地址行为和上下文拼起来。'
+                : 'Check whether it really connects behavior with context.',
+            },
+            {
+              label: isChinese ? '合并策略' : 'Merge strategy',
+              value: isChinese ? '分流到更窄对比页' : 'Route to narrower comparisons',
+              note: isChinese
+                ? '如果需求更偏提醒或看板，就转去对应页面。'
+                : 'If the need leans toward alerts or dashboards, move to the matching page.',
+            },
+            {
+              label: isChinese ? '后续增量' : 'Next increments',
+              value: isChinese ? '真实案例、标签、笔记' : 'Real cases, labels, notes',
+              note: isChinese
+                ? '补真实地址案例和研究记录，减少纯 AI 口径。'
+                : 'Add real address cases and research notes to reduce AI-only phrasing.',
+            },
+          ]}
+        />
 
         <GuideActionSection
           locale={locale}

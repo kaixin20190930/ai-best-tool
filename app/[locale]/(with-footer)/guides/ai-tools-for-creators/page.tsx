@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -172,6 +173,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先判断创作者工具是否真的能串起选题、脚本、封面、剪辑和再包装，而不是只给出泛泛的内容生成。'
+              : 'This page checks whether creator tools truly connect ideation, scripting, thumbnails, editing, and repurposing instead of only offering generic content generation.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证范围' : 'Checked scope',
+              value: isChinese ? '选题、脚本、封面、剪辑' : 'Ideation, scripts, thumbnails, editing',
+              note: isChinese
+                ? '先看它是否能省掉你最耗时的步骤。'
+                : 'First see whether it saves your most time-consuming steps.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '保留索引，接榜单与对比页' : 'Indexable with ranking and comparison paths',
+              note: isChinese
+                ? '把内容生产意图导向更具体的选择。'
+                : 'Guide content-production intent into clearer choices.',
+            },
+            {
+              label: isChinese ? '下一步增强' : 'Next enrichment',
+              value: isChinese ? '补真实案例、模板和使用反馈' : 'Add real examples, templates, and user feedback',
+              note: isChinese
+                ? '让内容更像真实创作现场。'
+                : 'Make the content feel closer to real creator workflows.',
+            },
+          ]}
+        />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

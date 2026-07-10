@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
 
@@ -320,6 +321,37 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         config={data.config}
         siteUrl={data.siteUrl}
         locale={locale}
+      />
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          isChinese
+            ? '这页先看真实可验证的语音使用信号，再继续判断是配音、转写还是对话助手更值得投入。'
+            : 'This page looks at verifiable voice-workflow signals first, then helps you decide whether dubbing, transcription, or conversational voice deserves more focus.'
+        }
+        items={[
+          {
+            label: isChinese ? '输入与输出' : 'Input and output',
+            value: isChinese ? '格式与导出方式先核对' : 'Check formats and exports first',
+            note: isChinese
+              ? '先确认音频、语言、导出和接入方式是否匹配你的工作流。'
+              : 'Confirm whether audio, language, export, and integration fit your workflow.',
+          },
+          {
+            label: isChinese ? '稳定性' : 'Stability',
+            value: isChinese ? '更新与评分是否稳定' : 'Freshness and ratings',
+            note: isChinese
+              ? '如果真实评论和更新节奏不稳，后面再比功能意义不大。'
+              : 'If comments and update cadence are unstable, feature comparison matters less.',
+          },
+          {
+            label: isChinese ? '场景匹配' : 'Use-case fit',
+            value: isChinese ? '配音、转写、对话要分开看' : 'Separate dubbing, transcription, and conversation',
+            note: isChinese
+              ? '不同语音任务的关键指标完全不一样，不要混成一类。'
+              : 'The key metrics differ across voice tasks, so do not group them as one decision.',
+          },
+        ]}
       />
       <div className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <section className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>

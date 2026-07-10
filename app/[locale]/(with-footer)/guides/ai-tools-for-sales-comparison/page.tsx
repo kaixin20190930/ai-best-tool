@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -196,6 +197,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '销售对比页要围绕线索、外联个性化、流程协作和 CRM 接入来判断，不要只看功能数量。这个页继续可索引，但会把销售拓客、获客和更窄的 CRM 路径分层。'
+            : 'This sales comparison page should judge leads, outreach personalization, workflow coordination, and CRM fit instead of counting features. Keep it indexable, but separate sales prospecting, lead generation, and narrower CRM paths.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '验证重点' : 'Validation focus',
+            value: locale === 'cn' || locale === 'tw' ? '线索、外联、CRM' : 'Leads, outreach, CRM',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先确认它是不是在帮销售流程，而不是只做泛自动化。'
+                : 'Confirm it is helping sales workflows rather than just generic automation.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '合并策略' : 'Merge strategy',
+            value: locale === 'cn' || locale === 'tw' ? '分流到拓客/获客' : 'Route to prospecting/lead gen',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果真正需求更像找名单，就转到更窄页。'
+                : 'If the real job is list sourcing, move to a narrower page.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '后续增量' : 'Next increments',
+            value: locale === 'cn' || locale === 'tw' ? '真实流程、集成、案例' : 'Real workflows, integrations, cases',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '补真实销售流程和 CRM 接入样本。'
+                : 'Add real sales workflows and CRM integration examples.',
+          },
+        ]}
+      />
       <div className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <section className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

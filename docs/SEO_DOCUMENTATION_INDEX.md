@@ -196,7 +196,20 @@ This documentation provides comprehensive guidance for implementing and maintain
 
 ### For Validation
 
-#### 15. [SEO Indexing Policy (CN)](./SEO_INDEXING_POLICY_CN.md)
+#### 15. [SEO Quality Recovery Tasks (CN)](./SEO_QUALITY_RECOVERY_TASKS_CN.md)
+**Purpose:** A two-week, four-week, and four-to-eight-week recovery checklist for reducing thin AI-like pages, focusing crawl/index budget, and adding real evidence/user/owner signals to priority pages.
+
+**Contents:**
+- 2+4+8 week execution plan
+- P0 technical cleanup tasks
+- 20 priority pages for real-data enrichment
+- Non-AI signal requirements
+- Weekly GSC and conversion tracking metrics
+- Pause list for programmatic expansion
+
+**When to use:** When deciding what to do next for SEO recovery, indexing cleanup, and content quality improvement
+
+#### 16. [SEO Indexing Policy (CN)](./SEO_INDEXING_POLICY_CN.md)
 **Purpose:** Define which pages should be included in sitemap, which pages should stay as internal traffic pages, and which pages should never enter the index surface.
 
 **Contents:**
@@ -208,7 +221,7 @@ This documentation provides comprehensive guidance for implementing and maintain
 
 **When to use:** When deciding whether a page should be indexed, added to sitemap, or kept as an internal navigation target
 
-#### 16. [SEO Indexing Control Table Template (CN)](./SEO_INDEXING_CONTROL_TABLE_TEMPLATE_CN.md)
+#### 17. [SEO Indexing Control Table Template (CN)](./SEO_INDEXING_CONTROL_TABLE_TEMPLATE_CN.md)
 **Purpose:** A practical operating template for weekly decisions on whether a URL should stay internal, remain noindex, or move into sitemap.
 
 **Contents:**

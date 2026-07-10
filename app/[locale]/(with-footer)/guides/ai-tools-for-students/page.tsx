@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -375,6 +376,39 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先检查页面是否能帮助学生完成真实选择：学习任务、写作辅助、引用/总结、笔记协作和后续进入更细分类的路径。'
+              : 'This page prioritizes whether the guide helps students make a real choice: learning tasks, writing help, citations/summaries, note collaboration, and next steps into narrower pages.'
+          }
+          items={[
+            {
+              label: isChinese ? '判断维度' : 'Decision signals',
+              value: isChinese ? '学习、写作、总结、协作' : 'Learning, writing, summaries, collaboration',
+              note: isChinese
+                ? '重点看它是否真的减轻学习和作业负担。'
+                : 'We care about whether it actually reduces learning and homework friction.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '核心页保留索引' : 'Keep the core page indexable',
+              note: isChinese
+                ? '尽量减少和写作、笔记、总览页的重复。'
+                : 'Minimize overlap with writing, note-taking, and hub pages.',
+            },
+            {
+              label: isChinese ? '下一步补强' : 'Next enrichment',
+              value: isChinese ? '补真实学习案例' : 'Add real student cases',
+              note: isChinese
+                ? '后续优先补学生使用场景、课程/作业样例和真实反馈。'
+                : 'Next, priority additions are student scenarios, class assignment examples, and real feedback.',
+            },
+          ]}
+        />
+
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '高意图榜单' : 'High-intent ranking'}

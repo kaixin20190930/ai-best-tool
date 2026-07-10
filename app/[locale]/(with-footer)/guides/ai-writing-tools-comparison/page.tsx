@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -281,6 +282,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '写作工具对比的重点不是“写得像不像”，而是提纲、改写、语气控制和内容更新是否真的能提升产出。'
+            : 'Writing tool comparison should focus less on sounding polished and more on outlines, rewriting, tone control, and whether they actually improve output.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '提纲能力' : 'Outline quality',
+            value: locale === 'cn' || locale === 'tw' ? '先看结构是否靠谱' : 'Check whether the structure is solid',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '好不好用，往往先体现在能不能搭出可写的骨架。'
+                : 'Useful writing tools usually start by producing a usable skeleton.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '改写质量' : 'Rewrite quality',
+            value: locale === 'cn' || locale === 'tw' ? '看是否保持原意' : 'Check whether meaning stays intact',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '不是改得更长，而是改得更顺。'
+                : 'The goal is not making it longer, but making it more usable.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '长期产出' : 'Long-term output',
+            value: locale === 'cn' || locale === 'tw' ? '看它能否持续帮忙' : 'See whether it stays useful over time',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '要看更新、价格和真实使用反馈。'
+                : 'Freshness, pricing, and real usage feedback matter here.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

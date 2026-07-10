@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -256,6 +257,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '钱包监控对比页要围绕提醒质量、异常发现、关系线索和团队协作来判断，不要把它当成单纯看板比较。这个页继续可索引，但会把钱包研究和资产追踪路径分层。'
+            : 'This wallet monitoring comparison page should judge alert quality, anomaly detection, relationship clues, and team collaboration instead of treating it like a generic dashboard comparison. Keep it indexable, but separate wallet research and portfolio tracking paths.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '验证重点' : 'Validation focus',
+            value: locale === 'cn' || locale === 'tw' ? '提醒、异常、关系' : 'Alerts, anomalies, relationships',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先确认它是不是在做真正的监控和预警。'
+                : 'Confirm it is doing real monitoring and alerting.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '合并策略' : 'Merge strategy',
+            value: locale === 'cn' || locale === 'tw' ? '分流到研究/追踪' : 'Route to research/tracking',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果重点其实是研究地址，就转去研究页。'
+                : 'If the real focus is address research, move to the research page.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '后续增量' : 'Next increments',
+            value: locale === 'cn' || locale === 'tw' ? '告警样本、截图、阈值' : 'Alert samples, screenshots, thresholds',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '补真实告警案例和通知截图。'
+                : 'Add real alert cases and notification screenshots.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

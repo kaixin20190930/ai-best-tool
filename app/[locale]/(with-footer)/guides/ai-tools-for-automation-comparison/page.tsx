@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { Link } from '@/app/navigation';
 
@@ -357,6 +358,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       </section>
 
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '自动化对比页要围绕集成范围、流程复杂度、执行稳定性和可维护性来判断，不要只看能接多少工具。它会继续保留索引，但把开发者和 API 路径分层。'
+            : 'This automation comparison page should focus on integration coverage, workflow complexity, execution stability, and maintainability instead of only counting integrations. Keep it indexable, but separate developer and API paths.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '验证重点' : 'Validation focus',
+            value: locale === 'cn' || locale === 'tw' ? '编排、稳定、维护' : 'Orchestration, stability, maintenance',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先确认它是不是能把重复流程稳定跑起来。'
+                : 'Confirm it can run repeatable workflows reliably.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '合并策略' : 'Merge strategy',
+            value: locale === 'cn' || locale === 'tw' ? '分流到开发者/API' : 'Route to developer/API',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果真正需求是脚本、API 或可观测，就别停在自动化页。'
+                : 'If the real need is scripts, APIs, or observability, move on from automation.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '后续增量' : 'Next increments',
+            value: locale === 'cn' || locale === 'tw' ? '真实流程、失败处理、案例' : 'Real flows, failure handling, cases',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '补流程分支和真实运行样本。'
+                : 'Add branching and real execution examples.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

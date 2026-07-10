@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -265,6 +266,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? 'API 可观测对比页要围绕日志可读性、成本可见性、评估闭环和生产接入深度来判断，不要只看图表数量。它会继续保留索引，但把更广的开发者路径分层。'
+            : 'This API observability comparison page should focus on log readability, cost visibility, evaluation loops, and production integration depth instead of chart count. Keep it indexable, but separate broader developer paths.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '验证重点' : 'Validation focus',
+            value: locale === 'cn' || locale === 'tw' ? '日志、成本、闭环' : 'Logs, cost, loops',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先确认它是不是在帮你做生产判断。'
+                : 'Confirm it helps with production decisions.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '合并策略' : 'Merge strategy',
+            value: locale === 'cn' || locale === 'tw' ? '分流到开发者/API' : 'Route to developer/API',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果重点是模型路由或更广的开发工作流，就分流。'
+                : 'If the real need is routing or broader developer workflow, move there.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '后续增量' : 'Next increments',
+            value: locale === 'cn' || locale === 'tw' ? '真实请求、告警、案例' : 'Real requests, alerts, cases',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '补上真实日志和调试样本。'
+                : 'Add real logs and debugging examples.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

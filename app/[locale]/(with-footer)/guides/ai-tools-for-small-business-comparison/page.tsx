@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -127,6 +128,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '小企业页的比较重点不是功能最全，而是营销、客服、内容和运营这几个日常动作能不能真的接上。'
+            : 'The small-business comparison should judge whether marketing, support, content, and operations actually connect in day-to-day work instead of feature breadth alone.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '营销覆盖' : 'Marketing coverage',
+            value: locale === 'cn' || locale === 'tw' ? '先看获客链路' : 'Start with the acquisition chain',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '小企业最先需要的是能带来生意的链路。'
+                : 'The first need is a chain that can actually bring in business.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '客服支持' : 'Support fit',
+            value: locale === 'cn' || locale === 'tw' ? '看是否能接住回复和分流' : 'Check whether it handles replies and routing',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '客户沟通不能只靠通用助手。'
+                : 'Customer communication usually needs more than a generic assistant.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '运营落地' : 'Operational fit',
+            value: locale === 'cn' || locale === 'tw' ? '看是否顺手接入日常流程' : 'See whether it plugs into daily ops',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '最终要落到团队每天会不会真的用。'
+                : 'The real question is whether the team will actually use it every day.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

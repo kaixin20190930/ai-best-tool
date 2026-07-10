@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -165,6 +166,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '这页优先判断聊天机器人是否真的能稳定回答、接知识库和适配日常工作流，而不是只看生成内容是否看起来聪明。'
+              : 'This page checks whether a chatbot truly answers reliably, connects to a knowledge base, and fits daily workflows instead of merely sounding smart.'
+          }
+          items={[
+            {
+              label: isChinese ? '验证范围' : 'Checked scope',
+              value: isChinese ? '问答、知识库、协作、稳定性' : 'Q&A, knowledge base, collaboration, reliability',
+              note: isChinese
+                ? '先确认它是否能解决你最常问的问题。'
+                : 'First confirm that it solves the questions you ask most often.',
+            },
+            {
+              label: isChinese ? '索引策略' : 'Indexing strategy',
+              value: isChinese ? '保留索引，连接榜单与对比页' : 'Indexable with ranking and comparison paths',
+              note: isChinese
+                ? '把用户带向更窄的高意图路径。'
+                : 'Move users into narrower high-intent paths.',
+            },
+            {
+              label: isChinese ? '下一步增强' : 'Next enrichment',
+              value: isChinese ? '补真实问答场景、评论和限制说明' : 'Add real question scenarios, comments, and limits',
+              note: isChinese
+                ? '用真实使用痕迹代替泛泛描述。'
+                : 'Replace generic copy with real usage evidence.',
+            },
+          ]}
+        />
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

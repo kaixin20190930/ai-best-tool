@@ -152,6 +152,8 @@ export default function AdminCollectionCandidatesTable({
   const allSelectableSelected =
     selectableCandidates.length > 0 &&
     selectableCandidates.every((candidate) => selectedIds.includes(candidate.id));
+  const activeButtonClass = 'border-cyan-200 bg-cyan-50 text-cyan-700 hover:bg-cyan-100';
+  const inactiveButtonClass = 'border-slate-300 bg-slate-100 text-slate-700 hover:bg-slate-200';
 
   const importCandidate = async (id: string) => {
     setLoadingId(id);
@@ -308,11 +310,9 @@ export default function AdminCollectionCandidatesTable({
                   key={status.value}
                   type="button"
                   onClick={() => goToStatus(status.value)}
-                  className={
-                    activeStatus === status.value
-                      ? 'rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white'
-                      : 'rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-                  }
+                  className={`rounded-lg border px-3 py-2 text-sm font-semibold transition-colors ${
+                    activeStatus === status.value ? activeButtonClass : inactiveButtonClass
+                  }`}
                 >
                   {status.label} {count}
                 </button>
@@ -335,11 +335,9 @@ export default function AdminCollectionCandidatesTable({
                   key={scoreFilter.value}
                   type="button"
                   onClick={() => goToScoreFilter(scoreFilter.value)}
-                  className={
-                    activeScoreFilter === scoreFilter.value
-                      ? 'rounded-lg bg-cyan-600 px-3 py-1.5 text-xs font-semibold text-white'
-                      : 'rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50'
-                  }
+                  className={`rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                    activeScoreFilter === scoreFilter.value ? activeButtonClass : inactiveButtonClass
+                  }`}
                 >
                   {scoreFilter.label}
                 </button>
@@ -351,7 +349,7 @@ export default function AdminCollectionCandidatesTable({
               type="button"
               disabled={isEnriching || isRescoring || Boolean(bulkLoading)}
               onClick={enrichCandidates}
-              className="rounded-lg border border-cyan-200 px-3 py-2 text-sm font-semibold text-cyan-700 hover:bg-cyan-50 disabled:opacity-50"
+              className="rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-sm font-semibold text-cyan-700 hover:bg-cyan-100 disabled:opacity-50"
             >
               {isEnriching ? 'Enriching...' : 'Enrich details'}
             </button>
@@ -359,7 +357,7 @@ export default function AdminCollectionCandidatesTable({
               type="button"
               disabled={isRescoring || isEnriching || Boolean(bulkLoading)}
               onClick={rescoreCandidates}
-              className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+              className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50"
             >
               {isRescoring ? 'Scoring...' : 'Rescore'}
             </button>
@@ -367,7 +365,7 @@ export default function AdminCollectionCandidatesTable({
               type="button"
               disabled={selectedIds.length === 0 || Boolean(bulkLoading)}
               onClick={importSelected}
-              className="rounded-lg bg-cyan-600 px-3 py-2 text-sm font-semibold text-white hover:bg-cyan-700 disabled:opacity-50"
+              className="rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-sm font-semibold text-cyan-700 hover:bg-cyan-100 disabled:opacity-50"
             >
               {bulkLoading === 'import' ? 'Importing...' : 'Create drafts'}
             </button>
@@ -541,7 +539,7 @@ export default function AdminCollectionCandidatesTable({
                           type="button"
                           disabled={loadingId === candidate.id || candidate.status !== 'new'}
                           onClick={() => importCandidate(candidate.id)}
-                          className="rounded-lg bg-cyan-600 px-3 py-2 text-sm font-semibold text-white hover:bg-cyan-700 disabled:opacity-50"
+                          className="rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-sm font-semibold text-cyan-700 hover:bg-cyan-100 disabled:opacity-50"
                         >
                           {loadingId === candidate.id ? 'Importing...' : 'Create draft'}
                         </button>
@@ -563,7 +561,7 @@ export default function AdminCollectionCandidatesTable({
                               toast.error(result.error || 'Failed to reject candidate');
                             }
                           }}
-                          className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                          className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50"
                         >
                           Reject
                         </button>
@@ -713,18 +711,16 @@ export default function AdminCollectionCandidatesTable({
             }
 
             return (
-              <button
-                key={page}
-                type="button"
-                onClick={() => goToPage(page)}
-                className={
-                  page === pagination.page
-                    ? 'rounded-lg bg-slate-900 px-3 py-2 font-semibold text-white'
-                    : 'rounded-lg border border-slate-300 px-3 py-2 font-semibold text-slate-700 hover:bg-slate-50'
-                }
-              >
-                {page}
-              </button>
+                <button
+                  key={page}
+                  type="button"
+                  onClick={() => goToPage(page)}
+                  className={`rounded-lg border px-3 py-2 font-semibold transition-colors ${
+                    page === pagination.page ? activeButtonClass : inactiveButtonClass
+                  }`}
+                >
+                  {page}
+                </button>
             );
           })}
           <button
