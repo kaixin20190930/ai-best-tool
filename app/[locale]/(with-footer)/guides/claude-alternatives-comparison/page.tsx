@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -241,6 +242,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '这页先看真实可验证的 Claude 替代信号，再继续判断是否真的需要长上下文、分析和写作能力。'
+            : 'This page looks at verifiable Claude-alternative signals first, then helps you decide whether long context, analysis, and writing abilities are truly needed.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '长上下文' : 'Long context',
+            value: locale === 'cn' || locale === 'tw' ? '是否真的能处理长文本' : 'Can it handle long text well',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果长文本和复杂推演不是重点，就别只看这个维度。'
+                : 'If long text is not the main job, do not over-weight this dimension.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '分析与写作' : 'Analysis and writing',
+            value: locale === 'cn' || locale === 'tw' ? '解释是否足够稳' : 'Is the explanation quality steady',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '替代 Claude 的关键不是名字，而是解释和总结是否靠谱。'
+                : 'A real Claude alternative is about explanation and summary quality, not just branding.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '长期稳定' : 'Long-term stability',
+            value: locale === 'cn' || locale === 'tw' ? '是否适合长期使用' : 'Is it comfortable to keep using',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果工作流会持续依赖，它必须稳定、顺手、可复用。'
+                : 'If your workflow depends on it over time, it needs to stay stable and reusable.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

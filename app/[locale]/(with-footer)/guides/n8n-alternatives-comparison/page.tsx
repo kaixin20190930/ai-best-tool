@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -241,6 +242,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '这页先看真实可验证的 n8n 替代信号，再继续判断是否需要可控、可自建和开发者导向的工作流底座。'
+            : 'This page looks at verifiable n8n-alternative signals first, then helps you decide whether a controllable, self-hostable, developer-oriented workflow base is needed.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '控制感' : 'Control',
+            value: locale === 'cn' || locale === 'tw' ? '能否自定义得足够深' : 'Can it be customized deeply enough',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? 'n8n 的替代项如果控制力不够，意义会弱很多。'
+                : 'If the alternative lacks control, it is not much of an alternative.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '可维护性' : 'Maintainability',
+            value: locale === 'cn' || locale === 'tw' ? '团队能否长期维护' : 'Can a team maintain it long term',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '自动化最后拼的是长期维护，而不是一时搭好。'
+                : 'Automation wins by being maintainable, not just by being built once.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '开发者适配' : 'Developer fit',
+            value: locale === 'cn' || locale === 'tw' ? 'API 和脚本是否顺手' : 'Are APIs and scripts natural to use',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果工作流已经深到 API 和脚本，这一点会很关键。'
+                : 'This matters a lot once workflows get deep into APIs and scripts.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

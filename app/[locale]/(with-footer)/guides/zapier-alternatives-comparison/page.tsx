@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -249,6 +250,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '这页先看真实可验证的 Zapier 替代信号，再继续判断是否需要连接器、编排和长期维护。'
+            : 'This page looks at verifiable Zapier-alternative signals first, then helps you decide whether connectors, orchestration, and long-term maintenance are needed.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '连接器覆盖' : 'Connector coverage',
+            value: locale === 'cn' || locale === 'tw' ? '常见 SaaS 是否够用' : 'Are common SaaS integrations sufficient',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? 'Zapier 的核心是“快连起来”，先看覆盖面够不够。'
+                : 'Zapier-like value starts with whether the integration coverage is enough.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '编排复杂度' : 'Orchestration complexity',
+            value: locale === 'cn' || locale === 'tw' ? '分支和重试是否稳' : 'Are branches and retries stable',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果流程有复杂逻辑，维护性会比模板更重要。'
+                : 'If the workflow gets complex, maintainability matters more than templates.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '长期维护' : 'Long-term maintenance',
+            value: locale === 'cn' || locale === 'tw' ? '团队能否接手' : 'Can a team maintain it',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '长期自动化不是搭出来就完，后续维护才是关键。'
+                : 'Long-term automation is about maintainability after setup, not just launch.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

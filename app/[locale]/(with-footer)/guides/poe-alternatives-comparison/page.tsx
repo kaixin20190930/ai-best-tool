@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -241,6 +242,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '这页先看真实可验证的多模型聚合信号，再继续判断是否真的需要 Poe 这类统一入口。'
+            : 'This page looks at verifiable multi-model aggregation signals first, then helps you decide whether a Poe-style unified entry is actually needed.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '聚合能力' : 'Aggregation',
+            value: locale === 'cn' || locale === 'tw' ? '是否真的能并排比较' : 'Can it truly compare models side by side',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果不能方便切换和并比，聚合入口的价值就会下降。'
+                : 'If switching and comparison are awkward, the aggregator value drops fast.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '对话顺手度' : 'Chat ergonomics',
+            value: locale === 'cn' || locale === 'tw' ? '入口是否顺手' : 'Is the entry comfortable',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? 'Poe 的关键是“切换时不别扭”，不是单个模型多强。'
+                : 'The key question is whether switching feels smooth, not how strong one model is.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '长期使用' : 'Long-term use',
+            value: locale === 'cn' || locale === 'tw' ? '是否适合长期保留' : 'Can it stay in your stack',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果你只要一个稳定主入口，别让聚合层过度复杂。'
+                : 'If you only want one stable primary entry, do not overcomplicate the aggregation layer.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
