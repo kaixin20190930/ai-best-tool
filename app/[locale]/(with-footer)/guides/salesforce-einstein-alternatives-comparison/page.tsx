@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -249,6 +250,37 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '这页先看真实可验证的 Salesforce Einstein 信号，再继续判断是否真的需要 CRM、销售自动化和企业工作流。'
+            : 'This page looks at verifiable Salesforce Einstein alternative signals first, then helps you decide whether CRM, sales automation, and enterprise workflows are truly needed.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? 'CRM 适配' : 'CRM fit',
+            value: locale === 'cn' || locale === 'tw' ? '是否能进销售体系' : 'Can it fit the sales stack',
+            note: locale === 'cn' || locale === 'tw'
+              ? '如果不是 CRM 层的需求，就别把它当成普通 AI 工具比。'
+              : 'If CRM is not the job, do not compare it like a generic AI tool.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '自动化编排' : 'Automation orchestration',
+            value: locale === 'cn' || locale === 'tw' ? '销售和流程是否能连起来' : 'Can sales and workflows connect',
+            note: locale === 'cn' || locale === 'tw'
+              ? '企业工具的关键是流程能不能真的跑通。'
+              : 'Enterprise tools live or die by whether the process actually runs.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '企业落地' : 'Enterprise adoption',
+            value: locale === 'cn' || locale === 'tw' ? '权限、数据和扩展性' : 'Permissions, data, and extensibility',
+            note: locale === 'cn' || locale === 'tw'
+              ? '能不能落进企业流程，通常比单点功能更重要。'
+              : 'Landing in enterprise workflow matters more than individual features.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

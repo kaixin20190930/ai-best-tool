@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -241,6 +242,37 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '这页先看真实可验证的 Gemini 信号，再继续判断是否真的需要 Google 生态、移动入口和通用聊天体验。'
+            : 'This page looks at verifiable Gemini-alternative signals first, then helps you decide whether Google ecosystem fit, mobile entry, and general-purpose chat are truly needed.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '生态整合' : 'Ecosystem fit',
+            value: locale === 'cn' || locale === 'tw' ? 'Google 生态是否顺手' : 'Does it fit Google workflows',
+            note: locale === 'cn' || locale === 'tw'
+              ? '如果生态整合不是关键，就别让它主导决策。'
+              : 'If ecosystem fit is not the key job, do not let it dominate.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '移动入口' : 'Mobile entry',
+            value: locale === 'cn' || locale === 'tw' ? '手机上是否好用' : 'Is it good on mobile',
+            note: locale === 'cn' || locale === 'tw'
+              ? '很多人选 Gemini，其实是看入口体验。'
+              : 'For many users, the entry experience is the real reason.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '长期使用' : 'Long-term use',
+            value: locale === 'cn' || locale === 'tw' ? '是否能一直用下去' : 'Can it stay in your stack',
+            note: locale === 'cn' || locale === 'tw'
+              ? '稳定、价格和切换成本，最后往往比宣传更重要。'
+              : 'Stability, pricing, and switching cost matter more than marketing.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

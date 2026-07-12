@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -241,6 +242,37 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '这页先看真实可验证的 Grammarly 信号，再继续判断是否真的需要语法修正、润色和写作工作流。'
+            : 'This page looks at verifiable Grammarly-alternative signals first, then helps you decide whether grammar fixes, polishing, and writing workflow support are truly needed.'
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '语法与润色' : 'Grammar and polish',
+            value: locale === 'cn' || locale === 'tw' ? '是否真的更顺' : 'Does it actually improve text',
+            note: locale === 'cn' || locale === 'tw'
+              ? '如果润色不稳定，替代页的价值会很快下降。'
+              : 'If polishing is inconsistent, the comparison loses value quickly.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '语气控制' : 'Tone control',
+            value: locale === 'cn' || locale === 'tw' ? '是否能统一表达风格' : 'Can it unify your voice',
+            note: locale === 'cn' || locale === 'tw'
+              ? '写作工具不只是改错，还要能保持品牌语气。'
+              : 'Writing tools should do more than fix errors; tone matters too.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '工作流嵌入' : 'Workflow embedding',
+            value: locale === 'cn' || locale === 'tw' ? '是否适合日常写作' : 'Fits daily writing',
+            note: locale === 'cn' || locale === 'tw'
+              ? '长期留得住的，是能真正嵌进日常流程的工具。'
+              : 'The tools that stay are the ones that fit daily flow.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
