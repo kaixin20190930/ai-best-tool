@@ -26,6 +26,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-13';
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const faqs = [
     {
@@ -176,6 +177,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '这页优先判断 Web3 工具是否真的能接入链上数据、钱包、协议研究和团队工作流，而不是只看概念。'
@@ -184,10 +186,12 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',
-              value: isChinese ? '链上数据、钱包、协议、API' : 'On-chain data, wallets, protocols, APIs',
+              value: isChinese
+                ? '链上数据、钱包、协议、API + 榜单'
+                : 'On-chain data, wallets, protocols, APIs + rankings',
               note: isChinese
-                ? 'Web3 工具必须能稳定处理数据源和权限问题。'
-                : 'Web3 tools need to handle data sources and permissions reliably.',
+                ? `当前可参考分类信号有 ${categories.length} 个，继续把真实链上流程放前面。`
+                : `${categories.length} category signals are available, and real on-chain workflow should stay up front.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -198,7 +202,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             },
             {
               label: isChinese ? '下一步补强' : 'Next enrichment',
-              value: isChinese ? '补真实链上场景和验证' : 'Add real on-chain scenarios and verification',
+              value: isChinese
+                ? '补真实链上场景、验证、最近检查'
+                : 'Add real on-chain scenarios, verification, and recent checks',
               note: isChinese
                 ? '后续会继续补评论、收藏和 owner 认领信号。'
                 : 'Next, comments, saves, and owner-claim signals should be added.',
@@ -213,8 +219,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? 'Web3 入口已按真实链上数据、钱包和协议工作流重新核对。'
-                : 'The Web3 entry has been rechecked against real on-chain data, wallet, and protocol workflows.'}
+                ? `Web3 入口已按真实链上数据、钱包和协议工作流重新核对，当前可参考分类信号 ${categories.length} 个。`
+                : `The Web3 entry has been rechecked against real on-chain data, wallet, and protocol workflows, with ${categories.length} category signals available.`}
             </p>
           </div>
           <div>
