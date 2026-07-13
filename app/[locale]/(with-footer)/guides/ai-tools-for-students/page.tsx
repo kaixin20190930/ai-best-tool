@@ -409,6 +409,46 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           ]}
         />
 
+        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '最近验证' : 'Last checked'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '这页已按真实学生决策路径重新核对，保留学习、写作、总结和笔记入口。'
+                : 'This page has been rechecked against a real student decision path and keeps learning, writing, summary, and note-taking entry points visible.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '当前判断' : 'Current judgment'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '保留索引，补真实学习证据' : 'Keep it indexable and add real student evidence'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '用课程、作业和引用案例把它和泛办公页区分开。'
+                : 'Use class, homework, and citation examples to differentiate it from generic productivity pages.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '下一步' : 'Next step'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '补真实学习场景和反馈' : 'Add real study scenarios and feedback'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '后续优先补学生使用案例、课程作业样例和真人评论。'
+                : 'Next, prioritize student cases, course assignment examples, and real comments.'}
+            </p>
+          </div>
+        </section>
+
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '高意图榜单' : 'High-intent ranking'}
