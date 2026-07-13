@@ -39,12 +39,12 @@ import { Separator } from '@/components/ui/separator';
 import PageViewTracker from '@/components/analytics/PageViewTracker';
 import CommentList from '@/components/comments/CommentList';
 import FavoriteButton from '@/components/FavoriteButton';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import BaseImage from '@/components/image/BaseImage';
 import MarkdownProse from '@/components/MarkdownProse';
 import MediaGallery from '@/components/MediaGallery';
 import RatingStars from '@/components/RatingStars';
 import RecommendedTools from '@/components/RecommendedTools';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import ShareButton from '@/components/ShareButton';
 import ToolFeedbackBar from '@/components/ToolFeedbackBar';
@@ -1624,6 +1624,7 @@ export default async function Page({
     const compareAxes = decisionCompareAxesOverride.length > 0 ? decisionCompareAxesOverride : [comparisonSummary];
     const nextComparisonLinks = getNextComparisonLinks(categorySlug, dbTool?.tags || [], locale);
     const primaryComparisonLink = nextComparisonLinks[0] || null;
+    const checkedAt = '2026-07-13';
     let decisionBestFitText =
       locale === 'cn' ? '先看这个工具是不是匹配你的场景' : 'Check whether this tool matches your workflow first';
     if (bestFitList.length > 0) {
@@ -1821,18 +1822,21 @@ export default async function Page({
 
                 <GuideEvidencePanel
                   locale={locale}
+                  checkedAt={checkedAt}
                   scope={
                     isChinese
-                      ? '这页优先说明这个工具到底适合什么真实工作流，是否有足够的截图、评论、更新时间和使用信号，而不是只展示营销式简介。'
-                      : 'This page focuses on what real workflow the tool fits, whether there are enough screenshots, comments, freshness, and usage signals instead of only a marketing-style summary.'
+                      ? '这页优先说明这个工具到底适合什么真实工作流，并把评分、讨论、收藏、点击和更新时间一起摆出来，而不是只展示营销式简介。'
+                      : 'This page focuses on what real workflow the tool fits and surfaces ratings, discussions, saves, clicks, and freshness instead of only a marketing-style summary.'
                   }
                   items={[
                     {
                       label: isChinese ? '验证范围' : 'Checked scope',
-                      value: isChinese ? '用途、评论、截图、更新' : 'Use case, comments, screenshots, freshness',
+                      value: isChinese
+                        ? '用途、评论、截图、更新 + 互动'
+                        : 'Use case, comments, screenshots, freshness + engagement',
                       note: isChinese
-                        ? '先判断它是否解决了你真正要做的事。'
-                        : 'First judge whether it solves the thing you actually need to do.',
+                        ? `当前 ${ratingStats.ratingCount} 条评分、${commentCount} 条讨论、${toolStats.favoriteCount} 次收藏。`
+                        : `${ratingStats.ratingCount} ratings, ${commentCount} comments, and ${toolStats.favoriteCount} saves are visible right now.`,
                     },
                     {
                       label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -1843,10 +1847,12 @@ export default async function Page({
                     },
                     {
                       label: isChinese ? '下一步增强' : 'Next enrichment',
-                      value: isChinese ? '补真实使用场景与 owner 认领' : 'Add real usage cases and owner claims',
+                      value: isChinese
+                        ? '补真实使用场景、owner 认领、最近验证'
+                        : 'Add real usage cases, owner claims, and recent verification',
                       note: isChinese
-                        ? '用真实信号替代泛泛介绍。'
-                        : 'Replace generic intro copy with real signals.',
+                        ? `最近更新时间 ${freshnessSummary}，继续把实际使用痕迹和认领信号放进页面。`
+                        : `Freshness reads as ${freshnessSummary}, and the page should keep gaining usage and claim signals.`,
                     },
                   ]}
                 />
