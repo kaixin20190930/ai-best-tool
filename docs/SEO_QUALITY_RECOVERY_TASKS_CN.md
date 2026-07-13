@@ -505,3 +505,27 @@ Google 不会因为内容由 AI 辅助生成就直接惩罚页面，但会压低
 - DeFi 分析、Evals、链上分析、Prompt 测试、学生、钱包监控、Jasper 和 Mailchimp 比较页补齐最近验证、当前判断和下一步增强
 - 继续把高意图工具对比页的“可验证性”统一到一个标准里
 - 为后续真实案例、评论和 owner 认领继续留入口
+
+## 二十一、第十二梯队 freshness 补齐记录
+
+更新时间：2026-07-13
+
+已补最近验证块的页面：
+
+- `/guides/ai-agent-tools-comparison`
+- `/guides/ai-api-observability-tools-comparison`
+- `/guides/ai-marketing-tools-comparison`
+- `/guides/ai-research-tools-comparison`
+- `/guides/ai-sales-tools-comparison`
+- `/guides/make-alternatives-comparison`
+- `/guides/notion-alternatives-comparison`
+- `/guides/notta-alternatives-comparison`
+- `/guides/perplexity-alternatives-comparison`
+- `/guides/sora-alternatives-comparison`
+- `/guides/suno-alternatives-comparison`
+
+这轮模块重点解决：
+
+- Agent、API 可观测、营销、研究、销售、Make、Notion、Notta、Perplexity、Sora 和 Suno 比较页补齐最近验证、当前判断和下一步增强
+- 继续把高意图工具对比页的“可验证性”统一到一个标准里
+- 为后续真实案例、评论和 owner 认领继续留入口
