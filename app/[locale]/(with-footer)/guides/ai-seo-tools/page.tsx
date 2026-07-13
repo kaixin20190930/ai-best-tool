@@ -28,6 +28,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-13';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -193,6 +195,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '这页优先判断 SEO 工具是否能覆盖真实增长工作流：关键词研究、内容优化、排名跟踪、导出协作和数据更新频率。'
@@ -203,8 +206,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '验证范围' : 'Checked scope',
               value: isChinese ? '关键词、内容、排名、协作' : 'Keywords, content, ranking, collaboration',
               note: isChinese
-                ? '把 SEO 工具拆成具体工作流，而不是按“AI SEO”这个大词泛泛推荐。'
-                : 'We split SEO tools by workflow instead of recommending broadly around the generic AI SEO label.',
+                ? `当前可参考分类信号有 ${categoryCount} 个，把 SEO 工具拆成具体工作流，而不是按“AI SEO”这个大词泛泛推荐。`
+                : `${categoryCount} category signals are available, so we split SEO tools by workflow instead of recommending broadly around the generic AI SEO label.`,
             },
             {
               label: isChinese ? '优先入口' : 'Priority paths',
@@ -217,8 +220,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '质量风险' : 'Quality risk',
               value: isChinese ? '避免薄 SEO 内容' : 'Avoid thin SEO content',
               note: isChinese
-                ? '后续会把真实 GSC 观察、页面表现和评论信号接入这类页面。'
-                : 'Next iterations should connect GSC observations, page performance, and feedback signals to this guide.',
+                ? `这页已于 ${checkedAt} 重新核对，后续会把真实 GSC 观察、页面表现和评论信号接入这类页面。`
+                : `This page was rechecked on ${checkedAt}, and next iterations should connect GSC observations, page performance, and feedback signals to this guide.`,
             },
           ]}
         />
@@ -228,29 +231,37 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? 'SEO 入口已与榜单、对比页和写作路径收口。'
-                : 'The SEO entry now aligns with ranking, comparison, and writing paths.'}
+                ? `SEO 入口已与榜单、对比页和写作路径收口，当前可参考分类信号 ${categoryCount} 个。`
+                : `The SEO entry now aligns with ranking, comparison, and writing paths, with ${categoryCount} category signals available.`}
             </p>
           </div>
           <div>
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '当前判断' : 'Current judgment'}
             </p>
-            <p className='mt-2 text-sm leading-6 text-slate-700'>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '保留索引，继续补真实增长证据' : 'Keep it indexable and keep adding real growth evidence'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '保留索引，继续补真实增长和 GSC 观察信号。'
-                : 'Keep indexable and continue adding real growth and GSC observation signals.'}
+                ? '用 GSC、评论和页面表现把它从泛 SEO 页面里拉出来。'
+                : 'Use GSC, comments, and page performance to separate it from generic SEO pages.'}
             </p>
           </div>
           <div>
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '下一步' : 'Next step'}
             </p>
-            <p className='mt-2 text-sm leading-6 text-slate-700'>
-              {isChinese ? '补一个真实 SEO 工作流案例。' : 'Add one real SEO workflow case.'}
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '补真实 SEO 工作流案例' : 'Add a real SEO workflow case'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '先补关键词、内容和排名三段式案例。'
+                : 'Start with keyword, content, and rank-tracking cases.'}
             </p>
           </div>
         </section>
