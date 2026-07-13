@@ -24,6 +24,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-14';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -262,11 +264,14 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先判断语音工具是否真的能帮你完成转写、配音、对话和导出，而不是只听起来好听。'
               : 'This page checks whether voice tools truly help with transcription, dubbing, conversation, and export rather than only sounding good.'
           }
+          checkedAt={checkedAt}
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',
               value: isChinese ? '转写、配音、对话、导出' : 'Transcription, dubbing, conversation, export',
-              note: isChinese ? '先看它是否能稳定进入工作流。' : 'First see whether it fits your workflow reliably.',
+              note: isChinese
+                ? `先看它是否能稳定进入工作流；当前分类数 ${categoryCount} 个。`
+                : `First see whether it fits your workflow reliably; current category count is ${categoryCount}.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -279,8 +284,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '下一步补强' : 'Next enrichment',
               value: isChinese ? '补真实配音与转写案例' : 'Add real dubbing and transcription cases',
               note: isChinese
-                ? '后续优先补样例音频、字幕样例和语言覆盖。'
-                : 'Next, add sample audio, caption examples, and language coverage notes.',
+                ? `后续优先补样例音频、字幕样例和语言覆盖，并保留 ${checkedAt} 的核对记录。`
+                : `Next, add sample audio, caption examples, and language coverage notes while keeping the ${checkedAt} verification record.`,
             },
           ]}
         />
@@ -290,11 +295,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '语音入口已和榜单、对比页和提交路径收口。'
-                : 'The voice entry now aligns with ranking, comparison, and submission paths.'}
+                ? `语音入口已和榜单、对比页和提交路径收口；当前分类数 ${categoryCount} 个。`
+                : `The voice entry now aligns with ranking, comparison, and submission paths; current category count is ${categoryCount}.`}
             </p>
           </div>
           <div>
@@ -303,8 +308,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-700'>
               {isChinese
-                ? '保留索引，继续补真实配音与转写案例。'
-                : 'Keep indexable and continue adding real dubbing and transcription cases.'}
+                ? `保留索引，继续补真实配音与转写案例，并持续保留 ${checkedAt} 的核对痕迹。`
+                : `Keep indexable and continue adding real dubbing and transcription cases while preserving the ${checkedAt} check trail.`}
             </p>
           </div>
           <div>
@@ -312,7 +317,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {isChinese ? '下一步' : 'Next step'}
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-700'>
-              {isChinese ? '补一个真实语音导出样例。' : 'Add one real voice export example.'}
+              {isChinese
+                ? `补一个真实语音导出样例，并把 ${checkedAt} 之后的反馈也记下来。`
+                : `Add one real voice export example and capture feedback after ${checkedAt}.`}
             </p>
           </div>
         </section>

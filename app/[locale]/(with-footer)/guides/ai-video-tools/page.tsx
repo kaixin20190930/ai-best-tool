@@ -31,6 +31,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-14';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -198,13 +200,14 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先判断视频工具是否真的能让剪辑、生成、字幕、配音和导出更快完成，而不是只看预览效果。'
               : 'This page checks whether video tools truly speed up editing, generation, captions, voiceover, and export instead of only looking good in previews.'
           }
+          checkedAt={checkedAt}
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',
               value: isChinese ? '剪辑、生成、字幕、配音、导出' : 'Editing, generation, captions, voiceover, export',
               note: isChinese
-                ? '视频页最重要的是能否稳定进入制作流程。'
-                : 'The key question is whether it can reliably fit into production.',
+                ? `视频页最重要的是能否稳定进入制作流程；当前分类数 ${categoryCount} 个。`
+                : `The key question is whether it can reliably fit into production; current category count is ${categoryCount}.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -217,8 +220,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '下一步补强' : 'Next enrichment',
               value: isChinese ? '补真实案例、模板与限制' : 'Add real cases, templates, and limits',
               note: isChinese
-                ? '后续继续补评论、收藏、截图和验证日期。'
-                : 'Next, comments, saves, screenshots, and verification dates should be added.',
+                ? `后续继续补评论、收藏、截图和验证日期，并保留 ${checkedAt} 的核对记录。`
+                : `Next, comments, saves, screenshots, and verification dates should be added while keeping the ${checkedAt} verification record.`,
             },
           ]}
         />
@@ -228,11 +231,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实视频决策重新核对，优先保留剪辑、字幕和导出路径。'
-                : 'This page has been rechecked against a real video decision and keeps editing, captions, and export paths visible.'}
+                ? `这页已按真实视频决策重新核对，优先保留剪辑、字幕和导出路径；当前分类数 ${categoryCount} 个。`
+                : `This page has been rechecked against a real video decision and keeps editing, captions, and export paths visible; current category count is ${categoryCount}.`}
             </p>
           </div>
           <div>
@@ -246,8 +249,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '用导出限制、批量制作和字幕配音流程来区分视频页。'
-                : 'Use export limits, batch production, and caption/voiceover workflows to distinguish video pages.'}
+                ? `用导出限制、批量制作和字幕配音流程来区分视频页，并持续保留 ${checkedAt} 的核对痕迹。`
+                : `Use export limits, batch production, and caption/voiceover workflows to distinguish video pages while preserving the ${checkedAt} check trail.`}
             </p>
           </div>
           <div>
@@ -255,7 +258,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {isChinese ? '下一步' : 'Next step'}
             </p>
             <p className='mt-2 text-lg font-bold text-slate-950'>
-              {isChinese ? '补真实制作与复用记录' : 'Add real production and repurposing notes'}
+              {isChinese
+                ? '补真实制作与复用记录，并把 2026-07-14 之后的更新继续记上。'
+                : 'Add real production and repurposing notes, then keep logging updates after 2026-07-14.'}
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
