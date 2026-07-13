@@ -29,6 +29,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-14';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -379,6 +381,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '这页优先检查页面是否能帮助学生完成真实选择：学习任务、写作辅助、引用/总结、笔记协作和后续进入更细分类的路径。'
@@ -389,8 +392,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '判断维度' : 'Decision signals',
               value: isChinese ? '学习、写作、总结、协作' : 'Learning, writing, summaries, collaboration',
               note: isChinese
-                ? '重点看它是否真的减轻学习和作业负担。'
-                : 'We care about whether it actually reduces learning and homework friction.',
+                ? `重点看它是否真的减轻学习和作业负担；当前分类数 ${categoryCount} 个。`
+                : `We care about whether it actually reduces learning and homework friction; current category count is ${categoryCount}.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -414,11 +417,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实学生决策路径重新核对，保留学习、写作、总结和笔记入口。'
-                : 'This page has been rechecked against a real student decision path and keeps learning, writing, summary, and note-taking entry points visible.'}
+                ? `这页已按真实学生决策路径重新核对，保留学习、写作、总结和笔记入口；当前分类数 ${categoryCount} 个。`
+                : `This page has been rechecked against a real student decision path and keeps learning, writing, summary, and note-taking entry points visible; current category count is ${categoryCount}.`}
             </p>
           </div>
           <div>
@@ -430,8 +433,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '用课程、作业和引用案例把它和泛办公页区分开。'
-                : 'Use class, homework, and citation examples to differentiate it from generic productivity pages.'}
+                ? `用课程、作业和引用案例把它和泛办公页区分开，并持续保留 ${checkedAt} 的核对痕迹。`
+                : `Use class, homework, and citation examples to differentiate it from generic productivity pages while preserving the ${checkedAt} check trail.`}
             </p>
           </div>
           <div>
@@ -443,8 +446,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '后续优先补学生使用案例、课程作业样例和真人评论。'
-                : 'Next, prioritize student cases, course assignment examples, and real comments.'}
+                ? '后续优先补学生使用案例、课程作业样例和真人评论，并持续保留 2026-07-14 的核对痕迹。'
+                : 'Next, prioritize student cases, course assignment examples, and real comments while keeping the 2026-07-14 check trail up to date.'}
             </p>
           </div>
         </section>

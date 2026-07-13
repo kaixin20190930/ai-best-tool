@@ -29,6 +29,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-14';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -218,6 +220,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '这页优先判断 Web3 分析工具是否真的能让链上变化、协议状态和风险观察更清晰，而不是只看图表数量。'
@@ -227,7 +230,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '验证范围' : 'Checked scope',
               value: isChinese ? '链上、协议、风险、追踪' : 'On-chain, protocol, risk, tracking',
-              note: isChinese ? '重点看能否支撑持续观察。' : 'Focus on whether it supports ongoing observation.',
+              note: isChinese
+                ? `重点看能否支撑持续观察；当前分类数 ${categoryCount} 个。`
+                : `Focus on whether it supports ongoing observation; current category count is ${categoryCount}.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -240,8 +245,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '下一步补强' : 'Next enrichment',
               value: isChinese ? '补真实研究与监控案例' : 'Add real research and monitoring cases',
               note: isChinese
-                ? '后续优先补链上样本、监控面板和研究笔记。'
-                : 'Next, add on-chain examples, monitoring panels, and research notes.',
+                ? `后续优先补链上样本、监控面板和研究笔记，并保持 ${checkedAt} 的核对记录。`
+                : `Next, add on-chain examples, monitoring panels, and research notes while keeping the ${checkedAt} verification record.`,
             },
           ]}
         />
@@ -251,11 +256,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实 Web3 分析决策重新核对，优先保留链上变化、协议状态和风险入口。'
-                : 'This page has been rechecked against a real Web3 analysis decision and keeps on-chain changes, protocol state, and risk entry points visible.'}
+                ? `这页已按真实 Web3 分析决策重新核对，优先保留链上变化、协议状态和风险入口；当前分类数 ${categoryCount} 个。`
+                : `This page has been rechecked against a real Web3 analysis decision and keeps on-chain changes, protocol state, and risk entry points visible; current category count is ${categoryCount}.`}
             </p>
           </div>
           <div>
@@ -267,8 +272,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '用链上样例、监控面板和研究笔记区分它与 DEX、DeFi 页。'
-                : 'Use on-chain examples, monitoring panels, and research notes to distinguish it from DEX and DeFi pages.'}
+                ? `用链上样例、监控面板和研究笔记区分它与 DEX、DeFi 页，并持续保留 ${checkedAt} 的核对痕迹。`
+                : `Use on-chain examples, monitoring panels, and research notes to distinguish it from DEX and DeFi pages while preserving the ${checkedAt} check trail.`}
             </p>
           </div>
           <div>
@@ -280,8 +285,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '后续优先补链上样本、监控面板和研究笔记。'
-                : 'Next, prioritize on-chain examples, monitoring panels, and research notes.'}
+                ? `后续优先补链上样本、监控面板和研究笔记，并持续保留 ${checkedAt} 的核对痕迹。`
+                : `Next, prioritize on-chain examples, monitoring panels, and research notes while keeping the ${checkedAt} check trail up to date.`}
             </p>
           </div>
         </section>

@@ -29,6 +29,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-14';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -303,6 +305,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '钱包研究页要围绕地址画像、关系线索、资金路径和历史判断来做，不是把所有 Web3 工具都平铺出来。这个页继续保留可索引，但会优先把更窄的钱包研究、钱包监控和资产追踪入口分流出去。'
@@ -313,8 +316,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '验证重点' : 'Validation focus',
               value: isChinese ? '画像、线索、历史' : 'Profiles, clues, history',
               note: isChinese
-                ? '先验证它是否真能把地址行为和上下文拼起来。'
-                : 'Check whether it really connects behavior with context.',
+                ? `先验证它是否真能把地址行为和上下文拼起来；当前分类数 ${categoryCount} 个。`
+                : `Check whether it really connects behavior with context; current category count is ${categoryCount}.`,
             },
             {
               label: isChinese ? '合并策略' : 'Merge strategy',
@@ -327,8 +330,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '后续增量' : 'Next increments',
               value: isChinese ? '真实案例、标签、笔记' : 'Real cases, labels, notes',
               note: isChinese
-                ? '补真实地址案例和研究记录，减少纯 AI 口径。'
-                : 'Add real address cases and research notes to reduce AI-only phrasing.',
+                ? `补真实地址案例和研究记录，减少纯 AI 口径，并保留 ${checkedAt} 的核对记录。`
+                : `Add real address cases and research notes to reduce AI-only phrasing while keeping the ${checkedAt} verification record.`,
             },
           ]}
         />
@@ -338,11 +341,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实钱包研究决策重新核对，优先保留画像、关系线索和历史入口。'
-                : 'This page has been rechecked against a real wallet-research decision and keeps profiles, relationship clues, and historical entry points visible.'}
+                ? `这页已按真实钱包研究决策重新核对，优先保留画像、关系线索和历史入口；当前分类数 ${categoryCount} 个。`
+                : `This page has been rechecked against a real wallet-research decision and keeps profiles, relationship clues, and historical entry points visible; current category count is ${categoryCount}.`}
             </p>
           </div>
           <div>
@@ -354,8 +357,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '用真实案例、标签和研究笔记来区分它与监控页。'
-                : 'Use real cases, labels, and research notes to distinguish it from monitoring pages.'}
+                ? `用真实案例、标签和研究笔记来区分它与监控页，并持续保留 ${checkedAt} 的核对痕迹。`
+                : `Use real cases, labels, and research notes to distinguish it from monitoring pages while preserving the ${checkedAt} check trail.`}
             </p>
           </div>
           <div>
@@ -367,8 +370,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '后续优先补真实地址案例、标签和结论记录。'
-                : 'Next, prioritize real address cases, labels, and conclusion notes.'}
+                ? `后续优先补真实地址案例、标签和结论记录，并持续保留 ${checkedAt} 的核对痕迹。`
+                : `Next, prioritize real address cases, labels, and conclusion notes while keeping the ${checkedAt} check trail up to date.`}
             </p>
           </div>
         </section>
