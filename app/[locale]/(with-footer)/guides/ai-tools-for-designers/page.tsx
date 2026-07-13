@@ -28,6 +28,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-14';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -166,6 +168,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '设计页要围绕品牌、视觉控制、输出类型和商业授权来做，不要只看“能不能出图”。这个页继续可索引，但会把图像、视频和内容创作路径优先分层。'
@@ -176,8 +179,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '验证重点' : 'Validation focus',
               value: isChinese ? '品牌、视觉、授权' : 'Brand, visuals, licensing',
               note: isChinese
-                ? '确认它是不是能稳定输出可商用视觉。'
-                : 'Confirm it can reliably produce commercially usable visuals.',
+                ? `确认它是不是能稳定输出可商用视觉。当前可用分类数：${categoryCount}。`
+                : `Confirm it can reliably produce commercially usable visuals. Current category count: ${categoryCount}.`,
             },
             {
               label: isChinese ? '合并策略' : 'Merge strategy',
@@ -189,7 +192,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '后续增量' : 'Next increments',
               value: isChinese ? '品牌案例、样片、授权' : 'Brand cases, samples, licensing',
-              note: isChinese ? '补真实品牌和设计交付样例。' : 'Add real brand and delivery examples.',
+              note: isChinese
+                ? `补真实品牌和设计交付样例，并保持 ${checkedAt} 的核对记录。`
+                : `Add real brand and delivery examples while keeping the ${checkedAt} verification record.`,
             },
           ]}
         />
@@ -199,11 +204,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实设计决策重新核对，优先保留品牌、视觉和授权入口。'
-                : 'This page has been rechecked against a real design decision and keeps brand, visual, and licensing entry points visible.'}
+                ? `这页已按真实设计决策重新核对，优先保留品牌、视觉和授权入口，目前覆盖 ${categoryCount} 个分类。`
+                : `This page has been rechecked against a real design decision and keeps brand, visual, and licensing entry points visible across ${categoryCount} categories.`}
             </p>
           </div>
           <div>

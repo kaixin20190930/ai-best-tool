@@ -29,6 +29,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-14';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -313,6 +315,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '链上分析页要围绕地址追踪、资金流和行为复盘来做，不要和协议分析、钱包监控混成一页。这个页继续保持可索引，但会把钱包研究、协议分析和监控入口分层，减少重复。'
@@ -322,7 +325,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '验证重点' : 'Validation focus',
               value: isChinese ? '追踪、资金流、复盘' : 'Tracking, fund flow, review',
-              note: isChinese ? '先确认它是否真能支撑复盘和研究。' : 'Confirm it really supports review and research.',
+              note: isChinese
+                ? `先确认它是否真能支撑复盘和研究。当前可用分类数：${categoryCount}。`
+                : `Confirm it really supports review and research. Current category count: ${categoryCount}.`,
             },
             {
               label: isChinese ? '合并策略' : 'Merge strategy',
@@ -334,7 +339,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '后续增量' : 'Next increments',
               value: isChinese ? '真实地址案例、图谱、截图' : 'Real address cases, charts, screenshots',
-              note: isChinese ? '补真实链上案例和可验证图谱。' : 'Add real on-chain cases and verifiable visuals.',
+              note: isChinese
+                ? `补真实链上案例和可验证图谱，并保持 ${checkedAt} 的核对记录。`
+                : `Add real on-chain cases and verifiable visuals while keeping the ${checkedAt} verification record.`,
             },
           ]}
         />
@@ -344,11 +351,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实链上分析决策重新核对，优先保留追踪、资金流和复盘入口。'
-                : 'This page has been rechecked against a real on-chain analysis decision and keeps tracking, fund flow, and review entry points visible.'}
+                ? `这页已按真实链上分析决策重新核对，优先保留追踪、资金流和复盘入口，目前覆盖 ${categoryCount} 个分类。`
+                : `This page has been rechecked against a real on-chain analysis decision and keeps tracking, fund flow, and review entry points visible across ${categoryCount} categories.`}
             </p>
           </div>
           <div>
