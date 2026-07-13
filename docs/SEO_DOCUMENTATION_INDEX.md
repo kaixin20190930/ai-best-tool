@@ -396,7 +396,19 @@ This documentation provides comprehensive guidance for implementing and maintain
 
 **When to use:** When generating monthly SEO reports
 
-#### 24. [Caching Strategy](./CACHING_STRATEGY.md)
+#### 24. [GSC Weekly Observation Log (CN)](./GSC_WEEKLY_OBSERVATION_LOG_CN.md)
+**Purpose:** Weekly Search Console tracking sheet for recovery-phase decisions.
+
+**Contents:**
+- Weekly summary table
+- Top queries
+- Top pages
+- Enhanced-page tracking
+- Decision notes
+
+**When to use:** When filling the weekly Search Console observation after recovery work starts producing data
+
+#### 25. [Caching Strategy](./CACHING_STRATEGY.md)
 **Purpose:** Guide to caching implementation
 
 **Contents:**

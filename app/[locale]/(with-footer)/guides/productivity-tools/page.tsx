@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 
+import { getNoindexMetadata } from '@/lib/seo/indexing';
+
 import ProductivityToolsPage, {
   generateMetadata as generateProductivityToolsMetadata,
 } from '../ai-productivity-tools/page';
@@ -7,6 +9,7 @@ import ProductivityToolsPage, {
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const metadata = await generateProductivityToolsMetadata({ params: { locale } });
   return {
+    ...getNoindexMetadata(),
     ...metadata,
     alternates: {
       ...metadata.alternates,

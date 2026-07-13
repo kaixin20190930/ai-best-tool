@@ -1,6 +1,6 @@
 # SEO 质量恢复与真实内容增长任务清单
 
-更新时间：2026-07-10
+更新时间：2026-07-13
 
 这份清单用于把接下来 2 周、4 周、4-8 周的恢复计划落到可跟踪任务上。当前重点不是继续铺更多 AI 生成页面，而是先收口索引面，再把少量核心页面做成有真实证据、真实判断和真实用户信号的页面。
 
@@ -67,8 +67,8 @@ Google 不会因为内容由 AI 辅助生成就直接惩罚页面，但会压低
 | 已完成 | 核对 robots / sitemap / noindex 策略 | 避免非 SEO 页面抢抓取预算 | 后台、认证、账号、API 不进入索引面；弱 guide 和 comparison 统一 noindex, follow |
 | 已完成 | 输出页面质量盘点表 | 建立 noindex / 合并依据 | 每个核心 URL 都有状态、问题、下一步动作 |
 | 待做 | 核对 sitemap URL 数量 | 确保 sitemap 只放主力页面 | sitemap 维持在当前阶段推荐规模内 |
-| 待做 | 标记弱 guide / alias guide | 减少同义页面互相竞争 | 同义页明确主页面、内部页或合并页 |
-| 待做 | GSC 基线记录 | 后续判断优化是否有效 | 记录当前 28 天曝光、点击、CTR、Top queries |
+| 已完成 | 标记弱 guide / alias guide | 减少同义页面互相竞争 | 同义页明确主页面、内部页或合并页；别名页已补 noindex |
+| 待做 | GSC 基线记录 | 后续判断优化是否有效 | 记录当前 28 天曝光、点击、CTR、Top queries；见 `docs/GSC_WEEKLY_OBSERVATION_LOG_CN.md` |
 
 ## 四、P1 任务：20 个核心页面真实数据增强
 
@@ -171,6 +171,11 @@ Google 不会因为内容由 AI 辅助生成就直接惩罚页面，但会压低
 - 提交数
 - 付费或询盘数
 
+记录入口：
+
+- `docs/GSC_WEEKLY_OBSERVATION_LOG_CN.md`
+- `docs/SEO_MONTHLY_REPORT_TEMPLATE.md`
+
 ## 八、暂停事项
 
 在第 1 阶段完成前，暂停：
@@ -189,6 +194,18 @@ Google 不会因为内容由 AI 辅助生成就直接惩罚页面，但会压低
 4. 给 20 个核心页面增加真实证据模块。已完成 20 个核心 page：`how-to-choose-ai-tools`、`ai-seo-tools`、`ai-coding-tools`、`free-ai-tools`、`best-free-ai-tools`、`ai-writing-tools`、`ai-productivity-tools`、`ai-tools-for-research`、`ai-note-taking-tools`、`ai-tools-for-web3`、`ai-video-tools`、`ai-tools-for-meeting-notes`、`ai-tools-for-automation`、`ai-tools-for-developers`、`ai-chatbot-tools`、`ai-tools-for-agents`、`ai-tools-for-sales`、`ai-tools-for-marketing`、`ai-tools-for-customer-support`、`ai-tools-for-creators`。并继续补齐了 `ai-tools-for-evals`、`ai-tools-for-code-review`、`ai-tools-for-content-creation`、`ai-tools-for-students`、`ai-tools-for-prompt-testing`、`ai-tools-for-model-routing`、`ai-image-tools`、`ai-tools-for-api-observability`、`ai-tools-for-lead-generation`、`ai-tools-for-crypto-research`、`ai-tools-for-token-research`、`ai-tools-for-voice`、`ai-tools-for-web3-analysis`、`ai-tools-for-dex-analytics` 等独立高意图页。
 5. 在管理后台增加“页面质量状态”和“下次复查日期”字段。
 6. 在详情页强化评论、owner 认领和最近验证日期。
+
+### 当前执行状态
+
+- 索引面收口：已完成主策略
+- 质量盘点：已完成自动盘点，可继续每周刷新
+- GSC 观察模板：已补齐，后续只填数
+- 弱 guide / alias guide：已补 noindex
+- 20 个核心页增强：已完成首批落地，继续做第二批真实数据增强
+- 核心入口 freshness：营销、销售、生产力页已补最近验证块
+- 核心入口 freshness：SEO、编程、研究入口也已补最近验证块
+- 核心入口 freshness：自动化、语音、Agent 入口也已补最近验证块
+- 核心入口 freshness：内容创作、客服、模型路由、API 可观测入口也已补最近验证块
 
 ## 十、首批真实证据模块落地记录
 

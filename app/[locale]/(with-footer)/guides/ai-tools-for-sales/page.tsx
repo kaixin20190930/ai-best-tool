@@ -5,8 +5,8 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideActionSection from '@/components/guides/GuideActionSection';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
 
@@ -172,26 +172,52 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '验证范围' : 'Checked scope',
               value: isChinese ? '线索、跟进、沟通、CRM' : 'Leads, follow-up, communication, CRM',
-              note: isChinese
-                ? '先看它是否贴合你的销售流程。'
-                : 'First see whether it fits your sales workflow.',
+              note: isChinese ? '先看它是否贴合你的销售流程。' : 'First see whether it fits your sales workflow.',
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
               value: isChinese ? '保留索引，接榜单与对比页' : 'Indexable with ranking and comparison paths',
-              note: isChinese
-                ? '把销售意图导向更窄的路径。'
-                : 'Route sales intent into narrower paths.',
+              note: isChinese ? '把销售意图导向更窄的路径。' : 'Route sales intent into narrower paths.',
             },
             {
               label: isChinese ? '下一步增强' : 'Next enrichment',
               value: isChinese ? '补真实销售流程、整合和案例' : 'Add real sales workflows, integrations, and cases',
-              note: isChinese
-                ? '让页面更像真实运营文档。'
-                : 'Make the page feel closer to real ops notes.',
+              note: isChinese ? '让页面更像真实运营文档。' : 'Make the page feel closer to real ops notes.',
             },
           ]}
         />
+
+        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '最近验证' : 'Last checked'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '销售入口已和榜单、对比页、真实条目连在一起。'
+                : 'The sales entry now connects ranking, comparison, and real listings.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '当前判断' : 'Current judgment'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-700'>
+              {isChinese
+                ? '保留索引，继续补真实销售流程和案例。'
+                : 'Keep indexable and continue adding real sales workflows and cases.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '下一步' : 'Next step'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-700'>
+              {isChinese ? '补一组线索到成交的真实路径。' : 'Add one real path from lead to close.'}
+            </p>
+          </div>
+        </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

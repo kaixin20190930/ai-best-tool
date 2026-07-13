@@ -184,26 +184,54 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '验证范围' : 'Checked scope',
               value: isChinese ? '广告、邮件、社媒、落地页' : 'Ads, email, social, landing pages',
-              note: isChinese
-                ? '先看它是否能嵌入你的渠道栈。'
-                : 'First check whether it fits your channel stack.',
+              note: isChinese ? '先看它是否能嵌入你的渠道栈。' : 'First check whether it fits your channel stack.',
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
               value: isChinese ? '保留索引，接榜单与对比页' : 'Indexable with ranking and comparison paths',
-              note: isChinese
-                ? '把增长意图导向更具体的选择。'
-                : 'Guide growth intent into more specific choices.',
+              note: isChinese ? '把增长意图导向更具体的选择。' : 'Guide growth intent into more specific choices.',
             },
             {
               label: isChinese ? '下一步增强' : 'Next enrichment',
               value: isChinese ? '补真实投放、内容和报告样例' : 'Add real campaign, content, and reporting examples',
-              note: isChinese
-                ? '减少空泛的营销话术。'
-                : 'Reduce generic marketing talk.',
+              note: isChinese ? '减少空泛的营销话术。' : 'Reduce generic marketing talk.',
             },
           ]}
         />
+
+        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '最近验证' : 'Last checked'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '营销入口已和榜单、对比页、分类页一起收口。'
+                : 'The marketing entry now aligns with ranking, comparison, and category paths.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '当前判断' : 'Current judgment'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-700'>
+              {isChinese
+                ? '保留索引，继续补真实投放、邮件和社媒样例。'
+                : 'Keep indexable and continue adding real ad, email, and social examples.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '下一步' : 'Next step'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-700'>
+              {isChinese
+                ? '补一组真实工作流案例，再决定是否继续扩量。'
+                : 'Add a real workflow case before deciding whether to expand further.'}
+            </p>
+          </div>
+        </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

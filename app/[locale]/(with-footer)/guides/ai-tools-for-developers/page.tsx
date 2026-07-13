@@ -5,8 +5,8 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideActionSection from '@/components/guides/GuideActionSection';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
 
@@ -194,16 +194,12 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '验证范围' : 'Checked scope',
               value: isChinese ? '编辑器、API、自动化、发布' : 'Editor, API, automation, release',
-              note: isChinese
-                ? '先看它是否适配真实构建流程。'
-                : 'First check whether it fits the real build workflow.',
+              note: isChinese ? '先看它是否适配真实构建流程。' : 'First check whether it fits the real build workflow.',
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
               value: isChinese ? '保留索引，接榜单与对比页' : 'Indexable with ranking and comparison paths',
-              note: isChinese
-                ? '让用户从总览走向更具体的选择。'
-                : 'Move users from overview to more specific choices.',
+              note: isChinese ? '让用户从总览走向更具体的选择。' : 'Move users from overview to more specific choices.',
             },
             {
               label: isChinese ? '下一步增强' : 'Next enrichment',
@@ -214,6 +210,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             },
           ]}
         />
+
+        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '最近验证' : 'Last checked'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '开发者入口已和编码、自动化和部署路径收口。'
+                : 'The developer entry now aligns with coding, automation, and deployment paths.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '当前判断' : 'Current judgment'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-700'>
+              {isChinese
+                ? '保留索引，继续补真实工作流和调试案例。'
+                : 'Keep indexable and continue adding real workflows and debugging cases.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '下一步' : 'Next step'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-700'>
+              {isChinese ? '补一个真实仓库协作案例。' : 'Add one real repo collaboration case.'}
+            </p>
+          </div>
+        </section>
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

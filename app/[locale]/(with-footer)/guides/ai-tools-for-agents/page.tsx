@@ -5,8 +5,8 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideActionSection from '@/components/guides/GuideActionSection';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -184,9 +184,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '验证范围' : 'Checked scope',
               value: isChinese ? '多步骤、工具调用、状态、接管' : 'Multi-step tasks, tool use, state, handoff',
-              note: isChinese
-                ? '先看它是否适合长期执行。'
-                : 'First check whether it fits long-running execution.',
+              note: isChinese ? '先看它是否适合长期执行。' : 'First check whether it fits long-running execution.',
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -197,13 +195,45 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             },
             {
               label: isChinese ? '下一步增强' : 'Next enrichment',
-              value: isChinese ? '补真实工作流、失败恢复和日志样例' : 'Add real workflows, recovery cases, and log samples',
-              note: isChinese
-                ? '让页面出现真实执行信号。'
-                : 'Make the page reflect real execution signals.',
+              value: isChinese
+                ? '补真实工作流、失败恢复和日志样例'
+                : 'Add real workflows, recovery cases, and log samples',
+              note: isChinese ? '让页面出现真实执行信号。' : 'Make the page reflect real execution signals.',
             },
           ]}
         />
+
+        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '最近验证' : 'Last checked'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? 'Agent 入口已和榜单、对比页和提交路径收口。'
+                : 'The agent entry now aligns with ranking, comparison, and submission paths.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '当前判断' : 'Current judgment'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-700'>
+              {isChinese
+                ? '保留索引，继续补真实多步骤执行和治理案例。'
+                : 'Keep indexable and continue adding real multi-step execution and governance cases.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '下一步' : 'Next step'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-700'>
+              {isChinese ? '补一个真实 Agent 执行回路。' : 'Add one real agent execution loop.'}
+            </p>
+          </div>
+        </section>
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

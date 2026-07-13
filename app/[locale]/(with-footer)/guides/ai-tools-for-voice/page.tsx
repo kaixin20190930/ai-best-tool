@@ -266,9 +266,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '验证范围' : 'Checked scope',
               value: isChinese ? '转写、配音、对话、导出' : 'Transcription, dubbing, conversation, export',
-              note: isChinese
-                ? '先看它是否能稳定进入工作流。'
-                : 'First see whether it fits your workflow reliably.',
+              note: isChinese ? '先看它是否能稳定进入工作流。' : 'First see whether it fits your workflow reliably.',
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -286,6 +284,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             },
           ]}
         />
+
+        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '最近验证' : 'Last checked'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '语音入口已和榜单、对比页和提交路径收口。'
+                : 'The voice entry now aligns with ranking, comparison, and submission paths.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '当前判断' : 'Current judgment'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-700'>
+              {isChinese
+                ? '保留索引，继续补真实配音与转写案例。'
+                : 'Keep indexable and continue adding real dubbing and transcription cases.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '下一步' : 'Next step'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-700'>
+              {isChinese ? '补一个真实语音导出样例。' : 'Add one real voice export example.'}
+            </p>
+          </div>
+        </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
