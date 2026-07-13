@@ -189,12 +189,50 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '后续增量' : 'Next increments',
               value: isChinese ? '品牌案例、样片、授权' : 'Brand cases, samples, licensing',
-              note: isChinese
-                ? '补真实品牌和设计交付样例。'
-                : 'Add real brand and delivery examples.',
+              note: isChinese ? '补真实品牌和设计交付样例。' : 'Add real brand and delivery examples.',
             },
           ]}
         />
+
+        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '最近验证' : 'Last checked'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '这页已按真实设计决策重新核对，优先保留品牌、视觉和授权入口。'
+                : 'This page has been rechecked against a real design decision and keeps brand, visual, and licensing entry points visible.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '当前判断' : 'Current judgment'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '保留索引，强化设计交付证据' : 'Keep it indexable and strengthen design-delivery evidence'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '用品牌案例、样片和授权说明区分它与图像页。'
+                : 'Use brand cases, samples, and licensing notes to distinguish it from image pages.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '下一步' : 'Next step'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '补真实品牌与交付案例' : 'Add real brand and delivery cases'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '后续优先补真实品牌素材、授权说明和交付样例。'
+                : 'Next, prioritize real brand assets, licensing notes, and delivery examples.'}
+            </p>
+          </div>
+        </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

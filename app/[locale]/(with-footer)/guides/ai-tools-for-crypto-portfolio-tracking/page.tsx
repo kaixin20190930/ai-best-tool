@@ -334,12 +334,52 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '后续增量' : 'Next increments',
               value: isChinese ? '真实钱包结构、看板、截图' : 'Real wallet setups, dashboards, screenshots',
-              note: isChinese
-                ? '补真实组合结构和看板例子。'
-                : 'Add real portfolio structures and dashboard examples.',
+              note: isChinese ? '补真实组合结构和看板例子。' : 'Add real portfolio structures and dashboard examples.',
             },
           ]}
         />
+
+        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '最近验证' : 'Last checked'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '这页已按真实资产追踪决策重新核对，优先保留组合、归集和持仓入口。'
+                : 'This page has been rechecked against a real portfolio-tracking decision and keeps portfolio, rollup, and holdings entry points visible.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '当前判断' : 'Current judgment'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese
+                ? '保留索引，强化资产看板证据'
+                : 'Keep it indexable and strengthen portfolio-dashboard evidence'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '用真实钱包结构、看板和截图区分它与监控页。'
+                : 'Use real wallet setups, dashboards, and screenshots to distinguish it from monitoring pages.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '下一步' : 'Next step'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '补真实组合与看板案例' : 'Add real portfolio and dashboard cases'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '后续优先补真实组合结构、看板和持仓截图。'
+                : 'Next, prioritize real portfolio structures, dashboards, and holdings screenshots.'}
+            </p>
+          </div>
+        </section>
 
         <GuideActionSection
           locale={locale}
