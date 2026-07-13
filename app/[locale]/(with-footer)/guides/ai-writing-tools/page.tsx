@@ -31,6 +31,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-13';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -171,6 +173,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '这页优先检查写作场景、语气稳定性、模板能力、限制和更新信号，避免只看“生成速度”。'
@@ -181,8 +184,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '验证范围' : 'Checked scope',
               value: isChinese ? '场景、语气、模板、限制' : 'Use case, tone, templates, limits',
               note: isChinese
-                ? '写作工具应该按工作流来分，不是只看“会不会写”。'
-                : 'Writing tools should be judged by workflow fit, not just whether they can write.',
+                ? `当前可参考分类信号有 ${categoryCount} 个，写作工具应该按工作流来分，不是只看“会不会写”。`
+                : `${categoryCount} category signals are available, so writing tools should be judged by workflow fit, not just whether they can write.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -195,8 +198,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '下一步补强' : 'Next enrichment',
               value: isChinese ? '补真实案例与反馈' : 'Add real cases and feedback',
               note: isChinese
-                ? '后续会逐步把内容类型、实际限制和评论信号补得更完整。'
-                : 'Next, we should add more content types, real limits, and feedback signals.',
+                ? `这页已于 ${checkedAt} 重新核对，后续会逐步把内容类型、实际限制和评论信号补得更完整。`
+                : `This page was rechecked on ${checkedAt}, and next we should add more content types, real limits, and feedback signals.`,
             },
           ]}
         />
@@ -206,11 +209,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实写作决策重新核对，优先保留场景、语气和模板入口。'
-                : 'This page has been rechecked against a real writing decision and keeps scenarios, tone, and template entry points visible.'}
+                ? `这页已按真实写作决策重新核对，优先保留场景、语气和模板入口。当前可参考分类信号 ${categoryCount} 个。`
+                : `This page has been rechecked against a real writing decision and keeps scenarios, tone, and template entry points visible, with ${categoryCount} category signals available.`}
             </p>
           </div>
           <div>
