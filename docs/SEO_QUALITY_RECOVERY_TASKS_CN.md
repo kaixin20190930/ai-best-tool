@@ -529,3 +529,41 @@ Google 不会因为内容由 AI 辅助生成就直接惩罚页面，但会压低
 - Agent、API 可观测、营销、研究、销售、Make、Notion、Notta、Perplexity、Sora 和 Suno 比较页补齐最近验证、当前判断和下一步增强
 - 继续把高意图工具对比页的“可验证性”统一到一个标准里
 - 为后续真实案例、评论和 owner 认领继续留入口
+
+## 二十二、第十三梯队 freshness 补齐记录
+
+更新时间：2026-07-13
+
+已补最近验证块的页面：
+
+- `/guides/agent-tools`
+- `/guides/ai-agent-tools`
+- `/guides/ai-api-observability-tools`
+- `/guides/ai-automation-tools`
+- `/guides/ai-code-review-tools`
+- `/guides/ai-evals-tools`
+- `/guides/ai-marketing-tools`
+- `/guides/ai-model-routing-tools`
+- `/guides/ai-research-tools`
+- `/guides/ai-sales-tools`
+- `/guides/ai-tools-for-defi-analytics`
+- `/guides/ai-web3-tools`
+- `/guides/automation-tools`
+- `/guides/chatbot-tools`
+- `/guides/developer-tools`
+- `/guides/image-tools`
+- `/guides/marketing-tools`
+- `/guides/note-taking-tools`
+- `/guides/productivity-tools`
+- `/guides/research-tools`
+- `/guides/sales-tools`
+- `/guides/seo-tools`
+- `/guides/video-tools`
+- `/guides/voice-tools`
+- `/guides/writing-tools`
+
+这轮模块重点解决：
+
+- 把普通指南页和场景页补上统一的最近验证信号
+- 继续把高意图工具页的“可验证性”统一到一个标准里
+- 为后续真实案例、评论和 owner 认领继续留入口
