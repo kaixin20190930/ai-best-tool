@@ -29,6 +29,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
   const checkedAt = '2026-07-13';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -187,8 +188,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '验证范围' : 'Checked scope',
               value: isChinese ? '广告、邮件、社媒、落地页 + 榜单' : 'Ads, email, social, landing pages + rankings',
               note: isChinese
-                ? `当前可参考分类信号有 ${categories.length} 个，先看它是否能嵌入你的渠道栈。`
-                : `${categories.length} category signals are available, and fit with your channel stack comes first.`,
+                ? `当前可参考分类信号有 ${categoryCount} 个，先看它是否能嵌入你的渠道栈。`
+                : `${categoryCount} category signals are available, and fit with your channel stack comes first.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -200,7 +201,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               value: isChinese
                 ? '补真实投放、内容、报告、最近验证'
                 : 'Add real campaign, content, reporting, and recent verification',
-              note: isChinese ? '减少空泛的营销话术。' : 'Reduce generic marketing talk.',
+              note: isChinese
+                ? `这页已于 ${checkedAt} 重新核对，继续减少空泛的营销话术。`
+                : `This page was rechecked on ${checkedAt}, and generic marketing talk should stay minimized.`,
             },
           ]}
         />
@@ -210,31 +213,35 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? `营销入口已和榜单、对比页、分类页一起收口，当前可参考分类信号 ${categories.length} 个。`
-                : `The marketing entry now aligns with ranking, comparison, and category paths, with ${categories.length} category signals available.`}
+                ? `营销入口已和榜单、对比页、分类页一起收口，当前可参考分类信号 ${categoryCount} 个。`
+                : `The marketing entry now aligns with ranking, comparison, and category paths, with ${categoryCount} category signals available.`}
             </p>
           </div>
           <div>
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '当前判断' : 'Current judgment'}
             </p>
-            <p className='mt-2 text-sm leading-6 text-slate-700'>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '保留索引，继续补真实营销证据' : 'Keep it indexable and keep adding real marketing evidence'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '保留索引，继续补真实投放、邮件和社媒样例。'
-                : 'Keep indexable and continue adding real ad, email, and social examples.'}
+                ? '用投放、邮件、社媒和报告样例把它从泛营销页里拉出来。'
+                : 'Use campaign, email, social, and reporting examples to separate it from generic marketing pages.'}
             </p>
           </div>
           <div>
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '下一步' : 'Next step'}
             </p>
-            <p className='mt-2 text-sm leading-6 text-slate-700'>
-              {isChinese
-                ? '补一组真实工作流案例，再决定是否继续扩量。'
-                : 'Add a real workflow case before deciding whether to expand further.'}
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '补真实营销工作流案例' : 'Add a real marketing workflow case'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese ? '先补广告、邮件和社媒三段式案例。' : 'Start with ad, email, and social cases.'}
             </p>
           </div>
         </section>
