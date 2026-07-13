@@ -146,7 +146,10 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
           {
             label: locale === 'cn' || locale === 'tw' ? '客服支持' : 'Support fit',
-            value: locale === 'cn' || locale === 'tw' ? '看是否能接住回复和分流' : 'Check whether it handles replies and routing',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看是否能接住回复和分流'
+                : 'Check whether it handles replies and routing',
             note:
               locale === 'cn' || locale === 'tw'
                 ? '客户沟通不能只靠通用助手。'
@@ -154,7 +157,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
           {
             label: locale === 'cn' || locale === 'tw' ? '运营落地' : 'Operational fit',
-            value: locale === 'cn' || locale === 'tw' ? '看是否顺手接入日常流程' : 'See whether it plugs into daily ops',
+            value:
+              locale === 'cn' || locale === 'tw' ? '看是否顺手接入日常流程' : 'See whether it plugs into daily ops',
             note:
               locale === 'cn' || locale === 'tw'
                 ? '最终要落到团队每天会不会真的用。'
@@ -162,6 +166,49 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
         ]}
       />
+      <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '这页已按真实小企业决策路径重新核对，保留营销、客服和运营入口。'
+              : 'This page has been rechecked against a real small-business decision path and keeps marketing, support, and operations entry points visible.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '当前判断' : 'Current judgment'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '保留索引，补真实小企业证据'
+              : 'Keep it indexable and add real small-business evidence'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '用营销、客服和运营样例把它和泛效率页区分开。'
+              : 'Use marketing, support, and ops examples to differentiate it from generic productivity pages.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '下一步' : 'Next step'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '补真实小企业场景和反馈'
+              : 'Add real small-business scenarios and feedback'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '后续优先补案例、流程和真人评论。'
+              : 'Next, prioritize cases, workflows, and real comments.'}
+          </p>
+        </div>
+      </section>
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

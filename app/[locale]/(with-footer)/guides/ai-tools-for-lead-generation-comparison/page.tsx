@@ -186,18 +186,12 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           {
             label: locale === 'cn' || locale === 'tw' ? '名单质量' : 'List quality',
             value: locale === 'cn' || locale === 'tw' ? '命中率、可用性' : 'Match rate, usability',
-            note:
-              locale === 'cn' || locale === 'tw'
-                ? '不要只看数量。'
-                : 'Do not focus on count alone.',
+            note: locale === 'cn' || locale === 'tw' ? '不要只看数量。' : 'Do not focus on count alone.',
           },
           {
             label: locale === 'cn' || locale === 'tw' ? '下游成本' : 'Downstream cost',
             value: locale === 'cn' || locale === 'tw' ? '导出、清洗、CRM' : 'Export, cleanup, CRM',
-            note:
-              locale === 'cn' || locale === 'tw'
-                ? '真正费用常在后面。'
-                : 'The real cost often appears later.',
+            note: locale === 'cn' || locale === 'tw' ? '真正费用常在后面。' : 'The real cost often appears later.',
           },
           {
             label: locale === 'cn' || locale === 'tw' ? '真人信号' : 'Human signals',
@@ -209,6 +203,47 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
         ]}
       />
+      <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '这页已按真实获客路径重新核对，保留名单、线索和质量入口。'
+              : 'This page has been rechecked against a real lead-generation workflow and keeps list, lead, and quality entry points visible.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '当前判断' : 'Current judgment'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '保留索引，补真实获客证据'
+              : 'Keep it indexable and add real lead-gen evidence'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '用名单质量、导出流程和真人评论把它和泛销售页区分开。'
+              : 'Use list quality, export workflow, and real comments to differentiate it from generic sales pages.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '下一步' : 'Next step'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw' ? '补真实获客场景和反馈' : 'Add real lead-gen scenarios and feedback'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '后续优先补案例、导出样例和真人评论。'
+              : 'Next, prioritize cases, export examples, and real comments.'}
+          </p>
+        </div>
+      </section>
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

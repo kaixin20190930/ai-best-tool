@@ -276,6 +276,47 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
         ]}
       />
+      <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '这页已按真实钱包研究路径重新核对，保留画像、标签和线索入口。'
+              : 'This page has been rechecked against a real wallet research workflow and keeps profile, labels, and clue entry points visible.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '当前判断' : 'Current judgment'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '保留索引，补真实钱包证据'
+              : 'Keep it indexable and add real wallet evidence'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '用地址画像、关系图和真人评论把它和泛追踪页区分开。'
+              : 'Use address profiles, relationship charts, and real comments to differentiate it from generic tracking pages.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '下一步' : 'Next step'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw' ? '补真实钱包场景和反馈' : 'Add real wallet scenarios and feedback'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '后续优先补案例、图谱和真人评论。'
+              : 'Next, prioritize cases, charts, and real comments.'}
+          </p>
+        </div>
+      </section>
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

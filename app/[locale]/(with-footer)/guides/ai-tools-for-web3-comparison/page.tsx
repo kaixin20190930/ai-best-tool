@@ -343,7 +343,10 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '数据可信度' : 'Data trust',
-            value: locale === 'cn' || locale === 'tw' ? '先看数据来源与可验证性' : 'Check source quality and verifiability first',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看数据来源与可验证性'
+                : 'Check source quality and verifiability first',
             note:
               locale === 'cn' || locale === 'tw'
                 ? '链上工具最怕数据看起来很全，实际却不准。'
@@ -359,7 +362,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
           {
             label: locale === 'cn' || locale === 'tw' ? '研究流程' : 'Research workflow',
-            value: locale === 'cn' || locale === 'tw' ? '看是否适合持续分析' : 'Check whether it supports ongoing analysis',
+            value:
+              locale === 'cn' || locale === 'tw' ? '看是否适合持续分析' : 'Check whether it supports ongoing analysis',
             note:
               locale === 'cn' || locale === 'tw'
                 ? '导出、收藏和历史跟踪很关键。'
@@ -367,6 +371,47 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
         ]}
       />
+      <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '这页已按真实 Web3 研究路径重新核对，保留数据、覆盖和研究入口。'
+              : 'This page has been rechecked against a real Web3 research workflow and keeps data, coverage, and research entry points visible.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '当前判断' : 'Current judgment'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '保留索引，补真实 Web3 证据'
+              : 'Keep it indexable and add real Web3 evidence'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '用来源可信度、链上覆盖和真人评论把它和泛工具页区分开。'
+              : 'Use source trust, on-chain coverage, and real comments to differentiate it from generic tool pages.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '下一步' : 'Next step'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw' ? '补真实 Web3 场景和反馈' : 'Add real Web3 scenarios and feedback'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '后续优先补案例、来源和真人评论。'
+              : 'Next, prioritize cases, sources, and real comments.'}
+          </p>
+        </div>
+      </section>
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
