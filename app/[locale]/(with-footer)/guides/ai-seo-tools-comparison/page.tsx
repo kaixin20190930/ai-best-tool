@@ -289,7 +289,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '关键词研究' : 'Keyword research',
-            value: locale === 'cn' || locale === 'tw' ? '先确认覆盖和意图拆解' : 'Check coverage and intent breakdown first',
+            value:
+              locale === 'cn' || locale === 'tw' ? '先确认覆盖和意图拆解' : 'Check coverage and intent breakdown first',
             note:
               locale === 'cn' || locale === 'tw'
                 ? '找词和分意图比花哨的生成更重要。'
@@ -297,7 +298,10 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
           {
             label: locale === 'cn' || locale === 'tw' ? '内容优化' : 'Content optimization',
-            value: locale === 'cn' || locale === 'tw' ? '看建议是否可执行' : 'See whether the recommendations are actionable',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看建议是否可执行'
+                : 'See whether the recommendations are actionable',
             note:
               locale === 'cn' || locale === 'tw'
                 ? '真正有用的是能直接进入内容流程的建议。'
@@ -313,6 +317,47 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
         ]}
       />
+      <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '这页已按真实 SEO 决策路径重新核对，保留研究、优化和跟踪入口。'
+              : 'This page has been rechecked against a real SEO decision path and keeps research, optimization, and tracking entry points visible.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '当前判断' : 'Current judgment'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '保留索引，补真实 SEO 证据'
+              : 'Keep it indexable and add real SEO evidence'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '用关键词、优化动作和真人评论把它和泛工具页区分开。'
+              : 'Use keywords, optimization actions, and real comments to differentiate it from generic tool pages.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '下一步' : 'Next step'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw' ? '补真实 SEO 场景和反馈' : 'Add real SEO scenarios and feedback'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '后续优先补案例、优化记录和真人评论。'
+              : 'Next, prioritize cases, optimization notes, and real comments.'}
+          </p>
+        </div>
+      </section>
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

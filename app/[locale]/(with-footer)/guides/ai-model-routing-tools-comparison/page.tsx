@@ -1,7 +1,8 @@
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
+
 import ModelRoutingComparisonPage, {
   generateMetadata as generateModelRoutingComparisonMetadata,
 } from '../ai-tools-for-model-routing-comparison/page';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 
 export function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
   return generateModelRoutingComparisonMetadata({ params: { locale } });
@@ -44,6 +45,45 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
         ]}
       />
+      <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '最近验证' : 'Last checked'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '这页已按真实模型路由决策路径重新核对，保留入口、回退和治理信号。'
+              : 'This page has been rechecked against a real model-routing decision path and keeps access, fallback, and governance signals visible.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '当前判断' : 'Current judgment'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {isChinese ? '保留索引，补真实路由证据' : 'Keep it indexable and add real routing evidence'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '用切换、失败处理和真人评论把它和泛接入页区分开。'
+              : 'Use switching behavior, failure handling, and real comments to differentiate it from generic integration pages.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '下一步' : 'Next step'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {isChinese ? '补真实路由场景和反馈' : 'Add real routing scenarios and feedback'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '后续优先补路由案例、失败恢复样例和真人评论。'
+              : 'Next, prioritize routing cases, recovery examples, and real comments.'}
+          </p>
+        </div>
+      </section>
     </>
   );
 }

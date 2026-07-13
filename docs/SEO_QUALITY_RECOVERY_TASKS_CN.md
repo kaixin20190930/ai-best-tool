@@ -345,3 +345,22 @@ Google 不会因为内容由 AI 辅助生成就直接惩罚页面，但会压低
 - 学生、创作者和设计类高意图页面补齐最近验证、当前判断和下一步增强
 - 让页面更明确地说明自己和泛目录页、泛生成页的区别
 - 为后续真实案例、评论和 owner 认领继续留入口
+
+## 十三、第四梯队 freshness 补齐记录
+
+更新时间：2026-07-13
+
+已补最近验证块的页面：
+
+- `/guides/ai-chatbot-tools-comparison`
+- `/guides/ai-coding-tools-comparison`
+- `/guides/ai-image-tools-comparison`
+- `/guides/ai-productivity-tools-comparison`
+- `/guides/ai-seo-tools-comparison`
+- `/guides/ai-model-routing-tools-comparison`
+
+这轮模块重点解决：
+
+- 聊天、代码、图片、生产力、SEO 和模型路由比较页补齐最近验证、当前判断和下一步增强
+- 让高意图页更明确表达它们和泛目录页、泛生成页的差异
+- 为后续真实案例、评论和 owner 认领继续留入口

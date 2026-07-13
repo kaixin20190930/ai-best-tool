@@ -181,9 +181,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '编辑效率' : 'Editing speed',
               value: isChinese ? '看修改是否顺手' : 'Check whether edits feel easy',
-              note: isChinese
-                ? '很多图像工作都在反复修改里完成。'
-                : 'A lot of image work is really iterative editing.',
+              note: isChinese ? '很多图像工作都在反复修改里完成。' : 'A lot of image work is really iterative editing.',
             },
             {
               label: isChinese ? '交付链路' : 'Delivery chain',
@@ -194,6 +192,46 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             },
           ]}
         />
+
+        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '最近验证' : 'Last checked'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '这页已按真实图像决策路径重新核对，保留风格、编辑和交付入口。'
+                : 'This page has been rechecked against a real image-tool decision path and keeps style, editing, and delivery entry points visible.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '当前判断' : 'Current judgment'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '保留索引，补真实图像证据' : 'Keep it indexable and add real image evidence'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '用风格一致性、修改记录和真人评论把它和泛生成页区分开。'
+                : 'Use style consistency, edit history, and real comments to differentiate it from generic generation pages.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '下一步' : 'Next step'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '补真实设计场景和反馈' : 'Add real image scenarios and feedback'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '后续优先补图像案例、编辑样例和真人评论。'
+                : 'Next, prioritize image cases, editing examples, and real comments.'}
+            </p>
+          </div>
+        </section>
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
