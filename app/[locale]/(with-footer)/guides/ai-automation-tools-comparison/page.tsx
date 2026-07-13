@@ -50,7 +50,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {isChinese
               ? '这页已按真实自动化决策路径重新核对，保留流程、重试和维护入口。'

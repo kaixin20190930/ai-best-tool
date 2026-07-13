@@ -175,7 +175,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按真实创作者决策路径重新核对，保留持续产出、再包装和发布入口。'
