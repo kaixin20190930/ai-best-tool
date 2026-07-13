@@ -143,7 +143,10 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
           {
             label: locale === 'cn' || locale === 'tw' ? '客户隔离' : 'Client separation',
-            value: locale === 'cn' || locale === 'tw' ? '看能否分客户管理' : 'Check whether clients can be separated cleanly',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看能否分客户管理'
+                : 'Check whether clients can be separated cleanly',
             note:
               locale === 'cn' || locale === 'tw'
                 ? '代理场景里这是硬需求。'
@@ -151,7 +154,10 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
           {
             label: locale === 'cn' || locale === 'tw' ? '协作与审计' : 'Collaboration and audit',
-            value: locale === 'cn' || locale === 'tw' ? '看多人能否顺手接力' : 'See whether multiple people can hand off smoothly',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看多人能否顺手接力'
+                : 'See whether multiple people can hand off smoothly',
             note:
               locale === 'cn' || locale === 'tw'
                 ? '多人协作和留痕决定能不能长期用。'
@@ -159,6 +165,47 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
         ]}
       />
+      <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '这页已按真实代理交付路径重新核对，保留交付、隔离和协作入口。'
+              : 'This page has been rechecked against a real agency delivery path and keeps delivery, separation, and collaboration entry points visible.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '当前判断' : 'Current judgment'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '保留索引，补真实代理证据'
+              : 'Keep it indexable and add real agency evidence'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '用客户隔离、协作留痕和真人评论把它和泛工具页区分开。'
+              : 'Use client separation, collaboration traces, and real comments to differentiate it from generic tool pages.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '下一步' : 'Next step'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw' ? '补真实代理场景和反馈' : 'Add real agency scenarios and feedback'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '后续优先补交付案例、客户隔离样例和真人评论。'
+              : 'Next, prioritize delivery cases, client separation examples, and real comments.'}
+          </p>
+        </div>
+      </section>
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

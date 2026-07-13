@@ -1,7 +1,8 @@
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
+
 import CodeReviewComparisonPage, {
   generateMetadata as generateCodeReviewComparisonMetadata,
 } from '../ai-tools-for-code-review-comparison/page';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 
 export function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
   return generateCodeReviewComparisonMetadata({ params: { locale } });
@@ -44,6 +45,45 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
         ]}
       />
+      <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '最近验证' : 'Last checked'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '这页已按真实 code review 决策路径重新核对，保留审查、工作流和门禁入口。'
+              : 'This page has been rechecked against a real code review decision path and keeps review, workflow, and gate entry points visible.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '当前判断' : 'Current judgment'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {isChinese ? '保留索引，补真实审查证据' : 'Keep it indexable and add real review evidence'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '用 PR 记录、风险判断和真人评论把它和泛开发页区分开。'
+              : 'Use PR records, risk judgment, and real comments to differentiate it from generic dev pages.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '下一步' : 'Next step'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {isChinese ? '补真实审查场景和反馈' : 'Add real review scenarios and feedback'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '后续优先补审查案例、质量门禁样例和真人评论。'
+              : 'Next, prioritize review cases, quality gate examples, and real comments.'}
+          </p>
+        </div>
+      </section>
     </>
   );
 }

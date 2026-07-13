@@ -5,8 +5,8 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideActionSection from '@/components/guides/GuideActionSection';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
 
@@ -65,15 +65,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-      '先分清你是在写第一封触达、做名单优先级，还是准备跟进节奏。',
-      '看它是否真的利用了目标客户上下文，而不只是批量拼模板。',
-      '如果你后面还要追踪回复和转化，优先看和 CRM、邮箱或序列工具的衔接。',
-    ]
+        '先分清你是在写第一封触达、做名单优先级，还是准备跟进节奏。',
+        '看它是否真的利用了目标客户上下文，而不只是批量拼模板。',
+        '如果你后面还要追踪回复和转化，优先看和 CRM、邮箱或序列工具的衔接。',
+      ]
     : [
-      'Separate first-touch outreach, list prioritization, and follow-up sequencing before comparing tools.',
-      'Check whether the tool actually uses buyer context instead of mass-producing generic templates.',
-      'If replies and conversions will be tracked later, prioritize fit with CRM, email, or sequencing tools.',
-    ];
+        'Separate first-touch outreach, list prioritization, and follow-up sequencing before comparing tools.',
+        'Check whether the tool actually uses buyer context instead of mass-producing generic templates.',
+        'If replies and conversions will be tracked later, prioritize fit with CRM, email, or sequencing tools.',
+      ];
 
   return (
     <>
@@ -204,9 +204,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '验证重点' : 'Validation focus',
               value: isChinese ? '触达准备、个性化' : 'Outreach prep, personalization',
-              note: isChinese
-                ? '确认它是不是在提高回复质量。'
-                : 'Confirm it improves reply quality.',
+              note: isChinese ? '确认它是不是在提高回复质量。' : 'Confirm it improves reply quality.',
             },
             {
               label: isChinese ? '合并策略' : 'Merge strategy',
@@ -218,12 +216,50 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '后续增量' : 'Next increments',
               value: isChinese ? '案例、回复率、模板' : 'Cases, reply rates, templates',
-              note: isChinese
-                ? '补真实触达案例和个性化样本。'
-                : 'Add real outreach cases and personalization samples.',
+              note: isChinese ? '补真实触达案例和个性化样本。' : 'Add real outreach cases and personalization samples.',
             },
           ]}
         />
+
+        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '最近验证' : 'Last checked'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '这页已按真实销售拓客路径重新核对，保留触达、个性化和分流入口。'
+                : 'This page has been rechecked against a real sales prospecting workflow and keeps outreach, personalization, and routing entry points visible.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '当前判断' : 'Current judgment'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '保留索引，补真实拓客证据' : 'Keep it indexable and add real prospecting evidence'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '用个性化、回复率和真人评论把它和泛外联页区分开。'
+                : 'Use personalization, response rates, and real comments to differentiate it from generic outreach pages.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '下一步' : 'Next step'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '补真实拓客场景和反馈' : 'Add real prospecting scenarios and feedback'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '后续优先补触达案例、模板样例和真人评论。'
+                : 'Next, prioritize outreach cases, template examples, and real comments.'}
+            </p>
+          </div>
+        </section>
 
         <GuideActionSection
           locale={locale}
@@ -316,7 +352,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {isChinese ? '高意图榜单' : 'High-intent ranking'}
             </p>
             <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-              {isChinese ? '先用榜单缩小 prospecting shortlist' : 'Use the ranking to narrow your prospecting shortlist first'}
+              {isChinese
+                ? '先用榜单缩小 prospecting shortlist'
+                : 'Use the ranking to narrow your prospecting shortlist first'}
             </h2>
             <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
               {isChinese

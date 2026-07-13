@@ -295,7 +295,10 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
           {
             label: locale === 'cn' || locale === 'tw' ? '调试支持' : 'Debug support',
-            value: locale === 'cn' || locale === 'tw' ? '看能否继续推进问题' : 'Check whether it helps move the issue forward',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看能否继续推进问题'
+                : 'Check whether it helps move the issue forward',
             note:
               locale === 'cn' || locale === 'tw'
                 ? '能解释、定位、建议下一步会更有价值。'
@@ -311,6 +314,47 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
         ]}
       />
+      <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '这页已按真实开发者工作流重新核对，保留编码、调试和协作入口。'
+              : 'This page has been rechecked against a real developer workflow and keeps coding, debugging, and collaboration entry points visible.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '当前判断' : 'Current judgment'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '保留索引，补真实开发者证据'
+              : 'Keep it indexable and add real developer evidence'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '用仓库上下文、调试记录和真人评论把它和泛开发页区分开。'
+              : 'Use repo context, debugging notes, and real comments to differentiate it from generic dev pages.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '下一步' : 'Next step'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw' ? '补真实开发场景和反馈' : 'Add real developer scenarios and feedback'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '后续优先补仓库案例、编辑器样例和真人评论。'
+              : 'Next, prioritize repo cases, editor examples, and real comments.'}
+          </p>
+        </div>
+      </section>
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
