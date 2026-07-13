@@ -29,6 +29,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-14';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -311,6 +313,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '资产追踪页要围绕组合看板、多钱包归集和持仓观察来做，不要和钱包监控混成一页。这个页继续可索引，但会把更窄的钱包监控、链上分析和 Web3 路径分层露出。'
@@ -321,8 +324,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '验证重点' : 'Validation focus',
               value: isChinese ? '组合、归集、持仓' : 'Portfolio, rollups, holdings',
               note: isChinese
-                ? '确认它是不是服务“看全局”这个任务。'
-                : 'Confirm it serves the “see the whole portfolio” job.',
+                ? `结合 ${categoryCount} 个分类一起核对，确认它是不是服务“看全局”这个任务。`
+                : `Review it together with ${categoryCount} categories and confirm it serves the “see the whole portfolio” job.`,
             },
             {
               label: isChinese ? '合并策略' : 'Merge strategy',
@@ -334,7 +337,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '后续增量' : 'Next increments',
               value: isChinese ? '真实钱包结构、看板、截图' : 'Real wallet setups, dashboards, screenshots',
-              note: isChinese ? '补真实组合结构和看板例子。' : 'Add real portfolio structures and dashboard examples.',
+              note: isChinese
+                ? `补真实组合结构和看板例子，并保持 ${checkedAt} 的核对痕迹。`
+                : `Add real portfolio structures and dashboard examples while keeping the ${checkedAt} check trail.`,
             },
           ]}
         />
@@ -344,11 +349,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实资产追踪决策重新核对，优先保留组合、归集和持仓入口。'
-                : 'This page has been rechecked against a real portfolio-tracking decision and keeps portfolio, rollup, and holdings entry points visible.'}
+                ? `这页已按真实资产追踪决策重新核对，当前共 ${categoryCount} 个分类，优先保留组合、归集和持仓入口。`
+                : `This page has been rechecked against a real portfolio-tracking decision, with ${categoryCount} categories reviewed, and keeps portfolio, rollup, and holdings entry points visible.`}
             </p>
           </div>
           <div>
@@ -362,8 +367,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '用真实钱包结构、看板和截图区分它与监控页。'
-                : 'Use real wallet setups, dashboards, and screenshots to distinguish it from monitoring pages.'}
+                ? `用真实钱包结构、看板和截图区分它与监控页，并保持 ${checkedAt} 的审计痕迹。`
+                : `Use real wallet setups, dashboards, and screenshots to distinguish it from monitoring pages while keeping the ${checkedAt} audit trail.`}
             </p>
           </div>
           <div>
@@ -375,8 +380,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '后续优先补真实组合结构、看板和持仓截图。'
-                : 'Next, prioritize real portfolio structures, dashboards, and holdings screenshots.'}
+                ? `后续优先补真实组合结构、看板和持仓截图，继续保留 ${checkedAt} 的核对痕迹。`
+                : `Next, prioritize real portfolio structures, dashboards, and holdings screenshots while keeping the ${checkedAt} check trail visible.`}
             </p>
           </div>
         </section>

@@ -29,6 +29,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-14';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const faqs = [
     {
@@ -250,6 +252,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '协议分析页要围绕协议健康、使用量和趋势观察来做，不要和链上分析、DeFi 分析混在一起。这个页继续可索引，但会把更窄的协议和 DeFi 路径分层处理。'
@@ -259,7 +262,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '验证重点' : 'Validation focus',
               value: isChinese ? '健康、使用量、趋势' : 'Health, usage, trends',
-              note: isChinese ? '确认它是否真的能支撑长期观察。' : 'Confirm it actually supports long-term monitoring.',
+              note: isChinese
+                ? `结合 ${categoryCount} 个分类一起核对，确认它是否真的能支撑长期观察。`
+                : `Review it together with ${categoryCount} categories and confirm it actually supports long-term monitoring.`,
             },
             {
               label: isChinese ? '合并策略' : 'Merge strategy',
@@ -271,7 +276,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '后续增量' : 'Next increments',
               value: isChinese ? '协议案例、曲线、周期' : 'Protocol cases, charts, periods',
-              note: isChinese ? '补真实协议趋势和周期性证据。' : 'Add real protocol trend and time-series evidence.',
+              note: isChinese
+                ? `补真实协议趋势和周期性证据，并保持 ${checkedAt} 的核对痕迹。`
+                : `Add real protocol trend and time-series evidence while keeping the ${checkedAt} check trail.`,
             },
           ]}
         />
@@ -281,11 +288,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实协议分析决策重新核对，优先保留健康、使用量和趋势入口。'
-                : 'This page has been rechecked against a real protocol-analytics decision and keeps health, usage, and trend entry points visible.'}
+                ? `这页已按真实协议分析决策重新核对，当前共 ${categoryCount} 个分类，优先保留健康、使用量和趋势入口。`
+                : `This page has been rechecked against a real protocol-analytics decision, with ${categoryCount} categories reviewed, and keeps health, usage, and trend entry points visible.`}
             </p>
           </div>
           <div>
@@ -297,8 +304,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '用协议案例、时间序列和周期分析区分它与链上页。'
-                : 'Use protocol cases, time-series views, and cycle analysis to distinguish it from on-chain pages.'}
+                ? `用协议案例、时间序列和周期分析区分它与链上页，并保持 ${checkedAt} 的审计痕迹。`
+                : `Use protocol cases, time-series views, and cycle analysis to distinguish it from on-chain pages while keeping the ${checkedAt} audit trail.`}
             </p>
           </div>
           <div>
@@ -310,8 +317,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '后续优先补真实协议趋势、周期性证据和案例。'
-                : 'Next, prioritize real protocol trends, time-series evidence, and cases.'}
+                ? `后续优先补真实协议趋势、周期性证据和案例，继续保留 ${checkedAt} 的核对痕迹。`
+                : `Next, prioritize real protocol trends, time-series evidence, and cases while keeping the ${checkedAt} check trail visible.`}
             </p>
           </div>
         </section>

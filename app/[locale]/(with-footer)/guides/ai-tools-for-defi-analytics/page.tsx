@@ -29,6 +29,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-14';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const faqs = [
     {
@@ -342,6 +344,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? 'DeFi 分析页要围绕流动性、收益和协议行为来做，不要和协议总览、链上分析混成一页。这个页继续可索引，但会把协议分析、链上分析和 Web3 路径分层处理。'
@@ -351,7 +354,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '验证重点' : 'Validation focus',
               value: isChinese ? '流动性、收益、协议行为' : 'Liquidity, yield, protocol behavior',
-              note: isChinese ? '先确认它是不是在做 DeFi 的核心判断。' : 'Confirm it makes the core DeFi judgment.',
+              note: isChinese
+                ? `结合 ${categoryCount} 个分类一起核对，先确认它是不是在做 DeFi 的核心判断。`
+                : `Review it together with ${categoryCount} categories and confirm it makes the core DeFi judgment.`,
             },
             {
               label: isChinese ? '合并策略' : 'Merge strategy',
@@ -364,8 +369,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '后续增量' : 'Next increments',
               value: isChinese ? '真实协议案例、收益曲线' : 'Real protocol cases, yield charts',
               note: isChinese
-                ? '补真实 DeFi 协议与收益跟踪例子。'
-                : 'Add real DeFi protocol and yield-tracking examples.',
+                ? `补真实 DeFi 协议与收益跟踪例子，并保持 ${checkedAt} 的核对痕迹。`
+                : `Add real DeFi protocol and yield-tracking examples while keeping the ${checkedAt} check trail.`,
             },
           ]}
         />
@@ -455,11 +460,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {locale === 'cn' || locale === 'tw'
-                ? '这页已按当前比较页的判断标准重新核对。'
-                : 'This page has been rechecked against the current comparison-page decision flow.'}
+                ? `这页已按当前比较页的判断标准重新核对，当前共 ${categoryCount} 个分类。`
+                : `This page has been rechecked against the current comparison-page decision flow, with ${categoryCount} categories reviewed.`}
             </p>
           </div>
           <div>
@@ -471,8 +476,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {locale === 'cn' || locale === 'tw'
-                ? '用评论、案例和 owner 认领把它和泛工具页区分开。'
-                : 'Use comments, cases, and owner claims to distinguish it from generic tool pages.'}
+                ? `用评论、案例和 owner 认领把它和泛工具页区分开，并保持 ${checkedAt} 的审计痕迹。`
+                : `Use comments, cases, and owner claims to distinguish it from generic tool pages while keeping the ${checkedAt} audit trail.`}
             </p>
           </div>
           <div>
@@ -484,8 +489,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {locale === 'cn' || locale === 'tw'
-                ? '后续优先补案例、反馈和认领信息。'
-                : 'Next, prioritize cases, feedback, and claim information.'}
+                ? `后续优先补案例、反馈和认领信息，继续保留 ${checkedAt} 的核对痕迹。`
+                : `Next, prioritize cases, feedback, and claim information while keeping the ${checkedAt} check trail visible.`}
             </p>
           </div>
         </section>

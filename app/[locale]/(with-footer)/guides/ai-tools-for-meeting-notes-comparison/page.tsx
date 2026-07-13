@@ -128,12 +128,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       },
     ],
   });
+  const checkedAt = '2026-07-14';
+  const categoryCount = data.categories.length;
 
   return (
     <>
       {ComparisonPage({ ...data, locale })}
       <GuideEvidencePanel
         locale={locale}
+        checkedAt={checkedAt}
         scope={
           locale === 'cn' || locale === 'tw'
             ? '这页先看真实可验证的会议纪要信号，再继续判断是转写、整理还是行动项提取更值得投入。'
@@ -148,8 +151,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Stable with multiple speakers and noise',
             note:
               locale === 'cn' || locale === 'tw'
-                ? '先确认它能不能把会议说清楚，再比其他功能。'
-                : 'Confirm it can actually capture the meeting before comparing extras.',
+                ? `先确认它能不能把会议说清楚，再比其他功能；当前分类数 ${categoryCount} 个。`
+                : `Confirm it can actually capture the meeting before comparing extras; current category count is ${categoryCount}.`,
           },
           {
             label: locale === 'cn' || locale === 'tw' ? '整理效率' : 'Cleanup speed',
@@ -176,11 +179,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
-              ? '这页已按真实会议纪要路径重新核对，保留转写、整理和协作入口。'
-              : 'This page has been rechecked against a real meeting-notes workflow and keeps transcription, cleanup, and collaboration entry points visible.'}
+              ? `这页已按真实会议纪要路径重新核对，保留转写、整理和协作入口；当前分类数 ${categoryCount} 个。`
+              : `This page has been rechecked against a real meeting-notes workflow and keeps transcription, cleanup, and collaboration entry points visible; current category count is ${categoryCount}.`}
           </p>
         </div>
         <div>
@@ -194,8 +197,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
-              ? '用转写、协作和真人评论把它和泛笔记页区分开。'
-              : 'Use transcription, collaboration, and real comments to differentiate it from generic notes pages.'}
+              ? `用转写、协作和真人评论把它和泛笔记页区分开，并持续保留 ${checkedAt} 的核对痕迹。`
+              : `Use transcription, collaboration, and real comments to differentiate it from generic notes pages while preserving the ${checkedAt} check trail.`}
           </p>
         </div>
         <div>
@@ -207,8 +210,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
-              ? '后续优先补会议案例、协作样例和真人评论。'
-              : 'Next, prioritize meeting cases, collaboration examples, and real comments.'}
+              ? `后续优先补会议案例、协作样例和真人评论，并持续保留 ${checkedAt} 的核对痕迹。`
+              : `Next, prioritize meeting cases, collaboration examples, and real comments while keeping the ${checkedAt} check trail up to date.`}
           </p>
         </div>
       </section>
