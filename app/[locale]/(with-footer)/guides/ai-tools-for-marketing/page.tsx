@@ -28,6 +28,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-13';
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -175,6 +176,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '这页优先判断营销工具是否真的能串起广告、邮件、社媒和落地页，而不是只生成看起来不错的文案。'
@@ -183,8 +185,10 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',
-              value: isChinese ? '广告、邮件、社媒、落地页' : 'Ads, email, social, landing pages',
-              note: isChinese ? '先看它是否能嵌入你的渠道栈。' : 'First check whether it fits your channel stack.',
+              value: isChinese ? '广告、邮件、社媒、落地页 + 榜单' : 'Ads, email, social, landing pages + rankings',
+              note: isChinese
+                ? `当前可参考分类信号有 ${categories.length} 个，先看它是否能嵌入你的渠道栈。`
+                : `${categories.length} category signals are available, and fit with your channel stack comes first.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -193,7 +197,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             },
             {
               label: isChinese ? '下一步增强' : 'Next enrichment',
-              value: isChinese ? '补真实投放、内容和报告样例' : 'Add real campaign, content, and reporting examples',
+              value: isChinese
+                ? '补真实投放、内容、报告、最近验证'
+                : 'Add real campaign, content, reporting, and recent verification',
               note: isChinese ? '减少空泛的营销话术。' : 'Reduce generic marketing talk.',
             },
           ]}
@@ -207,8 +213,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '营销入口已和榜单、对比页、分类页一起收口。'
-                : 'The marketing entry now aligns with ranking, comparison, and category paths.'}
+                ? `营销入口已和榜单、对比页、分类页一起收口，当前可参考分类信号 ${categories.length} 个。`
+                : `The marketing entry now aligns with ranking, comparison, and category paths, with ${categories.length} category signals available.`}
             </p>
           </div>
           <div>
