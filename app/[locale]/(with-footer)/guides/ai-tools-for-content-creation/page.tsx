@@ -31,6 +31,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-13';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -218,6 +220,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '这页优先检查页面是否能帮助用户完成真实内容创作决策：是否有明确内容格式、批量发布、品牌一致性、导出限制和后续进入对比页的路径。'
@@ -228,8 +231,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '判断维度' : 'Decision signals',
               value: isChinese ? '格式、批量、品牌、导出' : 'Format, batch, brand, export',
               note: isChinese
-                ? '重点看工具是否能把脚本、封面和发布串成稳定流程。'
-                : 'We care about whether the tool turns scripts, thumbnails, and publishing into a stable workflow.',
+                ? `重点看工具是否能把脚本、封面和发布串成稳定流程。当前可用分类数：${categoryCount}。`
+                : `We care about whether the tool turns scripts, thumbnails, and publishing into a stable workflow. Current category count: ${categoryCount}.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -242,8 +245,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '下一步补强' : 'Next enrichment',
               value: isChinese ? '补真实工作流' : 'Add real workflows',
               note: isChinese
-                ? '后续优先补真实案例、品牌模板和批量发布经验。'
-                : 'Next, priority additions are real use cases, brand templates, and batch-publishing notes.',
+                ? `后续优先补真实案例、品牌模板和批量发布经验，并保持 ${checkedAt} 的核对记录。`
+                : `Next, priority additions are real use cases, brand templates, and batch-publishing notes while keeping the ${checkedAt} verification record.`,
             },
           ]}
         />
@@ -253,11 +256,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实内容创作决策重新核对，优先保留高意图入口和可索引主体。'
-                : 'This page has been rechecked against a real content-creation decision and keeps the high-intent entry points indexable.'}
+                ? `这页已按真实内容创作决策重新核对，优先保留高意图入口和可索引主体，目前覆盖 ${categoryCount} 个分类。`
+                : `This page has been rechecked against a real content-creation decision and keeps the high-intent entry points indexable across ${categoryCount} categories.`}
             </p>
           </div>
           <div>

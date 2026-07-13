@@ -29,6 +29,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-13';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -144,6 +146,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '这页优先判断笔记工具是否能稳定接入会议、灵感和知识整理工作流，而不是只看界面和演示。'
@@ -154,8 +157,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '验证范围' : 'Checked scope',
               value: isChinese ? '记录、整理、搜索、协作' : 'Capture, organization, search, collaboration',
               note: isChinese
-                ? '笔记类工具最重要的是后续能不能找得回来。'
-                : 'The key question is whether notes can be found and reused later.',
+                ? `笔记类工具最重要的是后续能不能找得回来。当前可用分类数：${categoryCount}。`
+                : `The key question is whether notes can be found and reused later. Current category count: ${categoryCount}.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -168,8 +171,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '下一步补强' : 'Next enrichment',
               value: isChinese ? '补真实会议和整理场景' : 'Add real meeting and organization scenarios',
               note: isChinese
-                ? '后续会把评论、收藏和验证日期继续补厚。'
-                : 'Next, comments, saves, and verification dates should be added.',
+                ? `后续会把评论、收藏和验证日期继续补厚，并保持 ${checkedAt} 的核对记录。`
+                : `Next, comments, saves, and verification dates should be added while keeping the ${checkedAt} verification record.`,
             },
           ]}
         />
@@ -179,11 +182,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实笔记工作流重新核对，优先保留记录、整理和搜索入口。'
-                : 'This page has been rechecked against a real note-taking workflow and keeps capture, organization, and search entry points visible.'}
+                ? `这页已按真实笔记工作流重新核对，优先保留记录、整理和搜索入口，目前覆盖 ${categoryCount} 个分类。`
+                : `This page has been rechecked against a real note-taking workflow and keeps capture, organization, and search entry points visible across ${categoryCount} categories.`}
             </p>
           </div>
           <div>

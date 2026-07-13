@@ -29,6 +29,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-13';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -176,6 +178,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '这页优先判断创作者工具是否真的能串起选题、脚本、封面、剪辑和再包装，而不是只给出泛泛的内容生成。'
@@ -186,8 +189,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '验证范围' : 'Checked scope',
               value: isChinese ? '选题、脚本、封面、剪辑' : 'Ideation, scripts, thumbnails, editing',
               note: isChinese
-                ? '先看它是否能省掉你最耗时的步骤。'
-                : 'First see whether it saves your most time-consuming steps.',
+                ? `先看它是否能省掉你最耗时的步骤。当前可用分类数：${categoryCount}。`
+                : `First see whether it saves your most time-consuming steps. Current category count: ${categoryCount}.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -199,7 +202,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '下一步增强' : 'Next enrichment',
               value: isChinese ? '补真实案例、模板和使用反馈' : 'Add real examples, templates, and user feedback',
-              note: isChinese ? '让内容更像真实创作现场。' : 'Make the content feel closer to real creator workflows.',
+              note: isChinese
+                ? `让内容更像真实创作现场，并保持 ${checkedAt} 的核对记录。`
+                : `Make the content feel closer to real creator workflows while keeping the ${checkedAt} verification record.`,
             },
           ]}
         />
@@ -209,11 +214,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实创作者决策重新核对，优先保留选题、制作和再包装路径。'
-                : 'This page has been rechecked against a real creator decision and keeps topic selection, production, and repurposing paths visible.'}
+                ? `这页已按真实创作者决策重新核对，优先保留选题、制作和再包装路径，目前覆盖 ${categoryCount} 个分类。`
+                : `This page has been rechecked against a real creator decision and keeps topic selection, production, and repurposing paths visible across ${categoryCount} categories.`}
             </p>
           </div>
           <div>
