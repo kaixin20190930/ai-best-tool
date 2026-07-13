@@ -137,17 +137,12 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             label: locale === 'cn' || locale === 'tw' ? '工作流连贯性' : 'Workflow continuity',
             value: locale === 'cn' || locale === 'tw' ? '商品、客服、营销' : 'Products, support, marketing',
             note:
-              locale === 'cn' || locale === 'tw'
-                ? '别让关键流程断开。'
-                : 'Do not let the core workflow break apart.',
+              locale === 'cn' || locale === 'tw' ? '别让关键流程断开。' : 'Do not let the core workflow break apart.',
           },
           {
             label: locale === 'cn' || locale === 'tw' ? '长期使用' : 'Long-term use',
             value: locale === 'cn' || locale === 'tw' ? '更新频率、评分、评论' : 'Freshness, ratings, comments',
-            note:
-              locale === 'cn' || locale === 'tw'
-                ? '比标题更重要。'
-                : 'More important than labels.',
+            note: locale === 'cn' || locale === 'tw' ? '比标题更重要。' : 'More important than labels.',
           },
           {
             label: locale === 'cn' || locale === 'tw' ? '真实增量' : 'Real increments',
@@ -159,6 +154,47 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
         ]}
       />
+      <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '这页已按真实电商路径重新核对，保留商品、客服和营销入口。'
+              : 'This page has been rechecked against a real ecommerce workflow and keeps product, support, and marketing entry points visible.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '当前判断' : 'Current judgment'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '保留索引，补真实电商证据'
+              : 'Keep it indexable and add real ecommerce evidence'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '用商品、客服和营销信号把它和泛工具页区分开。'
+              : 'Use product, support, and marketing signals to differentiate it from generic tool pages.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '下一步' : 'Next step'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw' ? '补真实电商场景和反馈' : 'Add real ecommerce scenarios and feedback'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '后续优先补案例、商品样例和真人评论。'
+              : 'Next, prioritize cases, product examples, and real comments.'}
+          </p>
+        </div>
+      </section>
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

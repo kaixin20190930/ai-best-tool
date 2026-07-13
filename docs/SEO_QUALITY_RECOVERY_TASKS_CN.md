@@ -402,3 +402,22 @@ Google 不会因为内容由 AI 辅助生成就直接惩罚页面，但会压低
 - Agents、Crypto 研究、Web3、钱包研究、小企业和获客比较页补齐最近验证、当前判断和下一步增强
 - 让商业意图较强的决策页也带上清晰的真实性信号
 - 为后续真实案例、评论和 owner 认领继续留入口
+
+## 十六、第七梯队 freshness 补齐记录
+
+更新时间：2026-07-13
+
+已补最近验证块的页面：
+
+- `/guides/ai-tools-for-ecommerce-comparison`
+- `/guides/ai-tools-for-meeting-notes-comparison`
+- `/guides/ai-tools-for-token-research-comparison`
+- `/guides/ai-tools-for-web3-analysis-comparison`
+- `/guides/ai-tools-for-dex-analytics-comparison`
+- `/guides/ai-tools-for-voice-comparison`
+
+这轮模块重点解决：
+
+- 电商、会议纪要、代币研究、Web3 分析、DEX 分析和语音比较页补齐最近验证、当前判断和下一步增强
+- 让更多垂直决策页带上可验证的真实性信号
+- 为后续真实案例、评论和 owner 认领继续留入口

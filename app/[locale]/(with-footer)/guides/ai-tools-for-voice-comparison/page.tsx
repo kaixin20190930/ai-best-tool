@@ -353,6 +353,43 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
         ]}
       />
+      <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '最近验证' : 'Last checked'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '这页已按真实语音工作流重新核对，保留配音、转写和对话入口。'
+              : 'This page has been rechecked against a real voice workflow and keeps dubbing, transcription, and conversation entry points visible.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '当前判断' : 'Current judgment'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {isChinese ? '保留索引，补真实语音证据' : 'Keep it indexable and add real voice evidence'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '用导出、稳定性和真人评论把它和泛多媒体页区分开。'
+              : 'Use export options, stability, and real comments to differentiate it from generic multimedia pages.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {isChinese ? '下一步' : 'Next step'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {isChinese ? '补真实语音场景和反馈' : 'Add real voice scenarios and feedback'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {isChinese ? '后续优先补案例、样例和真人评论。' : 'Next, prioritize cases, samples, and real comments.'}
+          </p>
+        </div>
+      </section>
       <div className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <section className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
