@@ -29,6 +29,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-13';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -143,6 +145,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '这页优先检查免费额度、限制、更新频率、评论和截图，避免把“免费”误读成“足够用”。'
@@ -153,8 +156,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '验证范围' : 'Checked scope',
               value: isChinese ? '免费额度、限制、更新、评论' : 'Free quota, limits, freshness, comments',
               note: isChinese
-                ? '免费页不是价格页，而是先帮用户判断时间值不值得花。'
-                : 'A free-tools page should help users decide whether the time investment is worth it.',
+                ? `当前可参考分类信号有 ${categoryCount} 个，免费页不是价格页，而是先帮用户判断时间值不值得花。`
+                : `${categoryCount} category signals are available, and a free-tools page should help users decide whether the time investment is worth it.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -167,8 +170,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '下一步补强' : 'Next enrichment',
               value: isChinese ? '补真实更新与验证日期' : 'Add real update and verification dates',
               note: isChinese
-                ? '后续继续补评论、收藏、截图和 owner 认领信号。'
-                : 'Next iterations should add comments, saves, screenshots, and owner-claim signals.',
+                ? `这页已于 ${checkedAt} 重新核对，后续继续补评论、收藏、截图和 owner 认领信号。`
+                : `This page was rechecked on ${checkedAt}, and next iterations should add comments, saves, screenshots, and owner-claim signals.`,
             },
           ]}
         />
@@ -178,29 +181,35 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '免费入口已和免费榜单、筛选页、类目入口收口。'
-                : 'The free entry now aligns with ranking, filters, and category paths.'}
+                ? `免费入口已和免费榜单、筛选页、类目入口收口，当前可参考分类信号 ${categoryCount} 个。`
+                : `The free entry now aligns with ranking, filters, and category paths, with ${categoryCount} category signals available.`}
             </p>
           </div>
           <div>
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '当前判断' : 'Current judgment'}
             </p>
-            <p className='mt-2 text-sm leading-6 text-slate-700'>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '保留索引，继续补真实更新证据' : 'Keep it indexable and keep adding real update evidence'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '保留索引，继续补真实更新和验证日期。'
-                : 'Keep indexable and continue adding real update and verification dates.'}
+                ? '用更新日期、评论和使用反馈把它和泛免费页区分开。'
+                : 'Use update dates, comments, and usage feedback to distinguish it from generic free pages.'}
             </p>
           </div>
           <div>
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '下一步' : 'Next step'}
             </p>
-            <p className='mt-2 text-sm leading-6 text-slate-700'>
-              {isChinese ? '补一个真实免费工具限制样例。' : 'Add one real free-tool limit example.'}
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '补真实免费工具限制样例' : 'Add a real free-tool limit example'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese ? '先补免费额度、导出和协作限制。' : 'Start with quota, export, and collaboration limits.'}
             </p>
           </div>
         </section>
