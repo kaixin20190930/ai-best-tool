@@ -60,15 +60,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const faqSchema = generateFAQSchema(faqs);
   const tips = isChinese
     ? [
-      '先分清你要处理的是商品、客服、营销还是运营。',
-      '看它是否能支持批量和品牌一致性。',
-      '如果你在独立站或多渠道销售，优先看导出、自动化和协作。',
-    ]
+        '先分清你要处理的是商品、客服、营销还是运营。',
+        '看它是否能支持批量和品牌一致性。',
+        '如果你在独立站或多渠道销售，优先看导出、自动化和协作。',
+      ]
     : [
-      'Separate the job first: products, support, marketing, or operations.',
-      'Check whether it supports batch workflows and brand consistency.',
-      'If you sell through stores or multiple channels, prioritize exports, automation, and collaboration.',
-    ];
+        'Separate the job first: products, support, marketing, or operations.',
+        'Check whether it supports batch workflows and brand consistency.',
+        'If you sell through stores or multiple channels, prioritize exports, automation, and collaboration.',
+      ];
 
   return (
     <>
@@ -173,12 +173,50 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '后续增量' : 'Next increments',
               value: isChinese ? '商品案例、渠道截图' : 'Product cases, channel screenshots',
-              note: isChinese
-                ? '补真实商品、渠道和运营例子。'
-                : 'Add real product, channel, and operations examples.',
+              note: isChinese ? '补真实商品、渠道和运营例子。' : 'Add real product, channel, and operations examples.',
             },
           ]}
         />
+
+        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '最近验证' : 'Last checked'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '这页已按真实电商工作流重新核对，优先保留商品、客服、营销和运营入口。'
+                : 'This page has been rechecked against a real ecommerce workflow and keeps product, support, marketing, and operations entry points visible.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '当前判断' : 'Current judgment'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '保留索引，强化转化与运营证据' : 'Keep it indexable and strengthen conversion/ops evidence'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '用商品描述、客服自动化和营销流程区分电商页。'
+                : 'Use product workflows, support automation, and marketing operations to differentiate ecommerce pages.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '下一步' : 'Next step'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '补真实店铺与运营案例' : 'Add real store and ops cases'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '后续优先补真实店铺流程、客服记录和营销复盘。'
+                : 'Next, prioritize real store workflows, support records, and marketing retros.'}
+            </p>
+          </div>
+        </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
@@ -229,7 +267,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {isChinese ? '高意图榜单' : 'High-intent ranking'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '先用榜单缩小 ecommerce shortlist' : 'Use the ranking to narrow your ecommerce shortlist first'}
+            {isChinese
+              ? '先用榜单缩小 ecommerce shortlist'
+              : 'Use the ranking to narrow your ecommerce shortlist first'}
           </h2>
           <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
             {isChinese

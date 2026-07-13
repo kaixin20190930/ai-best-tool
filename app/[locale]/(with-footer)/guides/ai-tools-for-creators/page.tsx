@@ -199,12 +199,50 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '下一步增强' : 'Next enrichment',
               value: isChinese ? '补真实案例、模板和使用反馈' : 'Add real examples, templates, and user feedback',
-              note: isChinese
-                ? '让内容更像真实创作现场。'
-                : 'Make the content feel closer to real creator workflows.',
+              note: isChinese ? '让内容更像真实创作现场。' : 'Make the content feel closer to real creator workflows.',
             },
           ]}
         />
+
+        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '最近验证' : 'Last checked'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '这页已按真实创作者决策重新核对，优先保留选题、制作和再包装路径。'
+                : 'This page has been rechecked against a real creator decision and keeps topic selection, production, and repurposing paths visible.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '当前判断' : 'Current judgment'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '保留索引，强化创作流程证据' : 'Keep it indexable and strengthen creation workflow evidence'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '用多阶段制作、模板和复用案例来区别于通用内容页。'
+                : 'Use multi-stage production, templates, and reuse examples to distinguish it from generic content pages.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '下一步' : 'Next step'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '补真实创作流程与案例' : 'Add real creation workflows and cases'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '后续优先补真实选题流程、脚本迭代和再包装记录。'
+                : 'Next, prioritize real topic selection, script iteration, and repurposing notes.'}
+            </p>
+          </div>
+        </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

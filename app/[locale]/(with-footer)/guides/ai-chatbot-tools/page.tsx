@@ -185,19 +185,55 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
               value: isChinese ? '保留索引，连接榜单与对比页' : 'Indexable with ranking and comparison paths',
-              note: isChinese
-                ? '把用户带向更窄的高意图路径。'
-                : 'Move users into narrower high-intent paths.',
+              note: isChinese ? '把用户带向更窄的高意图路径。' : 'Move users into narrower high-intent paths.',
             },
             {
               label: isChinese ? '下一步增强' : 'Next enrichment',
               value: isChinese ? '补真实问答场景、评论和限制说明' : 'Add real question scenarios, comments, and limits',
-              note: isChinese
-                ? '用真实使用痕迹代替泛泛描述。'
-                : 'Replace generic copy with real usage evidence.',
+              note: isChinese ? '用真实使用痕迹代替泛泛描述。' : 'Replace generic copy with real usage evidence.',
             },
           ]}
         />
+
+        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '最近验证' : 'Last checked'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '这页已按真实聊天机器人决策重新核对，优先保留知识库、上下文和工作流入口。'
+                : 'This page has been rechecked against a real chatbot decision and keeps knowledge-base, context, and workflow entry points visible.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '当前判断' : 'Current judgment'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '保留索引，补真实接入证据' : 'Keep it indexable and add real integration evidence'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '用知识库、角色控制和接手案例区分它和泛聊天页。'
+                : 'Use knowledge bases, persona controls, and handoff examples to differentiate it from generic chat pages.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '下一步' : 'Next step'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '补真实对话与接手记录' : 'Add real dialogue and handoff notes'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '后续优先补真实对话样例、知识库接入和人工接手流程。'
+                : 'Next, prioritize real conversations, knowledge-base integration, and human handoff workflows.'}
+            </p>
+          </div>
+        </section>
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

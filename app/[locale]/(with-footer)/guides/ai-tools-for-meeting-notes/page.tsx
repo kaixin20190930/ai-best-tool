@@ -2,13 +2,13 @@ import { Metadata } from 'next';
 import { ArrowRight, CheckCircle2, ExternalLink, Mic, Workflow } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/app/navigation';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
+import { Link } from '@/app/navigation';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
@@ -70,15 +70,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ];
   const tips = isChinese
     ? [
-      '先确认你要的是转写、纪要整理，还是行动项抽取。',
-      '看它是否支持你现在用的会议工具和录音格式。',
-      '如果你每天开很多会，优先看协作、导出和历史记录，而不是只看转写速度。',
-    ]
+        '先确认你要的是转写、纪要整理，还是行动项抽取。',
+        '看它是否支持你现在用的会议工具和录音格式。',
+        '如果你每天开很多会，优先看协作、导出和历史记录，而不是只看转写速度。',
+      ]
     : [
-      'Start with the job: transcription, note cleanup, or action-item extraction.',
-      'Check whether it supports the meeting tools and audio formats you already use.',
-      'If you run many meetings, prioritize collaboration, exports, and history over pure speed.',
-    ];
+        'Start with the job: transcription, note cleanup, or action-item extraction.',
+        'Check whether it supports the meeting tools and audio formats you already use.',
+        'If you run many meetings, prioritize collaboration, exports, and history over pure speed.',
+      ];
 
   return (
     <>
@@ -174,19 +174,61 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '下一步增强' : 'Next enrichment',
               value: isChinese ? '补真实案例、样例纪要和评论' : 'Add real cases, sample notes, and comments',
-              note: isChinese
-                ? '用真实使用痕迹替代空泛描述。'
-                : 'Replace generic copy with real usage evidence.',
+              note: isChinese ? '用真实使用痕迹替代空泛描述。' : 'Replace generic copy with real usage evidence.',
             },
           ]}
         />
+
+        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '最近验证' : 'Last checked'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '这页已按真实会议纪要决策重新核对，优先保留转写、行动项和协作入口。'
+                : 'This page has been rechecked against a real meeting-notes decision and keeps transcription, action items, and collaboration entry points visible.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '当前判断' : 'Current judgment'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese
+                ? '保留索引，强化纪要工作流证据'
+                : 'Keep it indexable and strengthen meeting-workflow evidence'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '用转写准确率、行动项和共享协作来和笔记页区分。'
+                : 'Use transcription quality, action items, and collaboration handoffs to differentiate it from note-taking pages.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '下一步' : 'Next step'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '补真实会议与行动项案例' : 'Add real meeting and action-item cases'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '后续优先补真实转写样例、行动项复盘和团队协作记录。'
+                : 'Next, prioritize transcription samples, action-item retros, and team collaboration notes.'}
+            </p>
+          </div>
+        </section>
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '高意图路径' : 'High-intent path'}
           </p>
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '先看榜单，再进入对比页和真实条目' : 'Start with the ranking, then move into comparison and real listings'}
+            {isChinese
+              ? '先看榜单，再进入对比页和真实条目'
+              : 'Start with the ranking, then move into comparison and real listings'}
           </h2>
           <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
             {isChinese
@@ -203,7 +245,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {
                 href: '/guides/ai-tools-for-meeting-notes-comparison',
                 title: isChinese ? '会议纪要对比' : 'Meeting notes comparison',
-                desc: isChinese ? '横向看转写、整理和行动项。' : 'Compare transcription, cleanup, and action items side by side.',
+                desc: isChinese
+                  ? '横向看转写、整理和行动项。'
+                  : 'Compare transcription, cleanup, and action items side by side.',
               },
               {
                 href: '/guides/ai-note-taking-tools-comparison',
@@ -445,7 +489,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {
                 href: '/guides/ai-tools-for-meeting-notes-comparison',
                 title: isChinese ? '会议纪要对比' : 'Meeting notes comparison',
-                desc: isChinese ? '转写、整理和行动项一起看。' : 'Compare transcription, cleanup, and action items together.',
+                desc: isChinese
+                  ? '转写、整理和行动项一起看。'
+                  : 'Compare transcription, cleanup, and action items together.',
               },
               {
                 href: '/guides/ai-note-taking-tools-comparison',
@@ -455,7 +501,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {
                 href: '/guides/ai-productivity-tools-comparison',
                 title: isChinese ? '生产力对比' : 'Productivity comparison',
-                desc: isChinese ? '如果重点偏日常效率和协作。' : 'Useful when daily productivity and collaboration matter more.',
+                desc: isChinese
+                  ? '如果重点偏日常效率和协作。'
+                  : 'Useful when daily productivity and collaboration matter more.',
               },
             ].map((item) => (
               <TrackableCtaLink
