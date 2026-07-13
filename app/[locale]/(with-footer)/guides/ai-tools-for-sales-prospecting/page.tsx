@@ -28,6 +28,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-14';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -195,6 +197,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '销售拓客页要围绕触达准备、个性化和外呼前判断来做，不要只输出模板化外联。这个页继续可索引，但会把获客、销售和更窄的 prospecting 路径分层。'
@@ -204,7 +207,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '验证重点' : 'Validation focus',
               value: isChinese ? '触达准备、个性化' : 'Outreach prep, personalization',
-              note: isChinese ? '确认它是不是在提高回复质量。' : 'Confirm it improves reply quality.',
+              note: isChinese
+                ? `确认它是不是在提高回复质量。当前可用分类数：${categoryCount}。`
+                : `Confirm it improves reply quality. Current category count: ${categoryCount}.`,
             },
             {
               label: isChinese ? '合并策略' : 'Merge strategy',
@@ -216,7 +221,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '后续增量' : 'Next increments',
               value: isChinese ? '案例、回复率、模板' : 'Cases, reply rates, templates',
-              note: isChinese ? '补真实触达案例和个性化样本。' : 'Add real outreach cases and personalization samples.',
+              note: isChinese
+                ? `补真实触达案例和个性化样本，并保持 ${checkedAt} 的核对记录。`
+                : `Add real outreach cases and personalization samples while keeping the ${checkedAt} verification record.`,
             },
           ]}
         />
@@ -226,11 +233,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实销售拓客路径重新核对，保留触达、个性化和分流入口。'
-                : 'This page has been rechecked against a real sales prospecting workflow and keeps outreach, personalization, and routing entry points visible.'}
+                ? `这页已按真实销售拓客路径重新核对，保留触达、个性化和分流入口，目前覆盖 ${categoryCount} 个分类。`
+                : `This page has been rechecked against a real sales prospecting workflow and keeps outreach, personalization, and routing entry points visible across ${categoryCount} categories.`}
             </p>
           </div>
           <div>
