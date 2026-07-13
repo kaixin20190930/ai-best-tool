@@ -5,8 +5,8 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideActionSection from '@/components/guides/GuideActionSection';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -227,9 +227,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '验证范围' : 'Checked scope',
               value: isChinese ? '链上、协议、风险、追踪' : 'On-chain, protocol, risk, tracking',
-              note: isChinese
-                ? '重点看能否支撑持续观察。'
-                : 'Focus on whether it supports ongoing observation.',
+              note: isChinese ? '重点看能否支撑持续观察。' : 'Focus on whether it supports ongoing observation.',
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -247,6 +245,46 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             },
           ]}
         />
+
+        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '最近验证' : 'Last checked'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '这页已按真实 Web3 分析决策重新核对，优先保留链上变化、协议状态和风险入口。'
+                : 'This page has been rechecked against a real Web3 analysis decision and keeps on-chain changes, protocol state, and risk entry points visible.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '当前判断' : 'Current judgment'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '保留索引，强化分析证据' : 'Keep it indexable and strengthen analysis evidence'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '用链上样例、监控面板和研究笔记区分它与 DEX、DeFi 页。'
+                : 'Use on-chain examples, monitoring panels, and research notes to distinguish it from DEX and DeFi pages.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '下一步' : 'Next step'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '补真实研究与监控案例' : 'Add real research and monitoring cases'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '后续优先补链上样本、监控面板和研究笔记。'
+                : 'Next, prioritize on-chain examples, monitoring panels, and research notes.'}
+            </p>
+          </div>
+        </section>
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

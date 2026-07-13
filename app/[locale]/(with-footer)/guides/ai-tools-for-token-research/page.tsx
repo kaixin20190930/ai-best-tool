@@ -5,8 +5,8 @@ import { getTranslations } from 'next-intl/server';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideActionSection from '@/components/guides/GuideActionSection';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -334,6 +334,46 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             },
           ]}
         />
+
+        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '最近验证' : 'Last checked'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '这页已按真实代币研究决策重新核对，优先保留数据源、链上追踪和情报入口。'
+                : 'This page has been rechecked against a real token-research decision and keeps data sources, on-chain tracking, and intelligence entry points visible.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '当前判断' : 'Current judgment'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '保留索引，强化代币研究证据' : 'Keep it indexable and strengthen token-research evidence'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '用数据源、研究笔记和监控清单来区分它与泛看板页。'
+                : 'Use data sources, research notes, and monitoring checklists to distinguish it from broad dashboard pages.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '下一步' : 'Next step'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '补真实研究案例和监控清单' : 'Add real research cases and monitoring checklists'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '后续优先补真实研究笔记、链上样例和清单。'
+                : 'Next, prioritize real research notes, on-chain examples, and checklists.'}
+            </p>
+          </div>
+        </section>
 
         <GuideActionSection
           locale={locale}

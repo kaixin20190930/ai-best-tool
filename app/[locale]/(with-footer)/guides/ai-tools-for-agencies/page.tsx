@@ -189,9 +189,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '验证重点' : 'Validation focus',
               value: isChinese ? '交付、分工、隔离' : 'Delivery, roles, separation',
-              note: isChinese
-                ? '确认它是不是能支撑团队交付。'
-                : 'Confirm it supports team delivery.',
+              note: isChinese ? '确认它是不是能支撑团队交付。' : 'Confirm it supports team delivery.',
             },
             {
               label: isChinese ? '合并策略' : 'Merge strategy',
@@ -203,12 +201,50 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '后续增量' : 'Next increments',
               value: isChinese ? '项目案例、权限、流程' : 'Project cases, permissions, workflows',
-              note: isChinese
-                ? '补真实交付案例和团队流程。'
-                : 'Add real delivery cases and team workflows.',
+              note: isChinese ? '补真实交付案例和团队流程。' : 'Add real delivery cases and team workflows.',
             },
           ]}
         />
+
+        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '最近验证' : 'Last checked'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '这页已按真实代理交付决策重新核对，优先保留分工、客户隔离和批量输出入口。'
+                : 'This page has been rechecked against a real agency-delivery decision and keeps role splitting, client separation, and bulk-output entry points visible.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '当前判断' : 'Current judgment'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '保留索引，强化交付流程证据' : 'Keep it indexable and strengthen delivery workflow evidence'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '用项目案例、权限和团队流程来区分它和泛生产力页。'
+                : 'Use project cases, permissions, and team workflows to distinguish it from generic productivity pages.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '下一步' : 'Next step'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '补真实项目和流程案例' : 'Add real project and workflow cases'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '后续优先补真实交付案例、权限和团队工作流记录。'
+                : 'Next, prioritize real delivery cases, permissions, and team workflow notes.'}
+            </p>
+          </div>
+        </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>

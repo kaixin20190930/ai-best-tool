@@ -174,6 +174,48 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           ]}
         />
 
+        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '最近验证' : 'Last checked'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '这页已按真实笔记工作流重新核对，优先保留记录、整理和搜索入口。'
+                : 'This page has been rechecked against a real note-taking workflow and keeps capture, organization, and search entry points visible.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '当前判断' : 'Current judgment'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese
+                ? '保留索引，强化知识整理证据'
+                : 'Keep it indexable and strengthen knowledge-organization evidence'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '用会议、灵感和归档场景区分它和会议纪要页。'
+                : 'Use meetings, idea capture, and archiving scenarios to distinguish it from meeting-notes pages.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '下一步' : 'Next step'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '补真实整理和知识归档案例' : 'Add real organization and archiving cases'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '后续优先补真实整理流程、搜索命中和协作记录。'
+                : 'Next, prioritize real organization workflows, search hits, and collaboration notes.'}
+            </p>
+          </div>
+        </section>
+
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '高意图路径' : 'High-intent path'}
