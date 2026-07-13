@@ -29,6 +29,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-14';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -310,13 +312,14 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先检查页面是否能帮助用户完成真实代币研究判断：数据源、链上追踪、市场情报和导出能力，而不是只看信息量。'
               : 'This page prioritizes whether the guide helps with a real token-research decision: data sources, on-chain tracking, market intelligence, and export ability rather than raw information volume.'
           }
+          checkedAt={checkedAt}
           items={[
             {
               label: isChinese ? '判断维度' : 'Decision signals',
               value: isChinese ? '数据源、链上、情报、导出' : 'Sources, on-chain, intelligence, exports',
               note: isChinese
-                ? '重点看它是否能支撑持续研究，而不只是一次性浏览。'
-                : 'We care about whether it supports ongoing research, not just one-time browsing.',
+                ? `重点看它是否能支撑持续研究，而不只是一次性浏览；当前分类数 ${categoryCount} 个。`
+                : `We care about whether it supports ongoing research, not just one-time browsing; current category count is ${categoryCount}.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -329,8 +332,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '下一步补强' : 'Next enrichment',
               value: isChinese ? '补真实研究案例' : 'Add real research cases',
               note: isChinese
-                ? '后续优先补研究笔记、链上样例和监控清单。'
-                : 'Next, priority additions are research notes, on-chain examples, and monitoring checklists.',
+                ? `后续优先补研究笔记、链上样例和监控清单，并保持 ${checkedAt} 的验证记录。`
+                : `Next, priority additions are research notes, on-chain examples, and monitoring checklists while keeping the ${checkedAt} verification record.`,
             },
           ]}
         />
@@ -340,11 +343,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实代币研究决策重新核对，优先保留数据源、链上追踪和情报入口。'
-                : 'This page has been rechecked against a real token-research decision and keeps data sources, on-chain tracking, and intelligence entry points visible.'}
+                ? `这页已按真实代币研究决策重新核对，优先保留数据源、链上追踪和情报入口；当前分类数 ${categoryCount} 个。`
+                : `This page has been rechecked against a real token-research decision and keeps data sources, on-chain tracking, and intelligence entry points visible; current category count is ${categoryCount}.`}
             </p>
           </div>
           <div>
@@ -369,8 +372,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '后续优先补真实研究笔记、链上样例和清单。'
-                : 'Next, prioritize real research notes, on-chain examples, and checklists.'}
+                ? `后续优先补真实研究笔记、链上样例和清单，并持续保留 ${checkedAt} 的核对记录。`
+                : `Next, prioritize real research notes, on-chain examples, and checklists while keeping the ${checkedAt} check record up to date.`}
             </p>
           </div>
         </section>

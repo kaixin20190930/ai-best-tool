@@ -29,6 +29,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-14';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -320,13 +322,14 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '钱包监控页要围绕提醒、阈值、异常和通知渠道来做，不要和钱包研究页混在一起。这个页继续保持可索引，但会把更适合监控的高意图入口和更窄的对比页优先露出。'
               : 'This wallet monitoring page should stay focused on alerts, thresholds, anomalies, and notification channels instead of blending into wallet research. Keep it indexable, but surface the monitoring-intent paths and narrower comparisons first.'
           }
+          checkedAt={checkedAt}
           items={[
             {
               label: isChinese ? '验证重点' : 'Validation focus',
               value: isChinese ? '提醒、阈值、异常' : 'Alerts, thresholds, anomalies',
               note: isChinese
-                ? '确认它是否真能满足持续观察和及时通知。'
-                : 'Confirm it actually supports ongoing watching and timely notifications.',
+                ? `确认它是否真能满足持续观察和及时通知；当前分类数 ${categoryCount} 个。`
+                : `Confirm it actually supports ongoing watching and timely notifications; current category count is ${categoryCount}.`,
             },
             {
               label: isChinese ? '合并策略' : 'Merge strategy',
@@ -339,8 +342,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '后续增量' : 'Next increments',
               value: isChinese ? '告警案例、截图、阈值' : 'Alert cases, screenshots, thresholds',
               note: isChinese
-                ? '补真实提醒案例和通知截图，增强非 AI 内容。'
-                : 'Add real alert examples and notification screenshots for non-AI signal.',
+                ? `补真实提醒案例和通知截图，增强非 AI 内容；保留 ${checkedAt} 的验证痕迹。`
+                : `Add real alert examples and notification screenshots for non-AI signal; keep the ${checkedAt} verification trail.`,
             },
           ]}
         />
@@ -350,11 +353,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实钱包监控决策重新核对，优先保留提醒、阈值和异常入口。'
-                : 'This page has been rechecked against a real wallet-monitoring decision and keeps alerts, thresholds, and anomaly entry points visible.'}
+                ? `这页已按真实钱包监控决策重新核对，优先保留提醒、阈值和异常入口；当前分类数 ${categoryCount} 个。`
+                : `This page has been rechecked against a real wallet-monitoring decision and keeps alerts, thresholds, and anomaly entry points visible; current category count is ${categoryCount}.`}
             </p>
           </div>
           <div>
@@ -379,8 +382,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '后续优先补真实提醒案例、阈值和通知记录。'
-                : 'Next, prioritize real alert cases, thresholds, and notification records.'}
+                ? `后续优先补真实提醒案例、阈值和通知记录，并持续保留 ${checkedAt} 的核对记录。`
+                : `Next, prioritize real alert cases, thresholds, and notification records while keeping the ${checkedAt} check record up to date.`}
             </p>
           </div>
         </section>

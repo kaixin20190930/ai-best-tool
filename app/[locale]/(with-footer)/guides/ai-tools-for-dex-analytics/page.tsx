@@ -28,6 +28,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-14';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const faqs = [
     {
@@ -298,13 +300,14 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先判断 DEX 分析工具是否真的能让交易对、池子和流动性观察更清晰，而不是只看图表数量。'
               : 'This page checks whether DEX analytics tools truly make pair, pool, and liquidity observation clearer rather than only offering more charts.'
           }
+          checkedAt={checkedAt}
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',
               value: isChinese ? '交易对、池子、流动性、追踪' : 'Pairs, pools, liquidity, tracking',
               note: isChinese
-                ? '重点看能否支撑持续观察和比较。'
-                : 'Focus on whether it supports ongoing observation and comparison.',
+                ? `重点看能否支撑持续观察和比较；当前分类数 ${categoryCount} 个。`
+                : `Focus on whether it supports ongoing observation and comparison; current category count is ${categoryCount}.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -317,8 +320,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '下一步补强' : 'Next enrichment',
               value: isChinese ? '补真实交易与池子样例' : 'Add real pair and pool examples',
               note: isChinese
-                ? '后续优先补监控截图、历史变化和流动性追踪。'
-                : 'Next, add monitoring screenshots, historical changes, and liquidity tracking.',
+                ? `后续优先补监控截图、历史变化和流动性追踪，并保留 ${checkedAt} 的核对痕迹。`
+                : `Next, add monitoring screenshots, historical changes, and liquidity tracking while keeping the ${checkedAt} verification trail.`,
             },
           ]}
         />
@@ -328,11 +331,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实 DEX 分析决策重新核对，优先保留交易对、池子和流动性入口。'
-                : 'This page has been rechecked against a real DEX-analytics decision and keeps pairs, pools, and liquidity entry points visible.'}
+                ? `这页已按真实 DEX 分析决策重新核对，优先保留交易对、池子和流动性入口；当前分类数 ${categoryCount} 个。`
+                : `This page has been rechecked against a real DEX-analytics decision and keeps pairs, pools, and liquidity entry points visible; current category count is ${categoryCount}.`}
             </p>
           </div>
           <div>
@@ -357,8 +360,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '后续优先补真实交易对、池子和流动性变化样例。'
-                : 'Next, prioritize real pairs, pools, and liquidity change examples.'}
+                ? `后续优先补真实交易对、池子和流动性变化样例，并持续保留 ${checkedAt} 的核对记录。`
+                : `Next, prioritize real pairs, pools, and liquidity change examples while keeping the ${checkedAt} check record up to date.`}
             </p>
           </div>
         </section>
