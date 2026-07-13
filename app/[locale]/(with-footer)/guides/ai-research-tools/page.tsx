@@ -1,4 +1,5 @@
 import { getNoindexMetadata } from '@/lib/seo/indexing';
+import { getAllCategories } from '@/lib/services/categories';
 
 import ResearchToolsPage, { generateMetadata as generateResearchToolsMetadata } from '../ai-tools-for-research/page';
 
@@ -10,6 +11,7 @@ export function generateMetadata({ params: { locale } }: { params: { locale: str
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+  const categories = await getAllCategories(true).catch(() => []);
   return (
     <>
       {ResearchToolsPage({ params: { locale } })}
@@ -22,8 +24,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
-              ? '这页已按当前比较页的判断标准重新核对。'
-              : 'This page has been rechecked against the current comparison-page decision flow.'}
+              ? `这页已按当前比较页的判断标准重新核对，当前可参考分类信号 ${categories.length} 个。`
+              : `This page has been rechecked against the current comparison-page decision flow, with ${categories.length} category signals available.`}
           </p>
         </div>
         <div>
@@ -44,7 +46,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {locale === 'cn' || locale === 'tw' ? '下一步' : 'Next step'}
           </p>
           <p className='mt-2 text-lg font-bold text-slate-950'>
-            {locale === 'cn' || locale === 'tw' ? '补真实用例和反馈' : 'Add real use cases and feedback'}
+            {locale === 'cn' || locale === 'tw'
+              ? '补真实用例、来源说明、最近验证'
+              : 'Add real use cases, source notes, and recent verification'}
           </p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'

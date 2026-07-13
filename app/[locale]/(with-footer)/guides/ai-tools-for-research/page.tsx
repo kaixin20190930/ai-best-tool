@@ -26,6 +26,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-13';
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -198,6 +199,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '这页优先判断研究工具是否真的能帮助发现资料、核对证据和追溯来源，而不是只会生成看起来正确的答案。'
@@ -206,10 +208,12 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',
-              value: isChinese ? '来源、证据、发现、回溯' : 'Sources, evidence, discovery, traceability',
+              value: isChinese
+                ? '来源、证据、发现、回溯 + 榜单'
+                : 'Sources, evidence, discovery, traceability + rankings',
               note: isChinese
-                ? '研究工具的第一标准是能不能让信息回得去。'
-                : 'The first standard is whether information can be traced back.',
+                ? `当前能参考的分类信号有 ${categories.length} 个，研究页继续把来源和证据线索放在前面。`
+                : `${categories.length} category signals are available, and the page keeps source and evidence clues up front.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -220,7 +224,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             },
             {
               label: isChinese ? '下一步补强' : 'Next enrichment',
-              value: isChinese ? '补真实案例和来源说明' : 'Add real cases and source notes',
+              value: isChinese
+                ? '补真实案例、来源说明、最近验证'
+                : 'Add real cases, source notes, and recent verification',
               note: isChinese
                 ? '后续会把评论、收藏和 owner 信号继续接到这页。'
                 : 'Next, comments, saves, and owner signals should be connected to this page.',
@@ -236,8 +242,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '研究入口已和榜单、对比页和提交路径收口。'
-                : 'The research entry now aligns with ranking, comparison, and submission paths.'}
+                ? `研究入口已和榜单、对比页和提交路径收口，当前可参考分类信号 ${categories.length} 个。`
+                : `The research entry now aligns with ranking, comparison, and submission paths, with ${categories.length} category signals in view.`}
             </p>
           </div>
           <div>
