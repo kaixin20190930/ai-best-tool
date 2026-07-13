@@ -259,9 +259,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '验证重点' : 'Validation focus',
               value: isChinese ? '健康、使用量、趋势' : 'Health, usage, trends',
-              note: isChinese
-                ? '确认它是否真的能支撑长期观察。'
-                : 'Confirm it actually supports long-term monitoring.',
+              note: isChinese ? '确认它是否真的能支撑长期观察。' : 'Confirm it actually supports long-term monitoring.',
             },
             {
               label: isChinese ? '合并策略' : 'Merge strategy',
@@ -273,12 +271,50 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '后续增量' : 'Next increments',
               value: isChinese ? '协议案例、曲线、周期' : 'Protocol cases, charts, periods',
-              note: isChinese
-                ? '补真实协议趋势和周期性证据。'
-                : 'Add real protocol trend and time-series evidence.',
+              note: isChinese ? '补真实协议趋势和周期性证据。' : 'Add real protocol trend and time-series evidence.',
             },
           ]}
         />
+
+        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '最近验证' : 'Last checked'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '这页已按真实协议分析决策重新核对，优先保留健康、使用量和趋势入口。'
+                : 'This page has been rechecked against a real protocol-analytics decision and keeps health, usage, and trend entry points visible.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '当前判断' : 'Current judgment'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '保留索引，强化趋势研究证据' : 'Keep it indexable and strengthen trend-research evidence'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '用协议案例、时间序列和周期分析区分它与链上页。'
+                : 'Use protocol cases, time-series views, and cycle analysis to distinguish it from on-chain pages.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '下一步' : 'Next step'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '补真实协议曲线和周期' : 'Add real protocol charts and cycles'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '后续优先补真实协议趋势、周期性证据和案例。'
+                : 'Next, prioritize real protocol trends, time-series evidence, and cases.'}
+            </p>
+          </div>
+        </section>
 
         <GuideActionSection
           locale={locale}

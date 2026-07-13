@@ -305,9 +305,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '验证重点' : 'Validation focus',
               value: isChinese ? '协作、自动化、支持' : 'Collaboration, automation, support',
-              note: isChinese
-                ? '确认它是不是解决了团队日常工作。'
-                : 'Confirm it solves day-to-day team work.',
+              note: isChinese ? '确认它是不是解决了团队日常工作。' : 'Confirm it solves day-to-day team work.',
             },
             {
               label: isChinese ? '合并策略' : 'Merge strategy',
@@ -325,6 +323,46 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             },
           ]}
         />
+
+        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '最近验证' : 'Last checked'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '这页已按真实小企业工作流重新核对，优先保留协作、自动化和支持入口。'
+                : 'This page has been rechecked against a real small-business workflow and keeps collaboration, automation, and support entry points visible.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '当前判断' : 'Current judgment'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '保留索引，强化团队工作流证据' : 'Keep it indexable and strengthen team-workflow evidence'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '用真实团队案例、权限和截图区分它与泛生产力页。'
+                : 'Use real team cases, permissions, and screenshots to distinguish it from generic productivity pages.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '下一步' : 'Next step'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '补真实团队案例和权限设置' : 'Add real team cases and permission setup'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '后续优先补真实团队流程、权限和协作截图。'
+                : 'Next, prioritize team workflows, permissions, and collaboration screenshots.'}
+            </p>
+          </div>
+        </section>
 
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

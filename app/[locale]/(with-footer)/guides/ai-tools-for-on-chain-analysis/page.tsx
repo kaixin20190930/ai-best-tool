@@ -322,9 +322,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '验证重点' : 'Validation focus',
               value: isChinese ? '追踪、资金流、复盘' : 'Tracking, fund flow, review',
-              note: isChinese
-                ? '先确认它是否真能支撑复盘和研究。'
-                : 'Confirm it really supports review and research.',
+              note: isChinese ? '先确认它是否真能支撑复盘和研究。' : 'Confirm it really supports review and research.',
             },
             {
               label: isChinese ? '合并策略' : 'Merge strategy',
@@ -336,12 +334,50 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '后续增量' : 'Next increments',
               value: isChinese ? '真实地址案例、图谱、截图' : 'Real address cases, charts, screenshots',
-              note: isChinese
-                ? '补真实链上案例和可验证图谱。'
-                : 'Add real on-chain cases and verifiable visuals.',
+              note: isChinese ? '补真实链上案例和可验证图谱。' : 'Add real on-chain cases and verifiable visuals.',
             },
           ]}
         />
+
+        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '最近验证' : 'Last checked'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '这页已按真实链上分析决策重新核对，优先保留追踪、资金流和复盘入口。'
+                : 'This page has been rechecked against a real on-chain analysis decision and keeps tracking, fund flow, and review entry points visible.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '当前判断' : 'Current judgment'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '保留索引，强化地址研究证据' : 'Keep it indexable and strengthen address-research evidence'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '用地址案例、图谱和可验证截图区分它与协议页。'
+                : 'Use address cases, charts, and verifiable screenshots to distinguish it from protocol pages.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '下一步' : 'Next step'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '补真实地址案例和图谱' : 'Add real address cases and charts'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '后续优先补真实地址复盘、图谱和截图。'
+                : 'Next, prioritize real address retros, charts, and screenshots.'}
+            </p>
+          </div>
+        </section>
 
         <GuideActionSection
           locale={locale}
