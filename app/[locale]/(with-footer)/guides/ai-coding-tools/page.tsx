@@ -32,6 +32,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-13';
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -175,18 +176,21 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
-              ? '这页优先判断编程工具是否真的进入开发流程：编辑器支持、仓库上下文、多文件修改、测试调试、隐私和团队协作。'
-              : 'This page checks whether a coding tool actually fits the development workflow: editor support, repository context, multi-file edits, testing/debugging, privacy, and team collaboration.'
+              ? '这页优先判断编程工具是否真的进入开发流程：编辑器支持、仓库上下文、多文件修改、测试调试、隐私和团队协作，并继续把代表性条目和榜单串起来。'
+              : 'This page checks whether a coding tool actually fits the development workflow: editor support, repository context, multi-file edits, testing/debugging, privacy, and team collaboration, while tying representative listings back to rankings.'
           }
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',
-              value: isChinese ? '编辑器、仓库、上下文、团队' : 'Editor, repository, context, team fit',
+              value: isChinese
+                ? '编辑器、仓库、上下文、团队 + 榜单'
+                : 'Editor, repository, context, team fit + rankings',
               note: isChinese
-                ? '编程工具不能只看 demo，必须看能否稳定进入日常开发。'
-                : 'Coding tools cannot be judged by demos alone; they need to fit daily development.',
+                ? `当前分类页里有 ${categories.length} 个分类信号可参考，继续把真实开发流程接进来。`
+                : `${categories.length} category signals are available as context, and the page should keep reflecting real development flow.`,
             },
             {
               label: isChinese ? '代表工具' : 'Representative tools',
@@ -197,7 +201,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             },
             {
               label: isChinese ? '下一步补强' : 'Next enrichment',
-              value: isChinese ? '补充限制和适合团队' : 'Add limits and team fit',
+              value: isChinese ? '补充限制、团队适配、最近验证' : 'Add limits, team fit, and recent verification',
               note: isChinese
                 ? '下一轮会补免费额度、私有仓库支持、团队协作和真实评论信号。'
                 : 'Next pass should add free-tier limits, private repo support, team features, and real feedback signals.',

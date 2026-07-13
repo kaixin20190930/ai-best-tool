@@ -31,6 +31,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-13';
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -147,18 +148,21 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
-              ? '这页优先判断工具是否真的能让日常工作更轻：能否接入现有流程、是否有稳定协作、是否支持自动化和长期使用。'
-              : 'This page judges whether a tool truly lightens daily work: integration with existing workflows, collaboration stability, automation support, and long-term usability.'
+              ? '这页优先判断工具是否真的能让日常工作更轻：能否接入现有流程、是否有稳定协作、是否支持自动化和长期使用，并把榜单和真实条目连起来。'
+              : 'This page judges whether a tool truly lightens daily work: integration with existing workflows, collaboration stability, automation support, and long-term usability, while connecting rankings and real listings.'
           }
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',
-              value: isChinese ? '工作流、协作、自动化、稳定性' : 'Workflow, collaboration, automation, stability',
+              value: isChinese
+                ? '工作流、协作、自动化、稳定性 + 榜单'
+                : 'Workflow, collaboration, automation, stability + rankings',
               note: isChinese
-                ? '生产力页应该减少重复劳动，而不是展示更多功能。'
-                : 'A productivity page should reduce repeated work, not just display more features.',
+                ? `当前可参考的分类信号有 ${categories.length} 个，继续把真实日常案例放进去。`
+                : `${categories.length} category signals are available, and the page should keep adding real daily-use cases.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -169,7 +173,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             },
             {
               label: isChinese ? '下一步补强' : 'Next enrichment',
-              value: isChinese ? '补真实场景和反馈' : 'Add real scenarios and feedback',
+              value: isChinese ? '补真实场景、反馈、最近验证' : 'Add real scenarios, feedback, and recent verification',
               note: isChinese
                 ? '后续会继续补评论、收藏、认领和验证日期。'
                 : 'Next, comments, saves, claims, and verification dates should be added.',
