@@ -31,7 +31,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
-  const checkedAt = '2026-07-13';
+  const checkedAt = '2026-07-14';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -161,8 +162,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 ? '工作流、协作、自动化、稳定性 + 榜单'
                 : 'Workflow, collaboration, automation, stability + rankings',
               note: isChinese
-                ? `当前可参考的分类信号有 ${categories.length} 个，继续把真实日常案例放进去。`
-                : `${categories.length} category signals are available, and the page should keep adding real daily-use cases.`,
+                ? `当前可参考的分类信号有 ${categoryCount} 个，继续把真实日常案例放进去。`
+                : `${categoryCount} category signals are available, and the page should keep adding real daily-use cases.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -186,11 +187,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '生产力入口已连接榜单、对比页和真实条目。'
-                : 'The productivity entry now connects ranking, comparison, and real listings.'}
+                ? `生产力入口已连接榜单、对比页和真实条目，当前可参考分类信号 ${categoryCount} 个。`
+                : `The productivity entry now connects ranking, comparison, and real listings, with ${categoryCount} category signals available.`}
             </p>
           </div>
           <div>
@@ -199,8 +200,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-700'>
               {isChinese
-                ? '保留索引，继续补真实场景与反馈。'
-                : 'Keep indexable and continue adding real scenarios and feedback.'}
+                ? `保留索引，继续补真实场景与反馈，并保持 ${checkedAt} 的核对痕迹。`
+                : `Keep indexable and continue adding real scenarios and feedback while preserving the ${checkedAt} check trail.`}
             </p>
           </div>
           <div>
@@ -208,7 +209,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {isChinese ? '下一步' : 'Next step'}
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-700'>
-              {isChinese ? '补一组日常工作流案例。' : 'Add one set of daily workflow cases.'}
+              {isChinese
+                ? `补一组日常工作流案例，并持续保留 ${checkedAt} 的核对记录。`
+                : `Add one set of daily workflow cases while keeping the ${checkedAt} verification record.`}
             </p>
           </div>
         </section>
