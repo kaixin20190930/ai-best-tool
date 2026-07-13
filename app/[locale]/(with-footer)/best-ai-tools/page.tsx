@@ -4,6 +4,7 @@ import { ArrowRight, Layers3, Sparkles, Star, Target } from 'lucide-react';
 
 import { topListTopics } from '@/lib/data/topLists';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const isChinese = locale === 'cn' || locale === 'tw';
@@ -33,6 +34,7 @@ export default function BestAiToolsPage({ params: { locale } }: { params: { loca
   const priorityTopics = priorityTopicKeys
     .map((key) => topListTopics.find((topic) => topic.key === key))
     .filter((topic): topic is (typeof topListTopics)[number] => Boolean(topic));
+  const checkedAt = '2026-07-13';
 
   return (
     <div className='theme-page mx-auto max-w-pc px-4 py-8 lg:px-0'>
@@ -194,6 +196,33 @@ export default function BestAiToolsPage({ params: { locale } }: { params: { loca
           </div>
         </div>
       </section>
+
+      <GuideEvidencePanel
+        locale={locale}
+        checkedAt={checkedAt}
+        scope={
+          isChinese
+            ? '榜单总入口要先说明怎么筛选、为什么先看榜单、以及下一步去哪里，而不是只堆主题卡片。'
+            : 'The ranking hub should explain how to filter, why to start with rankings, and what to open next instead of only stacking topic cards.'
+        }
+        items={[
+          {
+            label: isChinese ? '验证范围' : 'Checked scope',
+            value: isChinese ? '榜单总入口 + 下一步路径' : 'Ranking hub + next-step paths',
+            note: isChinese ? '先把主入口的决策链路讲清楚。' : 'Make the decision path clear at the entry point.',
+          },
+          {
+            label: isChinese ? '索引策略' : 'Indexing strategy',
+            value: isChinese ? '保持可索引' : 'Keep indexable',
+            note: isChinese ? '保留可发现性和内部导航价值。' : 'Keep discoverability and internal navigation value.',
+          },
+          {
+            label: isChinese ? '下一步增强' : 'Next enrichment',
+            value: isChinese ? '真实榜单信号、owner 认领、评论' : 'Real ranking signals, owner claims, comments',
+            note: isChinese ? '让页面更接近真实决策页。' : 'Make the page feel closer to a real decision page.',
+          },
+        ]}
+      />
     </div>
   );
 }
