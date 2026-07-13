@@ -29,9 +29,9 @@ import { toolToListRow } from '@/lib/services/toolPresenter';
 import { getPopularTools } from '@/lib/services/tools';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import Faq from '@/components/Faq';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import CommunityPulse from '@/components/home/CommunityPulse';
 import Search from '@/components/Search';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import WebNavCardList from '@/components/webNav/WebNavCardList';
 import { Link } from '@/app/navigation';
@@ -116,6 +116,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const recentDiscussions = await getRecentDiscussions(3).catch(() => []);
   const risingTools = await getRisingTools(3).catch(() => []);
   const totalVisibleTools = latestTools.total || latestTools.rows.length;
+  const checkedAt = '2026-07-13';
   const heroTitle = isChinese
     ? '发现持续更新、好用且可直接访问的 AI 工具'
     : 'Discover updated, useful, and directly accessible AI tools';
@@ -503,32 +504,33 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         <div className='mx-auto mt-4 w-full max-w-7xl px-4 lg:px-6'>
           <GuideEvidencePanel
             locale={locale}
+            checkedAt={checkedAt}
             scope={
               isChinese
-                ? '首页先交代站点的更新、收录和筛选逻辑，避免只剩下泛泛的 AI 目录感。'
-                : 'The homepage should explain updates, inventory, and filtering logic so it does not feel like a generic AI directory.'
+                ? '首页先交代站点的更新、收录和筛选逻辑，并把真实收录量和社区信号放在同一屏。'
+                : 'The homepage should explain updates, inventory, and filtering logic while surfacing real inventory and community signals on the same screen.'
             }
             items={[
               {
                 label: isChinese ? '验证范围' : 'Checked scope',
-                value: isChinese ? '更新、收录、筛选逻辑' : 'Updates, inventory, filtering logic',
+                value: isChinese
+                  ? '更新、收录、筛选逻辑 + 真实信号'
+                  : 'Updates, inventory, filtering logic + live signals',
                 note: isChinese
-                  ? '先让首页说清楚自己是谁。'
-                  : 'Make the homepage clearly state what it is.',
+                  ? `当前可见工具约 ${totalVisibleTools}+，并保留社区讨论和上升工具入口。`
+                  : `About ${totalVisibleTools}+ visible tools, with community discussions and rising tools kept in view.`,
               },
               {
                 label: isChinese ? '索引策略' : 'Indexing strategy',
                 value: isChinese ? '首页保持索引' : 'Homepage kept indexable',
-                note: isChinese
-                  ? '承接品牌词与泛入口流量。'
-                  : 'Captures brand and broad-entry traffic.',
+                note: isChinese ? '承接品牌词与泛入口流量。' : 'Captures brand and broad-entry traffic.',
               },
               {
                 label: isChinese ? '下一步增强' : 'Next enrichment',
-                value: isChinese ? '补真实更新、分类和社区信号' : 'Add real updates, categories, and community signals',
+                value: isChinese ? '补真实更新、分类、owner 信号' : 'Add real updates, categories, and owner signals',
                 note: isChinese
-                  ? '减少首页的目录感空洞。'
-                  : 'Reduce the empty-directory feel on the homepage.',
+                  ? `社区高亮 ${communityHighlights.length} 条，最近讨论 ${recentDiscussions.length} 条，继续把真实使用痕迹放进首页。`
+                  : `${communityHighlights.length} highlights and ${recentDiscussions.length} recent discussions keep real usage traces on the homepage.`,
               },
             ]}
           />

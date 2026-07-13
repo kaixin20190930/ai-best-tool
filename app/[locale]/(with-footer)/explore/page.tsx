@@ -42,6 +42,7 @@ export default async function Page({ params, searchParams }: PageProps) {
   const categories = await getAllCategories(true);
   const tags = await getAllTags('count');
   const isChinese = params.locale === 'cn' || params.locale === 'tw';
+  const checkedAt = '2026-07-13';
 
   // Generate BreadcrumbList schema for navigation hierarchy
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
@@ -124,6 +125,7 @@ export default async function Page({ params, searchParams }: PageProps) {
 
         <GuideEvidencePanel
           locale={params.locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '探索页要同时交代筛选逻辑、真实更新和下一步去哪里，而不是只给一张搜索表。'
@@ -132,24 +134,22 @@ export default async function Page({ params, searchParams }: PageProps) {
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',
-              value: isChinese ? '筛选、更新、下一步' : 'Filtering, freshness, next step',
+              value: isChinese ? '筛选、更新、下一步 + 目录规模' : 'Filtering, freshness, next step + directory scale',
               note: isChinese
-                ? '先让用户知道怎样更快筛。'
-                : 'Help users understand how to narrow down faster.',
+                ? `当前分类 ${categories.length} 个，标签 ${tags.length} 个，先让用户知道怎样更快筛。`
+                : `${categories.length} categories and ${tags.length} tags help users narrow down faster.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
               value: isChinese ? '探索页保留索引' : 'Explore page kept indexable',
-              note: isChinese
-                ? '承接大盘流量和内部导航。'
-                : 'Capture broad traffic and internal navigation.',
+              note: isChinese ? '承接大盘流量和内部导航。' : 'Capture broad traffic and internal navigation.',
             },
             {
               label: isChinese ? '下一步增强' : 'Next enrichment',
-              value: isChinese ? '补热门筛选、真实讨论和更新说明' : 'Add popular filters, real discussions, and update notes',
-              note: isChinese
-                ? '让探索页更像决策中枢。'
-                : 'Make explore feel more like a decision hub.',
+              value: isChinese
+                ? '补热门筛选、真实讨论、owner 信号'
+                : 'Add popular filters, real discussions, owner signals',
+              note: isChinese ? '让探索页更像决策中枢。' : 'Make explore feel more like a decision hub.',
             },
           ]}
         />
