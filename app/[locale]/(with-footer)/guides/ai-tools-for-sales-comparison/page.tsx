@@ -231,6 +231,39 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
         ]}
       />
+      <section className='mx-auto mt-6 grid max-w-6xl gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '销售对比页已按真实线索和跟进场景重新核对。'
+              : 'The sales comparison page has been rechecked against real lead and follow-up scenarios.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '当前判断' : 'Current judgment'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-700'>
+            {locale === 'cn' || locale === 'tw'
+              ? '保留索引，继续强调线索、外联和 CRM。'
+              : 'Keep it indexable and keep emphasizing leads, outreach, and CRM.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '下一步' : 'Next step'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-700'>
+            {locale === 'cn' || locale === 'tw'
+              ? '补一个真实销售流程与 CRM 接入案例。'
+              : 'Add one real sales workflow and CRM integration case.'}
+          </p>
+        </div>
+      </section>
       <div className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <section className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

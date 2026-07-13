@@ -210,6 +210,7 @@ Google 不会因为内容由 AI 辅助生成就直接惩罚页面，但会压低
 - 核心入口 freshness：prompt 测试、获客、小企业、协议分析、链上分析、钱包监控入口也已补最近验证块
 - 核心入口 freshness：写作、设计、资产追踪、DEX 分析、evals、代码审查入口也已补最近验证块
 - 核心入口 freshness：补齐代理、图像、记事、crypto/token/web3/wallet 研究入口的最近验证块，并已通过 `pnpm run build`
+- 对比页 freshness：营销、销售对比页已补最近验证块，并已通过 `pnpm run build`
 
 ## 十、首批真实证据模块落地记录
 
