@@ -238,7 +238,10 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? 'Diff 理解' : 'Diff understanding',
-            value: locale === 'cn' || locale === 'tw' ? '先看能不能讲清改动本身' : 'Check whether it can explain the change itself',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看能不能讲清改动本身'
+                : 'Check whether it can explain the change itself',
             note:
               locale === 'cn' || locale === 'tw'
                 ? '如果连改动都解释不清，后面的建议就很难稳定。'
@@ -246,7 +249,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
           {
             label: locale === 'cn' || locale === 'tw' ? '风险噪音比' : 'Risk-to-noise ratio',
-            value: locale === 'cn' || locale === 'tw' ? '看提醒是否真有价值' : 'Check whether warnings are actually useful',
+            value:
+              locale === 'cn' || locale === 'tw' ? '看提醒是否真有价值' : 'Check whether warnings are actually useful',
             note:
               locale === 'cn' || locale === 'tw'
                 ? '能减少漏检才算好，而不是只是制造更多 comment。'
@@ -325,6 +329,45 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               </TrackableCtaLink>
             ))}
           </div>
+        </div>
+      </section>
+      <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '这页已按当前比较页的判断标准重新核对。'
+              : 'This page has been rechecked against the current comparison-page decision flow.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '当前判断' : 'Current judgment'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw' ? '保留索引，补真实证据' : 'Keep it indexable and add real evidence'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '用评论、案例和 owner 认领把它和泛工具页区分开。'
+              : 'Use comments, cases, and owner claims to distinguish it from generic tool pages.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '下一步' : 'Next step'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw' ? '补真实用例和反馈' : 'Add real use cases and feedback'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '后续优先补案例、反馈和认领信息。'
+              : 'Next, prioritize cases, feedback, and claim information.'}
+          </p>
         </div>
       </section>
       <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_code_review_comparison' />
