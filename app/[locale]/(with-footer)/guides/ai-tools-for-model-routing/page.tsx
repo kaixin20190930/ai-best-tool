@@ -29,6 +29,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-13';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -220,6 +222,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '这页优先检查页面是否能帮助用户完成真实模型路由选择：统一出口、回退、成本治理和可替换策略，而不是只看模型列表长度。'
@@ -230,8 +233,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '判断维度' : 'Decision signals',
               value: isChinese ? '路由、回退、成本、接入' : 'Routing, fallback, cost, integration',
               note: isChinese
-                ? '重点看能否支撑真实生产治理，而不是只做模型目录。'
-                : 'We care about whether the tool supports real production governance, not only a model directory.',
+                ? `重点看能否支撑真实生产治理，而不是只做模型目录。当前可用分类数：${categoryCount}。`
+                : `We care about whether the tool supports real production governance, not only a model directory. Current category count: ${categoryCount}.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -244,8 +247,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '下一步补强' : 'Next enrichment',
               value: isChinese ? '补真实路由案例' : 'Add real routing cases',
               note: isChinese
-                ? '后续优先补回退链路、成本优化和团队使用记录。'
-                : 'Next, priority additions are fallback flows, cost optimization notes, and team usage examples.',
+                ? `后续优先补回退链路、成本优化和团队使用记录，并保持 ${checkedAt} 的核对记录。`
+                : `Next, priority additions are fallback flows, cost optimization notes, and team usage examples while keeping the ${checkedAt} verification record.`,
             },
           ]}
         />
@@ -255,11 +258,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实模型路由决策重新核对，优先保留回退、成本和接入证据。'
-                : 'This page has been rechecked against a real routing decision and keeps fallback, cost, and integration evidence visible.'}
+                ? `这页已按真实模型路由决策重新核对，优先保留回退、成本和接入证据，目前覆盖 ${categoryCount} 个分类。`
+                : `This page has been rechecked against a real routing decision and keeps fallback, cost, and integration evidence visible across ${categoryCount} categories.`}
             </p>
           </div>
           <div>

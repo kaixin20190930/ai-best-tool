@@ -29,6 +29,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-13';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -238,6 +240,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '这页优先检查页面是否能帮助用户完成真实可观测判断：日志、调用追踪、成本分析、质量追踪和生产决策，而不是只看图表数量。'
@@ -248,8 +251,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '判断维度' : 'Decision signals',
               value: isChinese ? '日志、追踪、成本、质量' : 'Logs, traces, cost, quality',
               note: isChinese
-                ? '重点看它是否能把生产请求变成可判断的证据。'
-                : 'We care about whether production requests become decision-ready evidence.',
+                ? `重点看它是否能把生产请求变成可判断的证据。当前可用分类数：${categoryCount}。`
+                : `We care about whether production requests become decision-ready evidence. Current category count: ${categoryCount}.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -262,8 +265,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '下一步补强' : 'Next enrichment',
               value: isChinese ? '补真实监控案例' : 'Add real monitoring cases',
               note: isChinese
-                ? '后续优先补生产日志样例、告警规则和团队复盘。'
-                : 'Next, priority additions are production log examples, alert rules, and team retros.',
+                ? `后续优先补生产日志样例、告警规则和团队复盘，并保持 ${checkedAt} 的核对记录。`
+                : `Next, priority additions are production log examples, alert rules, and team retros while keeping the ${checkedAt} verification record.`,
             },
           ]}
         />
@@ -273,11 +276,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实可观测决策重新核对，优先保留日志、追踪和成本证据。'
-                : 'This page has been rechecked against a real observability decision and keeps logs, tracing, and cost evidence visible.'}
+                ? `这页已按真实可观测决策重新核对，优先保留日志、追踪和成本证据，目前覆盖 ${categoryCount} 个分类。`
+                : `This page has been rechecked against a real observability decision and keeps logs, tracing, and cost evidence visible across ${categoryCount} categories.`}
             </p>
           </div>
           <div>

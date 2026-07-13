@@ -27,6 +27,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-13';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -175,6 +177,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '这页优先判断 Agent 工具是否真的能保持上下文、调用工具和处理执行闭环，而不是只看单轮回答的表面效果。'
@@ -184,7 +187,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '验证范围' : 'Checked scope',
               value: isChinese ? '多步骤、工具调用、状态、接管' : 'Multi-step tasks, tool use, state, handoff',
-              note: isChinese ? '先看它是否适合长期执行。' : 'First check whether it fits long-running execution.',
+              note: isChinese
+                ? `先看它是否适合长期执行。当前可用分类数：${categoryCount}。`
+                : `First check whether it fits long-running execution. Current category count: ${categoryCount}.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -198,7 +203,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               value: isChinese
                 ? '补真实工作流、失败恢复和日志样例'
                 : 'Add real workflows, recovery cases, and log samples',
-              note: isChinese ? '让页面出现真实执行信号。' : 'Make the page reflect real execution signals.',
+              note: isChinese
+                ? `让页面出现真实执行信号，并保持 ${checkedAt} 的核对记录。`
+                : `Make the page reflect real execution signals while keeping the ${checkedAt} verification record.`,
             },
           ]}
         />
@@ -208,11 +215,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? 'Agent 入口已和榜单、对比页和提交路径收口。'
-                : 'The agent entry now aligns with ranking, comparison, and submission paths.'}
+                ? `Agent 入口已和榜单、对比页和提交路径收口，目前覆盖 ${categoryCount} 个分类。`
+                : `The agent entry now aligns with ranking, comparison, and submission paths across ${categoryCount} categories.`}
             </p>
           </div>
           <div>
