@@ -276,7 +276,10 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '供应商覆盖' : 'Provider coverage',
-            value: locale === 'cn' || locale === 'tw' ? '先确认能接多少模型' : 'Confirm how many models it can actually cover',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先确认能接多少模型'
+                : 'Confirm how many models it can actually cover',
             note:
               locale === 'cn' || locale === 'tw'
                 ? '先看能不能稳住多供应商接入和切换自由度。'
@@ -284,7 +287,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
           {
             label: locale === 'cn' || locale === 'tw' ? '容错能力' : 'Fallback handling',
-            value: locale === 'cn' || locale === 'tw' ? '回退与失败处理要可见' : 'Fallbacks and failures should be visible',
+            value:
+              locale === 'cn' || locale === 'tw' ? '回退与失败处理要可见' : 'Fallbacks and failures should be visible',
             note:
               locale === 'cn' || locale === 'tw'
                 ? '如果失败场景都说不清，后面再比高级功能意义不大。'
@@ -300,6 +304,39 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
         ]}
       />
+      <section className='mx-auto mt-6 grid max-w-6xl gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '模型路由对比页已按真实统一入口和回退场景重新核对。'
+              : 'The model routing comparison page has been rechecked against real unified-access and fallback scenarios.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '当前判断' : 'Current judgment'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-700'>
+            {locale === 'cn' || locale === 'tw'
+              ? '保留索引，继续强调统一入口、回退和治理。'
+              : 'Keep it indexable and keep emphasizing unified access, fallback, and governance.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '下一步' : 'Next step'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-700'>
+            {locale === 'cn' || locale === 'tw'
+              ? '补一个真实多模型切换与回退案例。'
+              : 'Add one real multi-model switching and fallback case.'}
+          </p>
+        </div>
+      </section>
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

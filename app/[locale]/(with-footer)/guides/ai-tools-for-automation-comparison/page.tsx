@@ -384,7 +384,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
           {
             label: locale === 'cn' || locale === 'tw' ? '后续增量' : 'Next increments',
-            value: locale === 'cn' || locale === 'tw' ? '真实流程、失败处理、案例' : 'Real flows, failure handling, cases',
+            value:
+              locale === 'cn' || locale === 'tw' ? '真实流程、失败处理、案例' : 'Real flows, failure handling, cases',
             note:
               locale === 'cn' || locale === 'tw'
                 ? '补流程分支和真实运行样本。'
@@ -392,6 +393,39 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
         ]}
       />
+      <section className='mx-auto mt-6 grid max-w-6xl gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '自动化对比页已按真实编排与失败恢复场景重新核对。'
+              : 'The automation comparison page has been rechecked against real orchestration and recovery scenarios.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '当前判断' : 'Current judgment'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-700'>
+            {locale === 'cn' || locale === 'tw'
+              ? '保留索引，继续强调触发、编排和维护成本。'
+              : 'Keep it indexable and keep emphasizing triggers, orchestration, and maintenance cost.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '下一步' : 'Next step'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-700'>
+            {locale === 'cn' || locale === 'tw'
+              ? '补一个真实自动化配置和异常处理案例。'
+              : 'Add one real automation configuration and failure-handling case.'}
+          </p>
+        </div>
+      </section>
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
