@@ -31,6 +31,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-13';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -277,6 +279,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '这页优先检查页面是否能帮助用户完成真实图像决策：生成、修图、商用授权和品牌素材，而不是只看出图效果。'
@@ -287,8 +290,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '判断维度' : 'Decision signals',
               value: isChinese ? '生成、修图、授权、品牌' : 'Generation, editing, licensing, brand',
               note: isChinese
-                ? '重点看是否能支撑创作与商用两种场景。'
-                : 'We care about whether the tool supports both creative and commercial use.',
+                ? `当前可参考分类信号有 ${categoryCount} 个，重点看是否能支撑创作与商用两种场景。`
+                : `${categoryCount} category signals are available, and the key question is whether the tool supports both creative and commercial use.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -301,8 +304,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '下一步补强' : 'Next enrichment',
               value: isChinese ? '补真实创作案例' : 'Add real creative cases',
               note: isChinese
-                ? '后续优先补真实图片样本、商用限制和品牌模板。'
-                : 'Next, priority additions are real image samples, commercial limits, and brand templates.',
+                ? `这页已于 ${checkedAt} 重新核对，后续优先补真实图片样本、商用限制和品牌模板。`
+                : `This page was rechecked on ${checkedAt}, and next additions are real image samples, commercial limits, and brand templates.`,
             },
           ]}
         />
@@ -312,11 +315,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实图像决策重新核对，优先保留生成、修图和授权入口。'
-                : 'This page has been rechecked against a real image decision and keeps generation, editing, and licensing entry points visible.'}
+                ? `这页已按真实图像决策重新核对，优先保留生成、修图和授权入口。当前可参考分类信号 ${categoryCount} 个。`
+                : `This page has been rechecked against a real image decision and keeps generation, editing, and licensing entry points visible, with ${categoryCount} category signals available.`}
             </p>
           </div>
           <div>

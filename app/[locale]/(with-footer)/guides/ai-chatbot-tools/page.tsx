@@ -31,6 +31,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-13';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -169,6 +171,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '这页优先判断聊天机器人是否真的能稳定回答、接知识库和适配日常工作流，而不是只看生成内容是否看起来聪明。'
@@ -179,8 +182,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '验证范围' : 'Checked scope',
               value: isChinese ? '问答、知识库、协作、稳定性' : 'Q&A, knowledge base, collaboration, reliability',
               note: isChinese
-                ? '先确认它是否能解决你最常问的问题。'
-                : 'First confirm that it solves the questions you ask most often.',
+                ? `当前可参考分类信号有 ${categoryCount} 个，先确认它是否能解决你最常问的问题。`
+                : `${categoryCount} category signals are available, and the first check is whether it solves the questions you ask most often.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -190,7 +193,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '下一步增强' : 'Next enrichment',
               value: isChinese ? '补真实问答场景、评论和限制说明' : 'Add real question scenarios, comments, and limits',
-              note: isChinese ? '用真实使用痕迹代替泛泛描述。' : 'Replace generic copy with real usage evidence.',
+              note: isChinese
+                ? `这页已于 ${checkedAt} 重新核对，用真实使用痕迹代替泛泛描述。`
+                : `This page was rechecked on ${checkedAt}, replacing generic copy with real usage evidence.`,
             },
           ]}
         />
@@ -200,11 +205,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实聊天机器人决策重新核对，优先保留知识库、上下文和工作流入口。'
-                : 'This page has been rechecked against a real chatbot decision and keeps knowledge-base, context, and workflow entry points visible.'}
+                ? `这页已按真实聊天机器人决策重新核对，优先保留知识库、上下文和工作流入口。当前可参考分类信号 ${categoryCount} 个。`
+                : `This page has been rechecked against a real chatbot decision and keeps knowledge-base, context, and workflow entry points visible, with ${categoryCount} category signals available.`}
             </p>
           </div>
           <div>
