@@ -28,6 +28,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-13';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -185,6 +187,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '这页优先判断开发者工具是否真的能融入编辑器、API、自动化和发布流程，而不是只看“能写代码”的表面能力。'
@@ -199,14 +202,16 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
               value: isChinese ? '保留索引，接榜单与对比页' : 'Indexable with ranking and comparison paths',
-              note: isChinese ? '让用户从总览走向更具体的选择。' : 'Move users from overview to more specific choices.',
+              note: isChinese
+                ? `当前可参考分类信号有 ${categoryCount} 个，让用户从总览走向更具体的选择。`
+                : `${categoryCount} category signals are available, helping users move from overview to more specific choices.`,
             },
             {
               label: isChinese ? '下一步增强' : 'Next enrichment',
               value: isChinese ? '补真实工作流、仓库与调试案例' : 'Add real workflows, repos, and debugging cases',
               note: isChinese
-                ? '用可执行证据替代泛泛的卖点。'
-                : 'Replace generic selling points with executable evidence.',
+                ? `这页已于 ${checkedAt} 重新核对，用可执行证据替代泛泛的卖点。`
+                : `This page was rechecked on ${checkedAt}, replacing generic selling points with executable evidence.`,
             },
           ]}
         />
@@ -216,29 +221,37 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '开发者入口已和编码、自动化和部署路径收口。'
-                : 'The developer entry now aligns with coding, automation, and deployment paths.'}
+                ? `开发者入口已和编码、自动化和部署路径收口，当前可参考分类信号 ${categoryCount} 个。`
+                : `The developer entry now aligns with coding, automation, and deployment paths, with ${categoryCount} category signals available.`}
             </p>
           </div>
           <div>
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '当前判断' : 'Current judgment'}
             </p>
-            <p className='mt-2 text-sm leading-6 text-slate-700'>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
               {isChinese
-                ? '保留索引，继续补真实工作流和调试案例。'
-                : 'Keep indexable and continue adding real workflows and debugging cases.'}
+                ? '保留索引，继续补真实工作流证据'
+                : 'Keep it indexable and keep adding real workflow evidence'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '用仓库、调试和集成案例把它从泛开发页里拉出来。'
+                : 'Use repo, debugging, and integration cases to separate it from generic developer pages.'}
             </p>
           </div>
           <div>
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '下一步' : 'Next step'}
             </p>
-            <p className='mt-2 text-sm leading-6 text-slate-700'>
-              {isChinese ? '补一个真实仓库协作案例。' : 'Add one real repo collaboration case.'}
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '补真实仓库协作案例' : 'Add a real repo collaboration case'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese ? '先补编辑器、API 和调试三段式案例。' : 'Start with editor, API, and debugging cases.'}
             </p>
           </div>
         </section>

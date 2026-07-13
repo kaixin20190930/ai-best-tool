@@ -27,6 +27,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
   const checkedAt = '2026-07-13';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -212,8 +213,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 ? '来源、证据、发现、回溯 + 榜单'
                 : 'Sources, evidence, discovery, traceability + rankings',
               note: isChinese
-                ? `当前能参考的分类信号有 ${categories.length} 个，研究页继续把来源和证据线索放在前面。`
-                : `${categories.length} category signals are available, and the page keeps source and evidence clues up front.`,
+                ? `当前能参考的分类信号有 ${categoryCount} 个，研究页继续把来源和证据线索放在前面。`
+                : `${categoryCount} category signals are available, and the page keeps source and evidence clues up front.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -228,8 +229,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 ? '补真实案例、来源说明、最近验证'
                 : 'Add real cases, source notes, and recent verification',
               note: isChinese
-                ? '后续会把评论、收藏和 owner 信号继续接到这页。'
-                : 'Next, comments, saves, and owner signals should be connected to this page.',
+                ? `这页已于 ${checkedAt} 重新核对，后续会把评论、收藏和 owner 信号继续接到这页。`
+                : `This page was rechecked on ${checkedAt}, and next comments, saves, and owner signals should be connected to this page.`,
             },
           ]}
         />
@@ -239,29 +240,35 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? `研究入口已和榜单、对比页和提交路径收口，当前可参考分类信号 ${categories.length} 个。`
-                : `The research entry now aligns with ranking, comparison, and submission paths, with ${categories.length} category signals in view.`}
+                ? `研究入口已和榜单、对比页和提交路径收口，当前可参考分类信号 ${categoryCount} 个。`
+                : `The research entry now aligns with ranking, comparison, and submission paths, with ${categoryCount} category signals in view.`}
             </p>
           </div>
           <div>
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '当前判断' : 'Current judgment'}
             </p>
-            <p className='mt-2 text-sm leading-6 text-slate-700'>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '保留索引，继续补真实研究证据' : 'Keep it indexable and keep adding real research evidence'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '保留索引，继续补真实案例和来源说明。'
-                : 'Keep indexable and continue adding real cases and source notes.'}
+                ? '用来源、证据和回溯记录把它从泛研究页里拉出来。'
+                : 'Use sources, evidence, and traceability notes to separate it from generic research pages.'}
             </p>
           </div>
           <div>
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '下一步' : 'Next step'}
             </p>
-            <p className='mt-2 text-sm leading-6 text-slate-700'>
-              {isChinese ? '补一个真实证据核对案例。' : 'Add one real evidence-checking case.'}
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '补真实证据核对案例' : 'Add a real evidence-checking case'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese ? '先补来源、证据和回溯。' : 'Start with source, evidence, and traceability.'}
             </p>
           </div>
         </section>
