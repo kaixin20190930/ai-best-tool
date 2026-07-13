@@ -116,7 +116,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const recentDiscussions = await getRecentDiscussions(3).catch(() => []);
   const risingTools = await getRisingTools(3).catch(() => []);
   const totalVisibleTools = latestTools.total || latestTools.rows.length;
-  const checkedAt = '2026-07-13';
+  const checkedAt = '2026-07-14';
   const heroTitle = isChinese
     ? '发现持续更新、好用且可直接访问的 AI 工具'
     : 'Discover updated, useful, and directly accessible AI tools';

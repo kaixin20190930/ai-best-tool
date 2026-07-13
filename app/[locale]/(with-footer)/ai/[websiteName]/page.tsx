@@ -1624,7 +1624,7 @@ export default async function Page({
     const compareAxes = decisionCompareAxesOverride.length > 0 ? decisionCompareAxesOverride : [comparisonSummary];
     const nextComparisonLinks = getNextComparisonLinks(categorySlug, dbTool?.tags || [], locale);
     const primaryComparisonLink = nextComparisonLinks[0] || null;
-    const checkedAt = '2026-07-13';
+    const checkedAt = '2026-07-14';
     let decisionBestFitText =
       locale === 'cn' ? '先看这个工具是不是匹配你的场景' : 'Check whether this tool matches your workflow first';
     if (bestFitList.length > 0) {

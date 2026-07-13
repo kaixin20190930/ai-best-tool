@@ -34,7 +34,7 @@ export default function BestAiToolsPage({ params: { locale } }: { params: { loca
   const priorityTopics = priorityTopicKeys
     .map((key) => topListTopics.find((topic) => topic.key === key))
     .filter((topic): topic is (typeof topListTopics)[number] => Boolean(topic));
-  const checkedAt = '2026-07-13';
+  const checkedAt = '2026-07-14';
 
   return (
     <div className='theme-page mx-auto max-w-pc px-4 py-8 lg:px-0'>

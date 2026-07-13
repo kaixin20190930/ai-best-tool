@@ -435,7 +435,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
     .filter((page): page is (typeof GUIDE_PAGES)[number] => Boolean(page))
     .filter((page) => page.href.endsWith('-comparison'));
   const primaryComparisonGuide = comparisonGuides[0] || relatedGuides[0] || null;
-  const checkedAt = '2026-07-13';
+  const checkedAt = '2026-07-14';
   const priorityCategorySlugs = [
     'developer-tools',
     'research',

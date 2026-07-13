@@ -42,7 +42,7 @@ export default async function Page({ params, searchParams }: PageProps) {
   const categories = await getAllCategories(true);
   const tags = await getAllTags('count');
   const isChinese = params.locale === 'cn' || params.locale === 'tw';
-  const checkedAt = '2026-07-13';
+  const checkedAt = '2026-07-14';
 
   // Generate BreadcrumbList schema for navigation hierarchy
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
