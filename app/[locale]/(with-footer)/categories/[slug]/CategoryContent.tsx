@@ -435,6 +435,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
     .filter((page): page is (typeof GUIDE_PAGES)[number] => Boolean(page))
     .filter((page) => page.href.endsWith('-comparison'));
   const primaryComparisonGuide = comparisonGuides[0] || relatedGuides[0] || null;
+  const checkedAt = '2026-07-13';
   const priorityCategorySlugs = [
     'developer-tools',
     'research',
@@ -884,18 +885,21 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
 
         <GuideEvidencePanel
           locale={params.locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
-              ? '这页先交代分类到底覆盖哪些真实场景、目前的代表工具是什么、以及用户接下来该去哪里比较。'
-              : 'This page explains which real scenarios the category covers, what representative tools matter, and where users should compare next.'
+              ? '这页先交代分类到底覆盖哪些真实场景、当前有多少已发布工具、以及用户接下来该去哪里比较。'
+              : 'This page explains which real scenarios the category covers, how many published tools exist now, and where users should compare next.'
           }
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',
-              value: isChinese ? '场景、代表工具、比较入口' : 'Scenarios, representative tools, comparison entry',
+              value: isChinese
+                ? '场景、代表工具、比较入口 + 规模'
+                : 'Scenarios, representative tools, comparison entry + scale',
               note: isChinese
-                ? '先让分类页说清楚自己解决什么问题。'
-                : 'Make the category page state the problem it actually solves.',
+                ? `当前分类约 ${categoryToolCount} 个已发布工具，代表工具 ${representativeTools.length} 个，相关指南 ${relatedGuides.length} 个。`
+                : `About ${categoryToolCount} published tools, ${representativeTools.length} representative tools, and ${relatedGuides.length} related guides are in view.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -906,7 +910,9 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
             },
             {
               label: isChinese ? '下一步增强' : 'Next enrichment',
-              value: isChinese ? '补代表工具、真实对比和评论' : 'Add representative tools, real comparisons, and comments',
+              value: isChinese
+                ? '补代表工具、真实对比、评论、owner 信号'
+                : 'Add representative tools, real comparisons, comments, and owner signals',
               note: isChinese
                 ? '把抽象分类变成可行动的选择页。'
                 : 'Turn an abstract category into an actionable selection page.',
