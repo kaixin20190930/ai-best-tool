@@ -1,3 +1,4 @@
+import { getAllCategories } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
@@ -15,6 +16,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+  const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-13';
   const data = await buildComparisonPageData(locale, {
     categoryLabel: { cn: '生产力工具', en: 'Productivity tools' },
     comparisonLabel: { cn: 'AI 生产力工具对比', en: 'AI productivity tools comparison' },
@@ -127,6 +130,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       {ComparisonPage({ ...data, locale })}
       <GuideEvidencePanel
         locale={locale}
+        checkedAt={checkedAt}
         scope={
           locale === 'cn' || locale === 'tw'
             ? '先确认生产力工具是否真的覆盖任务、笔记、知识管理和协作，再继续看对比。'
@@ -138,8 +142,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             value: locale === 'cn' || locale === 'tw' ? '任务、笔记、协作' : 'Tasks, notes, collaboration',
             note:
               locale === 'cn' || locale === 'tw'
-                ? '先分清你到底要解决什么。'
-                : 'First separate the actual problem you need to solve.',
+                ? `当前可参考分类信号有 ${categories.length} 个，先分清你到底要解决什么。`
+                : `${categories.length} category signals are available, so first separate the actual problem you need to solve.`,
           },
           {
             label: locale === 'cn' || locale === 'tw' ? '使用成本' : 'Usage cost',
@@ -164,11 +168,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
-              ? '这页已按真实生产力决策路径重新核对，保留任务、笔记、知识管理和协作入口。'
-              : 'This page has been rechecked against a real productivity decision path and keeps tasks, notes, knowledge management, and collaboration entry points visible.'}
+              ? `这页已按真实生产力决策路径重新核对，保留任务、笔记、知识管理和协作入口。当前可参考分类信号 ${categories.length} 个。`
+              : `This page has been rechecked against a real productivity decision path and keeps tasks, notes, knowledge management, and collaboration entry points visible, with ${categories.length} category signals available.`}
           </p>
         </div>
         <div>

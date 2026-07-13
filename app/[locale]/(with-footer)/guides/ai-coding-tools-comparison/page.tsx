@@ -33,6 +33,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const checkedAt = '2026-07-13';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
     { name: isChinese ? '指南' : 'Guides', url: `${siteUrl}/${locale}/guides` },
@@ -209,6 +210,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '编程工具的判断重点通常不是“写得更像”，而是上下文理解、编辑器联动、调试效率和团队工作流是否真的更顺。'
@@ -219,8 +221,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '上下文理解' : 'Context understanding',
               value: isChinese ? '优先看是否真懂仓库和 diff' : 'Check whether it truly understands the repo and diff',
               note: isChinese
-                ? '代码建议要能跟当前上下文对上，而不是只给通用答案。'
-                : 'Code suggestions need to match the current context instead of giving generic answers.',
+                ? `当前可参考分类信号有 ${categories.length} 个，代码建议要能跟当前上下文对上。`
+                : `${categories.length} category signals are available, and code suggestions need to match the current context.`,
             },
             {
               label: isChinese ? '编辑器联动' : 'Editor integration',
@@ -244,11 +246,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实编码决策路径重新核对，保留上下文、编辑器和调试入口。'
-                : 'This page has been rechecked against a real coding decision path and keeps context, editor, and debugging entry points visible.'}
+                ? `这页已按真实编码决策路径重新核对，保留上下文、编辑器和调试入口。当前可参考分类信号 ${categories.length} 个。`
+                : `This page has been rechecked against a real coding decision path and keeps context, editor, and debugging entry points visible, with ${categories.length} category signals available.`}
             </p>
           </div>
           <div>
