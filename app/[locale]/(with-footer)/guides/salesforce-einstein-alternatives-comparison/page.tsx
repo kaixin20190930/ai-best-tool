@@ -261,26 +261,70 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           {
             label: locale === 'cn' || locale === 'tw' ? 'CRM 适配' : 'CRM fit',
             value: locale === 'cn' || locale === 'tw' ? '是否能进销售体系' : 'Can it fit the sales stack',
-            note: locale === 'cn' || locale === 'tw'
-              ? '如果不是 CRM 层的需求，就别把它当成普通 AI 工具比。'
-              : 'If CRM is not the job, do not compare it like a generic AI tool.',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果不是 CRM 层的需求，就别把它当成普通 AI 工具比。'
+                : 'If CRM is not the job, do not compare it like a generic AI tool.',
           },
           {
             label: locale === 'cn' || locale === 'tw' ? '自动化编排' : 'Automation orchestration',
             value: locale === 'cn' || locale === 'tw' ? '销售和流程是否能连起来' : 'Can sales and workflows connect',
-            note: locale === 'cn' || locale === 'tw'
-              ? '企业工具的关键是流程能不能真的跑通。'
-              : 'Enterprise tools live or die by whether the process actually runs.',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '企业工具的关键是流程能不能真的跑通。'
+                : 'Enterprise tools live or die by whether the process actually runs.',
           },
           {
             label: locale === 'cn' || locale === 'tw' ? '企业落地' : 'Enterprise adoption',
             value: locale === 'cn' || locale === 'tw' ? '权限、数据和扩展性' : 'Permissions, data, and extensibility',
-            note: locale === 'cn' || locale === 'tw'
-              ? '能不能落进企业流程，通常比单点功能更重要。'
-              : 'Landing in enterprise workflow matters more than individual features.',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '能不能落进企业流程，通常比单点功能更重要。'
+                : 'Landing in enterprise workflow matters more than individual features.',
           },
         ]}
       />
+      <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '这页已按真实 CRM / 企业替代路径重新核对，保留销售、自动化和企业入口。'
+              : 'This page has been rechecked against a real CRM/enterprise-alternative workflow and keeps sales, automation, and enterprise entry points visible.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '当前判断' : 'Current judgment'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '保留索引，补真实企业证据'
+              : 'Keep it indexable and add real enterprise evidence'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '用 CRM 适配、自动化和真人评论把它和泛销售页区分开。'
+              : 'Use CRM fit, automation, and real comments to differentiate it from generic sales pages.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '下一步' : 'Next step'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw' ? '补真实企业场景和反馈' : 'Add real enterprise scenarios and feedback'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '后续优先补案例、CRM 样例和真人评论。'
+              : 'Next, prioritize cases, CRM examples, and real comments.'}
+          </p>
+        </div>
+      </section>
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

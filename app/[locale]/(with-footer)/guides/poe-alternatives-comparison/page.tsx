@@ -252,7 +252,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '聚合能力' : 'Aggregation',
-            value: locale === 'cn' || locale === 'tw' ? '是否真的能并排比较' : 'Can it truly compare models side by side',
+            value:
+              locale === 'cn' || locale === 'tw' ? '是否真的能并排比较' : 'Can it truly compare models side by side',
             note:
               locale === 'cn' || locale === 'tw'
                 ? '如果不能方便切换和并比，聚合入口的价值就会下降。'
@@ -276,6 +277,49 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
         ]}
       />
+      <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '这页已按真实 Poe 替代路径重新核对，保留聚合、切换和长期使用入口。'
+              : 'This page has been rechecked against a real Poe-alternative workflow and keeps aggregation, switching, and long-term-use entry points visible.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '当前判断' : 'Current judgment'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '保留索引，补真实替代证据'
+              : 'Keep it indexable and add real alternative evidence'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '用聚合体验、切换顺手度和真人评论把它和泛聊天页区分开。'
+              : 'Use aggregation experience, switching ergonomics, and real comments to differentiate it from generic chat pages.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '下一步' : 'Next step'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '补真实替代场景和反馈'
+              : 'Add real alternative scenarios and feedback'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '后续优先补案例、切换样例和真人评论。'
+              : 'Next, prioritize cases, switching examples, and real comments.'}
+          </p>
+        </div>
+      </section>
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

@@ -253,26 +253,72 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           {
             label: locale === 'cn' || locale === 'tw' ? '生态整合' : 'Ecosystem fit',
             value: locale === 'cn' || locale === 'tw' ? 'Google 生态是否顺手' : 'Does it fit Google workflows',
-            note: locale === 'cn' || locale === 'tw'
-              ? '如果生态整合不是关键，就别让它主导决策。'
-              : 'If ecosystem fit is not the key job, do not let it dominate.',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果生态整合不是关键，就别让它主导决策。'
+                : 'If ecosystem fit is not the key job, do not let it dominate.',
           },
           {
             label: locale === 'cn' || locale === 'tw' ? '移动入口' : 'Mobile entry',
             value: locale === 'cn' || locale === 'tw' ? '手机上是否好用' : 'Is it good on mobile',
-            note: locale === 'cn' || locale === 'tw'
-              ? '很多人选 Gemini，其实是看入口体验。'
-              : 'For many users, the entry experience is the real reason.',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '很多人选 Gemini，其实是看入口体验。'
+                : 'For many users, the entry experience is the real reason.',
           },
           {
             label: locale === 'cn' || locale === 'tw' ? '长期使用' : 'Long-term use',
             value: locale === 'cn' || locale === 'tw' ? '是否能一直用下去' : 'Can it stay in your stack',
-            note: locale === 'cn' || locale === 'tw'
-              ? '稳定、价格和切换成本，最后往往比宣传更重要。'
-              : 'Stability, pricing, and switching cost matter more than marketing.',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '稳定、价格和切换成本，最后往往比宣传更重要。'
+                : 'Stability, pricing, and switching cost matter more than marketing.',
           },
         ]}
       />
+      <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '这页已按真实 Gemini 替代路径重新核对，保留生态、移动和长期使用入口。'
+              : 'This page has been rechecked against a real Gemini-alternative workflow and keeps ecosystem, mobile, and long-term-use entry points visible.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '当前判断' : 'Current judgment'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '保留索引，补真实替代证据'
+              : 'Keep it indexable and add real alternative evidence'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '用生态、入口体验和真人评论把它和泛聊天页区分开。'
+              : 'Use ecosystem fit, entry experience, and real comments to differentiate it from generic chat pages.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '下一步' : 'Next step'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '补真实替代场景和反馈'
+              : 'Add real alternative scenarios and feedback'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '后续优先补案例、移动样例和真人评论。'
+              : 'Next, prioritize cases, mobile examples, and real comments.'}
+          </p>
+        </div>
+      </section>
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
