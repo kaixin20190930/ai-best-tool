@@ -7,7 +7,6 @@ import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import { toolToListRow } from '@/lib/services/toolPresenter';
 import { getTools } from '@/lib/services/tools';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -33,7 +32,6 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-  const checkedAt = '2026-07-13';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
     { name: isChinese ? '指南' : 'Guides', url: `${siteUrl}/${locale}/guides` },
@@ -207,80 +205,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
-
-        <GuideEvidencePanel
-          locale={locale}
-          checkedAt={checkedAt}
-          scope={
-            isChinese
-              ? '编程工具的判断重点通常不是“写得更像”，而是上下文理解、编辑器联动、调试效率和团队工作流是否真的更顺。'
-              : 'Coding tool decisions are usually not about sounding smarter, but about context understanding, editor integration, debugging speed, and whether the team workflow actually feels smoother.'
-          }
-          items={[
-            {
-              label: isChinese ? '上下文理解' : 'Context understanding',
-              value: isChinese ? '优先看是否真懂仓库和 diff' : 'Check whether it truly understands the repo and diff',
-              note: isChinese
-                ? `当前可参考分类信号有 ${categories.length} 个，代码建议要能跟当前上下文对上。`
-                : `${categories.length} category signals are available, and code suggestions need to match the current context.`,
-            },
-            {
-              label: isChinese ? '编辑器联动' : 'Editor integration',
-              value: isChinese ? '看是否顺手融入日常编码' : 'See whether it fits daily coding naturally',
-              note: isChinese
-                ? '真正有用的工具通常不是多一个按钮，而是少一次切换。'
-                : 'Useful tools often remove a context switch rather than add another button.',
-            },
-            {
-              label: isChinese ? '调试与重构' : 'Debugging and refactoring',
-              value: isChinese ? '看它能不能帮你继续往下走' : 'Check whether it helps you move forward',
-              note: isChinese
-                ? '调试、解释和重构比单纯补全更能体现真实价值。'
-                : 'Debugging, explanation, and refactoring show more real value than autocomplete alone.',
-            },
-          ]}
-        />
-
-        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '最近验证' : 'Last checked'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? `这页已按真实编码决策路径重新核对，保留上下文、编辑器和调试入口。当前可参考分类信号 ${categories.length} 个。`
-                : `This page has been rechecked against a real coding decision path and keeps context, editor, and debugging entry points visible, with ${categories.length} category signals available.`}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '当前判断' : 'Current judgment'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>
-              {isChinese ? '保留索引，补真实编码证据' : 'Keep it indexable and add real coding evidence'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '用仓库上下文、调试记录和真人评论把它和泛开发页区分开。'
-                : 'Use repo context, debugging notes, and real comments to differentiate it from generic dev pages.'}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '下一步' : 'Next step'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>
-              {isChinese ? '补真实编码场景和反馈' : 'Add real coding scenarios and feedback'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '后续优先补仓库案例、编辑器联动样例和真人评论。'
-                : 'Next, prioritize repo cases, editor integration examples, and real comments.'}
-            </p>
-          </div>
-        </section>
-
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '高意图入口' : 'High-intent path'}

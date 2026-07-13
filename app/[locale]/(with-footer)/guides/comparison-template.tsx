@@ -552,6 +552,8 @@ export function ComparisonPage({
   config,
   locale,
 }: ComparisonPageProps) {
+  const checkedAt = '2026-07-13';
+  const categoryCount = categories.length;
   const firstTool = tools[0] || null;
   const firstToolHref = firstTool ? `/ai/${firstTool.name}` : config.guideHref;
   let rankingEntryTitle = 'Browse more tools';
@@ -682,6 +684,7 @@ export function ComparisonPage({
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '比较页先说清比较依据、样本边界和下一步怎么缩小候选，避免它变成单纯的列表堆叠。'
@@ -692,22 +695,20 @@ export function ComparisonPage({
               label: isChinese ? '验证范围' : 'Checked scope',
               value: isChinese ? '比较依据、样本边界、下一步' : 'Basis, sample boundaries, next step',
               note: isChinese
-                ? '先让用户知道这一页为什么值得看。'
-                : 'Make it clear why this page is worth reading.',
+                ? `当前可参考分类信号有 ${categoryCount} 个，先让用户知道这一页为什么值得看。`
+                : `${categoryCount} category signals are available, making it clear why this page is worth reading.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
               value: isChinese ? '比较页保留索引' : 'Comparison page kept indexable',
-              note: isChinese
-                ? '承接高意图对比搜索。'
-                : 'Capture high-intent comparison searches.',
+              note: isChinese ? '承接高意图对比搜索。' : 'Capture high-intent comparison searches.',
             },
             {
               label: isChinese ? '下一步增强' : 'Next enrichment',
               value: isChinese ? '补真实样本、评论和决策说明' : 'Add real samples, comments, and decision notes',
               note: isChinese
-                ? '把比较页做成可决策页面。'
-                : 'Turn the page into a real decision aid.',
+                ? `这页已于 ${checkedAt} 重新核对，后续重点把比较页做成可决策页面。`
+                : `This page was rechecked on ${checkedAt}, and the next step is to turn it into a real decision aid.`,
             },
           ]}
         />

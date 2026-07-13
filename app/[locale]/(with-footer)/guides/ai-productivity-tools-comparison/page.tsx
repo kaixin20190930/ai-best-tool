@@ -1,6 +1,4 @@
-import { getAllCategories } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -16,8 +14,6 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
-  const categories = await getAllCategories(true).catch(() => []);
-  const checkedAt = '2026-07-13';
   const data = await buildComparisonPageData(locale, {
     categoryLabel: { cn: '生产力工具', en: 'Productivity tools' },
     comparisonLabel: { cn: 'AI 生产力工具对比', en: 'AI productivity tools comparison' },
@@ -128,84 +124,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
-      <GuideEvidencePanel
-        locale={locale}
-        checkedAt={checkedAt}
-        scope={
-          locale === 'cn' || locale === 'tw'
-            ? '先确认生产力工具是否真的覆盖任务、笔记、知识管理和协作，再继续看对比。'
-            : 'Check whether these tools really cover tasks, notes, knowledge management, and collaboration before continuing.'
-        }
-        items={[
-          {
-            label: locale === 'cn' || locale === 'tw' ? '核心场景' : 'Core use case',
-            value: locale === 'cn' || locale === 'tw' ? '任务、笔记、协作' : 'Tasks, notes, collaboration',
-            note:
-              locale === 'cn' || locale === 'tw'
-                ? `当前可参考分类信号有 ${categories.length} 个，先分清你到底要解决什么。`
-                : `${categories.length} category signals are available, so first separate the actual problem you need to solve.`,
-          },
-          {
-            label: locale === 'cn' || locale === 'tw' ? '使用成本' : 'Usage cost',
-            value: locale === 'cn' || locale === 'tw' ? '免费限制、协作深度' : 'Free limits, collaboration depth',
-            note:
-              locale === 'cn' || locale === 'tw'
-                ? '长期使用时这会越来越重要。'
-                : 'This becomes more important over time.',
-          },
-          {
-            label: locale === 'cn' || locale === 'tw' ? '真实信号' : 'Real signals',
-            value: locale === 'cn' || locale === 'tw' ? '评论、案例、认领' : 'Comments, cases, claims',
-            note:
-              locale === 'cn' || locale === 'tw'
-                ? '用真人信号补足 AI 页面。'
-                : 'Use human signals to complement the AI-written page.',
-          },
-        ]}
-      />
-      <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
-        <div>
-          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-            {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
-          </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
-          <p className='mt-2 text-sm leading-6 text-slate-600'>
-            {locale === 'cn' || locale === 'tw'
-              ? `这页已按真实生产力决策路径重新核对，保留任务、笔记、知识管理和协作入口。当前可参考分类信号 ${categories.length} 个。`
-              : `This page has been rechecked against a real productivity decision path and keeps tasks, notes, knowledge management, and collaboration entry points visible, with ${categories.length} category signals available.`}
-          </p>
-        </div>
-        <div>
-          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-            {locale === 'cn' || locale === 'tw' ? '当前判断' : 'Current judgment'}
-          </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>
-            {locale === 'cn' || locale === 'tw'
-              ? '保留索引，补真实生产力证据'
-              : 'Keep it indexable and add real productivity evidence'}
-          </p>
-          <p className='mt-2 text-sm leading-6 text-slate-600'>
-            {locale === 'cn' || locale === 'tw'
-              ? '用工作流、协作细节和真人评论把它和泛效率页区分开。'
-              : 'Use workflow details, collaboration signals, and real comments to differentiate it from generic productivity pages.'}
-          </p>
-        </div>
-        <div>
-          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-            {locale === 'cn' || locale === 'tw' ? '下一步' : 'Next step'}
-          </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>
-            {locale === 'cn' || locale === 'tw'
-              ? '补真实效率场景和反馈'
-              : 'Add real productivity scenarios and feedback'}
-          </p>
-          <p className='mt-2 text-sm leading-6 text-slate-600'>
-            {locale === 'cn' || locale === 'tw'
-              ? '后续优先补任务流、协作样例和真人评论。'
-              : 'Next, prioritize task flow examples, collaboration cases, and real comments.'}
-          </p>
-        </div>
-      </section>
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
