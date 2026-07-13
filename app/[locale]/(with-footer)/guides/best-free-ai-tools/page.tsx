@@ -67,7 +67,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
   const totalTools = result.status === 'fulfilled' ? result.value.total : 0;
   const categories = categoriesResult.status === 'fulfilled' ? categoriesResult.value : [];
-  const checkedAt = '2026-07-13';
+  const checkedAt = '2026-07-14';
   const categoryCount = categories.length;
   const categoryMap = new Map(categories.map((category) => [category.id, category]));
 

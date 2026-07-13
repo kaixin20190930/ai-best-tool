@@ -552,7 +552,7 @@ export function ComparisonPage({
   config,
   locale,
 }: ComparisonPageProps) {
-  const checkedAt = '2026-07-13';
+  const checkedAt = '2026-07-14';
   const categoryCount = categories.length;
   const firstTool = tools[0] || null;
   const firstToolHref = firstTool ? `/ai/${firstTool.name}` : config.guideHref;
