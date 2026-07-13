@@ -31,7 +31,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
-  const checkedAt = '2026-07-13';
+  const checkedAt = '2026-07-14';
   const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
@@ -230,7 +230,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {isChinese ? '下一步' : 'Next step'}
             </p>
             <p className='mt-2 text-lg font-bold text-slate-950'>
-              {isChinese ? '补真实对话与接手记录' : 'Add real dialogue and handoff notes'}
+              {isChinese
+                ? `补真实对话与接手记录，并持续保留 ${checkedAt} 的核对记录。`
+                : `Add real dialogue and handoff notes while keeping the ${checkedAt} verification record.`}
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese

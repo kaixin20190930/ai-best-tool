@@ -29,7 +29,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
-  const checkedAt = '2026-07-13';
+  const checkedAt = '2026-07-14';
   const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
@@ -252,7 +252,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {isChinese ? '下一步' : 'Next step'}
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-700'>
-              {isChinese ? '补一个真实自动化配置案例。' : 'Add one real automation configuration case.'}
+              {isChinese
+                ? `补一个真实自动化配置案例，并持续保留 ${checkedAt} 的核对记录。`
+                : `Add one real automation configuration case while keeping the ${checkedAt} verification record.`}
             </p>
           </div>
         </section>

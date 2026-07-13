@@ -32,7 +32,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
-  const checkedAt = '2026-07-13';
+  const checkedAt = '2026-07-14';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -203,8 +204,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '下一步补强' : 'Next enrichment',
               value: isChinese ? '补充限制、团队适配、最近验证' : 'Add limits, team fit, and recent verification',
               note: isChinese
-                ? '下一轮会补免费额度、私有仓库支持、团队协作和真实评论信号。'
-                : 'Next pass should add free-tier limits, private repo support, team features, and real feedback signals.',
+                ? `下一轮会补免费额度、私有仓库支持、团队协作和真实评论信号，并持续保留 ${checkedAt} 的核对记录。`
+                : `Next pass should add free-tier limits, private repo support, team features, and real feedback signals while keeping the ${checkedAt} verification record.`,
             },
           ]}
         />
@@ -214,11 +215,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '编程入口已和榜单、对比页和真实条目连在一起。'
-                : 'The coding entry now connects ranking, comparison, and real listings.'}
+                ? `编程入口已和榜单、对比页和真实条目连在一起，当前可参考分类信号 ${categoryCount} 个。`
+                : `The coding entry now connects ranking, comparison, and real listings, with ${categoryCount} category signals available.`}
             </p>
           </div>
           <div>
@@ -236,7 +237,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {isChinese ? '下一步' : 'Next step'}
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-700'>
-              {isChinese ? '补一个真实多文件修改案例。' : 'Add one real multi-file edit case.'}
+              {isChinese
+                ? `补一个真实多文件修改案例，并持续保留 ${checkedAt} 的核对记录。`
+                : `Add one real multi-file edit case while keeping the ${checkedAt} verification record.`}
             </p>
           </div>
         </section>
