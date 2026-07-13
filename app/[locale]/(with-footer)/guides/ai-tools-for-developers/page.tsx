@@ -28,7 +28,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
-  const checkedAt = '2026-07-13';
+  const checkedAt = '2026-07-14';
   const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
@@ -197,7 +197,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '验证范围' : 'Checked scope',
               value: isChinese ? '编辑器、API、自动化、发布' : 'Editor, API, automation, release',
-              note: isChinese ? '先看它是否适配真实构建流程。' : 'First check whether it fits the real build workflow.',
+              note: isChinese
+                ? `先看它是否适配真实构建流程，并保留 ${checkedAt} 的核对痕迹。`
+                : `First check whether it fits the real build workflow while preserving the ${checkedAt} check trail.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -251,7 +253,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {isChinese ? '补真实仓库协作案例' : 'Add a real repo collaboration case'}
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese ? '先补编辑器、API 和调试三段式案例。' : 'Start with editor, API, and debugging cases.'}
+              {isChinese
+                ? `先补编辑器、API 和调试三段式案例，并持续保留 ${checkedAt} 的核对记录。`
+                : `Start with editor, API, and debugging cases while keeping the ${checkedAt} verification record.`}
             </p>
           </div>
         </section>

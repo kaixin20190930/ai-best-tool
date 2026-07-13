@@ -29,7 +29,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
-  const checkedAt = '2026-07-13';
+  const checkedAt = '2026-07-14';
   const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
@@ -287,8 +287,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '后续优先补回退链路、缓存命中和团队成本治理记录。'
-                : 'Next, prioritize fallback flows, cache behavior, and team cost-governance notes.'}
+                ? `后续优先补回退链路、缓存命中和团队成本治理记录，并持续保留 ${checkedAt} 的核对痕迹。`
+                : `Next, prioritize fallback flows, cache behavior, and team cost-governance notes while preserving the ${checkedAt} check trail.`}
             </p>
           </div>
         </section>
