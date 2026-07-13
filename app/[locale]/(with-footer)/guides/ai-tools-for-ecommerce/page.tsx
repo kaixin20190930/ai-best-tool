@@ -25,6 +25,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-14';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -150,6 +152,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '电商页要围绕商品、客服、营销和运营的真实工作流来做，不是单纯堆工具。这个页继续可索引，但会把营销、自动化、客服和榜单入口分层处理，避免和生产力页互相抢词。'
@@ -160,8 +163,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '验证重点' : 'Validation focus',
               value: isChinese ? '商品、客服、活动' : 'Products, support, campaigns',
               note: isChinese
-                ? '先确认它是不是在服务电商真实工作流。'
-                : 'Confirm it serves actual ecommerce workflows.',
+                ? `先确认它是不是在服务电商真实工作流。当前可用分类数：${categoryCount}。`
+                : `Confirm it serves actual ecommerce workflows. Current category count: ${categoryCount}.`,
             },
             {
               label: isChinese ? '合并策略' : 'Merge strategy',
@@ -173,7 +176,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '后续增量' : 'Next increments',
               value: isChinese ? '商品案例、渠道截图' : 'Product cases, channel screenshots',
-              note: isChinese ? '补真实商品、渠道和运营例子。' : 'Add real product, channel, and operations examples.',
+              note: isChinese
+                ? `补真实商品、渠道和运营例子，并保持 ${checkedAt} 的核对记录。`
+                : `Add real product, channel, and operations examples while keeping the ${checkedAt} verification record.`,
             },
           ]}
         />
@@ -183,11 +188,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实电商工作流重新核对，优先保留商品、客服、营销和运营入口。'
-                : 'This page has been rechecked against a real ecommerce workflow and keeps product, support, marketing, and operations entry points visible.'}
+                ? `这页已按真实电商工作流重新核对，优先保留商品、客服、营销和运营入口，目前覆盖 ${categoryCount} 个分类。`
+                : `This page has been rechecked against a real ecommerce workflow and keeps product, support, marketing, and operations entry points visible across ${categoryCount} categories.`}
             </p>
           </div>
           <div>

@@ -29,6 +29,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-14';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -272,6 +274,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '这页优先检查页面是否能帮助用户完成真实 crypto 研究判断：数据源、链上追踪、市场情报和导出能力，而不是只看信息量。'
@@ -282,8 +285,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '判断维度' : 'Decision signals',
               value: isChinese ? '数据源、链上、情报、导出' : 'Sources, on-chain, intelligence, exports',
               note: isChinese
-                ? '重点看它是否能支撑持续研究，而不只是一次性浏览。'
-                : 'We care about whether it supports ongoing research, not just one-time browsing.',
+                ? `重点看它是否能支撑持续研究，而不只是一次性浏览。当前可用分类数：${categoryCount}。`
+                : `We care about whether it supports ongoing research, not just one-time browsing. Current category count: ${categoryCount}.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -296,8 +299,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '下一步补强' : 'Next enrichment',
               value: isChinese ? '补真实研究案例' : 'Add real research cases',
               note: isChinese
-                ? '后续优先补研究笔记、链上样例和监控清单。'
-                : 'Next, priority additions are research notes, on-chain examples, and monitoring checklists.',
+                ? `后续优先补研究笔记、链上样例和监控清单，并保持 ${checkedAt} 的核对记录。`
+                : `Next, priority additions are research notes, on-chain examples, and monitoring checklists while keeping the ${checkedAt} verification record.`,
             },
           ]}
         />
@@ -307,11 +310,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实 Crypto 研究决策重新核对，优先保留项目资料、链上跟踪和情报入口。'
-                : 'This page has been rechecked against a real crypto-research decision and keeps project materials, on-chain tracking, and intelligence entry points visible.'}
+                ? `这页已按真实 Crypto 研究决策重新核对，优先保留项目资料、链上跟踪和情报入口，目前覆盖 ${categoryCount} 个分类。`
+                : `This page has been rechecked against a real crypto-research decision and keeps project materials, on-chain tracking, and intelligence entry points visible across ${categoryCount} categories.`}
             </p>
           </div>
           <div>

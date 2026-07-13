@@ -28,6 +28,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-14';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -253,6 +255,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '这页优先检查页面是否能帮助用户完成真实获客判断：名单来源、筛选深度、导出质量和后续销售衔接，而不是只看联系人数量。'
@@ -263,8 +266,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '判断维度' : 'Decision signals',
               value: isChinese ? '来源、筛选、导出、衔接' : 'Sources, filtering, exports, workflow fit',
               note: isChinese
-                ? '重点看它能否把线索变成可用名单。'
-                : 'We care about whether it turns leads into usable lists.',
+                ? `重点看它能否把线索变成可用名单。当前可用分类数：${categoryCount}。`
+                : `We care about whether it turns leads into usable lists. Current category count: ${categoryCount}.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -277,8 +280,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '下一步补强' : 'Next enrichment',
               value: isChinese ? '补真实获客案例' : 'Add real lead-gen cases',
               note: isChinese
-                ? '后续优先补名单样例、筛选规则和外联前流程。'
-                : 'Next, priority additions are list examples, filtering rules, and pre-outreach workflow notes.',
+                ? `后续优先补名单样例、筛选规则和外联前流程，并保持 ${checkedAt} 的核对记录。`
+                : `Next, priority additions are list examples, filtering rules, and pre-outreach workflow notes while keeping the ${checkedAt} verification record.`,
             },
           ]}
         />
@@ -288,11 +291,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实获客决策重新核对，优先保留名单、筛选和导出入口。'
-                : 'This page has been rechecked against a real lead-gen decision and keeps list, filtering, and export entry points visible.'}
+                ? `这页已按真实获客决策重新核对，优先保留名单、筛选和导出入口，目前覆盖 ${categoryCount} 个分类。`
+                : `This page has been rechecked against a real lead-gen decision and keeps list, filtering, and export entry points visible across ${categoryCount} categories.`}
             </p>
           </div>
           <div>
