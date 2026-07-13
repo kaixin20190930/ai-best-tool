@@ -29,6 +29,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-13';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -220,6 +222,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '这页优先检查页面是否能帮助用户完成真实 code review 判断：是否围绕 diff、文件上下文、风险提示、反馈可执行性来展开，而不是只看“会不会生成代码”。'
@@ -230,8 +233,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '判断维度' : 'Decision signals',
               value: isChinese ? 'PR 理解、风险、反馈' : 'PR understanding, risk, feedback',
               note: isChinese
-                ? '重点看工具是否能把改动解释清楚，并指出真正的风险。'
-                : 'We care about whether the tool explains changes clearly and flags real risk.',
+                ? `重点看工具是否能把改动解释清楚，并指出真正的风险。当前可用分类数：${categoryCount}。`
+                : `We care about whether the tool explains changes clearly and flags real risk. Current category count: ${categoryCount}.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -244,8 +247,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '下一步补强' : 'Next enrichment',
               value: isChinese ? '补真实 PR 与模板' : 'Add real PRs and templates',
               note: isChinese
-                ? '后续优先补真实 PR 案例、团队复盘和常见评论模板。'
-                : 'Next, priority additions are real PR examples, team retros, and common review templates.',
+                ? `后续优先补真实 PR 案例、团队复盘和常见评论模板，并保持 ${checkedAt} 的核对记录。`
+                : `Next, priority additions are real PR examples, team retros, and common review templates while keeping the ${checkedAt} verification record.`,
             },
           ]}
         />
@@ -255,11 +258,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实 code review 决策重新核对，优先保留 diff、上下文和风险入口。'
-                : 'This page has been rechecked against a real code-review decision and keeps diffs, context, and risk entry points visible.'}
+                ? `这页已按真实 code review 决策重新核对，优先保留 diff、上下文和风险入口，目前覆盖 ${categoryCount} 个分类。`
+                : `This page has been rechecked against a real code-review decision and keeps diffs, context, and risk entry points visible across ${categoryCount} categories.`}
             </p>
           </div>
           <div>

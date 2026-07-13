@@ -27,6 +27,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-13';
+  const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -220,6 +222,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '这页优先检查页面是否能帮助用户完成真实 evals 判断：是否有明确评分标准、数据集、验收门槛、版本回归路径，以及是否能继续进入对比页或榜单页。'
@@ -230,8 +233,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '判断维度' : 'Decision signals',
               value: isChinese ? '评分标准、数据集、验收、回归' : 'Scoring, datasets, acceptance, regression',
               note: isChinese
-                ? '不只看工具功能，而是看它能否把结果质量变成可重复判断。'
-                : 'We focus on whether the tool turns output quality into a repeatable decision.',
+                ? `不只看工具功能，而是看它能否把结果质量变成可重复判断。当前可用分类数：${categoryCount}。`
+                : `We focus on whether the tool turns output quality into a repeatable decision. Current category count: ${categoryCount}.`,
             },
             {
               label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -244,8 +247,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               label: isChinese ? '下一步补强' : 'Next enrichment',
               value: isChinese ? '补真实样本与复盘' : 'Add real samples and retros',
               note: isChinese
-                ? '后续优先补评估样本、评分模板、验收清单和复盘笔记。'
-                : 'Next, priority additions are evaluation samples, scoring templates, acceptance checklists, and retrospective notes.',
+                ? `后续优先补评估样本、评分模板、验收清单和复盘笔记，并保持 ${checkedAt} 的核对记录。`
+                : `Next, priority additions are evaluation samples, scoring templates, acceptance checklists, and retrospective notes while keeping the ${checkedAt} verification record.`,
             },
           ]}
         />
@@ -255,11 +258,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实 evals 决策重新核对，优先保留评分、数据集和回归入口。'
-                : 'This page has been rechecked against a real evals decision and keeps scoring, datasets, and regression entry points visible.'}
+                ? `这页已按真实 evals 决策重新核对，优先保留评分、数据集和回归入口，目前覆盖 ${categoryCount} 个分类。`
+                : `This page has been rechecked against a real evals decision and keeps scoring, datasets, and regression entry points visible across ${categoryCount} categories.`}
             </p>
           </div>
           <div>
