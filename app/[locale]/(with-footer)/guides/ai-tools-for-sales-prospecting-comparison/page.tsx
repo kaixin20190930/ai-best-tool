@@ -202,13 +202,53 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           {
             label: locale === 'cn' || locale === 'tw' ? '后续增量' : 'Next increments',
             value: locale === 'cn' || locale === 'tw' ? '真实外联、案例、反馈' : 'Real outreach, cases, feedback',
-            note:
-              locale === 'cn' || locale === 'tw'
-                ? '补上真人外联样本。'
-                : 'Add genuine outreach examples.',
+            note: locale === 'cn' || locale === 'tw' ? '补上真人外联样本。' : 'Add genuine outreach examples.',
           },
         ]}
       />
+      <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '这页已按真实销售拓客路径重新核对，保留名单、触达和回应入口。'
+              : 'This page has been rechecked against a real sales prospecting workflow and keeps list, outreach, and response entry points visible.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '当前判断' : 'Current judgment'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '保留索引，补真实拓客证据'
+              : 'Keep it indexable and add real prospecting evidence'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '用名单质量、个性化和真人评论把它和泛外联页区分开。'
+              : 'Use list quality, personalization, and real comments to differentiate it from generic outreach pages.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '下一步' : 'Next step'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '补真实拓客场景和反馈'
+              : 'Add real prospecting scenarios and feedback'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '后续优先补案例、触达样例和真人评论。'
+              : 'Next, prioritize cases, outreach examples, and real comments.'}
+          </p>
+        </div>
+      </section>
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

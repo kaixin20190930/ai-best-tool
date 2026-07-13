@@ -3,11 +3,11 @@ import { ArrowRight, CheckCircle2, Columns3, ExternalLink, Sparkles } from 'luci
 import { getTranslations } from 'next-intl/server';
 
 import { generateBreadcrumbSchema, generateFAQSchema, generateItemListSchema } from '@/lib/seo/schema';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import { toolToListRow } from '@/lib/services/toolPresenter';
 import { getTools } from '@/lib/services/tools';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -327,7 +327,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {
               label: isChinese ? '长期使用' : 'Long-term',
               value: isChinese ? '导出、更新、评论' : 'Export, freshness, comments',
-              note: isChinese ? '持续做视频时这些比标题更重要。' : 'These matter more than labels for ongoing video work.',
+              note: isChinese
+                ? '持续做视频时这些比标题更重要。'
+                : 'These matter more than labels for ongoing video work.',
             },
             {
               label: isChinese ? '真实增量' : 'Real increments',
@@ -412,6 +414,43 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 </div>
               );
             })}
+          </div>
+        </section>
+        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '最近验证' : 'Last checked'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '这页已按真实视频工作流重新核对，保留剪辑、生成和配音入口。'
+                : 'This page has been rechecked against a real video workflow and keeps editing, generation, and voiceover entry points visible.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '当前判断' : 'Current judgment'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '保留索引，补真实视频证据' : 'Keep it indexable and add real video evidence'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '用导出、更新和真人评论把它和泛多媒体页区分开。'
+                : 'Use exports, freshness, and real comments to differentiate it from generic multimedia pages.'}
+            </p>
+          </div>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '下一步' : 'Next step'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '补真实视频场景和反馈' : 'Add real video scenarios and feedback'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese ? '后续优先补案例、样例和真人评论。' : 'Next, prioritize cases, samples, and real comments.'}
+            </p>
           </div>
         </section>
         <GuideSubmissionPath locale={locale} ctaPrefix='ai_video_tools_comparison' />

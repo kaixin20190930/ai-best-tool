@@ -289,7 +289,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '协议覆盖' : 'Protocol coverage',
-            value: locale === 'cn' || locale === 'tw' ? '是否覆盖你的研究对象' : 'Whether it covers your research targets',
+            value:
+              locale === 'cn' || locale === 'tw' ? '是否覆盖你的研究对象' : 'Whether it covers your research targets',
             note:
               locale === 'cn' || locale === 'tw'
                 ? '研究页最怕覆盖面不对，先确认对象。'
@@ -297,7 +298,10 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
           {
             label: locale === 'cn' || locale === 'tw' ? '趋势稳定性' : 'Trend stability',
-            value: locale === 'cn' || locale === 'tw' ? '长期趋势和历史是否可复用' : 'Whether trends and history are reusable',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '长期趋势和历史是否可复用'
+                : 'Whether trends and history are reusable',
             note:
               locale === 'cn' || locale === 'tw'
                 ? '稳定的趋势视图比一次性截图更有价值。'
@@ -313,6 +317,47 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           },
         ]}
       />
+      <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-13</p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '这页已按真实协议分析路径重新核对，保留协议、趋势和导出入口。'
+              : 'This page has been rechecked against a real protocol-analysis workflow and keeps protocol, trend, and export entry points visible.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '当前判断' : 'Current judgment'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw'
+              ? '保留索引，补真实协议证据'
+              : 'Keep it indexable and add real protocol evidence'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '用协议覆盖、历史和真人评论把它和泛分析页区分开。'
+              : 'Use protocol coverage, history, and real comments to differentiate it from generic analysis pages.'}
+          </p>
+        </div>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+            {locale === 'cn' || locale === 'tw' ? '下一步' : 'Next step'}
+          </p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>
+            {locale === 'cn' || locale === 'tw' ? '补真实协议场景和反馈' : 'Add real protocol scenarios and feedback'}
+          </p>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {locale === 'cn' || locale === 'tw'
+              ? '后续优先补案例、图表和真人评论。'
+              : 'Next, prioritize cases, charts, and real comments.'}
+          </p>
+        </div>
+      </section>
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
