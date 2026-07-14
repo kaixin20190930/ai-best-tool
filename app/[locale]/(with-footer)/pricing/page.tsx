@@ -4,6 +4,7 @@ import { ArrowRight, Clock3, CreditCard, Megaphone, Rocket, Sparkles } from 'luc
 import { getTranslations } from 'next-intl/server';
 
 import { getListingPaymentMailto, listingConfig } from '@/lib/config/listing';
+import CommerceViewTracker from '@/components/analytics/CommerceViewTracker';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 
 function PricingMiniCard({
@@ -164,6 +165,7 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
 
   return (
     <div className='theme-page mx-auto max-w-pc px-4 py-8 lg:px-0'>
+      <CommerceViewTracker eventType='pricing_view' pageType='pricing' />
       <section className='overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-sm'>
         <div className='grid gap-0 lg:grid-cols-[1.1fr_0.9fr]'>
           <div className='space-y-6 p-6 lg:p-10'>

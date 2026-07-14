@@ -1060,7 +1060,7 @@ export default async function AdminAnalyticsPage({
             <div>
               <h2 className='text-lg font-semibold text-slate-900'>Commercial intent snapshot</h2>
               <p className='mt-1 text-sm text-slate-600'>
-                One quick read on whether the site is producing submit, claim, and checkout intent.
+                One quick read on whether the site is producing pricing views, submit views, claim intent, and checkout.
               </p>
             </div>
             <div className='text-sm text-slate-500'>
@@ -1070,7 +1070,21 @@ export default async function AdminAnalyticsPage({
             </div>
           </div>
 
-          <div className='mb-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
+          <div className='mb-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3'>
+            <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+              <p className='text-sm font-medium text-slate-600'>Pricing views</p>
+              <p className='mt-2 text-3xl font-semibold text-slate-900'>
+                {commercialIntentReport.totalPricingViews.toLocaleString()}
+              </p>
+              <p className='mt-2 text-sm text-slate-500'>People opening the pricing page</p>
+            </div>
+            <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+              <p className='text-sm font-medium text-slate-600'>Submit views</p>
+              <p className='mt-2 text-3xl font-semibold text-slate-900'>
+                {commercialIntentReport.totalSubmitViews.toLocaleString()}
+              </p>
+              <p className='mt-2 text-sm text-slate-500'>People opening the submission form</p>
+            </div>
             <div className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
               <p className='text-sm font-medium text-slate-600'>Submit clicks</p>
               <p className='mt-2 text-3xl font-semibold text-slate-900'>

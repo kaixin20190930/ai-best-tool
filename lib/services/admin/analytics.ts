@@ -247,6 +247,8 @@ export interface CommercialIntentSource {
   pageLabel: string;
   pageViews: number;
   uniqueVisitors: number;
+  pricingViews: number;
+  submitViews: number;
   submitClicks: number;
   claimClicks: number;
   claimSubmissions: number;
@@ -256,6 +258,8 @@ export interface CommercialIntentSource {
 
 export interface CommercialIntentReport {
   sources: CommercialIntentSource[];
+  totalPricingViews: number;
+  totalSubmitViews: number;
   totalSubmitClicks: number;
   totalClaimClicks: number;
   totalClaimSubmissions: number;
@@ -290,6 +294,8 @@ export interface AgentJourneyReport {
 type CommercialIntentCounts = {
   pageViews: number;
   uniqueVisitors: number;
+  pricingViews: number;
+  submitViews: number;
   submitClicks: number;
   claimClicks: number;
   claimSubmissions: number;
@@ -1575,7 +1581,7 @@ export async function getCommercialIntentReport(
 
     const addCount = (
       sourcePathRaw: string | null | undefined,
-      key: 'submitClicks' | 'claimClicks' | 'claimSubmissions' | 'checkoutStarts',
+      key: 'pricingViews' | 'submitViews' | 'submitClicks' | 'claimClicks' | 'claimSubmissions' | 'checkoutStarts',
       countRaw: unknown,
     ) => {
       const sourcePath = normalizeSourcePath(sourcePathRaw);
@@ -1588,6 +1594,8 @@ export async function getCommercialIntentReport(
       const existing = rowsBySource.get(sourcePath) || {
         pageViews: 0,
         uniqueVisitors: 0,
+        pricingViews: 0,
+        submitViews: 0,
         submitClicks: 0,
         claimClicks: 0,
         claimSubmissions: 0,
@@ -1597,7 +1605,7 @@ export async function getCommercialIntentReport(
       rowsBySource.set(sourcePath, existing);
     };
 
-    const [pageViewResult, ctaResult, claimResult, checkoutResult] = await Promise.all([
+    const [pageViewResult, commerceViewResult, ctaResult, claimResult, checkoutResult] = await Promise.all([
       pool.query(
         `
         SELECT
@@ -1615,6 +1623,27 @@ export async function getCommercialIntentReport(
         WHERE event_type = 'page_view'
           ${dateCondition}
         GROUP BY 1
+      `,
+      ),
+      pool.query(
+        `
+        SELECT
+          COALESCE(
+            NULLIF(metadata->>'page_path', ''),
+            NULLIF(metadata->>'pagePath', ''),
+            NULLIF(metadata->>'source_path', ''),
+            NULLIF(regexp_replace(COALESCE(referrer, ''), '^https?://[^/]+', ''), '')
+          ) AS source_path,
+          CASE
+            WHEN event_type = 'pricing_view' THEN 'pricing_view'
+            WHEN event_type = 'submit_view' THEN 'submit_view'
+            ELSE 'other'
+          END AS view_type,
+          COUNT(*)::int AS count
+        FROM analytics
+        WHERE event_type IN ('pricing_view', 'submit_view')
+          ${dateCondition}
+        GROUP BY 1, 2
       `,
       ),
       pool.query(
@@ -1677,6 +1706,8 @@ export async function getCommercialIntentReport(
       const existing = rowsBySource.get(sourcePath) || {
         pageViews: 0,
         uniqueVisitors: 0,
+        pricingViews: 0,
+        submitViews: 0,
         submitClicks: 0,
         claimClicks: 0,
         claimSubmissions: 0,
@@ -1697,6 +1728,15 @@ export async function getCommercialIntentReport(
       }
     });
 
+    commerceViewResult.rows.forEach((row) => {
+      const viewType = String(row.view_type || 'other');
+      if (viewType === 'pricing_view') {
+        addCount(row.source_path, 'pricingViews', row.count);
+      } else if (viewType === 'submit_view') {
+        addCount(row.source_path, 'submitViews', row.count);
+      }
+    });
+
     claimResult.rows.forEach((row) => {
       addCount(row.source_path, 'claimSubmissions', row.count);
     });
@@ -1714,6 +1754,8 @@ export async function getCommercialIntentReport(
           pageLabel: getPageTypeLabel(pageType),
           pageViews: counts.pageViews,
           uniqueVisitors: counts.uniqueVisitors,
+          pricingViews: counts.pricingViews,
+          submitViews: counts.submitViews,
           submitClicks: counts.submitClicks,
           claimClicks: counts.claimClicks,
           claimSubmissions: counts.claimSubmissions,
@@ -1734,6 +1776,8 @@ export async function getCommercialIntentReport(
 
     return {
       sources,
+      totalPricingViews: rankedSources.reduce((sum, item) => sum + item.pricingViews, 0),
+      totalSubmitViews: rankedSources.reduce((sum, item) => sum + item.submitViews, 0),
       totalSubmitClicks: rankedSources.reduce((sum, item) => sum + item.submitClicks, 0),
       totalClaimClicks: rankedSources.reduce((sum, item) => sum + item.claimClicks, 0),
       totalClaimSubmissions: rankedSources.reduce((sum, item) => sum + item.claimSubmissions, 0),
@@ -1743,6 +1787,8 @@ export async function getCommercialIntentReport(
     console.error('Error fetching commercial intent report:', error);
     return {
       sources: [],
+      totalPricingViews: 0,
+      totalSubmitViews: 0,
       totalSubmitClicks: 0,
       totalClaimClicks: 0,
       totalClaimSubmissions: 0,

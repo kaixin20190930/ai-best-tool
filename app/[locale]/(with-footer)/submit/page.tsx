@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { getListingPaymentMailto, listingConfig } from '@/lib/config/listing';
 import { getAllCategories } from '@/lib/services/categories';
+import CommerceViewTracker from '@/components/analytics/CommerceViewTracker';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 
 import SubmitForm from './SubmitForm';
@@ -47,6 +48,7 @@ export default async function Page({
 
   return (
     <div className='theme-page mx-auto max-w-pc'>
+      <CommerceViewTracker eventType='submit_view' pageType='submit' />
       <section className='mx-auto mt-6 max-w-pc px-3 lg:mt-10 lg:px-0'>
         <div className='rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm lg:p-10'>
           <div className='inline-flex items-center gap-2 rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-800'>

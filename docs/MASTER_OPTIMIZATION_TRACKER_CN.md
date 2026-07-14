@@ -33,7 +33,7 @@
 
 | 计划 | 当前完成度 | 已完成的核心内容 | 主要未完成内容 |
 | --- | --- | --- | --- |
-| 60 天商业主线 | 40% | 工具库、分类、Guide、Comparison、Submit、Stripe、Featured、Admin 基础完整；部分认领、审核和后台能力已增强 | 真正的付费验证、Claim 留资转化、Pricing/Submit/Claim 页面重构、漏斗埋点闭环 |
+| 60 天商业主线 | 55% | 工具库、分类、Guide、Comparison、Submit、Stripe、Featured、Admin 基础完整；Pricing/Submit/Claim 页面收口，漏斗埋点已接通 | 真正的付费验证、Claim 留资转化、后台持续跟踪和优化 |
 | SEO 质量恢复主线 | 70% | robots/sitemap/noindex 策略、质量盘点、GSC 台账、核心页真实证据模块、多个 hub/detail/compare 页增强、索引收口方向已经落地 | 继续观察 GSC、补齐剩余核心页真实信号、合并/ noindex 弱页、按周复盘 |
 | 竞品研究与产品优化主线 | 20%（执行） / 100%（研究文档） | 已完成竞品研究文档，明确 10 条可借鉴设计和 10 类用户痛点 | 还需要把研究结论真正落到首页、Explore、分类页、对比页、评论/认领闭环里 |
 
@@ -101,7 +101,7 @@
 | Pricing 页面重构 | 让付费理由 3 秒内能看懂 | 套餐、交付、时效、边界清晰 | 进行中 |
 | Submit 页面重构 | 提交前教育用户 | 审核标准、拒绝规则、付款说明齐全 | 进行中 |
 | Claim Landing Page | 提前验证认领意愿 | 能直接留资，不依赖复杂后台 | 已完成 |
-| 漏斗埋点 | 找到流失点 | Pricing → Submit → Checkout → Success 全链路可读 | 待做 |
+| 漏斗埋点 | 找到流失点 | Pricing → Submit → Checkout → Success 全链路可读 | 已完成 |
 
 ## 六、推荐的执行顺序
 
