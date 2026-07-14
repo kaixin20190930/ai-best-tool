@@ -70,6 +70,33 @@ function slugifyTag(value: string): string {
     .replace(/^-+|-+$/g, '');
 }
 
+function PathOptionCard({
+  title,
+  summary,
+  ctaLabel,
+  href,
+  accent = false,
+}: {
+  title: string;
+  summary: string;
+  ctaLabel: string;
+  href: string;
+  accent?: boolean;
+}) {
+  return (
+    <Link
+      href={href}
+      className={`rounded-2xl border p-4 transition hover:-translate-y-0.5 ${
+        accent ? 'border-cyan-200 bg-cyan-50 shadow-sm' : 'border-slate-200 bg-white hover:border-cyan-200'
+      }`}
+    >
+      <p className='text-sm font-semibold text-slate-950'>{title}</p>
+      <p className='mt-2 text-sm leading-6 text-slate-600'>{summary}</p>
+      <p className={`mt-4 text-sm font-semibold ${accent ? 'text-cyan-800' : 'text-slate-700'}`}>{ctaLabel}</p>
+    </Link>
+  );
+}
+
 export default function SubmitForm({
   categories,
   locale,
@@ -237,6 +264,7 @@ export default function SubmitForm({
           'theme-surface mx-3 mb-5 flex w-full max-w-[560px] flex-col justify-between rounded-[12px] bg-white px-3 py-5 lg:p-8',
           className,
         )}
+        id='submit-form'
       >
         <div className='space-y-3 lg:space-y-5'>
           {intentBanner && (
@@ -252,6 +280,54 @@ export default function SubmitForm({
               )}
             </div>
           )}
+          <div className='rounded-2xl border border-slate-200 bg-slate-50 p-4'>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-800'>
+              {isChinese ? '先选路径' : 'Choose your path first'}
+            </p>
+            <h2 className='mt-1 text-lg font-bold text-slate-950'>
+              {isChinese
+                ? '先认领，再提交；要赶时间再走付费'
+                : 'Claim first, then submit; pay only when timing matters'}
+            </h2>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '如果目录里已经有你的工具，先认领更稳；如果是新条目，直接提交；如果要赶发布时间，再选付费路径。'
+                : 'If the listing already exists, claiming is the better first step. For a new tool, submit it. Use paid review only when the launch window matters.'}
+            </p>
+            <div className='mt-4 grid gap-3 md:grid-cols-3'>
+              <PathOptionCard
+                title={isChinese ? '已有条目' : 'Existing listing'}
+                summary={
+                  isChinese
+                    ? '先去认领页，把条目归到你的账号，再继续更新和审核。'
+                    : 'Go to the claim page first so the listing is tied to your account before review or updates.'
+                }
+                ctaLabel={isChinese ? '先去认领页' : 'Go claim listing'}
+                href={`/${locale}/developer/listing?intent=claim`}
+              />
+              <PathOptionCard
+                title={isChinese ? '新工具提交' : 'New tool submission'}
+                summary={
+                  isChinese
+                    ? '直接提交新条目，补全官网、分类、描述和素材后进入审核。'
+                    : 'Submit the new listing directly, then complete website, category, description, and media for review.'
+                }
+                ctaLabel={isChinese ? '继续提交' : 'Continue submitting'}
+                href='#submit-form'
+                accent
+              />
+              <PathOptionCard
+                title={isChinese ? '时间敏感发布' : 'Time-sensitive launch'}
+                summary={
+                  isChinese
+                    ? '先提交，再去“我的提交”里完成付费和前排窗口。'
+                    : 'Submit first, then complete payment and featured timing from My Submissions.'
+                }
+                ctaLabel={isChinese ? '看付费方案' : 'See paid options'}
+                href={`/${locale}/pricing`}
+              />
+            </div>
+          </div>
           {justSubmitted && (
             <div className='rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800'>
               <p className='font-semibold'>
