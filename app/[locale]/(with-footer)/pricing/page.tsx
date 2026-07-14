@@ -89,6 +89,47 @@ function StepRow({ index, text }: { index: string; text: string }) {
   );
 }
 
+function PathCard({
+  title,
+  summary,
+  ctaLabel,
+  href,
+  ctaId,
+  accent = false,
+}: {
+  title: string;
+  summary: string;
+  ctaLabel: string;
+  href: string;
+  ctaId: string;
+  accent?: boolean;
+}) {
+  return (
+    <div
+      className={`rounded-2xl border p-4 ${
+        accent ? 'border-cyan-200 bg-cyan-50 shadow-sm' : 'border-slate-200 bg-white'
+      }`}
+    >
+      <p className='text-sm font-semibold text-slate-950'>{title}</p>
+      <p className='mt-2 text-sm leading-6 text-slate-600'>{summary}</p>
+      <TrackableCtaLink
+        href={href}
+        ctaId={ctaId}
+        ctaLabel={ctaLabel}
+        pageType='pricing'
+        className={`mt-4 inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-semibold ${
+          accent
+            ? 'bg-cyan-700 text-white hover:bg-cyan-800'
+            : 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+        }`}
+      >
+        {ctaLabel}
+        <ArrowRight className='ml-2 size-4' />
+      </TrackableCtaLink>
+    </div>
+  );
+}
+
 function FaqCard({ q, a }: { q: string; a: string }) {
   return (
     <div className='rounded-xl border border-slate-200 bg-white p-5 shadow-sm'>
@@ -158,6 +199,56 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
                     ? '前排展示是固定天数窗口，不会自动续期，也不是按点击或按曝光计费的广告位。接近到期时，请回到“我的提交”查看续期提示。'
                     : 'Featured placement is a fixed-day window and does not renew automatically. When it nears expiry, check My Submissions for renewal prompts.'}
                 </p>
+              </div>
+            </div>
+
+            <div className='rounded-2xl border border-slate-200 bg-slate-50 p-5'>
+              <div className='flex flex-wrap items-center justify-between gap-3'>
+                <div>
+                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-800'>
+                    {isChinese ? '先选路径' : 'Choose your path first'}
+                  </p>
+                  <h2 className='mt-1 text-xl font-bold text-slate-950'>
+                    {isChinese ? '三种动作，直接对应三条入口' : 'Three actions, three direct entry points'}
+                  </h2>
+                </div>
+              </div>
+
+              <div className='mt-4 grid gap-3 md:grid-cols-3'>
+                <PathCard
+                  title={isChinese ? '我已经被收录了' : 'I am already listed'}
+                  summary={
+                    isChinese
+                      ? '先去认领页，把工具归到你的账号，再继续处理审核、更新和前排。'
+                      : 'Claim the listing first, then continue with review, updates, and featured placement.'
+                  }
+                  ctaLabel={isChinese ? '去认领' : 'Claim listing'}
+                  href={claimHref}
+                  ctaId='pricing_path_claim'
+                />
+                <PathCard
+                  title={isChinese ? '我是新提交' : 'I need a new submission'}
+                  summary={
+                    isChinese
+                      ? '先走提交页，免费提交继续开放；如果要更快审核，可以在同一流程里选择付费。'
+                      : 'Start from the submit page. Free submissions stay open, and paid review is available in the same flow.'
+                  }
+                  ctaLabel={isChinese ? '去提交' : 'Submit tool'}
+                  href={submitHref}
+                  ctaId='pricing_path_submit'
+                  accent
+                />
+                <PathCard
+                  title={isChinese ? '我有时间敏感的发布' : 'My launch is time-sensitive'}
+                  summary={
+                    isChinese
+                      ? '直接走提交页的付费方案，选择优先审核或固定前排窗口，适合发布和活动节点。'
+                      : 'Use the paid path on submit to choose priority review or a fixed featured window for launches and campaigns.'
+                  }
+                  ctaLabel={isChinese ? '看付费方案' : 'View paid options'}
+                  href={submitHref}
+                  ctaId='pricing_path_paid'
+                />
               </div>
             </div>
 
