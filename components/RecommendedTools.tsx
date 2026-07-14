@@ -236,7 +236,7 @@ export default async function RecommendedTools({
   }
 
   return (
-    <section className='mb-20 pb-0'>
+    <section className='mb-24 pb-2'>
       <div className='mb-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
         <h2 className='text-2xl font-bold text-slate-900 lg:text-3xl'>{comparisonTitle}</h2>
         <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>{comparisonDescription}</p>

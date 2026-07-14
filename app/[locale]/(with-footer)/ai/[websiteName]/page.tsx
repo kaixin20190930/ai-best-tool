@@ -2774,10 +2774,10 @@ export default async function Page({
           </div>
 
           {toolId && (
-            <section id='comments' className='mx-auto mt-20 max-w-7xl scroll-mt-28 px-4 pb-12 lg:mt-24 lg:px-6'>
+            <section id='comments' className='mx-auto mt-24 max-w-7xl scroll-mt-32 px-4 pb-12 lg:mt-28 lg:px-6'>
               <Separator className='mb-10 border-t border-slate-200' />
-              <div className='mb-3 rounded-lg bg-white p-3 shadow-sm ring-1 ring-slate-200 sm:p-4'>
-                <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-3'>
+              <div className='rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5 lg:p-6'>
+                <div className='flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between'>
                   <div className='max-w-2xl'>
                     <h3 className='text-base font-semibold text-slate-900'>
                       {locale === 'cn' ? '参与讨论，看看真实反馈' : 'Join the discussion and follow updates'}
@@ -2788,7 +2788,7 @@ export default async function Page({
                         : 'Save this tool, share it with your team, and leave your review.'}
                     </p>
                   </div>
-                  <div className='flex flex-wrap items-center gap-2 sm:pt-0.5'>
+                  <div className='flex flex-wrap items-center gap-2'>
                     {user ? (
                       <>
                         <FavoriteButton toolId={toolId} initialState={isFavoritedByUser} showLabel />
@@ -2810,24 +2810,26 @@ export default async function Page({
                     )}
                   </div>
                 </div>
+                <div className='mt-4 rounded-xl border border-cyan-100 bg-cyan-50 px-4 py-3 text-sm leading-6 text-cyan-900'>
+                  {locale === 'cn'
+                    ? '先看官网和相似工具，再回来写真实体验：适合什么场景、哪里最好用、有什么坑，都会帮到后来的人。'
+                    : 'Open the official site and compare similar tools first, then come back and share what really worked, what didn’t, and what to watch out for.'}
+                </div>
+                <div className='mt-6'>
+                  <CommentList
+                    toolId={toolId}
+                    currentUserId={user?.id}
+                    locale={locale}
+                    promptLabel={commentPromptLabel}
+                    starterPrompts={commentStarterPrompts}
+                    placeholder={
+                      locale === 'cn'
+                        ? '说说你的真实使用体验，比如适合什么场景、有什么优点或注意点。'
+                        : 'Tell us your real experience: best use cases, strengths, or anything to watch out for.'
+                    }
+                  />
+                </div>
               </div>
-              <div className='mb-4 rounded-lg border border-cyan-100 bg-cyan-50 px-4 py-3 text-sm leading-6 text-cyan-900'>
-                {locale === 'cn'
-                  ? '先看官网和相似工具，再回来写真实体验：适合什么场景、哪里最好用、有什么坑，都会帮到后来的人。'
-                  : 'Open the official site and compare similar tools first, then come back and share what really worked, what didn’t, and what to watch out for.'}
-              </div>
-              <CommentList
-                toolId={toolId}
-                currentUserId={user?.id}
-                locale={locale}
-                promptLabel={commentPromptLabel}
-                starterPrompts={commentStarterPrompts}
-                placeholder={
-                  locale === 'cn'
-                    ? '说说你的真实使用体验，比如适合什么场景、有什么优点或注意点。'
-                    : 'Tell us your real experience: best use cases, strengths, or anything to watch out for.'
-                }
-              />
             </section>
           )}
         </div>
