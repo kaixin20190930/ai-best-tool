@@ -1267,6 +1267,28 @@ function getPricingLabel(pricing: string | null | undefined): string {
   return 'Check website';
 }
 
+function getClaimLabel(claimStatus: string | null | undefined, locale: string): string {
+  const isChinese = locale === 'cn';
+
+  if (claimStatus === 'claimed') return isChinese ? '已认领' : 'Claimed';
+  if (claimStatus === 'pending') return isChinese ? '待确认' : 'Pending';
+  if (claimStatus === 'rejected') return isChinese ? '已驳回' : 'Rejected';
+  return isChinese ? '未认领' : 'Unclaimed';
+}
+
+function getClaimTone(claimStatus: string | null | undefined): string {
+  if (claimStatus === 'claimed') return 'bg-emerald-50 text-emerald-700';
+  if (claimStatus === 'pending') return 'bg-amber-50 text-amber-700';
+  if (claimStatus === 'rejected') return 'bg-rose-50 text-rose-700';
+  return 'bg-slate-100 text-slate-600';
+}
+
+type DetailClaimSignals = {
+  ownerEmail?: string | null;
+  claimStatus?: string | null;
+  claimedAt?: string | null;
+};
+
 export async function generateMetadata({
   params: { locale, websiteName },
 }: {
@@ -1361,6 +1383,8 @@ export default async function Page({
         : (await getWebNavigationDetail(websiteName, locale)).data;
 
     if (!data) notFound();
+
+    const claimTool = dbTool as (typeof dbTool & DetailClaimSignals) | null;
 
     // Get current user
     const supabase = await createClient();
@@ -1504,6 +1528,9 @@ export default async function Page({
     const heroImage = data.thumbnailUrl || data.imageUrl || '';
     const pricingLabel = getPricingLabel(dbTool?.pricing);
     const updatedAt = dbTool?.updatedAt || dbTool?.createdAt;
+    const ownerEmail = claimTool?.ownerEmail || '';
+    const claimStatus = claimTool?.claimStatus || 'unclaimed';
+    const claimedAt = claimTool?.claimedAt || '';
     const recentlyCheckedLabel = isChinese ? '最近检查' : 'Recently checked';
     const updatedLabel = updatedAt
       ? new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
@@ -1520,6 +1547,19 @@ export default async function Page({
     if (ratingStats.ratingCount > 0) {
       ratingLabel = `${ratingStats.averageRating.toFixed(1)} / 5`;
     }
+    const claimLabel = getClaimLabel(claimStatus, locale);
+    const claimTone = getClaimTone(claimStatus);
+    let claimSummary = isChinese ? '尚未补充 owner 邮箱' : 'Owner email not set';
+    if (ownerEmail) {
+      claimSummary = isChinese ? `Owner 邮箱：${ownerEmail}` : `Owner email: ${ownerEmail}`;
+    }
+    const claimedAtLabel = claimedAt
+      ? new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        }).format(new Date(claimedAt))
+      : null;
     const quickFacts = [
       {
         label: isChinese ? '分类' : 'Category',
@@ -1544,6 +1584,12 @@ export default async function Page({
         value: ratingLabel,
         icon: Star,
         tone: 'text-cyan-700 bg-cyan-50',
+      },
+      {
+        label: isChinese ? '认领' : 'Claim',
+        value: claimLabel,
+        icon: ShieldCheck,
+        tone: claimTone,
       },
     ];
     const commentPromptLabel = isChinese ? '可以直接点一个开头' : 'Start with one of these';
@@ -2121,6 +2167,24 @@ export default async function Page({
                           </p>
                           <p className='mt-2 text-base font-semibold text-slate-950'>{updatedLabel}</p>
                           <p className='mt-3 text-sm leading-6 text-slate-600'>{freshnessSummary}</p>
+                        </div>
+
+                        <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
+                          <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                            {locale === 'cn' ? 'Owner 信号' : 'Owner signal'}
+                          </p>
+                          <p className='mt-2 text-base font-semibold text-slate-950'>{claimLabel}</p>
+                          <div className='mt-2 flex flex-wrap gap-2'>
+                            <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${claimTone}`}>
+                              {claimLabel}
+                            </span>
+                            {claimedAtLabel && (
+                              <span className='rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700'>
+                                {isChinese ? `认领于 ${claimedAtLabel}` : `Claimed ${claimedAtLabel}`}
+                              </span>
+                            )}
+                          </div>
+                          <p className='mt-3 text-sm leading-6 text-slate-600'>{claimSummary}</p>
                         </div>
 
                         <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
