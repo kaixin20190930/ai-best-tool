@@ -43,6 +43,34 @@ export default async function Page({ params, searchParams }: PageProps) {
   const tags = await getAllTags('count');
   const isChinese = params.locale === 'cn' || params.locale === 'tw';
   const checkedAt = '2026-07-14';
+  const taskFirstEntryPoints = [
+    {
+      href: '/guides/ai-writing-tools',
+      title: isChinese ? '写内容' : 'Write content',
+      description: isChinese
+        ? '先看写作工具的场景、价格和输出质量。'
+        : 'Start with writing use cases, pricing, and output quality.',
+    },
+    {
+      href: '/guides/ai-coding-tools',
+      title: isChinese ? '做开发' : 'Build or code',
+      description: isChinese ? '先看 IDE、补全和 Agent 类工具。' : 'Start with IDE, completion, and agent-style tools.',
+    },
+    {
+      href: '/guides/ai-tools-for-research',
+      title: isChinese ? '做研究' : 'Do research',
+      description: isChinese
+        ? '先看资料发现、引用和证据整理。'
+        : 'Start with discovery, citations, and evidence gathering.',
+    },
+    {
+      href: '/guides/how-to-choose-ai-tools',
+      title: isChinese ? '还没决定' : 'Still deciding',
+      description: isChinese
+        ? '先看选型方法，再回到 Explore 做筛选。'
+        : 'Read the selection guide first, then come back to Explore.',
+    },
+  ];
 
   // Generate BreadcrumbList schema for navigation hierarchy
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
@@ -67,6 +95,26 @@ export default async function Page({ params, searchParams }: PageProps) {
               ? '如果你还没决定要看哪个方向，先从这里筛选；如果你已经有明确意图，再跳到本周新增、生产力或 Web3 这些更聚焦的核心页。'
               : 'If you are still orienting, start filtering here. If you already know the direction, jump straight to new additions, productivity, or Web3.'}
           </p>
+          <div className='mt-5 rounded-[18px] border border-cyan-100 bg-cyan-50/60 p-4 shadow-sm'>
+            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '先按任务找' : 'Start with a task'}
+            </p>
+            <h2 className='mt-1 text-xl font-bold text-slate-950'>
+              {isChinese ? '你想先解决哪类问题？' : 'What kind of problem are you solving first?'}
+            </h2>
+            <div className='mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+              {taskFirstEntryPoints.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
+                >
+                  <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
           <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
             <Link
               href='/new'

@@ -1,5 +1,9 @@
 # 竞品研究与下一步优化方案
 
+> 归档说明：本文件已并入 [优化总控任务表](./MASTER_OPTIMIZATION_TRACKER_CN.md)，不再作为当前活跃计划维护。
+> 
+> 研究结论仍然有效，但执行入口只看总控表。
+
 更新时间：2026-07-14
 
 这份研究用于回答两个问题：
@@ -285,4 +289,3 @@
 - [How algorithmic popularity bias hinders or promotes quality](https://arxiv.org/abs/1707.00574)
 - [Launch-Day Diffusion: Tracking Hacker News Impact on GitHub Stars for AI Tools](https://arxiv.org/abs/2511.04453)
 - [Product Hunt homepage](https://www.producthunt.com/) 中的 Trending Forum Threads
-

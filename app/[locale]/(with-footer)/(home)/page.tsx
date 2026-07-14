@@ -159,6 +159,36 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       href: '/new',
     },
   ];
+  const taskFirstEntryPoints = [
+    {
+      href: '/guides/ai-writing-tools',
+      title: isChinese ? '我要写内容' : 'I need to write content',
+      description: isChinese
+        ? '先看写作场景、价格和输出质量，再决定具体工具。'
+        : 'Start with writing use cases, pricing, and output quality before picking tools.',
+    },
+    {
+      href: '/guides/ai-coding-tools',
+      title: isChinese ? '我要做开发' : 'I need coding tools',
+      description: isChinese
+        ? '先看 IDE、补全、Agent 和工作流集成，再去比较具体产品。'
+        : 'Start with IDE, completion, agent, and workflow fit before comparing products.',
+    },
+    {
+      href: '/guides/ai-tools-for-research',
+      title: isChinese ? '我要做研究' : 'I need research tools',
+      description: isChinese
+        ? '先看资料发现、引用和证据整理，再决定要不要深入某个工具。'
+        : 'Start with discovery, citations, and evidence gathering before diving into tools.',
+    },
+    {
+      href: '/guides/how-to-choose-ai-tools',
+      title: isChinese ? '我还没想好' : 'I am still deciding',
+      description: isChinese
+        ? '先看选型方法，弄清楚该比哪些维度。'
+        : 'Start with the selection guide to clarify which dimensions matter.',
+    },
+  ];
   const featuredGuidePages = FEATURED_GUIDE_HREFS.map((href) => GUIDE_PAGES.find((page) => page.href === href)).filter(
     (page): page is (typeof GUIDE_PAGES)[number] => Boolean(page),
   );
@@ -380,6 +410,27 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   }
                   className='p-0 sm:p-0'
                 />
+              </div>
+
+              <div className='mt-5 rounded-[18px] border border-cyan-100 bg-cyan-50/60 p-4 shadow-sm'>
+                <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+                  {isChinese ? '先按任务开始' : 'Start by task'}
+                </p>
+                <h2 className='mt-1 text-lg font-bold text-slate-950'>
+                  {isChinese ? '你现在最想解决什么问题？' : 'What problem are you trying to solve?'}
+                </h2>
+                <div className='mt-4 grid gap-3 md:grid-cols-2'>
+                  {taskFirstEntryPoints.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
+                    >
+                      <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                      <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
+                    </Link>
+                  ))}
+                </div>
               </div>
 
               <div className='mt-4 flex flex-wrap items-center gap-2'>

@@ -197,7 +197,7 @@ This documentation provides comprehensive guidance for implementing and maintain
 ### For Validation
 
 #### 15. [SEO Quality Recovery Tasks (CN)](./SEO_QUALITY_RECOVERY_TASKS_CN.md)
-**Purpose:** A two-week, four-week, and four-to-eight-week recovery checklist for reducing thin AI-like pages, focusing crawl/index budget, and adding real evidence/user/owner signals to priority pages.
+**Purpose:** Archived recovery checklist now merged into the master tracker. Keep only for historical reference.
 
 **Contents:**
 - 2+4+8 week execution plan
@@ -207,7 +207,7 @@ This documentation provides comprehensive guidance for implementing and maintain
 - Weekly GSC and conversion tracking metrics
 - Pause list for programmatic expansion
 
-**When to use:** When deciding what to do next for SEO recovery, indexing cleanup, and content quality improvement
+**When to use:** Historical reference only; use the master tracker for current execution
 
 #### 16. [SEO Indexing Policy (CN)](./SEO_INDEXING_POLICY_CN.md)
 **Purpose:** Define which pages should be included in sitemap, which pages should stay as internal traffic pages, and which pages should never enter the index surface.
@@ -218,6 +218,8 @@ This documentation provides comprehensive guidance for implementing and maintain
 - Noindex page categories
 - Multilingual indexing boundaries
 - Promotion and maintenance cadence
+
+**Status:** Active policy reference
 
 #### 17. [Master Optimization Tracker (CN)](./MASTER_OPTIMIZATION_TRACKER_CN.md)
 **Purpose:** A unified tracker that merges the 60-day commercial plan, SEO quality recovery plan, and competitor research into one monitorable execution board.
@@ -230,6 +232,26 @@ This documentation provides comprehensive guidance for implementing and maintain
 - Weekly operating cadence
 
 **When to use:** When you want one source of truth for what to do next across product, SEO, and commercialization
+
+#### 18. [AI Tool Site 60 Day Execution Plan (CN)](./AI_TOOL_SITE_60_DAY_EXECUTION_PLAN_CN.md)
+**Purpose:** Archived commercial plan merged into the master tracker. Keep only for historical reference.
+
+**Contents:**
+- Early commercialization goals
+- Pricing / submit / claim basics
+- Legacy 60-day milestones
+
+**When to use:** Historical reference only; use the master tracker for current execution
+
+#### 19. [Competitor Research and Next Optimization (CN)](./COMPETITOR_RESEARCH_AND_NEXT_OPTIMIZATION_CN.md)
+**Purpose:** Archived research notes now folded into the master tracker and execution plan.
+
+**Contents:**
+- Competitor comparison notes
+- User pain points from public sources
+- Direction-setting for the next optimization wave
+
+**When to use:** Historical reference only; use the master tracker for current execution
 
 **When to use:** When deciding whether a page should be indexed, added to sitemap, or kept as an internal navigation target
 
