@@ -135,6 +135,29 @@ export default function DeveloperListingPage({
               ))}
             </div>
 
+            <div className='rounded-2xl border border-slate-200 bg-white p-4 shadow-sm'>
+              <p className='text-sm font-semibold text-slate-950'>
+                {isChinese ? '第一次发给我们的信息，最好包含什么' : 'What to include in the first message'}
+              </p>
+              <div className='mt-3 grid gap-3 md:grid-cols-2'>
+                <div className='rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-700'>
+                  {isChinese
+                    ? '官网地址、工具名称、你和这条 listing 的关系，以及你想更新什么。'
+                    : 'Website, tool name, your relationship to the listing, and what you want to update.'}
+                </div>
+                <div className='rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-700'>
+                  {isChinese
+                    ? '如果是重复收录，请直接说明要合并哪一条；如果是资料修正，请说明要改什么。'
+                    : 'If it is a duplicate, say which entries should merge; if it is a correction, say what should change.'}
+                </div>
+              </div>
+              <p className='mt-3 text-xs leading-5 text-slate-500'>
+                {isChinese
+                  ? '信息越具体，后面人工确认认领、更新 owner，或者决定是否需要提交 / 付费就越快。'
+                  : 'The more specific the first message is, the faster we can confirm ownership, update the owner mapping, or decide whether submission or paid acceleration is the better path.'}
+              </p>
+            </div>
+
             <div className='grid gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:grid-cols-2'>
               <div className='rounded-xl border border-white bg-white p-4'>
                 <p className='text-sm font-semibold text-slate-950'>{isChinese ? '适合认领' : 'Use claim when'}</p>
@@ -232,6 +255,15 @@ export default function DeveloperListingPage({
                   {isChinese ? '先验证留资，再验证付费。' : 'Validate lead capture before validating paid conversion.'}
                 </span>
               </div>
+            </div>
+
+            <div className='mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-950'>
+              <p className='font-semibold'>{isChinese ? '如果这不是你的条目' : 'If this is not your listing'}</p>
+              <p className='mt-1'>
+                {isChinese
+                  ? '请直接去提交页，认领页只适合已经存在、并且你要接手或修正的条目。'
+                  : 'Please go to the submission flow instead. This page is for listings that already exist and need ownership or profile updates.'}
+              </p>
             </div>
           </div>
         </div>
