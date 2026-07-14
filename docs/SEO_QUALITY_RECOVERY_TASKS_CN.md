@@ -213,6 +213,7 @@ Google 不会因为内容由 AI 辅助生成就直接惩罚页面，但会压低
 - 核心入口 freshness：补齐代理、图像、记事、crypto/token/web3/wallet 研究入口的最近验证块，并已通过 `pnpm run build`
 - 对比页 freshness：营销、销售对比页已补最近验证块，并已通过 `pnpm run build`
 - 对比页 freshness：自动化、模型路由、API 可观测对比页已补最近验证块，并已通过 `pnpm run build`
+- 竞品研究：已新增 `docs/COMPETITOR_RESEARCH_AND_NEXT_OPTIMIZATION_CN.md`，后续优化优先按“任务型搜索、对比/替代页、评论/认领闭环、验证日期显式化”推进
 
 ## 十、首批真实证据模块落地记录
 
