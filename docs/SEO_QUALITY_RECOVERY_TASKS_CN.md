@@ -66,7 +66,7 @@ Google 不会因为内容由 AI 辅助生成就直接惩罚页面，但会压低
 | 已开始 | 固化本任务清单 | 防止后续优化失焦 | 文档已进入 `docs/` 并可持续更新 |
 | 已完成 | 核对 robots / sitemap / noindex 策略 | 避免非 SEO 页面抢抓取预算 | 后台、认证、账号、API 不进入索引面；弱 guide 和 comparison 统一 noindex, follow |
 | 已完成 | 输出页面质量盘点表 | 建立 noindex / 合并依据 | 每个核心 URL 都有状态、问题、下一步动作 |
-| 待做 | 核对 sitemap URL 数量 | 确保 sitemap 只放主力页面 | sitemap 维持在当前阶段推荐规模内 |
+| 已完成 | 核对 sitemap URL 数量 | 确保 sitemap 只放主力页面 | 当前 sitemap 共 152 条 URL，仍在当前阶段可控范围内 |
 | 已完成 | 标记弱 guide / alias guide | 减少同义页面互相竞争 | 同义页明确主页面、内部页或合并页；别名页已补 noindex |
 | 待做 | GSC 基线记录 | 后续判断优化是否有效 | 记录当前 28 天曝光、点击、CTR、Top queries；见 `docs/GSC_WEEKLY_OBSERVATION_LOG_CN.md` |
 
@@ -199,6 +199,7 @@ Google 不会因为内容由 AI 辅助生成就直接惩罚页面，但会压低
 
 - 索引面收口：已完成主策略
 - 质量盘点：已完成自动盘点，可继续每周刷新
+- sitemap 规模：已核对，当前共 152 条 URL
 - GSC 观察模板：已补齐，后续只填数
 - 弱 guide / alias guide：已补 noindex
 - 20 个核心页增强：已完成首批落地，继续做第二批真实数据增强
