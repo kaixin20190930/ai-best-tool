@@ -219,6 +219,18 @@ This documentation provides comprehensive guidance for implementing and maintain
 - Multilingual indexing boundaries
 - Promotion and maintenance cadence
 
+#### 17. [Master Optimization Tracker (CN)](./MASTER_OPTIMIZATION_TRACKER_CN.md)
+**Purpose:** A unified tracker that merges the 60-day commercial plan, SEO quality recovery plan, and competitor research into one monitorable execution board.
+
+**Contents:**
+- Combined plan inventory
+- Rough completion estimates
+- Shared execution order
+- SEO, commercial, and content-signal metrics
+- Weekly operating cadence
+
+**When to use:** When you want one source of truth for what to do next across product, SEO, and commercialization
+
 **When to use:** When deciding whether a page should be indexed, added to sitemap, or kept as an internal navigation target
 
 #### 17. [SEO Indexing Control Table Template (CN)](./SEO_INDEXING_CONTROL_TABLE_TEMPLATE_CN.md)
