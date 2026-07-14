@@ -556,6 +556,7 @@ export function ComparisonPage({
   const categoryCount = categories.length;
   const firstTool = tools[0] || null;
   const firstToolHref = firstTool ? `/ai/${firstTool.name}` : config.guideHref;
+  const firstToolCommentsHref = firstTool ? `/ai/${firstTool.name}#comments` : config.altBrowseHref;
   let rankingEntryTitle = 'Browse more tools';
   let rankingEntryDescription = 'Browse a few more related tools, then come back and compare the key points.';
   if (isChinese) {
@@ -731,13 +732,13 @@ export function ComparisonPage({
               </p>
             </div>
             <div className='flex flex-wrap gap-2'>
-              <a
-                href='#comments'
+              <Link
+                href={firstToolCommentsHref}
                 className='inline-flex items-center justify-center gap-2 rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-cyan-800 ring-1 ring-cyan-200 transition hover:bg-cyan-50'
               >
                 <ArrowRight className='size-4' />
-                {isChinese ? '去评论区' : 'Jump to comments'}
-              </a>
+                {isChinese ? '去工具评论区' : 'Jump to tool comments'}
+              </Link>
               <Link
                 href='/developer/listing'
                 className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-cyan-800'
