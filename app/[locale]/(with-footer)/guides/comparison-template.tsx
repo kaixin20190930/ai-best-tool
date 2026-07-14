@@ -713,6 +713,42 @@ export function ComparisonPage({
           ]}
         />
 
+        <section className='mt-8 rounded-[18px] border border-cyan-100 bg-cyan-50/70 p-6 shadow-sm lg:p-8'>
+          <div className='flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between'>
+            <div className='max-w-3xl'>
+              <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+                {isChinese ? '把真实反馈补进来' : 'Add real feedback'}
+              </p>
+              <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+                {isChinese
+                  ? '对比之后，记得留下真实体验和认领信息'
+                  : 'After comparing, leave real feedback and ownership details'}
+              </h2>
+              <p className='mt-2 text-sm leading-6 text-cyan-900/80'>
+                {isChinese
+                  ? '这能帮助后来的访客更快判断这页到底值不值得看，也能让工具方更容易补齐更新和 owner 信号。'
+                  : 'This helps future visitors judge whether the page is worth reading, and helps tool owners add updates and ownership signals sooner.'}
+              </p>
+            </div>
+            <div className='flex flex-wrap gap-2'>
+              <a
+                href='#comments'
+                className='inline-flex items-center justify-center gap-2 rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-cyan-800 ring-1 ring-cyan-200 transition hover:bg-cyan-50'
+              >
+                <ArrowRight className='size-4' />
+                {isChinese ? '去评论区' : 'Jump to comments'}
+              </a>
+              <Link
+                href='/developer/listing'
+                className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-cyan-800'
+              >
+                <ArrowRight className='size-4' />
+                {isChinese ? '认领条目' : 'Claim listing'}
+              </Link>
+            </div>
+          </div>
+        </section>
+
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '直接进入对比' : 'Jump into comparison'}
