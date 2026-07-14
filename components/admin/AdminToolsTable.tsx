@@ -3,19 +3,20 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useRouter } from '@/app/navigation';
-import { Check, X, Edit, Trash2, ExternalLink, CheckCheck } from 'lucide-react';
+import { Check, CheckCheck, Edit, ExternalLink, Trash2, X } from 'lucide-react';
+import { toast } from 'sonner';
+
+import { getPaidListingPublishGate, getToolQuality } from '@/lib/services/toolQuality';
+import BaseImage from '@/components/image/BaseImage';
 import {
   approveTool,
-  rejectTool,
   deleteTool,
-  publishReadyTools,
   markPendingFollowedUp,
+  publishReadyTools,
+  rejectTool,
 } from '@/app/actions/admin/tools';
 import type { AdminTool } from '@/app/actions/admin/tools';
-import { toast } from 'sonner';
-import BaseImage from '@/components/image/BaseImage';
-import { getPaidListingPublishGate, getToolQuality } from '@/lib/services/toolQuality';
+import { useRouter } from '@/app/navigation';
 
 interface AdminToolsTableProps {
   tools: AdminTool[];
@@ -23,15 +24,20 @@ interface AdminToolsTableProps {
   currentPage: number;
 }
 
-export default function AdminToolsTable({
-  tools,
-  total,
-  currentPage,
-}: AdminToolsTableProps) {
+type PendingAction =
+  | { kind: 'reject'; toolId: string }
+  | { kind: 'delete'; toolId: string }
+  | { kind: 'bulk-publish'; toolIds: string[] }
+  | { kind: 'bulk-followup'; toolIds: string[] }
+  | null;
+
+export default function AdminToolsTable({ tools, total, currentPage }: AdminToolsTableProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [pendingAction, setPendingAction] = useState<PendingAction>(null);
+  const [actionReason, setActionReason] = useState('');
 
   const handleApprove = async (toolId: string) => {
     setLoading(toolId);
@@ -47,38 +53,12 @@ export default function AdminToolsTable({
   };
 
   const handleReject = async (toolId: string) => {
-    if (!confirm('Are you sure you want to reject this tool?')) {
-      return;
-    }
-
-    const reason = window.prompt('Optional rejection reason to share with the submitter:') || '';
-    setLoading(toolId);
-    const result = await rejectTool(toolId, reason);
-    setLoading(null);
-
-    if (result.success) {
-      toast.success('Tool rejected');
-      router.refresh();
-    } else {
-      toast.error(result.error || 'Failed to reject tool');
-    }
+    setActionReason('');
+    setPendingAction({ kind: 'reject', toolId });
   };
 
   const handleDelete = async (toolId: string) => {
-    if (!confirm('Are you sure you want to delete this tool? This action cannot be undone.')) {
-      return;
-    }
-
-    setLoading(toolId);
-    const result = await deleteTool(toolId);
-    setLoading(null);
-
-    if (result.success) {
-      toast.success('Tool deleted');
-      router.refresh();
-    } else {
-      toast.error(result.error || 'Failed to delete tool');
-    }
+    setPendingAction({ kind: 'delete', toolId });
   };
 
   const getStatusBadge = (status: string) => {
@@ -122,9 +102,7 @@ export default function AdminToolsTable({
     return 'bg-slate-100 text-slate-600';
   };
 
-  const getOwnerLabel = (tool: AdminTool) => {
-    return tool.ownerEmail || 'No owner';
-  };
+  const getOwnerLabel = (tool: AdminTool) => tool.ownerEmail || 'No owner';
 
   const getClaimStatusHref = (claimStatus: string | null | undefined) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -140,27 +118,13 @@ export default function AdminToolsTable({
     return `/admin/tools${query ? `?${query}` : ''}`;
   };
 
-  const getContent = (tool: AdminTool) => {
-    if (typeof tool.content === 'string') return tool.content;
-    if (typeof tool.content === 'object' && tool.content !== null) {
-      return tool.content.en || tool.content.zh || Object.values(tool.content)[0] || '';
-    }
-    return '';
-  };
+  const getMissingInfo = (tool: AdminTool) => getToolQuality(tool).missingLabels.map((label) => label.toLowerCase());
 
-  const getMissingInfo = (tool: AdminTool) => {
-    return getToolQuality(tool).missingLabels.map((label) => label.toLowerCase());
-  };
+  const getFeatureRecord = (tool: AdminTool) =>
+    tool.features && typeof tool.features === 'object' ? (tool.features as Record<string, unknown>) : {};
 
-  const getFeatureRecord = (tool: AdminTool) => {
-    return tool.features && typeof tool.features === 'object'
-      ? (tool.features as Record<string, unknown>)
-      : {};
-  };
-
-  const getNestedRecord = (value: unknown) => {
-    return value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
-  };
+  const getNestedRecord = (value: unknown) =>
+    value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
 
   const getSubmissionReview = (tool: AdminTool) => {
     const features = getFeatureRecord(tool);
@@ -175,9 +139,7 @@ export default function AdminToolsTable({
       : null;
   };
 
-  const getNumber = (value: unknown) => {
-    return typeof value === 'number' && Number.isFinite(value) ? value : undefined;
-  };
+  const getNumber = (value: unknown) => (typeof value === 'number' && Number.isFinite(value) ? value : undefined);
 
   const getAuditSignals = (tool: AdminTool) => {
     const features = getFeatureRecord(tool);
@@ -197,7 +159,7 @@ export default function AdminToolsTable({
       });
     }
 
-    const plan = commercial.plan;
+    const { plan } = commercial;
     if (plan === 'standard_paid') {
       signals.push({
         label: 'Paid intent',
@@ -252,26 +214,30 @@ export default function AdminToolsTable({
     }
 
     if (typeof relevanceScore === 'number') {
+      let relevanceTone = 'bg-red-50 text-red-700';
+      if (relevanceScore >= 60) {
+        relevanceTone = 'bg-green-50 text-green-700';
+      } else if (relevanceScore >= 50) {
+        relevanceTone = 'bg-amber-50 text-amber-700';
+      }
+
       signals.push({
         label: `AI ${relevanceScore}`,
-        className:
-          relevanceScore >= 60
-            ? 'bg-green-50 text-green-700'
-            : relevanceScore >= 50
-              ? 'bg-amber-50 text-amber-700'
-              : 'bg-red-50 text-red-700',
+        className: relevanceTone,
       });
     }
 
     if (typeof qualityScore === 'number') {
+      let qualityTone = 'bg-red-50 text-red-700';
+      if (qualityScore >= 80) {
+        qualityTone = 'bg-green-50 text-green-700';
+      } else if (qualityScore >= 60) {
+        qualityTone = 'bg-amber-50 text-amber-700';
+      }
+
       signals.push({
         label: `Source ${qualityScore}`,
-        className:
-          qualityScore >= 80
-            ? 'bg-green-50 text-green-700'
-            : qualityScore >= 60
-              ? 'bg-amber-50 text-amber-700'
-              : 'bg-red-50 text-red-700',
+        className: qualityTone,
       });
     }
 
@@ -314,18 +280,64 @@ export default function AdminToolsTable({
 
   const getQualityBadge = (tool: AdminTool) => {
     const { score } = getToolQuality(tool);
-    const color =
-      score >= 80
-        ? 'bg-green-50 text-green-700'
-        : score >= 55
-          ? 'bg-amber-50 text-amber-700'
-          : 'bg-red-50 text-red-700';
+    let color = 'bg-red-50 text-red-700';
+    if (score >= 80) {
+      color = 'bg-green-50 text-green-700';
+    } else if (score >= 55) {
+      color = 'bg-amber-50 text-amber-700';
+    }
 
     return (
       <span className={`mt-2 inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${color}`}>
         Quality {score}
       </span>
     );
+  };
+
+  const getQualityState = (tool: AdminTool) => {
+    const { score } = getToolQuality(tool);
+
+    if (score >= 80) {
+      return { label: 'Quality: ready', tone: 'bg-emerald-50 text-emerald-700', reviewDays: 90 };
+    }
+
+    if (score >= 60) {
+      return { label: 'Quality: watch', tone: 'bg-amber-50 text-amber-700', reviewDays: 30 };
+    }
+
+    return { label: 'Quality: needs work', tone: 'bg-rose-50 text-rose-700', reviewDays: 7 };
+  };
+
+  const getNextReviewDate = (tool: AdminTool) => {
+    const base = new Date(tool.updated_at || tool.created_at);
+    if (Number.isNaN(base.getTime())) {
+      return null;
+    }
+
+    const { reviewDays } = getQualityState(tool);
+    const nextReview = new Date(base);
+    nextReview.setDate(nextReview.getDate() + reviewDays);
+    return nextReview;
+  };
+
+  const getRowClassName = (tool: AdminTool, publishReady: boolean, pendingOverdue: boolean, staleFollowUp: boolean) => {
+    if (publishReady) {
+      return 'bg-emerald-50/50 hover:bg-emerald-50';
+    }
+
+    if (pendingOverdue) {
+      return 'bg-red-50/60 hover:bg-red-50';
+    }
+
+    if (staleFollowUp) {
+      return 'bg-amber-50/40 hover:bg-amber-50';
+    }
+
+    if (tool.status === 'pending') {
+      return 'bg-amber-50/60 hover:bg-amber-50';
+    }
+
+    return 'hover:bg-slate-50';
   };
 
   const isPendingOverdue = (tool: AdminTool) => {
@@ -345,28 +357,21 @@ export default function AdminToolsTable({
   const totalPages = Math.ceil(total / pageSize);
   const publishableTools = tools.filter(isPublishReady);
   const allPublishableSelected =
-    publishableTools.length > 0 &&
-    publishableTools.every((tool) => selectedIds.includes(tool.id));
+    publishableTools.length > 0 && publishableTools.every((tool) => selectedIds.includes(tool.id));
 
   const toggleTool = (toolId: string) => {
     setSelectedIds((current) =>
-      current.includes(toolId)
-        ? current.filter((id) => id !== toolId)
-        : [...current, toolId]
+      current.includes(toolId) ? current.filter((id) => id !== toolId) : [...current, toolId],
     );
   };
 
   const toggleAllPublishable = () => {
     if (allPublishableSelected) {
-      setSelectedIds((current) =>
-        current.filter((id) => !publishableTools.some((tool) => tool.id === id))
-      );
+      setSelectedIds((current) => current.filter((id) => !publishableTools.some((tool) => tool.id === id)));
       return;
     }
 
-    setSelectedIds((current) =>
-      Array.from(new Set([...current, ...publishableTools.map((tool) => tool.id)]))
-    );
+    setSelectedIds((current) => Array.from(new Set([...current, ...publishableTools.map((tool) => tool.id)])));
   };
 
   const handleBulkPublish = async () => {
@@ -375,23 +380,7 @@ export default function AdminToolsTable({
       return;
     }
 
-    if (!confirm(`Publish ${selectedIds.length} selected ready draft tool(s)?`)) {
-      return;
-    }
-
-    setLoading('bulk-publish');
-    const result = await publishReadyTools(selectedIds);
-    setLoading(null);
-
-    if (result.success) {
-      setSelectedIds([]);
-      const skippedText =
-        result.skipped > 0 ? ` ${result.skipped} skipped by checklist.` : '';
-      toast.success(`Published ${result.published} tool(s).${skippedText}`);
-      router.refresh();
-    } else {
-      toast.error(result.error || 'Failed to publish selected tools');
-    }
+    setPendingAction({ kind: 'bulk-publish', toolIds: selectedIds });
   };
 
   const hasFollowedUp = (tool: AdminTool) => {
@@ -403,10 +392,8 @@ export default function AdminToolsTable({
   const getFollowedUpAt = (tool: AdminTool) => {
     const features = getFeatureRecord(tool);
     const followUp = getNestedRecord(features.followUp);
-    const followedUpAt = followUp.followedUpAt;
-    return typeof followedUpAt === 'string' && followedUpAt.trim().length > 0
-      ? followedUpAt
-      : null;
+    const { followedUpAt } = followUp;
+    return typeof followedUpAt === 'string' && followedUpAt.trim().length > 0 ? followedUpAt : null;
   };
 
   const isFollowUpStale = (tool: AdminTool) => {
@@ -431,12 +418,71 @@ export default function AdminToolsTable({
       return;
     }
 
-    if (!confirm(`Mark ${overduePendingTools.length} overdue pending tool(s) as followed up?`)) {
+    setPendingAction({
+      kind: 'bulk-followup',
+      toolIds: overduePendingTools.map((tool) => tool.id),
+    });
+  };
+
+  const closePendingAction = () => {
+    setPendingAction(null);
+    setActionReason('');
+  };
+
+  const runPendingAction = async () => {
+    if (!pendingAction) {
+      return;
+    }
+
+    const action = pendingAction;
+    closePendingAction();
+
+    if (action.kind === 'reject') {
+      setLoading(action.toolId);
+      const result = await rejectTool(action.toolId, actionReason.trim());
+      setLoading(null);
+
+      if (result.success) {
+        toast.success('Tool rejected');
+        router.refresh();
+      } else {
+        toast.error(result.error || 'Failed to reject tool');
+      }
+      return;
+    }
+
+    if (action.kind === 'delete') {
+      setLoading(action.toolId);
+      const result = await deleteTool(action.toolId);
+      setLoading(null);
+
+      if (result.success) {
+        toast.success('Tool deleted');
+        router.refresh();
+      } else {
+        toast.error(result.error || 'Failed to delete tool');
+      }
+      return;
+    }
+
+    if (action.kind === 'bulk-publish') {
+      setLoading('bulk-publish');
+      const result = await publishReadyTools(action.toolIds);
+      setLoading(null);
+
+      if (result.success) {
+        setSelectedIds([]);
+        const skippedText = result.skipped > 0 ? ` ${result.skipped} skipped by checklist.` : '';
+        toast.success(`Published ${result.published} tool(s).${skippedText}`);
+        router.refresh();
+      } else {
+        toast.error(result.error || 'Failed to publish selected tools');
+      }
       return;
     }
 
     setLoading('bulk-followup');
-    const result = await markPendingFollowedUp(overduePendingTools.map((tool) => tool.id));
+    const result = await markPendingFollowedUp(action.toolIds);
     setLoading(null);
 
     if (result.success) {
@@ -462,278 +508,317 @@ export default function AdminToolsTable({
   };
 
   return (
-    <div className="theme-surface rounded-lg border border-slate-200 shadow-sm">
+    <div className='theme-surface rounded-lg border border-slate-200 shadow-sm'>
       {publishableTools.length > 0 && (
-        <div className="flex flex-col gap-3 border-b border-slate-200 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className='flex flex-col gap-3 border-b border-slate-200 px-6 py-4 sm:flex-row sm:items-center sm:justify-between'>
           <div>
-            <p className="text-sm font-semibold text-slate-900">
+            <p className='text-sm font-semibold text-slate-900'>
               {publishableTools.length} ready draft(s) on this page
             </p>
-            <p className="mt-1 text-sm text-slate-500">
+            <p className='mt-1 text-sm text-slate-500'>
               Select reviewed drafts with complete media and publish them in one batch.
             </p>
           </div>
           <button
-            type="button"
+            type='button'
             onClick={handleBulkPublish}
             disabled={selectedIds.length === 0 || loading === 'bulk-publish'}
-            className="inline-flex items-center justify-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700 hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-50"
+            className='inline-flex items-center justify-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700 hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-50'
           >
-            <CheckCheck className="h-4 w-4" />
-            {loading === 'bulk-publish'
-              ? 'Publishing...'
-              : `Publish selected (${selectedIds.length})`}
+            <CheckCheck className='h-4 w-4' />
+            {loading === 'bulk-publish' ? 'Publishing...' : `Publish selected (${selectedIds.length})`}
           </button>
         </div>
       )}
       {overduePendingTools.length > 0 && (
-        <div className="flex flex-col gap-3 border-b border-slate-200 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className='flex flex-col gap-3 border-b border-slate-200 px-6 py-4 sm:flex-row sm:items-center sm:justify-between'>
           <div>
-            <p className="text-sm font-semibold text-slate-900">
+            <p className='text-sm font-semibold text-slate-900'>
               {overduePendingTools.length} overdue pending tool(s) on this page
             </p>
-            <p className="mt-1 text-sm text-slate-500">
+            <p className='mt-1 text-sm text-slate-500'>
               Mark follow-up after contacting developers to reduce duplicate manual checks.
             </p>
           </div>
           <button
-            type="button"
+            type='button'
             onClick={handleBulkFollowUp}
             disabled={loading === 'bulk-followup'}
-            className="inline-flex items-center justify-center gap-2 rounded-lg border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-100 disabled:cursor-not-allowed disabled:opacity-50"
+            className='inline-flex items-center justify-center gap-2 rounded-lg border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-100 disabled:cursor-not-allowed disabled:opacity-50'
           >
             {loading === 'bulk-followup' ? 'Saving...' : 'Mark followed up'}
           </button>
         </div>
       )}
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-slate-200">
-          <thead className="bg-slate-50">
+      {pendingAction && (
+        <div className='fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 px-4'>
+          <div className='w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl'>
+            <h3 className='text-lg font-semibold text-slate-900'>Confirm action</h3>
+            <p className='mt-2 text-sm text-slate-600'>
+              {pendingAction.kind === 'reject' && 'Reject this tool and send an optional reason to the submitter.'}
+              {pendingAction.kind === 'delete' && 'Delete this tool permanently. This cannot be undone.'}
+              {pendingAction.kind === 'bulk-publish' &&
+                `Publish ${pendingAction.toolIds.length} selected ready draft tool(s)?`}
+              {pendingAction.kind === 'bulk-followup' &&
+                `Mark ${pendingAction.toolIds.length} overdue pending tool(s) as followed up?`}
+            </p>
+            {pendingAction.kind === 'reject' && (
+              <div className='mt-4 block'>
+                <span id='rejection-reason-label' className='text-sm font-medium text-slate-700'>
+                  Optional rejection reason
+                </span>
+                <textarea
+                  id='rejection-reason'
+                  aria-labelledby='rejection-reason-label'
+                  value={actionReason}
+                  onChange={(event) => setActionReason(event.target.value)}
+                  rows={4}
+                  className='mt-2 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 outline-none ring-0 focus:border-emerald-500'
+                  placeholder='Add a short note for the submitter'
+                />
+              </div>
+            )}
+            <div className='mt-6 flex justify-end gap-3'>
+              <button
+                type='button'
+                onClick={closePendingAction}
+                className='rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+              >
+                Cancel
+              </button>
+              <button
+                type='button'
+                onClick={runPendingAction}
+                className='rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800'
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      <div className='overflow-x-auto'>
+        <table className='min-w-full divide-y divide-slate-200'>
+          <thead className='bg-slate-50'>
             <tr>
-              <th className="w-12 px-6 py-3 text-left">
+              <th className='w-12 px-6 py-3 text-left'>
                 <input
-                  type="checkbox"
+                  type='checkbox'
                   checked={allPublishableSelected}
                   onChange={toggleAllPublishable}
                   disabled={publishableTools.length === 0}
-                  aria-label="Select all ready draft tools"
-                  className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 disabled:opacity-40"
+                  aria-label='Select all ready draft tools'
+                  className='h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 disabled:opacity-40'
                 />
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
-                Tool
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
-                Owner
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
-                Audit
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
+              <th className='px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500'>Tool</th>
+              <th className='px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500'>Owner</th>
+              <th className='px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500'>Audit</th>
+              <th className='px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500'>
                 Status
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
-                Stats
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
+              <th className='px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500'>Stats</th>
+              <th className='px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500'>
                 Created
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-slate-500">
+              <th className='px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-slate-500'>
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-200 bg-white">
+          <tbody className='divide-y divide-slate-200 bg-white'>
             {tools.map((tool) => {
               const publishReady = isPublishReady(tool);
               const pendingOverdue = isPendingOverdue(tool);
               const staleFollowUp = isFollowUpStale(tool);
+              const rowClassName = getRowClassName(tool, publishReady, pendingOverdue, staleFollowUp);
+              const qualityState = getQualityState(tool);
+              const nextReviewDate = getNextReviewDate(tool);
+              const rejectionReason = getRejectionReason(tool);
+              const followedUpAt = getFollowedUpAt(tool);
 
               return (
-                <tr
-                  key={tool.id}
-                  className={
-                    publishReady
-                      ? 'bg-emerald-50/50 hover:bg-emerald-50'
-                      : pendingOverdue
-                        ? 'bg-red-50/60 hover:bg-red-50'
-                        : staleFollowUp
-                          ? 'bg-amber-50/40 hover:bg-amber-50'
-                          : tool.status === 'pending'
-                            ? 'bg-amber-50/60 hover:bg-amber-50'
-                            : 'hover:bg-slate-50'
-                  }
-                >
-                <td className="px-6 py-4">
-                  <input
-                    type="checkbox"
-                    checked={selectedIds.includes(tool.id)}
-                    onChange={() => toggleTool(tool.id)}
-                    disabled={!publishReady}
-                    aria-label={`Select ${getTitle(tool)} for publishing`}
-                    className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 disabled:opacity-30"
-                  />
-                </td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center">
-                    {tool.thumbnail_url ? (
-                      <BaseImage
-                        src={tool.thumbnail_url}
-                        alt={`${getTitle(tool)} - AI tool thumbnail`}
-                        width={40}
-                        height={40}
-                        className="mr-3 h-10 w-10 rounded object-cover"
-                      />
-                    ) : (
-                      <div className="mr-3 flex h-10 w-10 shrink-0 items-center justify-center rounded bg-slate-100 text-xs font-semibold text-slate-500">
-                        {getTitle(tool).slice(0, 1).toUpperCase()}
-                      </div>
-                    )}
-                    <div>
-                      <div className="font-medium text-slate-900">{getTitle(tool)}</div>
-                      <div className="text-sm text-slate-500">{tool.name}</div>
-                      {tool.submitted_by && (
-                        <div className="mt-1 inline-flex rounded-full bg-cyan-50 px-2 py-0.5 text-xs font-medium text-cyan-700">
-                          Developer submission
+                <tr key={tool.id} className={rowClassName}>
+                  <td className='px-6 py-4'>
+                    <input
+                      type='checkbox'
+                      checked={selectedIds.includes(tool.id)}
+                      onChange={() => toggleTool(tool.id)}
+                      disabled={!publishReady}
+                      aria-label={`Select ${getTitle(tool)} for publishing`}
+                      className='h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 disabled:opacity-30'
+                    />
+                  </td>
+                  <td className='px-6 py-4'>
+                    <div className='flex items-center'>
+                      {tool.thumbnail_url ? (
+                        <BaseImage
+                          src={tool.thumbnail_url}
+                          alt={`${getTitle(tool)} - AI tool thumbnail`}
+                          width={40}
+                          height={40}
+                          className='mr-3 h-10 w-10 rounded object-cover'
+                        />
+                      ) : (
+                        <div className='mr-3 flex h-10 w-10 shrink-0 items-center justify-center rounded bg-slate-100 text-xs font-semibold text-slate-500'>
+                          {getTitle(tool).slice(0, 1).toUpperCase()}
                         </div>
                       )}
+                      <div>
+                        <div className='font-medium text-slate-900'>{getTitle(tool)}</div>
+                        <div className='text-sm text-slate-500'>{tool.name}</div>
+                        {tool.submitted_by && (
+                          <div className='mt-1 inline-flex rounded-full bg-cyan-50 px-2 py-0.5 text-xs font-medium text-cyan-700'>
+                            Developer submission
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  <div className="flex flex-wrap gap-2">
-                    <span
-                      className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${getClaimStatusTone(tool.claimStatus)}`}
-                    >
-                      {getClaimStatusLabel(tool.claimStatus)}
-                    </span>
-                    <span className="inline-flex rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700">
-                      {getOwnerLabel(tool)}
-                    </span>
-                  </div>
-                  {tool.claimedAt && (
-                    <div className="mt-2 text-xs text-slate-500">
-                      Claimed: {new Date(tool.claimedAt).toLocaleDateString()}
-                    </div>
-                  )}
-                  <div className="mt-2">
-                    <Link
-                      href={getClaimStatusHref(tool.claimStatus)}
-                      className="inline-flex rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-600 hover:bg-slate-50"
-                    >
-                      View claim filter
-                    </Link>
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  <div>{getQualityBadge(tool)}</div>
-                  <div className="mt-2 flex max-w-xs flex-wrap gap-1.5">
-                    {getAuditSignals(tool).map((signal) => (
+                  </td>
+                  <td className='px-6 py-4'>
+                    <div className='flex flex-wrap gap-2'>
                       <span
-                        key={signal.label}
-                        className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${signal.className}`}
+                        className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${getClaimStatusTone(tool.claimStatus)}`}
                       >
-                        {signal.label}
+                        {getClaimStatusLabel(tool.claimStatus)}
                       </span>
-                    ))}
-                  </div>
-                  {getMissingInfo(tool).length > 0 && (
-                    <div className="mt-2 text-xs text-slate-500">
-                      Needs: {getMissingInfo(tool).join(', ')}
+                      <span className='inline-flex rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700'>
+                        {getOwnerLabel(tool)}
+                      </span>
                     </div>
-                  )}
-                </td>
-                <td className="px-6 py-4">
-                  {getStatusBadge(tool.status)}
-                  {tool.status === 'rejected' && getRejectionReason(tool) && (
-                    <div className="mt-2 max-w-xs rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs leading-5 text-red-800">
-                      <p className="font-semibold">Reason</p>
-                      <p className="mt-1 break-words">{getRejectionReason(tool)}</p>
-                    </div>
-                  )}
-                  {pendingOverdue && (
-                    <div className="mt-1 inline-flex rounded-full bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-700">
-                      Overdue &gt; 48h
-                    </div>
-                  )}
-                  {hasFollowedUp(tool) && (
-                    <div className="mt-1">
-                      <div className="inline-flex rounded-full bg-cyan-100 px-2 py-0.5 text-xs font-semibold text-cyan-700">
-                        Followed up
+                    {tool.claimedAt && (
+                      <div className='mt-2 text-xs text-slate-500'>
+                        Claimed: {new Date(tool.claimedAt).toLocaleDateString()}
                       </div>
-                      {getFollowedUpAt(tool) && (
-                        <div className="mt-1 text-xs text-cyan-700">
-                          {new Date(getFollowedUpAt(tool) as string).toLocaleString()}
-                        </div>
-                      )}
-                      {staleFollowUp && (
-                        <div className="mt-1 inline-flex rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700">
-                          Follow-up stale (&gt; 3d)
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </td>
-                <td className="px-6 py-4">
-                  <div className="text-sm text-slate-900">
-                    {tool.view_count} views • {tool.rating_count} ratings
-                  </div>
-                  <div className="text-sm text-slate-500">
-                    ⭐ {tool.average_rating.toFixed(1)}
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-sm text-slate-500">
-                  {new Date(tool.created_at).toLocaleDateString()}
-                </td>
-                <td className="px-6 py-4 text-right">
-                  <div className="flex items-center justify-end gap-2">
-                  {tool.status === 'pending' && (
-                      <>
-                        <button
-                          onClick={() => handleApprove(tool.id)}
-                          disabled={loading === tool.id}
-                          className="rounded border border-emerald-200 bg-emerald-50 p-1 text-emerald-700 hover:bg-emerald-100 disabled:opacity-50"
-                          title="Approve"
-                        >
-                          <Check className="h-5 w-5" />
-                        </button>
-                        <button
-                          onClick={() => handleReject(tool.id)}
-                          disabled={loading === tool.id}
-                          className="rounded border border-rose-200 bg-rose-50 p-1 text-rose-700 hover:bg-rose-100 disabled:opacity-50"
-                          title="Reject"
-                        >
-                          <X className="h-5 w-5" />
-                        </button>
-                      </>
                     )}
-                    <Link
-                      href={`/admin/tools/${tool.id}/edit`}
-                      className="rounded border border-slate-200 bg-slate-50 p-1 text-slate-700 hover:bg-slate-100"
-                      title="Edit"
-                    >
-                      <Edit className="h-5 w-5" />
-                    </Link>
-                    <a
-                      href={tool.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="rounded border border-slate-200 bg-white p-1 text-slate-600 hover:bg-slate-50"
-                      title="Visit Website"
-                    >
-                      <ExternalLink className="h-5 w-5" />
-                    </a>
-                    <button
-                      onClick={() => handleDelete(tool.id)}
-                      disabled={loading === tool.id}
-                      className="rounded border border-rose-200 bg-rose-50 p-1 text-rose-700 hover:bg-rose-100 disabled:opacity-50"
-                      title="Delete"
-                    >
-                      <Trash2 className="h-5 w-5" />
-                    </button>
-                  </div>
-                </td>
-              </tr>
+                    <div className='mt-2'>
+                      <Link
+                        href={getClaimStatusHref(tool.claimStatus)}
+                        className='inline-flex rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-600 hover:bg-slate-50'
+                      >
+                        View claim filter
+                      </Link>
+                    </div>
+                  </td>
+                  <td className='px-6 py-4'>
+                    <div>{getQualityBadge(tool)}</div>
+                    <div className='mt-2 flex max-w-xs flex-wrap gap-1.5'>
+                      {getAuditSignals(tool).map((signal) => (
+                        <span
+                          key={signal.label}
+                          className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${signal.className}`}
+                        >
+                          {signal.label}
+                        </span>
+                      ))}
+                    </div>
+                    {getMissingInfo(tool).length > 0 && (
+                      <div className='mt-2 text-xs text-slate-500'>Needs: {getMissingInfo(tool).join(', ')}</div>
+                    )}
+                  </td>
+                  <td className='px-6 py-4'>
+                    {getStatusBadge(tool.status)}
+                    <div className='mt-2'>
+                      <span
+                        className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${qualityState.tone}`}
+                      >
+                        {qualityState.label}
+                      </span>
+                    </div>
+                    <div className='mt-2 text-xs text-slate-500'>
+                      Next review: {nextReviewDate ? nextReviewDate.toLocaleDateString() : 'Unknown'}
+                    </div>
+                    {tool.status === 'rejected' && rejectionReason && (
+                      <div className='mt-2 max-w-xs rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs leading-5 text-red-800'>
+                        <p className='font-semibold'>Reason</p>
+                        <p className='mt-1 break-words'>{rejectionReason}</p>
+                      </div>
+                    )}
+                    {pendingOverdue && (
+                      <div className='mt-1 inline-flex rounded-full bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-700'>
+                        Overdue &gt; 48h
+                      </div>
+                    )}
+                    {hasFollowedUp(tool) && (
+                      <div className='mt-1'>
+                        <div className='inline-flex rounded-full bg-cyan-100 px-2 py-0.5 text-xs font-semibold text-cyan-700'>
+                          Followed up
+                        </div>
+                        {followedUpAt && (
+                          <div className='mt-1 text-xs text-cyan-700'>{new Date(followedUpAt).toLocaleString()}</div>
+                        )}
+                        {staleFollowUp && (
+                          <div className='mt-1 inline-flex rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700'>
+                            Follow-up stale (&gt; 3d)
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </td>
+                  <td className='px-6 py-4'>
+                    <div className='text-sm text-slate-900'>
+                      {tool.view_count} views • {tool.rating_count} ratings
+                    </div>
+                    <div className='text-sm text-slate-500'>⭐ {tool.average_rating.toFixed(1)}</div>
+                  </td>
+                  <td className='px-6 py-4 text-sm text-slate-500'>{new Date(tool.created_at).toLocaleDateString()}</td>
+                  <td className='px-6 py-4 text-right'>
+                    <div className='flex items-center justify-end gap-2'>
+                      {tool.status === 'pending' && (
+                        <>
+                          <button
+                            type='button'
+                            onClick={() => handleApprove(tool.id)}
+                            disabled={loading === tool.id}
+                            aria-label={`Approve ${getTitle(tool)}`}
+                            className='rounded border border-emerald-200 bg-emerald-50 p-1 text-emerald-700 hover:bg-emerald-100 disabled:opacity-50'
+                            title='Approve'
+                          >
+                            <Check className='h-5 w-5' />
+                          </button>
+                          <button
+                            type='button'
+                            onClick={() => handleReject(tool.id)}
+                            disabled={loading === tool.id}
+                            aria-label={`Reject ${getTitle(tool)}`}
+                            className='rounded border border-rose-200 bg-rose-50 p-1 text-rose-700 hover:bg-rose-100 disabled:opacity-50'
+                            title='Reject'
+                          >
+                            <X className='h-5 w-5' />
+                          </button>
+                        </>
+                      )}
+                      <Link
+                        href={`/admin/tools/${tool.id}/edit`}
+                        aria-label={`Edit ${getTitle(tool)}`}
+                        className='rounded border border-slate-200 bg-slate-50 p-1 text-slate-700 hover:bg-slate-100'
+                        title='Edit'
+                      >
+                        <Edit className='h-5 w-5' />
+                      </Link>
+                      <a
+                        href={tool.url}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        aria-label={`Open official site for ${getTitle(tool)}`}
+                        className='rounded border border-slate-200 bg-white p-1 text-slate-600 hover:bg-slate-50'
+                        title='Visit Website'
+                      >
+                        <ExternalLink className='h-5 w-5' />
+                      </a>
+                      <button
+                        type='button'
+                        onClick={() => handleDelete(tool.id)}
+                        disabled={loading === tool.id}
+                        aria-label={`Delete ${getTitle(tool)}`}
+                        className='rounded border border-rose-200 bg-rose-50 p-1 text-rose-700 hover:bg-rose-100 disabled:opacity-50'
+                        title='Delete'
+                      >
+                        <Trash2 className='h-5 w-5' />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
               );
             })}
           </tbody>
@@ -742,16 +827,15 @@ export default function AdminToolsTable({
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between border-t border-slate-200 px-6 py-4">
-          <div className="text-sm text-slate-700">
-            Showing {(currentPage - 1) * pageSize + 1} to{' '}
-            {Math.min(currentPage * pageSize, total)} of {total} results
+        <div className='flex items-center justify-between border-t border-slate-200 px-6 py-4'>
+          <div className='text-sm text-slate-700'>
+            Showing {(currentPage - 1) * pageSize + 1} to {Math.min(currentPage * pageSize, total)} of {total} results
           </div>
-          <div className="flex gap-2">
+          <div className='flex gap-2'>
             {currentPage > 1 && (
               <Link
                 href={getPageHref(currentPage - 1)}
-                className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+                className='rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100'
               >
                 Previous
               </Link>
@@ -759,7 +843,7 @@ export default function AdminToolsTable({
             {currentPage < totalPages && (
               <Link
                 href={getPageHref(currentPage + 1)}
-                className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+                className='rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100'
               >
                 Next
               </Link>
