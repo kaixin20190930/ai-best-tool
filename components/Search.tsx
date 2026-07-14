@@ -4,12 +4,18 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { clearSearchHistory, getSearchHistory, getSearchSuggestions } from '@/app/actions/search';
+import { Link } from '@/app/navigation';
 
 interface SearchProps {
   onSearch?: (query: string) => void;
   placeholder?: string;
   showSuggestions?: boolean;
   className?: string;
+  taskSuggestions?: Array<{
+    label: string;
+    href: string;
+  }>;
+  taskHint?: string;
 }
 
 export default function Search({
@@ -17,6 +23,8 @@ export default function Search({
   placeholder = 'Search AI tools...',
   showSuggestions = true,
   className = '',
+  taskSuggestions = [],
+  taskHint,
 }: SearchProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -258,6 +266,24 @@ export default function Search({
             )}
           </button>
         </form>
+        {taskSuggestions.length > 0 && (
+          <div className='mt-3 rounded-lg border border-cyan-100 bg-cyan-50/70 px-3 py-3'>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {taskHint || 'Search by task'}
+            </p>
+            <div className='mt-2 flex flex-wrap gap-2'>
+              {taskSuggestions.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className='inline-flex items-center rounded-full bg-white px-3 py-1.5 text-sm font-medium text-cyan-800 ring-1 ring-cyan-100 transition hover:bg-cyan-100'
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

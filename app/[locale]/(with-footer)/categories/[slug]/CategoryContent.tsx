@@ -7,6 +7,7 @@ import { getAllTags } from '@/lib/services/tags';
 import { SortBy } from '@/lib/services/tools';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
+import Search from '@/components/Search';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import ExploreList from '@/app/[locale]/(with-footer)/explore/ExploreList';
 import { Link } from '@/app/navigation';
@@ -430,6 +431,10 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
       (page, index, pages): page is (typeof GUIDE_PAGES)[number] => Boolean(page) && pages.indexOf(page) === index,
     )
     .slice(0, 3);
+  const taskSuggestions = relatedGuides.map((guide) => ({
+    label: guide.title[isChinese ? 'cn' : 'en'],
+    href: guide.href,
+  }));
   const comparisonGuides = (guideHrefMap[categorySlug] || [])
     .map((href) => GUIDE_PAGES.find((page) => page.href === href))
     .filter((page): page is (typeof GUIDE_PAGES)[number] => Boolean(page))
@@ -916,6 +921,21 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
             </div>
           ))}
         </div>
+
+        {taskSuggestions.length > 0 && (
+          <div className='mb-8 rounded-[18px] border border-cyan-100 bg-cyan-50/60 p-4 shadow-sm'>
+            <Search
+              placeholder={
+                isChinese
+                  ? '搜索这个分类里的工具、场景或产品名...'
+                  : 'Search tools, use cases, or product names in this category...'
+              }
+              taskHint={isChinese ? '先按任务找' : 'Search by task'}
+              taskSuggestions={taskSuggestions}
+              className='p-0 sm:p-0'
+            />
+          </div>
+        )}
 
         <GuideEvidencePanel
           locale={params.locale}

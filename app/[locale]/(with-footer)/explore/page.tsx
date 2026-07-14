@@ -6,6 +6,7 @@ import { getAllTags } from '@/lib/services/tags';
 import { SortBy } from '@/lib/services/tools';
 import FilterPanel from '@/components/FilterPanel';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
+import Search from '@/components/Search';
 import { generateHreflangMetadata } from '@/components/seo';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -95,6 +96,18 @@ export default async function Page({ params, searchParams }: PageProps) {
               ? '如果你还没决定要看哪个方向，先从这里筛选；如果你已经有明确意图，再跳到本周新增、生产力或 Web3 这些更聚焦的核心页。'
               : 'If you are still orienting, start filtering here. If you already know the direction, jump straight to new additions, productivity, or Web3.'}
           </p>
+          <div className='mt-5 rounded-[18px] border border-slate-200 bg-slate-50 p-3 shadow-sm'>
+            <Search
+              placeholder={isChinese ? '搜索工具、场景或产品名...' : 'Search tools, use cases, or product names...'}
+              showSuggestions
+              taskHint={isChinese ? '先按任务找' : 'Search by task'}
+              taskSuggestions={taskFirstEntryPoints.map((item) => ({
+                label: item.title,
+                href: item.href,
+              }))}
+              className='p-0 sm:p-0'
+            />
+          </div>
           <div className='mt-5 rounded-[18px] border border-cyan-100 bg-cyan-50/60 p-4 shadow-sm'>
             <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '先按任务找' : 'Start with a task'}

@@ -408,6 +408,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   placeholder={
                     isChinese ? '搜索 AI 工具、场景或产品名...' : 'Search AI tools, use cases, or product names...'
                   }
+                  taskHint={isChinese ? '按任务搜索' : 'Search by task'}
+                  taskSuggestions={taskFirstEntryPoints.map((item) => ({
+                    label: item.title,
+                    href: item.href,
+                  }))}
                   className='p-0 sm:p-0'
                 />
               </div>

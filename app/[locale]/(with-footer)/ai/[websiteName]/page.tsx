@@ -1739,6 +1739,15 @@ export default async function Page({
         note: commentSnapshotNote,
       },
     ];
+    let discussionPrompt = 'Leave the first real comment, then connect the owner claim and update notes.';
+    if (locale === 'cn') {
+      discussionPrompt =
+        commentCount > 0
+          ? `已有 ${commentCount} 条讨论，欢迎继续补充体验、限制和替代方案。`
+          : '先留一条真实评论，再把 owner 认领和更新说明接上。';
+    } else if (commentCount > 0) {
+      discussionPrompt = `${commentCount} comments are already visible, so add your usage notes, limits, or alternatives.`;
+    }
     let heroPreview = (
       <div className='flex aspect-video items-center justify-center bg-slate-100 text-5xl font-bold text-slate-300'>
         {data.title.slice(0, 1).toUpperCase()}
@@ -1938,6 +1947,33 @@ export default async function Page({
                       <p className='mt-2 text-sm leading-6 text-slate-600'>{item.note}</p>
                     </div>
                   ))}
+                </div>
+
+                <div className='rounded-lg border border-cyan-100 bg-cyan-50/70 p-4 shadow-sm'>
+                  <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
+                    <div className='min-w-0'>
+                      <p className='text-sm font-semibold text-cyan-900'>
+                        {locale === 'cn' ? '把真实使用痕迹补进来' : 'Add real usage signals'}
+                      </p>
+                      <p className='mt-1 text-sm leading-6 text-cyan-900/80'>{discussionPrompt}</p>
+                    </div>
+                    <div className='flex flex-wrap gap-2'>
+                      <a
+                        href='#comments'
+                        className='inline-flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-semibold text-cyan-800 ring-1 ring-cyan-200 hover:bg-cyan-50'
+                      >
+                        <MessageSquare className='size-4' />
+                        {locale === 'cn' ? '去评论' : 'Jump to comments'}
+                      </a>
+                      <Link
+                        href={`/${locale}/developer/listing`}
+                        className='inline-flex items-center gap-2 rounded-lg bg-cyan-700 px-3 py-2 text-sm font-semibold text-white hover:bg-cyan-800'
+                      >
+                        <ShieldCheck className='size-4' />
+                        {locale === 'cn' ? '认领条目' : 'Claim listing'}
+                      </Link>
+                    </div>
+                  </div>
                 </div>
 
                 {toolId && (
