@@ -1712,6 +1712,33 @@ export default async function Page({
       commentChecklistItem = '讨论还不多，更适合先拿它和相似工具做横向比较。';
     }
     const verificationChecklist = [mediaChecklistItem, ratingChecklistItem, commentChecklistItem];
+    let commentSnapshotNote = isChinese
+      ? '评论还少，欢迎先留一条真实体验。'
+      : 'Comments are light, so the first real experience is especially useful.';
+    if (commentCount > 0) {
+      commentSnapshotNote = isChinese
+        ? `已有 ${commentCount} 条讨论，可直接看真实反馈。`
+        : `${commentCount} comments can surface real-world trade-offs quickly.`;
+    }
+    const trustSnapshotItems = [
+      {
+        label: isChinese ? 'Owner 状态' : 'Owner status',
+        value: claimLabel,
+        note: claimSummary,
+      },
+      {
+        label: isChinese ? '编辑复核' : 'Editorial review',
+        value: editorialReviewedLabel || (isChinese ? '待补复核时间' : 'Review time pending'),
+        note:
+          editorialReview?.summary ||
+          (isChinese ? '先把复核时间、复核说明和可信度备注补齐。' : 'Add review timing, notes, and trust context.'),
+      },
+      {
+        label: isChinese ? '讨论活跃度' : 'Discussion',
+        value: commentLabel,
+        note: commentSnapshotNote,
+      },
+    ];
     let heroPreview = (
       <div className='flex aspect-video items-center justify-center bg-slate-100 text-5xl font-bold text-slate-300'>
         {data.title.slice(0, 1).toUpperCase()}
@@ -1902,6 +1929,16 @@ export default async function Page({
                     },
                   ]}
                 />
+
+                <div className='grid gap-3 md:grid-cols-3'>
+                  {trustSnapshotItems.map((item) => (
+                    <div key={item.label} className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm'>
+                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>{item.label}</p>
+                      <p className='mt-2 text-lg font-semibold text-slate-950'>{item.value}</p>
+                      <p className='mt-2 text-sm leading-6 text-slate-600'>{item.note}</p>
+                    </div>
+                  ))}
+                </div>
 
                 {toolId && (
                   <div className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm'>
