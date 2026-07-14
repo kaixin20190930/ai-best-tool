@@ -25,6 +25,16 @@ function getLocalizedText(value: Record<string, string> | null | undefined, loca
   return value[locale] || value.en || value.zh || Object.values(value)[0] || '';
 }
 
+function isValidTopicTool(tool: {
+  id?: string;
+  name?: string;
+  url?: string;
+  title?: unknown;
+  content?: unknown;
+}): boolean {
+  return Boolean(tool?.id && tool?.name && tool?.url && tool?.title && tool?.content);
+}
+
 export async function generateStaticParams() {
   return topListTopics.map((topic) => ({ topic: topic.key }));
 }
@@ -104,18 +114,19 @@ export default async function BestAiToolsTopicPage({
     ]);
 
     const category = categoryResult.status === 'fulfilled' ? categoryResult.value : null;
-    const tools =
-      toolsResult.status === 'fulfilled'
-        ? toolsResult.value.data.filter((tool): tool is (typeof toolsResult.value.data)[number] =>
-            Boolean(tool?.id && tool?.name && tool?.url && tool?.title && tool?.content),
-          )
-        : [];
+    const tools = toolsResult.status === 'fulfilled' ? toolsResult.value.data.filter(isValidTopicTool) : [];
     let toolCount = 0;
     if (category && 'toolCount' in category) {
       toolCount = Number(category.toolCount || 0);
     } else if (toolsResult.status === 'fulfilled') {
       toolCount = Number(toolsResult.value.total || 0);
     }
+    const checkedAt = '2026-07-14';
+    const checkedAtLabel = new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    }).format(new Date(checkedAt));
 
     const categoryName = category ? getLocalizedField(category.name, locale) : topic.title;
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
@@ -488,6 +499,10 @@ export default async function BestAiToolsTopicPage({
                     label: isChinese ? '下一步' : 'Next step',
                     value: nextStepCardValue,
                   },
+                  {
+                    label: isChinese ? '最近检查' : 'Last checked',
+                    value: checkedAtLabel,
+                  },
                 ].map((item) => (
                   <div key={item.label} className='rounded-xl border border-white/10 bg-white/5 p-4'>
                     <p className='text-xs font-semibold uppercase tracking-wide text-cyan-100/80'>{item.label}</p>
@@ -629,9 +644,7 @@ export default async function BestAiToolsTopicPage({
             {
               label: isChinese ? '下一步增强' : 'Next enrichment',
               value: isChinese ? '补方法、评论和筛选说明' : 'Add method notes, comments, and filtering notes',
-              note: isChinese
-                ? '让榜单更像决策页。'
-                : 'Make the ranking feel like a decision page.',
+              note: isChinese ? '让榜单更像决策页。' : 'Make the ranking feel like a decision page.',
             },
           ]}
         />
@@ -665,6 +678,11 @@ export default async function BestAiToolsTopicPage({
                 </div>
               ))}
             </div>
+            <p className='mt-4 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? `这组榜单会按最近检查时间 ${checkedAtLabel} 持续更新，优先保留能接到详情页、官网和提交路径的主题。`
+                : `This list was last checked on ${checkedAtLabel}, and we keep prioritizing topics that connect into detail pages, official sites, and submission paths.`}
+            </p>
           </div>
 
           <div className='rounded-[20px] border border-cyan-100 bg-cyan-50 p-6 shadow-sm'>
