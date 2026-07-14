@@ -295,20 +295,45 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
   };
 
   const getQualityState = (tool: AdminTool) => {
+    const stored = tool.page_quality_status || 'continue_index';
+
+    if (stored === 'noindex') {
+      return { label: 'Noindex', tone: 'bg-rose-50 text-rose-700', reviewDays: 14 };
+    }
+
+    if (stored === 'merge_candidate') {
+      return { label: 'Merge candidate', tone: 'bg-violet-50 text-violet-700', reviewDays: 7 };
+    }
+
+    if (stored === 'monitor') {
+      return { label: 'Monitor', tone: 'bg-amber-50 text-amber-700', reviewDays: 30 };
+    }
+
+    if (stored === 'archive') {
+      return { label: 'Archive', tone: 'bg-slate-100 text-slate-600', reviewDays: 0 };
+    }
+
     const { score } = getToolQuality(tool);
 
     if (score >= 80) {
-      return { label: 'Quality: ready', tone: 'bg-emerald-50 text-emerald-700', reviewDays: 90 };
+      return { label: 'Continue index', tone: 'bg-emerald-50 text-emerald-700', reviewDays: 90 };
     }
 
     if (score >= 60) {
-      return { label: 'Quality: watch', tone: 'bg-amber-50 text-amber-700', reviewDays: 30 };
+      return { label: 'Monitor', tone: 'bg-amber-50 text-amber-700', reviewDays: 30 };
     }
 
-    return { label: 'Quality: needs work', tone: 'bg-rose-50 text-rose-700', reviewDays: 7 };
+    return { label: 'Noindex', tone: 'bg-rose-50 text-rose-700', reviewDays: 7 };
   };
 
   const getNextReviewDate = (tool: AdminTool) => {
+    if (tool.next_review_date) {
+      const storedDate = new Date(tool.next_review_date);
+      if (!Number.isNaN(storedDate.getTime())) {
+        return storedDate;
+      }
+    }
+
     const base = new Date(tool.updated_at || tool.created_at);
     if (Number.isNaN(base.getTime())) {
       return null;
@@ -728,6 +753,11 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
                     <div className='mt-2 text-xs text-slate-500'>
                       Next review: {nextReviewDate ? nextReviewDate.toLocaleDateString() : 'Unknown'}
                     </div>
+                    {tool.page_quality_status && (
+                      <div className='mt-1 text-xs text-slate-500'>
+                        Stored status: {tool.page_quality_status}
+                      </div>
+                    )}
                     {tool.status === 'rejected' && rejectionReason && (
                       <div className='mt-2 max-w-xs rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs leading-5 text-red-800'>
                         <p className='font-semibold'>Reason</p>

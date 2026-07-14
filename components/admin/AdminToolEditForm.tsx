@@ -361,6 +361,8 @@ export default function AdminToolEditForm({
     const formPaymentUrl = String(formData.get('payment_url') || '').trim();
     const formFeaturedActiveFrom = String(formData.get('featured_active_from') || '').trim();
     const formFeaturedUntil = String(formData.get('featured_until') || '').trim();
+    const formPageQualityStatus = String(formData.get('page_quality_status') || 'continue_index');
+    const formNextReviewDate = String(formData.get('next_review_date') || '').trim();
 
     const tags = tagsStr
       .split(',')
@@ -391,6 +393,8 @@ export default function AdminToolEditForm({
       featuredActiveFrom: formFeaturedActiveFrom || null,
       featuredUntil: formFeaturedUntil || null,
       isSponsoredPlacement: formSponsoredPlacement,
+      pageQualityStatus: formPageQualityStatus,
+      nextReviewDate: formNextReviewDate || null,
     });
 
     setLoading(false);
@@ -934,6 +938,44 @@ export default function AdminToolEditForm({
               <option value="published">Published</option>
               <option value="rejected">Rejected</option>
             </select>
+          </div>
+
+          <div className="md:col-span-2 rounded-lg border border-slate-200 bg-slate-50 p-4">
+            <p className="text-sm font-semibold text-slate-900">SEO / quality control</p>
+            <p className="mt-1 text-xs text-slate-500">
+              Track whether the page should keep indexing, pause indexing, or be merged, and set the next review date.
+            </p>
+            <div className="mt-4 grid gap-4 md:grid-cols-2">
+              <div>
+                <label htmlFor="page_quality_status" className="block text-sm font-medium text-slate-700">
+                  Page Quality Status
+                </label>
+                <select
+                  id="page_quality_status"
+                  name="page_quality_status"
+                  defaultValue={tool.page_quality_status || 'continue_index'}
+                  className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+                >
+                  <option value="continue_index">Continue index</option>
+                  <option value="monitor">Monitor</option>
+                  <option value="noindex">Noindex</option>
+                  <option value="merge_candidate">Merge candidate</option>
+                  <option value="archive">Archive</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="next_review_date" className="block text-sm font-medium text-slate-700">
+                  Next Review Date
+                </label>
+                <input
+                  type="date"
+                  id="next_review_date"
+                  name="next_review_date"
+                  defaultValue={tool.next_review_date || ''}
+                  className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -196,7 +196,7 @@ Google 不会因为内容由 AI 辅助生成就直接惩罚页面，但会压低
 2. 生成页面质量盘点脚本，输出 guide / comparison / tool 的索引建议。已完成。
 3. 给弱 guide / alias guide 分批加 noindex 或 canonical 合并策略。已通过中间件统一加 `X-Robots-Tag: noindex, follow`，后续再做合并。
 4. 给 20 个核心页面增加真实证据模块。已完成 20 个核心 page：`how-to-choose-ai-tools`、`ai-seo-tools`、`ai-coding-tools`、`free-ai-tools`、`best-free-ai-tools`、`ai-writing-tools`、`ai-productivity-tools`、`ai-tools-for-research`、`ai-note-taking-tools`、`ai-tools-for-web3`、`ai-video-tools`、`ai-tools-for-meeting-notes`、`ai-tools-for-automation`、`ai-tools-for-developers`、`ai-chatbot-tools`、`ai-tools-for-agents`、`ai-tools-for-sales`、`ai-tools-for-marketing`、`ai-tools-for-customer-support`、`ai-tools-for-creators`。并继续补齐了 `ai-tools-for-evals`、`ai-tools-for-code-review`、`ai-tools-for-content-creation`、`ai-tools-for-students`、`ai-tools-for-prompt-testing`、`ai-tools-for-model-routing`、`ai-image-tools`、`ai-tools-for-api-observability`、`ai-tools-for-lead-generation`、`ai-tools-for-crypto-research`、`ai-tools-for-token-research`、`ai-tools-for-voice`、`ai-tools-for-web3-analysis`、`ai-tools-for-dex-analytics` 等独立高意图页。
-5. 在管理后台增加“页面质量状态”和“下次复查日期”字段。
+5. 在管理后台增加“页面质量状态”和“下次复查日期”字段。已完成，字段已落到 `tools` 表并接入编辑页和列表页。
 6. 在详情页强化评论、owner 认领和最近验证日期。
 
 ### 当前执行状态

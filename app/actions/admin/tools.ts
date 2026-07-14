@@ -97,6 +97,8 @@ export interface AdminTool {
   ownerEmail: string | null;
   claimStatus: string | null;
   claimedAt: string | null;
+  page_quality_status: string | null;
+  next_review_date: string | null;
   created_at: Date;
   updated_at: Date;
   view_count: number;
@@ -228,6 +230,15 @@ function normalizeAdminTool(row: any): AdminTool {
 }
 
 function normalizeNullableText(value: string | null | undefined): string | null {
+  if (value === undefined || value === null) {
+    return null;
+  }
+
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : null;
+}
+
+function normalizeNullableDate(value: string | null | undefined): string | null {
   if (value === undefined || value === null) {
     return null;
   }
@@ -1110,6 +1121,8 @@ export async function updateTool(
     featuredUntil?: string | null;
     isSponsoredPlacement?: boolean;
     paymentUrl?: string | null;
+    pageQualityStatus?: string;
+    nextReviewDate?: string | null;
   }
 ): Promise<{ success: boolean; error?: string }> {
   try {
@@ -1254,6 +1267,18 @@ export async function updateTool(
     if (nextStatus !== undefined) {
       updates.push(`status = $${paramIndex}`);
       params.push(nextStatus);
+      paramIndex++;
+    }
+
+    if (data.pageQualityStatus !== undefined) {
+      updates.push(`page_quality_status = $${paramIndex}`);
+      params.push(normalizeRequiredText(data.pageQualityStatus, 'Page quality status'));
+      paramIndex++;
+    }
+
+    if (data.nextReviewDate !== undefined) {
+      updates.push(`next_review_date = $${paramIndex}`);
+      params.push(normalizeNullableDate(data.nextReviewDate));
       paramIndex++;
     }
 
