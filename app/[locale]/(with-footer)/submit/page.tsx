@@ -385,6 +385,80 @@ export default async function Page({
       </section>
 
       <section className='mx-auto mt-8 max-w-pc px-3 lg:px-0'>
+        <div className='rounded-[20px] border border-cyan-100 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
+          <div className='flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between'>
+            <div className='max-w-3xl'>
+              <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+                {isChinese ? '提交后会发生什么' : 'What happens next'}
+              </p>
+              <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+                {isChinese ? '把审核流程说清楚，减少反复确认' : 'Make the review flow clear so nobody has to guess twice'}
+              </h2>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '提交之后，你可以在「我的提交」里继续看审核状态、付款链接和后续提示；如果是老条目，先认领再处理会更快。'
+                  : 'After submitting, you can keep checking review status, payment links, and next steps in My Submissions. If it is an existing listing, claiming first is usually faster.'}
+              </p>
+            </div>
+            <div className='flex flex-wrap gap-3'>
+              <TrackableCtaLink
+                href={`/${locale}/profile/submissions`}
+                ctaId='submit_view_submissions_after'
+                ctaLabel='View my submissions'
+                pageType='submit'
+                className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-cyan-800'
+              >
+                {isChinese ? '查看我的提交' : 'View my submissions'}
+              </TrackableCtaLink>
+              <TrackableCtaLink
+                href={`/${locale}/pricing`}
+                ctaId='submit_view_pricing_after'
+                ctaLabel='View pricing'
+                pageType='submit'
+                className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-2.5 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
+              >
+                {isChinese ? '返回价格页' : 'View pricing'}
+              </TrackableCtaLink>
+            </div>
+          </div>
+
+          <div className='mt-6 grid gap-3 lg:grid-cols-4'>
+            {[
+              {
+                title: isChinese ? '1. 先进入审核队列' : '1. Enter the review queue',
+                text: isChinese
+                  ? '免费提交会进入标准审核；付费提交会更快进入处理。'
+                  : 'Free submissions go into the standard review queue; paid submissions move faster.',
+              },
+              {
+                title: isChinese ? '2. 补齐缺失信息' : '2. Fill any missing details',
+                text: isChinese
+                  ? '如果官网、截图、分类或描述不完整，审核会更慢。'
+                  : 'Missing website, screenshots, category, or descriptions will slow review down.',
+              },
+              {
+                title: isChinese ? '3. 付款只锁定窗口' : '3. Payment only reserves a window',
+                text: isChinese
+                  ? '付费会记录权益和前排窗口，但不会自动通过审核。'
+                  : 'Payment records the entitlement and reserves the featured window, but does not auto-approve.',
+              },
+              {
+                title: isChinese ? '4. 通过后继续跟进' : '4. Follow up after approval',
+                text: isChinese
+                  ? '发布后继续看认领、评论和更新请求。'
+                  : 'After publish, keep an eye on claims, comments, and update requests.',
+              },
+            ].map((step) => (
+              <div key={step.title} className='rounded-xl border border-white bg-white p-4 shadow-sm'>
+                <p className='text-sm font-semibold text-slate-950'>{step.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{step.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className='mx-auto mt-8 max-w-pc px-3 lg:px-0'>
         <div className='rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '常见问题' : 'FAQ'}
