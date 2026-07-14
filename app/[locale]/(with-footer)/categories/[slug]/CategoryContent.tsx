@@ -436,6 +436,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
     .filter((page) => page.href.endsWith('-comparison'));
   const primaryComparisonGuide = comparisonGuides[0] || relatedGuides[0] || null;
   const checkedAt = '2026-07-14';
+  const checkedAtLabel = checkedAt;
   const priorityCategorySlugs = [
     'developer-tools',
     'research',
@@ -466,6 +467,29 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
       name: getLocalizedField(item.name, params.locale),
     }));
   const representativeTools = (representativeToolMap[categorySlug] || []).slice(0, 3);
+  const categorySignalCards = [
+    {
+      label: isChinese ? '最近核查' : 'Last checked',
+      value: checkedAtLabel,
+      note: isChinese
+        ? '这不是静态目录，后续还会继续补真实对比、评论和认领信号。'
+        : 'This is not a static directory; we will keep adding real comparisons, comments, and claim signals.',
+    },
+    {
+      label: isChinese ? '当前规模' : 'Current size',
+      value: `${categoryToolCount}`,
+      note: isChinese
+        ? '分类页保留索引，但会继续把真实工具页、指南页和对比页串起来。'
+        : 'The category page stays indexable while linking real tool pages, guides, and comparison pages together.',
+    },
+    {
+      label: isChinese ? '下一跳入口' : 'Next hop',
+      value: `${comparisonGuides.length + relatedGuides.length}`,
+      note: isChinese
+        ? '先从对比和指南进入，再回到列表筛选具体工具。'
+        : 'Start with comparisons and guides, then return to the list to narrow down specific tools.',
+    },
+  ];
   const highIntentEntryPoints = (
     {
       coding: [
@@ -881,6 +905,16 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
               </TrackableCtaLink>
             </div>
           </div>
+        </div>
+
+        <div className='mb-8 grid gap-4 md:grid-cols-3'>
+          {categorySignalCards.map((card) => (
+            <div key={card.label} className='theme-surface rounded-lg border border-cyan-100 p-5 shadow-sm'>
+              <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>{card.label}</p>
+              <p className='mt-2 text-2xl font-bold text-slate-900'>{card.value}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>{card.note}</p>
+            </div>
+          ))}
         </div>
 
         <GuideEvidencePanel
