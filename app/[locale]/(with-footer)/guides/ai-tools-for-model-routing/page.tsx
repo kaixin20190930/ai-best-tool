@@ -251,6 +251,35 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `Next, priority additions are fallback flows, cost optimization notes, and team usage examples while keeping the ${checkedAt} verification record.`,
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese
+                ? '先看调用费、并发和预算控制'
+                : 'Check usage fees, concurrency, and budget controls first',
+              note: isChinese
+                ? '路由工具如果没把成本说清楚，后面很容易失控。'
+                : 'If routing tools do not make cost clear, spend can drift fast.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese
+                ? '看供应商覆盖和回退策略是否持续更新'
+                : 'Check whether provider coverage and fallback policies are actively updated',
+              note: isChinese
+                ? '模型生态变化太快，更新停滞就意味着会过时。'
+                : 'The model ecosystem changes too fast for stale routing logic to stay useful.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese
+                ? '没有真实生产治理就别放前排'
+                : 'Do not rank it highly without real production governance',
+              note: isChinese
+                ? '统一出口不等于真正能管住模型。'
+                : 'Unified access does not automatically mean real governance.',
+            },
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>

@@ -61,6 +61,41 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Whether it connects cleanly decides whether it will stay in use.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '价格信号' : 'Pricing signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看席位、发送量和自动化额度'
+                : 'Check seats, sending volume, and automation caps first',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '营销工具的成本通常藏在发送量和自动化层。'
+                : 'Marketing costs are often hidden in sending volume and automation tiers.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '更新信号' : 'Freshness signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看广告、邮件和受众能力是否持续更新'
+                : 'Check whether ads, email, and audience features are still being updated',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果还停在单点起稿，优先级就要降。'
+                : 'If it is still stuck at single-purpose drafting, priority should drop.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '风险信号' : 'Risk signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '没有真实转化链路就别只看文案'
+                : 'Do not judge by copy alone without a real conversion flow',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '最终要看能否连到 CRM、邮件和网站动作。'
+                : 'The real question is whether it connects to CRM, email, and site actions.',
+          },
+        ]}
       />
 
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>

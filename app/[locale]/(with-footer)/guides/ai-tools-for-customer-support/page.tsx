@@ -196,6 +196,33 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `Make the page feel closer to real support docs while keeping the ${checkedAt} verification record.`,
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese ? '先看工单量、席位和坐席限制' : 'Check ticket volume, seats, and agent limits first',
+              note: isChinese
+                ? '客服工具最容易在团队规模和自动分流上出现价格分层。'
+                : 'Support tools often tier by team size and automated triage features.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese
+                ? '看知识库、分流和接手是否持续更新'
+                : 'Check whether knowledge base, triage, and handoff features are still updated',
+              note: isChinese
+                ? '如果只剩演示文案，没有真实客服改进，优先级就要下降。'
+                : 'If only demo copy remains without real support improvements, priority should drop.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese
+                ? '没有真实接手闭环就别放前排'
+                : 'If there is no real handoff loop, do not rank it highly',
+              note: isChinese
+                ? '能否留住上下文和升级路径，比流畅回答更重要。'
+                : 'Context retention and escalation paths matter more than polished replies.',
+            },
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>

@@ -284,6 +284,33 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `Next, priority additions are list examples, filtering rules, and pre-outreach workflow notes while keeping the ${checkedAt} verification record.`,
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese
+                ? '先看线索量、导出和 enrichment 限额'
+                : 'Check lead volume, exports, and enrichment limits first',
+              note: isChinese
+                ? '获客工具很容易把关键价值放在导出和补全上。'
+                : 'Lead-gen tools often hide value in exports and enrichment.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese
+                ? '看名单来源和筛选能力是否还在更新'
+                : 'Check whether list sources and filtering capabilities are still being updated',
+              note: isChinese
+                ? '名单源一老，后续外联质量就会被拖垮。'
+                : 'If sources get stale, downstream outreach quality suffers.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '没有可用名单命中率就先降级' : 'Downgrade it if usable match rate is missing',
+              note: isChinese
+                ? '联系人很多，不等于线索真的可用。'
+                : 'Lots of contacts does not mean the leads are actually usable.',
+            },
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
