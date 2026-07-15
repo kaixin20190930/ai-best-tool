@@ -62,6 +62,41 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Ultimately, it has to help with incident recap and fixes.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '价格信号' : 'Pricing signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看请求量、保留期和席位'
+                : 'Check request volume, retention, and seats first',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '可观测工具通常把真正有用的数据留在更高层。'
+                : 'Observability tools often gate the most useful data behind higher tiers.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '更新信号' : 'Freshness signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看告警、追踪和仪表盘是否持续更新'
+                : 'Check whether alerts, tracing, and dashboards are being updated',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '排障工具如果不更新，很快会和真实系统脱节。'
+                : 'If observability tools are not updated, they drift away from real systems quickly.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '风险信号' : 'Risk signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '没有真实事故复盘就先降级'
+                : 'Downgrade it without real incident postmortems',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '只有图表没有复盘，不够用。'
+                : 'Charts without postmortems are not enough.',
+          },
+        ]}
       />
 
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
