@@ -288,6 +288,32 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'If your workflow depends on it over time, it needs to stay stable and reusable.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '上下文信号' : 'Context signal',
+            value: locale === 'cn' || locale === 'tw' ? '是否真的能处理长文本' : 'Can it handle long text well',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '长文本和复杂推演不是重点时，不要过度放大。'
+                : 'Do not over-weight this if long text is not the core job.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '分析信号' : 'Analysis signal',
+            value: locale === 'cn' || locale === 'tw' ? '解释是否足够稳' : 'Is the explanation quality steady',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '替代 Claude 的关键不是名字，而是解释和总结是否靠谱。'
+                : 'A real Claude alternative is about explanation and summary quality, not just branding.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '稳定信号' : 'Stability signal',
+            value: locale === 'cn' || locale === 'tw' ? '是否适合长期使用' : 'Is it comfortable to keep using',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果工作流会持续依赖，它必须稳定、顺手、可复用。'
+                : 'If your workflow depends on it over time, it needs to stay stable and reusable.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

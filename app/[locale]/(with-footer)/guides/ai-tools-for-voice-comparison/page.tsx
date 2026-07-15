@@ -365,6 +365,27 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               : 'The key metrics differ across voice tasks, so do not group them as one decision.',
           },
         ]}
+        signalCards={[
+          {
+            label: isChinese ? '格式信号' : 'Format signal',
+            value: isChinese ? '格式与导出方式先核对' : 'Check formats and exports first',
+            note: isChinese
+              ? '先确认音频、语言和导出是否匹配工作流。'
+              : 'Confirm whether audio, language, and export fit the workflow.',
+          },
+          {
+            label: isChinese ? '稳定信号' : 'Stability signal',
+            value: isChinese ? '更新与评分是否稳定' : 'Freshness and ratings',
+            note: isChinese
+              ? '如果真实评论和更新节奏不稳，后面再比功能意义不大。'
+              : 'If comments and update cadence are unstable, feature comparison matters less.',
+          },
+          {
+            label: isChinese ? '场景信号' : 'Use-case signal',
+            value: isChinese ? '配音、转写、对话要分开看' : 'Separate dubbing, transcription, and conversation',
+            note: isChinese ? '不同语音任务的关键指标完全不一样。' : 'The key metrics differ across voice tasks.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

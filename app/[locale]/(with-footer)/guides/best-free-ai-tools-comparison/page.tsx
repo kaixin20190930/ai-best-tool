@@ -224,6 +224,32 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Narrow the shortlist first, then validate the actual free rules and limits.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '免费信号' : 'Free signal',
+            value: locale === 'cn' || locale === 'tw' ? '能用多久' : 'How long it stays usable',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '免费页最容易失真的地方就是“看上去免费，实际很快卡住”。'
+                : 'Free pages often fail by looking free while hitting a wall very quickly.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '持续信号' : 'Sustainability signal',
+            value: locale === 'cn' || locale === 'tw' ? '持续可用' : 'Still usable later',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果只能短期试用，价值会和宣传差很多。'
+                : 'If it only works for a short trial, the value is very different from the marketing.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '收口信号' : 'Shortlist signal',
+            value: locale === 'cn' || locale === 'tw' ? '先 shortlist 再官网' : 'Shortlist before the official site',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先收紧候选，再去验证免费规则和限制。'
+                : 'Narrow the shortlist first, then validate the actual free rules and limits.',
+          },
+        ]}
       />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
