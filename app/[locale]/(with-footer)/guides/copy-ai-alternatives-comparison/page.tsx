@@ -286,6 +286,33 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Narrow the shortlist first, then validate whether the official site is actually the final answer.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '起稿信号' : 'Drafting signal',
+            value:
+              locale === 'cn' || locale === 'tw' ? '起稿 / 变体 / 营销文案' : 'Drafting / variants / marketing copy',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果你的任务更偏长文或品牌治理，这页就不该停太久。'
+                : 'If your real need is long-form or brand governance, this page should not be the endpoint.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '流程信号' : 'Workflow signal',
+            value: locale === 'cn' || locale === 'tw' ? '进团队流程' : 'Fits team workflows',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '能不能接进你现有的营销流程，通常比单次生成更重要。'
+                : 'How well it plugs into your existing marketing flow matters more than a single generation demo.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '收口信号' : 'Shortlist signal',
+            value: locale === 'cn' || locale === 'tw' ? '看榜单再决定官网' : 'Use the ranking before the official site',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先收窄 shortlist，再验证官网是不是最终答案。'
+                : 'Narrow the shortlist first, then validate whether the official site is actually the final answer.',
+          },
+        ]}
       />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>

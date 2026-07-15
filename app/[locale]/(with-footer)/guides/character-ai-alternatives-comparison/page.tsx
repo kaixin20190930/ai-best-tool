@@ -288,6 +288,32 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Narrow the shortlist first so you do not waste time on the official site.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '角色信号' : 'Character signal',
+            value: locale === 'cn' || locale === 'tw' ? '角色对话 / 沉浸式' : 'Character chat / immersive',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果你只是要一般聊天，这页很快就该切走。'
+                : 'If you only need general chat, this page should route you out quickly.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '连贯性信号' : 'Continuity signal',
+            value: locale === 'cn' || locale === 'tw' ? '持续对话体验' : 'Persistent conversation experience',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '角色产品成败通常看记忆和前后呼应。'
+                : 'These products usually live or die on memory and continuity.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '收口信号' : 'Shortlist signal',
+            value: locale === 'cn' || locale === 'tw' ? '先筛选再官网验证' : 'Filter first, then validate',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先缩短 shortlist 再看官网，比较不容易浪费时间。'
+                : 'Narrow the shortlist first so you do not waste time on the official site.',
+          },
+        ]}
       />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>

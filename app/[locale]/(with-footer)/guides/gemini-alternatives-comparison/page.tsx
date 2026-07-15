@@ -288,6 +288,32 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Stability, pricing, and switching cost matter more than marketing.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '生态信号' : 'Ecosystem signal',
+            value: locale === 'cn' || locale === 'tw' ? 'Google 生态是否顺手' : 'Does it fit Google workflows',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果生态整合不是关键，就别让它主导决策。'
+                : 'If ecosystem fit is not the key job, do not let it dominate.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '入口信号' : 'Entry signal',
+            value: locale === 'cn' || locale === 'tw' ? '手机上是否好用' : 'Is it good on mobile',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '很多人选 Gemini，其实是看入口体验。'
+                : 'For many users, the entry experience is the real reason.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '稳定信号' : 'Stability signal',
+            value: locale === 'cn' || locale === 'tw' ? '是否能一直用下去' : 'Can it stay in your stack',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '稳定、价格和切换成本，最后往往比宣传更重要。'
+                : 'Stability, pricing, and switching cost matter more than marketing.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

@@ -226,6 +226,7 @@
 
 ## 十、近期进展记录
 
+- 2026-07-15：继续补齐 `character-ai-alternatives-comparison`、`copy-ai-alternatives-comparison`、`gemini-alternatives-comparison` 的 `signalCards`，把角色聊天、起稿营销和 Gemini 替代页的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `ai-tools-for-voice-comparison`、`best-free-ai-tools-comparison`、`claude-alternatives-comparison` 的 `signalCards`，把语音、免费工具和 Claude 替代页的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `ai-tools-for-evals-comparison`、`ai-tools-for-model-routing-comparison`、`ai-tools-for-students-comparison` 的 `signalCards`，把 Evals、模型路由和学生页的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `ai-note-taking-tools-comparison`、`ai-seo-tools-comparison`、`chatgpt-alternatives-comparison` 的 `signalCards`，把记笔记、SEO 和 ChatGPT 替代页的可验证信号层补齐后再做 build 验证。
