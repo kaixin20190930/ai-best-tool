@@ -67,6 +67,39 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Ultimately, it must work in real projects.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '价格信号' : 'Pricing signal',
+            value:
+              locale === 'cn' || locale === 'tw' ? '先看团队席位和任务量' : 'Check team seats and task volume first',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? 'Agent 工具常按席位、任务和执行次数计费。'
+                : 'Agent tools often charge by seats, tasks, and execution counts.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '更新信号' : 'Freshness signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看任务路由和执行能力是否更新'
+                : 'Check whether task routing and execution keep improving',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果只是换了皮，长期落地价值会很弱。'
+                : 'If it is only a new wrapper, long-term value is weak.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '风险信号' : 'Risk signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '没有上下文 / 协作 / 落地就先降级'
+                : 'Downgrade it without context, collaboration, or delivery',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '这三项缺一项，就很难称得上可用 agent。'
+                : 'Without those three, it is hard to call the product a usable agent.',
+          },
+        ]}
       />
 
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>

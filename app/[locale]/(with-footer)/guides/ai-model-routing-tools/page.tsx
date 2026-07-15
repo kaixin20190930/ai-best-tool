@@ -60,6 +60,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Ultimately, it has to be worth the cost.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '价格信号' : 'Pricing signal',
+            value: locale === 'cn' || locale === 'tw' ? '先看路由量和席位' : 'Check routing volume and seats first',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '路由工具通常按调用量、团队席位或上层能力收费。'
+                : 'Routing tools usually price by calls, team seats, or higher-tier features.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '更新信号' : 'Freshness signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看模型列表和路由规则是否更新'
+                : 'Check whether model lists and routing rules keep updating',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果路由规则不再维护，稳定性会慢慢下降。'
+                : 'If routing rules stop being maintained, stability slowly erodes.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '风险信号' : 'Risk signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '没有切换 / 稳定 / 成本就先降级'
+                : 'Downgrade it without switching, stability, or cost clarity',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '这三项不清楚，路由价值很难成立。'
+                : 'Without those three, routing value is hard to justify.',
+          },
+        ]}
       />
 
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
