@@ -234,3 +234,4 @@
 - 2026-07-15：继续补齐 `ai-code-review-tools-comparison`、`ai-tools-for-code-review-comparison`、`cursor-alternatives-comparison` 的 `signalCards`，把代码审查与 Cursor 替代页的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `ai-tools-for-agencies-comparison`、`ai-tools-for-designers-comparison`、`ai-tools-for-creators-comparison` 的 `signalCards`，把代理、设计和创作者页的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `ai-web3-tools-comparison`、`ai-tools-for-defi-analytics-comparison`、`ai-tools-for-wallet-monitoring-comparison` 的 `signalCards`，把 Web3 / DeFi / 钱包监控页的可验证信号层补齐后再做 build 验证。
+- 2026-07-15：继续补齐 `ai-research-tools-comparison`、`ai-tools-for-prompt-testing-comparison`、`ai-tools-for-api-observability-comparison` 的 `signalCards`，把研究、Prompt 测试和 API 可观测页的可验证信号层补齐后再做 build 验证。

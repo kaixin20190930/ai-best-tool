@@ -297,6 +297,39 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               locale === 'cn' || locale === 'tw' ? '补上真实日志和调试样本。' : 'Add real logs and debugging examples.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '日志信号' : 'Log signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看能不能快速定位失败'
+                : 'Check whether it helps locate failures quickly',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '能定位问题，比单纯有日志更重要。'
+                : 'Finding the issue matters more than just having logs.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '成本信号' : 'Cost signal',
+            value:
+              locale === 'cn' || locale === 'tw' ? '看调用量和费用是否清楚' : 'See whether usage and spend are clear',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '没有成本可见性，预算治理会很难。'
+                : 'Without cost visibility, budget governance is hard.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '质量信号' : 'Quality signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看评估与反馈闭环是否顺手'
+                : 'Check whether eval and feedback loops are smooth',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '质量追踪一旦跑通，优化才有抓手。'
+                : 'Once quality tracking works, optimization has real leverage.',
+          },
+        ]}
       />
       <section className='mx-auto mt-6 grid max-w-6xl gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

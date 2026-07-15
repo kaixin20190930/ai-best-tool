@@ -280,6 +280,41 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Narrow the shortlist first, then validate whether it truly fits on the official site.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '评估信号' : 'Evaluation signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看偏单次、数据集还是回归验证'
+                : 'Check whether it is best at single-run, dataset, or regression evals',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先确认测试类型，再选工具。'
+                : 'Identify the test type before choosing a tool.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '版本信号' : 'Version signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看 prompt、模型和结果能否串起来'
+                : 'See whether prompts, models, and outputs are versioned together',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '没有版本链路就很难复盘。'
+                : 'Without version history, you cannot review what changed.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '协作信号' : 'Collaboration signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看共享、复盘和验收是否顺手'
+                : 'Check whether sharing, review, and signoff are smooth',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '团队用得顺，才会长期留着。'
+                : 'If the team can use it smoothly, it sticks.',
+          },
+        ]}
       />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>

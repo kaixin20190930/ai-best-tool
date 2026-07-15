@@ -58,6 +58,36 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Whether it supports export, recap, and follow-up determines long-term usefulness.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '发现信号' : 'Discovery signal',
+            value:
+              locale === 'cn' || locale === 'tw' ? '先看能否快速打开话题' : 'Check whether it quickly opens a topic',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '研究工具首先要帮你找到下一步。'
+                : 'Research tools first need to point you to the next step.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '证据信号' : 'Evidence signal',
+            value: locale === 'cn' || locale === 'tw' ? '看来源链路是否清楚' : 'See whether the source chain is clear',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '来源不清，研究价值会打折。'
+                : 'If sources are unclear, the research value drops quickly.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '复用信号' : 'Reuse signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看导出、复盘和追问是否顺手'
+                : 'Check whether export, recap, and follow-up feel smooth',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '能复用和协作，才适合长期留着。'
+                : 'Reusability and collaboration are what make it stick.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>
