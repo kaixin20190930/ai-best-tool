@@ -2872,7 +2872,7 @@ export default async function Page({
 
               {toolId && (
                 <div className='rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200'>
-                  <ToolFeedbackBar toolId={toolId} userId={user?.id} />
+                  <ToolFeedbackBar toolId={toolId} userId={user?.id} locale={locale} />
                 </div>
               )}
             </aside>
@@ -2955,13 +2955,27 @@ export default async function Page({
                     </p>
                   </div>
                 </div>
+                <div className='mt-4 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900'>
+                  {locale === 'cn'
+                    ? '如果你发现价格、截图、文案或功能已经过时，先点右侧“请求更新”，再在评论里写清楚是哪一项需要修正。'
+                    : 'If pricing, screenshots, copy, or features are stale, tap request update on the right, then leave a comment that says exactly what needs fixing.'}
+                </div>
                 <div className='mt-6'>
                   <CommentList
                     toolId={toolId}
                     currentUserId={user?.id}
                     locale={locale}
                     promptLabel={commentPromptLabel}
-                    starterPrompts={commentStarterPrompts}
+                    starterPrompts={[
+                      ...(locale === 'cn' || locale === 'tw'
+                        ? ['这页哪一项需要更新？', '价格 / 截图 / 文案哪里不准确？', '你实际用下来最需要补什么？']
+                        : [
+                            'What on this page needs updating?',
+                            'Which part is wrong: pricing, screenshots, or copy?',
+                            'What should we add from your real use?',
+                          ]),
+                      ...commentStarterPrompts,
+                    ]}
                     placeholder={
                       locale === 'cn'
                         ? '说说你的真实使用体验，比如适合什么场景、有什么优点或注意点。'
