@@ -201,6 +201,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先判断 SEO 工具是否能覆盖真实增长工作流：关键词研究、内容优化、排名跟踪、导出协作和数据更新频率。'
               : 'This page focuses on whether an SEO tool supports a real growth workflow: keyword research, content optimization, rank tracking, exports, collaboration, and data freshness.'
           }
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese ? '先看试用，再看升级成本' : 'Check trial first, then upgrade cost',
+              note: isChinese
+                ? 'SEO 工具很容易在导出、席位和监控上突然抬门槛。'
+                : 'SEO tools often raise the bar suddenly on exports, seats, or monitoring.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese ? '数据更新频率很关键' : 'Data freshness matters a lot',
+              note: isChinese
+                ? '排名、关键词和内容建议如果不够新，决策很容易失真。'
+                : 'If rankings, keywords, or content guidance are stale, decisions quickly get distorted.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '薄 SEO 页要警惕' : 'Be careful with thin SEO pages',
+              note: isChinese
+                ? '如果页面只会讲“AI SEO”但没有工作流证据，就先降权。'
+                : 'If a page only says "AI SEO" without workflow evidence, treat it cautiously.',
+            },
+          ]}
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',

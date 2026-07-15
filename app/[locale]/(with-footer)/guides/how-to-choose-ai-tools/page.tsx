@@ -182,6 +182,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先检查页面是否能帮用户完成真实选型：是否有明确场景、价格或限制、最近更新、截图/评论，以及能否继续进入分类、榜单或工具详情。'
               : 'This page prioritizes whether a tool can support a real selection decision: use case fit, pricing or limits, freshness, screenshots or comments, and clear next steps into categories, rankings, or tool pages.'
           }
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese ? '先看免费限制再看升级门槛' : 'Check free limits before upgrade thresholds',
+              note: isChinese
+                ? '如果免费版已经很吃紧，后面用起来通常会更快撞墙。'
+                : 'If the free tier is already tight, you will usually hit the wall sooner in real use.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese ? '优先看最近更新时间' : 'Prioritize the latest update date',
+              note: isChinese
+                ? '更新越近，越适合继续往下比较。'
+                : 'The fresher the page, the safer it is to keep comparing it.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '薄页和旧截图要谨慎' : 'Be careful with thin pages and stale screenshots',
+              note: isChinese
+                ? '如果没有评论、截图或真实反馈，先别急着下结论。'
+                : 'If there are no comments, screenshots, or real feedback, hold off on the conclusion.',
+            },
+          ]}
           items={[
             {
               label: isChinese ? '判断维度' : 'Decision signals',

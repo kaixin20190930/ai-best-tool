@@ -4,12 +4,20 @@ type EvidenceItem = {
   note: string;
 };
 
+type SignalCard = {
+  label: string;
+  value: string;
+  note: string;
+  tone?: string;
+};
+
 type GuideEvidencePanelProps = {
   locale: string;
   checkedAt?: string;
   scope: string;
   items: EvidenceItem[];
   decisionSteps?: string[];
+  signalCards?: SignalCard[];
 };
 
 export default function GuideEvidencePanel({
@@ -18,6 +26,7 @@ export default function GuideEvidencePanel({
   scope,
   items,
   decisionSteps,
+  signalCards,
 }: GuideEvidencePanelProps) {
   const isChinese = locale === 'cn' || locale === 'tw';
 
@@ -48,6 +57,21 @@ export default function GuideEvidencePanel({
           </div>
         ))}
       </div>
+
+      {signalCards && signalCards.length > 0 ? (
+        <div className='mt-5 grid gap-3 md:grid-cols-3'>
+          {signalCards.slice(0, 3).map((signal) => (
+            <div
+              key={signal.label}
+              className={`rounded-2xl border bg-white p-4 shadow-sm ${signal.tone || 'border-cyan-200'}`}
+            >
+              <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>{signal.label}</p>
+              <p className='mt-2 text-base font-semibold text-slate-950'>{signal.value}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>{signal.note}</p>
+            </div>
+          ))}
+        </div>
+      ) : null}
 
       {decisionSteps && decisionSteps.length > 0 ? (
         <div className='mt-5 rounded-2xl border border-emerald-200 bg-white p-4 shadow-sm'>

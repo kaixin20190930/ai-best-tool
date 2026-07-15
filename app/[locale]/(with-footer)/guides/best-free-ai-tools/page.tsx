@@ -176,6 +176,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先检查免费工具的真实可用性：是否真的免费、限制是否清晰、更新是否还在继续、评分和评论是否可信。'
               : 'This page checks whether free tools are actually usable: whether they are truly free, whether limits are clear, whether updates are still active, and whether ratings and comments are trustworthy.'
           }
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese ? '免费不是“随便用”' : 'Free does not mean unlimited',
+              note: isChinese
+                ? '先看免费额度和限制，再看是否值得继续试。'
+                : 'Check the quota and limits first, then decide whether it is worth trying.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese ? '保持活跃更新才更可信' : 'Active updates are a better sign',
+              note: isChinese
+                ? '免费工具变化快，更新停了往往就是风险。'
+                : 'Free tools change fast, and stalled updates are often a warning sign.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '只看免费容易踩坑' : 'Free-only browsing can mislead',
+              note: isChinese
+                ? '评论、收藏和 owner 认领能帮你把“能试”与“能长期用”分开。'
+                : 'Comments, saves, and owner claims help separate "can try" from "can rely on long term".',
+            },
+          ]}
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',
