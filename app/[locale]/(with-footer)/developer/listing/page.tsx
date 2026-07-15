@@ -4,6 +4,7 @@ import { ArrowRight, CheckCircle2, Mail, ShieldCheck, Sparkles } from 'lucide-re
 import { getListingPaymentMailto } from '@/lib/config/listing';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import ClaimListingForm from '@/components/developer/ClaimListingForm';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const isChinese = locale === 'cn' || locale === 'tw';
@@ -268,6 +269,63 @@ export default function DeveloperListingPage({
           </div>
         </div>
       </section>
+
+      <GuideEvidencePanel
+        locale={locale}
+        checkedAt='2026-07-15'
+        scope={
+          isChinese
+            ? '认领页不是收件箱，而是确认 owner、更新路径和后续加速意愿的分流页。'
+            : 'The claim page should not be an inbox. It should route ownership confirmation, update paths, and future acceleration intent.'
+        }
+        items={[
+          {
+            label: isChinese ? '页面定位' : 'Page role',
+            value: isChinese ? '先确认 owner 再谈后续' : 'Confirm ownership before anything else',
+            note: isChinese
+              ? '避免把认领页做成无判断的留资页。'
+              : 'Prevents the page from becoming a judgment-free lead form.',
+          },
+          {
+            label: isChinese ? '执行信号' : 'Execution signal',
+            value: isChinese ? '留下信息后人工跟进' : 'Leave details and follow up manually',
+            note: isChinese
+              ? '先拿到可核实线索，再决定更新或加速。'
+              : 'First collect verifiable clues, then decide on updates or acceleration.',
+          },
+          {
+            label: isChinese ? '边界信号' : 'Boundary signal',
+            value: isChinese ? '认领不是直接付费通过' : 'Claiming is not automatic approval',
+            note: isChinese
+              ? '认领、提交和付费加速必须分开。'
+              : 'Claiming, submitting, and paid acceleration should stay separate.',
+          },
+        ]}
+        decisionSteps={[
+          isChinese ? '先确认条目是否属于你。' : 'Confirm whether the listing belongs to you.',
+          isChinese ? '再说明要更新什么。' : 'Then explain what needs updating.',
+          isChinese ? '最后再决定是否加速或付费。' : 'Only then decide whether acceleration or payment is needed.',
+        ]}
+        signalCards={[
+          {
+            label: isChinese ? '认领信号' : 'Claim signal',
+            value: isChinese ? '邮箱 + 公司 + 官网' : 'Email + company + website',
+            note: isChinese ? '让人工更快确认身份。' : 'Helps humans verify identity faster.',
+          },
+          {
+            label: isChinese ? '更新信号' : 'Update signal',
+            value: isChinese ? '重复项先说明合并' : 'State duplicate merge needs up front',
+            note: isChinese ? '明确是否存在重复收录。' : 'Clarifies whether duplicates already exist.',
+          },
+          {
+            label: isChinese ? '风险信号' : 'Risk signal',
+            value: isChinese ? '信息越少，人工越慢' : 'Less detail slows manual review',
+            note: isChinese
+              ? '把第一条信息做完整，能减少来回确认。'
+              : 'A complete first message reduces back-and-forth.',
+          },
+        ]}
+      />
 
       <section className='mt-8 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]'>
         <div className='rounded-[20px] border border-slate-200 bg-slate-50 p-6 shadow-sm'>
