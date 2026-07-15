@@ -284,6 +284,40 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   : 'Continue surfacing the most common task-driven searches near the top of the page.',
               },
             ]}
+            decisionSteps={[
+              isChinese
+                ? '先看你要完成的任务，而不是先看完整目录。'
+                : 'Start with the task you want to finish, not the full directory.',
+              isChinese
+                ? '如果已经有方向，就先去对应的对比页。'
+                : 'If you already know the direction, go to the relevant comparison page first.',
+              isChinese
+                ? '如果还不确定，再回到总指南补背景。'
+                : 'If you are still unsure, come back to the hub for more context.',
+            ]}
+            signalCards={[
+              {
+                label: isChinese ? '任务优先' : 'Task-first',
+                value: isChinese ? '先按要做什么来找' : 'Search by what you need to do first',
+                note: isChinese
+                  ? '把“怎么选”前置，减少用户在目录里来回跳。'
+                  : 'Lead with selection intent so people do not bounce around the directory.',
+              },
+              {
+                label: isChinese ? '比较优先' : 'Compare first',
+                value: isChinese ? '高意图场景先去对比页' : 'High-intent cases should go to comparisons first',
+                note: isChinese
+                  ? '已经明确用途时，对比页比总览页更快。'
+                  : 'When the use case is clear, comparison pages are faster than the hub.',
+              },
+              {
+                label: isChinese ? '后补背景' : 'Backfill context',
+                value: isChinese ? '不确定再回来看总览' : 'Return to the hub when you need more context',
+                note: isChinese
+                  ? '总览页负责补全背景，不负责替代判断。'
+                  : 'The hub fills in the background; it should not replace decision making.',
+              },
+            ]}
           />
 
           <div className='mt-6 rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5'>
