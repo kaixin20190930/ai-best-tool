@@ -67,6 +67,36 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Whether it supports recap decides long-term use.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '价格信号' : 'Pricing signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看免费能否覆盖日常研究'
+                : 'Check whether free use covers daily research',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果基础查询都开始收费，研究流程很容易被打断。'
+                : 'If basic queries already cost money, the research workflow gets interrupted quickly.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '更新信号' : 'Freshness signal',
+            value:
+              locale === 'cn' || locale === 'tw' ? '来源和证据要保持新鲜' : 'Sources and evidence need to stay fresh',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '研究工具一旦失去追溯性，可信度会掉得很快。'
+                : 'Once traceability weakens, trust drops very quickly in research tools.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '风险信号' : 'Risk signal',
+            value: locale === 'cn' || locale === 'tw' ? '别被“看起来正确”骗到' : 'Do not trust "looks right" alone',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果无法回到来源链，先当作高风险。'
+                : 'If you cannot trace back to the source chain, treat it as high risk first.',
+          },
+        ]}
       />
 
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>

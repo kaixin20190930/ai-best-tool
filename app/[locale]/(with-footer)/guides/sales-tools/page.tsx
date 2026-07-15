@@ -67,6 +67,41 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'When multiple people are involved, permissions and shared views matter a lot.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '价格信号' : 'Pricing signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看席位和自动化门槛'
+                : 'Check seats and automation thresholds first',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '销售团队常常先在协作席位和自动化上触顶。'
+                : 'Sales teams often hit collaboration seats and automation caps first.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '更新信号' : 'Freshness signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看提醒、集成和共享视图是否在更新'
+                : 'Check whether reminders, integrations, and shared views keep improving',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果流程更新停了，后续跟进就容易散。'
+                : 'If workflow updates stall, follow-up discipline usually slips.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '风险信号' : 'Risk signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '没有跟进 / 协作 / 可见性就先降级'
+                : 'Downgrade it without follow-up, collaboration, or visibility',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '销售工具缺这三项，通常很难真正帮团队推进机会。'
+                : 'Without those three, sales tools rarely help teams move opportunities forward.',
+          },
+        ]}
       />
 
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
