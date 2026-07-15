@@ -980,6 +980,11 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
                   : 'Search tools, use cases, or product names in this category...'
               }
               taskHint={isChinese ? '先按任务找' : 'Search by task'}
+              taskDescription={
+                isChinese
+                  ? '先选你要完成的任务，再在这个分类里缩小 shortlist。'
+                  : 'Choose the task you want to complete first, then narrow the shortlist inside this category.'
+              }
               taskSuggestions={taskSuggestions}
               className='p-0 sm:p-0'
             />

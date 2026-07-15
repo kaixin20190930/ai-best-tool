@@ -16,6 +16,7 @@ interface SearchProps {
     href: string;
   }>;
   taskHint?: string;
+  taskDescription?: string;
 }
 
 export default function Search({
@@ -25,6 +26,7 @@ export default function Search({
   className = '',
   taskSuggestions = [],
   taskHint,
+  taskDescription,
 }: SearchProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -271,6 +273,7 @@ export default function Search({
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {taskHint || 'Search by task'}
             </p>
+            {taskDescription ? <p className='mt-1 text-xs leading-5 text-slate-600'>{taskDescription}</p> : null}
             <div className='mt-2 flex flex-wrap gap-2'>
               {taskSuggestions.map((item) => (
                 <Link

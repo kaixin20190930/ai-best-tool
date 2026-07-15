@@ -430,6 +430,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                     isChinese ? '搜索 AI 工具、场景或产品名...' : 'Search AI tools, use cases, or product names...'
                   }
                   taskHint={isChinese ? '按任务搜索' : 'Search by task'}
+                  taskDescription={
+                    isChinese
+                      ? '先说出你要解决的问题，再筛价格、更新频率和真实反馈。'
+                      : 'Start with the problem you need to solve, then filter by pricing, freshness, and real feedback.'
+                  }
                   taskSuggestions={taskFirstEntryPoints.map((item) => ({
                     label: item.title,
                     href: item.href,

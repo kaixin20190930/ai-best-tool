@@ -112,6 +112,11 @@ export default async function Page({ params, searchParams }: PageProps) {
               placeholder={isChinese ? '搜索工具、场景或产品名...' : 'Search tools, use cases, or product names...'}
               showSuggestions
               taskHint={isChinese ? '先按任务找' : 'Search by task'}
+              taskDescription={
+                isChinese
+                  ? '先确定你要做什么，再看价格、更新和评论。'
+                  : 'Decide the task first, then compare pricing, freshness, and comments.'
+              }
               taskSuggestions={taskFirstEntryPoints.map((item) => ({
                 label: item.title,
                 href: item.href,
