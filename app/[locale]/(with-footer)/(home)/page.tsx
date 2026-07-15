@@ -643,6 +643,27 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   ? '首页先排除不匹配场景，后面的点击会更准。'
                   : 'Filtering out mismatched use cases early improves downstream clicks.',
               },
+              {
+                label: isChinese ? '路线信号' : 'Route signal',
+                value: isChinese ? '先去榜单，再去详情' : 'Go to rankings first, then details',
+                note: isChinese
+                  ? '首页的任务不是把所有东西摊开，而是帮用户决定先看哪一层。'
+                  : 'The homepage should help users choose the right layer first, not dump everything at once.',
+              },
+              {
+                label: isChinese ? '受众信号' : 'Audience signal',
+                value: isChinese ? '先区分选型者和工具方' : 'Separate buyers from tool owners',
+                note: isChinese
+                  ? '找工具的人和想被收录的人，需要的入口不同。'
+                  : 'People looking for tools and people wanting to be listed need different entry points.',
+              },
+              {
+                label: isChinese ? '下一步信号' : 'Next-step signal',
+                value: isChinese ? '搜索、分类、认领三选一' : 'Choose search, category, or claim',
+                note: isChinese
+                  ? '如果首页说不清下一步，用户就会在这里流失。'
+                  : 'If the homepage does not make the next step clear, users leak here.',
+              },
             ]}
           />
         </div>

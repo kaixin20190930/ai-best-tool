@@ -254,3 +254,4 @@
 - 2026-07-15：最新 28 天 GSC 基线已写入周报，近 7 天曝光几乎归零，说明站点仍处在很低的曝光基线，后续优先继续补核心页真实信号与索引收口观察。
 - 2026-07-15：`CategoryContent` 的 evidence panel 改成按 `productivity / web3 / developer-tools / chatbot` 等核心分类输出场景化信号，让 P1 分类页更像真实决策页，并通过本地 `pnpm run build`。
 - 2026-07-16：`best-ai-tools` 榜单页补齐选择 / 受众 / 下一步信号层，让总入口更像路径分发中枢，并通过本地 `pnpm run build`。
+- 2026-07-16：首页补齐路线 / 受众 / 下一步信号层，让首屏更明确分流到榜单、分类、详情和认领路径，并通过本地 `pnpm run build`。
