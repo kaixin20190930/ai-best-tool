@@ -1733,26 +1733,26 @@ export default async function Page({
       detailSignalCards = [
         {
           label: isChinese ? '价格信号' : 'Pricing signal',
-          value: isChinese ? '先看会议记录额度和团队席位' : 'Check meeting minutes and seat limits first',
+          value: isChinese ? '先看会议记录额度和团队席位' : 'Check meeting limits and team seats first',
           note: isChinese
-            ? '会议纪要类工具最容易在记录次数和团队使用量上分层。'
-            : 'Meeting-note tools usually tier by recording volume and team seats.',
+            ? '先判断免费层能不能覆盖你的会议量，再看团队协作是否需要升级。'
+            : 'Check whether the free tier covers your meeting volume before worrying about team upgrades.',
         },
         {
           label: isChinese ? '更新信号' : 'Freshness signal',
           value: isChinese
             ? '看转写和跟进功能是否持续更新'
-            : 'Check whether transcription and follow-up are still updated',
+            : 'Check whether transcription and follow-up still move forward',
           note: isChinese
-            ? '如果会后流程没有跟进更新，说明它可能不再适合团队协作。'
-            : 'If the post-meeting workflow is stale, it may no longer fit team collaboration well.',
+            ? '如果会后流程和导出体验都没跟进，通常说明真实团队流程已经变弱。'
+            : 'If the post-meeting workflow and exports are stale, the real team workflow may already be weakening.',
         },
         {
           label: isChinese ? '风险信号' : 'Risk signal',
-          value: isChinese ? '先确认是否真能省会后整理时间' : 'Confirm it really saves post-meeting time',
+          value: isChinese ? '先确认是否真能省会后整理时间' : 'Confirm it really saves cleanup time',
           note: isChinese
-            ? '如果只是转录更好看，但不减少整理和跟进成本，就不算强价值。'
-            : 'Better transcription alone is not enough if it does not reduce cleanup and follow-up work.',
+            ? '如果只是转写更漂亮，但不减少整理和跟进成本，就不算强价值。'
+            : 'If transcription looks nicer but does not reduce cleanup or follow-up cost, the value is weak.',
         },
       ];
     } else if (websiteNameKey === 'pipedream') {
@@ -1761,19 +1761,19 @@ export default async function Page({
           label: isChinese ? '价格信号' : 'Pricing signal',
           value: isChinese ? '先看任务次数、workflow 限制' : 'Check task runs and workflow limits first',
           note: isChinese
-            ? '自动化平台通常先在执行次数和高级能力上分层。'
-            : 'Automation platforms often tier by executions and advanced capabilities.',
+            ? '先判断免费层能不能跑你的真实工作流，再看高级能力是否值得升级。'
+            : 'Check whether the free tier can run your real workflow before you care about advanced upgrades.',
         },
         {
           label: isChinese ? '更新信号' : 'Freshness signal',
-          value: isChinese ? '看触发器和集成是否在更新' : 'Check whether triggers and integrations are updated',
+          value: isChinese ? '看触发器和集成是否在更新' : 'Check whether triggers and integrations stay current',
           note: isChinese
-            ? '集成层如果不更新，很容易影响真实工作流。'
-            : 'Stale integrations can quickly break real workflows.',
+            ? '如果集成说明和触发器文档久不更新，真实工作流通常会先出问题。'
+            : 'If integration docs and trigger notes are stale, real workflows usually break first.',
         },
         {
           label: isChinese ? '风险信号' : 'Risk signal',
-          value: isChinese ? '先确认稳定性和失败重试' : 'Confirm stability and retry behavior first',
+          value: isChinese ? '先确认稳定性和失败重试' : 'Confirm stability and retries first',
           note: isChinese
             ? '自动化工具只要不稳定，后面的工作流就会很难持续。'
             : 'If an automation tool is unstable, downstream workflows become hard to trust.',
@@ -1786,14 +1786,14 @@ export default async function Page({
           value: isChinese ? '先看免费、试用和升级门槛' : 'Check free, trial, and upgrade thresholds first',
           note: isChinese
             ? '先知道门槛，再决定要不要继续深入比较。'
-            : 'Know the threshold before deciding whether to continue comparing.',
+            : 'Know the threshold before deciding whether to keep comparing.',
         },
         {
           label: isChinese ? '更新信号' : 'Freshness signal',
           value: isChinese ? '先看最近检查日期' : 'Check the last-checked date first',
           note: isChinese
             ? '越新的页面越容易和真实使用体验对齐。'
-            : 'Newer pages are more likely to match real-world usage.',
+            : 'Newer pages are more likely to match real-world usage and pricing changes.',
         },
         {
           label: isChinese ? '风险信号' : 'Risk signal',
