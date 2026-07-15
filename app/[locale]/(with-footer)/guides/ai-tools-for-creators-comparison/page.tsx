@@ -169,6 +169,39 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Use them to make the page feel more credible.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '产出信号' : 'Output signal',
+            value:
+              locale === 'cn' || locale === 'tw' ? '先看能否持续产出' : 'Check whether it supports sustained output',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '创作者最先看的是流程能不能跑起来。'
+                : 'Creators first need a workflow that actually runs.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '再包装信号' : 'Repurposing signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看单点输入能否变资产'
+                : 'See whether one idea becomes reusable assets',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '再包装决定内容能不能放大。'
+                : 'Repurposing is what lets content scale.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '发布信号' : 'Publishing signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看批量和发布是否顺手'
+                : 'Check whether batch and publishing feel smooth',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '持续发布靠的是节奏和导出。'
+                : 'Publishing cadence depends on batch output and export flow.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

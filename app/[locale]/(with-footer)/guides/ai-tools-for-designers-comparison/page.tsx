@@ -139,6 +139,36 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'How well it plugs into assets, review, and collaboration is key.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '一致性信号' : 'Consistency signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看品牌和视觉是否统一'
+                : 'Check whether brand and visuals stay consistent',
+            note: locale === 'cn' || locale === 'tw' ? '设计最怕风格跑掉。' : 'Design fails when style drifts.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '迭代信号' : 'Iteration signal',
+            value:
+              locale === 'cn' || locale === 'tw' ? '看修改和重做是否顺手' : 'See whether edits and rework are smooth',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '设计工作本质上是不断迭代。'
+                : 'Design is fundamentally an iterative loop.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '交付信号' : 'Delivery signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看是否适合团队交付流程'
+                : 'Check whether it fits the team delivery flow',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '素材、审阅和协作接得上最重要。'
+                : 'Assets, review, and collaboration need to connect cleanly.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

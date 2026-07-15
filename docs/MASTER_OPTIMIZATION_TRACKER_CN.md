@@ -232,3 +232,4 @@
 - 2026-07-15：继续补齐 `ai-chatbot-tools-comparison`、`ai-marketing-tools-comparison`、`ai-tools-for-developers-comparison` 的 `signalCards`，把聊天、营销和开发者页的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `ai-model-routing-tools-comparison`、`ai-sales-tools-comparison`、`ai-automation-tools-comparison` 的 `signalCards`，把模型路由、销售和自动化页的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `ai-code-review-tools-comparison`、`ai-tools-for-code-review-comparison`、`cursor-alternatives-comparison` 的 `signalCards`，把代码审查与 Cursor 替代页的可验证信号层补齐后再做 build 验证。
+- 2026-07-15：继续补齐 `ai-tools-for-agencies-comparison`、`ai-tools-for-designers-comparison`、`ai-tools-for-creators-comparison` 的 `signalCards`，把代理、设计和创作者页的可验证信号层补齐后再做 build 验证。

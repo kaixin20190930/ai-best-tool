@@ -177,6 +177,39 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Collaboration and traceability decide long-term adoption.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '交付信号' : 'Delivery signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看交付流程是否稳定'
+                : 'Check whether the delivery workflow is stable',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '代理场景里交付稳定性最重要。'
+                : 'In agency workflows, delivery stability matters most.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '隔离信号' : 'Separation signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看客户是否能分开管理'
+                : 'See whether clients can be separated cleanly',
+            note:
+              locale === 'cn' || locale === 'tw' ? '客户隔离是硬需求。' : 'Client separation is a hard requirement.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '协作信号' : 'Collaboration signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看多人接力和留痕是否顺手'
+                : 'Check whether handoff and audit trails feel smooth',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '多人协作越多，留痕越关键。'
+                : 'The more people are involved, the more traceability matters.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>
