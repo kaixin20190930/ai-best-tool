@@ -226,6 +226,7 @@
 
 ## 十、近期进展记录
 
+- 2026-07-15：继续补齐 `ai-note-taking-tools-comparison`、`ai-seo-tools-comparison`、`chatgpt-alternatives-comparison` 的 `signalCards`，把记笔记、SEO 和 ChatGPT 替代页的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `ai-video-tools-comparison`、`adobe-alternatives-comparison`、`ai-tools-for-content-creation-comparison` 的 `signalCards`，把视频、创作套件和内容生产页的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `suno-alternatives-comparison`、`elevenlabs-alternatives-comparison`、`descript-alternatives-comparison` 的 `signalCards`，把音乐生成、语音合成和音频编辑页的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `n8n-alternatives-comparison`、`make-alternatives-comparison`、`zapier-alternatives-comparison` 的 `signalCards`，把自动化底座、可视化编排和连接器页的可验证信号层补齐后再做 build 验证。

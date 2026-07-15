@@ -329,6 +329,36 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'SEO tools need to keep up with search changes over time.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '关键词信号' : 'Keyword signal',
+            value:
+              locale === 'cn' || locale === 'tw' ? '先看覆盖和意图拆解' : 'Check coverage and intent breakdown first',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '找词和分意图比花哨的生成更重要。'
+                : 'Finding the right queries and intents matters more than flashy generation.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '内容信号' : 'Content signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看建议是否可执行'
+                : 'See whether the recommendations are actionable',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '真正有用的是能直接进入内容流程的建议。'
+                : 'The useful ones are the recommendations that actually flow into publishing.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '长期信号' : 'Long-term signal',
+            value: locale === 'cn' || locale === 'tw' ? '更新与稳定性' : 'Freshness and stability',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? 'SEO 工具要能长期跟着搜索变化走。'
+                : 'SEO tools need to keep up with search changes over time.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

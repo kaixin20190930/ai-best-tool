@@ -322,6 +322,32 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Use these signals to strengthen credibility.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '记录信号' : 'Capture signal',
+            value: locale === 'cn' || locale === 'tw' ? '会议、灵感、知识' : 'Meetings, ideas, knowledge',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先看它是不是你真实会用的输入口。'
+                : 'Check whether this matches the way you actually capture information.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '整理信号' : 'Organization signal',
+            value: locale === 'cn' || locale === 'tw' ? '整理、检索、归档' : 'Organize, search, archive',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '能不能把内容真正找回来很关键。'
+                : 'Being able to find things later is crucial.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '增量信号' : 'Increment signal',
+            value: locale === 'cn' || locale === 'tw' ? '评论、案例、认领' : 'Comments, cases, claims',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '用这些信号补强页面可信度。'
+                : 'Use these signals to strengthen credibility.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

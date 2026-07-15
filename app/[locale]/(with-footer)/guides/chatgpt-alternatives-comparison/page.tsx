@@ -392,6 +392,32 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Ultimately, it has to work long term.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '聊天信号' : 'Chat signal',
+            value: locale === 'cn' || locale === 'tw' ? '顺不顺手' : 'Is it easy to use',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先看交互体验，再看附加能力。'
+                : 'Check interaction first, then the extras.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '多模型信号' : 'Multi-model signal',
+            value: locale === 'cn' || locale === 'tw' ? '能否切换入口' : 'Can it switch entry points',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果你常切模型，这一层很关键。'
+                : 'If you switch models often, this layer matters a lot.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '长期信号' : 'Long-term signal',
+            value: locale === 'cn' || locale === 'tw' ? '稳定和价格' : 'Stability and pricing',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '最后还是要看能不能长期用。'
+                : 'Ultimately, it has to work long term.',
+          },
+        ]}
       />
       <GuideSubmissionPath locale={locale} ctaPrefix='chatgpt_alternatives_comparison' />
     </>
