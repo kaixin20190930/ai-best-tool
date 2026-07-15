@@ -392,6 +392,32 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Ultimately, it has to fit the team delivery process.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '套件信号' : 'Suite signal',
+            value: locale === 'cn' || locale === 'tw' ? '整套还是单点' : 'Suite or point tool',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '整套流程和单点能力的差异很大。'
+                : 'The difference between full workflow and one feature is huge.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '素材信号' : 'Asset signal',
+            value: locale === 'cn' || locale === 'tw' ? '图、视频还是品牌资产' : 'Images, video, or brand assets',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '不同资产类型会导向不同选择。'
+                : 'Different asset types lead to different choices.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '交付信号' : 'Delivery signal',
+            value: locale === 'cn' || locale === 'tw' ? '团队能否复用' : 'Can the team reuse it',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '最后看它能不能进团队交付流程。'
+                : 'Ultimately, it has to fit the team delivery process.',
+          },
+        ]}
       />
       <GuideSubmissionPath locale={locale} ctaPrefix='adobe_alternatives_comparison' />
     </>

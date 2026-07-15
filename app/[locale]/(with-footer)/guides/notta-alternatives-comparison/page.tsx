@@ -285,6 +285,32 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Narrow the shortlist first, then validate whether it fits your note-taking flow.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '任务信号' : 'Task signal',
+            value: locale === 'cn' || locale === 'tw' ? '转写 / 归档 / 复盘' : 'Transcription / archiving / review',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果你只想做配音或一般语音处理，这页就不是主路径。'
+                : 'If you only need dubbing or general voice processing, this should not be the main path.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '质量信号' : 'Quality signal',
+            value: locale === 'cn' || locale === 'tw' ? '整理、归档、可搜索' : 'Clean, archived, searchable',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '真正决定能不能长期用的是输出是不是好整理。'
+                : 'What determines long-term use is how cleanly the output can be organized.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '收口信号' : 'Shortlist signal',
+            value: locale === 'cn' || locale === 'tw' ? '先看 shortlist' : 'Review the shortlist first',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先缩短候选，再去官网验证是否适合你的记录流程。'
+                : 'Narrow the shortlist first, then validate whether it fits your note-taking flow.',
+          },
+        ]}
       />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>

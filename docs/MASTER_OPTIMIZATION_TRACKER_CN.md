@@ -226,6 +226,7 @@
 
 ## 十、近期进展记录
 
+- 2026-07-15：继续补齐 `adobe-alternatives-comparison`、`ai-tools-for-content-creation-comparison`、`notta-alternatives-comparison` 的 `signalCards`，把 Adobe、内容创作和 Notta 页的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `grammarly-alternatives-comparison`、`jasper-alternatives-comparison`、`mailchimp-alternatives-comparison` 的 `signalCards`，把语法润色、品牌文案和邮件营销页的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `character-ai-alternatives-comparison`、`copy-ai-alternatives-comparison`、`gemini-alternatives-comparison` 的 `signalCards`，把角色聊天、起稿营销和 Gemini 替代页的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `ai-tools-for-voice-comparison`、`best-free-ai-tools-comparison`、`claude-alternatives-comparison` 的 `signalCards`，把语音、免费工具和 Claude 替代页的可验证信号层补齐后再做 build 验证。
