@@ -315,6 +315,32 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Freshness, pricing, and real usage feedback matter here.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '语气控制' : 'Tone control',
+            value: locale === 'cn' || locale === 'tw' ? '看品牌口吻是否稳定' : 'Check whether brand voice stays stable',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果每次输出都像不同作者，长期使用价值会下降。'
+                : 'If every output sounds like a different author, long-term usefulness drops.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '改写信号' : 'Rewrite signal',
+            value: locale === 'cn' || locale === 'tw' ? '不是更长，而是更顺' : 'Not longer, just better',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '写作工具的价值，常常体现在改写后是否更像可发布内容。'
+                : 'Writing tools are valuable when the rewritten text feels ready to publish.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '长期产出' : 'Long-term output',
+            value: locale === 'cn' || locale === 'tw' ? '看是否持续帮忙' : 'See whether it keeps helping',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '更新、价格和真实使用反馈都会直接影响长期产出。'
+                : 'Freshness, pricing, and real usage feedback all affect long-term output.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

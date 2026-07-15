@@ -60,6 +60,33 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'If a team evaluates together, collaboration and versioning matter more.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '稳定性信号' : 'Stability signal',
+            value:
+              locale === 'cn' || locale === 'tw' ? '看基准是否可复现' : 'Check whether benchmarks are reproducible',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '评测如果不能重复，最后很难做成团队共识。'
+                : 'If evals cannot be repeated, they rarely become team consensus.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '报告信号' : 'Reporting signal',
+            value: locale === 'cn' || locale === 'tw' ? '把结果变成结论' : 'Turn results into conclusions',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '输出的不是分数本身，而是能不能直接指导下一步动作。'
+                : 'The useful output is not the score itself but the next action it suggests.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '协作信号' : 'Collaboration signal',
+            value: locale === 'cn' || locale === 'tw' ? '多人评测要顺手' : 'Team evals should be easy',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '团队一起评测时，版本记录和评论会比单次结果更重要。'
+                : 'For team evals, version history and comments matter more than one-off output.',
+          },
+        ]}
       />
 
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>

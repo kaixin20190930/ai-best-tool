@@ -204,6 +204,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'How well it fits into the design process matters more than one-off demos.',
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '视觉一致性' : 'Visual consistency',
+              value: isChinese ? '先看系列输出是否统一' : 'Check whether outputs stay consistent',
+              note: isChinese
+                ? '如果同一项目里风格漂移太大，后面就会增加很多返工。'
+                : 'If style drifts too much across one project, you will spend more time reworking.',
+            },
+            {
+              label: isChinese ? '编辑信号' : 'Editing signal',
+              value: isChinese ? '看修改是否容易接力' : 'See whether edits are easy to iterate',
+              note: isChinese
+                ? '图像工具的长期价值，往往体现在反复修改是否顺手。'
+                : 'Long-term value often shows up in how easily you can iterate on edits.',
+            },
+            {
+              label: isChinese ? '交付信号' : 'Delivery signal',
+              value: isChinese ? '素材和协作要顺' : 'Assets and collaboration should fit',
+              note: isChinese
+                ? '如果不能顺手接入设计协作链路，工具就很难长期留在流程里。'
+                : 'If it does not fit the collaboration chain, it is hard to keep the tool in the workflow.',
+            },
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
