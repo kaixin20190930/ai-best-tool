@@ -288,6 +288,32 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'It needs to fit CRM and team workflows.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '触达信号' : 'Delivery signal',
+            value: locale === 'cn' || locale === 'tw' ? '是否顺手发和管' : 'Can it send and manage cleanly',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '邮件触达是这类工具的第一层。'
+                : 'Email delivery is the first layer for this category.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '自动化信号' : 'Automation signal',
+            value: locale === 'cn' || locale === 'tw' ? '触发与受众管理' : 'Triggers and audience control',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '真正能长期用的会把流程串起来。'
+                : 'The ones that last usually connect the workflow.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '长期信号' : 'Long-term signal',
+            value: locale === 'cn' || locale === 'tw' ? '协作与系统接入' : 'Collaboration and system fit',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '要能接上 CRM 和团队流程。'
+                : 'It needs to fit CRM and team workflows.',
+          },
+        ]}
       />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>

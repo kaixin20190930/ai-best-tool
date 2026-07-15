@@ -288,6 +288,32 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'The tools that stay are the ones that fit daily flow.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '修正信号' : 'Correction signal',
+            value: locale === 'cn' || locale === 'tw' ? '是否真的更顺' : 'Does it actually improve text',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果润色不稳定，替代页的价值会很快下降。'
+                : 'If polishing is inconsistent, the comparison loses value quickly.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '语气信号' : 'Tone signal',
+            value: locale === 'cn' || locale === 'tw' ? '是否能统一表达风格' : 'Can it unify your voice',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '写作工具不只是改错，还要能保持品牌语气。'
+                : 'Writing tools should do more than fix errors; tone matters too.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '工作流信号' : 'Workflow signal',
+            value: locale === 'cn' || locale === 'tw' ? '是否适合日常写作' : 'Fits daily writing',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '长期留得住的，是能真正嵌进日常流程的工具。'
+                : 'The tools that stay are the ones that fit daily flow.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

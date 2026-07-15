@@ -288,6 +288,32 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'It needs to plug into the team’s real production flow.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '品牌信号' : 'Brand signal',
+            value: locale === 'cn' || locale === 'tw' ? '语气和活动素材统一' : 'Voice and campaign assets stay aligned',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果品牌控制不稳，替代意义会下降。'
+                : 'If brand control is weak, the comparison loses value.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '产出信号' : 'Output signal',
+            value: locale === 'cn' || locale === 'tw' ? '是否能持续产出' : 'Can it sustain output',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '营销场景更看重稳定产出。'
+                : 'Marketing work cares a lot about sustained production.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '工作流信号' : 'Workflow signal',
+            value: locale === 'cn' || locale === 'tw' ? '能否进内容流程' : 'Fits the content workflow',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '要能接上团队的真实生产流程。'
+                : 'It needs to plug into the team’s real production flow.',
+          },
+        ]}
       />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
