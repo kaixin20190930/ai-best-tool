@@ -715,6 +715,15 @@ export default async function BestAiToolsTopicPage({
               note: isChinese ? '让榜单更像决策页。' : 'Make the ranking feel like a decision page.',
             },
           ]}
+          decisionSteps={[
+            isChinese ? '先看这个榜单为什么存在。' : 'First understand why this list exists.',
+            isChinese
+              ? '再筛掉价格、更新或场景不合适的。'
+              : 'Then filter out mismatches in price, freshness, or use case.',
+            isChinese
+              ? '最后进入详情、官网或提交路径。'
+              : 'Finally move into detail, the official site, or submission paths.',
+          ]}
           signalCards={[
             {
               label: isChinese ? '排序信号' : 'Ranking signal',
