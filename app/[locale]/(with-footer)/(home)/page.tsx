@@ -497,19 +497,25 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   {isChinese ? '探索全部工具' : 'Explore all tools'}
                   <ArrowRight className='size-4' />
                 </Link>
+              </div>
+
+              <div className='mt-3 flex flex-wrap items-center gap-3 text-sm'>
+                <span className='font-medium text-slate-500'>
+                  {isChinese ? '如果你是工具方：' : 'If you are a tool owner:'}
+                </span>
                 <Link
                   href='/submit'
-                  className='inline-flex items-center justify-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-slate-800 ring-1 ring-slate-200 transition hover:bg-slate-100'
+                  className='inline-flex items-center gap-1 text-slate-200 underline-offset-4 hover:underline'
                 >
                   {isChinese ? '提交/入驻工具' : 'Submit a tool'}
-                  <Rocket className='size-4' />
+                  <Rocket className='size-3.5' />
                 </Link>
                 <Link
                   href='/developer/listing'
-                  className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-cyan-800'
+                  className='inline-flex items-center gap-1 text-slate-200 underline-offset-4 hover:underline'
                 >
                   {isChinese ? '开发者入驻' : 'Developer listing'}
-                  <BadgeCheck className='size-4' />
+                  <BadgeCheck className='size-3.5' />
                 </Link>
               </div>
 

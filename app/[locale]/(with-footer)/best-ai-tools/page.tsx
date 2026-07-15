@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { ArrowRight, Layers3, Sparkles, Star, Target } from 'lucide-react';
 
 import { topListTopics } from '@/lib/data/topLists';
-import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
@@ -85,34 +84,24 @@ export default function BestAiToolsPage({ params: { locale } }: { params: { loca
             </div>
 
             <div className='flex flex-wrap gap-3'>
-              <TrackableCtaLink
-                href={`/${locale}/submit`}
-                ctaId='best_tools_submit'
-                ctaLabel='Submit a tool'
-                pageType='best_ai_tools'
-                className='inline-flex items-center justify-center rounded-lg bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-cyan-400'
-              >
-                {isChinese ? '提交工具' : 'Submit a tool'}
-                <ArrowRight className='ml-2 size-4' />
-              </TrackableCtaLink>
-              <TrackableCtaLink
+              <Link
                 href={`/${locale}/pricing`}
-                ctaId='best_tools_pricing'
-                ctaLabel='View pricing'
-                pageType='best_ai_tools'
                 className='inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/15'
               >
                 {isChinese ? '查看定价' : 'View pricing'}
-              </TrackableCtaLink>
-              <TrackableCtaLink
-                href={`/${locale}/developer/listing`}
-                ctaId='best_tools_claim'
-                ctaLabel='Claim listing'
-                pageType='best_ai_tools'
-                className='inline-flex items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 px-5 py-3 text-sm font-semibold text-emerald-800 hover:bg-emerald-100'
+              </Link>
+              <Link
+                href={`/${locale}/best-ai-tools/${priorityTopics[0]?.key || 'ai-coding-tools'}`}
+                className='inline-flex items-center justify-center rounded-lg bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-cyan-400'
               >
-                {isChinese ? '认领条目' : 'Claim listing'}
-              </TrackableCtaLink>
+                {isChinese ? '先看高意图榜单' : 'Start with a priority list'}
+                <ArrowRight className='ml-2 size-4' />
+              </Link>
+            </div>
+            <div className='rounded-2xl border border-white/10 bg-white/5 p-4 text-sm leading-6 text-slate-200'>
+              {isChinese
+                ? '如果你是工具方，提交和认领入口仍然保留在后续页面和页脚，但不放在这个总入口的第一层。'
+                : 'If you own a tool, submit and claim paths still exist on lower-level pages and the footer, but they are not part of this top-level entry.'}
             </div>
           </div>
 

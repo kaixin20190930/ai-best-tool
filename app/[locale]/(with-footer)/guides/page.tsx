@@ -242,27 +242,12 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {isChinese ? '看研究对比' : 'Open research comparison'}
               <ArrowRight className='size-4' />
             </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/submit'
-              ctaId='guides_hub_submit'
-              ctaLabel='Guides hub submit'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
-            >
-              {isChinese ? '提交你的工具' : 'Submit your tool'}
-              <ArrowRight className='size-4' />
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/developer/listing'
-              ctaId='guides_hub_claim'
-              ctaLabel='Guides hub claim'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800 hover:bg-emerald-100'
-            >
-              {isChinese ? '认领条目' : 'Claim listing'}
-              <ArrowRight className='size-4' />
-            </TrackableCtaLink>
           </div>
+          <p className='mt-3 text-sm leading-6 text-slate-500'>
+            {isChinese
+              ? '如果你是工具方，提交和认领入口会放在更靠后的页面区域，避免打断先看指南、再做比较的路径。'
+              : 'If you own a tool, submit and claim paths appear later on the page so they do not interrupt the read-first, compare-second flow.'}
+          </p>
 
           <GuideEvidencePanel
             locale={locale}
