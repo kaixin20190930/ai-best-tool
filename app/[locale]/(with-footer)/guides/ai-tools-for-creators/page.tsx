@@ -207,6 +207,31 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `Make the content feel closer to real creator workflows while keeping the ${checkedAt} verification record.`,
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese ? '先看批量、品牌和导出限制' : 'Check batch, brand, and export limits first',
+              note: isChinese
+                ? '创作者很快会碰到批量产出和品牌一致性边界。'
+                : 'Creators quickly run into batch production and brand-consistency limits.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese
+                ? '看模板、视频和图像能力是否更新'
+                : 'Check whether templates, video, and image features keep updating',
+              note: isChinese
+                ? '如果更新只停在文案，创作链路就不完整。'
+                : 'If updates stop at copy, the creation chain is incomplete.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '没有复用 / 风格 / 导出就先降级' : 'Downgrade it without reuse, style, or export',
+              note: isChinese
+                ? '创作者工具要能稳定串起多次产出。'
+                : 'Creator tools need to reliably support repeated output.',
+            },
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
