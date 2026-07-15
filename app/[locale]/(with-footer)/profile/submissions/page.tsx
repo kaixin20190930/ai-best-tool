@@ -3,6 +3,7 @@ import { ExternalLink } from 'lucide-react';
 
 import { getListingPaymentMailto, listingConfig } from '@/lib/config/listing';
 import EmptyState from '@/components/EmptyState';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import { getMySubmittedTools, SubmittedTool } from '@/app/actions/submissions';
 import { getMySubmissionEmailPreference } from '@/app/actions/userPreferences';
 
@@ -387,6 +388,61 @@ export default async function SubmissionsPage({
       )}
 
       <SubmissionEmailPreferenceToggle initialEnabled={submissionEmailEnabled} />
+
+      <GuideEvidencePanel
+        locale={locale}
+        checkedAt='2026-07-15'
+        scope={
+          isChinese
+            ? '我的提交页要把付款、审核、前排窗口和续期状态放在同一屏里，方便用户知道下一步到底该做什么。'
+            : 'The My Submissions page should keep payment, review, featured windows, and renewal status on one screen so users know the next step immediately.'
+        }
+        items={[
+          {
+            label: isChinese ? '页面定位' : 'Page role',
+            value: isChinese ? '追踪审核和付费状态' : 'Track review and payment status',
+            note: isChinese
+              ? '这里是提交后的主要跟进页，不是纯列表页。'
+              : 'This is the primary follow-up page after submission, not just a list view.',
+          },
+          {
+            label: isChinese ? '执行信号' : 'Execution signal',
+            value: isChinese ? '先处理待付费和待审核' : 'Handle pending payment and review first',
+            note: isChinese
+              ? '让用户先补齐最容易卡住的步骤。'
+              : 'Helps users clear the steps most likely to block progress.',
+          },
+          {
+            label: isChinese ? '续期信号' : 'Renewal signal',
+            value: isChinese ? '前排快到期就要提醒' : 'Warn when featured time is almost over',
+            note: isChinese
+              ? '避免用户错过窗口，延迟续费。'
+              : 'Prevents users from missing the window and delaying renewal.',
+          },
+        ]}
+        decisionSteps={[
+          isChinese ? '先看是否有待付款项目。' : 'Check whether any payment is still pending.',
+          isChinese ? '再确认审核和发布状态。' : 'Then confirm review and publish status.',
+          isChinese ? '最后看前排窗口是否需要续期。' : 'Finally check whether the featured window needs renewal.',
+        ]}
+        signalCards={[
+          {
+            label: isChinese ? '跟进信号' : 'Follow-up signal',
+            value: isChinese ? '付款未完成就先补付款' : 'Complete payment before anything else',
+            note: isChinese ? '这是最容易阻塞进度的状态。' : 'This is usually the easiest blocker to clear.',
+          },
+          {
+            label: isChinese ? '发布信号' : 'Publish signal',
+            value: isChinese ? '已发布就继续看更新请求' : 'If published, keep watching for update requests',
+            note: isChinese ? '把已发布条目维持在可运营状态。' : 'Keeps published listings operational.',
+          },
+          {
+            label: isChinese ? '风险信号' : 'Risk signal',
+            value: isChinese ? '前排过期要及时续' : 'Renew expired featured windows quickly',
+            note: isChinese ? '避免曝光窗口自然断掉。' : 'Avoids losing the visibility window.',
+          },
+        ]}
+      />
 
       <section className='mb-6 grid gap-4 lg:grid-cols-[1.2fr_0.8fr]'>
         <div className='theme-surface rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>

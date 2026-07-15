@@ -226,6 +226,7 @@
 
 ## 十、近期进展记录
 
+- 2026-07-16：继续补齐 `profile/submissions` 的可验证信号层，新增付款、审核和前排续期的跟进面板，把提交后的动作页改成更清楚的商业闭环。
 - 2026-07-16：继续补齐 `pricing` 和 `submit` 两个商业转化页的可验证信号层，新增页面定位、决策顺序、风险边界和后续动作，确保这两页从“说明页”收口成“可执行分流页”。
 - 2026-07-15：继续补齐 `poe-alternatives-comparison`、`salesforce-einstein-alternatives-comparison`、`sora-alternatives-comparison` 的 `signalCards`，把 Poe、Salesforce Einstein 和 Sora 页的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `adobe-alternatives-comparison`、`ai-tools-for-content-creation-comparison`、`notta-alternatives-comparison` 的 `signalCards`，把 Adobe、内容创作和 Notta 页的可验证信号层补齐后再做 build 验证。
