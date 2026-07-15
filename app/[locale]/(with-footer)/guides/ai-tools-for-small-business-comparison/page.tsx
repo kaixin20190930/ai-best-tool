@@ -178,6 +178,41 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'The real question is whether the team will actually use it every day.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '生意信号' : 'Business signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看能不能带来实际获客'
+                : 'Check whether it can actually bring in customers',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '小企业最先看的是能否转化成生意。'
+                : 'Small businesses first need signals that convert into business.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '客服信号' : 'Support signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看回复和分流是否接得住'
+                : 'See whether replies and routing are handled well',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '客户沟通不能只靠通用助手。'
+                : 'Customer communication usually needs more than a generic assistant.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '运营信号' : 'Ops signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看是否顺手接入日常流程'
+                : 'Check whether it plugs into daily workflows',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '能不能每天用，才是长期价值。'
+                : 'Long-term value depends on whether the team uses it every day.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

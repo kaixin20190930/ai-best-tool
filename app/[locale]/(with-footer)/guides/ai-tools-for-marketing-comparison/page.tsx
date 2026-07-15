@@ -383,6 +383,41 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Add real ads, email, and growth experiment examples.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '渠道信号' : 'Channel signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看是否覆盖你真的在用的渠道'
+                : 'Check whether it covers the channels you actually use',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '营销工具的价值首先在渠道适配。'
+                : 'Marketing tools start with channel fit.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '批量信号' : 'Batch signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看批量产出和测试节奏是否顺手'
+                : 'See whether batch production and testing feel smooth',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果要持续试验，批量能力很重要。'
+                : 'Batch capability matters when experiments repeat often.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '品牌信号' : 'Brand signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看品牌语气和协作是否稳定'
+                : 'Check whether brand voice and collaboration stay consistent',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '输出直接面向用户时，品牌一致性不能丢。'
+                : 'Brand consistency matters when outputs face users directly.',
+          },
+        ]}
       />
       <section className='mx-auto mt-6 grid max-w-6xl gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

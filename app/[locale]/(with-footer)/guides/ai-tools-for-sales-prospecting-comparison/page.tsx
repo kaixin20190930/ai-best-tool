@@ -218,6 +218,39 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             note: locale === 'cn' || locale === 'tw' ? '补上真人外联样本。' : 'Add genuine outreach examples.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '名单信号' : 'List signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看能不能帮你找到对的人'
+                : 'Check whether it helps you find the right people',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '销售拓客最先要解决的是名单质量。'
+                : 'Sales prospecting starts with list quality.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '节奏信号' : 'Cadence signal',
+            value:
+              locale === 'cn' || locale === 'tw' ? '看跟进节奏是否自然' : 'See whether follow-up cadence feels natural',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '流程顺不顺，直接影响触达结果。'
+                : 'Workflow friction directly affects outreach results.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '回应信号' : 'Response signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '最后看回复质量和回复率'
+                : 'Then check reply quality and response rate',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '真正有价值的是更高质量的回复。'
+                : 'What matters most is better-quality replies.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>
