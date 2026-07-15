@@ -173,6 +173,36 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'For long-term team use, these matter more than surface features.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '转写信号' : 'Transcription signal',
+            value:
+              locale === 'cn' || locale === 'tw' ? '先看多人和噪音环境' : 'Check multi-speaker and noisy scenes first',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果基础转写不稳，后面的整理和协作都很难成立。'
+                : 'If basic transcription is shaky, cleanup and collaboration will suffer too.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '整理信号' : 'Cleanup signal',
+            value: locale === 'cn' || locale === 'tw' ? '能否快速生成纪要' : 'Can it produce notes quickly',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '真正节省时间的是能不能把内容整理成可分享的版本。'
+                : 'The real time saver is turning raw text into something shareable.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '协作信号' : 'Collaboration signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '分享、权限、导出要顺手'
+                : 'Sharing, permissions, and exports should be easy',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '团队长期使用时，协作链路通常比演示里的功能更重要。'
+                : 'For long-term team use, collaboration flow matters more than demo features.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

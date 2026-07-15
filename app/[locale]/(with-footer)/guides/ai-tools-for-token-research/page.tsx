@@ -336,6 +336,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `Next, priority additions are research notes, on-chain examples, and monitoring checklists while keeping the ${checkedAt} verification record.`,
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '叙事信号' : 'Narrative signal',
+              value: isChinese ? '先看是否能讲清项目故事' : 'Check whether it can explain the project story',
+              note: isChinese
+                ? '代币研究最怕只看指标却忽略了叙事和上下文。'
+                : 'Token research fails when it looks only at metrics and ignores narrative context.',
+            },
+            {
+              label: isChinese ? '数据深度' : 'Data depth',
+              value: isChinese ? '看链上和市场数据够不够用' : 'See whether chain and market data are deep enough',
+              note: isChinese
+                ? '如果数据源不够深，研究结论很容易偏浅。'
+                : 'Shallow data sources lead to shallow conclusions.',
+            },
+            {
+              label: isChinese ? '导出信号' : 'Export signal',
+              value: isChinese ? '能否沉淀到研究流程里' : 'Can it fit into a research workflow',
+              note: isChinese
+                ? '能导出、能记录、能复盘，才更像真正的研究工具。'
+                : 'Exporting, recording, and reviewing are what make it feel like a real research tool.',
+            },
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>

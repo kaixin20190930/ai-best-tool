@@ -276,6 +276,35 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Narrow the options first, then go deeper on the official site for efficiency.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '视图信号' : 'View signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看组合是否一眼能懂'
+                : 'Check whether the portfolio view is instantly readable',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果资产归类和占比不清楚，长期盯仓位会很累。'
+                : 'If grouping and allocation are unclear, long-term tracking becomes tiring fast.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '刷新信号' : 'Refresh signal',
+            value: locale === 'cn' || locale === 'tw' ? '看是否跟得上变化' : 'See whether updates keep up',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '资产追踪最怕看见的是过期仓位，而不是当前仓位。'
+                : 'Portfolio tracking fails when you are looking at stale positions instead of current ones.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '导出信号' : 'Export signal',
+            value: locale === 'cn' || locale === 'tw' ? '能否接到团队分析' : 'Can it feed team analysis',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果不能把组合状态导出去，团队复盘和二次分析会很难。'
+                : 'If portfolio state cannot be exported, team review and follow-up analysis get much harder.',
+          },
+        ]}
       />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
