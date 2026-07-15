@@ -47,6 +47,12 @@ export default function ToolFeedbackBar({ toolId, userId, className = '', locale
   const [selected, setSelected] = useState<string | null>(null);
   const [loading, setLoading] = useState<string | null>(null);
   const isChinese = locale === 'cn' || locale === 'tw';
+  const nextSteps = isChinese
+    ? ['点“请求更新”后，再在评论里写明价格、截图或文案哪里不对。', '如果你是工具方，可以先认领条目，再补最新更新说明。']
+    : [
+        'After tapping request update, leave a comment that says exactly what is stale.',
+        'If you own the tool, claim the listing first, then add the latest update notes.',
+      ];
 
   const handleFeedback = async (feedbackType: (typeof feedbackOptions)[number]['type']) => {
     setLoading(feedbackType);
@@ -88,6 +94,14 @@ export default function ToolFeedbackBar({ toolId, userId, className = '', locale
             ? '如果价格、截图、文案或功能已经过时，点“请求更新”就好。'
             : 'If pricing, screenshots, copy, or features look stale, tap request update.'}
         </p>
+      </div>
+      <div className='rounded-lg border border-slate-200 bg-slate-50 p-3 text-xs leading-5 text-slate-600'>
+        <p className='font-semibold text-slate-800'>{isChinese ? '下一步怎么做' : 'What happens next'}</p>
+        <ul className='mt-2 list-disc space-y-1 pl-4'>
+          {nextSteps.map((step) => (
+            <li key={step}>{step}</li>
+          ))}
+        </ul>
       </div>
       <div className='grid gap-3'>
         {feedbackOptions.map((option) => {
