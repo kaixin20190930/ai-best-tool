@@ -243,6 +243,41 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Add real sales workflows and CRM integration examples.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '价格信号' : 'Pricing signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '按席位、线索量和集成来比较'
+                : 'Compare by seats, lead volume, and integrations',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '销售对比往往不只是价格，而是团队协作门槛。'
+                : 'Sales comparison is usually about team workflow thresholds, not only price.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '更新信号' : 'Freshness signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看 CRM、外联和案例是否持续更新'
+                : 'Check whether CRM, outreach, and cases are still being updated',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果只有老截图，没有新案例，就要小心。'
+                : 'If there are only old screenshots and no new cases, be cautious.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '风险信号' : 'Risk signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '没有真实跟进闭环就不要放前排'
+                : 'Do not rank it highly without a real follow-up loop',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '能否接 CRM 和跟进流程，比功能表更重要。'
+                : 'CRM and follow-up fit matter more than feature lists.',
+          },
+        ]}
       />
       <section className='mx-auto mt-6 grid max-w-6xl gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

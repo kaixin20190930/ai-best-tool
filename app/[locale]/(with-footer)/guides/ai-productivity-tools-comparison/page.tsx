@@ -171,6 +171,41 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Only keep it indexed if it is suitable for long-term use.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '价格信号' : 'Pricing signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看个人免费层与团队协作门槛'
+                : 'Check the free tier and team collaboration thresholds',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '生产力工具常把协作和自动化放在更高价层。'
+                : 'Productivity tools often reserve collaboration and automation for higher tiers.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '更新信号' : 'Freshness signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看任务、笔记和协作功能是否还在更新'
+                : 'Check whether tasks, notes, and collaboration features are still being updated',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '没有持续更新，长期使用会很快失去稳定性。'
+                : 'Without ongoing updates, long-term usage tends to degrade quickly.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '风险信号' : 'Risk signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '没有真实任务流就别只看演示'
+                : 'Do not rely on demo alone without a real task flow',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '真正省时的往往是最普通的日常场景。'
+                : 'The real time saver is usually the ordinary daily scenario.',
+          },
+        ]}
       />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>

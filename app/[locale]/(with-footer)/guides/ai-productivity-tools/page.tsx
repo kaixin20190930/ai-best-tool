@@ -180,6 +180,33 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Next, comments, saves, claims, and verification dates should be added.',
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese
+                ? '先看免费层、团队席位和自动化限制'
+                : 'Check free tier, team seats, and automation limits first',
+              note: isChinese
+                ? '生产力工具最容易在协作和自动化上出现付费门槛。'
+                : 'Productivity tools often gate collaboration and automation behind paid plans.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese
+                ? '看最近是否还在更新任务、笔记和协作功能'
+                : 'Check whether tasks, notes, and collaboration features are still being updated',
+              note: isChinese
+                ? '长期使用的工具必须持续打磨日常工作流。'
+                : 'Long-term tools need ongoing refinement of daily workflows.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '没有真实工作流就别只看 Demo' : 'Do not judge by demo alone without a real workflow',
+              note: isChinese
+                ? '如果只是“能做很多事”，通常不代表真正省时。'
+                : 'Being able to do a lot does not usually mean it saves time.',
+            },
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>

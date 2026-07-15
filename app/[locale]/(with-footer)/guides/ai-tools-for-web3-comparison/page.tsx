@@ -383,6 +383,41 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Export, saves, and historical tracking matter a lot.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '价格信号' : 'Pricing signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看数据深度、API 和历史查询怎么收费'
+                : 'Check how data depth, APIs, and historical queries are priced',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? 'Web3 对比不只是买不买，而是买到什么深度。'
+                : 'Web3 comparison is about what depth you actually get, not just whether you pay.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '更新信号' : 'Freshness signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看链支持和研究模板是否持续更新'
+                : 'Check whether chain support and research templates are still being updated',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '链上覆盖变动快，旧内容很容易误导。'
+                : 'On-chain coverage changes fast, so stale content can mislead.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '风险信号' : 'Risk signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '来源不稳就不要排太前'
+                : 'If the source is unstable, do not rank it too highly',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '可信度和可验证性优先于界面。'
+                : 'Trust and verifiability come before UI polish.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

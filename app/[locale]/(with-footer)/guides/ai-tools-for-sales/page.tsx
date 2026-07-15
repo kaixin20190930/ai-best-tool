@@ -192,6 +192,35 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `This page was rechecked on ${checkedAt}, making it feel closer to real ops notes.`,
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese
+                ? '先看免费线索额度、席位和导出限制'
+                : 'Check free lead limits, seats, and export caps first',
+              note: isChinese
+                ? '销售工具常把关键价值放在团队席位、CRM 同步和导出上。'
+                : 'Sales tools often hide their real value in seats, CRM sync, and export limits.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese
+                ? '看最近是否还在补流程、集成和案例'
+                : 'Check whether workflows, integrations, and cases are still being updated',
+              note: isChinese
+                ? '如果更新停在演示截图层，优先级就要降。'
+                : 'If updates stop at demo screenshots, the priority should drop.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese
+                ? '没有真实销售流程就先别放在前排'
+                : 'If there is no real sales workflow, keep it out of the front row',
+              note: isChinese
+                ? '能不能接 CRM、通话和跟进，决定它是不是可长期用。'
+                : 'CRM, call, and follow-up fit determine whether it is actually usable long term.',
+            },
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>

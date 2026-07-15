@@ -210,6 +210,33 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Next, comments, saves, and owner-claim signals should be added.',
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese
+                ? '先看 API、历史数据和导出是否单独收费'
+                : 'Check whether API, history, and exports are separately billed',
+              note: isChinese
+                ? 'Web3 工具最容易把关键能力放在更高价层。'
+                : 'Web3 tools often place the most important capabilities in higher tiers.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese
+                ? '看链支持、研究模板和告警是否持续更新'
+                : 'Check whether chain support, research templates, and alerts are actively updated',
+              note: isChinese
+                ? '链上数据和协议变化快，过期很容易误导。'
+                : 'On-chain data and protocols move fast, so stale tools can mislead quickly.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese
+                ? '来源不清、覆盖不稳就先降级'
+                : 'If sources are unclear or coverage is unstable, downgrade it',
+              note: isChinese ? '数据可信度比界面更重要。' : 'Data trust matters more than the interface.',
+            },
+          ]}
         />
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
           <div>
