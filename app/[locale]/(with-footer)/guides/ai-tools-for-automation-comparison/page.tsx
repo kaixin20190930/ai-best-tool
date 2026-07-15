@@ -405,6 +405,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Add branching and real execution examples.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '价格信号' : 'Pricing signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看执行额度和连接器'
+                : 'Check execution limits and connectors first',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '自动化成本常在任务次数和连接器上冒出来。'
+                : 'Automation costs often appear in task volume and connector tiers.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '更新信号' : 'Freshness signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看连接器和模板是否持续更新'
+                : 'Check whether connectors and templates are still updated',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '连接器一过期，流程就容易坏掉。'
+                : 'Once connectors go stale, workflows break more easily.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '风险信号' : 'Risk signal',
+            value: locale === 'cn' || locale === 'tw' ? '没有真实流程就先降级' : 'Downgrade it without real workflows',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '只串步骤不等于真正自动化。'
+                : 'Chaining steps is not the same as real automation.',
+          },
+        ]}
       />
       <section className='mx-auto mt-6 grid max-w-6xl gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

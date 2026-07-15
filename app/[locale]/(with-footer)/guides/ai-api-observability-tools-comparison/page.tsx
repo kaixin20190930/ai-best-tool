@@ -61,6 +61,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               : 'The point is not only monitoring, but making better decisions.',
           },
         ]}
+        signalCards={[
+          {
+            label: isChinese ? '价格信号' : 'Pricing signal',
+            value: isChinese ? '先看调用量和席位限制' : 'Check call volume and seat limits first',
+            note: isChinese
+              ? 'API 可观测工具通常会把请求量、团队席位和高级追踪拆开计费。'
+              : 'API observability tools often split billing by request volume, seats, and advanced tracing.',
+          },
+          {
+            label: isChinese ? '更新信号' : 'Freshness signal',
+            value: isChinese ? '看追踪和告警是否持续更新' : 'Check whether tracing and alerts are actively updated',
+            note: isChinese
+              ? '如果追踪规则长期不更新，生产环境里的判断会越来越偏。'
+              : 'If tracing rules go stale, production decisions drift quickly.',
+          },
+          {
+            label: isChinese ? '风险信号' : 'Risk signal',
+            value: isChinese ? '缺少稳定日志就先降级' : 'Downgrade it without stable logs',
+            note: isChinese
+              ? '只看漂亮仪表盘不够，失败链路不清楚就不适合直接上生产。'
+              : 'Pretty dashboards are not enough if the failure path is unclear for production use.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

@@ -326,6 +326,36 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'For production, these usually matter more than demo quality.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '价格信号' : 'Pricing signal',
+            value: locale === 'cn' || locale === 'tw' ? '先看执行额度和席位' : 'Check execution limits and seats first',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? 'Agent 工具最容易在执行次数和高级能力上分层。'
+                : 'Agent tools often tier by execution count and advanced capabilities.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '更新信号' : 'Freshness signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看编排和状态管理是否持续更新'
+                : 'Check whether orchestration and state management are actively updated',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? 'Agent 生态变化快，过时的编排逻辑很容易失效。'
+                : 'Agent ecosystems move fast, and stale orchestration logic breaks quickly.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '风险信号' : 'Risk signal',
+            value:
+              locale === 'cn' || locale === 'tw' ? '没有真实闭环就先降级' : 'Downgrade it without a real closed loop',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '只会跑单轮回复，不算真正的 Agent。'
+                : 'Single-turn replies alone do not make a real agent.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

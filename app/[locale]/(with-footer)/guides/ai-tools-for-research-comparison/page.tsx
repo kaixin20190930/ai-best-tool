@@ -385,6 +385,41 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Add research scenarios and human feedback together.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '价格信号' : 'Pricing signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看免费研究量和导出'
+                : 'Check free research volume and exports first',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '研究工具很容易把真正有用的资料藏在更高层。'
+                : 'Research tools often hide the useful material behind higher tiers.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '更新信号' : 'Freshness signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看来源、结论和监控清单是否更新'
+                : 'Check whether sources, conclusions, and monitoring checklists are updated',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '研究内容不更新，结论很快就会过期。'
+                : 'Without updates, research conclusions age very fast.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '风险信号' : 'Risk signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '没有可追溯来源就别放前排'
+                : 'Do not rank it highly without traceable sources',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '“看起来正确”不等于真的可靠。'
+                : 'Looking correct is not the same as being reliable.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>
