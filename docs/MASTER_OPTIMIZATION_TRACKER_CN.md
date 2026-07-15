@@ -35,6 +35,7 @@
 - 2026-07-15：`GuideEvidencePanel` 的定制信号继续补到 `ai-api-observability-tools`，把请求 / 告警 / 追踪 / 事故复盘的判断口径写得更具体，并通过本地 `pnpm run build`
 - 2026-07-15：工具详情页已新增“当前处理状态”面板，把最近更新、讨论数量、认领状态和下一步动作串成更清晰的 owner / 评论 / 更新请求闭环，并通过本地 `pnpm run build`
 - 2026-07-15：`ai-tools-for-small-business` 已补入价格 / 更新 / 风险信号层，继续强化小企业场景的团队席位、权限、导出和支持判断口径，并通过本地 `pnpm run build`
+- 2026-07-15：`ai-tools-for-students` 和 `ai-tools-for-voice` 已补入价格 / 更新 / 风险信号层，继续强化学习 / 引用 / 转写 / 商用导出的真实判断口径，并通过本地 `pnpm run build`
 
 ## 一、当前有几个计划
 

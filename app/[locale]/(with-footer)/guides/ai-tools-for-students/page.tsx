@@ -410,6 +410,35 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Next, priority additions are student scenarios, class assignment examples, and real feedback.',
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese
+                ? '先看免费版、引用和导出限制'
+                : 'Check the free tier, citations, and export limits first',
+              note: isChinese
+                ? '学生最容易卡在免费额度、导出和引用能力。'
+                : 'Students usually hit free quotas, exports, and citation limits first.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese
+                ? '看模型、引用和笔记集成是否持续更新'
+                : 'Check whether models, citations, and note integrations keep updating',
+              note: isChinese
+                ? '如果更新停留在回答变长，学习工作流通常不够稳。'
+                : 'If updates stop at longer answers, the learning workflow is usually not mature enough.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese
+                ? '没有引用 / 导出 / 稳定性就先降级'
+                : 'Downgrade it without citations, export, or stability',
+              note: isChinese
+                ? '做学习和作业辅助时，这三项缺一项都要谨慎。'
+                : 'For learning and homework help, missing any of those three is a warning sign.',
+            },
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>

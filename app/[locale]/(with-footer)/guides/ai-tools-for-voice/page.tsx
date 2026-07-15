@@ -288,6 +288,31 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `Next, add sample audio, caption examples, and language coverage notes while keeping the ${checkedAt} verification record.`,
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese ? '先看分钟数、席位和商用导出' : 'Check minutes, seats, and commercial export first',
+              note: isChinese
+                ? '语音工具最容易在使用量和商用权限上出现限制。'
+                : 'Voice tools often limit usage volume and commercial rights first.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese
+                ? '看音色、语言和集成是否还在更新'
+                : 'Check whether voices, languages, and integrations keep evolving',
+              note: isChinese
+                ? '如果更新停在 demo 阶段，长期使用价值通常不足。'
+                : 'If updates stop at demo polish, long-term value is usually weak.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '没有低延迟 / 稳定输出就先降级' : 'Downgrade it without low latency or stable output',
+              note: isChinese
+                ? '转写、配音和对话一旦不稳，真实工作流会马上受影响。'
+                : 'Once transcription, dubbing, or conversation becomes unstable, the workflow breaks quickly.',
+            },
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
