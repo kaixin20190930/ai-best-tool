@@ -61,6 +61,27 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               : 'The tools that stick become the quality gate teams rely on.',
           },
         ]}
+        signalCards={[
+          {
+            label: isChinese ? '风险信号' : 'Risk signal',
+            value: isChinese ? '先看能否抓到真实问题' : 'Check whether it catches real issues',
+            note: isChinese ? '代码审查不是只看风格。' : 'Code review is more than style.',
+          },
+          {
+            label: isChinese ? '流程信号' : 'Workflow signal',
+            value: isChinese ? '看是否贴合 PR 流程' : 'See whether it fits the PR flow',
+            note: isChinese
+              ? '如果不能嵌进 PR，功能再强也会闲置。'
+              : 'If it cannot fit into PRs, the features will go unused.',
+          },
+          {
+            label: isChinese ? '门禁信号' : 'Gate signal',
+            value: isChinese ? '看能否成为长期门槛' : 'Check whether it can act as a long-term gate',
+            note: isChinese
+              ? '真正留得住的是团队愿意依赖的门槛。'
+              : 'What sticks is the gate the team is willing to depend on.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

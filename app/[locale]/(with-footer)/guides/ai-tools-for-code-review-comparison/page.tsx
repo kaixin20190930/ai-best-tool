@@ -265,6 +265,33 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'The smoother the approval, comments, and handoff flow, the more likely the team will keep using it.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? 'Diff 信号' : 'Diff signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看能不能解释改动本身'
+                : 'Check whether it can explain the change itself',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '解释不清改动，后面就很难稳。'
+                : 'If it cannot explain the diff clearly, the rest is shaky.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '噪音信号' : 'Noise signal',
+            value:
+              locale === 'cn' || locale === 'tw' ? '看提醒是否真有价值' : 'See whether warnings are actually useful',
+            note: locale === 'cn' || locale === 'tw' ? '能减少漏检才算好。' : 'It only helps if it reduces misses.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '协作信号' : 'Collaboration signal',
+            value: locale === 'cn' || locale === 'tw' ? '看是否贴合 PR 流程' : 'Check whether it matches PR workflow',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '审批和交接越顺，越容易长期用。'
+                : 'The smoother the approval and handoff flow, the more likely it sticks.',
+          },
+        ]}
       />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>

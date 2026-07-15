@@ -288,6 +288,36 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Judge whether it can stay in the daily workflow.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '编辑器信号' : 'Editor signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看是不是贴着代码工作'
+                : 'Check whether it works alongside your code',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? 'Cursor 替代首先是编辑器内体验。'
+                : 'Cursor alternatives start with editor-native experience.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '上下文信号' : 'Context signal',
+            value:
+              locale === 'cn' || locale === 'tw' ? '看能否跟上改动链路' : 'See whether it follows the change chain',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '真正替代项要能推进修改。'
+                : 'A real alternative must move edits forward.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '留存信号' : 'Retention signal',
+            value: locale === 'cn' || locale === 'tw' ? '看是否适合日常编码' : 'Check whether it fits daily coding',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '能不能留在日常工作流里最关键。'
+                : 'The key question is whether it stays in the daily workflow.',
+          },
+        ]}
       />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
