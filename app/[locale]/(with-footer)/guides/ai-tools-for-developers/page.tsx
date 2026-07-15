@@ -193,6 +193,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先判断开发者工具是否真的能融入编辑器、API、自动化和发布流程，而不是只看“能写代码”的表面能力。'
               : 'This page checks whether a developer tool truly fits the editor, APIs, automation, and release path rather than only claiming it can write code.'
           }
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese ? '先看试用和席位' : 'Check trial and seat limits',
+              note: isChinese
+                ? '开发者工具常在团队席位和高级能力上分层。'
+                : 'Developer tools often split value across seats and advanced capabilities.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese ? '看是否还在持续迭代' : 'See whether it is still iterating',
+              note: isChinese
+                ? '如果连 release path 都停了，通常也不太适合长期接入。'
+                : 'If the release path has stalled, it is usually not ideal for long-term integration either.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '只会说能写代码不够' : 'Can-write-code alone is not enough',
+              note: isChinese
+                ? '如果没有真实仓库、调试或自动化案例，就先保留判断。'
+                : 'If there are no real repo, debugging, or automation cases, hold off on the conclusion.',
+            },
+          ]}
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',

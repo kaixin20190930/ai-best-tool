@@ -206,6 +206,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先判断研究工具是否真的能帮助发现资料、核对证据和追溯来源，而不是只会生成看起来正确的答案。'
               : 'This page checks whether a research tool truly helps discover material, verify evidence, and trace sources instead of merely producing plausible answers.'
           }
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese ? '先看免费能否覆盖日常研究' : 'Check whether free use covers daily research',
+              note: isChinese
+                ? '如果基础查询都开始收费，研究流程很容易被打断。'
+                : 'If basic queries already cost money, the research workflow gets interrupted quickly.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese ? '来源和证据要保持新鲜' : 'Sources and evidence need to stay fresh',
+              note: isChinese
+                ? '研究工具一旦失去追溯性，可信度会掉得很快。'
+                : 'Once traceability weakens, trust drops very quickly in research tools.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '别被“看起来正确”骗到' : 'Do not trust "looks right" alone',
+              note: isChinese
+                ? '如果无法回到来源链，先当作高风险。'
+                : 'If you cannot trace back to the source chain, treat it as high risk first.',
+            },
+          ]}
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',

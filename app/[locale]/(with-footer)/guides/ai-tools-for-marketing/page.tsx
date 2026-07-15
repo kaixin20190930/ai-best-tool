@@ -183,6 +183,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先判断营销工具是否真的能串起广告、邮件、社媒和落地页，而不是只生成看起来不错的文案。'
               : 'This page checks whether marketing tools truly connect ads, email, social, and landing pages instead of only generating copy that looks good.'
           }
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese ? '看渠道栈是否能在预算内跑通' : 'See whether the channel stack fits the budget',
+              note: isChinese
+                ? '营销工具常在功能、席位和渠道数上分层。'
+                : 'Marketing tools often tier by features, seats, and channel count.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese ? '广告和报告要保持最新' : 'Ads and reporting need freshness',
+              note: isChinese
+                ? '如果投放和报表慢半拍，优化就会失真。'
+                : 'If campaign data and reports lag, optimization quickly gets distorted.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '只有文案没有执行不够' : 'Copy without execution is not enough',
+              note: isChinese
+                ? '先确认它是否真能落到广告、邮件和社媒执行。'
+                : 'First confirm whether it truly reaches ads, email, and social execution.',
+            },
+          ]}
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',
