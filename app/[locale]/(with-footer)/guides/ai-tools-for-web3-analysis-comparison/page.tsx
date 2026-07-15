@@ -136,6 +136,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'If the work will be reused by a team, these matter more than a one-off query.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '覆盖信号' : 'Coverage signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先确认研究对象是否都覆盖'
+                : 'Confirm the objects you care about are all covered',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '协议、钱包和资金流如果漏了一个，分析就会断层。'
+                : 'If protocol, wallet, or fund-flow coverage is missing, the analysis has a gap.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '历史信号' : 'History signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看趋势和回看是否稳定'
+                : 'Check whether trends and history feel stable',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '没有稳定历史，研究页很难长期依赖。'
+                : 'Without stable history, the research page is hard to trust long term.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '团队信号' : 'Team signal',
+            value: locale === 'cn' || locale === 'tw' ? '导出、分享、告警' : 'Exports, sharing, and alerts',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果要团队复用，这些比单次查询更重要。'
+                : 'If the work will be reused by a team, these matter more than a one-off query.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

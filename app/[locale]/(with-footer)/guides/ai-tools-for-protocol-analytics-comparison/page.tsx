@@ -329,6 +329,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'If this supports team research, these are the practical thresholds.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '覆盖信号' : 'Coverage signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先确认协议和生态都覆盖'
+                : 'Confirm the protocols and ecosystems are covered',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果研究对象没覆盖齐，结论会偏。'
+                : 'If the research objects are not fully covered, the conclusions skew.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '趋势信号' : 'Trend signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看历史和趋势是否稳定'
+                : 'Check whether history and trends feel stable',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '协议分析里，趋势稳定性很决定研究底座。'
+                : 'In protocol analysis, trend stability strongly affects whether the page can be trusted as a base.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '输出信号' : 'Output signal',
+            value: locale === 'cn' || locale === 'tw' ? '导出、API、复盘' : 'Exports, API, and review',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '能进入团队工作流的工具，才更值得长期用。'
+                : 'Tools that can fit into a team workflow are the ones worth using long term.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

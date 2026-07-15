@@ -323,6 +323,38 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Add research scenarios and entity signals.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '叙事信号' : 'Narrative signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看能否讲清项目故事'
+                : 'Check whether it can explain the project story',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '代币研究最怕只看指标却忽略叙事和上下文。'
+                : 'Token research fails when it looks only at metrics and ignores narrative context.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '数据深度' : 'Data depth',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看链上和市场数据够不够用'
+                : 'See whether chain and market data are deep enough',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果数据源不够深，研究结论很容易偏浅。'
+                : 'Shallow data sources lead to shallow conclusions.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '导出信号' : 'Export signal',
+            value: locale === 'cn' || locale === 'tw' ? '能否沉淀到研究流程里' : 'Can it fit into a research workflow',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '能导出、能记录、能复盘，才更像真正的研究工具。'
+                : 'Exporting, recording, and reviewing are what make it feel like a real research tool.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>
