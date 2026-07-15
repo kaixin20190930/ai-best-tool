@@ -715,6 +715,29 @@ export default async function BestAiToolsTopicPage({
               note: isChinese ? '让榜单更像决策页。' : 'Make the ranking feel like a decision page.',
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '排序信号' : 'Ranking signal',
+              value: isChinese ? '先看最接近任务的候选' : 'Start with the closest match to the task',
+              note: isChinese
+                ? '榜单的目标不是制造热度，而是更快缩短 shortlist。'
+                : 'The goal is not to create hype, but to shorten the shortlist faster.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese ? '优先保留最近核查过的主题' : 'Prioritize topics checked most recently',
+              note: isChinese
+                ? '如果榜单本身不更新，后面的详情和官网跳转就会变得不可靠。'
+                : 'If the ranking itself is not updated, detail and official-site jumps become less trustworthy.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '不适合的条目要尽早踢掉' : 'Drop mismatched entries early',
+              note: isChinese
+                ? '榜单越快排除错误方向，用户越容易继续点下去。'
+                : 'The faster the page removes mismatched options, the more likely users are to keep clicking.',
+            },
+          ]}
         />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_360px]'>
