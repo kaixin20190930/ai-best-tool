@@ -395,6 +395,35 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Ultimately, it has to fit your content or product workflow.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '自然度信号' : 'Naturalness signal',
+            value: locale === 'cn' || locale === 'tw' ? '声音是否自然' : 'Does the voice sound natural',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果声音不自然，后续功能再强也会失分。'
+                : 'If the voice sounds unnatural, stronger features will not matter much.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '覆盖信号' : 'Coverage signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '语言与声音库是否够用'
+                : 'Are language and voice libraries sufficient',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '多语言和品牌声音场景要优先看。'
+                : 'Prioritize multilingual and branded-voice scenarios.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '接入信号' : 'Integration signal',
+            value: locale === 'cn' || locale === 'tw' ? '能不能进产品流程' : 'Can it ship into products',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '最终还是要看能否接入内容或产品工作流。'
+                : 'Ultimately, it has to fit your content or product workflow.',
+          },
+        ]}
       />
       <GuideSubmissionPath locale={locale} ctaPrefix='elevenlabs_alternatives_comparison' />
     </>

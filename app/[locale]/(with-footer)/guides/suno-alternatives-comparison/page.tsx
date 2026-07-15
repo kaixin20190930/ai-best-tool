@@ -285,6 +285,32 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Narrow the shortlist first, then validate on the official site.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '创作信号' : 'Creation signal',
+            value: locale === 'cn' || locale === 'tw' ? '是否真的在做歌曲' : 'Are you really making songs',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? 'Suno 的替代项最先要判断的是，你是不是在做歌曲而不是泛音频。'
+                : 'The first question for Suno alternatives is whether you are making songs, not just generic audio.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '风格信号' : 'Style signal',
+            value: locale === 'cn' || locale === 'tw' ? '歌词、旋律与版本迭代' : 'Lyrics, melody, and iteration',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果你会频繁改风格，这一层会直接影响产出效率。'
+                : 'If you keep changing styles, this layer directly affects output speed.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '导出信号' : 'Export signal',
+            value: locale === 'cn' || locale === 'tw' ? '能否接下游创作' : 'Can it feed downstream creation',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '音乐工具最终要看能不能稳定导出和复用。'
+                : 'Music tools ultimately need reliable export and reuse.',
+          },
+        ]}
       />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>

@@ -285,6 +285,33 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Narrow the shortlist first, then validate whether it fits your workflow.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '编辑信号' : 'Editing signal',
+            value: locale === 'cn' || locale === 'tw' ? '能否真做音频编辑' : 'Can it really handle audio editing',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? 'Descript 类工具的核心是编辑，不只是语音输出。'
+                : 'Descript-style tools are about editing, not just voice output.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '转写信号' : 'Transcription signal',
+            value: locale === 'cn' || locale === 'tw' ? '录音到文本是否顺手' : 'Is audio-to-text flow smooth',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果转写和剪辑之间不顺，工作流价值会掉很多。'
+                : 'If transcription and editing do not connect smoothly, the workflow value drops a lot.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '导出信号' : 'Export signal',
+            value:
+              locale === 'cn' || locale === 'tw' ? '能否接播客和内容流程' : 'Can it feed podcast and content workflows',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '可用性最终要落在导出和协作上。'
+                : 'Usability ultimately comes down to export and collaboration.',
+          },
+        ]}
       />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
