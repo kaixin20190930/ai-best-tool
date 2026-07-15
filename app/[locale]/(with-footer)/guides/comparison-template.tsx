@@ -138,6 +138,10 @@ type ComparisonConfig = {
     cn: string[];
     en: string[];
   };
+  decisionSteps?: {
+    cn: string[];
+    en: string[];
+  };
   faqs: {
     question: {
       cn: string;
@@ -165,8 +169,9 @@ type ComparisonTool = ReturnType<typeof toolToListRow> & {
 };
 
 type ComparisonPageData = Awaited<ReturnType<typeof buildComparisonPageData>>;
-type ComparisonPageProps = Omit<ComparisonPageData, 'highIntentPaths'> & {
+type ComparisonPageProps = Omit<ComparisonPageData, 'highIntentPaths' | 'decisionSteps'> & {
   highIntentPaths?: ComparisonPageData['highIntentPaths'];
+  decisionSteps?: ComparisonPageData['decisionSteps'];
   locale: string;
 };
 
@@ -415,6 +420,21 @@ function buildDefaultNotFor() {
   ];
 }
 
+function buildDefaultDecisionSteps(comparisonLabel: { cn: string; en: string }) {
+  return {
+    cn: [
+      `先用 ${comparisonLabel.cn} 确认自己到底要解决什么场景。`,
+      '再看价格、最近更新和风险信号，先排掉明显不合适的候选。',
+      '最后去评论区和官网验证真实反馈，再决定要不要继续深入。',
+    ],
+    en: [
+      `Start with ${comparisonLabel.en} by clarifying the exact workflow you need to solve.`,
+      'Then check pricing, freshness, and risk signals to drop clearly unsuitable options.',
+      'Finally, verify real feedback in comments and on the official site before going deeper.',
+    ],
+  };
+}
+
 export async function buildComparisonMetadata(locale: string, title: string, description: string): Promise<Metadata> {
   const t = await getTranslations({
     locale,
@@ -578,6 +598,7 @@ export async function buildComparisonPageData(locale: string, config: Comparison
     title: isChinese ? item.title.cn : item.title.en,
     description: isChinese ? item.description.cn : item.description.en,
   }));
+  const decisionStepsSource = config.decisionSteps || buildDefaultDecisionSteps(config.comparisonLabel);
 
   return {
     isChinese,
@@ -593,6 +614,7 @@ export async function buildComparisonPageData(locale: string, config: Comparison
     notFor,
     nextPaths,
     highIntentPaths,
+    decisionSteps: isChinese ? decisionStepsSource.cn : decisionStepsSource.en,
     categories,
     config,
   };
@@ -610,6 +632,7 @@ export function ComparisonPage({
   fitFor,
   notFor,
   nextPaths,
+  decisionSteps = [],
   highIntentPaths: highIntentPathsInput = [],
   categories,
   config,
@@ -778,6 +801,7 @@ export function ComparisonPage({
               ? '比较页先说清比较依据、最近核查和下一步怎么缩小候选，避免它变成单纯的列表堆叠。'
               : 'The comparison page should explain the comparison basis, last check date, and the next narrowing step so it does not become a simple list dump.'
           }
+          decisionSteps={decisionSteps}
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',
