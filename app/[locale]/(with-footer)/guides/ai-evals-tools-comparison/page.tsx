@@ -61,6 +61,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               : 'If it cannot be reused, it will not become infrastructure.',
           },
         ]}
+        signalCards={[
+          {
+            label: isChinese ? '基准信号' : 'Benchmark signal',
+            value: isChinese ? '真实任务覆盖是否足够' : 'Does it cover real tasks sufficiently',
+            note: isChinese
+              ? '只有真实任务，评分才不会只是形式化。'
+              : 'Only real tasks keep scoring from becoming a formality.',
+          },
+          {
+            label: isChinese ? '回归信号' : 'Regression signal',
+            value: isChinese ? '改动前后能否稳定对比' : 'Can before/after changes be compared reliably',
+            note: isChinese
+              ? '能持续看出差异，才适合做验收。'
+              : 'You need stable differences to make it useful for acceptance.',
+          },
+          {
+            label: isChinese ? '协作信号' : 'Collaboration signal',
+            value: isChinese ? '团队能否长期复用' : 'Can the team reuse it long term',
+            note: isChinese
+              ? '如果不能进入团队流程，它就不够像基础设施。'
+              : 'If it does not fit the team process, it will not behave like infrastructure.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

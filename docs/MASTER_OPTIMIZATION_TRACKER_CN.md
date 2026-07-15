@@ -226,6 +226,7 @@
 
 ## 十、近期进展记录
 
+- 2026-07-15：继续补齐 `ai-tools-for-wallet-research-comparison`、`ai-tools-for-crypto-research-comparison`、`ai-evals-tools-comparison` 的 `signalCards`，把钱包研究、Crypto 研究和 Evals 页的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐比较页的真实信号层，给剩余的对比页增加 `signalCards`，让价格、更新和风险判断在页面层保持一致。
 - 2026-07-15：比较页与指南页的 evidence panel 已统一到“可验证信号 + 真实判断”的结构，后续继续按同一模板补到未覆盖页面。
 - 2026-07-15：继续补齐 `ai-tools-for-sales-prospecting-comparison`、`ai-tools-for-marketing-comparison`、`ai-tools-for-small-business-comparison` 的 `signalCards`，把名单、渠道、品牌、运营等信号层补齐后再做 build 验证。

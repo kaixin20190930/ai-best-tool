@@ -313,6 +313,35 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'If it cannot be revisited, research will not last long.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '资料信号' : 'Source signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '项目资料和链上信息能否合并'
+                : 'Can project materials and chain data be combined',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? 'Crypto 研究最怕信息散着，合不起来。'
+                : 'Crypto research falls apart when information stays scattered.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '追踪信号' : 'Tracking signal',
+            value: locale === 'cn' || locale === 'tw' ? '历史、watchlist 和导出' : 'History, watchlists, and exports',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果不能长期追踪，就很难支持研究节奏。'
+                : 'Without long-term tracking, the research rhythm breaks quickly.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '决策信号' : 'Decision signal',
+            value: locale === 'cn' || locale === 'tw' ? '从发现到判断的路径' : 'Path from discovery to judgment',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '路径越短，越适合真正的研究工作。'
+                : 'The shorter the path, the more useful the tool is for real research work.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

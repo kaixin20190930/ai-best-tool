@@ -288,6 +288,37 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Add real address research examples and relationship graphs.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '画像信号' : 'Profiling signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看地址角色是否清楚'
+                : 'Check whether the address role is easy to infer',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '钱包研究最先看的，是它能不能把一个地址的角色和行为讲明白。'
+                : 'The first question in wallet research is whether the tool can explain an address role and behavior clearly.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '线索信号' : 'Clue signal',
+            value:
+              locale === 'cn' || locale === 'tw' ? '标签、聚类和关系图' : 'Labels, clustering, and relationship graphs',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果这些线索不清楚，结论就会变薄。'
+                : 'If these clues are unclear, the conclusion becomes thin fast.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '复盘信号' : 'Review signal',
+            value:
+              locale === 'cn' || locale === 'tw' ? '历史查询与持续跟踪' : 'Historical queries and ongoing tracking',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '能否回看、串联和复用，决定它能不能进工作流。'
+                : 'Whether you can review, link, and reuse prior work determines workflow fit.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>
