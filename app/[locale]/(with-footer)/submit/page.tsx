@@ -7,6 +7,7 @@ import { getListingPaymentMailto, listingConfig } from '@/lib/config/listing';
 import { getAllCategories } from '@/lib/services/categories';
 import CommerceViewTracker from '@/components/analytics/CommerceViewTracker';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 
 import SubmitForm from './SubmitForm';
 
@@ -392,7 +393,9 @@ export default async function Page({
                 {isChinese ? '提交后会发生什么' : 'What happens next'}
               </p>
               <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-                {isChinese ? '把审核流程说清楚，减少反复确认' : 'Make the review flow clear so nobody has to guess twice'}
+                {isChinese
+                  ? '把审核流程说清楚，减少反复确认'
+                  : 'Make the review flow clear so nobody has to guess twice'}
               </h2>
               <p className='mt-2 text-sm leading-6 text-slate-600'>
                 {isChinese
@@ -510,6 +513,59 @@ export default async function Page({
           </div>
         </div>
       </section>
+
+      <GuideEvidencePanel
+        locale={locale}
+        checkedAt='2026-07-15'
+        scope={
+          isChinese
+            ? '提交页要把认领、提交、付费和后续跟进拆开，避免访客把它当成一个只有表单的页面。'
+            : 'The submit page should separate claim, submission, payment, and follow-up so it does not feel like a plain form page.'
+        }
+        items={[
+          {
+            label: isChinese ? '页面定位' : 'Page role',
+            value: isChinese ? '先判断认领还是提交' : 'Decide claim or submit first',
+            note: isChinese
+              ? '已有条目先认领，新条目再提交。'
+              : 'Existing listings should be claimed first; new ones should be submitted.',
+          },
+          {
+            label: isChinese ? '执行信号' : 'Execution signal',
+            value: isChinese ? '付款后去“我的提交”' : 'Continue in My Submissions after payment',
+            note: isChinese ? '把付款和后续动作放到同一条线上。' : 'Keeps payment and follow-up on the same path.',
+          },
+          {
+            label: isChinese ? '质量信号' : 'Quality signal',
+            value: isChinese ? '先准备素材再进入审核' : 'Prepare assets before review',
+            note: isChinese ? '减少被退回和卡审核的概率。' : 'Reduces rejection and review delays.',
+          },
+        ]}
+        decisionSteps={[
+          isChinese ? '先看条目是否已经存在。' : 'Check whether the listing already exists.',
+          isChinese ? '如果是新条目，直接提交。' : 'If it is new, submit it directly.',
+          isChinese ? '需要加速时，再选付费。' : 'Choose paid review only when speed matters.',
+        ]}
+        signalCards={[
+          {
+            label: isChinese ? '分流信号' : 'Routing signal',
+            value: isChinese ? '已有条目先认领' : 'Claim existing listings first',
+            note: isChinese ? '避免重复提交导致审核更慢。' : 'Avoid duplicate submissions that slow review.',
+          },
+          {
+            label: isChinese ? '动作信号' : 'Action signal',
+            value: isChinese ? '提交后继续看状态' : 'Track status after submission',
+            note: isChinese ? '让提交过程变成可追踪流程。' : 'Turns submission into a trackable workflow.',
+          },
+          {
+            label: isChinese ? '风险信号' : 'Risk signal',
+            value: isChinese ? '缺信息会拖慢审核' : 'Missing info slows review',
+            note: isChinese
+              ? '官网、分类、截图和描述都要先准备好。'
+              : 'Website, category, screenshots, and description should be ready first.',
+          },
+        ]}
+      />
     </div>
   );
 }

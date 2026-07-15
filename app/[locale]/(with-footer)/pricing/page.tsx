@@ -6,6 +6,7 @@ import { getTranslations } from 'next-intl/server';
 import { getListingPaymentMailto, listingConfig } from '@/lib/config/listing';
 import CommerceViewTracker from '@/components/analytics/CommerceViewTracker';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 
 function PricingMiniCard({
   title,
@@ -428,6 +429,63 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
           </aside>
         </div>
       </section>
+
+      <GuideEvidencePanel
+        locale={locale}
+        checkedAt='2026-07-15'
+        scope={
+          isChinese
+            ? '价格页的作用不是让人停在这里，而是帮访客快速判断：先认领、先提交，还是直接走付费加速。'
+            : 'The pricing page should not trap visitors. It should help them decide whether to claim, submit, or use paid acceleration first.'
+        }
+        items={[
+          {
+            label: isChinese ? '页面定位' : 'Page role',
+            value: isChinese ? '先判断路径，再决定是否付费' : 'Decide the path before you pay',
+            note: isChinese
+              ? '认领、提交、付费三条入口都能直接跳转。'
+              : 'Claim, submit, and paid paths all link out directly.',
+          },
+          {
+            label: isChinese ? '付费边界' : 'Payment boundary',
+            value: isChinese ? '只买审核速度和固定窗口' : 'Only faster review and a fixed window',
+            note: isChinese
+              ? '明确说明不买保证通过、保证流量或永久曝光。'
+              : 'It clearly says this does not buy approval, traffic, or permanent exposure.',
+          },
+          {
+            label: isChinese ? '后续动作' : 'Next action',
+            value: isChinese ? '去提交页或我的提交' : 'Go to submit or My Submissions',
+            note: isChinese
+              ? '把价格页变成可执行的分流页，而不是纯说明页。'
+              : 'Turn the pricing page into an executable routing page, not just an explainer.',
+          },
+        ]}
+        decisionSteps={[
+          isChinese ? '先判断已有条目还是新提交。' : 'Check whether it is already listed or needs a new submission.',
+          isChinese ? '需要更快审核时再选付费。' : 'Choose paid review only when timing matters.',
+          isChinese ? '在「我的提交」里跟进付款与窗口。' : 'Follow payment and window status in My Submissions.',
+        ]}
+        signalCards={[
+          {
+            label: isChinese ? '决策信号' : 'Decision signal',
+            value: isChinese ? '先认领，后提交，再考虑付费' : 'Claim first, submit second, pay last',
+            note: isChinese
+              ? '这能减少重复提交和无效付款。'
+              : 'This reduces duplicate submissions and unnecessary payment.',
+          },
+          {
+            label: isChinese ? '流程信号' : 'Flow signal',
+            value: isChinese ? '付款后去“我的提交”查看' : 'Check My Submissions after payment',
+            note: isChinese ? '让访客知道下一步在哪里发生。' : 'Shows visitors exactly where the next step happens.',
+          },
+          {
+            label: isChinese ? '风险信号' : 'Risk signal',
+            value: isChinese ? '不保证通过，也不保证流量' : 'No approval guarantee and no traffic guarantee',
+            note: isChinese ? '把边界讲清楚，避免误解。' : 'Clear boundaries reduce confusion.',
+          },
+        ]}
+      />
 
       <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_360px]'>
         <div className='rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm'>
