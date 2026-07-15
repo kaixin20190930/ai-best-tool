@@ -1727,6 +1727,83 @@ export default async function Page({
       month: 'short',
       day: 'numeric',
     }).format(new Date(`${checkedAt}T00:00:00Z`));
+    let detailSignalCards: Array<{ label: string; value: string; note: string }>;
+    const websiteNameKey = websiteName.toLowerCase();
+    if (websiteNameKey === 'fathom') {
+      detailSignalCards = [
+        {
+          label: isChinese ? '价格信号' : 'Pricing signal',
+          value: isChinese ? '先看会议记录额度和团队席位' : 'Check meeting minutes and seat limits first',
+          note: isChinese
+            ? '会议纪要类工具最容易在记录次数和团队使用量上分层。'
+            : 'Meeting-note tools usually tier by recording volume and team seats.',
+        },
+        {
+          label: isChinese ? '更新信号' : 'Freshness signal',
+          value: isChinese
+            ? '看转写和跟进功能是否持续更新'
+            : 'Check whether transcription and follow-up are still updated',
+          note: isChinese
+            ? '如果会后流程没有跟进更新，说明它可能不再适合团队协作。'
+            : 'If the post-meeting workflow is stale, it may no longer fit team collaboration well.',
+        },
+        {
+          label: isChinese ? '风险信号' : 'Risk signal',
+          value: isChinese ? '先确认是否真能省会后整理时间' : 'Confirm it really saves post-meeting time',
+          note: isChinese
+            ? '如果只是转录更好看，但不减少整理和跟进成本，就不算强价值。'
+            : 'Better transcription alone is not enough if it does not reduce cleanup and follow-up work.',
+        },
+      ];
+    } else if (websiteNameKey === 'pipedream') {
+      detailSignalCards = [
+        {
+          label: isChinese ? '价格信号' : 'Pricing signal',
+          value: isChinese ? '先看任务次数、workflow 限制' : 'Check task runs and workflow limits first',
+          note: isChinese
+            ? '自动化平台通常先在执行次数和高级能力上分层。'
+            : 'Automation platforms often tier by executions and advanced capabilities.',
+        },
+        {
+          label: isChinese ? '更新信号' : 'Freshness signal',
+          value: isChinese ? '看触发器和集成是否在更新' : 'Check whether triggers and integrations are updated',
+          note: isChinese
+            ? '集成层如果不更新，很容易影响真实工作流。'
+            : 'Stale integrations can quickly break real workflows.',
+        },
+        {
+          label: isChinese ? '风险信号' : 'Risk signal',
+          value: isChinese ? '先确认稳定性和失败重试' : 'Confirm stability and retry behavior first',
+          note: isChinese
+            ? '自动化工具只要不稳定，后面的工作流就会很难持续。'
+            : 'If an automation tool is unstable, downstream workflows become hard to trust.',
+        },
+      ];
+    } else {
+      detailSignalCards = [
+        {
+          label: isChinese ? '价格信号' : 'Pricing signal',
+          value: isChinese ? '先看免费、试用和升级门槛' : 'Check free, trial, and upgrade thresholds first',
+          note: isChinese
+            ? '先知道门槛，再决定要不要继续深入比较。'
+            : 'Know the threshold before deciding whether to continue comparing.',
+        },
+        {
+          label: isChinese ? '更新信号' : 'Freshness signal',
+          value: isChinese ? '先看最近检查日期' : 'Check the last-checked date first',
+          note: isChinese
+            ? '越新的页面越容易和真实使用体验对齐。'
+            : 'Newer pages are more likely to match real-world usage.',
+        },
+        {
+          label: isChinese ? '风险信号' : 'Risk signal',
+          value: isChinese ? '先排除不适合的场景' : 'Filter out mismatched scenarios early',
+          note: isChinese
+            ? '不适合谁，往往比适合谁更能帮人做决定。'
+            : 'Knowing who it is not for often helps decisions more than another list of fit cases.',
+        },
+      ];
+    }
     let decisionBestFitText =
       locale === 'cn' ? '先看这个工具是不是匹配你的场景' : 'Check whether this tool matches your workflow first';
     if (bestFitList.length > 0) {
@@ -2008,6 +2085,7 @@ export default async function Page({
                         : `Freshness reads as ${freshnessSummary}, and the page should keep gaining usage and claim signals.`,
                     },
                   ]}
+                  signalCards={detailSignalCards}
                 />
 
                 <div className='grid gap-3 md:grid-cols-3'>
