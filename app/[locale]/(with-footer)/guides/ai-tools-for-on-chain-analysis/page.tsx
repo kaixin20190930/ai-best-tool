@@ -344,6 +344,31 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `Add real on-chain cases and verifiable visuals while keeping the ${checkedAt} verification record.`,
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese ? '先看查询额度和导出限制' : 'Check query quotas and export limits first',
+              note: isChinese
+                ? '链上分析常把深度查询放进更高层级。'
+                : 'On-chain analysis often gates deep queries behind higher tiers.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese
+                ? '看数据源、地址标签和仪表盘是否更新'
+                : 'Check whether data sources, labels, and dashboards are updated',
+              note: isChinese
+                ? '链上变化快，旧数据会直接误导判断。'
+                : 'On-chain data changes fast, so stale data misleads quickly.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '没有可复核证据就先降级' : 'Downgrade it without verifiable evidence',
+              note: isChinese
+                ? '只看到图表不够，必须能追到证据。'
+                : 'Charts alone are not enough; you need traceable evidence.',
+            },
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>

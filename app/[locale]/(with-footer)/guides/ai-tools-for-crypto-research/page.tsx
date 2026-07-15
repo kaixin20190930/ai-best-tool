@@ -303,6 +303,31 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `Next, priority additions are research notes, on-chain examples, and monitoring checklists while keeping the ${checkedAt} verification record.`,
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese ? '先看免费研究量和 API 限额' : 'Check free research volume and API limits first',
+              note: isChinese
+                ? '研究工具往往把深度功能放进更高价层。'
+                : 'Research tools often reserve deep features for higher tiers.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese
+                ? '看研究源和链上情报是否持续更新'
+                : 'Check whether research sources and on-chain intelligence are updated',
+              note: isChinese
+                ? '研究结论会被更新频率直接影响。'
+                : 'Research quality is directly affected by update frequency.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '没有可追溯来源就先别放前排' : 'Do not rank it highly without traceable sources',
+              note: isChinese
+                ? '研究页最怕“看起来很对”但证据不够。'
+                : 'The biggest risk is something that looks right but lacks evidence.',
+            },
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>

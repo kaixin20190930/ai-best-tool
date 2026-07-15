@@ -28,6 +28,7 @@
 - 2026-07-15：`GuideEvidencePanel` 的价格 / 更新 / 风险信号条继续接入 `ai-tools-for-sales`、`ai-productivity-tools`、`ai-tools-for-web3` 及其 comparison 页面，并通过本地 `pnpm run build`
 - 2026-07-15：`GuideEvidencePanel` 增加默认的价格 / 更新 / 风险信号条回退，未单独传 `signalCards` 的指南 / 对比页也会自动获得同一层真实信号，并通过本地 `pnpm run build`
 - 2026-07-15：`GuideEvidencePanel` 的定制信号继续补到 `ai-tools-for-customer-support`、`ai-tools-for-lead-generation`、`ai-tools-for-model-routing` 和 `ai-marketing-tools`，进一步强化高意图主页面的真实判断口径，并通过本地 `pnpm run build`
+- 2026-07-15：`GuideEvidencePanel` 的定制信号继续补到 `ai-tools-for-on-chain-analysis`、`ai-tools-for-crypto-research`、`ai-tools-for-wallet-monitoring`、`ai-tools-for-protocol-analytics` 和 `ai-tools-for-ecommerce`，进一步强化数据 / 交易 / 运营场景判断口径，并通过本地 `pnpm run build`
 - 2026-07-15：工具详情页已新增“当前处理状态”面板，把最近更新、讨论数量、认领状态和下一步动作串成更清晰的 owner / 评论 / 更新请求闭环，并通过本地 `pnpm run build`
 
 ## 一、当前有几个计划

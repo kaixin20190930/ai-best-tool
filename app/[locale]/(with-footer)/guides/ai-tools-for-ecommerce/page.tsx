@@ -181,6 +181,31 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `Add real product, channel, and operations examples while keeping the ${checkedAt} verification record.`,
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese ? '先看订单量和席位' : 'Check order volume and seats first',
+              note: isChinese
+                ? '电商工具成本通常和团队规模、数据量绑定。'
+                : 'Ecommerce tools often price by team size and data volume.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese
+                ? '看商品、客服和运营能力是否持续更新'
+                : 'Check whether product, support, and ops features are updated',
+              note: isChinese
+                ? '电商变化快，旧能力很快不够用。'
+                : 'Ecommerce changes fast, and stale capabilities become insufficient quickly.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '没有真实运营流程就先降级' : 'Downgrade it without a real ops flow',
+              note: isChinese
+                ? '不能串起商品、客服和运营，就不该排太前。'
+                : 'If it cannot connect product, support, and ops, it should not rank too high.',
+            },
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>

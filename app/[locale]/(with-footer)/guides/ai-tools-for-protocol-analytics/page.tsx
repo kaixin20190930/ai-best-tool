@@ -281,6 +281,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `Add real protocol trend and time-series evidence while keeping the ${checkedAt} check trail.`,
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese ? '先看历史深度和报表权限' : 'Check historical depth and reporting permissions first',
+              note: isChinese
+                ? '协议分析常把更深的历史窗口锁进高价层。'
+                : 'Protocol analytics often gates deeper history behind higher plans.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese
+                ? '看协议、指标和趋势是否持续更新'
+                : 'Check whether protocols, metrics, and trends are updated',
+              note: isChinese
+                ? '协议变化快，旧趋势会误导决策。'
+                : 'Protocols change quickly, and stale trends can mislead decisions.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '没有真实健康指标就先降级' : 'Downgrade it without real health metrics',
+              note: isChinese ? '只有图表没有解释，不够用。' : 'Charts without explanation are not enough.',
+            },
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>

@@ -346,6 +346,31 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `Add real alert examples and notification screenshots for non-AI signal; keep the ${checkedAt} verification trail.`,
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese ? '先看监控数量和告警额度' : 'Check monitored wallets and alert quotas first',
+              note: isChinese
+                ? '监控工具常按对象数量和通知通道收费。'
+                : 'Monitoring tools often price by object count and notification channels.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese
+                ? '看阈值、通知和异常规则是否还在更新'
+                : 'Check whether thresholds, notifications, and anomaly rules are updated',
+              note: isChinese
+                ? '如果没有持续调优，告警会很快失真。'
+                : 'Without ongoing tuning, alerts drift out of usefulness fast.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '没有可验证告警就先降级' : 'Downgrade it without verifiable alerts',
+              note: isChinese
+                ? '只会发通知，不代表真的能监控。'
+                : 'Sending notifications alone does not mean it truly monitors.',
+            },
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
