@@ -660,26 +660,11 @@ export function ComparisonPage({
                 <ArrowRight className='size-4' />
               </Link>
             ) : null}
-            <TrackableCtaLink
-              href='/submit'
-              ctaId='comparison_submit'
-              ctaLabel='Comparison submit'
-              pageType='comparison'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
-            >
-              {isChinese ? '提交你的工具' : 'Submit your tool'}
-              <ArrowRight className='size-4' />
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/developer/listing'
-              ctaId='comparison_claim'
-              ctaLabel='Comparison claim'
-              pageType='comparison'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800 hover:bg-emerald-100'
-            >
-              {isChinese ? '认领条目' : 'Claim listing'}
-              <ArrowRight className='size-4' />
-            </TrackableCtaLink>
+          </div>
+          <div className='mt-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '如果你是工具方，提交和认领入口仍然可用，但会放在更靠后的区域，避免打断“先看对比、再去官网”的主路径。'
+              : 'If you own a tool, submit and claim paths still exist, but they are placed later so they do not interrupt the compare-first flow.'}
           </div>
           <div className='mt-6 grid gap-3 md:grid-cols-3'>
             <div className='rounded-xl border border-slate-200 bg-slate-50 p-4 shadow-sm'>
