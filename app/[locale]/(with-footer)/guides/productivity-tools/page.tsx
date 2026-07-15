@@ -69,6 +69,41 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'The tools that stick are the ones that fit daily cadence.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '价格信号' : 'Pricing signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看免费版和团队协作门槛'
+                : 'Check free tier and team-collaboration thresholds first',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '生产力工具经常先在席位、同步和自动化上设限。'
+                : 'Productivity tools often limit seats, sync, and automation first.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '更新信号' : 'Freshness signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看搜索、同步和导出是否还在更新'
+                : 'Check whether search, sync, and export keep improving',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果这些基础能力停了，长期使用体验会很差。'
+                : 'If those basics stop improving, long-term usability suffers quickly.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '风险信号' : 'Risk signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '没有检索 / 导出 / 自动化就先降级'
+                : 'Downgrade it without search, export, or automation',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '这类工具缺了基础复用能力就不适合长期用。'
+                : 'Without reuse basics, these tools are not good long-term fits.',
+          },
+        ]}
       />
 
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>

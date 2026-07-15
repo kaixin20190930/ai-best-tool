@@ -69,6 +69,39 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Ultimately, it has to stay usable over time.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '价格信号' : 'Pricing signal',
+            value:
+              locale === 'cn' || locale === 'tw' ? '先看团队席位和可扩展性' : 'Check team seats and scalability first',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '开发者工具通常要看多人协作和可持续成本。'
+                : 'Developer tools often hinge on collaboration and sustainable cost.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '更新信号' : 'Freshness signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看 API、集成和可维护性是否更新'
+                : 'Check whether APIs, integrations, and maintainability are updated',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果更新只停留在界面层，长期用起来会很快失真。'
+                : 'If updates only touch the UI layer, the long-term workflow tends to drift quickly.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '风险信号' : 'Risk signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '没有协作 / 上下文 / 维护就先降级'
+                : 'Downgrade it without collaboration, context, or maintainability',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '这三项不稳，工具就很难真正融入开发流程。'
+                : 'Without those three, the tool rarely fits into the dev workflow for long.',
+          },
+        ]}
       />
 
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
