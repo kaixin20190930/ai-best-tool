@@ -275,6 +275,32 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'This matters a lot once workflows get deep into APIs and scripts.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '编排信号' : 'Orchestration signal',
+            value: locale === 'cn' || locale === 'tw' ? '能否跑完整流程' : 'Can it run a full flow',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '真正的自动化底座，要能把多步流程完整跑通。'
+                : 'A real automation base should be able to run a multi-step flow end to end.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '控制信号' : 'Control signal',
+            value: locale === 'cn' || locale === 'tw' ? '脚本、分支和 API' : 'Scripts, branches, and APIs',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果要接内部系统，这些能力会快速变成核心。'
+                : 'These capabilities quickly become core when internal systems are involved.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '维护信号' : 'Maintenance signal',
+            value: locale === 'cn' || locale === 'tw' ? '日志、权限和接管' : 'Logs, permissions, and handoff',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '长期跑的流程，最后都要回到可维护性。'
+                : 'Long-running workflows always come back to maintainability.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

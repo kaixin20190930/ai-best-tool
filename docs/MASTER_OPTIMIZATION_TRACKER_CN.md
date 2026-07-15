@@ -226,6 +226,7 @@
 
 ## 十、近期进展记录
 
+- 2026-07-15：继续补齐 `n8n-alternatives-comparison`、`make-alternatives-comparison`、`zapier-alternatives-comparison` 的 `signalCards`，把自动化底座、可视化编排和连接器页的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `notion-alternatives-comparison`、`hubspot-alternatives-comparison`、`perplexity-alternatives-comparison` 的 `signalCards`，把 Notion、HubSpot 和 Perplexity 的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `ai-agent-tools-comparison`、`ai-web3-tools-comparison`、`ai-coding-tools-comparison` 的 `signalCards`，把 Agent、Web3 和编程入口的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `ai-tools-for-on-chain-analysis-comparison`、`ai-tools-for-defi-analytics-comparison`、`ai-tools-for-dex-analytics-comparison` 的 `signalCards`，把链上分析、DeFi 分析和 DEX 分析页的可验证信号层补齐后再做 build 验证。

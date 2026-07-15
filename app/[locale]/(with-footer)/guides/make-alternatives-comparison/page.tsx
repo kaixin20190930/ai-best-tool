@@ -288,6 +288,32 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Narrow the shortlist first, then validate hands-on fit on the official site.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '可视化信号' : 'Visual signal',
+            value: locale === 'cn' || locale === 'tw' ? '流程是否一眼能懂' : 'Is the flow easy to read at a glance',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? 'Make 的核心价值通常在于把多步骤流程画清楚。'
+                : 'Make’s core value is usually making multi-step workflows visually clear.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '复杂度信号' : 'Complexity signal',
+            value: locale === 'cn' || locale === 'tw' ? '分支、重试和交接' : 'Branches, retries, and handoffs',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '当流程开始变复杂，可读性和维护成本就会变关键。'
+                : 'Once workflows get more complex, readability and maintenance cost matter a lot.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '交接信号' : 'Handoff signal',
+            value: locale === 'cn' || locale === 'tw' ? '团队能否接着维护' : 'Can the team keep maintaining it',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果别人也要接手，模板、日志和权限要先看。'
+                : 'If other people will inherit it, templates, logs, and permissions should be checked early.',
+          },
+        ]}
       />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>

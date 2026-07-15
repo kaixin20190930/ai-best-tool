@@ -284,6 +284,33 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Long-term automation is about maintainability after setup, not just launch.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '连接器信号' : 'Connector signal',
+            value:
+              locale === 'cn' || locale === 'tw' ? '能否快速连常见 SaaS' : 'Can it quickly connect common SaaS tools',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? 'Zapier 类工具的第一价值通常是上手快、连得广。'
+                : 'Zapier-style tools usually win first on fast onboarding and broad connectivity.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '流程信号' : 'Workflow signal',
+            value: locale === 'cn' || locale === 'tw' ? '复杂逻辑是否够用' : 'Is it enough for complex logic',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果你开始要分支、重试和更细控制，就要认真比较。'
+                : 'Once you need branching, retries, or finer control, it is time to compare carefully.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '扩展信号' : 'Scaling signal',
+            value: locale === 'cn' || locale === 'tw' ? '日志、权限和恢复' : 'Logs, permissions, and recovery',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '长期自动化要看的是能不能稳定扩展，而不是一次性连通。'
+                : 'Long-term automation is about stable scaling, not just one-time connectivity.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>
