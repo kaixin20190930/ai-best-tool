@@ -48,6 +48,27 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               : 'Whether you can reuse it and collaborate determines real usefulness.',
           },
         ]}
+        signalCards={[
+          {
+            label: isChinese ? '覆盖信号' : 'Coverage signal',
+            value: isChinese ? '协议、链上和钱包是否都够' : 'Are protocol, chain, and wallet layers all covered',
+            note: isChinese
+              ? '覆盖层级错了，后面细看功能意义不大。'
+              : 'If the layer is wrong, feature details matter less.',
+          },
+          {
+            label: isChinese ? '深度信号' : 'Depth signal',
+            value: isChinese ? '能否继续往下钻' : 'Can it drill deeper',
+            note: isChinese ? '真正有价值的是不只停在表层汇总。' : 'The key value is going beyond the surface summary.',
+          },
+          {
+            label: isChinese ? '复用信号' : 'Reuse signal',
+            value: isChinese ? '导出、历史和分享' : 'Exports, history, and sharing',
+            note: isChinese
+              ? '可复盘、可协作，才算真有用。'
+              : 'If it can be reused and collaborated on, it is genuinely useful.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

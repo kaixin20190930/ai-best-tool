@@ -418,6 +418,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Use comments and real examples to decide whether it belongs in the daily workflow.',
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '编辑器信号' : 'Editor signal',
+              value: isChinese ? '是否真正适合代码环境' : 'Does it fit the coding environment',
+              note: isChinese
+                ? '编程工具首先要进入编辑器和仓库流程。'
+                : 'Coding tools first need to fit into editor and repo workflows.',
+            },
+            {
+              label: isChinese ? '上下文信号' : 'Context signal',
+              value: isChinese ? '长上下文与仓库理解' : 'Long context and repo understanding',
+              note: isChinese
+                ? '如果看不懂仓库上下文，工具就只能做表层补全。'
+                : 'If it cannot understand repo context, it stays at superficial completion.',
+            },
+            {
+              label: isChinese ? '工作流信号' : 'Workflow signal',
+              value: isChinese ? '补全、调试、重构' : 'Completion, debugging, refactoring',
+              note: isChinese
+                ? '能否覆盖真实日常任务，比 demo 效果更重要。'
+                : 'Coverage of real daily tasks matters more than demo polish.',
+            },
+          ]}
         />
         <GuideSubmissionPath locale={locale} ctaPrefix='ai_coding_tools_comparison' />
       </div>

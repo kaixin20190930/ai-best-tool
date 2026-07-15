@@ -226,6 +226,7 @@
 
 ## 十、近期进展记录
 
+- 2026-07-15：继续补齐 `ai-agent-tools-comparison`、`ai-web3-tools-comparison`、`ai-coding-tools-comparison` 的 `signalCards`，把 Agent、Web3 和编程入口的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `ai-tools-for-on-chain-analysis-comparison`、`ai-tools-for-defi-analytics-comparison`、`ai-tools-for-dex-analytics-comparison` 的 `signalCards`，把链上分析、DeFi 分析和 DEX 分析页的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `ai-tools-for-wallet-research-comparison`、`ai-tools-for-crypto-research-comparison`、`ai-evals-tools-comparison` 的 `signalCards`，把钱包研究、Crypto 研究和 Evals 页的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐比较页的真实信号层，给剩余的对比页增加 `signalCards`，让价格、更新和风险判断在页面层保持一致。

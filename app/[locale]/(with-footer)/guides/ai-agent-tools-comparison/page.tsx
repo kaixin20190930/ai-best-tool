@@ -48,6 +48,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               : 'In production, these matter more than demo feel.',
           },
         ]}
+        signalCards={[
+          {
+            label: isChinese ? '编排信号' : 'Orchestration signal',
+            value: isChinese ? '能否跑完整流程' : 'Can it run a full flow',
+            note: isChinese
+              ? '真正的 Agent 不是只回答问题，而是能把多步流程走完。'
+              : 'A real agent is not just an answer box; it completes multi-step workflows.',
+          },
+          {
+            label: isChinese ? '状态信号' : 'State signal',
+            value: isChinese ? '上下文是否能保留' : 'Can context be retained',
+            note: isChinese
+              ? '没有状态，Agent 很快就会退化成单次调用。'
+              : 'Without state, the agent quickly degrades into a one-off call.',
+          },
+          {
+            label: isChinese ? '治理信号' : 'Governance signal',
+            value: isChinese ? '日志、审计和接管' : 'Logs, audits, and override',
+            note: isChinese
+              ? '进入生产后，这些比 demo 观感更关键。'
+              : 'In production, these matter more than demo polish.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>
