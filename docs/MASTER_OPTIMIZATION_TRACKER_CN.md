@@ -261,3 +261,4 @@
 - 2026-07-15：`CategoryContent` 的 evidence panel 改成按 `productivity / web3 / developer-tools / chatbot` 等核心分类输出场景化信号，让 P1 分类页更像真实决策页，并通过本地 `pnpm run build`。
 - 2026-07-16：`best-ai-tools` 榜单页补齐选择 / 受众 / 下一步信号层，让总入口更像路径分发中枢，并通过本地 `pnpm run build`。
 - 2026-07-16：首页补齐路线 / 受众 / 下一步信号层，让首屏更明确分流到榜单、分类、详情和认领路径，并通过本地 `pnpm run build`。
+- 2026-07-16：`categories/[slug]` 分类页补齐决策顺序信号，让分类页先承担筛选、再承担缩小 shortlist、最后承接到具体工具页的入口职责，并通过本地 `pnpm run build`。

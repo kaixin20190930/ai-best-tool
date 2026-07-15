@@ -1131,6 +1131,13 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
                 : 'Turn an abstract category into an actionable selection page.',
             },
           ]}
+          decisionSteps={[
+            isChinese ? '先看这个分类是否适合你的任务。' : 'First check whether this category fits your task.',
+            isChinese
+              ? '再用对比页和指南页缩小 shortlist。'
+              : 'Then use the comparison and guide pages to narrow the shortlist.',
+            isChinese ? '最后进入具体工具页做最终判断。' : 'Finally open the tool pages for the final call.',
+          ]}
           signalCards={evidenceSignalCards}
         />
 
