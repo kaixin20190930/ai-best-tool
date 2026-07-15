@@ -1776,6 +1776,14 @@ export default async function Page({
         ? `已有 ${commentCount} 条讨论，可直接看真实反馈。`
         : `${commentCount} comments can surface real-world trade-offs quickly.`;
     }
+    let discussionCountText = locale === 'cn' ? '还没有讨论' : 'No comments yet';
+    if (commentCount > 0) {
+      discussionCountText = `${commentCount} ${locale === 'cn' ? '条讨论' : 'comments'}`;
+    }
+    let nextActionText = locale === 'cn' ? '先认领再补更新' : 'Claim first, then add updates';
+    if (claimStatus === 'claimed') {
+      nextActionText = locale === 'cn' ? '认领后补更新说明' : 'Add update notes after claiming';
+    }
     const trustSnapshotItems = [
       {
         label: isChinese ? '最近核查' : 'Last checked',
@@ -2959,6 +2967,56 @@ export default async function Page({
                   {locale === 'cn'
                     ? '如果你发现价格、截图、文案或功能已经过时，先点右侧“请求更新”，再在评论里写清楚是哪一项需要修正。'
                     : 'If pricing, screenshots, copy, or features are stale, tap request update on the right, then leave a comment that says exactly what needs fixing.'}
+                </div>
+                <div className='mt-4 rounded-xl border border-cyan-100 bg-cyan-50/70 p-4'>
+                  <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between'>
+                    <div>
+                      <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                        {locale === 'cn' ? '当前处理状态' : 'Current status'}
+                      </p>
+                      <h4 className='mt-1 text-sm font-semibold text-slate-950'>
+                        {locale === 'cn'
+                          ? '先确认 owner，再用评论和更新请求补证据'
+                          : 'Confirm the owner, then use comments and update requests to add evidence'}
+                      </h4>
+                    </div>
+                    <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${claimTone}`}>{claimLabel}</span>
+                  </div>
+                  <div className='mt-3 grid gap-3 md:grid-cols-3'>
+                    <div className='rounded-lg border border-white bg-white p-3'>
+                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                        {locale === 'cn' ? '最近更新' : 'Last update'}
+                      </p>
+                      <p className='mt-1 text-sm font-semibold text-slate-950'>{updatedLabel}</p>
+                      <p className='mt-1 text-xs leading-5 text-slate-500'>
+                        {locale === 'cn'
+                          ? '如果时间久了，优先点“请求更新”。'
+                          : 'If it is old, tap request update first.'}
+                      </p>
+                    </div>
+                    <div className='rounded-lg border border-white bg-white p-3'>
+                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                        {locale === 'cn' ? '讨论数量' : 'Discussion count'}
+                      </p>
+                      <p className='mt-1 text-sm font-semibold text-slate-950'>{discussionCountText}</p>
+                      <p className='mt-1 text-xs leading-5 text-slate-500'>
+                        {locale === 'cn'
+                          ? '先留一个真实体验，后面的人会更容易判断。'
+                          : 'Leave one real usage note first to help the next visitor judge faster.'}
+                      </p>
+                    </div>
+                    <div className='rounded-lg border border-white bg-white p-3'>
+                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                        {locale === 'cn' ? '下一步动作' : 'Next action'}
+                      </p>
+                      <p className='mt-1 text-sm font-semibold text-slate-950'>{nextActionText}</p>
+                      <p className='mt-1 text-xs leading-5 text-slate-500'>
+                        {locale === 'cn'
+                          ? '把 owner、更新请求和评论串起来，页面才会越来越厚。'
+                          : 'Connect owner, update requests, and comments so the page keeps getting richer.'}
+                      </p>
+                    </div>
+                  </div>
                 </div>
                 <div className='mt-6'>
                   <CommentList

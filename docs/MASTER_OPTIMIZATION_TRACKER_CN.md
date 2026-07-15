@@ -20,6 +20,7 @@
 - 2026-07-15：`robots.txt` 已回退为 `public/robots.txt` 静态文件，避免 metadata route 500；本地预览 `seo:validate` 已跑通 27/27，工具页非数据库工具的提示已改为通过
 - 2026-07-15：主页、榜单页和指南页已把 Submit / Claim 从第一层入口降级为次级 owner 路径，避免商业入口打断先看内容、再做比较的决策流，并通过本地 `pnpm run build`
 - 2026-07-15：comparison template 已补入价格 / 更新 / 风险显式化，所有套用该模板的比较页都会显示统一的风险信号与 freshness 提示，并通过本地 `pnpm run build`
+- 2026-07-15：工具详情页已新增“当前处理状态”面板，把最近更新、讨论数量、认领状态和下一步动作串成更清晰的 owner / 评论 / 更新请求闭环，并通过本地 `pnpm run build`
 
 ## 一、当前有几个计划
 
