@@ -67,6 +67,39 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'If technical issues are not checked first, content improvements may not help.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '价格信号' : 'Pricing signal',
+            value:
+              locale === 'cn' || locale === 'tw' ? '先看站点规模和项目数' : 'Check site size and project limits first',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? 'SEO 工具常按项目、爬取量或站点数量计费。'
+                : 'SEO tools often charge by projects, crawl volume, or site count.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '更新信号' : 'Freshness signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看抓取、日志和建议是否持续更新'
+                : 'Check whether crawling, logs, and recommendations keep updating',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? 'SEO 变化快，旧报告很快失去参考价值。'
+                : 'SEO changes fast, and stale reports lose value quickly.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '风险信号' : 'Risk signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '没有动作建议就先降级'
+                : 'Downgrade it without actionable recommendations',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '只有报表没有建议，通常不足以支撑优化。'
+                : 'Reports without recommendations usually are not enough to drive optimization.',
+          },
+        ]}
       />
 
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>

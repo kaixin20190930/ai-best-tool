@@ -334,6 +334,33 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `Add real address cases and research notes to reduce AI-only phrasing while keeping the ${checkedAt} verification record.`,
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese ? '先看历史深度和多链覆盖' : 'Check history depth and multichain coverage first',
+              note: isChinese
+                ? '钱包研究常按历史跨度、查询量和团队协作定价。'
+                : 'Wallet research tools often price by history depth, query volume, and team collaboration.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese
+                ? '看标签、关系和搜索能力是否更新'
+                : 'Check whether labels, relationships, and search keep improving',
+              note: isChinese
+                ? '如果标签体系停了，研究链路很快就失真。'
+                : 'If labeling stagnates, the research chain quickly becomes unreliable.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese
+                ? '没有标签 / 历史 / 关系就先降级'
+                : 'Downgrade it without labels, history, or relationships',
+              note: isChinese
+                ? '三项缺一项，都会让研究结论变薄。'
+                : 'Missing any of those three weakens the research conclusion.',
+            },
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>

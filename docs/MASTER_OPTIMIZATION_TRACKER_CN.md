@@ -39,6 +39,7 @@
 - 2026-07-15：`developer-tools` 和 `productivity-tools` 已补入价格 / 更新 / 风险信号层，继续强化开发协作、可维护性、搜索、导出和自动化的真实判断口径，并通过本地 `pnpm run build`
 - 2026-07-15：`research-tools` 和 `sales-tools` 已补入价格 / 更新 / 风险信号层，继续强化来源追溯、研究复盘、线索管理和跟进协作的真实判断口径，并通过本地 `pnpm run build`
 - 2026-07-15：`ai-tools-for-creators` 已补入价格 / 更新 / 风险信号层，继续强化批量创作、品牌一致性、导出和复用的真实判断口径，并通过本地 `pnpm run build`
+- 2026-07-15：`seo-tools` 和 `ai-tools-for-wallet-research` 已补入价格 / 更新 / 风险信号层，继续强化 SEO 诊断、技术校验、地址画像和链上研究的真实判断口径，并通过本地 `pnpm run build`
 
 ## 一、当前有几个计划
 
