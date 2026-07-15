@@ -230,3 +230,4 @@
 - 2026-07-15：比较页与指南页的 evidence panel 已统一到“可验证信号 + 真实判断”的结构，后续继续按同一模板补到未覆盖页面。
 - 2026-07-15：继续补齐 `ai-tools-for-sales-prospecting-comparison`、`ai-tools-for-marketing-comparison`、`ai-tools-for-small-business-comparison` 的 `signalCards`，把名单、渠道、品牌、运营等信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `ai-chatbot-tools-comparison`、`ai-marketing-tools-comparison`、`ai-tools-for-developers-comparison` 的 `signalCards`，把聊天、营销和开发者页的可验证信号层补齐后再做 build 验证。
+- 2026-07-15：继续补齐 `ai-model-routing-tools-comparison`、`ai-sales-tools-comparison`、`ai-automation-tools-comparison` 的 `signalCards`，把模型路由、销售和自动化页的可验证信号层补齐后再做 build 验证。

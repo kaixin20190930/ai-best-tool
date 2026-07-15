@@ -61,6 +61,25 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               : 'These decide whether it is usable long term.',
           },
         ]}
+        signalCards={[
+          {
+            label: isChinese ? '入口信号' : 'Access signal',
+            value: isChinese ? '先看是否真的统一入口' : 'Check whether access is truly unified',
+            note: isChinese ? '不要只看支持多少模型。' : 'Do not only count supported models.',
+          },
+          {
+            label: isChinese ? '回退信号' : 'Fallback signal',
+            value: isChinese ? '看失败时能否自动切换' : 'See whether it can fall back automatically',
+            note: isChinese
+              ? '生产里最关键的是失败后还能不能继续。'
+              : 'In production, the key is whether things keep working after failure.',
+          },
+          {
+            label: isChinese ? '治理信号' : 'Governance signal',
+            value: isChinese ? '看日志、限额和审计是否齐全' : 'Check logs, limits, and audits',
+            note: isChinese ? '长期上线离不开治理能力。' : 'Long-term deployment depends on governance.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

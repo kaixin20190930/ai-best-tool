@@ -61,6 +61,27 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               : 'Whether a tool survives long term depends on maintainability.',
           },
         ]}
+        signalCards={[
+          {
+            label: isChinese ? '流程信号' : 'Workflow signal',
+            value: isChinese ? '先看是否覆盖真实重复任务' : 'Check whether real repeatable tasks are covered',
+            note: isChinese ? '自动化首先要解决重复工作。' : 'Automation starts by solving repeated work.',
+          },
+          {
+            label: isChinese ? '恢复信号' : 'Recovery signal',
+            value: isChinese ? '看失败恢复和重试是否稳' : 'See whether retries and recovery are stable',
+            note: isChinese
+              ? '失败之后能不能继续跑，决定能否长期上线。'
+              : 'Whether it keeps running after failure decides long-term use.',
+          },
+          {
+            label: isChinese ? '维护信号' : 'Maintenance signal',
+            value: isChinese ? '看团队是否能长期接手' : 'Check whether a team can maintain it',
+            note: isChinese
+              ? '维护成本越高，越难留在生产流程里。'
+              : 'The higher the maintenance cost, the harder it is to keep in production.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

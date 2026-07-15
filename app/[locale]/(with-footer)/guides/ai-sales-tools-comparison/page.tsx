@@ -62,6 +62,39 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'When multiple people are involved, permissions and shared views matter a lot.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '线索信号' : 'Lead signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看能否追踪机会和阶段'
+                : 'Check whether opportunities and stages are trackable',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '销售工具首先要让线索看得住。'
+                : 'Sales tools first need to keep leads visible.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '跟进信号' : 'Follow-up signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看节奏和提醒是否顺手'
+                : 'See whether cadence and reminders feel smooth',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '持续跟进是销售工具真正的价值点。'
+                : 'Persistent follow-up is where sales tools matter most.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '协作信号' : 'Collaboration signal',
+            value:
+              locale === 'cn' || locale === 'tw' ? '看多人一起跑销售是否方便' : 'Check whether team selling is easy',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '共享视图和权限决定能不能长期用。'
+                : 'Shared views and permissions decide long-term adoption.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>
