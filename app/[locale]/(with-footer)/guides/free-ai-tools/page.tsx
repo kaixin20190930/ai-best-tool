@@ -174,6 +174,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `This page was rechecked on ${checkedAt}, and next iterations should add comments, saves, screenshots, and owner-claim signals.`,
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese ? '先看免费额度和升级门槛' : 'Check free quotas and upgrade thresholds first',
+              note: isChinese ? '免费页最怕把“免费”说得太绝对。' : 'Free pages should not make "free" sound absolute.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese
+                ? '看最近更新和评论是否还活跃'
+                : 'Check whether recent updates and comments are still active',
+              note: isChinese
+                ? '如果工具和页面都不更新，免费也不值得试。'
+                : 'If neither the tool nor the page is updated, the free tier is not worth testing.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '没有限制说明就先降级' : 'Downgrade it without clear limits',
+              note: isChinese
+                ? '免费工具不写限制，通常意味着实际体验会很快受限。'
+                : 'If a free tool does not spell out limits, the actual experience usually hits a wall fast.',
+            },
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
