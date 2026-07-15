@@ -304,6 +304,36 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Add real alert cases and notification screenshots.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '提醒信号' : 'Alert signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看提醒是否准且及时'
+                : 'Check whether alerts are accurate and timely',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '钱包监控的核心就是提醒。'
+                : 'Alerts are the core of wallet monitoring.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '异常信号' : 'Anomaly signal',
+            value:
+              locale === 'cn' || locale === 'tw' ? '看能否快速发现异常' : 'See whether anomalies are surfaced quickly',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '静态看板不如异常发现重要。'
+                : 'Static dashboards matter less than anomaly detection.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '协作信号' : 'Collaboration signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看多地址和共享是否顺手'
+                : 'Check whether multi-address and sharing feel smooth',
+            note: locale === 'cn' || locale === 'tw' ? '团队要能接得上。' : 'The workflow needs to fit the team.',
+          },
+        ]}
       />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
