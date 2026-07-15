@@ -143,6 +143,35 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Narrow the shortlist first, then validate on the official site for better conversion.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '协议信号' : 'Protocol signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看协议覆盖是否够'
+                : 'Check whether protocol coverage is sufficient',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '覆盖不够，后面的收益和流动性判断都会虚。'
+                : 'If coverage is thin, yield and liquidity judgments become shaky.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '历史信号' : 'History signal',
+            value: locale === 'cn' || locale === 'tw' ? '时间序列和趋势是否稳定' : 'Are time series and trends stable',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? 'DeFi 很多判断都依赖历史，不是只看当下。'
+                : 'Many DeFi decisions depend on history, not only the current snapshot.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '团队信号' : 'Team signal',
+            value: locale === 'cn' || locale === 'tw' ? '导出、API 和权限' : 'Exports, API, and permissions',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果要进团队流程，这些比页面花哨更重要。'
+                : 'If it needs to fit team workflows, these matter more than flashy screens.',
+          },
+        ]}
       />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>

@@ -312,6 +312,32 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Narrow the shortlist first, then validate whether it fits the analysis workflow.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '数据信号' : 'Data signal',
+            value: locale === 'cn' || locale === 'tw' ? '先看能否继续下钻' : 'Check whether it allows deeper drilling',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '只有能继续下钻，链上分析才不只是汇总页。'
+                : 'On-chain analysis only matters if you can keep drilling instead of staying on a summary page.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '流向信号' : 'Flow signal',
+            value: locale === 'cn' || locale === 'tw' ? '地址与资金流是否清楚' : 'Are addresses and fund flows clear',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '地址、路径和流向清楚，判断才会稳。'
+                : 'Clear addresses, paths, and flows make the judgment steadier.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '复用信号' : 'Reuse signal',
+            value: locale === 'cn' || locale === 'tw' ? '导出、历史和协作' : 'Exports, history, and collaboration',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '能复用才适合持续研究。'
+                : 'If it can be reused, it is suitable for recurring research.',
+          },
+        ]}
       />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>

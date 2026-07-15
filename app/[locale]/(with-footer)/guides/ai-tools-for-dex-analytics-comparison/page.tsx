@@ -135,6 +135,35 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'For team reuse, these matter more than the feature list.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '交易对信号' : 'Pair signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '是否覆盖你真正在看的池子'
+                : 'Does it cover the pools you actually watch',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '只要池子不对，分析就没有意义。'
+                : 'If the pool is wrong, the analysis is not useful.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '趋势信号' : 'Trend signal',
+            value: locale === 'cn' || locale === 'tw' ? '历史变化是否清楚' : 'Are historical changes clear',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? 'DEX 判断常常取决于趋势，而不是单点。'
+                : 'DEX decisions often depend on trends, not a single snapshot.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '输出信号' : 'Output signal',
+            value: locale === 'cn' || locale === 'tw' ? '导出、分享和 API' : 'Exports, sharing, and API',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '能不能交给团队继续用，比功能堆砌更关键。'
+                : 'Whether the team can keep using it matters more than a longer feature list.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>
