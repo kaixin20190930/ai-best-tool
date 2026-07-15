@@ -129,6 +129,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             note: locale === 'cn' || locale === 'tw' ? '补学生真实使用痕迹。' : 'Add genuine student usage signals.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '学习信号' : 'Study signal',
+            value: locale === 'cn' || locale === 'tw' ? '学习、作业、笔记' : 'Study, homework, notes',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先确认它是不是能帮学生完成真实任务。'
+                : 'Confirm it helps students finish real tasks.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '分流信号' : 'Routing signal',
+            value: locale === 'cn' || locale === 'tw' ? '分流到笔记/写作' : 'Route to note-taking/writing',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果真实需要更偏记录或表达，就转到更窄页。'
+                : 'If the real need is capture or expression, move to narrower pages.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '增量信号' : 'Increment signal',
+            value: locale === 'cn' || locale === 'tw' ? '真实作业场景、反馈' : 'Real study cases, feedback',
+            note: locale === 'cn' || locale === 'tw' ? '补学生真实使用痕迹。' : 'Add genuine student usage signals.',
+          },
+        ]}
       />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>

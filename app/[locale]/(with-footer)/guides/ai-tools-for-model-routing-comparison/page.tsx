@@ -303,6 +303,33 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Once in production, governance matters more than quick setup.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '入口信号' : 'Access signal',
+            value:
+              locale === 'cn' || locale === 'tw' ? '先看是否真能统一入口' : 'Check whether access is truly unified',
+            note: locale === 'cn' || locale === 'tw' ? '不要只看支持多少模型。' : 'Do not only count supported models.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '回退信号' : 'Fallback signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看失败时能否自动切换'
+                : 'See whether it can fall back automatically',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '生产里最关键的是失败后还能不能继续。'
+                : 'In production, the key is whether things keep working after failure.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '治理信号' : 'Governance signal',
+            value: locale === 'cn' || locale === 'tw' ? '日志、限额、审计' : 'Logs, limits, and audits',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '长期上线离不开治理能力。'
+                : 'Long-term deployment depends on governance.',
+          },
+        ]}
       />
       <section className='mx-auto mt-6 grid max-w-6xl gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

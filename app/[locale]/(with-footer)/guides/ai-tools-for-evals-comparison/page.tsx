@@ -207,6 +207,28 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Use them to strengthen page credibility.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '评分信号' : 'Scoring signal',
+            value: locale === 'cn' || locale === 'tw' ? '质量判断方式' : 'Quality judgment method',
+            note:
+              locale === 'cn' || locale === 'tw' ? '不是只看跑不跑得起来。' : 'This is not only about whether it runs.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '流程信号' : 'Workflow signal',
+            value: locale === 'cn' || locale === 'tw' ? '样本、结果、规则' : 'Samples, outputs, rules',
+            note:
+              locale === 'cn' || locale === 'tw' ? '把复盘和验收连起来。' : 'Connect review and signoff in one flow.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '增量信号' : 'Increment signal',
+            value: locale === 'cn' || locale === 'tw' ? '评论、场景、案例' : 'Comments, context, cases',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '补足 AI 内容的可信度。'
+                : 'Use them to strengthen page credibility.',
+          },
+        ]}
       />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
