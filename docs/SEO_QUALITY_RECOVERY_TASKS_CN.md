@@ -72,7 +72,7 @@ Google 不会因为内容由 AI 辅助生成就直接惩罚页面，但会压低
 | 已完成 | 输出页面质量盘点表 | 建立 noindex / 合并依据 | 每个核心 URL 都有状态、问题、下一步动作 |
 | 已完成 | 核对 sitemap URL 数量 | 确保 sitemap 只放主力页面 | 当前质量盘点总页面 157 条，可进 sitemap 27 条，仍在当前阶段可控范围内 |
 | 已完成 | 标记弱 guide / alias guide | 减少同义页面互相竞争 | 同义页明确主页面、内部页或合并页；别名页已补 noindex |
-| 进行中 | GSC 基线记录 | 后续判断优化是否有效 | 记录当前 28 天曝光、点击、CTR、Top queries；见 `docs/GSC_WEEKLY_OBSERVATION_LOG_CN.md`。汇总脚本已支持递归扫描和部分导入，等待实际 CSV |
+| 已完成 | GSC 基线记录 | 后续判断优化是否有效 | 已记录当前 28 天曝光、点击、CTR、Top queries；见 `docs/GSC_WEEKLY_OBSERVATION_LOG_CN.md`。汇总脚本已支持递归扫描和部分导入 |
 
 ## 四、P1 任务：20 个核心页面真实数据增强
 
