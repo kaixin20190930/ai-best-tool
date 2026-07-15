@@ -393,6 +393,32 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Whether it supports follow-up, organization, and recap determines real adoption.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '发现信号' : 'Discovery signal',
+            value: locale === 'cn' || locale === 'tw' ? '是否能快速打开话题' : 'Can it quickly open up a topic',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? 'Perplexity 类工具最先看的，是能不能帮你迅速进入研究入口。'
+                : 'Perplexity-style tools are first judged by whether they help you quickly enter a research topic.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '核对信号' : 'Checking signal',
+            value: locale === 'cn' || locale === 'tw' ? '来源和说法是否清楚' : 'Are sources and claims clear',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果你需要证据核对，这个维度必须够强。'
+                : 'If evidence-checking matters, this dimension has to be strong.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '研究信号' : 'Research signal',
+            value: locale === 'cn' || locale === 'tw' ? '追问、整理和复盘' : 'Follow-up, organization, and recap',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '能否持续追问和整理，决定它是不是能长期用。'
+                : 'If it supports follow-up and organization, it can stay useful long term.',
+          },
+        ]}
       />
       <GuideSubmissionPath locale={locale} ctaPrefix='perplexity_alternatives_comparison' />
     </>

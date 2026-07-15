@@ -288,6 +288,32 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'For teams, these matter more than feature count.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '系统信号' : 'System signal',
+            value: locale === 'cn' || locale === 'tw' ? '是不是系统级选择' : 'Is this a system-level choice',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果只想找单点工具，HubSpot 类替代项可能偏重。'
+                : 'If you only want a point tool, HubSpot-style alternatives can feel heavy.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '流程信号' : 'Workflow signal',
+            value: locale === 'cn' || locale === 'tw' ? '触发、分层、跟进' : 'Triggers, segmentation, follow-up',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '真正落地靠流程，不只是内容生成。'
+                : 'Real adoption depends on workflows, not just content generation.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '协作信号' : 'Team signal',
+            value: locale === 'cn' || locale === 'tw' ? '权限和记录' : 'Permissions and records',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '多人使用时这些比功能数量更重要。'
+                : 'For teams, these matter more than feature count.',
+          },
+        ]}
       />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>

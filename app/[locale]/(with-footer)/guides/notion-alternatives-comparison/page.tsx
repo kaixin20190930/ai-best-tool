@@ -392,6 +392,32 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Judge whether AI is helping you organize or reshaping the workflow itself.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '结构信号' : 'Structure signal',
+            value: locale === 'cn' || locale === 'tw' ? '内容是否好组织' : 'Is content easy to organize',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '知识库工具的核心不是能记多少，而是能不能持续整理。'
+                : 'The real value is not how much it can store, but whether it stays organized over time.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '协作信号' : 'Collaboration signal',
+            value: locale === 'cn' || locale === 'tw' ? '多人编辑是否顺手' : 'Is multi-user editing smooth',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果团队要一起用，权限和共享会很关键。'
+                : 'If a team uses it together, permissions and sharing become critical.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? 'AI 信号' : 'AI signal',
+            value: locale === 'cn' || locale === 'tw' ? '辅助还是主角' : 'Helper or main feature',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '判断 AI 是在帮你整理，还是在重塑工作流。'
+                : 'Judge whether AI is organizing for you or reshaping the workflow itself.',
+          },
+        ]}
       />
       <GuideSubmissionPath locale={locale} ctaPrefix='notion_alternatives_comparison' />
     </>
