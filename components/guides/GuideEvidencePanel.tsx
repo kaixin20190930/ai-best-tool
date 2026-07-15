@@ -29,6 +29,30 @@ export default function GuideEvidencePanel({
   signalCards,
 }: GuideEvidencePanelProps) {
   const isChinese = locale === 'cn' || locale === 'tw';
+  const defaultSignalCards: SignalCard[] = [
+    {
+      label: isChinese ? '价格信号' : 'Pricing signal',
+      value: isChinese ? '先看免费层、席位和导出限制' : 'Check free tier, seats, and export caps first',
+      note: isChinese
+        ? '如果关键能力被锁在更高价层，先把它记成需要进一步核对。'
+        : 'If key capabilities are locked behind higher tiers, mark it for extra review.',
+    },
+    {
+      label: isChinese ? '更新信号' : 'Freshness signal',
+      value: isChinese
+        ? '看最近是否还在更新案例和整合'
+        : 'Check whether cases and integrations are still being updated',
+      note: isChinese
+        ? '页面内容和产品更新都越新，越像真实在维护。'
+        : 'Fresh page content and product updates both suggest ongoing maintenance.',
+    },
+    {
+      label: isChinese ? '风险信号' : 'Risk signal',
+      value: isChinese ? '没有真实样本就先降级' : 'Downgrade it without real samples',
+      note: isChinese ? '功能表不如真实案例可靠。' : 'Feature lists are less reliable than real cases.',
+    },
+  ];
+  const resolvedSignalCards = signalCards && signalCards.length > 0 ? signalCards.slice(0, 3) : defaultSignalCards;
 
   return (
     <section className='mt-8 rounded-[20px] border border-emerald-200 bg-emerald-50/70 p-6 shadow-sm lg:p-8'>
@@ -58,9 +82,9 @@ export default function GuideEvidencePanel({
         ))}
       </div>
 
-      {signalCards && signalCards.length > 0 ? (
+      {resolvedSignalCards.length > 0 ? (
         <div className='mt-5 grid gap-3 md:grid-cols-3'>
-          {signalCards.slice(0, 3).map((signal) => (
+          {resolvedSignalCards.map((signal) => (
             <div
               key={signal.label}
               className={`rounded-2xl border bg-white p-4 shadow-sm ${signal.tone || 'border-cyan-200'}`}

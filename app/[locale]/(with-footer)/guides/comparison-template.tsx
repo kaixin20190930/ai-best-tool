@@ -823,6 +823,31 @@ export function ComparisonPage({
                 : `This page was rechecked on ${checkedAt}, and the next step is to turn it into a real decision aid.`,
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese ? '先看免费层、席位和导出限制' : 'Check free tier, seats, and export caps first',
+              note: isChinese
+                ? '对比页里最容易隐藏成本的通常是协作、配额和更高层级功能。'
+                : 'The easiest costs to miss are usually collaboration, quotas, and higher-tier features.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese
+                ? '看最近是否还在补功能、案例和整合'
+                : 'Check whether features, cases, and integrations are still being updated',
+              note: isChinese
+                ? '如果最近更新停在很久以前，优先级就该下降。'
+                : 'If the last update is old, priority should drop.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '没有真实样本就先降级' : 'Downgrade it without real samples',
+              note: isChinese
+                ? '功能列表不如真实比较样本可靠。'
+                : 'Feature lists are less reliable than real comparison samples.',
+            },
+          ]}
         />
 
         <section className='mt-8 rounded-[18px] border border-cyan-100 bg-cyan-50/70 p-6 shadow-sm lg:p-8'>
