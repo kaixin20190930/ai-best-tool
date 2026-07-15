@@ -224,6 +224,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '先确认内容创作工具在真实工作流里的覆盖范围，再决定要不要继续看内容创作对比。'
             : 'Check whether these tools really cover your content workflow before continuing to compare content creation options.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认脚本、封面、改写和发布这些步骤能不能连起来。',
+                '再看模板、协作和品牌一致性，判断是否适合长期生产。',
+                '最后回到真实内容案例和评论，确认值不值得继续索引。',
+              ]
+            : [
+                'First confirm whether scripting, thumbnails, rewriting, and publishing can connect smoothly.',
+                'Then check templates, collaboration, and brand consistency for long-term production.',
+                'Finally return to real content cases and comments to judge whether the page deserves continued indexing.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '工作流连接' : 'Workflow fit',
@@ -262,7 +275,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按真实内容创作路径重新核对，保留脚本、封面、改写和发布入口。'

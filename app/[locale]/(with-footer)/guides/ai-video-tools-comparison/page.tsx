@@ -318,6 +318,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '先确认视频工具在剪辑、生成、配音和短视频营销里的真实覆盖，再继续看对比。'
               : 'Check whether these tools actually cover editing, generation, voiceover, and short-form marketing before continuing.'
           }
+          decisionSteps={
+            isChinese
+              ? [
+                  '先确认主流程是不是剪辑、生成还是配音。',
+                  '再看长视频和短视频的编辑、批量和协作是否顺手。',
+                  '最后回到真实视频案例和评论，判断能不能长期用。',
+                ]
+              : [
+                  'First confirm whether the main job is editing, generation, or voiceover.',
+                  'Then check editing, batch work, and collaboration for long- and short-form video.',
+                  'Finally return to real video cases and comments to judge long-term use.',
+                ]
+          }
           items={[
             {
               label: isChinese ? '工作流' : 'Workflow',
@@ -421,7 +434,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
                 ? '这页已按真实视频工作流重新核对，保留剪辑、生成和配音入口。'

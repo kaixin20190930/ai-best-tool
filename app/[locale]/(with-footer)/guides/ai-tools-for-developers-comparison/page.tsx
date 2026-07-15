@@ -284,6 +284,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '开发者工具的比较重点不是功能数，而是能否把编码、调试、协作和工作流整合到一个顺手的链路里。'
             : 'Developer tools should be judged less by feature count and more by whether they integrate coding, debugging, collaboration, and workflow into something actually smooth.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认它能不能接进你真实的编码和调试链路。',
+                '再看协作、权限和仓库上下文是否顺手。',
+                '最后回到真实开发案例、反馈和稳定性，判断能不能长期依赖。',
+              ]
+            : [
+                'First confirm whether it fits your real coding and debugging chain.',
+                'Then check collaboration, permissions, and repo context fit.',
+                'Finally return to real developer cases, feedback, and stability to judge long-term reliance.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '编码效率' : 'Coding efficiency',
@@ -319,7 +332,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按真实开发者工作流重新核对，保留编码、调试和协作入口。'

@@ -304,6 +304,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '先确认聊天机器人在问答、写作、知识库和协作里的真实覆盖，再继续比较。'
               : 'Check whether these chatbots truly cover Q&A, writing, knowledge base, and collaboration before continuing.'
           }
+          decisionSteps={
+            isChinese
+              ? [
+                  '先确认它是不是你真正会用的入口，而不是只会聊天。',
+                  '再看知识库、写作和协作是否顺手。',
+                  '最后回到真实聊天场景和评论，判断值不值得长期用。',
+                ]
+              : [
+                  'First confirm it is a real entry point for your workflow instead of only a chat surface.',
+                  'Then check knowledge base, writing, and collaboration fit.',
+                  'Finally return to real chat scenarios and comments to judge long-term use.',
+                ]
+          }
           items={[
             {
               label: isChinese ? '主用途' : 'Primary use',
@@ -330,7 +343,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
                 ? '这页已按真实聊天决策路径重新核对，保留问答、写作、知识库和协作入口。'

@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -235,6 +236,51 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        checkedAt='2026-07-15'
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? 'Prompt 测试对比页已经对齐“先验证，再扩大”的判断顺序。'
+            : 'This prompt-testing comparison page now follows a verify-first, expand-later order.'
+        }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? ['先确认评估目标', '再看版本与协作', '最后决定是否继续点开']
+            : [
+                'Confirm the evaluation goal first',
+                'Then check versioning and collaboration',
+                'Only then decide whether to continue',
+              ]
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '评估目标' : 'Evaluation goal',
+            value: locale === 'cn' || locale === 'tw' ? '对比 / 回归 / 验收' : 'Comparison / regression / acceptance',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '不同目标会直接改变你该看哪一类工具。'
+                : 'Different goals change which tools matter immediately.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '版本管理' : 'Versioning',
+            value: locale === 'cn' || locale === 'tw' ? '可回溯可复盘' : 'Traceable and reviewable',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '没有版本链路，prompt 测试很容易变成“今天觉得行”。'
+                : 'Without version history, prompt testing becomes a “seems fine today” exercise.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '后续动作' : 'Next action',
+            value:
+              locale === 'cn' || locale === 'tw' ? '先看榜单再验证官网' : 'Check the ranking before the official site',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先缩小 shortlist，再进入官网看是否真能落地。'
+                : 'Narrow the shortlist first, then validate whether it truly fits on the official site.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
@@ -305,7 +351,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按当前比较页的判断标准重新核对。'

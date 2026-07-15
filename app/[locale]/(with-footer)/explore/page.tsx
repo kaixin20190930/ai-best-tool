@@ -40,10 +40,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function Page({ params, searchParams }: PageProps) {
   // Fetch categories and tags for the filter panel
-  const categories = await getAllCategories(true);
-  const tags = await getAllTags('count');
+  const [categoriesResult, tagsResult] = await Promise.allSettled([getAllCategories(true), getAllTags('count')]);
+  const categories = categoriesResult.status === 'fulfilled' ? categoriesResult.value : [];
+  const tags = tagsResult.status === 'fulfilled' ? tagsResult.value : [];
   const isChinese = params.locale === 'cn' || params.locale === 'tw';
-  const checkedAt = '2026-07-14';
+  const checkedAt = '2026-07-15';
   const taskFirstEntryPoints = [
     {
       href: '/guides/ai-writing-tools',
@@ -97,6 +98,16 @@ export default async function Page({ params, searchParams }: PageProps) {
               : 'If you are still orienting, start filtering here. If you already know the direction, jump straight to new additions, productivity, or Web3.'}
           </p>
           <div className='mt-5 rounded-[18px] border border-slate-200 bg-slate-50 p-3 shadow-sm'>
+            <div className='mb-3 rounded-2xl border border-cyan-100 bg-cyan-50/70 px-4 py-3'>
+              <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+                {isChinese ? '先按任务找' : 'Start with a task'}
+              </p>
+              <p className='mt-1 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '比如写内容、做开发、做研究、做视频或看 Web3，再继续往下筛。'
+                  : 'For example: write content, build or code, do research, create video, or work on Web3.'}
+              </p>
+            </div>
             <Search
               placeholder={isChinese ? '搜索工具、场景或产品名...' : 'Search tools, use cases, or product names...'}
               showSuggestions
@@ -126,6 +137,45 @@ export default async function Page({ params, searchParams }: PageProps) {
                   <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
                 </Link>
               ))}
+            </div>
+          </div>
+          <div className='mt-5 grid gap-3 md:grid-cols-3'>
+            <div className='rounded-xl border border-slate-200 bg-white p-4 shadow-sm'>
+              <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                {isChinese ? '最近核查' : 'Last checked'}
+              </p>
+              <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '探索页的筛选、入口和目录规模刚刚复核过。'
+                  : 'Explore filtering, entry points, and directory scale were recently reviewed.'}
+              </p>
+            </div>
+            <div className='rounded-xl border border-slate-200 bg-white p-4 shadow-sm'>
+              <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                {isChinese ? '核心用途' : 'Primary purpose'}
+              </p>
+              <p className='mt-2 text-lg font-bold text-slate-950'>
+                {isChinese ? '先按任务筛，再看目录' : 'Filter by task before browsing'}
+              </p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '避免用户只看到一个大列表，先给他们明确的切入点。'
+                  : 'Avoid a flat list by giving users a clear starting point first.'}
+              </p>
+            </div>
+            <div className='rounded-xl border border-slate-200 bg-white p-4 shadow-sm'>
+              <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                {isChinese ? '后续补强' : 'Next enrichment'}
+              </p>
+              <p className='mt-2 text-lg font-bold text-slate-950'>
+                {isChinese ? '热门筛选、真实讨论、owner 信号' : 'Popular filters, real discussions, owner signals'}
+              </p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '让探索页更像决策中枢，而不是静态目录。'
+                  : 'Make Explore feel like a decision hub, not a static directory.'}
+              </p>
             </div>
           </div>
           <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
@@ -189,8 +239,8 @@ export default async function Page({ params, searchParams }: PageProps) {
           checkedAt={checkedAt}
           scope={
             isChinese
-              ? '探索页要同时交代筛选逻辑、真实更新和下一步去哪里，而不是只给一张搜索表。'
-              : 'The explore page should explain filtering logic, freshness, and the next step instead of acting like a plain search table.'
+              ? '探索页要同时交代筛选逻辑、最近核查和下一步去哪里，而不是只给一张搜索表。'
+              : 'The explore page should explain filtering logic, last check date, and the next step instead of acting like a plain search table.'
           }
           items={[
             {

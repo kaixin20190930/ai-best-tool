@@ -182,6 +182,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '销售拓客对比页要围绕名单来源、个性化外联、触达节奏和回应率来判断，不要只看自动化程度。它会继续保留索引，但把更窄的获客和销售路径分层。'
             : 'This sales prospecting comparison page should focus on list sourcing, outreach personalization, cadence, and response quality instead of automation level alone. Keep it indexable, but separate narrower lead-gen and sales paths.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认它是不是能帮你找到对的人，不要只看自动化。',
+                '再看触达节奏、个性化和回复质量是否顺手。',
+                '最后回到真实拓客案例和评论，判断长期是否值得用。',
+              ]
+            : [
+                'First confirm it helps you find the right people instead of only automating outreach.',
+                'Then check cadence, personalization, and response quality.',
+                'Finally return to real prospecting cases and comments to judge whether it is worth using long term.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '验证重点' : 'Validation focus',
@@ -211,7 +224,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按真实销售拓客路径重新核对，保留名单、触达和回应入口。'

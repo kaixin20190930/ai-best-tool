@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -311,7 +312,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按当前比较页的判断标准重新核对。'
@@ -345,6 +346,53 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
         </div>
       </section>
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? 'Adobe 替代页要先看创作套件、素材类型和团队交付，而不是只看单点生成。'
+            : 'Adobe alternatives should be judged around creative suites, asset types, and team delivery instead of single-feature generation.'
+        }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认你要的是整套创作流程还是单点工具。',
+                '再看素材类型、编辑能力和协作是否顺手。',
+                '最后结合真实项目和反馈判断是否长期保留。',
+              ]
+            : [
+                'First confirm whether you need a full creative workflow or a point solution.',
+                'Then check asset type, editing ability, and collaboration.',
+                'Finally use real projects and feedback to decide whether to keep it indexed.',
+              ]
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '创作套件' : 'Creative suite',
+            value: locale === 'cn' || locale === 'tw' ? '整套还是单点' : 'Suite or point tool',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '整套流程和单点能力的差异很大。'
+                : 'The difference between full workflow and one feature is huge.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '素材类型' : 'Asset type',
+            value: locale === 'cn' || locale === 'tw' ? '图、视频还是品牌资产' : 'Images, video, or brand assets',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '不同资产类型会导向不同选择。'
+                : 'Different asset types lead to different choices.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '交付协作' : 'Delivery collaboration',
+            value: locale === 'cn' || locale === 'tw' ? '团队能否复用' : 'Can the team reuse it',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '最后看它能不能进团队交付流程。'
+                : 'Ultimately, it has to fit the team delivery process.',
+          },
+        ]}
+      />
       <GuideSubmissionPath locale={locale} ctaPrefix='adobe_alternatives_comparison' />
     </>
   );

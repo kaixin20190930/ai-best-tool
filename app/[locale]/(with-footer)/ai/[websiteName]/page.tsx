@@ -1670,7 +1670,12 @@ export default async function Page({
     const compareAxes = decisionCompareAxesOverride.length > 0 ? decisionCompareAxesOverride : [comparisonSummary];
     const nextComparisonLinks = getNextComparisonLinks(categorySlug, dbTool?.tags || [], locale);
     const primaryComparisonLink = nextComparisonLinks[0] || null;
-    const checkedAt = '2026-07-14';
+    const checkedAt = '2026-07-15';
+    const checkedAtLabel = new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    }).format(new Date(`${checkedAt}T00:00:00Z`));
     let decisionBestFitText =
       locale === 'cn' ? '先看这个工具是不是匹配你的场景' : 'Check whether this tool matches your workflow first';
     if (bestFitList.length > 0) {
@@ -1721,6 +1726,13 @@ export default async function Page({
         : `${commentCount} comments can surface real-world trade-offs quickly.`;
     }
     const trustSnapshotItems = [
+      {
+        label: isChinese ? '最近核查' : 'Last checked',
+        value: checkedAtLabel,
+        note: isChinese
+          ? '这次复核不是单纯看页面文本，而是把官网、截图、评论和认领信号一起重新对齐。'
+          : 'This review rechecks the official site, screenshots, comments, and claim signals together.',
+      },
       {
         label: isChinese ? 'Owner 状态' : 'Owner status',
         value: claimLabel,
@@ -1907,18 +1919,18 @@ export default async function Page({
                   checkedAt={checkedAt}
                   scope={
                     isChinese
-                      ? '这页优先说明这个工具到底适合什么真实工作流，并把评分、讨论、收藏、点击和更新时间一起摆出来，而不是只展示营销式简介。'
-                      : 'This page focuses on what real workflow the tool fits and surfaces ratings, discussions, saves, clicks, and freshness instead of only a marketing-style summary.'
+                      ? '这页优先说明这个工具到底适合什么真实工作流，并把最近核查、评分、讨论、收藏、点击和更新时间一起摆出来，而不是只展示营销式简介。'
+                      : 'This page focuses on what real workflow the tool fits and surfaces last checked, ratings, discussions, saves, clicks, and freshness instead of only a marketing-style summary.'
                   }
                   items={[
                     {
                       label: isChinese ? '验证范围' : 'Checked scope',
                       value: isChinese
-                        ? '用途、评论、截图、更新 + 互动'
-                        : 'Use case, comments, screenshots, freshness + engagement',
+                        ? '最近核查、用途、评论、截图 + 互动'
+                        : 'Last checked, use case, comments, screenshots + engagement',
                       note: isChinese
-                        ? `当前 ${ratingStats.ratingCount} 条评分、${commentCount} 条讨论、${toolStats.favoriteCount} 次收藏。`
-                        : `${ratingStats.ratingCount} ratings, ${commentCount} comments, and ${toolStats.favoriteCount} saves are visible right now.`,
+                        ? `当前 ${ratingStats.ratingCount} 条评分、${commentCount} 条讨论、${toolStats.favoriteCount} 次收藏，${checkedAtLabel} 已复核。`
+                        : `${ratingStats.ratingCount} ratings, ${commentCount} comments, and ${toolStats.favoriteCount} saves are visible right now, last checked on ${checkedAtLabel}.`,
                     },
                     {
                       label: isChinese ? '索引策略' : 'Indexing strategy',
@@ -2774,13 +2786,15 @@ export default async function Page({
           </div>
 
           {toolId && (
-            <section id='comments' className='mx-auto mt-24 max-w-7xl scroll-mt-32 px-4 pb-12 lg:mt-28 lg:px-6'>
+            <section id='comments' className='mx-auto mt-20 max-w-7xl scroll-mt-32 px-4 pb-12 lg:mt-24 lg:px-6'>
               <Separator className='mb-10 border-t border-slate-200' />
               <div className='rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5 lg:p-6'>
                 <div className='flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between'>
                   <div className='max-w-2xl'>
                     <h3 className='text-base font-semibold text-slate-900'>
-                      {locale === 'cn' ? '参与讨论，看看真实反馈' : 'Join the discussion and follow updates'}
+                      {locale === 'cn'
+                        ? '先看官网，再回来写真实反馈'
+                        : 'Open the official site, then come back with real feedback'}
                     </h3>
                     <p className='mt-1 text-sm leading-6 text-slate-600'>
                       {locale === 'cn'
@@ -2810,10 +2824,43 @@ export default async function Page({
                     )}
                   </div>
                 </div>
-                <div className='mt-4 rounded-xl border border-cyan-100 bg-cyan-50 px-4 py-3 text-sm leading-6 text-cyan-900'>
-                  {locale === 'cn'
-                    ? '先看官网和相似工具，再回来写真实体验：适合什么场景、哪里最好用、有什么坑，都会帮到后来的人。'
-                    : 'Open the official site and compare similar tools first, then come back and share what really worked, what didn’t, and what to watch out for.'}
+                <div className='mt-4 grid gap-3 rounded-xl border border-slate-200 bg-white p-4 md:grid-cols-3'>
+                  <div className='rounded-lg bg-slate-50 p-4'>
+                    <p className='text-sm font-semibold text-slate-950'>
+                      {locale === 'cn' ? '先看官网和相似工具' : 'Start with the official site and similar tools'}
+                    </p>
+                    <p className='mt-2 text-sm leading-6 text-slate-600'>
+                      {locale === 'cn'
+                        ? '先确认产品真的解决你的任务，再回来留下反馈。'
+                        : 'Confirm the product really solves the job before you leave feedback.'}
+                    </p>
+                  </div>
+                  <div className='rounded-lg bg-slate-50 p-4'>
+                    <p className='text-sm font-semibold text-slate-950'>
+                      {locale === 'cn' ? '如果这是你的工具' : 'If this is your tool'}
+                    </p>
+                    <p className='mt-2 text-sm leading-6 text-slate-600'>
+                      {locale === 'cn'
+                        ? '先认领条目，再补评论、官网链接和最新更新说明。'
+                        : 'Claim the listing first, then add comments, the official link, and the latest update notes.'}
+                    </p>
+                    <Link
+                      href={`/${locale}/developer/listing?intent=claim`}
+                      className='mt-3 inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-2 text-sm font-semibold text-white hover:bg-cyan-800'
+                    >
+                      {locale === 'cn' ? '去认领条目' : 'Claim listing'}
+                    </Link>
+                  </div>
+                  <div className='rounded-lg bg-slate-50 p-4'>
+                    <p className='text-sm font-semibold text-slate-950'>
+                      {locale === 'cn' ? '如果你只是用户' : 'If you are a user'}
+                    </p>
+                    <p className='mt-2 text-sm leading-6 text-slate-600'>
+                      {locale === 'cn'
+                        ? '先留评论和真实体验，再回到相似工具和对比页继续筛选。'
+                        : 'Leave a real comment, then return to similar tools and comparison pages to keep narrowing the shortlist.'}
+                    </p>
+                  </div>
                 </div>
                 <div className='mt-6'>
                   <CommentList

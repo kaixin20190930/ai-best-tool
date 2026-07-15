@@ -264,6 +264,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '钱包监控对比页要围绕提醒质量、异常发现、关系线索和团队协作来判断，不要把它当成单纯看板比较。这个页继续可索引，但会把钱包研究和资产追踪路径分层。'
             : 'This wallet monitoring comparison page should judge alert quality, anomaly detection, relationship clues, and team collaboration instead of treating it like a generic dashboard comparison. Keep it indexable, but separate wallet research and portfolio tracking paths.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认提醒和异常是不是足够清楚，不要只看看板。',
+                '再看关系线索、协作和复盘能力是否顺手。',
+                '最后回到真实监控案例和反馈，判断能不能长期依赖。',
+              ]
+            : [
+                'First confirm alerts and anomalies are clear instead of judging by the dashboard alone.',
+                'Then check relationship clues, collaboration, and review workflows.',
+                'Finally return to real monitoring cases and feedback to judge long-term reliance.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '验证重点' : 'Validation focus',
@@ -362,7 +375,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按当前比较页的判断标准重新核对。'

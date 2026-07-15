@@ -287,6 +287,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '这页先看真实可验证的 Agent 工作流信号，再继续判断是否真的需要编排、执行和治理层。'
             : 'This page looks at verifiable agent-workflow signals first, then helps you decide whether orchestration, execution, and governance are truly needed.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认它是不是能跑完整任务闭环，而不是只会单轮输出。',
+                '再看上下文、状态和治理能力是否能支撑多人或长期使用。',
+                '最后回到真实 Agent 案例和反馈，判断是不是值得继续索引。',
+              ]
+            : [
+                'First confirm it can complete full task loops instead of only producing a single response.',
+                'Then check whether context, state, and governance support multi-person or long-term use.',
+                'Finally return to real agent cases and feedback to judge whether the page deserves continued indexing.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '编排能力' : 'Orchestration',
@@ -319,7 +332,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按真实 Agent 工作流重新核对，保留编排、状态和治理入口。'

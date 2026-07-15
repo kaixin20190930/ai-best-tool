@@ -1,3 +1,4 @@
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 
 import ApiObservabilityComparisonPage, {
@@ -5,7 +6,10 @@ import ApiObservabilityComparisonPage, {
 } from '../ai-tools-for-api-observability-comparison/page';
 
 export function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
-  return generateApiObservabilityComparisonMetadata({ params: { locale } });
+  return {
+    ...generateApiObservabilityComparisonMetadata({ params: { locale } }),
+    ...getNoindexMetadata(),
+  };
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
@@ -20,6 +24,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           isChinese
             ? '这页先看真实可验证的 API 可观测信号，再继续判断是否需要日志、成本和质量追踪。'
             : 'This page looks at verifiable API observability signals first, then helps you decide whether logs, cost, and quality tracking are needed.'
+        }
+        decisionSteps={
+          isChinese
+            ? [
+                '先确认日志和失败原因是否清楚，不要只看面板好不好看。',
+                '再看成本追踪、告警和质量指标是否能覆盖生产需求。',
+                '最后回到真实 API 案例和反馈，判断能不能长期依赖。',
+              ]
+            : [
+                'First confirm logs and failure reasons are visible instead of judging only by dashboard polish.',
+                'Then check whether cost tracking, alerts, and quality metrics cover production needs.',
+                'Finally return to real API cases and feedback to judge long-term reliance.',
+              ]
         }
         items={[
           {
@@ -50,7 +67,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按当前比较页的判断标准重新核对。'

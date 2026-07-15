@@ -249,6 +249,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '这页先看真实可验证的 Gemini 信号，再继续判断是否真的需要 Google 生态、移动入口和通用聊天体验。'
             : 'This page looks at verifiable Gemini-alternative signals first, then helps you decide whether Google ecosystem fit, mobile entry, and general-purpose chat are truly needed.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认 Google 生态是否真的是核心需求。',
+                '再看移动入口、通用聊天和稳定性是否顺手。',
+                '最后回到真实使用案例和评论，判断能不能长期依赖。',
+              ]
+            : [
+                'First confirm whether Google ecosystem fit is really the core need.',
+                'Then check mobile entry, general chat, and stability.',
+                'Finally return to real use cases and comments to judge long-term reliance.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '生态整合' : 'Ecosystem fit',
@@ -281,7 +294,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按真实 Gemini 替代路径重新核对，保留生态、移动和长期使用入口。'

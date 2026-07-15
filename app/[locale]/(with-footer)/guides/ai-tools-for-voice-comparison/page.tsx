@@ -329,6 +329,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '这页先看真实可验证的语音使用信号，再继续判断是配音、转写还是对话助手更值得投入。'
             : 'This page looks at verifiable voice-workflow signals first, then helps you decide whether dubbing, transcription, or conversational voice deserves more focus.'
         }
+        decisionSteps={
+          isChinese
+            ? [
+                '先确认音频、语言、导出和接入方式是否匹配你的工作流。',
+                '再看配音、转写和对话能力哪一层更关键。',
+                '最后回到真实语音案例和评论，判断值不值得长期用。',
+              ]
+            : [
+                'First confirm audio, language, export, and integration fit your workflow.',
+                'Then check whether dubbing, transcription, or conversation is the key layer.',
+                'Finally return to real voice cases and comments to judge long-term use.',
+              ]
+        }
         items={[
           {
             label: isChinese ? '输入与输出' : 'Input and output',
@@ -358,7 +371,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {isChinese
               ? '这页已按真实语音工作流重新核对，保留配音、转写和对话入口。'

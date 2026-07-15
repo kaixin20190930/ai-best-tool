@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -241,6 +242,53 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? 'Jasper 替代页要围绕品牌文案、活动素材和持续产出能力来判断，不要只看是不是能快速起稿。'
+            : 'Jasper alternatives should be judged around brand copy, campaign assets, and sustained output instead of quick drafting alone.'
+        }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认你是不是要做品牌文案，而不是只写几句。',
+                '再看活动素材、模板和批量产出是否顺手。',
+                '最后回到真实营销案例和评论，判断能不能长期用。',
+              ]
+            : [
+                'First confirm you need brand copy rather than a few lines of text.',
+                'Then check campaign assets, templates, and bulk output fit.',
+                'Finally return to real marketing cases and comments to judge long-term use.',
+              ]
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '品牌一致性' : 'Brand consistency',
+            value: locale === 'cn' || locale === 'tw' ? '语气和活动素材统一' : 'Voice and campaign assets stay aligned',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果品牌控制不稳，替代意义会下降。'
+                : 'If brand control is weak, the comparison loses value.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '起稿与批量' : 'Drafting and bulk output',
+            value: locale === 'cn' || locale === 'tw' ? '是否能持续产出' : 'Can it sustain output',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '营销场景更看重稳定产出。'
+                : 'Marketing work cares a lot about sustained production.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '工作流接入' : 'Workflow fit',
+            value: locale === 'cn' || locale === 'tw' ? '能否进内容流程' : 'Fits the content workflow',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '要能接上团队的真实生产流程。'
+                : 'It needs to plug into the team’s real production flow.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
@@ -311,7 +359,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按当前比较页的判断标准重新核对。'

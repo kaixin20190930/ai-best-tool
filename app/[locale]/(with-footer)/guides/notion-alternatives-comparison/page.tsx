@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -311,7 +312,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按当前比较页的判断标准重新核对。'
@@ -345,6 +346,53 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
         </div>
       </section>
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? 'Notion 替代页要先看知识库、文档协作和工作区结构，不要只看界面干净不干净。'
+            : 'Notion alternatives should be judged around knowledge bases, document collaboration, and workspace structure instead of just visual cleanliness.'
+        }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认你要的是知识库还是轻量文档。',
+                '再看协作、权限和复用是否顺手。',
+                '最后结合真实案例和反馈判断是否长期使用。',
+              ]
+            : [
+                'First confirm whether you need a knowledge base or lightweight docs.',
+                'Then check collaboration, permissions, and reusability.',
+                'Finally use real cases and feedback to judge long-term use.',
+              ]
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '知识库结构' : 'Knowledge-base structure',
+            value: locale === 'cn' || locale === 'tw' ? '能否长期组织内容' : 'Can it organize content long term',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果结构不稳，后面找资料会很痛。'
+                : 'If the structure is weak, retrieval becomes painful later.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '协作与权限' : 'Collaboration and permissions',
+            value: locale === 'cn' || locale === 'tw' ? '多人编辑是否顺手' : 'Is multi-user editing smooth',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '团队一起用时，权限和共享决定体验。'
+                : 'When teams use it together, permissions and sharing define the experience.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? 'AI 协作' : 'AI collaboration',
+            value: locale === 'cn' || locale === 'tw' ? '是辅助还是主角' : 'Helper or main feature',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '最后判断 AI 是在帮你整理，还是在重塑工作流。'
+                : 'Judge whether AI is helping you organize or reshaping the workflow itself.',
+          },
+        ]}
+      />
       <GuideSubmissionPath locale={locale} ctaPrefix='notion_alternatives_comparison' />
     </>
   );

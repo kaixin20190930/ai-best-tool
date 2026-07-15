@@ -1,6 +1,6 @@
 # SEO 页面质量盘点表
 
-更新时间：2026-07-14
+更新时间：2026-07-15
 
 这份表由 `pnpm exec tsx scripts/seo-quality-inventory.ts` 生成，用来辅助判断页面是否应该继续索引、保持内部流量，或进入 noindex / 合并候选。
 

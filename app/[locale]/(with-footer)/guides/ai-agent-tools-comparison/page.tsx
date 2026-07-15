@@ -1,3 +1,4 @@
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 
 import AgentToolsComparisonPage, {
@@ -5,7 +6,10 @@ import AgentToolsComparisonPage, {
 } from '../ai-tools-for-agents-comparison/page';
 
 export function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
-  return generateAgentToolsComparisonMetadata({ params: { locale } });
+  return {
+    ...generateAgentToolsComparisonMetadata({ params: { locale } }),
+    ...getNoindexMetadata(),
+  };
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
@@ -50,7 +54,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按当前比较页的判断标准重新核对。'

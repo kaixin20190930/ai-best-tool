@@ -340,6 +340,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? 'Web3 工具比较最重要的是数据可信度、链上覆盖和研究流程，而不是单纯谁的界面更花。'
             : 'Web3 tool comparison should focus on data trustworthiness, on-chain coverage, and research workflow rather than just who has the flashiest UI.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认数据来源和可验证性，别先被界面带偏。',
+                '再看链上覆盖、告警和研究工作流是否真的顺手。',
+                '最后回到真实链上案例和评论，判断能不能长期信任。',
+              ]
+            : [
+                'First confirm data sources and verifiability instead of getting distracted by UI.',
+                'Then check on-chain coverage, alerts, and whether the research workflow feels smooth.',
+                'Finally return to real chain cases and comments to judge long-term trust.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '数据可信度' : 'Data trust',
@@ -376,7 +389,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按真实 Web3 研究路径重新核对，保留数据、覆盖和研究入口。'

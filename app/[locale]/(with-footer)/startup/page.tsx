@@ -1,10 +1,10 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 
+import { generateBreadcrumbSchema, generateOrganizationSchema } from '@/lib/seo/schema';
 import { formatTime } from '@/lib/utils/timeUtils';
 import Faq from '@/components/Faq';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
-import { generateBreadcrumbSchema } from '@/lib/seo/schema';
 
 import DesktopTable from './DesktopTable';
 import MobileTable from './MobileTable';
@@ -18,10 +18,17 @@ export default function Page() {
     { name: 'Home', url: baseUrl },
     { name: 'Startup', url: `${baseUrl}/startup` },
   ]);
+  const organizationSchema = generateOrganizationSchema({
+    name: 'AI Best Tool',
+    url: baseUrl,
+    logo: `${baseUrl}/images/aibesttool.png`,
+    description: 'AI Best Tool startup directory and launch board.',
+  });
 
   return (
     <>
       <StructuredDataServer data={breadcrumbSchema} />
+      <StructuredDataServer data={organizationSchema} />
       <div className='theme-page flex flex-col'>
         <div className='my-5 flex flex-col text-center lg:mx-auto lg:my-10 lg:gap-1'>
           <h1 className='bg-clip-text text-2xl font-bold text-slate-950 lg:h-[56px] lg:text-5xl'>{t('title')}</h1>

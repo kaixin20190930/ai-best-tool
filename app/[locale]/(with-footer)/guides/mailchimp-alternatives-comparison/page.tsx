@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -241,6 +242,53 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? 'Mailchimp 替代页要围绕邮件营销、自动化和受众管理来判断，不要只看生成文案的能力。'
+            : 'Mailchimp alternatives should be judged around email marketing, automation, and audience management instead of copy generation alone.'
+        }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认你是不是在做邮件触达和自动化。',
+                '再看受众管理、触发和长期营销流程是否顺手。',
+                '最后回到真实邮件案例和评论，判断能不能长期用。',
+              ]
+            : [
+                'First confirm whether you are running email outreach and automation.',
+                'Then check audience management, triggers, and long-term marketing flow fit.',
+                'Finally return to real email cases and comments to judge long-term use.',
+              ]
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '邮件触达' : 'Email delivery',
+            value: locale === 'cn' || locale === 'tw' ? '是否顺手发和管' : 'Can it send and manage cleanly',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '邮件触达是这类工具的第一层。'
+                : 'Email delivery is the first layer for this category.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '自动化与分群' : 'Automation and segmentation',
+            value: locale === 'cn' || locale === 'tw' ? '触发与受众管理' : 'Triggers and audience control',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '真正能长期用的会把流程串起来。'
+                : 'The ones that last usually connect the workflow.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '长期使用' : 'Long-term use',
+            value: locale === 'cn' || locale === 'tw' ? '协作与系统接入' : 'Collaboration and system fit',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '要能接上 CRM 和团队流程。'
+                : 'It needs to fit CRM and team workflows.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
@@ -311,7 +359,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按当前比较页的判断标准重新核对。'

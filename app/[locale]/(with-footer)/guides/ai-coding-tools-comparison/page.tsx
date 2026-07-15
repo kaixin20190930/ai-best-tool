@@ -7,6 +7,7 @@ import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import { toolToListRow } from '@/lib/services/toolPresenter';
 import { getTools } from '@/lib/services/tools';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -374,6 +375,50 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             })}
           </div>
         </section>
+        <GuideEvidencePanel
+          locale={locale}
+          scope={
+            isChinese
+              ? '编程工具对比要先判断你真正要解决的是补全、调试还是重构，再决定哪类工具值得进入 shortlist。'
+              : 'Coding tool comparisons should start by deciding whether you need completion, debugging, or refactoring before picking a shortlist.'
+          }
+          decisionSteps={
+            isChinese
+              ? [
+                  '先确认你要解决的是补全、调试还是重构。',
+                  '再看上下文长度、编辑器贴合度和批量修改体验。',
+                  '最后回到真实案例、评论和长期使用反馈。',
+                ]
+              : [
+                  'First confirm whether your main need is completion, debugging, or refactoring.',
+                  'Then check context length, editor fit, and bulk edit experience.',
+                  'Finally review real cases, comments, and long-term usage feedback.',
+                ]
+          }
+          items={[
+            {
+              label: isChinese ? '补全与编辑器贴合' : 'Completion fit',
+              value: isChinese ? '先看编辑器里的协作感' : 'Start with editor collaboration',
+              note: isChinese
+                ? '如果你要在编辑器里持续协作，贴合度比“会不会聊天”更重要。'
+                : 'If you will keep working inside the editor, fit matters more than chat polish.',
+            },
+            {
+              label: isChinese ? '上下文与重构' : 'Context and refactoring',
+              value: isChinese ? '看文件和依赖是否跟得上' : 'Check file and dependency context',
+              note: isChinese
+                ? '真正能长期用的工具，要能跟得上你当前文件和相关依赖。'
+                : 'A tool that lasts needs to keep up with your current file and related dependencies.',
+            },
+            {
+              label: isChinese ? '真实使用反馈' : 'Real usage feedback',
+              value: isChinese ? '回到评论和案例' : 'Return to comments and cases',
+              note: isChinese
+                ? '最后用评论和实际案例判断它是否值得留在日常工作流。'
+                : 'Use comments and real examples to decide whether it belongs in the daily workflow.',
+            },
+          ]}
+        />
         <GuideSubmissionPath locale={locale} ctaPrefix='ai_coding_tools_comparison' />
       </div>
     </>

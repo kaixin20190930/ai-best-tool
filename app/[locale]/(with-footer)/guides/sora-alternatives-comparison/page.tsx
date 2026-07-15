@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -241,6 +242,50 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        checkedAt='2026-07-15'
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? 'Sora 对比页现在先判断“你到底要做视频生成还是更广的多模态创作”。'
+            : 'This Sora comparison page now starts by asking whether you need video generation or broader multimodal creation.'
+        }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? ['先确定是视频还是多模态创作', '再看角色运动与导出', '最后才决定是否继续对比']
+            : [
+                'Confirm whether you need video or multimodal creation first',
+                'Then review motion and export',
+                'Only then decide whether to keep comparing',
+              ]
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '目标类型' : 'Target type',
+            value: locale === 'cn' || locale === 'tw' ? '视频 / 多模态 / 创作' : 'Video / multimodal / creation',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '任务边界越清楚，对比页越有帮助。'
+                : 'The clearer the task boundary, the more useful the comparison page becomes.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '工作流' : 'Workflow',
+            value: locale === 'cn' || locale === 'tw' ? '生成、动作、导出' : 'Generation, motion, export',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果需要反复改镜头和风格，这些流程会直接影响效率。'
+                : 'If you keep revising shots and style, these flows directly affect efficiency.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '验证顺序' : 'Validation order',
+            value: locale === 'cn' || locale === 'tw' ? '先缩短 shortlist' : 'Shortlist first',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先收窄候选，再去官网验证是否真适合。'
+                : 'Narrow the shortlist first, then validate on the official site.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
@@ -311,7 +356,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按当前比较页的判断标准重新核对。'

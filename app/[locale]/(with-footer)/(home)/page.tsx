@@ -116,13 +116,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const recentDiscussions = await getRecentDiscussions(3).catch(() => []);
   const risingTools = await getRisingTools(3).catch(() => []);
   const totalVisibleTools = latestTools.total || latestTools.rows.length;
-  const checkedAt = '2026-07-14';
+  const checkedAt = '2026-07-15';
   const heroTitle = isChinese
     ? '发现持续更新、好用且可直接访问的 AI 工具'
     : 'Discover updated, useful, and directly accessible AI tools';
   const heroSubtitle = isChinese
-    ? '按场景、价格和更新频率筛选工具，快速找到更适合你的选择。'
-    : 'Filter by use case, pricing, and freshness to quickly find tools that fit your workflow.';
+    ? '先确认你要解决什么问题，再按场景、价格和更新频率筛选工具。'
+    : 'Start with the problem you need to solve, then filter by use case, pricing, and freshness.';
   const stats = [
     {
       label: isChinese ? '已收录工具' : 'Indexed tools',
@@ -140,7 +140,28 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       icon: Rocket,
     },
   ];
-  const quickSearches = ['video', 'writing', 'web3', 'coding', 'chatbot'];
+  const quickSearches = [
+    {
+      label: isChinese ? '写内容' : 'Write content',
+      query: 'writing',
+    },
+    {
+      label: isChinese ? '做开发' : 'Build or code',
+      query: 'coding',
+    },
+    {
+      label: isChinese ? '做研究' : 'Do research',
+      query: 'research',
+    },
+    {
+      label: isChinese ? '做视频' : 'Create video',
+      query: 'video',
+    },
+    {
+      label: isChinese ? '看 Web3' : 'Work on Web3',
+      query: 'web3',
+    },
+  ];
   const quickFilters = [
     {
       label: isChinese ? '免费工具' : 'Free tools',
@@ -442,13 +463,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 <span className='text-sm font-medium text-slate-500'>
                   {isChinese ? '快速搜索：' : 'Popular searches:'}
                 </span>
-                {quickSearches.map((query) => (
+                {quickSearches.map((item) => (
                   <Link
-                    key={query}
-                    href={`/explore?search=${query}`}
+                    key={item.query}
+                    href={`/explore?search=${item.query}`}
                     className='rounded-full bg-white px-3 py-1 text-sm font-medium text-slate-700 ring-1 ring-slate-200 hover:bg-slate-100'
                   >
-                    {query}
+                    {item.label}
                   </Link>
                 ))}
               </div>

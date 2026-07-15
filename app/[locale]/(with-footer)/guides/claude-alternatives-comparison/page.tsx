@@ -249,6 +249,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '这页先看真实可验证的 Claude 替代信号，再继续判断是否真的需要长上下文、分析和写作能力。'
             : 'This page looks at verifiable Claude-alternative signals first, then helps you decide whether long context, analysis, and writing abilities are truly needed.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认长上下文是不是你的真实需求。',
+                '再看分析、写作和稳定性是否顺手。',
+                '最后回到真实使用案例和评论，判断值不值得长期用。',
+              ]
+            : [
+                'First confirm whether long context is really your use case.',
+                'Then check analysis, writing, and stability fit.',
+                'Finally return to real use cases and comments to judge long-term use.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '长上下文' : 'Long context',
@@ -281,7 +294,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按真实 Claude 替代路径重新核对，保留长上下文、分析和写作入口。'

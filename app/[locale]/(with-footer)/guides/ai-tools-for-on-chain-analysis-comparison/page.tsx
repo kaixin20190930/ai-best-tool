@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -268,6 +269,50 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        checkedAt='2026-07-15'
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '链上分析对比页现在把重点放在“研究、监控和地址判断”三个动作。'
+            : 'This on-chain analysis comparison page now focuses on research, monitoring, and address analysis.'
+        }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? ['先确认研究还是监控', '再看地址和协议深度', '最后才决定是否继续对比']
+            : [
+                'Confirm research vs monitoring first',
+                'Then check address and protocol depth',
+                'Only then decide whether to keep comparing',
+              ]
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '核心动作' : 'Core action',
+            value: locale === 'cn' || locale === 'tw' ? '研究 / 监控 / 画像' : 'Research / monitoring / profiling',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果你更关心组合看板或钱包追踪，应该转去相邻页面。'
+                : 'If you care more about portfolio dashboards or wallet tracking, route to the adjacent pages.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '深度能力' : 'Depth',
+            value: locale === 'cn' || locale === 'tw' ? '历史和关系链' : 'History and relationships',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '链上分析真正的价值在于历史、关联和解释能力。'
+                : 'The real value in on-chain analysis is history, relationships, and explanation quality.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '验证顺序' : 'Validation order',
+            value: locale === 'cn' || locale === 'tw' ? '先缩 shortlist' : 'Shortlist first',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先收窄候选，再去官网验证是否符合分析工作流。'
+                : 'Narrow the shortlist first, then validate whether it fits the analysis workflow.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
@@ -338,7 +383,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按当前比较页的判断标准重新核对。'

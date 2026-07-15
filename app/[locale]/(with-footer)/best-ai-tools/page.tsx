@@ -34,7 +34,12 @@ export default function BestAiToolsPage({ params: { locale } }: { params: { loca
   const priorityTopics = priorityTopicKeys
     .map((key) => topListTopics.find((topic) => topic.key === key))
     .filter((topic): topic is (typeof topListTopics)[number] => Boolean(topic));
-  const checkedAt = '2026-07-14';
+  const checkedAt = '2026-07-15';
+  const checkedAtLabel = new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  }).format(new Date(`${checkedAt}T00:00:00Z`));
 
   return (
     <div className='theme-page mx-auto max-w-pc px-4 py-8 lg:px-0'>
@@ -180,6 +185,46 @@ export default function BestAiToolsPage({ params: { locale } }: { params: { loca
                   </p>
                 </div>
               </div>
+            </div>
+
+            <div className='mt-5 rounded-2xl border border-slate-200 bg-white p-5'>
+              <p className='text-xs font-semibold uppercase tracking-wide text-cyan-800'>
+                {isChinese ? '最近核查' : 'Last checked'}
+              </p>
+              <p className='mt-2 text-xl font-bold text-slate-950'>{checkedAtLabel}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '这个榜单入口会持续把你导向更窄的榜单、详情页和提交路径，而不是只停留在主题卡片。'
+                  : 'This ranking hub keeps routing people into narrower lists, detail pages, and submission paths instead of stopping at topic cards.'}
+              </p>
+            </div>
+
+            <div className='mt-5 grid gap-3 md:grid-cols-3'>
+              {[
+                {
+                  title: isChinese ? '为什么先看这里' : 'Why start here',
+                  text: isChinese
+                    ? '先把方向收窄到一个高意图主题，再去看详情和官网更省时间。'
+                    : 'Narrow the direction into one high-intent topic before opening details and official sites.',
+                },
+                {
+                  title: isChinese ? '这里比较什么' : 'What to compare',
+                  text: isChinese
+                    ? '先看场景、价格、更新状态和真实反馈，再决定是否继续。'
+                    : 'Compare use case, pricing, freshness, and real feedback before you go deeper.',
+                },
+                {
+                  title: isChinese ? '下一步去哪' : 'Where to go next',
+                  text: isChinese
+                    ? '看完榜单后，进入详情页、评论区，或直接去提交 / 认领。'
+                    : 'After a list, move into detail pages, comments, or submit / claim paths.',
+                },
+              ].map((item) => (
+                <div key={item.title} className='rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-sm'>
+                  <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>{item.text}</p>
+                </div>
+              ))}
             </div>
 
             <div className='mt-5 flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-5'>

@@ -170,6 +170,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '图像工具比较重点不是“谁更会出图”，而是是否能稳定控制风格、编辑、迭代和团队交付。'
               : 'Image tool comparison is less about who can generate prettier images and more about stable style control, editing, iteration, and delivery workflow.'
           }
+          decisionSteps={
+            isChinese
+              ? [
+                  '先确认风格控制是否稳定，不要先被出图效果带偏。',
+                  '再看编辑、迭代和团队交付是否顺手。',
+                  '最后回到真实图像案例和评论，判断能不能长期用。',
+                ]
+              : [
+                  'First confirm style control is stable instead of getting distracted by the image output.',
+                  'Then check editing, iteration, and delivery workflow.',
+                  'Finally return to real image cases and comments to judge long-term use.',
+                ]
+          }
           items={[
             {
               label: isChinese ? '风格控制' : 'Style control',
@@ -198,7 +211,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
                 ? '这页已按真实图像决策路径重新核对，保留风格、编辑和交付入口。'

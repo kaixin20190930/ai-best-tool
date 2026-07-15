@@ -284,6 +284,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '代币研究对比页要围绕项目比较、基本面判断、长期跟踪和研究复盘来判断，不要只看指标数量。它会继续保留索引，但把更广的 Crypto 研究路径分层。'
             : 'This token research comparison page should focus on project comparison, fundamentals, long-term tracking, and research review instead of metric count alone. Keep it indexable, but separate broader crypto research paths.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认它能不能帮你解释一个 token，而不是只堆指标。',
+                '再看基本面、长期跟踪和研究复盘是否顺手。',
+                '最后回到真实 token 案例和反馈，判断值不值得继续索引。',
+              ]
+            : [
+                'First confirm it helps explain a token instead of merely stacking metrics.',
+                'Then check fundamentals, long-term tracking, and review workflows.',
+                'Finally return to real token cases and feedback to judge whether the page deserves continued indexing.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '验证重点' : 'Validation focus',
@@ -316,7 +329,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按真实代币研究路径重新核对，保留项目、基本面和复盘入口。'

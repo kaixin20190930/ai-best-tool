@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -314,7 +315,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按当前比较页的判断标准重新核对。'
@@ -348,6 +349,53 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
         </div>
       </section>
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? 'ElevenLabs 替代页要先看语音合成、声音库和工作流接入，不要只看试听效果。'
+            : 'ElevenLabs alternatives should be judged around synthesis, voice library breadth, and workflow integration instead of demo quality alone.'
+        }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认你要的是合成、编辑还是实时对话。',
+                '再看声音库、语言覆盖和稳定性。',
+                '最后结合真实项目和反馈判断是否值得长期索引。',
+              ]
+            : [
+                'First confirm whether you need synthesis, editing, or real-time conversation.',
+                'Then check voice library depth, language coverage, and stability.',
+                'Finally use real projects and feedback to decide whether it deserves indexing.',
+              ]
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '语音合成' : 'Synthesis',
+            value: locale === 'cn' || locale === 'tw' ? '先看声音是否自然' : 'Check naturalness first',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果声音本身不自然，后面的功能意义不大。'
+                : 'If the voice does not sound natural, the rest matters far less.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '声音库与覆盖' : 'Voice library and coverage',
+            value: locale === 'cn' || locale === 'tw' ? '是否够你长期用' : 'Enough for long-term use',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '多语言和品牌声音场景要优先看。'
+                : 'Prioritize multilingual and branded-voice scenarios.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '工作流接入' : 'Workflow integration',
+            value: locale === 'cn' || locale === 'tw' ? '能不能进产品' : 'Can it ship into products',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '最后要看能不能接入你的内容或产品流程。'
+                : 'Ultimately, it has to fit your content or product workflow.',
+          },
+        ]}
+      />
       <GuideSubmissionPath locale={locale} ctaPrefix='elevenlabs_alternatives_comparison' />
     </>
   );

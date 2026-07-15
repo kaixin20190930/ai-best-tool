@@ -131,6 +131,48 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               {isChinese ? '查看全部指南' : 'See all guides'}
             </TrackableCtaLink>
           </div>
+
+          <div className='mt-6 grid gap-3 md:grid-cols-3'>
+            <div className='rounded-xl border border-slate-200 bg-slate-50 p-4 shadow-sm'>
+              <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                {isChinese ? '先看什么' : 'What to check first'}
+              </p>
+              <p className='mt-2 text-sm font-semibold text-slate-950'>
+                {isChinese ? '场景是否真的对上' : 'Whether the use case truly fits'}
+              </p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '先确认这工具是不是正好解决你的工作流，而不是只是在功能列表里看起来很强。'
+                  : 'First confirm the tool solves the workflow you actually care about, not just a strong-looking feature list.'}
+              </p>
+            </div>
+            <div className='rounded-xl border border-slate-200 bg-slate-50 p-4 shadow-sm'>
+              <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                {isChinese ? '再看什么' : 'What to check next'}
+              </p>
+              <p className='mt-2 text-sm font-semibold text-slate-950'>
+                {isChinese ? '价格、限制和更新频率' : 'Pricing, limits, and freshness'}
+              </p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '免费额度、升级门槛和是否持续更新，通常比宣传语更能决定你会不会继续用。'
+                  : 'Free tier limits, upgrade thresholds, and freshness usually matter more than marketing lines.'}
+              </p>
+            </div>
+            <div className='rounded-xl border border-slate-200 bg-slate-50 p-4 shadow-sm'>
+              <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                {isChinese ? '最后看什么' : 'What to confirm last'}
+              </p>
+              <p className='mt-2 text-sm font-semibold text-slate-950'>
+                {isChinese ? '评论、截图和下一步入口' : 'Comments, screenshots, and next steps'}
+              </p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '这些信号会告诉你它是不是值得继续比较，还是应该直接换到别的工具或分类。'
+                  : 'These signals tell you whether it is worth a deeper comparison or whether you should move on to another tool or category.'}
+              </p>
+            </div>
+          </div>
         </section>
 
         <GuideEvidencePanel

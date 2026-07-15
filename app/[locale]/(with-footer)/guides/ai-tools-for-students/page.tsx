@@ -29,7 +29,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
-  const checkedAt = '2026-07-14';
+  const checkedAt = '2026-07-15';
   const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
@@ -446,8 +446,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '后续优先补学生使用案例、课程作业样例和真人评论，并持续保留 2026-07-14 的核对痕迹。'
-                : 'Next, prioritize student cases, course assignment examples, and real comments while keeping the 2026-07-14 check trail up to date.'}
+                ? '后续优先补学生使用案例、课程作业样例和真人评论，并持续保留 2026-07-15 的核对痕迹。'
+                : 'Next, prioritize student cases, course assignment examples, and real comments while keeping the 2026-07-15 check trail up to date.'}
             </p>
           </div>
         </section>

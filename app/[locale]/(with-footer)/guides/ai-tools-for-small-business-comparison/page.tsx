@@ -135,6 +135,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '小企业页的比较重点不是功能最全，而是营销、客服、内容和运营这几个日常动作能不能真的接上。'
             : 'The small-business comparison should judge whether marketing, support, content, and operations actually connect in day-to-day work instead of feature breadth alone.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认营销、客服、内容和运营这些日常动作能不能接上。',
+                '再看批量、协作和预算是否适合小团队长期使用。',
+                '最后回到真实经营案例和反馈，判断是不是能带来生意。',
+              ]
+            : [
+                'First confirm whether marketing, support, content, and operations can connect in daily work.',
+                'Then check batch work, collaboration, and budget fit for a small team.',
+                'Finally return to real business cases and feedback to judge whether it can drive outcomes.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '营销覆盖' : 'Marketing coverage',
@@ -171,7 +184,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按真实小企业决策路径重新核对，保留营销、客服和运营入口。'

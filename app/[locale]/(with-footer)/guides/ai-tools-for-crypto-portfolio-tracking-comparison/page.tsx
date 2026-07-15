@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -232,6 +233,50 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        checkedAt='2026-07-15'
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '资产追踪对比页现在更强调“组合视图是否真的能帮你做决策”。'
+            : 'This portfolio-tracking comparison page now focuses on whether the portfolio view truly helps you decide.'
+        }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? ['先看是不是你真实的钱包结构', '再看组合视图和历史', '最后才打开官网验证']
+            : [
+                'Check whether it matches your real wallet setup first',
+                'Then review portfolio views and history',
+                'Only then validate on the official site',
+              ]
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '钱包结构' : 'Wallet structure',
+            value: locale === 'cn' || locale === 'tw' ? '多钱包 / 多链' : 'Multi-wallet / multi-chain',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '你真实的钱包结构决定了这个工具能不能长期用。'
+                : 'Your real wallet setup determines whether the tool is actually usable long term.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '视图清晰度' : 'View clarity',
+            value: locale === 'cn' || locale === 'tw' ? '持仓 / 分配 / 历史' : 'Holdings / allocation / history',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果这些视图不清楚，资产追踪就没有真正价值。'
+                : 'If those views are not clear, portfolio tracking loses most of its value.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '验证顺序' : 'Validation order',
+            value: locale === 'cn' || locale === 'tw' ? '先榜单后官网' : 'Ranking before official site',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先缩短候选，再做官网深挖，效率更高。'
+                : 'Narrow the options first, then go deeper on the official site for efficiency.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
@@ -302,7 +347,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按当前比较页的判断标准重新核对。'

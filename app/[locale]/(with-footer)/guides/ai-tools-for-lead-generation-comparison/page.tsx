@@ -182,6 +182,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '先确认获客、名单和线索质量的真实覆盖，再继续看对比页。'
             : 'Check whether acquisition, list building, and lead quality are actually covered before continuing.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认名单质量和命中率，不要只看数量。',
+                '再看导出、清洗和 CRM 接入是否顺手。',
+                '最后回到真实获客案例和反馈，判断能不能长期用。',
+              ]
+            : [
+                'First confirm list quality and match rate instead of focusing on count.',
+                'Then check export, cleanup, and CRM fit.',
+                'Finally return to real acquisition cases and feedback to judge long-term use.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '名单质量' : 'List quality',
@@ -208,7 +221,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按真实获客路径重新核对，保留名单、线索和质量入口。'

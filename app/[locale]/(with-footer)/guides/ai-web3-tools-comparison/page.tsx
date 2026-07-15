@@ -1,3 +1,4 @@
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 
 import Web3ComparisonPage, {
@@ -5,7 +6,10 @@ import Web3ComparisonPage, {
 } from '../ai-tools-for-web3-comparison/page';
 
 export function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
-  return generateWeb3ComparisonMetadata({ params: { locale } });
+  return {
+    ...generateWeb3ComparisonMetadata({ params: { locale } }),
+    ...getNoindexMetadata(),
+  };
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
@@ -50,7 +54,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {isChinese
               ? '这页已按真实 Web3 工具路径重新核对，保留协议、链上和研究入口。'

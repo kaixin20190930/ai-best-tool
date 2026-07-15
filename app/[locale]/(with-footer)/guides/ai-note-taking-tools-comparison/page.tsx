@@ -283,6 +283,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '先确认记笔记工具在会议记录、灵感捕捉和知识整理里的真实覆盖，再继续看对比。'
             : 'Check whether these tools really cover meeting capture, idea logging, and knowledge organization before continuing.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认它是不是你真实会用的输入口。',
+                '再看知识整理、检索和协作是否顺手。',
+                '最后回到真实笔记案例和反馈，判断能不能长期用。',
+              ]
+            : [
+                'First confirm it matches the way you actually capture information.',
+                'Then check knowledge organization, retrieval, and collaboration fit.',
+                'Finally return to real note-taking cases and feedback to judge long-term use.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '记录方式' : 'Capture mode',
@@ -315,7 +328,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按真实记笔记决策路径重新核对，保留转写、搜索和协作入口。'

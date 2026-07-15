@@ -344,6 +344,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '营销对比页要围绕渠道覆盖、产出效率、协作权限和品牌一致性来判断，不要只看工具有多少模板。这个页继续可索引，但会把写作、销售和自动化路径分层。'
             : 'This marketing comparison page should judge channel coverage, output efficiency, collaboration, and brand consistency instead of counting templates. Keep it indexable, but separate writing, sales, and automation paths.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认它覆盖的是你真正会用的渠道，不要只看通用生成能力。',
+                '再看模板、批处理和品牌控制，判断是否适合持续产出。',
+                '最后回到协作、权限和真实营销案例，确认团队能不能长期用。',
+              ]
+            : [
+                'First confirm it covers the channels you actually use instead of only looking at generic generation.',
+                'Then check templates, batching, and brand control to see whether it fits repeated production.',
+                'Finally return to collaboration, permissions, and real marketing cases to judge team adoption.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '验证重点' : 'Validation focus',
@@ -376,7 +389,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '营销对比页已按真实渠道和协作场景重新核对。'

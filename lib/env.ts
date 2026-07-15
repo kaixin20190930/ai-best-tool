@@ -1,4 +1,7 @@
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || `https://${process.env.VERCEL_URL}` || 'https://aibesttool.com';
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null) ||
+  'https://aibesttool.com';
 
 export const BASE_URL = siteUrl.replace(/\/$/, '');
 

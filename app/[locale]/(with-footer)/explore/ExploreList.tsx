@@ -125,12 +125,19 @@ export default async function ExploreList({
   const sortBy: SortBy =
     searchParams?.sort && validSortOptions.includes(searchParams.sort) ? searchParams.sort : 'latest';
 
-  // Fetch tools from database
-  const result = await getTools(filters, { page: currentPage, pageSize: WEB_PAGE_SIZE }, sortBy);
-  const featuredTools = await getActiveFeaturedTools(filters, 6);
+  // Fetch tools from database, but keep a curated fallback if the DB is unavailable.
+  const [toolsResult, featuredToolsResult] = await Promise.allSettled([
+    getTools(filters, { page: currentPage, pageSize: WEB_PAGE_SIZE }, sortBy),
+    getActiveFeaturedTools(filters, 6),
+  ]);
+  const result =
+    toolsResult.status === 'fulfilled'
+      ? toolsResult.value
+      : { data: [], total: 0, page: currentPage, pageSize: WEB_PAGE_SIZE };
+  const featuredTools = featuredToolsResult.status === 'fulfilled' ? featuredToolsResult.value : [];
 
   // Track search if there's a search query
-  if (searchParams?.search) {
+  if (searchParams?.search && toolsResult.status === 'fulfilled') {
     await trackSearch(searchParams.search, result.total);
   }
 

@@ -24,6 +24,7 @@
     "seo:audit": "tsx scripts/seo-audit.ts",
     "seo:audit:quick": "tsx scripts/seo-audit-quick.ts",
     "seo:quality-inventory": "tsx scripts/seo-quality-inventory.ts",
+    "gsc:weekly-report": "tsx scripts/summarize-gsc-export.ts",
     "seo:performance": "tsx scripts/performance-audit.ts",
     "seo:validate": "tsx scripts/validate-seo-complete.ts",
     "test:regression": "tsx scripts/regression-test.ts",

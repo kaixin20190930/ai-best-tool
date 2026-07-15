@@ -9,13 +9,15 @@ type GuideEvidencePanelProps = {
   checkedAt?: string;
   scope: string;
   items: EvidenceItem[];
+  decisionSteps?: string[];
 };
 
 export default function GuideEvidencePanel({
   locale,
-  checkedAt = '2026-07-10',
+  checkedAt = '2026-07-15',
   scope,
   items,
+  decisionSteps,
 }: GuideEvidencePanelProps) {
   const isChinese = locale === 'cn' || locale === 'tw';
 
@@ -29,9 +31,7 @@ export default function GuideEvidencePanel({
           <h2 className='mt-1 text-2xl font-bold text-slate-950'>
             {isChinese ? '这页不是只按功能堆列表' : 'This page is not only a feature list'}
           </h2>
-          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-700'>
-            {scope}
-          </p>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-700'>{scope}</p>
         </div>
         <div className='rounded-2xl border border-emerald-200 bg-white px-4 py-3 text-sm shadow-sm'>
           <p className='font-semibold text-slate-950'>{isChinese ? '最近检查' : 'Last checked'}</p>
@@ -48,6 +48,24 @@ export default function GuideEvidencePanel({
           </div>
         ))}
       </div>
+
+      {decisionSteps && decisionSteps.length > 0 ? (
+        <div className='mt-5 rounded-2xl border border-emerald-200 bg-white p-4 shadow-sm'>
+          <p className='text-xs font-semibold uppercase tracking-wide text-emerald-700'>
+            {isChinese ? '决策顺序' : 'Decision order'}
+          </p>
+          <div className='mt-3 grid gap-2 md:grid-cols-3'>
+            {decisionSteps.slice(0, 3).map((step, index) => (
+              <div key={step} className='rounded-xl bg-emerald-50/60 px-3 py-3 text-sm leading-6 text-slate-700'>
+                <span className='mr-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white text-xs font-semibold text-emerald-700 ring-1 ring-emerald-200'>
+                  {index + 1}
+                </span>
+                {step}
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }

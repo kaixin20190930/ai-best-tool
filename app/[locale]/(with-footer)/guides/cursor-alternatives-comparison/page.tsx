@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -241,6 +242,53 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? 'Cursor 替代页要围绕编辑器内补全、上下文理解和局部重构来判断，不要只看问答是不是顺手。'
+            : 'Cursor alternatives should be judged around editor-first completion, context understanding, and local refactoring instead of chat convenience alone.'
+        }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认它是不是你真正想在编辑器里用的工具。',
+                '再看上下文、补全和局部重构是否顺手。',
+                '最后回到真实编程案例和评论，判断值不值得长期用。',
+              ]
+            : [
+                'First confirm whether it is truly the tool you want inside the editor.',
+                'Then check context handling, completion, and local refactoring fit.',
+                'Finally return to real coding cases and comments to judge long-term use.',
+              ]
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '编辑器优先' : 'Editor-first',
+            value: locale === 'cn' || locale === 'tw' ? '是否贴着代码工作' : 'Works alongside your code',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先看它是不是在你写代码的地方起作用。'
+                : 'Check whether it helps where you actually write code.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '上下文与重构' : 'Context and refactoring',
+            value: locale === 'cn' || locale === 'tw' ? '能否跟上改动链路' : 'Can it follow the change chain',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '真正的替代项要能推进修改，不只是回答问题。'
+                : 'A real alternative must help with edits, not only answers.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '长期使用' : 'Long-term use',
+            value: locale === 'cn' || locale === 'tw' ? '是否适合日常编码' : 'Fits daily coding habits',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '最后看它是不是能留在日常工作流里。'
+                : 'Judge whether it can stay in the daily workflow.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
@@ -311,7 +359,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按当前比较页的判断标准重新核对。'

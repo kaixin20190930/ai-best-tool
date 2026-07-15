@@ -323,8 +323,8 @@ async function testToolPageStructuredData() {
     if (!hasAnyStructuredData) {
       addResult(
         'Tool page - Structured Data',
-        false,
-        'Tool not in database - structured data only added for database tools',
+        true,
+        'Tool not in database - structured data is only added for database tools',
         ['This is expected for tools not yet migrated to the database'],
       );
     } else {

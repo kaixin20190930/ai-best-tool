@@ -1,3 +1,4 @@
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 
 import EvalsComparisonPage, {
@@ -5,7 +6,10 @@ import EvalsComparisonPage, {
 } from '../ai-tools-for-evals-comparison/page';
 
 export function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
-  return generateEvalsComparisonMetadata({ params: { locale } });
+  return {
+    ...generateEvalsComparisonMetadata({ params: { locale } }),
+    ...getNoindexMetadata(),
+  };
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
@@ -20,6 +24,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           isChinese
             ? '这页先看真实可验证的 Evals 信号，再继续判断是否需要评估工作流、基准和质量回归追踪。'
             : 'This page looks at verifiable evals signals first, then helps you decide whether evaluation workflows, benchmarks, and regression tracking are needed.'
+        }
+        decisionSteps={
+          isChinese
+            ? [
+                '先确认它是不是覆盖真实任务，而不是只有测试形式。',
+                '再看基准、回归和质量追踪是否顺手。',
+                '最后回到真实评估案例和反馈，判断值不值得长期用。',
+              ]
+            : [
+                'First confirm it covers real tasks instead of only test formality.',
+                'Then check benchmarks, regression tracking, and quality workflows.',
+                'Finally return to real eval cases and comments to judge long-term use.',
+              ]
         }
         items={[
           {
@@ -50,7 +67,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {isChinese
               ? '这页已按真实 eval 决策路径重新核对，保留评估、回归和复用入口。'

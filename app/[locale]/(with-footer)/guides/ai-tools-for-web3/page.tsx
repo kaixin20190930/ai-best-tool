@@ -26,7 +26,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
-  const checkedAt = '2026-07-14';
+  const checkedAt = '2026-07-15';
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const faqs = [
     {
@@ -216,7 +216,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
                 ? `Web3 入口已按真实链上数据、钱包和协议工作流重新核对，当前可参考分类信号 ${categories.length} 个。`

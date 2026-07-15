@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -311,7 +312,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按当前比较页的判断标准重新核对。'
@@ -345,6 +346,53 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
         </div>
       </section>
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? 'ChatGPT 替代页要先看聊天、工作流和多模型入口，不要只看问答顺不顺。'
+            : 'ChatGPT alternatives should be judged around chat, workflow fit, and multi-model entry points instead of chat polish alone.'
+        }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认你要的是聊天入口还是长期工作入口。',
+                '再看多模型、稳定性和价格是否顺手。',
+                '最后回到真实案例和反馈决定是否长期使用。',
+              ]
+            : [
+                'First confirm whether you need a chat entry or a long-term work entry.',
+                'Then check multi-model support, stability, and pricing.',
+                'Finally use real cases and feedback to judge long-term use.',
+              ]
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '聊天入口' : 'Chat entry',
+            value: locale === 'cn' || locale === 'tw' ? '顺不顺手' : 'Is it easy to use',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先看交互体验，再看附加能力。'
+                : 'Check interaction first, then the extras.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '多模型与生态' : 'Multi-model and ecosystem',
+            value: locale === 'cn' || locale === 'tw' ? '能否切换入口' : 'Can it switch entry points',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果你常切模型，这一层很关键。'
+                : 'If you switch models often, this layer matters a lot.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '长期使用' : 'Long-term use',
+            value: locale === 'cn' || locale === 'tw' ? '稳定和价格' : 'Stability and pricing',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '最后还是要看能不能长期用。'
+                : 'Ultimately, it has to work long term.',
+          },
+        ]}
+      />
       <GuideSubmissionPath locale={locale} ctaPrefix='chatgpt_alternatives_comparison' />
     </>
   );

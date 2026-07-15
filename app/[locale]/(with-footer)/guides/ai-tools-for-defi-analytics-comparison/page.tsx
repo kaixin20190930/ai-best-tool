@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -99,6 +100,50 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        checkedAt='2026-07-15'
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? 'DeFi 对比页正在从“罗列工具”收束成“先看证据再决定”。'
+            : 'This DeFi comparison page is moving from a tool list to a evidence-first decision page.'
+        }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? ['先确认你要做什么 DeFi 任务', '再看数据覆盖和历史深度', '最后才看是否值得点开官网']
+            : [
+                'Confirm the DeFi task first',
+                'Then check coverage and history depth',
+                'Only then decide whether to open the official site',
+              ]
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '任务类型' : 'Task type',
+            value: locale === 'cn' || locale === 'tw' ? '流动性 / 收益 / 协议' : 'Liquidity / yield / protocol',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果任务类型不清楚，对比就会很虚。'
+                : 'If the task type is vague, comparison becomes hand-wavy very quickly.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '历史深度' : 'History depth',
+            value: locale === 'cn' || locale === 'tw' ? '看长期数据' : 'Long-term data',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? 'DeFi 很多判断都依赖历史和时间序列，而不是静态卡片。'
+                : 'Many DeFi decisions depend on history and time series, not static cards.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '落地验证' : 'Validation path',
+            value: locale === 'cn' || locale === 'tw' ? '先看榜单再打开官网' : 'Check ranking before the official site',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先把 shortlist 缩小，再进入官网验证，转化更稳。'
+                : 'Narrow the shortlist first, then validate on the official site for better conversion.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
@@ -169,7 +214,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按当前比较页的判断标准重新核对。'

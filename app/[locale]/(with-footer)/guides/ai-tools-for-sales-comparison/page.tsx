@@ -204,6 +204,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '销售对比页要围绕线索、外联个性化、流程协作和 CRM 接入来判断，不要只看功能数量。这个页继续可索引，但会把销售拓客、获客和更窄的 CRM 路径分层。'
             : 'This sales comparison page should judge leads, outreach personalization, workflow coordination, and CRM fit instead of counting features. Keep it indexable, but separate sales prospecting, lead generation, and narrower CRM paths.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认它是不是在帮销售流程，而不是只做泛自动化。',
+                '再看线索来源、外联个性化和跟进协作是否足够顺手。',
+                '最后回到 CRM 接入、案例和真实评论，判断能不能长期落地。',
+              ]
+            : [
+                'First confirm it helps sales workflows rather than only generic automation.',
+                'Then check lead sourcing, outreach personalization, and follow-up coordination.',
+                'Finally return to CRM integrations, cases, and real comments to judge long-term adoption.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '验证重点' : 'Validation focus',
@@ -236,7 +249,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '销售对比页已按真实线索和跟进场景重新核对。'

@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -244,6 +245,50 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        checkedAt='2026-07-15'
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? 'Character AI 对比页现在把重点放在角色对话和沉浸式互动。'
+            : 'This Character AI comparison page now centers on character chat and immersive interaction.'
+        }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? ['先确认你要的是角色对话还是通用聊天', '再看互动和记忆', '最后才判断是否继续比较']
+            : [
+                'Confirm whether you need character chat or general chat first',
+                'Then review interaction and memory',
+                'Only then decide whether to keep comparing',
+              ]
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '互动类型' : 'Interaction type',
+            value: locale === 'cn' || locale === 'tw' ? '角色对话 / 沉浸式' : 'Character chat / immersive',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果你只是要一般聊天，这页很快就该切走。'
+                : 'If you only need general chat, this page should route you out quickly.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '记忆与连贯性' : 'Memory and continuity',
+            value: locale === 'cn' || locale === 'tw' ? '持续对话体验' : 'Persistent conversation experience',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '角色产品成败通常看记忆和前后呼应。'
+                : 'These products usually live or die on memory and continuity.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '验证顺序' : 'Validation order',
+            value: locale === 'cn' || locale === 'tw' ? '先筛选再官网验证' : 'Filter first, then validate',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先缩短 shortlist 再看官网，比较不容易浪费时间。'
+                : 'Narrow the shortlist first so you do not waste time on the official site.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
@@ -314,7 +359,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按当前比较页的判断标准重新核对。'

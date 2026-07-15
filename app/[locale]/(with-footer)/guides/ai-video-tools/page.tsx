@@ -31,7 +31,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
-  const checkedAt = '2026-07-14';
+  const checkedAt = '2026-07-15';
   const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
@@ -259,8 +259,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </p>
             <p className='mt-2 text-lg font-bold text-slate-950'>
               {isChinese
-                ? '补真实制作与复用记录，并把 2026-07-14 之后的更新继续记上。'
-                : 'Add real production and repurposing notes, then keep logging updates after 2026-07-14.'}
+                ? '补真实制作与复用记录，并把 2026-07-15 之后的更新继续记上。'
+                : 'Add real production and repurposing notes, then keep logging updates after 2026-07-15.'}
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese

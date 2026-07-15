@@ -286,6 +286,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? 'SEO 工具对比不该只看功能表，而要看关键词研究、内容优化、排名跟踪和团队落地是否真的能接上。'
             : 'SEO tool comparison should not stop at feature lists; it should verify whether keyword research, content optimization, rank tracking, and team adoption actually fit together.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认关键词研究和意图拆解是否真的靠谱。',
+                '再看内容优化、排名跟踪和团队落地是否顺手。',
+                '最后回到真实 SEO 案例和评论，判断能不能长期用。',
+              ]
+            : [
+                'First confirm keyword research and intent breakdown are actually useful.',
+                'Then check content optimization, rank tracking, and team adoption fit.',
+                'Finally return to real SEO cases and comments to judge long-term use.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '关键词研究' : 'Keyword research',
@@ -322,7 +335,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按真实 SEO 决策路径重新核对，保留研究、优化和跟踪入口。'

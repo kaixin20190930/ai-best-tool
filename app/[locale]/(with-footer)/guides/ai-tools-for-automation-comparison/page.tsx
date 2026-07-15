@@ -365,6 +365,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '自动化对比页要围绕集成范围、流程复杂度、执行稳定性和可维护性来判断，不要只看能接多少工具。它会继续保留索引，但把开发者和 API 路径分层。'
             : 'This automation comparison page should focus on integration coverage, workflow complexity, execution stability, and maintainability instead of only counting integrations. Keep it indexable, but separate developer and API paths.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认它能不能接进你真实要跑的系统，不要先被连接器数量带偏。',
+                '再看流程复杂度、重试和日志，判断是不是能长期维护。',
+                '最后回到真实自动化案例和执行稳定性，确认能不能放心跑。',
+              ]
+            : [
+                'First confirm it connects to the systems you actually use instead of getting distracted by connector count.',
+                'Then check workflow complexity, retries, and logs to see whether it is maintainable long term.',
+                'Finally return to real automation cases and execution stability to judge whether it can run reliably.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '验证重点' : 'Validation focus',
@@ -398,7 +411,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '自动化对比页已按真实编排与失败恢复场景重新核对。'

@@ -440,7 +440,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
     .filter((page): page is (typeof GUIDE_PAGES)[number] => Boolean(page))
     .filter((page) => page.href.endsWith('-comparison'));
   const primaryComparisonGuide = comparisonGuides[0] || relatedGuides[0] || null;
-  const checkedAt = '2026-07-14';
+  const checkedAt = '2026-07-15';
   const checkedAtLabel = checkedAt;
   const priorityCategorySlugs = [
     'developer-tools',
@@ -879,6 +879,11 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
                   {categoryToolCount} {isChinese ? '个已发布工具' : 'published tools'}
                 </p>
               )}
+              <div className='mt-4 inline-flex items-center rounded-full border border-cyan-100 bg-cyan-50 px-3 py-1 text-sm font-medium text-cyan-800'>
+                {isChinese
+                  ? '先按任务收窄，再去看具体工具和对比页。'
+                  : 'Start with the task, then open the tools and comparison pages.'}
+              </div>
             </div>
             <div className='flex flex-wrap gap-3 lg:justify-end'>
               <TrackableCtaLink
@@ -920,6 +925,50 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
               <p className='mt-2 text-sm leading-6 text-slate-600'>{card.note}</p>
             </div>
           ))}
+        </div>
+
+        <div className='mb-8 grid gap-3 md:grid-cols-3'>
+          <div className='rounded-xl border border-slate-200 bg-white p-4 shadow-sm'>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '为什么先看这个分类' : 'Why start here'}
+            </p>
+            <p className='mt-2 text-sm font-semibold text-slate-950'>
+              {isChinese ? '它先帮你缩小场景，再看具体工具。' : 'It narrows the workflow first, then the tools.'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '分类页最有价值的部分，不是把工具堆在一起，而是让你知道哪些工具属于同一类真实任务。'
+                : 'The value is not in stacking tools, but in showing which ones belong to the same real task.'}
+            </p>
+          </div>
+          <div className='rounded-xl border border-slate-200 bg-white p-4 shadow-sm'>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '比较时先看什么' : 'What to compare first'}
+            </p>
+            <p className='mt-2 text-sm font-semibold text-slate-950'>
+              {isChinese ? '场景适配、价格门槛和更新信号。' : 'Use-case fit, pricing threshold, and freshness signals.'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '这三项通常比单纯的功能数更能决定你会不会继续用下去。'
+                : 'These three signals usually matter more than raw feature count when deciding what to keep using.'}
+            </p>
+          </div>
+          <div className='rounded-xl border border-slate-200 bg-white p-4 shadow-sm'>
+            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+              {isChinese ? '下一步怎么走' : 'Where to go next'}
+            </p>
+            <p className='mt-2 text-sm font-semibold text-slate-950'>
+              {isChinese
+                ? '先进对比页，再回到具体条目。'
+                : 'Go to the comparison page, then back to specific listings.'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '这样可以先把 shortlist 压缩，再进入更具体的工具页做最终判断。'
+                : 'This compresses the shortlist first, then sends you into more specific pages for the final call.'}
+            </p>
+          </div>
         </div>
 
         {taskSuggestions.length > 0 && (

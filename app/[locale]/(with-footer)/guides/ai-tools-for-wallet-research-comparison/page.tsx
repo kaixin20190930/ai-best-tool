@@ -249,6 +249,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '钱包研究对比页要围绕地址画像、标签、关系线索和研究复盘来判断，不要只看链上数据量。这个页继续可索引，但会把监控和资产追踪路径分层。'
             : 'This wallet research comparison page should judge address profiling, labels, relationship clues, and research review instead of just looking at data volume. Keep it indexable, but separate monitoring and portfolio-tracking paths.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认它是不是能帮你解释一个地址，不要只看数据量。',
+                '再看标签、关系线索和研究复盘是否顺手。',
+                '最后回到真实钱包案例和评论，判断能不能长期用。',
+              ]
+            : [
+                'First confirm it helps explain an address instead of only showing more data.',
+                'Then check labels, relationship clues, and review workflows.',
+                'Finally return to real wallet cases and comments to judge long-term use.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '验证重点' : 'Validation focus',
@@ -281,7 +294,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按真实钱包研究路径重新核对，保留画像、标签和线索入口。'

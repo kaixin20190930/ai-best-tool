@@ -286,6 +286,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '这页先看真实可验证的协议分析信号，再继续判断是否需要长期监控、趋势追踪和研究输出。'
             : 'This page looks at verifiable protocol-analysis signals first, then helps you decide whether long-term monitoring, trend tracking, and research output are needed.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认协议覆盖是否对准你的研究对象。',
+                '再看趋势追踪、监控和输出是否能支撑长期研究。',
+                '最后回到真实协议案例和反馈，判断能不能长期依赖。',
+              ]
+            : [
+                'First confirm the protocol coverage matches your research target.',
+                'Then check whether trend tracking, monitoring, and reporting support long-term work.',
+                'Finally return to real protocol cases and feedback to judge long-term reliance.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '协议覆盖' : 'Protocol coverage',
@@ -322,7 +335,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按真实协议分析路径重新核对，保留协议、趋势和导出入口。'

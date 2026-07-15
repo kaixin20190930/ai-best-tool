@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -312,7 +313,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按当前比较页的判断标准重新核对。'
@@ -346,6 +347,53 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </p>
         </div>
       </section>
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? 'Perplexity 替代页要围绕资料发现、证据核对和研究工作流来判断，不要只看答案生成快不快。'
+            : 'Perplexity alternatives should be judged around discovery, evidence-checking, and research workflows instead of raw answer speed.'
+        }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认你是在找资料发现还是证据核对。',
+                '再看引用、导出和追问工作流是否顺手。',
+                '最后回到真实研究案例和反馈，判断是否值得长期保留。',
+              ]
+            : [
+                'First confirm whether you need discovery or evidence-checking.',
+                'Then evaluate citations, exports, and follow-up workflows.',
+                'Finally review real cases and feedback before keeping it long term.',
+              ]
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '资料发现' : 'Discovery',
+            value: locale === 'cn' || locale === 'tw' ? '先打开话题' : 'Open the topic first',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果你要快速打开一个话题，这一步最重要。'
+                : 'If you need to quickly open up a topic, this is the most important layer.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '证据核对' : 'Evidence-checking',
+            value: locale === 'cn' || locale === 'tw' ? '确认来源和说法' : 'Confirm sources and claims',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果你需要确认说法和来源，优先看这个维度。'
+                : 'If you need to confirm claims and sources, prioritize this dimension.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '研究工作流' : 'Research workflow',
+            value: locale === 'cn' || locale === 'tw' ? '追问和整理' : 'Follow-up and organization',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '能否持续追问、整理和复盘，会影响它能不能真正落地。'
+                : 'Whether it supports follow-up, organization, and recap determines real adoption.',
+          },
+        ]}
+      />
       <GuideSubmissionPath locale={locale} ctaPrefix='perplexity_alternatives_comparison' />
     </>
   );

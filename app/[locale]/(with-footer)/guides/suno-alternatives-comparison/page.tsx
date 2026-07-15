@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -241,6 +242,50 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        checkedAt='2026-07-15'
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? 'Suno 对比页现在先判断“你到底要做歌曲还是更广的音频工作流”。'
+            : 'This Suno comparison page now starts by asking whether you need songs or a broader audio workflow.'
+        }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? ['先确定是歌曲还是音频工作流', '再看歌词/旋律与导出', '最后才决定是否继续对比']
+            : [
+                'Confirm whether you need songs or audio workflows first',
+                'Then review lyrics, melody, and export',
+                'Only then decide whether to keep comparing',
+              ]
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '目标类型' : 'Target type',
+            value: locale === 'cn' || locale === 'tw' ? '歌曲 / 音频 / 创作' : 'Songs / audio / creation',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '任务边界越清楚，对比结果越可靠。'
+                : 'The clearer the task boundary, the more reliable the comparison becomes.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '工作流' : 'Workflow',
+            value: locale === 'cn' || locale === 'tw' ? '歌词、旋律、导出' : 'Lyrics, melody, export',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果反复改词、改风格，这些流程会直接决定效率。'
+                : 'If you keep revising lyrics and style, these flows directly determine output speed.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '验证顺序' : 'Validation order',
+            value: locale === 'cn' || locale === 'tw' ? '先缩短 shortlist' : 'Shortlist first',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先收窄候选，再去官网验证是否真的适合。'
+                : 'Narrow the shortlist first, then validate on the official site.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
@@ -311,7 +356,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按当前比较页的判断标准重新核对。'

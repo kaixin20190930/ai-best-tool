@@ -346,6 +346,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '研究对比页要围绕资料发现、引用可追溯和分析复盘来判断，不要只看答案速度。它会继续保留索引，但会把更窄的 SEO 和写作路径分层。'
             : 'This research comparison page should focus on discovery, source traceability, and analysis review instead of answer speed alone. Keep it indexable, but separate narrower SEO and writing paths.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认它是不是能帮你找到资料和核对来源。',
+                '再看引用、复盘和笔记整理是否顺手。',
+                '最后回到真实研究案例和评论，判断值不值得继续索引。',
+              ]
+            : [
+                'First confirm it helps you find sources and verify claims.',
+                'Then check citations, review workflows, and note organization.',
+                'Finally return to real research cases and comments to judge whether it deserves continued indexing.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '验证重点' : 'Validation focus',
@@ -378,7 +391,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按真实研究路径重新核对，保留发现、引用和复盘入口。'

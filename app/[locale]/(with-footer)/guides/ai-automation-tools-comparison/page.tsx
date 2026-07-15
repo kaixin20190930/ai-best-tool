@@ -1,3 +1,4 @@
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 
 import AutomationComparisonPage, {
@@ -5,7 +6,10 @@ import AutomationComparisonPage, {
 } from '../ai-tools-for-automation-comparison/page';
 
 export function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
-  return generateAutomationComparisonMetadata({ params: { locale } });
+  return {
+    ...generateAutomationComparisonMetadata({ params: { locale } }),
+    ...getNoindexMetadata(),
+  };
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
@@ -20,6 +24,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           isChinese
             ? '这页先看真实可验证的自动化信号，再继续判断是否需要流程编排、重试和维护能力。'
             : 'This page looks at verifiable automation signals first, then helps you decide whether orchestration, retries, and maintainability are needed.'
+        }
+        decisionSteps={
+          isChinese
+            ? [
+                '先确认它是不是覆盖真实重复任务。',
+                '再看流程编排、重试和维护是否顺手。',
+                '最后回到真实自动化案例和评论，判断能不能长期依赖。',
+              ]
+            : [
+                'First confirm it covers real repeatable tasks.',
+                'Then check orchestration, retries, and maintainability fit.',
+                'Finally return to real automation cases and comments to judge long-term reliance.',
+              ]
         }
         items={[
           {
@@ -50,7 +67,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {isChinese
               ? '这页已按真实自动化决策路径重新核对，保留流程、重试和维护入口。'

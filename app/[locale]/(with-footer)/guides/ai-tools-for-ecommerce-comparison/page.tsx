@@ -132,6 +132,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '先确认电商、商品和营销工作流的真实覆盖，再继续看对比。'
             : 'Check whether ecommerce, product, and marketing workflows are actually covered before continuing the comparison.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认它是否真的覆盖商品、客服或营销中的核心环节。',
+                '再看批量能力、长期使用和团队协作是否顺手。',
+                '最后回到真实案例、评论和 owner 认领，判断能不能长期信任。',
+              ]
+            : [
+                'First confirm whether it really covers the core parts of products, support, or marketing.',
+                'Then check batch capability, long-term use, and team collaboration.',
+                'Finally return to real cases, comments, and owner claims to judge long-term trust.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '工作流连贯性' : 'Workflow continuity',
@@ -159,7 +172,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按真实电商路径重新核对，保留商品、客服和营销入口。'

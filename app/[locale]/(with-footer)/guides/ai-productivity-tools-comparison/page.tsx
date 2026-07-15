@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -124,6 +125,53 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '生产力工具对比页要围绕任务管理、协作、知识整理和自动化来判断，不要只看“功能多不多”。'
+            : 'Productivity comparison should judge task management, collaboration, knowledge organization, and automation instead of feature count alone.'
+        }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认它是不是覆盖你每天真正会做的任务。',
+                '再看协作、知识整理和自动化是否顺手。',
+                '最后回到真实使用案例和反馈，判断能不能长期用。',
+              ]
+            : [
+                'First confirm it covers the tasks you actually do every day.',
+                'Then check collaboration, knowledge organization, and automation fit.',
+                'Finally return to real use cases and feedback to judge long-term use.',
+              ]
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '任务覆盖' : 'Task coverage',
+            value: locale === 'cn' || locale === 'tw' ? '待办、文档、协作' : 'Tasks, docs, collaboration',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先看它是不是覆盖日常任务。'
+                : 'Check whether it covers daily work first.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '自动化' : 'Automation',
+            value: locale === 'cn' || locale === 'tw' ? '能否减少重复动作' : 'Does it reduce repetitive work',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '真正省时通常来自流程自动化。'
+                : 'Real time savings usually come from workflow automation.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '长期使用' : 'Long-term use',
+            value: locale === 'cn' || locale === 'tw' ? '协作与稳定性' : 'Collaboration and stability',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '适合长期用才值得索引保留。'
+                : 'Only keep it indexed if it is suitable for long-term use.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

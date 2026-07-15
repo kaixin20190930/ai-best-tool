@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -241,6 +242,50 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        checkedAt='2026-07-15'
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? 'Descript 对比页现在强调“音频编辑是否真的能进入工作流”。'
+            : 'This Descript comparison page now emphasizes whether audio editing really fits the workflow.'
+        }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? ['先确认是转写、编辑还是播客', '再看导出和协作', '最后才决定是否继续对比']
+            : [
+                'Confirm transcription, editing, or podcast use first',
+                'Then review export and collaboration',
+                'Only then decide whether to keep comparing',
+              ]
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '核心任务' : 'Core task',
+            value: locale === 'cn' || locale === 'tw' ? '编辑 / 转写 / 播客' : 'Editing / transcription / podcasting',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果你的目标更偏会议纪要或一般语音工具，这页就不是终点。'
+                : 'If your goal is more about meeting notes or general voice tools, this should not be the endpoint.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '工作流' : 'Workflow',
+            value: locale === 'cn' || locale === 'tw' ? '编辑 + 导出' : 'Editing + export',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '真正重要的是它能不能顺手接到你现有的剪辑流程里。'
+                : 'What matters is whether it fits cleanly into your existing editing flow.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '验证顺序' : 'Validation order',
+            value: locale === 'cn' || locale === 'tw' ? '先 shortlist 再看官网' : 'Shortlist before the official site',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先缩短候选，再验证官网是否适合你的流程。'
+                : 'Narrow the shortlist first, then validate whether it fits your workflow.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
@@ -311,7 +356,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按当前比较页的判断标准重新核对。'

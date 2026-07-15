@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -180,6 +181,50 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        checkedAt='2026-07-15'
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? '免费工具对比页现在把重点放在“免费可用性和持续可用性”。'
+            : 'This free-tools comparison page now focuses on free usability and whether it stays useful over time.'
+        }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? ['先看是不是真的能免费用', '再看限制和可持续性', '最后才决定是否继续对比']
+            : [
+                'Check whether it is truly free to use',
+                'Then review limitations and durability',
+                'Only then decide whether to keep comparing',
+              ]
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '免费边界' : 'Free tier',
+            value: locale === 'cn' || locale === 'tw' ? '能用多久' : 'How long it stays usable',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '免费页最容易失真的地方就是“看上去免费，实际很快卡住”。'
+                : 'Free pages often fail by looking free while hitting a wall very quickly.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '可持续性' : 'Sustainability',
+            value: locale === 'cn' || locale === 'tw' ? '持续可用' : 'Still usable later',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果只能短期试用，价值会和宣传差很多。'
+                : 'If it only works for a short trial, the value is very different from the marketing.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '下一步' : 'Next step',
+            value: locale === 'cn' || locale === 'tw' ? '先 shortlist 再官网' : 'Shortlist before the official site',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先收紧候选，再去验证免费规则和限制。'
+                : 'Narrow the shortlist first, then validate the actual free rules and limits.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
@@ -250,7 +295,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按当前比较页的判断标准重新核对。'

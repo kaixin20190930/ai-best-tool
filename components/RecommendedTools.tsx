@@ -280,7 +280,7 @@ export default async function RecommendedTools({
           </div>
         </div>
       </div>
-      <div className='grid items-start gap-5 md:grid-cols-2 xl:grid-cols-3'>
+      <div className='grid items-stretch gap-5 md:grid-cols-2 xl:grid-cols-3'>
         {recommendedTools.map((tool) => {
           const reasons = getSimilarityReasons(tool, pricing, tagSlugs, isChinese, locale);
           const visibleReasons = reasons.slice(0, 2);
@@ -289,7 +289,7 @@ export default async function RecommendedTools({
           return (
             <div
               key={tool.id}
-              className='flex h-fit flex-col gap-0 self-start overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm'
+              className='flex h-full min-h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm'
             >
               <WebNavCard
                 name={tool.name}
@@ -306,23 +306,23 @@ export default async function RecommendedTools({
                 locale={locale}
                 density='compact'
               />
-              <div className='border-t border-slate-200 bg-slate-50/80 px-3 py-3'>
+              <div className='mt-auto border-t border-slate-200 bg-slate-50/80 px-3 py-3'>
                 <div className='flex items-center justify-between gap-2'>
                   <p className='text-[10px] font-semibold uppercase tracking-wide text-slate-500'>
                     {isChinese ? '为什么推荐它' : 'Why compare this one'}
                   </p>
                   <p className='text-[10px] font-medium text-slate-400'>{isChinese ? '先看再决定' : 'Read first'}</p>
                 </div>
-                <div className='mt-2 space-y-2'>
+                <div className='mt-2 space-y-1.5'>
                   {visibleReasons.map((reason) => (
                     <div
                       key={`${reason.kind}-${reason.text}`}
-                      className='rounded-lg bg-white px-3 py-2 text-xs leading-5 text-slate-700 ring-1 ring-slate-200'
+                      className='flex items-start gap-2 rounded-lg bg-white px-3 py-2 text-xs leading-5 text-slate-700 ring-1 ring-slate-200'
                     >
-                      <p className='text-[10px] font-semibold uppercase tracking-wide text-slate-500'>
+                      <span className='mt-0.5 inline-flex shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-500'>
                         {getReasonLabel(reason.kind, isChinese)}
-                      </p>
-                      <p className='mt-1 break-words text-sm text-slate-800'>{reason.text}</p>
+                      </span>
+                      <p className='min-w-0 flex-1 break-words text-xs leading-5 text-slate-800'>{reason.text}</p>
                     </div>
                   ))}
                 </div>

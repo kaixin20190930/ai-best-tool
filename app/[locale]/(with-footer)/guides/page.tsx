@@ -6,6 +6,7 @@ import { FEATURED_GUIDE_HREFS, GUIDE_PAGES } from '@/lib/content/guides';
 import { topListTopics } from '@/lib/data/topLists';
 import { generateBreadcrumbSchema } from '@/lib/seo/schema';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
 
@@ -193,6 +194,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     { name: 'Home', url: `${siteUrl}/${locale}` },
     { name: isChinese ? '指南总览' : 'Guides', url: `${siteUrl}/${locale}/guides` },
   ]);
+  const checkedAt = '2026-07-15';
 
   return (
     <>
@@ -261,6 +263,43 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               <ArrowRight className='size-4' />
             </TrackableCtaLink>
           </div>
+
+          <GuideEvidencePanel
+            locale={locale}
+            checkedAt={checkedAt}
+            scope={
+              isChinese
+                ? '指南总览页负责先帮用户缩小任务范围，再把人送到更具体的对比、榜单和工具页，而不是把所有指南平铺给用户自己筛。'
+                : 'The guides hub should narrow the job first and then send people into more specific comparison, ranking, and tool pages instead of leaving them to sift through everything alone.'
+            }
+            items={[
+              {
+                label: isChinese ? '验证范围' : 'Checked scope',
+                value: isChinese
+                  ? '指南入口、对比入口、高意图路径'
+                  : 'Guide entry points, comparison lanes, high-intent routes',
+                note: isChinese
+                  ? `当前 ${featuredGuides.length} 个精选指南、${highIntentLanes.length} 条高意图路径已对齐到同一套决策叙事。`
+                  : `${featuredGuides.length} featured guides and ${highIntentLanes.length} high-intent paths now follow the same decision narrative.`,
+              },
+              {
+                label: isChinese ? '索引策略' : 'Indexing strategy',
+                value: isChinese ? '指南总览保留索引' : 'Guides hub kept indexable',
+                note: isChinese
+                  ? '把总入口保留给搜索引擎，有助于承接“怎么选 / 看什么 / 先看谁”这类高层问题。'
+                  : 'Keeping the hub indexable helps capture higher-level queries like how to choose, what to compare, and where to start.',
+              },
+              {
+                label: isChinese ? '下一步增强' : 'Next enrichment',
+                value: isChinese
+                  ? '补更明确的任务入口和最新验证'
+                  : 'Add clearer task entry points and fresher verification',
+                note: isChinese
+                  ? '后续继续把最常见的任务型搜索词放到更靠前的位置。'
+                  : 'Continue surfacing the most common task-driven searches near the top of the page.',
+              },
+            ]}
+          />
 
           <div className='mt-6 rounded-2xl border border-cyan-100 bg-cyan-50/70 p-5'>
             <div className='flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between'>
@@ -1584,7 +1623,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
                 ? '这个总入口已按当前指南收口标准重新核对。'

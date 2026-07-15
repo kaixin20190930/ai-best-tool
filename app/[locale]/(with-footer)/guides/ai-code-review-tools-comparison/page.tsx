@@ -1,3 +1,4 @@
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 
 import CodeReviewComparisonPage, {
@@ -5,7 +6,10 @@ import CodeReviewComparisonPage, {
 } from '../ai-tools-for-code-review-comparison/page';
 
 export function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
-  return generateCodeReviewComparisonMetadata({ params: { locale } });
+  return {
+    ...generateCodeReviewComparisonMetadata({ params: { locale } }),
+    ...getNoindexMetadata(),
+  };
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
@@ -20,6 +24,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           isChinese
             ? '这页先看真实可验证的 code review 信号，再继续判断是否需要审查、质量门禁和团队工作流。'
             : 'This page looks at verifiable code review signals first, then helps you decide whether review, quality gates, and team workflow support are needed.'
+        }
+        decisionSteps={
+          isChinese
+            ? [
+                '先确认它能不能抓到真实风险，不要只看风格建议。',
+                '再看团队工作流、门禁和协作是否顺手。',
+                '最后回到真实审查案例和反馈，判断是不是值得继续索引。',
+              ]
+            : [
+                'First confirm it can catch real risk instead of only style suggestions.',
+                'Then check whether workflow, gates, and collaboration feel workable.',
+                'Finally return to real review cases and feedback to judge whether it deserves continued indexing.',
+              ]
         }
         items={[
           {
@@ -50,7 +67,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {isChinese
               ? '这页已按真实 code review 决策路径重新核对，保留审查、工作流和门禁入口。'

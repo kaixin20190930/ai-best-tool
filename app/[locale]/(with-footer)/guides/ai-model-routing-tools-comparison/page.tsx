@@ -1,3 +1,4 @@
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 
 import ModelRoutingComparisonPage, {
@@ -5,7 +6,10 @@ import ModelRoutingComparisonPage, {
 } from '../ai-tools-for-model-routing-comparison/page';
 
 export function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
-  return generateModelRoutingComparisonMetadata({ params: { locale } });
+  return {
+    ...generateModelRoutingComparisonMetadata({ params: { locale } }),
+    ...getNoindexMetadata(),
+  };
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
@@ -20,6 +24,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           isChinese
             ? '这页先看真实可验证的模型路由信号，再继续判断是否需要统一入口、回退控制和成本治理。'
             : 'This page looks at verifiable model-routing signals first, then helps you decide whether unified access, fallback control, and cost governance are needed.'
+        }
+        decisionSteps={
+          isChinese
+            ? [
+                '先确认统一入口是否真的顺手，不要只看能接多少模型。',
+                '再看回退、成本和质量治理是否能支撑生产使用。',
+                '最后回到真实路由案例和评论，判断能不能长期依赖。',
+              ]
+            : [
+                'First confirm the unified entry point is actually smooth instead of only counting supported models.',
+                'Then check whether fallbacks, cost, and quality governance can support production use.',
+                'Finally return to real routing cases and comments to judge long-term reliance.',
+              ]
         }
         items={[
           {
@@ -50,7 +67,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {isChinese
               ? '这页已按真实模型路由决策路径重新核对，保留入口、回退和治理信号。'

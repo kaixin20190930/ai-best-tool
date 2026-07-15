@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -241,6 +242,53 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? 'HubSpot 替代页要围绕 CRM、营销自动化和流程编排来判断，不要只看某个单点功能。'
+            : 'HubSpot alternatives should be judged around CRM, marketing automation, and workflow orchestration instead of any single feature.'
+        }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认你要的是 CRM 还是营销自动化。',
+                '再看流程编排、受众管理和协作是否顺手。',
+                '最后回到真实团队案例和评论，判断能不能长期落地。',
+              ]
+            : [
+                'First confirm whether you need CRM or marketing automation.',
+                'Then check workflow orchestration, audience management, and collaboration fit.',
+                'Finally return to real team cases and comments to judge long-term adoption.',
+              ]
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '系统层能力' : 'System-level fit',
+            value: locale === 'cn' || locale === 'tw' ? 'CRM + 自动化' : 'CRM plus automation',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先看是不是系统层选择，而不是单点工具。'
+                : 'Check whether this is a system-level choice, not a point tool.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '流程编排' : 'Workflow orchestration',
+            value: locale === 'cn' || locale === 'tw' ? '触发、分层、跟进' : 'Triggers, segmentation, follow-up',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '真正落地靠流程，不只是生成内容。'
+                : 'Real adoption depends on workflows, not just content generation.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '团队协作' : 'Team adoption',
+            value: locale === 'cn' || locale === 'tw' ? '权限和记录' : 'Permissions and records',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '多人使用时这些比功能数量更重要。'
+                : 'For teams, these matter more than feature count.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
@@ -314,7 +362,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按当前比较页的判断标准重新核对。'

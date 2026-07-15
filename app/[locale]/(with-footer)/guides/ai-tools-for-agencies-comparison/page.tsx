@@ -132,6 +132,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '代理与服务团队页要围绕交付、协作和客户隔离来判断，而不是单纯看产出功能。'
             : 'Agency and service-team comparison should be judged around delivery, collaboration, and client separation rather than output features alone.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先确认交付流程是否稳定，别一上来只看单点功能。',
+                '再核对客户隔离、权限和多人协作是否顺手。',
+                '最后回到真实案例、评论和导出能力，判断能不能长期用。',
+              ]
+            : [
+                'First confirm the delivery workflow is stable instead of focusing on isolated features.',
+                'Then check whether client separation, permissions, and team collaboration feel workable.',
+                'Finally return to real cases, comments, and export support to judge long-term fit.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '交付流程' : 'Delivery workflow',
@@ -170,7 +183,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按真实代理交付路径重新核对，保留交付、隔离和协作入口。'

@@ -552,7 +552,7 @@ export function ComparisonPage({
   config,
   locale,
 }: ComparisonPageProps) {
-  const checkedAt = '2026-07-14';
+  const checkedAt = '2026-07-15';
   const categoryCount = categories.length;
   const firstTool = tools[0] || null;
   const firstToolHref = firstTool ? `/ai/${firstTool.name}` : config.guideHref;
@@ -664,7 +664,7 @@ export function ComparisonPage({
               href='/submit'
               ctaId='comparison_submit'
               ctaLabel='Comparison submit'
-              pageType='guide'
+              pageType='comparison'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
             >
               {isChinese ? '提交你的工具' : 'Submit your tool'}
@@ -674,12 +674,51 @@ export function ComparisonPage({
               href='/developer/listing'
               ctaId='comparison_claim'
               ctaLabel='Comparison claim'
-              pageType='guide'
+              pageType='comparison'
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800 hover:bg-emerald-100'
             >
               {isChinese ? '认领条目' : 'Claim listing'}
               <ArrowRight className='size-4' />
             </TrackableCtaLink>
+          </div>
+          <div className='mt-6 grid gap-3 md:grid-cols-3'>
+            <div className='rounded-xl border border-slate-200 bg-slate-50 p-4 shadow-sm'>
+              <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                {isChinese ? '最近核查' : 'Last checked'}
+              </p>
+              <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '比较页的样本、排序和下一步入口已复核。'
+                  : 'The comparison sample, ordering, and next-step entry points were reviewed recently.'}
+              </p>
+            </div>
+            <div className='rounded-xl border border-slate-200 bg-slate-50 p-4 shadow-sm'>
+              <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                {isChinese ? '比较依据' : 'Decision basis'}
+              </p>
+              <p className='mt-2 text-lg font-bold text-slate-950'>
+                {isChinese ? '场景、限制、可信度' : 'Workflow, limits, trust signals'}
+              </p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '先用这三类信息收敛候选，而不是直接扫完整个列表。'
+                  : 'Use these three signals to narrow candidates before scanning the full list.'}
+              </p>
+            </div>
+            <div className='rounded-xl border border-slate-200 bg-slate-50 p-4 shadow-sm'>
+              <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                {isChinese ? '下一步' : 'Next step'}
+              </p>
+              <p className='mt-2 text-lg font-bold text-slate-950'>
+                {isChinese ? '回到评论和认领' : 'Go to comments and claims'}
+              </p>
+              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                {isChinese
+                  ? '把真实反馈和工具方响应带回来，页面才会越来越厚。'
+                  : 'Bring back real feedback and owner responses so the page keeps getting richer.'}
+              </p>
+            </div>
           </div>
         </section>
 
@@ -688,8 +727,8 @@ export function ComparisonPage({
           checkedAt={checkedAt}
           scope={
             isChinese
-              ? '比较页先说清比较依据、样本边界和下一步怎么缩小候选，避免它变成单纯的列表堆叠。'
-              : 'The comparison page should explain the comparison basis, sample boundaries, and the next narrowing step so it does not become a simple list dump.'
+              ? '比较页先说清比较依据、最近核查和下一步怎么缩小候选，避免它变成单纯的列表堆叠。'
+              : 'The comparison page should explain the comparison basis, last check date, and the next narrowing step so it does not become a simple list dump.'
           }
           items={[
             {
@@ -822,7 +861,7 @@ export function ComparisonPage({
               href='/submit'
               ctaId='comparison_submit_secondary'
               ctaLabel='Comparison submit secondary'
-              pageType='guide'
+              pageType='comparison'
               className='rounded-xl border border-cyan-200 bg-white p-4 shadow-sm hover:bg-cyan-50'
             >
               <p className='text-sm font-semibold text-slate-950'>
@@ -838,7 +877,7 @@ export function ComparisonPage({
               href='/developer/listing'
               ctaId='comparison_claim_secondary'
               ctaLabel='Comparison claim secondary'
-              pageType='guide'
+              pageType='comparison'
               className='rounded-xl border border-emerald-200 bg-white p-4 shadow-sm hover:bg-emerald-50'
             >
               <p className='text-sm font-semibold text-slate-950'>

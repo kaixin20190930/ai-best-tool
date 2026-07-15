@@ -121,7 +121,7 @@ export default async function BestAiToolsTopicPage({
     } else if (toolsResult.status === 'fulfilled') {
       toolCount = Number(toolsResult.value.total || 0);
     }
-    const checkedAt = '2026-07-14';
+    const checkedAt = '2026-07-15';
     const checkedAtLabel = new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
       year: 'numeric',
       month: 'short',
@@ -345,6 +345,18 @@ export default async function BestAiToolsTopicPage({
                 <p className='max-w-2xl text-sm leading-6 text-slate-300'>{topic.summary}</p>
               </div>
 
+              <div className='rounded-2xl border border-white/10 bg-white/5 p-4'>
+                <p className='text-xs font-semibold uppercase tracking-wide text-cyan-100/80'>
+                  {isChinese ? '最近核查' : 'Last checked'}
+                </p>
+                <p className='mt-2 text-xl font-bold text-white'>{checkedAtLabel}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-200'>
+                  {isChinese
+                    ? '这个榜单页会继续把你导向更窄的比较页、详情页和提交路径，而不是只停在主题列表。'
+                    : 'This list keeps routing people into narrower comparison pages, detail pages, and submission paths instead of stopping at the topic list.'}
+                </p>
+              </div>
+
               {isAutomationTopic && (
                 <div className='rounded-2xl border border-white/10 bg-white/5 p-4'>
                   <p className='text-xs font-semibold uppercase tracking-wide text-cyan-100/80'>
@@ -511,6 +523,34 @@ export default async function BestAiToolsTopicPage({
                 ))}
               </div>
 
+              <div className='grid gap-3 sm:grid-cols-3'>
+                {[
+                  {
+                    title: isChinese ? '为什么看这页' : 'Why this list matters',
+                    text: isChinese
+                      ? '先帮你把这个主题的候选范围缩窄，再去详情页和官网做判断。'
+                      : 'It narrows the topic first so detail pages and official sites are faster to judge.',
+                  },
+                  {
+                    title: isChinese ? '比较什么' : 'What to compare',
+                    text: isChinese
+                      ? '重点看场景适配、更新状态、定价门槛和真实反馈。'
+                      : 'Focus on use-case fit, freshness, pricing thresholds, and real feedback.',
+                  },
+                  {
+                    title: isChinese ? '下一步去哪' : 'Where to go next',
+                    text: isChinese
+                      ? '看完榜单就进详情页、评论区，或者直接去提交 / 认领。'
+                      : 'After the list, go to detail pages, comments, or submit / claim.',
+                  },
+                ].map((item) => (
+                  <div key={item.title} className='rounded-2xl border border-white/10 bg-white/5 p-4'>
+                    <p className='text-sm font-semibold text-white'>{item.title}</p>
+                    <p className='mt-1 text-sm leading-6 text-slate-200'>{item.text}</p>
+                  </div>
+                ))}
+              </div>
+
               <div className='flex flex-wrap gap-3'>
                 <TrackableCtaLink
                   href={`/${locale}/submit`}
@@ -568,6 +608,34 @@ export default async function BestAiToolsTopicPage({
                     </p>
                   </div>
                 </div>
+              </div>
+
+              <div className='mt-4 grid gap-3 sm:grid-cols-3'>
+                {[
+                  {
+                    title: isChinese ? '为什么先看这页' : 'Why this list first',
+                    text: isChinese
+                      ? '先把主题收窄，再进详情页和官网，能少走很多弯路。'
+                      : 'Narrow the topic first, then use detail pages and official sites to avoid wasting time.',
+                  },
+                  {
+                    title: isChinese ? '比较什么' : 'What to compare',
+                    text: isChinese
+                      ? '重点看场景适配、定价门槛、更新状态和真实反馈。'
+                      : 'Focus on use-case fit, pricing thresholds, freshness, and real feedback.',
+                  },
+                  {
+                    title: isChinese ? '要留意什么' : 'What to watch out for',
+                    text: isChinese
+                      ? '如果候选看起来太像，就立刻下钻到详情页和评论区。'
+                      : 'If candidates look too similar, jump into detail pages and comments immediately.',
+                  },
+                ].map((item) => (
+                  <div key={item.title} className='rounded-2xl border border-slate-200 bg-white p-4 shadow-sm'>
+                    <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                    <p className='mt-2 text-sm leading-6 text-slate-600'>{item.text}</p>
+                  </div>
+                ))}
               </div>
 
               <div className='mt-4 grid gap-3 sm:grid-cols-2'>

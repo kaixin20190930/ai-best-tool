@@ -1,4 +1,5 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
+import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
@@ -241,6 +242,53 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   return (
     <>
       {ComparisonPage({ ...data, locale })}
+      <GuideEvidencePanel
+        locale={locale}
+        checkedAt='2026-07-15'
+        scope={
+          locale === 'cn' || locale === 'tw'
+            ? 'Make 对比页现在强调“可视化编排是否真的进入工作流”。'
+            : 'This Make comparison page now emphasizes whether visual orchestration really fits the workflow.'
+        }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? ['先确认是否需要编排自动化', '再看团队协作和维护', '最后才决定是否继续比较']
+            : [
+                'Confirm whether you need orchestration automation first',
+                'Then review collaboration and maintenance',
+                'Only then decide whether to keep comparing',
+              ]
+        }
+        items={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '核心任务' : 'Core task',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '编排 / 自动化 / 协作'
+                : 'Orchestration / automation / collaboration',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果只是轻量自动化，页面应很快引导到别的入口。'
+                : 'If you only need light automation, this page should route you elsewhere quickly.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '维护成本' : 'Maintenance cost',
+            value: locale === 'cn' || locale === 'tw' ? '长期可维护' : 'Maintainable over time',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '可视化编排最大的问题是后期维护和排错。'
+                : 'The biggest issue with visual orchestration is maintenance and debugging over time.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '验证顺序' : 'Validation order',
+            value: locale === 'cn' || locale === 'tw' ? '先筛选再官网验证' : 'Filter first, validate later',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '先把 shortlist 缩小，再看官网上手是否顺。'
+                : 'Narrow the shortlist first, then validate hands-on fit on the official site.',
+          },
+        ]}
+      />
       <section className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
         <div className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
@@ -311,7 +359,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-14</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? '这页已按当前比较页的判断标准重新核对。'

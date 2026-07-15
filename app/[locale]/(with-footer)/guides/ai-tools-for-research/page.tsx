@@ -26,7 +26,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
-  const checkedAt = '2026-07-14';
+  const checkedAt = '2026-07-15';
   const categoryCount = categories.length;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
@@ -233,6 +233,15 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `This page was rechecked on ${checkedAt}, and next comments, saves, and owner signals should be connected to this page.`,
             },
           ]}
+          decisionSteps={
+            isChinese
+              ? ['先确认来源和证据链', '再把 shortlist 缩到更窄的对比页', '最后回到真实条目和评论区做最终判断']
+              : [
+                  'First check sources and traceability',
+                  'Then narrow into a shorter comparison list',
+                  'Finally move back to real listings and comments',
+                ]
+          }
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>

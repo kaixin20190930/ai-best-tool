@@ -98,6 +98,10 @@ function getPreferredHost() {
   }
 }
 
+function isLocalHost(hostname: string) {
+  return hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '::1' || hostname.endsWith('.local');
+}
+
 function copyCookies(source: NextResponse, target: NextResponse) {
   source.cookies.getAll().forEach((cookie) => {
     target.cookies.set(cookie);
@@ -157,8 +161,8 @@ async function getCurrentUser(request: NextRequest) {
 
 export async function middleware(request: NextRequest) {
   const preferredHost = getPreferredHost();
-  if (preferredHost && request.nextUrl.hostname.toLowerCase() !== preferredHost) {
-    const currentHost = request.nextUrl.hostname.toLowerCase();
+  const currentHost = request.nextUrl.hostname.toLowerCase();
+  if (preferredHost && !isLocalHost(currentHost) && currentHost !== preferredHost) {
     const isWwwVariant = currentHost === `www.${preferredHost}`;
     if (isWwwVariant) {
       const redirectUrl = request.nextUrl.clone();

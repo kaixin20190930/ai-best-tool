@@ -4,7 +4,7 @@
 > 
 > 研究结论仍然有效，但执行入口只看总控表。
 
-更新时间：2026-07-14
+更新时间：2026-07-15
 
 这份研究用于回答两个问题：
 
@@ -109,6 +109,13 @@
 - 我检索了公开搜索结果、HN、产品社区和 GitHub 可见信息
 - 对于多数闭源目录站，**没有稳定的公开 GitHub issue 轨迹**
 - 但 HN / Product Hunt / 搜索结果的信号已经足够说明用户的真实抱怨集中在哪里
+- 下面的“问题”部分里，凡是没有明确站点级 issue 的地方，都是基于公开页面形态、社区讨论和目录站共性做的结构性推断，不是逐站 bug 报告
+
+公开信号参考：
+
+- [Product Hunt](https://en.wikipedia.org/wiki/Product_Hunt)
+- [AlternativeTo](https://en.wikipedia.org/wiki/AlternativeTo)
+- [Wired on Product Hunt moderation](https://www.wired.com/2015/08/product-hunt-live)
 
 ### 1. 用户很反感“太像广告位”的页面
 

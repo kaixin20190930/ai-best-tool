@@ -4,6 +4,7 @@ import { getMessages } from 'next-intl/server';
 
 import { isAdminUser } from '@/lib/auth/admin';
 import { getNoindexMetadata, isIndexableLocale } from '@/lib/seo/indexing';
+import { getSupabaseConfig } from '@/lib/supabase/env';
 import { createClient } from '@/lib/supabase/server';
 import { Toaster } from '@/components/ui/sonner';
 import Navigation from '@/components/home/Navigation';
@@ -49,11 +50,16 @@ export default async function RootLayout({
 }) {
   const messages = await getMessages();
 
-  // Get current user
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // Get current user when Supabase is configured; otherwise render a guest session.
+  let user = null;
+  try {
+    getSupabaseConfig();
+    const supabase = await createClient();
+    const authResult = await supabase.auth.getUser();
+    user = authResult.data.user;
+  } catch {
+    user = null;
+  }
   const isAdmin = isAdminUser(user);
 
   return (
