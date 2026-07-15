@@ -166,6 +166,36 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Add entity-level signals to make the page more credible.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '商品信号' : 'Product signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看商品和目录是否顺'
+                : 'Check whether product and catalog workflows are smooth',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '电商最先看的是商品和目录能不能撑住。'
+                : 'Ecommerce starts with whether product and catalog workflows hold up.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '营销信号' : 'Marketing signal',
+            value:
+              locale === 'cn' || locale === 'tw' ? '看批量内容和活动是否顺' : 'Check batch content and campaign flow',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果营销要批量执行，批量能力和导出就很关键。'
+                : 'When marketing is batch-driven, batch capability and exports matter a lot.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '真实增量' : 'Real increment',
+            value: locale === 'cn' || locale === 'tw' ? '场景、案例、owner 认领' : 'Cases, use cases, owner claims',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '把 AI 页面补成更可信的实体信号。'
+                : 'Add entity-level signals to make the page more credible.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

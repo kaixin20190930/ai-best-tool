@@ -215,6 +215,32 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Often a better fit signal than feature lists.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '名单信号' : 'List signal',
+            value: locale === 'cn' || locale === 'tw' ? '先看命中率和可用性' : 'Check match rate and usability first',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '名单质量差，后面所有销售动作都会受影响。'
+                : 'If list quality is poor, every downstream sales motion suffers.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '下游信号' : 'Downstream signal',
+            value: locale === 'cn' || locale === 'tw' ? '导出、清洗、CRM' : 'Export, cleanup, CRM',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '真正成本往往在名单进入 CRM 之后。'
+                : 'The real cost often appears after the leads enter CRM.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '真人信号' : 'Human signal',
+            value: locale === 'cn' || locale === 'tw' ? '评论、案例、场景' : 'Comments, cases, use cases',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '比功能列表更能判断是否贴合。'
+                : 'Often a better fit signal than feature lists.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

@@ -37,6 +37,7 @@
 - 2026-07-15：`GuideEvidencePanel` 的定制信号继续补到 `ai-image-tools-comparison`、`ai-writing-tools-comparison`、`ai-evals-tools`，进一步强化视觉一致性、写作语气 / 改写、评测稳定性与协作口径，并通过本地 `pnpm run build`
 - 2026-07-15：`GuideEvidencePanel` 的定制信号继续补到 `ai-tools-for-crypto-portfolio-tracking-comparison`、`ai-tools-for-meeting-notes-comparison`、`ai-tools-for-token-research`，进一步强化组合视图、转写 / 整理 / 协作、叙事 / 数据深度 / 导出口径，并通过本地 `pnpm run build`
 - 2026-07-15：`GuideEvidencePanel` 的定制信号继续补到 `ai-tools-for-token-research-comparison`、`ai-tools-for-web3-analysis-comparison`、`ai-tools-for-protocol-analytics-comparison`，进一步强化叙事 / 数据深度 / 导出、覆盖 / 历史 / 团队、协议覆盖 / 趋势 / 输出口径，并通过本地 `pnpm run build`
+- 2026-07-15：`GuideEvidencePanel` 的定制信号继续补到 `ai-tools-for-customer-support-comparison`、`ai-tools-for-ecommerce-comparison`、`ai-tools-for-lead-generation-comparison`，进一步强化回复 / 分流 / 知识库、商品 / 营销 / 真实增量、名单 / 下游 / 真人信号口径，并通过本地 `pnpm run build`
 - 2026-07-15：工具详情页已新增“当前处理状态”面板，把最近更新、讨论数量、认领状态和下一步动作串成更清晰的 owner / 评论 / 更新请求闭环，并通过本地 `pnpm run build`
 - 2026-07-15：`ai-tools-for-small-business` 已补入价格 / 更新 / 风险信号层，继续强化小企业场景的团队席位、权限、导出和支持判断口径，并通过本地 `pnpm run build`
 - 2026-07-15：`ai-tools-for-students` 和 `ai-tools-for-voice` 已补入价格 / 更新 / 风险信号层，继续强化学习 / 引用 / 转写 / 商用导出的真实判断口径，并通过本地 `pnpm run build`

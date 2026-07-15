@@ -224,6 +224,39 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Support efficiency only scales when the knowledge base is usable.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '回复信号' : 'Reply signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看能不能稳妥回答'
+                : 'Check whether it can answer safely and clearly',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '客服最怕答非所问。'
+                : 'Support teams cannot afford off-target replies.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '分流信号' : 'Triage signal',
+            value:
+              locale === 'cn' || locale === 'tw' ? '看能否分到正确队列' : 'See whether it routes to the right queue',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '分流正确，后面的人工处理才会省力。'
+                : 'Good triage makes the rest of the human workflow much easier.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '知识库信号' : 'Knowledge-base signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看是否能复用已有知识'
+                : 'Check whether existing knowledge can be reused',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '接得上知识库，客服效率才会稳定。'
+                : 'Support efficiency only scales when the knowledge base is usable.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>
