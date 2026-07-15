@@ -226,6 +226,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先检查页面是否能帮助用户完成真实内容创作决策：是否有明确内容格式、批量发布、品牌一致性、导出限制和后续进入对比页的路径。'
               : 'This page prioritizes whether the guide helps with a real content-creation decision: content format, batch publishing, brand consistency, export limits, and next steps into comparison pages.'
           }
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese ? '先看额度和导出限制' : 'Check quotas and export limits first',
+              note: isChinese
+                ? '内容创作工具很容易在导出、席位和模板上分层。'
+                : 'Content tools often tier exports, seats, and templates.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese ? '模板和发布能力要跟上' : 'Templates and publishing need freshness',
+              note: isChinese
+                ? '如果模板久不更新，品牌输出很快会跑偏。'
+                : 'If templates do not evolve, brand output drifts quickly.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '只会写文案不够' : 'Copy alone is not enough',
+              note: isChinese
+                ? '如果没有批量发布、品牌控制和真实案例，先降低优先级。'
+                : 'If there is no batch publishing, brand control, or real cases, lower the priority.',
+            },
+          ]}
           items={[
             {
               label: isChinese ? '判断维度' : 'Decision signals',

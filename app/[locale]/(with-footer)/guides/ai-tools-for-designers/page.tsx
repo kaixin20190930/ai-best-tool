@@ -174,6 +174,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '设计页要围绕品牌、视觉控制、输出类型和商业授权来做，不要只看“能不能出图”。这个页继续可索引，但会把图像、视频和内容创作路径优先分层。'
               : 'This design page should stay centered on brand, visual control, output type, and commercial rights rather than only asking whether it can make images. Keep it indexable, but layer image, video, and content-creation paths separately.'
           }
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese ? '先看商用版和团队席位' : 'Check commercial tiers and team seats',
+              note: isChinese
+                ? '设计工具常在高清导出、授权和协作能力上分层。'
+                : 'Design tools often tier high-res export, licensing, and collaboration.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese ? '看样式库和工作流是否常更新' : 'Watch style libraries and workflows',
+              note: isChinese
+                ? '样式库停更，设计输出就很容易落后。'
+                : 'Stalled style libraries make output feel outdated quickly.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '只会出图不够' : 'Making images alone is not enough',
+              note: isChinese
+                ? '如果没有授权、品牌案例和样片，先别当成首选。'
+                : 'If there is no licensing, brand case, or sample evidence, do not treat it as the first choice yet.',
+            },
+          ]}
           items={[
             {
               label: isChinese ? '验证重点' : 'Validation focus',

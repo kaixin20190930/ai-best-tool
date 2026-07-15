@@ -177,6 +177,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先判断聊天机器人是否真的能稳定回答、接知识库和适配日常工作流，而不是只看生成内容是否看起来聪明。'
               : 'This page checks whether a chatbot truly answers reliably, connects to a knowledge base, and fits daily workflows instead of merely sounding smart.'
           }
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese ? '先看免费能否接住日常问答' : 'Check whether free use covers daily Q&A',
+              note: isChinese
+                ? '聊天机器人很容易在历史记录、席位和知识库上分层。'
+                : 'Chatbots often tier history, seats, and knowledge-base access.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese ? '回答稳定性要持续验证' : 'Keep validating answer reliability',
+              note: isChinese
+                ? '如果模型、知识库或提示模板停了，体验会很快变旧。'
+                : 'If the model, knowledge base, or prompt templates stall, the experience quickly goes stale.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '聪明不等于可用' : 'Smart does not equal usable',
+              note: isChinese
+                ? '如果没有知识库接入和接手案例，先别当作主聊天入口。'
+                : 'If there is no knowledge-base integration or handoff example, do not make it the main chat entry yet.',
+            },
+          ]}
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',
