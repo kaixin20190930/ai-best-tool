@@ -246,6 +246,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先检查页面是否能帮助用户完成真实可观测判断：日志、调用追踪、成本分析、质量追踪和生产决策，而不是只看图表数量。'
               : 'This page prioritizes whether the guide helps with a real observability decision: logs, request tracing, cost analysis, quality tracking, and production decisions rather than chart count.'
           }
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese ? '先看试用和保留周期' : 'Check trial and retention limits',
+              note: isChinese
+                ? '可观测工具往往在保留时长、席位和团队权限上分层。'
+                : 'Observability tools often tier retention, seats, and team permissions.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese ? '请求和成本视图要够新' : 'Request and cost views need freshness',
+              note: isChinese
+                ? '数据一旧，排查和决策都会失真。'
+                : 'Stale data quickly distorts debugging and decisions.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '只有图表没有证据不够' : 'Charts without evidence are not enough',
+              note: isChinese
+                ? '如果没有请求级追踪和实际复盘，优先降低权重。'
+                : 'If there is no request-level tracing and real retros, reduce the priority.',
+            },
+          ]}
           items={[
             {
               label: isChinese ? '判断维度' : 'Decision signals',

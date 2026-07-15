@@ -198,6 +198,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先判断自动化工具是否真的能稳定跑流程、可追踪、可维护，而不是只会把步骤串起来。'
               : 'This page checks whether an automation tool can truly run workflows reliably, stay traceable, and remain maintainable rather than merely chaining steps together.'
           }
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese ? '先看执行额度和席位' : 'Check execution limits and seats',
+              note: isChinese
+                ? '自动化工具很容易在任务次数、席位和连接器上分层。'
+                : 'Automation tools often tier by run count, seats, and connectors.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese ? '看连接器和模板是否还在更新' : 'See whether connectors and templates still update',
+              note: isChinese
+                ? '如果模板不动了，自动化很快会落后业务变化。'
+                : 'If templates stop evolving, automation quickly lags behind business changes.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '只串步骤不等于可维护' : 'Chaining steps is not the same as maintainable',
+              note: isChinese
+                ? '如果没有重试、日志和交接案例，先不要把它当主流程。'
+                : 'If there are no retries, logs, or handoff cases, do not make it your main flow yet.',
+            },
+          ]}
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',

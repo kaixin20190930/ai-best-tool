@@ -183,6 +183,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先判断 Agent 工具是否真的能保持上下文、调用工具和处理执行闭环，而不是只看单轮回答的表面效果。'
               : 'This page checks whether agent tools truly keep context, call tools, and close the execution loop rather than only producing a good single-turn answer.'
           }
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese ? '先看试用和执行额度' : 'Check trial and execution limits',
+              note: isChinese
+                ? 'Agent 很容易在执行次数、席位和高级能力上分层。'
+                : 'Agent tools often split value across executions, seats, and advanced capabilities.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese ? '看是否还在持续迭代' : 'See whether it is still iterating',
+              note: isChinese
+                ? '如果发布和支持都停了，长期执行就更危险。'
+                : 'If releases and support have stalled, long-term execution gets riskier.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '没有真实执行回路要谨慎' : 'Be cautious without a real execution loop',
+              note: isChinese
+                ? '如果没有失败恢复、日志或接管案例，先别把它当主力。'
+                : 'If there are no recovery, logging, or handoff cases, do not treat it as the main choice yet.',
+            },
+          ]}
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',
