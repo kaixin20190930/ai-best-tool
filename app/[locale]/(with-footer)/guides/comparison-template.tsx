@@ -222,6 +222,69 @@ function formatUpdatedAt(updatedAt?: string): string {
   }).format(parsed);
 }
 
+function getRiskSignal(updatedAt?: string, pricing?: Tool['pricing'], isChinese = false) {
+  if (!updatedAt) {
+    return {
+      label: isChinese ? '风险偏高' : 'Higher risk',
+      note: isChinese
+        ? '缺少最近更新时间，建议先核对官网和评论。'
+        : 'No freshness signal yet, so check the official site and comments first.',
+      tone: 'border-rose-200 bg-rose-50 text-rose-700',
+    };
+  }
+
+  const parsed = new Date(updatedAt);
+  if (Number.isNaN(parsed.getTime())) {
+    return {
+      label: isChinese ? '待核对' : 'Needs review',
+      note: isChinese
+        ? '更新时间格式不稳定，先按需再核对一次。'
+        : 'The update date is not reliable, so verify it once more.',
+      tone: 'border-amber-200 bg-amber-50 text-amber-700',
+    };
+  }
+
+  const diffDays = Math.max(0, Math.floor((Date.now() - parsed.getTime()) / (1000 * 60 * 60 * 24)));
+
+  if (diffDays > 180) {
+    return {
+      label: isChinese ? '风险偏高' : 'Higher risk',
+      note: isChinese
+        ? `距最近更新已超过 ${diffDays} 天，最好先确认它还在维护。`
+        : `It has been more than ${diffDays} days since the last update, so confirm it is still maintained.`,
+      tone: 'border-rose-200 bg-rose-50 text-rose-700',
+    };
+  }
+
+  if (diffDays > 90) {
+    return {
+      label: isChinese ? '注意更新' : 'Watch freshness',
+      note: isChinese
+        ? `距最近更新约 ${diffDays} 天，建议先看官网和评论再决定。`
+        : `About ${diffDays} days since the last update, so check the official site and comments first.`,
+      tone: 'border-amber-200 bg-amber-50 text-amber-700',
+    };
+  }
+
+  if (pricing === 'paid') {
+    return {
+      label: isChinese ? '先看试用' : 'Check trial first',
+      note: isChinese
+        ? '付费工具先确认试用、限制和升级门槛。'
+        : 'For paid tools, confirm the trial, limits, and upgrade threshold first.',
+      tone: 'border-cyan-200 bg-cyan-50 text-cyan-700',
+    };
+  }
+
+  return {
+    label: isChinese ? '风险较低' : 'Lower risk',
+    note: isChinese
+      ? '最近有更新，且价格层级清楚，适合继续比较。'
+      : 'Fresh enough and the pricing tier is clear, so it is fine to keep comparing.',
+    tone: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+  };
+}
+
 function buildDefaultDecisionCards(comparisonLabel: { cn: string; en: string }) {
   return [
     {
@@ -1122,6 +1185,22 @@ export function ComparisonPage({
                         </span>
                       </div>
                       <p className='mt-2 text-sm leading-6 text-slate-600'>{tool.summary}</p>
+
+                      <div className='mt-4 rounded-xl border border-slate-200 bg-slate-50 p-3'>
+                        <div className='flex flex-wrap items-center gap-2'>
+                          <span className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                            {isChinese ? '风险信号' : 'Risk signal'}
+                          </span>
+                          <span
+                            className={`rounded-full border px-2.5 py-1 text-xs font-semibold ${getRiskSignal(tool.updatedAt, tool.pricing, isChinese).tone}`}
+                          >
+                            {getRiskSignal(tool.updatedAt, tool.pricing, isChinese).label}
+                          </span>
+                        </div>
+                        <p className='mt-2 text-sm leading-6 text-slate-600'>
+                          {getRiskSignal(tool.updatedAt, tool.pricing, isChinese).note}
+                        </p>
+                      </div>
 
                       <div className='mt-4 flex flex-wrap items-center gap-2 text-xs'>
                         <span className='inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 font-medium text-slate-600'>
