@@ -62,6 +62,41 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Whether it connects with CRM, email, and site actions decides if it will stay in use.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '渠道信号' : 'Channel signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看是不是覆盖你真正要用的渠道'
+                : 'Check whether it covers the channels you actually use',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '营销工具最先看渠道适配。'
+                : 'Marketing tools start with channel fit.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '协作信号' : 'Collaboration signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看团队协作和权限是否顺手'
+                : 'See whether team collaboration and permissions are smooth',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '多人协作越多，权限和流程越关键。'
+                : 'The more people involved, the more permissions and workflow matter.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '长期信号' : 'Long-term signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看能否接 CRM、邮件和站内动作'
+                : 'Check whether it links with CRM, email, and site actions',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '能接到后续流程，才会长期保留。'
+                : 'It only stays useful if it plugs into downstream flow.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

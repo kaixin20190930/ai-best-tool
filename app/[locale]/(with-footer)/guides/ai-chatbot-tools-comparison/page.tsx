@@ -336,6 +336,23 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               note: isChinese ? '把页面补成可验证的内容。' : 'Make the page more verifiable.',
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '回复信号' : 'Reply signal',
+              value: isChinese ? '先看回答是否稳妥清晰' : 'Check whether replies are safe and clear',
+              note: isChinese ? '聊天机器人最怕答非所问。' : 'Chatbots fail when answers are off-target.',
+            },
+            {
+              label: isChinese ? '上下文信号' : 'Context signal',
+              value: isChinese ? '看能否接住对话上下文' : 'See whether it can carry the conversation context',
+              note: isChinese ? '上下文接得住，体验才像真的能用。' : 'Context support is what makes it feel usable.',
+            },
+            {
+              label: isChinese ? '协作信号' : 'Collaboration signal',
+              value: isChinese ? '看知识库和人工接手是否顺手' : 'Check whether KB and human handoff are smooth',
+              note: isChinese ? '真正落地常常取决于流程。' : 'Real adoption usually depends on workflow fit.',
+            },
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>

@@ -326,6 +326,41 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Permissions, sharing, and history decide long-term adoption.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '仓库信号' : 'Repo signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '先看能否结合仓库上下文'
+                : 'Check whether it can use repo context well',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '开发者工具最先看仓库接入。'
+                : 'Developer tools start with repo integration.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '调试信号' : 'Debug signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看能不能帮你更快定位问题'
+                : 'See whether it helps you find issues faster',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '调试质量比单次生成更关键。'
+                : 'Debug quality matters more than one-off generation.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '编辑器信号' : 'Editor signal',
+            value:
+              locale === 'cn' || locale === 'tw'
+                ? '看编辑器和流程是否顺手'
+                : 'Check whether the editor and workflow feel natural',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '真正使用时，顺手与否决定留存。'
+                : 'For real use, workflow comfort decides retention.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>
