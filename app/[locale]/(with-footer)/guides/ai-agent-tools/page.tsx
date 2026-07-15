@@ -58,6 +58,33 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'A tool only works long term if the team can review and hand it off cleanly.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '自动化深度' : 'Automation depth',
+            value:
+              locale === 'cn' || locale === 'tw' ? '先看能否串起完整链路' : 'Check whether it connects the full chain',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '真正有价值的 agent 工具，应该能把计划、执行、回传结果串成闭环。'
+                : 'A useful agent tool should connect planning, execution, and result handoff into one loop.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '集成信号' : 'Integration signal',
+            value: locale === 'cn' || locale === 'tw' ? '优先接现有系统' : 'Fit existing systems first',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果接入 API、数据库、消息和任务系统很别扭，落地成本会迅速上升。'
+                : 'If API, database, message, and task integrations are awkward, the real rollout cost rises fast.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '协作信号' : 'Collaboration signal',
+            value: locale === 'cn' || locale === 'tw' ? '可复盘可交接' : 'Reviewable and handoff-ready',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '能不能给团队看懂、接手、复盘，比单次演示更重要。'
+                : 'Whether the team can understand, take over, and review it matters more than a one-off demo.',
+          },
+        ]}
       />
 
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>

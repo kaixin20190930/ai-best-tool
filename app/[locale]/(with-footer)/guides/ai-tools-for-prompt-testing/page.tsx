@@ -225,6 +225,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `Next, priority additions are prompt versions, scoring examples, and retrospective notes while keeping the ${checkedAt} verification record.`,
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '版本信号' : 'Version signal',
+              value: isChinese ? '优先看可复现的版本差异' : 'Prioritize reproducible version deltas',
+              note: isChinese
+                ? '如果不能稳定比较不同 prompt 版本，这类工具很难真正帮你做决策。'
+                : 'If different prompt versions cannot be compared reliably, the tool will not help you decide much.',
+            },
+            {
+              label: isChinese ? '样本信号' : 'Sample signal',
+              value: isChinese ? '评估集要能代表真实场景' : 'Eval sets must reflect real scenarios',
+              note: isChinese
+                ? '只跑一两个例子很容易失真，最好有接近真实任务的样本集。'
+                : 'A couple of examples can mislead; close-to-real task samples are much better.',
+            },
+            {
+              label: isChinese ? '复盘信号' : 'Retrospective signal',
+              value: isChinese ? '看团队是否能回看结果' : 'Check whether teams can review results',
+              note: isChinese
+                ? '能否把结论沉淀下来，比“跑出一版结果”更重要。'
+                : 'Being able to preserve conclusions matters more than just producing one result.',
+            },
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>

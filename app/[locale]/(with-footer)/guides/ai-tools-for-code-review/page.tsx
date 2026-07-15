@@ -251,6 +251,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `Next, priority additions are real PR examples, team retros, and common review templates while keeping the ${checkedAt} verification record.`,
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? 'Diff 信号' : 'Diff signal',
+              value: isChinese ? '先看是否真围绕改动讲清楚' : 'Check whether it explains actual diffs',
+              note: isChinese
+                ? '如果评论脱离代码上下文，这类工具对 code review 的帮助会大打折扣。'
+                : 'If comments drift away from code context, the tool helps much less with review.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '关注会不会漏掉关键问题' : 'Watch for missed critical issues',
+              note: isChinese
+                ? '更重要的是能不能把高风险变更提前拎出来，而不是只会夸代码。'
+                : 'The key is surfacing risky changes early, not just flattering the code.',
+            },
+            {
+              label: isChinese ? '执行信号' : 'Actionability signal',
+              value: isChinese ? '评论要能直接落地' : 'Comments should be actionable',
+              note: isChinese
+                ? '能不能直接给出下一步怎么改，比输出长篇分析更实用。'
+                : 'Direct next-step guidance is more useful than long-form analysis.',
+            },
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
