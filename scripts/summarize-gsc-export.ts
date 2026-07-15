@@ -282,7 +282,7 @@ async function readCsvByName(dir: string, filenames: string | string[]) {
   const candidates = Array.isArray(filenames) ? filenames : [filenames];
 
   for (const filename of candidates) {
-    const locatedPath = await findCsvFile(dir, filename);
+    const locatedPath = await findCsvFile(dir, filename, 6);
     if (!locatedPath) continue;
     return readCsvIfExists(path.dirname(locatedPath), path.basename(locatedPath));
   }
@@ -293,6 +293,9 @@ async function readCsvByName(dir: string, filenames: string | string[]) {
 function buildReport(dir: string, sources: Record<string, CsvTable | null>) {
   const chart = sources.chart ? summarizeChart(sources.chart) : null;
   const foundAny = Object.values(sources).some(Boolean);
+  const detectedSources = Object.entries(sources)
+    .filter(([, table]) => Boolean(table))
+    .map(([name]) => name);
 
   const lines: string[] = [];
   lines.push('# GSC Export Summary');
@@ -316,6 +319,11 @@ function buildReport(dir: string, sources: Record<string, CsvTable | null>) {
     return lines.join('\n');
   }
 
+  lines.push('## Detected Files');
+  lines.push('');
+  lines.push(detectedSources.length > 0 ? `- ${detectedSources.join(', ')}` : '- None');
+  lines.push('');
+
   if (chart) {
     lines.push('## 28-day Overview');
     lines.push('');
@@ -331,7 +339,9 @@ function buildReport(dir: string, sources: Record<string, CsvTable | null>) {
   } else {
     lines.push('## 28-day Overview');
     lines.push('');
-    lines.push('_No chart CSV found._');
+    lines.push(
+      '_No chart CSV found. Query/page tables were still detected, so the report can be used as a partial baseline._',
+    );
     lines.push('');
   }
 
@@ -398,9 +408,13 @@ async function main() {
     const docsPath = path.join(process.cwd(), 'docs', 'GSC_WEEKLY_OBSERVATION_LOG_CN.md');
     const log = await readFile(docsPath, 'utf8');
     const chartSummary = sources.chart ? summarizeChart(sources.chart) : null;
-    const summaryLine = chartSummary
-      ? `| Week 1 | ${new Date().toISOString().slice(0, 10)} | ${formatNumber(chartSummary.impressions)} | ${formatNumber(chartSummary.clicks)} | ${formatPercent(chartSummary.ctr)} | ${chartSummary.position.toFixed(2)} | ${inventoryCounts.sitemap ?? '待填'} | ${inventoryCounts.noindex ?? '待填'} | 从 GSC CSV 导入`
-      : null;
+    const hasAnySource = Object.values(sources).some(Boolean);
+    let summaryLine: string | null = null;
+    if (chartSummary) {
+      summaryLine = `| Week 1 | ${new Date().toISOString().slice(0, 10)} | ${formatNumber(chartSummary.impressions)} | ${formatNumber(chartSummary.clicks)} | ${formatPercent(chartSummary.ctr)} | ${chartSummary.position.toFixed(2)} | ${inventoryCounts.sitemap ?? '待填'} | ${inventoryCounts.noindex ?? '待填'} | 从 GSC CSV 导入`;
+    } else if (hasAnySource) {
+      summaryLine = `| Week 1 | ${new Date().toISOString().slice(0, 10)} | 待填 | 待填 | 待填 | 待填 | ${inventoryCounts.sitemap ?? '待填'} | ${inventoryCounts.noindex ?? '待填'} | GSC CSV 部分导入，等待图表文件`;
+    }
     if (summaryLine) {
       const updated = updateWeeklyOverview(log, summaryLine);
       if (updated !== log) {
