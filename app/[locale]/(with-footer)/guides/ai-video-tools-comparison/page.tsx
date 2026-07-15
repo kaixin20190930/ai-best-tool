@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { ArrowRight, CheckCircle2, Columns3, ExternalLink, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema, generateItemListSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import { toolToListRow } from '@/lib/services/toolPresenter';
@@ -27,6 +28,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '对比几款常见的 AI 视频工具，帮你更快选出适合的一个。'
         : 'Compare common AI video tools to choose the one that fits you best.',
+    ...getNoindexMetadata(),
   };
 }
 

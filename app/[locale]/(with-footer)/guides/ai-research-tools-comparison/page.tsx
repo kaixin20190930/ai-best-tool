@@ -1,3 +1,4 @@
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 
 import ResearchComparisonPage, {
@@ -5,7 +6,10 @@ import ResearchComparisonPage, {
 } from '../ai-tools-for-research-comparison/page';
 
 export function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
-  return generateResearchComparisonMetadata({ params: { locale } });
+  return generateResearchComparisonMetadata({ params: { locale } }).then((metadata) => ({
+    ...metadata,
+    ...getNoindexMetadata(),
+  }));
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
