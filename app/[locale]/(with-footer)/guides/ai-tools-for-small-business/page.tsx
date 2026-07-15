@@ -327,6 +327,33 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `Add real team workflows to reduce templated wording while keeping the ${checkedAt} verification record.`,
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese ? '先看团队席位和自动化限制' : 'Check team seats and automation limits first',
+              note: isChinese
+                ? '小企业通常很快会碰到席位、权限和工作流配额。'
+                : 'Small businesses often hit seat, permission, and workflow quotas quickly.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese
+                ? '看集成和后台能力是否在更新'
+                : 'Check whether integrations and admin features are still evolving',
+              note: isChinese
+                ? '如果更新停在演示层，后续协作功能往往不稳。'
+                : 'If updates stop at demo polish, collaboration features usually lag behind.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese
+                ? '没有权限 / 导出 / 支持就先降级'
+                : 'Downgrade it without permissions, export, or support',
+              note: isChinese
+                ? '这三项缺一项，都说明它还不够适合真正的小团队长期用。'
+                : 'If any of those are missing, it is not ready for sustained small-team use.',
+            },
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
