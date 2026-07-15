@@ -350,6 +350,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               note: isChinese ? '把 AI 内容补成更可信的页面。' : 'Use them to make the page more credible.',
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '流程信号' : 'Workflow signal',
+              value: isChinese
+                ? '剪辑、生成、配音、短视频营销'
+                : 'Editing, generation, voiceover, short-form marketing',
+              note: isChinese
+                ? '先确认它能不能接住你的主视频流程。'
+                : 'Confirm that it actually covers the main video workflow.',
+            },
+            {
+              label: isChinese ? '长期信号' : 'Long-term signal',
+              value: isChinese ? '导出、更新、评论' : 'Export, freshness, comments',
+              note: isChinese
+                ? '持续做视频时这些比标题更重要。'
+                : 'These matter more than labels for ongoing video work.',
+            },
+            {
+              label: isChinese ? '增量信号' : 'Increment signal',
+              value: isChinese ? '案例、场景、owner 认领' : 'Cases, use cases, owner claims',
+              note: isChinese ? '把 AI 内容补成更可信的页面。' : 'Use them to make the page more credible.',
+            },
+          ]}
         />
 
         <section className='mt-8'>
