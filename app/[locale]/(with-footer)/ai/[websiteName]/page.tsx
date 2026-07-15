@@ -1283,6 +1283,15 @@ function getClaimTone(claimStatus: string | null | undefined): string {
   return 'bg-slate-100 text-slate-600';
 }
 
+function getDaysSince(date: Date | string | null | undefined): number | null {
+  if (!date) return null;
+
+  const timestamp = new Date(date).getTime();
+  if (Number.isNaN(timestamp)) return null;
+
+  return Math.max(0, Math.floor((Date.now() - timestamp) / (1000 * 60 * 60 * 24)));
+}
+
 type DetailClaimSignals = {
   ownerEmail?: string | null;
   claimStatus?: string | null;
@@ -1531,6 +1540,7 @@ export default async function Page({
     const ownerEmail = claimTool?.ownerEmail || '';
     const claimStatus = claimTool?.claimStatus || 'unclaimed';
     const claimedAt = claimTool?.claimedAt || '';
+    const updatedAgeDays = getDaysSince(updatedAt);
     const recentlyCheckedLabel = isChinese ? '最近检查' : 'Recently checked';
     const updatedLabel = updatedAt
       ? new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
@@ -1635,6 +1645,47 @@ export default async function Page({
       : null;
     const freshnessSummary = decisionFreshnessSummary || getFreshnessSummary(updatedAt || null, locale);
     const pricingSummary = decisionPricingSummary || getPricingSummary(dbTool?.pricing, locale);
+    const riskPoints: string[] = [];
+    if (dbTool?.status !== 'published') {
+      riskPoints.push(
+        isChinese
+          ? '条目还没有完全公开，功能、定价或截图可能还在补齐。'
+          : 'The listing is not fully published yet, so features, pricing, or screenshots may still change.',
+      );
+    }
+    if (updatedAgeDays !== null && updatedAgeDays > 90) {
+      riskPoints.push(
+        isChinese
+          ? `最近更新已经是 ${updatedAgeDays} 天前，建议先确认官网是否仍在维护。`
+          : `The latest update was ${updatedAgeDays} days ago, so it is worth confirming the site is still maintained.`,
+      );
+    }
+    if (!ownerEmail && claimStatus === 'unclaimed') {
+      riskPoints.push(
+        isChinese
+          ? '还没有 owner 信号，出问题时不一定能快速联系到工具方。'
+          : 'There is no owner signal yet, so it may be harder to reach the team if something looks off.',
+      );
+    }
+    if (dbTool?.pricing === 'free') {
+      riskPoints.push(
+        isChinese
+          ? '免费版通常最容易验证价值，但也最容易碰到功能或额度限制。'
+          : 'Free plans are easiest to try but also the first to hit feature or usage limits.',
+      );
+    } else if (dbTool?.pricing === 'freemium') {
+      riskPoints.push(
+        isChinese
+          ? 'Freemium 往往能先试出价值，但真正工作流通常会在升级门槛处遇到限制。'
+          : 'Freemium can validate value fast, but the real workflow often hits upgrade gates quickly.',
+      );
+    } else if (dbTool?.pricing === 'paid') {
+      riskPoints.push(
+        isChinese
+          ? '付费工具最好结合试用和评论一起看，避免只看价格不看适配度。'
+          : 'Paid tools should still be checked with trials and comments so you do not buy the wrong fit.',
+      );
+    }
     const screenshotCount = dbTool?.screenshots?.length || 0;
     const hasVideo = Boolean(dbTool?.videoUrl);
     const mediaCoverageBase = getMediaCoverageSummary({
@@ -2229,7 +2280,7 @@ export default async function Page({
                       <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
                         {locale === 'cn' ? '先看这三个判断' : 'Start with these three signals'}
                       </p>
-                      <div className='mt-4 grid gap-3 sm:grid-cols-3'>
+                      <div className='mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4'>
                         <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
                           <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
                             {locale === 'cn' ? '官方网站状态' : 'Official website status'}
@@ -2278,6 +2329,27 @@ export default async function Page({
                           </p>
                           <p className='mt-2 text-base font-semibold text-slate-950'>{pricingLabel}</p>
                           <p className='mt-3 text-sm leading-6 text-slate-600'>{pricingSummary}</p>
+                        </div>
+
+                        <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
+                          <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                            {locale === 'cn' ? '风险与限制' : 'Risks and limits'}
+                          </p>
+                          <div className='mt-2 space-y-2'>
+                            {(riskPoints.length > 0
+                              ? riskPoints
+                              : [isChinese ? '暂时没有明显风险信号。' : 'No strong risk signal right now.']
+                            )
+                              .slice(0, 2)
+                              .map((item) => (
+                                <p
+                                  key={item}
+                                  className='rounded-lg bg-slate-50 px-3 py-2 text-sm leading-6 text-slate-600'
+                                >
+                                  {item}
+                                </p>
+                              ))}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -2674,6 +2746,27 @@ export default async function Page({
                       {locale === 'cn' ? '定价快照' : 'Pricing snapshot'}
                     </p>
                     <p className='mt-2 text-sm leading-6 text-slate-700'>{pricingSummary}</p>
+                  </div>
+
+                  <div>
+                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                      {locale === 'cn' ? '风险与限制' : 'Risks and limits'}
+                    </p>
+                    <div className='mt-2 space-y-2'>
+                      {(riskPoints.length > 0
+                        ? riskPoints
+                        : [isChinese ? '暂时没有明显风险信号。' : 'No strong risk signal right now.']
+                      )
+                        .slice(0, 2)
+                        .map((item) => (
+                          <p
+                            key={item}
+                            className='rounded-lg bg-white px-3 py-2 text-xs leading-5 text-slate-700 ring-1 ring-cyan-100'
+                          >
+                            {item}
+                          </p>
+                        ))}
+                    </div>
                   </div>
 
                   <div>
