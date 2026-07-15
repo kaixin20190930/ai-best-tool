@@ -250,3 +250,4 @@
 - 2026-07-15：继续补齐 `ai-web3-tools-comparison`、`ai-tools-for-defi-analytics-comparison`、`ai-tools-for-wallet-monitoring-comparison` 的 `signalCards`，把 Web3 / DeFi / 钱包监控页的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `ai-research-tools-comparison`、`ai-tools-for-prompt-testing-comparison`、`ai-tools-for-api-observability-comparison` 的 `signalCards`，把研究、Prompt 测试和 API 可观测页的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：补齐 `ai-chatbot-tools-comparison`、`ai-coding-tools-comparison`、`ai-image-tools-comparison`、`ai-research-tools-comparison`、`ai-video-tools-comparison` 的 `noindex` 标记，避免独立写 metadata 的 comparison 页漏进索引面。
+- 2026-07-15：`Explore` 页补齐价格 / 更新 / 风险信号层，让目录页也能直接承担筛选和决策中枢的角色，并通过本地 `pnpm run build`。

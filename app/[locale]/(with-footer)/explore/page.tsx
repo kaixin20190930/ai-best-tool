@@ -268,6 +268,29 @@ export default async function Page({ params, searchParams }: PageProps) {
               note: isChinese ? '让探索页更像决策中枢。' : 'Make explore feel more like a decision hub.',
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese ? '先按免费、freemium、付费筛选' : 'Start with free, freemium, and paid filters',
+              note: isChinese
+                ? '目录页最有价值的地方，是帮用户快速排除预算不合适的工具。'
+                : 'A directory page is most useful when it quickly removes tools that do not fit the budget.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese ? '优先看最近更新的结果' : 'Prioritize the newest results',
+              note: isChinese
+                ? '探索页如果只显示旧条目，用户很难判断哪些还值得点。'
+                : 'If the page only shows stale entries, users cannot tell what is still worth opening.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '把重复、稀薄和不活跃项降级' : 'Downgrade duplicates, thin pages, and inactive items',
+              note: isChinese
+                ? '目录页应该先把风险高、判断弱的结果挡在前面。'
+                : 'The directory should surface risky or weakly judged results less prominently.',
+            },
+          ]}
         />
 
         <section className='mb-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
