@@ -276,6 +276,33 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'If you only want one stable primary entry, do not overcomplicate the aggregation layer.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? '聚合信号' : 'Aggregation signal',
+            value:
+              locale === 'cn' || locale === 'tw' ? '是否真的能并排比较' : 'Can it truly compare models side by side',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果不能方便切换和并比，聚合入口的价值就会下降。'
+                : 'If switching and comparison are awkward, the aggregator value drops fast.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '入口信号' : 'Entry signal',
+            value: locale === 'cn' || locale === 'tw' ? '入口是否顺手' : 'Is the entry comfortable',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? 'Poe 的关键是“切换时不别扭”，不是单个模型多强。'
+                : 'The key question is whether switching feels smooth, not how strong one model is.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '长期信号' : 'Long-term signal',
+            value: locale === 'cn' || locale === 'tw' ? '是否适合长期保留' : 'Can it stay in your stack',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果你只要一个稳定主入口，别让聚合层过度复杂。'
+                : 'If you only want one stable primary entry, do not overcomplicate the aggregation layer.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>

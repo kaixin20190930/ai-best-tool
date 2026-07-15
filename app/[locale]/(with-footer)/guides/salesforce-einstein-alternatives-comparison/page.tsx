@@ -283,6 +283,32 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Landing in enterprise workflow matters more than individual features.',
           },
         ]}
+        signalCards={[
+          {
+            label: locale === 'cn' || locale === 'tw' ? 'CRM 信号' : 'CRM signal',
+            value: locale === 'cn' || locale === 'tw' ? '是否能进销售体系' : 'Can it fit the sales stack',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '如果不是 CRM 层的需求，就别把它当成普通 AI 工具比。'
+                : 'If CRM is not the job, do not compare it like a generic AI tool.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '自动化信号' : 'Automation signal',
+            value: locale === 'cn' || locale === 'tw' ? '销售和流程是否能连起来' : 'Can sales and workflows connect',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '企业工具的关键是流程能不能真的跑通。'
+                : 'Enterprise tools live or die by whether the process actually runs.',
+          },
+          {
+            label: locale === 'cn' || locale === 'tw' ? '企业信号' : 'Enterprise signal',
+            value: locale === 'cn' || locale === 'tw' ? '权限、数据和扩展性' : 'Permissions, data, and extensibility',
+            note:
+              locale === 'cn' || locale === 'tw'
+                ? '能不能落进企业流程，通常比单点功能更重要。'
+                : 'Landing in enterprise workflow matters more than individual features.',
+          },
+        ]}
       />
       <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
         <div>
