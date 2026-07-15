@@ -276,6 +276,27 @@ export default function BestAiToolsPage({ params: { locale } }: { params: { loca
               ? '在榜单页先讲清楚不适合谁，比单纯堆“推荐”更有用。'
               : 'Explaining who it is not for is often more useful than stacking more recommendations.',
           },
+          {
+            label: isChinese ? '选择信号' : 'Selection signal',
+            value: isChinese ? '先看榜单为何存在' : 'See why this ranking exists',
+            note: isChinese
+              ? '榜单页应该先帮你收窄主题，而不是只把工具名堆在一起。'
+              : 'A ranking page should narrow the theme first instead of just stacking names.',
+          },
+          {
+            label: isChinese ? '受众信号' : 'Audience signal',
+            value: isChinese ? '先看它是给谁看的' : 'Check who it is for',
+            note: isChinese
+              ? '不同的榜单页要承接不同意图，开发者、研究者和创作者不该混在一起。'
+              : 'Different ranking pages should serve different intents; developers, researchers, and creators should not be mixed together.',
+          },
+          {
+            label: isChinese ? '下一步信号' : 'Next-step signal',
+            value: isChinese ? '直接去榜单、详情或提交' : 'Go to a list, detail page, or submit',
+            note: isChinese
+              ? '用户在这个页面的目标是选路，不是看完就走。'
+              : 'The goal here is to choose a path, not just to browse and leave.',
+          },
         ]}
       />
     </div>
