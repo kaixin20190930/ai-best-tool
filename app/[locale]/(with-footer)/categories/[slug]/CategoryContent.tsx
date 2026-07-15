@@ -1026,6 +1026,29 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
                 : 'Turn an abstract category into an actionable selection page.',
             },
           ]}
+          signalCards={[
+            {
+              label: isChinese ? '价格信号' : 'Pricing signal',
+              value: isChinese ? '先看免费 / freemium / 付费层级' : 'Check free, freemium, and paid tiers first',
+              note: isChinese
+                ? '分类页要先告诉用户这类工具通常花多少钱。'
+                : 'A category page should tell users what this class of tools usually costs.',
+            },
+            {
+              label: isChinese ? '更新信号' : 'Freshness signal',
+              value: isChinese ? '先看最近核查与代表工具' : 'Check last-checked dates and representatives',
+              note: isChinese
+                ? '如果分类页长期不更新，代表工具和高意图入口都会失真。'
+                : 'If the category page goes stale, the representatives and high-intent paths drift.',
+            },
+            {
+              label: isChinese ? '风险信号' : 'Risk signal',
+              value: isChinese ? '先排除相邻但不匹配的场景' : 'Filter adjacent but mismatched use cases',
+              note: isChinese
+                ? '分类最怕把不同任务混在一起。'
+                : 'The biggest category risk is mixing different tasks together.',
+            },
+          ]}
         />
 
         <div className='mb-8 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]'>

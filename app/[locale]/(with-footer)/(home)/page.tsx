@@ -621,6 +621,29 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   : `${communityHighlights.length} highlights and ${recentDiscussions.length} recent discussions keep real usage traces on the homepage.`,
               },
             ]}
+            signalCards={[
+              {
+                label: isChinese ? '价格信号' : 'Pricing signal',
+                value: isChinese ? '先看免费与试用门槛' : 'Check free and trial thresholds first',
+                note: isChinese
+                  ? '首页先帮用户缩小预算范围，再进入更深的页面。'
+                  : 'The homepage should help users narrow budget before they dive deeper.',
+              },
+              {
+                label: isChinese ? '更新信号' : 'Freshness signal',
+                value: isChinese ? '真实更新和最近验证' : 'Real updates and last-checked dates',
+                note: isChinese
+                  ? '更新信号越强，首页越像一个活站点而不是静态目录。'
+                  : 'Stronger freshness signals make the site feel alive instead of static.',
+              },
+              {
+                label: isChinese ? '风险信号' : 'Risk signal',
+                value: isChinese ? '先看不适合谁' : 'Check who it is not for first',
+                note: isChinese
+                  ? '首页先排除不匹配场景，后面的点击会更准。'
+                  : 'Filtering out mismatched use cases early improves downstream clicks.',
+              },
+            ]}
           />
         </div>
 

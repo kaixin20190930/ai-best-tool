@@ -9,10 +9,10 @@ export async function generateMetadata({ params: { locale } }: { params: { local
   const isChinese = locale === 'cn' || locale === 'tw';
 
   return {
-    title: isChinese ? 'Top AI Tools | AI Best Tool' : 'Top AI Tools | AI Best Tool',
+    title: isChinese ? 'Best AI Tools by Use Case | AI Best Tool' : 'Best AI Tools by Use Case | AI Best Tool',
     description: isChinese
-      ? '按用途整理的 AI 工具榜单：Agent、可观测、写作、开发、模型路由、研究和视频。'
-      : 'Purpose-driven AI tool rankings for agents, observability, coding, model routing, research, writing, and video.',
+      ? '按用途整理的 AI 工具榜单：Agent、可观测、写作、开发、模型路由、研究和视频，并明确下一步该看什么。'
+      : 'Purpose-driven AI tool rankings for agents, observability, coding, model routing, research, writing, and video with clear next-step guidance.',
   };
 }
 
@@ -254,6 +254,27 @@ export default function BestAiToolsPage({ params: { locale } }: { params: { loca
             label: isChinese ? '下一步增强' : 'Next enrichment',
             value: isChinese ? '真实榜单信号、owner 认领、评论' : 'Real ranking signals, owner claims, comments',
             note: isChinese ? '让页面更接近真实决策页。' : 'Make the page feel closer to a real decision page.',
+          },
+        ]}
+        signalCards={[
+          {
+            label: isChinese ? '价格信号' : 'Pricing signal',
+            value: isChinese ? '先看免费、freemium、付费门槛' : 'Check free, freemium, and paid thresholds first',
+            note: isChinese
+              ? '榜单页应该先帮人判断预算，而不是先灌太多工具名。'
+              : 'A ranking page should help people judge budget before dumping too many tool names.',
+          },
+          {
+            label: isChinese ? '更新信号' : 'Freshness signal',
+            value: isChinese ? '先看最近核查时间' : 'Check the last-checked date first',
+            note: isChinese ? '榜单如果不新，用户会直接跳过。' : 'If the list looks stale, users skip it fast.',
+          },
+          {
+            label: isChinese ? '风险信号' : 'Risk signal',
+            value: isChinese ? '先排除不适合的工具' : 'Filter out mismatched tools early',
+            note: isChinese
+              ? '在榜单页先讲清楚不适合谁，比单纯堆“推荐”更有用。'
+              : 'Explaining who it is not for is often more useful than stacking more recommendations.',
           },
         ]}
       />
