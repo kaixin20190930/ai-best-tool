@@ -252,3 +252,4 @@
 - 2026-07-15：补齐 `ai-chatbot-tools-comparison`、`ai-coding-tools-comparison`、`ai-image-tools-comparison`、`ai-research-tools-comparison`、`ai-video-tools-comparison` 的 `noindex` 标记，避免独立写 metadata 的 comparison 页漏进索引面。
 - 2026-07-15：`Explore` 页补齐价格 / 更新 / 风险信号层，让目录页也能直接承担筛选和决策中枢的角色，并通过本地 `pnpm run build`。
 - 2026-07-15：最新 28 天 GSC 基线已写入周报，近 7 天曝光几乎归零，说明站点仍处在很低的曝光基线，后续优先继续补核心页真实信号与索引收口观察。
+- 2026-07-15：`CategoryContent` 的 evidence panel 改成按 `productivity / web3 / developer-tools / chatbot` 等核心分类输出场景化信号，让 P1 分类页更像真实决策页，并通过本地 `pnpm run build`。

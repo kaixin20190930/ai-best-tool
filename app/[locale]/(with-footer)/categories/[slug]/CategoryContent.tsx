@@ -495,6 +495,111 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
         : 'Start with comparisons and guides, then return to the list to narrow down specific tools.',
     },
   ];
+  const categorySpecificSignalCardsBySlug: Record<
+    string,
+    Array<{
+      label: string;
+      value: string;
+      note: string;
+    }>
+  > = {
+    productivity: [
+      {
+        label: isChinese ? '团队信号' : 'Team signal',
+        value: isChinese ? '先看个人席位还是团队席位' : 'Check whether it is for solo or team seats',
+        note: isChinese
+          ? '生产力类工具最容易在席位和协作边界上出问题。'
+          : 'Productivity tools often fail at seat structure and collaboration boundaries.',
+      },
+      {
+        label: isChinese ? '工作流信号' : 'Workflow signal',
+        value: isChinese ? '先看是否真能省掉会后整理' : 'Check whether it truly saves post-meeting admin',
+        note: isChinese
+          ? '如果不能减少整理和跟进，它就只是漂亮的演示。'
+          : 'If it does not reduce follow-up work, it is only a nice demo.',
+      },
+      {
+        label: isChinese ? '风险信号' : 'Risk signal',
+        value: isChinese ? '别把通用助手当生产力工具' : 'Do not confuse a general assistant with a productivity tool',
+        note: isChinese
+          ? '真正有用的生产力工具，应该能接住日历、会议和任务流。'
+          : 'A useful productivity tool should handle calendar, meetings, and task flow.',
+      },
+    ],
+    web3: [
+      {
+        label: isChinese ? '数据覆盖' : 'Coverage signal',
+        value: isChinese ? '先看链和协议覆盖面' : 'Check chain and protocol coverage first',
+        note: isChinese
+          ? 'Web3 类工具最怕覆盖链不全或协议不全。'
+          : 'Web3 tools are often limited by incomplete chain or protocol coverage.',
+      },
+      {
+        label: isChinese ? '更新信号' : 'Freshness signal',
+        value: isChinese ? '先看最近数据和指标更新时间' : 'Check the latest data and metric refresh dates',
+        note: isChinese
+          ? '链上数据过时，页面就会误导判断。'
+          : 'Stale on-chain data quickly undermines the page’s usefulness.',
+      },
+      {
+        label: isChinese ? '风险信号' : 'Risk signal',
+        value: isChinese ? '没有明确数据来源就先降级' : 'Downgrade it without clear data sources',
+        note: isChinese
+          ? 'Web3 里来源、覆盖和导出比花哨功能更重要。'
+          : 'In Web3, sources, coverage, and exports matter more than flashy features.',
+      },
+    ],
+    'developer-tools': [
+      {
+        label: isChinese ? '接入信号' : 'Integration signal',
+        value: isChinese ? '先看 API、SDK 和工作流接入' : 'Check APIs, SDKs, and workflow integration first',
+        note: isChinese
+          ? '开发者工具如果接不进去，功能再强也很难长期用。'
+          : 'If a developer tool is hard to integrate, strong features will not matter for long.',
+      },
+      {
+        label: isChinese ? '协作信号' : 'Collaboration signal',
+        value: isChinese ? '先看团队共享和权限' : 'Check sharing and permissions for teams',
+        note: isChinese
+          ? '开发团队更在意交接、权限和可追踪性。'
+          : 'Dev teams care about handoff, permissions, and traceability.',
+      },
+      {
+        label: isChinese ? '风险信号' : 'Risk signal',
+        value: isChinese
+          ? '没文档、没观测、没稳定更新就先谨慎'
+          : 'Be cautious without docs, observability, or steady updates',
+        note: isChinese
+          ? '开发者工具需要可维护，而不只是能演示。'
+          : 'Developer tools need maintainability, not just demos.',
+      },
+    ],
+    chatbot: [
+      {
+        label: isChinese ? '模型信号' : 'Model signal',
+        value: isChinese ? '先看能接什么模型' : 'Check which models it can access',
+        note: isChinese
+          ? '聊天机器人要看模型接入，而不是只看界面。'
+          : 'Chatbot pages should focus on model access, not only the UI.',
+      },
+      {
+        label: isChinese ? '使用场景' : 'Use-case signal',
+        value: isChinese ? '先分清问答、客服和助手' : 'Separate Q&A, support, and assistant workflows',
+        note: isChinese
+          ? '不同场景对回复、上下文和知识库要求完全不同。'
+          : 'Different workflows have very different needs for replies, context, and knowledge bases.',
+      },
+      {
+        label: isChinese ? '风险信号' : 'Risk signal',
+        value: isChinese ? '只是在套壳就降级' : 'Downgrade wrapper-only products',
+        note: isChinese
+          ? '如果没有真正的模型、记忆或工作流，就不该被当成核心工具。'
+          : 'Without a real model, memory, or workflow, it should not be treated as a core tool.',
+      },
+    ],
+  };
+  const categorySpecificSignalCards = categorySpecificSignalCardsBySlug[categorySlug] || [];
+  const evidenceSignalCards = [...categorySignalCards, ...categorySpecificSignalCards].slice(0, 6);
   const highIntentEntryPoints = (
     {
       coding: [
@@ -1026,29 +1131,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
                 : 'Turn an abstract category into an actionable selection page.',
             },
           ]}
-          signalCards={[
-            {
-              label: isChinese ? '价格信号' : 'Pricing signal',
-              value: isChinese ? '先看免费 / freemium / 付费层级' : 'Check free, freemium, and paid tiers first',
-              note: isChinese
-                ? '分类页要先告诉用户这类工具通常花多少钱。'
-                : 'A category page should tell users what this class of tools usually costs.',
-            },
-            {
-              label: isChinese ? '更新信号' : 'Freshness signal',
-              value: isChinese ? '先看最近核查与代表工具' : 'Check last-checked dates and representatives',
-              note: isChinese
-                ? '如果分类页长期不更新，代表工具和高意图入口都会失真。'
-                : 'If the category page goes stale, the representatives and high-intent paths drift.',
-            },
-            {
-              label: isChinese ? '风险信号' : 'Risk signal',
-              value: isChinese ? '先排除相邻但不匹配的场景' : 'Filter adjacent but mismatched use cases',
-              note: isChinese
-                ? '分类最怕把不同任务混在一起。'
-                : 'The biggest category risk is mixing different tasks together.',
-            },
-          ]}
+          signalCards={evidenceSignalCards}
         />
 
         <div className='mb-8 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]'>
