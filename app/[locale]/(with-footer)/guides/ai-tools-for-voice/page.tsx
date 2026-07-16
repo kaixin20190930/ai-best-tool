@@ -265,6 +265,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               : 'This page checks whether voice tools truly help with transcription, dubbing, conversation, and export rather than only sounding good.'
           }
           checkedAt={checkedAt}
+          decisionSteps={[
+            isChinese
+              ? '先判断你要的是转写、配音，还是语音对话。'
+              : 'First decide whether you need transcription, dubbing, or conversational voice.',
+            isChinese
+              ? '如果方向清楚，就先去对应的语音对比页。'
+              : 'If the direction is clear, go to the matching voice comparison page first.',
+            isChinese
+              ? '如果要长期用，再回来补样例音频、字幕和语言覆盖。'
+              : 'If you will use it long term, come back for sample audio, captions, and language coverage.',
+          ]}
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',
