@@ -151,6 +151,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先检查免费额度、限制、更新频率、评论和截图，避免把“免费”误读成“足够用”。'
               : 'This page prioritizes free quotas, limits, freshness, comments, and screenshots so that "free" is not mistaken for "enough".'
           }
+          decisionSteps={
+            isChinese
+              ? [
+                  '先判断你是要找能长期用的免费工具，还是只是先试试。',
+                  '如果场景已经明确，先去更具体的免费榜单、分类页或工具页收窄范围。',
+                  '如果还要和团队一起判断，再回到这里查看评论、更新时间和限制说明。',
+                ]
+              : [
+                  'First decide whether you need a tool that can stay free long term or just something to try.',
+                  'If the use case is already clear, move to a more specific free ranking, category, or tool page to narrow the list.',
+                  'If you still need team alignment, come back here for comments, freshness, and limit details.',
+                ]
+          }
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',
