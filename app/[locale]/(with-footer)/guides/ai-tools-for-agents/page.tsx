@@ -231,6 +231,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `Make the page reflect real execution signals while keeping the ${checkedAt} verification record.`,
             },
           ]}
+          decisionSteps={[
+            isChinese
+              ? '先判断你要的是单步回答还是多步骤执行。'
+              : 'First decide whether you need a single answer or multi-step execution.',
+            isChinese
+              ? '如果要长流程，就先看对应的 Agent 对比页。'
+              : 'If it is a long workflow, go to the matching agent comparison page first.',
+            isChinese
+              ? '如果要团队落地，再回来补日志、恢复和接管证据。'
+              : 'If it is for team rollout, come back for logs, recovery, and handoff evidence.',
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
