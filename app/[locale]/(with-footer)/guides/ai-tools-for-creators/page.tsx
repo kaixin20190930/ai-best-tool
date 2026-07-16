@@ -232,6 +232,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Creator tools need to reliably support repeated output.',
             },
           ]}
+          decisionSteps={[
+            isChinese
+              ? '先判断你要的是选题、脚本、封面，还是剪辑和再包装。'
+              : 'First decide whether you need ideation, scripting, thumbnails, editing, or repurposing.',
+            isChinese
+              ? '如果目标已经清楚，就先去创作者榜单和对比页收紧 shortlist。'
+              : 'If the goal is already clear, use the ranking and comparison pages to narrow the shortlist first.',
+            isChinese
+              ? '如果还要给团队留证据，再回到创作者页补真实案例、模板和反馈。'
+              : 'If you still need evidence for a team, come back for real cases, templates, and feedback.',
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>

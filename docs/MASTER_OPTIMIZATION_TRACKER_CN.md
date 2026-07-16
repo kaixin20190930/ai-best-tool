@@ -295,3 +295,4 @@
 - 2026-07-16：`ai-tools-for-web3-analysis` 指南页补齐链上变化 / 协议状态 / 风险观察的决策顺序信号，让 Web3 分析高意图页更像先判断分析目标再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`ai-tools-for-lead-generation` 指南页补齐名单来源 / 筛选深度 / 导出衔接的决策顺序信号，让获客高意图页更像先判断线索来源再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`ai-tools-for-evals-comparison` 对比页补齐评分逻辑 / 结果复盘 / 验收流程的决策顺序信号，让 Evals 对比页更像先判断验证目标再去比对的入口，并通过本地 `pnpm run build`。
+- 2026-07-16：`ai-tools-for-creators` 指南页补齐选题 / 脚本 / 封面 / 剪辑 / 再包装的决策顺序信号，让创作者高意图页更像先判断创作阶段再去比对的入口，并通过本地 `pnpm run build`。
