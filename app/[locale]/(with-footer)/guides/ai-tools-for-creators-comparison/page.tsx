@@ -140,6 +140,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '先确认创作者工具在真实工作流中的覆盖，再决定要不要继续横向比较。'
             : 'Check whether these tools truly cover creator workflows before comparing horizontally further.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先判断你是在做脚本、封面，还是再包装与发布。',
+                '如果目标已经明确，先去更聚焦的内容创作或视频工具页看细节。',
+                '如果还要给团队留证据，再回到这页补评论、案例和 owner 认领。',
+              ]
+            : [
+                'First decide whether the main job is scripts, thumbnails, or repurposing and publishing.',
+                'If the goal is already clear, move to the more focused content-creation or video pages for details.',
+                'If you still need team evidence, come back here for comments, cases, and owner claims.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '产出方式' : 'Output mode',
