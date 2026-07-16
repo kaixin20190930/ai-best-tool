@@ -303,3 +303,4 @@
 - 2026-07-16：`ai-tools-for-model-routing-comparison` 对比页补齐统一入口 / 回退策略 / 成本治理的决策顺序信号，让模型路由对比页更像先判断治理目标再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`ai-tools-for-evals` 指南页补齐评分标准 / 数据集 / 上线验收的决策顺序信号，让 Evals 指南页更像先判断验证目标再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`ai-tools-for-creators-comparison` 对比页补齐脚本 / 再包装 / 发布的决策顺序信号，让创作者对比页更像先判断产出阶段再去比对的入口，并通过本地 `pnpm run build`。
+- 2026-07-16：`ai-tools-for-designers-comparison` 对比页补齐品牌视觉 / 单张设计 / 团队交付的决策顺序信号，让设计对比页更像先判断交付阶段再去比对的入口，并通过本地 `pnpm run build`。

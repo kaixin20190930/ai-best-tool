@@ -106,6 +106,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '设计工具的判断重点通常不是“谁功能最多”，而是品牌一致性、输出可控性、迭代速度和团队交付流程是否匹配。'
             : 'Design tool decisions are usually not about who has the most features, but about brand consistency, output control, iteration speed, and whether the workflow fits how the team ships work.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先判断你是在做品牌视觉、单张设计，还是团队交付。',
+                '如果目标已经明确，先去更聚焦的设计或内容页看候选。',
+                '如果还要给团队留证据，再回到这页补案例、评论和交付说明。',
+              ]
+            : [
+                'First decide whether the job is brand visuals, one-off design, or team delivery.',
+                'If the goal is already clear, move to the more focused design or content pages for candidates.',
+                'If you still need team evidence, come back here for cases, comments, and delivery notes.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '输出一致性' : 'Output consistency',
