@@ -369,6 +369,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Charts alone are not enough; you need traceable evidence.',
             },
           ]}
+          decisionSteps={[
+            isChinese
+              ? '先判断你要的是地址追踪、资金流分析，还是行为复盘。'
+              : 'First decide whether you need address tracking, fund flow analysis, or behavior review.',
+            isChinese
+              ? '如果目标已经很明确，就先看更窄的钱包研究和协议分析页。'
+              : 'If the goal is already clear, start with the narrower wallet research and protocol analytics pages.',
+            isChinese
+              ? '如果还要给团队留证据，再回到链上分析页补真实案例、图谱和截图。'
+              : 'If you still need evidence for a team, come back for real cases, charts, and screenshots.',
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
