@@ -373,6 +373,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `Add real DeFi protocol and yield-tracking examples while keeping the ${checkedAt} check trail.`,
             },
           ]}
+          decisionSteps={[
+            isChinese
+              ? '先判断你要的是流动性分析、收益观察，还是协议行为判断。'
+              : 'First decide whether you need liquidity analysis, yield observation, or protocol behavior judgment.',
+            isChinese
+              ? '如果目标已经清楚，就先去更窄的协议分析和链上分析页。'
+              : 'If the target is already clear, start with the narrower protocol analytics and on-chain analysis pages.',
+            isChinese
+              ? '如果还要给团队沉淀证据，再回到 DeFi 页补真实协议案例和收益曲线。'
+              : 'If you still need evidence for a team, come back to add real protocol cases and yield charts.',
+          ]}
         />
 
         <GuideActionSection
