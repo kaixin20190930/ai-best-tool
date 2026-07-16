@@ -229,6 +229,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `This page was rechecked on ${checkedAt}, and generic marketing talk should stay minimized.`,
             },
           ]}
+          decisionSteps={[
+            isChinese
+              ? '先判断你的工作重点是广告、邮件还是社媒。'
+              : 'First decide whether your work is ads, email, or social.',
+            isChinese
+              ? '如果已经明确渠道，就先去对应对比页。'
+              : 'If the channel is clear, go to the matching comparison page first.',
+            isChinese
+              ? '如果还不确定，再回到这里看渠道栈和执行边界。'
+              : 'If you are still unsure, come back here for channel fit and execution boundaries.',
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
