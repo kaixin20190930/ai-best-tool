@@ -246,6 +246,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `Turn abstract workflows into verifiable content and keep adding real configs after ${checkedAt}.`,
             },
           ]}
+          decisionSteps={[
+            isChinese
+              ? '先判断你要的是简单连线还是长期可维护流程。'
+              : 'First decide whether you need a simple link or a maintainable long-term flow.',
+            isChinese
+              ? '如果已经是流程问题，就先去对应自动化对比页。'
+              : 'If it is already a workflow problem, go to the matching automation comparison page first.',
+            isChinese
+              ? '如果要团队跑起来，再回来补重试、日志和交接配置。'
+              : 'If the team needs to operate it, come back for retries, logs, and handoff configuration.',
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
