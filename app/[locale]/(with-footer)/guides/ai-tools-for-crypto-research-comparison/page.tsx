@@ -287,6 +287,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '这页先看真实可验证的 Crypto 研究信号，再继续判断是否需要更完整的链上和资料结合视图。'
             : 'This page looks at verifiable crypto-research signals first, then helps you decide whether a fuller blend of on-chain and source-context views is needed.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先判断你是在做项目研究、钱包研究，还是协议分析。',
+                '如果目标已经明确，先去更聚焦的代币、钱包或协议对比页看候选。',
+                '如果还要给团队留证据，再回到这页补历史、导出和资料合并案例。',
+              ]
+            : [
+                'First decide whether the job is project research, wallet research, or protocol analysis.',
+                'If the goal is already clear, move to the more focused token, wallet, or protocol comparison pages for candidates.',
+                'If you still need team evidence, come back here for history, exports, and combined source examples.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '研究框架' : 'Research framing',
