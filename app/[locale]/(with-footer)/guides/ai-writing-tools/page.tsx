@@ -179,6 +179,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先检查写作场景、语气稳定性、模板能力、限制和更新信号，避免只看“生成速度”。'
               : 'This page focuses on writing scenarios, tone stability, templates, limits, and freshness so generation speed is not the only factor.'
           }
+          decisionSteps={
+            isChinese
+              ? [
+                  '先判断你要写的是博客、邮件、社媒、SEO，还是广告文案。',
+                  '如果目标已经明确，先去更窄的写作榜单或对比页缩小 shortlist。',
+                  '如果还要和团队对齐，再回到这里看模板、语气和真实案例。',
+                ]
+              : [
+                  'First decide whether you need blogs, emails, social posts, SEO, or ad copy.',
+                  'If the goal is already clear, move to a narrower writing ranking or comparison page to shrink the shortlist.',
+                  'If you still need team alignment, come back here for templates, tone, and real examples.',
+                ]
+          }
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',
