@@ -342,6 +342,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `Add real portfolio structures and dashboard examples while keeping the ${checkedAt} check trail.`,
             },
           ]}
+          decisionSteps={[
+            isChinese
+              ? '先判断你要的是组合看板、持仓总览，还是钱包异动提醒。'
+              : 'First decide whether you need a portfolio dashboard, holdings overview, or wallet alerting.',
+            isChinese
+              ? '如果核心是看全局，就先看更窄的资产追踪对比和 Web3 榜单。'
+              : 'If the core task is seeing the whole picture, start with the narrower tracking comparison and Web3 ranking.',
+            isChinese
+              ? '如果后面还要补团队用法，再回来看真实组合结构和截图案例。'
+              : 'If you still need team usage later, come back for real portfolio setups and screenshot examples.',
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
