@@ -273,6 +273,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '这页先看真实可验证的模型路由信号，再继续判断是否需要统一入口、回退控制和成本治理。'
             : 'This page looks at verifiable model-routing signals first, then helps you decide whether unified access, fallback control, and cost governance are really needed.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先判断你是在选统一入口、回退策略，还是成本治理。',
+                '如果目标已经明确，先去更聚焦的路由或可观测页看细节。',
+                '如果还要给团队留证据，再回到这页补日志、限额和审计记录。',
+              ]
+            : [
+                'First decide whether you care most about unified access, fallback strategy, or cost governance.',
+                'If the goal is already clear, move to the more focused routing or observability pages for details.',
+                'If you still need team evidence, come back here for logs, limits, and audit notes.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '供应商覆盖' : 'Provider coverage',
