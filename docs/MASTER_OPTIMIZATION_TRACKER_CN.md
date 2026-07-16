@@ -275,3 +275,4 @@
 - 2026-07-16：`ai-tools-for-ecommerce` 指南页补齐商品 / 客服 / 营销的决策顺序信号，让电商高意图页更像先判断业务重点再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`ai-tools-for-designers` 指南页补齐品牌视觉 / 样片 / 授权交付的决策顺序信号，让设计高意图页更像先判断交付类型再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`ai-tools-for-api-observability` 指南页补齐日志 / 追踪 / 成本 / 质量的决策顺序信号，让 API 可观测高意图页更像先判断信号再去比对的入口，并通过本地 `pnpm run build`。
+- 2026-07-16：`ai-tools-for-code-review` 指南页补齐 PR 解释 / 风险检查 / 团队反馈的决策顺序信号，让代码审查高意图页更像先判断使用场景再去比对的入口，并通过本地 `pnpm run build`。

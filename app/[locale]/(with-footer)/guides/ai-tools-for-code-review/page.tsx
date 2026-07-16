@@ -228,6 +228,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先检查页面是否能帮助用户完成真实 code review 判断：是否围绕 diff、文件上下文、风险提示、反馈可执行性来展开，而不是只看“会不会生成代码”。'
               : 'This page prioritizes whether the guide helps with a real code review decision: diffs, file context, risk flags, and actionable feedback rather than only code generation ability.'
           }
+          decisionSteps={[
+            isChinese
+              ? '先判断你要的是 PR 解释、风险检查，还是团队协作反馈。'
+              : 'First decide whether you need PR explanation, risk checking, or collaboration feedback.',
+            isChinese
+              ? '如果目标清楚，就先去对应的对比页。'
+              : 'If the goal is clear, go to the matching comparison page first.',
+            isChinese
+              ? '如果要长期用，再回来补真实 PR 案例和评论模板。'
+              : 'If you will use it long term, come back for real PR cases and review templates.',
+          ]}
           items={[
             {
               label: isChinese ? '判断维度' : 'Decision signals',
