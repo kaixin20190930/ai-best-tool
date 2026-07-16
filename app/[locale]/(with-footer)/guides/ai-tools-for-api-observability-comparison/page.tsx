@@ -273,6 +273,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? 'API 可观测对比页要围绕日志可读性、成本可见性、评估闭环和生产接入深度来判断，不要只看图表数量。它会继续保留索引，但把更广的开发者路径分层。'
             : 'This API observability comparison page should focus on log readability, cost visibility, evaluation loops, and production integration depth instead of chart count. Keep it indexable, but separate broader developer paths.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先判断你是在看日志可读性、成本可见性，还是评估闭环。',
+                '如果目标已经明确，先去更聚焦的模型路由或开发者页看候选。',
+                '如果还要给团队留证据，再回到这页补真实请求、告警和案例。',
+              ]
+            : [
+                'First decide whether you care most about log readability, cost visibility, or evaluation loops.',
+                'If the goal is already clear, move to the more focused model-routing or developer pages for candidates.',
+                'If you still need team evidence, come back here for real requests, alerts, and cases.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '验证重点' : 'Validation focus',
