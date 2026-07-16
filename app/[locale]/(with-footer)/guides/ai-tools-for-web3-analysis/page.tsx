@@ -249,6 +249,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `Next, add on-chain examples, monitoring panels, and research notes while keeping the ${checkedAt} verification record.`,
             },
           ]}
+          decisionSteps={[
+            isChinese
+              ? '先判断你要的是链上变化、协议状态，还是风险观察。'
+              : 'First decide whether you need on-chain changes, protocol state, or risk observation.',
+            isChinese
+              ? '如果目标已经明确，就先去更窄的 DEX、DeFi 和钱包页。'
+              : 'If the goal is already clear, start with the narrower DEX, DeFi, and wallet pages.',
+            isChinese
+              ? '如果还要给团队沉淀证据，再回到 Web3 分析页补真实样例、面板和研究笔记。'
+              : 'If you still need evidence for a team, come back for real examples, panels, and research notes.',
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
