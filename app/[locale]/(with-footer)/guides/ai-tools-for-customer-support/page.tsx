@@ -175,6 +175,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先判断客服工具是否真的能保留上下文、控制语气并顺利接管，而不是只输出看起来流畅的回答。'
               : 'This page checks whether support tools truly preserve context, keep tone consistent, and hand off smoothly instead of only producing fluent replies.'
           }
+          decisionSteps={[
+            isChinese
+              ? '先判断你要的是回复草稿、知识库问答、首轮分流还是自动化。'
+              : 'First decide whether you need reply drafts, knowledge-base Q&A, first-pass triage, or automation.',
+            isChinese
+              ? '如果方向清楚，就先看对应的客服对比页。'
+              : 'If the direction is clear, go to the matching support comparison page first.',
+            isChinese
+              ? '如果要长期用，再回来补真实工单和接手案例。'
+              : 'If you will use it long term, come back for real ticket and handoff cases.',
+          ]}
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',
