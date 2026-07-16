@@ -188,6 +188,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '代理页要围绕交付、分工、客户隔离和批量输出来做，不要和泛生产力页混在一起。这个页继续可索引，但会把内容创作、营销和自动化路径优先分层。'
               : 'This agency page should stay centered on delivery, role splitting, client separation, and bulk output rather than blending into generic productivity. Keep it indexable, but layer content creation, marketing, and automation paths first.'
           }
+          decisionSteps={[
+            isChinese
+              ? '先判断你是代理商、服务团队、内容工作室还是顾问。'
+              : 'First decide whether you are an agency, service team, content studio, or consultancy.',
+            isChinese
+              ? '如果方向清楚，就先去对应的代理对比页。'
+              : 'If the direction is clear, go to the matching agency comparison page first.',
+            isChinese
+              ? '如果要长期用，再回来补真实项目和权限流程。'
+              : 'If you will use it long term, come back for real project cases and permissions workflows.',
+          ]}
           items={[
             {
               label: isChinese ? '验证重点' : 'Validation focus',
