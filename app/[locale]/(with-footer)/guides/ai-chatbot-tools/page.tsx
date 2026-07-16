@@ -221,6 +221,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `This page was rechecked on ${checkedAt}, replacing generic copy with real usage evidence.`,
             },
           ]}
+          decisionSteps={[
+            isChinese
+              ? '先判断你要的是通用问答、知识库还是团队协作。'
+              : 'First decide whether you need general Q&A, a knowledge base, or collaboration.',
+            isChinese
+              ? '如果用途明确，就先去对应的对比页。'
+              : 'If the use case is clear, go to the matching comparison page first.',
+            isChinese
+              ? '如果要长期接入，再回来补知识源和稳定性证据。'
+              : 'If this will be used long term, come back for knowledge-source and reliability evidence.',
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
