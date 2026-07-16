@@ -183,6 +183,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先判断 Web3 工具是否真的能接入链上数据、钱包、协议研究和团队工作流，而不是只看概念。'
               : 'This page checks whether a Web3 tool truly fits on-chain data, wallets, protocol research, and team workflows instead of just sounding promising.'
           }
+          decisionSteps={
+            isChinese
+              ? [
+                  '先判断你要的是链上分析、钱包监控，还是协议研究。',
+                  '如果方向已经清楚，先去更窄的 Web3 榜单或对比页收缩 shortlist。',
+                  '如果还要和团队确认数据源和使用方式，再回到这里看导出、历史和价格层。',
+                ]
+              : [
+                  'First decide whether you need on-chain analysis, wallet monitoring, or protocol research.',
+                  'If the direction is already clear, move to a narrower Web3 ranking or comparison page to shrink the shortlist.',
+                  'If you still need team sign-off on data sources and usage, come back here for exports, history, and pricing tiers.',
+                ]
+          }
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',
