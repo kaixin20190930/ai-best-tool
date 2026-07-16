@@ -280,3 +280,4 @@
 - 2026-07-16：`ai-tools-for-protocol-analytics` 指南页补齐健康 / 使用量 / 趋势的决策顺序信号，让协议分析高意图页更像先判断观察目标再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`ai-tools-for-model-routing` 指南页补齐统一出口 / 成本治理 / 回退控制的决策顺序信号，让模型路由高意图页更像先判断治理目标再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`ai-tools-for-customer-support` 指南页补齐回复草稿 / 知识库问答 / 首轮分流 / 自动化的决策顺序信号，让客服高意图页更像先判断支持工作流再去比对的入口，并通过本地 `pnpm run build`。
+- 2026-07-16：`ai-tools-for-small-business` 指南页补齐营销 / 客服 / 自动化 / 团队协作的决策顺序信号，让小企业高意图页更像先判断业务场景再去比对的入口，并通过本地 `pnpm run build`。

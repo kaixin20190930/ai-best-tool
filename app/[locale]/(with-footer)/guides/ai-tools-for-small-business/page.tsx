@@ -304,6 +304,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '小企业页要围绕协作、自动化、支持和效率来做，不是把所有企业工具都混在一起。这个页继续可索引，但会把营销、客服和自动化的更窄入口优先露出，减少和泛生产力页的重复。'
               : 'This small-business page should stay focused on collaboration, automation, support, and efficiency rather than blending every business tool together. Keep it indexable, but surface the narrower marketing, support, and automation paths first to reduce overlap with generic productivity pages.'
           }
+          decisionSteps={[
+            isChinese
+              ? '先判断你要先解决营销、客服、自动化还是团队协作。'
+              : 'First decide whether marketing, support, automation, or team collaboration comes first.',
+            isChinese
+              ? '如果方向清楚，就先去对应的小企业对比页。'
+              : 'If the direction is clear, go to the matching small-business comparison page first.',
+            isChinese
+              ? '如果要长期用，再回来补真实流程和团队管理案例。'
+              : 'If you will use it long term, come back for real workflows and team-management cases.',
+          ]}
           items={[
             {
               label: isChinese ? '验证重点' : 'Validation focus',
