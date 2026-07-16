@@ -246,6 +246,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先检查页面是否能帮助用户完成真实可观测判断：日志、调用追踪、成本分析、质量追踪和生产决策，而不是只看图表数量。'
               : 'This page prioritizes whether the guide helps with a real observability decision: logs, request tracing, cost analysis, quality tracking, and production decisions rather than chart count.'
           }
+          decisionSteps={[
+            isChinese
+              ? '先判断你更需要日志、追踪、成本还是质量信号。'
+              : 'First decide whether logs, tracing, cost, or quality signals matter most.',
+            isChinese
+              ? '如果目标清楚，就先去对应的对比页。'
+              : 'If the goal is clear, go to the matching comparison page first.',
+            isChinese
+              ? '如果是长期生产使用，再回来补真实监控案例和告警配置。'
+              : 'If it will be used in production long term, come back for real monitoring cases and alert setup.',
+          ]}
           signalCards={[
             {
               label: isChinese ? '价格信号' : 'Pricing signal',
