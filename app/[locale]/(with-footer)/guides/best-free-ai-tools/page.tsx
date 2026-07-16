@@ -176,6 +176,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先检查免费工具的真实可用性：是否真的免费、限制是否清晰、更新是否还在继续、评分和评论是否可信。'
               : 'This page checks whether free tools are actually usable: whether they are truly free, whether limits are clear, whether updates are still active, and whether ratings and comments are trustworthy.'
           }
+          decisionSteps={
+            isChinese
+              ? [
+                  '先判断你是在找真正免费的工具，还是先想试用再决定。',
+                  '如果目标已经明确，先去更具体的榜单、分类或工具页看候选。',
+                  '如果还要给团队留证据，再回到这页补评论、收藏和更新时间。',
+                ]
+              : [
+                  'First decide whether you need truly free tools or just something to try first.',
+                  'If the goal is already clear, move to the more specific ranking, category, or tool pages for candidates.',
+                  'If you still need team evidence, come back here for comments, saves, and update dates.',
+                ]
+          }
           signalCards={[
             {
               label: isChinese ? '价格信号' : 'Pricing signal',
