@@ -359,6 +359,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Exporting, recording, and reviewing are what make it feel like a real research tool.',
             },
           ]}
+          decisionSteps={[
+            isChinese
+              ? '先判断你要的是数据源、链上追踪，还是市场情报。'
+              : 'First decide whether you need data sources, on-chain tracking, or market intelligence.',
+            isChinese
+              ? '如果目标已经清楚，就先看更窄的代币研究对比和钱包研究页。'
+              : 'If the target is already clear, start with the narrower token research comparison and wallet research pages.',
+            isChinese
+              ? '如果还要沉淀成团队流程，再回到代币研究页补真实案例、笔记和导出记录。'
+              : 'If you still need a team workflow, come back for real cases, notes, and export records.',
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
