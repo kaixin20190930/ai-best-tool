@@ -387,6 +387,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先检查页面是否能帮助学生完成真实选择：学习任务、写作辅助、引用/总结、笔记协作和后续进入更细分类的路径。'
               : 'This page prioritizes whether the guide helps students make a real choice: learning tasks, writing help, citations/summaries, note collaboration, and next steps into narrower pages.'
           }
+          decisionSteps={[
+            isChinese
+              ? '先判断你要的是查资料、做笔记、写作业还是整理知识。'
+              : 'First decide whether you need research, note taking, homework help, or knowledge organization.',
+            isChinese
+              ? '如果方向清楚，就先去对应的学生对比页。'
+              : 'If the direction is clear, go to the matching student comparison page first.',
+            isChinese
+              ? '如果要长期用，再回来补真实学习场景和导出案例。'
+              : 'If you will use it long term, come back for real study scenarios and export cases.',
+          ]}
           items={[
             {
               label: isChinese ? '判断维度' : 'Decision signals',
