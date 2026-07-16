@@ -328,6 +328,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'The biggest risk is something that looks right but lacks evidence.',
             },
           ]}
+          decisionSteps={[
+            isChinese
+              ? '先判断你要的是市场研究、链上追踪，还是赛道情报。'
+              : 'First decide whether you need market research, on-chain tracking, or sector intelligence.',
+            isChinese
+              ? '如果目标已经很明确，就先去更窄的榜单和对比页。'
+              : 'If the target is already clear, go to the narrower ranking and comparison pages first.',
+            isChinese
+              ? '如果还要留给团队协作，再回到研究页补案例、来源和导出证据。'
+              : 'If team collaboration still matters, come back to the research page for cases, sources, and export evidence.',
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
