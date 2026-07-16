@@ -311,3 +311,4 @@
 - 2026-07-16：`ai-video-tools` 指南页补齐剪辑 / 生成 / 字幕 / 配音 / 导出的决策顺序信号，让视频工具页更像先判断制作阶段再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`ai-tools-for-code-review-comparison` 对比页补齐 diff / 风险 / PR 流程的决策顺序信号，让代码审查对比页更像先判断 review 目标再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`ai-tools-for-crypto-research-comparison` 对比页补齐项目研究 / 钱包研究 / 协议分析的决策顺序信号，让 Crypto 研究对比页更像先判断研究目标再去比对的入口，并通过本地 `pnpm run build`。
+- 2026-07-16：`how-to-choose-ai-tools` 指南页补齐场景 / 价格限制 / 最近更新的决策顺序信号，让全站选型入口更像先判断选择维度再去比对的入口，并通过本地 `pnpm run build`。

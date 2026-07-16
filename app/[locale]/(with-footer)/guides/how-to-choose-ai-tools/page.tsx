@@ -182,6 +182,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先检查页面是否能帮用户完成真实选型：是否有明确场景、价格或限制、最近更新、截图/评论，以及能否继续进入分类、榜单或工具详情。'
               : 'This page prioritizes whether a tool can support a real selection decision: use case fit, pricing or limits, freshness, screenshots or comments, and clear next steps into categories, rankings, or tool pages.'
           }
+          decisionSteps={
+            isChinese
+              ? [
+                  '先判断你是在选场景、筛价格限制，还是看最近更新。',
+                  '如果方向已经清楚，先去更具体的分类、榜单或工具页看候选。',
+                  '如果还要给团队留证据，再回到这页补截图、评论和最近验证记录。',
+                ]
+              : [
+                  'First decide whether the real job is use-case fit, pricing limits, or freshness.',
+                  'If the direction is already clear, move to the more specific category, ranking, or tool pages for candidates.',
+                  'If you still need team evidence, come back here for screenshots, comments, and the latest verification notes.',
+                ]
+          }
           signalCards={[
             {
               label: isChinese ? '价格信号' : 'Pricing signal',
