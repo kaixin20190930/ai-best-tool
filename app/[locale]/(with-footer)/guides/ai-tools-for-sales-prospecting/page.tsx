@@ -203,6 +203,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '销售拓客页要围绕触达准备、个性化和外呼前判断来做，不要只输出模板化外联。这个页继续可索引，但会把获客、销售和更窄的 prospecting 路径分层。'
               : 'This sales prospecting page should stay centered on outreach prep, personalization, and pre-contact judgment rather than template-heavy outbound copy. Keep it indexable, but layer lead-gen, sales, and narrower prospecting paths clearly.'
           }
+          decisionSteps={
+            isChinese
+              ? [
+                  '先判断你要的是线索筛选，还是外联前的个性化准备。',
+                  '如果目标已经明确，先去更窄的销售榜单或对比页缩小 shortlist。',
+                  '如果还要和销售团队对齐，再回到这里看回复率、模板和真实案例。',
+                ]
+              : [
+                  'First decide whether you need lead filtering or outreach personalization prep.',
+                  'If the goal is already clear, move to a narrower sales ranking or comparison page to shrink the shortlist.',
+                  'If you still need sales-team alignment, come back here for reply rates, templates, and real cases.',
+                ]
+          }
           items={[
             {
               label: isChinese ? '验证重点' : 'Validation focus',
