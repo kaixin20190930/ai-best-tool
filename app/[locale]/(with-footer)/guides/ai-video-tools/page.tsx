@@ -201,6 +201,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               : 'This page checks whether video tools truly speed up editing, generation, captions, voiceover, and export instead of only looking good in previews.'
           }
           checkedAt={checkedAt}
+          decisionSteps={
+            isChinese
+              ? [
+                  '先判断你是在做剪辑、生成，还是字幕 / 配音 / 导出。',
+                  '如果目标已经明确，先去更聚焦的视频对比页或榜单页看候选。',
+                  '如果还要给团队留证据，再回到这页补真实案例、模板和限制。',
+                ]
+              : [
+                  'First decide whether the job is editing, generation, or captions / voiceover / export.',
+                  'If the goal is already clear, move to the more focused video comparison or ranking pages for candidates.',
+                  'If you still need team evidence, come back here for real cases, templates, and limits.',
+                ]
+          }
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',
