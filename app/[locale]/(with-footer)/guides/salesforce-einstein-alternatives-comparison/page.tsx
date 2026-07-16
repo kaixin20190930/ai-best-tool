@@ -257,6 +257,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '这页先看真实可验证的 Salesforce Einstein 信号，再继续判断是否真的需要 CRM、销售自动化和企业工作流。'
             : 'This page looks at verifiable Salesforce Einstein alternative signals first, then helps you decide whether CRM, sales automation, and enterprise workflows are truly needed.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先判断你要的是企业级 CRM AI，还是更轻量的销售辅助。',
+                '如果目标已经明确，先去更窄的销售榜单或对比页收缩 shortlist。',
+                '如果还要和团队确认治理和集成，再回到这里看权限、自动化和真实案例。',
+              ]
+            : [
+                'First decide whether you need enterprise CRM AI or a lighter sales assistant.',
+                'If the goal is already clear, move to a narrower sales ranking or comparison page to shrink the shortlist.',
+                'If you still need team sign-off on governance and integration, come back here for permissions, automation, and real cases.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? 'CRM 适配' : 'CRM fit',
