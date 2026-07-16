@@ -277,3 +277,4 @@
 - 2026-07-16：`ai-tools-for-api-observability` 指南页补齐日志 / 追踪 / 成本 / 质量的决策顺序信号，让 API 可观测高意图页更像先判断信号再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`ai-tools-for-code-review` 指南页补齐 PR 解释 / 风险检查 / 团队反馈的决策顺序信号，让代码审查高意图页更像先判断使用场景再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`ai-tools-for-meeting-notes` 指南页补齐转写 / 纪要整理 / 行动项提取的决策顺序信号，让会议纪要高意图页更像先判断会议工作流再去比对的入口，并通过本地 `pnpm run build`。
+- 2026-07-16：`ai-tools-for-protocol-analytics` 指南页补齐健康 / 使用量 / 趋势的决策顺序信号，让协议分析高意图页更像先判断观察目标再去比对的入口，并通过本地 `pnpm run build`。

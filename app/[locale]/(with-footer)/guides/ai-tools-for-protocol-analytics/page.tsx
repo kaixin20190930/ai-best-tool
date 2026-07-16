@@ -258,6 +258,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '协议分析页要围绕协议健康、使用量和趋势观察来做，不要和链上分析、DeFi 分析混在一起。这个页继续可索引，但会把更窄的协议和 DeFi 路径分层处理。'
               : 'This protocol analytics page should stay centered on protocol health, usage, and trend watching rather than blending into on-chain or DeFi analysis. Keep it indexable, but separate narrower protocol and DeFi paths clearly.'
           }
+          decisionSteps={[
+            isChinese
+              ? '先判断你更需要健康监测、使用量分析还是趋势研究。'
+              : 'First decide whether you need health monitoring, usage analysis, or trend research.',
+            isChinese
+              ? '如果方向清楚，就先去对应的对比页。'
+              : 'If the direction is clear, go to the matching comparison page first.',
+            isChinese
+              ? '如果要长期跟踪，再回来补协议案例、周期图和历史证据。'
+              : 'If you will track it long term, come back for protocol cases, time-series charts, and history evidence.',
+          ]}
           items={[
             {
               label: isChinese ? '验证重点' : 'Validation focus',
