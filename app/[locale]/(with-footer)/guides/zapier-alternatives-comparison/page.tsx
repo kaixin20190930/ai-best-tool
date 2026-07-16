@@ -257,6 +257,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '这页先看真实可验证的 Zapier 替代信号，再继续判断是否需要连接器、编排和长期维护。'
             : 'This page looks at verifiable Zapier-alternative signals first, then helps you decide whether connectors, orchestration, and long-term maintenance are needed.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先判断你要的是简单连接器，还是更复杂的自动化编排。',
+                '如果方向已经清楚，先去更窄的自动化榜单或对比页收缩 shortlist。',
+                '如果还要给团队评审，再回到这里看维护性、日志和真实案例。',
+              ]
+            : [
+                'First decide whether you need simple connectors or more complex automation orchestration.',
+                'If the direction is already clear, move to a narrower automation ranking or comparison page to shrink the shortlist.',
+                'If you still need team review, come back here for maintainability, logs, and real cases.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '连接器覆盖' : 'Connector coverage',

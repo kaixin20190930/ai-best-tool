@@ -320,3 +320,4 @@
 - 2026-07-16：`ai-writing-tools` 指南页补齐博客 / 邮件 / 社媒 / SEO 的决策顺序信号，让写作高意图页更像先判断内容类型再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`ai-tools-for-sales-prospecting` 指南页补齐线索筛选 / 个性化外联 / 销售对齐的决策顺序信号，让销售拓客页更像先判断触达类型再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`poe-alternatives-comparison` 对比页补齐多模型聚合 / 模型切换 / 对话流畅度的决策顺序信号，让 Poe 对比页更像先判断入口类型再去比对的入口，并通过本地 `pnpm run build`。
+- 2026-07-16：`zapier-alternatives-comparison` 对比页补齐简单连接器 / 复杂编排 / 长期维护的决策顺序信号，让 Zapier 对比页更像先判断流程复杂度再去比对的入口，并通过本地 `pnpm run build`。
