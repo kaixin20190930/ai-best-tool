@@ -220,6 +220,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `Add real brand and delivery examples while keeping the ${checkedAt} verification record.`,
             },
           ]}
+          decisionSteps={[
+            isChinese
+              ? '先判断你要的是品牌视觉、样片还是授权交付。'
+              : 'First decide whether you need brand visuals, samples, or licensed delivery.',
+            isChinese
+              ? '如果目标明确，就先去对应的对比页。'
+              : 'If the goal is clear, go to the matching comparison page first.',
+            isChinese
+              ? '如果要长期交付，再回来补品牌案例和授权边界。'
+              : 'If it will be used for long-term delivery, come back for brand cases and licensing boundaries.',
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
