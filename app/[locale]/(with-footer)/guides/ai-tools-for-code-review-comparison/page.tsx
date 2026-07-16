@@ -235,6 +235,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '代码审查工具的核心不是“多说几句”，而是能不能把 diff、风险提示、团队协作和 review 节奏串起来，减少噪音。'
             : 'The core of code review tools is not saying more, but whether they can connect diff understanding, risk signals, team collaboration, and review rhythm without adding noise.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先判断你是在做 diff 理解、风险检查，还是 review 协作。',
+                '如果目标已经明确，先去更聚焦的代码审查或编程工具页看候选。',
+                '如果还要给团队留证据，再回到这页补 PR、评论和交接案例。',
+              ]
+            : [
+                'First decide whether you care most about diff understanding, risk checks, or review collaboration.',
+                'If the goal is already clear, move to the more focused code-review or coding pages for candidates.',
+                'If you still need team evidence, come back here for PR, comments, and handoff examples.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? 'Diff 理解' : 'Diff understanding',

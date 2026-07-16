@@ -309,3 +309,4 @@
 - 2026-07-16：`ai-tools-for-customer-support-comparison` 对比页补齐回复 / 分流 / 知识库的决策顺序信号，让客服对比页更像先判断支持工作流再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`n8n-alternatives-comparison` 对比页补齐控制力 / 可维护性 / 开发者适配的决策顺序信号，让自动化对比页更像先判断工作流复杂度再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`ai-video-tools` 指南页补齐剪辑 / 生成 / 字幕 / 配音 / 导出的决策顺序信号，让视频工具页更像先判断制作阶段再去比对的入口，并通过本地 `pnpm run build`。
+- 2026-07-16：`ai-tools-for-code-review-comparison` 对比页补齐 diff / 风险 / PR 流程的决策顺序信号，让代码审查对比页更像先判断 review 目标再去比对的入口，并通过本地 `pnpm run build`。
