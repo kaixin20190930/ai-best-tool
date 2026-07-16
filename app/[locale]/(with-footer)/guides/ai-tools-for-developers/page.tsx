@@ -239,6 +239,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `This page was rechecked on ${checkedAt}, replacing generic selling points with executable evidence.`,
             },
           ]}
+          decisionSteps={[
+            isChinese
+              ? '先判断你的工作发生在编辑器、API 还是自动化层。'
+              : 'First decide whether your work sits in the editor, API, or automation layer.',
+            isChinese
+              ? '如果已经有方向，直接去对应的对比页。'
+              : 'If you already have a direction, jump to the matching comparison page.',
+            isChinese
+              ? '如果是团队落地，再回来补仓库、权限和调试证据。'
+              : 'If this is for a team rollout, come back for repo, permissions, and debugging evidence.',
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
