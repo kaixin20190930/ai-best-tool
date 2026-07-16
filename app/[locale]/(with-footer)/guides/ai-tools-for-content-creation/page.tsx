@@ -272,6 +272,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `Next, priority additions are real use cases, brand templates, and batch-publishing notes while keeping the ${checkedAt} verification record.`,
             },
           ]}
+          decisionSteps={[
+            isChinese
+              ? '先判断你要做的是脚本、封面还是批量发布。'
+              : 'First decide whether you need scripts, thumbnails, or batch publishing.',
+            isChinese
+              ? '如果内容类型已经明确，就先去对应对比页。'
+              : 'If the content type is clear, go to the matching comparison page first.',
+            isChinese
+              ? '如果要团队长期使用，再回来补品牌模板和导出边界。'
+              : 'If the team will use it long term, come back for brand templates and export boundaries.',
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
