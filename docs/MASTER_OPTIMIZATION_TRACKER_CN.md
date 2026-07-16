@@ -306,3 +306,4 @@
 - 2026-07-16：`ai-tools-for-designers-comparison` 对比页补齐品牌视觉 / 单张设计 / 团队交付的决策顺序信号，让设计对比页更像先判断交付阶段再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`ai-tools-for-web3-analysis-comparison` 对比页补齐协议 / 钱包 / 资金流的决策顺序信号，让 Web3 分析对比页更像先判断研究目标再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`ai-tools-for-api-observability-comparison` 对比页补齐日志 / 成本 / 评估闭环的决策顺序信号，让 API 可观测对比页更像先判断生产判断目标再去比对的入口，并通过本地 `pnpm run build`。
+- 2026-07-16：`ai-tools-for-customer-support-comparison` 对比页补齐回复 / 分流 / 知识库的决策顺序信号，让客服对比页更像先判断支持工作流再去比对的入口，并通过本地 `pnpm run build`。

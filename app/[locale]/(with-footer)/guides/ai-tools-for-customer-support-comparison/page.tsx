@@ -191,6 +191,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '客服对比页应该看回复质量、分流、知识库接入和人工接手是否顺畅，而不只是模型输出是否漂亮。'
             : 'The support comparison page should judge reply quality, triage, knowledge-base access, and human handoff instead of just pretty outputs.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先判断你是在做回复、工单分流，还是知识库接入。',
+                '如果目标已经明确，先去更聚焦的客服或自动化页看候选。',
+                '如果还要给团队留证据，再回到这页补工单、知识库和人工接手案例。',
+              ]
+            : [
+                'First decide whether the job is replies, ticket triage, or knowledge-base integration.',
+                'If the goal is already clear, move to the more focused support or automation pages for candidates.',
+                'If you still need team evidence, come back here for tickets, knowledge-base examples, and handoff cases.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '回复质量' : 'Reply quality',
