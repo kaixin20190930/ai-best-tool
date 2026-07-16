@@ -206,6 +206,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'If it cannot connect product, support, and ops, it should not rank too high.',
             },
           ]}
+          decisionSteps={[
+            isChinese
+              ? '先判断你更重商品、客服还是营销。'
+              : 'First decide whether products, support, or marketing matters most.',
+            isChinese
+              ? '如果目标清楚，就先去对应对比页。'
+              : 'If the goal is clear, go to the matching comparison page first.',
+            isChinese
+              ? '如果要长期运营，再回来补店铺和流程案例。'
+              : 'If it will be used long term, come back for store and workflow cases.',
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
