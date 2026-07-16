@@ -228,6 +228,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先检查页面是否能帮助用户完成真实模型路由选择：统一出口、回退、成本治理和可替换策略，而不是只看模型列表长度。'
               : 'This page prioritizes whether the guide helps with a real model-routing decision: unified access, fallback, cost governance, and replaceable strategy rather than model list length.'
           }
+          decisionSteps={[
+            isChinese
+              ? '先判断你更需要统一出口、成本治理还是回退控制。'
+              : 'First decide whether you need unified access, cost governance, or fallback control.',
+            isChinese
+              ? '如果方向清楚，就先去对应的对比页。'
+              : 'If the direction is clear, go to the matching comparison page first.',
+            isChinese
+              ? '如果要长期用，再回来补真实路由案例和复盘。'
+              : 'If you will use it long term, come back for real routing cases and retros.',
+          ]}
           items={[
             {
               label: isChinese ? '判断维度' : 'Decision signals',
