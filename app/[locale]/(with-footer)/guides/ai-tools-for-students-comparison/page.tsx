@@ -106,6 +106,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '学生对比页要围绕学习、作业、笔记整理和论文写作来判断，不要只看输出是否“聪明”。它会继续保留索引，但把更窄的笔记和写作路径分层。'
             : 'This student comparison page should focus on study, homework, note organization, and paper writing instead of whether the output sounds clever. Keep it indexable, but separate narrower note-taking and writing paths.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先判断你要的是学习总结、作业辅助，还是笔记整理。',
+                '如果方向已经清楚，先去更窄的学生榜单或对比页收缩 shortlist。',
+                '如果还要和团队或同学确认使用体验，再回到这里看案例、反馈和真实输出。',
+              ]
+            : [
+                'First decide whether you need study summaries, homework help, or note organization.',
+                'If the direction is already clear, move to a narrower student ranking or comparison page to shrink the shortlist.',
+                'If you still need validation from teammates or classmates, come back here for cases, feedback, and real output examples.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '验证重点' : 'Validation focus',

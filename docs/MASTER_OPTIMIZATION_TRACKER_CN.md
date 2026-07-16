@@ -238,6 +238,7 @@
 - 2026-07-15：继续补齐 `character-ai-alternatives-comparison`、`copy-ai-alternatives-comparison`、`gemini-alternatives-comparison` 的 `signalCards`，把角色聊天、起稿营销和 Gemini 替代页的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `ai-tools-for-voice-comparison`、`best-free-ai-tools-comparison`、`claude-alternatives-comparison` 的 `signalCards`，把语音、免费工具和 Claude 替代页的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `ai-tools-for-evals-comparison`、`ai-tools-for-model-routing-comparison`、`ai-tools-for-students-comparison` 的 `signalCards`，把 Evals、模型路由和学生页的可验证信号层补齐后再做 build 验证。
+- 2026-07-16：`ai-tools-for-students-comparison` 对比页补齐学习总结 / 作业辅助 / 笔记整理的决策顺序信号，让学生工具对比页更像先判断学习任务再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-15：继续补齐 `ai-note-taking-tools-comparison`、`ai-seo-tools-comparison`、`chatgpt-alternatives-comparison` 的 `signalCards`，把记笔记、SEO 和 ChatGPT 替代页的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `ai-video-tools-comparison`、`adobe-alternatives-comparison`、`ai-tools-for-content-creation-comparison` 的 `signalCards`，把视频、创作套件和内容生产页的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `suno-alternatives-comparison`、`elevenlabs-alternatives-comparison`、`descript-alternatives-comparison` 的 `signalCards`，把音乐生成、语音合成和音频编辑页的可验证信号层补齐后再做 build 验证。
