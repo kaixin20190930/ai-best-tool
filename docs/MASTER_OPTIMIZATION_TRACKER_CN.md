@@ -291,3 +291,4 @@
 - 2026-07-16：`ai-tools-for-dex-analytics` 指南页补齐交易对 / 池子 / 流动性的决策顺序信号，让 DEX 分析高意图页更像先判断观察目标再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`ai-tools-for-token-research` 指南页补齐数据源 / 链上追踪 / 市场情报的决策顺序信号，让代币研究高意图页更像先判断研究目标再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`ai-tools-for-on-chain-analysis` 指南页补齐地址追踪 / 资金流 / 行为复盘的决策顺序信号，让链上分析高意图页更像先判断分析对象再去比对的入口，并通过本地 `pnpm run build`。
+- 2026-07-16：`ai-tools-for-wallet-monitoring` 指南页补齐钱包提醒 / 阈值监控 / 异常告警的决策顺序信号，让钱包监控高意图页更像先判断告警对象再去比对的入口，并通过本地 `pnpm run build`。

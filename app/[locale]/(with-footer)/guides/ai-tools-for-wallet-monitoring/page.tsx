@@ -371,6 +371,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Sending notifications alone does not mean it truly monitors.',
             },
           ]}
+          decisionSteps={[
+            isChinese
+              ? '先判断你要的是钱包提醒、阈值监控，还是异常告警。'
+              : 'First decide whether you need wallet alerts, threshold monitoring, or anomaly warnings.',
+            isChinese
+              ? '如果目标已经清楚，就先看更窄的钱包研究和资产追踪页。'
+              : 'If the target is already clear, start with the narrower wallet research and portfolio tracking pages.',
+            isChinese
+              ? '如果还要给团队留证据，再回到监控页补真实告警案例和通知截图。'
+              : 'If you still need evidence for a team, come back for real alert cases and notification screenshots.',
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
