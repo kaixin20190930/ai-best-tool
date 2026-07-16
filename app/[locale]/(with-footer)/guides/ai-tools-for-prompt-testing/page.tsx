@@ -202,6 +202,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先检查页面是否能帮助用户完成真实 prompt 测试判断：版本对比、评估数据集、回归验证和团队复盘，而不是只看单次输出。'
               : 'This page prioritizes whether the guide helps with a real prompt-testing decision: version comparison, eval datasets, regression checks, and team retros rather than a single output.'
           }
+          decisionSteps={
+            isChinese
+              ? [
+                  '先判断你是在做 prompt 版本比较、评估集设计，还是回归验证。',
+                  '如果决策已经明确，先去更聚焦的比较页或评估页看方法。',
+                  '如果还需要团队共识，再回到这页补样本、评分和复盘记录。',
+                ]
+              : [
+                  'First decide whether you are comparing prompt versions, designing eval sets, or running regression checks.',
+                  'If the decision is already clear, move to the more focused comparison or evaluation pages for method details.',
+                  'If you still need team alignment, come back here for samples, scoring, and retrospective notes.',
+                ]
+          }
           items={[
             {
               label: isChinese ? '判断维度' : 'Decision signals',
