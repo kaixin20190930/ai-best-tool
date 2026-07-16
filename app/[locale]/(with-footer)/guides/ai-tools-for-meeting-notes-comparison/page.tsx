@@ -142,6 +142,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '这页先看真实可验证的会议纪要信号，再继续判断是转写、整理还是行动项提取更值得投入。'
             : 'This page looks at verifiable meeting-notes signals first, then helps you decide whether transcription, cleanup, or action-item extraction deserves more focus.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先判断你要的是转写、整理，还是行动项提取。',
+                '如果目标已经明确，先去更窄的会议纪要榜单或对比页收缩 shortlist。',
+                '如果还需要团队共识，再回到这里看协作、导出和真实评论。',
+              ]
+            : [
+                'First decide whether you need transcription, cleanup, or action-item extraction.',
+                'If the goal is already clear, move to a narrower meeting-notes ranking or comparison page to shrink the shortlist.',
+                'If you still need team alignment, come back here for collaboration, exports, and real comments.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '转写质量' : 'Transcription quality',
