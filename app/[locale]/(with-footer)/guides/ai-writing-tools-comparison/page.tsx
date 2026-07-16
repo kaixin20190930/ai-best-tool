@@ -289,6 +289,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '写作工具对比的重点不是“写得像不像”，而是提纲、改写、语气控制和内容更新是否真的能提升产出。'
             : 'Writing tool comparison should focus less on sounding polished and more on outlines, rewriting, tone control, and whether they actually improve output.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先判断你是做起稿、改写，还是长文生产。',
+                '如果目标已经清楚，就先看写作榜单和内容创作对比页。',
+                '如果还要给团队留证据，再回到写作对比页补真实案例、模板和反馈。',
+              ]
+            : [
+                'First decide whether you need drafting, rewriting, or long-form production.',
+                'If the goal is already clear, start with the writing ranking and content creation comparison pages.',
+                'If you still need evidence for a team, come back for real cases, templates, and feedback.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '提纲能力' : 'Outline quality',

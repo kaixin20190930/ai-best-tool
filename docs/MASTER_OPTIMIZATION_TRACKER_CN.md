@@ -297,3 +297,4 @@
 - 2026-07-16：`ai-tools-for-evals-comparison` 对比页补齐评分逻辑 / 结果复盘 / 验收流程的决策顺序信号，让 Evals 对比页更像先判断验证目标再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`ai-tools-for-creators` 指南页补齐选题 / 脚本 / 封面 / 剪辑 / 再包装的决策顺序信号，让创作者高意图页更像先判断创作阶段再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`ai-tools-for-defi-analytics` 指南页补齐流动性 / 收益 / 协议行为的决策顺序信号，让 DeFi 分析高意图页更像先判断分析目标再去比对的入口，并通过本地 `pnpm run build`。
+- 2026-07-16：`ai-writing-tools-comparison` 对比页补齐起稿 / 改写 / 长文生产的决策顺序信号，让写作工具对比页更像先判断写作阶段再去比对的入口，并通过本地 `pnpm run build`。
