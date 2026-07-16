@@ -324,6 +324,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `Next, add monitoring screenshots, historical changes, and liquidity tracking while keeping the ${checkedAt} verification trail.`,
             },
           ]}
+          decisionSteps={[
+            isChinese
+              ? '先判断你要的是交易对分析、池子观察，还是流动性追踪。'
+              : 'First decide whether you need pair analysis, pool observation, or liquidity tracking.',
+            isChinese
+              ? '如果目标已经明确，就先看更窄的 DEX 对比页和 Web3 研究页。'
+              : 'If the target is already clear, start with the narrower DEX comparison and Web3 research pages.',
+            isChinese
+              ? '如果还要给团队留证据，再回到 DEX 分析页补真实监控图和历史变化。'
+              : 'If you still need evidence for a team, come back to add real monitoring screenshots and historical changes.',
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
