@@ -106,6 +106,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '这页先看真实可验证的 DEX 分析信号，再继续判断是不是要深挖交易对、流动性和链上观察。'
             : 'This page looks at verifiable DEX-analysis signals first, then helps you decide whether to go deeper into pairs, liquidity, and on-chain monitoring.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先判断你是在看交易对、流动性，还是更广义的链上研究。',
+                '如果目标已经明确，先去更聚焦的研究页或分析页看指标。',
+                '如果还要给团队留证据，再回到这页补导出、分享和历史记录。',
+              ]
+            : [
+                'First decide whether you care most about pairs, liquidity, or broader on-chain research.',
+                'If the goal is already clear, move to the more focused research or analytics pages for metrics.',
+                'If you still need team evidence, come back here for exports, sharing, and history.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '交易对覆盖' : 'Pair coverage',
