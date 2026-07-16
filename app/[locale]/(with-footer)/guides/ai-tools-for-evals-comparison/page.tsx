@@ -185,6 +185,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '先确认输出质量验证和验收流程的真实覆盖，再继续看对比。'
             : 'Check whether output validation and acceptance workflows are covered in practice before continuing.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先判断你要的是评分逻辑、结果复盘，还是验收流程。',
+                '如果目标已经很清楚，就先去更窄的 Prompt 测试和 API 可观测对比页。',
+                '如果还要给团队留证据，再回到 Evals 对比页补真实案例、评论和规则说明。',
+              ]
+            : [
+                'First decide whether you need scoring logic, result review, or acceptance workflows.',
+                'If the target is already clear, go to the narrower prompt testing and API observability comparison pages.',
+                'If you still need evidence for a team, come back to add real cases, comments, and rule notes.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '评分逻辑' : 'Scoring logic',
