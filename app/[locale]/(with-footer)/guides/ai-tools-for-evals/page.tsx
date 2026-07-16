@@ -228,6 +228,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先检查页面是否能帮助用户完成真实 evals 判断：是否有明确评分标准、数据集、验收门槛、版本回归路径，以及是否能继续进入对比页或榜单页。'
               : 'This page prioritizes whether the guide helps with a real evals decision: clear scoring rules, datasets, acceptance thresholds, regression paths, and next steps into comparison or ranking pages.'
           }
+          decisionSteps={
+            isChinese
+              ? [
+                  '先判断你是在做评分标准、数据集设计，还是上线验收。',
+                  '如果目标已经明确，先去更聚焦的对比页或榜单页看候选工具。',
+                  '如果还要给团队留证据，再回到这页补样本、模板和复盘记录。',
+                ]
+              : [
+                  'First decide whether you are working on scoring rules, dataset design, or release acceptance.',
+                  'If the goal is already clear, move to the more focused comparison or ranking pages for candidates.',
+                  'If you still need team evidence, come back here for samples, templates, and retrospective notes.',
+                ]
+          }
           items={[
             {
               label: isChinese ? '判断维度' : 'Decision signals',
