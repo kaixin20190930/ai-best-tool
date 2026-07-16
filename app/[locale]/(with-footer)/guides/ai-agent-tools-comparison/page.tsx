@@ -25,6 +25,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '这页先看真实可验证的 Agent 信号，再继续判断是否真的要走编排、执行和治理层。'
             : 'This page looks at verifiable agent signals first, then helps you decide whether orchestration, execution, and governance are truly needed.'
         }
+        decisionSteps={
+          isChinese
+            ? [
+                '先判断你要的是单步回答，还是多步骤执行的 Agent。',
+                '如果目标已经明确，先去更窄的 Agent 榜单或对比页收缩 shortlist。',
+                '如果还要和团队确认生产落地，再回到这里看状态、治理和真实案例。',
+              ]
+            : [
+                'First decide whether you need a single-step answer tool or a multi-step execution agent.',
+                'If the goal is already clear, move to a narrower agent ranking or comparison page to shrink the shortlist.',
+                'If you still need team validation for production, come back here for state, governance, and real cases.',
+              ]
+        }
         items={[
           {
             label: isChinese ? '编排' : 'Orchestration',
