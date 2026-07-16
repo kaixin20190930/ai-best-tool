@@ -322,3 +322,4 @@
 - 2026-07-16：`poe-alternatives-comparison` 对比页补齐多模型聚合 / 模型切换 / 对话流畅度的决策顺序信号，让 Poe 对比页更像先判断入口类型再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`zapier-alternatives-comparison` 对比页补齐简单连接器 / 复杂编排 / 长期维护的决策顺序信号，让 Zapier 对比页更像先判断流程复杂度再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`salesforce-einstein-alternatives-comparison` 对比页补齐企业级 CRM AI / 销售辅助 / 集成治理的决策顺序信号，让 Salesforce Einstein 对比页更像先判断企业落地层再去比对的入口，并通过本地 `pnpm run build`。
+- 2026-07-16：`ai-web3-tools-comparison` 对比页补齐协议 / 链上 / 钱包研究的决策顺序信号，让 Web3 对比页更像先判断研究层级再去比对的入口，并通过本地 `pnpm run build`。

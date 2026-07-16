@@ -25,6 +25,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '这页先看真实可验证的 Web3 工具信号，再继续判断是否要走更广的 Web3、链上和协议分析入口。'
             : 'This page looks at verifiable Web3-tool signals first, then helps you decide whether to move toward broader Web3, on-chain, and protocol-analysis entry points.'
         }
+        decisionSteps={
+          isChinese
+            ? [
+                '先判断你要的是协议、链上，还是钱包层面的研究工具。',
+                '如果方向已经清楚，先去更窄的 Web3 榜单或对比页收缩 shortlist。',
+                '如果还要和团队确认研究深度，再回到这里看导出、历史和分享。',
+              ]
+            : [
+                'First decide whether you need protocol, on-chain, or wallet-level research tools.',
+                'If the direction is already clear, move to a narrower Web3 ranking or comparison page to shrink the shortlist.',
+                'If you still need team alignment on depth, come back here for exports, history, and sharing.',
+              ]
+        }
         items={[
           {
             label: isChinese ? '覆盖层级' : 'Coverage layer',
