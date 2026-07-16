@@ -361,6 +361,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Missing any of those three weakens the research conclusion.',
             },
           ]}
+          decisionSteps={[
+            isChinese
+              ? '先判断你要的是地址画像、资金线索，还是历史轨迹。'
+              : 'First decide whether you need address profiling, fund clues, or historical trails.',
+            isChinese
+              ? '如果目标已经清楚，就先看更窄的钱包监控和资产追踪页。'
+              : 'If the goal is already clear, start with the narrower wallet monitoring and portfolio tracking pages.',
+            isChinese
+              ? '如果还要给团队留证据，再回到钱包研究页补真实案例、标签和笔记。'
+              : 'If you still need evidence for a team, come back for real cases, labels, and notes.',
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>

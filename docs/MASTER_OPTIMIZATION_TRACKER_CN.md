@@ -287,3 +287,4 @@
 - 2026-07-16：`ai-tools-for-students` 指南页补齐查资料 / 做笔记 / 写作业 / 整理知识的决策顺序信号，让学生高意图页更像先判断学习场景再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`ai-tools-for-crypto-portfolio-tracking` 指南页补齐组合 / 持仓 / 异动提醒的决策顺序信号，让资产追踪高意图页更像先判断工作目标再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`ai-tools-for-crypto-research` 指南页补齐市场研究 / 链上追踪 / 赛道情报的决策顺序信号，让 Crypto 研究高意图页更像先判断研究目标再去比对的入口，并通过本地 `pnpm run build`。
+- 2026-07-16：`ai-tools-for-wallet-research` 指南页补齐地址画像 / 资金线索 / 历史轨迹的决策顺序信号，让钱包研究高意图页更像先判断研究对象再去比对的入口，并通过本地 `pnpm run build`。
