@@ -247,6 +247,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : `This page was rechecked on ${checkedAt}, and next iterations should connect GSC observations, page performance, and feedback signals to this guide.`,
             },
           ]}
+          decisionSteps={[
+            isChinese
+              ? '先判断你是做关键词、内容还是排名监控。'
+              : 'First decide whether you need keywords, content, or rank monitoring.',
+            isChinese
+              ? '如果方向已经明确，就先去对应对比页。'
+              : 'If the direction is clear, go to the matching comparison page first.',
+            isChinese
+              ? '如果还不确定，再回来核对工作流和数据更新频率。'
+              : 'If you are still unsure, come back to check workflow fit and data freshness.',
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
