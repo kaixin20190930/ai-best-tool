@@ -8,7 +8,18 @@
  * 4. Priority values are appropriate
  */
 
+import fs from 'node:fs';
+import path from 'node:path';
+import dotenv from 'dotenv';
+
 import sitemap from '../app/sitemap';
+
+for (const envPath of ['.env.local', '.env.production']) {
+  const resolved = path.join(process.cwd(), envPath);
+  if (fs.existsSync(resolved)) {
+    dotenv.config({ path: resolved, override: false });
+  }
+}
 
 async function testSitemap() {
   console.log('🔍 Testing sitemap generation...\n');
@@ -22,7 +33,7 @@ async function testSitemap() {
 
     // Test 1: Check if sitemap includes important pages
     console.log('Test 1: Checking for important pages...');
-    const requiredPages = ['', 'explore', 'startup', 'submit', 'privacy-policy', 'terms-of-service'];
+    const requiredPages = ['', 'explore', 'guides', 'best-ai-tools'];
     const missingPages: string[] = [];
 
     for (const page of requiredPages) {
@@ -111,6 +122,47 @@ async function testSitemap() {
       console.log(`❌ Found ${duplicates} duplicate URLs\n`);
     }
 
+    // Test 6: Verify noindex / alias pages stay out of the sitemap
+    console.log('Test 6: Checking noindex / alias exclusions...');
+    const excludedPages = [
+      '/guides/chatbot-tools',
+      '/guides/note-taking-tools',
+      '/guides/marketing-tools',
+      '/guides/voice-tools',
+      '/guides/seo-tools',
+      '/guides/developer-tools',
+      '/guides/image-tools',
+      '/guides/productivity-tools',
+      '/guides/research-tools',
+      '/guides/sales-tools',
+      '/guides/writing-tools',
+      '/guides/automation-tools',
+      '/guides/agent-tools',
+      '/guides/ai-chatbot-tools-comparison',
+      '/guides/ai-video-tools-comparison',
+      '/guides/ai-web3-tools-comparison',
+      '/guides/ai-agent-tools-comparison',
+      '/guides/ai-model-routing-tools-comparison',
+      '/guides/ai-api-observability-tools-comparison',
+      '/guides/ai-code-review-tools-comparison',
+      '/pricing',
+      '/submit',
+      '/developer/listing',
+    ];
+    const excludedFound = excludedPages.filter((page) =>
+      sitemapEntries.some((entry) => {
+        const url = new URL(entry.url);
+        const pathname = url.pathname.replace(/^\/[a-z]{2}\//, '/').replace(/^\//, '');
+        return pathname === page.replace(/^\//, '');
+      }),
+    );
+
+    if (excludedFound.length === 0) {
+      console.log('✅ Noindex / alias pages stay out of the sitemap\n');
+    } else {
+      console.log(`❌ Unexpected sitemap entries for: ${excludedFound.join(', ')}\n`);
+    }
+
     // Display sample entries
     console.log('📋 Sample sitemap entries:');
     console.log('─'.repeat(80));
@@ -118,8 +170,8 @@ async function testSitemap() {
     const samples = [
       sitemapEntries.find((e) => e.url.endsWith('/')), // Homepage
       sitemapEntries.find((e) => e.url.includes('/explore')), // Explore page
-      sitemapEntries.find((e) => e.url.includes('/ai/')), // Tool page
-      sitemapEntries.find((e) => e.url.includes('category=')), // Category page
+      sitemapEntries.find((e) => e.url.includes('/guides/')), // Guide page
+      sitemapEntries.find((e) => e.url.includes('/best-ai-tools')), // Ranking page
     ].filter(Boolean);
 
     for (const entry of samples) {
@@ -156,13 +208,14 @@ async function testSitemap() {
         console.log(`  ${priority}: ${count} entries`);
       });
 
-    const totalTests = 5;
+    const totalTests = 6;
     const passedTests =
       (missingPages.length === 0 ? 1 : 0) +
       (invalidEntries === 0 ? 1 : 0) +
       (invalidDates === 0 ? 1 : 0) +
       (invalidPriorities === 0 ? 1 : 0) +
-      (duplicates === 0 ? 1 : 0);
+      (duplicates === 0 ? 1 : 0) +
+      (excludedFound.length === 0 ? 1 : 0);
 
     console.log(`\n${passedTests === totalTests ? '✅' : '❌'} Tests passed: ${passedTests}/${totalTests}`);
 
