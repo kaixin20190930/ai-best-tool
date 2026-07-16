@@ -152,6 +152,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先判断笔记工具是否能稳定接入会议、灵感和知识整理工作流，而不是只看界面和演示。'
               : 'This page checks whether note taking tools can reliably fit meetings, idea capture, and knowledge organization workflows instead of just looking polished in demos.'
           }
+          decisionSteps={[
+            isChinese
+              ? '先判断你要的是会议记录、灵感记录，还是知识整理。'
+              : 'First decide whether you need meeting capture, idea capture, or knowledge organization.',
+            isChinese
+              ? '如果方向清楚，就先去对应的笔记对比页。'
+              : 'If the direction is clear, go to the matching note taking comparison page first.',
+            isChinese
+              ? '如果要长期用，再回来补真实整理流程和搜索命中案例。'
+              : 'If you will use it long term, come back for real organization workflows and search-hit cases.',
+          ]}
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',
