@@ -110,6 +110,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '这页先看真实可验证的 Web3 分析信号，再继续判断是不是要做协议监控、钱包追踪或资金流研究。'
             : 'This page looks at verifiable Web3-analysis signals first, then helps you decide whether protocol monitoring, wallet tracking, or fund-flow research is the real need.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先判断你是在看协议监控、钱包追踪，还是资金流研究。',
+                '如果目标已经明确，先去更聚焦的 Web3 指南或对比页看候选。',
+                '如果还要给团队留证据，再回到这页补导出、分享和告警记录。',
+              ]
+            : [
+                'First decide whether you care most about protocol monitoring, wallet tracking, or fund-flow research.',
+                'If the goal is already clear, move to the more focused Web3 guide or comparison pages for candidates.',
+                'If you still need team evidence, come back here for exports, sharing, and alert notes.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '覆盖范围' : 'Coverage',
