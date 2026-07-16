@@ -207,6 +207,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Being able to do a lot does not usually mean it saves time.',
             },
           ]}
+          decisionSteps={[
+            isChinese
+              ? '先判断你是要省时间、做协作还是做自动化。'
+              : 'First decide whether you are optimizing for time saved, collaboration, or automation.',
+            isChinese
+              ? '如果目标明确，就先去对应的对比页。'
+              : 'If the goal is clear, go to the matching comparison page first.',
+            isChinese
+              ? '如果要长期用，再回来补真实场景和反馈。'
+              : 'If this will be used long term, come back for real scenarios and feedback.',
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
