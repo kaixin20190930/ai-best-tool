@@ -221,6 +221,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'CRM, call, and follow-up fit determine whether it is actually usable long term.',
             },
           ]}
+          decisionSteps={[
+            isChinese
+              ? '先判断你要管的是线索、跟进还是 CRM。'
+              : 'First decide whether you are managing leads, follow-up, or CRM.',
+            isChinese
+              ? '如果方向清楚，就先看对应销售对比页。'
+              : 'If the direction is clear, go to the matching sales comparison page first.',
+            isChinese
+              ? '如果要团队长期用，再回来补真实流程和整合案例。'
+              : 'If the team will use it long term, come back for real workflows and integration cases.',
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
