@@ -159,6 +159,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               : 'This page checks whether a meeting notes tool truly handles transcription, cleanup, and action items instead of only showing summaries that look correct.'
           }
           checkedAt={checkedAt}
+          decisionSteps={[
+            isChinese
+              ? '先判断你要的是转写、纪要整理，还是行动项提取。'
+              : 'First decide whether you need transcription, note cleanup, or action-item extraction.',
+            isChinese
+              ? '如果方向清楚，就先看对应的会议对比页。'
+              : 'If the goal is clear, go to the matching meeting comparison page first.',
+            isChinese
+              ? '如果要长期用，再回来补真实会议案例和共享协作痕迹。'
+              : 'If you will use it long term, come back for real meeting cases and collaboration traces.',
+          ]}
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',
