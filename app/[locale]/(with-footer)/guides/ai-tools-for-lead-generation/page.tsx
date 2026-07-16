@@ -311,6 +311,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Lots of contacts does not mean the leads are actually usable.',
             },
           ]}
+          decisionSteps={[
+            isChinese
+              ? '先判断你要的是名单来源、筛选深度，还是导出后的衔接。'
+              : 'First decide whether you need list sources, filtering depth, or downstream workflow fit.',
+            isChinese
+              ? '如果目标已经清楚，就先看更窄的销售和获客对比页。'
+              : 'If the goal is already clear, start with the narrower sales and lead-gen comparison pages.',
+            isChinese
+              ? '如果还要沉淀给团队，再回到获客页补真实名单、规则和外联前流程。'
+              : 'If you still need to document the workflow for a team, come back for real lists, rules, and pre-outreach notes.',
+          ]}
         />
 
         <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
