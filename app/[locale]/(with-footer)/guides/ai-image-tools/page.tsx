@@ -285,6 +285,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先检查页面是否能帮助用户完成真实图像决策：生成、修图、商用授权和品牌素材，而不是只看出图效果。'
               : 'This page prioritizes whether the guide helps with a real image decision: generation, editing, commercial licensing, and brand assets rather than just output quality.'
           }
+          decisionSteps={
+            isChinese
+              ? [
+                  '先判断你要的是生成、修图、抠图，还是品牌素材输出。',
+                  '如果方向已经清楚，先进入更窄的图像榜单或对比页缩小 shortlist。',
+                  '如果还要和团队对齐，再回到这里看授权、模板、更新和真实样本。',
+                ]
+              : [
+                  'First decide whether you need generation, editing, background removal, or brand asset output.',
+                  'If the direction is already clear, move into a narrower image ranking or comparison page to shrink the shortlist.',
+                  'If you still need team alignment, come back here for licensing, templates, freshness, and real samples.',
+                ]
+          }
           items={[
             {
               label: isChinese ? '判断维度' : 'Decision signals',
