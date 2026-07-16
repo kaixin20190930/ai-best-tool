@@ -319,3 +319,4 @@
 - 2026-07-16：`ai-tools-for-meeting-notes-comparison` 对比页补齐转写 / 整理 / 行动项提取的决策顺序信号，让会议纪要对比页更像先判断会议输出再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`ai-writing-tools` 指南页补齐博客 / 邮件 / 社媒 / SEO 的决策顺序信号，让写作高意图页更像先判断内容类型再去比对的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`ai-tools-for-sales-prospecting` 指南页补齐线索筛选 / 个性化外联 / 销售对齐的决策顺序信号，让销售拓客页更像先判断触达类型再去比对的入口，并通过本地 `pnpm run build`。
+- 2026-07-16：`poe-alternatives-comparison` 对比页补齐多模型聚合 / 模型切换 / 对话流畅度的决策顺序信号，让 Poe 对比页更像先判断入口类型再去比对的入口，并通过本地 `pnpm run build`。

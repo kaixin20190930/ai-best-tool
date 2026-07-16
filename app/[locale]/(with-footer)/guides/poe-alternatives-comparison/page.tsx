@@ -249,6 +249,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ? '这页先看真实可验证的多模型聚合信号，再继续判断是否真的需要 Poe 这类统一入口。'
             : 'This page looks at verifiable multi-model aggregation signals first, then helps you decide whether a Poe-style unified entry is actually needed.'
         }
+        decisionSteps={
+          locale === 'cn' || locale === 'tw'
+            ? [
+                '先判断你要的是多模型聚合入口，还是只想稳定用一个主工具。',
+                '如果目标已经明确，先去更窄的聊天榜单或对比页收缩 shortlist。',
+                '如果还要和团队确认体验，再回到这里看聚合、切换和对话流畅度。',
+              ]
+            : [
+                'First decide whether you need a multi-model aggregator or just one stable primary tool.',
+                'If the goal is already clear, move to a narrower chatbot ranking or comparison page to shrink the shortlist.',
+                'If you still need team validation, come back here for aggregation, switching, and conversation flow.',
+              ]
+        }
         items={[
           {
             label: locale === 'cn' || locale === 'tw' ? '聚合能力' : 'Aggregation',
