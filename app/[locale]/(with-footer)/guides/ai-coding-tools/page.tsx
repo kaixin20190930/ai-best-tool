@@ -183,6 +183,19 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这页优先判断编程工具是否真的进入开发流程：编辑器支持、仓库上下文、多文件修改、测试调试、隐私和团队协作，并继续把代表性条目和榜单串起来。'
               : 'This page checks whether a coding tool actually fits the development workflow: editor support, repository context, multi-file edits, testing/debugging, privacy, and team collaboration, while tying representative listings back to rankings.'
           }
+          decisionSteps={
+            isChinese
+              ? [
+                  '先判断你要的是编辑器内补全，还是更偏聊天式的方案设计和调试。',
+                  '如果目标明确，先去更窄的编程榜单或对比页缩小 shortlist。',
+                  '如果还要给团队看证据，再回到这里看仓库支持、上下文和真实反馈。',
+                ]
+              : [
+                  'First decide whether you need inline editor completion or a more chat-style solution for planning and debugging.',
+                  'If the goal is already clear, move to a narrower coding ranking or comparison page to shrink the shortlist.',
+                  'If you still need team evidence, come back here for repo support, context, and real feedback.',
+                ]
+          }
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',
