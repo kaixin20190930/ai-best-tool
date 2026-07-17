@@ -22,7 +22,7 @@ function PricingMiniCard({
   return (
     <div
       className={`rounded-2xl border p-4 ${
-        accent ? 'border-cyan-200 bg-white shadow-sm' : 'border-slate-200 bg-slate-50'
+        accent ? 'border-slate-200 bg-white shadow-sm' : 'border-slate-200 bg-slate-50'
       }`}
     >
       <p className='text-sm font-semibold text-slate-950'>{title}</p>
@@ -121,7 +121,7 @@ function PathCard({
         pageType='pricing'
         className={`mt-4 inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-semibold ${
           accent
-            ? 'bg-cyan-700 text-white hover:bg-cyan-800'
+            ? 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
             : 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
         }`}
       >
@@ -239,7 +239,6 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
                   ctaLabel={isChinese ? '去提交' : 'Submit tool'}
                   href={submitHref}
                   ctaId='pricing_path_submit'
-                  accent
                 />
                 <PathCard
                   title={isChinese ? '我有时间敏感的发布' : 'My launch is time-sensitive'}
@@ -269,7 +268,7 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
                 ctaId='pricing_submit'
                 ctaLabel='Go to submit page'
                 pageType='pricing'
-                className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-5 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+                className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
               >
                 {isChinese ? '先去提交页' : 'Go to submit page'}
               </TrackableCtaLink>
@@ -287,7 +286,7 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
                 ctaId='pricing_contact_paid_options'
                 ctaLabel='Contact paid options'
                 pageType='pricing'
-                className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-cyan-50 px-5 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+                className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
               >
                 {isChinese ? '联系付费方案' : 'Contact paid options'}
               </TrackableCtaLink>
@@ -317,7 +316,7 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
                   ctaId='pricing_submit_again'
                   ctaLabel='Submit a tool'
                   pageType='pricing'
-                  className='inline-flex items-center justify-center rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800'
+                  className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50'
                 >
                   {isChinese ? '去提交工具' : 'Submit a tool'}
                 </TrackableCtaLink>
@@ -664,7 +663,7 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
               ctaId='pricing_submit_footer'
               ctaLabel='Go to submit page'
               pageType='pricing'
-              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+              className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '去提交页' : 'Go to submit page'}
               <ArrowRight className='ml-2 size-4' />
@@ -674,7 +673,7 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
               ctaId='pricing_contact_footer'
               ctaLabel='Contact us'
               pageType='pricing'
-              className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+              className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '联系商务' : 'Contact us'}
             </TrackableCtaLink>
