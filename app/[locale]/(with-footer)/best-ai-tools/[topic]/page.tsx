@@ -557,7 +557,7 @@ export default async function BestAiToolsTopicPage({
                   ctaId={`${topic.key}_submit`}
                   ctaLabel='Submit a tool'
                   pageType='best_ai_tools_topic'
-                  className='inline-flex items-center justify-center rounded-lg bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-cyan-400'
+                  className='inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/15'
                 >
                   {isChinese ? '提交工具' : 'Submit a tool'}
                   <ArrowRight className='ml-2 size-4' />
@@ -812,6 +812,15 @@ export default async function BestAiToolsTopicPage({
               >
                 {isChinese ? '回到指南' : topic.guideLabel}
               </TrackableCtaLink>
+              <TrackableCtaLink
+                href={`/${locale}/submit`}
+                ctaId={`${topic.key}_submit_sidebar`}
+                ctaLabel='Open submit sidebar'
+                pageType='best_ai_tools_topic'
+                className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+              >
+                {isChinese ? '提交工具' : 'Submit a tool'}
+              </TrackableCtaLink>
             </div>
           </div>
         </section>
@@ -836,7 +845,7 @@ export default async function BestAiToolsTopicPage({
             </Link>
             <Link
               href={`/${params.locale || 'en'}/submit`}
-              className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:border-cyan-200 hover:text-cyan-700'
+              className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               Submit a tool
             </Link>
