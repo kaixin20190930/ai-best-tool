@@ -291,6 +291,19 @@ export default async function Page({ params, searchParams }: PageProps) {
                 : 'The directory should surface risky or weakly judged results less prominently.',
             },
           ]}
+          decisionSteps={
+            isChinese
+              ? [
+                  '先选任务或场景，再缩小到合适的分类。',
+                  '再按价格、更新和风险信号筛一轮。',
+                  '最后进入详情、对比或提交页。',
+                ]
+              : [
+                  'Choose the task or use case first, then narrow into the right category.',
+                  'Filter again by pricing, freshness, and risk signals.',
+                  'Open the detail, compare, or submission page last.',
+                ]
+          }
         />
 
         <section className='mb-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
