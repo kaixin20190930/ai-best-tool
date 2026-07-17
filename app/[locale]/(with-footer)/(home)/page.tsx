@@ -510,14 +510,14 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 </span>
                 <Link
                   href='/submit'
-                  className='inline-flex items-center gap-1 text-slate-200 underline-offset-4 hover:underline'
+                  className='inline-flex items-center gap-1 text-slate-400 underline-offset-4 hover:text-slate-300 hover:underline'
                 >
                   {isChinese ? '提交/入驻工具' : 'Submit a tool'}
                   <Rocket className='size-3.5' />
                 </Link>
                 <Link
                   href='/developer/listing'
-                  className='inline-flex items-center gap-1 text-slate-200 underline-offset-4 hover:underline'
+                  className='inline-flex items-center gap-1 text-slate-400 underline-offset-4 hover:text-slate-300 hover:underline'
                 >
                   {isChinese ? '开发者入驻' : 'Developer listing'}
                   <BadgeCheck className='size-3.5' />
@@ -540,7 +540,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   </div>
                   <Link
                     href='/developer/listing'
-                    className='inline-flex shrink-0 items-center justify-center rounded-lg bg-cyan-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-cyan-800'
+                    className='inline-flex shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50'
                   >
                     {isChinese ? '查看可选方案' : 'View optional plan'}
                   </Link>
@@ -1079,7 +1079,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
             <Link
               href='/submit'
-              className='inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700'
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50'
             >
               {isChinese ? '提交工具' : 'Submit tool'}
               <CircleChevronRight className='size-4' />
