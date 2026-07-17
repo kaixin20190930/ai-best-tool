@@ -181,7 +181,7 @@ export default function DeveloperListingPage({
             <div className='flex flex-wrap gap-3'>
               <a
                 href='#claim-form'
-                className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-5 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+                className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
               >
                 {isChinese ? '去填写认领表单' : 'Go to claim form'}
                 <ArrowRight className='ml-2 size-4' />
@@ -191,7 +191,7 @@ export default function DeveloperListingPage({
                 ctaId='developer_listing_go_submit'
                 ctaLabel='Go to submit'
                 pageType='developer_listing'
-                className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-5 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+                className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
               >
                 {isChinese ? '去提交页' : 'Go to submit'}
                 <ArrowRight className='ml-2 size-4' />
@@ -201,7 +201,7 @@ export default function DeveloperListingPage({
                 ctaId='developer_listing_email_claim'
                 ctaLabel='Claim by email'
                 pageType='developer_listing'
-                className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-cyan-50 px-5 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
+                className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
               >
                 <Mail className='mr-2 size-4' />
                 {isChinese ? '发邮件认领' : 'Claim by email'}
