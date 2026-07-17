@@ -272,6 +272,7 @@
 - 2026-07-17：`guides` 总览页底部的 Submit / Claim CTA 进一步降权，避免商业入口在总入口页抢走“先看指南、再做比较”的主路径注意力，并通过本地 `pnpm run build`。
 - 2026-07-17：首页里的 `Submit` / `Developer listing` 入口进一步降权，避免工具方入口压过“探索 / 榜单 / 分类”主路径，并通过本地 `pnpm run build`。
 - 2026-07-17：`best-ai-tools/[topic]` 榜单页里的 `Submit` 入口进一步降权，并在侧栏补了更克制的提交入口，确保榜单页仍然先把用户导向对比和指南，并通过本地 `pnpm run build`。
+- 2026-07-17：`new` 本周新增页里的 `Submit` 入口进一步降权，避免“最近新增”入口把用户过早带去提交页，并通过本地 `pnpm run build`。
 - 2026-07-16：`categories/[slug]` 分类页补齐决策顺序信号，让分类页先承担筛选、再承担缩小 shortlist、最后承接到具体工具页的入口职责，并通过本地 `pnpm run build`。
 - 2026-07-16：`guides` 总入口补齐任务优先、比较优先和后补背景的决策顺序信号，让指南 hub 更像先分流再深入的入口，并通过本地 `pnpm run build`。
 - 2026-07-16：`ai-tools-for-developers` 指南页补齐编辑器 / API / 自动化层的决策顺序信号，让开发者高意图页更像先判断工作层再去比对的入口，并通过本地 `pnpm run build`。

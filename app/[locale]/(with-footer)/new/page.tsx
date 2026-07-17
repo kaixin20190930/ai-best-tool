@@ -119,7 +119,7 @@ export default async function NewToolsPage({ params: { locale } }: { params: { l
                 </Link>
                 <Link
                   href='/submit'
-                  className='inline-flex items-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-slate-800 ring-1 ring-slate-200 hover:bg-slate-100'
+                  className='inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
                 >
                   {isChinese ? '提交工具' : 'Submit a tool'}
                 </Link>
