@@ -2058,6 +2058,17 @@ export default async function Page({
                       ? '这页优先说明这个工具到底适合什么真实工作流，并把最近核查、评分、讨论、收藏、点击和更新时间一起摆出来，而不是只展示营销式简介。'
                       : 'This page focuses on what real workflow the tool fits and surfaces last checked, ratings, discussions, saves, clicks, and freshness instead of only a marketing-style summary.'
                   }
+                  decisionSteps={[
+                    isChinese
+                      ? '先判断这个工具是否真的对应你的当前工作流。'
+                      : 'First decide whether this tool really matches your current workflow.',
+                    isChinese
+                      ? '再看价格、更新和截图，确认它是不是还能稳定工作。'
+                      : 'Then check pricing, freshness, and screenshots to see whether it still works reliably.',
+                    isChinese
+                      ? '最后结合评论、认领和同类工具对比，决定是继续看官网还是换成更窄的候选。'
+                      : 'Finally use comments, claims, and similar-tool comparisons to decide whether to open the official site or switch to a narrower candidate.',
+                  ]}
                   items={[
                     {
                       label: isChinese ? '验证范围' : 'Checked scope',
