@@ -1621,7 +1621,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ctaId='guides_hub_submit_footer'
               ctaLabel='Guides hub submit footer'
               pageType='guide'
-              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+              className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100'
             >
               {isChinese ? '提交你的工具' : 'Submit your tool'}
             </TrackableCtaLink>
@@ -1630,7 +1630,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ctaId='guides_hub_claim_footer'
               ctaLabel='Guides hub claim footer'
               pageType='guide'
-              className='inline-flex items-center justify-center rounded-lg border border-emerald-200 bg-white px-4 py-3 text-sm font-semibold text-emerald-800 hover:bg-emerald-50'
+              className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '认领条目' : 'Claim listing'}
             </TrackableCtaLink>
