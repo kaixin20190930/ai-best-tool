@@ -239,6 +239,17 @@ export default function BestAiToolsPage({ params: { locale } }: { params: { loca
             ? '榜单总入口要先说明怎么筛选、为什么先看榜单、以及下一步去哪里，而不是只堆主题卡片。'
             : 'The ranking hub should explain how to filter, why to start with rankings, and what to open next instead of only stacking topic cards.'
         }
+        decisionSteps={[
+          isChinese
+            ? '先确认你要找的是哪类工具或哪条任务线。'
+            : 'First confirm which type of tool or task line you want.',
+          isChinese
+            ? '再用价格、更新和真实反馈把 shortlist 缩小。'
+            : 'Then narrow the shortlist with pricing, freshness, and real feedback.',
+          isChinese
+            ? '最后进入具体详情页或提交页做最终判断。'
+            : 'Finally open the detail page or submit page for the final decision.',
+        ]}
         items={[
           {
             label: isChinese ? '验证范围' : 'Checked scope',

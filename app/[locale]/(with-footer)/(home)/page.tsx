@@ -598,6 +598,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 ? '首页先交代站点的更新、收录和筛选逻辑，并把真实收录量和社区信号放在同一屏。'
                 : 'The homepage should explain updates, inventory, and filtering logic while surfacing real inventory and community signals on the same screen.'
             }
+            decisionSteps={[
+              isChinese
+                ? '先判断你是想找工具、看榜单，还是提交自己的产品。'
+                : 'First decide whether you want to find a tool, browse rankings, or submit your own product.',
+              isChinese
+                ? '如果目标已经明确，就直接去榜单、分类或具体详情页。'
+                : 'If the goal is already clear, go straight to the ranking, category, or detail page.',
+              isChinese
+                ? '如果还不确定，先从首页的路线信号里收缩到更窄的候选。'
+                : 'If you are still unsure, use the homepage route signals to narrow into a smaller shortlist first.',
+            ]}
             items={[
               {
                 label: isChinese ? '验证范围' : 'Checked scope',
