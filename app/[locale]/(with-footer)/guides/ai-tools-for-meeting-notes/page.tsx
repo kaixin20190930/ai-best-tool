@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { ArrowRight, CheckCircle2, ExternalLink, Mic, Workflow } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -25,6 +26,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '适合会议记录、纪要整理和行动项提取的 AI 工具推荐与选型指南。'
         : 'A practical guide to AI tools for meeting notes, transcription, and action-item extraction.',
+    ...getNoindexMetadata(),
   };
 }
 

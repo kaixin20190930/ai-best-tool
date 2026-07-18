@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { ExternalLink, Mail, SearchCheck, Send } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -22,6 +23,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '面向销售触达准备、个性化外联和 prospecting 工作流的 AI 工具选型指南。'
         : 'A practical guide to AI tools for sales prospecting, personalized outreach prep, and outbound workflow support.',
+    ...getNoindexMetadata(),
   };
 }
 

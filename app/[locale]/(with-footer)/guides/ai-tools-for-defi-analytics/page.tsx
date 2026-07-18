@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { BarChart3, ExternalLink, Layers3, PieChart } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -23,6 +24,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '面向流动性监测、收益追踪和协议研究的 AI 工具选型指南。'
         : 'A practical guide to AI tools for DeFi analytics, yield tracking, and protocol research.',
+    ...getNoindexMetadata(),
   };
 }
 

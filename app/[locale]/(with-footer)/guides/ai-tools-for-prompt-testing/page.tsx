@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { ExternalLink, FlaskConical, Layers3, TestTube2 } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -23,6 +24,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '面向提示词评估、A/B 测试、版本对比和质量验证的 AI 工具选型指南。'
         : 'A practical guide to AI tools for prompt evaluation, A/B testing, version comparison, and quality validation.',
+    ...getNoindexMetadata(),
   };
 }
 
