@@ -22,6 +22,8 @@ for (const envPath of ['.env.local', '.env.production']) {
   }
 }
 
+process.env.DATABASE_URL = process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.DATABASE_URL_UNPOOLED;
+
 async function testSitemap() {
   console.log('🔍 Testing sitemap generation...\n');
 

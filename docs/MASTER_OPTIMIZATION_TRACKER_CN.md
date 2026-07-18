@@ -321,6 +321,7 @@
 - 2026-07-18：新增 [`EDITORIAL_REVIEW_QUEUE_CN.md`](/Users/liukai/web/ai-best-tool/docs/EDITORIAL_REVIEW_QUEUE_CN.md)，记录生产 25 条工具的真实复核队列，并标记 GSC 高曝光的 Fathom / Pipedream 与当前数据库不一致，下一步先审计数据源再补证据。
 - 2026-07-18：新增 `seo:priority-source-audit`，默认警告、`--strict` 阻断，用于检查 GSC 高曝光工具是否存在已发布数据库记录或 legacy 静态来源，防止复核状态与实际发布数据源脱节。
 - 2026-07-18：线上核对 `/cn/ai/fathom` 与 `/cn/ai/pipedream` 均为 200 且 canonical 正确，但评分、讨论和收藏仍为 0；确认当前不应因本地数据库样本差异直接 noindex，后续优先补真实互动和 owner 信号。
+- 2026-07-18：修正 sitemap 回归脚本对 `POSTGRES_URL` / `DATABASE_URL_UNPOOLED` 的兼容，避免环境变量命名差异导致动态工具和分类检查被跳过；后续 sitemap 结果更接近真实数据库状态。
 - 2026-07-17：最新 28 天 GSC 再核对仍只有 876 impressions / 2 clicks，Top queries 仍以品牌和目录词为主，排名大多在 70-110 之外；当前继续按“收口弱页 + 强化核心页真实信号 + 观察索引恢复”主线推进。
 - 2026-07-17：`guides` 总览页底部的 Submit / Claim CTA 进一步降权，避免商业入口在总入口页抢走“先看指南、再做比较”的主路径注意力，并通过本地 `pnpm run build`。
 - 2026-07-17：首页里的 `Submit` / `Developer listing` 入口进一步降权，避免工具方入口压过“探索 / 榜单 / 分类”主路径，并通过本地 `pnpm run build`。
