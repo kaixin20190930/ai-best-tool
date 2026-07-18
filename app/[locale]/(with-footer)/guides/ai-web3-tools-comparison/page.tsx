@@ -14,12 +14,14 @@ export function generateMetadata({ params: { locale } }: { params: { locale: str
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
+  const checkedAt = '2026-07-18';
 
   return (
     <>
       {Web3ComparisonPage({ params: { locale } })}
       <GuideEvidencePanel
         locale={locale}
+        checkedAt={checkedAt}
         scope={
           isChinese
             ? '这页先看真实可验证的 Web3 工具信号，再继续判断是否要走更广的 Web3、链上和协议分析入口。'
@@ -88,11 +90,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-18</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {isChinese
-              ? '这页已按真实 Web3 工具路径重新核对，保留协议、链上和研究入口。'
-              : 'This page has been rechecked against a real Web3-tool workflow and keeps protocol, on-chain, and research entry points visible.'}
+              ? `这页已按真实 Web3 工具路径重新核对（${checkedAt}），保留协议、链上和研究入口。`
+              : `This page has been rechecked against a real Web3-tool workflow (${checkedAt}) and keeps protocol, on-chain, and research entry points visible.`}
           </p>
         </div>
         <div>

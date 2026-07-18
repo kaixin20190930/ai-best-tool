@@ -16,6 +16,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+  const checkedAt = '2026-07-18';
   const data = await buildComparisonPageData(locale, {
     categoryLabel: { cn: '研究工具', en: 'Research tools' },
     comparisonLabel: { cn: 'AI 研究工具对比', en: 'AI tools for research comparison' },
@@ -341,6 +342,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       {ComparisonPage({ ...data, locale })}
       <GuideEvidencePanel
         locale={locale}
+        checkedAt={checkedAt}
         scope={
           locale === 'cn' || locale === 'tw'
             ? '研究对比页要围绕资料发现、引用可追溯和分析复盘来判断，不要只看答案速度。它会继续保留索引，但会把更窄的 SEO 和写作路径分层。'
@@ -426,11 +428,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-18</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
-              ? '这页已按真实研究路径重新核对，保留发现、引用和复盘入口。'
-              : 'This page has been rechecked against a real research workflow and keeps discovery, citation, and review entry points visible.'}
+              ? `这页已按真实研究路径重新核对（${checkedAt}），保留发现、引用和复盘入口。`
+              : `This page has been rechecked against a real research workflow (${checkedAt}) and keeps discovery, citation, and review entry points visible.`}
           </p>
         </div>
         <div>

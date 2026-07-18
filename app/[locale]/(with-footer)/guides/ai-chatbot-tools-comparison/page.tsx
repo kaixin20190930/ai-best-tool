@@ -34,6 +34,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
+  const checkedAt = '2026-07-18';
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -301,6 +302,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '先确认聊天机器人在问答、写作、知识库和协作里的真实覆盖，再继续比较。'
@@ -362,11 +364,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-18</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这页已按真实聊天决策路径重新核对，保留问答、写作、知识库和协作入口。'
-                : 'This page has been rechecked against a real chatbot decision path and keeps Q&A, writing, knowledge base, and collaboration entry points visible.'}
+                ? `这页已按真实聊天决策路径重新核对（${checkedAt}），保留问答、写作、知识库和协作入口。`
+                : `This page has been rechecked against a real chatbot decision path (${checkedAt}) and keeps Q&A, writing, knowledge base, and collaboration entry points visible.`}
             </p>
           </div>
           <div>
