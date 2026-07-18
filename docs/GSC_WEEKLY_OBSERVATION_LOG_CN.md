@@ -78,14 +78,14 @@
 
 | 页面 | 增强内容 | 本周曝光 | 本周点击 | 是否继续保留索引 | 备注 |
 | --- | --- | --- | --- | --- | --- |
-| `/guides/how-to-choose-ai-tools` |  |  |  |  |  |
-| `/guides/ai-seo-tools` |  |  |  |  |  |
-| `/guides/ai-coding-tools` |  |  |  |  |  |
-| `/guides/free-ai-tools` |  |  |  |  |  |
-| `/guides/ai-writing-tools` |  |  |  |  |  |
-| `/best-ai-tools` |  |  |  |  |  |
-| `/categories/productivity` |  |  |  |  |  |
-| `/categories/developer-tools` |  |  |  |  |  |
+| `/guides/how-to-choose-ai-tools` | 选型方法、价格/限制、更新、截图/评论判断、最近验证日期 | 暂无单页拆分 | 暂无单页拆分 | 是 | 保留为方法论入口；下一轮补真实案例和用户反馈 |
+| `/guides/ai-seo-tools` | SEO 场景、价格/更新/评论信号、最近验证日期 | 暂无单页拆分 | 暂无单页拆分 | 是 | 与当前 GSC 恢复主线直接相关；继续补真实案例 |
+| `/guides/ai-coding-tools` | IDE / 补全 / Agent 选择维度、价格与限制、最近验证日期 | 暂无单页拆分 | 暂无单页拆分 | 是 | 继续补多文件修改案例和真实评论 |
+| `/guides/free-ai-tools` | 免费额度、限制、更新、评论、截图判断、最近验证日期 | 暂无单页拆分 | 暂无单页拆分 | 是 | 继续补免费额度核查和用户反馈 |
+| `/guides/ai-writing-tools` | 写作场景、价格/限制、更新与评论信号、最近验证日期 | 暂无单页拆分 | 暂无单页拆分 | 是 | 继续补真实写作样例和限制说明 |
+| `/best-ai-tools` | 排名方法、选择标准、价格/更新/风险信号、决策顺序 | 暂无单页拆分 | 暂无单页拆分 | 是 | 继续观察榜单词曝光和点击 |
+| `/categories/productivity` | 分类解释、场景筛选、代表工具、更新与风险信号 | 暂无单页拆分 | 暂无单页拆分 | 是 | 继续补分类级真实工具信号 |
+| `/categories/developer-tools` | 开发者选择维度、筛选与比较路径、更新和风险信号 | 暂无单页拆分 | 暂无单页拆分 | 是 | 继续补开发者工作流案例 |
 
 ## 处理规则
 

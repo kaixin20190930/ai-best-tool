@@ -308,6 +308,7 @@
 - 2026-07-18：Stripe checkout 回跳地址移除 `request.nextUrl.origin` 兜底，统一只使用 canonical `BASE_URL`，避免支付成功 / 取消回跳在不同域名间漂移，并通过本地 `pnpm run build`。
 - 2026-07-18：middleware 继续收紧 host 归一化逻辑，确保 `www` 变体和非 HTTPS 访问都稳定 308 到 canonical 域名，减少 apex / www 之间的信号分裂，并通过本地 `pnpm run build`。
 - 2026-07-18：将 sitemap 主力 guide 白名单提取为共享策略，并把回归检查扩展到所有 GUIDE_PAGES，自动验证薄页、alias、comparison 不会重新进入 sitemap，同时验证主力 guide 全部存在；本地 sitemap 检查通过 `7/7`，并通过本地 `pnpm run build`。
+- 2026-07-18：依据已提供的最新 28 天 GSC 数据，把 8 个核心增强页的真实信号、保留索引判断和下一步缺口回填到 `GSC_WEEKLY_OBSERVATION_LOG_CN.md`，并将质量盘点日期对齐到 `2026-07-18`；当前仍保持“不扩量、先观察”的策略。
 - 2026-07-17：最新 28 天 GSC 再核对仍只有 876 impressions / 2 clicks，Top queries 仍以品牌和目录词为主，排名大多在 70-110 之外；当前继续按“收口弱页 + 强化核心页真实信号 + 观察索引恢复”主线推进。
 - 2026-07-17：`guides` 总览页底部的 Submit / Claim CTA 进一步降权，避免商业入口在总入口页抢走“先看指南、再做比较”的主路径注意力，并通过本地 `pnpm run build`。
 - 2026-07-17：首页里的 `Submit` / `Developer listing` 入口进一步降权，避免工具方入口压过“探索 / 榜单 / 分类”主路径，并通过本地 `pnpm run build`。
