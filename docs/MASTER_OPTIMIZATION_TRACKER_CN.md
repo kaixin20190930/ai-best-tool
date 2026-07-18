@@ -22,6 +22,7 @@
 - 2026-07-16：新增 sitemap 回归测试，自动确认 noindex / alias 页面不会重新混入 sitemap，并通过本地 `pnpm exec tsx scripts/test-sitemap.ts`。
 - 2026-07-17：`ai/[websiteName]` 工具详情页补齐决策顺序信号，让高曝光工具页先说明工作流匹配、价格更新和评论/认领判断，再进入更窄候选，并通过本地 `pnpm run build`。
 - 2026-07-18：继续把首页、榜单页、`ai/[websiteName]` 与剩余 guide / comparison 页面上的 freshness 信号统一推进到 `2026-07-18`，本轮只做内容时效收口，不改结构逻辑，并通过本地 `pnpm run build`。
+- 2026-07-18：完成一轮更广的页面 freshness 复核，把 remaining guide / comparison / conversion 页的最近检查日期统一到 `2026-07-18`，确保站内收口页面与总控表时间一致，并通过本地 `pnpm run build`。
 - 2026-07-15：根据最近 28 天 GSC 基线，开始优先强化首页、榜单页和分类页的判断信号，新增价格 / 更新 / 风险信号层，帮助核心入口更像可决策页面
 - 2026-07-15：继续把曝光较高的工具详情页做成更强答案页，先补 `Fathom` / `Pipedream` 这类高曝光条目的定制信号层，降低“看到了但点不出来”的损耗
 - 2026-07-15：`robots.txt` 已回退为 `public/robots.txt` 静态文件，避免 metadata route 500；本地预览 `seo:validate` 已跑通 27/27，工具页非数据库工具的提示已改为通过

@@ -272,8 +272,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </p>
             <p className='mt-2 text-lg font-bold text-slate-950'>
               {isChinese
-                ? '补真实制作与复用记录，并把 2026-07-15 之后的更新继续记上。'
-                : 'Add real production and repurposing notes, then keep logging updates after 2026-07-15.'}
+                ? '补真实制作与复用记录，并把 2026-07-18 之后的更新继续记上。'
+                : 'Add real production and repurposing notes, then keep logging updates after 2026-07-18.'}
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese

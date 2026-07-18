@@ -19,7 +19,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
       <GuideEvidencePanel
         locale={locale}
-        checkedAt='2026-07-15'
+        checkedAt='2026-07-18'
         scope={
           locale === 'cn' || locale === 'tw'
             ? 'Web3 总入口现在强调的是“先确认链上场景，再挑具体工具”。'
@@ -63,7 +63,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-18</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
               ? `这页已按当前比较页的判断标准重新核对，当前可参考分类信号 ${categories.length} 个。`

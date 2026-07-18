@@ -488,8 +488,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '后续优先补学生使用案例、课程作业样例和真人评论，并持续保留 2026-07-15 的核对痕迹。'
-                : 'Next, prioritize student cases, course assignment examples, and real comments while keeping the 2026-07-15 check trail up to date.'}
+                ? '后续优先补学生使用案例、课程作业样例和真人评论，并持续保留 2026-07-18 的核对痕迹。'
+                : 'Next, prioritize student cases, course assignment examples, and real comments while keeping the 2026-07-18 check trail up to date.'}
             </p>
           </div>
         </section>

@@ -393,7 +393,7 @@ export default async function SubmissionsPage({
 
       <GuideEvidencePanel
         locale={locale}
-        checkedAt='2026-07-15'
+        checkedAt='2026-07-18'
         scope={
           isChinese
             ? '我的提交页要把付款、审核、前排窗口和续期状态放在同一屏里，方便用户知道下一步到底该做什么。'

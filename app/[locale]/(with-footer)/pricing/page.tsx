@@ -431,7 +431,7 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
 
       <GuideEvidencePanel
         locale={locale}
-        checkedAt='2026-07-15'
+        checkedAt='2026-07-18'
         scope={
           isChinese
             ? '价格页的作用不是让人停在这里，而是帮访客快速判断：先认领、先提交，还是直接走付费加速。'

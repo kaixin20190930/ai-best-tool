@@ -1642,7 +1642,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '最近验证' : 'Last checked'}
             </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-15</p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-18</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
               {isChinese
                 ? '这个总入口已按当前指南收口标准重新核对。'

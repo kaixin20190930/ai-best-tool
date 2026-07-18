@@ -272,7 +272,7 @@ export default function DeveloperListingPage({
 
       <GuideEvidencePanel
         locale={locale}
-        checkedAt='2026-07-15'
+        checkedAt='2026-07-18'
         scope={
           isChinese
             ? '认领页不是收件箱，而是确认 owner、更新路径和后续加速意愿的分流页。'

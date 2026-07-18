@@ -516,7 +516,7 @@ export default async function Page({
 
       <GuideEvidencePanel
         locale={locale}
-        checkedAt='2026-07-15'
+        checkedAt='2026-07-18'
         scope={
           isChinese
             ? '提交页要把认领、提交、付费和后续跟进拆开，避免访客把它当成一个只有表单的页面。'
