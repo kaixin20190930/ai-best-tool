@@ -441,7 +441,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
     .filter((page): page is (typeof GUIDE_PAGES)[number] => Boolean(page))
     .filter((page) => page.href.endsWith('-comparison'));
   const primaryComparisonGuide = comparisonGuides[0] || relatedGuides[0] || null;
-  const checkedAt = '2026-07-15';
+  const checkedAt = '2026-07-18';
   const checkedAtLabel = checkedAt;
   const priorityCategorySlugs = [
     'developer-tools',
@@ -525,6 +525,29 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
         note: isChinese
           ? '真正有用的生产力工具，应该能接住日历、会议和任务流。'
           : 'A useful productivity tool should handle calendar, meetings, and task flow.',
+      },
+    ],
+    automation: [
+      {
+        label: isChinese ? '触发信号' : 'Trigger signal',
+        value: isChinese ? '先看触发器和事件覆盖' : 'Check triggers and event coverage first',
+        note: isChinese
+          ? '自动化工具的关键不是连接数量，而是能否稳定接住真实事件、定时任务和失败重试。'
+          : 'The key is not connector count, but whether real events, schedules, and retries work reliably.',
+      },
+      {
+        label: isChinese ? '编排信号' : 'Orchestration signal',
+        value: isChinese ? '再看条件、分支和数据传递' : 'Then check conditions, branches, and data flow',
+        note: isChinese
+          ? '先确认工作流能否表达你的业务逻辑，再比较可视化编排和代码控制的边界。'
+          : 'Confirm that the workflow can express your business logic before comparing visual and code-based control.',
+      },
+      {
+        label: isChinese ? '维护风险' : 'Maintenance risk',
+        value: isChinese ? '没有日志、重试和权限就先谨慎' : 'Be cautious without logs, retries, and permissions',
+        note: isChinese
+          ? '自动化一旦进入生产，失败可见性、权限边界和后续维护比演示效果更重要。'
+          : 'Once automation reaches production, failure visibility, permissions, and maintenance matter more than demos.',
       },
     ],
     web3: [
