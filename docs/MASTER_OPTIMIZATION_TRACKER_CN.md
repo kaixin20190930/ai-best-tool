@@ -318,6 +318,7 @@
 - 2026-07-18：editorial 保存接口增加质量门槛，复核日期必须同时有复核人和至少一份摘要，防止后台把不完整记录误标为已验证。
 - 2026-07-18：统一 editorial 复核读取规则，后台列表、复核筛选和工具详情页都要求“日期 + 复核人 + 摘要”齐全，历史不完整记录自动回到 pending，不再展示为公开验证证据。
 - 2026-07-18：只读核对生产 `tools` 表，当前共 25 条工具记录、完整 editorial 复核 0 条、部分记录 0 条；后续按 pending 队列逐条补真实证据，不用模板文本伪造复核信号，基线同步写入 GSC 周报。
+- 2026-07-18：新增 [`EDITORIAL_REVIEW_QUEUE_CN.md`](/Users/liukai/web/ai-best-tool/docs/EDITORIAL_REVIEW_QUEUE_CN.md)，记录生产 25 条工具的真实复核队列，并标记 GSC 高曝光的 Fathom / Pipedream 与当前数据库不一致，下一步先审计数据源再补证据。
 - 2026-07-17：最新 28 天 GSC 再核对仍只有 876 impressions / 2 clicks，Top queries 仍以品牌和目录词为主，排名大多在 70-110 之外；当前继续按“收口弱页 + 强化核心页真实信号 + 观察索引恢复”主线推进。
 - 2026-07-17：`guides` 总览页底部的 Submit / Claim CTA 进一步降权，避免商业入口在总入口页抢走“先看指南、再做比较”的主路径注意力，并通过本地 `pnpm run build`。
 - 2026-07-17：首页里的 `Submit` / `Developer listing` 入口进一步降权，避免工具方入口压过“探索 / 榜单 / 分类”主路径，并通过本地 `pnpm run build`。
