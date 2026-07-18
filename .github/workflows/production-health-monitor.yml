@@ -14,19 +14,16 @@ jobs:
     name: Check Production Health Endpoints
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    env:
+      # Keep monitoring useful even before the optional repository secret is set.
+      MONITOR_BASE_URL: ${{ secrets.MONITOR_BASE_URL || 'https://aibesttool.com' }}
 
     steps:
-      - name: Validate required secret
-        run: |
-          if [ -z "${{ secrets.MONITOR_BASE_URL }}" ]; then
-            echo "MONITOR_BASE_URL is not set."
-            exit 1
-          fi
 
       - name: Check /api/healthz
         run: |
           set -e
-          BASE_URL="${{ secrets.MONITOR_BASE_URL }}"
+          BASE_URL="${MONITOR_BASE_URL%/}"
           HTTP_CODE=$(curl -sS -o /tmp/healthz.json -w "%{http_code}" "$BASE_URL/api/healthz")
           echo "healthz_http_code=$HTTP_CODE"
           test "$HTTP_CODE" = "200"
@@ -35,13 +32,14 @@ jobs:
       - name: Check /api/monitor
         run: |
           set -e
-          BASE_URL="${{ secrets.MONITOR_BASE_URL }}"
+          BASE_URL="${MONITOR_BASE_URL%/}"
           if [ -n "${{ secrets.MONITOR_API_TOKEN }}" ]; then
             HTTP_CODE=$(curl -sS -o /tmp/monitor.json -w "%{http_code}" \
               -H "Authorization: Bearer ${{ secrets.MONITOR_API_TOKEN }}" \
               "$BASE_URL/api/monitor")
           else
-            HTTP_CODE=$(curl -sS -o /tmp/monitor.json -w "%{http_code}" "$BASE_URL/api/monitor")
+            echo "MONITOR_API_TOKEN is not set; skipping protected /api/monitor check."
+            exit 0
           fi
           echo "monitor_http_code=$HTTP_CODE"
           test "$HTTP_CODE" = "200"
@@ -50,7 +48,7 @@ jobs:
       - name: Check /api/health
         run: |
           set -e
-          BASE_URL="${{ secrets.MONITOR_BASE_URL }}"
+          BASE_URL="${MONITOR_BASE_URL%/}"
           HTTP_CODE=$(curl -sS -o /tmp/health.json -w "%{http_code}" "$BASE_URL/api/health")
           echo "health_http_code=$HTTP_CODE"
           test "$HTTP_CODE" = "200"
@@ -59,7 +57,7 @@ jobs:
       - name: Check SEO core pages and sitemap
         run: |
           set -euo pipefail
-          BASE_URL="${{ secrets.MONITOR_BASE_URL }}"
+          BASE_URL="${MONITOR_BASE_URL}"
           BASE_URL="${BASE_URL%/}"
 
           for ROUTE in /cn /cn/explore /cn/best-ai-tools /cn/ai/fathom /cn/ai/pipedream; do
@@ -80,7 +78,7 @@ jobs:
       - name: Notify Feishu on Failure (optional)
         if: failure() && secrets.FEISHU_WEBHOOK_URL != ''
         run: |
-          BASE_URL="${{ secrets.MONITOR_BASE_URL }}"
+          BASE_URL="${MONITOR_BASE_URL%/}"
           PAYLOAD=$(cat <<EOF
           {
             "msg_type": "text",
