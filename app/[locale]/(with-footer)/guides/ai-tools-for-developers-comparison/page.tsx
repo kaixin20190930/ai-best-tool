@@ -15,6 +15,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+  const checkedAt = '2026-07-18';
   const data = await buildComparisonPageData(locale, {
     categoryLabel: { cn: '开发者工具', en: 'Developer tools' },
     comparisonLabel: { cn: 'AI 开发者工具对比', en: 'AI tools for developers comparison' },
@@ -279,6 +280,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       {ComparisonPage({ ...data, locale })}
       <GuideEvidencePanel
         locale={locale}
+        checkedAt={checkedAt}
         scope={
           locale === 'cn' || locale === 'tw'
             ? '开发者工具的比较重点不是功能数，而是能否把编码、调试、协作和工作流整合到一个顺手的链路里。'
@@ -367,11 +369,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-18</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
-              ? '这页已按真实开发者工作流重新核对，保留编码、调试和协作入口。'
-              : 'This page has been rechecked against a real developer workflow and keeps coding, debugging, and collaboration entry points visible.'}
+              ? `这页已按真实开发者工作流重新核对（${checkedAt}），保留编码、调试和协作入口。`
+              : `This page has been rechecked against a real developer workflow (${checkedAt}) and keeps coding, debugging, and collaboration entry points visible.`}
           </p>
         </div>
         <div>

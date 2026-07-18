@@ -278,6 +278,7 @@
 - 2026-07-15：比较页与指南页的 evidence panel 已统一到“可验证信号 + 真实判断”的结构，后续继续按同一模板补到未覆盖页面。
 - 2026-07-15：继续补齐 `ai-tools-for-sales-prospecting-comparison`、`ai-tools-for-marketing-comparison`、`ai-tools-for-small-business-comparison` 的 `signalCards`，把名单、渠道、品牌、运营等信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `ai-chatbot-tools-comparison`、`ai-marketing-tools-comparison`、`ai-tools-for-developers-comparison` 的 `signalCards`，把聊天、营销和开发者页的可验证信号层补齐后再做 build 验证。
+- 2026-07-18：继续收口 `ai-coding-tools-comparison` 与 `ai-tools-for-developers-comparison` 的 freshness 记录，统一补入 `checkedAt`，避免核心比较页缺少最近核对时间。
 - 2026-07-15：继续补齐 `ai-model-routing-tools-comparison`、`ai-sales-tools-comparison`、`ai-automation-tools-comparison` 的 `signalCards`，把模型路由、销售和自动化页的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `ai-code-review-tools-comparison`、`ai-tools-for-code-review-comparison`、`cursor-alternatives-comparison` 的 `signalCards`，把代码审查与 Cursor 替代页的可验证信号层补齐后再做 build 验证。
 - 2026-07-15：继续补齐 `ai-tools-for-agencies-comparison`、`ai-tools-for-designers-comparison`、`ai-tools-for-creators-comparison` 的 `signalCards`，把代理、设计和创作者页的可验证信号层补齐后再做 build 验证。

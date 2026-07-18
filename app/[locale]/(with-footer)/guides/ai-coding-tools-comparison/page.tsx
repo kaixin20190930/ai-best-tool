@@ -35,6 +35,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const checkedAt = '2026-07-18';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
     { name: isChinese ? '指南' : 'Guides', url: `${siteUrl}/${locale}/guides` },
@@ -379,6 +380,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         </section>
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
           scope={
             isChinese
               ? '编程工具对比要先判断你真正要解决的是补全、调试还是重构，再决定哪类工具值得进入 shortlist。'
