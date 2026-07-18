@@ -4,7 +4,7 @@ Use this after a release that adds new pages, changes metadata, or updates the s
 
 ## Before You Start
 
-- Confirm `NEXT_PUBLIC_SITE_URL` points to the production domain.
+- Confirm `NEXT_PUBLIC_SITE_URL` points to the production canonical domain.
 - Confirm `/sitemap.xml` opens on the production domain.
 - Confirm the admin Search Console page is available at `/admin/search-console`.
 - Confirm `MONITOR_API_TOKEN` is set if you want monitor endpoints protected.

@@ -40,6 +40,7 @@ Notes:
 - `STRIPE_PUBLISHABLE_KEY` is not required for the current server-side Checkout flow.
 - Keep test keys and live keys in separate Stripe modes. When you move to production, switch the dashboard and the webhook endpoint to live mode.
 - Make sure the webhook endpoint URL is exactly `https://aibesttool.com/api/stripe/webhook` or your canonical production domain equivalent.
+- The app normalizes the configured site URL before generating Stripe return links, so keep the env var pointed at the canonical production domain.
 
 ## How the flow works
 

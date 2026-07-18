@@ -16,11 +16,15 @@ Use this checklist before promoting a release to production. The goal is to veri
 
 Core:
 
-- `NEXT_PUBLIC_SITE_URL`
+- `NEXT_PUBLIC_SITE_URL` (canonical production domain)
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - Database connection variables used by `db/neon/client`
 - `CONTACT_US_EMAIL`
+
+Note:
+
+- The codebase normalizes the configured site URL before using it for redirects, breadcrumbs, share links, and transactional email links.
 
 Email:
 

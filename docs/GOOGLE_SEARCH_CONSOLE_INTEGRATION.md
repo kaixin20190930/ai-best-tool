@@ -31,7 +31,7 @@ GSC_REFRESH_TOKEN=your-google-oauth-refresh-token
 
 Optional fallback:
 
-- `NEXT_PUBLIC_SITE_URL`
+- `NEXT_PUBLIC_SITE_URL` as the canonical production domain
 
 ## Reusable library
 
@@ -87,4 +87,3 @@ If `MONITOR_API_TOKEN` is set, pass it as:
 ```bash
 Authorization: Bearer $MONITOR_API_TOKEN
 ```
-

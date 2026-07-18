@@ -92,7 +92,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-For production, update `NEXT_PUBLIC_SITE_URL` to your production domain.
+For production, update `NEXT_PUBLIC_SITE_URL` to your canonical production domain. The app now normalizes this value before using it in redirects, metadata, and share links.
 
 ### 5. Database Setup
 

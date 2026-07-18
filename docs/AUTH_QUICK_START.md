@@ -113,6 +113,10 @@ export default function SignOutButton() {
 }
 ```
 
+## Site URL Contract
+
+The app uses the configured canonical site URL for redirects, metadata, and share links. Keep `NEXT_PUBLIC_SITE_URL` pointed at the production domain in Vercel so OAuth and auth emails resolve to the right origin.
+
 ## Common Patterns
 
 ### Conditional Rendering Based on Auth
