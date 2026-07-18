@@ -15,19 +15,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.9
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
+          cache: 'pnpm'
       
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
       
       - name: Run SEO Health Check
         id: health-check
         run: |
-          npm run seo:health-check || echo "health_check_failed=true" >> $GITHUB_OUTPUT
+          pnpm run seo:health-check || echo "health_check_failed=true" >> $GITHUB_OUTPUT
         continue-on-error: true
       
       - name: Upload Health Check Report
@@ -121,17 +126,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.9
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
+          cache: 'pnpm'
       
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
       
       - name: Run Comprehensive SEO Audit
-        run: npm run seo:audit
+        run: pnpm run seo:audit
         continue-on-error: true
       
       - name: Upload Audit Report
@@ -154,17 +164,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.9
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
+          cache: 'pnpm'
       
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
       
       - name: Run Performance Audit
-        run: npm run seo:performance
+        run: pnpm run seo:performance
         continue-on-error: true
       
       - name: Upload Performance Report
