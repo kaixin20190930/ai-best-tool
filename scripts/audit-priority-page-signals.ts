@@ -86,7 +86,12 @@ function render(rows: AuditRow[]) {
 }
 
 async function main() {
-  const rows = await Promise.all(priorityPaths.map(fetchPage));
+  // Keep requests sequential: the detail and category pages read live data, and
+  // a burst of concurrent requests can create false negatives in metadata.
+  const rows: AuditRow[] = [];
+  for (const route of priorityPaths) {
+    rows.push(await fetchPage(route));
+  }
   const outputPath = path.join(process.cwd(), 'docs', 'PRIORITY_PAGE_SIGNAL_AUDIT_CN.md');
   await fs.writeFile(outputPath, render(rows));
   console.log(`Wrote ${outputPath}`);

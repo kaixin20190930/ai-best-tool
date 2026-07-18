@@ -10,9 +10,9 @@
 
 - 核心页面：20
 - HTTP 正常：20
-- canonical：4/20
-- meta description：17/20
-- evidence / freshness 信号：13/20
+- canonical：20/20
+- meta description：20/20
+- evidence / freshness 信号：20/20
 - 评论 / 认领 / 官网 / 比较动作信号：20/20
 
 ## 页面明细
@@ -21,24 +21,24 @@
 | --- | --- | --- | --- | --- | --- | --- |
 | / | 200 | 是 | 是 | 是 | 是 | - |
 | /explore | 200 | 是 | 是 | 是 | 是 | - |
-| /best-ai-tools | 200 | 否 | 是 | 是 | 是 | - |
-| /categories/productivity | 200 | 否 | 否 | 否 | 是 | - |
-| /categories/web3 | 200 | 否 | 否 | 否 | 是 | - |
-| /categories/developer-tools | 200 | 否 | 否 | 否 | 是 | - |
-| /categories/chatbot | 200 | 否 | 是 | 是 | 是 | - |
-| /guides/how-to-choose-ai-tools | 200 | 否 | 是 | 是 | 是 | - |
-| /guides/free-ai-tools | 200 | 否 | 是 | 是 | 是 | - |
-| /guides/ai-writing-tools | 200 | 否 | 是 | 是 | 是 | - |
-| /guides/ai-seo-tools | 200 | 否 | 是 | 是 | 是 | - |
-| /guides/ai-coding-tools | 200 | 否 | 是 | 是 | 是 | - |
-| /guides/ai-tools-for-web3 | 200 | 否 | 是 | 是 | 是 | - |
-| /guides/ai-note-taking-tools | 200 | 否 | 是 | 是 | 是 | - |
-| /ai/chatgpt | 200 | 否 | 是 | 否 | 是 | - |
-| /ai/claude | 200 | 否 | 是 | 否 | 是 | - |
-| /ai/cursor | 200 | 否 | 是 | 否 | 是 | - |
+| /best-ai-tools | 200 | 是 | 是 | 是 | 是 | - |
+| /categories/productivity | 200 | 是 | 是 | 是 | 是 | - |
+| /categories/web3 | 200 | 是 | 是 | 是 | 是 | - |
+| /categories/developer-tools | 200 | 是 | 是 | 是 | 是 | - |
+| /categories/chatbot | 200 | 是 | 是 | 是 | 是 | - |
+| /guides/how-to-choose-ai-tools | 200 | 是 | 是 | 是 | 是 | - |
+| /guides/free-ai-tools | 200 | 是 | 是 | 是 | 是 | - |
+| /guides/ai-writing-tools | 200 | 是 | 是 | 是 | 是 | - |
+| /guides/ai-seo-tools | 200 | 是 | 是 | 是 | 是 | - |
+| /guides/ai-coding-tools | 200 | 是 | 是 | 是 | 是 | - |
+| /guides/ai-tools-for-web3 | 200 | 是 | 是 | 是 | 是 | - |
+| /guides/ai-note-taking-tools | 200 | 是 | 是 | 是 | 是 | - |
+| /ai/chatgpt | 200 | 是 | 是 | 是 | 是 | - |
+| /ai/claude | 200 | 是 | 是 | 是 | 是 | - |
+| /ai/cursor | 200 | 是 | 是 | 是 | 是 | - |
 | /ai/runway | 200 | 是 | 是 | 是 | 是 | - |
 | /ai/defillama | 200 | 是 | 是 | 是 | 是 | - |
-| /ai/notta | 200 | 否 | 是 | 否 | 是 | - |
+| /ai/notta | 200 | 是 | 是 | 是 | 是 | - |
 
 ## 解读规则
 
