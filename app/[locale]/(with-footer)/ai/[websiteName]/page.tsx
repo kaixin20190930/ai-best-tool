@@ -1721,12 +1721,15 @@ export default async function Page({
     const compareAxes = decisionCompareAxesOverride.length > 0 ? decisionCompareAxesOverride : [comparisonSummary];
     const nextComparisonLinks = getNextComparisonLinks(categorySlug, dbTool?.tags || [], locale);
     const primaryComparisonLink = nextComparisonLinks[0] || null;
-    const checkedAt = '2026-07-18';
-    const checkedAtLabel = new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    }).format(new Date(`${checkedAt}T00:00:00Z`));
+    const checkedAt = editorialReview?.reviewedAt || null;
+    let checkedAtLabel = isChinese ? '待补复核时间' : 'Review time pending';
+    if (checkedAt) {
+      checkedAtLabel = new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      }).format(new Date(checkedAt));
+    }
     let detailSignalCards: Array<{ label: string; value: string; note: string }>;
     const websiteNameKey = websiteName.toLowerCase();
     if (websiteNameKey === 'fathom') {
@@ -2052,7 +2055,7 @@ export default async function Page({
 
                 <GuideEvidencePanel
                   locale={locale}
-                  checkedAt={checkedAt}
+                  checkedAt={checkedAt || undefined}
                   scope={
                     isChinese
                       ? '这页优先说明这个工具到底适合什么真实工作流，并把最近核查、评分、讨论、收藏、点击和更新时间一起摆出来，而不是只展示营销式简介。'
