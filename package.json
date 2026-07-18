@@ -26,6 +26,7 @@
     "seo:quality-inventory": "tsx scripts/seo-quality-inventory.ts",
     "gsc:weekly-report": "tsx scripts/summarize-gsc-export.ts",
     "seo:priority-source-audit": "tsx scripts/audit-priority-tool-sources.ts",
+    "seo:production-smoke": "tsx scripts/production-seo-smoke.ts",
     "seo:performance": "tsx scripts/performance-audit.ts",
     "seo:validate": "tsx scripts/validate-seo-complete.ts",
     "test:regression": "tsx scripts/regression-test.ts",

@@ -324,6 +324,7 @@
 - 2026-07-18：修正 sitemap 回归脚本对 `POSTGRES_URL` / `DATABASE_URL_UNPOOLED` 的兼容，避免环境变量命名差异导致动态工具和分类检查被跳过；后续 sitemap 结果更接近真实数据库状态。
 - 2026-07-18：重新运行页面质量盘点，结果稳定为总页面 157、可进 sitemap 27、内部流量页 3、noindex / 合并候选 127；未发现新的索引收口遗漏，本轮继续以 GSC 趋势和真实用户信号为下一步依据。
 - 2026-07-19：生产 smoke check 确认 sitemap 与 robots 均为 200，线上 sitemap 无内部路径和 comparison 路径，首页 / Explore / 榜单页正常；索引收口暂无线上回归，P0 后续重点转向 GSC 观察与真实互动信号。
+- 2026-07-19：新增 `seo:production-smoke`，自动检查核心入口、robots sitemap 指令及 sitemap 内部 / comparison URL 混入，减少每次部署后依赖手工巡检。
 - 2026-07-17：最新 28 天 GSC 再核对仍只有 876 impressions / 2 clicks，Top queries 仍以品牌和目录词为主，排名大多在 70-110 之外；当前继续按“收口弱页 + 强化核心页真实信号 + 观察索引恢复”主线推进。
 - 2026-07-17：`guides` 总览页底部的 Submit / Claim CTA 进一步降权，避免商业入口在总入口页抢走“先看指南、再做比较”的主路径注意力，并通过本地 `pnpm run build`。
 - 2026-07-17：首页里的 `Submit` / `Developer listing` 入口进一步降权，避免工具方入口压过“探索 / 榜单 / 分类”主路径，并通过本地 `pnpm run build`。
