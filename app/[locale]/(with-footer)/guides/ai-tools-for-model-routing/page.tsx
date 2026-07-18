@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { ExternalLink, GitBranch, Layers3, Route } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -23,6 +24,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '面向多模型接入、成本控制、回退策略和路由工作的 AI 工具选型指南。'
         : 'A practical guide to AI tools for model routing, multi-model access, cost control, and fallback strategy.',
+    ...getNoindexMetadata(),
   };
 }
 

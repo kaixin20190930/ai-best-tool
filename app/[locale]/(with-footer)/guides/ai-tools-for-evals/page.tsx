@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { ClipboardCheck, ExternalLink, Layers3, Scale } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -21,6 +22,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '面向输出质量验证、结果评估、评分体系和验收流程的 AI 工具选型指南。'
         : 'A practical guide to AI tools for output evaluation, quality validation, scoring systems, and acceptance workflows.',
+    ...getNoindexMetadata(),
   };
 }
 

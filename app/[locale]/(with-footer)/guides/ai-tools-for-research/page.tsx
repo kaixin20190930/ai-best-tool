@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { ArrowRight, ExternalLink, FileSearch, Search, ShieldCheck } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -20,6 +21,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '面向资料检索、信息核对、证据整理和研究工作流的 AI 工具指南，先看榜单再进对比页。'
         : 'A practical guide to AI tools for research, evidence-checking, analysis, and information discovery, with a path from guide to ranking and comparison.',
+    ...getNoindexMetadata(),
   };
 }
 
