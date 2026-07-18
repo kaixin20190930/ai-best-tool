@@ -996,7 +996,7 @@ export default function AdminToolEditForm({
           <div className="md:col-span-2 rounded-lg border border-cyan-100 bg-cyan-50/40 p-4">
             <p className="text-sm font-semibold text-slate-900">Editorial verification</p>
             <p className="mt-1 text-xs text-slate-600">
-              Record only checks that were actually completed. Public tool pages show the review date and notes from this section.
+              Record only checks that were actually completed. A review date requires a reviewer and at least one summary before it can be marked verified.
             </p>
             <div className="mt-4 grid gap-4 md:grid-cols-2">
               <div>

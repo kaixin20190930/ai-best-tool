@@ -1297,14 +1297,27 @@ export async function updateTool(
     }
 
     if (data.editorial !== undefined) {
+      const editorialReviewedAt = normalizeNullableDate(data.editorial.reviewedAt);
+      const editorialReviewedBy = normalizeNullableText(data.editorial.reviewedBy);
+      const editorialSummaryEn = normalizeNullableText(data.editorial.summary?.en);
+      const editorialSummaryZh = normalizeNullableText(data.editorial.summary?.zh);
+
+      if (editorialReviewedAt && !editorialReviewedBy) {
+        return { success: false, error: 'Add a reviewer before marking editorial verification complete.' };
+      }
+
+      if (editorialReviewedAt && !editorialSummaryEn && !editorialSummaryZh) {
+        return { success: false, error: 'Add an editorial summary before marking verification complete.' };
+      }
+
       const nextEditorial = {
         ...getRecord(existingFeatures.editorial),
-        reviewedAt: normalizeNullableDate(data.editorial.reviewedAt),
-        reviewedBy: normalizeNullableText(data.editorial.reviewedBy),
+        reviewedAt: editorialReviewedAt,
+        reviewedBy: editorialReviewedBy,
         summary: {
           ...getRecord(getRecord(existingFeatures.editorial).summary),
-          en: normalizeNullableText(data.editorial.summary?.en) || '',
-          zh: normalizeNullableText(data.editorial.summary?.zh) || '',
+          en: editorialSummaryEn || '',
+          zh: editorialSummaryZh || '',
         },
         trustNote: {
           ...getRecord(getRecord(existingFeatures.editorial).trustNote),

@@ -315,6 +315,7 @@
 - 2026-07-18：后台工具编辑页新增 editorial 复核字段，可记录复核日期、复核人、双语摘要和信任备注，并写入 `features.editorial` 供详情页读取；补齐“真实复核可记录、可展示、可追踪”的闭环。
 - 2026-07-18：后台工具列表审计信号新增 `Editorial verified / Editorial pending` 标识，让核心页真实复核状态可以批量查看和跟进，不需要逐条打开详情页。
 - 2026-07-18：后台工具列表新增 `Editorial verified / Editorial pending` 筛选，直接按 `features.editorial.reviewedAt` 生成复核队列，让真实信号维护可以批量推进。
+- 2026-07-18：editorial 保存接口增加质量门槛，复核日期必须同时有复核人和至少一份摘要，防止后台把不完整记录误标为已验证。
 - 2026-07-17：最新 28 天 GSC 再核对仍只有 876 impressions / 2 clicks，Top queries 仍以品牌和目录词为主，排名大多在 70-110 之外；当前继续按“收口弱页 + 强化核心页真实信号 + 观察索引恢复”主线推进。
 - 2026-07-17：`guides` 总览页底部的 Submit / Claim CTA 进一步降权，避免商业入口在总入口页抢走“先看指南、再做比较”的主路径注意力，并通过本地 `pnpm run build`。
 - 2026-07-17：首页里的 `Submit` / `Developer listing` 入口进一步降权，避免工具方入口压过“探索 / 榜单 / 分类”主路径，并通过本地 `pnpm run build`。
