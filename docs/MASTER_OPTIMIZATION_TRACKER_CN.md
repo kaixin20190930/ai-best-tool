@@ -246,6 +246,7 @@
 - 2026-07-18：继续把 `ai-tools-for-agencies / crypto-research / web3-analysis / wallet-monitoring / dex-analytics / token-research` 这批薄指南页补 noindex，继续压缩代理、加密研究和链上分析类内部决策页的索引面。
 - 2026-07-18：继续把 `ai-tools-for-ecommerce / lead-generation / students / wallet-research / crypto-portfolio-tracking / code-review` 这批薄指南页补 noindex，继续压缩电商、获客、学生、钱包研究、组合跟踪和代码审查类内部决策页的索引面。
 - 2026-07-18：补齐 `ai-tools-for-agents` 和 `ai-tools-for-creators` 两个 direct guide 页的 `noindex`，并对账确认 comparison 模板页已由 `comparison-template` 统一带上 `noindex`，避免重复补丁。
+- 2026-07-18：对 `SEO_QUALITY_INVENTORY_CN.md` 里的 `noindex / 合并候选` direct guide 进行代码对账，当前已确认 0 个遗漏项，说明本轮索引收口已对齐到实现层。
 - 2026-07-17：继续下调 `developer/listing` 页里“去填写认领表单 / 去提交页 / 发邮件认领”的视觉优先级，把认领页从强 CTA 页收成中性分流页，同时保持 owner 确认与提交流程可用。
 - 2026-07-17：继续下调 `pricing` 页里 `Submit` / `Claim` / `Contact paid options` 的视觉优先级，把价格页从强转化页再往中性分流页收一层，同时保持跳转链路可用。
 - 2026-07-16：继续强化 `best-ai-tools/[topic]` 榜单页的决策顺序信号，让高意图主题榜单更像可继续比较的入口。
