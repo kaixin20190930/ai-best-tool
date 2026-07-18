@@ -289,6 +289,7 @@
 - 2026-07-17：`best-ai-tools` 榜单页补齐决策顺序信号，让主榜单入口先收窄主题、再看价格更新和真实反馈、最后进入详情或提交页，并通过本地 `pnpm run build`。
 - 2026-07-17：`explore` 探索页补齐决策顺序信号，让目录页先选任务或场景、再按价格 / 更新 / 风险筛选、最后进入详情 / 对比 / 提交页，并通过本地 `pnpm run build`。
 - 2026-07-18：最新 28 天 GSC 复核仍为 876 impressions / 2 clicks / 0.23% CTR / 70.09 平均排名；Top queries 仍以品牌与目录词为主，覆盖问题仍集中在 583 noindex、14 crawled not indexed、22 redirects、22 alternate canonicals 和 5 duplicates。
+- 2026-07-18：`best-ai-tools`、`explore`、`ai-seo-tools`、`ai-coding-tools`、`ai-writing-tools`、`free-ai-tools`、`ai-note-taking-tools`、`ai-tools-for-web3` 的 `checkedAt` 已刷新到 `2026-07-18`，继续把核心入口的 freshness 信号对齐到今天。
 - 2026-07-17：最新 28 天 GSC 再核对仍只有 876 impressions / 2 clicks，Top queries 仍以品牌和目录词为主，排名大多在 70-110 之外；当前继续按“收口弱页 + 强化核心页真实信号 + 观察索引恢复”主线推进。
 - 2026-07-17：`guides` 总览页底部的 Submit / Claim CTA 进一步降权，避免商业入口在总入口页抢走“先看指南、再做比较”的主路径注意力，并通过本地 `pnpm run build`。
 - 2026-07-17：首页里的 `Submit` / `Developer listing` 入口进一步降权，避免工具方入口压过“探索 / 榜单 / 分类”主路径，并通过本地 `pnpm run build`。

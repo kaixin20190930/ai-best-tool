@@ -33,7 +33,7 @@ export default function BestAiToolsPage({ params: { locale } }: { params: { loca
   const priorityTopics = priorityTopicKeys
     .map((key) => topListTopics.find((topic) => topic.key === key))
     .filter((topic): topic is (typeof topListTopics)[number] => Boolean(topic));
-  const checkedAt = '2026-07-15';
+  const checkedAt = '2026-07-18';
   const checkedAtLabel = new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
     year: 'numeric',
     month: 'short',

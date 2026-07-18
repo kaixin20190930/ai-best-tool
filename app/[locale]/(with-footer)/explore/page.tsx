@@ -44,7 +44,7 @@ export default async function Page({ params, searchParams }: PageProps) {
   const categories = categoriesResult.status === 'fulfilled' ? categoriesResult.value : [];
   const tags = tagsResult.status === 'fulfilled' ? tagsResult.value : [];
   const isChinese = params.locale === 'cn' || params.locale === 'tw';
-  const checkedAt = '2026-07-15';
+  const checkedAt = '2026-07-18';
   const taskFirstEntryPoints = [
     {
       href: '/guides/ai-writing-tools',
