@@ -20,11 +20,13 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const categories = await getAllCategories(true).catch(() => []);
+  const checkedAt = '2026-07-18';
   return (
     <>
       {MarketingToolsPage({ params: { locale } })}
       <GuideEvidencePanel
         locale={locale}
+        checkedAt={checkedAt}
         scope={
           locale === 'cn' || locale === 'tw'
             ? `营销工具页要先看内容生成、自动化和流程协同，而不是只看分类信号 ${categories.length} 个。`
@@ -76,11 +78,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-18</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
-              ? `这页已按当前比较页的判断标准重新核对，当前可参考分类信号 ${categories.length} 个。`
-              : `This page has been rechecked against the current comparison-page decision flow, with ${categories.length} category signals available.`}
+              ? `这页已按当前比较页的判断标准重新核对（${checkedAt}），当前可参考分类信号 ${categories.length} 个。`
+              : `This page has been rechecked against the current comparison-page decision flow (${checkedAt}), with ${categories.length} category signals available.`}
           </p>
         </div>
         <div>
