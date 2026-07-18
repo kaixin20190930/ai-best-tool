@@ -219,7 +219,7 @@ function getEditorialReview(
   const summary = getLocalizedText(record.summary, locale, fallback);
   const trustNote = getLocalizedText(record.trustNote, locale, fallback);
 
-  if (!reviewedAt && !reviewedBy && !summary && !trustNote) {
+  if (!reviewedAt || !reviewedBy || !summary) {
     return null;
   }
 

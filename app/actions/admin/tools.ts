@@ -743,9 +743,23 @@ export async function getAdminTools(filters?: {
     }
 
     if (filters?.editorial === 'verified') {
-      query += ` AND NULLIF(BTRIM(features->'editorial'->>'reviewedAt'), '') IS NOT NULL`;
+      query += `
+        AND NULLIF(BTRIM(features->'editorial'->>'reviewedAt'), '') IS NOT NULL
+        AND NULLIF(BTRIM(features->'editorial'->>'reviewedBy'), '') IS NOT NULL
+        AND (
+          NULLIF(BTRIM(features->'editorial'->'summary'->>'en'), '') IS NOT NULL
+          OR NULLIF(BTRIM(features->'editorial'->'summary'->>'zh'), '') IS NOT NULL
+        )`;
     } else if (filters?.editorial === 'pending') {
-      query += ` AND NULLIF(BTRIM(features->'editorial'->>'reviewedAt'), '') IS NULL`;
+      query += `
+        AND (
+          NULLIF(BTRIM(features->'editorial'->>'reviewedAt'), '') IS NULL
+          OR NULLIF(BTRIM(features->'editorial'->>'reviewedBy'), '') IS NULL
+          OR (
+            NULLIF(BTRIM(features->'editorial'->'summary'->>'en'), '') IS NULL
+            AND NULLIF(BTRIM(features->'editorial'->'summary'->>'zh'), '') IS NULL
+          )
+        )`;
     }
 
     if (filters?.collected) {
