@@ -24,6 +24,7 @@
 - 2026-07-18：继续把首页、榜单页、`ai/[websiteName]` 与剩余 guide / comparison 页面上的 freshness 信号统一推进到 `2026-07-18`，本轮只做内容时效收口，不改结构逻辑，并通过本地 `pnpm run build`。
 - 2026-07-18：完成一轮更广的页面 freshness 复核，把 remaining guide / comparison / conversion 页的最近检查日期统一到 `2026-07-18`，确保站内收口页面与总控表时间一致，并通过本地 `pnpm run build`。
 - 2026-07-18：继续收口 `seo-tools` 与 `agent-tools` 指南页的最近验证文案，把底部检查日期统一到 `2026-07-18`，并通过本地 `pnpm run build`。
+- 2026-07-18：继续收口写作、Gemini 替代、资产追踪和模型路由等 comparison 页的最近验证文案，把底部检查日期统一到 `2026-07-18`，并通过本地 `pnpm run build`。
 - 2026-07-18：`ai-web3-tools` 已收口为 `noindex` 并 canonical 到 `ai-tools-for-web3`，主 Web3 指南页保持可索引入口，减少同义入口的索引重复，并通过本地 `pnpm run build`。
 - 2026-07-18：`how-to-choose-ai-tools` 已补齐最近验证日期，让总选型入口也带上同样的 freshness 信号，并通过本地 `pnpm run build`。
 - 2026-07-15：根据最近 28 天 GSC 基线，开始优先强化首页、榜单页和分类页的判断信号，新增价格 / 更新 / 风险信号层，帮助核心入口更像可决策页面

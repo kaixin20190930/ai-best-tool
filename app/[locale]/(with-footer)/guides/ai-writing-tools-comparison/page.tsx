@@ -15,6 +15,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+  const checkedAt = '2026-07-18';
   const data = await buildComparisonPageData(locale, {
     categoryLabel: { cn: '写作工具', en: 'Writing tools' },
     comparisonLabel: { cn: 'AI 写作工具对比', en: 'AI writing tools comparison' },
@@ -284,6 +285,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       {ComparisonPage({ ...data, locale })}
       <GuideEvidencePanel
         locale={locale}
+        checkedAt={checkedAt}
         scope={
           locale === 'cn' || locale === 'tw'
             ? '写作工具对比的重点不是“写得像不像”，而是提纲、改写、语气控制和内容更新是否真的能提升产出。'
@@ -360,11 +362,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-18</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
-              ? '这页已按真实写作决策路径重新核对，保留提纲、改写和语气控制入口。'
-              : 'This page has been rechecked against a real writing decision path and keeps outline, rewrite, and tone-control entry points visible.'}
+              ? `这页已按真实写作决策路径重新核对（${checkedAt}），保留提纲、改写和语气控制入口。`
+              : `This page has been rechecked against a real writing decision path (${checkedAt}) and keeps outline, rewrite, and tone-control entry points visible.`}
           </p>
         </div>
         <div>

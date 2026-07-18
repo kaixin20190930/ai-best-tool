@@ -15,6 +15,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+  const checkedAt = '2026-07-18';
   const data = await buildComparisonPageData(locale, {
     categoryLabel: { cn: '模型路由工具', en: 'Model routing tools' },
     comparisonLabel: { cn: 'AI 模型路由工具对比', en: 'AI tools for model routing comparison' },
@@ -268,6 +269,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       {ComparisonPage({ ...data, locale })}
       <GuideEvidencePanel
         locale={locale}
+        checkedAt={checkedAt}
         scope={
           locale === 'cn' || locale === 'tw'
             ? '这页先看真实可验证的模型路由信号，再继续判断是否需要统一入口、回退控制和成本治理。'
@@ -349,11 +351,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-18</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
-              ? '模型路由对比页已按真实统一入口和回退场景重新核对。'
-              : 'The model routing comparison page has been rechecked against real unified-access and fallback scenarios.'}
+              ? `模型路由对比页已按真实统一入口和回退场景重新核对（${checkedAt}）。`
+              : `The model routing comparison page has been rechecked against real unified-access and fallback scenarios (${checkedAt}).`}
           </p>
         </div>
         <div>

@@ -15,6 +15,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+  const checkedAt = '2026-07-18';
   const data = await buildComparisonPageData(locale, {
     categoryLabel: { cn: '聊天工具', en: 'Chat tools' },
     comparisonLabel: { cn: 'Gemini 替代方案对比', en: 'Gemini alternatives comparison' },
@@ -244,6 +245,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       {ComparisonPage({ ...data, locale })}
       <GuideEvidencePanel
         locale={locale}
+        checkedAt={checkedAt}
         scope={
           locale === 'cn' || locale === 'tw'
             ? '这页先看真实可验证的 Gemini 信号，再继续判断是否真的需要 Google 生态、移动入口和通用聊天体验。'
@@ -320,11 +322,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-18</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
-              ? '这页已按真实 Gemini 替代路径重新核对，保留生态、移动和长期使用入口。'
-              : 'This page has been rechecked against a real Gemini-alternative workflow and keeps ecosystem, mobile, and long-term-use entry points visible.'}
+              ? `这页已按真实 Gemini 替代路径重新核对（${checkedAt}），保留生态、移动和长期使用入口。`
+              : `This page has been rechecked against a real Gemini-alternative workflow (${checkedAt}) and keeps ecosystem, mobile, and long-term-use entry points visible.`}
           </p>
         </div>
         <div>

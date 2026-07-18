@@ -17,6 +17,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+  const checkedAt = '2026-07-18';
   const data = await buildComparisonPageData(locale, {
     categoryLabel: { cn: 'Crypto 资产追踪工具', en: 'Crypto portfolio tracking tools' },
     comparisonLabel: {
@@ -235,7 +236,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       {ComparisonPage({ ...data, locale })}
       <GuideEvidencePanel
         locale={locale}
-        checkedAt='2026-07-18'
+        checkedAt={checkedAt}
         scope={
           locale === 'cn' || locale === 'tw'
             ? '资产追踪对比页现在更强调“组合视图是否真的能帮你做决策”。'
@@ -376,11 +377,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-18</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
-              ? '这页已按当前比较页的判断标准重新核对。'
-              : 'This page has been rechecked against the current comparison-page decision flow.'}
+              ? `这页已按当前比较页的判断标准重新核对（${checkedAt}）。`
+              : `This page has been rechecked against the current comparison-page decision flow (${checkedAt}).`}
           </p>
         </div>
         <div>
