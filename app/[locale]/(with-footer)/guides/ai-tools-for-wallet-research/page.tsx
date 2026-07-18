@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { ExternalLink, Layers3, SearchCheck, Wallet } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -23,6 +24,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '面向地址研究、钱包画像、链上行为判断和线索发现的 AI 工具选型指南。'
         : 'A practical guide to AI tools for address research, wallet profiling, behavior analysis, and on-chain clue discovery.',
+    ...getNoindexMetadata(),
   };
 }
 

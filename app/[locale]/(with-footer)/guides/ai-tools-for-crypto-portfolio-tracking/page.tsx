@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { ExternalLink, Layers3, PieChart, WalletCards } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -23,6 +24,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '面向资产看板、持仓跟踪、钱包归集和组合观察的 AI 工具选型指南。'
         : 'A practical guide to AI tools for portfolio dashboards, holdings tracking, wallet rollups, and allocation monitoring.',
+    ...getNoindexMetadata(),
   };
 }
 

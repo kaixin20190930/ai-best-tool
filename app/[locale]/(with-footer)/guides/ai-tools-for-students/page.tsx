@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { ArrowRight, CheckCircle2, ExternalLink, GraduationCap, NotebookPen } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -23,6 +24,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '面向学习、写作、总结、笔记和作业协作的 AI 工具选型指南。'
         : 'A practical guide to AI tools for learning, writing, summarizing, notes, and homework collaboration.',
+    ...getNoindexMetadata(),
   };
 }
 

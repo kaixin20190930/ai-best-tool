@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { ExternalLink, GitPullRequest, Layers3, ShieldAlert } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -23,6 +24,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '面向 PR 审查、变更解释、代码风险提示和团队反馈的 AI 工具选型指南。'
         : 'A practical guide to AI tools for PR review, change explanation, code risk checks, and team feedback.',
+    ...getNoindexMetadata(),
   };
 }
 
