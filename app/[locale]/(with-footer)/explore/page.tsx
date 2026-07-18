@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 
+import { BASE_URL } from '@/lib/env';
 import { generateBreadcrumbSchema } from '@/lib/seo/schema';
 import { getAllCategories } from '@/lib/services/categories';
 import { getAllTags } from '@/lib/services/tags';
@@ -75,10 +76,9 @@ export default async function Page({ params, searchParams }: PageProps) {
   ];
 
   // Generate BreadcrumbList schema for navigation hierarchy
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: 'Home', url: baseUrl },
-    { name: 'Explore', url: `${baseUrl}/explore` },
+    { name: 'Home', url: BASE_URL },
+    { name: 'Explore', url: `${BASE_URL}/explore` },
   ]);
 
   return (

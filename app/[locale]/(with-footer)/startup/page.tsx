@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 
+import { BASE_URL } from '@/lib/env';
 import { generateBreadcrumbSchema, generateOrganizationSchema } from '@/lib/seo/schema';
 import { formatTime } from '@/lib/utils/timeUtils';
 import Faq from '@/components/Faq';
@@ -13,15 +14,14 @@ export default function Page() {
   const t = useTranslations('Startup');
 
   // Generate BreadcrumbList schema for navigation hierarchy
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: 'Home', url: baseUrl },
-    { name: 'Startup', url: `${baseUrl}/startup` },
+    { name: 'Home', url: BASE_URL },
+    { name: 'Startup', url: `${BASE_URL}/startup` },
   ]);
   const organizationSchema = generateOrganizationSchema({
     name: 'AI Best Tool',
-    url: baseUrl,
-    logo: `${baseUrl}/images/aibesttool.png`,
+    url: BASE_URL,
+    logo: `${BASE_URL}/images/aibesttool.png`,
     description: 'AI Best Tool startup directory and launch board.',
   });
 

@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { BASE_URL } from '@/lib/env';
 import { SEO_CONFIG, SOCIAL_IMAGE_DIMENSIONS, ToolMetadata } from '@/lib/seo/constants';
 import {
   generateCanonicalUrl,
@@ -1484,8 +1485,7 @@ export default async function Page({
     }
 
     // Generate SoftwareApplication schema for tool pages
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-    const toolUrl = `${baseUrl}/${locale}/ai/${websiteName}`;
+    const toolUrl = `${BASE_URL}/${locale}/ai/${websiteName}`;
     const toolImageUrl = data.thumbnailUrl || data.imageUrl || '';
 
     let softwareSchema = null;
@@ -1513,7 +1513,7 @@ export default async function Page({
                 count: ratingStats.ratingCount,
               }
             : undefined,
-        image: toolImageUrl.startsWith('http') ? toolImageUrl : `${baseUrl}${toolImageUrl}`,
+        image: toolImageUrl.startsWith('http') ? toolImageUrl : `${BASE_URL}${toolImageUrl}`,
         url: toolUrl,
         officialUrl: data.url,
         datePublished: dbTool.createdAt?.toISOString?.(),
@@ -1525,8 +1525,8 @@ export default async function Page({
 
     // Generate BreadcrumbList schema for navigation hierarchy
     const breadcrumbSchema = generateBreadcrumbSchema([
-      { name: 'Home', url: `${baseUrl}/${locale}` },
-      { name: 'AI Tools', url: `${baseUrl}/${locale}/explore` },
+      { name: 'Home', url: `${BASE_URL}/${locale}` },
+      { name: 'AI Tools', url: `${BASE_URL}/${locale}/explore` },
       { name: data.title, url: toolUrl },
     ]);
     const categoryName = category ? getCategoryLocalizedField(category.name, locale) : data.categoryName || 'AI Tool';

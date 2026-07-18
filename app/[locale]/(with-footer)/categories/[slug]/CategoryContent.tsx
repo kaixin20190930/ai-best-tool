@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 
 import { GUIDE_PAGES } from '@/lib/content/guides';
+import { BASE_URL } from '@/lib/env';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getCategoryBySlug, getLocalizedField } from '@/lib/services/categories';
 import { getAllTags } from '@/lib/services/tags';
@@ -953,13 +954,12 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
     },
   ];
   const basePath = `/categories/${category.slug}`;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: 'Home', url: `${siteUrl}/${params.locale}` },
-    { name: 'Explore', url: `${siteUrl}/${params.locale}/explore` },
+    { name: 'Home', url: `${BASE_URL}/${params.locale}` },
+    { name: 'Explore', url: `${BASE_URL}/${params.locale}/explore` },
     {
       name: categoryName,
-      url: `${siteUrl}/${params.locale}/categories/${category.slug}`,
+      url: `${BASE_URL}/${params.locale}/categories/${category.slug}`,
     },
   ]);
   const faqSchema = generateFAQSchema(faqs);

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 
+import { BASE_URL } from '@/lib/env';
 import { getNoindexMetadata } from '@/lib/seo/indexing';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
@@ -9,14 +10,13 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     namespace: 'Metadata.startup',
   });
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://aibesttool.com';
   const title = t('title');
   const description = t('description');
-  const imageUrl = `${siteUrl}/images/aibesttool.png`;
-  const pageUrl = `${siteUrl}/${locale}/startup`;
+  const imageUrl = `${BASE_URL}/images/aibesttool.png`;
+  const pageUrl = `${BASE_URL}/${locale}/startup`;
 
   return {
-    metadataBase: new URL(siteUrl),
+    metadataBase: new URL(BASE_URL),
     title,
     description,
     keywords: t('keywords'),

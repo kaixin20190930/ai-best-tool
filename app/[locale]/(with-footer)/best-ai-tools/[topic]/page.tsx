@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { ArrowRight, CheckCircle2, Sparkles, Star, Target } from 'lucide-react';
 
 import { getTopListTopic, topListTopics } from '@/lib/data/topLists';
+import { BASE_URL } from '@/lib/env';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getCategoryBySlug } from '@/lib/services/categories';
 import { getLocalizedField, getTools } from '@/lib/services/tools';
@@ -129,11 +130,10 @@ export default async function BestAiToolsTopicPage({
     }).format(new Date(checkedAt));
 
     const categoryName = category ? getLocalizedField(category.name, locale) : topic.title;
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
     const breadcrumbSchema = generateBreadcrumbSchema([
-      { name: 'Home', url: `${siteUrl}/${locale}` },
-      { name: isChinese ? '榜单页' : 'Rankings', url: `${siteUrl}/${locale}/best-ai-tools` },
-      { name: topic.title, url: `${siteUrl}/${locale}/best-ai-tools/${topic.key}` },
+      { name: 'Home', url: `${BASE_URL}/${locale}` },
+      { name: isChinese ? '榜单页' : 'Rankings', url: `${BASE_URL}/${locale}/best-ai-tools` },
+      { name: topic.title, url: `${BASE_URL}/${locale}/best-ai-tools/${topic.key}` },
     ]);
     const faqSchema = generateFAQSchema([
       {
