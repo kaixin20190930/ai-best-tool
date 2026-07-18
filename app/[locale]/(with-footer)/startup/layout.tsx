@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 
+import { getNoindexMetadata } from '@/lib/seo/indexing';
+
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
     locale,
@@ -18,12 +20,13 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     title,
     description,
     keywords: t('keywords'),
+    ...getNoindexMetadata(),
     alternates: {
       canonical: `/${locale}/startup`,
     },
     openGraph: {
       type: 'website',
-      locale: locale,
+      locale,
       url: pageUrl,
       siteName: 'AI Best Tool',
       title,
