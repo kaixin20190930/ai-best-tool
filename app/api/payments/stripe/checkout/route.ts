@@ -101,7 +101,7 @@ export async function GET(request: NextRequest) {
     const featuredDays = parseFeaturedDays(getCommercialValue(tool, 'featuredDaysRequested'));
     const fastTrack = getCommercialValue(tool, 'fastTrackRequested') === true;
 
-    const siteUrl = BASE_URL.replace(/\/$/, '') || request.nextUrl.origin.replace(/\/$/, '');
+    const siteUrl = BASE_URL.replace(/\/$/, '');
     const titleValue = tool.title;
     const titleRecord = getRecord(titleValue);
     const toolTitle =
