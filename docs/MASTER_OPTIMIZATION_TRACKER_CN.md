@@ -327,6 +327,7 @@
 - 2026-07-19：新增 `seo:production-smoke`，自动检查核心入口、robots sitemap 指令及 sitemap 内部 / comparison URL 混入，减少每次部署后依赖手工巡检。
 - 2026-07-19：将 SEO 核心页与 sitemap 检查接入既有 `production-health-monitor`，每 5 分钟复用 `MONITOR_BASE_URL` 检查 5 个核心页面、robots sitemap 指令及内部 / comparison URL 混入。
 - 2026-07-19：修正 `seo-monitoring.yml` 使用错误包管理器的问题，统一改用 pnpm 9.15.9、冻结 lockfile 安装和 `pnpm run`，避免定时 SEO 监控因 `npm ci` 找不到 package-lock 而失效。
+- 2026-07-19：为 `production-health-monitor` 增加 `main` push 触发器，部署后立即执行生产 API 与 SEO surface 检查，不再依赖 5 分钟定时窗口才能验证监控修复。
 - 2026-07-17：最新 28 天 GSC 再核对仍只有 876 impressions / 2 clicks，Top queries 仍以品牌和目录词为主，排名大多在 70-110 之外；当前继续按“收口弱页 + 强化核心页真实信号 + 观察索引恢复”主线推进。
 - 2026-07-17：`guides` 总览页底部的 Submit / Claim CTA 进一步降权，避免商业入口在总入口页抢走“先看指南、再做比较”的主路径注意力，并通过本地 `pnpm run build`。
 - 2026-07-17：首页里的 `Submit` / `Developer listing` 入口进一步降权，避免工具方入口压过“探索 / 榜单 / 分类”主路径，并通过本地 `pnpm run build`。
