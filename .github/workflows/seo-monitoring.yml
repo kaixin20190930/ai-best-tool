@@ -1,6 +1,9 @@
 name: SEO Monitoring
 
 on:
+  push:
+    branches:
+      - main
   schedule:
     # Daily health and priority-page signal checks.
     - cron: '0 9 * * *'

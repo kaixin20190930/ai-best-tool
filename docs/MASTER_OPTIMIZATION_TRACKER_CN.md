@@ -334,6 +334,7 @@
 - 2026-07-19：修复核心榜单、分类、guide 和详情页的 canonical metadata，并为数据库异常 fallback 保留 canonical；本地 `pnpm run build` 通过，线上串行审计确认 20/20 核心页 HTTP、canonical、description、evidence/freshness 和 action signal 全部存在。
 - 2026-07-19：将 `seo:priority-page-signals -- --strict` 接入每日 SEO Monitoring，并上传核心页审计报告；后续 canonical、description、evidence/freshness 或 action signal 回归会直接让监控任务失败并留下 artifact。
 - 2026-07-19：修正 SEO Monitoring 的调度缺口，补上周一周度审计和每月 1 日性能审计对应的 cron；此前 workflow 只有每日 cron，周/月 job 条件虽存在但不会自动触发。
+- 2026-07-19：为 SEO Monitoring 增加 `main` push 触发，代码或 SEO 策略更新后立即执行 daily health 与核心页信号检查，避免等待下一个日程窗口。
 - 2026-07-17：最新 28 天 GSC 再核对仍只有 876 impressions / 2 clicks，Top queries 仍以品牌和目录词为主，排名大多在 70-110 之外；当前继续按“收口弱页 + 强化核心页真实信号 + 观察索引恢复”主线推进。
 - 2026-07-17：`guides` 总览页底部的 Submit / Claim CTA 进一步降权，避免商业入口在总入口页抢走“先看指南、再做比较”的主路径注意力，并通过本地 `pnpm run build`。
 - 2026-07-17：首页里的 `Submit` / `Developer listing` 入口进一步降权，避免工具方入口压过“探索 / 榜单 / 分类”主路径，并通过本地 `pnpm run build`。
