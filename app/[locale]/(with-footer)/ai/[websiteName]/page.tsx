@@ -2120,14 +2120,14 @@ export default async function Page({
                     <div className='flex flex-wrap gap-2'>
                       <a
                         href='#comments'
-                        className='inline-flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-semibold text-cyan-800 ring-1 ring-cyan-200 hover:bg-cyan-50'
+                        className='inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
                       >
                         <MessageSquare className='size-4' />
                         {locale === 'cn' ? '去评论' : 'Jump to comments'}
                       </a>
                       <Link
                         href={`/${locale}/developer/listing`}
-                        className='inline-flex items-center gap-2 rounded-lg bg-cyan-700 px-3 py-2 text-sm font-semibold text-white hover:bg-cyan-800'
+                        className='inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
                       >
                         <ShieldCheck className='size-4' />
                         {locale === 'cn' ? '认领条目' : 'Claim listing'}
@@ -2203,7 +2203,7 @@ export default async function Page({
                         />
                         <a
                           href='#comments'
-                          className='inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-4 py-2 text-sm font-semibold text-cyan-800 transition hover:bg-cyan-100'
+                          className='inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50'
                         >
                           <MessageSquare className='size-4' />
                           {commentLabel}
@@ -2219,7 +2219,7 @@ export default async function Page({
                       href={data.url}
                       toolId={toolId}
                       userId={user?.id}
-                      className='inline-flex items-center justify-center gap-2 rounded-lg bg-slate-950 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800'
+                      className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50'
                     >
                       {t('visitWebsite')} <ArrowUpRight className='size-4' />
                     </TrackableLink>
@@ -2228,7 +2228,7 @@ export default async function Page({
                       href={data.url}
                       target='_blank'
                       rel='noreferrer'
-                      className='inline-flex items-center justify-center gap-2 rounded-lg bg-slate-950 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800'
+                      className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50'
                     >
                       {t('visitWebsite')} <ArrowUpRight className='size-4' />
                     </a>
@@ -3007,7 +3007,7 @@ export default async function Page({
                     ) : (
                       <Link
                         href={`/${locale}/login?redirect=/${locale}/ai/${websiteName}`}
-                        className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-2 text-sm font-semibold text-white hover:bg-cyan-800'
+                        className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
                       >
                         {locale === 'cn' ? '登录后收藏、评论并关注更新' : 'Log in to save, comment, and follow updates'}
                       </Link>
@@ -3036,7 +3036,7 @@ export default async function Page({
                     </p>
                     <Link
                       href={`/${locale}/developer/listing?intent=claim`}
-                      className='mt-3 inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-2 text-sm font-semibold text-white hover:bg-cyan-800'
+                      className='mt-3 inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
                     >
                       {locale === 'cn' ? '去认领条目' : 'Claim listing'}
                     </Link>
