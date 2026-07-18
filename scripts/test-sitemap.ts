@@ -12,7 +12,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import dotenv from 'dotenv';
 
-import sitemap from '../app/sitemap';
+import sitemap, { INDEXABLE_GUIDE_PATHS } from '../app/sitemap';
+import { GUIDE_PAGES } from '../lib/content/guides';
 
 for (const envPath of ['.env.local', '.env.production']) {
   const resolved = path.join(process.cwd(), envPath);
@@ -122,34 +123,11 @@ async function testSitemap() {
       console.log(`❌ Found ${duplicates} duplicate URLs\n`);
     }
 
-    // Test 6: Verify noindex / alias pages stay out of the sitemap
-    console.log('Test 6: Checking noindex / alias exclusions...');
-    const excludedPages = [
-      '/guides/chatbot-tools',
-      '/guides/note-taking-tools',
-      '/guides/marketing-tools',
-      '/guides/voice-tools',
-      '/guides/seo-tools',
-      '/guides/developer-tools',
-      '/guides/image-tools',
-      '/guides/productivity-tools',
-      '/guides/research-tools',
-      '/guides/sales-tools',
-      '/guides/writing-tools',
-      '/guides/automation-tools',
-      '/guides/agent-tools',
-      '/guides/ai-chatbot-tools-comparison',
-      '/guides/ai-video-tools-comparison',
-      '/guides/ai-web3-tools-comparison',
-      '/guides/ai-agent-tools-comparison',
-      '/guides/ai-model-routing-tools-comparison',
-      '/guides/ai-api-observability-tools-comparison',
-      '/guides/ai-code-review-tools-comparison',
-      '/pricing',
-      '/submit',
-      '/developer/listing',
-    ];
-    const excludedFound = excludedPages.filter((page) =>
+    // Test 6: Verify the guide allowlist keeps weak / alias pages out of the sitemap.
+    console.log('Test 6: Checking guide allowlist exclusions...');
+    const indexableGuidePaths = INDEXABLE_GUIDE_PATHS;
+    const excludedGuidePaths = GUIDE_PAGES.map((page) => page.href).filter((page) => !indexableGuidePaths.has(page));
+    const excludedFound = excludedGuidePaths.filter((page) =>
       sitemapEntries.some((entry) => {
         const url = new URL(entry.url);
         const pathname = url.pathname.replace(/^\/[a-z]{2}\//, '/').replace(/^\//, '');
@@ -160,7 +138,24 @@ async function testSitemap() {
     if (excludedFound.length === 0) {
       console.log('✅ Noindex / alias pages stay out of the sitemap\n');
     } else {
-      console.log(`❌ Unexpected sitemap entries for: ${excludedFound.join(', ')}\n`);
+      console.log(`❌ Unexpected guide sitemap entries for: ${excludedFound.join(', ')}\n`);
+    }
+
+    // Test 7: Every non-comparison guide intended for indexing must be in the sitemap.
+    console.log('Test 7: Checking indexable guide coverage...');
+    const missingIndexableGuides = [...indexableGuidePaths].filter(
+      (page) =>
+        !sitemapEntries.some((entry) => {
+          const url = new URL(entry.url);
+          const pathname = url.pathname.replace(/^\/[a-z]{2}\//, '/').replace(/^\//, '');
+          return pathname === page.replace(/^\//, '');
+        }),
+    );
+
+    if (missingIndexableGuides.length === 0) {
+      console.log('✅ All indexable guide pages are present\n');
+    } else {
+      console.log(`❌ Missing indexable guide pages: ${missingIndexableGuides.join(', ')}\n`);
     }
 
     // Display sample entries
@@ -208,14 +203,15 @@ async function testSitemap() {
         console.log(`  ${priority}: ${count} entries`);
       });
 
-    const totalTests = 6;
+    const totalTests = 7;
     const passedTests =
       (missingPages.length === 0 ? 1 : 0) +
       (invalidEntries === 0 ? 1 : 0) +
       (invalidDates === 0 ? 1 : 0) +
       (invalidPriorities === 0 ? 1 : 0) +
       (duplicates === 0 ? 1 : 0) +
-      (excludedFound.length === 0 ? 1 : 0);
+      (excludedFound.length === 0 ? 1 : 0) +
+      (missingIndexableGuides.length === 0 ? 1 : 0);
 
     console.log(`\n${passedTests === totalTests ? '✅' : '❌'} Tests passed: ${passedTests}/${totalTests}`);
 

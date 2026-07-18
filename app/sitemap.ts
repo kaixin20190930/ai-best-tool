@@ -2,39 +2,38 @@ import { type MetadataRoute } from 'next';
 import { locales } from '@/i18n';
 
 import { GUIDE_PAGES } from '@/lib/content/guides';
-import { BASE_URL } from '@/lib/env';
 import { topListTopics } from '@/lib/data/topLists';
+import { BASE_URL } from '@/lib/env';
 import { INDEXABLE_LOCALES } from '@/lib/seo/indexing';
 import { getAllCategories, type CategoryWithCount } from '@/lib/services/categories';
 import { getToolQuality } from '@/lib/services/toolQuality';
 import { getTools } from '@/lib/services/tools';
 
+export const INDEXABLE_GUIDE_PATHS = new Set([
+  '/guides/how-to-choose-ai-tools',
+  '/guides/free-ai-tools',
+  '/guides/best-free-ai-tools',
+  '/guides/ai-writing-tools',
+  '/guides/ai-seo-tools',
+  '/guides/ai-video-tools',
+  '/guides/ai-image-tools',
+  '/guides/ai-coding-tools',
+  '/guides/ai-chatbot-tools',
+  '/guides/ai-productivity-tools',
+  '/guides/ai-tools-for-research',
+  '/guides/ai-tools-for-developers',
+  '/guides/ai-tools-for-automation',
+  '/guides/ai-tools-for-web3',
+  '/guides/ai-tools-for-marketing',
+  '/guides/ai-tools-for-sales',
+  '/guides/ai-tools-for-voice',
+  '/guides/ai-note-taking-tools',
+]);
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const sitemapLocales = locales.filter((locale) =>
     INDEXABLE_LOCALES.includes(locale as (typeof INDEXABLE_LOCALES)[number]),
   );
-  const featuredMainPages = new Set([
-    '/guides/how-to-choose-ai-tools',
-    '/guides/free-ai-tools',
-    '/guides/best-free-ai-tools',
-    '/guides/ai-writing-tools',
-    '/guides/ai-seo-tools',
-    '/guides/ai-video-tools',
-    '/guides/ai-image-tools',
-    '/guides/ai-coding-tools',
-    '/guides/ai-chatbot-tools',
-    '/guides/ai-productivity-tools',
-    '/guides/ai-tools-for-research',
-    '/guides/ai-tools-for-developers',
-    '/guides/ai-tools-for-automation',
-    '/guides/ai-tools-for-web3',
-    '/guides/ai-tools-for-marketing',
-    '/guides/ai-tools-for-sales',
-    '/guides/ai-tools-for-voice',
-    '/guides/ai-note-taking-tools',
-    '/best-ai-tools',
-  ]);
-
   // Static routes with their priorities and change frequencies
   const staticRoutes: Array<{
     url: string;
@@ -65,7 +64,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Generate static route entries for all locales
   const guideRoutes = GUIDE_PAGES.filter((page) => !page.href.includes('-comparison'))
-    .filter((page) => featuredMainPages.has(page.href))
+    .filter((page) => INDEXABLE_GUIDE_PATHS.has(page.href))
     .map(({ href, priority, changeFrequency }) => ({
       url: href.replace(/^\//, ''),
       priority,
