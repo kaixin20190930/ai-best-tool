@@ -356,7 +356,7 @@ export default async function SubmissionsPage({
         </div>
         <Link
           href='/submit'
-          className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-2 text-sm font-semibold text-white hover:bg-cyan-800'
+          className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
         >
           Submit another tool
         </Link>
@@ -452,7 +452,7 @@ export default async function SubmissionsPage({
           <div className='mt-4 flex flex-wrap gap-3'>
             <a
               href={nextAction.href}
-              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-2 text-sm font-semibold text-white hover:bg-cyan-800'
+              className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               Take action
             </a>
@@ -513,7 +513,7 @@ export default async function SubmissionsPage({
                 <div className='mt-4 flex flex-wrap gap-3'>
                   <Link
                     href='/pricing'
-                    className='inline-flex items-center justify-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700'
+                    className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
                   >
                     {featuredButtonText}
                   </Link>
@@ -607,14 +607,14 @@ export default async function SubmissionsPage({
                   href={firstPendingPaymentUrl}
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='inline-flex items-center justify-center rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-700'
+                  className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
                 >
                   Complete payment
                 </a>
               ) : (
                 <a
                   href={pendingPaymentMailto}
-                  className='inline-flex items-center justify-center rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-700'
+                  className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
                 >
                   Contact to pay
                 </a>
@@ -645,7 +645,7 @@ export default async function SubmissionsPage({
             </div>
             <Link
               href='/pricing'
-              className='inline-flex items-center justify-center rounded-lg border border-cyan-300 bg-white px-4 py-2 text-sm font-semibold text-cyan-900 hover:bg-cyan-100'
+              className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               Review listing options
             </Link>
@@ -740,7 +740,7 @@ export default async function SubmissionsPage({
                             href={paymentUrl}
                             target='_blank'
                             rel='noopener noreferrer'
-                            className='inline-flex items-center rounded-lg bg-cyan-700 px-3 py-1.5 text-sm font-semibold text-white hover:bg-cyan-800'
+                            className='inline-flex items-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-50'
                           >
                             Complete payment
                           </a>
@@ -758,7 +758,7 @@ export default async function SubmissionsPage({
                             href={paymentUrl}
                             target='_blank'
                             rel='noopener noreferrer'
-                            className='inline-flex items-center rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-emerald-700'
+                            className='inline-flex items-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-50'
                           >
                             Renew featured
                           </a>
@@ -776,7 +776,7 @@ export default async function SubmissionsPage({
                             href={paymentUrl}
                             target='_blank'
                             rel='noopener noreferrer'
-                            className='inline-flex items-center rounded-lg bg-rose-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-rose-700'
+                            className='inline-flex items-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-50'
                           >
                             Renew visibility
                           </a>
