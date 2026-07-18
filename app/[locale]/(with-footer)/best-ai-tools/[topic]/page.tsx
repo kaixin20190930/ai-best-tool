@@ -557,7 +557,7 @@ export default async function BestAiToolsTopicPage({
                   ctaId={`${topic.key}_submit`}
                   ctaLabel='Submit a tool'
                   pageType='best_ai_tools_topic'
-                  className='inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/15'
+                  className='inline-flex items-center justify-center rounded-lg border border-white/20 bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10'
                 >
                   {isChinese ? '提交工具' : 'Submit a tool'}
                   <ArrowRight className='ml-2 size-4' />
@@ -567,7 +567,7 @@ export default async function BestAiToolsTopicPage({
                   ctaId={`${topic.key}_comparison`}
                   ctaLabel='Open comparison'
                   pageType='best_ai_tools_topic'
-                  className='inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/15'
+                  className='inline-flex items-center justify-center rounded-lg border border-white/20 bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10'
                 >
                   {isChinese ? '进入对比页' : topic.comparisonLabel}
                 </TrackableCtaLink>
@@ -576,7 +576,7 @@ export default async function BestAiToolsTopicPage({
                   ctaId={`${topic.key}_guide`}
                   ctaLabel='Back to guide'
                   pageType='best_ai_tools_topic'
-                  className='inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10'
+                  className='inline-flex items-center justify-center rounded-lg border border-white/20 bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10'
                 >
                   {isChinese ? '返回指南页' : topic.guideLabel}
                 </TrackableCtaLink>
@@ -799,7 +799,7 @@ export default async function BestAiToolsTopicPage({
                 ctaId={`${topic.key}_comparison_sidebar`}
                 ctaLabel='Open comparison sidebar'
                 pageType='best_ai_tools_topic'
-                className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+                className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
               >
                 {isChinese ? '先看对比' : topic.comparisonLabel}
               </TrackableCtaLink>
@@ -808,7 +808,7 @@ export default async function BestAiToolsTopicPage({
                 ctaId={`${topic.key}_guide_sidebar`}
                 ctaLabel='Open guide sidebar'
                 pageType='best_ai_tools_topic'
-                className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
+                className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
               >
                 {isChinese ? '回到指南' : topic.guideLabel}
               </TrackableCtaLink>
@@ -839,7 +839,7 @@ export default async function BestAiToolsTopicPage({
           <div className='mt-6 flex flex-wrap gap-3'>
             <Link
               href={`/${params.locale || 'en'}/best-ai-tools`}
-              className='inline-flex items-center justify-center rounded-lg bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800'
+              className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               Back to rankings
             </Link>
