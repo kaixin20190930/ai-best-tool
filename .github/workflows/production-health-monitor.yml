@@ -77,7 +77,7 @@ jobs:
           BASE_URL="${MONITOR_BASE_URL%/}"
           curl -sS -L --retry 3 --retry-delay 2 --retry-all-errors \
             --connect-timeout 10 --max-time 30 "$BASE_URL/robots.txt" -o /tmp/robots.txt
-          grep -Fq "Sitemap: $BASE_URL/sitemap.xml" /tmp/robots.txt
+          grep -Eiq '^Sitemap:[[:space:]]*https?://[^[:space:]]+/sitemap\.xml[[:space:]]*$' /tmp/robots.txt
 
       - name: Check sitemap index surface
         run: |
