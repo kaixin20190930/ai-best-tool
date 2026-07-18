@@ -2,7 +2,6 @@ import { Metadata } from 'next';
 import { CircleDollarSign, ExternalLink, Globe, Layers3 } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -21,10 +20,6 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '面向 Web3、链上数据、钱包和 Crypto 工作流的 AI 工具选型指南，先看榜单再进对比页。'
         : 'A practical guide to AI tools for Web3, on-chain data, wallets, and crypto workflows, with a path from guide to ranking and comparison.',
-    ...getNoindexMetadata(),
-    alternates: {
-      canonical: `/${locale}/guides/ai-web3-tools`,
-    },
   };
 }
 

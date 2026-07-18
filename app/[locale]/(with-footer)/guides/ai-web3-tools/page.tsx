@@ -8,6 +8,9 @@ export function generateMetadata({ params: { locale } }: { params: { locale: str
   return {
     ...generateWeb3ToolsMetadata({ params: { locale } }),
     ...getNoindexMetadata(),
+    alternates: {
+      canonical: `/${locale}/guides/ai-tools-for-web3`,
+    },
   };
 }
 
