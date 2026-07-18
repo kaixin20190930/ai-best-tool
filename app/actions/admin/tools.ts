@@ -1124,6 +1124,12 @@ export async function updateTool(
     paymentUrl?: string | null;
     pageQualityStatus?: string;
     nextReviewDate?: string | null;
+    editorial?: {
+      reviewedAt?: string | null;
+      reviewedBy?: string | null;
+      summary?: { en?: string; zh?: string };
+      trustNote?: { en?: string; zh?: string };
+    };
   }
 ): Promise<{ success: boolean; error?: string }> {
   try {
@@ -1280,6 +1286,31 @@ export async function updateTool(
     if (data.nextReviewDate !== undefined) {
       updates.push(`next_review_date = $${paramIndex}`);
       params.push(normalizeNullableDate(data.nextReviewDate));
+      paramIndex++;
+    }
+
+    if (data.editorial !== undefined) {
+      const nextEditorial = {
+        ...getRecord(existingFeatures.editorial),
+        reviewedAt: normalizeNullableDate(data.editorial.reviewedAt),
+        reviewedBy: normalizeNullableText(data.editorial.reviewedBy),
+        summary: {
+          ...getRecord(getRecord(existingFeatures.editorial).summary),
+          en: normalizeNullableText(data.editorial.summary?.en) || '',
+          zh: normalizeNullableText(data.editorial.summary?.zh) || '',
+        },
+        trustNote: {
+          ...getRecord(getRecord(existingFeatures.editorial).trustNote),
+          en: normalizeNullableText(data.editorial.trustNote?.en) || '',
+          zh: normalizeNullableText(data.editorial.trustNote?.zh) || '',
+        },
+      };
+      const nextFeatures = {
+        ...existingFeatures,
+        editorial: nextEditorial,
+      };
+      updates.push(`features = $${paramIndex}`);
+      params.push(JSON.stringify(nextFeatures));
       paramIndex++;
     }
 

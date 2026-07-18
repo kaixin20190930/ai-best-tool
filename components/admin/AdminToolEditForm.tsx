@@ -132,6 +132,9 @@ export default function AdminToolEditForm({
   const submissionReview = getNestedRecord(submissionFeature.review);
   const rejectionReason = getString(submissionReview.rejectionReason);
   const rejectionReasonAt = getString(submissionReview.rejectedAt);
+  const editorial = getNestedRecord(featureRecord.editorial);
+  const editorialSummary = getNestedRecord(editorial.summary);
+  const editorialTrustNote = getNestedRecord(editorial.trustNote);
   const [categoryIdValue, setCategoryIdValue] = useState(tool.category_id || '');
   const [tagsValue, setTagsValue] = useState(tool.tags.join(', '));
   const [rejectionReasonInput, setRejectionReasonInput] = useState(rejectionReason || '');
@@ -363,6 +366,12 @@ export default function AdminToolEditForm({
     const formFeaturedUntil = String(formData.get('featured_until') || '').trim();
     const formPageQualityStatus = String(formData.get('page_quality_status') || 'continue_index');
     const formNextReviewDate = String(formData.get('next_review_date') || '').trim();
+    const editorialReviewedAt = String(formData.get('editorial_reviewed_at') || '').trim();
+    const editorialReviewedBy = String(formData.get('editorial_reviewed_by') || '').trim();
+    const editorialSummaryEn = String(formData.get('editorial_summary_en') || '').trim();
+    const editorialSummaryZh = String(formData.get('editorial_summary_zh') || '').trim();
+    const editorialTrustNoteEn = String(formData.get('editorial_trust_note_en') || '').trim();
+    const editorialTrustNoteZh = String(formData.get('editorial_trust_note_zh') || '').trim();
 
     const tags = tagsStr
       .split(',')
@@ -395,6 +404,12 @@ export default function AdminToolEditForm({
       isSponsoredPlacement: formSponsoredPlacement,
       pageQualityStatus: formPageQualityStatus,
       nextReviewDate: formNextReviewDate || null,
+      editorial: {
+        reviewedAt: editorialReviewedAt || null,
+        reviewedBy: editorialReviewedBy || null,
+        summary: { en: editorialSummaryEn, zh: editorialSummaryZh },
+        trustNote: { en: editorialTrustNoteEn, zh: editorialTrustNoteZh },
+      },
     });
 
     setLoading(false);
@@ -972,6 +987,88 @@ export default function AdminToolEditForm({
                   id="next_review_date"
                   name="next_review_date"
                   defaultValue={tool.next_review_date || ''}
+                  className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="md:col-span-2 rounded-lg border border-cyan-100 bg-cyan-50/40 p-4">
+            <p className="text-sm font-semibold text-slate-900">Editorial verification</p>
+            <p className="mt-1 text-xs text-slate-600">
+              Record only checks that were actually completed. Public tool pages show the review date and notes from this section.
+            </p>
+            <div className="mt-4 grid gap-4 md:grid-cols-2">
+              <div>
+                <label htmlFor="editorial_reviewed_at" className="block text-sm font-medium text-slate-700">
+                  Reviewed At
+                </label>
+                <input
+                  type="date"
+                  id="editorial_reviewed_at"
+                  name="editorial_reviewed_at"
+                  defaultValue={getString(editorial.reviewedAt) || ''}
+                  className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+                />
+              </div>
+              <div>
+                <label htmlFor="editorial_reviewed_by" className="block text-sm font-medium text-slate-700">
+                  Reviewed By
+                </label>
+                <input
+                  type="text"
+                  id="editorial_reviewed_by"
+                  name="editorial_reviewed_by"
+                  defaultValue={getString(editorial.reviewedBy) || ''}
+                  placeholder="Name or team"
+                  className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+                />
+              </div>
+              <div>
+                <label htmlFor="editorial_summary_en" className="block text-sm font-medium text-slate-700">
+                  Review Summary (EN)
+                </label>
+                <textarea
+                  id="editorial_summary_en"
+                  name="editorial_summary_en"
+                  defaultValue={getString(editorialSummary.en) || ''}
+                  rows={3}
+                  className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+                />
+              </div>
+              <div>
+                <label htmlFor="editorial_summary_zh" className="block text-sm font-medium text-slate-700">
+                  Review Summary (ZH)
+                </label>
+                <textarea
+                  id="editorial_summary_zh"
+                  name="editorial_summary_zh"
+                  defaultValue={getString(editorialSummary.zh) || ''}
+                  rows={3}
+                  className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+                />
+              </div>
+              <div>
+                <label htmlFor="editorial_trust_note_en" className="block text-sm font-medium text-slate-700">
+                  Trust Note (EN)
+                </label>
+                <textarea
+                  id="editorial_trust_note_en"
+                  name="editorial_trust_note_en"
+                  defaultValue={getString(editorialTrustNote.en) || ''}
+                  rows={3}
+                  className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+                />
+              </div>
+              <div>
+                <label htmlFor="editorial_trust_note_zh" className="block text-sm font-medium text-slate-700">
+                  Trust Note (ZH)
+                </label>
+                <textarea
+                  id="editorial_trust_note_zh"
+                  name="editorial_trust_note_zh"
+                  defaultValue={getString(editorialTrustNote.zh) || ''}
+                  rows={3}
                   className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
                 />
               </div>
