@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ExternalLink } from 'lucide-react';
 
 import { getListingPaymentMailto, listingConfig } from '@/lib/config/listing';
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import EmptyState from '@/components/EmptyState';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import { getMySubmittedTools, SubmittedTool } from '@/app/actions/submissions';
@@ -12,6 +13,7 @@ import SubmissionEmailPreferenceToggle from './SubmissionEmailPreferenceToggle';
 export const metadata = {
   title: 'My Submissions - AI Tools',
   description: 'Track your submitted AI tools and review status',
+  ...getNoindexMetadata(),
 };
 
 function getTitle(tool: SubmittedTool): string {

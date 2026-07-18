@@ -1,10 +1,12 @@
 import { Metadata } from 'next';
 
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { LoginForm } from '@/components/auth/LoginForm';
 
 export const metadata: Metadata = {
   title: 'Login',
   description: 'Sign in to your account',
+  ...getNoindexMetadata(),
 };
 
 function getSafeRedirectParam(value: string | string[] | undefined) {
@@ -17,15 +19,11 @@ function getSafeRedirectParam(value: string | string[] | undefined) {
   return redirect;
 }
 
-export default function LoginPage({
-  searchParams,
-}: {
-  searchParams?: { redirect?: string | string[] };
-}) {
+export default function LoginPage({ searchParams }: { searchParams?: { redirect?: string | string[] } }) {
   const redirectTo = getSafeRedirectParam(searchParams?.redirect);
 
   return (
-    <div className="theme-page container flex min-h-[calc(100vh-200px)] items-center justify-center py-10">
+    <div className='theme-page container flex min-h-[calc(100vh-200px)] items-center justify-center py-10'>
       <LoginForm redirectTo={redirectTo} />
     </div>
   );

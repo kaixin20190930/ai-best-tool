@@ -1,6 +1,7 @@
 import { BellRing, Mail, ShieldCheck, UserRound } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { getCurrentUserProfile } from '@/lib/services/user';
 import { getMySubmissionEmailPreference } from '@/app/actions/userPreferences';
 
@@ -11,6 +12,7 @@ export async function generateMetadata({ params }: { params: { locale: string } 
 
   return {
     title: `${t('title')} - Settings`,
+    ...getNoindexMetadata(),
   };
 }
 

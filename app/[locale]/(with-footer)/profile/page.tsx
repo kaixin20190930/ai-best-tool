@@ -1,6 +1,7 @@
 import { ArrowUpRight, Heart, LayoutDashboard, MessageSquareText, Settings2, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { getCurrentUserProfile } from '@/lib/services/user';
 import { getMyOwnedTools } from '@/app/actions/ownedTools';
 import { Link } from '@/app/navigation';
@@ -10,6 +11,7 @@ export async function generateMetadata({ params }: { params: { locale: string } 
 
   return {
     title: `${t('title')} - Profile`,
+    ...getNoindexMetadata(),
   };
 }
 
