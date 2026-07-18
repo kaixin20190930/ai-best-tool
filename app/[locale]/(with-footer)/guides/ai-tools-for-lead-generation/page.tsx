@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { ExternalLink, Filter, SearchCheck, Users } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { BASE_URL } from '@/lib/env';
 import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
@@ -32,7 +33,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const categories = await getAllCategories(true).catch(() => []);
   const checkedAt = '2026-07-18';
   const categoryCount = categories.length;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const siteUrl = BASE_URL;
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
     { name: isChinese ? '指南' : 'Guides', url: `${siteUrl}/${locale}/guides` },
