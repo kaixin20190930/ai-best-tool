@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+
 import { SortBy } from '@/lib/services/tools';
 
 interface ActiveFilter {
@@ -110,23 +111,24 @@ export default function ExploreControls({
   const currentPricing = searchParams.get('pricing');
 
   return (
-    <div className="theme-surface mb-5 rounded-lg p-4">
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+    <div className='theme-surface mb-5 rounded-lg p-4'>
+      <div className='flex flex-col gap-3 md:flex-row md:items-center md:justify-between'>
         <div>
-          <p className="theme-text-strong text-sm font-semibold">{resultLabel}</p>
+          <p className='theme-text-strong text-sm font-semibold'>{resultLabel}</p>
           {searchQuery && (
-            <p className="theme-text-muted mt-1 text-sm">
+            <p className='theme-text-muted mt-1 text-sm'>
               Showing {visible} of {total} matching tools
             </p>
           )}
         </div>
 
-        <label className="theme-text-muted flex items-center gap-2 text-sm font-medium">
+        <label htmlFor='explore-sort-select' className='theme-text-muted flex items-center gap-2 text-sm font-medium'>
           Sort by
           <select
+            id='explore-sort-select'
             value={sortBy}
             onChange={(event) => handleSortChange(event.target.value as SortBy)}
-            className="h-10 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-600"
+            className='h-10 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-600'
           >
             {sortOptions.map((option) => (
               <option key={option.value} value={option.value}>
@@ -137,19 +139,17 @@ export default function ExploreControls({
         </label>
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center gap-2">
-        <span className="theme-text-muted text-xs font-semibold uppercase tracking-wide">
-          Quick sort
-        </span>
+      <div className='mt-4 flex flex-wrap items-center gap-2'>
+        <span className='theme-text-muted text-xs font-semibold uppercase tracking-wide'>Quick sort</span>
         {sortOptions.map((option) => (
           <button
             key={option.value}
-            type="button"
+            type='button'
             onClick={() => handleSortChange(option.value)}
             className={
               sortBy === option.value
-                ? 'rounded-full bg-cyan-600 px-3 py-1 text-sm font-semibold text-white'
-                : 'rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700 hover:bg-slate-200'
+                ? 'rounded-full border border-slate-300 bg-slate-200 px-3 py-1 text-sm font-semibold text-slate-900'
+                : 'rounded-full border border-slate-200 bg-white px-3 py-1 text-sm font-medium text-slate-700 hover:border-slate-300 hover:bg-slate-50'
             }
           >
             {option.label}
@@ -157,19 +157,17 @@ export default function ExploreControls({
         ))}
       </div>
 
-      <div className="mt-2 flex flex-wrap items-center gap-2">
-        <span className="theme-text-muted text-xs font-semibold uppercase tracking-wide">
-          Pricing
-        </span>
+      <div className='mt-2 flex flex-wrap items-center gap-2'>
+        <span className='theme-text-muted text-xs font-semibold uppercase tracking-wide'>Pricing</span>
         {(['free', 'freemium', 'paid'] as const).map((pricing) => (
           <button
             key={pricing}
-            type="button"
+            type='button'
             onClick={() => togglePricing(pricing)}
             className={
               currentPricing === pricing
-                ? 'rounded-full bg-emerald-600 px-3 py-1 text-sm font-semibold text-white'
-                : 'rounded-full bg-slate-100 px-3 py-1 text-sm font-medium capitalize text-slate-700 hover:bg-slate-200'
+                ? 'rounded-full border border-slate-300 bg-slate-200 px-3 py-1 text-sm font-semibold capitalize text-slate-900'
+                : 'rounded-full border border-slate-200 bg-white px-3 py-1 text-sm font-medium capitalize text-slate-700 hover:border-slate-300 hover:bg-slate-50'
             }
           >
             {pricing}
@@ -178,31 +176,25 @@ export default function ExploreControls({
       </div>
 
       {hasActiveFilters && (
-        <div className="mt-4 flex flex-wrap items-center gap-2">
-          <span className="theme-text-muted text-xs font-semibold uppercase tracking-wide">
-            Active filters
-          </span>
+        <div className='mt-4 flex flex-wrap items-center gap-2'>
+          <span className='theme-text-muted text-xs font-semibold uppercase tracking-wide'>Active filters</span>
           {activeFilters.map((filter) => (
             <button
               key={`${filter.key}:${filter.value || filter.label}`}
-              type="button"
+              type='button'
               onClick={() => {
                 if (!filter.locked) {
                   removeFilter(filter);
                 }
               }}
-              className="rounded-full bg-cyan-50 px-3 py-1 text-sm font-medium text-cyan-700 hover:bg-cyan-100 disabled:cursor-default disabled:hover:bg-cyan-50"
+              className='rounded-full border border-slate-200 bg-white px-3 py-1 text-sm font-medium text-slate-700 hover:border-slate-300 hover:bg-slate-50 disabled:cursor-default disabled:hover:bg-white'
               disabled={filter.locked}
             >
               {filter.label}
               {!filter.locked && ' ×'}
             </button>
           ))}
-          <button
-            type="button"
-            onClick={clearAll}
-            className="text-sm font-medium text-slate-500 hover:text-slate-900"
-          >
+          <button type='button' onClick={clearAll} className='text-sm font-medium text-slate-500 hover:text-slate-800'>
             Clear all
           </button>
         </div>
