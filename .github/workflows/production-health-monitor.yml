@@ -63,16 +63,20 @@ jobs:
           BASE_URL="${BASE_URL%/}"
 
           for ROUTE in /cn /cn/explore /cn/best-ai-tools /cn/ai/fathom /cn/ai/pipedream; do
-            HTTP_CODE=$(curl -sS -L -o /tmp/seo-page.html -w "%{http_code}" "$BASE_URL$ROUTE")
+            HTTP_CODE=$(curl -sS -L --retry 3 --retry-delay 2 --retry-all-errors \
+              --connect-timeout 10 --max-time 30 \
+              -o /tmp/seo-page.html -w "%{http_code}" "$BASE_URL$ROUTE")
             echo "$ROUTE http_code=$HTTP_CODE"
             test "$HTTP_CODE" -ge 200
             test "$HTTP_CODE" -lt 400
           done
 
-          curl -sS -L "$BASE_URL/robots.txt" -o /tmp/robots.txt
+          curl -sS -L --retry 3 --retry-delay 2 --retry-all-errors \
+            --connect-timeout 10 --max-time 30 "$BASE_URL/robots.txt" -o /tmp/robots.txt
           grep -Fq "Sitemap: $BASE_URL/sitemap.xml" /tmp/robots.txt
 
-          curl -sS -L "$BASE_URL/sitemap.xml" -o /tmp/sitemap.xml
+          curl -sS -L --retry 3 --retry-delay 2 --retry-all-errors \
+            --connect-timeout 10 --max-time 30 "$BASE_URL/sitemap.xml" -o /tmp/sitemap.xml
           test "$(grep -c '<loc>' /tmp/sitemap.xml)" -gt 0
           ! grep -Eq '<loc>[^<]*/(admin|login|register|profile|pricing|submit|developer/listing|new|startup)(/|</loc>)' /tmp/sitemap.xml
           ! grep -q 'comparison' /tmp/sitemap.xml
