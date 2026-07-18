@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { Bot, ExternalLink, Orbit, Workflow } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -21,6 +22,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '面向 Agent 工作流、任务编排、模型调用、状态追踪和执行闭环的 AI 工具指南。'
         : 'A practical guide to AI tools for agent workflows, task orchestration, model calls, state tracking, and execution loops.',
+    ...getNoindexMetadata(),
   };
 }
 
