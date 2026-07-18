@@ -1,6 +1,6 @@
 # GSC 每周观察台账
 
-更新时间：2026-07-16
+更新时间：2026-07-18
 
 这份台账只做一件事：把 Google Search Console 的变化按周记录下来，方便判断当前的“收口 + 质量增强”策略到底有没有起效。
 
@@ -18,7 +18,7 @@
 | 周次 | 记录日期 | 28 天曝光 | 28 天点击 | CTR | 平均排名 | 已索引页面数 | 未索引页面数 | 备注 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Week 1 | 2026-07-15 | 876 | 2 | 0.23% | 70.09 | 27 | 127 | 从 `aibesttool.com-Performance-on-Search-2026-07-15.xlsx` 导入；当前本地 SEO 校验已通过 27/27 |
-| Week 2 | 2026-07-16 | 876 | 2 | 0.23% | 70.09 | 27 | 127 | 最新 28 天导出再次确认仍处低曝光、低点击、低排名基线；近 7 天曝光几乎归零，说明恢复期还在收口阶段 |
+| Week 2 | 2026-07-18 | 876 | 2 | 0.23% | 70.09 | 27 | 127 | 最新 28 天导出再次确认仍处低曝光、低点击、低排名基线；top queries 仍以品牌 / 目录词为主，top pages 仍集中在首页、automation 分类和少数工具详情页 |
 | Week 3 |  |  |  |  |  |  |  |  |
 | Week 4 |  |  |  |  |  |  |  |  |
 
@@ -51,9 +51,11 @@
 | Week 1 | fathom | 0 | 71 | 0.00% | 81.85 | 工具页已被部分检索到，但排名不足以出点击 |
 | Week 1 | automation tools | 0 | 65 | 0.00% | 73.34 | 目录型词有曝光，需要继续增强分类页 |
 | Week 1 | ai automation tools | 0 | 64 | 0.00% | 70.25 | 高意图词开始进入观察范围 |
-| Week 2 |  |  |  |  |  |  |
-| Week 2 |  |  |  |  |  |  |
-| Week 2 |  |  |  |  |  |  |
+| Week 2 | toolbloom ai tools directory best ai tools | 0 | 91 | 0.00% | 89.24 | 品牌 / 目录词 | 是 |
+| Week 2 | ai tools directory toolbloom ai tools | 0 | 77 | 0.00% | 112.13 | 品牌 / 目录词 | 是 |
+| Week 2 | fathom | 0 | 71 | 0.00% | 81.85 | 工具名词 | 是 |
+| Week 2 | automation tools | 0 | 65 | 0.00% | 73.34 | 类目词 | 是 |
+| Week 2 | ai automation tools | 0 | 64 | 0.00% | 70.25 | 类目词 | 是 |
 
 ## Top Pages
 
@@ -64,9 +66,11 @@
 | Week 1 | https://www.aibesttool.com/categories/automation | 0 | 178 | 0.00% | 70.64 | Category | 是 |
 | Week 1 | https://aibesttool.com/ai/fathom | 0 | 153 | 0.00% | 78.89 | Tool | 是 |
 | Week 1 | https://aibesttool.com/ai/pipedream | 0 | 39 | 0.00% | 55.05 | Tool | 是 |
-| Week 2 |  |  |  |  |  |  |  |
-| Week 2 |  |  |  |  |  |  |  |
-| Week 2 |  |  |  |  |  |  |  |
+| Week 2 | https://aibesttool.com/ | 1 | 214 | 0.47% | 66.78 | Core | 是 |
+| Week 2 | https://www.aibesttool.com/ | 1 | 134 | 0.75% | 78.19 | Core | 是 |
+| Week 2 | https://www.aibesttool.com/categories/automation | 0 | 178 | 0.00% | 70.64 | Category | 是 |
+| Week 2 | https://aibesttool.com/ai/fathom | 0 | 153 | 0.00% | 78.89 | Tool | 是 |
+| Week 2 | https://aibesttool.com/ai/pipedream | 0 | 39 | 0.00% | 55.05 | Tool | 是 |
 
 ## 增强页追踪
 
@@ -96,6 +100,5 @@
 | --- | --- | --- |
 | Week 1 | 已导入 28 天性能基线，曝光总量不高，而且近 7 天曝光几乎归零，说明当前仍在非常低的基线；query / page 方向已经能看见，但还没形成稳定点击。覆盖率问题主要集中在 noindex 收口、少量抓取未入索引，以及少量重复规范化痕迹 | 继续观察下周 GSC 变化，同时优先补核心页真实信号，并留意首页 / www 变体是否还在 GSC 中重复出现 |
 | Week 2 | 28 天内只有 2 次点击，主要来自首页；Top queries 仍以品牌/目录词为主，排名大多在 70-110 之外，说明现阶段的问题不是“缺页面”，而是“页面还没足够像可被点击的答案页” | 继续保持收口节奏，不扩量，优先看首页、榜单、分类、工具详情的真实信号是否继续改善 |
-| Week 2 |  |  |
 | Week 3 |  |  |
 | Week 4 |  |  |
