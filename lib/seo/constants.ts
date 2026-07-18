@@ -6,6 +6,8 @@
 /**
  * Site Configuration Interface
  */
+import { normalizeBaseUrl } from '@/lib/env';
+
 export interface SEOConfig {
   siteName: string;
   siteUrl: string;
@@ -59,7 +61,7 @@ export interface ToolMetadata {
 function getSiteUrl(): string {
   if (typeof window !== 'undefined') {
     // Client-side: use window.location.origin
-    return window.location.origin.replace(/\/$/, '');
+    return normalizeBaseUrl(window.location.origin);
   }
 
   // Server-side: use environment variables
@@ -68,7 +70,7 @@ function getSiteUrl(): string {
     (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '') ||
     'https://aibesttool.com';
 
-  return siteUrl.replace(/\/$/, '');
+  return normalizeBaseUrl(siteUrl);
 }
 
 /**

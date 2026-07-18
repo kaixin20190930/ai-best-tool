@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 
+import { BASE_URL } from '@/lib/env';
 import Faq from '@/components/Faq';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
@@ -10,7 +11,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     namespace: 'Metadata.explore',
   });
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://aibesttool.com';
+  const siteUrl = BASE_URL;
   const title = t('title');
   const description = t('description');
   const imageUrl = `${siteUrl}/images/aibesttool.png`;
@@ -26,7 +27,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     },
     openGraph: {
       type: 'website',
-      locale: locale,
+      locale,
       url: pageUrl,
       siteName: 'AI Best Tool',
       title,

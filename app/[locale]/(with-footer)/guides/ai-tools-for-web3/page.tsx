@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { CircleDollarSign, ExternalLink, Globe, Layers3 } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { BASE_URL } from '@/lib/env';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -27,7 +28,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
   const checkedAt = '2026-07-18';
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const siteUrl = BASE_URL;
   const faqs = [
     {
       question: isChinese ? 'Web3 工具最适合用来做什么？' : 'What are Web3 tools best used for?',

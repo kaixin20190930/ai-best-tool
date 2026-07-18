@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { ArrowRight, CheckCircle2, Clock3, Columns3, ExternalLink, Globe2, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { BASE_URL } from '@/lib/env';
 import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema, generateItemListSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
@@ -451,7 +452,7 @@ export async function buildComparisonMetadata(locale: string, title: string, des
 export async function buildComparisonPageData(locale: string, config: ComparisonConfig) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const siteUrl = BASE_URL;
   const comparisonPath = config.guideHref.endsWith('-comparison') ? config.guideHref : `${config.guideHref}-comparison`;
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },

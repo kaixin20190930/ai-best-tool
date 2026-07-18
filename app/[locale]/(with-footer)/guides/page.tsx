@@ -4,6 +4,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { FEATURED_GUIDE_HREFS, GUIDE_PAGES } from '@/lib/content/guides';
 import { topListTopics } from '@/lib/data/topLists';
+import { BASE_URL } from '@/lib/env';
 import { generateBreadcrumbSchema } from '@/lib/seo/schema';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
@@ -27,7 +28,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const siteUrl = BASE_URL;
   const pickGuide = (href: string) => GUIDE_PAGES.find((item) => item.href === href);
   const featuredGuides = FEATURED_GUIDE_HREFS.map((href) => pickGuide(href)).filter(
     (item): item is (typeof GUIDE_PAGES)[number] => Boolean(item),

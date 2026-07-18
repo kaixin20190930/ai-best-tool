@@ -21,6 +21,7 @@ import { getTranslations } from 'next-intl/server';
 import { listingConfig } from '@/lib/config/listing';
 import { FEATURED_GUIDE_HREFS, GUIDE_PAGES } from '@/lib/content/guides';
 import { topListTopics } from '@/lib/data/topLists';
+import { BASE_URL } from '@/lib/env';
 import { SEO_CONFIG } from '@/lib/seo/constants';
 import { generateOrganizationSchema } from '@/lib/seo/schema';
 import { getLocalizedField as getCategoryLocalizedField, getPopularCategories } from '@/lib/services/categories';
@@ -44,7 +45,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     namespace: 'Metadata.home',
   });
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://aibesttool.com';
+  const siteUrl = BASE_URL;
   const title = t('title');
   const description = t('description');
   const imageUrl = `${siteUrl}/images/aibesttool.png`;
