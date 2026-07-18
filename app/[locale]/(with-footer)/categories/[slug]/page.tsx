@@ -26,6 +26,9 @@ export async function generateMetadata({
   if (!category) {
     return {
       title: 'AI Tools Category | AI Best Tool',
+      alternates: {
+        canonical: `${BASE_URL}/${params.locale}/categories/${params.slug}`,
+      },
     };
   }
 

@@ -1374,6 +1374,9 @@ export async function generateMetadata({
     return {
       title: websiteName,
       description: 'AI tool profile',
+      alternates: {
+        canonical: generateCanonicalUrl(`/${locale}/ai/${websiteName}`),
+      },
     };
   }
 }
