@@ -18,11 +18,13 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+  const checkedAt = '2026-07-18';
   return (
     <>
       {AgentToolsPage({ params: { locale } })}
       <GuideEvidencePanel
         locale={locale}
+        checkedAt={checkedAt}
         scope={
           locale === 'cn' || locale === 'tw'
             ? 'Agent 工具页要先看自动执行、协作和落地性，而不是只看“agent”这个标签。'
@@ -107,11 +109,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
             {locale === 'cn' || locale === 'tw' ? '最近验证' : 'Last checked'}
           </p>
-          <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-18</p>
+          <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
           <p className='mt-2 text-sm leading-6 text-slate-600'>
             {locale === 'cn' || locale === 'tw'
-              ? '这页已按当前比较页的判断标准重新核对。'
-              : 'This page has been rechecked against the current comparison-page decision flow.'}
+              ? `这页已按当前比较页的判断标准重新核对（${checkedAt}）。`
+              : `This page has been rechecked against the current comparison-page decision flow (${checkedAt}).`}
           </p>
         </div>
         <div>
