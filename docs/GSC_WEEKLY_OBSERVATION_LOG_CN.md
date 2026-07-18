@@ -96,6 +96,8 @@
 
 同日线上核对 `/cn/ai/fathom` 与 `/cn/ai/pipedream`：两页均返回 `200`，canonical 均为 `https://aibesttool.com/cn/ai/...`，页面显示已有复核日期；但两页当前均为 0 条评分、0 条讨论、0 次收藏。因此两页暂不因本地数据库样本缺失而 noindex，下一步应优先获得真实评论、收藏、点击和 owner 更新信号。
 
+2026-07-19 生产 smoke check：`/sitemap.xml` 返回 `200`，线上共发现 360 个 `<loc>`，其中内部路径 0 个、comparison 路径 0 个；`/robots.txt` 返回 `200` 且包含 canonical sitemap。首页、Explore、榜单页及 robots/sitemap 均正常返回，当前索引收口没有发现线上回归。
+
 ## 处理规则
 
 - 如果增强页连续两周没有曝光提升，先看标题、摘要和内链是否足够明确。
