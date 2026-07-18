@@ -303,6 +303,7 @@
 - 2026-07-18：`best-ai-tools`、`explore`、`ai-seo-tools`、`ai-coding-tools`、`ai-writing-tools`、`free-ai-tools`、`ai-note-taking-tools`、`ai-tools-for-web3` 的 `checkedAt` 已刷新到 `2026-07-18`，继续把核心入口的 freshness 信号对齐到今天。
 - 2026-07-18：`explore`、`startup`、`best-ai-tools/[topic]`、`ai/[websiteName]`、`categories/[slug]` 的结构化数据与导航链接统一收口到 `BASE_URL`，进一步避免本地地址混入 canonical / breadcrumb / OG 链接，并通过本地 `pnpm run build`。
 - 2026-07-18：剩余 guide / comparison 页面继续统一收口到 `BASE_URL`，并补齐 `generateBreadcrumbSchema`、`generateFAQSchema`、`generateItemListSchema` 的导入，确保批量收口后本地 `pnpm run build` 仍然通过。
+- 2026-07-18：提交表单邮件、GSC 默认值、支付回跳、后台设置展示和 OAuth 回调继续统一到 `BASE_URL`，把“会生成外链”的后端入口也收口到同一站点基准，并通过本地 `pnpm run build`。
 - 2026-07-17：最新 28 天 GSC 再核对仍只有 876 impressions / 2 clicks，Top queries 仍以品牌和目录词为主，排名大多在 70-110 之外；当前继续按“收口弱页 + 强化核心页真实信号 + 观察索引恢复”主线推进。
 - 2026-07-17：`guides` 总览页底部的 Submit / Claim CTA 进一步降权，避免商业入口在总入口页抢走“先看指南、再做比较”的主路径注意力，并通过本地 `pnpm run build`。
 - 2026-07-17：首页里的 `Submit` / `Developer listing` 入口进一步降权，避免工具方入口压过“探索 / 榜单 / 分类”主路径，并通过本地 `pnpm run build`。

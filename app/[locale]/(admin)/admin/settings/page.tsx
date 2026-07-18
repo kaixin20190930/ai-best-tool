@@ -2,10 +2,12 @@ import Link from 'next/link';
 import { ExternalLink, Globe, KeyRound, Mail, ShieldCheck } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { BASE_URL } from '@/lib/env';
+
 const runtimeFields = [
   {
     label: 'Site URL',
-    value: process.env.NEXT_PUBLIC_SITE_URL || 'Not configured',
+    value: BASE_URL || 'Not configured',
     icon: Globe,
   },
   {

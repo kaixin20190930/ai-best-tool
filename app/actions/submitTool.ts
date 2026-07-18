@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { getPool } from '@/db/neon/client';
 
 import { requireAuth } from '@/lib/auth/middleware';
+import { BASE_URL } from '@/lib/env';
 import { sendTransactionalEmail } from '@/lib/services/mailer';
 import { ensureTagsExist } from '@/lib/services/tags';
 import { createNotification, notifyAdminsOfSubmission } from '@/app/actions/notifications';
@@ -244,7 +245,7 @@ export async function submitTool(input: SubmitToolInput): Promise<SubmitToolResu
         html: `
           <p>${website} has entered the review queue.</p>
           <p>You can track status in your submissions page.</p>
-          <p><a href="${process.env.NEXT_PUBLIC_SITE_URL || ''}/profile/submissions">View submissions</a></p>
+          <p><a href="${BASE_URL}/profile/submissions">View submissions</a></p>
         `,
       });
     }

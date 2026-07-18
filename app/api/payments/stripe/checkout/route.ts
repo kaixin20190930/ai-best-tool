@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getPool } from '@/db/neon/client';
 
+import { BASE_URL } from '@/lib/env';
 import { createStripeCheckoutSession, isStripeConfigured } from '@/lib/services/stripe';
 import { createClient } from '@/lib/supabase/server';
 import { trackCommerceEvent } from '@/app/actions/analytics';
@@ -100,7 +101,7 @@ export async function GET(request: NextRequest) {
     const featuredDays = parseFeaturedDays(getCommercialValue(tool, 'featuredDaysRequested'));
     const fastTrack = getCommercialValue(tool, 'fastTrackRequested') === true;
 
-    const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || request.nextUrl.origin).replace(/\/$/, '');
+    const siteUrl = BASE_URL.replace(/\/$/, '') || request.nextUrl.origin.replace(/\/$/, '');
     const titleValue = tool.title;
     const titleRecord = getRecord(titleValue);
     const toolTitle =

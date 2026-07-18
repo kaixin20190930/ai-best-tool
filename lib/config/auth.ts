@@ -6,6 +6,7 @@
  * - Email settings
  * - Redirect URLs
  */
+import { BASE_URL } from '@/lib/env';
 
 export const authConfig = {
   // OAuth Providers
@@ -51,7 +52,7 @@ export const authConfig = {
 
 // Site URL for OAuth redirects
 export const getSiteUrl = () => {
-  return (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000').replace(/\/$/, '');
+  return BASE_URL.replace(/\/$/, '');
 };
 
 // OAuth redirect URL

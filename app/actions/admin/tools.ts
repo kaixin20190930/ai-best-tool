@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { requireAdmin } from '@/lib/auth/middleware';
+import { BASE_URL } from '@/lib/env';
 import { getPool } from '@/db/neon/client';
 import { createNotification } from '@/app/actions/notifications';
 import { trackCommerceEvent } from '@/app/actions/analytics';
@@ -564,7 +565,7 @@ async function notifySubmissionStatusChange(
   const displayName = toolTitle?.trim() || toolName;
   const rejectionReason = reason?.trim() || '';
   const profileLink = '/profile/submissions';
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
+  const siteUrl = BASE_URL;
   const profileUrl = `${siteUrl}${profileLink}`;
   const toolUrl = `${siteUrl}/ai/${toolName}`;
 
@@ -2167,8 +2168,7 @@ export async function sendClaimInvitesBySystem(): Promise<{
           (typeof titleRecord?.en === 'string' && titleRecord.en.trim()) ||
           (typeof titleRecord?.zh === 'string' && titleRecord.zh.trim()) ||
           tool.name;
-        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-        const claimUrl = `${siteUrl.replace(/\/$/, '')}/en/developer/listing`;
+        const claimUrl = `${BASE_URL.replace(/\/$/, '')}/en/developer/listing`;
 
         const subject = `[AI Best Tool] Claim your listing / 认领你的条目`;
         const text = [
@@ -2324,8 +2324,7 @@ export async function sendProfileUpdateRemindersBySystem(): Promise<{
           (typeof titleRecord?.en === 'string' && titleRecord.en.trim()) ||
           (typeof titleRecord?.zh === 'string' && titleRecord.zh.trim()) ||
           tool.name;
-        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-        const submissionsUrl = `${siteUrl.replace(/\/$/, '')}/en/profile/submissions`;
+        const submissionsUrl = `${BASE_URL.replace(/\/$/, '')}/en/profile/submissions`;
         const missingList = quality.missingLabels.join(', ');
 
         const subject = `[AI Best Tool] Update your listing / 更新你的工具资料`;

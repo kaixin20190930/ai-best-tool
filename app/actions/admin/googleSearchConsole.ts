@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 
 import { query } from '@/db/neon/client';
+import { BASE_URL } from '@/lib/env';
 import { requireAdmin } from '@/lib/auth/middleware';
 import {
   createGoogleSearchConsoleClient,
@@ -87,12 +88,12 @@ function getGoogleSearchConsoleConfig(overrides?: {
   const propertyUrl =
     overrides?.propertyUrl?.trim() ||
     process.env.GSC_PROPERTY_URL ||
-    process.env.NEXT_PUBLIC_SITE_URL ||
+    BASE_URL ||
     '';
   const siteOrigin =
     overrides?.siteOrigin?.trim() ||
     process.env.GSC_SITE_ORIGIN ||
-    process.env.NEXT_PUBLIC_SITE_URL ||
+    BASE_URL ||
     undefined;
   const clientId = overrides?.clientId?.trim() || process.env.GSC_CLIENT_ID || '';
   const clientSecret = overrides?.clientSecret?.trim() || process.env.GSC_CLIENT_SECRET || '';
@@ -143,7 +144,7 @@ async function runGoogleSearchConsoleOperation(
         propertyUrl:
           overrides?.propertyUrl?.trim() ||
           process.env.GSC_PROPERTY_URL ||
-          process.env.NEXT_PUBLIC_SITE_URL ||
+          BASE_URL ||
           '',
         targetUrl,
         status: 'failed',

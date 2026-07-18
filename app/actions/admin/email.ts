@@ -1,6 +1,7 @@
 'use server';
 
 import { requireAdmin } from '@/lib/auth/middleware';
+import { BASE_URL } from '@/lib/env';
 import { sendTransactionalEmail } from '@/lib/services/mailer';
 import { query } from '@/db/neon/client';
 
@@ -19,7 +20,6 @@ export async function sendTestEmail(input: {
       return { success: false, error: 'Please enter a valid email address.' };
     }
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
     const result = await sendTransactionalEmail({
       to,
       subject: '[AI Best Tool] Test email',
@@ -27,7 +27,7 @@ export async function sendTestEmail(input: {
       html: `
         <p>This is a test email from AI Best Tool admin console.</p>
         <p>If you received this email, your mailer config is working.</p>
-        <p><a href="${siteUrl}">${siteUrl}</a></p>
+        <p><a href="${BASE_URL}">${BASE_URL}</a></p>
       `,
     });
 

@@ -7,6 +7,7 @@ import {
   inspectGoogleSearchConsoleUrlAction,
   submitGoogleSearchConsoleSitemapAction,
 } from '@/app/actions/admin/googleSearchConsole';
+import { BASE_URL } from '@/lib/env';
 
 export async function generateMetadata({ params }: { params: { locale: string } }) {
   const t = await getTranslations({ locale: params.locale, namespace: 'admin' });
@@ -22,10 +23,8 @@ export default async function AdminSearchConsolePage({
   params: { locale: string };
 }) {
   const isChinese = params.locale === 'cn' || params.locale === 'tw';
-  const defaultPropertyUrl =
-    process.env.GSC_PROPERTY_URL || process.env.NEXT_PUBLIC_SITE_URL || '';
-  const defaultSiteOrigin =
-    process.env.GSC_SITE_ORIGIN || process.env.NEXT_PUBLIC_SITE_URL || '';
+  const defaultPropertyUrl = process.env.GSC_PROPERTY_URL || BASE_URL;
+  const defaultSiteOrigin = process.env.GSC_SITE_ORIGIN || BASE_URL;
   const defaultSitemapUrl =
     process.env.GSC_DEFAULT_SITEMAP_URL ||
     (defaultSiteOrigin ? `${defaultSiteOrigin.replace(/\/$/, '')}/sitemap.xml` : '/sitemap.xml');
@@ -279,4 +278,3 @@ export default async function AdminSearchConsolePage({
     </div>
   );
 }
-
