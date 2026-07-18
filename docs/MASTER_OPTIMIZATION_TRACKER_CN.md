@@ -229,6 +229,7 @@
 
 ## 十、近期进展记录
 
+- 2026-07-18：继续下调首页里 `Explore all tools / Open guide / Open ranking / Compare / Submit tool` 的视觉优先级，把首页的主路径都收成中性导航样式，同时保留分流、搜索和提交能力。
 - 2026-07-18：继续下调 `ai/[websiteName]` 详情页里 `Claim listing / Open official site / View detail / Log in` 等入口的视觉优先级，把详情页从强转化流转页收成中性判断页，同时保留官网、认领、收藏和评论能力。
 - 2026-07-18：继续下调 `best-ai-tools/[topic]` 榜单页里 `Submit a tool / Open comparison / Back to guide` 的视觉优先级，把高意图榜单页也统一成更中性的分流页，同时保留继续比较和提交的入口。
 - 2026-07-18：继续下调 `profile/submissions` 页里“Submit another tool / Take action / Renew”这类入口的视觉优先级，把提交后跟进页也统一成中性分流页，同时保留付款、审核和续期动作。

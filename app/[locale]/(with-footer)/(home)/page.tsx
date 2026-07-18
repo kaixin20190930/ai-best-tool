@@ -497,7 +497,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               <div className='mt-7 flex flex-col gap-3 sm:flex-row'>
                 <Link
                   href='/explore'
-                  className='inline-flex items-center justify-center gap-2 rounded-lg bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800'
+                  className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50'
                 >
                   {isChinese ? '探索全部工具' : 'Explore all tools'}
                   <ArrowRight className='size-4' />
@@ -562,7 +562,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                       <Link
                         key={guide.href}
                         href={guide.href}
-                        className='inline-flex items-center gap-2 rounded-full bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700 ring-1 ring-slate-200 hover:bg-cyan-50 hover:text-cyan-700'
+                        className='inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 text-sm font-medium text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50'
                       >
                         {guide.title[isChinese ? 'cn' : 'en']}
                         <ArrowRight className='size-4' />
@@ -704,14 +704,14 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   <div className='mt-4 flex flex-wrap gap-2'>
                     <Link
                       href={lane.href}
-                      className='inline-flex items-center gap-1 rounded-full bg-slate-950 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-800'
+                      className='inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50'
                     >
                       {isChinese ? '看榜单' : 'Open ranking'}
                       <ArrowRight className='size-3.5' />
                     </Link>
                     <Link
                       href={lane.comparisonHref}
-                      className='inline-flex items-center gap-1 rounded-full bg-cyan-50 px-3 py-2 text-xs font-semibold text-cyan-700 hover:bg-cyan-100'
+                      className='inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50'
                     >
                       {isChinese ? '看对比' : 'Compare'}
                       <ArrowRight className='size-3.5' />
@@ -1018,7 +1018,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             <div className='mt-6 grid gap-3 sm:grid-cols-2 lg:mt-0 lg:flex-[1.1] xl:grid-cols-3'>
               <Link
                 href='/guides/how-to-choose-ai-tools'
-                className='inline-flex items-center justify-center gap-2 rounded-lg bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800'
+                className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50'
               >
                 {isChinese ? '打开选型指南' : 'Open guide'}
                 <ArrowRight className='size-4' />
@@ -1088,7 +1088,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
           <Link
             href='/explore'
-            className='mx-auto flex w-fit items-center justify-center gap-3 rounded-lg bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800'
+            className='mx-auto flex w-fit items-center justify-center gap-3 rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50'
           >
             {t('exploreMore')}
             <SearchIcon className='size-4' />
