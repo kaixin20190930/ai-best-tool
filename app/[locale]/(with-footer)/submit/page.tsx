@@ -92,7 +92,7 @@ export default async function Page({
                 ctaId='submit_banner_claim'
                 ctaLabel='Submit page banner claim'
                 pageType='submit'
-                className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-cyan-800'
+                className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50'
               >
                 {isChinese ? '先去认领页' : 'Go to claim listing'}
               </TrackableCtaLink>
@@ -101,7 +101,7 @@ export default async function Page({
                 ctaId='submit_banner_pricing'
                 ctaLabel='Submit page banner pricing'
                 pageType='submit'
-                className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-2.5 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
+                className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50'
               >
                 {isChinese ? '查看价格页' : 'View pricing'}
               </TrackableCtaLink>
@@ -281,7 +281,7 @@ export default async function Page({
               ctaId='submit_contact_paid_listing'
               ctaLabel='Contact paid listing'
               pageType='submit'
-              className='mt-5 inline-flex w-full items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+              className='mt-5 inline-flex w-full items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
             >
               {isChinese ? '联系付费入驻' : 'Contact paid listing'}
             </TrackableCtaLink>
