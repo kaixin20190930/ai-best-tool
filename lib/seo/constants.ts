@@ -6,7 +6,7 @@
 /**
  * Site Configuration Interface
  */
-import { normalizeBaseUrl } from '@/lib/env';
+import { BASE_URL, normalizeBaseUrl } from '@/lib/env';
 
 export interface SEOConfig {
   siteName: string;
@@ -64,13 +64,8 @@ function getSiteUrl(): string {
     return normalizeBaseUrl(window.location.origin);
   }
 
-  // Server-side: use environment variables
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '') ||
-    'https://aibesttool.com';
-
-  return normalizeBaseUrl(siteUrl);
+  // Server-side: use the normalized canonical base URL.
+  return BASE_URL;
 }
 
 /**
