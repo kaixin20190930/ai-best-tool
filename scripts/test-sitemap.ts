@@ -127,7 +127,9 @@ async function testSitemap() {
     console.log('Test 6: Checking guide allowlist exclusions...');
     const indexableGuidePaths = INDEXABLE_GUIDE_PATHS;
     const excludedGuidePaths = GUIDE_PAGES.map((page) => page.href).filter((page) => !indexableGuidePaths.has(page));
-    const excludedFound = excludedGuidePaths.filter((page) =>
+    const excludedStaticPaths = ['/pricing', '/submit', '/developer/listing'];
+    const excludedPaths = [...excludedGuidePaths, ...excludedStaticPaths];
+    const excludedFound = excludedPaths.filter((page) =>
       sitemapEntries.some((entry) => {
         const url = new URL(entry.url);
         const pathname = url.pathname.replace(/^\/[a-z]{2}\//, '/').replace(/^\//, '');
