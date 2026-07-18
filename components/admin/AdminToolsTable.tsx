@@ -132,6 +132,11 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
     return getNestedRecord(submission.review);
   };
 
+  const hasEditorialVerification = (tool: AdminTool) => {
+    const editorial = getNestedRecord(getFeatureRecord(tool).editorial);
+    return typeof editorial.reviewedAt === 'string' && editorial.reviewedAt.trim().length > 0;
+  };
+
   const getRejectionReason = (tool: AdminTool) => {
     const review = getSubmissionReview(tool);
     return typeof review.rejectionReason === 'string' && review.rejectionReason.trim().length > 0
@@ -197,6 +202,12 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
         className: 'bg-slate-100 text-slate-600',
       });
     }
+
+    signals.push(
+      hasEditorialVerification(tool)
+        ? { label: 'Editorial verified', className: 'bg-emerald-50 text-emerald-700' }
+        : { label: 'Editorial pending', className: 'bg-amber-50 text-amber-700' },
+    );
 
     if (commercial.fastTrackRequested === true) {
       signals.push({
