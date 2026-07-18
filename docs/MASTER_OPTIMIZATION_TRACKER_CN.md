@@ -330,6 +330,7 @@
 - 2026-07-19：为 `production-health-monitor` 增加 `main` push 触发器，部署后立即执行生产 API 与 SEO surface 检查，不再依赖 5 分钟定时窗口才能验证监控修复。
 - 2026-07-19：修复 `production-health-monitor` 的 GitHub Actions 工作流级 Secret 表达式错误，并将 SEO 检查拆分为核心页面、robots、sitemap 三步；最新运行 `749` 已成功，确认生产健康接口、5 个核心 SEO 页面、robots sitemap 指令和 sitemap 索引面检查均通过。
 - 2026-07-19：重新生成 SEO 页面质量盘点，结果稳定为 157 个页面，其中 27 个 sitemap 候选、3 个内部流量页、127 个 noindex / 合并候选；确认 P0 索引收口没有回归，下一步只保留 GSC 周度复盘和真实用户 / owner 信号积累。
+- 2026-07-19：新增 `seo:priority-page-signals`，读取线上 20 个核心页面的公开 HTML，审计 HTTP、canonical、description、evidence/freshness 和评论/认领/官网/比较动作入口；报告写入 `docs/PRIORITY_PAGE_SIGNAL_AUDIT_CN.md`，明确区分“页面有入口”和“已经产生真实互动”。
 - 2026-07-17：最新 28 天 GSC 再核对仍只有 876 impressions / 2 clicks，Top queries 仍以品牌和目录词为主，排名大多在 70-110 之外；当前继续按“收口弱页 + 强化核心页真实信号 + 观察索引恢复”主线推进。
 - 2026-07-17：`guides` 总览页底部的 Submit / Claim CTA 进一步降权，避免商业入口在总入口页抢走“先看指南、再做比较”的主路径注意力，并通过本地 `pnpm run build`。
 - 2026-07-17：首页里的 `Submit` / `Developer listing` 入口进一步降权，避免工具方入口压过“探索 / 榜单 / 分类”主路径，并通过本地 `pnpm run build`。

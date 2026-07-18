@@ -24,6 +24,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '适合记笔记、会议助手和信息整理的 AI 工具推荐与选型指南。'
         : 'A practical guide to AI note taking tools for note taking, meeting assistance, and information organization.',
+    alternates: { canonical: `${BASE_URL}/${locale}/guides/ai-note-taking-tools` },
   };
 }
 

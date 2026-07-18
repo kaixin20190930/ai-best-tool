@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 
 import { getCategoryBySlug, getLocalizedField } from '@/lib/services/categories';
+import { BASE_URL } from '@/lib/env';
 import { SortBy } from '@/lib/services/tools';
 
 import CategoryContent from './CategoryContent';
@@ -37,7 +38,7 @@ export async function generateMetadata({
     title: `Best ${name} AI Tools | AI Best Tool`,
     description,
     alternates: {
-      canonical: `/categories/${category.slug}`,
+      canonical: `${BASE_URL}/${params.locale}/categories/${category.slug}`,
     },
   };
 }

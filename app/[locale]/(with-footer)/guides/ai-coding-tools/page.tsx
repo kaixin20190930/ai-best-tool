@@ -27,6 +27,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '面向代码补全、调试、生成和工作流自动化的 AI 编程工具选型指南，先看榜单再进对比。'
         : 'A practical guide to AI tools for code completion, debugging, generation, and workflow automation, with a path from guide to ranking and comparison.',
+    alternates: { canonical: `${BASE_URL}/${locale}/guides/ai-coding-tools` },
   };
 }
 

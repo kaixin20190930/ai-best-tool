@@ -24,6 +24,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '一个实用的 AI 工具选型指南：先看场景，再看价格、更新、截图和评论。'
         : 'A practical guide to choosing AI tools: start with use case, then check pricing, freshness, screenshots, and comments.',
+    alternates: { canonical: `${BASE_URL}/${locale}/guides/how-to-choose-ai-tools` },
   };
 }
 

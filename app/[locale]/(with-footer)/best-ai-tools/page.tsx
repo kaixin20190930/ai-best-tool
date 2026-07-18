@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ArrowRight, Layers3, Sparkles, Star, Target } from 'lucide-react';
 
 import { topListTopics } from '@/lib/data/topLists';
+import { BASE_URL } from '@/lib/env';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
@@ -13,6 +14,9 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     description: isChinese
       ? '按用途整理的 AI 工具榜单：Agent、可观测、写作、开发、模型路由、研究和视频，并明确下一步该看什么。'
       : 'Purpose-driven AI tool rankings for agents, observability, coding, model routing, research, writing, and video with clear next-step guidance.',
+    alternates: {
+      canonical: `${BASE_URL}/${locale}/best-ai-tools`,
+    },
   };
 }
 

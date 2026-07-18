@@ -24,6 +24,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '帮你挑选真正值得试的免费 AI 工具：先看场景，再看限制、更新和评论。'
         : 'A practical guide to choosing free AI tools: check use case, limits, updates, and comments first.',
+    alternates: { canonical: `${BASE_URL}/${locale}/guides/free-ai-tools` },
   };
 }
 
