@@ -162,13 +162,27 @@ async function getCurrentUser(request: NextRequest) {
 export async function middleware(request: NextRequest) {
   const preferredHost = getPreferredHost();
   const currentHost = request.nextUrl.hostname.toLowerCase();
-  if (preferredHost && !isLocalHost(currentHost) && currentHost !== preferredHost) {
+  if (preferredHost && !isLocalHost(currentHost)) {
+    const isPreferredHost = currentHost === preferredHost;
     const isWwwVariant = currentHost === `www.${preferredHost}`;
-    if (isWwwVariant) {
+
+    if (isPreferredHost || isWwwVariant) {
       const redirectUrl = request.nextUrl.clone();
-      redirectUrl.hostname = preferredHost;
-      redirectUrl.protocol = 'https:';
-      return NextResponse.redirect(redirectUrl, 308);
+      let shouldRedirect = false;
+
+      if (isWwwVariant) {
+        redirectUrl.hostname = preferredHost;
+        shouldRedirect = true;
+      }
+
+      if (redirectUrl.protocol !== 'https:') {
+        redirectUrl.protocol = 'https:';
+        shouldRedirect = true;
+      }
+
+      if (shouldRedirect) {
+        return NextResponse.redirect(redirectUrl, 308);
+      }
     }
   }
 

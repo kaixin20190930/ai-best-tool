@@ -306,6 +306,7 @@
 - 2026-07-18：提交表单邮件、GSC 默认值、支付回跳、后台设置展示和 OAuth 回调继续统一到 `BASE_URL`，把“会生成外链”的后端入口也收口到同一站点基准，并通过本地 `pnpm run build`。
 - 2026-07-18：`lib/seo/constants.ts` 的默认站点配置改为直接使用统一的 `BASE_URL`，让默认 SEO 元数据与全站 canonical 基准保持一致，并通过本地 `pnpm run build`。
 - 2026-07-18：Stripe checkout 回跳地址移除 `request.nextUrl.origin` 兜底，统一只使用 canonical `BASE_URL`，避免支付成功 / 取消回跳在不同域名间漂移，并通过本地 `pnpm run build`。
+- 2026-07-18：middleware 继续收紧 host 归一化逻辑，确保 `www` 变体和非 HTTPS 访问都稳定 308 到 canonical 域名，减少 apex / www 之间的信号分裂，并通过本地 `pnpm run build`。
 - 2026-07-17：最新 28 天 GSC 再核对仍只有 876 impressions / 2 clicks，Top queries 仍以品牌和目录词为主，排名大多在 70-110 之外；当前继续按“收口弱页 + 强化核心页真实信号 + 观察索引恢复”主线推进。
 - 2026-07-17：`guides` 总览页底部的 Submit / Claim CTA 进一步降权，避免商业入口在总入口页抢走“先看指南、再做比较”的主路径注意力，并通过本地 `pnpm run build`。
 - 2026-07-17：首页里的 `Submit` / `Developer listing` 入口进一步降权，避免工具方入口压过“探索 / 榜单 / 分类”主路径，并通过本地 `pnpm run build`。
