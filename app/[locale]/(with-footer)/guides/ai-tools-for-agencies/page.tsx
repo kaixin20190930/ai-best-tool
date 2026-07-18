@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { CheckCircle2, ExternalLink, Layers3, Workflow } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -25,6 +26,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '面向代理商、服务团队和内容工作室的 AI 工具选型指南。'
         : 'A practical guide to AI tools for agencies, service teams, and content studios.',
+    ...getNoindexMetadata(),
   };
 }
 

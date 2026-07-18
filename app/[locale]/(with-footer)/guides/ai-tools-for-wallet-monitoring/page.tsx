@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { BellRing, ExternalLink, Layers3, Search } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -23,6 +24,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '面向钱包监控、地址提醒和异常观察的 AI 工具选型指南。'
         : 'A practical guide to AI tools for wallet monitoring, address alerts, and anomaly watching.',
+    ...getNoindexMetadata(),
   };
 }
 

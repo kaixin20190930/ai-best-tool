@@ -243,6 +243,7 @@
 - 2026-07-18：继续下调 `submit` 页里“先去认领页 / 查看价格页 / 联系付费入驻”的视觉优先级，把提交页的辅助入口收成中性按钮，同时保留表单本身的提交能力。
 - 2026-07-18：继续把一批薄指南页收回内部流量面，`ai-tools-for-content-creation / customer-support / defi-analytics / designers / meeting-notes / on-chain-analysis / prompt-testing / protocol-analytics / sales-prospecting / small-business` 已补 noindex，继续压缩低价值索引面。
 - 2026-07-18：继续把 `ai-tools-for-research / model-routing / api-observability / evals / sales` 这批薄指南页补 noindex，继续压缩研究、路由、观测和销售类内部决策页的索引面。
+- 2026-07-18：继续把 `ai-tools-for-agencies / crypto-research / web3-analysis / wallet-monitoring / dex-analytics / token-research` 这批薄指南页补 noindex，继续压缩代理、加密研究和链上分析类内部决策页的索引面。
 - 2026-07-17：继续下调 `developer/listing` 页里“去填写认领表单 / 去提交页 / 发邮件认领”的视觉优先级，把认领页从强 CTA 页收成中性分流页，同时保持 owner 确认与提交流程可用。
 - 2026-07-17：继续下调 `pricing` 页里 `Submit` / `Claim` / `Contact paid options` 的视觉优先级，把价格页从强转化页再往中性分流页收一层，同时保持跳转链路可用。
 - 2026-07-16：继续强化 `best-ai-tools/[topic]` 榜单页的决策顺序信号，让高意图主题榜单更像可继续比较的入口。

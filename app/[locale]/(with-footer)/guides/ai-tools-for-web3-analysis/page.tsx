@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { Activity, BarChart3, ExternalLink, Wallet } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -23,6 +24,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '面向链上分析、协议观察、DeFi 研究和钱包监控的 AI Web3 分析工具指南。'
         : 'A practical guide to AI tools for Web3 analysis, including on-chain research, protocol monitoring, DeFi analytics, and wallet tracking.',
+    ...getNoindexMetadata(),
   };
 }
 

@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { BarChart4, ExternalLink, Layers3, TrendingUp } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -22,6 +23,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '面向交易对分析、流动性观察和 DEX 研究的 AI 工具选型指南。'
         : 'A practical guide to AI tools for DEX analytics, pair analysis, and liquidity observation.',
+    ...getNoindexMetadata(),
   };
 }
 
