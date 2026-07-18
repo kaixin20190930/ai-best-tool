@@ -135,6 +135,34 @@ export default function BestAiToolsPage({ params: { locale } }: { params: { loca
               </div>
             </div>
 
+            <div className='mt-5 grid gap-4 md:grid-cols-3'>
+              {[
+                {
+                  title: isChinese ? '排序方法' : 'Ranking method',
+                  text: isChinese
+                    ? '优先把最贴近任务的主题放前面，再按最近核查和真实反馈微调。'
+                    : 'Put the closest task match first, then adjust with freshness and real feedback.',
+                },
+                {
+                  title: isChinese ? '选择标准' : 'Selection standard',
+                  text: isChinese
+                    ? '先看场景匹配、价格门槛、更新状态和是否有真实信号。'
+                    : 'Check use-case fit, pricing threshold, freshness, and real signals first.',
+                },
+                {
+                  title: isChinese ? '不放什么' : 'What stays out',
+                  text: isChinese
+                    ? '不把同义、太薄或还没补信号的主题混进第一层。'
+                    : 'Do not mix in thin, duplicate, or signal-poor topics at the first layer.',
+                },
+              ].map((item) => (
+                <div key={item.title} className='rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-sm'>
+                  <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>{item.text}</p>
+                </div>
+              ))}
+            </div>
+
             <div className='grid gap-4 sm:grid-cols-2'>
               {topListTopics.map((topic) => (
                 <Link
