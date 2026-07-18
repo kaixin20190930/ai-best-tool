@@ -194,7 +194,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     { name: 'Home', url: `${siteUrl}/${locale}` },
     { name: isChinese ? '指南总览' : 'Guides', url: `${siteUrl}/${locale}/guides` },
   ]);
-  const checkedAt = '2026-07-15';
+  const checkedAt = '2026-07-18';
 
   return (
     <>

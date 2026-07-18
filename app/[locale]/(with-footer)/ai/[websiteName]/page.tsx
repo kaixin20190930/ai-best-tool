@@ -1721,7 +1721,7 @@ export default async function Page({
     const compareAxes = decisionCompareAxesOverride.length > 0 ? decisionCompareAxesOverride : [comparisonSummary];
     const nextComparisonLinks = getNextComparisonLinks(categorySlug, dbTool?.tags || [], locale);
     const primaryComparisonLink = nextComparisonLinks[0] || null;
-    const checkedAt = '2026-07-15';
+    const checkedAt = '2026-07-18';
     const checkedAtLabel = new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
       year: 'numeric',
       month: 'short',

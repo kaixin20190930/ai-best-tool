@@ -121,7 +121,7 @@ export default async function BestAiToolsTopicPage({
     } else if (toolsResult.status === 'fulfilled') {
       toolCount = Number(toolsResult.value.total || 0);
     }
-    const checkedAt = '2026-07-15';
+    const checkedAt = '2026-07-18';
     const checkedAtLabel = new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
       year: 'numeric',
       month: 'short',

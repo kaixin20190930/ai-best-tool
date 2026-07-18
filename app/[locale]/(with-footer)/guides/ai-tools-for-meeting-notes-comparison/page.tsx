@@ -128,7 +128,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       },
     ],
   });
-  const checkedAt = '2026-07-15';
+  const checkedAt = '2026-07-18';
   const categoryCount = data.categories.length;
 
   return (
