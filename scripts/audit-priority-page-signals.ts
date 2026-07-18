@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 
 const baseUrl = (process.env.SEO_BASE_URL || 'https://aibesttool.com').replace(/\/$/, '');
+const strict = process.argv.includes('--strict');
 
 const priorityPaths = [
   '/',
@@ -103,6 +104,22 @@ async function main() {
     evidenceSignal: rows.filter((row) => row.evidenceSignal).length,
     actionSignal: rows.filter((row) => row.actionSignal).length,
   }, null, 2));
+
+  if (
+    strict &&
+    rows.some(
+      (row) =>
+        row.status === 'error' ||
+        row.status < 200 ||
+        row.status >= 400 ||
+        !row.canonical ||
+        !row.description ||
+        !row.evidenceSignal ||
+        !row.actionSignal,
+    )
+  ) {
+    throw new Error('Priority page signal audit failed in strict mode.');
+  }
 }
 
 main().catch((error) => {

@@ -34,13 +34,20 @@ jobs:
         run: |
           pnpm run seo:health-check || echo "health_check_failed=true" >> $GITHUB_OUTPUT
         continue-on-error: true
+
+      - name: Audit priority page signals
+        env:
+          SEO_BASE_URL: https://aibesttool.com
+        run: pnpm run seo:priority-page-signals -- --strict
       
       - name: Upload Health Check Report
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: seo-health-report-${{ github.run_number }}
-          path: .kiro/specs/seo-optimization/health-check-report.json
+          path: |
+            .kiro/specs/seo-optimization/health-check-report.json
+            docs/PRIORITY_PAGE_SIGNAL_AUDIT_CN.md
           retention-days: 30
       
       - name: Create Issue on Failure
