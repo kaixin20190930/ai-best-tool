@@ -31,6 +31,7 @@ export default async function AdminToolsPage({
   searchParams: {
     status?: string;
     claimStatus?: string;
+    editorial?: string;
     search?: string;
     collected?: string;
     needsMedia?: string;
@@ -51,6 +52,10 @@ export default async function AdminToolsPage({
   const claimStatus =
     searchParams.claimStatus && ['claimed', 'pending', 'rejected', 'unclaimed'].includes(searchParams.claimStatus)
       ? searchParams.claimStatus
+      : undefined;
+  const editorial =
+    searchParams.editorial === 'verified' || searchParams.editorial === 'pending'
+      ? searchParams.editorial
       : undefined;
   const { search } = searchParams;
   const collected = searchParams.collected === '1';
@@ -104,6 +109,7 @@ export default async function AdminToolsPage({
       getAdminTools({
         status,
         claimStatus,
+        editorial,
         search,
         collected,
         needsMedia,
@@ -229,6 +235,7 @@ export default async function AdminToolsPage({
       <AdminToolsFilters
         currentStatus={status}
         currentClaimStatus={claimStatus}
+        currentEditorial={editorial}
         currentSearch={search}
         currentCollected={collected}
         currentNeedsMedia={needsMedia}

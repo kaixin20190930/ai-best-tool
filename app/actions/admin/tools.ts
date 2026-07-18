@@ -683,6 +683,7 @@ function escapeHtml(value: string): string {
 export async function getAdminTools(filters?: {
   status?: string;
   claimStatus?: string;
+  editorial?: 'verified' | 'pending';
   search?: string;
   collected?: boolean;
   needsMedia?: boolean;
@@ -739,6 +740,12 @@ export async function getAdminTools(filters?: {
         params.push(claimStatus);
         paramIndex++;
       }
+    }
+
+    if (filters?.editorial === 'verified') {
+      query += ` AND NULLIF(BTRIM(features->'editorial'->>'reviewedAt'), '') IS NOT NULL`;
+    } else if (filters?.editorial === 'pending') {
+      query += ` AND NULLIF(BTRIM(features->'editorial'->>'reviewedAt'), '') IS NULL`;
     }
 
     if (filters?.collected) {

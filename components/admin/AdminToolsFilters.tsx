@@ -7,6 +7,7 @@ import { useRouter } from '@/app/navigation';
 interface AdminToolsFiltersProps {
   currentStatus?: string;
   currentClaimStatus?: string;
+  currentEditorial?: 'verified' | 'pending';
   currentSearch?: string;
   currentCollected?: boolean;
   currentNeedsMedia?: boolean;
@@ -24,6 +25,7 @@ interface AdminToolsFiltersProps {
 export default function AdminToolsFilters({
   currentStatus,
   currentClaimStatus,
+  currentEditorial,
   currentSearch,
   currentCollected,
   currentNeedsMedia,
@@ -44,6 +46,7 @@ export default function AdminToolsFilters({
 
     const nextStatus = updates.status ?? currentStatus;
     const nextClaimStatus = updates.claimStatus ?? currentClaimStatus;
+    const nextEditorial = updates.editorial ?? currentEditorial;
     const nextSearch = updates.search ?? currentSearch;
     const nextCollected = updates.collected ?? currentCollected;
     const nextNeedsMedia = updates.needsMedia ?? currentNeedsMedia;
@@ -70,6 +73,10 @@ export default function AdminToolsFilters({
 
     if (nextClaimStatus && nextClaimStatus !== 'all') {
       params.set('claimStatus', String(nextClaimStatus));
+    }
+
+    if (nextEditorial && nextEditorial !== 'all') {
+      params.set('editorial', String(nextEditorial));
     }
 
     if (nextCollected) {
@@ -192,6 +199,25 @@ export default function AdminToolsFilters({
               }`}
             >
               {claimStatus.label}
+            </button>
+          ))}
+        </div>
+
+        <div className='flex flex-wrap gap-2'>
+          {[
+            { value: 'all', label: 'All editorial states' },
+            { value: 'verified', label: 'Editorial verified' },
+            { value: 'pending', label: 'Editorial pending' },
+          ].map((editorial) => (
+            <button
+              key={editorial.value}
+              type='button'
+              onClick={() => router.push(buildPath({ editorial: editorial.value }))}
+              className={`rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
+                (currentEditorial || 'all') === editorial.value ? toneClasses.emerald : activeClasses
+              }`}
+            >
+              {editorial.label}
             </button>
           ))}
         </div>
