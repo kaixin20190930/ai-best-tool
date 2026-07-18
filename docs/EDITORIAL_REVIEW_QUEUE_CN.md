@@ -52,7 +52,7 @@ GSC 基线中的 `/ai/fathom` 和 `/ai/pipedream` 当前不在生产 `tools` 表
 2. 把复核字段接入该数据源，或明确将它们迁移为可管理的工具记录。
 3. 只有完成真实官方核查后，才填写日期、复核人和摘要。
 
-可重复执行数据源检查：
+可重复执行数据源检查。检查会分别报告“生产页面是否存在”和“当前连接数据库是否有可管理来源”：
 
 ```bash
 pnpm run seo:priority-source-audit
@@ -60,6 +60,8 @@ pnpm run seo:priority-source-audit -- --strict
 ```
 
 默认模式只输出警告，不阻断部署；`--strict` 用于发布前强制检查。
+
+2026-07-19 复核结果：Fathom / Pipedream 生产页面均可访问，但当前本地连接数据库和 legacy static source 都没有对应记录。因此不能把线上页面当作已进入 editorial 复核队列；后续需要核对 Vercel/Supabase 使用的生产数据库连接，或将这两个页面迁移到统一 `tools` 数据源。
 
 ## 复核记录格式
 

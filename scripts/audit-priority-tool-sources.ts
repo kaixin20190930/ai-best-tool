@@ -16,6 +16,19 @@ process.env.DATABASE_URL = process.env.DATABASE_URL || process.env.POSTGRES_URL 
 
 const PRIORITY_TOOL_SLUGS = ['fathom', 'pipedream'];
 const strict = process.argv.includes('--strict');
+const productionBaseUrl = (process.env.SEO_BASE_URL || 'https://aibesttool.com').replace(/\/$/, '');
+
+async function isProductionPageAvailable(slug: string) {
+  try {
+    const response = await fetch(`${productionBaseUrl}/en/ai/${slug}`, {
+      headers: { 'user-agent': 'ai-best-tool-priority-source-audit/1.0' },
+      redirect: 'follow',
+    });
+    return response.status >= 200 && response.status < 400;
+  } catch {
+    return false;
+  }
+}
 
 async function auditPriorityToolSources() {
   if (!process.env.DATABASE_URL) {
@@ -30,15 +43,18 @@ async function auditPriorityToolSources() {
     const databaseTool = await getToolByName(slug);
     const hasPublishedDatabaseSource = databaseTool?.status === 'published';
     const hasStaticSource = detailList.some((tool) => tool.name === slug);
+    const hasProductionPage = await isProductionPageAvailable(slug);
 
     if (hasPublishedDatabaseSource || hasStaticSource) {
       const source = hasPublishedDatabaseSource ? 'published database' : 'legacy static data';
-      console.log(`✅ ${slug}: ${source}`);
+      console.log(`✅ ${slug}: ${source}; production page ${hasProductionPage ? 'available' : 'unavailable'}`);
       continue;
     }
 
     missingSources.push(slug);
-    console.warn(`⚠️ ${slug}: no published database record or legacy static fallback`);
+    console.warn(
+      `⚠️ ${slug}: editorial source missing; production page ${hasProductionPage ? 'available' : 'unavailable'}`,
+    );
   }
 
   if (missingSources.length > 0) {
