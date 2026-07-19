@@ -1,0 +1,249 @@
+'use server';
+
+import { revalidatePath } from 'next/cache';
+import type { User } from '@supabase/supabase-js';
+
+import { requireAuth } from '@/lib/auth/middleware';
+import { isAdminUser } from '@/lib/auth/admin';
+import { createClient } from '@/lib/supabase/server';
+
+export type DistributionTaskStatus =
+  | 'planned'
+  | 'in_progress'
+  | 'submitted'
+  | 'live'
+  | 'follow_up'
+  | 'done'
+  | 'skipped';
+
+export interface DistributionDashboard {
+  workspace: { id: string; name: string; kind: string } | null;
+  project: { id: string; name: string; websiteUrl: string | null } | null;
+  channels: Array<{ id: string; name: string; channelType: string; instructions: string | null }>;
+  tasks: Array<{
+    id: string;
+    title: string;
+    status: DistributionTaskStatus;
+    priority: string;
+    taskType: string;
+    dueDate: string | null;
+    instructions: string | null;
+    channelName: string;
+    channelType: string;
+    liveUrl: string | null;
+    linkStatus: string | null;
+  }>;
+  metrics: { total: number; dueToday: number; live: number; followUp: number };
+}
+
+type AccessResult = { user: User; allowed: boolean };
+
+async function getDistributionAccess(): Promise<AccessResult> {
+  const user = await requireAuth();
+  if (isAdminUser(user)) return { user, allowed: true };
+
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from('distribution_entitlements')
+    .select('status, current_period_end')
+    .eq('user_id', user.id)
+    .maybeSingle();
+
+  const notExpired = !data?.current_period_end || new Date(data.current_period_end).getTime() > Date.now();
+  return { user, allowed: data?.status === 'active' && notExpired };
+}
+
+function normalize(value: FormDataEntryValue | null): string {
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+async function ensureDefaultProject(userId: string, email?: string, isOwnProject = false) {
+  const supabase = await createClient();
+  const { data: existingProject } = await supabase
+    .from('distribution_projects')
+    .select('id, name, website_url, workspace_id')
+    .eq('owner_id', userId)
+    .order('created_at', { ascending: true })
+    .limit(1)
+    .maybeSingle();
+
+  if (existingProject) return existingProject;
+
+  const workspaceName = email?.split('@')[0] || 'My distribution workspace';
+  const slug = workspaceName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 80) || 'workspace';
+  const { data: workspace, error: workspaceError } = await supabase
+    .from('distribution_workspaces')
+    .insert({ owner_id: userId, name: workspaceName, slug, kind: 'own' })
+    .select('id, name, kind')
+    .single();
+
+  if (workspaceError || !workspace) throw new Error(workspaceError?.message || 'Unable to create distribution workspace.');
+
+  const { data: project, error: projectError } = await supabase
+    .from('distribution_projects')
+    .insert({
+      workspace_id: workspace.id,
+      owner_id: userId,
+      name: 'My product',
+      website_url: isOwnProject ? 'https://aibesttool.com' : null,
+      description: 'Track human-led distribution, submissions, mentions, and follow-ups.',
+    })
+    .select('id, name, website_url, workspace_id')
+    .single();
+
+  if (projectError || !project) throw new Error(projectError?.message || 'Unable to create distribution project.');
+  return project;
+}
+
+export async function getDistributionDashboard(): Promise<
+  { success: true; access: true; data: DistributionDashboard } | { success: true; access: false; data: null } | { success: false; error: string }
+> {
+  try {
+    const { user, allowed } = await getDistributionAccess();
+    if (!allowed) return { success: true, access: false, data: null };
+
+    const supabase = await createClient();
+    const project = await ensureDefaultProject(user.id, user.email, isAdminUser(user));
+    const [{ data: workspace }, { data: channels, error: channelError }, { data: tasks, error: taskError }] = await Promise.all([
+      supabase.from('distribution_workspaces').select('id, name, kind').eq('id', project.workspace_id).single(),
+      supabase
+        .from('distribution_channels')
+        .select('id, name, channel_type, instructions')
+        .eq('is_active', true)
+        .order('sort_order', { ascending: true }),
+      supabase
+        .from('distribution_tasks')
+        .select('id, title, status, priority, task_type, due_date, instructions, distribution_channels(name, channel_type), distribution_results(live_url, link_status, created_at)')
+        .eq('project_id', project.id)
+        .order('due_date', { ascending: true, nullsFirst: false })
+        .order('created_at', { ascending: false }),
+    ]);
+
+    if (channelError || taskError) throw new Error(channelError?.message || taskError?.message || 'Unable to load distribution data.');
+
+    const today = new Date().toISOString().slice(0, 10);
+    const normalizedTasks = (tasks || []).map((task: any) => {
+      const latestResult = [...(task.distribution_results || [])].sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)))[0];
+      return {
+        id: task.id,
+        title: task.title,
+        status: task.status,
+        priority: task.priority,
+        taskType: task.task_type,
+        dueDate: task.due_date,
+        instructions: task.instructions,
+        channelName: task.distribution_channels?.name || 'Unknown channel',
+        channelType: task.distribution_channels?.channel_type || 'other',
+        liveUrl: latestResult?.live_url || null,
+        linkStatus: latestResult?.link_status || null,
+      };
+    });
+
+    return {
+      success: true,
+      access: true,
+      data: {
+        workspace,
+        project: { id: project.id, name: project.name, websiteUrl: project.website_url },
+        channels: (channels || []).map((channel: any) => ({
+          id: channel.id,
+          name: channel.name,
+          channelType: channel.channel_type,
+          instructions: channel.instructions,
+        })),
+        tasks: normalizedTasks,
+        metrics: {
+          total: normalizedTasks.length,
+          dueToday: normalizedTasks.filter((task) => task.dueDate === today && !['done', 'skipped'].includes(task.status)).length,
+          live: normalizedTasks.filter((task) => ['live', 'done'].includes(task.status)).length,
+          followUp: normalizedTasks.filter((task) => task.status === 'follow_up').length,
+        },
+      },
+    };
+  } catch (error) {
+    console.error('Distribution dashboard error:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'Unable to load distribution dashboard.' };
+  }
+}
+
+export async function createDistributionTask(formData: FormData): Promise<{ success: boolean; error?: string }> {
+  try {
+    const { user, allowed } = await getDistributionAccess();
+    if (!allowed) return { success: false, error: 'Distribution workspace access requires an active plan.' };
+
+    const title = normalize(formData.get('title'));
+    const channelId = normalize(formData.get('channelId'));
+    const priority = normalize(formData.get('priority')) || 'p1';
+    const dueDate = normalize(formData.get('dueDate')) || null;
+    const instructions = normalize(formData.get('instructions')) || null;
+    if (title.length < 3 || !channelId) return { success: false, error: 'Add a task title and channel.' };
+
+    const supabase = await createClient();
+    const project = await ensureDefaultProject(user.id, user.email, isAdminUser(user));
+    const { error } = await supabase.from('distribution_tasks').insert({
+      project_id: project.id,
+      owner_id: user.id,
+      channel_id: channelId,
+      title,
+      priority: ['p0', 'p1', 'p2'].includes(priority) ? priority : 'p1',
+      due_date: dueDate,
+      instructions,
+    });
+    if (error) throw error;
+    revalidatePath('/distribution');
+    return { success: true };
+  } catch (error) {
+    console.error('Create distribution task error:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'Unable to create task.' };
+  }
+}
+
+export async function updateDistributionTaskStatus(formData: FormData): Promise<{ success: boolean; error?: string }> {
+  try {
+    const { allowed } = await getDistributionAccess();
+    if (!allowed) return { success: false, error: 'Distribution workspace access requires an active plan.' };
+    const taskId = normalize(formData.get('taskId'));
+    const status = normalize(formData.get('status')) as DistributionTaskStatus;
+    if (!taskId || !['planned', 'in_progress', 'submitted', 'live', 'follow_up', 'done', 'skipped'].includes(status)) {
+      return { success: false, error: 'Invalid task status.' };
+    }
+    const supabase = await createClient();
+    const { error } = await supabase.from('distribution_tasks').update({ status, updated_at: new Date().toISOString() }).eq('id', taskId);
+    if (error) throw error;
+    revalidatePath('/distribution');
+    return { success: true };
+  } catch (error) {
+    console.error('Update distribution task error:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'Unable to update task.' };
+  }
+}
+
+export async function recordDistributionResult(formData: FormData): Promise<{ success: boolean; error?: string }> {
+  try {
+    const { user, allowed } = await getDistributionAccess();
+    if (!allowed) return { success: false, error: 'Distribution workspace access requires an active plan.' };
+    const taskId = normalize(formData.get('taskId'));
+    const liveUrl = normalize(formData.get('liveUrl')) || null;
+    const linkStatus = normalize(formData.get('linkStatus')) || 'unknown';
+    const notes = normalize(formData.get('notes')) || null;
+    if (!taskId) return { success: false, error: 'Task is required.' };
+    const supabase = await createClient();
+    const { error } = await supabase.from('distribution_results').insert({
+      task_id: taskId,
+      owner_id: user.id,
+      live_url: liveUrl,
+      link_status: ['unknown', 'pending', 'live', 'removed', 'nofollow', 'rejected'].includes(linkStatus) ? linkStatus : 'unknown',
+      checked_at: liveUrl ? new Date().toISOString() : null,
+      notes,
+    });
+    if (error) throw error;
+    if (liveUrl) {
+      await supabase.from('distribution_tasks').update({ status: 'live', updated_at: new Date().toISOString() }).eq('id', taskId);
+    }
+    revalidatePath('/distribution');
+    return { success: true };
+  } catch (error) {
+    console.error('Record distribution result error:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'Unable to record result.' };
+  }
+}

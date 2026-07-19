@@ -28,6 +28,7 @@
 - 2026-07-18：`ai-web3-tools` 已收口为 `noindex` 并 canonical 到 `ai-tools-for-web3`，主 Web3 指南页保持可索引入口，减少同义入口的索引重复，并通过本地 `pnpm run build`。
 - 2026-07-18：`how-to-choose-ai-tools` 已补齐最近验证日期，让总选型入口也带上同样的 freshness 信号，并通过本地 `pnpm run build`。
 - 2026-07-18：统一站点主 URL 规范化逻辑，强制去掉 `www` 后缀，并把首页、Explore、指南总览、comparison template 与核心 Web3 / Chatbot 指南页切到统一 canonical / breadcrumb 基址，并通过本地 `pnpm run build`。
+- 2026-07-19：开始实现独立的产品分发模块，目标是把 AI Directory、Alternative、Startup、Community、Newsletter、Blog、GitHub、Reddit 等渠道纳入可收费的任务、提交结果和外链复查工作台；当前先完成数据库迁移、权益边界和管理员可用的 MVP 页面，详见 [`docs/DISTRIBUTION_MODULE_PLAN_CN.md`](/Users/liukai/web/ai-best-tool/docs/DISTRIBUTION_MODULE_PLAN_CN.md)。
 - 2026-07-15：根据最近 28 天 GSC 基线，开始优先强化首页、榜单页和分类页的判断信号，新增价格 / 更新 / 风险信号层，帮助核心入口更像可决策页面
 - 2026-07-15：继续把曝光较高的工具详情页做成更强答案页，先补 `Fathom` / `Pipedream` 这类高曝光条目的定制信号层，降低“看到了但点不出来”的损耗
 - 2026-07-15：`robots.txt` 已回退为 `public/robots.txt` 静态文件，避免 metadata route 500；本地预览 `seo:validate` 已跑通 27/27，工具页非数据库工具的提示已改为通过

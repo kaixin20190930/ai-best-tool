@@ -12,6 +12,7 @@ const protectedRoutes = [
   '/favorites',
   '/settings',
   '/submit',
+  '/distribution',
 ];
 
 /**
