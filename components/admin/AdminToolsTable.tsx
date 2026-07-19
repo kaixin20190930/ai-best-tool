@@ -161,6 +161,15 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
     return missing;
   };
 
+  const isEditorialStale = (tool: AdminTool) => {
+    const editorial = getNestedRecord(getFeatureRecord(tool).editorial);
+    const reviewedAt = typeof editorial.reviewedAt === 'string' ? editorial.reviewedAt.trim() : '';
+    if (!reviewedAt || !hasEditorialVerification(tool)) return false;
+
+    const reviewedTime = new Date(reviewedAt).getTime();
+    return Number.isFinite(reviewedTime) && Date.now() - reviewedTime >= 90 * 24 * 60 * 60 * 1000;
+  };
+
   const getRejectionReason = (tool: AdminTool) => {
     const review = getSubmissionReview(tool);
     return typeof review.rejectionReason === 'string' && review.rejectionReason.trim().length > 0
@@ -227,7 +236,9 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
       });
     }
 
-    if (hasEditorialVerification(tool)) {
+    if (isEditorialStale(tool)) {
+      signals.push({ label: 'Editorial stale', className: 'bg-orange-50 text-orange-700' });
+    } else if (hasEditorialVerification(tool)) {
       signals.push({ label: 'Editorial verified', className: 'bg-emerald-50 text-emerald-700' });
     } else {
       signals.push({ label: 'Editorial pending', className: 'bg-amber-50 text-amber-700' });

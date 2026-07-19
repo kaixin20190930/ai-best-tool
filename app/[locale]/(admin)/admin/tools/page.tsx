@@ -54,7 +54,7 @@ export default async function AdminToolsPage({
       ? searchParams.claimStatus
       : undefined;
   const editorial =
-    searchParams.editorial === 'verified' || searchParams.editorial === 'pending'
+    searchParams.editorial === 'verified' || searchParams.editorial === 'pending' || searchParams.editorial === 'stale'
       ? searchParams.editorial
       : undefined;
   const { search } = searchParams;

@@ -7,7 +7,7 @@ import { useRouter } from '@/app/navigation';
 interface AdminToolsFiltersProps {
   currentStatus?: string;
   currentClaimStatus?: string;
-  currentEditorial?: 'verified' | 'pending';
+  currentEditorial?: 'verified' | 'pending' | 'stale';
   currentSearch?: string;
   currentCollected?: boolean;
   currentNeedsMedia?: boolean;
@@ -207,6 +207,7 @@ export default function AdminToolsFilters({
           {[
             { value: 'all', label: 'All editorial states' },
             { value: 'verified', label: 'Editorial verified' },
+            { value: 'stale', label: 'Editorial stale (90d+)' },
             { value: 'pending', label: 'Editorial pending' },
           ].map((editorial) => (
             <button

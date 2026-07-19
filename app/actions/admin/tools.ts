@@ -683,7 +683,7 @@ function escapeHtml(value: string): string {
 export async function getAdminTools(filters?: {
   status?: string;
   claimStatus?: string;
-  editorial?: 'verified' | 'pending';
+  editorial?: 'verified' | 'pending' | 'stale';
   search?: string;
   collected?: boolean;
   needsMedia?: boolean;
@@ -742,15 +742,18 @@ export async function getAdminTools(filters?: {
       }
     }
 
+    const completeEditorialSql = `
+      NULLIF(BTRIM(features->'editorial'->>'reviewedAt'), '') IS NOT NULL
+      AND NULLIF(BTRIM(features->'editorial'->>'reviewedBy'), '') IS NOT NULL
+      AND NULLIF(BTRIM(features->'editorial'->>'sourceUrl'), '') ~* '^https?://'
+      AND (
+        NULLIF(BTRIM(features->'editorial'->'summary'->>'en'), '') IS NOT NULL
+        OR NULLIF(BTRIM(features->'editorial'->'summary'->>'zh'), '') IS NOT NULL
+      )`;
+
     if (filters?.editorial === 'verified') {
       query += `
-        AND NULLIF(BTRIM(features->'editorial'->>'reviewedAt'), '') IS NOT NULL
-        AND NULLIF(BTRIM(features->'editorial'->>'reviewedBy'), '') IS NOT NULL
-        AND NULLIF(BTRIM(features->'editorial'->>'sourceUrl'), '') ~* '^https?://'
-        AND (
-          NULLIF(BTRIM(features->'editorial'->'summary'->>'en'), '') IS NOT NULL
-          OR NULLIF(BTRIM(features->'editorial'->'summary'->>'zh'), '') IS NOT NULL
-        )`;
+        AND ${completeEditorialSql}`;
     } else if (filters?.editorial === 'pending') {
       query += `
         AND (
@@ -763,6 +766,10 @@ export async function getAdminTools(filters?: {
             AND NULLIF(BTRIM(features->'editorial'->'summary'->>'zh'), '') IS NULL
           )
         )`;
+    } else if (filters?.editorial === 'stale') {
+      query += `
+        AND ${completeEditorialSql}
+        AND BTRIM(features->'editorial'->>'reviewedAt') < TO_CHAR(CURRENT_DATE - INTERVAL '90 days', 'YYYY-MM-DD')`;
     }
 
     if (filters?.collected) {
