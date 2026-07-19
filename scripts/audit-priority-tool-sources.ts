@@ -23,6 +23,23 @@ const PRIORITY_TOOL_SLUGS = ['fathom', 'pipedream'];
 const strict = process.argv.includes('--strict');
 const productionBaseUrl = (process.env.SEO_BASE_URL || 'https://aibesttool.com').replace(/\/$/, '');
 
+function getRecord(value: unknown): Record<string, unknown> {
+  return value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
+}
+
+function hasCompleteEditorialEvidence(tool: unknown) {
+  const features = getRecord(getRecord(tool).features);
+  const editorial = getRecord(features.editorial);
+  const reviewedAt = typeof editorial.reviewedAt === 'string' && editorial.reviewedAt.trim();
+  const reviewedBy = typeof editorial.reviewedBy === 'string' && editorial.reviewedBy.trim();
+  const sourceUrl = typeof editorial.sourceUrl === 'string' && /^https?:\/\//i.test(editorial.sourceUrl.trim());
+  const summary = getRecord(editorial.summary);
+  const summaryPresent =
+    (typeof summary.en === 'string' && summary.en.trim()) || (typeof summary.zh === 'string' && summary.zh.trim());
+
+  return Boolean(reviewedAt && reviewedBy && sourceUrl && summaryPresent);
+}
+
 async function isProductionPageAvailable(slug: string) {
   try {
     const response = await fetch(`${productionBaseUrl}/en/ai/${slug}`, {
@@ -40,6 +57,7 @@ async function auditPriorityToolSources() {
   if (!hasDatabase) console.warn('⚠️ DATABASE_URL is not set; database source checks are unavailable.');
 
   const missingSources: string[] = [];
+  const incompleteEditorial: string[] = [];
 
   for (const slug of PRIORITY_TOOL_SLUGS) {
     const databaseTool = hasDatabase ? await getToolByName(slug) : null;
@@ -49,7 +67,14 @@ async function auditPriorityToolSources() {
 
     if (hasPublishedDatabaseSource || hasStaticSource) {
       const source = hasPublishedDatabaseSource ? 'published database' : 'legacy static data';
-      console.log(`✅ ${slug}: ${source}; production page ${hasProductionPage ? 'available' : 'unavailable'}`);
+      if (hasPublishedDatabaseSource && !hasCompleteEditorialEvidence(databaseTool)) {
+        incompleteEditorial.push(slug);
+        console.warn(
+          `⚠️ ${slug}: ${source}; editorial evidence incomplete; production page ${hasProductionPage ? 'available' : 'unavailable'}`,
+        );
+      } else {
+        console.log(`✅ ${slug}: ${source}; editorial evidence complete; production page ${hasProductionPage ? 'available' : 'unavailable'}`);
+      }
       continue;
     }
 
@@ -62,13 +87,17 @@ async function auditPriorityToolSources() {
   if (missingSources.length > 0) {
     console.warn(`\nMissing priority tool sources: ${missingSources.join(', ')}`);
     console.warn('Do not mark these pages editorially verified until their source is restored.');
-    if (strict) {
-      process.exitCode = 1;
-    }
-    return;
   }
 
-  console.log('\n✅ All priority tool slugs have a published source.');
+  if (incompleteEditorial.length > 0) {
+    console.warn(`\nIncomplete priority editorial evidence: ${incompleteEditorial.join(', ')}`);
+    console.warn('Do not expose these pages as editorially verified until date, reviewer, summary, and HTTP(S) source URL are complete.');
+    if (strict) process.exitCode = 1;
+  }
+
+  if (missingSources.length === 0 && incompleteEditorial.length === 0) {
+    console.log('\n✅ All priority tool slugs have a published source and complete editorial evidence.');
+  }
 }
 
 auditPriorityToolSources()
