@@ -5,6 +5,7 @@ import { ExternalLink, Link2, Plus, Radar, Send, ShieldCheck } from 'lucide-reac
 
 import {
   createDistributionTask,
+  createDistributionProject,
   recordDistributionResult,
   seedDistributionStarterTasks,
   updateDistributionTaskStatus,
@@ -13,8 +14,9 @@ import {
 
 const statusOptions = ['planned', 'in_progress', 'submitted', 'live', 'follow_up', 'done', 'skipped'];
 
-export default function DistributionDashboard({ data }: { data: DistributionDashboardData }) {
+export default function DistributionDashboard({ data, locale }: { data: DistributionDashboardData; locale: string }) {
   const [showForm, setShowForm] = useState(false);
+  const [showProjectForm, setShowProjectForm] = useState(false);
 
   return (
     <div className='space-y-8'>
@@ -51,6 +53,35 @@ export default function DistributionDashboard({ data }: { data: DistributionDash
           ))}
         </div>
       </section>
+
+      <section className='flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:flex-row sm:items-end sm:justify-between'>
+        <label className='block min-w-0 flex-1 text-xs font-bold uppercase tracking-[0.16em] text-slate-500'>
+          Active project
+          <select
+            value={data.project?.id || ''}
+            onChange={(event) => {
+              const url = new URL(window.location.href);
+              url.searchParams.set('project', event.target.value);
+              window.location.href = url.toString();
+            }}
+            className='mt-2 block w-full max-w-xl rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-semibold normal-case tracking-normal text-slate-800 outline-none ring-cyan-400 focus:ring-2'
+          >
+            {data.projects.map((project) => <option key={project.id} value={project.id}>{project.name}{project.websiteUrl ? ` · ${project.websiteUrl}` : ''}</option>)}
+          </select>
+        </label>
+        <button type='button' onClick={() => setShowProjectForm((visible) => !visible)} className='rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-bold text-slate-700 hover:border-cyan-300 hover:text-cyan-700'>+ New project</button>
+      </section>
+
+      {showProjectForm ? (
+        <form action={createDistributionProject} className='rounded-2xl border border-cyan-200 bg-cyan-50/60 p-5'>
+          <div className='grid gap-4 sm:grid-cols-2'>
+            <label className='text-sm font-semibold text-slate-700'>Project name<input required name='name' placeholder='Client or product name' className='mt-2 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 font-normal outline-none focus:ring-2 focus:ring-cyan-400' /></label>
+            <label className='text-sm font-semibold text-slate-700'>Website URL<input name='websiteUrl' type='url' placeholder='https://example.com' className='mt-2 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 font-normal outline-none focus:ring-2 focus:ring-cyan-400' /></label>
+          </div>
+          <input type='hidden' name='locale' value={locale} />
+          <button className='mt-4 rounded-xl bg-slate-950 px-4 py-2.5 text-sm font-bold text-white hover:bg-slate-800'>Create project</button>
+        </form>
+      ) : null}
 
       {showForm ? (
         <form action={createDistributionTask} className='rounded-2xl border border-cyan-200 bg-cyan-50/60 p-5'>

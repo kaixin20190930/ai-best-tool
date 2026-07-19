@@ -4,8 +4,8 @@ import { redirect } from 'next/navigation';
 import DistributionDashboard from '@/components/distribution/DistributionDashboard';
 import { getDistributionDashboard } from '@/app/actions/distribution';
 
-export default async function DistributionPage({ params }: { params: { locale: string } }) {
-  const result = await getDistributionDashboard();
+export default async function DistributionPage({ params, searchParams }: { params: { locale: string }; searchParams: { project?: string } }) {
+  const result = await getDistributionDashboard(searchParams.project);
 
   if (!result.success) {
     if (result.error === 'Unauthorized') {
@@ -28,5 +28,5 @@ export default async function DistributionPage({ params }: { params: { locale: s
     );
   }
 
-  return <div className='w-full px-5 py-10 sm:px-8 lg:px-12'><DistributionDashboard data={result.data} /></div>;
+  return <div className='w-full px-5 py-10 sm:px-8 lg:px-12'><DistributionDashboard data={result.data} locale={params.locale} /></div>;
 }

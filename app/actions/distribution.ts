@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 import type { User } from '@supabase/supabase-js';
 
 import { requireAuth } from '@/lib/auth/middleware';
@@ -18,6 +19,7 @@ export type DistributionTaskStatus =
 
 export interface DistributionDashboard {
   workspace: { id: string; name: string; kind: string } | null;
+  projects: Array<{ id: string; name: string; websiteUrl: string | null; status: string }>;
   project: { id: string; name: string; websiteUrl: string | null } | null;
   channels: Array<{ id: string; name: string; channelType: string; instructions: string | null }>;
   tasks: Array<{
@@ -112,7 +114,7 @@ async function ensureDefaultProject(userId: string, email?: string, isOwnProject
   return project;
 }
 
-export async function getDistributionDashboard(): Promise<
+export async function getDistributionDashboard(projectId?: string): Promise<
   { success: true; access: true; data: DistributionDashboard } | { success: true; access: false; data: null } | { success: false; error: string }
 > {
   try {
@@ -120,7 +122,14 @@ export async function getDistributionDashboard(): Promise<
     if (!allowed) return { success: true, access: false, data: null };
 
     const supabase = await createClient();
-    const project = await ensureDefaultProject(user.id, user.email, isAdminUser(user));
+    const defaultProject = await ensureDefaultProject(user.id, user.email, isAdminUser(user));
+    const { data: projects, error: projectsError } = await supabase
+      .from('distribution_projects')
+      .select('id, name, website_url, status, workspace_id')
+      .eq('owner_id', user.id)
+      .order('created_at', { ascending: true });
+    if (projectsError) throw projectsError;
+    const project = (projects || []).find((item: any) => item.id === projectId) || defaultProject;
     const [{ data: workspace }, { data: channels, error: channelError }, { data: tasks, error: taskError }] = await Promise.all([
       supabase.from('distribution_workspaces').select('id, name, kind').eq('id', project.workspace_id).single(),
       supabase
@@ -161,6 +170,12 @@ export async function getDistributionDashboard(): Promise<
       access: true,
       data: {
         workspace,
+        projects: (projects || []).map((item: any) => ({
+          id: item.id,
+          name: item.name,
+          websiteUrl: item.website_url,
+          status: item.status,
+        })),
         project: { id: project.id, name: project.name, websiteUrl: project.website_url },
         channels: (channels || []).map((channel: any) => ({
           id: channel.id,
@@ -180,6 +195,48 @@ export async function getDistributionDashboard(): Promise<
   } catch (error) {
     console.error('Distribution dashboard error:', error);
     return { success: false, error: error instanceof Error ? error.message : 'Unable to load distribution dashboard.' };
+  }
+}
+
+export async function createDistributionProject(formData: FormData): Promise<{ success: boolean; error?: string }> {
+  try {
+    const { user, allowed } = await getDistributionAccess();
+    if (!allowed) return { success: false, error: 'Distribution workspace access requires an active plan.' };
+    const name = normalize(formData.get('name'));
+    const websiteUrl = normalize(formData.get('websiteUrl')) || null;
+    const locale = normalize(formData.get('locale')) || 'en';
+    if (name.length < 2) return { success: false, error: 'Project name is required.' };
+    if (websiteUrl) {
+      try {
+        const parsed = new URL(/^https?:\/\//i.test(websiteUrl) ? websiteUrl : `https://${websiteUrl}`);
+        if (!parsed.hostname) return { success: false, error: 'Enter a valid website URL.' };
+      } catch {
+        return { success: false, error: 'Enter a valid website URL.' };
+      }
+    }
+
+    const supabase = await createClient();
+    const workspaceProject = await ensureDefaultProject(user.id, user.email, isAdminUser(user));
+    const { data: project, error } = await supabase
+      .from('distribution_projects')
+      .insert({
+        workspace_id: workspaceProject.workspace_id,
+        owner_id: user.id,
+        name,
+        website_url: websiteUrl,
+        description: `Distribution project for ${name}.`,
+      })
+      .select('id')
+      .single();
+    if (error || !project) throw error || new Error('Unable to create project.');
+    revalidatePath('/[locale]/distribution', 'page');
+    redirect(`/${locale}/distribution?project=${project.id}`);
+  } catch (error) {
+    if (error && typeof error === 'object' && 'digest' in error && String((error as { digest?: string }).digest).startsWith('NEXT_REDIRECT')) {
+      throw error;
+    }
+    console.error('Create distribution project error:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'Unable to create project.' };
   }
 }
 
