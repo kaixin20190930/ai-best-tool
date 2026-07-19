@@ -5,7 +5,8 @@ import dotenv from 'dotenv';
 import { detailList } from '../lib/data';
 import { getToolByName } from '../lib/services/tools';
 
-const envPaths = process.env.SEO_AUDIT_ENV === 'local' ? ['.env.local', '.env.production'] : ['.env.production', '.env.local'];
+const isLocalAudit = process.env.SEO_AUDIT_ENV === 'local';
+const envPaths = isLocalAudit ? ['.env.local'] : ['.env.production'];
 
 for (const envPath of envPaths) {
   const resolved = path.join(process.cwd(), envPath);
@@ -14,7 +15,9 @@ for (const envPath of envPaths) {
   }
 }
 
-process.env.DATABASE_URL = process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.DATABASE_URL_UNPOOLED;
+if (isLocalAudit && !process.env.DATABASE_URL) {
+  process.env.DATABASE_URL = process.env.POSTGRES_URL || process.env.DATABASE_URL_UNPOOLED || '';
+}
 
 const PRIORITY_TOOL_SLUGS = ['fathom', 'pipedream'];
 const strict = process.argv.includes('--strict');
@@ -33,16 +36,13 @@ async function isProductionPageAvailable(slug: string) {
 }
 
 async function auditPriorityToolSources() {
-  if (!process.env.DATABASE_URL) {
-    console.warn('⚠️ DATABASE_URL is not set; skipped database source checks.');
-    process.exitCode = strict ? 1 : 0;
-    return;
-  }
+  const hasDatabase = Boolean(process.env.DATABASE_URL);
+  if (!hasDatabase) console.warn('⚠️ DATABASE_URL is not set; database source checks are unavailable.');
 
   const missingSources: string[] = [];
 
   for (const slug of PRIORITY_TOOL_SLUGS) {
-    const databaseTool = await getToolByName(slug);
+    const databaseTool = hasDatabase ? await getToolByName(slug) : null;
     const hasPublishedDatabaseSource = databaseTool?.status === 'published';
     const hasStaticSource = detailList.some((tool) => tool.name === slug);
     const hasProductionPage = await isProductionPageAvailable(slug);

@@ -335,8 +335,8 @@
 - 2026-07-19：将 `seo:priority-page-signals -- --strict` 接入每日 SEO Monitoring，并上传核心页审计报告；后续 canonical、description、evidence/freshness 或 action signal 回归会直接让监控任务失败并留下 artifact。
 - 2026-07-19：修正 SEO Monitoring 的调度缺口，补上周一周度审计和每月 1 日性能审计对应的 cron；此前 workflow 只有每日 cron，周/月 job 条件虽存在但不会自动触发。
 - 2026-07-19：为 SEO Monitoring 增加 `main` push 触发，代码或 SEO 策略更新后立即执行 daily health 与核心页信号检查，避免等待下一个日程窗口。
-- 2026-07-19：扩展 priority source audit，分别检查生产页面可用性与 editorial 管理源；确认 Fathom/Pipedream 线上可访问，但当前本地数据库连接没有对应记录，暂不把它们标记为已复核，下一步核对生产数据源。
-- 2026-07-19：修正 priority source audit 默认环境加载顺序，默认优先 `.env.production`，仅在显式设置 `SEO_AUDIT_ENV=local` 时检查本地库，避免 `.env.local` 抢先导致生产数据源误判。
+- 2026-07-19：扩展 priority source audit，分别检查生产页面可用性与 editorial 管理源；确认 Fathom/Pipedream 线上可访问，但项目 `.env.production` 未配置数据库连接，本次不对生产 DB 记录做推断，暂不把它们标记为已复核。
+- 2026-07-19：修正 priority source audit 默认环境加载范围，默认只读取 `.env.production`，仅在显式设置 `SEO_AUDIT_ENV=local` 时读取 `.env.local`，避免把本地库误判为生产数据源。
 - 2026-07-17：最新 28 天 GSC 再核对仍只有 876 impressions / 2 clicks，Top queries 仍以品牌和目录词为主，排名大多在 70-110 之外；当前继续按“收口弱页 + 强化核心页真实信号 + 观察索引恢复”主线推进。
 - 2026-07-17：`guides` 总览页底部的 Submit / Claim CTA 进一步降权，避免商业入口在总入口页抢走“先看指南、再做比较”的主路径注意力，并通过本地 `pnpm run build`。
 - 2026-07-17：首页里的 `Submit` / `Developer listing` 入口进一步降权，避免工具方入口压过“探索 / 榜单 / 分类”主路径，并通过本地 `pnpm run build`。
