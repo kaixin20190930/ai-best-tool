@@ -61,7 +61,7 @@ pnpm run seo:priority-source-audit -- --strict
 
 默认模式只输出警告，不阻断部署；`--strict` 用于发布前强制检查。
 
-2026-07-19 复核结果：Fathom / Pipedream 生产页面均可访问，但当前本地连接数据库和 legacy static source 都没有对应记录。因此不能把线上页面当作已进入 editorial 复核队列；后续需要核对 Vercel/Supabase 使用的生产数据库连接，或将这两个页面迁移到统一 `tools` 数据源。
+2026-07-19 复核结果：Fathom / Pipedream 生产页面均可访问，但默认生产配置对应的数据库仍没有对应记录。因此不能把线上页面当作已进入 editorial 复核队列；后续需要核对 Vercel/Supabase 使用的生产数据库连接，或将这两个页面迁移到统一 `tools` 数据源。若要检查本地库，显式设置 `SEO_AUDIT_ENV=local`。
 
 ## 复核记录格式
 

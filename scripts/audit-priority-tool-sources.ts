@@ -5,7 +5,9 @@ import dotenv from 'dotenv';
 import { detailList } from '../lib/data';
 import { getToolByName } from '../lib/services/tools';
 
-for (const envPath of ['.env.local', '.env.production']) {
+const envPaths = process.env.SEO_AUDIT_ENV === 'local' ? ['.env.local', '.env.production'] : ['.env.production', '.env.local'];
+
+for (const envPath of envPaths) {
   const resolved = path.join(process.cwd(), envPath);
   if (fs.existsSync(resolved)) {
     dotenv.config({ path: resolved, override: false });
