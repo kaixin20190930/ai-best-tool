@@ -69,6 +69,23 @@ jobs:
             echo "$ROUTE http_code=$HTTP_CODE"
             test "$HTTP_CODE" -ge 200
             test "$HTTP_CODE" -lt 400
+
+      - name: Check canonical host redirects
+        run: |
+          set -euo pipefail
+          BASE_URL="${MONITOR_BASE_URL%/}"
+          CANONICAL_URL="${BASE_URL}/cn"
+
+          for SOURCE_URL in "https://www.aibesttool.com/cn" "http://aibesttool.com/cn"; do
+            REDIRECT=$(curl -sS --retry 3 --retry-delay 2 --retry-all-errors \
+              --connect-timeout 10 --max-time 30 \
+              -o /dev/null -w '%{http_code} %{redirect_url}' "$SOURCE_URL")
+            echo "$SOURCE_URL -> $REDIRECT"
+            CODE="${REDIRECT%% *}"
+            LOCATION="${REDIRECT#* }"
+            test "$CODE" = "301" -o "$CODE" = "302" -o "$CODE" = "307" -o "$CODE" = "308"
+            test "$LOCATION" = "$CANONICAL_URL"
+          done
           done
 
       - name: Check robots sitemap directive

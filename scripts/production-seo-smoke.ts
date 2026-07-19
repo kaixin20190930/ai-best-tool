@@ -17,6 +17,23 @@ async function fetchText(path: string) {
   }
 }
 
+async function checkCanonicalRedirect(sourceUrl: string, expectedPath: string) {
+  const response = await fetch(sourceUrl, {
+    headers: { 'user-agent': 'ai-best-tool-seo-smoke/1.0' },
+    redirect: 'manual',
+  });
+  const location = response.headers.get('location');
+  const expectedUrl = new URL(expectedPath, baseUrl).toString();
+  const redirectedUrl = location ? new URL(location, sourceUrl).toString() : null;
+
+  return {
+    status: response.status,
+    location: redirectedUrl,
+    passes:
+      [301, 302, 307, 308].includes(response.status) && redirectedUrl === expectedUrl,
+  };
+}
+
 async function runSmokeCheck() {
   let failures = 0;
 
@@ -32,6 +49,24 @@ async function runSmokeCheck() {
     } catch (error) {
       failures++;
       console.error(`❌ ${path}: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  for (const [label, sourceUrl, expectedPath] of [
+    ['www', 'https://www.aibesttool.com/cn', '/cn'],
+    ['http', 'http://aibesttool.com/cn', '/cn'],
+  ] as const) {
+    try {
+      const redirect = await checkCanonicalRedirect(sourceUrl, expectedPath);
+      if (redirect.passes) {
+        console.log(`✅ ${label} canonical redirect: ${redirect.status} -> ${redirect.location}`);
+      } else {
+        failures++;
+        console.error(`❌ ${label} canonical redirect: ${redirect.status} -> ${redirect.location || 'missing location'}`);
+      }
+    } catch (error) {
+      failures++;
+      console.error(`❌ ${label} canonical redirect: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 
