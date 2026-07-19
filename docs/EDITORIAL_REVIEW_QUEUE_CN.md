@@ -10,6 +10,7 @@
 - 完整 editorial 复核：0 条。
 - 部分 editorial 记录：0 条。
 - 当前后台可通过 `Editorial pending` 筛选查看待处理记录。
+- 列表行会直接显示缺失的复核字段，按 `review date / reviewer / summary / evidence URL` 补齐即可。
 - 复核完成标准：复核日期、复核人、至少一份英文或中文摘要、证据来源 URL 齐全。
 
 ## 数据库工具队列

@@ -143,6 +143,24 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
     return Boolean(reviewedAt && reviewedBy && /^https?:\/\//i.test(sourceUrl) && (summaryEn || summaryZh));
   };
 
+  const getEditorialMissing = (tool: AdminTool) => {
+    const editorial = getNestedRecord(getFeatureRecord(tool).editorial);
+    const missing: string[] = [];
+    const reviewedAt = typeof editorial.reviewedAt === 'string' ? editorial.reviewedAt.trim() : '';
+    const reviewedBy = typeof editorial.reviewedBy === 'string' ? editorial.reviewedBy.trim() : '';
+    const sourceUrl = typeof editorial.sourceUrl === 'string' ? editorial.sourceUrl.trim() : '';
+    const summary = getNestedRecord(editorial.summary);
+    const summaryEn = typeof summary.en === 'string' ? summary.en.trim() : '';
+    const summaryZh = typeof summary.zh === 'string' ? summary.zh.trim() : '';
+
+    if (!reviewedAt) missing.push('review date');
+    if (!reviewedBy) missing.push('reviewer');
+    if (!summaryEn && !summaryZh) missing.push('summary');
+    if (!/^https?:\/\//i.test(sourceUrl)) missing.push('evidence URL');
+
+    return missing;
+  };
+
   const getRejectionReason = (tool: AdminTool) => {
     const review = getSubmissionReview(tool);
     return typeof review.rejectionReason === 'string' && review.rejectionReason.trim().length > 0
@@ -209,11 +227,18 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
       });
     }
 
-    signals.push(
-      hasEditorialVerification(tool)
-        ? { label: 'Editorial verified', className: 'bg-emerald-50 text-emerald-700' }
-        : { label: 'Editorial pending', className: 'bg-amber-50 text-amber-700' },
-    );
+    if (hasEditorialVerification(tool)) {
+      signals.push({ label: 'Editorial verified', className: 'bg-emerald-50 text-emerald-700' });
+    } else {
+      signals.push({ label: 'Editorial pending', className: 'bg-amber-50 text-amber-700' });
+      const editorialMissing = getEditorialMissing(tool);
+      if (editorialMissing.length > 0) {
+        signals.push({
+          label: `Editorial missing: ${editorialMissing.join(', ')}`,
+          className: 'bg-orange-50 text-orange-700',
+        });
+      }
+    }
 
     if (commercial.fastTrackRequested === true) {
       signals.push({
