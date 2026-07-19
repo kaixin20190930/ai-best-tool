@@ -24,6 +24,8 @@ export interface DistributionDashboard {
   projects: Array<{ id: string; name: string; websiteUrl: string | null; status: string }>;
   project: { id: string; name: string; websiteUrl: string | null } | null;
   channels: Array<{ id: string; name: string; channelType: string; instructions: string | null }>;
+  templates: Array<{ channelId: string; titleTemplate: string | null; descriptionTemplate: string | null; maxTitleLength: number | null; maxDescriptionLength: number | null; requiredFields: string[] }>;
+  links: Array<{ id: string; name: string; channelName: string; fullUrl: string; createdAt: string }>;
   tasks: Array<{
     id: string;
     title: string;
@@ -139,13 +141,15 @@ export async function getDistributionDashboard(projectId?: string): Promise<
       .order('created_at', { ascending: true });
     if (projectsError) throw projectsError;
     const project = (projects || []).find((item: any) => item.id === projectId) || defaultProject;
-    const [{ data: workspace }, { data: channels, error: channelError }, { data: tasks, error: taskError }] = await Promise.all([
+    const [{ data: workspace }, { data: channels, error: channelError }, { data: templates, error: templateError }, { data: links, error: linkError }, { data: tasks, error: taskError }] = await Promise.all([
       supabase.from('distribution_workspaces').select('id, name, kind').eq('id', project.workspace_id).single(),
       supabase
         .from('distribution_channels')
         .select('id, name, channel_type, instructions')
         .eq('is_active', true)
         .order('sort_order', { ascending: true }),
+      supabase.from('distribution_channel_templates').select('channel_id, title_template, description_template, max_title_length, max_description_length, required_fields'),
+      supabase.from('distribution_links').select('id, name, full_url, created_at, distribution_channels(name)').eq('project_id', project.id).order('created_at', { ascending: false }).limit(20),
       supabase
         .from('distribution_tasks')
         .select('id, title, status, priority, task_type, due_date, instructions, distribution_channels(name, channel_type), distribution_results(live_url, link_status, created_at)')
@@ -154,7 +158,7 @@ export async function getDistributionDashboard(projectId?: string): Promise<
         .order('created_at', { ascending: false }),
     ]);
 
-    if (channelError || taskError) throw new Error(channelError?.message || taskError?.message || 'Unable to load distribution data.');
+    if (channelError || templateError || linkError || taskError) throw new Error(channelError?.message || templateError?.message || linkError?.message || taskError?.message || 'Unable to load distribution data.');
 
     const today = new Date().toISOString().slice(0, 10);
     const normalizedTasks = (tasks || []).map((task: any) => {
@@ -194,6 +198,21 @@ export async function getDistributionDashboard(projectId?: string): Promise<
           channelType: channel.channel_type,
           instructions: channel.instructions,
         })),
+        templates: (templates || []).map((template: any) => ({
+          channelId: template.channel_id,
+          titleTemplate: template.title_template,
+          descriptionTemplate: template.description_template,
+          maxTitleLength: template.max_title_length,
+          maxDescriptionLength: template.max_description_length,
+          requiredFields: template.required_fields || [],
+        })),
+        links: (links || []).map((link: any) => ({
+          id: link.id,
+          name: link.name,
+          channelName: link.distribution_channels?.name || 'Unknown channel',
+          fullUrl: link.full_url,
+          createdAt: link.created_at,
+        })),
         tasks: normalizedTasks,
         metrics: {
           total: normalizedTasks.length,
@@ -206,6 +225,50 @@ export async function getDistributionDashboard(projectId?: string): Promise<
   } catch (error) {
     console.error('Distribution dashboard error:', error);
     return { success: false, error: error instanceof Error ? error.message : 'Unable to load distribution dashboard.' };
+  }
+}
+
+export async function createDistributionUtmLink(formData: FormData): Promise<{ success: boolean; error?: string }> {
+  try {
+    const { user, allowed } = await getDistributionAccess();
+    if (!allowed) return { success: false, error: 'Distribution workspace access requires an active plan.' };
+    const projectId = normalize(formData.get('projectId'));
+    const channelId = normalize(formData.get('channelId'));
+    const name = normalize(formData.get('name'));
+    const campaign = normalize(formData.get('campaign'));
+    const content = normalize(formData.get('content')) || null;
+    if (!projectId || !channelId || !name || !campaign) return { success: false, error: 'Project, channel, link name, and campaign are required.' };
+
+    const supabase = await createClient();
+    const { data: project, error: projectError } = await supabase.from('distribution_projects').select('id, website_url').eq('id', projectId).eq('owner_id', user.id).single();
+    if (projectError || !project?.website_url) return { success: false, error: 'Add a website URL to this project before creating a tracked link.' };
+    const { data: channel, error: channelError } = await supabase.from('distribution_channels').select('id, channel_key').eq('id', channelId).eq('is_active', true).single();
+    if (channelError || !channel) return { success: false, error: 'Choose an active distribution channel.' };
+
+    const destinationUrl = new URL(project.website_url);
+    const source = channel.channel_key.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase();
+    destinationUrl.searchParams.set('utm_source', source);
+    destinationUrl.searchParams.set('utm_medium', 'distribution');
+    destinationUrl.searchParams.set('utm_campaign', campaign.toLowerCase().replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').slice(0, 120));
+    if (content) destinationUrl.searchParams.set('utm_content', content.toLowerCase().replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').slice(0, 120));
+    const { error } = await supabase.from('distribution_links').insert({
+      project_id: project.id,
+      owner_id: user.id,
+      channel_id: channel.id,
+      name,
+      destination_url: project.website_url,
+      full_url: destinationUrl.toString(),
+      utm_source: source,
+      utm_medium: 'distribution',
+      utm_campaign: campaign,
+      utm_content: content,
+    });
+    if (error) throw error;
+    revalidatePath('/[locale]/distribution', 'page');
+    return { success: true };
+  } catch (error) {
+    console.error('Create distribution UTM link error:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'Unable to create tracked link.' };
   }
 }
 

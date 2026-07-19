@@ -6,6 +6,7 @@ import { ExternalLink, Link2, Plus, Radar, Send, ShieldCheck } from 'lucide-reac
 import {
   createDistributionTask,
   createDistributionProject,
+  createDistributionUtmLink,
   recordDistributionResult,
   seedDistributionStarterTasks,
   updateDistributionTaskStatus,
@@ -17,6 +18,7 @@ const statusOptions = ['planned', 'in_progress', 'submitted', 'live', 'follow_up
 export default function DistributionDashboard({ data, locale }: { data: DistributionDashboardData; locale: string }) {
   const [showForm, setShowForm] = useState(false);
   const [showProjectForm, setShowProjectForm] = useState(false);
+  const [showLinkForm, setShowLinkForm] = useState(false);
 
   return (
     <div className='space-y-8'>
@@ -82,6 +84,32 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
           <button className='mt-4 rounded-xl bg-slate-950 px-4 py-2.5 text-sm font-bold text-white hover:bg-slate-800'>Create project</button>
         </form>
       ) : null}
+
+      <section className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
+        <div className='flex flex-col justify-between gap-3 sm:flex-row sm:items-center'>
+          <div>
+            <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Attribution layer</div>
+            <h2 className='mt-1 text-xl font-bold text-slate-950'>Tracked distribution links</h2>
+            <p className='mt-1 text-sm text-slate-500'>Create one UTM link per channel so visits and conversions can be compared later.</p>
+          </div>
+          <button type='button' onClick={() => setShowLinkForm((visible) => !visible)} className='rounded-xl bg-cyan-700 px-4 py-2.5 text-sm font-bold text-white hover:bg-cyan-800'>+ Create UTM link</button>
+        </div>
+        {showLinkForm ? (
+          <form action={createDistributionUtmLink} className='mt-5 grid gap-4 rounded-xl bg-slate-50 p-4 sm:grid-cols-2'>
+            <input type='hidden' name='projectId' value={data.project?.id || ''} />
+            <label className='text-sm font-semibold text-slate-700'>Link name<input required name='name' placeholder='Product Hunt launch' className='mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 font-normal outline-none focus:ring-2 focus:ring-cyan-400' /></label>
+            <label className='text-sm font-semibold text-slate-700'>Channel<select required name='channelId' className='mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 font-normal'><option value=''>Choose a channel</option>{data.channels.map((channel) => <option key={channel.id} value={channel.id}>{channel.name}</option>)}</select></label>
+            <label className='text-sm font-semibold text-slate-700'>Campaign<input required name='campaign' defaultValue='launch' placeholder='launch-2026' className='mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 font-normal outline-none focus:ring-2 focus:ring-cyan-400' /></label>
+            <label className='text-sm font-semibold text-slate-700'>Content variant<input name='content' placeholder='founder-post-a' className='mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 font-normal outline-none focus:ring-2 focus:ring-cyan-400' /></label>
+            <button className='w-fit rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-bold text-white hover:bg-slate-800 sm:col-span-2'>Generate tracked link</button>
+          </form>
+        ) : null}
+        {data.links.length > 0 ? (
+          <div className='mt-5 space-y-2'>
+            {data.links.map((link) => <div key={link.id} className='flex flex-col gap-2 rounded-xl border border-slate-200 px-3 py-2.5 text-xs sm:flex-row sm:items-center sm:justify-between'><div><span className='font-bold text-slate-800'>{link.name}</span><span className='ml-2 rounded-full bg-slate-100 px-2 py-1 text-slate-500'>{link.channelName}</span></div><a href={link.fullUrl} target='_blank' rel='noreferrer' className='max-w-full truncate font-mono text-cyan-700 hover:underline'>{link.fullUrl}</a></div>)}
+          </div>
+        ) : <div className='mt-5 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500'>No tracked links yet. Start with one channel and one campaign.</div>}
+      </section>
 
       {showForm ? (
         <form action={createDistributionTask} className='rounded-2xl border border-cyan-200 bg-cyan-50/60 p-5'>
@@ -190,8 +218,12 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
         <div className='rounded-2xl border border-slate-200 bg-white p-5'>
           <div className='text-sm font-bold text-slate-900'>Channel playbook</div>
           <div className='mt-3 grid grid-cols-2 gap-2 text-xs text-slate-600 sm:grid-cols-4'>
-            {data.channels.map((channel) => <div key={channel.id} className='rounded-xl bg-slate-50 px-3 py-2'>{channel.name}</div>)}
+            {data.channels.map((channel) => {
+              const template = data.templates.find((item) => item.channelId === channel.id);
+              return <div key={channel.id} className='rounded-xl bg-slate-50 px-3 py-2' title={template?.descriptionTemplate || channel.instructions || ''}>{channel.name}</div>;
+            })}
           </div>
+          <p className='mt-3 text-xs text-slate-500'>Hover a channel to see its preparation rule. Templates guide human editing; they do not auto-publish.</p>
         </div>
       </section>
     </div>

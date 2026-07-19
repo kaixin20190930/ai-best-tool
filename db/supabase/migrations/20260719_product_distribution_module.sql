@@ -82,10 +82,62 @@ CREATE TABLE IF NOT EXISTS distribution_results (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+CREATE TABLE IF NOT EXISTS distribution_channel_templates (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  channel_id UUID NOT NULL UNIQUE REFERENCES distribution_channels(id) ON DELETE CASCADE,
+  title_template TEXT,
+  description_template TEXT,
+  max_title_length INTEGER,
+  max_description_length INTEGER,
+  required_fields JSONB NOT NULL DEFAULT '[]'::jsonb,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS distribution_links (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  project_id UUID NOT NULL REFERENCES distribution_projects(id) ON DELETE CASCADE,
+  owner_id UUID NOT NULL,
+  channel_id UUID NOT NULL REFERENCES distribution_channels(id),
+  name VARCHAR(160) NOT NULL,
+  destination_url VARCHAR(500) NOT NULL,
+  full_url VARCHAR(1200) NOT NULL,
+  utm_source VARCHAR(120) NOT NULL,
+  utm_medium VARCHAR(120) NOT NULL DEFAULT 'distribution',
+  utm_campaign VARCHAR(160) NOT NULL,
+  utm_content VARCHAR(160),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
 CREATE INDEX IF NOT EXISTS idx_distribution_projects_owner ON distribution_projects(owner_id);
 CREATE INDEX IF NOT EXISTS idx_distribution_tasks_owner_status ON distribution_tasks(owner_id, status, due_date);
 CREATE INDEX IF NOT EXISTS idx_distribution_tasks_project ON distribution_tasks(project_id);
 CREATE INDEX IF NOT EXISTS idx_distribution_results_task ON distribution_results(task_id);
+CREATE INDEX IF NOT EXISTS idx_distribution_links_project ON distribution_links(project_id, created_at DESC);
+
+INSERT INTO distribution_channel_templates (channel_id, title_template, description_template, max_title_length, max_description_length, required_fields)
+SELECT id, 'What is {{product}} and who is it for?', 'Explain the problem, the actual workflow, and one proof point. Disclose affiliation when relevant.', 120, 500, '["product_url", "audience", "proof_point"]'::jsonb FROM distribution_channels WHERE channel_key = 'ai-directories'
+ON CONFLICT (channel_id) DO NOTHING;
+INSERT INTO distribution_channel_templates (channel_id, title_template, description_template, max_title_length, max_description_length, required_fields)
+SELECT id, '{{product}} as an alternative to {{category}}', 'State the comparison honestly. Include the key difference and the user who should consider it.', 120, 500, '["product_url", "alternative_context", "difference"]'::jsonb FROM distribution_channels WHERE channel_key = 'alternative-sites'
+ON CONFLICT (channel_id) DO NOTHING;
+INSERT INTO distribution_channel_templates (channel_id, title_template, description_template, max_title_length, max_description_length, required_fields)
+SELECT id, 'We built {{product}} for {{audience}}', 'Share the launch context, what changed, and what early users can test or discuss.', 100, 800, '["product_url", "audience", "launch_context"]'::jsonb FROM distribution_channels WHERE channel_key = 'startup-launches'
+ON CONFLICT (channel_id) DO NOTHING;
+INSERT INTO distribution_channel_templates (channel_id, title_template, description_template, max_title_length, max_description_length, required_fields)
+SELECT id, 'A useful answer for {{question}}', 'Answer the question first. Mention the product only when it directly supports the answer and disclose affiliation.', 300, 2000, '["question", "answer", "disclosure"]'::jsonb FROM distribution_channels WHERE channel_key = 'communities'
+ON CONFLICT (channel_id) DO NOTHING;
+INSERT INTO distribution_channel_templates (channel_id, title_template, description_template, max_title_length, max_description_length, required_fields)
+SELECT id, 'A practical product for {{audience}}', 'Pitch a specific reader benefit, not a generic product announcement. Include one useful data point or example.', 100, 600, '["audience", "reader_benefit", "proof_point"]'::jsonb FROM distribution_channels WHERE channel_key = 'newsletters'
+ON CONFLICT (channel_id) DO NOTHING;
+INSERT INTO distribution_channel_templates (channel_id, title_template, description_template, max_title_length, max_description_length, required_fields)
+SELECT id, '{{product}}: what we learned from building and testing it', 'Publish first-party evidence, dates, screenshots, limitations, and what readers can verify themselves.', 160, 1200, '["experiment", "evidence", "limitations"]'::jsonb FROM distribution_channels WHERE channel_key = 'owned-blog'
+ON CONFLICT (channel_id) DO NOTHING;
+INSERT INTO distribution_channel_templates (channel_id, title_template, description_template, max_title_length, max_description_length, required_fields)
+SELECT id, 'A useful example for {{workflow}}', 'Share a relevant repository, template, or documentation example. Do not place unrelated promotional links in issues.', 100, 1000, '["repository", "workflow", "documentation"]'::jsonb FROM distribution_channels WHERE channel_key = 'github'
+ON CONFLICT (channel_id) DO NOTHING;
+INSERT INTO distribution_channel_templates (channel_id, title_template, description_template, max_title_length, max_description_length, required_fields)
+SELECT id, 'I tested {{product}} for {{use_case}}', 'Lead with the real question or experience. State affiliation, share useful detail, and invite discussion rather than votes.', 300, 2000, '["question", "experience", "disclosure"]'::jsonb FROM distribution_channels WHERE channel_key = 'reddit'
+ON CONFLICT (channel_id) DO NOTHING;
 
 INSERT INTO distribution_channels (channel_key, name, channel_type, instructions, sort_order)
 VALUES
@@ -109,6 +161,8 @@ ALTER TABLE distribution_projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE distribution_channels ENABLE ROW LEVEL SECURITY;
 ALTER TABLE distribution_tasks ENABLE ROW LEVEL SECURITY;
 ALTER TABLE distribution_results ENABLE ROW LEVEL SECURITY;
+ALTER TABLE distribution_channel_templates ENABLE ROW LEVEL SECURITY;
+ALTER TABLE distribution_links ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "Users can view own distribution entitlement" ON distribution_entitlements;
 CREATE POLICY "Users can view own distribution entitlement" ON distribution_entitlements
@@ -132,4 +186,12 @@ CREATE POLICY "Users can manage own distribution tasks" ON distribution_tasks
 
 DROP POLICY IF EXISTS "Users can manage own distribution results" ON distribution_results;
 CREATE POLICY "Users can manage own distribution results" ON distribution_results
+  FOR ALL USING (auth.uid() = owner_id) WITH CHECK (auth.uid() = owner_id);
+
+DROP POLICY IF EXISTS "Authenticated users can view distribution templates" ON distribution_channel_templates;
+CREATE POLICY "Authenticated users can view distribution templates" ON distribution_channel_templates
+  FOR SELECT USING (auth.role() = 'authenticated');
+
+DROP POLICY IF EXISTS "Users can manage own distribution links" ON distribution_links;
+CREATE POLICY "Users can manage own distribution links" ON distribution_links
   FOR ALL USING (auth.uid() = owner_id) WITH CHECK (auth.uid() = owner_id);
