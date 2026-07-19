@@ -19,6 +19,8 @@ export type DistributionTaskStatus =
 
 export interface DistributionDashboard {
   workspace: { id: string; name: string; kind: string } | null;
+  plan: 'pilot' | 'pro' | 'agency';
+  projectLimit: number;
   projects: Array<{ id: string; name: string; websiteUrl: string | null; status: string }>;
   project: { id: string; name: string; websiteUrl: string | null } | null;
   channels: Array<{ id: string; name: string; channelType: string; instructions: string | null }>;
@@ -38,21 +40,28 @@ export interface DistributionDashboard {
   metrics: { total: number; dueToday: number; live: number; followUp: number };
 }
 
-type AccessResult = { user: User; allowed: boolean };
+type AccessResult = { user: User; allowed: boolean; plan: 'pilot' | 'pro' | 'agency' };
 
 async function getDistributionAccess(): Promise<AccessResult> {
   const user = await requireAuth();
-  if (isAdminUser(user)) return { user, allowed: true };
+  if (isAdminUser(user)) return { user, allowed: true, plan: 'agency' };
 
   const supabase = await createClient();
   const { data } = await supabase
     .from('distribution_entitlements')
-    .select('status, current_period_end')
+    .select('plan, status, current_period_end')
     .eq('user_id', user.id)
     .maybeSingle();
 
   const notExpired = !data?.current_period_end || new Date(data.current_period_end).getTime() > Date.now();
-  return { user, allowed: data?.status === 'active' && notExpired };
+  const plan = data?.plan === 'agency' ? 'agency' : data?.plan === 'pro' ? 'pro' : 'pilot';
+  return { user, allowed: data?.status === 'active' && notExpired, plan };
+}
+
+function getProjectLimit(plan: 'pilot' | 'pro' | 'agency'): number {
+  if (plan === 'agency') return 25;
+  if (plan === 'pro') return 5;
+  return 1;
 }
 
 function normalize(value: FormDataEntryValue | null): string {
@@ -118,7 +127,7 @@ export async function getDistributionDashboard(projectId?: string): Promise<
   { success: true; access: true; data: DistributionDashboard } | { success: true; access: false; data: null } | { success: false; error: string }
 > {
   try {
-    const { user, allowed } = await getDistributionAccess();
+    const { user, allowed, plan } = await getDistributionAccess();
     if (!allowed) return { success: true, access: false, data: null };
 
     const supabase = await createClient();
@@ -170,6 +179,8 @@ export async function getDistributionDashboard(projectId?: string): Promise<
       access: true,
       data: {
         workspace,
+        plan,
+        projectLimit: getProjectLimit(plan),
         projects: (projects || []).map((item: any) => ({
           id: item.id,
           name: item.name,
@@ -200,7 +211,7 @@ export async function getDistributionDashboard(projectId?: string): Promise<
 
 export async function createDistributionProject(formData: FormData): Promise<{ success: boolean; error?: string }> {
   try {
-    const { user, allowed } = await getDistributionAccess();
+    const { user, allowed, plan } = await getDistributionAccess();
     if (!allowed) return { success: false, error: 'Distribution workspace access requires an active plan.' };
     const name = normalize(formData.get('name'));
     const websiteUrl = normalize(formData.get('websiteUrl')) || null;
@@ -217,6 +228,13 @@ export async function createDistributionProject(formData: FormData): Promise<{ s
 
     const supabase = await createClient();
     const workspaceProject = await ensureDefaultProject(user.id, user.email, isAdminUser(user));
+    const { count, error: countError } = await supabase
+      .from('distribution_projects')
+      .select('id', { count: 'exact', head: true })
+      .eq('owner_id', user.id)
+      .neq('status', 'archived');
+    if (countError) throw countError;
+    if ((count || 0) >= getProjectLimit(plan)) return { success: false, error: `Your current plan supports up to ${getProjectLimit(plan)} active projects.` };
     const { data: project, error } = await supabase
       .from('distribution_projects')
       .insert({

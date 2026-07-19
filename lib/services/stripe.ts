@@ -17,6 +17,54 @@ export function isStripeConfigured(): boolean {
   return Boolean(process.env.STRIPE_SECRET_KEY?.trim());
 }
 
+export type DistributionPlan = 'pro' | 'agency';
+
+export function getDistributionPriceId(plan: DistributionPlan): string | null {
+  const value = plan === 'agency' ? process.env.STRIPE_DISTRIBUTION_PRICE_ID_AGENCY : process.env.STRIPE_DISTRIBUTION_PRICE_ID_PRO;
+  return value?.trim() || null;
+}
+
+export function isDistributionStripeConfigured(): boolean {
+  return isStripeConfigured() && Boolean(getDistributionPriceId('pro'));
+}
+
+export async function createDistributionCheckoutSession(input: {
+  userId: string;
+  email?: string | null;
+  plan: DistributionPlan;
+  successUrl: string;
+  cancelUrl: string;
+}): Promise<{ id: string; url: string }> {
+  const secretKey = getStripeSecretKey();
+  const priceId = getDistributionPriceId(input.plan);
+  if (!priceId) throw new Error(`STRIPE_DISTRIBUTION_PRICE_ID_${input.plan.toUpperCase()} is not configured.`);
+
+  const body = new URLSearchParams();
+  body.set('mode', 'subscription');
+  body.set('success_url', input.successUrl);
+  body.set('cancel_url', input.cancelUrl);
+  body.set('client_reference_id', input.userId);
+  body.set('line_items[0][quantity]', '1');
+  body.set('line_items[0][price]', priceId);
+  body.set('metadata[feature]', 'distribution');
+  body.set('metadata[user_id]', input.userId);
+  body.set('metadata[plan]', input.plan);
+  body.set('subscription_data[metadata][feature]', 'distribution');
+  body.set('subscription_data[metadata][user_id]', input.userId);
+  body.set('subscription_data[metadata][plan]', input.plan);
+  if (input.email) body.set('customer_email', input.email);
+
+  const response = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${secretKey}`, 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body.toString(),
+  });
+  if (!response.ok) throw new Error(`Distribution checkout session creation failed: ${await response.text()}`);
+  const data = (await response.json()) as { id?: string; url?: string };
+  if (!data.id || !data.url) throw new Error('Distribution checkout response was missing url or id.');
+  return { id: data.id, url: data.url };
+}
+
 export function getStripeSecretKey(): string {
   const secretKey = process.env.STRIPE_SECRET_KEY?.trim();
 

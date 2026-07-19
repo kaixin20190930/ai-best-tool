@@ -11,6 +11,12 @@ CREATE TABLE IF NOT EXISTS distribution_entitlements (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+ALTER TABLE distribution_entitlements ADD COLUMN IF NOT EXISTS stripe_customer_id VARCHAR(120);
+ALTER TABLE distribution_entitlements ADD COLUMN IF NOT EXISTS stripe_subscription_id VARCHAR(120);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_distribution_entitlements_stripe_subscription
+  ON distribution_entitlements(stripe_subscription_id)
+  WHERE stripe_subscription_id IS NOT NULL;
+
 CREATE TABLE IF NOT EXISTS distribution_workspaces (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   owner_id UUID NOT NULL,
