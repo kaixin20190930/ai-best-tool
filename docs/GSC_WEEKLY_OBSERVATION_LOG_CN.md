@@ -1,6 +1,6 @@
 # GSC 每周观察台账
 
-更新时间：2026-07-18
+更新时间：2026-07-19
 
 这份台账只做一件事：把 Google Search Console 的变化按周记录下来，方便判断当前的“收口 + 质量增强”策略到底有没有起效。
 
@@ -19,7 +19,7 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Week 1 | 2026-07-15 | 876 | 2 | 0.23% | 70.09 | 27 | 127 | 从 `aibesttool.com-Performance-on-Search-2026-07-15.xlsx` 导入；当前本地 SEO 校验已通过 27/27 |
 | Week 2 | 2026-07-18 | 876 | 2 | 0.23% | 70.09 | 27 | 127 | 最新 28 天导出再次确认仍处低曝光、低点击、低排名基线；top queries 仍以品牌 / 目录词为主，top pages 仍集中在首页、automation 分类和少数工具详情页 |
-| Week 3 |  |  |  |  |  |  |  |  |
+| Week 3 | 2026-07-19 | 525 | 2 | 0.38% | 68.57 | 157 | 646 | 28 天实际覆盖 2026-06-20 至 2026-07-17；7 天窗口为 35 展示、0 点击、67.78 平均排名，短期尚未出现恢复信号 |
 | Week 4 |  |  |  |  |  |  |  |  |
 
 ## 站内收口基线
@@ -29,6 +29,7 @@
 | 日期 | 可进 sitemap | 内部流量页 | noindex / 合并候选 | 备注 |
 | --- | --- | --- | --- | --- |
 | 2026-07-15 | 27 | 3 | 127 | 来自最新页面质量盘点 |
+| 2026-07-19 | 27 | 3 | 127 | 质量盘点稳定；Coverage 另显示 157 已索引、646 个未索引状态，其中 583 个为主动 noindex |
 
 ## 覆盖率基线
 
@@ -56,6 +57,11 @@
 | Week 2 | fathom | 0 | 71 | 0.00% | 81.85 | 工具名词 | 是 |
 | Week 2 | automation tools | 0 | 65 | 0.00% | 73.34 | 类目词 | 是 |
 | Week 2 | ai automation tools | 0 | 64 | 0.00% | 70.25 | 类目词 | 是 |
+| Week 3 | fathom | 0 | 59 | 0.00% | 82.37 | 工具名词；28 天 Top query | 是 |
+| Week 3 | ai tools directory toolbloom ai tools | 0 | 59 | 0.00% | 106.47 | 品牌 / 目录词；排名偏后 | 是 |
+| Week 3 | toolbloom browse ai tools directory | 0 | 40 | 0.00% | 74.05 | 品牌 / 目录词 | 是 |
+| Week 3 | toolbloom ai tools directory best ai tools | 0 | 36 | 0.00% | 80.28 | 品牌 / 目录词 | 是 |
+| Week 3 | fathom about | 0 | 24 | 0.00% | 93.88 | 工具相关长尾；排名偏后 | 是 |
 
 ## Top Pages
 
@@ -71,6 +77,11 @@
 | Week 2 | https://www.aibesttool.com/categories/automation | 0 | 178 | 0.00% | 70.64 | Category | 是 |
 | Week 2 | https://aibesttool.com/ai/fathom | 0 | 153 | 0.00% | 78.89 | Tool | 是 |
 | Week 2 | https://aibesttool.com/ai/pipedream | 0 | 39 | 0.00% | 55.05 | Tool | 是 |
+| Week 3 | https://aibesttool.com/ | 1 | 210 | 0.48% | 66.64 | Core | 是 |
+| Week 3 | https://www.aibesttool.com/ | 1 | 33 | 3.03% | 77.91 | Core；历史 www 变体 | 是 |
+| Week 3 | https://aibesttool.com/ai/fathom | 0 | 129 | 0.00% | 81.13 | Tool | 是 |
+| Week 3 | https://www.aibesttool.com/categories/automation | 0 | 33 | 0.00% | 61.12 | Category；历史 www 变体 | 是 |
+| Week 3 | https://aibesttool.com/ai/pipedream | 0 | 30 | 0.00% | 55.67 | Tool | 是 |
 
 ## 增强页追踪
 
@@ -111,5 +122,5 @@
 | --- | --- | --- |
 | Week 1 | 已导入 28 天性能基线，曝光总量不高，而且近 7 天曝光几乎归零，说明当前仍在非常低的基线；query / page 方向已经能看见，但还没形成稳定点击。覆盖率问题主要集中在 noindex 收口、少量抓取未入索引，以及少量重复规范化痕迹 | 继续观察下周 GSC 变化，同时优先补核心页真实信号，并留意首页 / www 变体是否还在 GSC 中重复出现 |
 | Week 2 | 28 天内只有 2 次点击，主要来自首页；Top queries 仍以品牌/目录词为主，排名大多在 70-110 之外，说明现阶段的问题不是“缺页面”，而是“页面还没足够像可被点击的答案页” | 继续保持收口节奏，不扩量，优先看首页、榜单、分类、工具详情的真实信号是否继续改善 |
-| Week 3 |  |  |
+| Week 3 | 28 天为 525 展示、2 点击、0.38% CTR、68.57 平均排名；7 天仅 35 展示、0 点击，曝光较低但平均排名未明显恶化。Coverage 的 583 个 noindex 与主动收口一致，真正需要观察的是 14 个已抓取未索引、22 个备用 canonical 和 5 个重复页面。当前不能判断整体恢复，也没有证据支持扩量。 | 保持 noindex / canonical 收口；继续观察下一周 GSC，优先维护首页、Fathom、Pipedream、自动化/研究分类和少量高排名页面；等待真实评论、收藏和 owner 认领，不用模板数据替代。 |
 | Week 4 |  |  |
