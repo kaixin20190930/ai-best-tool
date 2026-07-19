@@ -746,7 +746,7 @@ export async function getAdminTools(filters?: {
       query += `
         AND NULLIF(BTRIM(features->'editorial'->>'reviewedAt'), '') IS NOT NULL
         AND NULLIF(BTRIM(features->'editorial'->>'reviewedBy'), '') IS NOT NULL
-        AND NULLIF(BTRIM(features->'editorial'->>'sourceUrl'), '') IS NOT NULL
+        AND NULLIF(BTRIM(features->'editorial'->>'sourceUrl'), '') ~* '^https?://'
         AND (
           NULLIF(BTRIM(features->'editorial'->'summary'->>'en'), '') IS NOT NULL
           OR NULLIF(BTRIM(features->'editorial'->'summary'->>'zh'), '') IS NOT NULL
@@ -757,6 +757,7 @@ export async function getAdminTools(filters?: {
           NULLIF(BTRIM(features->'editorial'->>'reviewedAt'), '') IS NULL
           OR NULLIF(BTRIM(features->'editorial'->>'reviewedBy'), '') IS NULL
           OR NULLIF(BTRIM(features->'editorial'->>'sourceUrl'), '') IS NULL
+          OR NULLIF(BTRIM(features->'editorial'->>'sourceUrl'), '') !~* '^https?://'
           OR (
             NULLIF(BTRIM(features->'editorial'->'summary'->>'en'), '') IS NULL
             AND NULLIF(BTRIM(features->'editorial'->'summary'->>'zh'), '') IS NULL
