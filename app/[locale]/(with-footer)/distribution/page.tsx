@@ -1,12 +1,16 @@
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
 import DistributionDashboard from '@/components/distribution/DistributionDashboard';
 import { getDistributionDashboard } from '@/app/actions/distribution';
 
-export default async function DistributionPage() {
+export default async function DistributionPage({ params }: { params: { locale: string } }) {
   const result = await getDistributionDashboard();
 
   if (!result.success) {
+    if (result.error === 'Unauthorized') {
+      redirect(`/${params.locale}/login?redirect=/${params.locale}/distribution`);
+    }
     return <div className='mx-auto w-full max-w-5xl px-5 py-16 text-center text-slate-700'>{result.error}</div>;
   }
 
