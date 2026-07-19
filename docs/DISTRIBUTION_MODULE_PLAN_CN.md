@@ -46,18 +46,25 @@
 - 可更新任务状态：planned、in progress、submitted、live、follow-up、done、skipped
 - 可记录上线 URL、链接属性、拒绝/移除状态和复查备注
 - 可按项目和渠道生成 UTM 链接，并保留链接历史
+- UTM 链接会写入 `abt_dist_link`，访问会建立分发会话，并在 30 天面板中汇总访问、注册、提交、认领、checkout 和付款
 - 渠道模板已提供标题、描述、必要字段和人工操作提示
 - 页面明确禁止自动发帖、重复内容和无关链接
 - aibesttool 自身可作为工作区中的自有项目使用
 - 多项目切换与创建，Pro / Agency 项目数量限制已接入
 - 独立分发订阅 checkout 路径和 Stripe webhook 处理器已加入，只有配置价格 ID 后才展示购买按钮
 
-## 下一阶段
+## 已完成的下一阶段
 
 1. 在 Stripe 创建 Pro / Agency recurring price，并配置 `STRIPE_DISTRIBUTION_PRICE_ID_PRO`、`STRIPE_DISTRIBUTION_PRICE_ID_AGENCY`
 2. 在 Stripe webhook 中增加 `https://aibesttool.com/api/stripe/distribution-webhook`，复用 `STRIPE_WEBHOOK_SECRET`
 3. 重新执行 `20260719_product_distribution_module.sql`，使已存在的 `distribution_entitlements` 增加 Stripe 订阅字段
-4. 增加项目级 UTM、来源访问、注册/认领转化关联
+4. 增加项目级 UTM、来源访问、注册/认领/checkout/付款转化关联，并在工作台展示 30 天归因快照
+
+## 仍需上线验证
+
+1. 重新执行完整迁移文件 `20260719_product_distribution_module.sql`，确认归因表和策略已落库。
+2. 用工作台生成一个 UTM 链接，使用新会话打开并完成一次注册或认领，确认归因数字增加。
+3. 在 Stripe 测试模式完成一次分发套餐 checkout，确认 webhook 写入 `payment` 事件且不重复计数。
 5. 增加渠道模板、批量生成“准备任务”，但不自动发布
 6. 增加 admin 视图，查看所有客户工作区、活跃任务、被拒原因和失效链接
 7. 增加周报导出，服务客户复盘和 aibesttool 自身的外链建设

@@ -72,6 +72,14 @@ export async function POST(request: NextRequest) {
         customerId: object.customer ? String(object.customer) : null,
         subscriptionId: object.subscription ? String(object.subscription) : null,
       });
+      const supabase = createAdminClient();
+      const { error: attributionError } = await supabase.from('distribution_attribution_events').insert({
+        event_type: 'payment',
+        session_id: String(object.id || object.subscription || userId),
+        user_id: userId,
+        metadata: { plan, stripeSessionId: object.id || null, subscriptionId: object.subscription || null },
+      });
+      if (attributionError) console.error('Distribution payment attribution failed:', attributionError);
       return NextResponse.json({ ok: true, activated: true });
     }
 

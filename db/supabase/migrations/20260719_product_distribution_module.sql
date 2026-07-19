@@ -108,11 +108,25 @@ CREATE TABLE IF NOT EXISTS distribution_links (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+CREATE TABLE IF NOT EXISTS distribution_attribution_events (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  event_type VARCHAR(30) NOT NULL CHECK (event_type IN ('visit', 'signup', 'submit', 'claim', 'checkout', 'payment')),
+  session_id VARCHAR(120) NOT NULL,
+  user_id UUID,
+  project_id UUID REFERENCES distribution_projects(id) ON DELETE SET NULL,
+  channel_id UUID REFERENCES distribution_channels(id) ON DELETE SET NULL,
+  link_id UUID REFERENCES distribution_links(id) ON DELETE SET NULL,
+  metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
 CREATE INDEX IF NOT EXISTS idx_distribution_projects_owner ON distribution_projects(owner_id);
 CREATE INDEX IF NOT EXISTS idx_distribution_tasks_owner_status ON distribution_tasks(owner_id, status, due_date);
 CREATE INDEX IF NOT EXISTS idx_distribution_tasks_project ON distribution_tasks(project_id);
 CREATE INDEX IF NOT EXISTS idx_distribution_results_task ON distribution_results(task_id);
 CREATE INDEX IF NOT EXISTS idx_distribution_links_project ON distribution_links(project_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_distribution_attribution_project ON distribution_attribution_events(project_id, event_type, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_distribution_attribution_session ON distribution_attribution_events(session_id, created_at DESC);
 
 INSERT INTO distribution_channel_templates (channel_id, title_template, description_template, max_title_length, max_description_length, required_fields)
 SELECT id, 'What is {{product}} and who is it for?', 'Explain the problem, the actual workflow, and one proof point. Disclose affiliation when relevant.', 120, 500, '["product_url", "audience", "proof_point"]'::jsonb FROM distribution_channels WHERE channel_key = 'ai-directories'
@@ -163,6 +177,7 @@ ALTER TABLE distribution_tasks ENABLE ROW LEVEL SECURITY;
 ALTER TABLE distribution_results ENABLE ROW LEVEL SECURITY;
 ALTER TABLE distribution_channel_templates ENABLE ROW LEVEL SECURITY;
 ALTER TABLE distribution_links ENABLE ROW LEVEL SECURITY;
+ALTER TABLE distribution_attribution_events ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "Users can view own distribution entitlement" ON distribution_entitlements;
 CREATE POLICY "Users can view own distribution entitlement" ON distribution_entitlements
@@ -195,3 +210,7 @@ CREATE POLICY "Authenticated users can view distribution templates" ON distribut
 DROP POLICY IF EXISTS "Users can manage own distribution links" ON distribution_links;
 CREATE POLICY "Users can manage own distribution links" ON distribution_links
   FOR ALL USING (auth.uid() = owner_id) WITH CHECK (auth.uid() = owner_id);
+
+DROP POLICY IF EXISTS "Users can view own distribution attribution" ON distribution_attribution_events;
+CREATE POLICY "Users can view own distribution attribution" ON distribution_attribution_events
+  FOR SELECT USING (auth.uid() = user_id OR auth.uid() IN (SELECT owner_id FROM distribution_projects WHERE id = project_id));

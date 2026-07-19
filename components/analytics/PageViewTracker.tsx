@@ -80,6 +80,37 @@ async function sendPageView(payload: { pagePath: string; pageType: PageViewType;
   });
 }
 
+function trackDistributionVisit(pathname: string) {
+  if (typeof window === 'undefined') return;
+
+  const params = new URLSearchParams(window.location.search);
+  const linkId = params.get('abt_dist_link');
+  const hasUtm = params.has('utm_source') || params.has('utm_campaign') || params.has('utm_medium');
+  if (!linkId && !hasUtm) return;
+
+  const key = `abt_distribution_visit:${linkId || params.toString()}`;
+  if (window.sessionStorage.getItem(key)) return;
+  window.sessionStorage.setItem(key, '1');
+
+  fetch('/api/analytics/distribution', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'same-origin',
+    keepalive: true,
+    body: JSON.stringify({
+      event: 'visit',
+      linkId,
+      pagePath: getPathWithoutLocale(pathname),
+      metadata: {
+        utmSource: params.get('utm_source'),
+        utmMedium: params.get('utm_medium'),
+        utmCampaign: params.get('utm_campaign'),
+        utmContent: params.get('utm_content'),
+      },
+    }),
+  }).catch(() => undefined);
+}
+
 export default function PageViewTracker({ toolId }: { toolId?: string | null }) {
   const pathname = usePathname();
   const lastTrackedRef = useRef<string | null>(null);
@@ -112,6 +143,7 @@ export default function PageViewTracker({ toolId }: { toolId?: string | null }) 
     }).catch((error) => {
       console.error('Failed to track page view:', error);
     });
+    trackDistributionVisit(pathname);
   }, [pathname, toolId]);
 
   return null;

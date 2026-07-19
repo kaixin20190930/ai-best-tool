@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { BASE_URL } from '@/lib/env';
 import { createClient } from '@/lib/supabase/server';
 import { createDistributionCheckoutSession, getDistributionPriceId, type DistributionPlan } from '@/lib/services/stripe';
+import { recordDistributionAttributionEvent } from '@/lib/services/distributionAttribution';
 
 export const runtime = 'nodejs';
 
@@ -28,6 +29,7 @@ export async function GET(request: NextRequest) {
       successUrl: `${siteUrl}/distribution?checkout=success&plan=${plan}`,
       cancelUrl: `${siteUrl}/pricing?checkout=cancelled`,
     });
+    await recordDistributionAttributionEvent('checkout', user.id, { sessionId: session.id, plan });
     return NextResponse.redirect(session.url, { status: 302 });
   } catch (error) {
     console.error('Distribution checkout route failed:', error);

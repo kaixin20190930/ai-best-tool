@@ -74,6 +74,32 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
         <button type='button' onClick={() => setShowProjectForm((visible) => !visible)} className='rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-bold text-slate-700 hover:border-cyan-300 hover:text-cyan-700'>+ New project</button>
       </section>
 
+      <section className='rounded-2xl border border-cyan-100 bg-cyan-50/60 p-5'>
+        <div className='flex flex-col justify-between gap-2 sm:flex-row sm:items-end'>
+          <div>
+            <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Last 30 days</div>
+            <h2 className='mt-1 text-xl font-bold text-slate-950'>Attribution snapshot</h2>
+            <p className='mt-1 text-sm text-slate-600'>See whether distribution activity produces visits, signups, claims, and paid workspaces.</p>
+          </div>
+          <span className='text-xs text-slate-500'>Tracked links only</span>
+        </div>
+        <div className='mt-4 grid gap-3 sm:grid-cols-3 lg:grid-cols-6'>
+          {[
+            ['Visits', data.metrics.attribution.visits],
+            ['Signups', data.metrics.attribution.signups],
+            ['Submissions', data.metrics.attribution.submissions],
+            ['Claims', data.metrics.attribution.claims],
+            ['Checkouts', data.metrics.attribution.checkouts],
+            ['Payments', data.metrics.attribution.payments],
+          ].map(([label, value]) => (
+            <div key={String(label)} className='rounded-xl border border-cyan-100 bg-white p-3'>
+              <div className='text-xl font-bold text-slate-950'>{value}</div>
+              <div className='mt-1 text-xs text-slate-500'>{label}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {showProjectForm ? (
         <form action={createDistributionProject} className='rounded-2xl border border-cyan-200 bg-cyan-50/60 p-5'>
           <div className='grid gap-4 sm:grid-cols-2'>

@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { randomUUID } from 'node:crypto';
 import type { User } from '@supabase/supabase-js';
 
 import { requireAuth } from '@/lib/auth/middleware';
@@ -39,7 +40,13 @@ export interface DistributionDashboard {
     liveUrl: string | null;
     linkStatus: string | null;
   }>;
-  metrics: { total: number; dueToday: number; live: number; followUp: number };
+  metrics: {
+    total: number;
+    dueToday: number;
+    live: number;
+    followUp: number;
+    attribution: { visits: number; signups: number; submissions: number; claims: number; checkouts: number; payments: number };
+  };
 }
 
 type AccessResult = { user: User; allowed: boolean; plan: 'pilot' | 'pro' | 'agency' };
@@ -141,7 +148,7 @@ export async function getDistributionDashboard(projectId?: string): Promise<
       .order('created_at', { ascending: true });
     if (projectsError) throw projectsError;
     const project = (projects || []).find((item: any) => item.id === projectId) || defaultProject;
-    const [{ data: workspace }, { data: channels, error: channelError }, { data: templates, error: templateError }, { data: links, error: linkError }, { data: tasks, error: taskError }] = await Promise.all([
+    const [{ data: workspace }, { data: channels, error: channelError }, { data: templates, error: templateError }, { data: links, error: linkError }, { data: tasks, error: taskError }, { data: attributionEvents, error: attributionError }] = await Promise.all([
       supabase.from('distribution_workspaces').select('id, name, kind').eq('id', project.workspace_id).single(),
       supabase
         .from('distribution_channels')
@@ -156,6 +163,11 @@ export async function getDistributionDashboard(projectId?: string): Promise<
         .eq('project_id', project.id)
         .order('due_date', { ascending: true, nullsFirst: false })
         .order('created_at', { ascending: false }),
+      supabase
+        .from('distribution_attribution_events')
+        .select('event_type')
+        .eq('project_id', project.id)
+        .gte('created_at', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()),
     ]);
 
     if (channelError || templateError || linkError || taskError) throw new Error(channelError?.message || templateError?.message || linkError?.message || taskError?.message || 'Unable to load distribution data.');
@@ -219,6 +231,16 @@ export async function getDistributionDashboard(projectId?: string): Promise<
           dueToday: normalizedTasks.filter((task) => task.dueDate === today && !['done', 'skipped'].includes(task.status)).length,
           live: normalizedTasks.filter((task) => ['live', 'done'].includes(task.status)).length,
           followUp: normalizedTasks.filter((task) => task.status === 'follow_up').length,
+          attribution: attributionError
+            ? { visits: 0, signups: 0, submissions: 0, claims: 0, checkouts: 0, payments: 0 }
+            : {
+                visits: (attributionEvents || []).filter((event: any) => event.event_type === 'visit').length,
+                signups: (attributionEvents || []).filter((event: any) => event.event_type === 'signup').length,
+                submissions: (attributionEvents || []).filter((event: any) => event.event_type === 'submit').length,
+                claims: (attributionEvents || []).filter((event: any) => event.event_type === 'claim').length,
+                checkouts: (attributionEvents || []).filter((event: any) => event.event_type === 'checkout').length,
+                payments: (attributionEvents || []).filter((event: any) => event.event_type === 'payment').length,
+              },
         },
       },
     };
@@ -245,13 +267,16 @@ export async function createDistributionUtmLink(formData: FormData): Promise<{ s
     const { data: channel, error: channelError } = await supabase.from('distribution_channels').select('id, channel_key').eq('id', channelId).eq('is_active', true).single();
     if (channelError || !channel) return { success: false, error: 'Choose an active distribution channel.' };
 
+    const linkId = randomUUID();
     const destinationUrl = new URL(project.website_url);
     const source = channel.channel_key.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase();
     destinationUrl.searchParams.set('utm_source', source);
     destinationUrl.searchParams.set('utm_medium', 'distribution');
     destinationUrl.searchParams.set('utm_campaign', campaign.toLowerCase().replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').slice(0, 120));
     if (content) destinationUrl.searchParams.set('utm_content', content.toLowerCase().replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').slice(0, 120));
+    destinationUrl.searchParams.set('abt_dist_link', linkId);
     const { error } = await supabase.from('distribution_links').insert({
+      id: linkId,
       project_id: project.id,
       owner_id: user.id,
       channel_id: channel.id,

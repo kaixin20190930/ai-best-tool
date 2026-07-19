@@ -6,6 +6,7 @@ import { query } from '@/db/neon/client';
 import { listingConfig } from '@/lib/config/listing';
 import { sendTransactionalEmail } from '@/lib/services/mailer';
 import { notifyAdminsOfClaimLead } from '@/app/actions/notifications';
+import { recordDistributionAttributionEvent } from '@/lib/services/distributionAttribution';
 
 export interface ClaimListingInput {
   listingName: string;
@@ -215,6 +216,8 @@ export async function submitClaimListing(input: ClaimListingInput): Promise<Clai
         `,
       });
     }
+
+    await recordDistributionAttributionEvent('claim', null, { claimId, listingName });
 
     return { success: true, claimId };
   } catch (error) {

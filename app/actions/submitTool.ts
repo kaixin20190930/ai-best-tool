@@ -9,6 +9,7 @@ import { sendTransactionalEmail } from '@/lib/services/mailer';
 import { ensureTagsExist } from '@/lib/services/tags';
 import { createNotification, notifyAdminsOfSubmission } from '@/app/actions/notifications';
 import { shouldSendSubmissionStatusEmail } from '@/app/actions/userPreferences';
+import { recordDistributionAttributionEvent } from '@/lib/services/distributionAttribution';
 
 interface SubmitToolInput {
   website: string;
@@ -213,6 +214,8 @@ export async function submitTool(input: SubmitToolInput): Promise<SubmitToolResu
         JSON.stringify(features),
       ],
     );
+
+    await recordDistributionAttributionEvent('submit', user.id, { toolSlug: slug, submissionPlan });
 
     await ensureTagsExist(tags);
 

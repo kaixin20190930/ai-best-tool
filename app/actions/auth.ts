@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 
 import { createClient } from '@/lib/supabase/server';
 import { authConfig, getOAuthRedirectUrl, getSiteUrl } from '@/lib/config/auth';
+import { recordDistributionAttributionEvent } from '@/lib/services/distributionAttribution';
 
 function getAuthErrorMessage(error: unknown) {
   if (error instanceof Error && error.message === 'fetch failed') {
@@ -68,6 +69,7 @@ export async function signUp(formData: FormData) {
       if (prefError) {
         console.error('Failed to create user preferences:', prefError);
       }
+      await recordDistributionAttributionEvent('signup', data.user.id);
     }
 
     revalidatePath('/', 'layout');
