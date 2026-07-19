@@ -17,6 +17,9 @@ jobs:
   daily-health-check:
     name: Daily SEO Health Check
     runs-on: ubuntu-latest
+    env:
+      # Optional read-only production DB connection for editorial source checks.
+      PRODUCTION_DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
     
     steps:
       - name: Checkout code
@@ -46,6 +49,17 @@ jobs:
         env:
           SEO_BASE_URL: https://aibesttool.com
         run: pnpm run seo:priority-page-signals -- --strict
+
+      - name: Audit priority tool sources (optional)
+        if: env.PRODUCTION_DATABASE_URL != ''
+        env:
+          DATABASE_URL: ${{ env.PRODUCTION_DATABASE_URL }}
+          SEO_BASE_URL: https://aibesttool.com
+        run: pnpm run seo:priority-source-audit -- --strict
+
+      - name: Report missing production DB audit secret
+        if: env.PRODUCTION_DATABASE_URL == ''
+        run: echo "PRODUCTION_DATABASE_URL is not configured; skipped editorial source DB audit."
       
       - name: Upload Health Check Report
         uses: actions/upload-artifact@v4

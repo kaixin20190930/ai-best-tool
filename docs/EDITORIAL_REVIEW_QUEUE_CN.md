@@ -60,6 +60,7 @@ pnpm run seo:priority-source-audit -- --strict
 ```
 
 默认模式只输出警告，不阻断部署；`--strict` 用于发布前强制检查。
+GitHub Actions 如果配置了只读 Secret `PRODUCTION_DATABASE_URL`，每日监控会自动执行 strict 检查；未配置时只检查生产页面并明确跳过数据库判断。
 
 2026-07-19 复核结果：Fathom / Pipedream 生产页面均可访问，但本地项目的 `.env.production` 没有数据库连接变量，因此本次未执行生产数据库记录判断。不能把线上页面当作已进入 editorial 复核队列；后续需要通过安全环境变量提供生产数据库连接，或将这两个页面迁移到统一 `tools` 数据源。若要检查本地库，显式设置 `SEO_AUDIT_ENV=local`。
 

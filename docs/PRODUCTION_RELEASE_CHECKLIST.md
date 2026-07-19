@@ -45,6 +45,7 @@ Current scope note:
 Monitor and scheduled jobs:
 
 - `MONITOR_API_TOKEN`
+- GitHub secret: `PRODUCTION_DATABASE_URL` (read-only, used only by the priority editorial source audit)
 - GitHub secret: `MONITOR_BASE_URL`
 - GitHub secret: `MONITOR_API_TOKEN`
 - GitHub secret: `FEISHU_WEBHOOK_URL`
