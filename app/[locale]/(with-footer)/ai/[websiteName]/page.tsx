@@ -1651,6 +1651,12 @@ export default async function Page({
           day: 'numeric',
         }).format(new Date(editorialReview.reviewedAt))
       : null;
+    const editorialReviewStale = editorialReview?.reviewedAt
+      ? (() => {
+          const reviewedTime = new Date(editorialReview.reviewedAt).getTime();
+          return Number.isFinite(reviewedTime) && Date.now() - reviewedTime >= 90 * 24 * 60 * 60 * 1000;
+        })()
+      : false;
     const freshnessSummary = decisionFreshnessSummary || getFreshnessSummary(updatedAt || null, locale);
     const pricingSummary = decisionPricingSummary || getPricingSummary(dbTool?.pricing, locale);
     const riskPoints: string[] = [];
@@ -2493,6 +2499,13 @@ export default async function Page({
                           <p className='mt-2 text-lg font-semibold text-slate-950'>
                             {editorialReviewedLabel || (locale === 'cn' ? '已复核' : 'Reviewed')}
                           </p>
+                          {editorialReviewStale && (
+                            <p className='mt-2 text-sm font-medium text-amber-700'>
+                              {locale === 'cn'
+                                ? '该复核已超过 90 天，建议重新核查官网信息。'
+                                : 'This review is over 90 days old. Recheck the official source before relying on it.'}
+                            </p>
+                          )}
                           {editorialReview.summary && (
                             <p className='mt-3 text-sm leading-6 text-slate-600'>{editorialReview.summary}</p>
                           )}
