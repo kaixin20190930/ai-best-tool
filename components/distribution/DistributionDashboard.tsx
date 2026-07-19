@@ -6,6 +6,7 @@ import { ExternalLink, Link2, Plus, Radar, Send, ShieldCheck } from 'lucide-reac
 import {
   createDistributionTask,
   recordDistributionResult,
+  seedDistributionStarterTasks,
   updateDistributionTaskStatus,
   type DistributionDashboard as DistributionDashboardData,
 } from '@/app/actions/distribution';
@@ -92,7 +93,14 @@ export default function DistributionDashboard({ data }: { data: DistributionDash
             <div className='text-xs font-bold uppercase tracking-[0.18em] text-cyan-700'>Today&apos;s operating board</div>
             <h2 className='mt-1 text-xl font-bold text-slate-950'>{data.project?.name || 'Product'} <span className='font-normal text-slate-400'>/ {data.workspace?.name || 'Workspace'}</span></h2>
           </div>
-          <div className='text-xs text-slate-500'>Keep one task tied to one channel and one next action.</div>
+          <div className='flex flex-wrap items-center gap-3 text-xs text-slate-500'>
+            <span>Keep one task tied to one channel and one next action.</span>
+            {data.tasks.length === 0 ? (
+              <form action={seedDistributionStarterTasks}>
+                <button className='rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 font-bold text-cyan-800 hover:bg-cyan-100'>Initialize AI Best Tool queue</button>
+              </form>
+            ) : null}
+          </div>
         </div>
 
         {data.tasks.length === 0 ? (

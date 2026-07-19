@@ -67,7 +67,24 @@ async function ensureDefaultProject(userId: string, email?: string, isOwnProject
     .limit(1)
     .maybeSingle();
 
-  if (existingProject) return existingProject;
+  if (existingProject) {
+    if (isOwnProject && existingProject.name === 'My product') {
+      const { data: updatedProject } = await supabase
+        .from('distribution_projects')
+        .update({
+          name: 'AI Best Tool',
+          website_url: 'https://aibesttool.com',
+          description: 'Track AI Best Tool distribution, editorial mentions, and follow-ups.',
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', existingProject.id)
+        .select('id, name, website_url, workspace_id')
+        .single();
+
+      return updatedProject || existingProject;
+    }
+    return existingProject;
+  }
 
   const workspaceName = email?.split('@')[0] || 'My distribution workspace';
   const slug = workspaceName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 80) || 'workspace';
@@ -245,5 +262,65 @@ export async function recordDistributionResult(formData: FormData): Promise<{ su
   } catch (error) {
     console.error('Record distribution result error:', error);
     return { success: false, error: error instanceof Error ? error.message : 'Unable to record result.' };
+  }
+}
+
+export async function seedDistributionStarterTasks(): Promise<{ success: boolean; created?: number; error?: string }> {
+  try {
+    const { user, allowed } = await getDistributionAccess();
+    if (!allowed || !isAdminUser(user)) return { success: false, error: 'Only the workspace owner can initialize starter tasks.' };
+
+    const supabase = await createClient();
+    const project = await ensureDefaultProject(user.id, user.email, true);
+    const { count, error: countError } = await supabase
+      .from('distribution_tasks')
+      .select('id', { count: 'exact', head: true })
+      .eq('project_id', project.id);
+    if (countError) throw countError;
+    if ((count || 0) > 0) return { success: true, created: 0 };
+
+    const { data: channels, error: channelError } = await supabase
+      .from('distribution_channels')
+      .select('id, channel_key, name')
+      .eq('is_active', true)
+      .order('sort_order', { ascending: true });
+    if (channelError) throw channelError;
+
+    const taskTemplates: Record<string, { title: string; taskType: string; instructions: string; priority: string }> = {
+      'ai-directories': { title: 'Audit 3 relevant AI directories before submitting', taskType: 'research', instructions: 'Choose directories with a real audience. Record acceptance rules and whether the listing is editorial or paid.', priority: 'p0' },
+      'alternative-sites': { title: 'Prepare an honest AI directory alternative pitch', taskType: 'prepare', instructions: 'Explain what AI Best Tool helps users decide better, without copying generic directory claims.', priority: 'p1' },
+      'startup-launches': { title: 'Draft an AI Best Tool launch story', taskType: 'prepare', instructions: 'Use the real problem, product evidence, and current SEO recovery context. No inflated traffic claims.', priority: 'p1' },
+      communities: { title: 'Find one relevant community question to answer', taskType: 'research', instructions: 'Contribute a useful answer first. Only mention AI Best Tool when it directly helps the question.', priority: 'p0' },
+      newsletters: { title: 'Build a shortlist of 5 relevant newsletters', taskType: 'research', instructions: 'Prioritize newsletters read by AI tool buyers, founders, or technical operators.', priority: 'p1' },
+      'owned-blog': { title: 'Publish one first-party comparison or experiment', taskType: 'publish', instructions: 'Use real screenshots, dates, test notes, or GSC evidence. Avoid generic AI-written listicles.', priority: 'p0' },
+      github: { title: 'Add a useful open-source example or resource', taskType: 'prepare', instructions: 'Create a relevant repository, template, or documentation example. Do not add unrelated links to issues.', priority: 'p2' },
+      reddit: { title: 'Answer one genuine Reddit question with disclosure', taskType: 'submit', instructions: 'Find a relevant question, answer it directly, disclose affiliation, and save the post URL for follow-up.', priority: 'p1' },
+    };
+
+    const today = new Date();
+    const rows = (channels || []).flatMap((channel: any, index) => {
+      const template = taskTemplates[channel.channel_key];
+      if (!template) return [];
+      const dueDate = new Date(today);
+      dueDate.setDate(today.getDate() + index);
+      return [{
+        project_id: project.id,
+        owner_id: user.id,
+        channel_id: channel.id,
+        title: template.title,
+        task_type: template.taskType,
+        priority: template.priority,
+        due_date: dueDate.toISOString().slice(0, 10),
+        instructions: template.instructions,
+      }];
+    });
+    if (!rows.length) return { success: false, error: 'No active distribution channels are available.' };
+    const { error } = await supabase.from('distribution_tasks').insert(rows);
+    if (error) throw error;
+    revalidatePath('/[locale]/distribution', 'page');
+    return { success: true, created: rows.length };
+  } catch (error) {
+    console.error('Seed distribution tasks error:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'Unable to initialize starter tasks.' };
   }
 }
