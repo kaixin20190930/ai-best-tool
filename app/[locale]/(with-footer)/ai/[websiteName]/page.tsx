@@ -2499,6 +2499,9 @@ export default async function Page({
                           <p className='mt-2 text-lg font-semibold text-slate-950'>
                             {editorialReviewedLabel || (locale === 'cn' ? '已复核' : 'Reviewed')}
                           </p>
+                          <p className='mt-1 text-xs font-medium text-slate-500'>
+                            {locale === 'cn' ? `复核人：${editorialReview.reviewedBy}` : `Reviewed by ${editorialReview.reviewedBy}`}
+                          </p>
                           {editorialReviewStale && (
                             <p className='mt-2 text-sm font-medium text-amber-700'>
                               {locale === 'cn'
