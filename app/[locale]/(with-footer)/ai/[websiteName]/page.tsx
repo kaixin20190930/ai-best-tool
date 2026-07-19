@@ -222,8 +222,9 @@ function getEditorialReview(
   const sourceUrl = /^https?:\/\//i.test(sourceUrlValue) ? sourceUrlValue : null;
   const summary = getLocalizedText(record.summary, locale, fallback);
   const trustNote = getLocalizedText(record.trustNote, locale, fallback);
+  const reviewedTime = reviewedAt ? new Date(reviewedAt).getTime() : Number.NaN;
 
-  if (!reviewedAt || !reviewedBy || !sourceUrl || !summary) {
+  if (!reviewedAt || !Number.isFinite(reviewedTime) || reviewedTime > Date.now() || !reviewedBy || !sourceUrl || !summary) {
     return null;
   }
 

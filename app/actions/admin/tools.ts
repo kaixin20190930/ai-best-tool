@@ -1328,6 +1328,16 @@ export async function updateTool(
       const editorialSummaryEn = normalizeNullableText(data.editorial.summary?.en);
       const editorialSummaryZh = normalizeNullableText(data.editorial.summary?.zh);
 
+      if (editorialReviewedAt) {
+        const reviewedTime = new Date(editorialReviewedAt).getTime();
+        if (!Number.isFinite(reviewedTime)) {
+          return { success: false, error: 'Review date must be a valid calendar date.' };
+        }
+        if (reviewedTime > Date.now()) {
+          return { success: false, error: 'Review date cannot be in the future.' };
+        }
+      }
+
       if (editorialReviewedAt && !editorialReviewedBy) {
         return { success: false, error: 'Add a reviewer before marking editorial verification complete.' };
       }
