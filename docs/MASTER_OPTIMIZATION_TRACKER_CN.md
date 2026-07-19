@@ -338,6 +338,7 @@
 - 2026-07-19：扩展 priority source audit，分别检查生产页面可用性与 editorial 管理源；确认 Fathom/Pipedream 线上可访问，但项目 `.env.production` 未配置数据库连接，本次不对生产 DB 记录做推断，暂不把它们标记为已复核。
 - 2026-07-19：修正 priority source audit 默认环境加载范围，默认只读取 `.env.production`，仅在显式设置 `SEO_AUDIT_ENV=local` 时读取 `.env.local`，避免把本地库误判为生产数据源。
 - 2026-07-19：为每日 SEO Monitoring 增加可选 `PRODUCTION_DATABASE_URL` 只读 Secret 接口；配置后自动 strict 检查 Fathom/Pipedream 的 editorial 数据源，未配置时明确跳过 DB 检查，不阻断现有部署。
+- 2026-07-19：最新回归通过：`seo:production-smoke` 检查 5 个核心页面均为 200，robots/sitemap 正常，线上 sitemap 360 条且无内部或 comparison URL；production monitor 运行 `771`、SEO monitor 运行 `63` 均成功。
 - 2026-07-19：复核 60 天计划周度验收项：8 项中 6 项已有代码或线上验证依据，剩余 2 项为真实外部商业行为（至少 20 个工具团队外联、至少 1 个 Claim 留资进入跟进），仍保持未完成，不用代码结果替代商业结果。
 - 2026-07-17：最新 28 天 GSC 再核对仍只有 876 impressions / 2 clicks，Top queries 仍以品牌和目录词为主，排名大多在 70-110 之外；当前继续按“收口弱页 + 强化核心页真实信号 + 观察索引恢复”主线推进。
 - 2026-07-17：`guides` 总览页底部的 Submit / Claim CTA 进一步降权，避免商业入口在总入口页抢走“先看指南、再做比较”的主路径注意力，并通过本地 `pnpm run build`。
