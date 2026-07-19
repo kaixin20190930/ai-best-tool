@@ -746,6 +746,7 @@ export async function getAdminTools(filters?: {
       query += `
         AND NULLIF(BTRIM(features->'editorial'->>'reviewedAt'), '') IS NOT NULL
         AND NULLIF(BTRIM(features->'editorial'->>'reviewedBy'), '') IS NOT NULL
+        AND NULLIF(BTRIM(features->'editorial'->>'sourceUrl'), '') IS NOT NULL
         AND (
           NULLIF(BTRIM(features->'editorial'->'summary'->>'en'), '') IS NOT NULL
           OR NULLIF(BTRIM(features->'editorial'->'summary'->>'zh'), '') IS NOT NULL
@@ -755,6 +756,7 @@ export async function getAdminTools(filters?: {
         AND (
           NULLIF(BTRIM(features->'editorial'->>'reviewedAt'), '') IS NULL
           OR NULLIF(BTRIM(features->'editorial'->>'reviewedBy'), '') IS NULL
+          OR NULLIF(BTRIM(features->'editorial'->>'sourceUrl'), '') IS NULL
           OR (
             NULLIF(BTRIM(features->'editorial'->'summary'->>'en'), '') IS NULL
             AND NULLIF(BTRIM(features->'editorial'->'summary'->>'zh'), '') IS NULL
@@ -1148,6 +1150,7 @@ export async function updateTool(
     editorial?: {
       reviewedAt?: string | null;
       reviewedBy?: string | null;
+      sourceUrl?: string | null;
       summary?: { en?: string; zh?: string };
       trustNote?: { en?: string; zh?: string };
     };
@@ -1313,6 +1316,7 @@ export async function updateTool(
     if (data.editorial !== undefined) {
       const editorialReviewedAt = normalizeNullableDate(data.editorial.reviewedAt);
       const editorialReviewedBy = normalizeNullableText(data.editorial.reviewedBy);
+      const editorialSourceUrl = normalizeNullableText(data.editorial.sourceUrl);
       const editorialSummaryEn = normalizeNullableText(data.editorial.summary?.en);
       const editorialSummaryZh = normalizeNullableText(data.editorial.summary?.zh);
 
@@ -1324,10 +1328,24 @@ export async function updateTool(
         return { success: false, error: 'Add an editorial summary before marking verification complete.' };
       }
 
+      if (editorialReviewedAt && !editorialSourceUrl) {
+        return { success: false, error: 'Add an evidence source URL before marking verification complete.' };
+      }
+
+      if (editorialSourceUrl) {
+        try {
+          const parsedSourceUrl = new URL(editorialSourceUrl);
+          if (!['http:', 'https:'].includes(parsedSourceUrl.protocol)) throw new Error('Unsupported protocol');
+        } catch {
+          return { success: false, error: 'Evidence source URL must be a valid HTTP or HTTPS URL.' };
+        }
+      }
+
       const nextEditorial = {
         ...getRecord(existingFeatures.editorial),
         reviewedAt: editorialReviewedAt,
         reviewedBy: editorialReviewedBy,
+        sourceUrl: editorialSourceUrl,
         summary: {
           ...getRecord(getRecord(existingFeatures.editorial).summary),
           en: editorialSummaryEn || '',

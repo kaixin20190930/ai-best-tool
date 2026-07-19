@@ -9,6 +9,7 @@ import {
   CircleArrowRight,
   DollarSign,
   Eye,
+  ExternalLink,
   FolderOpen,
   Heart,
   Lightbulb,
@@ -201,6 +202,7 @@ function getEditorialReview(
 ): {
   reviewedAt: string | null;
   reviewedBy: string | null;
+  sourceUrl: string;
   summary: string | null;
   trustNote: string | null;
 } | null {
@@ -216,16 +218,19 @@ function getEditorialReview(
   const record = editorial as Record<string, unknown>;
   const reviewedAt = typeof record.reviewedAt === 'string' ? record.reviewedAt : null;
   const reviewedBy = typeof record.reviewedBy === 'string' ? record.reviewedBy : null;
+  const sourceUrlValue = typeof record.sourceUrl === 'string' ? record.sourceUrl.trim() : '';
+  const sourceUrl = /^https?:\/\//i.test(sourceUrlValue) ? sourceUrlValue : null;
   const summary = getLocalizedText(record.summary, locale, fallback);
   const trustNote = getLocalizedText(record.trustNote, locale, fallback);
 
-  if (!reviewedAt || !reviewedBy || !summary) {
+  if (!reviewedAt || !reviewedBy || !sourceUrl || !summary) {
     return null;
   }
 
   return {
     reviewedAt,
     reviewedBy,
+    sourceUrl,
     summary,
     trustNote,
   };
@@ -2494,6 +2499,15 @@ export default async function Page({
                           {editorialReview.trustNote && (
                             <p className='mt-2 text-sm leading-6 text-slate-600'>{editorialReview.trustNote}</p>
                           )}
+                          <a
+                            href={editorialReview.sourceUrl}
+                            target='_blank'
+                            rel='noreferrer'
+                            className='mt-3 inline-flex items-center gap-1 text-sm font-semibold text-cyan-700 hover:text-cyan-900'
+                          >
+                            {locale === 'cn' ? '查看证据来源' : 'View evidence source'}
+                            <ExternalLink className='size-3.5' />
+                          </a>
                         </div>
                       )}
                     </div>

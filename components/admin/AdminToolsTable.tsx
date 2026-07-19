@@ -136,10 +136,11 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
     const editorial = getNestedRecord(getFeatureRecord(tool).editorial);
     const reviewedAt = typeof editorial.reviewedAt === 'string' ? editorial.reviewedAt.trim() : '';
     const reviewedBy = typeof editorial.reviewedBy === 'string' ? editorial.reviewedBy.trim() : '';
+    const sourceUrl = typeof editorial.sourceUrl === 'string' ? editorial.sourceUrl.trim() : '';
     const summary = getNestedRecord(editorial.summary);
     const summaryEn = typeof summary.en === 'string' ? summary.en.trim() : '';
     const summaryZh = typeof summary.zh === 'string' ? summary.zh.trim() : '';
-    return Boolean(reviewedAt && reviewedBy && (summaryEn || summaryZh));
+    return Boolean(reviewedAt && reviewedBy && sourceUrl && (summaryEn || summaryZh));
   };
 
   const getRejectionReason = (tool: AdminTool) => {

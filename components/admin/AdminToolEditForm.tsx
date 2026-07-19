@@ -372,6 +372,7 @@ export default function AdminToolEditForm({
     const editorialSummaryZh = String(formData.get('editorial_summary_zh') || '').trim();
     const editorialTrustNoteEn = String(formData.get('editorial_trust_note_en') || '').trim();
     const editorialTrustNoteZh = String(formData.get('editorial_trust_note_zh') || '').trim();
+    const editorialSourceUrl = String(formData.get('editorial_source_url') || '').trim();
 
     const tags = tagsStr
       .split(',')
@@ -407,6 +408,7 @@ export default function AdminToolEditForm({
       editorial: {
         reviewedAt: editorialReviewedAt || null,
         reviewedBy: editorialReviewedBy || null,
+        sourceUrl: editorialSourceUrl || null,
         summary: { en: editorialSummaryEn, zh: editorialSummaryZh },
         trustNote: { en: editorialTrustNoteEn, zh: editorialTrustNoteZh },
       },
@@ -1023,6 +1025,22 @@ export default function AdminToolEditForm({
                   placeholder="Name or team"
                   className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
                 />
+              </div>
+              <div className="md:col-span-2">
+                <label htmlFor="editorial_source_url" className="block text-sm font-medium text-slate-700">
+                  Evidence Source URL
+                </label>
+                <input
+                  type="url"
+                  id="editorial_source_url"
+                  name="editorial_source_url"
+                  defaultValue={getString(editorial.sourceUrl) || ''}
+                  placeholder="https://official-site.example/pricing"
+                  className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+                />
+                <p className="mt-1 text-xs text-slate-500">
+                  Required when marking a review complete. Use the official source or a clearly documented public evidence page.
+                </p>
               </div>
               <div>
                 <label htmlFor="editorial_summary_en" className="block text-sm font-medium text-slate-700">
