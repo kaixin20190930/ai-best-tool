@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Check, CheckCheck, Edit, ExternalLink, Trash2, X } from 'lucide-react';
 import { toast } from 'sonner';
@@ -16,7 +15,7 @@ import {
   rejectTool,
 } from '@/app/actions/admin/tools';
 import type { AdminTool } from '@/app/actions/admin/tools';
-import { useRouter } from '@/app/navigation';
+import { Link, useRouter } from '@/app/navigation';
 
 interface AdminToolsTableProps {
   tools: AdminTool[];
