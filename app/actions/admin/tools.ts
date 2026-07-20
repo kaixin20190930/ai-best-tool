@@ -1018,6 +1018,12 @@ export async function approveTool(
     const existingFeatures = getRecord(existingRow.features);
     const submission = getRecord(existingFeatures.submission);
     const commercial = getCommercialFeature(existingRow.features);
+    if (commercial.plan === 'standard_paid' && commercial.paymentConfirmed !== true) {
+      return {
+        success: false,
+        error: 'Priority review payment is required before publishing this paid submission.',
+      };
+    }
     const nextFeatures = {
       ...existingFeatures,
       submission: {
@@ -3252,6 +3258,55 @@ export async function activateCommercialPlacementBySystem(
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to activate commercial placement',
+    };
+  }
+}
+
+export async function markCommercialPaymentFailedBySystem(
+  toolId: string,
+  transactionId?: string | null,
+  paymentStage?: string | null,
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const pool = getPool();
+    const result = await pool.query('SELECT features FROM tools WHERE id = $1 LIMIT 1', [toolId]);
+    if (result.rows.length === 0) {
+      return { success: false, error: 'Tool not found' };
+    }
+
+    const features = getRecord(result.rows[0].features);
+    const submission = getRecord(features.submission);
+    const commercial = getCommercialFeature(features);
+    if (commercial.paymentConfirmed === true) {
+      return { success: true };
+    }
+    const nextFeatures = {
+      ...features,
+      submission: {
+        ...submission,
+        commercial: {
+          ...commercial,
+          status: 'payment_failed',
+          paymentConfirmed: false,
+          paymentFailedAt: new Date().toISOString(),
+          ...(transactionId ? { lastFailedTransactionId: transactionId } : {}),
+          ...(paymentStage ? { lastFailedPaymentStage: paymentStage } : {}),
+        },
+      },
+    };
+
+    await pool.query('UPDATE tools SET features = $2, updated_at = NOW() WHERE id = $1', [
+      toolId,
+      JSON.stringify(nextFeatures),
+    ]);
+    revalidateAdminToolPaths();
+    revalidatePublicToolPaths(null);
+    return { success: true };
+  } catch (error) {
+    console.error('Error marking commercial payment failed:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to mark payment failed',
     };
   }
 }

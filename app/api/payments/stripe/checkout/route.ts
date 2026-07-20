@@ -44,6 +44,10 @@ function parseFeaturedDays(value: unknown): 0 | 3 | 7 | 14 {
   return 0;
 }
 
+function parsePaymentStage(value: string | null): 'review' | 'featured' {
+  return value === 'featured' ? 'featured' : 'review';
+}
+
 export async function GET(request: NextRequest) {
   try {
     if (!isStripeConfigured()) {
@@ -94,12 +98,55 @@ export async function GET(request: NextRequest) {
 
     const plan = String(getCommercialValue(tool, 'plan') || 'free');
     const paymentConfirmed = getCommercialValue(tool, 'paymentConfirmed') === true;
-    if (plan !== 'standard_paid' || paymentConfirmed) {
-      return NextResponse.json({ ok: false, error: 'This submission does not require payment.' }, { status: 400 });
+    const paymentStage = parsePaymentStage(request.nextUrl.searchParams.get('stage'));
+    const commercial = getRecord(getRecord(getRecord(tool.features).submission).commercial);
+
+    if (plan !== 'standard_paid') {
+      return NextResponse.json({ ok: false, error: 'This submission is not on a paid plan.' }, { status: 400 });
     }
 
-    const featuredDays = parseFeaturedDays(getCommercialValue(tool, 'featuredDaysRequested'));
-    const fastTrack = getCommercialValue(tool, 'fastTrackRequested') === true;
+    if (paymentStage === 'review' && paymentConfirmed) {
+      return NextResponse.json({ ok: false, error: 'The review payment has already been completed.' }, { status: 400 });
+    }
+
+    if (paymentStage === 'featured' && (!paymentConfirmed || String(tool.status) !== 'published')) {
+      return NextResponse.json(
+        { ok: false, error: 'Featured placement is available after paid review approval.' },
+        { status: 400 },
+      );
+    }
+
+    const requestedFeaturedDays = parseFeaturedDays(
+      paymentStage === 'featured'
+        ? request.nextUrl.searchParams.get('days') || getCommercialValue(tool, 'featuredDaysRequested')
+        : getCommercialValue(tool, 'featuredDaysRequested'),
+    );
+    const bundleRequested =
+      request.nextUrl.searchParams.get('bundle') === '1' ||
+      (getCommercialValue(tool, 'fastTrackRequested') === true && requestedFeaturedDays === 14);
+
+    if (paymentStage === 'featured' && requestedFeaturedDays === 0) {
+      return NextResponse.json({ ok: false, error: 'Choose a featured duration first.' }, { status: 400 });
+    }
+
+    const nextFeatures = {
+      ...getRecord(tool.features),
+      submission: {
+        ...getRecord(getRecord(tool.features).submission),
+        commercial: {
+          ...commercial,
+          ...(requestedFeaturedDays > 0 ? { featuredDaysRequested: requestedFeaturedDays } : {}),
+          ...(paymentStage === 'featured' ? { fastTrackRequested: bundleRequested } : {}),
+        },
+      },
+    };
+
+    if (paymentStage === 'featured') {
+      await pool.query('UPDATE tools SET features = $2, updated_at = NOW() WHERE id = $1', [toolId, JSON.stringify(nextFeatures)]);
+    }
+
+    const featuredDays = paymentStage === 'review' ? 0 : requestedFeaturedDays;
+    const fastTrack = paymentStage === 'featured' ? bundleRequested : false;
 
     const siteUrl = BASE_URL.replace(/\/$/, '');
     const titleValue = tool.title;
@@ -115,6 +162,7 @@ export async function GET(request: NextRequest) {
       toolName: String(tool.name || toolId),
       featuredDays,
       fastTrack,
+      paymentStage,
       customerEmail: user.email || undefined,
       successUrl: `${siteUrl}/profile/submissions?payment=success&session_id={CHECKOUT_SESSION_ID}`,
       cancelUrl: `${siteUrl}/profile/submissions?payment=cancelled`,
@@ -128,6 +176,7 @@ export async function GET(request: NextRequest) {
         toolTitle,
         featuredDays,
         fastTrack,
+        paymentStage,
         sessionId: session.id,
         sourcePath,
         sourceLocale,

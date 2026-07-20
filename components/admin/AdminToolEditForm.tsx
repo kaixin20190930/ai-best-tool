@@ -170,7 +170,16 @@ export default function AdminToolEditForm({
   const [featuredDaysInput, setFeaturedDaysInput] = useState(featuredDaysRequested);
   const isPaidSubmission = commercialPlan === 'standard_paid';
   const paidPublishGate = getPaidListingPublishGate(tool);
-  const paidPublishBlocked = isPaidSubmission && paidPublishGate.blockers.length > 0;
+  const paymentBlocker = isPaidSubmission && !paymentConfirmed ? 'Priority review payment is required before publishing.' : '';
+  const paidPublishBlocked = isPaidSubmission && (paidPublishGate.blockers.length > 0 || Boolean(paymentBlocker));
+  const paidPublishBlockerText = [
+    paymentBlocker,
+    paidPublishGate.blockers.length > 0
+      ? `Missing publish fields: ${paidPublishGate.blockers.join(', ')}.`
+      : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
   const selectedCategory = categories.find((category) => category.id === categoryIdValue);
   const currentTags = tagsValue
     .split(',')
@@ -441,7 +450,7 @@ export default function AdminToolEditForm({
               </p>
               {paidPublishBlocked && (
                 <p className="mt-2 text-sm font-medium text-yellow-900">
-                  Paid listing blockers: {paidPublishGate.blockers.join(', ')}. Save the missing details before publishing.
+                  {paidPublishBlockerText} Save the missing details before publishing.
                 </p>
               )}
             </div>
@@ -476,7 +485,7 @@ export default function AdminToolEditForm({
                     {reviewLoading === 'approve'
                       ? 'Publishing...'
                       : paidPublishBlocked
-                        ? 'Save details before publish'
+                        ? paymentBlocker || 'Save details before publish'
                         : 'Approve & Publish'}
                   </button>
                 </div>

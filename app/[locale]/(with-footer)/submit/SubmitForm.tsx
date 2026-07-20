@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-import { getListingTotalCents, listingConfig } from '@/lib/config/listing';
+import { listingConfig } from '@/lib/config/listing';
 import { FORM_PLACEHOLDER, WEBSITE_EXAMPLE } from '@/lib/constants';
 import type { Category } from '@/lib/services/categories';
 import { cn } from '@/lib/utils';
@@ -138,9 +138,13 @@ export default function SubmitForm({
   const descriptionLength = form.watch('description')?.length || 0;
   const selectedFeaturedDays = Number(featuredDays || '0');
   const isPaidPlan = submissionPlan === 'standard_paid';
-  const selectedTotalCents = isPaidPlan
-    ? getListingTotalCents(selectedFeaturedDays as 0 | 3 | 7 | 14, fastTrack)
-    : 0;
+  const reviewCents = isPaidPlan ? listingConfig.pricingTiers.priorityReview.amountCents : 0;
+  const launchBundleSelected = isPaidPlan && fastTrack && selectedFeaturedDays === 14;
+  const featuredBalanceCents = launchBundleSelected
+    ? listingConfig.pricingTiers.launchBundle.amountCents - reviewCents
+    : selectedFeaturedDays > 0
+      ? listingConfig.pricingTiers.featuredWindows.find((item) => item.days === selectedFeaturedDays)?.amountCents || 0
+      : 0;
   const selectedCategoryId = form.watch('categoryId');
   const selectedCategory = categories.find((category) => category.id === selectedCategoryId);
 
@@ -812,13 +816,13 @@ export default function SubmitForm({
               </div>
               {isPaidPlan && (
                 <div className='mt-3 rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-sm text-cyan-950'>
-                  <span className='font-semibold'>{isChinese ? '预计一次性费用：' : 'Estimated one-time total: '}</span>
-                  <span className='font-bold'>${(selectedTotalCents / 100).toFixed(2)}</span>
+                  <span className='font-semibold'>{isChinese ? '审核时支付：' : 'Due for review: '}</span>
+                  <span className='font-bold'>${(reviewCents / 100).toFixed(2)}</span>
                   <span className='ml-2 text-xs text-cyan-950/70'>
                     {selectedFeaturedDays > 0
                       ? isChinese
-                        ? '包含优先审核和前排附加项'
-                        : 'Includes priority review and the featured add-on'
+                        ? `审核通过后再支付前排费用 $${(featuredBalanceCents / 100).toFixed(2)}`
+                        : `Pay $${(featuredBalanceCents / 100).toFixed(2)} for Featured after approval`
                       : isChinese
                         ? '包含优先审核'
                         : 'Includes priority review'}

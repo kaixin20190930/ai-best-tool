@@ -8,6 +8,8 @@ export type StripeCheckoutInput = {
   toolName: string;
   featuredDays: 0 | 3 | 7 | 14;
   fastTrack: boolean;
+  paymentStage?: 'review' | 'featured';
+  amountCentsOverride?: number;
   customerEmail?: string | null;
   successUrl: string;
   cancelUrl: string;
@@ -125,9 +127,21 @@ export function getStripeListingAmountCents(featuredDays: 0 | 3 | 7 | 14, fastTr
   return getListingTotalCents(featuredDays, fastTrack);
 }
 
-export function buildStripeListingDescription(input: Pick<StripeCheckoutInput, 'featuredDays' | 'fastTrack'>): string {
+export function buildStripeListingDescription(
+  input: Pick<StripeCheckoutInput, 'featuredDays' | 'fastTrack' | 'paymentStage' | 'amountCentsOverride'>,
+): string {
+  if (input.paymentStage === 'featured' && input.fastTrack && input.featuredDays === 14) {
+    return 'Complete the remaining balance for the Launch Bundle: 14-day featured placement after approval. Total: $30.';
+  }
+
+  if (input.paymentStage === 'featured') {
+    return `${input.featuredDays}-day featured placement after approval. Total: $${(
+      (input.amountCentsOverride || getListingTotalCents(input.featuredDays, false)) / 100
+    ).toFixed(2)}.`;
+  }
+
   if (input.fastTrack && input.featuredDays === 14) {
-    return listingConfig.pricingTiers.launchBundle.summary;
+    return `${listingConfig.pricingTiers.priorityReview.summary} Launch Bundle intent reserved for approval. Total due now: $9.`;
   }
 
   const prioritySummary = listingConfig.pricingTiers.priorityReview.summary;
@@ -143,8 +157,25 @@ export function buildStripeListingDescription(input: Pick<StripeCheckoutInput, '
   return `${prioritySummary} ${featuredSummary} Total: $${(total / 100).toFixed(2)}.`.trim();
 }
 
-function getFixedListingPriceIds(input: Pick<StripeCheckoutInput, 'featuredDays' | 'fastTrack'>): string[] | null {
+function getFixedListingPriceIds(
+  input: Pick<StripeCheckoutInput, 'featuredDays' | 'fastTrack' | 'paymentStage'>,
+): string[] | null {
   const prices = getStripeListingPriceIds();
+
+  if (input.paymentStage === 'review') {
+    return prices.priorityReview ? [prices.priorityReview] : null;
+  }
+
+  if (input.paymentStage === 'featured') {
+    if (input.fastTrack && input.featuredDays === 14) return null;
+    const featuredPrice =
+      input.featuredDays === 3
+        ? prices.featured3Days
+        : input.featuredDays === 7
+          ? prices.featured7Days
+          : prices.featured14Days;
+    return featuredPrice ? [featuredPrice] : null;
+  }
 
   if (input.fastTrack && input.featuredDays === 14) {
     return prices.launchBundle ? [prices.launchBundle] : null;
@@ -165,10 +196,24 @@ function getFixedListingPriceIds(input: Pick<StripeCheckoutInput, 'featuredDays'
 
 export async function createStripeCheckoutSession(input: StripeCheckoutInput): Promise<{ id: string; url: string }> {
   const secretKey = getStripeSecretKey();
-  const amountCents = getStripeListingAmountCents(input.featuredDays, input.fastTrack);
+  const amountCents =
+    input.amountCentsOverride ??
+    (input.paymentStage === 'review'
+      ? listingConfig.pricingTiers.priorityReview.amountCents
+      : input.paymentStage === 'featured' && input.fastTrack && input.featuredDays === 14
+        ? listingConfig.pricingTiers.launchBundle.amountCents - listingConfig.pricingTiers.priorityReview.amountCents
+        : input.paymentStage === 'featured'
+          ? listingConfig.pricingTiers.featuredWindows.find((item) => item.days === input.featuredDays)?.amountCents || 0
+          : getStripeListingAmountCents(input.featuredDays, input.fastTrack));
   const amountLabel = `$${(amountCents / 100).toFixed(2)}`;
-  const productName = input.fastTrack && input.featuredDays === 14
-    ? `${input.toolTitle} - launch bundle`
+  const productName = input.paymentStage === 'featured' && input.fastTrack && input.featuredDays === 14
+    ? `${input.toolTitle} - launch bundle featured balance`
+    : input.paymentStage === 'featured'
+      ? `${input.toolTitle} - ${input.featuredDays}-day featured placement`
+      : input.paymentStage === 'review'
+        ? `${input.toolTitle} - priority review`
+        : input.fastTrack && input.featuredDays === 14
+          ? `${input.toolTitle} - launch bundle`
     : input.featuredDays > 0
       ? `${input.toolTitle} - priority review + ${input.featuredDays}-day featured placement`
       : `${input.toolTitle} - priority review`;
@@ -196,6 +241,7 @@ export async function createStripeCheckoutSession(input: StripeCheckoutInput): P
   body.set('metadata[tool_slug]', input.toolName);
   body.set('metadata[featured_days]', String(input.featuredDays));
   body.set('metadata[fast_track]', String(input.fastTrack));
+  body.set('metadata[payment_stage]', input.paymentStage || 'legacy_full');
   body.set('metadata[amount_cents]', String(amountCents));
   body.set('metadata[amount_label]', amountLabel);
   body.set(

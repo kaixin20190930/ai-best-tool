@@ -65,11 +65,30 @@ AI Best Tool 不是单一目录站，而是由三层产品组成：
 | 产品 | 价格 | 类型 | 交付边界 |
 | --- | ---: | --- | --- |
 | Free Listing | $0 | 免费 | 标准审核队列，无 Featured |
-| Priority Review | $9 | 一次性 | 更短审核窗口，不保证通过 |
-| Featured 3 Days | +$9 | 一次性附加项 | 3 天固定窗口；含 Priority Review 时总计 $18 |
-| Featured 7 Days | +$19 | 一次性附加项 | 7 天固定窗口；含 Priority Review 时总计 $28 |
-| Featured 14 Days | +$29 | 一次性附加项 | 14 天固定窗口；含 Priority Review 时总计 $38 |
-| Launch Bundle | $39 | 一次性 | Priority Review + 14 天 Featured |
+| Priority Review | $9 | 一次性审核服务 | 提交时支付；进入优先审核队列，不保证通过；被拒后可在 14 天内免费修改并复审一次 |
+| Featured 3 Days | +$9 | 审核通过后的附加项 | 仅在审核通过后支付并激活 3 天固定窗口 |
+| Featured 7 Days | +$19 | 审核通过后的附加项 | 仅在审核通过后支付并激活 7 天固定窗口 |
+| Featured 14 Days | +$29 | 审核通过后的附加项 | 仅在审核通过后支付并激活 14 天固定窗口 |
+| Launch Bundle | $39 | 分阶段一次性 | 提交时先付 $9 审核费；审核通过后再付 $30 激活 14 天 Featured，总额不超过 $39 |
+
+### B.1 入驻消费流程与退款边界
+
+正式状态机：
+
+```text
+免费提交 → 标准审核 → 发布 / 拒绝
+付费提交 → 支付 $9 审核费 → 优先审核 → 发布 / 拒绝
+发布后 → 用户可选 Featured 3/7/14 或 Launch Bundle 余额 → 支付成功 → 激活 Featured
+```
+
+- `$9` 是审核服务费，不是“保证发布费”；审核不通过时不自动退还，但提供一次 14 天内免费复审。
+- Launch Bundle 的 `$30` 余额只有审核通过后才会创建 checkout；审核失败或用户放弃时不会扣款。
+- Featured 费用不在首次审核 checkout 中收取，避免“尚未通过就先购买曝光”的争议。
+- 已发布的旧付费记录如果尚未确认付款，会在“我的提交”显示补款入口，付款后按当前记录继续处理。
+- Stripe checkout 取消或失败不会开通任何权益；用户可从“我的提交”重试。
+- 退款仅处理重复扣款、系统故障或法律要求等异常；正常审核拒绝不退 `$9` 审核服务费。
+
+用户可见状态：`待支付`、`支付失败可重试`、`已付款待审核`、`已发布`、`Featured 生效`、`Featured 已到期`。
 
 ### C. Distribution Workspace
 
@@ -338,10 +357,10 @@ AI 不执行：
 
 | 编号 | 任务 | 负责人 | 状态 | 验收标准 |
 | --- | --- | --- | --- | --- |
-| P0-01 | 建立一次性产品和金额单一配置源 | Codex | 已有基础，待收口 | `listingConfig`、页面、checkout 的金额和权益一致 |
+| P0-01 | 建立一次性产品和金额单一配置源 | Codex | 已完成 | `listingConfig`、页面、checkout 的金额和权益一致 |
 | P0-02 | 创建一次性 Stripe Product/Price 映射 | 用户 + Codex | 未开始 | 5 个付费权益有 Test Price ID，服务端白名单校验 |
-| P0-03 | 一次性 checkout 产品键和金额校验 | Codex | 未开始 | 不允许客户端改价，metadata 与实际金额一致 |
-| P0-04 | 一次性 webhook 幂等和权益验收 | Codex | 部分已有，待补齐 | 重复 webhook 不重复激活或记账 |
+| P0-03 | 一次性 checkout 产品键和金额校验 | Codex | 已完成 | 分阶段 checkout 由服务端决定金额，metadata 标记 review/featured |
+| P0-04 | 一次性 webhook 幂等和权益验收 | Codex | 已完成 | 重复 webhook 不重复激活或记账，失败付款可重试 |
 | P0-05 | 建立 Distribution 定价单一配置源 | Codex | 未开始 | 页面和 checkout 不再硬编码价格 |
 | P0-06 | 增加 Pilot 自动权益 | Codex | 未开始 | 新用户无信用卡可创建 1 个项目 |
 | P0-07 | 实现 Pilot 任务、项目、链接限额 | Codex | 未开始 | 超限时显示升级提示，已有数据不删除 |
@@ -350,7 +369,7 @@ AI 不执行：
 | P0-10 | 支持 Pro/Agency 月付和年付 | Codex | 未开始 | 四个 Price ID 均能创建正确 checkout |
 | P0-11 | 修正取消、账期结束和降级规则 | Codex | 未开始 | 取消后保留到期，之后自动降为 Pilot |
 | P0-12 | 统一价格页三条产品路径 | Codex | 未开始 | Listing、Launch、Distribution 边界清晰 |
-| P0-13 | 完整本地 build 和回归 | Codex | 未开始 | `pnpm run build` 成功，既有付款不受影响 |
+| P0-13 | 完整本地 build 和回归 | Codex | 已完成 | `pnpm run build` 成功，既有付款不受影响 |
 
 ### P1：Stripe Test Mode 验收
 

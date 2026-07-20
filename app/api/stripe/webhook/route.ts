@@ -6,7 +6,10 @@ import {
   hasSuccessfulPaymentCallbackByTransactionId,
   insertPaymentCallbackLog,
 } from '@/app/actions/admin/paymentCallbacks';
-import { activateCommercialPlacementBySystem } from '@/app/actions/admin/tools';
+import {
+  activateCommercialPlacementBySystem,
+  markCommercialPaymentFailedBySystem,
+} from '@/app/actions/admin/tools';
 import { trackCommerceEvent } from '@/app/actions/analytics';
 import { createNotification } from '@/app/actions/notifications';
 
@@ -121,6 +124,12 @@ export async function POST(request: NextRequest) {
     );
 
     const tool = toolResult.rows[0] as Record<string, unknown> | undefined;
+
+    await markCommercialPaymentFailedBySystem(
+      toolId,
+      transactionId,
+      session?.metadata?.payment_stage || null,
+    );
 
     await writeCallbackLogSafe({
       toolId,

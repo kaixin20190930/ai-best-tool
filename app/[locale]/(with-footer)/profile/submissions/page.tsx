@@ -77,6 +77,7 @@ function getStatusActionHint(status: SubmittedTool['status']) {
 type CommercialViewStatus =
   | 'free'
   | 'pending_payment'
+  | 'payment_failed'
   | 'paid_waiting_review'
   | 'paid_published'
   | 'live_featured'
@@ -89,6 +90,7 @@ type CommercialDetails = {
   featuredDaysRequested: 0 | 3 | 7 | 14;
   featuredActiveFrom: Date | null;
   featuredUntil: Date | null;
+  paymentFailed: boolean;
 };
 
 function getRecord(value: unknown): Record<string, unknown> {
@@ -116,6 +118,7 @@ function getCommercialDetails(tool: SubmittedTool): CommercialDetails {
     featuredDaysRequested,
     featuredActiveFrom: activeFrom && !Number.isNaN(activeFrom.getTime()) ? activeFrom : null,
     featuredUntil: until && !Number.isNaN(until.getTime()) ? until : null,
+    paymentFailed: commercial.status === 'payment_failed' || typeof commercial.paymentFailedAt === 'string',
   };
 }
 
@@ -125,7 +128,7 @@ function getCommercialStatus(tool: SubmittedTool): CommercialViewStatus {
 
   if (details.plan !== 'standard_paid') return 'free';
 
-  if (!details.paymentConfirmed) return 'pending_payment';
+  if (!details.paymentConfirmed) return details.paymentFailed ? 'payment_failed' : 'pending_payment';
   if (tool.status !== 'published') return 'paid_waiting_review';
   if (
     details.sponsored &&
@@ -161,6 +164,8 @@ function getCommercialDetailLine(status: CommercialViewStatus, details: Commerci
       return details.featuredDaysRequested > 0
         ? `Stripe checkout is ready. Featured placement will start after approval and run for ${details.featuredDaysRequested} days.`
         : 'Stripe checkout is ready in your submission record.';
+    case 'payment_failed':
+      return 'The last payment did not complete. Retry the $9 review payment to keep this paid submission moving.';
     case 'paid_waiting_review':
       return details.featuredDaysRequested > 0
         ? 'Payment is recorded. The listing is waiting for review before the featured window starts.'
@@ -188,6 +193,7 @@ function getCommercialBadge(status: CommercialViewStatus) {
   const styles: Record<CommercialViewStatus, string> = {
     free: 'bg-slate-100 text-slate-700',
     pending_payment: 'bg-amber-100 text-amber-800',
+    payment_failed: 'bg-rose-100 text-rose-800',
     paid_waiting_review: 'bg-cyan-100 text-cyan-800',
     paid_published: 'bg-sky-100 text-sky-800',
     live_featured: 'bg-emerald-100 text-emerald-800',
@@ -196,6 +202,7 @@ function getCommercialBadge(status: CommercialViewStatus) {
   const labels: Record<CommercialViewStatus, string> = {
     free: listingConfig.plans.free.label,
     pending_payment: 'Pending payment',
+    payment_failed: 'Payment failed',
     paid_waiting_review: 'Paid, under review',
     paid_published: 'Paid listing',
     live_featured: listingConfig.plans.standard_paid.featuredLabel,
@@ -213,6 +220,13 @@ function getCommercialPaymentUrl(tool: SubmittedTool): string | null {
   const features = getRecord(tool.features);
   const submission = getRecord(features.submission);
   const commercial = getRecord(submission.commercial);
+
+  // Always use the staged server checkout for paid listings. A legacy stored
+  // URL may still point at the old full-amount checkout flow.
+  if (commercial.plan === 'standard_paid' && typeof window === 'undefined' && process.env.STRIPE_SECRET_KEY?.trim()) {
+    return `/api/payments/stripe/checkout?toolId=${encodeURIComponent(tool.id)}&stage=review`;
+  }
+
   const candidates = ['paymentUrl', 'checkoutUrl', 'paymentLink'] as const;
 
   const foundKey = candidates.find((key) => {
@@ -228,10 +242,22 @@ function getCommercialPaymentUrl(tool: SubmittedTool): string | null {
   }
 
   if (typeof window === 'undefined' && process.env.STRIPE_SECRET_KEY?.trim()) {
-    return `/api/payments/stripe/checkout?toolId=${encodeURIComponent(tool.id)}`;
+    return `/api/payments/stripe/checkout?toolId=${encodeURIComponent(tool.id)}&stage=review`;
   }
 
   return null;
+}
+
+function getFeaturedPaymentUrl(tool: SubmittedTool, days?: 3 | 7 | 14, bundle = false): string {
+  const details = getCommercialDetails(tool);
+  const requestedDays = days || details.featuredDaysRequested || 7;
+  const params = new URLSearchParams({
+    toolId: tool.id,
+    stage: 'featured',
+    days: String(requestedDays),
+  });
+  if (bundle) params.set('bundle', '1');
+  return `/api/payments/stripe/checkout?${params.toString()}`;
 }
 
 export default async function SubmissionsPage({
@@ -260,7 +286,10 @@ export default async function SubmissionsPage({
   const submissionEmailEnabled =
     submissionEmailEnabledPromise.status === 'fulfilled' ? submissionEmailEnabledPromise.value : true;
   const tools = result.success ? result.tools : [];
-  const pendingPaymentTools = tools.filter((tool) => getCommercialStatus(tool) === 'pending_payment');
+  const pendingPaymentTools = tools.filter((tool) => {
+    const status = getCommercialStatus(tool);
+    return status === 'pending_payment' || status === 'payment_failed';
+  });
   const featuredTools = tools.filter((tool) => getCommercialStatus(tool) === 'live_featured');
   const firstPendingPaymentTool = pendingPaymentTools[0] || null;
   const firstPendingPaymentUrl = firstPendingPaymentTool ? getCommercialPaymentUrl(firstPendingPaymentTool) : null;
@@ -720,6 +749,7 @@ export default async function SubmissionsPage({
                       const commercialDetails = getCommercialDetails(tool);
                       const paymentUrl =
                         commercialStatus === 'pending_payment' ||
+                        commercialStatus === 'payment_failed' ||
                         commercialStatus === 'live_featured' ||
                         commercialStatus === 'expired'
                           ? getCommercialPaymentUrl(tool)
@@ -729,14 +759,59 @@ export default async function SubmissionsPage({
 
                       if (tool.status === 'published') {
                         actionContent = (
-                          <Link
-                            href={`/ai/${tool.name}`}
-                            className='text-sm font-medium text-cyan-700 hover:text-cyan-800'
-                          >
-                            View listing
-                          </Link>
+                          <div className='flex flex-col items-end gap-2'>
+                            <Link
+                              href={`/ai/${tool.name}`}
+                              className='text-sm font-medium text-cyan-700 hover:text-cyan-800'
+                            >
+                              View listing
+                            </Link>
+                            {(commercialStatus === 'pending_payment' || commercialStatus === 'payment_failed') && paymentUrl && (
+                              <a
+                                href={paymentUrl}
+                                target='_blank'
+                                rel='noopener noreferrer'
+                                className='inline-flex items-center rounded-lg border border-amber-200 bg-amber-50 px-3 py-1.5 text-sm font-semibold text-amber-800 hover:bg-amber-100'
+                              >
+                                {commercialStatus === 'payment_failed' ? 'Retry payment' : 'Complete payment'}
+                              </a>
+                            )}
+                            {commercialStatus === 'paid_published' && (
+                              <div className='flex flex-wrap justify-end gap-1'>
+                                {commercialDetails.sponsored ? (
+                                  <a
+                                    href={getFeaturedPaymentUrl(tool, commercialDetails.featuredDaysRequested || 7)}
+                                    className='text-xs font-semibold text-amber-700 hover:text-amber-800'
+                                  >
+                                    Renew Featured
+                                  </a>
+                                ) : commercialDetails.featuredDaysRequested === 14 &&
+                                  getCommercialDetails(tool).plan === 'standard_paid' &&
+                                  getRecord(getRecord(getRecord(tool.features).submission).commercial).fastTrackRequested === true ? (
+                                  <a
+                                    href={getFeaturedPaymentUrl(tool, 14, true)}
+                                    className='text-xs font-semibold text-amber-700 hover:text-amber-800'
+                                  >
+                                    Activate Launch Bundle ($30)
+                                  </a>
+                                ) : (
+                                  <>
+                                    <a href={getFeaturedPaymentUrl(tool, 3)} className='text-xs font-semibold text-amber-700 hover:text-amber-800'>
+                                      Feature 3d
+                                    </a>
+                                    <a href={getFeaturedPaymentUrl(tool, 7)} className='text-xs font-semibold text-amber-700 hover:text-amber-800'>
+                                      Feature 7d
+                                    </a>
+                                    <a href={getFeaturedPaymentUrl(tool, 14)} className='text-xs font-semibold text-amber-700 hover:text-amber-800'>
+                                      Feature 14d
+                                    </a>
+                                  </>
+                                )}
+                              </div>
+                            )}
+                          </div>
                         );
-                      } else if (commercialStatus === 'pending_payment') {
+                      } else if (commercialStatus === 'pending_payment' || commercialStatus === 'payment_failed') {
                         actionContent = paymentUrl ? (
                           <a
                             href={paymentUrl}
@@ -744,7 +819,7 @@ export default async function SubmissionsPage({
                             rel='noopener noreferrer'
                             className='inline-flex items-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-50'
                           >
-                            Complete payment
+                            {commercialStatus === 'payment_failed' ? 'Retry payment' : 'Complete payment'}
                           </a>
                         ) : (
                           <a
