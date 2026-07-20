@@ -66,9 +66,9 @@ AI Best Tool 不是单一目录站，而是由三层产品组成：
 | --- | ---: | --- | --- |
 | Free Listing | $0 | 免费 | 标准审核队列，无 Featured |
 | Priority Review | $9 | 一次性 | 更短审核窗口，不保证通过 |
-| Featured 3 Days | $9 | 一次性 | 3 天固定窗口 |
-| Featured 7 Days | $19 | 一次性 | 7 天固定窗口 |
-| Featured 14 Days | $29 | 一次性 | 14 天固定窗口 |
+| Featured 3 Days | +$9 | 一次性附加项 | 3 天固定窗口；含 Priority Review 时总计 $18 |
+| Featured 7 Days | +$19 | 一次性附加项 | 7 天固定窗口；含 Priority Review 时总计 $28 |
+| Featured 14 Days | +$29 | 一次性附加项 | 14 天固定窗口；含 Priority Review 时总计 $38 |
 | Launch Bundle | $39 | 一次性 | Priority Review + 14 天 Featured |
 
 ### C. Distribution Workspace

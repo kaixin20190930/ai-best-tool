@@ -88,23 +88,23 @@ export const listingConfig: ListingConfig = {
       {
         days: 3,
         label: '3-day featured',
-        priceLabel: '$9',
+        priceLabel: '+$9',
         amountCents: 900,
-        summary: 'Short burst for a quick announcement.',
+        summary: 'Add-on: a short burst for a quick announcement.',
       },
       {
         days: 7,
         label: '7-day featured',
-        priceLabel: '$19',
+        priceLabel: '+$19',
         amountCents: 1900,
-        summary: 'A full week of added visibility.',
+        summary: 'Add-on: a full week of added visibility.',
       },
       {
         days: 14,
         label: '14-day featured',
-        priceLabel: '$29',
+        priceLabel: '+$29',
         amountCents: 2900,
-        summary: 'Longer visibility for bigger campaigns.',
+        summary: 'Add-on: longer visibility for bigger campaigns.',
       },
     ],
     launchBundle: {
@@ -137,4 +137,15 @@ export const listingConfig: ListingConfig = {
 
 export function getListingPaymentMailto(subject: string): string {
   return `mailto:${listingConfig.supportEmail}?subject=${encodeURIComponent(subject)}`;
+}
+
+export function getListingTotalCents(featuredDays: 0 | 3 | 7 | 14, fastTrack: boolean): number {
+  if (fastTrack && featuredDays === 14) {
+    return listingConfig.pricingTiers.launchBundle.amountCents;
+  }
+
+  const featuredAmount =
+    listingConfig.pricingTiers.featuredWindows.find((item) => item.days === featuredDays)?.amountCents || 0;
+
+  return listingConfig.pricingTiers.priorityReview.amountCents + featuredAmount;
 }

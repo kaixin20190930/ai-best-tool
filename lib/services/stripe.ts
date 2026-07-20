@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 
-import { listingConfig } from '@/lib/config/listing';
+import { getListingTotalCents, listingConfig } from '@/lib/config/listing';
 
 export type StripeCheckoutInput = {
   toolId: string;
@@ -86,19 +86,7 @@ export function getStripeWebhookSecret(): string {
 }
 
 export function getStripeListingAmountCents(featuredDays: 0 | 3 | 7 | 14, fastTrack: boolean): number {
-  const priorityReview = listingConfig.pricingTiers.priorityReview.amountCents;
-  const featuredAmountByDays: Record<0 | 3 | 7 | 14, number> = {
-    0: 0,
-    3: listingConfig.pricingTiers.featuredWindows.find((item) => item.days === 3)?.amountCents || 0,
-    7: listingConfig.pricingTiers.featuredWindows.find((item) => item.days === 7)?.amountCents || 0,
-    14: listingConfig.pricingTiers.featuredWindows.find((item) => item.days === 14)?.amountCents || 0,
-  };
-
-  if (fastTrack && featuredDays === 14) {
-    return listingConfig.pricingTiers.launchBundle.amountCents;
-  }
-
-  return priorityReview + featuredAmountByDays[featuredDays];
+  return getListingTotalCents(featuredDays, fastTrack);
 }
 
 export function buildStripeListingDescription(input: Pick<StripeCheckoutInput, 'featuredDays' | 'fastTrack'>): string {
@@ -109,22 +97,24 @@ export function buildStripeListingDescription(input: Pick<StripeCheckoutInput, '
   const prioritySummary = listingConfig.pricingTiers.priorityReview.summary;
 
   if (input.featuredDays === 0) {
-    return prioritySummary;
+    return `${prioritySummary} Total: $9.`;
   }
 
   const featuredWindow = listingConfig.pricingTiers.featuredWindows.find((item) => item.days === input.featuredDays);
 
   const featuredSummary = featuredWindow?.summary || `${input.featuredDays}-day featured placement`;
-  return `${prioritySummary} ${featuredSummary}`.trim();
+  const total = getListingTotalCents(input.featuredDays, input.fastTrack);
+  return `${prioritySummary} ${featuredSummary} Total: $${(total / 100).toFixed(2)}.`.trim();
 }
 
 export async function createStripeCheckoutSession(input: StripeCheckoutInput): Promise<{ id: string; url: string }> {
   const secretKey = getStripeSecretKey();
   const amountCents = getStripeListingAmountCents(input.featuredDays, input.fastTrack);
   const amountLabel = `$${(amountCents / 100).toFixed(2)}`;
-  const productName =
-    input.featuredDays > 0
-      ? `${input.toolTitle} - ${input.featuredDays}-day featured placement`
+  const productName = input.fastTrack && input.featuredDays === 14
+    ? `${input.toolTitle} - launch bundle`
+    : input.featuredDays > 0
+      ? `${input.toolTitle} - priority review + ${input.featuredDays}-day featured placement`
       : `${input.toolTitle} - priority review`;
 
   const body = new URLSearchParams();
