@@ -2,7 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { BASE_URL } from '@/lib/env';
 import { createClient } from '@/lib/supabase/server';
-import { createDistributionCheckoutSession, getDistributionPriceId, type DistributionPlan } from '@/lib/services/stripe';
+import {
+  createDistributionCheckoutSession,
+  getDistributionPriceId,
+  type DistributionInterval,
+  type DistributionPlan,
+} from '@/lib/services/stripe';
 import { recordDistributionAttributionEvent } from '@/lib/services/distributionAttribution';
 
 export const runtime = 'nodejs';
@@ -10,8 +15,10 @@ export const runtime = 'nodejs';
 export async function GET(request: NextRequest) {
   try {
     const plan = request.nextUrl.searchParams.get('plan') as DistributionPlan;
+    const interval = (request.nextUrl.searchParams.get('interval') || 'monthly') as DistributionInterval;
     if (plan !== 'pro' && plan !== 'agency') return NextResponse.json({ ok: false, error: 'plan must be pro or agency.' }, { status: 400 });
-    if (!getDistributionPriceId(plan)) return NextResponse.json({ ok: false, error: `Stripe price for ${plan} is not configured yet.` }, { status: 503 });
+    if (interval !== 'monthly' && interval !== 'yearly') return NextResponse.json({ ok: false, error: 'interval must be monthly or yearly.' }, { status: 400 });
+    if (!getDistributionPriceId(plan, interval)) return NextResponse.json({ ok: false, error: `Stripe price for ${plan} ${interval} is not configured yet.` }, { status: 503 });
 
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
@@ -26,10 +33,11 @@ export async function GET(request: NextRequest) {
       userId: user.id,
       email: user.email,
       plan,
+      interval,
       successUrl: `${siteUrl}/distribution?checkout=success&plan=${plan}`,
       cancelUrl: `${siteUrl}/pricing?checkout=cancelled`,
     });
-    await recordDistributionAttributionEvent('checkout', user.id, { sessionId: session.id, plan });
+    await recordDistributionAttributionEvent('checkout', user.id, { sessionId: session.id, plan, interval });
     return NextResponse.redirect(session.url, { status: 302 });
   } catch (error) {
     console.error('Distribution checkout route failed:', error);

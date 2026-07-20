@@ -25,15 +25,20 @@ export default async function DistributionPage({ params, searchParams }: { param
           <Link href='/pricing' className='mt-7 inline-flex rounded-xl bg-slate-950 px-5 py-3 text-sm font-bold text-white hover:bg-slate-800'>View plans</Link>
           <div className='mx-auto mt-8 grid max-w-2xl gap-3 text-left sm:grid-cols-2'>
             {[
-              { plan: 'pro', label: 'Pro', price: '$19/mo', detail: 'Up to 5 product projects' },
-              { plan: 'agency', label: 'Agency', price: '$49/mo', detail: 'Up to 25 product projects' },
+              { plan: 'pro', label: 'Pro', monthly: '$29/mo', yearly: '$290/yr', detail: 'Up to 5 product projects' },
+              { plan: 'agency', label: 'Agency', monthly: '$79/mo', yearly: '$790/yr', detail: 'Up to 25 product projects' },
             ].map((item) => {
-              const available = Boolean(getDistributionPriceId(item.plan as 'pro' | 'agency'));
+              const monthlyAvailable = Boolean(getDistributionPriceId(item.plan as 'pro' | 'agency', 'monthly'));
+              const yearlyAvailable = Boolean(getDistributionPriceId(item.plan as 'pro' | 'agency', 'yearly'));
               return (
                 <div key={item.plan} className='rounded-2xl border border-slate-200 bg-slate-50 p-4'>
-                  <div className='flex items-center justify-between'><span className='font-bold text-slate-900'>{item.label}</span><span className='text-sm font-bold text-cyan-700'>{item.price}</span></div>
+                  <div className='flex items-center justify-between'><span className='font-bold text-slate-900'>{item.label}</span><span className='text-sm font-bold text-cyan-700'>{item.monthly} · {item.yearly}</span></div>
                   <p className='mt-2 text-xs text-slate-600'>{item.detail}</p>
-                  {available ? <a href={`/api/payments/stripe/distribution/checkout?plan=${item.plan}`} className='mt-4 inline-flex rounded-lg bg-cyan-700 px-3 py-2 text-xs font-bold text-white hover:bg-cyan-800'>Start subscription</a> : <div className='mt-4 text-xs font-semibold text-slate-400'>Coming soon</div>}
+                  <div className='mt-4 flex flex-wrap gap-2'>
+                    {monthlyAvailable && <a href={`/api/payments/stripe/distribution/checkout?plan=${item.plan}&interval=monthly`} className='inline-flex rounded-lg bg-cyan-700 px-3 py-2 text-xs font-bold text-white hover:bg-cyan-800'>Monthly</a>}
+                    {yearlyAvailable && <a href={`/api/payments/stripe/distribution/checkout?plan=${item.plan}&interval=yearly`} className='inline-flex rounded-lg bg-slate-900 px-3 py-2 text-xs font-bold text-white hover:bg-slate-800'>Yearly</a>}
+                    {!monthlyAvailable && !yearlyAvailable && <div className='text-xs font-semibold text-slate-400'>Coming soon</div>}
+                  </div>
                 </div>
               );
             })}
