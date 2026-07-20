@@ -25,8 +25,8 @@ export default async function DistributionPage({ params, searchParams }: { param
           <Link href='/pricing' className='mt-7 inline-flex rounded-xl bg-slate-950 px-5 py-3 text-sm font-bold text-white hover:bg-slate-800'>View plans</Link>
           <div className='mx-auto mt-8 grid max-w-2xl gap-3 text-left sm:grid-cols-2'>
             {[
-              { plan: 'pro', label: 'Pro', monthly: '$29/mo', yearly: '$290/yr', detail: 'Up to 5 product projects' },
-              { plan: 'agency', label: 'Agency', monthly: '$79/mo', yearly: '$790/yr', detail: 'Up to 25 product projects' },
+              { plan: 'pro', label: 'Pro', monthly: '$19/mo', yearly: '$190/yr', detail: 'Up to 5 product projects' },
+              { plan: 'agency', label: 'Agency', monthly: '$49/mo', yearly: '$490/yr', detail: 'Up to 25 product projects' },
             ].map((item) => {
               const monthlyAvailable = Boolean(getDistributionPriceId(item.plan as 'pro' | 'agency', 'monthly'));
               const yearlyAvailable = Boolean(getDistributionPriceId(item.plan as 'pro' | 'agency', 'yearly'));
