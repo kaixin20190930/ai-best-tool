@@ -326,8 +326,12 @@ export async function getToolStats(toolId: string): Promise<{
     const favoriteCount = favoriteResult.rows[0]?.count || 0;
 
     return {
-      ...toolStats,
-      favoriteCount,
+      viewCount: Number(toolStats.viewCount ?? 0),
+      clickCount: Number(toolStats.clickCount ?? 0),
+      shareCount: Number(toolStats.shareCount ?? 0),
+      averageRating: Number(toolStats.averageRating ?? 0),
+      ratingCount: Number(toolStats.ratingCount ?? 0),
+      favoriteCount: Number(favoriteCount ?? 0),
     };
   } catch (error) {
     console.error('Error fetching tool stats:', error);
