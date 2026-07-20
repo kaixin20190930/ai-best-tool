@@ -336,7 +336,7 @@ export default async function SubmissionsPage({
   }
 
   let featuredWindowEndText = 'No end date set';
-  if (nextFeaturedRenewal.details.featuredUntil) {
+  if (nextFeaturedRenewal?.details.featuredUntil) {
     featuredWindowEndText = nextFeaturedRenewal.details.featuredUntil.toLocaleDateString();
   } else if (isChinese) {
     featuredWindowEndText = '暂无结束时间';

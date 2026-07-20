@@ -1,9 +1,11 @@
 import type { ComponentType } from 'react';
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { ArrowRight, Clock3, CreditCard, Megaphone, Rocket, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { getListingPaymentMailto, listingConfig } from '@/lib/config/listing';
+import { getDistributionPriceId } from '@/lib/services/stripe';
 import CommerceViewTracker from '@/components/analytics/CommerceViewTracker';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
@@ -138,6 +140,53 @@ function FaqCard({ q, a }: { q: string; a: string }) {
       <p className='text-sm font-semibold text-slate-950'>{q}</p>
       <p className='mt-2 text-sm leading-6 text-slate-600'>{a}</p>
     </div>
+  );
+}
+
+function DistributionPricingPanel({ locale }: { locale: string }) {
+  const isChinese = locale === 'cn' || locale === 'tw';
+  const plans = [
+    { key: 'pro' as const, label: 'Pro', monthly: '$19/mo', yearly: '$190/yr', detail: 'Up to 5 product projects' },
+    { key: 'agency' as const, label: 'Agency', monthly: '$49/mo', yearly: '$490/yr', detail: 'Up to 25 product projects' },
+  ];
+
+  return (
+    <section className='mt-8 rounded-[24px] border border-slate-200 bg-slate-950 p-6 text-white shadow-sm lg:p-8'>
+      <div className='flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between'>
+        <div>
+          <p className='text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300'>Distribution Workspace</p>
+          <h2 className='mt-2 text-2xl font-bold'>{isChinese ? '持续分发工作台' : 'Keep distribution moving'}</h2>
+          <p className='mt-2 max-w-2xl text-sm leading-6 text-slate-300'>
+            {isChinese
+              ? '管理目录、社区、内容和后续跟进，不包含一次性入驻或 Featured 权益。'
+              : 'Manage directories, communities, content, and follow-ups. This is separate from one-time listing and featured placement.'}
+          </p>
+        </div>
+        <Link href={`/${locale}/distribution`} className='inline-flex rounded-lg bg-cyan-300 px-4 py-2.5 text-sm font-bold text-slate-950 hover:bg-cyan-200'>
+          {isChinese ? '查看分发工作台' : 'Open workspace'}
+        </Link>
+      </div>
+      <div className='mt-6 grid gap-4 md:grid-cols-2'>
+        {plans.map((plan) => {
+          const monthlyAvailable = Boolean(getDistributionPriceId(plan.key, 'monthly'));
+          const yearlyAvailable = Boolean(getDistributionPriceId(plan.key, 'yearly'));
+          return (
+            <div key={plan.key} className='rounded-2xl border border-slate-700 bg-slate-900 p-5'>
+              <div className='flex items-center justify-between gap-3'>
+                <h3 className='text-lg font-bold'>{plan.label}</h3>
+                <span className='text-sm font-bold text-cyan-300'>{plan.monthly} · {plan.yearly}</span>
+              </div>
+              <p className='mt-2 text-sm text-slate-300'>{plan.detail}</p>
+              <div className='mt-4 flex flex-wrap gap-2'>
+                {monthlyAvailable && <a href={`/api/payments/stripe/distribution/checkout?plan=${plan.key}&interval=monthly`} className='rounded-lg bg-cyan-300 px-3 py-2 text-xs font-bold text-slate-950 hover:bg-cyan-200'>Monthly</a>}
+                {yearlyAvailable && <a href={`/api/payments/stripe/distribution/checkout?plan=${plan.key}&interval=yearly`} className='rounded-lg bg-white px-3 py-2 text-xs font-bold text-slate-950 hover:bg-slate-100'>Yearly</a>}
+                {!monthlyAvailable && !yearlyAvailable && <span className='text-xs font-semibold text-slate-400'>Coming soon</span>}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
   );
 }
 
@@ -428,6 +477,8 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
           </aside>
         </div>
       </section>
+
+      <DistributionPricingPanel locale={locale} />
 
       <GuideEvidencePanel
         locale={locale}

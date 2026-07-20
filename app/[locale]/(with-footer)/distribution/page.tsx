@@ -49,5 +49,19 @@ export default async function DistributionPage({ params, searchParams }: { param
     );
   }
 
-  return <div className='w-full px-5 py-10 sm:px-8 lg:px-12'><DistributionDashboard data={result.data} locale={params.locale} /></div>;
+  return (
+    <div className='w-full px-5 py-10 sm:px-8 lg:px-12'>
+      <div className='mb-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
+        <div className='flex flex-wrap items-center justify-between gap-3'>
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-[0.18em] text-cyan-700'>Distribution Workspace</p>
+            <h1 className='mt-1 text-xl font-bold text-slate-950'>Pro $19/mo · $190/yr&nbsp;&nbsp; | &nbsp;&nbsp;Agency $49/mo · $490/yr</h1>
+            <p className='mt-1 text-sm text-slate-600'>Your current access remains active. Prices are shown for plan reference and future upgrades.</p>
+          </div>
+          <Link href='/pricing' className='text-sm font-semibold text-cyan-700 hover:text-cyan-800'>View all pricing</Link>
+        </div>
+      </div>
+      <DistributionDashboard data={result.data} locale={params.locale} />
+    </div>
+  );
 }
