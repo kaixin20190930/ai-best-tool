@@ -213,6 +213,33 @@ AI Best Tool 不是单一目录站，而是由三层产品组成：
 
 这些产品继续使用 `mode=payment`。
 
+当前代码已经支持一次性 checkout，但金额来自
+`lib/config/listing.ts` 的 `listingConfig`，并通过 `price_data` 在创建 Checkout
+Session 时动态生成 Stripe Price。这条路径可以继续工作，但还没有形成可审计的
+Stripe Product/Price 目录，也没有固定 Price ID 映射。
+
+因此，一次性模块必须和 Distribution 一起完成以下配置：
+
+1. 以 `listingConfig` 作为产品名称、金额和权益的唯一业务配置源。
+2. 在 Stripe Test Mode 创建上述 5 个 Product，其中 Free Listing 不创建 Stripe Price。
+3. 为 5 个付费权益建立固定 Price ID 映射，服务端只允许使用白名单 Price ID。
+4. 在迁移期间保留动态 `price_data` 作为回滚方案；Test Mode 全链路通过后再切换生产。
+5. 统一 metadata：`tool_id`、`featured_days`、`fast_track`、产品键和金额。
+6. 对一次性 webhook 做事件幂等、金额校验、权益激活和重复投递测试。
+
+建议环境变量：
+
+```text
+STRIPE_LISTING_PRICE_ID_PRIORITY_REVIEW
+STRIPE_LISTING_PRICE_ID_FEATURED_3D
+STRIPE_LISTING_PRICE_ID_FEATURED_7D
+STRIPE_LISTING_PRICE_ID_FEATURED_14D
+STRIPE_LISTING_PRICE_ID_LAUNCH_BUNDLE
+```
+
+这 5 个变量必须分别配置 Test 和 Live 值，不能把 Distribution 的订阅 Price ID
+混用于一次性 checkout。未完成 Test Mode 验收前，不切换线上一次性支付。
+
 ### 订阅 Stripe Products
 
 - `AI Best Tool Distribution Pro`
@@ -288,6 +315,9 @@ AI 不执行：
 
 ### 未完成或未验收
 
+- 一次性入驻 Stripe Product/固定 Price ID 目录和服务端白名单映射。
+- 一次性 checkout 的产品键、金额和权益一致性测试。
+- 一次性 webhook 的事件幂等和重复投递验收。
 - Pilot 自动开通和功能限额。
 - 分发定价统一配置，页面仍有硬编码价格。
 - Pro / Agency 月付和年付 Price 支持。
@@ -309,15 +339,19 @@ AI 不执行：
 
 | 编号 | 任务 | 负责人 | 状态 | 验收标准 |
 | --- | --- | --- | --- | --- |
-| P0-01 | 建立 Distribution 定价单一配置源 | Codex | 未开始 | 页面和 checkout 不再硬编码价格 |
-| P0-02 | 增加 Pilot 自动权益 | Codex | 未开始 | 新用户无信用卡可创建 1 个项目 |
-| P0-03 | 实现 Pilot 任务、项目、链接限额 | Codex | 未开始 | 超限时显示升级提示，已有数据不删除 |
-| P0-04 | 分离 Distribution Webhook secret | Codex | 未开始 | 两个 Stripe endpoint 分别验证自己的 secret |
-| P0-05 | 增加 Stripe event 幂等表/唯一约束 | Codex | 未开始 | 重复 webhook 不重复付款和开通权益 |
-| P0-06 | 支持 Pro/Agency 月付和年付 | Codex | 未开始 | 四个 Price ID 均能创建正确 checkout |
-| P0-07 | 修正取消、账期结束和降级规则 | Codex | 未开始 | 取消后保留到期，之后自动降为 Pilot |
-| P0-08 | 统一价格页三条产品路径 | Codex | 未开始 | Listing、Launch、Distribution 边界清晰 |
-| P0-09 | 完整本地 build 和回归 | Codex | 未开始 | `pnpm run build` 成功，既有付款不受影响 |
+| P0-01 | 建立一次性产品和金额单一配置源 | Codex | 已有基础，待收口 | `listingConfig`、页面、checkout 的金额和权益一致 |
+| P0-02 | 创建一次性 Stripe Product/Price 映射 | 用户 + Codex | 未开始 | 5 个付费权益有 Test Price ID，服务端白名单校验 |
+| P0-03 | 一次性 checkout 产品键和金额校验 | Codex | 未开始 | 不允许客户端改价，metadata 与实际金额一致 |
+| P0-04 | 一次性 webhook 幂等和权益验收 | Codex | 部分已有，待补齐 | 重复 webhook 不重复激活或记账 |
+| P0-05 | 建立 Distribution 定价单一配置源 | Codex | 未开始 | 页面和 checkout 不再硬编码价格 |
+| P0-06 | 增加 Pilot 自动权益 | Codex | 未开始 | 新用户无信用卡可创建 1 个项目 |
+| P0-07 | 实现 Pilot 任务、项目、链接限额 | Codex | 未开始 | 超限时显示升级提示，已有数据不删除 |
+| P0-08 | 分离 Distribution Webhook secret | Codex | 未开始 | 两个 Stripe endpoint 分别验证自己的 secret |
+| P0-09 | 增加 Stripe event 幂等表/唯一约束 | Codex | 未开始 | 重复 webhook 不重复付款和开通权益 |
+| P0-10 | 支持 Pro/Agency 月付和年付 | Codex | 未开始 | 四个 Price ID 均能创建正确 checkout |
+| P0-11 | 修正取消、账期结束和降级规则 | Codex | 未开始 | 取消后保留到期，之后自动降为 Pilot |
+| P0-12 | 统一价格页三条产品路径 | Codex | 未开始 | Listing、Launch、Distribution 边界清晰 |
+| P0-13 | 完整本地 build 和回归 | Codex | 未开始 | `pnpm run build` 成功，既有付款不受影响 |
 
 ### P1：Stripe Test Mode 验收
 
@@ -458,4 +492,11 @@ AI 不执行：
 
 ## 十五、当前下一步
 
-下一项为 `P0-01：建立 Distribution 定价单一配置源`，随后依次处理 Pilot、Webhook secret、幂等、月付/年付和统一价格页。在 P0 全部通过本地 build 前，不创建正式 Live Price，也不开放真实扣款。
+下一步先完成一次性模块的 Stripe 配置收口，再完成 Distribution 的定价和订阅配置：
+
+1. `P0-01` 至 `P0-04`：一次性入驻 Product/Price、金额校验、webhook 幂等。
+2. `P0-05` 至 `P0-11`：Distribution 定价、Pilot、订阅生命周期和独立 webhook。
+3. `P0-12` 至 `P0-13`：统一价格页、完整 build 和回归。
+
+在一次性和 Distribution 两条支付链路都通过 Test Mode、重复 webhook、失败支付和
+取消场景验收前，不切换正式 Live Price，不开放新的真实扣款路径。
