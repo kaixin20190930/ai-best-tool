@@ -2,6 +2,10 @@
 
 更新时间：2026-07-19
 
+产品定价、Stripe、权限和实施顺序已统一到：
+
+- [平台产品、定价与 Stripe 实施总方案](./PLATFORM_PRODUCT_PRICING_AND_STRIPE_ROADMAP_CN.md)
+
 ## 目标
 
 把“外链建设”升级为可收费的产品分发工作台，同时服务 aibesttool 自身。模块只解决一个问题：**每天知道该推广哪里、怎么准备、目前做到哪一步、结果是否真实有效。**
@@ -54,21 +58,21 @@
 - 独立分发订阅 checkout 路径和 Stripe webhook 处理器已加入，只有配置价格 ID 后才展示购买按钮
 - 管理员可在 `/[locale]/admin/distribution` 查看所有项目、权益、任务、live 结果、异常结果和 30 天归因汇总
 
-## 已完成的下一阶段
+## 计费与验收状态
 
-1. 在 Stripe 创建 Pro / Agency recurring price，并配置 `STRIPE_DISTRIBUTION_PRICE_ID_PRO`、`STRIPE_DISTRIBUTION_PRICE_ID_AGENCY`
-2. 在 Stripe webhook 中增加 `https://aibesttool.com/api/stripe/distribution-webhook`，复用 `STRIPE_WEBHOOK_SECRET`
-3. 重新执行 `20260719_product_distribution_module.sql`，使已存在的 `distribution_entitlements` 增加 Stripe 订阅字段
-4. 增加项目级 UTM、来源访问、注册/认领/checkout/付款转化关联，并在工作台展示 30 天归因快照
+1. 数据库迁移：已完成。
+2. 项目级 UTM、访问、注册、提交、认领、checkout、付款归因和 30 天快照：代码已完成，待真实链路验收。
+3. Stripe Price 创建前的定价配置、Pilot、幂等、独立 webhook secret 和月付/年付改造：未开始，列为计费 P0。
+4. 分发 webhook 将使用独立 `STRIPE_DISTRIBUTION_WEBHOOK_SECRET`，不与一次性入驻付款共用 endpoint secret。
 
 ## 仍需上线验证
 
 1. 重新执行完整迁移文件 `20260719_product_distribution_module.sql`，确认归因表和策略已落库。
 2. 用工作台生成一个 UTM 链接，使用新会话打开并完成一次注册或认领，确认归因数字增加。
 3. 在 Stripe 测试模式完成一次分发套餐 checkout，确认 webhook 写入 `payment` 事件且不重复计数。
-5. 增加渠道模板、批量生成“准备任务”，但不自动发布
-6. 增加 admin 视图，查看所有客户工作区、活跃任务、被拒原因和失效链接（已完成，待迁移后验证）
-7. 增加周报导出，服务客户复盘和 aibesttool 自身的外链建设
+4. 增加渠道模板、批量生成“准备任务”，但不自动发布。
+5. Admin 视图：已完成，待真实数据验证。
+6. 增加周报导出，服务客户复盘和 aibesttool 自身的外链建设。
 
 ## 成功指标
 

@@ -1,6 +1,6 @@
 # 优化总控任务表
 
-更新时间：2026-07-19
+更新时间：2026-07-20
 
 这份文档把当前所有优化内容合并成一份可追踪、可监测、可复盘的总任务表。
 
@@ -9,6 +9,7 @@
 - [60 天商业主线](./AI_TOOL_SITE_60_DAY_EXECUTION_PLAN_CN.md)
 - [SEO 质量恢复与真实内容增长](./SEO_QUALITY_RECOVERY_TASKS_CN.md)
 - [竞品研究与下一步优化方案](./COMPETITOR_RESEARCH_AND_NEXT_OPTIMIZATION_CN.md)
+- [平台产品、定价与 Stripe 实施总方案](./PLATFORM_PRODUCT_PRICING_AND_STRIPE_ROADMAP_CN.md)
 
 说明：
 
@@ -32,6 +33,7 @@
 - 2026-07-19：分发模块继续完成 P0 的 UTM 链接和渠道模板能力，按项目保存渠道链接、推广活动参数和人工提交规则；本轮仍不自动发帖，先为后续访问/注册/认领转化追踪打基础，并通过本地 `pnpm run build`。
 - 2026-07-19：分发模块完成访问、注册、提交、认领、checkout、Stripe 付款归因闭环；新增独立 Supabase 归因表和 30 天项目级快照，归因失败静默降级，不阻断核心业务流程；本地 `pnpm run build` 通过。上线前需重新执行分发模块迁移并完成一次真实链路验收。
 - 2026-07-20：分发模块新增管理员总览，集中查看客户项目、权益、开放任务、live / rejected / removed 结果及 30 天归因；本地 `pnpm run build` 通过并推送 `main`，待 Supabase 迁移后做线上验收。
+- 2026-07-20：统一平台产品和商业定义：Discover 免费发现、List & Launch 一次性交易、Distribution Workspace 持续订阅；确定 Pilot `$0`、Pro Founding `$19/月`、Founding Agency `$49/月` 的验证价格，并新增 Stripe/Pilot/幂等/月付年付/真实项目验证路线图。后续商业实施以 `PLATFORM_PRODUCT_PRICING_AND_STRIPE_ROADMAP_CN.md` 为准。
 - 2026-07-15：根据最近 28 天 GSC 基线，开始优先强化首页、榜单页和分类页的判断信号，新增价格 / 更新 / 风险信号层，帮助核心入口更像可决策页面
 - 2026-07-15：继续把曝光较高的工具详情页做成更强答案页，先补 `Fathom` / `Pipedream` 这类高曝光条目的定制信号层，降低“看到了但点不出来”的损耗
 - 2026-07-15：`robots.txt` 已回退为 `public/robots.txt` 静态文件，避免 metadata route 500；本地预览 `seo:validate` 已跑通 27/27，工具页非数据库工具的提示已改为通过
