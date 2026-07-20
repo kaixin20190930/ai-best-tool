@@ -39,7 +39,9 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [pendingAction, setPendingAction] = useState<PendingAction>(null);
   const [actionReason, setActionReason] = useState('');
-  const localePrefix = pathname.match(/^\/(en|cn|tw|jp|de|es|fr|pt|ru)(?=\/|$)/)?.[1] || '';
+  const localePrefix = pathname.match(/^\/(en|cn|tw|jp|de|es|fr|pt|ru)(?=\/|$)/)
+    ? `/${pathname.match(/^\/(en|cn|tw|jp|de|es|fr|pt|ru)(?=\/|$)/)?.[1]}`
+    : '';
 
   const handleApprove = async (toolId: string) => {
     setLoading(toolId);
