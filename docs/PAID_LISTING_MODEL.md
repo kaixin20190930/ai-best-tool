@@ -73,15 +73,15 @@ These are the current recommended offers.
 
 ### Priority review
 
-- Price: `$29 one-time`
+- Price: `$9 one-time`
 - Review target: `1-3 business days`
 - Use case: launches, updates, time-sensitive reviews
 
 ### Featured placement windows
 
-- `3-day featured`: `$29`
-- `7-day featured`: `$49`
-- `14-day featured`: `$79`
+- `3-day featured`: `+$9`
+- `7-day featured`: `+$19`
+- `14-day featured`: `+$29`
 
 Use case:
 
@@ -91,7 +91,7 @@ Use case:
 
 ### Launch bundle
 
-- Price: `$99`
+- Price: `$39`
 - Includes:
   - priority review
   - 14-day featured placement
@@ -114,7 +114,7 @@ Suggested subscription structure:
 
 ### Verified Developer
 
-- Price: `$29/month`
+- Price: `$19/month`
 - Includes:
   - verified badge
   - faster metadata updates
@@ -123,7 +123,7 @@ Suggested subscription structure:
 
 ### Growth Listing
 
-- Price: `$79/month`
+- Price: `$49/month`
 - Includes:
   - everything in Verified Developer
   - one monthly featured credit
