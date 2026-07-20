@@ -136,7 +136,7 @@ export default function AdminToolEditForm({
   const editorialSummary = getNestedRecord(editorial.summary);
   const editorialTrustNote = getNestedRecord(editorial.trustNote);
   const [categoryIdValue, setCategoryIdValue] = useState(tool.category_id || '');
-  const [tagsValue, setTagsValue] = useState(tool.tags.join(', '));
+  const [tagsValue, setTagsValue] = useState((tool.tags || []).join(', '));
   const [rejectionReasonInput, setRejectionReasonInput] = useState(rejectionReason || '');
   const mediaNeeded = mediaReview.needed === true;
   const mediaMarkedAt = getString(mediaReview.markedAt);

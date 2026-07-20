@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { Check, CheckCheck, Edit, ExternalLink, Trash2, X } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -15,7 +16,7 @@ import {
   rejectTool,
 } from '@/app/actions/admin/tools';
 import type { AdminTool } from '@/app/actions/admin/tools';
-import { Link, useRouter } from '@/app/navigation';
+import { useRouter } from '@/app/navigation';
 
 interface AdminToolsTableProps {
   tools: AdminTool[];
@@ -32,11 +33,13 @@ type PendingAction =
 
 export default function AdminToolsTable({ tools, total, currentPage }: AdminToolsTableProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [pendingAction, setPendingAction] = useState<PendingAction>(null);
   const [actionReason, setActionReason] = useState('');
+  const localePrefix = pathname.match(/^\/(en|cn|tw|jp|de|es|fr|pt|ru)(?=\/|$)/)?.[1] || '';
 
   const handleApprove = async (toolId: string) => {
     setLoading(toolId);
@@ -871,7 +874,7 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
                         </>
                       )}
                       <Link
-                        href={`/admin/tools/${tool.id}/edit`}
+                        href={`${localePrefix}/admin/tools/${tool.id}/edit`}
                         aria-label={`Edit ${getTitle(tool)}`}
                         className='rounded border border-slate-200 bg-slate-50 p-1 text-slate-700 hover:bg-slate-100'
                         title='Edit'
