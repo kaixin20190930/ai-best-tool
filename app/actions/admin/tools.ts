@@ -1321,6 +1321,9 @@ export async function updateTool(
       paramIndex++;
     }
 
+    let nextFeaturesForUpdate = existingFeatures;
+    let shouldUpdateFeatures = false;
+
     if (data.editorial !== undefined) {
       const editorialReviewedAt = normalizeNullableDate(data.editorial.reviewedAt);
       const editorialReviewedBy = normalizeNullableText(data.editorial.reviewedBy);
@@ -1375,13 +1378,11 @@ export async function updateTool(
           zh: normalizeNullableText(data.editorial.trustNote?.zh) || '',
         },
       };
-      const nextFeatures = {
-        ...existingFeatures,
+      nextFeaturesForUpdate = {
+        ...nextFeaturesForUpdate,
         editorial: nextEditorial,
       };
-      updates.push(`features = $${paramIndex}`);
-      params.push(JSON.stringify(nextFeatures));
-      paramIndex++;
+      shouldUpdateFeatures = true;
     }
 
     const shouldUpdateCommercial =
@@ -1397,7 +1398,7 @@ export async function updateTool(
       nextStatus === 'published';
 
     if (shouldUpdateCommercial) {
-      const submission = getRecord(existingFeatures.submission);
+      const submission = getRecord(nextFeaturesForUpdate.submission);
       const commercial = getRecord(submission.commercial);
       let nextCommercial: Record<string, unknown> = {
         ...commercial,
@@ -1427,16 +1428,19 @@ export async function updateTool(
         nextCommercial = buildCommercialStateForCurrentStatus(nextCommercial, 'published');
       }
 
-      const nextFeatures = {
-        ...existingFeatures,
+      nextFeaturesForUpdate = {
+        ...nextFeaturesForUpdate,
         submission: {
           ...submission,
           commercial: nextCommercial,
         },
       };
+      shouldUpdateFeatures = true;
+    }
 
+    if (shouldUpdateFeatures) {
       updates.push(`features = $${paramIndex}`);
-      params.push(JSON.stringify(nextFeatures));
+      params.push(JSON.stringify(nextFeaturesForUpdate));
       paramIndex++;
     }
 
