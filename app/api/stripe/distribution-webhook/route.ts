@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { createAdminClient } from '@/lib/supabase/admin';
-import { getStripeWebhookSecret, verifyStripeWebhookSignature } from '@/lib/services/stripe';
+import { getStripeDistributionWebhookSecret, verifyStripeWebhookSignature } from '@/lib/services/stripe';
 
 export const runtime = 'nodejs';
 
@@ -44,7 +44,7 @@ async function upsertEntitlement(input: {
 export async function POST(request: NextRequest) {
   const payload = await request.text();
   const signature = request.headers.get('stripe-signature')?.trim() || '';
-  if (!signature || !verifyStripeWebhookSignature(payload, signature, getStripeWebhookSecret())) {
+  if (!signature || !verifyStripeWebhookSignature(payload, signature, getStripeDistributionWebhookSecret())) {
     return NextResponse.json({ ok: false, error: 'Invalid signature' }, { status: 400 });
   }
 

@@ -111,6 +111,16 @@ export function getStripeWebhookSecret(): string {
   return webhookSecret;
 }
 
+export function getStripeDistributionWebhookSecret(): string {
+  const webhookSecret = process.env.STRIPE_DISTRIBUTION_WEBHOOK_SECRET?.trim();
+
+  if (!webhookSecret) {
+    throw new Error('STRIPE_DISTRIBUTION_WEBHOOK_SECRET is not configured.');
+  }
+
+  return webhookSecret;
+}
+
 export function getStripeListingAmountCents(featuredDays: 0 | 3 | 7 | 14, fastTrack: boolean): number {
   return getListingTotalCents(featuredDays, fastTrack);
 }
