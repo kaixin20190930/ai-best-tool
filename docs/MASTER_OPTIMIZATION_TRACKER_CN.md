@@ -1,6 +1,6 @@
 # 优化总控任务表
 
-更新时间：2026-07-20
+更新时间：2026-07-27
 
 这份文档把当前所有优化内容合并成一份可追踪、可监测、可复盘的总任务表。
 
@@ -10,12 +10,21 @@
 - [SEO 质量恢复与真实内容增长](./SEO_QUALITY_RECOVERY_TASKS_CN.md)
 - [竞品研究与下一步优化方案](./COMPETITOR_RESEARCH_AND_NEXT_OPTIMIZATION_CN.md)
 - [平台产品、定价与 Stripe 实施总方案](./PLATFORM_PRODUCT_PRICING_AND_STRIPE_ROADMAP_CN.md)
+- [产品证据引擎、高质量内容与智能分发实施总方案](./PRODUCT_INTELLIGENCE_CONTENT_DISTRIBUTION_IMPLEMENTATION_PLAN_CN.md)
 
 说明：
 
 - 上面三个旧文档都已经标记为归档说明
 - 当前活跃计划只有这一份总控表
 - 后续所有执行、排期、复盘都以本文件为准
+- 2026-07-27：完成高质量内容与智能分发下一阶段的统一需求和技术设计，确定以共享产品证据引擎为底层，先建立可追溯事实，再分别驱动工具内容与目标站分发材料；完整任务拆分为 PI/QC/DT/DP/RM/REL 六组，后续执行和验收以 `PRODUCT_INTELLIGENCE_CONTENT_DISTRIBUTION_IMPLEMENTATION_PLAN_CN.md` 为准。
+- 2026-07-27：完成产品证据引擎 Phase 0 及 PI-011：统一证据类型、10 个产品校准集、10 个目标站校准集、七维质量门槛和安全抓取器已落地；PI-010 数据迁移脚本已完成但尚未在 Supabase 执行。基础测试、TypeScript 检查和完整生产构建均通过，下一项为 PI-012 页面发现。
+- 2026-07-27：PI-012 页面发现实现完成，可从首页链接、robots/sitemap 和受限常见路径识别关键产品页面，并记录发现来源、页面类型和评分；默认限制 sitemap 和候选规模，不遍历整站、不写数据库。下一项为真实站校准及 PI-013 页面类型识别。
+- 2026-07-27：PI-012 已用 `aibesttool.com` 完成真实只读校准，首页、定价、更新、开发者入口和 sitemap 均可发现且无抓取警告；校准发现链接文案会造成初步类型误判，已明确由 PI-013 结合 URL、metadata 和正文复判，当前结果未写生产库。
+- 2026-07-27：用户确认 PI-010 证据表迁移已在 Supabase 执行；PI-013 页面分类器完成并通过线上定价、指南、新增页校准，PI-014 确定性证据提取基础完成。真实定价页仅保留可追溯的 Pro `$19/mo` 和 Agency `$49/mo`，校准过程中发现的错误候选均未写入数据库。
+- 2026-07-27：PI-015 冲突检测与 PI-016 归一化产品档案已完成基础实现，支持对同一 profile 的多来源事实做冲突标记、生成归一化快照，并提供同步脚本 `pnpm run intelligence:sync` 作为后续人工验收入口；完整生产构建已通过。
+- 2026-07-27：PI-017 后台证据档案页已完成，新增 `/admin/intelligence` 管理页，可按 owner/status 查看 profile、来源、事实、资产、冲突与复查时间，并已接入后台导航；当前用于证据审阅与后续人工校准。
+- 2026-07-28：PI-018 完成真实站证据防污染校准：同步任务保留失败来源记录但不从非 2xx、非 HTML 或抓取异常页面提取事实；产品名优先读取 `og:site_name` / `application-name`，普通内页标题不再被误判为品牌名，500 错误页不会进入冲突。站点全局统一输出 `AI Best Tool` 品牌元数据，并补充回归测试。
 - 2026-07-15：`GuideEvidencePanel` 已补齐到全部 guide / comparison 页面，并通过本地 `pnpm run build`
 - 2026-07-15：`pnpm run seo:quality-inventory` 已生成最新质量盘点，当前总页面 157、可进 sitemap 27、内部流量页 3、noindex / 合并候选 127，详见 [`docs/SEO_QUALITY_INVENTORY_CN.md`](/Users/liukai/web/ai-best-tool/docs/SEO_QUALITY_INVENTORY_CN.md)
 - 2026-07-15：`gsc:weekly-report` 的导出汇总脚本已增强为更深层递归扫描，并支持部分 CSV 导入时写回周报基线，减少等待完整导出时的卡点；Week 1 GSC 性能与覆盖率基线已录入周报

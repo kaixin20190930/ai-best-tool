@@ -43,6 +43,15 @@
         "@typescript-eslint/comma-dangle": "off",
         "prefer-const": "off"
       }
+    },
+    {
+      "files": ["lib/services/intelligence/**/*.ts", "lib/services/admin/intelligence.ts"],
+      "rules": {
+        "no-restricted-syntax": "off",
+        "no-continue": "off",
+        "no-await-in-loop": "off",
+        "no-nested-ternary": "off"
+      }
     }
   ]
 }

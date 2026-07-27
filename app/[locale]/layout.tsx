@@ -3,6 +3,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 
 import { isAdminUser } from '@/lib/auth/admin';
+import { SEO_CONFIG } from '@/lib/seo/constants';
 import { getNoindexMetadata, isIndexableLocale } from '@/lib/seo/indexing';
 import { getSupabaseConfig } from '@/lib/supabase/env';
 import { createClient } from '@/lib/supabase/server';
@@ -65,6 +66,8 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
+        <meta name='application-name' content={SEO_CONFIG.siteName} />
+        <meta property='og:site_name' content={SEO_CONFIG.siteName} />
         <SeoScript />
         <GoogleAdSense />
       </head>
