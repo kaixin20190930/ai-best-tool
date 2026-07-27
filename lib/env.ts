@@ -20,5 +20,4 @@ export const BASE_URL = normalizeSiteUrl(siteUrl);
 export const normalizeBaseUrl = normalizeSiteUrl;
 
 export const GOOGLE_TRACKING_ID = process.env.GOOGLE_TRACKING_ID || 'G-G5N2JEFERP';
-export const GOOGLE_ADSENSE_URL = process.env.GOOGLE_ADSENSE_URL || '';
 export const CONTACT_US_EMAIL = process.env.CONTACT_US_EMAIL || '';

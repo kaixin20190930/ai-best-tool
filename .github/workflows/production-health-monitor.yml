@@ -86,7 +86,22 @@ jobs:
             test "$CODE" = "301" -o "$CODE" = "302" -o "$CODE" = "307" -o "$CODE" = "308"
             test "$LOCATION" = "$CANONICAL_URL"
           done
-          done
+
+      - name: Check AdSense integration
+        run: |
+          set -euo pipefail
+          BASE_URL="${MONITOR_BASE_URL%/}"
+          HTTP_CODE=$(curl -sS -L --retry 3 --retry-delay 2 --retry-all-errors \
+            --connect-timeout 10 --max-time 30 \
+            -o /tmp/ads.txt -w "%{http_code}" "$BASE_URL/ads.txt")
+          echo "ads_txt_http_code=$HTTP_CODE"
+          test "$HTTP_CODE" = "200"
+          grep -Fxq 'google.com, pub-5252543031076112, DIRECT, f08c47fec0942fa0' /tmp/ads.txt
+
+          curl -sS -L --retry 3 --retry-delay 2 --retry-all-errors \
+            --connect-timeout 10 --max-time 30 "$BASE_URL/cn" -o /tmp/adsense-home.html
+          grep -Fq 'google-adsense-account' /tmp/adsense-home.html
+          grep -Fq 'ca-pub-5252543031076112' /tmp/adsense-home.html
 
       - name: Check robots sitemap directive
         run: |

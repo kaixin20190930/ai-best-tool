@@ -1,9 +1,9 @@
-const ADS_TXT = 'google.com, pub-5252543031076112, DIRECT, f08c47fec0942fa0\n';
+import { ADSENSE_ADS_TXT_CONTENT } from '@/lib/adsense';
 
 export const dynamic = 'force-static';
 
 export function GET() {
-  return new Response(ADS_TXT, {
+  return new Response(ADSENSE_ADS_TXT_CONTENT, {
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',
       'Cache-Control': 'public, max-age=300, s-maxage=3600',

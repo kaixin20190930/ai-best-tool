@@ -13,7 +13,7 @@ import './globals.css';
 
 import { Suspense } from 'react';
 
-import GoogleAdScript from '@/components/ad/GoogleAdScript';
+import GoogleAdSense from '@/components/ad/GoogleAdSense';
 import PageViewTracker from '@/components/analytics/PageViewTracker';
 import SeoScript from '@/components/seo/SeoScript';
 
@@ -66,6 +66,7 @@ export default async function RootLayout({
     <html lang={locale} suppressHydrationWarning>
       <head>
         <SeoScript />
+        <GoogleAdSense />
       </head>
       <body className='theme-page relative mx-auto flex min-h-screen flex-col text-slate-800'>
         <NextIntlClientProvider locale={locale} messages={messages}>
@@ -84,7 +85,6 @@ export default async function RootLayout({
           <PageViewTracker />
           <Suspense fallback={<Loading />}>{children}</Suspense>
         </NextIntlClientProvider>
-        <GoogleAdScript />
       </body>
     </html>
   );
