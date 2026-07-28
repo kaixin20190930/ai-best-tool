@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 
-import { createAdminClient } from '@/lib/supabase/admin';
+import { queryDatabase } from '@/lib/services/database';
 
 import { analyzeDistributionTarget, buildDistributionTargetRequirementRecords } from './targetAnalyzer';
 import { discoverDistributionTargetPages } from './targetDiscovery';
@@ -98,17 +98,19 @@ function buildSnapshotPayload(input: {
 export async function persistDistributionTargetReview(
   input: PersistDistributionTargetReviewInput,
 ): Promise<PersistDistributionTargetReviewResult> {
-  const supabase = createAdminClient();
   const observedAt = input.observedAt || new Date().toISOString();
   const targetId = normalizeText(input.targetId);
   if (!targetId) throw new Error('targetId is required.');
 
-  const { data: target, error: targetError } = await supabase
-    .from('distribution_targets')
-    .select('id, homepage_url, target_status, current_rule_version')
-    .eq('id', targetId)
-    .maybeSingle();
-  if (targetError) throw new Error(targetError.message);
+  const [target] = await queryDatabase<{
+    id: string;
+    homepage_url: string;
+    target_status: string | null;
+    current_rule_version: number | null;
+  }>(
+    'select id, homepage_url, target_status, current_rule_version from distribution_targets where id = $1 limit 1',
+    [targetId],
+  );
   if (!target) throw new Error('Target not found.');
 
   const homepageUrl = normalizeText(input.homepageUrl) || target.homepage_url;
@@ -125,14 +127,14 @@ export async function persistDistributionTargetReview(
   });
   const snapshotHash = stableHash(snapshotPayload);
 
-  const { data: latestSnapshot, error: latestSnapshotError } = await supabase
-    .from('distribution_target_snapshots')
-    .select('id, rule_version, snapshot_hash')
-    .eq('target_id', targetId)
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .maybeSingle();
-  if (latestSnapshotError) throw new Error(latestSnapshotError.message);
+  const [latestSnapshot] = await queryDatabase<{
+    id: string;
+    rule_version: number | null;
+    snapshot_hash: string | null;
+  }>(
+    'select id, rule_version, snapshot_hash from distribution_target_snapshots where target_id = $1 order by created_at desc limit 1',
+    [targetId],
+  );
 
   const nextRuleVersion =
     latestSnapshot && latestSnapshot.snapshot_hash === snapshotHash
@@ -182,55 +184,168 @@ export async function persistDistributionTargetReview(
     };
   }
 
-  const { data: insertedSnapshot, error: snapshotError } = await supabase
-    .from('distribution_target_snapshots')
-    .insert(snapshotRow)
-    .select('id')
-    .single();
-  if (snapshotError) throw new Error(snapshotError.message);
+  const [insertedSnapshot] = await queryDatabase<{ id: string }>(
+    `
+      insert into distribution_target_snapshots (
+        target_id,
+        page_url,
+        http_status,
+        content_hash,
+        page_title,
+        rule_version,
+        analysis_json,
+        obstacle_status,
+        next_review_at,
+        review_reason,
+        discovered_page_count,
+        visible_rules,
+        pricing_info,
+        form_fields,
+        requires_account,
+        requires_captcha,
+        notes,
+        metadata,
+        fetched_at
+      ) values (
+        $1, $2, $3, $4, $5, $6, $7::jsonb, $8, $9, $10, $11, $12::jsonb, $13::jsonb, $14::jsonb, $15, $16, $17, $18::jsonb, $19
+      )
+      returning id
+    `,
+    [
+      targetId,
+      snapshotRow.page_url,
+      snapshotRow.http_status,
+      snapshotRow.content_hash,
+      snapshotRow.page_title,
+      snapshotRow.rule_version,
+      JSON.stringify(snapshotRow.analysis_json),
+      snapshotRow.obstacle_status,
+      snapshotRow.next_review_at,
+      snapshotRow.review_reason,
+      snapshotRow.discovered_page_count,
+      JSON.stringify(snapshotRow.visible_rules),
+      JSON.stringify(snapshotRow.pricing_info),
+      JSON.stringify(snapshotRow.form_fields),
+      snapshotRow.requires_account,
+      snapshotRow.requires_captcha,
+      snapshotRow.notes,
+      JSON.stringify(snapshotRow.metadata),
+      snapshotRow.fetched_at,
+    ],
+  );
 
   const requirementRows = buildDistributionTargetRequirementRecords(analysis, targetId, insertedSnapshot.id);
-  const { error: deleteError } = await supabase.from('distribution_target_requirements').delete().eq('target_id', targetId);
-  if (deleteError) throw new Error(deleteError.message);
+
+  await queryDatabase('delete from distribution_target_requirements where target_id = $1', [targetId]);
 
   if (requirementRows.length > 0) {
-    const { error: requirementError } = await supabase.from('distribution_target_requirements').insert(requirementRows);
-    if (requirementError) throw new Error(requirementError.message);
+    for (const requirement of requirementRows) {
+      await queryDatabase(
+        `
+          insert into distribution_target_requirements (
+            target_id,
+            source_snapshot_id,
+            required_field,
+            field_type,
+            character_limit,
+            allowed_values,
+            required_asset,
+            rule_text,
+            source_url,
+            confidence,
+            notes,
+            metadata
+          ) values (
+            $1, $2, $3, $4, $5, $6::jsonb, $7, $8, $9, $10, $11, $12::jsonb
+          )
+          on conflict (target_id, required_field, source_url)
+          do update set
+            source_snapshot_id = excluded.source_snapshot_id,
+            field_type = excluded.field_type,
+            character_limit = excluded.character_limit,
+            allowed_values = excluded.allowed_values,
+            required_asset = excluded.required_asset,
+            rule_text = excluded.rule_text,
+            confidence = excluded.confidence,
+            notes = excluded.notes,
+            metadata = excluded.metadata,
+            updated_at = now()
+        `,
+        [
+          requirement.target_id,
+          requirement.source_snapshot_id,
+          requirement.required_field,
+          requirement.field_type,
+          requirement.character_limit,
+          JSON.stringify(requirement.allowed_values),
+          requirement.required_asset,
+          requirement.rule_text,
+          requirement.source_url,
+          requirement.confidence,
+          requirement.notes,
+          JSON.stringify(requirement.metadata),
+        ],
+      );
+    }
   }
 
-  const { error: targetUpdateError } = await supabase
-    .from('distribution_targets')
-    .update({
-      homepage_url: discovery.homepageUrl,
-      submission_url: discovery.submissionUrl,
-      registration_url: discovery.registrationUrl,
-      pricing_url: discovery.pricingUrl,
-      target_status: targetStatus,
-      requires_account: discovery.requirements.requiresAccount,
-      requires_payment: discovery.requirements.requiresPayment,
-      requires_captcha: discovery.requirements.requiresCaptcha,
-      requires_backlink: discovery.requirements.requiresBacklink,
-      editorial_review: discovery.requirements.editorialReview,
-      expected_review_days: discovery.requirements.expectedReviewDays,
-      last_checked_at: observedAt,
-      next_check_at: nextReviewAt,
-      confidence: Math.max(analysis.rules[0]?.confidence || 50, discovery.pages[0]?.score || 50),
-      notes: analysis.summary,
-      metadata: {
+  await queryDatabase(
+    `
+      update distribution_targets
+      set
+        homepage_url = $2,
+        submission_url = $3,
+        registration_url = $4,
+        pricing_url = $5,
+        target_status = $6,
+        requires_account = $7,
+        requires_payment = $8,
+        requires_captcha = $9,
+        requires_backlink = $10,
+        editorial_review = $11,
+        expected_review_days = $12,
+        last_checked_at = $13,
+        next_check_at = $14,
+        confidence = $15,
+        notes = $16,
+        metadata = $17::jsonb,
+        current_snapshot_id = $18,
+        current_rule_version = $19,
+        last_review_reason = $20,
+        updated_at = $21
+      where id = $1
+    `,
+    [
+      targetId,
+      discovery.homepageUrl,
+      discovery.submissionUrl,
+      discovery.registrationUrl,
+      discovery.pricingUrl,
+      targetStatus,
+      discovery.requirements.requiresAccount,
+      discovery.requirements.requiresPayment,
+      discovery.requirements.requiresCaptcha,
+      discovery.requirements.requiresBacklink,
+      discovery.requirements.editorialReview,
+      discovery.requirements.expectedReviewDays,
+      observedAt,
+      nextReviewAt,
+      Math.max(analysis.rules[0]?.confidence || 50, discovery.pages[0]?.score || 50),
+      analysis.summary,
+      JSON.stringify({
         ...(target as Record<string, unknown>),
         lastSnapshotHash: snapshotHash,
         lastSnapshotId: insertedSnapshot.id,
         ruleVersion: nextRuleVersion,
         obstacleStatus: analysis.obstacleStatus,
         nextAction: analysis.nextAction,
-      },
-      current_snapshot_id: insertedSnapshot.id,
-      current_rule_version: nextRuleVersion,
-      last_review_reason: analysis.summary,
-      updated_at: observedAt,
-    })
-    .eq('id', targetId);
-  if (targetUpdateError) throw new Error(targetUpdateError.message);
+      }),
+      insertedSnapshot.id,
+      nextRuleVersion,
+      analysis.summary,
+      observedAt,
+    ],
+  );
 
   return {
     targetId,

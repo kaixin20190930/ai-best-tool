@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 
 import { requireAdmin } from '@/lib/auth/middleware';
-import { createAdminClient } from '@/lib/supabase/admin';
+import { queryDatabase } from '@/lib/services/database';
 import { persistDistributionTargetReview } from '@/lib/services/intelligence/targetPersistence';
 
 function normalizeText(value: FormDataEntryValue | null): string {
@@ -31,28 +31,46 @@ export async function updateDistributionTarget(formData: FormData): Promise<{ su
     const expectedReviewDaysValue = Number.parseInt(normalizeText(formData.get('expectedReviewDays')) || '', 10);
     const locale = normalizeText(formData.get('locale')) || 'en';
 
-    const supabase = createAdminClient();
-    const { error } = await supabase
-      .from('distribution_targets')
-      .update({
-        target_status: ['active', 'stale', 'blocked', 'retired'].includes(targetStatus) ? targetStatus : 'active',
+    await queryDatabase(
+      `
+        update distribution_targets
+        set
+          target_status = $2,
+          notes = $3,
+          homepage_url = $4,
+          submission_url = $5,
+          registration_url = $6,
+          pricing_url = $7,
+          next_check_at = $8,
+          confidence = $9,
+          expected_review_days = $10,
+          requires_account = $11,
+          requires_payment = $12,
+          requires_captcha = $13,
+          requires_backlink = $14,
+          editorial_review = $15,
+          updated_at = $16
+        where id = $1
+      `,
+      [
+        targetId,
+        ['active', 'stale', 'blocked', 'retired'].includes(targetStatus) ? targetStatus : 'active',
         notes,
-        homepage_url: homepageUrl || null,
-        submission_url: submissionUrl || null,
-        registration_url: registrationUrl || null,
-        pricing_url: pricingUrl || null,
-        next_check_at: nextCheckAt || null,
-        confidence: Number.isFinite(confidenceValue) ? Math.max(0, Math.min(100, confidenceValue)) : 50,
-        expected_review_days: Number.isFinite(expectedReviewDaysValue) && expectedReviewDaysValue > 0 ? expectedReviewDaysValue : null,
-        requires_account: normalizeBoolean(formData.get('requiresAccount')),
-        requires_payment: normalizeBoolean(formData.get('requiresPayment')),
-        requires_captcha: normalizeBoolean(formData.get('requiresCaptcha')),
-        requires_backlink: normalizeBoolean(formData.get('requiresBacklink')),
-        editorial_review: normalizeBoolean(formData.get('editorialReview')),
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', targetId);
-    if (error) throw error;
+        homepageUrl || null,
+        submissionUrl || null,
+        registrationUrl || null,
+        pricingUrl || null,
+        nextCheckAt || null,
+        Number.isFinite(confidenceValue) ? Math.max(0, Math.min(100, confidenceValue)) : 50,
+        Number.isFinite(expectedReviewDaysValue) && expectedReviewDaysValue > 0 ? expectedReviewDaysValue : null,
+        normalizeBoolean(formData.get('requiresAccount')),
+        normalizeBoolean(formData.get('requiresPayment')),
+        normalizeBoolean(formData.get('requiresCaptcha')),
+        normalizeBoolean(formData.get('requiresBacklink')),
+        normalizeBoolean(formData.get('editorialReview')),
+        new Date().toISOString(),
+      ],
+    );
 
     revalidatePath('/admin/targets');
     revalidatePath(`/${locale}/admin/targets`);

@@ -1,5 +1,5 @@
 import { requireAdmin } from '@/lib/auth/middleware';
-import { createAdminClient } from '@/lib/supabase/admin';
+import { queryDatabase } from '@/lib/services/database';
 
 export interface AdminDistributionTargetSnapshotItem {
   id: string;
@@ -85,70 +85,147 @@ export async function getAdminDistributionTargetRegistry(input?: {
   limit?: number;
 }): Promise<AdminDistributionTargetRegistry> {
   await requireAdmin();
-  const supabase = createAdminClient();
   const limit = Math.max(1, Math.min(input?.limit || 100, 300));
   const status = input?.status && ['active', 'stale', 'blocked', 'retired'].includes(input.status) ? input.status : null;
   const channelId = input?.channelId?.trim() || null;
   const search = normalizeSearch(input?.search);
 
-  let targetQuery = supabase
-    .from('distribution_targets')
-    .select(
-      'id, channel_id, name, homepage_url, submission_url, registration_url, pricing_url, target_status, requires_account, requires_payment, requires_captcha, requires_backlink, editorial_review, expected_review_days, last_checked_at, next_check_at, confidence, notes, current_rule_version, last_review_reason, current_snapshot_id, distribution_channels(id, name, channel_type)',
-    )
-    .order('next_check_at', { ascending: true, nullsFirst: false })
-    .order('confidence', { ascending: false })
-    .limit(limit);
+  const targets = await queryDatabase<{
+    id: string;
+    channel_id: string;
+    name: string;
+    homepage_url: string;
+    submission_url: string | null;
+    registration_url: string | null;
+    pricing_url: string | null;
+    target_status: 'active' | 'stale' | 'blocked' | 'retired';
+    requires_account: boolean;
+    requires_payment: boolean;
+    requires_captcha: boolean;
+    requires_backlink: boolean;
+    editorial_review: boolean;
+    expected_review_days: number | null;
+    last_checked_at: string | null;
+    next_check_at: string | null;
+    confidence: number;
+    notes: string | null;
+    current_rule_version: number | null;
+    last_review_reason: string | null;
+    current_snapshot_id: string | null;
+    channel_name: string;
+    channel_type: string;
+  }>(
+    `
+      select
+        t.id,
+        t.channel_id,
+        t.name,
+        t.homepage_url,
+        t.submission_url,
+        t.registration_url,
+        t.pricing_url,
+        t.target_status,
+        t.requires_account,
+        t.requires_payment,
+        t.requires_captcha,
+        t.requires_backlink,
+        t.editorial_review,
+        t.expected_review_days,
+        t.last_checked_at,
+        t.next_check_at,
+        t.confidence,
+        t.notes,
+        t.current_rule_version,
+        t.last_review_reason,
+        t.current_snapshot_id,
+        c.name as channel_name,
+        c.channel_type as channel_type
+      from distribution_targets t
+      join distribution_channels c on c.id = t.channel_id
+      where ($1::text is null or t.target_status = $1::text)
+        and ($2::uuid is null or t.channel_id = $2::uuid)
+      order by t.next_check_at asc nulls last, t.confidence desc
+      limit $3
+    `,
+    [status, channelId, limit],
+  );
 
-  if (status) targetQuery = targetQuery.eq('target_status', status);
-  if (channelId) targetQuery = targetQuery.eq('channel_id', channelId);
+  const snapshots = await queryDatabase<{
+    id: string;
+    target_id: string;
+    rule_version: number;
+    snapshot_hash: string | null;
+    analysis_json: Record<string, unknown> | null;
+    obstacle_status: 'clear' | 'needs_review' | 'blocked';
+    next_review_at: string | null;
+    review_reason: string | null;
+    discovered_page_count: number;
+    fetched_at: string;
+  }>(
+    `
+      select id, target_id, rule_version, snapshot_hash, analysis_json, obstacle_status, next_review_at, review_reason, discovered_page_count, fetched_at
+      from distribution_target_snapshots
+      order by fetched_at desc
+    `,
+  );
 
-  const [{ data: targets, error: targetError }, { data: snapshots, error: snapshotError }, { data: requirements, error: requirementError }, { data: channels, error: channelError }, { count, error: countError }] =
-    await Promise.all([
-      targetQuery,
-      supabase
-        .from('distribution_target_snapshots')
-        .select('id, target_id, rule_version, snapshot_hash, analysis_json, obstacle_status, next_review_at, review_reason, discovered_page_count, fetched_at')
-        .order('fetched_at', { ascending: false }),
-      supabase
-        .from('distribution_target_requirements')
-        .select('id, target_id, required_field, field_type, required_asset, confidence, source_url, rule_text')
-        .order('confidence', { ascending: false }),
-      supabase.from('distribution_channels').select('id, name, channel_type').eq('is_active', true).order('sort_order', { ascending: true }),
-      supabase.from('distribution_targets').select('id', { count: 'exact', head: true }),
-    ]);
+  const requirements = await queryDatabase<{
+    id: string;
+    target_id: string;
+    required_field: string;
+    field_type: string;
+    required_asset: string | null;
+    confidence: number;
+    source_url: string;
+    rule_text: string;
+  }>(
+    `
+      select id, target_id, required_field, field_type, required_asset, confidence, source_url, rule_text
+      from distribution_target_requirements
+      order by confidence desc
+    `,
+  );
 
-  if (targetError || snapshotError || requirementError || channelError || countError) {
-    throw new Error(targetError?.message || snapshotError?.message || requirementError?.message || channelError?.message || countError?.message || 'Unable to load target registry.');
-  }
+  const channels = await queryDatabase<{
+    id: string;
+    name: string;
+    channel_type: string;
+  }>(
+    `
+      select id, name, channel_type
+      from distribution_channels
+      where is_active = true
+      order by sort_order asc
+    `,
+  );
 
   const snapshotByTarget = new Map<string, AdminDistributionTargetSnapshotItem>();
   for (const snapshot of snapshots || []) {
-    const targetId = String((snapshot as Record<string, unknown>).target_id || '');
+    const targetId = String(snapshot.target_id || '');
     if (!targetId || snapshotByTarget.has(targetId)) continue;
     snapshotByTarget.set(targetId, {
-      id: String((snapshot as Record<string, unknown>).id),
+      id: String(snapshot.id),
       targetId,
-      ruleVersion: Number((snapshot as Record<string, unknown>).rule_version || 0),
-      snapshotHash: (snapshot as Record<string, unknown>).snapshot_hash as string | null,
+      ruleVersion: Number(snapshot.rule_version || 0),
+      snapshotHash: snapshot.snapshot_hash,
       matchScore: (() => {
-        const analysis = (snapshot as Record<string, unknown>).analysis_json as Record<string, unknown> | null | undefined;
+        const analysis = snapshot.analysis_json;
         const score = analysis?.matchScore as Record<string, unknown> | null | undefined;
         const value = score?.score;
         return typeof value === 'number' ? value : Number(value || 0) || null;
       })(),
       matchGrade: (() => {
-        const analysis = (snapshot as Record<string, unknown>).analysis_json as Record<string, unknown> | null | undefined;
+        const analysis = snapshot.analysis_json;
         const score = analysis?.matchScore as Record<string, unknown> | null | undefined;
         return typeof score?.grade === 'string' ? String(score.grade) : null;
       })(),
       matchSummary: (() => {
-        const analysis = (snapshot as Record<string, unknown>).analysis_json as Record<string, unknown> | null | undefined;
+        const analysis = snapshot.analysis_json;
         const score = analysis?.matchScore as Record<string, unknown> | null | undefined;
         return typeof score?.summary === 'string' ? String(score.summary) : null;
       })(),
       matchReasons: (() => {
-        const analysis = (snapshot as Record<string, unknown>).analysis_json as Record<string, unknown> | null | undefined;
+        const analysis = snapshot.analysis_json;
         const score = analysis?.matchScore as Record<string, unknown> | null | undefined;
         const reasons = Array.isArray(score?.reasons) ? score.reasons : [];
         return reasons.map((reason) => {
@@ -162,43 +239,41 @@ export async function getAdminDistributionTargetRegistry(input?: {
           };
         });
       })(),
-      obstacleStatus: ((snapshot as Record<string, unknown>).obstacle_status as 'clear' | 'needs_review' | 'blocked') || 'clear',
-      nextReviewAt: (snapshot as Record<string, unknown>).next_review_at as string | null,
-      reviewReason: (snapshot as Record<string, unknown>).review_reason as string | null,
-      discoveredPageCount: Number((snapshot as Record<string, unknown>).discovered_page_count || 0),
-      fetchedAt: String((snapshot as Record<string, unknown>).fetched_at || ''),
+      obstacleStatus: snapshot.obstacle_status || 'clear',
+      nextReviewAt: snapshot.next_review_at,
+      reviewReason: snapshot.review_reason,
+      discoveredPageCount: Number(snapshot.discovered_page_count || 0),
+      fetchedAt: String(snapshot.fetched_at || ''),
     });
   }
 
   const requirementsByTarget = new Map<string, AdminDistributionTargetItem['requirements']>();
   for (const requirement of requirements || []) {
-    const row = requirement as Record<string, unknown>;
-    const targetId = String(row.target_id || '');
+    const targetId = String(requirement.target_id || '');
     if (!targetId) continue;
     const current = requirementsByTarget.get(targetId) || [];
     current.push({
-      id: String(row.id),
-      requiredField: String(row.required_field || ''),
-      fieldType: String(row.field_type || 'unknown'),
-      requiredAsset: (row.required_asset as string | null | undefined) || null,
-      confidence: Number(row.confidence || 0),
-      sourceUrl: String(row.source_url || ''),
-      ruleText: String(row.rule_text || ''),
+      id: String(requirement.id),
+      requiredField: String(requirement.required_field || ''),
+      fieldType: String(requirement.field_type || 'unknown'),
+      requiredAsset: requirement.required_asset || null,
+      confidence: Number(requirement.confidence || 0),
+      sourceUrl: String(requirement.source_url || ''),
+      ruleText: String(requirement.rule_text || ''),
     });
     requirementsByTarget.set(targetId, current);
   }
 
   const filteredTargets = (targets || []).filter((target) => {
-    const row = target as Record<string, unknown>;
     if (!search) return true;
     const haystack = [
-      row.name,
-      row.homepage_url,
-      row.submission_url,
-      row.registration_url,
-      row.pricing_url,
-      row.notes,
-      (row.distribution_channels as Record<string, unknown> | undefined)?.name,
+      target.name,
+      target.homepage_url,
+      target.submission_url,
+      target.registration_url,
+      target.pricing_url,
+      target.notes,
+      target.channel_name,
     ]
       .map((value) => String(value || '').toLowerCase())
       .join(' ');
@@ -206,33 +281,31 @@ export async function getAdminDistributionTargetRegistry(input?: {
   });
 
   const mappedTargets = filteredTargets.map((target) => {
-    const row = target as Record<string, unknown>;
-    const targetId = String(row.id);
-    const channel = (row.distribution_channels as Record<string, unknown>) || {};
+    const targetId = String(target.id);
     return {
       id: targetId,
-      channelId: String(row.channel_id || ''),
-      channelName: String(channel.name || 'Unknown channel'),
-      channelType: String(channel.channel_type || 'other'),
-      name: String(row.name || ''),
-      homepageUrl: String(row.homepage_url || ''),
-      submissionUrl: (row.submission_url as string | null | undefined) || null,
-      registrationUrl: (row.registration_url as string | null | undefined) || null,
-      pricingUrl: (row.pricing_url as string | null | undefined) || null,
-      targetStatus: (row.target_status as AdminDistributionTargetItem['targetStatus']) || 'active',
-      requiresAccount: Boolean(row.requires_account),
-      requiresPayment: Boolean(row.requires_payment),
-      requiresCaptcha: Boolean(row.requires_captcha),
-      requiresBacklink: Boolean(row.requires_backlink),
-      editorialReview: Boolean(row.editorial_review),
-      expectedReviewDays: row.expected_review_days === null || row.expected_review_days === undefined ? null : Number(row.expected_review_days),
-      lastCheckedAt: (row.last_checked_at as string | null | undefined) || null,
-      nextCheckAt: (row.next_check_at as string | null | undefined) || null,
-      confidence: Number(row.confidence || 0),
-      notes: (row.notes as string | null | undefined) || null,
-      currentRuleVersion: Number(row.current_rule_version || 0),
-      lastReviewReason: (row.last_review_reason as string | null | undefined) || null,
-      currentSnapshotId: (row.current_snapshot_id as string | null | undefined) || null,
+      channelId: String(target.channel_id || ''),
+      channelName: String(target.channel_name || 'Unknown channel'),
+      channelType: String(target.channel_type || 'other'),
+      name: String(target.name || ''),
+      homepageUrl: String(target.homepage_url || ''),
+      submissionUrl: target.submission_url || null,
+      registrationUrl: target.registration_url || null,
+      pricingUrl: target.pricing_url || null,
+      targetStatus: target.target_status || 'active',
+      requiresAccount: Boolean(target.requires_account),
+      requiresPayment: Boolean(target.requires_payment),
+      requiresCaptcha: Boolean(target.requires_captcha),
+      requiresBacklink: Boolean(target.requires_backlink),
+      editorialReview: Boolean(target.editorial_review),
+      expectedReviewDays: target.expected_review_days === null || target.expected_review_days === undefined ? null : Number(target.expected_review_days),
+      lastCheckedAt: target.last_checked_at || null,
+      nextCheckAt: target.next_check_at || null,
+      confidence: Number(target.confidence || 0),
+      notes: target.notes || null,
+      currentRuleVersion: Number(target.current_rule_version || 0),
+      lastReviewReason: target.last_review_reason || null,
+      currentSnapshotId: target.current_snapshot_id || null,
       snapshot: snapshotByTarget.get(targetId) || null,
       requirements: requirementsByTarget.get(targetId) || [],
     };
@@ -252,7 +325,7 @@ export async function getAdminDistributionTargetRegistry(input?: {
   return {
     totals,
     targets: mappedTargets,
-    channels: (channels || []).map((channel: Record<string, unknown>) => ({
+    channels: (channels || []).map((channel) => ({
       id: String(channel.id),
       name: String(channel.name || ''),
       channelType: String(channel.channel_type || 'other'),

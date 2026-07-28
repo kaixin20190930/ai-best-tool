@@ -36,6 +36,8 @@
 - 2026-07-28：DP-011 分发文案包已完成，新增分发文案生成器并把每个渠道的标题、描述、披露、证明点、必填字段和跟进提示展示到 `/distribution` 工作台；本地 `./node_modules/.bin/tsc --noEmit` 和 `pnpm run build` 均通过，下一项转入 DP-012 字段和素材预检。
 - 2026-07-28：DP-012 到 DP-017 已完成，分发工作台现在具备预检、目的地建议、任务排序、任务详情页、一键状态更新和自动 follow-up 创建能力；本地 `./node_modules/.bin/tsc --noEmit` 和 `pnpm run build` 均通过，分发主线进入收口和观察阶段。
 - 2026-07-28：RM-010 到 RM-015 已完成，分发后台现在可做 live URL 检查、链接属性核验、30/90 天保留率、拒绝/障碍学习、渠道优先级回写和周报导出；本地 `./node_modules/.bin/tsc --noEmit` 和 `pnpm run build` 均通过，分发结果复查线进入收口和观察阶段。
+- 2026-07-28：REL-011 迁移演练脚本已完成并通过本地验证，`pnpm verify:distribution-migrations` 现在会检查分发工作区、项目、任务、结果、目标站和状态机相关表结构；`distribution:production-smoke` 也已通过，证明 `/distribution`、`/admin/distribution`、`/admin/targets` 和分发报表 API 在线上没有 5xx。
+- 2026-07-28：补齐分发 registry 的数据库迁移与种子脚本，并把目标站相关读写切换为直连 Postgres，绕开 Supabase schema cache 对 `distribution_targets` 的可见性问题；`distribution_targets` 已种入 10 条 fixture，`distribution_target_snapshots` 已累积到 12 条，批量 review 走通 10 个目标站，其中 6 个写入 snapshot、4 个归类为站点级 blocked，REL-014 已拿到真实验证结果。
 - 2026-07-15：`GuideEvidencePanel` 已补齐到全部 guide / comparison 页面，并通过本地 `pnpm run build`
 - 2026-07-15：`pnpm run seo:quality-inventory` 已生成最新质量盘点，当前总页面 157、可进 sitemap 27、内部流量页 3、noindex / 合并候选 127，详见 [`docs/SEO_QUALITY_INVENTORY_CN.md`](/Users/liukai/web/ai-best-tool/docs/SEO_QUALITY_INVENTORY_CN.md)
 - 2026-07-15：`gsc:weekly-report` 的导出汇总脚本已增强为更深层递归扫描，并支持部分 CSV 导入时写回周报基线，减少等待完整导出时的卡点；Week 1 GSC 性能与覆盖率基线已录入周报
