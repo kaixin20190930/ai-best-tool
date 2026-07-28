@@ -138,17 +138,20 @@ function findIndex(headers: string[], candidates: string[]) {
 
 function toNumber(value: string | undefined) {
   if (!value) return 0;
-  const normalized = value.replace(/,/g, '').trim();
+  const normalized = value
+    .replace(/,/g, '')
+    .replace(/%/g, '')
+    .trim();
   const parsed = Number(normalized);
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
 function summarizeChart(table: CsvTable): MetricSummary {
-  const clicksIndex = findIndex(table.headers, ['click']);
-  const impressionsIndex = findIndex(table.headers, ['impression']);
-  const ctrIndex = findIndex(table.headers, ['ctr', 'click-through']);
-  const positionIndex = findIndex(table.headers, ['position', 'avg position']);
-  const dateIndex = findIndex(table.headers, ['date', 'day']);
+  const clicksIndex = findIndex(table.headers, ['click', '点击次数', 'clicks']);
+  const impressionsIndex = findIndex(table.headers, ['impression', '展示']);
+  const ctrIndex = findIndex(table.headers, ['ctr', 'click-through', '点击率']);
+  const positionIndex = findIndex(table.headers, ['position', 'avg position', '排名']);
+  const dateIndex = findIndex(table.headers, ['date', 'day', '日期']);
 
   let clicks = 0;
   let impressions = 0;
@@ -374,10 +377,6 @@ function updateWeeklyOverview(log: string, summaryLine: string) {
   if (existing.includes('待填')) {
     lines[rowIndex] = summaryLine;
     return lines.join('\n');
-  }
-
-  if (existing.includes('| Week 1 |')) {
-    lines[rowIndex] = summaryLine;
   }
 
   return lines.join('\n');
