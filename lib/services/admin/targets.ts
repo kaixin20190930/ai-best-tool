@@ -82,6 +82,7 @@ export async function getAdminDistributionTargetRegistry(input?: {
   status?: string;
   channelId?: string;
   search?: string;
+  blockedReason?: string;
   limit?: number;
 }): Promise<AdminDistributionTargetRegistry> {
   await requireAdmin();
@@ -89,6 +90,7 @@ export async function getAdminDistributionTargetRegistry(input?: {
   const status = input?.status && ['active', 'stale', 'blocked', 'retired'].includes(input.status) ? input.status : null;
   const channelId = input?.channelId?.trim() || null;
   const search = normalizeSearch(input?.search);
+  const blockedReason = normalizeSearch(input?.blockedReason);
 
   const targets = await queryDatabase<{
     id: string;
@@ -273,6 +275,7 @@ export async function getAdminDistributionTargetRegistry(input?: {
       target.registration_url,
       target.pricing_url,
       target.notes,
+      target.last_review_reason,
       target.channel_name,
     ]
       .map((value) => String(value || '').toLowerCase())
@@ -280,7 +283,21 @@ export async function getAdminDistributionTargetRegistry(input?: {
     return haystack.includes(search);
   });
 
-  const mappedTargets = filteredTargets.map((target) => {
+  const blockedReasonFilteredTargets = filteredTargets.filter((target) => {
+    if (!blockedReason) return true;
+    if (target.target_status !== 'blocked') return false;
+    const haystack = [
+      target.last_review_reason,
+      target.notes,
+      target.homepage_url,
+      target.name,
+    ]
+      .map((value) => String(value || '').toLowerCase())
+      .join(' ');
+    return haystack.includes(blockedReason);
+  });
+
+  const mappedTargets = blockedReasonFilteredTargets.map((target) => {
     const targetId = String(target.id);
     return {
       id: targetId,

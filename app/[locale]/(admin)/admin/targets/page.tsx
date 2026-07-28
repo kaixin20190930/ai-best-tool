@@ -52,12 +52,14 @@ export default async function AdminTargetsPage({
     status?: string;
     channelId?: string;
     search?: string;
+    blockedReason?: string;
   };
 }) {
   const registry = await getAdminDistributionTargetRegistry({
     status: searchParams.status,
     channelId: searchParams.channelId,
     search: searchParams.search,
+    blockedReason: searchParams.blockedReason,
     limit: 200,
   });
 
@@ -133,6 +135,12 @@ export default async function AdminTargetsPage({
               name='search'
               defaultValue={searchParams.search || ''}
               placeholder='Search by name, URL, note...'
+              className='min-w-[260px] rounded-xl border border-slate-200 px-4 py-2 text-sm outline-none focus:border-cyan-300'
+            />
+            <input
+              name='blockedReason'
+              defaultValue={searchParams.blockedReason || ''}
+              placeholder='Blocked reason contains...'
               className='min-w-[260px] rounded-xl border border-slate-200 px-4 py-2 text-sm outline-none focus:border-cyan-300'
             />
             <select
