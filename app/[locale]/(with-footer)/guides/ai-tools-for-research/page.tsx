@@ -3,7 +3,7 @@ import { ArrowRight, ExternalLink, FileSearch, Search, ShieldCheck } from 'lucid
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
-import { getNoindexMetadata } from '@/lib/seo/indexing';
+import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -22,20 +22,25 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '面向资料检索、信息核对、证据整理和研究工作流的 AI 工具指南，先看榜单再进对比页。'
         : 'A practical guide to AI tools for research, evidence-checking, analysis, and information discovery, with a path from guide to ranking and comparison.',
-    ...getNoindexMetadata(),
+    alternates: {
+      canonical: generateLocalizedCanonicalUrl('/guides/ai-tools-for-research', locale, BASE_URL),
+    },
   };
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
-  const checkedAt = '2026-07-18';
+  const checkedAt = '2026-07-28';
   const categoryCount = categories.length;
   const siteUrl = BASE_URL;
   const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: 'Home', url: `${siteUrl}/${locale}` },
-    { name: isChinese ? '指南' : 'Guides', url: `${siteUrl}/${locale}/guides` },
-    { name: isChinese ? '研究工具' : 'Research tools', url: `${siteUrl}/${locale}/guides/ai-tools-for-research` },
+    { name: 'Home', url: generateLocalizedCanonicalUrl('/', locale, siteUrl) },
+    { name: isChinese ? '指南' : 'Guides', url: generateLocalizedCanonicalUrl('/guides', locale, siteUrl) },
+    {
+      name: isChinese ? '研究工具' : 'Research tools',
+      url: generateLocalizedCanonicalUrl('/guides/ai-tools-for-research', locale, siteUrl),
+    },
   ]);
   const faqs = [
     {

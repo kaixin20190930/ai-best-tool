@@ -1,6 +1,6 @@
 # GSC 每周观察台账
 
-更新时间：2026-07-19
+更新时间：2026-07-28
 
 这份台账只做一件事：把 Google Search Console 的变化按周记录下来，方便判断当前的“收口 + 质量增强”策略到底有没有起效。
 
@@ -20,7 +20,7 @@
 | Week 1 | 2026-07-15 | 876 | 2 | 0.23% | 70.09 | 27 | 127 | 从 `aibesttool.com-Performance-on-Search-2026-07-15.xlsx` 导入；当前本地 SEO 校验已通过 27/27 |
 | Week 2 | 2026-07-18 | 876 | 2 | 0.23% | 70.09 | 27 | 127 | 最新 28 天导出再次确认仍处低曝光、低点击、低排名基线；top queries 仍以品牌 / 目录词为主，top pages 仍集中在首页、automation 分类和少数工具详情页 |
 | Week 3 | 2026-07-19 | 525 | 2 | 0.38% | 68.57 | 157 | 646 | 28 天实际覆盖 2026-06-20 至 2026-07-17；7 天窗口为 35 展示、0 点击、67.78 平均排名，短期尚未出现恢复信号 |
-| Week 4 |  |  |  |  |  |  |  |  |
+| Week 4 | 2026-07-28 | 135 | 1 | 0.74% | 59.92 | 154 | 690 | 曝光继续下降，但平均排名较 Week 3 改善约 8.65 位；首页承接 102 次展示，新的页面级机会集中在 Research、Lindy、Fathom、ChatGPT 和少量分类页 |
 
 ## 站内收口基线
 
@@ -62,6 +62,11 @@
 | Week 3 | toolbloom browse ai tools directory | 0 | 40 | 0.00% | 74.05 | 品牌 / 目录词 | 是 |
 | Week 3 | toolbloom ai tools directory best ai tools | 0 | 36 | 0.00% | 80.28 | 品牌 / 目录词 | 是 |
 | Week 3 | fathom about | 0 | 24 | 0.00% | 93.88 | 工具相关长尾；排名偏后 | 是 |
+| Week 4 | ai tools directory | 0 | 19 | 0.00% | 100.32 | 目录主词；方向正确但权威度不足 | 是 |
+| Week 4 | ai tool directory | 0 | 13 | 0.00% | 78.92 | 目录主词；继续由首页承接 | 是 |
+| Week 4 | top ai tools directory | 0 | 7 | 0.00% | 73.71 | 榜单 / 目录意图 | 是 |
+| Week 4 | best ai tools directory | 0 | 5 | 0.00% | 59.40 | 当前目录词里相对更接近的机会 | 是 |
+| Week 4 | fathom ai meeting assistant features | 0 | 2 | 0.00% | 4.00 | 明确的功能查询；优先增强 Fathom 详情页 | 是 |
 
 ## Top Pages
 
@@ -82,6 +87,11 @@
 | Week 3 | https://aibesttool.com/ai/fathom | 0 | 129 | 0.00% | 81.13 | Tool | 是 |
 | Week 3 | https://www.aibesttool.com/categories/automation | 0 | 33 | 0.00% | 61.12 | Category；历史 www 变体 | 是 |
 | Week 3 | https://aibesttool.com/ai/pipedream | 0 | 30 | 0.00% | 55.67 | Tool | 是 |
+| Week 4 | https://aibesttool.com/ | 1 | 102 | 0.98% | 69.35 | Core；曝光高度集中 | 是 |
+| Week 4 | https://aibesttool.com/ai/lindy | 0 | 7 | 0.00% | 9.71 | Tool；首批机会页 | 是 |
+| Week 4 | https://aibesttool.com/ai/fathom | 0 | 7 | 0.00% | 33.14 | Tool；具体功能 query 已进入前 10 | 是 |
+| Week 4 | https://aibesttool.com/categories/research | 0 | 5 | 0.00% | 5.00 | Category；首批机会页 | 是 |
+| Week 4 | https://aibesttool.com/ai/chatgpt | 0 | 2 | 0.00% | 7.50 | Tool；样本小但属于核心入口 | 是 |
 
 ## 增强页追踪
 
@@ -123,4 +133,17 @@
 | Week 1 | 已导入 28 天性能基线，曝光总量不高，而且近 7 天曝光几乎归零，说明当前仍在非常低的基线；query / page 方向已经能看见，但还没形成稳定点击。覆盖率问题主要集中在 noindex 收口、少量抓取未入索引，以及少量重复规范化痕迹 | 继续观察下周 GSC 变化，同时优先补核心页真实信号，并留意首页 / www 变体是否还在 GSC 中重复出现 |
 | Week 2 | 28 天内只有 2 次点击，主要来自首页；Top queries 仍以品牌/目录词为主，排名大多在 70-110 之外，说明现阶段的问题不是“缺页面”，而是“页面还没足够像可被点击的答案页” | 继续保持收口节奏，不扩量，优先看首页、榜单、分类、工具详情的真实信号是否继续改善 |
 | Week 3 | 28 天为 525 展示、2 点击、0.38% CTR、68.57 平均排名；7 天仅 35 展示、0 点击，曝光较低但平均排名未明显恶化。Coverage 的 583 个 noindex 与主动收口一致，真正需要观察的是 14 个已抓取未索引、22 个备用 canonical 和 5 个重复页面。当前不能判断整体恢复，也没有证据支持扩量。 | 保持 noindex / canonical 收口；继续观察下一周 GSC，优先维护首页、Fathom、Pipedream、自动化/研究分类和少量高排名页面；等待真实评论、收藏和 owner 认领，不用模板数据替代。 |
-| Week 4 |  |  |
+| Week 4 | 28 天降到 135 展示、1 点击，平均排名改善到 59.92；当前不是全站 CTR 优化阶段，而是少量机会页和规范 URL 集中阶段。Coverage 为 154 已索引、690 未索引，其中 603 个 noindex 基本符合主动收口；需精准处理 19 个已抓取未索引、5 个未明确 canonical 的重复页和 3 个 Google canonical 不一致页。 | 停止继续批量收口 comparison；统一英文无前缀 canonical，先增强首页、Research、Lindy、Fathom、ChatGPT，再处理 Explore、Web3、Productivity、Automation、Voice、Cursor、The Graph、Dune；14/28 天后复盘。 |
+
+## Week 4 执行队列
+
+| 批次 | 页面 | 当前信号 | 本轮动作 | 状态 |
+| --- | --- | --- | --- | --- |
+| P0-A | `/` | 102 展示 / 1 点击 / 69.35 | 对齐 AI tools directory 意图、规范 canonical、更新首屏定位与最近核查日期 | 已完成 |
+| P0-A | `/categories/research` | 5 展示 / 排名 5.00 | 强化搜索、引用、证据整理意图；更新 metadata 与结构化数据 URL | 已完成 |
+| P0-A | `/ai/lindy` | 7 展示 / 排名 9.71 | 增加 Agent 工作流、权限、失败处理和额度判断块 | 已完成 |
+| P0-A | `/ai/fathom` | 7 展示；具体功能 query 排名 4.00 | 增加会议转录、摘要、行动项、协作与限制判断块 | 已完成 |
+| P0-A | `/ai/chatgpt` | 2 展示 / 排名 7.50 | 增加通用任务、工具能力、套餐和数据边界判断块 | 已完成 |
+| P0-A | `/guides/ai-tools-for-research`、`/guides/ai-tools-for-sales` | sitemap 白名单与页面 `noindex` 冲突 | 移除错误 noindex，统一英文无前缀 canonical，并新增 sitemap/noindex 自动回归 | 已完成 |
+| P0-B | `/explore`、`/categories/web3`、`/categories/productivity`、`/categories/automation` | 已出现少量前 10 信号 | 已补任务/价格/分类目录意图、专属 metadata 与决策顺序 | 已完成 |
+| P0-B | `/categories/voice`、`/ai/cursor`、`/ai/the-graph`、`/ai/dune` | 样本极小但排名靠前 | Voice 补专属 metadata；三个工具页补专属搜索意图、判断维度与 canonical | 已完成 |

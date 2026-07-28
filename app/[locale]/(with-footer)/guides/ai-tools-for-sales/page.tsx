@@ -3,7 +3,7 @@ import { BadgeDollarSign, CheckCircle2, ExternalLink, Target } from 'lucide-reac
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
-import { getNoindexMetadata } from '@/lib/seo/indexing';
+import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -21,20 +21,28 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '面向销售、线索跟进和客户沟通的 AI 工具选型指南。'
         : 'A practical guide to AI tools for sales, lead follow-up, and customer communication.',
-    ...getNoindexMetadata(),
+    alternates: {
+      canonical: generateLocalizedCanonicalUrl('/guides/ai-tools-for-sales', locale, BASE_URL),
+    },
   };
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
-  const checkedAt = '2026-07-18';
+  const checkedAt = '2026-07-28';
   const categoryCount = categories.length;
   const siteUrl = BASE_URL;
   const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: 'Home', url: `${siteUrl}/${locale}` },
-    { name: isChinese ? '选型指南' : 'Guides', url: `${siteUrl}/${locale}/guides/how-to-choose-ai-tools` },
-    { name: isChinese ? '销售工具' : 'Sales tools', url: `${siteUrl}/${locale}/guides/ai-tools-for-sales` },
+    { name: 'Home', url: generateLocalizedCanonicalUrl('/', locale, siteUrl) },
+    {
+      name: isChinese ? '选型指南' : 'Guides',
+      url: generateLocalizedCanonicalUrl('/guides/how-to-choose-ai-tools', locale, siteUrl),
+    },
+    {
+      name: isChinese ? '销售工具' : 'Sales tools',
+      url: generateLocalizedCanonicalUrl('/guides/ai-tools-for-sales', locale, siteUrl),
+    },
   ]);
   const faqs = [
     {

@@ -45,6 +45,9 @@
 - 2026-07-28：修复 comparison 页面多顶层模块被公共横向 flex 布局挤成超窄列的样式问题，公共 with-footer 主容器已统一改为纵向排列；同时将 agencies、creators、designers 三个角色型 comparison 页转为 noindex，并 canonical 回各自主 guide，继续收口重复索引入口。
 - 2026-07-28：继续完成 agents、code review、automation 三个工作流型 comparison 页的 canonical 收口，分别回到对应主 guide；共享 comparison 模板继续统一提供 noindex，避免重复索引入口与主指南竞争。
 - 2026-07-28：继续完成 comparison 收口下一批，`meeting-notes`、`customer-support`、`ecommerce` 三个 comparison 页已追加 `alternates.canonical` 回主 guide（`noindex` 仍由模板统一返回），用于继续降低别名比较页索引噪音。
+- 2026-07-28：导入最新 GSC 28 天数据：135 展示 / 1 点击 / 0.74% CTR / 59.92 平均排名，Coverage 为 154 已索引 / 690 未索引。执行重心从“继续批量 comparison 收口”切换为“规范 URL + 少量机会页增长”：新增统一本地化 canonical 生成器，英文规范页不再带 `/en` 前缀；首页、Explore、榜单、分类、工具详情的关键 canonical / schema URL 已对齐。首批增强首页、Research、Lindy、Fathom、ChatGPT，后续 14/28 天观察数据。
+- 2026-07-28：索引策略代码对账发现并修复 `/guides/ai-tools-for-research`、`/guides/ai-tools-for-sales` 同时存在于 sitemap 白名单却在页面 metadata 返回 `noindex` 的冲突；两页已恢复为规范可索引页，并为 sitemap 回归新增“白名单 Guide 不得显式 noindex”自动检查，防止同类问题再次出现。
+- 2026-07-28：完成 GSC 第二批机会页增强：Explore 对齐“按任务、价格和分类筛选 AI 工具目录”意图；Web3、Productivity、Automation、Voice 分类页补专属 Title / Description 和决策顺序；Cursor、The Graph、Dune 工具页补代码编辑、Web3 数据基础设施和链上 SQL 仪表盘的专属判断块。两批机会页均已完成代码落地，下一阶段进入部署后 14/28 天观察。
 - 2026-07-15：`GuideEvidencePanel` 已补齐到全部 guide / comparison 页面，并通过本地 `pnpm run build`
 - 2026-07-15：`pnpm run seo:quality-inventory` 已生成最新质量盘点，当前总页面 157、可进 sitemap 27、内部流量页 3、noindex / 合并候选 127，详见 [`docs/SEO_QUALITY_INVENTORY_CN.md`](/Users/liukai/web/ai-best-tool/docs/SEO_QUALITY_INVENTORY_CN.md)
 - 2026-07-15：`gsc:weekly-report` 的导出汇总脚本已增强为更深层递归扫描，并支持部分 CSV 导入时写回周报基线，减少等待完整导出时的卡点；Week 1 GSC 性能与覆盖率基线已录入周报
@@ -163,9 +166,9 @@
 
 | 任务 | 目标 | 验收标准 | 状态 |
 | --- | --- | --- | --- |
-| 停止新增低价值 programmatic 页面 | 防止索引面继续膨胀 | 新增页暂停，弱页不再推 sitemap | 进行中 |
-| 继续收口弱页 / alias 页 | 降低重复和稀薄内容 | 弱页 noindex / 合并策略已加固，别名页 canonical/noindex 已统一 | 进行中 |
-| 保持 GSC 周度观察 | 看恢复是否有效 | 周台账每周更新一次，模板已建立，待导入最新 GSC CSV | 进行中 |
+| 停止新增低价值 programmatic 页面 | 防止索引面继续膨胀 | 作为持续准入规则；新工具页必须先过质量门槛再进入 sitemap | 持续规则 |
+| 继续收口弱页 / alias 页 | 降低重复和稀薄内容 | 批量技术收口已完成；后续只处理 GSC 暴露的异常 URL，不再把 comparison 批量修改当作主要产出 | 维护中 |
+| 保持 GSC 周度观察 | 看恢复是否有效 | 2026-07-28 Week 4 已导入；14/28 天后复盘首批机会页 | 进行中 |
 | 维护核心页真实信号 | 给 Google 和用户证据 | 核心页持续补验证日期、价格、评论、owner 信号 | 进行中 |
 | 后台页面质量状态 / 下次复查日期 | 让质量决策可跟踪 | 管理后台可编辑并落库，列表页可查看 | 已完成 |
 

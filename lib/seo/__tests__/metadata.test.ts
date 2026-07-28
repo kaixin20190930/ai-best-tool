@@ -2,16 +2,17 @@
  * Tests for SEO Metadata Utilities
  */
 
-import {
-  generateTitle,
-  generateDescription,
-  generateSocialImageUrl,
-  generateCanonicalUrl,
-  generateToolTitle,
-  generateToolDescription,
-  generateAlternateLocales,
-} from '../metadata';
 import { SEO_CONFIG, SEO_CONSTRAINTS } from '../constants';
+import {
+  generateAlternateLocales,
+  generateCanonicalUrl,
+  generateDescription,
+  generateLocalizedCanonicalUrl,
+  generateSocialImageUrl,
+  generateTitle,
+  generateToolDescription,
+  generateToolTitle,
+} from '../metadata';
 
 describe('SEO Metadata Utilities', () => {
   describe('generateTitle', () => {
@@ -98,6 +99,17 @@ describe('SEO Metadata Utilities', () => {
     it('should handle root path', () => {
       const url = generateCanonicalUrl('/');
       expect(url).toMatch(/^https?:\/\/[^/]+\/$/);
+    });
+  });
+
+  describe('generateLocalizedCanonicalUrl', () => {
+    it('should keep the default English locale unprefixed', () => {
+      expect(generateLocalizedCanonicalUrl('/ai/chatgpt', 'en')).toBe(`${SEO_CONFIG.siteUrl}/ai/chatgpt`);
+      expect(generateLocalizedCanonicalUrl('/en/ai/chatgpt', 'en')).toBe(`${SEO_CONFIG.siteUrl}/ai/chatgpt`);
+    });
+
+    it('should retain the Chinese locale prefix', () => {
+      expect(generateLocalizedCanonicalUrl('/ai/chatgpt', 'cn')).toBe(`${SEO_CONFIG.siteUrl}/cn/ai/chatgpt`);
     });
   });
 

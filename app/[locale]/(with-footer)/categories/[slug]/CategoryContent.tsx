@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 
 import { GUIDE_PAGES } from '@/lib/content/guides';
 import { BASE_URL } from '@/lib/env';
+import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getCategoryBySlug, getLocalizedField } from '@/lib/services/categories';
 import { getAllTags } from '@/lib/services/tags';
@@ -364,6 +365,48 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
     ],
   };
   const decisionFocusMap: Record<string, { cn: string; en: string }[]> = {
+    productivity: [
+      {
+        cn: '先看它能否真正减少会议、日程和任务整理成本。',
+        en: 'Start with whether it truly reduces meeting, scheduling, and task administration.',
+      },
+      {
+        cn: '再看个人使用、团队席位、协作和权限边界。',
+        en: 'Then compare solo use, team seats, collaboration, and permission boundaries.',
+      },
+      {
+        cn: '最后检查导出、集成和长期工作流是否稳定。',
+        en: 'Finish with exports, integrations, and long-term workflow reliability.',
+      },
+    ],
+    automation: [
+      {
+        cn: '先看触发器、集成和定时任务能否覆盖真实流程。',
+        en: 'Start with trigger, integration, and schedule coverage for the real workflow.',
+      },
+      {
+        cn: '再看条件分支、数据传递和人工确认是否可控。',
+        en: 'Then compare branching, data flow, and human approval controls.',
+      },
+      {
+        cn: '最后检查日志、失败重试、权限和维护成本。',
+        en: 'Finish with logs, retries, permissions, and maintenance cost.',
+      },
+    ],
+    web3: [
+      {
+        cn: '先区分链上研究、钱包监控、协议数据和开发者基础设施。',
+        en: 'First separate on-chain research, wallet monitoring, protocol data, and developer infrastructure.',
+      },
+      {
+        cn: '再看链、协议、历史数据和实时更新覆盖。',
+        en: 'Then compare chain, protocol, historical-data, and real-time coverage.',
+      },
+      {
+        cn: '最后检查查询、导出、API、价格和数据风险。',
+        en: 'Finish with queries, exports, APIs, pricing, and data risks.',
+      },
+    ],
     'developer-tools': [
       {
         cn: '先看接入成本、API 覆盖和文档质量。',
@@ -441,7 +484,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
     .filter((page): page is (typeof GUIDE_PAGES)[number] => Boolean(page))
     .filter((page) => page.href.endsWith('-comparison'));
   const primaryComparisonGuide = comparisonGuides[0] || relatedGuides[0] || null;
-  const checkedAt = '2026-07-18';
+  const checkedAt = '2026-07-28';
   const checkedAtLabel = checkedAt;
   const priorityCategorySlugs = [
     'developer-tools',
@@ -978,11 +1021,11 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
   ];
   const basePath = `/categories/${category.slug}`;
   const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: 'Home', url: `${BASE_URL}/${params.locale}` },
-    { name: 'Explore', url: `${BASE_URL}/${params.locale}/explore` },
+    { name: 'Home', url: generateLocalizedCanonicalUrl('/', params.locale, BASE_URL) },
+    { name: 'Explore', url: generateLocalizedCanonicalUrl('/explore', params.locale, BASE_URL) },
     {
       name: categoryName,
-      url: `${BASE_URL}/${params.locale}/categories/${category.slug}`,
+      url: generateLocalizedCanonicalUrl(`/categories/${category.slug}`, params.locale, BASE_URL),
     },
   ]);
   const faqSchema = generateFAQSchema(faqs);

@@ -135,6 +135,27 @@ export function generateCanonicalUrl(path: string, baseUrl: string = SEO_CONFIG.
 }
 
 /**
+ * Generate the public canonical URL for a localized route.
+ * English uses the default unprefixed route while other locales keep their prefix.
+ */
+export function generateLocalizedCanonicalUrl(
+  path: string,
+  locale: string,
+  baseUrl: string = SEO_CONFIG.siteUrl,
+): string {
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  const pathWithoutLocale = normalizedPath.replace(/^\/(?:en|cn|jp|de|es|fr|pt|ru|tw)(?=\/|$)/, '') || '/';
+  const localizedPath =
+    locale === SEO_CONFIG.defaultLocale
+      ? pathWithoutLocale
+      : pathWithoutLocale === '/'
+        ? `/${locale}`
+        : `/${locale}${pathWithoutLocale}`;
+
+  return generateCanonicalUrl(localizedPath, baseUrl);
+}
+
+/**
  * Generate tool-specific title
  * Creates an optimized title for tool detail pages
  *
@@ -194,7 +215,7 @@ export function generateAlternateLocales(
 ): Array<{ locale: string; url: string }> {
   return INDEXABLE_LOCALES.filter((locale) => locale !== currentLocale).map((locale) => ({
     locale,
-    url: generateCanonicalUrl(`/${locale}${path}`, baseUrl),
+    url: generateLocalizedCanonicalUrl(path, locale, baseUrl),
   }));
 }
 
@@ -216,11 +237,11 @@ export function generateHreflangLinks(
 
   // Add all locales including current one
   INDEXABLE_LOCALES.forEach((locale) => {
-    hreflangLinks[locale] = generateCanonicalUrl(`/${locale}${path}`, baseUrl);
+    hreflangLinks[locale] = generateLocalizedCanonicalUrl(path, locale, baseUrl);
   });
 
   // Add x-default pointing to the default locale
-  hreflangLinks['x-default'] = generateCanonicalUrl(`/${SEO_CONFIG.defaultLocale}${path}`, baseUrl);
+  hreflangLinks['x-default'] = generateLocalizedCanonicalUrl(path, SEO_CONFIG.defaultLocale, baseUrl);
 
   return hreflangLinks;
 }

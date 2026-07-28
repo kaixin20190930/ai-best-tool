@@ -30,11 +30,15 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   // Generate hreflang tags for all locales
   const hreflangMetadata = generateHreflangMetadata(params.locale, '/explore');
+  const isChinese = params.locale === 'cn' || params.locale === 'tw';
 
   return {
-    title: 'Browse AI tools | AI Best Tool',
-    description:
-      'Browse curated AI tools by category, pricing, and use case. Compare tools for writing, coding, design, productivity, and more.',
+    title: isChinese
+      ? '探索 AI 工具目录：按场景、价格和分类筛选'
+      : 'Explore AI Tools Directory by Use Case, Pricing & Category',
+    description: isChinese
+      ? '浏览和筛选精选 AI 工具目录，按任务、分类、价格、标签和最近更新缩小范围，再进入详情页比较功能、限制与真实信号。'
+      : 'Browse and filter a curated AI tools directory by task, category, pricing, tags, and freshness, then compare features, limits, and real signals on detail pages.',
     ...hreflangMetadata,
   };
 }
@@ -45,7 +49,7 @@ export default async function Page({ params, searchParams }: PageProps) {
   const categories = categoriesResult.status === 'fulfilled' ? categoriesResult.value : [];
   const tags = tagsResult.status === 'fulfilled' ? tagsResult.value : [];
   const isChinese = params.locale === 'cn' || params.locale === 'tw';
-  const checkedAt = '2026-07-18';
+  const checkedAt = '2026-07-28';
   const taskFirstEntryPoints = [
     {
       href: '/guides/ai-writing-tools',
@@ -90,7 +94,9 @@ export default async function Page({ params, searchParams }: PageProps) {
             {isChinese ? '核心入口' : 'Core entry points'}
           </p>
           <h1 className='mt-2 text-3xl font-bold text-slate-950 lg:text-4xl'>
-            {isChinese ? '从探索页进入整个目录' : 'Use Explore as the main directory entry'}
+            {isChinese
+              ? '按任务、价格和分类探索 AI 工具目录'
+              : 'Explore the AI tools directory by task, pricing, and category'}
           </h1>
           <p className='mt-3 max-w-3xl text-sm leading-6 text-slate-600'>
             {isChinese

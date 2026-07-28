@@ -162,6 +162,22 @@ async function testSitemap() {
       console.log(`❌ Missing indexable guide pages: ${missingIndexableGuides.join(', ')}\n`);
     }
 
+    // Test 8: A guide cannot be both allowlisted in the sitemap and explicitly noindex in page metadata.
+    console.log('Test 8: Checking indexable guide metadata consistency...');
+    const conflictingIndexableGuides = [...indexableGuidePaths].filter((page) => {
+      const sourcePath = path.join(process.cwd(), 'app/[locale]/(with-footer)', page.replace(/^\//, ''), 'page.tsx');
+      if (!fs.existsSync(sourcePath)) return true;
+
+      const source = fs.readFileSync(sourcePath, 'utf8');
+      return source.includes('getNoindexMetadata()') || source.includes('index: false');
+    });
+
+    if (conflictingIndexableGuides.length === 0) {
+      console.log('✅ No sitemap guide explicitly returns noindex metadata\n');
+    } else {
+      console.log(`❌ Sitemap / noindex conflicts: ${conflictingIndexableGuides.join(', ')}\n`);
+    }
+
     // Display sample entries
     console.log('📋 Sample sitemap entries:');
     console.log('─'.repeat(80));
@@ -207,7 +223,7 @@ async function testSitemap() {
         console.log(`  ${priority}: ${count} entries`);
       });
 
-    const totalTests = 7;
+    const totalTests = 8;
     const passedTests =
       (missingPages.length === 0 ? 1 : 0) +
       (invalidEntries === 0 ? 1 : 0) +
@@ -215,7 +231,8 @@ async function testSitemap() {
       (invalidPriorities === 0 ? 1 : 0) +
       (duplicates === 0 ? 1 : 0) +
       (excludedFound.length === 0 ? 1 : 0) +
-      (missingIndexableGuides.length === 0 ? 1 : 0);
+      (missingIndexableGuides.length === 0 ? 1 : 0) +
+      (conflictingIndexableGuides.length === 0 ? 1 : 0);
 
     console.log(`\n${passedTests === totalTests ? '✅' : '❌'} Tests passed: ${passedTests}/${totalTests}`);
 

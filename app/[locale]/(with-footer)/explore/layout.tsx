@@ -3,6 +3,7 @@ import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
+import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
 import Faq from '@/components/Faq';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
@@ -15,7 +16,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
   const title = t('title');
   const description = t('description');
   const imageUrl = `${siteUrl}/images/aibesttool.png`;
-  const pageUrl = `${siteUrl}/${locale}/explore`;
+  const pageUrl = generateLocalizedCanonicalUrl('/explore', locale, siteUrl);
 
   return {
     metadataBase: new URL(siteUrl),
@@ -23,7 +24,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     description,
     keywords: t('keywords'),
     alternates: {
-      canonical: `/${locale}/explore`,
+      canonical: pageUrl,
     },
     openGraph: {
       type: 'website',

@@ -8,8 +8,8 @@ import {
   CheckCircle,
   CircleArrowRight,
   DollarSign,
-  Eye,
   ExternalLink,
+  Eye,
   FolderOpen,
   Heart,
   Lightbulb,
@@ -26,7 +26,7 @@ import { getTranslations } from 'next-intl/server';
 import { BASE_URL } from '@/lib/env';
 import { SEO_CONFIG, SOCIAL_IMAGE_DIMENSIONS, ToolMetadata } from '@/lib/seo/constants';
 import {
-  generateCanonicalUrl,
+  generateLocalizedCanonicalUrl,
   generateSocialImageUrl,
   generateToolDescription,
   generateToolTitle,
@@ -224,7 +224,14 @@ function getEditorialReview(
   const trustNote = getLocalizedText(record.trustNote, locale, fallback);
   const reviewedTime = reviewedAt ? new Date(reviewedAt).getTime() : Number.NaN;
 
-  if (!reviewedAt || !Number.isFinite(reviewedTime) || reviewedTime > Date.now() || !reviewedBy || !sourceUrl || !summary) {
+  if (
+    !reviewedAt ||
+    !Number.isFinite(reviewedTime) ||
+    reviewedTime > Date.now() ||
+    !reviewedBy ||
+    !sourceUrl ||
+    !summary
+  ) {
     return null;
   }
 
@@ -1305,6 +1312,195 @@ type DetailClaimSignals = {
   claimedAt?: string | null;
 };
 
+type PriorityToolSearchIntent = {
+  metadataTitle: string;
+  metadataDescription: string;
+  label: string;
+  summary: string;
+  checkpoints: string[];
+};
+
+function getPriorityToolSearchIntent(websiteName: string, locale: string): PriorityToolSearchIntent | null {
+  const isChinese = locale === 'cn' || locale === 'tw';
+  const key = websiteName.toLowerCase();
+
+  if (key === 'fathom') {
+    return isChinese
+      ? {
+          metadataTitle: 'Fathom AI 会议助手：功能、价格与限制',
+          metadataDescription:
+            '了解 Fathom 的会议转录、AI 摘要、行动项和会后跟进能力，并比较会议兼容性、团队协作、价格限制与数据处理风险。',
+          label: '会议助手判断重点',
+          summary: '判断 Fathom 的关键不是转录文本看起来多完整，而是它能否减少会后整理、行动项确认和团队跟进成本。',
+          checkpoints: [
+            '转录、摘要和行动项是否准确',
+            '会议平台、分享和协作流程是否匹配',
+            '免费额度、导出与隐私边界是否可接受',
+          ],
+        }
+      : {
+          metadataTitle: 'Fathom AI Meeting Assistant: Features, Pricing & Limits',
+          metadataDescription:
+            'Review Fathom for meeting transcription, AI summaries, action items, and follow-through, including compatibility, team workflow, pricing limits, and data risks.',
+          label: 'Meeting assistant decision',
+          summary:
+            'The real test for Fathom is not whether the transcript looks polished, but whether it reduces post-meeting cleanup, action-item tracking, and team follow-through.',
+          checkpoints: [
+            'Transcription, summaries, and action-item accuracy',
+            'Meeting compatibility, sharing, and team workflow',
+            'Free limits, exports, and data-handling boundaries',
+          ],
+        };
+  }
+
+  if (key === 'lindy') {
+    return isChinese
+      ? {
+          metadataTitle: 'Lindy AI Agent：功能、工作流、价格与限制',
+          metadataDescription:
+            '了解 Lindy 如何构建 AI Agent 和自动化工作流，并重点比较集成范围、人工确认、运行额度、失败处理与适用团队。',
+          label: 'AI Agent 判断重点',
+          summary: '评估 Lindy 时，应先确认它能否稳定执行你的真实流程，而不是只看 Agent 演示是否顺畅。',
+          checkpoints: [
+            '触发器、集成和多步骤流程是否覆盖需求',
+            '人工确认、权限和失败重试是否可控',
+            '运行额度与长期维护成本是否合理',
+          ],
+        }
+      : {
+          metadataTitle: 'Lindy AI Agent: Features, Workflows, Pricing & Limits',
+          metadataDescription:
+            'Review Lindy for AI agents and workflow automation, focusing on integrations, human approval, usage limits, failure handling, and the teams it fits best.',
+          label: 'AI agent decision',
+          summary:
+            'Evaluate Lindy on whether it can execute a real workflow reliably, not just whether the agent demo looks smooth.',
+          checkpoints: [
+            'Trigger, integration, and multi-step workflow coverage',
+            'Human approval, permissions, and failure recovery',
+            'Usage limits and long-term maintenance cost',
+          ],
+        };
+  }
+
+  if (key === 'chatgpt') {
+    return isChinese
+      ? {
+          metadataTitle: 'ChatGPT 功能、价格、使用场景与限制',
+          metadataDescription:
+            '比较 ChatGPT 在写作、研究、代码、文件、语音和联网任务中的适用性，并了解套餐边界、隐私风险与什么时候应该选择替代工具。',
+          label: '通用 AI 助手判断重点',
+          summary: 'ChatGPT 覆盖面很广，但真正的选择标准是你的核心任务、需要的工具能力以及数据和套餐限制。',
+          checkpoints: [
+            '写作、研究、代码或多模态任务是否匹配',
+            '文件、联网、语音和协作能力是否需要',
+            '套餐限制、数据处理和替代方案是否可接受',
+          ],
+        }
+      : {
+          metadataTitle: 'ChatGPT Review: Features, Pricing, Use Cases & Limits',
+          metadataDescription:
+            'Compare ChatGPT for writing, research, coding, files, voice, and web tasks, including plan boundaries, privacy trade-offs, and when an alternative fits better.',
+          label: 'General AI assistant decision',
+          summary:
+            'ChatGPT covers many workflows, but the right choice depends on your primary task, required tools, and acceptable plan and data boundaries.',
+          checkpoints: [
+            'Fit for writing, research, coding, or multimodal work',
+            'Need for files, web access, voice, and collaboration',
+            'Plan limits, data handling, and alternative options',
+          ],
+        };
+  }
+
+  if (key === 'cursor') {
+    return isChinese
+      ? {
+          metadataTitle: 'Cursor AI 代码编辑器：功能、价格与限制',
+          metadataDescription:
+            '了解 Cursor 的代码库上下文、补全、Agent 修改和模型能力，并比较使用额度、代码审查、隐私设置与团队开发工作流。',
+          label: 'AI 代码编辑器判断重点',
+          summary: '评估 Cursor 时，应先看它能否理解并安全修改你的真实代码库，而不只是单次补全速度。',
+          checkpoints: [
+            '代码库上下文、补全和多文件修改能力',
+            'Agent 变更、差异审查和人工确认流程',
+            '模型选择、使用额度、隐私和团队边界',
+          ],
+        }
+      : {
+          metadataTitle: 'Cursor AI Code Editor: Features, Pricing & Limits',
+          metadataDescription:
+            'Review Cursor for codebase context, completion, agent edits, and model access, including usage limits, code review, privacy settings, and team workflows.',
+          label: 'AI code editor decision',
+          summary:
+            'Evaluate Cursor on whether it can understand and safely change a real codebase, not only on single-line completion speed.',
+          checkpoints: [
+            'Codebase context, completion, and multi-file edits',
+            'Agent changes, diff review, and human approval',
+            'Model access, usage limits, privacy, and team boundaries',
+          ],
+        };
+  }
+
+  if (key === 'the-graph') {
+    return isChinese
+      ? {
+          metadataTitle: 'The Graph：区块链数据、Subgraph、价格与限制',
+          metadataDescription:
+            '了解 The Graph 的 Subgraph、链上数据查询和开发者基础设施能力，并比较网络覆盖、查询方式、API 集成、价格和数据时效。',
+          label: 'Web3 数据基础设施判断重点',
+          summary: '评估 The Graph 时，应先确认它是否覆盖你的链和数据模型，以及查询结果能否稳定进入产品工作流。',
+          checkpoints: [
+            '链、协议和 Subgraph 覆盖是否匹配',
+            '查询、API 和应用集成流程是否顺畅',
+            '数据时效、配额、价格和运维边界',
+          ],
+        }
+      : {
+          metadataTitle: 'The Graph: Blockchain Data, Subgraphs, Pricing & Limits',
+          metadataDescription:
+            'Review The Graph for subgraphs, blockchain data queries, and developer infrastructure, including network coverage, APIs, pricing, freshness, and operational limits.',
+          label: 'Web3 data infrastructure decision',
+          summary:
+            'Evaluate The Graph on whether it covers your chains and data model, and whether query results can reliably support a production application.',
+          checkpoints: [
+            'Chain, protocol, and subgraph coverage',
+            'Query, API, and application integration workflow',
+            'Data freshness, quotas, pricing, and operations',
+          ],
+        };
+  }
+
+  if (key === 'dune') {
+    return isChinese
+      ? {
+          metadataTitle: 'Dune Analytics：SQL、仪表盘、价格与限制',
+          metadataDescription:
+            '了解 Dune 的链上 SQL 查询、仪表盘和社区数据能力，并比较数据覆盖、查询性能、刷新频率、导出、协作和价格限制。',
+          label: '链上分析工作台判断重点',
+          summary: '评估 Dune 时，应先看你能否把链上问题转成可复用查询和仪表盘，而不只是浏览现成图表。',
+          checkpoints: [
+            '链上数据覆盖和 SQL 查询能力',
+            '仪表盘、刷新、导出与协作流程',
+            '查询性能、额度、价格和数据解释风险',
+          ],
+        }
+      : {
+          metadataTitle: 'Dune Analytics: SQL, Dashboards, Pricing & Limits',
+          metadataDescription:
+            'Review Dune for on-chain SQL queries, dashboards, and community data, including coverage, query performance, refreshes, exports, collaboration, and pricing limits.',
+          label: 'On-chain analytics workspace decision',
+          summary:
+            'Evaluate Dune on whether you can turn an on-chain question into a reusable query and dashboard, not only browse existing charts.',
+          checkpoints: [
+            'On-chain data coverage and SQL query workflow',
+            'Dashboards, refreshes, exports, and collaboration',
+            'Query performance, limits, pricing, and interpretation risk',
+          ],
+        };
+  }
+
+  return null;
+}
+
 export async function generateMetadata({
   params: { locale, websiteName },
 }: {
@@ -1336,11 +1532,13 @@ export async function generateMetadata({
     }
 
     // Generate optimized title and description using SEO utilities
-    const optimizedTitle = generateToolTitle(toolTitle, toolCategory);
-    const optimizedDescription = generateToolDescription(toolTitle, toolDescription, toolCategory);
+    const priorityIntent = getPriorityToolSearchIntent(websiteName, locale);
+    const optimizedTitle = priorityIntent?.metadataTitle || generateToolTitle(toolTitle, toolCategory);
+    const optimizedDescription =
+      priorityIntent?.metadataDescription || generateToolDescription(toolTitle, toolDescription, toolCategory);
 
     // Generate canonical URL
-    const canonicalUrl = generateCanonicalUrl(`/${locale}/ai/${websiteName}`);
+    const canonicalUrl = generateLocalizedCanonicalUrl(`/ai/${websiteName}`, locale);
 
     // Generate optimized social image URL
     const toolImage = data?.thumbnailUrl || data?.imageUrl || SEO_CONFIG.defaultImage;
@@ -1381,7 +1579,7 @@ export async function generateMetadata({
       title: websiteName,
       description: 'AI tool profile',
       alternates: {
-        canonical: generateCanonicalUrl(`/${locale}/ai/${websiteName}`),
+        canonical: generateLocalizedCanonicalUrl(`/ai/${websiteName}`, locale),
       },
     };
   }
@@ -1404,6 +1602,7 @@ export default async function Page({
     if (!data) notFound();
 
     const claimTool = dbTool as (typeof dbTool & DetailClaimSignals) | null;
+    const prioritySearchIntent = getPriorityToolSearchIntent(websiteName, locale);
 
     // Get current user
     const supabase = await createClient();
@@ -1494,7 +1693,7 @@ export default async function Page({
     }
 
     // Generate SoftwareApplication schema for tool pages
-    const toolUrl = `${BASE_URL}/${locale}/ai/${websiteName}`;
+    const toolUrl = generateLocalizedCanonicalUrl(`/ai/${websiteName}`, locale, BASE_URL);
     const toolImageUrl = data.thumbnailUrl || data.imageUrl || '';
 
     let softwareSchema = null;
@@ -1534,8 +1733,8 @@ export default async function Page({
 
     // Generate BreadcrumbList schema for navigation hierarchy
     const breadcrumbSchema = generateBreadcrumbSchema([
-      { name: 'Home', url: `${BASE_URL}/${locale}` },
-      { name: 'AI Tools', url: `${BASE_URL}/${locale}/explore` },
+      { name: 'Home', url: generateLocalizedCanonicalUrl('/', locale, BASE_URL) },
+      { name: 'AI Tools', url: generateLocalizedCanonicalUrl('/explore', locale, BASE_URL) },
       { name: data.title, url: toolUrl },
     ]);
     const categoryName = category ? getCategoryLocalizedField(category.name, locale) : data.categoryName || 'AI Tool';
@@ -1984,6 +2183,25 @@ export default async function Page({
                   </h1>
                   <p className='max-w-3xl text-base leading-7 text-slate-600 lg:text-lg'>{data.content}</p>
                 </div>
+
+                {prioritySearchIntent && (
+                  <div className='rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-5 shadow-sm'>
+                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                      {prioritySearchIntent.label}
+                    </p>
+                    <p className='mt-2 max-w-3xl text-base font-semibold leading-7 text-slate-950'>
+                      {prioritySearchIntent.summary}
+                    </p>
+                    <div className='mt-4 grid gap-3 md:grid-cols-3'>
+                      {prioritySearchIntent.checkpoints.map((checkpoint) => (
+                        <div key={checkpoint} className='flex gap-2 rounded-xl border border-white bg-white p-3'>
+                          <CheckCircle className='mt-0.5 size-4 shrink-0 text-emerald-600' />
+                          <p className='text-sm leading-6 text-slate-700'>{checkpoint}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 <div className='grid gap-3 md:grid-cols-3'>
                   {categorySlug ? (
@@ -2501,7 +2719,9 @@ export default async function Page({
                             {editorialReviewedLabel || (locale === 'cn' ? '已复核' : 'Reviewed')}
                           </p>
                           <p className='mt-1 text-xs font-medium text-slate-500'>
-                            {locale === 'cn' ? `复核人：${editorialReview.reviewedBy}` : `Reviewed by ${editorialReview.reviewedBy}`}
+                            {locale === 'cn'
+                              ? `复核人：${editorialReview.reviewedBy}`
+                              : `Reviewed by ${editorialReview.reviewedBy}`}
                           </p>
                           {editorialReviewStale && (
                             <p className='mt-2 text-sm font-medium text-amber-700'>

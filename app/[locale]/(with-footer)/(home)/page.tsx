@@ -23,6 +23,7 @@ import { FEATURED_GUIDE_HREFS, GUIDE_PAGES } from '@/lib/content/guides';
 import { topListTopics } from '@/lib/data/topLists';
 import { BASE_URL } from '@/lib/env';
 import { SEO_CONFIG } from '@/lib/seo/constants';
+import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
 import { generateOrganizationSchema } from '@/lib/seo/schema';
 import { getLocalizedField as getCategoryLocalizedField, getPopularCategories } from '@/lib/services/categories';
 import { getCommunityHighlights, getRecentDiscussions, getRisingTools } from '@/lib/services/community';
@@ -46,9 +47,15 @@ export async function generateMetadata({ params: { locale } }: { params: { local
   });
 
   const siteUrl = BASE_URL;
-  const title = t('title');
-  const description = t('description');
+  const isChinese = locale === 'cn' || locale === 'tw';
+  const title = isChinese
+    ? 'AI 工具目录：按场景比较精选 AI 工具 | AI Best Tool'
+    : 'AI Tools Directory: Compare Curated AI Tools | AI Best Tool';
+  const description = isChinese
+    ? '按写作、研究、开发、自动化和 Web3 等真实场景浏览 AI 工具，比较价格、功能、限制、最近更新与用户信号，再决定哪款更适合。'
+    : 'Browse a curated AI tools directory by real use case. Compare features, pricing, limits, freshness, and user signals for writing, research, coding, automation, and more.';
   const imageUrl = `${siteUrl}/images/aibesttool.png`;
+  const canonicalUrl = generateLocalizedCanonicalUrl('/', locale, siteUrl);
 
   return {
     metadataBase: new URL(siteUrl),
@@ -56,12 +63,12 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     description,
     keywords: t('keywords'),
     alternates: {
-      canonical: './',
+      canonical: canonicalUrl,
     },
     openGraph: {
       type: 'website',
       locale,
-      url: siteUrl,
+      url: canonicalUrl,
       siteName: 'AI Best Tool',
       title,
       description,
@@ -117,13 +124,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const recentDiscussions = await getRecentDiscussions(3).catch(() => []);
   const risingTools = await getRisingTools(3).catch(() => []);
   const totalVisibleTools = latestTools.total || latestTools.rows.length;
-  const checkedAt = '2026-07-18';
-  const heroTitle = isChinese
-    ? '发现持续更新、好用且可直接访问的 AI 工具'
-    : 'Discover updated, useful, and directly accessible AI tools';
+  const checkedAt = '2026-07-28';
+  const heroTitle = isChinese ? '按真实任务发现和比较 AI 工具' : 'Find and compare AI tools for real workflows';
   const heroSubtitle = isChinese
-    ? '先确认你要解决什么问题，再按场景、价格和更新频率筛选工具。'
-    : 'Start with the problem you need to solve, then filter by use case, pricing, and freshness.';
+    ? '这是一个持续维护的 AI 工具目录：先确认要解决的问题，再比较场景、价格、限制、更新频率和真实反馈。'
+    : 'A maintained AI tools directory: start with the problem, then compare use case, pricing, limits, freshness, and real feedback.';
   const stats = [
     {
       label: isChinese ? '已收录工具' : 'Indexed tools',
