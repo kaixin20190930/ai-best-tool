@@ -4,6 +4,16 @@ import { getTranslations } from 'next-intl/server';
 
 import { getAdminIntelligenceOverview } from '@/lib/services/admin/intelligence';
 
+const QUALITY_DIMENSIONS = [
+  { key: 'evidence', label: 'Evidence', maximum: 20 },
+  { key: 'factualConsistency', label: 'Factual consistency', maximum: 20 },
+  { key: 'decisionValue', label: 'Decision value', maximum: 20 },
+  { key: 'uniqueness', label: 'Uniqueness proxy', maximum: 15 },
+  { key: 'searchAndCategoryFit', label: 'Search and category fit', maximum: 10 },
+  { key: 'freshness', label: 'Freshness', maximum: 10 },
+  { key: 'mediaIntegrity', label: 'Media integrity', maximum: 5 },
+] as const;
+
 export async function generateMetadata({ params }: { params: { locale: string } }) {
   const t = await getTranslations({ locale: params.locale, namespace: 'admin' });
 
@@ -24,6 +34,13 @@ function badgeClass(status: string) {
   if (status === 'conflict') return 'bg-rose-50 text-rose-700';
   if (status === 'stale') return 'bg-orange-50 text-orange-700';
   return 'bg-amber-50 text-amber-700';
+}
+
+function decisionClass(decision: string) {
+  if (decision === 'publish_ready') return 'bg-emerald-50 text-emerald-700';
+  if (decision === 'review_required') return 'bg-cyan-50 text-cyan-700';
+  if (decision === 'enrich') return 'bg-amber-50 text-amber-700';
+  return 'bg-rose-50 text-rose-700';
 }
 
 export default async function AdminIntelligencePage({
@@ -196,6 +213,70 @@ export default async function AdminIntelligencePage({
                   <div className='text-xs uppercase tracking-wide text-slate-500'>Next review</div>
                   <div className='mt-1 text-lg font-semibold text-slate-950'>{formatDate(selected.nextReviewAt)}</div>
                 </div>
+              </div>
+
+              <div className='rounded-2xl border border-slate-200 bg-slate-50/70 p-4'>
+                <div className='flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between'>
+                  <div>
+                    <p className='text-xs font-bold uppercase tracking-[0.16em] text-slate-500'>
+                      Evidence-backed quality
+                    </p>
+                    <div className='mt-2 flex items-baseline gap-2'>
+                      <span className='text-3xl font-bold text-slate-950'>{selected.qualityAssessment.total}</span>
+                      <span className='text-sm text-slate-500'>/ 100</span>
+                    </div>
+                  </div>
+                  <span
+                    className={`w-fit rounded-full px-3 py-1 text-xs font-semibold ${decisionClass(
+                      selected.qualityAssessment.decision,
+                    )}`}
+                  >
+                    {selected.qualityAssessment.decision.replaceAll('_', ' ')}
+                  </span>
+                </div>
+
+                <div className='mt-5 grid gap-3 sm:grid-cols-2'>
+                  {QUALITY_DIMENSIONS.map((dimension) => {
+                    const score = selected.qualityAssessment.breakdown[dimension.key];
+                    const percentage = Math.round((score / dimension.maximum) * 100);
+                    return (
+                      <div key={dimension.key} className='rounded-xl border border-slate-200 bg-white p-3'>
+                        <div className='flex items-center justify-between gap-3 text-xs'>
+                          <span className='font-semibold text-slate-700'>{dimension.label}</span>
+                          <span className='text-slate-500'>
+                            {score}/{dimension.maximum}
+                          </span>
+                        </div>
+                        <div className='mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100'>
+                          <div className='h-full rounded-full bg-cyan-500' style={{ width: `${percentage}%` }} />
+                        </div>
+                        <p className='mt-2 text-xs leading-5 text-slate-500'>
+                          {selected.qualityAssessment.signals[dimension.key].join(' · ')}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {selected.qualityAssessment.blockers.length > 0 ? (
+                  <div className='mt-4 rounded-xl border border-rose-200 bg-rose-50 p-3'>
+                    <div className='text-xs font-bold uppercase tracking-wide text-rose-700'>Publish blockers</div>
+                    <div className='mt-2 text-sm text-rose-800'>{selected.qualityAssessment.blockers.join(' · ')}</div>
+                  </div>
+                ) : null}
+
+                {selected.qualityAssessment.recommendations.length > 0 ? (
+                  <div className='mt-4 rounded-xl border border-amber-200 bg-amber-50 p-3'>
+                    <div className='text-xs font-bold uppercase tracking-wide text-amber-800'>
+                      Recommended next actions
+                    </div>
+                    <ul className='mt-2 space-y-1 text-sm text-amber-950'>
+                      {selected.qualityAssessment.recommendations.map((recommendation) => (
+                        <li key={recommendation}>• {recommendation}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
               </div>
 
               <div className='grid gap-4 xl:grid-cols-3'>

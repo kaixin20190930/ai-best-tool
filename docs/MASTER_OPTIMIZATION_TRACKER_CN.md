@@ -25,6 +25,7 @@
 - 2026-07-27：PI-015 冲突检测与 PI-016 归一化产品档案已完成基础实现，支持对同一 profile 的多来源事实做冲突标记、生成归一化快照，并提供同步脚本 `pnpm run intelligence:sync` 作为后续人工验收入口；完整生产构建已通过。
 - 2026-07-27：PI-017 后台证据档案页已完成，新增 `/admin/intelligence` 管理页，可按 owner/status 查看 profile、来源、事实、资产、冲突与复查时间，并已接入后台导航；当前用于证据审阅与后续人工校准。
 - 2026-07-28：PI-018 完成真实站证据防污染校准：同步任务保留失败来源记录但不从非 2xx、非 HTML 或抓取异常页面提取事实；产品名优先读取 `og:site_name` / `application-name`，普通内页标题不再被误判为品牌名，500 错误页不会进入冲突。站点全局统一输出 `AI Best Tool` 品牌元数据，并补充回归测试。
+- 2026-07-28：产品证据真实同步链路完成收口：修复失效 Supabase URL、secret key 兼容、置信度百分制和数据库字段映射；`aibesttool.com` 已写入 39 个来源、37 条验证声明和 2 个资产，profile 为 `ready` 且 0 冲突。随后完成 QC-010 七维证据质量评分，后台 `/admin/intelligence` 已显示总分、每维依据、发布决策、阻断项和建议动作；下一项为 QC-011 evidence-bound composer。
 - 2026-07-15：`GuideEvidencePanel` 已补齐到全部 guide / comparison 页面，并通过本地 `pnpm run build`
 - 2026-07-15：`pnpm run seo:quality-inventory` 已生成最新质量盘点，当前总页面 157、可进 sitemap 27、内部流量页 3、noindex / 合并候选 127，详见 [`docs/SEO_QUALITY_INVENTORY_CN.md`](/Users/liukai/web/ai-best-tool/docs/SEO_QUALITY_INVENTORY_CN.md)
 - 2026-07-15：`gsc:weekly-report` 的导出汇总脚本已增强为更深层递归扫描，并支持部分 CSV 导入时写回周报基线，减少等待完整导出时的卡点；Week 1 GSC 性能与覆盖率基线已录入周报

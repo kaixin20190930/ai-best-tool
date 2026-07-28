@@ -14,6 +14,7 @@ import {
 import { normalizeIntelligenceConfidence } from '@/lib/services/intelligence/persistence';
 import { buildProductIntelligenceSnapshot } from '@/lib/services/intelligence/productProfile';
 import { buildContentQualityResult, CONTENT_QUALITY_WEIGHTS } from '@/lib/services/intelligence/qualityConfig';
+import { assessContentQuality } from '@/lib/services/intelligence/qualityScorer';
 import {
   isEvidenceHtmlContentType,
   isPathAllowedByRobots,
@@ -35,6 +36,100 @@ function run() {
   assert.equal(normalizeIntelligenceConfidence(90), 90);
   assert.equal(normalizeIntelligenceConfidence(150), 100);
   assert.equal(normalizeIntelligenceConfidence(-10), 0);
+
+  const qualityAssessment = assessContentQuality({
+    profile: {
+      id: 'profile-quality',
+      ownerType: 'tool',
+      ownerId: 'tool-quality',
+      canonicalDomain: 'example.com',
+      productName: 'Example',
+      status: 'ready',
+      version: 1,
+      lastCrawledAt: new Date().toISOString(),
+      lastVerifiedAt: new Date().toISOString(),
+      nextReviewAt: null,
+      metadata: {},
+    },
+    sources: [
+      {
+        id: 'source-quality',
+        profileId: 'profile-quality',
+        url: 'https://example.com/',
+        pageType: 'homepage',
+        httpStatus: 200,
+        canonicalUrl: 'https://example.com/',
+        contentHash: 'quality-hash',
+        contentType: 'text/html',
+        fetchedAt: new Date().toISOString(),
+        fetchStatus: 'success',
+        metadata: {},
+      },
+    ],
+    claims: [
+      {
+        id: 'claim-quality-name',
+        profileId: 'profile-quality',
+        claimType: 'product_name',
+        claimKey: 'product_name:quality',
+        claimValue: 'Example',
+        sourceUrl: 'https://example.com/',
+        sourceExcerpt: 'Example',
+        observedAt: new Date().toISOString(),
+        confidence: 95,
+        conflictStatus: 'none',
+        expiresAt: null,
+      },
+      {
+        id: 'claim-quality-positioning',
+        profileId: 'profile-quality',
+        claimType: 'one_line_positioning',
+        claimKey: 'one_line_positioning:quality',
+        claimValue: 'An evidence-backed example.',
+        sourceUrl: 'https://example.com/',
+        sourceExcerpt: 'An evidence-backed example.',
+        observedAt: new Date().toISOString(),
+        confidence: 90,
+        conflictStatus: 'none',
+        expiresAt: null,
+      },
+      {
+        id: 'claim-quality-feature',
+        profileId: 'profile-quality',
+        claimType: 'feature',
+        claimKey: 'feature:quality',
+        claimValue: 'Evidence tracking',
+        sourceUrl: 'https://example.com/',
+        sourceExcerpt: 'Evidence tracking',
+        observedAt: new Date().toISOString(),
+        confidence: 85,
+        conflictStatus: 'none',
+        expiresAt: null,
+      },
+    ],
+    assets: [
+      {
+        id: 'asset-quality',
+        profileId: 'profile-quality',
+        assetType: 'logo',
+        sourceUrl: 'https://example.com/logo.png',
+        storedUrl: null,
+        width: 256,
+        height: 256,
+        isPlaceholder: false,
+        evidenceStatus: 'verified',
+      },
+    ],
+  });
+  assert.equal(qualityAssessment.total, 60);
+  assert.equal(qualityAssessment.breakdown.factualConsistency, 20);
+  assert.equal(qualityAssessment.breakdown.mediaIntegrity, 3);
+  assert.equal(qualityAssessment.decision, 'hold');
+  assert.equal(qualityAssessment.blockers.length, 0);
+  assert.equal(
+    qualityAssessment.recommendations.some((item) => item.includes('QC-013')),
+    true,
+  );
 
   const publishReady = buildContentQualityResult({
     evidence: 20,

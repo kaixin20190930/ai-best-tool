@@ -1,4 +1,5 @@
 import { requireAdmin } from '@/lib/auth/middleware';
+import { assessContentQuality, type ContentQualityAssessment } from '@/lib/services/intelligence/qualityScorer';
 import type {
   IntelligenceProfileStatus,
   ProductIntelligenceAsset,
@@ -34,6 +35,7 @@ export interface AdminIntelligenceProfileDetail extends AdminIntelligenceProfile
   sources: ProductIntelligenceSource[];
   claims: ProductIntelligenceClaim[];
   assets: ProductIntelligenceAsset[];
+  qualityAssessment: ContentQualityAssessment;
 }
 
 export interface AdminIntelligenceOverview {
@@ -174,12 +176,32 @@ async function loadProfileDetail(profileId: string, supabase: ReturnType<typeof 
     verifiedClaimCount: mappedClaims.filter((claim) => claim.conflictStatus === 'none').length,
   });
 
+  const mappedProfile = {
+    id: baseItem.id,
+    ownerType: baseItem.ownerType,
+    ownerId: baseItem.ownerId,
+    canonicalDomain: baseItem.canonicalDomain,
+    productName: baseItem.productName,
+    status: baseItem.status,
+    version: baseItem.version,
+    lastCrawledAt: baseItem.lastCrawledAt,
+    lastVerifiedAt: baseItem.lastVerifiedAt,
+    nextReviewAt: baseItem.nextReviewAt,
+    metadata: ((profile as Record<string, unknown>).metadata as Record<string, unknown>) || {},
+  };
+
   return {
     ...baseItem,
-    metadata: ((profile as Record<string, unknown>).metadata as Record<string, unknown>) || {},
+    metadata: mappedProfile.metadata,
     sources: mappedSources,
     claims: mappedClaims,
     assets: mappedAssets,
+    qualityAssessment: assessContentQuality({
+      profile: mappedProfile,
+      sources: mappedSources,
+      claims: mappedClaims,
+      assets: mappedAssets,
+    }),
   };
 }
 
