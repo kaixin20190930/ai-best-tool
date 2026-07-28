@@ -174,6 +174,33 @@ export default async function AdminTargetsPage({
             </button>
           </form>
         </div>
+        <div className='flex flex-wrap gap-2 pt-3'>
+          {[
+            ['robots.txt', 'robots.txt'],
+            ['fetch failed', 'fetch failed'],
+            ['response limit', 'response exceeded the configured limit'],
+          ].map(([label, value]) => (
+            <Link
+              key={value}
+              href={`?status=blocked&blockedReason=${encodeURIComponent(value)}`}
+              className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                searchParams.blockedReason === value
+                  ? 'border-rose-300 bg-rose-50 text-rose-700'
+                  : 'border-slate-200 bg-white text-slate-600 hover:border-rose-300 hover:text-rose-700'
+              }`}
+            >
+              {label}
+            </Link>
+          ))}
+          {searchParams.blockedReason || searchParams.status ? (
+            <Link
+              href='/admin/targets'
+              className='rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:border-slate-300 hover:text-slate-900'
+            >
+              Clear filters
+            </Link>
+          ) : null}
+        </div>
       </section>
 
       <section className='space-y-4'>

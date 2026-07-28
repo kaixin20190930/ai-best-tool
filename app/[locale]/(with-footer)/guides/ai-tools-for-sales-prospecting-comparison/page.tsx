@@ -1,17 +1,28 @@
+import type { Metadata } from 'next';
+
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
 
-export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
-  return buildComparisonMetadata(
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const metadata = await buildComparisonMetadata(
     locale,
     locale === 'cn' || locale === 'tw' ? 'AI 销售拓客工具对比' : 'AI sales prospecting tools comparison',
     locale === 'cn' || locale === 'tw'
       ? '对比 AI 销售拓客工具，帮助你更快判断个性化触达、外联准备和 prospecting 适配度。'
       : 'Compare AI sales-prospecting tools to judge outreach personalization, contact prep, and prospecting fit faster.',
   );
+  return {
+    ...metadata,
+    ...getNoindexMetadata(),
+    alternates: {
+      ...metadata.alternates,
+      canonical: `/${locale}/guides/ai-tools-for-sales-prospecting`,
+    },
+  };
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
