@@ -8,7 +8,7 @@ import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
-  const metadata = await buildComparisonMetadata(
+  const metadata: Metadata = await buildComparisonMetadata(
     locale,
     locale === 'cn' || locale === 'tw' ? 'AI 销售拓客工具对比' : 'AI sales prospecting tools comparison',
     locale === 'cn' || locale === 'tw'
