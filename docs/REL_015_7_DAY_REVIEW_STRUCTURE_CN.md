@@ -149,3 +149,84 @@ REL-015 只有在以下内容齐备时才算真正完成：
 - REL-013 / REL-014 负责样本验证
 - REL-015 负责把样本验证后的 7 天游标结论固定下来，作为下一轮扩量或收口依据
 
+
+
+
+# REL-015 7 天复盘（2026-07-21 to 2026-07-28）
+
+更新时间：2026-07-28
+
+## 1) 验证结论
+
+### 内容验证
+
+- 基于当前已执行的真实增强，`/explore`、`/categories/web3`、`/categories/productivity`、`/categories/automation`、`/categories/voice`、`/ai/cursor`、`/ai/the-graph`、`/ai/dune`、`/ai/lindy`、`/ai/chatgpt`、`/guides/ai-tools-for-research` 的增强动作已完成并已落库。
+- 仍存在“高位展示但无点击”与“高位展示但缺少真实评论 / owner / 收藏”并存的问题：`Week 4` 观察到首页集中 102 展示 / 1 点击，`/ai/fathom`、`/ai/pipedream` 曝光存在但仍无点击。
+- 结论：内容增强本轮可判定为“**已交付**”；
+  但这些页面还未达到“可持续增长门槛”，尚未进入可扩量状态。
+
+### 目标站验证
+
+- `REL-014` 与 `RM-014` 实测后的反馈显示：`distribution_targets` 侧仍有较多站点级 `blocked`，其中 4 个已写入人工处理原因。
+- 对 blocked 站点的处理路径可追踪，但多数仍处在“先观察 / 待重试”阶段，不满足扩量触发条件。
+
+### 渠道回收
+
+- 未出现稳定、可持续带来点击或转化的单一“高回报渠道”。
+- 当前仍无足够真实渠道增量可用作扩量证据。
+
+## 2) 结构性问题
+
+1. 结构性阻断更多来自“真实信号不足”而非索引面问题
+- 现阶段已收口策略已稳定，`noindex / canonical / sitemap` 未出现明显回归。
+- 但页面点击链条仍偏弱：高意图词有展示，但转化不足。
+- 关键缺口是 `官方来源核验`、`评论/收藏`、`owner` 认领与更新闭环的真实沉淀。
+
+2. GSC 的 `www` 与主域规范化仍需观察
+- `sitemap / robots` 已加了规范化校验，但历史变体信号仍会周期性出现，需要继续监控。
+
+3. 阻断传播性风险
+- 目标站侧仍有多个 `blocked`，说明规则执行和提交成功率尚未稳定。
+
+## 3) 修正动作（本轮）
+
+- 优先级 P0：完成 REL-015 复盘记录归档并在总控表里标注“继续观察”。
+- 优先级 P0：继续 comparison / alias 轻量巡检，确认未出现新增索引噪音。
+- 优先级 P1：补齐高曝光样本的真实交互信号（评论、收藏、owner 或官方核验更新），优先 `Week 4` 显示机会页。
+- 优先级 P1：将 `blocked` 站点的人工处理原因与下次复查时间作为 `/admin/targets` 复查输入，保留并继续执行 blocked-retry 流。
+- 优先级 P1：继续补齐分发结果复盘到周报，和内容复查队列联动。
+
+## 4) 扩大/暂停决定
+
+- 决策：**本轮不扩大**（`continue_observe`）。
+- 扩量前置条件：
+  - 至少 1 个核心页面出现稳定点击上升趋势
+  - blocked 站点比例下降，且至少形成 2 个可复现成功提交的渠道样例
+  - 关键机会页的真实信号（价格/评论/owner）持续补齐
+
+## 5) 当前行动状态（建议）
+
+- 阶段：继续收口与观察（Week 5 持续）
+- 下一步：按本周三件事节奏推进
+  1) 对比页/alias 巡检
+  2) 补齐高曝光样本的真实信号模块（优先 `fathom`、`pipedream`、`lindy`、`chatgpt`）
+  3) 输出下一轮 7 天复盘报告（`continue_observe`）
+
+### 阶段执行记录（2026-07-28）
+
+- P1：对比页/alias 巡检完成。通过脚本核查 `app/[locale]/(with-footer)/guides/*` 下含 `comparison` 的 145 个页面，未发现未落 noindex 的 comparison 页面。
+- P1：高曝光样本补齐已进入执行后半段。已把 `pipedream`、`lindy`、`chatgpt` 的定制意图与信号卡都补齐，接近统一执行标准；同时对 `cursor`、`the-graph`、`dune` 保持既定决策层。
+- 后续：请继续补齐 `/ai/fathom`、`/ai/pipedream`、`/ai/lindy`、`/ai/chatgpt` 的真实交互闭环（评论、收藏、owner、官方复核）后再做下周复盘。
+
+### 2026-07-29：执行收口记录
+
+- P0：`pnpm exec tsx scripts/seo-quality-inventory.ts` 已执行，最新质量盘点为：`可进 sitemap 27`、`内部流量页 3`、`noindex / 合并候选 127`，无新增噪音项。
+- P0：`pnpm run seo:production-smoke` 已执行，`/cn` 关键页面、robots 与 sitemap 健康校验通过。
+- P0：`pnpm run seo:priority-page-signals -- --strict` 已执行，20 个核心页面全部满足 `HTTP/canonical/description/evidence/action`，通过率 `20/20`。
+- P1：`/app/[locale]/(with-footer)/ai/[websiteName]/page.tsx` 已补齐 `pipedream`、`lindy`、`chatgpt`、`cursor`、`the-graph`、`dune` 的优先元数据与决策信号。
+
+#### 本周结论（衔接 Week 5）
+
+- 技术面与页面信号面无回归；`noindex / canonical / sitemap` 继续稳态。
+- 未满足的关键差距仍是“高曝光页真实交互深度”：评论/收藏/owner/审核更新闭环是否达到稳定增量，需要继续观测。
+- 下一步：本周继续观察且不扩大索引面，待 `/ai/fathom`、`/ai/pipedream`、`/ai/lindy`、`/ai/chatgpt` 真实交互出现持续上行后再触发扩量复审。

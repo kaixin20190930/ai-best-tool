@@ -1382,6 +1382,36 @@ function getPriorityToolSearchIntent(websiteName: string, locale: string): Prior
         };
   }
 
+  if (key === 'pipedream') {
+    return isChinese
+      ? {
+          metadataTitle: 'Pipedream 自动化：触发器、workflow 与限制判断',
+          metadataDescription:
+            '评估 Pipedream 在工作流编排、触发器维护、失败重试和团队协作中的表现，重点对比集成覆盖、自动化稳定性、额度与升级门槛。',
+          label: '自动化工作流判断重点',
+          summary:
+            '自动化工具的核心价值在于稳定执行真实流程，而不是“有很多模板”本身。先确认触发和失败重试是否可控，再决定是否继续扩展。',
+          checkpoints: [
+            '触发器、重试机制和中间状态是否可观测',
+            '集成与鉴权变更对现有流程的影响是否可控',
+            '任务额度、并发和运营成本是否可承受',
+          ],
+        }
+      : {
+          metadataTitle: 'Pipedream Automation: Triggers, Workflow Stability & Limits',
+          metadataDescription:
+            'Review Pipedream for workflow orchestration, trigger management, retry handling, and team execution, including integration coverage, reliability, usage quotas, and upgrade gates.',
+          label: 'Automation workflow decision',
+          summary:
+            'The real value of automation tools is running real workflows reliably, not having many templates. Confirm trigger observability and retry behavior before committing.',
+          checkpoints: [
+            'Whether triggers, retries, and run state are observable',
+            'Whether integration and auth changes can be handled without breaking flows',
+            'Whether task quotas, concurrency, and cost fit your operations',
+          ],
+        };
+  }
+
   if (key === 'chatgpt') {
     return isChinese
       ? {
@@ -1857,6 +1887,13 @@ export default async function Page({
           return Number.isFinite(reviewedTime) && Date.now() - reviewedTime >= 90 * 24 * 60 * 60 * 1000;
         })()
       : false;
+    const editorialReviewerLabel = editorialReview
+      ? isChinese
+        ? `复核人：${editorialReview.reviewedBy}`
+        : `Reviewed by ${editorialReview.reviewedBy}`
+      : isChinese
+        ? '复核人：待补充'
+        : 'Reviewed by: pending';
     const freshnessSummary = decisionFreshnessSummary || getFreshnessSummary(updatedAt || null, locale);
     const pricingSummary = decisionPricingSummary || getPricingSummary(dbTool?.pricing, locale);
     const riskPoints: string[] = [];
@@ -1992,8 +2029,128 @@ export default async function Page({
           label: isChinese ? '风险信号' : 'Risk signal',
           value: isChinese ? '先确认稳定性和失败重试' : 'Confirm stability and retries first',
           note: isChinese
-            ? '自动化工具只要不稳定，后面的工作流就会很难持续。'
-            : 'If an automation tool is unstable, downstream workflows become hard to trust.',
+          ? '自动化工具只要不稳定，后面的工作流就会很难持续。'
+          : 'If an automation tool is unstable, downstream workflows become hard to trust.',
+        },
+      ];
+    } else if (websiteNameKey === 'lindy') {
+      detailSignalCards = [
+        {
+          label: isChinese ? '价格信号' : 'Pricing signal',
+          value: isChinese ? '先看执行次数与权限模型' : 'Check execution limits and permission model first',
+          note: isChinese
+            ? '先确认 AI 任务运行额度、是否可控的多步骤执行，再看高级能力。'
+            : 'Check workflow execution quotas and permission controls before weighing advanced capabilities.',
+        },
+        {
+          label: isChinese ? '更新信号' : 'Freshness signal',
+          value: isChinese ? '看触发器和执行链路是否持续维护' : 'Check whether trigger and execution pipelines are maintained',
+          note: isChinese
+            ? '当触发器和鉴权链路长期不更新时，自动化链路最容易积累沉没成本。'
+            : 'When trigger and auth chains stay stale, automation usually accumulates hidden maintenance costs.',
+        },
+        {
+          label: isChinese ? '风险信号' : 'Risk signal',
+          value: isChinese ? '先确认人工介入与回滚路径' : 'Confirm human-in-the-loop and rollback flow',
+          note: isChinese
+            ? '有清晰的人工审查和回滚才算可持续的 Agent 编排。'
+            : 'Agent automation needs dependable human review and rollback to stay trustworthy over time.',
+        },
+      ];
+    } else if (websiteNameKey === 'chatgpt') {
+      detailSignalCards = [
+        {
+          label: isChinese ? '价格信号' : 'Pricing signal',
+          value: isChinese ? '先看额度和并行场景' : 'Check plan limits and parallel usage first',
+          note: isChinese
+            ? '先确认额度是否适配你真实写作、研究或协作节奏，再决定是否换到替代方案。'
+            : 'Validate whether usage limits match your writing, research, and collaboration cadence before replacing with another option.',
+        },
+        {
+          label: isChinese ? '更新信号' : 'Freshness signal',
+          value: isChinese ? '看官方更新与模型能力变化' : 'Track official updates and model capability changes',
+          note: isChinese
+            ? 'ChatGPT 的体验变化主要来自模型与策略更新，周期性复核很关键。'
+            : 'ChatGPT value often shifts with model and policy updates, so periodic recheck is critical.',
+        },
+        {
+          label: isChinese ? '风险信号' : 'Risk signal',
+          value: isChinese ? '先确认替代门槛和数据边界' : 'Confirm migration cost and data boundaries first',
+          note: isChinese
+            ? '看清替代难度和数据留痕要求后再决定是否升级。'
+            : 'Decision should depend on migration cost and data-handling requirements, not just feature headlines.',
+        },
+      ];
+    } else if (websiteNameKey === 'cursor') {
+      detailSignalCards = [
+        {
+          label: isChinese ? '价格信号' : 'Pricing signal',
+          value: isChinese ? '先看套餐额度与项目规模' : 'Check plan limits against project scale',
+          note: isChinese
+            ? '先确认并发、上下文长度和项目规模是否足够，不要被单次补全体验带偏。'
+            : 'Start by validating concurrency, context length, and team size before trusting only completion UX.',
+        },
+        {
+          label: isChinese ? '更新信号' : 'Freshness signal',
+          value: isChinese ? '看规则提示、模型更新和协作链路' : 'Check rule hints, model updates, and collaboration flow',
+          note: isChinese
+            ? 'Cursor 的价值依赖稳定更新和代码变更闭环，长时间不更新会迅速出现漂移。'
+            : 'Cursor value depends on steady updates and a stable editing loop, not just short-term demos.',
+        },
+        {
+          label: isChinese ? '风险信号' : 'Risk signal',
+          value: isChinese ? '先确认 diff 审核和回滚能力' : 'Verify diff review and rollback first',
+          note: isChinese
+            ? '有可审查的差异和回滚路径，才适合上生产代码库。'
+            : 'Production code should only move forward with clear diff review and rollback options.',
+        },
+      ];
+    } else if (websiteNameKey === 'the-graph') {
+      detailSignalCards = [
+        {
+          label: isChinese ? '价格信号' : 'Pricing signal',
+          value: isChinese ? '先看查询额度与长期成本' : 'Check query quotas and long-term costs first',
+          note: isChinese
+            ? '先确认主查询量是否可支撑你的频率和分析规模。'
+            : 'Validate whether your expected query volume can be sustained over time.',
+        },
+        {
+          label: isChinese ? '更新信号' : 'Freshness signal',
+          value: isChinese ? '看链上索引和 subgraph 覆盖' : 'Check chain indexing and subgraph coverage',
+          note: isChinese
+            ? '如果索引滞后，任何看板都可能偏离真实业务决策。'
+            : 'If indexing is delayed, even polished dashboards can mislead business decisions.',
+        },
+        {
+          label: isChinese ? '风险信号' : 'Risk signal',
+          value: isChinese ? '先确认数据模型和时效风险' : 'Validate schema assumptions and freshness risk',
+          note: isChinese
+            ? '确认链上数据模型是否稳定，避免查询后期因接口变化失效。'
+            : 'Confirm schema stability to avoid later breakage when query interfaces change.',
+        },
+      ];
+    } else if (websiteNameKey === 'dune') {
+      detailSignalCards = [
+        {
+          label: isChinese ? '价格信号' : 'Pricing signal',
+          value: isChinese ? '先看查询额度与查询延迟' : 'Check query quotas and query latency',
+          note: isChinese
+            ? '先确认工作流里的 SQL 频率和大查询频率，避免后续被配额限制断流。'
+            : 'Validate SQL frequency and large-query cadence to avoid surprise quota throttling.',
+        },
+        {
+          label: isChinese ? '更新信号' : 'Freshness signal',
+          value: isChinese ? '看刷新策略和刷新延迟' : 'Check refresh strategy and lag',
+          note: isChinese
+            ? '仪表盘看起来不够稳时，先看刷新周期和手工刷新路径。'
+            : 'If dashboards look unstable, first check refresh scheduling and manual refresh steps.',
+        },
+        {
+          label: isChinese ? '风险信号' : 'Risk signal',
+          value: isChinese ? '先确认结果可解释性与复用成本' : 'Validate interpretability and reuse cost',
+          note: isChinese
+            ? '链上图表能否被团队复用更重要，别只看单张报表效果。'
+            : 'Reusability and clarity across team members matters more than one-off charts.',
         },
       ];
     } else {
@@ -2710,43 +2867,49 @@ export default async function Page({
                         <p className='mt-3 text-sm leading-6 text-slate-600'>{mediaCoverage.summary}</p>
                       </div>
 
-                      {editorialReview && (
-                        <div className='rounded-lg border border-slate-200 p-4'>
+                      <div className='rounded-lg border border-slate-200 p-4'>
                           <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
                             {locale === 'cn' ? '编辑复核' : 'Editorial review'}
                           </p>
                           <p className='mt-2 text-lg font-semibold text-slate-950'>
-                            {editorialReviewedLabel || (locale === 'cn' ? '已复核' : 'Reviewed')}
+                            {editorialReviewedLabel || (locale === 'cn' ? '待补复核' : 'Review pending')}
                           </p>
                           <p className='mt-1 text-xs font-medium text-slate-500'>
-                            {locale === 'cn'
-                              ? `复核人：${editorialReview.reviewedBy}`
-                              : `Reviewed by ${editorialReview.reviewedBy}`}
+                            {editorialReviewerLabel}
                           </p>
-                          {editorialReviewStale && (
-                            <p className='mt-2 text-sm font-medium text-amber-700'>
-                              {locale === 'cn'
-                                ? '该复核已超过 90 天，建议重新核查官网信息。'
-                                : 'This review is over 90 days old. Recheck the official source before relying on it.'}
-                            </p>
-                          )}
-                          {editorialReview.summary && (
-                            <p className='mt-3 text-sm leading-6 text-slate-600'>{editorialReview.summary}</p>
-                          )}
-                          {editorialReview.trustNote && (
-                            <p className='mt-2 text-sm leading-6 text-slate-600'>{editorialReview.trustNote}</p>
-                          )}
-                          <a
-                            href={editorialReview.sourceUrl}
-                            target='_blank'
-                            rel='noreferrer'
-                            className='mt-3 inline-flex items-center gap-1 text-sm font-semibold text-cyan-700 hover:text-cyan-900'
-                          >
-                            {locale === 'cn' ? '查看证据来源' : 'View evidence source'}
-                            <ExternalLink className='size-3.5' />
-                          </a>
-                        </div>
-                      )}
+                        {!editorialReview ? (
+                          <p className='mt-2 text-sm leading-6 text-slate-600'>
+                            {locale === 'cn'
+                              ? '目前还没有该条目的编辑复核记录。你可以先提交评论反馈，再发起“请求更新”让官方信息可追溯。'
+                              : 'No editorial review has been recorded yet. Please leave feedback first and request an update so we can bind source evidence.'}
+                          </p>
+                        ) : (
+                          <>
+                            {editorialReviewStale && (
+                              <p className='mt-2 text-sm font-medium text-amber-700'>
+                                {locale === 'cn'
+                                  ? '该复核已超过 90 天，建议重新核查官网信息。'
+                                  : 'This review is over 90 days old. Recheck the official source before relying on it.'}
+                              </p>
+                            )}
+                            {editorialReview.summary && (
+                              <p className='mt-3 text-sm leading-6 text-slate-600'>{editorialReview.summary}</p>
+                            )}
+                            {editorialReview.trustNote && (
+                              <p className='mt-2 text-sm leading-6 text-slate-600'>{editorialReview.trustNote}</p>
+                            )}
+                            <a
+                              href={editorialReview.sourceUrl}
+                              target='_blank'
+                              rel='noreferrer'
+                              className='mt-3 inline-flex items-center gap-1 text-sm font-semibold text-cyan-700 hover:text-cyan-900'
+                            >
+                              {locale === 'cn' ? '查看证据来源' : 'View evidence source'}
+                              <ExternalLink className='size-3.5' />
+                            </a>
+                          </>
+                        )}
+                      </div>
                     </div>
                   </div>
 
