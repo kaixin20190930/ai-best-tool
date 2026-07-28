@@ -218,3 +218,148 @@ export interface DistributionTargetProfile {
   nextCheckAt: string | null;
   confidence: number;
 }
+
+export type DistributionTargetPageType =
+  | 'homepage'
+  | 'submission'
+  | 'registration'
+  | 'pricing'
+  | 'contact'
+  | 'community'
+  | 'documentation'
+  | 'other';
+
+export type DistributionTargetDiscoveryMethod = 'homepage_link' | 'sitemap' | 'common_path';
+
+export interface DistributionTargetPageDiscovery {
+  url: string;
+  pageType: DistributionTargetPageType;
+  discoveryMethod: DistributionTargetDiscoveryMethod;
+  score: number;
+  anchorText: string | null;
+  title: string | null;
+  excerpt: string | null;
+  httpStatus: number | null;
+  finalUrl: string;
+  signals: string[];
+}
+
+export interface DistributionTargetRequirements {
+  requiresAccount: boolean;
+  requiresPayment: boolean;
+  requiresCaptcha: boolean;
+  requiresBacklink: boolean;
+  editorialReview: boolean;
+  expectedReviewDays: number | null;
+}
+
+export interface DistributionTargetDiscoveryResult {
+  homepageUrl: string;
+  finalUrl: string;
+  targetStatus: DistributionTargetStatus;
+  pages: DistributionTargetPageDiscovery[];
+  sitemapUrls: string[];
+  warnings: string[];
+  signals: {
+    homepageTitle: string | null;
+    inspectedCount: number;
+    blockedSignals: string[];
+  };
+  requirements: DistributionTargetRequirements;
+  submissionUrl: string | null;
+  registrationUrl: string | null;
+  pricingUrl: string | null;
+  contactUrl: string | null;
+  communityUrl: string | null;
+}
+
+export type DistributionTargetRuleKind =
+  | 'submission_entry'
+  | 'registration_requirement'
+  | 'payment_requirement'
+  | 'captcha_requirement'
+  | 'backlink_requirement'
+  | 'editorial_review'
+  | 'field_requirement'
+  | 'asset_requirement'
+  | 'manual_verification'
+  | 'risk_note';
+
+export type DistributionTargetRuleSeverity = 'info' | 'warn' | 'block';
+
+export interface DistributionTargetRuleFinding {
+  kind: DistributionTargetRuleKind;
+  severity: DistributionTargetRuleSeverity;
+  label: string;
+  value: string | number | boolean | null;
+  sourceUrl: string | null;
+  evidence: string[];
+  confidence: number;
+}
+
+export interface DistributionTargetFieldRequirement {
+  fieldName: string;
+  required: boolean;
+  fieldType: 'text' | 'url' | 'email' | 'textarea' | 'select' | 'file' | 'checkbox' | 'unknown';
+  characterLimit: number | null;
+  allowedValues: string[];
+  requiredAsset: string | null;
+  sourceUrls: string[];
+  evidence: string[];
+  confidence: number;
+}
+
+export interface DistributionTargetAnalysisResult {
+  homepageUrl: string;
+  finalUrl: string;
+  targetStatus: DistributionTargetStatus;
+  pageCount: number;
+  matchScore: DistributionTargetMatchScore;
+  rules: DistributionTargetRuleFinding[];
+  fieldRequirements: DistributionTargetFieldRequirement[];
+  blockedReasons: string[];
+  obstacles: DistributionTargetObstacleFinding[];
+  obstacleStatus: 'clear' | 'needs_review' | 'blocked';
+  nextAction: 'review' | 'retry' | 'manual' | 'ready';
+  summary: string;
+  snapshot: {
+    visibleRules: Array<{ label: string; value: string; sourceUrl: string | null }>;
+    pricingInfo: Array<{ label: string; value: string; sourceUrl: string | null }>;
+    formFields: Array<{
+      fieldName: string;
+      fieldType: string;
+      required: boolean;
+      characterLimit: number | null;
+      requiredAsset: string | null;
+    }>;
+    notes: string[];
+  };
+}
+
+export interface DistributionTargetObstacleFinding {
+  obstacle: DistributionObstacle;
+  severity: 'info' | 'warn' | 'block';
+  label: string;
+  value: string | number | boolean | null;
+  sourceUrl: string | null;
+  evidence: string[];
+  confidence: number;
+}
+
+export type DistributionTargetMatchGrade = 'excellent' | 'good' | 'moderate' | 'hard' | 'blocked';
+
+export interface DistributionTargetMatchReason {
+  label: string;
+  impact: number;
+  kind: 'bonus' | 'penalty';
+  sourceUrl: string | null;
+  detail: string;
+}
+
+export interface DistributionTargetMatchScore {
+  score: number;
+  maxScore: number;
+  grade: DistributionTargetMatchGrade;
+  summary: string;
+  reasons: DistributionTargetMatchReason[];
+}

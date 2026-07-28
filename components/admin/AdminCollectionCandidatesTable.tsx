@@ -104,6 +104,42 @@ function getCandidateChecklist(candidate: CollectionCandidate) {
   ].filter(Boolean) as string[];
 }
 
+function getCandidateNextAction(candidate: CollectionCandidate) {
+  const checklist = getCandidateChecklist(candidate);
+  const isReadyToImport =
+    candidate.status === 'new' && candidate.relevance_score >= 50 && candidate.quality_score >= 80;
+
+  if (candidate.status === 'imported') {
+    return 'Review imported draft';
+  }
+
+  if (candidate.status === 'skipped') {
+    return 'Re-evaluate later';
+  }
+
+  if (candidate.status === 'rejected') {
+    return 'Keep closed';
+  }
+
+  if (isReadyToImport) {
+    return 'Import now';
+  }
+
+  if (
+    checklist.includes('Missing category') ||
+    checklist.includes('Missing logo') ||
+    checklist.includes('Missing screenshot')
+  ) {
+    return 'Fix core assets first';
+  }
+
+  if (candidate.quality_score < 70 || checklist.length >= 3) {
+    return 'Enrich and rescore';
+  }
+
+  return 'Manual review';
+}
+
 const statusLabels: Array<{ label: string; value: CollectionCandidateStatus | 'all' }> = [
   { label: 'All', value: 'all' },
   { label: 'New', value: 'new' },
@@ -418,6 +454,9 @@ export default function AdminCollectionCandidatesTable({
               <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
                 Status
               </th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
+                Next step
+              </th>
               <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-slate-500">
                 Actions
               </th>
@@ -525,6 +564,13 @@ export default function AdminCollectionCandidatesTable({
                       {candidate.status}
                     </span>
                   </td>
+                  <td className="px-6 py-4 text-sm text-slate-700">
+                    <p className="font-semibold text-slate-900">{getCandidateNextAction(candidate)}</p>
+                    <p className="mt-1 text-xs text-slate-500">
+                      {getCandidateChecklist(candidate).length} gap
+                      {getCandidateChecklist(candidate).length === 1 ? '' : 's'}
+                    </p>
+                  </td>
                   <td className="px-6 py-4 text-right">
                     {candidate.status === 'imported' && candidate.tool_id ? (
                       <Link
@@ -572,7 +618,7 @@ export default function AdminCollectionCandidatesTable({
                 {expandedId === candidate.id && (
                   <tr>
                     <td className="bg-slate-50 px-6 py-4" />
-                    <td colSpan={5} className="bg-slate-50 px-6 py-4">
+                    <td colSpan={6} className="bg-slate-50 px-6 py-4">
                       <div className="grid gap-4 text-sm md:grid-cols-4">
                         <div>
                           <p className="font-semibold text-slate-900">Normalized URL</p>

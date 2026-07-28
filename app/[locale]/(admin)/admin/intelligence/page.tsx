@@ -2,7 +2,11 @@ import Link from 'next/link';
 import { AlertTriangle, ArrowUpRight, Layers3, ListChecks, ShieldCheck, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { getAdminIntelligenceOverview } from '@/lib/services/admin/intelligence';
+import {
+  getAdminIntelligenceDailyQueue,
+  getAdminIntelligenceOverview,
+  getAdminIntelligenceReviewQueue,
+} from '@/lib/services/admin/intelligence';
 
 const QUALITY_DIMENSIONS = [
   { key: 'evidence', label: 'Evidence', maximum: 20 },
@@ -69,6 +73,16 @@ export default async function AdminIntelligencePage({
     profileId: searchParams.profileId,
     limit: 30,
   });
+  const dailyQueue = await getAdminIntelligenceDailyQueue({
+    ownerType,
+    status,
+    limit: 3,
+  });
+  const reviewQueue = await getAdminIntelligenceReviewQueue({
+    ownerType,
+    status,
+    limit: 3,
+  });
 
   const selected = overview.selectedProfile;
 
@@ -120,6 +134,127 @@ export default async function AdminIntelligencePage({
           <AlertTriangle className='h-5 w-5 text-orange-700' />
           <div className='mt-3 text-2xl font-bold text-slate-950'>{overview.totals.conflicts}</div>
           <div className='mt-1 text-xs text-slate-500'>Conflict flags</div>
+        </div>
+      </section>
+
+      <section className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
+        <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between'>
+          <div>
+            <p className='text-xs font-bold uppercase tracking-[0.18em] text-cyan-700'>Daily queue</p>
+            <h2 className='mt-1 text-lg font-bold text-slate-950'>Today&apos;s content schedule</h2>
+            <p className='mt-1 text-sm text-slate-600'>
+              The queue defaults to {dailyQueue.limit} items so we keep the publication rhythm controlled.
+            </p>
+          </div>
+          <div className='rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-700'>
+            {dailyQueue.counts.publish} publish · {dailyQueue.counts.review} review · {dailyQueue.counts.enrich}{' '}
+            enrich
+          </div>
+        </div>
+
+        <div className='mt-4 grid gap-3 md:grid-cols-3'>
+          {dailyQueue.items.length > 0 ? (
+            dailyQueue.items.map((item, index) => (
+              <div
+                key={item.id}
+                className={`rounded-xl border p-4 ${
+                  item.lane === 'publish'
+                    ? 'border-emerald-200 bg-emerald-50'
+                    : item.lane === 'review'
+                      ? 'border-amber-200 bg-amber-50'
+                      : item.lane === 'enrich'
+                        ? 'border-cyan-200 bg-cyan-50'
+                        : 'border-rose-200 bg-rose-50'
+                }`}
+              >
+                <div className='flex items-center justify-between gap-3'>
+                  <div>
+                    <p className='text-xs font-bold uppercase tracking-wide text-slate-500'>Slot #{index + 1}</p>
+                    <h3 className='mt-1 text-base font-bold text-slate-950'>{item.productName}</h3>
+                    <p className='text-xs text-slate-500'>{item.canonicalDomain}</p>
+                  </div>
+                  <span className='rounded-full bg-white px-2 py-1 text-xs font-semibold text-slate-700'>
+                    {item.lane} · {item.score}
+                  </span>
+                </div>
+
+                <p className='mt-3 text-sm leading-6 text-slate-700'>{item.summary}</p>
+                <p className='mt-2 text-sm font-semibold text-slate-900'>{item.scheduledAction}</p>
+                <p className='mt-1 text-xs text-slate-500'>
+                  {item.blockers.length > 0 ? `Blockers: ${item.blockers.join(' · ')}` : 'No blocking issues'}
+                </p>
+                <div className='mt-3 flex flex-wrap gap-2 text-xs text-slate-600'>
+                  <span className='rounded-full bg-white px-2 py-1'>Owner: {item.ownerType}</span>
+                  <span className='rounded-full bg-white px-2 py-1'>Status: {item.status}</span>
+                  <span className='rounded-full bg-white px-2 py-1'>
+                    Review: {item.nextReviewAt ? formatDate(item.nextReviewAt) : '—'}
+                  </span>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className='rounded-xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-500 md:col-span-3'>
+              No queue items are ready yet. Once profiles reach publish or review readiness, they will show here.
+            </div>
+          )}
+        </div>
+      </section>
+
+      <section className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
+        <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between'>
+          <div>
+            <p className='text-xs font-bold uppercase tracking-[0.18em] text-cyan-700'>Review queue</p>
+            <h2 className='mt-1 text-lg font-bold text-slate-950'>7 / 30 / 60 day follow-up</h2>
+            <p className='mt-1 text-sm text-slate-600'>
+              Published profiles automatically stay visible here so review work does not get lost.
+            </p>
+          </div>
+          <div className='rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-700'>
+            {reviewQueue.counts.overdue} overdue · {reviewQueue.counts.dueSoon} due soon ·{' '}
+            {reviewQueue.counts.scheduled} scheduled
+          </div>
+        </div>
+
+        <div className='mt-4 grid gap-3 md:grid-cols-3'>
+          {reviewQueue.items.length > 0 ? (
+            reviewQueue.items.map((item, index) => (
+              <div
+                key={item.id}
+                className={`rounded-xl border p-4 ${
+                  item.state === 'overdue'
+                    ? 'border-rose-200 bg-rose-50'
+                    : item.state === 'due_soon'
+                      ? 'border-amber-200 bg-amber-50'
+                      : 'border-slate-200 bg-slate-50'
+                }`}
+              >
+                <div className='flex items-center justify-between gap-3'>
+                  <div>
+                    <p className='text-xs font-bold uppercase tracking-wide text-slate-500'>Review #{index + 1}</p>
+                    <h3 className='mt-1 text-base font-bold text-slate-950'>{item.productName}</h3>
+                    <p className='text-xs text-slate-500'>{item.canonicalDomain}</p>
+                  </div>
+                  <span className='rounded-full bg-white px-2 py-1 text-xs font-semibold text-slate-700'>
+                    {item.cadenceDays}d
+                  </span>
+                </div>
+
+                <p className='mt-3 text-sm leading-6 text-slate-700'>{item.reason}</p>
+                <p className='mt-2 text-sm font-semibold text-slate-900'>{item.action}</p>
+                <div className='mt-3 flex flex-wrap gap-2 text-xs text-slate-600'>
+                  <span className='rounded-full bg-white px-2 py-1'>Owner: {item.ownerType}</span>
+                  <span className='rounded-full bg-white px-2 py-1'>Status: {item.status}</span>
+                  <span className='rounded-full bg-white px-2 py-1'>
+                    Due: {item.dueAt ? formatDate(item.dueAt) : '—'}
+                  </span>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className='rounded-xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-500 md:col-span-3'>
+              No review items are ready yet. Profiles with next review dates will appear here automatically.
+            </div>
+          )}
         </div>
       </section>
 
@@ -271,12 +406,314 @@ export default async function AdminIntelligencePage({
                       Recommended next actions
                     </div>
                     <ul className='mt-2 space-y-1 text-sm text-amber-950'>
-                      {selected.qualityAssessment.recommendations.map((recommendation) => (
+                      {selected.qualityAssessment.recommendations.map((recommendation: string) => (
                         <li key={recommendation}>• {recommendation}</li>
                       ))}
                     </ul>
                   </div>
                 ) : null}
+              </div>
+
+              <div className='rounded-2xl border border-slate-200 bg-white p-4 shadow-sm'>
+                <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between'>
+                  <div>
+                    <p className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>
+                      Evidence-bound composer
+                    </p>
+                    <h3 className='mt-1 text-lg font-bold text-slate-950'>Traceable content blocks</h3>
+                    <p className='mt-1 text-sm text-slate-600'>
+                      Each block is composed only from verified claims and keeps its claim and source trail attached.
+                    </p>
+                  </div>
+                  <div className='rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-700'>
+                    {selected.contentComposer.traceability.blockCount} blocks
+                  </div>
+                </div>
+
+                <div className='mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4'>
+                  <div className='rounded-xl bg-slate-50 p-3'>
+                    <div className='text-xs uppercase tracking-wide text-slate-500'>Verified claims</div>
+                    <div className='mt-1 text-lg font-semibold text-slate-950'>
+                      {selected.contentComposer.traceability.verifiedClaimCount}
+                    </div>
+                  </div>
+                  <div className='rounded-xl bg-slate-50 p-3'>
+                    <div className='text-xs uppercase tracking-wide text-slate-500'>Sources</div>
+                    <div className='mt-1 text-lg font-semibold text-slate-950'>
+                      {selected.contentComposer.traceability.sourceCount}
+                    </div>
+                  </div>
+                  <div className='rounded-xl bg-slate-50 p-3'>
+                    <div className='text-xs uppercase tracking-wide text-slate-500'>Assets</div>
+                    <div className='mt-1 text-lg font-semibold text-slate-950'>
+                      {selected.contentComposer.traceability.assetCount}
+                    </div>
+                  </div>
+                  <div className='rounded-xl bg-slate-50 p-3'>
+                    <div className='text-xs uppercase tracking-wide text-slate-500'>Generated at</div>
+                    <div className='mt-1 text-sm font-semibold text-slate-950'>
+                      {formatDate(selected.contentComposer.generatedAt)}
+                    </div>
+                  </div>
+                </div>
+
+                {selected.contentComposer.warnings.length > 0 ? (
+                  <div className='mt-4 rounded-xl border border-amber-200 bg-amber-50 p-3'>
+                    <div className='text-xs font-bold uppercase tracking-wide text-amber-800'>Composer warnings</div>
+                    <ul className='mt-2 space-y-1 text-sm text-amber-950'>
+                      {selected.contentComposer.warnings.map((warning) => (
+                        <li key={warning}>• {warning}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+
+                <div
+                  className={`mt-4 rounded-xl border p-3 ${
+                    selected.factualGate.passed
+                      ? 'border-emerald-200 bg-emerald-50'
+                      : 'border-rose-200 bg-rose-50'
+                  }`}
+                >
+                  <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between'>
+                    <div>
+                      <div
+                        className={`text-xs font-bold uppercase tracking-wide ${
+                          selected.factualGate.passed ? 'text-emerald-700' : 'text-rose-700'
+                        }`}
+                      >
+                        Factual gate
+                      </div>
+                      <p className={`mt-2 text-sm ${selected.factualGate.passed ? 'text-emerald-950' : 'text-rose-950'}`}>
+                        {selected.factualGate.summary}
+                      </p>
+                    </div>
+                    <div className='rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-700'>
+                      {selected.factualGate.verifiedClaimCount} verified claims
+                    </div>
+                  </div>
+
+                  {selected.factualGate.findings.length > 0 ? (
+                    <div className='mt-3 space-y-2'>
+                      {selected.factualGate.findings.map((finding) => (
+                        <div
+                          key={finding.id}
+                          className={`rounded-lg border bg-white p-3 text-sm ${
+                            finding.severity === 'block'
+                              ? 'border-rose-200 text-rose-900'
+                              : 'border-amber-200 text-amber-900'
+                          }`}
+                        >
+                          <div className='flex flex-wrap items-center gap-2'>
+                            <span className='rounded-full bg-slate-100 px-2 py-1 text-[11px] font-semibold text-slate-700'>
+                              {finding.severity}
+                            </span>
+                            <span>{finding.message}</span>
+                          </div>
+                          {finding.sourceUrls.length > 0 ? (
+                            <div className='mt-2 space-y-1 text-xs text-slate-500'>
+                              {finding.sourceUrls.map((sourceUrl) => (
+                                <a
+                                  key={sourceUrl}
+                                  href={sourceUrl}
+                                  target='_blank'
+                                  rel='noreferrer'
+                                  className='block truncate text-cyan-700 hover:underline'
+                                >
+                                  {sourceUrl}
+                                </a>
+                              ))}
+                            </div>
+                          ) : null}
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+
+                <div
+                  className={`mt-4 rounded-xl border p-3 ${
+                    selected.uniquenessGate.passed
+                      ? 'border-emerald-200 bg-emerald-50'
+                      : 'border-rose-200 bg-rose-50'
+                  }`}
+                >
+                  <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between'>
+                    <div>
+                      <div
+                        className={`text-xs font-bold uppercase tracking-wide ${
+                          selected.uniquenessGate.passed ? 'text-emerald-700' : 'text-rose-700'
+                        }`}
+                      >
+                        Uniqueness gate
+                      </div>
+                      <p className={`mt-2 text-sm ${selected.uniquenessGate.passed ? 'text-emerald-950' : 'text-rose-950'}`}>
+                        {selected.uniquenessGate.summary}
+                      </p>
+                    </div>
+                    <div className='rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-700'>
+                      max similarity {selected.uniquenessGate.maxSimilarity}
+                    </div>
+                  </div>
+
+                  {selected.uniquenessGate.findings.length > 0 ? (
+                    <div className='mt-3 space-y-2'>
+                      {selected.uniquenessGate.findings.map((finding) => (
+                        <div
+                          key={finding.id}
+                          className={`rounded-lg border bg-white p-3 text-sm ${
+                            finding.severity === 'block'
+                              ? 'border-rose-200 text-rose-900'
+                              : 'border-amber-200 text-amber-900'
+                          }`}
+                        >
+                          <div className='flex flex-wrap items-center gap-2'>
+                            <span className='rounded-full bg-slate-100 px-2 py-1 text-[11px] font-semibold text-slate-700'>
+                              {finding.severity}
+                            </span>
+                            <span>{finding.message}</span>
+                            {finding.similarity !== null ? (
+                              <span className='rounded-full bg-slate-100 px-2 py-1 text-[11px] font-semibold text-slate-600'>
+                                similarity {finding.similarity}
+                              </span>
+                            ) : null}
+                          </div>
+                          {finding.matchedText.length > 0 ? (
+                            <div className='mt-2 space-y-1 text-xs text-slate-500'>
+                              {finding.matchedText.map((text) => (
+                                <div key={text} className='line-clamp-2 rounded bg-slate-50 px-2 py-1'>
+                                  {text}
+                                </div>
+                              ))}
+                            </div>
+                          ) : null}
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+
+                <div
+                  className={`mt-4 rounded-xl border p-3 ${
+                    selected.indexGate.decision === 'publish'
+                      ? 'border-emerald-200 bg-emerald-50'
+                      : selected.indexGate.decision === 'noindex'
+                        ? 'border-amber-200 bg-amber-50'
+                        : 'border-rose-200 bg-rose-50'
+                  }`}
+                >
+                  <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between'>
+                    <div>
+                      <div
+                        className={`text-xs font-bold uppercase tracking-wide ${
+                          selected.indexGate.decision === 'publish'
+                            ? 'text-emerald-700'
+                            : selected.indexGate.decision === 'noindex'
+                              ? 'text-amber-700'
+                              : 'text-rose-700'
+                        }`}
+                      >
+                        Index gate
+                      </div>
+                      <p
+                        className={`mt-2 text-sm ${
+                          selected.indexGate.decision === 'publish'
+                            ? 'text-emerald-950'
+                            : selected.indexGate.decision === 'noindex'
+                              ? 'text-amber-950'
+                              : 'text-rose-950'
+                        }`}
+                      >
+                        {selected.indexGate.summary}
+                      </p>
+                    </div>
+                    <div className='rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-700'>
+                      {selected.indexGate.decision} · score {selected.indexGate.score}
+                    </div>
+                  </div>
+
+                  <div className='mt-3 grid gap-3 sm:grid-cols-3'>
+                    <div className='rounded-lg bg-white p-3'>
+                      <div className='text-xs uppercase tracking-wide text-slate-500'>Should index</div>
+                      <div className='mt-1 text-lg font-semibold text-slate-950'>
+                        {selected.indexGate.shouldIndex ? 'Yes' : 'No'}
+                      </div>
+                    </div>
+                    <div className='rounded-lg bg-white p-3'>
+                      <div className='text-xs uppercase tracking-wide text-slate-500'>Should publish</div>
+                      <div className='mt-1 text-lg font-semibold text-slate-950'>
+                        {selected.indexGate.shouldPublish ? 'Yes' : 'No'}
+                      </div>
+                    </div>
+                    <div className='rounded-lg bg-white p-3'>
+                      <div className='text-xs uppercase tracking-wide text-slate-500'>Findings</div>
+                      <div className='mt-1 text-lg font-semibold text-slate-950'>
+                        {selected.indexGate.findings.length}
+                      </div>
+                    </div>
+                  </div>
+
+                  {selected.indexGate.findings.length > 0 ? (
+                    <div className='mt-3 space-y-2'>
+                      {selected.indexGate.findings.map((finding) => (
+                        <div
+                          key={finding.id}
+                          className={`rounded-lg border bg-white p-3 text-sm ${
+                            finding.severity === 'block'
+                              ? 'border-rose-200 text-rose-900'
+                              : 'border-amber-200 text-amber-900'
+                          }`}
+                        >
+                          <span className='rounded-full bg-slate-100 px-2 py-1 text-[11px] font-semibold text-slate-700'>
+                            {finding.severity}
+                          </span>
+                          <span className='ml-2'>{finding.message}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+
+                <div className='mt-4 space-y-3'>
+                  {selected.contentComposer.blocks.map((block) => (
+                    <div key={block.id} className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+                      <div className='flex flex-wrap items-center justify-between gap-3'>
+                        <h4 className='text-sm font-bold text-slate-950'>{block.title}</h4>
+                        <span className='text-xs text-slate-500'>{block.claimIds.length} claims</span>
+                      </div>
+                      <p className='mt-2 text-sm leading-6 text-slate-700'>{block.paragraph}</p>
+                      {block.notes.length > 0 ? (
+                        <ul className='mt-2 space-y-1 text-xs text-slate-500'>
+                          {block.notes.map((note) => (
+                            <li key={note}>• {note}</li>
+                          ))}
+                        </ul>
+                      ) : null}
+                      <div className='mt-3 flex flex-wrap gap-2'>
+                        {block.claimIds.map((claimId) => (
+                          <span key={claimId} className='rounded-full bg-white px-2 py-1 text-[11px] text-slate-600'>
+                            claim:{claimId.slice(0, 8)}
+                          </span>
+                        ))}
+                      </div>
+                      {block.sourceUrls.length > 0 ? (
+                        <div className='mt-3 space-y-1 text-xs text-slate-500'>
+                          {block.sourceUrls.map((sourceUrl) => (
+                            <a
+                              key={sourceUrl}
+                              href={sourceUrl}
+                              target='_blank'
+                              rel='noreferrer'
+                              className='block truncate text-cyan-700 hover:underline'
+                            >
+                              {sourceUrl}
+                            </a>
+                          ))}
+                        </div>
+                      ) : null}
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <div className='grid gap-4 xl:grid-cols-3'>

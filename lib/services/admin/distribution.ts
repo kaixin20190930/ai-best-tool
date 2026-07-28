@@ -1,5 +1,6 @@
 import { requireAdmin } from '@/lib/auth/middleware';
 import { createAdminClient } from '@/lib/supabase/admin';
+import { buildDistributionReviewReport } from '@/lib/services/distribution/review';
 
 export interface AdminDistributionOverview {
   entitlements: { active: number; pilot: number; pro: number; agency: number };
@@ -18,6 +19,7 @@ export interface AdminDistributionOverview {
     attribution: { visits: number; signups: number; submissions: number; claims: number; payments: number };
   }>;
   recentIssues: Array<{ projectName: string; title: string; status: string; liveUrl: string | null; updatedAt: string }>;
+  review: Awaited<ReturnType<typeof buildDistributionReviewReport>> | null;
 }
 
 export async function getAdminDistributionOverview(): Promise<AdminDistributionOverview> {
@@ -28,7 +30,7 @@ export async function getAdminDistributionOverview(): Promise<AdminDistributionO
   const [{ data: entitlements, error: entitlementError }, { data: projects, error: projectError }, { data: tasks, error: taskError }, { data: events, error: eventError }] = await Promise.all([
     supabase.from('distribution_entitlements').select('plan, status'),
     supabase.from('distribution_projects').select('id, name, website_url, status, owner_id, distribution_workspaces(name, kind)').order('created_at', { ascending: false }),
-    supabase.from('distribution_tasks').select('id, project_id, title, status, distribution_results(link_status, live_url, updated_at)').order('updated_at', { ascending: false }),
+    supabase.from('distribution_tasks').select('id, project_id, title, status, priority, due_date, channel_id, created_at, updated_at, distribution_channels(name, channel_type), distribution_projects(name, website_url), distribution_results(id, live_url, target_url, link_status, checked_at, notes, created_at, updated_at)').order('updated_at', { ascending: false }),
     supabase.from('distribution_attribution_events').select('project_id, event_type').gte('created_at', since),
   ]);
 
@@ -100,9 +102,36 @@ export async function getAdminDistributionOverview(): Promise<AdminDistributionO
     };
   });
 
+  const reviewTasks = (tasks || []).map((task: any) => ({
+    id: String(task.id),
+    project_id: String(task.project_id),
+    title: String(task.title || ''),
+    status: String(task.status || 'planned'),
+    priority: String(task.priority || 'p1'),
+    due_date: (task.due_date as string | null | undefined) || null,
+    channel_id: String(task.channel_id || ''),
+    channel_name: String(task.distribution_channels?.name || 'Unknown channel'),
+    channel_type: String(task.distribution_channels?.channel_type || 'other'),
+    project_name: String(task.distribution_projects?.name || 'Unknown project'),
+    project_website: (task.distribution_projects?.website_url as string | null | undefined) || null,
+    task_created_at: (task.created_at as string | null | undefined) || null,
+    task_updated_at: (task.updated_at as string | null | undefined) || null,
+    results: (task.distribution_results || []).map((result: any) => ({
+      id: String(result.id || ''),
+      live_url: (result.live_url as string | null | undefined) || null,
+      target_url: (result.target_url as string | null | undefined) || null,
+      link_status: String(result.link_status || 'unknown'),
+      checked_at: (result.checked_at as string | null | undefined) || null,
+      created_at: (result.created_at as string | null | undefined) || null,
+      notes: (result.notes as string | null | undefined) || null,
+    })),
+  }));
+  const review = await buildDistributionReviewReport(reviewTasks, null);
+
   return {
     entitlements: entitlementSummary,
     projects: projectRows,
     recentIssues: recentIssues.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)).slice(0, 20),
+    review,
   };
 }

@@ -36,6 +36,9 @@
     "intelligence:discover-pages": "tsx scripts/discover-product-intelligence-pages.ts",
     "intelligence:classify-page": "tsx scripts/classify-product-intelligence-page.ts",
     "intelligence:sync": "tsx scripts/sync-product-intelligence.ts",
+    "distribution:discover-target": "tsx scripts/discover-distribution-target-pages.ts",
+    "distribution:analyze-target": "tsx scripts/analyze-distribution-target.ts",
+    "distribution:review-target": "tsx scripts/review-distribution-target.ts",
     "test:regression": "tsx scripts/regression-test.ts",
     "theme:audit": "bash scripts/theme-audit.sh",
     "adsense:verify": "node scripts/verify-adsense.mjs"

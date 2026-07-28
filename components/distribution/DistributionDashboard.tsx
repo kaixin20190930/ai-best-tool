@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { ExternalLink, Link2, Plus, Radar, Send, ShieldCheck } from 'lucide-react';
+import Link from 'next/link';
+import { ExternalLink, Link2, Plus, Radar, Send, ShieldCheck, ArrowUpRight } from 'lucide-react';
 
 import {
   createDistributionTask,
@@ -12,8 +13,23 @@ import {
   updateDistributionTaskStatus,
   type DistributionDashboard as DistributionDashboardData,
 } from '@/app/actions/distribution';
+import {
+  DISTRIBUTION_TASK_STATUS_META,
+  getDistributionTaskStatusChoices,
+  getDistributionTaskStatusLabel,
+  type DistributionTaskStatus,
+} from '@/lib/services/distribution/taskStateMachine';
 
-const statusOptions = ['planned', 'in_progress', 'submitted', 'live', 'follow_up', 'done', 'skipped'];
+const statusOptions = getDistributionTaskStatusChoices();
+
+function statusToneClass(status: DistributionTaskStatus) {
+  const tone = DISTRIBUTION_TASK_STATUS_META[status].tone;
+  if (tone === 'success') return 'bg-emerald-100 text-emerald-800';
+  if (tone === 'warning') return 'bg-amber-100 text-amber-800';
+  if (tone === 'danger') return 'bg-rose-100 text-rose-800';
+  if (tone === 'info') return 'bg-cyan-100 text-cyan-800';
+  return 'bg-slate-100 text-slate-700';
+}
 
 export default function DistributionDashboard({ data, locale }: { data: DistributionDashboardData; locale: string }) {
   const [showForm, setShowForm] = useState(false);
@@ -32,6 +48,7 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
             <p className='mt-3 text-sm leading-6 text-slate-300 sm:text-base'>
               Plan human-led distribution across directories, communities, content, and launch channels. Record the evidence, next follow-up, and link quality in one place.
             </p>
+            {data.project?.description ? <p className='mt-3 max-w-2xl text-sm leading-6 text-cyan-100'>{data.project.description}</p> : null}
           </div>
           <button
             type='button'
@@ -45,14 +62,84 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
           {[
             ['Tasks tracked', data.metrics.total],
             ['Due today', data.metrics.dueToday],
-            ['Live mentions', data.metrics.live],
-            ['Follow-ups', data.metrics.followUp],
+            ['Ready to submit', data.metrics.readyToSubmit],
+            ['Waiting review', data.metrics.waitingReview],
           ].map(([label, value]) => (
             <div key={String(label)} className='rounded-2xl border border-white/10 bg-white/5 p-4'>
               <div className='text-2xl font-bold'>{value}</div>
               <div className='mt-1 text-xs text-slate-400'>{label}</div>
             </div>
           ))}
+          <div className='rounded-2xl border border-white/10 bg-white/5 p-4'>
+            <div className='text-2xl font-bold'>{data.metrics.live}</div>
+            <div className='mt-1 text-xs text-slate-400'>Live mentions</div>
+          </div>
+          <div className='rounded-2xl border border-white/10 bg-white/5 p-4'>
+            <div className='text-2xl font-bold'>{data.metrics.blocked}</div>
+            <div className='mt-1 text-xs text-slate-400'>Blocked tasks</div>
+          </div>
+        </div>
+      </section>
+
+      <section className='grid gap-4 lg:grid-cols-3'>
+        <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:col-span-2'>
+          <div className='flex items-center justify-between gap-3'>
+            <div>
+              <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Today&apos;s queue</div>
+              <h2 className='mt-1 text-xl font-bold text-slate-950'>Top priorities</h2>
+            </div>
+            <span className='text-xs text-slate-500'>Sorted by leverage and urgency</span>
+          </div>
+          <div className='mt-4 space-y-3'>
+            {data.recommendations.length > 0 ? (
+              data.recommendations.map((item, index) => (
+                <div key={item.id} className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+                  <div className='flex items-start justify-between gap-3'>
+                    <div>
+                      <div className='flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                        <span>#{index + 1}</span>
+                        <span className='rounded-full bg-white px-2 py-1 text-slate-600'>{item.channelName}</span>
+                        <span className='rounded-full bg-white px-2 py-1 text-slate-600'>{item.priority || 'p1'}</span>
+                      </div>
+                      <div className='mt-2 text-sm font-bold text-slate-950'>{item.title}</div>
+                      <p className='mt-1 text-xs leading-5 text-slate-600'>{item.reason}</p>
+                    </div>
+                    <Link href={`/${locale}/distribution/tasks/${item.id}`} className='inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:border-cyan-300 hover:text-cyan-700'>
+                      Open <ArrowUpRight className='h-3.5 w-3.5' />
+                    </Link>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className='rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500'>No ranked tasks yet.</div>
+            )}
+          </div>
+        </div>
+        <div className='space-y-4'>
+          <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
+            <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Preflight</div>
+            <h2 className='mt-1 text-lg font-bold text-slate-950'>Copy readiness</h2>
+            <p className='mt-2 text-sm text-slate-600'>{data.preflight.summary}</p>
+            <div className='mt-3 space-y-2 text-xs text-slate-600'>
+              <div>Title: {data.preflight.titleLength}{data.preflight.titleLimit ? ` / ${data.preflight.titleLimit}` : ''}</div>
+              <div>Description: {data.preflight.descriptionLength}{data.preflight.descriptionLimit ? ` / ${data.preflight.descriptionLimit}` : ''}</div>
+              <div>Required fields: {data.preflight.requiredFields.join(', ') || '—'}</div>
+              <div>Missing fields: {data.preflight.missingFields.join(', ') || '—'}</div>
+            </div>
+            {data.preflight.blockers.length > 0 ? <div className='mt-3 rounded-xl bg-rose-50 p-3 text-xs text-rose-800'>{data.preflight.blockers.join(' · ')}</div> : null}
+            {data.preflight.warnings.length > 0 ? <div className='mt-2 rounded-xl bg-amber-50 p-3 text-xs text-amber-800'>{data.preflight.warnings.join(' · ')}</div> : null}
+          </div>
+          <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
+            <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Tracked destination</div>
+            <h2 className='mt-1 text-lg font-bold text-slate-950'>UTM suggestion</h2>
+            <p className='mt-2 text-sm text-slate-600'>{data.destinationSuggestion.summary}</p>
+            <div className='mt-3 space-y-2 text-xs text-slate-600'>
+              <div className='break-all'>Destination: {data.destinationSuggestion.destinationUrl}</div>
+              <div>Source: {data.destinationSuggestion.utmSource}</div>
+              <div>Campaign: {data.destinationSuggestion.utmCampaign}</div>
+              <div>Content: {data.destinationSuggestion.utmContent || '—'}</div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -68,10 +155,15 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
             }}
             className='mt-2 block w-full max-w-xl rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-semibold normal-case tracking-normal text-slate-800 outline-none ring-cyan-400 focus:ring-2'
           >
-            {data.projects.map((project) => <option key={project.id} value={project.id}>{project.name}{project.websiteUrl ? ` · ${project.websiteUrl}` : ''}</option>)}
+            {data.projects.map((project) => (
+              <option key={project.id} value={project.id}>
+                {project.name}
+                {project.websiteUrl ? ` · ${project.websiteUrl}` : ''}
+              </option>
+            ))}
           </select>
         </label>
-        <button type='button' onClick={() => setShowProjectForm((visible) => !visible)} className='rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-bold text-slate-700 hover:border-cyan-300 hover:text-cyan-700'>+ New project</button>
+          <button type='button' onClick={() => setShowProjectForm((visible) => !visible)} className='rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-bold text-slate-700 hover:border-cyan-300 hover:text-cyan-700'>+ New project</button>
       </section>
 
       <section className='rounded-2xl border border-cyan-100 bg-cyan-50/60 p-5'>
@@ -199,6 +291,7 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
                     <div className='flex flex-wrap items-center gap-2 text-xs font-bold uppercase tracking-wide'>
                       <span className='rounded-full bg-slate-100 px-2.5 py-1 text-slate-600'>{task.channelName}</span>
                       <span className={`rounded-full px-2.5 py-1 ${task.priority === 'p0' ? 'bg-rose-50 text-rose-700' : 'bg-cyan-50 text-cyan-700'}`}>{task.priority}</span>
+                      <span className={`rounded-full px-2.5 py-1 ${statusToneClass(task.status)}`}>{getDistributionTaskStatusLabel(task.status)}</span>
                     </div>
                     <h3 className='mt-3 text-base font-bold text-slate-950'>{task.title}</h3>
                     {task.instructions ? <p className='mt-1 text-sm leading-5 text-slate-600'>{task.instructions}</p> : null}
@@ -206,13 +299,21 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
                       <span>Due: {task.dueDate || 'not scheduled'}</span>
                       {task.liveUrl ? <a href={task.liveUrl} target='_blank' rel='noreferrer' className='inline-flex items-center gap-1 font-semibold text-cyan-700 hover:underline'><ExternalLink className='h-3 w-3' /> Live result</a> : null}
                       {task.linkStatus ? <span className='inline-flex items-center gap-1'><Link2 className='h-3 w-3' /> {task.linkStatus}</span> : null}
+                      <Link href={`/${locale}/distribution/tasks/${task.id}`} className='inline-flex items-center gap-1 font-semibold text-slate-700 hover:text-cyan-700 hover:underline'>
+                        Open task
+                        <ArrowUpRight className='h-3 w-3' />
+                      </Link>
                     </div>
                   </div>
                   <div className='flex flex-wrap gap-2 lg:justify-end'>
                     <form action={updateDistributionTaskStatus}>
                       <input type='hidden' name='taskId' value={task.id} />
                       <select name='status' defaultValue={task.status} className='rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-xs font-semibold text-slate-700'>
-                        {statusOptions.map((status) => <option key={status} value={status}>{status.replace('_', ' ')}</option>)}
+                        {statusOptions.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
                       </select>
                       <button className='ml-2 rounded-lg bg-slate-100 px-2.5 py-2 text-xs font-bold text-slate-700 hover:bg-slate-200'>Update</button>
                     </form>
@@ -243,13 +344,59 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
         </div>
         <div className='rounded-2xl border border-slate-200 bg-white p-5'>
           <div className='text-sm font-bold text-slate-900'>Channel playbook</div>
-          <div className='mt-3 grid grid-cols-2 gap-2 text-xs text-slate-600 sm:grid-cols-4'>
+          <div className='mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
             {data.channels.map((channel) => {
               const template = data.templates.find((item) => item.channelId === channel.id);
-              return <div key={channel.id} className='rounded-xl bg-slate-50 px-3 py-2' title={template?.descriptionTemplate || channel.instructions || ''}>{channel.name}</div>;
+              return (
+                <details key={channel.id} className='rounded-xl border border-slate-200 bg-slate-50 p-3'>
+                  <summary className='cursor-pointer text-xs font-semibold text-slate-900'>
+                    {channel.name}
+                    <span className='ml-2 rounded-full bg-white px-2 py-0.5 text-[10px] uppercase tracking-wide text-slate-500'>
+                      {channel.channelType}
+                    </span>
+                  </summary>
+                  <div className='mt-3 space-y-2 text-xs text-slate-600'>
+                    <div className='rounded-lg bg-white p-2'>
+                      <div className='font-semibold text-slate-700'>Title</div>
+                      <div className='mt-1 text-slate-900'>{channel.copyPackage.title}</div>
+                    </div>
+                    <div className='rounded-lg bg-white p-2'>
+                      <div className='font-semibold text-slate-700'>Description</div>
+                      <div className='mt-1 leading-5 text-slate-700'>{channel.copyPackage.description}</div>
+                    </div>
+                    <div className='rounded-lg bg-white p-2'>
+                      <div className='font-semibold text-slate-700'>Disclosure</div>
+                      <div className='mt-1 text-slate-700'>{channel.copyPackage.disclosure}</div>
+                    </div>
+                    <div className='rounded-lg bg-white p-2'>
+                      <div className='font-semibold text-slate-700'>Proof points</div>
+                      <ul className='mt-1 list-disc space-y-1 pl-4 text-slate-700'>
+                        {channel.copyPackage.proofPoints.slice(0, 3).map((point) => <li key={point}>{point}</li>)}
+                      </ul>
+                    </div>
+                    <div className='rounded-lg bg-white p-2'>
+                      <div className='font-semibold text-slate-700'>Required fields</div>
+                      <div className='mt-1 flex flex-wrap gap-1'>
+                        {channel.copyPackage.requiredFields.map((field) => (
+                          <span key={field} className='rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-600'>
+                            {field}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className='rounded-lg bg-white p-2'>
+                      <div className='font-semibold text-slate-700'>Follow up</div>
+                      <div className='mt-1 leading-5 text-slate-700'>{channel.copyPackage.followUpPrompt}</div>
+                    </div>
+                    <div className='text-[11px] text-slate-500' title={template?.descriptionTemplate || channel.instructions || ''}>
+                      {channel.copyPackage.handoffNotes[0]}
+                    </div>
+                  </div>
+                </details>
+              );
             })}
           </div>
-          <p className='mt-3 text-xs text-slate-500'>Hover a channel to see its preparation rule. Templates guide human editing; they do not auto-publish.</p>
+          <p className='mt-3 text-xs text-slate-500'>Open a channel to review the generated copy package. Templates guide human editing; they do not auto-publish.</p>
         </div>
       </section>
     </div>

@@ -1105,13 +1105,13 @@ AI 不可以：
 | ID     | 任务                         | 依赖         | 交付             | 验收                         |
 | ------ | ---------------------------- | ------------ | ---------------- | ---------------------------- |
 | QC-010 | 已完成：拆分现有质量分       | PI-016       | 多维质量评分     | 七维得分、依据、阻断和建议已可见 |
-| QC-011 | 实现 evidence-bound composer | PI-016       | 内容生成 service | 每段可追溯 claim             |
-| QC-012 | 实现事实检查                 | QC-011       | factual gate     | 无来源事实阻断               |
-| QC-013 | 实现站内重复度检查           | QC-011       | uniqueness gate  | 模板替换内容阻断             |
-| QC-014 | 实现索引门槛                 | QC-010/12/13 | publish decision | draft/noindex/publish 可区分 |
-| QC-015 | 增强 Collection Queue        | QC-014       | 多维评分 UI      | 缺口和推荐动作可见           |
-| QC-016 | 实现每日内容队列             | QC-014       | scheduled queue  | 默认最多发布 1–3 个          |
-| QC-017 | 发布后复查任务               | QC-016       | 7/30/60 天复查   | 自动进入复盘队列             |
+| QC-011 | 已完成：实现 evidence-bound composer | PI-016       | 内容生成 service | 每段可追溯 claim             |
+| QC-012 | 已完成：实现事实检查         | QC-011       | factual gate     | 无来源事实阻断               |
+| QC-013 | 已完成：实现站内重复度检查   | QC-011       | uniqueness gate  | 模板替换内容阻断             |
+| QC-014 | 已完成：实现索引门槛         | QC-010/12/13 | publish decision | draft/noindex/publish 可区分 |
+| QC-015 | 已完成：增强 Collection Queue | QC-014       | 多维评分 UI      | 缺口和推荐动作可见           |
+| QC-016 | 已完成：实现每日内容队列     | QC-014       | scheduled queue  | 默认最多发布 1–3 个          |
+| QC-017 | 已完成：发布后复查任务       | QC-016       | 7/30/60 天复查   | 自动进入复盘队列             |
 
 ### Phase 3：具体目标站情报 P1，5–7 个工作日
 
@@ -1123,31 +1123,31 @@ AI 不可以：
 | DT-013 | 实现障碍识别         | DT-012        | blocked states                 | CAPTCHA/登录墙不误判       |
 | DT-014 | 实现规则版本与复查   | DT-012        | snapshots                      | 规则变化可追踪             |
 | DT-015 | 实现目标站管理后台   | DT-014        | registry UI                    | 可纠错和停用               |
-| DT-016 | 实现适配度评分       | PI-016/DT-014 | match score                    | 评分理由可解释             |
+| DT-016 | 已完成               | PI-016/DT-014 | match score + reasons          | 评分理由可解释，后台可见   |
 
 ### Phase 4：分发材料与每日任务 P1，5–7 个工作日
 
 | ID     | 任务                  | 依赖          | 交付                       | 验收                   |
 | ------ | --------------------- | ------------- | -------------------------- | ---------------------- |
-| DP-010 | 扩展分发状态机        | DT-010        | 新状态与迁移               | 旧任务兼容             |
-| DP-011 | 生成目标站文案包      | PI-016/DT-012 | distribution composer      | 目标站唯一文案         |
-| DP-012 | 字段和素材预检        | DP-011        | preflight gate             | 长度和缺失素材可见     |
-| DP-013 | 生成落地页和 UTM 建议 | DP-011        | tracked destination        | 可归因                 |
-| DP-014 | 今日任务排序器        | DT-016/DP-012 | scheduler                  | 每天 1–3 项            |
-| DP-015 | 任务详情页            | DP-011/12/13  | human action UI            | 不离开平台即可完成准备 |
-| DP-016 | 一键人工状态更新      | DP-015        | waiting/submitted/blockers | 操作不超过两步         |
-| DP-017 | 自动创建跟进          | DP-016        | follow-up job              | 提交后自动排期         |
+| DP-010 | 已完成               | DT-010        | 新状态与迁移               | 旧任务兼容             |
+| DP-011 | 已完成               | PI-016/DT-012 | distribution composer      | 目标站唯一文案         |
+| DP-012 | 已完成               | DP-011        | preflight gate             | 长度和缺失素材可见     |
+| DP-013 | 已完成               | DP-011        | tracked destination        | 可归因                 |
+| DP-014 | 已完成               | DT-016/DP-012 | scheduler                  | 每天 1–3 项            |
+| DP-015 | 已完成               | DP-011/12/13  | human action UI            | 不离开平台即可完成准备 |
+| DP-016 | 已完成               | DP-015        | waiting/submitted/blockers | 操作不超过两步         |
+| DP-017 | 已完成               | DP-016        | follow-up job              | 提交后自动排期         |
 
 ### Phase 5：结果复查与学习 P2，5–7 个工作日
 
 | ID     | 任务            | 依赖      | 交付                 | 验收                    |
 | ------ | --------------- | --------- | -------------------- | ----------------------- |
-| RM-010 | live URL 检查器 | DP-016    | availability monitor | 状态变化可记录          |
-| RM-011 | 链接属性检查    | RM-010    | rel/redirect checker | nofollow/removed 可识别 |
-| RM-012 | 30/90 天保留率  | RM-010    | retention metrics    | 项目和目标站可汇总      |
-| RM-013 | 拒绝和障碍学习  | DP-016    | outcome aggregation  | 不泄露私有数据          |
-| RM-014 | 渠道优先级回写  | RM-012/13 | scoring feedback     | 历史结果影响排序        |
-| RM-015 | 周报与导出      | RM-012    | project report       | Pro/Agency 可用         |
+| RM-010 | 已完成           | DP-016    | availability monitor | 状态变化可记录          |
+| RM-011 | 已完成           | RM-010    | rel/redirect checker | nofollow/removed 可识别 |
+| RM-012 | 已完成           | RM-010    | retention metrics    | 项目和目标站可汇总      |
+| RM-013 | 已完成           | DP-016    | outcome aggregation  | 不泄露私有数据          |
+| RM-014 | 已完成           | RM-012/13 | scoring feedback     | 历史结果影响排序        |
+| RM-015 | 已完成           | RM-012    | project report       | Pro/Agency 可用         |
 
 ### Phase 6：上线和真实验证，3–5 个工作日
 

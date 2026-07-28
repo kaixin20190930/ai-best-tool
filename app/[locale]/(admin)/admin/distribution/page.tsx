@@ -61,6 +61,129 @@ export default async function AdminDistributionPage() {
             <div className='rounded-2xl border border-amber-200 bg-amber-50/60 p-5'><div className='flex items-center gap-2 text-lg font-bold text-slate-950'><AlertTriangle className='h-5 w-5 text-amber-700' /> Recent result issues</div>{data.recentIssues.length ? <div className='mt-4 space-y-3'>{data.recentIssues.slice(0, 8).map((issue, index) => <div key={`${issue.projectName}-${issue.title}-${index}`} className='rounded-xl border border-amber-100 bg-white p-3'><div className='font-semibold text-slate-900'>{issue.projectName}</div><div className='mt-1 text-sm text-slate-600'>{issue.title}</div><div className='mt-2 text-xs font-bold uppercase text-rose-700'>{issue.status}</div>{issue.liveUrl ? <a href={issue.liveUrl} target='_blank' rel='noreferrer' className='mt-1 block truncate text-xs text-cyan-700 hover:underline'>{issue.liveUrl}</a> : null}</div>)}</div> : <p className='mt-3 text-sm text-slate-600'>No rejected or removed results recorded.</p>}</div>
           </div>
         </section>
+
+        <section className='grid gap-4 lg:grid-cols-[1.2fr_0.8fr]'>
+          <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
+            <div className='flex items-center justify-between gap-3'>
+              <div>
+                <h2 className='text-lg font-bold text-slate-950'>Review report</h2>
+                <p className='mt-1 text-sm text-slate-600'>RM-010 to RM-015 cover checks, signals, retention, learning, and export.</p>
+              </div>
+              <div className='flex flex-wrap gap-2'>
+                <a href='/api/admin/distribution/report?format=markdown' className='rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700 hover:border-cyan-300 hover:text-cyan-700'>Markdown</a>
+                <a href='/api/admin/distribution/report?format=csv' className='rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700 hover:border-cyan-300 hover:text-cyan-700'>CSV</a>
+                <a href='/api/admin/distribution/report?format=json' className='rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700 hover:border-cyan-300 hover:text-cyan-700'>JSON</a>
+              </div>
+            </div>
+
+            {data.review ? (
+              <div className='mt-4 space-y-4'>
+                <div className='grid gap-3 sm:grid-cols-2 xl:grid-cols-4'>
+                  {[
+                    ['Checked URLs', data.review.summary.checkedCount],
+                    ['Reachable', data.review.summary.liveCount],
+                    ['Issue URLs', data.review.summary.issueCount],
+                    ['Blocked signals', data.review.summary.blockedCount],
+                  ].map(([label, value]) => (
+                    <div key={String(label)} className='rounded-xl bg-slate-50 p-4'>
+                      <div className='text-2xl font-bold text-slate-950'>{value as number}</div>
+                      <div className='mt-1 text-xs text-slate-500'>{label}</div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className='grid gap-3 sm:grid-cols-2'>
+                  <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+                    <div className='text-sm font-bold text-slate-900'>Retention</div>
+                    <p className='mt-2 text-sm text-slate-600'>30d {data.review.retention.retention30dRate}% · 90d {data.review.retention.retention90dRate}%</p>
+                    <p className='mt-1 text-xs text-slate-500'>Live tasks {data.review.retention.liveTasks} · first live checks {data.review.retention.firstLiveChecks}</p>
+                  </div>
+                  <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+                    <div className='text-sm font-bold text-slate-900'>Top learning</div>
+                    <div className='mt-2 space-y-1 text-sm text-slate-600'>
+                      {data.review.outcomeLearning.slice(0, 4).map((item) => <div key={item.label} className='flex items-center justify-between gap-3'><span>{item.label}</span><span className='font-bold text-slate-900'>{item.count}</span></div>)}
+                    </div>
+                  </div>
+                </div>
+
+                <div className='grid gap-4 lg:grid-cols-2'>
+                  <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+                    <div className='text-sm font-bold text-slate-900'>Live URL checks</div>
+                    <div className='mt-3 space-y-3'>
+                      {data.review.liveChecks.slice(0, 6).map((check) => (
+                        <div key={check.taskId} className='rounded-lg bg-white p-3 text-xs text-slate-600'>
+                          <div className='font-semibold text-slate-900'>{check.projectName} · {check.taskTitle}</div>
+                          <div className='mt-1 break-all text-cyan-700'>{check.url}</div>
+                          <div className='mt-1'>Status {check.statusCode || 'n/a'} · {check.reachable ? 'reachable' : 'unreachable'}{check.noindex ? ' · noindex' : ''}</div>
+                          <div className='mt-1'>Canonical {check.canonicalUrl || '—'} · {check.title || 'No title'}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+                    <div className='text-sm font-bold text-slate-900'>Attribute checks</div>
+                    <div className='mt-3 space-y-3'>
+                      {data.review.attributeChecks.slice(0, 6).map((check) => (
+                        <div key={check.taskId} className='rounded-lg bg-white p-3 text-xs text-slate-600'>
+                          <div className='font-semibold text-slate-900'>{check.channelName}</div>
+                          <div className='mt-1 break-all text-cyan-700'>{check.url}</div>
+                          <div className='mt-1'>UTM source {check.hasUtmSource ? 'yes' : 'no'} · medium {check.hasUtmMedium ? 'yes' : 'no'} · campaign {check.hasUtmCampaign ? 'yes' : 'no'}</div>
+                          <div className='mt-1'>Link id {check.hasDistributionLinkId ? 'yes' : 'no'} · project domain {check.pointsToProjectDomain ? 'yes' : 'no'}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+                  <div className='text-sm font-bold text-slate-900'>Channel feedback</div>
+                  <div className='mt-3 overflow-x-auto'>
+                    <table className='w-full min-w-[720px] text-left text-xs'>
+                      <thead className='border-b border-slate-200 text-slate-500'>
+                        <tr>
+                          <th className='px-2 py-2'>Channel</th>
+                          <th className='px-2 py-2'>Live</th>
+                          <th className='px-2 py-2'>Issues</th>
+                          <th className='px-2 py-2'>Blocked</th>
+                          <th className='px-2 py-2'>Score</th>
+                          <th className='px-2 py-2'>Advice</th>
+                        </tr>
+                      </thead>
+                      <tbody className='divide-y divide-slate-100'>
+                        {data.review.channelFeedback.map((item) => (
+                          <tr key={item.channelType}>
+                            <td className='px-2 py-3 font-semibold text-slate-900'>{item.channelName}</td>
+                            <td className='px-2 py-3'>{item.liveCount}</td>
+                            <td className='px-2 py-3'>{item.issueCount}</td>
+                            <td className='px-2 py-3'>{item.blockedCount}</td>
+                            <td className='px-2 py-3 font-bold text-slate-900'>{item.scoreAdjustment >= 0 ? '+' : ''}{item.scoreAdjustment}</td>
+                            <td className='px-2 py-3 text-slate-600'>{item.recommendation}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <pre className='whitespace-pre-wrap rounded-xl border border-slate-200 bg-slate-950 p-4 text-xs leading-6 text-slate-100'>{data.review.markdown}</pre>
+              </div>
+            ) : (
+              <p className='mt-4 text-sm text-slate-600'>Review report unavailable.</p>
+            )}
+          </div>
+
+          <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
+            <h2 className='text-lg font-bold text-slate-950'>RM status</h2>
+            <div className='mt-4 space-y-3 text-sm'>
+              <div className='rounded-xl bg-slate-50 p-3'><div className='font-bold text-slate-900'>RM-010</div><div className='text-slate-600'>Live URL checks</div></div>
+              <div className='rounded-xl bg-slate-50 p-3'><div className='font-bold text-slate-900'>RM-011</div><div className='text-slate-600'>Link attribute inspection</div></div>
+              <div className='rounded-xl bg-slate-50 p-3'><div className='font-bold text-slate-900'>RM-012</div><div className='text-slate-600'>30/90 day retention</div></div>
+              <div className='rounded-xl bg-slate-50 p-3'><div className='font-bold text-slate-900'>RM-013</div><div className='text-slate-600'>Obstacle learning</div></div>
+              <div className='rounded-xl bg-slate-50 p-3'><div className='font-bold text-slate-900'>RM-014</div><div className='text-slate-600'>Channel priority feedback</div></div>
+              <div className='rounded-xl bg-slate-50 p-3'><div className='font-bold text-slate-900'>RM-015</div><div className='text-slate-600'>Weekly report and export</div></div>
+            </div>
+          </div>
+        </section>
       </div>
     );
   } catch (error) {

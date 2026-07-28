@@ -8,23 +8,42 @@ import type { User } from '@supabase/supabase-js';
 import { requireAuth } from '@/lib/auth/middleware';
 import { isAdminUser } from '@/lib/auth/admin';
 import { createClient } from '@/lib/supabase/server';
-
-export type DistributionTaskStatus =
-  | 'planned'
-  | 'in_progress'
-  | 'submitted'
-  | 'live'
-  | 'follow_up'
-  | 'done'
-  | 'skipped';
+import { composeDistributionCopyPackage } from '@/lib/services/distribution/composer';
+import { buildDistributionDestinationSuggestion } from '@/lib/services/distribution/destination';
+import { buildDistributionPreflight } from '@/lib/services/distribution/preflight';
+import { buildDistributionChannelPriorityFeedback, scheduleDistributionTasks } from '@/lib/services/distribution/scheduler';
+import { buildDistributionTaskDetail, type DistributionTaskDetail } from '@/lib/services/distribution/taskDetail';
+import {
+  deriveTaskStatusFromLinkResult,
+  isDistributionTaskStatus,
+  normalizeDistributionTaskStatus,
+  type DistributionTaskStatus,
+} from '@/lib/services/distribution/taskStateMachine';
 
 export interface DistributionDashboard {
   workspace: { id: string; name: string; kind: string } | null;
   plan: 'pilot' | 'pro' | 'agency';
   projectLimit: number;
-  projects: Array<{ id: string; name: string; websiteUrl: string | null; status: string }>;
-  project: { id: string; name: string; websiteUrl: string | null } | null;
-  channels: Array<{ id: string; name: string; channelType: string; instructions: string | null }>;
+  projects: Array<{ id: string; name: string; websiteUrl: string | null; description: string | null; status: string }>;
+  project: { id: string; name: string; websiteUrl: string | null; description: string | null } | null;
+  channels: Array<{
+    id: string;
+    name: string;
+    channelType: string;
+    instructions: string | null;
+    copyPackage: {
+      title: string;
+      titleAlternatives: string[];
+      description: string;
+      disclosure: string;
+      proofPoints: string[];
+      requiredFields: string[];
+      handoffNotes: string[];
+      followUpPrompt: string;
+      maxTitleLength: number | null;
+      maxDescriptionLength: number | null;
+    };
+  }>;
   templates: Array<{ channelId: string; titleTemplate: string | null; descriptionTemplate: string | null; maxTitleLength: number | null; maxDescriptionLength: number | null; requiredFields: string[] }>;
   links: Array<{ id: string; name: string; channelName: string; fullUrl: string; createdAt: string }>;
   tasks: Array<{
@@ -43,9 +62,47 @@ export interface DistributionDashboard {
   metrics: {
     total: number;
     dueToday: number;
+    preparing: number;
+    needsAssets: number;
+    readyToSubmit: number;
+    submitted: number;
+    waitingReview: number;
     live: number;
     followUp: number;
+    blocked: number;
     attribution: { visits: number; signups: number; submissions: number; claims: number; checkouts: number; payments: number };
+  };
+  recommendations: Array<{
+    id: string;
+    title: string;
+    status: DistributionTaskStatus;
+    priority: string;
+    score: number;
+    reason: string;
+    dueDate: string | null;
+    channelName: string;
+    channelType: string;
+  }>;
+  preflight: {
+    ready: boolean;
+    blockers: string[];
+    warnings: string[];
+    requiredFields: string[];
+    missingFields: string[];
+    titleLength: number;
+    titleLimit: number | null;
+    descriptionLength: number;
+    descriptionLimit: number | null;
+    summary: string;
+  };
+  destinationSuggestion: {
+    destinationUrl: string;
+    utmSource: string;
+    utmMedium: string;
+    utmCampaign: string;
+    utmContent: string | null;
+    linkName: string;
+    summary: string;
   };
 }
 
@@ -77,11 +134,54 @@ function normalize(value: FormDataEntryValue | null): string {
   return typeof value === 'string' ? value.trim() : '';
 }
 
+async function insertDistributionFollowUpTask(input: {
+  supabase: Awaited<ReturnType<typeof createClient>>;
+  userId: string;
+  projectId: string;
+  channelId: string;
+  sourceTitle: string;
+  reason: string;
+  dueDate: Date;
+}) {
+  const title = `Follow up: ${String(input.sourceTitle || '').slice(0, 160)}`;
+  const { data: existing } = await input.supabase
+    .from('distribution_tasks')
+    .select('id')
+    .eq('project_id', input.projectId)
+    .eq('channel_id', input.channelId)
+    .eq('owner_id', input.userId)
+    .eq('task_type', 'follow_up')
+    .eq('title', title)
+    .maybeSingle();
+  if (existing) {
+    return { createdTaskId: null, skipped: true as const };
+  }
+
+  const { data: created, error } = await input.supabase
+    .from('distribution_tasks')
+    .insert({
+      project_id: input.projectId,
+      owner_id: input.userId,
+      channel_id: input.channelId,
+      title,
+      task_type: 'follow_up',
+      status: 'planned',
+      priority: 'p1',
+      due_date: input.dueDate.toISOString().slice(0, 10),
+      instructions: input.reason,
+    })
+    .select('id')
+    .single();
+  if (error) throw error;
+
+  return { createdTaskId: created?.id || null, skipped: false as const };
+}
+
 async function ensureDefaultProject(userId: string, email?: string, isOwnProject = false) {
   const supabase = await createClient();
   const { data: existingProject } = await supabase
     .from('distribution_projects')
-    .select('id, name, website_url, workspace_id')
+    .select('id, name, website_url, description, workspace_id')
     .eq('owner_id', userId)
     .order('created_at', { ascending: true })
     .limit(1)
@@ -98,7 +198,7 @@ async function ensureDefaultProject(userId: string, email?: string, isOwnProject
           updated_at: new Date().toISOString(),
         })
         .eq('id', existingProject.id)
-        .select('id, name, website_url, workspace_id')
+        .select('id, name, website_url, description, workspace_id')
         .single();
 
       return updatedProject || existingProject;
@@ -143,16 +243,17 @@ export async function getDistributionDashboard(projectId?: string): Promise<
     const defaultProject = await ensureDefaultProject(user.id, user.email, isAdminUser(user));
     const { data: projects, error: projectsError } = await supabase
       .from('distribution_projects')
-      .select('id, name, website_url, status, workspace_id')
+      .select('id, name, website_url, description, status, workspace_id')
       .eq('owner_id', user.id)
       .order('created_at', { ascending: true });
     if (projectsError) throw projectsError;
     const project = (projects || []).find((item: any) => item.id === projectId) || defaultProject;
+    const projectDescription = (project as { description?: string | null } | null)?.description || null;
     const [{ data: workspace }, { data: channels, error: channelError }, { data: templates, error: templateError }, { data: links, error: linkError }, { data: tasks, error: taskError }, { data: attributionEvents, error: attributionError }] = await Promise.all([
       supabase.from('distribution_workspaces').select('id, name, kind').eq('id', project.workspace_id).single(),
       supabase
         .from('distribution_channels')
-        .select('id, name, channel_type, instructions')
+        .select('id, channel_key, name, channel_type, instructions')
         .eq('is_active', true)
         .order('sort_order', { ascending: true }),
       supabase.from('distribution_channel_templates').select('channel_id, title_template, description_template, max_title_length, max_description_length, required_fields'),
@@ -175,10 +276,11 @@ export async function getDistributionDashboard(projectId?: string): Promise<
     const today = new Date().toISOString().slice(0, 10);
     const normalizedTasks = (tasks || []).map((task: any) => {
       const latestResult = [...(task.distribution_results || [])].sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)))[0];
+      const status = normalizeDistributionTaskStatus(task.status) || 'planned';
       return {
         id: task.id,
         title: task.title,
-        status: task.status,
+        status,
         priority: task.priority,
         taskType: task.task_type,
         dueDate: task.due_date,
@@ -189,6 +291,50 @@ export async function getDistributionDashboard(projectId?: string): Promise<
         linkStatus: latestResult?.link_status || null,
       };
     });
+    const channelAdjustments = buildDistributionChannelPriorityFeedback(normalizedTasks);
+    const sortedRecommendations = scheduleDistributionTasks(normalizedTasks, channelAdjustments).slice(0, 3);
+    const firstChannel = (channels || [])[0] || null;
+    const firstTemplate = firstChannel ? (templates || []).find((template: any) => template.channel_id === firstChannel.id) || null : null;
+    const firstCopyPackage = firstChannel
+      ? composeDistributionCopyPackage({
+          productName: project.name,
+          projectDescription,
+          projectUrl: project.website_url || null,
+          channelName: firstChannel.name,
+          channelType: firstChannel.channel_type,
+          template: firstTemplate
+            ? {
+                titleTemplate: firstTemplate.title_template,
+                descriptionTemplate: firstTemplate.description_template,
+                maxTitleLength: firstTemplate.max_title_length,
+                maxDescriptionLength: firstTemplate.max_description_length,
+                requiredFields: firstTemplate.required_fields || [],
+              }
+            : null,
+          proofPoint: projectDescription || `${project.name} is available at ${project.website_url || 'its official site'}.`,
+          audience: firstChannel.channel_type === 'community' ? 'community readers' : 'the intended audience',
+          valueProp: firstChannel.channel_type === 'alternative' ? `compare ${project.name} clearly` : `share ${project.name} with ${firstChannel.name.toLowerCase()}`,
+        })
+      : null;
+    const firstPreflight = firstCopyPackage
+      ? buildDistributionPreflight({
+          copyPackage: firstCopyPackage,
+          projectUrl: project.website_url || null,
+          projectDescription,
+          channelName: firstChannel?.name || 'target channel',
+          channelType: firstChannel?.channel_type || 'other',
+        })
+      : null;
+    const firstDestinationSuggestion = firstChannel
+      ? buildDistributionDestinationSuggestion({
+          projectUrl: project.website_url || null,
+          channelKey: firstChannel.channel_key || firstChannel.id,
+          channelName: firstChannel.name,
+          projectName: project.name,
+          campaign: `${project.name}-${firstChannel.name}`,
+          content: projectDescription,
+        })
+      : null;
 
     return {
       success: true,
@@ -201,15 +347,38 @@ export async function getDistributionDashboard(projectId?: string): Promise<
           id: item.id,
           name: item.name,
           websiteUrl: item.website_url,
+          description: item.description || null,
           status: item.status,
         })),
-        project: { id: project.id, name: project.name, websiteUrl: project.website_url },
-        channels: (channels || []).map((channel: any) => ({
-          id: channel.id,
-          name: channel.name,
-          channelType: channel.channel_type,
-          instructions: channel.instructions,
-        })),
+        project: { id: project.id, name: project.name, websiteUrl: project.website_url, description: projectDescription },
+        channels: (channels || []).map((channel: any) => {
+          const template = (templates || []).find((item: any) => item.channel_id === channel.id) || null;
+          return {
+            id: channel.id,
+            name: channel.name,
+            channelType: channel.channel_type,
+            instructions: channel.instructions,
+            copyPackage: composeDistributionCopyPackage({
+              productName: project.name,
+              projectDescription,
+              projectUrl: project.website_url || null,
+              channelName: channel.name,
+              channelType: channel.channel_type,
+              template: template
+                ? {
+                    titleTemplate: template.title_template,
+                    descriptionTemplate: template.description_template,
+                    maxTitleLength: template.max_title_length,
+                    maxDescriptionLength: template.max_description_length,
+                    requiredFields: template.required_fields || [],
+                  }
+                : null,
+              proofPoint: projectDescription || `${project.name} is available at ${project.website_url || 'its official site'}.`,
+              audience: channel.channel_type === 'community' ? 'community readers' : 'the intended audience',
+              valueProp: channel.channel_type === 'alternative' ? `compare ${project.name} clearly` : `share ${project.name} with ${channel.name.toLowerCase()}`,
+            }),
+          };
+        }),
         templates: (templates || []).map((template: any) => ({
           channelId: template.channel_id,
           titleTemplate: template.title_template,
@@ -229,8 +398,14 @@ export async function getDistributionDashboard(projectId?: string): Promise<
         metrics: {
           total: normalizedTasks.length,
           dueToday: normalizedTasks.filter((task) => task.dueDate === today && !['done', 'skipped'].includes(task.status)).length,
-          live: normalizedTasks.filter((task) => ['live', 'done'].includes(task.status)).length,
+          preparing: normalizedTasks.filter((task) => task.status === 'in_progress').length,
+          needsAssets: normalizedTasks.filter((task) => task.status === 'needs_assets').length,
+          readyToSubmit: normalizedTasks.filter((task) => task.status === 'ready_to_submit').length,
+          submitted: normalizedTasks.filter((task) => task.status === 'submitted').length,
+          waitingReview: normalizedTasks.filter((task) => task.status === 'waiting_review').length,
+          live: normalizedTasks.filter((task) => task.status === 'live').length,
           followUp: normalizedTasks.filter((task) => task.status === 'follow_up').length,
+          blocked: normalizedTasks.filter((task) => task.status === 'blocked').length,
           attribution: attributionError
             ? { visits: 0, signups: 0, submissions: 0, claims: 0, checkouts: 0, payments: 0 }
             : {
@@ -242,6 +417,29 @@ export async function getDistributionDashboard(projectId?: string): Promise<
                 payments: (attributionEvents || []).filter((event: any) => event.event_type === 'payment').length,
               },
         },
+        recommendations: sortedRecommendations,
+        preflight: firstPreflight || {
+          ready: false,
+          blockers: ['No target channel available.'],
+          warnings: [],
+          requiredFields: [],
+          missingFields: [],
+          titleLength: 0,
+          titleLimit: null,
+          descriptionLength: 0,
+          descriptionLimit: null,
+          summary: 'No preflight target could be derived.',
+        },
+        destinationSuggestion:
+          firstDestinationSuggestion || {
+            destinationUrl: project.website_url || '',
+            utmSource: 'distribution',
+            utmMedium: 'distribution',
+            utmCampaign: project.name,
+            utmContent: null,
+            linkName: project.name,
+            summary: 'No destination suggestion could be derived.',
+          },
       },
     };
   } catch (error) {
@@ -383,8 +581,8 @@ export async function updateDistributionTaskStatus(formData: FormData): Promise<
     const { allowed } = await getDistributionAccess();
     if (!allowed) return { success: false, error: 'Distribution workspace access requires an active plan.' };
     const taskId = normalize(formData.get('taskId'));
-    const status = normalize(formData.get('status')) as DistributionTaskStatus;
-    if (!taskId || !['planned', 'in_progress', 'submitted', 'live', 'follow_up', 'done', 'skipped'].includes(status)) {
+    const status = normalizeDistributionTaskStatus(normalize(formData.get('status')));
+    if (!taskId || !status || !isDistributionTaskStatus(status)) {
       return { success: false, error: 'Invalid task status.' };
     }
     const supabase = await createClient();
@@ -408,6 +606,8 @@ export async function recordDistributionResult(formData: FormData): Promise<{ su
     const notes = normalize(formData.get('notes')) || null;
     if (!taskId) return { success: false, error: 'Task is required.' };
     const supabase = await createClient();
+    const { data: task, error: taskError } = await supabase.from('distribution_tasks').select('id, title, status, project_id, channel_id').eq('id', taskId).maybeSingle();
+    if (taskError) throw taskError;
     const { error } = await supabase.from('distribution_results').insert({
       task_id: taskId,
       owner_id: user.id,
@@ -417,8 +617,20 @@ export async function recordDistributionResult(formData: FormData): Promise<{ su
       notes,
     });
     if (error) throw error;
-    if (liveUrl) {
-      await supabase.from('distribution_tasks').update({ status: 'live', updated_at: new Date().toISOString() }).eq('id', taskId);
+    const nextStatus = deriveTaskStatusFromLinkResult({ currentStatus: task?.status || 'planned', liveUrl, linkStatus });
+    await supabase.from('distribution_tasks').update({ status: nextStatus, updated_at: new Date().toISOString() }).eq('id', taskId);
+    if (task && ['live', 'waiting_review'].includes(nextStatus)) {
+      const followUpDate = new Date();
+      followUpDate.setDate(followUpDate.getDate() + 3);
+      await insertDistributionFollowUpTask({
+        supabase,
+        userId: user.id,
+        projectId: String((task as { project_id?: string }).project_id || ''),
+        channelId: String((task as { channel_id?: string }).channel_id || ''),
+        sourceTitle: String((task as { title?: string }).title || taskId),
+        reason: notes || 'Check the live listing, capture evidence, and decide whether any follow-up is needed.',
+        dueDate: followUpDate,
+      });
     }
     revalidatePath('/distribution');
     return { success: true };
@@ -449,15 +661,15 @@ export async function seedDistributionStarterTasks(): Promise<{ success: boolean
       .order('sort_order', { ascending: true });
     if (channelError) throw channelError;
 
-    const taskTemplates: Record<string, { title: string; taskType: string; instructions: string; priority: string }> = {
-      'ai-directories': { title: 'Audit 3 relevant AI directories before submitting', taskType: 'research', instructions: 'Choose directories with a real audience. Record acceptance rules and whether the listing is editorial or paid.', priority: 'p0' },
-      'alternative-sites': { title: 'Prepare an honest AI directory alternative pitch', taskType: 'prepare', instructions: 'Explain what AI Best Tool helps users decide better, without copying generic directory claims.', priority: 'p1' },
-      'startup-launches': { title: 'Draft an AI Best Tool launch story', taskType: 'prepare', instructions: 'Use the real problem, product evidence, and current SEO recovery context. No inflated traffic claims.', priority: 'p1' },
-      communities: { title: 'Find one relevant community question to answer', taskType: 'research', instructions: 'Contribute a useful answer first. Only mention AI Best Tool when it directly helps the question.', priority: 'p0' },
-      newsletters: { title: 'Build a shortlist of 5 relevant newsletters', taskType: 'research', instructions: 'Prioritize newsletters read by AI tool buyers, founders, or technical operators.', priority: 'p1' },
-      'owned-blog': { title: 'Publish one first-party comparison or experiment', taskType: 'publish', instructions: 'Use real screenshots, dates, test notes, or GSC evidence. Avoid generic AI-written listicles.', priority: 'p0' },
-      github: { title: 'Add a useful open-source example or resource', taskType: 'prepare', instructions: 'Create a relevant repository, template, or documentation example. Do not add unrelated links to issues.', priority: 'p2' },
-      reddit: { title: 'Answer one genuine Reddit question with disclosure', taskType: 'submit', instructions: 'Find a relevant question, answer it directly, disclose affiliation, and save the post URL for follow-up.', priority: 'p1' },
+    const taskTemplates: Record<string, { title: string; taskType: string; instructions: string; priority: string; status: DistributionTaskStatus }> = {
+      'ai-directories': { title: 'Audit 3 relevant AI directories before submitting', taskType: 'research', instructions: 'Choose directories with a real audience. Record acceptance rules and whether the listing is editorial or paid.', priority: 'p0', status: 'planned' },
+      'alternative-sites': { title: 'Prepare an honest AI directory alternative pitch', taskType: 'prepare', instructions: 'Explain what AI Best Tool helps users decide better, without copying generic directory claims.', priority: 'p1', status: 'in_progress' },
+      'startup-launches': { title: 'Draft an AI Best Tool launch story', taskType: 'prepare', instructions: 'Use the real problem, product evidence, and current SEO recovery context. No inflated traffic claims.', priority: 'p1', status: 'ready_to_submit' },
+      communities: { title: 'Find one relevant community question to answer', taskType: 'research', instructions: 'Contribute a useful answer first. Only mention AI Best Tool when it directly helps the question.', priority: 'p0', status: 'planned' },
+      newsletters: { title: 'Build a shortlist of 5 relevant newsletters', taskType: 'research', instructions: 'Prioritize newsletters read by AI tool buyers, founders, or technical operators.', priority: 'p1', status: 'needs_assets' },
+      'owned-blog': { title: 'Publish one first-party comparison or experiment', taskType: 'publish', instructions: 'Use real screenshots, dates, test notes, or GSC evidence. Avoid generic AI-written listicles.', priority: 'p0', status: 'in_progress' },
+      github: { title: 'Add a useful open-source example or resource', taskType: 'prepare', instructions: 'Create a relevant repository, template, or documentation example. Do not add unrelated links to issues.', priority: 'p2', status: 'blocked' },
+      reddit: { title: 'Answer one genuine Reddit question with disclosure', taskType: 'submit', instructions: 'Find a relevant question, answer it directly, disclose affiliation, and save the post URL for follow-up.', priority: 'p1', status: 'submitted' },
     };
 
     const today = new Date();
@@ -475,6 +687,7 @@ export async function seedDistributionStarterTasks(): Promise<{ success: boolean
         priority: template.priority,
         due_date: dueDate.toISOString().slice(0, 10),
         instructions: template.instructions,
+        status: template.status,
       }];
     });
     if (!rows.length) return { success: false, error: 'No active distribution channels are available.' };
@@ -485,5 +698,135 @@ export async function seedDistributionStarterTasks(): Promise<{ success: boolean
   } catch (error) {
     console.error('Seed distribution tasks error:', error);
     return { success: false, error: error instanceof Error ? error.message : 'Unable to initialize starter tasks.' };
+  }
+}
+
+export async function getDistributionTaskDetail(taskId: string): Promise<{ success: true; access: true; data: DistributionTaskDetail } | { success: true; access: false; data: null } | { success: false; error: string }> {
+  try {
+    const { user, allowed } = await getDistributionAccess();
+    if (!allowed) return { success: true, access: false, data: null };
+    const supabase = await createClient();
+    const normalizedTaskId = normalize(taskId);
+    if (!normalizedTaskId) return { success: false, error: 'Task id is required.' };
+
+    const { data: task, error: taskError } = await supabase
+      .from('distribution_tasks')
+      .select('id, title, status, priority, task_type, due_date, instructions, notes, updated_at, project_id, channel_id, distribution_projects(id, name, website_url, description), distribution_channels(id, channel_key, name, channel_type, instructions), distribution_results(live_url, link_status, notes, checked_at, created_at)')
+      .eq('id', normalizedTaskId)
+      .eq('owner_id', user.id)
+      .maybeSingle();
+    if (taskError) throw taskError;
+    if (!task) return { success: false, error: 'Task not found.' };
+
+    const { data: templates, error: templatesError } = await supabase
+      .from('distribution_channel_templates')
+      .select('channel_id, title_template, description_template, max_title_length, max_description_length, required_fields');
+    if (templatesError) throw templatesError;
+    const { data: queue, error: queueError } = await supabase
+      .from('distribution_tasks')
+      .select('id, title, status, priority, due_date, distribution_channels(name, channel_type)')
+      .eq('project_id', task.project_id)
+      .order('due_date', { ascending: true, nullsFirst: false })
+      .order('created_at', { ascending: false });
+    if (queueError) throw queueError;
+
+    const projectRow = Array.isArray(task.distribution_projects) ? task.distribution_projects[0] || {} : task.distribution_projects || {};
+    const channelRow = Array.isArray(task.distribution_channels) ? task.distribution_channels[0] || {} : task.distribution_channels || {};
+    const template = (templates || []).find((item: any) => item.channel_id === task.channel_id) || null;
+    const recentResult = Array.isArray(task.distribution_results) && task.distribution_results.length > 0 ? [...task.distribution_results].sort((a: any, b: any) => String(b.created_at).localeCompare(String(a.created_at)))[0] : null;
+    const detail = buildDistributionTaskDetail({
+      task: {
+        id: String(task.id),
+        title: String(task.title || ''),
+        status: normalizeDistributionTaskStatus(String(task.status || 'planned')) || 'planned',
+        priority: String(task.priority || 'p1'),
+        taskType: String(task.task_type || 'submit'),
+        dueDate: (task.due_date as string | null | undefined) || null,
+        instructions: (task.instructions as string | null | undefined) || null,
+        notes: (task.notes as string | null | undefined) || null,
+        liveUrl: recentResult?.live_url || null,
+        linkStatus: recentResult?.link_status || null,
+        updatedAt: (task.updated_at as string | null | undefined) || null,
+      },
+      project: {
+        id: String((projectRow as { id?: string }).id || task.project_id),
+        name: String((projectRow as { name?: string }).name || ''),
+        websiteUrl: ((projectRow as { website_url?: string | null }).website_url as string | null | undefined) || null,
+        description: ((projectRow as { description?: string | null }).description as string | null | undefined) || null,
+      },
+      channel: {
+        id: String((channelRow as { id?: string }).id || task.channel_id),
+        name: String((channelRow as { name?: string }).name || 'Unknown channel'),
+        channelType: String((channelRow as { channel_type?: string }).channel_type || 'other'),
+        instructions: ((channelRow as { instructions?: string | null }).instructions as string | null | undefined) || null,
+        template: template
+          ? {
+              titleTemplate: template.title_template,
+              descriptionTemplate: template.description_template,
+              maxTitleLength: template.max_title_length,
+              maxDescriptionLength: template.max_description_length,
+              requiredFields: template.required_fields || [],
+            }
+          : null,
+      },
+      recentResult: recentResult
+        ? {
+            liveUrl: recentResult.live_url || null,
+            linkStatus: recentResult.link_status || null,
+            notes: recentResult.notes || null,
+            checkedAt: recentResult.checked_at || null,
+          }
+        : null,
+      queue: (queue || []).map((item: any) => ({
+        id: item.id,
+        title: item.title,
+        status: normalizeDistributionTaskStatus(item.status) || 'planned',
+        priority: item.priority,
+        dueDate: item.due_date,
+        channelName: item.distribution_channels?.name || 'Unknown channel',
+        channelType: item.distribution_channels?.channel_type || 'other',
+      })),
+    });
+
+    return { success: true, access: true, data: detail };
+  } catch (error) {
+    console.error('Get distribution task detail error:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'Unable to load task detail.' };
+  }
+}
+
+export async function createDistributionFollowUpTask(formData: FormData): Promise<{ success: boolean; error?: string; createdTaskId?: string }> {
+  try {
+    const { user, allowed } = await getDistributionAccess();
+    if (!allowed) return { success: false, error: 'Distribution workspace access requires an active plan.' };
+    const taskId = normalize(formData.get('taskId'));
+    const reason = normalize(formData.get('reason')) || 'Follow up on the previous submission.';
+    const days = Number.parseInt(normalize(formData.get('days')) || '3', 10);
+    if (!taskId) return { success: false, error: 'Task is required.' };
+    const supabase = await createClient();
+    const { data: task, error: taskError } = await supabase
+      .from('distribution_tasks')
+      .select('id, project_id, channel_id, title, status')
+      .eq('id', taskId)
+      .eq('owner_id', user.id)
+      .maybeSingle();
+    if (taskError) throw taskError;
+    if (!task) return { success: false, error: 'Task not found.' };
+    const followUpDate = new Date();
+    followUpDate.setDate(followUpDate.getDate() + (Number.isFinite(days) && days > 0 ? days : 3));
+    const result = await insertDistributionFollowUpTask({
+      supabase,
+      userId: user.id,
+      projectId: task.project_id,
+      channelId: task.channel_id,
+      sourceTitle: String(task.title || ''),
+      reason,
+      dueDate: followUpDate,
+    });
+    revalidatePath('/distribution');
+    return { success: true, createdTaskId: result.createdTaskId || undefined };
+  } catch (error) {
+    console.error('Create distribution follow-up task error:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'Unable to create follow-up task.' };
   }
 }

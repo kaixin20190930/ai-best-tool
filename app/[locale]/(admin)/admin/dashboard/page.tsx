@@ -72,6 +72,12 @@ function DashboardFallback({ error }: { error: string }) {
         >
           Open tools
         </Link>
+        <Link
+          href='/admin/targets'
+          className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-2 text-sm font-semibold text-cyan-700 hover:bg-cyan-100'
+        >
+          Open targets
+        </Link>
       </div>
     </div>
   );

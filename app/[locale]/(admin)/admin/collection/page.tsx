@@ -216,6 +216,17 @@ export default async function AdminCollectionPage({
       (candidate) => candidate.status === 'new' && candidate.quality_score < 70,
     ).length;
     const focusCategories = topCategories.slice(0, 3);
+    const importNowCandidates = candidatePageData.candidates
+      .filter(
+        (candidate) =>
+          candidate.status === 'new' &&
+          candidate.quality_score >= 80 &&
+          candidate.relevance_score >= 50,
+      )
+      .slice(0, 3);
+    const enrichNextCandidates = candidatePageData.candidates
+      .filter((candidate) => candidate.status === 'new' && candidate.quality_score < 70)
+      .slice(0, 3);
 
     return (
       <div>
@@ -249,6 +260,80 @@ export default async function AdminCollectionPage({
               Only create drafts when a candidate has a clear category, screenshot, logo, description, detail copy,
               pricing, and tags.
             </p>
+          </div>
+        </div>
+
+        <div className='theme-surface mb-6 overflow-hidden rounded-lg border border-slate-200 shadow-sm'>
+          <div className='border-b border-slate-200 px-6 py-4'>
+            <h2 className='text-lg font-semibold text-slate-900'>This week&apos;s queue plan</h2>
+            <p className='mt-1 text-sm text-slate-600'>
+              The queue now shows what to do next instead of only listing candidates.
+            </p>
+          </div>
+          <div className='grid gap-4 p-6 md:grid-cols-3'>
+            <div className='rounded-lg border border-emerald-200 bg-emerald-50 p-4'>
+              <p className='text-xs font-semibold uppercase tracking-wide text-emerald-700'>Import now</p>
+              <p className='mt-2 text-2xl font-bold text-emerald-950'>{readyToImportCount}</p>
+              <p className='mt-1 text-sm text-emerald-800'>
+                Ready-to-import candidates with strong relevance and quality.
+              </p>
+              <div className='mt-3 space-y-2 text-sm text-emerald-950'>
+                {importNowCandidates.length > 0 ? (
+                  importNowCandidates.map((candidate) => (
+                    <div key={candidate.id} className='rounded-md bg-white/70 px-3 py-2'>
+                      <p className='font-semibold'>{candidate.title || candidate.normalized_url}</p>
+                      <p className='text-xs text-emerald-700'>
+                        AI {candidate.relevance_score} · Quality {candidate.quality_score}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <p className='text-sm text-emerald-800'>No immediately actionable import candidates.</p>
+                )}
+              </div>
+            </div>
+            <div className='rounded-lg border border-amber-200 bg-amber-50 p-4'>
+              <p className='text-xs font-semibold uppercase tracking-wide text-amber-700'>Enrich next</p>
+              <p className='mt-2 text-2xl font-bold text-amber-950'>{needsEnrichmentCount}</p>
+              <p className='mt-1 text-sm text-amber-800'>
+                Candidates that need assets, better descriptions, or category alignment.
+              </p>
+              <div className='mt-3 space-y-2 text-sm text-amber-950'>
+                {enrichNextCandidates.length > 0 ? (
+                  enrichNextCandidates.map((candidate) => (
+                    <div key={candidate.id} className='rounded-md bg-white/70 px-3 py-2'>
+                      <p className='font-semibold'>{candidate.title || candidate.normalized_url}</p>
+                      <p className='text-xs text-amber-700'>
+                        Missing focus: {candidate.score_reason?.split(';').slice(-1)[0] || 'needs review'}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <p className='text-sm text-amber-800'>No enrichment candidates on this page.</p>
+                )}
+              </div>
+            </div>
+            <div className='rounded-lg border border-cyan-200 bg-cyan-50 p-4'>
+              <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>Backfill categories</p>
+              <p className='mt-2 text-2xl font-bold text-cyan-950'>{focusCategories.length}</p>
+              <p className='mt-1 text-sm text-cyan-800'>
+                These are the highest leverage categories to feed this week.
+              </p>
+              <div className='mt-3 space-y-2 text-sm text-cyan-950'>
+                {focusCategories.length > 0 ? (
+                  focusCategories.map((category, index) => (
+                    <div key={category.id} className='rounded-md bg-white/70 px-3 py-2'>
+                      <p className='font-semibold'>
+                        #{index + 1} {getCategoryDisplayName(category)}
+                      </p>
+                      <p className='text-xs text-cyan-700'>{getCategoryAction(category)}</p>
+                    </div>
+                  ))
+                ) : (
+                  <p className='text-sm text-cyan-800'>No focus categories available.</p>
+                )}
+              </div>
+            </div>
           </div>
         </div>
 

@@ -1,5 +1,10 @@
 import { requireAdmin } from '@/lib/auth/middleware';
+import { composeEvidenceBoundContent, type EvidenceBoundComposerResult } from '@/lib/services/intelligence/evidenceComposer';
+import { evaluateFactualGate, type FactualGateResult } from '@/lib/services/intelligence/factualGate';
+import { evaluateIndexGate, type IndexGateResult } from '@/lib/services/intelligence/indexGate';
+import { DEFAULT_DAILY_NEW_PAGE_LIMIT } from '@/lib/services/intelligence/qualityConfig';
 import { assessContentQuality, type ContentQualityAssessment } from '@/lib/services/intelligence/qualityScorer';
+import { evaluateUniquenessGate, type UniquenessGateResult } from '@/lib/services/intelligence/uniquenessGate';
 import type {
   IntelligenceProfileStatus,
   ProductIntelligenceAsset,
@@ -36,6 +41,10 @@ export interface AdminIntelligenceProfileDetail extends AdminIntelligenceProfile
   claims: ProductIntelligenceClaim[];
   assets: ProductIntelligenceAsset[];
   qualityAssessment: ContentQualityAssessment;
+  contentComposer: EvidenceBoundComposerResult;
+  factualGate: FactualGateResult;
+  uniquenessGate: UniquenessGateResult;
+  indexGate: IndexGateResult;
 }
 
 export interface AdminIntelligenceOverview {
@@ -50,6 +59,58 @@ export interface AdminIntelligenceOverview {
   };
   profiles: AdminIntelligenceProfileItem[];
   selectedProfile: AdminIntelligenceProfileDetail | null;
+}
+
+export interface AdminIntelligenceQueueItem {
+  id: string;
+  productName: string;
+  canonicalDomain: string;
+  ownerType: ProductIntelligenceProfile['ownerType'];
+  status: IntelligenceProfileStatus;
+  score: number;
+  lane: 'publish' | 'review' | 'enrich' | 'hold';
+  scheduledAction: string;
+  summary: string;
+  blockers: string[];
+  nextReviewAt: string | null;
+  lastVerifiedAt: string | null;
+}
+
+export interface AdminIntelligenceDailyQueue {
+  limit: number;
+  generatedAt: string;
+  items: AdminIntelligenceQueueItem[];
+  counts: {
+    publish: number;
+    review: number;
+    enrich: number;
+    hold: number;
+  };
+}
+
+export interface AdminIntelligenceReviewQueueItem {
+  id: string;
+  productName: string;
+  canonicalDomain: string;
+  ownerType: ProductIntelligenceProfile['ownerType'];
+  status: IntelligenceProfileStatus;
+  cadenceDays: 7 | 30 | 60;
+  dueAt: string | null;
+  daysUntilDue: number | null;
+  state: 'overdue' | 'due_soon' | 'scheduled';
+  action: string;
+  reason: string;
+}
+
+export interface AdminIntelligenceReviewQueue {
+  limit: number;
+  generatedAt: string;
+  items: AdminIntelligenceReviewQueueItem[];
+  counts: {
+    overdue: number;
+    dueSoon: number;
+    scheduled: number;
+  };
 }
 
 function normalizeDate(value: string | null | undefined): string | null {
@@ -190,18 +251,213 @@ async function loadProfileDetail(profileId: string, supabase: ReturnType<typeof 
     metadata: ((profile as Record<string, unknown>).metadata as Record<string, unknown>) || {},
   };
 
+  const contentComposer = composeEvidenceBoundContent({
+    profile: mappedProfile,
+    sources: mappedSources,
+    claims: mappedClaims,
+    assets: mappedAssets,
+  });
+  const qualityAssessment = assessContentQuality({
+    profile: mappedProfile,
+    sources: mappedSources,
+    claims: mappedClaims,
+    assets: mappedAssets,
+  });
+  const factualGate = evaluateFactualGate({
+    sources: mappedSources,
+    claims: mappedClaims,
+    composer: contentComposer,
+  });
+  const uniquenessGate = evaluateUniquenessGate({
+    composer: contentComposer,
+  });
+
   return {
     ...baseItem,
     metadata: mappedProfile.metadata,
     sources: mappedSources,
     claims: mappedClaims,
     assets: mappedAssets,
-    qualityAssessment: assessContentQuality({
-      profile: mappedProfile,
-      sources: mappedSources,
-      claims: mappedClaims,
-      assets: mappedAssets,
+    qualityAssessment,
+    contentComposer,
+    factualGate,
+    uniquenessGate,
+    indexGate: evaluateIndexGate({
+      quality: qualityAssessment,
+      factual: factualGate,
+      uniqueness: uniquenessGate,
     }),
+  };
+}
+
+function getQueueLane(indexGate: IndexGateResult): AdminIntelligenceQueueItem['lane'] {
+  if (indexGate.decision === 'publish') return 'publish';
+  if (indexGate.decision === 'noindex') return 'review';
+  if (indexGate.findings.some((finding) => finding.severity === 'warn')) return 'enrich';
+  return 'hold';
+}
+
+function getQueueAction(indexGate: IndexGateResult): string {
+  if (indexGate.decision === 'publish') return 'Schedule for publish today';
+  if (indexGate.decision === 'noindex') return 'Review and enrich before indexing';
+  return 'Hold and fix blockers first';
+}
+
+function getReviewCadenceDays(indexGate: IndexGateResult): 7 | 30 | 60 {
+  if (indexGate.decision === 'publish') return 7;
+  if (indexGate.decision === 'noindex') return 30;
+  return 60;
+}
+
+function addDays(value: Date, days: number): Date {
+  return new Date(value.getTime() + days * 24 * 60 * 60 * 1000);
+}
+
+function getDaysUntil(value: string | null, now = new Date()): number | null {
+  if (!value) return null;
+  const timestamp = new Date(value).getTime();
+  if (Number.isNaN(timestamp)) return null;
+  return Math.ceil((timestamp - now.getTime()) / (24 * 60 * 60 * 1000));
+}
+
+export async function getAdminIntelligenceDailyQueue(input?: {
+  ownerType?: IntelligenceOwnerFilter;
+  status?: IntelligenceProfileStatus | 'all';
+  limit?: number;
+}): Promise<AdminIntelligenceDailyQueue> {
+  await requireAdmin();
+  const supabase = createAdminClient();
+  const limit = Math.max(1, Math.min(input?.limit || DEFAULT_DAILY_NEW_PAGE_LIMIT, 3));
+
+  const overview = await getAdminIntelligenceOverview({
+    ownerType: input?.ownerType,
+    status: input?.status || 'all',
+    limit: 12,
+  });
+
+  const details = await Promise.all(
+    overview.profiles.slice(0, 12).map((profile) => loadProfileDetail(profile.id, supabase)),
+  );
+
+  const items = details
+    .filter((detail): detail is AdminIntelligenceProfileDetail => Boolean(detail))
+    .map((detail) => ({
+      id: detail.id,
+      productName: detail.productName,
+      canonicalDomain: detail.canonicalDomain,
+      ownerType: detail.ownerType,
+      status: detail.status,
+      score: detail.indexGate.score,
+      lane: getQueueLane(detail.indexGate),
+      scheduledAction: getQueueAction(detail.indexGate),
+      summary: detail.indexGate.summary,
+      blockers: [
+        ...detail.indexGate.findings
+          .filter((finding) => finding.severity === 'block')
+          .map((finding) => finding.message),
+      ],
+      nextReviewAt: detail.nextReviewAt,
+      lastVerifiedAt: detail.lastVerifiedAt,
+    }))
+    .sort((left, right) => {
+      const laneRank: Record<AdminIntelligenceQueueItem['lane'], number> = {
+        publish: 0,
+        review: 1,
+        enrich: 2,
+        hold: 3,
+      };
+
+      const laneDelta = laneRank[left.lane] - laneRank[right.lane];
+      if (laneDelta !== 0) return laneDelta;
+      return right.score - left.score;
+    })
+    .slice(0, limit);
+
+  const counts = {
+    publish: items.filter((item) => item.lane === 'publish').length,
+    review: items.filter((item) => item.lane === 'review').length,
+    enrich: items.filter((item) => item.lane === 'enrich').length,
+    hold: items.filter((item) => item.lane === 'hold').length,
+  };
+
+  return {
+    limit,
+    generatedAt: new Date().toISOString(),
+    items,
+    counts,
+  };
+}
+
+export async function getAdminIntelligenceReviewQueue(input?: {
+  ownerType?: IntelligenceOwnerFilter;
+  status?: IntelligenceProfileStatus | 'all';
+  limit?: number;
+}): Promise<AdminIntelligenceReviewQueue> {
+  await requireAdmin();
+  const supabase = createAdminClient();
+  const limit = Math.max(1, Math.min(input?.limit || 3, 6));
+  const overview = await getAdminIntelligenceOverview({
+    ownerType: input?.ownerType,
+    status: input?.status || 'all',
+    limit: 12,
+  });
+
+  const details = await Promise.all(
+    overview.profiles.slice(0, 12).map((profile) => loadProfileDetail(profile.id, supabase)),
+  );
+
+  const now = new Date();
+  const items = details
+    .filter((detail): detail is AdminIntelligenceProfileDetail => Boolean(detail))
+    .map((detail) => {
+      const cadenceDays = getReviewCadenceDays(detail.indexGate);
+      const fallbackDueAt = detail.lastVerifiedAt ? addDays(new Date(detail.lastVerifiedAt), cadenceDays).toISOString() : null;
+      const dueAt = detail.nextReviewAt || fallbackDueAt;
+      const daysUntilDue = getDaysUntil(dueAt, now);
+      const state: AdminIntelligenceReviewQueueItem['state'] =
+        daysUntilDue !== null && daysUntilDue <= 0
+          ? 'overdue'
+          : daysUntilDue !== null && daysUntilDue <= 7
+            ? 'due_soon'
+            : 'scheduled';
+
+      return {
+        id: detail.id,
+        productName: detail.productName,
+        canonicalDomain: detail.canonicalDomain,
+        ownerType: detail.ownerType,
+        status: detail.status,
+        cadenceDays,
+        dueAt,
+        daysUntilDue,
+        state,
+        action:
+          state === 'overdue'
+            ? 'Review today'
+            : state === 'due_soon'
+              ? `Review within ${Math.max(daysUntilDue || 1, 1)} day${daysUntilDue === 1 ? '' : 's'}`
+              : `Review in ${daysUntilDue ?? cadenceDays} days`,
+        reason: detail.indexGate.summary,
+      };
+    })
+    .sort((left, right) => {
+      const leftDue = left.dueAt ? new Date(left.dueAt).getTime() : Number.POSITIVE_INFINITY;
+      const rightDue = right.dueAt ? new Date(right.dueAt).getTime() : Number.POSITIVE_INFINITY;
+      return leftDue - rightDue;
+    })
+    .slice(0, limit);
+
+  const counts = {
+    overdue: items.filter((item) => item.state === 'overdue').length,
+    dueSoon: items.filter((item) => item.state === 'due_soon').length,
+    scheduled: items.filter((item) => item.state === 'scheduled').length,
+  };
+
+  return {
+    limit,
+    generatedAt: new Date().toISOString(),
+    items,
+    counts,
   };
 }
 

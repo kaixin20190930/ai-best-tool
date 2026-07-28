@@ -1,6 +1,6 @@
 # 优化总控任务表
 
-更新时间：2026-07-27
+更新时间：2026-07-28
 
 这份文档把当前所有优化内容合并成一份可追踪、可监测、可复盘的总任务表。
 
@@ -25,7 +25,17 @@
 - 2026-07-27：PI-015 冲突检测与 PI-016 归一化产品档案已完成基础实现，支持对同一 profile 的多来源事实做冲突标记、生成归一化快照，并提供同步脚本 `pnpm run intelligence:sync` 作为后续人工验收入口；完整生产构建已通过。
 - 2026-07-27：PI-017 后台证据档案页已完成，新增 `/admin/intelligence` 管理页，可按 owner/status 查看 profile、来源、事实、资产、冲突与复查时间，并已接入后台导航；当前用于证据审阅与后续人工校准。
 - 2026-07-28：PI-018 完成真实站证据防污染校准：同步任务保留失败来源记录但不从非 2xx、非 HTML 或抓取异常页面提取事实；产品名优先读取 `og:site_name` / `application-name`，普通内页标题不再被误判为品牌名，500 错误页不会进入冲突。站点全局统一输出 `AI Best Tool` 品牌元数据，并补充回归测试。
-- 2026-07-28：产品证据真实同步链路完成收口：修复失效 Supabase URL、secret key 兼容、置信度百分制和数据库字段映射；`aibesttool.com` 已写入 39 个来源、37 条验证声明和 2 个资产，profile 为 `ready` 且 0 冲突。随后完成 QC-010 七维证据质量评分，后台 `/admin/intelligence` 已显示总分、每维依据、发布决策、阻断项和建议动作；下一项为 QC-011 evidence-bound composer。
+- 2026-07-28：产品证据真实同步链路完成收口：修复失效 Supabase URL、secret key 兼容、置信度百分制和数据库字段映射；`aibesttool.com` 已写入 39 个来源、37 条验证声明和 2 个资产，profile 为 `ready` 且 0 冲突。随后完成 QC-010 七维证据质量评分，后台 `/admin/intelligence` 已显示总分、每维依据、发布决策、阻断项和建议动作；随后完成 QC-011 evidence-bound composer，后台已可查看每个内容块对应的 claim 和来源；接着完成 QC-012 factual gate，已可对无来源或未命中成功 source 的事实进行阻断；随后完成 QC-013 uniqueness gate，已可对块间重复与模板化短语进行阻断；随后完成 QC-014 index gate，已可输出 draft / noindex / publish 的最终发布门槛；随后完成 QC-015 Collection Queue 增强，队列页已显示本周优先动作、导入优先项和分类回填建议；随后完成 QC-016 每日内容队列，`/admin/intelligence` 已显示今日 1–3 项调度计划；随后完成 QC-017 发布后复查任务，`/admin/intelligence` 已显示 7/30/60 天复查队列，QC 段落闭环完成，下一项转入 DT-010。
+- 2026-07-28：DT-011 目标站页面发现器已落地为独立服务与命令行入口，能够从主页链接、robots/sitemap 和常见路径识别 submission / registration / pricing / contact / community 页面，并输出目标站状态、阻断信号和基础需求摘要；下一项转入 DT-012 规则提取。
+- 2026-07-28：DT-012 目标站规则提取已完成，新增规则分析器可把发现结果转成结构化的提交入口、注册要求、收费、验证码、反向链接、人工审核和字段需求，并生成 snapshot / requirement 记录草案；TypeScript 类型检查已通过，下一项转入 DT-013 障碍识别与状态细化。
+- 2026-07-28：DT-013 障碍识别已完成，目标站分析器现在会输出 account / payment / captcha / missing_asset / manual_verification / rule_conflict 等明确障碍，并给出 clear / needs_review / blocked 状态；TypeScript 类型检查已通过，下一项转入 DT-014 规则版本与复查快照。
+- 2026-07-28：DT-014 规则版本与复查快照已完成，新增版本化快照持久化服务和 `distribution:review-target` 命令，可将发现、分析、阻断项、字段需求和下次复查时间写入 `distribution_target_snapshots`，并同步刷新当前目标站规则记录；TypeScript 类型检查已通过，下一项转入 DT-015 目标站管理后台。
+- 2026-07-28：DT-015 目标站管理后台已完成，新增 `/admin/targets` registry 页面、后台侧边栏入口、筛选器和逐条编辑/刷新操作，可查看 target 状态、快照版本、字段需求和下次复查时间；TypeScript 类型检查已通过，下一项转入 DT-016 适配度评分。
+- 2026-07-28：DT-016 适配度评分已完成，目标站快照现在记录可解释 match score、grade、summary 和加减分理由，`/admin/targets` 已直接展示评分与理由；本地 `./node_modules/.bin/tsc --noEmit` 和 `pnpm run build` 均通过，下一项转入 DP-010 分发状态机扩展。
+- 2026-07-28：DP-010 分发状态机扩展已完成，新增共享 task state machine、任务卡标签、统计维度和结果回写转态映射，并补充数据库状态约束迁移；本地 `./node_modules/.bin/tsc --noEmit` 和 `pnpm run build` 均通过，下一项转入 DP-011 分发文案包。
+- 2026-07-28：DP-011 分发文案包已完成，新增分发文案生成器并把每个渠道的标题、描述、披露、证明点、必填字段和跟进提示展示到 `/distribution` 工作台；本地 `./node_modules/.bin/tsc --noEmit` 和 `pnpm run build` 均通过，下一项转入 DP-012 字段和素材预检。
+- 2026-07-28：DP-012 到 DP-017 已完成，分发工作台现在具备预检、目的地建议、任务排序、任务详情页、一键状态更新和自动 follow-up 创建能力；本地 `./node_modules/.bin/tsc --noEmit` 和 `pnpm run build` 均通过，分发主线进入收口和观察阶段。
+- 2026-07-28：RM-010 到 RM-015 已完成，分发后台现在可做 live URL 检查、链接属性核验、30/90 天保留率、拒绝/障碍学习、渠道优先级回写和周报导出；本地 `./node_modules/.bin/tsc --noEmit` 和 `pnpm run build` 均通过，分发结果复查线进入收口和观察阶段。
 - 2026-07-15：`GuideEvidencePanel` 已补齐到全部 guide / comparison 页面，并通过本地 `pnpm run build`
 - 2026-07-15：`pnpm run seo:quality-inventory` 已生成最新质量盘点，当前总页面 157、可进 sitemap 27、内部流量页 3、noindex / 合并候选 127，详见 [`docs/SEO_QUALITY_INVENTORY_CN.md`](/Users/liukai/web/ai-best-tool/docs/SEO_QUALITY_INVENTORY_CN.md)
 - 2026-07-15：`gsc:weekly-report` 的导出汇总脚本已增强为更深层递归扫描，并支持部分 CSV 导入时写回周报基线，减少等待完整导出时的卡点；Week 1 GSC 性能与覆盖率基线已录入周报

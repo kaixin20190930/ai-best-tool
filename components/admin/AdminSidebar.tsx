@@ -36,6 +36,7 @@ const navigation = [
   { name: 'emailOps', href: '/admin/email-ops', icon: Mail },
   { name: 'outreach', href: '/admin/outreach', icon: Mail },
   { name: 'distribution', href: '/admin/distribution', icon: Megaphone },
+  { name: 'targets', href: '/admin/targets', icon: ClipboardList },
   { name: 'intelligence', href: '/admin/intelligence', icon: Sparkles },
   { name: 'searchConsole', href: '/admin/search-console', icon: Search },
   { name: 'paymentCallbacks', href: '/admin/payment-callbacks', icon: ReceiptText },
