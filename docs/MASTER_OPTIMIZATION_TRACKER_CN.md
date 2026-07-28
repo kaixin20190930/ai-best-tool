@@ -43,6 +43,7 @@
 - 2026-07-28：继续收口剩余弱页与别名页，`/guides/*comparison` 和同义 guide 仍按 noindex / canonical / 合并优先级处理，不再扩大索引面；下一步只在质量盘点和 GSC 反馈证明有效时才考虑新增索引入口。
 - 2026-07-28：进一步收口销售拓客比较页，`/guides/ai-tools-for-sales-prospecting-comparison` 已转为 noindex 并 canonical 回主 guide，继续减少比较页索引噪音；后台 targets 页也新增了 blocked reason 快捷筛选。
 - 2026-07-28：修复 comparison 页面多顶层模块被公共横向 flex 布局挤成超窄列的样式问题，公共 with-footer 主容器已统一改为纵向排列；同时将 agencies、creators、designers 三个角色型 comparison 页转为 noindex，并 canonical 回各自主 guide，继续收口重复索引入口。
+- 2026-07-28：继续完成 agents、code review、automation 三个工作流型 comparison 页的 canonical 收口，分别回到对应主 guide；共享 comparison 模板继续统一提供 noindex，避免重复索引入口与主指南竞争。
 - 2026-07-15：`GuideEvidencePanel` 已补齐到全部 guide / comparison 页面，并通过本地 `pnpm run build`
 - 2026-07-15：`pnpm run seo:quality-inventory` 已生成最新质量盘点，当前总页面 157、可进 sitemap 27、内部流量页 3、noindex / 合并候选 127，详见 [`docs/SEO_QUALITY_INVENTORY_CN.md`](/Users/liukai/web/ai-best-tool/docs/SEO_QUALITY_INVENTORY_CN.md)
 - 2026-07-15：`gsc:weekly-report` 的导出汇总脚本已增强为更深层递归扫描，并支持部分 CSV 导入时写回周报基线，减少等待完整导出时的卡点；Week 1 GSC 性能与覆盖率基线已录入周报

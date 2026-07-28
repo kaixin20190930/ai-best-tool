@@ -1,17 +1,26 @@
+import type { Metadata } from 'next';
+
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
 
-export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
-  return buildComparisonMetadata(
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const metadata = await buildComparisonMetadata(
     locale,
     locale === 'cn' || locale === 'tw' ? 'AI 代码审查工具对比' : 'AI tools for code review comparison',
     locale === 'cn' || locale === 'tw'
       ? '对比几款常见的代码审查工具，帮你更快选出适合 PR 审查、风险提示和团队反馈的一款。'
       : 'Compare common code review tools to choose the one that fits PR review, risk checks, and team feedback best.',
   );
+
+  return {
+    ...metadata,
+    alternates: {
+      canonical: `/${locale}/guides/ai-tools-for-code-review`,
+    },
+  };
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {

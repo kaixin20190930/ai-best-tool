@@ -1,17 +1,26 @@
+import type { Metadata } from 'next';
+
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
 
-export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
-  return buildComparisonMetadata(
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const metadata = await buildComparisonMetadata(
     locale,
     locale === 'cn' || locale === 'tw' ? 'AI Agent 工具对比' : 'AI tools for agents comparison',
     locale === 'cn' || locale === 'tw'
       ? '对比几款更接近 Agent 工作流的 AI 工具，帮你更快选出适合任务编排、工具调用和运行治理的一组能力。'
       : 'Compare AI tools that sit closer to agent workflows so you can choose the right stack for orchestration, tool use, and runtime governance.',
   );
+
+  return {
+    ...metadata,
+    alternates: {
+      canonical: `/${locale}/guides/ai-tools-for-agents`,
+    },
+  };
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {

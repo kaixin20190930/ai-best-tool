@@ -1,3 +1,5 @@
+import type { Metadata } from 'next';
+
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
@@ -5,14 +7,21 @@ import { Link } from '@/app/navigation';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
 
-export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
-  return buildComparisonMetadata(
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const metadata = await buildComparisonMetadata(
     locale,
     locale === 'cn' || locale === 'tw' ? 'AI 自动化工具对比' : 'AI tools for automation comparison',
     locale === 'cn' || locale === 'tw'
       ? '对比几款常见的 AI 自动化工具，帮你更快选出适合流程编排、重复任务和跨工具联动的一个。'
       : 'Compare common AI automation tools to choose the one that fits orchestration, repeatable tasks, and cross-tool workflows best.',
   );
+
+  return {
+    ...metadata,
+    alternates: {
+      canonical: `/${locale}/guides/ai-tools-for-automation`,
+    },
+  };
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
