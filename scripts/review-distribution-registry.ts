@@ -38,6 +38,26 @@ type RegistryTarget = {
   target_status: string;
 };
 
+async function persistSiteLevelBlockReason(targetId: string, message: string) {
+  const reason = `site-level block: ${message}`;
+  await pool.query(
+    `
+      update distribution_targets
+      set
+        target_status = 'blocked',
+        last_review_reason = $2,
+        notes = case
+          when notes is null or btrim(notes) = '' then $2
+          else notes
+        end,
+        next_check_at = now() + interval '7 days',
+        updated_at = now()
+      where id = $1
+    `,
+    [targetId, reason],
+  );
+}
+
 async function main() {
   console.log('🔎 Batch reviewing distribution registry...');
   const { rows } = await pool.query<RegistryTarget>(
@@ -90,6 +110,7 @@ async function main() {
         'fetch failed',
       ];
       if (expectedBlockers.some((pattern) => message.toLowerCase().includes(pattern.toLowerCase()))) {
+        await persistSiteLevelBlockReason(target.id, message);
         results.push({
           name: target.name,
           homepageUrl: target.homepage_url,

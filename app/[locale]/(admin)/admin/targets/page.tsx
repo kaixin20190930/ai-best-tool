@@ -212,6 +212,12 @@ export default async function AdminTargetsPage({
                   <p className='text-sm text-slate-700'>
                     Next review: {formatDate(target.nextCheckAt)} · Last checked: {formatDate(target.lastCheckedAt)}
                   </p>
+                  {target.lastReviewReason ? (
+                    <div className='rounded-xl border border-rose-100 bg-rose-50 px-3 py-2 text-sm text-rose-800'>
+                      <div className='text-xs font-bold uppercase tracking-wide text-rose-700'>Manual handling reason</div>
+                      <div className='mt-1 leading-6'>{target.lastReviewReason}</div>
+                    </div>
+                  ) : null}
                   {target.notes ? <p className='rounded-xl bg-slate-50 px-3 py-2 text-sm text-slate-700'>{target.notes}</p> : null}
                 </div>
 
