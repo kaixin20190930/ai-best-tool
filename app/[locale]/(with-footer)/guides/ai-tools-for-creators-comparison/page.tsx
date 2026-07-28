@@ -1,17 +1,28 @@
+import type { Metadata } from 'next';
+
+import { getNoindexMetadata } from '@/lib/seo/indexing';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
 
-export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
-  return buildComparisonMetadata(
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const metadata = await buildComparisonMetadata(
     locale,
     locale === 'cn' || locale === 'tw' ? 'AI 创作者工具对比' : 'AI tools for creators comparison',
     locale === 'cn' || locale === 'tw'
       ? '对比几款常见的创作者 AI 工具，帮你更快判断内容产出、再包装和发布节奏能力。'
       : 'Compare common creator AI tools to judge content production, repurposing, and publishing workflow fit faster.',
   );
+
+  return {
+    ...metadata,
+    ...getNoindexMetadata(),
+    alternates: {
+      canonical: `/${locale}/guides/ai-tools-for-creators`,
+    },
+  };
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
