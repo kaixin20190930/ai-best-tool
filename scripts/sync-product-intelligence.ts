@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { loadEnvConfig } from '@next/env';
 
 import { extractProductEvidence } from '@/lib/services/intelligence/evidenceExtractor';
 import { classifyProductPage } from '@/lib/services/intelligence/pageClassifier';
@@ -11,6 +12,28 @@ import {
   safeFetchText,
 } from '@/lib/services/intelligence/safeFetch';
 import type { IntelligenceFetchStatus, IntelligencePageType } from '@/lib/services/intelligence/types';
+
+loadEnvConfig(process.cwd());
+
+function describeError(error: unknown) {
+  if (!(error instanceof Error)) return String(error);
+
+  const cause = error.cause;
+  if (!cause || typeof cause !== 'object') return error.message;
+
+  const details = cause as {
+    code?: unknown;
+    hostname?: unknown;
+    message?: unknown;
+  };
+  const causeParts = [
+    typeof details.code === 'string' ? `code=${details.code}` : null,
+    typeof details.hostname === 'string' ? `host=${details.hostname}` : null,
+    typeof details.message === 'string' ? details.message : null,
+  ].filter(Boolean);
+
+  return causeParts.length > 0 ? `${error.message} (${causeParts.join(', ')})` : error.message;
+}
 
 async function run() {
   const args = process.argv.slice(2);
@@ -29,6 +52,13 @@ async function run() {
 
   if (!ownerId) {
     throw new Error('The --owner-id flag is required.');
+  }
+
+  const adminKey = process.env.SUPABASE_SECRET_KEY?.trim() || process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+  if (!dryRun && !adminKey) {
+    throw new Error(
+      'SUPABASE_SECRET_KEY or SUPABASE_SERVICE_ROLE_KEY is required for database writes. Add one to .env.local without a NEXT_PUBLIC_ prefix, then rerun the command.',
+    );
   }
 
   const discovery = await discoverProductPages(websiteUrl);
@@ -117,21 +147,32 @@ async function run() {
     }
   }
 
-  const result = dryRun
-    ? await previewProductIntelligence({
-        ownerType,
-        ownerId,
-        canonicalDomain: new URL(websiteUrl).hostname.replace(/^www\./, ''),
-        productName: discovery.pages.find((page) => page.pageType === 'homepage')?.anchorText || undefined,
-        sources,
-      })
-    : await persistProductIntelligence({
-        ownerType,
-        ownerId,
-        canonicalDomain: new URL(websiteUrl).hostname.replace(/^www\./, ''),
-        productName: discovery.pages.find((page) => page.pageType === 'homepage')?.anchorText || undefined,
-        sources,
-      });
+  const input = {
+    ownerType,
+    ownerId,
+    canonicalDomain: new URL(websiteUrl).hostname.replace(/^www\./, ''),
+    productName: discovery.pages.find((page) => page.pageType === 'homepage')?.anchorText || undefined,
+    sources,
+  };
+
+  let result;
+  try {
+    result = dryRun ? await previewProductIntelligence(input) : await persistProductIntelligence(input);
+  } catch (error) {
+    const supabaseHost = (() => {
+      try {
+        return new URL(process.env.NEXT_PUBLIC_SUPABASE_URL || '').hostname;
+      } catch {
+        return 'invalid-or-missing-host';
+      }
+    })();
+
+    throw new Error(
+      `${dryRun ? 'Intelligence preview' : 'Supabase persistence'} failed${
+        dryRun ? '' : ` for ${supabaseHost}`
+      }: ${describeError(error)}`,
+    );
+  }
 
   console.log(
     JSON.stringify(
@@ -152,6 +193,6 @@ async function run() {
 }
 
 run().catch((error) => {
-  console.error(error instanceof Error ? error.message : error);
+  console.error(describeError(error));
   process.exitCode = 1;
 });

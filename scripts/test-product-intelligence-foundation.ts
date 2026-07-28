@@ -11,6 +11,7 @@ import {
   extractRobotsSitemaps,
   extractSitemapLocations,
 } from '@/lib/services/intelligence/pageDiscovery';
+import { normalizeIntelligenceConfidence } from '@/lib/services/intelligence/persistence';
 import { buildProductIntelligenceSnapshot } from '@/lib/services/intelligence/productProfile';
 import { buildContentQualityResult, CONTENT_QUALITY_WEIGHTS } from '@/lib/services/intelligence/qualityConfig';
 import {
@@ -30,6 +31,10 @@ function run() {
   assert.equal(DISTRIBUTION_TARGET_FIXTURES.length, 10);
   assert.equal(new Set(INTELLIGENCE_PRODUCT_FIXTURES.map((item) => item.key)).size, 10);
   assert.equal(new Set(DISTRIBUTION_TARGET_FIXTURES.map((item) => item.key)).size, 10);
+  assert.equal(normalizeIntelligenceConfidence(0.95), 95);
+  assert.equal(normalizeIntelligenceConfidence(90), 90);
+  assert.equal(normalizeIntelligenceConfidence(150), 100);
+  assert.equal(normalizeIntelligenceConfidence(-10), 0);
 
   const publishReady = buildContentQualityResult({
     evidence: 20,

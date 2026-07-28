@@ -52,6 +52,75 @@ function normalizeText(value: string | null | undefined): string | null {
   return trimmed || null;
 }
 
+export function normalizeIntelligenceConfidence(value: number): number {
+  if (!Number.isFinite(value)) return 0;
+
+  const percentage = value >= 0 && value <= 1 ? value * 100 : value;
+  return Math.round(Math.min(100, Math.max(0, percentage)));
+}
+
+function mapProfileRow(row: Record<string, unknown>): ProductIntelligenceProfile {
+  return {
+    id: String(row.id),
+    ownerType: row.owner_type as ProductIntelligenceProfile['ownerType'],
+    ownerId: String(row.owner_id),
+    canonicalDomain: String(row.canonical_domain || ''),
+    productName: String(row.product_name || ''),
+    status: row.profile_status as ProductIntelligenceProfile['status'],
+    version: Number(row.profile_version || 1),
+    lastCrawledAt: (row.last_crawled_at as string | null | undefined) || null,
+    lastVerifiedAt: (row.last_verified_at as string | null | undefined) || null,
+    nextReviewAt: (row.next_review_at as string | null | undefined) || null,
+    metadata: (row.metadata as Record<string, unknown>) || {},
+  };
+}
+
+function mapSourceRow(row: Record<string, unknown>): ProductIntelligenceSource {
+  return {
+    id: String(row.id),
+    profileId: String(row.profile_id),
+    url: String(row.url),
+    pageType: row.page_type as ProductIntelligenceSource['pageType'],
+    httpStatus: row.http_status === null || row.http_status === undefined ? null : Number(row.http_status),
+    canonicalUrl: (row.canonical_url as string | null | undefined) || null,
+    contentHash: (row.content_hash as string | null | undefined) || null,
+    contentType: (row.content_type as string | null | undefined) || null,
+    fetchedAt: (row.fetched_at as string | null | undefined) || null,
+    fetchStatus: row.fetch_status as ProductIntelligenceSource['fetchStatus'],
+    metadata: (row.metadata as Record<string, unknown>) || {},
+  };
+}
+
+function mapClaimRow(row: Record<string, unknown>): ProductIntelligenceClaim {
+  return {
+    id: String(row.id),
+    profileId: String(row.profile_id),
+    claimType: row.claim_type as ProductIntelligenceClaim['claimType'],
+    claimKey: String(row.claim_key),
+    claimValue: row.claim_value,
+    sourceUrl: String(row.source_url),
+    sourceExcerpt: (row.source_excerpt as string | null | undefined) || null,
+    observedAt: String(row.observed_at),
+    confidence: Number(row.confidence || 0),
+    conflictStatus: row.conflict_status as ProductIntelligenceClaim['conflictStatus'],
+    expiresAt: (row.expires_at as string | null | undefined) || null,
+  };
+}
+
+function mapAssetRow(row: Record<string, unknown>): ProductIntelligenceAsset {
+  return {
+    id: String(row.id),
+    profileId: String(row.profile_id),
+    assetType: row.asset_type as ProductIntelligenceAsset['assetType'],
+    sourceUrl: String(row.source_url),
+    storedUrl: (row.stored_url as string | null | undefined) || null,
+    width: row.width === null || row.width === undefined ? null : Number(row.width),
+    height: row.height === null || row.height === undefined ? null : Number(row.height),
+    isPlaceholder: Boolean(row.is_placeholder),
+    evidenceStatus: row.evidence_status as ProductIntelligenceAsset['evidenceStatus'],
+  };
+}
+
 function buildClaimMetadata(source: PersistedIntelligenceSourceInput, claim: ExtractedIntelligenceClaim) {
   return {
     pageType: source.pageType,
@@ -84,7 +153,7 @@ async function loadExistingProfile(
     throw new Error(error.message);
   }
 
-  return data as ProductIntelligenceProfile | null;
+  return data ? mapProfileRow(data as Record<string, unknown>) : null;
 }
 
 function inferProductName(input: PersistProductIntelligenceInput, sources: PersistedIntelligenceSourceInput[]): string {
@@ -252,7 +321,7 @@ export async function persistProductIntelligence(
           source_url: source.url,
           source_excerpt: claim.sourceExcerpt || null,
           observed_at: claim.observedAt || observedAt,
-          confidence: claim.confidence,
+          confidence: normalizeIntelligenceConfidence(claim.confidence),
           conflict_status: 'none',
           expires_at: claim.expiresAt || null,
           metadata: buildClaimMetadata(source, claim),
@@ -322,10 +391,10 @@ export async function persistProductIntelligence(
   }
 
   const snapshot = buildProductIntelligenceSnapshot({
-    profile: storedProfile as ProductIntelligenceProfile,
-    sources: (storedSources || []) as ProductIntelligenceSource[],
-    claims: (storedClaims || []) as ProductIntelligenceClaim[],
-    assets: (storedAssets || []) as ProductIntelligenceAsset[],
+    profile: mapProfileRow(storedProfile as Record<string, unknown>),
+    sources: (storedSources || []).map((row) => mapSourceRow(row as Record<string, unknown>)),
+    claims: (storedClaims || []).map((row) => mapClaimRow(row as Record<string, unknown>)),
+    assets: (storedAssets || []).map((row) => mapAssetRow(row as Record<string, unknown>)),
   });
 
   const metadata = computeMetadata(snapshot, existingProfile, input.profileMetadata || {});
@@ -355,7 +424,7 @@ export async function persistProductIntelligence(
 
   const finalSnapshot = buildProductIntelligenceSnapshot({
     profile: {
-      ...(storedProfile as ProductIntelligenceProfile),
+      ...mapProfileRow(storedProfile as Record<string, unknown>),
       ownerType: input.ownerType,
       ownerId: input.ownerId,
       canonicalDomain: input.canonicalDomain,
@@ -423,7 +492,7 @@ export async function previewProductIntelligence(
       sourceUrl: source.url,
       sourceExcerpt: claim.sourceExcerpt || null,
       observedAt: claim.observedAt || observedAt,
-      confidence: claim.confidence,
+      confidence: normalizeIntelligenceConfidence(claim.confidence),
       conflictStatus: 'none',
       expiresAt: claim.expiresAt || null,
     })),

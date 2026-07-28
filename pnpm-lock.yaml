@@ -11,6 +11,9 @@ importers:
       '@hookform/resolvers':
         specifier: 3.3.4
         version: 3.3.4(react-hook-form@7.51.2(react@18.2.0))
+      '@next/env':
+        specifier: 14.1.4
+        version: 14.1.4
       '@radix-ui/react-label':
         specifier: 2.0.2
         version: 2.0.2(@types/react-dom@18.2.23)(@types/react@18.2.73)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
