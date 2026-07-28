@@ -1,17 +1,29 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
+import type { Metadata } from 'next';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
 
-export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
-  return buildComparisonMetadata(
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const metadata = await buildComparisonMetadata(
     locale,
     locale === 'cn' || locale === 'tw' ? 'AI 电商工具对比' : 'AI ecommerce tools comparison',
     locale === 'cn' || locale === 'tw'
       ? '对比几款常见的 AI 电商工具，帮你更快选出适合的一个。'
       : 'Compare common AI ecommerce tools to choose the one that fits you best.',
   );
+
+  return {
+    ...metadata,
+    alternates: {
+      canonical: `/${locale}/guides/ai-tools-for-ecommerce`,
+    },
+  };
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {

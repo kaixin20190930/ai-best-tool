@@ -1,17 +1,29 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
+import type { Metadata } from 'next';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
 
-export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
-  return buildComparisonMetadata(
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const metadata = await buildComparisonMetadata(
     locale,
     locale === 'cn' || locale === 'tw' ? 'AI 客服工具对比' : 'AI customer support tools comparison',
     locale === 'cn' || locale === 'tw'
       ? '对比几款常见的 AI 客服工作流工具，帮你更快判断回复、分流和知识库能力。'
       : 'Compare common AI customer support workflow tools to judge replies, triage, and knowledge-base fit faster.',
   );
+
+  return {
+    ...metadata,
+    alternates: {
+      canonical: `/${locale}/guides/ai-tools-for-customer-support`,
+    },
+  };
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
