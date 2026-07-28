@@ -33,15 +33,17 @@
 
 ## 覆盖率基线
 
-来自 `aibesttool.com-Coverage-2026-07-15.xlsx` 的关键问题分布：
+来自 `aibesttool.com-Coverage-2026-07-28.xlsx` 的关键问题分布：
 
 | 问题 | 网页数 | 备注 |
 | --- | --- | --- |
-| 被 `noindex` 标记排除 | 583 | 主要是我们主动收口的弱页 / 非索引页 |
-| 已抓取 - 尚未编入索引 | 14 | 需要继续观察是否是质量或抓取优先级问题 |
-| 网页会自动重定向 | 22 | 多半是规范化 / 域名跳转带来的结果 |
-| 备用网页（有适当的规范标记） | 22 | 说明规范化正在生效，但仍要避免重复页过多 |
+| 被 `noindex` 标记排除 | 603 | 主要是我们主动收口的弱页 / 非索引页 |
+| 已抓取 - 尚未编入索引 | 19 | 需要继续观察是否是质量或抓取优先级问题 |
+| 网页会自动重定向 | 29 | 多半是规范化 / 域名跳转带来的结果 |
+| 备用网页（有适当的规范标记） | 31 | 说明规范化正在生效，但仍要避免重复页过多 |
 | 重复网页，用户未选定规范网页 | 5 | 需要继续收口同义页和 alias 页 |
+| 重复网页，Google 选择的规范网页与用户指定的不同 | 3 | 关注主模板页与规范化一致性 |
+| 已发现 - 尚未编入索引 | 0 | 目前无明显“已发现未编入索引”问题 |
 
 ## Top Queries
 
@@ -65,8 +67,8 @@
 | Week 4 | ai tools directory | 0 | 19 | 0.00% | 100.32 | 目录主词；方向正确但权威度不足 | 是 |
 | Week 4 | ai tool directory | 0 | 13 | 0.00% | 78.92 | 目录主词；继续由首页承接 | 是 |
 | Week 4 | top ai tools directory | 0 | 7 | 0.00% | 73.71 | 榜单 / 目录意图 | 是 |
+| Week 4 | ai tool index | 0 | 6 | 0.00% | 70.67 | 明确目录检索意图 | 是 |
 | Week 4 | best ai tools directory | 0 | 5 | 0.00% | 59.40 | 当前目录词里相对更接近的机会 | 是 |
-| Week 4 | fathom ai meeting assistant features | 0 | 2 | 0.00% | 4.00 | 明确的功能查询；优先增强 Fathom 详情页 | 是 |
 
 ## Top Pages
 
@@ -91,7 +93,12 @@
 | Week 4 | https://aibesttool.com/ai/lindy | 0 | 7 | 0.00% | 9.71 | Tool；首批机会页 | 是 |
 | Week 4 | https://aibesttool.com/ai/fathom | 0 | 7 | 0.00% | 33.14 | Tool；具体功能 query 已进入前 10 | 是 |
 | Week 4 | https://aibesttool.com/categories/research | 0 | 5 | 0.00% | 5.00 | Category；首批机会页 | 是 |
+| Week 4 | https://www.aibesttool.com/guides/ai-tools-for-research | 0 | 5 | 0.00% | 46.00 | Guide；需确认无重复模板干扰 | 是 |
+| Week 4 | https://aibesttool.com/ai/the-graph | 0 | 4 | 0.00% | 25.50 | Tool；高排名样本 | 是 |
+| Week 4 | https://aibesttool.com/en/explore | 0 | 3 | 0.00% | 4.00 | Core Hub | 是 |
+| Week 4 | https://www.aibesttool.com/ai/the-graph | 0 | 3 | 0.00% | 53.33 | Guide / 工具页变体 | 是 |
 | Week 4 | https://aibesttool.com/ai/chatgpt | 0 | 2 | 0.00% | 7.50 | Tool；样本小但属于核心入口 | 是 |
+| Week 4 | https://www.aibesttool.com/categories/web3 | 0 | 2 | 0.00% | 8.50 | Category；历史变体 | 是 |
 
 ## 增强页追踪
 

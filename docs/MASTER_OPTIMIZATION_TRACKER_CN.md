@@ -48,6 +48,7 @@
 - 2026-07-28：导入最新 GSC 28 天数据：135 展示 / 1 点击 / 0.74% CTR / 59.92 平均排名，Coverage 为 154 已索引 / 690 未索引。执行重心从“继续批量 comparison 收口”切换为“规范 URL + 少量机会页增长”：新增统一本地化 canonical 生成器，英文规范页不再带 `/en` 前缀；首页、Explore、榜单、分类、工具详情的关键 canonical / schema URL 已对齐。首批增强首页、Research、Lindy、Fathom、ChatGPT，后续 14/28 天观察数据。
 - 2026-07-28：索引策略代码对账发现并修复 `/guides/ai-tools-for-research`、`/guides/ai-tools-for-sales` 同时存在于 sitemap 白名单却在页面 metadata 返回 `noindex` 的冲突；两页已恢复为规范可索引页，并为 sitemap 回归新增“白名单 Guide 不得显式 noindex”自动检查，防止同类问题再次出现。
 - 2026-07-28：完成 GSC 第二批机会页增强：Explore 对齐“按任务、价格和分类筛选 AI 工具目录”意图；Web3、Productivity、Automation、Voice 分类页补专属 Title / Description 和决策顺序；Cursor、The Graph、Dune 工具页补代码编辑、Web3 数据基础设施和链上 SQL 仪表盘的专属判断块。两批机会页均已完成代码落地，下一阶段进入部署后 14/28 天观察。
+- 2026-07-29：执行确认：`/ai/chatgpt`、`/ai/pipedream`、`/ai/fathom`、`/ai/lindy`、`/categories/productivity`、`/categories/web3`、`/categories/automation`、`/categories/voice`、`/ai/cursor`、`/ai/the-graph`、`/ai/dune` 与 `Explore` / `/guides/ai-tools-for-research` 的技术信号与 noindex / canonical / sitemap 约束均保持稳定；本地 `pnpm run build` 通过。当前不继续扩量，进入 14/28 周期观察。
 - 2026-07-15：`GuideEvidencePanel` 已补齐到全部 guide / comparison 页面，并通过本地 `pnpm run build`
 - 2026-07-15：`pnpm run seo:quality-inventory` 已生成最新质量盘点，当前总页面 157、可进 sitemap 27、内部流量页 3、noindex / 合并候选 127，详见 [`docs/SEO_QUALITY_INVENTORY_CN.md`](/Users/liukai/web/ai-best-tool/docs/SEO_QUALITY_INVENTORY_CN.md)
 - 2026-07-15：`gsc:weekly-report` 的导出汇总脚本已增强为更深层递归扫描，并支持部分 CSV 导入时写回周报基线，减少等待完整导出时的卡点；Week 1 GSC 性能与覆盖率基线已录入周报
