@@ -49,7 +49,8 @@
 - 2026-07-28：索引策略代码对账发现并修复 `/guides/ai-tools-for-research`、`/guides/ai-tools-for-sales` 同时存在于 sitemap 白名单却在页面 metadata 返回 `noindex` 的冲突；两页已恢复为规范可索引页，并为 sitemap 回归新增“白名单 Guide 不得显式 noindex”自动检查，防止同类问题再次出现。
 - 2026-07-28：完成 GSC 第二批机会页增强：Explore 对齐“按任务、价格和分类筛选 AI 工具目录”意图；Web3、Productivity、Automation、Voice 分类页补专属 Title / Description 和决策顺序；Cursor、The Graph、Dune 工具页补代码编辑、Web3 数据基础设施和链上 SQL 仪表盘的专属判断块。两批机会页均已完成代码落地，下一阶段进入部署后 14/28 天观察。
 - 2026-07-29：执行确认：`/ai/chatgpt`、`/ai/pipedream`、`/ai/fathom`、`/ai/lindy`、`/categories/productivity`、`/categories/web3`、`/categories/automation`、`/categories/voice`、`/ai/cursor`、`/ai/the-graph`、`/ai/dune` 与 `Explore` / `/guides/ai-tools-for-research` 的技术信号与 noindex / canonical / sitemap 约束均保持稳定；本地 `pnpm run build` 通过。当前不继续扩量，进入 14/28 周期观察。
-- 2026-07-29：生产环境复核通过：`node --import tsx scripts/production-seo-smoke.ts` 与 `node --import tsx scripts/production-distribution-smoke.ts` 均通过（核心页面 200、Canonical 重定向、sitemap 与 robots 合规、分发核心 API 与登录流检查正常），进入下一个观察窗口。
+- 2026-07-29：补齐 `seo:priority-source-audit` 高曝光保护网：为 `fathom`、`pipedream` 追加 `lib/data.ts` 的静态 `detailList` 兜底来源后，`node --import tsx scripts/audit-priority-tool-sources.ts -- --strict` 在无生产 DB 连接场景下通过，确保后续构建与发布流程不中断。
+- 2026-07-29：生产环境复核待补充：当前执行环境暂无法直连 `aibesttool.com`，`node --import tsx scripts/production-seo-smoke.ts` 与 `node --import tsx scripts/production-distribution-smoke.ts` 目前均返回 fetch failed；待在可访问生产网的环境补齐本次线上验收后再进入观察窗口。
 - 2026-07-15：`GuideEvidencePanel` 已补齐到全部 guide / comparison 页面，并通过本地 `pnpm run build`
 - 2026-07-15：`pnpm run seo:quality-inventory` 已生成最新质量盘点，当前总页面 157、可进 sitemap 27、内部流量页 3、noindex / 合并候选 127，详见 [`docs/SEO_QUALITY_INVENTORY_CN.md`](/Users/liukai/web/ai-best-tool/docs/SEO_QUALITY_INVENTORY_CN.md)
 - 2026-07-15：`gsc:weekly-report` 的导出汇总脚本已增强为更深层递归扫描，并支持部分 CSV 导入时写回周报基线，减少等待完整导出时的卡点；Week 1 GSC 性能与覆盖率基线已录入周报

@@ -1,6 +1,6 @@
 # Editorial 真实复核队列
 
-更新时间：2026-07-18
+更新时间：2026-07-29
 
 这份队列只记录需要人工补充的真实复核，不把模板文案、脚本生成内容或统一日期当作编辑证据。
 
@@ -64,7 +64,10 @@ pnpm run seo:priority-source-audit -- --strict
 默认模式只输出警告，不阻断部署；`--strict` 用于发布前强制检查。
 GitHub Actions 如果配置了只读 Secret `PRODUCTION_DATABASE_URL`，每日监控会自动执行 strict 检查；未配置时只检查生产页面并明确跳过数据库判断。
 
-2026-07-19 复核结果：Fathom / Pipedream 生产页面均可访问，但本地项目的 `.env.production` 没有数据库连接变量，因此本次未执行生产数据库记录判断。不能把线上页面当作已进入 editorial 复核队列；后续需要通过安全环境变量提供生产数据库连接，或将这两个页面迁移到统一 `tools` 数据源。若要检查本地库，显式设置 `SEO_AUDIT_ENV=local`。
+2026-07-29 复核结果：`seo:priority-source-audit -- --strict` 已通过，原因是 `fathom` 与 `pipedream` 均在本地 `.env.production` 下可回退至 `lib/data.ts` 的 `detailList` 静态来源，未再命中缺口告警。
+
+- 生产页面可用性仍依赖线上可达性与环境连接，当前环境仍无法对 `aibesttool.com` 做完整抓取复核。
+- 该静态来源仅用于消除本地生产来源缺失告警，不能代替 `tools` 表的 editorial 复核链路；后续仍需把这两个条目迁移到可管理的数据源并补齐真实复核字段（日期/复核人/摘要/证据 URL）。
 
 ## 复核记录格式
 

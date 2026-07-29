@@ -638,4 +638,36 @@ export const detailList: WebNavigationDetailData[] = [
     starRating: 5,
     categoryName: 'Productivity',
   },
+  {
+    name: 'fathom',
+    title: 'Fathom (Meeting Intelligence)',
+    detail:
+      '# What is Fathom?\nFathom is a meeting and video intelligence platform for teams. It focuses on recording meetings, generating action-aware notes, and building searchable summaries with less friction.\n\n## Who is it for?\nIt is designed for founders, operators, and sales teams who need fast review of meeting outcomes without spending extra time on manual recap.\n\n## Typical use cases\n- Meeting summary and review\n- Action item extraction\n- Team knowledge sharing from recurring calls\n- Onboarding and deal pipeline updates\n\n## What to watch for\nBefore choosing Fathom, check whether your team needs direct platform integrations, pricing plans for seat-based usage, and whether your meeting cadence matches the workflow.',
+    content:
+      'Fathom is a meeting intelligence platform that provides recording, note taking, action extraction, and meeting summary workflows for teams.',
+    url: 'https://fathom.video',
+    imageUrl: 'https://img.artiversehub.ai/2024/05/17/d46533e95b4e419bb043ed71dadbba06.png',
+    thumbnailUrl: 'https://img.artiversehub.ai/2024/05/17/2f3ad3237754483a87032e17d0764b8d.png',
+    collectionTime: '2024-12-01 00:00:00',
+    tagName: 'Productivity',
+    websiteData: 'https://fathom.video',
+    starRating: 5,
+    categoryName: 'Productivity',
+  },
+  {
+    name: 'pipedream',
+    title: 'Pipedream (Workflow Automation)',
+    detail:
+      '# What is Pipedream?\nPipedream is a low-code workflow automation platform that connects APIs and event sources, helping teams automate operational tasks and data movements.\n\n## Who is it for?\nIt is suitable for builders, operations teams, and marketers who need repeatable integrations between SaaS products.\n\n## Typical use cases\n- API-triggered automation\n- Multi-step workflow composition\n- Event routing and webhook orchestration\n- Internal tool orchestration between CRMs, finance, and communication tools\n\n## What to watch for\nBefore adopting Pipedream, verify your trigger limits, security controls around credentials, pricing thresholds, and workflow complexity requirements for production workloads.',
+    content:
+      'Pipedream is a workflow automation platform for connecting APIs, managing triggers, and building repeatable integration workflows.',
+    url: 'https://pipedream.com',
+    imageUrl: 'https://img.artiversehub.ai/2024/05/17/3b4c2eb66e3e405187434e0fc71d0c52.png',
+    thumbnailUrl: 'https://img.artiversehub.ai/2024/05/17/80991fe84ffb454fba7dbf21baa18cee.png',
+    collectionTime: '2024-12-01 00:00:00',
+    tagName: 'Productivity',
+    websiteData: 'https://pipedream.com',
+    starRating: 5,
+    categoryName: 'Productivity',
+  },
 ];
