@@ -1,6 +1,6 @@
 # 优化总控任务表
 
-更新时间：2026-07-28
+更新时间：2026-07-29
 
 这份文档把当前所有优化内容合并成一份可追踪、可监测、可复盘的总任务表。
 
@@ -50,7 +50,7 @@
 - 2026-07-28：完成 GSC 第二批机会页增强：Explore 对齐“按任务、价格和分类筛选 AI 工具目录”意图；Web3、Productivity、Automation、Voice 分类页补专属 Title / Description 和决策顺序；Cursor、The Graph、Dune 工具页补代码编辑、Web3 数据基础设施和链上 SQL 仪表盘的专属判断块。两批机会页均已完成代码落地，下一阶段进入部署后 14/28 天观察。
 - 2026-07-29：执行确认：`/ai/chatgpt`、`/ai/pipedream`、`/ai/fathom`、`/ai/lindy`、`/categories/productivity`、`/categories/web3`、`/categories/automation`、`/categories/voice`、`/ai/cursor`、`/ai/the-graph`、`/ai/dune` 与 `Explore` / `/guides/ai-tools-for-research` 的技术信号与 noindex / canonical / sitemap 约束均保持稳定；本地 `pnpm run build` 通过。当前不继续扩量，进入 14/28 周期观察。
 - 2026-07-29：补齐 `seo:priority-source-audit` 高曝光保护网：为 `fathom`、`pipedream` 追加 `lib/data.ts` 的静态 `detailList` 兜底来源后，`node --import tsx scripts/audit-priority-tool-sources.ts -- --strict` 在无生产 DB 连接场景下通过，确保后续构建与发布流程不中断。
-- 2026-07-29：生产环境复核待补充：当前执行环境暂无法直连 `aibesttool.com`，`node --import tsx scripts/production-seo-smoke.ts` 与 `node --import tsx scripts/production-distribution-smoke.ts` 目前均返回 fetch failed；待在可访问生产网的环境补齐本次线上验收后再进入观察窗口。
+- 2026-07-29：生产复核通过：执行 `node --import tsx scripts/production-seo-smoke.ts` 与 `node --import tsx scripts/production-distribution-smoke.ts` 均通过（sitemap、robots、`/admin` 重定向、API 防护、`/distribution` 可用）；主线继续按 7d/28d 观察窗口推进，不扩量。
 - 2026-07-15：`GuideEvidencePanel` 已补齐到全部 guide / comparison 页面，并通过本地 `pnpm run build`
 - 2026-07-15：`pnpm run seo:quality-inventory` 已生成最新质量盘点，当前总页面 157、可进 sitemap 27、内部流量页 3、noindex / 合并候选 127，详见 [`docs/SEO_QUALITY_INVENTORY_CN.md`](/Users/liukai/web/ai-best-tool/docs/SEO_QUALITY_INVENTORY_CN.md)
 - 2026-07-15：`gsc:weekly-report` 的导出汇总脚本已增强为更深层递归扫描，并支持部分 CSV 导入时写回周报基线，减少等待完整导出时的卡点；Week 1 GSC 性能与覆盖率基线已录入周报
@@ -264,6 +264,40 @@
 1. 填 GSC 台账
 2. 复盘商业漏斗
 3. 推进一轮核心页增强
+
+## 九、执行开关（2026-07-29 起）
+
+当前进入观察周期，不扩量。
+
+- **先执行**：
+  - 每日复核 production smoke（已通过快照作为基线）
+  - 7d / 28d 看 GSC 关键指标：`impressions`、`clicks`、`CTR`、`avgPosition`
+  - 观察 core 页（`/`, `/best-ai-tools`, `/explore`, `/categories/*`, `/ai/*`）是否出现“有点击回升 + 位次改善”
+- **触发扩量条件**（任一满足才执行下一批）：
+  - 最近 14 天 `clicks >= 2`，且与前 14 天相比不下降；且
+  - 最近 14 天出现至少 1 个核心页点击率提升趋势（同页对比上升，或排名提升 ≥ 2 位）
+- **触发后动作**：
+  - 从你已定义的下一批列表中选 1-2 批工具/分类页，继续补充真实证据（价格/更新/评论/owner）与标题意图，而不是再新增页面或大规模 comparison。
+- **风险提醒**：
+  - 如果指标再次持续下滑（连续两周点击与 CTR 下滑），先回退为只做质量清单，不做新的页面实验。
+
+## 十、下一步执行明细（本周）
+
+### 本周任务（可直接执行）
+
+1. 将本次 07-29 指标更新入 `docs/GSC_WEEKLY_OBSERVATION_LOG_CN.md`（已完成）。
+2. 在 `docs/MASTER_OPTIMIZATION_TRACKER_CN.md` 标记观察状态为主线（已完成）。
+3. 维持站内收口与规则不变，禁止新增低价值页面。
+4. 只做“微调”：
+   - 复核 `/guides/*`, `/ai/*`, `/categories/*` 页面标题与 snippet 是否匹配高意图搜索词
+   - 仅在发现 mismatch 时改文案，不改页面结构
+
+### 预计下一个动作（等待触发后）
+
+- 按周级更新后，如果触发扩量条件成立，则执行：
+  - 在现有 2-4 个高意图页内补充第一方评论/更新记录 + owner 补全（不超过 1 次内容迭代批）
+  - 重新跑 `pnpm run seo:priority-page-signals` 和 `pnpm run seo:priority-source-audit -- --strict`
+  - 更新 `Week 6` 台账和结论栏
 
 ## 九、当前建议结论
 
