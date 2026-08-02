@@ -1966,6 +1966,203 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
         };
   }
 
+  if (key === 'pipedream') {
+    return isChinese
+      ? {
+          label: '官方事实快照',
+          title: 'Credits、费用上限和工作流生命周期',
+          summary:
+            '以下信息来自 Pipedream 官方文档；套餐额度和平台限制会变化，生产工作流应设置预算并监控 Billing & Usage。',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: '免费与付费',
+              value:
+                'Free 有每日 credits、活跃工作流和连接账户限制；付费层可运行不限 credits，但超出套餐包含量会产生按量费用。',
+            },
+            {
+              label: '成本控制',
+              value: '可设置 workspace 级 Credit Budget 和使用提醒；并发执行可能导致实际消耗略高于设定上限。',
+            },
+            {
+              label: '降级与保留',
+              value:
+                '降级或取消后，超出新套餐能力的工作流和连接会自动停用；workflow code 与 data store 数据会保留到用户主动删除。',
+            },
+          ],
+          sources: [
+            { label: '套餐与 Credits', href: 'https://pipedream.com/docs/pricing' },
+            { label: '平台限制', href: 'https://pipedream.com/docs/workflows/limits' },
+            { label: '预算与用量设置', href: 'https://pipedream.com/docs/account/billing-settings' },
+            { label: '数据保留', href: 'https://pipedream.com/docs/privacy-and-security' },
+          ],
+        }
+      : {
+          label: 'Official fact snapshot',
+          title: 'Credits, spending controls, and workflow lifecycle',
+          summary:
+            'These facts come from Pipedream documentation. Plan allowances and platform limits change, so production workflows should use budgets and Billing & Usage monitoring.',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: 'Free and paid usage',
+              value:
+                'Free has daily credit, active-workflow, and connected-account limits; paid tiers allow uncapped credits but charge for usage beyond the included amount.',
+            },
+            {
+              label: 'Cost control',
+              value:
+                'A workspace Credit Budget and usage notifications are available; concurrent executions can cause actual consumption to slightly exceed the configured cap.',
+            },
+            {
+              label: 'Downgrade and retention',
+              value:
+                'Downgrades or cancellation disable workflows and connections beyond the new plan; workflow code and data-store data remain until the user deletes them.',
+            },
+          ],
+          sources: [
+            { label: 'Plans and credits', href: 'https://pipedream.com/docs/pricing' },
+            { label: 'Platform limits', href: 'https://pipedream.com/docs/workflows/limits' },
+            { label: 'Budget and usage settings', href: 'https://pipedream.com/docs/account/billing-settings' },
+            { label: 'Data retention', href: 'https://pipedream.com/docs/privacy-and-security' },
+          ],
+        };
+  }
+
+  if (key === 'perplexity') {
+    return isChinese
+      ? {
+          label: '官方事实快照',
+          title: '搜索额度、消费者数据和企业边界',
+          summary: '以下信息来自 Perplexity 官方帮助中心；搜索与 Research 配额可能动态调整，应以账号当前显示为准。',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: 'Free 限制',
+              value:
+                'Free 当前包含每天 3 次 Pro Search 和每月 1 次 Research；高级模型、图像生成与更高额度需要付费套餐。',
+            },
+            {
+              label: '消费者数据',
+              value: 'Free、Pro、Max 的 AI Data Retention 默认开启，可在设置中关闭；退出只影响退出之后收集的数据。',
+            },
+            {
+              label: '企业数据',
+              value:
+                'Enterprise 查询数据不用于模型训练；上传文件通常保留 7 天，并通过与模型提供商的 ZDR/ZDT 协议保护。',
+            },
+          ],
+          sources: [
+            {
+              label: '套餐能力对比',
+              href: 'https://www.perplexity.ai/help-center/en/articles/11187416-which-perplexity-subscription-plan-is-right-for-you',
+            },
+            {
+              label: '数据收集与退出',
+              href: 'https://www.perplexity.ai/help-center/en/articles/11564572-data-collection-at-perplexity',
+            },
+          ],
+        }
+      : {
+          label: 'Official fact snapshot',
+          title: 'Search allowances, consumer data, and enterprise boundaries',
+          summary:
+            'These facts come from the Perplexity help center. Search and Research allowances can change dynamically, so verify the limits shown in your account.',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: 'Free limits',
+              value:
+                'Free currently includes three Pro Searches per day and one Research query per month; advanced models, image generation, and higher limits require paid plans.',
+            },
+            {
+              label: 'Consumer data',
+              value:
+                'AI Data Retention is enabled by default for Free, Pro, and Max and can be turned off; opting out only affects data collected after that date.',
+            },
+            {
+              label: 'Enterprise data',
+              value:
+                'Enterprise query data is not used for model training; uploaded files are generally retained for seven days and provider agreements require zero retention and training.',
+            },
+          ],
+          sources: [
+            {
+              label: 'Plan capability comparison',
+              href: 'https://www.perplexity.ai/help-center/en/articles/11187416-which-perplexity-subscription-plan-is-right-for-you',
+            },
+            {
+              label: 'Data collection and opt-out',
+              href: 'https://www.perplexity.ai/help-center/en/articles/11564572-data-collection-at-perplexity',
+            },
+          ],
+        };
+  }
+
+  if (key === 'n8n') {
+    return isChinese
+      ? {
+          label: '官方事实快照',
+          title: 'Execution 计费、部署方式和数据位置',
+          summary: '以下信息来自 n8n 官方定价与安全文档；价格按年付口径展示，执行额度和功能可能变化。',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: 'Cloud 套餐',
+              value:
+                '年付时 Starter €20/月含 2,500 executions，Pro €50/月含 10,000；所有套餐包含不限用户、工作流和步骤。',
+            },
+            {
+              label: '计费单位',
+              value:
+                '一次 execution 指整个工作流从开始到结束的一次运行，无论包含多少节点、步骤或处理多少数据，均计为一次。',
+            },
+            {
+              label: '部署与数据',
+              value:
+                'n8n Cloud 数据存储在德国法兰克福；自托管数据位置由用户决定，Community Edition 可从 GitHub 自行部署。',
+            },
+          ],
+          sources: [
+            { label: 'n8n 官方定价', href: 'https://n8n.io/pricing/' },
+            { label: 'Execution 计费说明', href: 'https://support.n8n.io/article/updated-pricing-model-august-2025' },
+            { label: '自托管安全审计', href: 'https://docs.n8n.io/hosting/securing/security-audit/' },
+          ],
+        }
+      : {
+          label: 'Official fact snapshot',
+          title: 'Execution billing, deployment choice, and data location',
+          summary:
+            'These facts come from n8n pricing and security documentation. Prices use annual-billing rates, and execution allowances and features can change.',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: 'Cloud plans',
+              value:
+                'On annual billing, Starter is €20/mo for 2,500 executions and Pro is €50/mo for 10,000; plans include unlimited users, workflows, and steps.',
+            },
+            {
+              label: 'Billing unit',
+              value:
+                'One execution is one complete workflow run, regardless of how many nodes or steps it contains or how much data it processes.',
+            },
+            {
+              label: 'Deployment and data',
+              value:
+                'n8n Cloud stores data in Frankfurt, Germany; self-hosted data location is user-controlled, and Community Edition is available for self-deployment from GitHub.',
+            },
+          ],
+          sources: [
+            { label: 'Official n8n pricing', href: 'https://n8n.io/pricing/' },
+            {
+              label: 'Execution pricing model',
+              href: 'https://support.n8n.io/article/updated-pricing-model-august-2025',
+            },
+            { label: 'Self-hosted security audit', href: 'https://docs.n8n.io/hosting/securing/security-audit/' },
+          ],
+        };
+  }
+
   return null;
 }
 

@@ -34,6 +34,9 @@
 - `chatgpt`
 - `claude`
 - `cursor`
+- `pipedream`
+- `perplexity`
+- `n8n`
 
 快照必须同时包含：
 
