@@ -37,6 +37,9 @@
 - `pipedream`
 - `perplexity`
 - `n8n`
+- `make`
+- `openrouter`
+- `grammarly`
 
 快照必须同时包含：
 

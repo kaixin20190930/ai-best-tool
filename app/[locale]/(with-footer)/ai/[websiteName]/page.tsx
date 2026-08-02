@@ -2163,6 +2163,193 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
         };
   }
 
+  if (key === 'make') {
+    return isChinese
+      ? {
+          label: '官方事实快照',
+          title: 'Credits、AI 双重成本和数据区域',
+          summary:
+            '以下信息来自 Make 官方帮助中心；credits、模型转换率和套餐上限可能变化，应按场景运行记录核算真实成本。',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: '基础计费',
+              value: 'Credits 已取代 operations 成为计费单位；大多数非 AI 模块默认一次 operation 消耗 1 credit。',
+            },
+            {
+              label: 'AI 成本边界',
+              value:
+                '使用自有 AI provider connection 时，向 Make 支付 operation credits，同时向模型商支付 tokens；内置或自动连接可能按 tokens、operations 和其他因素动态计费。',
+            },
+            {
+              label: '数据区域',
+              value: '创建 organization 时可选美国或欧盟数据中心；该位置决定数据存储与处理区域，创建后不能更改。',
+            },
+          ],
+          sources: [
+            { label: 'Credits 规则', href: 'https://help.make.com/credits' },
+            { label: '功能 Credit 消耗', href: 'https://help.make.com/how-features-use-credits' },
+            { label: 'Organization 与数据区域', href: 'https://help.make.com/organizations' },
+          ],
+        }
+      : {
+          label: 'Official fact snapshot',
+          title: 'Credits, dual AI costs, and data region',
+          summary:
+            'These facts come from the Make help center. Credits, model conversion rates, and plan limits can change, so calculate real cost from scenario run records.',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: 'Base billing',
+              value:
+                'Credits replaced operations as the billing unit; most non-AI modules use one credit for each operation by default.',
+            },
+            {
+              label: 'AI cost boundary',
+              value:
+                'With a custom AI-provider connection, users pay Make operation credits and separately pay the provider for tokens; built-in or automatic connections can bill dynamically by tokens, operations, and other factors.',
+            },
+            {
+              label: 'Data region',
+              value:
+                'An organization selects a US or EU data center at creation; this determines where its data is stored and processed and cannot be changed later.',
+            },
+          ],
+          sources: [
+            { label: 'Credit rules', href: 'https://help.make.com/credits' },
+            { label: 'Feature credit usage', href: 'https://help.make.com/how-features-use-credits' },
+            { label: 'Organizations and data region', href: 'https://help.make.com/organizations' },
+          ],
+        };
+  }
+
+  if (key === 'openrouter') {
+    return isChinese
+      ? {
+          label: '官方事实快照',
+          title: '模型透传价格、充值费用和日志边界',
+          summary:
+            '以下信息来自 OpenRouter 官方 FAQ；模型价格、provider 路由和免费模型限速会变化，生产调用应固定隐私与成本策略。',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: '价格结构',
+              value:
+                '模型推理按 provider 公布价格透传、不额外加价；购买 credits 收取 5.5% 费用且最低 $0.80，crypto 充值费为 5%。',
+            },
+            {
+              label: '免费与 BYOK',
+              value:
+                '未购买至少 $10 credits 时，免费模型合计通常限制为每天 50 次；BYOK 每月前 100 万请求免费，之后收取相应模型 OpenRouter 成本的 5%。',
+            },
+            {
+              label: '隐私边界',
+              value:
+                '默认仅记录时间、模型和 token 数等 metadata，不记录 prompt/completion；请求仍会发送给模型 provider，隐私路由不满足设置时会直接报错。',
+            },
+          ],
+          sources: [{ label: 'OpenRouter 官方 FAQ', href: 'https://openrouter.ai/docs/faq' }],
+        }
+      : {
+          label: 'Official fact snapshot',
+          title: 'Pass-through model pricing, credit fees, and logging boundaries',
+          summary:
+            'These facts come from the OpenRouter FAQ. Model prices, provider routing, and free-model limits change, so production calls should fix explicit privacy and cost policies.',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: 'Pricing structure',
+              value:
+                'Inference uses provider list prices without markup; credit purchases carry a 5.5% fee with a $0.80 minimum, while crypto payments carry a 5% fee.',
+            },
+            {
+              label: 'Free and BYOK',
+              value:
+                'Without at least $10 of purchased credits, free models are generally limited to 50 requests per day total; the first one million BYOK requests per month are free, followed by a 5% fee.',
+            },
+            {
+              label: 'Privacy boundary',
+              value:
+                'By default OpenRouter logs metadata rather than prompts or completions; requests still go to a model provider, and calls fail when available routes cannot meet account privacy settings.',
+            },
+          ],
+          sources: [{ label: 'Official OpenRouter FAQ', href: 'https://openrouter.ai/docs/faq' }],
+        };
+  }
+
+  if (key === 'grammarly') {
+    return isChinese
+      ? {
+          label: '官方事实快照',
+          title: 'Pro 价格、生成提示额度和内容控制',
+          summary:
+            '以下信息来自 Grammarly 官方支持与 Trust Center；产品正并入 Superhuman 套件，购买前应核对当前结账页与账号类型。',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: 'Pro 价格',
+              value: 'Grammarly Pro 为 $30/月、$60/季度或 $144/年（平均 $12/月），最多支持 149 个席位。',
+            },
+            {
+              label: '生成式提示',
+              value:
+                'Free 每月 100 prompts，Premium 每月 1,000，Pro/Plus/Business/Education 每月 2,000；额度用尽不影响普通下划线写作建议。',
+            },
+            {
+              label: '内容与训练',
+              value:
+                'Grammarly 不出售用户内容；可关闭 Product Improvement and Training。保存在 Grammarly Editor 的文档会持续存储到用户删除文档或账号。',
+            },
+          ],
+          sources: [
+            {
+              label: 'Grammarly Pro 价格',
+              href: 'https://support.grammarly.com/hc/en-us/articles/115000090011-How-much-does-Grammarly-Pro-cost',
+            },
+            {
+              label: '生成式提示额度',
+              href: 'https://support.grammarly.com/hc/en-us/articles/17776038294285-Error-message-You-re-out-of-prompts',
+            },
+            { label: 'Trust Center', href: 'https://www.grammarly.com/trust' },
+          ],
+        }
+      : {
+          label: 'Official fact snapshot',
+          title: 'Pro pricing, generative prompt limits, and content controls',
+          summary:
+            'These facts come from Grammarly support and its Trust Center. The product is joining the Superhuman suite, so verify the current checkout and account type before buying.',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: 'Pro pricing',
+              value:
+                'Grammarly Pro costs $30 monthly, $60 quarterly, or $144 annually ($12 monthly average) and supports up to 149 seats.',
+            },
+            {
+              label: 'Generative prompts',
+              value:
+                'Free includes 100 prompts monthly, Premium 1,000, and Pro, Plus, Business, and Education 2,000; exhausting prompts does not disable standard underlined writing suggestions.',
+            },
+            {
+              label: 'Content and training',
+              value:
+                'Grammarly does not sell user content and offers a Product Improvement and Training opt-out; Editor documents remain stored until the document or account is deleted.',
+            },
+          ],
+          sources: [
+            {
+              label: 'Grammarly Pro pricing',
+              href: 'https://support.grammarly.com/hc/en-us/articles/115000090011-How-much-does-Grammarly-Pro-cost',
+            },
+            {
+              label: 'Generative prompt limits',
+              href: 'https://support.grammarly.com/hc/en-us/articles/17776038294285-Error-message-You-re-out-of-prompts',
+            },
+            { label: 'Trust Center', href: 'https://www.grammarly.com/trust' },
+          ],
+        };
+  }
+
   return null;
 }
 

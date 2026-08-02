@@ -21,6 +21,7 @@
 - 2026-08-03：完成第三批 GSC 机会工具的官方证据增强。Notta 页面补转录分钟、语言覆盖和翻译配额；Runway 页面补 credits、模型成本、商业权利和 Web/API 账户边界；DefiLlama 页面补开源 adapter、TVL 纳入规则与价格波动误读风险。官方证据严格门禁由 4 页扩到 7 页，继续以增强已有页面替代无数据支撑的批量扩页。
 - 2026-08-03：完成第四批核心工具官方证据增强。ChatGPT 页面补个人与组织套餐边界、训练开关和 Temporary Chat；Claude 页面补个人套餐价格、动态用量因素和数据导出；Cursor 页面补套餐内 API usage、按量超额与 Privacy Mode 例外。官方证据严格门禁由 7 页扩到 10 页，继续禁止无可靠官方来源的 AI 推断式事实。
 - 2026-08-03：完成第五批核心工具官方证据增强。Pipedream 页面补 credits、预算上限、降级停用和数据保留；Perplexity 页面补搜索额度、消费者训练退出与 Enterprise 数据边界；n8n 页面补 execution 计费、Cloud/自托管选择与数据位置。严格审计新增 Pipedream、Perplexity、n8n 路径，官方证据门禁由 10 页扩到 13 页。
+- 2026-08-03：完成第六批核心工具官方证据增强。Make 页面补 credits 新计费、AI 双重成本和不可变数据区域；OpenRouter 页面补模型透传价、充值/BYOK 费用和 provider 日志边界；Grammarly 页面补 Pro 价格、生成式提示额度和训练退出。严格审计扩到 33 个核心页面、16 个官方证据页。
 
 - 2026-08-02：确认分发数据边界：具体目标站 registry、规则和快照继续保存在 Neon，用户项目机会、任务、材料包、提醒和归因保存在 Supabase；两边通过稳定 target UUID 和 channel key 映射，禁止创建跨数据库外键。Neon 暂时不可用时推荐区降级为空，不阻断原有项目和任务工作台。
 
