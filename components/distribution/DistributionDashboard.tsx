@@ -562,7 +562,7 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
               <div className='flex flex-col justify-between gap-2 sm:flex-row sm:items-start'>
                 <div>
                   <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>AI Best Tool connection</div>
-                  <h3 className='mt-1 text-base font-bold text-slate-950'>Reuse an owned or claimed listing</h3>
+                  <h3 className='mt-1 text-base font-bold text-slate-950'>Reuse a linked AI Best Tool listing</h3>
                   <p className='mt-1 text-xs leading-5 text-slate-600'>
                     Import name, website, description, category, pricing context, logo, and screenshots. Imported
                     facts remain unconfirmed until you review and save this profile.
@@ -616,8 +616,8 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
             </div>
           ) : (
             <div className='mt-4 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4 text-xs leading-5 text-slate-600'>
-              No owned or claimed AI Best Tool listing was found for this account. Continue manually, or claim the
-              listing first so future profile updates can stay connected.
+              No reusable AI Best Tool listing matches this project. Submitted listings are matched to their account;
+              platform admins can also connect an exact-domain listing. You can continue manually.
             </div>
           )}
           <form action={updateDistributionProjectProfile} className='mt-4 grid gap-4 sm:grid-cols-2'>

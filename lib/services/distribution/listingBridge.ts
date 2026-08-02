@@ -20,7 +20,7 @@ export interface DistributionListingCandidate {
   thumbnailUrl: string | null;
   screenshots: string[];
   productType: DistributionProductType;
-  ownershipSource: 'submitted' | 'claimed' | 'owner_email';
+  ownershipSource: 'submitted' | 'submission_email' | 'admin_domain';
   exactDomainMatch: boolean;
 }
 
@@ -32,6 +32,24 @@ export function normalizeDistributionDomain(value: string | null | undefined): s
   } catch {
     return '';
   }
+}
+
+export function canReuseDistributionListing(input: {
+  isAdmin: boolean;
+  userId: string;
+  email?: string | null;
+  projectUrl?: string | null;
+  listingUrl?: string | null;
+  submittedBy?: string | null;
+  submittedByEmail?: string | null;
+}): boolean {
+  const projectDomain = normalizeDistributionDomain(input.projectUrl);
+  const listingDomain = normalizeDistributionDomain(input.listingUrl);
+  if (input.isAdmin) return Boolean(projectDomain) && projectDomain === listingDomain;
+
+  const email = String(input.email || '').trim().toLowerCase();
+  const submittedByEmail = String(input.submittedByEmail || '').trim().toLowerCase();
+  return input.submittedBy === input.userId || (Boolean(email) && email === submittedByEmail);
 }
 
 export function inferDistributionProductType(input: {

@@ -16,6 +16,7 @@ import {
   type DistributionTargetRequirementInput,
 } from '@/lib/services/distribution/packageComposer';
 import {
+  canReuseDistributionListing,
   inferDistributionProductType,
   normalizeDistributionDomain,
   type DistributionListingCandidate,
@@ -37,6 +38,7 @@ import {
   type DistributionTaskStatus,
 } from '@/lib/services/distribution/taskStateMachine';
 import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
 
 export interface DistributionDashboard {
   workspace: { id: string; name: string; kind: string } | null;
@@ -208,71 +210,64 @@ async function loadOwnedCatalogListings(input: {
   userId: string;
   email: string | null | undefined;
   projectUrl?: string | null;
+  isAdmin: boolean;
 }): Promise<DistributionListingCandidate[]> {
+  const supabase = createAdminClient();
   const email = String(input.email || '').trim().toLowerCase();
-  const rows = await queryDatabase<{
-    id: string;
-    name: string;
-    title: Record<string, unknown> | null;
-    content: Record<string, unknown> | null;
-    url: string;
-    image_url: string | null;
-    thumbnail_url: string | null;
-    category_name: Record<string, unknown> | null;
-    tags: string[] | null;
-    pricing: string | null;
-    screenshots: string[] | null;
-    submitted_by: string | null;
-    owner_email: string | null;
-    claim_status: string | null;
-    has_claim: boolean;
-  }>(
-    `
-      select distinct
-        tool.id::text as id, tool.name, tool.title, tool.content, tool.url,
-        tool.image_url, tool.thumbnail_url, category.name as category_name,
-        tool.tags, tool.pricing, tool.screenshots, tool.submitted_by::text,
-        tool.owner_email, tool.claim_status,
-        exists (
-          select 1 from tool_claims claim
-          where claim.tool_id = tool.id
-            and claim.status = 'claimed'
-            and lower(claim.email) = $2
-        ) as has_claim
-      from tools tool
-      left join categories category on category.id = tool.category_id
-      where tool.status in ('published', 'pending')
-        and (
-          tool.submitted_by::text = $1
-          or ($2 <> '' and tool.claim_status = 'claimed' and lower(coalesce(tool.owner_email, '')) = $2)
-          or ($2 <> '' and exists (
-            select 1 from tool_claims claim
-            where claim.tool_id = tool.id
-              and claim.status = 'claimed'
-              and lower(claim.email) = $2
-          ))
-        )
-      order by tool.name asc
-      limit 50
-    `,
-    [input.userId, email],
-  ).catch((error) => {
-    console.error('Owned catalog listings unavailable:', error);
-    return [];
-  });
   const projectDomain = normalizeDistributionDomain(input.projectUrl);
+  const selectFields =
+    'id, name, title, content, url, image_url, thumbnail_url, tags, pricing, screenshots, submitted_by, features, categories(name)';
+  const queries = input.isAdmin
+    ? projectDomain
+      ? [
+          supabase
+            .from('tools')
+            .select(selectFields)
+            .in('status', ['published', 'pending'])
+            .ilike('url', `%${projectDomain}%`)
+            .limit(20),
+        ]
+      : []
+    : [
+        supabase
+          .from('tools')
+          .select(selectFields)
+          .in('status', ['published', 'pending'])
+          .eq('submitted_by', input.userId)
+          .limit(50),
+        ...(email
+          ? [
+              supabase
+                .from('tools')
+                .select(selectFields)
+                .in('status', ['published', 'pending'])
+                .contains('features', { submission: { submittedByEmail: email } })
+                .limit(50),
+            ]
+          : []),
+      ];
+  const queryResults = await Promise.all(queries);
+  const failedQueries = queryResults.filter((result) => result.error);
+  for (const failedQuery of failedQueries) console.error('Catalog listing query unavailable:', failedQuery.error);
+  const rowById = new Map<string, any>();
+  for (const result of queryResults) {
+    for (const row of result.data || []) rowById.set(String(row.id), row);
+  }
+  const rows = Array.from(rowById.values());
   return rows
     .map((row) => {
       const description = localizedCatalogText(row.content);
       const name = localizedCatalogText(row.title) || row.name;
-      const categoryName = localizedCatalogText(row.category_name) || null;
+      const categoryRow = Array.isArray(row.categories) ? row.categories[0] || null : row.categories;
+      const categoryName = localizedCatalogText(categoryRow?.name) || null;
       const tags = Array.isArray(row.tags) ? row.tags.map(String) : [];
+      const submittedByEmail = String(row.features?.submission?.submittedByEmail || '').trim().toLowerCase();
       const ownershipSource: DistributionListingCandidate['ownershipSource'] =
         row.submitted_by === input.userId
           ? 'submitted'
-          : row.has_claim
-            ? 'claimed'
-            : 'owner_email';
+          : email && submittedByEmail === email
+            ? 'submission_email'
+            : 'admin_domain';
       return {
         id: row.id,
         name,
@@ -293,8 +288,19 @@ async function loadOwnedCatalogListings(input: {
         ownershipSource,
         exactDomainMatch:
           Boolean(projectDomain) && normalizeDistributionDomain(row.url) === projectDomain,
+        canReuse: canReuseDistributionListing({
+          isAdmin: input.isAdmin,
+          userId: input.userId,
+          email,
+          projectUrl: input.projectUrl,
+          listingUrl: row.url,
+          submittedBy: row.submitted_by,
+          submittedByEmail,
+        }),
       };
     })
+    .filter((listing) => listing.canReuse)
+    .map(({ canReuse: _canReuse, ...listing }) => listing)
     .sort((a, b) => Number(b.exactDomainMatch) - Number(a.exactDomainMatch) || a.name.localeCompare(b.name));
 }
 
@@ -577,7 +583,12 @@ export async function getDistributionDashboard(
         .eq('project_id', project.id)
         .eq('owner_id', user.id)
         .order('updated_at', { ascending: false }),
-      loadOwnedCatalogListings({ userId: user.id, email: user.email, projectUrl: project.website_url }),
+      loadOwnedCatalogListings({
+        userId: user.id,
+        email: user.email,
+        projectUrl: project.website_url,
+        isAdmin: isAdminUser(user),
+      }),
     ]);
     if (projectTargetError || projectAssetError || projectPackageError)
       throw new Error(
@@ -1123,10 +1134,11 @@ export async function importDistributionCatalogListing(
       userId: user.id,
       email: user.email,
       projectUrl: project.website_url,
+      isAdmin: isAdminUser(user),
     });
     const listing = ownedListings.find((candidate) => candidate.id === toolId);
     if (!listing) {
-      return { success: false, error: 'This listing is not submitted by or claimed for the current account.' };
+      return { success: false, error: 'This listing is not owned by this account or does not match the project domain.' };
     }
     const projectDomain = normalizeDistributionDomain(project.website_url);
     const listingDomain = normalizeDistributionDomain(listing.websiteUrl);

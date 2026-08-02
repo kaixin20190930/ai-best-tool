@@ -6,6 +6,7 @@ import {
 } from '@/lib/services/distribution/targetRecommendation';
 import { composeDistributionPackage } from '@/lib/services/distribution/packageComposer';
 import {
+  canReuseDistributionListing,
   getDistributionAssetGuidance,
   inferDistributionProductType,
   normalizeDistributionDomain,
@@ -177,6 +178,66 @@ const readyPackage = composeDistributionPackage({
 assert.equal(readyPackage.ready, true, 'A complete base package should be ready for human submission.');
 
 assert.equal(normalizeDistributionDomain('https://www.Moxion.ai/path'), 'moxion.ai');
+assert.equal(
+  canReuseDistributionListing({
+    isAdmin: true,
+    userId: 'admin-user',
+    projectUrl: 'https://moxion.ai',
+    listingUrl: 'https://www.moxion.ai/',
+    submittedBy: 'another-user',
+  }),
+  true,
+  'Admins may connect a listing only when its official domain exactly matches the project.',
+);
+assert.equal(
+  canReuseDistributionListing({
+    isAdmin: true,
+    userId: 'admin-user',
+    projectUrl: 'https://moxion.ai',
+    listingUrl: 'https://example.com',
+    submittedBy: 'another-user',
+  }),
+  false,
+  'Admin access must not bypass the exact-domain requirement.',
+);
+assert.equal(
+  canReuseDistributionListing({
+    isAdmin: false,
+    userId: 'owner-user',
+    email: 'owner@example.com',
+    projectUrl: 'https://moxion.ai',
+    listingUrl: 'https://moxion.ai',
+    submittedBy: 'owner-user',
+  }),
+  true,
+  'The original submitter may reuse their listing.',
+);
+assert.equal(
+  canReuseDistributionListing({
+    isAdmin: false,
+    userId: 'owner-user',
+    email: 'Owner@Example.com',
+    projectUrl: 'https://moxion.ai',
+    listingUrl: 'https://moxion.ai',
+    submittedBy: 'another-user',
+    submittedByEmail: 'owner@example.com',
+  }),
+  true,
+  'A verified submission email match may reuse the listing.',
+);
+assert.equal(
+  canReuseDistributionListing({
+    isAdmin: false,
+    userId: 'unrelated-user',
+    email: 'unrelated@example.com',
+    projectUrl: 'https://moxion.ai',
+    listingUrl: 'https://moxion.ai',
+    submittedBy: 'another-user',
+    submittedByEmail: 'owner@example.com',
+  }),
+  false,
+  'An unrelated account cannot import a listing even when the project domain matches.',
+);
 assert.equal(
   inferDistributionProductType({ categoryName: 'Developer Tools', tags: ['api', 'sdk'] }),
   'developer_api',
