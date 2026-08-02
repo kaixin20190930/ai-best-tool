@@ -195,6 +195,15 @@ function normalize(value: FormDataEntryValue | null): string {
   return typeof value === 'string' ? value.trim() : '';
 }
 
+function getDistributionActionError(error: unknown, fallback: string): string {
+  if (error instanceof Error && error.message) return error.message;
+  if (error && typeof error === 'object' && 'message' in error) {
+    const message = (error as { message?: unknown }).message;
+    if (typeof message === 'string' && message.trim()) return message.trim();
+  }
+  return fallback;
+}
+
 function localizedCatalogText(value: unknown): string {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return '';
   const record = value as Record<string, unknown>;
@@ -1167,6 +1176,9 @@ export async function importDistributionCatalogListing(
       },
       fieldsRequireOwnerConfirmation: ['name', 'websiteUrl', 'description', 'pricing'],
     };
+    // The session query above proves project ownership. Shared intelligence records are
+    // maintained server-side so their stricter RLS cannot break an authorized import.
+    const adminSupabase = createAdminClient();
     const { error: updateError } = await supabase
       .from('distribution_projects')
       .update({
@@ -1185,14 +1197,14 @@ export async function importDistributionCatalogListing(
       .eq('owner_id', user.id);
     if (updateError) throw updateError;
 
-    const { data: existingIntelligenceProfile, error: existingProfileError } = await supabase
+    const { data: existingIntelligenceProfile, error: existingProfileError } = await adminSupabase
       .from('product_intelligence_profiles')
       .select('id, metadata')
       .eq('owner_type', 'distribution_project')
       .eq('owner_id', projectId)
       .maybeSingle();
     if (existingProfileError) throw existingProfileError;
-    const { data: intelligenceProfile, error: profileError } = await supabase
+    const { data: intelligenceProfile, error: profileError } = await adminSupabase
       .from('product_intelligence_profiles')
       .upsert(
         {
@@ -1212,7 +1224,7 @@ export async function importDistributionCatalogListing(
       .select('id')
       .single();
     if (profileError || !intelligenceProfile) throw profileError || new Error('Unable to link product intelligence.');
-    const { error: profileLinkError } = await supabase
+    const { error: profileLinkError } = await adminSupabase
       .from('distribution_projects')
       .update({ intelligence_profile_id: intelligenceProfile.id })
       .eq('id', projectId)
@@ -1233,7 +1245,7 @@ export async function importDistributionCatalogListing(
       })),
     ].filter((asset): asset is { assetType: string; name: string; url: string } => Boolean(asset?.url));
     if (importedAssets.length > 0) {
-      const { error: assetError } = await supabase.from('distribution_project_assets').upsert(
+      const { error: assetError } = await adminSupabase.from('distribution_project_assets').upsert(
         importedAssets.map((asset) => ({
           project_id: projectId,
           owner_id: user.id,
@@ -1252,7 +1264,7 @@ export async function importDistributionCatalogListing(
     return { success: true, importedAssets: importedAssets.length };
   } catch (error) {
     console.error('Import distribution catalog listing error:', error);
-    return { success: false, error: error instanceof Error ? error.message : 'Unable to import listing.' };
+    return { success: false, error: getDistributionActionError(error, 'Unable to import listing.') };
   }
 }
 
@@ -1314,7 +1326,8 @@ export async function updateDistributionProjectProfile(
     if (error) throw error;
     if (!project) return { success: false, error: 'Project not found or access denied.' };
     if (project.intelligence_profile_id) {
-      const { error: intelligenceError } = await supabase
+      const adminSupabase = createAdminClient();
+      const { error: intelligenceError } = await adminSupabase
         .from('product_intelligence_profiles')
         .update({
           product_name: name,
@@ -1412,7 +1425,8 @@ export async function importDistributionIntelligenceAssets(
     if (!project) return { success: false, error: 'Project not found or access denied.' };
     let profileId = project.intelligence_profile_id || null;
     if (!profileId) {
-      const { data: profile, error: profileError } = await supabase
+      const adminSupabase = createAdminClient();
+      const { data: profile, error: profileError } = await adminSupabase
         .from('product_intelligence_profiles')
         .select('id')
         .eq('owner_type', 'distribution_project')
@@ -1422,7 +1436,8 @@ export async function importDistributionIntelligenceAssets(
       profileId = profile?.id || null;
     }
     if (!profileId) return { success: false, error: 'No Product Intelligence profile is linked to this project yet.' };
-    const { data: intelligenceAssets, error: assetError } = await supabase
+    const adminSupabase = createAdminClient();
+    const { data: intelligenceAssets, error: assetError } = await adminSupabase
       .from('product_intelligence_assets')
       .select('id, asset_type, source_url, stored_url, width, height, evidence_status, is_placeholder')
       .eq('profile_id', profileId)
