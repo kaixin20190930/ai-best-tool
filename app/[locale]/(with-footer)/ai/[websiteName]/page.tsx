@@ -1433,6 +1433,131 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
         };
   }
 
+  if (key === 'the-graph') {
+    return isChinese
+      ? {
+          label: '官方事实快照',
+          title: '查询额度、生产访问和新鲜度检查',
+          summary: '以下信息来自 The Graph 官方文档；查询价格和网络支持范围可能变化，上线前应复核当前套餐与文档。',
+          checkedAt: '2026-08-03',
+          facts: [
+            { label: '免费额度', value: '每月前 100,000 次查询免费；官方价格页列出的超额价格为每 100,000 次查询 $2。' },
+            {
+              label: '生产访问',
+              value:
+                '已发布的 subgraph 使用唯一查询 URL，并通过 API key 访问；超过免费额度后进入按量计费的 Growth Plan。',
+            },
+            {
+              label: '新鲜度边界',
+              value:
+                'GraphQL 的 _meta 字段可返回区块、时间戳、部署与索引错误，生产使用时应据此检查数据新鲜度和完整性。',
+            },
+          ],
+          sources: [
+            {
+              label: 'Studio 与套餐说明',
+              href: 'https://thegraph.com/docs/en/subgraphs/providers/subgraph-studio/introduction/',
+            },
+            { label: '官方查询价格', href: 'https://thegraph.com/studio-pricing/' },
+            { label: '查询与 _meta 文档', href: 'https://thegraph.com/docs/en/subgraphs/querying/graphql-api/' },
+          ],
+        }
+      : {
+          label: 'Official fact snapshot',
+          title: 'Query allowance, production access, and freshness checks',
+          summary:
+            'These facts come from The Graph documentation. Recheck current plans and network support before production use because pricing and coverage can change.',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: 'Free allowance',
+              value:
+                'The first 100,000 monthly queries are free; the official pricing page lists $2 per additional 100,000 queries.',
+            },
+            {
+              label: 'Production access',
+              value:
+                'Published subgraphs use a unique query URL and API key; usage beyond the free allowance moves to the usage-based Growth Plan.',
+            },
+            {
+              label: 'Freshness boundary',
+              value:
+                'The GraphQL _meta field can expose block, timestamp, deployment, and indexing-error data for checking freshness and integrity.',
+            },
+          ],
+          sources: [
+            {
+              label: 'Studio and plan documentation',
+              href: 'https://thegraph.com/docs/en/subgraphs/providers/subgraph-studio/introduction/',
+            },
+            { label: 'Official query pricing', href: 'https://thegraph.com/studio-pricing/' },
+            {
+              label: 'Query and _meta documentation',
+              href: 'https://thegraph.com/docs/en/subgraphs/querying/graphql-api/',
+            },
+          ],
+        };
+  }
+
+  if (key === 'dune') {
+    return isChinese
+      ? {
+          label: '官方事实快照',
+          title: 'Credits、查询成本和数据刷新边界',
+          summary: '以下信息来自 Dune 官方文档；credits、套餐价格与数据刷新频率可能变化，使用前应复核当前账号设置。',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: '免费与付费',
+              value: 'Free 每月包含 2,500 credits；Analyst 为 $75/月，Plus 为 $399/月，复杂查询会消耗更多 credits。',
+            },
+            {
+              label: '成本控制',
+              value: '查询按实际计算资源计费，可设置单次查询 cost cap 和月度额外 credits 上限；未使用 credits 不结转。',
+            },
+            {
+              label: '新鲜度边界',
+              value:
+                '原始数据受链出块和重组风险影响；decoded 数据通常在原始数据进入后 15–60 秒完成，curated 表通常每小时刷新。',
+            },
+          ],
+          sources: [
+            { label: 'Credits 与套餐', href: 'https://docs.dune.com/resources/credits-billing/how-credits-work' },
+            { label: '数据新鲜度', href: 'https://docs.dune.com/data-catalog/data-freshness' },
+            { label: '查询调度', href: 'https://docs.dune.com/web-app/query-editor/query-scheduler' },
+          ],
+        }
+      : {
+          label: 'Official fact snapshot',
+          title: 'Credits, query cost, and data-refresh boundaries',
+          summary:
+            'These facts come from Dune documentation. Recheck account settings before use because credits, plan prices, and refresh timing can change.',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: 'Free and paid plans',
+              value:
+                'Free includes 2,500 monthly credits; Analyst is $75/mo and Plus is $399/mo, while more complex queries consume more credits.',
+            },
+            {
+              label: 'Cost controls',
+              value:
+                'Queries are charged by actual compute use; per-query cost caps and monthly extra-credit limits are available, and unused credits do not roll over.',
+            },
+            {
+              label: 'Freshness boundary',
+              value:
+                'Raw-data timing depends on block production and reorg risk; decoded data typically follows ingestion by 15–60 seconds, while curated tables usually refresh hourly.',
+            },
+          ],
+          sources: [
+            { label: 'Credits and plans', href: 'https://docs.dune.com/resources/credits-billing/how-credits-work' },
+            { label: 'Data freshness', href: 'https://docs.dune.com/data-catalog/data-freshness' },
+            { label: 'Query scheduling', href: 'https://docs.dune.com/web-app/query-editor/query-scheduler' },
+          ],
+        };
+  }
+
   return null;
 }
 

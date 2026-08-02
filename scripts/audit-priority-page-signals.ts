@@ -3,7 +3,7 @@ import path from 'node:path';
 
 const baseUrl = (process.env.SEO_BASE_URL || 'https://aibesttool.com').replace(/\/$/, '');
 const strict = process.argv.includes('--strict');
-const officialEvidencePaths = new Set(['/ai/lindy', '/ai/fathom']);
+const officialEvidencePaths = new Set(['/ai/lindy', '/ai/fathom', '/ai/the-graph', '/ai/dune']);
 
 const priorityPaths = [
   '/',
@@ -115,7 +115,7 @@ function render(rows: AuditRow[]) {
     (row) => officialEvidencePaths.has(row.path) && row.officialEvidence,
   ).length;
 
-  return `# 核心页面真实信号审计\n\n更新时间：${getReportDate()}\n\n审计地址：\`${baseUrl}\`\n\n这份报告只读取公开页面 HTML，不修改数据库，也不把模板文案当作真实用户证据。\n\n## 汇总\n\n- 核心页面：${rows.length}\n- HTTP 正常：${passed.length}\n- canonical：${count('canonical')}/${passed.length}\n- meta description：${count('description')}/${passed.length}\n- evidence / freshness 信号：${count('evidenceSignal')}/${passed.length}\n- 评论 / 认领 / 官网 / 比较动作信号：${count('actionSignal')}/${passed.length}\n- 指定机会页官方来源块：${officialEvidencePassed}/${officialEvidencePaths.size}\n\n## 页面明细\n\n| 页面 | HTTP | canonical | description | evidence / freshness | action signal | 官方来源块 | 错误 |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n${table}\n\n## 解读规则\n\n- HTTP、canonical、description 是技术底线；失败时优先修复。\n- evidence / freshness 只代表页面展示了验证口径，不代表已经有真实人工复核。\n- action signal 只代表页面提供评论、认领、官网或比较入口，不代表已有真实互动。\n- Lindy 与 Fathom 属于当前 GSC 机会页，必须显示带核查日期和官方链接的事实快照。\n- 真实评论、收藏、owner 认领和 editorial 复核仍需人工或用户产生，不能由脚本补齐。\n`;
+  return `# 核心页面真实信号审计\n\n更新时间：${getReportDate()}\n\n审计地址：\`${baseUrl}\`\n\n这份报告只读取公开页面 HTML，不修改数据库，也不把模板文案当作真实用户证据。\n\n## 汇总\n\n- 核心页面：${rows.length}\n- HTTP 正常：${passed.length}\n- canonical：${count('canonical')}/${passed.length}\n- meta description：${count('description')}/${passed.length}\n- evidence / freshness 信号：${count('evidenceSignal')}/${passed.length}\n- 评论 / 认领 / 官网 / 比较动作信号：${count('actionSignal')}/${passed.length}\n- 指定机会页官方来源块：${officialEvidencePassed}/${officialEvidencePaths.size}\n\n## 页面明细\n\n| 页面 | HTTP | canonical | description | evidence / freshness | action signal | 官方来源块 | 错误 |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n${table}\n\n## 解读规则\n\n- HTTP、canonical、description 是技术底线；失败时优先修复。\n- evidence / freshness 只代表页面展示了验证口径，不代表已经有真实人工复核。\n- action signal 只代表页面提供评论、认领、官网或比较入口，不代表已有真实互动。\n- Lindy、Fathom、The Graph 与 Dune 属于当前 GSC 机会页，必须显示带核查日期和官方链接的事实快照。\n- 真实评论、收藏、owner 认领和 editorial 复核仍需人工或用户产生，不能由脚本补齐。\n`;
 }
 
 async function main() {
