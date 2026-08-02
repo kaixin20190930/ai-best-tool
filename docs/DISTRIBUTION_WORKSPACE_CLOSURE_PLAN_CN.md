@@ -461,7 +461,7 @@ AI 生成的事实必须能回到产品证据；目标站规则必须显示来�
 | DC-001 | 冻结本方案和完成口径   | 无                     | Codex                   | 已完成                | 本文档成为分发收口唯一执行依据                                                                            |
 | DC-010 | 修复当前项目任务归属   | 无                     | Codex                   | 代码完成              | 当前 project ID 已贯穿新建任务和初始化队列；任务状态与结果写入增加 owner 校验，待生产迁移后真实多项目验收 |
 | DC-011 | 增量数据迁移           | DC-010                 | Codex；用户执行生产迁移 | 主迁移已执行 / 权限补丁待执行 | project-target、asset、package、event、reminder 已通过 17 项结构校验；需执行 execution history 增量 RLS 补丁 |
-| DC-012 | 产品初始化向导         | DC-011、PI-016         | Codex                   | 基础完成              | 可维护产品描述、目标、周容量、预算和事实确认；自动导入 Product Intelligence 与准备度仍待完成              |
+| DC-012 | 产品初始化向导         | DC-011、PI-016         | Codex                   | 已完成 / 待生产验收   | 可按所有权和官网域名导入 AI Best Tool 资料与候选素材，关联 Product Intelligence，并由 owner 最终确认      |
 | DC-013 | 产品素材中心           | DC-011、DC-012         | Codex                   | 已完成                | Logo、截图等可保存复用，可导入 Product Intelligence 素材，材料包会显示缺失素材                            |
 | DC-014 | 用户端具体目标站推荐   | DC-011、DT-016         | Codex                   | 代码完成 / 待迁移验收 | 已按目标、预算、入口可信度和人工障碍推荐具体网站，并显示费用、账号、验证码和审核要求                      |
 | DC-015 | 任务绑定具体目标站     | DC-011、DC-014         | Codex                   | 代码完成 / 待迁移验收 | 接受推荐会创建 project-target 和 target-bound task；历史渠道任务继续显示待绑定提示                        |

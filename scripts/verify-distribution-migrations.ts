@@ -57,7 +57,7 @@ const checks: MigrationCheck[] = [
     name: 'Distribution projects',
     table: 'distribution_projects',
     columns:
-      'id, workspace_id, owner_id, name, website_url, description, status, intelligence_profile_id, primary_goal, weekly_capacity, budget_preference, target_markets, onboarding_status, facts_confirmed_at',
+      'id, workspace_id, owner_id, name, website_url, description, status, intelligence_profile_id, primary_goal, weekly_capacity, budget_preference, target_markets, onboarding_status, facts_confirmed_at, source_tool_id, product_type, listing_imported_at, listing_snapshot_json',
     required: true,
   },
   {

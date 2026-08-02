@@ -16,6 +16,12 @@ import {
   type DistributionTargetRequirementInput,
 } from '@/lib/services/distribution/packageComposer';
 import {
+  inferDistributionProductType,
+  normalizeDistributionDomain,
+  type DistributionListingCandidate,
+  type DistributionProductType,
+} from '@/lib/services/distribution/listingBridge';
+import {
   buildDistributionChannelPriorityFeedback,
   scheduleDistributionTasks,
 } from '@/lib/services/distribution/scheduler';
@@ -47,6 +53,9 @@ export interface DistributionDashboard {
     budgetPreference: string | null;
     onboardingStatus: string;
     factsConfirmedAt: string | null;
+    productType: DistributionProductType | null;
+    sourceToolId: string | null;
+    listingImportedAt: string | null;
   } | null;
   channels: Array<{
     id: string;
@@ -153,6 +162,7 @@ export interface DistributionDashboard {
     status: string;
     verifiedAt: string | null;
   }>;
+  listingCandidates: DistributionListingCandidate[];
 }
 
 type AccessResult = { user: User; allowed: boolean; plan: 'pilot' | 'pro' | 'agency' };
@@ -181,6 +191,111 @@ function getProjectLimit(plan: 'pilot' | 'pro' | 'agency'): number {
 
 function normalize(value: FormDataEntryValue | null): string {
   return typeof value === 'string' ? value.trim() : '';
+}
+
+function localizedCatalogText(value: unknown): string {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return '';
+  const record = value as Record<string, unknown>;
+  for (const key of ['en', 'cn', 'zh']) {
+    const localizedValue = record[key];
+    if (typeof localizedValue === 'string' && localizedValue.trim()) return localizedValue.trim();
+  }
+  const first = Object.values(record).find((item) => typeof item === 'string' && item.trim());
+  return typeof first === 'string' ? first.trim() : '';
+}
+
+async function loadOwnedCatalogListings(input: {
+  userId: string;
+  email: string | null | undefined;
+  projectUrl?: string | null;
+}): Promise<DistributionListingCandidate[]> {
+  const email = String(input.email || '').trim().toLowerCase();
+  const rows = await queryDatabase<{
+    id: string;
+    name: string;
+    title: Record<string, unknown> | null;
+    content: Record<string, unknown> | null;
+    url: string;
+    image_url: string | null;
+    thumbnail_url: string | null;
+    category_name: Record<string, unknown> | null;
+    tags: string[] | null;
+    pricing: string | null;
+    screenshots: string[] | null;
+    submitted_by: string | null;
+    owner_email: string | null;
+    claim_status: string | null;
+    has_claim: boolean;
+  }>(
+    `
+      select distinct
+        tool.id::text as id, tool.name, tool.title, tool.content, tool.url,
+        tool.image_url, tool.thumbnail_url, category.name as category_name,
+        tool.tags, tool.pricing, tool.screenshots, tool.submitted_by::text,
+        tool.owner_email, tool.claim_status,
+        exists (
+          select 1 from tool_claims claim
+          where claim.tool_id = tool.id
+            and claim.status = 'claimed'
+            and lower(claim.email) = $2
+        ) as has_claim
+      from tools tool
+      left join categories category on category.id = tool.category_id
+      where tool.status in ('published', 'pending')
+        and (
+          tool.submitted_by::text = $1
+          or ($2 <> '' and tool.claim_status = 'claimed' and lower(coalesce(tool.owner_email, '')) = $2)
+          or ($2 <> '' and exists (
+            select 1 from tool_claims claim
+            where claim.tool_id = tool.id
+              and claim.status = 'claimed'
+              and lower(claim.email) = $2
+          ))
+        )
+      order by tool.name asc
+      limit 50
+    `,
+    [input.userId, email],
+  ).catch((error) => {
+    console.error('Owned catalog listings unavailable:', error);
+    return [];
+  });
+  const projectDomain = normalizeDistributionDomain(input.projectUrl);
+  return rows
+    .map((row) => {
+      const description = localizedCatalogText(row.content);
+      const name = localizedCatalogText(row.title) || row.name;
+      const categoryName = localizedCatalogText(row.category_name) || null;
+      const tags = Array.isArray(row.tags) ? row.tags.map(String) : [];
+      const ownershipSource: DistributionListingCandidate['ownershipSource'] =
+        row.submitted_by === input.userId
+          ? 'submitted'
+          : row.has_claim
+            ? 'claimed'
+            : 'owner_email';
+      return {
+        id: row.id,
+        name,
+        websiteUrl: row.url,
+        description,
+        categoryName,
+        tags,
+        pricing: row.pricing || null,
+        imageUrl: row.image_url || null,
+        thumbnailUrl: row.thumbnail_url || null,
+        screenshots: Array.isArray(row.screenshots) ? row.screenshots.map(String).filter(Boolean) : [],
+        productType: inferDistributionProductType({
+          categoryName,
+          tags,
+          name,
+          description,
+        }),
+        ownershipSource,
+        exactDomainMatch:
+          Boolean(projectDomain) && normalizeDistributionDomain(row.url) === projectDomain,
+      };
+    })
+    .sort((a, b) => Number(b.exactDomainMatch) - Number(a.exactDomainMatch) || a.name.localeCompare(b.name));
 }
 
 function dateAfterDays(days: number): string {
@@ -269,7 +384,7 @@ async function ensureDefaultProject(userId: string, email?: string, isOwnProject
   const { data: existingProject } = await supabase
     .from('distribution_projects')
     .select(
-      'id, name, website_url, description, workspace_id, primary_goal, weekly_capacity, budget_preference, onboarding_status, facts_confirmed_at',
+      'id, name, website_url, description, workspace_id, primary_goal, weekly_capacity, budget_preference, onboarding_status, facts_confirmed_at, source_tool_id, product_type, listing_imported_at',
     )
     .eq('owner_id', userId)
     .order('created_at', { ascending: true })
@@ -288,7 +403,7 @@ async function ensureDefaultProject(userId: string, email?: string, isOwnProject
         })
         .eq('id', existingProject.id)
         .select(
-          'id, name, website_url, description, workspace_id, primary_goal, weekly_capacity, budget_preference, onboarding_status, facts_confirmed_at',
+          'id, name, website_url, description, workspace_id, primary_goal, weekly_capacity, budget_preference, onboarding_status, facts_confirmed_at, source_tool_id, product_type, listing_imported_at',
         )
         .single();
 
@@ -323,7 +438,7 @@ async function ensureDefaultProject(userId: string, email?: string, isOwnProject
       description: 'Track human-led distribution, submissions, mentions, and follow-ups.',
     })
     .select(
-      'id, name, website_url, description, workspace_id, primary_goal, weekly_capacity, budget_preference, onboarding_status, facts_confirmed_at',
+      'id, name, website_url, description, workspace_id, primary_goal, weekly_capacity, budget_preference, onboarding_status, facts_confirmed_at, source_tool_id, product_type, listing_imported_at',
     )
     .single();
 
@@ -347,7 +462,7 @@ export async function getDistributionDashboard(
     const { data: projects, error: projectsError } = await supabase
       .from('distribution_projects')
       .select(
-        'id, name, website_url, description, status, workspace_id, primary_goal, weekly_capacity, budget_preference, onboarding_status, facts_confirmed_at',
+        'id, name, website_url, description, status, workspace_id, primary_goal, weekly_capacity, budget_preference, onboarding_status, facts_confirmed_at, source_tool_id, product_type, listing_imported_at',
       )
       .eq('owner_id', user.id)
       .order('created_at', { ascending: true });
@@ -408,6 +523,7 @@ export async function getDistributionDashboard(
       { data: projectTargetRows, error: projectTargetError },
       { data: projectAssetRows, error: projectAssetError },
       { data: projectPackageRows, error: projectPackageError },
+      listingCandidates,
     ] = await Promise.all([
       queryDatabase<{
         id: string;
@@ -461,6 +577,7 @@ export async function getDistributionDashboard(
         .eq('project_id', project.id)
         .eq('owner_id', user.id)
         .order('updated_at', { ascending: false }),
+      loadOwnedCatalogListings({ userId: user.id, email: user.email, projectUrl: project.website_url }),
     ]);
     if (projectTargetError || projectAssetError || projectPackageError)
       throw new Error(
@@ -493,7 +610,11 @@ export async function getDistributionDashboard(
             : Number(target.expected_review_days),
         confidence: Number(target.confidence || 0),
       })),
-      { primaryGoal: project.primary_goal || null, budgetPreference: project.budget_preference || null },
+      {
+        primaryGoal: project.primary_goal || null,
+        budgetPreference: project.budget_preference || null,
+        productType: (project.product_type as DistributionProductType | null) || null,
+      },
     ).map((target) => ({
       ...target,
       opportunityStatus: projectTargetByTargetId.get(target.id)?.opportunity_status || null,
@@ -606,6 +727,9 @@ export async function getDistributionDashboard(
           budgetPreference: project.budget_preference || null,
           onboardingStatus: project.onboarding_status || 'not_started',
           factsConfirmedAt: project.facts_confirmed_at || null,
+          productType: (project.product_type as DistributionProductType | null) || null,
+          sourceToolId: project.source_tool_id || null,
+          listingImportedAt: project.listing_imported_at || null,
         },
         channels: (channels || []).map((channel: any) => {
           const template = (templates || []).find((item: any) => item.channel_id === channel.id) || null;
@@ -712,6 +836,7 @@ export async function getDistributionDashboard(
           status: String(asset.status || 'candidate'),
           verifiedAt: asset.verified_at || null,
         })),
+        listingCandidates,
       },
     };
   } catch (error) {
@@ -975,6 +1100,150 @@ export async function createDistributionProject(formData: FormData): Promise<{ s
   }
 }
 
+export async function importDistributionCatalogListing(
+  formData: FormData,
+): Promise<{ success: boolean; importedAssets?: number; error?: string }> {
+  try {
+    const { user, allowed } = await getDistributionAccess();
+    if (!allowed) return { success: false, error: 'Distribution workspace access requires an active plan.' };
+    const projectId = normalize(formData.get('projectId'));
+    const toolId = normalize(formData.get('toolId'));
+    if (!projectId || !toolId) return { success: false, error: 'Project and AI Best Tool listing are required.' };
+    const supabase = await createClient();
+    const { data: project, error: projectError } = await supabase
+      .from('distribution_projects')
+      .select('id, name, website_url, description')
+      .eq('id', projectId)
+      .eq('owner_id', user.id)
+      .neq('status', 'archived')
+      .maybeSingle();
+    if (projectError) throw projectError;
+    if (!project) return { success: false, error: 'Project not found or access denied.' };
+    const ownedListings = await loadOwnedCatalogListings({
+      userId: user.id,
+      email: user.email,
+      projectUrl: project.website_url,
+    });
+    const listing = ownedListings.find((candidate) => candidate.id === toolId);
+    if (!listing) {
+      return { success: false, error: 'This listing is not submitted by or claimed for the current account.' };
+    }
+    const projectDomain = normalizeDistributionDomain(project.website_url);
+    const listingDomain = normalizeDistributionDomain(listing.websiteUrl);
+    if (projectDomain && listingDomain && projectDomain !== listingDomain) {
+      return {
+        success: false,
+        error: 'The listing domain does not match this project. Switch projects or correct the project website first.',
+      };
+    }
+    const domain = listingDomain;
+    if (!domain) return { success: false, error: 'The listing website URL is invalid.' };
+    const now = new Date().toISOString();
+    const snapshot = {
+      source: 'aibesttool_listing',
+      sourceToolId: listing.id,
+      importedAt: now,
+      ownershipSource: listing.ownershipSource,
+      categoryName: listing.categoryName,
+      tags: listing.tags,
+      pricing: listing.pricing,
+      productType: listing.productType,
+      importedFields: {
+        name: listing.name,
+        websiteUrl: listing.websiteUrl,
+        description: listing.description,
+      },
+      fieldsRequireOwnerConfirmation: ['name', 'websiteUrl', 'description', 'pricing'],
+    };
+    const { error: updateError } = await supabase
+      .from('distribution_projects')
+      .update({
+        name: listing.name || project.name,
+        website_url: listing.websiteUrl || project.website_url,
+        description: listing.description || project.description,
+        source_tool_id: listing.id,
+        product_type: listing.productType,
+        listing_imported_at: now,
+        listing_snapshot_json: snapshot,
+        onboarding_status: 'profile_started',
+        facts_confirmed_at: null,
+        updated_at: now,
+      })
+      .eq('id', projectId)
+      .eq('owner_id', user.id);
+    if (updateError) throw updateError;
+
+    const { data: existingIntelligenceProfile, error: existingProfileError } = await supabase
+      .from('product_intelligence_profiles')
+      .select('id, metadata')
+      .eq('owner_type', 'distribution_project')
+      .eq('owner_id', projectId)
+      .maybeSingle();
+    if (existingProfileError) throw existingProfileError;
+    const { data: intelligenceProfile, error: profileError } = await supabase
+      .from('product_intelligence_profiles')
+      .upsert(
+        {
+          owner_type: 'distribution_project',
+          owner_id: projectId,
+          canonical_domain: domain,
+          product_name: listing.name || project.name,
+          profile_status: 'pending',
+          metadata: {
+            ...((existingIntelligenceProfile?.metadata as Record<string, unknown> | null) || {}),
+            importedListing: snapshot,
+          },
+          updated_at: now,
+        },
+        { onConflict: 'owner_type,owner_id' },
+      )
+      .select('id')
+      .single();
+    if (profileError || !intelligenceProfile) throw profileError || new Error('Unable to link product intelligence.');
+    const { error: profileLinkError } = await supabase
+      .from('distribution_projects')
+      .update({ intelligence_profile_id: intelligenceProfile.id })
+      .eq('id', projectId)
+      .eq('owner_id', user.id);
+    if (profileLinkError) throw profileLinkError;
+
+    const importedAssets = [
+      listing.imageUrl
+        ? { assetType: 'logo', name: 'AI Best Tool listing logo', url: listing.imageUrl }
+        : null,
+      listing.thumbnailUrl
+        ? { assetType: 'screenshot', name: 'AI Best Tool listing thumbnail', url: listing.thumbnailUrl }
+        : null,
+      ...listing.screenshots.map((url, index) => ({
+        assetType: 'screenshot',
+        name: `AI Best Tool listing screenshot ${index + 1}`,
+        url,
+      })),
+    ].filter((asset): asset is { assetType: string; name: string; url: string } => Boolean(asset?.url));
+    if (importedAssets.length > 0) {
+      const { error: assetError } = await supabase.from('distribution_project_assets').upsert(
+        importedAssets.map((asset) => ({
+          project_id: projectId,
+          owner_id: user.id,
+          asset_type: asset.assetType,
+          name: asset.name,
+          source_url: asset.url,
+          status: 'candidate',
+          metadata: { source: 'aibesttool_listing', sourceToolId: listing.id },
+          updated_at: now,
+        })),
+        { onConflict: 'project_id,asset_type,name' },
+      );
+      if (assetError) throw assetError;
+    }
+    revalidatePath('/[locale]/distribution', 'page');
+    return { success: true, importedAssets: importedAssets.length };
+  } catch (error) {
+    console.error('Import distribution catalog listing error:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'Unable to import listing.' };
+  }
+}
+
 export async function updateDistributionProjectProfile(
   formData: FormData,
 ): Promise<{ success: boolean; error?: string }> {
@@ -985,10 +1254,21 @@ export async function updateDistributionProjectProfile(
     const name = normalize(formData.get('name'));
     const websiteUrl = normalize(formData.get('websiteUrl'));
     const description = normalize(formData.get('description'));
+    const productType = normalize(formData.get('productType')) as DistributionProductType;
     const primaryGoal = normalize(formData.get('primaryGoal'));
     const weeklyCapacity = Number.parseInt(normalize(formData.get('weeklyCapacity')) || '3', 10);
     const budgetPreference = normalize(formData.get('budgetPreference')) || 'free_first';
     const factsConfirmed = normalize(formData.get('factsConfirmed')) === 'on';
+    const allowedProductTypes: DistributionProductType[] = [
+      'ai_saas',
+      'developer_api',
+      'open_source',
+      'mobile_app',
+      'content_newsletter',
+      'agency_service',
+      'web3',
+      'other',
+    ];
     if (!projectId || name.length < 2 || !websiteUrl || description.length < 20) {
       return { success: false, error: 'Project, website URL, and a specific product description are required.' };
     }
@@ -1007,6 +1287,7 @@ export async function updateDistributionProjectProfile(
         name,
         website_url: normalizedWebsiteUrl,
         description,
+        product_type: allowedProductTypes.includes(productType) ? productType : 'other',
         primary_goal: primaryGoal || null,
         weekly_capacity: Number.isFinite(weeklyCapacity) && weeklyCapacity > 0 ? weeklyCapacity : 3,
         budget_preference: budgetPreference,
@@ -1016,10 +1297,25 @@ export async function updateDistributionProjectProfile(
       })
       .eq('id', projectId)
       .eq('owner_id', user.id)
-      .select('id')
+      .select('id, intelligence_profile_id')
       .maybeSingle();
     if (error) throw error;
     if (!project) return { success: false, error: 'Project not found or access denied.' };
+    if (project.intelligence_profile_id) {
+      const { error: intelligenceError } = await supabase
+        .from('product_intelligence_profiles')
+        .update({
+          product_name: name,
+          canonical_domain: new URL(normalizedWebsiteUrl).hostname.replace(/^www\./, ''),
+          profile_status: factsConfirmed ? 'ready' : 'pending',
+          last_verified_at: factsConfirmed ? new Date().toISOString() : null,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', project.intelligence_profile_id)
+        .eq('owner_type', 'distribution_project')
+        .eq('owner_id', projectId);
+      if (intelligenceError) throw intelligenceError;
+    }
     revalidatePath('/[locale]/distribution', 'page');
     return { success: true };
   } catch (error) {

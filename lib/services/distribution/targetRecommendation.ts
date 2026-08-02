@@ -35,15 +35,35 @@ function goalBonus(primaryGoal: string | null, channelType: string): number {
   return 2;
 }
 
+function productTypeBonus(productType: DistributionProductType | null, channelType: string): number {
+  if (!productType || productType === 'other') return 0;
+  const preferredChannels: Partial<Record<DistributionProductType, string[]>> = {
+    ai_saas: ['directory', 'alternative', 'startup'],
+    developer_api: ['github', 'community', 'newsletter', 'startup'],
+    open_source: ['github', 'community', 'reddit', 'newsletter'],
+    mobile_app: ['directory', 'startup', 'community'],
+    content_newsletter: ['newsletter', 'community', 'blog'],
+    agency_service: ['directory', 'newsletter', 'blog'],
+    web3: ['community', 'newsletter', 'blog', 'reddit'],
+  };
+  return preferredChannels[productType]?.includes(channelType) ? 10 : -2;
+}
+
 export function recommendDistributionTargets(
   targets: DistributionTargetCandidate[],
-  input: { primaryGoal: string | null; budgetPreference: string | null; limit?: number },
+  input: {
+    primaryGoal: string | null;
+    budgetPreference: string | null;
+    productType?: DistributionProductType | null;
+    limit?: number;
+  },
 ): DistributionTargetRecommendation[] {
   return targets
     .filter((target) => !(input.budgetPreference === 'free_only' && target.requiresPayment))
     .map((target) => {
       const reasons: string[] = [];
-      let score = 45 + Math.round(target.confidence * 0.25) + goalBonus(input.primaryGoal, target.channelType);
+      const typeBonus = productTypeBonus(input.productType || null, target.channelType);
+      let score = 45 + Math.round(target.confidence * 0.25) + goalBonus(input.primaryGoal, target.channelType) + typeBonus;
       if (target.submissionUrl) {
         score += 8;
         reasons.push('A verified submission entry is available.');
@@ -66,6 +86,7 @@ export function recommendDistributionTargets(
         );
       if (goalBonus(input.primaryGoal, target.channelType) >= 10)
         reasons.unshift('This channel matches the project primary goal.');
+      if (typeBonus >= 10) reasons.unshift('This channel fits the product type.');
       const estimatedMinutes =
         10 + (target.requiresAccount ? 5 : 0) + (target.requiresCaptcha ? 3 : 0) + (target.requiresPayment ? 5 : 0);
       const readiness: DistributionTargetRecommendation['readiness'] = !target.submissionUrl
@@ -84,3 +105,4 @@ export function recommendDistributionTargets(
     .sort((a, b) => b.score - a.score || b.confidence - a.confidence || a.name.localeCompare(b.name))
     .slice(0, input.limit || 12);
 }
+import type { DistributionProductType } from './listingBridge';

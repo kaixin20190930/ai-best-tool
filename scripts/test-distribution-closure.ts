@@ -5,6 +5,11 @@ import {
   type DistributionTargetCandidate,
 } from '@/lib/services/distribution/targetRecommendation';
 import { composeDistributionPackage } from '@/lib/services/distribution/packageComposer';
+import {
+  getDistributionAssetGuidance,
+  inferDistributionProductType,
+  normalizeDistributionDomain,
+} from '@/lib/services/distribution/listingBridge';
 import { buildDistributionTaskDetail } from '@/lib/services/distribution/taskDetail';
 
 const targets: DistributionTargetCandidate[] = [
@@ -170,5 +175,29 @@ const readyPackage = composeDistributionPackage({
   availableAssetTypes: ['logo'],
 });
 assert.equal(readyPackage.ready, true, 'A complete base package should be ready for human submission.');
+
+assert.equal(normalizeDistributionDomain('https://www.Moxion.ai/path'), 'moxion.ai');
+assert.equal(
+  inferDistributionProductType({ categoryName: 'Developer Tools', tags: ['api', 'sdk'] }),
+  'developer_api',
+  'Developer listings should receive developer-specific guidance.',
+);
+assert.equal(
+  inferDistributionProductType({ categoryName: 'Web3', tags: ['defi'] }),
+  'web3',
+  'Web3 must take precedence over generic AI terminology.',
+);
+assert.equal(
+  getDistributionAssetGuidance('mobile_app').find((item) => item.key === 'screenshot')?.required,
+  true,
+  'Mobile app screenshots are a required distribution asset.',
+);
+
+const developerRecommendations = recommendDistributionTargets(targets, {
+  primaryGoal: 'directory_coverage',
+  budgetPreference: 'free_first',
+  productType: 'developer_api',
+});
+assert.ok(developerRecommendations.length > 0, 'Product-type scoring must preserve eligible recommendations.');
 
 console.log('✅ Distribution closure recommendation tests passed.');

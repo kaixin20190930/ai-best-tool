@@ -28,12 +28,14 @@ import {
   createDistributionTask,
   createDistributionUtmLink,
   importDistributionIntelligenceAssets,
+  importDistributionCatalogListing,
   recordDistributionResult,
   seedDistributionStarterTasks,
   updateDistributionProjectProfile,
   updateDistributionTaskStatus,
   type DistributionDashboard as DistributionDashboardData,
 } from '@/app/actions/distribution';
+import { getDistributionAssetGuidance } from '@/lib/services/distribution/listingBridge';
 
 const statusOptions = getDistributionTaskStatusChoices();
 
@@ -50,9 +52,14 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
   const [showForm, setShowForm] = useState(false);
   const [showProjectForm, setShowProjectForm] = useState(false);
   const [showLinkForm, setShowLinkForm] = useState(false);
+  const activeProjectId = data.project?.id || '';
+  const activeProjectWebsiteUrl = data.project?.websiteUrl || null;
+  const activeProjectSourceToolId = data.project?.sourceToolId || null;
   const profileComplete = Boolean(
     data.project?.factsConfirmedAt && data.project.websiteUrl && (data.project.description?.length || 0) >= 20,
   );
+  const productType = data.project?.productType || 'other';
+  const assetGuidance = getDistributionAssetGuidance(productType);
   const hasLogo = data.assets.some((asset) => ['logo', 'icon'].includes(asset.assetType));
   const targetTask = data.tasks.find((task) => Boolean(task.targetId));
   const targetTaskByTargetId = new Map(
@@ -550,6 +557,69 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
           <p className='mt-2 text-sm text-slate-600'>
             Maintain the product facts once so every target-specific package can reuse them.
           </p>
+          {data.listingCandidates.length > 0 ? (
+            <div className='mt-4 rounded-2xl border border-cyan-200 bg-cyan-50/60 p-4'>
+              <div className='flex flex-col justify-between gap-2 sm:flex-row sm:items-start'>
+                <div>
+                  <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>AI Best Tool connection</div>
+                  <h3 className='mt-1 text-base font-bold text-slate-950'>Reuse an owned or claimed listing</h3>
+                  <p className='mt-1 text-xs leading-5 text-slate-600'>
+                    Import name, website, description, category, pricing context, logo, and screenshots. Imported
+                    facts remain unconfirmed until you review and save this profile.
+                  </p>
+                </div>
+                {data.project.sourceToolId ? (
+                  <span className='rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700'>
+                    Listing linked
+                  </span>
+                ) : null}
+              </div>
+              <div className='mt-3 grid gap-3 lg:grid-cols-2'>
+                {data.listingCandidates.map((listing) => (
+                  <div key={listing.id} className='rounded-xl border border-cyan-100 bg-white p-3'>
+                    <div className='flex items-start justify-between gap-3'>
+                      <div>
+                        <div className='text-sm font-bold text-slate-950'>{listing.name}</div>
+                        <div className='mt-1 break-all text-xs text-slate-500'>{listing.websiteUrl}</div>
+                      </div>
+                      {listing.exactDomainMatch ? (
+                        <span className='rounded-full bg-cyan-100 px-2 py-1 text-[10px] font-bold text-cyan-700'>
+                          Domain match
+                        </span>
+                      ) : null}
+                    </div>
+                    <div className='mt-2 flex flex-wrap gap-2 text-[10px] font-semibold uppercase tracking-wide text-slate-500'>
+                      <span>{listing.productType.replaceAll('_', ' ')}</span>
+                      <span>{listing.ownershipSource.replaceAll('_', ' ')}</span>
+                      {listing.categoryName ? <span>{listing.categoryName}</span> : null}
+                    </div>
+                    <p className='mt-2 line-clamp-2 text-xs leading-5 text-slate-600'>
+                      {listing.description || 'No reusable listing description is available.'}
+                    </p>
+                    <form action={importDistributionCatalogListing} className='mt-3'>
+                      <input type='hidden' name='projectId' value={activeProjectId} />
+                      <input type='hidden' name='toolId' value={listing.id} />
+                      <button
+                        disabled={Boolean(activeProjectWebsiteUrl) && !listing.exactDomainMatch}
+                        className='rounded-lg bg-cyan-700 px-3 py-2 text-xs font-bold text-white hover:bg-cyan-800 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500'
+                      >
+                        {Boolean(activeProjectWebsiteUrl) && !listing.exactDomainMatch
+                          ? 'Different project domain'
+                          : activeProjectSourceToolId === listing.id
+                            ? 'Refresh listing data'
+                            : 'Import and review'}
+                      </button>
+                    </form>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className='mt-4 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4 text-xs leading-5 text-slate-600'>
+              No owned or claimed AI Best Tool listing was found for this account. Continue manually, or claim the
+              listing first so future profile updates can stay connected.
+            </div>
+          )}
           <form action={updateDistributionProjectProfile} className='mt-4 grid gap-4 sm:grid-cols-2'>
             <input type='hidden' name='projectId' value={data.project.id} />
             <label className='text-sm font-semibold text-slate-700'>
@@ -584,6 +654,23 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
                 Use: “For [audience], [product] helps [job] by [specific capability].” Avoid rankings, invented usage
                 numbers, and unverified superlatives.
               </span>
+            </label>
+            <label className='text-sm font-semibold text-slate-700'>
+              Product type
+              <select
+                name='productType'
+                defaultValue={productType}
+                className='mt-2 w-full rounded-xl border border-slate-200 px-3 py-2.5 font-normal'
+              >
+                <option value='ai_saas'>AI SaaS</option>
+                <option value='developer_api'>Developer tool or API</option>
+                <option value='open_source'>Open-source product</option>
+                <option value='mobile_app'>Mobile app</option>
+                <option value='content_newsletter'>Content or newsletter</option>
+                <option value='agency_service'>Agency or service</option>
+                <option value='web3'>Web3 product</option>
+                <option value='other'>Other</option>
+              </select>
             </label>
             <label className='text-sm font-semibold text-slate-700'>
               Primary goal
@@ -640,12 +727,25 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
             <h2 className='mt-1 text-xl font-bold text-slate-950'>Product media and proof assets</h2>
             <p className='mt-1 text-sm text-slate-600'>Maintain assets once, then reuse them in every target-specific submission package.</p>
             <div className='mt-3 flex flex-wrap gap-2 text-xs font-semibold'>
-              <span className={`rounded-full px-2.5 py-1 ${hasLogo ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}`}>
-                {hasLogo ? 'Logo ready' : 'Logo required'}
-              </span>
-              <span className={`rounded-full px-2.5 py-1 ${data.assets.some((asset) => asset.assetType === 'screenshot') ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
-                {data.assets.some((asset) => asset.assetType === 'screenshot') ? 'Screenshot ready' : 'Screenshot recommended'}
-              </span>
+              {assetGuidance.map((requirement) => {
+                const ready = requirement.key === 'logo'
+                  ? data.assets.some((asset) => ['logo', 'icon'].includes(asset.assetType))
+                  : data.assets.some((asset) => asset.assetType === requirement.key);
+                return (
+                  <span
+                    key={requirement.key}
+                    className={`rounded-full px-2.5 py-1 ${
+                      ready
+                        ? 'bg-emerald-100 text-emerald-700'
+                        : requirement.required
+                          ? 'bg-rose-100 text-rose-700'
+                          : 'bg-amber-100 text-amber-700'
+                    }`}
+                  >
+                    {ready ? `${requirement.label} ready` : `${requirement.label} ${requirement.required ? 'required' : 'recommended'}`}
+                  </span>
+                );
+              })}
             </div>
           </div>
           <form action={importDistributionIntelligenceAssets}>
