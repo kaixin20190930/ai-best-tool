@@ -6,6 +6,7 @@ A comprehensive checklist for content creators to ensure all content meets SEO b
 
 Use this checklist before publishing any new page or content:
 
+- [ ] Page passes the indexable-page admission gate below
 - [ ] Page title is 30-60 characters
 - [ ] Meta description is 120-160 characters
 - [ ] Canonical URL is set
@@ -16,6 +17,28 @@ Use this checklist before publishing any new page or content:
 - [ ] Keywords are used naturally
 - [ ] Mobile-friendly layout
 - [ ] Page loads quickly
+
+## Indexable-Page Admission Gate
+
+This gate overrides page-volume targets. Publishing 5-10 generic tool pages per day is not a goal. A page may enter the sitemap and remain indexable only when every required item below is true:
+
+- [ ] It serves a distinct search intent that is not already covered by another page.
+- [ ] Product facts come from an official source and include the source URL and review date.
+- [ ] Pricing, current limitations, or an explicit "not verified" state is visible.
+- [ ] The page contains a decision-useful difference, use case, limitation, or comparison path that is not interchangeable template copy.
+- [ ] At least one first-party proof asset is present, such as an official logo, product screenshot, output sample, or verified owner update.
+- [ ] It has a relevant parent hub link and at least one useful next-step internal link.
+- [ ] Canonical, locale, sitemap, and indexability rules point to one unique public URL.
+- [ ] The page provides a path for non-AI updates, such as comments, owner claim, correction request, or editorial review.
+- [ ] An accountable reviewer has confirmed that visible claims are supportable and not invented.
+
+If any required item fails, do not create another indexable URL. Enrich the existing canonical page, merge or alias the duplicate, or keep the page as draft / `noindex` until evidence is available. AI may draft and normalize content, but AI-generated prose alone never satisfies this gate.
+
+### Ongoing Review
+
+- Pages with impressions but no clicks should be reviewed for intent and snippet fit before new pages are added.
+- Pages without impressions after two review cycles should be enriched, merged, or moved out of the indexable set.
+- A changed review date must represent a real source or editorial check; never advance dates in bulk only to signal freshness.
 
 ## Detailed Checklist
 

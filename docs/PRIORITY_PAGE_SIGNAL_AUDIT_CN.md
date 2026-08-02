@@ -1,6 +1,6 @@
 # 核心页面真实信号审计
 
-更新时间：2026-07-29
+更新时间：2026-08-03
 
 审计地址：`https://aibesttool.com`
 
@@ -8,12 +8,12 @@
 
 ## 汇总
 
-- 核心页面：20
-- HTTP 正常：20
-- canonical：20/20
-- meta description：20/20
-- evidence / freshness 信号：20/20
-- 评论 / 认领 / 官网 / 比较动作信号：20/20
+- 核心页面：27
+- HTTP 正常：27
+- canonical：27/27
+- meta description：27/27
+- evidence / freshness 信号：27/27
+- 评论 / 认领 / 官网 / 比较动作信号：27/27
 
 ## 页面明细
 
@@ -23,6 +23,9 @@
 | /explore | 200 | 是 | 是 | 是 | 是 | - |
 | /best-ai-tools | 200 | 是 | 是 | 是 | 是 | - |
 | /categories/productivity | 200 | 是 | 是 | 是 | 是 | - |
+| /categories/research | 200 | 是 | 是 | 是 | 是 | - |
+| /categories/voice | 200 | 是 | 是 | 是 | 是 | - |
+| /categories/automation | 200 | 是 | 是 | 是 | 是 | - |
 | /categories/web3 | 200 | 是 | 是 | 是 | 是 | - |
 | /categories/developer-tools | 200 | 是 | 是 | 是 | 是 | - |
 | /categories/chatbot | 200 | 是 | 是 | 是 | 是 | - |
@@ -36,6 +39,10 @@
 | /ai/chatgpt | 200 | 是 | 是 | 是 | 是 | - |
 | /ai/claude | 200 | 是 | 是 | 是 | 是 | - |
 | /ai/cursor | 200 | 是 | 是 | 是 | 是 | - |
+| /ai/lindy | 200 | 是 | 是 | 是 | 是 | - |
+| /ai/fathom | 200 | 是 | 是 | 是 | 是 | - |
+| /ai/the-graph | 200 | 是 | 是 | 是 | 是 | - |
+| /ai/dune | 200 | 是 | 是 | 是 | 是 | - |
 | /ai/runway | 200 | 是 | 是 | 是 | 是 | - |
 | /ai/defillama | 200 | 是 | 是 | 是 | 是 | - |
 | /ai/notta | 200 | 是 | 是 | 是 | 是 | - |

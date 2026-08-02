@@ -1,6 +1,6 @@
 # 优化总控任务表
 
-更新时间：2026-08-02
+更新时间：2026-08-03
 
 这份文档把当前所有优化内容合并成一份可追踪、可监测、可复盘的总任务表。
 
@@ -14,6 +14,8 @@
 - [分发工作台完整收口方案与执行计划](./DISTRIBUTION_WORKSPACE_CLOSURE_PLAN_CN.md)
 
 说明：
+
+- 2026-08-03：导入最新 GSC 7/28 天数据。28 天曝光由 135 增至 147（+8.9%），点击由 1 降为 0，页面行数仍为 24；新增曝光主要集中在首页，尚不能判断为全站恢复。线上核心信号审计由 20 页扩到 27 页，新增 Research、Voice、Automation、Lindy、Fathom、The Graph、Dune；Explore 已补分类到代表工具的明确路径。新增索引页必须通过 `SEO_CONTENT_CHECKLIST.md` 的准入硬门槛，分发结果必须按 `DISTRIBUTION_PRODUCT_ACCEPTANCE_GUIDE_CN.md` 区分 submitted、live mention 和 verified backlink。
 
 - 2026-08-02：确认分发数据边界：具体目标站 registry、规则和快照继续保存在 Neon，用户项目机会、任务、材料包、提醒和归因保存在 Supabase；两边通过稳定 target UUID 和 channel key 映射，禁止创建跨数据库外键。Neon 暂时不可用时推荐区降级为空，不阻断原有项目和任务工作台。
 
@@ -319,7 +321,7 @@
 | -------------------------------- | -------------------- | ----------------------------------------------------------------------------------------- | -------- |
 | 停止新增低价值 programmatic 页面 | 防止索引面继续膨胀   | 作为持续准入规则；新工具页必须先过质量门槛再进入 sitemap                                  | 持续规则 |
 | 继续收口弱页 / alias 页          | 降低重复和稀薄内容   | 批量技术收口已完成；后续只处理 GSC 暴露的异常 URL，不再把 comparison 批量修改当作主要产出 | 维护中   |
-| 保持 GSC 周度观察                | 看恢复是否有效       | 2026-07-28 Week 4 已导入；14/28 天后复盘首批机会页                                        | 进行中   |
+| 保持 GSC 周度观察                | 看恢复是否有效       | 2026-08-03 Week 6 已导入；28 天 147 展示 / 0 点击，下一轮同时观察非首页曝光与已核验外链      | 进行中   |
 | 维护核心页真实信号               | 给 Google 和用户证据 | 核心页持续补验证日期、价格、评论、owner 信号                                              | 进行中   |
 | 后台页面质量状态 / 下次复查日期  | 让质量决策可跟踪     | 管理后台可编辑并落库，列表页可查看                                                        | 已完成   |
 
@@ -415,11 +417,13 @@
 
 ## 九、执行开关（2026-07-29 起）
 
-当前进入观察周期，不扩量。
+当前进入“观察 + 高质量分发”周期，不扩张索引页数量。
 
 - **先执行**：
   - 每日复核 production smoke（已通过快照作为基线）
   - 7d / 28d 看 GSC 关键指标：`impressions`、`clicks`、`CTR`、`avgPosition`
+  - 单独看非首页曝光、产生曝光的页面数、Top 20 query 和 `www` 历史变体
+  - 每个产品每周完成 3-5 个高相关目标；分别统计 submitted、live mention 和 verified backlink
   - 观察 core 页（`/`, `/best-ai-tools`, `/explore`, `/categories/*`, `/ai/*`）是否出现“有点击回升 + 位次改善”
 - **触发扩量条件**（任一满足才执行下一批）：
   - 最近 14 天 `clicks >= 2`，且与前 14 天相比不下降；且
@@ -434,10 +438,12 @@
 
 ### 本周任务（可直接执行）
 
-1. 将本次 07-29 指标更新入 `docs/GSC_WEEKLY_OBSERVATION_LOG_CN.md`（已完成）。
-2. 在 `docs/MASTER_OPTIMIZATION_TRACKER_CN.md` 标记观察状态为主线（已完成）。
-3. 维持站内收口与规则不变，禁止新增低价值页面。
-4. 只做“微调”：
+1. 将本次 08-03 的 7/28 天指标更新入 `docs/GSC_WEEKLY_OBSERVATION_LOG_CN.md`（已完成）。
+2. 将核心页面线上审计从 20 页扩到 27 页，覆盖最新 GSC 信号页（已完成）。
+3. 用 Explore 把 Research、Voice、Automation、Web3 与代表工具连接起来（已完成）。
+4. 维持站内收口与规则不变；任何新增索引页必须通过 `docs/SEO_CONTENT_CHECKLIST.md` 的准入门槛。
+5. 分发只推进高相关、可核验目标，并按 `docs/DISTRIBUTION_PRODUCT_ACCEPTANCE_GUIDE_CN.md` 的状态口径复查。
+6. 只做“微调”：
    - 复核 `/guides/*`, `/ai/*`, `/categories/*` 页面标题与 snippet 是否匹配高意图搜索词
    - 仅在发现 mismatch 时改文案，不改页面结构
 
@@ -446,7 +452,7 @@
 - 按周级更新后，如果触发扩量条件成立，则执行：
   - 在现有 2-4 个高意图页内补充第一方评论/更新记录 + owner 补全（不超过 1 次内容迭代批）
   - 重新跑 `pnpm run seo:priority-page-signals` 和 `pnpm run seo:priority-source-audit -- --strict`
-  - 更新 `Week 6` 台账和结论栏
+  - 更新 `Week 7` 台账和结论栏
 
 ## 九、当前建议结论
 

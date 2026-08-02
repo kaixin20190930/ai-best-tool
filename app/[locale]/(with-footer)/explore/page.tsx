@@ -49,7 +49,7 @@ export default async function Page({ params, searchParams }: PageProps) {
   const categories = categoriesResult.status === 'fulfilled' ? categoriesResult.value : [];
   const tags = tagsResult.status === 'fulfilled' ? tagsResult.value : [];
   const isChinese = params.locale === 'cn' || params.locale === 'tw';
-  const checkedAt = '2026-07-28';
+  const checkedAt = '2026-08-03';
   const taskFirstEntryPoints = [
     {
       href: '/guides/ai-writing-tools',
@@ -321,8 +321,8 @@ export default async function Page({ params, searchParams }: PageProps) {
           </h2>
           <p className='mt-3 max-w-3xl text-sm leading-6 text-slate-600'>
             {isChinese
-              ? 'Research、Voice、Automation 和 Developer Tools 这些分类更适合高意图筛选，不必先在大类里绕一圈。'
-              : 'Research, Voice, Automation, and Developer Tools are stronger for high-intent browsing, so you do not need to stay in the broad buckets first.'}
+              ? 'Research、Voice、Automation 和 Web3 这些分类更适合高意图筛选，不必先在大类里绕一圈。'
+              : 'Research, Voice, Automation, and Web3 are stronger for high-intent browsing, so you do not need to stay in the broad buckets first.'}
           </p>
           <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
             {[
@@ -332,6 +332,7 @@ export default async function Page({ params, searchParams }: PageProps) {
                 description: isChinese
                   ? '适合模型发现、资料检索和研究型工作流。'
                   : 'A better fit for model discovery, source gathering, and research workflows.',
+                examples: [{ href: '/ai/chatgpt', label: 'ChatGPT' }],
               },
               {
                 href: '/categories/voice?sort=popular',
@@ -339,6 +340,7 @@ export default async function Page({ params, searchParams }: PageProps) {
                 description: isChinese
                   ? '适合转录、播客、配音和音频优先场景。'
                   : 'A better fit for transcription, podcasting, dubbing, and audio-first workflows.',
+                examples: [{ href: '/ai/fathom', label: 'Fathom' }],
               },
               {
                 href: '/categories/automation?sort=popular',
@@ -346,23 +348,38 @@ export default async function Page({ params, searchParams }: PageProps) {
                 description: isChinese
                   ? '适合工作流编排、Agent 和重复任务自动执行。'
                   : 'A better fit for orchestration, agents, and repeatable task automation.',
+                examples: [{ href: '/ai/lindy', label: 'Lindy' }],
               },
               {
-                href: '/categories/developer-tools?sort=popular',
-                title: isChinese ? '看开发者工具分类' : 'Open developer tools',
+                href: '/categories/web3?sort=popular',
+                title: isChinese ? '看 Web3 分类' : 'Open Web3',
                 description: isChinese
-                  ? '适合 API、模型基础设施和开发型工作流。'
-                  : 'A better fit for APIs, model infrastructure, and developer workflows.',
+                  ? '适合链上数据、协议索引和研究分析工作流。'
+                  : 'A better fit for on-chain data, protocol indexing, and research workflows.',
+                examples: [
+                  { href: '/ai/the-graph', label: 'The Graph' },
+                  { href: '/ai/dune', label: 'Dune' },
+                ],
               },
             ].map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className='rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-cyan-50/60'
-              >
-                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
-                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
-              </Link>
+              <article key={item.href} className='rounded-lg border border-slate-200 bg-slate-50 p-4'>
+                <Link href={item.href} className='group block'>
+                  <p className='text-sm font-semibold text-slate-950 group-hover:text-cyan-800'>{item.title}</p>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
+                </Link>
+                <div className='mt-3 flex flex-wrap items-center gap-2 border-t border-slate-200 pt-3 text-xs text-slate-500'>
+                  <span>{isChinese ? '代表工具：' : 'Examples:'}</span>
+                  {item.examples.map((example) => (
+                    <Link
+                      key={example.href}
+                      href={example.href}
+                      className='font-semibold text-cyan-800 underline decoration-cyan-200 underline-offset-4 hover:text-cyan-950'
+                    >
+                      {example.label}
+                    </Link>
+                  ))}
+                </div>
+              </article>
             ))}
           </div>
         </section>

@@ -1,6 +1,6 @@
 # GSC 每周观察台账
 
-更新时间：2026-07-29
+更新时间：2026-08-03
 
 这份台账只做一件事：把 Google Search Console 的变化按周记录下来，方便判断当前的“收口 + 质量增强”策略到底有没有起效。
 
@@ -22,6 +22,7 @@
 | Week 3 | 2026-07-19 | 525 | 2 | 0.38% | 68.57 | 157 | 646 | 28 天实际覆盖 2026-06-20 至 2026-07-17；7 天窗口为 35 展示、0 点击、67.78 平均排名，短期尚未出现恢复信号 |
 | Week 4 | 2026-07-28 | 135 | 1 | 0.74% | 59.92 | 154 | 690 | 曝光继续下降，但平均排名较 Week 3 改善约 8.65 位；首页承接 102 次展示，新的页面级机会集中在 Research、Lindy、Fathom、ChatGPT 和少量分类页 |
 | Week 5 | 2026-07-29 | 135 | 1 | 0.74% | 59.92 | 154 | 690 | 本周与上周平行：曝光与上周一致，继续观察是否出现点击转化 |
+| Week 6 | 2026-08-03 | 147 | 0 | 0.00% | 62.59 | 待下次 Coverage 更新 | 待下次 Coverage 更新 | 28 天曝光较上次增加 12（+8.9%），但点击归零；7 天为 47 展示、0 点击。增长主要来自首页，非首页覆盖没有扩张 |
 
 ## 站内收口基线
 
@@ -75,6 +76,11 @@
 | Week 5 | top ai tools directory | 0 | 7 | 0.00% | 73.71 | 榜单 / 目录意图 | 是 |
 | Week 5 | ai tool index | 0 | 6 | 0.00% | 70.67 | 明确目录检索意图 | 是 |
 | Week 5 | best ai tools directory | 0 | 5 | 0.00% | 59.40 | 当前目录词里相对更接近的机会 | 是 |
+| Week 6 | ai tools directory | 0 | 22 | 0.00% | 97.09 | 曝光增加但排名仍远，继续由首页承接 | 是 |
+| Week 6 | ai tool directory | 0 | 17 | 0.00% | 79.59 | 目录主词；不新增同义落地页 | 是 |
+| Week 6 | best ai tools directory | 0 | 8 | 0.00% | 60.62 | 目录词中相对更接近，但尚未进入可点击区间 | 是 |
+| Week 6 | ai tool index | 0 | 7 | 0.00% | 71.00 | 与目录意图重叠，继续收口到首页 / Explore | 是 |
+| Week 6 | top ai tools directory | 0 | 7 | 0.00% | 73.71 | 样本稳定但无位次改善 | 是 |
 
 ## Top Pages
 
@@ -115,6 +121,14 @@
 | Week 5 | https://www.aibesttool.com/ai/the-graph | 0 | 3 | 0.00% | 53.33 | Guide / 工具页变体 | 是 |
 | Week 5 | https://aibesttool.com/ai/chatgpt | 0 | 2 | 0.00% | 7.50 | Tool；样本小但属于核心入口 | 是 |
 | Week 5 | https://www.aibesttool.com/categories/web3 | 0 | 2 | 0.00% | 8.50 | Category；历史变体 | 是 |
+| Week 6 | https://aibesttool.com/ | 0 | 115 | 0.00% | 71.61 | Core；新增曝光几乎全部集中于首页 | 是 |
+| Week 6 | https://aibesttool.com/ai/lindy | 0 | 8 | 0.00% | 9.88 | Tool；仍在第一页边缘，优先保留和增强 | 是 |
+| Week 6 | https://aibesttool.com/ai/fathom | 0 | 6 | 0.00% | 44.83 | Tool；曝光稳定但排名回落 | 是 |
+| Week 6 | https://aibesttool.com/categories/research | 0 | 5 | 0.00% | 5.00 | Category；稳定的小样本前十信号 | 是 |
+| Week 6 | https://aibesttool.com/en/explore | 0 | 3 | 0.00% | 4.00 | Core Hub；稳定的小样本前十信号 | 是 |
+| Week 6 | https://aibesttool.com/ai/the-graph | 0 | 4 | 0.00% | 25.50 | Tool；保持观察并增强相关内链 | 是 |
+| Week 6 | https://aibesttool.com/ai/chatgpt | 0 | 2 | 0.00% | 7.50 | Tool；样本小但仍在前十 | 是 |
+| Week 6 | https://aibesttool.com/ai/dune | 0 | 2 | 0.00% | 27.00 | Tool；保持观察并增强相关内链 | 是 |
 
 ## 增强页追踪
 
@@ -159,6 +173,16 @@
 | Week 3 | 28 天为 525 展示、2 点击、0.38% CTR、68.57 平均排名；7 天仅 35 展示、0 点击，曝光较低但平均排名未明显恶化。Coverage 的 583 个 noindex 与主动收口一致，真正需要观察的是 14 个已抓取未索引、22 个备用 canonical 和 5 个重复页面。当前不能判断整体恢复，也没有证据支持扩量。 | 保持 noindex / canonical 收口；继续观察下一周 GSC，优先维护首页、Fathom、Pipedream、自动化/研究分类和少量高排名页面；等待真实评论、收藏和 owner 认领，不用模板数据替代。 |
 | Week 4 | 28 天降到 135 展示、1 点击，平均排名改善到 59.92；当前不是全站 CTR 优化阶段，而是少量机会页和规范 URL 集中阶段。Coverage 为 154 已索引、690 未索引，其中 603 个 noindex 基本符合主动收口；需精准处理 19 个已抓取未索引、5 个未明确 canonical 的重复页和 3 个 Google canonical 不一致页。 | 停止继续批量收口 comparison；统一英文无前缀 canonical，先增强首页、Research、Lindy、Fathom、ChatGPT，再处理 Explore、Web3、Productivity、Automation、Voice、Cursor、The Graph、Dune；14/28 天后复盘。 |
 | Week 5 | 观测中：28 天指标平行，未出现结构性反弹；首页继续是主流检索入口，核心机会页曝光仍在小样本范围内。 | 继续进入观察周期，先不扩量；当“可见点击”持续两周回升后，再加一批同类型页面做深度增强。 |
+| Week 6 | 28 天曝光从 135 增到 147（+8.9%），但点击从 1 降到 0，平均排名约从 59.92 回落到 62.59。首页从 102 增至 115 展示，页面行数仍为 24，说明这不是全站恢复，而是首页承接的目录词略有增加。7 天结果为 47 展示、0 点击；7 天页面表已经没有 `www` URL，规范化方向继续有效。 | 不批量新增页面。把线上核心信号审计扩到 Research、Voice、Automation、Lindy、Fathom、The Graph 和 Dune；由 Explore 建立分类到代表工具的内链；每周只做 3-5 个高相关、可核验的真实分发目标。下一次同时比较非首页曝光、Top 20 query 和已核验 backlink，不只看总曝光。 |
+
+## Week 6 验收基线
+
+- 最近 7 天：47 展示、0 点击、日均 6.71 展示；页面表中 `www` URL 为 0。
+- 最近 28 天：147 展示、0 点击、29 个 query 行、24 个 page 行。
+- 首页：115 展示，占页面表展示约 68.9%；相比上次增加 13。
+- 通用 directory / index / finder / listing 词：93 / 104 query 展示，约 89.4%，说明流量意图仍过度集中。
+- 下次改善不能只看总曝光；至少还要看到非首页 page impressions、产生曝光的页面数、Top 20 query 数量或真实点击中的一项增长。
+- 核心页连续两个复盘周期无新增信号时，先检查查询意图、内部链接和真实证据，不以生成更多相似 URL 解决。
 
 ## Week 4 执行队列
 
