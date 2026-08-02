@@ -113,6 +113,9 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
   ];
   const nextStep = onboardingSteps.find((step) => !step.complete) || null;
   const completedStepCount = onboardingSteps.filter((step) => step.complete).length;
+  const listingAssetCount = data.assets.filter(
+    (asset) => asset.source === 'aibesttool_listing' && asset.sourceToolId === activeProjectSourceToolId,
+  ).length;
 
   return (
     <div className='space-y-8'>
@@ -574,6 +577,14 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
                   </span>
                 ) : null}
               </div>
+              {data.project.sourceToolId ? (
+                <div className='mt-3 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs leading-5 text-emerald-800'>
+                  The linked {data.project.name} listing has populated the product fields below. {listingAssetCount}{' '}
+                  reusable{' '}
+                  {listingAssetCount === 1 ? 'asset is' : 'assets are'} saved in the Product media and proof assets
+                  section.
+                </div>
+              ) : null}
               <div className='mt-3 grid gap-3 lg:grid-cols-2'>
                 {data.listingCandidates.map((listing) => (
                   <div key={listing.id} className='rounded-xl border border-cyan-100 bg-white p-3'>
@@ -756,13 +767,31 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
         {data.assets.length ? (
           <div className='mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4'>
             {data.assets.map((asset) => (
-              <a key={asset.id} href={asset.url} target='_blank' rel='noreferrer' className='rounded-xl border border-slate-200 bg-slate-50 p-3 hover:border-cyan-300'>
+              <a key={asset.id} href={asset.url} target='_blank' rel='noreferrer' className='overflow-hidden rounded-xl border border-slate-200 bg-white hover:border-cyan-300 hover:shadow-sm'>
+                <div className='flex h-36 items-center justify-center border-b border-slate-100 bg-[linear-gradient(45deg,#f1f5f9_25%,transparent_25%),linear-gradient(-45deg,#f1f5f9_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#f1f5f9_75%),linear-gradient(-45deg,transparent_75%,#f1f5f9_75%)] bg-[length:16px_16px] bg-[position:0_0,0_8px,8px_-8px,-8px_0px] p-3'>
+                  <img
+                    src={asset.url}
+                    alt={`${data.project?.name || 'Product'} ${asset.assetType}`}
+                    className='h-full w-full object-contain'
+                    loading='lazy'
+                  />
+                </div>
+                <div className='p-3'>
                 <div className='flex items-center justify-between gap-2'>
                   <span className='text-xs font-bold uppercase text-cyan-700'>{asset.assetType.replaceAll('_', ' ')}</span>
                   <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${asset.status === 'verified' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>{asset.status}</span>
                 </div>
-                <div className='mt-2 truncate text-sm font-bold text-slate-900'>{asset.name}</div>
+                <div className='mt-2 truncate text-sm font-bold text-slate-900'>
+                  {asset.source === 'aibesttool_listing'
+                    ? `${data.project?.name || 'Product'} imported ${asset.assetType}`
+                    : asset.name}
+                </div>
+                {asset.source === 'aibesttool_listing' ? (
+                  <div className='mt-1 text-[11px] font-semibold text-emerald-700'>From the linked product listing</div>
+                ) : null}
                 <div className='mt-1 text-xs text-slate-500'>{asset.width && asset.height ? `${asset.width} × ${asset.height}` : 'Dimensions not recorded'}</div>
+                <div className='mt-2 truncate text-[10px] text-slate-400'>{asset.url}</div>
+                </div>
               </a>
             ))}
           </div>

@@ -163,6 +163,8 @@ export interface DistributionDashboard {
     height: number | null;
     status: string;
     verifiedAt: string | null;
+    source: string | null;
+    sourceToolId: string | null;
   }>;
   listingCandidates: DistributionListingCandidate[];
 }
@@ -582,7 +584,7 @@ export async function getDistributionDashboard(
         .eq('owner_id', user.id),
       supabase
         .from('distribution_project_assets')
-        .select('id, asset_type, name, source_url, stored_url, width, height, status, verified_at')
+        .select('id, asset_type, name, source_url, stored_url, width, height, status, verified_at, metadata')
         .eq('project_id', project.id)
         .eq('owner_id', user.id)
         .order('created_at', { ascending: false }),
@@ -855,6 +857,9 @@ export async function getDistributionDashboard(
           height: asset.height === null || asset.height === undefined ? null : Number(asset.height),
           status: String(asset.status || 'candidate'),
           verifiedAt: asset.verified_at || null,
+          source: typeof asset.metadata?.source === 'string' ? asset.metadata.source : null,
+          sourceToolId:
+            typeof asset.metadata?.sourceToolId === 'string' ? asset.metadata.sourceToolId : null,
         })),
         listingCandidates,
       },
