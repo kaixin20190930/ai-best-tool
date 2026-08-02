@@ -16,6 +16,7 @@
 说明：
 
 - 2026-08-03：导入最新 GSC 7/28 天数据。28 天曝光由 135 增至 147（+8.9%），点击由 1 降为 0，页面行数仍为 24；新增曝光主要集中在首页，尚不能判断为全站恢复。线上核心信号审计由 20 页扩到 27 页，新增 Research、Voice、Automation、Lindy、Fathom、The Graph、Dune；Explore 已补分类到代表工具的明确路径。新增索引页必须通过 `SEO_CONTENT_CHECKLIST.md` 的准入硬门槛，分发结果必须按 `DISTRIBUTION_PRODUCT_ACCEPTANCE_GUIDE_CN.md` 区分 submitted、live mention 和 verified backlink。
+- 2026-08-03：完成首批 GSC 机会工具的官方证据增强。Lindy 页面新增官方套餐、credits 消耗和暂停边界；Fathom 页面新增免费层、会议平台和录制同意边界，均显示 2026-08-03 核查日期和直接官方来源。`seo:priority-page-signals -- --strict` 新增机会页官方来源块检查，防止后续页面调整时退回无来源的 AI 描述。当前仍不新增全新索引 URL，下一批优先继续增强已经有曝光或分类锚点的 canonical 页面。
 
 - 2026-08-02：确认分发数据边界：具体目标站 registry、规则和快照继续保存在 Neon，用户项目机会、任务、材料包、提醒和归因保存在 Supabase；两边通过稳定 target UUID 和 channel key 映射，禁止创建跨数据库外键。Neon 暂时不可用时推荐区降级为空，不阻断原有项目和任务工作台。
 

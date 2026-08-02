@@ -1320,6 +1320,122 @@ type PriorityToolSearchIntent = {
   checkpoints: string[];
 };
 
+type PriorityToolOfficialEvidence = {
+  label: string;
+  title: string;
+  summary: string;
+  checkedAt: string;
+  facts: Array<{ label: string; value: string }>;
+  sources: Array<{ label: string; href: string }>;
+};
+
+function getPriorityToolOfficialEvidence(websiteName: string, locale: string): PriorityToolOfficialEvidence | null {
+  const isChinese = locale === 'cn' || locale === 'tw';
+  const key = websiteName.toLowerCase();
+
+  if (key === 'lindy') {
+    return isChinese
+      ? {
+          label: '官方事实快照',
+          title: '价格、用量和人工确认边界',
+          summary: '以下信息来自 Lindy 官方定价与用量文档；价格和额度可能变化，购买前应再次打开官方页面确认。',
+          checkedAt: '2026-08-03',
+          facts: [
+            { label: '试用与套餐', value: '7 天试用；Plus $49.99/月、Pro $99.99/月、Max $199.99/月。' },
+            {
+              label: '用量计算',
+              value: '自定义 Agent 按任务消耗 credits，模型、复杂度、付费动作和运行时间都会影响成本。',
+            },
+            { label: '运行边界', value: '额度用尽后 Agent 会暂停；未用额度不会结转，敏感邮件和消息应保留人工确认。' },
+          ],
+          sources: [
+            { label: '官方定价', href: 'https://www.lindy.ai/pricing' },
+            { label: 'Credits 说明', href: 'https://docs.lindy.ai/account-billing/credits' },
+            { label: '用量与暂停规则', href: 'https://docs.lindy.ai/account-billing/usage' },
+          ],
+        }
+      : {
+          label: 'Official fact snapshot',
+          title: 'Pricing, usage, and human-control boundaries',
+          summary:
+            'These facts come from Lindy pricing and usage documentation. Recheck the official pages before buying because prices and allowances can change.',
+          checkedAt: '2026-08-03',
+          facts: [
+            { label: 'Trial and plans', value: '7-day trial; Plus $49.99/mo, Pro $99.99/mo, and Max $199.99/mo.' },
+            {
+              label: 'Usage model',
+              value:
+                'Custom-agent tasks consume credits based on model choice, complexity, premium actions, and duration.',
+            },
+            {
+              label: 'Operating boundary',
+              value:
+                'Agents pause when usage is exhausted, unused allowance does not roll over, and sensitive sends should retain human review.',
+            },
+          ],
+          sources: [
+            { label: 'Official pricing', href: 'https://www.lindy.ai/pricing' },
+            { label: 'Credits documentation', href: 'https://docs.lindy.ai/account-billing/credits' },
+            { label: 'Usage and pause rules', href: 'https://docs.lindy.ai/account-billing/usage' },
+          ],
+        };
+  }
+
+  if (key === 'fathom') {
+    return isChinese
+      ? {
+          label: '官方事实快照',
+          title: '免费层、会议兼容性和录制同意',
+          summary: '以下信息来自 Fathom 官方帮助中心；团队方案和新桌面体验仍在变化，启用前应复核当前账号可见配置。',
+          checkedAt: '2026-08-03',
+          facts: [
+            { label: '免费层', value: '个人免费层包含不限量录制、存储和 38 种语言转录；高级摘要每月前 5 次可用。' },
+            {
+              label: '会议平台',
+              value: '设置文档列出 Zoom、Google Meet 和 Microsoft Teams，并支持分别配置自动录制与会后分享。',
+            },
+            { label: '隐私边界', value: 'Fathom 不支持静默录制；参与者必须能看到录制通知、bot 或同意机制。' },
+          ],
+          sources: [
+            { label: '免费与 Premium', href: 'https://help.fathom.video/en/articles/5290881' },
+            { label: '会议与分享设置', href: 'https://help.fathom.video/en/articles/3239617' },
+            { label: '录制同意规则', href: 'https://help.fathom.video/en/articles/6150977' },
+          ],
+        }
+      : {
+          label: 'Official fact snapshot',
+          title: 'Free tier, meeting compatibility, and recording consent',
+          summary:
+            'These facts come from the Fathom help center. Team packaging and the newer desktop experience are still changing, so recheck the settings visible to your account.',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: 'Free tier',
+              value:
+                'The individual free tier includes unlimited recordings, storage, and transcription in 38 languages, with five advanced summaries per month.',
+            },
+            {
+              label: 'Meeting platforms',
+              value:
+                'Settings documentation covers Zoom, Google Meet, and Microsoft Teams, with controls for capture and post-meeting sharing.',
+            },
+            {
+              label: 'Privacy boundary',
+              value:
+                'Fathom does not support silent recording; participants must see a recording notice, bot, or consent mechanism.',
+            },
+          ],
+          sources: [
+            { label: 'Free versus Premium', href: 'https://help.fathom.video/en/articles/5290881' },
+            { label: 'Meeting and sharing settings', href: 'https://help.fathom.video/en/articles/3239617' },
+            { label: 'Recording consent rules', href: 'https://help.fathom.video/en/articles/6150977' },
+          ],
+        };
+  }
+
+  return null;
+}
+
 function getPriorityToolSearchIntent(websiteName: string, locale: string): PriorityToolSearchIntent | null {
   const isChinese = locale === 'cn' || locale === 'tw';
   const key = websiteName.toLowerCase();
@@ -1633,6 +1749,7 @@ export default async function Page({
 
     const claimTool = dbTool as (typeof dbTool & DetailClaimSignals) | null;
     const prioritySearchIntent = getPriorityToolSearchIntent(websiteName, locale);
+    const priorityOfficialEvidence = getPriorityToolOfficialEvidence(websiteName, locale);
 
     // Get current user
     const supabase = await createClient();
@@ -1887,13 +2004,12 @@ export default async function Page({
           return Number.isFinite(reviewedTime) && Date.now() - reviewedTime >= 90 * 24 * 60 * 60 * 1000;
         })()
       : false;
-    const editorialReviewerLabel = editorialReview
-      ? isChinese
+    let editorialReviewerLabel = isChinese ? '复核人：待补充' : 'Reviewed by: pending';
+    if (editorialReview) {
+      editorialReviewerLabel = isChinese
         ? `复核人：${editorialReview.reviewedBy}`
-        : `Reviewed by ${editorialReview.reviewedBy}`
-      : isChinese
-        ? '复核人：待补充'
-        : 'Reviewed by: pending';
+        : `Reviewed by ${editorialReview.reviewedBy}`;
+    }
     const freshnessSummary = decisionFreshnessSummary || getFreshnessSummary(updatedAt || null, locale);
     const pricingSummary = decisionPricingSummary || getPricingSummary(dbTool?.pricing, locale);
     const riskPoints: string[] = [];
@@ -2029,8 +2145,8 @@ export default async function Page({
           label: isChinese ? '风险信号' : 'Risk signal',
           value: isChinese ? '先确认稳定性和失败重试' : 'Confirm stability and retries first',
           note: isChinese
-          ? '自动化工具只要不稳定，后面的工作流就会很难持续。'
-          : 'If an automation tool is unstable, downstream workflows become hard to trust.',
+            ? '自动化工具只要不稳定，后面的工作流就会很难持续。'
+            : 'If an automation tool is unstable, downstream workflows become hard to trust.',
         },
       ];
     } else if (websiteNameKey === 'lindy') {
@@ -2044,7 +2160,9 @@ export default async function Page({
         },
         {
           label: isChinese ? '更新信号' : 'Freshness signal',
-          value: isChinese ? '看触发器和执行链路是否持续维护' : 'Check whether trigger and execution pipelines are maintained',
+          value: isChinese
+            ? '看触发器和执行链路是否持续维护'
+            : 'Check whether trigger and execution pipelines are maintained',
           note: isChinese
             ? '当触发器和鉴权链路长期不更新时，自动化链路最容易积累沉没成本。'
             : 'When trigger and auth chains stay stale, automation usually accumulates hidden maintenance costs.',
@@ -2092,7 +2210,9 @@ export default async function Page({
         },
         {
           label: isChinese ? '更新信号' : 'Freshness signal',
-          value: isChinese ? '看规则提示、模型更新和协作链路' : 'Check rule hints, model updates, and collaboration flow',
+          value: isChinese
+            ? '看规则提示、模型更新和协作链路'
+            : 'Check rule hints, model updates, and collaboration flow',
           note: isChinese
             ? 'Cursor 的价值依赖稳定更新和代码变更闭环，长时间不更新会迅速出现漂移。'
             : 'Cursor value depends on steady updates and a stable editing loop, not just short-term demos.',
@@ -2358,6 +2478,53 @@ export default async function Page({
                       ))}
                     </div>
                   </div>
+                )}
+
+                {priorityOfficialEvidence && (
+                  <section
+                    data-official-evidence='true'
+                    className='rounded-[18px] border border-emerald-200 bg-emerald-50/60 p-5 shadow-sm'
+                  >
+                    <div className='flex flex-wrap items-start justify-between gap-3'>
+                      <div>
+                        <p className='text-xs font-semibold uppercase tracking-wide text-emerald-700'>
+                          {priorityOfficialEvidence.label}
+                        </p>
+                        <h2 className='mt-2 text-xl font-bold text-slate-950'>{priorityOfficialEvidence.title}</h2>
+                      </div>
+                      <span className='rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-600 ring-1 ring-emerald-200'>
+                        {isChinese ? '核查于' : 'Checked'} {priorityOfficialEvidence.checkedAt}
+                      </span>
+                    </div>
+                    <p className='mt-3 max-w-4xl text-sm leading-6 text-slate-600'>
+                      {priorityOfficialEvidence.summary}
+                    </p>
+                    <div className='mt-4 grid gap-3 md:grid-cols-3'>
+                      {priorityOfficialEvidence.facts.map((fact) => (
+                        <div key={fact.label} className='rounded-xl border border-white bg-white p-4'>
+                          <p className='text-xs font-semibold uppercase tracking-wide text-emerald-700'>{fact.label}</p>
+                          <p className='mt-2 text-sm leading-6 text-slate-700'>{fact.value}</p>
+                        </div>
+                      ))}
+                    </div>
+                    <div className='mt-4 flex flex-wrap items-center gap-2 border-t border-emerald-200 pt-4'>
+                      <span className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                        {isChinese ? '官方来源' : 'Official sources'}
+                      </span>
+                      {priorityOfficialEvidence.sources.map((source) => (
+                        <a
+                          key={source.href}
+                          href={source.href}
+                          target='_blank'
+                          rel='noreferrer'
+                          className='inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-emerald-800 ring-1 ring-emerald-200 transition hover:bg-emerald-100'
+                        >
+                          {source.label}
+                          <ExternalLink className='size-3.5' />
+                        </a>
+                      ))}
+                    </div>
+                  </section>
                 )}
 
                 <div className='grid gap-3 md:grid-cols-3'>
@@ -2868,15 +3035,13 @@ export default async function Page({
                       </div>
 
                       <div className='rounded-lg border border-slate-200 p-4'>
-                          <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                            {locale === 'cn' ? '编辑复核' : 'Editorial review'}
-                          </p>
-                          <p className='mt-2 text-lg font-semibold text-slate-950'>
-                            {editorialReviewedLabel || (locale === 'cn' ? '待补复核' : 'Review pending')}
-                          </p>
-                          <p className='mt-1 text-xs font-medium text-slate-500'>
-                            {editorialReviewerLabel}
-                          </p>
+                        <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                          {locale === 'cn' ? '编辑复核' : 'Editorial review'}
+                        </p>
+                        <p className='mt-2 text-lg font-semibold text-slate-950'>
+                          {editorialReviewedLabel || (locale === 'cn' ? '待补复核' : 'Review pending')}
+                        </p>
+                        <p className='mt-1 text-xs font-medium text-slate-500'>{editorialReviewerLabel}</p>
                         {!editorialReview ? (
                           <p className='mt-2 text-sm leading-6 text-slate-600'>
                             {locale === 'cn'
