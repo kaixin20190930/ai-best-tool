@@ -1558,6 +1558,212 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
         };
   }
 
+  if (key === 'notta') {
+    return isChinese
+      ? {
+          label: '官方事实快照',
+          title: '转录额度、语言覆盖和翻译限制',
+          summary: '以下信息来自 Notta 官方帮助中心；套餐额度和语言支持可能变化，处理重要会议前应复核当前账号限制。',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: '转录额度',
+              value:
+                'Free 每月 120 分钟，Pro 每月 1,800 分钟；Business 当前提供不限转录时长，Pro 不能单独购买额外分钟。',
+            },
+            {
+              label: '语言覆盖',
+              value: '单语转录支持 58 种语言，转录后翻译支持 42 种语言，双语转录与翻译支持 23 种语言。',
+            },
+            {
+              label: '翻译边界',
+              value: '翻译准确性依赖原始转录，官方建议先校正转录；重新翻译仍会消耗转录分钟，部分实时翻译另有次数限制。',
+            },
+          ],
+          sources: [
+            {
+              label: '转录额度说明',
+              href: 'https://support.notta.ai/hc/en-us/articles/16302706643739-Is-it-possible-to-buy-more-transcription-time',
+            },
+            {
+              label: '支持语言',
+              href: 'https://support.notta.ai/hc/en-us/articles/4403155631131-What-languages-does-Notta-support',
+            },
+            {
+              label: '翻译限制',
+              href: 'https://support.notta.ai/hc/en-us/articles/18585038521627-Generate-translations-from-transcripts',
+            },
+          ],
+        }
+      : {
+          label: 'Official fact snapshot',
+          title: 'Transcription allowance, language coverage, and translation limits',
+          summary:
+            'These facts come from the Notta help center. Recheck current account limits before important meetings because allowances and language support can change.',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: 'Transcription allowance',
+              value:
+                'Free includes 120 minutes per month and Pro includes 1,800; Business currently offers unlimited transcription, while Pro minutes cannot be purchased separately.',
+            },
+            {
+              label: 'Language coverage',
+              value:
+                'Monolingual transcription supports 58 languages, post-transcription translation supports 42, and bilingual transcription and translation supports 23.',
+            },
+            {
+              label: 'Translation boundary',
+              value:
+                'Translation quality depends on the transcript, retranslating consumes transcription minutes, and some real-time translation modes have separate usage limits.',
+            },
+          ],
+          sources: [
+            {
+              label: 'Transcription allowance',
+              href: 'https://support.notta.ai/hc/en-us/articles/16302706643739-Is-it-possible-to-buy-more-transcription-time',
+            },
+            {
+              label: 'Supported languages',
+              href: 'https://support.notta.ai/hc/en-us/articles/4403155631131-What-languages-does-Notta-support',
+            },
+            {
+              label: 'Translation limits',
+              href: 'https://support.notta.ai/hc/en-us/articles/18585038521627-Generate-translations-from-transcripts',
+            },
+          ],
+        };
+  }
+
+  if (key === 'runway') {
+    return isChinese
+      ? {
+          label: '官方事实快照',
+          title: '生成 Credits、商业权利和账户边界',
+          summary: '以下信息来自 Runway 官方帮助中心；模型费率与套餐额度变化较快，正式制作前应在 Billing 页面复核。',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: 'Credits',
+              value: 'Free 一次性提供 125 credits；Standard 每月 625，Pro 与 Unlimited 每月 2,250，Max 每月 9,500。',
+            },
+            {
+              label: '生成成本',
+              value:
+                '不同模型按输出计费；官方示例中 Gen-4.5 为每秒 12 credits。Standard、Pro 与 Unlimited 月度额度不结转。',
+            },
+            {
+              label: '权利与账户',
+              value: '各套餐生成内容可用于商业用途且无需强制署名；Web App 与 API 的套餐和 credits 完全分开，不能互转。',
+            },
+          ],
+          sources: [
+            {
+              label: 'Credits 规则',
+              href: 'https://help.runwayml.com/hc/en-us/articles/15124877443219-How-do-credits-work',
+            },
+            {
+              label: '使用与商业权利',
+              href: 'https://help.runwayml.com/hc/en-us/articles/18927776141715-Usage-rights',
+            },
+          ],
+        }
+      : {
+          label: 'Official fact snapshot',
+          title: 'Generation credits, commercial rights, and account boundaries',
+          summary:
+            'These facts come from the Runway help center. Model rates and plan allowances change quickly, so recheck Plans & Billing before production work.',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: 'Credits',
+              value:
+                'Free includes a one-time 125 credits; Standard includes 625 monthly, Pro and Unlimited 2,250 monthly, and Max 9,500 monthly.',
+            },
+            {
+              label: 'Generation cost',
+              value:
+                'Models consume credits at different rates; Runway lists Gen-4.5 at 12 credits per generated second. Standard, Pro, and Unlimited monthly credits do not roll over.',
+            },
+            {
+              label: 'Rights and accounts',
+              value:
+                'All plans permit commercial use without mandatory attribution; web-app and API plans and credits are separate and cannot be transferred.',
+            },
+          ],
+          sources: [
+            {
+              label: 'Credit rules',
+              href: 'https://help.runwayml.com/hc/en-us/articles/15124877443219-How-do-credits-work',
+            },
+            {
+              label: 'Usage and commercial rights',
+              href: 'https://help.runwayml.com/hc/en-us/articles/18927776141715-Usage-rights',
+            },
+          ],
+        };
+  }
+
+  if (key === 'defillama') {
+    return isChinese
+      ? {
+          label: '官方事实快照',
+          title: 'TVL 口径、开源数据和解读边界',
+          summary: '以下信息来自 DefiLlama 官方方法文档；链上指标依赖 adapter、价格源与分类口径，不能替代独立尽调。',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: '数据来源',
+              value:
+                '每个项目通过开源 adapter 返回 TVL，官方优先使用链上调用，也允许部分 adapter 使用 subgraph 或 API。',
+            },
+            {
+              label: 'TVL 口径',
+              value: '未流通资产、原生代币质押、智能钱包资金和链级 bridge TVL 默认不计入；同一协议内部避免重复计算。',
+            },
+            {
+              label: '解读边界',
+              value:
+                'TVL 会随资产价格变化，即使没有资金流入或流出也可能升降；分析资金方向时应结合 USD Inflows 等指标。',
+            },
+          ],
+          sources: [
+            { label: '官方方法与指标', href: 'https://docs.llama.fi/' },
+            { label: 'TVL 纳入规则', href: 'https://docs.llama.fi/list-your-project/what-to-include-as-tvl' },
+            { label: '数据定义', href: 'https://docs.llama.fi/analysts/data-definitions' },
+          ],
+        }
+      : {
+          label: 'Official fact snapshot',
+          title: 'TVL methodology, open data, and interpretation limits',
+          summary:
+            'These facts come from DefiLlama methodology documentation. Onchain metrics depend on adapters, price sources, and classification rules and do not replace independent diligence.',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: 'Data source',
+              value:
+                'Each listed project has an open-source adapter that returns TVL; onchain calls are preferred, while some adapters use subgraphs or APIs.',
+            },
+            {
+              label: 'TVL scope',
+              value:
+                'Unissued assets, native-token staking, smart-wallet funds, and bridge TVL at chain level are excluded by default, with double counting avoided inside a protocol.',
+            },
+            {
+              label: 'Interpretation boundary',
+              value:
+                'TVL can rise or fall with asset prices even without deposits or withdrawals; use measures such as USD Inflows when evaluating capital movement.',
+            },
+          ],
+          sources: [
+            { label: 'Official methodology and metrics', href: 'https://docs.llama.fi/' },
+            { label: 'TVL inclusion rules', href: 'https://docs.llama.fi/list-your-project/what-to-include-as-tvl' },
+            { label: 'Data definitions', href: 'https://docs.llama.fi/analysts/data-definitions' },
+          ],
+        };
+  }
+
   return null;
 }
 

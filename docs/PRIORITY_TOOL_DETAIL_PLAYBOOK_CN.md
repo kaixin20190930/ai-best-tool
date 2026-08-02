@@ -28,6 +28,9 @@
 - `fathom`
 - `the-graph`
 - `dune`
+- `notta`
+- `runway`
+- `defillama`
 
 快照必须同时包含：
 
