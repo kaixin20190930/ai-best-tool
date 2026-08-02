@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useFormStatus } from 'react-dom';
 import Link from 'next/link';
 import {
   ArrowRight,
@@ -9,6 +10,7 @@ import {
   Circle,
   ExternalLink,
   Link2,
+  LoaderCircle,
   Plus,
   Radar,
   Send,
@@ -38,6 +40,54 @@ import {
 import { getDistributionAssetGuidance } from '@/lib/services/distribution/listingBridge';
 
 const statusOptions = getDistributionTaskStatusChoices();
+
+function ImportListingButton({
+  disabled,
+  linked,
+}: {
+  disabled: boolean;
+  linked: boolean;
+}) {
+  const { pending } = useFormStatus();
+  const [stage, setStage] = useState(0);
+  const messages = linked
+    ? ['Refreshing listing data...', 'Updating product facts...', 'Syncing reusable assets...']
+    : ['Connecting product listing...', 'Filling product facts...', 'Saving reusable assets...'];
+
+  useEffect(() => {
+    if (!pending) {
+      setStage(0);
+      return;
+    }
+    const timer = window.setInterval(() => setStage((current) => Math.min(current + 1, messages.length - 1)), 700);
+    return () => window.clearInterval(timer);
+  }, [messages.length, pending]);
+
+  return (
+    <button
+      disabled={disabled || pending}
+      aria-live='polite'
+      className='inline-flex min-w-36 items-center justify-center gap-2 rounded-lg bg-cyan-700 px-3 py-2 text-xs font-bold text-white hover:bg-cyan-800 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500'
+    >
+      {pending ? <LoaderCircle className='h-4 w-4 animate-spin' /> : null}
+      {pending ? messages[stage] : disabled ? 'Different project domain' : linked ? 'Refresh listing data' : 'Import and review'}
+    </button>
+  );
+}
+
+function ImportAssetsButton() {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      disabled={pending}
+      aria-live='polite'
+      className='inline-flex items-center justify-center gap-2 rounded-xl border border-cyan-200 bg-cyan-50 px-4 py-2.5 text-xs font-bold text-cyan-800 hover:bg-cyan-100 disabled:cursor-wait disabled:opacity-70'
+    >
+      {pending ? <LoaderCircle className='h-4 w-4 animate-spin' /> : null}
+      {pending ? 'Importing discovered assets...' : 'Import discovered assets'}
+    </button>
+  );
+}
 
 function statusToneClass(status: DistributionTaskStatus) {
   const tone = DISTRIBUTION_TASK_STATUS_META[status].tone;
@@ -610,16 +660,10 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
                     <form action={importDistributionCatalogListing} className='mt-3'>
                       <input type='hidden' name='projectId' value={activeProjectId} />
                       <input type='hidden' name='toolId' value={listing.id} />
-                      <button
+                      <ImportListingButton
                         disabled={Boolean(activeProjectWebsiteUrl) && !listing.exactDomainMatch}
-                        className='rounded-lg bg-cyan-700 px-3 py-2 text-xs font-bold text-white hover:bg-cyan-800 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500'
-                      >
-                        {Boolean(activeProjectWebsiteUrl) && !listing.exactDomainMatch
-                          ? 'Different project domain'
-                          : activeProjectSourceToolId === listing.id
-                            ? 'Refresh listing data'
-                            : 'Import and review'}
-                      </button>
+                        linked={activeProjectSourceToolId === listing.id}
+                      />
                     </form>
                   </div>
                 ))}
@@ -761,7 +805,7 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
           </div>
           <form action={importDistributionIntelligenceAssets}>
             <input type='hidden' name='projectId' value={data.project?.id || ''} />
-            <button className='rounded-xl border border-cyan-200 bg-cyan-50 px-4 py-2.5 text-xs font-bold text-cyan-800 hover:bg-cyan-100'>Import discovered assets</button>
+            <ImportAssetsButton />
           </form>
         </div>
         {data.assets.length ? (
