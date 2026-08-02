@@ -1764,6 +1764,208 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
         };
   }
 
+  if (key === 'chatgpt') {
+    return isChinese
+      ? {
+          label: '官方事实快照',
+          title: '套餐选择、数据控制和工作区边界',
+          summary: '以下信息来自 OpenAI 官方定价与帮助文档；模型、额度和功能会持续变化，使用前应复核当前账号显示。',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: '套餐边界',
+              value: 'Free、Go、Plus 面向个人；Business 与 Enterprise 面向组织，Business 至少需要 2 名用户。',
+            },
+            {
+              label: '个人数据控制',
+              value: '个人工作区可在 Data Controls 关闭“Improve the model for everyone”；关闭后新对话不用于训练。',
+            },
+            {
+              label: '临时与商业数据',
+              value:
+                'Temporary Chat 不进入历史、不创建 memory，并在 30 天后删除；Business、Enterprise、Edu 默认不使用输入输出训练模型。',
+            },
+          ],
+          sources: [
+            { label: 'ChatGPT 官方定价', href: 'https://openai.com/business/chatgpt-pricing/' },
+            {
+              label: 'Data Controls',
+              href: 'https://help.openai.com/en/articles/7730893-how-chatgpt-uses-browser-history-and-data',
+            },
+            { label: '训练数据设置', href: 'https://help.openai.com/en/articles/8983130-how-does-chatgpt-use-my-data' },
+          ],
+        }
+      : {
+          label: 'Official fact snapshot',
+          title: 'Plan choice, data controls, and workspace boundaries',
+          summary:
+            'These facts come from OpenAI pricing and help documentation. Models, allowances, and features change, so recheck the options shown in your account.',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: 'Plan boundary',
+              value:
+                'Free, Go, and Plus are for individuals; Business and Enterprise serve organizations, with Business starting at two users.',
+            },
+            {
+              label: 'Personal data control',
+              value:
+                'Personal workspaces can turn off Improve the model for everyone in Data Controls; new conversations are then excluded from training.',
+            },
+            {
+              label: 'Temporary and business data',
+              value:
+                'Temporary Chats are not saved to history or memory and are deleted after 30 days; Business, Enterprise, and Edu inputs and outputs are not used for training by default.',
+            },
+          ],
+          sources: [
+            { label: 'Official ChatGPT pricing', href: 'https://openai.com/business/chatgpt-pricing/' },
+            {
+              label: 'Data Controls',
+              href: 'https://help.openai.com/en/articles/7730893-how-chatgpt-uses-browser-history-and-data',
+            },
+            {
+              label: 'Training-data settings',
+              href: 'https://help.openai.com/en/articles/8983130-how-does-chatgpt-use-my-data',
+            },
+          ],
+        };
+  }
+
+  if (key === 'claude') {
+    return isChinese
+      ? {
+          label: '官方事实快照',
+          title: '套餐价格、动态用量和数据导出',
+          summary: '以下信息来自 Anthropic 官方帮助中心；实际消息额度受对话、附件、工具和模型影响，并非固定消息数。',
+          checkedAt: '2026-08-03',
+          facts: [
+            { label: '个人套餐', value: 'Free 为 $0；Pro $20/月；Max 5x $100/月；Max 20x $200/月。' },
+            {
+              label: '用量边界',
+              value: '可用消息数会随消息长度、附件大小、对话长度、Research/web search、模型与 Artifacts 使用变化。',
+            },
+            {
+              label: '数据可携带性',
+              value:
+                'Free、Pro、Max 用户可从 Web 或桌面端 Settings > Privacy 导出账户信息与聊天记录；下载链接 24 小时后失效。',
+            },
+          ],
+          sources: [
+            {
+              label: 'Claude 套餐选择',
+              href: 'https://support.anthropic.com/en/articles/11049762-choosing-a-claude-ai-plan',
+            },
+            {
+              label: '用量优化与影响因素',
+              href: 'https://support.anthropic.com/en/articles/9797557-usage-limit-best-practices',
+            },
+            {
+              label: '数据导出',
+              href: 'https://support.anthropic.com/en/articles/9450526-how-can-i-export-my-claude-data',
+            },
+          ],
+        }
+      : {
+          label: 'Official fact snapshot',
+          title: 'Plan pricing, variable usage, and data export',
+          summary:
+            'These facts come from the Anthropic help center. Actual message capacity depends on the conversation, attachments, tools, and model rather than a fixed message count.',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: 'Individual plans',
+              value: 'Free is $0; Pro is $20/mo; Max 5x is $100/mo; and Max 20x is $200/mo.',
+            },
+            {
+              label: 'Usage boundary',
+              value:
+                'Capacity varies with message and attachment size, conversation length, Research or web search, model choice, and Artifact usage.',
+            },
+            {
+              label: 'Data portability',
+              value:
+                'Free, Pro, and Max users can export account and chat data from Settings > Privacy on web or desktop; the download link expires after 24 hours.',
+            },
+          ],
+          sources: [
+            {
+              label: 'Choosing a Claude plan',
+              href: 'https://support.anthropic.com/en/articles/11049762-choosing-a-claude-ai-plan',
+            },
+            {
+              label: 'Usage factors and practices',
+              href: 'https://support.anthropic.com/en/articles/9797557-usage-limit-best-practices',
+            },
+            {
+              label: 'Data export',
+              href: 'https://support.anthropic.com/en/articles/9450526-how-can-i-export-my-claude-data',
+            },
+          ],
+        };
+  }
+
+  if (key === 'cursor') {
+    return isChinese
+      ? {
+          label: '官方事实快照',
+          title: '套餐内用量、超额成本和代码隐私',
+          summary:
+            '以下信息来自 Cursor 官方定价、计费与隐私文档；模型价格和奖励用量可能变化，应在 Dashboard 核对实际消耗。',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: '套餐与用量',
+              value: 'Pro $20/月并包含 $20 API agent usage；Pro Plus 包含 $70，Ultra 包含 $400；Teams 为 $40/用户/月。',
+            },
+            {
+              label: '超额成本',
+              value:
+                '模型选择影响 token 消耗；套餐内用量耗尽后可按成本购买额外用量，组织管理员可设置月度或用户级限制。',
+            },
+            {
+              label: '隐私边界',
+              value:
+                '启用 Privacy Mode 后，Cursor 不将 Customer Data 用于训练，并与模型提供商维持 ZDR；滥用检测命中时仍可能按政策暂存调查数据。',
+            },
+          ],
+          sources: [
+            { label: '模型与套餐用量', href: 'https://docs.cursor.com/account/pricing' },
+            { label: '官方价格', href: 'https://cursor.com/pricing' },
+            { label: '数据使用与 Privacy Mode', href: 'https://cursor.com/data-use' },
+          ],
+        }
+      : {
+          label: 'Official fact snapshot',
+          title: 'Included usage, overage cost, and code privacy',
+          summary:
+            'These facts come from Cursor pricing, billing, and privacy documentation. Model prices and bonus usage can change, so verify actual consumption in the dashboard.',
+          checkedAt: '2026-08-03',
+          facts: [
+            {
+              label: 'Plans and usage',
+              value:
+                'Pro is $20/mo with $20 of API agent usage; Pro Plus includes $70, Ultra includes $400, and Teams is $40/user/mo.',
+            },
+            {
+              label: 'Overage cost',
+              value:
+                'Model choice affects token consumption; users can buy additional usage at cost after the included amount, while organizations can configure monthly or per-user limits.',
+            },
+            {
+              label: 'Privacy boundary',
+              value:
+                'With Privacy Mode enabled, Cursor does not train on Customer Data and maintains ZDR agreements with model providers; abuse-detector investigations remain an exception.',
+            },
+          ],
+          sources: [
+            { label: 'Models and included usage', href: 'https://docs.cursor.com/account/pricing' },
+            { label: 'Official pricing', href: 'https://cursor.com/pricing' },
+            { label: 'Data use and Privacy Mode', href: 'https://cursor.com/data-use' },
+          ],
+        };
+  }
+
   return null;
 }
 

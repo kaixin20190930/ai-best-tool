@@ -31,6 +31,9 @@
 - `notta`
 - `runway`
 - `defillama`
+- `chatgpt`
+- `claude`
+- `cursor`
 
 快照必须同时包含：
 
