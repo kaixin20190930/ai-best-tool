@@ -58,6 +58,15 @@
 
 点击 `Choose this target` 后必须生成一条绑定具体目标站的任务，并显示 `Continue task`。
 
+Moxion 首轮推荐顺序（2026-08-03 官方规则核验后）：
+
+1. `SaaSHub`：免费提交，需账号和人工审核；Featured 为可选付费，当前最适合首次验证。
+2. `AlternativeTo`：免费提交，需账号；新账号需等待一周后才能提交新应用。
+3. `Futurepedia`：当前提交方案收费且需审核；在 `Free first` 下保留但降权。
+4. `Hacker News`：不属于目录覆盖主渠道，只在产品有真实发布故事时使用。
+
+生产故障记录：旧 `DATABASE_URL` 值不可解析，而有效 Neon 连接保存在 `POSTGRES_URL` 等变量中；数据库客户端已改为选择第一个有效 Postgres URL。目标站查询异常不再静默显示为“无匹配网站”。
+
 ### Step 4：材料包
 
 进入任务页，点击 `Generate target package`。验收：

@@ -12,10 +12,24 @@ import { Pool, PoolClient, QueryResult, QueryResultRow } from 'pg';
  * 获取数据库连接池配置
  */
 function getPoolConfig() {
-  const databaseUrl = process.env.DATABASE_URL;
+  const databaseUrl = [
+    process.env.DATABASE_URL,
+    process.env.POSTGRES_URL,
+    process.env.POSTGRES_PRISMA_URL,
+    process.env.DATABASE_URL_UNPOOLED,
+    process.env.POSTGRES_URL_NON_POOLING,
+  ].find((candidate) => {
+    if (!candidate) return false;
+    try {
+      const parsed = new URL(candidate);
+      return ['postgres:', 'postgresql:'].includes(parsed.protocol) && Boolean(parsed.hostname);
+    } catch {
+      return false;
+    }
+  });
 
   if (!databaseUrl) {
-    throw new Error('DATABASE_URL environment variable is not set');
+    throw new Error('No valid Postgres connection URL is configured');
   }
 
   // 检查是否需要 SSL

@@ -10,7 +10,20 @@ import { DISTRIBUTION_TARGET_FIXTURES } from '@/lib/services/intelligence/fixtur
 
 config({ path: '.env.local' });
 
-const connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.DATABASE_URL_UNPOOLED;
+const connectionString = [
+  process.env.DATABASE_URL,
+  process.env.POSTGRES_URL,
+  process.env.POSTGRES_PRISMA_URL,
+  process.env.DATABASE_URL_UNPOOLED,
+].find((candidate) => {
+  if (!candidate) return false;
+  try {
+    const parsed = new URL(candidate);
+    return ['postgres:', 'postgresql:'].includes(parsed.protocol) && Boolean(parsed.hostname);
+  } catch {
+    return false;
+  }
+});
 
 if (!connectionString) {
   console.error('❌ Missing DATABASE_URL / POSTGRES_URL / DATABASE_URL_UNPOOLED');
@@ -108,6 +121,43 @@ const targetChannelKeyMap: Record<string, string> = {
   reddit: 'reddit',
 };
 
+const verifiedTargetOverrides: Record<
+  string,
+  {
+    submissionUrl: string;
+    requiresAccount: boolean;
+    requiresPayment: boolean;
+    editorialReview: boolean;
+    confidence: number;
+    reviewReason: string;
+  }
+> = {
+  saashub: {
+    submissionUrl: 'https://www.saashub.com/services/submit',
+    requiresAccount: true,
+    requiresPayment: false,
+    editorialReview: true,
+    confidence: 90,
+    reviewReason: 'Official submission page verified: free product submission is available; featured placement is optional.',
+  },
+  alternativeto: {
+    submissionUrl: 'https://alternativeto.net/faq/',
+    requiresAccount: true,
+    requiresPayment: false,
+    editorialReview: true,
+    confidence: 80,
+    reviewReason: 'Official FAQ verified: users can suggest a new application; new accounts must wait one week before submitting.',
+  },
+  futurepedia: {
+    submissionUrl: 'https://www.futurepedia.io/submit-tool',
+    requiresAccount: false,
+    requiresPayment: true,
+    editorialReview: true,
+    confidence: 90,
+    reviewReason: 'Official submission page verified: current listing options are paid and subject to editorial approval.',
+  },
+};
+
 async function main() {
   console.log('🔧 Seeding distribution registry...');
   const { rows: channels } = await pool.query<{ id: string; channel_key: string }>(
@@ -165,11 +215,12 @@ async function main() {
       throw new Error(`Missing channel for target fixture ${fixture.key}`);
     }
 
+    const verified = verifiedTargetOverrides[fixture.key];
     return {
       channelId,
       name: fixture.name,
       homepageUrl: fixture.homepageUrl,
-      submissionUrl: fixture.seedUrl ?? null,
+      submissionUrl: verified?.submissionUrl || fixture.seedUrl || null,
       registrationUrl: null,
       pricingUrl: null,
       audience:
@@ -184,6 +235,11 @@ async function main() {
                 : fixture.channelType === 'github'
                   ? 'developers'
                   : 'readers',
+      requiresAccount: verified?.requiresAccount || false,
+      requiresPayment: verified?.requiresPayment || false,
+      editorialReview: verified?.editorialReview || false,
+      confidence: verified?.confidence || 55,
+      reviewReason: verified?.reviewReason || `Seeded from canonical target fixture ${fixture.name}.`,
     };
   });
 
@@ -210,7 +266,7 @@ async function main() {
           metadata,
           updated_at
         )
-        values ($1, $2, $3, $4, $5, $6, $7, 'active', false, false, false, false, false, null, 55, $8, '{}'::jsonb, now())
+        values ($1, $2, $3, $4, $5, $6, $7, 'active', $8, $9, false, false, $10, null, $11, $12, '{}'::jsonb, now())
         on conflict (channel_id, homepage_url)
         do update set
           name = excluded.name,
@@ -219,6 +275,9 @@ async function main() {
           pricing_url = excluded.pricing_url,
           audience = excluded.audience,
           target_status = excluded.target_status,
+          requires_account = excluded.requires_account,
+          requires_payment = excluded.requires_payment,
+          editorial_review = excluded.editorial_review,
           confidence = excluded.confidence,
           notes = excluded.notes,
           updated_at = now()
@@ -231,7 +290,11 @@ async function main() {
         target.registrationUrl,
         target.pricingUrl,
         target.audience,
-        `Seeded from canonical target fixture ${target.name}.`,
+        target.requiresAccount,
+        target.requiresPayment,
+        target.editorialReview,
+        target.confidence,
+        target.reviewReason,
       ],
     );
   }

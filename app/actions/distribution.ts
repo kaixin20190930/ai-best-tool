@@ -154,6 +154,7 @@ export interface DistributionDashboard {
     summary: string;
   };
   targetRecommendations: Array<DistributionTargetRecommendation & { opportunityStatus: string | null }>;
+  targetRegistryUnavailable: boolean;
   assets: Array<{
     id: string;
     assetType: string;
@@ -486,6 +487,7 @@ export async function getDistributionDashboard(
     if (projectsError) throw projectsError;
     const project = (projects || []).find((item: any) => item.id === projectId) || defaultProject;
     const projectDescription = (project as { description?: string | null } | null)?.description || null;
+    let targetRegistryUnavailable = false;
     const [
       { data: workspace },
       { data: channels, error: channelError },
@@ -575,6 +577,7 @@ export async function getDistributionDashboard(
         limit 100
       `).catch((error) => {
         console.error('Distribution target registry unavailable:', error);
+        targetRegistryUnavailable = true;
         return [];
       }),
       supabase
@@ -848,6 +851,7 @@ export async function getDistributionDashboard(
           summary: 'No destination suggestion could be derived.',
         },
         targetRecommendations,
+        targetRegistryUnavailable,
         assets: (projectAssetRows || []).map((asset: any) => ({
           id: String(asset.id),
           assetType: String(asset.asset_type || 'other'),

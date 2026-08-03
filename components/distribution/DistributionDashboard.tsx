@@ -479,7 +479,18 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
             </div>
             <span className='text-xs text-slate-500'>Accepting a target creates one target-bound task.</span>
           </div>
-          {data.targetRecommendations.length ? (
+        {data.targetRegistryUnavailable ? (
+          <div className='mt-5 rounded-xl border border-rose-200 bg-rose-50 p-5 text-sm leading-6 text-rose-900'>
+            <div className='font-bold'>
+              {isChinese ? '目标网站服务暂时不可用' : 'The target-site registry is temporarily unavailable'}
+            </div>
+            <div className='mt-1'>
+              {isChinese
+                ? '你的产品资料和素材已经保存，不需要重复填写。请稍后刷新；管理员需要检查生产数据库连接。'
+                : 'Your product facts and assets are saved. Refresh later while an administrator checks the production database connection.'}
+            </div>
+          </div>
+        ) : data.targetRecommendations.length ? (
             <div className='mt-5 grid gap-4 lg:grid-cols-2 xl:grid-cols-3'>
               {data.targetRecommendations.map((target) => {
                 const acceptedTask = targetTaskByTargetId.get(target.id);
