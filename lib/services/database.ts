@@ -1,19 +1,13 @@
 import { Pool } from 'pg';
 
-let pool: Pool | null = null;
+import { getDatabaseConnectionString } from '@/lib/database/connection';
 
-function getConnectionString() {
-  const connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.DATABASE_URL_UNPOOLED;
-  if (!connectionString) {
-    throw new Error('DATABASE_URL, POSTGRES_URL, or DATABASE_URL_UNPOOLED is not configured.');
-  }
-  return connectionString;
-}
+let pool: Pool | null = null;
 
 export function getDatabasePool() {
   if (pool) return pool;
 
-  const connectionString = getConnectionString();
+  const connectionString = getDatabaseConnectionString();
   pool = new Pool({
     connectionString,
     ssl: connectionString.includes('supabase.com') || connectionString.includes('sslmode=require')
