@@ -2205,7 +2205,14 @@ export async function generateDistributionPackage(
     return { success: true, ready: packageDraft.ready };
   } catch (error) {
     console.error('Generate distribution package error:', error);
-    return { success: false, error: error instanceof Error ? error.message : 'Unable to generate package.' };
+    const message = getDistributionActionError(error, 'Unable to generate package.');
+    return {
+      success: false,
+      error:
+        message.includes('distribution_tasks_status_check') || message.includes('violates check constraint')
+          ? 'The distribution task workflow database migration is missing. Run the latest repair migration, then refresh this task.'
+          : message,
+    };
   }
 }
 
