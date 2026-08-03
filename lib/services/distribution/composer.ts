@@ -33,12 +33,7 @@ function truncate(value: string, limit: number | null): string {
   return `${cleaned.slice(0, Math.max(0, limit - 1)).trimEnd()}…`;
 }
 
-function buildTitle(input: {
-  productName: string;
-  channelType: string;
-  audience: string;
-  valueProp: string;
-}): string {
+function buildTitle(input: { productName: string; channelType: string; audience: string; valueProp: string }): string {
   const name = input.productName || 'this product';
   if (input.channelType === 'community') return `${name}: answering a real ${input.audience} problem`;
   if (input.channelType === 'github') return `${name}: a practical resource for ${input.audience}`;
@@ -46,7 +41,7 @@ function buildTitle(input: {
   if (input.channelType === 'reddit') return `I tested ${name} for ${input.audience}`;
   if (input.channelType === 'startup') return `We built ${name} for ${input.audience}`;
   if (input.channelType === 'newsletter') return `${name}: a useful pick for ${input.audience}`;
-  if (input.channelType === 'alternative') return `${name} as an alternative for ${input.valueProp}`;
+  if (input.channelType === 'alternative') return name;
   return `${name}: a better way to ${input.valueProp}`;
 }
 
@@ -59,24 +54,14 @@ function buildDescription(input: {
   proofPoint: string;
   disclosure: string;
 }): string {
-  const productName = input.productName || 'This product';
-  const baseDescription =
-    input.projectDescription ||
-    `A practical product for ${input.audience}.`;
-
-  const channelGuidance: Record<string, string> = {
-    directory: 'Focus on the problem it solves, the workflow it fits, and one concrete proof point.',
-    alternative: 'State the comparison honestly and explain the decision difference in plain language.',
-    startup: 'Lead with the launch context, why it exists, and what readers can test first.',
-    community: 'Answer the question first, then mention the product only if it helps the answer.',
-    newsletter: 'Keep it short, concrete, and useful for the reader audience.',
-    blog: 'Use first-party evidence, dates, and test notes so readers can verify the claim.',
-    github: 'Make the repository or example genuinely useful before adding any product mention.',
-    reddit: 'Keep it conversational, useful, and clearly disclosed.',
-  };
-
+  const baseDescription = input.projectDescription || `A practical product for ${input.audience}.`;
+  const proofPoint = normalizeText(input.proofPoint);
+  const includeProofPoint = proofPoint && proofPoint !== normalizeText(baseDescription);
+  const includeDisclosure = ['community', 'reddit', 'github'].includes(input.channelType);
   return truncate(
-    `${productName} ${baseDescription} ${channelGuidance[input.channelType] || channelGuidance.directory} ${input.proofPoint}. ${input.disclosure}`,
+    [baseDescription, includeProofPoint ? proofPoint : null, includeDisclosure ? input.disclosure : null]
+      .filter(Boolean)
+      .join(' '),
     input.channelType === 'blog' ? 1200 : 800,
   );
 }
@@ -141,7 +126,10 @@ export function composeDistributionCopyPackage(input: {
   return {
     title: truncate(title, input.template?.maxTitleLength || null),
     titleAlternatives: uniqueStrings([
-      `${input.productName}: ${input.valueProp}`,
+      input.channelType === 'alternative'
+        ? `${input.productName} overview`
+        : `${input.productName}: ${input.valueProp}`,
+      input.channelType === 'alternative' ? `${input.productName} alternatives` : null,
       `${input.productName} for ${input.audience}`,
       input.channelType === 'reddit' ? `Why ${input.productName} matters for ${input.audience}` : null,
     ]).map((item) => truncate(item, input.template?.maxTitleLength || null)),
