@@ -13,16 +13,22 @@ import { Pool, PoolClient, QueryResult, QueryResultRow } from 'pg';
  */
 function getPoolConfig() {
   const databaseUrl = [
-    process.env.DATABASE_URL,
+    // Vercel's managed Postgres variables are authoritative. DATABASE_URL is
+    // kept last because older project settings may contain a stale placeholder.
     process.env.POSTGRES_URL,
     process.env.POSTGRES_PRISMA_URL,
     process.env.DATABASE_URL_UNPOOLED,
     process.env.POSTGRES_URL_NON_POOLING,
+    process.env.DATABASE_URL,
   ].find((candidate) => {
     if (!candidate) return false;
     try {
       const parsed = new URL(candidate);
-      return ['postgres:', 'postgresql:'].includes(parsed.protocol) && Boolean(parsed.hostname);
+      return (
+        ['postgres:', 'postgresql:'].includes(parsed.protocol) &&
+        Boolean(parsed.hostname) &&
+        parsed.hostname !== 'base'
+      );
     } catch {
       return false;
     }
