@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useFormStatus } from 'react-dom';
 import Link from 'next/link';
 import {
   ArrowRight,
@@ -16,7 +15,9 @@ import {
   Send,
   ShieldCheck,
 } from 'lucide-react';
+import { useFormStatus } from 'react-dom';
 
+import { getDistributionAssetGuidance } from '@/lib/services/distribution/listingBridge';
 import {
   DISTRIBUTION_TASK_STATUS_META,
   getDistributionTaskStatusChoices,
@@ -25,29 +26,22 @@ import {
 } from '@/lib/services/distribution/taskStateMachine';
 import {
   acceptDistributionTarget,
-  createDistributionProjectAsset,
   createDistributionProject,
+  createDistributionProjectAsset,
   createDistributionTask,
   createDistributionUtmLink,
-  importDistributionIntelligenceAssets,
   importDistributionCatalogListing,
+  importDistributionIntelligenceAssets,
   recordDistributionResult,
   seedDistributionStarterTasks,
   updateDistributionProjectProfile,
   updateDistributionTaskStatus,
   type DistributionDashboard as DistributionDashboardData,
 } from '@/app/actions/distribution';
-import { getDistributionAssetGuidance } from '@/lib/services/distribution/listingBridge';
 
 const statusOptions = getDistributionTaskStatusChoices();
 
-function ImportListingButton({
-  disabled,
-  linked,
-}: {
-  disabled: boolean;
-  linked: boolean;
-}) {
+function ImportListingButton({ disabled, linked }: { disabled: boolean; linked: boolean }) {
   const { pending } = useFormStatus();
   const [stage, setStage] = useState(0);
   const messages = linked
@@ -70,7 +64,13 @@ function ImportListingButton({
       className='inline-flex min-w-36 items-center justify-center gap-2 rounded-lg bg-cyan-700 px-3 py-2 text-xs font-bold text-white hover:bg-cyan-800 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500'
     >
       {pending ? <LoaderCircle className='h-4 w-4 animate-spin' /> : null}
-      {pending ? messages[stage] : disabled ? 'Different project domain' : linked ? 'Refresh listing data' : 'Import and review'}
+      {pending
+        ? messages[stage]
+        : disabled
+          ? 'Different project domain'
+          : linked
+            ? 'Refresh listing data'
+            : 'Import and review'}
     </button>
   );
 }
@@ -90,7 +90,7 @@ function ImportAssetsButton() {
 }
 
 function statusToneClass(status: DistributionTaskStatus) {
-  const tone = DISTRIBUTION_TASK_STATUS_META[status].tone;
+  const { tone } = DISTRIBUTION_TASK_STATUS_META[status];
   if (tone === 'success') return 'bg-emerald-100 text-emerald-800';
   if (tone === 'warning') return 'bg-amber-100 text-amber-800';
   if (tone === 'danger') return 'bg-rose-100 text-rose-800';
@@ -105,6 +105,7 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
   const activeProjectId = data.project?.id || '';
   const activeProjectWebsiteUrl = data.project?.websiteUrl || null;
   const activeProjectSourceToolId = data.project?.sourceToolId || null;
+  const isChinese = locale === 'cn' || locale.startsWith('zh');
   const profileComplete = Boolean(
     data.project?.factsConfirmedAt && data.project.websiteUrl && (data.project.description?.length || 0) >= 20,
   );
@@ -119,46 +120,70 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
   const submitted = Boolean(
     targetTask && ['submitted', 'waiting_review', 'live', 'follow_up', 'done'].includes(targetTask.status),
   );
+  const profileMissingItems = [
+    !data.project?.name ? (isChinese ? '产品名称' : 'product name') : null,
+    !data.project?.websiteUrl ? (isChinese ? '官网地址' : 'website URL') : null,
+    (data.project?.description?.length || 0) < 20
+      ? isChinese
+        ? '具体产品描述'
+        : 'specific product description'
+      : null,
+    !data.project?.factsConfirmedAt
+      ? isChinese
+        ? '勾选“资料已核对并确认”'
+        : 'check “Facts reviewed and confirmed”'
+      : null,
+  ].filter(Boolean) as string[];
   const onboardingSteps = [
     {
       number: 1,
-      title: 'Confirm product facts',
-      description: 'Add a specific description, goal, capacity, and budget. Confirm only facts you can verify.',
+      title: isChinese ? '确认产品资料' : 'Confirm product facts',
+      description: isChinese
+        ? '核对名称、官网、描述、目标、预算，然后确认资料真实。'
+        : 'Review the name, website, description, goal, and budget, then confirm the facts.',
       complete: profileComplete,
       href: '#distribution-profile',
-      action: 'Complete profile',
+      action: isChinese ? '现在核对并确认' : 'Review and confirm now',
     },
     {
       number: 2,
-      title: 'Add reusable assets',
-      description: 'Add at least one official logo. A product screenshot is strongly recommended.',
+      title: isChinese ? '准备通用素材' : 'Add reusable assets',
+      description: isChinese
+        ? '准备官方 Logo 和产品截图，后续重复使用。'
+        : 'Prepare an official logo and product screenshot for reuse.',
       complete: hasLogo,
       href: '#distribution-assets',
-      action: 'Add logo',
+      action: isChinese ? '准备素材' : 'Prepare assets',
     },
     {
       number: 3,
-      title: 'Choose one target site',
-      description: 'Review fit, cost, account requirements, and submission rules before accepting.',
+      title: isChinese ? '选择目标网站' : 'Choose one target site',
+      description: isChinese
+        ? '查看匹配度、费用、账号要求和提交规则。'
+        : 'Review fit, cost, account requirements, and submission rules.',
       complete: Boolean(targetTask),
       href: '#distribution-targets',
-      action: 'Review targets',
+      action: isChinese ? '查看推荐网站' : 'Review target sites',
     },
     {
       number: 4,
-      title: 'Generate the target package',
-      description: 'The task combines verified facts, target rules, copy, UTM, and asset requirements.',
+      title: isChinese ? '生成专属材料包' : 'Generate the target package',
+      description: isChinese
+        ? '根据目标站规则生成文案、字段、素材和追踪链接。'
+        : 'Generate copy, fields, assets, and a tracked link for the target.',
       complete: packageGenerated,
       href: targetTask ? `/${locale}/distribution/tasks/${targetTask.id}` : '#distribution-targets',
-      action: 'Open target task',
+      action: isChinese ? '打开目标任务' : 'Open target task',
     },
     {
       number: 5,
-      title: 'Submit manually and record evidence',
-      description: 'Submit on the target site, then save the review state or live URL here.',
+      title: isChinese ? '人工提交并记录结果' : 'Submit manually and record evidence',
+      description: isChinese
+        ? '到目标站完成提交，再记录审核状态或上线地址。'
+        : 'Submit on the target site, then record its review state or live URL.',
       complete: submitted,
       href: targetTask ? `/${locale}/distribution/tasks/${targetTask.id}` : '#distribution-targets',
-      action: 'Record result',
+      action: isChinese ? '提交并记录结果' : 'Submit and record result',
     },
   ];
   const nextStep = onboardingSteps.find((step) => !step.complete) || null;
@@ -168,8 +193,8 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
   ).length;
 
   return (
-    <div className='space-y-8'>
-      <section className='flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:flex-row sm:items-end sm:justify-between'>
+    <div className='flex flex-col gap-6'>
+      <section className='order-1 flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:flex-row sm:items-end sm:justify-between'>
         <label className='block min-w-0 flex-1 text-xs font-bold uppercase tracking-[0.16em] text-slate-500'>
           Product being distributed
           <select
@@ -198,22 +223,29 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
         </button>
       </section>
 
-      <section className='overflow-hidden rounded-3xl border border-cyan-200 bg-white shadow-sm'>
+      <section className='order-2 overflow-hidden rounded-3xl border border-cyan-200 bg-white shadow-sm'>
         <div className='bg-gradient-to-r from-cyan-50 via-white to-amber-50 p-6 sm:p-8'>
           <div className='flex flex-col justify-between gap-5 lg:flex-row lg:items-start'>
             <div>
-              <div className='text-xs font-bold uppercase tracking-[0.18em] text-cyan-700'>Start here</div>
+              <div className='text-xs font-bold uppercase tracking-[0.18em] text-cyan-700'>
+                {isChinese ? '从这里开始' : 'Start here'}
+              </div>
               <h1 className='mt-2 text-2xl font-bold tracking-tight text-slate-950'>
-                Launch {data.project?.name || 'this product'} in five guided steps
+                {isChinese
+                  ? `分 5 步完成 ${data.project?.name || '这个产品'} 的首次分发`
+                  : `Launch ${data.project?.name || 'this product'} in five guided steps`}
               </h1>
               <p className='mt-2 max-w-2xl text-sm leading-6 text-slate-600'>
-                You only need this workspace and the target website. We prepare and track the work; you keep final
-                control and submit manually.
+                {isChinese
+                  ? '平台负责准备资料、推荐目标、生成文案和追踪进度；你只需要核对事实，并在目标网站完成最终提交。'
+                  : 'The workspace prepares the material, recommends targets, generates copy, and tracks progress. You verify the facts and complete the final submission.'}
               </p>
             </div>
             <div className='min-w-52 rounded-2xl border border-white bg-white/90 p-4 shadow-sm'>
               <div className='flex items-end justify-between gap-4'>
-                <span className='text-sm font-bold text-slate-900'>Setup progress</span>
+                <span className='text-sm font-bold text-slate-900'>
+                  {isChinese ? '首次分发进度' : 'First-run progress'}
+                </span>
                 <span className='text-2xl font-bold text-cyan-700'>{completedStepCount}/5</span>
               </div>
               <div className='mt-3 h-2 overflow-hidden rounded-full bg-slate-100'>
@@ -224,12 +256,51 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
               </div>
             </div>
           </div>
-          <div className='mt-6 grid gap-3 lg:grid-cols-5'>
+          {nextStep ? (
+            <div className='mt-6 grid gap-4 rounded-2xl border border-cyan-200 bg-white p-5 shadow-sm lg:grid-cols-[1fr_auto] lg:items-center'>
+              <div>
+                <div className='flex flex-wrap items-center gap-2'>
+                  <span className='rounded-full bg-cyan-100 px-2.5 py-1 text-xs font-bold text-cyan-800'>
+                    {isChinese ? `当前：第 ${nextStep.number} 步` : `Current: step ${nextStep.number}`}
+                  </span>
+                  {hasLogo && !profileComplete ? (
+                    <span className='rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-bold text-emerald-700'>
+                      {isChinese ? 'Logo 和截图已准备' : 'Logo and screenshot ready'}
+                    </span>
+                  ) : null}
+                </div>
+                <h2 className='mt-3 text-xl font-bold text-slate-950'>{nextStep.title}</h2>
+                {nextStep.number === 1 ? (
+                  <div className='mt-2 text-sm leading-6 text-slate-600'>
+                    {profileMissingItems.length === 1 && !data.project?.factsConfirmedAt
+                      ? isChinese
+                        ? 'Moxion 的名称、官网、描述和素材已经导入。现在只需核对这些内容，勾选“资料已核对并确认”，然后保存。'
+                        : 'The product name, website, description, and assets are already imported. Review them, check “Facts reviewed and confirmed,” and save.'
+                      : `${isChinese ? '还需要完成：' : 'Still needed: '}${profileMissingItems.join(isChinese ? '、' : ', ')}。`}
+                  </div>
+                ) : (
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>{nextStep.description}</p>
+                )}
+                <p className='mt-2 text-xs font-semibold text-slate-500'>
+                  {isChinese
+                    ? '完成后：系统会自动进入下一步，并只展示当时需要操作的模块。'
+                    : 'After completion, the workspace advances and reveals only the controls needed for the next step.'}
+                </p>
+              </div>
+              <a
+                href={nextStep.href}
+                className='inline-flex items-center justify-center gap-2 rounded-xl bg-slate-950 px-5 py-3 text-sm font-bold text-white hover:bg-slate-800'
+              >
+                {nextStep.action} <ArrowRight className='h-4 w-4' />
+              </a>
+            </div>
+          ) : null}
+          <div className='mt-5 grid gap-2 sm:grid-cols-5'>
             {onboardingSteps.map((step) => (
               <a
                 key={step.number}
                 href={step.href}
-                className={`rounded-2xl border p-4 transition hover:-translate-y-0.5 hover:shadow-sm ${
+                className={`rounded-xl border p-3 transition hover:border-cyan-300 ${
                   step.complete
                     ? 'border-emerald-200 bg-emerald-50/70'
                     : nextStep?.number === step.number
@@ -245,283 +316,284 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
                     <Circle className='h-5 w-5 text-slate-300' />
                   )}
                 </div>
-                <div className='mt-3 text-sm font-bold text-slate-950'>{step.title}</div>
-                <p className='mt-1 text-xs leading-5 text-slate-600'>{step.description}</p>
+                <div className='mt-2 text-xs font-bold leading-5 text-slate-950'>{step.title}</div>
               </a>
             ))}
           </div>
-          {nextStep ? (
-            <div className='mt-5 flex flex-col justify-between gap-3 rounded-2xl bg-slate-950 p-4 text-white sm:flex-row sm:items-center'>
-              <div>
-                <div className='text-xs font-bold uppercase tracking-wide text-cyan-300'>Your next action</div>
-                <div className='mt-1 text-sm font-bold'>{nextStep.title}</div>
+          {!nextStep ? (
+            <div className='mt-5 rounded-2xl bg-emerald-50 p-4 text-sm font-bold text-emerald-900'>
+              {isChinese
+                ? '首次分发流程已完成。接下来继续处理新的推荐目标和已排期的复查任务。'
+                : 'First distribution cycle complete. Continue with the next recommended target and scheduled follow-ups.'}
+            </div>
+          ) : null}
+        </div>
+      </section>
+
+      {profileComplete && targetTask ? (
+        <section className='order-6 rounded-3xl bg-slate-950 p-6 text-white shadow-xl shadow-slate-200/60 sm:p-8'>
+          <div className='flex flex-col justify-between gap-6 lg:flex-row lg:items-end'>
+            <div className='max-w-2xl'>
+              <div className='mb-4 flex items-center gap-2 text-sm font-semibold text-cyan-300'>
+                <Radar className='h-4 w-4' /> Distribution control room
               </div>
-              <a
-                href={nextStep.href}
-                className='inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-300 px-4 py-2.5 text-sm font-bold text-slate-950 hover:bg-cyan-200'
-              >
-                {nextStep.action} <ArrowRight className='h-4 w-4' />
-              </a>
+              <h1 className='text-3xl font-bold tracking-tight sm:text-4xl'>Know where to promote today.</h1>
+              <p className='mt-3 text-sm leading-6 text-slate-300 sm:text-base'>
+                Plan human-led distribution across directories, communities, content, and launch channels. Record the
+                evidence, next follow-up, and link quality in one place.
+              </p>
+              {data.project?.description ? (
+                <p className='mt-3 max-w-2xl text-sm leading-6 text-cyan-100'>{data.project.description}</p>
+              ) : null}
+            </div>
+            <button
+              type='button'
+              onClick={() => setShowForm((visible) => !visible)}
+              className='inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-300 px-4 py-3 text-sm font-bold text-slate-950 transition hover:bg-cyan-200'
+            >
+              <Plus className='h-4 w-4' /> Add custom task
+            </button>
+          </div>
+          <div className='mt-8 grid gap-3 sm:grid-cols-4'>
+            {[
+              ['Tasks tracked', data.metrics.total],
+              ['Due today', data.metrics.dueToday],
+              ['Ready to submit', data.metrics.readyToSubmit],
+              ['Waiting review', data.metrics.waitingReview],
+            ].map(([label, value]) => (
+              <div key={String(label)} className='rounded-2xl border border-white/10 bg-white/5 p-4'>
+                <div className='text-2xl font-bold'>{value}</div>
+                <div className='mt-1 text-xs text-slate-400'>{label}</div>
+              </div>
+            ))}
+            <div className='rounded-2xl border border-white/10 bg-white/5 p-4'>
+              <div className='text-2xl font-bold'>{data.metrics.live}</div>
+              <div className='mt-1 text-xs text-slate-400'>Live mentions</div>
+            </div>
+            <div className='rounded-2xl border border-white/10 bg-white/5 p-4'>
+              <div className='text-2xl font-bold'>{data.metrics.blocked}</div>
+              <div className='mt-1 text-xs text-slate-400'>Blocked tasks</div>
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {data.tasks.length > 0 ? (
+        <section className='order-7 grid gap-4 lg:grid-cols-3'>
+          <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:col-span-2'>
+            <div className='flex items-center justify-between gap-3'>
+              <div>
+                <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Today&apos;s queue</div>
+                <h2 className='mt-1 text-xl font-bold text-slate-950'>Top priorities</h2>
+              </div>
+              <span className='text-xs text-slate-500'>Sorted by leverage and urgency</span>
+            </div>
+            <div className='mt-4 space-y-3'>
+              {data.recommendations.length > 0 ? (
+                data.recommendations.map((item, index) => (
+                  <div key={item.id} className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
+                    <div className='flex items-start justify-between gap-3'>
+                      <div>
+                        <div className='flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                          <span>#{index + 1}</span>
+                          <span className='rounded-full bg-white px-2 py-1 text-slate-600'>{item.channelName}</span>
+                          <span className='rounded-full bg-white px-2 py-1 text-slate-600'>
+                            {item.priority || 'p1'}
+                          </span>
+                        </div>
+                        <div className='mt-2 text-sm font-bold text-slate-950'>{item.title}</div>
+                        <p className='mt-1 text-xs leading-5 text-slate-600'>{item.reason}</p>
+                      </div>
+                      <Link
+                        href={`/${locale}/distribution/tasks/${item.id}`}
+                        className='inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:border-cyan-300 hover:text-cyan-700'
+                      >
+                        Open <ArrowUpRight className='h-3.5 w-3.5' />
+                      </Link>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className='rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500'>
+                  No ranked tasks yet.
+                </div>
+              )}
+            </div>
+          </div>
+          <div className='space-y-4'>
+            <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
+              <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Preflight</div>
+              <h2 className='mt-1 text-lg font-bold text-slate-950'>Copy readiness</h2>
+              <p className='mt-2 text-sm text-slate-600'>{data.preflight.summary}</p>
+              <div className='mt-3 space-y-2 text-xs text-slate-600'>
+                <div>
+                  Title: {data.preflight.titleLength}
+                  {data.preflight.titleLimit ? ` / ${data.preflight.titleLimit}` : ''}
+                </div>
+                <div>
+                  Description: {data.preflight.descriptionLength}
+                  {data.preflight.descriptionLimit ? ` / ${data.preflight.descriptionLimit}` : ''}
+                </div>
+                <div>Required fields: {data.preflight.requiredFields.join(', ') || '—'}</div>
+                <div>Missing fields: {data.preflight.missingFields.join(', ') || '—'}</div>
+              </div>
+              {data.preflight.blockers.length > 0 ? (
+                <div className='mt-3 rounded-xl bg-rose-50 p-3 text-xs text-rose-800'>
+                  {data.preflight.blockers.join(' · ')}
+                </div>
+              ) : null}
+              {data.preflight.warnings.length > 0 ? (
+                <div className='mt-2 rounded-xl bg-amber-50 p-3 text-xs text-amber-800'>
+                  {data.preflight.warnings.join(' · ')}
+                </div>
+              ) : null}
+            </div>
+            <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
+              <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Tracked destination</div>
+              <h2 className='mt-1 text-lg font-bold text-slate-950'>UTM suggestion</h2>
+              <p className='mt-2 text-sm text-slate-600'>{data.destinationSuggestion.summary}</p>
+              <div className='mt-3 space-y-2 text-xs text-slate-600'>
+                <div className='break-all'>Destination: {data.destinationSuggestion.destinationUrl}</div>
+                <div>Source: {data.destinationSuggestion.utmSource}</div>
+                <div>Campaign: {data.destinationSuggestion.utmCampaign}</div>
+                <div>Content: {data.destinationSuggestion.utmContent || '—'}</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {profileComplete ? (
+        <section
+          id='distribution-targets'
+          className='order-5 scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'
+        >
+          <div className='flex flex-col justify-between gap-2 sm:flex-row sm:items-end'>
+            <div>
+              <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Concrete target sites</div>
+              <h2 className='mt-1 text-xl font-bold text-slate-950'>Recommended next opportunities</h2>
+              <p className='mt-1 text-sm text-slate-600'>
+                Recommendations account for the project goal, budget preference, verified entry points, and manual
+                obstacles.
+              </p>
+            </div>
+            <span className='text-xs text-slate-500'>Accepting a target creates one target-bound task.</span>
+          </div>
+          {data.targetRecommendations.length ? (
+            <div className='mt-5 grid gap-4 lg:grid-cols-2 xl:grid-cols-3'>
+              {data.targetRecommendations.map((target) => {
+                const acceptedTask = targetTaskByTargetId.get(target.id);
+                return (
+                  <article key={target.id} className='rounded-2xl border border-slate-200 bg-slate-50 p-4'>
+                    <div className='flex items-start justify-between gap-3'>
+                      <div>
+                        <div className='text-xs font-bold uppercase tracking-wide text-cyan-700'>
+                          {target.channelName}
+                        </div>
+                        <h3 className='mt-1 text-lg font-bold text-slate-950'>{target.name}</h3>
+                      </div>
+                      <span className='rounded-full bg-white px-2.5 py-1 text-xs font-bold text-slate-700'>
+                        Score {target.score}
+                      </span>
+                    </div>
+                    <div className='mt-3 flex flex-wrap gap-2 text-[11px] font-semibold text-slate-600'>
+                      <span className='rounded-full bg-white px-2 py-1'>{target.estimatedMinutes} min</span>
+                      <span className='rounded-full bg-white px-2 py-1'>
+                        {target.requiresPayment ? 'Paid' : 'No public payment requirement'}
+                      </span>
+                      {target.requiresAccount ? <span className='rounded-full bg-white px-2 py-1'>Account</span> : null}
+                      {target.requiresCaptcha ? <span className='rounded-full bg-white px-2 py-1'>CAPTCHA</span> : null}
+                      {target.editorialReview ? (
+                        <span className='rounded-full bg-white px-2 py-1'>Editorial review</span>
+                      ) : null}
+                    </div>
+                    <ul className='mt-3 space-y-1 text-xs leading-5 text-slate-600'>
+                      {target.reasons.slice(0, 3).map((reason) => (
+                        <li key={reason}>• {reason}</li>
+                      ))}
+                    </ul>
+                    <div className='mt-4 flex flex-wrap items-center gap-2'>
+                      <a
+                        href={target.submissionUrl || target.homepageUrl}
+                        target='_blank'
+                        rel='noreferrer'
+                        className='inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 hover:border-cyan-300 hover:text-cyan-700'
+                      >
+                        Inspect site <ExternalLink className='h-3.5 w-3.5' />
+                      </a>
+                      {target.opportunityStatus ? (
+                        <>
+                          <span className='rounded-lg bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-700'>
+                            {target.opportunityStatus.replaceAll('_', ' ')}
+                          </span>
+                          {acceptedTask ? (
+                            <Link
+                              href={`/${locale}/distribution/tasks/${acceptedTask.id}`}
+                              className='inline-flex items-center gap-1 rounded-lg bg-cyan-700 px-3 py-2 text-xs font-bold text-white hover:bg-cyan-800'
+                            >
+                              Continue task <ArrowRight className='h-3.5 w-3.5' />
+                            </Link>
+                          ) : null}
+                        </>
+                      ) : (
+                        <form action={acceptDistributionTarget}>
+                          <input type='hidden' name='projectId' value={data.project?.id || ''} />
+                          <input type='hidden' name='targetId' value={target.id} />
+                          <input type='hidden' name='score' value={target.score} />
+                          <input type='hidden' name='estimatedMinutes' value={target.estimatedMinutes} />
+                          <button className='rounded-lg bg-slate-950 px-3 py-2 text-xs font-bold text-white hover:bg-slate-800'>
+                            Choose this target
+                          </button>
+                        </form>
+                      )}
+                    </div>
+                  </article>
+                );
+              })}
             </div>
           ) : (
-            <div className='mt-5 rounded-2xl bg-emerald-50 p-4 text-sm font-bold text-emerald-900'>
-              First distribution cycle complete. Continue with the next recommended target and scheduled follow-ups.
+            <div className='mt-5 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-5 text-sm text-slate-500'>
+              No eligible target sites match the current project and budget settings.
             </div>
           )}
-        </div>
-      </section>
+        </section>
+      ) : null}
 
-      <section className='rounded-3xl bg-slate-950 p-6 text-white shadow-xl shadow-slate-200/60 sm:p-8'>
-        <div className='flex flex-col justify-between gap-6 lg:flex-row lg:items-end'>
-          <div className='max-w-2xl'>
-            <div className='mb-4 flex items-center gap-2 text-sm font-semibold text-cyan-300'>
-              <Radar className='h-4 w-4' /> Distribution control room
-            </div>
-            <h1 className='text-3xl font-bold tracking-tight sm:text-4xl'>Know where to promote today.</h1>
-            <p className='mt-3 text-sm leading-6 text-slate-300 sm:text-base'>
-              Plan human-led distribution across directories, communities, content, and launch channels. Record the
-              evidence, next follow-up, and link quality in one place.
-            </p>
-            {data.project?.description ? (
-              <p className='mt-3 max-w-2xl text-sm leading-6 text-cyan-100'>{data.project.description}</p>
-            ) : null}
-          </div>
-          <button
-            type='button'
-            onClick={() => setShowForm((visible) => !visible)}
-            className='inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-300 px-4 py-3 text-sm font-bold text-slate-950 transition hover:bg-cyan-200'
-          >
-            <Plus className='h-4 w-4' /> Add custom task
-          </button>
-        </div>
-        <div className='mt-8 grid gap-3 sm:grid-cols-4'>
-          {[
-            ['Tasks tracked', data.metrics.total],
-            ['Due today', data.metrics.dueToday],
-            ['Ready to submit', data.metrics.readyToSubmit],
-            ['Waiting review', data.metrics.waitingReview],
-          ].map(([label, value]) => (
-            <div key={String(label)} className='rounded-2xl border border-white/10 bg-white/5 p-4'>
-              <div className='text-2xl font-bold'>{value}</div>
-              <div className='mt-1 text-xs text-slate-400'>{label}</div>
-            </div>
-          ))}
-          <div className='rounded-2xl border border-white/10 bg-white/5 p-4'>
-            <div className='text-2xl font-bold'>{data.metrics.live}</div>
-            <div className='mt-1 text-xs text-slate-400'>Live mentions</div>
-          </div>
-          <div className='rounded-2xl border border-white/10 bg-white/5 p-4'>
-            <div className='text-2xl font-bold'>{data.metrics.blocked}</div>
-            <div className='mt-1 text-xs text-slate-400'>Blocked tasks</div>
-          </div>
-        </div>
-      </section>
-
-      <section className='grid gap-4 lg:grid-cols-3'>
-        <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:col-span-2'>
-          <div className='flex items-center justify-between gap-3'>
+      {data.tasks.length > 0 ? (
+        <section className='order-10 rounded-2xl border border-cyan-100 bg-cyan-50/60 p-5'>
+          <div className='flex flex-col justify-between gap-2 sm:flex-row sm:items-end'>
             <div>
-              <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Today&apos;s queue</div>
-              <h2 className='mt-1 text-xl font-bold text-slate-950'>Top priorities</h2>
+              <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Last 30 days</div>
+              <h2 className='mt-1 text-xl font-bold text-slate-950'>Attribution snapshot</h2>
+              <p className='mt-1 text-sm text-slate-600'>
+                See whether distribution activity produces visits, signups, claims, and paid workspaces.
+              </p>
             </div>
-            <span className='text-xs text-slate-500'>Sorted by leverage and urgency</span>
+            <span className='text-xs text-slate-500'>Tracked links only</span>
           </div>
-          <div className='mt-4 space-y-3'>
-            {data.recommendations.length > 0 ? (
-              data.recommendations.map((item, index) => (
-                <div key={item.id} className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
-                  <div className='flex items-start justify-between gap-3'>
-                    <div>
-                      <div className='flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                        <span>#{index + 1}</span>
-                        <span className='rounded-full bg-white px-2 py-1 text-slate-600'>{item.channelName}</span>
-                        <span className='rounded-full bg-white px-2 py-1 text-slate-600'>{item.priority || 'p1'}</span>
-                      </div>
-                      <div className='mt-2 text-sm font-bold text-slate-950'>{item.title}</div>
-                      <p className='mt-1 text-xs leading-5 text-slate-600'>{item.reason}</p>
-                    </div>
-                    <Link
-                      href={`/${locale}/distribution/tasks/${item.id}`}
-                      className='inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:border-cyan-300 hover:text-cyan-700'
-                    >
-                      Open <ArrowUpRight className='h-3.5 w-3.5' />
-                    </Link>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className='rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500'>
-                No ranked tasks yet.
+          <div className='mt-4 grid gap-3 sm:grid-cols-3 lg:grid-cols-6'>
+            {[
+              ['Visits', data.metrics.attribution.visits],
+              ['Signups', data.metrics.attribution.signups],
+              ['Submissions', data.metrics.attribution.submissions],
+              ['Claims', data.metrics.attribution.claims],
+              ['Checkouts', data.metrics.attribution.checkouts],
+              ['Payments', data.metrics.attribution.payments],
+            ].map(([label, value]) => (
+              <div key={String(label)} className='rounded-xl border border-cyan-100 bg-white p-3'>
+                <div className='text-xl font-bold text-slate-950'>{value}</div>
+                <div className='mt-1 text-xs text-slate-500'>{label}</div>
               </div>
-            )}
+            ))}
           </div>
-        </div>
-        <div className='space-y-4'>
-          <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
-            <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Preflight</div>
-            <h2 className='mt-1 text-lg font-bold text-slate-950'>Copy readiness</h2>
-            <p className='mt-2 text-sm text-slate-600'>{data.preflight.summary}</p>
-            <div className='mt-3 space-y-2 text-xs text-slate-600'>
-              <div>
-                Title: {data.preflight.titleLength}
-                {data.preflight.titleLimit ? ` / ${data.preflight.titleLimit}` : ''}
-              </div>
-              <div>
-                Description: {data.preflight.descriptionLength}
-                {data.preflight.descriptionLimit ? ` / ${data.preflight.descriptionLimit}` : ''}
-              </div>
-              <div>Required fields: {data.preflight.requiredFields.join(', ') || '—'}</div>
-              <div>Missing fields: {data.preflight.missingFields.join(', ') || '—'}</div>
-            </div>
-            {data.preflight.blockers.length > 0 ? (
-              <div className='mt-3 rounded-xl bg-rose-50 p-3 text-xs text-rose-800'>
-                {data.preflight.blockers.join(' · ')}
-              </div>
-            ) : null}
-            {data.preflight.warnings.length > 0 ? (
-              <div className='mt-2 rounded-xl bg-amber-50 p-3 text-xs text-amber-800'>
-                {data.preflight.warnings.join(' · ')}
-              </div>
-            ) : null}
-          </div>
-          <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
-            <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Tracked destination</div>
-            <h2 className='mt-1 text-lg font-bold text-slate-950'>UTM suggestion</h2>
-            <p className='mt-2 text-sm text-slate-600'>{data.destinationSuggestion.summary}</p>
-            <div className='mt-3 space-y-2 text-xs text-slate-600'>
-              <div className='break-all'>Destination: {data.destinationSuggestion.destinationUrl}</div>
-              <div>Source: {data.destinationSuggestion.utmSource}</div>
-              <div>Campaign: {data.destinationSuggestion.utmCampaign}</div>
-              <div>Content: {data.destinationSuggestion.utmContent || '—'}</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id='distribution-targets' className='scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
-        <div className='flex flex-col justify-between gap-2 sm:flex-row sm:items-end'>
-          <div>
-            <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Concrete target sites</div>
-            <h2 className='mt-1 text-xl font-bold text-slate-950'>Recommended next opportunities</h2>
-            <p className='mt-1 text-sm text-slate-600'>
-              Recommendations account for the project goal, budget preference, verified entry points, and manual
-              obstacles.
-            </p>
-          </div>
-          <span className='text-xs text-slate-500'>Accepting a target creates one target-bound task.</span>
-        </div>
-        {!profileComplete ? (
-          <div className='mt-5 rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-900'>
-            Complete Step 1 and confirm the product facts before selecting a target. This prevents generic or
-            inaccurate submissions.
-          </div>
-        ) : data.targetRecommendations.length ? (
-          <div className='mt-5 grid gap-4 lg:grid-cols-2 xl:grid-cols-3'>
-            {data.targetRecommendations.map((target) => {
-              const acceptedTask = targetTaskByTargetId.get(target.id);
-              return (
-              <article key={target.id} className='rounded-2xl border border-slate-200 bg-slate-50 p-4'>
-                <div className='flex items-start justify-between gap-3'>
-                  <div>
-                    <div className='text-xs font-bold uppercase tracking-wide text-cyan-700'>{target.channelName}</div>
-                    <h3 className='mt-1 text-lg font-bold text-slate-950'>{target.name}</h3>
-                  </div>
-                  <span className='rounded-full bg-white px-2.5 py-1 text-xs font-bold text-slate-700'>
-                    Score {target.score}
-                  </span>
-                </div>
-                <div className='mt-3 flex flex-wrap gap-2 text-[11px] font-semibold text-slate-600'>
-                  <span className='rounded-full bg-white px-2 py-1'>{target.estimatedMinutes} min</span>
-                  <span className='rounded-full bg-white px-2 py-1'>
-                    {target.requiresPayment ? 'Paid' : 'No public payment requirement'}
-                  </span>
-                  {target.requiresAccount ? <span className='rounded-full bg-white px-2 py-1'>Account</span> : null}
-                  {target.requiresCaptcha ? <span className='rounded-full bg-white px-2 py-1'>CAPTCHA</span> : null}
-                  {target.editorialReview ? (
-                    <span className='rounded-full bg-white px-2 py-1'>Editorial review</span>
-                  ) : null}
-                </div>
-                <ul className='mt-3 space-y-1 text-xs leading-5 text-slate-600'>
-                  {target.reasons.slice(0, 3).map((reason) => (
-                    <li key={reason}>• {reason}</li>
-                  ))}
-                </ul>
-                <div className='mt-4 flex flex-wrap items-center gap-2'>
-                  <a
-                    href={target.submissionUrl || target.homepageUrl}
-                    target='_blank'
-                    rel='noreferrer'
-                    className='inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 hover:border-cyan-300 hover:text-cyan-700'
-                  >
-                    Inspect site <ExternalLink className='h-3.5 w-3.5' />
-                  </a>
-                  {target.opportunityStatus ? (
-                    <>
-                      <span className='rounded-lg bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-700'>
-                        {target.opportunityStatus.replaceAll('_', ' ')}
-                      </span>
-                      {acceptedTask ? (
-                        <Link
-                          href={`/${locale}/distribution/tasks/${acceptedTask.id}`}
-                          className='inline-flex items-center gap-1 rounded-lg bg-cyan-700 px-3 py-2 text-xs font-bold text-white hover:bg-cyan-800'
-                        >
-                          Continue task <ArrowRight className='h-3.5 w-3.5' />
-                        </Link>
-                      ) : null}
-                    </>
-                  ) : (
-                    <form action={acceptDistributionTarget}>
-                      <input type='hidden' name='projectId' value={data.project?.id || ''} />
-                      <input type='hidden' name='targetId' value={target.id} />
-                      <input type='hidden' name='score' value={target.score} />
-                      <input type='hidden' name='estimatedMinutes' value={target.estimatedMinutes} />
-                      <button className='rounded-lg bg-slate-950 px-3 py-2 text-xs font-bold text-white hover:bg-slate-800'>
-                        Choose this target
-                      </button>
-                    </form>
-                  )}
-                </div>
-              </article>
-              );
-            })}
-          </div>
-        ) : (
-          <div className='mt-5 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-5 text-sm text-slate-500'>
-            No eligible target sites match the current project and budget settings.
-          </div>
-        )}
-      </section>
-
-      <section className='rounded-2xl border border-cyan-100 bg-cyan-50/60 p-5'>
-        <div className='flex flex-col justify-between gap-2 sm:flex-row sm:items-end'>
-          <div>
-            <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Last 30 days</div>
-            <h2 className='mt-1 text-xl font-bold text-slate-950'>Attribution snapshot</h2>
-            <p className='mt-1 text-sm text-slate-600'>
-              See whether distribution activity produces visits, signups, claims, and paid workspaces.
-            </p>
-          </div>
-          <span className='text-xs text-slate-500'>Tracked links only</span>
-        </div>
-        <div className='mt-4 grid gap-3 sm:grid-cols-3 lg:grid-cols-6'>
-          {[
-            ['Visits', data.metrics.attribution.visits],
-            ['Signups', data.metrics.attribution.signups],
-            ['Submissions', data.metrics.attribution.submissions],
-            ['Claims', data.metrics.attribution.claims],
-            ['Checkouts', data.metrics.attribution.checkouts],
-            ['Payments', data.metrics.attribution.payments],
-          ].map(([label, value]) => (
-            <div key={String(label)} className='rounded-xl border border-cyan-100 bg-white p-3'>
-              <div className='text-xl font-bold text-slate-950'>{value}</div>
-              <div className='mt-1 text-xs text-slate-500'>{label}</div>
-            </div>
-          ))}
-        </div>
-      </section>
+        </section>
+      ) : null}
 
       {showProjectForm ? (
-        <form action={createDistributionProject} className='rounded-2xl border border-cyan-200 bg-cyan-50/60 p-5'>
+        <form
+          action={createDistributionProject}
+          className='order-2 rounded-2xl border border-cyan-200 bg-cyan-50/60 p-5'
+        >
           <div className='grid gap-4 sm:grid-cols-2'>
             <label className='text-sm font-semibold text-slate-700'>
               Project name
@@ -598,27 +670,45 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
       {data.project ? (
         <details
           id='distribution-profile'
-          className='scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'
+          className='order-3 scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'
           open={!profileComplete}
         >
           <summary className='cursor-pointer text-sm font-bold text-slate-950'>
-            Product distribution profile{' '}
+            {isChinese ? '第 1 步：核对并确认产品资料' : 'Step 1: review and confirm product facts'}{' '}
             <span className='ml-2 rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-600'>
               {data.project.onboardingStatus.replaceAll('_', ' ')}
             </span>
           </summary>
           <p className='mt-2 text-sm text-slate-600'>
-            Maintain the product facts once so every target-specific package can reuse them.
+            {isChinese
+              ? '这些资料只需要确认一次，之后每个目标网站的专属材料包都会复用。'
+              : 'Confirm these facts once so every target-specific package can reuse them.'}
           </p>
+          {!profileComplete ? (
+            <div className='mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-950'>
+              <div className='font-bold'>
+                {isChinese ? '完成本步骤后才会推荐目标网站' : 'Target recommendations unlock after this step'}
+              </div>
+              <div className='mt-1'>
+                {profileMissingItems.length === 1 && !data.project?.factsConfirmedAt
+                  ? isChinese
+                    ? '当前字段已填写，向下核对内容，然后勾选“资料已核对并确认”并保存。'
+                    : 'The fields are filled. Review them, check “Facts reviewed and confirmed,” and save.'
+                  : `${isChinese ? '待完成：' : 'Still needed: '}${profileMissingItems.join(isChinese ? '、' : ', ')}`}
+              </div>
+            </div>
+          ) : null}
           {data.listingCandidates.length > 0 ? (
             <div className='mt-4 rounded-2xl border border-cyan-200 bg-cyan-50/60 p-4'>
               <div className='flex flex-col justify-between gap-2 sm:flex-row sm:items-start'>
                 <div>
-                  <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>AI Best Tool connection</div>
+                  <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>
+                    AI Best Tool connection
+                  </div>
                   <h3 className='mt-1 text-base font-bold text-slate-950'>Reuse a linked AI Best Tool listing</h3>
                   <p className='mt-1 text-xs leading-5 text-slate-600'>
-                    Import name, website, description, category, pricing context, logo, and screenshots. Imported
-                    facts remain unconfirmed until you review and save this profile.
+                    Import name, website, description, category, pricing context, logo, and screenshots. Imported facts
+                    remain unconfirmed until you review and save this profile.
                   </p>
                 </div>
                 {data.project.sourceToolId ? (
@@ -630,9 +720,8 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
               {data.project.sourceToolId ? (
                 <div className='mt-3 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs leading-5 text-emerald-800'>
                   The linked {data.project.name} listing has populated the product fields below. {listingAssetCount}{' '}
-                  reusable{' '}
-                  {listingAssetCount === 1 ? 'asset is' : 'assets are'} saved in the Product media and proof assets
-                  section.
+                  reusable {listingAssetCount === 1 ? 'asset is' : 'assets are'} saved in the Product media and proof
+                  assets section.
                 </div>
               ) : null}
               <div className='mt-3 grid gap-3 lg:grid-cols-2'>
@@ -766,196 +855,293 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
             </label>
             <label className='flex items-center gap-2 self-end rounded-xl border border-slate-200 px-3 py-2.5 text-sm font-semibold text-slate-700'>
               <input type='checkbox' name='factsConfirmed' defaultChecked={Boolean(data.project.factsConfirmedAt)} />{' '}
-              Facts reviewed and confirmed
+              {isChinese ? '我已核对以上资料，并确认其真实准确' : 'Facts reviewed and confirmed'}
             </label>
             <button className='w-fit rounded-xl bg-slate-950 px-4 py-2.5 text-sm font-bold text-white sm:col-span-2'>
-              Save and continue to assets
+              {isChinese ? '保存并进入下一步' : 'Save and continue'}
             </button>
           </form>
         </details>
       ) : null}
 
-      <section id='distribution-assets' className='scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
-        <div className='flex flex-col justify-between gap-3 sm:flex-row sm:items-end'>
-          <div>
-            <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Reusable asset center</div>
-            <h2 className='mt-1 text-xl font-bold text-slate-950'>Product media and proof assets</h2>
-            <p className='mt-1 text-sm text-slate-600'>Maintain assets once, then reuse them in every target-specific submission package.</p>
-            <div className='mt-3 flex flex-wrap gap-2 text-xs font-semibold'>
-              {assetGuidance.map((requirement) => {
-                const ready = requirement.key === 'logo'
-                  ? data.assets.some((asset) => ['logo', 'icon'].includes(asset.assetType))
-                  : data.assets.some((asset) => asset.assetType === requirement.key);
-                return (
-                  <span
-                    key={requirement.key}
-                    className={`rounded-full px-2.5 py-1 ${
-                      ready
-                        ? 'bg-emerald-100 text-emerald-700'
-                        : requirement.required
-                          ? 'bg-rose-100 text-rose-700'
-                          : 'bg-amber-100 text-amber-700'
-                    }`}
-                  >
-                    {ready ? `${requirement.label} ready` : `${requirement.label} ${requirement.required ? 'required' : 'recommended'}`}
-                  </span>
-                );
-              })}
+      <details
+        id='distribution-assets'
+        className='order-4 scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'
+        open={profileComplete && !hasLogo}
+      >
+        <summary className='cursor-pointer text-sm font-bold text-slate-950'>
+          {isChinese ? '第 2 步：通用产品素材' : 'Step 2: reusable product assets'}
+          <span
+            className={`ml-2 rounded-full px-2 py-1 text-xs font-semibold ${
+              hasLogo ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+            }`}
+          >
+            {hasLogo ? (isChinese ? '已准备' : 'ready') : isChinese ? '需要 Logo' : 'logo needed'}
+          </span>
+        </summary>
+        <div className='mt-4'>
+          <div className='flex flex-col justify-between gap-3 sm:flex-row sm:items-end'>
+            <div>
+              <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Reusable asset center</div>
+              <h2 className='mt-1 text-xl font-bold text-slate-950'>Product media and proof assets</h2>
+              <p className='mt-1 text-sm text-slate-600'>
+                Maintain assets once, then reuse them in every target-specific submission package.
+              </p>
+              <div className='mt-3 flex flex-wrap gap-2 text-xs font-semibold'>
+                {assetGuidance.map((requirement) => {
+                  const ready =
+                    requirement.key === 'logo'
+                      ? data.assets.some((asset) => ['logo', 'icon'].includes(asset.assetType))
+                      : data.assets.some((asset) => asset.assetType === requirement.key);
+                  return (
+                    <span
+                      key={requirement.key}
+                      className={`rounded-full px-2.5 py-1 ${
+                        ready
+                          ? 'bg-emerald-100 text-emerald-700'
+                          : requirement.required
+                            ? 'bg-rose-100 text-rose-700'
+                            : 'bg-amber-100 text-amber-700'
+                      }`}
+                    >
+                      {ready
+                        ? `${requirement.label} ready`
+                        : `${requirement.label} ${requirement.required ? 'required' : 'recommended'}`}
+                    </span>
+                  );
+                })}
+              </div>
             </div>
+            <form action={importDistributionIntelligenceAssets}>
+              <input type='hidden' name='projectId' value={data.project?.id || ''} />
+              <ImportAssetsButton />
+            </form>
           </div>
-          <form action={importDistributionIntelligenceAssets}>
-            <input type='hidden' name='projectId' value={data.project?.id || ''} />
-            <ImportAssetsButton />
-          </form>
-        </div>
-        {data.assets.length ? (
-          <div className='mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4'>
-            {data.assets.map((asset) => (
-              <a key={asset.id} href={asset.url} target='_blank' rel='noreferrer' className='overflow-hidden rounded-xl border border-slate-200 bg-white hover:border-cyan-300 hover:shadow-sm'>
-                <div className='flex h-36 items-center justify-center border-b border-slate-100 bg-[linear-gradient(45deg,#f1f5f9_25%,transparent_25%),linear-gradient(-45deg,#f1f5f9_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#f1f5f9_75%),linear-gradient(-45deg,transparent_75%,#f1f5f9_75%)] bg-[length:16px_16px] bg-[position:0_0,0_8px,8px_-8px,-8px_0px] p-3'>
-                  <img
-                    src={asset.url}
-                    alt={`${data.project?.name || 'Product'} ${asset.assetType}`}
-                    className='h-full w-full object-contain'
-                    loading='lazy'
-                  />
-                </div>
-                <div className='p-3'>
-                <div className='flex items-center justify-between gap-2'>
-                  <span className='text-xs font-bold uppercase text-cyan-700'>{asset.assetType.replaceAll('_', ' ')}</span>
-                  <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${asset.status === 'verified' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>{asset.status}</span>
-                </div>
-                <div className='mt-2 truncate text-sm font-bold text-slate-900'>
-                  {asset.source === 'aibesttool_listing'
-                    ? `${data.project?.name || 'Product'} imported ${asset.assetType}`
-                    : asset.name}
-                </div>
-                {asset.source === 'aibesttool_listing' ? (
-                  <div className='mt-1 text-[11px] font-semibold text-emerald-700'>From the linked product listing</div>
-                ) : null}
-                <div className='mt-1 text-xs text-slate-500'>{asset.width && asset.height ? `${asset.width} × ${asset.height}` : 'Dimensions not recorded'}</div>
-                <div className='mt-2 truncate text-[10px] text-slate-400'>{asset.url}</div>
-                </div>
-              </a>
-            ))}
-          </div>
-        ) : <div className='mt-5 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500'>No reusable assets yet. Import discovered assets or add a public asset URL below.</div>}
-        <details className='mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4'>
-          <summary className='cursor-pointer text-sm font-bold text-slate-800'>+ Add asset by URL</summary>
-          <form action={createDistributionProjectAsset} className='mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4'>
-            <input type='hidden' name='projectId' value={data.project?.id || ''} />
-            <label className='text-xs font-bold text-slate-600'>Type<select name='assetType' defaultValue='logo' className='mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-normal'><option value='logo'>Logo</option><option value='icon'>Icon</option><option value='screenshot'>Screenshot</option><option value='video'>Video</option><option value='founder_photo'>Founder photo</option><option value='social'>Social image</option></select></label>
-            <label className='text-xs font-bold text-slate-600'>Name<input required name='name' placeholder='Square logo' className='mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-normal' /></label>
-            <label className='text-xs font-bold text-slate-600 sm:col-span-2'>Public URL<input required name='sourceUrl' type='url' placeholder='https://...' className='mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-normal' /><span className='mt-1 block font-normal leading-5 text-slate-500'>Use the direct HTTPS URL of an official image that a target site can open without login.</span></label>
-            <label className='text-xs font-bold text-slate-600'>Width<input name='width' type='number' min='1' className='mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-normal' /></label>
-            <label className='text-xs font-bold text-slate-600'>Height<input name='height' type='number' min='1' className='mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-normal' /></label>
-            <label className='flex items-center gap-2 self-end rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-600'><input type='checkbox' name='verified' /> Verified first-party asset</label>
-            <button className='self-end rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-bold text-white'>Save asset</button>
-          </form>
-        </details>
-      </section>
-
-      <section className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
-        <div className='flex flex-col justify-between gap-3 sm:flex-row sm:items-center'>
-          <div>
-            <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Attribution layer</div>
-            <h2 className='mt-1 text-xl font-bold text-slate-950'>Tracked distribution links</h2>
-            <p className='mt-1 text-sm text-slate-500'>
-              Create one UTM link per channel so visits and conversions can be compared later.
-            </p>
-          </div>
-          <button
-            type='button'
-            onClick={() => setShowLinkForm((visible) => !visible)}
-            className='rounded-xl bg-cyan-700 px-4 py-2.5 text-sm font-bold text-white hover:bg-cyan-800'
-          >
-            + Create UTM link
-          </button>
-        </div>
-        {showLinkForm ? (
-          <form
-            action={createDistributionUtmLink}
-            className='mt-5 grid gap-4 rounded-xl bg-slate-50 p-4 sm:grid-cols-2'
-          >
-            <input type='hidden' name='projectId' value={data.project?.id || ''} />
-            <label className='text-sm font-semibold text-slate-700'>
-              Link name
-              <input
-                required
-                name='name'
-                placeholder='Product Hunt launch'
-                className='mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 font-normal outline-none focus:ring-2 focus:ring-cyan-400'
-              />
-            </label>
-            <label className='text-sm font-semibold text-slate-700'>
-              Channel
-              <select
-                required
-                name='channelId'
-                className='mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 font-normal'
-              >
-                <option value=''>Choose a channel</option>
-                {data.channels.map((channel) => (
-                  <option key={channel.id} value={channel.id}>
-                    {channel.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className='text-sm font-semibold text-slate-700'>
-              Campaign
-              <input
-                required
-                name='campaign'
-                defaultValue='launch'
-                placeholder='launch-2026'
-                className='mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 font-normal outline-none focus:ring-2 focus:ring-cyan-400'
-              />
-            </label>
-            <label className='text-sm font-semibold text-slate-700'>
-              Content variant
-              <input
-                name='content'
-                placeholder='founder-post-a'
-                className='mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 font-normal outline-none focus:ring-2 focus:ring-cyan-400'
-              />
-            </label>
-            <button className='w-fit rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-bold text-white hover:bg-slate-800 sm:col-span-2'>
-              Generate tracked link
-            </button>
-          </form>
-        ) : null}
-        {data.links.length > 0 ? (
-          <div className='mt-5 space-y-2'>
-            {data.links.map((link) => (
-              <div
-                key={link.id}
-                className='flex flex-col gap-2 rounded-xl border border-slate-200 px-3 py-2.5 text-xs sm:flex-row sm:items-center sm:justify-between'
-              >
-                <div>
-                  <span className='font-bold text-slate-800'>{link.name}</span>
-                  <span className='ml-2 rounded-full bg-slate-100 px-2 py-1 text-slate-500'>{link.channelName}</span>
-                </div>
+          {data.assets.length ? (
+            <div className='mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4'>
+              {data.assets.map((asset) => (
                 <a
-                  href={link.fullUrl}
+                  key={asset.id}
+                  href={asset.url}
                   target='_blank'
                   rel='noreferrer'
-                  className='max-w-full truncate font-mono text-cyan-700 hover:underline'
+                  className='overflow-hidden rounded-xl border border-slate-200 bg-white hover:border-cyan-300 hover:shadow-sm'
                 >
-                  {link.fullUrl}
+                  <div className='flex h-36 items-center justify-center border-b border-slate-100 bg-[linear-gradient(45deg,#f1f5f9_25%,transparent_25%),linear-gradient(-45deg,#f1f5f9_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#f1f5f9_75%),linear-gradient(-45deg,transparent_75%,#f1f5f9_75%)] bg-[length:16px_16px] bg-[position:0_0,0_8px,8px_-8px,-8px_0px] p-3'>
+                    <img
+                      src={asset.url}
+                      alt={`${data.project?.name || 'Product'} ${asset.assetType}`}
+                      className='h-full w-full object-contain'
+                      loading='lazy'
+                    />
+                  </div>
+                  <div className='p-3'>
+                    <div className='flex items-center justify-between gap-2'>
+                      <span className='text-xs font-bold uppercase text-cyan-700'>
+                        {asset.assetType.replaceAll('_', ' ')}
+                      </span>
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${asset.status === 'verified' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}
+                      >
+                        {asset.status}
+                      </span>
+                    </div>
+                    <div className='mt-2 truncate text-sm font-bold text-slate-900'>
+                      {asset.source === 'aibesttool_listing'
+                        ? `${data.project?.name || 'Product'} imported ${asset.assetType}`
+                        : asset.name}
+                    </div>
+                    {asset.source === 'aibesttool_listing' ? (
+                      <div className='mt-1 text-[11px] font-semibold text-emerald-700'>
+                        From the linked product listing
+                      </div>
+                    ) : null}
+                    <div className='mt-1 text-xs text-slate-500'>
+                      {asset.width && asset.height ? `${asset.width} × ${asset.height}` : 'Dimensions not recorded'}
+                    </div>
+                    <div className='mt-2 truncate text-[10px] text-slate-400'>{asset.url}</div>
+                  </div>
                 </a>
-              </div>
-            ))}
+              ))}
+            </div>
+          ) : (
+            <div className='mt-5 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500'>
+              No reusable assets yet. Import discovered assets or add a public asset URL below.
+            </div>
+          )}
+          <details className='mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4'>
+            <summary className='cursor-pointer text-sm font-bold text-slate-800'>+ Add asset by URL</summary>
+            <form action={createDistributionProjectAsset} className='mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4'>
+              <input type='hidden' name='projectId' value={data.project?.id || ''} />
+              <label className='text-xs font-bold text-slate-600'>
+                Type
+                <select
+                  name='assetType'
+                  defaultValue='logo'
+                  className='mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-normal'
+                >
+                  <option value='logo'>Logo</option>
+                  <option value='icon'>Icon</option>
+                  <option value='screenshot'>Screenshot</option>
+                  <option value='video'>Video</option>
+                  <option value='founder_photo'>Founder photo</option>
+                  <option value='social'>Social image</option>
+                </select>
+              </label>
+              <label className='text-xs font-bold text-slate-600'>
+                Name
+                <input
+                  required
+                  name='name'
+                  placeholder='Square logo'
+                  className='mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-normal'
+                />
+              </label>
+              <label className='text-xs font-bold text-slate-600 sm:col-span-2'>
+                Public URL
+                <input
+                  required
+                  name='sourceUrl'
+                  type='url'
+                  placeholder='https://...'
+                  className='mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-normal'
+                />
+                <span className='mt-1 block font-normal leading-5 text-slate-500'>
+                  Use the direct HTTPS URL of an official image that a target site can open without login.
+                </span>
+              </label>
+              <label className='text-xs font-bold text-slate-600'>
+                Width
+                <input
+                  name='width'
+                  type='number'
+                  min='1'
+                  className='mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-normal'
+                />
+              </label>
+              <label className='text-xs font-bold text-slate-600'>
+                Height
+                <input
+                  name='height'
+                  type='number'
+                  min='1'
+                  className='mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-normal'
+                />
+              </label>
+              <label className='flex items-center gap-2 self-end rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-600'>
+                <input type='checkbox' name='verified' /> Verified first-party asset
+              </label>
+              <button className='self-end rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-bold text-white'>
+                Save asset
+              </button>
+            </form>
+          </details>
+        </div>
+      </details>
+
+      {targetTask ? (
+        <section className='order-9 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
+          <div className='flex flex-col justify-between gap-3 sm:flex-row sm:items-center'>
+            <div>
+              <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Attribution layer</div>
+              <h2 className='mt-1 text-xl font-bold text-slate-950'>Tracked distribution links</h2>
+              <p className='mt-1 text-sm text-slate-500'>
+                Create one UTM link per channel so visits and conversions can be compared later.
+              </p>
+            </div>
+            <button
+              type='button'
+              onClick={() => setShowLinkForm((visible) => !visible)}
+              className='rounded-xl bg-cyan-700 px-4 py-2.5 text-sm font-bold text-white hover:bg-cyan-800'
+            >
+              + Create UTM link
+            </button>
           </div>
-        ) : (
-          <div className='mt-5 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500'>
-            No tracked links yet. Start with one channel and one campaign.
-          </div>
-        )}
-      </section>
+          {showLinkForm ? (
+            <form
+              action={createDistributionUtmLink}
+              className='mt-5 grid gap-4 rounded-xl bg-slate-50 p-4 sm:grid-cols-2'
+            >
+              <input type='hidden' name='projectId' value={data.project?.id || ''} />
+              <label className='text-sm font-semibold text-slate-700'>
+                Link name
+                <input
+                  required
+                  name='name'
+                  placeholder='Product Hunt launch'
+                  className='mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 font-normal outline-none focus:ring-2 focus:ring-cyan-400'
+                />
+              </label>
+              <label className='text-sm font-semibold text-slate-700'>
+                Channel
+                <select
+                  required
+                  name='channelId'
+                  className='mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 font-normal'
+                >
+                  <option value=''>Choose a channel</option>
+                  {data.channels.map((channel) => (
+                    <option key={channel.id} value={channel.id}>
+                      {channel.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className='text-sm font-semibold text-slate-700'>
+                Campaign
+                <input
+                  required
+                  name='campaign'
+                  defaultValue='launch'
+                  placeholder='launch-2026'
+                  className='mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 font-normal outline-none focus:ring-2 focus:ring-cyan-400'
+                />
+              </label>
+              <label className='text-sm font-semibold text-slate-700'>
+                Content variant
+                <input
+                  name='content'
+                  placeholder='founder-post-a'
+                  className='mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 font-normal outline-none focus:ring-2 focus:ring-cyan-400'
+                />
+              </label>
+              <button className='w-fit rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-bold text-white hover:bg-slate-800 sm:col-span-2'>
+                Generate tracked link
+              </button>
+            </form>
+          ) : null}
+          {data.links.length > 0 ? (
+            <div className='mt-5 space-y-2'>
+              {data.links.map((link) => (
+                <div
+                  key={link.id}
+                  className='flex flex-col gap-2 rounded-xl border border-slate-200 px-3 py-2.5 text-xs sm:flex-row sm:items-center sm:justify-between'
+                >
+                  <div>
+                    <span className='font-bold text-slate-800'>{link.name}</span>
+                    <span className='ml-2 rounded-full bg-slate-100 px-2 py-1 text-slate-500'>{link.channelName}</span>
+                  </div>
+                  <a
+                    href={link.fullUrl}
+                    target='_blank'
+                    rel='noreferrer'
+                    className='max-w-full truncate font-mono text-cyan-700 hover:underline'
+                  >
+                    {link.fullUrl}
+                  </a>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className='mt-5 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500'>
+              No tracked links yet. Start with one channel and one campaign.
+            </div>
+          )}
+        </section>
+      ) : null}
 
       {showForm ? (
-        <form action={createDistributionTask} className='rounded-2xl border border-cyan-200 bg-cyan-50/60 p-5'>
+        <form action={createDistributionTask} className='order-8 rounded-2xl border border-cyan-200 bg-cyan-50/60 p-5'>
           <input type='hidden' name='projectId' value={data.project?.id || ''} />
           <div className='mb-4 flex items-center gap-2 text-sm font-bold text-slate-900'>
             <Send className='h-4 w-4 text-cyan-700' /> Create a focused next action
@@ -1023,220 +1209,224 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
         </form>
       ) : null}
 
-      <section className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
-        <div className='flex flex-col justify-between gap-2 sm:flex-row sm:items-center'>
-          <div>
-            <div className='text-xs font-bold uppercase tracking-[0.18em] text-cyan-700'>
-              Today&apos;s operating board
+      {data.tasks.length > 0 ? (
+        <section className='order-8 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
+          <div className='flex flex-col justify-between gap-2 sm:flex-row sm:items-center'>
+            <div>
+              <div className='text-xs font-bold uppercase tracking-[0.18em] text-cyan-700'>
+                Today&apos;s operating board
+              </div>
+              <h2 className='mt-1 text-xl font-bold text-slate-950'>
+                {data.project?.name || 'Product'}{' '}
+                <span className='font-normal text-slate-400'>/ {data.workspace?.name || 'Workspace'}</span>
+              </h2>
             </div>
-            <h2 className='mt-1 text-xl font-bold text-slate-950'>
-              {data.project?.name || 'Product'}{' '}
-              <span className='font-normal text-slate-400'>/ {data.workspace?.name || 'Workspace'}</span>
-            </h2>
+            <div className='flex flex-wrap items-center gap-3 text-xs text-slate-500'>
+              <span>Keep one task tied to one channel and one next action.</span>
+              {data.tasks.length === 0 ? (
+                <form action={seedDistributionStarterTasks}>
+                  <input type='hidden' name='projectId' value={data.project?.id || ''} />
+                  <button className='rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 font-bold text-cyan-800 hover:bg-cyan-100'>
+                    Initialize project queue
+                  </button>
+                </form>
+              ) : null}
+            </div>
           </div>
-          <div className='flex flex-wrap items-center gap-3 text-xs text-slate-500'>
-            <span>Keep one task tied to one channel and one next action.</span>
-            {data.tasks.length === 0 ? (
-              <form action={seedDistributionStarterTasks}>
-                <input type='hidden' name='projectId' value={data.project?.id || ''} />
-                <button className='rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 font-bold text-cyan-800 hover:bg-cyan-100'>
-                  Initialize project queue
-                </button>
-              </form>
-            ) : null}
-          </div>
-        </div>
 
-        {data.tasks.length === 0 ? (
-          <div className='mt-6 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-sm text-slate-500'>
-            Add the first promotion task to start the daily queue.
-          </div>
-        ) : (
-          <div className='mt-6 space-y-3'>
-            {data.tasks.map((task) => (
-              <article
-                key={task.id}
-                className='rounded-2xl border border-slate-200 p-4 transition hover:border-cyan-300 hover:shadow-sm'
-              >
-                <div className='flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between'>
-                  <div className='min-w-0'>
-                    <div className='flex flex-wrap items-center gap-2 text-xs font-bold uppercase tracking-wide'>
-                      <span className='rounded-full bg-slate-100 px-2.5 py-1 text-slate-600'>{task.channelName}</span>
-                      <span
-                        className={`rounded-full px-2.5 py-1 ${task.priority === 'p0' ? 'bg-rose-50 text-rose-700' : 'bg-cyan-50 text-cyan-700'}`}
-                      >
-                        {task.priority}
-                      </span>
-                      <span className={`rounded-full px-2.5 py-1 ${statusToneClass(task.status)}`}>
-                        {getDistributionTaskStatusLabel(task.status)}
-                      </span>
-                    </div>
-                    <h3 className='mt-3 text-base font-bold text-slate-950'>{task.title}</h3>
-                    {task.instructions ? (
-                      <p className='mt-1 text-sm leading-5 text-slate-600'>{task.instructions}</p>
-                    ) : null}
-                    <div className='mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-500'>
-                      <span>Due: {task.dueDate || 'not scheduled'}</span>
-                      {task.liveUrl ? (
-                        <a
-                          href={task.liveUrl}
-                          target='_blank'
-                          rel='noreferrer'
-                          className='inline-flex items-center gap-1 font-semibold text-cyan-700 hover:underline'
+          {data.tasks.length === 0 ? (
+            <div className='mt-6 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-sm text-slate-500'>
+              Add the first promotion task to start the daily queue.
+            </div>
+          ) : (
+            <div className='mt-6 space-y-3'>
+              {data.tasks.map((task) => (
+                <article
+                  key={task.id}
+                  className='rounded-2xl border border-slate-200 p-4 transition hover:border-cyan-300 hover:shadow-sm'
+                >
+                  <div className='flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between'>
+                    <div className='min-w-0'>
+                      <div className='flex flex-wrap items-center gap-2 text-xs font-bold uppercase tracking-wide'>
+                        <span className='rounded-full bg-slate-100 px-2.5 py-1 text-slate-600'>{task.channelName}</span>
+                        <span
+                          className={`rounded-full px-2.5 py-1 ${task.priority === 'p0' ? 'bg-rose-50 text-rose-700' : 'bg-cyan-50 text-cyan-700'}`}
                         >
-                          <ExternalLink className='h-3 w-3' /> Live result
-                        </a>
-                      ) : null}
-                      {task.linkStatus ? (
-                        <span className='inline-flex items-center gap-1'>
-                          <Link2 className='h-3 w-3' /> {task.linkStatus}
+                          {task.priority}
                         </span>
+                        <span className={`rounded-full px-2.5 py-1 ${statusToneClass(task.status)}`}>
+                          {getDistributionTaskStatusLabel(task.status)}
+                        </span>
+                      </div>
+                      <h3 className='mt-3 text-base font-bold text-slate-950'>{task.title}</h3>
+                      {task.instructions ? (
+                        <p className='mt-1 text-sm leading-5 text-slate-600'>{task.instructions}</p>
                       ) : null}
-                      <Link
-                        href={`/${locale}/distribution/tasks/${task.id}`}
-                        className='inline-flex items-center gap-1 font-semibold text-slate-700 hover:text-cyan-700 hover:underline'
-                      >
-                        Open task
-                        <ArrowUpRight className='h-3 w-3' />
-                      </Link>
-                    </div>
-                  </div>
-                  <div className='flex flex-wrap gap-2 lg:justify-end'>
-                    <form action={updateDistributionTaskStatus}>
-                      <input type='hidden' name='taskId' value={task.id} />
-                      <select
-                        name='status'
-                        defaultValue={task.status}
-                        className='rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-xs font-semibold text-slate-700'
-                      >
-                        {statusOptions.map((option) => (
-                          <option key={option.value} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))}
-                      </select>
-                      <button className='ml-2 rounded-lg bg-slate-100 px-2.5 py-2 text-xs font-bold text-slate-700 hover:bg-slate-200'>
-                        Update
-                      </button>
-                    </form>
-                    <details className='rounded-lg border border-slate-200 px-2.5 py-2 text-xs'>
-                      <summary className='cursor-pointer font-bold text-slate-700'>Record result</summary>
-                      <form action={recordDistributionResult} className='mt-3 w-64 space-y-2'>
-                        <input type='hidden' name='taskId' value={task.id} />
-                        <input
-                          name='liveUrl'
-                          type='url'
-                          placeholder='https://...'
-                          className='w-full rounded-lg border border-slate-200 px-2.5 py-2 outline-none focus:ring-2 focus:ring-cyan-400'
-                        />
-                        <select
-                          name='linkStatus'
-                          defaultValue='pending'
-                          className='w-full rounded-lg border border-slate-200 px-2.5 py-2'
-                        >
-                          <option value='pending'>Pending review</option>
-                          <option value='live'>Live</option>
-                          <option value='nofollow'>Nofollow</option>
-                          <option value='rejected'>Rejected</option>
-                          <option value='removed'>Removed</option>
-                        </select>
-                        <input
-                          name='notes'
-                          placeholder='Evidence or next follow-up'
-                          className='w-full rounded-lg border border-slate-200 px-2.5 py-2 outline-none focus:ring-2 focus:ring-cyan-400'
-                        />
-                        <button className='w-full rounded-lg bg-cyan-700 px-2.5 py-2 font-bold text-white hover:bg-cyan-800'>
-                          Save result
-                        </button>
-                      </form>
-                    </details>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        )}
-      </section>
-
-      <section className='grid gap-4 md:grid-cols-2'>
-        <div className='rounded-2xl border border-slate-200 bg-white p-5'>
-          <div className='flex items-center gap-2 text-sm font-bold text-slate-900'>
-            <ShieldCheck className='h-4 w-4 text-emerald-600' /> Quality guardrails
-          </div>
-          <ul className='mt-3 space-y-2 text-sm leading-5 text-slate-600'>
-            <li>Use the right channel for the right audience.</li>
-            <li>Record disclosure and link status.</li>
-            <li>Do not duplicate promotional copy or automate community posting.</li>
-          </ul>
-        </div>
-        <div className='rounded-2xl border border-slate-200 bg-white p-5'>
-          <div className='text-sm font-bold text-slate-900'>Channel playbook</div>
-          <div className='mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
-            {data.channels.map((channel) => {
-              const template = data.templates.find((item) => item.channelId === channel.id);
-              return (
-                <details key={channel.id} className='rounded-xl border border-slate-200 bg-slate-50 p-3'>
-                  <summary className='cursor-pointer text-xs font-semibold text-slate-900'>
-                    {channel.name}
-                    <span className='ml-2 rounded-full bg-white px-2 py-0.5 text-[10px] uppercase tracking-wide text-slate-500'>
-                      {channel.channelType}
-                    </span>
-                  </summary>
-                  <div className='mt-3 space-y-2 text-xs text-slate-600'>
-                    <div className='rounded-lg bg-white p-2'>
-                      <div className='font-semibold text-slate-700'>Title</div>
-                      <div className='mt-1 text-slate-900'>{channel.copyPackage.title}</div>
-                    </div>
-                    <div className='rounded-lg bg-white p-2'>
-                      <div className='font-semibold text-slate-700'>Description</div>
-                      <div className='mt-1 leading-5 text-slate-700'>{channel.copyPackage.description}</div>
-                    </div>
-                    <div className='rounded-lg bg-white p-2'>
-                      <div className='font-semibold text-slate-700'>Disclosure</div>
-                      <div className='mt-1 text-slate-700'>{channel.copyPackage.disclosure}</div>
-                    </div>
-                    <div className='rounded-lg bg-white p-2'>
-                      <div className='font-semibold text-slate-700'>Proof points</div>
-                      <ul className='mt-1 list-disc space-y-1 pl-4 text-slate-700'>
-                        {channel.copyPackage.proofPoints.slice(0, 3).map((point) => (
-                          <li key={point}>{point}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div className='rounded-lg bg-white p-2'>
-                      <div className='font-semibold text-slate-700'>Required fields</div>
-                      <div className='mt-1 flex flex-wrap gap-1'>
-                        {channel.copyPackage.requiredFields.map((field) => (
-                          <span
-                            key={field}
-                            className='rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-600'
+                      <div className='mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-500'>
+                        <span>Due: {task.dueDate || 'not scheduled'}</span>
+                        {task.liveUrl ? (
+                          <a
+                            href={task.liveUrl}
+                            target='_blank'
+                            rel='noreferrer'
+                            className='inline-flex items-center gap-1 font-semibold text-cyan-700 hover:underline'
                           >
-                            {field}
+                            <ExternalLink className='h-3 w-3' /> Live result
+                          </a>
+                        ) : null}
+                        {task.linkStatus ? (
+                          <span className='inline-flex items-center gap-1'>
+                            <Link2 className='h-3 w-3' /> {task.linkStatus}
                           </span>
-                        ))}
+                        ) : null}
+                        <Link
+                          href={`/${locale}/distribution/tasks/${task.id}`}
+                          className='inline-flex items-center gap-1 font-semibold text-slate-700 hover:text-cyan-700 hover:underline'
+                        >
+                          Open task
+                          <ArrowUpRight className='h-3 w-3' />
+                        </Link>
                       </div>
                     </div>
-                    <div className='rounded-lg bg-white p-2'>
-                      <div className='font-semibold text-slate-700'>Follow up</div>
-                      <div className='mt-1 leading-5 text-slate-700'>{channel.copyPackage.followUpPrompt}</div>
-                    </div>
-                    <div
-                      className='text-[11px] text-slate-500'
-                      title={template?.descriptionTemplate || channel.instructions || ''}
-                    >
-                      {channel.copyPackage.handoffNotes[0]}
+                    <div className='flex flex-wrap gap-2 lg:justify-end'>
+                      <form action={updateDistributionTaskStatus}>
+                        <input type='hidden' name='taskId' value={task.id} />
+                        <select
+                          name='status'
+                          defaultValue={task.status}
+                          className='rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-xs font-semibold text-slate-700'
+                        >
+                          {statusOptions.map((option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                        <button className='ml-2 rounded-lg bg-slate-100 px-2.5 py-2 text-xs font-bold text-slate-700 hover:bg-slate-200'>
+                          Update
+                        </button>
+                      </form>
+                      <details className='rounded-lg border border-slate-200 px-2.5 py-2 text-xs'>
+                        <summary className='cursor-pointer font-bold text-slate-700'>Record result</summary>
+                        <form action={recordDistributionResult} className='mt-3 w-64 space-y-2'>
+                          <input type='hidden' name='taskId' value={task.id} />
+                          <input
+                            name='liveUrl'
+                            type='url'
+                            placeholder='https://...'
+                            className='w-full rounded-lg border border-slate-200 px-2.5 py-2 outline-none focus:ring-2 focus:ring-cyan-400'
+                          />
+                          <select
+                            name='linkStatus'
+                            defaultValue='pending'
+                            className='w-full rounded-lg border border-slate-200 px-2.5 py-2'
+                          >
+                            <option value='pending'>Pending review</option>
+                            <option value='live'>Live</option>
+                            <option value='nofollow'>Nofollow</option>
+                            <option value='rejected'>Rejected</option>
+                            <option value='removed'>Removed</option>
+                          </select>
+                          <input
+                            name='notes'
+                            placeholder='Evidence or next follow-up'
+                            className='w-full rounded-lg border border-slate-200 px-2.5 py-2 outline-none focus:ring-2 focus:ring-cyan-400'
+                          />
+                          <button className='w-full rounded-lg bg-cyan-700 px-2.5 py-2 font-bold text-white hover:bg-cyan-800'>
+                            Save result
+                          </button>
+                        </form>
+                      </details>
                     </div>
                   </div>
-                </details>
-              );
-            })}
+                </article>
+              ))}
+            </div>
+          )}
+        </section>
+      ) : null}
+
+      {targetTask ? (
+        <section className='order-11 grid gap-4 md:grid-cols-2'>
+          <div className='rounded-2xl border border-slate-200 bg-white p-5'>
+            <div className='flex items-center gap-2 text-sm font-bold text-slate-900'>
+              <ShieldCheck className='h-4 w-4 text-emerald-600' /> Quality guardrails
+            </div>
+            <ul className='mt-3 space-y-2 text-sm leading-5 text-slate-600'>
+              <li>Use the right channel for the right audience.</li>
+              <li>Record disclosure and link status.</li>
+              <li>Do not duplicate promotional copy or automate community posting.</li>
+            </ul>
           </div>
-          <p className='mt-3 text-xs text-slate-500'>
-            Open a channel to review the generated copy package. Templates guide human editing; they do not
-            auto-publish.
-          </p>
-        </div>
-      </section>
+          <div className='rounded-2xl border border-slate-200 bg-white p-5'>
+            <div className='text-sm font-bold text-slate-900'>Channel playbook</div>
+            <div className='mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+              {data.channels.map((channel) => {
+                const template = data.templates.find((item) => item.channelId === channel.id);
+                return (
+                  <details key={channel.id} className='rounded-xl border border-slate-200 bg-slate-50 p-3'>
+                    <summary className='cursor-pointer text-xs font-semibold text-slate-900'>
+                      {channel.name}
+                      <span className='ml-2 rounded-full bg-white px-2 py-0.5 text-[10px] uppercase tracking-wide text-slate-500'>
+                        {channel.channelType}
+                      </span>
+                    </summary>
+                    <div className='mt-3 space-y-2 text-xs text-slate-600'>
+                      <div className='rounded-lg bg-white p-2'>
+                        <div className='font-semibold text-slate-700'>Title</div>
+                        <div className='mt-1 text-slate-900'>{channel.copyPackage.title}</div>
+                      </div>
+                      <div className='rounded-lg bg-white p-2'>
+                        <div className='font-semibold text-slate-700'>Description</div>
+                        <div className='mt-1 leading-5 text-slate-700'>{channel.copyPackage.description}</div>
+                      </div>
+                      <div className='rounded-lg bg-white p-2'>
+                        <div className='font-semibold text-slate-700'>Disclosure</div>
+                        <div className='mt-1 text-slate-700'>{channel.copyPackage.disclosure}</div>
+                      </div>
+                      <div className='rounded-lg bg-white p-2'>
+                        <div className='font-semibold text-slate-700'>Proof points</div>
+                        <ul className='mt-1 list-disc space-y-1 pl-4 text-slate-700'>
+                          {channel.copyPackage.proofPoints.slice(0, 3).map((point) => (
+                            <li key={point}>{point}</li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div className='rounded-lg bg-white p-2'>
+                        <div className='font-semibold text-slate-700'>Required fields</div>
+                        <div className='mt-1 flex flex-wrap gap-1'>
+                          {channel.copyPackage.requiredFields.map((field) => (
+                            <span
+                              key={field}
+                              className='rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-600'
+                            >
+                              {field}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className='rounded-lg bg-white p-2'>
+                        <div className='font-semibold text-slate-700'>Follow up</div>
+                        <div className='mt-1 leading-5 text-slate-700'>{channel.copyPackage.followUpPrompt}</div>
+                      </div>
+                      <div
+                        className='text-[11px] text-slate-500'
+                        title={template?.descriptionTemplate || channel.instructions || ''}
+                      >
+                        {channel.copyPackage.handoffNotes[0]}
+                      </div>
+                    </div>
+                  </details>
+                );
+              })}
+            </div>
+            <p className='mt-3 text-xs text-slate-500'>
+              Open a channel to review the generated copy package. Templates guide human editing; they do not
+              auto-publish.
+            </p>
+          </div>
+        </section>
+      ) : null}
     </div>
   );
 }
