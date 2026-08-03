@@ -65,6 +65,7 @@ export interface DistributionTaskDetail {
       label: string;
       value: string;
       required: boolean;
+      manual?: boolean;
       characterLimit: number | null;
       sourceUrl: string | null;
     }>;

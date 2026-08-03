@@ -282,6 +282,7 @@ export default async function DistributionTaskDetailPage({ params }: { params: {
                   label={`${field.label}${field.required ? ' *' : ''}`}
                   value={field.value}
                   characterLimit={field.characterLimit}
+                  manual={field.manual}
                 />
               ))}
             </div>

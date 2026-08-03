@@ -177,6 +177,37 @@ const readyPackage = composeDistributionPackage({
 });
 assert.equal(readyPackage.ready, true, 'A complete base package should be ready for human submission.');
 
+const packageWithManualTargetFields = composeDistributionPackage({
+  detail,
+  requirements: [
+    {
+      requiredField: 'email',
+      fieldType: 'email',
+      characterLimit: null,
+      requiredAsset: null,
+      ruleText: 'Sign in with an account email.',
+      sourceUrl: 'https://launch.example/register',
+    },
+    {
+      requiredField: 'category',
+      fieldType: 'select',
+      characterLimit: null,
+      requiredAsset: null,
+      ruleText: 'Choose the closest category.',
+      sourceUrl: 'https://launch.example/submit',
+    },
+  ],
+  availableAssetTypes: ['logo'],
+});
+assert.equal(
+  packageWithManualTargetFields.ready,
+  true,
+  'Account and select fields completed on the target site must not block package readiness.',
+);
+assert.equal(packageWithManualTargetFields.fields.find((field) => field.key === 'email')?.manual, true);
+assert.equal(packageWithManualTargetFields.fields.find((field) => field.key === 'category')?.manual, true);
+assert.equal(packageWithManualTargetFields.warnings.length, 2);
+
 assert.equal(normalizeDistributionDomain('https://www.Moxion.ai/path'), 'moxion.ai');
 assert.equal(
   canReuseDistributionListing({
