@@ -16,6 +16,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { useFormStatus } from 'react-dom';
+import { DistributionActionForm, DistributionSubmitButton, useDistributionFormState } from './DistributionActionForm';
 
 import { getDistributionAssetGuidance } from '@/lib/services/distribution/listingBridge';
 import {
@@ -43,28 +44,30 @@ const statusOptions = getDistributionTaskStatusChoices();
 
 function ImportListingButton({ disabled, linked }: { disabled: boolean; linked: boolean }) {
   const { pending } = useFormStatus();
+  const formState = useDistributionFormState();
+  const isPending = formState?.submitting ?? pending;
   const [stage, setStage] = useState(0);
   const messages = linked
     ? ['Refreshing listing data...', 'Updating product facts...', 'Syncing reusable assets...']
     : ['Connecting product listing...', 'Filling product facts...', 'Saving reusable assets...'];
 
   useEffect(() => {
-    if (!pending) {
+    if (!isPending) {
       setStage(0);
       return;
     }
     const timer = window.setInterval(() => setStage((current) => Math.min(current + 1, messages.length - 1)), 700);
     return () => window.clearInterval(timer);
-  }, [messages.length, pending]);
+  }, [isPending, messages.length]);
 
   return (
     <button
-      disabled={disabled || pending}
+      disabled={disabled || isPending}
       aria-live='polite'
       className='inline-flex min-w-36 items-center justify-center gap-2 rounded-lg bg-cyan-700 px-3 py-2 text-xs font-bold text-white hover:bg-cyan-800 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500'
     >
-      {pending ? <LoaderCircle className='h-4 w-4 animate-spin' /> : null}
-      {pending
+      {isPending ? <LoaderCircle className='h-4 w-4 animate-spin' /> : null}
+      {isPending
         ? messages[stage]
         : disabled
           ? 'Different project domain'
@@ -77,14 +80,16 @@ function ImportListingButton({ disabled, linked }: { disabled: boolean; linked: 
 
 function ImportAssetsButton() {
   const { pending } = useFormStatus();
+  const formState = useDistributionFormState();
+  const isPending = formState?.submitting ?? pending;
   return (
     <button
-      disabled={pending}
+      disabled={isPending}
       aria-live='polite'
       className='inline-flex items-center justify-center gap-2 rounded-xl border border-cyan-200 bg-cyan-50 px-4 py-2.5 text-xs font-bold text-cyan-800 hover:bg-cyan-100 disabled:cursor-wait disabled:opacity-70'
     >
-      {pending ? <LoaderCircle className='h-4 w-4 animate-spin' /> : null}
-      {pending ? 'Importing discovered assets...' : 'Import discovered assets'}
+      {isPending ? <LoaderCircle className='h-4 w-4 animate-spin' /> : null}
+      {isPending ? 'Importing discovered assets...' : 'Import discovered assets'}
     </button>
   );
 }
@@ -547,15 +552,21 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
                           ) : null}
                         </>
                       ) : (
-                        <form action={acceptDistributionTarget}>
+                        <DistributionActionForm
+                          action={acceptDistributionTarget}
+                          successMessage='Target accepted. Opening the next distribution step…'
+                        >
                           <input type='hidden' name='projectId' value={data.project?.id || ''} />
                           <input type='hidden' name='targetId' value={target.id} />
                           <input type='hidden' name='score' value={target.score} />
                           <input type='hidden' name='estimatedMinutes' value={target.estimatedMinutes} />
-                          <button className='rounded-lg bg-slate-950 px-3 py-2 text-xs font-bold text-white hover:bg-slate-800'>
+                          <DistributionSubmitButton
+                            pendingLabel='Accepting target…'
+                            className='inline-flex items-center gap-1 rounded-lg bg-slate-950 px-3 py-2 text-xs font-bold text-white hover:bg-slate-800 disabled:cursor-wait disabled:opacity-70'
+                          >
                             Choose this target
-                          </button>
-                        </form>
+                          </DistributionSubmitButton>
+                        </DistributionActionForm>
                       )}
                     </div>
                   </article>
@@ -601,9 +612,10 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
       ) : null}
 
       {showProjectForm ? (
-        <form
+        <DistributionActionForm
           action={createDistributionProject}
           className='order-2 rounded-2xl border border-cyan-200 bg-cyan-50/60 p-5'
+          successMessage='Project created. Refreshing your workspace…'
         >
           <div className='grid gap-4 sm:grid-cols-2'>
             <label className='text-sm font-semibold text-slate-700'>
@@ -672,10 +684,13 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
             </label>
           </div>
           <input type='hidden' name='locale' value={locale} />
-          <button className='mt-4 rounded-xl bg-slate-950 px-4 py-2.5 text-sm font-bold text-white hover:bg-slate-800'>
+          <DistributionSubmitButton
+            pendingLabel='Creating project…'
+            className='mt-4 inline-flex items-center gap-2 rounded-xl bg-slate-950 px-4 py-2.5 text-sm font-bold text-white hover:bg-slate-800 disabled:cursor-wait disabled:opacity-70'
+          >
             Create project
-          </button>
-        </form>
+          </DistributionSubmitButton>
+        </DistributionActionForm>
       ) : null}
 
       {data.project ? (
@@ -757,14 +772,18 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
                     <p className='mt-2 line-clamp-2 text-xs leading-5 text-slate-600'>
                       {listing.description || 'No reusable listing description is available.'}
                     </p>
-                    <form action={importDistributionCatalogListing} className='mt-3'>
+                    <DistributionActionForm
+                      action={importDistributionCatalogListing}
+                      className='mt-3'
+                      successMessage='Listing imported. Refreshing the product profile…'
+                    >
                       <input type='hidden' name='projectId' value={activeProjectId} />
                       <input type='hidden' name='toolId' value={listing.id} />
                       <ImportListingButton
                         disabled={Boolean(activeProjectWebsiteUrl) && !listing.exactDomainMatch}
                         linked={activeProjectSourceToolId === listing.id}
                       />
-                    </form>
+                    </DistributionActionForm>
                   </div>
                 ))}
               </div>
@@ -775,7 +794,12 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
               platform admins can also connect an exact-domain listing. You can continue manually.
             </div>
           )}
-          <form action={updateDistributionProjectProfile} className='mt-4 grid gap-4 sm:grid-cols-2'>
+          <DistributionActionForm
+            action={updateDistributionProjectProfile}
+            className='mt-4 grid gap-4 sm:grid-cols-2'
+            successMessage='Product facts saved. Refreshing the workspace…'
+            feedbackClassName='sm:col-span-2'
+          >
             <input type='hidden' name='projectId' value={data.project.id} />
             <label className='text-sm font-semibold text-slate-700'>
               Product name
@@ -868,10 +892,13 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
               <input type='checkbox' name='factsConfirmed' defaultChecked={Boolean(data.project.factsConfirmedAt)} />{' '}
               {isChinese ? '我已核对以上资料，并确认其真实准确' : 'Facts reviewed and confirmed'}
             </label>
-            <button className='w-fit rounded-xl bg-slate-950 px-4 py-2.5 text-sm font-bold text-white sm:col-span-2'>
+            <DistributionSubmitButton
+              pendingLabel={isChinese ? '正在保存…' : 'Saving…'}
+              className='inline-flex w-fit items-center gap-2 rounded-xl bg-slate-950 px-4 py-2.5 text-sm font-bold text-white disabled:cursor-wait disabled:opacity-70 sm:col-span-2'
+            >
               {isChinese ? '保存并进入下一步' : 'Save and continue'}
-            </button>
-          </form>
+            </DistributionSubmitButton>
+          </DistributionActionForm>
         </details>
       ) : null}
 
@@ -923,10 +950,13 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
                 })}
               </div>
             </div>
-            <form action={importDistributionIntelligenceAssets}>
+            <DistributionActionForm
+              action={importDistributionIntelligenceAssets}
+              successMessage='Assets imported. Refreshing the asset center…'
+            >
               <input type='hidden' name='projectId' value={data.project?.id || ''} />
               <ImportAssetsButton />
-            </form>
+            </DistributionActionForm>
           </div>
           {data.assets.length ? (
             <div className='mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4'>
@@ -982,7 +1012,12 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
           )}
           <details className='mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4'>
             <summary className='cursor-pointer text-sm font-bold text-slate-800'>+ Add asset by URL</summary>
-            <form action={createDistributionProjectAsset} className='mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4'>
+            <DistributionActionForm
+              action={createDistributionProjectAsset}
+              className='mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4'
+              successMessage='Asset saved. Refreshing the asset center…'
+              feedbackClassName='sm:col-span-2 lg:col-span-4'
+            >
               <input type='hidden' name='projectId' value={data.project?.id || ''} />
               <label className='text-xs font-bold text-slate-600'>
                 Type
@@ -1042,10 +1077,13 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
               <label className='flex items-center gap-2 self-end rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-600'>
                 <input type='checkbox' name='verified' /> Verified first-party asset
               </label>
-              <button className='self-end rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-bold text-white'>
+              <DistributionSubmitButton
+                pendingLabel='Saving asset…'
+                className='inline-flex items-center gap-2 self-end rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-bold text-white disabled:cursor-wait disabled:opacity-70'
+              >
                 Save asset
-              </button>
-            </form>
+              </DistributionSubmitButton>
+            </DistributionActionForm>
           </details>
         </div>
       </details>
@@ -1069,9 +1107,11 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
             </button>
           </div>
           {showLinkForm ? (
-            <form
+            <DistributionActionForm
               action={createDistributionUtmLink}
               className='mt-5 grid gap-4 rounded-xl bg-slate-50 p-4 sm:grid-cols-2'
+              successMessage='Tracked link generated. Refreshing the attribution layer…'
+              feedbackClassName='sm:col-span-2'
             >
               <input type='hidden' name='projectId' value={data.project?.id || ''} />
               <label className='text-sm font-semibold text-slate-700'>
@@ -1116,10 +1156,13 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
                   className='mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 font-normal outline-none focus:ring-2 focus:ring-cyan-400'
                 />
               </label>
-              <button className='w-fit rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-bold text-white hover:bg-slate-800 sm:col-span-2'>
+              <DistributionSubmitButton
+                pendingLabel='Generating link…'
+                className='inline-flex w-fit items-center gap-2 rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-bold text-white hover:bg-slate-800 disabled:cursor-wait disabled:opacity-70 sm:col-span-2'
+              >
                 Generate tracked link
-              </button>
-            </form>
+              </DistributionSubmitButton>
+            </DistributionActionForm>
           ) : null}
           {data.links.length > 0 ? (
             <div className='mt-5 space-y-2'>
@@ -1152,7 +1195,11 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
       ) : null}
 
       {showForm ? (
-        <form action={createDistributionTask} className='order-8 rounded-2xl border border-cyan-200 bg-cyan-50/60 p-5'>
+        <DistributionActionForm
+          action={createDistributionTask}
+          className='order-8 rounded-2xl border border-cyan-200 bg-cyan-50/60 p-5'
+          successMessage='Task saved. Refreshing today’s queue…'
+        >
           <input type='hidden' name='projectId' value={data.project?.id || ''} />
           <div className='mb-4 flex items-center gap-2 text-sm font-bold text-slate-900'>
             <Send className='h-4 w-4 text-cyan-700' /> Create a focused next action
@@ -1214,10 +1261,13 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
           <p className='mt-4 text-xs leading-5 text-slate-500'>
             No automatic posting. The workspace keeps the human decision and evidence trail visible.
           </p>
-          <button className='mt-4 rounded-xl bg-slate-950 px-4 py-2.5 text-sm font-bold text-white hover:bg-slate-800'>
+          <DistributionSubmitButton
+            pendingLabel='Saving task…'
+            className='mt-4 inline-flex items-center gap-2 rounded-xl bg-slate-950 px-4 py-2.5 text-sm font-bold text-white hover:bg-slate-800 disabled:cursor-wait disabled:opacity-70'
+          >
             Save task
-          </button>
-        </form>
+          </DistributionSubmitButton>
+        </DistributionActionForm>
       ) : null}
 
       {data.tasks.length > 0 ? (
@@ -1235,12 +1285,18 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
             <div className='flex flex-wrap items-center gap-3 text-xs text-slate-500'>
               <span>Keep one task tied to one channel and one next action.</span>
               {data.tasks.length === 0 ? (
-                <form action={seedDistributionStarterTasks}>
+                <DistributionActionForm
+                  action={seedDistributionStarterTasks}
+                  successMessage='Starter queue created. Refreshing your workspace…'
+                >
                   <input type='hidden' name='projectId' value={data.project?.id || ''} />
-                  <button className='rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 font-bold text-cyan-800 hover:bg-cyan-100'>
+                  <DistributionSubmitButton
+                    pendingLabel='Creating queue…'
+                    className='inline-flex items-center gap-1 rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 font-bold text-cyan-800 hover:bg-cyan-100 disabled:cursor-wait disabled:opacity-70'
+                  >
                     Initialize project queue
-                  </button>
-                </form>
+                  </DistributionSubmitButton>
+                </DistributionActionForm>
               ) : null}
             </div>
           </div>
@@ -1300,7 +1356,11 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
                       </div>
                     </div>
                     <div className='flex flex-wrap gap-2 lg:justify-end'>
-                      <form action={updateDistributionTaskStatus}>
+                      <DistributionActionForm
+                        action={updateDistributionTaskStatus}
+                        className='flex items-center'
+                        successMessage='Task status updated. Refreshing the queue…'
+                      >
                         <input type='hidden' name='taskId' value={task.id} />
                         <select
                           name='status'
@@ -1313,13 +1373,20 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
                             </option>
                           ))}
                         </select>
-                        <button className='ml-2 rounded-lg bg-slate-100 px-2.5 py-2 text-xs font-bold text-slate-700 hover:bg-slate-200'>
+                        <DistributionSubmitButton
+                          pendingLabel='Updating…'
+                          className='ml-2 inline-flex items-center gap-1 rounded-lg bg-slate-100 px-2.5 py-2 text-xs font-bold text-slate-700 hover:bg-slate-200 disabled:cursor-wait disabled:opacity-70'
+                        >
                           Update
-                        </button>
-                      </form>
+                        </DistributionSubmitButton>
+                      </DistributionActionForm>
                       <details className='rounded-lg border border-slate-200 px-2.5 py-2 text-xs'>
                         <summary className='cursor-pointer font-bold text-slate-700'>Record result</summary>
-                        <form action={recordDistributionResult} className='mt-3 w-64 space-y-2'>
+                        <DistributionActionForm
+                          action={recordDistributionResult}
+                          className='mt-3 w-64 space-y-2'
+                          successMessage='Result recorded. Refreshing the queue…'
+                        >
                           <input type='hidden' name='taskId' value={task.id} />
                           <input
                             name='liveUrl'
@@ -1343,10 +1410,13 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
                             placeholder='Evidence or next follow-up'
                             className='w-full rounded-lg border border-slate-200 px-2.5 py-2 outline-none focus:ring-2 focus:ring-cyan-400'
                           />
-                          <button className='w-full rounded-lg bg-cyan-700 px-2.5 py-2 font-bold text-white hover:bg-cyan-800'>
+                          <DistributionSubmitButton
+                            pendingLabel='Saving…'
+                            className='inline-flex w-full items-center justify-center gap-1 rounded-lg bg-cyan-700 px-2.5 py-2 font-bold text-white hover:bg-cyan-800 disabled:cursor-wait disabled:bg-cyan-500'
+                          >
                             Save result
-                          </button>
-                        </form>
+                          </DistributionSubmitButton>
+                        </DistributionActionForm>
                       </details>
                     </div>
                   </div>

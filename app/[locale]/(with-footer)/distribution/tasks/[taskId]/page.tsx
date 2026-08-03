@@ -10,6 +10,7 @@ import {
 } from '@/lib/services/distribution/taskStateMachine';
 import CopyField from '@/components/distribution/CopyField';
 import DistributionActionButton from '@/components/distribution/DistributionActionButton';
+import { DistributionActionForm, DistributionSubmitButton } from '@/components/distribution/DistributionActionForm';
 import {
   createDistributionFollowUpTask,
   generateDistributionPackage,
@@ -73,14 +74,14 @@ export default async function DistributionTaskDetailPage({ params }: { params: {
                   : 'The workspace will turn your confirmed facts, logo, screenshot, and target rules into copy-ready fields. Do not open the target site yet.'}
               </p>
             </div>
-            <form action={generateDistributionPackage}>
+            <DistributionActionForm action={generateDistributionPackage} successMessage='Package generated. Refreshing your task…'>
               <input type='hidden' name='taskId' value={data.task.id} />
               <DistributionActionButton
                 label={isChinese ? '生成专属材料包' : 'Generate target package'}
                 pendingLabel={isChinese ? '正在生成，请稍候…' : 'Generating package…'}
                 className='inline-flex min-w-44 items-center justify-center gap-2 rounded-xl bg-slate-950 px-5 py-3 text-sm font-bold text-white hover:bg-cyan-800 disabled:cursor-wait disabled:bg-slate-500'
               />
-            </form>
+            </DistributionActionForm>
           </div>
         ) : data.package.ready && data.task.status === 'ready_to_submit' ? (
           <div className='mt-2'>
@@ -223,14 +224,14 @@ export default async function DistributionTaskDetailPage({ params }: { params: {
             </p>
           </div>
           {data.package ? (
-            <form action={generateDistributionPackage}>
+            <DistributionActionForm action={generateDistributionPackage} successMessage='Package regenerated. Refreshing your task…'>
               <input type='hidden' name='taskId' value={data.task.id} />
               <DistributionActionButton
                 label={isChinese ? '重新生成材料包' : 'Regenerate package'}
                 pendingLabel={isChinese ? '正在重新生成…' : 'Regenerating…'}
                 className='inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-700 px-4 py-2.5 text-sm font-bold text-white hover:bg-cyan-800 disabled:cursor-wait disabled:bg-slate-400'
               />
-            </form>
+            </DistributionActionForm>
           ) : null}
         </div>
 
@@ -479,22 +480,30 @@ export default async function DistributionTaskDetailPage({ params }: { params: {
 
           <div className='mt-4 flex flex-wrap gap-2'>
             {quickStatuses.map((status) => (
-              <form key={status} action={updateDistributionTaskStatus}>
+              <DistributionActionForm
+                key={status}
+                action={updateDistributionTaskStatus}
+                successMessage={`Status updated to ${getDistributionTaskStatusLabel(status)}. Refreshing your task…`}
+              >
                 <input type='hidden' name='taskId' value={data.task.id} />
                 <input type='hidden' name='status' value={status} />
-                <button
-                  type='submit'
-                  className='rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold text-slate-700 hover:border-cyan-300 hover:text-cyan-700'
+                <DistributionSubmitButton
+                  pendingLabel='Updating…'
+                  className='inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold text-slate-700 hover:border-cyan-300 hover:text-cyan-700 disabled:cursor-wait disabled:opacity-70'
                 >
                   {getDistributionTaskStatusLabel(status)}
-                </button>
-              </form>
+                </DistributionSubmitButton>
+              </DistributionActionForm>
             ))}
           </div>
 
           {canRecordResult ? (
             <div className='mt-5 grid gap-4 md:grid-cols-2'>
-              <form action={recordDistributionResult} className='rounded-xl bg-slate-50 p-4'>
+              <DistributionActionForm
+                action={recordDistributionResult}
+                className='rounded-xl bg-slate-50 p-4'
+                successMessage='Result recorded. Updating status and follow-up checks…'
+              >
                 <div className='flex items-center gap-2 text-sm font-bold text-slate-900'>
                   <Send className='h-4 w-4 text-cyan-700' /> Record live result
                 </div>
@@ -523,13 +532,20 @@ export default async function DistributionTaskDetailPage({ params }: { params: {
                     placeholder='Evidence or next follow-up note'
                     className='rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400'
                   />
-                  <button className='rounded-xl bg-cyan-700 px-4 py-2 text-sm font-bold text-white hover:bg-cyan-800'>
+                  <DistributionSubmitButton
+                    pendingLabel='Saving result…'
+                    className='inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-700 px-4 py-2 text-sm font-bold text-white hover:bg-cyan-800 disabled:cursor-wait disabled:bg-cyan-500'
+                  >
                     Save result
-                  </button>
+                  </DistributionSubmitButton>
                 </div>
-              </form>
+              </DistributionActionForm>
 
-              <form action={createDistributionFollowUpTask} className='rounded-xl bg-slate-50 p-4'>
+              <DistributionActionForm
+                action={createDistributionFollowUpTask}
+                className='rounded-xl bg-slate-50 p-4'
+                successMessage='Follow-up task created. Refreshing your task…'
+              >
                 <div className='flex items-center gap-2 text-sm font-bold text-slate-900'>
                   <Clock3 className='h-4 w-4 text-amber-600' /> Auto create follow-up
                 </div>
@@ -547,11 +563,14 @@ export default async function DistributionTaskDetailPage({ params }: { params: {
                     defaultValue='Follow up on the live listing and capture any updates.'
                     className='rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400'
                   />
-                  <button className='rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-bold text-amber-800 hover:bg-amber-100'>
+                  <DistributionSubmitButton
+                    pendingLabel='Creating follow-up…'
+                    className='inline-flex items-center justify-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-bold text-amber-800 hover:bg-amber-100 disabled:cursor-wait disabled:opacity-70'
+                  >
                     Create follow-up task
-                  </button>
+                  </DistributionSubmitButton>
                 </div>
-              </form>
+              </DistributionActionForm>
             </div>
           ) : null}
         </section>

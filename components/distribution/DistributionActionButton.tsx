@@ -2,6 +2,7 @@
 
 import { Loader2 } from 'lucide-react';
 import { useFormStatus } from 'react-dom';
+import { useDistributionFormState } from './DistributionActionForm';
 
 export default function DistributionActionButton({
   label,
@@ -13,11 +14,13 @@ export default function DistributionActionButton({
   className: string;
 }) {
   const { pending } = useFormStatus();
+  const formState = useDistributionFormState();
+  const isPending = formState?.submitting ?? pending;
 
   return (
-    <button type='submit' disabled={pending} className={className}>
-      {pending ? <Loader2 className='h-4 w-4 animate-spin' /> : null}
-      {pending ? pendingLabel : label}
+    <button type='submit' disabled={isPending} className={className}>
+      {isPending ? <Loader2 className='h-4 w-4 animate-spin' /> : null}
+      {isPending ? pendingLabel : label}
     </button>
   );
 }
