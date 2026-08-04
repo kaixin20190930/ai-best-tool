@@ -10,6 +10,8 @@ type DistributionPageSearchParams = {
   search?: string | string[];
   status?: string | string[];
   target?: string | string[];
+  focusTask?: string | string[];
+  focusTarget?: string | string[];
   fee?: string | string[];
   dateFrom?: string | string[];
   dateTo?: string | string[];
@@ -32,6 +34,8 @@ export default async function DistributionPage({
     search: pickValue(searchParams.search),
     status: pickValue(searchParams.status),
     targetId: pickValue(searchParams.target),
+    focusTask: pickValue(searchParams.focusTask),
+    focusTarget: pickValue(searchParams.focusTarget),
     fee: pickValue(searchParams.fee),
     dateFrom: pickValue(searchParams.dateFrom),
     dateTo: pickValue(searchParams.dateTo),

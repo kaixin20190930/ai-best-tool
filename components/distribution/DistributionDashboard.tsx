@@ -16,6 +16,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { useFormStatus } from 'react-dom';
+import { useRouter } from 'next/navigation';
 import { DistributionActionForm, DistributionSubmitButton, useDistributionFormState } from './DistributionActionForm';
 
 import { getDistributionAssetGuidance } from '@/lib/services/distribution/listingBridge';
@@ -31,6 +32,7 @@ import {
   createDistributionProjectAsset,
   createDistributionTask,
   createDistributionUtmLink,
+  rescheduleDistributionTasks,
   importDistributionCatalogListing,
   importDistributionIntelligenceAssets,
   recordDistributionResult,
@@ -113,6 +115,24 @@ const DASHBOARD_PROGRESSING_TASK_STATUSES: readonly DistributionTaskStatus[] = [
   'planned',
 ];
 
+const DASHBOARD_PREFERRED_STATUS_ORDER: readonly DistributionTaskStatus[] = [
+  'in_progress',
+  'needs_assets',
+  'ready_to_submit',
+  'submitted',
+  'waiting_review',
+  'follow_up',
+  'planned',
+  'blocked',
+  'live',
+  'done',
+  'skipped',
+];
+
+const DASHBOARD_STATUS_PRIORITY = new Map(
+  DASHBOARD_PREFERRED_STATUS_ORDER.map((status, index) => [status, index] as const),
+);
+
 const DASHBOARD_LIVE_TARGET_STATUS: DistributionTaskStatus = 'live';
 const DASHBOARD_DONE_TARGET_STATUSES = new Set<DistributionTaskStatus>(['done', 'skipped']);
 
@@ -122,6 +142,8 @@ type DistributionDashboardFilters = {
   search?: string;
   status?: string;
   targetId?: string;
+  focusTask?: string;
+  focusTarget?: string;
   fee?: string;
   dateFrom?: string;
   dateTo?: string;
@@ -194,6 +216,9 @@ export default function DistributionDashboard({
   const [showForm, setShowForm] = useState(false);
   const [showProjectForm, setShowProjectForm] = useState(false);
   const [showLinkForm, setShowLinkForm] = useState(false);
+  const [selectedScheduleTaskIds, setSelectedScheduleTaskIds] = useState<Set<string>>(new Set());
+  const [batchDueDate, setBatchDueDate] = useState(formatDateKey(new Date()));
+  const [clearScheduleDate, setClearScheduleDate] = useState(false);
   const activeProjectId = data.project?.id || '';
   const activeProjectWebsiteUrl = data.project?.websiteUrl || null;
   const activeProjectSourceToolId = data.project?.sourceToolId || null;
@@ -208,6 +233,8 @@ export default function DistributionDashboard({
   const searchFilter = normalizeFilterValue(dashboardFilters.search).toLowerCase();
   const statusFilter = normalizeFilterValue(dashboardFilters.status);
   const targetFilter = normalizeFilterValue(dashboardFilters.targetId);
+  const focusedTaskFilter = normalizeFilterValue(dashboardFilters.focusTask);
+  const focusedTargetFilter = normalizeFilterValue(dashboardFilters.focusTarget);
   const feeFilter = normalizeFilterValue(dashboardFilters.fee) as 'all' | 'free' | 'paid' | 'unknown' | '';
   const dateFromFilter = normalizeFilterValue(dashboardFilters.dateFrom);
   const dateToFilter = normalizeFilterValue(dashboardFilters.dateTo);
@@ -249,15 +276,39 @@ export default function DistributionDashboard({
     () => new Map(filteredTargetTasks.map((task) => [String(task.targetId), task])),
     [filteredTargetTasks],
   );
-  const buildTaskHref = (taskId: string) => {
+  const priorityAwareSort = (tasks: DistributionDashboardTask[]) =>
+    [...tasks].sort((a, b) => {
+      const aPriority = DASHBOARD_STATUS_PRIORITY.get(a.status) ?? 999;
+      const bPriority = DASHBOARD_STATUS_PRIORITY.get(b.status) ?? 999;
+      if (aPriority !== bPriority) return aPriority - bPriority;
+      return a.title.localeCompare(b.title);
+    });
+  const router = useRouter();
+  const buildTaskHref = (taskId: string, targetId?: string | null) => {
     if (typeof window === 'undefined') return `/${locale}/distribution/tasks/${taskId}`;
     const query = new URLSearchParams(window.location.search);
     query.set('focusTask', taskId);
+    if (targetId) {
+      query.set('focusTarget', targetId);
+    } else {
+      query.delete('focusTarget');
+    }
     const nextSearch = query.toString();
     return `/${locale}/distribution/tasks/${taskId}${nextSearch ? `?${nextSearch}` : ''}`;
   };
+  const openTaskWorkspace = (taskId: string, targetId?: string | null) => {
+    const nextSearch = new URLSearchParams();
+    nextSearch.set('focusTask', taskId);
+    if (targetId) nextSearch.set('focusTarget', targetId);
+    router.push(`/${locale}/distribution/tasks/${taskId}?${nextSearch.toString()}`);
+  };
   const focusedTaskId =
-    typeof window === 'undefined' ? null : new URLSearchParams(window.location.search).get('focusTask');
+    focusedTaskFilter ||
+    (typeof window === 'undefined' ? null : new URLSearchParams(window.location.search).get('focusTask'));
+  const focusedTargetId =
+    focusedTargetFilter ||
+    (typeof window === 'undefined' ? null : new URLSearchParams(window.location.search).get('focusTarget'));
+  const focusTargetContext = focusedTargetId || targetFilter;
   const filteredInProgressTasks = useMemo(
     () =>
       filteredTasks.filter(
@@ -297,19 +348,51 @@ export default function DistributionDashboard({
     return map;
   }, [filteredTasks, upcomingWeekSlots]);
   const blockedInboxTasks = useMemo(() => filteredTasks.filter((task) => task.status === 'blocked'), [filteredTasks]);
+  const schedulingCandidates = useMemo(
+    () =>
+      priorityAwareSort(
+        filteredTasks.filter(
+          (task) =>
+            task.targetId &&
+            !DASHBOARD_DONE_TARGET_STATUSES.has(task.status) &&
+            task.status !== DASHBOARD_LIVE_TARGET_STATUS &&
+            task.status !== 'blocked',
+        ),
+      ),
+    [filteredTasks, DASHBOARD_DONE_TARGET_STATUSES],
+  );
   const targetTask = useMemo(() => {
     const byFocus = focusedTaskId ? filteredTargetTasks.find((task) => task.id === focusedTaskId) : null;
     if (byFocus) return byFocus;
 
-    const targetScopedTasks = (targetFilter ? filteredTargetTasks.filter((task) => task.targetId === targetFilter) : filteredTargetTasks).filter(
-      (task) => !DASHBOARD_DONE_TARGET_STATUSES.has(task.status),
+    const targetScopedTasks = focusTargetContext
+      ? filteredTargetTasks.filter((task) => task.targetId === focusTargetContext)
+      : filteredTargetTasks;
+    const targetScopedActive = priorityAwareSort(targetScopedTasks.filter((task) => !DASHBOARD_DONE_TARGET_STATUSES.has(task.status)));
+    if (targetScopedActive.length > 0) return targetScopedActive[0];
+    if (targetScopedTasks.length > 0) return priorityAwareSort(targetScopedTasks)[0];
+
+    const targetScopedFallback = targetFilter
+      ? filteredTargetTasks.filter((task) => task.targetId === targetFilter)
+      : filteredTargetTasks;
+    const targetScopedFallbackActive = priorityAwareSort(
+      targetScopedFallback.filter((task) => !DASHBOARD_DONE_TARGET_STATUSES.has(task.status)),
     );
+    if (targetScopedFallbackActive.length > 0) return targetScopedFallbackActive[0];
     if (targetScopedTasks.length > 0) return targetScopedTasks[0];
 
     const activeOrdered = [...filteredInProgressTasks, ...filteredBlockedTasks, ...filteredLiveTasks];
     if (activeOrdered.length > 0) return activeOrdered[0];
     return null;
-  }, [filteredTargetTasks, filteredInProgressTasks, filteredBlockedTasks, filteredLiveTasks, focusedTaskId, targetFilter]);
+  }, [
+    filteredTargetTasks,
+    filteredInProgressTasks,
+    filteredBlockedTasks,
+    filteredLiveTasks,
+    focusedTaskId,
+    focusTargetContext,
+    targetFilter,
+  ]);
   const allTaskCount = allTasks.length;
   const filteredTaskCount = filteredTasks.length;
 
@@ -387,7 +470,7 @@ export default function DistributionDashboard({
         ? '根据目标站规则生成文案、字段、素材和追踪链接。'
         : 'Generate copy, fields, assets, and a tracked link for the target.',
       complete: packageGenerated,
-      href: targetTask ? buildTaskHref(targetTask.id) : '#distribution-targets',
+      href: targetTask ? buildTaskHref(targetTask.id, targetTask.targetId) : '#distribution-targets',
       action: isChinese ? '打开目标任务' : 'Open target task',
     },
     {
@@ -397,7 +480,7 @@ export default function DistributionDashboard({
         ? '到目标站完成提交，再记录审核状态或上线地址。'
         : 'Submit on the target site, then record its review state or live URL.',
       complete: submitted,
-      href: targetTask ? buildTaskHref(targetTask.id) : '#distribution-targets',
+      href: targetTask ? buildTaskHref(targetTask.id, targetTask.targetId) : '#distribution-targets',
       action: isChinese ? '提交并记录结果' : 'Submit and record result',
     },
   ];
@@ -437,7 +520,7 @@ export default function DistributionDashboard({
               </span>
             ) : null}
             <Link
-              href={buildTaskHref(task.id)}
+              href={buildTaskHref(task.id, task.targetId)}
               className='inline-flex items-center gap-1 font-semibold text-slate-700 hover:text-cyan-700 hover:underline'
             >
               Open task
@@ -552,9 +635,41 @@ export default function DistributionDashboard({
     if (view && view !== 'all') params.set('view', view);
     else params.delete('view');
 
+    if (focusedTaskFilter) params.set('focusTask', focusedTaskFilter);
+    if (focusedTargetFilter) params.set('focusTarget', focusedTargetFilter);
+
     if (nextProject) params.set('project', nextProject);
     window.location.href = `/${locale}/distribution?${params.toString()}`;
   };
+
+  useEffect(() => {
+    setSelectedScheduleTaskIds((current) => {
+      const activeTaskIds = new Set(schedulingCandidates.map((task) => task.id));
+      const next = new Set<string>();
+      Array.from(current).forEach((taskId) => {
+        if (activeTaskIds.has(taskId)) next.add(taskId);
+      });
+      return next;
+    });
+  }, [schedulingCandidates]);
+
+  const handleScheduleTaskToggle = (taskId: string) => {
+    setSelectedScheduleTaskIds((current) => {
+      const next = new Set(current);
+      if (next.has(taskId)) next.delete(taskId);
+      else next.add(taskId);
+      return next;
+    });
+  };
+
+  const handleSelectAllScheduleTasks = () => {
+    setSelectedScheduleTaskIds((current) => {
+      if (current.size === schedulingCandidates.length) return new Set<string>();
+      return new Set(schedulingCandidates.map((task) => task.id));
+    });
+  };
+
+  const scheduledPayload = JSON.stringify(Array.from(selectedScheduleTaskIds));
 
   return (
     <div className='flex flex-col gap-6'>
@@ -845,7 +960,7 @@ export default function DistributionDashboard({
                       </div>
                     </div>
                     <Link
-                      href={buildTaskHref(item.id)}
+                      href={buildTaskHref(item.id, item.targetId)}
                       className='inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 hover:border-cyan-300 hover:text-cyan-700'
                     >
                       Open task <ArrowUpRight className='h-3.5 w-3.5' />
@@ -919,6 +1034,91 @@ export default function DistributionDashboard({
             </div>
             <span className='text-xs text-slate-500'>只读周排期视图，不依赖外部日历</span>
           </div>
+          <div className='mt-4 rounded-2xl border border-cyan-100 bg-cyan-50 p-4'>
+            <div className='flex flex-wrap items-end justify-between gap-3'>
+              <div>
+                <h3 className='text-sm font-bold text-slate-900'>批量排期</h3>
+                <p className='mt-1 text-xs text-slate-600'>选中要执行的任务，一次性改到同一天，不用跳转日历</p>
+              </div>
+              <div className='text-xs text-cyan-700'>已选 {selectedScheduleTaskIds.size} / {schedulingCandidates.length} 项</div>
+            </div>
+            <div className='mt-3 grid gap-3 sm:grid-cols-[auto_1fr_auto] sm:items-end'>
+              <label className='text-xs font-semibold text-slate-700'>
+                目标日期
+                <input
+                  type='date'
+                  value={batchDueDate}
+                  onChange={(event) => {
+                    setBatchDueDate(event.target.value);
+                    setClearScheduleDate(false);
+                  }}
+                  className='mt-1 block rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-xs'
+                />
+              </label>
+              <div className='self-end text-xs text-slate-600'>
+                <label className='inline-flex items-center gap-2'>
+                  <input
+                    type='checkbox'
+                    onChange={(event) => {
+                      setClearScheduleDate(event.target.checked);
+                      if (!event.target.checked) setBatchDueDate(formatDateKey(new Date()));
+                    }}
+                  />
+                  清空排期（设为无截止日）
+                </label>
+              </div>
+              <DistributionActionForm
+                action={rescheduleDistributionTasks}
+                className='contents'
+                successMessage='Tasks rescheduled. Refreshing workspace…'
+              >
+                <input type='hidden' name='taskIds' value={scheduledPayload} />
+                {clearScheduleDate ? (
+                  <input type='hidden' name='clearDate' value='1' />
+                ) : (
+                  <input type='hidden' name='dueDate' value={batchDueDate} />
+                )}
+                <DistributionSubmitButton
+                  pendingLabel='Rescheduling…'
+                  className='inline-flex items-center justify-center rounded-lg bg-slate-900 px-4 py-2 text-xs font-bold text-white hover:bg-slate-800 disabled:cursor-wait disabled:opacity-70'
+                  disabled={selectedScheduleTaskIds.size === 0 || (!batchDueDate && !clearScheduleDate)}
+                >
+                  执行批量排期
+                </DistributionSubmitButton>
+              </DistributionActionForm>
+            </div>
+            <div className='mt-3 flex flex-wrap gap-2'>
+              <button
+                type='button'
+                onClick={handleSelectAllScheduleTasks}
+                className='rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-bold text-cyan-700'
+              >
+                {selectedScheduleTaskIds.size === schedulingCandidates.length ? '取消全选' : '全选可执行任务'}
+              </button>
+            </div>
+            <div className='mt-3 space-y-2 rounded-lg bg-white p-3'>
+              {schedulingCandidates.length === 0 ? (
+                <div className='text-xs text-slate-500'>暂无可调度任务。</div>
+              ) : (
+                schedulingCandidates.slice(0, 10).map((task) => (
+                  <label
+                    key={task.id}
+                    className='flex items-center justify-between gap-2 text-xs text-slate-700 border-b border-slate-100 py-2 last:border-0'
+                  >
+                    <span className='inline-flex items-center gap-2'>
+                      <input
+                        type='checkbox'
+                        checked={selectedScheduleTaskIds.has(task.id)}
+                        onChange={() => handleScheduleTaskToggle(task.id)}
+                      />
+                      <span>{task.title}</span>
+                    </span>
+                    <span className='text-slate-500'>当前截止：{task.dueDate || '未排期'}</span>
+                  </label>
+                ))
+              )}
+            </div>
+          </div>
           <div className='mt-4 grid gap-3 lg:grid-cols-7'>
             {upcomingWeekSlots.map((slot) => {
               const tasks = upcomingWeekMap.get(slot.dateKey) || [];
@@ -935,16 +1135,30 @@ export default function DistributionDashboard({
                   ) : (
                     <div className='mt-2 space-y-2'>
                       {tasks.map((task) => (
-                        <Link
-                          key={task.id}
-                          href={buildTaskHref(task.id)}
-                          className='block rounded-lg border border-white bg-white p-2 text-xs text-slate-700 hover:border-cyan-300 hover:text-cyan-700'
-                        >
-                          <div className='font-semibold'>{task.title}</div>
-                          <div className='mt-1 text-[11px] text-slate-500'>
-                            {task.targetName || task.channelName}
+                        <div key={task.id} className='rounded-lg border border-white bg-white p-2 text-xs text-slate-700'>
+                          <div className='flex cursor-pointer items-start justify-between gap-2'>
+                            <span className='flex items-center gap-2'>
+                              <input
+                                type='checkbox'
+                                checked={selectedScheduleTaskIds.has(task.id)}
+                                onChange={(event) => {
+                                  event.preventDefault();
+                                  handleScheduleTaskToggle(task.id);
+                                }}
+                              />
+                              <span className='font-semibold'>{task.title}</span>
+                            </span>
+                            <Link
+                              href={buildTaskHref(task.id, task.targetId)}
+                              className='inline-flex items-center rounded-md border border-cyan-100 bg-white px-2 py-1 text-[11px] text-slate-500 hover:text-cyan-700'
+                            >
+                              Open
+                            </Link>
                           </div>
-                        </Link>
+                            <span className='text-[11px] text-slate-500'>
+                              {task.targetName || task.channelName}
+                            </span>
+                        </div>
                       ))}
                     </div>
                   )}
@@ -953,7 +1167,7 @@ export default function DistributionDashboard({
             })}
           </div>
           <p className='mt-3 text-xs text-slate-500'>
-            DC-022 目标：一眼看懂一周优先级任务，并后续加上可重排功能。当前先上线只读版本先支持周内排期判断。
+            DC-022 目标：一眼看懂一周优先级任务，并支持批量重排到目标日期。
           </p>
         </section>
       ) : null}
@@ -1156,8 +1370,8 @@ export default function DistributionDashboard({
                             {target.opportunityStatus.replaceAll('_', ' ')}
                           </span>
                           {acceptedTask ? (
-                            <Link
-                              href={buildTaskHref(acceptedTask.id)}
+                    <Link
+                      href={buildTaskHref(acceptedTask.id, acceptedTask.targetId)}
                               className='inline-flex items-center gap-1 rounded-lg bg-cyan-700 px-3 py-2 text-xs font-bold text-white hover:bg-cyan-800'
                             >
                               Continue task <ArrowRight className='h-3.5 w-3.5' />
@@ -1167,7 +1381,13 @@ export default function DistributionDashboard({
                       ) : (
                         <DistributionActionForm
                           action={acceptDistributionTarget}
-                          successMessage='Target accepted. Opening the next distribution step…'
+                          successMessage='Target accepted. Opening the target task…'
+                          refresh={false}
+                          onSuccess={(result) => {
+                            if (result && typeof result === 'object' && 'success' in result && result.success && result.taskId) {
+                              openTaskWorkspace(result.taskId, target.id);
+                            }
+                          }}
                         >
                           <input type='hidden' name='projectId' value={data.project?.id || ''} />
                           <input type='hidden' name='targetId' value={target.id} />
@@ -1910,8 +2130,8 @@ export default function DistributionDashboard({
                   </div>
                 </div>
                 <div className='flex items-center gap-2'>
-                  <Link
-                    href={buildTaskHref(task.id)}
+                    <Link
+                    href={buildTaskHref(task.id, task.targetId)}
                     className='inline-flex items-center gap-1 rounded-lg bg-white px-3 py-2 text-xs font-bold text-slate-700 hover:text-cyan-700'
                   >
                     {isChinese ? '立即处理' : 'Handle now'} <ArrowRight className='h-3 w-3' />

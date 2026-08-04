@@ -30,12 +30,15 @@ export default async function DistributionTaskDetailPage({
   searchParams,
 }: {
   params: { locale: string; taskId: string };
-  searchParams?: { focusTask?: string | string[] };
+  searchParams?: { focusTask?: string | string[]; focusTarget?: string | string[] };
 }) {
   const focusTask = pickValue(searchParams?.focusTask).trim();
+  const focusTarget = pickValue(searchParams?.focusTarget).trim();
   const result = await getDistributionTaskDetail(params.taskId);
   const taskRedirectUrl = focusTask
-    ? `/${params.locale}/distribution/tasks/${params.taskId}?focusTask=${encodeURIComponent(focusTask)}`
+    ? `/${params.locale}/distribution/tasks/${params.taskId}?focusTask=${encodeURIComponent(focusTask)}${
+        focusTarget ? `&focusTarget=${encodeURIComponent(focusTarget)}` : ''
+      }`
     : `/${params.locale}/distribution/tasks/${params.taskId}`;
   if (!result.success) {
     if (result.error === 'Unauthorized')
@@ -48,9 +51,10 @@ export default async function DistributionTaskDetailPage({
 
   const data = result.data;
   const workspaceProjectId = data.project?.id || params.taskId;
+  const workspaceFocusTarget = focusTarget || data.target?.id || '';
   const workspaceRedirectUrl = `/${params.locale}/distribution?project=${encodeURIComponent(workspaceProjectId)}${
     focusTask ? `&focusTask=${encodeURIComponent(focusTask)}` : ''
-  }`;
+  }${workspaceFocusTarget ? `&focusTarget=${encodeURIComponent(workspaceFocusTarget)}` : ''}`;
   const isChinese = params.locale === 'cn';
   const targetName = data.target?.name || (isChinese ? '目标网站' : 'the target site');
   const statusChoices = getDistributionTaskStatusChoices();

@@ -1742,6 +1742,71 @@ export async function createDistributionTask(formData: FormData): Promise<{ succ
   }
 }
 
+export async function rescheduleDistributionTasks(formData: FormData): Promise<{ success: boolean; updated?: number; error?: string }> {
+  try {
+    const { user, allowed } = await getDistributionAccess();
+    if (!allowed) return { success: false, error: 'Distribution workspace access requires an active plan.' };
+
+    const taskIdsRaw = normalize(formData.get('taskIds'));
+    const dueDateInput = normalize(formData.get('dueDate'));
+    const dueDate = dueDateInput ? dueDateInput : null;
+
+    if (!dueDate && !formData.get('clearDate')) {
+      return { success: false, error: 'Please choose a date or check “Clear schedule”.' };
+    }
+    if (dueDate && !/^\d{4}-\d{2}-\d{2}$/.test(dueDate)) {
+      return { success: false, error: 'Invalid due date format. Use YYYY-MM-DD.' };
+    }
+
+    let taskIds: string[] = [];
+    try {
+      const parsed = taskIdsRaw ? JSON.parse(taskIdsRaw) : null;
+      taskIds = Array.isArray(parsed)
+        ? parsed.map((item) => (typeof item === 'string' ? item.trim() : String(item || '').trim())).filter(Boolean)
+        : [];
+    } catch {
+      return { success: false, error: 'Failed to parse selected tasks.' };
+    }
+
+    if (!taskIds.length) return { success: false, error: 'Select at least one task to schedule.' };
+
+    const normalizedDueDate = dueDate || null;
+    const now = new Date().toISOString();
+    const supabase = await createClient();
+
+    const uniqueTaskIds = Array.from(new Set(taskIds));
+    const { data: existingTasks, error: existingTaskError } = await supabase
+      .from('distribution_tasks')
+      .select('id, project_id, status')
+      .in('id', uniqueTaskIds)
+      .eq('owner_id', user.id);
+    if (existingTaskError) throw existingTaskError;
+
+    if (!existingTasks?.length) {
+      return { success: false, error: 'No valid tasks found for your account.' };
+    }
+
+    const updatableTaskIds = existingTasks.map((task) => task.id);
+    const { data: updatedRows, error: updateError } = await supabase
+      .from('distribution_tasks')
+      .update({ due_date: normalizedDueDate, updated_at: now })
+      .in('id', updatableTaskIds)
+      .eq('owner_id', user.id)
+      .select('id');
+
+    if (updateError) throw updateError;
+
+    revalidateDistributionPages();
+    return { success: true, updated: updatedRows ? updatedRows.length : updatableTaskIds.length };
+  } catch (error) {
+    console.error('Reschedule distribution tasks error:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unable to reschedule tasks.',
+    };
+  }
+}
+
 export async function updateDistributionTaskStatus(formData: FormData): Promise<{ success: boolean; error?: string }> {
   try {
     const { user, allowed } = await getDistributionAccess();

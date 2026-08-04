@@ -5,7 +5,11 @@ import { createContext, useContext, useRef, useState } from 'react';
 import { CheckCircle2, Loader2, XCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-type DistributionActionResult = { success?: boolean; error?: string } | void;
+type DistributionActionResult = {
+  success?: boolean;
+  error?: string;
+  taskId?: string;
+} | void;
 type DistributionAction = (formData: FormData) => Promise<DistributionActionResult>;
 
 const DistributionFormStateContext = createContext<{ submitting: boolean; succeeded: boolean } | null>(null);
@@ -20,12 +24,16 @@ export function DistributionActionForm({
   className,
   successMessage = 'Saved successfully. Refreshing the workspace…',
   feedbackClassName,
+  onSuccess,
+  refresh = true,
 }: {
   action: DistributionAction;
   children: ReactNode;
   className?: string;
   successMessage?: string;
   feedbackClassName?: string;
+  onSuccess?: (result: DistributionActionResult) => void;
+  refresh?: boolean;
 }) {
   const router = useRouter();
   const refreshTimer = useRef<number | null>(null);
@@ -46,7 +54,10 @@ export function DistributionActionForm({
       }
 
       setFeedback({ type: 'success', message: successMessage });
-      refreshTimer.current = window.setTimeout(() => router.refresh(), 700);
+      onSuccess?.(result);
+      if (refresh) {
+        refreshTimer.current = window.setTimeout(() => router.refresh(), 700);
+      }
     } catch (error) {
       setFeedback({
         type: 'error',
