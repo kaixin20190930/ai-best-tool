@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { ArrowLeft, ArrowUpRight, CheckCircle2, Clock3, Send, Sparkles } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, CheckCircle2, Clock3, Send, Sparkles, AlertTriangle } from 'lucide-react';
 
 import {
   getDistributionTaskStatusChoices,
@@ -24,6 +24,18 @@ function pickValue(value: string | string[] | undefined): string {
   if (!value) return '';
   return Array.isArray(value) ? value[0] : value;
 }
+
+const blockedReasonTypes = [
+  { value: '', label: 'Select reason type' },
+  { value: 'account', label: 'Account required' },
+  { value: 'payment', label: 'Payment required' },
+  { value: 'captcha', label: 'CAPTCHA or anti-bot limit' },
+  { value: 'editorial', label: 'Editorial / manual review' },
+  { value: 'quality', label: 'Quality or content mismatch' },
+  { value: 'removed', label: 'Listing removed' },
+  { value: 'nofollow', label: 'Nofollow / indexing issue' },
+  { value: 'other', label: 'Other reason' },
+];
 
 export default async function DistributionTaskDetailPage({
   params,
@@ -561,12 +573,40 @@ export default async function DistributionTaskDetailPage({
               >
                 <input type='hidden' name='taskId' value={data.task.id} />
                 <input type='hidden' name='status' value={status} />
-                <DistributionSubmitButton
-                  pendingLabel='Updating…'
-                  className='inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold text-slate-700 hover:border-cyan-300 hover:text-cyan-700 disabled:cursor-wait disabled:opacity-70'
-                >
-                  {getDistributionTaskStatusLabel(status)}
-                </DistributionSubmitButton>
+                {status === 'blocked' ? (
+                  <div className='space-y-2'>
+                    <select
+                      name='blockedReasonType'
+                      defaultValue=''
+                      className='w-full rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-xs font-semibold text-slate-700'
+                    >
+                      {blockedReasonTypes.map((reasonType) => (
+                        <option key={reasonType.value || 'empty'} value={reasonType.value}>
+                          {reasonType.label}
+                        </option>
+                      ))}
+                    </select>
+                    <textarea
+                      name='blockedReason'
+                      rows={2}
+                      placeholder='Add quick notes: why it was blocked and next action'
+                      className='w-full rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-xs outline-none focus:ring-2 focus:ring-cyan-400'
+                    />
+                    <DistributionSubmitButton
+                      pendingLabel='Updating…'
+                      className='inline-flex w-full items-center gap-1 rounded-xl border border-slate-200 bg-rose-600 px-3 py-2 text-xs font-bold text-white hover:bg-rose-700 disabled:cursor-wait disabled:opacity-70'
+                    >
+                      {getDistributionTaskStatusLabel(status)}
+                    </DistributionSubmitButton>
+                  </div>
+                ) : (
+                  <DistributionSubmitButton
+                    pendingLabel='Updating…'
+                    className='inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold text-slate-700 hover:border-cyan-300 hover:text-cyan-700 disabled:cursor-wait disabled:opacity-70'
+                  >
+                    {getDistributionTaskStatusLabel(status)}
+                  </DistributionSubmitButton>
+                )}
               </DistributionActionForm>
             ))}
           </div>
@@ -600,6 +640,23 @@ export default async function DistributionTaskDetailPage({
                     <option value='rejected'>Rejected</option>
                     <option value='removed'>Removed</option>
                   </select>
+                  <select
+                    name='blockedReasonType'
+                    defaultValue=''
+                    className='rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs'
+                  >
+                    {blockedReasonTypes.map((reasonType) => (
+                      <option key={reasonType.value || 'empty'} value={reasonType.value}>
+                        {reasonType.label}
+                      </option>
+                    ))}
+                  </select>
+                  <textarea
+                    name='blockedReason'
+                    rows={2}
+                    placeholder='Blocking reason details (for removed/nofollow/rejected cases)'
+                    className='rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400'
+                  />
                   <textarea
                     name='notes'
                     rows={3}
@@ -647,6 +704,16 @@ export default async function DistributionTaskDetailPage({
               </DistributionActionForm>
             </div>
           ) : null}
+        </section>
+      ) : null}
+
+      {data.task.blockedReason ? (
+        <section className='mt-6 rounded-2xl border border-rose-200 bg-rose-50 p-5'>
+          <div className='flex items-start gap-2 text-sm font-bold text-rose-700'>
+            <AlertTriangle className='mt-0.5 h-4 w-4' />
+            <span>{isChinese ? '当前阻塞原因' : 'Current blocked reason'}</span>
+          </div>
+          <p className='mt-2 text-sm text-rose-900'>{data.task.blockedReason}</p>
         </section>
       ) : null}
 

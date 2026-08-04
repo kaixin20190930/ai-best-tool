@@ -7,6 +7,7 @@ import {
   ArrowUpRight,
   CheckCircle2,
   Circle,
+  Bell,
   ExternalLink,
   Link2,
   LoaderCircle,
@@ -36,6 +37,7 @@ import {
   importDistributionCatalogListing,
   importDistributionIntelligenceAssets,
   recordDistributionResult,
+  recheckDistributionTaskResult,
   seedDistributionStarterTasks,
   updateDistributionProjectProfile,
   updateDistributionTaskStatus,
@@ -135,8 +137,27 @@ const DASHBOARD_STATUS_PRIORITY = new Map(
 
 const DASHBOARD_LIVE_TARGET_STATUS: DistributionTaskStatus = 'live';
 const DASHBOARD_DONE_TARGET_STATUSES = new Set<DistributionTaskStatus>(['done', 'skipped']);
+const DASHBOARD_RECHECKABLE_STATUS = new Set<DistributionTaskStatus>(['submitted', 'waiting_review', 'live', 'follow_up', 'done']);
+
+const linkStatusToneClass = (linkStatus: string | null) => {
+  if (linkStatus === 'live') return 'bg-emerald-50 text-emerald-700';
+  if (linkStatus === 'nofollow') return 'bg-amber-50 text-amber-800';
+  if (linkStatus === 'removed' || linkStatus === 'rejected') return 'bg-rose-50 text-rose-700';
+  return 'bg-slate-100 text-slate-700';
+};
+
+const linkStatusLabel = (linkStatus: string | null) => {
+  if (!linkStatus) return 'No live check';
+  if (linkStatus === 'pending') return 'Pending review';
+  if (linkStatus === 'live') return 'Live';
+  if (linkStatus === 'nofollow') return 'Noindex / Nofollow';
+  if (linkStatus === 'removed') return 'Removed';
+  if (linkStatus === 'rejected') return 'Rejected';
+  return linkStatus;
+};
 
 type DistributionDashboardTask = DistributionDashboardData['tasks'][number];
+type DistributionDashboardTaskWithBucket = DistributionDashboardTask & { _dueBucket?: string };
 
 type DistributionDashboardFilters = {
   search?: string;
@@ -348,6 +369,20 @@ export default function DistributionDashboard({
     return map;
   }, [filteredTasks, upcomingWeekSlots]);
   const blockedInboxTasks = useMemo(() => filteredTasks.filter((task) => task.status === 'blocked'), [filteredTasks]);
+  const upcomingWeekSnapshot = useMemo(() => {
+    const tasks: DistributionDashboardTaskWithBucket[] = [];
+    for (const slot of upcomingWeekSlots) {
+      const bucket = upcomingWeekMap.get(slot.dateKey) || [];
+      if (bucket.length === 0) continue;
+      tasks.push(
+        ...bucket
+          .filter((task) => !DASHBOARD_DONE_TARGET_STATUSES.has(task.status))
+          .slice(0, 3)
+          .map((task) => ({ ...task, _dueBucket: slot.dateKey } as DistributionDashboardTaskWithBucket)),
+      );
+    }
+    return tasks.slice(0, 8);
+  }, [upcomingWeekSlots, upcomingWeekMap]);
   const schedulingCandidates = useMemo(
     () =>
       priorityAwareSort(
@@ -418,6 +453,9 @@ export default function DistributionDashboard({
   const submitted = Boolean(
     targetTask && ['submitted', 'waiting_review', 'live', 'follow_up', 'done'].includes(targetTask.status),
   );
+  const notifications = data.notifications || [];
+  const actionableNotifications = notifications.slice(0, 6);
+  const completionRate = data.metrics.total > 0 ? Math.round((data.metrics.live / data.metrics.total) * 100) : 0;
   const profileMissingItems = [
     !data.project?.name ? (isChinese ? '产品名称' : 'product name') : null,
     !data.project?.websiteUrl ? (isChinese ? '官网地址' : 'website URL') : null,
@@ -485,6 +523,32 @@ export default function DistributionDashboard({
     },
   ];
 
+  const notificationToneClass = (type: (typeof data.notifications)[number]['type']) => {
+    if (type === 'overdue' || type === 'link_issue') return 'bg-rose-50 text-rose-700';
+    if (type === 'missing_assets') return 'bg-amber-50 text-amber-700';
+    if (type === 'followup_reminder') return 'bg-violet-50 text-violet-700';
+    return 'bg-cyan-50 text-cyan-700';
+  };
+
+  const canRecheckResult = (task: DistributionDashboardTask) =>
+    DASHBOARD_RECHECKABLE_STATUS.has(task.status) && Boolean(task.liveUrl || task.linkStatus);
+
+  const nextWeekSuggestion = useMemo(() => {
+    if (blockedInboxTasks.length > 0) {
+      return isChinese
+        ? '优先处理阻塞项：先补齐素材、更新可提交渠道，再继续推进后续任务。'
+        : 'Prioritize blocked items first: complete missing assets/requirements, then continue with the queued tasks.';
+    }
+    if (upcomingWeekSnapshot.length > 0) {
+      return isChinese
+        ? '先执行本周到期的待提交或审核任务，完成后再补充新的推荐目标以保持节奏。'
+        : 'Execute this week’s due-to-submit and waiting-review tasks first, then add new recommended targets to keep momentum.';
+    }
+    return isChinese
+      ? '补全产品资料与目标站规则后，继续生成更多任务并保持 1–3 项日排期。'
+      : 'After completing profile and target prep, add more recommendations and keep your weekly queue to 1–3 high priority tasks.';
+  }, [blockedInboxTasks.length, upcomingWeekSnapshot.length, isChinese]);
+
   const renderTaskCard = (task: DistributionDashboardTask) => (
     <article key={task.id} className='rounded-2xl border border-slate-200 p-4 transition hover:border-cyan-300 hover:shadow-sm'>
       <div className='flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between'>
@@ -514,11 +578,9 @@ export default function DistributionDashboard({
                 <ExternalLink className='h-3 w-3' /> Live result
               </a>
             ) : null}
-            {task.linkStatus ? (
-              <span className='inline-flex items-center gap-1'>
-                <Link2 className='h-3 w-3' /> {task.linkStatus}
-              </span>
-            ) : null}
+            <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 ${linkStatusToneClass(task.linkStatus)}`}>
+              <Link2 className='h-3 w-3' /> {linkStatusLabel(task.linkStatus)}
+            </span>
             <Link
               href={buildTaskHref(task.id, task.targetId)}
               className='inline-flex items-center gap-1 font-semibold text-slate-700 hover:text-cyan-700 hover:underline'
@@ -552,7 +614,32 @@ export default function DistributionDashboard({
             >
               Update
             </DistributionSubmitButton>
-          </DistributionActionForm>
+            </DistributionActionForm>
+          {canRecheckResult(task) ? (
+            <details className='rounded-lg border border-slate-200 px-2.5 py-2 text-xs'>
+              <summary className='cursor-pointer font-bold text-slate-700'>Recheck live URL</summary>
+              <DistributionActionForm
+                action={recheckDistributionTaskResult}
+                className='mt-3 w-64 space-y-2'
+                successMessage='Live URL rechecked. Refreshing the queue…'
+              >
+                <input type='hidden' name='taskId' value={task.id} />
+                <input
+                  name='liveUrl'
+                  type='url'
+                  defaultValue={task.liveUrl || ''}
+                  placeholder='https://...'
+                  className='w-full rounded-lg border border-slate-200 px-2.5 py-2 outline-none focus:ring-2 focus:ring-cyan-400'
+                />
+                <DistributionSubmitButton
+                  pendingLabel='Rechecking…'
+                  className='inline-flex w-full items-center justify-center gap-1 rounded-lg bg-emerald-700 px-2.5 py-2 font-bold text-white hover:bg-emerald-800 disabled:cursor-wait disabled:bg-emerald-500'
+                >
+                  Run recheck
+                </DistributionSubmitButton>
+              </DistributionActionForm>
+            </details>
+          ) : null}
           <details className='rounded-lg border border-slate-200 px-2.5 py-2 text-xs'>
             <summary className='cursor-pointer font-bold text-slate-700'>Record result</summary>
             <DistributionActionForm
@@ -561,12 +648,13 @@ export default function DistributionDashboard({
               successMessage='Result recorded. Refreshing the queue…'
             >
               <input type='hidden' name='taskId' value={task.id} />
-              <input
-                name='liveUrl'
-                type='url'
-                placeholder='https://...'
-                className='w-full rounded-lg border border-slate-200 px-2.5 py-2 outline-none focus:ring-2 focus:ring-cyan-400'
-              />
+                <input
+                  name='liveUrl'
+                  type='url'
+                  defaultValue={task.liveUrl || ''}
+                  placeholder='https://...'
+                  className='w-full rounded-lg border border-slate-200 px-2.5 py-2 outline-none focus:ring-2 focus:ring-cyan-400'
+                />
               <select name='linkStatus' defaultValue='pending' className='w-full rounded-lg border border-slate-200 px-2.5 py-2'>
                 <option value='pending'>Pending review</option>
                 <option value='live'>Live</option>
@@ -817,7 +905,58 @@ export default function DistributionDashboard({
         </form>
       </section>
 
-      <section className='order-3 overflow-hidden rounded-3xl border border-cyan-200 bg-white shadow-sm'>
+      <section className='order-3 rounded-2xl border border-amber-200 bg-white p-5 shadow-sm'>
+        <div className='flex items-center justify-between gap-3'>
+          <div>
+            <div className='flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-amber-700'>
+              <Bell className='h-4 w-4' />
+              {isChinese ? '站内通知' : 'Inbox notifications'}
+            </div>
+            <h2 className='mt-1 text-lg font-bold text-slate-950'>{isChinese ? '今天要做什么' : 'What to do today'}</h2>
+            <p className='mt-1 text-sm text-slate-600'>
+              {isChinese
+                ? '提醒会基于任务截止、素材缺失、到期复查、结果异常和人工回访节点自动生成。'
+                : 'Alerts are generated from deadlines, missing assets, follow-up reminders, and link anomalies.'}
+            </p>
+          </div>
+          <span className='rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600'>
+            {actionableNotifications.length} {isChinese ? '条提醒' : 'alerts'}
+          </span>
+        </div>
+        {actionableNotifications.length > 0 ? (
+          <div className='mt-4 grid gap-2'>
+            {actionableNotifications.map((notification) => (
+              <div
+                key={notification.id}
+                className={`rounded-xl border px-4 py-3 text-sm ${notificationToneClass(notification.type)} ${notification.urgent ? 'border-rose-200' : 'border-transparent'}`}
+              >
+                <div className='flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
+                  <div>
+                    <div className='text-xs font-bold uppercase tracking-[0.16em]'>
+                      {notification.title}
+                    </div>
+                    <div className='mt-1 text-xs text-slate-700'>{notification.message}</div>
+                  </div>
+                  {notification.ctaLabel && notification.href ? (
+                    <Link
+                      href={notification.href}
+                      className='inline-flex items-center gap-1 self-start rounded-lg bg-slate-950 px-3 py-2 text-xs font-bold text-white hover:bg-slate-800'
+                    >
+                      {notification.ctaLabel} <ArrowRight className='h-3 w-3' />
+                    </Link>
+                  ) : null}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className='mt-4 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500'>
+            {isChinese ? '暂无待处理提醒，继续执行当前排期即可。' : 'No pending alerts. Follow your scheduled plan.'}
+          </div>
+        )}
+      </section>
+
+      <section className='order-4 overflow-hidden rounded-3xl border border-cyan-200 bg-white shadow-sm'>
         <div className='bg-gradient-to-r from-cyan-50 via-white to-amber-50 p-6 sm:p-8'>
           <div className='flex flex-col justify-between gap-5 lg:flex-row lg:items-start'>
             <div>
@@ -1291,6 +1430,36 @@ export default function DistributionDashboard({
                 ) : null}
               </div>
             ) : null}
+          </div>
+          <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
+            <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Distribution weekly snapshot</div>
+            <h2 className='mt-1 text-lg font-bold text-slate-950'>Workspace digest</h2>
+            <div className='mt-3 grid gap-2 sm:grid-cols-3 text-xs'>
+              <div>Completion ratio: {completionRate}%</div>
+              <div>Live links: {data.metrics.live}</div>
+              <div>Blocked tasks: {data.metrics.blocked}</div>
+              <div>Visits: {data.metrics.attribution.visits}</div>
+              <div>Submissions: {data.metrics.attribution.submissions}</div>
+              <div>Payments: {data.metrics.attribution.payments}</div>
+            </div>
+            <div className='mt-4 rounded-xl bg-cyan-50 p-3 text-sm text-slate-700'>
+              <div className='font-bold text-slate-900'>Next 7-day action list</div>
+              <div className='mt-1 text-xs'>{nextWeekSuggestion}</div>
+              {upcomingWeekSnapshot.length > 0 ? (
+                <ul className='mt-3 space-y-2 text-xs text-slate-600'>
+                  {upcomingWeekSnapshot.slice(0, 5).map((task) => (
+                    <li key={`week-${task.id}`}>
+                      {task._dueBucket ? `${task._dueBucket} · ` : ''}
+                      {task.title} · {task.channelName}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <div className='mt-3 rounded-xl border border-cyan-100 bg-white p-3 text-xs text-slate-600'>
+                  No scheduled tasks for next 7 days. Seed targets and reschedule follow-ups to keep execution rhythm.
+                </div>
+              )}
+            </div>
           </div>
         </section>
       ) : null}

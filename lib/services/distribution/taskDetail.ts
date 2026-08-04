@@ -28,6 +28,7 @@ export interface DistributionTaskDetail {
     dueDate: string | null;
     instructions: string | null;
     notes: string | null;
+    blockedReason: string | null;
     liveUrl: string | null;
     linkStatus: string | null;
     updatedAt: string | null;

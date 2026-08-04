@@ -14,6 +14,10 @@
 - [分发工作台完整收口方案与执行计划](./DISTRIBUTION_WORKSPACE_CLOSURE_PLAN_CN.md)
 
 - 2026-08-04：分发工作台 P1 任务进入执行：`DC-020`（跨产品今日队列）与 `DC-021`（筛选、搜索和阻塞收件箱）功能已在代码面完成，完成分发页筛选面板、跨项目 Top1–3 排序队列和阻塞任务分组；本地 `pnpm run build`、`pnpm run distribution:production-smoke`、`pnpm run seo:production-smoke` 已通过，待生产验收与用户连续运行数据验证。
+- 2026-08-04：分发工作台 DC-023「站内通知和邮件摘要」进入实现。已完成站内提醒中心接入任务到期、素材缺失、链接异常与 follow-up 通知，更新文档状态并同步 `pnpm run build`、`pnpm run distribution:production-smoke`、`pnpm run test:distribution-closure` 通过；已进入生产部署前复核。
+- 2026-08-04：分发工作台 DC-024「自动 live URL 和链接属性复查接入用户端」功能已完成接入。任务卡片加入 link_status 可视化徽标与用户端「Recheck live URL」入口，支持在输入 live URL 后自动回填、重检并回写状态；同步 `pnpm run build`、`pnpm run distribution:production-smoke`、`pnpm run test:distribution-closure`。
+- 2026-08-04：分发工作台 DC-025「用户项目周报」完成前端周报接入。工作台新增站内提醒页与“分发工作空间周报”（完成率、24h/7d排期建议、阻塞优先级），`pnpm run build`、`pnpm run distribution:production-smoke`、`pnpm run test:distribution-closure` 均通过；已待用户验收。  
+- 2026-08-04：分发工作台 DC-026「用户反馈反哺目标站规则」在管理员目标页完成阻塞反馈收口。目标页面新增 `Workspace feedback` 块，展示执行端分发记录中的处理原因与来源任务，便于管理员先验后回填规则；`pnpm run build`、`pnpm run distribution:production-smoke`、`pnpm run test:distribution-closure` 均通过。 
 
 说明：
 

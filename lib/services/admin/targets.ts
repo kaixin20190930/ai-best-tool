@@ -57,6 +57,14 @@ export interface AdminDistributionTargetItem {
     sourceUrl: string;
     ruleText: string;
   }>;
+  workspaceFeedback: Array<{
+    snapshotId: string;
+    taskId: string | null;
+    taskStatus: string | null;
+    reason: string;
+    obstacleStatus: 'clear' | 'needs_review' | 'blocked';
+    fetchedAt: string;
+  }>;
 }
 
 export interface AdminDistributionTargetRegistry {
@@ -266,6 +274,62 @@ export async function getAdminDistributionTargetRegistry(input?: {
     requirementsByTarget.set(targetId, current);
   }
 
+  const targetIds = (targets || []).map((target) => String(target.id));
+  const feedbackRows =
+    targetIds.length > 0
+      ? await queryDatabase<{
+          id: string;
+          target_id: string;
+          review_reason: string | null;
+          obstacle_status: 'clear' | 'needs_review' | 'blocked';
+          fetched_at: string;
+          metadata: Record<string, unknown> | null;
+        }>(
+          `
+            select id, target_id, review_reason, obstacle_status, fetched_at, metadata
+            from distribution_target_snapshots
+            where target_id = any($1::uuid[])
+              and (metadata->>'source') = 'distribution-workspace'
+            order by fetched_at desc
+          `,
+          [targetIds],
+        )
+      : ([] as Array<{
+          id: string;
+          target_id: string;
+          review_reason: string | null;
+          obstacle_status: 'clear' | 'needs_review' | 'blocked';
+          fetched_at: string;
+          metadata: Record<string, unknown> | null;
+        }>);
+
+  const feedbackByTarget = new Map<string, AdminDistributionTargetItem['workspaceFeedback']>();
+  for (const row of feedbackRows || []) {
+    const targetId = String(row.target_id || '');
+    if (!targetId) continue;
+    const current = feedbackByTarget.get(targetId) || [];
+    if (current.length >= 5) continue;
+    const taskId =
+      typeof row.metadata?.sourceTask === 'string' && row.metadata.sourceTask.trim().length > 0
+        ? String(row.metadata.sourceTask)
+        : null;
+    const taskStatus =
+      typeof row.metadata?.sourceStatus === 'string' && row.metadata.sourceStatus.trim().length > 0
+        ? String(row.metadata.sourceStatus)
+        : null;
+    const reason = String(row.review_reason || '').trim();
+    if (!reason) continue;
+    current.push({
+      snapshotId: String(row.id),
+      taskId,
+      taskStatus,
+      reason,
+      obstacleStatus: row.obstacle_status || 'needs_review',
+      fetchedAt: String(row.fetched_at || ''),
+    });
+    feedbackByTarget.set(targetId, current);
+  }
+
   const filteredTargets = (targets || []).filter((target) => {
     if (!search) return true;
     const haystack = [
@@ -325,6 +389,7 @@ export async function getAdminDistributionTargetRegistry(input?: {
       currentSnapshotId: target.current_snapshot_id || null,
       snapshot: snapshotByTarget.get(targetId) || null,
       requirements: requirementsByTarget.get(targetId) || [],
+      workspaceFeedback: feedbackByTarget.get(targetId) || [],
     };
   });
 

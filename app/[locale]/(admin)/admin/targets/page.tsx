@@ -253,6 +253,25 @@ export default async function AdminTargetsPage({
                       <div className='mt-1 leading-6'>{target.lastReviewReason}</div>
                     </div>
                   ) : null}
+                  {target.workspaceFeedback.length > 0 ? (
+                    <div className='rounded-xl border border-cyan-100 bg-cyan-50 px-3 py-2 text-sm text-slate-800'>
+                      <div className='text-xs font-bold uppercase tracking-wide text-cyan-700'>Workspace feedback</div>
+                      <ul className='mt-2 space-y-2 text-sm text-slate-700'>
+                        {target.workspaceFeedback.map((feedback) => (
+                          <li key={feedback.snapshotId} className='rounded-lg bg-white px-2.5 py-2'>
+                            <div className='text-xs text-slate-500'>{formatDate(feedback.fetchedAt)}</div>
+                            <div className='mt-1 text-sm'>{feedback.reason}</div>
+                            {feedback.taskId ? (
+                              <div className='mt-1 text-xs text-slate-500'>source task: {feedback.taskId}</div>
+                            ) : null}
+                            {feedback.taskStatus ? (
+                              <div className='text-xs text-slate-500'>task status: {feedback.taskStatus}</div>
+                            ) : null}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
                   {target.notes ? <p className='rounded-xl bg-slate-50 px-3 py-2 text-sm text-slate-700'>{target.notes}</p> : null}
                 </div>
 

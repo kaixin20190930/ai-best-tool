@@ -130,6 +130,15 @@ export interface DistributionDashboard {
       payments: number;
     };
   };
+  notifications: Array<{
+    id: string;
+    type: 'due' | 'overdue' | 'missing_assets' | 'link_issue' | 'weekly_digest' | 'followup_reminder';
+    title: string;
+    message: string;
+    ctaLabel: string | null;
+    href: string | null;
+    urgent: boolean;
+  }>;
   recommendations: Array<{
     id: string;
     title: string;
@@ -259,6 +268,129 @@ function getDistributionActionError(error: unknown, fallback: string): string {
   return fallback;
 }
 
+type DistributionBlockedReasonType =
+  | 'account'
+  | 'payment'
+  | 'captcha'
+  | 'editorial'
+  | 'quality'
+  | 'other'
+  | 'removed'
+  | 'nofollow';
+
+const BLOCKED_REASON_TYPES: Array<{ value: DistributionBlockedReasonType; label: string }> = [
+  { value: 'account', label: 'Account required' },
+  { value: 'payment', label: 'Payment required' },
+  { value: 'captcha', label: 'CAPTCHA or anti-bot limit' },
+  { value: 'editorial', label: 'Editorial / manual review rejection' },
+  { value: 'quality', label: 'Quality or content mismatch' },
+  { value: 'removed', label: 'Listing removed after submit' },
+  { value: 'nofollow', label: 'Nofollow / indexing restricted' },
+  { value: 'other', label: 'Other reason' },
+];
+
+function toBlockedReasonType(value: string): DistributionBlockedReasonType {
+  const normalized = value.trim().toLowerCase();
+  if (normalized.startsWith('account')) return 'account';
+  if (normalized.startsWith('payment') || normalized.startsWith('fee')) return 'payment';
+  if (normalized.includes('captcha')) return 'captcha';
+  if (normalized.includes('editorial') || normalized.includes('review')) return 'editorial';
+  if (normalized.includes('quality') || normalized.includes('content')) return 'quality';
+  if (normalized.includes('removed')) return 'removed';
+  if (normalized.includes('nofollow')) return 'nofollow';
+  return 'other';
+}
+
+function buildBlockedReasonText(input: {
+  reasonType: string | null;
+  reasonText: string | null;
+}) {
+  const normalizedType = input.reasonType ? toBlockedReasonType(input.reasonType) : null;
+  const labels = new Map(BLOCKED_REASON_TYPES.map((item) => [item.value, item.label]));
+  const title = normalizedType ? labels.get(normalizedType) || normalizedType : 'Other reason';
+  const detail = input.reasonText && input.reasonText.trim().length > 0 ? input.reasonText.trim() : null;
+  return {
+    reasonType: normalizedType,
+    reasonText: detail,
+    summary: detail ? `${title}: ${detail}` : title,
+  };
+}
+
+async function recordDistributionTargetFeedback(input: {
+  taskId: string;
+  projectId: string;
+  taskTitle: string;
+  taskStatus: string;
+  targetId: string | null;
+  linkStatus: string | null;
+  liveUrl: string | null;
+  reasonType: string | null;
+  reasonText: string | null;
+}): Promise<{ success: boolean; error?: string }> {
+  if (!input.targetId) return { success: false, error: 'No target id.' };
+
+  const fallbackPageUrl = `https://example.com/targets/${input.targetId}`;
+
+  try {
+    const adminSupabase = createAdminClient();
+    const { data: target, error: targetError } = await adminSupabase
+      .from('distribution_targets')
+      .select('id, name, homepage_url, requires_account, requires_payment, requires_captcha')
+      .eq('id', input.targetId)
+      .maybeSingle();
+    if (targetError) throw targetError;
+    if (!target) return { success: false, error: 'Target is no longer available.' };
+
+    const pageUrl = String((target as { homepage_url?: string | null }).homepage_url || '').trim() || fallbackPageUrl;
+    const reasonSummary = buildBlockedReasonText({
+      reasonType: input.reasonType,
+      reasonText: input.reasonText,
+    });
+
+    const { error } = await adminSupabase.from('distribution_target_snapshots').insert({
+      target_id: input.targetId,
+      page_url: pageUrl,
+      http_status: null,
+      page_title: String((target as { name?: string }).name || ''),
+      visible_rules: [],
+      pricing_info: {},
+      form_fields: [],
+      requires_account: Boolean((target as { requires_account?: boolean }).requires_account),
+      requires_captcha: Boolean((target as { requires_captcha?: boolean }).requires_captcha),
+      fetched_at: new Date().toISOString(),
+      analysis_json: {
+        source: 'distribution_workspace',
+        sourceTask: input.taskId,
+        sourceStatus: input.taskStatus,
+        reasonType: reasonSummary.reasonType,
+        reasonText: reasonSummary.reasonText,
+      },
+      obstacle_status: 'needs_review',
+      review_reason: reasonSummary.summary,
+      notes: reasonSummary.summary,
+      metadata: {
+        source: 'distribution-workspace',
+        taskId: input.taskId,
+        projectId: input.projectId,
+        taskTitle: input.taskTitle,
+        linkStatus: input.linkStatus,
+        liveUrl: input.liveUrl,
+      },
+      next_review_at: new Date(Date.now() + 72 * 60 * 60 * 1000).toISOString(),
+      discovered_page_count: 0,
+    });
+    if (error) throw error;
+
+    return { success: true };
+  } catch (error) {
+    console.error('Record distribution target feedback error:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unable to write distribution feedback.',
+    };
+  }
+}
+
 function localizedCatalogText(value: unknown): string {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return '';
   const record = value as Record<string, unknown>;
@@ -372,6 +504,16 @@ function dateAfterDays(days: number): string {
   const date = new Date();
   date.setUTCDate(date.getUTCDate() + days);
   return date.toISOString();
+}
+
+function isDateBeforeToday(value: string | null | undefined, today: string): boolean {
+  if (!value || value.length < 10) return false;
+  return value.slice(0, 10) < today;
+}
+
+function isDateToday(value: string | null | undefined, today: string): boolean {
+  if (!value || value.length < 10) return false;
+  return value.slice(0, 10) === today;
 }
 
 async function scheduleDistributionReminders(input: {
@@ -594,6 +736,7 @@ export async function getDistributionDashboard(
       { data: projectTargetRows, error: projectTargetError },
       { data: projectAssetRows, error: projectAssetError },
       { data: projectPackageRows, error: projectPackageError },
+      { data: reminderRows, error: reminderRowsError },
       listingCandidates,
     ] = await Promise.all([
       queryDatabase<{
@@ -649,6 +792,14 @@ export async function getDistributionDashboard(
         .eq('project_id', project.id)
         .eq('owner_id', user.id)
         .order('updated_at', { ascending: false }),
+      supabase
+        .from('distribution_reminders')
+        .select('id, task_id, reminder_type, scheduled_at, status, metadata')
+        .eq('project_id', project.id)
+        .eq('owner_id', user.id)
+        .in('status', ['scheduled', 'failed'])
+        .eq('delivery_channel', 'in_app')
+        .order('scheduled_at', { ascending: true }),
       loadOwnedCatalogListings({
         userId: user.id,
         email: user.email,
@@ -656,11 +807,12 @@ export async function getDistributionDashboard(
         isAdmin: isAdminUser(user),
       }),
     ]);
-    if (projectTargetError || projectAssetError || projectPackageError)
+    if (projectTargetError || projectAssetError || projectPackageError || reminderRowsError)
       throw new Error(
         projectTargetError?.message ||
           projectAssetError?.message ||
           projectPackageError?.message ||
+          reminderRowsError?.message ||
           'Unable to load distribution project data.',
       );
     const projectTargetByTargetId = new Map((projectTargetRows || []).map((row: any) => [String(row.target_id), row]));
@@ -698,6 +850,7 @@ export async function getDistributionDashboard(
     }));
 
   const today = new Date().toISOString().slice(0, 10);
+  const localeHint = resolveDistributionLocaleFromHeaders();
   const projectIds = Array.isArray(projects) ? (projects || []).map((row: any) => String(row.id)) : [String(project.id)];
   const [
     { data: globalTasks, error: globalTasksError },
@@ -803,6 +956,9 @@ export async function getDistributionDashboard(
     .filter(Boolean)
     .slice(0, 3);
 
+    const profileComplete = Boolean(project.facts_confirmed_at && project.website_url && projectDescription);
+    const dashboardDoneStatuses = new Set<DistributionTaskStatus>(['done', 'skipped']);
+
     const packageStatusByTaskId = new Map<string, string>();
     for (const packageRow of projectPackageRows || []) {
       const packageTaskId = String(packageRow.task_id || '');
@@ -847,10 +1003,101 @@ export async function getDistributionDashboard(
           estimatedMinutes !== null && Number.isFinite(estimatedMinutes) && estimatedMinutes > 0
             ? estimatedMinutes
             : null,
-          estimatedCost:
-            estimatedCost !== null && Number.isFinite(estimatedCost) && estimatedCost >= 0 ? estimatedCost : null,
+        estimatedCost:
+          estimatedCost !== null && Number.isFinite(estimatedCost) && estimatedCost >= 0 ? estimatedCost : null,
       };
     });
+    
+    const remindersByTask = new Map<string, Array<(typeof reminderRows)[0]>>();
+    for (const reminder of reminderRows || []) {
+      const key = String(reminder?.task_id || '');
+      if (!key) continue;
+      if (!remindersByTask.has(key)) remindersByTask.set(key, []);
+      remindersByTask.get(key)?.push(reminder as any);
+    }
+    const notificationItems: DistributionDashboard['notifications'] = [];
+    const notificationIndex = new Set<string>();
+    const pushNotification = (item: DistributionDashboard['notifications'][number]) => {
+      if (notificationIndex.has(item.id)) return;
+      notificationIndex.add(item.id);
+      notificationItems.push(item);
+    };
+
+    normalizedTasks.forEach((task) => {
+      const taskId = String(task.id);
+      const taskHref = `/${localeHint}/distribution/tasks/${taskId}`;
+      if (isDateToday(task.dueDate, today) && !dashboardDoneStatuses.has(task.status)) {
+        pushNotification({
+          id: `due-${taskId}`,
+          type: 'due',
+          title: '任务到期',
+          message: `「${task.title}」今日截止，请先完成提交前准备或复查。`,
+          ctaLabel: '打开任务',
+          href: taskHref,
+          urgent: true,
+        });
+      }
+      if (isDateBeforeToday(task.dueDate, today) && !dashboardDoneStatuses.has(task.status)) {
+        pushNotification({
+          id: `overdue-${taskId}`,
+          type: 'overdue',
+          title: '任务超期',
+          message: `「${task.title}」已超期，建议先完成或延长日期，避免错过后续复查。`,
+          ctaLabel: '打开任务',
+          href: taskHref,
+          urgent: true,
+        });
+      }
+      if (task.status === 'needs_assets') {
+        pushNotification({
+          id: `assets-${taskId}`,
+          type: 'missing_assets',
+          title: '素材待补充',
+          message: `${task.title} 需要补齐官方素材后再提交到目标站。`,
+          ctaLabel: '补齐素材',
+          href: `/${localeHint}/distribution#distribution-assets`,
+          urgent: false,
+        });
+      }
+      if (task.status === 'live' && ['removed', 'nofollow', 'rejected'].includes(task.linkStatus || '')) {
+        pushNotification({
+          id: `link-${taskId}`,
+          type: 'link_issue',
+          title: '结果异常',
+          message: `${task.title} 已记录失效 / nofollow 状态，建议重新核查后提交新结果。`,
+          ctaLabel: '查看结果',
+          href: taskHref,
+          urgent: true,
+        });
+      }
+      const reminders = remindersByTask.get(taskId) || [];
+      for (const reminder of reminders) {
+        const scheduledDate = String(reminder.scheduled_at || '').slice(0, 10);
+        if (!scheduledDate) continue;
+        if (scheduledDate > today) continue;
+        if (reminder.status !== 'scheduled' && reminder.status !== 'failed') continue;
+        pushNotification({
+          id: `reminder-${reminder.id}`,
+          type: 'followup_reminder',
+          title: '该跟进了',
+          message: `${task.title} 的 ${String(reminder.reminder_type || 'follow up').replace(/_/g, ' ')} 复查点已到达。`,
+          ctaLabel: '打开任务',
+          href: taskHref,
+          urgent: true,
+        });
+      }
+    });
+    if (new Date().getDay() === 1 && normalizedTasks.length > 0) {
+      pushNotification({
+        id: `weekly-${project.id}-digest`,
+        type: 'weekly_digest',
+        title: '周报提醒',
+        message: `本周建议聚焦「${profileComplete ? '准备与上链提交' : '先完成资料'}」并清理超期任务。`,
+        ctaLabel: null,
+        href: `/${localeHint}/distribution?project=${project.id}&view=blocked`,
+        urgent: false,
+      });
+    }
     const reviewTasks = (tasks || []).map((task: any) => {
       const projectName = project?.name || 'Unknown project';
       const projectWebsite = project?.website_url || null;
@@ -1011,6 +1258,7 @@ export async function getDistributionDashboard(
           createdAt: link.created_at,
         })),
         tasks: normalizedTasks,
+        notifications: notificationItems,
         globalQueue: globalQueue as DistributionDashboard['globalQueue'],
         reviewReport,
         metrics: {
@@ -1813,18 +2061,25 @@ export async function updateDistributionTaskStatus(formData: FormData): Promise<
     if (!allowed) return { success: false, error: 'Distribution workspace access requires an active plan.' };
     const taskId = normalize(formData.get('taskId'));
     const status = normalizeDistributionTaskStatus(normalize(formData.get('status')));
+    const blockedReasonType = normalize(formData.get('blockedReasonType'));
+    const blockedReason = normalize(formData.get('blockedReason'));
     if (!taskId || !status || !isDistributionTaskStatus(status)) {
       return { success: false, error: 'Invalid task status.' };
     }
     const supabase = await createClient();
     const { data: existingTask, error: existingTaskError } = await supabase
       .from('distribution_tasks')
-      .select('id, project_id, status')
+      .select('id, project_id, status, title, target_id')
       .eq('id', taskId)
       .eq('owner_id', user.id)
       .maybeSingle();
     if (existingTaskError) throw existingTaskError;
     if (!existingTask) return { success: false, error: 'Task not found or access denied.' };
+    const blockedReasonPayload = buildBlockedReasonText({
+      reasonType: blockedReasonType,
+      reasonText: blockedReason,
+    });
+    const normalizedBlockedReason = status === 'blocked' ? blockedReasonPayload.summary : null;
     const now = new Date().toISOString();
     const statusTimestamps: Record<string, string | null> = {};
     if (['submitted', 'waiting_review'].includes(status)) statusTimestamps.submitted_at = now;
@@ -1832,7 +2087,12 @@ export async function updateDistributionTaskStatus(formData: FormData): Promise<
     if (!['live', 'done', 'skipped'].includes(status)) statusTimestamps.completed_at = null;
     const { data: task, error } = await supabase
       .from('distribution_tasks')
-      .update({ status, updated_at: now, ...statusTimestamps })
+      .update({
+        status,
+        updated_at: now,
+        blocked_reason: normalizedBlockedReason,
+        ...statusTimestamps,
+      })
       .eq('id', taskId)
       .eq('owner_id', user.id)
       .select('id')
@@ -1847,10 +2107,31 @@ export async function updateDistributionTaskStatus(formData: FormData): Promise<
         event_type: 'status_changed',
         from_status: existingTask.status,
         to_status: status,
-        reason: 'Status updated from the execution cockpit.',
+        reason:
+          status === 'blocked'
+            ? blockedReasonPayload.summary || 'Status updated to blocked from the execution cockpit.'
+            : 'Status updated from the execution cockpit.',
       });
       if (eventError) throw eventError;
     }
+
+    if (status === 'blocked') {
+      const blockedReasonResult = await recordDistributionTargetFeedback({
+        taskId,
+        projectId: String(existingTask.project_id || ''),
+        taskTitle: String(existingTask.title || 'Distribution task'),
+        taskStatus: status,
+        targetId: existingTask.target_id ? String(existingTask.target_id) : null,
+        linkStatus: existingTask?.status,
+        liveUrl: null,
+        reasonType: blockedReasonType,
+        reasonText: blockedReason,
+      });
+      if (!blockedReasonResult.success) {
+        console.warn('Unable to record distribution blocked feedback:', blockedReasonResult.error);
+      }
+    }
+
     if (['submitted', 'waiting_review'].includes(status)) {
       await scheduleDistributionReminders({
         supabase,
@@ -1891,12 +2172,14 @@ export async function recordDistributionResult(formData: FormData): Promise<{ su
     const taskId = normalize(formData.get('taskId'));
     const liveUrl = normalize(formData.get('liveUrl')) || null;
     const linkStatus = normalize(formData.get('linkStatus')) || 'unknown';
+    const blockedReasonType = normalize(formData.get('blockedReasonType'));
+    const blockedReason = normalize(formData.get('blockedReason'));
     const notes = normalize(formData.get('notes')) || null;
     if (!taskId) return { success: false, error: 'Task is required.' };
     const supabase = await createClient();
     const { data: task, error: taskError } = await supabase
       .from('distribution_tasks')
-      .select('id, title, status, project_id, channel_id')
+      .select('id, title, status, project_id, channel_id, target_id')
       .eq('id', taskId)
       .eq('owner_id', user.id)
       .maybeSingle();
@@ -1918,11 +2201,16 @@ export async function recordDistributionResult(formData: FormData): Promise<{ su
       liveUrl,
       linkStatus,
     });
+    const blockedReasonPayload = buildBlockedReasonText({
+      reasonType: blockedReasonType,
+      reasonText: blockedReason || (nextStatus === 'blocked' ? `Blocked by result: ${linkStatus}` : null),
+    });
     await supabase
       .from('distribution_tasks')
       .update({
         status: nextStatus,
         updated_at: new Date().toISOString(),
+        blocked_reason: nextStatus === 'blocked' ? blockedReasonPayload.summary : null,
         completed_at: nextStatus === 'live' ? new Date().toISOString() : null,
       })
       .eq('id', taskId)
@@ -1934,10 +2222,28 @@ export async function recordDistributionResult(formData: FormData): Promise<{ su
       event_type: 'result_recorded',
       from_status: task.status,
       to_status: nextStatus,
-      reason: notes,
-      metadata: { liveUrl, linkStatus },
+      reason: notes || blockedReasonPayload.summary,
+      metadata: { liveUrl, linkStatus, blockedReasonType, blockedReason },
     });
     if (eventError) throw eventError;
+
+    if (nextStatus === 'blocked') {
+      const blockedReasonResult = await recordDistributionTargetFeedback({
+        taskId,
+        projectId: String(task.project_id || ''),
+        taskTitle: String(task.title || 'Distribution task'),
+        taskStatus: nextStatus,
+        targetId: task.target_id ? String(task.target_id) : null,
+        linkStatus,
+        liveUrl,
+        reasonType: blockedReason || 'blocked result',
+        reasonText: blockedReasonPayload.summary,
+      });
+      if (!blockedReasonResult.success) {
+        console.warn('Unable to record distribution result blocked feedback:', blockedReasonResult.error);
+      }
+    }
+
     if (nextStatus === 'live') {
       await scheduleDistributionReminders({
         supabase,
@@ -2231,7 +2537,7 @@ export async function getDistributionTaskDetail(
     const { data: task, error: taskError } = await supabase
       .from('distribution_tasks')
       .select(
-        'id, title, status, priority, task_type, due_date, instructions, notes, updated_at, project_id, channel_id, target_id, distribution_projects(id, name, website_url, description), distribution_channels(id, channel_key, name, channel_type, instructions), distribution_results(live_url, link_status, notes, checked_at, created_at)',
+        'id, title, status, priority, task_type, due_date, instructions, notes, blocked_reason, updated_at, project_id, channel_id, target_id, distribution_projects(id, name, website_url, description), distribution_channels(id, channel_key, name, channel_type, instructions), distribution_results(live_url, link_status, notes, checked_at, created_at)',
       )
       .eq('id', normalizedTaskId)
       .eq('owner_id', user.id)
@@ -2340,6 +2646,7 @@ export async function getDistributionTaskDetail(
         dueDate: (task.due_date as string | null | undefined) || null,
         instructions: (task.instructions as string | null | undefined) || null,
         notes: (task.notes as string | null | undefined) || null,
+        blockedReason: (task.blocked_reason as string | null | undefined) || null,
         liveUrl: recentResult?.live_url || null,
         linkStatus: recentResult?.link_status || null,
         updatedAt: (task.updated_at as string | null | undefined) || null,
