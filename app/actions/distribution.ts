@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { randomUUID } from 'node:crypto';
 import type { User } from '@supabase/supabase-js';
@@ -30,6 +31,11 @@ import {
   recommendDistributionTargets,
   type DistributionTargetRecommendation,
 } from '@/lib/services/distribution/targetRecommendation';
+import {
+  buildDistributionReviewReport,
+  runDistributionUrlCheck,
+  type DistributionReviewReport,
+} from '@/lib/services/distribution/review';
 import { buildDistributionTaskDetail, type DistributionTaskDetail } from '@/lib/services/distribution/taskDetail';
 import {
   deriveTaskStatusFromLinkResult,
@@ -100,6 +106,9 @@ export interface DistributionDashboard {
     linkStatus: string | null;
     targetId: string | null;
     packageStatus: string | null;
+    targetName: string | null;
+    estimatedMinutes: number | null;
+    estimatedCost: number | null;
   }>;
   metrics: {
     total: number;
@@ -132,6 +141,26 @@ export interface DistributionDashboard {
     channelName: string;
     channelType: string;
   }>;
+  globalQueue: Array<{
+    id: string;
+    title: string;
+    status: DistributionTaskStatus;
+    priority: string;
+    score: number;
+    reason: string;
+    dueDate: string | null;
+    projectId: string;
+    projectName: string;
+    projectWebsiteUrl: string | null;
+    targetId: string | null;
+    targetName: string | null;
+    channelName: string;
+    channelType: string;
+    estimatedMinutes: number | null;
+    estimatedCost: number | null;
+    readiness: string;
+  }>;
+  reviewReport: DistributionReviewReport | null;
   preflight: {
     ready: boolean;
     blockers: string[];
@@ -171,6 +200,29 @@ export interface DistributionDashboard {
 }
 
 type AccessResult = { user: User; allowed: boolean; plan: 'pilot' | 'pro' | 'agency' };
+
+const FALLBACK_DISTRIBUTION_LOCALE = 'cn';
+
+function resolveDistributionLocaleFromHeaders(): string {
+  try {
+    const requestHeaders = headers();
+    const referer = requestHeaders.get('referer');
+    const candidateUrl = referer || '';
+    if (!candidateUrl) return FALLBACK_DISTRIBUTION_LOCALE;
+    const parsed = new URL(candidateUrl);
+    const firstSegment = parsed.pathname.split('/').filter(Boolean)[0] || '';
+    if (/^[a-z]{2}(?:-[a-z]{2})?$/i.test(firstSegment)) return firstSegment;
+  } catch {
+    return FALLBACK_DISTRIBUTION_LOCALE;
+  }
+  return FALLBACK_DISTRIBUTION_LOCALE;
+}
+
+function revalidateDistributionPages(taskId?: string) {
+  const locale = resolveDistributionLocaleFromHeaders();
+  revalidatePath(`/${locale}/distribution`, 'page');
+  if (taskId) revalidatePath(`/${locale}/distribution/tasks/${taskId}`, 'page');
+}
 
 async function getDistributionAccess(): Promise<AccessResult> {
   const user = await requireAuth();
@@ -514,10 +566,10 @@ export async function getDistributionDashboard(
         .order('created_at', { ascending: false })
         .limit(20),
       supabase
-        .from('distribution_tasks')
-        .select(
-          'id, title, status, priority, task_type, due_date, instructions, target_id, distribution_channels(name, channel_type), distribution_results(live_url, link_status, created_at)',
-        )
+      .from('distribution_tasks')
+      .select(
+        'id, project_id, title, status, priority, task_type, due_date, instructions, target_id, estimated_minutes, distribution_channels(name, channel_type), distribution_targets(id, name), distribution_results(id, live_url, target_url, link_status, checked_at, created_at, notes)',
+      )
         .eq('project_id', project.id)
         .order('due_date', { ascending: true, nullsFirst: false })
         .order('created_at', { ascending: false }),
@@ -582,7 +634,7 @@ export async function getDistributionDashboard(
       }),
       supabase
         .from('distribution_project_targets')
-        .select('id, target_id, opportunity_status, match_score, estimated_minutes')
+        .select('id, target_id, opportunity_status, match_score, estimated_minutes, estimated_cost')
         .eq('project_id', project.id)
         .eq('owner_id', user.id),
       supabase
@@ -645,7 +697,112 @@ export async function getDistributionDashboard(
       opportunityStatus: projectTargetByTargetId.get(target.id)?.opportunity_status || null,
     }));
 
-    const today = new Date().toISOString().slice(0, 10);
+  const today = new Date().toISOString().slice(0, 10);
+  const projectIds = Array.isArray(projects) ? (projects || []).map((row: any) => String(row.id)) : [String(project.id)];
+  const [
+    { data: globalTasks, error: globalTasksError },
+    { data: globalProjectTargets, error: globalProjectTargetsError },
+  ] = await Promise.all([
+    supabase
+      .from('distribution_tasks')
+      .select(
+        'id, title, status, priority, task_type, due_date, instructions, target_id, project_id, estimated_minutes, distribution_channels(name, channel_type), distribution_projects(name, website_url)'
+      )
+      .in('project_id', projectIds)
+      .eq('owner_id', user.id)
+      .not('status', 'in', '(done,skipped)')
+      .order('due_date', { ascending: true, nullsFirst: false }),
+    supabase
+      .from('distribution_project_targets')
+      .select('project_id, target_id, estimated_minutes, estimated_cost')
+      .in('project_id', projectIds)
+      .eq('owner_id', user.id),
+  ]);
+  if (globalTasksError || globalProjectTargetsError)
+    throw new Error(
+      globalTasksError?.message ||
+        globalProjectTargetsError?.message ||
+        'Unable to load cross-project distribution queue.'
+    );
+
+  const targetIds = Array.from(
+    new Set((globalTasks || []).map((task: any) => String(task.target_id || '').trim()).filter(Boolean)),
+  );
+  const [{ data: globalTargetRows },] = await Promise.all([
+    targetIds.length
+      ? supabase
+          .from('distribution_targets')
+          .select('id, name')
+          .in('id', targetIds)
+      : Promise.resolve({ data: [] as any[], error: null }),
+  ]);
+
+  const projectTargetByKey = new Map<string, any>();
+  for (const row of globalProjectTargets || []) {
+    projectTargetByKey.set(`${String(row.project_id)}:${String(row.target_id)}`, row);
+  }
+  const targetNameById = new Map(
+    (globalTargetRows || []).map((row: any) => [String(row.id), String(row.name || 'Target site')]),
+  );
+  const projectById = new Map((projects || []).map((item: any) => [String(item.id), item]));
+  const globalQueueItems = (globalTasks || []).map((task: any) => {
+    const projectRow = task.distribution_projects && !Array.isArray(task.distribution_projects)
+      ? task.distribution_projects
+      : task.distribution_projects?.[0] || {};
+    const projectId = String(task.project_id || '');
+    const targetId = task.target_id ? String(task.target_id) : null;
+    const projectTarget = targetId ? projectTargetByKey.get(`${projectId}:${targetId}`) || null : null;
+    const status = normalizeDistributionTaskStatus(task.status) || 'planned';
+    return {
+      id: String(task.id),
+      title: String(task.title || ''),
+      status,
+      priority: task.priority || 'p1',
+      dueDate: (task.due_date as string | null | undefined) || null,
+      taskType: task.task_type,
+      channelName: task.distribution_channels?.name || 'Unknown channel',
+      channelType: task.distribution_channels?.channel_type || 'other',
+      dueDateSort: task.due_date,
+      projectId,
+      projectName: String((projectById.get(projectId) || projectRow || {}).name || projectRow?.name || task.title || 'Untitled product'),
+      projectWebsiteUrl: ((projectRow as { website_url?: string | null }).website_url as string | null) || null,
+      targetId,
+      targetName: targetId ? (targetNameById.get(targetId) || 'Target site') : null,
+      estimatedMinutes: projectTarget?.estimated_minutes === undefined ? null : Number(projectTarget.estimated_minutes),
+      estimatedCost: projectTarget?.estimated_cost === undefined ? null : Number(projectTarget.estimated_cost),
+      readiness: status === 'needs_assets' ? 'Needs assets' : status === 'blocked' ? 'Blocked' : status === 'ready_to_submit' ? 'Ready to submit' : status === 'live' ? 'Live monitoring' : status === 'submitted' || status === 'waiting_review' ? 'Submitted' : 'In progress',
+    };
+  });
+
+  const globalQueueFeedback = buildDistributionChannelPriorityFeedback(
+    globalQueueItems.map((task: any) => ({
+      channelType: task.channelType,
+      status: task.status,
+      liveUrl: null,
+      linkStatus: null,
+    })),
+  );
+  const globalQueue = scheduleDistributionTasks(globalQueueItems, globalQueueFeedback)
+    .map((item) => {
+      const source = globalQueueItems.find((candidate) => candidate.id === item.id) || null;
+      if (!source) return null;
+      const minutes = source.estimatedMinutes || null;
+      const cost = source.estimatedCost || null;
+      return {
+        ...item,
+        projectId: source.projectId,
+        projectName: source.projectName,
+        projectWebsiteUrl: source.projectWebsiteUrl,
+        targetId: source.targetId,
+        targetName: source.targetName,
+        estimatedMinutes: Number.isFinite(minutes) ? minutes : null,
+        estimatedCost: Number.isFinite(cost) ? cost : null,
+        readiness: source.readiness,
+      };
+    })
+    .filter(Boolean)
+    .slice(0, 3);
+
     const packageStatusByTaskId = new Map<string, string>();
     for (const packageRow of projectPackageRows || []) {
       const packageTaskId = String(packageRow.task_id || '');
@@ -657,7 +814,20 @@ export async function getDistributionDashboard(
       const latestResult = [...(task.distribution_results || [])].sort((a, b) =>
         String(b.created_at).localeCompare(String(a.created_at)),
       )[0];
+      const projectTarget = task.target_id
+        ? projectTargetByTargetId.get(`${project.id}:${String(task.target_id)}`) || null
+        : null;
       const status = normalizeDistributionTaskStatus(task.status) || 'planned';
+      const estimatedMinutes =
+        task.estimated_minutes !== null && task.estimated_minutes !== undefined
+          ? Number(task.estimated_minutes)
+          : projectTarget?.estimated_minutes === undefined
+            ? null
+            : Number(projectTarget.estimated_minutes);
+      const estimatedCost =
+        projectTarget?.estimated_cost === undefined || projectTarget?.estimated_cost === null
+          ? null
+          : Number(projectTarget.estimated_cost);
       return {
         id: task.id,
         title: task.title,
@@ -672,8 +842,45 @@ export async function getDistributionDashboard(
         linkStatus: latestResult?.link_status || null,
         targetId: task.target_id || null,
         packageStatus: packageStatusByTaskId.get(String(task.id)) || null,
+        targetName: task.distribution_targets?.name || null,
+        estimatedMinutes:
+          estimatedMinutes !== null && Number.isFinite(estimatedMinutes) && estimatedMinutes > 0
+            ? estimatedMinutes
+            : null,
+          estimatedCost:
+            estimatedCost !== null && Number.isFinite(estimatedCost) && estimatedCost >= 0 ? estimatedCost : null,
       };
     });
+    const reviewTasks = (tasks || []).map((task: any) => {
+      const projectName = project?.name || 'Unknown project';
+      const projectWebsite = project?.website_url || null;
+      return {
+        id: String(task.id),
+        project_id: String(task.project_id || project.id),
+        title: String(task.title || ''),
+        status: String(task.status || 'planned'),
+        priority: String(task.priority || 'p1'),
+        task_type: String(task.task_type || 'submit'),
+        due_date: task.due_date || null,
+        instructions: task.instructions || null,
+        target_id: task.target_id || null,
+        channel_name: String(task.distribution_channels?.name || 'Unknown channel'),
+        channel_type: String(task.distribution_channels?.channel_type || 'other'),
+        project_name: projectName,
+        project_website: projectWebsite,
+        results: (task.distribution_results || []).map((item: any) => ({
+          id: item.id,
+          live_url: item.live_url || null,
+          target_url: item.target_url || null,
+          link_status: item.link_status || 'pending',
+          checked_at: item.checked_at || null,
+          created_at: item.created_at || null,
+          notes: item.notes || null,
+        })),
+      } as any;
+    });
+    const reviewReport = tasks && tasks.length > 0 ? await buildDistributionReviewReport(reviewTasks, project.website_url) : null;
+
     const channelAdjustments = buildDistributionChannelPriorityFeedback(normalizedTasks);
     const sortedRecommendations = scheduleDistributionTasks(normalizedTasks, channelAdjustments).slice(0, 3);
     const firstChannel = (channels || [])[0] || null;
@@ -804,6 +1011,8 @@ export async function getDistributionDashboard(
           createdAt: link.created_at,
         })),
         tasks: normalizedTasks,
+        globalQueue: globalQueue as DistributionDashboard['globalQueue'],
+        reviewReport,
         metrics: {
           total: normalizedTasks.length,
           dueToday: normalizedTasks.filter(
@@ -979,7 +1188,7 @@ export async function acceptDistributionTarget(
       .select('id')
       .single();
     if (taskError || !task) throw taskError || new Error('Unable to create target task.');
-    revalidatePath('/[locale]/distribution', 'page');
+    revalidateDistributionPages();
     return { success: true, taskId: String(task.id) };
   } catch (error) {
     console.error('Accept distribution target error:', error);
@@ -1056,7 +1265,7 @@ export async function createDistributionUtmLink(formData: FormData): Promise<{ s
       utm_content: content,
     });
     if (error) throw error;
-    revalidatePath('/[locale]/distribution', 'page');
+    revalidateDistributionPages();
     return { success: true };
   } catch (error) {
     console.error('Create distribution UTM link error:', error);
@@ -1113,7 +1322,7 @@ export async function createDistributionProject(formData: FormData): Promise<{ s
       .select('id')
       .single();
     if (error || !project) throw error || new Error('Unable to create project.');
-    revalidatePath('/[locale]/distribution', 'page');
+    revalidateDistributionPages();
     redirect(`/${locale}/distribution?project=${project.id}`);
   } catch (error) {
     if (
@@ -1269,7 +1478,7 @@ export async function importDistributionCatalogListing(
       );
       if (assetError) throw assetError;
     }
-    revalidatePath('/[locale]/distribution', 'page');
+    revalidateDistributionPages();
     return { success: true, importedAssets: importedAssets.length };
   } catch (error) {
     console.error('Import distribution catalog listing error:', error);
@@ -1350,7 +1559,7 @@ export async function updateDistributionProjectProfile(
         .eq('owner_id', projectId);
       if (intelligenceError) throw intelligenceError;
     }
-    revalidatePath('/[locale]/distribution', 'page');
+    revalidateDistributionPages();
     return { success: true };
   } catch (error) {
     console.error('Update distribution project profile error:', error);
@@ -1407,7 +1616,7 @@ export async function createDistributionProjectAsset(
       { onConflict: 'project_id,asset_type,name' },
     );
     if (error) throw error;
-    revalidatePath('/[locale]/distribution', 'page');
+    revalidateDistributionPages();
     return { success: true };
   } catch (error) {
     console.error('Create distribution project asset error:', error);
@@ -1480,7 +1689,7 @@ export async function importDistributionIntelligenceAssets(
         .update({ intelligence_profile_id: profileId })
         .eq('id', projectId)
         .eq('owner_id', user.id);
-    revalidatePath('/[locale]/distribution', 'page');
+    revalidateDistributionPages();
     return { success: true, imported: usableAssets.length };
   } catch (error) {
     console.error('Import distribution intelligence assets error:', error);
@@ -1525,7 +1734,7 @@ export async function createDistributionTask(formData: FormData): Promise<{ succ
       instructions,
     });
     if (error) throw error;
-    revalidatePath('/distribution');
+    revalidateDistributionPages();
     return { success: true };
   } catch (error) {
     console.error('Create distribution task error:', error);
@@ -1602,7 +1811,7 @@ export async function updateDistributionTaskStatus(formData: FormData): Promise<
         ],
       });
     }
-    revalidatePath('/distribution');
+    revalidateDistributionPages();
     return { success: true };
   } catch (error) {
     console.error('Update distribution task error:', error);
@@ -1690,11 +1899,123 @@ export async function recordDistributionResult(formData: FormData): Promise<{ su
         dueDate: followUpDate,
       });
     }
-    revalidatePath('/distribution');
+    revalidateDistributionPages();
     return { success: true };
   } catch (error) {
     console.error('Record distribution result error:', error);
     return { success: false, error: error instanceof Error ? error.message : 'Unable to record result.' };
+  }
+}
+
+export async function recheckDistributionTaskResult(formData: FormData): Promise<{ success: boolean; error?: string }> {
+  try {
+    const { user, allowed } = await getDistributionAccess();
+    if (!allowed) return { success: false, error: 'Distribution workspace access requires an active plan.' };
+    const taskId = normalize(formData.get('taskId'));
+    const liveUrl = normalize(formData.get('liveUrl'));
+    if (!taskId) return { success: false, error: 'Task is required.' };
+
+    const supabase = await createClient();
+    const { data: task, error: taskError } = await supabase
+      .from('distribution_tasks')
+      .select('id, title, status, project_id, channel_id')
+      .eq('id', taskId)
+      .eq('owner_id', user.id)
+      .maybeSingle();
+    if (taskError) throw taskError;
+    if (!task) return { success: false, error: 'Task not found or access denied.' };
+
+    const {
+      data: latestResultRows,
+      error: latestResultError,
+    } = await supabase
+      .from('distribution_results')
+      .select('live_url')
+      .eq('task_id', taskId)
+      .order('created_at', { ascending: false })
+      .limit(1);
+    if (latestResultError) throw latestResultError;
+    const latestResult = latestResultRows?.[0];
+    const url = liveUrl || latestResult?.live_url;
+    if (!url) return { success: false, error: 'Please paste the live URL before recheck.' };
+
+    const snapshot = await runDistributionUrlCheck(url);
+    const checkedAt = new Date().toISOString();
+    const linkStatus = snapshot.reachable ? (snapshot.noindex ? 'nofollow' : 'live') : 'rejected';
+    const notes = [
+      snapshot.statusCode ? `HTTP ${snapshot.statusCode}` : null,
+      snapshot.noindex ? 'Noindex detected' : null,
+      snapshot.canonicalUrl ? `Canonical: ${snapshot.canonicalUrl}` : null,
+      snapshot.error ? `Error: ${snapshot.error}` : null,
+    ]
+      .filter(Boolean)
+      .join(' · ');
+
+    const { error: insertError } = await supabase.from('distribution_results').insert({
+      task_id: taskId,
+      owner_id: user.id,
+      live_url: url,
+      link_status: linkStatus,
+      checked_at: checkedAt,
+      notes,
+    });
+    if (insertError) throw insertError;
+
+    const nextStatus = deriveTaskStatusFromLinkResult({
+      currentStatus: task?.status || 'planned',
+      liveUrl: url,
+      linkStatus,
+    });
+    await supabase
+      .from('distribution_tasks')
+      .update({
+        status: nextStatus,
+        updated_at: checkedAt,
+        completed_at: nextStatus === 'live' ? checkedAt : null,
+      })
+      .eq('id', taskId)
+      .eq('owner_id', user.id);
+
+    const eventPayload = {
+      task_id: taskId,
+      project_id: task.project_id,
+      owner_id: user.id,
+      event_type: 'result_recorded',
+      from_status: task.status,
+      to_status: nextStatus,
+      reason: `Recheck: ${notes || 'Live URL verified.'}`,
+      metadata: {
+        liveUrl: url,
+        reachable: snapshot.reachable,
+        statusCode: snapshot.statusCode,
+        noindex: snapshot.noindex,
+      },
+    };
+    const { error: eventError } = await supabase.from('distribution_task_events').insert(eventPayload);
+    if (eventError) throw eventError;
+
+    if (nextStatus === 'live') {
+      await scheduleDistributionReminders({
+        supabase,
+        userId: user.id,
+        taskId,
+        projectId: String(task.project_id || ''),
+        milestones: [
+          { type: 'live_check_7d', days: 7 },
+          { type: 'live_check_30d', days: 30 },
+          { type: 'live_check_90d', days: 90 },
+        ],
+      });
+    }
+
+    revalidateDistributionPages(taskId);
+    return { success: true };
+  } catch (error) {
+    console.error('Recheck distribution task result error:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unable to recheck task result. Please try again.',
+    };
   }
 }
 
@@ -1820,7 +2141,7 @@ export async function seedDistributionStarterTasks(
     if (!rows.length) return { success: false, error: 'No active distribution channels are available.' };
     const { error } = await supabase.from('distribution_tasks').insert(rows);
     if (error) throw error;
-    revalidatePath('/[locale]/distribution', 'page');
+    revalidateDistributionPages();
     return { success: true, created: rows.length };
   } catch (error) {
     console.error('Seed distribution tasks error:', error);
@@ -2200,8 +2521,7 @@ export async function generateDistributionPackage(
     });
     if (eventError) throw eventError;
 
-    revalidatePath('/[locale]/distribution/tasks/[taskId]', 'page');
-    revalidatePath('/[locale]/distribution', 'page');
+    revalidateDistributionPages(taskId);
     return { success: true, ready: packageDraft.ready };
   } catch (error) {
     console.error('Generate distribution package error:', error);
@@ -2246,7 +2566,7 @@ export async function createDistributionFollowUpTask(
       reason,
       dueDate: followUpDate,
     });
-    revalidatePath('/distribution');
+    revalidateDistributionPages();
     return { success: true, createdTaskId: result.createdTaskId || undefined };
   } catch (error) {
     console.error('Create distribution follow-up task error:', error);

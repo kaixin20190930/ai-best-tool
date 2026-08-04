@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import Link from 'next/link';
 import {
   ArrowRight,
@@ -103,7 +103,94 @@ function statusToneClass(status: DistributionTaskStatus) {
   return 'bg-slate-100 text-slate-700';
 }
 
-export default function DistributionDashboard({ data, locale }: { data: DistributionDashboardData; locale: string }) {
+const DASHBOARD_PROGRESSING_TASK_STATUSES: readonly DistributionTaskStatus[] = [
+  'in_progress',
+  'needs_assets',
+  'ready_to_submit',
+  'submitted',
+  'waiting_review',
+  'follow_up',
+  'planned',
+];
+
+const DASHBOARD_LIVE_TARGET_STATUS: DistributionTaskStatus = 'live';
+const DASHBOARD_DONE_TARGET_STATUSES = new Set<DistributionTaskStatus>(['done', 'skipped']);
+
+type DistributionDashboardTask = DistributionDashboardData['tasks'][number];
+
+type DistributionDashboardFilters = {
+  search?: string;
+  status?: string;
+  targetId?: string;
+  fee?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  view?: string;
+};
+
+const FILTER_VIEW_BLOCKED = 'blocked';
+
+const feeFilterLabels = {
+  all: 'All',
+  free: 'Free',
+  paid: 'Paid',
+  unknown: 'Unpriced',
+} as const;
+
+function getFeeLabel(value: string | null | undefined) {
+  if (value === 'free' || value === 'paid' || value === 'unknown' || value === 'all') return feeFilterLabels[value];
+  return feeFilterLabels.all;
+}
+
+function normalizeFilterValue(value: unknown) {
+  if (typeof value !== 'string') return '';
+  return value.trim();
+}
+
+function isDateLike(value: string | undefined): value is string {
+  return /^\d{4}-\d{2}-\d{2}$/.test(value || '');
+}
+
+const weekdayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const;
+
+function formatDateKey(date: Date) {
+  return date.toISOString().slice(0, 10);
+}
+
+function buildWeekSlots(baseDate = new Date()) {
+  const start = new Date(baseDate);
+  start.setHours(0, 0, 0, 0);
+  const day = start.getDay();
+  const offsetToMonday = (day + 6) % 7;
+  start.setDate(start.getDate() - offsetToMonday);
+  const slots: { date: Date; dateKey: string; label: string; weekday: string }[] = [];
+  for (let i = 0; i < 7; i += 1) {
+    const current = new Date(start);
+    current.setDate(start.getDate() + i);
+    slots.push({
+      date: current,
+      dateKey: formatDateKey(current),
+      weekday: weekdayLabels[current.getDay()],
+      label: `${current.getMonth() + 1}/${current.getDate()}`,
+    });
+  }
+  return slots;
+}
+
+function toLocaleDateDisplay(dateKey: string) {
+  const [y, m, d] = dateKey.split('-');
+  return `${m}/${d}`;
+}
+
+export default function DistributionDashboard({
+  data,
+  locale,
+  filters: dashboardFilters = {},
+}: {
+  data: DistributionDashboardData;
+  locale: string;
+  filters?: DistributionDashboardFilters;
+}) {
   const [showForm, setShowForm] = useState(false);
   const [showProjectForm, setShowProjectForm] = useState(false);
   const [showLinkForm, setShowLinkForm] = useState(false);
@@ -117,10 +204,133 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
   const productType = data.project?.productType || 'other';
   const assetGuidance = getDistributionAssetGuidance(productType);
   const hasLogo = data.assets.some((asset) => ['logo', 'icon'].includes(asset.assetType));
-  const targetTask = data.tasks.find((task) => Boolean(task.targetId));
-  const targetTaskByTargetId = new Map(
-    data.tasks.filter((task) => task.targetId).map((task) => [String(task.targetId), task]),
+  const globalQueue = data.globalQueue || [];
+  const searchFilter = normalizeFilterValue(dashboardFilters.search).toLowerCase();
+  const statusFilter = normalizeFilterValue(dashboardFilters.status);
+  const targetFilter = normalizeFilterValue(dashboardFilters.targetId);
+  const feeFilter = normalizeFilterValue(dashboardFilters.fee) as 'all' | 'free' | 'paid' | 'unknown' | '';
+  const dateFromFilter = normalizeFilterValue(dashboardFilters.dateFrom);
+  const dateToFilter = normalizeFilterValue(dashboardFilters.dateTo);
+  const activeView = normalizeFilterValue(dashboardFilters.view);
+  const hasAnyFilters =
+    Boolean(searchFilter) ||
+    Boolean(statusFilter) ||
+    Boolean(targetFilter) ||
+    feeFilter === 'free' ||
+    feeFilter === 'paid' ||
+    feeFilter === 'unknown' ||
+    isDateLike(dateFromFilter) ||
+    isDateLike(dateToFilter) ||
+    activeView === FILTER_VIEW_BLOCKED;
+  const allTasks = data.tasks;
+  const filteredTasks = useMemo(() => {
+    return allTasks.filter((task) => {
+      if (statusFilter && task.status !== statusFilter) return false;
+      if (targetFilter && task.targetId !== targetFilter) return false;
+      if (searchFilter) {
+        const searchSource = `${task.title} ${task.channelName} ${task.targetName || ''} ${task.taskType}`.toLowerCase();
+        if (!searchSource.includes(searchFilter)) return false;
+      }
+      if (isDateLike(dateFromFilter) && (!task.dueDate || task.dueDate < dateFromFilter)) return false;
+      if (isDateLike(dateToFilter) && (!task.dueDate || task.dueDate > dateToFilter)) return false;
+      if (feeFilter === 'free') {
+        if (task.estimatedCost === null || task.estimatedCost > 0) return false;
+      }
+      if (feeFilter === 'paid') {
+        if (task.estimatedCost === null || task.estimatedCost <= 0) return false;
+      }
+      if (feeFilter === 'unknown' && task.estimatedCost !== null) return false;
+      if (activeView === FILTER_VIEW_BLOCKED && task.status !== 'blocked') return false;
+      return true;
+    });
+  }, [allTasks, statusFilter, targetFilter, searchFilter, dateFromFilter, dateToFilter, feeFilter, activeView]);
+  const filteredTargetTasks = useMemo(() => filteredTasks.filter((task) => Boolean(task.targetId)), [filteredTasks]);
+  const targetTaskByTargetId = useMemo(
+    () => new Map(filteredTargetTasks.map((task) => [String(task.targetId), task])),
+    [filteredTargetTasks],
   );
+  const buildTaskHref = (taskId: string) => {
+    if (typeof window === 'undefined') return `/${locale}/distribution/tasks/${taskId}`;
+    const query = new URLSearchParams(window.location.search);
+    query.set('focusTask', taskId);
+    const nextSearch = query.toString();
+    return `/${locale}/distribution/tasks/${taskId}${nextSearch ? `?${nextSearch}` : ''}`;
+  };
+  const focusedTaskId =
+    typeof window === 'undefined' ? null : new URLSearchParams(window.location.search).get('focusTask');
+  const filteredInProgressTasks = useMemo(
+    () =>
+      filteredTasks.filter(
+        (task) =>
+          task.targetId &&
+          !DASHBOARD_DONE_TARGET_STATUSES.has(task.status) &&
+          task.status !== DASHBOARD_LIVE_TARGET_STATUS &&
+          task.status !== 'blocked',
+      ),
+    [filteredTasks],
+  );
+  const filteredActiveTasks = useMemo(() => {
+    return filteredInProgressTasks.filter((task) => DASHBOARD_PROGRESSING_TASK_STATUSES.includes(task.status));
+  }, [filteredInProgressTasks]);
+  const filteredBlockedTasks = useMemo(() => filteredTasks.filter((task) => task.status === 'blocked'), [filteredTasks]);
+  const filteredLiveTasks = useMemo(() => filteredTasks.filter((task) => task.status === DASHBOARD_LIVE_TARGET_STATUS), [filteredTasks]);
+  const filteredCompletedTasks = useMemo(
+    () => filteredTasks.filter((task) => DASHBOARD_DONE_TARGET_STATUSES.has(task.status)),
+    [filteredTasks],
+  );
+  const upcomingWeekSlots = useMemo(() => buildWeekSlots(), []);
+  const upcomingWeekMap = useMemo(() => {
+    const map = new Map<string, DistributionDashboardTask[]>();
+    for (const slot of upcomingWeekSlots) {
+      map.set(slot.dateKey, []);
+    }
+    filteredTasks.forEach((task) => {
+      if (!task.dueDate || DASHBOARD_DONE_TARGET_STATUSES.has(task.status)) return;
+      const bucket = map.get(task.dueDate);
+      if (bucket) bucket.push(task);
+    });
+    for (const slot of upcomingWeekSlots) {
+      const tasks = map.get(slot.dateKey);
+      if (!tasks) continue;
+      tasks.sort((a, b) => a.priority.localeCompare(b.priority));
+    }
+    return map;
+  }, [filteredTasks, upcomingWeekSlots]);
+  const blockedInboxTasks = useMemo(() => filteredTasks.filter((task) => task.status === 'blocked'), [filteredTasks]);
+  const targetTask = useMemo(() => {
+    const byFocus = focusedTaskId ? filteredTargetTasks.find((task) => task.id === focusedTaskId) : null;
+    if (byFocus) return byFocus;
+
+    const targetScopedTasks = (targetFilter ? filteredTargetTasks.filter((task) => task.targetId === targetFilter) : filteredTargetTasks).filter(
+      (task) => !DASHBOARD_DONE_TARGET_STATUSES.has(task.status),
+    );
+    if (targetScopedTasks.length > 0) return targetScopedTasks[0];
+
+    const activeOrdered = [...filteredInProgressTasks, ...filteredBlockedTasks, ...filteredLiveTasks];
+    if (activeOrdered.length > 0) return activeOrdered[0];
+    return null;
+  }, [filteredTargetTasks, filteredInProgressTasks, filteredBlockedTasks, filteredLiveTasks, focusedTaskId, targetFilter]);
+  const allTaskCount = allTasks.length;
+  const filteredTaskCount = filteredTasks.length;
+
+  const targetOptions = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const task of allTasks) {
+      if (!task.targetId || !task.targetName) continue;
+      map.set(task.targetId, task.targetName);
+    }
+    return Array.from(map.entries())
+      .map(([id, name]) => ({ id, name }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, [allTasks]);
+
+  const taskGroups: Array<{ id: string; title: string; tasks: DistributionDashboardTask[] }> = [
+    { id: 'active', title: isChinese ? '进行中' : 'In progress', tasks: filteredActiveTasks },
+    { id: 'blocked', title: isChinese ? '阻塞' : 'Blocked', tasks: filteredBlockedTasks },
+    { id: 'live', title: isChinese ? '已上线监控中' : 'Live (monitoring)', tasks: filteredLiveTasks },
+    { id: 'done', title: isChinese ? '已完成/已跳过' : 'Completed or skipped', tasks: filteredCompletedTasks },
+  ];
+
   const packageGenerated = Boolean(targetTask?.packageStatus);
   const submitted = Boolean(
     targetTask && ['submitted', 'waiting_review', 'live', 'follow_up', 'done'].includes(targetTask.status),
@@ -177,7 +387,7 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
         ? '根据目标站规则生成文案、字段、素材和追踪链接。'
         : 'Generate copy, fields, assets, and a tracked link for the target.',
       complete: packageGenerated,
-      href: targetTask ? `/${locale}/distribution/tasks/${targetTask.id}` : '#distribution-targets',
+      href: targetTask ? buildTaskHref(targetTask.id) : '#distribution-targets',
       action: isChinese ? '打开目标任务' : 'Open target task',
     },
     {
@@ -187,15 +397,164 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
         ? '到目标站完成提交，再记录审核状态或上线地址。'
         : 'Submit on the target site, then record its review state or live URL.',
       complete: submitted,
-      href: targetTask ? `/${locale}/distribution/tasks/${targetTask.id}` : '#distribution-targets',
+      href: targetTask ? buildTaskHref(targetTask.id) : '#distribution-targets',
       action: isChinese ? '提交并记录结果' : 'Submit and record result',
     },
   ];
+
+  const renderTaskCard = (task: DistributionDashboardTask) => (
+    <article key={task.id} className='rounded-2xl border border-slate-200 p-4 transition hover:border-cyan-300 hover:shadow-sm'>
+      <div className='flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between'>
+        <div className='min-w-0'>
+          <div className='flex flex-wrap items-center gap-2 text-xs font-bold uppercase tracking-wide'>
+            <span className='rounded-full bg-slate-100 px-2.5 py-1 text-slate-600'>{task.channelName}</span>
+            <span
+              className={`rounded-full px-2.5 py-1 ${task.priority === 'p0' ? 'bg-rose-50 text-rose-700' : 'bg-cyan-50 text-cyan-700'}`}
+            >
+              {task.priority}
+            </span>
+            <span className={`rounded-full px-2.5 py-1 ${statusToneClass(task.status)}`}>
+              {getDistributionTaskStatusLabel(task.status)}
+            </span>
+          </div>
+          <h3 className='mt-3 text-base font-bold text-slate-950'>{task.title}</h3>
+          {task.instructions ? <p className='mt-1 text-sm leading-5 text-slate-600'>{task.instructions}</p> : null}
+          <div className='mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-500'>
+            <span>Due: {task.dueDate || 'not scheduled'}</span>
+            {task.liveUrl ? (
+              <a
+                href={task.liveUrl}
+                target='_blank'
+                rel='noreferrer'
+                className='inline-flex items-center gap-1 font-semibold text-cyan-700 hover:underline'
+              >
+                <ExternalLink className='h-3 w-3' /> Live result
+              </a>
+            ) : null}
+            {task.linkStatus ? (
+              <span className='inline-flex items-center gap-1'>
+                <Link2 className='h-3 w-3' /> {task.linkStatus}
+              </span>
+            ) : null}
+            <Link
+              href={buildTaskHref(task.id)}
+              className='inline-flex items-center gap-1 font-semibold text-slate-700 hover:text-cyan-700 hover:underline'
+            >
+              Open task
+              <ArrowUpRight className='h-3 w-3' />
+            </Link>
+          </div>
+        </div>
+        <div className='flex flex-wrap gap-2 lg:justify-end'>
+          <DistributionActionForm
+            action={updateDistributionTaskStatus}
+            className='flex items-center'
+            successMessage='Task status updated. Refreshing the queue…'
+          >
+            <input type='hidden' name='taskId' value={task.id} />
+            <select
+              name='status'
+              defaultValue={task.status}
+              className='rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-xs font-semibold text-slate-700'
+            >
+              {statusOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            <DistributionSubmitButton
+              pendingLabel='Updating…'
+              className='ml-2 inline-flex items-center gap-1 rounded-lg bg-slate-100 px-2.5 py-2 text-xs font-bold text-slate-700 hover:bg-slate-200 disabled:cursor-wait disabled:opacity-70'
+            >
+              Update
+            </DistributionSubmitButton>
+          </DistributionActionForm>
+          <details className='rounded-lg border border-slate-200 px-2.5 py-2 text-xs'>
+            <summary className='cursor-pointer font-bold text-slate-700'>Record result</summary>
+            <DistributionActionForm
+              action={recordDistributionResult}
+              className='mt-3 w-64 space-y-2'
+              successMessage='Result recorded. Refreshing the queue…'
+            >
+              <input type='hidden' name='taskId' value={task.id} />
+              <input
+                name='liveUrl'
+                type='url'
+                placeholder='https://...'
+                className='w-full rounded-lg border border-slate-200 px-2.5 py-2 outline-none focus:ring-2 focus:ring-cyan-400'
+              />
+              <select name='linkStatus' defaultValue='pending' className='w-full rounded-lg border border-slate-200 px-2.5 py-2'>
+                <option value='pending'>Pending review</option>
+                <option value='live'>Live</option>
+                <option value='nofollow'>Nofollow</option>
+                <option value='rejected'>Rejected</option>
+                <option value='removed'>Removed</option>
+              </select>
+              <input
+                name='notes'
+                placeholder='Evidence or next follow-up'
+                className='w-full rounded-lg border border-slate-200 px-2.5 py-2 outline-none focus:ring-2 focus:ring-cyan-400'
+              />
+              <DistributionSubmitButton
+                pendingLabel='Saving…'
+                className='inline-flex w-full items-center justify-center gap-1 rounded-lg bg-cyan-700 px-2.5 py-2 font-bold text-white hover:bg-cyan-800 disabled:cursor-wait disabled:bg-cyan-500'
+              >
+                Save result
+              </DistributionSubmitButton>
+            </DistributionActionForm>
+          </details>
+        </div>
+      </div>
+    </article>
+  );
   const nextStep = onboardingSteps.find((step) => !step.complete) || null;
   const completedStepCount = onboardingSteps.filter((step) => step.complete).length;
   const listingAssetCount = data.assets.filter(
     (asset) => asset.source === 'aibesttool_listing' && asset.sourceToolId === activeProjectSourceToolId,
   ).length;
+  const reviewReport = data.reviewReport;
+  const onFilterSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (typeof window === 'undefined') return;
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const params = new URLSearchParams(window.location.search);
+    const nextProject = String(params.get('project') || activeProjectId);
+
+    const search = String(formData.get('search') || '').trim();
+    const status = String(formData.get('status') || '').trim();
+    const target = String(formData.get('target') || '').trim();
+    const fee = String(formData.get('fee') || '').trim();
+    const dateFrom = String(formData.get('dateFrom') || '').trim();
+    const dateTo = String(formData.get('dateTo') || '').trim();
+    const view = String(formData.get('view') || '').trim();
+
+    if (search) params.set('search', search);
+    else params.delete('search');
+
+    if (status && status !== 'all') params.set('status', status);
+    else params.delete('status');
+
+    if (target) params.set('target', target);
+    else params.delete('target');
+
+    if (fee && fee !== 'all') params.set('fee', fee);
+    else params.delete('fee');
+
+    if (dateFrom && isDateLike(dateFrom)) params.set('dateFrom', dateFrom);
+    else params.delete('dateFrom');
+
+    if (dateTo && isDateLike(dateTo)) params.set('dateTo', dateTo);
+    else params.delete('dateTo');
+
+    if (view && view !== 'all') params.set('view', view);
+    else params.delete('view');
+
+    if (nextProject) params.set('project', nextProject);
+    window.location.href = `/${locale}/distribution?${params.toString()}`;
+  };
 
   return (
     <div className='flex flex-col gap-6'>
@@ -228,7 +587,122 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
         </button>
       </section>
 
-      <section className='order-2 overflow-hidden rounded-3xl border border-cyan-200 bg-white shadow-sm'>
+      <section className='order-2 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm'>
+        <div className='flex flex-wrap items-end justify-between gap-3'>
+          <div>
+            <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Task filter</div>
+            <div className='mt-1 text-sm font-bold text-slate-950'>
+              {isChinese ? '任务队列筛选' : 'Filter distribution tasks'}
+            </div>
+            <p className='mt-1 text-xs text-slate-500'>
+              {isChinese ? '可先筛选阻塞项、按渠道或预算查看，减少干扰。' : 'Filter blocked tasks, channels, and budget status before taking action.'}
+            </p>
+          </div>
+          <div className='text-xs text-slate-500'>{allTaskCount === 0 ? 0 : filteredTaskCount} / {allTaskCount} tasks</div>
+        </div>
+        <form onSubmit={onFilterSubmit} className='mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6'>
+          <label className='text-xs font-semibold text-slate-700'>
+            {isChinese ? '搜索' : 'Search'}
+            <input
+              type='text'
+              name='search'
+              defaultValue={searchFilter}
+              placeholder={isChinese ? '标题/站点/渠道' : 'title/channel/target'}
+              className='mt-1 block w-full rounded-xl border border-slate-200 px-2.5 py-2 text-sm'
+            />
+          </label>
+          <label className='text-xs font-semibold text-slate-700'>
+            {isChinese ? '状态' : 'Status'}
+            <select name='status' defaultValue={statusFilter || 'all'} className='mt-1 block w-full rounded-xl border border-slate-200 px-2.5 py-2 text-sm'>
+              <option value='all'>{isChinese ? '全部' : 'All'}</option>
+              {statusOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className='text-xs font-semibold text-slate-700'>
+            {isChinese ? '目标站' : 'Target'}
+            <select name='target' defaultValue={targetFilter} className='mt-1 block w-full rounded-xl border border-slate-200 px-2.5 py-2 text-sm'>
+              <option value=''>{isChinese ? '全部目标' : 'All targets'}</option>
+              {targetOptions.map((target) => (
+                <option key={target.id} value={target.id}>
+                  {target.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className='text-xs font-semibold text-slate-700'>
+            {isChinese ? '费用' : 'Fee'}
+            <select name='fee' defaultValue={feeFilter || 'all'} className='mt-1 block w-full rounded-xl border border-slate-200 px-2.5 py-2 text-sm'>
+              <option value='all'>{getFeeLabel('all')}</option>
+              <option value='free'>{getFeeLabel('free')}</option>
+              <option value='paid'>{getFeeLabel('paid')}</option>
+              <option value='unknown'>{getFeeLabel('unknown')}</option>
+            </select>
+          </label>
+          <label className='text-xs font-semibold text-slate-700'>
+            {isChinese ? '开始日期' : 'From'}
+            <input
+              type='date'
+              name='dateFrom'
+              defaultValue={dateFromFilter}
+              className='mt-1 block w-full rounded-xl border border-slate-200 px-2.5 py-2 text-sm'
+            />
+          </label>
+          <label className='text-xs font-semibold text-slate-700'>
+            {isChinese ? '结束日期' : 'To'}
+            <input
+              type='date'
+              name='dateTo'
+              defaultValue={dateToFilter}
+              className='mt-1 block w-full rounded-xl border border-slate-200 px-2.5 py-2 text-sm'
+            />
+          </label>
+          <label className='text-xs font-semibold text-slate-700 sm:col-span-2 lg:col-span-3'>
+            {isChinese ? '视图' : 'View'}
+            <select name='view' defaultValue={activeView || 'all'} className='mt-1 block w-full rounded-xl border border-slate-200 px-2.5 py-2 text-sm'>
+              <option value='all'>{isChinese ? '全部' : 'All'}</option>
+              <option value='blocked'>{isChinese ? '仅阻塞收件箱' : 'Blocked inbox only'}</option>
+            </select>
+          </label>
+          <div className='sm:col-span-2 lg:col-span-3 flex flex-wrap gap-2'>
+            <button
+              type='submit'
+              className='inline-flex items-center justify-center rounded-lg bg-slate-900 px-3 py-2 text-xs font-bold text-white disabled:cursor-wait disabled:opacity-70'
+            >
+              {isChinese ? '应用筛选' : 'Apply filters'}
+            </button>
+            <button
+              type='button'
+              onClick={() => {
+                const params = new URLSearchParams(window.location.search);
+                params.delete('search');
+                params.delete('status');
+                params.delete('target');
+                params.delete('fee');
+                params.delete('dateFrom');
+                params.delete('dateTo');
+                params.delete('view');
+                const project = params.get('project') || activeProjectId;
+                if (project) params.set('project', project);
+                window.location.href = `/${locale}/distribution?${params.toString()}`;
+              }}
+              className='inline-flex items-center justify-center rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700 hover:border-cyan-300 hover:text-cyan-700'
+            >
+              {isChinese ? '清除筛选' : 'Clear filters'}
+            </button>
+            {hasAnyFilters ? (
+              <span className='inline-flex items-center rounded-full bg-amber-50 px-3 py-2 text-[11px] font-bold text-amber-800'>
+                {isChinese ? '筛选已生效' : 'Filters are active'}
+              </span>
+            ) : null}
+          </div>
+        </form>
+      </section>
+
+      <section className='order-3 overflow-hidden rounded-3xl border border-cyan-200 bg-white shadow-sm'>
         <div className='bg-gradient-to-r from-cyan-50 via-white to-amber-50 p-6 sm:p-8'>
           <div className='flex flex-col justify-between gap-5 lg:flex-row lg:items-start'>
             <div>
@@ -336,7 +810,60 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
       </section>
 
       {profileComplete && targetTask ? (
-        <section className='order-6 rounded-3xl bg-slate-950 p-6 text-white shadow-xl shadow-slate-200/60 sm:p-8'>
+        <section className='order-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
+          <div className='mb-4 flex items-center justify-between gap-3'>
+            <div>
+              <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Cross-product today queue</div>
+              <h2 className='mt-1 text-lg font-bold text-slate-950'>Top 1–3 actions across all projects</h2>
+            </div>
+            <span className='text-xs text-slate-500'>Score is based on urgency, status and channel readiness.</span>
+          </div>
+          {globalQueue.length > 0 ? (
+            <div className='space-y-3'>
+              {globalQueue.map((item, index) => (
+                <div
+                  key={item.id}
+                  className='rounded-xl border border-slate-200 bg-slate-50 p-4'
+                >
+                  <div className='flex flex-wrap items-center justify-between gap-3'>
+                    <div>
+                      <div className='flex flex-wrap items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500'>
+                        <span>#{index + 1}</span>
+                        <span className='rounded-full bg-white px-2 py-1 text-slate-700'>{item.projectName}</span>
+                        <span className='rounded-full bg-white px-2 py-1'>{item.channelName}</span>
+                        <span className='rounded-full bg-white px-2 py-1'>{item.priority}</span>
+                        <span className='rounded-full bg-white px-2 py-1'>{item.readiness}</span>
+                      </div>
+                      <div className='mt-2 text-sm font-bold text-slate-950'>{item.title}</div>
+                      {item.targetName ? (
+                        <div className='mt-1 text-xs text-slate-600'>Target: {item.targetName}</div>
+                      ) : null}
+                      <p className='mt-2 text-xs leading-5 text-slate-600'>{item.reason}</p>
+                      <div className='mt-2 text-xs text-slate-600'>
+                        Prepare time: {typeof item.estimatedMinutes === 'number' ? `${item.estimatedMinutes} min` : 'TBD'} ·
+                        Fee: {item.estimatedCost === null ? 'TBD' : `$${item.estimatedCost}`}
+                      </div>
+                    </div>
+                    <Link
+                      href={buildTaskHref(item.id)}
+                      className='inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 hover:border-cyan-300 hover:text-cyan-700'
+                    >
+                      Open task <ArrowUpRight className='h-3.5 w-3.5' />
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className='rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4 text-xs text-slate-500'>
+              No active target tasks yet. Start with a product and choose targets to build the queue.
+            </div>
+          )}
+        </section>
+      ) : null}
+
+      {profileComplete && targetTask ? (
+        <section className='order-7 rounded-3xl bg-slate-950 p-6 text-white shadow-xl shadow-slate-200/60 sm:p-8'>
           <div className='flex flex-col justify-between gap-6 lg:flex-row lg:items-end'>
             <div className='max-w-2xl'>
               <div className='mb-4 flex items-center gap-2 text-sm font-semibold text-cyan-300'>
@@ -383,8 +910,56 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
         </section>
       ) : null}
 
+      {filteredTasks.length > 0 ? (
+        <section className='order-7 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
+          <div className='flex items-center justify-between gap-3'>
+            <div>
+              <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>7-day planning view</div>
+              <h2 className='mt-1 text-lg font-bold text-slate-950'>本周/下周排期速览</h2>
+            </div>
+            <span className='text-xs text-slate-500'>只读周排期视图，不依赖外部日历</span>
+          </div>
+          <div className='mt-4 grid gap-3 lg:grid-cols-7'>
+            {upcomingWeekSlots.map((slot) => {
+              const tasks = upcomingWeekMap.get(slot.dateKey) || [];
+              return (
+                <div key={slot.dateKey} className='rounded-xl border border-slate-200 bg-slate-50 p-3'>
+                  <div className='text-xs font-bold text-slate-700'>
+                    {slot.weekday} {slot.label}
+                  </div>
+                  <div className='text-[11px] text-slate-500'>{toLocaleDateDisplay(slot.dateKey)}</div>
+                  {tasks.length === 0 ? (
+                    <div className='mt-2 rounded-lg border border-dashed border-slate-300 p-2 text-xs text-slate-400'>
+                      无计划任务
+                    </div>
+                  ) : (
+                    <div className='mt-2 space-y-2'>
+                      {tasks.map((task) => (
+                        <Link
+                          key={task.id}
+                          href={buildTaskHref(task.id)}
+                          className='block rounded-lg border border-white bg-white p-2 text-xs text-slate-700 hover:border-cyan-300 hover:text-cyan-700'
+                        >
+                          <div className='font-semibold'>{task.title}</div>
+                          <div className='mt-1 text-[11px] text-slate-500'>
+                            {task.targetName || task.channelName}
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+          <p className='mt-3 text-xs text-slate-500'>
+            DC-022 目标：一眼看懂一周优先级任务，并后续加上可重排功能。当前先上线只读版本先支持周内排期判断。
+          </p>
+        </section>
+      ) : null}
+
       {data.tasks.length > 0 ? (
-        <section className='order-7 grid gap-4 lg:grid-cols-3'>
+        <section className='order-8 grid gap-4 lg:grid-cols-3'>
           <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:col-span-2'>
             <div className='flex items-center justify-between gap-3'>
               <div>
@@ -410,7 +985,7 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
                         <p className='mt-1 text-xs leading-5 text-slate-600'>{item.reason}</p>
                       </div>
                       <Link
-                        href={`/${locale}/distribution/tasks/${item.id}`}
+                        href={buildTaskHref(item.id)}
                         className='inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:border-cyan-300 hover:text-cyan-700'
                       >
                         Open <ArrowUpRight className='h-3.5 w-3.5' />
@@ -464,6 +1039,44 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
                 <div>Content: {data.destinationSuggestion.utmContent || '—'}</div>
               </div>
             </div>
+            {reviewReport ? (
+              <div className='rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-sm'>
+                <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Distribution review report</div>
+                <h2 className='mt-1 text-lg font-bold text-slate-950'>Weekly checks for this workspace</h2>
+                <div className='mt-3 grid gap-2 text-xs sm:grid-cols-2'>
+                  <div>Live checks: {reviewReport.summary.liveCount}</div>
+                  <div>Issue links: {reviewReport.summary.issueCount}</div>
+                  <div>Blocked: {reviewReport.summary.blockedCount}</div>
+                  <div>Checked total: {reviewReport.summary.checkedCount}</div>
+                  <div>30d retention: {reviewReport.retention.retention30dRate}%</div>
+                  <div>90d retention: {reviewReport.retention.retention90dRate}%</div>
+                </div>
+                {reviewReport.channelFeedback.length > 0 ? (
+                  <div className='mt-3'>
+                    <div className='text-xs font-bold uppercase tracking-[0.14em] text-slate-500'>Channel-level feedback</div>
+                    <ul className='mt-2 space-y-1 text-xs text-slate-600'>
+                      {reviewReport.channelFeedback.slice(0, 3).map((item) => (
+                        <li key={`${item.channelType}-${item.channelName}`}>
+                          {item.channelName}: live {item.liveCount} / issue {item.issueCount} / blocked {item.blockedCount}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+                {reviewReport.outcomeLearning.length > 0 ? (
+                  <div className='mt-3'>
+                    <div className='text-xs font-bold uppercase tracking-[0.14em] text-slate-500'>Top obstacles</div>
+                    <ul className='mt-2 space-y-1 text-xs text-slate-600'>
+                      {reviewReport.outcomeLearning.slice(0, 4).map((item) => (
+                        <li key={item.label}>
+                          {item.label}: {item.count}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
           </div>
         </section>
       ) : null}
@@ -544,7 +1157,7 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
                           </span>
                           {acceptedTask ? (
                             <Link
-                              href={`/${locale}/distribution/tasks/${acceptedTask.id}`}
+                              href={buildTaskHref(acceptedTask.id)}
                               className='inline-flex items-center gap-1 rounded-lg bg-cyan-700 px-3 py-2 text-xs font-bold text-white hover:bg-cyan-800'
                             >
                               Continue task <ArrowRight className='h-3.5 w-3.5' />
@@ -1270,6 +1883,49 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
         </DistributionActionForm>
       ) : null}
 
+      {blockedInboxTasks.length > 0 ? (
+        <section className='order-7 rounded-2xl border border-rose-200 bg-rose-50/70 p-5 shadow-sm'>
+          <div className='flex items-start justify-between gap-3'>
+            <div>
+              <div className='text-xs font-bold uppercase tracking-[0.18em] text-rose-700'>
+                {isChinese ? '阻塞收件箱' : 'Blocked inbox'}
+              </div>
+              <h2 className='mt-1 text-lg font-bold text-slate-950'>
+                {isChinese ? '先处理阻塞项' : 'Handle blocked items first'}
+              </h2>
+            </div>
+            <span className='text-xs text-rose-800'>{blockedInboxTasks.length} {isChinese ? '项' : 'item(s)'}</span>
+          </div>
+          <div className='mt-4 space-y-2'>
+            {blockedInboxTasks.map((task) => (
+              <div
+                key={`blocked-${task.id}`}
+                className='flex flex-wrap items-center justify-between gap-2 rounded-xl border border-rose-200 bg-white p-3'
+              >
+                <div>
+                  <div className='text-sm font-bold text-slate-900'>{task.title}</div>
+                  <div className='text-xs text-slate-600'>
+                    {task.channelName}
+                    {task.targetName ? ` · ${task.targetName}` : ''}
+                  </div>
+                </div>
+                <div className='flex items-center gap-2'>
+                  <Link
+                    href={buildTaskHref(task.id)}
+                    className='inline-flex items-center gap-1 rounded-lg bg-white px-3 py-2 text-xs font-bold text-slate-700 hover:text-cyan-700'
+                  >
+                    {isChinese ? '立即处理' : 'Handle now'} <ArrowRight className='h-3 w-3' />
+                  </Link>
+                  <span className='rounded-full bg-rose-100 px-2 py-1 text-xs font-bold text-rose-800'>
+                    {getDistributionTaskStatusLabel(task.status)}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
       {data.tasks.length > 0 ? (
         <section className='order-8 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
           <div className='flex flex-col justify-between gap-2 sm:flex-row sm:items-center'>
@@ -1307,120 +1963,22 @@ export default function DistributionDashboard({ data, locale }: { data: Distribu
             </div>
           ) : (
             <div className='mt-6 space-y-3'>
-              {data.tasks.map((task) => (
-                <article
-                  key={task.id}
-                  className='rounded-2xl border border-slate-200 p-4 transition hover:border-cyan-300 hover:shadow-sm'
-                >
-                  <div className='flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between'>
-                    <div className='min-w-0'>
-                      <div className='flex flex-wrap items-center gap-2 text-xs font-bold uppercase tracking-wide'>
-                        <span className='rounded-full bg-slate-100 px-2.5 py-1 text-slate-600'>{task.channelName}</span>
-                        <span
-                          className={`rounded-full px-2.5 py-1 ${task.priority === 'p0' ? 'bg-rose-50 text-rose-700' : 'bg-cyan-50 text-cyan-700'}`}
-                        >
-                          {task.priority}
-                        </span>
-                        <span className={`rounded-full px-2.5 py-1 ${statusToneClass(task.status)}`}>
-                          {getDistributionTaskStatusLabel(task.status)}
-                        </span>
-                      </div>
-                      <h3 className='mt-3 text-base font-bold text-slate-950'>{task.title}</h3>
-                      {task.instructions ? (
-                        <p className='mt-1 text-sm leading-5 text-slate-600'>{task.instructions}</p>
-                      ) : null}
-                      <div className='mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-500'>
-                        <span>Due: {task.dueDate || 'not scheduled'}</span>
-                        {task.liveUrl ? (
-                          <a
-                            href={task.liveUrl}
-                            target='_blank'
-                            rel='noreferrer'
-                            className='inline-flex items-center gap-1 font-semibold text-cyan-700 hover:underline'
-                          >
-                            <ExternalLink className='h-3 w-3' /> Live result
-                          </a>
-                        ) : null}
-                        {task.linkStatus ? (
-                          <span className='inline-flex items-center gap-1'>
-                            <Link2 className='h-3 w-3' /> {task.linkStatus}
-                          </span>
-                        ) : null}
-                        <Link
-                          href={`/${locale}/distribution/tasks/${task.id}`}
-                          className='inline-flex items-center gap-1 font-semibold text-slate-700 hover:text-cyan-700 hover:underline'
-                        >
-                          Open task
-                          <ArrowUpRight className='h-3 w-3' />
-                        </Link>
-                      </div>
-                    </div>
-                    <div className='flex flex-wrap gap-2 lg:justify-end'>
-                      <DistributionActionForm
-                        action={updateDistributionTaskStatus}
-                        className='flex items-center'
-                        successMessage='Task status updated. Refreshing the queue…'
-                      >
-                        <input type='hidden' name='taskId' value={task.id} />
-                        <select
-                          name='status'
-                          defaultValue={task.status}
-                          className='rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-xs font-semibold text-slate-700'
-                        >
-                          {statusOptions.map((option) => (
-                            <option key={option.value} value={option.value}>
-                              {option.label}
-                            </option>
-                          ))}
-                        </select>
-                        <DistributionSubmitButton
-                          pendingLabel='Updating…'
-                          className='ml-2 inline-flex items-center gap-1 rounded-lg bg-slate-100 px-2.5 py-2 text-xs font-bold text-slate-700 hover:bg-slate-200 disabled:cursor-wait disabled:opacity-70'
-                        >
-                          Update
-                        </DistributionSubmitButton>
-                      </DistributionActionForm>
-                      <details className='rounded-lg border border-slate-200 px-2.5 py-2 text-xs'>
-                        <summary className='cursor-pointer font-bold text-slate-700'>Record result</summary>
-                        <DistributionActionForm
-                          action={recordDistributionResult}
-                          className='mt-3 w-64 space-y-2'
-                          successMessage='Result recorded. Refreshing the queue…'
-                        >
-                          <input type='hidden' name='taskId' value={task.id} />
-                          <input
-                            name='liveUrl'
-                            type='url'
-                            placeholder='https://...'
-                            className='w-full rounded-lg border border-slate-200 px-2.5 py-2 outline-none focus:ring-2 focus:ring-cyan-400'
-                          />
-                          <select
-                            name='linkStatus'
-                            defaultValue='pending'
-                            className='w-full rounded-lg border border-slate-200 px-2.5 py-2'
-                          >
-                            <option value='pending'>Pending review</option>
-                            <option value='live'>Live</option>
-                            <option value='nofollow'>Nofollow</option>
-                            <option value='rejected'>Rejected</option>
-                            <option value='removed'>Removed</option>
-                          </select>
-                          <input
-                            name='notes'
-                            placeholder='Evidence or next follow-up'
-                            className='w-full rounded-lg border border-slate-200 px-2.5 py-2 outline-none focus:ring-2 focus:ring-cyan-400'
-                          />
-                          <DistributionSubmitButton
-                            pendingLabel='Saving…'
-                            className='inline-flex w-full items-center justify-center gap-1 rounded-lg bg-cyan-700 px-2.5 py-2 font-bold text-white hover:bg-cyan-800 disabled:cursor-wait disabled:bg-cyan-500'
-                          >
-                            Save result
-                          </DistributionSubmitButton>
-                        </DistributionActionForm>
-                      </details>
-                    </div>
+              {taskGroups.map((group) => (
+                <div key={group.id}>
+                  <div className='mb-2 flex items-center justify-between gap-2 text-xs font-bold uppercase tracking-wide text-slate-500'>
+                    <span>{group.title}</span>
+                    <span>{group.tasks.length}</span>
                   </div>
-                </article>
+                  {group.tasks.length > 0 ? (
+                    <div className='space-y-3'>
+                      {group.tasks.map((task) => renderTaskCard(task))}
+                    </div>
+                  ) : (
+                    <div className='mb-4 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-3 text-xs text-slate-500'>
+                      {isChinese ? `暂无${group.title}任务` : `No ${group.title.toLowerCase()} tasks.`}
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
           )}

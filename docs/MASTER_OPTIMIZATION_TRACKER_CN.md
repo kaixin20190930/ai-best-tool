@@ -13,6 +13,8 @@
 - [产品证据引擎、高质量内容与智能分发实施总方案](./PRODUCT_INTELLIGENCE_CONTENT_DISTRIBUTION_IMPLEMENTATION_PLAN_CN.md)
 - [分发工作台完整收口方案与执行计划](./DISTRIBUTION_WORKSPACE_CLOSURE_PLAN_CN.md)
 
+- 2026-08-04：分发工作台 P1 任务进入执行：`DC-020`（跨产品今日队列）与 `DC-021`（筛选、搜索和阻塞收件箱）功能已在代码面完成，完成分发页筛选面板、跨项目 Top1–3 排序队列和阻塞任务分组；本地 `pnpm run build`、`pnpm run distribution:production-smoke`、`pnpm run seo:production-smoke` 已通过，待生产验收与用户连续运行数据验证。
+
 说明：
 
 - 2026-08-03：导入最新 GSC 7/28 天数据。28 天曝光由 135 增至 147（+8.9%），点击由 1 降为 0，页面行数仍为 24；新增曝光主要集中在首页，尚不能判断为全站恢复。线上核心信号审计由 20 页扩到 27 页，新增 Research、Voice、Automation、Lindy、Fathom、The Graph、Dune；Explore 已补分类到代表工具的明确路径。新增索引页必须通过 `SEO_CONTENT_CHECKLIST.md` 的准入硬门槛，分发结果必须按 `DISTRIBUTION_PRODUCT_ACCEPTANCE_GUIDE_CN.md` 区分 submitted、live mention 和 verified backlink。

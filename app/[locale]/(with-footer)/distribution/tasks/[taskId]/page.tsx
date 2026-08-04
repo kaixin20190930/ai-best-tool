@@ -16,21 +16,41 @@ import {
   generateDistributionPackage,
   getDistributionTaskDetail,
   recordDistributionResult,
+  recheckDistributionTaskResult,
   updateDistributionTaskStatus,
 } from '@/app/actions/distribution';
 
-export default async function DistributionTaskDetailPage({ params }: { params: { locale: string; taskId: string } }) {
+function pickValue(value: string | string[] | undefined): string {
+  if (!value) return '';
+  return Array.isArray(value) ? value[0] : value;
+}
+
+export default async function DistributionTaskDetailPage({
+  params,
+  searchParams,
+}: {
+  params: { locale: string; taskId: string };
+  searchParams?: { focusTask?: string | string[] };
+}) {
+  const focusTask = pickValue(searchParams?.focusTask).trim();
   const result = await getDistributionTaskDetail(params.taskId);
+  const taskRedirectUrl = focusTask
+    ? `/${params.locale}/distribution/tasks/${params.taskId}?focusTask=${encodeURIComponent(focusTask)}`
+    : `/${params.locale}/distribution/tasks/${params.taskId}`;
   if (!result.success) {
     if (result.error === 'Unauthorized')
-      redirect(`/${params.locale}/login?redirect=/${params.locale}/distribution/tasks/${params.taskId}`);
+      redirect(`/${params.locale}/login?redirect=${encodeURIComponent(taskRedirectUrl)}`);
     return <div className='mx-auto max-w-4xl px-5 py-16 text-slate-700'>{result.error}</div>;
   }
   if (!result.access || !result.data) {
-    redirect(`/${params.locale}/login?redirect=/${params.locale}/distribution/tasks/${params.taskId}`);
+    redirect(`/${params.locale}/login?redirect=${encodeURIComponent(taskRedirectUrl)}`);
   }
 
   const data = result.data;
+  const workspaceProjectId = data.project?.id || params.taskId;
+  const workspaceRedirectUrl = `/${params.locale}/distribution?project=${encodeURIComponent(workspaceProjectId)}${
+    focusTask ? `&focusTask=${encodeURIComponent(focusTask)}` : ''
+  }`;
   const isChinese = params.locale === 'cn';
   const targetName = data.target?.name || (isChinese ? '目标网站' : 'the target site');
   const statusChoices = getDistributionTaskStatusChoices();
@@ -45,12 +65,14 @@ export default async function DistributionTaskDetailPage({ params }: { params: {
   };
   const quickStatuses = statusActions[data.task.status] || [];
   const canRecordResult = ['submitted', 'waiting_review', 'live', 'follow_up'].includes(data.task.status);
+  const canRecheckResult = ['submitted', 'waiting_review', 'live', 'follow_up', 'done'].includes(data.task.status);
+  const latestUrl = data.recentResult?.liveUrl || '';
 
   return (
     <div className='mx-auto w-full max-w-6xl px-5 py-10 sm:px-8 lg:px-12'>
       <div className='mb-6 flex items-center justify-between gap-4'>
         <Link
-          href={`/${params.locale}/distribution?project=${data.project.id}`}
+          href={workspaceRedirectUrl.replace('/aibesttool.com', '')}
           className='inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 hover:border-cyan-300 hover:text-cyan-700'
         >
           <ArrowLeft className='h-4 w-4' /> {isChinese ? '返回分发工作台' : 'Back to workspace'}
@@ -144,6 +166,29 @@ export default async function DistributionTaskDetailPage({ params }: { params: {
             </div>
             <p className='mt-1 text-sm text-slate-600'>{getDistributionTaskStatusDescription(data.task.status)}</p>
           </div>
+        </div>
+      </section>
+      <section className='mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
+        <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Latest result snapshot</div>
+        <div className='mt-2 flex flex-wrap items-center justify-between gap-3'>
+          <div>
+            <h2 className='text-xl font-bold text-slate-950'>{isChinese ? '记录状态' : 'Recorded status'}</h2>
+            <p className='mt-1 text-sm text-slate-600'>
+              {data.recentResult
+                ? isChinese
+                  ? `当前状态：${data.recentResult.linkStatus || 'unknown'}`
+                  : `Latest status: ${data.recentResult.linkStatus || 'unknown'}`
+                : isChinese
+                  ? '尚未记录 URL/结果。请先完成提交后回来录入。'
+                  : 'No live URL or result recorded yet. Submit on the target site first, then record here.'}
+            </p>
+          </div>
+          {data.recentResult ? (
+            <div className='text-xs text-slate-500'>
+              <div>{data.recentResult.checkedAt || '—'}</div>
+              <div className='mt-1 break-all'>{data.recentResult.notes || '—'}</div>
+            </div>
+          ) : null}
         </div>
       </section>
 
@@ -411,6 +456,31 @@ export default async function DistributionTaskDetailPage({ params }: { params: {
 
       {data.package ? (
         <section className='mt-6 grid gap-4 lg:grid-cols-2'>
+          {canRecheckResult ? (
+            <DistributionActionForm
+              action={recheckDistributionTaskResult}
+              className='rounded-xl bg-slate-50 p-4'
+              successMessage='Live URL rechecked. Task status refreshed automatically.'
+            >
+              <div className='flex items-center gap-2 text-sm font-bold text-slate-900'>
+                <CheckCircle2 className='h-4 w-4 text-emerald-700' /> Recheck live URL
+              </div>
+              <input type='hidden' name='taskId' value={data.task.id} />
+              <input
+                name='liveUrl'
+                type='url'
+                defaultValue={latestUrl}
+                placeholder='https://live-url.example'
+                className='mt-3 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400'
+              />
+              <DistributionSubmitButton
+                pendingLabel='Rechecking…'
+                className='mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-700 px-4 py-2 text-sm font-bold text-white hover:bg-emerald-800 disabled:cursor-wait disabled:bg-emerald-500'
+              >
+                {isChinese ? '重新检测' : 'Recheck now'}
+              </DistributionSubmitButton>
+            </DistributionActionForm>
+          ) : null}
           <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
             <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Execution history</div>
             <h2 className='mt-1 text-lg font-bold text-slate-950'>What happened and when</h2>

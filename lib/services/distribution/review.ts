@@ -42,6 +42,19 @@ export interface DistributionLiveUrlCheck {
   note: string | null;
 }
 
+export interface DistributionRecheckSnapshot {
+  reachable: boolean;
+  statusCode: number | null;
+  finalUrl: string | null;
+  contentType: string | null;
+  title: string | null;
+  canonicalUrl: string | null;
+  noindex: boolean;
+  checkedAt: string;
+  sourceUrl: string;
+  error?: string;
+}
+
 export interface DistributionAttributeCheck {
   taskId: string;
   projectId: string;
@@ -118,9 +131,9 @@ function countBy<T extends string>(items: T[]): Array<{ label: string; count: nu
     .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
 }
 
-async function fetchUrlSnapshot(url: string) {
+export async function runDistributionUrlCheck(url: string, timeoutMs = 8000): Promise<DistributionRecheckSnapshot> {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 8000);
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
   try {
     const response = await fetch(url, {
       method: 'GET',
@@ -145,8 +158,11 @@ async function fetchUrlSnapshot(url: string) {
       title,
       canonicalUrl: canonical,
       noindex,
+      checkedAt: new Date().toISOString(),
+      sourceUrl: url,
     };
   } catch (error) {
+    const message = error instanceof Error ? error.message : 'unknown error';
     return {
       reachable: false,
       statusCode: null,
@@ -155,7 +171,9 @@ async function fetchUrlSnapshot(url: string) {
       title: null,
       canonicalUrl: null,
       noindex: false,
-      error: error instanceof Error ? error.message : 'unknown error',
+      checkedAt: new Date().toISOString(),
+      sourceUrl: url,
+      error: message,
     };
   } finally {
     clearTimeout(timeout);
@@ -213,8 +231,8 @@ export async function buildDistributionReviewReport(tasks: TaskRow[], projectDom
   const liveChecks = await Promise.all(
     liveCandidates.map(async ({ task, latest }) => {
       const url = latest.live_url || latest.target_url || '';
-      const snapshot = await fetchUrlSnapshot(url);
-      const snapshotError = 'error' in snapshot ? String((snapshot as { error?: string }).error || 'unknown error') : null;
+      const snapshot = await runDistributionUrlCheck(url);
+      const snapshotError = snapshot.error || null;
       return {
         taskId: task.id,
         projectId: task.project_id,

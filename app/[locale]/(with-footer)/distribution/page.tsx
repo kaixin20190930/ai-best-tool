@@ -5,8 +5,38 @@ import DistributionDashboard from '@/components/distribution/DistributionDashboa
 import { getDistributionDashboard } from '@/app/actions/distribution';
 import { getDistributionPriceId } from '@/lib/services/stripe';
 
-export default async function DistributionPage({ params, searchParams }: { params: { locale: string }; searchParams: { project?: string } }) {
-  const result = await getDistributionDashboard(searchParams.project);
+type DistributionPageSearchParams = {
+  project?: string | string[];
+  search?: string | string[];
+  status?: string | string[];
+  target?: string | string[];
+  fee?: string | string[];
+  dateFrom?: string | string[];
+  dateTo?: string | string[];
+  view?: string | string[];
+};
+
+function pickValue(value: undefined | string | string[]) {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+export default async function DistributionPage({
+  params,
+  searchParams,
+}: {
+  params: { locale: string };
+  searchParams: DistributionPageSearchParams;
+}) {
+  const result = await getDistributionDashboard(pickValue(searchParams.project));
+  const filters = {
+    search: pickValue(searchParams.search),
+    status: pickValue(searchParams.status),
+    targetId: pickValue(searchParams.target),
+    fee: pickValue(searchParams.fee),
+    dateFrom: pickValue(searchParams.dateFrom),
+    dateTo: pickValue(searchParams.dateTo),
+    view: pickValue(searchParams.view),
+  };
 
   if (!result.success) {
     if (result.error === 'Unauthorized') {
@@ -61,7 +91,7 @@ export default async function DistributionPage({ params, searchParams }: { param
           <Link href='/pricing' className='text-sm font-semibold text-cyan-700 hover:text-cyan-800'>View all pricing</Link>
         </div>
       </div>
-      <DistributionDashboard data={result.data} locale={params.locale} />
+      <DistributionDashboard data={result.data} locale={params.locale} filters={filters} />
     </div>
   );
 }
