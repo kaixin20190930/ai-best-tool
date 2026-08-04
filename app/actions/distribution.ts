@@ -710,7 +710,7 @@ export async function getDistributionDashboard(
       supabase
       .from('distribution_tasks')
       .select(
-        'id, project_id, title, status, priority, task_type, due_date, instructions, target_id, estimated_minutes, distribution_channels(name, channel_type), distribution_targets(id, name), distribution_results(id, live_url, target_url, link_status, checked_at, created_at, notes)',
+        'id, project_id, title, status, priority, task_type, due_date, instructions, target_id, estimated_minutes, distribution_channels(name, channel_type), distribution_results(id, live_url, target_url, link_status, checked_at, created_at, notes)',
       )
         .eq('project_id', project.id)
         .order('due_date', { ascending: true, nullsFirst: false })
@@ -815,7 +815,18 @@ export async function getDistributionDashboard(
           reminderRowsError?.message ||
           'Unable to load distribution project data.',
       );
+    const dashboardTargetIds = Array.from(
+      new Set((tasks || []).map((task: any) => String(task.target_id || '').trim()).filter(Boolean)),
+    );
+    const { data: dashboardTargetRows, error: dashboardTargetError } = dashboardTargetIds.length
+      ? await supabase.from('distribution_targets').select('id, name').in('id', dashboardTargetIds)
+      : { data: [] as Array<{ id: string; name: string | null }>, error: null };
+    if (dashboardTargetError) throw dashboardTargetError;
+
     const projectTargetByTargetId = new Map((projectTargetRows || []).map((row: any) => [String(row.target_id), row]));
+    const dashboardTargetNameById = new Map(
+      (dashboardTargetRows || []).map((row: any) => [String(row.id), String(row.name || 'Target site')]),
+    );
     const targetRecommendations = recommendDistributionTargets(
       (targetRows || []).map((target: any) => ({
         id: String(target.id),
@@ -971,7 +982,7 @@ export async function getDistributionDashboard(
         String(b.created_at).localeCompare(String(a.created_at)),
       )[0];
       const projectTarget = task.target_id
-        ? projectTargetByTargetId.get(`${project.id}:${String(task.target_id)}`) || null
+        ? projectTargetByTargetId.get(String(task.target_id)) || null
         : null;
       const status = normalizeDistributionTaskStatus(task.status) || 'planned';
       const estimatedMinutes =
@@ -998,7 +1009,7 @@ export async function getDistributionDashboard(
         linkStatus: latestResult?.link_status || null,
         targetId: task.target_id || null,
         packageStatus: packageStatusByTaskId.get(String(task.id)) || null,
-        targetName: task.distribution_targets?.name || null,
+        targetName: task.target_id ? dashboardTargetNameById.get(String(task.target_id)) || null : null,
         estimatedMinutes:
           estimatedMinutes !== null && Number.isFinite(estimatedMinutes) && estimatedMinutes > 0
             ? estimatedMinutes

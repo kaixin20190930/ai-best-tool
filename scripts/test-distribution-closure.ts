@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 
 import {
   recommendDistributionTargets,
@@ -12,6 +13,16 @@ import {
   normalizeDistributionDomain,
 } from '@/lib/services/distribution/listingBridge';
 import { buildDistributionTaskDetail } from '@/lib/services/distribution/taskDetail';
+
+const distributionActionsSource = readFileSync(
+  new URL('../app/actions/distribution.ts', import.meta.url),
+  'utf8',
+);
+assert.equal(
+  distributionActionsSource.includes('distribution_targets(id, name)'),
+  false,
+  'Dashboard task queries must not rely on an implicit distribution_tasks-to-targets PostgREST relationship.',
+);
 
 const targets: DistributionTargetCandidate[] = [
   {
