@@ -332,13 +332,22 @@ async function recordDistributionTargetFeedback(input: {
   const fallbackPageUrl = `https://example.com/targets/${input.targetId}`;
 
   try {
-    const adminSupabase = createAdminClient();
-    const { data: target, error: targetError } = await adminSupabase
-      .from('distribution_targets')
-      .select('id, name, homepage_url, requires_account, requires_payment, requires_captcha')
-      .eq('id', input.targetId)
-      .maybeSingle();
-    if (targetError) throw targetError;
+    const [target] = await queryDatabase<{
+      id: string;
+      name: string;
+      homepage_url: string;
+      requires_account: boolean;
+      requires_payment: boolean;
+      requires_captcha: boolean;
+    }>(
+      `
+        select id, name, homepage_url, requires_account, requires_payment, requires_captcha
+        from distribution_targets
+        where id = $1
+        limit 1
+      `,
+      [input.targetId],
+    );
     if (!target) return { success: false, error: 'Target is no longer available.' };
 
     const pageUrl = String((target as { homepage_url?: string | null }).homepage_url || '').trim() || fallbackPageUrl;
@@ -347,46 +356,53 @@ async function recordDistributionTargetFeedback(input: {
       reasonText: input.reasonText,
     });
 
-    const { error } = await adminSupabase.from('distribution_target_snapshots').insert({
-      target_id: input.targetId,
-      page_url: pageUrl,
-      http_status: null,
-      page_title: String((target as { name?: string }).name || ''),
-      visible_rules: [],
-      pricing_info: {},
-      form_fields: [],
-      requires_account: Boolean((target as { requires_account?: boolean }).requires_account),
-      requires_captcha: Boolean((target as { requires_captcha?: boolean }).requires_captcha),
-      fetched_at: new Date().toISOString(),
-      analysis_json: {
+    const analysisJson = {
         source: 'distribution_workspace',
         sourceTask: input.taskId,
         sourceStatus: input.taskStatus,
         reasonType: reasonSummary.reasonType,
         reasonText: reasonSummary.reasonText,
-      },
-      obstacle_status: 'needs_review',
-      review_reason: reasonSummary.summary,
-      notes: reasonSummary.summary,
-      metadata: {
+    };
+    const metadata = {
         source: 'distribution-workspace',
         taskId: input.taskId,
         projectId: input.projectId,
         taskTitle: input.taskTitle,
         linkStatus: input.linkStatus,
         liveUrl: input.liveUrl,
-      },
-      next_review_at: new Date(Date.now() + 72 * 60 * 60 * 1000).toISOString(),
-      discovered_page_count: 0,
-    });
-    if (error) throw error;
+    };
+    await queryDatabase(
+      `
+        insert into distribution_target_snapshots (
+          target_id, page_url, http_status, page_title, visible_rules, pricing_info,
+          form_fields, requires_account, requires_captcha, fetched_at, analysis_json,
+          obstacle_status, review_reason, notes, metadata, next_review_at,
+          discovered_page_count
+        ) values (
+          $1, $2, null, $3, '[]'::jsonb, '{}'::jsonb, '[]'::jsonb, $4, $5,
+          $6, $7::jsonb, 'needs_review', $8, $8, $9::jsonb, $10, 0
+        )
+      `,
+      [
+        input.targetId,
+        pageUrl,
+        target.name || '',
+        Boolean(target.requires_account),
+        Boolean(target.requires_captcha),
+        new Date().toISOString(),
+        JSON.stringify(analysisJson),
+        reasonSummary.summary,
+        JSON.stringify(metadata),
+        new Date(Date.now() + 72 * 60 * 60 * 1000).toISOString(),
+      ],
+    );
 
     return { success: true };
   } catch (error) {
     console.error('Record distribution target feedback error:', error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unable to write distribution feedback.',
+      error: getDistributionActionError(error, 'Unable to write distribution feedback.'),
     };
   }
 }
@@ -818,10 +834,16 @@ export async function getDistributionDashboard(
     const dashboardTargetIds = Array.from(
       new Set((tasks || []).map((task: any) => String(task.target_id || '').trim()).filter(Boolean)),
     );
-    const { data: dashboardTargetRows, error: dashboardTargetError } = dashboardTargetIds.length
-      ? await supabase.from('distribution_targets').select('id, name').in('id', dashboardTargetIds)
-      : { data: [] as Array<{ id: string; name: string | null }>, error: null };
-    if (dashboardTargetError) throw dashboardTargetError;
+    const dashboardTargetRows = dashboardTargetIds.length
+      ? await queryDatabase<{ id: string; name: string | null }>(
+          `select id, name from distribution_targets where id = any($1::uuid[])`,
+          [dashboardTargetIds],
+        ).catch((error) => {
+          console.error('Distribution dashboard target names unavailable:', error);
+          targetRegistryUnavailable = true;
+          return [];
+        })
+      : [];
 
     const projectTargetByTargetId = new Map((projectTargetRows || []).map((row: any) => [String(row.target_id), row]));
     const dashboardTargetNameById = new Map(
@@ -892,14 +914,16 @@ export async function getDistributionDashboard(
   const targetIds = Array.from(
     new Set((globalTasks || []).map((task: any) => String(task.target_id || '').trim()).filter(Boolean)),
   );
-  const [{ data: globalTargetRows },] = await Promise.all([
-    targetIds.length
-      ? supabase
-          .from('distribution_targets')
-          .select('id, name')
-          .in('id', targetIds)
-      : Promise.resolve({ data: [] as any[], error: null }),
-  ]);
+  const globalTargetRows = targetIds.length
+    ? await queryDatabase<{ id: string; name: string | null }>(
+        `select id, name from distribution_targets where id = any($1::uuid[])`,
+        [targetIds],
+      ).catch((error) => {
+        console.error('Cross-project distribution target names unavailable:', error);
+        targetRegistryUnavailable = true;
+        return [];
+      })
+    : [];
 
   const projectTargetByKey = new Map<string, any>();
   for (const row of globalProjectTargets || []) {
@@ -1338,7 +1362,7 @@ export async function getDistributionDashboard(
     };
   } catch (error) {
     console.error('Distribution dashboard error:', error);
-    return { success: false, error: error instanceof Error ? error.message : 'Unable to load distribution dashboard.' };
+    return { success: false, error: getDistributionActionError(error, 'Unable to load distribution dashboard.') };
   }
 }
 

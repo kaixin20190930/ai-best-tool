@@ -23,6 +23,16 @@ assert.equal(
   false,
   'Dashboard task queries must not rely on an implicit distribution_tasks-to-targets PostgREST relationship.',
 );
+assert.equal(
+  distributionActionsSource.includes(".from('distribution_targets')"),
+  false,
+  'The Neon-backed target registry must not be queried through the Supabase client.',
+);
+assert.equal(
+  distributionActionsSource.includes(".from('distribution_target_snapshots')"),
+  false,
+  'Workspace feedback must be written to the Neon-backed target registry.',
+);
 
 const targets: DistributionTargetCandidate[] = [
   {
