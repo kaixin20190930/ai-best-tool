@@ -156,6 +156,26 @@ const linkStatusLabel = (linkStatus: string | null) => {
   return linkStatus;
 };
 
+const opportunityStatusLabel = (status: string, isChinese: boolean) => {
+  const labels: Record<string, [string, string]> = {
+    accepted: ['Accepted', '已选择'],
+    in_progress: ['Preparing', '准备中'],
+    submitted: ['Submitted', '已提交，待审核'],
+    live: ['Live', '已上线'],
+    rejected: ['Rejected', '未通过'],
+    skipped: ['Skipped', '已跳过'],
+  };
+  return labels[status]?.[isChinese ? 1 : 0] || status.replaceAll('_', ' ');
+};
+
+const opportunityStatusToneClass = (status: string) => {
+  if (status === 'live') return 'bg-emerald-50 text-emerald-700';
+  if (status === 'submitted') return 'bg-amber-50 text-amber-800';
+  if (status === 'rejected') return 'bg-rose-50 text-rose-700';
+  if (status === 'skipped') return 'bg-slate-100 text-slate-700';
+  return 'bg-cyan-50 text-cyan-800';
+};
+
 type DistributionDashboardTask = DistributionDashboardData['tasks'][number];
 type DistributionDashboardTaskWithBucket = DistributionDashboardTask & { _dueBucket?: string };
 
@@ -450,6 +470,7 @@ export default function DistributionDashboard({
   ];
 
   const packageGenerated = Boolean(targetTask?.packageStatus);
+  const targetTaskName = targetTask?.targetName || (isChinese ? '当前目标站' : 'the current target site');
   const submitted = Boolean(
     targetTask && ['submitted', 'waiting_review', 'live', 'follow_up', 'done'].includes(targetTask.status),
   );
@@ -495,7 +516,7 @@ export default function DistributionDashboard({
       number: 3,
       title: isChinese ? '选择目标网站' : 'Choose one target site',
       description: isChinese
-        ? '查看匹配度、费用、账号要求和提交规则。'
+        ? `查看 ${targetTaskName} 的匹配度、费用、账号要求和提交规则。`
         : 'Review fit, cost, account requirements, and submission rules.',
       complete: Boolean(targetTask),
       href: '#distribution-targets',
@@ -505,7 +526,7 @@ export default function DistributionDashboard({
       number: 4,
       title: isChinese ? '生成专属材料包' : 'Generate the target package',
       description: isChinese
-        ? '根据目标站规则生成文案、字段、素材和追踪链接。'
+        ? `根据 ${targetTaskName} 的规则生成文案、字段、素材和追踪链接。`
         : 'Generate copy, fields, assets, and a tracked link for the target.',
       complete: packageGenerated,
       href: targetTask ? buildTaskHref(targetTask.id, targetTask.targetId) : '#distribution-targets',
@@ -515,7 +536,7 @@ export default function DistributionDashboard({
       number: 5,
       title: isChinese ? '人工提交并记录结果' : 'Submit manually and record evidence',
       description: isChinese
-        ? '到目标站完成提交，再记录审核状态或上线地址。'
+        ? `到 ${targetTaskName} 完成提交，再记录审核状态或上线地址。`
         : 'Submit on the target site, then record its review state or live URL.',
       complete: submitted,
       href: targetTask ? buildTaskHref(targetTask.id, targetTask.targetId) : '#distribution-targets',
@@ -1060,6 +1081,21 @@ export default function DistributionDashboard({
                 : 'First distribution cycle complete. Continue with the next recommended target and scheduled follow-ups.'}
             </div>
           ) : null}
+          {targetTask ? (
+            <div className='mt-4 flex flex-wrap items-center gap-2 rounded-xl border border-cyan-100 bg-cyan-50/70 px-4 py-3 text-sm text-cyan-950'>
+              <span className='font-bold'>{isChinese ? '当前目标站：' : 'Current target: '}</span>
+              <span>{targetTaskName}</span>
+              <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${statusToneClass(targetTask.status)}`}>
+                {isChinese ? opportunityStatusLabel(targetTask.status, true) : getDistributionTaskStatusLabel(targetTask.status)}
+              </span>
+              <Link
+                href={buildTaskHref(targetTask.id, targetTask.targetId)}
+                className='ml-auto text-xs font-bold text-cyan-800 underline underline-offset-2'
+              >
+                {isChinese ? '打开这个任务' : 'Open this task'}
+              </Link>
+            </div>
+          ) : null}
         </div>
       </section>
 
@@ -1535,15 +1571,22 @@ export default function DistributionDashboard({
                       </a>
                       {target.opportunityStatus ? (
                         <>
-                          <span className='rounded-lg bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-700'>
-                            {target.opportunityStatus.replaceAll('_', ' ')}
+                          <span className={`rounded-lg px-3 py-2 text-xs font-bold ${opportunityStatusToneClass(target.opportunityStatus)}`}>
+                            {opportunityStatusLabel(target.opportunityStatus, isChinese)}
                           </span>
                           {acceptedTask ? (
                     <Link
                       href={buildTaskHref(acceptedTask.id, acceptedTask.targetId)}
                               className='inline-flex items-center gap-1 rounded-lg bg-cyan-700 px-3 py-2 text-xs font-bold text-white hover:bg-cyan-800'
                             >
-                              Continue task <ArrowRight className='h-3.5 w-3.5' />
+                              {target.opportunityStatus === 'live'
+                                ? isChinese
+                                  ? '查看上线结果'
+                                  : 'View live result'
+                                : isChinese
+                                  ? '继续任务'
+                                  : 'Continue task'}{' '}
+                              <ArrowRight className='h-3.5 w-3.5' />
                             </Link>
                           ) : null}
                         </>

@@ -83,6 +83,7 @@ export default async function DistributionTaskDetailPage({
   const canRecordResult = ['submitted', 'waiting_review', 'live', 'follow_up'].includes(data.task.status);
   const canRecheckResult = ['submitted', 'waiting_review', 'live', 'follow_up', 'done'].includes(data.task.status);
   const latestUrl = data.recentResult?.liveUrl || '';
+  const isLive = data.task.status === 'live' && Boolean(latestUrl);
 
   return (
     <div className='mx-auto w-full max-w-6xl px-5 py-10 sm:px-8 lg:px-12'>
@@ -132,6 +133,17 @@ export default async function DistributionTaskDetailPage({
               {isChinese
                 ? '先逐项复制材料包，再打开目标网站完成注册和提交；提交成功后回到本页点击“已提交”。'
                 : 'Copy each package field first, open the target site, submit manually, then return and mark the task Submitted.'}
+            </p>
+          </div>
+        ) : isLive ? (
+          <div className='mt-2'>
+            <h2 className='text-2xl font-bold text-slate-950'>
+              {isChinese ? `${targetName} 已上线，下一步只需定期复查` : `${targetName} is live. Monitor the listing on schedule.`}
+            </h2>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '提交阶段已完成；系统只保留上线后的 7、30、90 天复查。若页面被移除或链接异常，再在下方记录结果。'
+                : 'Submission is complete. Only the 7-, 30-, and 90-day live checks remain. Record a result below only if the listing changes.'}
             </p>
           </div>
         ) : data.package.ready ? (
@@ -258,12 +270,13 @@ export default async function DistributionTaskDetailPage({
                 </a>
               ) : null}
               <a
-                href={data.target.submissionUrl || data.target.homepageUrl}
+                href={isLive ? latestUrl : data.target.submissionUrl || data.target.homepageUrl}
                 target='_blank'
                 rel='noreferrer'
                 className='inline-flex items-center gap-2 rounded-xl bg-slate-950 px-4 py-2.5 text-sm font-bold text-white'
               >
-                Open submission page <ArrowUpRight className='h-4 w-4' />
+                {isLive ? (isChinese ? '打开上线页面' : 'Open live listing') : 'Open submission page'}{' '}
+                <ArrowUpRight className='h-4 w-4' />
               </a>
             </div>
           </div>

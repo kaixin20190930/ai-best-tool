@@ -564,6 +564,59 @@ async function scheduleDistributionReminders(input: {
   if (error) throw error;
 }
 
+const SUBMISSION_REMINDER_TYPES = ['submission_check_3d', 'submission_check_7d'];
+
+async function cancelDistributionReminders(input: {
+  supabase: Awaited<ReturnType<typeof createClient>>;
+  userId: string;
+  taskId: string;
+  reminderTypes: string[];
+}) {
+  if (!input.reminderTypes.length) return;
+  const { error } = await input.supabase
+    .from('distribution_reminders')
+    .update({ status: 'cancelled', updated_at: new Date().toISOString() })
+    .eq('task_id', input.taskId)
+    .eq('owner_id', input.userId)
+    .eq('status', 'scheduled')
+    .in('reminder_type', input.reminderTypes);
+  if (error) throw error;
+}
+
+function opportunityStatusFromTaskStatus(status: DistributionTaskStatus) {
+  if (status === 'live' || status === 'done') return 'live';
+  if (status === 'submitted' || status === 'waiting_review' || status === 'follow_up') return 'submitted';
+  if (status === 'skipped') return 'skipped';
+  if (status === 'planned') return 'accepted';
+  // A blocker can still be resolved. Keep the opportunity visible as active,
+  // while the task itself carries the actionable blocked reason.
+  return 'in_progress';
+}
+
+async function syncDistributionProjectTargetStatus(input: {
+  supabase: Awaited<ReturnType<typeof createClient>>;
+  userId: string;
+  projectId: string;
+  targetId: string | null | undefined;
+  taskStatus: DistributionTaskStatus;
+}) {
+  if (!input.targetId) return;
+  const { error } = await input.supabase
+    .from('distribution_project_targets')
+    .update({
+      opportunity_status: opportunityStatusFromTaskStatus(input.taskStatus),
+      last_submission_at:
+        input.taskStatus === 'submitted' || input.taskStatus === 'waiting_review' || input.taskStatus === 'live'
+          ? new Date().toISOString()
+          : null,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('project_id', input.projectId)
+    .eq('target_id', input.targetId)
+    .eq('owner_id', input.userId);
+  if (error) throw error;
+}
+
 async function insertDistributionFollowUpTask(input: {
   supabase: Awaited<ReturnType<typeof createClient>>;
   userId: string;
@@ -1107,6 +1160,7 @@ export async function getDistributionDashboard(
       }
       const reminders = remindersByTask.get(taskId) || [];
       for (const reminder of reminders) {
+        if (task.status === 'live' && SUBMISSION_REMINDER_TYPES.includes(String(reminder.reminder_type || ''))) continue;
         const scheduledDate = String(reminder.scheduled_at || '').slice(0, 10);
         if (!scheduledDate) continue;
         if (scheduledDate > today) continue;
@@ -1420,6 +1474,18 @@ export async function acceptDistributionTarget(
       .maybeSingle();
     if (channelError || !channel)
       return { success: false, error: 'The target channel is not available in this workspace.' };
+    const { data: existingTask, error: existingTaskError } = await supabase
+      .from('distribution_tasks')
+      .select('id, status')
+      .eq('project_id', projectId)
+      .eq('target_id', targetId)
+      .eq('owner_id', user.id)
+      .not('status', 'in', '(done,skipped)')
+      .maybeSingle();
+    if (existingTaskError) throw existingTaskError;
+    const existingTaskStatus = existingTask?.status
+      ? normalizeDistributionTaskStatus(String(existingTask.status)) || 'planned'
+      : null;
     const { data: projectTarget, error: projectTargetError } = await supabase
       .from('distribution_project_targets')
       .upsert(
@@ -1428,7 +1494,7 @@ export async function acceptDistributionTarget(
           target_id: targetId,
           owner_id: user.id,
           match_score: Math.max(0, Math.min(100, Number.isFinite(score) ? score : 0)),
-          opportunity_status: 'accepted',
+          opportunity_status: existingTaskStatus ? opportunityStatusFromTaskStatus(existingTaskStatus) : 'accepted',
           estimated_minutes: Number.isFinite(estimatedMinutes) && estimatedMinutes > 0 ? estimatedMinutes : 15,
           selected_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
@@ -1438,15 +1504,6 @@ export async function acceptDistributionTarget(
       .select('id')
       .single();
     if (projectTargetError || !projectTarget) throw projectTargetError || new Error('Unable to accept target.');
-    const { data: existingTask, error: existingTaskError } = await supabase
-      .from('distribution_tasks')
-      .select('id')
-      .eq('project_id', projectId)
-      .eq('target_id', targetId)
-      .eq('owner_id', user.id)
-      .not('status', 'in', '(done,skipped)')
-      .maybeSingle();
-    if (existingTaskError) throw existingTaskError;
     if (existingTask) return { success: true, taskId: String(existingTask.id) };
     const blockers = [
       target.requires_account ? 'account' : null,
@@ -2167,6 +2224,14 @@ export async function updateDistributionTaskStatus(formData: FormData): Promise<
       }
     }
 
+    await syncDistributionProjectTargetStatus({
+      supabase,
+      userId: user.id,
+      projectId: String(existingTask.project_id),
+      targetId: existingTask.target_id ? String(existingTask.target_id) : null,
+      taskStatus: status,
+    });
+
     if (['submitted', 'waiting_review'].includes(status)) {
       await scheduleDistributionReminders({
         supabase,
@@ -2180,6 +2245,12 @@ export async function updateDistributionTaskStatus(formData: FormData): Promise<
       });
     }
     if (status === 'live') {
+      await cancelDistributionReminders({
+        supabase,
+        userId: user.id,
+        taskId,
+        reminderTypes: SUBMISSION_REMINDER_TYPES,
+      });
       await scheduleDistributionReminders({
         supabase,
         userId: user.id,
@@ -2279,7 +2350,21 @@ export async function recordDistributionResult(formData: FormData): Promise<{ su
       }
     }
 
+    await syncDistributionProjectTargetStatus({
+      supabase,
+      userId: user.id,
+      projectId: String(task.project_id),
+      targetId: task.target_id ? String(task.target_id) : null,
+      taskStatus: nextStatus,
+    });
+
     if (nextStatus === 'live') {
+      await cancelDistributionReminders({
+        supabase,
+        userId: user.id,
+        taskId,
+        reminderTypes: SUBMISSION_REMINDER_TYPES,
+      });
       await scheduleDistributionReminders({
         supabase,
         userId: user.id,
@@ -2324,7 +2409,7 @@ export async function recheckDistributionTaskResult(formData: FormData): Promise
     const supabase = await createClient();
     const { data: task, error: taskError } = await supabase
       .from('distribution_tasks')
-      .select('id, title, status, project_id, channel_id')
+      .select('id, title, status, project_id, channel_id, target_id')
       .eq('id', taskId)
       .eq('owner_id', user.id)
       .maybeSingle();
@@ -2400,7 +2485,21 @@ export async function recheckDistributionTaskResult(formData: FormData): Promise
     const { error: eventError } = await supabase.from('distribution_task_events').insert(eventPayload);
     if (eventError) throw eventError;
 
+    await syncDistributionProjectTargetStatus({
+      supabase,
+      userId: user.id,
+      projectId: String(task.project_id),
+      targetId: task.target_id ? String(task.target_id) : null,
+      taskStatus: nextStatus,
+    });
+
     if (nextStatus === 'live') {
+      await cancelDistributionReminders({
+        supabase,
+        userId: user.id,
+        taskId,
+        reminderTypes: SUBMISSION_REMINDER_TYPES,
+      });
       await scheduleDistributionReminders({
         supabase,
         userId: user.id,
@@ -2773,12 +2872,17 @@ export async function getDistributionTaskDetail(
         reason: (event.reason as string | null | undefined) || null,
         createdAt: String(event.created_at || ''),
       })),
-      reminders: (reminderRows || []).map((reminder: any) => ({
-        id: String(reminder.id),
-        reminderType: String(reminder.reminder_type || 'follow_up'),
-        scheduledAt: String(reminder.scheduled_at || ''),
-        status: String(reminder.status || 'scheduled'),
-      })),
+      reminders: (reminderRows || [])
+        .filter(
+          (reminder: any) =>
+            !(task.status === 'live' && SUBMISSION_REMINDER_TYPES.includes(String(reminder.reminder_type || ''))),
+        )
+        .map((reminder: any) => ({
+          id: String(reminder.id),
+          reminderType: String(reminder.reminder_type || 'follow_up'),
+          scheduledAt: String(reminder.scheduled_at || ''),
+          status: String(reminder.status || 'scheduled'),
+        })),
       recentResult: recentResult
         ? {
             liveUrl: recentResult.live_url || null,
