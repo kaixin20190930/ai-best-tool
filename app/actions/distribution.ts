@@ -50,7 +50,14 @@ export interface DistributionDashboard {
   workspace: { id: string; name: string; kind: string } | null;
   plan: 'pilot' | 'pro' | 'agency';
   projectLimit: number;
-  projects: Array<{ id: string; name: string; websiteUrl: string | null; description: string | null; status: string }>;
+  projects: Array<{
+    id: string;
+    name: string;
+    websiteUrl: string | null;
+    description: string | null;
+    status: string;
+    updatedAt: string | null;
+  }>;
   project: {
     id: string;
     name: string;
@@ -64,6 +71,7 @@ export interface DistributionDashboard {
     productType: DistributionProductType | null;
     sourceToolId: string | null;
     listingImportedAt: string | null;
+    updatedAt: string | null;
   } | null;
   channels: Array<{
     id: string;
@@ -720,10 +728,10 @@ async function insertDistributionFollowUpTask(input: {
 async function ensureDefaultProject(userId: string, email?: string, isOwnProject = false) {
   const supabase = await createClient();
   const { data: existingProject } = await supabase
-    .from('distribution_projects')
-    .select(
-      'id, name, website_url, description, workspace_id, primary_goal, weekly_capacity, budget_preference, onboarding_status, facts_confirmed_at, source_tool_id, product_type, listing_imported_at',
-    )
+      .from('distribution_projects')
+      .select(
+      'id, name, website_url, description, workspace_id, primary_goal, weekly_capacity, budget_preference, onboarding_status, facts_confirmed_at, source_tool_id, product_type, listing_imported_at, updated_at',
+      )
     .eq('owner_id', userId)
     .order('created_at', { ascending: true })
     .limit(1)
@@ -741,7 +749,7 @@ async function ensureDefaultProject(userId: string, email?: string, isOwnProject
         })
         .eq('id', existingProject.id)
         .select(
-          'id, name, website_url, description, workspace_id, primary_goal, weekly_capacity, budget_preference, onboarding_status, facts_confirmed_at, source_tool_id, product_type, listing_imported_at',
+          'id, name, website_url, description, workspace_id, primary_goal, weekly_capacity, budget_preference, onboarding_status, facts_confirmed_at, source_tool_id, product_type, listing_imported_at, updated_at',
         )
         .single();
 
@@ -755,18 +763,18 @@ async function ensureDefaultProject(userId: string, email?: string, isOwnProject
 
   if (!workspace) throw new Error('Unable to create distribution workspace.');
 
-  const { data: project, error: projectError } = await supabase
-    .from('distribution_projects')
-    .insert({
+    const { data: project, error: projectError } = await supabase
+      .from('distribution_projects')
+      .insert({
       workspace_id: workspace.id,
       owner_id: userId,
       name: 'My product',
       website_url: isOwnProject ? 'https://aibesttool.com' : null,
       description: 'Track human-led distribution, submissions, mentions, and follow-ups.',
     })
-    .select(
-      'id, name, website_url, description, workspace_id, primary_goal, weekly_capacity, budget_preference, onboarding_status, facts_confirmed_at, source_tool_id, product_type, listing_imported_at',
-    )
+      .select(
+      'id, name, website_url, description, workspace_id, primary_goal, weekly_capacity, budget_preference, onboarding_status, facts_confirmed_at, source_tool_id, product_type, listing_imported_at, updated_at',
+      )
     .single();
 
   if (projectError || !project) throw new Error(projectError?.message || 'Unable to create distribution project.');
@@ -789,12 +797,17 @@ export async function getDistributionDashboard(
     const { data: projects, error: projectsError } = await supabase
       .from('distribution_projects')
       .select(
-        'id, name, website_url, description, status, workspace_id, primary_goal, weekly_capacity, budget_preference, onboarding_status, facts_confirmed_at, source_tool_id, product_type, listing_imported_at',
+        'id, name, website_url, description, status, workspace_id, primary_goal, weekly_capacity, budget_preference, onboarding_status, facts_confirmed_at, source_tool_id, product_type, listing_imported_at, updated_at',
       )
       .eq('owner_id', user.id)
+      .neq('status', 'archived')
       .order('created_at', { ascending: true });
     if (projectsError) throw projectsError;
-    const project = (projects || []).find((item: any) => item.id === projectId) || defaultProject;
+    const normalizedProjects = Array.isArray(projects) ? projects.filter(Boolean) : [];
+    const project = (normalizedProjects.find((item: any) => item.id === projectId) || defaultProject) as any;
+    if (project && !normalizedProjects.some((item: any) => item.id === project.id)) {
+      normalizedProjects.unshift(project);
+    }
     const projectDescription = (project as { description?: string | null } | null)?.description || null;
     let targetRegistryUnavailable = false;
     const [
@@ -1322,12 +1335,13 @@ export async function getDistributionDashboard(
         workspace,
         plan,
         projectLimit: getProjectLimit(plan),
-        projects: (projects || []).map((item: any) => ({
+        projects: normalizedProjects.map((item: any) => ({
           id: item.id,
           name: item.name,
           websiteUrl: item.website_url,
           description: item.description || null,
           status: item.status,
+          updatedAt: item.updated_at || null,
         })),
         project: {
           id: project.id,
@@ -1345,6 +1359,7 @@ export async function getDistributionDashboard(
           productType: (project.product_type as DistributionProductType | null) || null,
           sourceToolId: project.source_tool_id || null,
           listingImportedAt: project.listing_imported_at || null,
+          updatedAt: project.updated_at || null,
         },
         channels: (channels || []).map((channel: any) => {
           const template = (templates || []).find((item: any) => item.channel_id === channel.id) || null;

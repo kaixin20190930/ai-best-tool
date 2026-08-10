@@ -5,6 +5,7 @@ import { CalendarClock, CircleAlert, CircleCheckBig, Clock, Sparkles, Target } f
 import { deriveDistributionPresentationState, type DistributionPresentationPhase, type DistributionPresentationState } from '@/lib/services/distribution/presentationState';
 import { getDistributionDashboard } from '@/app/actions/distribution';
 import { getDistributionPriceId } from '@/lib/services/stripe';
+import DistributionProjectSwitcher from '@/components/distribution/DistributionProjectSwitcher';
 
 type DistributionPageSearchParams = {
   project?: string | string[];
@@ -188,11 +189,31 @@ export default async function DistributionPage({
   const actionItems = buildActionCandidates(tasks);
   const blockedItems = actionItems.filter((item) => item.blocked);
   const todayActionItems = buildTodayList(actionItems, blockedItems.length);
+  const readyTaskCount = actionItems.filter((item) => item.status === 'ready').length;
   const monitoringItems = buildMonitoringSummary(actionItems);
   const criticalNotifications = (data.notifications || []) as DistributionReminder[];
 
   return (
     <div className='w-full px-4 py-6 sm:px-6 lg:px-8'>
+      <div className='mx-4 mb-4 rounded-2xl border border-cyan-200 bg-cyan-50 p-3 text-xs text-cyan-800 sm:mx-0'>
+        {localize(
+          locale,
+          '分发首页是“今天工作台”，先处理今日高优先动作，不是项目列表页。切换项目后，下面内容自动切到对应项目。',
+          'The distribution home is the "Today workspace" for priority actions, not the project list. Switching project will filter all content to that project.',
+        )}
+      </div>
+      <DistributionProjectSwitcher
+        locale={locale}
+        projects={data.projects}
+        selectedProjectId={data.project?.id || null}
+        selectedProjectName={data.project?.name}
+        selectedProjectUpdatedAt={data.project?.updatedAt || null}
+        selectedProjectUrl={data.project?.websiteUrl}
+        selectedProjectStatus={data.project?.onboardingStatus}
+        totalTasks={tasks.length}
+        readyTasks={readyTaskCount}
+        className='mb-4'
+      />
       <section className='mb-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
         <div className='flex flex-wrap items-start justify-between gap-3'>
           <div>

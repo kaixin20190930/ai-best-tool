@@ -3,7 +3,15 @@ import { redirect } from 'next/navigation';
 import { CheckCircle2, Circle, Globe, Package, Plus, Upload } from 'lucide-react';
 
 import { DistributionActionForm, DistributionSubmitButton } from '@/components/distribution/DistributionActionForm';
-import { getDistributionDashboard, importDistributionCatalogListing, importDistributionIntelligenceAssets, createDistributionProjectAsset, updateDistributionProjectProfile } from '@/app/actions/distribution';
+import DistributionProjectSwitcher from '@/components/distribution/DistributionProjectSwitcher';
+import {
+  createDistributionProject,
+  createDistributionProjectAsset,
+  getDistributionDashboard,
+  importDistributionCatalogListing,
+  importDistributionIntelligenceAssets,
+  updateDistributionProjectProfile,
+} from '@/app/actions/distribution';
 import { getDistributionPriceId } from '@/lib/services/stripe';
 
 type DistributionWorkspaceSearchParams = {
@@ -13,6 +21,13 @@ type DistributionWorkspaceSearchParams = {
 
 function pickValue(value: undefined | string | string[]) {
   return Array.isArray(value) ? value[0] : value;
+}
+
+function formatSimpleDate(value: string | null | undefined) {
+  if (!value) return '未更新';
+  const valueDate = new Date(value);
+  if (Number.isNaN(valueDate.getTime())) return value.slice(0, 10) || '未更新';
+  return valueDate.toISOString().slice(0, 10);
 }
 
 export default async function DistributionProductsPage({
@@ -90,7 +105,21 @@ export default async function DistributionProductsPage({
   const selectedProjectSite = project?.websiteUrl || '—';
   const candidateListings = data.listingCandidates || [];
   const projectAssets = data.assets || [];
+  const readyTasksCount = (data.tasks || []).filter((task) => ['ready_to_submit', 'needs_assets'].includes(task.status)).length;
+  const submittedTasksCount = (data.tasks || []).filter((task) => task.status === 'submitted').length;
+  const doneTasksCount = (data.tasks || []).filter((task) => task.status === 'done').length;
+  const blockedTasksCount = (data.tasks || []).filter((task) => task.status === 'blocked').length;
+  const canCreateProject = data.projectLimit > data.projects.length;
 
+  const visibleProjects =
+    data.projects && data.projects.length > 0
+      ? data.projects
+      : project?.id
+        ? [{ id: project.id, name: project.name || 'AI Best Tool', websiteUrl: project.websiteUrl || null, description: project.description || null, status: 'active', updatedAt: project.updatedAt || null }]
+        : [];
+
+  const visibleUpdatedAt = formatSimpleDate(project?.updatedAt) || '未更新';
+  const visibleProjectCount = visibleProjects.length;
   const profileMissingItems = [
     !project?.name ? 'product name' : null,
     !project?.websiteUrl ? 'website URL' : null,
@@ -99,6 +128,145 @@ export default async function DistributionProductsPage({
 
   return (
     <div className='space-y-6'>
+      <DistributionProjectSwitcher
+        locale={currentLocale}
+        projects={data.projects}
+        selectedProjectId={project?.id || null}
+        selectedProjectName={project?.name}
+        selectedProjectUpdatedAt={project?.updatedAt || null}
+        selectedProjectUrl={project?.websiteUrl}
+        selectedProjectStatus={project?.onboardingStatus}
+        totalTasks={(data.tasks || []).length}
+        readyTasks={readyTasksCount}
+      />
+      <section className='rounded-2xl border border-cyan-100 bg-cyan-50 p-4'>
+        <div className='flex flex-wrap items-center justify-between gap-3'>
+          <div>
+            <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>
+              {isChinese ? '项目总览' : 'Projects overview'}
+            </div>
+            <h2 className='mt-1 text-sm font-bold text-slate-900'>
+              {isChinese ? `当前可见项目：${visibleProjectCount} / ${data.projectLimit}` : `Visible projects: ${visibleProjectCount} / ${data.projectLimit}`}
+            </h2>
+            <p className='mt-1 text-xs text-slate-600'>
+              {isChinese
+                ? '注意：分发首页是“今天工作台”，不是项目列表；右侧与左侧都按当前选中项目自动过滤。'
+                : 'Note: the distribution home is the “Today workspace,” not the project list; all sections are filtered by selected project.'}
+            </p>
+            <div className='mt-2 flex flex-wrap gap-2 text-xs text-slate-700'>
+              <span className='rounded-full bg-white px-2.5 py-1'>{isChinese ? '关联任务' : 'Related tasks'}: {(data.tasks || []).length}</span>
+              <span className='rounded-full bg-white px-2.5 py-1'>{isChinese ? '待提交' : 'Submitted'}: {submittedTasksCount}</span>
+              <span className='rounded-full bg-white px-2.5 py-1'>{isChinese ? '已完成' : 'Done'}: {doneTasksCount}</span>
+              <span className='rounded-full bg-white px-2.5 py-1'>{isChinese ? '上次更新' : 'Updated'}: {visibleUpdatedAt}</span>
+              {blockedTasksCount > 0 ? <span className='rounded-full bg-rose-100 px-2.5 py-1 text-rose-700'>{isChinese ? '阻塞' : 'Blocked'}: {blockedTasksCount}</span> : null}
+            </div>
+          </div>
+          <Link href={`/${currentLocale}/distribution/settings`} className='text-xs font-bold text-cyan-700'>
+            {isChinese ? '套餐与项目管理' : 'Plan & projects'}
+          </Link>
+        </div>
+        <div className='mt-3 rounded-xl border border-cyan-100 bg-white p-3 text-xs text-slate-600'>
+          <div className='mb-2 rounded-md border border-cyan-100 bg-cyan-50 px-2.5 py-2 text-[11px] text-cyan-800'>
+            {isChinese
+              ? `可见项目清单（${visibleProjectCount} / ${data.projectLimit}）`
+              : `Visible products (${visibleProjectCount} / ${data.projectLimit})`}
+          </div>
+          <div className='mb-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-3'>
+            {visibleProjects.map((item) => {
+              const isActive = item.id === project?.id;
+              return (
+                <Link
+                  key={item.id}
+                  href={`/${currentLocale}/distribution/products?project=${encodeURIComponent(item.id)}`}
+                  className={`rounded-xl border px-2.5 py-2 transition ${
+                    isActive ? 'border-cyan-300 bg-cyan-50' : 'border-slate-200 bg-white hover:border-cyan-200 hover:bg-cyan-50'
+                  }`}
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  <div className='font-semibold text-slate-900'>{item.name}</div>
+                  <div className='mt-1 text-[11px] text-slate-500'>{item.websiteUrl || '--'}</div>
+                  {isActive ? <div className='mt-1 text-[11px] font-semibold text-cyan-700'>{isChinese ? '当前项目' : 'Current project'}</div> : null}
+                </Link>
+              );
+            })}
+          </div>
+            {visibleProjects.length === 0 ? <p className='text-amber-700'>{isChinese ? '当前无可见项目。' : 'No visible projects yet.'}</p> : null}
+
+          {canCreateProject ? (
+            <DistributionActionForm
+              action={createDistributionProject}
+              operationLabel={isChinese ? '创建分发项目' : 'Create distribution project'}
+              successMessage={isChinese ? '项目创建成功，正在跳转到今天工作台…' : 'Project created, opening today workspace…'}
+            >
+              <input type='hidden' name='locale' value={currentLocale} />
+              <div className='grid gap-2 sm:grid-cols-2 lg:grid-cols-5'>
+                <label className='text-xs font-semibold text-slate-700'>
+                  {isChinese ? '产品名' : 'Product name'}
+                  <input
+                    type='text'
+                    name='name'
+                    required
+                    className='mt-1 w-full rounded-lg border border-slate-200 px-2.5 py-2 text-xs'
+                    placeholder={isChinese ? '如：Moxion' : 'e.g. Moxion'}
+                  />
+                </label>
+                <label className='text-xs font-semibold text-slate-700'>
+                  {isChinese ? '官网' : 'Website'}
+                  <input
+                    type='url'
+                    name='websiteUrl'
+                    required
+                    className='mt-1 w-full rounded-lg border border-slate-200 px-2.5 py-2 text-xs'
+                    placeholder='https://example.com'
+                  />
+                </label>
+                <label className='text-xs font-semibold text-slate-700 sm:col-span-2'>
+                  {isChinese ? '一句描述' : 'One-line description'}
+                  <input
+                    type='text'
+                    name='description'
+                    required
+                    className='mt-1 w-full rounded-lg border border-slate-200 px-2.5 py-2 text-xs'
+                    placeholder={isChinese ? '一句话说明产品定位' : 'A short line describing the product'}
+                  />
+                </label>
+                <label className='text-xs font-semibold text-slate-700'>
+                  {isChinese ? '每周提交目标' : 'Weekly capacity'}
+                  <input
+                    type='number'
+                    name='weeklyCapacity'
+                    min={1}
+                    max={30}
+                    defaultValue={3}
+                    className='mt-1 w-full rounded-lg border border-slate-200 px-2.5 py-2 text-xs'
+                  />
+                </label>
+                <label className='text-xs font-semibold text-slate-700'>
+                  {isChinese ? '预算偏好' : 'Budget preference'}
+                  <select name='budgetPreference' defaultValue='free_first' className='mt-1 w-full rounded-lg border border-slate-200 px-2.5 py-2 text-xs'>
+                    <option value='free_first'>{isChinese ? '先免费' : 'Free first'}</option>
+                    <option value='paid_selective'>{isChinese ? '优选付费' : 'Paid selective'}</option>
+                    <option value='free_only'>{isChinese ? '只要免费' : 'Free only'}</option>
+                  </select>
+                </label>
+                <div className='sm:col-span-2 lg:col-span-1 flex items-end'>
+                  <DistributionSubmitButton
+                    pendingLabel={isChinese ? '创建中…' : 'Creating…'}
+                    className='inline-flex w-full items-center justify-center rounded-lg bg-emerald-700 px-3 py-2 text-xs font-bold text-white hover:bg-emerald-800'
+                  >
+                    <Plus className='mr-1 h-3.5 w-3.5' />
+                    {isChinese ? '新增分发项目' : 'Add distribution project'}
+                  </DistributionSubmitButton>
+                </div>
+              </div>
+            </DistributionActionForm>
+          ) : (
+            <p className='text-amber-700'>
+              {isChinese ? '项目配额已满，升级套餐后可新增更多。' : 'Project quota is full; upgrade plan for more.'}
+            </p>
+          )}
+        </div>
+      </section>
       <section className='rounded-2xl border border-cyan-200 bg-white p-5 shadow-sm'>
         <div className='flex flex-wrap items-center justify-between gap-3'>
           <div>
