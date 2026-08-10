@@ -21,6 +21,7 @@ import { useRouter } from 'next/navigation';
 import { DistributionActionForm, DistributionSubmitButton, useDistributionFormState } from './DistributionActionForm';
 
 import { getDistributionAssetGuidance } from '@/lib/services/distribution/listingBridge';
+import { deriveDistributionPresentationState } from '@/lib/services/distribution/presentationState';
 import {
   DISTRIBUTION_TASK_STATUS_META,
   getDistributionTaskStatusChoices,
@@ -202,6 +203,17 @@ const feeFilterLabels = {
   unknown: 'Unpriced',
 } as const;
 
+function getTaskPresentationState(task: DistributionDashboardTask) {
+  return deriveDistributionPresentationState({
+    status: task.status,
+    liveUrl: task.liveUrl,
+    linkStatus: task.linkStatus,
+    packageStatus: task.packageStatus,
+    blockedReason: task.blockedReason,
+    dueDate: task.dueDate,
+  });
+}
+
 function getFeeLabel(value: string | null | undefined) {
   if (value === 'free' || value === 'paid' || value === 'unknown' || value === 'all') return feeFilterLabels[value];
   return feeFilterLabels.all;
@@ -352,6 +364,8 @@ export default function DistributionDashboard({
     focusedTargetFilter ||
     (typeof window === 'undefined' ? null : new URLSearchParams(window.location.search).get('focusTarget'));
   const focusTargetContext = focusedTargetId || targetFilter;
+  const workspaceUrl = (nextSearch: URLSearchParams) =>
+    `/${locale}/distribution${nextSearch.toString() ? `?${nextSearch.toString()}` : ''}`;
   const filteredInProgressTasks = useMemo(
     () =>
       filteredTasks.filter(
@@ -473,7 +487,8 @@ export default function DistributionDashboard({
 
   const packageGenerated = Boolean(targetTask?.packageStatus);
   const targetTaskName = targetTask?.targetName || (isChinese ? '当前目标站' : 'the current target site');
-  const targetTaskBlocked = targetTask?.status === 'blocked';
+  const targetTaskPresentationState = targetTask ? getTaskPresentationState(targetTask) : null;
+  const targetTaskBlocked = Boolean(targetTaskPresentationState?.blocked);
   const submitted = Boolean(
     targetTask && ['submitted', 'waiting_review', 'live', 'follow_up', 'done'].includes(targetTask.status),
   );
@@ -590,6 +605,9 @@ export default function DistributionDashboard({
   }, [blockedInboxTasks.length, upcomingWeekSnapshot.length, isChinese]);
 
   const renderTaskCard = (task: DistributionDashboardTask) => (
+    (() => {
+      const presentation = getTaskPresentationState(task);
+      return (
     <article key={task.id} className='rounded-2xl border border-slate-200 p-4 transition hover:border-cyan-300 hover:shadow-sm'>
       <div className='flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between'>
         <div className='min-w-0'>
@@ -600,9 +618,14 @@ export default function DistributionDashboard({
             >
               {task.priority}
             </span>
-            <span className={`rounded-full px-2.5 py-1 ${statusToneClass(task.status)}`}>
-              {getDistributionTaskStatusLabel(task.status)}
+            <span className={`rounded-full px-2.5 py-1 ${presentation.toneClass}`}>
+              {presentation.label}
             </span>
+            {presentation.blocked ? (
+              <span className='rounded-full bg-slate-900 px-2.5 py-1 text-white'>
+                {isChinese ? '阻塞态' : 'Blocked'}
+              </span>
+            ) : null}
           </div>
           <h3 className='mt-3 text-base font-bold text-slate-950'>{task.title}</h3>
           {task.instructions ? <p className='mt-1 text-sm leading-5 text-slate-600'>{task.instructions}</p> : null}
@@ -718,6 +741,8 @@ export default function DistributionDashboard({
         </div>
       </div>
     </article>
+      );
+    })()
   );
   const nextStep = onboardingSteps.find((step) => !step.complete) || null;
   const completedStepCount = onboardingSteps.filter((step) => step.complete).length;
@@ -767,7 +792,7 @@ export default function DistributionDashboard({
     if (focusedTargetFilter) params.set('focusTarget', focusedTargetFilter);
 
     if (nextProject) params.set('project', nextProject);
-    window.location.href = `/${locale}/distribution?${params.toString()}`;
+    router.push(workspaceUrl(params));
   };
 
   useEffect(() => {
@@ -807,9 +832,9 @@ export default function DistributionDashboard({
           <select
             value={data.project?.id || ''}
             onChange={(event) => {
-              const url = new URL(window.location.href);
-              url.searchParams.set('project', event.target.value);
-              window.location.href = url.toString();
+              const params = new URLSearchParams(window.location.search);
+              params.set('project', event.target.value);
+              router.push(workspaceUrl(params));
             }}
             className='mt-2 block w-full max-w-xl rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-semibold normal-case tracking-normal text-slate-800 outline-none ring-cyan-400 focus:ring-2'
           >
@@ -930,7 +955,7 @@ export default function DistributionDashboard({
                 params.delete('view');
                 const project = params.get('project') || activeProjectId;
                 if (project) params.set('project', project);
-                window.location.href = `/${locale}/distribution?${params.toString()}`;
+                router.push(workspaceUrl(params));
               }}
               className='inline-flex items-center justify-center rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700 hover:border-cyan-300 hover:text-cyan-700'
             >
@@ -1104,8 +1129,15 @@ export default function DistributionDashboard({
             <div className='mt-4 flex flex-wrap items-center gap-2 rounded-xl border border-cyan-100 bg-cyan-50/70 px-4 py-3 text-sm text-cyan-950'>
               <span className='font-bold'>{isChinese ? '当前目标站：' : 'Current target: '}</span>
               <span>{targetTaskName}</span>
-              <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${statusToneClass(targetTask.status)}`}>
-                {isChinese ? opportunityStatusLabel(targetTask.status, true) : getDistributionTaskStatusLabel(targetTask.status)}
+              {targetTaskPresentationState ? (
+                <span
+                  className={`rounded-full px-2.5 py-1 text-xs font-bold ${targetTaskPresentationState.toneClass}`}
+                >
+                  {isChinese ? targetTaskPresentationState.label : targetTaskPresentationState.label}
+                </span>
+              ) : null}
+              <span className={`rounded-full px-2.5 py-1 ${targetTaskPresentationState?.blocked ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-700'}`}>
+                {isChinese ? getDistributionTaskStatusLabel(targetTask.status) : getDistributionTaskStatusLabel(targetTask.status)}
               </span>
               <Link
                 href={buildTaskHref(targetTask.id, targetTask.targetId)}

@@ -1,5 +1,10 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
+
+function assertContains(source: string, pattern: RegExp | string, message: string) {
+  const matcher = typeof pattern === 'string' ? new RegExp(pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') : pattern;
+  assert.match(source, matcher, message);
+}
 
 import {
   recommendDistributionTargets,
@@ -33,6 +38,128 @@ assert.equal(
   false,
   'Workspace feedback must be written to the Neon-backed target registry.',
 );
+
+const distributionWorkspaceSource = readFileSync(
+  new URL('../components/distribution/DistributionWorkspaceChrome.tsx', import.meta.url),
+  'utf8',
+);
+const distributionLayoutSource = readFileSync(
+  new URL('../app/[locale]/(with-footer)/distribution/layout.tsx', import.meta.url),
+  'utf8',
+);
+const distributionActionCenterSource = readFileSync(
+  new URL('../components/distribution/DistributionActionCenter.tsx', import.meta.url),
+  'utf8',
+);
+const distributionTasksPageSource = readFileSync(
+  new URL('../app/[locale]/(with-footer)/distribution/tasks/page.tsx', import.meta.url),
+  'utf8',
+);
+const distributionTaskDetailSource = readFileSync(
+  new URL('../app/[locale]/(with-footer)/distribution/tasks/[taskId]/page.tsx', import.meta.url),
+  'utf8',
+);
+const distributionOpportunitiesSource = readFileSync(
+  new URL('../app/[locale]/(with-footer)/distribution/opportunities/page.tsx', import.meta.url),
+  'utf8',
+);
+const distributionMonitoringSource = readFileSync(
+  new URL('../app/[locale]/(with-footer)/distribution/monitoring/page.tsx', import.meta.url),
+  'utf8',
+);
+const distributionProductsSource = readFileSync(
+  new URL('../app/[locale]/(with-footer)/distribution/products/page.tsx', import.meta.url),
+  'utf8',
+);
+const distributionReportsSource = readFileSync(
+  new URL('../app/[locale]/(with-footer)/distribution/reports/page.tsx', import.meta.url),
+  'utf8',
+);
+const distributionSettingsSource = readFileSync(
+  new URL('../app/[locale]/(with-footer)/distribution/settings/page.tsx', import.meta.url),
+  'utf8',
+);
+const distributionLandingSource = readFileSync(
+  new URL('../app/[locale]/(with-footer)/distribution/page.tsx', import.meta.url),
+  'utf8',
+);
+
+const distributionRouteSources = {
+  '/distribution': distributionLandingSource,
+  '/distribution/products': distributionProductsSource,
+  '/distribution/opportunities': distributionOpportunitiesSource,
+  '/distribution/tasks': distributionTasksPageSource,
+  '/distribution/tasks/[taskId]': distributionTaskDetailSource,
+  '/distribution/monitoring': distributionMonitoringSource,
+  '/distribution/reports': distributionReportsSource,
+  '/distribution/settings': distributionSettingsSource,
+};
+
+const requiredDistributionPages = [
+  'app/[locale]/(with-footer)/distribution/page.tsx',
+  'app/[locale]/(with-footer)/distribution/products/page.tsx',
+  'app/[locale]/(with-footer)/distribution/opportunities/page.tsx',
+  'app/[locale]/(with-footer)/distribution/tasks/page.tsx',
+  'app/[locale]/(with-footer)/distribution/tasks/[taskId]/page.tsx',
+  'app/[locale]/(with-footer)/distribution/monitoring/page.tsx',
+  'app/[locale]/(with-footer)/distribution/reports/page.tsx',
+  'app/[locale]/(with-footer)/distribution/settings/page.tsx',
+  'components/distribution/DistributionWorkspaceChrome.tsx',
+  'components/distribution/DistributionActionCenter.tsx',
+].map((relativePath) => new URL(`../${relativePath}`, import.meta.url).pathname);
+
+for (const absPath of requiredDistributionPages) {
+  assert.equal(
+    existsSync(absPath),
+    true,
+    `Distribution route or component must exist: ${absPath}`,
+  );
+}
+
+assertContains(distributionLayoutSource, 'DistributionActionCenter', 'Distribution layout must mount the global action center.');
+assertContains(distributionWorkspaceSource, 'const workspaceItems =', 'Workspace must define stable primary navigation.');
+assertContains(distributionWorkspaceSource, "href: '/distribution'", 'Workspace must include Today route entry.');
+assertContains(distributionWorkspaceSource, "href: '/distribution/products'", 'Workspace must include Product Profile route entry.');
+assertContains(distributionWorkspaceSource, "href: '/distribution/opportunities'", 'Workspace must include Opportunities route entry.');
+assertContains(distributionWorkspaceSource, "href: '/distribution/tasks'", 'Workspace must include Execution Tasks route entry.');
+assertContains(distributionWorkspaceSource, "href: '/distribution/monitoring'", 'Workspace must include Monitoring route entry.');
+assertContains(distributionWorkspaceSource, "href: '/distribution/reports'", 'Workspace must include Reports route entry.');
+assertContains(distributionActionCenterSource, 'distribution:action-center', 'Action Center events must be emitted under the standard name.');
+assertContains(distributionTasksPageSource, 'renderQuickStatusForm', 'Task queue page should expose quick status actions.');
+assertContains(distributionTasksPageSource, 'DistributionActionForm', 'Task queue page should use shared action form wrapper.');
+assertContains(distributionTasksPageSource, 'DistributionSubmitButton', 'Task queue page should expose submit-state buttons.');
+
+assertContains(distributionTaskDetailSource, 'DistributionActionForm', 'Task detail page should use shared action form wrapper.');
+assertContains(distributionTaskDetailSource, 'DistributionSubmitButton', 'Task detail page should expose pending-state buttons.');
+assertContains(distributionTaskDetailSource, 'DistributionActionButton', 'Task detail page should support primary action button standardization.');
+
+assertContains(distributionOpportunitiesSource, 'DistributionActionForm', 'Opportunities page should use shared action form for target acceptance.');
+assertContains(distributionOpportunitiesSource, 'acceptDistributionTarget', 'Opportunities page should call target acceptance workflow.');
+
+assertContains(distributionMonitoringSource, 'recheckDistributionTaskResult', 'Monitoring page should provide recheck action for links.');
+assertContains(distributionMonitoringSource, 'deriveDistributionPresentationState', 'Monitoring page should use presentation-state selector.');
+
+assertContains(distributionLandingSource, 'buildTodayList', 'Today workspace should include 1-3 priority action list.');
+assertContains(distributionLandingSource, 'deriveDistributionPresentationState', 'Today workspace should use presentation-state selector.');
+assertContains(distributionProductsSource, 'getDistributionDashboard', 'Product profile page should be fed by dashboard data.');
+assertContains(distributionProductsSource, 'updateDistributionProjectProfile', 'Product profile page should support updating project profile facts.');
+assertContains(distributionProductsSource, 'createDistributionProjectAsset', 'Product profile page should support adding reusable assets.');
+assertContains(distributionProductsSource, 'importDistributionCatalogListing', 'Product profile page should support importing listing-backed data.');
+assertContains(distributionReportsSource, 'data.metrics', 'Reports page should expose operational metrics.');
+assertContains(distributionReportsSource, 'Attribution signals', 'Reports page should expose attribution signal section.');
+assertContains(distributionSettingsSource, 'getDistributionPriceId', 'Settings page should expose pricing entrypoints.');
+
+const localeAwareDistributionHref = /\/\$\{(?:locale|currentLocale|params\.locale)\}\/distribution/;
+for (const route of requiredDistributionPages) {
+  const source = readFileSync(route).toString();
+  if (!route.includes('components/')) {
+    assert.equal(
+      localeAwareDistributionHref.test(source),
+      true,
+      `Route ${route} should preserve locale path usage.`,
+    );
+  }
+}
 
 const targets: DistributionTargetCandidate[] = [
   {

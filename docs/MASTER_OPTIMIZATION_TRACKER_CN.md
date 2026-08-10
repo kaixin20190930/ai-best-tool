@@ -1,6 +1,6 @@
 # 优化总控任务表
 
-更新时间：2026-08-03
+更新时间：2026-08-10
 
 这份文档把当前所有优化内容合并成一份可追踪、可监测、可复盘的总任务表。
 
@@ -12,6 +12,9 @@
 - [平台产品、定价与 Stripe 实施总方案](./PLATFORM_PRODUCT_PRICING_AND_STRIPE_ROADMAP_CN.md)
 - [产品证据引擎、高质量内容与智能分发实施总方案](./PRODUCT_INTELLIGENCE_CONTENT_DISTRIBUTION_IMPLEMENTATION_PLAN_CN.md)
 - [分发工作台完整收口方案与执行计划](./DISTRIBUTION_WORKSPACE_CLOSURE_PLAN_CN.md)
+- [分发工作台 UI 重构最终方案与实施任务表](./DISTRIBUTION_UI_REDESIGN_PLAN_CN.md)
+
+- 2026-08-10：完成分发用户端 UI 重构方案审计并冻结最终执行口径。采用固定 Distribution Layout 与“今天、产品资料、目标机会、执行任务、跟进与监控、结果报告”六项导航；阻塞改为跨阶段覆盖状态，所有页面统一消费 presentation-state selector；短操作统一 pending/success/error，长操作分阶段接入持久化 Action Center。新增 `DUI-001` 至 `DUI-034` 带权重任务表，当前 UI 重构完成度约 94%，`DUI-032`、`DUI-034` 已完成，`DUI-033` 继续执行三产品真实验收。
 
 - 2026-08-04：分发工作台 P1 任务进入执行：`DC-020`（跨产品今日队列）与 `DC-021`（筛选、搜索和阻塞收件箱）功能已在代码面完成，完成分发页筛选面板、跨项目 Top1–3 排序队列和阻塞任务分组；本地 `pnpm run build`、`pnpm run distribution:production-smoke`、`pnpm run seo:production-smoke` 已通过，待生产验收与用户连续运行数据验证。
 - 2026-08-04：分发工作台 DC-023「站内通知和邮件摘要」进入实现。已完成站内提醒中心接入任务到期、素材缺失、链接异常与 follow-up 通知，更新文档状态并同步 `pnpm run build`、`pnpm run distribution:production-smoke`、`pnpm run test:distribution-closure` 通过；已进入生产部署前复核。

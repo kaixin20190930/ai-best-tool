@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 import { redirect } from 'next/navigation';
 import { ArrowLeft, ArrowUpRight, CheckCircle2, Clock3, Send, Sparkles, AlertTriangle } from 'lucide-react';
 
@@ -8,6 +9,7 @@ import {
   getDistributionTaskStatusLabel,
   type DistributionTaskStatus,
 } from '@/lib/services/distribution/taskStateMachine';
+import { deriveDistributionPresentationState } from '@/lib/services/distribution/presentationState';
 import CopyField from '@/components/distribution/CopyField';
 import DistributionActionButton from '@/components/distribution/DistributionActionButton';
 import { DistributionActionForm, DistributionSubmitButton } from '@/components/distribution/DistributionActionForm';
@@ -19,6 +21,64 @@ import {
   recheckDistributionTaskResult,
   updateDistributionTaskStatus,
 } from '@/app/actions/distribution';
+
+
+
+type DistributionPrimaryActionType =
+  | 'generate'
+  | 'ready'
+  | 'submit'
+  | 'check-result'
+  | 'follow-up'
+  | 'done'
+  | 'queue'
+  | 'unblock'
+  | 'recheck';
+
+function getPrimaryActionType(
+  status: DistributionTaskStatus,
+  packageReady: boolean,
+  isBlocked: boolean,
+  hasPackage: boolean,
+): DistributionPrimaryActionType {
+  if (!hasPackage) {
+    return 'generate';
+  }
+
+  if (isBlocked) {
+    return 'unblock';
+  }
+
+  if (status === 'in_progress' || status === 'needs_assets') {
+    return packageReady ? 'ready' : 'generate';
+  }
+
+  if (status === 'ready_to_submit') {
+    return 'submit';
+  }
+
+  if (status === 'submitted' || status === 'waiting_review') {
+    return 'check-result';
+  }
+
+  if (status === 'live') {
+    return 'follow-up';
+  }
+
+  if (status === 'follow_up') {
+    return 'done';
+  }
+
+  if (status === 'done' || status === 'skipped') {
+    return 'queue';
+  }
+
+  if (status === 'planned') {
+    return 'ready';
+  }
+
+  return 'check-result';
+}
 
 function pickValue(value: string | string[] | undefined): string {
   if (!value) return '';
@@ -69,6 +129,14 @@ export default async function DistributionTaskDetailPage({
   }${workspaceFocusTarget ? `&focusTarget=${encodeURIComponent(workspaceFocusTarget)}` : ''}`;
   const isChinese = params.locale === 'cn';
   const targetName = data.target?.name || (isChinese ? '目标网站' : 'the target site');
+  const taskPresentation = deriveDistributionPresentationState({
+    status: data.task.status,
+    liveUrl: data.task.liveUrl || data.recentResult?.liveUrl,
+    linkStatus: data.task.linkStatus || data.recentResult?.linkStatus,
+    packageStatus: data.package?.status || null,
+    blockedReason: data.task.blockedReason,
+    dueDate: data.task.dueDate,
+  });
   const statusChoices = getDistributionTaskStatusChoices();
   const statusActions: Partial<Record<DistributionTaskStatus, readonly DistributionTaskStatus[]>> = {
     needs_assets: ['in_progress', 'blocked'],
@@ -84,13 +152,232 @@ export default async function DistributionTaskDetailPage({
   const canRecheckResult = ['submitted', 'waiting_review', 'live', 'follow_up', 'done'].includes(data.task.status);
   const latestUrl = data.recentResult?.liveUrl || '';
   const isLive = data.task.status === 'live' && Boolean(latestUrl);
+  const hasPackage = Boolean(data.package);
+  const packageReady = Boolean(data.package?.ready);
+  const hasActiveTargetLink = Boolean(data.target?.submissionUrl || data.target?.homepageUrl);
+  const submissionLink = data.target?.submissionUrl || data.target?.homepageUrl || '';
+  const primaryActionType = getPrimaryActionType(data.task.status, packageReady, taskPresentation.blocked, hasPackage);
+  const primaryActionLabel =
+    primaryActionType === 'generate'
+      ? isChinese
+        ? '生成并完善材料包'
+        : 'Generate package'
+      : primaryActionType === 'ready'
+        ? isChinese
+          ? '准备完成，进入待提交'
+          : 'Mark ready to submit'
+        : primaryActionType === 'submit'
+          ? isChinese
+            ? '标记已提交'
+            : 'Mark as submitted'
+          : primaryActionType === 'check-result' || primaryActionType === 'recheck'
+            ? isChinese
+              ? '记录审核结果'
+              : 'Record review result'
+            : primaryActionType === 'follow-up'
+              ? isChinese
+                ? '打开高级动作创建复查任务'
+                : 'Open advanced actions for follow-up'
+              : primaryActionType === 'done'
+                ? isChinese
+                  ? '任务完成'
+                  : 'Complete this task'
+                : primaryActionType === 'unblock'
+                  ? isChinese
+                    ? '解除阻塞并继续'
+                    : 'Unblock and continue'
+                  : isChinese
+                    ? '返回执行任务列表'
+                    : 'Return to execution list';
+  const primaryActionDescription =
+    primaryActionType === 'generate'
+      ? (isChinese ? '生成材料包后才可以进入提交动作。' : 'Generate package before moving on.')
+      : primaryActionType === 'ready'
+        ? (isChinese ? '任务具备提交条件，先推进到可提交状态。' : 'Move task to ready-to-submit state.')
+        : primaryActionType === 'submit'
+          ? (isChinese ? '手动完成目标站提交后，在此标记状态。' : 'Submit manually on target site, then mark this task as submitted.')
+          : primaryActionType === 'check-result' || primaryActionType === 'recheck'
+            ? (isChinese ? '先在目标站确认最新状态，再记录结果。' : 'Verify the target status first, then record result.')
+            : primaryActionType === 'follow-up'
+              ? (isChinese ? '已上线后重点检查是否需要复查与跟进。' : 'After launch, use follow-up actions below.')
+              : primaryActionType === 'done'
+      ? (isChinese ? '可直接结束本任务，返回队列处理下一项。' : 'You can finish this task and continue with the next one.')
+    : (isChinese ? '进入下一步处理。' : 'Proceed to the next step.');
+
+  const unblockStatus = packageReady ? 'ready_to_submit' : 'in_progress';
+  let primaryActionPanel: ReactNode = null;
+  const secondaryActions: Array<{ label: string; href: string; target?: string; rel?: string }> = [];
+
+  if (submissionLink) {
+    secondaryActions.push({
+      label: isLive ? (isChinese ? '打开上线页面' : 'Open live listing') : isChinese ? '打开目标站提交页' : 'Open target submission',
+      href: isLive ? latestUrl : submissionLink,
+      target: '_blank',
+      rel: 'noreferrer',
+    });
+  }
+
+  if (primaryActionType === 'generate') {
+    primaryActionPanel = (
+      <DistributionActionForm action={generateDistributionPackage} successMessage='Package generated. Refreshing your task…'>
+        <input type='hidden' name='taskId' value={data.task.id} />
+        <DistributionActionButton
+          label={isChinese ? '生成专属材料包' : 'Generate target package'}
+          pendingLabel={isChinese ? '正在生成，请稍候…' : 'Generating package…'}
+          className='inline-flex w-full items-center justify-center gap-2 rounded-xl bg-slate-950 px-4 py-3 text-sm font-bold text-white hover:bg-cyan-800 disabled:cursor-wait disabled:bg-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-cyan-500'
+        />
+      </DistributionActionForm>
+    );
+  } else if (primaryActionType === 'ready') {
+    primaryActionPanel = (
+      <DistributionActionForm
+        action={updateDistributionTaskStatus}
+        successMessage={isChinese ? '任务已准备就绪。请继续下一步。' : 'Task is ready to submit. Please continue.'}
+      >
+        <input type='hidden' name='taskId' value={data.task.id} />
+        <input type='hidden' name='status' value='ready_to_submit' />
+        <DistributionSubmitButton
+          pendingLabel={isChinese ? '更新中…' : 'Updating…'}
+          className='inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-700 px-4 py-3 text-sm font-bold text-white hover:bg-emerald-800 disabled:cursor-wait disabled:bg-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-emerald-500'
+        >
+          {isChinese ? '确认资料已准备' : 'Mark package ready'}
+        </DistributionSubmitButton>
+      </DistributionActionForm>
+    );
+  } else if (primaryActionType === 'submit') {
+    primaryActionPanel = (
+      <DistributionActionForm
+        action={updateDistributionTaskStatus}
+        successMessage={isChinese ? '状态已更新：已提交。' : 'Task status set to submitted.'}
+      >
+        <input type='hidden' name='taskId' value={data.task.id} />
+        <input type='hidden' name='status' value='submitted' />
+        <DistributionSubmitButton
+          pendingLabel={isChinese ? '更新中…' : 'Updating…'}
+          className='inline-flex w-full items-center justify-center gap-2 rounded-xl bg-cyan-700 px-4 py-3 text-sm font-bold text-white hover:bg-cyan-800 disabled:cursor-wait disabled:bg-cyan-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-cyan-500'
+        >
+          {isChinese ? '我已提交到目标站' : 'I submitted on target site'}
+        </DistributionSubmitButton>
+      </DistributionActionForm>
+    );
+  } else if (primaryActionType === 'check-result' || primaryActionType === 'recheck') {
+    primaryActionPanel = (
+      <DistributionActionForm action={recordDistributionResult} successMessage={isChinese ? '结果已记录。请刷新查看更新。' : 'Result recorded. Refreshing task…'}>
+        <input type='hidden' name='taskId' value={data.task.id} />
+        <div className='grid gap-3'>
+          <input
+            name='liveUrl'
+            type='url'
+            defaultValue={latestUrl}
+            placeholder='https://live-url.example'
+            className='rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400'
+          />
+          <select
+            name='linkStatus'
+            defaultValue='pending'
+            className='rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm'
+          >
+            <option value='pending'>Pending review</option>
+            <option value='live'>Live</option>
+            <option value='nofollow'>Nofollow</option>
+            <option value='rejected'>Rejected</option>
+            <option value='removed'>Removed</option>
+          </select>
+          <select name='blockedReasonType' defaultValue='' className='rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs'>
+            {blockedReasonTypes.map((reasonType) => (
+              <option key={reasonType.value || 'empty'} value={reasonType.value}>
+                {reasonType.label}
+              </option>
+            ))}
+          </select>
+          <textarea
+            name='notes'
+            rows={2}
+            placeholder={isChinese ? '补充复查情况（建议包含截图/时间）' : 'Add evidence or notes (screenshot/time).'}
+            className='rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400'
+          />
+          <DistributionSubmitButton
+            pendingLabel={isChinese ? '保存中…' : 'Saving…'}
+            className='inline-flex items-center justify-center gap-2 rounded-xl bg-slate-950 px-4 py-3 text-sm font-bold text-white hover:bg-cyan-800 disabled:cursor-wait disabled:bg-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-500'
+          >
+            {isChinese ? '保存审核结果' : 'Save review result'}
+          </DistributionSubmitButton>
+        </div>
+      </DistributionActionForm>
+    );
+  } else if (primaryActionType === 'follow-up') {
+    primaryActionPanel = (
+      <DistributionActionForm
+        action={createDistributionFollowUpTask}
+        successMessage={isChinese ? '复查任务已创建。' : 'Follow-up task created.'}
+      >
+        <input type='hidden' name='taskId' value={data.task.id} />
+        <div className='grid gap-3 md:grid-cols-[1fr_auto] md:items-end'>
+          <input
+            name='days'
+            type='number'
+            min='1'
+            defaultValue='7'
+            className='rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400'
+          />
+          <DistributionSubmitButton
+            pendingLabel={isChinese ? '创建中…' : 'Creating…'}
+            className='inline-flex items-center justify-center gap-2 rounded-xl bg-amber-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-amber-700 disabled:cursor-wait disabled:bg-amber-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amber-500'
+          >
+            {isChinese ? '创建7天复查任务' : 'Create 7-day follow-up'}
+          </DistributionSubmitButton>
+        </div>
+      </DistributionActionForm>
+    );
+  } else if (primaryActionType === 'done') {
+    primaryActionPanel = (
+      <DistributionActionForm
+        action={updateDistributionTaskStatus}
+        successMessage={isChinese ? '任务已完成。返回队列继续下一项。' : 'Task marked done. You can continue with the next one.'}
+      >
+        <input type='hidden' name='taskId' value={data.task.id} />
+        <input type='hidden' name='status' value='done' />
+        <DistributionSubmitButton
+          pendingLabel={isChinese ? '更新中…' : 'Updating…'}
+          className='inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-700 px-4 py-3 text-sm font-bold text-white hover:bg-emerald-800 disabled:cursor-wait disabled:bg-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-emerald-500'
+        >
+          {isChinese ? '确认任务完成' : 'Mark task completed'}
+        </DistributionSubmitButton>
+      </DistributionActionForm>
+    );
+  } else if (primaryActionType === 'unblock') {
+    primaryActionPanel = (
+      <DistributionActionForm
+        action={updateDistributionTaskStatus}
+        successMessage={isChinese ? '阻塞已清理，任务恢复执行。' : 'Block cleared. Continuing in execution flow.'}
+      >
+        <input type='hidden' name='taskId' value={data.task.id} />
+        <input type='hidden' name='status' value={unblockStatus} />
+        <DistributionSubmitButton
+          pendingLabel={isChinese ? '更新中…' : 'Updating…'}
+          className='inline-flex w-full items-center justify-center gap-2 rounded-xl bg-slate-950 px-4 py-3 text-sm font-bold text-white hover:bg-cyan-800 disabled:cursor-wait disabled:bg-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-500'
+        >
+          {isChinese ? '已处理完阻塞，恢复执行' : 'Resume task execution'}
+        </DistributionSubmitButton>
+      </DistributionActionForm>
+    );
+  } else {
+    primaryActionPanel = (
+      <Link
+        href={`/${params.locale}/distribution/tasks`}
+        className='inline-flex w-full items-center justify-center rounded-xl bg-cyan-700 px-4 py-3 text-sm font-bold text-white hover:bg-cyan-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-cyan-500'
+      >
+        {isChinese ? '返回执行任务列表' : 'Back to execution queue'}
+      </Link>
+    );
+  }
 
   return (
-    <div className='mx-auto w-full max-w-6xl px-5 py-10 sm:px-8 lg:px-12'>
+    <div className='mx-auto w-full max-w-6xl px-5 py-10 pb-28 sm:px-8 lg:px-12'>
       <div className='mb-6 flex items-center justify-between gap-4'>
         <Link
           href={workspaceRedirectUrl.replace('/aibesttool.com', '')}
-          className='inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 hover:border-cyan-300 hover:text-cyan-700'
+          className='inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 hover:border-cyan-300 hover:text-cyan-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-cyan-500'
         >
           <ArrowLeft className='h-4 w-4' /> {isChinese ? '返回分发工作台' : 'Back to workspace'}
         </Link>
@@ -101,80 +388,54 @@ export default async function DistributionTaskDetailPage({
         <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>
           {isChinese ? '你现在只需要做这一件事' : 'Your single next action'}
         </div>
-        {!data.package ? (
-          <div className='mt-2 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between'>
-            <div>
-              <h2 className='text-2xl font-bold text-slate-950'>
-                {isChinese ? `生成 ${targetName} 专属提交材料包` : `Generate the ${targetName} submission package`}
-              </h2>
-              <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '系统会根据已确认的产品资料、Logo、截图和目标站规则生成逐项可复制的内容。生成完成前，不需要打开目标网站。'
-                  : 'The workspace will turn your confirmed facts, logo, screenshot, and target rules into copy-ready fields. Do not open the target site yet.'}
-              </p>
-            </div>
-            <DistributionActionForm action={generateDistributionPackage} successMessage='Package generated. Refreshing your task…'>
-              <input type='hidden' name='taskId' value={data.task.id} />
-              <DistributionActionButton
-                label={isChinese ? '生成专属材料包' : 'Generate target package'}
-                pendingLabel={isChinese ? '正在生成，请稍候…' : 'Generating package…'}
-                className='inline-flex min-w-44 items-center justify-center gap-2 rounded-xl bg-slate-950 px-5 py-3 text-sm font-bold text-white hover:bg-cyan-800 disabled:cursor-wait disabled:bg-slate-500'
-              />
-            </DistributionActionForm>
+        <div className='mt-2'>
+          <h2 className='text-2xl font-bold text-slate-950'>{primaryActionLabel}</h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>{primaryActionDescription}</p>
+        </div>
+
+        <div className='mt-4'>
+          <div className='rounded-xl border border-cyan-200 bg-white/80 p-4'>{primaryActionPanel}</div>
+        </div>
+        {secondaryActions.length > 0 ? (
+          <div className='mt-4 flex flex-wrap gap-2'>
+            {secondaryActions.map((action) => (
+              <a
+                key={action.href}
+                href={action.href}
+                target={action.target || '_self'}
+                rel={action.rel}
+                className='inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 hover:border-cyan-300 hover:text-cyan-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-cyan-500'
+              >
+                {action.label}
+                <ArrowUpRight className='h-3.5 w-3.5' />
+              </a>
+            ))}
+            <a
+              href='#task-submission-package'
+              className='inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 hover:border-cyan-300 hover:text-cyan-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-cyan-500'
+            >
+              {isChinese ? '查看并补充材料' : 'Open submission package'}
+              <ArrowUpRight className='h-3.5 w-3.5' />
+            </a>
           </div>
-        ) : data.package.ready && data.task.status === 'ready_to_submit' ? (
-          <div className='mt-2'>
-            <h2 className='text-2xl font-bold text-slate-950'>
-              {isChinese
-                ? `复制下方字段，然后提交到 ${targetName}`
-                : `Copy the fields below, then submit to ${targetName}`}
-            </h2>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '先逐项复制材料包，再打开目标网站完成注册和提交；提交成功后回到本页点击“已提交”。'
-                : 'Copy each package field first, open the target site, submit manually, then return and mark the task Submitted.'}
-            </p>
-          </div>
-        ) : isLive ? (
-          <div className='mt-2'>
-            <h2 className='text-2xl font-bold text-slate-950'>
-              {isChinese ? `${targetName} 已上线，下一步只需定期复查` : `${targetName} is live. Monitor the listing on schedule.`}
-            </h2>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '提交阶段已完成；系统只保留上线后的 7、30、90 天复查。若页面被移除或链接异常，再在下方记录结果。'
-                : 'Submission is complete. Only the 7-, 30-, and 90-day live checks remain. Record a result below only if the listing changes.'}
-            </p>
-          </div>
-        ) : data.package.ready ? (
-          <div className='mt-2'>
-            <h2 className='text-2xl font-bold text-slate-950'>
-              {isChinese ? `更新 ${targetName} 的审核结果` : `Update the ${targetName} review result`}
-            </h2>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '根据目标网站当前状态，在页面下方记录待审核、已上线或被拒绝。'
-                : 'Record whether the listing is pending, live, or rejected below.'}
-            </p>
-          </div>
-        ) : (
-          <div className='mt-2'>
-            <h2 className='text-2xl font-bold text-slate-950'>
-              {isChinese ? '先补齐材料包中的阻塞项' : 'Resolve the package blockers first'}
-            </h2>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>{data.package.blockers.join(' · ')}</p>
-          </div>
-        )}
+        ) : null}
       </section>
+
+      <div className='md:hidden fixed inset-x-0 bottom-0 z-20 border-t border-slate-200 bg-white/95 p-3' style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}>
+        <div className='mx-auto flex max-w-6xl gap-2'>
+          <div className='w-full'>{primaryActionPanel}</div>
+        </div>
+      </div>
 
       <section className='rounded-3xl border border-slate-200 bg-white p-6 shadow-sm'>
         <div className='flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between'>
           <div className='space-y-3'>
             <div className='flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500'>
               <span className='rounded-full bg-slate-100 px-2.5 py-1'>{data.channel.name}</span>
-              <span className='rounded-full bg-cyan-50 px-2.5 py-1 text-cyan-700'>
-                {getDistributionTaskStatusLabel(data.task.status)}
+              <span className={`rounded-full px-2.5 py-1 ${taskPresentation.toneClass}`}>
+                {taskPresentation.label}
               </span>
+              {taskPresentation.blocked ? <span className='rounded-full bg-slate-900 px-2.5 py-1 text-white'>Blocked</span> : null}
               <span className='rounded-full bg-amber-50 px-2.5 py-1 text-amber-700'>{data.task.priority}</span>
             </div>
             <h1 className='text-3xl font-bold tracking-tight text-slate-950'>{data.task.title}</h1>
@@ -190,13 +451,18 @@ export default async function DistributionTaskDetailPage({
           <div className='rounded-2xl border border-slate-200 bg-slate-50 p-4'>
             <div className='text-xs font-bold uppercase tracking-wide text-slate-500'>Current status</div>
             <div className='mt-2 text-lg font-bold text-slate-950'>
-              {getDistributionTaskStatusLabel(data.task.status)}
+              {taskPresentation.label}
             </div>
             <p className='mt-1 text-sm text-slate-600'>{getDistributionTaskStatusDescription(data.task.status)}</p>
+            <p className='mt-2 text-xs text-slate-500'>Next action: {taskPresentation.actionHint}</p>
+            {taskPresentation.nextReviewAt ? <p className='mt-1 text-xs text-slate-500'>Review by: {taskPresentation.nextReviewAt}</p> : null}
           </div>
         </div>
       </section>
-      <section className='mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
+      <section
+        id='task-submission-package'
+        className='mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'
+      >
         <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Latest result snapshot</div>
         <div className='mt-2 flex flex-wrap items-center justify-between gap-3'>
           <div>
@@ -569,29 +835,101 @@ export default async function DistributionTaskDetailPage({
 
       {data.package ? (
         <section className='mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
-          <div className='flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between'>
+          <div className='mb-2 flex flex-wrap justify-between gap-3'>
             <div>
-              <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>One-click update</div>
-              <h2 className='mt-1 text-lg font-bold text-slate-950'>Move the task without leaving the page</h2>
+              <div className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>
+                {isChinese ? '高级动作（可选）' : 'Advanced actions (optional)'}
+              </div>
+              <h2 className='mt-1 text-lg font-bold text-slate-950'>
+                {isChinese ? '状态更新、结果记录与复查动作' : 'Status updates, result records, and follow-up actions'}
+              </h2>
             </div>
-            <div className='text-xs text-slate-500'>Action buttons update the task immediately.</div>
+            <p className='text-xs text-slate-500'>{isChinese ? '仅在主流程完成后使用高级动作。' : 'Use after completing the main action.'}</p>
           </div>
 
-          <div className='mt-4 flex flex-wrap gap-2'>
-            {quickStatuses.map((status) => (
-              <DistributionActionForm
-                key={status}
-                action={updateDistributionTaskStatus}
-                successMessage={`Status updated to ${getDistributionTaskStatusLabel(status)}. Refreshing your task…`}
-              >
-                <input type='hidden' name='taskId' value={data.task.id} />
-                <input type='hidden' name='status' value={status} />
-                {status === 'blocked' ? (
-                  <div className='space-y-2'>
+          <details className='mt-2 rounded-xl border border-slate-200 bg-slate-50 p-4'>
+            <summary className='cursor-pointer text-sm font-bold text-slate-900'>{isChinese ? '展开高级动作' : 'Open advanced actions'}</summary>
+            <div className='mt-4 flex flex-wrap gap-2'>
+              {quickStatuses.map((status) => (
+                <DistributionActionForm
+                  key={status}
+                  action={updateDistributionTaskStatus}
+                  successMessage={`Status updated to ${getDistributionTaskStatusLabel(status)}. Refreshing your task…`}
+                >
+                  <input type='hidden' name='taskId' value={data.task.id} />
+                  <input type='hidden' name='status' value={status} />
+                  {status === 'blocked' ? (
+                    <div className='space-y-2'>
+                      <select
+                        name='blockedReasonType'
+                        defaultValue=''
+                        className='w-full rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-xs font-semibold text-slate-700'
+                      >
+                        {blockedReasonTypes.map((reasonType) => (
+                          <option key={reasonType.value || 'empty'} value={reasonType.value}>
+                            {reasonType.label}
+                          </option>
+                        ))}
+                      </select>
+                      <textarea
+                        name='blockedReason'
+                        rows={2}
+                        placeholder='Add quick notes: why it was blocked and next action'
+                        className='w-full rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-xs outline-none focus:ring-2 focus:ring-cyan-400'
+                      />
+                      <DistributionSubmitButton
+                        pendingLabel='Updating…'
+                        className='inline-flex w-full items-center gap-1 rounded-xl border border-slate-200 bg-rose-600 px-3 py-2 text-xs font-bold text-white hover:bg-rose-700 disabled:cursor-wait disabled:opacity-70'
+                      >
+                        {getDistributionTaskStatusLabel(status)}
+                      </DistributionSubmitButton>
+                    </div>
+                  ) : (
+                    <DistributionSubmitButton
+                      pendingLabel='Updating…'
+                      className='inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold text-slate-700 hover:border-cyan-300 hover:text-cyan-700 disabled:cursor-wait disabled:opacity-70'
+                    >
+                      {getDistributionTaskStatusLabel(status)}
+                    </DistributionSubmitButton>
+                  )}
+                </DistributionActionForm>
+              ))}
+            </div>
+
+            <div className='mt-5 grid gap-4 md:grid-cols-2'>
+              {canRecordResult && primaryActionType !== 'check-result' ? (
+                <DistributionActionForm
+                  action={recordDistributionResult}
+                  className='rounded-xl bg-white p-4'
+                  successMessage='Result recorded. Updating status and follow-up checks…'
+                >
+                  <div className='flex items-center gap-2 text-sm font-bold text-slate-900'>
+                    <Send className='h-4 w-4 text-cyan-700' /> Record live result
+                  </div>
+                  <input type='hidden' name='taskId' value={data.task.id} />
+                  <div className='mt-3 grid gap-3'>
+                    <input
+                      name='liveUrl'
+                      type='url'
+                      placeholder='https://live-url.example'
+                      defaultValue={latestUrl}
+                      className='rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400'
+                    />
+                    <select
+                      name='linkStatus'
+                      defaultValue='pending'
+                      className='rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm'
+                    >
+                      <option value='pending'>Pending review</option>
+                      <option value='live'>Live</option>
+                      <option value='nofollow'>Nofollow</option>
+                      <option value='rejected'>Rejected</option>
+                      <option value='removed'>Removed</option>
+                    </select>
                     <select
                       name='blockedReasonType'
                       defaultValue=''
-                      className='w-full rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-xs font-semibold text-slate-700'
+                      className='rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs'
                     >
                       {blockedReasonTypes.map((reasonType) => (
                         <option key={reasonType.value || 'empty'} value={reasonType.value}>
@@ -602,92 +940,28 @@ export default async function DistributionTaskDetailPage({
                     <textarea
                       name='blockedReason'
                       rows={2}
-                      placeholder='Add quick notes: why it was blocked and next action'
-                      className='w-full rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-xs outline-none focus:ring-2 focus:ring-cyan-400'
+                      placeholder='Blocking reason details (for removed/nofollow/rejected cases)'
+                      className='rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400'
+                    />
+                    <textarea
+                      name='notes'
+                      rows={3}
+                      placeholder='Evidence or next follow-up note'
+                      className='rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400'
                     />
                     <DistributionSubmitButton
-                      pendingLabel='Updating…'
-                      className='inline-flex w-full items-center gap-1 rounded-xl border border-slate-200 bg-rose-600 px-3 py-2 text-xs font-bold text-white hover:bg-rose-700 disabled:cursor-wait disabled:opacity-70'
+                      pendingLabel='Saving result…'
+                      className='inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-700 px-4 py-2 text-sm font-bold text-white hover:bg-cyan-800 disabled:cursor-wait disabled:bg-cyan-500'
                     >
-                      {getDistributionTaskStatusLabel(status)}
+                      {isChinese ? '保存审核结果' : 'Save review result'}
                     </DistributionSubmitButton>
                   </div>
-                ) : (
-                  <DistributionSubmitButton
-                    pendingLabel='Updating…'
-                    className='inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold text-slate-700 hover:border-cyan-300 hover:text-cyan-700 disabled:cursor-wait disabled:opacity-70'
-                  >
-                    {getDistributionTaskStatusLabel(status)}
-                  </DistributionSubmitButton>
-                )}
-              </DistributionActionForm>
-            ))}
-          </div>
-
-          {canRecordResult ? (
-            <div className='mt-5 grid gap-4 md:grid-cols-2'>
-              <DistributionActionForm
-                action={recordDistributionResult}
-                className='rounded-xl bg-slate-50 p-4'
-                successMessage='Result recorded. Updating status and follow-up checks…'
-              >
-                <div className='flex items-center gap-2 text-sm font-bold text-slate-900'>
-                  <Send className='h-4 w-4 text-cyan-700' /> Record live result
-                </div>
-                <input type='hidden' name='taskId' value={data.task.id} />
-                <div className='mt-3 grid gap-3'>
-                  <input
-                    name='liveUrl'
-                    type='url'
-                    placeholder='https://live-url.example'
-                    className='rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400'
-                  />
-                  <select
-                    name='linkStatus'
-                    defaultValue='pending'
-                    className='rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm'
-                  >
-                    <option value='pending'>Pending review</option>
-                    <option value='live'>Live</option>
-                    <option value='nofollow'>Nofollow</option>
-                    <option value='rejected'>Rejected</option>
-                    <option value='removed'>Removed</option>
-                  </select>
-                  <select
-                    name='blockedReasonType'
-                    defaultValue=''
-                    className='rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs'
-                  >
-                    {blockedReasonTypes.map((reasonType) => (
-                      <option key={reasonType.value || 'empty'} value={reasonType.value}>
-                        {reasonType.label}
-                      </option>
-                    ))}
-                  </select>
-                  <textarea
-                    name='blockedReason'
-                    rows={2}
-                    placeholder='Blocking reason details (for removed/nofollow/rejected cases)'
-                    className='rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400'
-                  />
-                  <textarea
-                    name='notes'
-                    rows={3}
-                    placeholder='Evidence or next follow-up note'
-                    className='rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-cyan-400'
-                  />
-                  <DistributionSubmitButton
-                    pendingLabel='Saving result…'
-                    className='inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-700 px-4 py-2 text-sm font-bold text-white hover:bg-cyan-800 disabled:cursor-wait disabled:bg-cyan-500'
-                  >
-                    Save result
-                  </DistributionSubmitButton>
-                </div>
-              </DistributionActionForm>
+                </DistributionActionForm>
+              ) : null}
 
               <DistributionActionForm
                 action={createDistributionFollowUpTask}
-                className='rounded-xl bg-slate-50 p-4'
+                className='rounded-xl bg-white p-4'
                 successMessage='Follow-up task created. Refreshing your task…'
               >
                 <div className='flex items-center gap-2 text-sm font-bold text-slate-900'>
@@ -711,12 +985,12 @@ export default async function DistributionTaskDetailPage({
                     pendingLabel='Creating follow-up…'
                     className='inline-flex items-center justify-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-bold text-amber-800 hover:bg-amber-100 disabled:cursor-wait disabled:opacity-70'
                   >
-                    Create follow-up task
+                    {isChinese ? '创建复查任务' : 'Create follow-up task'}
                   </DistributionSubmitButton>
                 </div>
               </DistributionActionForm>
             </div>
-          ) : null}
+          </details>
         </section>
       ) : null}
 

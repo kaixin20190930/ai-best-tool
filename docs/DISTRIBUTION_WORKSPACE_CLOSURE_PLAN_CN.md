@@ -9,6 +9,9 @@
 - [优化总控任务表](./MASTER_OPTIMIZATION_TRACKER_CN.md)
 - [产品证据引擎、高质量内容与智能分发实施总方案](./PRODUCT_INTELLIGENCE_CONTENT_DISTRIBUTION_IMPLEMENTATION_PLAN_CN.md)
 - [产品分发模块 MVP 范围](./DISTRIBUTION_MODULE_PLAN_CN.md)
+- [分发工作台 UI 重构最终方案与实施任务表](./DISTRIBUTION_UI_REDESIGN_PLAN_CN.md)
+
+> 2026-08-10 起，本文档继续负责底层能力与真实闭环；用户端信息架构、异步反馈和页面重构统一由 `DISTRIBUTION_UI_REDESIGN_PLAN_CN.md` 的 `DUI-*` 任务追踪，本文较早的信息架构描述不再作为 UI 实施依据。
 - [平台产品、定价与 Stripe 实施总方案](./PLATFORM_PRODUCT_PRICING_AND_STRIPE_ROADMAP_CN.md)
 
 本文档只负责一件事：把现有分发模块从“渠道任务记录器”收口成可供真实产品长期使用、无需额外管理工具承接的 **AI Product

@@ -44,6 +44,7 @@
     "distribution:discover-target": "tsx scripts/discover-distribution-target-pages.ts",
     "distribution:analyze-target": "tsx scripts/analyze-distribution-target.ts",
     "distribution:review-target": "tsx scripts/review-distribution-target.ts",
+    "test:distribution-release": "pnpm run build && pnpm run test:distribution-closure && pnpm run distribution:production-smoke && pnpm run seo:production-smoke",
     "test:distribution-closure": "tsx scripts/test-distribution-closure.ts",
     "test:regression": "tsx scripts/regression-test.ts",
     "theme:audit": "bash scripts/theme-audit.sh",

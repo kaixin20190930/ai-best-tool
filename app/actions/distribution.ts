@@ -100,6 +100,7 @@ export interface DistributionDashboard {
     taskType: string;
     dueDate: string | null;
     instructions: string | null;
+    blockedReason: string | null;
     channelName: string;
     channelType: string;
     liveUrl: string | null;
@@ -778,7 +779,7 @@ export async function getDistributionDashboard(
       supabase
       .from('distribution_tasks')
       .select(
-        'id, project_id, title, status, priority, task_type, due_date, instructions, target_id, estimated_minutes, distribution_channels(name, channel_type), distribution_results(id, live_url, target_url, link_status, checked_at, created_at, notes)',
+        'id, project_id, title, status, blocked_reason, priority, task_type, due_date, instructions, target_id, estimated_minutes, distribution_channels(name, channel_type), distribution_results(id, live_url, target_url, link_status, checked_at, created_at, notes)',
       )
         .eq('project_id', project.id)
         .order('due_date', { ascending: true, nullsFirst: false })
@@ -1079,6 +1080,7 @@ export async function getDistributionDashboard(
         taskType: task.task_type,
         dueDate: task.due_date,
         instructions: task.instructions,
+        blockedReason: task.blocked_reason || null,
         channelName: task.distribution_channels?.name || 'Unknown channel',
         channelType: task.distribution_channels?.channel_type || 'other',
         liveUrl: latestResult?.live_url || null,
