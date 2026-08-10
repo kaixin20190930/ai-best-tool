@@ -586,10 +586,9 @@ async function cancelDistributionReminders(input: {
 function opportunityStatusFromTaskStatus(status: DistributionTaskStatus) {
   if (status === 'live' || status === 'done') return 'live';
   if (status === 'submitted' || status === 'waiting_review' || status === 'follow_up') return 'submitted';
+  if (status === 'blocked') return 'blocked';
   if (status === 'skipped') return 'skipped';
   if (status === 'planned') return 'accepted';
-  // A blocker can still be resolved. Keep the opportunity visible as active,
-  // while the task itself carries the actionable blocked reason.
   return 'in_progress';
 }
 

@@ -162,6 +162,7 @@ const opportunityStatusLabel = (status: string, isChinese: boolean) => {
     in_progress: ['Preparing', '准备中'],
     submitted: ['Submitted', '已提交，待审核'],
     live: ['Live', '已上线'],
+    blocked: ['Blocked', '已阻塞'],
     rejected: ['Rejected', '未通过'],
     skipped: ['Skipped', '已跳过'],
   };
@@ -171,6 +172,7 @@ const opportunityStatusLabel = (status: string, isChinese: boolean) => {
 const opportunityStatusToneClass = (status: string) => {
   if (status === 'live') return 'bg-emerald-50 text-emerald-700';
   if (status === 'submitted') return 'bg-amber-50 text-amber-800';
+  if (status === 'blocked') return 'bg-rose-50 text-rose-700';
   if (status === 'rejected') return 'bg-rose-50 text-rose-700';
   if (status === 'skipped') return 'bg-slate-100 text-slate-700';
   return 'bg-cyan-50 text-cyan-800';
@@ -471,6 +473,7 @@ export default function DistributionDashboard({
 
   const packageGenerated = Boolean(targetTask?.packageStatus);
   const targetTaskName = targetTask?.targetName || (isChinese ? '当前目标站' : 'the current target site');
+  const targetTaskBlocked = targetTask?.status === 'blocked';
   const submitted = Boolean(
     targetTask && ['submitted', 'waiting_review', 'live', 'follow_up', 'done'].includes(targetTask.status),
   );
@@ -534,13 +537,29 @@ export default function DistributionDashboard({
     },
     {
       number: 5,
-      title: isChinese ? '人工提交并记录结果' : 'Submit manually and record evidence',
+      title: targetTaskBlocked
+        ? isChinese
+          ? '处理目标站阻塞原因'
+          : 'Resolve the target blocker'
+        : isChinese
+          ? '人工提交并记录结果'
+          : 'Submit manually and record evidence',
       description: isChinese
-        ? `到 ${targetTaskName} 完成提交，再记录审核状态或上线地址。`
-        : 'Submit on the target site, then record its review state or live URL.',
+        ? targetTaskBlocked
+          ? `${targetTaskName} 当前无法继续提交。请打开任务查看付款、账号或其他阻塞原因，再决定继续或跳过。`
+          : `到 ${targetTaskName} 完成提交，再记录审核状态或上线地址。`
+        : targetTaskBlocked
+          ? `${targetTaskName} cannot proceed yet. Review the payment, account, or other blocker, then continue or skip it.`
+          : 'Submit on the target site, then record its review state or live URL.',
       complete: submitted,
       href: targetTask ? buildTaskHref(targetTask.id, targetTask.targetId) : '#distribution-targets',
-      action: isChinese ? '提交并记录结果' : 'Submit and record result',
+      action: targetTaskBlocked
+        ? isChinese
+          ? '查看阻塞原因'
+          : 'View blocker'
+        : isChinese
+          ? '提交并记录结果'
+          : 'Submit and record result',
     },
   ];
 
@@ -1583,6 +1602,10 @@ export default function DistributionDashboard({
                                 ? isChinese
                                   ? '查看上线结果'
                                   : 'View live result'
+                                : target.opportunityStatus === 'blocked'
+                                  ? isChinese
+                                    ? '处理阻塞原因'
+                                    : 'Resolve blocker'
                                 : isChinese
                                   ? '继续任务'
                                   : 'Continue task'}{' '}
