@@ -533,6 +533,63 @@ function isDateToday(value: string | null | undefined, today: string): boolean {
   return value.slice(0, 10) === today;
 }
 
+function buildDistributionWorkspaceSlug(workspaceName: string): string {
+  const raw = workspaceName
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 80);
+  return raw || 'workspace';
+}
+
+async function ensureDistributionWorkspace(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userId: string,
+  workspaceName: string,
+) {
+  const slug = buildDistributionWorkspaceSlug(workspaceName);
+
+  const { data: existingWorkspaceByOwner, error: ownerWorkspaceError } = await supabase
+    .from('distribution_workspaces')
+    .select('id, name, kind')
+    .eq('owner_id', userId)
+    .order('created_at', { ascending: true })
+    .limit(1)
+    .maybeSingle();
+
+  if (ownerWorkspaceError) throw ownerWorkspaceError;
+  if (existingWorkspaceByOwner) return existingWorkspaceByOwner;
+
+  const { data: workspace, error: insertError } = await supabase
+    .from('distribution_workspaces')
+    .upsert(
+      {
+        owner_id: userId,
+        name: workspaceName,
+        slug,
+        kind: 'own',
+      },
+      { onConflict: 'owner_id,slug' },
+    )
+    .select('id, name, kind')
+    .single();
+
+  if (!insertError && workspace) return workspace;
+
+  if (insertError && (insertError as { code?: string }).code === '23505') {
+    const { data: fallbackWorkspace } = await supabase
+      .from('distribution_workspaces')
+      .select('id, name, kind')
+      .eq('owner_id', userId)
+      .eq('slug', slug)
+      .maybeSingle();
+
+    if (fallbackWorkspace) return fallbackWorkspace;
+  }
+
+  throw insertError || new Error('Unable to create or load distribution workspace.');
+}
+
 async function scheduleDistributionReminders(input: {
   supabase: Awaited<ReturnType<typeof createClient>>;
   userId: string;
@@ -694,20 +751,9 @@ async function ensureDefaultProject(userId: string, email?: string, isOwnProject
   }
 
   const workspaceName = email?.split('@')[0] || 'My distribution workspace';
-  const slug =
-    workspaceName
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-|-$/g, '')
-      .slice(0, 80) || 'workspace';
-  const { data: workspace, error: workspaceError } = await supabase
-    .from('distribution_workspaces')
-    .insert({ owner_id: userId, name: workspaceName, slug, kind: 'own' })
-    .select('id, name, kind')
-    .single();
+  const workspace = await ensureDistributionWorkspace(supabase, userId, workspaceName);
 
-  if (workspaceError || !workspace)
-    throw new Error(workspaceError?.message || 'Unable to create distribution workspace.');
+  if (!workspace) throw new Error('Unable to create distribution workspace.');
 
   const { data: project, error: projectError } = await supabase
     .from('distribution_projects')
