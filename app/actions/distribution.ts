@@ -730,7 +730,7 @@ async function ensureDefaultProject(userId: string, email?: string, isOwnProject
   const { data: existingProject } = await supabase
       .from('distribution_projects')
       .select(
-      'id, name, website_url, description, workspace_id, primary_goal, weekly_capacity, budget_preference, onboarding_status, facts_confirmed_at, source_tool_id, product_type, listing_imported_at, updated_at',
+      'id, name, website_url, description, status, workspace_id, primary_goal, weekly_capacity, budget_preference, onboarding_status, facts_confirmed_at, source_tool_id, product_type, listing_imported_at, updated_at',
       )
     .eq('owner_id', userId)
     .order('created_at', { ascending: true })
@@ -749,8 +749,8 @@ async function ensureDefaultProject(userId: string, email?: string, isOwnProject
         })
         .eq('id', existingProject.id)
         .select(
-          'id, name, website_url, description, workspace_id, primary_goal, weekly_capacity, budget_preference, onboarding_status, facts_confirmed_at, source_tool_id, product_type, listing_imported_at, updated_at',
-        )
+          'id, name, website_url, description, status, workspace_id, primary_goal, weekly_capacity, budget_preference, onboarding_status, facts_confirmed_at, source_tool_id, product_type, listing_imported_at, updated_at',
+          )
         .single();
 
       return updatedProject || existingProject;
@@ -773,7 +773,7 @@ async function ensureDefaultProject(userId: string, email?: string, isOwnProject
       description: 'Track human-led distribution, submissions, mentions, and follow-ups.',
     })
       .select(
-      'id, name, website_url, description, workspace_id, primary_goal, weekly_capacity, budget_preference, onboarding_status, facts_confirmed_at, source_tool_id, product_type, listing_imported_at, updated_at',
+      'id, name, website_url, description, status, workspace_id, primary_goal, weekly_capacity, budget_preference, onboarding_status, facts_confirmed_at, source_tool_id, product_type, listing_imported_at, updated_at',
       )
     .single();
 
@@ -793,6 +793,7 @@ export async function getDistributionDashboard(
     if (!allowed) return { success: true, access: false, data: null };
 
     const supabase = await createClient();
+    const normalizedProjectId = typeof projectId === 'string' ? projectId.trim() : '';
     const defaultProject = await ensureDefaultProject(user.id, user.email, isAdminUser(user));
     const { data: projects, error: projectsError } = await supabase
       .from('distribution_projects')
@@ -802,9 +803,12 @@ export async function getDistributionDashboard(
       .eq('owner_id', user.id)
       .neq('status', 'archived')
       .order('created_at', { ascending: true });
-    if (projectsError) throw projectsError;
+      if (projectsError) throw projectsError;
     const normalizedProjects = Array.isArray(projects) ? projects.filter(Boolean) : [];
-    const project = (normalizedProjects.find((item: any) => item.id === projectId) || defaultProject) as any;
+    const project =
+      (normalizedProjectId
+        ? normalizedProjects.find((item: any) => item.id === normalizedProjectId)
+        : undefined) || defaultProject;
     if (project && !normalizedProjects.some((item: any) => item.id === project.id)) {
       normalizedProjects.unshift(project);
     }

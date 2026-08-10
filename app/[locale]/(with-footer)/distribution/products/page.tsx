@@ -120,6 +120,7 @@ export default async function DistributionProductsPage({
 
   const visibleUpdatedAt = formatSimpleDate(project?.updatedAt) || '未更新';
   const visibleProjectCount = visibleProjects.length;
+  const projectScopedKey = projectId ? `project:${projectId}` : 'project:default';
   const profileMissingItems = [
     !project?.name ? 'product name' : null,
     !project?.websiteUrl ? 'website URL' : null,
@@ -267,7 +268,7 @@ export default async function DistributionProductsPage({
           )}
         </div>
       </section>
-      <section className='rounded-2xl border border-cyan-200 bg-white p-5 shadow-sm'>
+      <section key={`${projectScopedKey}-overview`} className='rounded-2xl border border-cyan-200 bg-white p-5 shadow-sm'>
         <div className='flex flex-wrap items-center justify-between gap-3'>
           <div>
             <div className='text-xs font-bold uppercase tracking-[0.2em] text-cyan-700'>Product profile</div>
@@ -324,7 +325,7 @@ export default async function DistributionProductsPage({
         ) : null}
       </section>
 
-      <section className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
+      <section key={`${projectScopedKey}-edit`} className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
         <h2 className='text-lg font-bold text-slate-950'>
           {isChinese ? '编辑项目资料' : 'Edit Project Facts'}
         </h2>
@@ -333,7 +334,7 @@ export default async function DistributionProductsPage({
             ? '资料会作为分发材料和文案的事实依据，确认后再继续下一步。'
             : 'These facts become the source of all target materials; confirm before moving on.'}
         </p>
-        <DistributionActionForm action={updateDistributionProjectProfile} className='mt-4 grid gap-3 sm:grid-cols-2'>
+        <DistributionActionForm key={`${projectScopedKey}-profile-form`} action={updateDistributionProjectProfile} className='mt-4 grid gap-3 sm:grid-cols-2'>
           <input type='hidden' name='projectId' value={projectId || ''} />
           <label className='text-xs font-semibold text-slate-700'>
             {isChinese ? '产品名' : 'Product name'}
@@ -418,7 +419,7 @@ export default async function DistributionProductsPage({
         </DistributionActionForm>
       </section>
 
-      <section className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
+      <section key={`${projectScopedKey}-assets`} className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
         <div className='flex items-center justify-between'>
           <h2 className='text-lg font-bold text-slate-950'>{isChinese ? '素材中心' : 'Project Assets'}</h2>
           <div className='inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-700'>
@@ -456,7 +457,7 @@ export default async function DistributionProductsPage({
 
         <div className='mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4'>
           <h3 className='text-xs font-bold uppercase tracking-[0.16em] text-slate-700'>{isChinese ? '添加素材' : 'Add asset'}</h3>
-          <DistributionActionForm action={createDistributionProjectAsset} className='mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-5'>
+            <DistributionActionForm key={`${projectScopedKey}-asset-form`} action={createDistributionProjectAsset} className='mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-5'>
             <input type='hidden' name='projectId' value={projectId || ''} />
             <label className='text-xs font-semibold text-slate-700'>
               {isChinese ? '素材类型' : 'Asset type'}
@@ -516,7 +517,7 @@ export default async function DistributionProductsPage({
                 <div className='text-[11px] text-slate-500'>
                   {candidate.ownershipSource || isChinese ? 'Owned listing' : 'Owned listing'} · {candidate.categoryName || '—'}
                 </div>
-                <DistributionActionForm action={importDistributionCatalogListing} className='mt-2'>
+                <DistributionActionForm key={`${projectScopedKey}-import-${candidate.id}`} action={importDistributionCatalogListing} className='mt-2'>
                   <input type='hidden' name='projectId' value={projectId || ''} />
                   <input type='hidden' name='toolId' value={candidate.id} />
                   <DistributionSubmitButton
@@ -528,7 +529,7 @@ export default async function DistributionProductsPage({
                 </DistributionActionForm>
               </div>
             ))}
-            <DistributionActionForm action={importDistributionIntelligenceAssets} className='mt-3'>
+            <DistributionActionForm key={`${projectScopedKey}-import-all`} action={importDistributionIntelligenceAssets} className='mt-3'>
               <input type='hidden' name='projectId' value={projectId || ''} />
               <DistributionSubmitButton
                 pendingLabel={isChinese ? '同步中…' : 'Syncing…'}
