@@ -39,7 +39,9 @@ export default async function DistributionProductsPage({
 }) {
   const currentLocale = params.locale;
   const result = await getDistributionDashboard(pickValue(searchParams?.project));
-  const redirectUrl = `/${currentLocale}/distribution/products${searchParams ? `?project=${pickValue(searchParams.project) || ''}` : ''}`;
+  const selectedProjectId = pickValue(searchParams?.project);
+  const redirectUrl = `/${currentLocale}/distribution/products${selectedProjectId ? `?project=${encodeURIComponent(selectedProjectId)}` : ''}`;
+  const projectQuery = selectedProjectId ? `?project=${encodeURIComponent(selectedProjectId)}` : '';
 
   if (!result.success) {
     if (result.error === 'Unauthorized') {
@@ -163,7 +165,7 @@ export default async function DistributionProductsPage({
               {blockedTasksCount > 0 ? <span className='rounded-full bg-rose-100 px-2.5 py-1 text-rose-700'>{isChinese ? '阻塞' : 'Blocked'}: {blockedTasksCount}</span> : null}
             </div>
           </div>
-          <Link href={`/${currentLocale}/distribution/settings`} className='text-xs font-bold text-cyan-700'>
+          <Link href={`/${currentLocale}/distribution/settings${projectQuery}`} className='text-xs font-bold text-cyan-700'>
             {isChinese ? '套餐与项目管理' : 'Plan & projects'}
           </Link>
         </div>
@@ -280,7 +282,10 @@ export default async function DistributionProductsPage({
                 : 'Complete project facts first, then move into execution tasks and target submissions.'}
             </p>
           </div>
-          <Link href={`/${currentLocale}/distribution`} className='inline-flex rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700 hover:border-cyan-300 hover:text-cyan-700'>
+          <Link
+            href={`/${currentLocale}/distribution${projectQuery}`}
+            className='inline-flex rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold text-cyan-700 hover:border-cyan-300 hover:text-cyan-700'
+          >
             {isChinese ? '返回今天工作台' : 'Back to Today'}
           </Link>
         </div>

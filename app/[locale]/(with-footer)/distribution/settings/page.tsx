@@ -22,7 +22,9 @@ export default async function DistributionSettingsPage({
 }) {
   const locale = params.locale;
   const result = await getDistributionDashboard(pickValue(searchParams?.project));
-  const redirectUrl = `/${locale}/distribution/settings${searchParams ? `?project=${pickValue(searchParams.project) || ''}` : ''}`;
+  const projectId = pickValue(searchParams?.project);
+  const redirectUrl = `/${locale}/distribution/settings${projectId ? `?project=${encodeURIComponent(projectId)}` : ''}`;
+  const projectQuery = projectId ? `?project=${encodeURIComponent(projectId)}` : '';
   const isChinese = locale === 'cn';
 
   if (!result.success) {
@@ -81,7 +83,7 @@ export default async function DistributionSettingsPage({
             </p>
           </div>
           <Link
-            href={`/${locale}/distribution`}
+            href={`/${locale}/distribution${projectQuery}`}
             className='rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700 hover:border-cyan-300 hover:text-cyan-700'
           >
             {isChinese ? '返回今日工作台' : 'Back to Today'}
@@ -117,7 +119,10 @@ export default async function DistributionSettingsPage({
                 ? `可用配额 ${data.projects.length}/${planCount}`
                 : `Used / total: ${data.projects.length}/${planCount}`}
             </div>
-            <Link href={`/${locale}/distribution/products`} className='mt-3 inline-flex items-center rounded-lg text-xs font-bold text-cyan-700'>
+            <Link
+              href={`/${locale}/distribution/products${projectQuery}`}
+              className='mt-3 inline-flex items-center rounded-lg text-xs font-bold text-cyan-700'
+            >
               {isChinese ? '管理项目设置' : 'Manage products'}
             </Link>
           </div>

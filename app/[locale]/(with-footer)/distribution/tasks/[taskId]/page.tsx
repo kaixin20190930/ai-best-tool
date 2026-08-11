@@ -125,11 +125,15 @@ export default async function DistributionTaskDetailPage({
   }
 
   const data = result.data;
-  const workspaceProjectId = focusProject || data.project?.id || params.taskId;
+  const workspaceProjectId = focusProject || data.project?.id;
   const workspaceFocusTarget = focusTarget || data.target?.id || '';
-  const workspaceRedirectUrl = `/${params.locale}/distribution?project=${encodeURIComponent(workspaceProjectId)}${
-    focusTask ? `&focusTask=${encodeURIComponent(focusTask)}` : ''
-  }${workspaceFocusTarget ? `&focusTarget=${encodeURIComponent(workspaceFocusTarget)}` : ''}`;
+  const workspaceRedirectParams = new URLSearchParams();
+  if (workspaceProjectId) workspaceRedirectParams.set('project', workspaceProjectId);
+  if (focusTask) workspaceRedirectParams.set('focusTask', focusTask);
+  if (workspaceFocusTarget) workspaceRedirectParams.set('focusTarget', workspaceFocusTarget);
+  const workspaceRedirectUrl = `/${params.locale}/distribution${
+    workspaceRedirectParams.toString() ? `?${workspaceRedirectParams.toString()}` : ''
+  }`;
   const isChinese = params.locale === 'cn';
   const targetName = data.target?.name || (isChinese ? '目标网站' : 'the target site');
   const taskPresentation = deriveDistributionPresentationState({
