@@ -793,7 +793,17 @@ export async function getDistributionDashboard(
     if (!allowed) return { success: true, access: false, data: null };
 
     const supabase = await createClient();
-    const normalizedProjectId = typeof projectId === 'string' ? projectId.trim() : '';
+    const normalizedProjectId =
+      typeof projectId === 'string'
+        ? (() => {
+            const trimmed = projectId.trim();
+            try {
+              return decodeURIComponent(trimmed);
+            } catch {
+              return trimmed;
+            }
+          })()
+        : '';
     const defaultProject = await ensureDefaultProject(user.id, user.email, isAdminUser(user));
     const { data: projects, error: projectsError } = await supabase
       .from('distribution_projects')
@@ -805,10 +815,25 @@ export async function getDistributionDashboard(
       .order('created_at', { ascending: true });
       if (projectsError) throw projectsError;
     const normalizedProjects = Array.isArray(projects) ? projects.filter(Boolean) : [];
+    const { data: requestedProject, error: requestedProjectError } = normalizedProjectId
+      ? await supabase
+          .from('distribution_projects')
+          .select(
+            'id, name, website_url, description, status, workspace_id, primary_goal, weekly_capacity, budget_preference, onboarding_status, facts_confirmed_at, source_tool_id, product_type, listing_imported_at, updated_at',
+          )
+          .eq('id', normalizedProjectId)
+          .eq('owner_id', user.id)
+          .neq('status', 'archived')
+          .maybeSingle()
+      : { data: null, error: null };
+    if (requestedProjectError) throw requestedProjectError;
+
     const project =
+      requestedProject ||
       (normalizedProjectId
         ? normalizedProjects.find((item: any) => item.id === normalizedProjectId)
-        : undefined) || defaultProject;
+        : undefined) ||
+      defaultProject;
     if (project && !normalizedProjects.some((item: any) => item.id === project.id)) {
       normalizedProjects.unshift(project);
     }

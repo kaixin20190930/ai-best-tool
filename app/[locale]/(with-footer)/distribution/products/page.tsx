@@ -130,6 +130,7 @@ export default async function DistributionProductsPage({
   return (
     <div className='space-y-6'>
       <DistributionProjectSwitcher
+        key={`${projectScopedKey}-switcher`}
         locale={currentLocale}
         projects={data.projects}
         selectedProjectId={project?.id || null}
