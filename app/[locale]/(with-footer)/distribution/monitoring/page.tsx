@@ -60,12 +60,14 @@ export default async function DistributionMonitoringPage({
   const projectQuery = pickValue(searchParams?.project) ? `?project=${encodeURIComponent(pickValue(searchParams?.project)!)}`
     : '';
 
+  const statusForBucket = (status: string) => {
+    if (status === 'blocked') return 'blocked';
+    if (['submitted', 'waiting_review', 'live', 'follow_up'].includes(status)) return status;
+    return 'follow_up';
+  };
+
   const grouped = monitoringTasks.reduce<Record<string, typeof monitoringTasks>>((acc, task) => {
-    const status = ['submitted', 'waiting_review', 'live', 'follow_up'].includes(task.status)
-      ? task.status
-      : task.status === 'blocked'
-        ? 'blocked'
-        : 'follow_up';
+    const status = statusForBucket(task.status);
     if (!acc[status]) acc[status] = [];
     acc[status].push(task);
     return acc;
@@ -89,13 +91,13 @@ export default async function DistributionMonitoringPage({
           </div>
           <div className='flex flex-wrap gap-2 text-sm'>
             <Link
-              href={`/${locale}/distribution/tasks`}
+              href={`/${locale}/distribution/tasks${projectQuery}`}
               className='rounded-lg border border-slate-200 px-3 py-2 font-bold text-slate-700 hover:border-cyan-300'
             >
               {isChinese ? '查看执行任务' : 'Execution queue'}
             </Link>
             <Link
-              href={`/${locale}/distribution/opportunities`}
+              href={`/${locale}/distribution/opportunities${projectQuery}`}
               className='rounded-lg border border-slate-200 px-3 py-2 font-bold text-slate-700 hover:border-cyan-300'
             >
               {isChinese ? '继续选目标' : 'Choose targets'}
