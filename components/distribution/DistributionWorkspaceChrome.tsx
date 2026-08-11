@@ -31,7 +31,7 @@ type DistributionWorkspaceChromeProps = {
   children: ReactNode;
 };
 
-const workspaceItems: DistributionWorkspaceItem[] = [
+const workspaceItems = [
   { id: 'today', href: '/distribution', label: '今天', description: '今日最重要任务', icon: Home },
   { id: 'products', href: '/distribution/products', label: '产品资料', description: '准备度与素材', icon: Package },
   {
@@ -52,7 +52,7 @@ const workspaceItems: DistributionWorkspaceItem[] = [
   { id: 'reports', href: '/distribution/reports', label: '结果报告', description: '指标与复盘', icon: BarChart3 },
 ];
 
-const extraItems: DistributionWorkspaceItem[] = [
+const extraItems = [
   { id: 'settings', href: '/distribution/settings', label: '套餐与设置', description: '升级与偏好', icon: Settings },
 ];
 
