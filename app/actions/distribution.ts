@@ -118,6 +118,7 @@ export interface DistributionDashboard {
     targetName: string | null;
     estimatedMinutes: number | null;
     estimatedCost: number | null;
+    updatedAt: string | null;
   }>;
   metrics: {
     total: number;
@@ -200,7 +201,12 @@ export interface DistributionDashboard {
     linkName: string;
     summary: string;
   };
-  targetRecommendations: Array<DistributionTargetRecommendation & { opportunityStatus: string | null }>;
+  targetRecommendations: Array<
+    DistributionTargetRecommendation & {
+      opportunityStatus: string | null;
+      opportunityUpdatedAt: string | null;
+    }
+  >;
   targetRegistryUnavailable: boolean;
   assets: Array<{
     id: string;
@@ -248,7 +254,13 @@ function resolveDistributionLocaleFromHeaders(): string {
 
 function revalidateDistributionPages(taskId?: string) {
   const locale = resolveDistributionLocaleFromHeaders();
-  revalidatePath(`/${locale}/distribution`, 'page');
+  const distributionBase = `/${locale}/distribution`;
+  revalidatePath(distributionBase, 'page');
+  revalidatePath(`${distributionBase}/products`, 'page');
+  revalidatePath(`${distributionBase}/tasks`, 'page');
+  revalidatePath(`${distributionBase}/opportunities`, 'page');
+  revalidatePath(`${distributionBase}/monitoring`, 'page');
+  revalidatePath(`${distributionBase}/reports`, 'page');
   if (taskId) revalidatePath(`/${locale}/distribution/tasks/${taskId}`, 'page');
 }
 
@@ -659,13 +671,116 @@ async function cancelDistributionReminders(input: {
   if (error) throw error;
 }
 
-function opportunityStatusFromTaskStatus(status: DistributionTaskStatus) {
+type DistributionProjectTargetStatus = 'accepted' | 'in_progress' | 'submitted' | 'live' | 'blocked' | 'skipped' | 'rejected';
+
+function getOpportunityStatusRank(status: DistributionProjectTargetStatus): number {
+  if (status === 'accepted') return 1;
+  if (status === 'in_progress') return 2;
+  if (status === 'submitted') return 3;
+  if (status === 'blocked') return 4;
+  if (status === 'live') return 5;
+  if (status === 'rejected') return 6;
+  return 2;
+}
+
+function isProjectTargetStickyState(status: DistributionProjectTargetStatus) {
+  return status === 'live' || status === 'rejected';
+}
+
+function normalizeDistributionProjectTargetStatus(value: unknown): DistributionProjectTargetStatus {
+  switch (String(value || '').toLowerCase()) {
+    case 'accepted':
+      return 'accepted';
+    case 'submitted':
+      return 'submitted';
+    case 'live':
+      return 'live';
+    case 'blocked':
+      return 'blocked';
+    case 'skipped':
+      return 'skipped';
+    case 'rejected':
+      return 'rejected';
+    case 'in_progress':
+      return 'in_progress';
+    case 'done':
+      return 'live';
+    case 'ready_to_submit':
+    case 'needs_assets':
+      return 'in_progress';
+    case 'following':
+    case 'inprogress':
+      return 'in_progress';
+    case 'follow_up':
+    case 'followup':
+      return 'in_progress';
+    case 'planned':
+      return 'accepted';
+    case 'waiting_review':
+    case 'waiting-review':
+      return 'submitted';
+    default:
+      return 'in_progress';
+  }
+}
+
+function opportunityStatusFromTaskStatus(status: DistributionTaskStatus): DistributionProjectTargetStatus {
   if (status === 'live' || status === 'done') return 'live';
   if (status === 'submitted' || status === 'waiting_review' || status === 'follow_up') return 'submitted';
   if (status === 'blocked') return 'blocked';
   if (status === 'skipped') return 'skipped';
   if (status === 'planned') return 'accepted';
+  if (status === 'ready_to_submit' || status === 'needs_assets' || status === 'in_progress') return 'in_progress';
   return 'in_progress';
+}
+
+function resolveOpportunityStatusFromSignals(input: {
+  projectTargetStatus: DistributionProjectTargetStatus | null;
+  taskStatus: DistributionProjectTargetStatus | null;
+}): DistributionProjectTargetStatus | null {
+  if (!input.projectTargetStatus && !input.taskStatus) return null;
+  if (!input.projectTargetStatus) return input.taskStatus || null;
+
+  // Keep submitted/live/blocked/skipped/rejected states stored on the project-target bridge.
+  // They represent canonical progress and should not be downgraded by stale task rows.
+  if (input.projectTargetStatus !== 'accepted' && input.projectTargetStatus !== 'in_progress') {
+    return input.projectTargetStatus;
+  }
+
+  // If target bridge only shows accepted/in_progress and task has a stronger signal,
+  // use the task signal. Otherwise keep bridge state for clarity at product scope.
+  if (input.taskStatus && input.taskStatus !== 'in_progress') return input.taskStatus;
+  return input.projectTargetStatus;
+}
+
+function pickMostRecentTimestamp(values: Array<string | null | undefined>): string | null {
+  let latest = '';
+  for (const value of values) {
+    if (!value) continue;
+    const candidate = String(value);
+    if (candidate > latest) latest = candidate;
+  }
+  return latest || null;
+}
+
+function mergeOpportunityStatus(input: {
+  current: DistributionProjectTargetStatus;
+  next: DistributionProjectTargetStatus;
+}): DistributionProjectTargetStatus {
+  if (input.current === input.next) return input.current;
+  if (input.next === 'rejected') return 'rejected';
+  if (isProjectTargetStickyState(input.current) && input.next !== 'blocked') return input.current;
+  if (isProjectTargetStickyState(input.current) && input.next === 'blocked') return 'blocked';
+  if (getOpportunityStatusRank(input.next) < getOpportunityStatusRank(input.current)) return input.current;
+  return input.next;
+}
+
+function normalizeTaskStatusForDashboard(input: { status: string | null; taskType?: string | null }) {
+  const normalizedStatus = normalizeDistributionTaskStatus(input.status) || 'planned';
+  if (input.taskType === 'follow_up' && normalizedStatus === 'planned') {
+    return 'follow_up' as DistributionTaskStatus;
+  }
+  return normalizedStatus;
 }
 
 async function syncDistributionProjectTargetStatus(input: {
@@ -674,17 +789,42 @@ async function syncDistributionProjectTargetStatus(input: {
   projectId: string;
   targetId: string | null | undefined;
   taskStatus: DistributionTaskStatus;
+  taskType?: string | null;
+  taskUpdatedAt?: string | null;
 }) {
   if (!input.targetId) return;
+  if (input.taskType === 'follow_up' && input.taskStatus === 'planned') {
+    return;
+  }
+  const now = new Date().toISOString();
+  const { data: existing } = await input.supabase
+    .from('distribution_project_targets')
+    .select('opportunity_status, updated_at')
+    .eq('project_id', input.projectId)
+    .eq('target_id', input.targetId)
+    .eq('owner_id', input.userId)
+    .maybeSingle();
+  const currentOpportunityStatus = normalizeDistributionProjectTargetStatus(existing?.opportunity_status);
+  const nextOpportunityStatus = opportunityStatusFromTaskStatus(input.taskStatus);
+  if (
+    input.taskUpdatedAt &&
+    existing?.updated_at &&
+    String(existing.updated_at) > String(input.taskUpdatedAt)
+  ) {
+    return;
+  }
+  const mergedOpportunityStatus = mergeOpportunityStatus({
+    current: currentOpportunityStatus,
+    next: nextOpportunityStatus,
+  });
+  const shouldTouchSubmissionTime =
+    nextOpportunityStatus === 'live' || nextOpportunityStatus === 'submitted';
   const { error } = await input.supabase
     .from('distribution_project_targets')
     .update({
-      opportunity_status: opportunityStatusFromTaskStatus(input.taskStatus),
-      last_submission_at:
-        input.taskStatus === 'submitted' || input.taskStatus === 'waiting_review' || input.taskStatus === 'live'
-          ? new Date().toISOString()
-          : null,
-      updated_at: new Date().toISOString(),
+      opportunity_status: mergedOpportunityStatus,
+      last_submission_at: shouldTouchSubmissionTime ? now : null,
+      updated_at: now,
     })
     .eq('project_id', input.projectId)
     .eq('target_id', input.targetId)
@@ -723,7 +863,7 @@ async function insertDistributionFollowUpTask(input: {
       channel_id: input.channelId,
       title,
       task_type: 'follow_up',
-      status: 'planned',
+      status: 'follow_up',
       priority: 'p1',
       due_date: input.dueDate.toISOString().slice(0, 10),
       instructions: input.reason,
@@ -877,7 +1017,7 @@ export async function getDistributionDashboard(
       supabase
       .from('distribution_tasks')
       .select(
-        'id, project_id, title, status, blocked_reason, priority, task_type, due_date, instructions, target_id, estimated_minutes, distribution_channels(name, channel_type), distribution_results(id, live_url, target_url, link_status, checked_at, created_at, notes)',
+        'id, project_id, title, status, blocked_reason, priority, task_type, due_date, instructions, target_id, estimated_minutes, updated_at, distribution_channels(name, channel_type), distribution_results(id, live_url, target_url, link_status, checked_at, created_at, notes)',
       )
         .eq('project_id', project.id)
         .order('due_date', { ascending: true, nullsFirst: false })
@@ -944,7 +1084,9 @@ export async function getDistributionDashboard(
       }),
       supabase
         .from('distribution_project_targets')
-        .select('id, target_id, opportunity_status, match_score, estimated_minutes, estimated_cost')
+        .select(
+          'id, target_id, opportunity_status, match_score, estimated_minutes, estimated_cost, updated_at, last_submission_at',
+        )
         .eq('project_id', project.id)
         .eq('owner_id', user.id),
       supabase
@@ -996,7 +1138,54 @@ export async function getDistributionDashboard(
         })
       : [];
 
-    const projectTargetByTargetId = new Map((projectTargetRows || []).map((row: any) => [String(row.target_id), row]));
+    const latestTaskByTargetId = new Map<
+      string,
+      {
+        taskStatus: DistributionTaskStatus;
+        updatedAt: string | null;
+        taskType: string | null;
+      }
+    >();
+    for (const task of tasks || []) {
+      const taskType = task.task_type ? String(task.task_type) : null;
+      const targetId = task.target_id ? String(task.target_id) : '';
+      if (!targetId) continue;
+      const taskStatus = normalizeTaskStatusForDashboard({
+        status: String(task.status || ''),
+        taskType: String(task.task_type || ''),
+      });
+      if (taskType === 'follow_up' && taskStatus === 'planned') {
+        continue;
+      }
+      const updatedAt = (task.updated_at as string | null | undefined) || null;
+      const existing = latestTaskByTargetId.get(targetId);
+      const shouldReplace =
+        !existing ||
+        (!existing.updatedAt && !!updatedAt) ||
+        (updatedAt !== null && existing.updatedAt !== null && updatedAt > existing.updatedAt) ||
+        (updatedAt !== null && existing.updatedAt === null);
+      if (shouldReplace) {
+        latestTaskByTargetId.set(targetId, {
+          taskStatus,
+          updatedAt,
+          taskType,
+        });
+      }
+    }
+    const normalizedProjectTargetRows = [...(projectTargetRows || [])]
+      .filter((row: any) => row && row.target_id)
+      .sort((a: any, b: any) => {
+        const left = String(b?.updated_at || '').localeCompare(String(a?.updated_at || ''));
+        if (left !== 0) return left;
+        return String(b?.id || '').localeCompare(String(a?.id || ''));
+      });
+    const dashboardProjectTargetByTargetId = new Map<string, any>();
+    for (const row of normalizedProjectTargetRows) {
+      const targetId = String(row.target_id);
+      if (!dashboardProjectTargetByTargetId.has(targetId)) {
+        dashboardProjectTargetByTargetId.set(targetId, row);
+      }
+    }
     const dashboardTargetNameById = new Map(
       (dashboardTargetRows || []).map((row: any) => [String(row.id), String(row.name || 'Target site')]),
     );
@@ -1028,10 +1217,26 @@ export async function getDistributionDashboard(
         budgetPreference: project.budget_preference || null,
         productType: (project.product_type as DistributionProductType | null) || null,
       },
-    ).map((target) => ({
-      ...target,
-      opportunityStatus: projectTargetByTargetId.get(target.id)?.opportunity_status || null,
-    }));
+    ).map((target) => {
+      const latestTask = latestTaskByTargetId.get(target.id);
+      const projectTarget = dashboardProjectTargetByTargetId.get(target.id);
+      const projectTargetStatus = projectTarget ? normalizeDistributionProjectTargetStatus(projectTarget?.opportunity_status) : null;
+      const latestTaskStatus = projectTarget && latestTask
+        ? opportunityStatusFromTaskStatus(latestTask.taskStatus)
+        : null;
+      return {
+        ...target,
+        opportunityStatus: resolveOpportunityStatusFromSignals({
+          projectTargetStatus,
+          taskStatus: latestTaskStatus,
+        }),
+        opportunityUpdatedAt: pickMostRecentTimestamp([
+          latestTask?.updatedAt,
+          projectTarget?.updated_at,
+          projectTarget?.last_submission_at,
+        ]),
+      };
+    });
 
   const today = new Date().toISOString().slice(0, 10);
   const localeHint = resolveDistributionLocaleFromHeaders();
@@ -1050,8 +1255,8 @@ export async function getDistributionDashboard(
       .not('status', 'in', '(done,skipped)')
       .order('due_date', { ascending: true, nullsFirst: false }),
     supabase
-      .from('distribution_project_targets')
-      .select('project_id, target_id, estimated_minutes, estimated_cost')
+    .from('distribution_project_targets')
+      .select('project_id, target_id, estimated_minutes, estimated_cost, updated_at')
       .in('project_id', projectIds)
       .eq('owner_id', user.id),
   ]);
@@ -1065,7 +1270,7 @@ export async function getDistributionDashboard(
   const targetIds = Array.from(
     new Set((globalTasks || []).map((task: any) => String(task.target_id || '').trim()).filter(Boolean)),
   );
-  const globalTargetRows = targetIds.length
+    const globalTargetRows = targetIds.length
     ? await queryDatabase<{ id: string; name: string | null }>(
         `select id, name from distribution_targets where id = any($1::uuid[])`,
         [targetIds],
@@ -1076,10 +1281,18 @@ export async function getDistributionDashboard(
       })
     : [];
 
-  const projectTargetByKey = new Map<string, any>();
-  for (const row of globalProjectTargets || []) {
-    projectTargetByKey.set(`${String(row.project_id)}:${String(row.target_id)}`, row);
+  const globalProjectTargetByKey = new Map<string, any>();
+  for (const row of [...(globalProjectTargets || [])]) {
+    const projectId = String(row?.project_id || '');
+    const targetId = String(row?.target_id || '');
+    if (!projectId || !targetId) continue;
+    const mapKey = `${projectId}:${targetId}`;
+    const existing = globalProjectTargetByKey.get(mapKey);
+    if (!existing || String(row.updated_at || '').localeCompare(String(existing.updated_at || '')) > 0) {
+      globalProjectTargetByKey.set(mapKey, row);
+    }
   }
+
   const targetNameById = new Map(
     (globalTargetRows || []).map((row: any) => [String(row.id), String(row.name || 'Target site')]),
   );
@@ -1090,8 +1303,11 @@ export async function getDistributionDashboard(
       : task.distribution_projects?.[0] || {};
     const projectId = String(task.project_id || '');
     const targetId = task.target_id ? String(task.target_id) : null;
-    const projectTarget = targetId ? projectTargetByKey.get(`${projectId}:${targetId}`) || null : null;
-    const status = normalizeDistributionTaskStatus(task.status) || 'planned';
+    const projectTarget = targetId ? globalProjectTargetByKey.get(`${projectId}:${targetId}`) || null : null;
+    const status = normalizeTaskStatusForDashboard({
+      status: String(task.status || 'planned'),
+      taskType: String(task.task_type || ''),
+    });
     return {
       id: String(task.id),
       title: String(task.title || ''),
@@ -1156,10 +1372,13 @@ export async function getDistributionDashboard(
       const latestResult = [...(task.distribution_results || [])].sort((a, b) =>
         String(b.created_at).localeCompare(String(a.created_at)),
       )[0];
-      const projectTarget = task.target_id
-        ? projectTargetByTargetId.get(String(task.target_id)) || null
+    const projectTarget = task.target_id
+        ? dashboardProjectTargetByTargetId.get(String(task.target_id)) || null
         : null;
-      const status = normalizeDistributionTaskStatus(task.status) || 'planned';
+      const status = normalizeTaskStatusForDashboard({
+        status: String(task.status || ''),
+        taskType: String(task.task_type || ''),
+      });
       const estimatedMinutes =
         task.estimated_minutes !== null && task.estimated_minutes !== undefined
           ? Number(task.estimated_minutes)
@@ -1192,6 +1411,7 @@ export async function getDistributionDashboard(
             : null,
         estimatedCost:
           estimatedCost !== null && Number.isFinite(estimatedCost) && estimatedCost >= 0 ? estimatedCost : null,
+        updatedAt: (task.updated_at as string | null | undefined) || null,
       };
     });
     
@@ -1212,7 +1432,7 @@ export async function getDistributionDashboard(
 
     normalizedTasks.forEach((task) => {
       const taskId = String(task.id);
-      const taskHref = `/${localeHint}/distribution/tasks/${taskId}`;
+      const taskHref = `/${localeHint}/distribution/tasks/${taskId}?project=${encodeURIComponent(project.id)}`;
       if (isDateToday(task.dueDate, today) && !dashboardDoneStatuses.has(task.status)) {
         pushNotification({
           id: `due-${taskId}`,
@@ -2358,7 +2578,7 @@ export async function updateDistributionTaskStatus(formData: FormData): Promise<
     const supabase = await createClient();
     const { data: existingTask, error: existingTaskError } = await supabase
       .from('distribution_tasks')
-      .select('id, project_id, status, title, target_id')
+      .select('id, project_id, status, title, target_id, task_type')
       .eq('id', taskId)
       .eq('owner_id', user.id)
       .maybeSingle();
@@ -2427,6 +2647,8 @@ export async function updateDistributionTaskStatus(formData: FormData): Promise<
       projectId: String(existingTask.project_id),
       targetId: existingTask.target_id ? String(existingTask.target_id) : null,
       taskStatus: status,
+      taskType: String(existingTask.task_type || ''),
+      taskUpdatedAt: now,
     });
 
     if (['submitted', 'waiting_review'].includes(status)) {
@@ -2482,7 +2704,7 @@ export async function recordDistributionResult(formData: FormData): Promise<{ su
     const supabase = await createClient();
     const { data: task, error: taskError } = await supabase
       .from('distribution_tasks')
-      .select('id, title, status, project_id, channel_id, target_id')
+      .select('id, title, status, project_id, channel_id, target_id, task_type')
       .eq('id', taskId)
       .eq('owner_id', user.id)
       .maybeSingle();
@@ -2504,6 +2726,7 @@ export async function recordDistributionResult(formData: FormData): Promise<{ su
       liveUrl,
       linkStatus,
     });
+    const now = new Date().toISOString();
     const blockedReasonPayload = buildBlockedReasonText({
       reasonType: blockedReasonType,
       reasonText: blockedReason || (nextStatus === 'blocked' ? `Blocked by result: ${linkStatus}` : null),
@@ -2512,9 +2735,9 @@ export async function recordDistributionResult(formData: FormData): Promise<{ su
       .from('distribution_tasks')
       .update({
         status: nextStatus,
-        updated_at: new Date().toISOString(),
+        updated_at: now,
         blocked_reason: nextStatus === 'blocked' ? blockedReasonPayload.summary : null,
-        completed_at: nextStatus === 'live' ? new Date().toISOString() : null,
+        completed_at: nextStatus === 'live' ? now : null,
       })
       .eq('id', taskId)
       .eq('owner_id', user.id);
@@ -2553,6 +2776,8 @@ export async function recordDistributionResult(formData: FormData): Promise<{ su
       projectId: String(task.project_id),
       targetId: task.target_id ? String(task.target_id) : null,
       taskStatus: nextStatus,
+      taskType: String(task.task_type || ''),
+      taskUpdatedAt: now,
     });
 
     if (nextStatus === 'live') {
@@ -2606,7 +2831,7 @@ export async function recheckDistributionTaskResult(formData: FormData): Promise
     const supabase = await createClient();
     const { data: task, error: taskError } = await supabase
       .from('distribution_tasks')
-      .select('id, title, status, project_id, channel_id, target_id')
+      .select('id, title, status, project_id, channel_id, target_id, task_type')
       .eq('id', taskId)
       .eq('owner_id', user.id)
       .maybeSingle();
@@ -2688,6 +2913,8 @@ export async function recheckDistributionTaskResult(formData: FormData): Promise
       projectId: String(task.project_id),
       targetId: task.target_id ? String(task.target_id) : null,
       taskStatus: nextStatus,
+      taskType: String(task.task_type || ''),
+      taskUpdatedAt: checkedAt,
     });
 
     if (nextStatus === 'live') {
@@ -2884,7 +3111,7 @@ export async function getDistributionTaskDetail(
     if (templatesError) throw templatesError;
     const { data: queue, error: queueError } = await supabase
       .from('distribution_tasks')
-      .select('id, title, status, priority, due_date, distribution_channels(name, channel_type)')
+      .select('id, title, status, task_type, priority, due_date, distribution_channels(name, channel_type)')
       .eq('project_id', task.project_id)
       .order('due_date', { ascending: true, nullsFirst: false })
       .order('created_at', { ascending: false });
@@ -2967,11 +3194,15 @@ export async function getDistributionTaskDetail(
             String(b.created_at).localeCompare(String(a.created_at)),
           )[0]
         : null;
-    const detail = buildDistributionTaskDetail({
+  const normalizedTaskStatus = normalizeTaskStatusForDashboard({
+    status: String(task.status || 'planned'),
+    taskType: String(task.task_type || ''),
+  });
+  const detail = buildDistributionTaskDetail({
       task: {
         id: String(task.id),
         title: String(task.title || ''),
-        status: normalizeDistributionTaskStatus(String(task.status || 'planned')) || 'planned',
+        status: normalizedTaskStatus,
         priority: String(task.priority || 'p1'),
         taskType: String(task.task_type || 'submit'),
         dueDate: (task.due_date as string | null | undefined) || null,
@@ -3072,7 +3303,10 @@ export async function getDistributionTaskDetail(
       reminders: (reminderRows || [])
         .filter(
           (reminder: any) =>
-            !(task.status === 'live' && SUBMISSION_REMINDER_TYPES.includes(String(reminder.reminder_type || ''))),
+            !(
+              normalizedTaskStatus === 'live' &&
+              SUBMISSION_REMINDER_TYPES.includes(String(reminder.reminder_type || ''))
+            ),
         )
         .map((reminder: any) => ({
           id: String(reminder.id),
@@ -3091,7 +3325,10 @@ export async function getDistributionTaskDetail(
       queue: (queue || []).map((item: any) => ({
         id: item.id,
         title: item.title,
-        status: normalizeDistributionTaskStatus(item.status) || 'planned',
+        status: normalizeTaskStatusForDashboard({
+          status: String(item.status || 'planned'),
+          taskType: String(item.task_type || ''),
+        }),
         priority: item.priority,
         dueDate: item.due_date,
         channelName: item.distribution_channels?.name || 'Unknown channel',

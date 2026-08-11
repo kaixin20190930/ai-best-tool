@@ -330,7 +330,7 @@ export default async function DistributionReportsPage({
               </div>
               <div className='mt-3'>
                 <Link
-                  href={`/${locale}/distribution/tasks/${item.taskId}${projectQuery ? projectQuery : ''}`}
+                  href={`/${locale}/distribution/tasks/${item.taskId}${projectQuery ? `${projectQuery}&` : '?'}focusTask=${encodeURIComponent(item.taskId)}`}
                   className='inline-flex items-center gap-1 rounded-lg bg-slate-900 px-2.5 py-1.5 text-xs font-bold text-white'
                 >
                   {isChinese ? '记录复查结果' : 'Update result'}

@@ -57,6 +57,8 @@ export default async function DistributionMonitoringPage({
   const monitoringTasks = sourceTasks.filter((task) =>
     ['submitted', 'waiting_review', 'live', 'follow_up', 'blocked'].includes(task.status),
   );
+  const projectQuery = pickValue(searchParams?.project) ? `?project=${encodeURIComponent(pickValue(searchParams?.project)!)}`
+    : '';
 
   const grouped = monitoringTasks.reduce<Record<string, typeof monitoringTasks>>((acc, task) => {
     const status = ['submitted', 'waiting_review', 'live', 'follow_up'].includes(task.status)
@@ -168,7 +170,7 @@ export default async function DistributionMonitoringPage({
                       {task.targetName ? <div className='mt-1 text-xs text-slate-600'>{task.targetName}</div> : null}
                       <div className='mt-3 flex flex-wrap gap-2'>
                         <Link
-                          href={`/${locale}/distribution/tasks/${task.id}`}
+                          href={`/${locale}/distribution/tasks/${task.id}${projectQuery}${projectQuery ? '&' : '?'}focusTask=${encodeURIComponent(task.id)}${task.targetId ? `&focusTarget=${encodeURIComponent(task.targetId)}` : ''}`}
                           className='inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 hover:border-cyan-300'
                         >
                           {isChinese ? '打开任务' : 'Open task'}
@@ -191,7 +193,7 @@ export default async function DistributionMonitoringPage({
                           </DistributionSubmitButton>
                         </DistributionActionForm>
                         <a
-                          href={task.liveUrl || `/${locale}/distribution/tasks/${task.id}`}
+                          href={task.liveUrl || `/${locale}/distribution/tasks/${task.id}${projectQuery}`}
                           target='_blank'
                           rel='noreferrer'
                           className='inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 hover:border-cyan-300'

@@ -149,7 +149,7 @@ function renderTaskCard(task: any, locale: string, localePrefix: string, project
 
       <div className='mt-3 flex flex-wrap gap-2'>
         <Link
-          href={`/${localePrefix}/distribution/tasks/${task.id}?focusTask=${encodeURIComponent(task.id)}${projectParam ? `&focusTarget=${encodeURIComponent(task.targetName || task.targetId || '')}` : ''}`}
+          href={`/${localePrefix}/distribution/tasks/${task.id}?focusTask=${encodeURIComponent(task.id)}${projectParam ? `&project=${encodeURIComponent(projectParam)}` : ''}${task.targetId ? `&focusTarget=${encodeURIComponent(task.targetId)}` : ''}`}
           className='inline-flex items-center gap-1 rounded-lg bg-slate-900 px-3 py-2 text-xs font-bold text-white hover:bg-slate-800'
         >
           <ArrowRight className='h-3.5 w-3.5' />

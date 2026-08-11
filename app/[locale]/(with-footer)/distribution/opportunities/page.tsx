@@ -36,7 +36,14 @@ function toChineseBoolean(value: boolean, locale: string) {
 
 function deriveOpportunityStatus(status: string | null | undefined) {
   if (!status) return 'recommended';
-  if (status === 'accepted' || status === 'in_progress' || status === 'submitted' || status === 'live' || status === 'blocked') {
+  if (
+    status === 'accepted' ||
+    status === 'in_progress' ||
+    status === 'submitted' ||
+    status === 'live' ||
+    status === 'blocked' ||
+    status === 'follow_up'
+  ) {
     return 'selected';
   }
   if (status === 'skipped') return 'skipped';
@@ -50,11 +57,18 @@ function buildOpportunitySection(
   projectId: string,
 ) {
   const allCards = data.targetRecommendations || [];
-  const taskByTargetId = new Map(
-    data.tasks
-      .filter((task) => task.targetId)
-      .map((task) => [String(task.targetId), task.id]),
-  );
+  const taskByTargetId = (() => {
+    const map = new Map<string, { id: string; updatedAt: string | null }>();
+    for (const task of data.tasks || []) {
+      if (!task.targetId) continue;
+      const key = String(task.targetId);
+      const existing = map.get(key);
+      if (!existing || (task.updatedAt && existing.updatedAt && task.updatedAt > existing.updatedAt) || (!existing.updatedAt && task.updatedAt)) {
+        map.set(key, { id: String(task.id), updatedAt: task.updatedAt || null });
+      }
+    }
+    return map;
+  })();
 
   const cards = allCards.filter((item) => deriveOpportunityStatus(item.opportunityStatus || null) === status);
   const titleMap = {
@@ -70,6 +84,23 @@ function buildOpportunitySection(
     other: locale === 'cn' ? '暂无其他状态。' : 'No historical opportunities.',
   };
 
+  const renderStatusLabel = (value: string | null | undefined) => {
+    if (!value) return locale === 'cn' ? '待开启' : 'Pending';
+    if (
+      value === 'accepted' ||
+      value === 'in_progress' ||
+      value === 'submitted' ||
+      value === 'live' ||
+      value === 'blocked' ||
+      value === 'follow_up'
+    ) {
+      return locale === 'cn' ? '执行中' : 'In progress';
+    }
+    if (value === 'skipped') return locale === 'cn' ? '已跳过' : 'Skipped';
+    if (value === 'rejected') return locale === 'cn' ? '已拒绝' : 'Rejected';
+    return value;
+  };
+
   return (
     <section className='rounded-2xl border border-slate-200 bg-white p-4 shadow-sm'>
       <div className='mb-3 flex items-center justify-between'>
@@ -81,9 +112,11 @@ function buildOpportunitySection(
       {cards.length === 0 ? <div className='rounded-xl bg-slate-50 p-3 text-sm text-slate-600'>{emptyMap[status]}</div> : null}
 
       <div className='space-y-3'>
-        {cards.map((item) => {
-          const taskId = taskByTargetId.get(item.id) || '';
-          const targetReady = !!item.submissionUrl;
+            {cards.map((item) => {
+              const taskInfo = taskByTargetId.get(item.id);
+              const taskId = taskInfo?.id || '';
+              const opportunityUpdatedAt = item.opportunityUpdatedAt ? item.opportunityUpdatedAt.slice(0, 10) : '';
+              const targetReady = !!item.submissionUrl;
           const reasonCount = item.reasons.length;
           const detailTitle = item.name || item.channelName;
           const hasAccount = toChineseBoolean(item.requiresAccount, locale);
@@ -108,10 +141,16 @@ function buildOpportunitySection(
                   <span className='rounded-full bg-slate-900 px-2.5 py-1 text-xs text-white'>{item.confidence}%</span>
                 </div>
               </div>
-              <div className='mt-2 flex flex-wrap gap-2 text-[11px] text-slate-700'>
-                <span className='inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-1 text-emerald-700'>
-                  <ShieldCheck className='h-3 w-3' />
-                  {locale === 'cn' ? '人工审核' : 'Editorial'}：{item.editorialReview ? 'required' : 'none'}
+                <div className='mt-2 flex flex-wrap gap-2 text-[11px] text-slate-700'>
+                  <span className='inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-1 text-slate-700'>
+                    {renderStatusLabel(item.opportunityStatus || null)}
+                  </span>
+                  <span className='inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-1 text-slate-700'>
+                    {locale === 'cn' ? '更新' : 'Updated'}：{opportunityUpdatedAt || '--'}
+                  </span>
+                  <span className='inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-1 text-emerald-700'>
+                    <ShieldCheck className='h-3 w-3' />
+                    {locale === 'cn' ? '人工审核' : 'Editorial'}：{item.editorialReview ? 'required' : 'none'}
                 </span>
                 <span className='inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-1 text-amber-700'>
                   <CircleDollarSign className='h-3 w-3' />
@@ -201,7 +240,7 @@ function buildOpportunitySection(
                 ) : null}
                 {taskId ? (
                   <Link
-                    href={`/${locale}/distribution/tasks/${taskId}`}
+                    href={`/${locale}/distribution/tasks/${taskId}?project=${encodeURIComponent(projectId)}&focusTarget=${encodeURIComponent(item.id)}`}
                     className='inline-flex items-center gap-1 rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-bold text-white hover:bg-slate-800'
                   >
                     {targetReady

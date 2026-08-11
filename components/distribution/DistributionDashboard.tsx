@@ -15,6 +15,7 @@ import {
   Radar,
   Send,
   ShieldCheck,
+  Clock3,
 } from 'lucide-react';
 import { useFormStatus } from 'react-dom';
 import { useRouter } from 'next/navigation';
@@ -259,6 +260,19 @@ function toLocaleDateDisplay(dateKey: string) {
   return `${m}/${d}`;
 }
 
+function formatSimpleDateTime(dateValue: string | null) {
+  if (!dateValue) return '';
+  const parsed = new Date(dateValue);
+  if (Number.isNaN(parsed.getTime())) return '';
+  return parsed.toLocaleString(undefined, {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
 export default function DistributionDashboard({
   data,
   locale,
@@ -328,7 +342,18 @@ export default function DistributionDashboard({
   }, [allTasks, statusFilter, targetFilter, searchFilter, dateFromFilter, dateToFilter, feeFilter, activeView]);
   const filteredTargetTasks = useMemo(() => filteredTasks.filter((task) => Boolean(task.targetId)), [filteredTasks]);
   const targetTaskByTargetId = useMemo(
-    () => new Map(filteredTargetTasks.map((task) => [String(task.targetId), task])),
+    () => {
+      const map = new Map<string, DistributionDashboardTask>();
+      for (const task of filteredTargetTasks) {
+        const targetId = String(task.targetId || '');
+        if (!targetId) continue;
+        const existing = map.get(targetId);
+        if (!existing || !existing.updatedAt || (task.updatedAt && task.updatedAt > existing.updatedAt)) {
+          map.set(targetId, task);
+        }
+      }
+      return map;
+    },
     [filteredTargetTasks],
   );
   const priorityAwareSort = (tasks: DistributionDashboardTask[]) =>
@@ -343,6 +368,9 @@ export default function DistributionDashboard({
     if (typeof window === 'undefined') return `/${locale}/distribution/tasks/${taskId}`;
     const query = new URLSearchParams(window.location.search);
     query.set('focusTask', taskId);
+    if (activeProjectId) {
+      query.set('project', activeProjectId);
+    }
     if (targetId) {
       query.set('focusTarget', targetId);
     } else {
@@ -353,6 +381,9 @@ export default function DistributionDashboard({
   };
   const openTaskWorkspace = (taskId: string, targetId?: string | null) => {
     const nextSearch = new URLSearchParams();
+    if (activeProjectId) {
+      nextSearch.set('project', activeProjectId);
+    }
     nextSearch.set('focusTask', taskId);
     if (targetId) nextSearch.set('focusTarget', targetId);
     router.push(`/${locale}/distribution/tasks/${taskId}?${nextSearch.toString()}`);
@@ -1625,6 +1656,12 @@ export default function DistributionDashboard({
                           <span className={`rounded-lg px-3 py-2 text-xs font-bold ${opportunityStatusToneClass(target.opportunityStatus)}`}>
                             {opportunityStatusLabel(target.opportunityStatus, isChinese)}
                           </span>
+                          {target.opportunityUpdatedAt ? (
+                            <span className='inline-flex items-center gap-1 rounded-lg bg-white px-2.5 py-1 text-[11px] text-slate-500'>
+                              <Clock3 className='h-3 w-3' />
+                              {isChinese ? '状态更新时间' : 'Updated'}: {formatSimpleDateTime(target.opportunityUpdatedAt)}
+                            </span>
+                          ) : null}
                           {acceptedTask ? (
                     <Link
                       href={buildTaskHref(acceptedTask.id, acceptedTask.targetId)}

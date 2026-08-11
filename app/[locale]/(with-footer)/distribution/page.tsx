@@ -14,6 +14,7 @@ type DistributionPageSearchParams = {
 type DistributionActionItem = {
   taskId: string;
   targetName: string;
+  targetId: string | null;
   channelName: string | null;
   status: DistributionPresentationState['status'];
   dueDate: string | null;
@@ -48,7 +49,22 @@ function formatDateLabel(value: string | null) {
   return value.slice(0, 10);
 }
 
-function buildActionCandidates(tasks: Array<{ id: string; title: string; status: string; taskType?: string; dueDate: string | null; targetName?: string | null; channelName?: string | null; blockedReason?: string | null; linkStatus?: string | null; packageStatus?: string | null; liveUrl?: string | null; }>): DistributionActionItem[] {
+function buildActionCandidates(
+  tasks: Array<{
+    id: string;
+    title: string;
+    status: string;
+    taskType?: string;
+    dueDate: string | null;
+    targetId?: string | null;
+    targetName?: string | null;
+    channelName?: string | null;
+    blockedReason?: string | null;
+    linkStatus?: string | null;
+    packageStatus?: string | null;
+    liveUrl?: string | null;
+  }>,
+): DistributionActionItem[] {
   return tasks
     .filter((task) => !['done', 'skipped'].includes(task.status))
     .map((task) => {
@@ -65,6 +81,7 @@ function buildActionCandidates(tasks: Array<{ id: string; title: string; status:
       return {
         taskId: task.id,
         targetName: target,
+        targetId: task.targetId || null,
         channelName: task.channelName || task.taskType || null,
         status: state.status,
         phase: state.phase,
@@ -281,7 +298,7 @@ export default async function DistributionPage({
           <div className='mt-4 space-y-3'>
             {todayActionItems.map((task) => (
               <Link
-                href={`/${locale}/distribution/tasks/${task.taskId}`}
+                href={`/${locale}/distribution/tasks/${task.taskId}?focusTask=${encodeURIComponent(task.taskId)}${projectId ? `&project=${encodeURIComponent(projectId)}` : ''}${task.targetId ? `&focusTarget=${encodeURIComponent(task.targetId)}` : ''}`}
                 key={task.taskId}
                 className='block rounded-xl border border-slate-200 bg-slate-50 p-3 transition hover:border-cyan-300 hover:bg-white'
               >
@@ -317,7 +334,7 @@ export default async function DistributionPage({
             ) : null}
             {blockedItems.slice(0, 3).map((task) => (
               <Link
-                href={`/${locale}/distribution/tasks/${task.taskId}`}
+                href={`/${locale}/distribution/tasks/${task.taskId}?focusTask=${encodeURIComponent(task.taskId)}${projectId ? `&project=${encodeURIComponent(projectId)}` : ''}${task.targetId ? `&focusTarget=${encodeURIComponent(task.targetId)}` : ''}`}
                 key={`blocked-${task.taskId}`}
                 className='flex items-center justify-between rounded-xl border border-rose-100 bg-rose-50 p-3 text-sm text-rose-900 hover:bg-rose-100'
               >
@@ -343,7 +360,7 @@ export default async function DistributionPage({
             ) : null}
             {monitoringItems.map((task) => (
               <Link
-                href={`/${locale}/distribution/tasks/${task.taskId}`}
+                href={`/${locale}/distribution/tasks/${task.taskId}?focusTask=${encodeURIComponent(task.taskId)}${projectId ? `&project=${encodeURIComponent(projectId)}` : ''}${task.targetId ? `&focusTarget=${encodeURIComponent(task.targetId)}` : ''}`}
                 key={`monitor-${task.taskId}`}
                 className='block rounded-xl border border-slate-200 bg-slate-50 p-3'
               >

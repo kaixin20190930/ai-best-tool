@@ -102,16 +102,19 @@ export default async function DistributionTaskDetailPage({
   searchParams,
 }: {
   params: { locale: string; taskId: string };
-  searchParams?: { focusTask?: string | string[]; focusTarget?: string | string[] };
+  searchParams?: { focusTask?: string | string[]; focusTarget?: string | string[]; project?: string | string[] };
 }) {
   const focusTask = pickValue(searchParams?.focusTask).trim();
   const focusTarget = pickValue(searchParams?.focusTarget).trim();
+  const focusProject = pickValue(searchParams?.project).trim();
   const result = await getDistributionTaskDetail(params.taskId);
   const taskRedirectUrl = focusTask
     ? `/${params.locale}/distribution/tasks/${params.taskId}?focusTask=${encodeURIComponent(focusTask)}${
         focusTarget ? `&focusTarget=${encodeURIComponent(focusTarget)}` : ''
-      }`
-    : `/${params.locale}/distribution/tasks/${params.taskId}`;
+      }${focusProject ? `&project=${encodeURIComponent(focusProject)}` : ''}`
+    : `/${params.locale}/distribution/tasks/${params.taskId}${
+      focusProject ? `?project=${encodeURIComponent(focusProject)}` : ''
+    }`;
   if (!result.success) {
     if (result.error === 'Unauthorized')
       redirect(`/${params.locale}/login?redirect=${encodeURIComponent(taskRedirectUrl)}`);
@@ -122,7 +125,7 @@ export default async function DistributionTaskDetailPage({
   }
 
   const data = result.data;
-  const workspaceProjectId = data.project?.id || params.taskId;
+  const workspaceProjectId = focusProject || data.project?.id || params.taskId;
   const workspaceFocusTarget = focusTarget || data.target?.id || '';
   const workspaceRedirectUrl = `/${params.locale}/distribution?project=${encodeURIComponent(workspaceProjectId)}${
     focusTask ? `&focusTask=${encodeURIComponent(focusTask)}` : ''
