@@ -218,6 +218,16 @@ export interface DistributionDashboard {
 }
 
 type AccessResult = { user: User; allowed: boolean; plan: 'pilot' | 'pro' | 'agency' };
+const ASSET_NAME_MAX_LENGTH = 80;
+
+function normalizeDistributionAssetName(value: string) {
+  const normalized = value
+    .replace(/[\r\n]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .replace(/[\\/:*?"<>|]/g, '')
+    .trim();
+  return normalized.slice(0, ASSET_NAME_MAX_LENGTH) || 'Distribution product';
+}
 
 const FALLBACK_DISTRIBUTION_LOCALE = 'cn';
 
@@ -1809,6 +1819,7 @@ export async function importDistributionCatalogListing(
     const domain = listingDomain;
     if (!domain) return { success: false, error: 'The listing website URL is invalid.' };
     const now = new Date().toISOString();
+    const assetBaseName = normalizeDistributionAssetName(listing.name || project.name || 'Distribution product');
     const snapshot = {
       source: 'aibesttool_listing',
       sourceToolId: listing.id,
@@ -1882,14 +1893,14 @@ export async function importDistributionCatalogListing(
 
     const importedAssets = [
       listing.imageUrl
-        ? { assetType: 'logo', name: 'AI Best Tool listing logo', url: listing.imageUrl }
+        ? { assetType: 'logo', name: `${assetBaseName} logo`, url: listing.imageUrl }
         : null,
       listing.thumbnailUrl
-        ? { assetType: 'screenshot', name: 'AI Best Tool listing thumbnail', url: listing.thumbnailUrl }
+        ? { assetType: 'screenshot', name: `${assetBaseName} thumbnail`, url: listing.thumbnailUrl }
         : null,
       ...listing.screenshots.map((url, index) => ({
         assetType: 'screenshot',
-        name: `AI Best Tool listing screenshot ${index + 1}`,
+        name: `${assetBaseName} screenshot ${index + 1}`,
         url,
       })),
     ].filter((asset): asset is { assetType: string; name: string; url: string } => Boolean(asset?.url));
@@ -2066,15 +2077,16 @@ export async function importDistributionIntelligenceAssets(
     const supabase = await createClient();
     const { data: project, error: projectError } = await supabase
       .from('distribution_projects')
-      .select('id, intelligence_profile_id')
+      .select('id, intelligence_profile_id, source_tool_id, name')
       .eq('id', projectId)
       .eq('owner_id', user.id)
       .maybeSingle();
     if (projectError) throw projectError;
     if (!project) return { success: false, error: 'Project not found or access denied.' };
+    const assetBaseName = normalizeDistributionAssetName(project.name || 'Distribution product');
+    const adminSupabase = createAdminClient();
     let profileId = project.intelligence_profile_id || null;
     if (!profileId) {
-      const adminSupabase = createAdminClient();
       const { data: profile, error: profileError } = await adminSupabase
         .from('product_intelligence_profiles')
         .select('id')
@@ -2084,33 +2096,127 @@ export async function importDistributionIntelligenceAssets(
       if (profileError) throw profileError;
       profileId = profile?.id || null;
     }
-    if (!profileId) return { success: false, error: 'No Product Intelligence profile is linked to this project yet.' };
-    const adminSupabase = createAdminClient();
-    const { data: intelligenceAssets, error: assetError } = await adminSupabase
-      .from('product_intelligence_assets')
-      .select('id, asset_type, source_url, stored_url, width, height, evidence_status, is_placeholder')
-      .eq('profile_id', profileId)
-      .neq('evidence_status', 'rejected');
-    if (assetError) throw assetError;
-    const usableAssets = (intelligenceAssets || []).filter(
-      (asset: any) => !asset.is_placeholder && (asset.stored_url || asset.source_url),
-    );
-    if (!usableAssets.length) return { success: false, error: 'No reusable verified or candidate assets were found.' };
+
+    let resolvedAssets: Array<{
+      id: string;
+      asset_type: string;
+      source_url: string;
+      stored_url: string | null;
+      width: number | null;
+      height: number | null;
+      evidence_status: string;
+      is_placeholder: boolean;
+    }> = [];
+
+    if (profileId) {
+      const { data: intelligenceAssets, error: assetError } = await adminSupabase
+        .from('product_intelligence_assets')
+        .select('id, asset_type, source_url, stored_url, width, height, evidence_status, is_placeholder')
+        .eq('profile_id', profileId)
+        .neq('evidence_status', 'rejected');
+      if (assetError) throw assetError;
+
+      const usableAssets = (intelligenceAssets || []).filter(
+        (asset: any) => !asset.is_placeholder && (asset.stored_url || asset.source_url),
+      );
+
+      resolvedAssets = usableAssets as typeof resolvedAssets;
+    }
+
+    if (!resolvedAssets.length && project.source_tool_id) {
+      const { data: sourceTool, error: sourceToolError } = await adminSupabase
+        .from('tools')
+        .select('id, image_url, thumbnail_url, screenshots')
+        .eq('id', project.source_tool_id)
+        .maybeSingle();
+      if (sourceToolError) throw sourceToolError;
+      if (sourceTool) {
+        const screenshots = Array.isArray(sourceTool.screenshots)
+          ? sourceTool.screenshots.map(String).filter(Boolean)
+          : [];
+        const fallbackAssets = [
+          sourceTool.image_url
+            ? {
+                asset_type: 'logo',
+                source_url: sourceTool.image_url,
+                stored_url: null,
+                width: null,
+                height: null,
+                evidence_status: 'candidate',
+                is_placeholder: false,
+                id: `${sourceTool.id}-logo`,
+              }
+            : null,
+          sourceTool.thumbnail_url
+            ? {
+                asset_type: 'screenshot',
+                source_url: sourceTool.thumbnail_url,
+                stored_url: null,
+                width: null,
+                height: null,
+                evidence_status: 'candidate',
+                is_placeholder: false,
+                id: `${sourceTool.id}-thumbnail`,
+              }
+            : null,
+          ...screenshots.map((url, index) => ({
+            id: `${sourceTool.id}-screenshot-${index + 1}`,
+            asset_type: 'screenshot',
+            source_url: url,
+            stored_url: null,
+            width: null,
+            height: null,
+            evidence_status: 'candidate',
+            is_placeholder: false,
+          })),
+        ].filter(Boolean) as {
+          id: string;
+          asset_type: string;
+          source_url: string;
+          stored_url: null;
+          width: null;
+          height: null;
+          evidence_status: string;
+          is_placeholder: boolean;
+        }[];
+        resolvedAssets = fallbackAssets;
+      }
+    }
+
+    if (!resolvedAssets.length) {
+      return {
+        success: false,
+        error:
+          project.source_tool_id
+            ? 'No usable assets found. Run intelligence sync for this project, or re-import from AI Best Tool listing first.'
+            : 'No usable assets found and no source listing is linked. Link an AI Best Tool listing first, then sync again.',
+      };
+    }
+
     const { error } = await supabase.from('distribution_project_assets').upsert(
-      usableAssets.map((asset: any) => ({
-        project_id: projectId,
-        owner_id: user.id,
-        profile_asset_id: asset.id,
-        asset_type: asset.asset_type,
-        name: `${asset.asset_type}-${String(asset.id).slice(0, 8)}`,
-        source_url: asset.source_url,
-        stored_url: asset.stored_url,
-        width: asset.width,
-        height: asset.height,
-        status: asset.evidence_status === 'verified' ? 'verified' : 'candidate',
-        verified_at: asset.evidence_status === 'verified' ? new Date().toISOString() : null,
-        updated_at: new Date().toISOString(),
-      })),
+      resolvedAssets.map((asset: any) => {
+        const typeLabel = String(asset.asset_type || 'asset');
+        const isFallbackAsset = typeof asset.id === 'string' && asset.id.startsWith(`${project.source_tool_id}-`);
+        const typeIndex = typeLabel === 'logo' ? '' : String(asset.id).split('-').pop() || 'item';
+        const fileName = `${assetBaseName} ${typeLabel}`.trim() + (isFallbackAsset ? ` ${typeIndex}` : '');
+        return {
+          project_id: projectId,
+          owner_id: user.id,
+          profile_asset_id: isFallbackAsset ? null : asset.id,
+          asset_type: typeLabel,
+          name: normalizeDistributionAssetName(fileName),
+          source_url: asset.source_url,
+          stored_url: asset.stored_url || null,
+          width: asset.width,
+          height: asset.height,
+          status: asset.evidence_status === 'verified' ? 'verified' : 'candidate',
+          verified_at: asset.evidence_status === 'verified' ? new Date().toISOString() : null,
+          updated_at: new Date().toISOString(),
+          metadata: {
+            source: project.source_tool_id && String(asset.id).startsWith(`${project.source_tool_id}-`) ? 'listing_fallback' : 'intelligence',
+          },
+        };
+      }),
       { onConflict: 'project_id,asset_type,name' },
     );
     if (error) throw error;
@@ -2121,7 +2227,7 @@ export async function importDistributionIntelligenceAssets(
         .eq('id', projectId)
         .eq('owner_id', user.id);
     revalidateDistributionPages();
-    return { success: true, imported: usableAssets.length };
+    return { success: true, imported: resolvedAssets.length };
   } catch (error) {
     console.error('Import distribution intelligence assets error:', error);
     return { success: false, error: error instanceof Error ? error.message : 'Unable to import intelligence assets.' };
