@@ -147,8 +147,7 @@ export default async function AdminIntelligencePage({
             </p>
           </div>
           <div className='rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-700'>
-            {dailyQueue.counts.publish} publish · {dailyQueue.counts.review} review · {dailyQueue.counts.enrich}{' '}
-            enrich
+            {dailyQueue.counts.publish} publish · {dailyQueue.counts.review} review · {dailyQueue.counts.enrich} enrich
           </div>
         </div>
 
@@ -470,9 +469,7 @@ export default async function AdminIntelligencePage({
 
                 <div
                   className={`mt-4 rounded-xl border p-3 ${
-                    selected.factualGate.passed
-                      ? 'border-emerald-200 bg-emerald-50'
-                      : 'border-rose-200 bg-rose-50'
+                    selected.factualGate.passed ? 'border-emerald-200 bg-emerald-50' : 'border-rose-200 bg-rose-50'
                   }`}
                 >
                   <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between'>
@@ -484,7 +481,9 @@ export default async function AdminIntelligencePage({
                       >
                         Factual gate
                       </div>
-                      <p className={`mt-2 text-sm ${selected.factualGate.passed ? 'text-emerald-950' : 'text-rose-950'}`}>
+                      <p
+                        className={`mt-2 text-sm ${selected.factualGate.passed ? 'text-emerald-950' : 'text-rose-950'}`}
+                      >
                         {selected.factualGate.summary}
                       </p>
                     </div>
@@ -533,9 +532,7 @@ export default async function AdminIntelligencePage({
 
                 <div
                   className={`mt-4 rounded-xl border p-3 ${
-                    selected.uniquenessGate.passed
-                      ? 'border-emerald-200 bg-emerald-50'
-                      : 'border-rose-200 bg-rose-50'
+                    selected.uniquenessGate.passed ? 'border-emerald-200 bg-emerald-50' : 'border-rose-200 bg-rose-50'
                   }`}
                 >
                   <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between'>
@@ -547,7 +544,9 @@ export default async function AdminIntelligencePage({
                       >
                         Uniqueness gate
                       </div>
-                      <p className={`mt-2 text-sm ${selected.uniquenessGate.passed ? 'text-emerald-950' : 'text-rose-950'}`}>
+                      <p
+                        className={`mt-2 text-sm ${selected.uniquenessGate.passed ? 'text-emerald-950' : 'text-rose-950'}`}
+                      >
                         {selected.uniquenessGate.summary}
                       </p>
                     </div>
@@ -717,6 +716,79 @@ export default async function AdminIntelligencePage({
               </div>
 
               <div className='grid gap-4 xl:grid-cols-3'>
+                <div className='rounded-xl border border-amber-200 bg-amber-50 p-4 xl:col-span-3'>
+                  <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between'>
+                    <div>
+                      <p className='text-xs font-bold uppercase tracking-[0.16em] text-amber-700'>Change review</p>
+                      <h3 className='mt-1 text-lg font-bold text-slate-950'>Detected facts waiting for review</h3>
+                      <p className='mt-1 text-sm text-slate-600'>
+                        Automated scans never overwrite the verified baseline. Accept or reject these differences in a
+                        later review step.
+                      </p>
+                    </div>
+                    <span className='rounded-full bg-white px-3 py-1 text-xs font-semibold text-amber-800'>
+                      {selected.changes.filter((change) => change.reviewStatus === 'pending').length} pending
+                    </span>
+                  </div>
+
+                  <div className='mt-4 space-y-3'>
+                    {selected.changes.length > 0 ? (
+                      selected.changes.map((change) => (
+                        <div key={change.id} className='rounded-xl border border-amber-100 bg-white p-4'>
+                          <div className='flex flex-wrap items-center gap-2 text-xs font-semibold'>
+                            <span className='rounded-full bg-slate-100 px-2 py-1 text-slate-700'>
+                              {change.claimType}
+                            </span>
+                            <span className='rounded-full bg-amber-100 px-2 py-1 text-amber-800'>
+                              {change.changeType}
+                            </span>
+                            <span className='rounded-full bg-slate-100 px-2 py-1 text-slate-700'>
+                              {change.reviewStatus}
+                            </span>
+                            <span className='text-slate-500'>{formatDate(change.detectedAt)}</span>
+                          </div>
+                          <div className='mt-3 grid gap-3 md:grid-cols-2'>
+                            <div className='rounded-lg bg-slate-50 p-3'>
+                              <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                                Verified baseline
+                              </p>
+                              <p className='mt-2 break-words text-sm text-slate-800'>
+                                {change.oldValue === null
+                                  ? '—'
+                                  : typeof change.oldValue === 'string'
+                                    ? change.oldValue
+                                    : JSON.stringify(change.oldValue)}
+                              </p>
+                            </div>
+                            <div className='rounded-lg bg-cyan-50 p-3'>
+                              <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                                New observation
+                              </p>
+                              <p className='mt-2 break-words text-sm text-slate-800'>
+                                {change.newValue === null
+                                  ? '—'
+                                  : typeof change.newValue === 'string'
+                                    ? change.newValue
+                                    : JSON.stringify(change.newValue)}
+                              </p>
+                            </div>
+                          </div>
+                          <a
+                            href={change.sourceUrl}
+                            target='_blank'
+                            rel='noreferrer'
+                            className='mt-3 block truncate text-xs text-cyan-700 hover:underline'
+                          >
+                            {change.sourceUrl}
+                          </a>
+                        </div>
+                      ))
+                    ) : (
+                      <p className='rounded-lg bg-white p-3 text-sm text-slate-500'>No detected changes are waiting.</p>
+                    )}
+                  </div>
+                </div>
+
                 <div className='rounded-xl border border-slate-200 p-4'>
                   <h3 className='text-sm font-bold text-slate-950'>Facts</h3>
                   <dl className='mt-3 space-y-3 text-sm'>

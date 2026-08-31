@@ -1,17 +1,21 @@
 import { requireAdmin } from '@/lib/auth/middleware';
-import { composeEvidenceBoundContent, type EvidenceBoundComposerResult } from '@/lib/services/intelligence/evidenceComposer';
+import {
+  composeEvidenceBoundContent,
+  type EvidenceBoundComposerResult,
+} from '@/lib/services/intelligence/evidenceComposer';
 import { evaluateFactualGate, type FactualGateResult } from '@/lib/services/intelligence/factualGate';
 import { evaluateIndexGate, type IndexGateResult } from '@/lib/services/intelligence/indexGate';
 import { DEFAULT_DAILY_NEW_PAGE_LIMIT } from '@/lib/services/intelligence/qualityConfig';
 import { assessContentQuality, type ContentQualityAssessment } from '@/lib/services/intelligence/qualityScorer';
-import { evaluateUniquenessGate, type UniquenessGateResult } from '@/lib/services/intelligence/uniquenessGate';
 import type {
   IntelligenceProfileStatus,
   ProductIntelligenceAsset,
+  ProductIntelligenceChange,
   ProductIntelligenceClaim,
   ProductIntelligenceProfile,
   ProductIntelligenceSource,
 } from '@/lib/services/intelligence/types';
+import { evaluateUniquenessGate, type UniquenessGateResult } from '@/lib/services/intelligence/uniquenessGate';
 import { createAdminClient } from '@/lib/supabase/admin';
 
 type IntelligenceOwnerFilter = ProductIntelligenceProfile['ownerType'] | 'all';
@@ -40,6 +44,7 @@ export interface AdminIntelligenceProfileDetail extends AdminIntelligenceProfile
   sources: ProductIntelligenceSource[];
   claims: ProductIntelligenceClaim[];
   assets: ProductIntelligenceAsset[];
+  changes: ProductIntelligenceChange[];
   qualityAssessment: ContentQualityAssessment;
   contentComposer: EvidenceBoundComposerResult;
   factualGate: FactualGateResult;
@@ -195,12 +200,33 @@ function mapAssetRow(row: Record<string, unknown>): ProductIntelligenceAsset {
   };
 }
 
+function mapChangeRow(row: Record<string, unknown>): ProductIntelligenceChange {
+  return {
+    id: String(row.id),
+    profileId: String(row.profile_id),
+    sourceUrl: String(row.source_url),
+    claimType: row.claim_type as ProductIntelligenceChange['claimType'],
+    claimKey: String(row.claim_key),
+    changeType: row.change_type as ProductIntelligenceChange['changeType'],
+    oldValue: row.old_value ?? null,
+    newValue: row.new_value ?? null,
+    oldExcerpt: (row.old_excerpt as string | null | undefined) || null,
+    newExcerpt: (row.new_excerpt as string | null | undefined) || null,
+    fingerprint: String(row.fingerprint),
+    reviewStatus: row.review_status as ProductIntelligenceChange['reviewStatus'],
+    detectedAt: normalizeDate(row.detected_at as string | null | undefined) || new Date().toISOString(),
+    reviewedAt: normalizeDate(row.reviewed_at as string | null | undefined),
+    reviewNote: (row.review_note as string | null | undefined) || null,
+  };
+}
+
 async function loadProfileDetail(profileId: string, supabase: ReturnType<typeof createAdminClient>) {
   const [
     { data: profile, error: profileError },
     { data: sources, error: sourcesError },
     { data: claims, error: claimsError },
     { data: assets, error: assetsError },
+    changesResult,
   ] = await Promise.all([
     supabase.from('product_intelligence_profiles').select('*').eq('id', profileId).maybeSingle(),
     supabase
@@ -218,6 +244,12 @@ async function loadProfileDetail(profileId: string, supabase: ReturnType<typeof 
       .select('*')
       .eq('profile_id', profileId)
       .order('created_at', { ascending: false }),
+    supabase
+      .from('product_intelligence_changes')
+      .select('*')
+      .eq('profile_id', profileId)
+      .order('detected_at', { ascending: false })
+      .limit(50),
   ]);
 
   if (profileError) throw new Error(profileError.message);
@@ -226,8 +258,14 @@ async function loadProfileDetail(profileId: string, supabase: ReturnType<typeof 
   if (assetsError) throw new Error(assetsError.message);
   if (!profile) return null;
 
+  const changesUnavailable =
+    changesResult.error &&
+    (changesResult.error.message.includes('product_intelligence_changes') || changesResult.error.code === '42P01');
+  if (changesResult.error && !changesUnavailable) throw new Error(changesResult.error.message);
+
   const mappedSources = (sources || []).map((row) => mapSourceRow(row as Record<string, unknown>));
   const mappedClaims = (claims || []).map((row) => mapClaimRow(row as Record<string, unknown>));
+  const mappedChanges = (changesResult.data || []).map((row) => mapChangeRow(row as Record<string, unknown>));
   const mappedAssets = (assets || []).map((row) => mapAssetRow(row as Record<string, unknown>));
   const baseItem = mapProfileRow(profile as Record<string, unknown>, {
     sourceCount: mappedSources.length,
@@ -278,6 +316,7 @@ async function loadProfileDetail(profileId: string, supabase: ReturnType<typeof 
     sources: mappedSources,
     claims: mappedClaims,
     assets: mappedAssets,
+    changes: mappedChanges,
     qualityAssessment,
     contentComposer,
     factualGate,
@@ -411,7 +450,9 @@ export async function getAdminIntelligenceReviewQueue(input?: {
     .filter((detail): detail is AdminIntelligenceProfileDetail => Boolean(detail))
     .map((detail) => {
       const cadenceDays = getReviewCadenceDays(detail.indexGate);
-      const fallbackDueAt = detail.lastVerifiedAt ? addDays(new Date(detail.lastVerifiedAt), cadenceDays).toISOString() : null;
+      const fallbackDueAt = detail.lastVerifiedAt
+        ? addDays(new Date(detail.lastVerifiedAt), cadenceDays).toISOString()
+        : null;
       const dueAt = detail.nextReviewAt || fallbackDueAt;
       const daysUntilDue = getDaysUntil(dueAt, now);
       const state: AdminIntelligenceReviewQueueItem['state'] =

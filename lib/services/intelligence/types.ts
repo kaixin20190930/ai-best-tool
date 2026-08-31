@@ -121,6 +121,24 @@ export interface ProductIntelligenceClaim {
   expiresAt: string | null;
 }
 
+export interface ProductIntelligenceChange {
+  id: string;
+  profileId: string;
+  sourceUrl: string;
+  claimType: IntelligenceClaimType;
+  claimKey: string;
+  changeType: 'added' | 'changed' | 'removed';
+  oldValue: unknown | null;
+  newValue: unknown | null;
+  oldExcerpt: string | null;
+  newExcerpt: string | null;
+  fingerprint: string;
+  reviewStatus: 'pending' | 'accepted' | 'rejected';
+  detectedAt: string;
+  reviewedAt: string | null;
+  reviewNote: string | null;
+}
+
 export interface ProductIntelligenceAsset {
   id: string;
   profileId: string;

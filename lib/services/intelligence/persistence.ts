@@ -1,5 +1,6 @@
 import { createAdminClient } from '@/lib/supabase/admin';
 
+import { detectIntelligenceClaimChanges } from './changeDetector';
 import { buildProductIntelligenceSnapshot, type ProductIntelligenceProfileSnapshot } from './productProfile';
 import type {
   ExtractedIntelligenceAsset,
@@ -44,6 +45,7 @@ export interface PersistProductIntelligenceResult {
   profileId: string;
   profileStatus: ProductIntelligenceProfile['status'];
   versionChanged: boolean;
+  pendingChangeCount: number;
   dryRun: boolean;
 }
 
@@ -207,7 +209,7 @@ function computeMetadata(
   snapshot: ProductIntelligenceProfileSnapshot,
   existing?: ProductIntelligenceProfile | null,
   extra: Record<string, unknown> = {},
-) {
+): Record<string, unknown> {
   return {
     ...(existing?.metadata || {}),
     ...extra,
@@ -232,6 +234,7 @@ export async function persistProductIntelligence(
   const profileName = inferProductName(input, sourcesInput);
 
   let profileId = existingProfile?.id || '';
+  let pendingChangeCount = 0;
   if (!profileId) {
     const { data, error } = await supabase
       .from('product_intelligence_profiles')
@@ -280,6 +283,23 @@ export async function persistProductIntelligence(
   }
 
   for (const source of sourcesInput) {
+    const { data: existingClaimRows, error: existingClaimsError } = await supabase
+      .from('product_intelligence_claims')
+      .select('*')
+      .eq('profile_id', profileId)
+      .eq('source_url', source.url);
+
+    if (existingClaimsError) {
+      throw new Error(existingClaimsError.message);
+    }
+
+    const existingSourceClaims = (existingClaimRows || []).map((row) => mapClaimRow(row as Record<string, unknown>));
+    const sourceClaims = source.claims || [];
+    const detectedChanges =
+      existingProfile && source.fetchStatus !== 'failed' && source.fetchStatus !== 'blocked'
+        ? detectIntelligenceClaimChanges(existingSourceClaims, sourceClaims, source.url)
+        : [];
+
     const { error: sourceError } = await supabase.from('product_intelligence_sources').upsert(
       {
         profile_id: profileId,
@@ -300,18 +320,35 @@ export async function persistProductIntelligence(
       throw new Error(sourceError.message);
     }
 
-    const { error: deleteClaimsError } = await supabase
-      .from('product_intelligence_claims')
-      .delete()
-      .eq('profile_id', profileId)
-      .eq('source_url', source.url);
+    if (detectedChanges.length > 0) {
+      const { error: changesError } = await supabase.from('product_intelligence_changes').upsert(
+        detectedChanges.map((change) => ({
+          profile_id: profileId,
+          source_url: change.sourceUrl,
+          claim_type: change.claimType,
+          claim_key: change.claimKey,
+          change_type: change.changeType,
+          old_value: change.oldValue,
+          new_value: change.newValue,
+          old_excerpt: change.oldExcerpt,
+          new_excerpt: change.newExcerpt,
+          fingerprint: change.fingerprint,
+          review_status: 'pending',
+          detected_at: observedAt,
+          metadata: { pageType: source.pageType, sourceKind: 'official' },
+        })),
+        { onConflict: 'fingerprint', ignoreDuplicates: true },
+      );
 
-    if (deleteClaimsError) {
-      throw new Error(deleteClaimsError.message);
-    }
-
-    const sourceClaims = source.claims || [];
-    if (sourceClaims.length > 0) {
+      if (changesError) {
+        throw new Error(
+          changesError.message.includes('product_intelligence_changes')
+            ? `Intelligence change-review migration is required before sync: ${changesError.message}`
+            : changesError.message,
+        );
+      }
+      pendingChangeCount += detectedChanges.length;
+    } else if (existingSourceClaims.length === 0 && sourceClaims.length > 0) {
       const { error: insertClaimsError } = await supabase.from('product_intelligence_claims').insert(
         sourceClaims.map((claim) => ({
           profile_id: profileId,
@@ -398,6 +435,7 @@ export async function persistProductIntelligence(
   });
 
   const metadata = computeMetadata(snapshot, existingProfile, input.profileMetadata || {});
+  metadata.pendingChangeCount = pendingChangeCount;
   const nextReviewAt = input.nextReviewAt || deriveNextReviewAt(snapshot, existingProfile);
   const nextStatus = computeProfileStatus(snapshot);
   const versionChanged = !existingProfile || existingProfile.metadata?.snapshotHash !== snapshot.snapshotHash;
@@ -446,6 +484,7 @@ export async function persistProductIntelligence(
     profileId,
     profileStatus: nextStatus,
     versionChanged,
+    pendingChangeCount,
     dryRun: false,
   };
 }
@@ -530,6 +569,7 @@ export async function previewProductIntelligence(
     profileId: 'preview',
     profileStatus,
     versionChanged: true,
+    pendingChangeCount: 0,
     dryRun: true,
   };
 }

@@ -182,6 +182,7 @@ async function run() {
         profileId: result.profileId,
         profileStatus: result.profileStatus,
         versionChanged: result.versionChanged,
+        pendingChangeCount: result.pendingChangeCount,
         summary: result.snapshot.summary,
         facts: result.snapshot.facts,
         conflicts: result.snapshot.conflicts,

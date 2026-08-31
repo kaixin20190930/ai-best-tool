@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 
+import { detectIntelligenceClaimChanges, stableIntelligenceValue } from '@/lib/services/intelligence/changeDetector';
 import { resolveProductIntelligenceConflicts } from '@/lib/services/intelligence/conflictResolver';
 import { extractProductEvidence } from '@/lib/services/intelligence/evidenceExtractor';
 import { DISTRIBUTION_TARGET_FIXTURES, INTELLIGENCE_PRODUCT_FIXTURES } from '@/lib/services/intelligence/fixtures';
@@ -24,6 +25,42 @@ import {
 } from '@/lib/services/intelligence/safeFetch';
 
 function run() {
+  assert.equal(
+    stableIntelligenceValue({ price: 19, interval: 'month' }),
+    stableIntelligenceValue({ interval: 'month', price: 19 }),
+  );
+  const baselineClaim = {
+    id: 'claim-baseline',
+    profileId: 'profile-change',
+    claimType: 'pricing_plan' as const,
+    claimKey: 'pricing_plan:pro',
+    claimValue: { name: 'Pro', price: 19 },
+    sourceUrl: 'https://example.com/pricing',
+    sourceExcerpt: 'Pro costs $19',
+    observedAt: '2026-08-01T00:00:00.000Z',
+    confidence: 95,
+    conflictStatus: 'none' as const,
+    expiresAt: null,
+  };
+  assert.equal(
+    detectIntelligenceClaimChanges(
+      [baselineClaim],
+      [{ ...baselineClaim, claimValue: { price: 19, name: 'Pro' } }],
+      baselineClaim.sourceUrl,
+    ).length,
+    0,
+  );
+  const changedClaims = detectIntelligenceClaimChanges(
+    [baselineClaim],
+    [
+      { ...baselineClaim, claimValue: { name: 'Pro', price: 29 }, sourceExcerpt: 'Pro costs $29' },
+      { ...baselineClaim, claimType: 'free_trial', claimKey: 'free_trial:available', claimValue: true },
+    ],
+    baselineClaim.sourceUrl,
+  );
+  assert.deepEqual(changedClaims.map((change) => change.changeType).sort(), ['added', 'changed']);
+  assert.equal(detectIntelligenceClaimChanges([baselineClaim], [], baselineClaim.sourceUrl)[0]?.changeType, 'removed');
+
   assert.equal(
     Object.values(CONTENT_QUALITY_WEIGHTS).reduce((sum, weight) => sum + weight, 0),
     100,
