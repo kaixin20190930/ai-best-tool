@@ -65,7 +65,7 @@
 | ID | 任务 | 优先页面 / 查询意图 | 验收标准 | 状态 | 负责人 |
 | --- | --- | --- | --- | --- | --- |
 | CTR-01 | 首页标题、描述、首屏与 schema 复核 | `ai tools directory`、`ai tool directory`、`ai top tools` | 文案已与目录词和可见内容一致；英文 canonical 首页已补 WebSite/SearchAction schema | 已完成 | Codex |
-| CTR-02 | 首页 -> Explore -> 分类的分流审计 | 目录通用词 | 源码内链与 URL 口径已符合规则；生产缺失的 14 个证据块已定位为详情页辅助数据查询触发 fallback，修复已完成并等待部署复验 | 等待部署复验 | Codex |
+| CTR-02 | 首页 -> Explore -> 分类的分流审计 | 目录通用词 | 14 个机会详情页已补证据驱动 fallback，5 个无数据库记录的分类入口已改为虚拟决策中心；本地严格审计 33/33、官方事实块 16/16 通过，等待生产复验 | 等待部署复验 | Codex |
 | CTR-03 | 强化已有展示的 Guide | Web3、Automation、Research | 三页均已补 3 条任务、适用边界、核验风险和直达工具 Decision Card 的路径；提交 `de1504e6` | 已完成 | Codex |
 | CTR-04 | 强化已有展示的详情页 | Fathom、Anthropic、DeepL、Gamma、Lindy、Cursor、The Graph | 每页保留至少两个官方来源和一个真实选择限制；禁止通用 AI 改写 | 已完成 | Codex |
 | CTR-05 | 真实编辑/owner 信号回填 | 本轮先选 5 页 | 每页至少一条有来源的更新、纠错、owner 补充或真实使用记录 | 需要数据 | 用户 + Codex |

@@ -23,6 +23,7 @@ import {
 import { getTranslations } from 'next-intl/server';
 
 import { PRIORITY_TOOL_EVIDENCE } from '@/lib/config/priorityToolEvidence';
+import { PRIORITY_TOOL_FALLBACK_PROFILES } from '@/lib/config/priorityToolFallbacks';
 import { BASE_URL } from '@/lib/env';
 import { SEO_CONFIG, SOCIAL_IMAGE_DIMENSIONS, ToolMetadata } from '@/lib/seo/constants';
 import {
@@ -2399,6 +2400,38 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
   return null;
 }
 
+function getPriorityToolFallbackDetail(websiteName: string, locale: string) {
+  const profile = PRIORITY_TOOL_FALLBACK_PROFILES[websiteName.toLowerCase()];
+  const evidence = getPriorityToolOfficialEvidence(websiteName, locale);
+  const compactEvidence = PRIORITY_TOOL_EVIDENCE[websiteName.toLowerCase()];
+  const searchIntent = getPriorityToolSearchIntent(websiteName, locale);
+
+  if (!profile || (!evidence && !compactEvidence)) return null;
+
+  const compactLimitation = compactEvidence
+    ? locale === 'cn'
+      ? compactEvidence.limitation.zh
+      : compactEvidence.limitation.en
+    : '';
+  const summary = searchIntent?.summary || evidence?.summary || compactLimitation;
+  const details = evidence?.facts.map((fact) => `${fact.label}: ${fact.value}`) || [compactLimitation];
+
+  return {
+    categoryName: profile.categoryName,
+    collectionTime: evidence?.checkedAt || compactEvidence?.checkedAt || '',
+    content: summary,
+    detail: [summary, ...details].filter(Boolean).join('\n\n'),
+    imageUrl: '',
+    name: websiteName.toLowerCase(),
+    starRating: 0,
+    tagName: profile.tagName,
+    thumbnailUrl: '',
+    title: profile.title,
+    url: profile.url,
+    websiteData: '',
+  };
+}
+
 function getPriorityToolSearchIntent(websiteName: string, locale: string): PriorityToolSearchIntent | null {
   const isChinese = locale === 'cn' || locale === 'tw';
   const key = websiteName.toLowerCase();
@@ -2629,7 +2662,8 @@ export async function generateMetadata({
     const data =
       dbTool?.status === 'published'
         ? toolToDetailData(dbTool, locale)
-        : (await getWebNavigationDetail(websiteName, locale)).data;
+        : (await getWebNavigationDetail(websiteName, locale)).data ||
+          getPriorityToolFallbackDetail(websiteName, locale);
 
     // Get localized content if available
     const toolTitle = dbTool
@@ -2728,7 +2762,8 @@ export default async function Page({
     const data =
       dbTool?.status === 'published'
         ? toolToDetailData(dbTool, locale)
-        : (await getWebNavigationDetail(websiteName, locale)).data;
+        : (await getWebNavigationDetail(websiteName, locale)).data ||
+          getPriorityToolFallbackDetail(websiteName, locale);
 
     if (!data) notFound();
 
@@ -2738,10 +2773,14 @@ export default async function Page({
 
     // Get current user
     failureStage = 'viewer lookup';
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser().catch(() => ({ data: { user: null } }));
+    let user = null;
+    try {
+      const supabase = await createClient();
+      const authResult = await supabase.auth.getUser().catch(() => ({ data: { user: null } }));
+      user = authResult.data.user;
+    } catch (error) {
+      console.error('Tool detail viewer lookup failed; continuing anonymously:', { websiteName, error });
+    }
 
     const toolId = dbTool?.id;
 

@@ -84,14 +84,28 @@ const CATEGORY_METADATA_PROFILES: Record<string, { en: CategoryMetadataProfile; 
       description: '比较会议转录、语音生成、播客和音频工作流工具，查看语言支持、导出能力、价格、音质和生产使用风险。',
     },
   },
+  'developer-tools': {
+    en: {
+      title: 'AI Developer Tools: APIs, Coding & Production Workflows',
+      description:
+        'Compare AI developer tools by APIs, SDKs, coding workflows, observability, permissions, pricing, and production reliability.',
+    },
+    cn: {
+      title: 'AI 开发者工具：API、编码与生产工作流 | AI Best Tool',
+      description: '按 API、SDK、编码工作流、可观测性、权限、价格和生产可靠性比较 AI 开发者工具。',
+    },
+  },
 };
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
   const category = await getCategoryBySlug(params.slug, true);
+  const isChinese = params.locale === 'cn' || params.locale === 'tw';
+  const profile = CATEGORY_METADATA_PROFILES[params.slug]?.[isChinese ? 'cn' : 'en'];
 
   if (!category) {
     return {
-      title: 'AI Tools Category | AI Best Tool',
+      title: profile?.title || 'AI Tools Category | AI Best Tool',
+      description: profile?.description,
       alternates: {
         canonical: generateLocalizedCanonicalUrl(`/categories/${params.slug}`, params.locale, BASE_URL),
       },
@@ -102,8 +116,6 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   const description =
     getLocalizedField(category.description, params.locale) ||
     `Discover the best ${name} AI tools. Browse latest, popular, and top-rated tools in the AI Best Tool directory.`;
-  const isChinese = params.locale === 'cn' || params.locale === 'tw';
-  const profile = CATEGORY_METADATA_PROFILES[String(category.slug)]?.[isChinese ? 'cn' : 'en'];
   const title = profile?.title || `Best ${name} AI Tools | AI Best Tool`;
   const metadataDescription = profile?.description || description;
 

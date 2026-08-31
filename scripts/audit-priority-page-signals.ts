@@ -90,6 +90,8 @@ async function fetchPage(route: string): Promise<AuditRow> {
     });
     const html = await response.text();
 
+    const officialEvidence = has(html, /data-official-evidence=["']true["']/i);
+
     return {
       path: route,
       status: response.status,
@@ -98,9 +100,14 @@ async function fetchPage(route: string): Promise<AuditRow> {
         /<link[^>]+(?:rel=["'][^"']*canonical[^"']*["'][^>]+href|href=["']https:\/\/aibesttool\.com[^"']*["'][^>]+rel=["'][^"']*canonical)/i,
       ),
       description: has(html, /<meta[^>]+name=["']description["'][^>]+content=["'][^"']+\S[^"']*["']/i),
-      evidenceSignal: has(html, /Evidence and verification|真实信号与验证口径|Last checked|最近核查|最近验证/i),
+      evidenceSignal:
+        officialEvidence ||
+        has(
+          html,
+          /Evidence and verification|真实信号与验证口径|Last checked|最近核查|最近验证|Official evidence snapshot|官方证据快照/i,
+        ),
       actionSignal: has(html, /Comments|评论|Claim|认领|Official site|官网|Compare|比较/i),
-      officialEvidence: has(html, /data-official-evidence=["']true["']/i),
+      officialEvidence,
     };
   } catch (error) {
     return {

@@ -25,13 +25,71 @@ export interface CategoryContentProps {
   };
 }
 
+const VIRTUAL_DECISION_CATEGORIES: Record<
+  string,
+  { name: Record<string, string>; description: Record<string, string> }
+> = {
+  research: {
+    name: { en: 'AI Research', cn: 'AI 研究' },
+    description: {
+      en: 'A decision hub for research, citations, literature review, and evidence-checking tools.',
+      cn: '面向资料发现、引用追踪、文献整理和证据核对工具的决策中心。',
+    },
+  },
+  voice: {
+    name: { en: 'AI Voice', cn: 'AI 语音' },
+    description: {
+      en: 'A decision hub for transcription, speech generation, meetings, podcasts, and audio workflows.',
+      cn: '面向转录、语音生成、会议、播客和音频工作流的决策中心。',
+    },
+  },
+  automation: {
+    name: { en: 'AI Automation', cn: 'AI 自动化' },
+    description: {
+      en: 'A decision hub for triggers, integrations, workflow orchestration, retries, and production reliability.',
+      cn: '面向触发器、集成、流程编排、失败重试和生产可靠性的决策中心。',
+    },
+  },
+  web3: {
+    name: { en: 'Web3 Tools', cn: 'Web3 工具' },
+    description: {
+      en: 'A decision hub for on-chain research, protocol data, wallet monitoring, and developer infrastructure.',
+      cn: '面向链上研究、协议数据、钱包监控和开发者基础设施的决策中心。',
+    },
+  },
+  'developer-tools': {
+    name: { en: 'AI Developer Tools', cn: 'AI 开发者工具' },
+    description: {
+      en: 'A decision hub for APIs, SDKs, coding workflows, observability, and production operations.',
+      cn: '面向 API、SDK、编码工作流、可观测性和生产运维的决策中心。',
+    },
+  },
+};
+
 export default async function CategoryContent({ params, pageNum, searchParams }: CategoryContentProps) {
   const [categoryResult, categoriesResult, tagsResult] = await Promise.allSettled([
     getCategoryBySlug(params.slug, true),
     getAllCategories(true),
     getAllTags('count'),
   ]);
-  const category = categoryResult.status === 'fulfilled' ? categoryResult.value : null;
+  const databaseCategory = categoryResult.status === 'fulfilled' ? categoryResult.value : null;
+  const virtualCategory = VIRTUAL_DECISION_CATEGORIES[params.slug];
+  const category =
+    databaseCategory ||
+    (virtualCategory
+      ? {
+          id: `virtual:${params.slug}`,
+          slug: params.slug,
+          name: virtualCategory.name,
+          description: virtualCategory.description,
+          icon: null,
+          orderIndex: 0,
+          createdAt: new Date('2026-08-31T00:00:00.000Z'),
+          updatedAt: new Date('2026-08-31T00:00:00.000Z'),
+          toolCount: 0,
+        }
+      : null);
+  const isVirtualCategory = Boolean(!databaseCategory && virtualCategory);
   const categories = categoriesResult.status === 'fulfilled' ? categoriesResult.value : [];
   const tags = tagsResult.status === 'fulfilled' ? tagsResult.value : [];
 
@@ -526,10 +584,18 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
     },
     {
       label: isChinese ? '当前规模' : 'Current size',
-      value: `${categoryToolCount}`,
-      note: isChinese
-        ? '分类页保留索引，但会继续把真实工具页、指南页和对比页串起来。'
-        : 'The category page stays indexable while linking real tool pages, guides, and comparison pages together.',
+      value: isVirtualCategory
+        ? isChinese
+          ? `${representativeTools.length} 个精选入口`
+          : `${representativeTools.length} curated entries`
+        : `${categoryToolCount}`,
+      note: isVirtualCategory
+        ? isChinese
+          ? '这是精选决策入口，不把尚未建立的数据库分类数量伪装成真实收录规模。'
+          : 'This is a curated decision hub and does not present a nonexistent database category as listing volume.'
+        : isChinese
+          ? '分类页保留索引，但会继续把真实工具页、指南页和对比页串起来。'
+          : 'The category page stays indexable while linking real tool pages, guides, and comparison pages together.',
     },
     {
       label: isChinese ? '下一跳入口' : 'Next hop',
@@ -1583,15 +1649,17 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
           </section>
         )}
 
-        <ExploreList
-          locale={params.locale}
-          searchParams={searchParams}
-          pageNum={pageNum}
-          categories={categories}
-          tags={tags}
-          forcedCategorySlug={category.slug}
-          basePath={basePath}
-        />
+        {!isVirtualCategory ? (
+          <ExploreList
+            locale={params.locale}
+            searchParams={searchParams}
+            pageNum={pageNum}
+            categories={categories}
+            tags={tags}
+            forcedCategorySlug={category.slug}
+            basePath={basePath}
+          />
+        ) : null}
       </div>
     </>
   );
