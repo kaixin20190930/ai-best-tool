@@ -25,7 +25,7 @@
 | `/favicon.ico` | 1 | 静态资源，200 | 忽略 | 不影响 HTML 页面收录；不需要请求索引 |
 | `/cn` | 1 | 200，self-canonical | 保留索引 | 作为中文目录首页，纳入每周 CTR/目录词监测 |
 | `/ai/claude`、`/ai/anthropic` | 2 | 200，self-canonical | 保留并增强 | 补真实编辑/owner/官方事实信号；不新建同义页 |
-| `/guides/how-to-choose-ai-tools` | 1 | 200，但 canonical 指向 `/en/guides/how-to-choose-ai-tools` | 技术修复 | 统一到站点的英文 canonical 规则；确认 sitemap 与内链只使用这一种 URL |
+| `/guides/how-to-choose-ai-tools` | 1 | 200，原 canonical 指向 `/en/guides/how-to-choose-ai-tools` | 已修复 | 已改用全站 canonical 生成器；英文版本统一输出无前缀 `/guides/how-to-choose-ai-tools`，并同步修正面包屑结构化数据 |
 | `/ai/consensus`、`/ai/gumloop`、`/ai/salesloft`、`/cn/ai/luma-ai`、`/cn/categories/design-art`、`/ai/shop_your_ai_powered_Shopping_assistant` | 6 | 200，self-canonical 或正确重定向 | 质量审计后决定 | 先核对官方来源、独特选择信息、媒体与编辑复核；达标则增强，未达标则 `noindex` |
 
 ## 优先执行顺序

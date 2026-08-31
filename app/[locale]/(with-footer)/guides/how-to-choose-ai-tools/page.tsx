@@ -3,6 +3,7 @@ import { CheckCircle2, ExternalLink, FileText, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
+import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -24,7 +25,9 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '一个实用的 AI 工具选型指南：先看场景，再看价格、更新、截图和评论。'
         : 'A practical guide to choosing AI tools: start with use case, then check pricing, freshness, screenshots, and comments.',
-    alternates: { canonical: `${BASE_URL}/${locale}/guides/how-to-choose-ai-tools` },
+    alternates: {
+      canonical: generateLocalizedCanonicalUrl('/guides/how-to-choose-ai-tools', locale, BASE_URL),
+    },
   };
 }
 
@@ -34,8 +37,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const checkedAt = '2026-07-18';
   const siteUrl = BASE_URL;
   const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: 'Home', url: `${siteUrl}/${locale}` },
-    { name: isChinese ? '选型指南' : 'Guides', url: `${siteUrl}/${locale}/guides/how-to-choose-ai-tools` },
+    { name: 'Home', url: generateLocalizedCanonicalUrl('/', locale, siteUrl) },
+    {
+      name: isChinese ? '选型指南' : 'Guides',
+      url: generateLocalizedCanonicalUrl('/guides/how-to-choose-ai-tools', locale, siteUrl),
+    },
   ]);
   const faqs = [
     {

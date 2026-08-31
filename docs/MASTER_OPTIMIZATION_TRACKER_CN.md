@@ -52,7 +52,7 @@
 | --- | --- | --- | --- | --- |
 | IDX-01 | 更新 GSC 周度台账与基线 | 已写入本次 28 天、7 天、Coverage 和结论 | 已完成 | Codex |
 | IDX-02 | 核对 24 个“已抓取未编入索引”URL | 已完成逐条分类，详见 [Coverage URL 审计](./COVERAGE_URL_AUDIT_2026-08-31_CN.md)；不做盲目 Request Indexing | 已完成 | Codex |
-| IDX-03 | 核对 22 个软 404 与 4 个未指定 canonical 重复页 | 仅保留有独立意图与事实证据的 canonical 页 | 待执行 | Codex |
+| IDX-03 | 核对 22 个软 404 与 4 个未指定 canonical 重复页 | `how-to-choose-ai-tools` 的英文 canonical 已统一；软 404 URL 明细尚未导出，收到后逐条决定 404、合并或补实质内容 | 进行中 | Codex |
 | IDX-04 | 每周生产 SEO smoke | 首页、Explore、核心详情、robots、sitemap、canonical 均通过 | 持续 | Codex |
 | IDX-05 | 索引准入门槛持续执行 | 所有新 URL 均通过 [SEO 内容准入清单](./SEO_CONTENT_CHECKLIST.md) | 持续 | 共同 |
 
