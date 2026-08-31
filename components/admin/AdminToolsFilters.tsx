@@ -8,6 +8,7 @@ interface AdminToolsFiltersProps {
   currentStatus?: string;
   currentClaimStatus?: string;
   currentEditorial?: 'verified' | 'pending' | 'stale';
+  currentEvidence?: 'complete' | 'gaps' | 'review_due';
   currentSearch?: string;
   currentCollected?: boolean;
   currentNeedsMedia?: boolean;
@@ -26,6 +27,7 @@ export default function AdminToolsFilters({
   currentStatus,
   currentClaimStatus,
   currentEditorial,
+  currentEvidence,
   currentSearch,
   currentCollected,
   currentNeedsMedia,
@@ -47,6 +49,7 @@ export default function AdminToolsFilters({
     const nextStatus = updates.status ?? currentStatus;
     const nextClaimStatus = updates.claimStatus ?? currentClaimStatus;
     const nextEditorial = updates.editorial ?? currentEditorial;
+    const nextEvidence = updates.evidence ?? currentEvidence;
     const nextSearch = updates.search ?? currentSearch;
     const nextCollected = updates.collected ?? currentCollected;
     const nextNeedsMedia = updates.needsMedia ?? currentNeedsMedia;
@@ -77,6 +80,10 @@ export default function AdminToolsFilters({
 
     if (nextEditorial && nextEditorial !== 'all') {
       params.set('editorial', String(nextEditorial));
+    }
+
+    if (nextEvidence && nextEvidence !== 'all') {
+      params.set('evidence', String(nextEvidence));
     }
 
     if (nextCollected) {
@@ -219,6 +226,26 @@ export default function AdminToolsFilters({
               }`}
             >
               {editorial.label}
+            </button>
+          ))}
+        </div>
+
+        <div className='flex flex-wrap gap-2'>
+          {[
+            { value: 'all', label: 'All evidence states' },
+            { value: 'complete', label: 'Evidence complete' },
+            { value: 'gaps', label: 'Evidence gaps' },
+            { value: 'review_due', label: 'Fact review due' },
+          ].map((evidence) => (
+            <button
+              key={evidence.value}
+              type='button'
+              onClick={() => router.push(buildPath({ evidence: evidence.value }))}
+              className={`rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
+                (currentEvidence || 'all') === evidence.value ? toneClasses.sky : activeClasses
+              }`}
+            >
+              {evidence.label}
             </button>
           ))}
         </div>

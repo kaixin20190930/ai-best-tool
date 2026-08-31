@@ -32,6 +32,7 @@ export default async function AdminToolsPage({
     status?: string;
     claimStatus?: string;
     editorial?: string;
+    evidence?: string;
     search?: string;
     collected?: string;
     needsMedia?: string;
@@ -56,6 +57,12 @@ export default async function AdminToolsPage({
   const editorial =
     searchParams.editorial === 'verified' || searchParams.editorial === 'pending' || searchParams.editorial === 'stale'
       ? searchParams.editorial
+      : undefined;
+  const evidence =
+    searchParams.evidence === 'complete' ||
+    searchParams.evidence === 'gaps' ||
+    searchParams.evidence === 'review_due'
+      ? searchParams.evidence
       : undefined;
   const { search } = searchParams;
   const collected = searchParams.collected === '1';
@@ -110,6 +117,7 @@ export default async function AdminToolsPage({
         status,
         claimStatus,
         editorial,
+        evidence,
         search,
         collected,
         needsMedia,
@@ -236,6 +244,7 @@ export default async function AdminToolsPage({
         currentStatus={status}
         currentClaimStatus={claimStatus}
         currentEditorial={editorial}
+        currentEvidence={evidence}
         currentSearch={search}
         currentCollected={collected}
         currentNeedsMedia={needsMedia}

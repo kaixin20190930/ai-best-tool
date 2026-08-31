@@ -684,6 +684,7 @@ export async function getAdminTools(filters?: {
   status?: string;
   claimStatus?: string;
   editorial?: 'verified' | 'pending' | 'stale';
+  evidence?: 'complete' | 'gaps' | 'review_due';
   search?: string;
   collected?: boolean;
   needsMedia?: boolean;
@@ -745,11 +746,23 @@ export async function getAdminTools(filters?: {
     const completeEditorialSql = `
       NULLIF(BTRIM(features->'editorial'->>'reviewedAt'), '') IS NOT NULL
       AND NULLIF(BTRIM(features->'editorial'->>'reviewedBy'), '') IS NOT NULL
-      AND NULLIF(BTRIM(features->'editorial'->>'sourceUrl'), '') ~* '^https?://'
+      AND COALESCE(NULLIF(BTRIM(features->'editorial'->>'sourceUrl'), '') ~* '^https?://', FALSE)
       AND (
         NULLIF(BTRIM(features->'editorial'->'summary'->>'en'), '') IS NOT NULL
         OR NULLIF(BTRIM(features->'editorial'->'summary'->>'zh'), '') IS NOT NULL
       )`;
+    const localizedArrayCountSql = (path: string) => `GREATEST(
+      CASE WHEN jsonb_typeof(${path}->'en') = 'array' THEN jsonb_array_length(${path}->'en') ELSE 0 END,
+      CASE WHEN jsonb_typeof(${path}->'zh') = 'array' THEN jsonb_array_length(${path}->'zh') ELSE 0 END
+    )`;
+    const evidenceCompleteSql = `
+      NULLIF(BTRIM(features->'editorial'->>'reviewedAt'), '') IS NOT NULL
+      AND COALESCE(NULLIF(BTRIM(features->'editorial'->>'sourceUrl'), '') ~* '^https?://', FALSE)
+      AND (image_url IS NOT NULL OR thumbnail_url IS NOT NULL)
+      AND ${localizedArrayCountSql("features->'decision'->'limitations'")} > 0
+      AND ${localizedArrayCountSql("features->'bestFit'")} > 0
+      AND ${localizedArrayCountSql("features->'notIdealFor'")} > 0
+      AND ${localizedArrayCountSql("features->'decision'->'compareAxes'")} > 0`;
 
     if (filters?.editorial === 'verified') {
       query += `
@@ -770,6 +783,16 @@ export async function getAdminTools(filters?: {
       query += `
         AND ${completeEditorialSql}
         AND BTRIM(features->'editorial'->>'reviewedAt') < TO_CHAR(CURRENT_DATE - INTERVAL '90 days', 'YYYY-MM-DD')`;
+    }
+
+    if (filters?.evidence === 'complete') {
+      query += ` AND ${evidenceCompleteSql}`;
+    } else if (filters?.evidence === 'gaps') {
+      query += ` AND NOT (${evidenceCompleteSql})`;
+    } else if (filters?.evidence === 'review_due') {
+      query += `
+        AND NULLIF(BTRIM(features->'editorial'->>'reviewedAt'), '') IS NOT NULL
+        AND BTRIM(features->'editorial'->>'reviewedAt') < TO_CHAR(CURRENT_DATE - INTERVAL '30 days', 'YYYY-MM-DD')`;
     }
 
     if (filters?.collected) {

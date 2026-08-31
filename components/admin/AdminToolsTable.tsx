@@ -165,6 +165,46 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
     return missing;
   };
 
+  const getLocalizedList = (value: unknown) => {
+    if (Array.isArray(value)) {
+      return value.filter((item): item is string => typeof item === 'string' && item.trim().length > 0);
+    }
+
+    const record = getNestedRecord(value);
+    const localized = [...(Array.isArray(record.en) ? record.en : []), ...(Array.isArray(record.zh) ? record.zh : [])];
+    return localized.filter((item): item is string => typeof item === 'string' && item.trim().length > 0);
+  };
+
+  const getEvidenceAdmission = (tool: AdminTool) => {
+    const features = getFeatureRecord(tool);
+    const editorial = getNestedRecord(features.editorial);
+    const decision = getNestedRecord(features.decision);
+    const reviewedAt = typeof editorial.reviewedAt === 'string' ? editorial.reviewedAt.trim() : '';
+    const sourceUrl = typeof editorial.sourceUrl === 'string' ? editorial.sourceUrl.trim() : '';
+    const missing = [
+      /^https?:\/\//i.test(sourceUrl) ? null : 'official source',
+      reviewedAt ? null : 'review date',
+      getLocalizedList(decision.limitations).length > 0 ? null : 'limitations',
+      tool.image_url || tool.thumbnail_url ? null : 'media',
+      getLocalizedList(features.bestFit).length > 0 ? null : 'best fit',
+      getLocalizedList(features.notIdealFor).length > 0 ? null : 'not ideal for',
+      getLocalizedList(decision.compareAxes).length > 0 ? null : 'comparison path',
+    ].filter(Boolean) as string[];
+    const reviewedTime = reviewedAt ? new Date(reviewedAt).getTime() : Number.NaN;
+    const nextFactReview = Number.isFinite(reviewedTime) ? new Date(reviewedTime + 30 * 24 * 60 * 60 * 1000) : null;
+    const nextDecisionReview = Number.isFinite(reviewedTime)
+      ? new Date(reviewedTime + 90 * 24 * 60 * 60 * 1000)
+      : null;
+
+    return {
+      complete: missing.length === 0,
+      missing,
+      nextDecisionReview,
+      nextFactReview,
+      score: Math.round(((7 - missing.length) / 7) * 100),
+    };
+  };
+
   const isEditorialStale = (tool: AdminTool) => {
     const editorial = getNestedRecord(getFeatureRecord(tool).editorial);
     const reviewedAt = typeof editorial.reviewedAt === 'string' ? editorial.reviewedAt.trim() : '';
@@ -718,6 +758,7 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
               const nextReviewDate = getNextReviewDate(tool);
               const rejectionReason = getRejectionReason(tool);
               const followedUpAt = getFollowedUpAt(tool);
+              const evidenceAdmission = getEvidenceAdmission(tool);
 
               return (
                 <tr key={tool.id} className={rowClassName}>
@@ -784,6 +825,24 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
                   </td>
                   <td className='px-6 py-4'>
                     <div>{getQualityBadge(tool)}</div>
+                    <div className='mt-2 flex flex-wrap gap-1.5'>
+                      <span
+                        className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${
+                          evidenceAdmission.complete
+                            ? 'bg-emerald-50 text-emerald-700'
+                            : 'bg-amber-50 text-amber-700'
+                        }`}
+                      >
+                        Evidence {evidenceAdmission.score}%
+                      </span>
+                      <span
+                        className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${
+                          evidenceAdmission.complete ? 'bg-cyan-50 text-cyan-700' : 'bg-rose-50 text-rose-700'
+                        }`}
+                      >
+                        {evidenceAdmission.complete ? 'Publication ready' : 'Hold for evidence'}
+                      </span>
+                    </div>
                     <div className='mt-2 flex max-w-xs flex-wrap gap-1.5'>
                       {getAuditSignals(tool).map((signal) => (
                         <span
@@ -797,6 +856,24 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
                     {getMissingInfo(tool).length > 0 && (
                       <div className='mt-2 text-xs text-slate-500'>Needs: {getMissingInfo(tool).join(', ')}</div>
                     )}
+                    {evidenceAdmission.missing.length > 0 && (
+                      <div className='mt-2 max-w-xs text-xs text-rose-700'>
+                        Evidence gaps: {evidenceAdmission.missing.slice(0, 4).join(', ')}
+                        {evidenceAdmission.missing.length > 4 ? '…' : ''}
+                      </div>
+                    )}
+                    <div className='mt-2 text-xs text-slate-500'>
+                      Fact review:{' '}
+                      {evidenceAdmission.nextFactReview
+                        ? evidenceAdmission.nextFactReview.toLocaleDateString()
+                        : 'Initial review required'}
+                    </div>
+                    <div className='mt-1 text-xs text-slate-500'>
+                      Decision review:{' '}
+                      {evidenceAdmission.nextDecisionReview
+                        ? evidenceAdmission.nextDecisionReview.toLocaleDateString()
+                        : 'Initial review required'}
+                    </div>
                   </td>
                   <td className='px-6 py-4'>
                     {getStatusBadge(tool.status)}
