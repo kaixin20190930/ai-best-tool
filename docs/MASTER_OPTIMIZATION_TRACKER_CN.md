@@ -51,7 +51,7 @@
 | ID | 任务 | 验收标准 | 状态 | 负责人 |
 | --- | --- | --- | --- | --- |
 | IDX-01 | 更新 GSC 周度台账与基线 | 已写入本次 28 天、7 天、Coverage 和结论 | 已完成 | Codex |
-| IDX-02 | 核对 24 个“已抓取未编入索引”URL | 每条归类为保留增强、canonical/noindex、404/软 404 修复；不做盲目 Request Indexing | 待执行 | Codex |
+| IDX-02 | 核对 24 个“已抓取未编入索引”URL | 已完成逐条分类，详见 [Coverage URL 审计](./COVERAGE_URL_AUDIT_2026-08-31_CN.md)；不做盲目 Request Indexing | 已完成 | Codex |
 | IDX-03 | 核对 22 个软 404 与 4 个未指定 canonical 重复页 | 仅保留有独立意图与事实证据的 canonical 页 | 待执行 | Codex |
 | IDX-04 | 每周生产 SEO smoke | 首页、Explore、核心详情、robots、sitemap、canonical 均通过 | 持续 | Codex |
 | IDX-05 | 索引准入门槛持续执行 | 所有新 URL 均通过 [SEO 内容准入清单](./SEO_CONTENT_CHECKLIST.md) | 持续 | 共同 |
@@ -83,4 +83,4 @@
 ## 历史方案
 
 - 2026-08-10 及之前的总控、60 天商业、竞品研究、分发与产品证据方案均在 `docs/archive/` 保留，供追溯，不再作为本轮排期依据。
-- 本轮唯一的执行依据是本文件、[GSC 周度观察台账](./GSC_WEEKLY_OBSERVATION_LOG_CN.md)、[SEO 内容准入清单](./SEO_CONTENT_CHECKLIST.md)、[核心页面信号审计](./PRIORITY_PAGE_SIGNAL_AUDIT_CN.md) 与 [重点工具详情说明](./PRIORITY_TOOL_DETAIL_PLAYBOOK_CN.md)。
+- 本轮唯一的执行依据是本文件、[GSC 周度观察台账](./GSC_WEEKLY_OBSERVATION_LOG_CN.md)、[Coverage URL 审计](./COVERAGE_URL_AUDIT_2026-08-31_CN.md)、[SEO 内容准入清单](./SEO_CONTENT_CHECKLIST.md)、[核心页面信号审计](./PRIORITY_PAGE_SIGNAL_AUDIT_CN.md) 与 [重点工具详情说明](./PRIORITY_TOOL_DETAIL_PLAYBOOK_CN.md)。
