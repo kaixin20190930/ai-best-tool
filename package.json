@@ -47,6 +47,7 @@
     "intelligence:discover-pages": "tsx scripts/discover-product-intelligence-pages.ts",
     "intelligence:classify-page": "tsx scripts/classify-product-intelligence-page.ts",
     "intelligence:sync": "tsx scripts/sync-product-intelligence.ts",
+    "intelligence:sync-signals": "tsx scripts/sync-product-intelligence-signals.ts",
     "distribution:discover-target": "tsx scripts/discover-distribution-target-pages.ts",
     "distribution:analyze-target": "tsx scripts/analyze-distribution-target.ts",
     "distribution:review-target": "tsx scripts/review-distribution-target.ts",

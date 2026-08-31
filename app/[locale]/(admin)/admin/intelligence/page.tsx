@@ -761,6 +761,54 @@ export default async function AdminIntelligencePage({
               </div>
 
               <div className='grid gap-4 xl:grid-cols-3'>
+                <div className='rounded-xl border border-cyan-200 bg-cyan-50 p-4 xl:col-span-3'>
+                  <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between'>
+                    <div>
+                      <p className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Real user signals</p>
+                      <h3 className='mt-1 text-lg font-bold text-slate-950'>Owner, correction, and experience queue</h3>
+                      <p className='mt-1 text-sm text-slate-600'>
+                        These inputs are traceable leads, not verified facts. They cannot change the public Decision
+                        Card until editorial review.
+                      </p>
+                    </div>
+                    <span className='rounded-full bg-white px-3 py-1 text-xs font-semibold text-cyan-800'>
+                      {selected.signals.filter((signal) => signal.reviewStatus === 'pending').length} pending
+                    </span>
+                  </div>
+                  <div className='mt-4 grid gap-3 lg:grid-cols-2'>
+                    {selected.signals.length > 0 ? (
+                      selected.signals.map((signal) => (
+                        <article key={signal.id} className='rounded-xl border border-cyan-100 bg-white p-4'>
+                          <div className='flex flex-wrap items-center gap-2 text-xs font-semibold'>
+                            <span className='rounded-full bg-cyan-100 px-2 py-1 text-cyan-800'>
+                              {signal.signalType}
+                            </span>
+                            <span className='rounded-full bg-slate-100 px-2 py-1 text-slate-700'>
+                              {signal.sourceType}
+                            </span>
+                            <span className='rounded-full bg-amber-100 px-2 py-1 text-amber-800'>
+                              {signal.reviewStatus}
+                            </span>
+                          </div>
+                          <p className='mt-3 whitespace-pre-wrap text-sm leading-6 text-slate-800'>{signal.content}</p>
+                          <div className='mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500'>
+                            <span>{formatDate(signal.observedAt)}</span>
+                            {signal.sourcePath ? (
+                              <Link href={signal.sourcePath} className='font-semibold text-cyan-700 hover:underline'>
+                                Open source
+                              </Link>
+                            ) : null}
+                          </div>
+                        </article>
+                      ))
+                    ) : (
+                      <p className='rounded-lg bg-white p-3 text-sm text-slate-500 lg:col-span-2'>
+                        No owner or community signals have been queued for this tool.
+                      </p>
+                    )}
+                  </div>
+                </div>
+
                 <div className='rounded-xl border border-amber-200 bg-amber-50 p-4 xl:col-span-3'>
                   <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between'>
                     <div>

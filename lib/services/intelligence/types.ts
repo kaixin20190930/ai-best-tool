@@ -139,6 +139,22 @@ export interface ProductIntelligenceChange {
   reviewNote: string | null;
 }
 
+export interface ProductIntelligenceSignal {
+  id: string;
+  profileId: string;
+  toolId: string;
+  sourceType: 'owner_claim' | 'profile_correction' | 'comment';
+  sourceId: string;
+  signalType: 'owner_update' | 'correction' | 'user_experience';
+  content: string;
+  sourcePath: string | null;
+  reviewStatus: 'pending' | 'accepted' | 'rejected';
+  observedAt: string;
+  reviewedAt: string | null;
+  reviewNote: string | null;
+  metadata: Record<string, unknown>;
+}
+
 export interface ProductIntelligenceAsset {
   id: string;
   profileId: string;

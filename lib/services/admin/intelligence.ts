@@ -18,6 +18,7 @@ import type {
   ProductIntelligenceChange,
   ProductIntelligenceClaim,
   ProductIntelligenceProfile,
+  ProductIntelligenceSignal,
   ProductIntelligenceSource,
 } from '@/lib/services/intelligence/types';
 import { evaluateUniquenessGate, type UniquenessGateResult } from '@/lib/services/intelligence/uniquenessGate';
@@ -50,6 +51,7 @@ export interface AdminIntelligenceProfileDetail extends AdminIntelligenceProfile
   claims: ProductIntelligenceClaim[];
   assets: ProductIntelligenceAsset[];
   changes: ProductIntelligenceChange[];
+  signals: ProductIntelligenceSignal[];
   qualityAssessment: ContentQualityAssessment;
   contentComposer: EvidenceBoundComposerResult;
   factualGate: FactualGateResult;
@@ -227,6 +229,24 @@ function mapChangeRow(row: Record<string, unknown>): ProductIntelligenceChange {
   };
 }
 
+function mapSignalRow(row: Record<string, unknown>): ProductIntelligenceSignal {
+  return {
+    id: String(row.id),
+    profileId: String(row.profile_id),
+    toolId: String(row.tool_id),
+    sourceType: row.source_type as ProductIntelligenceSignal['sourceType'],
+    sourceId: String(row.source_id),
+    signalType: row.signal_type as ProductIntelligenceSignal['signalType'],
+    content: String(row.content || ''),
+    sourcePath: (row.source_path as string | null | undefined) || null,
+    reviewStatus: row.review_status as ProductIntelligenceSignal['reviewStatus'],
+    observedAt: normalizeDate(row.observed_at as string | null | undefined) || new Date().toISOString(),
+    reviewedAt: normalizeDate(row.reviewed_at as string | null | undefined),
+    reviewNote: (row.review_note as string | null | undefined) || null,
+    metadata: (row.metadata as Record<string, unknown>) || {},
+  };
+}
+
 async function loadProfileDetail(profileId: string, supabase: ReturnType<typeof createAdminClient>) {
   const [
     { data: profile, error: profileError },
@@ -234,6 +254,7 @@ async function loadProfileDetail(profileId: string, supabase: ReturnType<typeof 
     { data: claims, error: claimsError },
     { data: assets, error: assetsError },
     changesResult,
+    signalsResult,
   ] = await Promise.all([
     supabase.from('product_intelligence_profiles').select('*').eq('id', profileId).maybeSingle(),
     supabase
@@ -257,6 +278,12 @@ async function loadProfileDetail(profileId: string, supabase: ReturnType<typeof 
       .eq('profile_id', profileId)
       .order('detected_at', { ascending: false })
       .limit(50),
+    supabase
+      .from('product_intelligence_signals')
+      .select('*')
+      .eq('profile_id', profileId)
+      .order('observed_at', { ascending: false })
+      .limit(50),
   ]);
 
   if (profileError) throw new Error(profileError.message);
@@ -269,10 +296,15 @@ async function loadProfileDetail(profileId: string, supabase: ReturnType<typeof 
     changesResult.error &&
     (changesResult.error.message.includes('product_intelligence_changes') || changesResult.error.code === '42P01');
   if (changesResult.error && !changesUnavailable) throw new Error(changesResult.error.message);
+  const signalsUnavailable =
+    signalsResult.error &&
+    (signalsResult.error.message.includes('product_intelligence_signals') || signalsResult.error.code === '42P01');
+  if (signalsResult.error && !signalsUnavailable) throw new Error(signalsResult.error.message);
 
   const mappedSources = (sources || []).map((row) => mapSourceRow(row as Record<string, unknown>));
   const mappedClaims = (claims || []).map((row) => mapClaimRow(row as Record<string, unknown>));
   const mappedChanges = (changesResult.data || []).map((row) => mapChangeRow(row as Record<string, unknown>));
+  const mappedSignals = (signalsResult.data || []).map((row) => mapSignalRow(row as Record<string, unknown>));
   const mappedAssets = (assets || []).map((row) => mapAssetRow(row as Record<string, unknown>));
   const baseItem = mapProfileRow(profile as Record<string, unknown>, {
     sourceCount: mappedSources.length,
@@ -324,6 +356,7 @@ async function loadProfileDetail(profileId: string, supabase: ReturnType<typeof 
     claims: mappedClaims,
     assets: mappedAssets,
     changes: mappedChanges,
+    signals: mappedSignals,
     qualityAssessment,
     contentComposer,
     factualGate,

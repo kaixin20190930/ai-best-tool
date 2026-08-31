@@ -24,8 +24,45 @@ import {
   isSuccessfulHttpStatus,
   parseRobotsRules,
 } from '@/lib/services/intelligence/safeFetch';
+import { buildIntelligenceSignalCandidates } from '@/lib/services/intelligence/signalPersistence';
 
 function run() {
+  const signals = buildIntelligenceSignalCandidates({
+    profiles: [{ id: 'profile-1', owner_id: 'tool-1' }],
+    claims: [
+      {
+        id: 'claim-1',
+        tool_id: 'tool-1',
+        listing_name: 'Example',
+        claim_reason: 'profile_correction',
+        note: 'The pricing shown on the listing is no longer current.',
+        updated_at: '2026-08-31T00:00:00.000Z',
+      },
+    ],
+    comments: [
+      {
+        id: 'comment-1',
+        tool_id: 'tool-1',
+        user_id: 'user-1',
+        content: 'Exports worked well, but the free plan limit was reached quickly.',
+        is_hidden: false,
+        created_at: '2026-08-31T00:00:00.000Z',
+      },
+      {
+        id: 'comment-hidden',
+        tool_id: 'tool-1',
+        content: 'This hidden comment must not enter review.',
+        is_hidden: true,
+      },
+    ],
+  });
+  assert.deepEqual(
+    signals.map(({ sourceType, signalType }) => ({ sourceType, signalType })),
+    [
+      { sourceType: 'profile_correction', signalType: 'correction' },
+      { sourceType: 'comment', signalType: 'user_experience' },
+    ],
+  );
   const reviewSchedule = buildIntelligenceReviewSchedule({
     lastVerifiedAt: '2026-01-01T00:00:00.000Z',
     now: new Date('2026-01-20T00:00:00.000Z'),
