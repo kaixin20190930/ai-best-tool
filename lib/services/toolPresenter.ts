@@ -16,7 +16,10 @@ export function getLocalizedToolValue(field: unknown, locale = 'en'): string {
   const candidateLocales = [locale, ...(localeAliases[locale] || []), 'en'];
   const record = field as Record<string, unknown>;
   const matchedLocale = candidateLocales.find(
-    (candidate) => typeof record[candidate] === 'string' && record[candidate].trim(),
+    (candidate) => {
+      const value = record[candidate];
+      return typeof value === 'string' && value.trim().length > 0;
+    },
   );
 
   if (matchedLocale) {
