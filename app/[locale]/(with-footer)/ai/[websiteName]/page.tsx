@@ -19,7 +19,6 @@ import {
   Sparkles,
   Star,
   Tag as TagIcon,
-  Target,
 } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
@@ -4147,86 +4146,6 @@ export default async function Page({
                 </div>
               </section>
 
-              <section className='rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'>
-                <div className='mb-5 flex items-center gap-3'>
-                  <Target className='size-6 text-cyan-600' />
-                  <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>
-                    {locale === 'cn' ? '快速决策' : 'Quick decision'}
-                  </h2>
-                </div>
-                <p className='max-w-3xl text-sm leading-6 text-slate-600'>
-                  {locale === 'cn'
-                    ? '先看这四块，再决定要不要继续比、直接打开官网，还是回到更窄的对比页。'
-                    : 'Use these four cards to decide whether to keep comparing, open the official site, or jump to a narrower alternative page.'}
-                </p>
-                <div className='mt-5 grid gap-4 lg:grid-cols-2 xl:grid-cols-4'>
-                  <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
-                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                      {locale === 'cn' ? '适合谁' : 'Suitable for'}
-                    </p>
-                    <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
-                      {(bestFitList.length > 0 ? bestFitList : [categoryName]).slice(0, 4).map((item) => (
-                        <li key={item} className='flex gap-2'>
-                          <CheckCircle className='mt-1 size-4 shrink-0 text-emerald-600' />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
-                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                      {locale === 'cn' ? '不太适合' : 'Not suitable for'}
-                    </p>
-                    <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
-                      {(notIdealForList.length > 0 ? notIdealForList : verificationChecklist)
-                        .slice(0, 4)
-                        .map((item) => (
-                          <li key={item} className='flex gap-2'>
-                            <CircleArrowRight className='mt-1 size-4 shrink-0 text-slate-500' />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                    </ul>
-                  </div>
-
-                  <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
-                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                      {locale === 'cn' ? '替代方案' : 'Alternatives'}
-                    </p>
-                    <div className='mt-3 space-y-3'>
-                      {nextComparisonLinks.map((item) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          className='block rounded-lg border border-white bg-white p-3 transition hover:-translate-y-0.5 hover:bg-slate-50'
-                        >
-                          <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
-                          <p className='mt-1 text-sm leading-6 text-slate-600'>{item.description}</p>
-                          <span className='mt-3 inline-flex items-center gap-1 rounded-full bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-cyan-700'>
-                            {locale === 'cn' ? '打开这个替代页' : 'Open this alternative'}
-                            <ArrowRight className='size-3.5' />
-                          </span>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
-                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                      {locale === 'cn' ? '定价快照' : 'Pricing snapshot'}
-                    </p>
-                    <p className='mt-3 text-base font-semibold text-slate-950'>{pricingLabel}</p>
-                    <p className='mt-2 text-sm leading-6 text-slate-700'>{pricingSummary}</p>
-                    <div className='mt-4 rounded-lg border border-white bg-white p-3 text-sm leading-6 text-slate-600'>
-                      {locale === 'cn'
-                        ? '如果价格、试用和升级门槛都合适，再继续看详情和官网。'
-                        : 'If pricing, trial access, and upgrade limits look right, continue into the detail page and the official site.'}
-                    </div>
-                  </div>
-                </div>
-              </section>
-
               {featureEntries.length > 0 && (
                 <section className='rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'>
                   <div className='mb-5 flex items-center gap-3'>
@@ -4298,97 +4217,6 @@ export default async function Page({
             </main>
 
             <aside className='space-y-4 lg:sticky lg:top-24 lg:self-start'>
-              <div className='rounded-lg border border-cyan-100 bg-cyan-50 p-5 shadow-sm'>
-                <h2 className='text-base font-bold text-slate-950'>
-                  {locale === 'cn' ? '决策摘要' : 'Decision Snapshot'}
-                </h2>
-                <p className='mt-2 text-sm leading-6 text-cyan-900/75'>
-                  {locale === 'cn'
-                    ? '先看这块，再决定要不要继续点官网、看相似工具，还是直接收藏。'
-                    : 'Use this box to decide whether to visit the official site, compare similar tools, or save it for later.'}
-                </p>
-                <div className='mt-4 space-y-4'>
-                  <div>
-                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                      {locale === 'cn' ? '适合谁' : 'Suitable for'}
-                    </p>
-                    <div className='mt-2 flex flex-wrap gap-2'>
-                      {(bestFitList.slice(0, 2).length > 0 ? bestFitList.slice(0, 2) : [categoryName]).map((item) => (
-                        <span
-                          key={item}
-                          className='rounded-full bg-white px-3 py-1 text-xs font-medium text-slate-700 ring-1 ring-cyan-100'
-                        >
-                          {item}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                      {locale === 'cn' ? '不太适合' : 'Not suitable for'}
-                    </p>
-                    <div className='mt-2 flex flex-wrap gap-2'>
-                      {(notIdealForList.slice(0, 2).length > 0
-                        ? notIdealForList.slice(0, 2)
-                        : verificationChecklist.slice(0, 2)
-                      ).map((item) => (
-                        <span
-                          key={item}
-                          className='rounded-full bg-white px-3 py-1 text-xs font-medium text-slate-700 ring-1 ring-cyan-100'
-                        >
-                          {item}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                      {locale === 'cn' ? '定价快照' : 'Pricing snapshot'}
-                    </p>
-                    <p className='mt-2 text-sm leading-6 text-slate-700'>{pricingSummary}</p>
-                  </div>
-
-                  <div>
-                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                      {locale === 'cn' ? '风险与限制' : 'Risks and limits'}
-                    </p>
-                    <div className='mt-2 space-y-2'>
-                      {(riskPoints.length > 0
-                        ? riskPoints
-                        : [isChinese ? '暂时没有明显风险信号。' : 'No strong risk signal right now.']
-                      )
-                        .slice(0, 2)
-                        .map((item) => (
-                          <p
-                            key={item}
-                            className='rounded-lg bg-white px-3 py-2 text-xs leading-5 text-slate-700 ring-1 ring-cyan-100'
-                          >
-                            {item}
-                          </p>
-                        ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                      {locale === 'cn' ? '先比这几项' : 'Compare first'}
-                    </p>
-                    <div className='mt-2 flex flex-wrap gap-2'>
-                      {compareAxes.slice(0, 3).map((axis) => (
-                        <span
-                          key={axis}
-                          className='rounded-full bg-white px-3 py-1 text-xs font-medium text-cyan-900 ring-1 ring-cyan-100'
-                        >
-                          {axis}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
               <div className='rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200'>
                 <h2 className='text-base font-bold text-slate-950'>
                   {locale === 'cn' ? '可信度快照' : 'Trust Snapshot'}
