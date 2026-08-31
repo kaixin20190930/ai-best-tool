@@ -10,7 +10,7 @@
 
 以下行为在本轮冻结：
 
-- 不批量新增工具页、同义 guide、comparison 或 alternatives URL。
+- 不批量新增工具页、同义 guide、comparison 或 alternatives URL。允许按 [高质量收录与 "Best" 定位执行规范](./BEST_DIRECTORY_POSITIONING_AND_INTAKE_CN.md) 每周发布 3-5 个证据驱动的新工具页，未通过准入的条目只保留 draft / `noindex`。
 - 不为了“更新日期”批量改写内容；每次更新必须对应真实来源、编辑核查或用户反馈。
 - 不把外链数量作为 SEO 成功指标；分发模块只保留维护，不继续扩功能或执行站外投放。
 
@@ -55,6 +55,7 @@
 | IDX-03 | 核对 22 个软 404 与 4 个未指定 canonical 重复页 | `how-to-choose-ai-tools` 的英文 canonical 已统一；软 404 URL 明细尚未导出，收到后逐条决定 404、合并或补实质内容 | 进行中 | Codex |
 | IDX-04 | 每周生产 SEO smoke | 首页、Explore、核心详情、robots、sitemap、canonical 均通过 | 持续 | Codex |
 | IDX-05 | 索引准入门槛持续执行 | 所有新 URL 均通过 [SEO 内容准入清单](./SEO_CONTENT_CHECKLIST.md) | 持续 | 共同 |
+| IDX-06 | 高质量收录候选池与 "Best Decision Card" | 每周 3-5 个候选经过官方来源、限制、适合/不适合和重复意图审核 | 待执行 | Codex + 用户 |
 
 ### P1：让已获得展示的页面变成更可点击的答案（第 2-4 周）
 
