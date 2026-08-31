@@ -461,11 +461,11 @@ document.querySelectorAll('link[rel="alternate"][hreflang]').forEach(link => {
 ## Resources
 
 ### Documentation
-- [SEO Guidelines](./SEO_GUIDELINES.md)
-- [Structured Data Patterns](./STRUCTURED_DATA_PATTERNS.md)
+- [SEO Guidelines](./archive/SEO_GUIDELINES.md)
+- [Structured Data Patterns](./archive/STRUCTURED_DATA_PATTERNS.md)
 - [SEO Components README](../components/seo/README.md)
-- [Image Optimization Guide](./IMAGE_OPTIMIZATION.md)
-- [Hreflang Implementation](./HREFLANG_IMPLEMENTATION.md)
+- [Image Optimization Guide](./archive/IMAGE_OPTIMIZATION.md)
+- [Hreflang Implementation](./archive/HREFLANG_IMPLEMENTATION.md)
 
 ### Validation Tools
 - [Google Rich Results Test](https://search.google.com/test/rich-results)
