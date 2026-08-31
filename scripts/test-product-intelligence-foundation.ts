@@ -43,6 +43,7 @@ function run() {
       {
         id: 'comment-1',
         tool_id: 'tool-1',
+        tool_name: 'example',
         user_id: 'user-1',
         content: 'Exports worked well, but the free plan limit was reached quickly.',
         is_hidden: false,
@@ -63,6 +64,7 @@ function run() {
       { sourceType: 'comment', signalType: 'user_experience' },
     ],
   );
+  assert.equal(signals[1]?.sourcePath, '/ai/example#comments');
   const reviewSchedule = buildIntelligenceReviewSchedule({
     lastVerifiedAt: '2026-01-01T00:00:00.000Z',
     now: new Date('2026-01-20T00:00:00.000Z'),
