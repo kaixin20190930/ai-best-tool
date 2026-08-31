@@ -58,7 +58,7 @@
 | IDX-04 | 每周生产 SEO smoke | 首页、Explore、核心详情、robots、sitemap、canonical 均通过 | 持续 | Codex |
 | IDX-05 | 索引准入门槛持续执行 | 所有新 URL 均通过 [SEO 内容准入清单](./SEO_CONTENT_CHECKLIST.md) | 持续 | 共同 |
 | IDX-06 | 高质量收录候选池与 "Best Decision Card" | 未来 3 天 6 条候选已排期；Contextberg、Re_gent、Invenio、Thinnest AI 已形成合格 draft，Motion/PollyReach 仍按缺口保持不公开 | 进行中（4/7-14） | Codex + 用户 |
-| IDX-07 | 四周证据驱动目录计划 | W2-02B 保持日常运营节奏；平台实现已并行进入 W2-03A Guide 联动 | 进行中（W2-03A） | Codex + 用户 |
+| IDX-07 | 四周证据驱动目录计划 | W2-02B 保持日常运营节奏；W2-03A Guide 联动已完成，提交 `de1504e6`，下一项进入 W3-01A | 进行中（W3-01A） | Codex + 用户 |
 
 ### P1：让已获得展示的页面变成更可点击的答案（第 2-4 周）
 
@@ -66,7 +66,7 @@
 | --- | --- | --- | --- | --- | --- |
 | CTR-01 | 首页标题、描述、首屏与 schema 复核 | `ai tools directory`、`ai tool directory`、`ai top tools` | 文案已与目录词和可见内容一致；英文 canonical 首页已补 WebSite/SearchAction schema | 已完成 | Codex |
 | CTR-02 | 首页 -> Explore -> 分类的分流审计 | 目录通用词 | 源码内链与 URL 口径已符合规则；生产缺失的 14 个证据块已定位为详情页辅助数据查询触发 fallback，修复已完成并等待部署复验 | 等待部署复验 | Codex |
-| CTR-03 | 强化已有展示的 Guide | Web3、Automation、Research | 每页补一个可核验的实际选择情境、明确适用/不适用边界和代表工具路径 | 进行中（W2-03A） | Codex |
+| CTR-03 | 强化已有展示的 Guide | Web3、Automation、Research | 三页均已补 3 条任务、适用边界、核验风险和直达工具 Decision Card 的路径；提交 `de1504e6` | 已完成 | Codex |
 | CTR-04 | 强化已有展示的详情页 | Fathom、Anthropic、DeepL、Gamma、Lindy、Cursor、The Graph | 每页保留至少两个官方来源和一个真实选择限制；禁止通用 AI 改写 | 待执行 | Codex |
 | CTR-05 | 真实编辑/owner 信号回填 | 本轮先选 5 页 | 每页至少一条有来源的更新、纠错、owner 补充或真实使用记录 | 需要数据 | 用户 + Codex |
 
