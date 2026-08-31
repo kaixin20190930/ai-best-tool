@@ -1,4 +1,5 @@
 import { getPool } from '@/db/neon/client';
+import { evaluateCollectionAdmission } from '@/lib/services/admin/collectionAdmission';
 
 const collectionSchemaSql = `
 CREATE TABLE IF NOT EXISTS collection_sources (
@@ -1100,7 +1101,7 @@ export async function getCollectionCandidateStats(): Promise<
   return stats;
 }
 
-export async function rejectCollectionCandidates(candidateIds: string[]) {
+export async function rejectCollectionCandidates(candidateIds: string[], reason = 'Manual editorial rejection') {
   await ensureCollectionSchema();
 
   if (candidateIds.length === 0) {
@@ -1111,11 +1112,15 @@ export async function rejectCollectionCandidates(candidateIds: string[]) {
   const result = await pool.query(
     `
       UPDATE collection_candidates
-      SET status = 'rejected'
+      SET status = 'rejected',
+          raw_payload = raw_payload || $2::jsonb
       WHERE id = ANY($1::uuid[])
         AND status = 'new'
     `,
-    [candidateIds]
+    [
+      candidateIds,
+      JSON.stringify({ admission: { decision: 'rejected', evaluatedAt: new Date().toISOString(), reason } }),
+    ]
   );
 
   return { updatedCount: result.rowCount || 0 };
@@ -1128,11 +1133,21 @@ export async function rejectLowScoreCollectionCandidates(maxRelevanceScore = 49)
   const result = await pool.query(
     `
       UPDATE collection_candidates
-      SET status = 'rejected'
+      SET status = 'rejected',
+          raw_payload = raw_payload || $2::jsonb
       WHERE status = 'new'
         AND relevance_score <= $1
     `,
-    [maxRelevanceScore]
+    [
+      maxRelevanceScore,
+      JSON.stringify({
+        admission: {
+          decision: 'rejected',
+          evaluatedAt: new Date().toISOString(),
+          reason: `AI relevance score at or below ${maxRelevanceScore}`,
+        },
+      }),
+    ]
   );
 
   return { updatedCount: result.rowCount || 0 };
@@ -1361,6 +1376,16 @@ export async function importCollectionCandidateToDraft(
       detailMetadata,
     },
   });
+  const admission = evaluateCollectionAdmission({
+    ...candidate,
+    quality_score: updatedScore.qualityScore,
+    raw_payload: {
+      ...candidate.raw_payload,
+      detailMetadata,
+    },
+    relevance_score: updatedScore.relevanceScore,
+    summary,
+  });
   const title = { en: titleText, zh: titleText };
   const content = {
     en: summary,
@@ -1431,6 +1456,14 @@ export async function importCollectionCandidateToDraft(
       candidateId,
       toolId,
       JSON.stringify({
+        admission: {
+          coreGaps: admission.coreGaps,
+          decision: admission.publishReady ? 'publication_ready' : 'draft_requires_evidence',
+          decisionGaps: admission.decisionGaps,
+          draftReady: admission.draftReady,
+          evaluatedAt: new Date().toISOString(),
+          publishReady: admission.publishReady,
+        },
         detailMetadata,
         importedToolUrl: officialUrl,
       }),

@@ -130,11 +130,11 @@ export async function importCollectionCandidatesAction(candidateIds: string[]) {
   }
 }
 
-export async function rejectCollectionCandidatesAction(candidateIds: string[]) {
+export async function rejectCollectionCandidatesAction(candidateIds: string[], reason?: string) {
   try {
     await requireAdmin();
     const uniqueIds = Array.from(new Set(candidateIds)).filter(Boolean);
-    const result = await rejectCollectionCandidates(uniqueIds);
+    const result = await rejectCollectionCandidates(uniqueIds, reason);
     revalidatePath('/admin/collection');
     return { success: true, updatedCount: result.updatedCount };
   } catch (error) {

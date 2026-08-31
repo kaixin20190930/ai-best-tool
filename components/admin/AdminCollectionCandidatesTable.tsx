@@ -18,6 +18,7 @@ import type {
   CollectionCandidateScoreFilter,
   CollectionCandidateStatus,
 } from '@/lib/services/admin/collection';
+import { evaluateCollectionAdmission } from '@/lib/services/admin/collectionAdmission';
 
 function getStatusClass(status: CollectionCandidate['status']) {
   switch (status) {
@@ -75,69 +76,19 @@ function getPayloadText(
   return typeof value === 'string' && value.trim() ? value.trim() : undefined;
 }
 
-function getCandidateChecklist(candidate: CollectionCandidate) {
-  const detailMetadata = candidate.raw_payload.detailMetadata;
-  const detailRecord =
-    detailMetadata && typeof detailMetadata === 'object'
-      ? (detailMetadata as Record<string, unknown>)
-      : {};
-  const tags = Array.isArray(candidate.raw_payload.tags)
-    ? candidate.raw_payload.tags.filter((tag) => typeof tag === 'string' && tag.trim())
-    : [];
-  const description = typeof candidate.summary === 'string' ? candidate.summary.trim() : '';
-  const detailText =
-    typeof detailRecord.description === 'string'
-      ? detailRecord.description.trim()
-      : typeof candidate.raw_payload.detail === 'string'
-        ? candidate.raw_payload.detail.trim()
-        : '';
+function getAdmissionRecord(payload: Record<string, unknown>) {
+  const value = payload.admission;
+  return value && typeof value === 'object' && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : null;
+}
 
-  return [
-    candidate.raw_payload.category_id || candidate.raw_payload.categorySlug ? null : 'Missing category',
-    getPayloadText(candidate.raw_payload, 'imageUrl') ? null : 'Missing logo',
-    getPayloadText(candidate.raw_payload, 'externalUrl') || getPayloadText(candidate.raw_payload, 'canonicalUrl')
-      ? null
-      : 'Missing source URL',
-    description.length >= 80 ? null : 'Short description',
-    detailText.length >= 160 ? null : 'Short detail',
-    Array.isArray(tags) && tags.length > 0 ? null : 'Missing tags',
-  ].filter(Boolean) as string[];
+function getCandidateChecklist(candidate: CollectionCandidate) {
+  return evaluateCollectionAdmission(candidate).coreGaps;
 }
 
 function getCandidateNextAction(candidate: CollectionCandidate) {
-  const checklist = getCandidateChecklist(candidate);
-  const isReadyToImport =
-    candidate.status === 'new' && candidate.relevance_score >= 50 && candidate.quality_score >= 80;
-
-  if (candidate.status === 'imported') {
-    return 'Review imported draft';
-  }
-
-  if (candidate.status === 'skipped') {
-    return 'Re-evaluate later';
-  }
-
-  if (candidate.status === 'rejected') {
-    return 'Keep closed';
-  }
-
-  if (isReadyToImport) {
-    return 'Import now';
-  }
-
-  if (
-    checklist.includes('Missing category') ||
-    checklist.includes('Missing logo') ||
-    checklist.includes('Missing screenshot')
-  ) {
-    return 'Fix core assets first';
-  }
-
-  if (candidate.quality_score < 70 || checklist.length >= 3) {
-    return 'Enrich and rescore';
-  }
-
-  return 'Manual review';
+  return evaluateCollectionAdmission(candidate).nextAction;
 }
 
 const statusLabels: Array<{ label: string; value: CollectionCandidateStatus | 'all' }> = [
@@ -510,8 +461,9 @@ export default function AdminCollectionCandidatesTable({
                   </td>
                   <td className="px-6 py-4">
                     {(() => {
-                      const isReadyToImport = candidate.status === 'new' && candidate.relevance_score >= 50 && candidate.quality_score >= 80;
-                      const checklist = getCandidateChecklist(candidate);
+                      const admission = evaluateCollectionAdmission(candidate);
+                      const isReadyToImport = candidate.status === 'new' && admission.draftReady;
+                      const checklist = admission.coreGaps;
 
                       return (
                         <div className="mb-2">
@@ -522,7 +474,7 @@ export default function AdminCollectionCandidatesTable({
                                 : 'bg-amber-50 text-amber-700'
                             }`}
                           >
-                            {isReadyToImport ? 'Ready to import' : 'Needs enrichment'}
+                            {isReadyToImport ? 'Draft ready' : 'Needs enrichment'}
                           </span>
                           {!isReadyToImport && checklist.length > 0 ? (
                             <p className="mt-2 max-w-48 text-xs text-amber-700">
@@ -570,6 +522,13 @@ export default function AdminCollectionCandidatesTable({
                       {getCandidateChecklist(candidate).length} gap
                       {getCandidateChecklist(candidate).length === 1 ? '' : 's'}
                     </p>
+                    <p className="mt-1 text-xs text-slate-500">
+                      {evaluateCollectionAdmission(candidate).publishReady
+                        ? 'Publication evidence complete'
+                        : `${evaluateCollectionAdmission(candidate).decisionGaps.length} publication gap${
+                            evaluateCollectionAdmission(candidate).decisionGaps.length === 1 ? '' : 's'
+                          }`}
+                    </p>
                   </td>
                   <td className="px-6 py-4 text-right">
                     {candidate.status === 'imported' && candidate.tool_id ? (
@@ -594,7 +553,12 @@ export default function AdminCollectionCandidatesTable({
                           disabled={candidate.status !== 'new' || Boolean(bulkLoading)}
                           onClick={async () => {
                             setBulkLoading('reject');
-                            const result = await rejectCollectionCandidatesAction([candidate.id]);
+                            const admission = evaluateCollectionAdmission(candidate);
+                            const reason = [...admission.coreGaps, ...admission.decisionGaps].join('; ');
+                            const result = await rejectCollectionCandidatesAction(
+                              [candidate.id],
+                              reason || 'Manual editorial rejection',
+                            );
                             setBulkLoading(null);
 
                             if (result.success) {
@@ -649,6 +613,26 @@ export default function AdminCollectionCandidatesTable({
                           <p className="mt-1 text-slate-600">
                             {candidate.score_reason || 'No score reason available'}
                           </p>
+                          {getAdmissionRecord(candidate.raw_payload) && (
+                            <div className="mt-3 rounded-lg border border-slate-200 bg-white p-3">
+                              <p className="font-semibold text-slate-900">Recorded admission result</p>
+                              <p className="mt-1 text-slate-600">
+                                {String(getAdmissionRecord(candidate.raw_payload)?.decision || 'evaluated')}
+                              </p>
+                              {Boolean(getAdmissionRecord(candidate.raw_payload)?.reason) && (
+                                <p className="mt-1 text-xs text-slate-500">
+                                  {String(getAdmissionRecord(candidate.raw_payload)?.reason)}
+                                </p>
+                              )}
+                              {Boolean(getAdmissionRecord(candidate.raw_payload)?.evaluatedAt) && (
+                                <p className="mt-1 text-xs text-slate-500">
+                                  {new Date(
+                                    String(getAdmissionRecord(candidate.raw_payload)?.evaluatedAt),
+                                  ).toLocaleString()}
+                                </p>
+                              )}
+                            </div>
+                          )}
                         </div>
                         <div>
                           <p className="font-semibold text-slate-900">Enrichment</p>
@@ -664,6 +648,21 @@ export default function AdminCollectionCandidatesTable({
                                   <span
                                     key={item}
                                     className="rounded-full bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700"
+                                  >
+                                    {item}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                          {evaluateCollectionAdmission(candidate).decisionGaps.length > 0 && (
+                            <div className="mt-3">
+                              <p className="font-semibold text-slate-900">Publication admission gaps</p>
+                              <div className="mt-2 flex flex-wrap gap-2">
+                                {evaluateCollectionAdmission(candidate).decisionGaps.map((item) => (
+                                  <span
+                                    key={item}
+                                    className="rounded-full bg-rose-50 px-2 py-1 text-xs font-medium text-rose-700"
                                   >
                                     {item}
                                   </span>
