@@ -11,10 +11,10 @@
 - 核心页面：33
 - HTTP 正常：33
 - canonical：33/33
-- meta description：28/33
-- evidence / freshness 信号：14/33
+- meta description：33/33
+- evidence / freshness 信号：33/33
 - 评论 / 认领 / 官网 / 比较动作信号：33/33
-- 指定机会页官方来源块：2/16
+- 指定机会页官方来源块：16/16
 
 ## 页面明细
 
@@ -24,11 +24,11 @@
 | /explore | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
 | /best-ai-tools | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
 | /categories/productivity | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
-| /categories/research | 200 | 是 | 否 | 否 | 是 | 不要求 | - |
-| /categories/voice | 200 | 是 | 否 | 否 | 是 | 不要求 | - |
-| /categories/automation | 200 | 是 | 否 | 否 | 是 | 不要求 | - |
-| /categories/web3 | 200 | 是 | 否 | 否 | 是 | 不要求 | - |
-| /categories/developer-tools | 200 | 是 | 否 | 否 | 是 | 不要求 | - |
+| /categories/research | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
+| /categories/voice | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
+| /categories/automation | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
+| /categories/web3 | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
+| /categories/developer-tools | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
 | /categories/chatbot | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
 | /guides/how-to-choose-ai-tools | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
 | /guides/free-ai-tools | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
@@ -37,22 +37,22 @@
 | /guides/ai-coding-tools | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
 | /guides/ai-tools-for-web3 | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
 | /guides/ai-note-taking-tools | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
-| /ai/chatgpt | 200 | 是 | 是 | 否 | 是 | 否 | - |
-| /ai/claude | 200 | 是 | 是 | 否 | 是 | 否 | - |
-| /ai/cursor | 200 | 是 | 是 | 否 | 是 | 否 | - |
-| /ai/lindy | 200 | 是 | 是 | 否 | 是 | 否 | - |
+| /ai/chatgpt | 200 | 是 | 是 | 是 | 是 | 是 | - |
+| /ai/claude | 200 | 是 | 是 | 是 | 是 | 是 | - |
+| /ai/cursor | 200 | 是 | 是 | 是 | 是 | 是 | - |
+| /ai/lindy | 200 | 是 | 是 | 是 | 是 | 是 | - |
 | /ai/fathom | 200 | 是 | 是 | 是 | 是 | 是 | - |
 | /ai/pipedream | 200 | 是 | 是 | 是 | 是 | 是 | - |
-| /ai/the-graph | 200 | 是 | 是 | 否 | 是 | 否 | - |
-| /ai/dune | 200 | 是 | 是 | 否 | 是 | 否 | - |
-| /ai/runway | 200 | 是 | 是 | 否 | 是 | 否 | - |
-| /ai/defillama | 200 | 是 | 是 | 否 | 是 | 否 | - |
-| /ai/notta | 200 | 是 | 是 | 否 | 是 | 否 | - |
-| /ai/perplexity | 200 | 是 | 是 | 否 | 是 | 否 | - |
-| /ai/n8n | 200 | 是 | 是 | 否 | 是 | 否 | - |
-| /ai/make | 200 | 是 | 是 | 否 | 是 | 否 | - |
-| /ai/openrouter | 200 | 是 | 是 | 否 | 是 | 否 | - |
-| /ai/grammarly | 200 | 是 | 是 | 否 | 是 | 否 | - |
+| /ai/the-graph | 200 | 是 | 是 | 是 | 是 | 是 | - |
+| /ai/dune | 200 | 是 | 是 | 是 | 是 | 是 | - |
+| /ai/runway | 200 | 是 | 是 | 是 | 是 | 是 | - |
+| /ai/defillama | 200 | 是 | 是 | 是 | 是 | 是 | - |
+| /ai/notta | 200 | 是 | 是 | 是 | 是 | 是 | - |
+| /ai/perplexity | 200 | 是 | 是 | 是 | 是 | 是 | - |
+| /ai/n8n | 200 | 是 | 是 | 是 | 是 | 是 | - |
+| /ai/make | 200 | 是 | 是 | 是 | 是 | 是 | - |
+| /ai/openrouter | 200 | 是 | 是 | 是 | 是 | 是 | - |
+| /ai/grammarly | 200 | 是 | 是 | 是 | 是 | 是 | - |
 
 ## 解读规则
 
@@ -61,9 +61,3 @@
 - action signal 只代表页面提供评论、认领、官网或比较入口，不代表已有真实互动。
 - Lindy、Fathom、The Graph、Dune、Notta、Runway、DefiLlama、ChatGPT、Claude、Cursor、Pipedream、Perplexity、n8n、Make、OpenRouter 与 Grammarly 属于当前 GSC 机会页，必须显示带核查日期和官方链接的事实快照。
 - 真实评论、收藏、owner 认领和 editorial 复核仍需人工或用户产生，不能由脚本补齐。
-
-## 当前验收结论
-
-- 2026-08-31 部署 `b9dac805` 后，生产 SEO smoke 全部通过。
-- 严格信号审计仍只有 `2/16` 个指定机会页显示官方来源块，因此内容证据验收未通过。
-- 该缺口已保留在四周计划并归入 W3-03；不得因 build 或 smoke 通过而标记为内容质量完成。
