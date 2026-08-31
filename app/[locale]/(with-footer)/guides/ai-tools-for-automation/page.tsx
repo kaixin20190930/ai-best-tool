@@ -7,6 +7,7 @@ import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
+import GuideDecisionPath from '@/components/guides/GuideDecisionPath';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -517,6 +518,52 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             ))}
           </div>
         </section>
+
+        <GuideDecisionPath
+          locale={locale}
+          guideId='automation_guide'
+          title={isChinese ? '从工作流任务进入具体工具判断' : 'Move from workflow task to a concrete tool decision'}
+          description={
+            isChinese
+              ? '先区分自托管、API 编排和低代码协作，再核验运行额度、错误恢复和长期维护成本。'
+              : 'Separate self-hosting, API orchestration, and low-code collaboration, then verify run limits, recovery, and maintenance cost.'
+          }
+          tasks={[
+            {
+              task: isChinese ? '可视化编排与自托管' : 'Visual orchestration and self-hosting',
+              toolName: 'n8n',
+              toolLabel: 'n8n',
+              bestFor: isChinese
+                ? '需要流程控制、可部署性和较强技术灵活性的团队。'
+                : 'Teams needing flow control, deployability, and technical flexibility.',
+              verifyFirst: isChinese
+                ? '运维责任、执行额度和复杂流程调试成本。'
+                : 'Operational ownership, run limits, and complex-flow debugging cost.',
+            },
+            {
+              task: isChinese ? 'API 驱动的开发者工作流' : 'API-driven developer workflows',
+              toolName: 'pipedream',
+              toolLabel: 'Pipedream',
+              bestFor: isChinese
+                ? '需要快速连接 API、事件和代码步骤。'
+                : 'Fast API, event, and code-step integrations.',
+              verifyFirst: isChinese
+                ? '计费单位、日志保留和生产错误恢复。'
+                : 'Billing units, log retention, and production recovery.',
+            },
+            {
+              task: isChinese ? '业务团队低代码自动化' : 'Low-code automation for business teams',
+              toolName: 'zapier',
+              toolLabel: 'Zapier',
+              bestFor: isChinese
+                ? '常见 SaaS 连接和非技术成员快速上手。'
+                : 'Common SaaS integrations and fast non-technical adoption.',
+              verifyFirst: isChinese
+                ? '高频任务成本、复杂分支和权限治理。'
+                : 'High-volume cost, complex branching, and permission governance.',
+            },
+          ]}
+        />
 
         <GuideActionSection
           locale={locale}

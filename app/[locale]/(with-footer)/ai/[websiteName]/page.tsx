@@ -32,9 +32,8 @@ import {
 } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateSoftwareSchema } from '@/lib/seo/schema';
 import { getCategoryById, getLocalizedField as getCategoryLocalizedField } from '@/lib/services/categories';
-import { buildToolDecisionCard } from '@/lib/services/toolDecisionCard';
-import { DecisionEvidenceRequirementKey } from '@/lib/services/toolDecisionCard';
 import { getLocalizedField as getTagLocalizedField, getTagsBySlugs, humanizeTagSlug } from '@/lib/services/tags';
+import { buildToolDecisionCard, DecisionEvidenceRequirementKey } from '@/lib/services/toolDecisionCard';
 import { toolToDetailData } from '@/lib/services/toolPresenter';
 import { getLocalizedField, getToolByName } from '@/lib/services/tools';
 import { createClient } from '@/lib/supabase/server';
@@ -3367,11 +3366,7 @@ export default async function Page({
     const decisionEvidenceMissingLabels = decisionCard.evidenceCompleteness.missing.map((key) =>
       getEvidenceRequirementLabel(key, locale),
     );
-    const lastCheckedScheduleLabel = formatReviewScheduleDate(
-      decisionCard.reviewSchedule.lastCheckedAt,
-      false,
-      locale,
-    );
+    const lastCheckedScheduleLabel = formatReviewScheduleDate(decisionCard.reviewSchedule.lastCheckedAt, false, locale);
     const nextFactReviewLabel = formatReviewScheduleDate(
       decisionCard.reviewSchedule.nextFactReviewAt,
       decisionCard.reviewSchedule.factReviewDue,
@@ -3902,7 +3897,6 @@ export default async function Page({
                     </div>
                   ))}
                 </div>
-
               </aside>
             </div>
           </div>
@@ -3940,7 +3934,11 @@ export default async function Page({
                 <MarkdownProse markdown={detailMarkdown} className='text-base leading-7 text-slate-700' />
               </section>
 
-              <section className='rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'>
+              <section
+                id='decision-card'
+                data-tool-decision-card
+                className='scroll-mt-28 rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'
+              >
                 <div className='mb-5 flex items-center gap-3'>
                   <ShieldCheck className='size-6 text-cyan-600' />
                   <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>
@@ -4035,9 +4033,7 @@ export default async function Page({
                               {decisionCard.officialSite.statusLabel}
                             </span>
                           </div>
-                          <p className='mt-3 text-sm leading-6 text-slate-600'>
-                            {decisionCard.officialSite.summary}
-                          </p>
+                          <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.officialSite.summary}</p>
                         </div>
 
                         <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
@@ -4054,7 +4050,9 @@ export default async function Page({
                           </p>
                           <p className='mt-2 text-base font-semibold text-slate-950'>{decisionCard.owner.label}</p>
                           <div className='mt-2 flex flex-wrap gap-2'>
-                            <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${decisionCard.owner.tone}`}>
+                            <span
+                              className={`rounded-full px-2.5 py-1 text-xs font-semibold ${decisionCard.owner.tone}`}
+                            >
                               {decisionCard.owner.label}
                             </span>
                             {decisionCard.owner.claimedAtLabel && (
@@ -4125,7 +4123,9 @@ export default async function Page({
                         <p className='mt-2 text-lg font-semibold text-slate-950'>
                           {decisionCard.editorial.reviewedLabel || (locale === 'cn' ? '待补复核' : 'Review pending')}
                         </p>
-                        <p className='mt-1 text-xs font-medium text-slate-500'>{decisionCard.editorial.reviewerLabel}</p>
+                        <p className='mt-1 text-xs font-medium text-slate-500'>
+                          {decisionCard.editorial.reviewerLabel}
+                        </p>
                         {!decisionCard.editorial.sourceUrl ? (
                           <p className='mt-2 text-sm leading-6 text-slate-600'>
                             {locale === 'cn'
@@ -4145,7 +4145,9 @@ export default async function Page({
                               <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.editorial.summary}</p>
                             )}
                             {decisionCard.editorial.trustNote && (
-                              <p className='mt-2 text-sm leading-6 text-slate-600'>{decisionCard.editorial.trustNote}</p>
+                              <p className='mt-2 text-sm leading-6 text-slate-600'>
+                                {decisionCard.editorial.trustNote}
+                              </p>
                             )}
                             <a
                               href={decisionCard.editorial.sourceUrl}
@@ -4633,10 +4635,7 @@ export default async function Page({
   } catch (error) {
     console.error('Tool detail page failed to render:', { websiteName, failureStage, error });
     return (
-      <div
-        className='mx-auto max-w-5xl px-4 py-12 lg:px-0'
-        data-detail-failure-stage={failureStage}
-      >
+      <div className='mx-auto max-w-5xl px-4 py-12 lg:px-0' data-detail-failure-stage={failureStage}>
         <section className='rounded-3xl border border-slate-200 bg-white p-8 shadow-sm'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>AI tool profile</p>
           <h1 className='mt-2 text-3xl font-bold text-slate-950'>This tool page is temporarily unavailable</h1>

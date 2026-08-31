@@ -8,6 +8,7 @@ import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
+import GuideDecisionPath from '@/components/guides/GuideDecisionPath';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
@@ -597,6 +598,52 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </TrackableCtaLink>
           </div>
         </section>
+
+        <GuideDecisionPath
+          locale={locale}
+          guideId='research_guide'
+          title={isChinese ? '按证据任务选择研究工具' : 'Choose a research tool by evidence task'}
+          description={
+            isChinese
+              ? '研究工具的区别不只在回答质量，还在来源透明度、证据覆盖和能否回到原始材料。'
+              : 'Research tools differ not only in answer quality, but in source transparency, evidence coverage, and traceability to original material.'
+          }
+          tasks={[
+            {
+              task: isChinese ? '快速检索并保留来源' : 'Fast discovery with visible sources',
+              toolName: 'perplexity',
+              toolLabel: 'Perplexity',
+              bestFor: isChinese
+                ? '探索主题、形成初始来源清单和追问。'
+                : 'Topic exploration, initial source lists, and follow-up questions.',
+              verifyFirst: isChinese
+                ? '引用是否支持结论，以及关键事实是否回到原文。'
+                : 'Whether citations support the claim and key facts trace to originals.',
+            },
+            {
+              task: isChinese ? '学术证据与共识核对' : 'Academic evidence and consensus checking',
+              toolName: 'consensus',
+              toolLabel: 'Consensus',
+              bestFor: isChinese
+                ? '从研究论文中快速判断证据方向。'
+                : 'Quickly assessing the direction of evidence in research papers.',
+              verifyFirst: isChinese
+                ? '检索范围、研究质量和是否忽略相反证据。'
+                : 'Search scope, study quality, and omitted contradictory evidence.',
+            },
+            {
+              task: isChinese ? '论文引用与可信度检查' : 'Citation and credibility checking',
+              toolName: 'scite',
+              toolLabel: 'scite',
+              bestFor: isChinese
+                ? '查看论文被支持、提及或反驳的引用语境。'
+                : 'Seeing whether citations support, mention, or dispute a paper.',
+              verifyFirst: isChinese
+                ? '学科覆盖、引用语境和原始论文访问权限。'
+                : 'Discipline coverage, citation context, and paper access.',
+            },
+          ]}
+        />
 
         <GuideActionSection
           locale={locale}

@@ -7,6 +7,7 @@ import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
+import GuideDecisionPath from '@/components/guides/GuideDecisionPath';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -551,6 +552,56 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </Link>
           </div>
         </section>
+
+        <GuideDecisionPath
+          locale={locale}
+          guideId='web3_guide'
+          title={
+            isChinese
+              ? '先按真实 Web3 任务选入口，再看完整工具页'
+              : 'Choose by a real Web3 task before opening the full tool page'
+          }
+          description={
+            isChinese
+              ? '这里不做笼统排名。先确认任务、适用边界和必须核验的风险，再直达对应工具的 Decision Card。'
+              : 'This is not a generic ranking. Confirm the task, fit boundary, and key risk first, then jump to the tool Decision Card.'
+          }
+          tasks={[
+            {
+              task: isChinese ? '查询驱动的链上分析' : 'Query-driven on-chain analysis',
+              toolName: 'dune',
+              toolLabel: 'Dune',
+              bestFor: isChinese
+                ? '需要自定义查询、仪表盘和公开链上数据分析。'
+                : 'Custom queries, dashboards, and public on-chain analysis.',
+              verifyFirst: isChinese
+                ? '目标链覆盖、查询学习成本和团队权限。'
+                : 'Chain coverage, query learning curve, and team permissions.',
+            },
+            {
+              task: isChinese ? '协议与市场覆盖研究' : 'Protocol and market coverage research',
+              toolName: 'defillama',
+              toolLabel: 'DefiLlama',
+              bestFor: isChinese
+                ? '快速查看协议、TVL、收益和市场概览。'
+                : 'Fast protocol, TVL, yield, and market overviews.',
+              verifyFirst: isChinese
+                ? '指标定义、更新频率和是否覆盖你的细分协议。'
+                : 'Metric definitions, freshness, and niche protocol coverage.',
+            },
+            {
+              task: isChinese ? '钱包与资产组合监控' : 'Wallet and portfolio monitoring',
+              toolName: 'debank',
+              toolLabel: 'DeBank',
+              bestFor: isChinese
+                ? '跨链查看钱包资产、协议头寸和变化。'
+                : 'Cross-chain wallet assets, protocol positions, and changes.',
+              verifyFirst: isChinese
+                ? '隐私边界、链覆盖和提醒能力。'
+                : 'Privacy boundaries, chain coverage, and alerting support.',
+            },
+          ]}
+        />
 
         <GuideActionSection
           locale={locale}
