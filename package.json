@@ -39,6 +39,7 @@
     "seo:validate": "tsx scripts/validate-seo-complete.ts",
     "test:intelligence-foundation": "tsx scripts/test-product-intelligence-foundation.ts",
     "test:tool-decision-card": "tsx scripts/test-tool-decision-card.ts",
+    "test:tool-decision-card-structure": "node scripts/verify-tool-decision-card-structure.mjs",
     "test:collection-admission": "tsx scripts/test-collection-admission.ts",
     "intelligence:discover-pages": "tsx scripts/discover-product-intelligence-pages.ts",
     "intelligence:classify-page": "tsx scripts/classify-product-intelligence-page.ts",
