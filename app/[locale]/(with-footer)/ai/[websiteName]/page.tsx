@@ -2670,9 +2670,13 @@ export default async function Page({
 }: {
   params: { websiteName: string; locale: string };
 }) {
+  let failureStage = 'initialization';
+
   try {
+    failureStage = 'translations';
     const t = await getTranslations('Startup.detail');
     const isChinese = locale === 'cn';
+    failureStage = 'tool lookup';
     const rawDbTool = await getToolByName(websiteName);
     // Keep legacy imports from breaking the public page when JSON array fields are malformed.
     const dbTool = rawDbTool
@@ -2682,6 +2686,7 @@ export default async function Page({
           screenshots: getStringArray(rawDbTool.screenshots),
         }
       : null;
+    failureStage = 'tool projection';
     const data =
       dbTool?.status === 'published'
         ? toolToDetailData(dbTool, locale)
@@ -2694,6 +2699,7 @@ export default async function Page({
     const priorityOfficialEvidence = getPriorityToolOfficialEvidence(websiteName, locale);
 
     // Get current user
+    failureStage = 'viewer lookup';
     const supabase = await createClient();
     const {
       data: { user },
@@ -2727,6 +2733,7 @@ export default async function Page({
     const tagSlugsForDisplay = dbTool?.tags && dbTool.tags.length > 0 ? dbTool.tags : fallbackTagSlugs;
 
     if (dbTool) {
+      failureStage = 'taxonomy lookup';
       // Category and tags improve the detail page but must not hide it if a supporting query fails.
       if (dbTool.categoryId) {
         category = await getCategoryById(dbTool.categoryId).catch((error) => {
@@ -2759,6 +2766,7 @@ export default async function Page({
         : tagSlugsForDisplay.map((tagSlug) => humanizeTagSlug(tagSlug)).filter(Boolean);
 
     if (toolId) {
+      failureStage = 'engagement lookup';
       try {
         const [nextUserRating, nextIsFavoritedByUser, nextToolStats, nextCommentCount] = await Promise.all([
           getUserRating(toolId).catch(() => null),
@@ -2787,6 +2795,7 @@ export default async function Page({
     }
 
     // Generate SoftwareApplication schema for tool pages
+    failureStage = 'detail signals';
     const toolUrl = generateLocalizedCanonicalUrl(`/ai/${websiteName}`, locale, BASE_URL);
     const toolImageUrl = data.thumbnailUrl || data.imageUrl || '';
 
@@ -3044,6 +3053,7 @@ export default async function Page({
         day: 'numeric',
       }).format(new Date(checkedAt));
     }
+    failureStage = 'page render';
     let detailSignalCards: Array<{ label: string; value: string; note: string }>;
     const websiteNameKey = websiteName.toLowerCase();
     if (websiteNameKey === 'fathom') {
@@ -4669,9 +4679,12 @@ export default async function Page({
       </>
     );
   } catch (error) {
-    console.error('Tool detail page failed to render:', error);
+    console.error('Tool detail page failed to render:', { websiteName, failureStage, error });
     return (
-      <div className='mx-auto max-w-5xl px-4 py-12 lg:px-0'>
+      <div
+        className='mx-auto max-w-5xl px-4 py-12 lg:px-0'
+        data-detail-failure-stage={failureStage}
+      >
         <section className='rounded-3xl border border-slate-200 bg-white p-8 shadow-sm'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>AI tool profile</p>
           <h1 className='mt-2 text-3xl font-bold text-slate-950'>This tool page is temporarily unavailable</h1>
