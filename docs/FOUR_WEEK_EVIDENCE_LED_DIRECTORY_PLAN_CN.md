@@ -48,7 +48,7 @@
 | W2-01A | 后台列表增加完整度、准入状态、下次复查、缺失项筛选 | 1.5 天 | W1-02 | 管理员一屏识别能否发布 | 已完成，提交 `9f780aa0`；tsc/build 通过 |
 | W2-01B | 编辑页增加证据来源、限制和 Decision Card 字段校验 | 1.5 天 | W2-01A | 缺字段无法误标可发布 | 已完成，提交 `4e3df958`；部署 `b48753cd`、production smoke 通过 |
 | W2-02A | 生成未来 3 天候选池，每日处理 1-2 条 | 每日 1 小时 | W2-01 | 每条有发布/待补结论 | 已完成，提交 `d7ea18b5`；6 条生产候选按 3 天每天 2 条排期 |
-| W2-02B | 首批 7-14 条处理台账；只发布通过准入的条目 | 每日 1 小时 | W2-02A | 无低质量例外放行 | 进行中 |
+| W2-02B | 首批 7-14 条处理台账；只发布通过准入的条目 | 每日 1 小时 | W2-02A | 无低质量例外放行 | 进行中，已处理 2/7-14；提交 `2a4295e5` |
 | W2-03A | Web3、Automation、Research Guide 统一任务入口 | 1 天 | W1-01C | 指向对应工具 Decision Card | 待执行 |
 
 ### 第 3 周：变化监测与真实信号（09-15 至 09-21，预计 4-5 个开发日）
@@ -81,7 +81,7 @@
 
 | 计划日 | 候选 | 当前结论 | 公开状态 | 主要待补 |
 | --- | --- | --- | --- | --- |
-| 2026-09-01 | Contextberg、Re_gent | `needs_evidence` | 不公开 | 定价/成熟度、限制、可复用素材 |
+| 2026-09-01 | Contextberg、Re_gent | `ready_for_draft` | 已创建 draft，未公开 | 工具级最终编辑复核与发布审批 |
 | 2026-09-02 | Invenio、Thinnest AI | `needs_evidence` | 不公开 | 兼容/合规、定价、可复用素材 |
 | 2026-09-03 | Motion、PollyReach | `needs_evidence` | 不公开 | 访问/地域、定价、真实限制 |
 
@@ -90,6 +90,13 @@
 - 防重复：执行前按官方域名与 `tools` 表比对；本批 6 条未发现已收录域名冲突。
 - 自动验收：`pnpm run test:collection-planning`、`pnpm run test:collection-admission`、`tsc --noEmit`、`pnpm run build` 全部通过。
 - 下一步：W2-02B 按计划日逐条补限制、素材、比较路径和事实确认；只有准入结果为 `publishReady` 才允许公开。
+
+### W2-02B 第一批处理记录（2026-08-31）
+
+- Contextberg：已核验官方首页、Pricing 和 Download；记录 `$0 Free / $8 Lite / Pro coming soon`、180 天免费版留存、模型路由的数据边界、平台与使用限制；草稿 `0afff0d2-3d47-42ea-bf05-748bd8f6e1d8`。
+- Re_gent：已核验官方站与 GitHub；记录 Public Alpha、当前支持 Claude Code/Codex/OpenCode、其他 agent 为计划项、Apache-2.0 免费许可及“不替代 Git”边界；草稿 `f34ca62d-d1aa-46df-8e22-366618c1125f`。
+- 两条候选级准入均为 `coreGaps=0 / decisionGaps=0`；工具状态仍为 `draft`，工具级发布 SQL 会继续要求最终编辑复核，未进入 sitemap。
+- 本批自动验收：collection planning 测试、TypeScript、完整 `pnpm run build` 通过。
 
 ## 状态更新协议
 
