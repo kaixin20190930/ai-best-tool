@@ -60,7 +60,7 @@
 
 | ID | 任务 | 优先页面 / 查询意图 | 验收标准 | 状态 | 负责人 |
 | --- | --- | --- | --- | --- | --- |
-| CTR-01 | 首页标题、描述、首屏与 schema 复核 | `ai tools directory`、`ai tool directory`、`ai top tools` | 不夸大工具数量；明确“curated directory + task-based discovery”，与可见内容一致 | 待执行 | Codex |
+| CTR-01 | 首页标题、描述、首屏与 schema 复核 | `ai tools directory`、`ai tool directory`、`ai top tools` | 文案已与目录词和可见内容一致；英文 canonical 首页已补 WebSite/SearchAction schema | 已完成 | Codex |
 | CTR-02 | 首页 -> Explore -> 分类的分流审计 | 目录通用词 | 每个核心入口有明确且非重复的搜索职责、描述性锚文本和下一步链接 | 待执行 | Codex |
 | CTR-03 | 强化已有展示的 Guide | Web3、Automation、Research | 每页补一个可核验的实际选择情境、明确适用/不适用边界和代表工具路径 | 待执行 | Codex |
 | CTR-04 | 强化已有展示的详情页 | Fathom、Anthropic、DeepL、Gamma、Lindy、Cursor、The Graph | 每页保留至少两个官方来源和一个真实选择限制；禁止通用 AI 改写 | 待执行 | Codex |

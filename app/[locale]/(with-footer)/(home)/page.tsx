@@ -24,7 +24,7 @@ import { topListTopics } from '@/lib/data/topLists';
 import { BASE_URL } from '@/lib/env';
 import { SEO_CONFIG } from '@/lib/seo/constants';
 import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
-import { generateOrganizationSchema } from '@/lib/seo/schema';
+import { generateOrganizationSchema, generateWebSiteSchema } from '@/lib/seo/schema';
 import { getLocalizedField as getCategoryLocalizedField, getPopularCategories } from '@/lib/services/categories';
 import { getCommunityHighlights, getRecentDiscussions, getRisingTools } from '@/lib/services/community';
 import { toolToListRow } from '@/lib/services/toolPresenter';
@@ -408,10 +408,12 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       // 'https://linkedin.com/company/aibesttool'
     ],
   });
+  const webSiteSchema = locale === 'en' ? generateWebSiteSchema(BASE_URL, SEO_CONFIG.siteName) : null;
 
   return (
     <>
       <StructuredDataServer data={organizationSchema} />
+      {webSiteSchema ? <StructuredDataServer data={webSiteSchema} /> : null}
       <div className='relative w-full bg-slate-50'>
         <section className='border-b border-slate-200 bg-white'>
           <div className='mx-auto grid w-full max-w-7xl gap-8 px-4 py-10 lg:grid-cols-[minmax(0,1fr)_360px] lg:px-6 lg:py-16'>
