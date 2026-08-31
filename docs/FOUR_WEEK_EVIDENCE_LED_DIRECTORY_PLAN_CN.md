@@ -48,7 +48,7 @@
 | W2-01A | 后台列表增加完整度、准入状态、下次复查、缺失项筛选 | 1.5 天 | W1-02 | 管理员一屏识别能否发布 | 已完成，提交 `9f780aa0`；tsc/build 通过 |
 | W2-01B | 编辑页增加证据来源、限制和 Decision Card 字段校验 | 1.5 天 | W2-01A | 缺字段无法误标可发布 | 已完成，提交 `4e3df958`；部署 `b48753cd`、production smoke 通过 |
 | W2-02A | 生成未来 3 天候选池，每日处理 1-2 条 | 每日 1 小时 | W2-01 | 每条有发布/待补结论 | 已完成，提交 `d7ea18b5`；6 条生产候选按 3 天每天 2 条排期 |
-| W2-02B | 首批 7-14 条处理台账；只发布通过准入的条目 | 每日 1 小时 | W2-02A | 无低质量例外放行 | 进行中，已处理 2/7-14；提交 `2a4295e5` |
+| W2-02B | 首批 7-14 条处理台账；只发布通过准入的条目 | 每日 1 小时 | W2-02A | 无低质量例外放行 | 进行中，已处理 4/7-14；第二批提交 `d1fe7375` |
 | W2-03A | Web3、Automation、Research Guide 统一任务入口 | 1 天 | W1-01C | 指向对应工具 Decision Card | 待执行 |
 
 ### 第 3 周：变化监测与真实信号（09-15 至 09-21，预计 4-5 个开发日）
@@ -82,7 +82,7 @@
 | 计划日 | 候选 | 当前结论 | 公开状态 | 主要待补 |
 | --- | --- | --- | --- | --- |
 | 2026-09-01 | Contextberg、Re_gent | `ready_for_draft` | 已创建 draft，未公开 | 工具级最终编辑复核与发布审批 |
-| 2026-09-02 | Invenio、Thinnest AI | `needs_evidence` | 不公开 | 兼容/合规、定价、可复用素材 |
+| 2026-09-02 | Invenio、Thinnest AI | `ready_for_draft` | 已创建 draft，未公开 | 工具级最终编辑复核与发布审批 |
 | 2026-09-03 | Motion、PollyReach | `needs_evidence` | 不公开 | 访问/地域、定价、真实限制 |
 
 - 来源：现有生产 `collection_candidates`，没有为完成数量目标盲目增加 URL。
@@ -97,6 +97,13 @@
 - Re_gent：已核验官方站与 GitHub；记录 Public Alpha、当前支持 Claude Code/Codex/OpenCode、其他 agent 为计划项、Apache-2.0 免费许可及“不替代 Git”边界；草稿 `f34ca62d-d1aa-46df-8e22-366618c1125f`。
 - 两条候选级准入均为 `coreGaps=0 / decisionGaps=0`；工具状态仍为 `draft`，工具级发布 SQL 会继续要求最终编辑复核，未进入 sitemap。
 - 本批自动验收：collection planning 测试、TypeScript、完整 `pnpm run build` 通过。
+
+### W2-02B 第二批处理记录（2026-08-31）
+
+- Invenio：已核验 Apple Silicon 限制、完全本地处理、Free/Pro/Lifetime 定价和付费语音转录边界；草稿 `b5207528-b91f-439f-ae3a-b3af239ef02a`。
+- Thinnest AI：已核验 BYOK、印度语言/电话工作流、provider pass-through、GST 与企业部署；明确记录 Pricing 页 `₹2/min` 与首页/About `₹1.5/min` 的官方口径冲突；草稿 `99548aee-f320-48ee-a8fc-7d901f65ff56`。
+- 修复幂等重复检测：候选重跑时，已关联到同一草稿的官方域名不再被误判为既有重复工具。
+- 两条候选级准入均为 `coreGaps=0 / decisionGaps=0`，生产回读确认工具状态仍为 `draft`；完整 build 通过。
 
 ## 状态更新协议
 
