@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {
   CandidatePoolEntry,
   getCandidateIntakePlan,
+  isDifferentExistingTool,
   validateThreeDayCandidatePool,
 } from '@/lib/services/admin/collectionPlanning';
 
@@ -47,6 +48,9 @@ assert.equal(parsed?.decision, 'needs_evidence');
 assert.equal(parsed?.plannedFor, '2026-09-01T09:00:00.000Z');
 assert.equal(parsed?.evidenceUrls.length, 2);
 assert.equal(getCandidateIntakePlan({ intakePlan: { decision: 'unknown' } }), null);
+assert.equal(isDifferentExistingTool('tool-a', 'tool-a'), false);
+assert.equal(isDifferentExistingTool('tool-a', null), true);
+assert.equal(isDifferentExistingTool(null, 'tool-a'), false);
 
 const incompleteReadyPool = validPool.map((item, index) =>
   index === 0 ? { ...item, decision: 'ready_for_draft' as const, gaps: [] } : item

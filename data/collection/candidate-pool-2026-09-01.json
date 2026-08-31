@@ -59,15 +59,25 @@
   {
     "candidateUrl": "https://www.producthunt.com/products/invenio",
     "categorySlug": "productivity",
-    "decision": "needs_evidence",
-    "decisionReason": "The official site verifies local Mac media search and an offline-first workflow; compatibility, pricing and trade-offs need confirmation.",
+    "compareAxes": ["Supported hardware", "Search modes", "Local processing", "Pricing and transcript access"],
+    "decision": "ready_for_draft",
+    "decisionReason": "The official site verifies supported hardware, local processing, search modes and current pricing. The candidate can enter draft review but is not automatically publishable.",
+    "detail": "Invenio is a macOS menu-bar application that indexes video and photo libraries locally and supports natural-language visual search, OCR and spoken-word search. It can index internal folders, external drives and RAID arrays, then lets editors drag matching clips into common NLE timelines. The application requires an Apple Silicon Mac and does not support Intel Macs.",
     "evidenceUrls": [
       "https://getinvenio.com/",
       "https://www.producthunt.com/products/invenio"
     ],
-    "gaps": ["Confirm Mac requirements", "Confirm current pricing", "Verify reusable logo"],
+    "gaps": [],
+    "imageUrl": "https://getinvenio.com/media/search_neon_city.png",
+    "limitations": [
+      "Invenio requires macOS on Apple Silicon; Intel Macs and non-Mac platforms are not supported.",
+      "Speech transcript search is not included in the Free plan and requires Pro or Lifetime access.",
+      "Local indexing uses the device's compute and storage resources, so first-time processing effort depends on the size of the media library."
+    ],
+    "notIdealFor": ["Windows, Linux or Intel Mac users", "Users who need cloud-shared team libraries rather than local media search"],
     "officialUrl": "https://getinvenio.com/",
     "plannedFor": "2026-09-02T09:00:00.000Z",
+    "pricingSnapshot": "Free: $0; Pro: $6.99/month or $49.99/year; Lifetime: $99.99. Verified 2026-08-31 on the official homepage.",
     "reviewedAt": "2026-08-31T00:00:00.000Z",
     "summary": "Invenio provides local natural-language, visual and transcript search across video and photo libraries on a Mac without cloud uploads.",
     "tags": ["video-search", "local-ai", "mac"],
@@ -77,15 +87,25 @@
   {
     "candidateUrl": "https://www.producthunt.com/products/thinnest-ai",
     "categorySlug": "voice",
-    "decision": "needs_evidence",
-    "decisionReason": "The official site verifies multilingual voice-agent infrastructure and India-focused positioning; compliance and real usage constraints need review.",
+    "compareAxes": ["Indian-language support", "Platform and provider costs", "BYOK and telephony", "Deployment and compliance options"],
+    "decision": "ready_for_draft",
+    "decisionReason": "Official product, pricing and company pages verify the workflow and expose an important pricing inconsistency. The candidate can enter draft review with that caveat visible.",
+    "detail": "Thinnest AI is an India-focused BYOK platform for building voice and chat agents with telephony, workflow tools, knowledge bases and multilingual speech. Its dedicated pricing page lists a platform fee plus provider pass-through costs, while enterprise options add private-cloud or on-premise deployment and compliance review. Official pages currently disagree between ₹2 and ₹1.5 per minute.",
     "evidenceUrls": [
       "https://www.thinnest.ai/",
       "https://www.thinnest.ai/about"
     ],
-    "gaps": ["Verify pricing calculation", "Review compliance claims", "Verify reusable logo"],
+    "gaps": [],
+    "imageUrl": "https://www.thinnest.ai/logo_light.png",
+    "limitations": [
+      "The dedicated pricing page lists ₹2/minute, but the homepage and About page still state ₹1.5/minute; buyers should confirm the live rate before purchase.",
+      "The platform fee is not the complete cost: LLM provider tokens pass through separately, and Indian customers also pay 18% GST.",
+      "Compliance statements are vendor claims; regulated teams still need their own legal, security and deployment review."
+    ],
+    "notIdealFor": ["Teams that require one all-inclusive per-minute price", "Buyers who need independently certified compliance without additional review"],
     "officialUrl": "https://www.thinnest.ai/",
     "plannedFor": "2026-09-02T09:30:00.000Z",
+    "pricingSnapshot": "Pricing page: Trial includes 50 voice minutes and 200 chat messages; PAYG is ₹2/min plus provider pass-through; Enterprise is custom with a stated ₹1.75/min floor at 100k+ minutes. Homepage/About still show ₹1.5/min. Verified 2026-08-31.",
     "reviewedAt": "2026-08-31T00:00:00.000Z",
     "summary": "Thinnest AI is a BYOK voice and chat agent platform focused on Indian languages, telephony workflows and INR-based platform pricing.",
     "tags": ["voice-agents", "multilingual", "byok"],

@@ -7,6 +7,7 @@ import { getPool } from '@/db/neon/client';
 import { evaluateCollectionAdmission } from '@/lib/services/admin/collectionAdmission';
 import {
   CandidatePoolEntry,
+  isDifferentExistingTool,
   validateThreeDayCandidatePool,
 } from '@/lib/services/admin/collectionPlanning';
 import {
@@ -38,7 +39,7 @@ async function main() {
     for (const entry of entries) {
       const candidate = await pool.query(
         `
-        SELECT id, title, normalized_url, status
+        SELECT id, title, normalized_url, status, tool_id
         FROM collection_candidates
         WHERE RTRIM(normalized_url, '/') = RTRIM($1, '/')
         LIMIT 1
@@ -62,7 +63,11 @@ async function main() {
         [officialHost]
       );
 
-      const effectivePlan = duplicate.rows[0]
+      const isExistingDifferentTool = isDifferentExistingTool(
+        duplicate.rows[0]?.id,
+        candidate.rows[0].tool_id
+      );
+      const effectivePlan = isExistingDifferentTool
         ? {
             ...entry,
             decision: 'duplicate' as const,

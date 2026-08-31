@@ -79,6 +79,13 @@ export function getCandidateIntakePlan(
   };
 }
 
+export function isDifferentExistingTool(
+  existingToolId: string | null | undefined,
+  linkedToolId: string | null | undefined
+): boolean {
+  return Boolean(existingToolId && existingToolId !== linkedToolId);
+}
+
 export function validateThreeDayCandidatePool(entries: CandidatePoolEntry[]): string[] {
   const errors: string[] = [];
 
