@@ -60,6 +60,26 @@ assert.deepEqual(result.verificationChecklist, ['Check pricing', 'Read docs']);
 assert.equal(result.evidenceCompleteness.complete, false);
 assert.equal(result.evidenceCompleteness.score, 71);
 assert.deepEqual(result.evidenceCompleteness.missing, ['official_source', 'reviewed_at']);
+assert.equal(result.reviewSchedule.initialReviewRequired, true);
+assert.equal(result.reviewSchedule.nextFactReviewAt, null);
 assert.deepEqual(input.comparison.axes, ['Sources', ' Sources ', 'Pricing']);
+
+const reviewedResult = buildToolDecisionCard(
+  {
+    ...input,
+    editorial: {
+      ...input.editorial,
+      reviewedAt: '2026-01-01T00:00:00.000Z',
+      sourceUrl: 'https://example.com/docs',
+    },
+  },
+  new Date('2026-01-15T00:00:00.000Z'),
+);
+
+assert.equal(reviewedResult.evidenceCompleteness.complete, true);
+assert.equal(reviewedResult.reviewSchedule.initialReviewRequired, false);
+assert.equal(reviewedResult.reviewSchedule.nextFactReviewAt, '2026-01-31T00:00:00.000Z');
+assert.equal(reviewedResult.reviewSchedule.nextDecisionReviewAt, '2026-04-01T00:00:00.000Z');
+assert.equal(reviewedResult.reviewSchedule.factReviewDue, false);
 
 console.log('Tool Decision Card model test passed.');

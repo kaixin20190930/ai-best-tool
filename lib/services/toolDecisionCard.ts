@@ -20,6 +20,15 @@ export type DecisionEvidenceCompleteness = {
   score: number;
 };
 
+export type DecisionReviewSchedule = {
+  decisionReviewDue: boolean;
+  factReviewDue: boolean;
+  initialReviewRequired: boolean;
+  lastCheckedAt: string | null;
+  nextDecisionReviewAt: string | null;
+  nextFactReviewAt: string | null;
+};
+
 export type ToolDecisionCardModel = {
   audience: {
     bestFit: string[];
@@ -71,17 +80,24 @@ export type ToolDecisionCardModel = {
     label: string;
     summary: string;
   };
+  reviewSchedule: DecisionReviewSchedule;
   risks: string[];
   verificationChecklist: string[];
 };
 
-type ToolDecisionCardInput = Omit<ToolDecisionCardModel, 'evidenceCompleteness'>;
+type ToolDecisionCardInput = Omit<ToolDecisionCardModel, 'evidenceCompleteness' | 'reviewSchedule'>;
 
 function uniqueText(values: string[]): string[] {
   return Array.from(new Set(values.map((value) => value.trim()).filter(Boolean)));
 }
 
-export function buildToolDecisionCard(input: ToolDecisionCardInput): ToolDecisionCardModel {
+function addUtcDays(value: Date, days: number): string {
+  const result = new Date(value);
+  result.setUTCDate(result.getUTCDate() + days);
+  return result.toISOString();
+}
+
+export function buildToolDecisionCard(input: ToolDecisionCardInput, now = new Date()): ToolDecisionCardModel {
   const seenAlternatives = new Set<string>();
   const alternatives = input.comparison.alternatives.filter((alternative) => {
     const key = `${alternative.href.trim()}::${alternative.title.trim()}`;
@@ -113,6 +129,10 @@ export function buildToolDecisionCard(input: ToolDecisionCardInput): ToolDecisio
   ];
   const met = requirements.filter(([, satisfied]) => satisfied).map(([key]) => key);
   const missing = requirements.filter(([, satisfied]) => !satisfied).map(([key]) => key);
+  const reviewedDate = input.editorial.reviewedAt ? new Date(input.editorial.reviewedAt) : null;
+  const hasValidReviewDate = reviewedDate !== null && Number.isFinite(reviewedDate.getTime());
+  const nextFactReviewAt = hasValidReviewDate ? addUtcDays(reviewedDate, 30) : null;
+  const nextDecisionReviewAt = hasValidReviewDate ? addUtcDays(reviewedDate, 90) : null;
 
   return {
     ...input,
@@ -125,6 +145,14 @@ export function buildToolDecisionCard(input: ToolDecisionCardInput): ToolDecisio
       score: Math.round((met.length / requirements.length) * 100),
     },
     risks,
+    reviewSchedule: {
+      decisionReviewDue: nextDecisionReviewAt ? now.getTime() >= new Date(nextDecisionReviewAt).getTime() : false,
+      factReviewDue: nextFactReviewAt ? now.getTime() >= new Date(nextFactReviewAt).getTime() : false,
+      initialReviewRequired: !hasValidReviewDate,
+      lastCheckedAt: hasValidReviewDate ? reviewedDate.toISOString() : null,
+      nextDecisionReviewAt,
+      nextFactReviewAt,
+    },
     verificationChecklist: uniqueText(input.verificationChecklist),
   };
 }

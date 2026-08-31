@@ -33,6 +33,7 @@ import {
 import { generateBreadcrumbSchema, generateSoftwareSchema } from '@/lib/seo/schema';
 import { getCategoryById, getLocalizedField as getCategoryLocalizedField } from '@/lib/services/categories';
 import { buildToolDecisionCard } from '@/lib/services/toolDecisionCard';
+import { DecisionEvidenceRequirementKey } from '@/lib/services/toolDecisionCard';
 import { getLocalizedField as getTagLocalizedField, getTagsBySlugs, humanizeTagSlug } from '@/lib/services/tags';
 import { toolToDetailData } from '@/lib/services/toolPresenter';
 import { getLocalizedField, getToolByName } from '@/lib/services/tools';
@@ -281,6 +282,35 @@ function getDecisionList(input: unknown, field: 'compareAxes', locale: string, f
   }
 
   return getStringList((decision as Record<string, unknown>)[field], locale, fallback);
+}
+
+function getEvidenceRequirementLabel(key: DecisionEvidenceRequirementKey, locale: string): string {
+  const labels: Record<DecisionEvidenceRequirementKey, { cn: string; en: string }> = {
+    official_source: { cn: '可追溯官方来源', en: 'Traceable official source' },
+    reviewed_at: { cn: '编辑核查日期', en: 'Editorial review date' },
+    limitations: { cn: '限制与风险', en: 'Limits and risks' },
+    media: { cn: '产品素材', en: 'Product media' },
+    best_fit: { cn: '适合人群', en: 'Best-fit audience' },
+    not_ideal_for: { cn: '不适合人群', en: 'Less-ideal audience' },
+    comparison_path: { cn: '比较路径', en: 'Comparison path' },
+  };
+
+  return locale === 'cn' ? labels[key].cn : labels[key].en;
+}
+
+function formatReviewScheduleDate(value: string | null, due: boolean, locale: string): string {
+  if (!value) {
+    return locale === 'cn' ? '需要首次复核' : 'Initial review required';
+  }
+
+  const label = new Intl.DateTimeFormat(locale === 'cn' ? 'zh-CN' : 'en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  }).format(new Date(value));
+
+  if (!due) return label;
+  return locale === 'cn' ? `${label} · 已到期` : `${label} · Due`;
 }
 
 function inferBestFit(categorySlug: string | undefined, locale: string, useCases: string[]): string[] {
@@ -3334,6 +3364,24 @@ export default async function Page({
       risks: riskPoints,
       verificationChecklist,
     });
+    const decisionEvidenceMissingLabels = decisionCard.evidenceCompleteness.missing.map((key) =>
+      getEvidenceRequirementLabel(key, locale),
+    );
+    const lastCheckedScheduleLabel = formatReviewScheduleDate(
+      decisionCard.reviewSchedule.lastCheckedAt,
+      false,
+      locale,
+    );
+    const nextFactReviewLabel = formatReviewScheduleDate(
+      decisionCard.reviewSchedule.nextFactReviewAt,
+      decisionCard.reviewSchedule.factReviewDue,
+      locale,
+    );
+    const nextDecisionReviewLabel = formatReviewScheduleDate(
+      decisionCard.reviewSchedule.nextDecisionReviewAt,
+      decisionCard.reviewSchedule.decisionReviewDue,
+      locale,
+    );
     let commentSnapshotNote = isChinese
       ? '评论还少，欢迎先留一条真实体验。'
       : 'Comments are light, so the first real experience is especially useful.';
@@ -3905,6 +3953,67 @@ export default async function Page({
                     : 'Use this one card to check fit, limits, evidence, and alternatives before you trial, pay, or keep comparing.'}
                 </p>
                 <div className='space-y-5'>
+                  <div
+                    data-decision-evidence-status
+                    className='rounded-lg border border-slate-200 bg-slate-950 p-4 text-white sm:p-5'
+                  >
+                    <div className='flex flex-wrap items-start justify-between gap-4'>
+                      <div>
+                        <p className='text-xs font-semibold uppercase tracking-wide text-cyan-300'>
+                          {locale === 'cn' ? '证据准备度' : 'Evidence readiness'}
+                        </p>
+                        <p className='mt-2 text-2xl font-bold'>{decisionCard.evidenceCompleteness.score}%</p>
+                      </div>
+                      <span
+                        className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                          decisionCard.evidenceCompleteness.complete
+                            ? 'bg-emerald-400/15 text-emerald-200'
+                            : 'bg-amber-400/15 text-amber-200'
+                        }`}
+                      >
+                        {decisionCard.evidenceCompleteness.complete
+                          ? locale === 'cn'
+                            ? '证据已齐'
+                            : 'Evidence complete'
+                          : locale === 'cn'
+                            ? `待补 ${decisionEvidenceMissingLabels.length} 项`
+                            : `${decisionEvidenceMissingLabels.length} gaps`}
+                      </span>
+                    </div>
+                    <div className='mt-4 grid gap-3 sm:grid-cols-3'>
+                      <div className='rounded-lg bg-white/5 p-3'>
+                        <p className='text-xs text-slate-400'>{locale === 'cn' ? '最近核查' : 'Last checked'}</p>
+                        <p className='mt-1 text-sm font-semibold text-white'>{lastCheckedScheduleLabel}</p>
+                      </div>
+                      <div className='rounded-lg bg-white/5 p-3'>
+                        <p className='text-xs text-slate-400'>
+                          {locale === 'cn' ? '下次事实复查（30 天）' : 'Next fact check (30 days)'}
+                        </p>
+                        <p className='mt-1 text-sm font-semibold text-white'>{nextFactReviewLabel}</p>
+                      </div>
+                      <div className='rounded-lg bg-white/5 p-3'>
+                        <p className='text-xs text-slate-400'>
+                          {locale === 'cn' ? '下次判断复核（90 天）' : 'Next decision review (90 days)'}
+                        </p>
+                        <p className='mt-1 text-sm font-semibold text-white'>{nextDecisionReviewLabel}</p>
+                      </div>
+                    </div>
+                    {decisionEvidenceMissingLabels.length > 0 && (
+                      <div className='mt-4'>
+                        <p className='text-xs font-semibold text-slate-300'>
+                          {locale === 'cn' ? '公开判断仍需补齐' : 'Still needed for a complete decision'}
+                        </p>
+                        <div className='mt-2 flex flex-wrap gap-2'>
+                          {decisionEvidenceMissingLabels.map((label) => (
+                            <span key={label} className='rounded-full bg-white/10 px-2.5 py-1 text-xs text-slate-200'>
+                              {label}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
                   <div className='grid gap-4 xl:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]'>
                     <div className='rounded-lg border border-slate-200 bg-slate-50 p-4 sm:p-5'>
                       <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
