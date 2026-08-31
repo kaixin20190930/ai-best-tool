@@ -51,11 +51,26 @@ const mediaNeededSql = `
   )
 `;
 
+const localizedArrayCountSql = (path: string) => `GREATEST(
+  CASE WHEN jsonb_typeof(${path}->'en') = 'array' THEN jsonb_array_length(${path}->'en') ELSE 0 END,
+  CASE WHEN jsonb_typeof(${path}->'zh') = 'array' THEN jsonb_array_length(${path}->'zh') ELSE 0 END
+)`;
+
+const evidenceCompleteSql = `
+  NULLIF(BTRIM(features->'editorial'->>'reviewedAt'), '') IS NOT NULL
+  AND COALESCE(NULLIF(BTRIM(features->'editorial'->>'sourceUrl'), '') ~* '^https?://', FALSE)
+  AND (image_url IS NOT NULL OR thumbnail_url IS NOT NULL)
+  AND ${localizedArrayCountSql("features->'decision'->'limitations'")} > 0
+  AND ${localizedArrayCountSql("features->'bestFit'")} > 0
+  AND ${localizedArrayCountSql("features->'notIdealFor'")} > 0
+  AND ${localizedArrayCountSql("features->'decision'->'compareAxes'")} > 0`;
+
 const publishReadySql = `
   (
     status = 'draft'
     AND ${toolQualityScoreSql} >= 80
     AND NOT ${mediaNeededSql}
+    AND ${evidenceCompleteSql}
   )
 `;
 
@@ -288,6 +303,36 @@ function getStringArray(value: unknown): string[] {
   return Array.isArray(value)
     ? value.filter((item): item is string => typeof item === 'string' && item.trim().length > 0)
     : [];
+}
+
+function getLocalizedStringArray(value: unknown): string[] {
+  const direct = getStringArray(value);
+  if (direct.length > 0) return direct;
+  const record = getRecord(value);
+  return Array.from(new Set([...getStringArray(record.en), ...getStringArray(record.zh)]));
+}
+
+function getEvidencePublishGateError(tool: {
+  features?: unknown;
+  image_url?: string | null;
+  thumbnail_url?: string | null;
+}): string | null {
+  const features = getRecord(tool.features);
+  const editorial = getRecord(features.editorial);
+  const decision = getRecord(features.decision);
+  const reviewedAt = typeof editorial.reviewedAt === 'string' ? editorial.reviewedAt.trim() : '';
+  const sourceUrl = typeof editorial.sourceUrl === 'string' ? editorial.sourceUrl.trim() : '';
+  const missing = [
+    /^https?:\/\//i.test(sourceUrl) ? null : 'official source',
+    reviewedAt ? null : 'review date',
+    getLocalizedStringArray(decision.limitations).length > 0 ? null : 'limitations',
+    tool.image_url || tool.thumbnail_url ? null : 'media',
+    getLocalizedStringArray(features.bestFit).length > 0 ? null : 'best fit',
+    getLocalizedStringArray(features.notIdealFor).length > 0 ? null : 'not ideal for',
+    getLocalizedStringArray(decision.compareAxes).length > 0 ? null : 'comparison path',
+  ].filter(Boolean) as string[];
+
+  return missing.length > 0 ? `Complete publication evidence first: ${missing.join(', ')}.` : null;
 }
 
 function getCommercialFeature(features: unknown): Record<string, unknown> {
@@ -751,19 +796,6 @@ export async function getAdminTools(filters?: {
         NULLIF(BTRIM(features->'editorial'->'summary'->>'en'), '') IS NOT NULL
         OR NULLIF(BTRIM(features->'editorial'->'summary'->>'zh'), '') IS NOT NULL
       )`;
-    const localizedArrayCountSql = (path: string) => `GREATEST(
-      CASE WHEN jsonb_typeof(${path}->'en') = 'array' THEN jsonb_array_length(${path}->'en') ELSE 0 END,
-      CASE WHEN jsonb_typeof(${path}->'zh') = 'array' THEN jsonb_array_length(${path}->'zh') ELSE 0 END
-    )`;
-    const evidenceCompleteSql = `
-      NULLIF(BTRIM(features->'editorial'->>'reviewedAt'), '') IS NOT NULL
-      AND COALESCE(NULLIF(BTRIM(features->'editorial'->>'sourceUrl'), '') ~* '^https?://', FALSE)
-      AND (image_url IS NOT NULL OR thumbnail_url IS NOT NULL)
-      AND ${localizedArrayCountSql("features->'decision'->'limitations'")} > 0
-      AND ${localizedArrayCountSql("features->'bestFit'")} > 0
-      AND ${localizedArrayCountSql("features->'notIdealFor'")} > 0
-      AND ${localizedArrayCountSql("features->'decision'->'compareAxes'")} > 0`;
-
     if (filters?.editorial === 'verified') {
       query += `
         AND ${completeEditorialSql}`;
@@ -1037,6 +1069,10 @@ export async function approveTool(
     if (gateError) {
       return { success: false, error: gateError };
     }
+    const evidenceGateError = getEvidencePublishGateError(existingRow);
+    if (evidenceGateError) {
+      return { success: false, error: evidenceGateError };
+    }
 
     const existingFeatures = getRecord(existingRow.features);
     const submission = getRecord(existingFeatures.submission);
@@ -1191,6 +1227,12 @@ export async function updateTool(
       summary?: { en?: string; zh?: string };
       trustNote?: { en?: string; zh?: string };
     };
+    decisionEvidence?: {
+      bestFit?: { en?: string[]; zh?: string[] };
+      compareAxes?: { en?: string[]; zh?: string[] };
+      limitations?: { en?: string[]; zh?: string[] };
+      notIdealFor?: { en?: string[]; zh?: string[] };
+    };
   }
 ): Promise<{ success: boolean; error?: string }> {
   try {
@@ -1261,7 +1303,7 @@ export async function updateTool(
       },
     };
 
-    if (nextStatus === 'published') {
+    if (nextStatus === 'published' && existingStatus !== 'published') {
       const gateError = getPaidListingGateError(prospectiveTool);
       if (gateError) {
         return { success: false, error: gateError };
@@ -1412,6 +1454,36 @@ export async function updateTool(
         editorial: nextEditorial,
       };
       shouldUpdateFeatures = true;
+    }
+
+    if (data.decisionEvidence !== undefined) {
+      const normalizeLocalizedList = (value?: { en?: string[]; zh?: string[] }) => ({
+        en: normalizeTags(value?.en) || [],
+        zh: normalizeTags(value?.zh) || [],
+      });
+      const existingDecision = getRecord(nextFeaturesForUpdate.decision);
+      nextFeaturesForUpdate = {
+        ...nextFeaturesForUpdate,
+        bestFit: normalizeLocalizedList(data.decisionEvidence.bestFit),
+        decision: {
+          ...existingDecision,
+          compareAxes: normalizeLocalizedList(data.decisionEvidence.compareAxes),
+          limitations: normalizeLocalizedList(data.decisionEvidence.limitations),
+        },
+        notIdealFor: normalizeLocalizedList(data.decisionEvidence.notIdealFor),
+      };
+      shouldUpdateFeatures = true;
+    }
+
+    if (nextStatus === 'published' && existingStatus !== 'published') {
+      const evidenceGateError = getEvidencePublishGateError({
+        features: nextFeaturesForUpdate,
+        image_url: prospectiveTool.image_url,
+        thumbnail_url: prospectiveTool.thumbnail_url,
+      });
+      if (evidenceGateError) {
+        return { success: false, error: evidenceGateError };
+      }
     }
 
     const shouldUpdateCommercial =

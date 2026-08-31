@@ -135,6 +135,11 @@ export default function AdminToolEditForm({
   const editorial = getNestedRecord(featureRecord.editorial);
   const editorialSummary = getNestedRecord(editorial.summary);
   const editorialTrustNote = getNestedRecord(editorial.trustNote);
+  const decision = getNestedRecord(featureRecord.decision);
+  const decisionLimitations = getNestedRecord(decision.limitations);
+  const decisionCompareAxes = getNestedRecord(decision.compareAxes);
+  const bestFit = getNestedRecord(featureRecord.bestFit);
+  const notIdealFor = getNestedRecord(featureRecord.notIdealFor);
   const [categoryIdValue, setCategoryIdValue] = useState(tool.category_id || '');
   const [tagsValue, setTagsValue] = useState((tool.tags || []).join(', '));
   const [rejectionReasonInput, setRejectionReasonInput] = useState(rejectionReason || '');
@@ -382,6 +387,11 @@ export default function AdminToolEditForm({
     const editorialTrustNoteEn = String(formData.get('editorial_trust_note_en') || '').trim();
     const editorialTrustNoteZh = String(formData.get('editorial_trust_note_zh') || '').trim();
     const editorialSourceUrl = String(formData.get('editorial_source_url') || '').trim();
+    const parseEvidenceLines = (name: string) =>
+      String(formData.get(name) || '')
+        .split(/[\n,]+/)
+        .map((value) => value.trim())
+        .filter(Boolean);
 
     const tags = tagsStr
       .split(',')
@@ -420,6 +430,24 @@ export default function AdminToolEditForm({
         sourceUrl: editorialSourceUrl || null,
         summary: { en: editorialSummaryEn, zh: editorialSummaryZh },
         trustNote: { en: editorialTrustNoteEn, zh: editorialTrustNoteZh },
+      },
+      decisionEvidence: {
+        bestFit: {
+          en: parseEvidenceLines('best_fit_en'),
+          zh: parseEvidenceLines('best_fit_zh'),
+        },
+        compareAxes: {
+          en: parseEvidenceLines('compare_axes_en'),
+          zh: parseEvidenceLines('compare_axes_zh'),
+        },
+        limitations: {
+          en: parseEvidenceLines('limitations_en'),
+          zh: parseEvidenceLines('limitations_zh'),
+        },
+        notIdealFor: {
+          en: parseEvidenceLines('not_ideal_for_en'),
+          zh: parseEvidenceLines('not_ideal_for_zh'),
+        },
       },
     });
 
@@ -1099,6 +1127,38 @@ export default function AdminToolEditForm({
                   className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
                 />
               </div>
+            </div>
+          </div>
+
+          <div className="md:col-span-2 rounded-lg border border-sky-100 bg-sky-50/40 p-4">
+            <p className="text-sm font-semibold text-slate-900">Decision evidence</p>
+            <p className="mt-1 text-xs text-slate-600">
+              Add one item per line. A tool cannot be published until limitations, fit, non-fit, and comparison paths are present with editorial evidence.
+            </p>
+            <div className="mt-4 grid gap-4 md:grid-cols-2">
+              {[
+                ['limitations_en', 'Limitations (EN)', getStringArray(decisionLimitations.en)],
+                ['limitations_zh', 'Limitations (ZH)', getStringArray(decisionLimitations.zh)],
+                ['best_fit_en', 'Best fit (EN)', getStringArray(bestFit.en)],
+                ['best_fit_zh', 'Best fit (ZH)', getStringArray(bestFit.zh)],
+                ['not_ideal_for_en', 'Not ideal for (EN)', getStringArray(notIdealFor.en)],
+                ['not_ideal_for_zh', 'Not ideal for (ZH)', getStringArray(notIdealFor.zh)],
+                ['compare_axes_en', 'Comparison axes (EN)', getStringArray(decisionCompareAxes.en)],
+                ['compare_axes_zh', 'Comparison axes (ZH)', getStringArray(decisionCompareAxes.zh)],
+              ].map(([name, label, values]) => (
+                <div key={name as string}>
+                  <label htmlFor={name as string} className="block text-sm font-medium text-slate-700">
+                    {label as string}
+                  </label>
+                  <textarea
+                    id={name as string}
+                    name={name as string}
+                    defaultValue={(values as string[]).join('\n')}
+                    rows={4}
+                    className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </div>

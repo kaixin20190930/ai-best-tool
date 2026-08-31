@@ -371,7 +371,8 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
       getToolQuality(tool).score >= 80 &&
       Boolean(tool.image_url) &&
       Boolean(tool.thumbnail_url) &&
-      mediaReview.needed !== true
+      mediaReview.needed !== true &&
+      getEvidenceAdmission(tool).complete
     );
   };
 
