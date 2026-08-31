@@ -133,6 +133,14 @@ function getStringList(input: unknown, locale = 'en', fallback = 'en'): string[]
   return [];
 }
 
+function getStringArray(input: unknown): string[] {
+  if (!Array.isArray(input)) {
+    return [];
+  }
+
+  return input.filter((item): item is string => typeof item === 'string' && item.trim().length > 0);
+}
+
 function getFeatureEntries(input: unknown, locale = 'en', fallback = 'en'): Array<{ label: string; value?: string }> {
   if (Array.isArray(input)) {
     return input
@@ -2570,7 +2578,16 @@ export async function generateMetadata({
   params: { locale: string; websiteName: string };
 }): Promise<Metadata> {
   try {
-    const dbTool = await getToolByName(websiteName);
+    const rawDbTool = await getToolByName(websiteName);
+    // Older imports can contain non-array JSON values; normalize at the page boundary
+    // so an inconsistent record cannot take the entire public detail page down.
+    const dbTool = rawDbTool
+      ? {
+          ...rawDbTool,
+          tags: getStringArray(rawDbTool.tags),
+          screenshots: getStringArray(rawDbTool.screenshots),
+        }
+      : null;
     const data =
       dbTool?.status === 'published'
         ? toolToDetailData(dbTool, locale)
@@ -2656,7 +2673,15 @@ export default async function Page({
   try {
     const t = await getTranslations('Startup.detail');
     const isChinese = locale === 'cn';
-    const dbTool = await getToolByName(websiteName);
+    const rawDbTool = await getToolByName(websiteName);
+    // Keep legacy imports from breaking the public page when JSON array fields are malformed.
+    const dbTool = rawDbTool
+      ? {
+          ...rawDbTool,
+          tags: getStringArray(rawDbTool.tags),
+          screenshots: getStringArray(rawDbTool.screenshots),
+        }
+      : null;
     const data =
       dbTool?.status === 'published'
         ? toolToDetailData(dbTool, locale)
