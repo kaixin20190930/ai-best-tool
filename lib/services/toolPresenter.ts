@@ -9,13 +9,41 @@ const localeAliases: Record<string, string[]> = {
   en: ['en', 'en-US'],
 };
 
-export function getLocalizedToolValue(field: Record<string, string> | null | undefined, locale = 'en') {
-  if (!field) return '';
+export function getLocalizedToolValue(field: unknown, locale = 'en'): string {
+  if (typeof field === 'string') return field.trim();
+  if (!field || typeof field !== 'object') return '';
 
   const candidateLocales = [locale, ...(localeAliases[locale] || []), 'en'];
-  const matchedLocale = candidateLocales.find((candidate) => field[candidate]);
+  const record = field as Record<string, unknown>;
+  const matchedLocale = candidateLocales.find(
+    (candidate) => typeof record[candidate] === 'string' && record[candidate].trim(),
+  );
 
-  return matchedLocale ? field[matchedLocale] : Object.values(field)[0] || '';
+  if (matchedLocale) {
+    return (record[matchedLocale] as string).trim();
+  }
+
+  const firstString = Object.values(record).find((value) => typeof value === 'string' && value.trim());
+  return typeof firstString === 'string' ? firstString.trim() : '';
+}
+
+function getSafeIsoDate(value: unknown): string {
+  if (value instanceof Date) {
+    return Number.isFinite(value.getTime()) ? value.toISOString() : '';
+  }
+
+  if (typeof value === 'string') {
+    const timestamp = new Date(value).getTime();
+    return Number.isFinite(timestamp) ? new Date(timestamp).toISOString() : '';
+  }
+
+  return '';
+}
+
+function getToolStringArray(value: unknown): string[] {
+  return Array.isArray(value)
+    ? value.filter((item): item is string => typeof item === 'string' && item.trim().length > 0)
+    : [];
 }
 
 export function toolToListRow(tool: Tool, locale = 'en'): WebNavigationListRow {
@@ -44,12 +72,12 @@ export function toolToListRow(tool: Tool, locale = 'en'): WebNavigationListRow {
     name: tool.name,
     title: getLocalizedToolValue(tool.title, locale),
     content: getLocalizedToolValue(tool.content, locale),
-    createdAt: tool.createdAt?.toISOString?.(),
+    createdAt: getSafeIsoDate(tool.createdAt),
     url: tool.url,
     imageUrl: tool.imageUrl,
     thumbnailUrl: tool.thumbnailUrl || tool.imageUrl,
     isFeatured,
-    updatedAt: tool.updatedAt?.toISOString?.(),
+    updatedAt: getSafeIsoDate(tool.updatedAt),
     ...comparisonCta,
   };
 }
@@ -60,13 +88,13 @@ export function toolToDetailData(tool: Tool, locale = 'en'): WebNavigationDetail
 
   return {
     categoryName: tool.categoryId || '',
-    collectionTime: tool.createdAt?.toISOString?.() || '',
+    collectionTime: getSafeIsoDate(tool.createdAt),
     content,
     detail: detail || content,
     imageUrl: tool.imageUrl || tool.thumbnailUrl || '',
     name: tool.name,
     starRating: Number(tool.averageRating) || 0,
-    tagName: tool.tags?.join(', ') || '',
+    tagName: getToolStringArray(tool.tags).join(', '),
     thumbnailUrl: tool.thumbnailUrl || tool.imageUrl || '',
     title: getLocalizedToolValue(tool.title, locale),
     url: tool.url,
