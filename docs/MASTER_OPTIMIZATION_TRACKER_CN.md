@@ -58,7 +58,7 @@
 | IDX-04 | 每周生产 SEO smoke | 首页、Explore、核心详情、robots、sitemap、canonical 均通过 | 持续 | Codex |
 | IDX-05 | 索引准入门槛持续执行 | 所有新 URL 均通过 [SEO 内容准入清单](./SEO_CONTENT_CHECKLIST.md) | 持续 | 共同 |
 | IDX-06 | 高质量收录候选池与 "Best Decision Card" | 未来 3 天 6 条候选已排期；Contextberg、Re_gent、Invenio、Thinnest AI 已形成合格 draft，Motion/PollyReach 仍按缺口保持不公开 | 进行中（4/7-14） | Codex + 用户 |
-| IDX-07 | 四周证据驱动目录计划 | W2-02B 保持日常运营节奏；W2-03A Guide 联动已完成，提交 `de1504e6`，下一项进入 W3-01A | 进行中（W3-01A） | Codex + 用户 |
+| IDX-07 | 四周证据驱动目录计划 | W2-02B 保持日常运营节奏；W3-01A 代码提交 `fdf1c1f6`，待执行 Supabase change-review 迁移后验收 | 进行中（W3-01A） | Codex + 用户 |
 
 ### P1：让已获得展示的页面变成更可点击的答案（第 2-4 周）
 
