@@ -19,6 +19,7 @@ import type {
   CollectionCandidateStatus,
 } from '@/lib/services/admin/collection';
 import { evaluateCollectionAdmission } from '@/lib/services/admin/collectionAdmission';
+import { getCandidateIntakePlan } from '@/lib/services/admin/collectionPlanning';
 
 function getStatusClass(status: CollectionCandidate['status']) {
   switch (status) {
@@ -517,6 +518,30 @@ export default function AdminCollectionCandidatesTable({
                     </span>
                   </td>
                   <td className="px-6 py-4 text-sm text-slate-700">
+                    {(() => {
+                      const plan = getCandidateIntakePlan(candidate.raw_payload);
+                      if (!plan) return null;
+
+                      return (
+                        <div className="mb-3 rounded-lg border border-cyan-100 bg-cyan-50 p-3">
+                          <p className="text-xs font-semibold uppercase tracking-wide text-cyan-800">
+                            Planned {new Date(plan.plannedFor).toLocaleDateString()}
+                          </p>
+                          <p className="mt-1 text-sm font-semibold text-slate-900">
+                            {plan.decision === 'ready_for_draft'
+                              ? 'Ready for draft review'
+                              : plan.decision === 'needs_evidence'
+                                ? 'Hold: gather evidence'
+                                : plan.decision}
+                          </p>
+                          {plan.gaps.length > 0 ? (
+                            <p className="mt-1 text-xs text-slate-600">
+                              {plan.gaps.slice(0, 2).join(' · ')}
+                            </p>
+                          ) : null}
+                        </div>
+                      );
+                    })()}
                     <p className="font-semibold text-slate-900">{getCandidateNextAction(candidate)}</p>
                     <p className="mt-1 text-xs text-slate-500">
                       {getCandidateChecklist(candidate).length} gap
@@ -633,6 +658,17 @@ export default function AdminCollectionCandidatesTable({
                               )}
                             </div>
                           )}
+                          {getCandidateIntakePlan(candidate.raw_payload) ? (
+                            <div className="mt-3 rounded-lg border border-cyan-100 bg-cyan-50 p-3">
+                              <p className="font-semibold text-slate-900">Three-day intake plan</p>
+                              <p className="mt-1 text-slate-700">
+                                {getCandidateIntakePlan(candidate.raw_payload)?.decisionReason}
+                              </p>
+                              <p className="mt-2 text-xs text-slate-500">
+                                {getCandidateIntakePlan(candidate.raw_payload)?.evidenceUrls.length} evidence source(s)
+                              </p>
+                            </div>
+                          ) : null}
                         </div>
                         <div>
                           <p className="font-semibold text-slate-900">Enrichment</p>

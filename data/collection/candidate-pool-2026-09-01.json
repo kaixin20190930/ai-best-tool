@@ -1,0 +1,112 @@
+[
+  {
+    "candidateUrl": "https://www.producthunt.com/products/contextberg",
+    "categorySlug": "productivity",
+    "decision": "needs_evidence",
+    "decisionReason": "The official product and local-first MCP workflow are verified; limitations, pricing and reusable media still need editorial confirmation.",
+    "evidenceUrls": [
+      "https://contextberg.com/en",
+      "https://contextberg.com/en/how-it-works",
+      "https://contextberg.com/en/download"
+    ],
+    "gaps": ["Confirm current pricing", "Record privacy limitations", "Verify reusable logo"],
+    "officialUrl": "https://contextberg.com/en",
+    "plannedFor": "2026-09-01T09:00:00.000Z",
+    "reviewedAt": "2026-08-31T00:00:00.000Z",
+    "summary": "Contextberg records local work context and exposes useful screen, browser and agent history to MCP-compatible coding agents.",
+    "tags": ["agent-memory", "mcp", "developer-tools"],
+    "title": "Contextberg",
+    "useCases": ["Restore coding-agent context", "Search recent local work", "Share local memory over MCP"]
+  },
+  {
+    "candidateUrl": "https://www.producthunt.com/products/re_gent",
+    "categorySlug": "developer-tools",
+    "decision": "needs_evidence",
+    "decisionReason": "The official site and open-source repository verify the agent activity version-control workflow; maturity and operational limits need review.",
+    "evidenceUrls": [
+      "https://www.re-gent.dev/",
+      "https://github.com/regent-vcs/re_gent"
+    ],
+    "gaps": ["Verify supported agents", "Document alpha-stage limitations", "Verify reusable logo"],
+    "officialUrl": "https://www.re-gent.dev/",
+    "plannedFor": "2026-09-01T09:30:00.000Z",
+    "reviewedAt": "2026-08-31T00:00:00.000Z",
+    "summary": "Re_gent is a local-first version-control layer for AI coding-agent activity, linking file changes to prompts and captured sessions.",
+    "tags": ["coding-agents", "version-control", "open-source"],
+    "title": "Re_gent",
+    "useCases": ["Audit coding-agent changes", "Trace code to prompts", "Review agent sessions"]
+  },
+  {
+    "candidateUrl": "https://www.producthunt.com/products/invenio",
+    "categorySlug": "productivity",
+    "decision": "needs_evidence",
+    "decisionReason": "The official site verifies local Mac media search and an offline-first workflow; compatibility, pricing and trade-offs need confirmation.",
+    "evidenceUrls": [
+      "https://getinvenio.com/",
+      "https://www.producthunt.com/products/invenio"
+    ],
+    "gaps": ["Confirm Mac requirements", "Confirm current pricing", "Verify reusable logo"],
+    "officialUrl": "https://getinvenio.com/",
+    "plannedFor": "2026-09-02T09:00:00.000Z",
+    "reviewedAt": "2026-08-31T00:00:00.000Z",
+    "summary": "Invenio provides local natural-language, visual and transcript search across video and photo libraries on a Mac without cloud uploads.",
+    "tags": ["video-search", "local-ai", "mac"],
+    "title": "Invenio",
+    "useCases": ["Find clips by scene", "Search spoken words in video", "Index external media drives locally"]
+  },
+  {
+    "candidateUrl": "https://www.producthunt.com/products/thinnest-ai",
+    "categorySlug": "voice",
+    "decision": "needs_evidence",
+    "decisionReason": "The official site verifies multilingual voice-agent infrastructure and India-focused positioning; compliance and real usage constraints need review.",
+    "evidenceUrls": [
+      "https://www.thinnest.ai/",
+      "https://www.thinnest.ai/about"
+    ],
+    "gaps": ["Verify pricing calculation", "Review compliance claims", "Verify reusable logo"],
+    "officialUrl": "https://www.thinnest.ai/",
+    "plannedFor": "2026-09-02T09:30:00.000Z",
+    "reviewedAt": "2026-08-31T00:00:00.000Z",
+    "summary": "Thinnest AI is a BYOK voice and chat agent platform focused on Indian languages, telephony workflows and INR-based platform pricing.",
+    "tags": ["voice-agents", "multilingual", "byok"],
+    "title": "Thinnest AI",
+    "useCases": ["Build multilingual voice agents", "Automate phone workflows", "Deploy India-focused support agents"]
+  },
+  {
+    "candidateUrl": "https://www.producthunt.com/products/motion-8",
+    "categorySlug": "design-art",
+    "decision": "needs_evidence",
+    "decisionReason": "The official site and maker launch page verify an editable video-agent workflow; access, pricing and output limitations need review.",
+    "evidenceUrls": [
+      "https://motion.so/",
+      "https://motion.so/studio",
+      "https://www.producthunt.com/products/motion-8"
+    ],
+    "gaps": ["Confirm public access", "Confirm current pricing", "Document generation limitations"],
+    "officialUrl": "https://motion.so/",
+    "plannedFor": "2026-09-03T09:00:00.000Z",
+    "reviewedAt": "2026-08-31T00:00:00.000Z",
+    "summary": "Motion is a video agent that researches and storyboards from prompts and references, then keeps generated scenes editable at the element level.",
+    "tags": ["video-agent", "motion-design", "video-editing"],
+    "title": "Motion",
+    "useCases": ["Create launch videos", "Generate product explainers", "Edit AI-generated motion scenes"]
+  },
+  {
+    "candidateUrl": "https://www.producthunt.com/products/pollyreach",
+    "categorySlug": "voice",
+    "decision": "needs_evidence",
+    "decisionReason": "The official site verifies dedicated phone numbers and agent calling workflows; geography, pricing and safety limits need confirmation.",
+    "evidenceUrls": [
+      "https://www.pollyreach.com/",
+      "https://pollyreach.ai/use-cases/customer-support.html"
+    ],
+    "gaps": ["Confirm supported countries", "Confirm pricing after free quota", "Verify reusable logo"],
+    "officialUrl": "https://www.pollyreach.com/",
+    "plannedFor": "2026-09-03T09:30:00.000Z",
+    "reviewedAt": "2026-08-31T00:00:00.000Z",
+    "summary": "PollyReach gives AI agents dedicated phone numbers and calling workflows for reservations, support, scheduling and other business interactions.",
+    "tags": ["voice-agents", "phone-automation", "customer-support"],
+    "title": "PollyReach",
+    "useCases": ["Let agents call businesses", "Automate phone support", "Handle appointment calls"]
+  }
+]

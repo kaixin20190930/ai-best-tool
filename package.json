@@ -41,6 +41,8 @@
     "test:tool-decision-card": "tsx scripts/test-tool-decision-card.ts",
     "test:tool-decision-card-structure": "node scripts/verify-tool-decision-card-structure.mjs",
     "test:collection-admission": "tsx scripts/test-collection-admission.ts",
+    "test:collection-planning": "tsx scripts/test-collection-planning.ts",
+    "collection:plan-three-days": "tsx scripts/plan-three-day-candidate-pool.ts",
     "intelligence:discover-pages": "tsx scripts/discover-product-intelligence-pages.ts",
     "intelligence:classify-page": "tsx scripts/classify-product-intelligence-page.ts",
     "intelligence:sync": "tsx scripts/sync-product-intelligence.ts",
