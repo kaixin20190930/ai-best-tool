@@ -3043,7 +3043,6 @@ export default async function Page({
     const comparisonSummary = getComparisonSummary(categorySlug, locale);
     const compareAxes = decisionCompareAxesOverride.length > 0 ? decisionCompareAxesOverride : [comparisonSummary];
     const nextComparisonLinks = getNextComparisonLinks(categorySlug, dbTool?.tags || [], locale);
-    const primaryComparisonLink = nextComparisonLinks[0] || null;
     const checkedAt = editorialReview?.reviewedAt || null;
     let checkedAtLabel = isChinese ? '待补复核时间' : 'Review time pending';
     if (checkedAt) {
@@ -3254,20 +3253,6 @@ export default async function Page({
             : 'Knowing who it is not for often helps decisions more than another list of fit cases.',
         },
       ];
-    }
-    let decisionBestFitText =
-      locale === 'cn' ? '先看这个工具是不是匹配你的场景' : 'Check whether this tool matches your workflow first';
-    if (bestFitList.length > 0) {
-      const [firstBestFit] = bestFitList;
-      decisionBestFitText = firstBestFit;
-    }
-    let decisionNotIdealText =
-      locale === 'cn'
-        ? '如果你的需求更窄，先看更细的对比页'
-        : 'If your need is narrower, start from a more specific comparison';
-    if (notIdealForList.length > 0) {
-      const [firstNotIdeal] = notIdealForList;
-      decisionNotIdealText = firstNotIdeal;
     }
     let mediaChecklistItem = 'Preview media is still limited, so check the official screenshots before deciding.';
     if (heroImage) {
@@ -3817,28 +3802,6 @@ export default async function Page({
                   ))}
                 </div>
 
-                <div className='rounded-lg border border-cyan-100 bg-cyan-50 px-4 py-4 shadow-sm'>
-                  <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                    {isChinese ? '快速判断' : 'Decision snapshot'}
-                  </p>
-                  <p className='mt-2 text-base font-semibold text-slate-950'>{decisionBestFitText}</p>
-                  <p className='mt-2 text-sm leading-6 text-slate-600'>{decisionNotIdealText}</p>
-                  <div className='mt-3 grid gap-2 text-sm text-slate-700'>
-                    <div className='rounded-lg bg-white px-3 py-2 ring-1 ring-slate-200'>
-                      <span className='font-semibold text-slate-950'>{isChinese ? '重点比较' : 'Compare first'}:</span>{' '}
-                      {compareAxes[0]}
-                    </div>
-                    {primaryComparisonLink && (
-                      <Link
-                        href={primaryComparisonLink.href}
-                        className='inline-flex items-center justify-between rounded-lg bg-white px-3 py-2 font-semibold text-cyan-700 ring-1 ring-cyan-200 transition hover:bg-cyan-50'
-                      >
-                        <span>{primaryComparisonLink.title}</span>
-                        <ArrowRight className='size-4' />
-                      </Link>
-                    )}
-                  </div>
-                </div>
               </aside>
             </div>
           </div>
@@ -3880,13 +3843,13 @@ export default async function Page({
                 <div className='mb-5 flex items-center gap-3'>
                   <ShieldCheck className='size-6 text-cyan-600' />
                   <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>
-                    {locale === 'cn' ? '决策参考' : 'Decision Guide'}
+                    {locale === 'cn' ? '选择判断卡' : 'Decision Card'}
                   </h2>
                 </div>
                 <p className='mb-5 max-w-3xl text-sm leading-6 text-slate-600'>
                   {locale === 'cn'
-                    ? '这一组信息不是在替你下结论，而是帮你更快判断：它值不值得继续比较、试用或付费。'
-                    : 'This section is here to speed up your decision: whether this tool is worth comparing further, trialing, or paying for.'}
+                    ? '先用这一张卡确认任务匹配、限制、证据和替代路径，再决定是否试用、付费或继续比较。'
+                    : 'Use this one card to check fit, limits, evidence, and alternatives before you trial, pay, or keep comparing.'}
                 </p>
                 <div className='space-y-5'>
                   <div className='grid gap-4 xl:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]'>
