@@ -34,7 +34,7 @@
 | Day 4 | 分类页/Guide 到 Decision Card 的联动 | 三个已有曝光 Guide 的任务入口与工具链接 | Web3、Automation、Research 均有选择流程和明确跳转 | Codex |
 | Day 5 | 第一批日常收录：候选 A | 1 个通过准入的工具页或 1 条待补记录 | 准入台账已由 `b3e0bc39` 完成；首批真实候选留在 W2-02 执行 | Codex + 用户事实确认 |
 | Day 6 | 第二批日常收录：候选 B | 1-2 个处理完成的条目 | 同上；候选池补足未来 3 天 | Codex + 用户事实确认 |
-| Day 7 | 质量复盘与生产验收 | 收录台账、页面 smoke、首批复查日期 | 进行中（W1-04A）：把 Decision Card 结构验收固化为命令 | Codex |
+| Day 7 | 质量复盘与生产验收 | 收录台账、页面 smoke、首批复查日期 | 本地自动回归已完成；等待部署后 production smoke | Codex |
 
 ## 工具页最终显示顺序
 
