@@ -4,14 +4,20 @@ import path from 'node:path';
 import { config } from 'dotenv';
 
 import { getPool } from '@/db/neon/client';
+import { evaluateCollectionAdmission } from '@/lib/services/admin/collectionAdmission';
 import {
   CandidatePoolEntry,
   validateThreeDayCandidatePool,
 } from '@/lib/services/admin/collectionPlanning';
+import {
+  importCollectionCandidateToDraft,
+  scoreCollectionCandidate,
+} from '@/lib/services/admin/collection';
 
 config({ path: '.env.local' });
 
 const apply = process.argv.includes('--apply');
+const createReadyDrafts = process.argv.includes('--create-ready-drafts');
 const fileArgument = process.argv.find((argument) => argument.startsWith('--file='));
 const filePath = path.resolve(
   fileArgument?.slice('--file='.length) ||
@@ -64,41 +70,92 @@ async function main() {
             gaps: [],
           }
         : entry;
+      const evidencePayload = {
+        categorySlug: entry.categorySlug,
+        decision: {
+          compareAxes: entry.compareAxes || [],
+          limitations: entry.limitations || [],
+          notIdealFor: entry.notIdealFor || [],
+          reviewedAt: entry.reviewedAt,
+        },
+        detailMetadata: {
+          canonicalUrl: entry.officialUrl,
+          description: entry.detail || entry.summary,
+          externalUrl: entry.officialUrl,
+          imageUrl: entry.imageUrl,
+          title: entry.title,
+        },
+        intakePlan: effectivePlan,
+        pricingSnapshot: entry.pricingSnapshot || '',
+        tags: entry.tags,
+        useCases: entry.useCases,
+      };
+      const score = scoreCollectionCandidate({
+        rawPayload: evidencePayload,
+        summary: entry.summary,
+        title: entry.title,
+        url: entry.officialUrl,
+      });
+      const admission = evaluateCollectionAdmission({
+        quality_score: score.qualityScore,
+        raw_payload: evidencePayload,
+        relevance_score: score.relevanceScore,
+        status: candidate.rows[0].status,
+        summary: entry.summary,
+      });
 
       if (apply) {
         await pool.query(
           `
           UPDATE collection_candidates
-          SET raw_payload = raw_payload || $2::jsonb,
+          SET summary = $2,
+              raw_payload = raw_payload || $3::jsonb,
+              relevance_score = $4,
+              quality_score = $5,
+              score_reason = $6,
               updated_at = NOW()
           WHERE id = $1
         `,
           [
             candidate.rows[0].id,
+            entry.summary,
             JSON.stringify({
-              categorySlug: entry.categorySlug,
-              decision: {
-                reviewedAt: entry.reviewedAt,
+              ...evidencePayload,
+              admission: {
+                coreGaps: admission.coreGaps,
+                decision: admission.publishReady
+                  ? 'publication_ready'
+                  : admission.draftReady
+                    ? 'draft_requires_evidence'
+                    : 'candidate_requires_enrichment',
+                decisionGaps: admission.decisionGaps,
+                draftReady: admission.draftReady,
+                evaluatedAt: new Date().toISOString(),
+                publishReady: admission.publishReady,
               },
-              detailMetadata: {
-                canonicalUrl: entry.officialUrl,
-                description: entry.summary,
-                externalUrl: entry.officialUrl,
-                title: entry.title,
-              },
-              intakePlan: effectivePlan,
-              tags: entry.tags,
-              useCases: entry.useCases,
             }),
+            score.relevanceScore,
+            score.qualityScore,
+            score.reason,
           ]
         );
       }
+
+      const draftResult =
+        apply && createReadyDrafts && admission.publishReady && effectivePlan.decision !== 'duplicate'
+          ? await importCollectionCandidateToDraft(candidate.rows[0].id)
+          : null;
 
       results.push({
         title: entry.title,
         plannedFor: entry.plannedFor.slice(0, 10),
         decision: effectivePlan.decision,
-        outcome: apply ? 'updated' : 'dry_run',
+        coreGaps: admission.coreGaps.length,
+        decisionGaps: admission.decisionGaps.length,
+        draftReady: admission.draftReady,
+        draftToolId: draftResult?.toolId || '',
+        publishReady: admission.publishReady,
+        outcome: draftResult ? 'draft_created' : apply ? 'updated' : 'dry_run',
       });
     }
 

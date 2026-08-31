@@ -17,6 +17,12 @@ export type CandidateIntakePlan = {
 export type CandidatePoolEntry = CandidateIntakePlan & {
   candidateUrl: string;
   categorySlug: string;
+  compareAxes?: string[];
+  detail?: string;
+  imageUrl?: string;
+  limitations?: string[];
+  notIdealFor?: string[];
+  pricingSnapshot?: string;
   summary: string;
   tags: string[];
   title: string;
@@ -97,6 +103,23 @@ export function validateThreeDayCandidatePool(entries: CandidatePoolEntry[]): st
     }
     if (entry.decision === 'needs_evidence' && entry.gaps.length === 0) {
       errors.push(`${label}: needs_evidence requires at least one explicit gap.`);
+    }
+    if (entry.decision === 'ready_for_draft') {
+      if (!entry.imageUrl || !isHttpUrl(entry.imageUrl)) {
+        errors.push(`${label}: ready_for_draft requires a valid image URL.`);
+      }
+      if (!entry.limitations?.length) {
+        errors.push(`${label}: ready_for_draft requires explicit limitations.`);
+      }
+      if (!entry.notIdealFor?.length) {
+        errors.push(`${label}: ready_for_draft requires explicit not-ideal evidence.`);
+      }
+      if (!entry.compareAxes?.length) {
+        errors.push(`${label}: ready_for_draft requires comparison axes.`);
+      }
+      if (!entry.detail || entry.detail.trim().length < 160) {
+        errors.push(`${label}: ready_for_draft requires at least 160 characters of verified detail.`);
+      }
     }
     if (!/^\d{4}-\d{2}-\d{2}$/.test(day)) {
       errors.push(`${label}: plannedFor must begin with an ISO date.`);

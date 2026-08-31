@@ -2,16 +2,26 @@
   {
     "candidateUrl": "https://www.producthunt.com/products/contextberg",
     "categorySlug": "productivity",
-    "decision": "needs_evidence",
-    "decisionReason": "The official product and local-first MCP workflow are verified; limitations, pricing and reusable media still need editorial confirmation.",
+    "compareAxes": ["Captured context types", "Local storage and model routing", "Operating-system support", "Retention and pricing"],
+    "decision": "ready_for_draft",
+    "decisionReason": "Official product, workflow, pricing and platform limitations are verified. The candidate can enter draft review but is not automatically publishable.",
+    "detail": "Contextberg is a local work-memory application for macOS and Windows. It captures screen, input, browser and supported agent activity, organizes that history into activity, daily and long-term memory, and exposes context to MCP-compatible agents. Users can choose a local model or a hosted model route; that choice changes whether required context leaves the device.",
     "evidenceUrls": [
       "https://contextberg.com/en",
       "https://contextberg.com/en/how-it-works",
       "https://contextberg.com/en/download"
     ],
-    "gaps": ["Confirm current pricing", "Record privacy limitations", "Verify reusable logo"],
+    "gaps": [],
+    "imageUrl": "https://contextberg.com/images/og-default.png",
+    "limitations": [
+      "Contextberg records screens, inputs, browser activity and agent conversations, so users must be comfortable collecting sensitive work context.",
+      "Only a local model keeps the entire processing flow local; the official site says required context is sent when another model route is selected.",
+      "The Free plan lists a basic Gemini model and 180-day data retention; unlimited retention is a paid Lite feature."
+    ],
+    "notIdealFor": ["People who do not want screen, input or browser activity recorded", "Teams that require every inference route to remain fully local"],
     "officialUrl": "https://contextberg.com/en",
     "plannedFor": "2026-09-01T09:00:00.000Z",
+    "pricingSnapshot": "Free: $0 forever; Lite: $8/month; Pro: coming soon. Verified 2026-08-31 on the official pricing page.",
     "reviewedAt": "2026-08-31T00:00:00.000Z",
     "summary": "Contextberg records local work context and exposes useful screen, browser and agent history to MCP-compatible coding agents.",
     "tags": ["agent-memory", "mcp", "developer-tools"],
@@ -21,15 +31,25 @@
   {
     "candidateUrl": "https://www.producthunt.com/products/re_gent",
     "categorySlug": "developer-tools",
-    "decision": "needs_evidence",
-    "decisionReason": "The official site and open-source repository verify the agent activity version-control workflow; maturity and operational limits need review.",
+    "compareAxes": ["Supported coding agents", "Prompt-to-code traceability", "Local storage model", "Project maturity and license"],
+    "decision": "ready_for_draft",
+    "decisionReason": "The official site and repository verify scope, supported agents, alpha maturity and license. The candidate can enter draft review but is not automatically publishable.",
+    "detail": "Re_gent is an open-source local-first CLI that records AI coding-agent activity alongside project changes. Its log, blame and show workflows connect code changes to the agent session and prompt that produced them. The current Public Alpha supports Claude Code, Codex and OpenCode, while several other coding assistants remain roadmap items.",
     "evidenceUrls": [
       "https://www.re-gent.dev/",
       "https://github.com/regent-vcs/re_gent"
     ],
-    "gaps": ["Verify supported agents", "Document alpha-stage limitations", "Verify reusable logo"],
+    "gaps": [],
+    "imageUrl": "https://framerusercontent.com/images/KQsJkHYnAxroD5VpSsUbIczuS0.png",
+    "limitations": [
+      "The product is explicitly labeled Public Alpha, so workflows and storage semantics may still change.",
+      "The official site currently lists Claude Code, Codex and OpenCode; Cursor, Cline, Continue and Aider are planned rather than supported.",
+      "Re_gent complements Git and focuses on agent activity; it is not a replacement for repository version control."
+    ],
+    "notIdealFor": ["Teams that require a stable production release", "Users whose primary coding agent is not currently supported"],
     "officialUrl": "https://www.re-gent.dev/",
     "plannedFor": "2026-09-01T09:30:00.000Z",
+    "pricingSnapshot": "Free forever under the Apache-2.0 license. Verified 2026-08-31 on the official site and repository.",
     "reviewedAt": "2026-08-31T00:00:00.000Z",
     "summary": "Re_gent is a local-first version-control layer for AI coding-agent activity, linking file changes to prompts and captured sessions.",
     "tags": ["coding-agents", "version-control", "open-source"],

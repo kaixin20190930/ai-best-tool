@@ -48,4 +48,13 @@ assert.equal(parsed?.plannedFor, '2026-09-01T09:00:00.000Z');
 assert.equal(parsed?.evidenceUrls.length, 2);
 assert.equal(getCandidateIntakePlan({ intakePlan: { decision: 'unknown' } }), null);
 
+const incompleteReadyPool = validPool.map((item, index) =>
+  index === 0 ? { ...item, decision: 'ready_for_draft' as const, gaps: [] } : item
+);
+assert.ok(
+  validateThreeDayCandidatePool(incompleteReadyPool).some((message) =>
+    message.includes('requires a valid image URL')
+  )
+);
+
 console.log('Collection planning test passed.');
