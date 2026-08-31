@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { PRIORITY_TOOL_EVIDENCE } from '@/lib/config/priorityToolEvidence';
 import { BASE_URL } from '@/lib/env';
 import { SEO_CONFIG, SOCIAL_IMAGE_DIMENSIONS, ToolMetadata } from '@/lib/seo/constants';
 import {
@@ -3084,6 +3085,7 @@ export default async function Page({
     failureStage = 'page render';
     let detailSignalCards: Array<{ label: string; value: string; note: string }>;
     const websiteNameKey = websiteName.toLowerCase();
+    const priorityEvidence = PRIORITY_TOOL_EVIDENCE[websiteNameKey] || null;
     if (websiteNameKey === 'fathom') {
       detailSignalCards = [
         {
@@ -3950,6 +3952,42 @@ export default async function Page({
                     ? '先用这一张卡确认任务匹配、限制、证据和替代路径，再决定是否试用、付费或继续比较。'
                     : 'Use this one card to check fit, limits, evidence, and alternatives before you trial, pay, or keep comparing.'}
                 </p>
+                {priorityEvidence ? (
+                  <div
+                    data-priority-tool-evidence
+                    className='mb-5 rounded-xl border border-cyan-200 bg-cyan-50 p-4 sm:p-5'
+                  >
+                    <div className='flex flex-wrap items-start justify-between gap-3'>
+                      <div>
+                        <p className='text-xs font-semibold uppercase tracking-[0.16em] text-cyan-700'>
+                          {locale === 'cn' ? '官方证据快照' : 'Official evidence snapshot'}
+                        </p>
+                        <h3 className='mt-1 text-base font-bold text-slate-950'>
+                          {locale === 'cn' ? '先核验真实限制，再决定是否采用' : 'Verify the real limit before adopting'}
+                        </h3>
+                      </div>
+                      <span className='rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-600'>
+                        {locale === 'cn' ? '核查于' : 'Checked'} {priorityEvidence.checkedAt}
+                      </span>
+                    </div>
+                    <p className='mt-3 text-sm leading-6 text-slate-700'>
+                      {locale === 'cn' ? priorityEvidence.limitation.zh : priorityEvidence.limitation.en}
+                    </p>
+                    <div className='mt-4 flex flex-wrap gap-2'>
+                      {priorityEvidence.sources.map((source) => (
+                        <a
+                          key={source.url}
+                          href={source.url}
+                          target='_blank'
+                          rel='noreferrer'
+                          className='inline-flex items-center rounded-lg border border-cyan-200 bg-white px-3 py-2 text-xs font-semibold text-cyan-800 hover:border-cyan-300 hover:bg-cyan-100'
+                        >
+                          {source.label}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
                 <div className='space-y-5'>
                   <div
                     data-decision-evidence-status

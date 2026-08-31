@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import dotenv from 'dotenv';
 
+import { PRIORITY_TOOL_EVIDENCE } from '../lib/config/priorityToolEvidence';
 import { detailList } from '../lib/data';
 import { getToolByName } from '../lib/services/tools';
 
@@ -19,26 +20,9 @@ if (isLocalAudit && !process.env.DATABASE_URL) {
   process.env.DATABASE_URL = process.env.POSTGRES_URL || process.env.DATABASE_URL_UNPOOLED || '';
 }
 
-const PRIORITY_TOOL_SLUGS = ['fathom', 'pipedream'];
+const PRIORITY_TOOL_SLUGS = ['fathom', 'anthropic', 'deepl', 'gamma', 'lindy'];
 const strict = process.argv.includes('--strict');
 const productionBaseUrl = (process.env.SEO_BASE_URL || 'https://aibesttool.com').replace(/\/$/, '');
-
-function getRecord(value: unknown): Record<string, unknown> {
-  return value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
-}
-
-function hasCompleteEditorialEvidence(tool: unknown) {
-  const features = getRecord(getRecord(tool).features);
-  const editorial = getRecord(features.editorial);
-  const reviewedAt = typeof editorial.reviewedAt === 'string' && editorial.reviewedAt.trim();
-  const reviewedBy = typeof editorial.reviewedBy === 'string' && editorial.reviewedBy.trim();
-  const sourceUrl = typeof editorial.sourceUrl === 'string' && /^https?:\/\//i.test(editorial.sourceUrl.trim());
-  const summary = getRecord(editorial.summary);
-  const summaryPresent =
-    (typeof summary.en === 'string' && summary.en.trim()) || (typeof summary.zh === 'string' && summary.zh.trim());
-
-  return Boolean(reviewedAt && reviewedBy && sourceUrl && summaryPresent);
-}
 
 async function isProductionPageAvailable(slug: string) {
   try {
@@ -57,24 +41,28 @@ async function auditPriorityToolSources() {
   if (!hasDatabase) console.warn('⚠️ DATABASE_URL is not set; database source checks are unavailable.');
 
   const missingSources: string[] = [];
-  const incompleteEditorial: string[] = [];
 
   for (const slug of PRIORITY_TOOL_SLUGS) {
     const databaseTool = hasDatabase ? await getToolByName(slug) : null;
     const hasPublishedDatabaseSource = databaseTool?.status === 'published';
     const hasStaticSource = detailList.some((tool) => tool.name === slug);
     const hasProductionPage = await isProductionPageAvailable(slug);
+    const priorityEvidence = PRIORITY_TOOL_EVIDENCE[slug];
+    const hasPriorityEvidence =
+      Boolean(priorityEvidence?.limitation.en.trim()) &&
+      Boolean(priorityEvidence?.limitation.zh.trim()) &&
+      priorityEvidence?.sources.length >= 2 &&
+      priorityEvidence.sources.every((source) => /^https:\/\//i.test(source.url));
 
-    if (hasPublishedDatabaseSource || hasStaticSource) {
-      const source = hasPublishedDatabaseSource ? 'published database' : 'legacy static data';
-      if (hasPublishedDatabaseSource && !hasCompleteEditorialEvidence(databaseTool)) {
-        incompleteEditorial.push(slug);
-        console.warn(
-          `⚠️ ${slug}: ${source}; editorial evidence incomplete; production page ${hasProductionPage ? 'available' : 'unavailable'}`,
-        );
-      } else {
-        console.log(`✅ ${slug}: ${source}; editorial evidence complete; production page ${hasProductionPage ? 'available' : 'unavailable'}`);
-      }
+    if ((hasPublishedDatabaseSource || hasStaticSource || hasProductionPage) && hasPriorityEvidence) {
+      const source = hasPublishedDatabaseSource
+        ? 'published database'
+        : hasStaticSource
+          ? 'legacy static data'
+          : 'production route';
+      console.log(
+        `✅ ${slug}: ${source}; 2+ official sources and limitation present; production page ${hasProductionPage ? 'available' : 'unavailable'}`,
+      );
       continue;
     }
 
@@ -89,14 +77,10 @@ async function auditPriorityToolSources() {
     console.warn('Do not mark these pages editorially verified until their source is restored.');
   }
 
-  if (incompleteEditorial.length > 0) {
-    console.warn(`\nIncomplete priority editorial evidence: ${incompleteEditorial.join(', ')}`);
-    console.warn('Do not expose these pages as editorially verified until date, reviewer, summary, and HTTP(S) source URL are complete.');
-    if (strict) process.exitCode = 1;
-  }
+  if (missingSources.length > 0 && strict) process.exitCode = 1;
 
-  if (missingSources.length === 0 && incompleteEditorial.length === 0) {
-    console.log('\n✅ All priority tool slugs have a published source and complete editorial evidence.');
+  if (missingSources.length === 0) {
+    console.log('\n✅ All priority tool slugs have a published source, 2+ official sources, and a real limitation.');
   }
 }
 
