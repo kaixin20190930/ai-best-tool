@@ -54,6 +54,8 @@ export default async function AdminIntelligencePage({
     ownerType?: 'tool' | 'distribution_project' | 'all';
     status?: 'pending' | 'ready' | 'conflict' | 'stale' | 'all';
     profileId?: string;
+    reviewType?: 'fact' | 'decision' | 'all';
+    reviewState?: 'overdue' | 'due_soon' | 'scheduled' | 'unscheduled' | 'all';
   };
 }) {
   const ownerType =
@@ -81,7 +83,9 @@ export default async function AdminIntelligencePage({
   const reviewQueue = await getAdminIntelligenceReviewQueue({
     ownerType,
     status,
-    limit: 3,
+    limit: 6,
+    reviewType: searchParams.reviewType || 'all',
+    state: searchParams.reviewState || 'all',
   });
 
   const selected = overview.selectedProfile;
@@ -203,22 +207,63 @@ export default async function AdminIntelligencePage({
         <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between'>
           <div>
             <p className='text-xs font-bold uppercase tracking-[0.18em] text-cyan-700'>Review queue</p>
-            <h2 className='mt-1 text-lg font-bold text-slate-950'>7 / 30 / 60 day follow-up</h2>
+            <h2 className='mt-1 text-lg font-bold text-slate-950'>30-day facts · 90-day decisions</h2>
             <p className='mt-1 text-sm text-slate-600'>
               Published profiles automatically stay visible here so review work does not get lost.
             </p>
           </div>
           <div className='rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-700'>
             {reviewQueue.counts.overdue} overdue · {reviewQueue.counts.dueSoon} due soon ·{' '}
-            {reviewQueue.counts.scheduled} scheduled
+            {reviewQueue.counts.scheduled} scheduled · {reviewQueue.counts.unscheduled} unscheduled
           </div>
+        </div>
+
+        <div className='mt-4 flex flex-wrap gap-2'>
+          {[
+            { label: 'All reviews', type: 'all' },
+            { label: '30-day facts', type: 'fact' },
+            { label: '90-day decisions', type: 'decision' },
+          ].map((filter) => (
+            <Link
+              key={filter.type}
+              href={`/admin/intelligence?reviewType=${filter.type}`}
+              className={`rounded-full px-3 py-1.5 text-xs font-semibold ${
+                (searchParams.reviewType || 'all') === filter.type
+                  ? 'bg-slate-950 text-white'
+                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+              }`}
+            >
+              {filter.label}
+            </Link>
+          ))}
+        </div>
+        <div className='mt-2 flex flex-wrap gap-2'>
+          {[
+            { label: 'Any state', state: 'all' },
+            { label: 'Overdue', state: 'overdue' },
+            { label: 'Due soon', state: 'due_soon' },
+            { label: 'Scheduled', state: 'scheduled' },
+            { label: 'Needs baseline', state: 'unscheduled' },
+          ].map((filter) => (
+            <Link
+              key={filter.state}
+              href={`/admin/intelligence?reviewType=${searchParams.reviewType || 'all'}&reviewState=${filter.state}`}
+              className={`rounded-full px-3 py-1.5 text-xs font-semibold ${
+                (searchParams.reviewState || 'all') === filter.state
+                  ? 'bg-cyan-700 text-white'
+                  : 'bg-cyan-50 text-cyan-800 hover:bg-cyan-100'
+              }`}
+            >
+              {filter.label}
+            </Link>
+          ))}
         </div>
 
         <div className='mt-4 grid gap-3 md:grid-cols-3'>
           {reviewQueue.items.length > 0 ? (
             reviewQueue.items.map((item, index) => (
               <div
-                key={item.id}
+                key={`${item.id}-${item.reviewType}`}
                 className={`rounded-xl border p-4 ${
                   item.state === 'overdue'
                     ? 'border-rose-200 bg-rose-50'
@@ -234,7 +279,7 @@ export default async function AdminIntelligencePage({
                     <p className='text-xs text-slate-500'>{item.canonicalDomain}</p>
                   </div>
                   <span className='rounded-full bg-white px-2 py-1 text-xs font-semibold text-slate-700'>
-                    {item.cadenceDays}d
+                    {item.reviewType} · {item.cadenceDays}d
                   </span>
                 </div>
 

@@ -7,6 +7,11 @@ import { evaluateFactualGate, type FactualGateResult } from '@/lib/services/inte
 import { evaluateIndexGate, type IndexGateResult } from '@/lib/services/intelligence/indexGate';
 import { DEFAULT_DAILY_NEW_PAGE_LIMIT } from '@/lib/services/intelligence/qualityConfig';
 import { assessContentQuality, type ContentQualityAssessment } from '@/lib/services/intelligence/qualityScorer';
+import {
+  buildIntelligenceReviewSchedule,
+  type IntelligenceReviewState,
+  type IntelligenceReviewType,
+} from '@/lib/services/intelligence/reviewSchedule';
 import type {
   IntelligenceProfileStatus,
   ProductIntelligenceAsset,
@@ -99,10 +104,11 @@ export interface AdminIntelligenceReviewQueueItem {
   canonicalDomain: string;
   ownerType: ProductIntelligenceProfile['ownerType'];
   status: IntelligenceProfileStatus;
-  cadenceDays: 7 | 30 | 60;
+  reviewType: IntelligenceReviewType;
+  cadenceDays: 30 | 90;
   dueAt: string | null;
   daysUntilDue: number | null;
-  state: 'overdue' | 'due_soon' | 'scheduled';
+  state: IntelligenceReviewState;
   action: string;
   reason: string;
 }
@@ -115,6 +121,7 @@ export interface AdminIntelligenceReviewQueue {
     overdue: number;
     dueSoon: number;
     scheduled: number;
+    unscheduled: number;
   };
 }
 
@@ -342,23 +349,6 @@ function getQueueAction(indexGate: IndexGateResult): string {
   return 'Hold and fix blockers first';
 }
 
-function getReviewCadenceDays(indexGate: IndexGateResult): 7 | 30 | 60 {
-  if (indexGate.decision === 'publish') return 7;
-  if (indexGate.decision === 'noindex') return 30;
-  return 60;
-}
-
-function addDays(value: Date, days: number): Date {
-  return new Date(value.getTime() + days * 24 * 60 * 60 * 1000);
-}
-
-function getDaysUntil(value: string | null, now = new Date()): number | null {
-  if (!value) return null;
-  const timestamp = new Date(value).getTime();
-  if (Number.isNaN(timestamp)) return null;
-  return Math.ceil((timestamp - now.getTime()) / (24 * 60 * 60 * 1000));
-}
-
 export async function getAdminIntelligenceDailyQueue(input?: {
   ownerType?: IntelligenceOwnerFilter;
   status?: IntelligenceProfileStatus | 'all';
@@ -431,6 +421,8 @@ export async function getAdminIntelligenceReviewQueue(input?: {
   ownerType?: IntelligenceOwnerFilter;
   status?: IntelligenceProfileStatus | 'all';
   limit?: number;
+  reviewType?: IntelligenceReviewType | 'all';
+  state?: IntelligenceReviewState | 'all';
 }): Promise<AdminIntelligenceReviewQueue> {
   await requireAdmin();
   const supabase = createAdminClient();
@@ -448,39 +440,43 @@ export async function getAdminIntelligenceReviewQueue(input?: {
   const now = new Date();
   const items = details
     .filter((detail): detail is AdminIntelligenceProfileDetail => Boolean(detail))
-    .map((detail) => {
-      const cadenceDays = getReviewCadenceDays(detail.indexGate);
-      const fallbackDueAt = detail.lastVerifiedAt
-        ? addDays(new Date(detail.lastVerifiedAt), cadenceDays).toISOString()
-        : null;
-      const dueAt = detail.nextReviewAt || fallbackDueAt;
-      const daysUntilDue = getDaysUntil(dueAt, now);
-      const state: AdminIntelligenceReviewQueueItem['state'] =
-        daysUntilDue !== null && daysUntilDue <= 0
-          ? 'overdue'
-          : daysUntilDue !== null && daysUntilDue <= 7
-            ? 'due_soon'
-            : 'scheduled';
+    .flatMap((detail) => {
+      const metadata = detail.metadata || {};
+      const schedule = buildIntelligenceReviewSchedule({
+        lastVerifiedAt: detail.lastVerifiedAt,
+        nextFactReviewAt: detail.nextReviewAt,
+        lastDecisionReviewedAt: typeof metadata.decisionReviewedAt === 'string' ? metadata.decisionReviewedAt : null,
+        nextDecisionReviewAt: typeof metadata.nextDecisionReviewAt === 'string' ? metadata.nextDecisionReviewAt : null,
+        now,
+      });
 
-      return {
+      return schedule.map((review) => ({
         id: detail.id,
         productName: detail.productName,
         canonicalDomain: detail.canonicalDomain,
         ownerType: detail.ownerType,
         status: detail.status,
-        cadenceDays,
-        dueAt,
-        daysUntilDue,
-        state,
+        reviewType: review.reviewType,
+        cadenceDays: review.cadenceDays,
+        dueAt: review.dueAt,
+        daysUntilDue: review.daysUntilDue,
+        state: review.state,
         action:
-          state === 'overdue'
-            ? 'Review today'
-            : state === 'due_soon'
-              ? `Review within ${Math.max(daysUntilDue || 1, 1)} day${daysUntilDue === 1 ? '' : 's'}`
-              : `Review in ${daysUntilDue ?? cadenceDays} days`,
-        reason: detail.indexGate.summary,
-      };
+          review.state === 'overdue'
+            ? `Review ${review.reviewType} evidence today`
+            : review.state === 'due_soon'
+              ? `Review ${review.reviewType} evidence within ${Math.max(review.daysUntilDue || 1, 1)} days`
+              : review.state === 'unscheduled'
+                ? `Establish a ${review.cadenceDays}-day ${review.reviewType} review baseline`
+                : `Review ${review.reviewType} evidence in ${review.daysUntilDue} days`,
+        reason:
+          review.reviewType === 'fact'
+            ? 'Recheck official pricing, features, documentation, and limitations.'
+            : 'Reassess best-fit, not-fit, limitations, and comparison guidance.',
+      }));
     })
+    .filter((item) => !input?.reviewType || input.reviewType === 'all' || item.reviewType === input.reviewType)
+    .filter((item) => !input?.state || input.state === 'all' || item.state === input.state)
     .sort((left, right) => {
       const leftDue = left.dueAt ? new Date(left.dueAt).getTime() : Number.POSITIVE_INFINITY;
       const rightDue = right.dueAt ? new Date(right.dueAt).getTime() : Number.POSITIVE_INFINITY;
@@ -492,6 +488,7 @@ export async function getAdminIntelligenceReviewQueue(input?: {
     overdue: items.filter((item) => item.state === 'overdue').length,
     dueSoon: items.filter((item) => item.state === 'due_soon').length,
     scheduled: items.filter((item) => item.state === 'scheduled').length,
+    unscheduled: items.filter((item) => item.state === 'unscheduled').length,
   };
 
   return {

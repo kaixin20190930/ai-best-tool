@@ -16,6 +16,7 @@ import { normalizeIntelligenceConfidence } from '@/lib/services/intelligence/per
 import { buildProductIntelligenceSnapshot } from '@/lib/services/intelligence/productProfile';
 import { buildContentQualityResult, CONTENT_QUALITY_WEIGHTS } from '@/lib/services/intelligence/qualityConfig';
 import { assessContentQuality } from '@/lib/services/intelligence/qualityScorer';
+import { buildIntelligenceReviewSchedule } from '@/lib/services/intelligence/reviewSchedule';
 import {
   isEvidenceHtmlContentType,
   isPathAllowedByRobots,
@@ -25,6 +26,17 @@ import {
 } from '@/lib/services/intelligence/safeFetch';
 
 function run() {
+  const reviewSchedule = buildIntelligenceReviewSchedule({
+    lastVerifiedAt: '2026-01-01T00:00:00.000Z',
+    now: new Date('2026-01-20T00:00:00.000Z'),
+  });
+  assert.deepEqual(
+    reviewSchedule.map(({ reviewType, cadenceDays, daysUntilDue }) => ({ reviewType, cadenceDays, daysUntilDue })),
+    [
+      { reviewType: 'fact', cadenceDays: 30, daysUntilDue: 11 },
+      { reviewType: 'decision', cadenceDays: 90, daysUntilDue: 71 },
+    ],
+  );
   assert.equal(
     stableIntelligenceValue({ price: 19, interval: 'month' }),
     stableIntelligenceValue({ interval: 'month', price: 19 }),
