@@ -292,6 +292,16 @@ export async function getToolByName(name: string): Promise<Tool | null> {
       rating_count as "ratingCount"
     FROM tools
     WHERE name = $1
+    ORDER BY
+      CASE status
+        WHEN 'published' THEN 0
+        WHEN 'pending' THEN 1
+        WHEN 'draft' THEN 2
+        WHEN 'rejected' THEN 3
+        ELSE 4
+      END,
+      updated_at DESC
+    LIMIT 1
   `;
   
   const result = await query<Tool>(sql, [name]);
