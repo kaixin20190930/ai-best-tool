@@ -37,4 +37,8 @@ if (!detailPage.includes('data-priority-tool-evidence')) {
   throw new Error('Tool detail page does not expose the priority evidence block.');
 }
 
+if (!detailPage.includes('priorityEvidence && !priorityOfficialEvidence')) {
+  throw new Error('Tool detail page must avoid duplicating an existing official evidence snapshot.');
+}
+
 console.log('Priority tool evidence checks passed.');

@@ -3952,7 +3952,7 @@ export default async function Page({
                     ? '先用这一张卡确认任务匹配、限制、证据和替代路径，再决定是否试用、付费或继续比较。'
                     : 'Use this one card to check fit, limits, evidence, and alternatives before you trial, pay, or keep comparing.'}
                 </p>
-                {priorityEvidence ? (
+                {priorityEvidence && !priorityOfficialEvidence ? (
                   <div
                     data-priority-tool-evidence
                     className='mb-5 rounded-xl border border-cyan-200 bg-cyan-50 p-4 sm:p-5'
