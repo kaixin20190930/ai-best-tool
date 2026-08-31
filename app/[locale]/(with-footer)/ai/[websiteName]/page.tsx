@@ -32,6 +32,7 @@ import {
 } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateSoftwareSchema } from '@/lib/seo/schema';
 import { getCategoryById, getLocalizedField as getCategoryLocalizedField } from '@/lib/services/categories';
+import { buildToolDecisionCard } from '@/lib/services/toolDecisionCard';
 import { getLocalizedField as getTagLocalizedField, getTagsBySlugs, humanizeTagSlug } from '@/lib/services/tags';
 import { toolToDetailData } from '@/lib/services/toolPresenter';
 import { getLocalizedField, getToolByName } from '@/lib/services/tools';
@@ -3280,6 +3281,57 @@ export default async function Page({
       commentChecklistItem = '讨论还不多，更适合先拿它和相似工具做横向比较。';
     }
     const verificationChecklist = [mediaChecklistItem, ratingChecklistItem, commentChecklistItem];
+    const decisionCard = buildToolDecisionCard({
+      audience: {
+        bestFit: bestFitList,
+        notIdealFor: notIdealForList,
+      },
+      community: {
+        evidence: isChinese
+          ? `${ratingStats.ratingCount} 条评分 · ${commentCount} 条讨论 · ${toolStats.favoriteCount} 次收藏`
+          : `${ratingStats.ratingCount} ratings · ${commentCount} comments · ${toolStats.favoriteCount} saves`,
+        label: communitySignal.label,
+        summary: communitySignalWithOverride.summary,
+      },
+      comparison: {
+        alternatives: nextComparisonLinks,
+        axes: compareAxes,
+        summary: comparisonSummary,
+      },
+      editorial: {
+        reviewedLabel: editorialReviewedLabel,
+        reviewerLabel: editorialReviewerLabel,
+        sourceUrl: editorialReview?.sourceUrl || null,
+        stale: editorialReviewStale,
+        summary: editorialReview?.summary || null,
+        trustNote: editorialReview?.trustNote || null,
+      },
+      freshness: {
+        label: updatedLabel,
+        summary: freshnessSummary,
+      },
+      media: {
+        evidence: mediaCoverage.evidence,
+        label: mediaCoverage.label,
+        summary: mediaCoverage.summary,
+      },
+      officialSite: {
+        ...officialSite,
+        summary: officialSiteSummary,
+      },
+      owner: {
+        claimedAtLabel,
+        label: claimLabel,
+        summary: claimSummary,
+        tone: claimTone,
+      },
+      pricing: {
+        label: pricingLabel,
+        summary: pricingSummary,
+      },
+      risks: riskPoints,
+      verificationChecklist,
+    });
     let commentSnapshotNote = isChinese
       ? '评论还少，欢迎先留一条真实体验。'
       : 'Comments are light, so the first real experience is especially useful.';
@@ -3861,50 +3913,56 @@ export default async function Page({
                           <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
                             {locale === 'cn' ? '官方网站状态' : 'Official website status'}
                           </p>
-                          <p className='mt-2 text-base font-semibold text-slate-950'>{officialSite.hostname}</p>
+                          <p className='mt-2 text-base font-semibold text-slate-950'>
+                            {decisionCard.officialSite.hostname}
+                          </p>
                           <div className='mt-2 flex flex-wrap items-center gap-2'>
                             <span className='rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700'>
-                              {officialSite.secureLabel}
+                              {decisionCard.officialSite.secureLabel}
                             </span>
                             <span className='rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700'>
-                              {officialSite.statusLabel}
+                              {decisionCard.officialSite.statusLabel}
                             </span>
                           </div>
-                          <p className='mt-3 text-sm leading-6 text-slate-600'>{officialSiteSummary}</p>
+                          <p className='mt-3 text-sm leading-6 text-slate-600'>
+                            {decisionCard.officialSite.summary}
+                          </p>
                         </div>
 
                         <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
                           <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
                             {locale === 'cn' ? '最近更新信息' : 'Recent update'}
                           </p>
-                          <p className='mt-2 text-base font-semibold text-slate-950'>{updatedLabel}</p>
-                          <p className='mt-3 text-sm leading-6 text-slate-600'>{freshnessSummary}</p>
+                          <p className='mt-2 text-base font-semibold text-slate-950'>{decisionCard.freshness.label}</p>
+                          <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.freshness.summary}</p>
                         </div>
 
                         <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
                           <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
                             {locale === 'cn' ? 'Owner 信号' : 'Owner signal'}
                           </p>
-                          <p className='mt-2 text-base font-semibold text-slate-950'>{claimLabel}</p>
+                          <p className='mt-2 text-base font-semibold text-slate-950'>{decisionCard.owner.label}</p>
                           <div className='mt-2 flex flex-wrap gap-2'>
-                            <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${claimTone}`}>
-                              {claimLabel}
+                            <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${decisionCard.owner.tone}`}>
+                              {decisionCard.owner.label}
                             </span>
-                            {claimedAtLabel && (
+                            {decisionCard.owner.claimedAtLabel && (
                               <span className='rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700'>
-                                {isChinese ? `认领于 ${claimedAtLabel}` : `Claimed ${claimedAtLabel}`}
+                                {isChinese
+                                  ? `认领于 ${decisionCard.owner.claimedAtLabel}`
+                                  : `Claimed ${decisionCard.owner.claimedAtLabel}`}
                               </span>
                             )}
                           </div>
-                          <p className='mt-3 text-sm leading-6 text-slate-600'>{claimSummary}</p>
+                          <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.owner.summary}</p>
                         </div>
 
                         <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
                           <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
                             {locale === 'cn' ? '定价快照' : 'Pricing snapshot'}
                           </p>
-                          <p className='mt-2 text-base font-semibold text-slate-950'>{pricingLabel}</p>
-                          <p className='mt-3 text-sm leading-6 text-slate-600'>{pricingSummary}</p>
+                          <p className='mt-2 text-base font-semibold text-slate-950'>{decisionCard.pricing.label}</p>
+                          <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.pricing.summary}</p>
                         </div>
 
                         <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
@@ -3912,8 +3970,8 @@ export default async function Page({
                             {locale === 'cn' ? '风险与限制' : 'Risks and limits'}
                           </p>
                           <div className='mt-2 space-y-2'>
-                            {(riskPoints.length > 0
-                              ? riskPoints
+                            {(decisionCard.risks.length > 0
+                              ? decisionCard.risks
                               : [isChinese ? '暂时没有明显风险信号。' : 'No strong risk signal right now.']
                             )
                               .slice(0, 2)
@@ -3935,22 +3993,18 @@ export default async function Page({
                         <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
                           {locale === 'cn' ? '真实反馈信号' : 'User signal'}
                         </p>
-                        <p className='mt-2 text-lg font-semibold text-slate-950'>{communitySignal.label}</p>
-                        <p className='mt-2 text-xs font-medium text-slate-500'>
-                          {locale === 'cn'
-                            ? `${ratingStats.ratingCount} 条评分 · ${commentCount} 条讨论 · ${toolStats.favoriteCount} 次收藏`
-                            : `${ratingStats.ratingCount} ratings · ${commentCount} comments · ${toolStats.favoriteCount} saves`}
-                        </p>
-                        <p className='mt-3 text-sm leading-6 text-slate-600'>{communitySignalWithOverride.summary}</p>
+                        <p className='mt-2 text-lg font-semibold text-slate-950'>{decisionCard.community.label}</p>
+                        <p className='mt-2 text-xs font-medium text-slate-500'>{decisionCard.community.evidence}</p>
+                        <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.community.summary}</p>
                       </div>
 
                       <div className='rounded-lg border border-slate-200 p-4'>
                         <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
                           {locale === 'cn' ? '预览覆盖' : 'Preview coverage'}
                         </p>
-                        <p className='mt-2 text-lg font-semibold text-slate-950'>{mediaCoverage.label}</p>
-                        <p className='mt-2 text-xs font-medium text-slate-500'>{mediaCoverage.evidence}</p>
-                        <p className='mt-3 text-sm leading-6 text-slate-600'>{mediaCoverage.summary}</p>
+                        <p className='mt-2 text-lg font-semibold text-slate-950'>{decisionCard.media.label}</p>
+                        <p className='mt-2 text-xs font-medium text-slate-500'>{decisionCard.media.evidence}</p>
+                        <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.media.summary}</p>
                       </div>
 
                       <div className='rounded-lg border border-slate-200 p-4'>
@@ -3958,10 +4012,10 @@ export default async function Page({
                           {locale === 'cn' ? '编辑复核' : 'Editorial review'}
                         </p>
                         <p className='mt-2 text-lg font-semibold text-slate-950'>
-                          {editorialReviewedLabel || (locale === 'cn' ? '待补复核' : 'Review pending')}
+                          {decisionCard.editorial.reviewedLabel || (locale === 'cn' ? '待补复核' : 'Review pending')}
                         </p>
-                        <p className='mt-1 text-xs font-medium text-slate-500'>{editorialReviewerLabel}</p>
-                        {!editorialReview ? (
+                        <p className='mt-1 text-xs font-medium text-slate-500'>{decisionCard.editorial.reviewerLabel}</p>
+                        {!decisionCard.editorial.sourceUrl ? (
                           <p className='mt-2 text-sm leading-6 text-slate-600'>
                             {locale === 'cn'
                               ? '目前还没有该条目的编辑复核记录。你可以先提交评论反馈，再发起“请求更新”让官方信息可追溯。'
@@ -3969,21 +4023,21 @@ export default async function Page({
                           </p>
                         ) : (
                           <>
-                            {editorialReviewStale && (
+                            {decisionCard.editorial.stale && (
                               <p className='mt-2 text-sm font-medium text-amber-700'>
                                 {locale === 'cn'
                                   ? '该复核已超过 90 天，建议重新核查官网信息。'
                                   : 'This review is over 90 days old. Recheck the official source before relying on it.'}
                               </p>
                             )}
-                            {editorialReview.summary && (
-                              <p className='mt-3 text-sm leading-6 text-slate-600'>{editorialReview.summary}</p>
+                            {decisionCard.editorial.summary && (
+                              <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.editorial.summary}</p>
                             )}
-                            {editorialReview.trustNote && (
-                              <p className='mt-2 text-sm leading-6 text-slate-600'>{editorialReview.trustNote}</p>
+                            {decisionCard.editorial.trustNote && (
+                              <p className='mt-2 text-sm leading-6 text-slate-600'>{decisionCard.editorial.trustNote}</p>
                             )}
                             <a
-                              href={editorialReview.sourceUrl}
+                              href={decisionCard.editorial.sourceUrl}
                               target='_blank'
                               rel='noreferrer'
                               className='mt-3 inline-flex items-center gap-1 text-sm font-semibold text-cyan-700 hover:text-cyan-900'
@@ -4005,7 +4059,7 @@ export default async function Page({
                       {locale === 'cn' ? '先横向看关键差异' : 'Compare the decision points first'}
                     </p>
                     <div className='mt-3 flex flex-wrap gap-2'>
-                      {compareAxes.map((axis) => (
+                      {decisionCard.comparison.axes.map((axis) => (
                         <span
                           key={axis}
                           className='inline-flex rounded-full bg-white px-3 py-1 text-sm font-medium text-cyan-900 ring-1 ring-cyan-100'
@@ -4014,7 +4068,7 @@ export default async function Page({
                         </span>
                       ))}
                     </div>
-                    <p className='mt-3 text-sm leading-6 text-slate-600'>{comparisonSummary}</p>
+                    <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.comparison.summary}</p>
                   </div>
 
                   <div className='rounded-lg border border-slate-200 bg-white p-4 sm:p-5'>
@@ -4032,7 +4086,7 @@ export default async function Page({
                         : 'Use these pages to replace the current shortlist instead of circling the same tool.'}
                     </p>
                     <div className='mt-4 grid gap-3 lg:grid-cols-3'>
-                      {nextComparisonLinks.map((item) => (
+                      {decisionCard.comparison.alternatives.map((item) => (
                         <Link
                           key={item.href}
                           href={item.href}
@@ -4051,7 +4105,7 @@ export default async function Page({
                         {locale === 'cn' ? '适合谁' : 'Best fit'}
                       </p>
                       <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
-                        {bestFitList.map((item) => (
+                        {decisionCard.audience.bestFit.map((item) => (
                           <li key={item} className='flex gap-2'>
                             <CheckCircle className='mt-1 size-4 shrink-0 text-emerald-600' />
                             <span>{item}</span>
@@ -4065,7 +4119,7 @@ export default async function Page({
                         {locale === 'cn' ? '不太适合' : 'Less ideal for'}
                       </p>
                       <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
-                        {notIdealForList.map((item) => (
+                        {decisionCard.audience.notIdealFor.map((item) => (
                           <li key={item} className='flex gap-2'>
                             <CircleArrowRight className='mt-1 size-4 shrink-0 text-slate-500' />
                             <span>{item}</span>
@@ -4079,7 +4133,7 @@ export default async function Page({
                         {locale === 'cn' ? '选择前先核对' : 'Verify before choosing'}
                       </p>
                       <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
-                        {verificationChecklist.map((item) => (
+                        {decisionCard.verificationChecklist.map((item) => (
                           <li key={item} className='flex gap-2'>
                             <ShieldCheck className='mt-1 size-4 shrink-0 text-cyan-600' />
                             <span>{item}</span>
@@ -4123,13 +4177,9 @@ export default async function Page({
                         {locale === 'cn' ? '真实互动' : 'Community traction'}
                       </p>
                     </div>
-                    <p className='mt-3 text-lg font-semibold text-slate-950'>{communitySignal.label}</p>
-                    <p className='mt-2 text-xs font-medium text-slate-500'>
-                      {locale === 'cn'
-                        ? `${ratingStats.ratingCount} 条评分 · ${commentCount} 条讨论 · ${toolStats.favoriteCount} 次收藏`
-                        : `${ratingStats.ratingCount} ratings · ${commentCount} comments · ${toolStats.favoriteCount} saves`}
-                    </p>
-                    <p className='mt-3 text-sm leading-6 text-slate-600'>{communitySignalWithOverride.summary}</p>
+                    <p className='mt-3 text-lg font-semibold text-slate-950'>{decisionCard.community.label}</p>
+                    <p className='mt-2 text-xs font-medium text-slate-500'>{decisionCard.community.evidence}</p>
+                    <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.community.summary}</p>
                   </div>
 
                   <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
@@ -4224,15 +4274,15 @@ export default async function Page({
                 <dl className='mt-4 space-y-3 text-sm'>
                   <div className='flex items-center justify-between gap-4'>
                     <dt className='text-slate-500'>{locale === 'cn' ? '官网域名' : 'Official domain'}</dt>
-                    <dd className='text-right font-semibold text-slate-950'>{officialSite.hostname}</dd>
+                    <dd className='text-right font-semibold text-slate-950'>{decisionCard.officialSite.hostname}</dd>
                   </div>
                   <div className='flex items-center justify-between gap-4'>
                     <dt className='text-slate-500'>{locale === 'cn' ? '链接安全' : 'Connection'}</dt>
-                    <dd className='font-semibold text-slate-950'>{officialSite.secureLabel}</dd>
+                    <dd className='font-semibold text-slate-950'>{decisionCard.officialSite.secureLabel}</dd>
                   </div>
                   <div className='flex items-center justify-between gap-4'>
                     <dt className='text-slate-500'>{locale === 'cn' ? '定价' : 'Pricing'}</dt>
-                    <dd className='font-semibold text-slate-950'>{pricingLabel}</dd>
+                    <dd className='font-semibold text-slate-950'>{decisionCard.pricing.label}</dd>
                   </div>
                   <div className='flex items-center justify-between gap-4'>
                     <dt className='text-slate-500'>{locale === 'cn' ? '分类' : 'Category'}</dt>
