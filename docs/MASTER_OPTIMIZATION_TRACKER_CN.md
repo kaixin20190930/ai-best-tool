@@ -57,8 +57,8 @@
 | IDX-03 | 核对 22 个软 404 与 4 个未指定 canonical 重复页 | `how-to-choose-ai-tools` 的英文 canonical 已统一；软 404 URL 明细尚未导出，收到后逐条决定 404、合并或补实质内容 | 进行中 | Codex |
 | IDX-04 | 每周生产 SEO smoke | 首页、Explore、核心详情、robots、sitemap、canonical 均通过 | 持续 | Codex |
 | IDX-05 | 索引准入门槛持续执行 | 所有新 URL 均通过 [SEO 内容准入清单](./SEO_CONTENT_CHECKLIST.md) | 持续 | 共同 |
-| IDX-06 | 高质量收录候选池与 "Best Decision Card" | 每天至少处理 1 个、最多 2 个；未通过证据、限制、适合/不适合和重复意图审核则转 draft / `noindex` | 进行中 | Codex + 用户 |
-| IDX-07 | 四周证据驱动目录计划 | W2-01 已完成并部署 `b48753cd`；Vercel 与 production smoke 通过 | 进行中（W2-02A） | Codex + 用户 |
+| IDX-06 | 高质量收录候选池与 "Best Decision Card" | 未来 3 天 6 条候选已写入生产候选池，每天 2 条；均有证据入口、明确缺口并保持不公开 | 进行中（首批逐条补证据） | Codex + 用户 |
+| IDX-07 | 四周证据驱动目录计划 | W2-02A 已完成，提交 `d7ea18b5`；候选规划/准入测试、tsc、完整 build 通过 | 进行中（W2-02B） | Codex + 用户 |
 
 ### P1：让已获得展示的页面变成更可点击的答案（第 2-4 周）
 
