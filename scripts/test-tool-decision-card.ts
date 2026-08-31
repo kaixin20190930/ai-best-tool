@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 
-import { buildToolDecisionCard, ToolDecisionCardModel } from '@/lib/services/toolDecisionCard';
+import { buildToolDecisionCard } from '@/lib/services/toolDecisionCard';
 
-const input: ToolDecisionCardModel = {
+const input = {
   audience: {
     bestFit: ['Research teams', ' Research teams ', 'Analysts'],
     notIdealFor: ['One-off use', ''],
@@ -22,6 +22,7 @@ const input: ToolDecisionCardModel = {
     summary: 'Compare evidence quality first.',
   },
   editorial: {
+    reviewedAt: null,
     reviewedLabel: null,
     reviewerLabel: 'Pending',
     sourceUrl: null,
@@ -30,7 +31,7 @@ const input: ToolDecisionCardModel = {
     trustNote: null,
   },
   freshness: { label: 'Recently updated', summary: 'Check the official changelog.' },
-  media: { evidence: '1 screenshot', label: 'Partial preview', summary: 'More media is needed.' },
+  media: { assetCount: 1, evidence: '1 screenshot', label: 'Partial preview', summary: 'More media is needed.' },
   officialSite: {
     hostname: 'example.com',
     secureLabel: 'HTTPS',
@@ -56,6 +57,9 @@ assert.deepEqual(result.comparison.axes, ['Sources', 'Pricing']);
 assert.equal(result.comparison.alternatives.length, 1);
 assert.deepEqual(result.risks, ['Limited feedback']);
 assert.deepEqual(result.verificationChecklist, ['Check pricing', 'Read docs']);
+assert.equal(result.evidenceCompleteness.complete, false);
+assert.equal(result.evidenceCompleteness.score, 71);
+assert.deepEqual(result.evidenceCompleteness.missing, ['official_source', 'reviewed_at']);
 assert.deepEqual(input.comparison.axes, ['Sources', ' Sources ', 'Pricing']);
 
 console.log('Tool Decision Card model test passed.');

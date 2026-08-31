@@ -3299,6 +3299,7 @@ export default async function Page({
         summary: comparisonSummary,
       },
       editorial: {
+        reviewedAt: editorialReview?.reviewedAt || null,
         reviewedLabel: editorialReviewedLabel,
         reviewerLabel: editorialReviewerLabel,
         sourceUrl: editorialReview?.sourceUrl || null,
@@ -3311,6 +3312,7 @@ export default async function Page({
         summary: freshnessSummary,
       },
       media: {
+        assetCount: screenshotCount + (hasVideo ? 1 : 0) + (heroImage ? 1 : 0),
         evidence: mediaCoverage.evidence,
         label: mediaCoverage.label,
         summary: mediaCoverage.summary,
