@@ -58,7 +58,7 @@
 | IDX-04 | 每周生产 SEO smoke | 首页、Explore、核心详情、robots、sitemap、canonical 均通过 | 持续 | Codex |
 | IDX-05 | 索引准入门槛持续执行 | 所有新 URL 均通过 [SEO 内容准入清单](./SEO_CONTENT_CHECKLIST.md) | 持续 | 共同 |
 | IDX-06 | 高质量收录候选池与 "Best Decision Card" | 每天至少处理 1 个、最多 2 个；未通过证据、限制、适合/不适合和重复意图审核则转 draft / `noindex` | 进行中 | Codex + 用户 |
-| IDX-07 | 四周证据驱动目录计划 | W2-01A 后台 Evidence 状态、缺失项、复查日期与筛选已完成 | 进行中（W2-01B） | Codex |
+| IDX-07 | 四周证据驱动目录计划 | W2-01 已完成；编辑字段与所有新发布入口已绑定证据门槛 | 进行中（W2-02A） | Codex + 用户 |
 
 ### P1：让已获得展示的页面变成更可点击的答案（第 2-4 周）
 
