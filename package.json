@@ -31,6 +31,7 @@
     "seo:audit:quick": "tsx scripts/seo-audit-quick.ts",
     "seo:quality-inventory": "tsx scripts/seo-quality-inventory.ts",
     "gsc:weekly-report": "tsx scripts/summarize-gsc-export.ts",
+    "test:gsc-decision-report": "tsx scripts/test-gsc-decision-report.ts",
     "seo:priority-source-audit": "tsx scripts/audit-priority-tool-sources.ts",
     "seo:priority-page-signals": "tsx scripts/audit-priority-page-signals.ts",
     "seo:production-smoke": "tsx scripts/production-seo-smoke.ts",

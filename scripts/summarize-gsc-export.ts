@@ -1,6 +1,8 @@
 import { mkdir, readdir, readFile, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
+import { buildGscDecisionReport, type GscCsvTable } from '@/lib/seo/gscDecisionModel';
+
 type CsvRow = string[];
 
 type CsvTable = {
@@ -53,6 +55,8 @@ function parseArgs(argv: string[]) {
 
   return {
     dir: typeof args.get('dir') === 'string' ? String(args.get('dir')) : process.cwd(),
+    previousDir: typeof args.get('previous-dir') === 'string' ? String(args.get('previous-dir')) : null,
+    baselineDir: typeof args.get('baseline-dir') === 'string' ? String(args.get('baseline-dir')) : null,
     out: typeof args.get('out') === 'string' ? String(args.get('out')) : null,
     write: args.get('write') === true,
   };
@@ -138,10 +142,7 @@ function findIndex(headers: string[], candidates: string[]) {
 
 function toNumber(value: string | undefined) {
   if (!value) return 0;
-  const normalized = value
-    .replace(/,/g, '')
-    .replace(/%/g, '')
-    .trim();
+  const normalized = value.replace(/,/g, '').replace(/%/g, '').trim();
   const parsed = Number(normalized);
   return Number.isFinite(parsed) ? parsed : 0;
 }
@@ -293,7 +294,21 @@ async function readCsvByName(dir: string, filenames: string | string[]) {
   return null;
 }
 
-function buildReport(dir: string, sources: Record<string, CsvTable | null>) {
+function formatDecisionPages(pages: ReturnType<typeof buildGscDecisionReport>['enhanceCandidates']) {
+  if (pages.length === 0) return '_None._';
+  return pages
+    .map(
+      (page) =>
+        `- \`${page.url}\`: ${formatNumber(page.impressions)} impressions, ${formatNumber(page.clicks)} clicks, ${formatPercent(page.ctr)}, position ${page.position.toFixed(2)}`,
+    )
+    .join('\n');
+}
+
+function buildReport(
+  dir: string,
+  sources: Record<string, CsvTable | null>,
+  comparison?: { previousPages: CsvTable | null; baselinePages: CsvTable | null },
+) {
   const chart = sources.chart ? summarizeChart(sources.chart) : null;
   const foundAny = Object.values(sources).some(Boolean);
   const detectedSources = Object.entries(sources)
@@ -355,6 +370,40 @@ function buildReport(dir: string, sources: Record<string, CsvTable | null>) {
   if (sources.appearances) lines.push(formatTableSection('Search Result Appearance', sources.appearances));
   if (sources.filters) lines.push(formatTableSection('Filters', sources.filters));
 
+  if (sources.pages) {
+    const decision = buildGscDecisionReport({
+      current: sources.pages as GscCsvTable,
+      previous: comparison?.previousPages as GscCsvTable | null,
+      baseline: comparison?.baselinePages as GscCsvTable | null,
+    });
+    lines.push('## W4 Index Decision Gate');
+    lines.push('');
+    lines.push(`- Homepage impressions: ${formatNumber(decision.current.homepageImpressions)}`);
+    lines.push(`- Non-homepage impressions: ${formatNumber(decision.current.nonHomepageImpressions)}`);
+    lines.push(`- Non-homepage share: ${formatPercent(decision.current.nonHomepageShare)}`);
+    lines.push(`- Visible non-homepage pages: ${decision.current.visibleNonHomepagePages}`);
+    lines.push(`- Non-homepage pages with >= 20 impressions: ${decision.current.qualifiedNonHomepagePages.length}`);
+    lines.push(`- EXP-01 expansion gate: ${decision.expansionTriggered ? 'TRIGGERED' : 'NOT TRIGGERED'}`);
+    for (const reason of decision.expansionReasons) lines.push(`  - ${reason}`);
+    lines.push('');
+    lines.push('### Enhance Candidates');
+    lines.push('');
+    lines.push(formatDecisionPages(decision.enhanceCandidates));
+    lines.push('');
+    lines.push('### Manual Closure Audit Candidates');
+    lines.push('');
+    lines.push(
+      decision.manualClosureCandidates.length > 0
+        ? decision.manualClosureCandidates.map((url) => `- \`${url}\``).join('\n')
+        : '_None. A URL is listed only when it appeared in the baseline and is absent from both the previous and current snapshots._',
+    );
+    lines.push('');
+    lines.push(
+      '_The report never changes index state automatically. Closure candidates still require an independent-intent and technical audit._',
+    );
+    lines.push('');
+  }
+
   lines.push('## Notes');
   lines.push('');
   lines.push('- This report is generated from exported Search Console CSV files.');
@@ -383,7 +432,7 @@ function updateWeeklyOverview(log: string, summaryLine: string) {
 }
 
 async function main() {
-  const { dir, out, write } = parseArgs(process.argv.slice(2));
+  const { dir, previousDir, baselineDir, out, write } = parseArgs(process.argv.slice(2));
   const inventoryCounts = await readInventoryCounts();
 
   const sources = {
@@ -396,7 +445,11 @@ async function main() {
     filters: await readCsvByName(dir, DEFAULT_FILENAMES.filters),
   };
 
-  const report = buildReport(dir, sources);
+  const comparison = {
+    previousPages: previousDir ? await readCsvByName(previousDir, DEFAULT_FILENAMES.pages) : null,
+    baselinePages: baselineDir ? await readCsvByName(baselineDir, DEFAULT_FILENAMES.pages) : null,
+  };
+  const report = buildReport(dir, sources, comparison);
 
   if (out) {
     await mkdir(path.dirname(out), { recursive: true });

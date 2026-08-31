@@ -12,6 +12,7 @@
 4. 如果出现连续两周下滑，再回到恢复任务文档调整方向。
 5. 如果你导出了 Search Console CSV，可以直接运行 `pnpm run gsc:weekly-report -- --dir <export-folder> --out docs/gsc-weekly-report.md` 先生成摘要，再把关键数值贴回本表。脚本会在传入目录下递归查找常见的导出文件名，不要求 CSV 必须放在根目录。
 6. 如果只有部分 CSV 导出，脚本也会生成部分基线摘要；等拿到图表文件后，再回填 Week 1 的曝光、点击、CTR 和平均排名。
+7. W4 连续趋势决策使用三期页面导出：`pnpm run gsc:weekly-report -- --dir <当前28天目录> --previous-dir <上一轮目录> --baseline-dir <基线目录> --out docs/gsc-weekly-report.md`。报告只给出扩张门槛和人工收口候选，不自动修改任何页面索引状态。
 
 ## 周度总览
 
