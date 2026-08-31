@@ -2702,14 +2702,19 @@ export default async function Page({
     const tagSlugsForDisplay = dbTool?.tags && dbTool.tags.length > 0 ? dbTool.tags : fallbackTagSlugs;
 
     if (dbTool) {
-      // Fetch category if available
+      // Category and tags improve the detail page but must not hide it if a supporting query fails.
       if (dbTool.categoryId) {
-        category = await getCategoryById(dbTool.categoryId);
+        category = await getCategoryById(dbTool.categoryId).catch((error) => {
+          console.error('Tool detail category lookup failed:', { websiteName, error });
+          return null;
+        });
       }
 
-      // Fetch tags if available
       if (tagSlugsForDisplay.length > 0) {
-        tags = await getTagsBySlugs(tagSlugsForDisplay);
+        tags = await getTagsBySlugs(tagSlugsForDisplay).catch((error) => {
+          console.error('Tool detail tag lookup failed:', { websiteName, error });
+          return [];
+        });
       }
     }
 

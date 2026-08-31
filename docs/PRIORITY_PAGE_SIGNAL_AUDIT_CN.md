@@ -64,4 +64,4 @@
 
 ## 生产版本说明
 
-本次审计读取的生产 HTML 只返回 Fathom 与 Pipedream 的官方证据块；其余 14 个机会工具在当前源码中已有对应区块。继续增强页面前，应先部署当前 `main`，再运行 `pnpm run seo:priority-page-signals -- --strict`，确认生产版本与代码一致。
+本次审计中缺失的 14 个证据块不是没有对应内容：ChatGPT 等页面在分类或标签辅助查询异常后，被最外层错误处理降级为“暂时不可用”页面。修复已将两类辅助查询隔离为可失败增强项；部署当前 `main` 后，必须重新运行 `pnpm run seo:priority-page-signals -- --strict`，确认 16 个机会工具都能完整渲染。
