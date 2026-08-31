@@ -55,7 +55,7 @@
 | IDX-03 | 核对 22 个软 404 与 4 个未指定 canonical 重复页 | `how-to-choose-ai-tools` 的英文 canonical 已统一；软 404 URL 明细尚未导出，收到后逐条决定 404、合并或补实质内容 | 进行中 | Codex |
 | IDX-04 | 每周生产 SEO smoke | 首页、Explore、核心详情、robots、sitemap、canonical 均通过 | 持续 | Codex |
 | IDX-05 | 索引准入门槛持续执行 | 所有新 URL 均通过 [SEO 内容准入清单](./SEO_CONTENT_CHECKLIST.md) | 持续 | 共同 |
-| IDX-06 | 高质量收录候选池与 "Best Decision Card" | 每天最多 1 个进入发布流程；未通过证据、限制、适合/不适合和重复意图审核则不发布 | 待执行 | Codex + 用户 |
+| IDX-06 | 高质量收录候选池与 "Best Decision Card" | 每天至少处理 1 个、最多 2 个；未通过证据、限制、适合/不适合和重复意图审核则转 draft / `noindex` | 进行中 | Codex + 用户 |
 
 ### P1：让已获得展示的页面变成更可点击的答案（第 2-4 周）
 
