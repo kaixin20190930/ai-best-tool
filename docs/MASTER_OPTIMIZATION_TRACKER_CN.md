@@ -12,7 +12,7 @@
 
 以下行为在本轮冻结：
 
-- 不批量新增工具页、同义 guide、comparison 或 alternatives URL。允许按 [高质量收录与 "Best" 定位执行规范](./BEST_DIRECTORY_POSITIONING_AND_INTAKE_CN.md) 每周发布 3-5 个证据驱动的新工具页，未通过准入的条目只保留 draft / `noindex`。
+- 不批量新增同义 guide、comparison 或 alternatives URL。工具收录每天至少处理 1 个、最多 2 个；只有通过 [高质量收录与 "Best" 定位执行规范](./BEST_DIRECTORY_POSITIONING_AND_INTAKE_CN.md) 的条目才公开，未通过的只保留 draft / `noindex`。
 - 不为了“更新日期”批量改写内容；每次更新必须对应真实来源、编辑核查或用户反馈。
 - 不把外链数量作为 SEO 成功指标；分发模块只保留维护，不继续扩功能或执行站外投放。
 
@@ -58,6 +58,7 @@
 | IDX-04 | 每周生产 SEO smoke | 首页、Explore、核心详情、robots、sitemap、canonical 均通过 | 持续 | Codex |
 | IDX-05 | 索引准入门槛持续执行 | 所有新 URL 均通过 [SEO 内容准入清单](./SEO_CONTENT_CHECKLIST.md) | 持续 | 共同 |
 | IDX-06 | 高质量收录候选池与 "Best Decision Card" | 每天至少处理 1 个、最多 2 个；未通过证据、限制、适合/不适合和重复意图审核则转 draft / `noindex` | 进行中 | Codex + 用户 |
+| IDX-07 | 四周证据驱动目录计划 | 按子任务记录工时、依赖、测试和提交；主/子文档状态同步 | 进行中（W1-01B） | Codex |
 
 ### P1：让已获得展示的页面变成更可点击的答案（第 2-4 周）
 

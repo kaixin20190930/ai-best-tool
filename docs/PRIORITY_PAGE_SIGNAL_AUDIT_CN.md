@@ -62,6 +62,8 @@
 - Lindy、Fathom、The Graph、Dune、Notta、Runway、DefiLlama、ChatGPT、Claude、Cursor、Pipedream、Perplexity、n8n、Make、OpenRouter 与 Grammarly 属于当前 GSC 机会页，必须显示带核查日期和官方链接的事实快照。
 - 真实评论、收藏、owner 认领和 editorial 复核仍需人工或用户产生，不能由脚本补齐。
 
-## 生产版本说明
+## 当前验收结论
 
-本次审计中缺失的 14 个证据块不是没有对应内容：ChatGPT 等页面在分类或标签辅助查询异常后，被最外层错误处理降级为“暂时不可用”页面。修复已将两类辅助查询隔离为可失败增强项；部署当前 `main` 后，必须重新运行 `pnpm run seo:priority-page-signals -- --strict`，确认 16 个机会工具都能完整渲染。
+- 本次审计只有 `2/16` 个指定机会页显示官方来源块，严格验收尚未通过。
+- 该结果保留为四周计划的质量基线，不得因构建成功而标记为 SEO 信号验收完成。
+- 完成详情页 Decision Card 和证据字段收口后，必须重新运行 `pnpm run seo:priority-page-signals -- --strict`；达到目标前相关任务保持进行中。
