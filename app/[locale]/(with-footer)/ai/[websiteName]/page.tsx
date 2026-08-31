@@ -1477,13 +1477,15 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           label: '官方事实快照',
           title: '查询额度、生产访问和新鲜度检查',
           summary: '以下信息来自 The Graph 官方文档；查询价格和网络支持范围可能变化，上线前应复核当前套餐与文档。',
-          checkedAt: '2026-08-03',
+          checkedAt: '2026-08-31',
           facts: [
-            { label: '免费额度', value: '每月前 100,000 次查询免费；官方价格页列出的超额价格为每 100,000 次查询 $2。' },
+            {
+              label: '成本边界',
+              value: '查询费用与索引成本彼此独立；查询量增加会提高使用成本，但无法让索引不足的 Subgraph 自动变得可用。',
+            },
             {
               label: '生产访问',
-              value:
-                '已发布的 subgraph 使用唯一查询 URL，并通过 API key 访问；超过免费额度后进入按量计费的 Growth Plan。',
+              value: 'Gateway 负责端点、认证和计费体验；API key 可限制到指定 Subgraph、域名和 rate limit。',
             },
             {
               label: '新鲜度边界',
@@ -1494,9 +1496,12 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           sources: [
             {
               label: 'Studio 与套餐说明',
-              href: 'https://thegraph.com/docs/en/subgraphs/providers/subgraph-studio/introduction/',
+              href: 'https://thegraph.com/docs/en/gateways/subgraphs/consumer-side/overview/',
             },
-            { label: '官方查询价格', href: 'https://thegraph.com/studio-pricing/' },
+            {
+              label: '查询与索引成本',
+              href: 'https://thegraph.com/docs/en/gateways/subgraphs/consumer-side/pricing-payments/',
+            },
             { label: '查询与 _meta 文档', href: 'https://thegraph.com/docs/en/subgraphs/querying/graphql-api/' },
           ],
         }
@@ -1505,17 +1510,17 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           title: 'Query allowance, production access, and freshness checks',
           summary:
             'These facts come from The Graph documentation. Recheck current plans and network support before production use because pricing and coverage can change.',
-          checkedAt: '2026-08-03',
+          checkedAt: '2026-08-31',
           facts: [
             {
-              label: 'Free allowance',
+              label: 'Cost boundary',
               value:
-                'The first 100,000 monthly queries are free; the official pricing page lists $2 per additional 100,000 queries.',
+                'Query fees and indexing costs are separate; more query spend scales access but cannot make an under-indexed Subgraph available.',
             },
             {
               label: 'Production access',
               value:
-                'Published subgraphs use a unique query URL and API key; usage beyond the free allowance moves to the usage-based Growth Plan.',
+                'A Gateway controls endpoints, authentication, and billing; API keys can be scoped to specific Subgraphs, domains, and rate limits.',
             },
             {
               label: 'Freshness boundary',
@@ -1526,9 +1531,12 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           sources: [
             {
               label: 'Studio and plan documentation',
-              href: 'https://thegraph.com/docs/en/subgraphs/providers/subgraph-studio/introduction/',
+              href: 'https://thegraph.com/docs/en/gateways/subgraphs/consumer-side/overview/',
             },
-            { label: 'Official query pricing', href: 'https://thegraph.com/studio-pricing/' },
+            {
+              label: 'Query and indexing costs',
+              href: 'https://thegraph.com/docs/en/gateways/subgraphs/consumer-side/pricing-payments/',
+            },
             {
               label: 'Query and _meta documentation',
               href: 'https://thegraph.com/docs/en/subgraphs/querying/graphql-api/',
@@ -1950,7 +1958,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           title: '套餐内用量、超额成本和代码隐私',
           summary:
             '以下信息来自 Cursor 官方定价、计费与隐私文档；模型价格和奖励用量可能变化，应在 Dashboard 核对实际消耗。',
-          checkedAt: '2026-08-03',
+          checkedAt: '2026-08-31',
           facts: [
             {
               label: '套餐与用量',
@@ -1970,7 +1978,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           sources: [
             { label: '模型与套餐用量', href: 'https://docs.cursor.com/account/pricing' },
             { label: '官方价格', href: 'https://cursor.com/pricing' },
-            { label: '数据使用与 Privacy Mode', href: 'https://cursor.com/data-use' },
+            { label: '数据使用与 Privacy Mode', href: 'https://cursor.com/en-US/data-use' },
           ],
         }
       : {
@@ -1978,7 +1986,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           title: 'Included usage, overage cost, and code privacy',
           summary:
             'These facts come from Cursor pricing, billing, and privacy documentation. Model prices and bonus usage can change, so verify actual consumption in the dashboard.',
-          checkedAt: '2026-08-03',
+          checkedAt: '2026-08-31',
           facts: [
             {
               label: 'Plans and usage',
@@ -1999,7 +2007,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           sources: [
             { label: 'Models and included usage', href: 'https://docs.cursor.com/account/pricing' },
             { label: 'Official pricing', href: 'https://cursor.com/pricing' },
-            { label: 'Data use and Privacy Mode', href: 'https://cursor.com/data-use' },
+            { label: 'Data use and Privacy Mode', href: 'https://cursor.com/en-US/data-use' },
           ],
         };
   }

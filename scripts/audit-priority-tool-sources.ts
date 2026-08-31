@@ -20,7 +20,7 @@ if (isLocalAudit && !process.env.DATABASE_URL) {
   process.env.DATABASE_URL = process.env.POSTGRES_URL || process.env.DATABASE_URL_UNPOOLED || '';
 }
 
-const PRIORITY_TOOL_SLUGS = ['fathom', 'anthropic', 'deepl', 'gamma', 'lindy'];
+const PRIORITY_TOOL_SLUGS = ['fathom', 'anthropic', 'deepl', 'gamma', 'lindy', 'cursor', 'the-graph'];
 const strict = process.argv.includes('--strict');
 const productionBaseUrl = (process.env.SEO_BASE_URL || 'https://aibesttool.com').replace(/\/$/, '');
 

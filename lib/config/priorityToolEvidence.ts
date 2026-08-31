@@ -69,4 +69,32 @@ export const PRIORITY_TOOL_EVIDENCE: Record<string, PriorityToolEvidence> = {
       { label: 'Official credit documentation', url: 'https://docs.lindy.ai/account-billing/credits' },
     ],
   },
+  cursor: {
+    checkedAt: '2026-08-31',
+    limitation: {
+      en: 'Agent usage is consumed at model inference API prices, so model choice and agent-heavy workflows can exhaust included usage well before the billing period ends.',
+      zh: 'Agent 用量按模型推理 API 价格消耗，因此模型选择和高频 Agent 工作流可能在账期结束前耗尽套餐内额度。',
+    },
+    sources: [
+      { label: 'Official models and pricing', url: 'https://docs.cursor.com/account/pricing' },
+      { label: 'Official data use policy', url: 'https://cursor.com/en-US/data-use' },
+    ],
+  },
+  'the-graph': {
+    checkedAt: '2026-08-31',
+    limitation: {
+      en: 'Querying and indexing are separate: paying more for queries cannot make an under-indexed Subgraph available or fresh, so production use still needs indexing and freshness checks.',
+      zh: '查询与索引是两项独立活动：增加查询费用不能让索引不足的 Subgraph 自动可用或保持新鲜，生产使用仍需检查索引和数据时效。',
+    },
+    sources: [
+      {
+        label: 'Official pricing and payments',
+        url: 'https://thegraph.com/docs/en/gateways/subgraphs/consumer-side/pricing-payments/',
+      },
+      {
+        label: 'Official consumer gateway overview',
+        url: 'https://thegraph.com/docs/en/gateways/subgraphs/consumer-side/overview/',
+      },
+    ],
+  },
 };
