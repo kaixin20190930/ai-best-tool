@@ -1,15 +1,18 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+type ReleaseBoundary = {
+  label: string;
+  releaseGuard: string;
+  restrictedSummary?: string;
+  summary?: string;
+};
+
 type Preaudit = {
   action: string;
   decisionAngles: string[];
   existingRoute: string;
-  licenseBoundary: {
-    label: string;
-    releaseGuard: string;
-    restrictedSummary: string;
-  };
+  licenseBoundary?: ReleaseBoundary;
   limitations: string[];
   marketValidation: {
     recurringUserFriction: string[];
@@ -18,6 +21,7 @@ type Preaudit = {
     verdict: string;
   };
   nextSlotChecklist: string[];
+  policyBoundaries?: ReleaseBoundary[];
   pricingSnapshot: {
     billingUnit: string;
     checkedAt: string;
@@ -36,66 +40,94 @@ type Preaudit = {
   status: string;
 };
 
-const preauditPath = path.join(process.cwd(), 'data', 'collection', 'n8n-preaudit-2026-09-01.json');
-const preaudit = JSON.parse(fs.readFileSync(preauditPath, 'utf8')) as Preaudit;
+const collectionDir = path.join(process.cwd(), 'data', 'collection');
+const preauditPaths = fs
+  .readdirSync(collectionDir)
+  .filter((file) => file.endsWith('.json') && file.includes('-preaudit-'))
+  .sort()
+  .map((file) => path.join(collectionDir, file));
 
-if (preaudit.slug !== 'n8n' || preaudit.existingRoute !== '/ai/n8n') {
-  throw new Error('n8n preaudit must target the existing canonical fallback route.');
+if (preauditPaths.length === 0) {
+  throw new Error('At least one controlled tool preaudit is required.');
 }
 
-if (preaudit.action !== 'migrate_existing_fallback' || preaudit.status !== 'ready_for_next_slot') {
-  throw new Error('n8n preaudit must remain a controlled migration candidate.');
-}
+for (const preauditPath of preauditPaths) {
+  const preaudit = JSON.parse(fs.readFileSync(preauditPath, 'utf8')) as Preaudit;
+  const label = preaudit.slug || path.basename(preauditPath);
 
-if (preaudit.productionWriteApproved || preaudit.sitemapChangeApproved) {
-  throw new Error('A preaudit cannot approve a production write or sitemap expansion.');
-}
+  if (!preaudit.slug || preaudit.existingRoute !== `/ai/${preaudit.slug}`) {
+    throw new Error(`${label}: preaudit must target its existing canonical fallback route.`);
+  }
 
-if (preaudit.publishNotBefore <= preaudit.reviewedAt) {
-  throw new Error('The publication guard must reserve a later release slot.');
-}
+  if (preaudit.action !== 'migrate_existing_fallback' || preaudit.status !== 'ready_for_next_slot') {
+    throw new Error(`${label}: preaudit must remain a controlled migration candidate.`);
+  }
 
-if (preaudit.sources.official.length < 5 || preaudit.sources.independent.length < 2) {
-  throw new Error('n8n requires at least five official and two independent sources.');
-}
+  if (preaudit.productionWriteApproved || preaudit.sitemapChangeApproved) {
+    throw new Error(`${label}: a preaudit cannot approve a production write or sitemap expansion.`);
+  }
 
-const allSources = [...preaudit.sources.official, ...preaudit.sources.independent];
-if (new Set(allSources).size !== allSources.length || allSources.some((url) => !url.startsWith('https://'))) {
-  throw new Error('Preaudit sources must be unique HTTPS URLs.');
-}
+  if (preaudit.publishNotBefore <= preaudit.reviewedAt) {
+    throw new Error(`${label}: the publication guard must reserve a later release slot.`);
+  }
 
-if (
-  preaudit.decisionAngles.length < 5 ||
-  preaudit.limitations.length < 5 ||
-  preaudit.nextSlotChecklist.length < 5
-) {
-  throw new Error('n8n preaudit is missing decision, limitation, or release-gate depth.');
-}
+  if (preaudit.sources.official.length < 5 || preaudit.sources.independent.length < 2) {
+    throw new Error(`${label}: at least five official and two independent sources are required.`);
+  }
 
-if (
-  preaudit.marketValidation.score < 85 ||
-  preaudit.marketValidation.verdict !== 'validated' ||
-  preaudit.marketValidation.strongSignals.length < 3 ||
-  preaudit.marketValidation.recurringUserFriction.length < 2
-) {
-  throw new Error('n8n market validation is incomplete or inconsistent.');
-}
+  const allSources = [...preaudit.sources.official, ...preaudit.sources.independent];
+  if (new Set(allSources).size !== allSources.length || allSources.some((url) => !url.startsWith('https://'))) {
+    throw new Error(`${label}: sources must be unique HTTPS URLs.`);
+  }
 
-const licenseText = [
-  preaudit.licenseBoundary.label,
-  preaudit.licenseBoundary.restrictedSummary,
-  preaudit.licenseBoundary.releaseGuard,
-].join(' ');
-if (!/Sustainable Use License/i.test(licenseText) || !/not OSI open source|Never describe/i.test(licenseText)) {
-  throw new Error('The source-available license boundary must be explicit.');
-}
+  if (
+    preaudit.decisionAngles.length < 5 ||
+    preaudit.limitations.length < 5 ||
+    preaudit.nextSlotChecklist.length < 5
+  ) {
+    throw new Error(`${label}: decision, limitation, or release-gate depth is incomplete.`);
+  }
 
-if (
-  !/workflow run|execution/i.test(preaudit.pricingSnapshot.billingUnit) ||
-  preaudit.pricingSnapshot.volatileFields.length < 2 ||
-  !/recheck/i.test(preaudit.pricingSnapshot.releaseGuard)
-) {
-  throw new Error('Pricing-unit and volatility safeguards are required.');
-}
+  if (
+    preaudit.marketValidation.score < 85 ||
+    preaudit.marketValidation.verdict !== 'validated' ||
+    preaudit.marketValidation.strongSignals.length < 3 ||
+    preaudit.marketValidation.recurringUserFriction.length < 2
+  ) {
+    throw new Error(`${label}: market validation is incomplete or inconsistent.`);
+  }
 
-console.log('✅ n8n preaudit passed: evidence complete, release guarded, no production expansion approved.');
+  const boundaries = [preaudit.licenseBoundary, ...(preaudit.policyBoundaries || [])].filter(
+    (boundary): boundary is ReleaseBoundary => Boolean(boundary),
+  );
+  if (
+    boundaries.length === 0 ||
+    boundaries.some(
+      (boundary) =>
+        !boundary.label || !boundary.releaseGuard || !(boundary.summary || boundary.restrictedSummary),
+    )
+  ) {
+    throw new Error(`${label}: at least one explicit release boundary is required.`);
+  }
+
+  if (preaudit.licenseBoundary) {
+    const licenseText = [
+      preaudit.licenseBoundary.label,
+      preaudit.licenseBoundary.restrictedSummary,
+      preaudit.licenseBoundary.releaseGuard,
+    ].join(' ');
+    if (!/Sustainable Use License/i.test(licenseText) || !/not OSI open source|Never describe/i.test(licenseText)) {
+      throw new Error(`${label}: the source-available license boundary must be explicit.`);
+    }
+  }
+
+  if (
+    !preaudit.pricingSnapshot.billingUnit.trim() ||
+    preaudit.pricingSnapshot.volatileFields.length < 2 ||
+    !/recheck/i.test(preaudit.pricingSnapshot.releaseGuard)
+  ) {
+    throw new Error(`${label}: pricing-unit and volatility safeguards are required.`);
+  }
+
+  console.log(`✅ ${label} preaudit passed: evidence complete, release guarded, no production expansion approved.`);
+}

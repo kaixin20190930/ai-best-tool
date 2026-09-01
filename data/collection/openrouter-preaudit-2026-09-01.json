@@ -1,0 +1,108 @@
+{
+  "slug": "openrouter",
+  "title": "OpenRouter Unified AI Model API",
+  "officialUrl": "https://openrouter.ai/",
+  "existingRoute": "/ai/openrouter",
+  "action": "migrate_existing_fallback",
+  "status": "ready_for_next_slot",
+  "reviewedAt": "2026-09-01",
+  "publishNotBefore": "2026-09-03",
+  "sitemapChangeApproved": false,
+  "productionWriteApproved": false,
+  "category": {
+    "discoverySlug": "developer-tools",
+    "storageSlug": "developer-tools"
+  },
+  "positioning": "A unified model marketplace and API gateway for teams that need broad model access, centralized billing, provider routing, fallbacks, privacy controls, and usage observability without maintaining a separate integration for every provider.",
+  "decisionAngles": [
+    "Unified integration convenience versus adding another production dependency",
+    "Automatic provider routing versus reproducible provider, latency, caching, and output behavior",
+    "Pass-through inference pricing versus credit-purchase, BYOK, and provider-specific charges",
+    "OpenRouter prompt non-logging versus downstream provider retention and training policies",
+    "Fast model experimentation versus production controls for budgets, privacy, fallbacks, and deprecations",
+    "Free model exploration versus paid capacity suitable for production workloads"
+  ],
+  "pricingSnapshot": {
+    "checkedAt": "2026-09-01",
+    "billingUnit": "Inference is billed using each selected model and provider's token, request, image, or reasoning-unit price; OpenRouter currently adds a 5.5% fee when purchasing credits rather than marking up inference prices.",
+    "plans": [
+      "Free: 25+ free models, four free providers, and 50 requests per day",
+      "Pay-as-you-go: no minimum spend, model-based prices, high global limits, and a 5.5% platform fee",
+      "Enterprise: volume commitments, discounted platform fees, optional dedicated limits, invoicing, SSO/SAML, policy enforcement, and support SLA",
+      "BYOK pay-as-you-go: up to USD 25,000 of list-price inference per month without a fee, then 5%; higher enterprise threshold is listed separately"
+    ],
+    "volatileFields": [
+      "model and provider counts",
+      "individual model and endpoint prices",
+      "free-model rate limits",
+      "BYOK fee-free thresholds and enterprise terms"
+    ],
+    "releaseGuard": "Recheck the live pricing, FAQ, and selected model endpoint immediately before migration; do not describe a provider count, model count, or endpoint price as permanent."
+  },
+  "policyBoundaries": [
+    {
+      "label": "OpenRouter privacy and downstream-provider policies are separate layers",
+      "summary": "OpenRouter says prompts and completions are not logged by default, but requests are still sent to model providers whose retention, training, and endpoint policies can differ.",
+      "releaseGuard": "Never summarize OpenRouter non-logging as a guarantee that every routed provider has zero retention or no training."
+    },
+    {
+      "label": "Zero Data Retention is endpoint- and feature-scoped",
+      "summary": "ZDR can constrain inference routing, but endpoint policies vary, in-memory caching may still qualify as ZDR, and plugins or tools such as web search have their own policies.",
+      "releaseGuard": "State the inference-routing scope and require endpoint-level verification for regulated or sensitive workloads."
+    },
+    {
+      "label": "Routing improves availability but can reduce reproducibility",
+      "summary": "Default routing can move requests among providers; differences in latency, quantization, caching, supported parameters, and provider behavior can affect cost and output.",
+      "releaseGuard": "Recommend explicit provider ordering, parameter requirements, fallbacks, privacy rules, and price ceilings where reproducibility matters."
+    }
+  ],
+  "limitations": [
+    "Default multi-provider routing can change the serving endpoint, latency, quantization, caching behavior, and effective output characteristics unless the team pins or constrains providers.",
+    "A unified OpenAI-compatible interface does not guarantee that every model supports identical parameters, tools, structured output, context handling, or safety behavior.",
+    "OpenRouter prompt non-logging does not replace reviewing the selected provider endpoint's retention, training, residency, and compliance policy.",
+    "ZDR applies to eligible inference endpoints and does not automatically cover plugins, external tools, or every form of in-memory prompt caching.",
+    "Free models have low shared rate limits and are explicitly unsuitable for most production workloads.",
+    "Credits, purchase fees, refund windows, possible credit expiry, provider price changes, and failed or fallback request behavior require billing controls and monitoring.",
+    "Centralizing model access through OpenRouter introduces an additional account, credit balance, routing, support, and availability dependency."
+  ],
+  "marketValidation": {
+    "score": 97,
+    "verdict": "validated",
+    "rationale": "OpenRouter has strong current scale, product breadth, independent review, and strategic validation. Its durable value is not merely listing models; it combines a unified API with routing, observability, billing, policy filters, and provider choice. The recommendation remains conditional because production teams must actively constrain privacy, provider behavior, fallback policy, and spend.",
+    "strongSignals": [
+      "OpenRouter's 2026-08-19 announcement reports more than 10 trillion tokens processed per day and a community of over 10 million developers and companies",
+      "OpenRouter and Stripe both announced an agreement for OpenRouter to join Stripe on 2026-08-19",
+      "The live pricing page lists hundreds of models and dozens of providers across pay-as-you-go and enterprise access",
+      "G2 lists 21 reviews with a 4.6 rating at review time"
+    ],
+    "recurringUserFriction": [
+      "Provider routing and fallback choices can create cost, latency, caching, and output variance",
+      "Privacy requires both OpenRouter settings and endpoint-specific provider-policy review",
+      "Billing, account support, credit refunds, and changing model availability create operational overhead"
+    ]
+  },
+  "sources": {
+    "official": [
+      "https://openrouter.ai/pricing",
+      "https://openrouter.ai/docs/faq",
+      "https://openrouter.ai/docs/guides/routing/provider-selection",
+      "https://openrouter.ai/docs/guides/privacy/provider-logging",
+      "https://openrouter.ai/docs/guides/features/zdr",
+      "https://openrouter.ai/docs/guides/features/input-output-logging",
+      "https://openrouter.ai/blog/announcements/openrouter-is-joining-stripe/",
+      "https://stripe.com/newsroom/news/stripe-agrees-to-acquire-openrouter"
+    ],
+    "independent": [
+      "https://www.g2.com/sellers/openrouter",
+      "https://www.axios.com/2026/08/17/stripe-openrouter-paypal"
+    ]
+  },
+  "nextSlotChecklist": [
+    "Confirm there is still no production tools row using the openrouter slug or official domain",
+    "Recheck current pricing, model and provider counts, free limits, and BYOK thresholds",
+    "Verify current logo and thumbnail are official and reusable",
+    "Confirm privacy language distinguishes OpenRouter logging, provider retention, ZDR, and plugin policies",
+    "Replace the dated fallback snapshot with bilingual decision content without creating a second canonical URL",
+    "Run evidence, route-alias, sitemap, TypeScript, full build, and production smoke checks"
+  ]
+}

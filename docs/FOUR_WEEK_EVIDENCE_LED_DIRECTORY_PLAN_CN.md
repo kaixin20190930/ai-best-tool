@@ -51,6 +51,7 @@
 | W2-02A | 生成未来 3 天候选池，每日处理 1-2 条 | 每日 1 小时 | W2-01 | 每条有发布/待补结论 | 已完成，提交 `d7ea18b5`；6 条生产候选按 3 天每天 2 条排期 |
 | W2-02B | 首批 7-14 条处理台账；只发布通过资料与市场双重准入的条目 | 每日 1 小时 | W2-02A | 无低质量例外放行 | 进行中，已处理 10/7-14；Perplexity 与 Make 已迁移既有 fallback，Owlish 保持 draft，ArcRift 不因数量目标放行 |
 | W2-02D | 下一公开时段成熟工具预审；证据齐全但不提前发布 | 0.5 天 | W2-02B | 证据、边界和发布闸门自动校验；不改生产数据或 sitemap | 已完成 n8n 预审；状态 `ready_for_next_slot`，最早 2026-09-02 复核后迁移 |
+| W2-02E | 后续公开时段成熟工具预审；建立可复用多候选门禁 | 0.5 天 | W2-02D | 所有预审文件统一校验，证据与边界不足即失败 | 已完成 OpenRouter 预审；最早 2026-09-03 复核后迁移，未改生产数据或 sitemap |
 | W2-03A | Web3、Automation、Research Guide 统一任务入口 | 1 天 | W1-01C | 指向对应工具 Decision Card | 已完成，提交 `de1504e6`；专项结构测试、Decision Card 回归、tsc、完整 build 通过 |
 
 ### 第 3 周：变化监测与真实信号（09-15 至 09-21，预计 4-5 个开发日）
@@ -157,7 +158,16 @@
 - 决策边界：明确 workflow execution 计费、模型 provider 费用、Community 版协作/治理缺口、Sustainable Use License 商业限制，以及 Redis、数据库、worker、密钥、备份和监控责任。
 - 发布控制：本轮只新增 `data/collection/n8n-preaudit-2026-09-01.json`，状态为 `ready_for_next_slot`；`productionWriteApproved=false`、`sitemapChangeApproved=false`，不会提前写入生产工具表或扩大 sitemap。
 - 下一时段迁移前必须重新核对实时 Pricing，尤其是不稳定的 AI credits 和套餐权益；随后复用现有 `/ai/n8n` canonical，禁止创建重复 URL。
-- 自动验收：`pnpm run test:next-tool-preaudit` 负责验证官方/独立来源数量、许可证边界、计费单位、限制深度及生产发布闸门。
+
+### W2-02E 后续公开时段预审（2026-09-01）
+
+- OpenRouter：完成 Pricing、FAQ、provider routing、provider logging、ZDR、输入输出日志、Stripe 收购公告与独立评论信号预审，市场验证结论为 `97/100 / Validated`。
+- 核心决策边界：统一 API 不代表模型能力完全一致；默认路由会带来供应商、延迟、缓存、成本与输出差异；OpenRouter 默认不记录正文不等于下游供应商均为零保留；ZDR 不自动覆盖插件和外部工具。
+- 商业事实：当前推理价格按模型和供应商透传，购买 credits 收取 5.5% 费用；模型数、供应商数、单模型价格、免费限额和 BYOK 阈值均属于发布当天必须复核的波动字段。
+- 市场信号：OpenRouter 与 Stripe 已在 2026-08-19 分别官宣收购协议；OpenRouter 官方称每日处理超过 10 万亿 tokens、服务超过 1,000 万开发者和企业，G2 当日显示 21 条评论、4.6 分。规模数据标注为官方自报，不替代独立使用证据。
+- 自动门禁：`test:next-tool-preaudit` 已从 n8n 单文件断言升级为扫描全部 `*-preaudit-*.json`；统一校验 canonical、来源数量、决策深度、市场信号、政策边界、价格波动和禁止提前发布字段。
+- 发布控制：OpenRouter 状态为 `ready_for_next_slot`，最早 2026-09-03；本轮不写生产工具表、不批准 sitemap 扩张，因此 W2-02B 公开处理数仍为 10/7-14。
+- 自动验收：`pnpm run test:next-tool-preaudit` 负责扫描全部预审文件，验证官方/独立来源数量、许可证或政策边界、计费单位、限制深度及生产发布闸门。
 
 ### W2-02B 第八批处理记录（2026-09-01）
 
