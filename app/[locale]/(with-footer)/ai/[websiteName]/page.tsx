@@ -1539,6 +1539,43 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
         };
   }
 
+  if (key === 'gamma') {
+    return isChinese
+      ? {
+          label: '官方事实快照',
+          title: '生成范围、付费边界和导出兼容性',
+          summary: '以下信息来自 Gamma 当前官网与帮助中心；套餐功能、credits 和模型范围会变化，购买前应再次核对账号内可见配置。',
+          checkedAt: '2026-09-01',
+          facts: [
+            { label: '创作范围', value: 'Gamma 可从提示词、提纲或已有文件生成演示文稿、文档、网站、社交内容和图形。' },
+            { label: '计费边界', value: '订阅按用户计费；AI 操作消耗 credits，消耗量会随模型、长度和任务复杂度变化。' },
+            { label: '导出边界', value: '支持 PDF、PNG 和 PPTX；导出以 Present Mode 为准，可能与编辑器不同，且不支持 Word 导出。' },
+          ],
+          sources: [
+            { label: '官方套餐说明', href: 'https://help.gamma.app/en/articles/8077107-how-can-i-upgrade-my-gamma-subscription' },
+            { label: '官方导入说明', href: 'https://help.gamma.app/en/articles/11047840-how-can-i-import-slides-or-documents-into-gamma' },
+            { label: '官方导出说明', href: 'https://help.gamma.app/en/articles/8022861-what-s-the-easiest-way-to-export-my-gamma' },
+          ],
+        }
+      : {
+          label: 'Official fact snapshot',
+          title: 'Creation scope, paid boundaries, and export compatibility',
+          summary:
+            'These facts come from Gamma\'s current website and help center. Recheck account-level plan features, credits, and model access before purchasing because they can change.',
+          checkedAt: '2026-09-01',
+          facts: [
+            { label: 'Creation scope', value: 'Gamma turns prompts, outlines, or existing files into presentations, documents, websites, social content, and graphics.' },
+            { label: 'Billing boundary', value: 'Subscriptions are per user; AI actions consume credits based on the model, content length, and task complexity.' },
+            { label: 'Export boundary', value: 'PDF, PNG, and PPTX are supported; exports follow Present Mode and may differ from the editor, while Word export is unavailable.' },
+          ],
+          sources: [
+            { label: 'Official plan guide', href: 'https://help.gamma.app/en/articles/8077107-how-can-i-upgrade-my-gamma-subscription' },
+            { label: 'Official import guide', href: 'https://help.gamma.app/en/articles/11047840-how-can-i-import-slides-or-documents-into-gamma' },
+            { label: 'Official export guide', href: 'https://help.gamma.app/en/articles/8022861-what-s-the-easiest-way-to-export-my-gamma' },
+          ],
+        };
+  }
+
   if (key === 'the-graph') {
     return isChinese
       ? {
@@ -2558,6 +2595,35 @@ function getPriorityToolSearchIntent(websiteName: string, locale: string): Prior
             'Transcription, summaries, and action-item accuracy',
             'Meeting compatibility, sharing, and team workflow',
             'Free limits, exports, and data-handling boundaries',
+          ],
+        };
+  }
+
+  if (key === 'gamma') {
+    return isChinese
+      ? {
+          metadataTitle: 'Gamma AI 演示文稿：功能、价格、导出与限制',
+          metadataDescription:
+            '评估 Gamma 的 AI 演示文稿、文档和网站生成能力，了解 credits、按用户计费、品牌控制、导入与 PPTX/PDF 导出限制。',
+          label: 'AI 演示工具判断重点',
+          summary: 'Gamma 的优势是快速形成可分享的视觉初稿；真正的选择标准是品牌控制、导出还原度和团队成本是否满足最终交付。',
+          checkpoints: [
+            '演示文稿、文档或网站是否匹配真实交付物',
+            '导入内容、PPTX/PDF 导出和品牌样式是否可接受',
+            '按用户订阅、AI credits 和数据设置是否适合团队',
+          ],
+        }
+      : {
+          metadataTitle: 'Gamma AI Presentation Maker: Pricing, Export & Limits',
+          metadataDescription:
+            'Evaluate Gamma for AI presentations, documents, and websites, including credits, per-user billing, branding, imports, and PPTX or PDF export limitations.',
+          label: 'AI presentation decision',
+          summary:
+            'Gamma is strongest at producing a shareable visual first draft quickly; the purchase decision depends on brand control, export fidelity, and team-wide cost.',
+          checkpoints: [
+            'Fit for presentations, documents, or hosted websites',
+            'Import behavior, PPTX/PDF export fidelity, and brand control',
+            'Per-user subscription, AI credits, and data settings',
           ],
         };
   }

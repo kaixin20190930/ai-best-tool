@@ -151,7 +151,8 @@
 - 自动门槛：`pnpm run test:mature-tool-priority` 必须保证恰好 10 项、slug 不重复、每项有 GSC 信号和决策角度，并禁止队列悄然变成新增 URL 扩张。
 - Rank 1 Claude/Anthropic 已完成：保留原数据库 ID，将产品 slug、标题、正文、用途和官网更新为 Claude；`/ai/anthropic` 及本地化旧路径返回真实 308，sitemap 只保留 Claude；本地生产模式已验证标题、canonical、双语内容和跳转。
 - Rank 2 Fathom 已完成：建立唯一的生产数据库实体，补齐双语决策内容、官方素材、兼容性、录制同意、免费额度边界及 G2/Capterra 独立市场证据；显式英文重复路径 `/en/ai/fathom` 统一 308 到 canonical `/ai/fathom`。
-- 当前进度：`2/10`。下一项为 rank 3 Gamma，将已接近第一页的 fallback 页面迁移为数据库可维护实体，并强化演示文稿、文档、网站生成及导出边界。
+- Rank 3 Gamma 已完成：在不增加 URL 的前提下迁移为生产数据库实体，补齐双语决策内容、当前官方品牌素材、演示/文档/网站能力、按用户计费、credits、导入导出、数据训练设置，以及 Product Hunt、G2、Capterra、TechCrunch 市场证据。
+- 当前进度：`3/10`。下一项为 rank 4 Consensus，解决历史网络页虽返回 200 但未进入生产数据库且被 Google 标记为“已抓取未编入索引”的问题。
 
 ## 状态更新协议
 

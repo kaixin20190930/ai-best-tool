@@ -191,6 +191,12 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'static.gamma.app',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'www.midjourney.com',
         port: '',
         pathname: '/**',
