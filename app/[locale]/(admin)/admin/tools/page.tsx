@@ -93,6 +93,7 @@ export default async function AdminToolsPage({
 
   let tools: Awaited<ReturnType<typeof getAdminTools>>['tools'] = [];
   let total = 0;
+  let collectedDraftTotal = 0;
   let stats: AdminToolStats = {
     total: 0,
     published: 0,
@@ -112,7 +113,7 @@ export default async function AdminToolsPage({
   let loadError: string | null = null;
 
   try {
-    const [toolResult, statsResult, blockerResult] = await Promise.all([
+    const [toolResult, statsResult, blockerResult, collectedDraftResult] = await Promise.all([
       getAdminTools({
         status,
         claimStatus,
@@ -135,6 +136,7 @@ export default async function AdminToolsPage({
       }),
       getToolsStats(),
       getPaidListingBlockerSummary(8),
+      getAdminTools({ status: 'draft', collected: true, page: 1, pageSize: 1 }),
     ]);
 
     tools = toolResult.tools;
@@ -152,6 +154,7 @@ export default async function AdminToolsPage({
       claimUnclaimed: statsData.claimUnclaimed ?? 0,
     };
     paidBlockerSummary = blockerResult;
+    collectedDraftTotal = collectedDraftResult.total;
   } catch (error) {
     loadError = error instanceof Error ? error.message : 'Failed to load admin tools.';
   }
@@ -163,12 +166,20 @@ export default async function AdminToolsPage({
           <h1 className='text-3xl font-bold text-slate-900'>Tool Management</h1>
           <p className='mt-2 text-slate-600'>Review, approve, and manage tool submissions</p>
         </div>
-        <Link
-          href='/admin/tools?status=pending'
-          className='inline-flex items-center justify-center rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-700 hover:bg-amber-100'
-        >
-          Review pending ({stats.pending})
-        </Link>
+        <div className='flex flex-wrap gap-2'>
+          <Link
+            href='/admin/tools?status=draft&collected=1'
+            className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-2 text-sm font-semibold text-cyan-700 hover:bg-cyan-100'
+          >
+            Collected drafts ({collectedDraftTotal})
+          </Link>
+          <Link
+            href='/admin/tools?status=pending'
+            className='inline-flex items-center justify-center rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-700 hover:bg-amber-100'
+          >
+            Review pending ({stats.pending})
+          </Link>
+        </div>
       </div>
 
       {/* Stats Cards */}

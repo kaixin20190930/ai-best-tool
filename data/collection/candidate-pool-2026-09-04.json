@@ -45,20 +45,39 @@
   {
     "candidateUrl": "https://www.producthunt.com/products/owlish",
     "categorySlug": "chatbot",
-    "decision": "needs_evidence",
-    "decisionReason": "Official product and developer documentation establish the support-agent workflow, but the complete current plan matrix, channel entitlements and operational limitations still require one consolidated verification pass.",
+    "compareAxes": [
+      "Included sessions and knowledge capacity",
+      "Human handoff and shared inbox access",
+      "Supported deployment channels",
+      "API, MCP and automation boundaries"
+    ],
+    "decision": "ready_for_draft",
+    "decisionReason": "The official product, pricing, knowledge-base and developer pages verify the support workflow, current plan limits, channels, retention and API boundaries. The candidate can enter draft review but is not automatically publishable.",
+    "detail": "Owlish is a customer-support agent platform that grounds answers in websites, uploaded documents and direct canonical responses. It combines cited AI answers with conversation review, human handoff and a shared helpdesk on higher tiers. Plans are limited by monthly chat sessions, processed knowledge-base capacity, agents, members and channels rather than a single unlimited chatbot allowance.",
     "evidenceUrls": [
       "https://owlish.bot/",
+      "https://owlish.bot/pricing/",
       "https://owlish.bot/docs/developers/overview/",
       "https://owlish.bot/docs/knowledge-base/overview/"
     ],
-    "gaps": [
-      "Verify the current Free, Starter, Growth and Scale prices on the canonical plans page.",
-      "Record exact channel, session, knowledge-base and retention limits for each plan.",
-      "Confirm a stable official image and explicit not-ideal scenarios before draft creation."
+    "gaps": [],
+    "imageUrl": "https://owlish.bot/owlish-og.jpg",
+    "limitations": [
+      "Free is limited to one agent, 25 monthly chat sessions, a 0.5 MB processed knowledge base, one member, web-widget deployment and seven-day conversation retention.",
+      "Human handoff, the shared helpdesk inbox and API access start on Growth rather than Free or Starter.",
+      "API and MCP access are available only on Growth and Scale, are limited to 100 requests per minute per key, and do not have a separate public sandbox.",
+      "Programmatic agent creation, billing changes, channel installation and session webhooks are not currently exposed by the public API.",
+      "Email and Instagram are listed as included when available rather than currently available on the reviewed pricing page."
+    ],
+    "notIdealFor": [
+      "Teams needing an unlimited or high-volume free support bot",
+      "Developers who require a complete API-only setup and billing workflow",
+      "Buyers who need email or Instagram support to be generally available today"
     ],
     "officialUrl": "https://owlish.bot/",
     "plannedFor": "2026-09-05T09:00:00.000Z",
+    "pricing": "freemium",
+    "pricingSnapshot": "Free: $0. Monthly: Starter $49, Growth $149, Scale $449. Annual billing shows effective monthly prices of $39, $119 and $359, billed as $468, $1,428 and $4,308 per year. Verified 2026-09-01 on the official pricing page.",
     "reviewedAt": "2026-09-01T00:00:00.000Z",
     "summary": "Owlish builds customer-support agents from websites, files and documented answers, with citations, shared handoff workflows and multiple deployment channels.",
     "tags": ["customer-support", "knowledge-base", "ai-agents"],

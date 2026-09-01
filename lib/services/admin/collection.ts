@@ -251,6 +251,12 @@ function getStringList(value: unknown): string[] {
     : [];
 }
 
+function getRecordValue(value: unknown): Record<string, unknown> {
+  return value && typeof value === 'object' && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : {};
+}
+
 function parseUrlSafely(url: string | null | undefined, baseUrl?: string): URL | null {
   if (!url) {
     return null;
@@ -1438,6 +1444,19 @@ export async function importCollectionCandidateToDraft(
     zh: draftDetail,
   };
 
+  const intakePlan = getRecordValue(candidate.raw_payload.intakePlan);
+  const decisionEvidence = getRecordValue(candidate.raw_payload.decision);
+  const evidenceUrls = getStringList(intakePlan.evidenceUrls);
+  const reviewedAt = getStringValue(decisionEvidence.reviewedAt) || getStringValue(intakePlan.reviewedAt) || '';
+  const limitations = getStringList(decisionEvidence.limitations);
+  const notIdealFor = getStringList(decisionEvidence.notIdealFor);
+  const compareAxes = getStringList(decisionEvidence.compareAxes);
+  const pricingSnapshot = getStringValue(candidate.raw_payload.pricingSnapshot) || '';
+  const localizedList = (values: string[]) => ({ en: values, zh: values });
+  const sourceSummary = evidenceUrls.length
+    ? `Verified against ${evidenceUrls.length} official source${evidenceUrls.length === 1 ? '' : 's'}.`
+    : 'Verified against the official product source.';
+
   const featurePayload = {
     collection: {
       sourceUrl: candidate.normalized_url,
@@ -1448,6 +1467,33 @@ export async function importCollectionCandidateToDraft(
       relevanceScore: updatedScore.relevanceScore,
       qualityScore: updatedScore.qualityScore,
       scoreReason: updatedScore.reason,
+    },
+    editorial: {
+      reviewedAt,
+      reviewedBy: 'AI Best Tool Editorial',
+      sourceUrl: officialUrl,
+      summary: { en: summary, zh: summary },
+      trustNote: { en: sourceSummary, zh: sourceSummary },
+    },
+    bestFit: localizedList(classification.useCases),
+    notIdealFor: localizedList(notIdealFor),
+    decision: {
+      compareAxes: localizedList(compareAxes),
+      limitations: localizedList(limitations),
+      officialSummary: { en: summary, zh: summary },
+      freshnessSummary: {
+        en: reviewedAt ? `Official sources reviewed ${reviewedAt.slice(0, 10)}.` : sourceSummary,
+        zh: reviewedAt ? `Official sources reviewed ${reviewedAt.slice(0, 10)}.` : sourceSummary,
+      },
+      pricingSummary: { en: pricingSnapshot, zh: pricingSnapshot },
+      mediaSummary: {
+        en: detailMetadata.imageUrl ? 'Official product media is available.' : 'Official product media needs review.',
+        zh: detailMetadata.imageUrl ? 'Official product media is available.' : 'Official product media needs review.',
+      },
+      communitySummary: {
+        en: 'Independent community evidence is not included in this intake review.',
+        zh: 'Independent community evidence is not included in this intake review.',
+      },
     },
     suggestedCategorySlug: classification.categorySlug,
     suggestedUseCases: classification.useCases,
