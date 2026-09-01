@@ -47,6 +47,39 @@
       "The official site currently lists Claude Code, Codex and OpenCode; Cursor, Cline, Continue and Aider are planned rather than supported.",
       "Re_gent complements Git and focuses on agent activity; it is not a replacement for repository version control."
     ],
+    "marketValidation": {
+      "evidenceUrls": [
+        "https://github.com/regent-vcs/re_gent",
+        "https://github.com/regent-vcs/re_gent/releases",
+        "https://news.ycombinator.com/item?id=48063548",
+        "https://www.producthunt.com/products/re_gent/awards",
+        "https://jfound.net/spotlight/enterprise-agents-take-the-search-bar-and-modal-takes-355m"
+      ],
+      "rationale": {
+        "en": "Re_gent targets a credible and increasingly important problem: preserving prompt, session and tool-call provenance around AI-generated code without polluting normal Git history. Its Show HN launch reached 129 points and 67 comments, producing substantive discussion about the need, competing approaches and test coverage. The repository has 787 stars, 57 forks, seven visible contributors and five releases, while Product Hunt recorded 189 points and 298 followers. These are meaningful attention and community-development signals, but the project was created only four months ago, its last code push was July 2, release downloads remain in the hundreds and the official site still labels it Public Alpha. There is not yet enough repeat-use, production-team or retention evidence for a validated recommendation, so Re_gent remains an emerging candidate and should be reviewed again after new releases or documented adoption.",
+        "zh": "Re_gent 面向一个可信且越来越重要的问题：在不污染常规 Git 历史的前提下，保留 AI 生成代码对应的 prompt、session 和工具调用来源。其 Show HN 发布获得 129 points 和 67 comments，形成了关于实际需求、替代方案和测试覆盖的实质讨论。仓库现有 787 stars、57 forks、7 名可见贡献者和 5 个 releases，Product Hunt 也记录了 189 points 和 298 followers。这些足以证明关注度和社区开发信号，但项目仅创建约四个月，最后一次代码推送为 7 月 2 日，release 下载仍为数百次，官网也仍标记为 Public Alpha。当前缺少重复使用、生产团队采用或留存证据，因此 Re_gent 暂时保持 Emerging，待出现新版本或可验证采用后复核。"
+      },
+      "reviewedAt": "2026-09-01",
+      "score": 72,
+      "scores": {
+        "userValue": 21,
+        "independentValidation": 16,
+        "durability": 9,
+        "evidenceQuality": 17,
+        "strategicValue": 9
+      },
+      "strongSignals": [
+        "hacker-news-129-points-67-comments"
+      ],
+      "supportingSignals": [
+        "github-community-787-stars-57-forks",
+        "seven-visible-contributors",
+        "five-public-releases",
+        "product-hunt-189-points-298-followers",
+        "independent-technical-critique"
+      ],
+      "verdict": "emerging"
+    },
     "notIdealFor": ["Teams that require a stable production release", "Users whose primary coding agent is not currently supported"],
     "officialUrl": "https://www.re-gent.dev/",
     "plannedFor": "2026-09-01T09:30:00.000Z",
