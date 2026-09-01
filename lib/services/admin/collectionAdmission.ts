@@ -45,6 +45,10 @@ export function evaluateCollectionAdmission(candidate: CollectionAdmissionCandid
   const marketEvidenceUrls = stringList(marketValidation.evidenceUrls);
   const strongSignals = stringList(marketValidation.strongSignals);
   const supportingSignals = stringList(marketValidation.supportingSignals);
+  const marketScore =
+    typeof marketValidation.score === 'number' && Number.isFinite(marketValidation.score)
+      ? marketValidation.score
+      : 0;
 
   const coreGaps = [
     payload.category_id || payload.categorySlug ? null : 'Missing category',
@@ -71,6 +75,7 @@ export function evaluateCollectionAdmission(candidate: CollectionAdmissionCandid
     strongSignals.length + supportingSignals.length >= 2
       ? null
       : 'Need at least two market durability signals',
+    marketScore >= 75 ? null : 'Market score must be at least 75',
   ].filter(Boolean) as string[];
   const draftReady = candidate.relevance_score >= 50 && candidate.quality_score >= 80 && coreGaps.length === 0;
   const marketValidated = marketGaps.length === 0;

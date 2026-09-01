@@ -23,7 +23,16 @@ export type CandidatePoolEntry = CandidateIntakePlan & {
   limitations?: string[];
   marketValidation?: {
     evidenceUrls: string[];
+    rationale?: { en?: string; zh?: string };
     reviewedAt: string;
+    score?: number;
+    scores?: {
+      userValue?: number;
+      independentValidation?: number;
+      durability?: number;
+      evidenceQuality?: number;
+      strategicValue?: number;
+    };
     strongSignals: string[];
     supportingSignals: string[];
     verdict: 'validated' | 'emerging' | 'unverified' | 'rejected';

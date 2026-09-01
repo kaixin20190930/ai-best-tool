@@ -80,6 +80,11 @@ const publishReadySql = `
         AND jsonb_array_length(features->'marketValidation'->'evidenceUrls') > 0
         AND jsonb_typeof(features->'marketValidation'->'strongSignals') = 'array'
         AND jsonb_array_length(features->'marketValidation'->'strongSignals') > 0
+        AND CASE
+          WHEN COALESCE(features->'marketValidation'->>'score', '') ~ '^\d+$'
+            THEN (features->'marketValidation'->>'score')::int
+          ELSE 0
+        END >= 75
       )
     )
   )
@@ -344,6 +349,28 @@ function getEvidencePublishGateError(tool: {
   ].filter(Boolean) as string[];
 
   return missing.length > 0 ? `Complete publication evidence first: ${missing.join(', ')}.` : null;
+}
+
+function getMarketValidationPublishGateError(tool: { features?: unknown }): string | null {
+  const features = getRecord(tool.features);
+  if (!features.collection) return null;
+
+  const validation = getRecord(features.marketValidation);
+  const evidenceUrls = getStringArray(validation.evidenceUrls);
+  const strongSignals = getStringArray(validation.strongSignals);
+  const supportingSignals = getStringArray(validation.supportingSignals);
+  const reviewedAt = typeof validation.reviewedAt === 'string' ? validation.reviewedAt.trim() : '';
+  const score = Number(validation.score || 0);
+  const missing = [
+    validation.verdict === 'validated' ? null : 'validated verdict',
+    reviewedAt ? null : 'market review date',
+    evidenceUrls.length > 0 ? null : 'independent evidence',
+    strongSignals.length > 0 ? null : 'strong market signal',
+    strongSignals.length + supportingSignals.length >= 2 ? null : 'second durability signal',
+    score >= 75 ? null : 'market score of at least 75',
+  ].filter(Boolean) as string[];
+
+  return missing.length > 0 ? `Complete market validation first: ${missing.join(', ')}.` : null;
 }
 
 function getCommercialFeature(features: unknown): Record<string, unknown> {
@@ -1084,6 +1111,10 @@ export async function approveTool(
     if (evidenceGateError) {
       return { success: false, error: evidenceGateError };
     }
+    const marketGateError = getMarketValidationPublishGateError(existingRow);
+    if (marketGateError) {
+      return { success: false, error: marketGateError };
+    }
 
     const existingFeatures = getRecord(existingRow.features);
     const submission = getRecord(existingFeatures.submission);
@@ -1243,6 +1274,21 @@ export async function updateTool(
       compareAxes?: { en?: string[]; zh?: string[] };
       limitations?: { en?: string[]; zh?: string[] };
       notIdealFor?: { en?: string[]; zh?: string[] };
+    };
+    marketValidation?: {
+      verdict?: 'validated' | 'emerging' | 'unverified' | 'rejected';
+      reviewedAt?: string | null;
+      evidenceUrls?: string[];
+      strongSignals?: string[];
+      supportingSignals?: string[];
+      rationale?: { en?: string; zh?: string };
+      scores?: {
+        userValue?: number;
+        independentValidation?: number;
+        durability?: number;
+        evidenceQuality?: number;
+        strategicValue?: number;
+      };
     };
   }
 ): Promise<{ success: boolean; error?: string }> {
@@ -1486,6 +1532,81 @@ export async function updateTool(
       shouldUpdateFeatures = true;
     }
 
+    if (data.marketValidation !== undefined) {
+      const allowedVerdicts = ['validated', 'emerging', 'unverified', 'rejected'] as const;
+      const verdict = allowedVerdicts.includes(data.marketValidation.verdict as (typeof allowedVerdicts)[number])
+        ? data.marketValidation.verdict || 'unverified'
+        : 'unverified';
+      const reviewedAt = normalizeNullableDate(data.marketValidation.reviewedAt);
+      const evidenceUrls = normalizeTags(data.marketValidation.evidenceUrls) || [];
+      const strongSignals = normalizeTags(data.marketValidation.strongSignals) || [];
+      const supportingSignals = normalizeTags(data.marketValidation.supportingSignals) || [];
+      const rationaleEn = normalizeNullableText(data.marketValidation.rationale?.en) || '';
+      const rationaleZh = normalizeNullableText(data.marketValidation.rationale?.zh) || '';
+      const scoreLimits = {
+        userValue: 25,
+        independentValidation: 25,
+        durability: 20,
+        evidenceQuality: 20,
+        strategicValue: 10,
+      } as const;
+      const scores = Object.fromEntries(
+        Object.entries(scoreLimits).map(([key, maximum]) => {
+          const value = Number(data.marketValidation?.scores?.[key as keyof typeof scoreLimits] || 0);
+          if (!Number.isFinite(value) || value < 0 || value > maximum) {
+            throw new Error(`${key} market score must be between 0 and ${maximum}.`);
+          }
+          return [key, Math.round(value)];
+        })
+      ) as Record<keyof typeof scoreLimits, number>;
+      const score = Object.values(scores).reduce((total, value) => total + value, 0);
+
+      if (reviewedAt) {
+        const reviewedTime = new Date(reviewedAt).getTime();
+        if (!Number.isFinite(reviewedTime) || reviewedTime > Date.now()) {
+          return { success: false, error: 'Market review date must be valid and cannot be in the future.' };
+        }
+      }
+      for (const evidenceUrl of evidenceUrls) {
+        try {
+          const parsed = new URL(evidenceUrl);
+          if (!['http:', 'https:'].includes(parsed.protocol)) throw new Error('Unsupported protocol');
+        } catch {
+          return { success: false, error: `Invalid market evidence URL: ${evidenceUrl}` };
+        }
+      }
+      if (verdict !== 'unverified' && (!reviewedAt || evidenceUrls.length === 0 || (!rationaleEn && !rationaleZh))) {
+        return {
+          success: false,
+          error: 'A reviewed market verdict requires a date, independent evidence, and an editorial rationale.',
+        };
+      }
+      if (
+        verdict === 'validated' &&
+        (score < 75 || strongSignals.length === 0 || strongSignals.length + supportingSignals.length < 2)
+      ) {
+        return {
+          success: false,
+          error: 'Validated tools require a score of at least 75, one strong signal, and two total market signals.',
+        };
+      }
+
+      nextFeaturesForUpdate = {
+        ...nextFeaturesForUpdate,
+        marketValidation: {
+          evidenceUrls,
+          rationale: { en: rationaleEn, zh: rationaleZh },
+          reviewedAt,
+          score,
+          scores,
+          strongSignals,
+          supportingSignals,
+          verdict,
+        },
+      };
+      shouldUpdateFeatures = true;
+    }
+
     if (nextStatus === 'published' && existingStatus !== 'published') {
       const evidenceGateError = getEvidencePublishGateError({
         features: nextFeaturesForUpdate,
@@ -1494,6 +1615,10 @@ export async function updateTool(
       });
       if (evidenceGateError) {
         return { success: false, error: evidenceGateError };
+      }
+      const marketGateError = getMarketValidationPublishGateError({ features: nextFeaturesForUpdate });
+      if (marketGateError) {
+        return { success: false, error: marketGateError };
       }
     }
 

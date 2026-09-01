@@ -254,6 +254,79 @@ function getEditorialReview(
   };
 }
 
+function getMarketValidation(input: unknown, locale: string, fallback = 'en') {
+  if (!input || typeof input !== 'object') return null;
+  const validation = (input as Record<string, unknown>).marketValidation;
+  if (!validation || typeof validation !== 'object') return null;
+
+  const record = validation as Record<string, unknown>;
+  const verdict = typeof record.verdict === 'string' ? record.verdict : 'unverified';
+  const validVerdicts = ['validated', 'emerging', 'unverified', 'rejected'];
+  if (!validVerdicts.includes(verdict)) return null;
+  const reviewedAt = typeof record.reviewedAt === 'string' ? record.reviewedAt : null;
+  const reviewedTime = reviewedAt ? new Date(reviewedAt).getTime() : Number.NaN;
+  const score = typeof record.score === 'number' && Number.isFinite(record.score) ? record.score : null;
+  const evidenceUrls = Array.isArray(record.evidenceUrls)
+    ? record.evidenceUrls.filter(
+        (value): value is string => typeof value === 'string' && /^https?:\/\//i.test(value),
+      )
+    : [];
+  const strongSignals = Array.isArray(record.strongSignals)
+    ? record.strongSignals.filter((value): value is string => typeof value === 'string' && value.trim().length > 0)
+    : [];
+  const supportingSignals = Array.isArray(record.supportingSignals)
+    ? record.supportingSignals.filter(
+        (value): value is string => typeof value === 'string' && value.trim().length > 0,
+      )
+    : [];
+  const rationale = getLocalizedText(record.rationale, locale, fallback);
+  const labels = {
+    validated: {
+      label: locale === 'cn' ? '市场验证通过' : 'Market validated',
+      summary:
+        locale === 'cn'
+          ? '已有独立采用或持续性证据支持这项收录判断。'
+          : 'Independent adoption or durability evidence supports this listing decision.',
+      tone: 'bg-emerald-50 text-emerald-700 ring-emerald-200',
+    },
+    emerging: {
+      label: locale === 'cn' ? '新兴产品，验证有限' : 'Emerging, limited validation',
+      summary:
+        locale === 'cn'
+          ? '产品值得观察，但独立评价、采用或持续维护证据仍有限。'
+          : 'The product is worth watching, but independent adoption or durability evidence remains limited.',
+      tone: 'bg-amber-50 text-amber-800 ring-amber-200',
+    },
+    unverified: {
+      label: locale === 'cn' ? '市场验证待补' : 'Market verification pending',
+      summary:
+        locale === 'cn'
+          ? '当前资料主要证明产品存在，尚不能证明市场采用与持续性。'
+          : 'Current evidence confirms the product exists, not that adoption or durability is established.',
+      tone: 'bg-slate-100 text-slate-700 ring-slate-200',
+    },
+    rejected: {
+      label: locale === 'cn' ? '市场复核未通过' : 'Market review not passed',
+      summary:
+        locale === 'cn'
+          ? '现有独立证据不足以支持公开推荐。'
+          : 'Available independent evidence does not support a public recommendation.',
+      tone: 'bg-rose-50 text-rose-700 ring-rose-200',
+    },
+  } as const;
+
+  return {
+    ...labels[verdict as keyof typeof labels],
+    evidenceUrls,
+    rationale,
+    reviewedAt: Number.isFinite(reviewedTime) ? reviewedAt : null,
+    score,
+    signalCount: strongSignals.length + supportingSignals.length,
+    strongSignalCount: strongSignals.length,
+    verdict,
+  };
+}
+
 function getDecisionText(
   input: unknown,
   field: 'officialSummary' | 'freshnessSummary' | 'pricingSummary' | 'communitySummary' | 'mediaSummary',
@@ -2958,6 +3031,14 @@ export default async function Page({
           day: 'numeric',
         }).format(new Date(claimedAt))
       : null;
+    const marketValidation = getMarketValidation(dbTool?.features, locale);
+    const marketReviewedLabel = marketValidation?.reviewedAt
+      ? new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        }).format(new Date(marketValidation.reviewedAt))
+      : null;
     const quickFacts = [
       {
         label: isChinese ? '分类' : 'Category',
@@ -2989,6 +3070,21 @@ export default async function Page({
         icon: ShieldCheck,
         tone: claimTone,
       },
+      ...(marketValidation
+        ? [
+            {
+              label: isChinese ? '市场验证' : 'Validation',
+              value: marketValidation.label,
+              icon: ShieldCheck,
+              tone:
+                marketValidation.verdict === 'validated'
+                  ? 'text-emerald-700 bg-emerald-50'
+                  : marketValidation.verdict === 'emerging'
+                    ? 'text-amber-700 bg-amber-50'
+                    : 'text-slate-700 bg-slate-100',
+            },
+          ]
+        : []),
     ];
     const commentPromptLabel = isChinese ? '可以直接点一个开头' : 'Start with one of these';
     const commentStarterPrompts = isChinese
@@ -3999,6 +4095,54 @@ export default async function Page({
                     ? '先用这一张卡确认任务匹配、限制、证据和替代路径，再决定是否试用、付费或继续比较。'
                     : 'Use this one card to check fit, limits, evidence, and alternatives before you trial, pay, or keep comparing.'}
                 </p>
+                {marketValidation ? (
+                  <div className='mb-5 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5'>
+                    <div className='flex flex-wrap items-start justify-between gap-3'>
+                      <div>
+                        <p className='text-xs font-semibold uppercase tracking-[0.16em] text-slate-500'>
+                          {isChinese ? '市场成熟度判断' : 'Market maturity review'}
+                        </p>
+                        <div className='mt-2 flex flex-wrap items-center gap-2'>
+                          <span className={`rounded-full px-3 py-1 text-xs font-semibold ring-1 ${marketValidation.tone}`}>
+                            {marketValidation.label}
+                          </span>
+                          {marketValidation.score !== null ? (
+                            <span className='rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-700 ring-1 ring-slate-200'>
+                              {isChinese ? '产品价值分' : 'Product value'} {marketValidation.score}/100
+                            </span>
+                          ) : null}
+                        </div>
+                      </div>
+                      <div className='text-right text-xs text-slate-500'>
+                        <p>{marketReviewedLabel ? `${isChinese ? '复核于' : 'Reviewed'} ${marketReviewedLabel}` : isChinese ? '复核日期待补' : 'Review date pending'}</p>
+                        <p className='mt-1'>
+                          {isChinese
+                            ? `${marketValidation.strongSignalCount} 个强信号 · ${marketValidation.signalCount} 个总信号`
+                            : `${marketValidation.strongSignalCount} strong · ${marketValidation.signalCount} total signals`}
+                        </p>
+                      </div>
+                    </div>
+                    <p className='mt-3 text-sm leading-6 text-slate-700'>
+                      {marketValidation.rationale || marketValidation.summary}
+                    </p>
+                    {marketValidation.evidenceUrls.length > 0 ? (
+                      <div className='mt-4 flex flex-wrap gap-2'>
+                        {marketValidation.evidenceUrls.slice(0, 4).map((url, index) => (
+                          <a
+                            key={url}
+                            href={url}
+                            target='_blank'
+                            rel='noreferrer'
+                            className='inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:border-cyan-300 hover:text-cyan-800'
+                          >
+                            {isChinese ? `独立证据 ${index + 1}` : `Independent evidence ${index + 1}`}
+                            <ExternalLink className='size-3.5' />
+                          </a>
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
+                ) : null}
                 {priorityEvidence && !priorityOfficialEvidence ? (
                   <div
                     data-priority-tool-evidence

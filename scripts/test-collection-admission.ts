@@ -33,6 +33,7 @@ const completeCandidate = {
     marketValidation: {
       evidenceUrls: ['https://independent.example.com/review'],
       reviewedAt: '2026-08-31T00:00:00.000Z',
+      score: 82,
       strongSignals: ['verified-customer-adoption'],
       supportingSignals: ['active-release-history'],
       verdict: 'validated',
@@ -69,5 +70,20 @@ assert.equal(emerging.draftReady, true);
 assert.equal(emerging.marketValidated, false);
 assert.equal(emerging.publishReady, false);
 assert.ok(emerging.marketGaps.includes('Market verdict is not validated'));
+
+const lowMarketScore = evaluateCollectionAdmission({
+  ...completeCandidate,
+  raw_payload: {
+    ...completeCandidate.raw_payload,
+    marketValidation: {
+      ...completeCandidate.raw_payload.marketValidation,
+      score: 74,
+    },
+  },
+});
+
+assert.equal(lowMarketScore.marketValidated, false);
+assert.equal(lowMarketScore.publishReady, false);
+assert.ok(lowMarketScore.marketGaps.includes('Market score must be at least 75'));
 
 console.log('Collection admission test passed.');

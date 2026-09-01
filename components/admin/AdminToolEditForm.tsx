@@ -140,6 +140,9 @@ export default function AdminToolEditForm({
   const decisionCompareAxes = getNestedRecord(decision.compareAxes);
   const bestFit = getNestedRecord(featureRecord.bestFit);
   const notIdealFor = getNestedRecord(featureRecord.notIdealFor);
+  const marketValidation = getNestedRecord(featureRecord.marketValidation);
+  const marketRationale = getNestedRecord(marketValidation.rationale);
+  const marketScores = getNestedRecord(marketValidation.scores);
   const [categoryIdValue, setCategoryIdValue] = useState(tool.category_id || '');
   const [tagsValue, setTagsValue] = useState((tool.tags || []).join(', '));
   const [rejectionReasonInput, setRejectionReasonInput] = useState(rejectionReason || '');
@@ -392,6 +395,11 @@ export default function AdminToolEditForm({
         .split(/[\n,]+/)
         .map((value) => value.trim())
         .filter(Boolean);
+    const marketVerdict = String(formData.get('market_verdict') || 'unverified') as
+      | 'validated'
+      | 'emerging'
+      | 'unverified'
+      | 'rejected';
 
     const tags = tagsStr
       .split(',')
@@ -430,6 +438,24 @@ export default function AdminToolEditForm({
         sourceUrl: editorialSourceUrl || null,
         summary: { en: editorialSummaryEn, zh: editorialSummaryZh },
         trustNote: { en: editorialTrustNoteEn, zh: editorialTrustNoteZh },
+      },
+      marketValidation: {
+        verdict: marketVerdict,
+        reviewedAt: String(formData.get('market_reviewed_at') || '').trim() || null,
+        evidenceUrls: parseEvidenceLines('market_evidence_urls'),
+        strongSignals: parseEvidenceLines('market_strong_signals'),
+        supportingSignals: parseEvidenceLines('market_supporting_signals'),
+        rationale: {
+          en: String(formData.get('market_rationale_en') || '').trim(),
+          zh: String(formData.get('market_rationale_zh') || '').trim(),
+        },
+        scores: {
+          userValue: Number(formData.get('market_score_user_value') || 0),
+          independentValidation: Number(formData.get('market_score_independent_validation') || 0),
+          durability: Number(formData.get('market_score_durability') || 0),
+          evidenceQuality: Number(formData.get('market_score_evidence_quality') || 0),
+          strategicValue: Number(formData.get('market_score_strategic_value') || 0),
+        },
       },
       decisionEvidence: {
         bestFit: {
@@ -1126,6 +1152,139 @@ export default function AdminToolEditForm({
                   rows={3}
                   className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
                 />
+              </div>
+            </div>
+          </div>
+
+          <div className="md:col-span-2 rounded-lg border border-emerald-100 bg-emerald-50/40 p-4">
+            <p className="text-sm font-semibold text-slate-900">Market validation</p>
+            <p className="mt-1 text-xs text-slate-600">
+              Evidence completeness is not product quality. Record independent adoption and durability before marking a collected tool as validated.
+            </p>
+            <div className="mt-4 grid gap-4 md:grid-cols-2">
+              <div>
+                <label htmlFor="market_verdict" className="block text-sm font-medium text-slate-700">
+                  Market verdict
+                </label>
+                <select
+                  id="market_verdict"
+                  name="market_verdict"
+                  defaultValue={getString(marketValidation.verdict) || 'unverified'}
+                  className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+                >
+                  <option value="unverified">Needs verification</option>
+                  <option value="emerging">Emerging / limited validation</option>
+                  <option value="validated">Market validated</option>
+                  <option value="rejected">Rejected after review</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="market_reviewed_at" className="block text-sm font-medium text-slate-700">
+                  Market reviewed at
+                </label>
+                <input
+                  id="market_reviewed_at"
+                  name="market_reviewed_at"
+                  type="date"
+                  defaultValue={getString(marketValidation.reviewedAt) || ''}
+                  className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+                />
+              </div>
+              <div className="md:col-span-2">
+                <label htmlFor="market_evidence_urls" className="block text-sm font-medium text-slate-700">
+                  Independent evidence URLs
+                </label>
+                <textarea
+                  id="market_evidence_urls"
+                  name="market_evidence_urls"
+                  defaultValue={getStringArray(marketValidation.evidenceUrls).join('\n')}
+                  rows={3}
+                  placeholder={'https://independent-review.example/tool\nhttps://community.example/discussion'}
+                  className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+                />
+                <p className="mt-1 text-xs text-slate-500">
+                  One URL per line. Official product pages do not count as independent market evidence.
+                </p>
+              </div>
+              <div>
+                <label htmlFor="market_strong_signals" className="block text-sm font-medium text-slate-700">
+                  Strong market signals
+                </label>
+                <textarea
+                  id="market_strong_signals"
+                  name="market_strong_signals"
+                  defaultValue={getStringArray(marketValidation.strongSignals).join('\n')}
+                  rows={4}
+                  placeholder={'verified-customer-adoption\ncredible-independent-reviews'}
+                  className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+                />
+              </div>
+              <div>
+                <label htmlFor="market_supporting_signals" className="block text-sm font-medium text-slate-700">
+                  Supporting signals
+                </label>
+                <textarea
+                  id="market_supporting_signals"
+                  name="market_supporting_signals"
+                  defaultValue={getStringArray(marketValidation.supportingSignals).join('\n')}
+                  rows={4}
+                  placeholder={'active-release-history\ntransparent-official-documentation'}
+                  className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+                />
+              </div>
+              <div>
+                <label htmlFor="market_rationale_en" className="block text-sm font-medium text-slate-700">
+                  Market rationale (EN)
+                </label>
+                <textarea
+                  id="market_rationale_en"
+                  name="market_rationale_en"
+                  defaultValue={getString(marketRationale.en) || getString(marketValidation.rationale) || ''}
+                  rows={3}
+                  className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+                />
+              </div>
+              <div>
+                <label htmlFor="market_rationale_zh" className="block text-sm font-medium text-slate-700">
+                  Market rationale (ZH)
+                </label>
+                <textarea
+                  id="market_rationale_zh"
+                  name="market_rationale_zh"
+                  defaultValue={getString(marketRationale.zh) || ''}
+                  rows={3}
+                  className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+                />
+              </div>
+              <div className="md:col-span-2 rounded-lg border border-slate-200 bg-white p-4">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <p className="text-sm font-semibold text-slate-900">Product value score</p>
+                  <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+                    Current {getNumber(marketValidation.score) || 0}/100 · Validated requires 75+
+                  </span>
+                </div>
+                <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+                  {[
+                    ['market_score_user_value', 'User value', 'userValue', 25],
+                    ['market_score_independent_validation', 'Independent proof', 'independentValidation', 25],
+                    ['market_score_durability', 'Durability', 'durability', 20],
+                    ['market_score_evidence_quality', 'Evidence quality', 'evidenceQuality', 20],
+                    ['market_score_strategic_value', 'Strategic value', 'strategicValue', 10],
+                  ].map(([name, label, key, maximum]) => (
+                    <label key={name as string} className="text-xs font-medium text-slate-600">
+                      {label as string} / {maximum as number}
+                      <input
+                        type="number"
+                        id={name as string}
+                        name={name as string}
+                        min={0}
+                        max={maximum as number}
+                        defaultValue={getNumber(marketScores[key as string]) || 0}
+                        className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+                      />
+                    </label>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
