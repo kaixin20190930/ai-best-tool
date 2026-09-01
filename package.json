@@ -48,6 +48,7 @@
     "test:collection-admission": "tsx scripts/test-collection-admission.ts",
     "test:collection-planning": "tsx scripts/test-collection-planning.ts",
     "test:mature-tool-priority": "tsx scripts/test-mature-tool-gap-priority.ts",
+    "test:tool-route-aliases": "tsx scripts/test-tool-route-aliases.ts",
     "collection:plan-three-days": "tsx scripts/plan-three-day-candidate-pool.ts",
     "intelligence:discover-pages": "tsx scripts/discover-product-intelligence-pages.ts",
     "intelligence:classify-page": "tsx scripts/classify-product-intelligence-page.ts",

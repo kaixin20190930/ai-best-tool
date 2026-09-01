@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { getWebNavigationDetail } from '@/network/webNavigation';
 import {
   ArrowRight,
@@ -24,6 +24,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { PRIORITY_TOOL_EVIDENCE } from '@/lib/config/priorityToolEvidence';
 import { PRIORITY_TOOL_FALLBACK_PROFILES } from '@/lib/config/priorityToolFallbacks';
+import { getCanonicalToolSlug, getLocalizedToolPath, isLegacyToolSlug } from '@/lib/config/toolRouteAliases';
 import { BASE_URL } from '@/lib/env';
 import { SEO_CONFIG, SOCIAL_IMAGE_DIMENSIONS, ToolMetadata } from '@/lib/seo/constants';
 import {
@@ -1956,9 +1957,9 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
     return isChinese
       ? {
           label: '官方事实快照',
-          title: '套餐价格、动态用量和数据导出',
+          title: '套餐价格、动态用量和数据保留',
           summary: '以下信息来自 Anthropic 官方帮助中心；实际消息额度受对话、附件、工具和模型影响，并非固定消息数。',
-          checkedAt: '2026-08-03',
+          checkedAt: '2026-09-01',
           facts: [
             { label: '个人套餐', value: 'Free 为 $0；Pro $20/月；Max 5x $100/月；Max 20x $200/月。' },
             {
@@ -1966,32 +1967,32 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
               value: '可用消息数会随消息长度、附件大小、对话长度、Research/web search、模型与 Artifacts 使用变化。',
             },
             {
-              label: '数据可携带性',
+              label: '个人数据保留',
               value:
-                'Free、Pro、Max 用户可从 Web 或桌面端 Settings > Privacy 导出账户信息与聊天记录；下载链接 24 小时后失效。',
+                '删除对话后会立即从历史记录移除，并在 30 天内从后端删除；若允许使用聊天或编程会话改进 Claude，去标识数据可能在训练流程中保留最长 5 年。',
             },
           ],
           sources: [
             {
               label: 'Claude 套餐选择',
-              href: 'https://support.anthropic.com/en/articles/11049762-choosing-a-claude-ai-plan',
+              href: 'https://support.claude.com/en/articles/11049762-choose-a-claude-plan',
             },
             {
               label: '用量优化与影响因素',
-              href: 'https://support.anthropic.com/en/articles/9797557-usage-limit-best-practices',
+              href: 'https://support.claude.com/en/articles/9797557-usage-limit-best-practices',
             },
             {
-              label: '数据导出',
-              href: 'https://support.anthropic.com/en/articles/9450526-how-can-i-export-my-claude-data',
+              label: '个人数据保留',
+              href: 'https://privacy.claude.com/en/articles/10023548-how-long-do-you-store-my-data',
             },
           ],
         }
       : {
           label: 'Official fact snapshot',
-          title: 'Plan pricing, variable usage, and data export',
+          title: 'Plan pricing, variable usage, and data retention',
           summary:
             'These facts come from the Anthropic help center. Actual message capacity depends on the conversation, attachments, tools, and model rather than a fixed message count.',
-          checkedAt: '2026-08-03',
+          checkedAt: '2026-09-01',
           facts: [
             {
               label: 'Individual plans',
@@ -2003,23 +2004,23 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
                 'Capacity varies with message and attachment size, conversation length, Research or web search, model choice, and Artifact usage.',
             },
             {
-              label: 'Data portability',
+              label: 'Consumer data retention',
               value:
-                'Free, Pro, and Max users can export account and chat data from Settings > Privacy on web or desktop; the download link expires after 24 hours.',
+                'Deleting a conversation removes it from history immediately and from back-end systems within 30 days; if model improvement is enabled, de-identified chat or coding data may remain in training pipelines for up to five years.',
             },
           ],
           sources: [
             {
               label: 'Choosing a Claude plan',
-              href: 'https://support.anthropic.com/en/articles/11049762-choosing-a-claude-ai-plan',
+              href: 'https://support.claude.com/en/articles/11049762-choose-a-claude-plan',
             },
             {
               label: 'Usage factors and practices',
-              href: 'https://support.anthropic.com/en/articles/9797557-usage-limit-best-practices',
+              href: 'https://support.claude.com/en/articles/9797557-usage-limit-best-practices',
             },
             {
-              label: 'Data export',
-              href: 'https://support.anthropic.com/en/articles/9450526-how-can-i-export-my-claude-data',
+              label: 'Consumer data retention',
+              href: 'https://privacy.claude.com/en/articles/10023548-how-long-do-you-store-my-data',
             },
           ],
         };
@@ -2509,6 +2510,36 @@ function getPriorityToolSearchIntent(websiteName: string, locale: string): Prior
   const isChinese = locale === 'cn' || locale === 'tw';
   const key = websiteName.toLowerCase();
 
+  if (key === 'claude') {
+    return isChinese
+      ? {
+          metadataTitle: 'Claude AI：功能、价格、用量与隐私限制',
+          metadataDescription:
+            '评估 Claude 在写作、研究、文件分析和编程中的适用性，并核对 Pro/Max 价格、动态用量、API 单独计费、数据保留与替代方案。',
+          label: 'Claude 选择判断重点',
+          summary:
+            '选择 Claude 的关键不是模型名称，而是它能否覆盖你的主要任务，以及动态用量、API 计费和数据边界是否可以接受。',
+          checkpoints: [
+            '写作、研究、文件分析与编程任务是否匹配',
+            'Pro/Max 动态额度与额外用量成本是否可接受',
+            '个人、团队、API 的数据和管理边界是否清楚',
+          ],
+        }
+      : {
+          metadataTitle: 'Claude AI Review: Features, Pricing, Usage & Privacy Limits',
+          metadataDescription:
+            'Evaluate Claude for writing, research, file analysis, and coding, including Pro and Max pricing, variable usage, separate API billing, data retention, and alternatives.',
+          label: 'Claude decision priorities',
+          summary:
+            'Choose Claude by task fit and by whether its variable usage, separate API billing, and data boundaries match your workflow, not by model name alone.',
+          checkpoints: [
+            'Fit for writing, research, file analysis, and coding',
+            'Pro and Max variable allowances and additional usage cost',
+            'Consumer, organization, and API data boundaries',
+          ],
+        };
+  }
+
   if (key === 'fathom') {
     return isChinese
       ? {
@@ -2722,7 +2753,8 @@ export async function generateMetadata({
   params: { locale: string; websiteName: string };
 }): Promise<Metadata> {
   try {
-    const rawDbTool = await getToolByName(websiteName);
+    const canonicalSlug = getCanonicalToolSlug(websiteName);
+    const rawDbTool = await getToolByName(canonicalSlug);
     // Older imports can contain non-array JSON values; normalize at the page boundary
     // so an inconsistent record cannot take the entire public detail page down.
     const dbTool = rawDbTool
@@ -2735,8 +2767,8 @@ export async function generateMetadata({
     const data =
       dbTool?.status === 'published'
         ? toolToDetailData(dbTool, locale)
-        : (await getWebNavigationDetail(websiteName, locale)).data ||
-          getPriorityToolFallbackDetail(websiteName, locale);
+        : (await getWebNavigationDetail(canonicalSlug, locale)).data ||
+          getPriorityToolFallbackDetail(canonicalSlug, locale);
 
     // Get localized content if available
     const toolTitle = dbTool
@@ -2757,13 +2789,13 @@ export async function generateMetadata({
     }
 
     // Generate optimized title and description using SEO utilities
-    const priorityIntent = getPriorityToolSearchIntent(websiteName, locale);
+    const priorityIntent = getPriorityToolSearchIntent(canonicalSlug, locale);
     const optimizedTitle = priorityIntent?.metadataTitle || generateToolTitle(toolTitle, toolCategory);
     const optimizedDescription =
       priorityIntent?.metadataDescription || generateToolDescription(toolTitle, toolDescription, toolCategory);
 
     // Generate canonical URL
-    const canonicalUrl = generateLocalizedCanonicalUrl(`/ai/${websiteName}`, locale);
+    const canonicalUrl = generateLocalizedCanonicalUrl(`/ai/${canonicalSlug}`, locale);
 
     // Generate optimized social image URL
     const toolImage = data?.thumbnailUrl || data?.imageUrl || SEO_CONFIG.defaultImage;
@@ -2815,6 +2847,10 @@ export default async function Page({
 }: {
   params: { websiteName: string; locale: string };
 }) {
+  if (isLegacyToolSlug(websiteName)) {
+    permanentRedirect(getLocalizedToolPath(websiteName, locale));
+  }
+
   let failureStage = 'initialization';
 
   try {
@@ -2822,7 +2858,8 @@ export default async function Page({
     const t = await getTranslations('Startup.detail');
     const isChinese = locale === 'cn';
     failureStage = 'tool lookup';
-    const rawDbTool = await getToolByName(websiteName);
+    const canonicalSlug = getCanonicalToolSlug(websiteName);
+    const rawDbTool = await getToolByName(canonicalSlug);
     // Keep legacy imports from breaking the public page when JSON array fields are malformed.
     const dbTool = rawDbTool
       ? {
@@ -2835,14 +2872,14 @@ export default async function Page({
     const data =
       dbTool?.status === 'published'
         ? toolToDetailData(dbTool, locale)
-        : (await getWebNavigationDetail(websiteName, locale)).data ||
-          getPriorityToolFallbackDetail(websiteName, locale);
+        : (await getWebNavigationDetail(canonicalSlug, locale)).data ||
+          getPriorityToolFallbackDetail(canonicalSlug, locale);
 
     if (!data) notFound();
 
     const claimTool = dbTool as (typeof dbTool & DetailClaimSignals) | null;
-    const prioritySearchIntent = getPriorityToolSearchIntent(websiteName, locale);
-    const priorityOfficialEvidence = getPriorityToolOfficialEvidence(websiteName, locale);
+    const prioritySearchIntent = getPriorityToolSearchIntent(canonicalSlug, locale);
+    const priorityOfficialEvidence = getPriorityToolOfficialEvidence(canonicalSlug, locale);
 
     // Get current user
     failureStage = 'viewer lookup';

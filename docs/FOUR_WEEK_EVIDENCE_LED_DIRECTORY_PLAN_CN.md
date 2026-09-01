@@ -149,7 +149,8 @@
 - P0 顺序为 Claude/Anthropic、Fathom、Gamma、Consensus；P1 顺序为 DeepL、Runway、Luma AI、Pipedream、Cursor、The Graph。排序综合 GSC 需求、索引机会、市场成熟度和独立决策内容空间。
 - `Fathom` 是当前最强非首页工具页信号（两个 locale 路径合计 65 次展示）；`Gamma` 已接近第一页（12 次展示，平均排名 10.83）；`Consensus` 与 `Luma AI` 返回 200 但仍在“已抓取未编入索引”清单。
 - 自动门槛：`pnpm run test:mature-tool-priority` 必须保证恰好 10 项、slug 不重复、每项有 GSC 信号和决策角度，并禁止队列悄然变成新增 URL 扩张。
-- 下一项：执行 rank 1 的 Claude/Anthropic 实体与 URL 收口；完成构建和线上验证后再进入 Fathom。
+- Rank 1 Claude/Anthropic 已完成：保留原数据库 ID，将产品 slug、标题、正文、用途和官网更新为 Claude；`/ai/anthropic` 及本地化旧路径返回真实 308，sitemap 只保留 Claude；本地生产模式已验证标题、canonical、双语内容和跳转。
+- 当前进度：`1/10`。下一项为 rank 2 Fathom，将两个 locale 的 GSC 信号合并到一个数据库可维护的 canonical 产品实体。
 
 ## 状态更新协议
 

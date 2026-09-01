@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 
 import { BASE_URL } from './lib/env';
+import { getLocalizedToolPath } from './lib/config/toolRouteAliases';
 import intlMiddleware from './middlewares/intlMiddleware';
 
 const localePattern = /^\/(en|cn|jp|de|es|fr|pt|ru|tw)(?=\/|$)/;
@@ -187,6 +188,16 @@ export async function middleware(request: NextRequest) {
   }
 
   const { pathname } = request.nextUrl;
+  const { locale, pathWithoutLocale } = getPathParts(pathname);
+
+  // Resolve legacy tool entities before locale rewriting so crawlers receive
+  // a real HTTP 308 rather than a streamed client-side redirect marker.
+  if (pathWithoutLocale === '/ai/anthropic') {
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = getLocalizedToolPath('anthropic', locale || 'en');
+    return NextResponse.redirect(redirectUrl, 308);
+  }
+
   const needsAuthCheck =
     matchesRoute(pathname, protectedRoutes) ||
     matchesRoute(pathname, adminRoutes) ||

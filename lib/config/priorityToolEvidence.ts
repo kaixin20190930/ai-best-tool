@@ -16,17 +16,17 @@ export const PRIORITY_TOOL_EVIDENCE: Record<string, PriorityToolEvidence> = {
       { label: 'Free vs. Premium limits', url: 'https://help.fathom.video/en/articles/5290881' },
     ],
   },
-  anthropic: {
+  claude: {
     checkedAt: '2026-08-31',
     limitation: {
       en: 'Claude usage varies with message length, attachments, conversation length, tools, and model choice; a paid plan is not an unlimited plan.',
       zh: 'Claude 的额度会受消息长度、附件、上下文、工具和模型选择影响；付费套餐并不等于无限使用。',
     },
     sources: [
-      { label: 'Official Claude pricing', url: 'https://www.anthropic.com/pricing?subjects=claude&type=product' },
+      { label: 'Official Claude pricing', url: 'https://support.claude.com/en/articles/11049762-choose-a-claude-plan' },
       {
         label: 'Usage limit guidance',
-        url: 'https://support.anthropic.com/en/articles/9797557-usage-limit-best-practices',
+        url: 'https://support.claude.com/en/articles/9797557-usage-limit-best-practices',
       },
     ],
   },

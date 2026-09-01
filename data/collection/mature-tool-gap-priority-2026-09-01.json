@@ -21,7 +21,9 @@
       "problem": "The product is split between company and product routes, while the database URL points to a login page.",
       "deliverable": "Choose one primary Claude decision page, preserve Anthropic as company context, fix the official URL, and make the alternate route canonical or redirect without losing intent.",
       "decisionAngles": ["Claude plan and usage limits", "Claude vs ChatGPT by task", "privacy and data controls", "who should not choose Claude"],
-      "status": "queued"
+      "status": "completed",
+      "completedAt": "2026-09-01",
+      "result": "The production record was renamed to claude without changing its ID; /ai/anthropic now returns a real 308 to /ai/claude, Claude is the only sitemap entity, and the page has current bilingual decision content and official evidence."
     },
     {
       "rank": 2,
