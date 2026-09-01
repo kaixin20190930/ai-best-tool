@@ -10,7 +10,8 @@
     "startup": "Startup",
     "menu": "Menü",
     "guides": "Guides",
-    "distribution": "Distribution"
+    "distribution": "Distribution",
+    "pricing": "Preise"
   },
   "Footer": {
     "title": "AI Best Tool Tools Verzeichnis",
@@ -123,6 +124,10 @@
     "title": "AI Best Tool - KI-Tools entdecken",
     "subTitle": "Finden Sie Ihre Lieblings-KI-Tools im AI Best Tool Verzeichnis. Durchsuchen Sie Kategorien, vergleichen Sie Optionen und reichen Sie neue Tools ein.",
     "ai-navigate": "KI-Tools Liste",
+    "latestTools": "Neueste KI-Tools",
+    "latestToolsDescription": "Kürzlich geprüfte Tools aus dem AI Best Tool Verzeichnis.",
+    "popularTools": "Beliebte KI-Tools",
+    "popularToolsDescription": "Tools mit stärkeren Traffic-, Bewertungs- und Nutzungssignalen.",
     "exploreMore": "Weitere KI-Tools entdecken"
   },
   "Submit": {

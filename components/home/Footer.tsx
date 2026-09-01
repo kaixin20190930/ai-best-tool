@@ -57,8 +57,8 @@ export default function Footer() {
     <footer className='w-full border-t border-slate-200 bg-slate-100'>
       <div className='mx-auto flex min-h-[251px] max-w-pc flex-col items-center justify-between p-10 pb-5 lg:h-[180px] lg:flex-row lg:px-0 lg:pb-10'>
         <div className='flex flex-col items-center lg:items-stretch'>
-          <h1 className='text-xl font-bold text-slate-900 lg:h-8 lg:text-[32px]'>{t('title')}</h1>
-          <h2 className='text-xs text-slate-500'>{t('subTitle')}</h2>
+          <p className='text-xl font-bold text-slate-900 lg:h-8 lg:text-[32px]'>{t('title')}</p>
+          <p className='text-xs text-slate-500'>{t('subTitle')}</p>
         </div>
         <div className='mt-5 flex flex-col items-center gap-y-5 lg:mt-0 lg:flex-row lg:items-stretch lg:gap-x-10'>
           <div className='flex w-full flex-col gap-2'>

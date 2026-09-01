@@ -10,7 +10,8 @@
     "startup": "創業公司",
     "menu": "菜單",
     "guides": "指南",
-    "distribution": "產品分發"
+    "distribution": "產品分發",
+    "pricing": "定價"
   },
   "Footer": {
     "title": "AI Best Tool工具目錄",
@@ -123,6 +124,10 @@
     "title": "AI Best Tool - 發現 AI 工具",
     "subTitle": "在 AI Best Tool 目錄中找到您喜愛的 AI 工具。可依分類瀏覽、比較與提交新工具。",
     "ai-navigate": "AI工具列表",
+    "latestTools": "最新 AI 工具",
+    "latestToolsDescription": "AI Best Tool 目錄中最近完成審核的工具。",
+    "popularTools": "熱門 AI 工具",
+    "popularToolsDescription": "依流量、評分與使用訊號優先展示的工具。",
     "exploreMore": "獲取更多AI工具"
   },
   "Submit": {

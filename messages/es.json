@@ -10,7 +10,8 @@
     "startup": "Inicio",
     "menu": "Menú",
     "guides": "Guías",
-    "distribution": "Distribución"
+    "distribution": "Distribución",
+    "pricing": "Precios"
   },
   "Footer": {
     "title": "Directorio de Herramientas de IA de AIBestTool",
@@ -123,6 +124,10 @@
     "title": "AI Best Tool - Descubre herramientas de IA",
     "subTitle": "Encuentra tus herramientas de IA favoritas en el directorio AI Best Tool. Navega por categorías, compara opciones y envía nuevas herramientas.",
     "ai-navigate": "Lista de Herramientas de IA",
+    "latestTools": "Últimas herramientas de IA",
+    "latestToolsDescription": "Herramientas revisadas recientemente en el directorio AI Best Tool.",
+    "popularTools": "Herramientas de IA populares",
+    "popularToolsDescription": "Herramientas con señales más sólidas de tráfico, valoraciones y uso.",
     "exploreMore": "Explorar Más Herramientas de IA"
   },
   "Submit": {

@@ -10,7 +10,8 @@
     "startup": "スタートアップ",
     "menu": "メニュー",
     "guides": "ガイド",
-    "distribution": "プロダクト配信"
+    "distribution": "プロダクト配信",
+    "pricing": "料金"
   },
   "Footer": {
     "title": "AI Best Tool ツールディレクトリ",
@@ -123,6 +124,10 @@
     "title": "AI Best Tool - AIツールを発見する",
     "subTitle": "AI Best Tool ディレクトリでお気に入りのAIツールを見つけましょう。カテゴリごとに閲覧し、比較して、新しいツールを投稿できます。",
     "ai-navigate": "AIツールリスト",
+    "latestTools": "最新のAIツール",
+    "latestToolsDescription": "AI Best Tool ディレクトリで最近確認されたツールです。",
+    "popularTools": "人気のAIツール",
+    "popularToolsDescription": "トラフィック、評価、利用状況のシグナルが強いツールです。",
     "exploreMore": "もっと多くのAIツールを入手する"
   },
   "Submit": {

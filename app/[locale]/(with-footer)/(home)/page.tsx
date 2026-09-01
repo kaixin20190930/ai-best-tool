@@ -31,7 +31,6 @@ import { toolToListRow } from '@/lib/services/toolPresenter';
 import { getPopularTools } from '@/lib/services/tools';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import Faq from '@/components/Faq';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import CommunityPulse from '@/components/home/CommunityPulse';
 import Search from '@/components/Search';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
@@ -52,8 +51,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     ? 'AI 工具目录：按场景比较精选 AI 工具 | AI Best Tool'
     : 'AI Tools Directory: Compare Curated AI Tools | AI Best Tool';
   const description = isChinese
-    ? '按写作、研究、开发、自动化和 Web3 等真实场景浏览 AI 工具，比较价格、功能、限制、最近更新与用户信号，再决定哪款更适合。'
-    : 'Browse a curated AI tools directory by real use case. Compare features, pricing, limits, freshness, and user signals for writing, research, coding, automation, and more.';
+    ? '按写作、研究、开发、自动化和 Web3 等真实场景浏览 AI 工具，通过来源、价格、限制、核查日期与变化记录判断哪款更适合。'
+    : 'Browse an AI tools directory by real use case, then compare sources, pricing, limits, review dates, and material changes before choosing.';
   const imageUrl = `${siteUrl}/images/aibesttool.png`;
   const canonicalUrl = generateLocalizedCanonicalUrl('/', locale, siteUrl);
 
@@ -124,11 +123,12 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const recentDiscussions = await getRecentDiscussions(3).catch(() => []);
   const risingTools = await getRisingTools(3).catch(() => []);
   const totalVisibleTools = latestTools.total || latestTools.rows.length;
-  const checkedAt = '2026-07-28';
-  const heroTitle = isChinese ? '按真实任务发现和比较 AI 工具' : 'Find and compare AI tools for real workflows';
+  const heroTitle = isChinese
+    ? '用证据、限制和真实变化比较 AI 工具'
+    : 'Compare AI tools with evidence, limits, and real changes';
   const heroSubtitle = isChinese
-    ? '这是一个持续维护的 AI 工具目录：先确认要解决的问题，再比较场景、价格、限制、更新频率和真实反馈。'
-    : 'A maintained AI tools directory: start with the problem, then compare use case, pricing, limits, freshness, and real feedback.';
+    ? '先确认要解决的任务，再查看官方来源、适用边界、最后核查和下一步比较。这里不替所有人选唯一第一名，而是帮助你排除不合适的选择。'
+    : 'Start with the task, then inspect official sources, fit boundaries, last-checked dates, and what to compare next. We help you rule out poor fits rather than name one winner for everyone.';
   const stats = [
     {
       label: isChinese ? '已收录工具' : 'Indexed tools',
@@ -136,14 +136,37 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       icon: Compass,
     },
     {
-      label: isChinese ? '持续更新' : 'Fresh updates',
-      value: isChinese ? '每日' : 'Daily',
-      icon: Clock3,
+      label: isChinese ? '决策信号' : 'Decision signals',
+      value: isChinese ? '来源 + 限制' : 'Sources + limits',
+      icon: BadgeCheck,
     },
     {
-      label: isChinese ? '开发者可提交' : 'Developer submissions',
-      value: isChinese ? '开放' : 'Open',
-      icon: Rocket,
+      label: isChinese ? '复查框架' : 'Review cadence',
+      value: isChinese ? '事实 30 天 / 判断 90 天' : '30d facts / 90d fit',
+      icon: Clock3,
+    },
+  ];
+  const evidenceMethod = [
+    {
+      label: isChinese ? '打开证据' : 'Open the evidence',
+      title: isChinese ? '重要事实带来源和核查日期' : 'Important claims carry sources and review dates',
+      description: isChinese
+        ? '优先引用官网、定价、文档和独立采用信号；无法确认的内容明确标记待核查。'
+        : 'We prioritize official product, pricing, and documentation sources plus independent adoption signals. Unconfirmed claims stay marked for review.',
+    },
+    {
+      label: isChinese ? '先看限制' : 'Read the limits first',
+      title: isChinese ? '推荐之前先说明不适合谁' : 'Know who should not choose it before the recommendation',
+      description: isChinese
+        ? '价格、额度、隐私、部署和兼容性会改变选择结果，不能藏在功能列表后面。'
+        : 'Pricing, quotas, privacy, deployment, and compatibility can change the decision, so they do not stay buried behind a feature list.',
+    },
+    {
+      label: isChinese ? '记录真实变化' : 'Track material changes',
+      title: isChinese ? '有变化才更新判断，不伪造新鲜度' : 'Update decisions when facts change, not to fake freshness',
+      description: isChinese
+        ? '事实复查和判断复核分开记录；没有变化时只保留复查记录，不批量改写正文日期。'
+        : 'Fact checks and fit reviews are tracked separately. A no-change review does not trigger a cosmetic rewrite or a fresh date.',
     },
   ];
   const quickSearches = [
@@ -425,7 +448,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 </span>
                 <span className='inline-flex items-center gap-2 rounded-full bg-cyan-50 px-3 py-1 text-sm font-semibold text-cyan-700'>
                   <BadgeCheck className='size-4' />
-                  {isChinese ? '人工审核 + 自动采集' : 'Reviewed and collected'}
+                  {isChinese ? '证据提取 + 编辑复核' : 'Evidence extracted, editorially reviewed'}
                 </span>
               </div>
 
@@ -440,8 +463,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   taskHint={isChinese ? '按任务搜索' : 'Search by task'}
                   taskDescription={
                     isChinese
-                      ? '先说出你要解决的问题，再筛价格、更新频率和真实反馈。'
-                      : 'Start with the problem you need to solve, then filter by pricing, freshness, and real feedback.'
+                      ? '先说出你要解决的问题，再筛价格、限制、核查状态和真实反馈。'
+                      : 'Start with the problem, then filter by pricing, limits, review status, and real feedback.'
                   }
                   taskSuggestions={taskFirstEntryPoints.map((item) => ({
                     label: item.title,
@@ -532,29 +555,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 </Link>
               </div>
 
-              <div className='mt-6 rounded-lg border border-cyan-100 bg-cyan-50 p-4'>
-                <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
-                  <div className='min-w-0'>
-                    <p className='text-sm font-semibold text-cyan-900'>
-                      {isChinese
-                        ? '如果你需要更快的节奏或更明显的曝光'
-                        : 'If you need faster timing or a bit more visibility'}
-                    </p>
-                    <p className='mt-1 text-sm leading-6 text-cyan-900/80'>
-                      {isChinese
-                        ? `${listingConfig.plans.standard_paid.label}：可以作为可选路径，适合发布期和活动期。`
-                        : `${listingConfig.plans.standard_paid.summary} ${listingConfig.plans.standard_paid.reviewWindow}.`}
-                    </p>
-                  </div>
-                  <Link
-                    href='/developer/listing'
-                    className='inline-flex shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-                  >
-                    {isChinese ? '查看可选方案' : 'View optional plan'}
-                  </Link>
-                </div>
-              </div>
-
               {comparisonGuidePages.length > 0 && (
                 <div className='mt-4 rounded-lg border border-slate-200 bg-white p-4 shadow-sm'>
                   <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
@@ -597,95 +597,55 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </div>
         </section>
 
-        <div className='mx-auto mt-4 w-full max-w-7xl px-4 lg:px-6'>
-          <GuideEvidencePanel
-            locale={locale}
-            checkedAt={checkedAt}
-            scope={
-              isChinese
-                ? '首页先交代站点的更新、收录和筛选逻辑，并把真实收录量和社区信号放在同一屏。'
-                : 'The homepage should explain updates, inventory, and filtering logic while surfacing real inventory and community signals on the same screen.'
-            }
-            decisionSteps={[
-              isChinese
-                ? '先判断你是想找工具、看榜单，还是提交自己的产品。'
-                : 'First decide whether you want to find a tool, browse rankings, or submit your own product.',
-              isChinese
-                ? '如果目标已经明确，就直接去榜单、分类或具体详情页。'
-                : 'If the goal is already clear, go straight to the ranking, category, or detail page.',
-              isChinese
-                ? '如果还不确定，先从首页的路线信号里收缩到更窄的候选。'
-                : 'If you are still unsure, use the homepage route signals to narrow into a smaller shortlist first.',
-            ]}
-            items={[
-              {
-                label: isChinese ? '验证范围' : 'Checked scope',
-                value: isChinese
-                  ? '更新、收录、筛选逻辑 + 真实信号'
-                  : 'Updates, inventory, filtering logic + live signals',
-                note: isChinese
-                  ? `当前可见工具约 ${totalVisibleTools}+，并保留社区讨论和上升工具入口。`
-                  : `About ${totalVisibleTools}+ visible tools, with community discussions and rising tools kept in view.`,
-              },
-              {
-                label: isChinese ? '索引策略' : 'Indexing strategy',
-                value: isChinese ? '首页保持索引' : 'Homepage kept indexable',
-                note: isChinese ? '承接品牌词与泛入口流量。' : 'Captures brand and broad-entry traffic.',
-              },
-              {
-                label: isChinese ? '下一步增强' : 'Next enrichment',
-                value: isChinese ? '补真实更新、分类、owner 信号' : 'Add real updates, categories, and owner signals',
-                note: isChinese
-                  ? `社区高亮 ${communityHighlights.length} 条，最近讨论 ${recentDiscussions.length} 条，继续把真实使用痕迹放进首页。`
-                  : `${communityHighlights.length} highlights and ${recentDiscussions.length} recent discussions keep real usage traces on the homepage.`,
-              },
-            ]}
-            signalCards={[
-              {
-                label: isChinese ? '价格信号' : 'Pricing signal',
-                value: isChinese ? '先看免费与试用门槛' : 'Check free and trial thresholds first',
-                note: isChinese
-                  ? '首页先帮用户缩小预算范围，再进入更深的页面。'
-                  : 'The homepage should help users narrow budget before they dive deeper.',
-              },
-              {
-                label: isChinese ? '更新信号' : 'Freshness signal',
-                value: isChinese ? '真实更新和最近验证' : 'Real updates and last-checked dates',
-                note: isChinese
-                  ? '更新信号越强，首页越像一个活站点而不是静态目录。'
-                  : 'Stronger freshness signals make the site feel alive instead of static.',
-              },
-              {
-                label: isChinese ? '风险信号' : 'Risk signal',
-                value: isChinese ? '先看不适合谁' : 'Check who it is not for first',
-                note: isChinese
-                  ? '首页先排除不匹配场景，后面的点击会更准。'
-                  : 'Filtering out mismatched use cases early improves downstream clicks.',
-              },
-              {
-                label: isChinese ? '路线信号' : 'Route signal',
-                value: isChinese ? '先去榜单，再去详情' : 'Go to rankings first, then details',
-                note: isChinese
-                  ? '首页的任务不是把所有东西摊开，而是帮用户决定先看哪一层。'
-                  : 'The homepage should help users choose the right layer first, not dump everything at once.',
-              },
-              {
-                label: isChinese ? '受众信号' : 'Audience signal',
-                value: isChinese ? '先区分选型者和工具方' : 'Separate buyers from tool owners',
-                note: isChinese
-                  ? '找工具的人和想被收录的人，需要的入口不同。'
-                  : 'People looking for tools and people wanting to be listed need different entry points.',
-              },
-              {
-                label: isChinese ? '下一步信号' : 'Next-step signal',
-                value: isChinese ? '搜索、分类、认领三选一' : 'Choose search, category, or claim',
-                note: isChinese
-                  ? '如果首页说不清下一步，用户就会在这里流失。'
-                  : 'If the homepage does not make the next step clear, users leak here.',
-              },
-            ]}
-          />
-        </div>
+        <section className='mx-auto mt-4 w-full max-w-7xl px-4 lg:px-6'>
+          <div className='rounded-[20px] border border-emerald-200 bg-emerald-50/70 p-5 shadow-sm lg:p-7'>
+            <div className='flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between'>
+              <div>
+                <p className='text-sm font-semibold uppercase tracking-wide text-emerald-700'>
+                  {isChinese ? '我们如何做判断' : 'How decisions are built'}
+                </p>
+                <h2 className='mt-1 text-2xl font-bold text-slate-950'>
+                  {isChinese ? '不是再给你一张更长的工具清单' : 'Not another longer list of AI tools'}
+                </h2>
+              </div>
+              <p className='max-w-2xl text-sm leading-6 text-slate-700'>
+                {isChinese
+                  ? '每个公开工具页都应该帮助你核对事实、提前看到限制，并知道下一步该比较什么。'
+                  : 'Every public tool page should help you verify the facts, see decision-changing limits early, and know what to compare next.'}
+              </p>
+            </div>
+            <div className='mt-5 grid gap-3 lg:grid-cols-3'>
+              {evidenceMethod.map((item, index) => (
+                <div key={item.label} className='rounded-2xl border border-white bg-white p-5 shadow-sm'>
+                  <div className='flex items-center justify-between gap-3'>
+                    <p className='text-xs font-semibold uppercase tracking-wide text-emerald-700'>{item.label}</p>
+                    <span className='inline-flex size-7 items-center justify-center rounded-full bg-emerald-50 text-xs font-bold text-emerald-700 ring-1 ring-emerald-200'>
+                      {index + 1}
+                    </span>
+                  </div>
+                  <h3 className='mt-3 text-base font-semibold text-slate-950'>{item.title}</h3>
+                  <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
+                </div>
+              ))}
+            </div>
+            <div className='mt-5 flex flex-wrap gap-3'>
+              <Link
+                href='/guides/how-to-choose-ai-tools'
+                className='inline-flex items-center gap-2 rounded-lg bg-emerald-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-emerald-800'
+              >
+                {isChinese ? '查看选型方法' : 'See the selection method'}
+                <ArrowRight className='size-4' />
+              </Link>
+              <Link
+                href='/ai/chatgpt'
+                className='inline-flex items-center gap-2 rounded-lg border border-emerald-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-emerald-50'
+              >
+                {isChinese ? '查看完整工具页' : 'Open a complete tool page'}
+                <ArrowRight className='size-4' />
+              </Link>
+            </div>
+          </div>
+        </section>
 
         <section className='mx-auto mt-4 w-full max-w-7xl px-4 lg:px-6'>
           <div className='rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-5 shadow-sm lg:p-6'>
@@ -1081,17 +1041,27 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               </h2>
               <p className='mt-2 max-w-2xl text-sm leading-6 text-slate-600'>
                 {isChinese
-                  ? '提交你的 AI 工具进入审核队列，并根据需要补充资料、更新信息或选择更多展示方式。'
-                  : 'Submit your AI tool for review, then add details, update information, or choose more visibility options when needed.'}
+                  ? '提交工具、认领已有页面或补充真实变化。付费选项只改变审核时效或标注清楚的展示窗口，不影响编辑结论和公开资格。'
+                  : 'Submit a tool, claim an existing page, or report a real change. Paid options only affect review timing or clearly labeled visibility, never the editorial conclusion or publication eligibility.'}
               </p>
             </div>
-            <Link
-              href='/submit'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50'
-            >
-              {isChinese ? '提交工具' : 'Submit tool'}
-              <CircleChevronRight className='size-4' />
-            </Link>
+            <div className='flex flex-col gap-2 sm:flex-row lg:flex-col'>
+              <Link
+                href='/submit'
+                className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50'
+              >
+                {isChinese ? '提交工具' : 'Submit tool'}
+                <CircleChevronRight className='size-4' />
+              </Link>
+              <Link
+                href='/pricing'
+                className='inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold text-slate-500 hover:text-slate-800'
+              >
+                {isChinese
+                  ? `${listingConfig.plans.standard_paid.label}（可选）`
+                  : 'Optional review and visibility plans'}
+              </Link>
+            </div>
           </section>
 
           <Link
