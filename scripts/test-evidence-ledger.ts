@@ -245,6 +245,21 @@ assert.equal(syncScript.includes('process.exit(process.exitCode || 0)'), true, '
 const intelligenceDom = readFileSync(resolve(process.cwd(), 'lib/services/intelligence/dom.ts'), 'utf8');
 assert.equal(intelligenceDom.includes('VirtualConsole'), true, 'third-party DOM parsing must isolate noisy console errors');
 
+const summaryRepair = readFileSync(
+  resolve(process.cwd(), 'scripts/repair-intelligence-verification-summaries.ts'),
+  'utf8',
+);
+assert.equal(
+  summaryRepair.includes("verification_status === 'verified' && claim.conflict_status === 'none'"),
+  true,
+  'cached verification summaries must use the explicit verified definition',
+);
+assert.equal(
+  summaryRepair.includes("factsSemantics: 'machine_extracted_candidates'"),
+  true,
+  'cached extracted facts must be labeled as candidates',
+);
+
 const toolPage = readFileSync(resolve(process.cwd(), 'app/[locale]/(with-footer)/ai/[websiteName]/page.tsx'), 'utf8');
 const decisionCardPosition = toolPage.indexOf("id='decision-card'");
 const evidenceLedgerPosition = toolPage.indexOf('<EvidenceLedgerPanel');

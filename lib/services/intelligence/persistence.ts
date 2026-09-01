@@ -223,13 +223,17 @@ function computeMetadata(
   existing?: ProductIntelligenceProfile | null,
   extra: Record<string, unknown> = {},
 ): Record<string, unknown> {
+  const existingMetadata = { ...(existing?.metadata || {}) };
+  delete existingMetadata.facts;
   return {
-    ...(existing?.metadata || {}),
+    ...existingMetadata,
     ...extra,
     snapshotHash: snapshot.snapshotHash,
     summary: snapshot.summary,
-    facts: snapshot.facts,
+    candidateFacts: snapshot.facts,
+    factsSemantics: 'machine_extracted_candidates',
     conflicts: snapshot.conflicts.slice(0, 50),
+    verificationSummarySemantics: 'explicit_verified_without_conflict',
   };
 }
 

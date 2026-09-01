@@ -536,6 +536,7 @@ function run() {
   assert.equal(snapshot.facts.productName, 'Example');
   assert.equal(snapshot.summary.claimCount, 2);
   assert.equal(snapshot.summary.verifiedClaimCount, 0, 'conflict-free candidates are not verified evidence');
+  assert.equal(snapshot.summary.candidateClaimCount, 2);
   assert.equal(snapshot.snapshotHash.length > 0, true);
 
   console.log('Product intelligence foundation checks passed.');

@@ -78,7 +78,7 @@ AI Best Tool 对 Google 和普通访客的基础身份保持不变：
 | EVD-01 | P1     | Evidence Ledger 数据模型        | claim 级来源、来源类型、核查日、状态、冲突、失效边界统一        |     1 天 | 已完成；Supabase 迁移与只读验收通过                  |
 | EVD-02 | P1     | 工具页 Evidence Ledger UI       | 核心判断可以展开查看证据，不以单一分数替代解释                  |     1 天 | 已完成；有效工具身份产生 verified 数据后自动展示     |
 | EVD-03 | P1     | 后台证据编辑与冲突处理          | 官方、独立、owner、用户来源分开；冲突不自动覆盖                 | 1-1.5 天 | 已完成；首条人工核验、状态保护、处理中反馈已落地     |
-| EVD-04 | P1     | 情报档案身份映射收口            | tool 档案 owner_id 必须对应真实目录工具；错误身份不可继续同步   |   0.5 天 | 进行中；Fathom 真实链路已闭环，站点身份迁移待执行    |
+| EVD-04 | P1     | 情报档案身份映射收口            | tool 档案 owner_id 必须对应真实目录工具；错误身份不可继续同步   |   0.5 天 | 已完成；站点迁移、缓存修复、Fathom 公开闭环均通过    |
 | CHG-01 | P1     | Change Timeline 模型与读取      | 真实事实变化和“仅复核、无变化”可区分                            |     1 天 | 待执行                                               |
 | CHG-02 | P1     | 首批 10-20 个核心工具变化时间线 | 每页至少有基线核查；无变化不伪造更新事件                        |   1-2 天 | 待执行                                               |
 | LNK-01 | P1     | Guide / 分类消费统一判断        | 不复制工具事实；链接到对应 Decision Card 和证据                 |     1 天 | 待执行                                               |
@@ -233,5 +233,8 @@ Review 结论：方案可实施。P0 不改变 URL 和索引面，先增强主�
 - Fathom 自动提取中混入页面结构文案的 pricing claims 全部保持 candidate，证明机器候选不会为了填充页面而被批量放行。
 - verified 口径已在后台统计、snapshot、quality scorer、factual gate 和 evidence composer 中统一为“显式 verified 且无冲突”；不再
   把 conflict-free candidate 当作已验证内容或发布加分项。
-- 迁移执行后运行 `pnpm run verify:intelligence-owner-migration`；返回 `ownerType: site` 且 verifiedClaims 大于等于 1 时关闭
-  EVD-04。
+- 迁移执行后 `pnpm run verify:intelligence-owner-migration` 已返回 `ownerType: site`、`verifiedClaims: 1`，EVD-04 正式关闭。
+- 存量 metadata 快照已通过 `pnpm run repair:intelligence-verification-summaries` 全量重算：AI Best Tool 为 1 verified / 36
+  candidate，Fathom 为 1 / 10，MOXION.AI 为 0 / 0。
+- 旧快照中的机器提取内容由容易误解的 `facts` 无损迁移为 `candidateFacts`，并标记
+  `factsSemantics: machine_extracted_candidates`；后续同步持续使用这一语义。

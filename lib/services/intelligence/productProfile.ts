@@ -46,6 +46,7 @@ export interface ProductIntelligenceProfileSnapshot {
     assetCount: number;
     conflictCount: number;
     verifiedClaimCount: number;
+    candidateClaimCount: number;
     latestObservedAt: string | null;
   };
   snapshotHash: string;
@@ -165,6 +166,9 @@ export function buildProductIntelligenceSnapshot(input: {
     assetCount: input.assets.length,
     conflictCount: resolution.conflicts.length,
     verifiedClaimCount: resolution.claims.filter(isVerifiedIntelligenceClaim).length,
+    candidateClaimCount: resolution.claims.filter(
+      (claim) => !claim.verificationStatus || claim.verificationStatus === 'candidate',
+    ).length,
     latestObservedAt: getLatestObservedAt(resolution.claims),
   };
 

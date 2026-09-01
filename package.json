@@ -58,6 +58,7 @@
     "intelligence:classify-page": "tsx scripts/classify-product-intelligence-page.ts",
     "intelligence:sync": "tsx scripts/sync-product-intelligence.ts",
     "verify:intelligence-owner-migration": "tsx scripts/verify-intelligence-owner-migration.ts",
+    "repair:intelligence-verification-summaries": "tsx scripts/repair-intelligence-verification-summaries.ts",
     "intelligence:sync-signals": "tsx scripts/sync-product-intelligence-signals.ts",
     "distribution:discover-target": "tsx scripts/discover-distribution-target-pages.ts",
     "distribution:analyze-target": "tsx scripts/analyze-distribution-target.ts",
