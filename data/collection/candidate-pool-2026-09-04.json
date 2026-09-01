@@ -24,6 +24,39 @@
       "Worktree isolation and review workflows assume a Git repository and are best used by people comfortable with branches, diffs and merge decisions.",
       "Provider capabilities differ: auto-approve, resume, hooks and initial-prompt support are not identical across every supported CLI."
     ],
+    "marketValidation": {
+      "evidenceUrls": [
+        "https://github.com/generalaction/emdash",
+        "https://github.com/generalaction/emdash/releases",
+        "https://www.producthunt.com/products/emdash",
+        "https://www.reddit.com/r/codex/comments/1odyivo/provideragnostic_oss_app_for_running_and/",
+        "https://teqvolt.com/open-source/emdash-open-source-parallel-coding-agents"
+      ],
+      "rationale": {
+        "en": "Emdash solves a specific, recurring workflow problem for developers who run several coding agents: parallel execution without sharing one checkout, followed by diff, pull-request and CI review. The project has 5,564 GitHub stars, 573 forks, a year of public history, 154 GitHub releases and a release published on the review date. Product Hunt and Reddit include hands-on feedback that confirms both the value of worktree isolation and real setup, resource and provider-compatibility friction. This is sufficient market and durability evidence for a validated listing, while the page must still disclose that Emdash is unnecessary for single-agent users and that provider accounts, resource use and platform compatibility remain separate concerns.",
+        "zh": "Emdash 解决的是开发者同时运行多个编码 agent 时反复出现的具体问题：通过独立 Git worktree 并行执行，再集中审查 diff、PR 和 CI。项目现有 5,564 个 GitHub stars、573 个 forks、约一年的公开历史、154 个 GitHub releases，并在核验当天仍发布新版本。Product Hunt 和 Reddit 的实测反馈同时验证了 worktree 隔离的价值，也暴露了安装、资源占用和 provider 兼容性摩擦。证据足以将其判定为通过市场验证，但页面仍需明确：只使用单一 agent 的用户通常不需要它，provider 账号、资源消耗和平台兼容性也需要分别评估。"
+      },
+      "reviewedAt": "2026-09-01",
+      "score": 87,
+      "scores": {
+        "userValue": 22,
+        "independentValidation": 21,
+        "durability": 18,
+        "evidenceQuality": 17,
+        "strategicValue": 9
+      },
+      "strongSignals": [
+        "github-community-adoption-5564-stars-573-forks",
+        "sustained-release-history-154-releases"
+      ],
+      "supportingSignals": [
+        "active-release-on-review-date",
+        "product-hunt-following-and-reviews",
+        "independent-hands-on-feedback",
+        "cross-platform-release-downloads"
+      ],
+      "verdict": "validated"
+    },
     "notIdealFor": [
       "Non-technical users who do not work with Git repositories",
       "Teams seeking one bundled AI model subscription instead of managing provider access"
