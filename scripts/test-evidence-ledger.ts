@@ -124,4 +124,32 @@ const migration = readFileSync(
   assert.equal(migration.includes(requiredFragment), true, `migration is missing ${requiredFragment}`);
 });
 
+const publicService = readFileSync(resolve(process.cwd(), 'lib/services/intelligence/publicEvidence.ts'), 'utf8');
+assert.equal(
+  publicService.includes(".eq('verification_status', 'verified')"),
+  true,
+  'public ledger must only read explicitly verified claims',
+);
+assert.equal(publicService.includes(".eq('verification_status', 'candidate')"), false);
+
+const panel = readFileSync(resolve(process.cwd(), 'components/intelligence/EvidenceLedgerPanel.tsx'), 'utf8');
+[
+  'data-evidence-ledger',
+  '<details',
+  'machine candidates are never published automatically',
+  'entry.sourceUrl',
+  'entry.validityScope',
+  'entry.reviewDueAt',
+  'entry.expiresAt',
+].forEach((requiredFragment) => {
+  assert.equal(panel.includes(requiredFragment), true, `public panel is missing ${requiredFragment}`);
+});
+assert.equal(panel.includes("type='range'"), false, 'the ledger must not collapse evidence into a score control');
+
+const toolPage = readFileSync(resolve(process.cwd(), 'app/[locale]/(with-footer)/ai/[websiteName]/page.tsx'), 'utf8');
+const decisionCardPosition = toolPage.indexOf("id='decision-card'");
+const evidenceLedgerPosition = toolPage.indexOf('<EvidenceLedgerPanel');
+assert.equal(decisionCardPosition >= 0, true);
+assert.equal(evidenceLedgerPosition > decisionCardPosition, true, 'the ledger should follow the Decision Card');
+
 console.log('Evidence Ledger model checks passed.');
