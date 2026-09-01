@@ -80,7 +80,7 @@
 | EVD-01 | Evidence Ledger 数据模型           | 所有 claim 统一来源类型、核查状态、复查日、冲突和失效边界；机器提取不自动成为已核验事实          | 已完成；Supabase 迁移、只读验收、专项测试和 build 通过                                                                        | Codex + 用户    |
 | EVD-02 | 工具页 Evidence Ledger UI          | Decision Card 后可展开核对已验证 claim；候选证据不公开，不以单一分数代替解释                     | 已完成；有效工具身份产生 verified 数据后自动展示                                                                               | Codex           |
 | EVD-03 | 后台证据编辑与冲突处理             | 状态受控流转；冲突不自动覆盖；核验人、日期、复查、失效和适用范围可追踪；所有保存操作有中间态      | 已完成；首条真实人工核验已回读确认，专项测试、tsc、完整 build 通过                                                            | Codex           |
-| EVD-04 | 情报档案身份映射收口               | `tool` 类型 owner_id 必须对应目录真实工具；存量错误身份重新归类后再公开                           | 进行中；同步入口已增加无效工具 ID 拦截，AI Best Tool 存量档案待重新归类                                                      | Codex           |
+| EVD-04 | 情报档案身份映射收口               | `tool` 类型 owner_id 必须对应目录真实工具；存量错误身份重新归类后再公开                           | 进行中；Fathom 真实 UUID -> verified -> 生产公开链路已闭环；AI Best Tool `site` 迁移待执行                                   | Codex + 用户    |
 
 ### P2：只在数据证明后扩展（第 4-6 周）
 

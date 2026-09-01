@@ -78,7 +78,7 @@ AI Best Tool 对 Google 和普通访客的基础身份保持不变：
 | EVD-01 | P1     | Evidence Ledger 数据模型        | claim 级来源、来源类型、核查日、状态、冲突、失效边界统一        |     1 天 | 已完成；Supabase 迁移与只读验收通过                  |
 | EVD-02 | P1     | 工具页 Evidence Ledger UI       | 核心判断可以展开查看证据，不以单一分数替代解释                  |     1 天 | 已完成；有效工具身份产生 verified 数据后自动展示     |
 | EVD-03 | P1     | 后台证据编辑与冲突处理          | 官方、独立、owner、用户来源分开；冲突不自动覆盖                 | 1-1.5 天 | 已完成；首条人工核验、状态保护、处理中反馈已落地     |
-| EVD-04 | P1     | 情报档案身份映射收口            | tool 档案 owner_id 必须对应真实目录工具；错误身份不可继续同步   |   0.5 天 | 进行中；新同步已拦截无效 ID，存量站点档案待重新归类  |
+| EVD-04 | P1     | 情报档案身份映射收口            | tool 档案 owner_id 必须对应真实目录工具；错误身份不可继续同步   |   0.5 天 | 进行中；Fathom 真实链路已闭环，站点身份迁移待执行    |
 | CHG-01 | P1     | Change Timeline 模型与读取      | 真实事实变化和“仅复核、无变化”可区分                            |     1 天 | 待执行                                               |
 | CHG-02 | P1     | 首批 10-20 个核心工具变化时间线 | 每页至少有基线核查；无变化不伪造更新事件                        |   1-2 天 | 待执行                                               |
 | LNK-01 | P1     | Guide / 分类消费统一判断        | 不复制工具事实；链接到对应 Decision Card 和证据                 |     1 天 | 待执行                                               |
@@ -218,3 +218,20 @@ Review 结论：方案可实施。P0 不改变 URL 和索引面，先增强主�
 - 后台 verified 统计已改为仅统计 `verification_status = verified` 且无冲突的 claim，不再把所有无冲突候选误算为已核验。
 - 首条真实核验为 AI Best Tool 首页定位原文；线上原文、来源 URL 和无冲突状态均已人工确认。旧的分发订阅价格 claim 与当前产品
   状态不一致，继续保持 candidate，不得进入公开证据。
+
+## 十三、情报身份映射实施记录（2026-09-02）
+
+- 数据模型新增 `site` owner 类型，平台自身证据不再伪装成目录工具；幂等迁移位于
+  `db/supabase/migrations/20260902_intelligence_owner_identity.sql`。
+- 迁移只原位修改 AI Best Tool 档案的 owner 类型并写入重分类原因，sources、claims、assets、verified 状态和审核历史不会重建或
+  丢失。
+- `tool` 同步在抓取前通过 Neon 目录校验 UUID；无效 ID 会直接失败并提示从 `/admin/tools/<uuid>/edit` 获取正确 ID。
+- CLI 明确接受 tool、distribution_project、site 三种类型；第三方 CSS 解析错误被隔离，抓取结束后主动关闭连接与进程，避免假性
+  卡住。
+- 已使用真实目录工具 Fathom（目录 UUID `7ae4bbb2-847f-45cc-9294-e96663fa02a3`）完成抓取、candidate 写入、人工核验和公开读取
+  闭环。生产 `/cn/ai/fathom` 已出现 Evidence Ledger，线上逐字确认的定位 claim 为唯一 verified 内容。
+- Fathom 自动提取中混入页面结构文案的 pricing claims 全部保持 candidate，证明机器候选不会为了填充页面而被批量放行。
+- verified 口径已在后台统计、snapshot、quality scorer、factual gate 和 evidence composer 中统一为“显式 verified 且无冲突”；不再
+  把 conflict-free candidate 当作已验证内容或发布加分项。
+- 迁移执行后运行 `pnpm run verify:intelligence-owner-migration`；返回 `ownerType: site` 且 verifiedClaims 大于等于 1 时关闭
+  EVD-04。

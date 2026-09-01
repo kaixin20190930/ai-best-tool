@@ -1,11 +1,11 @@
-import { JSDOM } from 'jsdom';
-
 import { safeFetchText, type SafeFetchOptions } from '@/lib/services/intelligence/safeFetch';
 import type {
   DiscoveredIntelligencePage,
   IntelligenceDiscoveryMethod,
   IntelligencePageType,
 } from '@/lib/services/intelligence/types';
+
+import createIntelligenceDom from './dom';
 
 const DEFAULT_MAX_PAGES = 40;
 const DEFAULT_MAX_SITEMAPS = 3;
@@ -138,7 +138,7 @@ function upsertCandidate(
 
 export function extractHomepageCandidates(html: string, homepageUrl: string): DiscoveredIntelligencePage[] {
   const baseUrl = new URL(homepageUrl);
-  const { document } = new JSDOM(html, { url: baseUrl.toString() }).window;
+  const { document } = createIntelligenceDom(html, baseUrl.toString()).window;
   const candidates = new Map<string, DiscoveredIntelligencePage>();
   upsertCandidate(candidates, baseUrl, 'homepage_link', null, 'homepage');
 

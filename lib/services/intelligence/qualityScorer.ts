@@ -7,6 +7,7 @@ import type {
   ProductIntelligenceProfile,
   ProductIntelligenceSource,
 } from './types';
+import isVerifiedIntelligenceClaim from './claimVerification';
 
 export interface ContentQualityAssessment extends ContentQualityResult {
   recommendations: string[];
@@ -44,7 +45,7 @@ export function assessContentQuality(input: {
   assets: ProductIntelligenceAsset[];
 }): ContentQualityAssessment {
   const successfulSources = input.sources.filter((source) => source.fetchStatus === 'success');
-  const verifiedClaims = input.claims.filter((claim) => claim.conflictStatus === 'none');
+  const verifiedClaims = input.claims.filter(isVerifiedIntelligenceClaim);
   const conflictedClaims = input.claims.filter((claim) => claim.conflictStatus !== 'none');
   const claimsWithExcerpt = verifiedClaims.filter((claim) => Boolean(claim.sourceExcerpt));
   const sourceTypes = new Set(successfulSources.map((source) => source.pageType));

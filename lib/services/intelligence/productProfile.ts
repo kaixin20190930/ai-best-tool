@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 
 import { resolveProductIntelligenceConflicts, type ConflictResolutionResult } from './conflictResolver';
+import isVerifiedIntelligenceClaim from './claimVerification';
 import type {
   IntelligenceClaimType,
   ProductIntelligenceAsset,
@@ -163,7 +164,7 @@ export function buildProductIntelligenceSnapshot(input: {
     claimCount: resolution.claims.length,
     assetCount: input.assets.length,
     conflictCount: resolution.conflicts.length,
-    verifiedClaimCount: resolution.claims.filter((claim) => claim.conflictStatus === 'none').length,
+    verifiedClaimCount: resolution.claims.filter(isVerifiedIntelligenceClaim).length,
     latestObservedAt: getLatestObservedAt(resolution.claims),
   };
 

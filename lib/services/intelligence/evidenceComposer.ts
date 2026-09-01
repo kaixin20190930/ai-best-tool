@@ -4,6 +4,7 @@ import type {
   ProductIntelligenceProfile,
   ProductIntelligenceSource,
 } from './types';
+import isVerifiedIntelligenceClaim from './claimVerification';
 
 export interface EvidenceBoundComposerBlock {
   id: string;
@@ -26,10 +27,6 @@ export interface EvidenceBoundComposerResult {
     assetCount: number;
     blockCount: number;
   };
-}
-
-function isVerifiedClaim(claim: ProductIntelligenceClaim) {
-  return claim.conflictStatus === 'none' && Boolean(claim.claimValue);
 }
 
 function claimValueToText(value: unknown): string {
@@ -61,7 +58,9 @@ function selectClaims(
   claims: ProductIntelligenceClaim[],
   ...claimTypes: ProductIntelligenceClaim['claimType'][]
 ) {
-  return claims.filter((claim) => claimTypes.includes(claim.claimType) && isVerifiedClaim(claim));
+  return claims.filter(
+    (claim) => claimTypes.includes(claim.claimType) && isVerifiedIntelligenceClaim(claim),
+  );
 }
 
 function collectSourceUrls(claims: ProductIntelligenceClaim[]) {
@@ -103,7 +102,7 @@ export function composeEvidenceBoundContent(input: {
   claims: ProductIntelligenceClaim[];
   assets: ProductIntelligenceAsset[];
 }): EvidenceBoundComposerResult {
-  const verifiedClaims = input.claims.filter(isVerifiedClaim);
+  const verifiedClaims = input.claims.filter(isVerifiedIntelligenceClaim);
   const now = new Date().toISOString();
   const warnings: string[] = [];
 

@@ -52,7 +52,7 @@ export default async function AdminIntelligencePage({
   searchParams,
 }: {
   searchParams: {
-    ownerType?: 'tool' | 'distribution_project' | 'all';
+    ownerType?: 'tool' | 'distribution_project' | 'site' | 'all';
     status?: 'pending' | 'ready' | 'conflict' | 'stale' | 'all';
     profileId?: string;
     reviewType?: 'fact' | 'decision' | 'all';
@@ -60,7 +60,9 @@ export default async function AdminIntelligencePage({
   };
 }) {
   const ownerType =
-    searchParams.ownerType === 'tool' || searchParams.ownerType === 'distribution_project'
+    searchParams.ownerType === 'tool' ||
+    searchParams.ownerType === 'distribution_project' ||
+    searchParams.ownerType === 'site'
       ? searchParams.ownerType
       : 'all';
   const status =

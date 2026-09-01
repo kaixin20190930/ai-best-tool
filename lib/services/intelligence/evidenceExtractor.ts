@@ -1,5 +1,4 @@
 import { createHash } from 'node:crypto';
-import { JSDOM } from 'jsdom';
 
 import { classifyProductPage } from '@/lib/services/intelligence/pageClassifier';
 import type {
@@ -9,6 +8,8 @@ import type {
   IntelligencePageType,
   ProductEvidenceExtraction,
 } from '@/lib/services/intelligence/types';
+
+import createIntelligenceDom from './dom';
 
 const MAX_EXCERPT_LENGTH = 500;
 const MAX_FEATURES_PER_PAGE = 12;
@@ -220,7 +221,7 @@ export interface ExtractProductEvidenceInput {
 
 export function extractProductEvidence(input: ExtractProductEvidenceInput): ProductEvidenceExtraction {
   const pageUrl = new URL(input.url);
-  const { document } = new JSDOM(input.html, { url: pageUrl.toString() }).window;
+  const { document } = createIntelligenceDom(input.html, pageUrl.toString()).window;
   const observedAt = input.observedAt || new Date().toISOString();
   const pageType = input.pageType || classifyProductPage({ url: input.url, html: input.html }).pageType;
   const claims: ExtractedIntelligenceClaim[] = [];

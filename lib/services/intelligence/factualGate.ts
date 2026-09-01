@@ -2,6 +2,7 @@ import type {
   ProductIntelligenceClaim,
   ProductIntelligenceSource,
 } from './types';
+import isVerifiedIntelligenceClaim from './claimVerification';
 import type { EvidenceBoundComposerResult } from './evidenceComposer';
 
 export type FactualGateSeverity = 'info' | 'warn' | 'block';
@@ -24,10 +25,6 @@ export interface FactualGateResult {
   summary: string;
 }
 
-function isVerifiedClaim(claim: ProductIntelligenceClaim) {
-  return claim.conflictStatus === 'none' && Boolean(claim.claimValue);
-}
-
 function isSuccessfulSource(source: ProductIntelligenceSource) {
   return (
     source.fetchStatus === 'success' &&
@@ -46,7 +43,7 @@ export function evaluateFactualGate(input: {
   claims: ProductIntelligenceClaim[];
   composer: EvidenceBoundComposerResult;
 }): FactualGateResult {
-  const verifiedClaims = input.claims.filter(isVerifiedClaim);
+  const verifiedClaims = input.claims.filter(isVerifiedIntelligenceClaim);
   const successfulSources = input.sources.filter(isSuccessfulSource);
   const successfulSourceUrls = new Set(successfulSources.map((source) => source.url));
   const findings: FactualGateFinding[] = [];

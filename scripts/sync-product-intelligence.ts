@@ -41,14 +41,16 @@ async function run() {
   const args = process.argv.slice(2);
   const websiteUrl = args.find((argument) => argument !== '--' && !argument.startsWith('--'));
   const dryRun = args.includes('--dry-run');
-  const ownerType = (args.find((argument) => argument.startsWith('--owner-type='))?.split('=')[1] || 'tool') as
-    | 'tool'
-    | 'distribution_project';
+  const ownerTypeValue = args.find((argument) => argument.startsWith('--owner-type='))?.split('=')[1] || 'tool';
+  if (!['tool', 'distribution_project', 'site'].includes(ownerTypeValue)) {
+    throw new Error('The --owner-type flag must be tool, distribution_project, or site.');
+  }
+  const ownerType = ownerTypeValue as 'tool' | 'distribution_project' | 'site';
   const ownerId = args.find((argument) => argument.startsWith('--owner-id='))?.split('=')[1] || '';
 
   if (!websiteUrl) {
     throw new Error(
-      'Usage: pnpm run intelligence:sync -- https://example.com --owner-id=<uuid> [--owner-type=tool|distribution_project] [--dry-run]',
+      'Usage: pnpm run intelligence:sync -- https://example.com --owner-id=<uuid> [--owner-type=tool|distribution_project|site] [--dry-run]',
     );
   }
 
@@ -204,9 +206,12 @@ async function run() {
   );
 }
 
-run().catch((error) => {
-  console.error(describeError(error));
-  process.exitCode = 1;
-}).finally(async () => {
-  await closePool();
-});
+run()
+  .catch((error) => {
+    console.error(describeError(error));
+    process.exitCode = 1;
+  })
+  .finally(async () => {
+    await closePool();
+    process.exit(process.exitCode || 0);
+  });

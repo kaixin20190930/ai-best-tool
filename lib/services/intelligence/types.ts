@@ -1,4 +1,4 @@
-export type IntelligenceOwnerType = 'tool' | 'distribution_project';
+export type IntelligenceOwnerType = 'tool' | 'distribution_project' | 'site';
 
 export type IntelligenceProfileStatus = 'pending' | 'ready' | 'conflict' | 'stale';
 

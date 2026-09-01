@@ -4,6 +4,7 @@ import { resolve } from 'node:path';
 
 import { buildEvidenceLedger, buildEvidenceLedgerEntry } from '@/lib/services/intelligence/evidenceLedger';
 import { prepareEvidenceReviewUpdate } from '@/lib/services/intelligence/evidenceReview';
+import isVerifiedIntelligenceClaim from '@/lib/services/intelligence/claimVerification';
 import type { ProductIntelligenceClaim, ProductIntelligenceSource } from '@/lib/services/intelligence/types';
 
 const now = new Date('2026-09-01T12:00:00.000Z');
@@ -54,6 +55,7 @@ assert.equal(candidate.freshness, 'fresh');
 assert.equal(candidate.canSupportDecision, false, 'machine candidates must not become public evidence automatically');
 assert.equal(candidate.sourceLabel, 'Pricing');
 assert.deepEqual(candidate.validityScope, baseClaim.validityScope);
+assert.equal(isVerifiedIntelligenceClaim(baseClaim), false, 'candidate claims must not pass shared verification');
 
 const verified = buildEvidenceLedgerEntry(
   {
@@ -66,6 +68,11 @@ const verified = buildEvidenceLedgerEntry(
   now,
 );
 assert.equal(verified.canSupportDecision, true);
+assert.equal(
+  isVerifiedIntelligenceClaim({ ...baseClaim, verificationStatus: 'verified' }),
+  true,
+  'explicitly verified conflict-free claims should pass shared verification',
+);
 
 const reviewDue = buildEvidenceLedgerEntry(
   { ...baseClaim, verificationStatus: 'verified', reviewDueAt: '2026-08-31T09:00:00.000Z' },
@@ -175,6 +182,18 @@ const migration = readFileSync(
   assert.equal(migration.includes(requiredFragment), true, `migration is missing ${requiredFragment}`);
 });
 
+const ownerMigration = readFileSync(
+  resolve(process.cwd(), 'db/supabase/migrations/20260902_intelligence_owner_identity.sql'),
+  'utf8',
+);
+[
+  "'distribution_project', 'site'",
+  "owner_type = 'site'",
+  'Platform-level evidence must not impersonate a directory tool.',
+].forEach((requiredFragment) => {
+  assert.equal(ownerMigration.includes(requiredFragment), true, `owner migration is missing ${requiredFragment}`);
+});
+
 const publicService = readFileSync(resolve(process.cwd(), 'lib/services/intelligence/publicEvidence.ts'), 'utf8');
 assert.equal(
   publicService.includes(".eq('verification_status', 'verified')"),
@@ -215,11 +234,16 @@ assert.equal(
 
 const syncScript = readFileSync(resolve(process.cwd(), 'scripts/sync-product-intelligence.ts'), 'utf8');
 assert.equal(syncScript.includes('getToolById(ownerId)'), true, 'tool intelligence sync must validate its owner ID');
+assert.equal(syncScript.includes("'tool', 'distribution_project', 'site'"), true, 'sync must recognize site owners');
 assert.equal(
   syncScript.includes('does not exist in the directory'),
   true,
   'invalid tool identity errors must explain how to find the correct ID',
 );
+assert.equal(syncScript.includes('process.exit(process.exitCode || 0)'), true, 'sync CLI must exit after cleanup');
+
+const intelligenceDom = readFileSync(resolve(process.cwd(), 'lib/services/intelligence/dom.ts'), 'utf8');
+assert.equal(intelligenceDom.includes('VirtualConsole'), true, 'third-party DOM parsing must isolate noisy console errors');
 
 const toolPage = readFileSync(resolve(process.cwd(), 'app/[locale]/(with-footer)/ai/[websiteName]/page.tsx'), 'utf8');
 const decisionCardPosition = toolPage.indexOf("id='decision-card'");

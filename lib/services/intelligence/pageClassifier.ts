@@ -1,11 +1,11 @@
-import { JSDOM } from 'jsdom';
-
 import type {
   IntelligenceClassificationSignal,
   IntelligenceClassificationSignalSource,
   IntelligencePageClassification,
   IntelligencePageType,
 } from '@/lib/services/intelligence/types';
+
+import createIntelligenceDom from './dom';
 
 interface ClassificationRule {
   pageType: IntelligencePageType;
@@ -222,7 +222,7 @@ export function classifyProductPage(input: ClassifyProductPageInput): Intelligen
     };
   }
 
-  const { document } = new JSDOM(input.html, { url: url.toString() }).window;
+  const { document } = createIntelligenceDom(input.html, url.toString()).window;
   const signals: IntelligenceClassificationSignal[] = [];
   const pathSignal = decodeURIComponent(url.pathname).replace(/[-_/]+/g, ' ');
 

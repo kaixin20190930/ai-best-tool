@@ -166,6 +166,7 @@ function run() {
         observedAt: new Date().toISOString(),
         confidence: 95,
         conflictStatus: 'none',
+        verificationStatus: 'verified',
         expiresAt: null,
       },
       {
@@ -179,6 +180,7 @@ function run() {
         observedAt: new Date().toISOString(),
         confidence: 90,
         conflictStatus: 'none',
+        verificationStatus: 'verified',
         expiresAt: null,
       },
       {
@@ -192,6 +194,7 @@ function run() {
         observedAt: new Date().toISOString(),
         confidence: 85,
         conflictStatus: 'none',
+        verificationStatus: 'verified',
         expiresAt: null,
       },
     ],
@@ -532,6 +535,7 @@ function run() {
   });
   assert.equal(snapshot.facts.productName, 'Example');
   assert.equal(snapshot.summary.claimCount, 2);
+  assert.equal(snapshot.summary.verifiedClaimCount, 0, 'conflict-free candidates are not verified evidence');
   assert.equal(snapshot.snapshotHash.length > 0, true);
 
   console.log('Product intelligence foundation checks passed.');

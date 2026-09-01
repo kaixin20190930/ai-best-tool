@@ -1,5 +1,3 @@
-import { JSDOM } from 'jsdom';
-
 import {
   extractRobotsSitemaps,
   extractSitemapLocations,
@@ -12,6 +10,8 @@ import type {
   DistributionTargetRequirements,
   DistributionTargetStatus,
 } from '@/lib/services/intelligence/types';
+
+import createIntelligenceDom from './dom';
 
 const DEFAULT_MAX_PAGES = 12;
 const DEFAULT_MAX_SITEMAPS = 2;
@@ -234,7 +234,7 @@ function upsertPage(
 
 function extractHomepageCandidates(html: string, homepageUrl: string): DistributionTargetPageDiscovery[] {
   const baseUrl = new URL(homepageUrl);
-  const { document } = new JSDOM(html, { url: baseUrl.toString() }).window;
+  const { document } = createIntelligenceDom(html, baseUrl.toString()).window;
   const pages = new Map<string, DistributionTargetPageDiscovery>();
 
   upsertPage(pages, {
@@ -339,7 +339,7 @@ async function inspectCandidatePage(
   fetchOptions: SafeFetchOptions | undefined,
 ) {
   const result = await safeFetchText(page.url, fetchOptions);
-  const { document } = new JSDOM(result.body, { url: result.finalUrl }).window;
+  const { document } = createIntelligenceDom(result.body, result.finalUrl).window;
   const title = normalizeText(document.title, 220);
   const description = normalizeText(
     document.querySelector<HTMLMetaElement>('meta[name="description"]')?.content ||
@@ -526,7 +526,9 @@ export async function discoverDistributionTargetPages(
 
   const collapsed = collapsePageList(inspectedPages);
   const signals = {
-    homepageTitle: normalizeText(homepage.body ? new JSDOM(homepage.body, { url: homepage.finalUrl }).window.document.title : '', 220) || null,
+    homepageTitle:
+      normalizeText(homepage.body ? createIntelligenceDom(homepage.body, homepage.finalUrl).window.document.title : '', 220) ||
+      null,
     inspectedCount: inspectedPages.length,
     blockedSignals,
   };
