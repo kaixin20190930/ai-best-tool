@@ -50,6 +50,7 @@
 | W2-01C | 市场验证编辑器与前台成熟度状态 | 1 天 | W2-01B | 五维评分、独立证据和信号可编辑；收集型工具未验证不能发布；详情页展示验证依据 | 已完成；专项准入测试、tsc 与完整 build 通过 |
 | W2-02A | 生成未来 3 天候选池，每日处理 1-2 条 | 每日 1 小时 | W2-01 | 每条有发布/待补结论 | 已完成，提交 `d7ea18b5`；6 条生产候选按 3 天每天 2 条排期 |
 | W2-02B | 首批 7-14 条处理台账；只发布通过资料与市场双重准入的条目 | 每日 1 小时 | W2-02A | 无低质量例外放行 | 进行中，已处理 9/7-14；Perplexity 通过市场与资料准入并迁移既有 fallback，Owlish 保持 draft，ArcRift 不因数量目标放行 |
+| W2-02D | 下一公开时段成熟工具预审；证据齐全但不提前发布 | 0.5 天 | W2-02B | 证据、边界和发布闸门自动校验；不改生产数据或 sitemap | 已完成 n8n 预审；状态 `ready_for_next_slot`，最早 2026-09-02 复核后迁移 |
 | W2-03A | Web3、Automation、Research Guide 统一任务入口 | 1 天 | W1-01C | 指向对应工具 Decision Card | 已完成，提交 `de1504e6`；专项结构测试、Decision Card 回归、tsc、完整 build 通过 |
 
 ### 第 3 周：变化监测与真实信号（09-15 至 09-21，预计 4-5 个开发日）
@@ -148,6 +149,15 @@
 - 资料核验覆盖 Search、Pro Search、Research、套餐与额度、模型访问、消费者训练退出、Enterprise 数据保护、文件留存和来源标签边界；明确“有引用不等于单项结论准确”，高风险判断仍需打开原文。
 - 市场验证为 `96/100 / Validated`：G2 `276 reviews / 4.5`、Capterra `35 reviews / 4.2` 和多年付费使用构成强独立信号；评价中的额度、答案深度和不准确数据问题保留为选择限制。
 - ArcRift 保持 `needs_evidence`，不创建工具页；这轮证明日常收录可以由成熟工具的既有 URL 迁移承接，而不依赖批量新增陌生早期产品。
+
+### W2-02D 下一公开时段预审（2026-09-01）
+
+- n8n：完成官网、Pricing、官方文档、许可证、Community/Business/Enterprise 版本、queue mode、GitHub、G2、Capterra 与融资信号预审，市场验证结论为 `98/100 / Validated`。
+- 差异化判断：它适合需要可视化工作流、代码控制、广泛集成、AI 节点及 Cloud/自托管选择的技术团队；页面不能把“源代码可见”误写为 OSI 开源，也不能把“可自托管”描述成低运维成本。
+- 决策边界：明确 workflow execution 计费、模型 provider 费用、Community 版协作/治理缺口、Sustainable Use License 商业限制，以及 Redis、数据库、worker、密钥、备份和监控责任。
+- 发布控制：本轮只新增 `data/collection/n8n-preaudit-2026-09-01.json`，状态为 `ready_for_next_slot`；`productionWriteApproved=false`、`sitemapChangeApproved=false`，不会提前写入生产工具表或扩大 sitemap。
+- 下一时段迁移前必须重新核对实时 Pricing，尤其是不稳定的 AI credits 和套餐权益；随后复用现有 `/ai/n8n` canonical，禁止创建重复 URL。
+- 自动验收：`pnpm run test:next-tool-preaudit` 负责验证官方/独立来源数量、许可证边界、计费单位、限制深度及生产发布闸门。
 
 ### W2-02C 首批成熟工具内容缺口（2026-09-01）
 

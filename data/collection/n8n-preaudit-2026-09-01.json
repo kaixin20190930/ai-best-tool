@@ -1,0 +1,92 @@
+{
+  "slug": "n8n",
+  "title": "n8n Workflow Automation",
+  "officialUrl": "https://n8n.io/",
+  "existingRoute": "/ai/n8n",
+  "action": "migrate_existing_fallback",
+  "status": "ready_for_next_slot",
+  "reviewedAt": "2026-09-01",
+  "publishNotBefore": "2026-09-02",
+  "sitemapChangeApproved": false,
+  "productionWriteApproved": false,
+  "category": {
+    "discoverySlug": "automation",
+    "storageSlug": "productivity"
+  },
+  "positioning": "A workflow automation platform for technical teams that need visual workflows, code, integrations, AI steps, and a choice between managed cloud and self-hosting.",
+  "decisionAngles": [
+    "Cloud versus self-hosted operational ownership",
+    "Workflow execution billing versus provider and AI costs",
+    "Community versus paid collaboration, governance, and environment features",
+    "Source-available license boundaries for embedded or resale use",
+    "Queue-mode scaling, secrets, retries, observability, and binary-data handling"
+  ],
+  "pricingSnapshot": {
+    "checkedAt": "2026-09-01",
+    "billingUnit": "One complete workflow run counts as one execution regardless of its number of steps; chat workloads can consume an execution for each message-triggered run.",
+    "plans": [
+      "Starter: EUR 20/month billed annually, 2,500 workflow executions",
+      "Pro: EUR 50/month billed annually, 10,000 workflow executions",
+      "Business: EUR 667/month billed annually, 40,000 workflow executions and self-hosted collaboration/governance features",
+      "Enterprise: custom pricing for cloud or self-hosted deployments"
+    ],
+    "volatileFields": [
+      "AI Workflow Builder and AI Assistant credit allowances",
+      "usage-tier options and overage terms",
+      "plan-level feature allocation"
+    ],
+    "releaseGuard": "Recheck the live pricing page immediately before migration; do not hard-code AI-credit allowances without a same-day verification."
+  },
+  "licenseBoundary": {
+    "label": "Source-available fair-code under the Sustainable Use License, not OSI open source",
+    "allowedSummary": "Free internal business, personal, and non-commercial use is generally allowed; paid consulting and support around customer-owned n8n workflows are allowed.",
+    "restrictedSummary": "Hosting n8n and charging users for access, or selling a product whose value derives substantially from n8n, can require a separate commercial agreement.",
+    "releaseGuard": "Never describe n8n as MIT, Apache-2.0, or unrestricted open source."
+  },
+  "limitations": [
+    "Self-hosting transfers upgrades, backups, database availability, Redis, worker health, encryption-key consistency, credential security, and monitoring to the operator.",
+    "Community edition omits projects, workflow and credential sharing, SSO, environments, external secrets, external binary storage, log streaming, multi-main mode, and Git version control.",
+    "Queue mode uses Redis plus a shared database; distributed queue mode over SQLite is unsupported, and filesystem binary storage is not supported for queue-mode persistence.",
+    "AI nodes and agents can require separate model-provider accounts, API charges, data-policy review, human approval, and output guardrails.",
+    "An execution quota can be consumed quickly by high-frequency schedules, retries, webhook events, or message-by-message chatbot workflows.",
+    "Source availability and self-hosting do not remove the Sustainable Use License restrictions on resale, hosted access, or embedded commercial products."
+  ],
+  "marketValidation": {
+    "score": 98,
+    "verdict": "validated",
+    "rationale": "n8n has durable product, community, funding, release, and independent-review signals. Its strongest differentiator is combining visual workflow construction, code-level control, broad integrations, AI steps, and deployment choice. The recommendation must remain conditional because operating a production self-hosted instance and governing complex automations require engineering ownership.",
+    "strongSignals": [
+      "GitHub API: 203,022 stars and 60,487 forks on 2026-09-01",
+      "Latest GitHub release n8n@2.36.9 published 2026-08-31",
+      "G2: 272 reviews with a 4.7 rating at review time",
+      "Reported EUR 154.9 million Series C at a EUR 2.15 billion valuation"
+    ],
+    "recurringUserFriction": [
+      "Steep learning curve for users without coding or API familiarity",
+      "Production self-hosting introduces infrastructure and upgrade responsibility",
+      "Execution-based pricing requires workload modeling for schedules, webhooks, retries, and chat messages"
+    ]
+  },
+  "sources": {
+    "official": [
+      "https://n8n.io/pricing/",
+      "https://docs.n8n.io/privacy-and-security/sustainable-use-license",
+      "https://docs.n8n.io/deploy/host-n8n/community-edition-features/",
+      "https://docs.n8n.io/deploy/host-n8n/configure-n8n/scaling/enable-queue-mode/",
+      "https://docs.n8n.io/hosting/scaling/external-storage/",
+      "https://github.com/n8n-io/n8n/releases/tag/n8n%402.36.9"
+    ],
+    "independent": [
+      "https://www.g2.com/products/n8n/reviews",
+      "https://www.capterra.com/p/198028/n8n-io/reviews/",
+      "https://www.axios.com/newsletters/axios-pro-rata-46ff2b15-12ab-43b0-a71b-5d7f86dd53dc"
+    ]
+  },
+  "nextSlotChecklist": [
+    "Confirm there is still no production tools row using the n8n slug or official domain",
+    "Recheck the live pricing page and avoid publishing unstable AI-credit counts",
+    "Verify current logo and thumbnail are official and reusable",
+    "Replace the dated fallback snapshot with bilingual decision content without creating a second canonical URL",
+    "Run evidence, route-alias, sitemap, TypeScript, full build, and production smoke checks"
+  ]
+}
