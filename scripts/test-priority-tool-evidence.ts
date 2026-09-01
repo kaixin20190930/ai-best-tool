@@ -58,7 +58,7 @@ for (const [officialSnapshotSlug, expectedDate] of Object.entries({
   'luma-ai': '2026-09-01',
   pipedream: '2026-09-01',
   runway: '2026-09-01',
-  'the-graph': '2026-08-31',
+  'the-graph': '2026-09-01',
 })) {
   const branchStart = detailPage.indexOf(`if (key === '${officialSnapshotSlug}')`);
   const branchEnd = detailPage.indexOf('\n  if (key ===', branchStart + 1);

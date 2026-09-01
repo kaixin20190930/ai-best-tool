@@ -1654,72 +1654,59 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
     return isChinese
       ? {
           label: '官方事实快照',
-          title: '查询额度、生产访问和新鲜度检查',
-          summary: '以下信息来自 The Graph 官方文档；查询价格和网络支持范围可能变化，上线前应复核当前套餐与文档。',
-          checkedAt: '2026-08-31',
+          title: 'Subgraph 查询价格、索引与新鲜度',
+          summary: '以下信息来自 The Graph 官方文档；上线前应分别验证查询套餐、索引覆盖、同步状态和目标网络支持。',
+          checkedAt: '2026-09-01',
           facts: [
             {
-              label: '成本边界',
-              value: '查询费用与索引成本彼此独立；查询量增加会提高使用成本，但无法让索引不足的 Subgraph 自动变得可用。',
+              label: '查询价格',
+              value: '每月前 100,000 次查询免费，之后目前为每 100,000 次 $2；生产 API key 可配置域名限制和月度支出上限。',
             },
             {
-              label: '生产访问',
-              value: 'Gateway 负责端点、认证和计费体验；API key 可限制到指定 Subgraph、域名和 rate limit。',
+              label: '索引边界',
+              value: '查询与索引是独立活动；提高查询支出不会让索引不足的 Subgraph 自动同步，需要 Indexer 支持或自行运行 Graph Node。',
             },
             {
-              label: '新鲜度边界',
+              label: '生产检查',
               value:
-                'GraphQL 的 _meta 字段可返回区块、时间戳、部署与索引错误，生产使用时应据此检查数据新鲜度和完整性。',
+                '上线前应核对部署版本、Indexer 数量、同步区块和 indexing errors；新网络或新 trigger 可能产生延迟或此前未出现的错误。',
             },
           ],
           sources: [
-            {
-              label: 'Studio 与套餐说明',
-              href: 'https://thegraph.com/docs/en/gateways/subgraphs/consumer-side/overview/',
-            },
-            {
-              label: '查询与索引成本',
-              href: 'https://thegraph.com/docs/en/gateways/subgraphs/consumer-side/pricing-payments/',
-            },
-            { label: '查询与 _meta 文档', href: 'https://thegraph.com/docs/en/subgraphs/querying/graphql-api/' },
+            { label: 'Studio 查询价格', href: 'https://thegraph.com/studio-pricing/' },
+            { label: '查询接入说明', href: 'https://thegraph.com/docs/en/subgraphs/querying/introduction/' },
+            { label: '查询与索引成本', href: 'https://thegraph.com/docs/en/gateways/subgraphs/consumer-side/pricing-payments/' },
+            { label: '支持的网络', href: 'https://thegraph.com/docs/en/supported-networks/' },
           ],
         }
       : {
           label: 'Official fact snapshot',
-          title: 'Query allowance, production access, and freshness checks',
+          title: 'Subgraph query pricing, indexing, and freshness',
           summary:
-            'These facts come from The Graph documentation. Recheck current plans and network support before production use because pricing and coverage can change.',
-          checkedAt: '2026-08-31',
+            'These facts come from The Graph documentation. Validate query plans, indexing coverage, sync state, and target-network support separately before production use.',
+          checkedAt: '2026-09-01',
           facts: [
             {
-              label: 'Cost boundary',
+              label: 'Query pricing',
               value:
-                'Query fees and indexing costs are separate; more query spend scales access but cannot make an under-indexed Subgraph available.',
+                'The first 100,000 monthly queries are free and additional queries are currently $2 per 100,000; production API keys can use domain and monthly spending limits.',
             },
             {
-              label: 'Production access',
+              label: 'Indexing boundary',
               value:
-                'A Gateway controls endpoints, authentication, and billing; API keys can be scoped to specific Subgraphs, domains, and rate limits.',
+                'Querying and indexing are separate activities. More query spend cannot synchronize an under-indexed Subgraph; production needs Indexer support or a self-hosted Graph Node.',
             },
             {
-              label: 'Freshness boundary',
+              label: 'Production checks',
               value:
-                'The GraphQL _meta field can expose block, timestamp, deployment, and indexing-error data for checking freshness and integrity.',
+                'Check deployment version, Indexer count, synced block, and indexing errors. New networks or triggers can introduce lag or previously unseen failures.',
             },
           ],
           sources: [
-            {
-              label: 'Studio and plan documentation',
-              href: 'https://thegraph.com/docs/en/gateways/subgraphs/consumer-side/overview/',
-            },
-            {
-              label: 'Query and indexing costs',
-              href: 'https://thegraph.com/docs/en/gateways/subgraphs/consumer-side/pricing-payments/',
-            },
-            {
-              label: 'Query and _meta documentation',
-              href: 'https://thegraph.com/docs/en/subgraphs/querying/graphql-api/',
-            },
+            { label: 'Studio query pricing', href: 'https://thegraph.com/studio-pricing/' },
+            { label: 'Query introduction', href: 'https://thegraph.com/docs/en/subgraphs/querying/introduction/' },
+            { label: 'Query and indexing economics', href: 'https://thegraph.com/docs/en/gateways/subgraphs/consumer-side/pricing-payments/' },
+            { label: 'Supported networks', href: 'https://thegraph.com/docs/en/supported-networks/' },
           ],
         };
   }
@@ -2987,28 +2974,28 @@ function getPriorityToolSearchIntent(websiteName: string, locale: string): Prior
   if (key === 'the-graph') {
     return isChinese
       ? {
-          metadataTitle: 'The Graph：区块链数据、Subgraph、价格与限制',
+          metadataTitle: 'The Graph：Subgraph 查询、索引、价格与新鲜度',
           metadataDescription:
-            '了解 The Graph 的 Subgraph、链上数据查询和开发者基础设施能力，并比较网络覆盖、查询方式、API 集成、价格和数据时效。',
+            '评估 The Graph 的 Subgraphs、Substreams、Graph Node 与 Gateway，比较网络覆盖、API key、查询价格、索引和数据新鲜度。',
           label: 'Web3 数据基础设施判断重点',
-          summary: '评估 The Graph 时，应先确认它是否覆盖你的链和数据模型，以及查询结果能否稳定进入产品工作流。',
+          summary: '评估 The Graph 时，应先选对 Subgraphs、Substreams 或 Graph Node，再分别验证查询访问和索引新鲜度。',
           checkpoints: [
-            '链、协议和 Subgraph 覆盖是否匹配',
-            '查询、API 和应用集成流程是否顺畅',
-            '数据时效、配额、价格和运维边界',
+            '目标链、数据模型和产品路径是否匹配',
+            'API key、Gateway 价格与支出限制',
+            'Indexer 覆盖、同步状态和故障回退',
           ],
         }
       : {
-          metadataTitle: 'The Graph: Blockchain Data, Subgraphs, Pricing & Limits',
+          metadataTitle: 'The Graph: Subgraph Queries, Indexing, Pricing & Freshness',
           metadataDescription:
-            'Review The Graph for subgraphs, blockchain data queries, and developer infrastructure, including network coverage, APIs, pricing, freshness, and operational limits.',
+            'Evaluate The Graph Subgraphs, Substreams, Graph Node, and Gateway across network coverage, API keys, query pricing, indexing, and data freshness.',
           label: 'Web3 data infrastructure decision',
           summary:
-            'Evaluate The Graph on whether it covers your chains and data model, and whether query results can reliably support a production application.',
+            'Choose between Subgraphs, Substreams, and Graph Node first, then validate query access and indexing freshness as separate production concerns.',
           checkpoints: [
-            'Chain, protocol, and subgraph coverage',
-            'Query, API, and application integration workflow',
-            'Data freshness, quotas, pricing, and operations',
+            'Target-chain, data-model, and product-path fit',
+            'API key, Gateway pricing, and spending controls',
+            'Indexer coverage, sync state, and failure fallback',
           ],
         };
   }

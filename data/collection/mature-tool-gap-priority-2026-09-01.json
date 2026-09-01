@@ -165,7 +165,9 @@
       "problem": "The page has niche demand and a strong limitation snapshot but no database-backed record or editable market-validation history.",
       "deliverable": "Migrate the page and connect query pricing, indexing freshness and production-readiness decisions to the Web3 guide.",
       "decisionAngles": ["querying vs indexing", "data freshness", "gateway pricing", "The Graph vs hosted blockchain data providers"],
-      "status": "queued"
+      "status": "completed",
+      "completedAt": "2026-09-01",
+      "result": "Migrated the existing The Graph fallback into one production database entity without changing its canonical URL. Distinguished Subgraphs, Substreams, Graph Node, and Gateway; added current query pricing and API-key controls; separated query spend from indexing health; and added network coverage, deployment, freshness, self-hosting, and active graph-node maturity evidence."
     }
   ]
 }

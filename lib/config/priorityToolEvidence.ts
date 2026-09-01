@@ -143,19 +143,23 @@ export const PRIORITY_TOOL_EVIDENCE: Record<string, PriorityToolEvidence> = {
     ],
   },
   'the-graph': {
-    checkedAt: '2026-08-31',
+    checkedAt: '2026-09-01',
     limitation: {
-      en: 'Querying and indexing are separate: paying more for queries cannot make an under-indexed Subgraph available or fresh, so production use still needs indexing and freshness checks.',
-      zh: '查询与索引是两项独立活动：增加查询费用不能让索引不足的 Subgraph 自动可用或保持新鲜，生产使用仍需检查索引和数据时效。',
+      en: 'The first 100,000 monthly queries are free and additional queries are currently $2 per 100,000, but query spend cannot repair an under-indexed, stale, or failed Subgraph.',
+      zh: '每月前 100,000 次查询免费，超出部分目前为每 100,000 次 $2；但增加查询支出不能修复索引不足、陈旧或失败的 Subgraph。',
     },
     sources: [
       {
-        label: 'Official pricing and payments',
-        url: 'https://thegraph.com/docs/en/gateways/subgraphs/consumer-side/pricing-payments/',
+        label: 'Official Studio pricing',
+        url: 'https://thegraph.com/studio-pricing/',
       },
       {
-        label: 'Official consumer gateway overview',
-        url: 'https://thegraph.com/docs/en/gateways/subgraphs/consumer-side/overview/',
+        label: 'Official query introduction',
+        url: 'https://thegraph.com/docs/en/subgraphs/querying/introduction/',
+      },
+      {
+        label: 'Official query and indexing economics',
+        url: 'https://thegraph.com/docs/en/gateways/subgraphs/consumer-side/pricing-payments/',
       },
     ],
   },
