@@ -2173,59 +2173,68 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
     return isChinese
       ? {
           label: '官方事实快照',
-          title: '套餐内用量、超额成本和代码隐私',
+          title: 'Agent 用量、Privacy Mode 与模型连续性',
           summary:
-            '以下信息来自 Cursor 官方定价、计费与隐私文档；模型价格和奖励用量可能变化，应在 Dashboard 核对实际消耗。',
-          checkedAt: '2026-08-31',
+            '以下信息来自 Cursor、OpenAI 的当前官方资料；除价格和隐私外，SpaceX 收购后的模型供应变化已成为采用前必须核对的风险。',
+          checkedAt: '2026-09-01',
           facts: [
             {
               label: '套餐与用量',
-              value: 'Pro $20/月并包含 $20 API agent usage；Pro Plus 包含 $70，Ultra 包含 $400；Teams 为 $40/用户/月。',
-            },
-            {
-              label: '超额成本',
               value:
-                '模型选择影响 token 消耗；套餐内用量耗尽后可按成本购买额外用量，组织管理员可设置月度或用户级限制。',
+                'Hobby 免费；Pro、Pro+、Ultra 分别为 $20、$60、$200/月；Teams Standard 与 Premium 分别为 $40、$120/用户/月。每个套餐都包含有限模型用量，超出后可按量计费。',
             },
             {
               label: '隐私边界',
               value:
-                '启用 Privacy Mode 后，Cursor 不将 Customer Data 用于训练，并与模型提供商维持 ZDR；滥用检测命中时仍可能按政策暂存调查数据。',
+                '启用 Privacy Mode 后 Customer Data 不用于训练，并使用 ZDR 协议；但请求仍经过 Cursor 后端，滥用检测命中时数据可能按提供商政策暂存调查。关闭该模式后，代码、prompt 和编辑动作可能用于改进与训练。',
+            },
+            {
+              label: '模型连续性',
+              value:
+                'Cursor 已于 2026-08-14 被 SpaceX 收购。OpenAI 于 8 月 28 日提议在 11 月 12 日停止向 Cursor 直接提供模型；这是拟议切换日期，当前并非已经停用。',
             },
           ],
           sources: [
-            { label: '模型与套餐用量', href: 'https://docs.cursor.com/account/pricing' },
             { label: '官方价格', href: 'https://cursor.com/pricing' },
             { label: '数据使用与 Privacy Mode', href: 'https://cursor.com/en-US/data-use' },
+            { label: 'SpaceX 收购公告', href: 'https://cursor.com/blog/joining-spacex' },
+            {
+              label: 'OpenAI 模型供应决定',
+              href: 'https://openai.com/index/our-decision-on-cursor-following-its-acquisition-by-spacex/',
+            },
           ],
         }
       : {
           label: 'Official fact snapshot',
-          title: 'Included usage, overage cost, and code privacy',
+          title: 'Agent usage, Privacy Mode, and model continuity',
           summary:
-            'These facts come from Cursor pricing, billing, and privacy documentation. Model prices and bonus usage can change, so verify actual consumption in the dashboard.',
-          checkedAt: '2026-08-31',
+            'These facts come from current Cursor and OpenAI materials. Beyond pricing and privacy, model-supply changes after the SpaceX acquisition are now a required adoption check.',
+          checkedAt: '2026-09-01',
           facts: [
             {
               label: 'Plans and usage',
               value:
-                'Pro is $20/mo with $20 of API agent usage; Pro Plus includes $70, Ultra includes $400, and Teams is $40/user/mo.',
-            },
-            {
-              label: 'Overage cost',
-              value:
-                'Model choice affects token consumption; users can buy additional usage at cost after the included amount, while organizations can configure monthly or per-user limits.',
+                'Hobby is free; Pro, Pro+, and Ultra are $20, $60, and $200 monthly. Teams Standard and Premium are $40 and $120 per user monthly. Every plan includes finite model usage, with on-demand billing available beyond it.',
             },
             {
               label: 'Privacy boundary',
               value:
-                'With Privacy Mode enabled, Cursor does not train on Customer Data and maintains ZDR agreements with model providers; abuse-detector investigations remain an exception.',
+                'Privacy Mode prevents training on Customer Data and uses ZDR agreements, but requests still pass through Cursor. Abuse detections can trigger policy-based investigation retention. With the mode off, code, prompts, and editor actions may be used for improvement and training.',
+            },
+            {
+              label: 'Model continuity',
+              value:
+                'Cursor was acquired by SpaceX on August 14, 2026. OpenAI proposed ending direct model supply on November 12 after giving notice on August 28; this is a proposed transition date, not an already completed shutdown.',
             },
           ],
           sources: [
-            { label: 'Models and included usage', href: 'https://docs.cursor.com/account/pricing' },
             { label: 'Official pricing', href: 'https://cursor.com/pricing' },
             { label: 'Data use and Privacy Mode', href: 'https://cursor.com/en-US/data-use' },
+            { label: 'SpaceX acquisition announcement', href: 'https://cursor.com/blog/joining-spacex' },
+            {
+              label: 'OpenAI model-supply decision',
+              href: 'https://openai.com/index/our-decision-on-cursor-following-its-acquisition-by-spacex/',
+            },
           ],
         };
   }
@@ -2949,28 +2958,28 @@ function getPriorityToolSearchIntent(websiteName: string, locale: string): Prior
   if (key === 'cursor') {
     return isChinese
       ? {
-          metadataTitle: 'Cursor AI 代码编辑器：功能、价格与限制',
+          metadataTitle: 'Cursor AI：Agent 价格、Privacy Mode 与模型变化',
           metadataDescription:
-            '了解 Cursor 的代码库上下文、补全、Agent 修改和模型能力，并比较使用额度、代码审查、隐私设置与团队开发工作流。',
+            '评估 Cursor 的 Agent、代码库上下文和多文件修改，并核对套餐用量、Privacy Mode、SpaceX 收购后的模型供应变化与迁移成本。',
           label: 'AI 代码编辑器判断重点',
           summary: '评估 Cursor 时，应先看它能否理解并安全修改你的真实代码库，而不只是单次补全速度。',
           checkpoints: [
             '代码库上下文、补全和多文件修改能力',
             'Agent 变更、差异审查和人工确认流程',
-            '模型选择、使用额度、隐私和团队边界',
+            '模型供应、使用额度、Privacy Mode 和团队边界',
           ],
         }
       : {
-          metadataTitle: 'Cursor AI Code Editor: Features, Pricing & Limits',
+          metadataTitle: 'Cursor AI: Agent Pricing, Privacy Mode & Model Changes',
           metadataDescription:
-            'Review Cursor for codebase context, completion, agent edits, and model access, including usage limits, code review, privacy settings, and team workflows.',
+            'Evaluate Cursor agents, codebase context, and multi-file edits by plan usage, Privacy Mode, model-supply changes after the SpaceX acquisition, and migration cost.',
           label: 'AI code editor decision',
           summary:
             'Evaluate Cursor on whether it can understand and safely change a real codebase, not only on single-line completion speed.',
           checkpoints: [
             'Codebase context, completion, and multi-file edits',
             'Agent changes, diff review, and human approval',
-            'Model access, usage limits, privacy, and team boundaries',
+            'Model continuity, usage limits, Privacy Mode, and team boundaries',
           ],
         };
   }

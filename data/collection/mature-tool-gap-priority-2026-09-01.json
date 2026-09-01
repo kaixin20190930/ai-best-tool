@@ -149,7 +149,9 @@
       "problem": "The page has a decision-oriented title and official evidence but still depends on fallback data and lacks editable market-validation history.",
       "deliverable": "Create the production record without changing the canonical URL, then add model-cost, privacy and agent-heavy workflow comparisons.",
       "decisionAngles": ["agent usage cost", "privacy mode and data use", "editor migration cost", "Cursor vs coding-agent alternatives"],
-      "status": "queued"
+      "status": "completed",
+      "completedAt": "2026-09-01",
+      "result": "Migrated the existing Cursor fallback into one production database entity without changing its canonical URL. Added current plan and usage boundaries, Privacy Mode routing and retention exceptions, human review and migration controls, the completed SpaceX acquisition, and OpenAI's proposed November 12 model-supply cutoff as a live continuity risk rather than an already completed shutdown."
     },
     {
       "rank": 10,

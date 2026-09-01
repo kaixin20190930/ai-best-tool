@@ -127,14 +127,19 @@ export const PRIORITY_TOOL_EVIDENCE: Record<string, PriorityToolEvidence> = {
     ],
   },
   cursor: {
-    checkedAt: '2026-08-31',
+    checkedAt: '2026-09-01',
     limitation: {
-      en: 'Agent usage is consumed at model inference API prices, so model choice and agent-heavy workflows can exhaust included usage well before the billing period ends.',
-      zh: 'Agent 用量按模型推理 API 价格消耗，因此模型选择和高频 Agent 工作流可能在账期结束前耗尽套餐内额度。',
+      en: 'Agent cost depends on model and usage pool, Privacy Mode still routes requests through Cursor, and OpenAI has proposed ending direct model supply on November 12, 2026 after the SpaceX acquisition.',
+      zh: 'Agent 成本取决于模型和用量池；Privacy Mode 下请求仍会经过 Cursor；SpaceX 收购后，OpenAI 已提议于 2026 年 11 月 12 日停止向 Cursor 直接提供模型。',
     },
     sources: [
-      { label: 'Official models and pricing', url: 'https://docs.cursor.com/account/pricing' },
+      { label: 'Current plans and pricing', url: 'https://cursor.com/pricing' },
       { label: 'Official data use policy', url: 'https://cursor.com/en-US/data-use' },
+      { label: 'Cursor acquisition announcement', url: 'https://cursor.com/blog/joining-spacex' },
+      {
+        label: 'Proposed OpenAI model-supply cutoff',
+        url: 'https://openai.com/index/our-decision-on-cursor-following-its-acquisition-by-spacex/',
+      },
     ],
   },
   'the-graph': {
