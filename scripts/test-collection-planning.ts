@@ -6,6 +6,7 @@ import {
   isDifferentExistingTool,
   validateThreeDayCandidatePool,
 } from '@/lib/services/admin/collectionPlanning';
+import { inferDraftClassification } from '@/lib/services/admin/collection';
 
 function entry(title: string, day: string): CandidatePoolEntry {
   return {
@@ -51,6 +52,23 @@ assert.equal(getCandidateIntakePlan({ intakePlan: { decision: 'unknown' } }), nu
 assert.equal(isDifferentExistingTool('tool-a', 'tool-a'), false);
 assert.equal(isDifferentExistingTool('tool-a', null), true);
 assert.equal(isDifferentExistingTool(null, 'tool-a'), false);
+
+const explicitClassification = inferDraftClassification({
+  summary: 'A video design workflow with productivity integrations and content output.',
+  rawPayload: {
+    categorySlug: 'design-art',
+    pricing: 'paid',
+    tags: ['video-agent', 'motion-design'],
+    useCases: ['Create launch videos', 'Build product explainers'],
+  },
+});
+assert.equal(explicitClassification.categorySlug, 'design-art');
+assert.equal(explicitClassification.pricing, 'paid');
+assert.deepEqual(explicitClassification.tags, ['video-agent', 'motion-design']);
+assert.deepEqual(explicitClassification.useCases, [
+  'Create launch videos',
+  'Build product explainers',
+]);
 
 const incompleteReadyPool = validPool.map((item, index) =>
   index === 0 ? { ...item, decision: 'ready_for_draft' as const, gaps: [] } : item

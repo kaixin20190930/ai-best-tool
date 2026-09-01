@@ -230,6 +230,12 @@ function getStringValue(value: unknown): string | undefined {
   return typeof value === 'string' && value.trim() ? value.trim() : undefined;
 }
 
+function getStringList(value: unknown): string[] {
+  return Array.isArray(value)
+    ? value.map(getStringValue).filter((entry): entry is string => Boolean(entry))
+    : [];
+}
+
 function parseUrlSafely(url: string | null | undefined, baseUrl?: string): URL | null {
   if (!url) {
     return null;
@@ -419,7 +425,7 @@ export function scoreCollectionCandidate(input: {
   };
 }
 
-function inferDraftClassification(input: {
+export function inferDraftClassification(input: {
   title?: string | null;
   summary?: string | null;
   url?: string | null;
@@ -486,11 +492,19 @@ function inferDraftClassification(input: {
     addTag('marketing');
   }
 
+  const explicitCategory = getStringValue(input.rawPayload?.categorySlug);
+  const explicitTags = getStringList(input.rawPayload?.tags);
+  const explicitUseCases = getStringList(input.rawPayload?.useCases);
+  const explicitPricing = getStringValue(input.rawPayload?.pricing);
+
   return {
-    categorySlug,
-    tags: Array.from(tags).slice(0, 6),
-    pricing: 'freemium',
-    useCases: Array.from(useCases).slice(0, 4),
+    categorySlug: explicitCategory || categorySlug,
+    tags: (explicitTags.length > 0 ? explicitTags : Array.from(tags)).slice(0, 6),
+    pricing:
+      explicitPricing === 'free' || explicitPricing === 'freemium' || explicitPricing === 'paid'
+        ? explicitPricing
+        : 'freemium',
+    useCases: (explicitUseCases.length > 0 ? explicitUseCases : Array.from(useCases)).slice(0, 4),
   };
 }
 
@@ -1328,7 +1342,11 @@ export async function importCollectionCandidateToDraft(
     throw new Error('Collection candidate not found');
   }
 
-  if (candidate.status === 'imported' && candidate.tool_id) {
+  const linkedTool = candidate.tool_id
+    ? await pool.query('SELECT id, status FROM tools WHERE id = $1 LIMIT 1', [candidate.tool_id])
+    : null;
+  const linkedToolStatus = linkedTool?.rows[0]?.status as string | undefined;
+  if (candidate.status === 'imported' && candidate.tool_id && linkedToolStatus !== 'draft') {
     return { toolId: candidate.tool_id };
   }
 
@@ -1404,8 +1422,54 @@ export async function importCollectionCandidateToDraft(
     zh: draftDetail,
   };
 
-  const toolResult = await pool.query(
-    `
+  const featurePayload = {
+    collection: {
+      sourceUrl: candidate.normalized_url,
+      sourceName: candidate.source_name,
+      canonicalUrl: detailMetadata.canonicalUrl,
+      externalUrl: detailMetadata.externalUrl,
+      productHuntRedirectUrl: getStoredProductHuntRedirectUrl(candidate.raw_payload),
+      relevanceScore: updatedScore.relevanceScore,
+      qualityScore: updatedScore.qualityScore,
+      scoreReason: updatedScore.reason,
+    },
+    suggestedCategorySlug: classification.categorySlug,
+    suggestedUseCases: classification.useCases,
+  };
+  const toolResult =
+    candidate.tool_id && linkedToolStatus === 'draft'
+      ? await pool.query(
+          `
+      UPDATE tools
+      SET title = $2,
+          content = $3,
+          detail = $4,
+          url = $5,
+          image_url = $6,
+          thumbnail_url = $6,
+          category_id = $7,
+          tags = $8,
+          pricing = $9,
+          features = COALESCE(features, '{}'::jsonb) || $10::jsonb,
+          updated_at = NOW()
+      WHERE id = $1 AND status = 'draft'
+      RETURNING id
+    `,
+          [
+            candidate.tool_id,
+            JSON.stringify(title),
+            JSON.stringify(content),
+            JSON.stringify(detail),
+            officialUrl,
+            detailMetadata.imageUrl || null,
+            categoryId,
+            classification.tags,
+            classification.pricing,
+            JSON.stringify(featurePayload),
+          ]
+        )
+      : await pool.query(
+          `
       INSERT INTO tools (
         name, title, content, detail, url, image_url, thumbnail_url,
         category_id, tags, pricing, status, features
@@ -1413,32 +1477,19 @@ export async function importCollectionCandidateToDraft(
       VALUES ($1, $2, $3, $4, $5, $6, $6, $7, $8, $9, 'draft', $10)
       RETURNING id
     `,
-    [
-      slug,
-      JSON.stringify(title),
-      JSON.stringify(content),
-      JSON.stringify(detail),
-      officialUrl,
-      detailMetadata.imageUrl || null,
-      categoryId,
-      classification.tags,
-      classification.pricing,
-      JSON.stringify({
-        collection: {
-          sourceUrl: candidate.normalized_url,
-          sourceName: candidate.source_name,
-          canonicalUrl: detailMetadata.canonicalUrl,
-          externalUrl: detailMetadata.externalUrl,
-          productHuntRedirectUrl: getStoredProductHuntRedirectUrl(candidate.raw_payload),
-          relevanceScore: updatedScore.relevanceScore,
-          qualityScore: updatedScore.qualityScore,
-          scoreReason: updatedScore.reason,
-        },
-        suggestedCategorySlug: classification.categorySlug,
-        suggestedUseCases: classification.useCases,
-      }),
-    ]
-  );
+          [
+            slug,
+            JSON.stringify(title),
+            JSON.stringify(content),
+            JSON.stringify(detail),
+            officialUrl,
+            detailMetadata.imageUrl || null,
+            categoryId,
+            classification.tags,
+            classification.pricing,
+            JSON.stringify(featurePayload),
+          ]
+        );
   const toolId = toolResult.rows[0].id as string;
 
   await pool.query(

@@ -22,6 +22,7 @@ export type CandidatePoolEntry = CandidateIntakePlan & {
   imageUrl?: string;
   limitations?: string[];
   notIdealFor?: string[];
+  pricing?: 'free' | 'freemium' | 'paid';
   pricingSnapshot?: string;
   summary: string;
   tags: string[];

@@ -91,6 +91,7 @@ async function main() {
           title: entry.title,
         },
         intakePlan: effectivePlan,
+        pricing: entry.pricing,
         pricingSnapshot: entry.pricingSnapshot || '',
         tags: entry.tags,
         useCases: entry.useCases,
@@ -160,7 +161,13 @@ async function main() {
         draftReady: admission.draftReady,
         draftToolId: draftResult?.toolId || '',
         publishReady: admission.publishReady,
-        outcome: draftResult ? 'draft_created' : apply ? 'updated' : 'dry_run',
+        outcome: draftResult
+          ? candidate.rows[0].status === 'imported'
+            ? 'draft_refreshed'
+            : 'draft_created'
+          : apply
+            ? 'updated'
+            : 'dry_run',
       });
     }
 

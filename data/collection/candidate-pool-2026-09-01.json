@@ -115,17 +115,28 @@
   {
     "candidateUrl": "https://www.producthunt.com/products/motion-8",
     "categorySlug": "design-art",
-    "decision": "needs_evidence",
-    "decisionReason": "The official site and maker launch page verify an editable video-agent workflow; access, pricing and output limitations need review.",
+    "compareAxes": ["Editable scene and element control", "Brand research and source-asset workflow", "Credit cost and video duration", "Web app, API and MCP access"],
+    "decision": "ready_for_draft",
+    "decisionReason": "The official product site, launch article and credit documentation verify public account access, editable output, integrations and usage-based pricing. The candidate can enter draft review but is not automatically publishable.",
+    "detail": "Motion by Mosaic is an AI motion-design agent for launch videos, product demos, explainers, logo animation and social ads. It researches a product or brand, plans a storyboard, builds scenes with voiceover, music and captions, and keeps generated elements editable. The product is available through its web app, while API and MCP workflows require an authenticated account and available Motion credits.",
     "evidenceUrls": [
       "https://motion.so/",
-      "https://motion.so/studio",
-      "https://www.producthunt.com/products/motion-8"
+      "https://motion.so/blog/introducing-motion",
+      "https://docs.motion.so/guides/credits"
     ],
-    "gaps": ["Confirm public access", "Confirm current pricing", "Document generation limitations"],
+    "gaps": [],
+    "imageUrl": "https://motion.so/motionbg.png",
+    "limitations": [
+      "Credit usage is variable: the official guide estimates 200 credits for roughly 1-2 videos, while longer videos, premium models, voiceover and follow-up edits can consume more.",
+      "API jobs require available account credits and can fail with an insufficient-credits response; credit purchases and auto top-ups are managed outside the public API.",
+      "Brand research and generated scenes still need human review for factual accuracy, source rights and creative direction, even though individual elements remain editable."
+    ],
+    "notIdealFor": ["Teams that require a fixed per-video cost before generation", "Editors who need a traditional frame-accurate timeline as the primary workflow"],
     "officialUrl": "https://motion.so/",
     "plannedFor": "2026-09-03T09:00:00.000Z",
-    "reviewedAt": "2026-08-31T00:00:00.000Z",
+    "pricing": "paid",
+    "pricingSnapshot": "Credits cost $5 for 200. The official guide estimates about 1-2 videos per 200 credits and about 18-20 videos per 5,000 credits; actual usage varies with duration, model, voiceover and follow-up edits. Verified 2026-09-01.",
+    "reviewedAt": "2026-09-01T00:00:00.000Z",
     "summary": "Motion is a video agent that researches and storyboards from prompts and references, then keeps generated scenes editable at the element level.",
     "tags": ["video-agent", "motion-design", "video-editing"],
     "title": "Motion",
