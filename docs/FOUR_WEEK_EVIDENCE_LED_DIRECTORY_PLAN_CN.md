@@ -49,7 +49,7 @@
 | W2-01B | 编辑页增加证据来源、限制和 Decision Card 字段校验 | 1.5 天 | W2-01A | 缺字段无法误标可发布 | 已完成，提交 `4e3df958`；部署 `b48753cd`、production smoke 通过 |
 | W2-01C | 市场验证编辑器与前台成熟度状态 | 1 天 | W2-01B | 五维评分、独立证据和信号可编辑；收集型工具未验证不能发布；详情页展示验证依据 | 已完成；专项准入测试、tsc 与完整 build 通过 |
 | W2-02A | 生成未来 3 天候选池，每日处理 1-2 条 | 每日 1 小时 | W2-01 | 每条有发布/待补结论 | 已完成，提交 `d7ea18b5`；6 条生产候选按 3 天每天 2 条排期 |
-| W2-02B | 首批 7-14 条处理台账；只发布通过资料与市场双重准入的条目 | 每日 1 小时 | W2-02A | 无低质量例外放行 | 进行中，已处理 9/7-14；Perplexity 通过市场与资料准入并迁移既有 fallback，Owlish 保持 draft，ArcRift 不因数量目标放行 |
+| W2-02B | 首批 7-14 条处理台账；只发布通过资料与市场双重准入的条目 | 每日 1 小时 | W2-02A | 无低质量例外放行 | 进行中，已处理 10/7-14；Perplexity 与 Make 已迁移既有 fallback，Owlish 保持 draft，ArcRift 不因数量目标放行 |
 | W2-02D | 下一公开时段成熟工具预审；证据齐全但不提前发布 | 0.5 天 | W2-02B | 证据、边界和发布闸门自动校验；不改生产数据或 sitemap | 已完成 n8n 预审；状态 `ready_for_next_slot`，最早 2026-09-02 复核后迁移 |
 | W2-03A | Web3、Automation、Research Guide 统一任务入口 | 1 天 | W1-01C | 指向对应工具 Decision Card | 已完成，提交 `de1504e6`；专项结构测试、Decision Card 回归、tsc、完整 build 通过 |
 
@@ -158,6 +158,14 @@
 - 发布控制：本轮只新增 `data/collection/n8n-preaudit-2026-09-01.json`，状态为 `ready_for_next_slot`；`productionWriteApproved=false`、`sitemapChangeApproved=false`，不会提前写入生产工具表或扩大 sitemap。
 - 下一时段迁移前必须重新核对实时 Pricing，尤其是不稳定的 AI credits 和套餐权益；随后复用现有 `/ai/n8n` canonical，禁止创建重复 URL。
 - 自动验收：`pnpm run test:next-tool-preaudit` 负责验证官方/独立来源数量、许可证边界、计费单位、限制深度及生产发布闸门。
+
+### W2-02B 第八批处理记录（2026-09-01）
+
+- Make：确认 Supabase 历史表存在旧条目，但生产页面、后台和 sitemap 的当前事实源是 Neon；Neon 原先没有 Make 实体，因此 `/ai/make` 只是 fallback，不能把历史表状态误判为生产已发布。
+- 保留既有 `/ai/make` canonical 并迁移为唯一 Neon 实体，不创建新 slug；补齐双语定位、Free/Core/Pro/Teams 当前套餐、credits 计费、AI 双重成本、credits 耗尽中断、US/EU 数据区域、托管云边界和代表性试用方法。
+- 市场验证为 `95/100 / Validated`：G2 数百条评价、官方披露的 350,000+ 用户、Celonis 收购后的持续运营和当前安全文档构成成熟度证据；高级映射/调试、支持摩擦和复杂 scenario 的 credits 预测仍作为限制保留。
+- 生产回读为 `published / continue_index / 95`，下次事实复查为 2026-09-15；迁移后重新完整 build，本地生产 sitemap 从 174 增至 176，新增项严格为 `/ai/make` 与 `/cn/ai/make`。
+- 自动验收：迁移先在真实 Neon 连接中执行 `BEGIN → SQL → 回读 → ROLLBACK`；随后 `test:priority-tool-evidence`、TypeScript、完整 build、双语标题/canonical/事实块/市场验证和 sitemap 均通过。
 
 ### W2-02C 首批成熟工具内容缺口（2026-09-01）
 

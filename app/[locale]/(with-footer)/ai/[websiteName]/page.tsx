@@ -1452,7 +1452,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           label: '官方事实快照',
           title: '价格、用量和人工确认边界',
           summary: '以下信息来自 Lindy 官方定价与用量文档；价格和额度可能变化，购买前应再次打开官方页面确认。',
-          checkedAt: '2026-08-03',
+          checkedAt: '2026-09-01',
           facts: [
             { label: '试用与套餐', value: '7 天试用；Plus $49.99/月、Pro $99.99/月、Max $199.99/月。' },
             {
@@ -2439,7 +2439,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           title: 'Credits、AI 双重成本和数据区域',
           summary:
             '以下信息来自 Make 官方帮助中心；credits、模型转换率和套餐上限可能变化，应按场景运行记录核算真实成本。',
-          checkedAt: '2026-08-03',
+          checkedAt: '2026-09-01',
           facts: [
             {
               label: '基础计费',
@@ -2454,6 +2454,10 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
               label: '数据区域',
               value: '创建 organization 时可选美国或欧盟数据中心；该位置决定数据存储与处理区域，创建后不能更改。',
             },
+            {
+              label: '中断边界',
+              value: 'credits 用完后 scenario 会停止；incoming webhooks 只会在当前 queue allowance 范围内等待。',
+            },
           ],
           sources: [
             { label: 'Credits 规则', href: 'https://help.make.com/credits' },
@@ -2466,7 +2470,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           title: 'Credits, dual AI costs, and data region',
           summary:
             'These facts come from the Make help center. Credits, model conversion rates, and plan limits can change, so calculate real cost from scenario run records.',
-          checkedAt: '2026-08-03',
+          checkedAt: '2026-09-01',
           facts: [
             {
               label: 'Base billing',
@@ -2482,6 +2486,11 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
               label: 'Data region',
               value:
                 'An organization selects a US or EU data center at creation; this determines where its data is stored and processed and cannot be changed later.',
+            },
+            {
+              label: 'Interruption boundary',
+              value:
+                'Scenarios stop when credits run out; incoming webhooks wait only within the current queue allowance.',
             },
           ],
           sources: [
