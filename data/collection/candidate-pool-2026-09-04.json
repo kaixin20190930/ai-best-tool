@@ -1,0 +1,90 @@
+[
+  {
+    "candidateUrl": "https://www.producthunt.com/products/emdash",
+    "categorySlug": "developer-tools",
+    "compareAxes": [
+      "Supported coding agents",
+      "Worktree isolation and parallel execution",
+      "Local versus remote project support",
+      "Review, issue and CI integrations"
+    ],
+    "decision": "ready_for_draft",
+    "decisionReason": "The official site, documentation and Apache-2.0 repository verify the current workflow, supported platforms, provider model, privacy boundary and free open-source license. The candidate can enter draft review but is not automatically publishable.",
+    "detail": "Emdash is a free, open-source desktop environment for running multiple CLI coding agents in parallel. Each task can use an isolated Git worktree and retain its branch, terminal, conversation and review state. The app supports local projects and remote machines over SSH, connects issue sources to agent tasks, and brings diffs, pull requests and CI checks into one workflow.",
+    "evidenceUrls": [
+      "https://emdash.com/",
+      "https://emdash.com/docs/providers",
+      "https://github.com/generalaction/emdash"
+    ],
+    "gaps": [],
+    "imageUrl": "https://emdash.com/opengraph-image.png?opengraph-image.bea53f98.png",
+    "limitations": [
+      "Emdash orchestrates separate coding-agent CLIs; each provider can still require its own installation, account, authentication or paid access.",
+      "The application stores its own state locally, but selected agent providers may transmit code, prompts and context under their separate data policies.",
+      "Worktree isolation and review workflows assume a Git repository and are best used by people comfortable with branches, diffs and merge decisions.",
+      "Provider capabilities differ: auto-approve, resume, hooks and initial-prompt support are not identical across every supported CLI."
+    ],
+    "notIdealFor": [
+      "Non-technical users who do not work with Git repositories",
+      "Teams seeking one bundled AI model subscription instead of managing provider access"
+    ],
+    "officialUrl": "https://emdash.com/",
+    "plannedFor": "2026-09-04T09:00:00.000Z",
+    "pricing": "free",
+    "pricingSnapshot": "The desktop application is free and open source under Apache-2.0. Agent-provider accounts, APIs or infrastructure may have separate costs. Verified 2026-09-01 on the official site and repository.",
+    "reviewedAt": "2026-09-01T00:00:00.000Z",
+    "summary": "Emdash is an open-source desktop environment for running multiple coding agents in isolated Git worktrees and reviewing their changes in one place.",
+    "tags": ["coding-agents", "git-worktrees", "open-source"],
+    "title": "Emdash",
+    "useCases": [
+      "Run coding agents in parallel",
+      "Isolate agent work with Git worktrees",
+      "Review agent diffs and pull requests"
+    ]
+  },
+  {
+    "candidateUrl": "https://www.producthunt.com/products/owlish",
+    "categorySlug": "chatbot",
+    "decision": "needs_evidence",
+    "decisionReason": "Official product and developer documentation establish the support-agent workflow, but the complete current plan matrix, channel entitlements and operational limitations still require one consolidated verification pass.",
+    "evidenceUrls": [
+      "https://owlish.bot/",
+      "https://owlish.bot/docs/developers/overview/",
+      "https://owlish.bot/docs/knowledge-base/overview/"
+    ],
+    "gaps": [
+      "Verify the current Free, Starter, Growth and Scale prices on the canonical plans page.",
+      "Record exact channel, session, knowledge-base and retention limits for each plan.",
+      "Confirm a stable official image and explicit not-ideal scenarios before draft creation."
+    ],
+    "officialUrl": "https://owlish.bot/",
+    "plannedFor": "2026-09-05T09:00:00.000Z",
+    "reviewedAt": "2026-09-01T00:00:00.000Z",
+    "summary": "Owlish builds customer-support agents from websites, files and documented answers, with citations, shared handoff workflows and multiple deployment channels.",
+    "tags": ["customer-support", "knowledge-base", "ai-agents"],
+    "title": "Owlish",
+    "useCases": ["Answer support questions", "Ground replies in company documents", "Hand conversations to human support"]
+  },
+  {
+    "candidateUrl": "https://www.producthunt.com/products/glia-2",
+    "categorySlug": "developer-tools",
+    "decision": "needs_evidence",
+    "decisionReason": "The original Glia candidate now identifies as ArcRift. The official repository verifies the local memory architecture and MIT license, but identity migration, current release packaging and stable public assets must be reconciled before creating a draft.",
+    "evidenceUrls": [
+      "https://github.com/Eshaan-Nair/ArcRift",
+      "https://www.producthunt.com/products/glia-2"
+    ],
+    "gaps": [
+      "Confirm whether ArcRift fully replaces the Glia product name and record the canonical public URL.",
+      "Verify current supported browsers, desktop platforms and installation path from release artifacts.",
+      "Confirm a stable official image and document resource, privacy and setup limitations."
+    ],
+    "officialUrl": "https://github.com/Eshaan-Nair/ArcRift",
+    "plannedFor": "2026-09-06T09:00:00.000Z",
+    "reviewedAt": "2026-09-01T00:00:00.000Z",
+    "summary": "ArcRift, formerly Glia, is an open-source local memory layer that connects browser conversations and code context to MCP-compatible development tools.",
+    "tags": ["agent-memory", "mcp", "local-ai"],
+    "title": "ArcRift",
+    "useCases": ["Reuse browser-chat context in an IDE", "Search local agent memory", "Expose project context over MCP"]
+  }
+]

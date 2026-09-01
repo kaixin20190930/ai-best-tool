@@ -1466,7 +1466,8 @@ export async function importCollectionCandidateToDraft(
           category_id = $7,
           tags = $8,
           pricing = $9,
-          features = COALESCE(features, '{}'::jsonb) || $10::jsonb,
+          use_cases = $10::jsonb,
+          features = COALESCE(features, '{}'::jsonb) || $11::jsonb,
           updated_at = NOW()
       WHERE id = $1 AND status = 'draft'
       RETURNING id
@@ -1481,6 +1482,7 @@ export async function importCollectionCandidateToDraft(
             categoryId,
             classification.tags,
             classification.pricing,
+            JSON.stringify(classification.useCases),
             JSON.stringify(featurePayload),
           ]
         )
@@ -1488,9 +1490,9 @@ export async function importCollectionCandidateToDraft(
           `
       INSERT INTO tools (
         name, title, content, detail, url, image_url, thumbnail_url,
-        category_id, tags, pricing, status, features
+        category_id, tags, pricing, use_cases, status, features
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $6, $7, $8, $9, 'draft', $10)
+      VALUES ($1, $2, $3, $4, $5, $6, $6, $7, $8, $9, $10::jsonb, 'draft', $11)
       RETURNING id
     `,
           [
@@ -1503,6 +1505,7 @@ export async function importCollectionCandidateToDraft(
             categoryId,
             classification.tags,
             classification.pricing,
+            JSON.stringify(classification.useCases),
             JSON.stringify(featurePayload),
           ]
         );

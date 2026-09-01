@@ -48,7 +48,7 @@
 | W2-01A | 后台列表增加完整度、准入状态、下次复查、缺失项筛选 | 1.5 天 | W1-02 | 管理员一屏识别能否发布 | 已完成，提交 `9f780aa0`；tsc/build 通过 |
 | W2-01B | 编辑页增加证据来源、限制和 Decision Card 字段校验 | 1.5 天 | W2-01A | 缺字段无法误标可发布 | 已完成，提交 `4e3df958`；部署 `b48753cd`、production smoke 通过 |
 | W2-02A | 生成未来 3 天候选池，每日处理 1-2 条 | 每日 1 小时 | W2-01 | 每条有发布/待补结论 | 已完成，提交 `d7ea18b5`；6 条生产候选按 3 天每天 2 条排期 |
-| W2-02B | 首批 7-14 条处理台账；只发布通过准入的条目 | 每日 1 小时 | W2-02A | 无低质量例外放行 | 进行中，已处理 6/7-14；首个三日候选池已全部形成合格草稿，均未公开 |
+| W2-02B | 首批 7-14 条处理台账；只发布通过准入的条目 | 每日 1 小时 | W2-02A | 无低质量例外放行 | 进行中，已处理 7/7-14；7 条均为合格草稿且未公开，第二个三日池另保留 2 条待补证据候选 |
 | W2-03A | Web3、Automation、Research Guide 统一任务入口 | 1 天 | W1-01C | 指向对应工具 Decision Card | 已完成，提交 `de1504e6`；专项结构测试、Decision Card 回归、tsc、完整 build 通过 |
 
 ### 第 3 周：变化监测与真实信号（09-15 至 09-21，预计 4-5 个开发日）
@@ -119,6 +119,13 @@
 - PollyReach：已核验官方首页、Pricing 与 Terms；记录 `50+` 国家宣传、Star/Pro/Max 的 credits 与国家数限制、免费额度周/月口径冲突、credits 不保证固定工作量，以及 consent、AI disclosure、DNC、当地拨打时段和记录保存责任；草稿 `8d9934d7-d6de-42da-b60a-71330e3f7e3c`。
 - 补齐虚拟发现分类与实体存储分类映射：`voice → chatbot`、`developer-tools → productivity`；保留 `suggestedCategorySlug` 和标签用于 Voice/Developer 发现入口，修复 PollyReach、Thinnest AI、Re_gent 的空分类。
 - 本批 6 条候选均显式记录 `free / freemium / paid`，避免默认价格误判；生产幂等回读确认全部仍为 `draft`，没有自动发布。
+
+### W2-02B 第五批处理记录（2026-09-01）
+
+- Emdash：已核验官方首页、Providers 文档和 Apache-2.0 仓库；记录并行 agent、Git worktree 隔离、本地/SSH 项目、issue/PR/CI 工作流，以及 provider 账号、数据边界和能力差异；草稿 `6f62a262-3cb3-4201-9127-b1c4eda6438f`。
+- 新增第二个三日候选池 `data/collection/candidate-pool-2026-09-04.json`：Emdash 通过准入；Owlish 因完整价格/渠道/容量边界待核验、ArcRift 因 Glia 更名与当前安装/素材边界待核验，二者保持 `new` 且未创建工具页。
+- 修复候选导入器遗漏规范 `tools.use_cases` 的问题；幂等回填首批 7 条草稿，每条生产回读均为 3 项用途，分类、价格和 `draft` 状态不变。
+- 候选级结果：Emdash `coreGaps=0 / decisionGaps=0`；Owlish 与 ArcRift 均未达到草稿准入门槛。W2-02B 达到最低验收数量 7 条，但继续按每日 1-2 条节奏向 14 条上限推进。
 
 ## 状态更新协议
 
