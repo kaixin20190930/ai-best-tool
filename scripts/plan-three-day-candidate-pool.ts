@@ -91,6 +91,7 @@ async function main() {
           title: entry.title,
         },
         intakePlan: effectivePlan,
+        marketValidation: entry.marketValidation,
         pricing: entry.pricing,
         pricingSnapshot: entry.pricingSnapshot || '',
         tags: entry.tags,
@@ -137,6 +138,8 @@ async function main() {
                 decisionGaps: admission.decisionGaps,
                 draftReady: admission.draftReady,
                 evaluatedAt: new Date().toISOString(),
+                marketGaps: admission.marketGaps,
+                marketValidated: admission.marketValidated,
                 publishReady: admission.publishReady,
               },
             }),
@@ -148,7 +151,7 @@ async function main() {
       }
 
       const draftResult =
-        apply && createReadyDrafts && admission.publishReady && effectivePlan.decision !== 'duplicate'
+        apply && createReadyDrafts && admission.draftReady && effectivePlan.decision !== 'duplicate'
           ? await importCollectionCandidateToDraft(candidate.rows[0].id)
           : null;
 
@@ -160,6 +163,8 @@ async function main() {
         decisionGaps: admission.decisionGaps.length,
         draftReady: admission.draftReady,
         draftToolId: draftResult?.toolId || '',
+        marketGaps: admission.marketGaps.length,
+        marketValidated: admission.marketValidated,
         publishReady: admission.publishReady,
         outcome: draftResult
           ? candidate.rows[0].status === 'imported'

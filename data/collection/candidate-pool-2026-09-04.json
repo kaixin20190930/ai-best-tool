@@ -69,6 +69,19 @@
       "Programmatic agent creation, billing changes, channel installation and session webhooks are not currently exposed by the public API.",
       "Email and Instagram are listed as included when available rather than currently available on the reviewed pricing page."
     ],
+    "marketValidation": {
+      "evidenceUrls": [
+        "https://www.producthunt.com/products/owlish",
+        "https://peerpush.com/p/owlish"
+      ],
+      "reviewedAt": "2026-09-01T00:00:00.000Z",
+      "strongSignals": [],
+      "supportingSignals": [
+        "recent-public-launch",
+        "transparent-official-documentation"
+      ],
+      "verdict": "emerging"
+    },
     "notIdealFor": [
       "Teams needing an unlimited or high-volume free support bot",
       "Developers who require a complete API-only setup and billing workflow",

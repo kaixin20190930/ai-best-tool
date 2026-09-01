@@ -12,7 +12,7 @@
 
 以下行为在本轮冻结：
 
-- 不批量新增同义 guide、comparison 或 alternatives URL。工具收录每天至少公开 1 个、最多 2 个；候选处理或创建 draft 不计入公开日更。只有通过 [高质量收录与 "Best" 定位执行规范](./BEST_DIRECTORY_POSITIONING_AND_INTAKE_CN.md) 的条目才公开，未通过的只保留 draft / `noindex`。
+- 不批量新增同义 guide、comparison 或 alternatives URL。工具候选每天处理 3-5 个，常态公开 2-3 个、单周最多 15 个；候选处理或创建 draft 不计入公开日更。只有同时通过资料完整度与独立市场验证的条目才公开，未通过的只保留 draft / `noindex`。
 - 不为了“更新日期”批量改写内容；每次更新必须对应真实来源、编辑核查或用户反馈。
 - 不把外链数量作为 SEO 成功指标；分发模块只保留维护，不继续扩功能或执行站外投放。
 
@@ -57,7 +57,7 @@
 | IDX-03 | 核对 22 个软 404 与 4 个未指定 canonical 重复页 | `how-to-choose-ai-tools` 的英文 canonical 已统一；软 404 URL 明细尚未导出，收到后逐条决定 404、合并或补实质内容 | 进行中 | Codex |
 | IDX-04 | 每周生产 SEO smoke | 首页、Explore、核心详情、robots、sitemap、canonical 均通过 | 持续 | Codex |
 | IDX-05 | 索引准入门槛持续执行 | 所有新 URL 均通过 [SEO 内容准入清单](./SEO_CONTENT_CHECKLIST.md) | 持续 | 共同 |
-| IDX-06 | 高质量收录候选池与 "Best Decision Card" | 已处理 8 条合格工具：Owlish 已公开并通过线上 200 验收，其余 7 条保留 Ready to publish；ArcRift 待补证据 | 进行中（8/7-14，已达最低目标） | Codex + 用户 |
+| IDX-06 | 高质量收录候选池与 "Best Decision Card" | 已处理 8 条资料候选；复盘发现旧闸门只衡量证据完整度。Owlish 退回 draft，其余 7 条进入市场验证队列，ArcRift 另待补产品证据 | 进行中（准入规则已纠偏，公开数重新核验） | Codex + 用户 |
 | IDX-07 | 四周证据驱动目录计划 | 第 1-3 周开发项已完成；W4 三期 GSC 决策报告已实现，等待同期数据验证后执行扩大或收口 | 进行中（W4） | Codex + 用户 |
 
 ### P1：让已获得展示的页面变成更可点击的答案（第 2-4 周）

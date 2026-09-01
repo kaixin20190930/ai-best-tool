@@ -483,6 +483,17 @@ export default function AdminCollectionCandidatesTable({
                               {checklist.length > 3 ? '…' : ''}
                             </p>
                           ) : null}
+                          {isReadyToImport ? (
+                            <p
+                              className={`mt-2 max-w-48 text-xs ${
+                                admission.marketValidated ? 'text-emerald-700' : 'text-amber-700'
+                              }`}
+                            >
+                              {admission.marketValidated
+                                ? 'Market validation recorded'
+                                : 'Draft only: market validation required before publishing'}
+                            </p>
+                          ) : null}
                         </div>
                       );
                     })()}
@@ -499,7 +510,7 @@ export default function AdminCollectionCandidatesTable({
                           candidate.quality_score
                         )}`}
                       >
-                        Quality {candidate.quality_score}/100
+                        Evidence {candidate.quality_score}/100
                       </span>
                     </div>
                     {candidate.score_reason && (
@@ -549,9 +560,16 @@ export default function AdminCollectionCandidatesTable({
                     </p>
                     <p className="mt-1 text-xs text-slate-500">
                       {evaluateCollectionAdmission(candidate).publishReady
-                        ? 'Publication evidence complete'
-                        : `${evaluateCollectionAdmission(candidate).decisionGaps.length} publication gap${
-                            evaluateCollectionAdmission(candidate).decisionGaps.length === 1 ? '' : 's'
+                        ? 'Evidence and market validation complete'
+                        : `${
+                            evaluateCollectionAdmission(candidate).decisionGaps.length +
+                            evaluateCollectionAdmission(candidate).marketGaps.length
+                          } publication gap${
+                            evaluateCollectionAdmission(candidate).decisionGaps.length +
+                              evaluateCollectionAdmission(candidate).marketGaps.length ===
+                            1
+                              ? ''
+                              : 's'
                           }`}
                     </p>
                   </td>

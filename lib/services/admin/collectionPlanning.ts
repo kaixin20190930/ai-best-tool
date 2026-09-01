@@ -21,6 +21,13 @@ export type CandidatePoolEntry = CandidateIntakePlan & {
   detail?: string;
   imageUrl?: string;
   limitations?: string[];
+  marketValidation?: {
+    evidenceUrls: string[];
+    reviewedAt: string;
+    strongSignals: string[];
+    supportingSignals: string[];
+    verdict: 'validated' | 'emerging' | 'unverified' | 'rejected';
+  };
   notIdealFor?: string[];
   pricing?: 'free' | 'freemium' | 'paid';
   pricingSnapshot?: string;

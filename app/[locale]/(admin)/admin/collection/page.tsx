@@ -10,6 +10,7 @@ import {
   listCollectionSources,
 } from '@/lib/services/admin/collection';
 import { getToolQuality } from '@/lib/services/toolQuality';
+import { evaluateCollectionAdmission } from '@/lib/services/admin/collectionAdmission';
 import AdminCollectionCandidatesTable from '@/components/admin/AdminCollectionCandidatesTable';
 import AdminCollectionSourceForm from '@/components/admin/AdminCollectionSourceForm';
 import AdminCollectionSourcesTable from '@/components/admin/AdminCollectionSourcesTable';
@@ -210,7 +211,7 @@ export default async function AdminCollectionPage({
       (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
     );
     const readyToImportCount = candidatePageData.candidates.filter(
-      (candidate) => candidate.status === 'new' && candidate.quality_score >= 80 && candidate.relevance_score >= 50,
+      (candidate) => candidate.status === 'new' && evaluateCollectionAdmission(candidate).draftReady,
     ).length;
     const needsEnrichmentCount = candidatePageData.candidates.filter(
       (candidate) => candidate.status === 'new' && candidate.quality_score < 70,
@@ -220,8 +221,7 @@ export default async function AdminCollectionPage({
       .filter(
         (candidate) =>
           candidate.status === 'new' &&
-          candidate.quality_score >= 80 &&
-          candidate.relevance_score >= 50,
+          evaluateCollectionAdmission(candidate).draftReady,
       )
       .slice(0, 3);
     const enrichNextCandidates = candidatePageData.candidates
@@ -247,7 +247,7 @@ export default async function AdminCollectionPage({
           <div className='theme-surface rounded-lg border border-slate-200 p-5 shadow-sm'>
             <p className='text-sm font-medium text-slate-600'>Ready to import</p>
             <p className='mt-2 text-3xl font-semibold text-slate-900'>{readyToImportCount}</p>
-            <p className='mt-1 text-sm text-slate-500'>High quality candidates on this page</p>
+            <p className='mt-1 text-sm text-slate-500'>Evidence-complete candidates on this page</p>
           </div>
           <div className='theme-surface rounded-lg border border-slate-200 p-5 shadow-sm'>
             <p className='text-sm font-medium text-slate-600'>Needs enrichment</p>
@@ -257,8 +257,8 @@ export default async function AdminCollectionPage({
           <div className='theme-surface rounded-lg border border-slate-200 p-5 shadow-sm'>
             <p className='text-sm font-medium text-slate-600'>Import rule</p>
             <p className='mt-2 text-sm leading-6 text-slate-600'>
-              Only create drafts when a candidate has a clear category, screenshot, logo, description, detail copy,
-              pricing, and tags.
+              Evidence completeness can create a draft. Public release also requires a dated editorial market review,
+              independent evidence, and durability signals.
             </p>
           </div>
         </div>
@@ -275,7 +275,7 @@ export default async function AdminCollectionPage({
               <p className='text-xs font-semibold uppercase tracking-wide text-emerald-700'>Import now</p>
               <p className='mt-2 text-2xl font-bold text-emerald-950'>{readyToImportCount}</p>
               <p className='mt-1 text-sm text-emerald-800'>
-                Ready-to-import candidates with strong relevance and quality.
+                Ready-to-import candidates with strong relevance and complete source evidence.
               </p>
               <div className='mt-3 space-y-2 text-sm text-emerald-950'>
                 {importNowCandidates.length > 0 ? (
@@ -283,7 +283,7 @@ export default async function AdminCollectionPage({
                     <div key={candidate.id} className='rounded-md bg-white/70 px-3 py-2'>
                       <p className='font-semibold'>{candidate.title || candidate.normalized_url}</p>
                       <p className='text-xs text-emerald-700'>
-                        AI {candidate.relevance_score} · Quality {candidate.quality_score}
+                        AI {candidate.relevance_score} · Evidence {candidate.quality_score}
                       </p>
                     </div>
                   ))

@@ -1452,6 +1452,7 @@ export async function importCollectionCandidateToDraft(
   const notIdealFor = getStringList(decisionEvidence.notIdealFor);
   const compareAxes = getStringList(decisionEvidence.compareAxes);
   const pricingSnapshot = getStringValue(candidate.raw_payload.pricingSnapshot) || '';
+  const marketValidation = getRecordValue(candidate.raw_payload.marketValidation);
   const localizedList = (values: string[]) => ({ en: values, zh: values });
   const sourceSummary = evidenceUrls.length
     ? `Verified against ${evidenceUrls.length} official source${evidenceUrls.length === 1 ? '' : 's'}.`
@@ -1475,6 +1476,7 @@ export async function importCollectionCandidateToDraft(
       summary: { en: summary, zh: summary },
       trustNote: { en: sourceSummary, zh: sourceSummary },
     },
+    marketValidation,
     bestFit: localizedList(classification.useCases),
     notIdealFor: localizedList(notIdealFor),
     decision: {
@@ -1578,6 +1580,8 @@ export async function importCollectionCandidateToDraft(
           decisionGaps: admission.decisionGaps,
           draftReady: admission.draftReady,
           evaluatedAt: new Date().toISOString(),
+          marketGaps: admission.marketGaps,
+          marketValidated: admission.marketValidated,
           publishReady: admission.publishReady,
         },
         detailMetadata,

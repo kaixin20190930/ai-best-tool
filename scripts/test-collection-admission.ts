@@ -15,7 +15,7 @@ assert.equal(incomplete.publishReady, false);
 assert.ok(incomplete.coreGaps.includes('Missing source URL'));
 assert.ok(incomplete.decisionGaps.includes('Missing review date'));
 
-const complete = evaluateCollectionAdmission({
+const completeCandidate = {
   quality_score: 90,
   raw_payload: {
     categorySlug: 'research',
@@ -30,17 +30,44 @@ const complete = evaluateCollectionAdmission({
       notIdealFor: ['One-off use'],
       reviewedAt: '2026-08-31T00:00:00.000Z',
     },
+    marketValidation: {
+      evidenceUrls: ['https://independent.example.com/review'],
+      reviewedAt: '2026-08-31T00:00:00.000Z',
+      strongSignals: ['verified-customer-adoption'],
+      supportingSignals: ['active-release-history'],
+      verdict: 'validated',
+    },
     tags: ['research'],
     useCases: ['Evidence research'],
   },
   relevance_score: 80,
   status: 'new',
   summary: 'A'.repeat(90),
-});
+} as const;
+const complete = evaluateCollectionAdmission(completeCandidate);
 
 assert.equal(complete.draftReady, true);
 assert.equal(complete.publishReady, true);
 assert.deepEqual(complete.coreGaps, []);
 assert.deepEqual(complete.decisionGaps, []);
+assert.deepEqual(complete.marketGaps, []);
+
+const emerging = evaluateCollectionAdmission({
+  ...completeCandidate,
+  raw_payload: {
+    ...completeCandidate.raw_payload,
+    marketValidation: {
+      evidenceUrls: ['https://launch.example.com/product'],
+      reviewedAt: '2026-09-01T00:00:00.000Z',
+      supportingSignals: ['transparent-official-documentation'],
+      verdict: 'emerging',
+    },
+  },
+});
+
+assert.equal(emerging.draftReady, true);
+assert.equal(emerging.marketValidated, false);
+assert.equal(emerging.publishReady, false);
+assert.ok(emerging.marketGaps.includes('Market verdict is not validated'));
 
 console.log('Collection admission test passed.');
