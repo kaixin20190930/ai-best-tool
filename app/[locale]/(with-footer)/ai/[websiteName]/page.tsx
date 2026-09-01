@@ -1864,28 +1864,29 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
     return isChinese
       ? {
           label: '官方事实快照',
-          title: '生成 Credits、商业权利和账户边界',
-          summary: '以下信息来自 Runway 官方帮助中心；模型费率与套餐额度变化较快，正式制作前应在 Billing 页面复核。',
-          checkedAt: '2026-08-03',
+          title: '生成 Credits、工作区成本和编辑边界',
+          summary: '以下信息来自 Runway 当前定价与帮助中心；模型费率和套餐变化较快，正式制作前应在 Plans & Billing 再次复核。',
+          checkedAt: '2026-09-01',
           facts: [
             {
-              label: 'Credits',
-              value: 'Free 一次性提供 125 credits；Standard 每月 625，Pro 与 Unlimited 每月 2,250，Max 每月 9,500。',
+              label: '当前套餐',
+              value: 'Free 一次性提供 125 credits；Standard 每月 625，Pro 每月 2,250，Max 每月 9,500。Unlimited 已停止新售，仅部分老用户延续至 2026-11-30。',
             },
             {
-              label: '生成成本',
+              label: '成本与协作',
               value:
-                '不同模型按输出计费；官方示例中 Gen-4.5 为每秒 12 credits。Standard、Pro 与 Unlimited 月度额度不结转。',
+                'Gen-4.5 当前每秒消耗 12 credits；Standard 与 Pro 月度额度不结转，Max 最多结转一个月。套餐按编辑席位收费，但同一工作区共享一组 credits。',
             },
             {
-              label: '权利与账户',
-              value: '各套餐生成内容可用于商业用途且无需强制署名；Web App 与 API 的套餐和 credits 完全分开，不能互转。',
+              label: '交付边界',
+              value: '各套餐允许商业使用且无需强制署名；Web App 与 API credits 不互通。官方已说明内置视频编辑器不再积极维护，大型项目应使用本地后期工具。',
             },
           ],
           sources: [
+            { label: '当前官方定价', href: 'https://runway.com/pricing' },
             {
-              label: 'Credits 规则',
-              href: 'https://help.runwayml.com/hc/en-us/articles/15124877443219-How-do-credits-work',
+              label: '套餐与工作区规则',
+              href: 'https://help.runwayml.com/hc/en-us/articles/21664961171475-Which-plan-is-right-for-me',
             },
             {
               label: '使用与商业权利',
@@ -1895,31 +1896,32 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
         }
       : {
           label: 'Official fact snapshot',
-          title: 'Generation credits, commercial rights, and account boundaries',
+          title: 'Generation credits, workspace cost, and editing boundaries',
           summary:
-            'These facts come from the Runway help center. Model rates and plan allowances change quickly, so recheck Plans & Billing before production work.',
-          checkedAt: '2026-08-03',
+            'These facts come from current Runway pricing and help documentation. Model rates and plans change quickly, so recheck Plans & Billing before production work.',
+          checkedAt: '2026-09-01',
           facts: [
             {
-              label: 'Credits',
+              label: 'Current plans',
               value:
-                'Free includes a one-time 125 credits; Standard includes 625 monthly, Pro and Unlimited 2,250 monthly, and Max 9,500 monthly.',
+                'Free includes a one-time 125 credits, Standard 625 monthly, Pro 2,250 monthly, and Max 9,500 monthly. Unlimited is closed to new sales, with eligible legacy access extended through November 30, 2026.',
             },
             {
-              label: 'Generation cost',
+              label: 'Cost and collaboration',
               value:
-                'Models consume credits at different rates; Runway lists Gen-4.5 at 12 credits per generated second. Standard, Pro, and Unlimited monthly credits do not roll over.',
+                'Gen-4.5 currently costs 12 credits per generated second. Standard and Pro credits do not roll over, while Max carries up to one month. Plans charge per editor, but one workspace shares one credit pool.',
             },
             {
-              label: 'Rights and accounts',
+              label: 'Delivery boundary',
               value:
-                'All plans permit commercial use without mandatory attribution; web-app and API plans and credits are separate and cannot be transferred.',
+                'All plans permit commercial use without mandatory attribution; web-app and API credits are separate. Runway says its built-in video editor is no longer actively maintained, so larger projects should use a local editor.',
             },
           ],
           sources: [
+            { label: 'Current official pricing', href: 'https://runway.com/pricing' },
             {
-              label: 'Credit rules',
-              href: 'https://help.runwayml.com/hc/en-us/articles/15124877443219-How-do-credits-work',
+              label: 'Plan and workspace rules',
+              href: 'https://help.runwayml.com/hc/en-us/articles/21664961171475-Which-plan-is-right-for-me',
             },
             {
               label: 'Usage and commercial rights',
@@ -2756,6 +2758,35 @@ function getPriorityToolSearchIntent(websiteName: string, locale: string): Prior
             'Fit across Translator, Write, and API workflows',
             'Character allowances, file formats, and document-size limits',
             'Data security, glossary, and team-administration requirements',
+          ],
+        };
+  }
+
+  if (key === 'runway') {
+    return isChinese
+      ? {
+          metadataTitle: 'Runway AI 视频：模型、Credits、价格与编辑限制',
+          metadataDescription:
+            '评估 Runway 的 AI 视频生成与编辑工作流，核对 Gen-4.5、Standard/Pro/Max credits、团队席位、API 隔离、商业权利和后期交付限制。',
+          label: 'AI 视频工作流判断重点',
+          summary: '选择 Runway 的关键不是能否生成一段漂亮视频，而是 credits 成本、镜头迭代、素材管理和外部后期能否组成可预测的生产流程。',
+          checkpoints: [
+            '生成、局部编辑还是完整后期，哪一段流程需要 Runway',
+            '不同模型、时长和分辨率对应的 credits 是否可预测',
+            '编辑席位、共享额度、API 与最终交付工具是否匹配',
+          ],
+        }
+      : {
+          metadataTitle: 'Runway AI Video: Models, Credits, Pricing & Editing Limits',
+          metadataDescription:
+            'Evaluate Runway for AI video generation and editing, including Gen-4.5, Standard, Pro and Max credits, editor seats, separate API billing, commercial rights, and finishing limits.',
+          label: 'AI video workflow decision',
+          summary:
+            'The Runway decision is not whether it can generate an impressive clip, but whether credit cost, shot iteration, asset management, and external finishing form a predictable production workflow.',
+          checkpoints: [
+            'Where Runway fits across generation, targeted edits, and final post-production',
+            'Credit predictability by model, duration, and resolution',
+            'Editor seats, shared allowance, API separation, and delivery-tool fit',
           ],
         };
   }

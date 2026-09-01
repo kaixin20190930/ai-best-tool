@@ -173,6 +173,18 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'runway.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'd3phaj0sisr2ct.cloudfront.net',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'lovable.dev',
         port: '',
         pathname: '/**',

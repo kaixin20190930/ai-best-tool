@@ -57,7 +57,7 @@
 | IDX-03 | 核对 22 个软 404 与 4 个未指定 canonical 重复页 | `how-to-choose-ai-tools` 的英文 canonical 已统一；软 404 URL 明细尚未导出，收到后逐条决定 404、合并或补实质内容 | 进行中 | Codex |
 | IDX-04 | 每周生产 SEO smoke | 首页、Explore、核心详情、robots、sitemap、canonical 均通过 | 持续 | Codex |
 | IDX-05 | 索引准入门槛持续执行 | 所有新 URL 均通过 [SEO 内容准入清单](./SEO_CONTENT_CHECKLIST.md) | 持续 | 共同 |
-| IDX-06 | 高质量收录候选池与 "Best Decision Card" | Claude/Anthropic、Fathom、Gamma、Consensus、DeepL 已完成实体迁移或决策信号收口；下一项为 P1 Runway | 进行中（成熟工具队列 5/10） | Codex + 用户 |
+| IDX-06 | 高质量收录候选池与 "Best Decision Card" | Claude/Anthropic、Fathom、Gamma、Consensus、DeepL、Runway 已完成实体迁移或决策信号收口；下一项为 P1 Luma AI | 进行中（成熟工具队列 6/10） | Codex + 用户 |
 | IDX-07 | 四周证据驱动目录计划 | 第 1-3 周开发项已完成；W4 三期 GSC 决策报告已实现，等待同期数据验证后执行扩大或收口 | 进行中（W4） | Codex + 用户 |
 
 ### P1：让已获得展示的页面变成更可点击的答案（第 2-4 周）
@@ -69,7 +69,7 @@
 | CTR-03 | 强化已有展示的 Guide | Web3、Automation、Research | 三页均已补 3 条任务、适用边界、核验风险和直达工具 Decision Card 的路径；提交 `de1504e6` | 已完成 | Codex |
 | CTR-04 | 强化已有展示的详情页 | Fathom、Anthropic、DeepL、Gamma、Lindy、Cursor、The Graph | 每页保留至少两个官方来源和一个真实选择限制；禁止通用 AI 改写 | 已完成 | Codex |
 | CTR-05 | 真实编辑/owner 信号回填 | 本轮先选 5 页 | 每页至少一条有来源的更新、纠错、owner 补充或真实使用记录 | 需要数据 | 用户 + Codex |
-| CTR-06 | 首批成熟工具内容缺口 | Claude/Anthropic、Fathom、Gamma、Consensus、DeepL、Runway、Luma AI、Pipedream、Cursor、The Graph | 10 个既有 canonical URL 完成合并、数据库迁移或决策内容增强；前 5 项已完成且未新增 URL | 进行中（5/10） | Codex |
+| CTR-06 | 首批成熟工具内容缺口 | Claude/Anthropic、Fathom、Gamma、Consensus、DeepL、Runway、Luma AI、Pipedream、Cursor、The Graph | 10 个既有 canonical URL 完成合并、数据库迁移或决策内容增强；前 6 项已完成且未新增 URL | 进行中（6/10） | Codex |
 
 ### P2：只在数据证明后扩展（第 4-6 周）
 

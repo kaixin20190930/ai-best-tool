@@ -3,7 +3,7 @@ import path from 'node:path';
 
 import { PRIORITY_TOOL_EVIDENCE } from '../lib/config/priorityToolEvidence';
 
-const expectedSlugs = ['claude', 'consensus', 'cursor', 'deepl', 'fathom', 'gamma', 'lindy', 'the-graph'];
+const expectedSlugs = ['claude', 'consensus', 'cursor', 'deepl', 'fathom', 'gamma', 'lindy', 'runway', 'the-graph'];
 const actualSlugs = Object.keys(PRIORITY_TOOL_EVIDENCE).sort();
 
 if (JSON.stringify(actualSlugs) !== JSON.stringify(expectedSlugs)) {
@@ -41,11 +41,15 @@ if (!detailPage.includes('priorityEvidence && !priorityOfficialEvidence')) {
   throw new Error('Tool detail page must avoid duplicating an existing official evidence snapshot.');
 }
 
-for (const officialSnapshotSlug of ['cursor', 'the-graph']) {
+for (const [officialSnapshotSlug, expectedDate] of Object.entries({
+  cursor: '2026-08-31',
+  runway: '2026-09-01',
+  'the-graph': '2026-08-31',
+})) {
   const branchStart = detailPage.indexOf(`if (key === '${officialSnapshotSlug}')`);
   const branchEnd = detailPage.indexOf('\n  if (key ===', branchStart + 1);
   const branch = detailPage.slice(branchStart, branchEnd > branchStart ? branchEnd : undefined);
-  const checkedCount = branch.match(/checkedAt: '2026-08-31'/g)?.length || 0;
+  const checkedCount = branch.match(new RegExp(`checkedAt: '${expectedDate}'`, 'g'))?.length || 0;
 
   if (checkedCount !== 2) {
     throw new Error(`${officialSnapshotSlug}: both localized official snapshots must use the latest review date.`);

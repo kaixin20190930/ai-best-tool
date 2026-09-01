@@ -101,7 +101,9 @@
       "problem": "The page has a first-page position on a small sample but still uses a generic AI Tool title and fallback data.",
       "deliverable": "Migrate the page into the database and focus the snippet and Decision Card on video model access, credits, editing and commercial workflow boundaries.",
       "decisionAngles": ["generation vs editing workflow", "credit predictability", "model availability by plan", "Runway vs dedicated video generators"],
-      "status": "queued"
+      "status": "completed",
+      "completedAt": "2026-09-01",
+      "result": "Migrated the existing Runway fallback into one production database entity without adding a URL. Added bilingual generation-versus-editing decisions, current Free/Standard/Pro/Max credits, legacy Unlimited transition, shared-workspace seat economics, separate API billing, commercial-rights and external-finishing boundaries, plus correctly scoped adoption, G2, and funding evidence."
     },
     {
       "rank": 7,

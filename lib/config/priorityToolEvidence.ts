@@ -56,6 +56,24 @@ export const PRIORITY_TOOL_EVIDENCE: Record<string, PriorityToolEvidence> = {
       { label: 'Document format limits', url: 'https://support.deepl.com/hc/en-us/articles/360020582359-File-formats' },
     ],
   },
+  runway: {
+    checkedAt: '2026-09-01',
+    limitation: {
+      en: 'Runway charges per editor while a workspace shares one pool of plan credits; web-app and API credits are separate, and the built-in editor is not intended for large finishing workflows.',
+      zh: 'Runway 按编辑席位收费，但一个工作区共享一组套餐 credits；网页端与 API credits 互不相通，内置编辑器也不适合大型后期流程。',
+    },
+    sources: [
+      { label: 'Current Runway pricing', url: 'https://runway.com/pricing' },
+      {
+        label: 'Plan and workspace boundaries',
+        url: 'https://help.runwayml.com/hc/en-us/articles/21664961171475-Which-plan-is-right-for-me',
+      },
+      {
+        label: 'Commercial usage rights',
+        url: 'https://help.runwayml.com/hc/en-us/articles/18927776141715-Usage-rights',
+      },
+    ],
+  },
   gamma: {
     checkedAt: '2026-08-31',
     limitation: {
