@@ -2234,24 +2234,25 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
     return isChinese
       ? {
           label: '官方事实快照',
-          title: 'Credits、费用上限和工作流生命周期',
+          title: 'Compute credits、Connect 计费与执行可靠性',
           summary:
-            '以下信息来自 Pipedream 官方文档；套餐额度和平台限制会变化，生产工作流应设置预算并监控 Billing & Usage。',
-          checkedAt: '2026-08-03',
+            '以下信息来自 Pipedream 官方文档；Workflows 与 Connect 的计费单位不同，生产使用前应先按真实负载测试 credits、并发和事件顺序。',
+          checkedAt: '2026-09-01',
           facts: [
             {
-              label: '免费与付费',
+              label: 'Workflows 计费',
               value:
-                'Free 有每日 credits、活跃工作流和连接账户限制；付费层可运行不限 credits，但超出套餐包含量会产生按量费用。',
+                '默认 256MB 下，每个 workflow segment 每 30 秒计算 1 credit；提高内存会按比例增加 credits，开发和测试运行不收费，也不是按步骤数收费。',
             },
             {
-              label: '成本控制',
-              value: '可设置 workspace 级 Credit Budget 和使用提醒；并发执行可能导致实际消耗略高于设定上限。',
+              label: 'Connect 计费',
+              value:
+                'Connect 的 action、MCP tool call、已部署 trigger emit 和 proxy 请求会消耗 credits；标准套餐还会按连接账户的独立外部用户数计费。',
             },
             {
-              label: '降级与保留',
+              label: '执行与数据边界',
               value:
-                '降级或取消后，超出新套餐能力的工作流和连接会自动停用；workflow code 与 data store 数据会保留到用户主动删除。',
+                '并行事件不保证顺序；事件队列不支持原生 HTTP、cron、SDK 和 email triggers。Workflow code 和 data store 可保留到主动删除，execution event/log 则按账户保留规则处理。',
             },
           ],
           sources: [
@@ -2263,25 +2264,25 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
         }
       : {
           label: 'Official fact snapshot',
-          title: 'Credits, spending controls, and workflow lifecycle',
+          title: 'Compute credits, Connect billing, and execution reliability',
           summary:
-            'These facts come from Pipedream documentation. Plan allowances and platform limits change, so production workflows should use budgets and Billing & Usage monitoring.',
-          checkedAt: '2026-08-03',
+            'These facts come from Pipedream documentation. Workflows and Connect use different billing inputs, so test credits, concurrency, and event ordering against a real workload before production.',
+          checkedAt: '2026-09-01',
           facts: [
             {
-              label: 'Free and paid usage',
+              label: 'Workflows billing',
               value:
-                'Free has daily credit, active-workflow, and connected-account limits; paid tiers allow uncapped credits but charge for usage beyond the included amount.',
+                'At the default 256MB, each workflow segment costs one credit per 30 seconds. More memory raises credit use proportionally; development and testing runs are free, and billing is not based on step count.',
             },
             {
-              label: 'Cost control',
+              label: 'Connect billing',
               value:
-                'A workspace Credit Budget and usage notifications are available; concurrent executions can cause actual consumption to slightly exceed the configured cap.',
+                'Connect action runs, MCP tool calls, deployed trigger emits, and proxy requests consume credits; standard plans also bill by unique external users who connect accounts.',
             },
             {
-              label: 'Downgrade and retention',
+              label: 'Execution and data boundary',
               value:
-                'Downgrades or cancellation disable workflows and connections beyond the new plan; workflow code and data-store data remain until the user deletes them.',
+                'Parallel events are not guaranteed to stay ordered, and event queues do not support native HTTP, cron, SDK, or email triggers. Workflow code and data stores persist until deletion, while execution events and logs follow account retention rules.',
             },
           ],
           sources: [
@@ -2889,29 +2890,29 @@ function getPriorityToolSearchIntent(websiteName: string, locale: string): Prior
   if (key === 'pipedream') {
     return isChinese
       ? {
-          metadataTitle: 'Pipedream 自动化：触发器、workflow 与限制判断',
+          metadataTitle: 'Pipedream：Workflow、Connect、Credits 与生产限制',
           metadataDescription:
-            '评估 Pipedream 在工作流编排、触发器维护、失败重试和团队协作中的表现，重点对比集成覆盖、自动化稳定性、额度与升级门槛。',
+            '评估 Pipedream Workflows 与 Connect，了解 compute credits、外部用户计费、并发顺序、数据保留，以及与 n8n、Make 的选择边界。',
           label: '自动化工作流判断重点',
           summary:
             '自动化工具的核心价值在于稳定执行真实流程，而不是“有很多模板”本身。先确认触发和失败重试是否可控，再决定是否继续扩展。',
           checkpoints: [
             '触发器、重试机制和中间状态是否可观测',
             '集成与鉴权变更对现有流程的影响是否可控',
-            '任务额度、并发和运营成本是否可承受',
+            'compute credits、Connect 外部用户和并发成本是否可承受',
           ],
         }
       : {
-          metadataTitle: 'Pipedream Automation: Triggers, Workflow Stability & Limits',
+          metadataTitle: 'Pipedream: Workflows, Connect, Credits & Production Limits',
           metadataDescription:
-            'Review Pipedream for workflow orchestration, trigger management, retry handling, and team execution, including integration coverage, reliability, usage quotas, and upgrade gates.',
+            'Evaluate Pipedream Workflows and Connect by compute credits, external-user billing, concurrency, data retention, and the tradeoffs versus n8n and Make.',
           label: 'Automation workflow decision',
           summary:
             'The real value of automation tools is running real workflows reliably, not having many templates. Confirm trigger observability and retry behavior before committing.',
           checkpoints: [
             'Whether triggers, retries, and run state are observable',
             'Whether integration and auth changes can be handled without breaking flows',
-            'Whether task quotas, concurrency, and cost fit your operations',
+            'Whether compute credits, Connect users, concurrency, and cost fit your operations',
           ],
         };
   }

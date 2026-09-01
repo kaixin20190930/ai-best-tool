@@ -133,7 +133,9 @@
       "problem": "The page has an early first-page signal but no production tool record for ongoing evidence maintenance.",
       "deliverable": "Migrate the current decision page into the database and retain its workflow-stability intent while improving the Chinese snippet.",
       "decisionAngles": ["workflow vs code execution", "credit and compute billing", "trigger reliability", "Pipedream vs n8n and Make"],
-      "status": "queued"
+      "status": "completed",
+      "completedAt": "2026-09-01",
+      "result": "Migrated the existing Pipedream fallback into one production database entity without adding a URL. Preserved the workflow-stability intent while separating Workflows from Connect, replacing task-count language with compute-and-memory credits, documenting external-user billing, concurrency and queue boundaries, retention, Workday ownership, connector-scale evidence, and a modest independent G2 review sample."
     },
     {
       "rank": 9,

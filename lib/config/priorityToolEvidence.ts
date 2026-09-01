@@ -111,6 +111,21 @@ export const PRIORITY_TOOL_EVIDENCE: Record<string, PriorityToolEvidence> = {
       { label: 'Commercial licensing rules', url: 'https://lumalabs.ai/learning-hub/licensing' },
     ],
   },
+  pipedream: {
+    checkedAt: '2026-09-01',
+    limitation: {
+      en: 'Pipedream Workflows bills by compute time and memory per workflow segment rather than by step; Connect also bills for external users, and queues are not available for every native trigger type.',
+      zh: 'Pipedream Workflows 按每个 workflow segment 的计算时间和内存计费，而不是按步骤数计费；Connect 还会按外部用户计费，并且事件队列不支持所有原生触发器类型。',
+    },
+    sources: [
+      { label: 'Workflow and Connect credit model', url: 'https://pipedream.com/docs/pricing' },
+      {
+        label: 'Concurrency, ordering, and queue boundaries',
+        url: 'https://pipedream.com/docs/workflows/building-workflows/settings/concurrency-and-throttling',
+      },
+      { label: 'Privacy and retention boundaries', url: 'https://pipedream.com/docs/privacy-and-security' },
+    ],
+  },
   cursor: {
     checkedAt: '2026-08-31',
     limitation: {
