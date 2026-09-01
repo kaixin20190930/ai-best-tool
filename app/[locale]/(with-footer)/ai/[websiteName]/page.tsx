@@ -1500,19 +1500,16 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           label: '官方事实快照',
           title: '免费层、会议兼容性和录制同意',
           summary: '以下信息来自 Fathom 官方帮助中心；团队方案和新桌面体验仍在变化，启用前应复核当前账号可见配置。',
-          checkedAt: '2026-08-03',
+          checkedAt: '2026-09-01',
           facts: [
             { label: '免费层', value: '个人免费层包含不限量录制、存储和 38 种语言转录；高级摘要每月前 5 次可用。' },
-            {
-              label: '会议平台',
-              value: '设置文档列出 Zoom、Google Meet 和 Microsoft Teams，并支持分别配置自动录制与会后分享。',
-            },
+            { label: '设备与采集', value: 'Mac 和 Windows 支持原有流程；较新的无机器人体验当前仅支持 Mac。' },
             { label: '隐私边界', value: 'Fathom 不支持静默录制；参与者必须能看到录制通知、bot 或同意机制。' },
           ],
           sources: [
             { label: '免费与 Premium', href: 'https://help.fathom.video/en/articles/5290881' },
-            { label: '会议与分享设置', href: 'https://help.fathom.video/en/articles/3239617' },
-            { label: '录制同意规则', href: 'https://help.fathom.video/en/articles/6150977' },
+            { label: '设备与会议限制', href: 'https://help.fathom.video/en/articles/296576' },
+            { label: '录制同意规则', href: 'https://help.fathom.video/en/articles/294272' },
           ],
         }
       : {
@@ -1520,18 +1517,14 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           title: 'Free tier, meeting compatibility, and recording consent',
           summary:
             'These facts come from the Fathom help center. Team packaging and the newer desktop experience are still changing, so recheck the settings visible to your account.',
-          checkedAt: '2026-08-03',
+          checkedAt: '2026-09-01',
           facts: [
             {
               label: 'Free tier',
               value:
                 'The individual free tier includes unlimited recordings, storage, and transcription in 38 languages, with five advanced summaries per month.',
             },
-            {
-              label: 'Meeting platforms',
-              value:
-                'Settings documentation covers Zoom, Google Meet, and Microsoft Teams, with controls for capture and post-meeting sharing.',
-            },
+            { label: 'Devices and capture', value: 'Mac and Windows support the established workflow; the newer bot-free experience is currently Mac-only.' },
             {
               label: 'Privacy boundary',
               value:
@@ -1540,8 +1533,8 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           ],
           sources: [
             { label: 'Free versus Premium', href: 'https://help.fathom.video/en/articles/5290881' },
-            { label: 'Meeting and sharing settings', href: 'https://help.fathom.video/en/articles/3239617' },
-            { label: 'Recording consent rules', href: 'https://help.fathom.video/en/articles/6150977' },
+            { label: 'Device and meeting limits', href: 'https://help.fathom.video/en/articles/296576' },
+            { label: 'Recording consent rules', href: 'https://help.fathom.video/en/articles/294272' },
           ],
         };
   }

@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 
 import { BASE_URL } from './lib/env';
-import { getLocalizedToolPath } from './lib/config/toolRouteAliases';
+import { getLocalizedToolPath, shouldRedirectExplicitEnglishToolPath } from './lib/config/toolRouteAliases';
 import intlMiddleware from './middlewares/intlMiddleware';
 
 const localePattern = /^\/(en|cn|jp|de|es|fr|pt|ru|tw)(?=\/|$)/;
@@ -196,6 +196,15 @@ export async function middleware(request: NextRequest) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = getLocalizedToolPath('anthropic', locale || 'en');
     return NextResponse.redirect(redirectUrl, 308);
+  }
+
+  if (locale === 'en' && pathWithoutLocale.startsWith('/ai/')) {
+    const toolSlug = pathWithoutLocale.slice('/ai/'.length);
+    if (shouldRedirectExplicitEnglishToolPath(toolSlug)) {
+      const redirectUrl = request.nextUrl.clone();
+      redirectUrl.pathname = pathWithoutLocale;
+      return NextResponse.redirect(redirectUrl, 308);
+    }
   }
 
   const needsAuthCheck =

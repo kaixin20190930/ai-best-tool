@@ -1,4 +1,9 @@
-import { getCanonicalToolSlug, getLocalizedToolPath, isLegacyToolSlug } from '@/lib/config/toolRouteAliases';
+import {
+  getCanonicalToolSlug,
+  getLocalizedToolPath,
+  isLegacyToolSlug,
+  shouldRedirectExplicitEnglishToolPath,
+} from '@/lib/config/toolRouteAliases';
 
 const assertions: Array<[boolean, string]> = [
   [getCanonicalToolSlug('anthropic') === 'claude', 'Anthropic must resolve to Claude.'],
@@ -7,6 +12,8 @@ const assertions: Array<[boolean, string]> = [
   [getLocalizedToolPath('anthropic', 'cn') === '/cn/ai/claude', 'Chinese alias path is invalid.'],
   [isLegacyToolSlug('anthropic'), 'Anthropic must be recognized as a legacy slug.'],
   [!isLegacyToolSlug('claude'), 'Claude must remain the canonical slug.'],
+  [shouldRedirectExplicitEnglishToolPath('fathom'), 'The explicit /en Fathom path must redirect.'],
+  [!shouldRedirectExplicitEnglishToolPath('claude'), 'Claude does not need the explicit-English exception.'],
 ];
 
 for (const [condition, message] of assertions) {

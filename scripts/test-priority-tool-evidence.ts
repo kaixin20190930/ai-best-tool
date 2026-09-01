@@ -3,7 +3,7 @@ import path from 'node:path';
 
 import { PRIORITY_TOOL_EVIDENCE } from '../lib/config/priorityToolEvidence';
 
-const expectedSlugs = ['anthropic', 'cursor', 'deepl', 'fathom', 'gamma', 'lindy', 'the-graph'];
+const expectedSlugs = ['claude', 'cursor', 'deepl', 'fathom', 'gamma', 'lindy', 'the-graph'];
 const actualSlugs = Object.keys(PRIORITY_TOOL_EVIDENCE).sort();
 
 if (JSON.stringify(actualSlugs) !== JSON.stringify(expectedSlugs)) {

@@ -37,7 +37,9 @@
       "problem": "This is the strongest non-homepage tool signal, but locale variants split impressions and the page is not manageable from the production tools table.",
       "deliverable": "Create one database-backed record, preserve the canonical route, consolidate locale signals, and add current setup, consent, platform and plan-limit decisions.",
       "decisionAngles": ["bot and bot-free capture modes", "meeting consent", "free vs paid AI limits", "Fathom vs alternative meeting assistants"],
-      "status": "queued"
+      "status": "completed",
+      "completedAt": "2026-09-01",
+      "result": "Created one production database-backed Fathom entity with bilingual decision content, official media, current compatibility, consent and plan-limit evidence, plus independent G2 and Capterra validation. The explicit /en/ai/fathom duplicate now redirects to the canonical /ai/fathom route."
     },
     {
       "rank": 3,
