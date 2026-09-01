@@ -74,11 +74,24 @@
         "https://www.producthunt.com/products/owlish",
         "https://peerpush.com/p/owlish"
       ],
-      "reviewedAt": "2026-09-01T00:00:00.000Z",
+      "rationale": {
+        "en": "Owlish presents a clear source-cited support workflow, transparent pricing and documented technical limits. However, it launched only a few months ago and the reviewed independent listings contain no user reviews or durable customer-adoption evidence, so it remains an emerging product rather than a market-validated recommendation.",
+        "zh": "Owlish 的来源引用式客服流程、定价和技术限制较透明，但产品上线仅数月，已核查的独立平台尚无用户评价，也缺少持续客户采用证据，因此目前属于值得观察的新兴产品，而不是已经通过市场验证的推荐。"
+      },
+      "reviewedAt": "2026-09-01",
+      "score": 51,
+      "scores": {
+        "userValue": 18,
+        "independentValidation": 5,
+        "durability": 4,
+        "evidenceQuality": 17,
+        "strategicValue": 7
+      },
       "strongSignals": [],
       "supportingSignals": [
         "recent-public-launch",
-        "transparent-official-documentation"
+        "transparent-official-documentation",
+        "independent-launch-discussion"
       ],
       "verdict": "emerging"
     },
