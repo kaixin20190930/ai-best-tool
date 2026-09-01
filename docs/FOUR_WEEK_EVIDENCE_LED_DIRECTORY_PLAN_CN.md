@@ -49,7 +49,7 @@
 | W2-01B | 编辑页增加证据来源、限制和 Decision Card 字段校验 | 1.5 天 | W2-01A | 缺字段无法误标可发布 | 已完成，提交 `4e3df958`；部署 `b48753cd`、production smoke 通过 |
 | W2-01C | 市场验证编辑器与前台成熟度状态 | 1 天 | W2-01B | 五维评分、独立证据和信号可编辑；收集型工具未验证不能发布；详情页展示验证依据 | 已完成；专项准入测试、tsc 与完整 build 通过 |
 | W2-02A | 生成未来 3 天候选池，每日处理 1-2 条 | 每日 1 小时 | W2-01 | 每条有发布/待补结论 | 已完成，提交 `d7ea18b5`；6 条生产候选按 3 天每天 2 条排期 |
-| W2-02B | 首批 7-14 条处理台账；只发布通过资料与市场双重准入的条目 | 每日 1 小时 | W2-02A | 无低质量例外放行 | 进行中，已处理 8/7-14；Owlish 因市场验证不足退回 draft，其余 7 条补市场验证，ArcRift 待补产品证据 |
+| W2-02B | 首批 7-14 条处理台账；只发布通过资料与市场双重准入的条目 | 每日 1 小时 | W2-02A | 无低质量例外放行 | 进行中，已处理 9/7-14；Perplexity 通过市场与资料准入并迁移既有 fallback，Owlish 保持 draft，ArcRift 不因数量目标放行 |
 | W2-03A | Web3、Automation、Research Guide 统一任务入口 | 1 天 | W1-01C | 指向对应工具 Decision Card | 已完成，提交 `de1504e6`；专项结构测试、Decision Card 回归、tsc、完整 build 通过 |
 
 ### 第 3 周：变化监测与真实信号（09-15 至 09-21，预计 4-5 个开发日）
@@ -141,6 +141,13 @@
 - 完成 Motion（`motion.so`）真实市场核验：`68/100`、结论 `Emerging`；独立完成生成的测试验证了速度和元素级编辑，也记录了高 credits 消耗与精细控制限制。Product Hunt 有发布热度但仍无正式 review，近期两次实测均在未付费时止于渲染前；Mosaic 的 YC W25 active 状态只能支持持续性，不能替代 Motion 自身的采用证据，因此保持 draft。
 - 完成 Re_gent 真实市场核验：`72/100`、结论 `Emerging`；Show HN `129 points / 67 comments` 构成强讨论信号，GitHub `787 stars / 57 forks / 7 contributors / 5 releases` 和 Product Hunt `189 points / 298 followers` 构成辅助信号。但项目仅约四个月、最后代码推送为 2026-07-02、release 下载仍为数百且官网仍标记 Public Alpha，缺少重复使用与生产采用证据，因此保持 draft。
 - 纠正执行口径：每日收录目标按“公开可见”计数，候选处理和 draft 不再计入日更完成量。
+
+### W2-02B 第七批处理记录（2026-09-01）
+
+- Perplexity：选择成熟高需求产品替代证据不足的 ArcRift 硬放行；保留既有 `/ai/perplexity` fallback 路径并迁移为唯一生产数据库实体，新增 sitemap 中英文 URL 但不创造重复 canonical。
+- 资料核验覆盖 Search、Pro Search、Research、套餐与额度、模型访问、消费者训练退出、Enterprise 数据保护、文件留存和来源标签边界；明确“有引用不等于单项结论准确”，高风险判断仍需打开原文。
+- 市场验证为 `96/100 / Validated`：G2 `276 reviews / 4.5`、Capterra `35 reviews / 4.2` 和多年付费使用构成强独立信号；评价中的额度、答案深度和不准确数据问题保留为选择限制。
+- ArcRift 保持 `needs_evidence`，不创建工具页；这轮证明日常收录可以由成熟工具的既有 URL 迁移承接，而不依赖批量新增陌生早期产品。
 
 ### W2-02C 首批成熟工具内容缺口（2026-09-01）
 

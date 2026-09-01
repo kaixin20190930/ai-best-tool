@@ -2296,7 +2296,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           label: '官方事实快照',
           title: '搜索额度、消费者数据和企业边界',
           summary: '以下信息来自 Perplexity 官方帮助中心；搜索与 Research 配额可能动态调整，应以账号当前显示为准。',
-          checkedAt: '2026-08-03',
+          checkedAt: '2026-09-01',
           facts: [
             {
               label: 'Free 限制',
@@ -2308,9 +2308,9 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
               value: 'Free、Pro、Max 的 AI Data Retention 默认开启，可在设置中关闭；退出只影响退出之后收集的数据。',
             },
             {
-              label: '企业数据',
+              label: '来源边界',
               value:
-                'Enterprise 查询数据不用于模型训练；上传文件通常保留 7 天，并通过与模型提供商的 ZDR/ZDT 协议保护。',
+                '引用和来源标签帮助追溯，但官方明确说明域名标签不代表单篇内容准确；重要判断仍应打开原文核对。',
             },
           ],
           sources: [
@@ -2322,6 +2322,10 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
               label: '数据收集与退出',
               href: 'https://www.perplexity.ai/help-center/en/articles/11564572-data-collection-at-perplexity',
             },
+            {
+              label: '来源标签边界',
+              href: 'https://www.perplexity.ai/help-center/en/articles/20260806-understanding-source-labels',
+            },
           ],
         }
       : {
@@ -2329,7 +2333,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           title: 'Search allowances, consumer data, and enterprise boundaries',
           summary:
             'These facts come from the Perplexity help center. Search and Research allowances can change dynamically, so verify the limits shown in your account.',
-          checkedAt: '2026-08-03',
+          checkedAt: '2026-09-01',
           facts: [
             {
               label: 'Free limits',
@@ -2342,9 +2346,9 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
                 'AI Data Retention is enabled by default for Free, Pro, and Max and can be turned off; opting out only affects data collected after that date.',
             },
             {
-              label: 'Enterprise data',
+              label: 'Source boundary',
               value:
-                'Enterprise query data is not used for model training; uploaded files are generally retained for seven days and provider agreements require zero retention and training.',
+                'Citations and source labels improve traceability, but Perplexity says a domain label does not validate an individual page; consequential claims still require reading the source.',
             },
           ],
           sources: [
@@ -2355,6 +2359,10 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
             {
               label: 'Data collection and opt-out',
               href: 'https://www.perplexity.ai/help-center/en/articles/11564572-data-collection-at-perplexity',
+            },
+            {
+              label: 'Source-label boundaries',
+              href: 'https://www.perplexity.ai/help-center/en/articles/20260806-understanding-source-labels',
             },
           ],
         };
