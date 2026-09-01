@@ -42,17 +42,18 @@ export const PRIORITY_TOOL_EVIDENCE: Record<string, PriorityToolEvidence> = {
     ],
   },
   deepl: {
-    checkedAt: '2026-08-31',
+    checkedAt: '2026-09-01',
     limitation: {
-      en: 'Translator subscriptions do not include DeepL API access, and document size, format, and monthly volume limits vary by plan.',
-      zh: 'Translator 订阅不包含 DeepL API 权限，文档大小、格式和每月额度也会因套餐而不同。',
+      en: 'Translator, Write, and API are separate product and subscription paths; document formats, data protection, character limits, and admin controls vary by plan.',
+      zh: 'Translator、Write 与 API 是不同产品和订阅路径；文档格式、数据保护、字符额度和管理能力都会因套餐而不同。',
     },
     sources: [
       {
-        label: 'Official plan guide',
-        url: 'https://support.deepl.com/hc/en-us/articles/360019924499-About-DeepL-plans',
+        label: 'DeepL Write product boundaries',
+        url: 'https://support.deepl.com/hc/en-us/articles/6318834492700-About-DeepL-Write',
       },
-      { label: 'API usage and document limits', url: 'https://developers.deepl.com/docs/resources/usage-limits' },
+      { label: 'DeepL API plans', url: 'https://support.deepl.com/hc/en-us/articles/360021200939-DeepL-API-plans' },
+      { label: 'Document format limits', url: 'https://support.deepl.com/hc/en-us/articles/360020582359-File-formats' },
     ],
   },
   gamma: {

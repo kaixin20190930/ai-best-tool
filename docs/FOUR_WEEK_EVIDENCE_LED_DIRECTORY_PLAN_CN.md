@@ -153,7 +153,8 @@
 - Rank 2 Fathom 已完成：建立唯一的生产数据库实体，补齐双语决策内容、官方素材、兼容性、录制同意、免费额度边界及 G2/Capterra 独立市场证据；显式英文重复路径 `/en/ai/fathom` 统一 308 到 canonical `/ai/fathom`。
 - Rank 3 Gamma 已完成：在不增加 URL 的前提下迁移为生产数据库实体，补齐双语决策内容、当前官方品牌素材、演示/文档/网站能力、按用户计费、credits、导入导出、数据训练设置，以及 Product Hunt、G2、Capterra、TechCrunch 市场证据。
 - Rank 4 Consensus 已完成：保留 `/ai/consensus`，将通用历史网络页替换为生产数据库实体，补齐双语学术搜索决策内容、论文覆盖、套餐、全文访问和系统综述边界；证据严格限定为 `consensus.app`，排除了同名销售演示产品的 G2 数据污染。
-- 当前进度：`4/10`，P0 四项全部完成。下一项为 P1 rank 5 DeepL，收紧 Translator、Write、API、文档额度、隐私和团队管理的决策意图。
+- Rank 5 DeepL 已完成：保留 `/ai/deepl` 和既有生产记录，重构双语标题与正文，明确 Translator、Write、API 的订阅隔离、字符与文档额度、数据安全和团队管理边界，并补齐官方媒体与正确归属的 G2/融资成熟度证据。
+- 当前进度：`5/10`，P0 四项和 P1 第一项已完成。下一项为 P1 rank 6 Runway，聚焦视频生成与编辑流程、credits、模型可用性和商业交付边界。
 
 ## 状态更新协议
 

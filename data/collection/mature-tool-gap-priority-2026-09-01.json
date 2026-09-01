@@ -85,7 +85,9 @@
       "problem": "The record is editable and already has official evidence, but the search result has not earned clicks and its decision intent remains broad.",
       "deliverable": "Tighten the title and summary around Translator, Write and API choices, while retaining the existing page and evidence snapshot.",
       "decisionAngles": ["Translator vs Write", "subscription vs API billing", "document limits", "privacy and team administration"],
-      "status": "queued"
+      "status": "completed",
+      "completedAt": "2026-09-01",
+      "result": "Upgraded the existing production DeepL entity without adding a URL. Reframed the bilingual page around Translator, Write, and API selection; added current subscription, character, document-format, data-security, and administration boundaries; replaced legacy media; and recorded correctly scoped G2 and funding evidence."
     },
     {
       "rank": 6,

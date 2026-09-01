@@ -197,6 +197,12 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'www.deepl.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'www.midjourney.com',
         port: '',
         pathname: '/**',

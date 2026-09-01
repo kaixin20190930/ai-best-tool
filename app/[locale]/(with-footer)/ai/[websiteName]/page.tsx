@@ -1613,6 +1613,43 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
         };
   }
 
+  if (key === 'deepl') {
+    return isChinese
+      ? {
+          label: '官方事实快照',
+          title: 'Translator、Write、API 与文档边界',
+          summary: '以下信息来自 DeepL 当前产品与帮助文档；产品组合、额度和文件限制会变化，购买前应按真实工作流再次核对。',
+          checkedAt: '2026-09-01',
+          facts: [
+            { label: '产品边界', value: 'Translator、Write 和 API 是不同产品路径；Translator 订阅不自动包含 API，API 套餐也不提供网页翻译器和桌面应用的 Pro 权益。' },
+            { label: 'Write 边界', value: '未付费账号每次最多处理 1,500 字符；Translator Pro 用户可处理 2,000 字符，但完整 Write Pro 与最高数据安全需要 Write 套餐或组合套餐。' },
+            { label: '文件边界', value: 'Word、PowerPoint、Excel、PDF、XLIFF 等格式的可用性、单文件大小和字符上限会随 Translator 与 API 套餐变化。' },
+          ],
+          sources: [
+            { label: 'DeepL Write 说明', href: 'https://support.deepl.com/hc/en-us/articles/6318834492700-About-DeepL-Write' },
+            { label: 'DeepL API 套餐', href: 'https://support.deepl.com/hc/en-us/articles/360021200939-DeepL-API-plans' },
+            { label: '文件格式与额度', href: 'https://support.deepl.com/hc/en-us/articles/360020582359-File-formats' },
+          ],
+        }
+      : {
+          label: 'Official fact snapshot',
+          title: 'Translator, Write, API, and document boundaries',
+          summary:
+            'These facts come from current DeepL product and help documentation. Product packaging, allowances, and file limits can change, so recheck them against the actual workflow before buying.',
+          checkedAt: '2026-09-01',
+          facts: [
+            { label: 'Product boundary', value: 'Translator, Write, and API are separate paths. A Translator subscription does not automatically include API access, and API plans do not provide Pro benefits in the web translator or desktop apps.' },
+            { label: 'Write boundary', value: 'Users without a paid account can process 1,500 characters at a time. Translator Pro users get 2,000, while full Write Pro and maximum data security require a Write plan or bundle.' },
+            { label: 'Document boundary', value: 'Availability, per-file size, and character limits for Word, PowerPoint, Excel, PDF, XLIFF, and other formats vary across Translator and API plans.' },
+          ],
+          sources: [
+            { label: 'DeepL Write guide', href: 'https://support.deepl.com/hc/en-us/articles/6318834492700-About-DeepL-Write' },
+            { label: 'DeepL API plans', href: 'https://support.deepl.com/hc/en-us/articles/360021200939-DeepL-API-plans' },
+            { label: 'File formats and limits', href: 'https://support.deepl.com/hc/en-us/articles/360020582359-File-formats' },
+          ],
+        };
+  }
+
   if (key === 'the-graph') {
     return isChinese
       ? {
@@ -2690,6 +2727,35 @@ function getPriorityToolSearchIntent(websiteName: string, locale: string): Prior
             'Coverage for the target discipline, date range, and study type',
             'Fit across Papers, Pro, Deep Review, and library workflows',
             'Full-text access, citation verification, and reproducibility needs',
+          ],
+        };
+  }
+
+  if (key === 'deepl') {
+    return isChinese
+      ? {
+          metadataTitle: 'DeepL 翻译、Write 与 API：套餐、额度与隐私',
+          metadataDescription:
+            '评估 DeepL Translator、Write 和 API 的适用场景，并核对订阅关系、文档格式、字符额度、数据安全与团队管理边界。',
+          label: '语言 AI 选择判断重点',
+          summary: '选择 DeepL 的关键不是笼统比较翻译效果，而是先确定你需要网页翻译、写作改进还是产品 API，再核对文件、额度和数据要求。',
+          checkpoints: [
+            'Translator、Write 或 API 是否对应真实任务',
+            '字符额度、文件格式和文档大小是否满足使用量',
+            '数据安全、术语表和团队管理是否符合组织要求',
+          ],
+        }
+      : {
+          metadataTitle: 'DeepL Translator, Write & API: Plans, Limits & Privacy',
+          metadataDescription:
+            'Evaluate DeepL Translator, Write, and API by workflow, including subscription separation, document formats, character allowances, data security, and team administration.',
+          label: 'Language AI decision priorities',
+          summary:
+            'Choose DeepL by first deciding whether the workflow needs translation, writing improvement, or product integration, then verify file, usage, and data requirements.',
+          checkpoints: [
+            'Fit across Translator, Write, and API workflows',
+            'Character allowances, file formats, and document-size limits',
+            'Data security, glossary, and team-administration requirements',
           ],
         };
   }
