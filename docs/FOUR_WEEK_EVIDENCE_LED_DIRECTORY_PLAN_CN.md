@@ -17,7 +17,7 @@
 | W1-03 | 第 1 周 | 候选与发布准入台账 | 每日 1-2 条处理、缺失原因可追踪、未通过不公开 | 已完成 | Codex + 用户 |
 | W1-04 | 第 1 周 | 自动回归 | build、详情页信号、生产 smoke 可重复执行 | 已完成 | Codex |
 | W2-01 | 第 2 周 | 后台资料完整度 / 审核队列 | 管理员能知道可否公开、缺什么、何时复查 | 已完成 | Codex |
-| W2-02 | 第 2 周 | 日常收录与候选池 | 每日处理 1-2 条，未来 3 天候选已核验 | 进行中 | Codex + 用户 |
+| W2-02 | 第 2 周 | 日常收录与候选池 | 成熟工具优先队列已建立；每日处理 1-2 条，未来 3 天候选已核验 | 进行中 | Codex + 用户 |
 | W2-03 | 第 2 周 | Guide 联动 | Web3、Automation、Research 从任务入口进入相应 Decision Card | 已完成 | Codex |
 | W3-01 | 第 3 周 | 变化监测与复查队列 | AI 发现变化，人工/owner 确认后更新事实 | 已完成 | Codex + 用户 |
 | W3-02 | 第 3 周 | 真实信号闭环 | owner、纠错、评论能更新对应工具判断 | 已完成（W3-02A） | Codex + 用户 |
@@ -79,6 +79,7 @@
 - 每日下午：处理 3-5 个候选，常态公开 2-3 个、单周最多 15 个；通过资料与市场双重准入才公开。
 - 公开额度按 `70% 成熟高需求工具 / 20% 快速增长且证据充分 / 10% 差异化早期项目` 分配；“成熟”需由搜索意图、用户/评论量、开源采用或稳定客户证据支持，不能只看品牌知名度。
 - 对已经收录的成熟工具优先升级原工具页的价格、限制、真实评价和替代决策，不创建重复页面；新页面只有在站内不存在且能补充明确搜索/决策缺口时才进入发布流程。
+- 首批成熟工具缺口队列只升级、迁移或合并已有 canonical URL，不新增页面；机器可校验数据见 `data/collection/mature-tool-gap-priority-2026-09-01.json`。
 - 每日结束：更新候选结果、缺失原因、来源和下次复查日期。
 - 每周末：执行 build、详情页信号测试、生产 smoke，并核对主/子计划状态。
 
@@ -140,6 +141,15 @@
 - 完成 Motion（`motion.so`）真实市场核验：`68/100`、结论 `Emerging`；独立完成生成的测试验证了速度和元素级编辑，也记录了高 credits 消耗与精细控制限制。Product Hunt 有发布热度但仍无正式 review，近期两次实测均在未付费时止于渲染前；Mosaic 的 YC W25 active 状态只能支持持续性，不能替代 Motion 自身的采用证据，因此保持 draft。
 - 完成 Re_gent 真实市场核验：`72/100`、结论 `Emerging`；Show HN `129 points / 67 comments` 构成强讨论信号，GitHub `787 stars / 57 forks / 7 contributors / 5 releases` 和 Product Hunt `189 points / 298 followers` 构成辅助信号。但项目仅约四个月、最后代码推送为 2026-07-02、release 下载仍为数百且官网仍标记 Public Alpha，缺少重复使用与生产采用证据，因此保持 draft。
 - 纠正执行口径：每日收录目标按“公开可见”计数，候选处理和 draft 不再计入日更完成量。
+
+### W2-02C 首批成熟工具内容缺口（2026-09-01）
+
+- 已将 8 月 31 日 GSC 查询、页面和 Coverage 与生产 `tools` 表、fallback 页及历史网络数据交叉匹配，形成 10 项队列：Claude/Anthropic、Fathom、Gamma、Consensus、DeepL、Runway、Luma AI、Pipedream、Cursor、The Graph。
+- 队列中 `0` 个新增 URL：2 项需要合并或明确实体，6 项需要把 fallback 页迁移为数据库可维护记录，2 项需要把历史网络页迁移并解决未收录问题。
+- P0 顺序为 Claude/Anthropic、Fathom、Gamma、Consensus；P1 顺序为 DeepL、Runway、Luma AI、Pipedream、Cursor、The Graph。排序综合 GSC 需求、索引机会、市场成熟度和独立决策内容空间。
+- `Fathom` 是当前最强非首页工具页信号（两个 locale 路径合计 65 次展示）；`Gamma` 已接近第一页（12 次展示，平均排名 10.83）；`Consensus` 与 `Luma AI` 返回 200 但仍在“已抓取未编入索引”清单。
+- 自动门槛：`pnpm run test:mature-tool-priority` 必须保证恰好 10 项、slug 不重复、每项有 GSC 信号和决策角度，并禁止队列悄然变成新增 URL 扩张。
+- 下一项：执行 rank 1 的 Claude/Anthropic 实体与 URL 收口；完成构建和线上验证后再进入 Fathom。
 
 ## 状态更新协议
 

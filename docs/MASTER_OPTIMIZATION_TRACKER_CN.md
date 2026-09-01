@@ -1,6 +1,6 @@
 # 收录与搜索质量主计划
 
-更新时间：2026-08-31
+更新时间：2026-09-01
 执行状态：进行中
 当前范围：SEO 收录、搜索可见性、核心页面质量与真实编辑信号。产品分发/外链工作台暂不作为本轮执行目标，保留代码与数据，并已隐藏公开导航、价格页和后台侧栏入口；相关历史方案已移至 `docs/archive/`。
 
@@ -57,7 +57,7 @@
 | IDX-03 | 核对 22 个软 404 与 4 个未指定 canonical 重复页 | `how-to-choose-ai-tools` 的英文 canonical 已统一；软 404 URL 明细尚未导出，收到后逐条决定 404、合并或补实质内容 | 进行中 | Codex |
 | IDX-04 | 每周生产 SEO smoke | 首页、Explore、核心详情、robots、sitemap、canonical 均通过 | 持续 | Codex |
 | IDX-05 | 索引准入门槛持续执行 | 所有新 URL 均通过 [SEO 内容准入清单](./SEO_CONTENT_CHECKLIST.md) | 持续 | 共同 |
-| IDX-06 | 高质量收录候选池与 "Best Decision Card" | 市场验证编辑器、五维评分、独立证据闸门和前台成熟度状态已实现；Owlish 退回 draft，其余 7 条进入市场验证队列，ArcRift 另待补产品证据 | 进行中（机制完成，候选逐条复核） | Codex + 用户 |
+| IDX-06 | 高质量收录候选池与 "Best Decision Card" | 市场验证机制已完成；首批 10 项成熟工具内容缺口已按 GSC 排序，全部复用已有 URL，下一项为 Claude/Anthropic 收口 | 进行中（成熟工具队列 0/10） | Codex + 用户 |
 | IDX-07 | 四周证据驱动目录计划 | 第 1-3 周开发项已完成；W4 三期 GSC 决策报告已实现，等待同期数据验证后执行扩大或收口 | 进行中（W4） | Codex + 用户 |
 
 ### P1：让已获得展示的页面变成更可点击的答案（第 2-4 周）
@@ -69,6 +69,7 @@
 | CTR-03 | 强化已有展示的 Guide | Web3、Automation、Research | 三页均已补 3 条任务、适用边界、核验风险和直达工具 Decision Card 的路径；提交 `de1504e6` | 已完成 | Codex |
 | CTR-04 | 强化已有展示的详情页 | Fathom、Anthropic、DeepL、Gamma、Lindy、Cursor、The Graph | 每页保留至少两个官方来源和一个真实选择限制；禁止通用 AI 改写 | 已完成 | Codex |
 | CTR-05 | 真实编辑/owner 信号回填 | 本轮先选 5 页 | 每页至少一条有来源的更新、纠错、owner 补充或真实使用记录 | 需要数据 | 用户 + Codex |
+| CTR-06 | 首批成熟工具内容缺口 | Claude/Anthropic、Fathom、Gamma、Consensus、DeepL、Runway、Luma AI、Pipedream、Cursor、The Graph | 10 个既有 canonical URL 完成合并、数据库迁移或决策内容增强；不创建重复页 | 进行中（0/10） | Codex |
 
 ### P2：只在数据证明后扩展（第 4-6 周）
 
@@ -87,4 +88,4 @@
 ## 历史方案
 
 - 2026-08-10 及之前的总控、60 天商业、竞品研究、分发与产品证据方案均在 `docs/archive/` 保留，供追溯，不再作为本轮排期依据。
-- 本轮唯一的执行依据是本文件、[GSC 周度观察台账](./GSC_WEEKLY_OBSERVATION_LOG_CN.md)、[Coverage URL 审计](./COVERAGE_URL_AUDIT_2026-08-31_CN.md)、[SEO 内容准入清单](./SEO_CONTENT_CHECKLIST.md)、[核心页面信号审计](./PRIORITY_PAGE_SIGNAL_AUDIT_CN.md) 与 [重点工具详情说明](./PRIORITY_TOOL_DETAIL_PLAYBOOK_CN.md)。
+- 本轮唯一的执行依据是本文件、[四周证据驱动目录计划](./FOUR_WEEK_EVIDENCE_LED_DIRECTORY_PLAN_CN.md)、[GSC 周度观察台账](./GSC_WEEKLY_OBSERVATION_LOG_CN.md)、[Coverage URL 审计](./COVERAGE_URL_AUDIT_2026-08-31_CN.md)、[SEO 内容准入清单](./SEO_CONTENT_CHECKLIST.md)、[核心页面信号审计](./PRIORITY_PAGE_SIGNAL_AUDIT_CN.md) 与 [重点工具详情说明](./PRIORITY_TOOL_DETAIL_PLAYBOOK_CN.md)。
