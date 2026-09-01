@@ -135,6 +135,37 @@
       "API jobs require available account credits and can fail with an insufficient-credits response; credit purchases and auto top-ups are managed outside the public API.",
       "Brand research and generated scenes still need human review for factual accuracy, source rights and creative direction, even though individual elements remain editable."
     ],
+    "marketValidation": {
+      "evidenceUrls": [
+        "https://www.producthunt.com/products/motion-8",
+        "https://www.linkedin.com/posts/jaimingagiya_recently-i-got-a-chance-to-try-motion-by-activity-7448731868256026624-HmuR",
+        "https://www.ycombinator.com/companies/mosaic-2",
+        "https://www.iart.ai/blog/best-ai-motion-graphics-tools-2026",
+        "https://tapvid.ai/blog/motion-so-alternatives"
+      ],
+      "rationale": {
+        "en": "Motion addresses a clear production problem by turning a brief or product URL into a researched storyboard and editable motion-design project. An independent user completed a video in under five minutes and confirmed the value of element-level editing, but also reported high credit consumption and limited fine-grained animation control. Product Hunt shows meaningful launch interest, yet still has no formal reviews, while two recent hands-on comparisons reached the research step but could not evaluate output without buying credits. Mosaic has operated since 2024, is active in YC W25 and provides a credible durability signal, but that company-level evidence does not prove sustained adoption of the four-month-old Motion product. Motion therefore remains an emerging candidate until repeat usage, customer adoption or a broader body of completed independent tests is available.",
+        "zh": "Motion 通过把 brief 或产品网址转化为经过研究的分镜和可编辑 motion-design 项目，解决了明确的视频生产问题。一名独立用户在五分钟内完成了视频，并验证了元素级编辑的价值，但同时记录了 credits 消耗高和精细动画控制有限的问题。Product Hunt 有一定发布热度，却仍没有正式 review；另外两次近期实测只到达研究阶段，未付费便无法评价最终输出。Mosaic 自 2024 年运营、处于 YC W25 active 状态，能够提供持续性信号，但公司层面的证据不能代替上线约四个月的 Motion 自身采用证据。因此 Motion 暂定为 Emerging，需等待重复使用、客户采用或更多完成生成的独立测试后再决定发布。"
+      },
+      "reviewedAt": "2026-09-01",
+      "score": 68,
+      "scores": {
+        "userValue": 21,
+        "independentValidation": 11,
+        "durability": 12,
+        "evidenceQuality": 16,
+        "strategicValue": 8
+      },
+      "strongSignals": [],
+      "supportingSignals": [
+        "independent-completed-generation-test",
+        "product-hunt-launch-interest",
+        "active-yc-backed-parent-company",
+        "multiple-hands-on-paywall-tests",
+        "current-public-api-and-mcp-documentation"
+      ],
+      "verdict": "emerging"
+    },
     "notIdealFor": ["Teams that require a fixed per-video cost before generation", "Editors who need a traditional frame-accurate timeline as the primary workflow"],
     "officialUrl": "https://motion.so/",
     "plannedFor": "2026-09-03T09:00:00.000Z",

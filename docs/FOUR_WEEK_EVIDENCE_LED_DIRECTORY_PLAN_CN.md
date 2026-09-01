@@ -135,6 +135,7 @@
 - Owlish 工具 `7a9339c6-36d2-491b-8307-cdc7589a650d` 曾按旧资料完整度闸门发布；2026-09-01 复盘确认其缺少独立评价、持续性与采用证据，退回 draft。其余 7 条不得沿用 `Ready to publish` 结论，需先完成市场验证。
 - 市场验证编辑器部署后完成首条真实记录：Owlish `51/100`、结论 `Emerging`；工具和候选数据均已回读确认，Product Hunt 与 PeerPush 作为独立来源，但没有强市场信号，因此保持 draft。
 - 完成 Emdash 真实市场核验：`87/100`、结论 `Validated`；GitHub `5,564 stars / 573 forks / 154 releases` 与核验当天仍有正式发布构成强信号，Product Hunt、Reddit 实测反馈和跨平台下载构成辅助信号。已同步候选和工具级记录并允许公开发布，同时保留资源占用、安装兼容性、provider 账号与单 agent 场景不适配等限制。
+- 完成 Motion（`motion.so`）真实市场核验：`68/100`、结论 `Emerging`；独立完成生成的测试验证了速度和元素级编辑，也记录了高 credits 消耗与精细控制限制。Product Hunt 有发布热度但仍无正式 review，近期两次实测均在未付费时止于渲染前；Mosaic 的 YC W25 active 状态只能支持持续性，不能替代 Motion 自身的采用证据，因此保持 draft。
 - 纠正执行口径：每日收录目标按“公开可见”计数，候选处理和 draft 不再计入日更完成量。
 
 ## 状态更新协议
