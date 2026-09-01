@@ -69,7 +69,9 @@
       "problem": "The route returns 200 but has a generic title, is absent from the production tools table, and has not entered Google's index.",
       "deliverable": "Create a database-backed research-tool record, preserve the canonical route, and replace generic copy with evidence coverage, research limits and workflow decisions.",
       "decisionAngles": ["peer-reviewed corpus coverage", "AI synthesis limitations", "Deep Search and library workflow", "Consensus vs general-purpose AI search"],
-      "status": "queued"
+      "status": "completed",
+      "completedAt": "2026-09-01",
+      "result": "Replaced the generic legacy-network page with one production database-backed Consensus academic-search entity while preserving /ai/consensus. Added bilingual search, plan, full-text and systematic-review boundaries, current official media, and correctly scoped adoption evidence without mixing in the unrelated sales-demo product with the same name."
     },
     {
       "rank": 5,

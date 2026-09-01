@@ -152,7 +152,8 @@
 - Rank 1 Claude/Anthropic 已完成：保留原数据库 ID，将产品 slug、标题、正文、用途和官网更新为 Claude；`/ai/anthropic` 及本地化旧路径返回真实 308，sitemap 只保留 Claude；本地生产模式已验证标题、canonical、双语内容和跳转。
 - Rank 2 Fathom 已完成：建立唯一的生产数据库实体，补齐双语决策内容、官方素材、兼容性、录制同意、免费额度边界及 G2/Capterra 独立市场证据；显式英文重复路径 `/en/ai/fathom` 统一 308 到 canonical `/ai/fathom`。
 - Rank 3 Gamma 已完成：在不增加 URL 的前提下迁移为生产数据库实体，补齐双语决策内容、当前官方品牌素材、演示/文档/网站能力、按用户计费、credits、导入导出、数据训练设置，以及 Product Hunt、G2、Capterra、TechCrunch 市场证据。
-- 当前进度：`3/10`。下一项为 rank 4 Consensus，解决历史网络页虽返回 200 但未进入生产数据库且被 Google 标记为“已抓取未编入索引”的问题。
+- Rank 4 Consensus 已完成：保留 `/ai/consensus`，将通用历史网络页替换为生产数据库实体，补齐双语学术搜索决策内容、论文覆盖、套餐、全文访问和系统综述边界；证据严格限定为 `consensus.app`，排除了同名销售演示产品的 G2 数据污染。
+- 当前进度：`4/10`，P0 四项全部完成。下一项为 P1 rank 5 DeepL，收紧 Translator、Write、API、文档额度、隐私和团队管理的决策意图。
 
 ## 状态更新协议
 

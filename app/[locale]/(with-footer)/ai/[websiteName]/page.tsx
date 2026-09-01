@@ -1576,6 +1576,43 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
         };
   }
 
+  if (key === 'consensus') {
+    return isChinese
+      ? {
+          label: '官方事实快照',
+          title: '论文覆盖、检索深度和研究边界',
+          summary: '以下信息来自 Consensus 官方帮助中心；检索模式、论文数量和套餐额度会变化，严谨研究仍应复核原论文和正式数据库。',
+          checkedAt: '2026-09-01',
+          facts: [
+            { label: '语料范围', value: '官方帮助中心记录的数据库覆盖超过 2.2 亿篇同行评审论文；能否查看或下载全文仍取决于开放获取或个人/机构订阅。' },
+            { label: '套餐边界', value: 'Free 提供不限量 Papers 搜索，但 Pro、Deep Review、Study Snapshot 及 API/MCP 调用有不同月度额度。' },
+            { label: '研究边界', value: 'AI 综合适合范围探索和线索发现，但不能替代可复现检索、纳入排除标准、偏倚评估和对原始论文的阅读。' },
+          ],
+          sources: [
+            { label: '官方研究数据库', href: 'https://help.consensus.app/en/articles/10055108-consensus-research-database' },
+            { label: '官方套餐说明', href: 'https://help.consensus.app/en/articles/10087865-subscription-plans' },
+            { label: '独立同行评审', href: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC12318603/' },
+          ],
+        }
+      : {
+          label: 'Official fact snapshot',
+          title: 'Paper coverage, search depth, and research boundaries',
+          summary:
+            'These facts come from the Consensus help center. Search modes, corpus size, and plan allowances can change; rigorous work must still verify source papers and formal databases.',
+          checkedAt: '2026-09-01',
+          facts: [
+            { label: 'Corpus scope', value: 'Official documentation lists more than 220 million peer-reviewed papers; viewing or downloading full text still depends on open access or personal and institutional subscriptions.' },
+            { label: 'Plan boundary', value: 'Free includes unlimited Papers searches, while Pro messages, Deep Reviews, Study Snapshots, and API or MCP calls have plan-specific allowances.' },
+            { label: 'Research boundary', value: 'AI synthesis supports scoping and discovery but does not replace reproducible retrieval, screening criteria, bias assessment, or reading the source papers.' },
+          ],
+          sources: [
+            { label: 'Official research database', href: 'https://help.consensus.app/en/articles/10055108-consensus-research-database' },
+            { label: 'Official plan guide', href: 'https://help.consensus.app/en/articles/10087865-subscription-plans' },
+            { label: 'Independent peer-reviewed review', href: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC12318603/' },
+          ],
+        };
+  }
+
   if (key === 'the-graph') {
     return isChinese
       ? {
@@ -2624,6 +2661,35 @@ function getPriorityToolSearchIntent(websiteName: string, locale: string): Prior
             'Fit for presentations, documents, or hosted websites',
             'Import behavior, PPTX/PDF export fidelity, and brand control',
             'Per-user subscription, AI credits, and data settings',
+          ],
+        };
+  }
+
+  if (key === 'consensus') {
+    return isChinese
+      ? {
+          metadataTitle: 'Consensus AI 学术搜索：论文覆盖、价格与限制',
+          metadataDescription:
+            '评估 Consensus 的同行评审论文搜索、Pro、Deep Review、Study Snapshot 和文献库流程，并了解全文访问、检索覆盖与系统综述限制。',
+          label: '学术搜索判断重点',
+          summary: 'Consensus 的价值是快速定位和理解证据，而不是替代正式数据库、系统综述方法或对原论文的批判性阅读。',
+          checkpoints: [
+            '目标学科、时间范围和研究类型是否被语料覆盖',
+            'Papers、Pro、Deep Review 和文献库流程是否匹配任务',
+            '全文访问、引用核验和可复现检索要求是否满足',
+          ],
+        }
+      : {
+          metadataTitle: 'Consensus AI Academic Search: Coverage, Pricing & Limits',
+          metadataDescription:
+            'Evaluate Consensus for peer-reviewed paper search, Pro, Deep Reviews, Study Snapshots, and library workflows, including full-text access and systematic-review limits.',
+          label: 'Academic search decision',
+          summary:
+            'Consensus is valuable for finding and understanding evidence faster, not for replacing formal databases, systematic-review methods, or critical reading of source papers.',
+          checkpoints: [
+            'Coverage for the target discipline, date range, and study type',
+            'Fit across Papers, Pro, Deep Review, and library workflows',
+            'Full-text access, citation verification, and reproducibility needs',
           ],
         };
   }

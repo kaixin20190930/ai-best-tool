@@ -5,6 +5,17 @@ export interface PriorityToolEvidence {
 }
 
 export const PRIORITY_TOOL_EVIDENCE: Record<string, PriorityToolEvidence> = {
+  consensus: {
+    checkedAt: '2026-09-01',
+    limitation: {
+      en: 'Consensus accelerates discovery and synthesis, but corpus coverage, retrieval, and AI interpretation are not exhaustive enough to replace a reproducible systematic-review protocol or reading the source papers.',
+      zh: 'Consensus 可以加速发现与综合，但语料覆盖、检索和 AI 解读并非穷尽式，不能替代可复现的系统综述方案或对原论文的阅读。',
+    },
+    sources: [
+      { label: 'Official research database', url: 'https://help.consensus.app/en/articles/10055108-consensus-research-database' },
+      { label: 'Independent peer-reviewed review', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC12318603/' },
+    ],
+  },
   fathom: {
     checkedAt: '2026-08-31',
     limitation: {
