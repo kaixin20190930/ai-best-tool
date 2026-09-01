@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { loadEnvConfig } from '@next/env';
 
+import { closePool } from '@/db/neon/client';
 import { extractProductEvidence } from '@/lib/services/intelligence/evidenceExtractor';
 import { classifyProductPage } from '@/lib/services/intelligence/pageClassifier';
 import { discoverProductPages } from '@/lib/services/intelligence/pageDiscovery';
@@ -12,6 +13,7 @@ import {
   safeFetchText,
 } from '@/lib/services/intelligence/safeFetch';
 import type { IntelligenceFetchStatus, IntelligencePageType } from '@/lib/services/intelligence/types';
+import { getToolById } from '@/lib/services/tools';
 
 loadEnvConfig(process.cwd());
 
@@ -52,6 +54,15 @@ async function run() {
 
   if (!ownerId) {
     throw new Error('The --owner-id flag is required.');
+  }
+
+  if (ownerType === 'tool') {
+    const ownerTool = await getToolById(ownerId);
+    if (!ownerTool) {
+      throw new Error(
+        `The tool owner ID ${ownerId} does not exist in the directory. Open the tool in Admin and use the UUID from /admin/tools/<uuid>/edit.`,
+      );
+    }
   }
 
   const adminKey = process.env.SUPABASE_SECRET_KEY?.trim() || process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
@@ -196,4 +207,6 @@ async function run() {
 run().catch((error) => {
   console.error(describeError(error));
   process.exitCode = 1;
+}).finally(async () => {
+  await closePool();
 });

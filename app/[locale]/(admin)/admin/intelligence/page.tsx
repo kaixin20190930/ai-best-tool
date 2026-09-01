@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { AlertTriangle, ArrowUpRight, Layers3, ListChecks, ShieldCheck, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import IntelligenceClaimReviewForm from '@/components/admin/IntelligenceClaimReviewForm';
 import {
   getAdminIntelligenceDailyQueue,
   getAdminIntelligenceOverview,
@@ -915,26 +916,34 @@ export default async function AdminIntelligencePage({
                   <div className='mt-3 space-y-3'>
                     {selected.claims.length > 0 ? (
                       selected.claims.map((claim) => (
-                        <div key={claim.id} className='rounded-lg bg-slate-50 p-3'>
-                          <div className='flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-500'>
-                            <span className='rounded-full bg-white px-2 py-1 text-slate-700'>{claim.claimType}</span>
-                            <span className='rounded-full bg-white px-2 py-1 text-slate-700'>
-                              {claim.conflictStatus}
-                            </span>
-                            <span className='rounded-full bg-white px-2 py-1 text-slate-700'>
-                              conf:{claim.confidence}
-                            </span>
-                          </div>
-                          <div className='mt-2 text-sm text-slate-900'>
-                            {typeof claim.claimValue === 'string' ? claim.claimValue : JSON.stringify(claim.claimValue)}
-                          </div>
-                          <div className='mt-2 text-xs text-slate-500'>
-                            {claim.sourceUrl}
-                            {claim.sourceExcerpt ? (
-                              <span className='mt-1 block text-slate-400'>{claim.sourceExcerpt}</span>
-                            ) : null}
-                          </div>
-                        </div>
+                        <details key={claim.id} className='rounded-lg bg-slate-50 p-3'>
+                          <summary className='cursor-pointer list-none'>
+                            <div className='flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-500'>
+                              <span className='rounded-full bg-white px-2 py-1 text-slate-700'>{claim.claimType}</span>
+                              <span className='rounded-full bg-cyan-50 px-2 py-1 text-cyan-800'>
+                                {claim.verificationStatus || 'candidate'}
+                              </span>
+                              <span className='rounded-full bg-white px-2 py-1 text-slate-700'>
+                                {claim.conflictStatus}
+                              </span>
+                              <span className='rounded-full bg-white px-2 py-1 text-slate-700'>
+                                conf:{claim.confidence}
+                              </span>
+                            </div>
+                            <div className='mt-2 text-sm text-slate-900'>
+                              {typeof claim.claimValue === 'string'
+                                ? claim.claimValue
+                                : JSON.stringify(claim.claimValue)}
+                            </div>
+                            <div className='mt-2 text-xs text-slate-500'>
+                              {claim.sourceUrl}
+                              {claim.sourceExcerpt ? (
+                                <span className='mt-1 block text-slate-400'>{claim.sourceExcerpt}</span>
+                              ) : null}
+                            </div>
+                          </summary>
+                          <IntelligenceClaimReviewForm claim={claim} />
+                        </details>
                       ))
                     ) : (
                       <p className='text-sm text-slate-500'>No claims recorded.</p>

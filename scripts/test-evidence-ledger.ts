@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 import { buildEvidenceLedger, buildEvidenceLedgerEntry } from '@/lib/services/intelligence/evidenceLedger';
+import { prepareEvidenceReviewUpdate } from '@/lib/services/intelligence/evidenceReview';
 import type { ProductIntelligenceClaim, ProductIntelligenceSource } from '@/lib/services/intelligence/types';
 
 const now = new Date('2026-09-01T12:00:00.000Z');
@@ -105,6 +106,56 @@ assert.equal(conflicted.canSupportDecision, false);
 const ledger = buildEvidenceLedger([{ ...baseClaim, sourceId: undefined }], [source], now);
 assert.equal(ledger[0]?.sourceId, source.id, 'legacy claims should resolve a source by URL');
 
+const verifiedUpdate = prepareEvidenceReviewUpdate(
+  {
+    currentStatus: 'candidate',
+    nextStatus: 'verified',
+    conflictStatus: 'none',
+    sourceUrl: source.url,
+    sourceType: 'official',
+    verificationNote: 'Checked against the official pricing page.',
+    validityScope: '{"plan":"Pro"}',
+  },
+  'reviewer-id',
+  now,
+);
+assert.equal(verifiedUpdate.verification_status, 'verified');
+assert.equal(verifiedUpdate.verified_by, 'reviewer-id');
+assert.equal(verifiedUpdate.review_due_at, '2026-10-01T12:00:00.000Z');
+assert.deepEqual(verifiedUpdate.validity_scope, { plan: 'Pro' });
+
+assert.throws(
+  () =>
+    prepareEvidenceReviewUpdate(
+      {
+        currentStatus: 'candidate',
+        nextStatus: 'verified',
+        conflictStatus: 'possible',
+        sourceUrl: source.url,
+        sourceType: 'official',
+        verificationNote: 'Checked against the official pricing page.',
+      },
+      'reviewer-id',
+      now,
+    ),
+  /Resolve the evidence conflict/,
+);
+assert.throws(
+  () =>
+    prepareEvidenceReviewUpdate(
+      {
+        currentStatus: 'verified',
+        nextStatus: 'candidate',
+        conflictStatus: 'none',
+        sourceUrl: source.url,
+        sourceType: 'official',
+      },
+      'reviewer-id',
+      now,
+    ),
+  /Move verified claims back to candidate/,
+);
+
 const migration = readFileSync(
   resolve(process.cwd(), 'db/supabase/migrations/20260901_evidence_ledger_model.sql'),
   'utf8',
@@ -145,6 +196,30 @@ const panel = readFileSync(resolve(process.cwd(), 'components/intelligence/Evide
   assert.equal(panel.includes(requiredFragment), true, `public panel is missing ${requiredFragment}`);
 });
 assert.equal(panel.includes("type='range'"), false, 'the ledger must not collapse evidence into a score control');
+
+const reviewForm = readFileSync(
+  resolve(process.cwd(), 'components/admin/IntelligenceClaimReviewForm.tsx'),
+  'utf8',
+);
+['isPending', 'Saving review...', 'conflict', 'reviewIntelligenceClaim'].forEach((requiredFragment) => {
+  assert.equal(reviewForm.includes(requiredFragment), true, `admin review form is missing ${requiredFragment}`);
+});
+
+const reviewAction = readFileSync(resolve(process.cwd(), 'app/actions/admin/intelligence.ts'), 'utf8');
+assert.equal(reviewAction.includes('requireAdmin()'), true, 'evidence review must require an administrator');
+assert.equal(
+  reviewAction.includes("conflict_status: 'none'"),
+  false,
+  'reviewing evidence must never clear a conflict automatically',
+);
+
+const syncScript = readFileSync(resolve(process.cwd(), 'scripts/sync-product-intelligence.ts'), 'utf8');
+assert.equal(syncScript.includes('getToolById(ownerId)'), true, 'tool intelligence sync must validate its owner ID');
+assert.equal(
+  syncScript.includes('does not exist in the directory'),
+  true,
+  'invalid tool identity errors must explain how to find the correct ID',
+);
 
 const toolPage = readFileSync(resolve(process.cwd(), 'app/[locale]/(with-footer)/ai/[websiteName]/page.tsx'), 'utf8');
 const decisionCardPosition = toolPage.indexOf("id='decision-card'");

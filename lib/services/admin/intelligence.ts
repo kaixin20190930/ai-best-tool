@@ -324,7 +324,9 @@ async function loadProfileDetail(profileId: string, supabase: ReturnType<typeof 
     claimCount: mappedClaims.length,
     assetCount: mappedAssets.length,
     conflictCount: mappedClaims.filter((claim) => claim.conflictStatus !== 'none').length,
-    verifiedClaimCount: mappedClaims.filter((claim) => claim.conflictStatus === 'none').length,
+    verifiedClaimCount: mappedClaims.filter(
+      (claim) => claim.verificationStatus === 'verified' && claim.conflictStatus === 'none',
+    ).length,
   });
 
   const mappedProfile = {
@@ -583,8 +585,14 @@ export async function getAdminIntelligenceOverview(input?: {
       ? supabase.from('product_intelligence_sources').select('profile_id').in('profile_id', profileIds)
       : Promise.resolve({ data: [] as Array<{ profile_id: string }>, error: null as null }),
     profileIds.length > 0
-      ? supabase.from('product_intelligence_claims').select('profile_id, conflict_status').in('profile_id', profileIds)
-      : Promise.resolve({ data: [] as Array<{ profile_id: string; conflict_status: string }>, error: null as null }),
+      ? supabase
+          .from('product_intelligence_claims')
+          .select('profile_id, conflict_status, verification_status')
+          .in('profile_id', profileIds)
+      : Promise.resolve({
+          data: [] as Array<{ profile_id: string; conflict_status: string; verification_status: string }>,
+          error: null as null,
+        }),
     profileIds.length > 0
       ? supabase.from('product_intelligence_assets').select('profile_id').in('profile_id', profileIds)
       : Promise.resolve({ data: [] as Array<{ profile_id: string }>, error: null as null }),
@@ -611,7 +619,8 @@ export async function getAdminIntelligenceOverview(input?: {
     claimCountByProfile.set(row.profile_id, (claimCountByProfile.get(row.profile_id) || 0) + 1);
     if (row.conflict_status && row.conflict_status !== 'none') {
       conflictCountByProfile.set(row.profile_id, (conflictCountByProfile.get(row.profile_id) || 0) + 1);
-    } else {
+    }
+    if (row.verification_status === 'verified' && row.conflict_status === 'none') {
       verifiedCountByProfile.set(row.profile_id, (verifiedCountByProfile.get(row.profile_id) || 0) + 1);
     }
   }
