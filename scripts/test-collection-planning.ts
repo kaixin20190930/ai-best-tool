@@ -6,7 +6,10 @@ import {
   isDifferentExistingTool,
   validateThreeDayCandidatePool,
 } from '@/lib/services/admin/collectionPlanning';
-import { inferDraftClassification } from '@/lib/services/admin/collection';
+import {
+  inferDraftClassification,
+  resolveCollectionCategorySlug,
+} from '@/lib/services/admin/collection';
 
 function entry(title: string, day: string): CandidatePoolEntry {
   return {
@@ -69,6 +72,9 @@ assert.deepEqual(explicitClassification.useCases, [
   'Create launch videos',
   'Build product explainers',
 ]);
+assert.equal(resolveCollectionCategorySlug('voice'), 'chatbot');
+assert.equal(resolveCollectionCategorySlug('developer-tools'), 'productivity');
+assert.equal(resolveCollectionCategorySlug('design-art'), 'design-art');
 
 const incompleteReadyPool = validPool.map((item, index) =>
   index === 0 ? { ...item, decision: 'ready_for_draft' as const, gaps: [] } : item

@@ -57,7 +57,7 @@
 | IDX-03 | 核对 22 个软 404 与 4 个未指定 canonical 重复页 | `how-to-choose-ai-tools` 的英文 canonical 已统一；软 404 URL 明细尚未导出，收到后逐条决定 404、合并或补实质内容 | 进行中 | Codex |
 | IDX-04 | 每周生产 SEO smoke | 首页、Explore、核心详情、robots、sitemap、canonical 均通过 | 持续 | Codex |
 | IDX-05 | 索引准入门槛持续执行 | 所有新 URL 均通过 [SEO 内容准入清单](./SEO_CONTENT_CHECKLIST.md) | 持续 | 共同 |
-| IDX-06 | 高质量收录候选池与 "Best Decision Card" | Contextberg、Re_gent、Invenio、Thinnest AI、Motion 已形成合格 draft；PollyReach 继续按证据缺口保持不公开 | 进行中（5/7-14） | Codex + 用户 |
+| IDX-06 | 高质量收录候选池与 "Best Decision Card" | 首个三日候选池 6 条均已形成合格 draft；分类、价格、证据和限制已回读，全部保持未公开 | 进行中（6/7-14） | Codex + 用户 |
 | IDX-07 | 四周证据驱动目录计划 | 第 1-3 周开发项已完成；W4 三期 GSC 决策报告已实现，等待同期数据验证后执行扩大或收口 | 进行中（W4） | Codex + 用户 |
 
 ### P1：让已获得展示的页面变成更可点击的答案（第 2-4 周）

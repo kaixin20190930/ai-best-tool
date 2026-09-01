@@ -48,7 +48,7 @@
 | W2-01A | 后台列表增加完整度、准入状态、下次复查、缺失项筛选 | 1.5 天 | W1-02 | 管理员一屏识别能否发布 | 已完成，提交 `9f780aa0`；tsc/build 通过 |
 | W2-01B | 编辑页增加证据来源、限制和 Decision Card 字段校验 | 1.5 天 | W2-01A | 缺字段无法误标可发布 | 已完成，提交 `4e3df958`；部署 `b48753cd`、production smoke 通过 |
 | W2-02A | 生成未来 3 天候选池，每日处理 1-2 条 | 每日 1 小时 | W2-01 | 每条有发布/待补结论 | 已完成，提交 `d7ea18b5`；6 条生产候选按 3 天每天 2 条排期 |
-| W2-02B | 首批 7-14 条处理台账；只发布通过准入的条目 | 每日 1 小时 | W2-02A | 无低质量例外放行 | 进行中，已处理 5/7-14；Motion 已形成合格草稿，PollyReach 继续待补 |
+| W2-02B | 首批 7-14 条处理台账；只发布通过准入的条目 | 每日 1 小时 | W2-02A | 无低质量例外放行 | 进行中，已处理 6/7-14；首个三日候选池已全部形成合格草稿，均未公开 |
 | W2-03A | Web3、Automation、Research Guide 统一任务入口 | 1 天 | W1-01C | 指向对应工具 Decision Card | 已完成，提交 `de1504e6`；专项结构测试、Decision Card 回归、tsc、完整 build 通过 |
 
 ### 第 3 周：变化监测与真实信号（09-15 至 09-21，预计 4-5 个开发日）
@@ -85,7 +85,7 @@
 | --- | --- | --- | --- | --- |
 | 2026-09-01 | Contextberg、Re_gent | `ready_for_draft` | 已创建 draft，未公开 | 工具级最终编辑复核与发布审批 |
 | 2026-09-02 | Invenio、Thinnest AI | `ready_for_draft` | 已创建 draft，未公开 | 工具级最终编辑复核与发布审批 |
-| 2026-09-03 | Motion、PollyReach | Motion `ready_for_draft`；PollyReach `needs_evidence` | Motion 已创建 draft；PollyReach 不公开 | PollyReach 仍缺地域、价格、素材与安全限制 |
+| 2026-09-03 | Motion、PollyReach | `ready_for_draft` | 已创建 draft，未公开 | 工具级最终编辑复核与发布审批 |
 
 - 来源：现有生产 `collection_candidates`，没有为完成数量目标盲目增加 URL。
 - 核验：每条有 2-3 个官方或 maker 证据入口、明确排期、结论和 3 个待补项。
@@ -113,6 +113,12 @@
 - 修复草稿导入优先级：人工核验的分类、标签、用途和价格优先于通用关键词推断；重复运行只刷新仍为 `draft` 的条目，不覆盖已发布工具。
 - 生产回读确认 Motion 为 `design-art / paid`，用途为 launch video、product explainer 和可编辑 motion scene，状态仍为 `draft`；PollyReach 未达到准入门槛，保持 `new` 且未创建工具页。
 - 本批自动验收：collection planning、collection admission、TypeScript 和完整 `pnpm run build` 全部通过。
+
+### W2-02B 第四批处理记录（2026-09-01）
+
+- PollyReach：已核验官方首页、Pricing 与 Terms；记录 `50+` 国家宣传、Star/Pro/Max 的 credits 与国家数限制、免费额度周/月口径冲突、credits 不保证固定工作量，以及 consent、AI disclosure、DNC、当地拨打时段和记录保存责任；草稿 `8d9934d7-d6de-42da-b60a-71330e3f7e3c`。
+- 补齐虚拟发现分类与实体存储分类映射：`voice → chatbot`、`developer-tools → productivity`；保留 `suggestedCategorySlug` 和标签用于 Voice/Developer 发现入口，修复 PollyReach、Thinnest AI、Re_gent 的空分类。
+- 本批 6 条候选均显式记录 `free / freemium / paid`，避免默认价格误判；生产幂等回读确认全部仍为 `draft`，没有自动发布。
 
 ## 状态更新协议
 

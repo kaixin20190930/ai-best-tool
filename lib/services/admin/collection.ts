@@ -183,6 +183,21 @@ interface DraftClassification {
   useCases: string[];
 }
 
+const COLLECTION_CATEGORY_ALIASES: Record<string, string> = {
+  automation: 'productivity',
+  'developer-tools': 'productivity',
+  image: 'design-art',
+  research: 'productivity',
+  video: 'design-art',
+  voice: 'chatbot',
+  web3: 'other',
+  writing: 'text-writing',
+};
+
+export function resolveCollectionCategorySlug(slug: string): string {
+  return COLLECTION_CATEGORY_ALIASES[slug] || slug;
+}
+
 export function normalizeCollectionUrl(url: string): string {
   const trimmed = url.trim();
   const withProtocol = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
@@ -510,8 +525,9 @@ export function inferDraftClassification(input: {
 
 async function getCategoryIdBySlug(slug: string): Promise<string | null> {
   const pool = getPool();
+  const storageSlug = resolveCollectionCategorySlug(slug);
   const result = await pool.query('SELECT id FROM categories WHERE slug = $1 LIMIT 1', [
-    slug,
+    storageSlug,
   ]);
 
   return result.rows[0]?.id || null;
