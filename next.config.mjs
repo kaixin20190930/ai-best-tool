@@ -185,6 +185,12 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'static.cdn-luma.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'lovable.dev',
         port: '',
         pathname: '/**',

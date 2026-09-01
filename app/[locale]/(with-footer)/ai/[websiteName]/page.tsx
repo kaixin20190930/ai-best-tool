@@ -1931,6 +1931,43 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
         };
   }
 
+  if (key === 'luma-ai') {
+    return isChinese
+      ? {
+          label: '官方事实快照',
+          title: 'Dream Machine 套餐、Credits 与商业授权',
+          summary: '以下信息来自 Luma Dream Machine 当前帮助文档；模型和 credits 费率变化较快，商业项目生成前应再次复核。',
+          checkedAt: '2026-09-01',
+          facts: [
+            { label: '产品范围', value: '本页评估 Dream Machine 的视频、图片和 Modify 工作流，不把 Luma 的 Capture、Genie、Agents 或研究平台混成同一个产品。' },
+            { label: '套餐与额度', value: 'Web 端 Lite 为 $9.99/月、3,200 credits；Plus 为 $29.99/月、10,000 credits；Unlimited 为 $94.99/月，含 10,000 fast credits 和 relaxed generation。月度 credits 不结转。' },
+            { label: '商业与 API 边界', value: 'Free 与 Lite 输出带水印且仅限个人非商业用途；Plus、Unlimited 与 Enterprise 才提供商业权利。Dream Machine 网页订阅和 API credits 不互通。' },
+          ],
+          sources: [
+            { label: '套餐与订阅', href: 'https://lumalabs.ai/learning-hub/payments-subscriptions' },
+            { label: 'Credits 规则', href: 'https://lumalabs.ai/learning-hub/dream-machine-credit-system' },
+            { label: '商业授权', href: 'https://lumalabs.ai/learning-hub/licensing' },
+          ],
+        }
+      : {
+          label: 'Official fact snapshot',
+          title: 'Dream Machine plans, credits, and commercial licensing',
+          summary:
+            'These facts come from current Luma Dream Machine documentation. Model and credit rates change quickly, so recheck them before generating assets for commercial work.',
+          checkedAt: '2026-09-01',
+          facts: [
+            { label: 'Product scope', value: 'This page evaluates Dream Machine video, image, and Modify workflows rather than combining Luma Capture, Genie, Agents, and research into one product.' },
+            { label: 'Plans and allowance', value: 'Web Lite is $9.99 monthly with 3,200 credits, Plus $29.99 with 10,000, and Unlimited $94.99 with 10,000 fast credits plus relaxed generation. Monthly credits do not roll over.' },
+            { label: 'Commercial and API boundary', value: 'Free and Lite outputs remain watermarked and personal-use only. Plus, Unlimited, and Enterprise provide commercial rights. Web subscriptions and API credits do not transfer.' },
+          ],
+          sources: [
+            { label: 'Plans and subscriptions', href: 'https://lumalabs.ai/learning-hub/payments-subscriptions' },
+            { label: 'Credit system', href: 'https://lumalabs.ai/learning-hub/dream-machine-credit-system' },
+            { label: 'Commercial licensing', href: 'https://lumalabs.ai/learning-hub/licensing' },
+          ],
+        };
+  }
+
   if (key === 'defillama') {
     return isChinese
       ? {
@@ -2787,6 +2824,35 @@ function getPriorityToolSearchIntent(websiteName: string, locale: string): Prior
             'Where Runway fits across generation, targeted edits, and final post-production',
             'Credit predictability by model, duration, and resolution',
             'Editor seats, shared allowance, API separation, and delivery-tool fit',
+          ],
+        };
+  }
+
+  if (key === 'luma-ai') {
+    return isChinese
+      ? {
+          metadataTitle: 'Luma Dream Machine：AI 视频、Credits、价格与商用限制',
+          metadataDescription:
+            '评估 Luma Dream Machine 的 Ray 视频、Photon 图片和 Modify 工作流，核对 Lite/Plus/Unlimited credits、水印、商业授权与 API 独立计费。',
+          label: 'Dream Machine 判断重点',
+          summary: 'Dream Machine 更适合镜头探索和生成式修改；真正的选择标准是模型费率、可用镜头成本和当前套餐是否允许商业交付。',
+          checkpoints: [
+            '视频生成、图片生成或 Modify 是否对应真实任务',
+            '模型、分辨率、时长和失败重试后的可用镜头成本',
+            '水印、商业授权、月度 credits 与 API 隔离是否可接受',
+          ],
+        }
+      : {
+          metadataTitle: 'Luma Dream Machine: AI Video, Credits, Pricing & Commercial Use',
+          metadataDescription:
+            'Evaluate Luma Dream Machine for Ray video, Photon images, and Modify workflows, including Lite, Plus and Unlimited credits, watermarks, commercial rights, and separate API billing.',
+          label: 'Dream Machine decision priorities',
+          summary:
+            'Dream Machine is strongest for shot exploration and generative modification; the decision depends on model rates, usable-shot economics, and whether the active plan permits commercial delivery.',
+          checkpoints: [
+            'Fit across video generation, image generation, and Modify workflows',
+            'Usable-shot cost by model, resolution, duration, and retries',
+            'Watermarks, commercial rights, monthly credits, and API separation',
           ],
         };
   }

@@ -3,7 +3,7 @@ import path from 'node:path';
 
 import { PRIORITY_TOOL_EVIDENCE } from '../lib/config/priorityToolEvidence';
 
-const expectedSlugs = ['claude', 'consensus', 'cursor', 'deepl', 'fathom', 'gamma', 'lindy', 'runway', 'the-graph'];
+const expectedSlugs = ['claude', 'consensus', 'cursor', 'deepl', 'fathom', 'gamma', 'lindy', 'luma-ai', 'runway', 'the-graph'];
 const actualSlugs = Object.keys(PRIORITY_TOOL_EVIDENCE).sort();
 
 if (JSON.stringify(actualSlugs) !== JSON.stringify(expectedSlugs)) {
@@ -43,6 +43,7 @@ if (!detailPage.includes('priorityEvidence && !priorityOfficialEvidence')) {
 
 for (const [officialSnapshotSlug, expectedDate] of Object.entries({
   cursor: '2026-08-31',
+  'luma-ai': '2026-09-01',
   runway: '2026-09-01',
   'the-graph': '2026-08-31',
 })) {

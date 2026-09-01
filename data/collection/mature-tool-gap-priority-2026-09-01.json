@@ -117,7 +117,9 @@
       "problem": "The route returns 200 but is absent from the production tools table, has generic metadata, and remains unindexed.",
       "deliverable": "Create a verified database record, confirm whether the page represents Dream Machine or the broader Luma platform, and expose one unambiguous search intent.",
       "decisionAngles": ["Dream Machine scope", "video and image generation limits", "credits and queue priority", "commercial-output boundaries"],
-      "status": "queued"
+      "status": "completed",
+      "completedAt": "2026-09-01",
+      "result": "Replaced the unavailable legacy-network route with one production database-backed Luma Dream Machine entity while preserving /ai/luma-ai. Scoped the page to Dream Machine instead of mixing Luma Agents, Capture, Genie, and research; added current web plans, model-dependent credits, watermark and commercial-license rules, separate API billing, official media, and a deliberately moderated market score reflecting strong company signals but thin independent product reviews."
     },
     {
       "rank": 8,

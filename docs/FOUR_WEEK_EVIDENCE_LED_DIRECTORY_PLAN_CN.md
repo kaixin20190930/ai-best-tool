@@ -155,7 +155,8 @@
 - Rank 4 Consensus 已完成：保留 `/ai/consensus`，将通用历史网络页替换为生产数据库实体，补齐双语学术搜索决策内容、论文覆盖、套餐、全文访问和系统综述边界；证据严格限定为 `consensus.app`，排除了同名销售演示产品的 G2 数据污染。
 - Rank 5 DeepL 已完成：保留 `/ai/deepl` 和既有生产记录，重构双语标题与正文，明确 Translator、Write、API 的订阅隔离、字符与文档额度、数据安全和团队管理边界，并补齐官方媒体与正确归属的 G2/融资成熟度证据。
 - Rank 6 Runway 已完成：保留 `/ai/runway` 并将 fallback 迁移为生产数据库实体，补齐生成与编辑分工、Free/Standard/Pro/Max credits、旧 Unlimited 迁移、工作区共享额度、API 隔离、商业权利和外部后期边界。
-- 当前进度：`6/10`，P0 四项和 P1 前两项已完成。下一项为 P1 rank 7 Luma AI，先确认 Dream Machine 与 Luma 平台实体范围，再收紧视频/图片生成和 credits 意图。
+- Rank 7 Luma AI 已完成：保留 `/ai/luma-ai`，将不可用的 legacy-network 页面替换为生产数据库实体，并明确页面只评估 Dream Machine；补齐 Web 套餐、模型 credits、水印与商用授权、API 隔离及“公司信号强但独立产品评价薄”的证据边界。
+- 当前进度：`7/10`，P0 四项和 P1 前三项已完成。下一项为 P1 rank 8 Pipedream，迁移现有自动化决策页并强化中文 snippet、workflow 稳定性、credits 与 compute 边界。
 
 ## 状态更新协议
 

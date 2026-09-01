@@ -99,6 +99,18 @@ export const PRIORITY_TOOL_EVIDENCE: Record<string, PriorityToolEvidence> = {
       { label: 'Official credit documentation', url: 'https://docs.lindy.ai/account-billing/credits' },
     ],
   },
+  'luma-ai': {
+    checkedAt: '2026-09-01',
+    limitation: {
+      en: 'Dream Machine web subscriptions and API credits are separate; Free and Lite outputs remain watermarked and non-commercial, and monthly credits do not roll over.',
+      zh: 'Dream Machine 网页订阅与 API credits 互相独立；Free 与 Lite 输出保留水印且仅限非商业使用，月度 credits 也不会结转。',
+    },
+    sources: [
+      { label: 'Plans and subscription boundaries', url: 'https://lumalabs.ai/learning-hub/payments-subscriptions' },
+      { label: 'Credit system and current rates', url: 'https://lumalabs.ai/learning-hub/dream-machine-credit-system' },
+      { label: 'Commercial licensing rules', url: 'https://lumalabs.ai/learning-hub/licensing' },
+    ],
+  },
   cursor: {
     checkedAt: '2026-08-31',
     limitation: {
