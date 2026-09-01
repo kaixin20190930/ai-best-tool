@@ -89,6 +89,10 @@ function mapSourceRow(row: Record<string, unknown>): ProductIntelligenceSource {
     contentType: (row.content_type as string | null | undefined) || null,
     fetchedAt: (row.fetched_at as string | null | undefined) || null,
     fetchStatus: row.fetch_status as ProductIntelligenceSource['fetchStatus'],
+    sourceType: (row.source_type as ProductIntelligenceSource['sourceType']) || 'official',
+    sourceLabel: (row.source_label as string | null | undefined) || null,
+    publisherName: (row.publisher_name as string | null | undefined) || null,
+    lastVerifiedAt: (row.last_verified_at as string | null | undefined) || null,
     metadata: (row.metadata as Record<string, unknown>) || {},
   };
 }
@@ -106,6 +110,15 @@ function mapClaimRow(row: Record<string, unknown>): ProductIntelligenceClaim {
     confidence: Number(row.confidence || 0),
     conflictStatus: row.conflict_status as ProductIntelligenceClaim['conflictStatus'],
     expiresAt: (row.expires_at as string | null | undefined) || null,
+    sourceId: (row.source_id as string | null | undefined) || null,
+    sourceType: (row.source_type as ProductIntelligenceClaim['sourceType']) || 'official',
+    verificationStatus: (row.verification_status as ProductIntelligenceClaim['verificationStatus']) || 'candidate',
+    verifiedAt: (row.verified_at as string | null | undefined) || null,
+    verificationNote: (row.verification_note as string | null | undefined) || null,
+    reviewDueAt: (row.review_due_at as string | null | undefined) || null,
+    invalidatedAt: (row.invalidated_at as string | null | undefined) || null,
+    invalidationReason: (row.invalidation_reason as string | null | undefined) || null,
+    validityScope: (row.validity_scope as Record<string, unknown>) || {},
   };
 }
 

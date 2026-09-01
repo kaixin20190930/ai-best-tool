@@ -50,6 +50,8 @@
     "test:mature-tool-priority": "tsx scripts/test-mature-tool-gap-priority.ts",
     "test:next-tool-preaudit": "tsx scripts/test-next-tool-preaudit.ts",
     "test:home-positioning": "tsx scripts/test-home-positioning.ts",
+    "test:evidence-ledger": "tsx scripts/test-evidence-ledger.ts",
+    "verify:evidence-ledger-migration": "tsx scripts/verify-evidence-ledger-migration.ts",
     "test:tool-route-aliases": "tsx scripts/test-tool-route-aliases.ts",
     "collection:plan-three-days": "tsx scripts/plan-three-day-candidate-pool.ts",
     "intelligence:discover-pages": "tsx scripts/discover-product-intelligence-pages.ts",

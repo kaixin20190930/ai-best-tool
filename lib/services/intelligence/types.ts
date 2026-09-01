@@ -24,6 +24,10 @@ export type IntelligenceDiscoveryMethod = 'homepage_link' | 'sitemap' | 'common_
 
 export type IntelligenceConflictStatus = 'none' | 'possible' | 'confirmed';
 
+export type IntelligenceSourceType = 'official' | 'independent' | 'owner' | 'user' | 'editorial';
+
+export type IntelligenceVerificationStatus = 'candidate' | 'verified' | 'rejected' | 'superseded';
+
 export type IntelligenceAssetType = 'logo' | 'screenshot' | 'social' | 'video';
 
 export type IntelligenceEvidenceStatus = 'candidate' | 'verified' | 'rejected';
@@ -73,6 +77,10 @@ export interface ProductIntelligenceSource {
   contentType: string | null;
   fetchedAt: string | null;
   fetchStatus: IntelligenceFetchStatus;
+  sourceType?: IntelligenceSourceType;
+  sourceLabel?: string | null;
+  publisherName?: string | null;
+  lastVerifiedAt?: string | null;
   metadata: Record<string, unknown>;
 }
 
@@ -119,6 +127,15 @@ export interface ProductIntelligenceClaim {
   confidence: number;
   conflictStatus: IntelligenceConflictStatus;
   expiresAt: string | null;
+  sourceId?: string | null;
+  sourceType?: IntelligenceSourceType;
+  verificationStatus?: IntelligenceVerificationStatus;
+  verifiedAt?: string | null;
+  verificationNote?: string | null;
+  reviewDueAt?: string | null;
+  invalidatedAt?: string | null;
+  invalidationReason?: string | null;
+  validityScope?: Record<string, unknown>;
 }
 
 export interface ProductIntelligenceChange {

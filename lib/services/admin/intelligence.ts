@@ -175,6 +175,10 @@ function mapSourceRow(row: Record<string, unknown>): ProductIntelligenceSource {
     contentType: (row.content_type as string | null | undefined) || null,
     fetchedAt: normalizeDate(row.fetched_at as string | null | undefined),
     fetchStatus: row.fetch_status as ProductIntelligenceSource['fetchStatus'],
+    sourceType: (row.source_type as ProductIntelligenceSource['sourceType']) || 'official',
+    sourceLabel: (row.source_label as string | null | undefined) || null,
+    publisherName: (row.publisher_name as string | null | undefined) || null,
+    lastVerifiedAt: normalizeDate(row.last_verified_at as string | null | undefined),
     metadata: (row.metadata as Record<string, unknown>) || {},
   };
 }
@@ -192,6 +196,15 @@ function mapClaimRow(row: Record<string, unknown>): ProductIntelligenceClaim {
     confidence: Number(row.confidence || 0),
     conflictStatus: row.conflict_status as ProductIntelligenceClaim['conflictStatus'],
     expiresAt: normalizeDate(row.expires_at as string | null | undefined),
+    sourceId: (row.source_id as string | null | undefined) || null,
+    sourceType: (row.source_type as ProductIntelligenceClaim['sourceType']) || 'official',
+    verificationStatus: (row.verification_status as ProductIntelligenceClaim['verificationStatus']) || 'candidate',
+    verifiedAt: normalizeDate(row.verified_at as string | null | undefined),
+    verificationNote: (row.verification_note as string | null | undefined) || null,
+    reviewDueAt: normalizeDate(row.review_due_at as string | null | undefined),
+    invalidatedAt: normalizeDate(row.invalidated_at as string | null | undefined),
+    invalidationReason: (row.invalidation_reason as string | null | undefined) || null,
+    validityScope: (row.validity_scope as Record<string, unknown>) || {},
   };
 }
 
@@ -391,6 +404,8 @@ export async function getAdminIntelligenceDailyQueue(input?: {
   const supabase = createAdminClient();
   const limit = Math.max(1, Math.min(input?.limit || DEFAULT_DAILY_NEW_PAGE_LIMIT, 3));
 
+  // The shared overview loader is declared below the specialized queue readers.
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
   const overview = await getAdminIntelligenceOverview({
     ownerType: input?.ownerType,
     status: input?.status || 'all',
@@ -460,6 +475,8 @@ export async function getAdminIntelligenceReviewQueue(input?: {
   await requireAdmin();
   const supabase = createAdminClient();
   const limit = Math.max(1, Math.min(input?.limit || 3, 6));
+  // The shared overview loader is declared below the specialized queue readers.
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
   const overview = await getAdminIntelligenceOverview({
     ownerType: input?.ownerType,
     status: input?.status || 'all',

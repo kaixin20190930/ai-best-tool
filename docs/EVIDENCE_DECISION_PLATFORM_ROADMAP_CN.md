@@ -73,7 +73,7 @@ AI Best Tool 对 Google 和普通访客的基础身份保持不变：
 | POS-02 | P0 | 首页可信方法模块 | 用 3 个可理解步骤替代内部化、冗长的通用信号面板 | 0.5 天 | 已完成；净减少重复首页内容 |
 | POS-03 | P0 | 商业与编辑边界 | 首屏移除付费曝光卡，owner 区域保留次级入口并披露不影响结论 | 0.25 天 | 已完成；付费入口已下移 |
 | POS-04 | P0 | 首页定位自动回归 | 目录主题、差异表达、商业边界和核心链接可自动校验 | 0.25 天 | 已完成；`test:home-positioning` 通过 |
-| EVD-01 | P1 | Evidence Ledger 数据模型 | claim 级来源、来源类型、核查日、状态、冲突、失效边界统一 | 1 天 | 待执行 |
+| EVD-01 | P1 | Evidence Ledger 数据模型 | claim 级来源、来源类型、核查日、状态、冲突、失效边界统一 | 1 天 | 代码完成，待执行 Supabase 迁移并验收 |
 | EVD-02 | P1 | 工具页 Evidence Ledger UI | 核心判断可以展开查看证据，不以单一分数替代解释 | 1 天 | 待执行 |
 | EVD-03 | P1 | 后台证据编辑与冲突处理 | 官方、独立、owner、用户来源分开；冲突不自动覆盖 | 1-1.5 天 | 待执行 |
 | CHG-01 | P1 | Change Timeline 模型与读取 | 真实事实变化和“仅复核、无变化”可区分 | 1 天 | 待执行 |
@@ -166,3 +166,13 @@ Review 结论：方案可实施。P0 不改变 URL 和索引面，先增强主�
 - 新增 `pnpm run test:home-positioning`，自动保护 title、唯一 H1、核心差异、可抓取入口和商业边界。
 - 生产模式 DOM 复核发现并修正共享 Footer 使用 H1 的历史语义问题；FAQ 标题同步收口为 `h2/h3/p`，公开页主标题不再被页尾品牌名干扰。
 - 验收：首页专项测试、全部候选预审门禁、TypeScript 和完整 `pnpm run build` 均通过；AdSense 验证通过，43/43 静态页生成完成。最终本地生产模式 DOM 显示中英文首页各只有一个 H1，目录 title、三项差异信号与商业披露均可见，旧“每日更新”和旧联系方式不再出现在可见正文。
+
+## 十、Evidence Ledger 数据模型实施记录（2026-09-01）
+
+- 复用 `product_intelligence_profiles / sources / claims`，不创建第二套证据实体，signals 和 changes 后续仍汇入同一 profile 与 claim 流程。
+- claim 新增 `source_id / source_type`、显式核验状态与日期、复查期限、已知失效时间、实际失效原因和结构化适用边界；历史 `expires_at` 保留为已知事实失效边界。
+- 机器提取和历史未明确审核的 claim 默认保持 `candidate`，不会因为来源是官网或 profile 为 ready 就自动成为 `verified`。
+- `review_due` 只触发复查队列，不静默删除事实；`expired / invalidated / confirmed conflict` 不允许支撑公开 Decision Card。
+- 新增统一读取模型 `ProductEvidenceLedgerEntry`，兼容迁移前历史 claim 的 URL 关联，并为 EVD-02 前台展示提供稳定字段。
+- 新增 `pnpm run test:evidence-ledger` 和 `pnpm run verify:evidence-ledger-migration`。前者已通过；后者当前按预期报告 Supabase 尚缺新字段，需执行迁移后复验。
+- 待执行迁移：`db/supabase/migrations/20260901_evidence_ledger_model.sql`。该迁移幂等，不重写既有 claim 内容，不把候选批量升级为已核验。

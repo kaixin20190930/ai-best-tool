@@ -73,6 +73,7 @@
 | CTR-04 | 强化已有展示的详情页 | Fathom、Anthropic、DeepL、Gamma、Lindy、Cursor、The Graph | 每页保留至少两个官方来源和一个真实选择限制；禁止通用 AI 改写 | 已完成 | Codex |
 | CTR-05 | 真实编辑/owner 信号回填 | 本轮先选 5 页 | 每页至少一条有来源的更新、纠错、owner 补充或真实使用记录 | 需要数据 | 用户 + Codex |
 | CTR-06 | 首批成熟工具内容缺口 | Claude/Anthropic、Fathom、Gamma、Consensus、DeepL、Runway、Luma AI、Pipedream、Cursor、The Graph | 10 个既有 canonical URL 已完成合并、数据库迁移或决策内容增强，全程未新增 canonical URL | 已完成（10/10） | Codex |
+| EVD-01 | Evidence Ledger 数据模型 | 所有 claim 统一来源类型、核查状态、复查日、冲突和失效边界；机器提取不自动成为已核验事实 | 代码与专项测试已完成；等待 Supabase 迁移验收 | Codex + 用户 |
 
 ### P2：只在数据证明后扩展（第 4-6 周）
 
