@@ -230,7 +230,7 @@ Review 后不使用 UUID 数组保存证据引用，因为数组无法建立外�
 | DCF-01 | P0     | 新表、约束、索引、RLS 迁移 |   1 天 | 已完成；生产 10 表可读，跨用户 RLS 已启用                    |
 | DCF-02 | P0     | Evidence Ledger 派生读取层 |   1 天 | 已完成；stale/冲突/未核验 claim 不参与判断且保留解释 trace   |
 | DCF-03 | P0     | 确定性规则引擎与解释 trace |   1 天 | 已完成；相同输入和版本结果一致，硬约束优先且最多 3 项         |
-| DCF-04 | P1     | Finder UI 与匿名本地状态   |   1 天 | 未登录不落库；每步有中间态和错误态                           |
+| DCF-04 | P1     | Finder UI 与匿名本地状态   |   1 天 | 已完成；匿名仅存浏览器，任务字段、中间态、成功/错误态完整     |
 | DCF-05 | P1     | Decision Card 2.0          |   1 天 | Replaces/Works with/True cost/Setup/Data/Exit/Why not 可追溯 |
 | DCF-06 | P1     | 后台任务、fit、关系审核    |   1 天 | 机器草稿不能直接 published                                   |
 | DCF-07 | P0     | SEO 与自动验收             | 0.5 天 | 无新增 sitemap URL；metadata/robots/build 通过               |

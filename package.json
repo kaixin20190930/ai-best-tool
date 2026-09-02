@@ -63,6 +63,7 @@
     "test:decision-evidence": "tsx scripts/test-decision-evidence-contract.ts",
     "verify:decision-evidence-read-layer": "tsx scripts/verify-decision-evidence-read-layer.ts",
     "test:decision-rules": "tsx scripts/test-decision-finder-rules.ts",
+    "test:decision-finder-ui": "tsx scripts/test-decision-finder-ui.ts",
     "test:tool-route-aliases": "tsx scripts/test-tool-route-aliases.ts",
     "collection:plan-three-days": "tsx scripts/plan-three-day-candidate-pool.ts",
     "intelligence:discover-pages": "tsx scripts/discover-product-intelligence-pages.ts",
