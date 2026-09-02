@@ -89,7 +89,7 @@ AI Best Tool 对 Google 和普通访客的基础身份保持不变：
 | CHG-02    | P1     | 首批 10-20 个核心工具变化时间线 | 每页至少有基线核查；无变化不伪造更新事件                        |   1-2 天 | 进行中；Fathom、Claude、Consensus 已完成，当前 3/10   |
 | LNK-01    | P1     | Guide / 分类消费统一判断        | 不复制工具事实；链接到对应 Decision Card 和证据                 |     1 天 | 已纳入 DCF 与 SEO-IA 实施规格，待执行                 |
 | MON-01    | P1     | 30/90 天监测闭环                | 事实到期、判断到期和变化待审可筛选                              |   0.5 天 | 待执行                                                |
-| DCF-01~07 | P1     | Finder + Decision Card 2.0      | 字段级模型、规则、后台、前台、SEO 与自动验收完整闭环            |   6.5 天 | DCF-01/02 已完成；生产迁移和严格证据读取通过，DCF-03~07 待实施 |
+| DCF-01~07 | P1     | Finder + Decision Card 2.0      | 字段级模型、规则、后台、前台、SEO 与自动验收完整闭环            |   6.5 天 | DCF-01~03 已完成；数据、证据与确定性规则闭环通过，DCF-04~07 待实施 |
 | STK-01~06 | P1     | Stack Audit + 7-Day Trial       | 私有 Stack、审计、试用、提醒与 RLS 闭环                         |   5.5 天 | 等待阶段一 Gate                                       |
 | SIG/WAT   | P1     | Verified Usage + Change Watch   | 审核聚合、利益披露、变化通知与去重                              |   5.5 天 | 等待阶段二真实使用门槛                                |
 | COM-01    | P2     | 保持一次性 Priority / Featured  | 付款不保证通过、排名、流量或编辑背书                            |     持续 | 已有，需持续审计                                      |
