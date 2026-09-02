@@ -68,6 +68,8 @@
     "test:decision-review-gate": "tsx scripts/test-decision-review-gate.ts",
     "test:decision-seo-release": "tsx scripts/test-decision-seo-release.ts",
     "test:decision-release": "pnpm run test:decision-finder-ui && pnpm run test:decision-seo-release && pnpm run test:seo-architecture && pnpm run test:seo-breadcrumbs && pnpm run build",
+    "test:stack-foundation": "tsx scripts/test-stack-audit-trial-migration.ts",
+    "verify:stack-foundation-migration": "tsx scripts/verify-stack-audit-trial-migration.ts",
     "test:tool-route-aliases": "tsx scripts/test-tool-route-aliases.ts",
     "collection:plan-three-days": "tsx scripts/plan-three-day-candidate-pool.ts",
     "intelligence:discover-pages": "tsx scripts/discover-product-intelligence-pages.ts",

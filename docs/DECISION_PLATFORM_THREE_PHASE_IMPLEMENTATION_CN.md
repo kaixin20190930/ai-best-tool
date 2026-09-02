@@ -269,9 +269,11 @@ TypeScript 和完整生产 build 均已通过。
 | `custom_tool_name`          | VARCHAR(200)  | nullable                            | 未收录工具临时名   |
 | `custom_tool_url`           | VARCHAR(1200) | nullable                            | 未收录工具官网     |
 | `subscription_status`       | VARCHAR(20)   | `trial/free/paid/cancelled`         | 用户真实状态       |
+| `billing_amount`            | NUMERIC(12,2) | nullable                            | 用户输入的原始账单 |
 | `monthly_cost`              | NUMERIC(12,2) | nullable                            | 用户折算后的月成本 |
 | `currency`                  | CHAR(3)       | DEFAULT `USD`                       | 账单货币           |
 | `billing_period`            | VARCHAR(20)   | `month/year/usage/one_time/unknown` | 原账单周期         |
+| `cost_normalization`        | JSONB         | DEFAULT `{}`                        | 折算公式与假设     |
 | `usage_frequency`           | VARCHAR(20)   | `daily/weekly/monthly/rarely/never` | 使用频率           |
 | `data_sensitivity`          | VARCHAR(20)   | nullable                            | 用户使用环境       |
 | `started_at` / `renews_at`  | TIMESTAMPTZ   | nullable                            | 开始与续费         |
@@ -279,7 +281,9 @@ TypeScript 和完整生产 build 均已通过。
 | `notes`                     | TEXT          | nullable                            | 私有备注           |
 | `created_at` / `updated_at` | TIMESTAMPTZ   | DEFAULT NOW                         | 时间戳             |
 
-约束：`tool_id` 与 `custom_tool_name` 至少一个非空；用户输入不得写回 `tools` 或 Evidence Ledger。
+约束：`tool_id` 与 `custom_tool_name` 至少一个非空；`tool_id` 是指向 Neon `tools` 的逻辑引用，不建立跨库 FK；用户输入不得写回
+`tools` 或 Evidence Ledger。`billing_amount` 保留用户真实输入，`monthly_cost` 只存规范化结果，折算周期和假设写入
+`cost_normalization`，不得从公开定价反推用户账单。
 
 关联表 `user_tool_stack_item_tasks`：`stack_item_id` FK、`task_id`
 FK、`is_primary BOOLEAN DEFAULT FALSE`、`created_at`，主键 `(stack_item_id, task_id)`。这样任务归档、合并和审计统计都有
@@ -356,7 +360,7 @@ FK、`claim_snapshot JSONB NOT NULL`、`purpose`、`created_at`，主键 `(findi
 
 | ID     | 优先级 | 任务                              |   预计 | 验收                                     |
 | ------ | ------ | --------------------------------- | -----: | ---------------------------------------- |
-| STK-01 | P1     | 私有 Stack、Audit、Trial 表与 RLS |   1 天 | 所有权测试通过                           |
+| STK-01 | P1     | 私有 Stack、Audit、Trial 表与 RLS |   1 天 | 代码已完成：7 表、私有 RLS、跨用户关联触发器、幂等键和静态安全测试通过；待执行生产迁移并回读 |
 | STK-02 | P1     | Stack 编辑与成本规范化            |   1 天 | 年/月/usage 原始周期可追溯               |
 | STK-03 | P1     | Keep/Replace/Remove/Missing 规则  |   1 天 | 每项有 rationale 和 evidence state       |
 | STK-04 | P1     | 7 日 Scorecard 与提醒             | 1.5 天 | 任务、目标、结果、续费提醒闭环           |
