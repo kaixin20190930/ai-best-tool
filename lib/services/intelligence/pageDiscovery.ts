@@ -57,7 +57,9 @@ export interface ProductPageDiscoveryOptions {
   maxPages?: number;
   maxSitemaps?: number;
   maxSitemapUrls?: number;
+  includeSitemaps?: boolean;
   includeCommonPaths?: boolean;
+  allowedPageTypes?: IntelligencePageType[];
   fetchOptions?: SafeFetchOptions;
 }
 
@@ -94,9 +96,9 @@ export function classifyDiscoveredPage(
   url: URL,
   anchorText = '',
 ): {
-  pageType: IntelligencePageType;
-  score: number;
-} {
+    pageType: IntelligencePageType;
+    score: number;
+  } {
   if (url.pathname === '/' || url.pathname === '') return { pageType: 'homepage', score: 100 };
   const signal = `${url.pathname.replace(/[-_/]+/g, ' ')} ${anchorText}`.trim();
 
@@ -200,6 +202,17 @@ export function buildCommonPathCandidates(homepageUrl: string): DiscoveredIntell
   });
 }
 
+export function selectDiscoveredPages(
+  candidates: DiscoveredIntelligencePage[],
+  maxPages: number,
+  allowedPageTypes?: IntelligencePageType[],
+): DiscoveredIntelligencePage[] {
+  return candidates
+    .filter((candidate) => !allowedPageTypes || allowedPageTypes.includes(candidate.pageType))
+    .sort((left, right) => right.score - left.score || left.url.localeCompare(right.url))
+    .slice(0, maxPages);
+}
+
 export async function discoverProductPages(
   websiteUrl: string,
   input: ProductPageDiscoveryOptions = {},
@@ -217,14 +230,16 @@ export async function discoverProductPages(
   }
 
   let sitemapUrls: string[] = [];
-  try {
-    const robotsUrl = new URL('/robots.txt', homepageUrl).toString();
-    const robots = await safeFetchText(robotsUrl, { ...input.fetchOptions, respectRobots: false });
-    sitemapUrls = extractRobotsSitemaps(robots.body, homepageUrl.origin);
-  } catch (error) {
-    warnings.push(`robots: ${error instanceof Error ? error.message : 'unavailable'}`);
+  if (input.includeSitemaps !== false) {
+    try {
+      const robotsUrl = new URL('/robots.txt', homepageUrl).toString();
+      const robots = await safeFetchText(robotsUrl, { ...input.fetchOptions, respectRobots: false });
+      sitemapUrls = extractRobotsSitemaps(robots.body, homepageUrl.origin);
+    } catch (error) {
+      warnings.push(`robots: ${error instanceof Error ? error.message : 'unavailable'}`);
+    }
+    if (sitemapUrls.length === 0) sitemapUrls = [new URL('/sitemap.xml', homepageUrl).toString()];
   }
-  if (sitemapUrls.length === 0) sitemapUrls = [new URL('/sitemap.xml', homepageUrl).toString()];
 
   const sitemapQueue = sitemapUrls.slice(0, maxSitemaps);
   const visitedSitemaps = new Set<string>();
@@ -263,9 +278,7 @@ export async function discoverProductPages(
 
   return {
     homepageUrl: homepageUrl.toString(),
-    pages: Array.from(candidates.values())
-      .sort((left, right) => right.score - left.score || left.url.localeCompare(right.url))
-      .slice(0, maxPages),
+    pages: selectDiscoveredPages(Array.from(candidates.values()), maxPages, input.allowedPageTypes),
     sitemapUrls: Array.from(visitedSitemaps),
     warnings,
   };

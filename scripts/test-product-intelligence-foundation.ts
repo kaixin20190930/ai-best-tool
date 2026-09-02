@@ -11,6 +11,7 @@ import {
   extractHomepageCandidates,
   extractRobotsSitemaps,
   extractSitemapLocations,
+  selectDiscoveredPages,
 } from '@/lib/services/intelligence/pageDiscovery';
 import { normalizeIntelligenceConfidence } from '@/lib/services/intelligence/persistence';
 import { buildProductIntelligenceSnapshot } from '@/lib/services/intelligence/productProfile';
@@ -27,6 +28,36 @@ import {
 import { buildIntelligenceSignalCandidates } from '@/lib/services/intelligence/signalPersistence';
 
 function run() {
+  assert.deepEqual(
+    selectDiscoveredPages(
+      [
+        {
+          url: 'https://example.com/docs',
+          pageType: 'documentation',
+          discoveryMethod: 'homepage_link',
+          score: 98,
+          anchorText: 'Docs',
+        },
+        {
+          url: 'https://example.com/pricing',
+          pageType: 'pricing',
+          discoveryMethod: 'homepage_link',
+          score: 95,
+          anchorText: 'Pricing',
+        },
+        {
+          url: 'https://example.com/',
+          pageType: 'homepage',
+          discoveryMethod: 'homepage_link',
+          score: 100,
+          anchorText: null,
+        },
+      ],
+      2,
+      ['homepage', 'pricing'],
+    ).map((page) => page.pageType),
+    ['homepage', 'pricing'],
+  );
   const signals = buildIntelligenceSignalCandidates({
     profiles: [{ id: 'profile-1', owner_id: 'tool-1' }],
     claims: [

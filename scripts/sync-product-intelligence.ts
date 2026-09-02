@@ -37,10 +37,48 @@ function describeError(error: unknown) {
   return causeParts.length > 0 ? `${error.message} (${causeParts.join(', ')})` : error.message;
 }
 
+function parsePositiveIntegerFlag(args: string[], name: string, fallback: number): number {
+  const rawValue = args.find((argument) => argument.startsWith(`--${name}=`))?.split('=')[1];
+  if (!rawValue) return fallback;
+  const value = Number(rawValue);
+  if (!Number.isInteger(value) || value < 1 || value > 100) {
+    throw new Error(`The --${name} flag must be an integer from 1 to 100.`);
+  }
+  return value;
+}
+
 async function run() {
   const args = process.argv.slice(2);
   const websiteUrl = args.find((argument) => argument !== '--' && !argument.startsWith('--'));
   const dryRun = args.includes('--dry-run');
+  const maxPages = parsePositiveIntegerFlag(args, 'max-pages', 40);
+  const includeSitemaps = !args.includes('--no-sitemap');
+  const includeCommonPaths = !args.includes('--no-common-paths');
+  const allowedPageTypesValue = args
+    .find((argument) => argument.startsWith('--page-types='))
+    ?.split('=')[1]
+    ?.split(',')
+    .map((value) => value.trim())
+    .filter(Boolean);
+  const supportedPageTypes: IntelligencePageType[] = [
+    'homepage',
+    'pricing',
+    'features',
+    'product',
+    'documentation',
+    'help',
+    'changelog',
+    'about',
+    'security',
+    'use_case',
+    'license',
+    'terms',
+    'other',
+  ];
+  if (allowedPageTypesValue?.some((value) => !supportedPageTypes.includes(value as IntelligencePageType))) {
+    throw new Error('The --page-types flag contains an unsupported page type.');
+  }
+  const allowedPageTypes = allowedPageTypesValue as IntelligencePageType[] | undefined;
   const ownerTypeValue = args.find((argument) => argument.startsWith('--owner-type='))?.split('=')[1] || 'tool';
   if (!['tool', 'distribution_project', 'site'].includes(ownerTypeValue)) {
     throw new Error('The --owner-type flag must be tool, distribution_project, or site.');
@@ -50,7 +88,7 @@ async function run() {
 
   if (!websiteUrl) {
     throw new Error(
-      'Usage: pnpm run intelligence:sync -- https://example.com --owner-id=<uuid> [--owner-type=tool|distribution_project|site] [--dry-run]',
+      'Usage: pnpm run intelligence:sync -- https://example.com --owner-id=<uuid> [--owner-type=tool|distribution_project|site] [--max-pages=8] [--no-sitemap] [--no-common-paths] [--page-types=homepage,pricing,product] [--dry-run]',
     );
   }
 
@@ -74,7 +112,12 @@ async function run() {
     );
   }
 
-  const discovery = await discoverProductPages(websiteUrl);
+  const discovery = await discoverProductPages(websiteUrl, {
+    maxPages,
+    includeSitemaps,
+    includeCommonPaths,
+    allowedPageTypes,
+  });
   const sources: Array<{
     url: string;
     pageType: IntelligencePageType;
@@ -192,6 +235,12 @@ async function run() {
       {
         dryRun,
         websiteUrl,
+        discoveryOptions: {
+          maxPages,
+          includeSitemaps,
+          includeCommonPaths,
+          allowedPageTypes: allowedPageTypes || 'all',
+        },
         profileId: result.profileId,
         profileStatus: result.profileStatus,
         versionChanged: result.versionChanged,
