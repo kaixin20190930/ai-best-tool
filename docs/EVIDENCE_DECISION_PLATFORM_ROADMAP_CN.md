@@ -80,7 +80,7 @@ AI Best Tool 对 Google 和普通访客的基础身份保持不变：
 | EVD-03 | P1     | 后台证据编辑与冲突处理          | 官方、独立、owner、用户来源分开；冲突不自动覆盖                 | 1-1.5 天 | 已完成；首条人工核验、状态保护、处理中反馈已落地     |
 | EVD-04 | P1     | 情报档案身份映射收口            | tool 档案 owner_id 必须对应真实目录工具；错误身份不可继续同步   |   0.5 天 | 已完成；站点迁移、缓存修复、Fathom 公开闭环均通过    |
 | CHG-01 | P1     | Change Timeline 模型与读取      | 真实事实变化和“仅复核、无变化”可区分                            |     1 天 | 已完成；迁移、读写边界、后台/前台读取与测试均通过   |
-| CHG-02 | P1     | 首批 10-20 个核心工具变化时间线 | 每页至少有基线核查；无变化不伪造更新事件                        |   1-2 天 | 进行中；Fathom、Claude 真实公开基线完成，当前 2/10  |
+| CHG-02 | P1     | 首批 10-20 个核心工具变化时间线 | 每页至少有基线核查；无变化不伪造更新事件                        |   1-2 天 | 进行中；Fathom、Claude、Consensus 已完成，当前 3/10 |
 | LNK-01 | P1     | Guide / 分类消费统一判断        | 不复制工具事实；链接到对应 Decision Card 和证据                 |     1 天 | 待执行                                               |
 | MON-01 | P1     | 30/90 天监测闭环                | 事实到期、判断到期和变化待审可筛选                              |   0.5 天 | 待执行                                               |
 | COM-01 | P2     | 保持一次性 Priority / Featured  | 付款不保证通过、排名、流量或编辑背书                            |     持续 | 已有，需持续审计                                     |
@@ -269,7 +269,7 @@ Review 结论：方案可实施。P0 不改变 URL 和索引面，先增强主�
   一条 verified 且无冲突证据，重复执行不会重复插入。
 - Fathom（UUID `7ae4bbb2-847f-45cc-9294-e96663fa02a3`）已建立首条公开 `reviewed_no_change` 基线，来源为官方首页，发生时间沿用
   真实人工核验时间；公开读取回查成功，重复执行返回 `baseline_already_exists`。
-- 当前 CHG-02 真实进度为 2/10。其余核心工具必须先完成 intelligence 抓取和至少一条人工 claim 核验，再建立基线；不会直接把
+- 当前 CHG-02 真实进度为 3/10。其余核心工具必须先完成 intelligence 抓取和至少一条人工 claim 核验，再建立基线；不会直接把
   既有页面文案或机器提取结果批量包装为变化历史。
 - Gamma 官网 dry-run 发现 11 个来源但未提取出 claim，暂不写入空档案，后续改用定向官方帮助/定价页采集。
 - Claude 首次默认 dry-run 扩散到大型 Docs 站，产生 67 条候选和 42 个伪冲突；数据库写入前已拦截。同步命令新增
@@ -278,3 +278,10 @@ Review 结论：方案可实施。P0 不改变 URL 和索引面，先增强主�
   `product_name = Claude` 完成人工核验，价格和两种定位文案继续保持 candidate / conflict。
 - Claude（UUID `149cf3e0-5f5c-4bdf-ac02-80ec5064fb92`）已建立第二条公开 `reviewed_no_change` 基线，来源、核验人、核验时间和
   30 天复查日均可追踪。
+- DeepL 产品页、Pipedream 首页和 Cursor 首页均被各自 robots 明确禁止当前抓取；系统按规则停止且未写入。这三项不得通过关闭
+  robots 检查绕过，后续进入受控的人工官方证据录入队列。
+- DeepL Help Center 允许访问，但模板只提取到错误身份 `DeepL Help Center`，因此未创建工具档案或基线。
+- Consensus 定向 dry-run 只产生 2 条 candidate、0 冲突；官方首页原始 HTML description 已逐字确认其“面向同行评审文献的 AI
+  学术搜索引擎”定位。仅该定位 claim 被人工核验，产品名仍保持 candidate。
+- Consensus（UUID `f15873ae-c6ef-4f0a-b811-b40c2aba76ab`）已建立第三条公开 `reviewed_no_change` 基线，下次复查日为
+  2026-10-02。
