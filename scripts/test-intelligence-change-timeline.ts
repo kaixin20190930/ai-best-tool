@@ -140,6 +140,12 @@ const migration = readFileSync(
   assert.equal(migration.includes(fragment), true, `timeline migration is missing ${fragment}`);
 });
 
+const migrationVerifier = readFileSync(
+  resolve(process.cwd(), 'scripts/verify-intelligence-timeline-migration.ts'),
+  'utf8',
+);
+assert.equal(migrationVerifier.includes("count: 'exact', head: true"), true);
+
 const publicReader = readFileSync(
   resolve(process.cwd(), 'lib/services/intelligence/publicChangeTimeline.ts'),
   'utf8',

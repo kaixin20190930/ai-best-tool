@@ -6,10 +6,9 @@ loadEnvConfig(process.cwd());
 
 async function verifyIntelligenceTimelineMigration() {
   const supabase = createAdminClient();
-  const { data, error } = await supabase
+  const { count, error } = await supabase
     .from('product_intelligence_timeline_events')
-    .select('id, profile_id, event_type, review_scope, visibility, occurred_at, verified_at')
-    .limit(1);
+    .select('id', { count: 'exact', head: true });
   if (error) throw new Error(`Change Timeline migration is not ready: ${error.message}`);
 
   console.log(
@@ -17,7 +16,7 @@ async function verifyIntelligenceTimelineMigration() {
       {
         success: true,
         timelineSchemaReadable: true,
-        existingEvents: data?.length || 0,
+        existingEvents: count || 0,
       },
       null,
       2,
