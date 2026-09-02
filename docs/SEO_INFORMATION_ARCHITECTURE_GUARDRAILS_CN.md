@@ -2,7 +2,7 @@
 
 创建日期：2026-09-02
 
-状态：现状审计完成；SEO-IA-01 至 SEO-IA-07 已实施并通过本地发布门禁
+状态：SEO-IA-01 至 SEO-IA-08 已完成，并通过本地与生产发布门禁
 上位计划：[收录与搜索质量主计划](./MASTER_OPTIMIZATION_TRACKER_CN.md)
 
 ## 一、审计结论
@@ -205,7 +205,7 @@ Tool -> Category / 2-4 个关系明确的 Tool / 对应 Guide
 | SEO-IA-05 | P1     | 共享可见 Breadcrumb + JSON-LD        | 五类核心模板同源渲染                                     | 已完成          |
 | SEO-IA-06 | P1     | Guide 高意图内链收口                 | 首要路径指向 indexable 实体；noindex comparison 降为次级 | 已完成          |
 | SEO-IA-07 | P1     | Tool 关系内链接入 reviewed 数据      | 2-4 个明确关系，无随机/商业干预                          | 已完成          |
-| SEO-IA-08 | P0     | 本地/生产架构 smoke                  | sitemap、robots、canonical、hreflang、breadcrumb 全通过  | 本地通过/待生产 |
+| SEO-IA-08 | P0     | 本地/生产架构 smoke                  | sitemap、robots、canonical、hreflang、breadcrumb 全通过  | 已完成          |
 
 ## 十一、SEO 架构变更流程
 
@@ -283,3 +283,19 @@ Tool -> Category / 2-4 个关系明确的 Tool / 对应 Guide
   保留相同公开读取门槛和自动测试。
 - 新增 `pnpm run test:reviewed-tool-relationships`，阻止自链、重复、超过 4 条、缺少双语理由、无复查日期、重新调用算法推荐或
   绕过索引门禁。
+
+## 十六、SEO-IA-08 生产验收记录（2026-09-02）
+
+- 提交 `e05d25ea` 与文档清理提交 `fa566907` 已通过 SSH 推送 `main`，Vercel 对目标提交返回 Deployment success，主域名已切
+  换到新构建。
+- `production-seo-smoke` 已升级为同时支持本地 production server 与正式域名：请求地址和期望 canonical 域名分离，避免本地
+  验收把 production canonical 误报为错误。
+- 中英文 Claude、中文 Home、Explore、Guides、Best root/topic、Category、Fathom 和 Pipedream 均返回 200；核心模板的可见
+  Breadcrumb 与 `BreadcrumbList` 一一对应。
+- 可索引页 canonical 与 `en/cn/x-default` 对齐；当前处于 noindex 的 Developer Tools Category 与 Pipedream 明确保留
+  canonical 和 noindex 边界，不错误要求 hreflang。
+- Claude 中英文页各输出 3 条 reviewed 关系，英文无 `/en`、中文无 `/cn/cn`；comparison Guide 返回
+  `X-Robots-Tag: noindex`。
+- `www` 与 HTTP 均以 308 指向规范 HTTPS 主域；robots 包含 sitemap 指令；生产 sitemap 当前 158 条 URL，不包含后台、登录、
+  提交、comparison 等越界路径。
+- 线上命令 `pnpm run seo:production-smoke` 最终以 `exit 0` 完成，SEO-IA-01 至 SEO-IA-08 正式关闭。
