@@ -7,6 +7,7 @@
 上位计划：[收录与搜索质量主计划](./MASTER_OPTIMIZATION_TRACKER_CN.md)
 
 SEO 护栏：[SEO 信息架构与不可回退规则](./SEO_INFORMATION_ARCHITECTURE_GUARDRAILS_CN.md)
+
 自动验收：[决策平台自动化测试与发布验收](./DECISION_PLATFORM_AUTOMATED_ACCEPTANCE_CN.md)
 
 ## 一、目标与范围
@@ -66,6 +67,8 @@ SEO 护栏：[SEO 信息架构与不可回退规则](./SEO_INFORMATION_ARCHITECT
 - 用户私有表必须启用 RLS；匿名读取只允许来自安全聚合视图。
 - 所有派生判断保存 `rules_version` 和引用的 `evidence_claim_ids`，保证可复现。
 - 新迁移必须幂等，约束、索引和 policy 均使用存在性检查或先 drop 再 create。
+- `tools`、`categories` 位于 Neon，决策表位于 Supabase；对应 UUID 只做逻辑引用，禁止伪造跨库 FK。服务端编辑写入前校验
+  Neon 实体存在，claim 关联触发器同时校验证据所属工具。
 
 ## 四、阶段一：Task & Constraint Finder + Decision Card 2.0
 
@@ -81,18 +84,18 @@ SEO 护栏：[SEO 信息架构与不可回退规则](./SEO_INFORMATION_ARCHITECT
 
 任务分类必须由编辑维护，首期只开放 6-8 个已有证据覆盖的任务。
 
-| 字段                | 类型         | 约束 / 默认值                | 用途                             |
-| ------------------- | ------------ | ---------------------------- | -------------------------------- |
-| `id`                | UUID         | PK                           | 任务 ID                          |
-| `slug`              | VARCHAR(120) | UNIQUE NOT NULL              | 稳定机器键，不直接生成新 SEO URL |
-| `name`              | JSONB        | NOT NULL                     | `{en, cn}` 名称                  |
-| `description`       | JSONB        | NOT NULL DEFAULT `{}`        | 用户可理解的任务定义             |
-| `category_id`       | UUID         | FK `categories(id)` nullable | 与现有分类的主关联               |
-| `status`            | VARCHAR(20)  | `draft/active/archived`      | 是否可用于 Finder                |
-| `display_order`     | INTEGER      | DEFAULT 0                    | 展示顺序                         |
-| `constraint_schema` | JSONB        | DEFAULT `{}`                 | 此任务需要显示的限制项配置       |
-| `created_at`        | TIMESTAMPTZ  | DEFAULT NOW                  | 创建时间                         |
-| `updated_at`        | TIMESTAMPTZ  | DEFAULT NOW                  | 更新时间                         |
+| 字段                | 类型         | 约束 / 默认值           | 用途                             |
+| ------------------- | ------------ | ----------------------- | -------------------------------- |
+| `id`                | UUID         | PK                      | 任务 ID                          |
+| `slug`              | VARCHAR(120) | UNIQUE NOT NULL         | 稳定机器键，不直接生成新 SEO URL |
+| `name`              | JSONB        | NOT NULL                | `{en, cn}` 名称                  |
+| `description`       | JSONB        | NOT NULL DEFAULT `{}`   | 用户可理解的任务定义             |
+| `category_id`       | UUID         | nullable，Neon 逻辑引用 | 与现有分类的主关联               |
+| `status`            | VARCHAR(20)  | `draft/active/archived` | 是否可用于 Finder                |
+| `display_order`     | INTEGER      | DEFAULT 0               | 展示顺序                         |
+| `constraint_schema` | JSONB        | DEFAULT `{}`            | 此任务需要显示的限制项配置       |
+| `created_at`        | TIMESTAMPTZ  | DEFAULT NOW             | 创建时间                         |
+| `updated_at`        | TIMESTAMPTZ  | DEFAULT NOW             | 更新时间                         |
 
 索引：`UNIQUE(slug)`、`(status, display_order)`。
 
@@ -102,7 +105,7 @@ SEO 护栏：[SEO 信息架构与不可回退规则](./SEO_INFORMATION_ARCHITECT
 
 | 字段                 | 类型        | 约束 / 默认值                    | 用途                           |
 | -------------------- | ----------- | -------------------------------- | ------------------------------ |
-| `tool_id`            | UUID        | PK, FK `tools(id)` CASCADE       | 一工具一份决策档案             |
+| `tool_id`            | UUID        | PK，Neon 逻辑引用                | 一工具一份决策档案             |
 | `profile_version`    | INTEGER     | NOT NULL DEFAULT 1               | 数据结构版本                   |
 | `setup_complexity`   | VARCHAR(20) | `low/medium/high/unknown`        | 上手复杂度                     |
 | `setup_minutes_low`  | INTEGER     | nullable, >=0                    | 预计最短设置时间               |
@@ -126,7 +129,7 @@ SEO 护栏：[SEO 信息架构与不可回退规则](./SEO_INFORMATION_ARCHITECT
 | 字段                            | 类型        | 约束 / 默认值                     | 用途                             |
 | ------------------------------- | ----------- | --------------------------------- | -------------------------------- |
 | `id`                            | UUID        | PK                                | 记录 ID                          |
-| `tool_id`                       | UUID        | FK `tools(id)` CASCADE            | 工具                             |
+| `tool_id`                       | UUID        | Neon 逻辑引用                     | 工具                             |
 | `task_id`                       | UUID        | FK `decision_tasks(id)` CASCADE   | 任务                             |
 | `fit_level`                     | VARCHAR(20) | `strong/conditional/weak/not_fit` | 任务适配等级                     |
 | `rationale`                     | JSONB       | NOT NULL                          | 中英文适配理由                   |
@@ -144,8 +147,8 @@ SEO 护栏：[SEO 信息架构与不可回退规则](./SEO_INFORMATION_ARCHITECT
 | 字段                            | 类型        | 约束 / 默认值                               | 用途             |
 | ------------------------------- | ----------- | ------------------------------------------- | ---------------- |
 | `id`                            | UUID        | PK                                          | 关系 ID          |
-| `tool_id`                       | UUID        | FK tools                                    | 当前工具         |
-| `related_tool_id`               | UUID        | FK tools                                    | 关联工具         |
+| `tool_id`                       | UUID        | Neon 逻辑引用                               | 当前工具         |
+| `related_tool_id`               | UUID        | Neon 逻辑引用                               | 关联工具         |
 | `relationship_type`             | VARCHAR(20) | `replaces/complements/overlaps/alternative` | 关系类型         |
 | `rationale`                     | JSONB       | NOT NULL                                    | 为什么替代或配合 |
 | `status`                        | VARCHAR(20) | `draft/reviewed/published/stale`            | 公开状态         |
@@ -184,7 +187,7 @@ SEO 护栏：[SEO 信息架构与不可回退规则](./SEO_INFORMATION_ARCHITECT
 | ----------------------- | ----------- | ------------------------------------- | ------------------------ |
 | `id`                    | UUID        | PK                                    | 推荐 ID                  |
 | `session_id`            | UUID        | FK decision_sessions CASCADE          | 所属会话                 |
-| `tool_id`               | UUID        | FK tools                              | 被推荐工具               |
+| `tool_id`               | UUID        | Neon 逻辑引用                         | 被推荐工具               |
 | `recommendation_role`   | VARCHAR(30) | `best_fit/lower_cost/privacy_control` | 三个可解释位置           |
 | `rank_order`            | SMALLINT    | 1-3                                   | 固定最多 3 个            |
 | `matched_conditions`    | JSONB       | DEFAULT `[]`                          | 满足条件                 |
@@ -224,7 +227,7 @@ Review 后不使用 UUID 数组保存证据引用，因为数组无法建立外�
 
 | ID     | 优先级 | 任务                       |   预计 | 验收                                                         |
 | ------ | ------ | -------------------------- | -----: | ------------------------------------------------------------ |
-| DCF-01 | P0     | 新表、约束、索引、RLS 迁移 |   1 天 | 幂等执行；跨用户不可读                                       |
+| DCF-01 | P0     | 新表、约束、索引、RLS 迁移 |   1 天 | 迁移与双层验收已完成，待生产执行；跨用户不可读               |
 | DCF-02 | P0     | Evidence Ledger 派生读取层 |   1 天 | stale/冲突/未核验 claim 不参与判断                           |
 | DCF-03 | P0     | 确定性规则引擎与解释 trace |   1 天 | 相同输入和版本结果一致；最多 3 项                            |
 | DCF-04 | P1     | Finder UI 与匿名本地状态   |   1 天 | 未登录不落库；每步有中间态和错误态                           |
