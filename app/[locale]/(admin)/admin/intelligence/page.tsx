@@ -3,6 +3,7 @@ import { AlertTriangle, ArrowUpRight, Layers3, ListChecks, ShieldCheck, Sparkles
 import { getTranslations } from 'next-intl/server';
 
 import IntelligenceClaimReviewForm from '@/components/admin/IntelligenceClaimReviewForm';
+import IntelligenceTimelineEventForm from '@/components/admin/IntelligenceTimelineEventForm';
 import {
   getAdminIntelligenceDailyQueue,
   getAdminIntelligenceOverview,
@@ -901,6 +902,24 @@ export default async function AdminIntelligencePage({
                   </div>
 
                   <div className='mt-4 space-y-3'>
+                    <IntelligenceTimelineEventForm
+                      profileId={selected.id}
+                      ownerType={selected.ownerType}
+                      verifiedClaims={selected.claims
+                        .filter(
+                          (claim) => claim.verificationStatus === 'verified' && claim.conflictStatus === 'none',
+                        )
+                        .map((claim) => ({
+                          id: claim.id,
+                          claimType: claim.claimType,
+                          claimKey: claim.claimKey,
+                          sourceUrl: claim.sourceUrl,
+                          label:
+                            typeof claim.claimValue === 'string'
+                              ? claim.claimValue.slice(0, 90)
+                              : JSON.stringify(claim.claimValue).slice(0, 90),
+                        }))}
+                    />
                     {selected.timelineEvents.length > 0 ? (
                       selected.timelineEvents.map((event) => (
                         <article key={event.id} className='rounded-xl border border-cyan-100 bg-white p-4'>

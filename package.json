@@ -61,6 +61,7 @@
     "repair:intelligence-verification-summaries": "tsx scripts/repair-intelligence-verification-summaries.ts",
     "verify:intelligence-timeline-migration": "tsx scripts/verify-intelligence-timeline-migration.ts",
     "test:intelligence-change-timeline": "tsx scripts/test-intelligence-change-timeline.ts",
+    "intelligence:seed-timeline-baseline": "tsx scripts/seed-intelligence-timeline-baseline.ts",
     "intelligence:sync-signals": "tsx scripts/sync-product-intelligence-signals.ts",
     "distribution:discover-target": "tsx scripts/discover-distribution-target-pages.ts",
     "distribution:analyze-target": "tsx scripts/analyze-distribution-target.ts",

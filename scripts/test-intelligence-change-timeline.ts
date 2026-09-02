@@ -5,6 +5,7 @@ import { resolve } from 'node:path';
 import {
   isFactChangeTimelineEvent,
   mapIntelligenceTimelineRow,
+  prepareTimelineEventInsert,
 } from '@/lib/services/intelligence/changeTimeline';
 
 const factChange = mapIntelligenceTimelineRow({
@@ -43,6 +44,88 @@ const noChangeReview = mapIntelligenceTimelineRow({
 assert.equal(isFactChangeTimelineEvent(noChangeReview), false);
 assert.equal(noChangeReview.claimType, null);
 
+const reviewedNoChangeInsert = prepareTimelineEventInsert(
+  {
+    profileId: 'profile-example',
+    profileOwnerType: 'tool',
+    eventType: 'reviewed_no_change',
+    reviewScope: 'full',
+    title: 'Official product review completed',
+    summary: 'The verified positioning and product boundary were reviewed with no confirmed change.',
+    sourceUrl: 'https://example.com/',
+    visibility: 'public',
+    occurredAt: '2026-09-02T00:00:00.000Z',
+  },
+  'reviewer-example',
+);
+assert.equal(reviewedNoChangeInsert.claim_type, null);
+assert.equal(reviewedNoChangeInsert.metadata.entryMethod, 'admin_editorial_review');
+
+const verifiedClaim = {
+  id: 'claim-example',
+  profileId: 'profile-example',
+  claimType: 'pricing_plan' as const,
+  claimKey: 'pricing_plan:pro',
+  verificationStatus: 'verified' as const,
+  conflictStatus: 'none' as const,
+  sourceUrl: 'https://example.com/pricing',
+};
+const factChangeInsert = prepareTimelineEventInsert(
+  {
+    profileId: 'profile-example',
+    profileOwnerType: 'tool',
+    eventType: 'fact_changed',
+    reviewScope: 'fact',
+    claim: verifiedClaim,
+    title: 'Pro monthly price changed',
+    summary: 'The official pricing page now lists the Pro monthly plan at $29 instead of $19.',
+    oldValue: '{"price":"$19"}',
+    newValue: '{"price":"$29"}',
+    visibility: 'public',
+    occurredAt: '2026-09-02T00:00:00.000Z',
+  },
+  'reviewer-example',
+);
+assert.deepEqual(factChangeInsert.old_value, { price: '$19' });
+assert.equal(factChangeInsert.source_url, 'https://example.com/pricing');
+
+assert.throws(
+  () =>
+    prepareTimelineEventInsert(
+      {
+        profileId: 'profile-example',
+        profileOwnerType: 'site',
+        eventType: 'reviewed_no_change',
+        reviewScope: 'full',
+        title: 'Platform review completed',
+        summary: 'The platform facts were reviewed with no confirmed change.',
+        sourceUrl: 'https://example.com/',
+        visibility: 'public',
+        occurredAt: '2026-09-02T00:00:00.000Z',
+      },
+      'reviewer-example',
+    ),
+  /Only directory tool profiles/,
+);
+assert.throws(
+  () =>
+    prepareTimelineEventInsert(
+      {
+        profileId: 'profile-example',
+        profileOwnerType: 'tool',
+        eventType: 'fact_changed',
+        reviewScope: 'fact',
+        claim: { ...verifiedClaim, verificationStatus: 'candidate' },
+        title: 'Unverified price change',
+        summary: 'A machine candidate attempted to enter the confirmed timeline.',
+        visibility: 'internal',
+        occurredAt: '2026-09-02T00:00:00.000Z',
+      },
+      'reviewer-example',
+    ),
+  /Only verified, conflict-free claims/,
+);
+
 const migration = readFileSync(
   resolve(process.cwd(), 'db/supabase/migrations/20260902_product_intelligence_timeline.sql'),
   'utf8',
@@ -63,5 +146,19 @@ const publicReader = readFileSync(
 );
 assert.equal(publicReader.includes(".eq('visibility', 'public')"), true);
 assert.equal(publicReader.includes(".eq('owner_type', 'tool')"), true);
+
+const toolDetailPage = readFileSync(
+  resolve(process.cwd(), 'app/[locale]/(with-footer)/ai/[websiteName]/page.tsx'),
+  'utf8',
+);
+assert.equal(toolDetailPage.includes('getPublicToolChangeTimeline(toolId)'), true);
+assert.equal(toolDetailPage.includes('publicChangeTimeline.length > 0'), true);
+
+const publicPanel = readFileSync(
+  resolve(process.cwd(), 'components/intelligence/ChangeTimelinePanel.tsx'),
+  'utf8',
+);
+assert.equal(publicPanel.includes('data-change-timeline'), true);
+assert.equal(publicPanel.includes('Machine-detected candidates never enter automatically'), true);
 
 console.log('Intelligence Change Timeline checks passed.');

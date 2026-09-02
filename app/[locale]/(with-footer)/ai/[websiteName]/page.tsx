@@ -35,6 +35,7 @@ import {
 } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateSoftwareSchema } from '@/lib/seo/schema';
 import { getCategoryById, getLocalizedField as getCategoryLocalizedField } from '@/lib/services/categories';
+import { getPublicToolChangeTimeline } from '@/lib/services/intelligence/publicChangeTimeline';
 import { getPublicToolEvidenceLedger } from '@/lib/services/intelligence/publicEvidence';
 import { getLocalizedField as getTagLocalizedField, getTagsBySlugs, humanizeTagSlug } from '@/lib/services/tags';
 import { buildToolDecisionCard, DecisionEvidenceRequirementKey } from '@/lib/services/toolDecisionCard';
@@ -47,6 +48,7 @@ import CommentList from '@/components/comments/CommentList';
 import FavoriteButton from '@/components/FavoriteButton';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import BaseImage from '@/components/image/BaseImage';
+import ChangeTimelinePanel from '@/components/intelligence/ChangeTimelinePanel';
 import EvidenceLedgerPanel from '@/components/intelligence/EvidenceLedgerPanel';
 import MarkdownProse from '@/components/MarkdownProse';
 import MediaGallery from '@/components/MediaGallery';
@@ -3212,6 +3214,7 @@ export default async function Page({
       ratingCount: 0,
     };
     let publicEvidenceLedger: Awaited<ReturnType<typeof getPublicToolEvidenceLedger>> = null;
+    let publicChangeTimeline: Awaited<ReturnType<typeof getPublicToolChangeTimeline>> = [];
 
     // Get category and tags information
     let category = null;
@@ -3260,7 +3263,14 @@ export default async function Page({
     if (toolId) {
       failureStage = 'engagement lookup';
       try {
-        const [nextUserRating, nextIsFavoritedByUser, nextToolStats, nextCommentCount, nextEvidenceLedger] =
+        const [
+          nextUserRating,
+          nextIsFavoritedByUser,
+          nextToolStats,
+          nextCommentCount,
+          nextEvidenceLedger,
+          nextChangeTimeline,
+        ] =
           await Promise.all([
             getUserRating(toolId).catch(() => null),
             isFavorited(toolId).catch(() => false),
@@ -3274,12 +3284,14 @@ export default async function Page({
             })),
             getCommentCount(toolId).catch(() => 0),
             getPublicToolEvidenceLedger(toolId).catch(() => null),
+            getPublicToolChangeTimeline(toolId).catch(() => []),
           ]);
         userRating = nextUserRating;
         isFavoritedByUser = nextIsFavoritedByUser;
         toolStats = nextToolStats;
         commentCount = Number(nextCommentCount || 0);
         publicEvidenceLedger = nextEvidenceLedger;
+        publicChangeTimeline = nextChangeTimeline;
         ratingStats = {
           averageRating: toolStats.averageRating,
           ratingCount: toolStats.ratingCount,
@@ -4833,6 +4845,10 @@ export default async function Page({
               </section>
 
               {publicEvidenceLedger ? <EvidenceLedgerPanel ledger={publicEvidenceLedger} locale={locale} /> : null}
+
+              {publicChangeTimeline.length > 0 ? (
+                <ChangeTimelinePanel events={publicChangeTimeline} locale={locale} />
+              ) : null}
 
               <section className='rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'>
                 <div className='mb-5 flex items-center gap-3'>
