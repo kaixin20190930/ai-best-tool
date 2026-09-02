@@ -389,8 +389,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               if (isChinese) {
                 ratingLabel = '暂无';
               }
-              if (tool.averageRating) {
-                ratingLabel = `${tool.averageRating.toFixed(1)}★`;
+              const averageRating = Number(tool.averageRating);
+              if (Number.isFinite(averageRating) && averageRating > 0) {
+                ratingLabel = `${averageRating.toFixed(1)}★`;
               }
               return (
                 <div key={tool.id} className='rounded-[18px] border border-slate-200 bg-white p-5 shadow-sm'>

@@ -34,3 +34,5 @@ export {
 
 // SeoScript Component (existing)
 export { default as SeoScript } from './SeoScript';
+
+export { default as SeoBreadcrumbs, type SeoBreadcrumbItem, type SeoBreadcrumbsProps } from './SeoBreadcrumbs';

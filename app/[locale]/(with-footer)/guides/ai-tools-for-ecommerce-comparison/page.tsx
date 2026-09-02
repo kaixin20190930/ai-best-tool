@@ -1,15 +1,13 @@
+import type { Metadata } from 'next';
+
+import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
-import type { Metadata } from 'next';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const metadata = await buildComparisonMetadata(
     locale,
     locale === 'cn' || locale === 'tw' ? 'AI 电商工具对比' : 'AI ecommerce tools comparison',
@@ -21,7 +19,7 @@ export async function generateMetadata({
   return {
     ...metadata,
     alternates: {
-      canonical: `/${locale}/guides/ai-tools-for-ecommerce`,
+      canonical: generateLocalizedCanonicalUrl('/guides/ai-tools-for-ecommerce', locale),
     },
   };
 }

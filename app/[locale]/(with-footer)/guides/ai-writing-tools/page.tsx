@@ -3,6 +3,7 @@ import { ArrowRight, CheckCircle2, ExternalLink, FileText, PenLine } from 'lucid
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
+import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -26,7 +27,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '适合内容创作、SEO、营销和日常写作的 AI 工具推荐与选型指南。'
         : 'A practical guide to AI writing tools for content creation, SEO, marketing, and everyday writing.',
-    alternates: { canonical: `${BASE_URL}/${locale}/guides/ai-writing-tools` },
+    alternates: { canonical: generateLocalizedCanonicalUrl('/guides/ai-writing-tools', locale, BASE_URL) },
   };
 }
 

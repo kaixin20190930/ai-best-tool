@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 
+import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
@@ -19,7 +20,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
   return {
     ...metadata,
     alternates: {
-      canonical: `/${locale}/guides/ai-tools-for-automation`,
+      canonical: generateLocalizedCanonicalUrl('/guides/ai-tools-for-automation', locale),
     },
   };
 }

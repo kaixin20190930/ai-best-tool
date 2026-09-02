@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
-import { getNoindexMetadata } from '@/lib/seo/indexing';
+import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({
@@ -12,43 +12,16 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 
   const title = t('title');
   const description = t('description');
-  const imageUrl = `${BASE_URL}/images/aibesttool.png`;
-  const pageUrl = `${BASE_URL}/${locale}/startup`;
-
-  return {
-    metadataBase: new URL(BASE_URL),
+  return buildLocalizedPageMetadata({
+    locale,
+    path: '/startup',
     title,
     description,
     keywords: t('keywords'),
-    ...getNoindexMetadata(),
-    alternates: {
-      canonical: `/${locale}/startup`,
-    },
-    openGraph: {
-      type: 'website',
-      locale,
-      url: pageUrl,
-      siteName: 'AI Best Tool',
-      title,
-      description,
-      images: [
-        {
-          url: imageUrl,
-          width: 1200,
-          height: 630,
-          alt: 'Startup Launch Sites - AI Best Tool Directory',
-        },
-      ],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      site: '@aibesttool',
-      creator: '@aibesttool',
-      title,
-      description,
-      images: [imageUrl],
-    },
-  };
+    image: '/images/aibesttool.png',
+    indexable: false,
+    baseUrl: BASE_URL,
+  });
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {

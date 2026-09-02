@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { ArrowRight, Clock3, FolderOpen, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { getAllCategories, getLocalizedField as getLocalizedCategoryField } from '@/lib/services/categories';
 import { toolToListRow } from '@/lib/services/toolPresenter';
 import { getLatestTools } from '@/lib/services/tools';
@@ -22,19 +23,15 @@ function isWithinLastDays(dateLike: string | Date | undefined, days: number) {
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const isChinese = locale === 'cn' || locale === 'tw';
 
-  return {
+  return buildLocalizedPageMetadata({
+    locale,
+    path: '/new',
     title: isChinese ? '本周新增 AI 工具' : 'New This Week AI Tools',
     description: isChinese
       ? '查看 AI Best Tool 本周新增和最近收录的工具，快速跟上最近补进来的真实内容。'
       : 'Catch up on the newest AI tools added to AI Best Tool this week and see the latest reviewed additions in one place.',
-    alternates: {
-      canonical: './new',
-    },
-    robots: {
-      index: false,
-      follow: true,
-    },
-  };
+    indexable: false,
+  });
 }
 
 export default async function NewToolsPage({ params: { locale } }: { params: { locale: string } }) {

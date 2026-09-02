@@ -3,8 +3,22 @@
  * Functions for generating optimized titles, descriptions, and metadata
  */
 
+import type { Metadata } from 'next';
+
 import { SEO_CONFIG, SEO_CONSTRAINTS, TITLE_SEPARATOR } from './constants';
-import { INDEXABLE_LOCALES } from './indexing';
+import { getNoindexMetadata, INDEXABLE_LOCALES, isIndexableLocale } from './indexing';
+
+export interface LocalizedPageMetadataInput {
+  locale: string;
+  path: string;
+  title: string;
+  description: string;
+  indexable?: boolean;
+  image?: string;
+  type?: 'website' | 'article';
+  keywords?: string | string[];
+  baseUrl?: string;
+}
 
 /**
  * Generate an optimized page title
@@ -134,6 +148,14 @@ export function generateCanonicalUrl(path: string, baseUrl: string = SEO_CONFIG.
   return `${cleanBaseUrl}${cleanPath}`;
 }
 
+export function generateLocalizedPath(path: string, locale: string): string {
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  const pathWithoutLocale = normalizedPath.replace(/^\/(?:en|cn|jp|de|es|fr|pt|ru|tw)(?=\/|$)/, '') || '/';
+  if (locale === SEO_CONFIG.defaultLocale) return pathWithoutLocale;
+  if (pathWithoutLocale === '/') return `/${locale}`;
+  return `/${locale}${pathWithoutLocale}`;
+}
+
 /**
  * Generate the public canonical URL for a localized route.
  * English uses the default unprefixed route while other locales keep their prefix.
@@ -143,16 +165,7 @@ export function generateLocalizedCanonicalUrl(
   locale: string,
   baseUrl: string = SEO_CONFIG.siteUrl,
 ): string {
-  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
-  const pathWithoutLocale = normalizedPath.replace(/^\/(?:en|cn|jp|de|es|fr|pt|ru|tw)(?=\/|$)/, '') || '/';
-  const localizedPath =
-    locale === SEO_CONFIG.defaultLocale
-      ? pathWithoutLocale
-      : pathWithoutLocale === '/'
-        ? `/${locale}`
-        : `/${locale}${pathWithoutLocale}`;
-
-  return generateCanonicalUrl(localizedPath, baseUrl);
+  return generateCanonicalUrl(generateLocalizedPath(path, locale), baseUrl);
 }
 
 /**
@@ -244,4 +257,66 @@ export function generateHreflangLinks(
   hreflangLinks['x-default'] = generateLocalizedCanonicalUrl(path, SEO_CONFIG.defaultLocale, baseUrl);
 
   return hreflangLinks;
+}
+
+/**
+ * Build canonical, hreflang, robots, and social metadata from one localized path.
+ * Non-indexable and unsupported-locale pages keep a canonical but do not advertise
+ * hreflang alternates to search engines.
+ */
+export function buildLocalizedPageMetadata({
+  locale,
+  path,
+  title,
+  description,
+  indexable = true,
+  image = SEO_CONFIG.defaultImage,
+  type = 'website',
+  keywords,
+  baseUrl = SEO_CONFIG.siteUrl,
+}: LocalizedPageMetadataInput): Metadata {
+  const canonicalPath = path.split(/[?#]/, 1)[0] || '/';
+  const canonical = generateLocalizedCanonicalUrl(canonicalPath, locale, baseUrl);
+  const shouldIndex = indexable && isIndexableLocale(locale);
+  const socialImage = generateSocialImageUrl(image, baseUrl);
+
+  return {
+    metadataBase: new URL(baseUrl),
+    title,
+    description,
+    ...(keywords ? { keywords } : {}),
+    alternates: {
+      canonical,
+      ...(shouldIndex ? { languages: generateHreflangLinks(canonicalPath, locale, baseUrl) } : {}),
+    },
+    ...(shouldIndex ? {} : getNoindexMetadata()),
+    openGraph: {
+      type,
+      locale,
+      url: canonical,
+      siteName: SEO_CONFIG.siteName,
+      title,
+      description,
+      images: [
+        {
+          url: socialImage,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [socialImage],
+      ...(SEO_CONFIG.twitterHandle
+        ? {
+            creator: SEO_CONFIG.twitterHandle,
+            site: SEO_CONFIG.twitterHandle,
+          }
+        : {}),
+    },
+  };
 }

@@ -1,3 +1,7 @@
+import { INDEXABLE_GUIDE_PATHS, isComparisonGuideHref } from '@/lib/seo/guideIndexing';
+
+export { INDEXABLE_GUIDE_PATHS, isComparisonGuideHref } from '@/lib/seo/guideIndexing';
+
 export type GuidePageConfig = {
   href: string;
   priority: number;
@@ -1998,3 +2002,7 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/claude-alternatives-comparison',
   '/guides/cursor-alternatives-comparison',
 ] as const;
+
+export const INDEXABLE_GUIDE_PAGES = GUIDE_PAGES.filter(
+  (page) => !isComparisonGuideHref(page.href) && INDEXABLE_GUIDE_PATHS.has(page.href),
+);

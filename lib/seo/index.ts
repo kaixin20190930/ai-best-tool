@@ -25,6 +25,10 @@ export {
   generateToolDescription,
   generateAlternateLocales,
   generateHreflangLinks,
+  generateLocalizedCanonicalUrl,
+  generateLocalizedPath,
+  buildLocalizedPageMetadata,
+  type LocalizedPageMetadataInput,
 } from './metadata';
 
 // Schema.org Generators

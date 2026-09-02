@@ -447,8 +447,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           <div className='grid gap-4 lg:grid-cols-2'>
             {rankedTools.map((tool) => {
               let ratingLabel = isChinese ? '暂无评分' : 'No rating yet';
-              if (tool.averageRating) {
-                ratingLabel = `${tool.averageRating.toFixed(1)}★`;
+              const averageRating = Number(tool.averageRating);
+              if (Number.isFinite(averageRating) && averageRating > 0) {
+                ratingLabel = `${averageRating.toFixed(1)}★`;
               }
 
               return (

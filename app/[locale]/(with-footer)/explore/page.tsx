@@ -1,15 +1,14 @@
 import { Metadata } from 'next';
 
 import { BASE_URL } from '@/lib/env';
-import { generateBreadcrumbSchema } from '@/lib/seo/schema';
+import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { getAllCategories } from '@/lib/services/categories';
 import { getAllTags } from '@/lib/services/tags';
 import { SortBy } from '@/lib/services/tools';
 import FilterPanel from '@/components/FilterPanel';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import Search from '@/components/Search';
-import { generateHreflangMetadata } from '@/components/seo';
-import { StructuredDataServer } from '@/components/seo/StructuredData';
+import SeoBreadcrumbs from '@/components/seo/SeoBreadcrumbs';
 import { Link } from '@/app/navigation';
 
 import ExploreList from './ExploreList';
@@ -28,19 +27,19 @@ interface PageProps {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  // Generate hreflang tags for all locales
-  const hreflangMetadata = generateHreflangMetadata(params.locale, '/explore');
   const isChinese = params.locale === 'cn' || params.locale === 'tw';
 
-  return {
+  return buildLocalizedPageMetadata({
+    locale: params.locale,
+    path: '/explore',
     title: isChinese
       ? '探索 AI 工具目录：按场景、价格和分类筛选'
       : 'Explore AI Tools Directory by Use Case, Pricing & Category',
     description: isChinese
       ? '浏览和筛选精选 AI 工具目录，按任务、分类、价格、标签和最近更新缩小范围，再进入详情页比较功能、限制与真实信号。'
       : 'Browse and filter a curated AI tools directory by task, category, pricing, tags, and freshness, then compare features, limits, and real signals on detail pages.',
-    ...hreflangMetadata,
-  };
+    baseUrl: BASE_URL,
+  });
 }
 
 export default async function Page({ params, searchParams }: PageProps) {
@@ -79,323 +78,322 @@ export default async function Page({ params, searchParams }: PageProps) {
     },
   ];
 
-  // Generate BreadcrumbList schema for navigation hierarchy
-  const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: 'Home', url: BASE_URL },
-    { name: 'Explore', url: `${BASE_URL}/explore` },
-  ]);
-
   return (
-    <>
-      <StructuredDataServer data={breadcrumbSchema} />
-      <div className='container mx-auto px-4 py-8'>
-        <section className='mb-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '核心入口' : 'Core entry points'}
-          </p>
-          <h1 className='mt-2 text-3xl font-bold text-slate-950 lg:text-4xl'>
-            {isChinese
-              ? '按任务、价格和分类探索 AI 工具目录'
-              : 'Explore the AI tools directory by task, pricing, and category'}
-          </h1>
-          <p className='mt-3 max-w-3xl text-sm leading-6 text-slate-600'>
-            {isChinese
-              ? '如果你还没决定要看哪个方向，先从这里筛选；如果你已经有明确意图，再跳到本周新增、生产力或 Web3 这些更聚焦的核心页。'
-              : 'If you are still orienting, start filtering here. If you already know the direction, jump straight to new additions, productivity, or Web3.'}
-          </p>
-          <div className='mt-5 rounded-[18px] border border-slate-200 bg-slate-50 p-3 shadow-sm'>
-            <div className='mb-3 rounded-2xl border border-cyan-100 bg-cyan-50/70 px-4 py-3'>
-              <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-                {isChinese ? '先按任务找' : 'Start with a task'}
-              </p>
-              <p className='mt-1 text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '比如写内容、做开发、做研究、做视频或看 Web3，再继续往下筛。'
-                  : 'For example: write content, build or code, do research, create video, or work on Web3.'}
-              </p>
-            </div>
-            <Search
-              placeholder={isChinese ? '搜索工具、场景或产品名...' : 'Search tools, use cases, or product names...'}
-              showSuggestions
-              taskHint={isChinese ? '先按任务找' : 'Search by task'}
-              taskDescription={
-                isChinese
-                  ? '先确定你要做什么，再看价格、更新和评论。'
-                  : 'Decide the task first, then compare pricing, freshness, and comments.'
-              }
-              taskSuggestions={taskFirstEntryPoints.map((item) => ({
-                label: item.title,
-                href: item.href,
-              }))}
-              className='p-0 sm:p-0'
-            />
-          </div>
-          <div className='mt-5 rounded-[18px] border border-cyan-100 bg-cyan-50/60 p-4 shadow-sm'>
+    <div className='container mx-auto px-4 py-8'>
+      <SeoBreadcrumbs
+        locale={params.locale}
+        items={[
+          { name: isChinese ? '首页' : 'Home', path: '/' },
+          { name: isChinese ? '探索工具' : 'Explore', path: '/explore' },
+        ]}
+        className='mb-5'
+      />
+      <section className='mb-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
+        <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+          {isChinese ? '核心入口' : 'Core entry points'}
+        </p>
+        <h1 className='mt-2 text-3xl font-bold text-slate-950 lg:text-4xl'>
+          {isChinese
+            ? '按任务、价格和分类探索 AI 工具目录'
+            : 'Explore the AI tools directory by task, pricing, and category'}
+        </h1>
+        <p className='mt-3 max-w-3xl text-sm leading-6 text-slate-600'>
+          {isChinese
+            ? '如果你还没决定要看哪个方向，先从这里筛选；如果你已经有明确意图，再跳到本周新增、生产力或 Web3 这些更聚焦的核心页。'
+            : 'If you are still orienting, start filtering here. If you already know the direction, jump straight to new additions, productivity, or Web3.'}
+        </p>
+        <div className='mt-5 rounded-[18px] border border-slate-200 bg-slate-50 p-3 shadow-sm'>
+          <div className='mb-3 rounded-2xl border border-cyan-100 bg-cyan-50/70 px-4 py-3'>
             <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '先按任务找' : 'Start with a task'}
             </p>
-            <h2 className='mt-1 text-xl font-bold text-slate-950'>
-              {isChinese ? '你想先解决哪类问题？' : 'What kind of problem are you solving first?'}
-            </h2>
-            <div className='mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
-              {taskFirstEntryPoints.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
-                >
-                  <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
-                  <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
-                </Link>
-              ))}
-            </div>
+            <p className='mt-1 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '比如写内容、做开发、做研究、做视频或看 Web3，再继续往下筛。'
+                : 'For example: write content, build or code, do research, create video, or work on Web3.'}
+            </p>
           </div>
-          <div className='mt-5 grid gap-3 md:grid-cols-3'>
-            <div className='rounded-xl border border-slate-200 bg-white p-4 shadow-sm'>
-              <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                {isChinese ? '最近核查' : 'Last checked'}
-              </p>
-              <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
-              <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '探索页的筛选、入口和目录规模刚刚复核过。'
-                  : 'Explore filtering, entry points, and directory scale were recently reviewed.'}
-              </p>
-            </div>
-            <div className='rounded-xl border border-slate-200 bg-white p-4 shadow-sm'>
-              <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                {isChinese ? '核心用途' : 'Primary purpose'}
-              </p>
-              <p className='mt-2 text-lg font-bold text-slate-950'>
-                {isChinese ? '先按任务筛，再看目录' : 'Filter by task before browsing'}
-              </p>
-              <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '避免用户只看到一个大列表，先给他们明确的切入点。'
-                  : 'Avoid a flat list by giving users a clear starting point first.'}
-              </p>
-            </div>
-            <div className='rounded-xl border border-slate-200 bg-white p-4 shadow-sm'>
-              <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                {isChinese ? '后续补强' : 'Next enrichment'}
-              </p>
-              <p className='mt-2 text-lg font-bold text-slate-950'>
-                {isChinese ? '热门筛选、真实讨论、owner 信号' : 'Popular filters, real discussions, owner signals'}
-              </p>
-              <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '让探索页更像决策中枢，而不是静态目录。'
-                  : 'Make Explore feel like a decision hub, not a static directory.'}
-              </p>
-            </div>
-          </div>
-          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
-            <Link
-              href='/new'
-              className='rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-cyan-50/60'
-            >
-              <p className='text-sm font-semibold text-slate-950'>
-                {isChinese ? '看本周新增' : 'See what is new this week'}
-              </p>
-              <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '先看最近补进和最近补厚的页面，更容易找到活跃内容。'
-                  : 'Start with recently added and recently improved pages to find the freshest inventory.'}
-              </p>
-            </Link>
-            <Link
-              href='/categories/productivity?sort=popular'
-              className='rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-cyan-50/60'
-            >
-              <p className='text-sm font-semibold text-slate-950'>
-                {isChinese ? '看生产力分类' : 'Open the productivity category'}
-              </p>
-              <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '这是目前最厚的分类之一，适合第一次建立判断。'
-                  : 'One of the densest categories and a strong starting point for first-time visitors.'}
-              </p>
-            </Link>
-            <Link
-              href='/categories/web3?sort=popular'
-              className='rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-cyan-50/60'
-            >
-              <p className='text-sm font-semibold text-slate-950'>
-                {isChinese ? '看 Web3 分类' : 'Open the Web3 category'}
-              </p>
-              <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '如果你关注链上研究、分析和基础设施，这里是最聚焦的入口。'
-                  : 'If you care about on-chain research, analytics, or infrastructure, this is the sharpest entry point.'}
-              </p>
-            </Link>
-            <Link
-              href='/guides/how-to-choose-ai-tools'
-              className='rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-cyan-50/60'
-            >
-              <p className='text-sm font-semibold text-slate-950'>
-                {isChinese ? '先看选型指南' : 'Read the selection guide'}
-              </p>
-              <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '如果你还没想清楚比较维度，先从指南入手会更高效。'
-                  : 'If your comparison criteria are still fuzzy, the guide is the fastest way to build context.'}
-              </p>
-            </Link>
-          </div>
-        </section>
-
-        <GuideEvidencePanel
-          locale={params.locale}
-          checkedAt={checkedAt}
-          scope={
-            isChinese
-              ? '探索页要同时交代筛选逻辑、最近核查和下一步去哪里，而不是只给一张搜索表。'
-              : 'The explore page should explain filtering logic, last check date, and the next step instead of acting like a plain search table.'
-          }
-          items={[
-            {
-              label: isChinese ? '验证范围' : 'Checked scope',
-              value: isChinese ? '筛选、更新、下一步 + 目录规模' : 'Filtering, freshness, next step + directory scale',
-              note: isChinese
-                ? `当前分类 ${categories.length} 个，标签 ${tags.length} 个，先让用户知道怎样更快筛。`
-                : `${categories.length} categories and ${tags.length} tags help users narrow down faster.`,
-            },
-            {
-              label: isChinese ? '索引策略' : 'Indexing strategy',
-              value: isChinese ? '探索页保留索引' : 'Explore page kept indexable',
-              note: isChinese ? '承接大盘流量和内部导航。' : 'Capture broad traffic and internal navigation.',
-            },
-            {
-              label: isChinese ? '下一步增强' : 'Next enrichment',
-              value: isChinese
-                ? '补热门筛选、真实讨论、owner 信号'
-                : 'Add popular filters, real discussions, owner signals',
-              note: isChinese ? '让探索页更像决策中枢。' : 'Make explore feel more like a decision hub.',
-            },
-          ]}
-          signalCards={[
-            {
-              label: isChinese ? '价格信号' : 'Pricing signal',
-              value: isChinese ? '先按免费、freemium、付费筛选' : 'Start with free, freemium, and paid filters',
-              note: isChinese
-                ? '目录页最有价值的地方，是帮用户快速排除预算不合适的工具。'
-                : 'A directory page is most useful when it quickly removes tools that do not fit the budget.',
-            },
-            {
-              label: isChinese ? '更新信号' : 'Freshness signal',
-              value: isChinese ? '优先看最近更新的结果' : 'Prioritize the newest results',
-              note: isChinese
-                ? '探索页如果只显示旧条目，用户很难判断哪些还值得点。'
-                : 'If the page only shows stale entries, users cannot tell what is still worth opening.',
-            },
-            {
-              label: isChinese ? '风险信号' : 'Risk signal',
-              value: isChinese ? '把重复、稀薄和不活跃项降级' : 'Downgrade duplicates, thin pages, and inactive items',
-              note: isChinese
-                ? '目录页应该先把风险高、判断弱的结果挡在前面。'
-                : 'The directory should surface risky or weakly judged results less prominently.',
-            },
-          ]}
-          decisionSteps={
-            isChinese
-              ? [
-                  '先选任务或场景，再缩小到合适的分类。',
-                  '再按价格、更新和风险信号筛一轮。',
-                  '最后进入详情、对比或提交页。',
-                ]
-              : [
-                  'Choose the task or use case first, then narrow into the right category.',
-                  'Filter again by pricing, freshness, and risk signals.',
-                  'Open the detail, compare, or submission page last.',
-                ]
-          }
-        />
-
-        <section className='mb-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
+          <Search
+            placeholder={isChinese ? '搜索工具、场景或产品名...' : 'Search tools, use cases, or product names...'}
+            showSuggestions
+            taskHint={isChinese ? '先按任务找' : 'Search by task'}
+            taskDescription={
+              isChinese
+                ? '先确定你要做什么，再看价格、更新和评论。'
+                : 'Decide the task first, then compare pricing, freshness, and comments.'
+            }
+            taskSuggestions={taskFirstEntryPoints.map((item) => ({
+              label: item.title,
+              href: item.href,
+            }))}
+            className='p-0 sm:p-0'
+          />
+        </div>
+        <div className='mt-5 rounded-[18px] border border-cyan-100 bg-cyan-50/60 p-4 shadow-sm'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '更细的分类入口' : 'Focused category entry points'}
+            {isChinese ? '先按任务找' : 'Start with a task'}
           </p>
-          <h2 className='mt-2 text-2xl font-bold text-slate-950'>
-            {isChinese ? '如果方向已经清楚，就直接去细分类' : 'When the direction is clear, jump to focused categories'}
+          <h2 className='mt-1 text-xl font-bold text-slate-950'>
+            {isChinese ? '你想先解决哪类问题？' : 'What kind of problem are you solving first?'}
           </h2>
-          <p className='mt-3 max-w-3xl text-sm leading-6 text-slate-600'>
-            {isChinese
-              ? 'Research、Voice、Automation 和 Web3 这些分类更适合高意图筛选，不必先在大类里绕一圈。'
-              : 'Research, Voice, Automation, and Web3 are stronger for high-intent browsing, so you do not need to stay in the broad buckets first.'}
-          </p>
-          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
-            {[
-              {
-                href: '/categories/research?sort=popular',
-                title: isChinese ? '看研究分类' : 'Open research',
-                description: isChinese
-                  ? '适合模型发现、资料检索和研究型工作流。'
-                  : 'A better fit for model discovery, source gathering, and research workflows.',
-                examples: [{ href: '/ai/chatgpt', label: 'ChatGPT' }],
-              },
-              {
-                href: '/categories/voice?sort=popular',
-                title: isChinese ? '看语音分类' : 'Open voice',
-                description: isChinese
-                  ? '适合转录、播客、配音和音频优先场景。'
-                  : 'A better fit for transcription, podcasting, dubbing, and audio-first workflows.',
-                examples: [{ href: '/ai/fathom', label: 'Fathom' }],
-              },
-              {
-                href: '/categories/automation?sort=popular',
-                title: isChinese ? '看自动化分类' : 'Open automation',
-                description: isChinese
-                  ? '适合工作流编排、Agent 和重复任务自动执行。'
-                  : 'A better fit for orchestration, agents, and repeatable task automation.',
-                examples: [{ href: '/ai/lindy', label: 'Lindy' }],
-              },
-              {
-                href: '/categories/web3?sort=popular',
-                title: isChinese ? '看 Web3 分类' : 'Open Web3',
-                description: isChinese
-                  ? '适合链上数据、协议索引和研究分析工作流。'
-                  : 'A better fit for on-chain data, protocol indexing, and research workflows.',
-                examples: [
-                  { href: '/ai/the-graph', label: 'The Graph' },
-                  { href: '/ai/dune', label: 'Dune' },
-                ],
-              },
-            ].map((item) => (
-              <article key={item.href} className='rounded-lg border border-slate-200 bg-slate-50 p-4'>
-                <Link href={item.href} className='group block'>
-                  <p className='text-sm font-semibold text-slate-950 group-hover:text-cyan-800'>{item.title}</p>
-                  <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
-                </Link>
-                <div className='mt-3 flex flex-wrap items-center gap-2 border-t border-slate-200 pt-3 text-xs text-slate-500'>
-                  <span>{isChinese ? '代表工具：' : 'Examples:'}</span>
-                  {item.examples.map((example) => (
-                    <Link
-                      key={example.href}
-                      href={example.href}
-                      className='font-semibold text-cyan-800 underline decoration-cyan-200 underline-offset-4 hover:text-cyan-950'
-                    >
-                      {example.label}
-                    </Link>
-                  ))}
-                </div>
-              </article>
+          <div className='mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {taskFirstEntryPoints.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
+              </Link>
             ))}
           </div>
-        </section>
-
-        <div className='flex flex-col gap-6 lg:flex-row'>
-          {/* Filter Panel - Sidebar on desktop, collapsible on mobile */}
-          <aside className='shrink-0 lg:w-72'>
-            <FilterPanel categories={categories} tags={tags} locale={params.locale} />
-          </aside>
-
-          {/* Main Content */}
-          <main className='flex-1'>
-            <ExploreList locale={params.locale} searchParams={searchParams} categories={categories} tags={tags} />
-          </main>
         </div>
+        <div className='mt-5 grid gap-3 md:grid-cols-3'>
+          <div className='rounded-xl border border-slate-200 bg-white p-4 shadow-sm'>
+            <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+              {isChinese ? '最近核查' : 'Last checked'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '探索页的筛选、入口和目录规模刚刚复核过。'
+                : 'Explore filtering, entry points, and directory scale were recently reviewed.'}
+            </p>
+          </div>
+          <div className='rounded-xl border border-slate-200 bg-white p-4 shadow-sm'>
+            <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+              {isChinese ? '核心用途' : 'Primary purpose'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '先按任务筛，再看目录' : 'Filter by task before browsing'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '避免用户只看到一个大列表，先给他们明确的切入点。'
+                : 'Avoid a flat list by giving users a clear starting point first.'}
+            </p>
+          </div>
+          <div className='rounded-xl border border-slate-200 bg-white p-4 shadow-sm'>
+            <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+              {isChinese ? '后续补强' : 'Next enrichment'}
+            </p>
+            <p className='mt-2 text-lg font-bold text-slate-950'>
+              {isChinese ? '热门筛选、真实讨论、owner 信号' : 'Popular filters, real discussions, owner signals'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '让探索页更像决策中枢，而不是静态目录。'
+                : 'Make Explore feel like a decision hub, not a static directory.'}
+            </p>
+          </div>
+        </div>
+        <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+          <Link
+            href='/new'
+            className='rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-cyan-50/60'
+          >
+            <p className='text-sm font-semibold text-slate-950'>
+              {isChinese ? '看本周新增' : 'See what is new this week'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '先看最近补进和最近补厚的页面，更容易找到活跃内容。'
+                : 'Start with recently added and recently improved pages to find the freshest inventory.'}
+            </p>
+          </Link>
+          <Link
+            href='/categories/productivity?sort=popular'
+            className='rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-cyan-50/60'
+          >
+            <p className='text-sm font-semibold text-slate-950'>
+              {isChinese ? '看生产力分类' : 'Open the productivity category'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '这是目前最厚的分类之一，适合第一次建立判断。'
+                : 'One of the densest categories and a strong starting point for first-time visitors.'}
+            </p>
+          </Link>
+          <Link
+            href='/categories/web3?sort=popular'
+            className='rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-cyan-50/60'
+          >
+            <p className='text-sm font-semibold text-slate-950'>
+              {isChinese ? '看 Web3 分类' : 'Open the Web3 category'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '如果你关注链上研究、分析和基础设施，这里是最聚焦的入口。'
+                : 'If you care about on-chain research, analytics, or infrastructure, this is the sharpest entry point.'}
+            </p>
+          </Link>
+          <Link
+            href='/guides/how-to-choose-ai-tools'
+            className='rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-cyan-50/60'
+          >
+            <p className='text-sm font-semibold text-slate-950'>
+              {isChinese ? '先看选型指南' : 'Read the selection guide'}
+            </p>
+            <p className='mt-2 text-sm leading-6 text-slate-600'>
+              {isChinese
+                ? '如果你还没想清楚比较维度，先从指南入手会更高效。'
+                : 'If your comparison criteria are still fuzzy, the guide is the fastest way to build context.'}
+            </p>
+          </Link>
+        </div>
+      </section>
+
+      <GuideEvidencePanel
+        locale={params.locale}
+        checkedAt={checkedAt}
+        scope={
+          isChinese
+            ? '探索页要同时交代筛选逻辑、最近核查和下一步去哪里，而不是只给一张搜索表。'
+            : 'The explore page should explain filtering logic, last check date, and the next step instead of acting like a plain search table.'
+        }
+        items={[
+          {
+            label: isChinese ? '验证范围' : 'Checked scope',
+            value: isChinese ? '筛选、更新、下一步 + 目录规模' : 'Filtering, freshness, next step + directory scale',
+            note: isChinese
+              ? `当前分类 ${categories.length} 个，标签 ${tags.length} 个，先让用户知道怎样更快筛。`
+              : `${categories.length} categories and ${tags.length} tags help users narrow down faster.`,
+          },
+          {
+            label: isChinese ? '索引策略' : 'Indexing strategy',
+            value: isChinese ? '探索页保留索引' : 'Explore page kept indexable',
+            note: isChinese ? '承接大盘流量和内部导航。' : 'Capture broad traffic and internal navigation.',
+          },
+          {
+            label: isChinese ? '下一步增强' : 'Next enrichment',
+            value: isChinese
+              ? '补热门筛选、真实讨论、owner 信号'
+              : 'Add popular filters, real discussions, owner signals',
+            note: isChinese ? '让探索页更像决策中枢。' : 'Make explore feel more like a decision hub.',
+          },
+        ]}
+        signalCards={[
+          {
+            label: isChinese ? '价格信号' : 'Pricing signal',
+            value: isChinese ? '先按免费、freemium、付费筛选' : 'Start with free, freemium, and paid filters',
+            note: isChinese
+              ? '目录页最有价值的地方，是帮用户快速排除预算不合适的工具。'
+              : 'A directory page is most useful when it quickly removes tools that do not fit the budget.',
+          },
+          {
+            label: isChinese ? '更新信号' : 'Freshness signal',
+            value: isChinese ? '优先看最近更新的结果' : 'Prioritize the newest results',
+            note: isChinese
+              ? '探索页如果只显示旧条目，用户很难判断哪些还值得点。'
+              : 'If the page only shows stale entries, users cannot tell what is still worth opening.',
+          },
+          {
+            label: isChinese ? '风险信号' : 'Risk signal',
+            value: isChinese ? '把重复、稀薄和不活跃项降级' : 'Downgrade duplicates, thin pages, and inactive items',
+            note: isChinese
+              ? '目录页应该先把风险高、判断弱的结果挡在前面。'
+              : 'The directory should surface risky or weakly judged results less prominently.',
+          },
+        ]}
+        decisionSteps={
+          isChinese
+            ? [
+                '先选任务或场景，再缩小到合适的分类。',
+                '再按价格、更新和风险信号筛一轮。',
+                '最后进入详情、对比或提交页。',
+              ]
+            : [
+                'Choose the task or use case first, then narrow into the right category.',
+                'Filter again by pricing, freshness, and risk signals.',
+                'Open the detail, compare, or submission page last.',
+              ]
+        }
+      />
+
+      <section className='mb-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
+        <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+          {isChinese ? '更细的分类入口' : 'Focused category entry points'}
+        </p>
+        <h2 className='mt-2 text-2xl font-bold text-slate-950'>
+          {isChinese ? '如果方向已经清楚，就直接去细分类' : 'When the direction is clear, jump to focused categories'}
+        </h2>
+        <p className='mt-3 max-w-3xl text-sm leading-6 text-slate-600'>
+          {isChinese
+            ? 'Research、Voice、Automation 和 Web3 这些分类更适合高意图筛选，不必先在大类里绕一圈。'
+            : 'Research, Voice, Automation, and Web3 are stronger for high-intent browsing, so you do not need to stay in the broad buckets first.'}
+        </p>
+        <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+          {[
+            {
+              href: '/categories/research?sort=popular',
+              title: isChinese ? '看研究分类' : 'Open research',
+              description: isChinese
+                ? '适合模型发现、资料检索和研究型工作流。'
+                : 'A better fit for model discovery, source gathering, and research workflows.',
+              examples: [{ href: '/ai/chatgpt', label: 'ChatGPT' }],
+            },
+            {
+              href: '/categories/voice?sort=popular',
+              title: isChinese ? '看语音分类' : 'Open voice',
+              description: isChinese
+                ? '适合转录、播客、配音和音频优先场景。'
+                : 'A better fit for transcription, podcasting, dubbing, and audio-first workflows.',
+              examples: [{ href: '/ai/fathom', label: 'Fathom' }],
+            },
+            {
+              href: '/categories/automation?sort=popular',
+              title: isChinese ? '看自动化分类' : 'Open automation',
+              description: isChinese
+                ? '适合工作流编排、Agent 和重复任务自动执行。'
+                : 'A better fit for orchestration, agents, and repeatable task automation.',
+              examples: [{ href: '/ai/lindy', label: 'Lindy' }],
+            },
+            {
+              href: '/categories/web3?sort=popular',
+              title: isChinese ? '看 Web3 分类' : 'Open Web3',
+              description: isChinese
+                ? '适合链上数据、协议索引和研究分析工作流。'
+                : 'A better fit for on-chain data, protocol indexing, and research workflows.',
+              examples: [
+                { href: '/ai/the-graph', label: 'The Graph' },
+                { href: '/ai/dune', label: 'Dune' },
+              ],
+            },
+          ].map((item) => (
+            <article key={item.href} className='rounded-lg border border-slate-200 bg-slate-50 p-4'>
+              <Link href={item.href} className='group block'>
+                <p className='text-sm font-semibold text-slate-950 group-hover:text-cyan-800'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
+              </Link>
+              <div className='mt-3 flex flex-wrap items-center gap-2 border-t border-slate-200 pt-3 text-xs text-slate-500'>
+                <span>{isChinese ? '代表工具：' : 'Examples:'}</span>
+                {item.examples.map((example) => (
+                  <Link
+                    key={example.href}
+                    href={example.href}
+                    className='font-semibold text-cyan-800 underline decoration-cyan-200 underline-offset-4 hover:text-cyan-950'
+                  >
+                    {example.label}
+                  </Link>
+                ))}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <div className='flex flex-col gap-6 lg:flex-row'>
+        {/* Filter Panel - Sidebar on desktop, collapsible on mobile */}
+        <aside className='shrink-0 lg:w-72'>
+          <FilterPanel categories={categories} tags={tags} locale={params.locale} />
+        </aside>
+
+        {/* Main Content */}
+        <main className='flex-1'>
+          <ExploreList locale={params.locale} searchParams={searchParams} categories={categories} tags={tags} />
+        </main>
       </div>
-    </>
+    </div>
   );
 }

@@ -3,6 +3,7 @@ import { ArrowRight, CheckCircle2, ExternalLink, NotebookPen, Workflow } from 'l
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
+import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -24,7 +25,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '适合记笔记、会议助手和信息整理的 AI 工具推荐与选型指南。'
         : 'A practical guide to AI note taking tools for note taking, meeting assistance, and information organization.',
-    alternates: { canonical: `${BASE_URL}/${locale}/guides/ai-note-taking-tools` },
+    alternates: { canonical: generateLocalizedCanonicalUrl('/guides/ai-note-taking-tools', locale, BASE_URL) },
   };
 }
 

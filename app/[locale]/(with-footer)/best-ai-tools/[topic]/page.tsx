@@ -3,14 +3,17 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowRight, CheckCircle2, Sparkles, Star, Target } from 'lucide-react';
+import { unstable_setRequestLocale } from 'next-intl/server';
 
-import { getTopListTopic, topListTopics } from '@/lib/data/topLists';
+import { getTopListTopic } from '@/lib/data/topLists';
 import { BASE_URL } from '@/lib/env';
-import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
+import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
+import { generateFAQSchema } from '@/lib/seo/schema';
 import { getCategoryBySlug } from '@/lib/services/categories';
 import { getLocalizedField, getTools } from '@/lib/services/tools';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
+import SeoBreadcrumbs from '@/components/seo/SeoBreadcrumbs';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import TrackableLink from '@/components/TrackableLink';
 
@@ -36,9 +39,7 @@ function isValidTopicTool(tool: {
   return Boolean(tool?.id && tool?.name && tool?.url && tool?.title && tool?.content);
 }
 
-export async function generateStaticParams() {
-  return topListTopics.map((topic) => ({ topic: topic.key }));
-}
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({
   params,
@@ -48,6 +49,8 @@ export async function generateMetadata({
     topic: string;
   };
 }): Promise<Metadata> {
+  unstable_setRequestLocale(params.locale);
+
   try {
     const topic = getTopListTopic(params.topic);
     const isChinese = params.locale === 'cn' || params.locale === 'tw';
@@ -79,16 +82,24 @@ export async function generateMetadata({
         : 'A focused shortlist of useful AI tools, organized by use case.';
     }
 
-    return {
+    return buildLocalizedPageMetadata({
+      locale: params.locale,
+      path: `/best-ai-tools/${params.topic}`,
       title,
       description,
-    };
+      baseUrl: BASE_URL,
+      indexable: Boolean(topic),
+    });
   } catch (error) {
     console.error('Best AI tools topic metadata failed to render:', error);
-    return {
+    return buildLocalizedPageMetadata({
+      locale: params.locale,
+      path: `/best-ai-tools/${params.topic}`,
       title: 'Best AI tools',
       description: 'A focused shortlist of useful AI tools, organized by use case.',
-    };
+      baseUrl: BASE_URL,
+      indexable: false,
+    });
   }
 }
 
@@ -100,6 +111,8 @@ export default async function BestAiToolsTopicPage({
     topic: string;
   };
 }) {
+  unstable_setRequestLocale(params.locale);
+
   try {
     const { locale, topic: topicKey } = params;
     const isChinese = locale === 'cn' || locale === 'tw';
@@ -130,11 +143,6 @@ export default async function BestAiToolsTopicPage({
     }).format(new Date(checkedAt));
 
     const categoryName = category ? getLocalizedField(category.name, locale) : topic.title;
-    const breadcrumbSchema = generateBreadcrumbSchema([
-      { name: 'Home', url: `${BASE_URL}/${locale}` },
-      { name: isChinese ? '榜单页' : 'Rankings', url: `${BASE_URL}/${locale}/best-ai-tools` },
-      { name: topic.title, url: `${BASE_URL}/${locale}/best-ai-tools/${topic.key}` },
-    ]);
     const faqSchema = generateFAQSchema([
       {
         question: isChinese ? '这个榜单是怎么选出来的？' : 'How is this ranking selected?',
@@ -329,8 +337,16 @@ export default async function BestAiToolsTopicPage({
 
     return (
       <div className='theme-page mx-auto max-w-pc px-4 py-8 lg:px-0'>
-        <StructuredDataServer data={breadcrumbSchema} />
         <StructuredDataServer data={faqSchema} />
+        <SeoBreadcrumbs
+          locale={locale}
+          items={[
+            { name: isChinese ? '首页' : 'Home', path: '/' },
+            { name: isChinese ? 'AI 工具榜单' : 'Best AI Tools', path: '/best-ai-tools' },
+            { name: topic.title, path: `/best-ai-tools/${topic.key}` },
+          ]}
+          className='mb-5'
+        />
         <section className='overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm'>
           <div className='grid gap-0 lg:grid-cols-[1.1fr_0.9fr]'>
             <div className='space-y-6 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950 p-6 text-white lg:p-10'>

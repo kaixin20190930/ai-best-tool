@@ -8,6 +8,11 @@
 差异化、证据账本、变化追踪与商业化触发条件见
 [AI 工具决策平台差异化与商业化实施路线图](./EVIDENCE_DECISION_PLATFORM_ROADMAP_CN.md)。
 
+新决策能力的字段级实施、自动验收和 SEO 架构边界分别见：
+[三阶段实施方案](./DECISION_PLATFORM_THREE_PHASE_IMPLEMENTATION_CN.md)、
+[自动化测试与发布验收](./DECISION_PLATFORM_AUTOMATED_ACCEPTANCE_CN.md)、
+[SEO 信息架构与不可回退规则](./SEO_INFORMATION_ARCHITECTURE_GUARDRAILS_CN.md)。
+
 ## 目标与边界
 
 目标不是增加页面数量，而是在 6 周内验证以下链路：Google 能稳定理解 `AI Best Tool` 是一个可信的 AI 工具目录；目录意图从首
@@ -15,7 +20,9 @@
 
 以下行为在本轮冻结：
 
-- 不批量新增同义 guide、comparison 或 alternatives URL。每天新增并公开 1-2 个合格工具，但新工具默认 `monitor / noindex`；每天最多批准 1 个、每周最多 5 个进入索引。只有同时通过资料完整度、独立市场验证和索引复核的条目才进入 sitemap，详见 [工具页索引发布与节奏控制](./TOOL_INDEX_RELEASE_POLICY_CN.md)。
+- 不批量新增同义 guide、comparison 或 alternatives URL。每天新增并公开 1-2 个合格工具，但新工具默认
+  `monitor / noindex`；每天最多批准 1 个、每周最多 5 个进入索引。只有同时通过资料完整度、独立市场验证和索引复核的条目才
+  进入 sitemap，详见 [工具页索引发布与节奏控制](./TOOL_INDEX_RELEASE_POLICY_CN.md)。
 - 不为了“更新日期”批量改写内容；每次更新必须对应真实来源、编辑核查或用户反馈。
 - 不把外链数量作为 SEO 成功指标；分发模块只保留维护，不继续扩功能或执行站外投放。
 
@@ -64,25 +71,29 @@
 | IDX-05 | 索引准入门槛持续执行                            | 所有新 URL 均通过 [SEO 内容准入清单](./SEO_CONTENT_CHECKLIST.md)                                                | 持续                                   | 共同         |
 | IDX-06 | 高质量收录候选池与 "Best Decision Card"         | 首批 10 个成熟工具缺口全部完成实体迁移、合并或决策信号收口；未新增 canonical URL，下一批必须等待 W4 数据触发    | 已完成（成熟工具队列 10/10）           | Codex + 用户 |
 | IDX-07 | 四周证据驱动目录计划                            | 第 1-3 周开发项已完成；W4 三期 GSC 决策报告已实现，等待同期数据验证后执行扩大或收口                             | 进行中（W4）                           | Codex + 用户 |
-| IDX-08 | 工具页发布与索引解耦                            | `page_quality_status` 同时控制 robots 与 sitemap；新工具默认 monitor；每天最多放开 1 个、每周 5 个             | 已完成；首批逐日复核队列执行中           | Codex        |
+| IDX-08 | 工具页发布与索引解耦                            | `page_quality_status` 同时控制 robots 与 sitemap；新工具默认 monitor；每天最多放开 1 个、每周 5 个              | 已完成；首批逐日复核队列执行中         | Codex        |
 | POS-01 | SEO 安全的差异化表达                            | 保留 AI 工具目录主题、索引与结构化数据；首页突出证据、限制和变化，商业入口不干扰编辑判断                        | 已完成；专项测试、tsc、完整 build 通过 | Codex        |
 
 ### P1：让已获得展示的页面变成更可点击的答案（第 2-4 周）
 
-| ID     | 任务                               | 优先页面 / 查询意图                                                                              | 验收标准                                                                                                                      | 状态            | 负责人       |
-| ------ | ---------------------------------- | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- | --------------- | ------------ |
-| CTR-01 | 首页标题、描述、首屏与 schema 复核 | `ai tools directory`、`ai tool directory`、`ai top tools`                                        | 文案已与目录词和可见内容一致；英文 canonical 首页已补 WebSite/SearchAction schema                                             | 已完成          | Codex        |
-| CTR-02 | 首页 -> Explore -> 分类的分流审计  | 目录通用词                                                                                       | 14 个机会详情页已补证据驱动 fallback，5 个无数据库记录的分类入口已改为虚拟决策中心；生产严格审计 33/33、官方事实块 16/16 通过 | 已完成          | Codex        |
-| CTR-03 | 强化已有展示的 Guide               | Web3、Automation、Research                                                                       | 三页均已补 3 条任务、适用边界、核验风险和直达工具 Decision Card 的路径；提交 `de1504e6`                                       | 已完成          | Codex        |
-| CTR-04 | 强化已有展示的详情页               | Fathom、Anthropic、DeepL、Gamma、Lindy、Cursor、The Graph                                        | 每页保留至少两个官方来源和一个真实选择限制；禁止通用 AI 改写                                                                  | 已完成          | Codex        |
-| CTR-05 | 真实编辑/owner 信号回填            | 本轮先选 5 页                                                                                    | 每页至少一条有来源的更新、纠错、owner 补充或真实使用记录                                                                      | 需要数据        | 用户 + Codex |
-| CTR-06 | 首批成熟工具内容缺口               | Claude/Anthropic、Fathom、Gamma、Consensus、DeepL、Runway、Luma AI、Pipedream、Cursor、The Graph | 10 个既有 canonical URL 已完成合并、数据库迁移或决策内容增强，全程未新增 canonical URL                                        | 已完成（10/10） | Codex        |
-| EVD-01 | Evidence Ledger 数据模型           | 所有 claim 统一来源类型、核查状态、复查日、冲突和失效边界；机器提取不自动成为已核验事实          | 已完成；Supabase 迁移、只读验收、专项测试和 build 通过                                                                        | Codex + 用户    |
-| EVD-02 | 工具页 Evidence Ledger UI          | Decision Card 后可展开核对已验证 claim；候选证据不公开，不以单一分数代替解释                     | 已完成；有效工具身份产生 verified 数据后自动展示                                                                               | Codex           |
-| EVD-03 | 后台证据编辑与冲突处理             | 状态受控流转；冲突不自动覆盖；核验人、日期、复查、失效和适用范围可追踪；所有保存操作有中间态      | 已完成；首条真实人工核验已回读确认，专项测试、tsc、完整 build 通过                                                            | Codex           |
-| EVD-04 | 情报档案身份映射收口               | `tool` 类型 owner_id 必须对应目录真实工具；存量错误身份重新归类后再公开                           | 已完成；site 迁移、3 个档案缓存重算、Fathom 真实 UUID -> verified -> 生产公开链路全部通过                                    | Codex + 用户    |
-| CHG-01 | Change Timeline 模型与读取          | 正式历史与机器待审差异分离；事实变化与“复核无变化”分开；公开只读数据仅来自真实 tool 和 public 事件 | 已完成；迁移可读，受控写入、后台/工具页读取、专项测试和类型检查均通过                                                       | Codex + 用户    |
-| CHG-02 | 首批核心工具变化基线               | 10-20 个核心工具拥有真实基线复核；没有变化时只记录 `reviewed_no_change`，禁止伪造变化               | 进行中（3/10）；Fathom、Claude、Consensus 已完成；Gamma 待定向采集，DeepL/Pipedream/Cursor 受 robots 限制                 | Codex + 用户    |
+| ID     | 任务                               | 优先页面 / 查询意图                                                                                | 验收标准                                                                                                                      | 状态            | 负责人       |
+| ------ | ---------------------------------- | -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | --------------- | ------------ |
+| CTR-01 | 首页标题、描述、首屏与 schema 复核 | `ai tools directory`、`ai tool directory`、`ai top tools`                                          | 文案已与目录词和可见内容一致；英文 canonical 首页已补 WebSite/SearchAction schema                                             | 已完成          | Codex        |
+| CTR-02 | 首页 -> Explore -> 分类的分流审计  | 目录通用词                                                                                         | 14 个机会详情页已补证据驱动 fallback，5 个无数据库记录的分类入口已改为虚拟决策中心；生产严格审计 33/33、官方事实块 16/16 通过 | 已完成          | Codex        |
+| CTR-03 | 强化已有展示的 Guide               | Web3、Automation、Research                                                                         | 三页均已补 3 条任务、适用边界、核验风险和直达工具 Decision Card 的路径；提交 `de1504e6`                                       | 已完成          | Codex        |
+| CTR-04 | 强化已有展示的详情页               | Fathom、Anthropic、DeepL、Gamma、Lindy、Cursor、The Graph                                          | 每页保留至少两个官方来源和一个真实选择限制；禁止通用 AI 改写                                                                  | 已完成          | Codex        |
+| CTR-05 | 真实编辑/owner 信号回填            | 本轮先选 5 页                                                                                      | 每页至少一条有来源的更新、纠错、owner 补充或真实使用记录                                                                      | 需要数据        | 用户 + Codex |
+| CTR-06 | 首批成熟工具内容缺口               | Claude/Anthropic、Fathom、Gamma、Consensus、DeepL、Runway、Luma AI、Pipedream、Cursor、The Graph   | 10 个既有 canonical URL 已完成合并、数据库迁移或决策内容增强，全程未新增 canonical URL                                        | 已完成（10/10） | Codex        |
+| EVD-01 | Evidence Ledger 数据模型           | 所有 claim 统一来源类型、核查状态、复查日、冲突和失效边界；机器提取不自动成为已核验事实            | 已完成；Supabase 迁移、只读验收、专项测试和 build 通过                                                                        | Codex + 用户    |
+| EVD-02 | 工具页 Evidence Ledger UI          | Decision Card 后可展开核对已验证 claim；候选证据不公开，不以单一分数代替解释                       | 已完成；有效工具身份产生 verified 数据后自动展示                                                                              | Codex           |
+| EVD-03 | 后台证据编辑与冲突处理             | 状态受控流转；冲突不自动覆盖；核验人、日期、复查、失效和适用范围可追踪；所有保存操作有中间态       | 已完成；首条真实人工核验已回读确认，专项测试、tsc、完整 build 通过                                                            | Codex           |
+| EVD-04 | 情报档案身份映射收口               | `tool` 类型 owner_id 必须对应目录真实工具；存量错误身份重新归类后再公开                            | 已完成；site 迁移、3 个档案缓存重算、Fathom 真实 UUID -> verified -> 生产公开链路全部通过                                     | Codex + 用户    |
+| CHG-01 | Change Timeline 模型与读取         | 正式历史与机器待审差异分离；事实变化与“复核无变化”分开；公开只读数据仅来自真实 tool 和 public 事件 | 已完成；迁移可读，受控写入、后台/工具页读取、专项测试和类型检查均通过                                                         | Codex + 用户    |
+| CHG-02 | 首批核心工具变化基线               | 10-20 个核心工具拥有真实基线复核；没有变化时只记录 `reviewed_no_change`，禁止伪造变化              | 进行中（3/10）；Fathom、Claude、Consensus 已完成；Gamma 待定向采集，DeepL/Pipedream/Cursor 受 robots 限制                     | Codex + 用户    |
+| SEO-IA | SEO 信息架构统一与门禁             | 修复历史 canonical/hreflang，统一 Breadcrumb，并让工具关系内链只消费 reviewed 数据                 | SEO-IA-01~07 已完成；算法相似推荐已退出公开关系链，SEO-IA-08 待生产 smoke                                                     | Codex           |
+| DCF    | Finder + Decision Card 2.0         | 10 个核心工具和 6-8 个任务形成证据可追溯、最多三项的可解释推荐                                     | 字段级方案和自动验收已定稿；DCF-01~07 待执行                                                                                  | Codex           |
+| STK    | Stack Audit + 7-Day Trial          | 私有工具栈、Keep/Replace/Remove/Missing 与试用到期决策闭环                                         | 等待阶段一 Gate；STK-01~06 未开始                                                                                             | Codex + 用户    |
+| SIG    | Verified Usage + Change Watch      | 审核后的结构化使用信号和已确认变化通知，不公开低样本或利益相关数据                                 | 等待阶段二真实使用门槛；SIG/WAT 未开始                                                                                        | Codex + 用户    |
 
 ### P2：只在数据证明后扩展（第 4-6 周）
 

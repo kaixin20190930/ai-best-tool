@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 import { BASE_URL } from '@/lib/env';
-import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
+import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { getCategoryBySlug, getLocalizedField } from '@/lib/services/categories';
 import { SortBy } from '@/lib/services/tools';
 
@@ -103,13 +103,14 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   const profile = CATEGORY_METADATA_PROFILES[params.slug]?.[isChinese ? 'cn' : 'en'];
 
   if (!category) {
-    return {
+    return buildLocalizedPageMetadata({
+      locale: params.locale,
+      path: `/categories/${params.slug}`,
       title: profile?.title || 'AI Tools Category | AI Best Tool',
-      description: profile?.description,
-      alternates: {
-        canonical: generateLocalizedCanonicalUrl(`/categories/${params.slug}`, params.locale, BASE_URL),
-      },
-    };
+      description: profile?.description || 'Browse AI tools in this category.',
+      indexable: false,
+      baseUrl: BASE_URL,
+    });
   }
 
   const name = getLocalizedField(category.name, params.locale);
@@ -118,16 +119,18 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
     `Discover the best ${name} AI tools. Browse latest, popular, and top-rated tools in the AI Best Tool directory.`;
   const title = profile?.title || `Best ${name} AI Tools | AI Best Tool`;
   const metadataDescription = profile?.description || description;
+  const toolCount = 'toolCount' in category ? Number(category.toolCount || 0) : 0;
 
-  return {
+  return buildLocalizedPageMetadata({
+    locale: params.locale,
+    path: `/categories/${category.slug}`,
     title,
     description: metadataDescription,
-    alternates: {
-      canonical: generateLocalizedCanonicalUrl(`/categories/${category.slug}`, params.locale, BASE_URL),
-    },
-  };
+    indexable: toolCount >= 3,
+    baseUrl: BASE_URL,
+  });
 }
 
-export default async function CategoryPage(props: CategoryPageProps) {
-  return <CategoryContent {...props} />;
+export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
+  return <CategoryContent params={params} searchParams={searchParams} />;
 }

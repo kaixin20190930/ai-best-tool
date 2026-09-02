@@ -4,21 +4,22 @@ import { ArrowRight, Layers3, Sparkles, Star, Target } from 'lucide-react';
 
 import { topListTopics } from '@/lib/data/topLists';
 import { BASE_URL } from '@/lib/env';
-import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
+import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
+import SeoBreadcrumbs from '@/components/seo/SeoBreadcrumbs';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const isChinese = locale === 'cn' || locale === 'tw';
 
-  return {
+  return buildLocalizedPageMetadata({
+    locale,
+    path: '/best-ai-tools',
     title: isChinese ? 'Best AI Tools by Use Case | AI Best Tool' : 'Best AI Tools by Use Case | AI Best Tool',
     description: isChinese
       ? '按用途整理的 AI 工具榜单：Agent、可观测、写作、开发、模型路由、研究和视频，并明确下一步该看什么。'
       : 'Purpose-driven AI tool rankings for agents, observability, coding, model routing, research, writing, and video with clear next-step guidance.',
-    alternates: {
-      canonical: generateLocalizedCanonicalUrl('/best-ai-tools', locale, BASE_URL),
-    },
-  };
+    baseUrl: BASE_URL,
+  });
 }
 
 export default function BestAiToolsPage({ params: { locale } }: { params: { locale: string } }) {
@@ -47,6 +48,14 @@ export default function BestAiToolsPage({ params: { locale } }: { params: { loca
 
   return (
     <div className='theme-page mx-auto max-w-pc px-4 py-8 lg:px-0'>
+      <SeoBreadcrumbs
+        locale={locale}
+        items={[
+          { name: isChinese ? '首页' : 'Home', path: '/' },
+          { name: isChinese ? 'AI 工具榜单' : 'Best AI Tools', path: '/best-ai-tools' },
+        ]}
+        className='mb-5'
+      />
       <section className='overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm'>
         <div className='grid gap-0 lg:grid-cols-[1.05fr_0.95fr]'>
           <div className='space-y-6 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950 p-6 text-white lg:p-10'>

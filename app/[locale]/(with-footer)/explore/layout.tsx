@@ -1,9 +1,8 @@
 import { Metadata } from 'next';
-import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
-import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
+import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import Faq from '@/components/Faq';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
@@ -12,56 +11,23 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     namespace: 'Metadata.explore',
   });
 
-  const siteUrl = BASE_URL;
   const title = t('title');
   const description = t('description');
-  const imageUrl = `${siteUrl}/images/aibesttool.png`;
-  const pageUrl = generateLocalizedCanonicalUrl('/explore', locale, siteUrl);
 
-  return {
-    metadataBase: new URL(siteUrl),
+  return buildLocalizedPageMetadata({
+    locale,
+    path: '/explore',
     title,
     description,
     keywords: t('keywords'),
-    alternates: {
-      canonical: pageUrl,
-    },
-    openGraph: {
-      type: 'website',
-      locale,
-      url: pageUrl,
-      siteName: 'AI Best Tool',
-      title,
-      description,
-      images: [
-        {
-          url: imageUrl,
-          width: 1200,
-          height: 630,
-          alt: 'Explore AI Tools - AI Best Tool Directory',
-        },
-      ],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      site: '@aibesttool',
-      creator: '@aibesttool',
-      title,
-      description,
-      images: [imageUrl],
-    },
-  };
+    image: '/images/aibesttool.png',
+    baseUrl: BASE_URL,
+  });
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const t = useTranslations('Explore');
-
   return (
     <div className='theme-page flex-y-center mx-auto w-full max-w-pc px-3'>
-      <div className='my-5 flex flex-col gap-1 text-balance text-center lg:my-10 lg:gap-3'>
-        <h1 className='text-2xl text-slate-900 lg:text-5xl'>{t('title')}</h1>
-        <h2 className='text-xs text-slate-500 lg:text-sm'>{t('subTitle')}</h2>
-      </div>
       {children}
       <Faq />
     </div>

@@ -2,7 +2,6 @@ import { Metadata } from 'next';
 import { notFound, permanentRedirect } from 'next/navigation';
 import { getWebNavigationDetail } from '@/network/webNavigation';
 import {
-  ArrowRight,
   ArrowUpRight,
   CalendarDays,
   CheckCircle,
@@ -26,18 +25,19 @@ import { PRIORITY_TOOL_EVIDENCE } from '@/lib/config/priorityToolEvidence';
 import { PRIORITY_TOOL_FALLBACK_PROFILES } from '@/lib/config/priorityToolFallbacks';
 import { getCanonicalToolSlug, getLocalizedToolPath, isLegacyToolSlug } from '@/lib/config/toolRouteAliases';
 import { BASE_URL } from '@/lib/env';
-import { SEO_CONFIG, SOCIAL_IMAGE_DIMENSIONS, ToolMetadata } from '@/lib/seo/constants';
-import { getToolIndexDecision } from '@/lib/seo/toolIndexing';
+import { SEO_CONFIG, ToolMetadata } from '@/lib/seo/constants';
 import {
+  buildLocalizedPageMetadata,
   generateLocalizedCanonicalUrl,
-  generateSocialImageUrl,
   generateToolDescription,
   generateToolTitle,
 } from '@/lib/seo/metadata';
-import { generateBreadcrumbSchema, generateSoftwareSchema } from '@/lib/seo/schema';
+import { generateSoftwareSchema } from '@/lib/seo/schema';
+import { getToolIndexDecision } from '@/lib/seo/toolIndexing';
 import { getCategoryById, getLocalizedField as getCategoryLocalizedField } from '@/lib/services/categories';
 import { getPublicToolChangeTimeline } from '@/lib/services/intelligence/publicChangeTimeline';
 import { getPublicToolEvidenceLedger } from '@/lib/services/intelligence/publicEvidence';
+import { getReviewedToolRelationships } from '@/lib/services/reviewedToolRelationships';
 import { getLocalizedField as getTagLocalizedField, getTagsBySlugs, humanizeTagSlug } from '@/lib/services/tags';
 import { buildToolDecisionCard, DecisionEvidenceRequirementKey } from '@/lib/services/toolDecisionCard';
 import { toolToDetailData } from '@/lib/services/toolPresenter';
@@ -55,6 +55,7 @@ import MarkdownProse from '@/components/MarkdownProse';
 import MediaGallery from '@/components/MediaGallery';
 import RatingStars from '@/components/RatingStars';
 import RecommendedTools from '@/components/RecommendedTools';
+import SeoBreadcrumbs from '@/components/seo/SeoBreadcrumbs';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import ShareButton from '@/components/ShareButton';
 import ToolFeedbackBar from '@/components/ToolFeedbackBar';
@@ -273,17 +274,13 @@ function getMarketValidation(input: unknown, locale: string, fallback = 'en') {
   const reviewedTime = reviewedAt ? new Date(reviewedAt).getTime() : Number.NaN;
   const score = typeof record.score === 'number' && Number.isFinite(record.score) ? record.score : null;
   const evidenceUrls = Array.isArray(record.evidenceUrls)
-    ? record.evidenceUrls.filter(
-        (value): value is string => typeof value === 'string' && /^https?:\/\//i.test(value),
-      )
+    ? record.evidenceUrls.filter((value): value is string => typeof value === 'string' && /^https?:\/\//i.test(value))
     : [];
   const strongSignals = Array.isArray(record.strongSignals)
     ? record.strongSignals.filter((value): value is string => typeof value === 'string' && value.trim().length > 0)
     : [];
   const supportingSignals = Array.isArray(record.supportingSignals)
-    ? record.supportingSignals.filter(
-        (value): value is string => typeof value === 'string' && value.trim().length > 0,
-      )
+    ? record.supportingSignals.filter((value): value is string => typeof value === 'string' && value.trim().length > 0)
     : [];
   const rationale = getLocalizedText(record.rationale, locale, fallback);
   const labels = {
@@ -894,6 +891,8 @@ function getCategoryGuideLink(categorySlug: string | undefined, locale: string) 
   }
 }
 
+// Legacy copy reference only. Public relationship links must never call this inferred mapping.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getNextComparisonLinks(categorySlug: string | undefined, tagSlugs: string[], locale: string) {
   const isChinese = locale === 'cn';
   const tagSet = new Set(tagSlugs);
@@ -1529,7 +1528,11 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
               value:
                 'The individual free tier includes unlimited recordings, storage, and transcription in 38 languages, with five advanced summaries per month.',
             },
-            { label: 'Devices and capture', value: 'Mac and Windows support the established workflow; the newer bot-free experience is currently Mac-only.' },
+            {
+              label: 'Devices and capture',
+              value:
+                'Mac and Windows support the established workflow; the newer bot-free experience is currently Mac-only.',
+            },
             {
               label: 'Privacy boundary',
               value:
@@ -1549,34 +1552,68 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
       ? {
           label: '官方事实快照',
           title: '生成范围、付费边界和导出兼容性',
-          summary: '以下信息来自 Gamma 当前官网与帮助中心；套餐功能、credits 和模型范围会变化，购买前应再次核对账号内可见配置。',
+          summary:
+            '以下信息来自 Gamma 当前官网与帮助中心；套餐功能、credits 和模型范围会变化，购买前应再次核对账号内可见配置。',
           checkedAt: '2026-09-01',
           facts: [
             { label: '创作范围', value: 'Gamma 可从提示词、提纲或已有文件生成演示文稿、文档、网站、社交内容和图形。' },
             { label: '计费边界', value: '订阅按用户计费；AI 操作消耗 credits，消耗量会随模型、长度和任务复杂度变化。' },
-            { label: '导出边界', value: '支持 PDF、PNG 和 PPTX；导出以 Present Mode 为准，可能与编辑器不同，且不支持 Word 导出。' },
+            {
+              label: '导出边界',
+              value: '支持 PDF、PNG 和 PPTX；导出以 Present Mode 为准，可能与编辑器不同，且不支持 Word 导出。',
+            },
           ],
           sources: [
-            { label: '官方套餐说明', href: 'https://help.gamma.app/en/articles/8077107-how-can-i-upgrade-my-gamma-subscription' },
-            { label: '官方导入说明', href: 'https://help.gamma.app/en/articles/11047840-how-can-i-import-slides-or-documents-into-gamma' },
-            { label: '官方导出说明', href: 'https://help.gamma.app/en/articles/8022861-what-s-the-easiest-way-to-export-my-gamma' },
+            {
+              label: '官方套餐说明',
+              href: 'https://help.gamma.app/en/articles/8077107-how-can-i-upgrade-my-gamma-subscription',
+            },
+            {
+              label: '官方导入说明',
+              href: 'https://help.gamma.app/en/articles/11047840-how-can-i-import-slides-or-documents-into-gamma',
+            },
+            {
+              label: '官方导出说明',
+              href: 'https://help.gamma.app/en/articles/8022861-what-s-the-easiest-way-to-export-my-gamma',
+            },
           ],
         }
       : {
           label: 'Official fact snapshot',
           title: 'Creation scope, paid boundaries, and export compatibility',
           summary:
-            'These facts come from Gamma\'s current website and help center. Recheck account-level plan features, credits, and model access before purchasing because they can change.',
+            "These facts come from Gamma's current website and help center. Recheck account-level plan features, credits, and model access before purchasing because they can change.",
           checkedAt: '2026-09-01',
           facts: [
-            { label: 'Creation scope', value: 'Gamma turns prompts, outlines, or existing files into presentations, documents, websites, social content, and graphics.' },
-            { label: 'Billing boundary', value: 'Subscriptions are per user; AI actions consume credits based on the model, content length, and task complexity.' },
-            { label: 'Export boundary', value: 'PDF, PNG, and PPTX are supported; exports follow Present Mode and may differ from the editor, while Word export is unavailable.' },
+            {
+              label: 'Creation scope',
+              value:
+                'Gamma turns prompts, outlines, or existing files into presentations, documents, websites, social content, and graphics.',
+            },
+            {
+              label: 'Billing boundary',
+              value:
+                'Subscriptions are per user; AI actions consume credits based on the model, content length, and task complexity.',
+            },
+            {
+              label: 'Export boundary',
+              value:
+                'PDF, PNG, and PPTX are supported; exports follow Present Mode and may differ from the editor, while Word export is unavailable.',
+            },
           ],
           sources: [
-            { label: 'Official plan guide', href: 'https://help.gamma.app/en/articles/8077107-how-can-i-upgrade-my-gamma-subscription' },
-            { label: 'Official import guide', href: 'https://help.gamma.app/en/articles/11047840-how-can-i-import-slides-or-documents-into-gamma' },
-            { label: 'Official export guide', href: 'https://help.gamma.app/en/articles/8022861-what-s-the-easiest-way-to-export-my-gamma' },
+            {
+              label: 'Official plan guide',
+              href: 'https://help.gamma.app/en/articles/8077107-how-can-i-upgrade-my-gamma-subscription',
+            },
+            {
+              label: 'Official import guide',
+              href: 'https://help.gamma.app/en/articles/11047840-how-can-i-import-slides-or-documents-into-gamma',
+            },
+            {
+              label: 'Official export guide',
+              href: 'https://help.gamma.app/en/articles/8022861-what-s-the-easiest-way-to-export-my-gamma',
+            },
           ],
         };
   }
@@ -1586,15 +1623,29 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
       ? {
           label: '官方事实快照',
           title: '论文覆盖、检索深度和研究边界',
-          summary: '以下信息来自 Consensus 官方帮助中心；检索模式、论文数量和套餐额度会变化，严谨研究仍应复核原论文和正式数据库。',
+          summary:
+            '以下信息来自 Consensus 官方帮助中心；检索模式、论文数量和套餐额度会变化，严谨研究仍应复核原论文和正式数据库。',
           checkedAt: '2026-09-01',
           facts: [
-            { label: '语料范围', value: '官方帮助中心记录的数据库覆盖超过 2.2 亿篇同行评审论文；能否查看或下载全文仍取决于开放获取或个人/机构订阅。' },
-            { label: '套餐边界', value: 'Free 提供不限量 Papers 搜索，但 Pro、Deep Review、Study Snapshot 及 API/MCP 调用有不同月度额度。' },
-            { label: '研究边界', value: 'AI 综合适合范围探索和线索发现，但不能替代可复现检索、纳入排除标准、偏倚评估和对原始论文的阅读。' },
+            {
+              label: '语料范围',
+              value:
+                '官方帮助中心记录的数据库覆盖超过 2.2 亿篇同行评审论文；能否查看或下载全文仍取决于开放获取或个人/机构订阅。',
+            },
+            {
+              label: '套餐边界',
+              value: 'Free 提供不限量 Papers 搜索，但 Pro、Deep Review、Study Snapshot 及 API/MCP 调用有不同月度额度。',
+            },
+            {
+              label: '研究边界',
+              value: 'AI 综合适合范围探索和线索发现，但不能替代可复现检索、纳入排除标准、偏倚评估和对原始论文的阅读。',
+            },
           ],
           sources: [
-            { label: '官方研究数据库', href: 'https://help.consensus.app/en/articles/10055108-consensus-research-database' },
+            {
+              label: '官方研究数据库',
+              href: 'https://help.consensus.app/en/articles/10055108-consensus-research-database',
+            },
             { label: '官方套餐说明', href: 'https://help.consensus.app/en/articles/10087865-subscription-plans' },
             { label: '独立同行评审', href: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC12318603/' },
           ],
@@ -1606,13 +1657,31 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
             'These facts come from the Consensus help center. Search modes, corpus size, and plan allowances can change; rigorous work must still verify source papers and formal databases.',
           checkedAt: '2026-09-01',
           facts: [
-            { label: 'Corpus scope', value: 'Official documentation lists more than 220 million peer-reviewed papers; viewing or downloading full text still depends on open access or personal and institutional subscriptions.' },
-            { label: 'Plan boundary', value: 'Free includes unlimited Papers searches, while Pro messages, Deep Reviews, Study Snapshots, and API or MCP calls have plan-specific allowances.' },
-            { label: 'Research boundary', value: 'AI synthesis supports scoping and discovery but does not replace reproducible retrieval, screening criteria, bias assessment, or reading the source papers.' },
+            {
+              label: 'Corpus scope',
+              value:
+                'Official documentation lists more than 220 million peer-reviewed papers; viewing or downloading full text still depends on open access or personal and institutional subscriptions.',
+            },
+            {
+              label: 'Plan boundary',
+              value:
+                'Free includes unlimited Papers searches, while Pro messages, Deep Reviews, Study Snapshots, and API or MCP calls have plan-specific allowances.',
+            },
+            {
+              label: 'Research boundary',
+              value:
+                'AI synthesis supports scoping and discovery but does not replace reproducible retrieval, screening criteria, bias assessment, or reading the source papers.',
+            },
           ],
           sources: [
-            { label: 'Official research database', href: 'https://help.consensus.app/en/articles/10055108-consensus-research-database' },
-            { label: 'Official plan guide', href: 'https://help.consensus.app/en/articles/10087865-subscription-plans' },
+            {
+              label: 'Official research database',
+              href: 'https://help.consensus.app/en/articles/10055108-consensus-research-database',
+            },
+            {
+              label: 'Official plan guide',
+              href: 'https://help.consensus.app/en/articles/10087865-subscription-plans',
+            },
             { label: 'Independent peer-reviewed review', href: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC12318603/' },
           ],
         };
@@ -1623,16 +1692,35 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
       ? {
           label: '官方事实快照',
           title: 'Translator、Write、API 与文档边界',
-          summary: '以下信息来自 DeepL 当前产品与帮助文档；产品组合、额度和文件限制会变化，购买前应按真实工作流再次核对。',
+          summary:
+            '以下信息来自 DeepL 当前产品与帮助文档；产品组合、额度和文件限制会变化，购买前应按真实工作流再次核对。',
           checkedAt: '2026-09-01',
           facts: [
-            { label: '产品边界', value: 'Translator、Write 和 API 是不同产品路径；Translator 订阅不自动包含 API，API 套餐也不提供网页翻译器和桌面应用的 Pro 权益。' },
-            { label: 'Write 边界', value: '未付费账号每次最多处理 1,500 字符；Translator Pro 用户可处理 2,000 字符，但完整 Write Pro 与最高数据安全需要 Write 套餐或组合套餐。' },
-            { label: '文件边界', value: 'Word、PowerPoint、Excel、PDF、XLIFF 等格式的可用性、单文件大小和字符上限会随 Translator 与 API 套餐变化。' },
+            {
+              label: '产品边界',
+              value:
+                'Translator、Write 和 API 是不同产品路径；Translator 订阅不自动包含 API，API 套餐也不提供网页翻译器和桌面应用的 Pro 权益。',
+            },
+            {
+              label: 'Write 边界',
+              value:
+                '未付费账号每次最多处理 1,500 字符；Translator Pro 用户可处理 2,000 字符，但完整 Write Pro 与最高数据安全需要 Write 套餐或组合套餐。',
+            },
+            {
+              label: '文件边界',
+              value:
+                'Word、PowerPoint、Excel、PDF、XLIFF 等格式的可用性、单文件大小和字符上限会随 Translator 与 API 套餐变化。',
+            },
           ],
           sources: [
-            { label: 'DeepL Write 说明', href: 'https://support.deepl.com/hc/en-us/articles/6318834492700-About-DeepL-Write' },
-            { label: 'DeepL API 套餐', href: 'https://support.deepl.com/hc/en-us/articles/360021200939-DeepL-API-plans' },
+            {
+              label: 'DeepL Write 说明',
+              href: 'https://support.deepl.com/hc/en-us/articles/6318834492700-About-DeepL-Write',
+            },
+            {
+              label: 'DeepL API 套餐',
+              href: 'https://support.deepl.com/hc/en-us/articles/360021200939-DeepL-API-plans',
+            },
             { label: '文件格式与额度', href: 'https://support.deepl.com/hc/en-us/articles/360020582359-File-formats' },
           ],
         }
@@ -1643,14 +1731,35 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
             'These facts come from current DeepL product and help documentation. Product packaging, allowances, and file limits can change, so recheck them against the actual workflow before buying.',
           checkedAt: '2026-09-01',
           facts: [
-            { label: 'Product boundary', value: 'Translator, Write, and API are separate paths. A Translator subscription does not automatically include API access, and API plans do not provide Pro benefits in the web translator or desktop apps.' },
-            { label: 'Write boundary', value: 'Users without a paid account can process 1,500 characters at a time. Translator Pro users get 2,000, while full Write Pro and maximum data security require a Write plan or bundle.' },
-            { label: 'Document boundary', value: 'Availability, per-file size, and character limits for Word, PowerPoint, Excel, PDF, XLIFF, and other formats vary across Translator and API plans.' },
+            {
+              label: 'Product boundary',
+              value:
+                'Translator, Write, and API are separate paths. A Translator subscription does not automatically include API access, and API plans do not provide Pro benefits in the web translator or desktop apps.',
+            },
+            {
+              label: 'Write boundary',
+              value:
+                'Users without a paid account can process 1,500 characters at a time. Translator Pro users get 2,000, while full Write Pro and maximum data security require a Write plan or bundle.',
+            },
+            {
+              label: 'Document boundary',
+              value:
+                'Availability, per-file size, and character limits for Word, PowerPoint, Excel, PDF, XLIFF, and other formats vary across Translator and API plans.',
+            },
           ],
           sources: [
-            { label: 'DeepL Write guide', href: 'https://support.deepl.com/hc/en-us/articles/6318834492700-About-DeepL-Write' },
-            { label: 'DeepL API plans', href: 'https://support.deepl.com/hc/en-us/articles/360021200939-DeepL-API-plans' },
-            { label: 'File formats and limits', href: 'https://support.deepl.com/hc/en-us/articles/360020582359-File-formats' },
+            {
+              label: 'DeepL Write guide',
+              href: 'https://support.deepl.com/hc/en-us/articles/6318834492700-About-DeepL-Write',
+            },
+            {
+              label: 'DeepL API plans',
+              href: 'https://support.deepl.com/hc/en-us/articles/360021200939-DeepL-API-plans',
+            },
+            {
+              label: 'File formats and limits',
+              href: 'https://support.deepl.com/hc/en-us/articles/360020582359-File-formats',
+            },
           ],
         };
   }
@@ -1665,11 +1774,13 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           facts: [
             {
               label: '查询价格',
-              value: '每月前 100,000 次查询免费，之后目前为每 100,000 次 $2；生产 API key 可配置域名限制和月度支出上限。',
+              value:
+                '每月前 100,000 次查询免费，之后目前为每 100,000 次 $2；生产 API key 可配置域名限制和月度支出上限。',
             },
             {
               label: '索引边界',
-              value: '查询与索引是独立活动；提高查询支出不会让索引不足的 Subgraph 自动同步，需要 Indexer 支持或自行运行 Graph Node。',
+              value:
+                '查询与索引是独立活动；提高查询支出不会让索引不足的 Subgraph 自动同步，需要 Indexer 支持或自行运行 Graph Node。',
             },
             {
               label: '生产检查',
@@ -1680,7 +1791,10 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           sources: [
             { label: 'Studio 查询价格', href: 'https://thegraph.com/studio-pricing/' },
             { label: '查询接入说明', href: 'https://thegraph.com/docs/en/subgraphs/querying/introduction/' },
-            { label: '查询与索引成本', href: 'https://thegraph.com/docs/en/gateways/subgraphs/consumer-side/pricing-payments/' },
+            {
+              label: '查询与索引成本',
+              href: 'https://thegraph.com/docs/en/gateways/subgraphs/consumer-side/pricing-payments/',
+            },
             { label: '支持的网络', href: 'https://thegraph.com/docs/en/supported-networks/' },
           ],
         }
@@ -1710,7 +1824,10 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           sources: [
             { label: 'Studio query pricing', href: 'https://thegraph.com/studio-pricing/' },
             { label: 'Query introduction', href: 'https://thegraph.com/docs/en/subgraphs/querying/introduction/' },
-            { label: 'Query and indexing economics', href: 'https://thegraph.com/docs/en/gateways/subgraphs/consumer-side/pricing-payments/' },
+            {
+              label: 'Query and indexing economics',
+              href: 'https://thegraph.com/docs/en/gateways/subgraphs/consumer-side/pricing-payments/',
+            },
             { label: 'Supported networks', href: 'https://thegraph.com/docs/en/supported-networks/' },
           ],
         };
@@ -1857,12 +1974,14 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
       ? {
           label: '官方事实快照',
           title: '生成 Credits、工作区成本和编辑边界',
-          summary: '以下信息来自 Runway 当前定价与帮助中心；模型费率和套餐变化较快，正式制作前应在 Plans & Billing 再次复核。',
+          summary:
+            '以下信息来自 Runway 当前定价与帮助中心；模型费率和套餐变化较快，正式制作前应在 Plans & Billing 再次复核。',
           checkedAt: '2026-09-01',
           facts: [
             {
               label: '当前套餐',
-              value: 'Free 一次性提供 125 credits；Standard 每月 625，Pro 每月 2,250，Max 每月 9,500。Unlimited 已停止新售，仅部分老用户延续至 2026-11-30。',
+              value:
+                'Free 一次性提供 125 credits；Standard 每月 625，Pro 每月 2,250，Max 每月 9,500。Unlimited 已停止新售，仅部分老用户延续至 2026-11-30。',
             },
             {
               label: '成本与协作',
@@ -1871,7 +1990,8 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
             },
             {
               label: '交付边界',
-              value: '各套餐允许商业使用且无需强制署名；Web App 与 API credits 不互通。官方已说明内置视频编辑器不再积极维护，大型项目应使用本地后期工具。',
+              value:
+                '各套餐允许商业使用且无需强制署名；Web App 与 API credits 不互通。官方已说明内置视频编辑器不再积极维护，大型项目应使用本地后期工具。',
             },
           ],
           sources: [
@@ -1928,12 +2048,25 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
       ? {
           label: '官方事实快照',
           title: 'Dream Machine 套餐、Credits 与商业授权',
-          summary: '以下信息来自 Luma Dream Machine 当前帮助文档；模型和 credits 费率变化较快，商业项目生成前应再次复核。',
+          summary:
+            '以下信息来自 Luma Dream Machine 当前帮助文档；模型和 credits 费率变化较快，商业项目生成前应再次复核。',
           checkedAt: '2026-09-01',
           facts: [
-            { label: '产品范围', value: '本页评估 Dream Machine 的视频、图片和 Modify 工作流，不把 Luma 的 Capture、Genie、Agents 或研究平台混成同一个产品。' },
-            { label: '套餐与额度', value: 'Web 端 Lite 为 $9.99/月、3,200 credits；Plus 为 $29.99/月、10,000 credits；Unlimited 为 $94.99/月，含 10,000 fast credits 和 relaxed generation。月度 credits 不结转。' },
-            { label: '商业与 API 边界', value: 'Free 与 Lite 输出带水印且仅限个人非商业用途；Plus、Unlimited 与 Enterprise 才提供商业权利。Dream Machine 网页订阅和 API credits 不互通。' },
+            {
+              label: '产品范围',
+              value:
+                '本页评估 Dream Machine 的视频、图片和 Modify 工作流，不把 Luma 的 Capture、Genie、Agents 或研究平台混成同一个产品。',
+            },
+            {
+              label: '套餐与额度',
+              value:
+                'Web 端 Lite 为 $9.99/月、3,200 credits；Plus 为 $29.99/月、10,000 credits；Unlimited 为 $94.99/月，含 10,000 fast credits 和 relaxed generation。月度 credits 不结转。',
+            },
+            {
+              label: '商业与 API 边界',
+              value:
+                'Free 与 Lite 输出带水印且仅限个人非商业用途；Plus、Unlimited 与 Enterprise 才提供商业权利。Dream Machine 网页订阅和 API credits 不互通。',
+            },
           ],
           sources: [
             { label: '套餐与订阅', href: 'https://lumalabs.ai/learning-hub/payments-subscriptions' },
@@ -1948,9 +2081,21 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
             'These facts come from current Luma Dream Machine documentation. Model and credit rates change quickly, so recheck them before generating assets for commercial work.',
           checkedAt: '2026-09-01',
           facts: [
-            { label: 'Product scope', value: 'This page evaluates Dream Machine video, image, and Modify workflows rather than combining Luma Capture, Genie, Agents, and research into one product.' },
-            { label: 'Plans and allowance', value: 'Web Lite is $9.99 monthly with 3,200 credits, Plus $29.99 with 10,000, and Unlimited $94.99 with 10,000 fast credits plus relaxed generation. Monthly credits do not roll over.' },
-            { label: 'Commercial and API boundary', value: 'Free and Lite outputs remain watermarked and personal-use only. Plus, Unlimited, and Enterprise provide commercial rights. Web subscriptions and API credits do not transfer.' },
+            {
+              label: 'Product scope',
+              value:
+                'This page evaluates Dream Machine video, image, and Modify workflows rather than combining Luma Capture, Genie, Agents, and research into one product.',
+            },
+            {
+              label: 'Plans and allowance',
+              value:
+                'Web Lite is $9.99 monthly with 3,200 credits, Plus $29.99 with 10,000, and Unlimited $94.99 with 10,000 fast credits plus relaxed generation. Monthly credits do not roll over.',
+            },
+            {
+              label: 'Commercial and API boundary',
+              value:
+                'Free and Lite outputs remain watermarked and personal-use only. Plus, Unlimited, and Enterprise provide commercial rights. Web subscriptions and API credits do not transfer.',
+            },
           ],
           sources: [
             { label: 'Plans and subscriptions', href: 'https://lumalabs.ai/learning-hub/payments-subscriptions' },
@@ -2314,8 +2459,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
             },
             {
               label: '来源边界',
-              value:
-                '引用和来源标签帮助追溯，但官方明确说明域名标签不代表单篇内容准确；重要判断仍应打开原文核对。',
+              value: '引用和来源标签帮助追溯，但官方明确说明域名标签不代表单篇内容准确；重要判断仍应打开原文核对。',
             },
           ],
           sources: [
@@ -2640,15 +2784,16 @@ function getPriorityToolFallbackDetail(websiteName: string, locale: string) {
   const profile = PRIORITY_TOOL_FALLBACK_PROFILES[websiteName.toLowerCase()];
   const evidence = getPriorityToolOfficialEvidence(websiteName, locale);
   const compactEvidence = PRIORITY_TOOL_EVIDENCE[websiteName.toLowerCase()];
+  // Function declarations are hoisted; this helper is kept below the large reviewed evidence map.
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
   const searchIntent = getPriorityToolSearchIntent(websiteName, locale);
 
   if (!profile || (!evidence && !compactEvidence)) return null;
 
-  const compactLimitation = compactEvidence
-    ? locale === 'cn'
-      ? compactEvidence.limitation.zh
-      : compactEvidence.limitation.en
-    : '';
+  let compactLimitation = '';
+  if (compactEvidence) {
+    compactLimitation = locale === 'cn' ? compactEvidence.limitation.zh : compactEvidence.limitation.en;
+  }
   const summary = searchIntent?.summary || evidence?.summary || compactLimitation;
   const details = evidence?.facts.map((fact) => `${fact.label}: ${fact.value}`) || [compactLimitation];
 
@@ -2738,7 +2883,8 @@ function getPriorityToolSearchIntent(websiteName: string, locale: string): Prior
           metadataDescription:
             '评估 Gamma 的 AI 演示文稿、文档和网站生成能力，了解 credits、按用户计费、品牌控制、导入与 PPTX/PDF 导出限制。',
           label: 'AI 演示工具判断重点',
-          summary: 'Gamma 的优势是快速形成可分享的视觉初稿；真正的选择标准是品牌控制、导出还原度和团队成本是否满足最终交付。',
+          summary:
+            'Gamma 的优势是快速形成可分享的视觉初稿；真正的选择标准是品牌控制、导出还原度和团队成本是否满足最终交付。',
           checkpoints: [
             '演示文稿、文档或网站是否匹配真实交付物',
             '导入内容、PPTX/PDF 导出和品牌样式是否可接受',
@@ -2796,7 +2942,8 @@ function getPriorityToolSearchIntent(websiteName: string, locale: string): Prior
           metadataDescription:
             '评估 DeepL Translator、Write 和 API 的适用场景，并核对订阅关系、文档格式、字符额度、数据安全与团队管理边界。',
           label: '语言 AI 选择判断重点',
-          summary: '选择 DeepL 的关键不是笼统比较翻译效果，而是先确定你需要网页翻译、写作改进还是产品 API，再核对文件、额度和数据要求。',
+          summary:
+            '选择 DeepL 的关键不是笼统比较翻译效果，而是先确定你需要网页翻译、写作改进还是产品 API，再核对文件、额度和数据要求。',
           checkpoints: [
             'Translator、Write 或 API 是否对应真实任务',
             '字符额度、文件格式和文档大小是否满足使用量',
@@ -2825,7 +2972,8 @@ function getPriorityToolSearchIntent(websiteName: string, locale: string): Prior
           metadataDescription:
             '评估 Runway 的 AI 视频生成与编辑工作流，核对 Gen-4.5、Standard/Pro/Max credits、团队席位、API 隔离、商业权利和后期交付限制。',
           label: 'AI 视频工作流判断重点',
-          summary: '选择 Runway 的关键不是能否生成一段漂亮视频，而是 credits 成本、镜头迭代、素材管理和外部后期能否组成可预测的生产流程。',
+          summary:
+            '选择 Runway 的关键不是能否生成一段漂亮视频，而是 credits 成本、镜头迭代、素材管理和外部后期能否组成可预测的生产流程。',
           checkpoints: [
             '生成、局部编辑还是完整后期，哪一段流程需要 Runway',
             '不同模型、时长和分辨率对应的 credits 是否可预测',
@@ -2854,7 +3002,8 @@ function getPriorityToolSearchIntent(websiteName: string, locale: string): Prior
           metadataDescription:
             '评估 Luma Dream Machine 的 Ray 视频、Photon 图片和 Modify 工作流，核对 Lite/Plus/Unlimited credits、水印、商业授权与 API 独立计费。',
           label: 'Dream Machine 判断重点',
-          summary: 'Dream Machine 更适合镜头探索和生成式修改；真正的选择标准是模型费率、可用镜头成本和当前套餐是否允许商业交付。',
+          summary:
+            'Dream Machine 更适合镜头探索和生成式修改；真正的选择标准是模型费率、可用镜头成本和当前套餐是否允许商业交付。',
           checkpoints: [
             '视频生成、图片生成或 Modify 是否对应真实任务',
             '模型、分辨率、时长和失败重试后的可用镜头成本',
@@ -3101,66 +3250,27 @@ export async function generateMetadata({
     const optimizedDescription =
       priorityIntent?.metadataDescription || generateToolDescription(toolTitle, toolDescription, toolCategory);
 
-    // Generate canonical URL
-    const canonicalUrl = generateLocalizedCanonicalUrl(`/ai/${canonicalSlug}`, locale);
-
     // Generate optimized social image URL
     const toolImage = data?.thumbnailUrl || data?.imageUrl || SEO_CONFIG.defaultImage;
-    const socialImageUrl = generateSocialImageUrl(toolImage);
     const indexable = dbTool ? getToolIndexDecision(dbTool).indexable : false;
 
-    return {
+    return buildLocalizedPageMetadata({
+      locale,
+      path: `/ai/${canonicalSlug}`,
       title: optimizedTitle,
       description: optimizedDescription,
-      alternates: {
-        canonical: canonicalUrl,
-      },
-      robots: indexable
-        ? undefined
-        : {
-            index: false,
-            follow: true,
-            googleBot: {
-              index: false,
-              follow: true,
-            },
-          },
-      openGraph: {
-        title: optimizedTitle,
-        description: optimizedDescription,
-        url: canonicalUrl,
-        siteName: SEO_CONFIG.siteName,
-        images: [
-          {
-            url: socialImageUrl,
-            width: SOCIAL_IMAGE_DIMENSIONS.OPEN_GRAPH.width,
-            height: SOCIAL_IMAGE_DIMENSIONS.OPEN_GRAPH.height,
-            alt: toolTitle,
-          },
-        ],
-        locale,
-        type: 'website',
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: optimizedTitle,
-        description: optimizedDescription,
-        images: [socialImageUrl],
-      },
-    };
+      image: toolImage,
+      indexable,
+    });
   } catch (error) {
     console.error('Tool detail metadata failed to render:', error);
-    return {
+    return buildLocalizedPageMetadata({
+      locale,
+      path: `/ai/${websiteName}`,
       title: websiteName,
       description: 'AI tool profile',
-      alternates: {
-        canonical: generateLocalizedCanonicalUrl(`/ai/${websiteName}`, locale),
-      },
-      robots: {
-        index: false,
-        follow: true,
-      },
-    };
+      indexable: false,
+    });
   }
 }
 
@@ -3231,6 +3341,7 @@ export default async function Page({
     };
     let publicEvidenceLedger: Awaited<ReturnType<typeof getPublicToolEvidenceLedger>> = null;
     let publicChangeTimeline: Awaited<ReturnType<typeof getPublicToolChangeTimeline>> = [];
+    let reviewedToolRelationships: Awaited<ReturnType<typeof getReviewedToolRelationships>> = [];
 
     // Get category and tags information
     let category = null;
@@ -3286,28 +3397,30 @@ export default async function Page({
           nextCommentCount,
           nextEvidenceLedger,
           nextChangeTimeline,
-        ] =
-          await Promise.all([
-            getUserRating(toolId).catch(() => null),
-            isFavorited(toolId).catch(() => false),
-            getToolStats(toolId).catch(() => ({
-              viewCount: 0,
-              clickCount: 0,
-              shareCount: 0,
-              favoriteCount: 0,
-              averageRating: 0,
-              ratingCount: 0,
-            })),
-            getCommentCount(toolId).catch(() => 0),
-            getPublicToolEvidenceLedger(toolId).catch(() => null),
-            getPublicToolChangeTimeline(toolId).catch(() => []),
-          ]);
+          nextReviewedToolRelationships,
+        ] = await Promise.all([
+          getUserRating(toolId).catch(() => null),
+          isFavorited(toolId).catch(() => false),
+          getToolStats(toolId).catch(() => ({
+            viewCount: 0,
+            clickCount: 0,
+            shareCount: 0,
+            favoriteCount: 0,
+            averageRating: 0,
+            ratingCount: 0,
+          })),
+          getCommentCount(toolId).catch(() => 0),
+          getPublicToolEvidenceLedger(toolId).catch(() => null),
+          getPublicToolChangeTimeline(toolId).catch(() => []),
+          getReviewedToolRelationships(canonicalSlug, locale).catch(() => []),
+        ]);
         userRating = nextUserRating;
         isFavoritedByUser = nextIsFavoritedByUser;
         toolStats = nextToolStats;
         commentCount = Number(nextCommentCount || 0);
         publicEvidenceLedger = nextEvidenceLedger;
         publicChangeTimeline = nextChangeTimeline;
+        reviewedToolRelationships = nextReviewedToolRelationships;
         ratingStats = {
           averageRating: toolStats.averageRating,
           ratingCount: toolStats.ratingCount,
@@ -3357,12 +3470,6 @@ export default async function Page({
       softwareSchema = generateSoftwareSchema(toolMetadata);
     }
 
-    // Generate BreadcrumbList schema for navigation hierarchy
-    const breadcrumbSchema = generateBreadcrumbSchema([
-      { name: 'Home', url: generateLocalizedCanonicalUrl('/', locale, BASE_URL) },
-      { name: 'AI Tools', url: generateLocalizedCanonicalUrl('/explore', locale, BASE_URL) },
-      { name: data.title, url: toolUrl },
-    ]);
     const categoryName = category ? getCategoryLocalizedField(category.name, locale) : data.categoryName || 'AI Tool';
     const detailMarkdown =
       dbTool && getLocalizedField(dbTool.detail, locale)
@@ -3412,6 +3519,16 @@ export default async function Page({
           day: 'numeric',
         }).format(new Date(marketValidation.reviewedAt))
       : null;
+    let marketValidationTone = 'text-slate-700 bg-slate-100';
+    if (marketValidation?.verdict === 'validated') {
+      marketValidationTone = 'text-emerald-700 bg-emerald-50';
+    } else if (marketValidation?.verdict === 'emerging') {
+      marketValidationTone = 'text-amber-700 bg-amber-50';
+    }
+    let marketReviewStatusLabel = isChinese ? '复核日期待补' : 'Review date pending';
+    if (marketReviewedLabel) {
+      marketReviewStatusLabel = `${isChinese ? '复核于' : 'Reviewed'} ${marketReviewedLabel}`;
+    }
     const quickFacts = [
       {
         label: isChinese ? '分类' : 'Category',
@@ -3449,12 +3566,7 @@ export default async function Page({
               label: isChinese ? '市场验证' : 'Validation',
               value: marketValidation.label,
               icon: ShieldCheck,
-              tone:
-                marketValidation.verdict === 'validated'
-                  ? 'text-emerald-700 bg-emerald-50'
-                  : marketValidation.verdict === 'emerging'
-                    ? 'text-amber-700 bg-amber-50'
-                    : 'text-slate-700 bg-slate-100',
+              tone: marketValidationTone,
             },
           ]
         : []),
@@ -3588,7 +3700,11 @@ export default async function Page({
     });
     const comparisonSummary = getComparisonSummary(categorySlug, locale);
     const compareAxes = decisionCompareAxesOverride.length > 0 ? decisionCompareAxesOverride : [comparisonSummary];
-    const nextComparisonLinks = getNextComparisonLinks(categorySlug, dbTool?.tags || [], locale);
+    const nextComparisonLinks = reviewedToolRelationships.map((relationship) => ({
+      description: relationship.rationale,
+      href: `${getLocalizedToolPath(relationship.tool.name, locale)}#decision-card`,
+      title: getLocalizedField(relationship.tool.title, locale),
+    }));
     const checkedAt = editorialReview?.reviewedAt || null;
     let checkedAtLabel = isChinese ? '待补复核时间' : 'Review time pending';
     if (checkedAt) {
@@ -3884,6 +4000,12 @@ export default async function Page({
     const decisionEvidenceMissingLabels = decisionCard.evidenceCompleteness.missing.map((key) =>
       getEvidenceRequirementLabel(key, locale),
     );
+    let decisionEvidenceStatusLabel = `${decisionEvidenceMissingLabels.length} gaps`;
+    if (decisionCard.evidenceCompleteness.complete) {
+      decisionEvidenceStatusLabel = locale === 'cn' ? '证据已齐' : 'Evidence complete';
+    } else if (locale === 'cn') {
+      decisionEvidenceStatusLabel = `待补 ${decisionEvidenceMissingLabels.length} 项`;
+    }
     const lastCheckedScheduleLabel = formatReviewScheduleDate(decisionCard.reviewSchedule.lastCheckedAt, false, locale);
     const nextFactReviewLabel = formatReviewScheduleDate(
       decisionCard.reviewSchedule.nextFactReviewAt,
@@ -3993,10 +4115,19 @@ export default async function Page({
         <PageViewTracker toolId={toolId} />
         {/* Structured Data for SEO */}
         {softwareSchema && <StructuredDataServer data={softwareSchema} />}
-        <StructuredDataServer data={breadcrumbSchema} />
 
         <div className='w-full bg-slate-50'>
           <div className='mx-auto max-w-7xl px-4 py-8 lg:px-6 lg:py-12'>
+            <SeoBreadcrumbs
+              locale={locale}
+              items={[
+                { name: isChinese ? '首页' : 'Home', path: '/' },
+                { name: isChinese ? '探索工具' : 'Explore', path: '/explore' },
+                ...(category?.slug ? [{ name: categoryName, path: `/categories/${category.slug}` }] : []),
+                { name: data.title, path: `/ai/${websiteName}` },
+              ]}
+              className='mb-5'
+            />
             <div className='grid gap-8 lg:grid-cols-[minmax(0,1fr)_460px] lg:items-start'>
               <section className='space-y-6'>
                 <div className='flex flex-wrap items-center gap-2'>
@@ -4476,7 +4607,9 @@ export default async function Page({
                           {isChinese ? '市场成熟度判断' : 'Market maturity review'}
                         </p>
                         <div className='mt-2 flex flex-wrap items-center gap-2'>
-                          <span className={`rounded-full px-3 py-1 text-xs font-semibold ring-1 ${marketValidation.tone}`}>
+                          <span
+                            className={`rounded-full px-3 py-1 text-xs font-semibold ring-1 ${marketValidation.tone}`}
+                          >
                             {marketValidation.label}
                           </span>
                           {marketValidation.score !== null ? (
@@ -4487,7 +4620,7 @@ export default async function Page({
                         </div>
                       </div>
                       <div className='text-right text-xs text-slate-500'>
-                        <p>{marketReviewedLabel ? `${isChinese ? '复核于' : 'Reviewed'} ${marketReviewedLabel}` : isChinese ? '复核日期待补' : 'Review date pending'}</p>
+                        <p>{marketReviewStatusLabel}</p>
                         <p className='mt-1'>
                           {isChinese
                             ? `${marketValidation.strongSignalCount} 个强信号 · ${marketValidation.signalCount} 个总信号`
@@ -4571,13 +4704,7 @@ export default async function Page({
                             : 'bg-amber-400/15 text-amber-200'
                         }`}
                       >
-                        {decisionCard.evidenceCompleteness.complete
-                          ? locale === 'cn'
-                            ? '证据已齐'
-                            : 'Evidence complete'
-                          : locale === 'cn'
-                            ? `待补 ${decisionEvidenceMissingLabels.length} 项`
-                            : `${decisionEvidenceMissingLabels.length} gaps`}
+                        {decisionEvidenceStatusLabel}
                       </span>
                     </div>
                     <div className='mt-4 grid gap-3 sm:grid-cols-3'>
@@ -4793,23 +4920,23 @@ export default async function Page({
                     <p className='mt-2 text-lg font-semibold text-slate-950'>
                       {locale === 'cn'
                         ? '如果这款不合适，直接看更窄的比较页'
-                        : 'If this is not the right fit, jump to narrower comparison pages'}
+                        : 'If this is not the right fit, open a reviewed related tool'}
                     </p>
                     <p className='mt-2 text-sm leading-6 text-slate-600'>
                       {locale === 'cn'
-                        ? '这组入口适合用来替换当前 shortlist，而不是继续围着同一个工具打转。'
-                        : 'Use these pages to replace the current shortlist instead of circling the same tool.'}
+                        ? '这些人工复核关系可帮助你替换或补充当前 shortlist，而不是继续围着同一个工具打转。'
+                        : 'Use these reviewed relationships to replace or complement the shortlist instead of circling the same tool.'}
                     </p>
                     <div className='mt-4 grid gap-3 lg:grid-cols-3'>
                       {decisionCard.comparison.alternatives.map((item) => (
-                        <Link
+                        <a
                           key={item.href}
                           href={item.href}
                           className='rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:-translate-y-0.5 hover:bg-slate-100'
                         >
                           <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
                           <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
-                        </Link>
+                        </a>
                       ))}
                     </div>
                   </div>
@@ -4966,15 +5093,13 @@ export default async function Page({
               {toolId && (
                 <>
                   <RecommendedTools
-                    toolId={toolId}
                     locale={locale}
                     categoryName={categoryName}
                     categorySlug={categorySlug}
                     compareAxes={compareAxes}
-                    pricing={dbTool?.pricing}
                     pricingLabel={pricingLabel}
-                    tagSlugs={tagSlugsForDisplay}
                     tagLabels={tagLabels}
+                    relationships={reviewedToolRelationships}
                   />
                   <div className='my-14 flex items-center gap-3 lg:my-16'>
                     <span className='h-px flex-1 bg-slate-200' />

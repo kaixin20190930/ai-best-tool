@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { getNoindexMetadata } from '@/lib/seo/indexing';
+import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
@@ -20,7 +21,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     ...metadata,
     ...getNoindexMetadata(),
     alternates: {
-      canonical: `/${locale}/guides/ai-tools-for-designers`,
+      canonical: generateLocalizedCanonicalUrl('/guides/ai-tools-for-designers', locale),
     },
   };
 }

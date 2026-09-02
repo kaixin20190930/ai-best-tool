@@ -23,7 +23,7 @@ import { FEATURED_GUIDE_HREFS, GUIDE_PAGES } from '@/lib/content/guides';
 import { topListTopics } from '@/lib/data/topLists';
 import { BASE_URL } from '@/lib/env';
 import { SEO_CONFIG } from '@/lib/seo/constants';
-import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
+import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { generateOrganizationSchema, generateWebSiteSchema } from '@/lib/seo/schema';
 import { getLocalizedField as getCategoryLocalizedField, getPopularCategories } from '@/lib/services/categories';
 import { getCommunityHighlights, getRecentDiscussions, getRisingTools } from '@/lib/services/community';
@@ -45,7 +45,6 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     namespace: 'Metadata.home',
   });
 
-  const siteUrl = BASE_URL;
   const isChinese = locale === 'cn' || locale === 'tw';
   const title = isChinese
     ? 'AI 工具目录：按场景比较精选 AI 工具 | AI Best Tool'
@@ -53,42 +52,15 @@ export async function generateMetadata({ params: { locale } }: { params: { local
   const description = isChinese
     ? '按写作、研究、开发、自动化和 Web3 等真实场景浏览 AI 工具，通过来源、价格、限制、核查日期与变化记录判断哪款更适合。'
     : 'Browse an AI tools directory by real use case, then compare sources, pricing, limits, review dates, and material changes before choosing.';
-  const imageUrl = `${siteUrl}/images/aibesttool.png`;
-  const canonicalUrl = generateLocalizedCanonicalUrl('/', locale, siteUrl);
-
-  return {
-    metadataBase: new URL(siteUrl),
+  return buildLocalizedPageMetadata({
+    locale,
+    path: '/',
     title,
     description,
     keywords: t('keywords'),
-    alternates: {
-      canonical: canonicalUrl,
-    },
-    openGraph: {
-      type: 'website',
-      locale,
-      url: canonicalUrl,
-      siteName: 'AI Best Tool',
-      title,
-      description,
-      images: [
-        {
-          url: imageUrl,
-          width: 1200,
-          height: 630,
-          alt: 'AI Best Tool - Discover the Best AI Tools',
-        },
-      ],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      site: '@aibesttool',
-      creator: '@aibesttool',
-      title,
-      description,
-      images: [imageUrl],
-    },
-  };
+    image: '/images/aibesttool.png',
+    baseUrl: BASE_URL,
+  });
 }
 
 export const revalidate = 3600;

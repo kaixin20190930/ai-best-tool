@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 
+import { getNoindexMetadata } from '@/lib/seo/indexing';
+import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
-import { getNoindexMetadata } from '@/lib/seo/indexing';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
 
@@ -20,7 +21,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     ...getNoindexMetadata(),
     alternates: {
       ...metadata.alternates,
-      canonical: `/${locale}/guides/ai-tools-for-lead-generation`,
+      canonical: generateLocalizedCanonicalUrl('/guides/ai-tools-for-lead-generation', locale),
     },
   };
 }

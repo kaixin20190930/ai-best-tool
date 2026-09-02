@@ -5,6 +5,12 @@
 上位计划：[收录与搜索质量主计划](./MASTER_OPTIMIZATION_TRACKER_CN.md)  
 关联计划：[四周证据驱动目录优化计划](./FOUR_WEEK_EVIDENCE_LED_DIRECTORY_PLAN_CN.md)
 
+字段级三阶段实施规格：[AI 工具决策平台三阶段实施方案](./DECISION_PLATFORM_THREE_PHASE_IMPLEMENTATION_CN.md)
+
+自动验收规格：[决策平台自动化测试与发布验收](./DECISION_PLATFORM_AUTOMATED_ACCEPTANCE_CN.md)
+
+SEO 架构护栏：[SEO 信息架构与不可回退规则](./SEO_INFORMATION_ARCHITECTURE_GUARDRAILS_CN.md)
+
 ## 一、最终定位
 
 ### 搜索主题
@@ -69,30 +75,34 @@ AI Best Tool 对 Google 和普通访客的基础身份保持不变：
 
 ## 四、实施计划
 
-| ID     | 优先级 | 任务                            | 验收标准                                                        |     预计 | 状态                                                 |
-| ------ | ------ | ------------------------------- | --------------------------------------------------------------- | -------: | ---------------------------------------------------- |
-| POS-01 | P0     | 首页 SEO 安全定位收口           | 保留目录 title/H1/schema；首屏明确证据、限制、变化              |   0.5 天 | 已完成；专项测试、tsc、完整 build 通过               |
-| POS-02 | P0     | 首页可信方法模块                | 用 3 个可理解步骤替代内部化、冗长的通用信号面板                 |   0.5 天 | 已完成；净减少重复首页内容                           |
-| POS-03 | P0     | 商业与编辑边界                  | 首屏移除付费曝光卡，owner 区域保留次级入口并披露不影响结论      |  0.25 天 | 已完成；付费入口已下移                               |
-| POS-04 | P0     | 首页定位自动回归                | 目录主题、差异表达、商业边界和核心链接可自动校验                |  0.25 天 | 已完成；`test:home-positioning` 通过                 |
-| EVD-01 | P1     | Evidence Ledger 数据模型        | claim 级来源、来源类型、核查日、状态、冲突、失效边界统一        |     1 天 | 已完成；Supabase 迁移与只读验收通过                  |
-| EVD-02 | P1     | 工具页 Evidence Ledger UI       | 核心判断可以展开查看证据，不以单一分数替代解释                  |     1 天 | 已完成；有效工具身份产生 verified 数据后自动展示     |
-| EVD-03 | P1     | 后台证据编辑与冲突处理          | 官方、独立、owner、用户来源分开；冲突不自动覆盖                 | 1-1.5 天 | 已完成；首条人工核验、状态保护、处理中反馈已落地     |
-| EVD-04 | P1     | 情报档案身份映射收口            | tool 档案 owner_id 必须对应真实目录工具；错误身份不可继续同步   |   0.5 天 | 已完成；站点迁移、缓存修复、Fathom 公开闭环均通过    |
-| CHG-01 | P1     | Change Timeline 模型与读取      | 真实事实变化和“仅复核、无变化”可区分                            |     1 天 | 已完成；迁移、读写边界、后台/前台读取与测试均通过   |
-| CHG-02 | P1     | 首批 10-20 个核心工具变化时间线 | 每页至少有基线核查；无变化不伪造更新事件                        |   1-2 天 | 进行中；Fathom、Claude、Consensus 已完成，当前 3/10 |
-| LNK-01 | P1     | Guide / 分类消费统一判断        | 不复制工具事实；链接到对应 Decision Card 和证据                 |     1 天 | 待执行                                               |
-| MON-01 | P1     | 30/90 天监测闭环                | 事实到期、判断到期和变化待审可筛选                              |   0.5 天 | 待执行                                               |
-| COM-01 | P2     | 保持一次性 Priority / Featured  | 付款不保证通过、排名、流量或编辑背书                            |     持续 | 已有，需持续审计                                     |
-| COM-02 | P2     | Verified Profile 付费验证       | 先完成 owner 变更、页面引用、到期提醒和基础数据，再决定是否收费 |   2-3 天 | 条件触发                                             |
-| COM-03 | P2     | Buyer Decision Brief 试点       | 先用 3 个真实需求验证是否有人为 shortlist 与证据报告付费        |   2-3 天 | 条件触发                                             |
-| COM-04 | P2     | 结构化数据/API 商业验证         | 证据与变化数据覆盖和稳定性达到门槛后才开放                      | 后续周期 | 条件触发                                             |
+| ID        | 优先级 | 任务                            | 验收标准                                                        |     预计 | 状态                                                |
+| --------- | ------ | ------------------------------- | --------------------------------------------------------------- | -------: | --------------------------------------------------- |
+| POS-01    | P0     | 首页 SEO 安全定位收口           | 保留目录 title/H1/schema；首屏明确证据、限制、变化              |   0.5 天 | 已完成；专项测试、tsc、完整 build 通过              |
+| POS-02    | P0     | 首页可信方法模块                | 用 3 个可理解步骤替代内部化、冗长的通用信号面板                 |   0.5 天 | 已完成；净减少重复首页内容                          |
+| POS-03    | P0     | 商业与编辑边界                  | 首屏移除付费曝光卡，owner 区域保留次级入口并披露不影响结论      |  0.25 天 | 已完成；付费入口已下移                              |
+| POS-04    | P0     | 首页定位自动回归                | 目录主题、差异表达、商业边界和核心链接可自动校验                |  0.25 天 | 已完成；`test:home-positioning` 通过                |
+| EVD-01    | P1     | Evidence Ledger 数据模型        | claim 级来源、来源类型、核查日、状态、冲突、失效边界统一        |     1 天 | 已完成；Supabase 迁移与只读验收通过                 |
+| EVD-02    | P1     | 工具页 Evidence Ledger UI       | 核心判断可以展开查看证据，不以单一分数替代解释                  |     1 天 | 已完成；有效工具身份产生 verified 数据后自动展示    |
+| EVD-03    | P1     | 后台证据编辑与冲突处理          | 官方、独立、owner、用户来源分开；冲突不自动覆盖                 | 1-1.5 天 | 已完成；首条人工核验、状态保护、处理中反馈已落地    |
+| EVD-04    | P1     | 情报档案身份映射收口            | tool 档案 owner_id 必须对应真实目录工具；错误身份不可继续同步   |   0.5 天 | 已完成；站点迁移、缓存修复、Fathom 公开闭环均通过   |
+| CHG-01    | P1     | Change Timeline 模型与读取      | 真实事实变化和“仅复核、无变化”可区分                            |     1 天 | 已完成；迁移、读写边界、后台/前台读取与测试均通过   |
+| CHG-02    | P1     | 首批 10-20 个核心工具变化时间线 | 每页至少有基线核查；无变化不伪造更新事件                        |   1-2 天 | 进行中；Fathom、Claude、Consensus 已完成，当前 3/10 |
+| LNK-01    | P1     | Guide / 分类消费统一判断        | 不复制工具事实；链接到对应 Decision Card 和证据                 |     1 天 | 已纳入 DCF 与 SEO-IA 实施规格，待执行               |
+| MON-01    | P1     | 30/90 天监测闭环                | 事实到期、判断到期和变化待审可筛选                              |   0.5 天 | 待执行                                              |
+| DCF-01~07 | P1     | Finder + Decision Card 2.0      | 字段级模型、规则、后台、前台、SEO 与自动验收完整闭环            |   6.5 天 | 最终方案已 Review，待实施                           |
+| STK-01~06 | P1     | Stack Audit + 7-Day Trial       | 私有 Stack、审计、试用、提醒与 RLS 闭环                         |   5.5 天 | 等待阶段一 Gate                                     |
+| SIG/WAT   | P1     | Verified Usage + Change Watch   | 审核聚合、利益披露、变化通知与去重                              |   5.5 天 | 等待阶段二真实使用门槛                              |
+| COM-01    | P2     | 保持一次性 Priority / Featured  | 付款不保证通过、排名、流量或编辑背书                            |     持续 | 已有，需持续审计                                    |
+| COM-02    | P2     | Verified Profile 付费验证       | 先完成 owner 变更、页面引用、到期提醒和基础数据，再决定是否收费 |   2-3 天 | 条件触发                                            |
+| COM-03    | P2     | Buyer Decision Brief 试点       | 先用 3 个真实需求验证是否有人为 shortlist 与证据报告付费        |   2-3 天 | 条件触发                                            |
+| COM-04    | P2     | 结构化数据/API 商业验证         | 证据与变化数据覆盖和稳定性达到门槛后才开放                      | 后续周期 | 条件触发                                            |
 
 ## 五、发布与收录节奏
 
 - 2026-09-02：同日复核 n8n 实时价格和关键边界后，迁移既有 fallback；不创建第二条 canonical。
 - 2026-09-03：同日复核 OpenRouter 价格、provider 数、隐私与 ZDR 边界后，迁移既有 fallback。
-- 日常继续处理 3-5 个候选，常态公开 2-3 个通过双重准入的条目，单周最多 15 个；不合格时允许公开 0 个。
+- 日常可审核多个候选，但每天只新增并公开 1-2 个合格工具；新工具默认 `monitor/noindex`。每天最多批准 1 个、每周最多 5 个
+  进入索引；不合格时允许新增或批准 0 个。唯一口径见 [工具页索引发布与节奏控制](./TOOL_INDEX_RELEASE_POLICY_CN.md)。
 - 首页、Evidence Ledger 和 Change Timeline 可以并行开发，但任何代码任务仍独立完成测试、build 和状态更新。
 
 ## 六、商业化路线
@@ -216,41 +226,42 @@ Review 结论：方案可实施。P0 不改变 URL 和索引面，先增强主�
 - verified 与 rejected 必须填写人工备注；核验时记录管理员、核验时间、30 天默认复查日、已知失效日和结构化适用范围。
 - 每条 claim 的保存按钮提供 spinner、禁用态和成功/失败 toast，避免点击后无反馈。
 - 后台 verified 统计已改为仅统计 `verification_status = verified` 且无冲突的 claim，不再把所有无冲突候选误算为已核验。
-- 首条真实核验为 AI Best Tool 首页定位原文；线上原文、来源 URL 和无冲突状态均已人工确认。旧的分发订阅价格 claim 与当前产品
-  状态不一致，继续保持 candidate，不得进入公开证据。
+- 首条真实核验为 AI Best Tool 首页定位原文；线上原文、来源 URL 和无冲突状态均已人工确认。旧的分发订阅价格 claim 与当前产
+  品状态不一致，继续保持 candidate，不得进入公开证据。
 
 ## 十三、情报身份映射实施记录（2026-09-02）
 
 - 数据模型新增 `site` owner 类型，平台自身证据不再伪装成目录工具；幂等迁移位于
   `db/supabase/migrations/20260902_intelligence_owner_identity.sql`。
-- 迁移只原位修改 AI Best Tool 档案的 owner 类型并写入重分类原因，sources、claims、assets、verified 状态和审核历史不会重建或
-  丢失。
+- 迁移只原位修改 AI Best Tool 档案的 owner 类型并写入重分类原因，sources、claims、assets、verified 状态和审核历史不会重
+  建或丢失。
 - `tool` 同步在抓取前通过 Neon 目录校验 UUID；无效 ID 会直接失败并提示从 `/admin/tools/<uuid>/edit` 获取正确 ID。
-- CLI 明确接受 tool、distribution_project、site 三种类型；第三方 CSS 解析错误被隔离，抓取结束后主动关闭连接与进程，避免假性
-  卡住。
-- 已使用真实目录工具 Fathom（目录 UUID `7ae4bbb2-847f-45cc-9294-e96663fa02a3`）完成抓取、candidate 写入、人工核验和公开读取
-  闭环。生产 `/cn/ai/fathom` 已出现 Evidence Ledger，线上逐字确认的定位 claim 为唯一 verified 内容。
+- CLI 明确接受 tool、distribution_project、site 三种类型；第三方 CSS 解析错误被隔离，抓取结束后主动关闭连接与进程，避免
+  假性卡住。
+- 已使用真实目录工具 Fathom（目录 UUID `7ae4bbb2-847f-45cc-9294-e96663fa02a3`）完成抓取、candidate 写入、人工核验和公开
+  读取闭环。生产 `/cn/ai/fathom` 已出现 Evidence Ledger，线上逐字确认的定位 claim 为唯一 verified 内容。
 - Fathom 自动提取中混入页面结构文案的 pricing claims 全部保持 candidate，证明机器候选不会为了填充页面而被批量放行。
-- verified 口径已在后台统计、snapshot、quality scorer、factual gate 和 evidence composer 中统一为“显式 verified 且无冲突”；不再
-  把 conflict-free candidate 当作已验证内容或发布加分项。
-- 迁移执行后 `pnpm run verify:intelligence-owner-migration` 已返回 `ownerType: site`、`verifiedClaims: 1`，EVD-04 正式关闭。
-- 存量 metadata 快照已通过 `pnpm run repair:intelligence-verification-summaries` 全量重算：AI Best Tool 为 1 verified / 36
-  candidate，Fathom 为 1 / 10，MOXION.AI 为 0 / 0。
+- verified 口径已在后台统计、snapshot、quality scorer、factual gate 和 evidence composer 中统一为“显式 verified 且无冲突
+  ”；不再把 conflict-free candidate 当作已验证内容或发布加分项。
+- 迁移执行后 `pnpm run verify:intelligence-owner-migration` 已返回 `ownerType: site`、`verifiedClaims: 1`，EVD-04 正式关
+  闭。
+- 存量 metadata 快照已通过 `pnpm run repair:intelligence-verification-summaries` 全量重算：AI Best Tool 为 1 verified /
+  36 candidate，Fathom 为 1 / 10，MOXION.AI 为 0 / 0。
 - 旧快照中的机器提取内容由容易误解的 `facts` 无损迁移为 `candidateFacts`，并标记
   `factsSemantics: machine_extracted_candidates`；后续同步持续使用这一语义。
 
 ## 十四、Change Timeline 模型与读取实施记录（2026-09-02）
 
-- 新增独立的 `product_intelligence_timeline_events` 正式时间线，不复用机器差异队列
-  `product_intelligence_changes`；机器发现的变化不会自动成为历史事实。
-- 事件明确区分 `fact_added / fact_changed / fact_removed` 与 `reviewed_no_change`。完成复核但事实未变化时记录审核检查点，
-  不伪造“产品更新”。
+- 新增独立的 `product_intelligence_timeline_events` 正式时间线，不复用机器差异队列 `product_intelligence_changes`；机器
+  发现的变化不会自动成为历史事实。
+- 事件明确区分 `fact_added / fact_changed / fact_removed` 与 `reviewed_no_change`。完成复核但事实未变化时记录审核检查
+  点，不伪造“产品更新”。
 - 每条事件保留复核范围、claim 身份、前后值、来源、发生时间、核验时间、核验人、备注和 `internal / public` 可见性。
 - 数据库约束要求事实变化必须绑定 claim；公开事件必须包含 HTTP(S) 来源。表已启用 RLS，不向匿名客户端开放直接写入能力。
-- 后台 Intelligence 详情页新增独立 Change Timeline 区域，与待审核机器差异并列但不混合；空状态也明确说明“无变化复核”和
-  “事实变化”的区别。
-- 新增公开只读服务，仅允许读取真实 `tool` 档案且 `visibility = public` 的事件；站点级档案、内部记录和待审差异不会进入公开
-  工具页数据。
+- 后台 Intelligence 详情页新增独立 Change Timeline 区域，与待审核机器差异并列但不混合；空状态也明确说明“无变化复核”和“事
+  实变化”的区别。
+- 新增公开只读服务，仅允许读取真实 `tool` 档案且 `visibility = public` 的事件；站点级档案、内部记录和待审差异不会进入公
+  开工具页数据。
 - 专项测试 `pnpm run test:intelligence-change-timeline`、Evidence Ledger 回归、intelligence foundation 回归和 TypeScript
   全量检查均已通过。
 - 待执行幂等迁移：`db/supabase/migrations/20260902_product_intelligence_timeline.sql`。执行后运行
@@ -262,13 +273,14 @@ Review 结论：方案可实施。P0 不改变 URL 和索引面，先增强主�
 
 - Change Timeline 迁移验收返回 `timelineSchemaReadable: true`，CHG-01 正式关闭。
 - 后台新增受控的时间线编辑器，所有提交均有处理中、成功和失败反馈；公开事件仅允许真实目录 `tool` 档案。
-- `fact_added / fact_changed / fact_removed` 必须绑定当前档案中显式 verified 且无冲突的 claim；candidate、冲突 claim、其他档案
-  claim 和无来源公开事件均在 Server Action 层拒绝。
-- 工具详情页在 Evidence Ledger 后条件式展示 `Review & Change Timeline`；无 public 事件时不渲染空模块，不批量增加模板正文。
-- 新增幂等命令 `pnpm run intelligence:seed-timeline-baseline -- --owner-id=<tool-uuid>`。它只接受真实工具 UUID、已完成核验日期和至少
-  一条 verified 且无冲突证据，重复执行不会重复插入。
-- Fathom（UUID `7ae4bbb2-847f-45cc-9294-e96663fa02a3`）已建立首条公开 `reviewed_no_change` 基线，来源为官方首页，发生时间沿用
-  真实人工核验时间；公开读取回查成功，重复执行返回 `baseline_already_exists`。
+- `fact_added / fact_changed / fact_removed` 必须绑定当前档案中显式 verified 且无冲突的 claim；candidate、冲突 claim、其
+  他档案 claim 和无来源公开事件均在 Server Action 层拒绝。
+- 工具详情页在 Evidence Ledger 后条件式展示 `Review & Change Timeline`；无 public 事件时不渲染空模块，不批量增加模板正
+  文。
+- 新增幂等命令 `pnpm run intelligence:seed-timeline-baseline -- --owner-id=<tool-uuid>`。它只接受真实工具 UUID、已完成核
+  验日期和至少一条 verified 且无冲突证据，重复执行不会重复插入。
+- Fathom（UUID `7ae4bbb2-847f-45cc-9294-e96663fa02a3`）已建立首条公开 `reviewed_no_change` 基线，来源为官方首页，发生时
+  间沿用真实人工核验时间；公开读取回查成功，重复执行返回 `baseline_already_exists`。
 - 当前 CHG-02 真实进度为 3/10。其余核心工具必须先完成 intelligence 抓取和至少一条人工 claim 核验，再建立基线；不会直接把
   既有页面文案或机器提取结果批量包装为变化历史。
 - Gamma 官网 dry-run 发现 11 个来源但未提取出 claim，暂不写入空档案，后续改用定向官方帮助/定价页采集。
@@ -276,8 +288,8 @@ Review 结论：方案可实施。P0 不改变 URL 和索引面，先增强主�
   `--max-pages`、`--no-sitemap`、`--no-common-paths` 和 `--page-types`，用于大型产品站的定向证据采集，默认行为保持不变。
 - Claude 使用 `homepage,pricing,product` 范围重新同步后收口为 16 条 candidate 和 2 条真实定位冲突；只对官方首页的无冲突
   `product_name = Claude` 完成人工核验，价格和两种定位文案继续保持 candidate / conflict。
-- Claude（UUID `149cf3e0-5f5c-4bdf-ac02-80ec5064fb92`）已建立第二条公开 `reviewed_no_change` 基线，来源、核验人、核验时间和
-  30 天复查日均可追踪。
+- Claude（UUID `149cf3e0-5f5c-4bdf-ac02-80ec5064fb92`）已建立第二条公开 `reviewed_no_change` 基线，来源、核验人、核验时
+  间和 30 天复查日均可追踪。
 - DeepL 产品页、Pipedream 首页和 Cursor 首页均被各自 robots 明确禁止当前抓取；系统按规则停止且未写入。这三项不得通过关闭
   robots 检查绕过，后续进入受控的人工官方证据录入队列。
 - DeepL Help Center 允许访问，但模板只提取到错误身份 `DeepL Help Center`，因此未创建工具档案或基线。

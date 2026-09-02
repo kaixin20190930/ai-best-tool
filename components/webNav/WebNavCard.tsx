@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Flame, Megaphone, Sparkles } from 'lucide-react';
 
+import { getLocalizedToolPath } from '@/lib/config/toolRouteAliases';
 import { WebNavigationListRow } from '@/lib/data';
 
 import FavoriteButton from '../FavoriteButton';
@@ -79,7 +80,7 @@ export default function WebNavCard({
         isCompact ? 'gap-2.5 p-2.5 lg:p-3' : 'gap-3 p-3 lg:p-3.5'
       }`}
     >
-      <Link href={`/ai/${name}`} title={title}>
+      <Link href={getLocalizedToolPath(name, locale)} title={title}>
         <ToolCardMedia imageUrl={imageUrl} name={name} thumbnailUrl={thumbnailUrl} title={title} compact={isCompact} />
       </Link>
       <div className='flex min-w-0 items-center justify-between gap-2.5'>

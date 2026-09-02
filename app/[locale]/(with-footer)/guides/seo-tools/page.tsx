@@ -10,10 +10,6 @@ export async function generateMetadata({ params: { locale } }: { params: { local
   return {
     ...metadata,
     ...getNoindexMetadata(),
-    alternates: {
-      ...metadata.alternates,
-      canonical: `/${locale}/guides/ai-seo-tools`,
-    },
   };
 }
 

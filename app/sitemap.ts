@@ -1,34 +1,13 @@
 import { type MetadataRoute } from 'next';
 import { locales } from '@/i18n';
 
-import { GUIDE_PAGES } from '@/lib/content/guides';
+import { INDEXABLE_GUIDE_PAGES } from '@/lib/content/guides';
 import { topListTopics } from '@/lib/data/topLists';
 import { BASE_URL } from '@/lib/env';
 import { INDEXABLE_LOCALES } from '@/lib/seo/indexing';
 import { getToolIndexDecision } from '@/lib/seo/toolIndexing';
 import { getAllCategories, type CategoryWithCount } from '@/lib/services/categories';
 import { getTools } from '@/lib/services/tools';
-
-export const INDEXABLE_GUIDE_PATHS = new Set([
-  '/guides/how-to-choose-ai-tools',
-  '/guides/free-ai-tools',
-  '/guides/best-free-ai-tools',
-  '/guides/ai-writing-tools',
-  '/guides/ai-seo-tools',
-  '/guides/ai-video-tools',
-  '/guides/ai-image-tools',
-  '/guides/ai-coding-tools',
-  '/guides/ai-chatbot-tools',
-  '/guides/ai-productivity-tools',
-  '/guides/ai-tools-for-research',
-  '/guides/ai-tools-for-developers',
-  '/guides/ai-tools-for-automation',
-  '/guides/ai-tools-for-web3',
-  '/guides/ai-tools-for-marketing',
-  '/guides/ai-tools-for-sales',
-  '/guides/ai-tools-for-voice',
-  '/guides/ai-note-taking-tools',
-]);
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const sitemapLocales = locales.filter((locale) =>
@@ -63,13 +42,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // Generate static route entries for all locales
-  const guideRoutes = GUIDE_PAGES.filter((page) => !page.href.includes('-comparison'))
-    .filter((page) => INDEXABLE_GUIDE_PATHS.has(page.href))
-    .map(({ href, priority, changeFrequency }) => ({
-      url: href.replace(/^\//, ''),
-      priority,
-      changeFrequency,
-    }));
+  const guideRoutes = INDEXABLE_GUIDE_PAGES.map(({ href, priority, changeFrequency }) => ({
+    url: href.replace(/^\//, ''),
+    priority,
+    changeFrequency,
+  }));
 
   const topListRoutes = topListTopics.map((topic) => ({
     url: `best-ai-tools/${topic.key}`,

@@ -3,6 +3,7 @@ import { CheckCircle2, Code2, ExternalLink, Wrench } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
+import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -27,7 +28,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '面向代码补全、调试、生成和工作流自动化的 AI 编程工具选型指南，先看榜单再进对比。'
         : 'A practical guide to AI tools for code completion, debugging, generation, and workflow automation, with a path from guide to ranking and comparison.',
-    alternates: { canonical: `${BASE_URL}/${locale}/guides/ai-coding-tools` },
+    alternates: { canonical: generateLocalizedCanonicalUrl('/guides/ai-coding-tools', locale, BASE_URL) },
   };
 }
 

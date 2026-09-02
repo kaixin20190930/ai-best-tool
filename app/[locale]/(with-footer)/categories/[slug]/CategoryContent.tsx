@@ -1,15 +1,14 @@
 import { notFound } from 'next/navigation';
 
 import { GUIDE_PAGES } from '@/lib/content/guides';
-import { BASE_URL } from '@/lib/env';
-import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
-import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
+import { generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getCategoryBySlug, getLocalizedField } from '@/lib/services/categories';
 import { getAllTags } from '@/lib/services/tags';
 import { SortBy } from '@/lib/services/tools';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import Search from '@/components/Search';
+import SeoBreadcrumbs from '@/components/seo/SeoBreadcrumbs';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import ExploreList from '@/app/[locale]/(with-footer)/explore/ExploreList';
 import { Link } from '@/app/navigation';
@@ -574,6 +573,18 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
       name: getLocalizedField(item.name, params.locale),
     }));
   const representativeTools = (representativeToolMap[categorySlug] || []).slice(0, 3);
+  let categorySizeValue = `${categoryToolCount}`;
+  let categorySizeNote = isChinese
+    ? '分类页保留索引，但会继续把真实工具页、指南页和对比页串起来。'
+    : 'The category page stays indexable while linking real tool pages, guides, and comparison pages together.';
+  if (isVirtualCategory) {
+    categorySizeValue = isChinese
+      ? `${representativeTools.length} 个精选入口`
+      : `${representativeTools.length} curated entries`;
+    categorySizeNote = isChinese
+      ? '这是精选决策入口，不把尚未建立的数据库分类数量伪装成真实收录规模。'
+      : 'This is a curated decision hub and does not present a nonexistent database category as listing volume.';
+  }
   const categorySignalCards = [
     {
       label: isChinese ? '最近核查' : 'Last checked',
@@ -584,18 +595,8 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
     },
     {
       label: isChinese ? '当前规模' : 'Current size',
-      value: isVirtualCategory
-        ? isChinese
-          ? `${representativeTools.length} 个精选入口`
-          : `${representativeTools.length} curated entries`
-        : `${categoryToolCount}`,
-      note: isVirtualCategory
-        ? isChinese
-          ? '这是精选决策入口，不把尚未建立的数据库分类数量伪装成真实收录规模。'
-          : 'This is a curated decision hub and does not present a nonexistent database category as listing volume.'
-        : isChinese
-          ? '分类页保留索引，但会继续把真实工具页、指南页和对比页串起来。'
-          : 'The category page stays indexable while linking real tool pages, guides, and comparison pages together.',
+      value: categorySizeValue,
+      note: categorySizeNote,
     },
     {
       label: isChinese ? '下一跳入口' : 'Next hop',
@@ -1086,21 +1087,21 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
     },
   ];
   const basePath = `/categories/${category.slug}`;
-  const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: 'Home', url: generateLocalizedCanonicalUrl('/', params.locale, BASE_URL) },
-    { name: 'Explore', url: generateLocalizedCanonicalUrl('/explore', params.locale, BASE_URL) },
-    {
-      name: categoryName,
-      url: generateLocalizedCanonicalUrl(`/categories/${category.slug}`, params.locale, BASE_URL),
-    },
-  ]);
   const faqSchema = generateFAQSchema(faqs);
 
   return (
     <>
-      <StructuredDataServer data={breadcrumbSchema} />
       <StructuredDataServer data={faqSchema} />
       <div className='theme-page container mx-auto px-4 py-8'>
+        <SeoBreadcrumbs
+          locale={params.locale}
+          items={[
+            { name: isChinese ? '首页' : 'Home', path: '/' },
+            { name: isChinese ? '探索工具' : 'Explore', path: '/explore' },
+            { name: categoryName, path: `/categories/${category.slug}` },
+          ]}
+          className='mb-5'
+        />
         <div className='theme-surface mb-8 rounded-lg border border-slate-200 p-6 shadow-sm'>
           <div className='flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between'>
             <div className='max-w-3xl'>
