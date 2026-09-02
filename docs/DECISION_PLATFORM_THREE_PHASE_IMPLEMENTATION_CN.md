@@ -232,12 +232,17 @@ Review 后不使用 UUID 数组保存证据引用，因为数组无法建立外�
 | DCF-03 | P0     | 确定性规则引擎与解释 trace |   1 天 | 已完成；相同输入和版本结果一致，硬约束优先且最多 3 项         |
 | DCF-04 | P1     | Finder UI 与匿名本地状态   |   1 天 | 已完成；匿名仅存浏览器，任务字段、中间态、成功/错误态完整     |
 | DCF-05 | P1     | Decision Card 2.0          |   1 天 | 已完成；七类判断逐字段绑定有效证据，无证据明确未知，未发布 profile 自动回退旧卡 |
-| DCF-06 | P1     | 后台任务、fit、关系审核    |   1 天 | 机器草稿不能直接 published                                   |
+| DCF-06 | P1     | 后台任务、fit、关系审核    |   1 天 | 已完成；统一审核队列、人工状态机、证据发布门禁与操作中间态已落地 |
 | DCF-07 | P0     | SEO 与自动验收             | 0.5 天 | 无新增 sitemap URL；metadata/robots/build 通过               |
 
 `DCF-05` 发布保护：新版卡片只消费 `DCF-02` 严格读取层中已核验、无冲突、未失效且未到期的 claim；
 `cost/setup/privacy/export/limitation/replacement` 不得跨用途借用。工具尚无 published profile、profile 到期或证据服务不可用时，
 详情页继续显示原有判断卡，不输出空洞的批量“未知”模块。专项契约测试、Finder 回归、TypeScript 和完整生产 build 均已通过。
+
+`DCF-06` 后台入口为 `/[locale]/admin/decision`。任务与 profile/fit/relationship 分队列展示；后者只允许
+`draft → reviewed → published → stale → reviewed` 的受控路径，禁止 `draft → published`。应用层发布前检查人工复核时间和
+证据关联数量，数据库继续以 verified、无冲突、未失效、未到期 claim 触发器作为最终门禁。专项状态机测试、定向 lint、
+TypeScript 和完整生产 build 均已通过。
 
 ## 五、阶段二：AI Stack Audit + 7-Day Trial Scorecard
 

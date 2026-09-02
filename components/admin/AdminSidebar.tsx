@@ -7,6 +7,7 @@ import {
   BadgeCheck,
   BarChart3,
   ClipboardList,
+  GitCompareArrows,
   Home,
   LayoutDashboard,
   Mail,
@@ -35,6 +36,7 @@ const navigation = [
   { name: 'emailOps', href: '/admin/email-ops', icon: Mail },
   { name: 'outreach', href: '/admin/outreach', icon: Mail },
   { name: 'intelligence', href: '/admin/intelligence', icon: Sparkles },
+  { name: 'decision', href: '/admin/decision', icon: GitCompareArrows, label: 'Decision review' },
   { name: 'searchConsole', href: '/admin/search-console', icon: Search },
   { name: 'paymentCallbacks', href: '/admin/payment-callbacks', icon: ReceiptText },
   { name: 'users', href: '/admin/users', icon: Users },
@@ -74,7 +76,7 @@ export default function AdminSidebar({ userId }: { userId?: string }) {
             }`}
           >
             <item.icon className='h-5 w-5' />
-            {t(`nav.${item.name}`)}
+            {'label' in item ? item.label : t(`nav.${item.name}`)}
           </Link>
         ))}
       </nav>
