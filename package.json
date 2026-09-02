@@ -40,6 +40,7 @@
     "seo:validate": "tsx scripts/validate-seo-complete.ts",
     "test:intelligence-foundation": "tsx scripts/test-product-intelligence-foundation.ts",
     "test:tool-decision-card": "tsx scripts/test-tool-decision-card.ts",
+    "test:tool-indexing": "tsx scripts/test-tool-indexing.ts",
     "test:tool-decision-card-structure": "node scripts/verify-tool-decision-card-structure.mjs",
     "test:priority-tool-evidence": "tsx scripts/test-priority-tool-evidence.ts",
     "test:priority-tool-fallbacks": "tsx scripts/test-priority-tool-fallbacks.ts",

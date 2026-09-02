@@ -393,7 +393,7 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
   };
 
   const getQualityState = (tool: AdminTool) => {
-    const stored = tool.page_quality_status || 'continue_index';
+    const stored = tool.page_quality_status || 'monitor';
 
     if (stored === 'noindex') {
       return { label: 'Noindex', tone: 'bg-rose-50 text-rose-700', reviewDays: 14 };

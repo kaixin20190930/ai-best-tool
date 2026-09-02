@@ -27,6 +27,8 @@ export interface Tool {
   screenshots: string[] | null;
   videoUrl: string | null;
   status: 'draft' | 'pending' | 'published' | 'rejected';
+  pageQualityStatus?: string | null;
+  nextReviewDate?: Date | null;
   submittedBy: string | null;
   createdAt: Date;
   updatedAt: Date;
@@ -197,7 +199,8 @@ export async function getActiveFeaturedTools(
       id, name, title, content, detail, url, image_url as "imageUrl",
       thumbnail_url as "thumbnailUrl", category_id as "categoryId", tags,
       pricing, features, use_cases as "useCases", screenshots, video_url as "videoUrl",
-      status, submitted_by as "submittedBy", created_at as "createdAt",
+      status, page_quality_status as "pageQualityStatus", next_review_date as "nextReviewDate",
+      submitted_by as "submittedBy", created_at as "createdAt",
       updated_at as "updatedAt", view_count as "viewCount", click_count as "clickCount",
       share_count as "shareCount", average_rating as "averageRating",
       rating_count as "ratingCount"
@@ -235,7 +238,8 @@ export async function getTools(
       id, name, title, content, detail, url, image_url as "imageUrl",
       thumbnail_url as "thumbnailUrl", category_id as "categoryId", tags,
       pricing, features, use_cases as "useCases", screenshots, video_url as "videoUrl",
-      status, submitted_by as "submittedBy", created_at as "createdAt",
+      status, page_quality_status as "pageQualityStatus", next_review_date as "nextReviewDate",
+      submitted_by as "submittedBy", created_at as "createdAt",
       updated_at as "updatedAt", view_count as "viewCount", click_count as "clickCount",
       share_count as "shareCount", average_rating as "averageRating",
       rating_count as "ratingCount"
@@ -265,7 +269,8 @@ export async function getToolById(id: string): Promise<Tool | null> {
       id, name, title, content, detail, url, image_url as "imageUrl",
       thumbnail_url as "thumbnailUrl", category_id as "categoryId", tags,
       pricing, features, use_cases as "useCases", screenshots, video_url as "videoUrl",
-      status, submitted_by as "submittedBy", created_at as "createdAt",
+      status, page_quality_status as "pageQualityStatus", next_review_date as "nextReviewDate",
+      submitted_by as "submittedBy", created_at as "createdAt",
       updated_at as "updatedAt", view_count as "viewCount", click_count as "clickCount",
       share_count as "shareCount", average_rating as "averageRating",
       rating_count as "ratingCount"
@@ -286,7 +291,8 @@ export async function getToolByName(name: string): Promise<Tool | null> {
       id, name, title, content, detail, url, image_url as "imageUrl",
       thumbnail_url as "thumbnailUrl", category_id as "categoryId", tags,
       pricing, features, use_cases as "useCases", screenshots, video_url as "videoUrl",
-      status, submitted_by as "submittedBy", created_at as "createdAt",
+      status, page_quality_status as "pageQualityStatus", next_review_date as "nextReviewDate",
+      submitted_by as "submittedBy", created_at as "createdAt",
       updated_at as "updatedAt", view_count as "viewCount", click_count as "clickCount",
       share_count as "shareCount", average_rating as "averageRating",
       rating_count as "ratingCount"

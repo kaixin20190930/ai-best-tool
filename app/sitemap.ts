@@ -5,8 +5,8 @@ import { GUIDE_PAGES } from '@/lib/content/guides';
 import { topListTopics } from '@/lib/data/topLists';
 import { BASE_URL } from '@/lib/env';
 import { INDEXABLE_LOCALES } from '@/lib/seo/indexing';
+import { getToolIndexDecision } from '@/lib/seo/toolIndexing';
 import { getAllCategories, type CategoryWithCount } from '@/lib/services/categories';
-import { getToolQuality } from '@/lib/services/toolQuality';
 import { getTools } from '@/lib/services/tools';
 
 export const INDEXABLE_GUIDE_PATHS = new Set([
@@ -99,19 +99,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       'latest',
     );
 
-    const eligibleTools = toolsResult.data.filter((tool) => {
-      const quality = getToolQuality({
-        category_id: tool.categoryId,
-        image_url: tool.imageUrl,
-        thumbnail_url: tool.thumbnailUrl,
-        content: tool.content,
-        detail: tool.detail,
-        pricing: tool.pricing,
-        tags: tool.tags,
-      });
-
-      return quality.score >= 80;
-    });
+    const eligibleTools = toolsResult.data.filter((tool) => getToolIndexDecision(tool).indexable);
 
     toolSitemapEntries = eligibleTools.flatMap((tool) =>
       sitemapLocales.map((locale) => {

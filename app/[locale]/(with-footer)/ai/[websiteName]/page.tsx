@@ -27,6 +27,7 @@ import { PRIORITY_TOOL_FALLBACK_PROFILES } from '@/lib/config/priorityToolFallba
 import { getCanonicalToolSlug, getLocalizedToolPath, isLegacyToolSlug } from '@/lib/config/toolRouteAliases';
 import { BASE_URL } from '@/lib/env';
 import { SEO_CONFIG, SOCIAL_IMAGE_DIMENSIONS, ToolMetadata } from '@/lib/seo/constants';
+import { getToolIndexDecision } from '@/lib/seo/toolIndexing';
 import {
   generateLocalizedCanonicalUrl,
   generateSocialImageUrl,
@@ -3106,6 +3107,7 @@ export async function generateMetadata({
     // Generate optimized social image URL
     const toolImage = data?.thumbnailUrl || data?.imageUrl || SEO_CONFIG.defaultImage;
     const socialImageUrl = generateSocialImageUrl(toolImage);
+    const indexable = dbTool ? getToolIndexDecision(dbTool).indexable : false;
 
     return {
       title: optimizedTitle,
@@ -3113,6 +3115,16 @@ export async function generateMetadata({
       alternates: {
         canonical: canonicalUrl,
       },
+      robots: indexable
+        ? undefined
+        : {
+            index: false,
+            follow: true,
+            googleBot: {
+              index: false,
+              follow: true,
+            },
+          },
       openGraph: {
         title: optimizedTitle,
         description: optimizedDescription,
@@ -3143,6 +3155,10 @@ export async function generateMetadata({
       description: 'AI tool profile',
       alternates: {
         canonical: generateLocalizedCanonicalUrl(`/ai/${websiteName}`, locale),
+      },
+      robots: {
+        index: false,
+        follow: true,
       },
     };
   }

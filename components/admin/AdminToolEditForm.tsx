@@ -381,7 +381,7 @@ export default function AdminToolEditForm({
     const formPaymentUrl = String(formData.get('payment_url') || '').trim();
     const formFeaturedActiveFrom = String(formData.get('featured_active_from') || '').trim();
     const formFeaturedUntil = String(formData.get('featured_until') || '').trim();
-    const formPageQualityStatus = String(formData.get('page_quality_status') || 'continue_index');
+    const formPageQualityStatus = String(formData.get('page_quality_status') || 'monitor');
     const formNextReviewDate = String(formData.get('next_review_date') || '').trim();
     const editorialReviewedAt = String(formData.get('editorial_reviewed_at') || '').trim();
     const editorialReviewedBy = String(formData.get('editorial_reviewed_by') || '').trim();
@@ -1033,7 +1033,7 @@ export default function AdminToolEditForm({
                 <select
                   id="page_quality_status"
                   name="page_quality_status"
-                  defaultValue={tool.page_quality_status || 'continue_index'}
+                  defaultValue={tool.page_quality_status || 'monitor'}
                   className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
                 >
                   <option value="continue_index">Continue index</option>

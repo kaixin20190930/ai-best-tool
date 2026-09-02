@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS tools (
   owner_email VARCHAR(255),
   claim_status VARCHAR(30) DEFAULT 'unclaimed',
   claimed_at TIMESTAMP WITH TIME ZONE,
-  page_quality_status VARCHAR(40) DEFAULT 'continue_index',
+  page_quality_status VARCHAR(40) DEFAULT 'monitor',
   next_review_date DATE,
   
   -- 时间戳
