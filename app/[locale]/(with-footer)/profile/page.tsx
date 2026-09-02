@@ -1,4 +1,4 @@
-import { ArrowUpRight, Heart, LayoutDashboard, MessageSquareText, Settings2, Sparkles } from 'lucide-react';
+import { ArrowUpRight, Boxes, Heart, LayoutDashboard, MessageSquareText, Settings2, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { getNoindexMetadata } from '@/lib/seo/indexing';
@@ -207,7 +207,21 @@ export default async function ProfilePage({ params }: { params: { locale: string
         </p>
       </div>
 
-      <section className='grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
+      <section className='grid gap-4 md:grid-cols-2 xl:grid-cols-5'>
+        <Link
+          href='/profile/stack'
+          className='theme-surface rounded-lg border border-cyan-200 bg-cyan-50 p-5 shadow-sm transition hover:border-cyan-300 hover:shadow-md'
+        >
+          <div className='flex items-center justify-between gap-4'>
+            <div>
+              <p className='text-sm font-medium text-cyan-900'>{isChinese ? 'AI Stack' : 'AI Stack'}</p>
+              <p className='mt-2 text-sm leading-6 text-cyan-800/80'>
+                {isChinese ? '记录真实成本、使用频率和续费。' : 'Track real costs, usage, and renewals.'}
+              </p>
+            </div>
+            <Boxes className='size-5 text-cyan-700' />
+          </div>
+        </Link>
         <Link
           href='/profile/favorites'
           className='theme-surface rounded-lg border border-slate-200 p-5 shadow-sm transition hover:border-cyan-200 hover:shadow-md'
