@@ -231,9 +231,13 @@ Review 后不使用 UUID 数组保存证据引用，因为数组无法建立外�
 | DCF-02 | P0     | Evidence Ledger 派生读取层 |   1 天 | 已完成；stale/冲突/未核验 claim 不参与判断且保留解释 trace   |
 | DCF-03 | P0     | 确定性规则引擎与解释 trace |   1 天 | 已完成；相同输入和版本结果一致，硬约束优先且最多 3 项         |
 | DCF-04 | P1     | Finder UI 与匿名本地状态   |   1 天 | 已完成；匿名仅存浏览器，任务字段、中间态、成功/错误态完整     |
-| DCF-05 | P1     | Decision Card 2.0          |   1 天 | Replaces/Works with/True cost/Setup/Data/Exit/Why not 可追溯 |
+| DCF-05 | P1     | Decision Card 2.0          |   1 天 | 已完成；七类判断逐字段绑定有效证据，无证据明确未知，未发布 profile 自动回退旧卡 |
 | DCF-06 | P1     | 后台任务、fit、关系审核    |   1 天 | 机器草稿不能直接 published                                   |
 | DCF-07 | P0     | SEO 与自动验收             | 0.5 天 | 无新增 sitemap URL；metadata/robots/build 通过               |
+
+`DCF-05` 发布保护：新版卡片只消费 `DCF-02` 严格读取层中已核验、无冲突、未失效且未到期的 claim；
+`cost/setup/privacy/export/limitation/replacement` 不得跨用途借用。工具尚无 published profile、profile 到期或证据服务不可用时，
+详情页继续显示原有判断卡，不输出空洞的批量“未知”模块。专项契约测试、Finder 回归、TypeScript 和完整生产 build 均已通过。
 
 ## 五、阶段二：AI Stack Audit + 7-Day Trial Scorecard
 

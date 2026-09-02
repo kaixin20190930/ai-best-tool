@@ -35,6 +35,7 @@ import {
 import { generateSoftwareSchema } from '@/lib/seo/schema';
 import { getToolIndexDecision } from '@/lib/seo/toolIndexing';
 import { getCategoryById, getLocalizedField as getCategoryLocalizedField } from '@/lib/services/categories';
+import { getToolDecisionCardV2, type DecisionCardV2Model } from '@/lib/services/decision/card';
 import { getPublicToolChangeTimeline } from '@/lib/services/intelligence/publicChangeTimeline';
 import { getPublicToolEvidenceLedger } from '@/lib/services/intelligence/publicEvidence';
 import { getReviewedToolRelationships } from '@/lib/services/reviewedToolRelationships';
@@ -46,6 +47,7 @@ import { createClient } from '@/lib/supabase/server';
 import { Separator } from '@/components/ui/separator';
 import PageViewTracker from '@/components/analytics/PageViewTracker';
 import CommentList from '@/components/comments/CommentList';
+import DecisionCardV2 from '@/components/decision/DecisionCardV2';
 import FavoriteButton from '@/components/FavoriteButton';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import BaseImage from '@/components/image/BaseImage';
@@ -3342,6 +3344,7 @@ export default async function Page({
     let publicEvidenceLedger: Awaited<ReturnType<typeof getPublicToolEvidenceLedger>> = null;
     let publicChangeTimeline: Awaited<ReturnType<typeof getPublicToolChangeTimeline>> = [];
     let reviewedToolRelationships: Awaited<ReturnType<typeof getReviewedToolRelationships>> = [];
+    let decisionCardV2: DecisionCardV2Model | null = null;
 
     // Get category and tags information
     let category = null;
@@ -3398,6 +3401,7 @@ export default async function Page({
           nextEvidenceLedger,
           nextChangeTimeline,
           nextReviewedToolRelationships,
+          nextDecisionCardV2,
         ] = await Promise.all([
           getUserRating(toolId).catch(() => null),
           isFavorited(toolId).catch(() => false),
@@ -3413,6 +3417,7 @@ export default async function Page({
           getPublicToolEvidenceLedger(toolId).catch(() => null),
           getPublicToolChangeTimeline(toolId).catch(() => []),
           getReviewedToolRelationships(canonicalSlug, locale).catch(() => []),
+          getToolDecisionCardV2(toolId, locale).catch(() => null),
         ]);
         userRating = nextUserRating;
         isFavoritedByUser = nextIsFavoritedByUser;
@@ -3421,6 +3426,7 @@ export default async function Page({
         publicEvidenceLedger = nextEvidenceLedger;
         publicChangeTimeline = nextChangeTimeline;
         reviewedToolRelationships = nextReviewedToolRelationships;
+        decisionCardV2 = nextDecisionCardV2;
         ratingStats = {
           averageRating: toolStats.averageRating,
           ratingCount: toolStats.ratingCount,
@@ -4583,6 +4589,9 @@ export default async function Page({
                 <MarkdownProse markdown={detailMarkdown} className='text-base leading-7 text-slate-700' />
               </section>
 
+              {decisionCardV2 ? (
+                <DecisionCardV2 model={decisionCardV2} locale={locale} />
+              ) : (
               <section
                 id='decision-card'
                 data-tool-decision-card
@@ -4986,6 +4995,7 @@ export default async function Page({
                   </div>
                 </div>
               </section>
+              )}
 
               {publicEvidenceLedger ? <EvidenceLedgerPanel ledger={publicEvidenceLedger} locale={locale} /> : null}
 
