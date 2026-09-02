@@ -6,7 +6,9 @@ const page = readFileSync(resolve(process.cwd(), 'app/[locale]/(with-footer)/fin
 const component = readFileSync(resolve(process.cwd(), 'components/decision/DecisionFinder.tsx'), 'utf8');
 const action = readFileSync(resolve(process.cwd(), 'app/actions/decision.ts'), 'utf8');
 
-assert.equal(page.includes('getNoindexMetadata()'), true, 'Finder must remain noindex,follow');
+assert.equal(page.includes('buildLocalizedPageMetadata'), true, 'Finder metadata must use the shared canonical helper');
+assert.equal(page.includes("path: '/find-tools'"), true, 'Finder canonical path must ignore query combinations');
+assert.equal(page.includes('indexable: false'), true, 'Finder must remain noindex,follow');
 assert.equal(page.includes("dynamic = 'force-dynamic'"), true, 'task availability must not be frozen at build time');
 assert.equal(component.includes("'use client'"), true);
 assert.equal(component.includes('window.localStorage'), true, 'anonymous Finder state must stay in the browser');

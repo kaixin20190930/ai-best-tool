@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { getNoindexMetadata } from '@/lib/seo/indexing';
+import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { getActiveDecisionTasks, type DecisionTaskOption } from '@/lib/services/decision/repository';
 import DecisionFinder from '@/components/decision/DecisionFinder';
 import SeoBreadcrumbs from '@/components/seo/SeoBreadcrumbs';
@@ -9,13 +9,15 @@ export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
   const isChinese = params.locale === 'cn' || params.locale === 'tw';
-  return {
+  return buildLocalizedPageMetadata({
+    locale: params.locale,
+    path: '/find-tools',
     title: isChinese ? '按任务和硬条件选择 AI 工具' : 'Find AI Tools by Task and Hard Constraints',
     description: isChinese
       ? '按任务、预算、隐私、自托管和导出要求，从已核验证据中获得最多三项可解释建议。'
       : 'Use task, budget, privacy, self-hosting, and export constraints to get up to three evidence-backed recommendations.',
-    ...getNoindexMetadata(),
-  };
+    indexable: false,
+  });
 }
 
 export default async function FindToolsPage({ params }: { params: { locale: string } }) {

@@ -7,6 +7,7 @@ const corePaths = [
   '/cn/explore',
   '/cn/guides',
   '/cn/best-ai-tools',
+  '/cn/find-tools',
   '/cn/best-ai-tools/ai-writing-tools',
   '/cn/categories/developer-tools',
   '/cn/ai/fathom',
@@ -211,7 +212,7 @@ async function runSmokeCheck() {
     const { response: sitemapResponse, body: sitemap } = await fetchText('/sitemap.xml');
     const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
     const internalUrls = urls.filter((url) =>
-      /\/(admin|login|register|profile|pricing|submit|developer\/listing|new|startup)(\/|$)/.test(
+      /\/(admin|login|register|profile|pricing|submit|developer\/listing|find-tools|decision|new|startup)(\/|$)/.test(
         new URL(url).pathname,
       ),
     );

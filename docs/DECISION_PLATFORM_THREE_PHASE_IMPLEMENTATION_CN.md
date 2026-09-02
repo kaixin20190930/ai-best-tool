@@ -233,7 +233,7 @@ Review 后不使用 UUID 数组保存证据引用，因为数组无法建立外�
 | DCF-04 | P1     | Finder UI 与匿名本地状态   |   1 天 | 已完成；匿名仅存浏览器，任务字段、中间态、成功/错误态完整     |
 | DCF-05 | P1     | Decision Card 2.0          |   1 天 | 已完成；七类判断逐字段绑定有效证据，无证据明确未知，未发布 profile 自动回退旧卡 |
 | DCF-06 | P1     | 后台任务、fit、关系审核    |   1 天 | 已完成；统一审核队列、人工状态机、证据发布门禁与操作中间态已落地 |
-| DCF-07 | P0     | SEO 与自动验收             | 0.5 天 | 无新增 sitemap URL；metadata/robots/build 通过               |
+| DCF-07 | P0     | SEO 与自动验收             | 0.5 天 | 已完成；Finder noindex/canonical、sitemap 边界、metadata/robots/build 与统一 release gate 通过 |
 
 `DCF-05` 发布保护：新版卡片只消费 `DCF-02` 严格读取层中已核验、无冲突、未失效且未到期的 claim；
 `cost/setup/privacy/export/limitation/replacement` 不得跨用途借用。工具尚无 published profile、profile 到期或证据服务不可用时，
@@ -243,6 +243,11 @@ Review 后不使用 UUID 数组保存证据引用，因为数组无法建立外�
 `draft → reviewed → published → stale → reviewed` 的受控路径，禁止 `draft → published`。应用层发布前检查人工复核时间和
 证据关联数量，数据库继续以 verified、无冲突、未失效、未到期 claim 触发器作为最终门禁。专项状态机测试、定向 lint、
 TypeScript 和完整生产 build 均已通过。
+
+`DCF-07` 将 `pnpm run test:decision-release` 固化为阶段一统一门禁，串联 Finder 隐私与 SEO 边界、Decision Card 内嵌与证据链接、
+后台审核隔离、全站 SEO 架构、面包屑和完整 build。Finder 使用共享 localized metadata helper，canonical 固定为 `/find-tools`
+且 `noindex,follow`，不输出 hreflang；生产 smoke 明确拒绝 Finder、decision、admin 和 comparison URL 进入 sitemap。本地 production
+渲染验收通过，158 个 sitemap URL 中无内部或 comparison 路径。
 
 ## 五、阶段二：AI Stack Audit + 7-Day Trial Scorecard
 
