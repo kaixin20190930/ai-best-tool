@@ -60,6 +60,8 @@
     "verify:evidence-ledger-migration": "tsx scripts/verify-evidence-ledger-migration.ts",
     "test:decision-foundation": "tsx scripts/test-decision-finder-migration.ts",
     "verify:decision-foundation-migration": "tsx scripts/verify-decision-finder-migration.ts",
+    "test:decision-evidence": "tsx scripts/test-decision-evidence-contract.ts",
+    "verify:decision-evidence-read-layer": "tsx scripts/verify-decision-evidence-read-layer.ts",
     "test:tool-route-aliases": "tsx scripts/test-tool-route-aliases.ts",
     "collection:plan-three-days": "tsx scripts/plan-three-day-candidate-pool.ts",
     "intelligence:discover-pages": "tsx scripts/discover-product-intelligence-pages.ts",

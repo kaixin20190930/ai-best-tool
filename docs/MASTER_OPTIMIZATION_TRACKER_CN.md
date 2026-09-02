@@ -91,7 +91,7 @@
 | CHG-01 | Change Timeline 模型与读取         | 正式历史与机器待审差异分离；事实变化与“复核无变化”分开；公开只读数据仅来自真实 tool 和 public 事件 | 已完成；迁移可读，受控写入、后台/工具页读取、专项测试和类型检查均通过                                                         | Codex + 用户    |
 | CHG-02 | 首批核心工具变化基线               | 10-20 个核心工具拥有真实基线复核；没有变化时只记录 `reviewed_no_change`，禁止伪造变化              | 进行中（3/10）；Fathom、Claude、Consensus 已完成；Gamma 待定向采集，DeepL/Pipedream/Cursor 受 robots 限制                     | Codex + 用户    |
 | SEO-IA | SEO 信息架构统一与门禁             | 修复历史 canonical/hreflang，统一 Breadcrumb，并让工具关系内链只消费 reviewed 数据                 | SEO-IA-01~08 已完成；本地/生产 smoke、完整 build 和 reviewed 关系验收全部通过                                                 | Codex           |
-| DCF    | Finder + Decision Card 2.0         | 10 个核心工具和 6-8 个任务形成证据可追溯、最多三项的可解释推荐                                     | DCF-01 迁移、约束、RLS 与双层验收已完成，待生产执行；DCF-02~07 待执行                                                         | Codex           |
+| DCF    | Finder + Decision Card 2.0         | 10 个核心工具和 6-8 个任务形成证据可追溯、最多三项的可解释推荐                                     | DCF-01 生产迁移已完成；DCF-02 严格证据派生读取层已完成；DCF-03~07 待执行                                                       | Codex           |
 | STK    | Stack Audit + 7-Day Trial          | 私有工具栈、Keep/Replace/Remove/Missing 与试用到期决策闭环                                         | 等待阶段一 Gate；STK-01~06 未开始                                                                                             | Codex + 用户    |
 | SIG    | Verified Usage + Change Watch      | 审核后的结构化使用信号和已确认变化通知，不公开低样本或利益相关数据                                 | 等待阶段二真实使用门槛；SIG/WAT 未开始                                                                                        | Codex + 用户    |
 
