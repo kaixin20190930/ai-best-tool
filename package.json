@@ -59,6 +59,8 @@
     "intelligence:sync": "tsx scripts/sync-product-intelligence.ts",
     "verify:intelligence-owner-migration": "tsx scripts/verify-intelligence-owner-migration.ts",
     "repair:intelligence-verification-summaries": "tsx scripts/repair-intelligence-verification-summaries.ts",
+    "verify:intelligence-timeline-migration": "tsx scripts/verify-intelligence-timeline-migration.ts",
+    "test:intelligence-change-timeline": "tsx scripts/test-intelligence-change-timeline.ts",
     "intelligence:sync-signals": "tsx scripts/sync-product-intelligence-signals.ts",
     "distribution:discover-target": "tsx scripts/discover-distribution-target-pages.ts",
     "distribution:analyze-target": "tsx scripts/analyze-distribution-target.ts",

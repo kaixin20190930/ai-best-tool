@@ -1,4 +1,5 @@
 import { requireAdmin } from '@/lib/auth/middleware';
+import { mapIntelligenceTimelineRow } from '@/lib/services/intelligence/changeTimeline';
 import {
   composeEvidenceBoundContent,
   type EvidenceBoundComposerResult,
@@ -20,6 +21,7 @@ import type {
   ProductIntelligenceProfile,
   ProductIntelligenceSignal,
   ProductIntelligenceSource,
+  ProductIntelligenceTimelineEvent,
 } from '@/lib/services/intelligence/types';
 import { evaluateUniquenessGate, type UniquenessGateResult } from '@/lib/services/intelligence/uniquenessGate';
 import { createAdminClient } from '@/lib/supabase/admin';
@@ -51,6 +53,7 @@ export interface AdminIntelligenceProfileDetail extends AdminIntelligenceProfile
   claims: ProductIntelligenceClaim[];
   assets: ProductIntelligenceAsset[];
   changes: ProductIntelligenceChange[];
+  timelineEvents: ProductIntelligenceTimelineEvent[];
   signals: ProductIntelligenceSignal[];
   qualityAssessment: ContentQualityAssessment;
   contentComposer: EvidenceBoundComposerResult;
@@ -267,6 +270,7 @@ async function loadProfileDetail(profileId: string, supabase: ReturnType<typeof 
     { data: claims, error: claimsError },
     { data: assets, error: assetsError },
     changesResult,
+    timelineResult,
     signalsResult,
   ] = await Promise.all([
     supabase.from('product_intelligence_profiles').select('*').eq('id', profileId).maybeSingle(),
@@ -292,6 +296,12 @@ async function loadProfileDetail(profileId: string, supabase: ReturnType<typeof 
       .order('detected_at', { ascending: false })
       .limit(50),
     supabase
+      .from('product_intelligence_timeline_events')
+      .select('*')
+      .eq('profile_id', profileId)
+      .order('occurred_at', { ascending: false })
+      .limit(50),
+    supabase
       .from('product_intelligence_signals')
       .select('*')
       .eq('profile_id', profileId)
@@ -309,6 +319,11 @@ async function loadProfileDetail(profileId: string, supabase: ReturnType<typeof 
     changesResult.error &&
     (changesResult.error.message.includes('product_intelligence_changes') || changesResult.error.code === '42P01');
   if (changesResult.error && !changesUnavailable) throw new Error(changesResult.error.message);
+  const timelineUnavailable =
+    timelineResult.error &&
+    (timelineResult.error.message.includes('product_intelligence_timeline_events') ||
+      timelineResult.error.code === '42P01');
+  if (timelineResult.error && !timelineUnavailable) throw new Error(timelineResult.error.message);
   const signalsUnavailable =
     signalsResult.error &&
     (signalsResult.error.message.includes('product_intelligence_signals') || signalsResult.error.code === '42P01');
@@ -317,6 +332,9 @@ async function loadProfileDetail(profileId: string, supabase: ReturnType<typeof 
   const mappedSources = (sources || []).map((row) => mapSourceRow(row as Record<string, unknown>));
   const mappedClaims = (claims || []).map((row) => mapClaimRow(row as Record<string, unknown>));
   const mappedChanges = (changesResult.data || []).map((row) => mapChangeRow(row as Record<string, unknown>));
+  const mappedTimelineEvents = (timelineResult.data || []).map((row) =>
+    mapIntelligenceTimelineRow(row as Record<string, unknown>),
+  );
   const mappedSignals = (signalsResult.data || []).map((row) => mapSignalRow(row as Record<string, unknown>));
   const mappedAssets = (assets || []).map((row) => mapAssetRow(row as Record<string, unknown>));
   const baseItem = mapProfileRow(profile as Record<string, unknown>, {
@@ -371,6 +389,7 @@ async function loadProfileDetail(profileId: string, supabase: ReturnType<typeof 
     claims: mappedClaims,
     assets: mappedAssets,
     changes: mappedChanges,
+    timelineEvents: mappedTimelineEvents,
     signals: mappedSignals,
     qualityAssessment,
     contentComposer,
@@ -586,13 +605,13 @@ export async function getAdminIntelligenceOverview(input?: {
       : Promise.resolve({ data: [] as Array<{ profile_id: string }>, error: null as null }),
     profileIds.length > 0
       ? supabase
-          .from('product_intelligence_claims')
-          .select('profile_id, conflict_status, verification_status')
-          .in('profile_id', profileIds)
+        .from('product_intelligence_claims')
+        .select('profile_id, conflict_status, verification_status')
+        .in('profile_id', profileIds)
       : Promise.resolve({
-          data: [] as Array<{ profile_id: string; conflict_status: string; verification_status: string }>,
-          error: null as null,
-        }),
+        data: [] as Array<{ profile_id: string; conflict_status: string; verification_status: string }>,
+        error: null as null,
+      }),
     profileIds.length > 0
       ? supabase.from('product_intelligence_assets').select('profile_id').in('profile_id', profileIds)
       : Promise.resolve({ data: [] as Array<{ profile_id: string }>, error: null as null }),

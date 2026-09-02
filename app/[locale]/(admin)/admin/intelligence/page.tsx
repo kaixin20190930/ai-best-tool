@@ -885,6 +885,89 @@ export default async function AdminIntelligencePage({
                   </div>
                 </div>
 
+                <div className='rounded-xl border border-cyan-200 bg-cyan-50/60 p-4 xl:col-span-3'>
+                  <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between'>
+                    <div>
+                      <p className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Change Timeline</p>
+                      <h3 className='mt-1 text-lg font-bold text-slate-950'>Confirmed history and review checkpoints</h3>
+                      <p className='mt-1 text-sm text-slate-600'>
+                        Timeline events are editorial records. Pending machine differences above never appear here
+                        automatically.
+                      </p>
+                    </div>
+                    <span className='rounded-full bg-white px-3 py-1 text-xs font-semibold text-cyan-800'>
+                      {selected.timelineEvents.length} events
+                    </span>
+                  </div>
+
+                  <div className='mt-4 space-y-3'>
+                    {selected.timelineEvents.length > 0 ? (
+                      selected.timelineEvents.map((event) => (
+                        <article key={event.id} className='rounded-xl border border-cyan-100 bg-white p-4'>
+                          <div className='flex flex-wrap items-center gap-2 text-xs font-semibold'>
+                            <span
+                              className={`rounded-full px-2 py-1 ${
+                                event.eventType === 'reviewed_no_change'
+                                  ? 'bg-emerald-100 text-emerald-800'
+                                  : 'bg-cyan-100 text-cyan-800'
+                              }`}
+                            >
+                              {event.eventType === 'reviewed_no_change' ? 'reviewed · no change' : event.eventType}
+                            </span>
+                            <span className='rounded-full bg-slate-100 px-2 py-1 text-slate-700'>
+                              {event.reviewScope}
+                            </span>
+                            <span className='rounded-full bg-slate-100 px-2 py-1 text-slate-700'>
+                              {event.visibility}
+                            </span>
+                            <span className='text-slate-500'>{formatDate(event.occurredAt)}</span>
+                          </div>
+                          <h4 className='mt-3 text-sm font-bold text-slate-950'>{event.title}</h4>
+                          <p className='mt-1 text-sm leading-6 text-slate-700'>{event.summary}</p>
+                          {event.eventType !== 'reviewed_no_change' ? (
+                            <div className='mt-3 grid gap-3 md:grid-cols-2'>
+                              <div className='rounded-lg bg-slate-50 p-3 text-xs text-slate-700'>
+                                <span className='font-semibold text-slate-500'>Before: </span>
+                                {event.oldValue === null
+                                  ? '—'
+                                  : typeof event.oldValue === 'string'
+                                    ? event.oldValue
+                                    : JSON.stringify(event.oldValue)}
+                              </div>
+                              <div className='rounded-lg bg-cyan-50 p-3 text-xs text-slate-700'>
+                                <span className='font-semibold text-cyan-700'>After: </span>
+                                {event.newValue === null
+                                  ? '—'
+                                  : typeof event.newValue === 'string'
+                                    ? event.newValue
+                                    : JSON.stringify(event.newValue)}
+                              </div>
+                            </div>
+                          ) : null}
+                          <div className='mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500'>
+                            <span>Verified {formatDate(event.verifiedAt)}</span>
+                            {event.sourceUrl ? (
+                              <a
+                                href={event.sourceUrl}
+                                target='_blank'
+                                rel='noreferrer'
+                                className='font-semibold text-cyan-700 hover:underline'
+                              >
+                                Open evidence
+                              </a>
+                            ) : null}
+                          </div>
+                        </article>
+                      ))
+                    ) : (
+                      <p className='rounded-lg bg-white p-3 text-sm text-slate-500'>
+                        No confirmed timeline events yet. A completed review with no change is recorded separately from
+                        a confirmed fact change.
+                      </p>
+                    )}
+                  </div>
+                </div>
+
                 <div className='rounded-xl border border-slate-200 p-4'>
                   <h3 className='text-sm font-bold text-slate-950'>Facts</h3>
                   <dl className='mt-3 space-y-3 text-sm'>

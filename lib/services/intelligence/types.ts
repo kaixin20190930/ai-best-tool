@@ -28,6 +28,12 @@ export type IntelligenceSourceType = 'official' | 'independent' | 'owner' | 'use
 
 export type IntelligenceVerificationStatus = 'candidate' | 'verified' | 'rejected' | 'superseded';
 
+export type IntelligenceTimelineEventType = 'fact_added' | 'fact_changed' | 'fact_removed' | 'reviewed_no_change';
+
+export type IntelligenceTimelineReviewScope = 'fact' | 'decision' | 'full';
+
+export type IntelligenceTimelineVisibility = 'internal' | 'public';
+
 export type IntelligenceAssetType = 'logo' | 'screenshot' | 'social' | 'video';
 
 export type IntelligenceEvidenceStatus = 'candidate' | 'verified' | 'rejected';
@@ -154,6 +160,28 @@ export interface ProductIntelligenceChange {
   detectedAt: string;
   reviewedAt: string | null;
   reviewNote: string | null;
+}
+
+export interface ProductIntelligenceTimelineEvent {
+  id: string;
+  profileId: string;
+  sourceChangeId: string | null;
+  eventType: IntelligenceTimelineEventType;
+  reviewScope: IntelligenceTimelineReviewScope;
+  claimType: IntelligenceClaimType | null;
+  claimKey: string | null;
+  title: string;
+  summary: string;
+  oldValue: unknown | null;
+  newValue: unknown | null;
+  sourceUrl: string | null;
+  sourceExcerpt: string | null;
+  visibility: IntelligenceTimelineVisibility;
+  occurredAt: string;
+  verifiedAt: string;
+  verifiedBy: string | null;
+  reviewNote: string | null;
+  metadata: Record<string, unknown>;
 }
 
 export interface ProductIntelligenceSignal {

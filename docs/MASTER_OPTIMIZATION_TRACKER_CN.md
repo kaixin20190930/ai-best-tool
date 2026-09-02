@@ -81,6 +81,8 @@
 | EVD-02 | 工具页 Evidence Ledger UI          | Decision Card 后可展开核对已验证 claim；候选证据不公开，不以单一分数代替解释                     | 已完成；有效工具身份产生 verified 数据后自动展示                                                                               | Codex           |
 | EVD-03 | 后台证据编辑与冲突处理             | 状态受控流转；冲突不自动覆盖；核验人、日期、复查、失效和适用范围可追踪；所有保存操作有中间态      | 已完成；首条真实人工核验已回读确认，专项测试、tsc、完整 build 通过                                                            | Codex           |
 | EVD-04 | 情报档案身份映射收口               | `tool` 类型 owner_id 必须对应目录真实工具；存量错误身份重新归类后再公开                           | 已完成；site 迁移、3 个档案缓存重算、Fathom 真实 UUID -> verified -> 生产公开链路全部通过                                    | Codex + 用户    |
+| CHG-01 | Change Timeline 模型与读取          | 正式历史与机器待审差异分离；事实变化与“复核无变化”分开；公开只读数据仅来自真实 tool 和 public 事件 | 进行中；代码、后台 UI、专项测试与 tsc 已完成，待执行 `20260902_product_intelligence_timeline.sql` 并复验                   | Codex + 用户    |
+| CHG-02 | 首批核心工具变化基线               | 10-20 个核心工具拥有真实基线复核；没有变化时只记录 `reviewed_no_change`，禁止伪造变化               | 待 CHG-01 迁移验收后执行                                                                                                    | Codex + 用户    |
 
 ### P2：只在数据证明后扩展（第 4-6 周）
 

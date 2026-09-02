@@ -79,7 +79,7 @@ AI Best Tool 对 Google 和普通访客的基础身份保持不变：
 | EVD-02 | P1     | 工具页 Evidence Ledger UI       | 核心判断可以展开查看证据，不以单一分数替代解释                  |     1 天 | 已完成；有效工具身份产生 verified 数据后自动展示     |
 | EVD-03 | P1     | 后台证据编辑与冲突处理          | 官方、独立、owner、用户来源分开；冲突不自动覆盖                 | 1-1.5 天 | 已完成；首条人工核验、状态保护、处理中反馈已落地     |
 | EVD-04 | P1     | 情报档案身份映射收口            | tool 档案 owner_id 必须对应真实目录工具；错误身份不可继续同步   |   0.5 天 | 已完成；站点迁移、缓存修复、Fathom 公开闭环均通过    |
-| CHG-01 | P1     | Change Timeline 模型与读取      | 真实事实变化和“仅复核、无变化”可区分                            |     1 天 | 待执行                                               |
+| CHG-01 | P1     | Change Timeline 模型与读取      | 真实事实变化和“仅复核、无变化”可区分                            |     1 天 | 进行中；代码、后台读取与测试完成，待执行数据库迁移   |
 | CHG-02 | P1     | 首批 10-20 个核心工具变化时间线 | 每页至少有基线核查；无变化不伪造更新事件                        |   1-2 天 | 待执行                                               |
 | LNK-01 | P1     | Guide / 分类消费统一判断        | 不复制工具事实；链接到对应 Decision Card 和证据                 |     1 天 | 待执行                                               |
 | MON-01 | P1     | 30/90 天监测闭环                | 事实到期、判断到期和变化待审可筛选                              |   0.5 天 | 待执行                                               |
@@ -238,3 +238,22 @@ Review 结论：方案可实施。P0 不改变 URL 和索引面，先增强主�
   candidate，Fathom 为 1 / 10，MOXION.AI 为 0 / 0。
 - 旧快照中的机器提取内容由容易误解的 `facts` 无损迁移为 `candidateFacts`，并标记
   `factsSemantics: machine_extracted_candidates`；后续同步持续使用这一语义。
+
+## 十四、Change Timeline 模型与读取实施记录（2026-09-02）
+
+- 新增独立的 `product_intelligence_timeline_events` 正式时间线，不复用机器差异队列
+  `product_intelligence_changes`；机器发现的变化不会自动成为历史事实。
+- 事件明确区分 `fact_added / fact_changed / fact_removed` 与 `reviewed_no_change`。完成复核但事实未变化时记录审核检查点，
+  不伪造“产品更新”。
+- 每条事件保留复核范围、claim 身份、前后值、来源、发生时间、核验时间、核验人、备注和 `internal / public` 可见性。
+- 数据库约束要求事实变化必须绑定 claim；公开事件必须包含 HTTP(S) 来源。表已启用 RLS，不向匿名客户端开放直接写入能力。
+- 后台 Intelligence 详情页新增独立 Change Timeline 区域，与待审核机器差异并列但不混合；空状态也明确说明“无变化复核”和
+  “事实变化”的区别。
+- 新增公开只读服务，仅允许读取真实 `tool` 档案且 `visibility = public` 的事件；站点级档案、内部记录和待审差异不会进入公开
+  工具页数据。
+- 专项测试 `pnpm run test:intelligence-change-timeline`、Evidence Ledger 回归、intelligence foundation 回归和 TypeScript
+  全量检查均已通过。
+- 待执行幂等迁移：`db/supabase/migrations/20260902_product_intelligence_timeline.sql`。执行后运行
+  `pnpm run verify:intelligence-timeline-migration`；返回 `timelineSchemaReadable: true` 后关闭 CHG-01。
+- CHG-02 不自动补造历史变化。首批核心工具应先写入真实的基线复核或 `reviewed_no_change`，后续只有人工确认的变化才能写入
+  `fact_*` 事件。
