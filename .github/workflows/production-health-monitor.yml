@@ -75,7 +75,7 @@ jobs:
         run: |
           set -euo pipefail
           BASE_URL="${MONITOR_BASE_URL%/}"
-          CANONICAL_URL="${BASE_URL}/cn"
+          CANONICAL_URL="https://aibesttool.com/cn"
 
           for SOURCE_URL in "https://www.aibesttool.com/cn" "http://aibesttool.com/cn"; do
             REDIRECT=$(curl -sS --retry 3 --retry-delay 2 --retry-all-errors \
@@ -123,9 +123,13 @@ jobs:
           ! grep -q 'comparison' /tmp/sitemap.xml
 
       - name: Check Stack and Trial privacy surface
+        if: always()
         run: |
           set -euo pipefail
           BASE_URL="${MONITOR_BASE_URL%/}"
+
+          curl -sS -L --retry 3 --retry-delay 2 --retry-all-errors \
+            --connect-timeout 10 --max-time 30 "$BASE_URL/sitemap.xml" -o /tmp/stack-privacy-sitemap.xml
 
           for ROUTE in \
             /cn/profile/stack \
@@ -142,7 +146,7 @@ jobs:
             grep -Eiq 'login|登录' "/tmp/${SAFE_NAME}.html"
           done
 
-          ! grep -Eq '<loc>[^<]*/profile/(stack|trials)(/|</loc>)' /tmp/sitemap.xml
+          ! grep -Eq '<loc>[^<]*/profile/(stack|trials)(/|</loc>)' /tmp/stack-privacy-sitemap.xml
 
       - name: Notify Feishu on Failure (optional)
         if: failure() && env.FEISHU_WEBHOOK_URL != ''

@@ -46,7 +46,10 @@ assert.match(smoke, /profile\/trials/);
 assert.match(smoke, /noindex/i);
 assert.match(smoke, /sitemap/i);
 assert.match(healthWorkflow, /Check Stack and Trial privacy surface/);
+assert.match(healthWorkflow, /Check Stack and Trial privacy surface\s+if: always\(\)/);
 assert.match(healthWorkflow, /profile\/\(stack\|trials\)/);
+assert.match(healthWorkflow, /CANONICAL_URL="https:\/\/aibesttool\.com\/cn"/);
+assert.match(healthWorkflow, /stack-privacy-sitemap\.xml/);
 assert.match(
   healthWorkflow,
   /for ROUTE in \/cn \/cn\/explore[\s\S]*?test "\$HTTP_CODE" -lt 400\s+done/,
