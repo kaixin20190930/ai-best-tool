@@ -121,6 +121,28 @@ jobs:
           ! grep -Eq '<loc>[^<]*/(admin|login|register|profile|pricing|submit|developer/listing|new|startup)(/|</loc>)' /tmp/sitemap.xml
           ! grep -q 'comparison' /tmp/sitemap.xml
 
+      - name: Check Stack and Trial privacy surface
+        run: |
+          set -euo pipefail
+          BASE_URL="${MONITOR_BASE_URL%/}"
+
+          for ROUTE in \
+            /cn/profile/stack \
+            /cn/profile/trials \
+            /cn/profile/trials/00000000-0000-4000-8000-000000000000; do
+            SAFE_NAME=$(echo "$ROUTE" | tr '/' '-')
+            HTTP_CODE=$(curl -sS -L --retry 3 --retry-delay 2 --retry-all-errors \
+              --connect-timeout 10 --max-time 30 \
+              -o "/tmp/${SAFE_NAME}.html" -w "%{http_code}" "$BASE_URL$ROUTE")
+            echo "$ROUTE http_code=$HTTP_CODE"
+            test "$HTTP_CODE" -ge 200
+            test "$HTTP_CODE" -lt 400
+            grep -Eiq '<meta name="robots" content="[^"]*noindex' "/tmp/${SAFE_NAME}.html"
+            grep -Eiq 'login|登录' "/tmp/${SAFE_NAME}.html"
+          done
+
+          ! grep -Eq '<loc>[^<]*/profile/(stack|trials)(/|</loc>)' /tmp/sitemap.xml
+
       - name: Notify Feishu on Failure (optional)
         if: failure() && env.FEISHU_WEBHOOK_URL != ''
         run: |
