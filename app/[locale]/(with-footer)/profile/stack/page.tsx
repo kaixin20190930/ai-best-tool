@@ -83,9 +83,9 @@ export default async function StackPage({ params }: { params: { locale: string }
     };
   });
 
-  const { data: latestAuditRow } = await supabase
+  const { data: latestAuditRow, error: latestAuditError } = await supabase
     .from('stack_audit_runs')
-    .select('id, status, created_at, completed_at')
+    .select('id, status, created_at, completed_at, failure_code, idempotency_key')
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
     .limit(1)
@@ -119,6 +119,8 @@ export default async function StackPage({ params }: { params: { locale: string }
     latestAudit = {
       id: String(latestAuditRow.id),
       status: String(latestAuditRow.status),
+      failureCode: latestAuditRow.failure_code ? String(latestAuditRow.failure_code) : null,
+      idempotencyKey: latestAuditRow.idempotency_key ? String(latestAuditRow.idempotency_key) : null,
       createdAt: String(latestAuditRow.created_at),
       completedAt: latestAuditRow.completed_at ? String(latestAuditRow.completed_at) : null,
       findings: ((findingRows || []) as DatabaseRow[]).map((finding) => {
@@ -156,6 +158,11 @@ export default async function StackPage({ params }: { params: { locale: string }
             {isChinese ? '打开 7 日试用工作区' : 'Open 7-day trial workspace'}
           </Link>
         </div>
+        {tasksResult.error || itemsResult.error || itemTasksResult.error || latestAuditError ? (
+          <div className='mb-5 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-900'>
+            {isChinese ? '部分私有 Stack 数据暂时无法读取。请刷新重试；页面不会把读取失败误报为“没有数据”。' : 'Some private Stack data is temporarily unavailable. Refresh to retry; a read failure is never presented as empty data.'}
+          </div>
+        ) : null}
         <StackWorkspace locale={params.locale} tools={tools} tasks={tasks} items={items} latestAudit={latestAudit} />
       </div>
     </main>

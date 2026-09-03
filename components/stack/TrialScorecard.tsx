@@ -23,7 +23,7 @@ export default function TrialScorecard({
   const isChinese = locale === 'cn' || locale === 'tw';
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [pendingCheckId, setPendingCheckId] = useState<string | null>(null);
+  const [pendingAction, setPendingAction] = useState<string | null>(null);
   const [notes, setNotes] = useState<Record<string, string>>(Object.fromEntries(checks.map((check) => [check.id, check.actualNote || ''])));
   const [finalDecision, setFinalDecision] = useState('keep');
   const [privateNotes, setPrivateNotes] = useState('');
@@ -31,28 +31,36 @@ export default function TrialScorecard({
   const pendingCount = checks.filter((check) => check.result === 'pending').length;
 
   const saveCheck = (checkId: string, result: string) => {
-    setPendingCheckId(checkId);
+    setPendingAction(`check:${checkId}:${result}`);
     startTransition(async () => {
-      const response = await updateTrialCheck({ locale, scorecardId, checkId, result, actualNote: notes[checkId] });
-      setPendingCheckId(null);
-      if (!response.success) {
-        toast.error(`${response.message} (${response.code})`);
-        return;
+      try {
+        const response = await updateTrialCheck({ locale, scorecardId, checkId, result, actualNote: notes[checkId] });
+        if (!response.success) {
+          toast.error(`${response.message} (${response.code})`);
+          return;
+        }
+        toast.success(isChinese ? '检查结果已保存。' : response.message);
+        router.refresh();
+      } finally {
+        setPendingAction(null);
       }
-      toast.success(isChinese ? '检查结果已保存。' : response.message);
-      router.refresh();
     });
   };
 
   const complete = () => {
+    setPendingAction('complete');
     startTransition(async () => {
-      const response = await completeTrialScorecard({ locale, scorecardId, finalDecision, privateNotes });
-      if (!response.success) {
-        toast.error(`${response.message} (${response.code})`);
-        return;
+      try {
+        const response = await completeTrialScorecard({ locale, scorecardId, finalDecision, privateNotes });
+        if (!response.success) {
+          toast.error(`${response.message} (${response.code})`);
+          return;
+        }
+        toast.success(isChinese ? '最终试用决定已保存。' : response.message);
+        router.refresh();
+      } finally {
+        setPendingAction(null);
       }
-      toast.success(isChinese ? '最终试用决定已保存。' : response.message);
-      router.refresh();
     });
   };
 
@@ -74,7 +82,7 @@ export default function TrialScorecard({
           {editable ? <div className='mt-3 flex flex-wrap gap-2'>
             {(['pass', 'fail', 'skipped'] as const).map((result) => (
               <button key={result} type='button' disabled={isPending} onClick={() => saveCheck(check.id, result)} className={`inline-flex items-center gap-1 rounded-lg border px-3 py-2 text-xs font-semibold ${check.result === result ? 'border-cyan-300 bg-cyan-50 text-cyan-900' : 'border-slate-200 text-slate-700 hover:bg-slate-50'}`}>
-                {pendingCheckId === check.id && isPending ? <Loader2 className='size-3.5 animate-spin' /> : null}
+                {pendingAction === `check:${check.id}:${result}` ? <Loader2 className='size-3.5 animate-spin' /> : null}
                 {result}
               </button>
             ))}
@@ -90,8 +98,8 @@ export default function TrialScorecard({
         </div>
         <textarea value={privateNotes} onChange={(event) => setPrivateNotes(event.target.value)} disabled={isPending} rows={3} maxLength={2000} placeholder={isChinese ? '记录最终判断的私有备注（可选）' : 'Private notes for your final decision (optional)'} className='mt-4 w-full rounded-xl border border-cyan-200 bg-white px-3 py-2.5 text-sm' />
         <button type='button' onClick={complete} disabled={isPending || pendingCount > 0} className='mt-3 inline-flex items-center gap-2 rounded-xl bg-cyan-800 px-4 py-2.5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50'>
-          {isPending && !pendingCheckId ? <Loader2 className='size-4 animate-spin' /> : <CheckCircle2 className='size-4' />}
-          {isPending && !pendingCheckId ? (isChinese ? '正在保存最终决定…' : 'Saving final decision...') : (isChinese ? '完成试用并保存决定' : 'Complete trial and save decision')}
+          {pendingAction === 'complete' ? <Loader2 className='size-4 animate-spin' /> : <CheckCircle2 className='size-4' />}
+          {pendingAction === 'complete' ? (isChinese ? '正在保存最终决定…' : 'Saving final decision...') : (isChinese ? '完成试用并保存决定' : 'Complete trial and save decision')}
         </button>
       </section> : null}
     </div>

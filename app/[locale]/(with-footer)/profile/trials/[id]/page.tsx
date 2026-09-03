@@ -17,12 +17,14 @@ export default async function TrialDetailPage({ params }: { params: { locale: st
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return <main className='container mx-auto px-4 py-16 text-center'><h1 className='text-3xl font-bold'>{isChinese ? '请先登录' : 'Please log in'}</h1><Link href={`/login?redirect=/profile/trials/${params.id}`} className='mt-6 inline-flex rounded-xl bg-cyan-700 px-5 py-3 font-semibold text-white'>{isChinese ? '登录' : 'Log in'}</Link></main>;
 
-  const { data: trial } = await supabase.from('trial_scorecards').select('*').eq('id', params.id).eq('user_id', user.id).maybeSingle();
+  const { data: trial, error: trialError } = await supabase.from('trial_scorecards').select('*').eq('id', params.id).eq('user_id', user.id).maybeSingle();
+  if (trialError) return <main className='container mx-auto max-w-3xl px-4 py-16'><div className='rounded-2xl border border-rose-200 bg-rose-50 p-6 text-rose-900'><h1 className='text-xl font-bold'>{isChinese ? '试用详情暂时无法读取' : 'Trial details are temporarily unavailable'}</h1><p className='mt-2 text-sm'>{isChinese ? '请刷新重试。系统不会把数据库读取失败误报为 404。' : 'Refresh to retry. A database read failure is not reported as a 404.'}</p></div></main>;
   if (!trial) notFound();
-  const [{ data: checkRows }, toolResult] = await Promise.all([
+  const [{ data: checkRows, error: checksError }, toolResult] = await Promise.all([
     supabase.from('trial_scorecard_checks').select('id, sequence, label, result, actual_value').eq('scorecard_id', params.id).order('sequence'),
     query<{ name: string; title: Record<string, string> }>(`SELECT name, title FROM tools WHERE id = $1::uuid LIMIT 1`, [trial.tool_id]),
   ]);
+  if (checksError) return <main className='container mx-auto max-w-3xl px-4 py-16'><div className='rounded-2xl border border-rose-200 bg-rose-50 p-6 text-rose-900'><h1 className='text-xl font-bold'>{isChinese ? '试用检查项暂时无法读取' : 'Trial checks are temporarily unavailable'}</h1><p className='mt-2 text-sm'>{isChinese ? '请刷新重试，已有检查项不会被当成空数据。' : 'Refresh to retry; saved checks are not presented as empty data.'}</p></div></main>;
   const tool = toolResult.rows[0];
   const toolTitle = tool ? getLocalizedField(tool.title, params.locale, isChinese ? 'cn' : 'en') : String(trial.tool_id);
   const checks: TrialCheckView[] = ((checkRows || []) as DatabaseRow[]).map((check) => {

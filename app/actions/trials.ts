@@ -68,11 +68,14 @@ async function createTrialInternal(input: {
   const admin = createAdminClient();
   const { data: existing } = await admin
     .from('trial_scorecards')
-    .select('id')
+    .select('id, status')
     .eq('user_id', userId)
     .eq('idempotency_key', idempotencyKey)
     .maybeSingle();
   if (existing) {
+    if (existing.status === 'planned') {
+      return { success: false, code: 'TRIAL_IN_PROGRESS', message: 'This trial is still being prepared. Wait a moment and retry.' };
+    }
     return { success: true, scorecardId: String(existing.id), reused: true, message: 'Existing trial reopened.' };
   }
 
@@ -83,7 +86,7 @@ async function createTrialInternal(input: {
     .insert({
       user_id: userId,
       tool_id: input.toolId,
-      status: 'active',
+      status: 'planned',
       target_outcome: targetOutcome,
       started_at: startedAt.toISOString(),
       ends_at: endsAt.toISOString(),
@@ -95,6 +98,17 @@ async function createTrialInternal(input: {
     .select('id')
     .single();
   if (scorecardError || !scorecard) {
+    const { data: collision } = await admin
+      .from('trial_scorecards')
+      .select('id, status')
+      .eq('user_id', userId)
+      .eq('idempotency_key', idempotencyKey)
+      .maybeSingle();
+    if (collision) {
+      return collision.status === 'planned'
+        ? { success: false, code: 'TRIAL_IN_PROGRESS', message: 'This trial is still being prepared. Wait a moment and retry.' }
+        : { success: true, scorecardId: String(collision.id), reused: true, message: 'Existing trial reopened.' };
+    }
     return { success: false, code: 'TRIAL_CREATE_FAILED', message: 'Unable to start this trial.' };
   }
   const scorecardId = String(scorecard.id);
@@ -110,6 +124,19 @@ async function createTrialInternal(input: {
   if (checksError) {
     await admin.from('trial_scorecards').delete().eq('id', scorecardId).eq('user_id', userId);
     return { success: false, code: 'TRIAL_CHECKS_FAILED', message: 'Trial checks could not be saved; no trial was created.' };
+  }
+
+  const { data: activated, error: activateError } = await admin
+    .from('trial_scorecards')
+    .update({ status: 'active' })
+    .eq('id', scorecardId)
+    .eq('user_id', userId)
+    .eq('status', 'planned')
+    .select('id')
+    .maybeSingle();
+  if (activateError || !activated) {
+    await admin.from('trial_scorecards').delete().eq('id', scorecardId).eq('user_id', userId);
+    return { success: false, code: 'TRIAL_ACTIVATION_FAILED', message: 'Trial setup could not finish; no trial was created.' };
   }
 
   refreshTrials(input.locale, scorecardId);

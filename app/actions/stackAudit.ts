@@ -49,13 +49,26 @@ async function runStackAuditInternal(input: {
     .eq('idempotency_key', idempotencyKey)
     .maybeSingle();
   if (existing) {
-    const summary = (existing.summary || {}) as Record<string, unknown>;
-    return {
-      success: true,
-      auditId: String(existing.id),
-      reused: true,
-      findingCount: Number(summary.findingCount || 0),
-    };
+    if (existing.status === 'pending' || existing.status === 'running') {
+      return { success: false, code: 'AUDIT_IN_PROGRESS', message: 'This audit is already running. Wait a moment and retry.' };
+    }
+    if (existing.status !== 'failed') {
+      const summary = (existing.summary || {}) as Record<string, unknown>;
+      return {
+        success: true,
+        auditId: String(existing.id),
+        reused: true,
+        findingCount: Number(summary.findingCount || 0),
+      };
+    }
+  }
+
+  const retryAuditId = existing?.status === 'failed' ? String(existing.id) : null;
+  if (retryAuditId) {
+    const { error: clearError } = await admin.from('stack_audit_findings').delete().eq('audit_id', retryAuditId);
+    if (clearError) {
+      return { success: false, code: 'AUDIT_RETRY_PREPARE_FAILED', message: 'Unable to prepare this audit for retry.' };
+    }
   }
 
   const [itemsResult, tasksResult] = await Promise.all([
@@ -120,18 +133,49 @@ async function runStackAuditInternal(input: {
       taskId: item.taskId,
     })),
   };
-  const { data: audit, error: auditError } = await admin
-    .from('stack_audit_runs')
-    .insert({
-      user_id: user.id,
-      status: 'running',
-      input_snapshot: inputSnapshot,
-      rules_version: STACK_AUDIT_RULES_VERSION,
-      idempotency_key: idempotencyKey,
-    })
-    .select('id')
-    .single();
+  const auditWrite = retryAuditId
+    ? admin
+        .from('stack_audit_runs')
+        .update({
+          status: 'running',
+          input_snapshot: inputSnapshot,
+          rules_version: STACK_AUDIT_RULES_VERSION,
+          summary: {},
+          failure_code: null,
+          completed_at: null,
+        })
+        .eq('id', retryAuditId)
+        .eq('user_id', user.id)
+        .eq('status', 'failed')
+    : admin.from('stack_audit_runs').insert({
+        user_id: user.id,
+        status: 'running',
+        input_snapshot: inputSnapshot,
+        rules_version: STACK_AUDIT_RULES_VERSION,
+        idempotency_key: idempotencyKey,
+      });
+  const { data: audit, error: auditError } = await auditWrite.select('id').maybeSingle();
   if (auditError || !audit) {
+    if (!retryAuditId) {
+      const { data: collision } = await admin
+        .from('stack_audit_runs')
+        .select('id, status, summary')
+        .eq('user_id', user.id)
+        .eq('idempotency_key', idempotencyKey)
+        .maybeSingle();
+      if (collision?.status === 'completed') {
+        const summary = (collision.summary || {}) as Record<string, unknown>;
+        return {
+          success: true,
+          auditId: String(collision.id),
+          reused: true,
+          findingCount: Number(summary.findingCount || 0),
+        };
+      }
+      if (collision) {
+        return { success: false, code: 'AUDIT_IN_PROGRESS', message: 'This audit is already running. Wait a moment and retry.' };
+      }
+    }
     return { success: false, code: 'AUDIT_CREATE_FAILED', message: 'Unable to start this audit.' };
   }
 

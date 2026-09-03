@@ -35,6 +35,8 @@ export type StackItemView = {
 export type StackAuditView = {
   id: string;
   status: string;
+  failureCode: string | null;
+  idempotencyKey: string | null;
   createdAt: string;
   completedAt: string | null;
   findings: Array<{
@@ -81,10 +83,15 @@ export default function StackWorkspace({
   const [form, setForm] = useState<StackItemInput>(emptyForm);
   const [mode, setMode] = useState<'listed' | 'custom'>('listed');
   const [isPending, startTransition] = useTransition();
+  const [pendingAction, setPendingAction] = useState<string | null>(null);
   const [selectedAuditTasks, setSelectedAuditTasks] = useState<string[]>(() =>
     Array.from(new Set(items.map((item) => item.taskId).filter((taskId): taskId is string => Boolean(taskId)))),
   );
-  const [auditKey, setAuditKey] = useState(() => globalThis.crypto?.randomUUID?.() || `audit-${Date.now()}`);
+  const [auditKey, setAuditKey] = useState(() =>
+    latestAudit?.status === 'failed' && latestAudit.idempotencyKey
+      ? latestAudit.idempotencyKey
+      : globalThis.crypto?.randomUUID?.() || `audit-${Date.now()}`,
+  );
   const amount = form.billingAmount?.trim() ? Number(form.billingAmount) : null;
   const preview = normalizeStackCost(amount !== null && Number.isFinite(amount) ? amount : null, form.billingPeriod);
 
@@ -117,36 +124,46 @@ export default function StackWorkspace({
 
   const submit = (event: React.FormEvent) => {
     event.preventDefault();
+    setPendingAction('save');
     startTransition(async () => {
-      const result = await saveStackItem(
-        {
-          ...form,
-          toolId: mode === 'listed' ? form.toolId : '',
-          customToolName: mode === 'custom' ? form.customToolName : '',
-          customToolUrl: mode === 'custom' ? form.customToolUrl : '',
-        },
-        locale,
-      );
-      if (!result.success) {
-        toast.error(`${result.message} (${result.code})`);
-        return;
+      try {
+        const result = await saveStackItem(
+          {
+            ...form,
+            toolId: mode === 'listed' ? form.toolId : '',
+            customToolName: mode === 'custom' ? form.customToolName : '',
+            customToolUrl: mode === 'custom' ? form.customToolUrl : '',
+          },
+          locale,
+        );
+        if (!result.success) {
+          toast.error(`${result.message} (${result.code})`);
+          return;
+        }
+        toast.success(isChinese ? 'AI Stack 已保存。' : result.message);
+        reset();
+        router.refresh();
+      } finally {
+        setPendingAction(null);
       }
-      toast.success(isChinese ? 'AI Stack 已保存。' : result.message);
-      reset();
-      router.refresh();
     });
   };
 
   const remove = (itemId: string) => {
+    setPendingAction(`delete:${itemId}`);
     startTransition(async () => {
-      const result = await deleteStackItem(itemId, locale);
-      if (!result.success) {
-        toast.error(`${result.message} (${result.code})`);
-        return;
+      try {
+        const result = await deleteStackItem(itemId, locale);
+        if (!result.success) {
+          toast.error(`${result.message} (${result.code})`);
+          return;
+        }
+        toast.success(isChinese ? '已从 Stack 移除。' : result.message);
+        if (form.id === itemId) reset();
+        router.refresh();
+      } finally {
+        setPendingAction(null);
       }
-      toast.success(isChinese ? '已从 Stack 移除。' : result.message);
-      if (form.id === itemId) reset();
-      router.refresh();
     });
   };
 
@@ -157,19 +174,24 @@ export default function StackWorkspace({
   };
 
   const runAudit = () => {
+    setPendingAction('audit');
     startTransition(async () => {
-      const result = await runStackAudit({ locale, targetTaskIds: selectedAuditTasks, idempotencyKey: auditKey });
-      if (!result.success) {
-        toast.error(`${result.message} (${result.code})`);
-        return;
+      try {
+        const result = await runStackAudit({ locale, targetTaskIds: selectedAuditTasks, idempotencyKey: auditKey });
+        if (!result.success) {
+          toast.error(`${result.message} (${result.code})`);
+          return;
+        }
+        toast.success(
+          isChinese
+            ? `审计完成，生成 ${result.findingCount} 条建议。`
+            : `Audit complete with ${result.findingCount} findings.`,
+        );
+        setAuditKey(globalThis.crypto?.randomUUID?.() || `audit-${Date.now()}`);
+        router.refresh();
+      } finally {
+        setPendingAction(null);
       }
-      toast.success(
-        isChinese
-          ? `审计完成，生成 ${result.findingCount} 条建议。`
-          : `Audit complete with ${result.findingCount} findings.`,
-      );
-      setAuditKey(globalThis.crypto?.randomUUID?.() || `audit-${Date.now()}`);
-      router.refresh();
     });
   };
 
@@ -345,8 +367,8 @@ export default function StackWorkspace({
 
         <div className='mt-5 flex flex-wrap gap-3'>
           <button type='submit' disabled={isPending} className='inline-flex items-center gap-2 rounded-xl bg-cyan-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-cyan-800 disabled:opacity-60'>
-            {isPending ? <Loader2 className='size-4 animate-spin' /> : form.id ? <Pencil className='size-4' /> : <Plus className='size-4' />}
-            {isPending ? (isChinese ? '正在保存…' : 'Saving...') : form.id ? (isChinese ? '保存修改' : 'Save changes') : (isChinese ? '加入 AI Stack' : 'Add to AI Stack')}
+            {pendingAction === 'save' ? <Loader2 className='size-4 animate-spin' /> : form.id ? <Pencil className='size-4' /> : <Plus className='size-4' />}
+            {pendingAction === 'save' ? (isChinese ? '正在保存…' : 'Saving...') : form.id ? (isChinese ? '保存修改' : 'Save changes') : (isChinese ? '加入 AI Stack' : 'Add to AI Stack')}
           </button>
           {form.id ? <button type='button' disabled={isPending} onClick={reset} className='rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700'>{isChinese ? '取消编辑' : 'Cancel edit'}</button> : null}
         </div>
@@ -393,8 +415,8 @@ export default function StackWorkspace({
             disabled={isPending || items.length === 0 || selectedAuditTasks.length === 0}
             className='mt-4 inline-flex items-center gap-2 rounded-xl bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50'
           >
-            {isPending ? <Loader2 className='size-4 animate-spin' /> : <Play className='size-4' />}
-            {isPending ? (isChinese ? '正在生成审计建议…' : 'Generating audit findings...') : (isChinese ? '运行本轮审计' : 'Run this audit')}
+            {pendingAction === 'audit' ? <Loader2 className='size-4 animate-spin' /> : <Play className='size-4' />}
+            {pendingAction === 'audit' ? (isChinese ? '正在生成审计建议…' : 'Generating audit findings...') : (isChinese ? '运行本轮审计' : 'Run this audit')}
           </button>
         </div>
 
@@ -416,6 +438,12 @@ export default function StackWorkspace({
               </span>
             </div>
             <div className='mt-4 space-y-3'>
+              {latestAudit.status === 'failed' ? (
+                <div className='rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-900'>
+                  <p className='font-semibold'>{isChinese ? '上次审计未完成，可以安全重试；不会重复创建审计记录。' : 'The last audit did not finish. Retry safely without creating a duplicate run.'}</p>
+                  {latestAudit.failureCode ? <p className='mt-1 text-xs'>Code: {latestAudit.failureCode}</p> : null}
+                </div>
+              ) : null}
               {latestAudit.findings.map((finding) => (
                 <article key={finding.id} className={`rounded-2xl border p-4 ${findingTone(finding.findingType)}`}>
                   <div className='flex flex-wrap items-start justify-between gap-3'>
@@ -473,7 +501,7 @@ export default function StackWorkspace({
               </div>
               <div className='flex gap-2'>
                 <button type='button' disabled={isPending} onClick={() => edit(item)} aria-label={isChinese ? '编辑' : 'Edit'} className='rounded-lg border border-slate-200 p-2 text-slate-600 hover:bg-slate-50'><Pencil className='size-4' /></button>
-                <button type='button' disabled={isPending} onClick={() => remove(item.id)} aria-label={isChinese ? '删除' : 'Delete'} className='rounded-lg border border-rose-200 p-2 text-rose-600 hover:bg-rose-50'><Trash2 className='size-4' /></button>
+                <button type='button' disabled={isPending} onClick={() => remove(item.id)} aria-label={isChinese ? '删除' : 'Delete'} className='rounded-lg border border-rose-200 p-2 text-rose-600 hover:bg-rose-50'>{pendingAction === `delete:${item.id}` ? <Loader2 className='size-4 animate-spin' /> : <Trash2 className='size-4' />}</button>
               </div>
             </div>
             <div className='mt-4 grid gap-3 sm:grid-cols-3'>

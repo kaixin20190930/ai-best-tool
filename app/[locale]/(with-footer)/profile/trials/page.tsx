@@ -41,6 +41,7 @@ export default async function TrialsPage({ params }: { params: { locale: string 
           <TrialCreator locale={params.locale} tools={tools} />
           <section className='space-y-3'>
             <div className='rounded-3xl bg-slate-950 p-5 text-white'><p className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-300'>{isChinese ? '试用记录' : 'Trial history'}</p><p className='mt-2 text-4xl font-bold'>{trials.length}</p></div>
+            {trialsResult.error ? <div className='rounded-2xl border border-rose-200 bg-rose-50 p-5 text-sm text-rose-900'>{isChinese ? '试用记录暂时无法读取，请刷新重试。这里不会把读取失败显示成“还没有试用”。' : 'Trial history is temporarily unavailable. Refresh to retry; this error is not presented as an empty history.'}</div> : null}
             {trials.map((trial) => {
               const toolId = String(trial.tool_id);
               return <Link key={String(trial.id)} href={`/profile/trials/${trial.id}`} className='block rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-cyan-300'>
@@ -48,7 +49,7 @@ export default async function TrialsPage({ params }: { params: { locale: string 
                 <p className='mt-3 line-clamp-2 text-sm leading-6 text-slate-600'>{String(trial.target_outcome)}</p><p className='mt-3 text-xs text-slate-500'>{String(trial.started_at).slice(0, 10)} → {String(trial.ends_at).slice(0, 10)}</p>
               </Link>;
             })}
-            {trials.length === 0 ? <div className='rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-600'>{isChinese ? '还没有试用记录。先从左侧定义一次真实试用。' : 'No trial yet. Define the first real trial on the left.'}</div> : null}
+            {!trialsResult.error && trials.length === 0 ? <div className='rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-600'>{isChinese ? '还没有试用记录。先从左侧定义一次真实试用。' : 'No trial yet. Define the first real trial on the left.'}</div> : null}
           </section>
         </div>
       </div>

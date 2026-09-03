@@ -89,6 +89,21 @@ async function saveStackItemInternal(input: StackItemInput, locale: string): Pro
   if (dataSensitivity && !sensitivityLevels.has(dataSensitivity)) {
     return { success: false, code: 'INVALID_SENSITIVITY', message: 'Choose a valid data sensitivity.' };
   }
+  const taskId = input.taskId?.trim() || '';
+  if (taskId && !uuidPattern.test(taskId)) {
+    return { success: false, code: 'INVALID_TASK', message: 'Choose a valid primary task.' };
+  }
+  if (taskId) {
+    const { data: activeTask, error: taskLookupError } = await supabase
+      .from('decision_tasks')
+      .select('id')
+      .eq('id', taskId)
+      .eq('status', 'active')
+      .maybeSingle();
+    if (taskLookupError || !activeTask) {
+      return { success: false, code: 'TASK_NOT_AVAILABLE', message: 'The selected task is no longer available.' };
+    }
+  }
 
   const amountText = input.billingAmount?.trim() || '';
   const billingAmount = amountText === '' ? null : Number(amountText);
@@ -127,6 +142,15 @@ async function saveStackItemInternal(input: StackItemInput, locale: string): Pro
     notes: input.notes?.trim().slice(0, 2000) || null,
   };
 
+  const isNewItem = !itemId;
+  const { data: previousTaskLink } = itemId
+    ? await supabase
+        .from('user_tool_stack_item_tasks')
+        .select('task_id, is_primary')
+        .eq('stack_item_id', itemId)
+        .eq('is_primary', true)
+        .maybeSingle()
+    : { data: null };
   let savedId = itemId;
   if (itemId) {
     const { data, error } = await supabase
@@ -152,19 +176,26 @@ async function saveStackItemInternal(input: StackItemInput, locale: string): Pro
     .delete()
     .eq('stack_item_id', savedId);
   if (clearTaskError) {
-    return { success: false, code: 'STACK_TASK_SAVE_FAILED', message: 'The tool was saved, but its task was not updated.' };
+    if (isNewItem) await supabase.from('user_tool_stack_items').delete().eq('id', savedId).eq('user_id', user.id);
+    return { success: false, code: 'STACK_TASK_SAVE_FAILED', message: 'Unable to save the task link. No duplicate tool was created.' };
   }
-  if (input.taskId) {
-    if (!uuidPattern.test(input.taskId)) {
-      return { success: false, code: 'INVALID_TASK', message: 'The tool was saved, but the selected task is invalid.' };
-    }
+  if (taskId) {
     const { error: taskError } = await supabase.from('user_tool_stack_item_tasks').insert({
       stack_item_id: savedId,
-      task_id: input.taskId,
+      task_id: taskId,
       is_primary: true,
     });
     if (taskError) {
-      return { success: false, code: 'STACK_TASK_SAVE_FAILED', message: 'The tool was saved, but its task was not updated.' };
+      if (isNewItem) {
+        await supabase.from('user_tool_stack_items').delete().eq('id', savedId).eq('user_id', user.id);
+      } else if (previousTaskLink?.task_id) {
+        await supabase.from('user_tool_stack_item_tasks').insert({
+          stack_item_id: savedId,
+          task_id: previousTaskLink.task_id,
+          is_primary: true,
+        });
+      }
+      return { success: false, code: 'STACK_TASK_SAVE_FAILED', message: 'Unable to save the task link. Retry safely.' };
     }
   }
 

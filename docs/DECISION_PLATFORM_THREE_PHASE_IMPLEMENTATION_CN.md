@@ -363,8 +363,8 @@ FK、`claim_snapshot JSONB NOT NULL`、`purpose`、`created_at`，主键 `(findi
 | STK-01 | P1     | 私有 Stack、Audit、Trial 表与 RLS |   1 天 | 已完成；7 表生产可读，私有 RLS、跨用户关联触发器、幂等键和专项测试通过 |
 | STK-02 | P1     | Stack 编辑与成本规范化            |   1 天 | 已完成；私有编辑页、真实账单、月/年/usage 可追溯折算、目录/自定义工具与操作中间态已落地；专项测试、SEO 架构、类型检查与完整 build 通过 |
 | STK-03 | P1     | Keep/Replace/Remove/Missing 规则  |   1 天 | 已完成；目标任务范围、每工具唯一主建议、确定性规则、rationale、confidence、证据快照与“仅建议不自动取消”边界已落地；专项测试、类型检查、SEO 架构与完整 build 通过 |
-| STK-04 | P1     | 7 日 Scorecard 与提醒             | 1.5 天 | 代码已完成；3-5 项真实检查、固定 7 日窗口、pass/fail/skipped、最终 keep/cancel/compare、站内单次提醒和每日调度已通过专项测试、类型检查、SEO 架构与完整 build；待生产迁移回读 |
-| STK-05 | P1     | 中间态、空态和失败恢复            | 0.5 天 | 重试不重复写入                           |
+| STK-04 | P1     | 7 日 Scorecard 与提醒             | 1.5 天 | 已完成；3-5 项真实检查、固定 7 日窗口、pass/fail/skipped、最终 keep/cancel/compare、站内单次提醒和每日调度已落地，生产迁移回读、专项测试、类型检查、SEO 架构与完整 build 全部通过 |
+| STK-05 | P1     | 中间态、空态和失败恢复            | 0.5 天 | 已完成；审计失败复用原记录重试，并发审计/Trial 不重复写入，Stack 半写入回滚，逐按钮中间态和读取失败专用错误态已通过专项测试、类型检查、SEO 架构与完整 build |
 | STK-06 | P0     | 隐私、SEO 与发布验收              | 0.5 天 | 私有 URL 不在 sitemap，跨用户 403/空结果 |
 
 ## 六、阶段三：Verified Usage Signals + Pricing / Change Watch
