@@ -1,10 +1,11 @@
 'use client';
 
-import { Loader2, Pencil, Plus, Trash2, WalletCards } from 'lucide-react';
+import { ExternalLink, Loader2, Pencil, Play, Plus, Trash2, WalletCards } from 'lucide-react';
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
 import { deleteStackItem, saveStackItem, type StackItemInput } from '@/app/actions/stack';
+import { runStackAudit } from '@/app/actions/stackAudit';
 import { useRouter } from '@/app/navigation';
 import { normalizeStackCost, type StackBillingPeriod } from '@/lib/services/stack/cost';
 
@@ -31,6 +32,24 @@ export type StackItemView = {
   taskName: string | null;
 };
 
+export type StackAuditView = {
+  id: string;
+  status: string;
+  createdAt: string;
+  completedAt: string | null;
+  findings: Array<{
+    id: string;
+    findingType: 'keep' | 'replace' | 'remove' | 'missing';
+    currentToolTitle: string | null;
+    relatedToolTitle: string | null;
+    reasonCodes: string[];
+    confidenceState: string;
+    estimatedMonthlySavings: number | null;
+    currency: string | null;
+    evidence: Array<{ sourceUrl: string; claimType: string }>;
+  }>;
+};
+
 const emptyForm: StackItemInput = {
   subscriptionStatus: 'free',
   billingAmount: '',
@@ -49,17 +68,23 @@ export default function StackWorkspace({
   tools,
   tasks,
   items,
+  latestAudit,
 }: {
   locale: string;
   tools: StackToolOption[];
   tasks: StackTaskOption[];
   items: StackItemView[];
+  latestAudit: StackAuditView | null;
 }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const router = useRouter();
   const [form, setForm] = useState<StackItemInput>(emptyForm);
   const [mode, setMode] = useState<'listed' | 'custom'>('listed');
   const [isPending, startTransition] = useTransition();
+  const [selectedAuditTasks, setSelectedAuditTasks] = useState<string[]>(() =>
+    Array.from(new Set(items.map((item) => item.taskId).filter((taskId): taskId is string => Boolean(taskId)))),
+  );
+  const [auditKey, setAuditKey] = useState(() => globalThis.crypto?.randomUUID?.() || `audit-${Date.now()}`);
   const amount = form.billingAmount?.trim() ? Number(form.billingAmount) : null;
   const preview = normalizeStackCost(amount !== null && Number.isFinite(amount) ? amount : null, form.billingPeriod);
 
@@ -124,6 +149,62 @@ export default function StackWorkspace({
       router.refresh();
     });
   };
+
+  const toggleAuditTask = (taskId: string) => {
+    setSelectedAuditTasks((current) =>
+      current.includes(taskId) ? current.filter((value) => value !== taskId) : [...current, taskId],
+    );
+  };
+
+  const runAudit = () => {
+    startTransition(async () => {
+      const result = await runStackAudit({ locale, targetTaskIds: selectedAuditTasks, idempotencyKey: auditKey });
+      if (!result.success) {
+        toast.error(`${result.message} (${result.code})`);
+        return;
+      }
+      toast.success(
+        isChinese
+          ? `审计完成，生成 ${result.findingCount} 条建议。`
+          : `Audit complete with ${result.findingCount} findings.`,
+      );
+      setAuditKey(globalThis.crypto?.randomUUID?.() || `audit-${Date.now()}`);
+      router.refresh();
+    });
+  };
+
+  const reasonLabel = (reason: string) => {
+    const labels: Record<string, [string, string]> = {
+      already_cancelled: ['已标记为取消', 'Already cancelled'],
+      never_used: ['当前从不使用', 'Currently never used'],
+      paid_but_rarely_used: ['付费但很少使用', 'Paid but rarely used'],
+      no_supported_replacement: ['暂无证据充分的替代项', 'No supported replacement yet'],
+      task_or_verified_fit_missing: ['任务或已核验适配信息不足', 'Task or verified fit is missing'],
+      current_fit_strong: ['当前任务适配度强', 'Strong fit for the current task'],
+      current_fit_conditional: ['满足条件时适配', 'Fit is conditional'],
+      current_fit_weak: ['当前任务适配度弱', 'Weak fit for the current task'],
+      current_fit_not_fit: ['当前任务不适配', 'Not a fit for the current task'],
+      selected_task_not_covered: ['选定任务尚未被覆盖', 'Selected task is not covered'],
+    };
+    return labels[reason]?.[isChinese ? 0 : 1] || reason.replaceAll('_', ' ');
+  };
+
+  const findingLabel = (type: StackAuditView['findings'][number]['findingType']) => {
+    const labels = {
+      keep: isChinese ? '保留 Keep' : 'Keep',
+      replace: isChinese ? '替换 Replace' : 'Replace',
+      remove: isChinese ? '移除 Remove' : 'Remove',
+      missing: isChinese ? '缺口 Missing' : 'Missing',
+    };
+    return labels[type];
+  };
+
+  const findingTone = (type: StackAuditView['findings'][number]['findingType']) => ({
+    keep: 'border-emerald-200 bg-emerald-50 text-emerald-900',
+    replace: 'border-amber-200 bg-amber-50 text-amber-950',
+    remove: 'border-rose-200 bg-rose-50 text-rose-950',
+    missing: 'border-cyan-200 bg-cyan-50 text-cyan-950',
+  })[type];
 
   const inputClass = 'mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900';
   const labelClass = 'text-xs font-semibold text-slate-700';
@@ -279,6 +360,99 @@ export default function StackWorkspace({
             <p className='max-w-xs text-right text-xs leading-5 text-slate-400'>{isChinese ? '这些数据仅用于你的审计和试用决策，不会写回公开工具页。' : 'This private data is used only for your audits and trial decisions.'}</p>
           </div>
         </div>
+
+        <div className='rounded-3xl border border-slate-200 bg-white p-5 shadow-sm md:p-6'>
+          <p className='text-xs font-bold uppercase tracking-[0.16em] text-amber-700'>
+            {isChinese ? '运行 Stack Audit' : 'Run Stack Audit'}
+          </p>
+          <h2 className='mt-2 text-xl font-bold text-slate-950'>
+            {isChinese ? '这次你必须覆盖哪些任务？' : 'Which tasks must this Stack cover?'}
+          </h2>
+          <p className='mt-2 text-sm leading-6 text-slate-600'>
+            {isChinese
+              ? '只对你勾选的任务判断缺口。建议不会自动取消订阅，也不会修改公开工具资料。'
+              : 'Missing coverage is checked only for selected tasks. Recommendations never cancel subscriptions or edit public listings.'}
+          </p>
+          <div className='mt-4 grid gap-2 sm:grid-cols-2'>
+            {tasks.map((task) => (
+              <label key={task.id} className='flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 p-3 text-sm text-slate-800 hover:bg-slate-50'>
+                <input
+                  type='checkbox'
+                  checked={selectedAuditTasks.includes(task.id)}
+                  onChange={() => toggleAuditTask(task.id)}
+                  disabled={isPending}
+                  className='mt-0.5 size-4 accent-cyan-700'
+                />
+                <span className='font-semibold'>{task.name}</span>
+              </label>
+            ))}
+          </div>
+          <button
+            type='button'
+            onClick={runAudit}
+            disabled={isPending || items.length === 0 || selectedAuditTasks.length === 0}
+            className='mt-4 inline-flex items-center gap-2 rounded-xl bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50'
+          >
+            {isPending ? <Loader2 className='size-4 animate-spin' /> : <Play className='size-4' />}
+            {isPending ? (isChinese ? '正在生成审计建议…' : 'Generating audit findings...') : (isChinese ? '运行本轮审计' : 'Run this audit')}
+          </button>
+        </div>
+
+        {latestAudit ? (
+          <div className='rounded-3xl border border-slate-200 bg-white p-5 shadow-sm md:p-6'>
+            <div className='flex flex-wrap items-start justify-between gap-3'>
+              <div>
+                <p className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>
+                  {isChinese ? '最近一次审计' : 'Latest audit'}
+                </p>
+                <h2 className='mt-2 text-xl font-bold text-slate-950'>
+                  {latestAudit.status === 'completed'
+                    ? isChinese ? `${latestAudit.findings.length} 条可解释建议` : `${latestAudit.findings.length} explained findings`
+                    : isChinese ? `状态：${latestAudit.status}` : `Status: ${latestAudit.status}`}
+                </h2>
+              </div>
+              <span className='rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600'>
+                {latestAudit.createdAt.slice(0, 10)}
+              </span>
+            </div>
+            <div className='mt-4 space-y-3'>
+              {latestAudit.findings.map((finding) => (
+                <article key={finding.id} className={`rounded-2xl border p-4 ${findingTone(finding.findingType)}`}>
+                  <div className='flex flex-wrap items-start justify-between gap-3'>
+                    <div>
+                      <span className='text-xs font-bold uppercase tracking-wide'>{findingLabel(finding.findingType)}</span>
+                      <h3 className='mt-1 font-bold'>
+                        {finding.currentToolTitle || (isChinese ? '当前任务缺口' : 'Current task gap')}
+                        {finding.relatedToolTitle ? ` → ${finding.relatedToolTitle}` : ''}
+                      </h3>
+                    </div>
+                    <span className='rounded-full bg-white/80 px-2.5 py-1 text-xs font-semibold'>{finding.confidenceState}</span>
+                  </div>
+                  <ul className='mt-3 space-y-1 text-sm'>
+                    {finding.reasonCodes.map((reason) => <li key={reason}>• {reasonLabel(reason)}</li>)}
+                  </ul>
+                  {finding.estimatedMonthlySavings !== null ? (
+                    <p className='mt-3 text-sm font-semibold'>
+                      {isChinese ? '潜在月成本变化：' : 'Potential monthly change: '}
+                      {finding.currency} {finding.estimatedMonthlySavings.toFixed(2)}
+                    </p>
+                  ) : null}
+                  <div className='mt-3 flex flex-wrap gap-2'>
+                    {finding.evidence.map((reference, index) => (
+                      <a key={`${finding.id}-${reference.sourceUrl}-${index}`} href={reference.sourceUrl} target='_blank' rel='noreferrer' className='inline-flex items-center gap-1 rounded-full bg-white/80 px-2.5 py-1 text-xs font-semibold underline-offset-2 hover:underline'>
+                        {reference.claimType || (isChinese ? '查看证据' : 'View evidence')} <ExternalLink className='size-3' />
+                      </a>
+                    ))}
+                    {finding.evidence.length === 0 ? <span className='text-xs opacity-75'>{isChinese ? '依据：你的私有输入；暂无外部证据' : 'Basis: your private input; no external evidence yet'}</span> : null}
+                  </div>
+                </article>
+              ))}
+              {latestAudit.status === 'completed' && latestAudit.findings.length === 0 ? (
+                <p className='rounded-xl bg-slate-50 p-4 text-sm text-slate-600'>{isChinese ? '本轮没有生成可支持的建议。' : 'No supported findings were generated.'}</p>
+              ) : null}
+            </div>
+          </div>
+        ) : null}
 
         {items.length === 0 ? (
           <div className='rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center'>

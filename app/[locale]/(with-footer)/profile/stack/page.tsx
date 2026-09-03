@@ -1,5 +1,9 @@
 import { query } from '@/db/neon/client';
-import StackWorkspace, { type StackItemView, type StackToolOption } from '@/components/stack/StackWorkspace';
+import StackWorkspace, {
+  type StackAuditView,
+  type StackItemView,
+  type StackToolOption,
+} from '@/components/stack/StackWorkspace';
 import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { getLocalizedField } from '@/lib/services/tools';
 import { createClient } from '@/lib/supabase/server';
@@ -79,6 +83,64 @@ export default async function StackPage({ params }: { params: { locale: string }
     };
   });
 
+  const { data: latestAuditRow } = await supabase
+    .from('stack_audit_runs')
+    .select('id, status, created_at, completed_at')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  let latestAudit: StackAuditView | null = null;
+  if (latestAuditRow) {
+    const { data: findingRows } = await supabase
+      .from('stack_audit_findings')
+      .select('id, finding_type, related_tool_id, rationale, confidence_state, estimated_monthly_savings, currency')
+      .eq('audit_id', latestAuditRow.id)
+      .order('created_at', { ascending: true });
+    const findingIds = (findingRows || []).map((finding) => String(finding.id));
+    const { data: claimRows } = findingIds.length
+      ? await supabase
+          .from('stack_audit_finding_claims')
+          .select('finding_id, claim_snapshot')
+          .in('finding_id', findingIds)
+      : { data: [] };
+    const evidenceByFinding = new Map<string, Array<{ sourceUrl: string; claimType: string }>>();
+    for (const row of (claimRows || []) as DatabaseRow[]) {
+      const snapshot = row.claim_snapshot && typeof row.claim_snapshot === 'object'
+        ? row.claim_snapshot as Record<string, unknown>
+        : {};
+      const sourceUrl = typeof snapshot.sourceUrl === 'string' ? snapshot.sourceUrl : '';
+      if (!/^https?:\/\//i.test(sourceUrl)) continue;
+      const findingId = String(row.finding_id);
+      const current = evidenceByFinding.get(findingId) || [];
+      current.push({ sourceUrl, claimType: String(snapshot.claimType || '') });
+      evidenceByFinding.set(findingId, current);
+    }
+    latestAudit = {
+      id: String(latestAuditRow.id),
+      status: String(latestAuditRow.status),
+      createdAt: String(latestAuditRow.created_at),
+      completedAt: latestAuditRow.completed_at ? String(latestAuditRow.completed_at) : null,
+      findings: ((findingRows || []) as DatabaseRow[]).map((finding) => {
+        const rationale = finding.rationale && typeof finding.rationale === 'object'
+          ? finding.rationale as Record<string, unknown>
+          : {};
+        const findingId = String(finding.id);
+        return {
+          id: findingId,
+          findingType: String(finding.finding_type) as StackAuditView['findings'][number]['findingType'],
+          currentToolTitle: typeof rationale.currentToolTitle === 'string' ? rationale.currentToolTitle : null,
+          relatedToolTitle: typeof rationale.relatedToolTitle === 'string' ? rationale.relatedToolTitle : null,
+          reasonCodes: Array.isArray(rationale.reasonCodes) ? rationale.reasonCodes.map(String) : [],
+          confidenceState: String(finding.confidence_state),
+          estimatedMonthlySavings: finding.estimated_monthly_savings === null ? null : Number(finding.estimated_monthly_savings),
+          currency: finding.currency ? String(finding.currency) : null,
+          evidence: evidenceByFinding.get(findingId) || [],
+        };
+      }),
+    };
+  }
+
   return (
     <main className='theme-page min-h-screen bg-[radial-gradient(circle_at_top_left,_#ecfeff,_transparent_34%),linear-gradient(180deg,#f8fafc,#ffffff)] py-10'>
       <div className='container mx-auto px-4'>
@@ -91,7 +153,7 @@ export default async function StackPage({ params }: { params: { locale: string }
             {isChinese ? '把真实工具、账单、使用频率和续费日期放在一起。下一阶段会基于这些私有输入给出 Keep、Replace、Remove 和 Missing 建议。' : 'Keep real tools, bills, usage, and renewal dates together. The next stage uses these private inputs for Keep, Replace, Remove, and Missing recommendations.'}
           </p>
         </div>
-        <StackWorkspace locale={params.locale} tools={tools} tasks={tasks} items={items} />
+        <StackWorkspace locale={params.locale} tools={tools} tasks={tasks} items={items} latestAudit={latestAudit} />
       </div>
     </main>
   );
