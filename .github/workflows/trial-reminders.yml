@@ -1,0 +1,24 @@
+name: Trial reminders
+
+on:
+  schedule:
+    - cron: '20 1 * * *'
+  workflow_dispatch:
+
+jobs:
+  send-trial-reminders:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Send due trial reminders
+        env:
+          BASE_URL: ${{ vars.PRODUCTION_BASE_URL || 'https://aibesttool.com' }}
+          MONITOR_API_TOKEN: ${{ secrets.MONITOR_API_TOKEN }}
+        run: |
+          if [ -z "${MONITOR_API_TOKEN}" ]; then
+            echo "MONITOR_API_TOKEN is required."
+            exit 1
+          fi
+          curl --fail-with-body --silent --show-error \
+            -H "Authorization: Bearer ${MONITOR_API_TOKEN}" \
+            "${BASE_URL}/api/monitor/trial-reminders"

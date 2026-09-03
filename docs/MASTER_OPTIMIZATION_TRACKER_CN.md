@@ -92,7 +92,7 @@
 | CHG-02 | 首批核心工具变化基线               | 10-20 个核心工具拥有真实基线复核；没有变化时只记录 `reviewed_no_change`，禁止伪造变化              | 进行中（3/10）；Fathom、Claude、Consensus 已完成；Gamma 待定向采集，DeepL/Pipedream/Cursor 受 robots 限制                     | Codex + 用户    |
 | SEO-IA | SEO 信息架构统一与门禁             | 修复历史 canonical/hreflang，统一 Breadcrumb，并让工具关系内链只消费 reviewed 数据                 | SEO-IA-01~08 已完成；本地/生产 smoke、完整 build 和 reviewed 关系验收全部通过                                                 | Codex           |
 | DCF    | Finder + Decision Card 2.0         | 10 个核心工具和 6-8 个任务形成证据可追溯、最多三项的可解释推荐                                     | DCF-01~07 已完成：数据、证据、规则、前台、后台审核、SEO 与自动发布门禁全部闭环                                                 | Codex           |
-| STK    | Stack Audit + 7-Day Trial          | 私有工具栈、Keep/Replace/Remove/Missing 与试用到期决策闭环                                         | 进行中（3/6）；STK-01~03 已完成，私有 Stack、成本折算与四类可解释审计通过 build；STK-04~06 待实施                         | Codex + 用户    |
+| STK    | Stack Audit + 7-Day Trial          | 私有工具栈、Keep/Replace/Remove/Missing 与试用到期决策闭环                                         | 进行中；STK-01~03 已完成，STK-04 Scorecard 与单次站内提醒代码完成、待生产迁移回读；STK-05~06 待实施                     | Codex + 用户    |
 | SIG    | Verified Usage + Change Watch      | 审核后的结构化使用信号和已确认变化通知，不公开低样本或利益相关数据                                 | 等待阶段二真实使用门槛；SIG/WAT 未开始                                                                                        | Codex + 用户    |
 
 ### P2：只在数据证明后扩展（第 4-6 周）

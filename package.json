@@ -74,6 +74,8 @@
     "test:stack-editor-release": "tsx scripts/test-stack-editor-release.ts",
     "test:stack-audit-rules": "tsx scripts/test-stack-audit-rules.ts",
     "test:stack-audit-release": "tsx scripts/test-stack-audit-release.ts",
+    "test:trial-scorecard-release": "tsx scripts/test-trial-scorecard-release.ts",
+    "verify:trial-reminder-migration": "tsx scripts/verify-trial-reminder-migration.ts",
     "test:tool-route-aliases": "tsx scripts/test-tool-route-aliases.ts",
     "collection:plan-three-days": "tsx scripts/plan-three-day-candidate-pool.ts",
     "intelligence:discover-pages": "tsx scripts/discover-product-intelligence-pages.ts",

@@ -152,6 +152,9 @@ export default async function StackPage({ params }: { params: { locale: string }
           <p className='mt-4 text-base leading-7 text-slate-600'>
             {isChinese ? '把真实工具、账单、使用频率和续费日期放在一起。下一阶段会基于这些私有输入给出 Keep、Replace、Remove 和 Missing 建议。' : 'Keep real tools, bills, usage, and renewal dates together. The next stage uses these private inputs for Keep, Replace, Remove, and Missing recommendations.'}
           </p>
+          <Link href='/profile/trials' className='mt-5 inline-flex rounded-xl border border-cyan-200 bg-white px-4 py-2.5 text-sm font-semibold text-cyan-800 shadow-sm'>
+            {isChinese ? '打开 7 日试用工作区' : 'Open 7-day trial workspace'}
+          </Link>
         </div>
         <StackWorkspace locale={params.locale} tools={tools} tasks={tasks} items={items} latestAudit={latestAudit} />
       </div>
