@@ -47,6 +47,11 @@ assert.match(smoke, /noindex/i);
 assert.match(smoke, /sitemap/i);
 assert.match(healthWorkflow, /Check Stack and Trial privacy surface/);
 assert.match(healthWorkflow, /profile\/\(stack\|trials\)/);
+assert.match(
+  healthWorkflow,
+  /for ROUTE in \/cn \/cn\/explore[\s\S]*?test "\$HTTP_CODE" -lt 400\s+done/,
+  'The existing SEO route loop must close before privacy monitoring can run.',
+);
 
 console.log(
   JSON.stringify(

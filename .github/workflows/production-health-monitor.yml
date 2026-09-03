@@ -69,6 +69,7 @@ jobs:
             echo "$ROUTE http_code=$HTTP_CODE"
             test "$HTTP_CODE" -ge 200
             test "$HTTP_CODE" -lt 400
+          done
 
       - name: Check canonical host redirects
         run: |
