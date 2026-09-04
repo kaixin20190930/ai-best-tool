@@ -4,14 +4,15 @@
   "officialUrl": "https://openrouter.ai/",
   "existingRoute": "/ai/openrouter",
   "action": "migrate_existing_fallback",
-  "status": "ready_for_next_slot",
+  "status": "released",
   "reviewedAt": "2026-09-01",
   "publishNotBefore": "2026-09-03",
-  "sitemapChangeApproved": false,
-  "productionWriteApproved": false,
+  "releasedAt": "2026-09-04",
+  "sitemapChangeApproved": true,
+  "productionWriteApproved": true,
   "category": {
     "discoverySlug": "developer-tools",
-    "storageSlug": "developer-tools"
+    "storageSlug": "productivity"
   },
   "positioning": "A unified model marketplace and API gateway for teams that need broad model access, centralized billing, provider routing, fallbacks, privacy controls, and usage observability without maintaining a separate integration for every provider.",
   "decisionAngles": [
@@ -23,7 +24,7 @@
     "Free model exploration versus paid capacity suitable for production workloads"
   ],
   "pricingSnapshot": {
-    "checkedAt": "2026-09-01",
+    "checkedAt": "2026-09-04",
     "billingUnit": "Inference is billed using each selected model and provider's token, request, image, or reasoning-unit price; OpenRouter currently adds a 5.5% fee when purchasing credits rather than marking up inference prices.",
     "plans": [
       "Free: 25+ free models, four free providers, and 50 requests per day",

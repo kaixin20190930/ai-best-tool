@@ -49,9 +49,9 @@
 | W2-01B | 编辑页增加证据来源、限制和 Decision Card 字段校验 | 1.5 天 | W2-01A | 缺字段无法误标可发布 | 已完成，提交 `4e3df958`；部署 `b48753cd`、production smoke 通过 |
 | W2-01C | 市场验证编辑器与前台成熟度状态 | 1 天 | W2-01B | 五维评分、独立证据和信号可编辑；收集型工具未验证不能发布；详情页展示验证依据 | 已完成；专项准入测试、tsc 与完整 build 通过 |
 | W2-02A | 生成未来 3 天候选池，每日处理 1-2 条 | 每日 1 小时 | W2-01 | 每条有发布/待补结论 | 已完成，提交 `d7ea18b5`；6 条生产候选按 3 天每天 2 条排期 |
-| W2-02B | 首批 7-14 条处理台账；只发布通过资料与市场双重准入的条目 | 每日 1 小时 | W2-02A | 无低质量例外放行 | 进行中，已处理 10/7-14；Perplexity 与 Make 已迁移既有 fallback，Owlish 保持 draft，ArcRift 不因数量目标放行 |
+| W2-02B | 首批 7-14 条处理台账；只发布通过资料与市场双重准入的条目 | 每日 1 小时 | W2-02A | 无低质量例外放行 | 进行中，累计处理 11/7-14；9 月 4 日 OpenRouter 已迁移，今日公开 1 条；累计处理数不是日更发布数 |
 | W2-02D | 下一公开时段成熟工具预审；证据齐全但不提前发布 | 0.5 天 | W2-02B | 证据、边界和发布闸门自动校验；不改生产数据或 sitemap | 已完成 n8n 预审；状态 `ready_for_next_slot`，最早 2026-09-02 复核后迁移 |
-| W2-02E | 后续公开时段成熟工具预审；建立可复用多候选门禁 | 0.5 天 | W2-02D | 所有预审文件统一校验，证据与边界不足即失败 | 已完成 OpenRouter 预审；最早 2026-09-03 复核后迁移，未改生产数据或 sitemap |
+| W2-02E | 后续公开时段成熟工具预审；建立可复用多候选门禁 | 0.5 天 | W2-02D | 所有预审文件统一校验，证据与边界不足即失败 | 已完成；OpenRouter 于 2026-09-04 完成复核、生产迁移与回读，沿用原 canonical |
 | W2-03A | Web3、Automation、Research Guide 统一任务入口 | 1 天 | W1-01C | 指向对应工具 Decision Card | 已完成，提交 `de1504e6`；专项结构测试、Decision Card 回归、tsc、完整 build 通过 |
 
 ### 第 3 周：变化监测与真实信号（09-15 至 09-21，预计 4-5 个开发日）
@@ -176,6 +176,15 @@
 - 市场验证为 `95/100 / Validated`：G2 数百条评价、官方披露的 350,000+ 用户、Celonis 收购后的持续运营和当前安全文档构成成熟度证据；高级映射/调试、支持摩擦和复杂 scenario 的 credits 预测仍作为限制保留。
 - 生产回读为 `published / continue_index / 95`，下次事实复查为 2026-09-15；迁移后重新完整 build，本地生产 sitemap 从 174 增至 176，新增项严格为 `/ai/make` 与 `/cn/ai/make`。
 - 自动验收：迁移先在真实 Neon 连接中执行 `BEGIN → SQL → 回读 → ROLLBACK`；随后 `test:priority-tool-evidence`、TypeScript、完整 build、双语标题/canonical/事实块/市场验证和 sitemap 均通过。
+
+### W2-02B OpenRouter 发布收口（2026-09-04）
+
+- 状态：实现、生产数据库迁移、回读和本地生产验收已完成；Vercel 部署待确认。上次中断未执行迁移，已先纠正提前写入的 released 标记，实际提交后才重新标记 released。
+- 保留 `/ai/openrouter`，仅迁移既有 fallback；生产分类使用实际存在的 productivity，不创建第二个 canonical。
+- 已复核官方 Pricing 与 provider privacy；更正旧 BYOK 请求次数口径，补齐双语适配场景、成本、路由、隐私边界和建议试用方法，明确来源分析不等于实测。
+- 迁移脚本：`scripts/migrate-openrouter-tool.ts`；默认事务回滚，`--check` 只校验内容，`--commit` 才实际发布。已完成真实数据库插入、回读、回滚演练。
+- 已完成：内容检查、预审门禁、工具证据测试、首轮完整 build（退出码 0）、正式提交事务和独立连接回读。数据库 ID 为 `f77fb817-e8dc-4c22-b7cd-8edc2e5b0a5e`，状态 `published / continue_index`，下次复核 2026-09-18。
+- 发布验收：两轮 `pnpm run build` 均退出 0；`test:openrouter-release`、`test:next-tool-preaudit`、`test:priority-tool-evidence` 均通过。`pnpm exec tsx scripts/test-openrouter-pages.ts` 在本地生产模式确认双语 200、canonical、index、核验日期、BYOK 新阈值及官方来源，sitemap 恰好包含两个语言 URL。Vercel 部署成功与否单独记录，不能由数据库提交成功推断。
 
 ### W2-02C 首批成熟工具内容缺口（2026-09-01）
 

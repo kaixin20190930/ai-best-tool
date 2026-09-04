@@ -2658,51 +2658,67 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           label: '官方事实快照',
           title: '模型透传价格、充值费用和日志边界',
           summary:
-            '以下信息来自 OpenRouter 官方 FAQ；模型价格、provider 路由和免费模型限速会变化，生产调用应固定隐私与成本策略。',
-          checkedAt: '2026-08-03',
+            '以下信息来自 OpenRouter 官方 Pricing、FAQ 与隐私文档；模型数量、provider 路由和免费限速会变化，生产调用应固定隐私与成本策略。',
+          checkedAt: '2026-09-04',
           facts: [
             {
               label: '价格结构',
               value:
-                '模型推理按 provider 公布价格透传、不额外加价；购买 credits 收取 5.5% 费用且最低 $0.80，crypto 充值费为 5%。',
+                '模型推理按所选模型与 provider 的价格计费、不额外加价；Pay-as-you-go 购买 credits 当前收取 5.5% 平台费用，没有最低消费。',
             },
             {
               label: '免费与 BYOK',
               value:
-                '未购买至少 $10 credits 时，免费模型合计通常限制为每天 50 次；BYOK 每月前 100 万请求免费，之后收取相应模型 OpenRouter 成本的 5%。',
+                'Free 当前列出 25+ 免费模型、4 个免费 provider 和每天 50 次请求；Pay-as-you-go 的 BYOK 每月前 $25,000 标价推理免平台费，之后为 5%，Enterprise 阈值另计。',
             },
             {
               label: '隐私边界',
               value:
-                '默认仅记录时间、模型和 token 数等 metadata，不记录 prompt/completion；请求仍会发送给模型 provider，隐私路由不满足设置时会直接报错。',
+                'OpenRouter 默认记录 metadata 而不记录 prompt/completion；请求仍会发送给模型 provider，下游留存政策需单独核对，ZDR 也不自动覆盖插件和外部工具。',
             },
           ],
-          sources: [{ label: 'OpenRouter 官方 FAQ', href: 'https://openrouter.ai/docs/faq' }],
+          sources: [
+            { label: 'OpenRouter 官方 Pricing', href: 'https://openrouter.ai/pricing' },
+            { label: 'OpenRouter 官方 FAQ', href: 'https://openrouter.ai/docs/faq' },
+            {
+              label: 'Provider 日志政策',
+              href: 'https://openrouter.ai/docs/guides/privacy/provider-logging',
+            },
+            { label: 'ZDR 文档', href: 'https://openrouter.ai/docs/guides/features/zdr' },
+          ],
         }
       : {
           label: 'Official fact snapshot',
           title: 'Pass-through model pricing, credit fees, and logging boundaries',
           summary:
-            'These facts come from the OpenRouter FAQ. Model prices, provider routing, and free-model limits change, so production calls should fix explicit privacy and cost policies.',
-          checkedAt: '2026-08-03',
+            'These facts come from OpenRouter pricing, FAQ, and privacy documentation. Model counts, provider routing, and free-model limits change, so production calls should fix explicit privacy and cost policies.',
+          checkedAt: '2026-09-04',
           facts: [
             {
               label: 'Pricing structure',
               value:
-                'Inference uses provider list prices without markup; credit purchases carry a 5.5% fee with a $0.80 minimum, while crypto payments carry a 5% fee.',
+                'Inference is billed at the selected model and provider price without an inference markup; pay-as-you-go credit purchases currently carry a 5.5% platform fee and no minimum spend.',
             },
             {
               label: 'Free and BYOK',
               value:
-                'Without at least $10 of purchased credits, free models are generally limited to 50 requests per day total; the first one million BYOK requests per month are free, followed by a 5% fee.',
+                'Free currently lists 25+ free models, four free providers, and 50 requests per day. Pay-as-you-go BYOK has no platform fee on the first $25,000 of list-price inference per month, followed by 5%; Enterprise has a separate threshold.',
             },
             {
               label: 'Privacy boundary',
               value:
-                'By default OpenRouter logs metadata rather than prompts or completions; requests still go to a model provider, and calls fail when available routes cannot meet account privacy settings.',
+                'OpenRouter logs metadata rather than prompts or completions by default; requests still go to model providers whose retention policies need separate review, and ZDR does not automatically cover plugins or external tools.',
             },
           ],
-          sources: [{ label: 'Official OpenRouter FAQ', href: 'https://openrouter.ai/docs/faq' }],
+          sources: [
+            { label: 'Official OpenRouter pricing', href: 'https://openrouter.ai/pricing' },
+            { label: 'Official OpenRouter FAQ', href: 'https://openrouter.ai/docs/faq' },
+            {
+              label: 'Provider logging policy',
+              href: 'https://openrouter.ai/docs/guides/privacy/provider-logging',
+            },
+            { label: 'ZDR documentation', href: 'https://openrouter.ai/docs/guides/features/zdr' },
+          ],
         };
   }
 
@@ -4003,6 +4019,11 @@ export default async function Page({
       risks: riskPoints,
       verificationChecklist,
     });
+    const visibleDecisionRisks = (
+      decisionCard.risks.length > 0
+        ? decisionCard.risks
+        : [isChinese ? '暂时没有明显风险信号。' : 'No strong risk signal right now.']
+    ).slice(0, 2);
     const decisionEvidenceMissingLabels = decisionCard.evidenceCompleteness.missing.map((key) =>
       getEvidenceRequirementLabel(key, locale),
     );
@@ -4592,237 +4613,236 @@ export default async function Page({
               {decisionCardV2 ? (
                 <DecisionCardV2 model={decisionCardV2} locale={locale} />
               ) : (
-              <section
-                id='decision-card'
-                data-tool-decision-card
-                className='scroll-mt-28 rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'
-              >
-                <div className='mb-5 flex items-center gap-3'>
-                  <ShieldCheck className='size-6 text-cyan-600' />
-                  <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>
-                    {locale === 'cn' ? '选择判断卡' : 'Decision Card'}
-                  </h2>
-                </div>
-                <p className='mb-5 max-w-3xl text-sm leading-6 text-slate-600'>
-                  {locale === 'cn'
-                    ? '先用这一张卡确认任务匹配、限制、证据和替代路径，再决定是否试用、付费或继续比较。'
-                    : 'Use this one card to check fit, limits, evidence, and alternatives before you trial, pay, or keep comparing.'}
-                </p>
-                {marketValidation ? (
-                  <div className='mb-5 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5'>
-                    <div className='flex flex-wrap items-start justify-between gap-3'>
-                      <div>
-                        <p className='text-xs font-semibold uppercase tracking-[0.16em] text-slate-500'>
-                          {isChinese ? '市场成熟度判断' : 'Market maturity review'}
-                        </p>
-                        <div className='mt-2 flex flex-wrap items-center gap-2'>
-                          <span
-                            className={`rounded-full px-3 py-1 text-xs font-semibold ring-1 ${marketValidation.tone}`}
-                          >
-                            {marketValidation.label}
-                          </span>
-                          {marketValidation.score !== null ? (
-                            <span className='rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-700 ring-1 ring-slate-200'>
-                              {isChinese ? '产品价值分' : 'Product value'} {marketValidation.score}/100
+                <section
+                  id='decision-card'
+                  data-tool-decision-card
+                  className='scroll-mt-28 rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'
+                >
+                  <div className='mb-5 flex items-center gap-3'>
+                    <ShieldCheck className='size-6 text-cyan-600' />
+                    <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>
+                      {locale === 'cn' ? '选择判断卡' : 'Decision Card'}
+                    </h2>
+                  </div>
+                  <p className='mb-5 max-w-3xl text-sm leading-6 text-slate-600'>
+                    {locale === 'cn'
+                      ? '先用这一张卡确认任务匹配、限制、证据和替代路径，再决定是否试用、付费或继续比较。'
+                      : 'Use this one card to check fit, limits, evidence, and alternatives before you trial, pay, or keep comparing.'}
+                  </p>
+                  {marketValidation ? (
+                    <div className='mb-5 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5'>
+                      <div className='flex flex-wrap items-start justify-between gap-3'>
+                        <div>
+                          <p className='text-xs font-semibold uppercase tracking-[0.16em] text-slate-500'>
+                            {isChinese ? '市场成熟度判断' : 'Market maturity review'}
+                          </p>
+                          <div className='mt-2 flex flex-wrap items-center gap-2'>
+                            <span
+                              className={`rounded-full px-3 py-1 text-xs font-semibold ring-1 ${marketValidation.tone}`}
+                            >
+                              {marketValidation.label}
                             </span>
-                          ) : null}
+                            {marketValidation.score !== null ? (
+                              <span className='rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-700 ring-1 ring-slate-200'>
+                                {isChinese ? '产品价值分' : 'Product value'} {marketValidation.score}/100
+                              </span>
+                            ) : null}
+                          </div>
+                        </div>
+                        <div className='text-right text-xs text-slate-500'>
+                          <p>{marketReviewStatusLabel}</p>
+                          <p className='mt-1'>
+                            {isChinese
+                              ? `${marketValidation.strongSignalCount} 个强信号 · ${marketValidation.signalCount} 个总信号`
+                              : `${marketValidation.strongSignalCount} strong · ${marketValidation.signalCount} total signals`}
+                          </p>
                         </div>
                       </div>
-                      <div className='text-right text-xs text-slate-500'>
-                        <p>{marketReviewStatusLabel}</p>
-                        <p className='mt-1'>
-                          {isChinese
-                            ? `${marketValidation.strongSignalCount} 个强信号 · ${marketValidation.signalCount} 个总信号`
-                            : `${marketValidation.strongSignalCount} strong · ${marketValidation.signalCount} total signals`}
-                        </p>
-                      </div>
+                      <p className='mt-3 text-sm leading-6 text-slate-700'>
+                        {marketValidation.rationale || marketValidation.summary}
+                      </p>
+                      {marketValidation.evidenceUrls.length > 0 ? (
+                        <div className='mt-4 flex flex-wrap gap-2'>
+                          {marketValidation.evidenceUrls.slice(0, 4).map((url, index) => (
+                            <a
+                              key={url}
+                              href={url}
+                              target='_blank'
+                              rel='noreferrer'
+                              className='inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:border-cyan-300 hover:text-cyan-800'
+                            >
+                              {isChinese ? `独立证据 ${index + 1}` : `Independent evidence ${index + 1}`}
+                              <ExternalLink className='size-3.5' />
+                            </a>
+                          ))}
+                        </div>
+                      ) : null}
                     </div>
-                    <p className='mt-3 text-sm leading-6 text-slate-700'>
-                      {marketValidation.rationale || marketValidation.summary}
-                    </p>
-                    {marketValidation.evidenceUrls.length > 0 ? (
+                  ) : null}
+                  {priorityEvidence && !priorityOfficialEvidence ? (
+                    <div
+                      data-priority-tool-evidence
+                      className='mb-5 rounded-xl border border-cyan-200 bg-cyan-50 p-4 sm:p-5'
+                    >
+                      <div className='flex flex-wrap items-start justify-between gap-3'>
+                        <div>
+                          <p className='text-xs font-semibold uppercase tracking-[0.16em] text-cyan-700'>
+                            {locale === 'cn' ? '官方证据快照' : 'Official evidence snapshot'}
+                          </p>
+                          <h3 className='mt-1 text-base font-bold text-slate-950'>
+                            {locale === 'cn'
+                              ? '先核验真实限制，再决定是否采用'
+                              : 'Verify the real limit before adopting'}
+                          </h3>
+                        </div>
+                        <span className='rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-600'>
+                          {locale === 'cn' ? '核查于' : 'Checked'} {priorityEvidence.checkedAt}
+                        </span>
+                      </div>
+                      <p className='mt-3 text-sm leading-6 text-slate-700'>
+                        {locale === 'cn' ? priorityEvidence.limitation.zh : priorityEvidence.limitation.en}
+                      </p>
                       <div className='mt-4 flex flex-wrap gap-2'>
-                        {marketValidation.evidenceUrls.slice(0, 4).map((url, index) => (
+                        {priorityEvidence.sources.map((source) => (
                           <a
-                            key={url}
-                            href={url}
+                            key={source.url}
+                            href={source.url}
                             target='_blank'
                             rel='noreferrer'
-                            className='inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:border-cyan-300 hover:text-cyan-800'
+                            className='inline-flex items-center rounded-lg border border-cyan-200 bg-white px-3 py-2 text-xs font-semibold text-cyan-800 hover:border-cyan-300 hover:bg-cyan-100'
                           >
-                            {isChinese ? `独立证据 ${index + 1}` : `Independent evidence ${index + 1}`}
-                            <ExternalLink className='size-3.5' />
+                            {source.label}
                           </a>
                         ))}
                       </div>
-                    ) : null}
-                  </div>
-                ) : null}
-                {priorityEvidence && !priorityOfficialEvidence ? (
-                  <div
-                    data-priority-tool-evidence
-                    className='mb-5 rounded-xl border border-cyan-200 bg-cyan-50 p-4 sm:p-5'
-                  >
-                    <div className='flex flex-wrap items-start justify-between gap-3'>
-                      <div>
-                        <p className='text-xs font-semibold uppercase tracking-[0.16em] text-cyan-700'>
-                          {locale === 'cn' ? '官方证据快照' : 'Official evidence snapshot'}
-                        </p>
-                        <h3 className='mt-1 text-base font-bold text-slate-950'>
-                          {locale === 'cn' ? '先核验真实限制，再决定是否采用' : 'Verify the real limit before adopting'}
-                        </h3>
-                      </div>
-                      <span className='rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-600'>
-                        {locale === 'cn' ? '核查于' : 'Checked'} {priorityEvidence.checkedAt}
-                      </span>
                     </div>
-                    <p className='mt-3 text-sm leading-6 text-slate-700'>
-                      {locale === 'cn' ? priorityEvidence.limitation.zh : priorityEvidence.limitation.en}
-                    </p>
-                    <div className='mt-4 flex flex-wrap gap-2'>
-                      {priorityEvidence.sources.map((source) => (
-                        <a
-                          key={source.url}
-                          href={source.url}
-                          target='_blank'
-                          rel='noreferrer'
-                          className='inline-flex items-center rounded-lg border border-cyan-200 bg-white px-3 py-2 text-xs font-semibold text-cyan-800 hover:border-cyan-300 hover:bg-cyan-100'
+                  ) : null}
+                  <div className='space-y-5'>
+                    <div
+                      data-decision-evidence-status
+                      className='rounded-lg border border-slate-200 bg-slate-950 p-4 text-white sm:p-5'
+                    >
+                      <div className='flex flex-wrap items-start justify-between gap-4'>
+                        <div>
+                          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-300'>
+                            {locale === 'cn' ? '证据准备度' : 'Evidence readiness'}
+                          </p>
+                          <p className='mt-2 text-2xl font-bold'>{decisionCard.evidenceCompleteness.score}%</p>
+                        </div>
+                        <span
+                          className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                            decisionCard.evidenceCompleteness.complete
+                              ? 'bg-emerald-400/15 text-emerald-200'
+                              : 'bg-amber-400/15 text-amber-200'
+                          }`}
                         >
-                          {source.label}
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                ) : null}
-                <div className='space-y-5'>
-                  <div
-                    data-decision-evidence-status
-                    className='rounded-lg border border-slate-200 bg-slate-950 p-4 text-white sm:p-5'
-                  >
-                    <div className='flex flex-wrap items-start justify-between gap-4'>
-                      <div>
-                        <p className='text-xs font-semibold uppercase tracking-wide text-cyan-300'>
-                          {locale === 'cn' ? '证据准备度' : 'Evidence readiness'}
-                        </p>
-                        <p className='mt-2 text-2xl font-bold'>{decisionCard.evidenceCompleteness.score}%</p>
+                          {decisionEvidenceStatusLabel}
+                        </span>
                       </div>
-                      <span
-                        className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                          decisionCard.evidenceCompleteness.complete
-                            ? 'bg-emerald-400/15 text-emerald-200'
-                            : 'bg-amber-400/15 text-amber-200'
-                        }`}
-                      >
-                        {decisionEvidenceStatusLabel}
-                      </span>
-                    </div>
-                    <div className='mt-4 grid gap-3 sm:grid-cols-3'>
-                      <div className='rounded-lg bg-white/5 p-3'>
-                        <p className='text-xs text-slate-400'>{locale === 'cn' ? '最近核查' : 'Last checked'}</p>
-                        <p className='mt-1 text-sm font-semibold text-white'>{lastCheckedScheduleLabel}</p>
-                      </div>
-                      <div className='rounded-lg bg-white/5 p-3'>
-                        <p className='text-xs text-slate-400'>
-                          {locale === 'cn' ? '下次事实复查（30 天）' : 'Next fact check (30 days)'}
-                        </p>
-                        <p className='mt-1 text-sm font-semibold text-white'>{nextFactReviewLabel}</p>
-                      </div>
-                      <div className='rounded-lg bg-white/5 p-3'>
-                        <p className='text-xs text-slate-400'>
-                          {locale === 'cn' ? '下次判断复核（90 天）' : 'Next decision review (90 days)'}
-                        </p>
-                        <p className='mt-1 text-sm font-semibold text-white'>{nextDecisionReviewLabel}</p>
-                      </div>
-                    </div>
-                    {decisionEvidenceMissingLabels.length > 0 && (
-                      <div className='mt-4'>
-                        <p className='text-xs font-semibold text-slate-300'>
-                          {locale === 'cn' ? '公开判断仍需补齐' : 'Still needed for a complete decision'}
-                        </p>
-                        <div className='mt-2 flex flex-wrap gap-2'>
-                          {decisionEvidenceMissingLabels.map((label) => (
-                            <span key={label} className='rounded-full bg-white/10 px-2.5 py-1 text-xs text-slate-200'>
-                              {label}
-                            </span>
-                          ))}
+                      <div className='mt-4 grid gap-3 sm:grid-cols-3'>
+                        <div className='rounded-lg bg-white/5 p-3'>
+                          <p className='text-xs text-slate-400'>{locale === 'cn' ? '最近核查' : 'Last checked'}</p>
+                          <p className='mt-1 text-sm font-semibold text-white'>{lastCheckedScheduleLabel}</p>
+                        </div>
+                        <div className='rounded-lg bg-white/5 p-3'>
+                          <p className='text-xs text-slate-400'>
+                            {locale === 'cn' ? '下次事实复查（30 天）' : 'Next fact check (30 days)'}
+                          </p>
+                          <p className='mt-1 text-sm font-semibold text-white'>{nextFactReviewLabel}</p>
+                        </div>
+                        <div className='rounded-lg bg-white/5 p-3'>
+                          <p className='text-xs text-slate-400'>
+                            {locale === 'cn' ? '下次判断复核（90 天）' : 'Next decision review (90 days)'}
+                          </p>
+                          <p className='mt-1 text-sm font-semibold text-white'>{nextDecisionReviewLabel}</p>
                         </div>
                       </div>
-                    )}
-                  </div>
-
-                  <div className='grid gap-4 xl:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]'>
-                    <div className='rounded-lg border border-slate-200 bg-slate-50 p-4 sm:p-5'>
-                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                        {locale === 'cn' ? '先看这三个判断' : 'Start with these three signals'}
-                      </p>
-                      <div className='mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4'>
-                        <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
-                          <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                            {locale === 'cn' ? '官方网站状态' : 'Official website status'}
+                      {decisionEvidenceMissingLabels.length > 0 && (
+                        <div className='mt-4'>
+                          <p className='text-xs font-semibold text-slate-300'>
+                            {locale === 'cn' ? '公开判断仍需补齐' : 'Still needed for a complete decision'}
                           </p>
-                          <p className='mt-2 text-base font-semibold text-slate-950'>
-                            {decisionCard.officialSite.hostname}
-                          </p>
-                          <div className='mt-2 flex flex-wrap items-center gap-2'>
-                            <span className='rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700'>
-                              {decisionCard.officialSite.secureLabel}
-                            </span>
-                            <span className='rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700'>
-                              {decisionCard.officialSite.statusLabel}
-                            </span>
-                          </div>
-                          <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.officialSite.summary}</p>
-                        </div>
-
-                        <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
-                          <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                            {locale === 'cn' ? '最近更新信息' : 'Recent update'}
-                          </p>
-                          <p className='mt-2 text-base font-semibold text-slate-950'>{decisionCard.freshness.label}</p>
-                          <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.freshness.summary}</p>
-                        </div>
-
-                        <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
-                          <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                            {locale === 'cn' ? 'Owner 信号' : 'Owner signal'}
-                          </p>
-                          <p className='mt-2 text-base font-semibold text-slate-950'>{decisionCard.owner.label}</p>
                           <div className='mt-2 flex flex-wrap gap-2'>
-                            <span
-                              className={`rounded-full px-2.5 py-1 text-xs font-semibold ${decisionCard.owner.tone}`}
-                            >
-                              {decisionCard.owner.label}
-                            </span>
-                            {decisionCard.owner.claimedAtLabel && (
-                              <span className='rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700'>
-                                {isChinese
-                                  ? `认领于 ${decisionCard.owner.claimedAtLabel}`
-                                  : `Claimed ${decisionCard.owner.claimedAtLabel}`}
+                            {decisionEvidenceMissingLabels.map((label) => (
+                              <span key={label} className='rounded-full bg-white/10 px-2.5 py-1 text-xs text-slate-200'>
+                                {label}
                               </span>
-                            )}
+                            ))}
                           </div>
-                          <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.owner.summary}</p>
                         </div>
+                      )}
+                    </div>
 
-                        <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
-                          <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                            {locale === 'cn' ? '定价快照' : 'Pricing snapshot'}
-                          </p>
-                          <p className='mt-2 text-base font-semibold text-slate-950'>{decisionCard.pricing.label}</p>
-                          <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.pricing.summary}</p>
-                        </div>
+                    <div className='grid gap-4 xl:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]'>
+                      <div className='rounded-lg border border-slate-200 bg-slate-50 p-4 sm:p-5'>
+                        <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                          {locale === 'cn' ? '先看这三个判断' : 'Start with these three signals'}
+                        </p>
+                        <div className='mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4'>
+                          <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
+                            <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                              {locale === 'cn' ? '官方网站状态' : 'Official website status'}
+                            </p>
+                            <p className='mt-2 text-base font-semibold text-slate-950'>
+                              {decisionCard.officialSite.hostname}
+                            </p>
+                            <div className='mt-2 flex flex-wrap items-center gap-2'>
+                              <span className='rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700'>
+                                {decisionCard.officialSite.secureLabel}
+                              </span>
+                              <span className='rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700'>
+                                {decisionCard.officialSite.statusLabel}
+                              </span>
+                            </div>
+                            <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.officialSite.summary}</p>
+                          </div>
 
-                        <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
-                          <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                            {locale === 'cn' ? '风险与限制' : 'Risks and limits'}
-                          </p>
-                          <div className='mt-2 space-y-2'>
-                            {(decisionCard.risks.length > 0
-                              ? decisionCard.risks
-                              : [isChinese ? '暂时没有明显风险信号。' : 'No strong risk signal right now.']
-                            )
-                              .slice(0, 2)
-                              .map((item) => (
+                          <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
+                            <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                              {locale === 'cn' ? '最近更新信息' : 'Recent update'}
+                            </p>
+                            <p className='mt-2 text-base font-semibold text-slate-950'>
+                              {decisionCard.freshness.label}
+                            </p>
+                            <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.freshness.summary}</p>
+                          </div>
+
+                          <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
+                            <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                              {locale === 'cn' ? 'Owner 信号' : 'Owner signal'}
+                            </p>
+                            <p className='mt-2 text-base font-semibold text-slate-950'>{decisionCard.owner.label}</p>
+                            <div className='mt-2 flex flex-wrap gap-2'>
+                              <span
+                                className={`rounded-full px-2.5 py-1 text-xs font-semibold ${decisionCard.owner.tone}`}
+                              >
+                                {decisionCard.owner.label}
+                              </span>
+                              {decisionCard.owner.claimedAtLabel && (
+                                <span className='rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700'>
+                                  {isChinese
+                                    ? `认领于 ${decisionCard.owner.claimedAtLabel}`
+                                    : `Claimed ${decisionCard.owner.claimedAtLabel}`}
+                                </span>
+                              )}
+                            </div>
+                            <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.owner.summary}</p>
+                          </div>
+
+                          <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
+                            <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                              {locale === 'cn' ? '定价快照' : 'Pricing snapshot'}
+                            </p>
+                            <p className='mt-2 text-base font-semibold text-slate-950'>{decisionCard.pricing.label}</p>
+                            <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.pricing.summary}</p>
+                          </div>
+
+                          <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
+                            <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                              {locale === 'cn' ? '风险与限制' : 'Risks and limits'}
+                            </p>
+                            <div className='mt-2 space-y-2'>
+                              {visibleDecisionRisks.map((item) => (
                                 <p
                                   key={item}
                                   className='rounded-lg bg-slate-50 px-3 py-2 text-sm leading-6 text-slate-600'
@@ -4830,171 +4850,173 @@ export default async function Page({
                                   {item}
                                 </p>
                               ))}
+                            </div>
                           </div>
+                        </div>
+                      </div>
+
+                      <div className='grid gap-4'>
+                        <div className='rounded-lg border border-slate-200 p-4'>
+                          <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                            {locale === 'cn' ? '真实反馈信号' : 'User signal'}
+                          </p>
+                          <p className='mt-2 text-lg font-semibold text-slate-950'>{decisionCard.community.label}</p>
+                          <p className='mt-2 text-xs font-medium text-slate-500'>{decisionCard.community.evidence}</p>
+                          <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.community.summary}</p>
+                        </div>
+
+                        <div className='rounded-lg border border-slate-200 p-4'>
+                          <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                            {locale === 'cn' ? '预览覆盖' : 'Preview coverage'}
+                          </p>
+                          <p className='mt-2 text-lg font-semibold text-slate-950'>{decisionCard.media.label}</p>
+                          <p className='mt-2 text-xs font-medium text-slate-500'>{decisionCard.media.evidence}</p>
+                          <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.media.summary}</p>
+                        </div>
+
+                        <div className='rounded-lg border border-slate-200 p-4'>
+                          <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                            {locale === 'cn' ? '编辑复核' : 'Editorial review'}
+                          </p>
+                          <p className='mt-2 text-lg font-semibold text-slate-950'>
+                            {decisionCard.editorial.reviewedLabel || (locale === 'cn' ? '待补复核' : 'Review pending')}
+                          </p>
+                          <p className='mt-1 text-xs font-medium text-slate-500'>
+                            {decisionCard.editorial.reviewerLabel}
+                          </p>
+                          {!decisionCard.editorial.sourceUrl ? (
+                            <p className='mt-2 text-sm leading-6 text-slate-600'>
+                              {locale === 'cn'
+                                ? '目前还没有该条目的编辑复核记录。你可以先提交评论反馈，再发起“请求更新”让官方信息可追溯。'
+                                : 'No editorial review has been recorded yet. Please leave feedback first and request an update so we can bind source evidence.'}
+                            </p>
+                          ) : (
+                            <>
+                              {decisionCard.editorial.stale && (
+                                <p className='mt-2 text-sm font-medium text-amber-700'>
+                                  {locale === 'cn'
+                                    ? '该复核已超过 90 天，建议重新核查官网信息。'
+                                    : 'This review is over 90 days old. Recheck the official source before relying on it.'}
+                                </p>
+                              )}
+                              {decisionCard.editorial.summary && (
+                                <p className='mt-3 text-sm leading-6 text-slate-600'>
+                                  {decisionCard.editorial.summary}
+                                </p>
+                              )}
+                              {decisionCard.editorial.trustNote && (
+                                <p className='mt-2 text-sm leading-6 text-slate-600'>
+                                  {decisionCard.editorial.trustNote}
+                                </p>
+                              )}
+                              <a
+                                href={decisionCard.editorial.sourceUrl}
+                                target='_blank'
+                                rel='noreferrer'
+                                className='mt-3 inline-flex items-center gap-1 text-sm font-semibold text-cyan-700 hover:text-cyan-900'
+                              >
+                                {locale === 'cn' ? '查看证据来源' : 'View evidence source'}
+                                <ExternalLink className='size-3.5' />
+                              </a>
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>
 
-                    <div className='grid gap-4'>
+                    <div className='rounded-lg border border-cyan-100 bg-cyan-50 p-4 sm:p-5'>
+                      <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
+                        {locale === 'cn' ? '和相似工具怎么比' : 'How to compare it next'}
+                      </p>
+                      <p className='mt-2 text-lg font-semibold text-slate-950'>
+                        {locale === 'cn' ? '先横向看关键差异' : 'Compare the decision points first'}
+                      </p>
+                      <div className='mt-3 flex flex-wrap gap-2'>
+                        {decisionCard.comparison.axes.map((axis) => (
+                          <span
+                            key={axis}
+                            className='inline-flex rounded-full bg-white px-3 py-1 text-sm font-medium text-cyan-900 ring-1 ring-cyan-100'
+                          >
+                            {axis}
+                          </span>
+                        ))}
+                      </div>
+                      <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.comparison.summary}</p>
+                    </div>
+
+                    <div className='rounded-lg border border-slate-200 bg-white p-4 sm:p-5'>
+                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                        {locale === 'cn' ? '替代方案' : 'Alternatives'}
+                      </p>
+                      <p className='mt-2 text-lg font-semibold text-slate-950'>
+                        {locale === 'cn'
+                          ? '如果这款不合适，直接看更窄的比较页'
+                          : 'If this is not the right fit, open a reviewed related tool'}
+                      </p>
+                      <p className='mt-2 text-sm leading-6 text-slate-600'>
+                        {locale === 'cn'
+                          ? '这些人工复核关系可帮助你替换或补充当前 shortlist，而不是继续围着同一个工具打转。'
+                          : 'Use these reviewed relationships to replace or complement the shortlist instead of circling the same tool.'}
+                      </p>
+                      <div className='mt-4 grid gap-3 lg:grid-cols-3'>
+                        {decisionCard.comparison.alternatives.map((item) => (
+                          <a
+                            key={item.href}
+                            href={item.href}
+                            className='rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:-translate-y-0.5 hover:bg-slate-100'
+                          >
+                            <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                            <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className='grid gap-4 lg:grid-cols-3'>
                       <div className='rounded-lg border border-slate-200 p-4'>
                         <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                          {locale === 'cn' ? '真实反馈信号' : 'User signal'}
+                          {locale === 'cn' ? '适合谁' : 'Best fit'}
                         </p>
-                        <p className='mt-2 text-lg font-semibold text-slate-950'>{decisionCard.community.label}</p>
-                        <p className='mt-2 text-xs font-medium text-slate-500'>{decisionCard.community.evidence}</p>
-                        <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.community.summary}</p>
+                        <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
+                          {decisionCard.audience.bestFit.map((item) => (
+                            <li key={item} className='flex gap-2'>
+                              <CheckCircle className='mt-1 size-4 shrink-0 text-emerald-600' />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
 
                       <div className='rounded-lg border border-slate-200 p-4'>
                         <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                          {locale === 'cn' ? '预览覆盖' : 'Preview coverage'}
+                          {locale === 'cn' ? '不太适合' : 'Less ideal for'}
                         </p>
-                        <p className='mt-2 text-lg font-semibold text-slate-950'>{decisionCard.media.label}</p>
-                        <p className='mt-2 text-xs font-medium text-slate-500'>{decisionCard.media.evidence}</p>
-                        <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.media.summary}</p>
+                        <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
+                          {decisionCard.audience.notIdealFor.map((item) => (
+                            <li key={item} className='flex gap-2'>
+                              <CircleArrowRight className='mt-1 size-4 shrink-0 text-slate-500' />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
 
                       <div className='rounded-lg border border-slate-200 p-4'>
                         <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                          {locale === 'cn' ? '编辑复核' : 'Editorial review'}
+                          {locale === 'cn' ? '选择前先核对' : 'Verify before choosing'}
                         </p>
-                        <p className='mt-2 text-lg font-semibold text-slate-950'>
-                          {decisionCard.editorial.reviewedLabel || (locale === 'cn' ? '待补复核' : 'Review pending')}
-                        </p>
-                        <p className='mt-1 text-xs font-medium text-slate-500'>
-                          {decisionCard.editorial.reviewerLabel}
-                        </p>
-                        {!decisionCard.editorial.sourceUrl ? (
-                          <p className='mt-2 text-sm leading-6 text-slate-600'>
-                            {locale === 'cn'
-                              ? '目前还没有该条目的编辑复核记录。你可以先提交评论反馈，再发起“请求更新”让官方信息可追溯。'
-                              : 'No editorial review has been recorded yet. Please leave feedback first and request an update so we can bind source evidence.'}
-                          </p>
-                        ) : (
-                          <>
-                            {decisionCard.editorial.stale && (
-                              <p className='mt-2 text-sm font-medium text-amber-700'>
-                                {locale === 'cn'
-                                  ? '该复核已超过 90 天，建议重新核查官网信息。'
-                                  : 'This review is over 90 days old. Recheck the official source before relying on it.'}
-                              </p>
-                            )}
-                            {decisionCard.editorial.summary && (
-                              <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.editorial.summary}</p>
-                            )}
-                            {decisionCard.editorial.trustNote && (
-                              <p className='mt-2 text-sm leading-6 text-slate-600'>
-                                {decisionCard.editorial.trustNote}
-                              </p>
-                            )}
-                            <a
-                              href={decisionCard.editorial.sourceUrl}
-                              target='_blank'
-                              rel='noreferrer'
-                              className='mt-3 inline-flex items-center gap-1 text-sm font-semibold text-cyan-700 hover:text-cyan-900'
-                            >
-                              {locale === 'cn' ? '查看证据来源' : 'View evidence source'}
-                              <ExternalLink className='size-3.5' />
-                            </a>
-                          </>
-                        )}
+                        <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
+                          {decisionCard.verificationChecklist.map((item) => (
+                            <li key={item} className='flex gap-2'>
+                              <ShieldCheck className='mt-1 size-4 shrink-0 text-cyan-600' />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
                     </div>
                   </div>
-
-                  <div className='rounded-lg border border-cyan-100 bg-cyan-50 p-4 sm:p-5'>
-                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                      {locale === 'cn' ? '和相似工具怎么比' : 'How to compare it next'}
-                    </p>
-                    <p className='mt-2 text-lg font-semibold text-slate-950'>
-                      {locale === 'cn' ? '先横向看关键差异' : 'Compare the decision points first'}
-                    </p>
-                    <div className='mt-3 flex flex-wrap gap-2'>
-                      {decisionCard.comparison.axes.map((axis) => (
-                        <span
-                          key={axis}
-                          className='inline-flex rounded-full bg-white px-3 py-1 text-sm font-medium text-cyan-900 ring-1 ring-cyan-100'
-                        >
-                          {axis}
-                        </span>
-                      ))}
-                    </div>
-                    <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.comparison.summary}</p>
-                  </div>
-
-                  <div className='rounded-lg border border-slate-200 bg-white p-4 sm:p-5'>
-                    <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                      {locale === 'cn' ? '替代方案' : 'Alternatives'}
-                    </p>
-                    <p className='mt-2 text-lg font-semibold text-slate-950'>
-                      {locale === 'cn'
-                        ? '如果这款不合适，直接看更窄的比较页'
-                        : 'If this is not the right fit, open a reviewed related tool'}
-                    </p>
-                    <p className='mt-2 text-sm leading-6 text-slate-600'>
-                      {locale === 'cn'
-                        ? '这些人工复核关系可帮助你替换或补充当前 shortlist，而不是继续围着同一个工具打转。'
-                        : 'Use these reviewed relationships to replace or complement the shortlist instead of circling the same tool.'}
-                    </p>
-                    <div className='mt-4 grid gap-3 lg:grid-cols-3'>
-                      {decisionCard.comparison.alternatives.map((item) => (
-                        <a
-                          key={item.href}
-                          href={item.href}
-                          className='rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:-translate-y-0.5 hover:bg-slate-100'
-                        >
-                          <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
-                          <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className='grid gap-4 lg:grid-cols-3'>
-                    <div className='rounded-lg border border-slate-200 p-4'>
-                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                        {locale === 'cn' ? '适合谁' : 'Best fit'}
-                      </p>
-                      <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
-                        {decisionCard.audience.bestFit.map((item) => (
-                          <li key={item} className='flex gap-2'>
-                            <CheckCircle className='mt-1 size-4 shrink-0 text-emerald-600' />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div className='rounded-lg border border-slate-200 p-4'>
-                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                        {locale === 'cn' ? '不太适合' : 'Less ideal for'}
-                      </p>
-                      <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
-                        {decisionCard.audience.notIdealFor.map((item) => (
-                          <li key={item} className='flex gap-2'>
-                            <CircleArrowRight className='mt-1 size-4 shrink-0 text-slate-500' />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div className='rounded-lg border border-slate-200 p-4'>
-                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                        {locale === 'cn' ? '选择前先核对' : 'Verify before choosing'}
-                      </p>
-                      <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
-                        {decisionCard.verificationChecklist.map((item) => (
-                          <li key={item} className='flex gap-2'>
-                            <ShieldCheck className='mt-1 size-4 shrink-0 text-cyan-600' />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </section>
+                </section>
               )}
 
               {publicEvidenceLedger ? <EvidenceLedgerPanel ledger={publicEvidenceLedger} locale={locale} /> : null}

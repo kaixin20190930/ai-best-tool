@@ -30,6 +30,7 @@ type Preaudit = {
   };
   productionWriteApproved: boolean;
   publishNotBefore: string;
+  releasedAt?: string;
   reviewedAt: string;
   sitemapChangeApproved: boolean;
   slug: string;
@@ -59,16 +60,28 @@ for (const preauditPath of preauditPaths) {
     throw new Error(`${label}: preaudit must target its existing canonical fallback route.`);
   }
 
-  if (preaudit.action !== 'migrate_existing_fallback' || preaudit.status !== 'ready_for_next_slot') {
+  if (
+    preaudit.action !== 'migrate_existing_fallback' ||
+    !['ready_for_next_slot', 'released'].includes(preaudit.status)
+  ) {
     throw new Error(`${label}: preaudit must remain a controlled migration candidate.`);
-  }
-
-  if (preaudit.productionWriteApproved || preaudit.sitemapChangeApproved) {
-    throw new Error(`${label}: a preaudit cannot approve a production write or sitemap expansion.`);
   }
 
   if (preaudit.publishNotBefore <= preaudit.reviewedAt) {
     throw new Error(`${label}: the publication guard must reserve a later release slot.`);
+  }
+
+  if (preaudit.status === 'ready_for_next_slot') {
+    if (preaudit.productionWriteApproved || preaudit.sitemapChangeApproved || preaudit.releasedAt) {
+      throw new Error(`${label}: an unreleased preaudit cannot approve production changes.`);
+    }
+  } else if (
+    !preaudit.productionWriteApproved ||
+    !preaudit.sitemapChangeApproved ||
+    !preaudit.releasedAt ||
+    preaudit.releasedAt < preaudit.publishNotBefore
+  ) {
+    throw new Error(`${label}: a released migration needs dated production and sitemap approval.`);
   }
 
   if (preaudit.sources.official.length < 5 || preaudit.sources.independent.length < 2) {
@@ -80,11 +93,7 @@ for (const preauditPath of preauditPaths) {
     throw new Error(`${label}: sources must be unique HTTPS URLs.`);
   }
 
-  if (
-    preaudit.decisionAngles.length < 5 ||
-    preaudit.limitations.length < 5 ||
-    preaudit.nextSlotChecklist.length < 5
-  ) {
+  if (preaudit.decisionAngles.length < 5 || preaudit.limitations.length < 5 || preaudit.nextSlotChecklist.length < 5) {
     throw new Error(`${label}: decision, limitation, or release-gate depth is incomplete.`);
   }
 
@@ -103,8 +112,7 @@ for (const preauditPath of preauditPaths) {
   if (
     boundaries.length === 0 ||
     boundaries.some(
-      (boundary) =>
-        !boundary.label || !boundary.releaseGuard || !(boundary.summary || boundary.restrictedSummary),
+      (boundary) => !boundary.label || !boundary.releaseGuard || !(boundary.summary || boundary.restrictedSummary),
     )
   ) {
     throw new Error(`${label}: at least one explicit release boundary is required.`);
@@ -129,5 +137,9 @@ for (const preauditPath of preauditPaths) {
     throw new Error(`${label}: pricing-unit and volatility safeguards are required.`);
   }
 
-  console.log(`✅ ${label} preaudit passed: evidence complete, release guarded, no production expansion approved.`);
+  console.log(
+    `✅ ${label} preaudit passed: evidence complete, ${
+      preaudit.status === 'released' ? `released ${preaudit.releasedAt}` : 'release guarded'
+    }.`,
+  );
 }

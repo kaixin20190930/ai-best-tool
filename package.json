@@ -50,6 +50,7 @@
     "test:collection-planning": "tsx scripts/test-collection-planning.ts",
     "test:mature-tool-priority": "tsx scripts/test-mature-tool-gap-priority.ts",
     "test:next-tool-preaudit": "tsx scripts/test-next-tool-preaudit.ts",
+    "test:openrouter-release": "tsx scripts/migrate-openrouter-tool.ts --check",
     "test:home-positioning": "tsx scripts/test-home-positioning.ts",
     "test:localized-metadata": "tsx scripts/test-localized-page-metadata.ts",
     "test:seo-architecture": "tsx scripts/test-seo-architecture-guardrails.ts",
