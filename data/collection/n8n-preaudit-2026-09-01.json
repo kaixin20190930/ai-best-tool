@@ -4,12 +4,13 @@
   "officialUrl": "https://n8n.io/",
   "existingRoute": "/ai/n8n",
   "action": "migrate_existing_fallback",
-  "status": "ready_for_next_slot",
+  "status": "released",
   "reviewedAt": "2026-09-01",
   "recheckedAt": "2026-09-04",
   "publishNotBefore": "2026-09-02",
-  "sitemapChangeApproved": false,
-  "productionWriteApproved": false,
+  "releasedAt": "2026-09-04",
+  "sitemapChangeApproved": true,
+  "productionWriteApproved": true,
   "category": {
     "discoverySlug": "automation",
     "storageSlug": "productivity"
