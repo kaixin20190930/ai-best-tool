@@ -58,6 +58,15 @@ if (!detailPage.includes('priorityEvidence && !priorityOfficialEvidence')) {
   throw new Error('Tool detail page must avoid duplicating an existing official evidence snapshot.');
 }
 
+const gammaStart = detailPage.indexOf("if (key === 'gamma')");
+const gammaEnd = detailPage.indexOf('\n  if (key ===', gammaStart + 1);
+const gammaBranch = detailPage.slice(gammaStart, gammaEnd);
+for (const locale of ['en', 'zh']) {
+  if (!gammaBranch.includes(`PRIORITY_TOOL_EVIDENCE.gamma.limitation.${locale}`)) {
+    throw new Error(`Gamma visible official snapshot must reuse the reviewed ${locale} export boundary.`);
+  }
+}
+
 for (const [officialSnapshotSlug, expectedDate] of Object.entries({
   cursor: '2026-09-01',
   'luma-ai': '2026-09-01',

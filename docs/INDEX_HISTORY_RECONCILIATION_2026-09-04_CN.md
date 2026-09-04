@@ -40,3 +40,13 @@ MAINT-01 技术保护与本周可证实记录补账分别验收；本周禁止�
 - Gamma：官方导出说明明确 Google Slides 通过 PPTX 上传，可能替换嵌入字体，Word 导出仍不支持。已将此具体限制写入双语 priority evidence 卡，替代泛泛的视觉差异提示；卡片检查日期更新为本次实际核查日期，不等于整页审核日期。来源：[官方导出说明](https://help.gamma.app/en/articles/8022861-what-s-the-easiest-way-to-export-my-gamma)。
 - Gamma 当前定价页可读取套餐能力，但本次文本未给出可可靠核对的价格数字，因此没有凭旧数值宣称新价格已验证。来源：[Pricing](https://gamma.app/pricing)。
 - 两者仍维持 monitor；本轮未改数据库 next_review_date、市场验证结论或整页 reviewedAt。MAINT-03 仍进行中；剩余为完整来源、内容一致性与复查排期，Gamma 的 CHG-02 变化账本基线也未因此算完成。
+
+## Gamma 部署后可见性修正
+
+`33e65beb` 的 Vercel 部署成功，但部署后抓取实际 HTML 发现新提示未显示。原因是详情页优先使用官方事实快照，简版 priority evidence 被去重隐藏；此前只测配置内容不足以证明可见性。
+
+修复让官方快照的双语导出项复用同一份 `PRIORITY_TOOL_EVIDENCE.gamma` 文案，附带局部核查日期，保留整块旧核查日期，不暗示所有事实均已重新验证。没有新增重复区块或修改索引状态。
+
+新增验收：`SEO_BASE_URL=https://aibesttool.com pnpm exec tsx scripts/test-gamma-evidence-pages.ts`。移除 script/RSC 内容后检查可见正文，再检查双语 canonical、noindex 与 sitemap 排除；部署后必须通过，不能用 GitHub 部署成功状态代替。
+
+修复验证：专项证据结构测试、完整 `pnpm run build` 均退出 0；本地生产模式（端口 3017）双语可见正文、局部日期、canonical、noindex 和 sitemap 排除全部通过。生产验收结果另行确认，不与本地结果混写。

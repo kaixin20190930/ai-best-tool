@@ -1562,7 +1562,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
             { label: '计费边界', value: '订阅按用户计费；AI 操作消耗 credits，消耗量会随模型、长度和任务复杂度变化。' },
             {
               label: '导出边界',
-              value: '支持 PDF、PNG 和 PPTX；导出以 Present Mode 为准，可能与编辑器不同，且不支持 Word 导出。',
+              value: `支持 PDF、PNG 和 PPTX；导出以 Present Mode 为准。${PRIORITY_TOOL_EVIDENCE.gamma.limitation.zh}（导出限制核查：${PRIORITY_TOOL_EVIDENCE.gamma.checkedAt}）`,
             },
           ],
           sources: [
@@ -1599,8 +1599,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
             },
             {
               label: 'Export boundary',
-              value:
-                'PDF, PNG, and PPTX are supported; exports follow Present Mode and may differ from the editor, while Word export is unavailable.',
+              value: `PDF, PNG, and PPTX are supported; exports follow Present Mode. ${PRIORITY_TOOL_EVIDENCE.gamma.limitation.en} (Export limits checked: ${PRIORITY_TOOL_EVIDENCE.gamma.checkedAt})`,
             },
           ],
           sources: [
