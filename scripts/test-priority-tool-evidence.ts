@@ -18,6 +18,11 @@ const expectedSlugs = [
 ];
 const actualSlugs = Object.keys(PRIORITY_TOOL_EVIDENCE).sort();
 
+const gammaLimit = PRIORITY_TOOL_EVIDENCE.gamma.limitation;
+if (!gammaLimit.en.includes('PPTX') || !gammaLimit.en.includes('fonts') || !gammaLimit.zh.includes('字体')) {
+  throw new Error('Gamma evidence must explain the PPTX import and font boundary in both languages.');
+}
+
 if (JSON.stringify(actualSlugs) !== JSON.stringify(expectedSlugs)) {
   throw new Error(`Priority evidence slugs differ: ${actualSlugs.join(', ')}`);
 }

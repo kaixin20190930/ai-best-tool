@@ -25,9 +25,9 @@
 
 | ID | 优先级 | 任务 | 现场依据 | 当前状态 | 负责人/所需输入 |
 | --- | --- | --- | --- | --- | --- |
-| MAINT-01 | P0 | 公开收录与索引批准额度分离 | 同日两次索引放行违反内部上限 | 技术保护已应用生产并测试通过；整体未完成，本周历史待核对，保持暂停 | Codex；核对本周批准历史 |
+| MAINT-01 | P0 | 公开收录与索引批准额度分离 | 本周可证实放行至少 12 次，当前额度 0 | 技术保护、本周可证实记录补账及额度判断完成；保持暂停，旧历史未知部分明确保留 | Codex；下周恢复前重新复核 |
 | MAINT-02 | P0 | 生产健康、广告和 SEO 边界复查 | 本轮 SEO、health、ads.txt 检查通过 | 本轮审计完成；持续维护 | Codex |
-| MAINT-03 | P1 | Consensus、Gamma 到期复核 | next_review_date 分别为 9 月 3 日、9 月 4 日；两者仍为 monitor | 待逐页事实/意图复核，不自动放开索引 | Codex |
+| MAINT-03 | P1 | Consensus、Gamma 到期复核 | next_review_date 分别为 9 月 3 日、9 月 4 日；两者仍为 monitor | 进行中：Consensus 套餐局部核对、Gamma 导出限制卡更新完成；整页复核/排期待完成 | Codex |
 | MAINT-04 | P1 | 历史工具维护字段补齐 | 23 个 published 工具没有 next_review_date；22 个没有数据库 editorial.reviewedAt；23 个没有数据库 marketValidation.verdict | 待分批核验，不批量伪造日期或验证结论 | Codex；官方与独立证据 |
 | MAINT-05 | P1 | Emdash 复查排期 | 已有 9 月 1 日核验记录和 validated，但 next_review_date 为空 | 待核对现有复查计算逻辑并补齐显式排期 | Codex |
 | MAINT-06 | P1 | Change Timeline 首批真实基线 | 主台账仍为 Fathom、Claude、Consensus，3/10 | Gamma 下一项；robots 受限来源不绕过 | Codex；必要时人工来源材料 |
@@ -36,6 +36,13 @@
 | MAINT-09 | P1 | SEO smoke 退出与超时保护 | 原脚本所有断言通过后未自行结束，重定向请求无超时且响应体未释放 | 已修复；重跑所有生产断言通过并以 0 退出 | Codex |
 
 ## 排期事实
+
+### 后续执行：历史补账与局部内容维护
+
+- `9fa46afc` 已获得 Vercel success / Deployment has completed。
+- 补账脚本默认回滚预演及正式应用成功，9 月 1 日十条 + 9 月 4 日两条 = 至少 12 条。重复插入断言通过，所有工具行哈希不变，paused=true。
+- 未知旧历史不猜测日期，历史退回 monitor 不退还额度；本周不再批准新增索引。详细依据见 [本周核对](./INDEX_HISTORY_RECONCILIATION_2026-09-04_CN.md)。
+- Gamma 双语 priority evidence 卡更新具体导出限制；专项测试及完整 build 退出 0。未修改数据库整页核验日期或下次复核日，不将局部核查标为整页完成。
 
 ### 追加验收：统一索引保护
 

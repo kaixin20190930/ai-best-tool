@@ -12,7 +12,10 @@ export const PRIORITY_TOOL_EVIDENCE: Record<string, PriorityToolEvidence> = {
       zh: 'Consensus 可以加速发现与综合，但语料覆盖、检索和 AI 解读并非穷尽式，不能替代可复现的系统综述方案或对原论文的阅读。',
     },
     sources: [
-      { label: 'Official research database', url: 'https://help.consensus.app/en/articles/10055108-consensus-research-database' },
+      {
+        label: 'Official research database',
+        url: 'https://help.consensus.app/en/articles/10055108-consensus-research-database',
+      },
       { label: 'Independent peer-reviewed review', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC12318603/' },
     ],
   },
@@ -75,10 +78,10 @@ export const PRIORITY_TOOL_EVIDENCE: Record<string, PriorityToolEvidence> = {
     ],
   },
   gamma: {
-    checkedAt: '2026-08-31',
+    checkedAt: '2026-09-04',
     limitation: {
-      en: 'Exports can differ visually from the editor, Word export is unavailable, and subscriptions are billed per user.',
-      zh: '导出结果可能与编辑器存在视觉差异，目前不支持 Word 导出，而且订阅按用户席位计费。',
+      en: 'Google Slides requires importing a PPTX file and can replace embedded fonts; verify the exported deck before presenting. Word export is unavailable.',
+      zh: 'Google Slides 需要导入 PPTX 文件，且可能替换嵌入字体；演示前应核对导出结果。目前不支持 Word 导出。',
     },
     sources: [
       { label: 'Official pricing', url: 'https://gamma.app/pricing' },
