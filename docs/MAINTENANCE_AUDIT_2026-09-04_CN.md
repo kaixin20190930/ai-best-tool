@@ -28,14 +28,20 @@
 | MAINT-01 | P0 | 公开收录与索引批准额度分离 | 本周可证实放行至少 12 次，当前额度 0 | 技术保护、本周可证实记录补账及额度判断完成；保持暂停，旧历史未知部分明确保留 | Codex；下周恢复前重新复核 |
 | MAINT-02 | P0 | 生产健康、广告和 SEO 边界复查 | 本轮 SEO、health、ads.txt 检查通过 | 本轮审计完成；持续维护 | Codex |
 | MAINT-03 | P1 | Consensus、Gamma 到期复核 | 两者 monitor；生产下次复查均已设为 9 月 7 日 | 本轮官方事实维护与排期完成 2/2；独立市场复核/账户实操未完成，不刷新旧验证日期 | Codex；9 月 7 日复查已记录缺口 |
-| MAINT-04 | P1 | 历史工具维护字段补齐 | 23 个 published 工具没有 next_review_date；22 个没有数据库 editorial.reviewedAt；23 个没有数据库 marketValidation.verdict | 待分批核验，不批量伪造日期或验证结论 | Codex；官方与独立证据 |
-| MAINT-05 | P1 | Emdash 复查排期 | 已有 9 月 1 日核验记录和 validated，但 next_review_date 为空 | 待核对现有复查计算逻辑并补齐显式排期 | Codex |
+| MAINT-04 | P1 | 历史工具维护字段补齐 | 缺排期由 23 降为 22；其余数据库验证字段缺口未擅自补齐 | 剩余 22 项已分类，待逐页核验；不能由字段为空推断页面没有证据 | Codex；官方与独立证据 |
+| MAINT-05 | P1 | Emdash 复查排期 | 依据已有 9 月 1 日核验 +30 天 | 已完成：生产 next_review_date 为 10 月 1 日；幂等与其他字段不变校验通过 | Codex |
 | MAINT-06 | P1 | Change Timeline 首批真实基线 | 主台账仍为 Fathom、Claude、Consensus，3/10 | Gamma 下一项；robots 受限来源不绕过 | Codex；必要时人工来源材料 |
 | MAINT-07 | P1 | GSC / Coverage 周度复盘 | 现有主台账性能基线为 8 月 31 日导出；技术通过不代表 Google 已收录 | 等下一次同期数据后评估，不为等待数据扩页 | 用户提供 7 天、28 天及 Coverage |
 | MAINT-08 | P2 | Stack/Trial 实际使用验收 | 技术阶段已完成，真实使用门槛仍需验证 | 保持维护，不新增功能 | 用户真实工具栈/试用反馈，Codex复盘 |
 | MAINT-09 | P1 | SEO smoke 退出与超时保护 | 原脚本所有断言通过后未自行结束，重定向请求无超时且响应体未释放 | 已修复；重跑所有生产断言通过并以 0 退出 | Codex |
 
 ## 排期事实
+
+### 后续执行：Emdash 排期补齐
+
+- 生产 Emdash 明确复查日期已补为 2026-10-01，仍沿用原 9 月 1 日事实核验，不新造市场结论。
+- 离线排期测试、数据库预演回滚、正式应用、独立回读、重复执行不更新断言及完整 build 均通过。Decision Card 模型回归通过。
+- 当前无排期项为 22 个；原始快照下方 23 个列表保留为历史记录。新分类与运行命令见 [历史排期审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。
 
 ### 后续执行：Consensus / Gamma 官方事实维护
 
