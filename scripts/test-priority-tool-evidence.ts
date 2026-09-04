@@ -58,6 +58,7 @@ for (const [officialSnapshotSlug, expectedDate] of Object.entries({
   'luma-ai': '2026-09-01',
   make: '2026-09-01',
   openrouter: '2026-09-04',
+  n8n: '2026-09-04',
   perplexity: '2026-09-01',
   pipedream: '2026-09-01',
   runway: '2026-09-01',
@@ -70,6 +71,16 @@ for (const [officialSnapshotSlug, expectedDate] of Object.entries({
 
   if (checkedCount !== 2) {
     throw new Error(`${officialSnapshotSlug}: both localized official snapshots must use the latest review date.`);
+  }
+  if (officialSnapshotSlug === 'n8n') {
+    for (const term of ['Sustainable Use License', 'Community', 'queue mode', '€667', '40,000', 'AI Assistant']) {
+      if (branch.split(term).length - 1 < 2) {
+        throw new Error(`n8n: both languages must explain ${term}.`);
+      }
+    }
+    if (!branch.includes('not OSI open source') || !branch.includes('不等于 OSI 开源')) {
+      throw new Error('n8n: source-available license must not be presented as unrestricted open source.');
+    }
   }
 }
 

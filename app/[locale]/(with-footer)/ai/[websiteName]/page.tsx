@@ -2523,9 +2523,9 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
     return isChinese
       ? {
           label: '官方事实快照',
-          title: 'Execution 计费、部署方式和数据位置',
-          summary: '以下信息来自 n8n 官方定价与安全文档；价格按年付口径展示，执行额度和功能可能变化。',
-          checkedAt: '2026-08-03',
+          title: 'Execution 成本、部署责任和许可证边界',
+          summary: '以下为官方来源核验，并非实测；价格按年付展示，套餐、AI credits 和功能分配应在购买前复核。',
+          checkedAt: '2026-09-04',
           facts: [
             {
               label: 'Cloud 套餐',
@@ -2533,28 +2533,41 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
                 '年付时 Starter €20/月含 2,500 executions，Pro €50/月含 10,000；所有套餐包含不限用户、工作流和步骤。',
             },
             {
-              label: '计费单位',
+              label: '执行与 AI 成本',
               value:
-                '一次 execution 指整个工作流从开始到结束的一次运行，无论包含多少节点、步骤或处理多少数据，均计为一次。',
+                '按完整工作流运行次数而非节点数计费；高频调度、webhook 和逐消息聊天应分别估算用量。AI Assistant credits 与工作流调用模型商的 API 费用不是同一个额度。',
             },
             {
-              label: '部署与数据',
+              label: '部署与治理',
               value:
-                'n8n Cloud 数据存储在德国法兰克福；自托管数据位置由用户决定，Community Edition 可从 GitHub 自行部署。',
+                'Cloud 由 n8n 托管；自托管需自己负责升级、备份、凭证和监控。Business 年付 €667/月含 40,000 executions，属于自托管套餐；Enterprise 可选云端或自托管。',
+            },
+            {
+              label: '免费版边界',
+              value:
+                'Community 免费自托管且包含 queue mode，但不含项目共享、SSO、Git 版本控制及 external secrets 等付费治理功能；免费注册可解锁文件夹、编辑器调试和自定义执行数据。',
+            },
+            {
+              label: '许可证与选择建议',
+              value:
+                '源码可见不等于 OSI 开源。Sustainable Use License 限制收费托管、白标销售等用途，嵌入产品需核对官方案例。先用一个真实流程比较成功执行成本、失败恢复和维护时间，再决定 Cloud 或自托管。',
             },
           ],
           sources: [
             { label: 'n8n 官方定价', href: 'https://n8n.io/pricing/' },
-            { label: 'Execution 计费说明', href: 'https://support.n8n.io/article/updated-pricing-model-august-2025' },
-            { label: '自托管安全审计', href: 'https://docs.n8n.io/hosting/securing/security-audit/' },
+            { label: 'Community 与付费版本', href: 'https://docs.n8n.io/deploy/host-n8n/community-edition-features/' },
+            {
+              label: 'Sustainable Use License',
+              href: 'https://docs.n8n.io/privacy-and-security/sustainable-use-license',
+            },
           ],
         }
       : {
           label: 'Official fact snapshot',
-          title: 'Execution billing, deployment choice, and data location',
+          title: 'Execution cost, deployment ownership, and license boundaries',
           summary:
-            'These facts come from n8n pricing and security documentation. Prices use annual-billing rates, and execution allowances and features can change.',
-          checkedAt: '2026-08-03',
+            'This is an official-source review, not a hands-on test. Prices use annual billing; recheck plans, AI credits, and feature allocation before purchasing.',
+          checkedAt: '2026-09-04',
           facts: [
             {
               label: 'Cloud plans',
@@ -2562,23 +2575,36 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
                 'On annual billing, Starter is €20/mo for 2,500 executions and Pro is €50/mo for 10,000; plans include unlimited users, workflows, and steps.',
             },
             {
-              label: 'Billing unit',
+              label: 'Execution and AI costs',
               value:
-                'One execution is one complete workflow run, regardless of how many nodes or steps it contains or how much data it processes.',
+                'Billing counts complete workflow runs rather than nodes. Model schedules, webhooks, and message-triggered chat runs separately; AI Assistant credits are not the same allowance as model-provider API charges inside workflows.',
             },
             {
-              label: 'Deployment and data',
+              label: 'Deployment and governance',
               value:
-                'n8n Cloud stores data in Frankfurt, Germany; self-hosted data location is user-controlled, and Community Edition is available for self-deployment from GitHub.',
+                'Cloud is managed by n8n; self-hosting transfers upgrades, backups, credentials, and monitoring to you. Business is self-hosted at €667/mo billed annually for 40,000 executions; Enterprise supports cloud or self-hosting.',
+            },
+            {
+              label: 'Free-edition boundary',
+              value:
+                'Community includes queue mode but excludes paid governance features such as project sharing, SSO, Git version control, and external secrets. Free registration unlocks folders, editor debugging, and custom execution data.',
+            },
+            {
+              label: 'License and decision',
+              value:
+                'Source-available is not OSI open source. The Sustainable Use License restricts paid hosting and white-label resale; check official examples for embedded products. Pilot a real workflow and compare successful-run cost, failure recovery, and maintenance effort before choosing cloud or self-hosting.',
             },
           ],
           sources: [
             { label: 'Official n8n pricing', href: 'https://n8n.io/pricing/' },
             {
-              label: 'Execution pricing model',
-              href: 'https://support.n8n.io/article/updated-pricing-model-august-2025',
+              label: 'Community and paid editions',
+              href: 'https://docs.n8n.io/deploy/host-n8n/community-edition-features/',
             },
-            { label: 'Self-hosted security audit', href: 'https://docs.n8n.io/hosting/securing/security-audit/' },
+            {
+              label: 'Sustainable Use License',
+              href: 'https://docs.n8n.io/privacy-and-security/sustainable-use-license',
+            },
           ],
         };
   }

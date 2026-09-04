@@ -5,7 +5,7 @@
 
 四周实施排期见 [证据驱动目录优化计划](./FOUR_WEEK_EVIDENCE_LED_DIRECTORY_PLAN_CN.md)。
 
-2026-09-04 日常收录更新：W2-02B 累计处理 11/7-14，今日完成 OpenRouter 一条既有 fallback 的生产实体迁移，保留 `/ai/openrouter`。真实事务回滚演练、两轮完整 build、正式提交后独立回读、双语生产模式页面与 sitemap 验收均通过；等待 Vercel 部署确认。累计处理数不等于每日公开数，今天不补发前几天的数量。
+2026-09-04 日常收录更新：W2-02B 累计处理 11/7-14，今日完成 OpenRouter 一条既有 fallback 的生产实体迁移，保留 `/ai/openrouter`。提交 `eca9b320` 的双语生产页面及 sitemap 验收已通过，线上更新已确认。n8n 本轮仅复核并增强既有页面，未写生产工具表或扩 sitemap，仍待发布；累计处理数与今日公开数均不增加。
 
 差异化、证据账本、变化追踪与商业化触发条件见
 [AI 工具决策平台差异化与商业化实施路线图](./EVIDENCE_DECISION_PLATFORM_ROADMAP_CN.md)。

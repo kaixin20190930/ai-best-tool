@@ -6,6 +6,7 @@
   "action": "migrate_existing_fallback",
   "status": "ready_for_next_slot",
   "reviewedAt": "2026-09-01",
+  "recheckedAt": "2026-09-04",
   "publishNotBefore": "2026-09-02",
   "sitemapChangeApproved": false,
   "productionWriteApproved": false,
@@ -22,7 +23,7 @@
     "Queue-mode scaling, secrets, retries, observability, and binary-data handling"
   ],
   "pricingSnapshot": {
-    "checkedAt": "2026-09-01",
+    "checkedAt": "2026-09-04",
     "billingUnit": "One complete workflow run counts as one execution regardless of its number of steps; chat workloads can consume an execution for each message-triggered run.",
     "plans": [
       "Starter: EUR 20/month billed annually, 2,500 workflow executions",
@@ -45,7 +46,7 @@
   },
   "limitations": [
     "Self-hosting transfers upgrades, backups, database availability, Redis, worker health, encryption-key consistency, credential security, and monitoring to the operator.",
-    "Community edition omits projects, workflow and credential sharing, SSO, environments, external secrets, external binary storage, log streaming, multi-main mode, and Git version control.",
+    "Community edition omits custom variables, projects, workflow and credential sharing, SSO, environments, external secrets, external binary storage, log streaming, multi-main mode, and Git version control. Queue mode is included; free registration unlocks folders, editor debugging, and custom execution data.",
     "Queue mode uses Redis plus a shared database; distributed queue mode over SQLite is unsupported, and filesystem binary storage is not supported for queue-mode persistence.",
     "AI nodes and agents can require separate model-provider accounts, API charges, data-policy review, human approval, and output guardrails.",
     "An execution quota can be consumed quickly by high-frequency schedules, retries, webhook events, or message-by-message chatbot workflows.",

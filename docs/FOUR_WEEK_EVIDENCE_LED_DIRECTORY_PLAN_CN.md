@@ -50,7 +50,7 @@
 | W2-01C | 市场验证编辑器与前台成熟度状态 | 1 天 | W2-01B | 五维评分、独立证据和信号可编辑；收集型工具未验证不能发布；详情页展示验证依据 | 已完成；专项准入测试、tsc 与完整 build 通过 |
 | W2-02A | 生成未来 3 天候选池，每日处理 1-2 条 | 每日 1 小时 | W2-01 | 每条有发布/待补结论 | 已完成，提交 `d7ea18b5`；6 条生产候选按 3 天每天 2 条排期 |
 | W2-02B | 首批 7-14 条处理台账；只发布通过资料与市场双重准入的条目 | 每日 1 小时 | W2-02A | 无低质量例外放行 | 进行中，累计处理 11/7-14；9 月 4 日 OpenRouter 已迁移，今日公开 1 条；累计处理数不是日更发布数 |
-| W2-02D | 下一公开时段成熟工具预审；证据齐全但不提前发布 | 0.5 天 | W2-02B | 证据、边界和发布闸门自动校验；不改生产数据或 sitemap | 已完成 n8n 预审；状态 `ready_for_next_slot`，最早 2026-09-02 复核后迁移 |
+| W2-02D | 下一公开时段成熟工具预审；证据齐全但不提前发布 | 0.5 天 | W2-02B | 证据、边界和发布闸门自动校验；不改生产数据或 sitemap | 已完成 n8n 预审；9 月 4 日复核定价、版本与许可证并增强既有页面，仍为 `ready_for_next_slot`，未迁移生产实体 |
 | W2-02E | 后续公开时段成熟工具预审；建立可复用多候选门禁 | 0.5 天 | W2-02D | 所有预审文件统一校验，证据与边界不足即失败 | 已完成；OpenRouter 于 2026-09-04 完成复核、生产迁移与回读，沿用原 canonical |
 | W2-03A | Web3、Automation、Research Guide 统一任务入口 | 1 天 | W1-01C | 指向对应工具 Decision Card | 已完成，提交 `de1504e6`；专项结构测试、Decision Card 回归、tsc、完整 build 通过 |
 
@@ -185,6 +185,15 @@
 - 迁移脚本：`scripts/migrate-openrouter-tool.ts`；默认事务回滚，`--check` 只校验内容，`--commit` 才实际发布。已完成真实数据库插入、回读、回滚演练。
 - 已完成：内容检查、预审门禁、工具证据测试、首轮完整 build（退出码 0）、正式提交事务和独立连接回读。数据库 ID 为 `f77fb817-e8dc-4c22-b7cd-8edc2e5b0a5e`，状态 `published / continue_index`，下次复核 2026-09-18。
 - 发布验收：两轮 `pnpm run build` 均退出 0；`test:openrouter-release`、`test:next-tool-preaudit`、`test:priority-tool-evidence` 均通过。`pnpm exec tsx scripts/test-openrouter-pages.ts` 在本地生产模式确认双语 200、canonical、index、核验日期、BYOK 新阈值及官方来源，sitemap 恰好包含两个语言 URL。Vercel 部署成功与否单独记录，不能由数据库提交成功推断。
+- 线上收口：提交 `eca9b320` 推送后，以 `SEO_BASE_URL=https://aibesttool.com` 执行同一页面验收脚本已通过；确认生产双语事实快照和 sitemap 已生效。
+
+### W2-02D n8n 复核与既有页增强（2026-09-04）
+
+- 生产只读查询确认 n8n 实体仍为 0 条；本轮不写工具表、不扩 sitemap，今日公开收录仍为 OpenRouter 1 条，累计处理数不增加。
+- 官方 Pricing、Sustainable Use License 与 Compare editions 再核验完成。补齐 Business 自托管边界、Community 免费注册功能与付费治理缺口、execution 与模型 API/AI Assistant 费用隔离、许可证限制及代表性试用建议。
+- 既有 `/ai/n8n` 双语快照更新至 2026-09-04；移除未在本轮重新核实的数据中心位置表述，不硬编码波动 AI credits。来源核验不能冒充实测。
+- 自动门禁：`test:priority-tool-evidence` 校验双语日期、关键成本/版本/许可证边界；`test:next-tool-preaudit` 继续禁止未发布候选自动批准数据库写入或 sitemap 扩张。
+- 状态：本轮内容与门禁已完成；`pnpm run build` 退出 0，证据与预审测试通过。`pnpm exec tsx scripts/test-n8n-prepublication-pages.ts` 在本地生产模式确认双语可见事实、来源、canonical 与原有 `noindex`，sitemap 不包含 n8n。生产实体迁移仍待后续发布时段，不计为已发布。
 
 ### W2-02C 首批成熟工具内容缺口（2026-09-01）
 
