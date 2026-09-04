@@ -16,7 +16,9 @@
 - 本轮将缺失的数据库事实复查日期补为 **2026-10-01**；不从今天重新起算，也不改动未来可能存在的人工排期。公开页面原先可能已显示推导出的日期，本次是补齐数据库明确字段，不宣称新增页面功能。
 - 更新只允许 next_review_date 与 updated_at；数据库原正文、features、index 状态等全部保持不变。
 
-## 剩余 22 项分类
+## 剩余项分类（初始 22，当前 21）
+
+后续 Gemini 真实官方事实维护已完成，补齐中英文正文、来源和 9 月 18 日复查日期；非独立市场验证。缺排期现为 21，详细验收见 [Gemini 维护](./GEMINI_MAINTENANCE_2026-09-04_CN.md)。本文件原 Emdash 只补排期的范围仍保留，Gemini 是另一次实质内容维护。
 
 执行结果：生产补齐已完成并经独立连接回读，Emdash 为 2026-10-01；只读 inventory 确认缺排期为 22。专项测试、Decision Card 回归、完整 build 均退出 0。无新增工具或索引批准，其他历史条目未被写入。
 
@@ -24,7 +26,8 @@
 
 | 顺序 | 工具 | 下一动作 | 状态 |
 | --- | --- | --- | --- |
-| 1 | gemini、notion、poe、adobe、salesforce_einstein | 核对页面静态证据与数据库字段，确认同一产品和真实检查日期后再补录 | 待执行 |
+| 1a | gemini | 官方访问、额度、隐私及双语内容维护，保留索引与身份 | 本轮完成；9 月 18 日复查，市场验证未赋值 |
+| 1b | notion、poe、adobe、salesforce_einstein | 核对页面静态证据与数据库字段，确认同一产品和真实检查日期后再补录 | 待执行 |
 | 2 | openai、gpt_4o、chatgpt-mac、sora | 先确认品牌、模型、客户端与独立产品实体关系；本轮不重命名、不合并 URL | 待执行 |
 | 3 | character_ai、artiversehub-ai、fastimage-ai-sketch-to-image、honeydo、shutterstock、suno_aI、tattooai-design、viggle、woy-ai、shop_your_ai_powered_Shopping_assistant | 核对官网可用性、实际产品范围、原有证据和市场信号；按证据决定是否补录或另行复核 | 待执行 |
 | 4 | aigirl-best、anime-girl-studio、undressing_ai | 先确认实际服务类型、安全与合规边界，不自动推广或补“已验证” | 待执行 |
