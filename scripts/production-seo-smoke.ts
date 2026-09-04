@@ -86,19 +86,28 @@ async function fetchText(path: string) {
 }
 
 async function checkCanonicalRedirect(sourceUrl: string, expectedPath: string) {
-  const response = await fetch(sourceUrl, {
-    headers: { 'user-agent': 'ai-best-tool-seo-smoke/1.0' },
-    redirect: 'manual',
-  });
-  const location = response.headers.get('location');
-  const expectedUrl = new URL(expectedPath, canonicalBaseUrl).toString();
-  const redirectedUrl = location ? new URL(location, sourceUrl).toString() : null;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 20_000);
+  try {
+    const response = await fetch(sourceUrl, {
+      headers: { 'user-agent': 'ai-best-tool-seo-smoke/1.0' },
+      redirect: 'manual',
+      signal: controller.signal,
+    });
+    const location = response.headers.get('location');
+    const expectedUrl = new URL(expectedPath, canonicalBaseUrl).toString();
+    const redirectedUrl = location ? new URL(location, sourceUrl).toString() : null;
 
-  return {
-    status: response.status,
-    location: redirectedUrl,
-    passes: [301, 302, 307, 308].includes(response.status) && redirectedUrl === expectedUrl,
-  };
+    // Manual redirects only need headers; release the unread stream and its connection.
+    await response.body?.cancel();
+    return {
+      status: response.status,
+      location: redirectedUrl,
+      passes: [301, 302, 307, 308].includes(response.status) && redirectedUrl === expectedUrl,
+    };
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 async function runSmokeCheck() {
