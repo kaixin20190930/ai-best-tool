@@ -27,7 +27,7 @@
 | --- | --- | --- | --- | --- | --- |
 | MAINT-01 | P0 | 公开收录与索引批准额度分离 | 本周可证实放行至少 12 次，当前额度 0 | 技术保护、本周可证实记录补账及额度判断完成；保持暂停，旧历史未知部分明确保留 | Codex；下周恢复前重新复核 |
 | MAINT-02 | P0 | 生产健康、广告和 SEO 边界复查 | 本轮 SEO、health、ads.txt 检查通过 | 本轮审计完成；持续维护 | Codex |
-| MAINT-03 | P1 | Consensus、Gamma 到期复核 | next_review_date 分别为 9 月 3 日、9 月 4 日；两者仍为 monitor | 进行中：Consensus 套餐局部核对、Gamma 导出限制卡更新完成；整页复核/排期待完成 | Codex |
+| MAINT-03 | P1 | Consensus、Gamma 到期复核 | 两者 monitor；生产下次复查均已设为 9 月 7 日 | 本轮官方事实维护与排期完成 2/2；独立市场复核/账户实操未完成，不刷新旧验证日期 | Codex；9 月 7 日复查已记录缺口 |
 | MAINT-04 | P1 | 历史工具维护字段补齐 | 23 个 published 工具没有 next_review_date；22 个没有数据库 editorial.reviewedAt；23 个没有数据库 marketValidation.verdict | 待分批核验，不批量伪造日期或验证结论 | Codex；官方与独立证据 |
 | MAINT-05 | P1 | Emdash 复查排期 | 已有 9 月 1 日核验记录和 validated，但 next_review_date 为空 | 待核对现有复查计算逻辑并补齐显式排期 | Codex |
 | MAINT-06 | P1 | Change Timeline 首批真实基线 | 主台账仍为 Fathom、Claude、Consensus，3/10 | Gamma 下一项；robots 受限来源不绕过 | Codex；必要时人工来源材料 |
@@ -36,6 +36,13 @@
 | MAINT-09 | P1 | SEO smoke 退出与超时保护 | 原脚本所有断言通过后未自行结束，重定向请求无超时且响应体未释放 | 已修复；重跑所有生产断言通过并以 0 退出 | Codex |
 
 ## 排期事实
+
+### 后续执行：Consensus / Gamma 官方事实维护
+
+- [维护记录](./CONSENSUS_GAMMA_MAINTENANCE_2026-09-04_CN.md)：官方套餐/功能边界核查、双语试用检查和明确范围的 features.maintenanceReview 已完成；仅维护记录、下次复查日期及更新时间允许变化，其他字段不变断言通过。
+- 生产 next_review_date 均为 2026-09-07；editorial.reviewedAt 与 marketValidation.reviewedAt 仍为 2026-09-01，不伪造实测或独立市场复核。
+- 四个本地生产页面的可见提示、来源链接、canonical、noindex 及 sitemap 排除通过。生产前一版 Gamma 可见性修复 `4923dbc5` 也已完成线上验收。
+- 原下表 9 月 3–4 日为审计时的到期日期，本轮处理后的新复查日期以本节为准。
 
 ### 后续执行：历史补账与局部内容维护
 

@@ -22,7 +22,7 @@ Gamma 验收补充：`33e65beb` 部署成功，但新简版提示被官方快照
 
 - P0：统一数据库保护已应用生产，提交 `9fa46afc` 的 Vercel 部署已确认成功。已补记 9 月 1 日十次可证实迁移，与 9 月 4 日两次合计至少 12 次，本周剩余额度 0；完整旧历史仍有未知部分，不伪造日期、不自动恢复批准。补账幂等/事务回滚及工具行不变断言通过。详见 [历史核对](./INDEX_HISTORY_RECONCILIATION_2026-09-04_CN.md)、[保护运行说明](./INDEX_RELEASE_GUARD_RUNBOOK_CN.md)。
 - P0：本轮生产 SEO、health 和 ads.txt 只读审计通过；sitemap 162 URLs。另修复 SEO smoke 重定向请求无超时/未释放响应体的问题，重跑断言全部通过且退出 0。
-- P1：Consensus 套餐数字完成局部官方交叉核对；Gamma 双语决策卡补充 PPTX 导入/字体替换边界，证据测试与完整 build 通过。两页整页复核与排期仍待完成，保持 monitor；23 个历史 published 工具缺少显式下次复核日期，不批量刷新“已验证”日期。
+- P1：Consensus、Gamma 本轮官方事实维护与复查排期完成 2/2，新增可操作试用检查；生产维护记录已写入，两页保持 monitor，下次复查 9 月 7 日。独立论文验证码与 Gamma 金额核对缺口保留，不重置市场验证。详见 [本轮维护](./CONSENSUS_GAMMA_MAINTENANCE_2026-09-04_CN.md)。23 个历史 published 工具缺少显式复核日期的任务仍未完成。
 - P1：CHG-02 仍为 3/10；后续做 Gamma 真实变化基线，不新增页面。
 - 数据依赖：下一次同期 GSC 7 天、28 天与 Coverage；真实 owner/评论/Stack/Trial 信号需用户实际使用，不能由 AI 编造。
 

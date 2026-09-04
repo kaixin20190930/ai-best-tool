@@ -23,6 +23,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { PRIORITY_TOOL_EVIDENCE } from '@/lib/config/priorityToolEvidence';
 import { PRIORITY_TOOL_FALLBACK_PROFILES } from '@/lib/config/priorityToolFallbacks';
+import TOOL_MAINTENANCE_REVIEWS from '@/lib/config/toolMaintenanceReviews';
 import { getCanonicalToolSlug, getLocalizedToolPath, isLegacyToolSlug } from '@/lib/config/toolRouteAliases';
 import { BASE_URL } from '@/lib/env';
 import { SEO_CONFIG, ToolMetadata } from '@/lib/seo/constants';
@@ -1564,6 +1565,10 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
               label: '导出边界',
               value: `支持 PDF、PNG 和 PPTX；导出以 Present Mode 为准。${PRIORITY_TOOL_EVIDENCE.gamma.limitation.zh}（导出限制核查：${PRIORITY_TOOL_EVIDENCE.gamma.checkedAt}）`,
             },
+            {
+              label: `试用检查（${TOOL_MAINTENANCE_REVIEWS.gamma.checkedAt} 核查）`,
+              value: TOOL_MAINTENANCE_REVIEWS.gamma.note.zh,
+            },
           ],
           sources: [
             {
@@ -1578,6 +1583,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
               label: '官方导出说明',
               href: 'https://help.gamma.app/en/articles/8022861-what-s-the-easiest-way-to-export-my-gamma',
             },
+            { label: '官方数据控制', href: TOOL_MAINTENANCE_REVIEWS.gamma.sources[3] },
           ],
         }
       : {
@@ -1601,6 +1607,10 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
               label: 'Export boundary',
               value: `PDF, PNG, and PPTX are supported; exports follow Present Mode. ${PRIORITY_TOOL_EVIDENCE.gamma.limitation.en} (Export limits checked: ${PRIORITY_TOOL_EVIDENCE.gamma.checkedAt})`,
             },
+            {
+              label: `Trial check (reviewed ${TOOL_MAINTENANCE_REVIEWS.gamma.checkedAt})`,
+              value: TOOL_MAINTENANCE_REVIEWS.gamma.note.en,
+            },
           ],
           sources: [
             {
@@ -1615,6 +1625,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
               label: 'Official export guide',
               href: 'https://help.gamma.app/en/articles/8022861-what-s-the-easiest-way-to-export-my-gamma',
             },
+            { label: 'Official data controls', href: TOOL_MAINTENANCE_REVIEWS.gamma.sources[3] },
           ],
         };
   }
@@ -1641,6 +1652,10 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
               label: '研究边界',
               value: 'AI 综合适合范围探索和线索发现，但不能替代可复现检索、纳入排除标准、偏倚评估和对原始论文的阅读。',
             },
+            {
+              label: `试用检查（${TOOL_MAINTENANCE_REVIEWS.consensus.checkedAt} 核查）`,
+              value: TOOL_MAINTENANCE_REVIEWS.consensus.note.zh,
+            },
           ],
           sources: [
             {
@@ -1648,6 +1663,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
               href: 'https://help.consensus.app/en/articles/10055108-consensus-research-database',
             },
             { label: '官方套餐说明', href: 'https://help.consensus.app/en/articles/10087865-subscription-plans' },
+            { label: '官方 Deep Review 使用说明', href: TOOL_MAINTENANCE_REVIEWS.consensus.sources[2] },
             { label: '独立同行评审', href: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC12318603/' },
           ],
         }
@@ -1673,6 +1689,10 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
               value:
                 'AI synthesis supports scoping and discovery but does not replace reproducible retrieval, screening criteria, bias assessment, or reading the source papers.',
             },
+            {
+              label: `Trial check (reviewed ${TOOL_MAINTENANCE_REVIEWS.consensus.checkedAt})`,
+              value: TOOL_MAINTENANCE_REVIEWS.consensus.note.en,
+            },
           ],
           sources: [
             {
@@ -1683,6 +1703,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
               label: 'Official plan guide',
               href: 'https://help.consensus.app/en/articles/10087865-subscription-plans',
             },
+            { label: 'Official Deep Review guide', href: TOOL_MAINTENANCE_REVIEWS.consensus.sources[2] },
             { label: 'Independent peer-reviewed review', href: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC12318603/' },
           ],
         };
