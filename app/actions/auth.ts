@@ -3,9 +3,10 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-import { createClient } from '@/lib/supabase/server';
 import { authConfig, getOAuthRedirectUrl, getSiteUrl } from '@/lib/config/auth';
+import { safeLocalizedReturnPath } from '@/lib/navigation/localizedPaths';
 import { recordDistributionAttributionEvent } from '@/lib/services/distributionAttribution';
+import { createClient } from '@/lib/supabase/server';
 
 function getAuthErrorMessage(error: unknown) {
   if (error instanceof Error && error.message === 'fetch failed') {
@@ -16,15 +17,7 @@ function getAuthErrorMessage(error: unknown) {
 }
 
 function getSafeRedirectPath(value: FormDataEntryValue | null, fallback: string) {
-  if (typeof value !== 'string' || !value.startsWith('/')) {
-    return fallback;
-  }
-
-  if (value.startsWith('//') || value.includes('://')) {
-    return fallback;
-  }
-
-  return value;
+  return safeLocalizedReturnPath(value) || fallback;
 }
 
 /**
@@ -77,7 +70,7 @@ export async function signUp(formData: FormData) {
     return { error: getAuthErrorMessage(error) };
   }
 
-  redirect(authConfig.redirects.afterSignUp);
+  return redirect(authConfig.redirects.afterSignUp);
 }
 
 /**
@@ -86,10 +79,7 @@ export async function signUp(formData: FormData) {
 export async function signIn(formData: FormData) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
-  const redirectTo = getSafeRedirectPath(
-    formData.get('redirectTo'),
-    authConfig.redirects.afterSignIn
-  );
+  const redirectTo = getSafeRedirectPath(formData.get('redirectTo'), authConfig.redirects.afterSignIn);
 
   // Validate inputs
   if (!email || !password) {
@@ -112,7 +102,7 @@ export async function signIn(formData: FormData) {
     return { error: getAuthErrorMessage(error) };
   }
 
-  redirect(redirectTo);
+  return redirect(redirectTo);
 }
 
 /**
@@ -128,7 +118,7 @@ export async function signOut() {
   }
 
   revalidatePath('/', 'layout');
-  redirect(authConfig.redirects.afterSignOut);
+  return redirect(authConfig.redirects.afterSignOut);
 }
 
 /**
@@ -157,8 +147,9 @@ export async function signInWithOAuth(provider: 'google' | 'github') {
   }
 
   if (redirectUrl) {
-    redirect(redirectUrl);
+    return redirect(redirectUrl);
   }
+  return { error: 'OAuth sign-in did not return a redirect URL.' };
 }
 
 /**
@@ -205,7 +196,7 @@ export async function updatePassword(formData: FormData) {
   }
 
   revalidatePath('/', 'layout');
-  redirect(authConfig.redirects.afterPasswordReset);
+  return redirect(authConfig.redirects.afterPasswordReset);
 }
 
 /**

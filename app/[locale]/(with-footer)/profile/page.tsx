@@ -558,7 +558,7 @@ export default async function ProfilePage({ params }: { params: { locale: string
 
                   <div className='mt-4 flex flex-wrap gap-3'>
                     <Link
-                      href={`/${params.locale}/ai/${tool.name}`}
+                      href={`/ai/${tool.name}`}
                       className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-2 text-sm font-semibold text-white hover:bg-cyan-800'
                     >
                       {isChinese ? '打开详情页' : 'Open listing'} <ArrowUpRight className='ml-2 size-4' />

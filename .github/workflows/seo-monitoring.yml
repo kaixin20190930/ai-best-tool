@@ -39,6 +39,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       
+      - name: Check localized navigation contracts
+        # Static navigation checks do not depend on production deployment timing.
+        id: navigation-check
+        run: pnpm run test:localized-navigation
+
       - name: Run SEO Health Check
         id: health-check
         run: |

@@ -26,6 +26,7 @@ import { PRIORITY_TOOL_FALLBACK_PROFILES } from '@/lib/config/priorityToolFallba
 import TOOL_MAINTENANCE_REVIEWS from '@/lib/config/toolMaintenanceReviews';
 import { getCanonicalToolSlug, getLocalizedToolPath, isLegacyToolSlug } from '@/lib/config/toolRouteAliases';
 import { BASE_URL } from '@/lib/env';
+import { buildLoginHref } from '@/lib/navigation/localizedPaths';
 import { SEO_CONFIG, ToolMetadata } from '@/lib/seo/constants';
 import {
   buildLocalizedPageMetadata,
@@ -4446,7 +4447,7 @@ export default async function Page({
                         {locale === 'cn' ? '去评论' : 'Jump to comments'}
                       </a>
                       <Link
-                        href={`/${locale}/developer/listing`}
+                        href='/developer/listing'
                         className='inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
                       >
                         <ShieldCheck className='size-4' />
@@ -4594,7 +4595,7 @@ export default async function Page({
                           : 'If this is your tool, review the listing options to submit updates and manage visibility.'}
                       </p>
                       <Link
-                        href={`/${locale}/developer/listing`}
+                        href='/developer/listing'
                         className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-3 py-2 text-sm font-semibold text-white hover:bg-cyan-800'
                       >
                         {locale === 'cn' ? '查看提交方案' : 'View listing options'}
@@ -5313,7 +5314,7 @@ export default async function Page({
                       </>
                     ) : (
                       <Link
-                        href={`/${locale}/login?redirect=/${locale}/ai/${websiteName}`}
+                        href={buildLoginHref(`/ai/${websiteName}`, locale)}
                         className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
                       >
                         {locale === 'cn' ? '登录后收藏、评论并关注更新' : 'Log in to save, comment, and follow updates'}
@@ -5342,7 +5343,7 @@ export default async function Page({
                         : 'Claim the listing first, then add comments, the official link, and the latest update notes.'}
                     </p>
                     <Link
-                      href={`/${locale}/developer/listing?intent=claim`}
+                      href='/developer/listing?intent=claim'
                       className='mt-3 inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
                     >
                       {locale === 'cn' ? '去认领条目' : 'Claim listing'}
@@ -5455,13 +5456,13 @@ export default async function Page({
           </p>
           <div className='mt-6 flex flex-wrap gap-3'>
             <Link
-              href={`/${locale}/explore`}
+              href='/explore'
               className='inline-flex items-center justify-center rounded-lg bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800'
             >
               Explore tools
             </Link>
             <Link
-              href={`/${locale}/best-ai-tools`}
+              href='/best-ai-tools'
               className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:border-cyan-200 hover:text-cyan-700'
             >
               Back to rankings

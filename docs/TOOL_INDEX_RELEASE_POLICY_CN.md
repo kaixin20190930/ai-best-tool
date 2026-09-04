@@ -73,7 +73,7 @@ OpenRouter 与 n8n 同日从未批准索引的 fallback 转为 continue_index，
 必须同时满足：
 
 1. 状态为 `published`，质量分不低于 80，且无占位 logo、截图或明显空字段。
-2. 市场验证结论为 `validated`；至少一项强信号和另一项强/辅助信号可追溯。
+2. 市场验证结论为 `validated`；至少一项产品级强采用信号和另一项强/辅助信号可追溯，不能仅凭厂商发布历史或品牌声誉。先满足 [唯一收录准入规范](./BEST_DIRECTORY_POSITIONING_AND_INTAKE_CN.md) 的对象规则与八项门槛，再判断索引资格；后台状态或分数不能替代编辑证据。
 3. 至少两个互补官方来源、一个会影响选择的真实限制、最近核查日期和下次复查日期。
 4. `Best for`、`Not ideal for`、比较维度和替代路径不是模板化空话。
 5. canonical 唯一，不与现有工具、Guide、comparison 或 alias 抢同一意图。

@@ -3,6 +3,7 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr';
 
 import { getLocalizedToolPath, shouldRedirectExplicitEnglishToolPath } from './lib/config/toolRouteAliases';
 import { BASE_URL } from './lib/env';
+import { repairRepeatedLocalePath } from './lib/navigation/localizedPaths';
 import { INDEXABLE_GUIDE_PATHS } from './lib/seo/guideIndexing';
 import intlMiddleware from './middlewares/intlMiddleware';
 
@@ -169,6 +170,12 @@ export async function middleware(request: NextRequest) {
   }
 
   const { pathname } = request.nextUrl;
+  const repairedPath = repairRepeatedLocalePath(pathname);
+  if (repairedPath !== pathname && (request.method === 'GET' || request.method === 'HEAD')) {
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = repairedPath;
+    return NextResponse.redirect(redirectUrl, 308);
+  }
   const { locale, pathWithoutLocale } = getPathParts(pathname);
 
   // Resolve legacy tool entities before locale rewriting so crawlers receive
@@ -205,7 +212,7 @@ export async function middleware(request: NextRequest) {
 
   if ((isProtectedRoute || isAdminRoute) && !user) {
     const redirectUrl = new URL(getLocalizedPath(pathname, '/login'), request.url);
-    redirectUrl.searchParams.set('redirect', pathname);
+    redirectUrl.searchParams.set('redirect', `${pathname}${request.nextUrl.search}`);
 
     const response = NextResponse.redirect(redirectUrl);
     copyCookies(sessionResponse, response);

@@ -37,6 +37,10 @@
 
 ## 排期事实
 
+后续只读核查：Adobe/Salesforce 查重与已知引用/8 页线上抽查完成，四个工具 URL 仍允许索引并列入 sitemap；GSC URL 明细未知，最终处置未做。新增待修：工具页登录入口重复 locale 前缀。详见 [影响面审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。缺排期仍 19，不将审计等同于工具核验。
+
+准入规范修订完成：Adobe / Salesforce Einstein 转入收录对象复核，初步审计发现泛品牌/范围混淆；处置、市场验证与页面整改尚未完成。见 [对象复核记录](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。不把文档完成记为工具核验完成；缺排期仍 19，生产未改。
+
 最新追加：Notion、Poe 官方事实维护完成，缺排期现为 19；以下 21/22/23 项为此前快照。执行与四个语言页验收见 [Notion/Poe 维护](./NOTION_POE_MAINTENANCE_2026-09-04_CN.md)。
 
 最新追加：Gemini 官方事实维护完成，缺排期现为 21；下文 Emdash 的 22 项为当时快照。实际执行与线上验收见 [Gemini 维护](./GEMINI_MAINTENANCE_2026-09-04_CN.md)。

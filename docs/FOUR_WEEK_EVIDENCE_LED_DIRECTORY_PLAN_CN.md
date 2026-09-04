@@ -8,6 +8,10 @@
 
 ## 北极星
 
+2026-09-04 对象复核进度：Adobe/Salesforce 已完成数据库查重及已知引用、生产页抽查；GSC URL 明细待补，最终页面/索引处置未实施。无新增工具或批准索引。下一项独立修复为已发现的工具页登录语言前缀重复，详见 [复核台账](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。
+
+2026-09-04 规范更新完成：候选与历史复核统一执行 [收录对象及八项硬门槛](./BEST_DIRECTORY_POSITIONING_AND_INTAKE_CN.md)。Adobe / Salesforce Einstein 当前条目未通过完整准入，转入对象复核及处置，不以维护日期代替核验。本次没有实施页面/数据库/索引变更，也没有新增自动校验功能；执行队列见 [历史工具审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。
+
 2026-09-04 最新维护：Notion、Poe 本轮双语正文、官方证据、用量和隐私边界完成生产更新，下次 9 月 18 日。历史缺排期降至 19；四个语言页面本地/线上验收通过，sitemap 仍 162，无新增 URL、索引批准或市场评分。详见 [Notion/Poe 维护](./NOTION_POE_MAINTENANCE_2026-09-04_CN.md)。
 
 2026-09-04 Gemini 后续维护：既有页面双语摘要/正文、官方证据、访问与隐私边界完成生产更新，9 月 18 日复查；缺排期降为 21。本地 build、Decision Card 回归与双语线上验收通过；未新增 URL、索引批准或市场评分。详见 [Gemini 维护](./GEMINI_MAINTENANCE_2026-09-04_CN.md)。

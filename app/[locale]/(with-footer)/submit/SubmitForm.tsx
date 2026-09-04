@@ -140,11 +140,17 @@ export default function SubmitForm({
   const isPaidPlan = submissionPlan === 'standard_paid';
   const reviewCents = isPaidPlan ? listingConfig.pricingTiers.priorityReview.amountCents : 0;
   const launchBundleSelected = isPaidPlan && fastTrack && selectedFeaturedDays === 14;
-  const featuredBalanceCents = launchBundleSelected
-    ? listingConfig.pricingTiers.launchBundle.amountCents - reviewCents
-    : selectedFeaturedDays > 0
+  const featuredWindowCents =
+    selectedFeaturedDays > 0
       ? listingConfig.pricingTiers.featuredWindows.find((item) => item.days === selectedFeaturedDays)?.amountCents || 0
       : 0;
+  const featuredBalanceCents = launchBundleSelected
+    ? listingConfig.pricingTiers.launchBundle.amountCents - reviewCents
+    : featuredWindowCents;
+  const featuredPaymentLabel = isChinese
+    ? `审核通过后再支付前排费用 $${(featuredBalanceCents / 100).toFixed(2)}`
+    : `Pay $${(featuredBalanceCents / 100).toFixed(2)} for Featured after approval`;
+  const priorityReviewLabel = isChinese ? '包含优先审核' : 'Includes priority review';
   const selectedCategoryId = form.watch('categoryId');
   const selectedCategory = categories.find((category) => category.id === selectedCategoryId);
 
@@ -310,7 +316,7 @@ export default function SubmitForm({
                     : 'Go to the claim page first so the listing is tied to your account before review or updates.'
                 }
                 ctaLabel={isChinese ? '先去认领页' : 'Go claim listing'}
-                href={`/${locale}/developer/listing?intent=claim`}
+                href='/developer/listing?intent=claim'
               />
               <PathOptionCard
                 title={isChinese ? '新工具提交' : 'New tool submission'}
@@ -331,7 +337,7 @@ export default function SubmitForm({
                     : 'Submit first, then complete payment and featured timing from My Submissions.'
                 }
                 ctaLabel={isChinese ? '看付费方案' : 'See paid options'}
-                href={`/${locale}/pricing`}
+                href='/pricing'
               />
             </div>
           </div>
@@ -819,13 +825,7 @@ export default function SubmitForm({
                   <span className='font-semibold'>{isChinese ? '审核时支付：' : 'Due for review: '}</span>
                   <span className='font-bold'>${(reviewCents / 100).toFixed(2)}</span>
                   <span className='ml-2 text-xs text-cyan-950/70'>
-                    {selectedFeaturedDays > 0
-                      ? isChinese
-                        ? `审核通过后再支付前排费用 $${(featuredBalanceCents / 100).toFixed(2)}`
-                        : `Pay $${(featuredBalanceCents / 100).toFixed(2)} for Featured after approval`
-                      : isChinese
-                        ? '包含优先审核'
-                        : 'Includes priority review'}
+                    {selectedFeaturedDays > 0 ? featuredPaymentLabel : priorityReviewLabel}
                   </span>
                 </div>
               )}

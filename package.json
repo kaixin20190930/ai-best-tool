@@ -57,6 +57,8 @@
     "test:n8n-pages": "tsx scripts/test-n8n-pages.ts",
     "test:home-positioning": "tsx scripts/test-home-positioning.ts",
     "test:localized-metadata": "tsx scripts/test-localized-page-metadata.ts",
+    "test:localized-navigation": "tsx scripts/test-localized-navigation.ts",
+    "test:localized-navigation:smoke": "tsx scripts/test-localized-navigation.ts --smoke",
     "test:seo-architecture": "tsx scripts/test-seo-architecture-guardrails.ts",
     "test:seo-breadcrumbs": "tsx scripts/test-seo-breadcrumbs.ts",
     "test:guide-link-boundaries": "tsx scripts/test-guide-link-boundaries.ts",
