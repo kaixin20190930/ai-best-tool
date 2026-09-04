@@ -5,7 +5,7 @@
 
 四周实施排期见 [证据驱动目录优化计划](./FOUR_WEEK_EVIDENCE_LED_DIRECTORY_PLAN_CN.md)。
 
-2026-09-04 日常收录更新：W2-02B 累计处理 12/7-14，今日完成 OpenRouter 与 n8n 两条既有 fallback 的生产实体迁移，均保留原 canonical。OpenRouter 线上验收已通过；n8n 已完成两轮 build、生产提交与独立回读、双语 index/canonical/新正文和 sitemap 本地生产验收，等待最终线上部署。今日达到 2 条上限，不再新增第 3 条。累计处理数不是每日公开数。
+2026-09-04 日常收录更新：W2-02B 累计处理 12/7-14，今日完成 OpenRouter 与 n8n 两条既有 fallback 的生产实体迁移，均保留原 canonical。两者线上验收均已通过；n8n 提交 `37ceb6d2` 已获 Vercel 部署成功确认，双语 index/canonical/新正文和 sitemap 生产验收通过。今日达到 2 条上限，不再新增第 3 条。累计处理数不是每日公开数。
 
 差异化、证据账本、变化追踪与商业化触发条件见
 [AI 工具决策平台差异化与商业化实施路线图](./EVIDENCE_DECISION_PLATFORM_ROADMAP_CN.md)。

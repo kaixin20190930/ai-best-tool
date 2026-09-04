@@ -197,12 +197,12 @@
 
 ### W2-02B n8n 正式迁移（2026-09-04）
 
-- 状态：实现、生产实体迁移、独立回读和本地生产验收已完成，等待代码部署。上一提交 `2352f015` 的线上双语事实快照、noindex 和 sitemap 排除检查已通过。
+- 状态：已完成并部署。提交 `37ceb6d2` 的 Vercel 状态为 `success / Deployment has completed`；生产双语页面与 sitemap 最终验收已通过。上一提交 `2352f015` 的预发布 noindex 与 sitemap 排除检查亦已通过。
 - 生产只读查询确认 n8n 无同名/同域名实体；当天此前只有 OpenRouter 一条新发布记录。
 - `scripts/migrate-n8n-tool.ts` 默认在真实数据库内插入、回读后回滚，已演练通过；`--commit` 才发布，`--check` 不访问数据库。固定 ID、防重复检测、分类核验和既有记录不覆盖保护均已加入。
 - `scripts/test-n8n-pages.ts` 取代预发布专用页面脚本，按预审生命周期分别验证 noindex/排除 sitemap 与 index/两个语言 URL。
 - 首轮完整 build 退出 0，随后正式提交事务并通过独立连接回读；ID 为 `23bb3601-a5ac-42c3-bff3-64b06a063959`，状态 `published / continue_index`，下次复核 2026-09-18。今天公开 2 条，到达上限，不再追加第 3 条。
-- 发布验收：两轮完整 build 均退出 0；`test:n8n-release`、`test:next-tool-preaudit`、`test:priority-tool-evidence` 均通过。`test:n8n-pages` 在本地生产模式确认双语新决策正文、canonical、index 和 sitemap 恰好两个语言 URL。线上最终部署尚待确认。
+- 发布验收：两轮完整 build 均退出 0；`test:n8n-release`、`test:next-tool-preaudit`、`test:priority-tool-evidence` 均通过。`test:n8n-pages` 在本地生产模式及 `SEO_BASE_URL=https://aibesttool.com` 下均确认双语新决策正文、canonical、index 和 sitemap 恰好两个语言 URL。
 - 市场核验日期仍为 9 月 1 日，官方事实核验日期为 9 月 4 日，避免虚报证据新鲜度。
 
 ### W2-02C 首批成熟工具内容缺口（2026-09-01）
