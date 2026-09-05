@@ -147,6 +147,45 @@ const reviews: Record<string, Review> = {
       },
     ],
   },
+  openrouter: {
+    profileId: '2c4881f1-edf8-4b6a-9280-0ab88a006057',
+    ownerId: 'f77fb817-e8dc-4c22-b7cd-8edc2e5b0a5e',
+    productName: 'OpenRouter',
+    reviewDueAt: '2026-10-05T00:00:00.000Z',
+    officialHosts: ['openrouter.ai'],
+    decisions: [
+      {
+        id: '31afa697-ce1e-45f6-9f37-08300bdcd68e',
+        type: 'product_name',
+        value: 'OpenRouter',
+        sourceUrl: 'https://openrouter.ai/',
+        status: 'verified',
+        note: 'Owner-authorized assisted review: OpenRouter name confirmed from the official homepage metadata on 2026-09-05.',
+        excerpt: 'OpenRouter',
+        scope: 'official-product-identity',
+      },
+      {
+        id: '76cf5413-ce8c-424d-9a6b-21584758cf72',
+        type: 'one_line_positioning',
+        value: 'The unified interface for every model. Find the best models & prices for your prompts',
+        sourceUrl: 'https://openrouter.ai/',
+        status: 'verified',
+        note: 'Owner-authorized assisted review: positioning exactly matched the official homepage description on 2026-09-05.',
+        excerpt: 'The unified interface for every model. Find the best models & prices for your prompts',
+        scope: 'official-product-positioning',
+      },
+      {
+        id: 'd7a18353-7813-40c8-a2f2-acb0063683e4',
+        type: 'pricing_model',
+        value: 'published_pricing_page',
+        sourceUrl: 'https://openrouter.ai/pricing',
+        status: 'verified',
+        note: 'Owner-authorized assisted review: the official OpenRouter pricing page was available on 2026-09-05; no model or plan amount was verified from dynamic page content.',
+        excerpt: 'Official OpenRouter pricing page for model and account pricing.',
+        scope: 'pricing-page-presence-only',
+      },
+    ],
+  },
 };
 
 function readTool(args: string[]) {
