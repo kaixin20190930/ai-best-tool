@@ -36,7 +36,7 @@ Gamma 验收补充：`33e65beb` 部署成功，但新简版提示被官方快照
 - P0：本轮生产 SEO、health 和 ads.txt 只读审计通过；sitemap 162 URLs。另修复 SEO smoke 重定向请求无超时/未释放响应体的问题，重跑断言全部通过且退出 0。
 - P1：Consensus、Gamma 本轮官方事实维护与复查排期完成 2/2，新增可操作试用检查；生产维护记录已写入，两页保持 monitor，下次复查 9 月 7 日。独立论文验证码与 Gamma 金额核对缺口保留，不重置市场验证。详见 [本轮维护](./CONSENSUS_GAMMA_MAINTENANCE_2026-09-04_CN.md)。
 - P1：Emdash 已依既有 9 月 1 日核验 +30 天补齐生产复查日期 10 月 1 日；未改正文、验证日期或索引状态。缺排期从 23 降为 22，剩余项不能自动补为已验证，分类见 [历史工具排期审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。MAINT-05 完成，MAINT-04 继续分批核验。
-- P1：CHG-02 已推进至9/10。Gamma、Luma Dream Machine、n8n、OpenRouter、Runway与Dune本轮完成受控官网核验及幂等`fact`基线；Dune通过官网定位和公开价格页，拒绝将`Dune Docs`当产品名。基线主锚点固定按产品名、官网定位、其他事实排序。同步脚本统一从Supabase验证工具owner；提取器继续限制站点身份只取首页并拦截假套餐。ElevenLabs/Descript/Perplexity/Make按robots停止，QuillBot证据为空、Poe证据过薄，均不凑数。
+- P1：CHG-02 已完成10/10。Fathom、Claude、Consensus、Gamma、Luma Dream Machine、n8n、OpenRouter、Runway、Dune、The Graph均有真实幂等`fact`基线；The Graph以官网产品名和定位完成最后一条。基线主锚点固定按产品名、官网定位、其他事实排序，同步脚本统一从Supabase验证工具owner，提取器限制站点身份只取首页并拦截假套餐。ElevenLabs/Descript/Perplexity/Make按robots停止，QuillBot证据为空、Poe证据过薄，均未用于凑数。
 - P1：Gemini 既有页面官方事实维护完成，修正手机入口误导及中文复制英文，补访问/额度/隐私边界与来源；下次复查9月18日。当时缺排期22→21，本地与线上双语验收通过，sitemap仍162，无新增索引批准或市场评分。详见 [Gemini维护](./GEMINI_MAINTENANCE_2026-09-04_CN.md)。其后的Notion、Poe维护也已完成，不再重复排入待办。
 - P1 最新：Notion、Poe 本轮官方事实维护完成2/2，修复中文复制英文及Poe移动端/保密错误，补使用边界与试用检查；下次均为9月18日。四个语言页本地及生产验收通过，缺排期21→19，sitemap仍162；未新增索引批准或市场评分。详见 [Notion/Poe维护](./NOTION_POE_MAINTENANCE_2026-09-04_CN.md)。Adobe/Salesforce范围正文和数据库纠偏已完成，剩余独立市场核验及待URL级数据的迁移/索引决策。
 - 数据依赖：下一次同期 GSC 7 天、28 天与 Coverage；真实 owner/评论/Stack/Trial 信号需用户实际使用，不能由 AI 编造。
@@ -122,7 +122,7 @@ Gamma 验收补充：`33e65beb` 部署成功，但新简版提示被官方快照
 | EVD-03 | 后台证据编辑与冲突处理             | 状态受控流转；冲突不自动覆盖；核验人、日期、复查、失效和适用范围可追踪；所有保存操作有中间态       | 已完成；首条真实人工核验已回读确认，专项测试、tsc、完整 build 通过                                                            | Codex           |
 | EVD-04 | 情报档案身份映射收口               | `tool` 类型 owner_id 必须对应目录真实工具；存量错误身份重新归类后再公开                            | 已完成；site 迁移、3 个档案缓存重算、Fathom 真实 UUID -> verified -> 生产公开链路全部通过                                     | Codex + 用户    |
 | CHG-01 | Change Timeline 模型与读取         | 正式历史与机器待审差异分离；事实变化与“复核无变化”分开；公开只读数据仅来自真实 tool 和 public 事件 | 已完成；迁移可读，受控写入、后台/工具页读取、专项测试和类型检查均通过                                                         | Codex + 用户    |
-| CHG-02 | 首批核心工具变化基线               | 10-20 个核心工具拥有真实基线复核；没有变化时只记录 `reviewed_no_change`，禁止伪造变化              | 进行中（9/10）；Fathom、Claude、Consensus、Gamma、Luma Dream Machine、n8n、OpenRouter、Runway、Dune 已完成；最后1条继续受证据质量与 robots 门禁约束 | Codex + 用户    |
+| CHG-02 | 首批核心工具变化基线               | 10-20 个核心工具拥有真实基线复核；没有变化时只记录 `reviewed_no_change`，禁止伪造变化              | 已完成（10/10）；Fathom、Claude、Consensus、Gamma、Luma Dream Machine、n8n、OpenRouter、Runway、Dune、The Graph 均完成真实基线 | Codex + 用户    |
 | SEO-IA | SEO 信息架构统一与门禁             | 修复历史 canonical/hreflang，统一 Breadcrumb，并让工具关系内链只消费 reviewed 数据                 | SEO-IA-01~08 已完成；本地/生产 smoke、完整 build 和 reviewed 关系验收全部通过                                                 | Codex           |
 | DCF    | Finder + Decision Card 2.0         | 10 个核心工具和 6-8 个任务形成证据可追溯、最多三项的可解释推荐                                     | DCF-01~07 已完成：数据、证据、规则、前台、后台审核、SEO 与自动发布门禁全部闭环                                                 | Codex           |
 | STK    | Stack Audit + 7-Day Trial          | 私有工具栈、Keep/Replace/Remove/Missing 与试用到期决策闭环                                         | 已完成（6/6）；双用户真实 RLS、匿名边界、service-only 审计输出、私有路由 noindex/sitemap 排除、生产 smoke、持续监控、类型检查与完整 build 均通过 | Codex           |

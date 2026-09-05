@@ -274,6 +274,37 @@ const reviews: Record<string, Review> = {
       },
     ],
   },
+  'the-graph': {
+    profileId: 'd2b3186e-3343-4675-b85e-039b20f6bd34',
+    ownerId: 'ab03d4d1-003d-44af-a223-cc563c877ee4',
+    productName: 'The Graph',
+    reviewDueAt: '2026-10-05T00:00:00.000Z',
+    officialHosts: ['thegraph.com'],
+    decisions: [
+      {
+        id: '8b84acb6-d0e3-42a7-8f37-dd4806396795',
+        type: 'product_name',
+        value: 'The Graph',
+        sourceUrl: 'https://thegraph.com/',
+        status: 'verified',
+        note: 'Owner-authorized assisted review: The Graph name confirmed from the official homepage metadata on 2026-09-05.',
+        excerpt: 'The Graph',
+        scope: 'official-product-identity',
+      },
+      {
+        id: 'e465f9c0-ce1a-48ae-9c1c-a556c0a82eb1',
+        type: 'one_line_positioning',
+        value:
+          'The Graph is an indexing protocol for organizing blockchain data and making it easily accessible with GraphQL.',
+        sourceUrl: 'https://thegraph.com/',
+        status: 'verified',
+        note: 'Owner-authorized assisted review: positioning exactly matched the official homepage description on 2026-09-05.',
+        excerpt:
+          'The Graph is an indexing protocol for organizing blockchain data and making it easily accessible with GraphQL.',
+        scope: 'official-product-positioning',
+      },
+    ],
+  },
 };
 
 function readTool(args: string[]) {

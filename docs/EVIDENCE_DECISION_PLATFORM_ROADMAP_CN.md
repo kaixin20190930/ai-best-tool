@@ -86,7 +86,7 @@ AI Best Tool 对 Google 和普通访客的基础身份保持不变：
 | EVD-03    | P1     | 后台证据编辑与冲突处理          | 官方、独立、owner、用户来源分开；冲突不自动覆盖                 | 1-1.5 天 | 已完成；首条人工核验、状态保护、处理中反馈已落地      |
 | EVD-04    | P1     | 情报档案身份映射收口            | tool 档案 owner_id 必须对应真实目录工具；错误身份不可继续同步   |   0.5 天 | 已完成；站点迁移、缓存修复、Fathom 公开闭环均通过     |
 | CHG-01    | P1     | Change Timeline 模型与读取      | 真实事实变化和“仅复核、无变化”可区分                            |     1 天 | 已完成；迁移、读写边界、后台/前台读取与测试均通过     |
-| CHG-02    | P1     | 首批 10-20 个核心工具变化时间线 | 每页至少有基线核查；无变化不伪造更新事件                        |   1-2 天 | 进行中；Fathom、Claude、Consensus 已完成，当前 3/10   |
+| CHG-02    | P1     | 首批 10 个核心工具变化时间线    | 每页至少有基线核查；无变化不伪造更新事件                        |   1-2 天 | 已完成；10/10 均有受控核验且幂等的 fact 基线         |
 | LNK-01    | P1     | Guide / 分类消费统一判断        | 不复制工具事实；链接到对应 Decision Card 和证据                 |     1 天 | 已有Guide/关系内链实现归属SEO-IA-06/07及DCF；全量分类事实复用尚未验收，不重复开发既有部分 |
 | MON-01    | P1     | 30/90 天监测闭环                | 事实到期、判断到期和变化待审可筛选                              |   0.5 天 | 技术实现完成，归属W3-01B；真实运行有效性由RC-08另行验收，不宣称调度持续成功 |
 | DCF-01~07 | P1     | Finder + Decision Card 2.0      | 字段级模型、规则、后台、前台、SEO 与自动验收完整闭环            |   6.5 天 | 已完成；统一 release gate 与本地 production smoke 通过 |
@@ -280,7 +280,7 @@ Review 结论：方案可实施。P0 不改变 URL 和索引面，先增强主�
   验日期和至少一条 verified 且无冲突证据，重复执行不会重复插入。
 - Fathom（UUID `7ae4bbb2-847f-45cc-9294-e96663fa02a3`）已建立首条公开 `reviewed_no_change` 基线，来源为官方首页，发生时
   间沿用真实人工核验时间；公开读取回查成功，重复执行返回 `baseline_already_exists`。
-- 当前 CHG-02 真实进度为 9/10（2026-09-05新增Gamma、Luma Dream Machine、n8n、OpenRouter、Runway、Dune）。最后一个核心工具仍必须先完成 intelligence 抓取和至少一条人工或有审计记录的owner授权辅助claim核验，再建立基线；不会直接把
+- 当前 CHG-02 已完成 10/10（2026-09-05至09-06新增Gamma、Luma Dream Machine、n8n、OpenRouter、Runway、Dune、The Graph）。每个核心工具均先完成 intelligence 抓取和至少一条人工或有审计记录的owner授权辅助claim核验，再建立基线；不会直接把
   既有页面文案或机器提取结果批量包装为变化历史。
 - Gamma 初次官网dry-run发现11个来源但未提取claim；2026-09-05按homepage/pricing/product/help定向重采集后，已建立工具档案 `63031451-a3eb-497d-9396-d6904aa2d3b3`，共4个官方来源、3条candidate、0冲突。产品名和官网定位待人工核验；定价候选的摘录受页面CSS污染，不据此通过或发布价格事实。人工核验前不创建`reviewed_no_change`基线。
 - Claude 首次默认 dry-run 扩散到大型 Docs 站，产生 67 条候选和 42 个伪冲突；数据库写入前已拦截。同步命令新增
@@ -307,4 +307,5 @@ Review 结论：方案可实施。P0 不改变 URL 和索引面，先增强主�
 - Runway首次持久化前发现同步脚本使用旧Neon连接验证owner、随后写入Supabase，导致当前Supabase中的真实工具被误报不存在。owner存在性校验现已与intelligence写入统一到Supabase；校验失败时仍停止写入，不提供绕过参数。
 - Dune定向采集建立5个官方来源、3条candidate、0冲突的档案。2026-09-05通过官网定位和公开价格页存在性，拒绝将文档入口的`Dune Docs`当作产品名，并将档案规范名固定为`Dune`。第9条公开基线创建及重复幂等检查通过，下次复查为2026-10-05。
 - 基线种子主证据已固定为`product_name`优先、`one_line_positioning`次之、其他已验证事实最后，避免无产品名时因数据库返回顺序让价格等易变事实随机成为公开基线锚点。
+- The Graph定向采集建立7个官方来源、2条candidate、0冲突的档案。2026-09-06通过官网产品名与官网定位，第10条公开基线创建及重复幂等检查通过，下次复查为2026-10-05。至此首批10个核心工具变化基线完成，后续转入按`next_review_at`复查而非继续为数量扩张。
 - 后续候选审计：Perplexity、Make受robots阻止；n8n误把FAQ/套餐识别为free；OpenRouter混入Documentation身份；Poe仅产生“存在定价页”一条事实。均未被计入第6条，下一步先修正采集范围/提取质量或选用更完整的官方证据。
