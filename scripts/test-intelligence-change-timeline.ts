@@ -146,6 +146,13 @@ const migrationVerifier = readFileSync(
 );
 assert.equal(migrationVerifier.includes("count: 'exact', head: true"), true);
 
+const baselineSeeder = readFileSync(resolve(process.cwd(), 'scripts/seed-intelligence-timeline-baseline.ts'), 'utf8');
+assert.equal(baselineSeeder.includes("reviewScope: 'fact'"), true);
+assert.equal(baselineSeeder.includes("claim.claim_type === 'product_name'"), true);
+assert.equal(baselineSeeder.includes('editor-reviewed, conflict-free claim'), true);
+assert.equal(baselineSeeder.includes('--repair-existing'), true);
+assert.equal(baselineSeeder.includes("reviewScope: 'full'"), false);
+
 const publicReader = readFileSync(
   resolve(process.cwd(), 'lib/services/intelligence/publicChangeTimeline.ts'),
   'utf8',
