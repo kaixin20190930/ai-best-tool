@@ -282,7 +282,7 @@ Review 结论：方案可实施。P0 不改变 URL 和索引面，先增强主�
   间沿用真实人工核验时间；公开读取回查成功，重复执行返回 `baseline_already_exists`。
 - 当前 CHG-02 真实进度为 3/10。其余核心工具必须先完成 intelligence 抓取和至少一条人工 claim 核验，再建立基线；不会直接把
   既有页面文案或机器提取结果批量包装为变化历史。
-- Gamma 官网 dry-run 发现 11 个来源但未提取出 claim，暂不写入空档案，后续改用定向官方帮助/定价页采集。
+- Gamma 初次官网dry-run发现11个来源但未提取claim；2026-09-05按homepage/pricing/product/help定向重采集后，已建立工具档案 `63031451-a3eb-497d-9396-d6904aa2d3b3`，共4个官方来源、3条candidate、0冲突。产品名和官网定位待人工核验；定价候选的摘录受页面CSS污染，不据此通过或发布价格事实。人工核验前不创建`reviewed_no_change`基线。
 - Claude 首次默认 dry-run 扩散到大型 Docs 站，产生 67 条候选和 42 个伪冲突；数据库写入前已拦截。同步命令新增
   `--max-pages`、`--no-sitemap`、`--no-common-paths` 和 `--page-types`，用于大型产品站的定向证据采集，默认行为保持不变。
 - Claude 使用 `homepage,pricing,product` 范围重新同步后收口为 16 条 candidate 和 2 条真实定位冲突；只对官方首页的无冲突
