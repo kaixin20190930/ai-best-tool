@@ -56,6 +56,9 @@ jobs:
       - name: Check legacy product scope migration payload
         run: pnpm run refresh:legacy-tool-scope -- --check
 
+      - name: Check Gamma baseline review decisions
+        run: pnpm run intelligence:review-gamma-baseline -- --check
+
       - name: Run SEO Health Check
         id: health-check
         run: |

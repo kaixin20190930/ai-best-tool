@@ -280,7 +280,7 @@ Review 结论：方案可实施。P0 不改变 URL 和索引面，先增强主�
   验日期和至少一条 verified 且无冲突证据，重复执行不会重复插入。
 - Fathom（UUID `7ae4bbb2-847f-45cc-9294-e96663fa02a3`）已建立首条公开 `reviewed_no_change` 基线，来源为官方首页，发生时
   间沿用真实人工核验时间；公开读取回查成功，重复执行返回 `baseline_already_exists`。
-- 当前 CHG-02 真实进度为 3/10。其余核心工具必须先完成 intelligence 抓取和至少一条人工 claim 核验，再建立基线；不会直接把
+- 当前 CHG-02 真实进度为 4/10（2026-09-05新增Gamma）。其余核心工具必须先完成 intelligence 抓取和至少一条人工或有审计记录的owner授权辅助claim核验，再建立基线；不会直接把
   既有页面文案或机器提取结果批量包装为变化历史。
 - Gamma 初次官网dry-run发现11个来源但未提取claim；2026-09-05按homepage/pricing/product/help定向重采集后，已建立工具档案 `63031451-a3eb-497d-9396-d6904aa2d3b3`，共4个官方来源、3条candidate、0冲突。产品名和官网定位待人工核验；定价候选的摘录受页面CSS污染，不据此通过或发布价格事实。人工核验前不创建`reviewed_no_change`基线。
 - Claude 首次默认 dry-run 扩散到大型 Docs 站，产生 67 条候选和 42 个伪冲突；数据库写入前已拦截。同步命令新增
@@ -296,3 +296,5 @@ Review 结论：方案可实施。P0 不改变 URL 和索引面，先增强主�
   学术搜索引擎”定位。仅该定位 claim 被人工核验，产品名仍保持 candidate。
 - Consensus（UUID `f15873ae-c6ef-4f0a-b811-b40c2aba76ab`）已建立第三条公开 `reviewed_no_change` 基线，下次复查日为
   2026-10-02。
+- Gamma（工具UUID `6512aa61-8663-49f8-809d-2a2ab4e529ad`）定向采集4个官方来源、3条candidate、0冲突。2026-09-05经owner授权辅助审查，通过产品名和“存在公开定价页”，将CSS污染摘录替换为实际页面证据，拒绝当前官网不可复现的旧定位。第4条公开基线创建成功，重复执行返回`baseline_already_exists`；下次证据复查为2026-10-05。
+- Runway定向dry-run产生6个跨产品定位冲突及可疑价格，不写入档案。Luma Dream Machine定向采集已建立2条candidate、0冲突的档案；候选与官方HTML title/description一致，但在正式审核和基线写入前仍不计入完成数。

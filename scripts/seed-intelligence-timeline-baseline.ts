@@ -53,7 +53,8 @@ async function seedTimelineBaseline() {
     return;
   }
 
-  const primaryClaim = claims[0];
+  // Identity is the clearest anchor for an initial product baseline; fall back only when unavailable.
+  const primaryClaim = claims.find((claim) => claim.claim_type === 'product_name') || claims[0];
   const insert = prepareTimelineEventInsert(
     {
       profileId: String(profile.id),
@@ -66,7 +67,7 @@ async function seedTimelineBaseline() {
       sourceExcerpt: String(primaryClaim.source_excerpt || ''),
       visibility: 'public',
       occurredAt: String(profile.last_verified_at),
-      reviewNote: 'Created from an existing manually verified, conflict-free claim. Machine candidates were excluded.',
+      reviewNote: 'Created from an existing editor-reviewed, conflict-free claim. Machine candidates were excluded.',
     },
     null,
   );
