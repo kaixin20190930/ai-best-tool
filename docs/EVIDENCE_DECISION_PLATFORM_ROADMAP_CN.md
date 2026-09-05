@@ -280,7 +280,7 @@ Review 结论：方案可实施。P0 不改变 URL 和索引面，先增强主�
   验日期和至少一条 verified 且无冲突证据，重复执行不会重复插入。
 - Fathom（UUID `7ae4bbb2-847f-45cc-9294-e96663fa02a3`）已建立首条公开 `reviewed_no_change` 基线，来源为官方首页，发生时
   间沿用真实人工核验时间；公开读取回查成功，重复执行返回 `baseline_already_exists`。
-- 当前 CHG-02 真实进度为 5/10（2026-09-05新增Gamma、Luma Dream Machine）。其余核心工具必须先完成 intelligence 抓取和至少一条人工或有审计记录的owner授权辅助claim核验，再建立基线；不会直接把
+- 当前 CHG-02 真实进度为 6/10（2026-09-05新增Gamma、Luma Dream Machine、n8n）。其余核心工具必须先完成 intelligence 抓取和至少一条人工或有审计记录的owner授权辅助claim核验，再建立基线；不会直接把
   既有页面文案或机器提取结果批量包装为变化历史。
 - Gamma 初次官网dry-run发现11个来源但未提取claim；2026-09-05按homepage/pricing/product/help定向重采集后，已建立工具档案 `63031451-a3eb-497d-9396-d6904aa2d3b3`，共4个官方来源、3条candidate、0冲突。产品名和官网定位待人工核验；定价候选的摘录受页面CSS污染，不据此通过或发布价格事实。人工核验前不创建`reviewed_no_change`基线。
 - Claude 首次默认 dry-run 扩散到大型 Docs 站，产生 67 条候选和 42 个伪冲突；数据库写入前已拦截。同步命令新增
@@ -300,4 +300,6 @@ Review 结论：方案可实施。P0 不改变 URL 和索引面，先增强主�
 - Runway定向dry-run产生6个跨产品定位冲突及可疑价格，不写入档案。Luma Dream Machine定向采集已建立2条candidate、0冲突的档案；候选与官方HTML title/description一致，但在正式审核和基线写入前仍不计入完成数。
 - Luma后续受控审核只通过与官网description完全一致的定位，拒绝将`Luma Dream Machine | AI Video Generator`整段SEO标题当作产品名，并将档案规范名固定为`Luma Dream Machine`。第5条公开基线创建及重复幂等检查通过。
 - 初始基线只代表已核验事实，不代表整款产品全面审核。种子脚本统一使用`review_scope=fact`，Gamma/Luma两条既有事件已受控修正；摘要明确已核验claim数量，禁止1条事实包装成`full`评审。
+- n8n定向采集建立5个官方来源、4条candidate、0冲突的档案。2026-09-05受控审核通过产品名、官网定位、公开价格页存在性和明确免费试用4条事实；不从动态缺失内容推断套餐金额。第6条公开基线创建成功，重复执行返回`baseline_already_exists`，下次复查为2026-10-05。
+- 本轮真实反例显示站点身份与页面内容曾混用：OpenRouter文档页会改写产品名，Runway产品子页会制造全局定位冲突，n8n FAQ会被误判为免费套餐。提取器现将`product_name`和`one_line_positioning`限制为首页事实；套餐名必须来自局部价格卡、问句和比较标题被排除，免费套餐必须明确以Free命名。Runway、OpenRouter、n8n复验均为0冲突且0假套餐。
 - 后续候选审计：Perplexity、Make受robots阻止；n8n误把FAQ/套餐识别为free；OpenRouter混入Documentation身份；Poe仅产生“存在定价页”一条事实。均未被计入第6条，下一步先修正采集范围/提取质量或选用更完整的官方证据。

@@ -395,7 +395,11 @@ function run() {
     `,
   });
   assert.equal(extractedEvidence.pageType, 'pricing');
-  assert.equal(extractedEvidence.claims.find(({ claimType }) => claimType === 'product_name')?.claimValue, 'Example');
+  assert.equal(
+    extractedEvidence.claims.some(({ claimType }) => claimType === 'product_name'),
+    false,
+    'route-level metadata must not redefine the profile product name',
+  );
   assert.deepEqual(extractedEvidence.claims.find(({ claimType }) => claimType === 'pricing_plan')?.claimValue, {
     name: 'Pro',
     priceText: '$19 per month',
@@ -431,6 +435,52 @@ function run() {
   assert.equal(
     routeTitleIsNotAProductName.claims.some(({ claimType }) => claimType === 'product_name'),
     false,
+  );
+
+  const documentationSiteNameIsNotAProductName = extractProductEvidence({
+    url: 'https://openrouter.ai/docs/quickstart',
+    pageType: 'documentation',
+    html: '<meta property="og:site_name" content="OpenRouter Documentation"><title>Quickstart</title>',
+  });
+  assert.equal(
+    documentationSiteNameIsNotAProductName.claims.some(({ claimType }) => claimType === 'product_name'),
+    false,
+  );
+
+  const productPagePositioningStaysPageScoped = extractProductEvidence({
+    url: 'https://runway.com/product/characters',
+    pageType: 'product',
+    html: `
+      <meta name="description" content="Create expressive characters for a specific Runway workflow.">
+      <main><h1>Characters</h1></main>
+    `,
+  });
+  assert.equal(
+    productPagePositioningStaysPageScoped.claims.some(({ claimType }) => claimType === 'one_line_positioning'),
+    false,
+  );
+
+  const pricingFaqHeadingsAreNotPlans = extractProductEvidence({
+    url: 'https://n8n.io/pricing',
+    pageType: 'pricing',
+    html: `
+      <main>
+        <section><h2>Starter</h2><p>$20 per month</p></section>
+        <section><h2>Free</h2><p>Free plan for personal workflows</p></section>
+        <section><h2>Can I pay by wire transfer?</h2><p>Contact sales for annual billing.</p></section>
+        <section><h2>Does the business plan include support?</h2><p>Free community support is available.</p></section>
+        <section><h2>Compare models across plans</h2><p>$0 per month for selected models.</p></section>
+      </main>
+    `,
+  });
+  assert.deepEqual(
+    pricingFaqHeadingsAreNotPlans.claims
+      .filter(({ claimType }) => claimType === 'pricing_plan')
+      .map(({ claimValue }) => claimValue),
+    [
+      { name: 'Starter', priceText: '$20 per month' },
+      { name: 'Free', priceText: 'Free' },
+    ],
   );
 
   const errorPageIsNotEvidence = extractProductEvidence({

@@ -51,6 +51,10 @@ function extractProductName(
   pageType: IntelligencePageType,
   pageUrl: URL,
 ): { value: string; excerpt: string; confidence: number } | null {
+  // Product identity is profile-level evidence. Route-specific site names and
+  // titles (for example, "OpenRouter Documentation") must not redefine it.
+  if (pageType !== 'homepage') return null;
+
   const candidates = [
     document.querySelector<HTMLMetaElement>('meta[property="og:site_name"]')?.content,
     document.querySelector<HTMLMetaElement>('meta[name="application-name"]')?.content,
@@ -59,11 +63,6 @@ function extractProductName(
     const value = normalizedText(candidate, 120);
     if (value && !isErrorPageTitle(value)) return { value, excerpt: value, confidence: 0.95 };
   }
-
-  // Page titles describe the current route more often than the product. Only the
-  // homepage may use a conservative title fallback when structured brand metadata
-  // is unavailable.
-  if (pageType !== 'homepage') return null;
 
   const title = normalizedText(document.title, 200);
   if (!title || isErrorPageTitle(title)) return null;
@@ -137,15 +136,30 @@ function extractPricingPlans(document: Document): Array<{
   const headings = Array.from(document.querySelectorAll<HTMLHeadingElement>('h2, h3'));
 
   for (const heading of headings) {
+    const name = normalizedText(heading.textContent, 80);
+    if (
+      !name ||
+      name.includes('?') ||
+      name.split(/\s+/).length > 6 ||
+      /^(?:pricing|plans?|what|why|how|when|where|who|which|can|could|do|does|did|is|are|will|would|should|choose|get|three|each|keep|submit|start|pick|compare)\b/i.test(
+        name,
+      )
+    ) {
+      continue;
+    }
+
     let container: HTMLElement | null = heading.parentElement;
     let depth = 0;
     while (container && depth < 4) {
       const localHeadings = container.querySelectorAll('h2, h3');
       const localText = normalizedText(container.textContent, 700);
+      const hasNumericPrice = /[$€£]\s?\d+(?:[.,]\d+)?/i.test(localText);
+      const isExplicitFreePlan = /^free(?:\s+(?:plan|tier))?$/i.test(name);
       if (
         localHeadings.length === 1 &&
-        /(?:[$€£]\s?\d+(?:[.,]\d+)?|\bfree\b)/i.test(localText) &&
-        /(?:\bper\s+(?:month|year|user|seat)\b|\/(?:mo|month|yr|year)\b|\bone[- ]time\b|\bfree\b)/i.test(localText)
+        (hasNumericPrice || isExplicitFreePlan) &&
+        (isExplicitFreePlan ||
+          /(?:\bper\s+(?:month|year|user|seat)\b|\/(?:mo|month|yr|year)\b|\bone[- ]time\b)/i.test(localText))
       ) {
         break;
       }
@@ -154,19 +168,12 @@ function extractPricingPlans(document: Document): Array<{
     }
     if (!container) continue;
     const text = normalizedText(container.textContent, 700);
-    const priceMatch = text.match(
-      /(?:[$€£]\s?\d+(?:[.,]\d+)?(?:\s*\/\s*(?:mo|month|yr|year))?|\bfree\b)(?:\s+(?:per|\/)\s*(?:month|year|user|seat))?/i,
+    const numericPriceMatch = text.match(
+      /[$€£]\s?\d+(?:[.,]\d+)?(?:\s*\/\s*(?:mo|month|yr|year))?(?:\s+per\s+(?:month|year|user|seat))?/i,
     );
-    if (!priceMatch) continue;
-    const name = normalizedText(heading.textContent, 80);
-    if (
-      !name ||
-      name.split(/\s+/).length > 6 ||
-      /^(?:pricing|plans?|what|why|how|choose|get|three|each|keep|submit|start|pick)\b/i.test(name)
-    ) {
-      continue;
-    }
-    plans.push({ name, priceText: priceMatch[0], excerpt: text });
+    const priceText = numericPriceMatch?.[0] || (/^free(?:\s+(?:plan|tier))?$/i.test(name) ? name : null);
+    if (!priceText) continue;
+    plans.push({ name, priceText, excerpt: text });
     if (plans.length >= MAX_PRICING_PLANS_PER_PAGE) break;
   }
 
@@ -243,7 +250,10 @@ export function extractProductEvidence(input: ExtractProductEvidenceInput): Prod
   }
 
   const positioning = extractPositioning(document);
-  if (positioning && ['homepage', 'features', 'product'].includes(pageType)) {
+  // A profile has one canonical positioning statement. Product subpages can
+  // contribute feature evidence, but their page descriptions are not the
+  // company's global one-line positioning.
+  if (positioning && pageType === 'homepage') {
     addClaim(claims, {
       claimType: 'one_line_positioning',
       claimValue: positioning.value,

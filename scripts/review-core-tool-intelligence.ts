@@ -8,7 +8,7 @@ loadEnvConfig(process.cwd());
 type Decision = {
   id: string;
   type: string;
-  value: string;
+  value: unknown;
   sourceUrl: string;
   status: 'verified' | 'rejected';
   note: string;
@@ -93,6 +93,57 @@ const reviews: Record<string, Review> = {
         status: 'rejected',
         note: 'Rejected after official-page review on 2026-09-05: the extracted value includes a descriptive SEO title suffix, not only the product name.',
         excerpt: 'Luma Dream Machine | AI Video Generator',
+      },
+    ],
+  },
+  n8n: {
+    profileId: '78427cbc-30df-43f4-99f1-ecbc2ae76c10',
+    ownerId: '23bb3601-a5ac-42c3-bff3-64b06a063959',
+    productName: 'n8n',
+    reviewDueAt: '2026-10-05T00:00:00.000Z',
+    officialHosts: ['n8n.io'],
+    decisions: [
+      {
+        id: '2cb79bcc-be88-4d2a-b35c-e1b23b9ce1ab',
+        type: 'product_name',
+        value: 'n8n',
+        sourceUrl: 'https://n8n.io/',
+        status: 'verified',
+        note: 'Owner-authorized assisted review: n8n name confirmed from the official homepage metadata on 2026-09-05.',
+        excerpt: 'AI Workflow Automation Platform - n8n',
+        scope: 'official-product-identity',
+      },
+      {
+        id: '806bedca-c1e4-4fd1-ae57-e4db06567e47',
+        type: 'one_line_positioning',
+        value:
+          'n8n is a workflow automation platform that uniquely combines AI capabilities with business process automation, giving technical teams the flexibility of code with the speed of no-code.',
+        sourceUrl: 'https://n8n.io/',
+        status: 'verified',
+        note: 'Owner-authorized assisted review: positioning exactly matched the official homepage description on 2026-09-05.',
+        excerpt:
+          'n8n is a workflow automation platform that uniquely combines AI capabilities with business process automation, giving technical teams the flexibility of code with the speed of no-code.',
+        scope: 'official-product-positioning',
+      },
+      {
+        id: 'aa91e4f6-f8f4-4eea-9818-e5fb164a9338',
+        type: 'pricing_model',
+        value: 'published_pricing_page',
+        sourceUrl: 'https://n8n.io/pricing/',
+        status: 'verified',
+        note: 'Owner-authorized assisted review: the official n8n pricing page published selectable plans on 2026-09-05; no plan amount was promoted from the dynamic page.',
+        excerpt: 'Official n8n pricing page with published Cloud and self-hosted plan options.',
+        scope: 'pricing-page-presence-only',
+      },
+      {
+        id: '9e9d0bf6-a9d0-403e-ad9d-efbc8045dc28',
+        type: 'free_trial',
+        value: true,
+        sourceUrl: 'https://n8n.io/pricing/',
+        status: 'verified',
+        note: 'Owner-authorized assisted review: the official pricing page explicitly displayed a free-trial CTA without a credit card on 2026-09-05.',
+        excerpt: 'Start free trial. No credit card required.',
+        scope: 'official-pricing-trial-availability',
       },
     ],
   },
