@@ -236,6 +236,44 @@ const reviews: Record<string, Review> = {
       },
     ],
   },
+  dune: {
+    profileId: '4887453a-a4a4-489c-b6f0-80e88ccc9c09',
+    ownerId: 'dd8cb6a3-ef78-4747-9075-ebf663290410',
+    productName: 'Dune',
+    reviewDueAt: '2026-10-05T00:00:00.000Z',
+    officialHosts: ['dune.com', 'docs.dune.com'],
+    decisions: [
+      {
+        id: 'd62c2b86-d468-4499-8c3e-f8c7ce0ee98a',
+        type: 'one_line_positioning',
+        value: 'Dune is the onchain data platform for analytics, data engineering, and application development.',
+        sourceUrl: 'https://docs.dune.com/',
+        status: 'verified',
+        note: 'Owner-authorized assisted review: positioning exactly matched the official Dune documentation landing-page description on 2026-09-05.',
+        excerpt: 'Dune is the onchain data platform for analytics, data engineering, and application development.',
+        scope: 'official-product-positioning',
+      },
+      {
+        id: '4bef0b50-7e97-4ef4-909b-3464fb732ef5',
+        type: 'pricing_model',
+        value: 'published_pricing_page',
+        sourceUrl: 'https://dune.com/pricing',
+        status: 'verified',
+        note: 'Owner-authorized assisted review: the official Dune pricing route was available on 2026-09-05; no plan amount was verified from dynamic application content.',
+        excerpt: 'Official Dune pricing route with an upgrade-plan entry point.',
+        scope: 'pricing-page-presence-only',
+      },
+      {
+        id: '1f2a8730-9de2-4d34-ac87-abdc2f77e3ee',
+        type: 'product_name',
+        value: 'Dune Docs',
+        sourceUrl: 'https://docs.dune.com/',
+        status: 'rejected',
+        note: 'Rejected on 2026-09-05: Dune Docs identifies the documentation surface rather than the canonical product name Dune.',
+        excerpt: 'Dune Docs',
+      },
+    ],
+  },
 };
 
 function readTool(args: string[]) {

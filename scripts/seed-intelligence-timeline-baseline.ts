@@ -42,8 +42,12 @@ async function seedTimelineBaseline() {
   if (claimsError) throw new Error(claimsError.message);
   if (!claims?.length) throw new Error('A baseline requires at least one verified, conflict-free claim.');
 
-  // Identity is the clearest anchor for an initial product baseline; fall back only when unavailable.
-  const primaryClaim = claims.find((claim) => claim.claim_type === 'product_name') || claims[0];
+  // Keep the public baseline anchor deterministic and descriptive. Pricing or
+  // other volatile facts should only lead when identity and positioning are absent.
+  const primaryClaim =
+    claims.find((claim) => claim.claim_type === 'product_name') ||
+    claims.find((claim) => claim.claim_type === 'one_line_positioning') ||
+    claims[0];
   const insert = prepareTimelineEventInsert(
     {
       profileId: String(profile.id),
