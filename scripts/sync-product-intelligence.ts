@@ -1,7 +1,6 @@
 import { createHash } from 'node:crypto';
 import { loadEnvConfig } from '@next/env';
 
-import { closePool } from '@/db/neon/client';
 import { extractProductEvidence } from '@/lib/services/intelligence/evidenceExtractor';
 import { classifyProductPage } from '@/lib/services/intelligence/pageClassifier';
 import { discoverProductPages } from '@/lib/services/intelligence/pageDiscovery';
@@ -13,7 +12,7 @@ import {
   safeFetchText,
 } from '@/lib/services/intelligence/safeFetch';
 import type { IntelligenceFetchStatus, IntelligencePageType } from '@/lib/services/intelligence/types';
-import { getToolById } from '@/lib/services/tools';
+import { createAdminClient } from '@/lib/supabase/admin';
 
 loadEnvConfig(process.cwd());
 
@@ -96,20 +95,22 @@ async function run() {
     throw new Error('The --owner-id flag is required.');
   }
 
+  const adminKey = process.env.SUPABASE_SECRET_KEY?.trim() || process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+  if ((ownerType === 'tool' || !dryRun) && !adminKey) {
+    throw new Error(
+      'SUPABASE_SECRET_KEY or SUPABASE_SERVICE_ROLE_KEY is required to validate or persist an intelligence owner. Add one to .env.local without a NEXT_PUBLIC_ prefix, then rerun the command.',
+    );
+  }
+
   if (ownerType === 'tool') {
-    const ownerTool = await getToolById(ownerId);
+    const supabase = createAdminClient();
+    const { data: ownerTool, error: ownerError } = await supabase.from('tools').select('id').eq('id', ownerId).maybeSingle();
+    if (ownerError) throw new Error(`Unable to validate tool owner in Supabase: ${ownerError.message}`);
     if (!ownerTool) {
       throw new Error(
         `The tool owner ID ${ownerId} does not exist in the directory. Open the tool in Admin and use the UUID from /admin/tools/<uuid>/edit.`,
       );
     }
-  }
-
-  const adminKey = process.env.SUPABASE_SECRET_KEY?.trim() || process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
-  if (!dryRun && !adminKey) {
-    throw new Error(
-      'SUPABASE_SECRET_KEY or SUPABASE_SERVICE_ROLE_KEY is required for database writes. Add one to .env.local without a NEXT_PUBLIC_ prefix, then rerun the command.',
-    );
   }
 
   const discovery = await discoverProductPages(websiteUrl, {
@@ -255,12 +256,7 @@ async function run() {
   );
 }
 
-run()
-  .catch((error) => {
-    console.error(describeError(error));
-    process.exitCode = 1;
-  })
-  .finally(async () => {
-    await closePool();
-    process.exit(process.exitCode || 0);
-  });
+run().catch((error) => {
+  console.error(describeError(error));
+  process.exitCode = 1;
+});

@@ -186,6 +186,56 @@ const reviews: Record<string, Review> = {
       },
     ],
   },
+  runway: {
+    profileId: '45a3f33b-ac86-404b-9955-2909c2b801cd',
+    ownerId: '1abacadf-7a7b-490c-bf9a-11fd5fc16682',
+    productName: 'Runway',
+    reviewDueAt: '2026-10-05T00:00:00.000Z',
+    officialHosts: ['runway.com'],
+    decisions: [
+      {
+        id: 'a2331f9a-7479-4339-aa9d-335d06dc81a3',
+        type: 'product_name',
+        value: 'Runway',
+        sourceUrl: 'https://runway.com/',
+        status: 'verified',
+        note: 'Owner-authorized assisted review: Runway name confirmed from the official homepage title on 2026-09-05.',
+        excerpt: 'Runway | Building Real-World Intelligence',
+        scope: 'official-product-identity',
+      },
+      {
+        id: '7f575c33-0618-4f28-9bf6-45ba2bbc8ae4',
+        type: 'one_line_positioning',
+        value:
+          'Runway is building foundational Real-World Intelligence that can understand, simulate and act in the world. We offer products and services built on-top of this intelligence to empower individuals and organizations to do more in the world.',
+        sourceUrl: 'https://runway.com/',
+        status: 'verified',
+        note: 'Owner-authorized assisted review: positioning exactly matched the official homepage description on 2026-09-05.',
+        excerpt:
+          'Runway is building foundational Real-World Intelligence that can understand, simulate and act in the world. We offer products and services built on-top of this intelligence to empower individuals and organizations to do more in the world.',
+        scope: 'official-product-positioning',
+      },
+      {
+        id: '0b984b20-625b-4c38-b9ad-80721b7aeb7b',
+        type: 'pricing_model',
+        value: 'published_pricing_page',
+        sourceUrl: 'https://runway.com/pricing',
+        status: 'verified',
+        note: 'Owner-authorized assisted review: the canonical official Runway pricing page published plan options on 2026-09-05; no plan amount is asserted by this claim.',
+        excerpt: 'Official Runway pricing page with published plan options.',
+        scope: 'pricing-page-presence-only',
+      },
+      {
+        id: '14aea0f6-ec7e-4973-b59a-e55f9f87fd2c',
+        type: 'pricing_model',
+        value: 'published_pricing_page',
+        sourceUrl: 'https://runway.com/pricing?tab=dev',
+        status: 'rejected',
+        note: 'Rejected as a duplicate route variant on 2026-09-05: the canonical /pricing claim already represents the same published pricing-page fact.',
+        excerpt: 'Duplicate pricing route variant; canonical evidence is https://runway.com/pricing.',
+      },
+    ],
+  },
 };
 
 function readTool(args: string[]) {
