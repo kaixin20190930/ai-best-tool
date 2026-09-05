@@ -9,6 +9,10 @@
 
 四周实施排期见 [证据驱动目录优化计划](./FOUR_WEEK_EVIDENCE_LED_DIRECTORY_PLAN_CN.md)。
 
+当前收尾执行见 [质量收尾与状态校正子方案](./QUALITY_CLOSEOUT_IMPLEMENTATION_2026-09-04_CN.md)，不是新主线。四周一级任务9/13完成（69.2%）；持续运营、内容覆盖、生产验收与效果验证分别统计。
+
+RC-01至RC-04首轮治理已完成：状态校正、结构化内链测试与计划一致性守卫、生产只读19项缺排期回查均已执行；专项测试及完整build通过。此轮没有完成新的工具核验，四周比例不增加；CI配置待提交后运行，下一项RC-05对象事实纠偏，不直接迁移URL或解除索引暂停。
+
 2026-09-04 日常收录更新：W2-02B 累计处理 12/7-14，今日完成 OpenRouter 与 n8n 两条既有 fallback 的生产实体迁移，均保留原 canonical。两者线上验收均已通过；n8n 提交 `37ceb6d2` 已获 Vercel 部署成功确认，双语 index/canonical/新正文和 sitemap 生产验收通过。今日达到 2 条上限，不再新增第 3 条。累计处理数不是每日公开数。
 
 差异化、证据账本、变化追踪与商业化触发条件见
@@ -16,9 +20,11 @@
 
 ### 当前维护优先级（2026-09-04）
 
+RC-05进行中：Adobe/Salesforce范围正文、列表/静态兜底和metadata已统一，撤下两页通用价格/评分/比较卡及单软件schema；comparison等价替代暗示已修正。以上为本地实现，数据库原文写入及生产验收尚未完成，不改URL/索引规则或排期。见 [本轮范围澄清](./LEGACY_PRODUCT_SCOPE_CLARIFICATION_2026-09-04_CN.md)，四周比例不变。
+
 全站导航修复：已确认重复语言前缀不限于工具页，个人中心和提交表单同类入口也受影响；共享 Link、旧地址修复及安全登录回跳已实现，77 个源码文件检查、182 页/5,406 处内部链接扫描、完整 build 和中文正文登录点击通过。实现提交 `4c3e01a1`；验收边界见 [全站导航审计](./LOCALIZED_NAVIGATION_AUDIT_2026-09-04_CN.md)，未修改生产数据或索引策略。
 
-对象复核后续：Adobe/Salesforce 的数据库关键词查重、静态引用与 8 个线上页面抽查完成；没有找到 Firefly/Agentforce 的独立 tools 记录，两者原四页仍在 sitemap。原始 GSC 文件当前不可用，URL 明细为未知；最终处置尚未实施，见 [对象影响面与处置分支](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。另发现工具页登录 href 重复语言前缀，列为下一项不依赖 GSC 的修复；本轮未改生产数据或代码。
+对象复核后续：Adobe/Salesforce 的数据库关键词查重、静态引用与 8 个线上页面抽查完成；没有找到 Firefly/Agentforce 的独立 tools 记录，两者原四页仍在 sitemap。原始 GSC 文件当前不可用，URL 明细为未知；最终处置尚未实施，见 [对象影响面与处置分支](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。对象审计未改生产数据；附带发现的重复语言前缀已由独立修复373d2336部署及生产验收关闭，不再列作待修项。
 
 最新准入口径：以 [唯一收录规范](./BEST_DIRECTORY_POSITIONING_AND_INTAKE_CN.md) 的对象类型及八项门槛为准，品牌/流量/付费/完整度分数不能替代准入；公开、索引与推荐分开。规范修订已完成，未声称新增自动校验已实现。Adobe、Salesforce Einstein 初步身份审计完成，当前记录未通过完整准入；下一步是 [收录对象复核与处置](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)，不是机械补日期。仅文档更新，生产与缺排期 19 项不变。
 
@@ -31,8 +37,8 @@ Gamma 验收补充：`33e65beb` 部署成功，但新简版提示被官方快照
 - P1：Consensus、Gamma 本轮官方事实维护与复查排期完成 2/2，新增可操作试用检查；生产维护记录已写入，两页保持 monitor，下次复查 9 月 7 日。独立论文验证码与 Gamma 金额核对缺口保留，不重置市场验证。详见 [本轮维护](./CONSENSUS_GAMMA_MAINTENANCE_2026-09-04_CN.md)。
 - P1：Emdash 已依既有 9 月 1 日核验 +30 天补齐生产复查日期 10 月 1 日；未改正文、验证日期或索引状态。缺排期从 23 降为 22，剩余项不能自动补为已验证，分类见 [历史工具排期审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。MAINT-05 完成，MAINT-04 继续分批核验。
 - P1：CHG-02 仍为 3/10；后续做 Gamma 真实变化基线，不新增页面。
-- P1：Gemini 既有页面官方事实维护完成，修正手机入口误导及中文复制英文，补访问/额度/隐私边界与来源；下次复查 9 月 18 日。缺排期再由 22 降为 21，本地与线上双语验收通过，sitemap 仍 162，无新增索引批准或市场评分。详见 [Gemini 维护](./GEMINI_MAINTENANCE_2026-09-04_CN.md)。下一项 Notion、Poe。
-- P1 最新：Notion、Poe 本轮官方事实维护完成 2/2，修复中文复制英文及 Poe 移动端/保密错误，补使用边界与试用检查；下次均为 9 月 18 日。四个语言页本地及生产验收通过，缺排期 21 → 19，sitemap 仍 162；未新增索引批准或市场评分。详见 [Notion/Poe 维护](./NOTION_POE_MAINTENANCE_2026-09-04_CN.md)。下一项 Adobe、Salesforce Einstein 产品范围核对。
+- P1：Gemini 既有页面官方事实维护完成，修正手机入口误导及中文复制英文，补访问/额度/隐私边界与来源；下次复查9月18日。当时缺排期22→21，本地与线上双语验收通过，sitemap仍162，无新增索引批准或市场评分。详见 [Gemini维护](./GEMINI_MAINTENANCE_2026-09-04_CN.md)。其后的Notion、Poe维护也已完成，不再重复排入待办。
+- P1 最新：Notion、Poe 本轮官方事实维护完成2/2，修复中文复制英文及Poe移动端/保密错误，补使用边界与试用检查；下次均为9月18日。四个语言页本地及生产验收通过，缺排期21→19，sitemap仍162；未新增索引批准或市场评分。详见 [Notion/Poe维护](./NOTION_POE_MAINTENANCE_2026-09-04_CN.md)。Adobe/Salesforce初步范围审计已完成，剩余是具体事实/内容纠偏及待数据的迁移决策。
 - 数据依赖：下一次同期 GSC 7 天、28 天与 Coverage；真实 owner/评论/Stack/Trial 信号需用户实际使用，不能由 AI 编造。
 
 新决策能力的字段级实施、自动验收和 SEO 架构边界分别见：

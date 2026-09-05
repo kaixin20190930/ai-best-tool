@@ -1,6 +1,7 @@
 import { dataList, detailList, WebNavigationDetailData, WebNavigationListRow } from '@/lib/data';
 import { toolToDetailData, toolToListRow } from '@/lib/services/toolPresenter';
 import { getToolByName, getTools } from '@/lib/services/tools';
+import { applyLegacyToolScope } from '@/lib/config/legacyToolScopeReviews';
 
 /* eslint-disable @typescript-eslint/indent */
 export type ResponseBase<T> = {
@@ -47,7 +48,7 @@ export async function getWebNavigationList({ locale = 'en', pageNum, pageSize }:
     console.error('Failed to load tools from database, falling back to static data:', error);
   }
 
-  const rows = getStaticList(pageNum, pageSize);
+  const rows = getStaticList(pageNum, pageSize).map((row) => applyLegacyToolScope(row, locale));
   const res = { code: 200, msg: 'success', rows, total: dataList.length } satisfies ResponseRows<WebNavigationListRow[]>;
 
   return res;
@@ -68,10 +69,11 @@ export async function getWebNavigationDetail(name: string, locale = 'en') {
     console.error('Failed to load tool detail from database, falling back to static data:', error);
   }
 
+  const fallback = detailList.find((item) => item.name === name);
   const res = {
     code: 200,
     msg: 'success',
-    data: (detailList.find((item) => item.name === name) || null) as WebNavigationDetailData | null,
+    data: fallback ? applyLegacyToolScope(fallback, locale) : null,
   } satisfies ResponseData<WebNavigationDetailData>;
 
   return res;

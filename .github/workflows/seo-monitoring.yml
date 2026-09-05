@@ -44,6 +44,18 @@ jobs:
         id: navigation-check
         run: pnpm run test:localized-navigation
 
+      - name: Check active plan status consistency
+        run: pnpm run test:plan-consistency
+
+      - name: Check reviewed relationship links
+        run: pnpm run test:reviewed-tool-relationships
+
+      - name: Check legacy product scope notices
+        run: pnpm run test:legacy-tool-scope
+
+      - name: Check legacy product scope migration payload
+        run: pnpm run refresh:legacy-tool-scope -- --check
+
       - name: Run SEO Health Check
         id: health-check
         run: |

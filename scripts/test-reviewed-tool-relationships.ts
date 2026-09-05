@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import ts from 'typescript';
 
 import { REVIEWED_TOOL_RELATIONSHIPS } from '../lib/config/reviewedToolRelationships';
 
@@ -44,10 +45,38 @@ assert.ok(
   !detailPage.includes('const nextComparisonLinks = getNextComparisonLinks('),
   'Decision Card must not consume inferred comparison links',
 );
-assert.ok(
-  detailPage.includes('<a\n                          key={item.href}\n                          href={item.href}'),
-  'Already-localized Decision Card relationship links must not be prefixed again by next-intl Link',
-);
+function assertAlternativeAnchors(text: string) {
+  const source = ts.createSourceFile('detail.tsx', text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  let matched = 0;
+  const visit = (node: ts.Node) => {
+    if (ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) {
+      const attributes = node.attributes.properties.filter(ts.isJsxAttribute);
+      const hasExpression = (name: string) =>
+        attributes.some(
+          (attribute) =>
+            attribute.name.getText(source) === name &&
+            attribute.initializer &&
+            ts.isJsxExpression(attribute.initializer) &&
+            attribute.initializer.expression?.getText(source).replace(/\s/g, '') === 'item.href',
+        );
+      if (hasExpression('key')) {
+        matched += 1;
+        assert.equal(node.tagName.getText(source), 'a', 'Localized relationship URLs must use native anchors');
+        assert(hasExpression('href'), 'Relationship href must preserve item.href');
+      }
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(source);
+  assert(matched > 0, 'Decision Card relationship anchors are missing');
+}
+
+assertAlternativeAnchors(detailPage);
+assertAlternativeAnchors('<a href={item.href} key={item.href}>OK</a>');
+assertAlternativeAnchors('<a\n key={ item.href }\n href={ item.href }\n>OK</a>');
+assert.throws(() => assertAlternativeAnchors('<Link key={item.href} href={item.href}>Bad</Link>'));
+assert.throws(() => assertAlternativeAnchors('<a key={item.href}>Missing href</a>'));
+assert.throws(() => assertAlternativeAnchors('<div>No relationships</div>'));
 assert.ok(
   relationshipComponent.includes('data-reviewed-tool-relationships'),
   'Reviewed relationship UI marker is required',

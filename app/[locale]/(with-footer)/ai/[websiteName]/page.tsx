@@ -24,6 +24,8 @@ import { getTranslations } from 'next-intl/server';
 import { PRIORITY_TOOL_EVIDENCE } from '@/lib/config/priorityToolEvidence';
 import { PRIORITY_TOOL_FALLBACK_PROFILES } from '@/lib/config/priorityToolFallbacks';
 import TOOL_MAINTENANCE_REVIEWS from '@/lib/config/toolMaintenanceReviews';
+import LegacyToolScopePage from '@/components/tools/LegacyToolScopePage';
+import { getLegacyToolScopeContent } from '@/lib/config/legacyToolScopeReviews';
 import { getCanonicalToolSlug, getLocalizedToolPath, isLegacyToolSlug } from '@/lib/config/toolRouteAliases';
 import { BASE_URL } from '@/lib/env';
 import { buildLoginHref } from '@/lib/navigation/localizedPaths';
@@ -3296,9 +3298,10 @@ export async function generateMetadata({
       ? getLocalizedField(dbTool.title, locale) || data?.title || websiteName
       : data?.title || websiteName;
 
-    const toolDescription = dbTool
+    const originalDescription = dbTool
       ? getLocalizedField(dbTool.content, locale) || data?.content || ''
       : data?.content || '';
+    const toolDescription = getLegacyToolScopeContent(canonicalSlug, locale)?.content || originalDescription;
 
     // Get category name if available
     let toolCategory: string | undefined;
@@ -3373,6 +3376,16 @@ export default async function Page({
           getPriorityToolFallbackDetail(canonicalSlug, locale);
 
     if (!data) notFound();
+
+    // Unresolved brand/family records must not emit single-software ratings or inferred recommendations.
+    if (getLegacyToolScopeContent(canonicalSlug, locale)) {
+      return (
+        <>
+          <PageViewTracker toolId={dbTool?.id} />
+          <LegacyToolScopePage slug={canonicalSlug} title={data.title} locale={locale} />
+        </>
+      );
+    }
 
     const claimTool = dbTool as (typeof dbTool & DetailClaimSignals) | null;
     const prioritySearchIntent = getPriorityToolSearchIntent(canonicalSlug, locale);

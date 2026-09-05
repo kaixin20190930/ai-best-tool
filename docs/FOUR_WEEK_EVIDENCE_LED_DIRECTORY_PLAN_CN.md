@@ -4,11 +4,13 @@
 状态：执行中
 唯一上位计划：[主计划](./MASTER_OPTIMIZATION_TRACKER_CN.md)
 
+当前状态校正与剩余执行范围见 [质量收尾子方案](./QUALITY_CLOSEOUT_IMPLEMENTATION_2026-09-04_CN.md)。一级任务9/13完成（69.2%），不是SEO效果完成率；本表保留原13项，不因后续额外能力改变分母。
+
 2026-09-04 维护审计补充：统一数据库保护已部署并补齐本周可证实历史记录，9 月 1 日十次 + 9 月 4 日两次，至少 12 次，本周额度 0，保持暂停。旧历史未知部分不猜测；本轮未新增工具、未改索引状态。Gamma 决策卡补充 PPTX/字体边界，专项测试及完整 build 通过；整页复核仍进行中。详见 [维护审计](./MAINTENANCE_AUDIT_2026-09-04_CN.md)、[历史核对](./INDEX_HISTORY_RECONCILIATION_2026-09-04_CN.md)。
 
 ## 北极星
 
-2026-09-04 对象复核进度：Adobe/Salesforce 已完成数据库查重及已知引用、生产页抽查；GSC URL 明细待补，最终页面/索引处置未实施。无新增工具或批准索引。下一项独立修复为已发现的工具页登录语言前缀重复，详见 [复核台账](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。
+2026-09-04 对象复核进度：Adobe/Salesforce 已完成数据库查重及已知引用、生产页抽查；GSC URL 明细待补，最终页面/索引处置未实施。无新增工具或批准索引。附带导航问题已独立修复并随373d2336部署，生产182页/5406处内部链接检查通过；对象事实核查仍未关闭，详见 [复核台账](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。
 
 2026-09-04 规范更新完成：候选与历史复核统一执行 [收录对象及八项硬门槛](./BEST_DIRECTORY_POSITIONING_AND_INTAKE_CN.md)。Adobe / Salesforce Einstein 当前条目未通过完整准入，转入对象复核及处置，不以维护日期代替核验。本次没有实施页面/数据库/索引变更，也没有新增自动校验功能；执行队列见 [历史工具审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。
 

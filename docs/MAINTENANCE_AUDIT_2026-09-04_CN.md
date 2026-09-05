@@ -2,7 +2,9 @@
 
 归属：[收录与搜索质量主计划](./MASTER_OPTIMIZATION_TRACKER_CN.md)。本文件是审计快照，不替代主计划或索引政策。
 
-## 本轮结论
+## 初始只读审计快照
+
+以下数字和“本轮”指初始审计；当前状态以随后维护表及[质量收尾子方案](./QUALITY_CLOSEOUT_IMPLEMENTATION_2026-09-04_CN.md)为准。历史执行过程保留，不把旧快照当最新现场结果。
 
 - 生产只读查询：37 个 published 工具，28 个 continue_index、9 个 monitor。continue_index 不代表必然进入 sitemap，还受内容质量门槛约束。
 - 生产 SEO smoke：全部断言通过，sitemap 共 162 个 URL；核心页面、canonical/hreflang、面包屑、comparison noindex、域名重定向和 robots 指令均符合当前规则。
@@ -37,19 +39,19 @@
 
 ## 排期事实
 
-后续只读核查：Adobe/Salesforce 查重与已知引用/8 页线上抽查完成，四个工具 URL 仍允许索引并列入 sitemap；GSC URL 明细未知，最终处置未做。新增待修：工具页登录入口重复 locale 前缀。详见 [影响面审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。缺排期仍 19，不将审计等同于工具核验。
+当前只读核查：Adobe/Salesforce 查重与已知引用/8 页线上抽查完成，四个工具 URL 仍允许索引并列入 sitemap；GSC URL 明细未知，最终处置未做。导航附带问题已由373d2336独立部署及生产验收关闭。详见 [影响面审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。本轮再次执行inventory确认缺排期仍19，不将审计等同于工具核验。
 
 准入规范修订完成：Adobe / Salesforce Einstein 转入收录对象复核，初步审计发现泛品牌/范围混淆；处置、市场验证与页面整改尚未完成。见 [对象复核记录](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。不把文档完成记为工具核验完成；缺排期仍 19，生产未改。
 
 最新追加：Notion、Poe 官方事实维护完成，缺排期现为 19；以下 21/22/23 项为此前快照。执行与四个语言页验收见 [Notion/Poe 维护](./NOTION_POE_MAINTENANCE_2026-09-04_CN.md)。
 
-最新追加：Gemini 官方事实维护完成，缺排期现为 21；下文 Emdash 的 22 项为当时快照。实际执行与线上验收见 [Gemini 维护](./GEMINI_MAINTENANCE_2026-09-04_CN.md)。
+历史快照（Gemini阶段）：官方事实维护完成，当时缺排期21；下文Emdash的22项也为当时快照，当前19。实际执行与线上验收见 [Gemini 维护](./GEMINI_MAINTENANCE_2026-09-04_CN.md)。
 
 ### 后续执行：Emdash 排期补齐
 
 - 生产 Emdash 明确复查日期已补为 2026-10-01，仍沿用原 9 月 1 日事实核验，不新造市场结论。
 - 离线排期测试、数据库预演回滚、正式应用、独立回读、重复执行不更新断言及完整 build 均通过。Decision Card 模型回归通过。
-- 当前无排期项为 22 个；原始快照下方 23 个列表保留为历史记录。新分类与运行命令见 [历史排期审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。
+- Emdash阶段历史无排期项为22个；原始23个列表保留为历史记录，当前19。新分类与运行命令见 [历史排期审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。
 
 ### 后续执行：Consensus / Gamma 官方事实维护
 
@@ -72,7 +74,7 @@
 - `test:index-release-guard` 在随机隔离 schema 中通过暂停、日/周额度、批量回滚、草稿发布、冲突忽略与两种隔离级别并发测试，退出 0。
 - `pnpm run build` 完整退出 0，AdSense 校验通过；专项 ESLint 通过。Browserslist 过期提示仍是非阻断维护项。
 - 本次是前述只读审计后的独立维护实施，新增两张内部表、函数及触发器，并将新行默认质量状态固定为 monitor；没有新增工具页、修改现有工具或解除暂停。
-- 操作及恢复边界见 [索引批准保护运行说明](./INDEX_RELEASE_GUARD_RUNBOOK_CN.md)。未完成历史核对，不能宣称 MAINT-01 整体完成。
+- 操作及恢复边界见 [索引批准保护运行说明](./INDEX_RELEASE_GUARD_RUNBOOK_CN.md)。本段为历史核对前的验收快照；当前MAINT-01技术保护与可证实补账完成，未知历史及恢复审批仍保留，不宣称已解除暂停。
 
 以下是已有数据库复核日期，不是自动索引日期，日期按 Asia/Shanghai 解读：
 

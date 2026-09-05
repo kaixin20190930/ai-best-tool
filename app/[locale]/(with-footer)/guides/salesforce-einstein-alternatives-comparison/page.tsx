@@ -1,6 +1,7 @@
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
+import LegacyToolScopeNotice from '@/components/tools/LegacyToolScopeNotice';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
 
@@ -11,8 +12,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       ? 'Salesforce Einstein 替代方案对比'
       : 'Salesforce Einstein alternatives comparison',
     locale === 'cn' || locale === 'tw'
-      ? '对比几款更常被拿来替代 Salesforce Einstein 的 AI 工具，帮你更快判断 CRM、销售自动化和企业工作流该怎么选。'
-      : 'Compare AI tools that are commonly used as Salesforce Einstein alternatives so you can choose the right fit for CRM, sales automation, and enterprise workflows.',
+      ? '先明确 Salesforce Einstein 的具体服务，再比较 CRM、销售数据和自动化工作流；本页候选不是经验证的等价替代品。'
+      : 'Identify the specific Salesforce Einstein service before comparing CRM, sales data and automation workflows. Candidates are not verified interchangeable replacements.',
   );
 }
 
@@ -24,8 +25,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       en: 'Salesforce Einstein alternatives comparison',
     },
     description: {
-      cn: '如果你已经在比较 Salesforce Einstein 这类 CRM 与销售智能入口，这一页会把常见替代项放在一起看，帮助你判断是要企业级 CRM、营销自动化，还是更轻量的销售工作流。',
-      en: 'If you are already comparing Salesforce Einstein-style CRM and sales-intelligence entry points, this page puts the common alternatives side by side so you can decide whether you need enterprise CRM, marketing automation, or a lighter sales workflow.',
+      cn: '先确认要比较哪一项 Einstein 服务。本页仅用于区分 CRM、销售数据和自动化需求，不证明候选功能、数据、许可或迁移能力相同。',
+      en: 'First identify the Einstein service you need. This page separates CRM, sales data and automation needs; it does not establish equivalent features, data, licenses or migration capabilities.',
     },
     searchQuery: 'sales',
     guideHref: '/guides/ai-tools-for-sales',
@@ -36,8 +37,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     altBrowseLabel: { cn: '浏览更多销售相关工具', en: 'Browse more sales-related tools' },
     breadcrumbLabel: { cn: 'Salesforce Einstein 替代方案对比', en: 'Salesforce Einstein alternatives comparison' },
     compareTitle: {
-      cn: '几款常见 Salesforce Einstein 替代项的快速对照',
-      en: 'A quick side-by-side look at common Salesforce Einstein alternatives',
+      cn: '按具体销售任务比较候选，不视为等价替代',
+      en: 'Compare candidates by sales task, not assumed equivalence',
     },
     compareSubtitle: { cn: 'Salesforce', en: 'Salesforce' },
     preferredToolNames: ['salesforce_einstein', 'hubspot', 'apollo-io', 'clay'],
@@ -249,6 +250,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
   return (
     <>
+      <div className='mx-auto max-w-7xl px-4 pt-6 lg:px-6'>
+        <LegacyToolScopeNotice slug='salesforce_einstein' locale={locale} />
+      </div>
       {ComparisonPage({ ...data, locale })}
       <GuideEvidencePanel
         locale={locale}

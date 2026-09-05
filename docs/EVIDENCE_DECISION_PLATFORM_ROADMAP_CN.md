@@ -87,8 +87,8 @@ AI Best Tool 对 Google 和普通访客的基础身份保持不变：
 | EVD-04    | P1     | 情报档案身份映射收口            | tool 档案 owner_id 必须对应真实目录工具；错误身份不可继续同步   |   0.5 天 | 已完成；站点迁移、缓存修复、Fathom 公开闭环均通过     |
 | CHG-01    | P1     | Change Timeline 模型与读取      | 真实事实变化和“仅复核、无变化”可区分                            |     1 天 | 已完成；迁移、读写边界、后台/前台读取与测试均通过     |
 | CHG-02    | P1     | 首批 10-20 个核心工具变化时间线 | 每页至少有基线核查；无变化不伪造更新事件                        |   1-2 天 | 进行中；Fathom、Claude、Consensus 已完成，当前 3/10   |
-| LNK-01    | P1     | Guide / 分类消费统一判断        | 不复制工具事实；链接到对应 Decision Card 和证据                 |     1 天 | 已纳入 DCF 与 SEO-IA 实施规格，待执行                 |
-| MON-01    | P1     | 30/90 天监测闭环                | 事实到期、判断到期和变化待审可筛选                              |   0.5 天 | 待执行                                                |
+| LNK-01    | P1     | Guide / 分类消费统一判断        | 不复制工具事实；链接到对应 Decision Card 和证据                 |     1 天 | 已有Guide/关系内链实现归属SEO-IA-06/07及DCF；全量分类事实复用尚未验收，不重复开发既有部分 |
+| MON-01    | P1     | 30/90 天监测闭环                | 事实到期、判断到期和变化待审可筛选                              |   0.5 天 | 技术实现完成，归属W3-01B；真实运行有效性由RC-08另行验收，不宣称调度持续成功 |
 | DCF-01~07 | P1     | Finder + Decision Card 2.0      | 字段级模型、规则、后台、前台、SEO 与自动验收完整闭环            |   6.5 天 | 已完成；统一 release gate 与本地 production smoke 通过 |
 | STK-01~06 | P1     | Stack Audit + 7-Day Trial       | 私有 Stack、审计、试用、提醒与 RLS 闭环                         |   5.5 天 | 已完成（6/6）；真实双用户隔离、匿名边界、私有 SEO 边界、生产 smoke 与持续健康监控均已验收 |
 | SIG/WAT   | P1     | Verified Usage + Change Watch   | 审核聚合、利益披露、变化通知与去重                              |   5.5 天 | 等待阶段二真实使用门槛                                |
@@ -99,8 +99,7 @@ AI Best Tool 对 Google 和普通访客的基础身份保持不变：
 
 ## 五、发布与收录节奏
 
-- 2026-09-02：同日复核 n8n 实时价格和关键边界后，迁移既有 fallback；不创建第二条 canonical。
-- 2026-09-03：同日复核 OpenRouter 价格、provider 数、隐私与 ZDR 边界后，迁移既有 fallback。
+- 原09-02/09-03是n8n/OpenRouter预排期，不是实际发布日；两条实际于09-04迁移，保留原canonical但仍计入索引放行，本周至少12次、剩余额度0，保持暂停。偏差及保护见主计划和维护审计。
 - 日常可审核多个候选，但每天只新增并公开 1-2 个合格工具；新工具默认 `monitor/noindex`。每天最多批准 1 个、每周最多 5 个
   进入索引；不合格时允许新增或批准 0 个。唯一口径见 [工具页索引发布与节奏控制](./TOOL_INDEX_RELEASE_POLICY_CN.md)。
 - 首页、Evidence Ledger 和 Change Timeline 可以并行开发，但任何代码任务仍独立完成测试、build 和状态更新。

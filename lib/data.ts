@@ -1,3 +1,5 @@
+import { applyLegacyToolScope } from '@/lib/config/legacyToolScopeReviews';
+
 export type WebNavigationListRow = {
   compareHref?: string;
   compareLabel?: string;
@@ -28,7 +30,7 @@ export type WebNavigationDetailData = {
   websiteData: string;
 };
 
-export const dataList: WebNavigationListRow[] = [
+const legacyDataList: WebNavigationListRow[] = [
   {
     id: '1792434701288771585',
     name: 'woy-ai',
@@ -261,7 +263,9 @@ export const dataList: WebNavigationListRow[] = [
   },
 ];
 
-export const detailList: WebNavigationDetailData[] = [
+export const dataList: WebNavigationListRow[] = legacyDataList.map((row) => applyLegacyToolScope(row, 'en'));
+
+const legacyDetailList: WebNavigationDetailData[] = [
   {
     name: 'aigirl-best',
     title: 'Best AI Girl Friend Generator | AIGirl.best',
@@ -671,3 +675,5 @@ export const detailList: WebNavigationDetailData[] = [
     categoryName: 'Productivity',
   },
 ];
+
+export const detailList: WebNavigationDetailData[] = legacyDetailList.map((row) => applyLegacyToolScope(row, 'en'));

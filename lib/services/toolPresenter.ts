@@ -1,6 +1,7 @@
 import { WebNavigationDetailData, WebNavigationListRow } from '@/lib/data';
 import { getComparisonCtaFromTags } from '@/lib/services/comparisonCta';
 import { Tool } from '@/lib/services/tools';
+import { getLegacyToolScopeContent } from '@/lib/config/legacyToolScopeReviews';
 
 const localeAliases: Record<string, string[]> = {
   cn: ['cn', 'zh', 'zh-CN', 'en'],
@@ -74,7 +75,7 @@ export function toolToListRow(tool: Tool, locale = 'en'): WebNavigationListRow {
     id: tool.id,
     name: tool.name,
     title: getLocalizedToolValue(tool.title, locale),
-    content: getLocalizedToolValue(tool.content, locale),
+    content: getLegacyToolScopeContent(tool.name, locale)?.content || getLocalizedToolValue(tool.content, locale),
     createdAt: getSafeIsoDate(tool.createdAt),
     url: tool.url,
     imageUrl: tool.imageUrl,
@@ -86,8 +87,9 @@ export function toolToListRow(tool: Tool, locale = 'en'): WebNavigationListRow {
 }
 
 export function toolToDetailData(tool: Tool, locale = 'en'): WebNavigationDetailData {
-  const content = getLocalizedToolValue(tool.content, locale);
-  const detail = getLocalizedToolValue(tool.detail, locale);
+  const correction = getLegacyToolScopeContent(tool.name, locale);
+  const content = correction?.content || getLocalizedToolValue(tool.content, locale);
+  const detail = correction?.detail || getLocalizedToolValue(tool.detail, locale);
 
   return {
     categoryName: tool.categoryId || '',
