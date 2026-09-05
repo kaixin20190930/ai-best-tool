@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { isDeepStrictEqual } from 'node:util';
 import { config } from 'dotenv';
 import { Client } from 'pg';
 
@@ -77,9 +78,9 @@ async function main() {
       assert(before, `${record.slug}: fixed record not found`);
       const beforeIndex = getToolIndexDecision(indexInput(before));
       const afterIndex = getToolIndexDecision(indexInput(before, payload.content, payload.detail));
+      // PostgreSQL jsonb normalizes key order, so compare values rather than serialized insertion order.
       const alreadyApplied =
-        JSON.stringify(before.content) === JSON.stringify(payload.content) &&
-        JSON.stringify(before.detail) === JSON.stringify(payload.detail);
+        isDeepStrictEqual(before.content, payload.content) && isDeepStrictEqual(before.detail, payload.detail);
 
       if (args.includes('--status')) {
         results.push({

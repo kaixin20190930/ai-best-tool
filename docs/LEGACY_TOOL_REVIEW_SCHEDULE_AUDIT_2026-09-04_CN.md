@@ -41,7 +41,7 @@
 
 ## Adobe / Salesforce Einstein 收录对象复核
 
-后续RC-05A/B：共享范围提示及Salesforce对比入口之后，已继续统一本地范围正文、列表/静态兜底和metadata，并撤下两页通用评分/比较卡及单软件schema。数据库原文写入、生产验收及最终索引处置仍未完成，详见 [范围澄清](./LEGACY_PRODUCT_SCOPE_CLARIFICATION_2026-09-04_CN.md)，不减少缺排期19项。
+后续RC-05A/B：共享范围提示及Salesforce对比入口之后，范围正文、列表/静态兜底和metadata已统一，并撤下两页通用评分/比较卡及单软件schema。生产8页验收及两条数据库原文写入已完成；最终索引/URL处置与独立市场核验仍未完成，详见 [范围澄清](./LEGACY_PRODUCT_SCOPE_CLARIFICATION_2026-09-04_CN.md)，不减少缺排期19项。
 
 2026-09-04 只读数据库及官方资料审计，依据 [唯一准入规范](./BEST_DIRECTORY_POSITIONING_AND_INTAKE_CN.md)。两条是历史公开条目，本轮不等于批准继续推荐，也不直接改 URL 或索引。
 
