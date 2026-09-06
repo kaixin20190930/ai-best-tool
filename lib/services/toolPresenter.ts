@@ -51,6 +51,7 @@ function getToolStringArray(value: unknown): string[] {
 }
 
 export function toolToListRow(tool: Tool, locale = 'en'): WebNavigationListRow {
+  const scopeCorrection = getLegacyToolScopeContent(tool.name, locale);
   const featureRecord =
     tool.features && typeof tool.features === 'object' ? (tool.features as Record<string, unknown>) : {};
   const submission =
@@ -74,10 +75,10 @@ export function toolToListRow(tool: Tool, locale = 'en'): WebNavigationListRow {
   return {
     id: tool.id,
     name: tool.name,
-    title: getLocalizedToolValue(tool.title, locale),
-    content: getLegacyToolScopeContent(tool.name, locale)?.content || getLocalizedToolValue(tool.content, locale),
+    title: scopeCorrection?.title || getLocalizedToolValue(tool.title, locale),
+    content: scopeCorrection?.content || getLocalizedToolValue(tool.content, locale),
     createdAt: getSafeIsoDate(tool.createdAt),
-    url: tool.url,
+    url: scopeCorrection?.url || tool.url,
     imageUrl: tool.imageUrl,
     thumbnailUrl: tool.thumbnailUrl || tool.imageUrl,
     isFeatured,
@@ -101,8 +102,8 @@ export function toolToDetailData(tool: Tool, locale = 'en'): WebNavigationDetail
     starRating: Number(tool.averageRating) || 0,
     tagName: getToolStringArray(tool.tags).join(', '),
     thumbnailUrl: tool.thumbnailUrl || tool.imageUrl || '',
-    title: getLocalizedToolValue(tool.title, locale),
-    url: tool.url,
+    title: correction?.title || getLocalizedToolValue(tool.title, locale),
+    url: correction?.url || tool.url,
     websiteData: '',
   };
 }

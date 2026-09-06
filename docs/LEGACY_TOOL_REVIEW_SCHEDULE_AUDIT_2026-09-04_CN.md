@@ -6,7 +6,7 @@
 
 只补已有核验依据对应的缺失排期，不重新验证产品事实，不修改正文、市场分数、核验时间或索引批准。不把今日执行维护当成今日完成产品核验。
 
-后续对象审计及实质内容维护为独立阶段，见下文；当前缺排期19，本轮RC-04只读回查再次确认，未执行任何日期写入。
+后续对象审计及实质内容维护为独立阶段，见下文。RC-07 第一组完成后当前缺排期为15；RC-04 的19项是此前只读快照。
 
 数据库初始快照：37 个 published 工具，23 个缺少 next_review_date。其中只有 Emdash 同时具有可用的数据库 editorial.reviewedAt、sourceUrl 与市场验证记录；其余 22 个缺少这些数据库字段。这不代表页面没有静态官方事实、历史来源或其他证据，需要逐页核对。
 
@@ -18,9 +18,9 @@
 - 本轮将缺失的数据库事实复查日期补为 **2026-10-01**；不从今天重新起算，也不改动未来可能存在的人工排期。公开页面原先可能已显示推导出的日期，本次是补齐数据库明确字段，不宣称新增页面功能。
 - 更新只允许 next_review_date 与 updated_at；数据库原正文、features、index 状态等全部保持不变。
 
-## 剩余项分类（初始 22，当前 19）
+## 剩余项分类（初始 22，当前 15）
 
-最新：Notion、Poe 完成官方事实维护及真实双语内容，9 月 18 日复查。当前缺排期 19，以下 21/22 为历史快照；详见 [Notion/Poe 维护](./NOTION_POE_MAINTENANCE_2026-09-04_CN.md)。
+最新：OpenAI 家族四条完成对象纠偏、双语内容、官方入口、`monitor` 隔离与复查排期，当前缺排期 15；详见 [OpenAI 家族收口](./OPENAI_FAMILY_LEGACY_SCOPE_CLOSEOUT_2026-09-06_CN.md)。以下 19/21/22 为历史快照。
 
 历史快照（Gemini阶段）：真实官方事实维护完成，补齐中英文正文、来源和9月18日复查日期；非独立市场验证。当时缺排期21，当前19，详细验收见 [Gemini 维护](./GEMINI_MAINTENANCE_2026-09-04_CN.md)。本文件原Emdash只补排期的范围仍保留，Gemini是另一次实质内容维护。
 
@@ -33,11 +33,17 @@
 | 1a | gemini | 官方访问、额度、隐私及双语内容维护，保留索引与身份 | 本轮完成；9 月 18 日复查，市场验证未赋值 |
 | 1b | notion、poe | 官方用量、权限/隐私及双语内容维护，保留索引与身份 | 本轮完成；9 月 18 日复查，市场验证未赋值 |
 | 1c | adobe、salesforce_einstein | 对象/重复检查及线上链接审计已完成；按下方处置分支补 URL 级数据 | 当前条目未通过准入；GSC 明细和最终处置未完成，生产未改 |
-| 2 | openai、gpt_4o、chatgpt-mac、sora | 先确认品牌、模型、客户端与独立产品实体关系；本轮不重命名、不合并 URL | 待执行 |
+| 2 | openai、gpt_4o、chatgpt-mac、sora | 公司、API模型、客户端入口和停服产品已分别界定；保留原slug作为历史说明，不并入活跃推荐 | 已完成；4条均monitor/noindex并有复查日期 |
 | 3 | character_ai、artiversehub-ai、fastimage-ai-sketch-to-image、honeydo、shutterstock、suno_aI、tattooai-design、viggle、woy-ai、shop_your_ai_powered_Shopping_assistant | 核对官网可用性、实际产品范围、原有证据和市场信号；按证据决定是否补录或另行复核 | 待执行 |
 | 4 | aigirl-best、anime-girl-studio、undressing_ai | 先确认实际服务类型、安全与合规边界，不自动推广或补“已验证” | 待执行 |
 
 没有充分核验依据的条目可以进入人工维护队列，但不能统一填今日 reviewedAt、虚构 sourceUrl 或提升市场分数。缺日期本身不触发本轮批量 noindex；索引仍遵循独立政策和暂停规则。
+
+## OpenAI 家族历史对象复核
+
+2026-09-06 完成 RC-07 第一组。`chatgpt-mac` 仅代表 ChatGPT macOS 入口并改用官方下载安装地址；`gpt_4o` 明确为仍可用的 API 模型、而非当前 ChatGPT 产品；`openai` 明确为公司记录；`sora` 按官方停服状态保留历史说明。四条不再参与活跃工具推荐，均设为 `monitor`，其中 Sora 于 2026-09-25 复查 API 停止状态，其余三条于 2026-10-06 复查。
+
+固定 ID、原始 MD5、允许字段、来源和自动验收见 [专项记录](./OPENAI_FAMILY_LEGACY_SCOPE_CLOSEOUT_2026-09-06_CN.md)。本次没有创建新 URL、301 或删除记录；缺排期从19降至15，但 RC-07 仍有13/17条待复核。
 
 ## Adobe / Salesforce Einstein 收录对象复核
 

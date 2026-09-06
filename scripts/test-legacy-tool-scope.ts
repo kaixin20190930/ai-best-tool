@@ -12,7 +12,9 @@ import { dataList, detailList } from '../lib/data';
 import { toolToDetailData, toolToListRow } from '../lib/services/toolPresenter';
 import type { Tool } from '../lib/services/tools';
 
-for (const slug of ['adobe', 'salesforce_einstein']) {
+const reviewedSlugs = ['adobe', 'salesforce_einstein', 'chatgpt-mac', 'gpt_4o', 'openai', 'sora'];
+
+for (const slug of reviewedSlugs) {
   for (const locale of ['en', 'cn', 'tw']) {
     const review = getLegacyToolScopeReview(slug, locale);
     assert(review);
@@ -23,17 +25,23 @@ for (const slug of ['adobe', 'salesforce_einstein']) {
       content: 'Old marketing',
       detail: 'Old claims',
       id: 'unchanged',
+      title: 'Original title',
       url: 'https://example.com',
     };
     const corrected = applyLegacyToolScope(row, locale);
     assert.equal(corrected.content, review.summary);
     assert.equal(corrected.detail, copy.detail);
     assert.equal(corrected.id, row.id);
-    assert.equal(corrected.url, row.url);
+    assert.equal(corrected.url, copy.url || row.url);
+    assert.equal(corrected.title, copy.title || row.title);
     assert.equal(row.content, 'Old marketing', 'Do not mutate source data');
     const fixture = { ...row, title: { en: 'Original title' }, tags: [], features: null } as unknown as Tool;
     assert.equal(toolToListRow(fixture, locale).content, copy.content);
+    assert.equal(toolToListRow(fixture, locale).url, copy.url || row.url);
+    assert.equal(toolToListRow(fixture, locale).title, copy.title || 'Original title');
     assert.equal(toolToDetailData(fixture, locale).detail, copy.detail);
+    assert.equal(toolToDetailData(fixture, locale).url, copy.url || row.url);
+    assert.equal(toolToDetailData(fixture, locale).title, copy.title || 'Original title');
     assert(copy.detail.includes(locale === 'en' ? 'not completed hands-on testing' : '不是已完成的实测'));
     const html = renderToStaticMarkup(React.createElement(LegacyToolScopeNotice, { slug, locale }));
     assert(html.includes(`data-tool-scope-review="${slug}"`));
@@ -49,6 +57,11 @@ for (const slug of ['adobe', 'salesforce_einstein']) {
   assert.equal(dataList.find((row) => row.name === slug)?.content, getLegacyToolScopeContent(slug, 'en')?.content);
   assert.equal(detailList.find((row) => row.name === slug)?.detail, getLegacyToolScopeContent(slug, 'en')?.detail);
 }
+assert(!getLegacyToolScopeContent('chatgpt-mac', 'en')?.detail.includes('artiversehub.ai'));
+assert(getLegacyToolScopeContent('chatgpt-mac', 'en')?.url.includes('chatgpt.com/download'));
+assert(getLegacyToolScopeContent('gpt_4o', 'en')?.detail.includes('retired from ChatGPT'));
+assert(!getLegacyToolScopeContent('gpt_4o', 'en')?.detail.includes('HIPAA compliant'));
+assert(getLegacyToolScopeContent('sora', 'en')?.detail.includes('discontinued'));
 for (const slug of ['claude', 'firefly', 'agentforce', 'constructor', '__proto__']) {
   assert.equal(getLegacyToolScopeReview(slug, 'en'), null);
   const row = { name: slug, content: 'Unchanged content', detail: 'Unchanged detail' };

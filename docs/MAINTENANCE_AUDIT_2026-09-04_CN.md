@@ -30,7 +30,7 @@
 | MAINT-01 | P0 | 公开收录与索引批准额度分离 | 本周可证实放行至少 12 次，当前额度 0 | 技术保护、本周可证实记录补账及额度判断完成；保持暂停，旧历史未知部分明确保留 | Codex；下周恢复前重新复核 |
 | MAINT-02 | P0 | 生产健康、广告和 SEO 边界复查 | 本轮 SEO、health、ads.txt 检查通过 | 本轮审计完成；持续维护 | Codex |
 | MAINT-03 | P1 | Consensus、Gamma 到期复核 | 两者 monitor；生产下次复查均已设为 9 月 7 日 | 本轮官方事实维护与排期完成 2/2；独立市场复核/账户实操未完成，不刷新旧验证日期 | Codex；9 月 7 日复查已记录缺口 |
-| MAINT-04 | P1 | 历史工具维护字段补齐 | Emdash 排期及 Gemini、Notion、Poe 官方事实维护已完成；缺排期 23 → 22 → 21 → 19 | 三个工具双语正文及来源已修正，下次 9 月 18 日；未赋市场评分。剩余 19 项继续逐页核验 | Codex；官方与独立证据 |
+| MAINT-04 | P1 | 历史工具维护字段补齐 | Emdash、Gemini、Notion、Poe及OpenAI家族四条已处理；缺排期 23 → 22 → 21 → 19 → 15 | OpenAI家族完成对象纠偏和隔离，不赋市场评分；剩余15项继续逐页核验 | Codex；官方与独立证据 |
 | MAINT-05 | P1 | Emdash 复查排期 | 依据已有 9 月 1 日核验 +30 天 | 已完成：生产 next_review_date 为 10 月 1 日；幂等与其他字段不变校验通过 | Codex |
 | MAINT-06 | P1 | Change Timeline 首批真实基线 | 主台账仍为 Fathom、Claude、Consensus，3/10 | Gamma 下一项；robots 受限来源不绕过 | Codex；必要时人工来源材料 |
 | MAINT-07 | P1 | GSC / Coverage 周度复盘 | 现有主台账性能基线为 8 月 31 日导出；技术通过不代表 Google 已收录 | 等下一次同期数据后评估，不为等待数据扩页 | 用户提供 7 天、28 天及 Coverage |
@@ -40,6 +40,8 @@
 ## 排期事实
 
 当前只读核查：Adobe/Salesforce 查重与已知引用/8 页线上抽查完成，四个工具 URL 仍允许索引并列入 sitemap；GSC URL 明细未知，最终处置未做。导航附带问题已由373d2336独立部署及生产验收关闭。详见 [影响面审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。本轮再次执行inventory确认缺排期仍19，不将审计等同于工具核验。
+
+2026-09-06 追加：OpenAI 家族四条已完成事实范围纠偏并正式写入数据库，均转为 `monitor` 且补明确复查日期；独立 inventory 确认缺排期 15。专项测试、类型检查和完整 build 通过；页面代码待提交部署，因此不提前宣称生产 UI 验收完成。
 
 准入规范修订完成：Adobe / Salesforce Einstein 转入收录对象复核，初步审计发现泛品牌/范围混淆；处置、市场验证与页面整改尚未完成。见 [对象复核记录](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。不把文档完成记为工具核验完成；缺排期仍 19，生产未改。
 

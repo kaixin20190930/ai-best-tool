@@ -3294,14 +3294,15 @@ export async function generateMetadata({
           getPriorityToolFallbackDetail(canonicalSlug, locale);
 
     // Get localized content if available
-    const toolTitle = dbTool
+    const scopeCorrection = getLegacyToolScopeContent(canonicalSlug, locale);
+    const toolTitle = scopeCorrection?.title || (dbTool
       ? getLocalizedField(dbTool.title, locale) || data?.title || websiteName
-      : data?.title || websiteName;
+      : data?.title || websiteName);
 
     const originalDescription = dbTool
       ? getLocalizedField(dbTool.content, locale) || data?.content || ''
       : data?.content || '';
-    const toolDescription = getLegacyToolScopeContent(canonicalSlug, locale)?.content || originalDescription;
+    const toolDescription = scopeCorrection?.content || originalDescription;
 
     // Get category name if available
     let toolCategory: string | undefined;
