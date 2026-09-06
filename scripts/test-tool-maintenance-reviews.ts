@@ -22,6 +22,9 @@ async function main() {
   assert(TOOL_MAINTENANCE_REVIEWS.consensus.note.en.includes('also consumes a Pro message'));
   assert(TOOL_MAINTENANCE_REVIEWS.gamma.note.en.includes('Editable tables are on by default'));
   assert(TOOL_MAINTENANCE_REVIEWS.gamma.note.en.includes('Google Slides substitutes embedded fonts'));
+  assert(TOOL_MAINTENANCE_REVIEWS.perplexity.unresolved[0].includes('three and five'));
+  assert(TOOL_MAINTENANCE_REVIEWS.perplexity.note.en.includes('Web plans do not include API access'));
+  assert(TOOL_MAINTENANCE_REVIEWS.make.note.en.includes('cannot be changed'));
   console.log('PASS scoped maintenance data, unresolved gaps and visible bindings');
   if (!process.argv.includes('--pages')) return;
   const base = process.env.SEO_BASE_URL || 'http://localhost:3000';
@@ -41,8 +44,8 @@ async function main() {
   }
   const response = await fetch(`${base}/sitemap.xml`, { signal: AbortSignal.timeout(20000) });
   assert.equal(response.status, 200);
-  assert(!/<loc>[^<]*\/ai\/(gamma|consensus)\/?<\/loc>/.test(await response.text()));
-  console.log('PASS sitemap excludes both tools');
+  assert(!/<loc>[^<]*\/ai\/(gamma|consensus|perplexity|make)\/?<\/loc>/.test(await response.text()));
+  console.log('PASS sitemap excludes all reviewed monitor tools');
 }
 
 main().catch((error) => {

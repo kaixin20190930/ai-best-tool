@@ -2474,13 +2474,14 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
       ? {
           label: '官方事实快照',
           title: '搜索额度、消费者数据和企业边界',
-          summary: '以下信息来自 Perplexity 官方帮助中心；搜索与 Research 配额可能动态调整，应以账号当前显示为准。',
-          checkedAt: '2026-09-01',
+          summary:
+            '以下信息来自 Perplexity 官方帮助中心；官方页面对 Free Pro Search 次数存在 3 次与 5 次两种口径，且付费额度按周期动态管理，应以账号当前显示为准。',
+          checkedAt: '2026-09-06',
           facts: [
             {
               label: 'Free 限制',
               value:
-                'Free 当前包含每天 3 次 Pro Search 和每月 1 次 Research；高级模型、图像生成与更高额度需要付费套餐。',
+                '最新套餐对比页列出每天 3 次 Pro Search、每月 1 次 Research，但账号帮助页仍列每天 5 次；不要把固定数字当承诺，注册后以账号额度页为准。',
             },
             {
               label: '消费者数据',
@@ -2490,19 +2491,36 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
               label: '来源边界',
               value: '引用和来源标签帮助追溯，但官方明确说明域名标签不代表单篇内容准确；重要判断仍应打开原文核对。',
             },
+            {
+              label: 'API 与代理成本',
+              value:
+                '网页订阅不包含 API；API 单独按量付费。Computer 使用独立 credits，Pro 没有固定月度额度，Max 当前含月度 credits，复杂任务的消耗会变化。',
+            },
+            {
+              label: `试用检查（${TOOL_MAINTENANCE_REVIEWS.perplexity.checkedAt} 核查）`,
+              value: TOOL_MAINTENANCE_REVIEWS.perplexity.note.zh,
+            },
           ],
           sources: [
             {
               label: '套餐能力对比',
-              href: 'https://www.perplexity.ai/help-center/en/articles/11187416-which-perplexity-subscription-plan-is-right-for-you',
+              href: TOOL_MAINTENANCE_REVIEWS.perplexity.sources[0],
+            },
+            {
+              label: 'Free 账号额度',
+              href: TOOL_MAINTENANCE_REVIEWS.perplexity.sources[1],
             },
             {
               label: '数据收集与退出',
-              href: 'https://www.perplexity.ai/help-center/en/articles/11564572-data-collection-at-perplexity',
+              href: TOOL_MAINTENANCE_REVIEWS.perplexity.sources[2],
             },
             {
               label: '来源标签边界',
-              href: 'https://www.perplexity.ai/help-center/en/articles/20260806-understanding-source-labels',
+              href: TOOL_MAINTENANCE_REVIEWS.perplexity.sources[3],
+            },
+            {
+              label: 'Computer credits',
+              href: TOOL_MAINTENANCE_REVIEWS.perplexity.sources[4],
             },
           ],
         }
@@ -2510,13 +2528,13 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           label: 'Official fact snapshot',
           title: 'Search allowances, consumer data, and enterprise boundaries',
           summary:
-            'These facts come from the Perplexity help center. Search and Research allowances can change dynamically, so verify the limits shown in your account.',
-          checkedAt: '2026-09-01',
+            'These facts come from the Perplexity help center. Official pages currently conflict between three and five Free Pro Searches, while paid allowances are managed dynamically, so treat the account meter as the source of truth.',
+          checkedAt: '2026-09-06',
           facts: [
             {
               label: 'Free limits',
               value:
-                'Free currently includes three Pro Searches per day and one Research query per month; advanced models, image generation, and higher limits require paid plans.',
+                'The latest plan comparison lists three Pro Searches per day and one Research query per month, while the account article still lists five per day. Do not treat either number as a guarantee; verify the signed-in account meter.',
             },
             {
               label: 'Consumer data',
@@ -2528,19 +2546,36 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
               value:
                 'Citations and source labels improve traceability, but Perplexity says a domain label does not validate an individual page; consequential claims still require reading the source.',
             },
+            {
+              label: 'API and agent cost',
+              value:
+                'Web subscriptions do not include API access; API usage is billed separately. Computer uses separate credits, Pro has no recurring monthly allocation, Max currently includes monthly credits, and task cost varies by complexity.',
+            },
+            {
+              label: `Trial check (reviewed ${TOOL_MAINTENANCE_REVIEWS.perplexity.checkedAt})`,
+              value: TOOL_MAINTENANCE_REVIEWS.perplexity.note.en,
+            },
           ],
           sources: [
             {
               label: 'Plan capability comparison',
-              href: 'https://www.perplexity.ai/help-center/en/articles/11187416-which-perplexity-subscription-plan-is-right-for-you',
+              href: TOOL_MAINTENANCE_REVIEWS.perplexity.sources[0],
+            },
+            {
+              label: 'Free account allowance',
+              href: TOOL_MAINTENANCE_REVIEWS.perplexity.sources[1],
             },
             {
               label: 'Data collection and opt-out',
-              href: 'https://www.perplexity.ai/help-center/en/articles/11564572-data-collection-at-perplexity',
+              href: TOOL_MAINTENANCE_REVIEWS.perplexity.sources[2],
             },
             {
               label: 'Source-label boundaries',
-              href: 'https://www.perplexity.ai/help-center/en/articles/20260806-understanding-source-labels',
+              href: TOOL_MAINTENANCE_REVIEWS.perplexity.sources[3],
+            },
+            {
+              label: 'Computer credits',
+              href: TOOL_MAINTENANCE_REVIEWS.perplexity.sources[4],
             },
           ],
         };
@@ -2643,7 +2678,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           title: 'Credits、AI 双重成本和数据区域',
           summary:
             '以下信息来自 Make 官方帮助中心；credits、模型转换率和套餐上限可能变化，应按场景运行记录核算真实成本。',
-          checkedAt: '2026-09-01',
+          checkedAt: '2026-09-06',
           facts: [
             {
               label: '基础计费',
@@ -2662,11 +2697,16 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
               label: '中断边界',
               value: 'credits 用完后 scenario 会停止；incoming webhooks 只会在当前 queue allowance 范围内等待。',
             },
+            {
+              label: `试用检查（${TOOL_MAINTENANCE_REVIEWS.make.checkedAt} 核查）`,
+              value: TOOL_MAINTENANCE_REVIEWS.make.note.zh,
+            },
           ],
           sources: [
-            { label: 'Credits 规则', href: 'https://help.make.com/credits' },
-            { label: '功能 Credit 消耗', href: 'https://help.make.com/how-features-use-credits' },
-            { label: 'Organization 与数据区域', href: 'https://help.make.com/organizations' },
+            { label: 'Credits 规则', href: TOOL_MAINTENANCE_REVIEWS.make.sources[0] },
+            { label: '功能 Credit 消耗', href: TOOL_MAINTENANCE_REVIEWS.make.sources[1] },
+            { label: 'Organization 与数据区域', href: TOOL_MAINTENANCE_REVIEWS.make.sources[2] },
+            { label: 'Webhook 队列', href: TOOL_MAINTENANCE_REVIEWS.make.sources[3] },
           ],
         }
       : {
@@ -2674,7 +2714,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           title: 'Credits, dual AI costs, and data region',
           summary:
             'These facts come from the Make help center. Credits, model conversion rates, and plan limits can change, so calculate real cost from scenario run records.',
-          checkedAt: '2026-09-01',
+          checkedAt: '2026-09-06',
           facts: [
             {
               label: 'Base billing',
@@ -2696,11 +2736,16 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
               value:
                 'Scenarios stop when credits run out; incoming webhooks wait only within the current queue allowance.',
             },
+            {
+              label: `Trial check (reviewed ${TOOL_MAINTENANCE_REVIEWS.make.checkedAt})`,
+              value: TOOL_MAINTENANCE_REVIEWS.make.note.en,
+            },
           ],
           sources: [
-            { label: 'Credit rules', href: 'https://help.make.com/credits' },
-            { label: 'Feature credit usage', href: 'https://help.make.com/how-features-use-credits' },
-            { label: 'Organizations and data region', href: 'https://help.make.com/organizations' },
+            { label: 'Credit rules', href: TOOL_MAINTENANCE_REVIEWS.make.sources[0] },
+            { label: 'Feature credit usage', href: TOOL_MAINTENANCE_REVIEWS.make.sources[1] },
+            { label: 'Organizations and data region', href: TOOL_MAINTENANCE_REVIEWS.make.sources[2] },
+            { label: 'Webhook queues', href: TOOL_MAINTENANCE_REVIEWS.make.sources[3] },
           ],
         };
   }

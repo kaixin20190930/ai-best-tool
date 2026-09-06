@@ -87,10 +87,10 @@ for (const locale of ['en', 'zh']) {
 for (const [officialSnapshotSlug, expectedDate] of Object.entries({
   cursor: '2026-09-01',
   'luma-ai': '2026-09-01',
-  make: '2026-09-01',
+  make: '2026-09-06',
   openrouter: '2026-09-04',
   n8n: '2026-09-04',
-  perplexity: '2026-09-01',
+  perplexity: '2026-09-06',
   pipedream: '2026-09-01',
   runway: '2026-09-01',
   'the-graph': '2026-09-01',
@@ -111,6 +111,13 @@ for (const [officialSnapshotSlug, expectedDate] of Object.entries({
     }
     if (!branch.includes('not OSI open source') || !branch.includes('不等于 OSI 开源')) {
       throw new Error('n8n: source-available license must not be presented as unrestricted open source.');
+    }
+  }
+  if (officialSnapshotSlug === 'perplexity') {
+    for (const term of ['three and five', 'do not include API access', 'Computer uses separate credits']) {
+      if (!branch.includes(term)) {
+        throw new Error(`perplexity: reviewed boundary missing ${term}.`);
+      }
     }
   }
 }

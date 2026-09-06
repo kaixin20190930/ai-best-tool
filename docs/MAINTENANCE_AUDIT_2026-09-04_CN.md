@@ -106,6 +106,12 @@ MAINT-04排期收口，不代表RC-05C URL/索引决策或独立市场核验完�
 - 每条均来自受控核验且使用 `review_scope=fact`，重复执行保持幂等；证据不足或受 robots 限制的来源没有用于补数量。
 - 该完成状态只代表首批事实基线，不代表自动抓取持续运行，也不代表亲手试用。后续变化仍须进入待审差异并经人工或 owner 核验。
 
+### 9 月 6 日后续维护：Perplexity / Make
+
+- 两条到期前官方事实复核已完成本地校验，仍保持 `published + monitor + noindex`，不新增 URL 或索引批准。
+- Perplexity 记录官方 Free 次数口径冲突并补 API/Computer credits 边界；Make 记录为 `reviewed_no_change`。两条均保留真实使用缺口，下次复查为 2026-10-06。
+- 详细来源、字段保护和生产验收见 [专项维护记录](./PERPLEXITY_MAKE_MAINTENANCE_2026-09-06_CN.md)。
+
 ### 后续执行：历史补账与局部内容维护
 
 - `9fa46afc` 已获得 Vercel success / Deployment has completed。

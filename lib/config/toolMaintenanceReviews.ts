@@ -42,6 +42,51 @@ const TOOL_MAINTENANCE_REVIEWS = {
       'https://help.gamma.app/en/articles/7834324-how-do-credits-work-in-gamma',
     ],
   },
+  perplexity: {
+    id: '3d018623-85f9-4df4-bd55-9a4a0e7a2d93',
+    checkedAt: '2026-09-06',
+    nextReviewDate: '2026-10-06',
+    outcome: 'fact_updated',
+    changeSummary:
+      'Recorded conflicting official Free Pro Search allowances and added separate API and Computer credit boundaries.',
+    scope:
+      'Official consumer plans, data retention, source labels, API separation and Computer credits; not a new market validation or hands-on accuracy benchmark.',
+    unresolved: [
+      'Official help articles currently disagree between three and five Free Pro Searches per day; the signed-in account meter remains authoritative.',
+    ],
+    note: {
+      en: 'Check the same consequential question in Perplexity and the original cited pages. Treat the signed-in usage meter as authoritative because official Free allowance articles currently conflict. Web plans do not include API access, and Computer credits are a separate variable-cost system.',
+      zh: '用同一个重要问题对照 Perplexity 答案与引用原文。官方 Free 次数页面当前存在冲突，因此以登录后的额度页为准。网页套餐不包含 API，Computer credits 也是独立的浮动成本系统。',
+    },
+    sources: [
+      'https://www.perplexity.ai/help-center/en/articles/11187416-which-perplexity-subscription-plan-is-right-for-you',
+      'https://www.perplexity.ai/help-center/en/articles/10352998-account-management-and-security',
+      'https://www.perplexity.ai/help-center/en/articles/11564572-data-collection-at-perplexity',
+      'https://www.perplexity.ai/help-center/en/articles/20260806-understanding-source-labels',
+      'https://www.perplexity.ai/help-center/en/articles/13838041-how-credits-work-on-perplexity',
+    ],
+  },
+  make: {
+    id: 'c0bb3aba-33be-4e14-903e-5f1d036eec4a',
+    checkedAt: '2026-09-06',
+    nextReviewDate: '2026-10-06',
+    outcome: 'reviewed_no_change',
+    changeSummary:
+      'Current official credit, AI connection, data-region and webhook queue boundaries remain aligned with the production snapshot.',
+    scope:
+      'Official billing unit, AI provider cost split, organization data region and webhook queue boundaries; not a new market validation or live scenario benchmark.',
+    unresolved: ['Real credit use and failure recovery still require a representative production scenario.'],
+    note: {
+      en: 'Pilot one representative scenario and read its run records. Custom AI connections charge Make credits and provider tokens separately; built-in AI can use dynamic credits. Select the US or EU data region deliberately because it cannot be changed after organization creation.',
+      zh: '先用一个代表性 scenario 查看真实运行记录。自有 AI 连接会分别产生 Make credits 和模型商 token 成本，内置 AI 可能动态消耗 credits。创建 organization 时应谨慎选择美国或欧盟数据区，因为之后不能更改。',
+    },
+    sources: [
+      'https://help.make.com/credits',
+      'https://help.make.com/how-features-use-credits',
+      'https://help.make.com/organizations',
+      'https://help.make.com/webhooks',
+    ],
+  },
 } as const;
 
 export default TOOL_MAINTENANCE_REVIEWS;
