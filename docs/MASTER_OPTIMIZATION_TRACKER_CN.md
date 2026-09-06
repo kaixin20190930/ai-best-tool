@@ -56,6 +56,12 @@ build通过。此轮没有完成新的工具核验，四周比例不增加；CI�
 canonical。两者线上验收均已通过；n8n 提交 `37ceb6d2` 已获 Vercel 部署成功确认，双语 index/canonical/新正文和 sitemap 生
 产验收通过。今日达到 2 条上限，不再新增第 3 条。累计处理数不是每日公开数。
 
+2026-09-06 日常收录更新：W2-02B 累计处理 13/7-14。四个开发者入口此前指向 `/ai/github-copilot`，但该路径只有自动 fallback，
+而既有 `copilot` 实体实际代表 Microsoft Copilot，形成产品身份冲突。现已将 GitHub Copilot 建为独立生产实体，补齐当前套餐与
+AI Credits、IDE/Agent 工作流、内容排除边界、Stack Overflow 调查和独立评价证据，市场验证为 `97/100 / Validated`。生产回读
+确认 `published + monitor + noindex`，下次复查 2026-09-20；本周索引额度仍为 0，不进入 sitemap，不改变四周一级任务 9/13。
+专项内容、身份链接、TypeScript、数据库 rollback/commit/status 与完整 build 均通过，部署后页面验收待提交完成。
+
 差异化、证据账本、变化追踪与商业化触发条件见
 [AI 工具决策平台差异化与商业化实施路线图](./EVIDENCE_DECISION_PLATFORM_ROADMAP_CN.md)。
 

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">GitHub Copilot directory icon</title>
+  <desc id="desc">A stylized coding assistant face on a dark blue tile.</desc>
+  <defs>
+    <linearGradient id="bg" x1="12" y1="8" x2="116" y2="120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#172554"/>
+      <stop offset="1" stop-color="#020617"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#bg)"/>
+  <path d="M28 55c0-18 14-31 36-31s36 13 36 31v24c0 15-12 25-27 25H55c-15 0-27-10-27-25V55Z" fill="#dbeafe" fill-opacity=".1" stroke="#93c5fd" stroke-width="4"/>
+  <path d="M28 58 17 48M100 58l11-10M46 76h36" fill="none" stroke="#bfdbfe" stroke-linecap="round" stroke-width="6"/>
+  <circle cx="48" cy="58" r="7" fill="#60a5fa"/>
+  <circle cx="80" cy="58" r="7" fill="#60a5fa"/>
+</svg>

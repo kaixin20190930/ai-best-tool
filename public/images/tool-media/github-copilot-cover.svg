@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">GitHub Copilot coding workflow illustration</title>
+  <desc id="desc">An editor workflow comparing completion, chat, agent, review, and verification.</desc>
+  <defs>
+    <linearGradient id="bg" x1="70" y1="30" x2="1120" y2="650" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1e3a8a"/>
+      <stop offset=".55" stop-color="#172554"/>
+      <stop offset="1" stop-color="#020617"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientTransform="translate(930 130) rotate(135) scale(540 390)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#60a5fa" stop-opacity=".32"/>
+      <stop offset="1" stop-color="#60a5fa" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="675" rx="42" fill="url(#bg)"/>
+  <rect width="1200" height="675" rx="42" fill="url(#glow)"/>
+  <rect x="96" y="86" width="1008" height="503" rx="30" fill="#020617" fill-opacity=".8" stroke="#60a5fa" stroke-opacity=".4" stroke-width="2"/>
+  <circle cx="136" cy="124" r="7" fill="#60a5fa"/>
+  <circle cx="160" cy="124" r="7" fill="#93c5fd" fill-opacity=".72"/>
+  <circle cx="184" cy="124" r="7" fill="#dbeafe" fill-opacity=".45"/>
+  <text x="136" y="218" fill="#eff6ff" font-family="ui-monospace, monospace" font-size="54" font-weight="700">GITHUB COPILOT</text>
+  <text x="136" y="266" fill="#93c5fd" font-family="ui-monospace, monospace" font-size="24">complete  chat  agent  review</text>
+  <g font-family="ui-monospace, monospace" font-size="25">
+    <text x="136" y="354" fill="#60a5fa">01</text><text x="196" y="354" fill="#dbeafe">Choose a representative repository task</text>
+    <text x="136" y="410" fill="#60a5fa">02</text><text x="196" y="410" fill="#dbeafe">Check context, policy, and credit use</text>
+    <text x="136" y="466" fill="#60a5fa">03</text><text x="196" y="466" fill="#dbeafe">Review the diff and run real tests</text>
+    <text x="136" y="522" fill="#60a5fa">04</text><text x="196" y="522" fill="#dbeafe">Compare accepted work, not generated lines</text>
+  </g>
+</svg>
