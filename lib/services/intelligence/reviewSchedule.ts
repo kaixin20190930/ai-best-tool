@@ -1,6 +1,11 @@
 export type IntelligenceReviewType = 'fact' | 'decision';
 export type IntelligenceReviewState = 'overdue' | 'due_soon' | 'scheduled' | 'unscheduled';
 
+export function isIntelligenceReviewApplicable(reviewType: IntelligenceReviewType, ownerType: string): boolean {
+  // Site and distribution profiles retain factual evidence, but they are not tool Decision Cards.
+  return reviewType === 'fact' || ownerType === 'tool';
+}
+
 export interface IntelligenceReviewScheduleItem {
   reviewType: IntelligenceReviewType;
   cadenceDays: 30 | 90;

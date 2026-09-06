@@ -6,6 +6,7 @@ import {
   buildIntelligenceReviewSchedule,
   getLatestReviewAt,
   getLatestTimelineReviewAt,
+  isIntelligenceReviewApplicable,
   type IntelligenceReviewState,
   type IntelligenceReviewType,
 } from '@/lib/services/intelligence/reviewSchedule';
@@ -86,7 +87,9 @@ async function auditIntelligenceMonitorRuntime() {
         getLatestTimelineReviewAt(events, 'decision'),
       ),
       nextDecisionReviewAt: typeof metadata.nextDecisionReviewAt === 'string' ? metadata.nextDecisionReviewAt : null,
-    }).map((item) => ({ ...item, ownerType: profile.owner_type }));
+    })
+      .filter((item) => isIntelligenceReviewApplicable(item.reviewType, profile.owner_type))
+      .map((item) => ({ ...item, ownerType: profile.owner_type }));
   });
   const automaticWorkflowConfigured = hasAutomaticIntelligenceWorkflow();
   const pendingChanges = (changesResult.data || []).filter((change) => change.review_status === 'pending').length;

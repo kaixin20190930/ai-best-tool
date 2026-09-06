@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 
 import { detectIntelligenceClaimChanges, stableIntelligenceValue } from '@/lib/services/intelligence/changeDetector';
 import { resolveProductIntelligenceConflicts } from '@/lib/services/intelligence/conflictResolver';
@@ -21,6 +22,7 @@ import {
   buildIntelligenceReviewSchedule,
   getLatestReviewAt,
   getLatestTimelineReviewAt,
+  isIntelligenceReviewApplicable,
 } from '@/lib/services/intelligence/reviewSchedule';
 import {
   isEvidenceHtmlContentType,
@@ -32,6 +34,10 @@ import {
 import { buildIntelligenceSignalCandidates } from '@/lib/services/intelligence/signalPersistence';
 
 function run() {
+  const adminIntelligencePage = readFileSync('app/[locale]/(admin)/admin/intelligence/page.tsx', 'utf8');
+  assert(adminIntelligencePage.includes("{ label: 'Tools', value: 'tool' }"));
+  assert(adminIntelligencePage.includes("{ label: 'Distribution history', value: 'distribution_project' }"));
+  assert(adminIntelligencePage.includes('ownerType=${ownerType}&reviewType=${filter.type}'));
   assert.deepEqual(
     selectDiscoveredPages(
       [
@@ -112,6 +118,11 @@ function run() {
     ],
   );
   assert.equal(reviewSchedule[1]?.state, 'unscheduled');
+  assert.equal(isIntelligenceReviewApplicable('fact', 'site'), true);
+  assert.equal(isIntelligenceReviewApplicable('fact', 'distribution_project'), true);
+  assert.equal(isIntelligenceReviewApplicable('decision', 'tool'), true);
+  assert.equal(isIntelligenceReviewApplicable('decision', 'site'), false);
+  assert.equal(isIntelligenceReviewApplicable('decision', 'distribution_project'), false);
   assert.equal(
     getLatestTimelineReviewAt(
       [

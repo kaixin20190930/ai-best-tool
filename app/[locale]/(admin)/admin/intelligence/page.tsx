@@ -61,11 +61,11 @@ export default async function AdminIntelligencePage({
   };
 }) {
   const ownerType =
-    searchParams.ownerType === 'tool' ||
+    searchParams.ownerType === 'all' ||
     searchParams.ownerType === 'distribution_project' ||
     searchParams.ownerType === 'site'
       ? searchParams.ownerType
-      : 'all';
+      : 'tool';
   const status =
     searchParams.status === 'pending' ||
     searchParams.status === 'ready' ||
@@ -111,6 +111,38 @@ export default async function AdminIntelligencePage({
           Back to tools <ArrowUpRight className='h-4 w-4' />
         </Link>
       </div>
+
+      <section className='rounded-2xl border border-slate-200 bg-white p-4 shadow-sm'>
+        <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
+          <div>
+            <p className='text-xs font-bold uppercase tracking-[0.18em] text-cyan-700'>Profile scope</p>
+            <p className='mt-1 text-sm text-slate-600'>
+              Tools are the default decision-review scope. Site and paused distribution evidence remain available for
+              factual review without reducing tool baseline completion.
+            </p>
+          </div>
+          <div className='flex flex-wrap gap-2'>
+            {[
+              { label: 'Tools', value: 'tool' },
+              { label: 'Site evidence', value: 'site' },
+              { label: 'Distribution history', value: 'distribution_project' },
+              { label: 'All profiles', value: 'all' },
+            ].map((scope) => (
+              <Link
+                key={scope.value}
+                href={`/admin/intelligence?ownerType=${scope.value}`}
+                className={`rounded-full px-3 py-1.5 text-xs font-semibold ${
+                  ownerType === scope.value
+                    ? 'bg-slate-950 text-white'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                }`}
+              >
+                {scope.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section className='grid gap-3 sm:grid-cols-2 lg:grid-cols-6'>
         <div className='rounded-2xl border border-slate-200 bg-white p-4 shadow-sm'>
@@ -231,7 +263,7 @@ export default async function AdminIntelligencePage({
           ].map((filter) => (
             <Link
               key={filter.type}
-              href={`/admin/intelligence?reviewType=${filter.type}`}
+              href={`/admin/intelligence?ownerType=${ownerType}&reviewType=${filter.type}`}
               className={`rounded-full px-3 py-1.5 text-xs font-semibold ${
                 (searchParams.reviewType || 'all') === filter.type
                   ? 'bg-slate-950 text-white'
@@ -252,7 +284,7 @@ export default async function AdminIntelligencePage({
           ].map((filter) => (
             <Link
               key={filter.state}
-              href={`/admin/intelligence?reviewType=${searchParams.reviewType || 'all'}&reviewState=${filter.state}`}
+              href={`/admin/intelligence?ownerType=${ownerType}&reviewType=${searchParams.reviewType || 'all'}&reviewState=${filter.state}`}
               className={`rounded-full px-3 py-1.5 text-xs font-semibold ${
                 (searchParams.reviewState || 'all') === filter.state
                   ? 'bg-cyan-700 text-white'

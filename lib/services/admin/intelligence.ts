@@ -12,6 +12,7 @@ import {
   buildIntelligenceReviewSchedule,
   getLatestReviewAt,
   getLatestTimelineReviewAt,
+  isIntelligenceReviewApplicable,
   type IntelligenceReviewState,
   type IntelligenceReviewType,
 } from '@/lib/services/intelligence/reviewSchedule';
@@ -549,31 +550,33 @@ export async function getAdminIntelligenceReviewQueue(input?: {
         now,
       });
 
-      return schedule.map((review) => ({
-        id: String(profile.id),
-        productName: String(profile.product_name || ''),
-        canonicalDomain: String(profile.canonical_domain || ''),
-        ownerType: profile.owner_type as ProductIntelligenceProfile['ownerType'],
-        status: profile.profile_status as IntelligenceProfileStatus,
-        reviewType: review.reviewType,
-        cadenceDays: review.cadenceDays,
-        basisAt: review.basisAt,
-        dueAt: review.dueAt,
-        daysUntilDue: review.daysUntilDue,
-        state: review.state,
-        action:
-          review.state === 'overdue'
-            ? `Review ${review.reviewType} evidence today`
-            : review.state === 'due_soon'
-              ? `Review ${review.reviewType} evidence within ${Math.max(review.daysUntilDue || 1, 1)} days`
-              : review.state === 'unscheduled'
-                ? `Establish a ${review.cadenceDays}-day ${review.reviewType} review baseline`
-                : `Review ${review.reviewType} evidence in ${review.daysUntilDue} days`,
-        reason:
-          review.reviewType === 'fact'
-            ? 'Recheck official pricing, features, documentation, and limitations.'
-            : 'Reassess best-fit, not-fit, limitations, and comparison guidance.',
-      }));
+      return schedule
+        .filter((review) => isIntelligenceReviewApplicable(review.reviewType, String(profile.owner_type || '')))
+        .map((review) => ({
+          id: String(profile.id),
+          productName: String(profile.product_name || ''),
+          canonicalDomain: String(profile.canonical_domain || ''),
+          ownerType: profile.owner_type as ProductIntelligenceProfile['ownerType'],
+          status: profile.profile_status as IntelligenceProfileStatus,
+          reviewType: review.reviewType,
+          cadenceDays: review.cadenceDays,
+          basisAt: review.basisAt,
+          dueAt: review.dueAt,
+          daysUntilDue: review.daysUntilDue,
+          state: review.state,
+          action:
+            review.state === 'overdue'
+              ? `Review ${review.reviewType} evidence today`
+              : review.state === 'due_soon'
+                ? `Review ${review.reviewType} evidence within ${Math.max(review.daysUntilDue || 1, 1)} days`
+                : review.state === 'unscheduled'
+                  ? `Establish a ${review.cadenceDays}-day ${review.reviewType} review baseline`
+                  : `Review ${review.reviewType} evidence in ${review.daysUntilDue} days`,
+          reason:
+            review.reviewType === 'fact'
+              ? 'Recheck official pricing, features, documentation, and limitations.'
+              : 'Reassess best-fit, not-fit, limitations, and comparison guidance.',
+        }));
     })
     .filter((item) => !input?.reviewType || input.reviewType === 'all' || item.reviewType === input.reviewType)
     .filter((item) => !input?.state || input.state === 'all' || item.state === input.state)
