@@ -70,7 +70,7 @@ TypeScript、数据库 rollback/commit/status 与完整 build 均通过，提交
 差异化、证据账本、变化追踪与商业化触发条件见
 [AI 工具决策平台差异化与商业化实施路线图](./EVIDENCE_DECISION_PLATFORM_ROADMAP_CN.md)。
 
-### 当前维护优先级（2026-09-04）
+### 当前维护优先级（更新至 2026-09-06）
 
 RC-05进行中：Adobe/Salesforce的RC-05A/B已完成生产发布、8页验收和数据库原文纠偏；范围正文、列表/静态兜底和metadata统一，
 撤下通用价格/评分/比较卡及单软件schema，comparison等价替代暗示已修正。生产复核排期已安全补至2026-09-11，缺排期为0；
@@ -94,8 +94,9 @@ tools 记录，两者原四页仍在 sitemap。原始 GSC 文件当前不可用�
 
 维护审计、数据库字段缺口和排期明细见 [本轮维护审计](./MAINTENANCE_AUDIT_2026-09-04_CN.md)。
 
-Gamma 验收补充：`33e65beb` 部署成功，但新简版提示被官方快照去重逻辑隐藏。已修复实际展示分支，复用统一文案，并新增双语实
-际 HTML 验收；具体说明见 [历史核对及维护记录](./INDEX_HISTORY_RECONCILIATION_2026-09-04_CN.md)。整页复核仍未完成。
+Gamma 验收补充：`33e65beb` 部署成功后发现新简版提示被官方快照去重逻辑隐藏，随后已修复实际展示分支，复用统一文案并新增
+双语实际 HTML 验收。官方事实复核与 CHG-02 基线均已完成；未做的仅是账户结账和导出实操，不能把该实操缺口表述为整页事实
+复核仍在进行。具体说明见 [历史核对及维护记录](./INDEX_HISTORY_RECONCILIATION_2026-09-04_CN.md)。
 
 - P0：统一数据库保护已应用生产，提交 `9fa46afc` 的 Vercel 部署已确认成功。已补记 9 月 1 日十次可证实迁移，与 9 月 4 日两
   次合计至少 12 次，本周剩余额度 0；完整旧历史仍有未知部分，不伪造日期、不自动恢复批准。补账幂等/事务回滚及工具行不变断
@@ -108,8 +109,9 @@ Gamma 验收补充：`33e65beb` 部署成功，但新简版提示被官方快照
   `monitor/noindex`，下次事实复查为 10 月 6 日；独立论文验证码与 Gamma 实际结账金额缺口保留，不重置市场验证。详见
   [本轮维护](./CONSENSUS_GAMMA_MAINTENANCE_2026-09-04_CN.md)。
 - P1：Emdash 已依既有 9 月 1 日核验 +30 天补齐生产复查日期 10 月 1 日；未改正文、验证日期或索引状态。缺排期从 23 降为
-  22，剩余项不能自动补为已验证，分类见
-  [历史工具排期审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。MAINT-05 完成，MAINT-04 继续分批核验。
+  22 是该阶段历史快照；后续对象复核与安全收口已将缺排期降至 0，未用补日期冒充事实核验。分类与完整执行记录见
+  [历史工具排期审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。MAINT-04 与 MAINT-05 均已完成；Adobe、Salesforce
+  Einstein 的 URL/索引处置继续归 RC-05C，等待 URL 级数据，不再归入排期补齐任务。
 - P1：CHG-02 已完成10/10。Fathom、Claude、Consensus、Gamma、Luma Dream Machine、n8n、OpenRouter、Runway、Dune、The Graph
   均有真实幂等`fact`基线；The Graph以官网产品名和定位完成最后一条。基线主锚点固定按产品名、官网定位、其他事实排序，同步
   脚本统一从Supabase验证工具owner，提取器限制站点身份只取首页并拦截假套餐。ElevenLabs/Descript/Perplexity/Make按robots停

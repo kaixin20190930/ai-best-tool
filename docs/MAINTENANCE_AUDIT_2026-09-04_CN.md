@@ -40,7 +40,7 @@
 | MAINT-03 | P1     | Consensus、Gamma 到期复核     | 两者 monitor；9 月 6 日按当前官方资料完成复核                     | 已完成；Consensus无变化，Gamma纠正导出边界；下次事实复查10月6日              | Codex；市场复核/账户实操仍独立处理 |
 | MAINT-04 | P1     | 历史工具维护字段补齐          | 缺排期 23 → 22 → 21 → 19 → 15 → 11 → 5 → 2 → 0                    | 已完成；Adobe/Salesforce仅补2026-09-11复核排期，未冒充完成核验                | Codex；RC-05C URL决策仍待数据      |
 | MAINT-05 | P1     | Emdash 复查排期               | 依据已有 9 月 1 日核验 +30 天                                     | 已完成：生产 next_review_date 为 10 月 1 日；幂等与其他字段不变校验通过       | Codex                              |
-| MAINT-06 | P1     | Change Timeline 首批真实基线  | 主台账仍为 Fathom、Claude、Consensus，3/10                        | Gamma 下一项；robots 受限来源不绕过                                           | Codex；必要时人工来源材料          |
+| MAINT-06 | P1     | Change Timeline 首批真实基线  | 10 个工具均有真实、幂等的 fact 基线；受限来源未用于凑数           | 已完成 10/10；最后由 The Graph 完成，Gamma 等记录均非伪造实测                 | Codex；后续按复查日持续维护        |
 | MAINT-07 | P1     | GSC / Coverage 周度复盘       | 现有主台账性能基线为 8 月 31 日导出；技术通过不代表 Google 已收录 | 等下一次同期数据后评估，不为等待数据扩页                                      | 用户提供 7 天、28 天及 Coverage    |
 | MAINT-08 | P2     | Stack/Trial 实际使用验收      | 技术阶段已完成，真实使用门槛仍需验证                              | 保持维护，不新增功能                                                          | 用户真实工具栈/试用反馈，Codex复盘 |
 | MAINT-09 | P1     | SEO smoke 退出与超时保护      | 原脚本所有断言通过后未自行结束，重定向请求无超时且响应体未释放    | 已修复；重跑所有生产断言通过并以 0 退出                                       | Codex                              |
@@ -99,6 +99,12 @@ MAINT-04排期收口，不代表RC-05C URL/索引决策或独立市场核验完�
 - Gamma 当前公开页面可核对 Free、Plus、Pro、Ultra 的能力和 credits，但没有可靠公开金额文本；不猜测实际账单。两页均未做
   登录账户、付费或导出实操，`editorial.reviewedAt` 与 `marketValidation.reviewedAt` 不刷新。
 - 两页保持 `published + monitor + noindex` 并继续退出 sitemap；下次事实复查统一为 2026-10-06。
+
+### MAINT-06 最终状态校正
+
+- Change Timeline 首批基线已完成 10/10：Fathom、Claude、Consensus、Gamma、Luma Dream Machine、n8n、OpenRouter、Runway、Dune、The Graph。
+- 每条均来自受控核验且使用 `review_scope=fact`，重复执行保持幂等；证据不足或受 robots 限制的来源没有用于补数量。
+- 该完成状态只代表首批事实基线，不代表自动抓取持续运行，也不代表亲手试用。后续变化仍须进入待审差异并经人工或 owner 核验。
 
 ### 后续执行：历史补账与局部内容维护
 

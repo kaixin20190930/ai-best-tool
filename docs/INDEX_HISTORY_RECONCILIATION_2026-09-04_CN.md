@@ -39,7 +39,7 @@ MAINT-01 技术保护与本周可证实记录补账分别验收；本周禁止�
 - Consensus：官方帮助中心仍列出 Pro $20/月或 $144/年、Deep $65/月或 $540/年，与现有迁移正文一致；本轮未据此调整价格或刷新整页核验日期。来源：[Subscription Plans](https://help.consensus.app/en/articles/10087865-subscription-plans)。直接 pricing 页未获取可读正文，使用官方帮助中心交叉核对。
 - Gamma：官方导出说明明确 Google Slides 通过 PPTX 上传，可能替换嵌入字体，Word 导出仍不支持。已将此具体限制写入双语 priority evidence 卡，替代泛泛的视觉差异提示；卡片检查日期更新为本次实际核查日期，不等于整页审核日期。来源：[官方导出说明](https://help.gamma.app/en/articles/8022861-what-s-the-easiest-way-to-export-my-gamma)。
 - Gamma 当前定价页可读取套餐能力，但本次文本未给出可可靠核对的价格数字，因此没有凭旧数值宣称新价格已验证。来源：[Pricing](https://gamma.app/pricing)。
-- 两者仍维持 monitor；本轮未改数据库 next_review_date、市场验证结论或整页 reviewedAt。MAINT-03 仍进行中；剩余为完整来源、内容一致性与复查排期，Gamma 的 CHG-02 变化账本基线也未因此算完成。
+- 两者仍维持 monitor；该轮未改数据库 next_review_date、市场验证结论或整页 reviewedAt。此句仅记录当时阶段状态；截至 2026-09-06，MAINT-03 官方事实复核和 Gamma 的 CHG-02 事实基线均已独立完成，账户结账与导出实操仍未冒充已验证。
 
 ## Gamma 部署后可见性修正
 

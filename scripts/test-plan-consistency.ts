@@ -62,9 +62,18 @@ function assertCurrentNavigation(document: string) {
     '下一项独立修复为已发现的工具页登录',
     '新增待修：工具页登录',
     '新发现，待定位修复',
+    'MAINT-04 继续分批核验',
+    'Gamma 下一项；robots 受限来源不绕过',
+    '整页复核仍进行中',
+    'MAINT-03 仍进行中',
   ]) {
     assert(!document.includes(stale), `Obsolete current navigation status: ${stale}`);
   }
+}
+
+function assertMaintenanceCloseout(document: string) {
+  assert(document.includes('MAINT-04 与 MAINT-05 均已完成'), 'Main plan must close both maintenance schedule tasks');
+  assert(document.includes('CHG-02 已完成10/10'), 'Main plan must retain the completed timeline baseline');
 }
 
 const counts = countTasks(weekly);
@@ -82,6 +91,10 @@ for (const document of [
 for (const document of [main, weekly]) {
   assert(document.includes(`./${planName}`), 'Closeout work must link back to the existing main plan');
 }
+assertMaintenanceCloseout(main);
+const maintenanceAudit = read('MAINTENANCE_AUDIT_2026-09-04_CN.md');
+assert(maintenanceAudit.includes('已完成 10/10；最后由 The Graph 完成'), 'Maintenance audit must match CHG-02');
+assert(maintenanceAudit.includes('MAINT-06 最终状态校正'), 'Maintenance audit must expose the current baseline state');
 const roadmap = read('EVIDENCE_DECISION_PLATFORM_ROADMAP_CN.md');
 const mon = roadmap.split('\n').find((line) => line.startsWith('| MON-01')) || '';
 const lnk = roadmap.split('\n').find((line) => line.startsWith('| LNK-01')) || '';
@@ -105,6 +118,8 @@ assert.throws(() => countTasks(weekly.replace(/^\| W4-03 \|.*$/m, '')));
 assert.throws(() => countTasks(weekly.replace('| 需要数据 |', '| 完成啦 |')));
 assert.throws(() => assertProgress('一级任务13/13完成（100.0%）', { ...counts, complete: 9 }));
 assert.throws(() => assertCurrentNavigation('新发现，待定位修复'));
+assert.throws(() => assertCurrentNavigation('MAINT-04 继续分批核验'));
+assert.throws(() => assertMaintenanceCloseout('CHG-02 已完成10/10'));
 console.log(
   JSON.stringify(
     { success: true, scope: 'Known active-plan contracts, not a semantic audit of every historical document', counts },
