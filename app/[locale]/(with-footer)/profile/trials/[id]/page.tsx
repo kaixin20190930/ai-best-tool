@@ -5,6 +5,7 @@ import { Link } from '@/app/navigation';
 import { query } from '@/db/neon/client';
 import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { getLocalizedField } from '@/lib/services/tools';
+import { canCompleteTrial, getTrialDaysRemaining } from '@/lib/services/stack/trialWindow';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata = { title: '7-Day Trial Scorecard', ...getNoindexMetadata() };
@@ -31,9 +32,15 @@ export default async function TrialDetailPage({ params }: { params: { locale: st
     const actual = check.actual_value && typeof check.actual_value === 'object' ? check.actual_value as Record<string, unknown> : {};
     return { id: String(check.id), sequence: Number(check.sequence), label: String(check.label), result: String(check.result), actualNote: typeof actual.note === 'string' ? actual.note : null };
   });
-  const now = Date.now();
+  const now = new Date();
   const endsAt = new Date(String(trial.ends_at));
-  const daysLeft = Math.max(0, Math.ceil((endsAt.getTime() - now) / (24 * 60 * 60 * 1000)));
+  const daysLeft = getTrialDaysRemaining(endsAt, now);
+  const completionAvailable = canCompleteTrial(endsAt, now);
+  const completionAvailableLabel = new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+    timeZone: 'Asia/Shanghai',
+  }).format(endsAt);
 
   return (
     <main className='theme-page min-h-screen bg-slate-50 py-10'>
@@ -45,7 +52,7 @@ export default async function TrialDetailPage({ params }: { params: { locale: st
           <div className='mt-5 grid gap-3 sm:grid-cols-3'><div className='rounded-xl bg-white/5 p-3'><p className='text-xs text-slate-400'>{isChinese ? '开始' : 'Started'}</p><p className='mt-1 font-bold'>{String(trial.started_at).slice(0, 10)}</p></div><div className='rounded-xl bg-white/5 p-3'><p className='text-xs text-slate-400'>{isChinese ? '结束' : 'Ends'}</p><p className='mt-1 font-bold'>{String(trial.ends_at).slice(0, 10)}</p></div><div className='rounded-xl bg-white/5 p-3'><p className='text-xs text-slate-400'>{isChinese ? '剩余' : 'Remaining'}</p><p className='mt-1 font-bold'>{daysLeft} {isChinese ? '天' : 'days'}</p></div></div>
           {trial.status === 'completed' ? <div className='mt-5 rounded-xl bg-emerald-400/10 p-4 text-sm text-emerald-200'>{isChinese ? '最终决定：' : 'Final decision: '}<strong>{String(trial.final_decision)}</strong>{trial.private_notes ? <p className='mt-2 text-emerald-100/80'>{String(trial.private_notes)}</p> : null}</div> : null}
         </section>
-        <div className='mt-6'><TrialScorecard locale={params.locale} scorecardId={params.id} status={String(trial.status)} checks={checks} /></div>
+        <div className='mt-6'><TrialScorecard locale={params.locale} scorecardId={params.id} status={String(trial.status)} checks={checks} completionAvailable={completionAvailable} completionAvailableLabel={completionAvailableLabel} /></div>
       </div>
     </main>
   );

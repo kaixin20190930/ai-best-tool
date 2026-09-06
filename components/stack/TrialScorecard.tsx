@@ -14,11 +14,15 @@ export default function TrialScorecard({
   scorecardId,
   status,
   checks,
+  completionAvailable,
+  completionAvailableLabel,
 }: {
   locale: string;
   scorecardId: string;
   status: string;
   checks: TrialCheckView[];
+  completionAvailable: boolean;
+  completionAvailableLabel: string;
 }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const router = useRouter();
@@ -92,12 +96,12 @@ export default function TrialScorecard({
 
       {editable ? <section className='rounded-3xl border border-cyan-200 bg-cyan-50 p-5'>
         <h2 className='text-xl font-bold text-cyan-950'>{isChinese ? '做最终决定' : 'Make the final decision'}</h2>
-        <p className='mt-2 text-sm text-cyan-900'>{pendingCount > 0 ? (isChinese ? `还有 ${pendingCount} 项未处理。可以通过、失败或跳过。` : `${pendingCount} checks remain. Pass, fail, or skip each one.`) : (isChinese ? '所有检查已处理，可以保存最终决定。' : 'All checks are resolved. Save the final decision.')}</p>
+        <p className='mt-2 text-sm text-cyan-900'>{pendingCount > 0 ? (isChinese ? `还有 ${pendingCount} 项未处理。可以通过、失败或跳过。` : `${pendingCount} checks remain. Pass, fail, or skip each one.`) : completionAvailable ? (isChinese ? '所有检查已处理，可以保存最终决定。' : 'All checks are resolved. Save the final decision.') : (isChinese ? `检查项已记录，但完整观察期尚未结束。最终决定将于 ${completionAvailableLabel} 开放。` : `Checks are recorded, but the observation window is still active. The final decision unlocks on ${completionAvailableLabel}.`)}</p>
         <div className='mt-4 grid gap-3 sm:grid-cols-3'>
           {(['keep', 'cancel', 'compare'] as const).map((decision) => <label key={decision} className='flex cursor-pointer items-center gap-2 rounded-xl border border-cyan-200 bg-white p-3 text-sm font-semibold text-slate-800'><input type='radio' name='finalDecision' value={decision} checked={finalDecision === decision} onChange={() => setFinalDecision(decision)} disabled={isPending} className='accent-cyan-700' />{decision}</label>)}
         </div>
         <textarea value={privateNotes} onChange={(event) => setPrivateNotes(event.target.value)} disabled={isPending} rows={3} maxLength={2000} placeholder={isChinese ? '记录最终判断的私有备注（可选）' : 'Private notes for your final decision (optional)'} className='mt-4 w-full rounded-xl border border-cyan-200 bg-white px-3 py-2.5 text-sm' />
-        <button type='button' onClick={complete} disabled={isPending || pendingCount > 0} className='mt-3 inline-flex items-center gap-2 rounded-xl bg-cyan-800 px-4 py-2.5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50'>
+        <button type='button' onClick={complete} disabled={isPending || pendingCount > 0 || !completionAvailable} className='mt-3 inline-flex items-center gap-2 rounded-xl bg-cyan-800 px-4 py-2.5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50'>
           {pendingAction === 'complete' ? <Loader2 className='size-4 animate-spin' /> : <CheckCircle2 className='size-4' />}
           {pendingAction === 'complete' ? (isChinese ? '正在保存最终决定…' : 'Saving final decision...') : (isChinese ? '完成试用并保存决定' : 'Complete trial and save decision')}
         </button>

@@ -6,6 +6,7 @@ import { createNotification } from '@/app/actions/notifications';
 import { query } from '@/db/neon/client';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { createClient } from '@/lib/supabase/server';
+import { canCompleteTrial } from '@/lib/services/stack/trialWindow';
 
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const checkResults = new Set(['pass', 'fail', 'skipped']);
@@ -215,7 +216,7 @@ export async function completeTrialScorecard(input: {
     const admin = createAdminClient();
     const { data: scorecard } = await admin
       .from('trial_scorecards')
-      .select('id, status')
+      .select('id, status, ends_at')
       .eq('id', input.scorecardId)
       .eq('user_id', userId)
       .maybeSingle();
@@ -225,6 +226,14 @@ export async function completeTrialScorecard(input: {
     }
     if (!['planned', 'active'].includes(String(scorecard.status))) {
       return { success: false, code: 'TRIAL_NOT_EDITABLE', message: 'This trial can no longer be completed.' };
+    }
+    const completedAt = new Date();
+    if (!canCompleteTrial(String(scorecard.ends_at), completedAt)) {
+      return {
+        success: false,
+        code: 'TRIAL_WINDOW_ACTIVE',
+        message: 'The final decision unlocks after the full 7-day observation window ends.',
+      };
     }
     const { data: checks, error: checksError } = await admin
       .from('trial_scorecard_checks')
@@ -246,6 +255,7 @@ export async function completeTrialScorecard(input: {
       .eq('id', input.scorecardId)
       .eq('user_id', userId)
       .in('status', ['planned', 'active'])
+      .lte('ends_at', completedAt.toISOString())
       .select('id')
       .maybeSingle();
     if (error || !data) return { success: false, code: 'TRIAL_COMPLETE_FAILED', message: 'Unable to complete this trial.' };
