@@ -21,12 +21,11 @@ import {
 } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { getLegacyToolScopeContent } from '@/lib/config/legacyToolScopeReviews';
 import { PRIORITY_TOOL_EVIDENCE } from '@/lib/config/priorityToolEvidence';
 import { PRIORITY_TOOL_FALLBACK_PROFILES } from '@/lib/config/priorityToolFallbacks';
-import TOOL_MAINTENANCE_REVIEWS from '@/lib/config/toolMaintenanceReviews';
-import LegacyToolScopePage from '@/components/tools/LegacyToolScopePage';
-import { getLegacyToolScopeContent } from '@/lib/config/legacyToolScopeReviews';
 import { getSafetyToolReview } from '@/lib/config/safetyToolReviews';
+import TOOL_MAINTENANCE_REVIEWS from '@/lib/config/toolMaintenanceReviews';
 import { getCanonicalToolSlug, getLocalizedToolPath, isLegacyToolSlug } from '@/lib/config/toolRouteAliases';
 import { BASE_URL } from '@/lib/env';
 import { buildLoginHref } from '@/lib/navigation/localizedPaths';
@@ -66,8 +65,9 @@ import SeoBreadcrumbs from '@/components/seo/SeoBreadcrumbs';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import ShareButton from '@/components/ShareButton';
 import ToolFeedbackBar from '@/components/ToolFeedbackBar';
-import TrackableLink from '@/components/TrackableLink';
+import LegacyToolScopePage from '@/components/tools/LegacyToolScopePage';
 import SafetyToolArchivePage from '@/components/tools/SafetyToolArchivePage';
+import TrackableLink from '@/components/TrackableLink';
 import { getToolStats } from '@/app/actions/analytics';
 import { getCommentCount } from '@/app/actions/comments';
 import { isFavorited } from '@/app/actions/favorites';
@@ -3298,9 +3298,10 @@ export async function generateMetadata({
     // Get localized content if available
     const scopeCorrection = getLegacyToolScopeContent(canonicalSlug, locale);
     const safetyCorrection = getSafetyToolReview(canonicalSlug, locale);
-    const toolTitle = safetyCorrection?.title || scopeCorrection?.title || (dbTool
-      ? getLocalizedField(dbTool.title, locale) || data?.title || websiteName
-      : data?.title || websiteName);
+    const toolTitle =
+      safetyCorrection?.title ||
+      scopeCorrection?.title ||
+      (dbTool ? getLocalizedField(dbTool.title, locale) || data?.title || websiteName : data?.title || websiteName);
 
     const originalDescription = dbTool
       ? getLocalizedField(dbTool.content, locale) || data?.content || ''
@@ -3499,8 +3500,8 @@ export default async function Page({
             ratingCount: 0,
           })),
           getCommentCount(toolId).catch(() => 0),
-          getPublicToolEvidenceLedger(toolId).catch(() => null),
-          getPublicToolChangeTimeline(toolId).catch(() => []),
+          getPublicToolEvidenceLedger(toolId, canonicalSlug).catch(() => null),
+          getPublicToolChangeTimeline(toolId, canonicalSlug).catch(() => []),
           getReviewedToolRelationships(canonicalSlug, locale).catch(() => []),
           getToolDecisionCardV2(toolId, locale).catch(() => null),
         ]);

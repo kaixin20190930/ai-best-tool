@@ -153,24 +153,26 @@ assert.equal(baselineSeeder.includes('editor-reviewed, conflict-free claim'), tr
 assert.equal(baselineSeeder.includes('--repair-existing'), true);
 assert.equal(baselineSeeder.includes("reviewScope: 'full'"), false);
 
-const publicReader = readFileSync(
-  resolve(process.cwd(), 'lib/services/intelligence/publicChangeTimeline.ts'),
-  'utf8',
-);
+const publicReader = readFileSync(resolve(process.cwd(), 'lib/services/intelligence/publicChangeTimeline.ts'), 'utf8');
 assert.equal(publicReader.includes(".eq('visibility', 'public')"), true);
-assert.equal(publicReader.includes(".eq('owner_type', 'tool')"), true);
 
 const toolDetailPage = readFileSync(
   resolve(process.cwd(), 'app/[locale]/(with-footer)/ai/[websiteName]/page.tsx'),
   'utf8',
 );
-assert.equal(toolDetailPage.includes('getPublicToolChangeTimeline(toolId)'), true);
+assert.equal(toolDetailPage.includes('getPublicToolChangeTimeline(toolId, canonicalSlug)'), true);
 assert.equal(toolDetailPage.includes('publicChangeTimeline.length > 0'), true);
 
-const publicPanel = readFileSync(
-  resolve(process.cwd(), 'components/intelligence/ChangeTimelinePanel.tsx'),
+const publicProfileResolver = readFileSync(
+  resolve(process.cwd(), 'lib/services/intelligence/publicToolProfile.ts'),
   'utf8',
 );
+assert.equal(publicProfileResolver.includes(".eq('owner_id', ownerId)"), true);
+assert.equal(publicProfileResolver.includes(".eq('owner_type', 'tool')"), true);
+assert.equal(publicProfileResolver.includes(".eq('name', canonicalSlug)"), true);
+assert.equal(publicProfileResolver.includes('.maybeSingle()'), true);
+
+const publicPanel = readFileSync(resolve(process.cwd(), 'components/intelligence/ChangeTimelinePanel.tsx'), 'utf8');
 assert.equal(publicPanel.includes('data-change-timeline'), true);
 assert.equal(publicPanel.includes('Machine-detected candidates never enter automatically'), true);
 

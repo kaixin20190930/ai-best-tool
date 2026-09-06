@@ -9,6 +9,7 @@ loadEnvConfig(process.cwd());
 
 type DecisionBaseline = {
   toolId: string;
+  profileOwnerId?: string;
   profileId: string;
   toolName: string;
   profileName: string;
@@ -116,6 +117,29 @@ const baselines: Record<string, DecisionBaseline> = {
     notIdealFor: ['One stable provider is sufficient', 'Sensitive workloads without endpoint review'],
     alternatives: ['Direct provider API', 'LiteLLM', 'Managed AI gateway'],
   },
+  runway: {
+    toolId: 'f39ef025-c2b4-4392-be38-95a377931b5e',
+    profileOwnerId: '1abacadf-7a7b-490c-bf9a-11fd5fc16682',
+    profileId: '45a3f33b-ac86-404b-9955-2909c2b801cd',
+    toolName: 'runway',
+    profileName: 'Runway',
+    allowedSourceHosts: ['runway.com', 'help.runwayml.com'],
+    allowedPageQualityStatuses: ['monitor'],
+    minimumVerifiedClaims: 3,
+    title: 'Decision baseline established',
+    summary:
+      'Runway is a fit for creators and teams iterating on generative video shots, visual concepts, and AI-assisted edits when they can budget several attempts and finish continuity, audio, and delivery in a broader production workflow. Keep Luma Dream Machine, Adobe Firefly, or a professional timeline editor in the comparison when predictable accepted-shot cost, a simpler generation workflow, or complete deterministic post-production matters more than having generation and editing tools together.',
+    primarySourceUrl: 'https://help.runwayml.com/hc/en-us/articles/15124877443219-How-do-credits-work',
+    sourceUrls: [
+      'https://runway.com/pricing',
+      'https://help.runwayml.com/hc/en-us/articles/15124877443219-How-do-credits-work',
+      'https://help.runwayml.com/hc/en-us/articles/21668707517587-Can-I-use-the-content-I-made-in-Runway-for-commercial-purposes',
+      'https://help.runwayml.com/hc/en-us/articles/52685547867667-Trimming-and-Assembling-Clips-in-Studio',
+    ],
+    bestFit: ['Rapid video concept iteration', 'Generative shot editing'],
+    notIdealFor: ['Replacing a full professional timeline editor', 'Assuming every generation will be usable'],
+    alternatives: ['Luma Dream Machine', 'Adobe Firefly', 'Professional timeline editor'],
+  },
 };
 
 function readBaseline(args: string[]) {
@@ -187,7 +211,7 @@ async function main() {
   if (error) throw new Error(error.message);
   assert(profileResult.data, `${key}: intelligence profile missing`);
   assert.equal(profileResult.data.owner_type, 'tool');
-  assert.equal(profileResult.data.owner_id, baseline.toolId);
+  assert.equal(profileResult.data.owner_id, baseline.profileOwnerId || baseline.toolId);
   assert.equal(profileResult.data.product_name, baseline.profileName);
   const verifiedClaims = (claimsResult.data || []).filter(
     (claim) => claim.verification_status === 'verified' && claim.conflict_status === 'none',

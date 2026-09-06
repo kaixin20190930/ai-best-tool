@@ -2,9 +2,9 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
+import isVerifiedIntelligenceClaim from '@/lib/services/intelligence/claimVerification';
 import { buildEvidenceLedger, buildEvidenceLedgerEntry } from '@/lib/services/intelligence/evidenceLedger';
 import { prepareEvidenceReviewUpdate } from '@/lib/services/intelligence/evidenceReview';
-import isVerifiedIntelligenceClaim from '@/lib/services/intelligence/claimVerification';
 import type { ProductIntelligenceClaim, ProductIntelligenceSource } from '@/lib/services/intelligence/types';
 
 const now = new Date('2026-09-01T12:00:00.000Z');
@@ -201,6 +201,7 @@ assert.equal(
   'public ledger must only read explicitly verified claims',
 );
 assert.equal(publicService.includes(".eq('verification_status', 'candidate')"), false);
+assert.equal(publicService.includes('resolvePublicToolProfileId(supabase, toolId, canonicalSlug)'), true);
 
 const panel = readFileSync(resolve(process.cwd(), 'components/intelligence/EvidenceLedgerPanel.tsx'), 'utf8');
 [
@@ -216,10 +217,7 @@ const panel = readFileSync(resolve(process.cwd(), 'components/intelligence/Evide
 });
 assert.equal(panel.includes("type='range'"), false, 'the ledger must not collapse evidence into a score control');
 
-const reviewForm = readFileSync(
-  resolve(process.cwd(), 'components/admin/IntelligenceClaimReviewForm.tsx'),
-  'utf8',
-);
+const reviewForm = readFileSync(resolve(process.cwd(), 'components/admin/IntelligenceClaimReviewForm.tsx'), 'utf8');
 ['isPending', 'Saving review...', 'conflict', 'reviewIntelligenceClaim'].forEach((requiredFragment) => {
   assert.equal(reviewForm.includes(requiredFragment), true, `admin review form is missing ${requiredFragment}`);
 });
@@ -233,17 +231,25 @@ assert.equal(
 );
 
 const syncScript = readFileSync(resolve(process.cwd(), 'scripts/sync-product-intelligence.ts'), 'utf8');
-assert.equal(syncScript.includes('getToolById(ownerId)'), true, 'tool intelligence sync must validate its owner ID');
+assert.equal(
+  syncScript.includes("supabase.from('tools').select('id').eq('id', ownerId).maybeSingle()"),
+  true,
+  'tool intelligence sync must validate its owner ID in the persistence store',
+);
 assert.equal(syncScript.includes("'tool', 'distribution_project', 'site'"), true, 'sync must recognize site owners');
 assert.equal(
   syncScript.includes('does not exist in the directory'),
   true,
   'invalid tool identity errors must explain how to find the correct ID',
 );
-assert.equal(syncScript.includes('process.exit(process.exitCode || 0)'), true, 'sync CLI must exit after cleanup');
+assert.equal(syncScript.includes('process.exitCode = 1'), true, 'sync CLI must report persistence failures');
 
 const intelligenceDom = readFileSync(resolve(process.cwd(), 'lib/services/intelligence/dom.ts'), 'utf8');
-assert.equal(intelligenceDom.includes('VirtualConsole'), true, 'third-party DOM parsing must isolate noisy console errors');
+assert.equal(
+  intelligenceDom.includes('VirtualConsole'),
+  true,
+  'third-party DOM parsing must isolate noisy console errors',
+);
 
 const summaryRepair = readFileSync(
   resolve(process.cwd(), 'scripts/repair-intelligence-verification-summaries.ts'),

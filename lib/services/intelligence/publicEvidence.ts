@@ -1,6 +1,7 @@
 import { createAdminClient } from '@/lib/supabase/admin';
 
 import { buildEvidenceLedger, type ProductEvidenceLedgerEntry } from './evidenceLedger';
+import { resolvePublicToolProfileId } from './publicToolProfile';
 import type { ProductIntelligenceClaim, ProductIntelligenceSource } from './types';
 
 export interface PublicToolEvidenceLedger {
@@ -68,19 +69,14 @@ function mapClaim(row: Record<string, unknown>): ProductIntelligenceClaim {
   };
 }
 
-export async function getPublicToolEvidenceLedger(toolId: string): Promise<PublicToolEvidenceLedger | null> {
+export async function getPublicToolEvidenceLedger(
+  toolId: string,
+  canonicalSlug?: string,
+): Promise<PublicToolEvidenceLedger | null> {
   try {
     const supabase = createAdminClient();
-    const { data: profile, error: profileError } = await supabase
-      .from('product_intelligence_profiles')
-      .select('id')
-      .eq('owner_type', 'tool')
-      .eq('owner_id', toolId)
-      .maybeSingle();
-
-    if (profileError || !profile?.id) return null;
-
-    const profileId = String(profile.id);
+    const profileId = await resolvePublicToolProfileId(supabase, toolId, canonicalSlug);
+    if (!profileId) return null;
     const [sourcesResult, claimsResult] = await Promise.all([
       supabase.from('product_intelligence_sources').select('*').eq('profile_id', profileId),
       supabase
