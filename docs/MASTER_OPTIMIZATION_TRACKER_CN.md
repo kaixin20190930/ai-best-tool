@@ -81,6 +81,12 @@ TypeScript、数据库 rollback/commit/status 与完整 build 均通过，提交
 
 ### 当前维护优先级（更新至 2026-09-06）
 
+2026-09-07 持续收录准备：已建立 [下周成熟工具候选与发布节奏](./NEXT_WEEK_MATURE_TOOL_INTAKE_2026-09-07_CN.md)。候选顺序为
+Synthesia、Replit、Otter.ai，Lovable 与 Midjourney 因计费冲突或官方边界证据不足暂缓；Synthesia 已完成结构化预审，最早
+2026-09-08 才能进入生产迁移复核。当前没有配置 DataForSEO，因此不伪造搜索量；审核可以并行，但公开默认每天 1 个，全部先
+`monitor / noindex`，索引仍需单独批准。本轮只新增文档和门禁数据，不写生产、不改变 sitemap，四周一级进度仍为 10/13
+（76.9%）。
+
 RC-05进行中：Adobe/Salesforce的RC-05A/B已完成生产发布、8页验收和数据库原文纠偏；范围正文、列表/静态兜底和metadata统一，
 撤下通用价格/评分/比较卡及单软件schema，comparison等价替代暗示已修正。生产复核排期已安全补至2026-09-11，缺排期为0；
 RC-05C URL/索引处置与独立市场核验仍待数据。见 [本轮范围澄清](./LEGACY_PRODUCT_SCOPE_CLARIFICATION_2026-09-04_CN.md)，四

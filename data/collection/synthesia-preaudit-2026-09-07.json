@@ -1,0 +1,112 @@
+{
+  "slug": "synthesia",
+  "title": "Synthesia AI Video Platform",
+  "officialUrl": "https://www.synthesia.io/",
+  "existingRoute": "/ai/synthesia",
+  "action": "migrate_existing_fallback",
+  "status": "ready_for_next_slot",
+  "reviewedAt": "2026-09-07",
+  "publishNotBefore": "2026-09-08",
+  "sitemapChangeApproved": false,
+  "productionWriteApproved": false,
+  "category": {
+    "discoverySlug": "video-generator",
+    "storageSlug": "design-art"
+  },
+  "positioning": "A business AI video platform for teams producing presenter-led training, internal communications, product education, and localized videos from scripts, documents, templates, or presentations without a traditional studio workflow.",
+  "decisionAngles": [
+    "Presenter-led business video workflows versus cinematic or open-ended generative video creation",
+    "Script, document, PowerPoint, template, and blank-canvas starting points versus timeline-first editing",
+    "Shared generation credits and separate avatar add-ons versus a simple per-video subscription",
+    "Workspace roles and paid Full licenses versus occasional collaborators who only need a free role",
+    "Stock, personal, and studio avatars versus consent, likeness ownership, sharing, and brand-control requirements",
+    "Web application convenience versus API access, account-level keys, plan limits, and production automation controls",
+    "Fast multilingual production versus the need to review pronunciation, timing, translation, visual accuracy, and brand consistency"
+  ],
+  "pricingSnapshot": {
+    "checkedAt": "2026-09-07",
+    "billingUnit": "Current plans combine workspace access with shared credits consumed by video generation and related AI media operations; some custom avatar capabilities are separate add-ons, and enterprise credits can be allocated by workspace.",
+    "plans": [
+      "Free: limited access for evaluating the editor and AI video workflow",
+      "Starter and Creator: paid self-serve tiers with different usage allowances and creation features",
+      "Enterprise: custom organization terms, workspace administration, security, support, and scaled usage",
+      "Studio Avatar: a separately priced add-on rather than an entitlement that should be assumed in every paid plan"
+    ],
+    "volatileFields": [
+      "monthly and annual plan prices",
+      "credit allowances and the operations that consume credits",
+      "avatar entitlements and add-on prices",
+      "seat, license, workspace, API, and enterprise limits"
+    ],
+    "releaseGuard": "Recheck the live pricing, billing, license, avatar, and API documentation on release day; do not publish exact prices, credit quantities, or plan entitlements from this snapshot without that recheck."
+  },
+  "policyBoundaries": [
+    {
+      "label": "Avatar creation and sharing require explicit consent and ownership review",
+      "summary": "Personal avatar creation includes a live consent step, while avatar availability, sharing, deletion, and ownership depend on the avatar type and workspace relationship.",
+      "releaseGuard": "Never imply that a team can create, clone, transfer, or keep using another person's likeness without the required consent and current product permissions."
+    },
+    {
+      "label": "Workspace role and paid license are separate controls",
+      "summary": "A user's administrative role does not by itself describe paid creation access, and some creation actions can upgrade a free license to a paid Full license.",
+      "releaseGuard": "Recheck current license automation before describing collaborator access or estimating seat cost; warn administrators to review auto-upgrade behavior."
+    },
+    {
+      "label": "API keys are account-level credentials with plan and rate-limit boundaries",
+      "summary": "API access requires an eligible plan, keys belong to an account rather than a workspace, and test and production operations are subject to documented limits.",
+      "releaseGuard": "Do not describe workspace membership as sufficient API authorization; require account ownership, secret handling, and current rate-limit verification."
+    }
+  ],
+  "limitations": [
+    "Synthesia is optimized for structured presenter-led business video and is not a direct substitute for cinematic generation, advanced motion design, or unrestricted timeline editing.",
+    "Generation, dubbing, personalization, and AI stock operations can share a credit pool, so teams must model the actual mix of workflows rather than compare only the headline plan price.",
+    "Some avatar capabilities are separate add-ons, and user actions can affect paid license allocation; workspace administrators need cost and permission controls.",
+    "AI-generated speech, translation, pronunciation, timing, gestures, visuals, and factual claims still require human review before external or regulated use.",
+    "Personal avatar creation and reuse require consent and identity controls; likeness ownership and offboarding need an explicit policy.",
+    "API access is not included in every plan, API keys are tied to accounts, and rate limits or test-video limits can affect automated production.",
+    "Large projects are bounded by scene and duration limits, and complex source presentations may still require manual restructuring after import.",
+    "A polished avatar-led video can look generic or reduce trust when the audience expects a real expert, live demonstration, or authentic customer evidence."
+  ],
+  "marketValidation": {
+    "score": 96,
+    "verdict": "validated",
+    "rationale": "Synthesia has durable independent review volume, material funding and valuation coverage, and substantial business adoption claims. Its clearest decision value is a governed presenter-led business video workflow rather than generic text-to-video novelty. The recommendation remains conditional because credit accounting, avatar consent, license auto-upgrades, localization quality, and API ownership can materially change fit and cost.",
+    "strongSignals": [
+      "G2 listed more than 2,700 Synthesia reviews with a 4.6 rating at review time",
+      "Reuters reported a USD 180 million funding round and USD 2.1 billion valuation in January 2025",
+      "TechCrunch reported the same funding event and Synthesia's claim of adoption by more than 60,000 businesses",
+      "Synthesia reported passing USD 100 million in annual recurring revenue; this scale figure is company-reported and must remain labeled as such"
+    ],
+    "recurringUserFriction": [
+      "Credit consumption, avatar add-ons, paid licenses, and automated license upgrades make total cost less obvious than the headline subscription",
+      "Avatar realism, pronunciation, translation, scene timing, and visual relevance still need human quality control",
+      "Consent, likeness ownership, workspace offboarding, account-level API keys, and security controls require governance",
+      "Teams seeking cinematic generation or deep nonlinear editing can mistake presenter-led automation for a broader video-production replacement"
+    ]
+  },
+  "sources": {
+    "official": [
+      "https://www.synthesia.io/pricing",
+      "https://docs.synthesia.io/docs/billing-settings",
+      "https://docs.synthesia.io/docs/user-licenses",
+      "https://docs.synthesia.io/docs/video-creation",
+      "https://docs.synthesia.io/docs/personal-avatars",
+      "https://docs.synthesia.io/reference/introduction",
+      "https://www.synthesia.io/post/100-million-revenue-adobe-investment"
+    ],
+    "independent": [
+      "https://www.g2.com/products/synthesia/reviews",
+      "https://tech.yahoo.com/business/articles/synthesia-hits-2-1-billion-070357495.html",
+      "https://techcrunch.com/2025/01/14/synthesia-snaps-up-180m-at-a-2-1b-valuation/"
+    ]
+  },
+  "nextSlotChecklist": [
+    "Confirm there is still no production tools row using the synthesia slug or official domain",
+    "Recheck live pricing, credit consumption, avatar add-ons, user-license behavior, API eligibility, and rate limits",
+    "Verify the logo and thumbnail come from an official reusable source and render correctly in both locales",
+    "Keep the page focused on presenter-led business video rather than making an unsupported best general AI video claim",
+    "Preserve consent, likeness, license, account-level API, and human quality-review boundaries in both languages",
+    "Replace only the existing fallback route and do not create another canonical URL",
+    "Publish as monitor and noindex first; run evidence, alias, sitemap, TypeScript, full build, and production smoke checks before any later index decision"
+  ]
+}
