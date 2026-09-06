@@ -10,7 +10,7 @@
 四周实施排期见 [证据驱动目录优化计划](./FOUR_WEEK_EVIDENCE_LED_DIRECTORY_PLAN_CN.md)。
 
 当前收尾执行见 [质量收尾与状态校正子方案](./QUALITY_CLOSEOUT_IMPLEMENTATION_2026-09-04_CN.md)，不是新主线。四周一级任务
-9/13完成（69.2%）；持续运营、内容覆盖、生产验收与效果验证分别统计。
+10/13完成（76.9%）；持续运营、内容覆盖、生产验收与效果验证分别统计。
 
 2026-09-06 RC-07 第一组完成 4/17：OpenAI 家族历史记录已按公司、API 模型、桌面入口和停服产品分别纠偏，移除非官方安装包及
 无依据旧声明，统一官方入口并设为 `monitor`。数据库回读与缺排期 19 -> 15 已确认，专项测试、类型检查、完整 build 及中英文
@@ -45,8 +45,8 @@ RC-08 已完成分类事实边界和 MON 运行审计：分类页不再把框架
 双语边界和 5 项 7 天试用模板。该记录保持 `published + monitor + noindex`，不进入 sitemap，也不计作新的索引放行；Trial 页面选择
 Codex 后会自动载入可编辑的目标与检查项。生产事务写入、独立回读、专项测试、TypeScript 与完整 build 均通过。剩余动作必须由
 真实登录用户开始并完成 7 天 Trial，记录实际检查结果及 Keep/Compare/Cancel 决策；真实 Trial 已于北京时间 2026-09-06
-16:26 启动，预计 2026-09-13 16:26 到期，当前 5/5 检查项待观察。在最终决策写入前 RC-08 不标完成，四周一级任务比例仍为
-9/13。
+16:26 启动，预计 2026-09-13 16:26 到期，当前 5/5 检查项待观察。在最终决策写入前 RC-08 不标完成；其本身不改变四周一级
+任务统计，后续 W2-02 首批 14 条收口完成后四周比例已更新为 10/13。
 
 RC-01至RC-04首轮治理已完成：状态校正、结构化内链测试与计划一致性守卫、生产只读19项缺排期回查均已执行；专项测试及完整
 build通过。此轮没有完成新的工具核验，四周比例不增加；CI配置待提交后运行，下一项RC-05对象事实纠偏，不直接迁移URL或解除索
@@ -59,8 +59,13 @@ canonical。两者线上验收均已通过；n8n 提交 `37ceb6d2` 已获 Vercel
 2026-09-06 日常收录更新：W2-02B 累计处理 13/7-14。四个开发者入口此前指向 `/ai/github-copilot`，但该路径只有自动 fallback，
 而既有 `copilot` 实体实际代表 Microsoft Copilot，形成产品身份冲突。现已将 GitHub Copilot 建为独立生产实体，补齐当前套餐与
 AI Credits、IDE/Agent 工作流、内容排除边界、Stack Overflow 调查和独立评价证据，市场验证为 `97/100 / Validated`。生产回读
-确认 `published + monitor + noindex`，下次复查 2026-09-20；本周索引额度仍为 0，不进入 sitemap，不改变四周一级任务 9/13。
-专项内容、身份链接、TypeScript、数据库 rollback/commit/status 与完整 build 均通过，部署后页面验收待提交完成。
+确认 `published + monitor + noindex`，下次复查 2026-09-20；本周索引额度仍为 0，不进入 sitemap。专项内容、身份链接、
+TypeScript、数据库 rollback/commit/status 与完整 build 均通过，提交 `33f831ca` 已部署并完成双语生产验收。
+
+2026-09-06 W2-02 首批收口完成：NotebookLM 作为第 14 条，将站内已有 `/ai/notebooklm` 空壳 fallback 转为独立生产实体。旧种子
+的“完全免费”口径已纠正为 Standard 与 Google AI Plus/Pro/Ultra 并存的 freemium 边界；补齐来源额度、账号级数据处理、引用准确
+性、资料质量和开放网页发现边界，市场验证为 `90/100 / Validated`。生产回读为 `published + monitor + noindex`，复查日
+2026-09-20，不进入 sitemap。W2-02B 达到 14/14 并完成，四周一级任务更新为 10/13（76.9%）；后续候选处理转为持续运营。
 
 差异化、证据账本、变化追踪与商业化触发条件见
 [AI 工具决策平台差异化与商业化实施路线图](./EVIDENCE_DECISION_PLATFORM_ROADMAP_CN.md)。

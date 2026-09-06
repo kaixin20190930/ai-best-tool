@@ -4,15 +4,18 @@
 状态：执行中
 唯一上位计划：[主计划](./MASTER_OPTIMIZATION_TRACKER_CN.md)
 
-当前状态校正与剩余执行范围见 [质量收尾子方案](./QUALITY_CLOSEOUT_IMPLEMENTATION_2026-09-04_CN.md)。一级任务9/13完成（69.2%），不是SEO效果完成率；本表保留原13项，不因后续额外能力改变分母。
+当前状态校正与剩余执行范围见 [质量收尾子方案](./QUALITY_CLOSEOUT_IMPLEMENTATION_2026-09-04_CN.md)。一级任务10/13完成（76.9%），不是SEO效果完成率；本表保留原13项，不因后续额外能力改变分母。
 
 2026-09-06 真实使用补充：Codex 已作为 `monitor/noindex` Trial 候选写入生产，并提供可编辑的 7 天目标与 5 项检查模板；该动作只为
-RC-08 准备真实样本，不新增 sitemap URL、不批准索引，也不改变本计划 9/13 的统计。真实 Trial 已于北京时间 2026-09-06
+RC-08 准备真实样本，不新增 sitemap URL、不批准索引，也不直接改变本计划统计。真实 Trial 已于北京时间 2026-09-06
 16:26 启动，当前 5 项检查均待观察；预计 09-13 结束后才能形成 Keep/Compare/Cancel 结论。
 
 2026-09-06 W2-02B 补充：累计处理 13/7-14。GitHub Copilot 从无事实的 fallback 收口为独立于 Microsoft Copilot 的正式实体；
 四个既有开发入口继续使用原 `/ai/github-copilot` canonical。当前套餐、AI Credits、Agent/IDE、内容排除例外和独立采用证据已核验，
 生产状态固定为 `published + monitor + noindex`，不进入 sitemap；本周新增索引批准仍暂停。
+
+同日 W2-02B 第 14 条完成：NotebookLM 从已有空壳 fallback 收口为事实可维护的 `monitor/noindex` 实体，纠正旧“完全免费”口径，
+补齐分档来源额度、数据处理、引用准确性和来源发现边界。首批处理达到 14/14，W2-02 一级任务完成；四周进度更新为 10/13。
 
 2026-09-04 维护审计补充：统一数据库保护已部署并补齐本周可证实历史记录，9 月 1 日十次 + 9 月 4 日两次，至少 12 次，本周额度 0，保持暂停。旧历史未知部分不猜测；本轮未新增工具、未改索引状态。Gamma 决策卡补充 PPTX/字体边界，专项测试及完整 build 通过；整页复核仍进行中。详见 [维护审计](./MAINTENANCE_AUDIT_2026-09-04_CN.md)、[历史核对](./INDEX_HISTORY_RECONCILIATION_2026-09-04_CN.md)。
 
@@ -41,7 +44,7 @@ RC-08 准备真实样本，不新增 sitemap URL、不批准索引，也不改�
 | W1-03 | 第 1 周 | 候选与发布准入台账 | 每日 1-2 条处理、缺失原因可追踪、未通过不公开 | 已完成 | Codex + 用户 |
 | W1-04 | 第 1 周 | 自动回归 | build、详情页信号、生产 smoke 可重复执行 | 已完成 | Codex |
 | W2-01 | 第 2 周 | 后台资料完整度 / 审核队列 | 管理员能知道可否公开、缺什么、何时复查 | 已完成 | Codex |
-| W2-02 | 第 2 周 | 日常收录与候选池 | 每日新增 1-2 条；公开与索引解耦，每天最多 1 条、每周最多 5 条进入索引 | 进行中 | Codex + 用户 |
+| W2-02 | 第 2 周 | 日常收录与候选池 | 每日新增 1-2 条；公开与索引解耦，每天最多 1 条、每周最多 5 条进入索引 | 已完成（首批 14/14；后续持续运营） | Codex + 用户 |
 | W2-03 | 第 2 周 | Guide 联动 | Web3、Automation、Research 从任务入口进入相应 Decision Card | 已完成 | Codex |
 | W3-01 | 第 3 周 | 变化监测与复查队列 | AI 发现变化，人工/owner 确认后更新事实 | 已完成 | Codex + 用户 |
 | W3-02 | 第 3 周 | 真实信号闭环 | owner、纠错、评论能更新对应工具判断 | 已完成（W3-02A） | Codex + 用户 |
@@ -73,7 +76,7 @@ RC-08 准备真实样本，不新增 sitemap URL、不批准索引，也不改�
 | W2-01B | 编辑页增加证据来源、限制和 Decision Card 字段校验 | 1.5 天 | W2-01A | 缺字段无法误标可发布 | 已完成，提交 `4e3df958`；部署 `b48753cd`、production smoke 通过 |
 | W2-01C | 市场验证编辑器与前台成熟度状态 | 1 天 | W2-01B | 五维评分、独立证据和信号可编辑；收集型工具未验证不能发布；详情页展示验证依据 | 已完成；专项准入测试、tsc 与完整 build 通过 |
 | W2-02A | 生成未来 3 天候选池，每日处理 1-2 条 | 每日 1 小时 | W2-01 | 每条有发布/待补结论 | 已完成，提交 `d7ea18b5`；6 条生产候选按 3 天每天 2 条排期 |
-| W2-02B | 首批 7-14 条处理台账；只发布通过资料与市场双重准入的条目 | 每日 1 小时 | W2-02A | 无低质量例外放行 | 进行中，累计处理 13/7-14；GitHub Copilot 于 9 月 6 日收口既有 fallback，保持 monitor/noindex；累计处理数不是索引放行数 |
+| W2-02B | 首批 7-14 条处理台账；只发布通过资料与市场双重准入的条目 | 每日 1 小时 | W2-02A | 无低质量例外放行 | 已完成，累计处理 14/14；GitHub Copilot 与 NotebookLM 于 9 月 6 日收口既有 fallback，均保持 monitor/noindex |
 | W2-02D | 下一公开时段成熟工具预审；证据齐全但不提前发布 | 0.5 天 | W2-02B | 证据、边界和发布闸门自动校验；不改生产数据或 sitemap | 已完成；n8n 于 9 月 4 日复核并正式迁移，保留原 canonical，生产提交与独立回读通过 |
 | W2-02E | 后续公开时段成熟工具预审；建立可复用多候选门禁 | 0.5 天 | W2-02D | 所有预审文件统一校验，证据与边界不足即失败 | 已完成；OpenRouter 于 2026-09-04 完成复核、生产迁移与回读，沿用原 canonical |
 | W2-03A | Web3、Automation、Research Guide 统一任务入口 | 1 天 | W1-01C | 指向对应工具 Decision Card | 已完成，提交 `de1504e6`；专项结构测试、Decision Card 回归、tsc、完整 build 通过 |
@@ -237,6 +240,16 @@ RC-08 准备真实样本，不新增 sitemap URL、不批准索引，也不改�
 - 生产数据库完成 rollback 演练、正式事务与独立 status 回读，固定 ID 为 `8f09dc60-e77b-41e8-b2e0-9cefbc228d0d`；状态 `published + monitor`，下次复查 2026-09-20。
 - 索引保护：`getToolIndexDecision` 返回 `indexing_paused`，页面保持 noindex 且排除 sitemap；本周索引额度仍为 0。
 - 自动验收：内容/素材门禁、四个入口身份一致性、TypeScript、diff check 和完整 `pnpm run build` 均通过；部署后继续执行双语页面与 sitemap 专项验收。
+
+### W2-02B NotebookLM 空壳页收口（2026-09-06）
+
+- 站内研究 Guide 已引用 `/ai/notebooklm`，但生产中英文路径此前只有 slug fallback；本次保留 canonical 并建立唯一生产实体。
+- 纠正旧种子的 `free` 口径为 `freemium`，按 Google 当前文档记录 Standard、AI Plus/Pro/Ultra 的差异，并明确 100/300/600 来源上限属于不同档位而非统一承诺。
+- 决策边界覆盖资料质量、解析、引用准确性、个人与 Workspace/Education 数据处理差异，以及“分析既有资料”不等于“完成开放网页或系统文献发现”。
+- 市场验证为 `90/100 / Validated`：多年持续运营、Google 功能扩展和独立消费者采用分析支持成熟需求；独立准确性证据仍弱于使用可见度。
+- 生产数据库 rollback 演练首次识别 Research 只是虚拟 Hub；根据 Consensus、Fathom、Perplexity 的真实归属改用既有 Productivity 存储分类，未新建分类。
+- 正式事务及独立 status 回读通过，固定 ID `cec78907-e2a1-4eb7-853a-a58334026280`，状态 `published + monitor`，复查日 2026-09-20，索引判定为 `indexing_paused`。
+- W2-02B 至此完成 14/14；后续每日收录属于持续运营，仍服从资料、市场和索引三道独立门禁。
 
 ### W2-02C 首批成熟工具内容缺口（2026-09-01）
 
