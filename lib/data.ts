@@ -119,7 +119,7 @@ const legacyDataList: WebNavigationListRow[] = [
   },
   {
     id: '1791393780052955138',
-    name: 'suno_aI',
+    name: 'suno_ai',
     title: 'Suno AI',
     content:
       "Suno is building a future where anyone can make great music. Whether you're a shower singer or a charting artist, we break barriers between you and the song you dream of making. No instrument needed, just imagination. From your mind to music.",
@@ -411,7 +411,7 @@ const legacyDetailList: WebNavigationDetailData[] = [
     categoryName: 'Other',
   },
   {
-    name: 'suno_aI',
+    name: 'suno_ai',
     title: 'Suno AI',
     detail:
       "# What is Suno AI?\nSuno AI is a revolutionary platform that empowers individuals to create great music without the need for musical instruments or prior knowledge. It transforms imagination into music, making the songwriting process accessible to everyone from amateur enthusiasts to professional musicians.\n\n# How to use Suno AI?\nTo start making music with Suno AI, follow these steps:\n1. Sign up on their website.\n2. Access the intuitive music creation platform.\n3. Explore various genres, rhythms, and melodies.\n4. Compose your unique tracks with the assistance of Suno AI's algorithms.\n\n# Suno AI's Core Features\n- **Intuitive Music Creation Platform**: A user-friendly interface for music composition.\n- **Artificial Intelligence Assistance**: AI algorithms help in the creative process.\n- **Access to Genres, Rhythms, and Melodies**: A wide range of musical styles to choose from.\n\n# Suno AI's Use Cases\n1. **Amateur Musicians**: For those beginning their music-making journey.\n2. **Professional Artists**: Seeking inspiration and assistance in composition.\n3. **Creative Individuals**: Exploring their musical talents and creativity.\n\n# FAQ from Suno AI\n- **Music Knowledge Requirement**: No prior music knowledge is needed to use Suno AI.\n- **Exporting Songs**: Users can export their compositions and use them for personal or commercial use.\n- **Compatibility with Music Software**: Suno AI supports export in file formats compatible with popular music production software.\n- **Data Security**: Suno AI takes user data security seriously and protects personal information and compositions.\n- **Collaboration Features**: Currently, Suno AI focuses on individual creation, with collaboration features in development.\n\n# Suno AI Support\n- **Support Email**: For customer service, reach out at hello@suno.ai.\n\n# Suno AI Company\n- **Company Name**: Suno, Inc.\n\n# Suno AI Social Media\n- **Twitter**: [Suno AI Twitter](https://twitter.com/suno_ai_)\n- **Instagram**: [Suno AI Instagram](https://www.instagram.com/suno_ai_)\n\nPlease note that while I can provide information based on the description given, the actual features, availability, and pricing of Suno AI's services may vary and should be verified on their official website or by contacting their support.",

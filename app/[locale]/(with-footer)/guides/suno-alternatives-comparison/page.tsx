@@ -35,7 +35,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       en: 'A quick side-by-side look at common Suno alternatives',
     },
     compareSubtitle: { cn: 'Suno', en: 'Suno' },
-    preferredToolNames: ['suno_aI', 'gpt_4o', 'chatgpt-mac', 'character_ai'],
+    preferredToolNames: ['suno_ai', 'gpt_4o', 'chatgpt-mac', 'character_ai'],
     decisionCards: [
       {
         title: { cn: '先看你要生成什么', en: 'What exactly are you generating' },
@@ -152,7 +152,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       },
     ],
     toolSelectionNotes: {
-      suno_aI: {
+      suno_ai: {
         bestFor: {
           cn: '想快速把灵感变成歌曲草稿和音乐创作的人。',
           en: 'People who want to turn ideas into song drafts and music quickly.',

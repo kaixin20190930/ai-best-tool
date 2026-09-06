@@ -64,7 +64,7 @@ const REVIEWS = {
       ['License agreements', 'https://www.shutterstock.com/license'],
     ],
   },
-  suno_aI: {
+  suno_ai: {
     checkedAt: '2026-09-06',
     nextReviewDate: '2026-09-20',
     title: 'Suno',

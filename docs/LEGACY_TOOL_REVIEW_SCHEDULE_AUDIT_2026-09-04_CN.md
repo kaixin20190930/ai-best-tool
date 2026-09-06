@@ -22,6 +22,8 @@
 
 最新：Character.AI、Shutterstock GenAI、Suno、Viggle 完成官方事实、双语正文与复查排期，保留原索引批准；当前缺排期 11。OpenAI 家族处理后的15项及更早19/21/22均为历史快照。
 
+生产抽查发现 Suno 历史名称 `suno_aI` 与路由统一小写规则冲突，造成 sitemap 旧大小写、canonical 小写且页面回退 noindex。固定 ID 在正文 MD5 和同名冲突校验后已归一为 `suno_ai`；内容与索引批准保持不变，代码部署后复查 canonical、sitemap 与 robots。
+
 历史快照（Gemini阶段）：真实官方事实维护完成，补齐中英文正文、来源和9月18日复查日期；非独立市场验证。当时缺排期21，当前19，详细验收见 [Gemini 维护](./GEMINI_MAINTENANCE_2026-09-04_CN.md)。本文件原Emdash只补排期的范围仍保留，Gemini是另一次实质内容维护。
 
 执行结果：生产补齐已完成并经独立连接回读，Emdash 为 2026-10-01；只读 inventory 确认缺排期为 22。专项测试、Decision Card 回归、完整 build 均退出 0。无新增工具或索引批准，其他历史条目未被写入。

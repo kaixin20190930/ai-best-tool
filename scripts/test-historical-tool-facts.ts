@@ -32,7 +32,7 @@ for (const slug of Object.keys(REVIEWS)) {
 
 assert(getHistoricalToolFactReview('character_ai', 'en')?.detail.includes('make things up'));
 assert(getHistoricalToolFactReview('shutterstock', 'en')?.title.includes('GenAI'));
-assert(getHistoricalToolFactReview('suno_aI', 'en')?.detail.includes('does not automatically grant retroactive'));
+assert(getHistoricalToolFactReview('suno_ai', 'en')?.detail.includes('does not automatically grant retroactive'));
 assert(getHistoricalToolFactReview('viggle', 'en')?.detail.includes('seven-day storage'));
 assert.equal(getHistoricalToolFactReview('claude', 'en'), null);
 

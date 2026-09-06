@@ -10,7 +10,7 @@ import { getToolIndexDecision } from '../lib/seo/toolIndexing';
 const records = [
   ['48256626-68c0-4cbc-a120-126f5ca03179', 'character_ai', '7538884ffdcba014af8ea4748e08c8d5'],
   ['603c7a89-e42f-4543-a7a6-2bcfdc00f00b', 'shutterstock', 'a839e1e6c1c1efb3d4b82cbb4e9eb9cc'],
-  ['fc8fce43-88ef-4817-ac3f-028231da4b4b', 'suno_aI', 'e79800e024e421e76cc3344ff932a249'],
+  ['fc8fce43-88ef-4817-ac3f-028231da4b4b', 'suno_ai', 'e79800e024e421e76cc3344ff932a249'],
   ['a838bc9e-6653-4608-86d5-144cb703075b', 'viggle', 'eb49b57454361f2a029e7e525f42abb4'],
 ] as const;
 

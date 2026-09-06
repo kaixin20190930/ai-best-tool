@@ -324,7 +324,7 @@ async function verifySampleTools(): Promise<VerificationResult> {
   
   try {
     // 选择几个示例工具进行详细验证
-    const sampleNames = ['openai', 'chatgpt-mac', 'suno_aI'];
+    const sampleNames = ['openai', 'chatgpt-mac', 'suno_ai'];
     
     for (const name of sampleNames) {
       const result = await pool.query('SELECT * FROM tools WHERE name = $1', [name]);
