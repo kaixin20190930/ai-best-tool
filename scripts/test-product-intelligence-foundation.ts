@@ -17,7 +17,11 @@ import { normalizeIntelligenceConfidence } from '@/lib/services/intelligence/per
 import { buildProductIntelligenceSnapshot } from '@/lib/services/intelligence/productProfile';
 import { buildContentQualityResult, CONTENT_QUALITY_WEIGHTS } from '@/lib/services/intelligence/qualityConfig';
 import { assessContentQuality } from '@/lib/services/intelligence/qualityScorer';
-import { buildIntelligenceReviewSchedule } from '@/lib/services/intelligence/reviewSchedule';
+import {
+  buildIntelligenceReviewSchedule,
+  getLatestReviewAt,
+  getLatestTimelineReviewAt,
+} from '@/lib/services/intelligence/reviewSchedule';
 import {
   isEvidenceHtmlContentType,
   isPathAllowedByRobots,
@@ -104,9 +108,22 @@ function run() {
     reviewSchedule.map(({ reviewType, cadenceDays, daysUntilDue }) => ({ reviewType, cadenceDays, daysUntilDue })),
     [
       { reviewType: 'fact', cadenceDays: 30, daysUntilDue: 11 },
-      { reviewType: 'decision', cadenceDays: 90, daysUntilDue: 71 },
+      { reviewType: 'decision', cadenceDays: 90, daysUntilDue: null },
     ],
   );
+  assert.equal(reviewSchedule[1]?.state, 'unscheduled');
+  assert.equal(
+    getLatestTimelineReviewAt(
+      [
+        { reviewScope: 'fact', occurredAt: '2026-01-02T00:00:00.000Z' },
+        { reviewScope: 'full', occurredAt: '2026-01-03T00:00:00.000Z' },
+        { reviewScope: 'decision', occurredAt: '2026-01-04T00:00:00.000Z' },
+      ],
+      'decision',
+    ),
+    '2026-01-04T00:00:00.000Z',
+  );
+  assert.equal(getLatestReviewAt('2026-01-01T00:00:00.000Z', '2026-01-05T00:00:00.000Z'), '2026-01-05T00:00:00.000Z');
   assert.equal(
     stableIntelligenceValue({ price: 19, interval: 'month' }),
     stableIntelligenceValue({ interval: 'month', price: 19 }),

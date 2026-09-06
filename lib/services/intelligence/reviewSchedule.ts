@@ -10,10 +10,39 @@ export interface IntelligenceReviewScheduleItem {
   state: IntelligenceReviewState;
 }
 
+export interface IntelligenceTimelineReviewBasis {
+  reviewScope: 'fact' | 'decision' | 'full';
+  occurredAt: string;
+  verifiedAt?: string | null;
+}
+
 function validDate(value: string | null | undefined): Date | null {
   if (!value) return null;
   const date = new Date(value);
   return Number.isNaN(date.getTime()) ? null : date;
+}
+
+export function getLatestTimelineReviewAt(
+  events: IntelligenceTimelineReviewBasis[],
+  reviewType: IntelligenceReviewType,
+): string | null {
+  const eligibleScopes = reviewType === 'fact' ? new Set(['fact', 'full']) : new Set(['decision', 'full']);
+  const dates = events
+    .filter((event) => eligibleScopes.has(event.reviewScope))
+    .map((event) => validDate(event.occurredAt) || validDate(event.verifiedAt))
+    .filter((date): date is Date => Boolean(date))
+    .sort((left, right) => right.getTime() - left.getTime());
+
+  return dates[0]?.toISOString() || null;
+}
+
+export function getLatestReviewAt(...values: Array<string | null | undefined>): string | null {
+  const dates = values
+    .map((value) => validDate(value))
+    .filter((date): date is Date => Boolean(date))
+    .sort((left, right) => right.getTime() - left.getTime());
+
+  return dates[0]?.toISOString() || null;
 }
 
 function addDays(date: Date, days: number) {
@@ -60,6 +89,6 @@ export function buildIntelligenceReviewSchedule(input: {
   const now = input.now || new Date();
   return [
     buildItem('fact', 30, input.lastVerifiedAt, input.nextFactReviewAt, now),
-    buildItem('decision', 90, input.lastDecisionReviewedAt || input.lastVerifiedAt, input.nextDecisionReviewAt, now),
+    buildItem('decision', 90, input.lastDecisionReviewedAt, input.nextDecisionReviewAt, now),
   ];
 }

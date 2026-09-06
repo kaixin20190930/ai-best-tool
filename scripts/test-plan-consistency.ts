@@ -85,7 +85,10 @@ for (const document of [main, weekly]) {
 const roadmap = read('EVIDENCE_DECISION_PLATFORM_ROADMAP_CN.md');
 const mon = roadmap.split('\n').find((line) => line.startsWith('| MON-01')) || '';
 const lnk = roadmap.split('\n').find((line) => line.startsWith('| LNK-01')) || '';
-assert(mon.includes('技术实现完成') && mon.includes('RC-08'), 'Separate monitoring implementation from real operation');
+assert(
+  mon.includes('代码与生产数据审计完成') && mon.includes('余9项待真实复核') && mon.includes('不包含自动抓取'),
+  'Separate the verified editorial calendar from missing decision baselines and autonomous crawling',
+);
 assert(
   lnk.includes('SEO-IA-06/07') && lnk.includes('尚未验收'),
   'Keep existing link work and unverified scope distinct',

@@ -2,13 +2,13 @@ import Link from 'next/link';
 import { AlertTriangle, ArrowUpRight, Layers3, ListChecks, ShieldCheck, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import IntelligenceClaimReviewForm from '@/components/admin/IntelligenceClaimReviewForm';
-import IntelligenceTimelineEventForm from '@/components/admin/IntelligenceTimelineEventForm';
 import {
   getAdminIntelligenceDailyQueue,
   getAdminIntelligenceOverview,
   getAdminIntelligenceReviewQueue,
 } from '@/lib/services/admin/intelligence';
+import IntelligenceClaimReviewForm from '@/components/admin/IntelligenceClaimReviewForm';
+import IntelligenceTimelineEventForm from '@/components/admin/IntelligenceTimelineEventForm';
 
 const QUALITY_DIMENSIONS = [
   { key: 'evidence', label: 'Evidence', maximum: 20 },
@@ -213,7 +213,8 @@ export default async function AdminIntelligencePage({
             <p className='text-xs font-bold uppercase tracking-[0.18em] text-cyan-700'>Review queue</p>
             <h2 className='mt-1 text-lg font-bold text-slate-950'>30-day facts · 90-day decisions</h2>
             <p className='mt-1 text-sm text-slate-600'>
-              Published profiles automatically stay visible here so review work does not get lost.
+              This calendar is computed when the page loads. It tracks editorial review dates; it does not claim that an
+              autonomous crawler has run.
             </p>
           </div>
           <div className='rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-700'>
@@ -292,6 +293,9 @@ export default async function AdminIntelligencePage({
                 <div className='mt-3 flex flex-wrap gap-2 text-xs text-slate-600'>
                   <span className='rounded-full bg-white px-2 py-1'>Owner: {item.ownerType}</span>
                   <span className='rounded-full bg-white px-2 py-1'>Status: {item.status}</span>
+                  <span className='rounded-full bg-white px-2 py-1'>
+                    Basis: {item.basisAt ? formatDate(item.basisAt) : 'needs first review'}
+                  </span>
                   <span className='rounded-full bg-white px-2 py-1'>
                     Due: {item.dueAt ? formatDate(item.dueAt) : '—'}
                   </span>
@@ -890,7 +894,9 @@ export default async function AdminIntelligencePage({
                   <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between'>
                     <div>
                       <p className='text-xs font-bold uppercase tracking-[0.16em] text-cyan-700'>Change Timeline</p>
-                      <h3 className='mt-1 text-lg font-bold text-slate-950'>Confirmed history and review checkpoints</h3>
+                      <h3 className='mt-1 text-lg font-bold text-slate-950'>
+                        Confirmed history and review checkpoints
+                      </h3>
                       <p className='mt-1 text-sm text-slate-600'>
                         Timeline events are editorial records. Pending machine differences above never appear here
                         automatically.
@@ -906,9 +912,7 @@ export default async function AdminIntelligencePage({
                       profileId={selected.id}
                       ownerType={selected.ownerType}
                       verifiedClaims={selected.claims
-                        .filter(
-                          (claim) => claim.verificationStatus === 'verified' && claim.conflictStatus === 'none',
-                        )
+                        .filter((claim) => claim.verificationStatus === 'verified' && claim.conflictStatus === 'none')
                         .map((claim) => ({
                           id: claim.id,
                           claimType: claim.claimType,

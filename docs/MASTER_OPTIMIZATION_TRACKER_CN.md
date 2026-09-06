@@ -4,51 +4,95 @@
 
 执行状态：进行中；索引保护及本周可证实历史补账完成，本周至少 12 次放行、剩余额度 0，新增索引批准保持暂停。
 
-当前范围：SEO 收录、搜索可见性、核心页面质量与真实编辑信号。产品分发/外链工作台暂不
-作为本轮执行目标，保留代码与数据，并已隐藏公开导航、价格页和后台侧栏入口；相关历史方案已移至 `docs/archive/`。
+当前范围：SEO 收录、搜索可见性、核心页面质量与真实编辑信号。产品分发/外链工作台暂不作为本轮执行目标，保留代码与数据，并
+已隐藏公开导航、价格页和后台侧栏入口；相关历史方案已移至 `docs/archive/`。
 
 四周实施排期见 [证据驱动目录优化计划](./FOUR_WEEK_EVIDENCE_LED_DIRECTORY_PLAN_CN.md)。
 
-当前收尾执行见 [质量收尾与状态校正子方案](./QUALITY_CLOSEOUT_IMPLEMENTATION_2026-09-04_CN.md)，不是新主线。四周一级任务9/13完成（69.2%）；持续运营、内容覆盖、生产验收与效果验证分别统计。
+当前收尾执行见 [质量收尾与状态校正子方案](./QUALITY_CLOSEOUT_IMPLEMENTATION_2026-09-04_CN.md)，不是新主线。四周一级任务
+9/13完成（69.2%）；持续运营、内容覆盖、生产验收与效果验证分别统计。
 
-2026-09-06 RC-07 第一组完成 4/17：OpenAI 家族历史记录已按公司、API 模型、桌面入口和停服产品分别纠偏，移除非官方安装包及无依据旧声明，统一官方入口并设为 `monitor`。数据库回读与缺排期 19 -> 15 已确认，专项测试、类型检查、完整 build 及中英文生产 smoke 通过，部署提交 `b0dac6aa`。详见 [专项记录](./OPENAI_FAMILY_LEGACY_SCOPE_CLOSEOUT_2026-09-06_CN.md)。
+2026-09-06 RC-07 第一组完成 4/17：OpenAI 家族历史记录已按公司、API 模型、桌面入口和停服产品分别纠偏，移除非官方安装包及
+无依据旧声明，统一官方入口并设为 `monitor`。数据库回读与缺排期 19 -> 15 已确认，专项测试、类型检查、完整 build 及中英文
+生产 smoke 通过，部署提交 `b0dac6aa`。详见 [专项记录](./OPENAI_FAMILY_LEGACY_SCOPE_CLOSEOUT_2026-09-06_CN.md)。
 
-RC-07 第二组完成后进度 8/17：Character.AI、Shutterstock GenAI、Suno、Viggle 已完成官方事实范围、双语决策正文、静态 fallback 和数据库同步，均保留原索引批准并于 2026-09-20 复查；没有伪造独立实测或市场评分。数据库回读确认缺排期 15 -> 11；Suno 大小写 slug 已安全归一为 `suno_ai`，专项测试、类型检查和完整 build 通过，代码待提交部署。
+RC-07 第二组完成后进度 8/17：Character.AI、Shutterstock GenAI、Suno、Viggle 已完成官方事实范围、双语决策正文、静态
+fallback 和数据库同步，均保留原索引批准并于 2026-09-20 复查；没有伪造独立实测或市场评分。数据库回读确认缺排期 15 ->
+11；Suno 大小写 slug 已安全归一为 `suno_ai`，专项测试、类型检查和完整 build 通过，代码待提交部署。
 
-RC-07 第三组完成后进度 14/17：ArtiverseHub AI、FastImage、HoneyDo、Shop、Tattoo AI Design、Woy.ai 已纠正对象/旧文案并转 `monitor`，缺排期 11 -> 5；只剩3条安全/合规对象，Adobe/Salesforce 2条另属RC-05C。完整 build 与数据库幂等回读通过。
+RC-07 第三组完成后进度 14/17：ArtiverseHub AI、FastImage、HoneyDo、Shop、Tattoo AI Design、Woy.ai 已纠正对象/旧文案并转
+`monitor`，缺排期 11 -> 5；只剩3条安全/合规对象，Adobe/Salesforce 2条另属RC-05C。完整 build 与数据库幂等回读通过。
 
-RC-07 已于 2026-09-06 完成 17/17：最后三条安全/合规对象不做流量或转化增强。`aigirl-best` 与 `undressing_ai` 归档，`anime-girl-studio` 纠正旧范围后转 `monitor`；三条统一绕过普通工具评分、推荐、CTA 和 `SoftwareApplication` schema，并退出 sitemap。生产数据库固定记录保护、dry-run、正式事务、独立回读、专项测试、TypeScript 检查与完整 build 均通过。缺排期 5 -> 2，余下仅 Adobe/Salesforce Einstein，转回 RC-05C 处理。
+RC-07 已于 2026-09-06 完成 17/17：最后三条安全/合规对象不做流量或转化增强。`aigirl-best` 与 `undressing_ai` 归
+档，`anime-girl-studio` 纠正旧范围后转 `monitor`；三条统一绕过普通工具评分、推荐、CTA 和 `SoftwareApplication` schema，
+并退出 sitemap。生产数据库固定记录保护、dry-run、正式事务、独立回读、专项测试、TypeScript 检查与完整 build 均通过。缺排
+期 5 -> 2，余下仅 Adobe/Salesforce Einstein，转回 RC-05C 处理。
 
-RC-08 已启动并完成不依赖真实用户输入的分类事实边界审计：分类页不再把框架复核日期表达成全分类工具事实核验，代表工具卡只承担导航理由；价格、功能、限制、证据日期和判断状态统一回到工具详情页。自动守卫已覆盖禁止复制的事实字段。MON 调度记录及真实 Stack/Trial 使用价值仍需实际运行数据，未被本次代码审计冒充完成。
+RC-08 已完成分类事实边界和 MON 运行审计：分类页不再把框架复核日期表达成全分类工具事实核验，代表工具卡只承担导航理由；价
+格、功能、限制、证据日期和判断状态统一回到工具详情页。生产 MON 审计确认事实日历 1 个到期、11 个已排期，判断日历仅 3 个有
+真实基线、9 个缺首次判断复核；后台现按全量档案计数并显示复核依据。MON 被明确为页面加载时计算的人工编辑日历，仓库没有自动
+情报同步 workflow，不能宣称自主抓取持续运行。真实 Stack/Trial 使用价值和 9 个判断基线仍需实际输入，RC-08 保持进行中。
 
-RC-01至RC-04首轮治理已完成：状态校正、结构化内链测试与计划一致性守卫、生产只读19项缺排期回查均已执行；专项测试及完整build通过。此轮没有完成新的工具核验，四周比例不增加；CI配置待提交后运行，下一项RC-05对象事实纠偏，不直接迁移URL或解除索引暂停。
+RC-01至RC-04首轮治理已完成：状态校正、结构化内链测试与计划一致性守卫、生产只读19项缺排期回查均已执行；专项测试及完整
+build通过。此轮没有完成新的工具核验，四周比例不增加；CI配置待提交后运行，下一项RC-05对象事实纠偏，不直接迁移URL或解除索
+引暂停。
 
-2026-09-04 日常收录更新：W2-02B 累计处理 12/7-14，今日完成 OpenRouter 与 n8n 两条既有 fallback 的生产实体迁移，均保留原 canonical。两者线上验收均已通过；n8n 提交 `37ceb6d2` 已获 Vercel 部署成功确认，双语 index/canonical/新正文和 sitemap 生产验收通过。今日达到 2 条上限，不再新增第 3 条。累计处理数不是每日公开数。
+2026-09-04 日常收录更新：W2-02B 累计处理 12/7-14，今日完成 OpenRouter 与 n8n 两条既有 fallback 的生产实体迁移，均保留原
+canonical。两者线上验收均已通过；n8n 提交 `37ceb6d2` 已获 Vercel 部署成功确认，双语 index/canonical/新正文和 sitemap 生
+产验收通过。今日达到 2 条上限，不再新增第 3 条。累计处理数不是每日公开数。
 
 差异化、证据账本、变化追踪与商业化触发条件见
 [AI 工具决策平台差异化与商业化实施路线图](./EVIDENCE_DECISION_PLATFORM_ROADMAP_CN.md)。
 
 ### 当前维护优先级（2026-09-04）
 
-RC-05进行中：Adobe/Salesforce的RC-05A/B已完成生产发布、8页验收和数据库原文纠偏；范围正文、列表/静态兜底和metadata统一，撤下通用价格/评分/比较卡及单软件schema，comparison等价替代暗示已修正。RC-05C URL/索引处置与独立市场核验仍待数据，不改排期。见 [本轮范围澄清](./LEGACY_PRODUCT_SCOPE_CLARIFICATION_2026-09-04_CN.md)，四周比例不变。
+RC-05进行中：Adobe/Salesforce的RC-05A/B已完成生产发布、8页验收和数据库原文纠偏；范围正文、列表/静态兜底和metadata统一，
+撤下通用价格/评分/比较卡及单软件schema，comparison等价替代暗示已修正。RC-05C URL/索引处置与独立市场核验仍待数据，不改排
+期。见 [本轮范围澄清](./LEGACY_PRODUCT_SCOPE_CLARIFICATION_2026-09-04_CN.md)，四周比例不变。
 
-全站导航修复：已确认重复语言前缀不限于工具页，个人中心和提交表单同类入口也受影响；共享 Link、旧地址修复及安全登录回跳已实现，77 个源码文件检查、182 页/5,406 处内部链接扫描、完整 build 和中文正文登录点击通过。实现提交 `4c3e01a1`；验收边界见 [全站导航审计](./LOCALIZED_NAVIGATION_AUDIT_2026-09-04_CN.md)，未修改生产数据或索引策略。
+全站导航修复：已确认重复语言前缀不限于工具页，个人中心和提交表单同类入口也受影响；共享 Link、旧地址修复及安全登录回跳已
+实现，77 个源码文件检查、182 页/5,406 处内部链接扫描、完整 build 和中文正文登录点击通过。实现提交 `4c3e01a1`；验收边界见
+[全站导航审计](./LOCALIZED_NAVIGATION_AUDIT_2026-09-04_CN.md)，未修改生产数据或索引策略。
 
-对象复核后续：Adobe/Salesforce 的数据库关键词查重、静态引用与 8 个线上页面抽查完成；没有找到 Firefly/Agentforce 的独立 tools 记录，两者原四页仍在 sitemap。原始 GSC 文件当前不可用，URL 明细为未知；最终处置尚未实施，见 [对象影响面与处置分支](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。对象审计未改生产数据；附带发现的重复语言前缀已由独立修复373d2336部署及生产验收关闭，不再列作待修项。
+对象复核后续：Adobe/Salesforce 的数据库关键词查重、静态引用与 8 个线上页面抽查完成；没有找到 Firefly/Agentforce 的独立
+tools 记录，两者原四页仍在 sitemap。原始 GSC 文件当前不可用，URL 明细为未知；最终处置尚未实施，见
+[对象影响面与处置分支](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。对象审计未改生产数据；附带发现的重复语言前
+缀已由独立修复373d2336部署及生产验收关闭，不再列作待修项。
 
-最新准入口径：以 [唯一收录规范](./BEST_DIRECTORY_POSITIONING_AND_INTAKE_CN.md) 的对象类型及八项门槛为准，品牌/流量/付费/完整度分数不能替代准入；公开、索引与推荐分开。规范修订已完成，未声称新增自动校验已实现。Adobe、Salesforce Einstein 初步身份审计完成，当前记录未通过完整准入；下一步是 [收录对象复核与处置](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)，不是机械补日期。仅文档更新，生产与缺排期 19 项不变。
+最新准入口径：以 [唯一收录规范](./BEST_DIRECTORY_POSITIONING_AND_INTAKE_CN.md) 的对象类型及八项门槛为准，品牌/流量/付费/
+完整度分数不能替代准入；公开、索引与推荐分开。规范修订已完成，未声称新增自动校验已实现。Adobe、Salesforce Einstein 初步
+身份审计完成，当前记录未通过完整准入；下一步是
+[收录对象复核与处置](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)，不是机械补日期。仅文档更新，生产与缺排期 19
+项不变。
 
 维护审计、数据库字段缺口和排期明细见 [本轮维护审计](./MAINTENANCE_AUDIT_2026-09-04_CN.md)。
 
-Gamma 验收补充：`33e65beb` 部署成功，但新简版提示被官方快照去重逻辑隐藏。已修复实际展示分支，复用统一文案，并新增双语实际 HTML 验收；具体说明见 [历史核对及维护记录](./INDEX_HISTORY_RECONCILIATION_2026-09-04_CN.md)。整页复核仍未完成。
+Gamma 验收补充：`33e65beb` 部署成功，但新简版提示被官方快照去重逻辑隐藏。已修复实际展示分支，复用统一文案，并新增双语实
+际 HTML 验收；具体说明见 [历史核对及维护记录](./INDEX_HISTORY_RECONCILIATION_2026-09-04_CN.md)。整页复核仍未完成。
 
-- P0：统一数据库保护已应用生产，提交 `9fa46afc` 的 Vercel 部署已确认成功。已补记 9 月 1 日十次可证实迁移，与 9 月 4 日两次合计至少 12 次，本周剩余额度 0；完整旧历史仍有未知部分，不伪造日期、不自动恢复批准。补账幂等/事务回滚及工具行不变断言通过。详见 [历史核对](./INDEX_HISTORY_RECONCILIATION_2026-09-04_CN.md)、[保护运行说明](./INDEX_RELEASE_GUARD_RUNBOOK_CN.md)。
-- P0：本轮生产 SEO、health 和 ads.txt 只读审计通过；sitemap 162 URLs。另修复 SEO smoke 重定向请求无超时/未释放响应体的问题，重跑断言全部通过且退出 0。
-- P1：Consensus、Gamma 本轮官方事实维护与复查排期完成 2/2，新增可操作试用检查；生产维护记录已写入，两页保持 monitor，下次复查 9 月 7 日。独立论文验证码与 Gamma 金额核对缺口保留，不重置市场验证。详见 [本轮维护](./CONSENSUS_GAMMA_MAINTENANCE_2026-09-04_CN.md)。
-- P1：Emdash 已依既有 9 月 1 日核验 +30 天补齐生产复查日期 10 月 1 日；未改正文、验证日期或索引状态。缺排期从 23 降为 22，剩余项不能自动补为已验证，分类见 [历史工具排期审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。MAINT-05 完成，MAINT-04 继续分批核验。
-- P1：CHG-02 已完成10/10。Fathom、Claude、Consensus、Gamma、Luma Dream Machine、n8n、OpenRouter、Runway、Dune、The Graph均有真实幂等`fact`基线；The Graph以官网产品名和定位完成最后一条。基线主锚点固定按产品名、官网定位、其他事实排序，同步脚本统一从Supabase验证工具owner，提取器限制站点身份只取首页并拦截假套餐。ElevenLabs/Descript/Perplexity/Make按robots停止，QuillBot证据为空、Poe证据过薄，均未用于凑数。
-- P1：Gemini 既有页面官方事实维护完成，修正手机入口误导及中文复制英文，补访问/额度/隐私边界与来源；下次复查9月18日。当时缺排期22→21，本地与线上双语验收通过，sitemap仍162，无新增索引批准或市场评分。详见 [Gemini维护](./GEMINI_MAINTENANCE_2026-09-04_CN.md)。其后的Notion、Poe维护也已完成，不再重复排入待办。
-- P1 最新：Notion、Poe 本轮官方事实维护完成2/2，修复中文复制英文及Poe移动端/保密错误，补使用边界与试用检查；下次均为9月18日。四个语言页本地及生产验收通过，缺排期21→19，sitemap仍162；未新增索引批准或市场评分。详见 [Notion/Poe维护](./NOTION_POE_MAINTENANCE_2026-09-04_CN.md)。Adobe/Salesforce范围正文和数据库纠偏已完成，剩余独立市场核验及待URL级数据的迁移/索引决策。
+- P0：统一数据库保护已应用生产，提交 `9fa46afc` 的 Vercel 部署已确认成功。已补记 9 月 1 日十次可证实迁移，与 9 月 4 日两
+  次合计至少 12 次，本周剩余额度 0；完整旧历史仍有未知部分，不伪造日期、不自动恢复批准。补账幂等/事务回滚及工具行不变断
+  言通过。详见
+  [历史核对](./INDEX_HISTORY_RECONCILIATION_2026-09-04_CN.md)、[保护运行说明](./INDEX_RELEASE_GUARD_RUNBOOK_CN.md)。
+- P0：本轮生产 SEO、health 和 ads.txt 只读审计通过；sitemap 162 URLs。另修复 SEO smoke 重定向请求无超时/未释放响应体的问
+  题，重跑断言全部通过且退出 0。
+- P1：Consensus、Gamma 本轮官方事实维护与复查排期完成 2/2，新增可操作试用检查；生产维护记录已写入，两页保持 monitor，下
+  次复查 9 月 7 日。独立论文验证码与 Gamma 金额核对缺口保留，不重置市场验证。详见
+  [本轮维护](./CONSENSUS_GAMMA_MAINTENANCE_2026-09-04_CN.md)。
+- P1：Emdash 已依既有 9 月 1 日核验 +30 天补齐生产复查日期 10 月 1 日；未改正文、验证日期或索引状态。缺排期从 23 降为
+  22，剩余项不能自动补为已验证，分类见
+  [历史工具排期审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。MAINT-05 完成，MAINT-04 继续分批核验。
+- P1：CHG-02 已完成10/10。Fathom、Claude、Consensus、Gamma、Luma Dream Machine、n8n、OpenRouter、Runway、Dune、The Graph
+  均有真实幂等`fact`基线；The Graph以官网产品名和定位完成最后一条。基线主锚点固定按产品名、官网定位、其他事实排序，同步
+  脚本统一从Supabase验证工具owner，提取器限制站点身份只取首页并拦截假套餐。ElevenLabs/Descript/Perplexity/Make按robots停
+  止，QuillBot证据为空、Poe证据过薄，均未用于凑数。
+- P1：Gemini 既有页面官方事实维护完成，修正手机入口误导及中文复制英文，补访问/额度/隐私边界与来源；下次复查9月18日。当时
+  缺排期22→21，本地与线上双语验收通过，sitemap仍162，无新增索引批准或市场评分。详见
+  [Gemini维护](./GEMINI_MAINTENANCE_2026-09-04_CN.md)。其后的Notion、Poe维护也已完成，不再重复排入待办。
+- P1 最新：Notion、Poe 本轮官方事实维护完成2/2，修复中文复制英文及Poe移动端/保密错误，补使用边界与试用检查；下次均为9月
+  18日。四个语言页本地及生产验收通过，缺排期21→19，sitemap仍162；未新增索引批准或市场评分。详见
+  [Notion/Poe维护](./NOTION_POE_MAINTENANCE_2026-09-04_CN.md)。Adobe/Salesforce范围正文和数据库纠偏已完成，剩余独立市场
+  核验及待URL级数据的迁移/索引决策。
 - 数据依赖：下一次同期 GSC 7 天、28 天与 Coverage；真实 owner/评论/Stack/Trial 信号需用户实际使用，不能由 AI 编造。
 
 新决策能力的字段级实施、自动验收和 SEO 架构边界分别见：
@@ -119,24 +163,24 @@ Gamma 验收补充：`33e65beb` 部署成功，但新简版提示被官方快照
 
 ### P1：让已获得展示的页面变成更可点击的答案（第 2-4 周）
 
-| ID     | 任务                               | 优先页面 / 查询意图                                                                                | 验收标准                                                                                                                      | 状态            | 负责人       |
-| ------ | ---------------------------------- | -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | --------------- | ------------ |
-| CTR-01 | 首页标题、描述、首屏与 schema 复核 | `ai tools directory`、`ai tool directory`、`ai top tools`                                          | 文案已与目录词和可见内容一致；英文 canonical 首页已补 WebSite/SearchAction schema                                             | 已完成          | Codex        |
-| CTR-02 | 首页 -> Explore -> 分类的分流审计  | 目录通用词                                                                                         | 14 个机会详情页已补证据驱动 fallback，5 个无数据库记录的分类入口已改为虚拟决策中心；生产严格审计 33/33、官方事实块 16/16 通过 | 已完成          | Codex        |
-| CTR-03 | 强化已有展示的 Guide               | Web3、Automation、Research                                                                         | 三页均已补 3 条任务、适用边界、核验风险和直达工具 Decision Card 的路径；提交 `de1504e6`                                       | 已完成          | Codex        |
-| CTR-04 | 强化已有展示的详情页               | Fathom、Anthropic、DeepL、Gamma、Lindy、Cursor、The Graph                                          | 每页保留至少两个官方来源和一个真实选择限制；禁止通用 AI 改写                                                                  | 已完成          | Codex        |
-| CTR-05 | 真实编辑/owner 信号回填            | 本轮先选 5 页                                                                                      | 每页至少一条有来源的更新、纠错、owner 补充或真实使用记录                                                                      | 需要数据        | 用户 + Codex |
-| CTR-06 | 首批成熟工具内容缺口               | Claude/Anthropic、Fathom、Gamma、Consensus、DeepL、Runway、Luma AI、Pipedream、Cursor、The Graph   | 10 个既有 canonical URL 已完成合并、数据库迁移或决策内容增强，全程未新增 canonical URL                                        | 已完成（10/10） | Codex        |
-| EVD-01 | Evidence Ledger 数据模型           | 所有 claim 统一来源类型、核查状态、复查日、冲突和失效边界；机器提取不自动成为已核验事实            | 已完成；Supabase 迁移、只读验收、专项测试和 build 通过                                                                        | Codex + 用户    |
-| EVD-02 | 工具页 Evidence Ledger UI          | Decision Card 后可展开核对已验证 claim；候选证据不公开，不以单一分数代替解释                       | 已完成；有效工具身份产生 verified 数据后自动展示                                                                              | Codex           |
-| EVD-03 | 后台证据编辑与冲突处理             | 状态受控流转；冲突不自动覆盖；核验人、日期、复查、失效和适用范围可追踪；所有保存操作有中间态       | 已完成；首条真实人工核验已回读确认，专项测试、tsc、完整 build 通过                                                            | Codex           |
-| EVD-04 | 情报档案身份映射收口               | `tool` 类型 owner_id 必须对应目录真实工具；存量错误身份重新归类后再公开                            | 已完成；site 迁移、3 个档案缓存重算、Fathom 真实 UUID -> verified -> 生产公开链路全部通过                                     | Codex + 用户    |
-| CHG-01 | Change Timeline 模型与读取         | 正式历史与机器待审差异分离；事实变化与“复核无变化”分开；公开只读数据仅来自真实 tool 和 public 事件 | 已完成；迁移可读，受控写入、后台/工具页读取、专项测试和类型检查均通过                                                         | Codex + 用户    |
-| CHG-02 | 首批核心工具变化基线               | 10-20 个核心工具拥有真实基线复核；没有变化时只记录 `reviewed_no_change`，禁止伪造变化              | 已完成（10/10）；Fathom、Claude、Consensus、Gamma、Luma Dream Machine、n8n、OpenRouter、Runway、Dune、The Graph 均完成真实基线 | Codex + 用户    |
-| SEO-IA | SEO 信息架构统一与门禁             | 修复历史 canonical/hreflang，统一 Breadcrumb，并让工具关系内链只消费 reviewed 数据                 | SEO-IA-01~08 已完成；本地/生产 smoke、完整 build 和 reviewed 关系验收全部通过                                                 | Codex           |
-| DCF    | Finder + Decision Card 2.0         | 10 个核心工具和 6-8 个任务形成证据可追溯、最多三项的可解释推荐                                     | DCF-01~07 已完成：数据、证据、规则、前台、后台审核、SEO 与自动发布门禁全部闭环                                                 | Codex           |
+| ID     | 任务                               | 优先页面 / 查询意图                                                                                | 验收标准                                                                                                                                         | 状态            | 负责人       |
+| ------ | ---------------------------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | --------------- | ------------ |
+| CTR-01 | 首页标题、描述、首屏与 schema 复核 | `ai tools directory`、`ai tool directory`、`ai top tools`                                          | 文案已与目录词和可见内容一致；英文 canonical 首页已补 WebSite/SearchAction schema                                                                | 已完成          | Codex        |
+| CTR-02 | 首页 -> Explore -> 分类的分流审计  | 目录通用词                                                                                         | 14 个机会详情页已补证据驱动 fallback，5 个无数据库记录的分类入口已改为虚拟决策中心；生产严格审计 33/33、官方事实块 16/16 通过                    | 已完成          | Codex        |
+| CTR-03 | 强化已有展示的 Guide               | Web3、Automation、Research                                                                         | 三页均已补 3 条任务、适用边界、核验风险和直达工具 Decision Card 的路径；提交 `de1504e6`                                                          | 已完成          | Codex        |
+| CTR-04 | 强化已有展示的详情页               | Fathom、Anthropic、DeepL、Gamma、Lindy、Cursor、The Graph                                          | 每页保留至少两个官方来源和一个真实选择限制；禁止通用 AI 改写                                                                                     | 已完成          | Codex        |
+| CTR-05 | 真实编辑/owner 信号回填            | 本轮先选 5 页                                                                                      | 每页至少一条有来源的更新、纠错、owner 补充或真实使用记录                                                                                         | 需要数据        | 用户 + Codex |
+| CTR-06 | 首批成熟工具内容缺口               | Claude/Anthropic、Fathom、Gamma、Consensus、DeepL、Runway、Luma AI、Pipedream、Cursor、The Graph   | 10 个既有 canonical URL 已完成合并、数据库迁移或决策内容增强，全程未新增 canonical URL                                                           | 已完成（10/10） | Codex        |
+| EVD-01 | Evidence Ledger 数据模型           | 所有 claim 统一来源类型、核查状态、复查日、冲突和失效边界；机器提取不自动成为已核验事实            | 已完成；Supabase 迁移、只读验收、专项测试和 build 通过                                                                                           | Codex + 用户    |
+| EVD-02 | 工具页 Evidence Ledger UI          | Decision Card 后可展开核对已验证 claim；候选证据不公开，不以单一分数代替解释                       | 已完成；有效工具身份产生 verified 数据后自动展示                                                                                                 | Codex           |
+| EVD-03 | 后台证据编辑与冲突处理             | 状态受控流转；冲突不自动覆盖；核验人、日期、复查、失效和适用范围可追踪；所有保存操作有中间态       | 已完成；首条真实人工核验已回读确认，专项测试、tsc、完整 build 通过                                                                               | Codex           |
+| EVD-04 | 情报档案身份映射收口               | `tool` 类型 owner_id 必须对应目录真实工具；存量错误身份重新归类后再公开                            | 已完成；site 迁移、3 个档案缓存重算、Fathom 真实 UUID -> verified -> 生产公开链路全部通过                                                        | Codex + 用户    |
+| CHG-01 | Change Timeline 模型与读取         | 正式历史与机器待审差异分离；事实变化与“复核无变化”分开；公开只读数据仅来自真实 tool 和 public 事件 | 已完成；迁移可读，受控写入、后台/工具页读取、专项测试和类型检查均通过                                                                            | Codex + 用户    |
+| CHG-02 | 首批核心工具变化基线               | 10-20 个核心工具拥有真实基线复核；没有变化时只记录 `reviewed_no_change`，禁止伪造变化              | 已完成（10/10）；Fathom、Claude、Consensus、Gamma、Luma Dream Machine、n8n、OpenRouter、Runway、Dune、The Graph 均完成真实基线                   | Codex + 用户    |
+| SEO-IA | SEO 信息架构统一与门禁             | 修复历史 canonical/hreflang，统一 Breadcrumb，并让工具关系内链只消费 reviewed 数据                 | SEO-IA-01~08 已完成；本地/生产 smoke、完整 build 和 reviewed 关系验收全部通过                                                                    | Codex           |
+| DCF    | Finder + Decision Card 2.0         | 10 个核心工具和 6-8 个任务形成证据可追溯、最多三项的可解释推荐                                     | DCF-01~07 已完成：数据、证据、规则、前台、后台审核、SEO 与自动发布门禁全部闭环                                                                   | Codex           |
 | STK    | Stack Audit + 7-Day Trial          | 私有工具栈、Keep/Replace/Remove/Missing 与试用到期决策闭环                                         | 已完成（6/6）；双用户真实 RLS、匿名边界、service-only 审计输出、私有路由 noindex/sitemap 排除、生产 smoke、持续监控、类型检查与完整 build 均通过 | Codex           |
-| SIG    | Verified Usage + Change Watch      | 审核后的结构化使用信号和已确认变化通知，不公开低样本或利益相关数据                                 | 等待阶段二真实使用门槛；SIG/WAT 未开始                                                                                        | Codex + 用户    |
+| SIG    | Verified Usage + Change Watch      | 审核后的结构化使用信号和已确认变化通知，不公开低样本或利益相关数据                                 | 等待阶段二真实使用门槛；SIG/WAT 未开始                                                                                                           | Codex + 用户    |
 
 ### P2：只在数据证明后扩展（第 4-6 周）
 

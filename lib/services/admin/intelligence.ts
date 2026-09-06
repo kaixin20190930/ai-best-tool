@@ -10,6 +10,8 @@ import { DEFAULT_DAILY_NEW_PAGE_LIMIT } from '@/lib/services/intelligence/qualit
 import { assessContentQuality, type ContentQualityAssessment } from '@/lib/services/intelligence/qualityScorer';
 import {
   buildIntelligenceReviewSchedule,
+  getLatestReviewAt,
+  getLatestTimelineReviewAt,
   type IntelligenceReviewState,
   type IntelligenceReviewType,
 } from '@/lib/services/intelligence/reviewSchedule';
@@ -111,6 +113,7 @@ export interface AdminIntelligenceReviewQueueItem {
   status: IntelligenceProfileStatus;
   reviewType: IntelligenceReviewType;
   cadenceDays: 30 | 90;
+  basisAt: string | null;
   dueAt: string | null;
   daysUntilDue: number | null;
   state: IntelligenceReviewState;
@@ -496,39 +499,65 @@ export async function getAdminIntelligenceReviewQueue(input?: {
   await requireAdmin();
   const supabase = createAdminClient();
   const limit = Math.max(1, Math.min(input?.limit || 3, 6));
-  // The shared overview loader is declared below the specialized queue readers.
-  // eslint-disable-next-line @typescript-eslint/no-use-before-define
-  const overview = await getAdminIntelligenceOverview({
-    ownerType: input?.ownerType,
-    status: input?.status || 'all',
-    limit: 12,
-  });
+  let profileQuery = supabase
+    .from('product_intelligence_profiles')
+    .select(
+      'id, owner_type, canonical_domain, product_name, profile_status, last_verified_at, next_review_at, metadata',
+    )
+    .order('updated_at', { ascending: false })
+    .limit(100);
+  if (input?.ownerType && input.ownerType !== 'all') profileQuery = profileQuery.eq('owner_type', input.ownerType);
+  if (input?.status && input.status !== 'all') profileQuery = profileQuery.eq('profile_status', input.status);
 
-  const details = await Promise.all(
-    overview.profiles.slice(0, 12).map((profile) => loadProfileDetail(profile.id, supabase)),
-  );
+  const { data: profiles, error: profilesError } = await profileQuery;
+  if (profilesError) throw new Error(profilesError.message);
+  const profileIds = (profiles || []).map((profile) => String(profile.id));
+  const timelineResult = profileIds.length
+    ? await supabase
+        .from('product_intelligence_timeline_events')
+        .select('profile_id, review_scope, occurred_at, verified_at')
+        .in('profile_id', profileIds)
+    : { data: [], error: null };
+  if (timelineResult.error) throw new Error(timelineResult.error.message);
 
   const now = new Date();
-  const items = details
-    .filter((detail): detail is AdminIntelligenceProfileDetail => Boolean(detail))
-    .flatMap((detail) => {
-      const metadata = detail.metadata || {};
+  const items = (profiles || [])
+    .flatMap((profile) => {
+      const metadata = (profile.metadata as Record<string, unknown> | null) || {};
+      const timelineEvents = (timelineResult.data || [])
+        .filter((event) => event.profile_id === profile.id)
+        .map((event) => ({
+          reviewScope: event.review_scope as 'fact' | 'decision' | 'full',
+          occurredAt: String(event.occurred_at),
+          verifiedAt: normalizeDate(event.verified_at as string | null | undefined),
+        }));
+      const timelineFactReviewedAt = getLatestTimelineReviewAt(timelineEvents, 'fact');
+      const timelineDecisionReviewedAt = getLatestTimelineReviewAt(timelineEvents, 'decision');
+      const factReviewedAt = getLatestReviewAt(
+        normalizeDate(profile.last_verified_at as string | null | undefined),
+        timelineFactReviewedAt,
+      );
+      const decisionReviewedAt = getLatestReviewAt(
+        typeof metadata.decisionReviewedAt === 'string' ? metadata.decisionReviewedAt : null,
+        timelineDecisionReviewedAt,
+      );
       const schedule = buildIntelligenceReviewSchedule({
-        lastVerifiedAt: detail.lastVerifiedAt,
-        nextFactReviewAt: detail.nextReviewAt,
-        lastDecisionReviewedAt: typeof metadata.decisionReviewedAt === 'string' ? metadata.decisionReviewedAt : null,
+        lastVerifiedAt: factReviewedAt,
+        nextFactReviewAt: normalizeDate(profile.next_review_at as string | null | undefined),
+        lastDecisionReviewedAt: decisionReviewedAt,
         nextDecisionReviewAt: typeof metadata.nextDecisionReviewAt === 'string' ? metadata.nextDecisionReviewAt : null,
         now,
       });
 
       return schedule.map((review) => ({
-        id: detail.id,
-        productName: detail.productName,
-        canonicalDomain: detail.canonicalDomain,
-        ownerType: detail.ownerType,
-        status: detail.status,
+        id: String(profile.id),
+        productName: String(profile.product_name || ''),
+        canonicalDomain: String(profile.canonical_domain || ''),
+        ownerType: profile.owner_type as ProductIntelligenceProfile['ownerType'],
+        status: profile.profile_status as IntelligenceProfileStatus,
         reviewType: review.reviewType,
         cadenceDays: review.cadenceDays,
+        basisAt: review.basisAt,
         dueAt: review.dueAt,
         daysUntilDue: review.daysUntilDue,
         state: review.state,
@@ -552,8 +581,7 @@ export async function getAdminIntelligenceReviewQueue(input?: {
       const leftDue = left.dueAt ? new Date(left.dueAt).getTime() : Number.POSITIVE_INFINITY;
       const rightDue = right.dueAt ? new Date(right.dueAt).getTime() : Number.POSITIVE_INFINITY;
       return leftDue - rightDue;
-    })
-    .slice(0, limit);
+    });
 
   const counts = {
     overdue: items.filter((item) => item.state === 'overdue').length,
@@ -565,7 +593,7 @@ export async function getAdminIntelligenceReviewQueue(input?: {
   return {
     limit,
     generatedAt: new Date().toISOString(),
-    items,
+    items: items.slice(0, limit),
     counts,
   };
 }
@@ -605,13 +633,13 @@ export async function getAdminIntelligenceOverview(input?: {
       : Promise.resolve({ data: [] as Array<{ profile_id: string }>, error: null as null }),
     profileIds.length > 0
       ? supabase
-        .from('product_intelligence_claims')
-        .select('profile_id, conflict_status, verification_status')
-        .in('profile_id', profileIds)
+          .from('product_intelligence_claims')
+          .select('profile_id, conflict_status, verification_status')
+          .in('profile_id', profileIds)
       : Promise.resolve({
-        data: [] as Array<{ profile_id: string; conflict_status: string; verification_status: string }>,
-        error: null as null,
-      }),
+          data: [] as Array<{ profile_id: string; conflict_status: string; verification_status: string }>,
+          error: null as null,
+        }),
     profileIds.length > 0
       ? supabase.from('product_intelligence_assets').select('profile_id').in('profile_id', profileIds)
       : Promise.resolve({ data: [] as Array<{ profile_id: string }>, error: null as null }),
