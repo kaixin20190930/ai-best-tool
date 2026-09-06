@@ -62,6 +62,7 @@
     "test:plan-consistency": "tsx scripts/test-plan-consistency.ts",
     "test:legacy-tool-scope": "tsx scripts/test-legacy-tool-scope.ts",
     "refresh:legacy-tool-scope": "tsx scripts/refresh-legacy-tool-scope.ts",
+    "schedule:legacy-scope-reviews": "tsx scripts/schedule-legacy-scope-reviews.ts",
     "isolate:openai-family-scope": "tsx scripts/isolate-openai-family-scope.ts",
     "refresh:historical-tool-facts": "tsx scripts/refresh-historical-tool-facts.ts",
     "test:historical-tool-facts": "tsx scripts/test-historical-tool-facts.ts",

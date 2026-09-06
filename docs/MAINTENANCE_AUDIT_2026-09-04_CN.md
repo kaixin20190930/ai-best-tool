@@ -4,98 +4,132 @@
 
 ## 初始只读审计快照
 
-以下数字和“本轮”指初始审计；当前状态以随后维护表及[质量收尾子方案](./QUALITY_CLOSEOUT_IMPLEMENTATION_2026-09-04_CN.md)为准。历史执行过程保留，不把旧快照当最新现场结果。
+以下数字和“本轮”指初始审计；当前状态以随后维护表及[质量收尾子方案](./QUALITY_CLOSEOUT_IMPLEMENTATION_2026-09-04_CN.md)为
+准。历史执行过程保留，不把旧快照当最新现场结果。
 
-- 生产只读查询：37 个 published 工具，28 个 continue_index、9 个 monitor。continue_index 不代表必然进入 sitemap，还受内容质量门槛约束。
-- 生产 SEO smoke：全部断言通过，sitemap 共 162 个 URL；核心页面、canonical/hreflang、面包屑、comparison noindex、域名重定向和 robots 指令均符合当前规则。
+- 生产只读查询：37 个 published 工具，28 个 continue_index、9 个 monitor。continue_index 不代表必然进入 sitemap，还受内
+  容质量门槛约束。
+- 生产 SEO smoke：全部断言通过，sitemap 共 162 个 URL；核心页面、canonical/hreflang、面包屑、comparison noindex、域名重
+  定向和 robots 指令均符合当前规则。
 - `/api/healthz`、`/api/health`、`/ads.txt` 均返回 200，预期健康字段和广告发布商记录存在。
-- 本轮没有发布工具、修改生产数据库、切换索引状态或改写产品事实。数据库字段为空只能证明相应存储字段缺失，不能直接推断整个页面没有证据。
+- 本轮没有发布工具、修改生产数据库、切换索引状态或改写产品事实。数据库字段为空只能证明相应存储字段缺失，不能直接推断整个
+  页面没有证据。
 
 ## P0：执行偏差必须先收口
 
-2026-09-04，OpenRouter 和 n8n 同日从未获索引批准的 fallback 迁移为 published / continue_index，增加四个语言 URL。它们保留原 canonical，避免了重复 URL，但仍属于两次新增索引放行。
+2026-09-04，OpenRouter 和 n8n 同日从未获索引批准的 fallback 迁移为 published / continue_index，增加四个语言 URL。它们保
+留原 canonical，避免了重复 URL，但仍属于两次新增索引放行。
 
-这违反既定“公开收录每日 1–2 个、索引放行每日最多 1 个且每周最多 5 个”的内部策略。此前将“没有重复 canonical”误当作不受索引额度限制，并混淆了公开与索引的上限，是执行错误，不是已经批准的策略调整。
+这违反既定“公开收录每日 1–2 个、索引放行每日最多 1 个且每周最多 5 个”的内部策略。此前将“没有重复 canonical”误当作不受索
+引额度限制，并混淆了公开与索引的上限，是执行错误，不是已经批准的策略调整。
 
-- 立即措施：暂停进一步新增索引批准；不追补 Consensus 或 Gamma 的历史时段，不把额度累积到次日。后续维护已应用统一数据库保护，保持 paused=true；详见本页追加验收记录。
+- 立即措施：暂停进一步新增索引批准；不追补 Consensus 或 Gamma 的历史时段，不把额度累积到次日。后续维护已应用统一数据库保
+  护，保持 paused=true；详见本页追加验收记录。
 - 不自动反复切换已上线页的 index/noindex，不把偏差记录伪装成事后批准。
-- 已实施：生产工具表触发器统一记录批准日志并核对日/周额度，覆盖 migration、后台和批量脚本；隔离测试验证并发和事务回滚。历史预审测试不再被当作跨条目额度保护。
+- 已实施：生产工具表触发器统一记录批准日志并核对日/周额度，覆盖 migration、后台和批量脚本；隔离测试验证并发和事务回滚。
+  历史预审测试不再被当作跨条目额度保护。
 - 恢复条件：核对本周真实批准记录、明确已用额度并通过统一校验后再恢复；不能仅凭创建日期推断全部索引批准时间。
 - 这些数量是本站观察策略，不是 Google 公布的每日页面配额。
 
 ## 按优先级维护
 
-| ID | 优先级 | 任务 | 现场依据 | 当前状态 | 负责人/所需输入 |
-| --- | --- | --- | --- | --- | --- |
-| MAINT-01 | P0 | 公开收录与索引批准额度分离 | 本周可证实放行至少 12 次，当前额度 0 | 技术保护、本周可证实记录补账及额度判断完成；保持暂停，旧历史未知部分明确保留 | Codex；下周恢复前重新复核 |
-| MAINT-02 | P0 | 生产健康、广告和 SEO 边界复查 | 本轮 SEO、health、ads.txt 检查通过 | 本轮审计完成；持续维护 | Codex |
-| MAINT-03 | P1 | Consensus、Gamma 到期复核 | 两者 monitor；生产下次复查均已设为 9 月 7 日 | 本轮官方事实维护与排期完成 2/2；独立市场复核/账户实操未完成，不刷新旧验证日期 | Codex；9 月 7 日复查已记录缺口 |
-| MAINT-04 | P1 | 历史工具维护字段补齐 | 缺排期 23 → 22 → 21 → 19 → 15 → 11 → 5 → 2 | RC-07已完成17/17；剩余2条均为RC-05C的Adobe/Salesforce | Codex；RC-07关闭，RC-05C待数据 |
-| MAINT-05 | P1 | Emdash 复查排期 | 依据已有 9 月 1 日核验 +30 天 | 已完成：生产 next_review_date 为 10 月 1 日；幂等与其他字段不变校验通过 | Codex |
-| MAINT-06 | P1 | Change Timeline 首批真实基线 | 主台账仍为 Fathom、Claude、Consensus，3/10 | Gamma 下一项；robots 受限来源不绕过 | Codex；必要时人工来源材料 |
-| MAINT-07 | P1 | GSC / Coverage 周度复盘 | 现有主台账性能基线为 8 月 31 日导出；技术通过不代表 Google 已收录 | 等下一次同期数据后评估，不为等待数据扩页 | 用户提供 7 天、28 天及 Coverage |
-| MAINT-08 | P2 | Stack/Trial 实际使用验收 | 技术阶段已完成，真实使用门槛仍需验证 | 保持维护，不新增功能 | 用户真实工具栈/试用反馈，Codex复盘 |
-| MAINT-09 | P1 | SEO smoke 退出与超时保护 | 原脚本所有断言通过后未自行结束，重定向请求无超时且响应体未释放 | 已修复；重跑所有生产断言通过并以 0 退出 | Codex |
+| ID       | 优先级 | 任务                          | 现场依据                                                          | 当前状态                                                                      | 负责人/所需输入                    |
+| -------- | ------ | ----------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------- | ---------------------------------- |
+| MAINT-01 | P0     | 公开收录与索引批准额度分离    | 本周可证实放行至少 12 次，当前额度 0                              | 技术保护、本周可证实记录补账及额度判断完成；保持暂停，旧历史未知部分明确保留  | Codex；下周恢复前重新复核          |
+| MAINT-02 | P0     | 生产健康、广告和 SEO 边界复查 | 本轮 SEO、health、ads.txt 检查通过                                | 本轮审计完成；持续维护                                                        | Codex                              |
+| MAINT-03 | P1     | Consensus、Gamma 到期复核     | 两者 monitor；生产下次复查均已设为 9 月 7 日                      | 本轮官方事实维护与排期完成 2/2；独立市场复核/账户实操未完成，不刷新旧验证日期 | Codex；9 月 7 日复查已记录缺口     |
+| MAINT-04 | P1     | 历史工具维护字段补齐          | 缺排期 23 → 22 → 21 → 19 → 15 → 11 → 5 → 2 → 0                    | 已完成；Adobe/Salesforce仅补2026-09-11复核排期，未冒充完成核验                | Codex；RC-05C URL决策仍待数据      |
+| MAINT-05 | P1     | Emdash 复查排期               | 依据已有 9 月 1 日核验 +30 天                                     | 已完成：生产 next_review_date 为 10 月 1 日；幂等与其他字段不变校验通过       | Codex                              |
+| MAINT-06 | P1     | Change Timeline 首批真实基线  | 主台账仍为 Fathom、Claude、Consensus，3/10                        | Gamma 下一项；robots 受限来源不绕过                                           | Codex；必要时人工来源材料          |
+| MAINT-07 | P1     | GSC / Coverage 周度复盘       | 现有主台账性能基线为 8 月 31 日导出；技术通过不代表 Google 已收录 | 等下一次同期数据后评估，不为等待数据扩页                                      | 用户提供 7 天、28 天及 Coverage    |
+| MAINT-08 | P2     | Stack/Trial 实际使用验收      | 技术阶段已完成，真实使用门槛仍需验证                              | 保持维护，不新增功能                                                          | 用户真实工具栈/试用反馈，Codex复盘 |
+| MAINT-09 | P1     | SEO smoke 退出与超时保护      | 原脚本所有断言通过后未自行结束，重定向请求无超时且响应体未释放    | 已修复；重跑所有生产断言通过并以 0 退出                                       | Codex                              |
 
 ## 排期事实
 
-当前只读核查：Adobe/Salesforce 查重与已知引用/8 页线上抽查完成，四个工具 URL 仍允许索引并列入 sitemap；GSC URL 明细未知，最终处置未做。导航附带问题已由373d2336独立部署及生产验收关闭。详见 [影响面审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。本轮再次执行inventory确认缺排期仍19，不将审计等同于工具核验。
+当前只读核查：Adobe/Salesforce 查重与已知引用/8 页线上抽查完成，四个工具 URL 仍允许索引并列入 sitemap；GSC URL 明细未
+知，最终处置未做。导航附带问题已由373d2336独立部署及生产验收关闭。详见
+[影响面审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。本轮再次执行inventory确认缺排期仍19，不将审计等同于
+工具核验。
 
-2026-09-06 追加：OpenAI 家族四条已完成事实范围纠偏并正式写入数据库，均转为 `monitor` 且补明确复查日期；独立 inventory 确认缺排期 15。专项测试、类型检查、完整 build 与中英文生产 smoke 通过，部署提交 `b0dac6aa`。
+2026-09-06 追加：OpenAI 家族四条已完成事实范围纠偏并正式写入数据库，均转为 `monitor` 且补明确复查日期；独立 inventory 确
+认缺排期 15。专项测试、类型检查、完整 build 与中英文生产 smoke 通过，部署提交 `b0dac6aa`。
 
-2026-09-06 RC-07 最终追加：三条安全/合规对象完成非推广式处置。`aigirl-best`、`undressing_ai` 归档，`anime-girl-studio` 转观察；独立安全页面阻断普通工具 schema、评分、推荐和外跳转化。生产事务与独立 inventory 确认缺排期仅2条，均属于 RC-05C。
+2026-09-06 RC-07 最终追加：三条安全/合规对象完成非推广式处置。`aigirl-best`、`undressing_ai` 归档，`anime-girl-studio`
+转观察；独立安全页面阻断普通工具 schema、评分、推荐和外跳转化。生产事务与独立 inventory 确认缺排期仅2条，均属于 RC-05C。
 
-准入规范修订完成：Adobe / Salesforce Einstein 转入收录对象复核，初步审计发现泛品牌/范围混淆；处置、市场验证与页面整改尚未完成。见 [对象复核记录](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。不把文档完成记为工具核验完成；缺排期仍 19，生产未改。
+2026-09-06 RC-05C排期追加：Adobe与Salesforce Einstein的`next_review_date`均安全写为2026-09-11，独立inventory确认缺排期为
+0。固定ID事务脚本只改复核日，不刷新`updated_at`，正文、发布状态、索引审批与计算后的index判断均保持不变。该动作只完成
+MAINT-04排期收口，不代表RC-05C URL/索引决策或独立市场核验完成。
 
-最新追加：Notion、Poe 官方事实维护完成，缺排期现为 19；以下 21/22/23 项为此前快照。执行与四个语言页验收见 [Notion/Poe 维护](./NOTION_POE_MAINTENANCE_2026-09-04_CN.md)。
+准入规范修订完成：Adobe / Salesforce Einstein 转入收录对象复核，初步审计发现泛品牌/范围混淆；处置、市场验证与页面整改尚
+未完成。见 [对象复核记录](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。不把文档完成记为工具核验完成；缺排期仍
+19，生产未改。
 
-历史快照（Gemini阶段）：官方事实维护完成，当时缺排期21；下文Emdash的22项也为当时快照，当前19。实际执行与线上验收见 [Gemini 维护](./GEMINI_MAINTENANCE_2026-09-04_CN.md)。
+最新追加：Notion、Poe 官方事实维护完成，缺排期现为 19；以下 21/22/23 项为此前快照。执行与四个语言页验收见
+[Notion/Poe 维护](./NOTION_POE_MAINTENANCE_2026-09-04_CN.md)。
+
+历史快照（Gemini阶段）：官方事实维护完成，当时缺排期21；下文Emdash的22项也为当时快照，当前19。实际执行与线上验收见
+[Gemini 维护](./GEMINI_MAINTENANCE_2026-09-04_CN.md)。
 
 ### 后续执行：Emdash 排期补齐
 
 - 生产 Emdash 明确复查日期已补为 2026-10-01，仍沿用原 9 月 1 日事实核验，不新造市场结论。
 - 离线排期测试、数据库预演回滚、正式应用、独立回读、重复执行不更新断言及完整 build 均通过。Decision Card 模型回归通过。
-- Emdash阶段历史无排期项为22个；原始23个列表保留为历史记录，当前19。新分类与运行命令见 [历史排期审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。
+- Emdash阶段历史无排期项为22个；原始23个列表保留为历史记录，当前19。新分类与运行命令见
+  [历史排期审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。
 
 ### 后续执行：Consensus / Gamma 官方事实维护
 
-- [维护记录](./CONSENSUS_GAMMA_MAINTENANCE_2026-09-04_CN.md)：官方套餐/功能边界核查、双语试用检查和明确范围的 features.maintenanceReview 已完成；仅维护记录、下次复查日期及更新时间允许变化，其他字段不变断言通过。
-- 生产 next_review_date 均为 2026-09-07；editorial.reviewedAt 与 marketValidation.reviewedAt 仍为 2026-09-01，不伪造实测或独立市场复核。
-- 四个本地生产页面的可见提示、来源链接、canonical、noindex 及 sitemap 排除通过。生产前一版 Gamma 可见性修复 `4923dbc5` 也已完成线上验收。
+- [维护记录](./CONSENSUS_GAMMA_MAINTENANCE_2026-09-04_CN.md)：官方套餐/功能边界核查、双语试用检查和明确范围的
+  features.maintenanceReview 已完成；仅维护记录、下次复查日期及更新时间允许变化，其他字段不变断言通过。
+- 生产 next_review_date 均为 2026-09-07；editorial.reviewedAt 与 marketValidation.reviewedAt 仍为 2026-09-01，不伪造实测
+  或独立市场复核。
+- 四个本地生产页面的可见提示、来源链接、canonical、noindex 及 sitemap 排除通过。生产前一版 Gamma 可见性修复 `4923dbc5`
+  也已完成线上验收。
 - 原下表 9 月 3–4 日为审计时的到期日期，本轮处理后的新复查日期以本节为准。
 
 ### 后续执行：历史补账与局部内容维护
 
 - `9fa46afc` 已获得 Vercel success / Deployment has completed。
-- 补账脚本默认回滚预演及正式应用成功，9 月 1 日十条 + 9 月 4 日两条 = 至少 12 条。重复插入断言通过，所有工具行哈希不变，paused=true。
-- 未知旧历史不猜测日期，历史退回 monitor 不退还额度；本周不再批准新增索引。详细依据见 [本周核对](./INDEX_HISTORY_RECONCILIATION_2026-09-04_CN.md)。
-- Gamma 双语 priority evidence 卡更新具体导出限制；专项测试及完整 build 退出 0。未修改数据库整页核验日期或下次复核日，不将局部核查标为整页完成。
+- 补账脚本默认回滚预演及正式应用成功，9 月 1 日十条 + 9 月 4 日两条 = 至少 12 条。重复插入断言通过，所有工具行哈希不
+  变，paused=true。
+- 未知旧历史不猜测日期，历史退回 monitor 不退还额度；本周不再批准新增索引。详细依据见
+  [本周核对](./INDEX_HISTORY_RECONCILIATION_2026-09-04_CN.md)。
+- Gamma 双语 priority evidence 卡更新具体导出限制；专项测试及完整 build 退出 0。未修改数据库整页核验日期或下次复核日，不
+  将局部核查标为整页完成。
 
 ### 追加验收：统一索引保护
 
 - 已应用 `db/neon/20260904_tool_index_release_guard.sql`；不是仅新增本地迁移文件。
-- 生产事务预演回滚及正式应用均成功；前后全部工具行哈希一致。28 条未知日期基线、2 条已证实 9 月 4 日历史批准保留，不重写工具状态。
-- `test:index-release-guard` 在随机隔离 schema 中通过暂停、日/周额度、批量回滚、草稿发布、冲突忽略与两种隔离级别并发测试，退出 0。
+- 生产事务预演回滚及正式应用均成功；前后全部工具行哈希一致。28 条未知日期基线、2 条已证实 9 月 4 日历史批准保留，不重写
+  工具状态。
+- `test:index-release-guard` 在随机隔离 schema 中通过暂停、日/周额度、批量回滚、草稿发布、冲突忽略与两种隔离级别并发测
+  试，退出 0。
 - `pnpm run build` 完整退出 0，AdSense 校验通过；专项 ESLint 通过。Browserslist 过期提示仍是非阻断维护项。
-- 本次是前述只读审计后的独立维护实施，新增两张内部表、函数及触发器，并将新行默认质量状态固定为 monitor；没有新增工具页、修改现有工具或解除暂停。
-- 操作及恢复边界见 [索引批准保护运行说明](./INDEX_RELEASE_GUARD_RUNBOOK_CN.md)。本段为历史核对前的验收快照；当前MAINT-01技术保护与可证实补账完成，未知历史及恢复审批仍保留，不宣称已解除暂停。
+- 本次是前述只读审计后的独立维护实施，新增两张内部表、函数及触发器，并将新行默认质量状态固定为 monitor；没有新增工具页、
+  修改现有工具或解除暂停。
+- 操作及恢复边界见 [索引批准保护运行说明](./INDEX_RELEASE_GUARD_RUNBOOK_CN.md)。本段为历史核对前的验收快照；当前MAINT-01
+  技术保护与可证实补账完成，未知历史及恢复审批仍保留，不宣称已解除暂停。
 
 以下是已有数据库复核日期，不是自动索引日期，日期按 Asia/Shanghai 解读：
 
-| 日期 | 工具 | 说明 |
-| --- | --- | --- |
-| 9 月 3–4 日 | Consensus、Gamma | 到期，先复核；保持 monitor，受 MAINT-01 限制 |
-| 9 月 5–6 日 | Runway、Luma AI | 按期核验，不保证索引放行 |
-| 9 月 7–11 日 | Pipedream、Cursor、The Graph、Perplexity、Make | 按既有队列复核，不能绕过剩余额度 |
-| 9 月 18 日 | OpenRouter、n8n | 官方事实及限制复核 |
-| 10 月 1 日 | Claude、DeepL、Fathom | 已存在显式复核日期；出现价格/政策变化时提前处理 |
+| 日期         | 工具                                           | 说明                                            |
+| ------------ | ---------------------------------------------- | ----------------------------------------------- |
+| 9 月 3–4 日  | Consensus、Gamma                               | 到期，先复核；保持 monitor，受 MAINT-01 限制    |
+| 9 月 5–6 日  | Runway、Luma AI                                | 按期核验，不保证索引放行                        |
+| 9 月 7–11 日 | Pipedream、Cursor、The Graph、Perplexity、Make | 按既有队列复核，不能绕过剩余额度                |
+| 9 月 18 日   | OpenRouter、n8n                                | 官方事实及限制复核                              |
+| 10 月 1 日   | Claude、DeepL、Fathom                          | 已存在显式复核日期；出现价格/政策变化时提前处理 |
 
-缺少 next_review_date 的 23 个工具：adobe、aigirl-best、anime-girl-studio、artiversehub-ai、character_ai、chatgpt-mac、emdash、fastimage-ai-sketch-to-image、gemini、gpt_4o、honeydo、notion、openai、poe、salesforce_einstein、shop_your_ai_powered_Shopping_assistant、shutterstock、sora、suno_aI、tattooai-design、undressing_ai、viggle、woy-ai。
+缺少 next_review_date 的 23 个工
+具：adobe、aigirl-best、anime-girl-studio、artiversehub-ai、character_ai、chatgpt-mac、emdash、fastimage-ai-sketch-to-image、gemini、gpt_4o、honeydo、notion、openai、poe、salesforce_einstein、shop_your_ai_powered_Shopping_assistant、shutterstock、sora、suno_aI、tattooai-design、undressing_ai、viggle、woy-ai。
 
 ## 数据与状态边界
 
 - 未访问管理后台的登录态业务页面，不将匿名 SEO smoke 视为全部后台功能验收。
 - 未在本轮读取真实评论、付款或试用业务记录，不对这些业务闭环的实际使用情况作完成声明。
 - 工作流配置存在不等于定时任务运行成功；后续需检查 GitHub Actions 执行历史和必要密钥配置。
-- 本轮仅修改维护脚本与文档：为 `scripts/production-seo-smoke.ts` 的重定向检查增加 20 秒超时和响应体取消释放。修复后真实生产 smoke 全部断言通过并正常退出 0；原挂起进程在断言通过后人工终止，不能算退出码成功。
+- 本轮仅修改维护脚本与文档：为 `scripts/production-seo-smoke.ts` 的重定向检查增加 20 秒超时和响应体取消释放。修复后真实
+  生产 smoke 全部断言通过并正常退出 0；原挂起进程在断言通过后人工终止，不能算退出码成功。
 - `pnpm run build` 已完整执行并退出 0；没有修改网站页面逻辑，也没有以“维护完成”代替未完成任务。
