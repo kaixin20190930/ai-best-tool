@@ -146,7 +146,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
   > = {
     productivity: [
       {
-        href: '/ai/fathom',
+        href: '/ai/fathom#decision-card',
         title: {
           cn: 'Fathom：会议纪要与会后跟进',
           en: 'Fathom: meeting notes and follow-through',
@@ -157,7 +157,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
         },
       },
       {
-        href: '/ai/gamma',
+        href: '/ai/gamma#decision-card',
         title: {
           cn: 'Gamma：把想法变成可分享材料',
           en: 'Gamma: turn rough ideas into shareable decks',
@@ -168,7 +168,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
         },
       },
       {
-        href: '/ai/notta',
+        href: '/ai/notta#decision-card',
         title: {
           cn: 'Notta：转录与整理入口',
           en: 'Notta: transcription and organization',
@@ -179,7 +179,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
         },
       },
       {
-        href: '/ai/motion',
+        href: '/ai/motion#decision-card',
         title: {
           cn: 'Motion：时间与任务安排',
           en: 'Motion: planning and task scheduling',
@@ -192,7 +192,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
     ],
     web3: [
       {
-        href: '/ai/dune',
+        href: '/ai/dune#decision-card',
         title: {
           cn: 'Dune：查询驱动的链上分析',
           en: 'Dune: query-driven on-chain analytics',
@@ -203,7 +203,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
         },
       },
       {
-        href: '/ai/defillama',
+        href: '/ai/defillama#decision-card',
         title: {
           cn: 'DefiLlama：广覆盖市场与协议监控',
           en: 'DefiLlama: protocol monitoring and market coverage',
@@ -214,7 +214,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
         },
       },
       {
-        href: '/ai/the-graph',
+        href: '/ai/the-graph#decision-card',
         title: {
           cn: 'The Graph：面向构建者的数据基础设施',
           en: 'The Graph: builder-facing data infrastructure',
@@ -225,7 +225,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
         },
       },
       {
-        href: '/ai/nansen',
+        href: '/ai/nansen#decision-card',
         title: {
           cn: 'Nansen：地址与资金流研究',
           en: 'Nansen: wallet and flow intelligence',
@@ -238,7 +238,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
     ],
     research: [
       {
-        href: '/ai/perplexity',
+        href: '/ai/perplexity#decision-card',
         title: {
           cn: 'Perplexity：更适合来源和研究起点',
           en: 'Perplexity: source-friendly research starting point',
@@ -249,7 +249,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
         },
       },
       {
-        href: '/ai/elicit',
+        href: '/ai/elicit#decision-card',
         title: {
           cn: 'Elicit：证据驱动研究入口',
           en: 'Elicit: evidence-driven research',
@@ -260,7 +260,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
         },
       },
       {
-        href: '/ai/papers-with-code',
+        href: '/ai/papers-with-code#decision-card',
         title: {
           cn: 'Papers with Code：论文与实现结合',
           en: 'Papers with Code: papers plus implementations',
@@ -271,7 +271,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
         },
       },
       {
-        href: '/ai/hugging-face',
+        href: '/ai/hugging-face#decision-card',
         title: {
           cn: 'Hugging Face：模型发现和生态探索',
           en: 'Hugging Face: model discovery and ecosystem exploration',
@@ -284,7 +284,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
     ],
     voice: [
       {
-        href: '/ai/elevenlabs',
+        href: '/ai/elevenlabs#decision-card',
         title: {
           cn: 'ElevenLabs：语音合成与克隆',
           en: 'ElevenLabs: speech synthesis and cloning',
@@ -295,7 +295,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
         },
       },
       {
-        href: '/ai/descript',
+        href: '/ai/descript#decision-card',
         title: {
           cn: 'Descript：音频编辑与转写',
           en: 'Descript: audio editing and transcription',
@@ -306,7 +306,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
         },
       },
       {
-        href: '/ai/notta',
+        href: '/ai/notta#decision-card',
         title: {
           cn: 'Notta：会议转写入口',
           en: 'Notta: meeting transcription',
@@ -317,7 +317,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
         },
       },
       {
-        href: '/ai/elevenlabs-conversational-ai',
+        href: '/ai/elevenlabs-conversational-ai#decision-card',
         title: {
           cn: '语音对话 Agent',
           en: 'Voice conversational agents',
@@ -330,7 +330,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
     ],
     automation: [
       {
-        href: '/ai/n8n',
+        href: '/ai/n8n#decision-card',
         title: {
           cn: 'n8n：工作流自动化',
           en: 'n8n: workflow automation',
@@ -341,7 +341,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
         },
       },
       {
-        href: '/ai/zapier',
+        href: '/ai/zapier#decision-card',
         title: {
           cn: 'Zapier：连接器优先自动化',
           en: 'Zapier: connector-first automation',
@@ -352,7 +352,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
         },
       },
       {
-        href: '/ai/make',
+        href: '/ai/make#decision-card',
         title: {
           cn: 'Make：可视化编排',
           en: 'Make: visual orchestration',
@@ -363,7 +363,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
         },
       },
       {
-        href: '/ai/ifttt',
+        href: '/ai/ifttt#decision-card',
         title: {
           cn: 'IFTTT：轻量触发自动化',
           en: 'IFTTT: lightweight trigger automation',
@@ -376,7 +376,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
     ],
     'developer-tools': [
       {
-        href: '/ai/cursor',
+        href: '/ai/cursor#decision-card',
         title: {
           cn: 'Cursor：开发者编辑器入口',
           en: 'Cursor: developer editor entry point',
@@ -387,7 +387,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
         },
       },
       {
-        href: '/ai/alchemy',
+        href: '/ai/alchemy#decision-card',
         title: {
           cn: 'Alchemy：基础设施和 API',
           en: 'Alchemy: infrastructure and APIs',
@@ -398,7 +398,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
         },
       },
       {
-        href: '/ai/pinecone',
+        href: '/ai/pinecone#decision-card',
         title: {
           cn: 'Pinecone：向量和检索',
           en: 'Pinecone: vector and retrieval',
@@ -409,7 +409,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
         },
       },
       {
-        href: '/ai/v0',
+        href: '/ai/v0#decision-card',
         title: {
           cn: 'v0：前端与原型生成',
           en: 'v0: frontend and prototype generation',
@@ -1441,7 +1441,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
         )}
 
         {comparisonGuides.length > 0 && (
-          <section className='theme-surface mb-8 rounded-lg border border-slate-200 p-6 shadow-sm'>
+          <section data-category-decision-links className='theme-surface mb-8 rounded-lg border border-slate-200 p-6 shadow-sm'>
             <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
               {isChinese ? '先做对比' : 'Compare first'}
             </p>

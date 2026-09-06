@@ -103,8 +103,8 @@ assert(
   'Separate the verified editorial calendar from missing decision baselines and autonomous crawling',
 );
 assert(
-  lnk.includes('SEO-IA-06/07') && lnk.includes('尚未验收'),
-  'Keep existing link work and unverified scope distinct',
+  lnk.includes('已完成') && lnk.includes('18个可索引Guide') && lnk.includes('24个分类代表入口'),
+  'LNK-01 must retain its full Guide, relationship, and category acceptance evidence',
 );
 assert(read(planName).includes('Review结论'), 'Implementation plan must retain its review record');
 assert(
