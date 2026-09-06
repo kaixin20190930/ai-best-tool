@@ -1,4 +1,5 @@
 import { applyLegacyToolScope } from '@/lib/config/legacyToolScopeReviews';
+import { applyHistoricalToolFactReview } from '@/lib/config/historicalToolFactReviews';
 
 export type WebNavigationListRow = {
   compareHref?: string;
@@ -263,7 +264,9 @@ const legacyDataList: WebNavigationListRow[] = [
   },
 ];
 
-export const dataList: WebNavigationListRow[] = legacyDataList.map((row) => applyLegacyToolScope(row, 'en'));
+export const dataList: WebNavigationListRow[] = legacyDataList.map((row) =>
+  applyHistoricalToolFactReview(applyLegacyToolScope(row, 'en'), 'en'),
+);
 
 const legacyDetailList: WebNavigationDetailData[] = [
   {
@@ -676,4 +679,6 @@ const legacyDetailList: WebNavigationDetailData[] = [
   },
 ];
 
-export const detailList: WebNavigationDetailData[] = legacyDetailList.map((row) => applyLegacyToolScope(row, 'en'));
+export const detailList: WebNavigationDetailData[] = legacyDetailList.map((row) =>
+  applyHistoricalToolFactReview(applyLegacyToolScope(row, 'en'), 'en'),
+);
