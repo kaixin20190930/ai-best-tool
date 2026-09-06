@@ -3,6 +3,7 @@ import { locales } from '@/i18n';
 
 import { INDEXABLE_GUIDE_PAGES } from '@/lib/content/guides';
 import { topListTopics } from '@/lib/data/topLists';
+import { getCanonicalToolSlug } from '@/lib/config/toolRouteAliases';
 import { BASE_URL } from '@/lib/env';
 import { INDEXABLE_LOCALES } from '@/lib/seo/indexing';
 import { getToolIndexDecision } from '@/lib/seo/toolIndexing';
@@ -82,7 +83,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       sitemapLocales.map((locale) => {
         const lang = locale === 'en' ? '' : `/${locale}`;
         return {
-          url: `${BASE_URL}${lang}/ai/${tool.name}`,
+          url: `${BASE_URL}${lang}/ai/${getCanonicalToolSlug(tool.name)}`,
           lastModified: tool.updatedAt || tool.createdAt || new Date(),
           changeFrequency: 'weekly' as const,
           priority: 0.8,

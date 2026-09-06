@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 
 import REVIEWS, {
   applyHistoricalToolFactReview,
@@ -35,5 +36,7 @@ assert(getHistoricalToolFactReview('shutterstock', 'en')?.title.includes('GenAI'
 assert(getHistoricalToolFactReview('suno_ai', 'en')?.detail.includes('does not automatically grant retroactive'));
 assert(getHistoricalToolFactReview('viggle', 'en')?.detail.includes('seven-day storage'));
 assert.equal(getHistoricalToolFactReview('claude', 'en'), null);
+const sitemapSource = readFileSync('app/sitemap.ts', 'utf8');
+assert(sitemapSource.includes('getCanonicalToolSlug(tool.name)'), 'Sitemap must never emit raw historical slugs');
 
 console.log('PASS four bilingual historical fact reviews, presenter projection, static fallback and control slug');
