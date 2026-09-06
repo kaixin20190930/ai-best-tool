@@ -87,13 +87,21 @@ async function smoke() {
     for (const path of [
       '/ai/adobe',
       '/ai/salesforce_einstein',
+      '/ai/chatgpt-mac',
+      '/ai/gpt_4o',
+      '/ai/openai',
+      '/ai/sora',
       '/guides/salesforce-einstein-alternatives-comparison',
     ]) {
       const response = await fetch(`${base}${prefix}${path}`, { signal: AbortSignal.timeout(20000) });
       assert.equal(response.status, 200);
       const raw = await response.text();
       const html = raw.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
-      const slug = path.includes('adobe') ? 'adobe' : 'salesforce_einstein';
+      const slug = path.startsWith('/ai/')
+        ? path.slice('/ai/'.length)
+        : path.includes('adobe')
+          ? 'adobe'
+          : 'salesforce_einstein';
       assert.equal((html.match(/data-tool-scope-review=/g) || []).length, 1);
       assert(html.includes(`data-tool-scope-review="${slug}"`));
       if (path.startsWith('/ai/')) {
@@ -114,7 +122,9 @@ async function smoke() {
       const noindex =
         /name="robots"[^>]*content="[^"]*noindex/.test(html) ||
         (response.headers.get('x-robots-tag') || '').includes('noindex');
-      assert.equal(noindex, path.startsWith('/guides/'), 'Existing index/noindex boundary unchanged');
+      const expectedNoindex =
+        path.startsWith('/guides/') || ['chatgpt-mac', 'gpt_4o', 'openai', 'sora'].includes(slug);
+      assert.equal(noindex, expectedNoindex, 'Each reviewed record must preserve its audited index boundary');
       assert(!html.includes('commonly used as Salesforce Einstein alternatives'));
       console.log(`PASS ${prefix}${path}: visible scope notice, canonical and index boundary`);
     }
