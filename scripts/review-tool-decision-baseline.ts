@@ -12,6 +12,8 @@ type DecisionBaseline = {
   profileId: string;
   toolName: string;
   profileName: string;
+  allowedSourceHosts: string[];
+  minimumVerifiedClaims: number;
   title: string;
   summary: string;
   primarySourceUrl: string;
@@ -27,6 +29,8 @@ const baselines: Record<string, DecisionBaseline> = {
     profileId: '63031451-a3eb-497d-9396-d6904aa2d3b3',
     toolName: 'gamma',
     profileName: 'Gamma',
+    allowedSourceHosts: ['help.gamma.app'],
+    minimumVerifiedClaims: 2,
     title: 'Decision baseline established',
     summary:
       'Gamma is a strong fit for fast, browser-first presentation and visual-content drafts when the team will review the final structure and export. Keep PowerPoint, Google Slides, or Canva in the comparison when exact editable-file handoff, offline work, strict brand control, or predictable credit use is the deciding constraint.',
@@ -43,6 +47,27 @@ const baselines: Record<string, DecisionBaseline> = {
     bestFit: ['Fast visual first drafts', 'Browser-based proposals and pitch decks'],
     notIdealFor: ['Pixel-perfect PowerPoint handoff', 'Offline-first editing'],
     alternatives: ['PowerPoint', 'Google Slides', 'Canva'],
+  },
+  luma: {
+    toolId: '711df152-fdcf-4a19-930c-ab866b67605f',
+    profileId: '4501f2f9-4579-4675-9a16-0ef800fe8385',
+    toolName: 'luma-ai',
+    profileName: 'Luma Dream Machine',
+    allowedSourceHosts: ['lumalabs.ai'],
+    minimumVerifiedClaims: 1,
+    title: 'Decision baseline established',
+    summary:
+      'Luma Dream Machine is a fit for video concepting, shot exploration, and generative modification when the team can compare several outputs, measure the cost of accepted shots, and finish continuity and delivery elsewhere. Keep Runway, Adobe Firefly, or a dedicated timeline editor in the comparison when low-tier commercial rights, shared API credits, deterministic continuity, or complete post-production is required.',
+    primarySourceUrl: 'https://lumalabs.ai/learning-hub/licensing',
+    sourceUrls: [
+      'https://lumalabs.ai/learning-hub/licensing',
+      'https://lumalabs.ai/learning-hub/dream-machine-credit-system',
+      'https://lumalabs.ai/learning-hub/payments-subscriptions',
+      'https://lumalabs.ai/learning-hub/modify-video-dream-machine',
+    ],
+    bestFit: ['Video concept and shot exploration', 'Generative video modification'],
+    notIdealFor: ['Commercial output on Free or Lite', 'Treating Dream Machine and API credits as one balance'],
+    alternatives: ['Runway', 'Adobe Firefly', 'Dedicated timeline editor'],
   },
 };
 
@@ -67,7 +92,7 @@ async function main() {
       .filter((argument) => !argument.startsWith('--tool='))
       .every((argument) => ['--check', '--commit'].includes(argument)),
   );
-  assert(baseline.sourceUrls.every((url) => new URL(url).hostname === 'help.gamma.app'));
+  assert(baseline.sourceUrls.every((url) => baseline.allowedSourceHosts.includes(new URL(url).hostname)));
   assert(baseline.bestFit.length >= 2 && baseline.notIdealFor.length >= 2 && baseline.alternatives.length >= 2);
   if (mode === 'check') {
     console.log(`PASS ${key} fixed identity, decision fields and official-source boundaries`);
@@ -117,7 +142,10 @@ async function main() {
   const verifiedClaims = (claimsResult.data || []).filter(
     (claim) => claim.verification_status === 'verified' && claim.conflict_status === 'none',
   );
-  assert(verifiedClaims.length >= 2, `${key}: at least two verified official claims are required`);
+  assert(
+    verifiedClaims.length >= baseline.minimumVerifiedClaims,
+    `${key}: at least ${baseline.minimumVerifiedClaims} verified official claims are required`,
+  );
 
   if (existingResult.data?.length) {
     console.log(
