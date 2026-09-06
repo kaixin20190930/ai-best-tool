@@ -1,0 +1,113 @@
+{
+  "slug": "replit",
+  "title": "Replit AI App Builder and Cloud Development Platform",
+  "officialUrl": "https://replit.com/",
+  "existingRoute": "/ai/replit",
+  "action": "migrate_existing_fallback",
+  "status": "ready_for_next_slot",
+  "reviewedAt": "2026-09-07",
+  "publishNotBefore": "2026-09-09",
+  "sitemapChangeApproved": false,
+  "productionWriteApproved": false,
+  "category": {
+    "discoverySlug": "developer-tools",
+    "storageSlug": "productivity"
+  },
+  "positioning": "An AI-assisted browser development and cloud application platform for turning requirements into working software, editing the generated code, collaborating, attaching managed services, and publishing from one environment.",
+  "decisionAngles": [
+    "Idea-to-deployed-app convenience versus the control and portability of a local repository plus independently selected cloud services",
+    "Agent-led full builds versus targeted coding assistance for teams that already own architecture and implementation",
+    "Effort-based Agent charges plus shared cloud credits versus predictable seat-only pricing",
+    "Built-in database, hosting, authentication, secrets, and collaboration versus dependency on one integrated application platform",
+    "Checkpoints and one-click rollback versus conventional Git review, environment promotion, database migration, and incident recovery practices",
+    "Accessible prototyping for non-specialists versus the engineering ownership needed for security, testing, observability, scaling, and maintenance",
+    "Optional security scans and managed controls versus an independent application-security review for sensitive or business-critical software"
+  ],
+  "pricingSnapshot": {
+    "checkedAt": "2026-09-07",
+    "billingUnit": "A subscription includes plan-level Agent and platform allowances, while Agent work uses effort-based pricing and additional cloud services such as publishing, databases, storage, compute, and data transfer can consume shared credits or usage charges.",
+    "plans": [
+      "Starter: free evaluation with daily Agent usage and a limited published-app allowance",
+      "Core: individual paid tier with monthly credits, full-build Agent capabilities, private workspaces, and publishing features",
+      "Pro: higher-cost tier with more included credits, parallel Agent work, collaborators, support, and longer database rollback",
+      "Enterprise: organization controls and custom commercial terms"
+    ],
+    "volatileFields": [
+      "monthly and annual subscription prices",
+      "included Agent and cloud credits",
+      "Agent effort-mode behavior and task cost",
+      "collaborator, background-task, publishing, database, compute, storage, and transfer limits"
+    ],
+    "releaseGuard": "Recheck the live pricing and AI billing pages on release day; do not publish exact plan prices, credit quantities, effort estimates, or cloud usage rates from this snapshot without that recheck."
+  },
+  "policyBoundaries": [
+    {
+      "label": "Agent output remains software that requires owner verification",
+      "summary": "Agent can plan, generate, change, and publish an application, but probabilistic output, retries, dependencies, integrations, generated security decisions, and production behavior still require testing and accountable human review.",
+      "releaseGuard": "Never equate successful generation or a working preview with production readiness, security approval, regulatory compliance, or maintainability."
+    },
+    {
+      "label": "Security scans are safeguards, not a complete application-security guarantee",
+      "summary": "Replit provides secrets handling, pre-deployment scanning, isolation, and stronger enterprise controls, while scan requirements and private-development protections vary by configuration and plan.",
+      "releaseGuard": "Describe current controls precisely and require independent threat modeling, authorization tests, dependency review, secret rotation, and deployment verification for sensitive applications."
+    },
+    {
+      "label": "Cloud limits and platform terms apply independently of Agent success",
+      "summary": "Applications remain subject to plan-based CPU, memory, storage, network, concurrency, database, deployment, and acceptable-use limits even when Agent completes the requested build.",
+      "releaseGuard": "Do not describe one-click publishing as unlimited hosting or assume a generated application is portable, scalable, or continuously available without workload-specific checks."
+    }
+  ],
+  "limitations": [
+    "Effort-based Agent pricing varies with the work performed, and text-only planning or troubleshooting can still be billable even when no code checkpoint appears.",
+    "Agent, publishing, database, storage, compute, and third-party AI usage can draw from the same credit budget, so the subscription price is not the full cost model.",
+    "Generated applications can require repeated prompting or repair, and unsuccessful approaches can consume time and credits before producing an acceptable result.",
+    "Checkpoints help recover application state but do not replace code review, automated tests, deployment promotion, backups, observability, incident response, or an independently controlled source repository.",
+    "Optional scans and secure defaults reduce common mistakes but do not prove business logic, authorization, data handling, dependency, or regulatory correctness.",
+    "Complex, performance-sensitive, highly customized, or regulated systems may outgrow the convenience and constraints of an integrated browser platform.",
+    "Cloud resource and network limits vary by plan and can temporarily stop an application or operation when enforced limits are reached.",
+    "Moving away can require extracting code, data, secrets, domains, background jobs, deployment configuration, and managed-service dependencies rather than only exporting source files."
+  ],
+  "marketValidation": {
+    "score": 98,
+    "verdict": "validated",
+    "rationale": "Replit has long operating history, substantial independent review volume, current product documentation, and independently reported funding and revenue scale. It has a clear decision role for fast browser-based building and deployment, especially for prototypes and small teams. The recommendation must stay conditional because effort-based cost, generated-code verification, complex debugging, cloud limits, security ownership, and platform dependency materially affect production fit.",
+    "strongSignals": [
+      "G2 listed Replit at 4.5 stars with more than 400 reviews across the seller's current product profiles at review time",
+      "Reuters reported a USD 250 million funding round at a USD 3 billion valuation in September 2025 and cited Replit's annualized revenue increasing to USD 150 million from USD 2.8 million",
+      "Current official documentation covers Agent build workflows, checkpoints, Git, managed databases, publishing, billing controls, security scans, and enterprise privacy settings rather than a single experimental feature",
+      "The live product supports free evaluation plus individual, professional, and enterprise tiers, indicating a maintained commercial platform"
+    ],
+    "recurringUserFriction": [
+      "Independent reviewers repeatedly identify credit consumption and total cost as harder to predict when Agent needs retries or complex work",
+      "Complex projects can expose debugging, dependency, performance, and customization limits compared with a conventional local development workflow",
+      "Non-technical accessibility can obscure the continuing need for architecture, testing, security, operations, and maintenance ownership",
+      "An integrated build-and-host workflow increases switching work when an application depends on Replit-specific managed services"
+    ]
+  },
+  "sources": {
+    "official": [
+      "https://replit.com/pricing",
+      "https://docs.replit.com/billing/ai-billing",
+      "https://docs.replit.com/learn/build-with-agent",
+      "https://docs.replit.com/learn/projects-and-artifacts/version-control",
+      "https://replit.com/security/",
+      "https://docs.replit.com/teams/enterprise-privacy-settings",
+      "https://docs.replit.com/legal-and-security-info/usage",
+      "https://docs.replit.com/core-concepts/project-editor/app-setup/secrets"
+    ],
+    "independent": [
+      "https://www.g2.com/products/replit/reviews",
+      "https://www.g2.com/sellers/replit",
+      "https://www.investing.com/news/stock-market-news/ai-software-developer-replit-raises-250-million-at-3-billion-valuation-4234041"
+    ]
+  },
+  "nextSlotChecklist": [
+    "Confirm there is still no production tools row using the replit slug or official domain",
+    "Recheck subscription prices, included credits, effort-based Agent billing, plan capabilities, and cloud usage charges",
+    "Verify official logo and thumbnail sources and confirm both locales render them without fallback media",
+    "Keep the decision scope on integrated AI building and cloud deployment rather than describing Replit as an unrestricted replacement for engineering teams",
+    "Preserve generated-code review, security, resource-limit, portability, and total-cost boundaries in both languages",
+    "Replace only the existing /ai/replit fallback and do not create a second canonical URL",
+    "Publish as monitor and noindex first; run evidence, alias, sitemap, TypeScript, full build, and production smoke checks before any later index decision"
+  ]
+}

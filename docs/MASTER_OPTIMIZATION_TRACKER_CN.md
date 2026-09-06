@@ -83,7 +83,8 @@ TypeScript、数据库 rollback/commit/status 与完整 build 均通过，提交
 
 2026-09-07 持续收录准备：已建立 [下周成熟工具候选与发布节奏](./NEXT_WEEK_MATURE_TOOL_INTAKE_2026-09-07_CN.md)。候选顺序为
 Synthesia、Replit、Otter.ai，Lovable 与 Midjourney 因计费冲突或官方边界证据不足暂缓；Synthesia 已完成结构化预审，最早
-2026-09-08 才能进入生产迁移复核。当前没有配置 DataForSEO，因此不伪造搜索量；审核可以并行，但公开默认每天 1 个，全部先
+2026-09-08 才能进入生产迁移复核；Replit 也已完成生产查重与结构化预审，最早排在 2026-09-09。当前没有配置 DataForSEO，因
+此不伪造搜索量；审核可以并行，但公开默认每天 1 个，全部先
 `monitor / noindex`，索引仍需单独批准。本轮只新增文档和门禁数据，不写生产、不改变 sitemap，四周一级进度仍为 10/13
 （76.9%）。
 
