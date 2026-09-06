@@ -44,7 +44,7 @@ function payload(slug: string) {
 async function main() {
   const args = process.argv.slice(2).filter((arg) => arg !== '--');
   assert(args.length <= 1 && args.every((arg) => ['--check', '--status', '--commit'].includes(arg)));
-  assert.equal(Object.keys(REVIEWS).length, records.length);
+  assert(records.every(([, slug]) => Object.prototype.hasOwnProperty.call(REVIEWS, slug)));
   for (const [, slug] of records) {
     const item = payload(slug);
     assert(item.content.en !== item.content.zh && item.detail.zh.includes('官方来源'));

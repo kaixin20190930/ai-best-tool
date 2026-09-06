@@ -127,6 +127,88 @@ const REVIEWS = {
       ['Terms of Use', 'https://viggle.ai/terms-of-use'],
     ],
   },
+  'artiversehub-ai': {
+    checkedAt: '2026-09-06', nextReviewDate: '2026-10-06', title: 'ArtiverseHub AI', url: 'https://artiversehub.ai/',
+    summary: {
+      en: 'ArtiverseHub AI presents an all-in-one image and video generation workspace. The former detail text incorrectly described Intuit financial products and has been withdrawn; independent adoption evidence is still missing.',
+      cn: 'ArtiverseHub AI 提供一站式图像和视频生成工作区。旧详情错误介绍了 Intuit 金融产品，现已撤下；独立采用证据仍然缺失。',
+    },
+    detail: {
+      en: [
+        ['Verified scope', 'The official site describes image and video generation, multiple creative models and paid generation upgrades. This record does not represent Intuit or its products.'],
+        ['Why it is monitored', 'The product is accessible, but this review found only first-party product claims and no sufficient independent adoption evidence for a Best recommendation.'],
+        ['What to check next', 'Verify a real account workflow, output limits, current checkout terms and an independent user or market signal before reconsidering index approval.'],
+        ['Review status', 'Identity and official scope checked 2026-09-06. No hands-on quality score or market-verification score was assigned.'],
+      ],
+      cn: [
+        ['已核对范围', '官网描述图像与视频生成、多种创作模型和付费生成升级。本记录与 Intuit 及其产品无关。'],
+        ['为什么观察', '产品入口可访问，但本轮只有产品方自述，缺少足以支持 Best 推荐的独立采用证据。'],
+        ['下一步核验', '重新评估索引前，需要核验真实账号流程、输出限制、当前结账条款以及独立用户或市场信号。'],
+        ['核验状态', '2026-09-06 已核对身份和官方范围；未填写实测质量分或市场验证分。'],
+      ],
+    },
+    sources: [['Official site', 'https://artiversehub.ai/']],
+  },
+  'fastimage-ai-sketch-to-image': {
+    checkedAt: '2026-09-06', nextReviewDate: '2026-10-06', title: 'Fast Image AI Sketch to Image', url: 'https://fastimage.ai/sketch-to-image',
+    summary: {
+      en: 'Fast Image AI Sketch to Image converts sketches into generated images for concept and design workflows. Its current listing lacks independent adoption evidence and verified account limits.',
+      cn: 'Fast Image AI Sketch to Image 把草图转换为用于概念和设计工作流的生成图像。目前条目缺少独立采用证据和已核验的账号限制。',
+    },
+    detail: {
+      en: [['Verified scope', 'The official product page and first-party guide describe sketch-conditioned image generation for illustration, product and spatial concepts.'], ['Why it is monitored', 'A product description alone does not establish output quality, reliable limits or meaningful market adoption.'], ['What to check next', 'Run one controlled sketch test, record account limits and find an independent usage signal before index reconsideration.'], ['Review status', 'Official scope checked 2026-09-06; hands-on and independent market validation remain open.']],
+      cn: [['已核对范围', '官方产品页和第一方指南描述了面向插画、产品与空间概念的草图条件图像生成。'], ['为什么观察', '产品描述本身不能证明输出质量、稳定限制或真实市场采用。'], ['下一步核验', '重新考虑索引前，需要完成一次受控草图测试、记录账号限制并找到独立使用信号。'], ['核验状态', '2026-09-06 已核对官网范围；实测与独立市场验证仍待完成。']],
+    },
+    sources: [['Official tool', 'https://fastimage.ai/sketch-to-image'], ['First-party workflow guide', 'https://fastimage.ai/blog/the-creative-link-sketch-to-commercial-images-via-fast-image-ai']],
+  },
+  honeydo: {
+    checkedAt: '2026-09-06', nextReviewDate: '2026-10-06', title: 'HoneyDo: Speak, Snap and Shop', url: 'https://apps.apple.com/us/app/honeydo-speak-snap-and-shop/id6473463998',
+    summary: {
+      en: 'HoneyDo is an iPhone grocery-list app using voice and photo input to organize shopping items. Availability is verifiable, but current plan limits and independent adoption have not been established.',
+      cn: 'HoneyDo 是通过语音和照片输入整理购物项目的 iPhone 购物清单应用。应用入口可核对，但当前套餐限制和独立采用情况尚未确认。',
+    },
+    detail: {
+      en: [['Verified scope', 'The App Store entry identifies an iPhone grocery-list application centered on spoken and photographed inputs.'], ['Why it is monitored', 'A store listing confirms availability, not sustained adoption, extraction accuracy or current paid boundaries.'], ['What to check next', 'Confirm regional availability, one photo-to-list result, sharing behavior, subscription terms and an independent user signal.'], ['Review status', 'Store identity checked 2026-09-06; no hands-on or market score assigned.']],
+      cn: [['已核对范围', 'App Store 条目确认这是一款以语音和照片输入为核心的 iPhone 购物清单应用。'], ['为什么观察', '商店上架只能证明可用，不能证明持续采用、识别准确率或当前付费边界。'], ['下一步核验', '需确认地区可用性、一次照片转清单结果、共享行为、订阅条款和独立用户信号。'], ['核验状态', '2026-09-06 已核对商店身份；未填写实测或市场评分。']],
+    },
+    sources: [['Apple App Store', 'https://apps.apple.com/us/app/honeydo-speak-snap-and-shop/id6473463998']],
+  },
+  shop_your_ai_powered_Shopping_assistant: {
+    checkedAt: '2026-09-06', nextReviewDate: '2026-10-06', title: 'Shop by Shopify (AI-enabled commerce app)', url: 'https://shop.app/',
+    summary: {
+      en: 'Shop is Shopify’s shopping, checkout and order-tracking app with AI-enabled discovery and agentic shopping connections. AI is one capability inside a broader commerce product, not a standalone assistant.',
+      cn: 'Shop 是 Shopify 的购物、结账和订单追踪应用，并包含 AI 发现与智能体购物连接。AI 是综合商业产品中的一项能力，不是独立助手。',
+    },
+    detail: {
+      en: [['Verified scope', 'Official Shopify material describes product discovery, Shop Pay checkout, order tracking and agentic shopping experiences.'], ['Why it is monitored', 'The historical title overstates a standalone AI assistant and does not separate consumer Shop features from merchant or developer capabilities.'], ['What to check next', 'Define the user job and region, then decide whether this belongs in an AI-tool directory or only in a commerce guide.'], ['Review status', 'Product scope checked 2026-09-06; the record is withheld from active tool recommendations pending classification.']],
+      cn: [['已核对范围', 'Shopify 官方资料描述商品发现、Shop Pay 结账、订单追踪和智能体购物体验。'], ['为什么观察', '历史标题夸大了独立 AI 助手身份，也没有区分消费者 Shop、商家和开发者能力。'], ['下一步核验', '先明确用户任务和地区，再决定它应进入 AI 工具目录还是只出现在商业指南。'], ['核验状态', '2026-09-06 已核对产品范围；完成分类前不进入活跃工具推荐。']],
+    },
+    sources: [['Shop customer experience', 'https://help.shopify.com/en/manual/online-sales-channels/shop/customer-experience'], ['Shop', 'https://shop.app/']],
+  },
+  'tattooai-design': {
+    checkedAt: '2026-09-06', nextReviewDate: '2026-10-06', title: 'Tattoo AI Design', url: 'https://tattooai.design/',
+    summary: {
+      en: 'Tattoo AI Design generates tattoo concepts and virtual try-on images. The service is active, but first-party claims do not yet establish design quality, safety for permanent use or independent adoption.',
+      cn: 'Tattoo AI Design 用于生成纹身概念和虚拟试戴图。服务仍在运行，但第一方自述尚不能证明设计质量、永久纹身使用安全性或独立采用。',
+    },
+    detail: {
+      en: [['Verified scope', 'The official site offers text-to-tattoo, image try-on and credit-based generation.'], ['Important limit', 'Generated images are concepts, not proof that a design is technically suitable, original or safe to tattoo. Review with a qualified artist before permanent use.'], ['Why it is monitored', 'Current evidence is first-party and pricing varies by access mode; independent adoption and hands-on output review remain missing.'], ['Review status', 'Scope and current pricing structure checked 2026-09-06; no Best ranking or market score assigned.']],
+      cn: [['已核对范围', '官网提供文本生成纹身、图片试戴和按 credits 生成。'], ['重要限制', '生成图只是概念，不能证明图案适合实际纹身、具有原创性或安全；永久使用前应由合格纹身师评估。'], ['为什么观察', '当前证据主要来自产品方，且价格因购买方式变化；仍缺独立采用和输出实测。'], ['核验状态', '2026-09-06 已核对范围和当前价格结构；未给出 Best 排名或市场评分。']],
+    },
+    sources: [['Official site', 'https://tattooai.design/'], ['Pricing', 'https://tattooai.design/pricing/']],
+  },
+  'woy-ai': {
+    checkedAt: '2026-09-06', nextReviewDate: '2026-10-06', title: 'Woy.ai (AI tools directory)', url: 'https://woy.ai/',
+    summary: {
+      en: 'Woy.ai is another AI tools directory, not an AI tool that performs a user task. Its old 2024 copy is stale and the record is outside the current single-tool index scope.',
+      cn: 'Woy.ai 是另一个 AI 工具目录，不是直接完成用户任务的 AI 工具。旧版 2024 文案已经过时，该记录不属于当前单工具索引范围。',
+    },
+    detail: {
+      en: [['Verified scope', 'The site organizes third-party AI products by category and product type.'], ['Why it is monitored', 'A directory competes at the discovery-platform level and should not masquerade as one recommended AI tool.'], ['What to do next', 'Retain only as a historical ecosystem reference unless a separate directory-comparison policy is approved.'], ['Review status', 'Identity checked 2026-09-06; excluded from active tool recommendations.']],
+      cn: [['已核对范围', '该网站按分类和产品类型整理第三方 AI 产品。'], ['为什么观察', '目录属于发现平台层，不应伪装成一个被推荐的 AI 工具。'], ['下一步', '除非单独批准目录对比政策，否则只作为历史生态参考保留。'], ['核验状态', '2026-09-06 已核对身份；退出活跃工具推荐。']],
+    },
+    sources: [['Woy.ai categories', 'https://woy.ai/tags']],
+  },
 } as const;
 
 export function getHistoricalToolFactReview(slug: string, locale: string) {

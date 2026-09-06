@@ -30,7 +30,7 @@
 | MAINT-01 | P0 | 公开收录与索引批准额度分离 | 本周可证实放行至少 12 次，当前额度 0 | 技术保护、本周可证实记录补账及额度判断完成；保持暂停，旧历史未知部分明确保留 | Codex；下周恢复前重新复核 |
 | MAINT-02 | P0 | 生产健康、广告和 SEO 边界复查 | 本轮 SEO、health、ads.txt 检查通过 | 本轮审计完成；持续维护 | Codex |
 | MAINT-03 | P1 | Consensus、Gamma 到期复核 | 两者 monitor；生产下次复查均已设为 9 月 7 日 | 本轮官方事实维护与排期完成 2/2；独立市场复核/账户实操未完成，不刷新旧验证日期 | Codex；9 月 7 日复查已记录缺口 |
-| MAINT-04 | P1 | 历史工具维护字段补齐 | Emdash、Gemini、Notion、Poe、OpenAI家族及第二组4条已处理；缺排期 23 → 22 → 21 → 19 → 15 → 11 | 第二组补实但不赋市场评分；剩余11项逐页核验，其中Adobe/Salesforce属RC-05 | Codex；官方与独立证据 |
+| MAINT-04 | P1 | 历史工具维护字段补齐 | RC-07前三组已处理；缺排期 23 → 22 → 21 → 19 → 15 → 11 → 5 | RC-07已完成14/17，剩余3条安全对象；另2条为RC-05C | Codex；官方与独立证据 |
 | MAINT-05 | P1 | Emdash 复查排期 | 依据已有 9 月 1 日核验 +30 天 | 已完成：生产 next_review_date 为 10 月 1 日；幂等与其他字段不变校验通过 | Codex |
 | MAINT-06 | P1 | Change Timeline 首批真实基线 | 主台账仍为 Fathom、Claude、Consensus，3/10 | Gamma 下一项；robots 受限来源不绕过 | Codex；必要时人工来源材料 |
 | MAINT-07 | P1 | GSC / Coverage 周度复盘 | 现有主台账性能基线为 8 月 31 日导出；技术通过不代表 Google 已收录 | 等下一次同期数据后评估，不为等待数据扩页 | 用户提供 7 天、28 天及 Coverage |

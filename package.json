@@ -65,6 +65,7 @@
     "refresh:historical-tool-facts": "tsx scripts/refresh-historical-tool-facts.ts",
     "test:historical-tool-facts": "tsx scripts/test-historical-tool-facts.ts",
     "normalize:suno-slug": "tsx scripts/normalize-suno-slug.ts",
+    "monitor:unverified-historical-tools": "tsx scripts/monitor-unverified-historical-tools.ts",
     "test:localized-navigation:smoke": "tsx scripts/test-localized-navigation.ts --smoke",
     "test:seo-architecture": "tsx scripts/test-seo-architecture-guardrails.ts",
     "test:seo-breadcrumbs": "tsx scripts/test-seo-breadcrumbs.ts",

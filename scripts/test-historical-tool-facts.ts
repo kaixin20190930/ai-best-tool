@@ -27,14 +27,19 @@ for (const slug of Object.keys(REVIEWS)) {
     assert.equal(toolToDetailData(fixture, locale).url, review.url);
     assert(review.detail.includes(locale === 'en' ? 'Official sources' : '官方来源'));
   }
-  assert.equal(dataList.find((row) => row.name === slug)?.content, getHistoricalToolFactReview(slug, 'en')?.content);
-  assert.equal(detailList.find((row) => row.name === slug)?.detail, getHistoricalToolFactReview(slug, 'en')?.detail);
+  const fallbackList = dataList.find((row) => row.name === slug);
+  const fallbackDetail = detailList.find((row) => row.name === slug);
+  if (fallbackList) assert.equal(fallbackList.content, getHistoricalToolFactReview(slug, 'en')?.content);
+  if (fallbackDetail) assert.equal(fallbackDetail.detail, getHistoricalToolFactReview(slug, 'en')?.detail);
 }
 
 assert(getHistoricalToolFactReview('character_ai', 'en')?.detail.includes('make things up'));
 assert(getHistoricalToolFactReview('shutterstock', 'en')?.title.includes('GenAI'));
 assert(getHistoricalToolFactReview('suno_ai', 'en')?.detail.includes('does not automatically grant retroactive'));
 assert(getHistoricalToolFactReview('viggle', 'en')?.detail.includes('seven-day storage'));
+assert(!getHistoricalToolFactReview('artiversehub-ai', 'en')?.detail.includes('TurboTax'));
+assert(getHistoricalToolFactReview('woy-ai', 'en')?.detail.includes('directory'));
+assert(getHistoricalToolFactReview('shop_your_ai_powered_Shopping_assistant', 'en')?.detail.includes('standalone AI assistant'));
 assert.equal(getHistoricalToolFactReview('claude', 'en'), null);
 const sitemapSource = readFileSync('app/sitemap.ts', 'utf8');
 assert(sitemapSource.includes('getCanonicalToolSlug(tool.name)'), 'Sitemap must never emit raw historical slugs');

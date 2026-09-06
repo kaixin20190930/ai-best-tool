@@ -18,7 +18,7 @@
 - 本轮将缺失的数据库事实复查日期补为 **2026-10-01**；不从今天重新起算，也不改动未来可能存在的人工排期。公开页面原先可能已显示推导出的日期，本次是补齐数据库明确字段，不宣称新增页面功能。
 - 更新只允许 next_review_date 与 updated_at；数据库原正文、features、index 状态等全部保持不变。
 
-## 剩余项分类（初始 22，当前 11）
+## 剩余项分类（初始 22，当前 5）
 
 最新：Character.AI、Shutterstock GenAI、Suno、Viggle 完成官方事实、双语正文与复查排期，保留原索引批准；当前缺排期 11。OpenAI 家族处理后的15项及更早19/21/22均为历史快照。
 
@@ -36,10 +36,12 @@
 | 1b | notion、poe | 官方用量、权限/隐私及双语内容维护，保留索引与身份 | 本轮完成；9 月 18 日复查，市场验证未赋值 |
 | 1c | adobe、salesforce_einstein | 对象/重复检查及线上链接审计已完成；按下方处置分支补 URL 级数据 | 当前条目未通过准入；GSC 明细和最终处置未完成，生产未改 |
 | 2 | openai、gpt_4o、chatgpt-mac、sora | 公司、API模型、客户端入口和停服产品已分别界定；保留原slug作为历史说明，不并入活跃推荐 | 已完成；4条均monitor/noindex并有复查日期 |
-| 3 | character_ai、artiversehub-ai、fastimage-ai-sketch-to-image、honeydo、shutterstock、suno_aI、tattooai-design、viggle、woy-ai、shop_your_ai_powered_Shopping_assistant | Character.AI、Shutterstock GenAI、Suno、Viggle 已补实保留；其余6条继续核对官网、对象和市场信号 | 4/10完成，剩余6条 |
+| 3 | character_ai、artiversehub-ai、fastimage-ai-sketch-to-image、honeydo、shutterstock、suno_ai、tattooai-design、viggle、woy-ai、shop_your_ai_powered_Shopping_assistant | 4条补实保留；其余6条已纠错并因分类或独立采用证据不足转monitor | 10/10完成 |
 | 4 | aigirl-best、anime-girl-studio、undressing_ai | 先确认实际服务类型、安全与合规边界，不自动推广或补“已验证” | 待执行 |
 
 没有充分核验依据的条目可以进入人工维护队列，但不能统一填今日 reviewedAt、虚构 sourceUrl 或提升市场分数。缺日期本身不触发本轮批量 noindex；索引仍遵循独立政策和暂停规则。
+
+2026-09-06 第三组：ArtiverseHub AI、FastImage、HoneyDo、Shop、Tattoo AI Design、Woy.ai 已完成身份、官网、双语状态正文和10月6日复查。前五条从实际 index 转为 `monitor`；Woy 原已因质量门禁 noindex，本次显式统一为 `monitor`。当前缺排期5条，其中Adobe/Salesforce属于RC-05C，RC-07仅剩3条安全/合规对象。
 
 ## OpenAI 家族历史对象复核
 
