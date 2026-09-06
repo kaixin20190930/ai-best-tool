@@ -15,6 +15,7 @@ loadEnvConfig(process.cwd());
 
 type ProfileRow = {
   id: string;
+  owner_type: string;
   product_name: string;
   last_verified_at: string | null;
   next_review_at: string | null;
@@ -55,7 +56,7 @@ async function auditIntelligenceMonitorRuntime() {
   const [profilesResult, timelineResult, changesResult] = await Promise.all([
     supabase
       .from('product_intelligence_profiles')
-      .select('id, product_name, last_verified_at, next_review_at, metadata')
+      .select('id, owner_type, product_name, last_verified_at, next_review_at, metadata')
       .order('updated_at', { ascending: false }),
     supabase
       .from('product_intelligence_timeline_events')
@@ -85,11 +86,28 @@ async function auditIntelligenceMonitorRuntime() {
         getLatestTimelineReviewAt(events, 'decision'),
       ),
       nextDecisionReviewAt: typeof metadata.nextDecisionReviewAt === 'string' ? metadata.nextDecisionReviewAt : null,
-    });
+    }).map((item) => ({ ...item, ownerType: profile.owner_type }));
   });
   const automaticWorkflowConfigured = hasAutomaticIntelligenceWorkflow();
   const pendingChanges = (changesResult.data || []).filter((change) => change.review_status === 'pending').length;
   const stateCounts = countStates(schedule);
+  const profileCountsByOwnerType = Object.fromEntries(
+    [...new Set(profiles.map((profile) => profile.owner_type))]
+      .sort()
+      .map((ownerType) => [ownerType, profiles.filter((profile) => profile.owner_type === ownerType).length]),
+  );
+  const reviewCalendarByOwnerType = Object.fromEntries(
+    Object.keys(profileCountsByOwnerType).map((ownerType) => [
+      ownerType,
+      countStates(schedule.filter((item) => item.ownerType === ownerType)),
+    ]),
+  );
+  const toolDecisionCalendar = reviewCalendarByOwnerType.tool?.decision || {
+    overdue: 0,
+    dueSoon: 0,
+    scheduled: 0,
+    unscheduled: 0,
+  };
 
   console.log(
     JSON.stringify(
@@ -97,7 +115,9 @@ async function auditIntelligenceMonitorRuntime() {
         success: true,
         generatedAt: new Date().toISOString(),
         profileCount: profiles.length,
+        profileCountsByOwnerType,
         reviewCalendar: stateCounts,
+        reviewCalendarByOwnerType,
         timelineReviewEvents: timeline.length,
         pendingDetectedChanges: pendingChanges,
         automaticWorkflowConfigured,
@@ -105,11 +125,12 @@ async function auditIntelligenceMonitorRuntime() {
         verdict: {
           editorialCalendarReady: profiles.length > 0 && stateCounts.fact.unscheduled === 0,
           decisionBaselineComplete: stateCounts.decision.unscheduled === 0,
+          toolDecisionBaselineComplete: toolDecisionCalendar.unscheduled === 0,
           autonomousMonitoringVerified: false,
         },
         note: automaticWorkflowConfigured
-          ? 'A repository workflow invokes the intelligence monitor, but there is no dedicated run log to prove scheduler delivery.'
-          : 'The admin queue is a computed editorial calendar. No repository workflow currently proves autonomous crawling or recurring sync.',
+          ? 'Owner-type counts separate tool decision coverage from site or distribution profiles. A repository workflow invokes the intelligence monitor, but there is no dedicated run log to prove scheduler delivery.'
+          : 'Owner-type counts separate tool decision coverage from site or distribution profiles. The admin queue is a computed editorial calendar; no repository workflow currently proves autonomous crawling or recurring sync.',
       },
       null,
       2,

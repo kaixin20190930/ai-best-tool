@@ -112,6 +112,7 @@
     "intelligence:review-core-baseline": "tsx scripts/review-core-tool-intelligence.ts",
     "intelligence:review-gamma-baseline": "tsx scripts/review-core-tool-intelligence.ts --tool=gamma",
     "intelligence:review-decision-baseline": "tsx scripts/review-tool-decision-baseline.ts",
+    "tools:reconcile-dune": "tsx scripts/reconcile-dune-directory-tool.ts",
     "intelligence:sync-signals": "tsx scripts/sync-product-intelligence-signals.ts",
     "distribution:discover-target": "tsx scripts/discover-distribution-target-pages.ts",
     "distribution:analyze-target": "tsx scripts/analyze-distribution-target.ts",

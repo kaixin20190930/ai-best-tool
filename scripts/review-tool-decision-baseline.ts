@@ -140,6 +140,28 @@ const baselines: Record<string, DecisionBaseline> = {
     notIdealFor: ['Replacing a full professional timeline editor', 'Assuming every generation will be usable'],
     alternatives: ['Luma Dream Machine', 'Adobe Firefly', 'Professional timeline editor'],
   },
+  dune: {
+    toolId: 'dd8cb6a3-ef78-4747-9075-ebf663290410',
+    profileId: '4887453a-a4a4-489c-b6f0-80e88ccc9c09',
+    toolName: 'dune',
+    profileName: 'Dune',
+    allowedSourceHosts: ['dune.com', 'docs.dune.com'],
+    allowedPageQualityStatuses: ['monitor'],
+    minimumVerifiedClaims: 2,
+    title: 'Decision baseline established',
+    summary:
+      'Dune is a fit for onchain analysts and crypto researchers who need custom SQL queries, reusable dashboards, and evidence behind a thesis, and can own query logic, freshness checks, and credit usage. Keep DefiLlama, Nansen, or a direct data warehouse in the comparison when broad market scanning, packaged wallet intelligence, or governed application pipelines matter more than flexible public analytics.',
+    primarySourceUrl: 'https://docs.dune.com/docs/product-comparison',
+    sourceUrls: [
+      'https://docs.dune.com/',
+      'https://docs.dune.com/docs/product-comparison',
+      'https://docs.dune.com/web-app/overview',
+      'https://docs.dune.com/web-app/share',
+    ],
+    bestFit: ['On-chain analysts', 'Crypto researchers'],
+    notIdealFor: ['People only wanting lightweight charts', 'Users who do not want to work close to raw data'],
+    alternatives: ['DefiLlama', 'Nansen', 'Direct data warehouse'],
+  },
 };
 
 function readBaseline(args: string[]) {
