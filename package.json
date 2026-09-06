@@ -56,6 +56,7 @@
     "test:openrouter-release": "tsx scripts/migrate-openrouter-tool.ts --check",
     "test:n8n-release": "tsx scripts/migrate-n8n-tool.ts --check",
     "test:n8n-pages": "tsx scripts/test-n8n-pages.ts",
+    "tools:migrate-codex": "tsx scripts/migrate-codex-tool.ts",
     "test:home-positioning": "tsx scripts/test-home-positioning.ts",
     "test:localized-metadata": "tsx scripts/test-localized-page-metadata.ts",
     "test:localized-navigation": "tsx scripts/test-localized-navigation.ts",

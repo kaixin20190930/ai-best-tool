@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Codex coding workflow illustration</title>
+  <desc id="desc">A terminal workspace showing plan, edit, test, and review stages.</desc>
+  <defs>
+    <linearGradient id="bg" x1="80" y1="30" x2="1110" y2="650" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#164e43"/>
+      <stop offset=".55" stop-color="#0f2f2d"/>
+      <stop offset="1" stop-color="#061716"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientTransform="translate(880 160) rotate(130) scale(520 390)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5eead4" stop-opacity=".28"/>
+      <stop offset="1" stop-color="#5eead4" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="675" rx="42" fill="url(#bg)"/>
+  <rect width="1200" height="675" rx="42" fill="url(#glow)"/>
+  <g fill="none" stroke="#99f6e4" stroke-opacity=".12">
+    <path d="M0 112h1200M0 225h1200M0 338h1200M0 451h1200M0 564h1200"/>
+    <path d="M150 0v675M350 0v675M550 0v675M750 0v675M950 0v675"/>
+  </g>
+  <rect x="104" y="92" width="992" height="491" rx="30" fill="#031f1d" fill-opacity=".82" stroke="#5eead4" stroke-opacity=".35" stroke-width="2"/>
+  <circle cx="142" cy="128" r="7" fill="#5eead4"/>
+  <circle cx="166" cy="128" r="7" fill="#a7f3d0" fill-opacity=".7"/>
+  <circle cx="190" cy="128" r="7" fill="#ecfdf5" fill-opacity=".4"/>
+  <text x="142" y="220" fill="#ecfdf5" font-family="ui-monospace, monospace" font-size="58" font-weight="700">CODEX</text>
+  <text x="142" y="268" fill="#99f6e4" font-family="ui-monospace, monospace" font-size="24">plan  edit  test  review</text>
+  <g font-family="ui-monospace, monospace" font-size="25">
+    <text x="142" y="354" fill="#5eead4">01</text><text x="202" y="354" fill="#d1fae5">Understand the repository</text>
+    <text x="142" y="408" fill="#5eead4">02</text><text x="202" y="408" fill="#d1fae5">Make a focused change</text>
+    <text x="142" y="462" fill="#5eead4">03</text><text x="202" y="462" fill="#d1fae5">Run the real checks</text>
+    <text x="142" y="516" fill="#5eead4">04</text><text x="202" y="516" fill="#d1fae5">Keep human review</text>
+  </g>
+  <path d="M866 259 921 310 866 361M947 379h70" fill="none" stroke="#ecfdf5" stroke-linecap="round" stroke-linejoin="round" stroke-width="18"/>
+</svg>

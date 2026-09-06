@@ -23,10 +23,33 @@ export default async function TrialsPage({ params }: { params: { locale: string 
   }
 
   const [{ rows: neonTools }, trialsResult] = await Promise.all([
-    query<{ id: string; name: string; title: Record<string, string> }>(`SELECT id, name, title FROM tools WHERE status = 'published' ORDER BY name ASC LIMIT 500`),
+    query<{ id: string; name: string; title: Record<string, string>; features: Record<string, unknown> | null }>(`SELECT id, name, title, features FROM tools WHERE status = 'published' ORDER BY name ASC LIMIT 500`),
     supabase.from('trial_scorecards').select('id, tool_id, status, target_outcome, started_at, ends_at, renewal_at, final_decision').eq('user_id', user.id).order('created_at', { ascending: false }),
   ]);
-  const tools: StackToolOption[] = neonTools.map((tool) => ({ id: tool.id, slug: tool.name, title: getLocalizedField(tool.title, params.locale, isChinese ? 'cn' : 'en') }));
+  const tools: StackToolOption[] = neonTools.map((tool) => {
+    const template = tool.features?.trialTemplate && typeof tool.features.trialTemplate === 'object'
+      ? tool.features.trialTemplate as Record<string, unknown>
+      : null;
+    const localizedChecks = template?.checks && typeof template.checks === 'object'
+      ? template.checks as Record<string, unknown>
+      : null;
+    const checkValue = localizedChecks?.[params.locale] || localizedChecks?.[isChinese ? 'zh' : 'en'];
+    return {
+      id: tool.id,
+      slug: tool.name,
+      title: getLocalizedField(tool.title, params.locale, isChinese ? 'cn' : 'en'),
+      trialTemplate: template
+        ? {
+            targetOutcome: getLocalizedField(
+              (template.targetOutcome || {}) as Record<string, string>,
+              params.locale,
+              isChinese ? 'cn' : 'en',
+            ),
+            checks: Array.isArray(checkValue) ? checkValue.map(String).filter(Boolean).slice(0, 5) : [],
+          }
+        : undefined,
+    };
+  });
   const toolNames = new Map(tools.map((tool) => [tool.id, tool.title]));
   const trials = (trialsResult.data || []) as DatabaseRow[];
 

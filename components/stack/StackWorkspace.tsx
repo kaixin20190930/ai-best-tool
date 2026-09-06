@@ -9,7 +9,12 @@ import { runStackAudit } from '@/app/actions/stackAudit';
 import { useRouter } from '@/app/navigation';
 import { normalizeStackCost, type StackBillingPeriod } from '@/lib/services/stack/cost';
 
-export type StackToolOption = { id: string; title: string; slug: string };
+export type StackToolOption = {
+  id: string;
+  title: string;
+  slug: string;
+  trialTemplate?: { targetOutcome: string; checks: string[] };
+};
 export type StackTaskOption = { id: string; name: string };
 export type StackItemView = {
   id: string;

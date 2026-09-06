@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Codex directory icon</title>
+  <desc id="desc">A terminal prompt and code brackets on a dark green tile.</desc>
+  <defs>
+    <linearGradient id="bg" x1="12" y1="8" x2="116" y2="120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#123d35"/>
+      <stop offset="1" stop-color="#071c1a"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#bg)"/>
+  <rect x="22" y="28" width="84" height="72" rx="14" fill="#e8fff8" fill-opacity=".08" stroke="#a7f3d0" stroke-opacity=".45" stroke-width="3"/>
+  <path d="m39 52 13 12-13 12M60 79h27" fill="none" stroke="#d1fae5" stroke-linecap="round" stroke-linejoin="round" stroke-width="7"/>
+  <circle cx="35" cy="40" r="3" fill="#5eead4"/>
+  <circle cx="46" cy="40" r="3" fill="#a7f3d0"/>
+</svg>

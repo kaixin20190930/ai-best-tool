@@ -18,10 +18,25 @@ export default function TrialCreator({ locale, tools }: { locale: string; tools:
   const [targetOutcome, setTargetOutcome] = useState('');
   const [renewalAt, setRenewalAt] = useState('');
   const [checks, setChecks] = useState(initialChecks);
+  const [templateToolId, setTemplateToolId] = useState<string | null>(null);
   const [idempotencyKey, setIdempotencyKey] = useState(() => globalThis.crypto?.randomUUID?.() || `trial-${Date.now()}`);
 
   const updateCheck = (index: number, value: string) => {
     setChecks((current) => current.map((check, checkIndex) => checkIndex === index ? value : check));
+  };
+
+  const selectTool = (nextToolId: string) => {
+    setToolId(nextToolId);
+    const template = tools.find((tool) => tool.id === nextToolId)?.trialTemplate;
+    if (!template || !template.targetOutcome || template.checks.length < 3) {
+      setTargetOutcome('');
+      setChecks(initialChecks);
+      setTemplateToolId(null);
+      return;
+    }
+    setTargetOutcome(template.targetOutcome);
+    setChecks(template.checks.slice(0, 5));
+    setTemplateToolId(nextToolId);
   };
 
   const submit = (event: React.FormEvent) => {
@@ -49,11 +64,16 @@ export default function TrialCreator({ locale, tools }: { locale: string; tools:
       <div className='mt-5 grid gap-4 md:grid-cols-2'>
         <label className='text-xs font-semibold text-slate-700 md:col-span-2'>
           {isChinese ? '试用工具' : 'Tool to trial'}
-          <select value={toolId} onChange={(event) => setToolId(event.target.value)} className={inputClass} required disabled={isPending}>
+          <select value={toolId} onChange={(event) => selectTool(event.target.value)} className={inputClass} required disabled={isPending}>
             <option value=''>{isChinese ? '选择一个目录工具' : 'Choose a listed tool'}</option>
             {tools.map((tool) => <option key={tool.id} value={tool.id}>{tool.title}</option>)}
           </select>
         </label>
+        {templateToolId === toolId ? (
+          <p className='-mt-2 text-xs font-medium text-cyan-700 md:col-span-2'>
+            {isChinese ? '已载入该工具的建议试用目标和检查项；请按你的真实工作修改后再开始。' : 'Suggested outcome and checks loaded. Edit them to match your real work before starting.'}
+          </p>
+        ) : null}
         <label className='text-xs font-semibold text-slate-700 md:col-span-2'>
           {isChinese ? '7 天后希望验证什么结果？' : 'What outcome should be proven in seven days?'}
           <textarea value={targetOutcome} onChange={(event) => setTargetOutcome(event.target.value)} className={inputClass} rows={3} maxLength={1000} required disabled={isPending} placeholder={isChinese ? '例如：每周会议纪要整理时间减少一半，并且关键信息没有明显遗漏。' : 'Example: Cut weekly meeting-note cleanup time in half without losing key decisions.'} />
