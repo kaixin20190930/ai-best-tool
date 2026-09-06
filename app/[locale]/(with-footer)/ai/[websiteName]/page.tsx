@@ -1589,6 +1589,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
               href: 'https://help.gamma.app/en/articles/8022861-what-s-the-easiest-way-to-export-my-gamma',
             },
             { label: '官方数据控制', href: TOOL_MAINTENANCE_REVIEWS.gamma.sources[3] },
+            { label: '官方 credits 规则', href: TOOL_MAINTENANCE_REVIEWS.gamma.sources[4] },
           ],
         }
       : {
@@ -1631,6 +1632,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
               href: 'https://help.gamma.app/en/articles/8022861-what-s-the-easiest-way-to-export-my-gamma',
             },
             { label: 'Official data controls', href: TOOL_MAINTENANCE_REVIEWS.gamma.sources[3] },
+            { label: 'Official credit rules', href: TOOL_MAINTENANCE_REVIEWS.gamma.sources[4] },
           ],
         };
   }
