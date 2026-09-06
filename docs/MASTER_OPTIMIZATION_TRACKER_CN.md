@@ -17,6 +17,8 @@ RC-07 第二组完成后进度 8/17：Character.AI、Shutterstock GenAI、Suno�
 
 RC-07 第三组完成后进度 14/17：ArtiverseHub AI、FastImage、HoneyDo、Shop、Tattoo AI Design、Woy.ai 已纠正对象/旧文案并转 `monitor`，缺排期 11 -> 5；只剩3条安全/合规对象，Adobe/Salesforce 2条另属RC-05C。完整 build 与数据库幂等回读通过。
 
+RC-07 已于 2026-09-06 完成 17/17：最后三条安全/合规对象不做流量或转化增强。`aigirl-best` 与 `undressing_ai` 归档，`anime-girl-studio` 纠正旧范围后转 `monitor`；三条统一绕过普通工具评分、推荐、CTA 和 `SoftwareApplication` schema，并退出 sitemap。生产数据库固定记录保护、dry-run、正式事务、独立回读、专项测试、TypeScript 检查与完整 build 均通过。缺排期 5 -> 2，余下仅 Adobe/Salesforce Einstein，转回 RC-05C 处理。
+
 RC-01至RC-04首轮治理已完成：状态校正、结构化内链测试与计划一致性守卫、生产只读19项缺排期回查均已执行；专项测试及完整build通过。此轮没有完成新的工具核验，四周比例不增加；CI配置待提交后运行，下一项RC-05对象事实纠偏，不直接迁移URL或解除索引暂停。
 
 2026-09-04 日常收录更新：W2-02B 累计处理 12/7-14，今日完成 OpenRouter 与 n8n 两条既有 fallback 的生产实体迁移，均保留原 canonical。两者线上验收均已通过；n8n 提交 `37ceb6d2` 已获 Vercel 部署成功确认，双语 index/canonical/新正文和 sitemap 生产验收通过。今日达到 2 条上限，不再新增第 3 条。累计处理数不是每日公开数。

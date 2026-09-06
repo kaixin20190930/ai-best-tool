@@ -26,6 +26,7 @@ import { PRIORITY_TOOL_FALLBACK_PROFILES } from '@/lib/config/priorityToolFallba
 import TOOL_MAINTENANCE_REVIEWS from '@/lib/config/toolMaintenanceReviews';
 import LegacyToolScopePage from '@/components/tools/LegacyToolScopePage';
 import { getLegacyToolScopeContent } from '@/lib/config/legacyToolScopeReviews';
+import { getSafetyToolReview } from '@/lib/config/safetyToolReviews';
 import { getCanonicalToolSlug, getLocalizedToolPath, isLegacyToolSlug } from '@/lib/config/toolRouteAliases';
 import { BASE_URL } from '@/lib/env';
 import { buildLoginHref } from '@/lib/navigation/localizedPaths';
@@ -66,6 +67,7 @@ import { StructuredDataServer } from '@/components/seo/StructuredData';
 import ShareButton from '@/components/ShareButton';
 import ToolFeedbackBar from '@/components/ToolFeedbackBar';
 import TrackableLink from '@/components/TrackableLink';
+import SafetyToolArchivePage from '@/components/tools/SafetyToolArchivePage';
 import { getToolStats } from '@/app/actions/analytics';
 import { getCommentCount } from '@/app/actions/comments';
 import { isFavorited } from '@/app/actions/favorites';
@@ -3295,14 +3297,15 @@ export async function generateMetadata({
 
     // Get localized content if available
     const scopeCorrection = getLegacyToolScopeContent(canonicalSlug, locale);
-    const toolTitle = scopeCorrection?.title || (dbTool
+    const safetyCorrection = getSafetyToolReview(canonicalSlug, locale);
+    const toolTitle = safetyCorrection?.title || scopeCorrection?.title || (dbTool
       ? getLocalizedField(dbTool.title, locale) || data?.title || websiteName
       : data?.title || websiteName);
 
     const originalDescription = dbTool
       ? getLocalizedField(dbTool.content, locale) || data?.content || ''
       : data?.content || '';
-    const toolDescription = scopeCorrection?.content || originalDescription;
+    const toolDescription = safetyCorrection?.content || scopeCorrection?.content || originalDescription;
 
     // Get category name if available
     let toolCategory: string | undefined;
@@ -3377,6 +3380,11 @@ export default async function Page({
           getPriorityToolFallbackDetail(canonicalSlug, locale);
 
     if (!data) notFound();
+
+    // Restricted historical records use a neutral audit page and never emit product schema or conversion UI.
+    if (getSafetyToolReview(canonicalSlug, locale)) {
+      return <SafetyToolArchivePage slug={canonicalSlug} locale={locale} />;
+    }
 
     // Unresolved brand/family records must not emit single-software ratings or inferred recommendations.
     if (getLegacyToolScopeContent(canonicalSlug, locale)) {

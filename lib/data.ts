@@ -1,5 +1,6 @@
 import { applyLegacyToolScope } from '@/lib/config/legacyToolScopeReviews';
 import { applyHistoricalToolFactReview } from '@/lib/config/historicalToolFactReviews';
+import { applySafetyToolReview, getSafetyToolReview } from '@/lib/config/safetyToolReviews';
 
 export type WebNavigationListRow = {
   compareHref?: string;
@@ -54,8 +55,8 @@ const legacyDataList: WebNavigationListRow[] = [
   {
     id: '1791403586373455873',
     name: 'undressing_ai',
-    title: 'Undressing AI',
-    content: 'Undressing AI is a free online service that uses AI technology to create deepnude images.',
+    title: 'Undressing AI (excluded)',
+    content: 'This historical listing is excluded from discovery and recommendations for safety reasons.',
     url: 'https://undressing.ai/',
     imageUrl: 'https://img.artiversehub.ai/2024/05/17/1c0ef6025e09413bac29ddcba644a09a.png',
     thumbnailUrl: 'https://img.artiversehub.ai/2024/05/17/28087968ada64091b2331e8beea26180.png',
@@ -100,9 +101,8 @@ const legacyDataList: WebNavigationListRow[] = [
   {
     id: '1793585234460999681',
     name: 'aigirl-best',
-    title: 'Best AI Girl Friend Generator | AIGirl.best',
-    content:
-      'AIGirl.best is an online platform touted as the best Anime/Realistic AI Girl Generator. It allows users to create ultra-detailed anime characters, including school girls, cat girls, and more, in high resolutions like 8K CG. The site features a variety of styles and settings, from tropical gardens to cyberpunk cities, and offers a free trial for users to explore its capabilities. Additionally, it includes a blog, pricing information, and a gallery of generated images.',
+    title: 'AIGirl.best (archived listing)',
+    content: 'This historical adult-oriented image-generator listing is archived pending reliable safety review.',
     url: 'https://aigirl.best',
     imageUrl: 'https://img.artiversehub.ai/2024/05/23/e8494b7617674af59a1e92e0fca59f66.png',
     thumbnailUrl: 'https://img.artiversehub.ai/2024/05/23/e08dd1ce53194e138671f0681f6e4eea.png',
@@ -130,9 +130,8 @@ const legacyDataList: WebNavigationListRow[] = [
   {
     id: '17913965023030513337',
     name: 'anime-girl-studio',
-    title: 'Anime Girl Studio - AI Anime Girl Generator & Chat',
-    content:
-      'Best free AI anime girl | character generator online with NSFW options. Get inspired by free AI generated anime girl arts, Anime Girl Studio is a free Anime Girl Generator that allows anyone to create their own ai Anime girl. With nsfw option.\n',
+    title: 'AI Anime Studio (scope under review)',
+    content: 'The current site presents a general anime image, text, and study assistant; its scope remains under review.',
     url: 'https://animegirl.studio/',
     imageUrl: 'https://img.artiversehub.ai/2024/05/23/e8494b7617674af59a1e92e0fca59f66.png',
     thumbnailUrl: 'https://img.artiversehub.ai/2024/05/23/e08dd1ce53194e138671f0681f6e4eea.png',
@@ -264,26 +263,23 @@ const legacyDataList: WebNavigationListRow[] = [
   },
 ];
 
-export const dataList: WebNavigationListRow[] = legacyDataList.map((row) =>
-  applyHistoricalToolFactReview(applyLegacyToolScope(row, 'en'), 'en'),
-);
+export const dataList: WebNavigationListRow[] = legacyDataList
+  .filter((row) => !getSafetyToolReview(row.name, 'en'))
+  .map((row) => applyHistoricalToolFactReview(applyLegacyToolScope(row, 'en'), 'en'));
 
 const legacyDetailList: WebNavigationDetailData[] = [
   {
     name: 'aigirl-best',
-    title: 'Best AI Girl Friend Generator | AIGirl.best',
-
-    detail:
-      "### What is AIGirl.best?\nAIGirl.best is an AI-driven platform that provides access to a vast array of AI technologies for generating anime-style girls. With our advanced AI models, users can create stunning anime-style characters with ultra-realistic features, intricate details, and captivating poses.\n\n### How can I use AIGirl.best for free?\nEvery user can utilize AIGirl.best for free, with unlimited generations per day. Our platform offers a wide range of anime-style characters, from school girls to fantasy monsters, all available for free.\n\n### Can I generate anime-style images using AIGirl.best?\nYes, with our advanced AI models, users can generate stunning anime-style images, including characters, landscapes, and scenes. Our AI models can create intricate details, vibrant colors, and captivating poses, making your imagination come to life.\n\n### How many anime-style characters are available on AIGirl.best?\nAIGirl.best offers an extensive library of anime-style characters, with new additions every week. Our platform features a vast array of characters, from cute school girls to fierce warriors, and from fantasy monsters to beautiful angels.\n\n### How can I maximize my use of AIGirl.best's AI services?\nBy leveraging our daily free generations, users can explore a vast range of AI-powered tools to support various tasks, from creating stunning anime-style characters to generating captivating scenes and landscapes.\n\n### Will my information be used for training data?\nWe highly value user privacy, and your data will not be used for any training purposes. If needed, you can delete your account at any time, and all your data will be removed as well.\n\n### When would I need a subscription on AIGirl.best?\nIf the daily free generations do not meet your needs, and you heavily rely on our AI services, we invite you to subscribe to our affordable products, which offer additional benefits and extended access to our AI models.",
-    content:
-      'AIGirl.best is an online platform touted as the best Anime/Realistic AI Girl Generator. It allows users to create ultra-detailed anime characters, including school girls, cat girls, and more, in high resolutions like 8K CG. The site features a variety of styles and settings, from tropical gardens to cyberpunk cities, and offers a free trial for users to explore its capabilities. Additionally, it includes a blog, pricing information, and a gallery of generated images.',
+    title: 'AIGirl.best (archived listing)',
+    detail: 'This historical record is retained only for an auditable safety decision.',
+    content: 'This historical adult-oriented image-generator listing is archived pending reliable safety review.',
     url: 'https://aigirl.best',
     imageUrl: 'https://img.artiversehub.ai/2024/05/23/e8494b7617674af59a1e92e0fca59f66.png',
     thumbnailUrl: 'https://img.artiversehub.ai/2024/05/23/e08dd1ce53194e138671f0681f6e4eea.png',
     collectionTime: '2024-05-20 00:00:00',
     tagName: 'Website',
     websiteData: '1000',
-    starRating: 5,
+    starRating: 0,
     categoryName: 'Other',
   },
   {
@@ -318,18 +314,16 @@ const legacyDetailList: WebNavigationDetailData[] = [
   },
   {
     name: 'anime-girl-studio',
-    title: 'Anime Girl Studio - AI Anime Girl Generator & Chat',
-    detail:
-      "### What is Anime Girl Studio?\nAnime Girl Studio is an AI-driven platform that provides access to a vast array of AI technologies for generating anime-style girls. With our advanced AI models, users can create stunning anime-style characters with ultra-realistic features, intricate details, and captivating poses.\n\n### How can I use Anime Girl Studio for free?\nEvery user can utilize Anime Girl Studio for free, with unlimited generations per day. Our platform offers a wide range of anime-style characters, from school girls to fantasy monsters, all available for free.\n\n### Can I generate anime-style images using Anime Girl Studio?\nYes, with our advanced AI models, users can generate stunning anime-style images, including characters, landscapes, and scenes. Our AI models can create intricate details, vibrant colors, and captivating poses, making your imagination come to life.\n\n### How many anime-style characters are available on Anime Girl Studio?\nAnime Girl Studio offers an extensive library of anime-style characters, with new additions every week. Our platform features a vast array of characters, from cute school girls to fierce warriors, and from fantasy monsters to beautiful angels.\n\n### How can I maximize my use of Anime Girl Studio's AI services?\nBy leveraging our daily free generations, users can explore a vast range of AI-powered tools to support various tasks, from creating stunning anime-style characters to generating captivating scenes and landscapes.\n\n### Will my information be used for training data?\nWe highly value user privacy, and your data will not be used for any training purposes. If needed, you can delete your account at any time, and all your data will be removed as well.\n\n### When would I need a subscription on AIGirl.best?\nIf the daily free generations do not meet your needs, and you heavily rely on our AI services, we invite you to subscribe to our affordable products, which offer additional benefits and extended access to our AI models.",
-    content:
-      'Best free AI anime girl | character generator online with NSFW options. Get inspired by free AI generated anime girl arts, Anime Girl Studio is a free Anime Girl Generator that allows anyone to create their own ai Anime girl. With nsfw option.\n',
+    title: 'AI Anime Studio (scope under review)',
+    detail: 'The current official scope is recorded, but independent quality, rights, and safety checks remain open.',
+    content: 'The current site presents a general anime image, text, and study assistant; its scope remains under review.',
     url: 'https://animegirl.studio/',
     imageUrl: 'https://img.artiversehub.ai/2024/05/23/e8494b7617674af59a1e92e0fca59f66.png',
     thumbnailUrl: 'https://img.artiversehub.ai/2024/05/23/e08dd1ce53194e138671f0681f6e4eea.png',
     collectionTime: '2024-05-20 00:00:00',
     tagName: 'Website',
     websiteData: '1000',
-    starRating: 5,
+    starRating: 0,
     categoryName: 'Other',
   },
   {
@@ -350,17 +344,16 @@ const legacyDetailList: WebNavigationDetailData[] = [
   },
   {
     name: 'undressing_ai',
-    title: 'Undressing AI',
-    detail:
-      "# What is Undressing AI?\nUndressing AI is a free online service that harnesses the power of AI to generate deepnude images from any photo you upload.\n\n## How to use Undressing AI\nTo utilize Undressing AI, follow these simple steps:\n1. **Upload a photo**: Submit an image to the AI service.\n2. **Wait for processing**: The AI will quickly process your image.\n3. **Receive your deepnude image**: Obtain the deepnude result without any data being saved, ensuring complete anonymity.\n\n## Undressing AI's Core Features\n- **Completely anonymous**: No data is stored, ensuring your privacy.\n- **High-quality results**: Depending on the plan, you receive medium to UHD quality deepnude images.\n- **Customizable settings**: Adjust preferences such as boobs size, body type, and clothing settings (available in certain plans).\n\n## Undressing AI's Use Cases\n1. **Create deepnude images**: Use for fun or artistic purposes, ensuring to follow ethical guidelines and legal restrictions.\n\n## Pricing Information\nUndressing AI offers various plans to suit different needs:\n- **Free**: 5 tokens, 1-minute queue, medium quality.\n- **Basic**: 15 tokens, no queue, medium quality, with boobs size settings.\n- **Pro**: 90 tokens, priority queue, HD quality, with advanced settings.\n- **Ultimate**: 900 tokens, priority queue, UHD quality, no watermarks, and all settings included.\n\n## FAQ from Undressing AI\n**How do I make a deepnude?**\n- Simply upload a photo to the service, and Undressing AI will generate a deepnude image.\n\n**Why should I choose Undressing AI?**\n- Choose Undressing AI for its free, anonymous, and customizable deepnude creation.\n\n**Do unused credits stack up to the next month?**\n- Unused credits do not carry over to the next month.\n\n**Is using AI undressing safe and anonymous?**\n- Yes, it is safe and anonymous. No image data is stored.\n\n**How to Improve the result?**\n- Ensure the uploaded photo is of good quality and well-lit for the best results.\n\n## Invite Friends for Free Credits\nInvite friends to join Undressing AI using your referral link to earn free credits:\n- Get 3 credits for each friend who registers through your link.\n\nFor more information on Undressing AI, visit the [product information page](https://undressing.ai/).",
-    content: 'Undressing AI is a free online service that uses AI technology to create deepnude images.',
+    title: 'Undressing AI (excluded)',
+    detail: 'This historical record is retained only as an auditable exclusion decision and has no usage guidance.',
+    content: 'This historical listing is excluded from discovery and recommendations for safety reasons.',
     url: 'https://undressing.ai/',
     imageUrl: 'https://img.artiversehub.ai/2024/05/17/1c0ef6025e09413bac29ddcba644a09a.png',
     thumbnailUrl: 'https://img.artiversehub.ai/2024/05/17/28087968ada64091b2331e8beea26180.png',
     collectionTime: '2024-05-17 17:41:11',
     tagName: 'Freemium',
     websiteData: 'https://undressing.ai/',
-    starRating: 5,
+    starRating: 0,
     categoryName: 'Life Assistant',
   },
   {
@@ -680,5 +673,5 @@ const legacyDetailList: WebNavigationDetailData[] = [
 ];
 
 export const detailList: WebNavigationDetailData[] = legacyDetailList.map((row) =>
-  applyHistoricalToolFactReview(applyLegacyToolScope(row, 'en'), 'en'),
+  applySafetyToolReview(applyHistoricalToolFactReview(applyLegacyToolScope(row, 'en'), 'en'), 'en'),
 );

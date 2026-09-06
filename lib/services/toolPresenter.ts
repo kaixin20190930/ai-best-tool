@@ -3,6 +3,7 @@ import { getComparisonCtaFromTags } from '@/lib/services/comparisonCta';
 import { Tool } from '@/lib/services/tools';
 import { getLegacyToolScopeContent } from '@/lib/config/legacyToolScopeReviews';
 import { getHistoricalToolFactReview } from '@/lib/config/historicalToolFactReviews';
+import { getSafetyToolReview } from '@/lib/config/safetyToolReviews';
 
 const localeAliases: Record<string, string[]> = {
   cn: ['cn', 'zh', 'zh-CN', 'en'],
@@ -54,6 +55,7 @@ function getToolStringArray(value: unknown): string[] {
 export function toolToListRow(tool: Tool, locale = 'en'): WebNavigationListRow {
   const scopeCorrection = getLegacyToolScopeContent(tool.name, locale);
   const factReview = getHistoricalToolFactReview(tool.name, locale);
+  const safetyReview = getSafetyToolReview(tool.name, locale);
   const featureRecord =
     tool.features && typeof tool.features === 'object' ? (tool.features as Record<string, unknown>) : {};
   const submission =
@@ -77,8 +79,8 @@ export function toolToListRow(tool: Tool, locale = 'en'): WebNavigationListRow {
   return {
     id: tool.id,
     name: tool.name,
-    title: scopeCorrection?.title || factReview?.title || getLocalizedToolValue(tool.title, locale),
-    content: scopeCorrection?.content || factReview?.content || getLocalizedToolValue(tool.content, locale),
+    title: safetyReview?.title || scopeCorrection?.title || factReview?.title || getLocalizedToolValue(tool.title, locale),
+    content: safetyReview?.content || scopeCorrection?.content || factReview?.content || getLocalizedToolValue(tool.content, locale),
     createdAt: getSafeIsoDate(tool.createdAt),
     url: scopeCorrection?.url || factReview?.url || tool.url,
     imageUrl: tool.imageUrl,
@@ -92,8 +94,9 @@ export function toolToListRow(tool: Tool, locale = 'en'): WebNavigationListRow {
 export function toolToDetailData(tool: Tool, locale = 'en'): WebNavigationDetailData {
   const correction = getLegacyToolScopeContent(tool.name, locale);
   const factReview = getHistoricalToolFactReview(tool.name, locale);
-  const content = correction?.content || factReview?.content || getLocalizedToolValue(tool.content, locale);
-  const detail = correction?.detail || factReview?.detail || getLocalizedToolValue(tool.detail, locale);
+  const safetyReview = getSafetyToolReview(tool.name, locale);
+  const content = safetyReview?.content || correction?.content || factReview?.content || getLocalizedToolValue(tool.content, locale);
+  const detail = safetyReview?.detail || correction?.detail || factReview?.detail || getLocalizedToolValue(tool.detail, locale);
 
   return {
     categoryName: tool.categoryId || '',
@@ -105,7 +108,7 @@ export function toolToDetailData(tool: Tool, locale = 'en'): WebNavigationDetail
     starRating: Number(tool.averageRating) || 0,
     tagName: getToolStringArray(tool.tags).join(', '),
     thumbnailUrl: tool.thumbnailUrl || tool.imageUrl || '',
-    title: correction?.title || factReview?.title || getLocalizedToolValue(tool.title, locale),
+    title: safetyReview?.title || correction?.title || factReview?.title || getLocalizedToolValue(tool.title, locale),
     url: correction?.url || factReview?.url || tool.url,
     websiteData: '',
   };

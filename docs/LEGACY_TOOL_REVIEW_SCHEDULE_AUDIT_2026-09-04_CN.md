@@ -37,11 +37,13 @@
 | 1c | adobe、salesforce_einstein | 对象/重复检查及线上链接审计已完成；按下方处置分支补 URL 级数据 | 当前条目未通过准入；GSC 明细和最终处置未完成，生产未改 |
 | 2 | openai、gpt_4o、chatgpt-mac、sora | 公司、API模型、客户端入口和停服产品已分别界定；保留原slug作为历史说明，不并入活跃推荐 | 已完成；4条均monitor/noindex并有复查日期 |
 | 3 | character_ai、artiversehub-ai、fastimage-ai-sketch-to-image、honeydo、shutterstock、suno_ai、tattooai-design、viggle、woy-ai、shop_your_ai_powered_Shopping_assistant | 4条补实保留；其余6条已纠错并因分类或独立采用证据不足转monitor | 10/10完成 |
-| 4 | aigirl-best、anime-girl-studio、undressing_ai | 先确认实际服务类型、安全与合规边界，不自动推广或补“已验证” | 待执行 |
+| 4 | aigirl-best、anime-girl-studio、undressing_ai | 安全与合规边界核对；不自动推广或补“已验证” | 已完成；前后两条archive，中间一条monitor，均退出索引和推荐 |
 
 没有充分核验依据的条目可以进入人工维护队列，但不能统一填今日 reviewedAt、虚构 sourceUrl 或提升市场分数。缺日期本身不触发本轮批量 noindex；索引仍遵循独立政策和暂停规则。
 
 2026-09-06 第三组：ArtiverseHub AI、FastImage、HoneyDo、Shop、Tattoo AI Design、Woy.ai 已完成身份、官网、双语状态正文和10月6日复查。前五条从实际 index 转为 `monitor`；Woy 原已因质量门禁 noindex，本次显式统一为 `monitor`。当前缺排期5条，其中Adobe/Salesforce属于RC-05C，RC-07仅剩3条安全/合规对象。
+
+2026-09-06 最后一组：`aigirl-best` 与 `undressing_ai` 已设为 `archive`，`anime-girl-studio` 已纠正旧 NSFW 范围并设为 `monitor`。三条使用独立安全隔离页，不展示外部使用 CTA、通用评分、替代推荐或 `SoftwareApplication` schema；数据库回读确认均不可索引并有明确复核日期。RC-07 至此 17/17 完成，当前缺排期2条，仅为 RC-05C 的 Adobe 与 Salesforce Einstein。
 
 ## OpenAI 家族历史对象复核
 

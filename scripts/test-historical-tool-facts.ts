@@ -44,4 +44,4 @@ assert.equal(getHistoricalToolFactReview('claude', 'en'), null);
 const sitemapSource = readFileSync('app/sitemap.ts', 'utf8');
 assert(sitemapSource.includes('getCanonicalToolSlug(tool.name)'), 'Sitemap must never emit raw historical slugs');
 
-console.log('PASS four bilingual historical fact reviews, presenter projection, static fallback and control slug');
+console.log(`PASS ${Object.keys(REVIEWS).length} bilingual historical fact reviews, presenter projection, static fallback and control slug`);

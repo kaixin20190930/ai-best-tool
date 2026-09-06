@@ -6,6 +6,7 @@
 
 import { query } from '@/db/neon/client';
 import { cached, CacheTTL, invalidateCache } from '@/lib/cache';
+import { SAFETY_TOOL_SLUGS } from '@/lib/config/safetyToolReviews';
 
 /**
  * 工具数据类型
@@ -137,6 +138,14 @@ function buildWhereClause(filters: ToolFilters): { clause: string; params: any[]
     conditions.push(`status = $${paramIndex}`);
     params.push(filters.status);
     paramIndex++;
+    // Archived safety/compliance records remain directly auditable but must not
+    // re-enter public discovery, search, ranking, or featured queries.
+    if (filters.status === 'published') {
+      conditions.push(`COALESCE(page_quality_status, 'monitor') <> 'archive'`);
+      conditions.push(`name <> ALL($${paramIndex}::text[])`);
+      params.push(SAFETY_TOOL_SLUGS);
+      paramIndex++;
+    }
   }
   
   // 提交者筛选
