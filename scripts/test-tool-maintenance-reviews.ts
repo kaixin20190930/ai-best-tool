@@ -6,8 +6,10 @@ import TOOL_MAINTENANCE_REVIEWS from '../lib/config/toolMaintenanceReviews';
 async function main() {
   const source = fs.readFileSync('app/[locale]/(with-footer)/ai/[websiteName]/page.tsx', 'utf8');
   for (const [slug, review] of Object.entries(TOOL_MAINTENANCE_REVIEWS)) {
-    assert.equal(review.checkedAt, '2026-09-04');
+    assert.equal(review.checkedAt, '2026-09-06');
     assert(review.nextReviewDate > review.checkedAt);
+    assert(['reviewed_no_change', 'fact_updated'].includes(review.outcome));
+    assert(review.changeSummary.length > 50);
     assert(review.unresolved.length > 0 && review.scope.includes('not a new market validation'));
     assert(review.sources.length >= 3 && review.sources.every((url) => new URL(url).protocol === 'https:'));
     const start = source.indexOf(`if (key === '${slug}')`);
@@ -18,7 +20,8 @@ async function main() {
     }
   }
   assert(TOOL_MAINTENANCE_REVIEWS.consensus.note.en.includes('also consumes a Pro message'));
-  assert(TOOL_MAINTENANCE_REVIEWS.gamma.note.en.includes('Free credits do not refresh'));
+  assert(TOOL_MAINTENANCE_REVIEWS.gamma.note.en.includes('Editable tables are on by default'));
+  assert(TOOL_MAINTENANCE_REVIEWS.gamma.note.en.includes('Google Slides substitutes embedded fonts'));
   console.log('PASS scoped maintenance data, unresolved gaps and visible bindings');
   if (!process.argv.includes('--pages')) return;
   const base = process.env.SEO_BASE_URL || 'http://localhost:3000';

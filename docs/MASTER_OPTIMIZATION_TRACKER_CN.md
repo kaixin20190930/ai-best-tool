@@ -92,8 +92,9 @@ Gamma 验收补充：`33e65beb` 部署成功，但新简版提示被官方快照
   [历史核对](./INDEX_HISTORY_RECONCILIATION_2026-09-04_CN.md)、[保护运行说明](./INDEX_RELEASE_GUARD_RUNBOOK_CN.md)。
 - P0：本轮生产 SEO、health 和 ads.txt 只读审计通过；sitemap 162 URLs。另修复 SEO smoke 重定向请求无超时/未释放响应体的问
   题，重跑断言全部通过且退出 0。
-- P1：Consensus、Gamma 本轮官方事实维护与复查排期完成 2/2，新增可操作试用检查；生产维护记录已写入，两页保持 monitor，下
-  次复查 9 月 7 日。独立论文验证码与 Gamma 金额核对缺口保留，不重置市场验证。详见
+- P1：Consensus、Gamma 到期复核已于 9 月 6 日提前完成。Consensus 当前套餐、语料、全文与 Deep Review 事实和生产正文一致，
+  记录为 `reviewed_no_change`；Gamma 根据新版官方导出文档纠正 PPTX 字体归因，并补默认可编辑表格与圆角回退边界。两页继续
+  `monitor/noindex`，下次事实复查为 10 月 6 日；独立论文验证码与 Gamma 实际结账金额缺口保留，不重置市场验证。详见
   [本轮维护](./CONSENSUS_GAMMA_MAINTENANCE_2026-09-04_CN.md)。
 - P1：Emdash 已依既有 9 月 1 日核验 +30 天补齐生产复查日期 10 月 1 日；未改正文、验证日期或索引状态。缺排期从 23 降为
   22，剩余项不能自动补为已验证，分类见

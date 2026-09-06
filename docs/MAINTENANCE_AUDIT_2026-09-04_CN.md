@@ -37,7 +37,7 @@
 | -------- | ------ | ----------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------- | ---------------------------------- |
 | MAINT-01 | P0     | 公开收录与索引批准额度分离    | 本周可证实放行至少 12 次，当前额度 0                              | 技术保护、本周可证实记录补账及额度判断完成；保持暂停，旧历史未知部分明确保留  | Codex；下周恢复前重新复核          |
 | MAINT-02 | P0     | 生产健康、广告和 SEO 边界复查 | 本轮 SEO、health、ads.txt 检查通过                                | 本轮审计完成；持续维护                                                        | Codex                              |
-| MAINT-03 | P1     | Consensus、Gamma 到期复核     | 两者 monitor；生产下次复查均已设为 9 月 7 日                      | 本轮官方事实维护与排期完成 2/2；独立市场复核/账户实操未完成，不刷新旧验证日期 | Codex；9 月 7 日复查已记录缺口     |
+| MAINT-03 | P1     | Consensus、Gamma 到期复核     | 两者 monitor；9 月 6 日按当前官方资料完成复核                     | 已完成；Consensus无变化，Gamma纠正导出边界；下次事实复查10月6日              | Codex；市场复核/账户实操仍独立处理 |
 | MAINT-04 | P1     | 历史工具维护字段补齐          | 缺排期 23 → 22 → 21 → 19 → 15 → 11 → 5 → 2 → 0                    | 已完成；Adobe/Salesforce仅补2026-09-11复核排期，未冒充完成核验                | Codex；RC-05C URL决策仍待数据      |
 | MAINT-05 | P1     | Emdash 复查排期               | 依据已有 9 月 1 日核验 +30 天                                     | 已完成：生产 next_review_date 为 10 月 1 日；幂等与其他字段不变校验通过       | Codex                              |
 | MAINT-06 | P1     | Change Timeline 首批真实基线  | 主台账仍为 Fathom、Claude、Consensus，3/10                        | Gamma 下一项；robots 受限来源不绕过                                           | Codex；必要时人工来源材料          |
@@ -88,6 +88,17 @@ MAINT-04排期收口，不代表RC-05C URL/索引决策或独立市场核验完�
 - 四个本地生产页面的可见提示、来源链接、canonical、noindex 及 sitemap 排除通过。生产前一版 Gamma 可见性修复 `4923dbc5`
   也已完成线上验收。
 - 原下表 9 月 3–4 日为审计时的到期日期，本轮处理后的新复查日期以本节为准。
+
+### 9 月 6 日到期复核结果
+
+- Consensus 官方套餐仍为 Free、Pro、Deep、Teams 与 Enterprise；生产正文中的 Pro/Deep 金额、Deep Review、Study Snapshot、
+  API/MCP 额度、2.2 亿以上同行评审论文和全文下载边界与当前官方资料一致，记录为 `reviewed_no_change`。
+- Gamma 官方帮助中心本周更新。原页面“Google Slides 可能替换嵌入字体”方向正确但归因不够精确：Gamma 当前会把主题字体嵌入
+  PPTX，Google Slides 会忽略并替换嵌入字体，少数导出抓取失败也可能回退。PPTX 表格现在默认可编辑，但 PowerPoint 会把圆角
+  改为直角；这些事实写入统一 priority evidence 和 maintenance review。
+- Gamma 当前公开页面可核对 Free、Plus、Pro、Ultra 的能力和 credits，但没有可靠公开金额文本；不猜测实际账单。两页均未做
+  登录账户、付费或导出实操，`editorial.reviewedAt` 与 `marketValidation.reviewedAt` 不刷新。
+- 两页保持 `published + monitor + noindex` 并继续退出 sitemap；下次事实复查统一为 2026-10-06。
 
 ### 后续执行：历史补账与局部内容维护
 

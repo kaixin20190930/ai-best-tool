@@ -2,6 +2,9 @@
 
 日期：2026-09-04。归属：[主计划](./MASTER_OPTIMIZATION_TRACKER_CN.md)、[维护审计](./MAINTENANCE_AUDIT_2026-09-04_CN.md) MAINT-03。
 
+最新复核：2026-09-06。Consensus 为 `reviewed_no_change`；Gamma 为 `fact_updated`。本节保留 9 月 4 日首次维护历史，最新结果见
+“9 月 6 日复核”。
+
 ## 本轮范围
 
 生产两页均为 published / monitor。复核官方套餐规则、主要功能与决策边界，补可操作的试用检查，并安排下一次复查。不新增 URL，不放开索引，不声称做过登录后的亲自试用，也不重置既有市场验证。
@@ -59,3 +62,27 @@ SEO_BASE_URL=https://aibesttool.com pnpm exec tsx scripts/test-tool-maintenance-
 本轮数据库预演、正式应用及独立连接回读通过；本地生产四页面可见提示、来源、canonical、noindex 与 sitemap 排除通过。整页编辑与市场日期保持 9 月 1 日；维护记录明确为官方资料核查，9 月 7 日继续复查缺口。
 
 9 月 7 日复查来源可读性和未解决的价格核对项；若仍不可验证，记录原因而不是伪造完成。市场评价、实操试用、索引批准与 CHG-02 变化账本是独立任务，不因本轮维护自动完成。无需用户重新执行数据库迁移；真实试用结果仍应由实际体验提供。
+
+## 9 月 6 日复核
+
+### Consensus：reviewed_no_change
+
+- 官方套餐页现行 Free、Pro、Deep、Teams 与 Enterprise 结构，与生产正文一致；Pro 仍为 $20/月或 $144/年，Deep 仍为 $65/月或
+  $540/年。
+- Free 的不限量 Papers 搜索、有限 Pro 消息、每月 3 次 Deep Review、10 次 Study Snapshot 和 30 次 API/MCP 调用，以及
+  Pro/Deep 的对应额度，已存在于生产正文，无需重复添加。
+- 官方数据库仍表述 2.2 亿以上同行评审论文、每周更新和按论文变化的全文可用性；平台可分析全文不等于用户有权查看或下载。
+- 不刷新 9 月 1 日的市场验证，也不把官方资料复核包装成账户实操或独立准确率测试。
+
+### Gamma：fact_updated
+
+- 官方导出文档已明确 Gamma 会把主题字体嵌入 PPTX；Google Slides 会忽略并替换嵌入字体，少数导出时无法取得字体文件也会
+  回退。现有简写改为精确归因，避免误解为 Gamma 一般不嵌入字体。
+- PPTX 表格现在默认作为真实可编辑表格导出，所有套餐均可用；PowerPoint 不支持圆角表格，因此会显示直角。页面继续要求在
+  最终交付软件中复核导出结果。
+- 官方套餐能力现明确 Free、Plus、Pro、Ultra；Plus、Pro、Ultra 每月分别提供 1,000、4,000、20,000 credits，Pro/Ultra
+  分别最多发布 10/100 个自定义域名。公开定价文本仍未提供可可靠读取的金额，不发布推测价格。
+- 免费 credits 不刷新、付费 credits 每月补充、按用户计费和个人/团队工作区的数据训练设置仍与生产正文一致。
+
+本次只更新统一可见证据、`features.maintenanceReview` 和下次事实复查日；两页保持 `monitor/noindex` 并退出 sitemap。下次事实
+复查为 2026-10-06。独立市场评价、真实账户结账与导出实操仍是单独证据，不因本轮复核自动完成。

@@ -19,8 +19,13 @@ const expectedSlugs = [
 const actualSlugs = Object.keys(PRIORITY_TOOL_EVIDENCE).sort();
 
 const gammaLimit = PRIORITY_TOOL_EVIDENCE.gamma.limitation;
-if (!gammaLimit.en.includes('PPTX') || !gammaLimit.en.includes('fonts') || !gammaLimit.zh.includes('字体')) {
-  throw new Error('Gamma evidence must explain the PPTX import and font boundary in both languages.');
+if (
+  !gammaLimit.en.includes('PPTX') ||
+  !gammaLimit.en.includes('Google Slides substitutes embedded fonts') ||
+  !gammaLimit.en.includes('editable') ||
+  !gammaLimit.zh.includes('可编辑')
+) {
+  throw new Error('Gamma evidence must explain current PPTX font and editable-table boundaries in both languages.');
 }
 
 if (JSON.stringify(actualSlugs) !== JSON.stringify(expectedSlugs)) {

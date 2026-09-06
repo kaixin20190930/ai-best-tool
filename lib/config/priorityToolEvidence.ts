@@ -78,10 +78,10 @@ export const PRIORITY_TOOL_EVIDENCE: Record<string, PriorityToolEvidence> = {
     ],
   },
   gamma: {
-    checkedAt: '2026-09-04',
+    checkedAt: '2026-09-06',
     limitation: {
-      en: 'Google Slides requires importing a PPTX file and can replace embedded fonts; verify the exported deck before presenting. Word export is unavailable.',
-      zh: 'Google Slides 需要导入 PPTX 文件，且可能替换嵌入字体；演示前应核对导出结果。目前不支持 Word 导出。',
+      en: 'Gamma embeds theme fonts in PPTX, but Google Slides substitutes embedded fonts and rare export failures can fall back. Tables export as editable by default, although PowerPoint changes rounded corners to sharp ones. Word export is unavailable.',
+      zh: 'Gamma 会在 PPTX 中嵌入主题字体，但 Google Slides 会替换嵌入字体，少数导出失败也可能触发回退。表格默认以可编辑形式导出，但 PowerPoint 会把圆角改为直角。目前不支持 Word 导出。',
     },
     sources: [
       { label: 'Official pricing', url: 'https://gamma.app/pricing' },
