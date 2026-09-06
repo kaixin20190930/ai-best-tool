@@ -94,6 +94,28 @@ const baselines: Record<string, DecisionBaseline> = {
     notIdealFor: ['Zero-maintenance self-hosting', 'Unrestricted workflow-platform resale'],
     alternatives: ['Make', 'Zapier', 'Managed n8n Cloud'],
   },
+  openrouter: {
+    toolId: 'f77fb817-e8dc-4c22-b7cd-8edc2e5b0a5e',
+    profileId: '2c4881f1-edf8-4b6a-9280-0ab88a006057',
+    toolName: 'openrouter',
+    profileName: 'OpenRouter',
+    allowedSourceHosts: ['openrouter.ai'],
+    allowedPageQualityStatuses: ['continue_index'],
+    minimumVerifiedClaims: 3,
+    title: 'Decision baseline established',
+    summary:
+      'OpenRouter is a fit for application teams that need multi-model access, explicit provider routing, or fallback control through one integration and will benchmark cost, latency, reliability, and endpoint policy on representative workloads. Keep a direct provider API, LiteLLM, or another managed AI gateway in the comparison when one stable provider is sufficient, self-managed routing is preferred, or removing an additional gateway dependency matters more than provider optionality.',
+    primarySourceUrl: 'https://openrouter.ai/docs/guides/routing/provider-selection',
+    sourceUrls: [
+      'https://openrouter.ai/pricing',
+      'https://openrouter.ai/docs/guides/routing/provider-selection',
+      'https://openrouter.ai/docs/guides/privacy/provider-logging',
+      'https://openrouter.ai/docs/guides/features/zdr',
+    ],
+    bestFit: ['Multi-model application teams', 'Provider routing and fallback control'],
+    notIdealFor: ['One stable provider is sufficient', 'Sensitive workloads without endpoint review'],
+    alternatives: ['Direct provider API', 'LiteLLM', 'Managed AI gateway'],
+  },
 };
 
 function readBaseline(args: string[]) {
