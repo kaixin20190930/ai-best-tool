@@ -76,7 +76,7 @@ Review结论：首轮范围低风险，可以实施；后续生产内容/索引�
 
 RC-05最新：[范围澄清实施与验收](./LEGACY_PRODUCT_SCOPE_CLARIFICATION_2026-09-04_CN.md)。RC-05B已完成共享读层、范围正文、生产8页验收及两条数据库原文纠偏，撤下无依据通用判断和单软件schema；市场核验与RC-05C URL/索引处置仍待数据。
 
-RC-07第一组：[OpenAI 家族历史对象收口](./OPENAI_FAMILY_LEGACY_SCOPE_CLOSEOUT_2026-09-06_CN.md)。`openai`、`gpt_4o`、`chatgpt-mac`、`sora` 已按公司/模型/客户端/停服产品重新界定，撤下非官方 DMG、旧价格及无依据合规声明，统一官方入口并转为 `monitor`。数据库正式写入、独立回读、缺排期 19 -> 15、专项测试、类型检查和完整 build 均通过；代码尚待提交部署，生产页面结构验收不能提前标完成。
+RC-07第一组：[OpenAI 家族历史对象收口](./OPENAI_FAMILY_LEGACY_SCOPE_CLOSEOUT_2026-09-06_CN.md)。`openai`、`gpt_4o`、`chatgpt-mac`、`sora` 已按公司/模型/客户端/停服产品重新界定，撤下非官方 DMG、旧价格及无依据合规声明，统一官方入口并转为 `monitor`。数据库正式写入、独立回读、缺排期 19 -> 15、专项测试、类型检查、完整 build 和中英文生产 smoke 均通过；部署提交为 `b0dac6aa`。
 
 - RC-01/04：已回读计划与实现，inventory退出0，缺排期19；Guide边界测试18项通过；关系测试发现缩进误报，修复前不得作为通过证据。
 - RC-02/03：已同步主计划、四周、差异化、维护、历史对象及导航验收6份既有文档；保留历史快照及索引偏差记录。关系内链AST测试8个source工具通过，格式变化正例及错误Link/缺href/缺关系反例通过。

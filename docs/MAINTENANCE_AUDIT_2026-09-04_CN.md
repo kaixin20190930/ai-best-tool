@@ -41,7 +41,7 @@
 
 当前只读核查：Adobe/Salesforce 查重与已知引用/8 页线上抽查完成，四个工具 URL 仍允许索引并列入 sitemap；GSC URL 明细未知，最终处置未做。导航附带问题已由373d2336独立部署及生产验收关闭。详见 [影响面审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。本轮再次执行inventory确认缺排期仍19，不将审计等同于工具核验。
 
-2026-09-06 追加：OpenAI 家族四条已完成事实范围纠偏并正式写入数据库，均转为 `monitor` 且补明确复查日期；独立 inventory 确认缺排期 15。专项测试、类型检查和完整 build 通过；页面代码待提交部署，因此不提前宣称生产 UI 验收完成。
+2026-09-06 追加：OpenAI 家族四条已完成事实范围纠偏并正式写入数据库，均转为 `monitor` 且补明确复查日期；独立 inventory 确认缺排期 15。专项测试、类型检查、完整 build 与中英文生产 smoke 通过，部署提交 `b0dac6aa`。
 
 准入规范修订完成：Adobe / Salesforce Einstein 转入收录对象复核，初步审计发现泛品牌/范围混淆；处置、市场验证与页面整改尚未完成。见 [对象复核记录](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。不把文档完成记为工具核验完成；缺排期仍 19，生产未改。
 

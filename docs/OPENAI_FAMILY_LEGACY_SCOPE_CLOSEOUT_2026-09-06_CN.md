@@ -35,7 +35,7 @@
 - `pnpm run isolate:openai-family-scope`：回滚演练通过，四条索引决策均由 true 变 false。
 - `./node_modules/.bin/tsc --noEmit`：通过。
 - `pnpm run build`：通过；AdSense、编译、类型检查、44 个静态页生成完成。
-- 待代码推送后：生产四个语言/对象页面的 200、唯一 H1、scope notice、noindex、canonical、无 SoftwareApplication、sitemap 排除及官方链接验收。
+- `SEO_BASE_URL=https://aibesttool.com pnpm run test:legacy-tool-scope -- --smoke`：通过；中英文四个本组页面、Adobe/Salesforce、comparison 与 Claude 对照页均通过 200、唯一 H1、scope notice、索引边界、canonical、无单软件 schema 和官方链接检查。部署提交 `b0dac6aa`。
 
 ## 下一步
 
