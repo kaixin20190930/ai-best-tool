@@ -40,7 +40,7 @@
 | RC-05 | P1     | Adobe/Salesforce对象和内容纠偏                       | 官方/独立证据；迁移另需URL级数据      | 固定ID；英文/中文/静态fallback/指南同验；先事实纠错，URL迁移另作决定                        | 1-2天          | 进行中：RC-05A/B生产及数据库纠偏完成；RC-05C URL/索引处置待数据                                                                                  |
 | RC-06 | P1     | Gamma变化基线，再补至10个核心工具                    | 有效来源和历史快照                    | 每条有真实baseline或reviewed_no_change；受robots限制停止抓取，不造变化                      | 2-4天分批      | 已完成，10/10。最后由The Graph以官网产品名和定位完成基线；所有新增事件均为受控核验、fact范围且通过重复幂等检查，受robots限制或证据不足站点未计数 |
 | RC-07 | P1     | 其余17项历史对象分组复核                             | RC-04；每条证据                       | 每条明确保留/补充/隔离/待数据；完成事实核验才补对应排期                                     | 3-6天分批      | 已完成，17/17；最后3条安全/合规对象已隔离，缺排期仅剩RC-05C的2条                                                                                 |
-| RC-08 | P1     | 实际运行、LNK剩余范围与用户价值验收                  | 管理员登录、真实Stack/Trial、复核记录 | MON核对人工复核日历和自动运行边界；核对分类事实复用是否仍有重复来源；真实使用复盘不由AI伪造 | 1-2天+7天试用  | 进行中；分类事实边界和MON运行审计已完成；工具判断基线9/10，全部档案9/12；The Graph、2个非工具档案及真实Stack/Trial仍待实际输入                   |
+| RC-08 | P1     | 实际运行、LNK剩余范围与用户价值验收                  | 管理员登录、真实Stack/Trial、复核记录 | MON核对人工复核日历和自动运行边界；核对分类事实复用是否仍有重复来源；真实使用复盘不由AI伪造 | 1-2天+7天试用  | 进行中；分类事实边界和MON运行审计已完成，工具判断基线10/10；2个非工具档案不计入工具完成度，真实Stack/Trial仍待实际输入                           |
 | RC-09 | P1     | W4数据复盘、保留/收口/扩大决策及归档                 | 同期GSC7d/28d/Coverage，必要URL明细   | 指标口径一致；逐URL决定；满足政策且明确审批后才改变索引                                     | 2-3天+数据等待 | 待数据                                                                                                                                           |
 
 RC-05/07共19项，不重复计数：Adobe/Salesforce 2；openai/gpt_4o/chatgpt-mac/sora 4；其余普通对象10；需先检查安全/合规边界
@@ -112,9 +112,9 @@ RC-08 分类代码审计于 2026-09-06 完成：分类页原有统一“最近�
 不宣称 MON 调度有效或真实 Stack/Trial 已验收。
 
 RC-08 MON 运行审计于 2026-09-06 完成。生产库共有 12 个情报档案，其中10个为工具档案、另2个为站点/分发项目档案；事实复核日
-历为 1 个到期、11 个已排期、0 个缺基线。判断复核日历现为 9 个已排期、3 个缺首次判断基线；按工具单独统计为9/10，避免把非
-工具档案误称为待补工具。原有 3 个真实 `full` 基线来自 Fathom、Claude、Consensus；Gamma 于 09-06 根据当前官方导入、导出差
-异、数据控制、credits 和按成员计费文档新增 `decision` 基线，事件 `0385e896-f064-40ea-a43e-d2aa92466ceb`；Luma Dream
+历为 1 个到期、11 个已排期、0 个缺基线。判断复核日历现为 10 个已排期、2 个缺首次判断基线；按工具单独统计为10/10，避免把
+非工具档案误称为待补工具。原有 3 个真实 `full` 基线来自 Fathom、Claude、Consensus；Gamma 于 09-06 根据当前官方导入、导出
+差异、数据控制、credits 和按成员计费文档新增 `decision` 基线，事件 `0385e896-f064-40ea-a43e-d2aa92466ceb`；Luma Dream
 Machine 根据官方授权、credits、订阅/API 分离和 Modify 文档新增同类基线，事件 `0c92d051-bf36-4300-9585-79f8dc6c28ae`；n8n
 根据官方完整工作流执行计费、Community Edition、Sustainable Use License 和 queue mode 文档新增同类基线，事件
 `1f89e397-7239-4529-b026-39e4d8a05558`。三条均明确 `handsOnTrial=false`，且 n8n 不把可自托管包装成零维护或不受限开
@@ -126,8 +126,10 @@ credits 当成 API credits。Dune发现Supabase情报档案存在但Neon主目�
 件`5fec6387-3667-4e91-a76c-38551fafbd68`。线上页面200、Evidence Ledger与Change Timeline可见且未提前放行索引。变化待审为
 0，但不等于自动扫描持续成功。仓库不存在调用情报同步的定时 workflow，因此 MON 当前被准确定义为“页面加载时计算的人工编辑复
 核日历”，不是自主爬虫。后台已显示复核依据并修正全量计数，普通事实核验不再自动冒充 90 天判断复
-核；`pnpm run audit:intelligence-monitor` 可重复只读核验并按owner type拆分统计。RC-08 仍未完成，剩余The Graph工具判断基
-线、2个非工具档案的适用性决策和真实 Stack/Trial 必须来自实际复核/使用。
+核；`pnpm run audit:intelligence-monitor` 可重复只读核验并按owner type拆分统计。The Graph依据官方产品边界、网络支持、API
+key安全与查询计费建立最后一条工具判断基线，事件`305ab178-cc0b-4d24-a20f-17320d30309f`；线上Decision Timeline显示正常，并
+保持`monitor/noindex`。至此工具判断基线10/10完成。RC-08 仍未完成，2个非工具档案的适用性决策和真实 Stack/Trial 必须来自实
+际复核/使用。
 
 Stack/Trial 生产只读审计同日完成：`user_tool_stack_items`、任务关联、审计运行/发现/证据、`trial_scorecards` 和检查项 7
 张表均为 0 条。该结论表示尚无真实用户价值样本，不否定此前 schema、RLS、页面和 production smoke 已通过，也不得用测试造数

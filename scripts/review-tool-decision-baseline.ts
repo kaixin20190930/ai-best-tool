@@ -162,6 +162,29 @@ const baselines: Record<string, DecisionBaseline> = {
     notIdealFor: ['People only wanting lightweight charts', 'Users who do not want to work close to raw data'],
     alternatives: ['DefiLlama', 'Nansen', 'Direct data warehouse'],
   },
+  theGraph: {
+    toolId: 'b189f440-f5d7-44ca-9b10-5906c6eedb62',
+    profileOwnerId: 'ab03d4d1-003d-44af-a223-cc563c877ee4',
+    profileId: 'd2b3186e-3343-4675-b85e-039b20f6bd34',
+    toolName: 'the-graph',
+    profileName: 'The Graph',
+    allowedSourceHosts: ['thegraph.com'],
+    allowedPageQualityStatuses: ['monitor'],
+    minimumVerifiedClaims: 2,
+    title: 'Decision baseline established',
+    summary:
+      'The Graph is a fit for application and data teams that need a typed, repeatable query layer over indexed onchain data and can own schema, deployment, key security, and freshness monitoring. Keep Dune, a managed blockchain data API, or direct RPC and warehouse infrastructure in the comparison when interactive research, broader prepackaged coverage, or complete control of the ingestion pipeline matters more than an application-specific Subgraph.',
+    primarySourceUrl: 'https://thegraph.com/docs/en/',
+    sourceUrls: [
+      'https://thegraph.com/docs/en/',
+      'https://thegraph.com/docs/en/supported-networks/',
+      'https://thegraph.com/docs/en/subgraphs/providers/subgraph-studio/managing-api-keys/',
+      'https://thegraph.com/docs/en/subgraphs/providers/subgraph-studio/introduction/',
+    ],
+    bestFit: ['Applications needing typed onchain APIs', 'Teams owning a Subgraph schema and deployment'],
+    notIdealFor: ['Instant universal blockchain coverage', 'Assuming paid queries guarantee fresh indexing'],
+    alternatives: ['Dune', 'Managed blockchain data API', 'Direct RPC and data warehouse'],
+  },
 };
 
 function readBaseline(args: string[]) {
