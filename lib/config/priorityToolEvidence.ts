@@ -114,6 +114,23 @@ export const PRIORITY_TOOL_EVIDENCE: Record<string, PriorityToolEvidence> = {
       { label: 'Commercial licensing rules', url: 'https://lumalabs.ai/learning-hub/licensing' },
     ],
   },
+  notebooklm: {
+    checkedAt: '2026-09-06',
+    limitation: {
+      en: 'NotebookLM works from a bounded source set rather than discovering the open web. Google AI Plus, Pro, and Ultra currently allow up to 100, 300, and 600 sources per notebook; users should still check citation accuracy and source quality. Data handling also differs by account, including Workspace for Education protections.',
+      zh: 'NotebookLM 基于限定资料集工作，而不是检索开放网络。Google AI Plus、Pro 和 Ultra 目前每个笔记本最多支持 100、300 和 600 个来源；用户仍需核验引用准确性和来源质量。不同账户的数据处理规则也不同，包括 Workspace for Education 的保护条款。',
+    },
+    sources: [
+      {
+        label: 'Official product and data notice',
+        url: 'https://support.google.com/notebooklm/answer/16164461?hl=en',
+      },
+      {
+        label: 'Official plans and source limits',
+        url: 'https://support.google.com/googleone/answer/16105039?hl=en',
+      },
+    ],
+  },
   pipedream: {
     checkedAt: '2026-09-01',
     limitation: {

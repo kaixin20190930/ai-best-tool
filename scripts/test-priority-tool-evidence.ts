@@ -12,6 +12,7 @@ const expectedSlugs = [
   'gamma',
   'lindy',
   'luma-ai',
+  'notebooklm',
   'pipedream',
   'runway',
   'the-graph',
@@ -26,6 +27,17 @@ if (
   !gammaLimit.zh.includes('可编辑')
 ) {
   throw new Error('Gamma evidence must explain current PPTX font and editable-table boundaries in both languages.');
+}
+
+const notebooklmLimit = PRIORITY_TOOL_EVIDENCE.notebooklm.limitation;
+if (
+  !notebooklmLimit.en.includes('600 sources') ||
+  !notebooklmLimit.en.includes('citation accuracy') ||
+  !notebooklmLimit.en.includes('Workspace for Education') ||
+  !notebooklmLimit.zh.includes('600 个来源') ||
+  !notebooklmLimit.zh.includes('引用准确性')
+) {
+  throw new Error('NotebookLM evidence must retain source limits, citation checks, and account boundaries.');
 }
 
 if (JSON.stringify(actualSlugs) !== JSON.stringify(expectedSlugs)) {

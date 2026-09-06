@@ -8,6 +8,20 @@ const linkedPages = [
 ];
 
 async function main() {
+  const evidenceConfig = fs.readFileSync('lib/config/priorityToolEvidence.ts', 'utf8');
+  for (const term of [
+    'notebooklm:',
+    '600 sources',
+    '600 个来源',
+    'citation accuracy',
+    'Workspace for Education',
+    'support.google.com/notebooklm/answer/16164461',
+    'support.google.com/googleone/answer/16105039',
+  ]) {
+    assert(evidenceConfig.includes(term), `NotebookLM evidence snapshot: ${term} missing`);
+  }
+  console.log('PASS NotebookLM official evidence snapshot retains limits and account boundaries');
+
   for (const file of linkedPages) {
     const source = fs.readFileSync(file, 'utf8');
     assert(source.includes('notebooklm'), `${file}: NotebookLM relationship missing`);
