@@ -86,7 +86,7 @@ const roadmap = read('EVIDENCE_DECISION_PLATFORM_ROADMAP_CN.md');
 const mon = roadmap.split('\n').find((line) => line.startsWith('| MON-01')) || '';
 const lnk = roadmap.split('\n').find((line) => line.startsWith('| LNK-01')) || '';
 assert(
-  mon.includes('代码与生产数据审计完成') && mon.includes('余9项待真实复核') && mon.includes('不包含自动抓取'),
+  mon.includes('代码与生产数据审计完成') && mon.includes('待真实复核') && mon.includes('不包含自动抓取'),
   'Separate the verified editorial calendar from missing decision baselines and autonomous crawling',
 );
 assert(

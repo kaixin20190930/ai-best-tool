@@ -1,0 +1,186 @@
+import assert from 'node:assert/strict';
+import { closePool, query } from '@/db/neon/client';
+import { loadEnvConfig } from '@next/env';
+
+import { prepareTimelineEventInsert } from '@/lib/services/intelligence/changeTimeline';
+import { createAdminClient } from '@/lib/supabase/admin';
+
+loadEnvConfig(process.cwd());
+
+type DecisionBaseline = {
+  toolId: string;
+  profileId: string;
+  toolName: string;
+  profileName: string;
+  title: string;
+  summary: string;
+  primarySourceUrl: string;
+  sourceUrls: string[];
+  bestFit: string[];
+  notIdealFor: string[];
+  alternatives: string[];
+};
+
+const baselines: Record<string, DecisionBaseline> = {
+  gamma: {
+    toolId: '6512aa61-8663-49f8-809d-2a2ab4e529ad',
+    profileId: '63031451-a3eb-497d-9396-d6904aa2d3b3',
+    toolName: 'gamma',
+    profileName: 'Gamma',
+    title: 'Decision baseline established',
+    summary:
+      'Gamma is a strong fit for fast, browser-first presentation and visual-content drafts when the team will review the final structure and export. Keep PowerPoint, Google Slides, or Canva in the comparison when exact editable-file handoff, offline work, strict brand control, or predictable credit use is the deciding constraint.',
+    primarySourceUrl:
+      'https://help.gamma.app/en/articles/15939201-why-doesn-t-my-exported-pdf-or-powerpoint-match-what-i-see-in-gamma',
+    sourceUrls: [
+      'https://help.gamma.app/en/articles/11047840-how-can-i-import-slides-or-documents-into-gamma',
+      'https://help.gamma.app/en/articles/8022861-what-s-the-easiest-way-to-export-my-gamma',
+      'https://help.gamma.app/en/articles/15939201-why-doesn-t-my-exported-pdf-or-powerpoint-match-what-i-see-in-gamma',
+      'https://help.gamma.app/en/articles/12281928-does-gamma-use-my-content-to-train-its-ai-features',
+      'https://help.gamma.app/en/articles/7834324-how-do-credits-work-in-gamma',
+      'https://help.gamma.app/en/articles/11048258-what-does-per-member-billing-mean-in-gamma',
+    ],
+    bestFit: ['Fast visual first drafts', 'Browser-based proposals and pitch decks'],
+    notIdealFor: ['Pixel-perfect PowerPoint handoff', 'Offline-first editing'],
+    alternatives: ['PowerPoint', 'Google Slides', 'Canva'],
+  },
+};
+
+function readBaseline(args: string[]) {
+  const key = args.find((argument) => argument.startsWith('--tool='))?.slice('--tool='.length);
+  assert(key && baselines[key], `Use --tool=${Object.keys(baselines).join('|')}`);
+  return { key, baseline: baselines[key] };
+}
+
+function getLocalizedList(value: unknown, locale: string): string[] {
+  if (!value || typeof value !== 'object') return [];
+  const localized = value as Record<string, unknown>;
+  return Array.isArray(localized[locale]) ? localized[locale].map(String) : [];
+}
+
+async function main() {
+  const args = process.argv.slice(2).filter((argument) => argument !== '--');
+  const { key, baseline } = readBaseline(args);
+  const mode = args.includes('--commit') ? 'commit' : args.includes('--check') ? 'check' : 'dry-run';
+  assert(
+    args
+      .filter((argument) => !argument.startsWith('--tool='))
+      .every((argument) => ['--check', '--commit'].includes(argument)),
+  );
+  assert(baseline.sourceUrls.every((url) => new URL(url).hostname === 'help.gamma.app'));
+  assert(baseline.bestFit.length >= 2 && baseline.notIdealFor.length >= 2 && baseline.alternatives.length >= 2);
+  if (mode === 'check') {
+    console.log(`PASS ${key} fixed identity, decision fields and official-source boundaries`);
+    return;
+  }
+
+  const toolResult = await query<{
+    id: string;
+    name: string;
+    status: string;
+    page_quality_status: string | null;
+    features: Record<string, unknown> | null;
+  }>('SELECT id, name, status, page_quality_status, features FROM tools WHERE id = $1', [baseline.toolId]);
+  assert.equal(toolResult.rows.length, 1, `${key}: fixed tool record missing or duplicated`);
+  const tool = toolResult.rows[0];
+  assert.equal(tool.name, baseline.toolName);
+  assert.equal(tool.status, 'published');
+  assert.equal(tool.page_quality_status, 'monitor');
+  const audience = (tool.features?.audience as Record<string, unknown> | undefined) || {};
+  assert.deepEqual(getLocalizedList(audience.bestFit, 'en').slice(0, 2), baseline.bestFit);
+  assert.deepEqual(getLocalizedList(audience.notIdealFor, 'en').slice(0, 2), baseline.notIdealFor);
+
+  const supabase = createAdminClient();
+  const [profileResult, claimsResult, existingResult] = await Promise.all([
+    supabase
+      .from('product_intelligence_profiles')
+      .select('id, owner_type, owner_id, product_name')
+      .eq('id', baseline.profileId)
+      .maybeSingle(),
+    supabase
+      .from('product_intelligence_claims')
+      .select('id, verification_status, conflict_status')
+      .eq('profile_id', baseline.profileId),
+    supabase
+      .from('product_intelligence_timeline_events')
+      .select('id, title, review_scope, occurred_at')
+      .eq('profile_id', baseline.profileId)
+      .in('review_scope', ['decision', 'full'])
+      .order('occurred_at', { ascending: false }),
+  ]);
+  const error = profileResult.error || claimsResult.error || existingResult.error;
+  if (error) throw new Error(error.message);
+  assert(profileResult.data, `${key}: intelligence profile missing`);
+  assert.equal(profileResult.data.owner_type, 'tool');
+  assert.equal(profileResult.data.owner_id, baseline.toolId);
+  assert.equal(profileResult.data.product_name, baseline.profileName);
+  const verifiedClaims = (claimsResult.data || []).filter(
+    (claim) => claim.verification_status === 'verified' && claim.conflict_status === 'none',
+  );
+  assert(verifiedClaims.length >= 2, `${key}: at least two verified official claims are required`);
+
+  if (existingResult.data?.length) {
+    console.log(
+      JSON.stringify(
+        {
+          success: true,
+          tool: key,
+          mode,
+          created: false,
+          reason: 'decision_baseline_already_exists',
+          event: existingResult.data[0],
+        },
+        null,
+        2,
+      ),
+    );
+    return;
+  }
+
+  const insert = prepareTimelineEventInsert(
+    {
+      profileId: baseline.profileId,
+      profileOwnerType: 'tool',
+      eventType: 'reviewed_no_change',
+      reviewScope: 'decision',
+      title: baseline.title,
+      summary: baseline.summary,
+      sourceUrl: baseline.primarySourceUrl,
+      visibility: 'public',
+      occurredAt: new Date().toISOString(),
+      reviewNote:
+        'Evidence-only editorial baseline based on current official documentation. No hands-on trial or user outcome is claimed.',
+    },
+    null,
+  );
+  insert.metadata = {
+    ...insert.metadata,
+    entryMethod: 'controlled_decision_baseline',
+    sourceUrls: baseline.sourceUrls,
+    bestFit: baseline.bestFit,
+    notIdealFor: baseline.notIdealFor,
+    alternatives: baseline.alternatives,
+    handsOnTrial: false,
+    verifiedClaimCount: verifiedClaims.length,
+  };
+
+  if (mode === 'dry-run') {
+    console.log(JSON.stringify({ success: true, tool: key, mode, created: false, insert }, null, 2));
+    return;
+  }
+
+  const { data: created, error: insertError } = await supabase
+    .from('product_intelligence_timeline_events')
+    .insert(insert)
+    .select('id, profile_id, event_type, review_scope, visibility, occurred_at')
+    .single();
+  if (insertError) throw new Error(insertError.message);
+  console.log(JSON.stringify({ success: true, tool: key, mode, created: true, event: created }, null, 2));
+}
+
+main()
+  .catch((error) => {
+    console.error(error instanceof Error ? error.message : error);
+    process.exitCode = 1;
+  })
+  .finally(closePool);

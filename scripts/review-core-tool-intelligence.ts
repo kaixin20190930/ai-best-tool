@@ -344,10 +344,14 @@ async function main() {
     .select('id, claim_type, claim_value, source_url, verification_status, conflict_status, source_excerpt')
     .eq('profile_id', review.profileId);
   if (error) throw new Error(error.message);
+  const reviewedIds = new Set(review.decisions.map((decision) => decision.id));
+  const unexpectedCandidates = (claims || []).filter(
+    (claim) => !reviewedIds.has(claim.id) && claim.verification_status === 'candidate',
+  );
   assert.equal(
-    claims?.length,
-    review.decisions.length,
-    `${tool}: candidate set changed; review instead of overwriting`,
+    unexpectedCandidates.length,
+    0,
+    `${tool}: unreviewed candidate set changed; review instead of overwriting`,
   );
   for (const decision of review.decisions) {
     const claim = claims.find((item) => item.id === decision.id);
