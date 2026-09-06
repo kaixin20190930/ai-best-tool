@@ -13,6 +13,7 @@ type DecisionBaseline = {
   toolName: string;
   profileName: string;
   allowedSourceHosts: string[];
+  allowedPageQualityStatuses: string[];
   minimumVerifiedClaims: number;
   title: string;
   summary: string;
@@ -30,6 +31,7 @@ const baselines: Record<string, DecisionBaseline> = {
     toolName: 'gamma',
     profileName: 'Gamma',
     allowedSourceHosts: ['help.gamma.app'],
+    allowedPageQualityStatuses: ['monitor'],
     minimumVerifiedClaims: 2,
     title: 'Decision baseline established',
     summary:
@@ -54,6 +56,7 @@ const baselines: Record<string, DecisionBaseline> = {
     toolName: 'luma-ai',
     profileName: 'Luma Dream Machine',
     allowedSourceHosts: ['lumalabs.ai'],
+    allowedPageQualityStatuses: ['monitor'],
     minimumVerifiedClaims: 1,
     title: 'Decision baseline established',
     summary:
@@ -68,6 +71,28 @@ const baselines: Record<string, DecisionBaseline> = {
     bestFit: ['Video concept and shot exploration', 'Generative video modification'],
     notIdealFor: ['Commercial output on Free or Lite', 'Treating Dream Machine and API credits as one balance'],
     alternatives: ['Runway', 'Adobe Firefly', 'Dedicated timeline editor'],
+  },
+  n8n: {
+    toolId: '23bb3601-a5ac-42c3-bff3-64b06a063959',
+    profileId: '78427cbc-30df-43f4-99f1-ecbc2ae76c10',
+    toolName: 'n8n',
+    profileName: 'n8n',
+    allowedSourceHosts: ['n8n.io', 'docs.n8n.io'],
+    allowedPageQualityStatuses: ['continue_index'],
+    minimumVerifiedClaims: 4,
+    title: 'Decision baseline established',
+    summary:
+      'n8n is a fit for technical teams that need code-level workflow control, broad integrations, or a choice between managed and self-hosted deployment, and can own credentials, failures, and maintenance. Keep Make, Zapier, or managed n8n Cloud in the comparison when lower operational overhead, simpler collaboration, or managed delivery matters more than self-hosting flexibility.',
+    primarySourceUrl: 'https://docs.n8n.io/sustainable-use-license/',
+    sourceUrls: [
+      'https://n8n.io/pricing/',
+      'https://docs.n8n.io/hosting/community-edition-features/',
+      'https://docs.n8n.io/sustainable-use-license/',
+      'https://docs.n8n.io/hosting/scaling/queue-mode/',
+    ],
+    bestFit: ['Technical operations', 'Code-assisted workflows'],
+    notIdealFor: ['Zero-maintenance self-hosting', 'Unrestricted workflow-platform resale'],
+    alternatives: ['Make', 'Zapier', 'Managed n8n Cloud'],
   },
 };
 
@@ -110,7 +135,10 @@ async function main() {
   const tool = toolResult.rows[0];
   assert.equal(tool.name, baseline.toolName);
   assert.equal(tool.status, 'published');
-  assert.equal(tool.page_quality_status, 'monitor');
+  assert(
+    tool.page_quality_status && baseline.allowedPageQualityStatuses.includes(tool.page_quality_status),
+    `${key}: unexpected page quality status ${tool.page_quality_status || 'null'}`,
+  );
   const audience = (tool.features?.audience as Record<string, unknown> | undefined) || {};
   assert.deepEqual(getLocalizedList(audience.bestFit, 'en').slice(0, 2), baseline.bestFit);
   assert.deepEqual(getLocalizedList(audience.notIdealFor, 'en').slice(0, 2), baseline.notIdealFor);
