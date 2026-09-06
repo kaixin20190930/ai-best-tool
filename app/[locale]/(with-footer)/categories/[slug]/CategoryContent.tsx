@@ -541,8 +541,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
     .filter((page): page is (typeof GUIDE_PAGES)[number] => Boolean(page))
     .filter((page) => page.href.endsWith('-comparison'));
   const primaryComparisonGuide = comparisonGuides[0] || relatedGuides[0] || null;
-  const checkedAt = '2026-07-28';
-  const checkedAtLabel = checkedAt;
+  const hubStructureReviewedAt = '2026-09-06';
   const priorityCategorySlugs = [
     'developer-tools',
     'research',
@@ -587,11 +586,11 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
   }
   const categorySignalCards = [
     {
-      label: isChinese ? '最近核查' : 'Last checked',
-      value: checkedAtLabel,
+      label: isChinese ? '页面结构复核' : 'Hub structure reviewed',
+      value: hubStructureReviewedAt,
       note: isChinese
-        ? '这不是静态目录，后续还会继续补真实对比、评论和认领信号。'
-        : 'This is not a static directory; we will keep adding real comparisons, comments, and claim signals.',
+        ? '这里只表示分类导航和判断框架的复核日期，不代表下方每个工具都在同一天完成事实核验。'
+        : 'This date covers the category navigation and decision framework, not a same-day fact review of every tool below.',
     },
     {
       label: isChinese ? '当前规模' : 'Current size',
@@ -1231,7 +1230,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
 
         <GuideEvidencePanel
           locale={params.locale}
-          checkedAt={checkedAt}
+          checkedAt={hubStructureReviewedAt}
           scope={
             isChinese
               ? '这页先交代分类到底覆盖哪些真实场景、当前有多少已发布工具、以及用户接下来该去哪里比较。'
@@ -1634,6 +1633,11 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
               {isChinese
                 ? '如果你不想一开始就看太多卡片，这几个代表页能更快帮你建立“这一类工具到底怎么比较”的判断。'
                 : 'If you do not want to scan too many cards right away, these representative pages are the fastest way to understand how tools in this category should be compared.'}
+            </p>
+            <p className='mt-2 max-w-3xl text-xs leading-5 text-slate-500' data-category-fact-boundary>
+              {isChinese
+                ? '卡片只说明为什么把该页面作为导航入口；价格、功能、限制、证据日期和判断状态均以对应工具详情页为准。'
+                : 'These cards only explain why a page is a useful navigation entry. Pricing, features, limits, evidence dates, and decision status come from the linked tool page.'}
             </p>
             <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
               {representativeTools.map((tool) => (

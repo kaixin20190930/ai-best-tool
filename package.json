@@ -68,6 +68,7 @@
     "monitor:unverified-historical-tools": "tsx scripts/monitor-unverified-historical-tools.ts",
     "isolate:safety-tool-records": "tsx scripts/isolate-safety-tool-records.ts",
     "test:safety-tool-isolation": "tsx scripts/test-safety-tool-isolation.ts",
+    "test:category-fact-boundaries": "tsx scripts/test-category-fact-boundaries.ts",
     "test:localized-navigation:smoke": "tsx scripts/test-localized-navigation.ts --smoke",
     "test:seo-architecture": "tsx scripts/test-seo-architecture-guardrails.ts",
     "test:seo-breadcrumbs": "tsx scripts/test-seo-breadcrumbs.ts",
