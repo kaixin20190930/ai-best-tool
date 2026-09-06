@@ -56,4 +56,7 @@
 7. 部署后使用 `SEO_BASE_URL=https://aibesttool.com pnpm exec tsx scripts/test-tool-maintenance-reviews.ts --pages`
 
 回滚预演、正式写入及独立 `--status` 回读均已通过。Perplexity、Make 与配置中既有的 Consensus、Gamma 全部保持
-`published + monitor`，下次复查为 2026-10-06；编辑与市场验证日期仍为 2026-09-01。生产页面结果在部署后补记。
+`published + monitor`，下次复查为 2026-10-06；编辑与市场验证日期仍为 2026-09-01。
+
+发布提交 `b75b1637` 已获 Vercel `success / Deployment has completed`。8 个中英文生产页均通过可见维护建议、全部官方来源、
+canonical 与 noindex 验收；sitemap 继续排除四条 monitor 工具，全站 SEO smoke 通过，URL 总数保持 138。

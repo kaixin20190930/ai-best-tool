@@ -125,7 +125,8 @@ Gamma 验收补充：`33e65beb` 部署成功后发现新简版提示被官方快
   核验及待URL级数据的迁移/索引决策。
 - P1 最新：Perplexity 与 Make 的到期前官方事实维护已完成本地核验。Perplexity 明确展示官方 Free Pro Search 3次/5次冲突，
   并补网页订阅、API 与 Computer credits 的独立边界；Make 的 credits、AI 双重成本、数据区域与 webhook 队列事实无变化。两条
-  均保留 `monitor/noindex`，下次复查 10 月 6 日，不刷新市场验证或冒充实测。执行记录见
+  均保留 `monitor/noindex`，下次复查 10 月 6 日，不刷新市场验证或冒充实测。提交 `b75b1637` 已部署，8 个中英文维护页与
+  全站 SEO smoke 均通过，sitemap 保持 138。执行记录见
   [Perplexity/Make维护](./PERPLEXITY_MAKE_MAINTENANCE_2026-09-06_CN.md)。
 - 数据依赖：下一次同期 GSC 7 天、28 天与 Coverage；真实 owner/评论/Stack/Trial 信号需用户实际使用，不能由 AI 编造。
 
