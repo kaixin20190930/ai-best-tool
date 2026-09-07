@@ -1,0 +1,132 @@
+{
+  "slug": "lovable",
+  "title": "Lovable AI Full-Stack App Builder",
+  "officialUrl": "https://lovable.dev/",
+  "existingRoute": "/ai/lovable",
+  "action": "migrate_existing_fallback",
+  "status": "ready_for_next_slot",
+  "reviewedAt": "2026-09-07",
+  "publishNotBefore": "2026-09-11",
+  "sitemapChangeApproved": false,
+  "productionWriteApproved": false,
+  "category": {
+    "discoverySlug": "developer-tools",
+    "storageSlug": "productivity"
+  },
+  "positioning": "An AI software builder for creating and iterating full-stack web applications from conversation, with generated source code, workspace collaboration, publishing, managed cloud services, and AI features for deployed apps.",
+  "decisionAngles": [
+    "Fast prompt-to-working-app iteration versus the engineering review needed for production architecture, data, security, and operations",
+    "One integrated build, Cloud, and AI workflow versus selecting and operating separate development, backend, hosting, and model services",
+    "Unified usage credits versus a predictable message, seat, or fixed hosting subscription",
+    "No per-seat charge and shared workspace credits versus controlling member, project, build, Cloud, and AI consumption",
+    "Generated source ownership and Git synchronization versus portability of data, domains, managed services, secrets, and deployment configuration",
+    "Built-in security analysis and publish controls versus independent authorization, RLS, dependency, privacy, and business-logic verification",
+    "Accessible app creation for non-developers versus the technical ownership required when an application accepts payments or handles real user data"
+  ],
+  "pricingSnapshot": {
+    "checkedAt": "2026-09-07",
+    "billingUnit": "Lovable now uses a shared workspace credit balance across building, Lovable Cloud usage, and AI features inside deployed apps; credit value and consumption vary by plan, mode, task complexity, and service.",
+    "plans": [
+      "Free: daily build grants plus limited monthly Cloud and in-app AI grants for evaluation",
+      "Pro: paid workspace credits and individual or collaborative production features without a per-seat charge",
+      "Business: additional team, governance, publishing, and security capabilities with plan-specific credit economics",
+      "Enterprise: custom organization controls, support, compliance, and volume-based credit pricing"
+    ],
+    "volatileFields": [
+      "monthly and annual plan prices",
+      "included, daily, Cloud, AI, rollover, and top-up credit grants",
+      "credit value and task, model, build, hosting, database, storage, function, and transfer consumption rates",
+      "workspace, publishing, security, collaboration, connector, and enterprise entitlements"
+    ],
+    "releaseGuard": "Recheck the live pricing, credits-and-usage, workspace administration, Cloud, and terms pages on release day; do not publish exact prices, grants, example task costs, expiry periods, or plan entitlements from this snapshot without that recheck."
+  },
+  "policyBoundaries": [
+    {
+      "label": "Unified credits replaced the former two-balance billing model",
+      "summary": "Lovable announced a phased June 2026 migration from separate build and Cloud/AI balances to one credit balance; the current pricing and live admin documentation now describe unified usage, while cached or transitional account material may still show the older structure.",
+      "releaseGuard": "Use the current unified model as the primary description, label the former two-balance model as historical, and require an account-level billing-screen check if a workspace still appears transitional."
+    },
+    {
+      "label": "Generated and published applications still require accountable security review",
+      "summary": "Lovable provides security checks and governance features, but its documentation allows publishing in some cases with unresolved findings and does not replace application-specific authorization, RLS, secret, dependency, and data-flow validation.",
+      "releaseGuard": "Never describe successful generation, preview, built-in scanning, or one-click publishing as proof of production security; require independent review before payments, sensitive data, external users, or regulated workflows."
+    },
+    {
+      "label": "Project ownership does not remove third-party or managed-service dependencies",
+      "summary": "Lovable states that customers own generated projects, code, customer data, and AI output subject to third-party model rights, while real portability also depends on repositories, data, domains, secrets, integrations, and hosted services.",
+      "releaseGuard": "Describe code ownership separately from full application portability and require an export, backup, migration, domain, and service-dependency plan."
+    },
+    {
+      "label": "Credits are prepaid usage rights rather than refundable cash value",
+      "summary": "Current terms and pricing describe plan-dependent credit value, consumption, expiration, freezing after cancellation, and non-refundability except where law requires otherwise.",
+      "releaseGuard": "Do not imply unused or unsuccessful generation credits can always be refunded; require users to set limits, review usage by member and project, and test with a bounded budget."
+    }
+  ],
+  "limitations": [
+    "A fast working preview is not evidence that authentication, authorization, RLS, payments, data validation, error handling, privacy, backups, and deployment behavior are production-ready.",
+    "Default build-mode credit use varies by task complexity, while Cloud and in-app AI usage can continue after publication, making total cost workload-dependent.",
+    "Shared workspace credits simplify collaboration but one member, project, traffic spike, background workload, or AI feature can consume budget without appropriate limits and monitoring.",
+    "AI repair loops and repeated prompts can consume credits while leaving architectural or business-logic problems unresolved.",
+    "Built-in security review can miss application-specific authorization, data exposure, dependency, secret, workflow, and compliance failures; publishing with unresolved issues may still be technically possible.",
+    "Code and project ownership do not automatically export databases, stored files, domains, secrets, server functions, AI gateway behavior, authentication, observability, or managed-service configuration.",
+    "Generated applications still require automated tests, source control, code review, environment separation, deployment rollback, backups, monitoring, and an accountable maintainer.",
+    "Monthly, annual, top-up, daily, and included grant credits have different expiry or availability rules, and current pricing says credits are not refundable.",
+    "The unified credit model was rolled out in phases; cached documents or a not-yet-migrated workspace can temporarily display historical billing terminology."
+  ],
+  "marketValidation": {
+    "score": 98,
+    "verdict": "validated",
+    "rationale": "Lovable has substantial independent review, adoption, revenue, funding, and current product-development signals. It has a clear decision role for rapidly creating full-stack web applications, especially for prototypes and small teams. The recommendation must remain conditional because credit usage, security review, production hardening, generated-code maintenance, data portability, and managed-service dependency can materially change total cost and risk.",
+    "strongSignals": [
+      "TechCrunch reported in June 2026 that Lovable said it had reached a USD 500 million annualized revenue run rate and one million new projects per week",
+      "TechCrunch reported in March 2026 that Lovable had about eight million users and said it had crossed USD 400 million in annual recurring revenue",
+      "G2 maintains a current Lovable review profile with verified user feedback on product capability and limitations",
+      "Current official documentation covers full-stack generation, workspaces, Git, Cloud, AI, security, governance, billing, usage controls, and portability rather than a single experimental generator"
+    ],
+    "recurringUserFriction": [
+      "Independent feedback repeatedly identifies credit consumption and repeated repair prompts as difficult to budget",
+      "Production use requires technical review of authentication, authorization, RLS, dependencies, secrets, and data flows even when the generated interface works",
+      "Convenient integrated hosting and backend services increase migration work beyond exporting source code",
+      "Non-technical accessibility can make teams underestimate ongoing testing, security, operations, and maintenance ownership"
+    ]
+  },
+  "sources": {
+    "official": [
+      "https://lovable.dev/pricing",
+      "https://lovable.dev/blog/simplifying-billing",
+      "https://docs.lovable.dev/features/workspace-admin-settings",
+      "https://docs.lovable.dev/features/workspace",
+      "https://docs.lovable.dev/features/security",
+      "https://lovable.dev/cloud",
+      "https://docs.lovable.dev/features/collaboration",
+      "https://lovable.dev/terms"
+    ],
+    "independent": [
+      "https://www.g2.com/products/lovable/reviews",
+      "https://techcrunch.com/2026/06/09/lovable-says-it-has-hit-500m-in-annualized-revenue-with-1-million-new-projects-a-week/",
+      "https://techcrunch.com/2026/03/11/lovable-says-it-added-100m-in-revenue-last-month-alone-with-just-146-employees/",
+      "https://www.techradar.com/pro/software-services/lovable-review",
+      "https://www.axios.com/2026/05/07/loveable-replit-vibe-coding-privacy"
+    ]
+  },
+  "billingConflictResolution": {
+    "resolvedAt": "2026-09-07",
+    "primaryCurrentSources": [
+      "https://lovable.dev/pricing",
+      "https://docs.lovable.dev/features/workspace-admin-settings",
+      "https://lovable.dev/terms"
+    ],
+    "historicalSource": "https://lovable.dev/blog/simplifying-billing",
+    "conclusion": "Current live sources consistently describe one balance across Build, Cloud, and AI. Search snippets that still describe separate balances reflect stale crawls or the phased migration period and must not be used as the current default.",
+    "releaseRequirement": "Reopen all primary current sources on release day and preserve a short transitional-account caveat rather than publishing the old two-balance model as current."
+  },
+  "nextSlotChecklist": [
+    "Confirm there is still no production tools row using the lovable, lovable-dev, or lovable.dev identity",
+    "Recheck current plan prices, unified credit rules, example task consumption, expiry, grants, Cloud and AI usage, and refund terms",
+    "Confirm current live admin documentation still agrees with pricing and terms; preserve only a transitional-account caveat for old two-balance displays",
+    "Verify official logo and thumbnail sources and confirm both locales render them without fallback media",
+    "Keep the page focused on rapid full-stack web application creation and separate prototype speed from production readiness",
+    "Preserve security, RLS, generated-code review, ongoing cost, portability, ownership, and maintenance boundaries in both languages",
+    "Replace only the existing /ai/lovable fallback and publish as monitor/noindex; run evidence, alias, sitemap, TypeScript, full build, and production smoke before any later index decision"
+  ]
+}
