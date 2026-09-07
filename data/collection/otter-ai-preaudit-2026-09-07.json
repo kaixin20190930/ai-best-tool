@@ -1,0 +1,129 @@
+{
+  "slug": "otter-ai",
+  "title": "Otter.ai Meeting Transcription and AI Notes",
+  "officialUrl": "https://otter.ai/",
+  "existingRoute": "/ai/otter-ai",
+  "action": "migrate_existing_fallback",
+  "status": "ready_for_next_slot",
+  "reviewedAt": "2026-09-07",
+  "publishNotBefore": "2026-09-10",
+  "sitemapChangeApproved": false,
+  "productionWriteApproved": false,
+  "category": {
+    "discoverySlug": "voice",
+    "storageSlug": "chatbot"
+  },
+  "positioning": "An AI meeting assistant for recording or importing conversations, producing live transcripts, speaker labels, summaries, action items, searchable meeting history, and workflow-ready meeting knowledge across individual and team use.",
+  "decisionAngles": [
+    "Automatic meeting capture versus bot-free, local, or manually initiated recording workflows",
+    "Live transcription and searchable history versus the accuracy review required for names, accents, noise, jargon, and overlapping speech",
+    "Cross-meeting AI Chat and workflows versus the risk of treating generated summaries or answers as an authoritative record",
+    "Monthly minutes, per-meeting duration, file imports, and conversation-history access versus an apparently simple per-user subscription",
+    "Calendar auto-join and automatic sharing convenience versus participant consent, client expectations, and accidental disclosure",
+    "Shared team knowledge and integrations versus ownership, retention, archival, deletion, access, and administrator controls",
+    "General meeting notes versus sales, enterprise, API, webhook, compliance, and custom workflow requirements"
+  ],
+  "pricingSnapshot": {
+    "checkedAt": "2026-09-07",
+    "billingUnit": "Plans combine per-user access with different monthly transcription allowances, recording or meeting duration limits, file-import allowances, conversation-history access, concurrent meeting capacity, administration, integrations, and enterprise controls.",
+    "plans": [
+      "Basic: free evaluation with monthly transcription, per-conversation, lifetime import, and recent-history limits",
+      "Pro: paid individual or small-team tier with higher recording limits, more imports, storage, search, export, and selected integrations",
+      "Business: team tier with longer meetings, broader recording and import capacity, concurrent meeting support, and administration",
+      "Enterprise: custom security, identity, compliance, API, webhook, sales, and integration capabilities"
+    ],
+    "volatileFields": [
+      "monthly and annual per-user prices",
+      "transcription minutes and which capture methods consume them",
+      "per-meeting duration, file-import, history, storage, and concurrent-meeting limits",
+      "language, integration, AI workflow, API, webhook, and compliance entitlements"
+    ],
+    "releaseGuard": "Recheck the live pricing and current limit documentation on release day; do not publish exact prices, discounts, minute allowances, import counts, history limits, or enterprise entitlements from this snapshot without that recheck."
+  },
+  "policyBoundaries": [
+    {
+      "label": "Recording permission and participant notice remain the user's responsibility",
+      "summary": "Otter can automatically join, record, transcribe, and share meetings, while recording and consent requirements differ by participant, organization, contract, and jurisdiction.",
+      "releaseGuard": "Never imply that calendar access, a host invitation, or the product's recording indicator alone satisfies every legal, workplace, client, or participant-consent requirement."
+    },
+    {
+      "label": "Auto-join and auto-share require explicit configuration review",
+      "summary": "Default and event-specific settings can control which meetings the Notetaker joins, whether guests are notified, and who receives or can collaborate on the resulting conversation.",
+      "releaseGuard": "Require users to review global and event-level join, notification, audience, link-sharing, and permission settings before connecting a calendar or using external meetings."
+    },
+    {
+      "label": "AI Chat output is not a verified meeting record",
+      "summary": "Otter states that AI Chat can produce incorrect or outdated responses and uses transcript context with internal and external model services when a user asks a question.",
+      "releaseGuard": "Do not present summaries, action items, inferred commitments, or AI Chat answers as exact quotes, professional advice, or verified decisions without checking the transcript and source recording."
+    },
+    {
+      "label": "Conversation ownership controls access after plan and workspace changes",
+      "summary": "Downgrades can archive older conversations without deleting them, shared access follows the owner's plan and permissions, and administrators or owners affect access and deletion.",
+      "releaseGuard": "Before organization-wide use, document conversation ownership, export, retention, deletion, offboarding, shared-access, and downgrade procedures."
+    }
+  ],
+  "limitations": [
+    "Transcription and speaker identification require proofreading when meetings include strong accents, background noise, overlapping speech, uncommon names, or specialized terminology.",
+    "Summaries, action items, and AI Chat answers can omit context or be incorrect, so critical commitments and quotations must be checked against the transcript and recording.",
+    "Automatic calendar joining can place a bot in internal, client, recruiting, legal, medical, or otherwise sensitive meetings unless global and event-specific settings are reviewed.",
+    "Automatic sharing, participant notifications, channels, public links, and collaborator permissions can expose meeting content beyond the intended audience if left misconfigured.",
+    "Recording and transcribing other people creates consent, workplace-policy, contractual, privacy, and jurisdiction-specific obligations that the product cannot resolve for the user.",
+    "The free tier limits monthly minutes, per-conversation duration, lifetime imports, and accessible history; deleting a conversation does not restore consumed transcription minutes.",
+    "Downgrading can archive older conversations and remove shared access based on the conversation owner's plan, even though the data has not been deleted.",
+    "Enterprise API, webhook, identity, compliance, and administration requirements may require a custom plan and should not be inferred from the consumer workflow.",
+    "Teams should define export, retention, deletion, account offboarding, workspace ownership, model-service, and incident-response procedures before treating meeting history as an organizational knowledge base."
+  ],
+  "marketValidation": {
+    "score": 96,
+    "verdict": "validated",
+    "rationale": "Otter.ai has substantial independent review volume, long-term product operation, broad meeting-platform integration, and independently covered evolution beyond basic transcription. It has a clear decision role for meeting-heavy individuals and teams. The recommendation remains conditional because accuracy, participant consent, auto-join and sharing defaults, minute and history limits, data governance, and generated-answer reliability can outweigh convenience in sensitive workflows.",
+    "strongSignals": [
+      "G2 listed Otter.ai at 4.4 stars with 504 reviews at review time",
+      "TechCrunch independently covered Otter.ai's expansion from meeting transcription into APIs, integrations, MCP access, and enterprise meeting knowledge workflows",
+      "Axios previously documented the product's calendar-connected ability to join and transcribe Zoom, Microsoft Teams, or Google Meet meetings with or without the account holder attending",
+      "Otter.ai reports more than USD 100 million in annual recurring revenue, more than 35 million users, and more than one billion processed meetings; these scale figures are company-reported"
+    ],
+    "recurringUserFriction": [
+      "Independent reviews report accuracy drops with accents, noise, jargon, and difficult speaker separation",
+      "Automatic joining, participant messages, and automatic summary sharing can surprise teams or external attendees when settings are not reviewed",
+      "Plan comparisons require understanding minutes, capture method, duration, imports, history, concurrent meetings, integrations, and administration rather than price alone",
+      "Privacy, consent, recording ownership, retention, and deletion become organizational governance questions rather than simple note-taking preferences"
+    ]
+  },
+  "sources": {
+    "official": [
+      "https://otter.ai/pricing",
+      "https://help.otter.ai/hc/en-us/articles/360047538094-Conversation-import-and-app-limits-on-the-Basic-free-plan",
+      "https://help.otter.ai/hc/en-us/articles/25205539848343-When-will-my-monthly-minutes-reset",
+      "https://help.otter.ai/hc/en-us/articles/12906714508823-Stop-Otter-Notetaker-from-automatically-joining-your-meetings",
+      "https://help.otter.ai/hc/en-us/articles/14952683922711-Turn-off-auto-share-for-conversations-meetings",
+      "https://help.otter.ai/hc/en-us/articles/17016733191703-Otter-AI-Chat-FAQs",
+      "https://help.otter.ai/hc/en-us/articles/360048258953-Data-security-and-privacy-policies",
+      "https://help.otter.ai/hc/en-us/articles/26011568967447-What-happens-to-my-conversations-if-I-cancel-downgrade-or-change-my-Otter-plan",
+      "https://help.otter.ai/hc/en-us/articles/360047733414-Delete-a-conversation",
+      "https://otter.ai/blog/otter-ai-caps-transformational-2025-with-100m-arr-milestone-industry-first-ai-meeting-agents-and-global-enterprise-expansion"
+    ],
+    "independent": [
+      "https://www.g2.com/sellers/otter-ai",
+      "https://learn.g2.com/best-conversation-intelligence-software",
+      "https://techcrunch.com/2025/10/07/how-otter-ais-ceo-is-pushing-the-company-to-be-more-than-just-a-meeting-scribe/",
+      "https://www.axios.com/2023/07/28/otterpilot-two-meetings-at-once-ai-assistant"
+    ]
+  },
+  "routeAliasGuard": {
+    "canonicalRoute": "/ai/otter-ai",
+    "aliasRoute": "/ai/otter",
+    "observedAt": "2026-09-07",
+    "currentState": "Both fallback routes return 200, noindex, and self-canonical metadata.",
+    "releaseRequirement": "Before production migration, keep /ai/otter-ai as the only canonical entity and redirect or alias /ai/otter without creating a second indexable tool page."
+  },
+  "nextSlotChecklist": [
+    "Confirm there is still no production tools row using the otter, otter-ai, otter_ai, or otter.ai identity",
+    "Recheck live prices, minutes, duration, imports, history, storage, concurrent meetings, integrations, API, webhook, and compliance entitlements",
+    "Verify official logo and thumbnail sources and confirm both locales render them without fallback media",
+    "Keep the page centered on meeting capture, transcription, meeting knowledge, and governance rather than an unsupported universal productivity claim",
+    "Preserve accuracy, consent, auto-join, auto-share, ownership, retention, AI Chat, and downgrade boundaries in both languages",
+    "Migrate /ai/otter-ai as the only canonical entity and redirect or alias /ai/otter before any index approval",
+    "Publish as monitor and noindex first; run evidence, alias, canonical, sitemap, TypeScript, full build, and production smoke checks before any later index decision"
+  ]
+}
