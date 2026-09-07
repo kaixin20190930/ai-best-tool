@@ -1,0 +1,130 @@
+{
+  "slug": "midjourney",
+  "title": "Midjourney AI Image and Video Creator",
+  "officialUrl": "https://www.midjourney.com/",
+  "existingRoute": "/ai/midjourney",
+  "action": "migrate_existing_fallback",
+  "status": "ready_for_next_slot",
+  "reviewedAt": "2026-09-07",
+  "publishNotBefore": "2026-09-12",
+  "sitemapChangeApproved": false,
+  "productionWriteApproved": false,
+  "category": {
+    "discoverySlug": "image-generator",
+    "storageSlug": "design-art"
+  },
+  "positioning": "An AI-native visual creation service for generating, steering, editing, organizing, and animating images through the Midjourney website or Discord, with a workflow centered on visual exploration and iterative art direction rather than exact instruction following.",
+  "decisionAngles": [
+    "Distinctive visual ideation and art direction versus literal prompt adherence and predictable production output",
+    "Web creation and editing workflow versus Discord-based prompting and collaboration",
+    "Fast GPU time, Relax availability, and task-specific consumption versus a simple per-image allowance",
+    "Public-by-default creation and community remixing versus confidential client or unreleased brand work",
+    "Style, image, and edit references versus exact object, text, layout, and character consistency",
+    "Image generation and short image-to-video animation versus a full timeline-based video production suite",
+    "Commercial usage terms versus copyrightability, trademark, likeness, source-image, and client-clearance requirements"
+  ],
+  "pricingSnapshot": {
+    "checkedAt": "2026-09-07",
+    "billingUnit": "Midjourney sells automatically renewing subscriptions whose practical capacity is primarily measured in Fast GPU time, with plan-dependent Relax generation, concurrency, video resolution, privacy, and commercial-use conditions.",
+    "plans": [
+      "Basic: entry subscription with limited monthly Fast GPU time and no Relax or Stealth mode",
+      "Standard: more Fast time plus Relax image generation, but no Stealth mode",
+      "Pro: more concurrency, Relax image and eligible video generation, and Stealth mode",
+      "Mega: highest included Fast time and concurrency with Pro-level privacy and Relax capabilities"
+    ],
+    "volatileFields": [
+      "monthly and annual prices and annual discount",
+      "included and purchasable Fast GPU time",
+      "image and video GPU cost by model, resolution, mode, upscale, and batch size",
+      "Relax, Turbo, video, Stealth, concurrency, queue, and permutation entitlements",
+      "commercial-use conditions and company-revenue threshold"
+    ],
+    "releaseGuard": "Recheck the live plan comparison, GPU speed, video, Stealth, commercial-use, and terms pages on release day; do not publish exact prices, GPU minutes, generation costs, resolutions, thresholds, or plan entitlements from this snapshot without that recheck."
+  },
+  "policyBoundaries": [
+    {
+      "label": "Public-by-default creation is not confidential by default",
+      "summary": "Midjourney describes an open community in which content is publicly viewable and remixable by default. Stealth is restricted to eligible higher plans, does not retroactively privatize earlier work automatically, and does not hide creations made in shared or open Discord spaces.",
+      "releaseGuard": "Never recommend the default workflow for confidential client, product, campaign, personal, or regulated material; verify plan, visibility mode, creation surface, existing asset visibility, and contractual requirements before upload or generation."
+    },
+    {
+      "label": "Commercial use does not guarantee exclusive or risk-free rights",
+      "summary": "Midjourney provides plan-dependent commercial usage terms, but users remain responsible for input rights and applicable law, public content can be remixed, third-party creations remain attributable to their creators, and copyright, trademark, likeness, and client-clearance outcomes are jurisdiction and use-case dependent.",
+      "releaseGuard": "Describe commercial eligibility separately from ownership, copyrightability, exclusivity, trademark clearance, publicity rights, and indemnity; require legal review for material brand, merchandise, entertainment, or client use."
+    },
+    {
+      "label": "GPU time is workload capacity rather than a fixed image count",
+      "summary": "Fast time resets with the subscription and generation cost varies by image or video task, model, resolution, upscale, batch, and speed. Relax availability and wait times depend on plan and workload.",
+      "releaseGuard": "Do not convert plan hours into a guaranteed image or video count; compare using a representative prompt, edit, upscale, rerun, and animation workflow and record actual usage."
+    },
+    {
+      "label": "Image-to-video is not a full video editor",
+      "summary": "The official video workflow animates a starting image into short clips with motion controls and extensions. It should not be represented as equivalent to timeline editing, long-form generation, audio, captions, scene management, or deterministic production pipelines.",
+      "releaseGuard": "Keep the video claim scoped to current image-to-video capabilities and recheck duration, extension, resolution, batch, and GPU-cost limits before release."
+    }
+  ],
+  "limitations": [
+    "A visually strong generation may still miss exact instructions, typography, product geometry, factual details, hands, spatial relationships, or repeatable character and object consistency.",
+    "The aesthetic and parameter-driven workflow rewards iteration and learned prompting, which can be slower or less predictable for users who need literal conversational edits.",
+    "Fast GPU capacity resets and does not roll over, while reruns, edits, upscales, high-resolution work, and video can consume materially different amounts of time.",
+    "Relax generation can involve queue delays and is unavailable for some plans, modes, resolutions, or task types.",
+    "Content and prompts may be public and remixable unless the correct eligible Stealth workflow is used; changing the default does not automatically privatize prior creations.",
+    "Stealth mode does not conceal work posted in shared or public Discord channels from people in those channels.",
+    "Commercial-use eligibility does not settle copyrightability, exclusivity, source-image rights, trademark, likeness, client policy, disclosure, or jurisdiction-specific legal risk.",
+    "The video feature is based on animating a starting image into short clips and is not a substitute for a complete video production and editing environment.",
+    "Model versions, parameters, moderation behavior, visual style, GPU costs, and feature availability change frequently, so saved workflows require release and review checks."
+  ],
+  "marketValidation": {
+    "score": 99,
+    "verdict": "validated",
+    "rationale": "Midjourney is a mature, AI-native visual product with strong independent recognition, substantial reported revenue, a current review footprint, and a documented web, Discord, editing, personalization, image, and video workflow. Its value is strongest for visual exploration and art direction. Recommendation must remain conditional because exact control, privacy, GPU economics, commercial rights, legal exposure, and production consistency materially affect fit.",
+    "strongSignals": [
+      "Forbes reported, citing PitchBook, that Midjourney generated USD 300 million in 2024 revenue and was profitable",
+      "Tom's Guide's February 2026 hands-on comparison retained Midjourney as a leading choice for visual steering, artistic control, and iterative design",
+      "G2 maintains a current Midjourney review profile with recurring feedback on image quality, ideation, prompt learning, and generation errors",
+      "Official documentation now covers a mature web creation surface, editor, image references, personalization, organization, Discord synchronization, subscriptions, GPU usage, privacy controls, and image-to-video"
+    ],
+    "recurringUserFriction": [
+      "Independent reviews and user reports repeatedly distinguish strong aesthetics and exploration from literal prompt following, precise editing, and consistency",
+      "The parameter-driven workflow and differences between Web, Discord, public, private, Fast, Relax, and Turbo modes create a meaningful learning curve",
+      "GPU-time accounting makes real cost dependent on reruns, edits, upscales, resolution, animation, and speed rather than a simple per-output price",
+      "Privacy, public remixing, training-data disputes, commercial rights, and client clearance remain material adoption concerns for professional work"
+    ]
+  },
+  "sources": {
+    "official": [
+      "https://docs.midjourney.com/hc/en-us/articles/27870484040333-Comparing-Midjourney-Plans",
+      "https://docs.midjourney.com/hc/en-us/articles/32016412137741-GPU-Speed-Fast-Relax-Turbo",
+      "https://docs.midjourney.com/hc/en-us/articles/33390732264589-Creating-on-Web",
+      "https://docs.midjourney.com/hc/en-us/articles/32764383466893-Editor",
+      "https://docs.midjourney.com/hc/en-us/articles/37460773864589-Video",
+      "https://docs.midjourney.com/hc/en-us/articles/32019750070669-Stealth-Mode",
+      "https://docs.midjourney.com/hc/en-us/articles/27870375276557-Using-Images-Videos-Commercially",
+      "https://docs.midjourney.com/hc/en-us/articles/32083055291277-Terms-of-Service"
+    ],
+    "independent": [
+      "https://www.forbes.com/companies/midjourney/",
+      "https://www.tomsguide.com/best-picks/best-ai-image-generators",
+      "https://www.g2.com/products/midjourney/reviews",
+      "https://crfm.stanford.edu/fmti/December-2025/company-reports/Midjourney_FinalReport_FMTI2025.html"
+    ]
+  },
+  "routeAudit": {
+    "checkedAt": "2026-09-07",
+    "canonicalRoute": "/ai/midjourney",
+    "productionEntityMatches": 0,
+    "fallbackStatus": 200,
+    "fallbackRobots": "noindex, follow",
+    "fallbackCanonical": "https://aibesttool.com/ai/midjourney",
+    "releaseRequirement": "Migrate the existing fallback only. Do not introduce a second Midjourney slug or approve sitemap inclusion during the initial monitor release."
+  },
+  "nextSlotChecklist": [
+    "Confirm there is still no production tools row using the midjourney, mid-journey, or midjourney.com identity",
+    "Recheck prices, annual discount, Fast GPU time, extra time, Relax and Turbo rules, concurrency, video resolution, Stealth, and commercial-use thresholds",
+    "Verify current Web and Discord entry points and keep the product description aligned with the live creation, edit, organize, reference, and video surfaces",
+    "Verify official logo and thumbnail sources and confirm both locales render them without fallback media",
+    "Keep the recommendation centered on visual exploration and art direction rather than claiming universal prompt accuracy or deterministic production output",
+    "Preserve public-by-default, Stealth, remixing, GPU economics, exact-control, commercial-rights, copyright, and image-to-video boundaries in both languages",
+    "Replace only the existing /ai/midjourney fallback and publish as monitor/noindex; run evidence, alias, sitemap, TypeScript, full build, and production smoke before any later index decision"
+  ]
+}
