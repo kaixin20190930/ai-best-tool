@@ -97,8 +97,8 @@ RC-05最新：[范围澄清实施与验收](./LEGACY_PRODUCT_SCOPE_CLARIFICATION
 文、生产页面及数据库原文纠偏均已验收；2026-09-08 又根据对象身份、独立证据和 GSC 缺行口径，将两条固定记录转为
 `monitor/noindex`。未删除历史 URL，未把 Adobe 强制迁到 Firefly，也未把 Einstein 产品族强制迁到 Agentforce。
 
-RC-05C维护排期于2026-09-06补齐：Adobe与Salesforce Einstein均设2026-09-11人工复核，缺排期降至0。固定ID脚本只修
-改`next_review_date`，没有刷新`updated_at`，正文、状态与索引判断不变；这不把URL级数据依赖或最终处置标为完成。
+RC-05C 的 2026-09-06 排期写入是阶段性动作：当时仅把 Adobe 与 Salesforce Einstein 设为 2026-09-11 人工复核并将缺排期降
+至 0，没有改正文、状态或索引判断。该历史记录不覆盖下述 2026-09-08 最终处置。
 
 RC-05C 于 2026-09-08 完成：最新 GSC 导出中两条 URL 均未进入 Top Pages，因此只记录“无可见机会行”，不伪造 0 曝光；官方与
 独立证据确认 Adobe/Firefly、Einstein/Agentforce 不能一一等同。固定 ID 脚本完成 rollback、commit 和独立 status 回读，两条均
@@ -170,5 +170,5 @@ Guide边界、8个reviewed关系源及分类易变事实禁复制规则全部通
   0，AdSense校验通过，Browserslist旧数据提示不阻断。
 - 二次Review：没有删减原13项分母，没有修改生产工具/索引/排期，没有将部分LNK范围或MON运行情况标为全验收；自动检查仅覆盖已
   知现行契约，不声称语义审计全部历史文档。CI接线是代码配置，尚未提交/推送，因此不宣称GitHub任务已运行。
-- 下一项RC-05：先完成Adobe/Salesforce事实范围和内容方案；不改slug/canonical/索引、不直接改为Firefly/Agentforce。需要四个
-  原URL的GSC数据用于迁移决策，但不阻止先做事实核查。无需用户执行SQL。
+- 当前执行顺序：RC-05 与 RC-07 已关闭；RC-08 只等待 2026-09-13 真实 Trial 到期后的最终决定。等待期间继续按独立发布槽执行
+  成熟工具日常收录，下一条为 2026-09-09 的 Replit 发布日复核；不得提前写发布日事实或自动批准索引。

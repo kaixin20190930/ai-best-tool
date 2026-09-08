@@ -26,8 +26,8 @@ RC-07 第三组完成后进度 14/17：ArtiverseHub AI、FastImage、HoneyDo、S
 RC-07 已于 2026-09-06 完成 17/17：最后三条安全/合规对象不做流量或转化增强。`aigirl-best` 与 `undressing_ai` 归
 档，`anime-girl-studio` 纠正旧范围后转 `monitor`；三条统一绕过普通工具评分、推荐、CTA 和 `SoftwareApplication` schema，
 并退出 sitemap。生产数据库固定记录保护、dry-run、正式事务、独立回读、专项测试、TypeScript 检查与完整 build 均通过。缺排
-期 5 -> 2，余下仅 Adobe/Salesforce Einstein，转回 RC-05C 处理。两条随后只补2026-09-11人工复核排期，缺排期降至0；未改正
-文、状态或索引判断，RC-05C仍待URL级数据。
+期 5 -> 2，余下仅 Adobe/Salesforce Einstein，转回 RC-05C 处理。该段记录 09-06 阶段快照；两条随后补齐排期，并已于 09-08
+完成范围、证据与索引处置，当前状态以本页后文的 RC-05 完成记录为准。
 
 RC-08 已完成分类事实边界和 MON 运行审计：分类页不再把框架复核日期表达成全分类工具事实核验，代表工具卡只承担导航理由；价
 格、功能、限制、证据日期和判断状态统一回到工具详情页。生产 MON 审计确认事实日历 1 个到期、11 个已排期；Gamma 已用当前官
@@ -58,8 +58,8 @@ Codex 后会自动载入可编辑的目标与检查项。生产事务写入、�
 这不会新增页面、修改 sitemap 或放开索引；RC-08 当前只等待9月13日到期后的真实最终决定。
 
 RC-01至RC-04首轮治理已完成：状态校正、结构化内链测试与计划一致性守卫、生产只读19项缺排期回查均已执行；专项测试及完整
-build通过。此轮没有完成新的工具核验，四周比例不增加；CI配置待提交后运行，下一项RC-05对象事实纠偏，不直接迁移URL或解除索
-引暂停。
+build通过。该段是首轮阶段快照，当时没有完成新的工具核验、四周比例不增加；其后 RC-05 已按事实纠偏并完成索引处置，不直接迁
+移到不同产品身份。
 
 2026-09-04 日常收录更新：W2-02B 累计处理 12/7-14，今日完成 OpenRouter 与 n8n 两条既有 fallback 的生产实体迁移，均保留原
 canonical。两者线上验收均已通过；n8n 提交 `37ceb6d2` 已获 Vercel 部署成功确认，双语 index/canonical/新正文和 sitemap 生
@@ -118,16 +118,14 @@ RC-05 已完成：Adobe/Salesforce 的范围正文、列表/静态兜底、metad
 实现，77 个源码文件检查、182 页/5,406 处内部链接扫描、完整 build 和中文正文登录点击通过。实现提交 `4c3e01a1`；验收边界见
 [全站导航审计](./LOCALIZED_NAVIGATION_AUDIT_2026-09-04_CN.md)，未修改生产数据或索引策略。
 
-对象复核后续：Adobe/Salesforce 的数据库关键词查重、静态引用与 8 个线上页面抽查完成；没有找到 Firefly/Agentforce 的独立
-tools 记录，两者原四页仍在 sitemap。原始 GSC 文件当前不可用，URL 明细为未知；最终处置尚未实施，见
-[对象影响面与处置分支](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。对象审计未改生产数据；附带发现的重复语言前
-缀已由独立修复373d2336部署及生产验收关闭，不再列作待修项。
+对象复核最终状态：Adobe/Salesforce 的数据库查重、静态引用、线上页面、GSC Top Pages 口径和独立证据均已复核；未建立
+Firefly/Agentforce 独立 tools 记录，也未错误迁移身份。两条历史范围页现为 `monitor/noindex`，已退出 sitemap，2026-10-08
+复查；完整决策见 [范围澄清实施](./LEGACY_PRODUCT_SCOPE_CLARIFICATION_2026-09-04_CN.md)。附带发现的重复语言前缀已由独立修复
+`373d2336` 部署及生产验收关闭，不再列作待修项。
 
 最新准入口径：以 [唯一收录规范](./BEST_DIRECTORY_POSITIONING_AND_INTAKE_CN.md) 的对象类型及八项门槛为准，品牌/流量/付费/
-完整度分数不能替代准入；公开、索引与推荐分开。规范修订已完成，未声称新增自动校验已实现。Adobe、Salesforce Einstein 初步
-身份审计完成，当前记录未通过完整准入；下一步是
-[收录对象复核与处置](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)，不是机械补日期。仅文档更新，生产与缺排期 19
-项不变。
+完整度分数不能替代准入；公开、索引与推荐分开。Adobe、Salesforce Einstein 未通过独立产品身份准入，已按历史范围页隔离；
+未来 Firefly/Agentforce 必须以独立实体重新走资料、市场和索引门禁，不能继承旧页批准或信号。
 
 维护审计、数据库字段缺口和排期明细见 [本轮维护审计](./MAINTENANCE_AUDIT_2026-09-04_CN.md)。
 
@@ -148,7 +146,7 @@ Gamma 验收补充：`33e65beb` 部署成功后发现新简版提示被官方快
 - P1：Emdash 已依既有 9 月 1 日核验 +30 天补齐生产复查日期 10 月 1 日；未改正文、验证日期或索引状态。缺排期从 23 降为
   22 是该阶段历史快照；后续对象复核与安全收口已将缺排期降至 0，未用补日期冒充事实核验。分类与完整执行记录见
   [历史工具排期审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。MAINT-04 与 MAINT-05 均已完成；Adobe、Salesforce
-  Einstein 的 URL/索引处置继续归 RC-05C，等待 URL 级数据，不再归入排期补齐任务。
+  Einstein 的 URL/索引处置也已由 RC-05C 于 09-08 关闭，不再归入排期补齐任务。
 - P1：CHG-02 已完成10/10。Fathom、Claude、Consensus、Gamma、Luma Dream Machine、n8n、OpenRouter、Runway、Dune、The Graph
   均有真实幂等`fact`基线；The Graph以官网产品名和定位完成最后一条。基线主锚点固定按产品名、官网定位、其他事实排序，同步
   脚本统一从Supabase验证工具owner，提取器限制站点身份只取首页并拦截假套餐。ElevenLabs/Descript/Perplexity/Make按robots停
@@ -158,8 +156,8 @@ Gamma 验收补充：`33e65beb` 部署成功后发现新简版提示被官方快
   [Gemini维护](./GEMINI_MAINTENANCE_2026-09-04_CN.md)。其后的Notion、Poe维护也已完成，不再重复排入待办。
 - P1 最新：Notion、Poe 本轮官方事实维护完成2/2，修复中文复制英文及Poe移动端/保密错误，补使用边界与试用检查；下次均为9月
   18日。四个语言页本地及生产验收通过，缺排期21→19，sitemap仍162；未新增索引批准或市场评分。详见
-  [Notion/Poe维护](./NOTION_POE_MAINTENANCE_2026-09-04_CN.md)。Adobe/Salesforce范围正文和数据库纠偏已完成，剩余独立市场
-  核验及待URL级数据的迁移/索引决策。
+  [Notion/Poe维护](./NOTION_POE_MAINTENANCE_2026-09-04_CN.md)。这里的缺排期数字是当批历史快照；Adobe/Salesforce 后续范围、
+  独立证据和索引决策均已在 RC-05C 关闭。
 - P1 最新：Perplexity 与 Make 的到期前官方事实维护已完成本地核验。Perplexity 明确展示官方 Free Pro Search 3次/5次冲突，
   并补网页订阅、API 与 Computer credits 的独立边界；Make 的 credits、AI 双重成本、数据区域与 webhook 队列事实无变化。两条
   均保留 `monitor/noindex`，下次复查 10 月 6 日，不刷新市场验证或冒充实测。提交 `b75b1637` 已部署，8 个中英文维护页与

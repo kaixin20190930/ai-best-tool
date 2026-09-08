@@ -66,6 +66,11 @@ function assertCurrentNavigation(document: string) {
     'Gamma 下一项；robots 受限来源不绕过',
     '整页复核仍进行中',
     'MAINT-03 仍进行中',
+    'RC-05C仍待URL级数据',
+    '最终处置尚未实施',
+    '等待 URL 级数据',
+    '剩余独立市场核验及待URL级数据的迁移/索引决策',
+    '下一项RC-05',
   ]) {
     assert(!document.includes(stale), `Obsolete current navigation status: ${stale}`);
   }
