@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>Replit editorial logo tile</title>
+  <rect width="256" height="256" rx="56" fill="#FFF7ED"/>
+  <rect x="52" y="62" width="68" height="52" rx="8" fill="#F26207"/>
+  <rect x="120" y="62" width="52" height="68" rx="8" fill="#F26207"/>
+  <rect x="104" y="130" width="68" height="52" rx="8" fill="#F26207"/>
+</svg>

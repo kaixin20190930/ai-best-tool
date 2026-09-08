@@ -103,6 +103,11 @@ URL 完全一致，遗漏、越界、重复、canonical 和 robots 冲突均为 
 `published + monitor`；索引审批保持关闭，双语页面继续 noindex 且不进入 sitemap。统一流水线同时补齐 released/monitor 状态契约，
 避免数据库发布成功后验证器仍按未发布状态运行。该项属于 W2-02F 持续运营，不提高四周一级进度，仍为 10/13（76.9%）。
 
+2026-09-08 下一发布槽准备：Replit 已完成非波动发布材料，记录当前 Starter/Core/Pro/Enterprise 结构、effort-based Agent 计费、
+共享 credits、云服务费用、成本控制及使用数据延迟，并补齐本地品牌媒体、适合/不适合和真实试用协议。为避免把 09-08 快照冒充
+发布日事实，没有提前创建可执行的 `replit-release.json`，也没有写生产或批准 sitemap；09-09 必须重新打开官方价格与计费文档后
+才能通过统一流水线。
+
 RC-05进行中：Adobe/Salesforce的RC-05A/B已完成生产发布、8页验收和数据库原文纠偏；范围正文、列表/静态兜底和metadata统一，
 撤下通用价格/评分/比较卡及单软件schema，comparison等价替代暗示已修正。生产复核排期已安全补至2026-09-11，缺排期为0；
 RC-05C URL/索引处置与独立市场核验仍待数据。见 [本轮范围澄清](./LEGACY_PRODUCT_SCOPE_CLARIFICATION_2026-09-04_CN.md)，四

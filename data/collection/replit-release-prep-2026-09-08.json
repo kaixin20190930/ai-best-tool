@@ -1,0 +1,61 @@
+{
+  "slug": "replit",
+  "status": "prepared_pending_release_day_recheck",
+  "preparedAt": "2026-09-08",
+  "publishNotBefore": "2026-09-09",
+  "officialUrl": "https://replit.com/",
+  "categorySlug": "productivity",
+  "pricing": "freemium",
+  "media": {
+    "imageUrl": "/icons/tool-logos/replit.svg",
+    "thumbnailUrl": "/images/tool-media/replit-cover.svg",
+    "provenance": "Local editorial brand tile checked against the official Replit product and brand pages; it is not represented as a product screenshot."
+  },
+  "observedFacts": {
+    "pricingCheckedAt": "2026-09-08",
+    "starter": "Free; daily Agent credits; one published app with a 30-day publication window; one background task at a time.",
+    "core": "$20 monthly reference price or $17/month billed annually; $20 toward the most powerful models; up to 5 collaborators; one active background task.",
+    "pro": "$100 monthly reference price or $95/month billed annually; $100 toward the most powerful models; up to 15 collaborators; 10 parallel agents; 28-day database rollback.",
+    "enterprise": "Custom pricing with organization security and control features.",
+    "billing": "Paid Agent work uses effort-based pricing. Subscription credits also cover publishing, databases, storage, and other cloud services; some third-party AI services are deducted at the provider public API rate.",
+    "costControls": "Paid work requires confirmation; usage alerts and budget limits are available. Usage data can take up to 30 minutes to appear.",
+    "productBoundary": "Replit integrates AI building, browser development, Git, managed services, and publishing. A successful preview or Agent checkpoint is not evidence of production security, correctness, scalability, or portability."
+  },
+  "decisionFrame": {
+    "bestFit": [
+      "Founders and small teams validating a web application quickly in one browser workspace",
+      "Teams that value an integrated Agent, editor, Git, database, secrets, and publishing path",
+      "Projects that can measure Agent and cloud usage and retain an accountable technical owner"
+    ],
+    "notIdealFor": [
+      "Regulated or high-risk systems without independent architecture and security review",
+      "Teams requiring fully predictable seat-only costs or provider-independent infrastructure",
+      "Applications whose performance, deployment, data, and operations must remain deeply customized"
+    ],
+    "trialProtocol": [
+      "Build one bounded internal workflow rather than the final production system",
+      "Set a spending limit before using paid Agent modes",
+      "Connect Git and review every generated change and dependency",
+      "Test authentication, authorization, secrets, failure paths, backups, and rollback",
+      "Record Agent cost, cloud cost, repair time, escaped defects, and export effort"
+    ]
+  },
+  "releaseDayChecks": [
+    "Re-open the official pricing page and confirm Starter, Core, Pro, and Enterprise prices and included allowances",
+    "Re-open AI billing and publishing-cost documentation and confirm effort-based and shared-credit wording",
+    "Run production duplicate and fallback preflight with --as-of=2026-09-09 --online",
+    "Generate data/collection/replit-release.json with reviewedAt=2026-09-09 only after the checks pass",
+    "Run release in rollback mode before --commit",
+    "After deployment, verify both locales remain noindex and outside sitemap"
+  ],
+  "sources": [
+    "https://replit.com/pricing",
+    "https://docs.replit.com/billing/ai-billing",
+    "https://docs.replit.com/billing/deployment-pricing",
+    "https://docs.replit.com/billing/managing-spend",
+    "https://docs.replit.com/learn/build-with-agent",
+    "https://docs.replit.com/learn/projects-and-artifacts/version-control",
+    "https://docs.replit.com/core-concepts/project-editor/app-setup/secrets",
+    "https://replit.com/brand"
+  ]
+}
