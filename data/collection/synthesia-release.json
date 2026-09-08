@@ -1,0 +1,110 @@
+{
+  "id": "87a0f886-1472-4111-a09a-6a6c781dcf42",
+  "slug": "synthesia",
+  "officialUrl": "https://www.synthesia.io/",
+  "reviewedAt": "2026-09-08",
+  "nextReviewDate": "2026-10-08",
+  "categorySlug": "design-art",
+  "pricing": "freemium",
+  "title": {
+    "en": "Synthesia AI Video Platform",
+    "zh": "Synthesia AI 商务视频平台"
+  },
+  "content": {
+    "en": "Synthesia turns scripts, documents, presentations, and templates into presenter-led business videos with AI avatars and multilingual voices. It is strongest for repeatable training, onboarding, internal communications, and product education, not cinematic generation or unrestricted timeline editing.",
+    "zh": "Synthesia 可将脚本、文档、演示文稿和模板转为带 AI 数字人与多语言配音的商务视频。它更适合可重复的培训、入职、内部沟通和产品教育，不应被当作电影级生成或无限制时间线剪辑工具。"
+  },
+  "detail": {
+    "en": "Decision summary: choose Synthesia when the job is to produce repeatable presenter-led business videos without arranging cameras, studios, and repeated voice recording. The strongest fit is a team that already has approved scripts, training material, product documentation, or presentations and needs consistent versions across languages. It is a weaker fit for cinematic storytelling, advanced motion design, highly expressive human performance, or editing that depends on a deep nonlinear timeline.\n\nCurrent commercial boundary, reviewed September 8, 2026: Basic is $0 per month and includes 1,200 shared credits, described as up to 10 minutes of video per month. Starter is $29 per month when billed monthly, includes 1,200 credits, one editor and three guests, downloads, dubbing, and removal of Synthesia branding. Creator is $89 per month when billed monthly, includes 3,600 credits, one editor and five guests, five personal avatars, interactive video features, and API access. Enterprise uses custom pricing and organization controls. Credits are a shared currency across video generation, dubbing, personalization, and AI-generated assets, so the headline subscription is not a complete estimate of production cost. Studio Express-1 avatars are listed as a separate $1,000 per year add-on for annual-plan users. Prices and entitlements can change; verify the official pricing page before purchase.\n\nTeam-cost warning: license and role are separate. A Free license does not mean that creation is free. Creating, generating, duplicating, or editing scenes can automatically upgrade a Free license to a billable Full license, while a Restricted license requires administrator approval. Teams should set license defaults and approval controls before inviting occasional collaborators.\n\nGovernance warning: creating a personal avatar requires a live consent step. The person providing the likeness must be the same person recording consent. Establish who owns the avatar, who can use it, and what happens when a contributor leaves. Treat translation, pronunciation, timing, gestures, visual relevance, and factual claims as review tasks rather than assuming generated output is ready to publish.\n\nAutomation boundary: API access is shown on Creator and Enterprise, and keys belong to the individual account rather than the workspace. Creator is documented at 60 write requests per minute, 300 per hour, and 1,000 per day per endpoint; test videos are limited to 30 per day. Store keys as secrets, define an account owner, and verify current limits before production automation.\n\nA practical trial should use one real training or onboarding script, produce two language versions, invite one reviewer without granting unnecessary creation access, and record credits consumed, correction time, pronunciation issues, and approval time. Adopt it only if the repeatable production savings outweigh credit, license, governance, and human quality-control costs.",
+    "zh": "决策结论：当目标是不再反复安排摄像、场地和真人录音，而是稳定制作数字人讲解型商务视频时，可以优先试用 Synthesia。它最适合已有审核过的脚本、培训资料、产品文档或演示文稿，并需要多语言一致版本的团队；不适合电影化叙事、高级动效、强真人表演，或依赖复杂非线性时间线的制作。\n\n截至 2026 年 9 月 8 日的商业边界：Basic 为每月 0 美元，包含 1,200 个共享 credits，官方描述最多可生成每月 10 分钟视频；Starter 按月付费为 29 美元，包含 1,200 credits、1 名编辑和 3 名访客，并支持下载、配音及移除品牌；Creator 按月付费为 89 美元，包含 3,600 credits、1 名编辑和 5 名访客、5 个个人数字人、互动视频和 API；Enterprise 为定制报价。credits 会被视频生成、配音、个性化和 AI 素材共同消耗，因此不能只看订阅价估算总成本。Studio Express-1 数字人目前是面向年付用户、每年 1,000 美元的独立附加项。价格和权益可能变化，购买前应再次核对官方页。\n\n团队成本提醒：角色和 license 是两套独立控制。Free license 并不代表创建免费；创建、生成、复制视频或编辑场景等动作可能自动升级为需要付费的 Full license，而 Restricted license 会先请求管理员批准。邀请临时协作者前，应先配置默认 license 和升级审批。\n\n治理提醒：创建个人数字人需要实时录制同一人的授权视频。团队应明确肖像归属、允许用途及成员离开后的停用流程。翻译、发音、节奏、动作、画面相关性和事实陈述仍需人工复核，不能把生成完成等同于可发布。\n\n自动化边界：API 目前显示在 Creator 和 Enterprise 方案中，密钥归属于个人账号而非 workspace。Creator 文档限制为每个端点每分钟 60 次写请求、每小时 300 次、每天 1,000 次，测试视频每天最多 30 个。生产接入前要明确账号责任人、密钥保管和当前限额。\n\n建议用一个真实培训或入职脚本做试用，生成两种语言，邀请一名不具备多余创建权限的审核者，并记录 credits 消耗、修改时间、发音问题和审批时间。只有重复制作节省的成本明显高于 credits、license、治理和人工质检成本时，才适合正式采用。"
+  },
+  "imageUrl": "/icons/tool-logos/synthesia.svg",
+  "thumbnailUrl": "/images/tool-media/synthesia-cover.svg",
+  "tags": [
+    "video-generation",
+    "avatar-video",
+    "training",
+    "localization"
+  ],
+  "features": {
+    "audience": {
+      "bestFit": {
+        "en": [
+          "Training and enablement teams producing repeatable presenter-led videos",
+          "Organizations localizing approved scripts and product education",
+          "Teams that need templates, reviewers, workspace controls, and an API path"
+        ],
+        "zh": [
+          "需要重复制作数字人讲解视频的培训和赋能团队",
+          "需要将已审核脚本和产品教育内容本地化的组织",
+          "需要模板、审核、workspace 控制和 API 路径的团队"
+        ]
+      },
+      "notIdealFor": {
+        "en": [
+          "Cinematic generation, advanced motion design, or deep timeline editing",
+          "Teams unwilling to govern likeness consent, licenses, and shared credits",
+          "Workflows that cannot include human language and factual review"
+        ],
+        "zh": [
+          "电影级生成、高级动效或深度时间线剪辑",
+          "不愿管理肖像授权、license 和共享 credits 的团队",
+          "无法安排语言和事实人工复核的工作流"
+        ]
+      }
+    },
+    "editorial": {
+      "reviewedAt": "2026-09-08",
+      "reviewedBy": "AI Best Tool editorial",
+      "sourceUrl": "https://www.synthesia.io/pricing",
+      "summary": "Release-day review reconciled pricing, credits, licenses, personal-avatar consent, and API limits across official documentation.",
+      "trustNote": "The page remains monitor/noindex until its evidence, rendering, and search fit are reviewed after release."
+    },
+    "marketValidation": {
+      "reviewedAt": "2026-09-08",
+      "score": 96,
+      "scores": {
+        "marketDurability": 25,
+        "independentAdoption": 24,
+        "decisionValue": 24,
+        "evidenceQuality": 23
+      },
+      "verdict": "validated",
+      "rationale": "Durable independent review volume, major funding coverage, enterprise adoption, and a distinct governed business-video workflow support inclusion. The recommendation stays conditional on credits, license upgrades, consent, and human review.",
+      "strongSignals": [
+        "More than 2,700 G2 reviews at preaudit time",
+        "Reuters-reported $180 million funding round and $2.1 billion valuation in January 2025",
+        "TechCrunch-reported adoption claim of more than 60,000 businesses"
+      ],
+      "evidenceUrls": [
+        "https://www.synthesia.io/pricing",
+        "https://docs.synthesia.io/docs/billing-settings",
+        "https://docs.synthesia.io/docs/user-licenses",
+        "https://docs.synthesia.io/docs/personal-avatars",
+        "https://docs.synthesia.io/reference/introduction",
+        "https://www.g2.com/products/synthesia/reviews",
+        "https://techcrunch.com/2025/01/14/synthesia-snaps-up-180m-at-a-2-1b-valuation/"
+      ]
+    },
+    "pricingSnapshot": {
+      "checkedAt": "2026-09-08",
+      "basic": "$0/mo; 1,200 credits; up to 10 minutes of video/month",
+      "starter": "$29/mo billed monthly; 1,200 credits; 1 editor and 3 guests",
+      "creator": "$89/mo billed monthly; 3,600 credits; 1 editor and 5 guests; API access",
+      "enterprise": "Custom pricing",
+      "warning": "Credits are shared across several AI operations; license upgrades and avatar add-ons can change total cost."
+    }
+  },
+  "useCases": {
+    "en": [
+      "Create multilingual employee training and onboarding videos from approved scripts",
+      "Turn product documentation and presentations into repeatable presenter-led explainers",
+      "Automate template-based customer education after validating API ownership and limits"
+    ],
+    "zh": [
+      "把已审核脚本制作成多语言员工培训和入职视频",
+      "将产品文档和演示文稿转成可重复的数字人讲解视频",
+      "核对 API 所有权和限额后，自动生成基于模板的客户教育视频"
+    ]
+  }
+}

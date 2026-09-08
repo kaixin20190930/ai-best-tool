@@ -21,6 +21,8 @@ type Preaudit = {
   status: string;
   reviewedAt: string;
   publishNotBefore: string;
+  releasedAt?: string;
+  releaseIndexState?: 'monitor' | 'continue_index';
   productionWriteApproved: boolean;
   sitemapChangeApproved: boolean;
   sources: { official: string[]; independent: string[] };
@@ -80,9 +82,17 @@ function loadPreaudit(candidate: Candidate): Preaudit {
   assert.equal(audit.slug, candidate.slug);
   assert.equal(audit.existingRoute, `/ai/${candidate.slug}`);
   assert.equal(audit.action, 'migrate_existing_fallback');
-  assert.equal(audit.status, 'ready_for_next_slot');
-  assert.equal(audit.productionWriteApproved, false);
-  assert.equal(audit.sitemapChangeApproved, false);
+  assert(['ready_for_next_slot', 'released'].includes(audit.status), `${candidate.slug}: unsupported release status`);
+  if (audit.status === 'ready_for_next_slot') {
+    assert.equal(audit.productionWriteApproved, false);
+    assert.equal(audit.sitemapChangeApproved, false);
+    assert.equal(audit.releasedAt, undefined);
+  } else {
+    assert.equal(audit.productionWriteApproved, true, `${candidate.slug}: released row needs production approval`);
+    assert(audit.releasedAt && audit.releasedAt >= audit.publishNotBefore, `${candidate.slug}: released date is invalid`);
+    assert.equal(audit.releaseIndexState, 'monitor', `${candidate.slug}: controlled release must remain monitor`);
+    assert.equal(audit.sitemapChangeApproved, false, `${candidate.slug}: monitor release cannot approve sitemap inclusion`);
+  }
   assert(audit.sources.official.length >= 5 && audit.sources.independent.length >= 2, `${candidate.slug}: evidence incomplete`);
   assert(audit.nextSlotChecklist.length >= 5, `${candidate.slug}: release checklist incomplete`);
   return audit;
@@ -165,6 +175,7 @@ async function validateOnlineFallback(candidate: Candidate, expectReleased: bool
 }
 
 async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, commit: boolean) {
+  assert.equal(audit.status, 'ready_for_next_slot', `${candidate.slug}: candidate is already released`);
   const payload = loadPayload(candidate, audit, asOf);
   const title = { ...payload.title, cn: payload.title.cn || payload.title.zh };
   const content = { ...payload.content, cn: payload.content.cn || payload.content.zh };
@@ -214,7 +225,11 @@ async function main() {
   for (const candidate of selected) {
     const audit = loadPreaudit(candidate);
     if (options.phase === 'validate') {
-      console.log(`✅ ${candidate.slug}: preaudit valid; release window ${audit.publishNotBefore}`);
+      console.log(
+        `✅ ${candidate.slug}: preaudit valid; ${
+          audit.status === 'released' ? `released ${audit.releasedAt} as monitor` : `release window ${audit.publishNotBefore}`
+        }`,
+      );
       continue;
     }
     if (options.phase === 'release') {
@@ -222,6 +237,11 @@ async function main() {
       continue;
     }
     assert(options.asOf >= audit.publishNotBefore, `${candidate.slug}: release window opens ${audit.publishNotBefore}`);
+    if (options.phase === 'preflight') {
+      assert.equal(audit.status, 'ready_for_next_slot', `${candidate.slug}: preflight only accepts an unreleased candidate`);
+    } else {
+      assert.equal(audit.status, 'released', `${candidate.slug}: verify requires a released audit record`);
+    }
     const client = await openDatabase();
     try {
       const matches = await findMatches(client, candidate);

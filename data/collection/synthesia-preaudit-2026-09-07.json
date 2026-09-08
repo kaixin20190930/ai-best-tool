@@ -4,11 +4,13 @@
   "officialUrl": "https://www.synthesia.io/",
   "existingRoute": "/ai/synthesia",
   "action": "migrate_existing_fallback",
-  "status": "ready_for_next_slot",
+  "status": "released",
   "reviewedAt": "2026-09-07",
   "publishNotBefore": "2026-09-08",
+  "releasedAt": "2026-09-08",
+  "releaseIndexState": "monitor",
   "sitemapChangeApproved": false,
-  "productionWriteApproved": false,
+  "productionWriteApproved": true,
   "category": {
     "discoverySlug": "video-generator",
     "storageSlug": "design-art"

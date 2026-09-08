@@ -98,6 +98,11 @@ Lovable 的旧双余额冲突也已通过实时官方文档解决：当前为 Bu
 URL 完全一致，遗漏、越界、重复、canonical 和 robots 冲突均为 0；sitemap 总数仍为 138。本项不依赖 GSC、没有生产写入，四周
 一级进度保持 10/13。
 
+2026-09-08 持续收录执行：Synthesia 已完成发布日事实复核，价格更新为 Basic `$0/月`、Starter `$29/月`、Creator `$89/月`，并
+补齐共享 credits、license 自动升级、数字人同意及 API 账号/限额边界。生产发布先通过事务 rollback 演练，再显式 commit 并回读为
+`published + monitor`；索引审批保持关闭，双语页面继续 noindex 且不进入 sitemap。统一流水线同时补齐 released/monitor 状态契约，
+避免数据库发布成功后验证器仍按未发布状态运行。该项属于 W2-02F 持续运营，不提高四周一级进度，仍为 10/13（76.9%）。
+
 RC-05进行中：Adobe/Salesforce的RC-05A/B已完成生产发布、8页验收和数据库原文纠偏；范围正文、列表/静态兜底和metadata统一，
 撤下通用价格/评分/比较卡及单软件schema，comparison等价替代暗示已修正。生产复核排期已安全补至2026-09-11，缺排期为0；
 RC-05C URL/索引处置与独立市场核验仍待数据。见 [本轮范围澄清](./LEGACY_PRODUCT_SCOPE_CLARIFICATION_2026-09-04_CN.md)，四

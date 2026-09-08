@@ -12,7 +12,7 @@
 
 | 顺序 | 候选 | AI 核心性与站内价值 | 当前状态 | 最早处理日 | 放行前缺口 |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Synthesia | AI 原生商务视频生成；可补“演示型商务视频”而非泛视频生成的决策边界 | 已完成完整预审，待发布槽 | 09-08 | 当日复核价格、credits、avatar、license 与 API；补官方素材 |
+| 1 | Synthesia | AI 原生商务视频生成；可补“演示型商务视频”而非泛视频生成的决策边界 | 已于 09-08 按 `monitor/noindex` 发布 | 09-08 | 10-08 复核证据与页面表现；索引仍需独立批准 |
 | 2 | Replit | AI 原生软件构建与 Agent 工作流；可比较托管便利、成本、可控性和生产责任 | 已完成完整预审，待发布槽 | 09-09 | 当日复核套餐、effort-based 计费、云资源费用及官方素材 |
 | 3 | Otter.ai | AI 原生会议转录与会议助手；高评论量且有清晰免费/团队决策 | 已完成完整预审，待发布槽 | 09-10 | 当日复核价格/额度/隐私；迁移 `otter-ai` 并同步处理 `/ai/otter` alias |
 | 4 | Lovable | AI 原生全栈应用构建；用户需求强，须拆分原型速度与生产就绪 | 已完成完整预审，待发布槽 | 09-11 | 当日复核统一 credits、账户过渡状态、安全、RLS 与官方素材 |
@@ -48,8 +48,10 @@ Synthesia 达到成熟工具预审门槛，完整机器可验收记录见
 “最好的所有类型 AI 视频工具”。主要风险是 credits 与 add-on 总成本、paid license 自动变化、avatar 同意与肖像权、输出质量人
 审，以及 account-level API key 的治理。
 
-当前状态只到 `ready_for_next_slot`：`productionWriteApproved=false`、`sitemapChangeApproved=false`，最早 2026-09-08。今天不
-写生产工具表、不新增 sitemap URL。
+2026-09-08 已完成发布日复核：Basic 为 `$0/月`，Starter 为 `$29/月`，Creator 为 `$89/月`；补充共享 credits、Free license
+自动升级、个人数字人实时同意和 account-level API key 边界。生产事务先完成强制 rollback，再显式 commit，回读为
+`published + monitor`。`productionWriteApproved=true` 仅代表工具实体允许公开，`sitemapChangeApproved=false`，因此双语页面继续
+`noindex` 且不进入 sitemap；下次内容复核日为 2026-10-08。
 
 ## 状态追踪
 
@@ -57,6 +59,7 @@ Synthesia 达到成熟工具预审门槛，完整机器可验收记录见
 | --- | --- | --- |
 | 2026-09-07 | 五个成熟候选排序与重复路由检查 | 全部已有 fallback；没有新增 canonical URL |
 | 2026-09-07 | Synthesia 完整预审 | 待自动门禁与完整 build；不写生产、不改 sitemap |
+| 2026-09-08 | Synthesia 发布日复核与生产迁移 | 当日价格、credits、license、consent、API 已复核；rollback/commit 回读通过，保持 monitor/noindex，不改 sitemap |
 | 2026-09-07 | Replit 生产查重与完整预审 | 名称、标题、官网域名均无实体记录；最早 09-09，不写生产、不改 sitemap |
 | 2026-09-07 | Otter.ai 查重、双 fallback 与完整预审 | 无实体记录；两路由均为 noindex self-canonical，发布前必须统一到 `otter-ai` |
 | 2026-09-07 | Lovable 计费冲突复核、查重与完整预审 | 实时官方页面已统一；旧双余额为历史/过渡口径，无实体重复，最早 09-11 |

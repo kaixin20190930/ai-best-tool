@@ -16,6 +16,8 @@ assert(source.includes("ON CONFLICT (id) DO NOTHING"), 'Idempotent ID boundary i
 assert(source.includes("conflicting entity exists"), 'Slug/domain conflicts must block release');
 assert(source.includes("initial release must remain noindex"), 'Post-release noindex check is required');
 assert(source.includes("monitor page leaked into sitemap"), 'Post-release sitemap exclusion is required');
+assert(source.includes("releaseIndexState, 'monitor'"), 'Released audit must preserve the monitor state');
+assert(source.includes('monitor release cannot approve sitemap inclusion'), 'Monitor release must not approve sitemap inclusion');
 assert.equal(packageJson.scripts['tools:candidate-release'], 'tsx scripts/candidate-release-pipeline.ts');
 assert.equal(packageJson.scripts['test:candidate-release'], 'tsx scripts/test-candidate-release-pipeline.ts');
 
@@ -26,11 +28,14 @@ const run = (args: string[]) =>
   });
 const validation = run(['--phase=validate']);
 assert.equal(validation.status, 0, validation.stderr || validation.stdout);
-const earlyPreflight = run(['--candidate=synthesia', '--phase=preflight', '--as-of=2026-09-07']);
+const earlyPreflight = run(['--candidate=replit', '--phase=preflight', '--as-of=2026-09-08']);
 assert.notEqual(earlyPreflight.status, 0, 'Preflight must fail before the release window');
-assert.match(earlyPreflight.stderr, /release window opens 2026-09-08/);
-const missingPayload = run(['--candidate=synthesia', '--phase=release', '--as-of=2026-09-08']);
-assert.notEqual(missingPayload.status, 0, 'Release must fail without a reviewed payload');
-assert.match(missingPayload.stderr, /release payload is not ready/);
+assert.match(earlyPreflight.stderr, /release window opens 2026-09-09/);
+const prematureVerify = run(['--candidate=replit', '--phase=verify', '--as-of=2026-09-09']);
+assert.notEqual(prematureVerify.status, 0, 'Verify must fail before the audit is marked released');
+assert.match(prematureVerify.stderr, /verify requires a released audit record/);
+const repeatedRelease = run(['--candidate=synthesia', '--phase=release', '--as-of=2026-09-08']);
+assert.notEqual(repeatedRelease.status, 0, 'Release must fail after the audit is marked released');
+assert.match(repeatedRelease.stderr, /candidate is already released/);
 
 console.log('✅ Candidate release pipeline contract passed.');

@@ -68,3 +68,10 @@
 - 15 个允许索引工具恰好对应英文/中文 30 条 URL；遗漏、越界、重复 URL、重复 canonical 实体均为 0。
 - 已检查 41 个 published 工具的 82 个语言页面，HTTP、canonical 与 robots 冲突均为 0。
 - 报告：`reports/seo/index-consistency-2026-09-07.json`。本轮没有数据库写入或 sitemap 变更。
+
+## 首次真实执行（2026-09-08）
+
+- Synthesia 当日官方价格、credits、团队 license、数字人同意与 API 限额已重新复核，并生成独立双语 release payload。
+- 生产 preflight、事务 rollback 演练及显式 commit 均通过；数据库回读为 `published + monitor`，下次复核日为 2026-10-08。
+- 修正状态机：`ready_for_next_slot` 只允许 preflight/release，`released + releaseIndexState=monitor` 才允许 verify；monitor 发布明确禁止 sitemap approval。
+- 本次没有批准索引或增加 sitemap URL。代码部署后仍须通过双语 noindex/self-canonical、sitemap 排除及全站索引一致性验收。

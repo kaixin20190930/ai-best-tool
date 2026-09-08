@@ -31,6 +31,7 @@ type Preaudit = {
   productionWriteApproved: boolean;
   publishNotBefore: string;
   releasedAt?: string;
+  releaseIndexState?: 'monitor' | 'continue_index';
   reviewedAt: string;
   sitemapChangeApproved: boolean;
   slug: string;
@@ -75,13 +76,16 @@ for (const preauditPath of preauditPaths) {
     if (preaudit.productionWriteApproved || preaudit.sitemapChangeApproved || preaudit.releasedAt) {
       throw new Error(`${label}: an unreleased preaudit cannot approve production changes.`);
     }
-  } else if (
-    !preaudit.productionWriteApproved ||
-    !preaudit.sitemapChangeApproved ||
-    !preaudit.releasedAt ||
-    preaudit.releasedAt < preaudit.publishNotBefore
-  ) {
-    throw new Error(`${label}: a released migration needs dated production and sitemap approval.`);
+  } else {
+    if (!preaudit.productionWriteApproved || !preaudit.releasedAt || preaudit.releasedAt < preaudit.publishNotBefore) {
+      throw new Error(`${label}: a released migration needs dated production approval.`);
+    }
+    if (preaudit.releaseIndexState === 'monitor' && preaudit.sitemapChangeApproved) {
+      throw new Error(`${label}: a monitor release cannot approve sitemap inclusion.`);
+    }
+    if (preaudit.releaseIndexState !== 'monitor' && !preaudit.sitemapChangeApproved) {
+      throw new Error(`${label}: an indexable release needs sitemap approval.`);
+    }
   }
 
   if (preaudit.sources.official.length < 5 || preaudit.sources.independent.length < 2) {
