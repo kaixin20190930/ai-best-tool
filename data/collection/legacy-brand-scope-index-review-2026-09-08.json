@@ -1,0 +1,43 @@
+{
+  "reviewedAt": "2026-09-08",
+  "nextReviewDate": "2026-10-08",
+  "gscWindow": "2026-08-01/2026-08-28",
+  "gscEvidence": "Neither canonical URL appeared in the exported Top Pages set. This is recorded as no visible opportunity row, not as zero impressions or zero clicks.",
+  "records": [
+    {
+      "id": "eca3ba76-9e1c-449d-bfa8-43e1a390d681",
+      "slug": "adobe",
+      "canonicalPath": "/ai/adobe",
+      "currentOfficialUrl": "https://www.adobe.com/home",
+      "decision": "monitor",
+      "reason": "Adobe is a company and product-family brand, not one AI tool. Adobe Firefly has a distinct official product identity and independent review evidence, so the generic Adobe record must not inherit Firefly facts or index approval.",
+      "futureAction": "Keep the historical scope page noindex. Evaluate Adobe Firefly later as a separate candidate using its own canonical identity; do not redirect until that entity and URL migration have passed admission review.",
+      "officialSources": [
+        "https://www.adobe.com/products/firefly.html",
+        "https://www.adobe.com/products/catalog.html"
+      ],
+      "independentSources": [
+        "https://www.g2.com/products/adobe-firefly/reviews",
+        "https://www.techradar.com/computing/creative-software/adobe-firefly-ai-video-editor-review"
+      ]
+    },
+    {
+      "id": "44dd71ec-57fb-4d1b-b702-002693fb7c36",
+      "slug": "salesforce_einstein",
+      "canonicalPath": "/ai/salesforce_einstein",
+      "currentOfficialUrl": "https://www.salesforce.com/jp/?ir=1",
+      "decision": "monitor",
+      "reason": "Einstein names a family of Salesforce AI services rather than one standalone product and plan. Salesforce states that Einstein Copilot was renamed Agentforce, but that limited rename does not make every Einstein service equivalent to Agentforce.",
+      "futureAction": "Keep the historical scope page noindex. Evaluate a specific Agentforce product and use case later with its own licensing, implementation and market evidence; do not redirect the umbrella URL to a different scope.",
+      "officialSources": [
+        "https://compliance.salesforce.com/en/services/agentforce-einstein-platform",
+        "https://help.salesforce.com/s/articleView?id=release-notes.rn_copilot_new_name_agentforce_default.htm&language=en_US&release=252&type=5",
+        "https://www.salesforce.com/agentforce/"
+      ],
+      "independentSources": [
+        "https://www.techradar.com/pro/salesforce-crm-review",
+        "https://www.reddit.com/r/salesforce/comments/1o11ies/has_anyone_here_actually_implemented_agentforce/"
+      ]
+    }
+  ]
+}

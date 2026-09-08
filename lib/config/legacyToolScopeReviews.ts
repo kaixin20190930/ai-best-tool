@@ -1,6 +1,6 @@
 const REVIEWS = {
   adobe: {
-    checkedAt: '2026-09-04',
+    checkedAt: '2026-09-08',
     summary: {
       cn: 'Adobe 是品牌范围，不是一个单独的 AI 工具。这条历史记录尚未完成具体产品范围核验，不能视为 Firefly 的已核验条目。',
       en: 'Adobe is a brand, not a single AI tool. This historical listing still needs product-scope review and is not a verified Firefly listing.',
@@ -9,10 +9,14 @@ const REVIEWS = {
       cn: '先确定要使用的具体产品。Firefly 官方页可用于核对其生成式 AI 能力，但不能把 Adobe 其他应用、套餐或授权一并视为包含。',
       en: 'Identify the specific product first. The Firefly page documents its generative AI scope; do not assume other Adobe apps, plans or licenses are included.',
     },
+    disposition: {
+      cn: '该历史品牌页已转为观察状态并停止索引，不进入 sitemap。后续如收录 Firefly，必须以独立产品身份重新核验，不能直接继承本页历史信号。',
+      en: 'This historical brand page is now monitor-only and excluded from indexing and the sitemap. Firefly requires a separate product review and cannot inherit this page\'s legacy signals.',
+    },
     sources: [{ label: 'Adobe Firefly', url: 'https://www.adobe.com/products/firefly.html' }],
   },
   salesforce_einstein: {
-    checkedAt: '2026-09-04',
+    checkedAt: '2026-09-08',
     summary: {
       cn: 'Einstein 涉及多项 Salesforce AI 服务，并非一个统一套餐的独立工具。不能把整个 Einstein 体系直接更名为 Agentforce。',
       en: 'Einstein covers multiple Salesforce AI services, not a standalone tool with one plan. The entire Einstein family cannot simply be renamed Agentforce.',
@@ -20,6 +24,10 @@ const REVIEWS = {
     next: {
       cn: '先明确 Sales、Service 或其他具体功能，再核对账号权限、许可和部署要求。Einstein Copilot 的更名说明仅适用于相应助手，不证明其他条目是可直接替代的产品。',
       en: 'Select the specific Sales, Service or other feature, then verify access, licensing and deployment requirements. The Einstein Copilot naming history concerns that assistant, not every Einstein service or a proven interchangeable alternative.',
+    },
+    disposition: {
+      cn: '该历史产品族页面已转为观察状态并停止索引，不进入 sitemap。后续 Agentforce 必须按具体产品、用途、许可和实施边界独立核验。',
+      en: 'This historical product-family page is now monitor-only and excluded from indexing and the sitemap. Agentforce requires a separate review of its specific product, use case, licensing and implementation boundaries.',
     },
     sources: [
       {
@@ -116,6 +124,7 @@ export default function getLegacyToolScopeReview(slug: string, locale: string) {
     officialUrl: 'officialUrl' in review ? review.officialUrl : undefined,
     summary: review.summary[language],
     next: review.next[language],
+    disposition: 'disposition' in review ? review.disposition[language] : undefined,
     sources: review.sources,
   };
 }
@@ -138,7 +147,8 @@ export function getLegacyToolScopeContent(slug: string, locale: string) {
       ],
       [
         '记录状态',
-        `本次仅修正对象范围和旧文案，依据核对日期为${review.checkedAt}。独立市场核验及最终页面处置尚未完成，不代表获得收录批准，也未更名为其他产品。`,
+        review.disposition ||
+          `本次仅修正对象范围和旧文案，依据核对日期为${review.checkedAt}。独立市场核验及最终页面处置尚未完成，不代表获得收录批准，也未更名为其他产品。`,
       ],
     ],
     en: [
@@ -154,7 +164,8 @@ export function getLegacyToolScopeContent(slug: string, locale: string) {
       ],
       [
         'Record status',
-        `This correction only addresses scope and legacy copy using sources checked ${review.checkedAt}. Independent market review and final page disposition remain open. It is not admission approval or a rename to another product.`,
+        review.disposition ||
+          `This correction only addresses scope and legacy copy using sources checked ${review.checkedAt}. Independent market review and final page disposition remain open. It is not admission approval or a rename to another product.`,
       ],
     ],
   };

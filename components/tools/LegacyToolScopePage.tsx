@@ -29,8 +29,8 @@ export default function LegacyToolScopePage({ slug, title, locale }: { slug: str
         </div>
         <p className='text-sm text-slate-600'>
           {chinese
-            ? '范围核对期间暂不展示通用评分、适用建议和比较卡。原有账户记录未删除。'
-            : 'Generic ratings, fit suggestions and comparison cards are withheld during scope review. Existing account records have not been deleted.'}
+            ? '该历史范围页不展示通用评分、适用建议和比较卡，也不参与索引或 sitemap。原有账户记录未删除。'
+            : 'This historical scope page withholds generic ratings, fit suggestions and comparison cards, and is excluded from indexing and the sitemap. Existing account records have not been deleted.'}
         </p>
         <div className='flex flex-wrap gap-4 text-sm font-semibold text-cyan-800'>
           <Link href={generateLocalizedPath('/developer/listing?intent=claim', locale)}>

@@ -21,7 +21,10 @@ RC-08 准备真实样本，不新增 sitemap URL、不批准索引，也不直�
 
 ## 北极星
 
-2026-09-04 对象复核进度：Adobe/Salesforce 已完成数据库查重及已知引用、生产页抽查；GSC URL 明细待补，最终页面/索引处置未实施。无新增工具或批准索引。附带导航问题已独立修复并随373d2336部署，生产182页/5406处内部链接检查通过；对象事实核查仍未关闭，详见 [复核台账](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。
+2026-09-08 对象复核收口：Adobe/Salesforce 已完成 RC-05A/B/C。最近 GSC Top Pages 没有两条 canonical，只记录为无可见机会行而非
+0 流量；对象身份与独立证据确认泛 Adobe 不能继承 Firefly、Einstein 产品族不能整体继承 Agentforce。两条均转为
+`monitor/noindex` 并退出 sitemap，保留历史 URL，2026-10-08 复查。此前附带导航问题仍由独立提交 `373d2336` 的生产验收关闭，
+不并入本次索引处置；该质量子方案完成不改变本表 10/13 统计。
 
 2026-09-04 规范更新完成：候选与历史复核统一执行 [收录对象及八项硬门槛](./BEST_DIRECTORY_POSITIONING_AND_INTAKE_CN.md)。Adobe / Salesforce Einstein 当前条目未通过完整准入，转入对象复核及处置，不以维护日期代替核验。本次没有实施页面/数据库/索引变更，也没有新增自动校验功能；执行队列见 [历史工具审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。
 

@@ -62,6 +62,10 @@ assert(getLegacyToolScopeContent('chatgpt-mac', 'en')?.url.includes('chatgpt.com
 assert(getLegacyToolScopeContent('gpt_4o', 'en')?.detail.includes('retired from ChatGPT'));
 assert(!getLegacyToolScopeContent('gpt_4o', 'en')?.detail.includes('HIPAA compliant'));
 assert(getLegacyToolScopeContent('sora', 'en')?.detail.includes('discontinued'));
+for (const slug of ['adobe', 'salesforce_einstein']) {
+  assert(getLegacyToolScopeContent(slug, 'en')?.detail.includes('excluded from indexing and the sitemap'));
+  assert(getLegacyToolScopeContent(slug, 'cn')?.detail.includes('停止索引'));
+}
 for (const slug of ['claude', 'firefly', 'agentforce', 'constructor', '__proto__']) {
   assert.equal(getLegacyToolScopeReview(slug, 'en'), null);
   const row = { name: slug, content: 'Unchanged content', detail: 'Unchanged detail' };
@@ -123,7 +127,8 @@ async function smoke() {
         /name="robots"[^>]*content="[^"]*noindex/.test(html) ||
         (response.headers.get('x-robots-tag') || '').includes('noindex');
       const expectedNoindex =
-        path.startsWith('/guides/') || ['chatgpt-mac', 'gpt_4o', 'openai', 'sora'].includes(slug);
+        path.startsWith('/guides/') ||
+        ['adobe', 'salesforce_einstein', 'chatgpt-mac', 'gpt_4o', 'openai', 'sora'].includes(slug);
       assert.equal(noindex, expectedNoindex, 'Each reviewed record must preserve its audited index boundary');
       assert(!html.includes('commonly used as Salesforce Einstein alternatives'));
       console.log(`PASS ${prefix}${path}: visible scope notice, canonical and index boundary`);
