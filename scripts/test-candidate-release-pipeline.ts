@@ -51,6 +51,26 @@ assert(replitRelease.nextReviewDate > replitRelease.reviewedAt);
 assert.equal(replitRelease.features.editorial?.reviewedAt, replitRelease.reviewedAt);
 assert.equal(replitRelease.features.pricingSnapshot?.checkedAt, replitRelease.reviewedAt);
 
+const otterPrep = JSON.parse(fs.readFileSync('data/collection/otter-ai-release-prep-2026-09-09.json', 'utf8')) as {
+  slug: string;
+  status: string;
+  preparedAt: string;
+  publishNotBefore: string;
+  media: { imageUrl: string; thumbnailUrl: string };
+  observedOnPreparationDay: { displayWarning: string };
+  releaseDayChecks: string[];
+  sources: string[];
+};
+assert.equal(otterPrep.slug, 'otter-ai');
+assert.equal(otterPrep.status, 'prepared_for_release_day_recheck');
+assert(otterPrep.preparedAt < otterPrep.publishNotBefore, 'Otter prep must not impersonate its release-day review');
+assert.match(otterPrep.observedOnPreparationDay.displayWarning, /No price.*release payload/i);
+assert(otterPrep.releaseDayChecks.length >= 7 && otterPrep.sources.length >= 7, 'Otter release prep is incomplete');
+for (const asset of [otterPrep.media.imageUrl, otterPrep.media.thumbnailUrl]) {
+  assert(asset.startsWith('/'), `Otter prep asset must be local: ${asset}`);
+  assert(fs.existsSync(path.join('public', asset.slice(1))), `Otter prep asset is missing: ${asset}`);
+}
+
 const run = (args: string[]) =>
   spawnSync(process.execPath, ['--import', 'tsx', 'scripts/candidate-release-pipeline.ts', ...args], {
     cwd: process.cwd(),
@@ -61,6 +81,12 @@ assert.equal(validation.status, 0, validation.stderr || validation.stdout);
 const earlyPreflight = run(['--candidate=replit', '--phase=preflight', '--as-of=2026-09-08']);
 assert.notEqual(earlyPreflight.status, 0, 'Preflight must fail before the release window');
 assert.match(earlyPreflight.stderr, /release window opens 2026-09-09/);
+const earlyOtterPreflight = run(['--candidate=otter-ai', '--phase=preflight', '--as-of=2026-09-09']);
+assert.notEqual(earlyOtterPreflight.status, 0, 'Otter preflight must fail before the release window');
+assert.match(earlyOtterPreflight.stderr, /release window opens 2026-09-10/);
+const earlyOtterRelease = run(['--candidate=otter-ai', '--phase=release', '--as-of=2026-09-09']);
+assert.notEqual(earlyOtterRelease.status, 0, 'Otter release must fail before the release window');
+assert.match(earlyOtterRelease.stderr, /release window opens 2026-09-10/);
 const repeatedReplitRelease = run(['--candidate=replit', '--phase=release', '--as-of=2026-09-09']);
 assert.notEqual(repeatedReplitRelease.status, 0, 'Release must fail after Replit is marked released');
 assert.match(repeatedReplitRelease.stderr, /candidate is already released/);

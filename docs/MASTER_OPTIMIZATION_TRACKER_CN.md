@@ -84,8 +84,9 @@ TypeScript、数据库 rollback/commit/status 与完整 build 均通过，提交
 2026-09-07 持续收录准备：已建立 [下周成熟工具候选与发布节奏](./NEXT_WEEK_MATURE_TOOL_INTAKE_2026-09-07_CN.md)。候选顺序为
 Synthesia、Replit、Otter.ai、Lovable 与 Midjourney；五个候选均已完成结构化预审与生产查重。Synthesia 与 Replit 已分别在
 09-08、09-09 通过当日门禁并以 `monitor/noindex` 发布。下一槽为 Otter.ai，已完成查重、结构化预审和 alias 代码收口：旧
-`/ai/otter` 及本地化路径统一 308 到唯一 `/ai/otter-ai` canonical；生产发布仍最早为 2026-09-10，必须先完成部署后 alias 验收
-及当日价格、额度和隐私复核。当前
+`/ai/otter` 及本地化路径统一 308 到唯一 `/ai/otter-ai` canonical，部署后双语路径、canonical、noindex 和 sitemap 排除均已验收；
+09-09 又完成发布前材料包与自动日期门禁。生产发布仍最早为 2026-09-10，届时必须重新核对价格、额度和隐私，且区分月付、年付、
+促销和地区价格后才能生成正式 release payload。当前
 Lovable 的旧双余额冲突也已通过实时官方文档解决：当前为 Build/Cloud/AI 统一 credits，旧口径仅作历史或过渡账户提示；其预审
 最早排在 2026-09-11。Midjourney 的价格、GPU 计费、Web/Discord、编辑、视频、默认公开、Stealth 与商业权利边界已补齐，最早
 排在 2026-09-12。当前没有配置 DataForSEO，因
@@ -107,6 +108,10 @@ URL 完全一致，遗漏、越界、重复、canonical 和 robots 冲突均为 
 2026-09-09 持续收录执行：Replit 已重新核对当天官方价格、Starter/Core/Pro 权益、effort-based Agent 计费、共享云 credits、
 Starter 发布限制和用量延迟。生产查重、在线 fallback、事务 rollback、完整 build 和显式 commit 通过，固定实体发布为
 `published + monitor`，复查日 2026-10-09；不批准索引、不进入 sitemap。09-08 的准备快照保留为发布前证据，不冒充发布日事实。
+
+2026-09-09 Otter.ai 发布前准备：alias 提交 `132e83b0` 已部署，英文和中文旧路径均 308 到 `/ai/otter-ai` 对应 locale；canonical
+页为 200、自 canonical、`noindex, follow` 且不在 sitemap。新增独立准备快照，只固定产品边界、试用协议、现有本地素材与 09-10
+复核清单；官方价格页同一文档中的月付、年付、促销与地区值不得混写，正式价格和 `reviewedAt` 只能在 09-10 复核后写入。
 
 RC-05 已完成：Adobe/Salesforce 的范围正文、列表/静态兜底、metadata、数据库原文及生产页面已统一，通用价格/评分/比较卡、单
 软件 schema 和等价替代暗示均已撤下。2026-09-08 RC-05C 又确认两个 canonical 未进入最近 GSC Top Pages，但未把缺行写成 0

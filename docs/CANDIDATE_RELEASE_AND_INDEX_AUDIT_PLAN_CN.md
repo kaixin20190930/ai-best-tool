@@ -93,3 +93,7 @@
   和 noindex。此动作不创建数据库实体、不增加 sitemap URL，也不提前填写 09-10 发布事实。
 - 修复旧 sitemap 测试从未导出模块读取 allowlist 的问题，并注册 `pnpm run test:sitemap`；8 项结构、重复、noindex 排除、Guide
   覆盖和 metadata 一致性检查全部通过。
+- 提交 `132e83b0` 已部署；生产环境双语旧路径 308、canonical 页 200/self-canonical/noindex、sitemap 排除、索引一致性和全站 SEO
+  smoke 均通过。
+- 新增 `otter-ai-release-prep-2026-09-09.json`，只记录稳定产品边界、试用协议、本地素材与发布日检查；价格页同时暴露的月付、年付、
+  促销和地区值必须在 09-10 明确上下文后才能进入正式 release payload。命令级测试会阻断任何 09-09 preflight/release。

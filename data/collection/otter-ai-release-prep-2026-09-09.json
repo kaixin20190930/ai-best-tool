@@ -1,0 +1,62 @@
+{
+  "slug": "otter-ai",
+  "status": "prepared_for_release_day_recheck",
+  "preparedAt": "2026-09-09",
+  "publishNotBefore": "2026-09-10",
+  "officialUrl": "https://otter.ai/",
+  "categorySlug": "chatbot",
+  "pricing": "freemium",
+  "media": {
+    "imageUrl": "/icons/tool-logos/otter.svg",
+    "thumbnailUrl": "/images/tool-media/otter-cover.svg",
+    "provenance": "Local editorial brand tiles prepared for stable rendering. They are not represented as official product screenshots or independent usage evidence."
+  },
+  "stableProductBoundary": {
+    "positioning": "AI meeting capture, transcription, summaries, action items, searchable conversation history, and meeting-knowledge workflows for individuals and teams.",
+    "bestFit": [
+      "Meeting-heavy individuals and teams that can notify participants and review transcripts",
+      "Teams comparing searchable meeting history, summaries, action items, and integrations",
+      "Organizations prepared to define recording, sharing, retention, export, and offboarding controls"
+    ],
+    "notIdealFor": [
+      "Sensitive meetings where recording permission, participant notice, or data handling is unresolved",
+      "Workflows that need every transcript, speaker label, summary, or generated answer to be authoritative without review",
+      "Teams that cannot govern calendar auto-join, automatic sharing, ownership, retention, and plan limits"
+    ],
+    "trialProtocol": [
+      "Use one internal meeting with explicit participant notice before enabling calendar-wide auto-join",
+      "Review names, jargon, accents, overlapping speech, summary omissions, and action-item attribution",
+      "Check default and event-level join, notification, audience, public-link, and sharing settings",
+      "Export one transcript and document ownership, retention, deletion, downgrade, and offboarding behavior",
+      "Record correction time, missed decisions, false action items, monthly minutes, imports, and AI Chat usage"
+    ]
+  },
+  "observedOnPreparationDay": {
+    "sourceCheckedAt": "2026-09-09",
+    "basicBoundary": "The official comparison currently describes Basic as free, with meeting-platform support, AI Chat, live transcription, three lifetime file imports, and bounded monthly transcription and history.",
+    "paidBoundary": "The official comparison currently separates Pro, Business, and Enterprise by recording or import capacity, meeting duration, concurrency, integrations, administration, security, API, and webhook access.",
+    "displayWarning": "The pricing page exposes monthly, annual, promotional, and region-specific values in the same rendered document. No price from this preparation snapshot may enter the release payload until the release-day billing context is identified and rechecked.",
+    "governanceBoundary": "Official help content confirms that auto-join can be disabled globally while prior event-level choices persist, so users must review upcoming events after changing the default."
+  },
+  "releaseDayChecks": [
+    "Re-open the official pricing page on 2026-09-10 and identify monthly versus annual billing before recording any price",
+    "Exclude first-time, temporary, student, educator, India-only, or other regional promotions from the standard reference price",
+    "Confirm Basic, Pro, Business, and Enterprise minutes, meeting duration, imports, history, storage, concurrency, integrations, API, webhook, and compliance boundaries",
+    "Re-open official auto-join, auto-share, AI Chat, security, downgrade, ownership, retention, and deletion documentation",
+    "Run production duplicate and fallback preflight with --as-of=2026-09-10 --online",
+    "Generate data/collection/otter-ai-release.json with reviewedAt=2026-09-10 only after all volatile facts pass",
+    "Run release in rollback mode before any --commit operation",
+    "After deployment, verify aliases, both canonical locales, noindex, sitemap exclusion, index consistency, and production SEO smoke"
+  ],
+  "sources": [
+    "https://otter.ai/pricing",
+    "https://help.otter.ai/hc/en-us/articles/360047538094-Conversation-import-and-app-limits-on-the-Basic-free-plan",
+    "https://help.otter.ai/hc/en-us/articles/25205539848343-When-will-my-monthly-minutes-reset",
+    "https://help.otter.ai/hc/en-us/articles/12906714508823-Stop-Otter-Notetaker-from-automatically-joining-your-meetings",
+    "https://help.otter.ai/hc/en-us/articles/14952683922711-Turn-off-auto-share-for-conversations-meetings",
+    "https://help.otter.ai/hc/en-us/articles/17016733191703-Otter-AI-Chat-FAQs",
+    "https://help.otter.ai/hc/en-us/articles/360048258953-Data-security-and-privacy-policies",
+    "https://help.otter.ai/hc/en-us/articles/26011568967447-What-happens-to-my-conversations-if-I-cancel-downgrade-or-change-my-Otter-plan",
+    "https://help.otter.ai/hc/en-us/articles/360047733414-Delete-a-conversation"
+  ]
+}
