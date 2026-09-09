@@ -1,5 +1,6 @@
 const TOOL_ROUTE_ALIASES: Record<string, string> = {
   anthropic: 'claude',
+  otter: 'otter-ai',
 };
 
 const EXPLICIT_ENGLISH_TOOL_ALIASES = new Set(['fathom']);

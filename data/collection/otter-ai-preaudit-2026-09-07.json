@@ -114,7 +114,7 @@
     "canonicalRoute": "/ai/otter-ai",
     "aliasRoute": "/ai/otter",
     "observedAt": "2026-09-07",
-    "currentState": "Both fallback routes return 200, noindex, and self-canonical metadata.",
+    "currentState": "The repository now maps /ai/otter to the unique /ai/otter-ai canonical through a locale-safe permanent redirect; production verification remains required after deployment.",
     "releaseRequirement": "Before production migration, keep /ai/otter-ai as the only canonical entity and redirect or alias /ai/otter without creating a second indexable tool page."
   },
   "nextSlotChecklist": [

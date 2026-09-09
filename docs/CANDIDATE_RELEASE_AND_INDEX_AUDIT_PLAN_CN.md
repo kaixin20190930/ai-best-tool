@@ -85,3 +85,11 @@
 - 生产查重、双语 fallback、自 canonical、noindex 和 sitemap 排除通过；事务先 rollback，完整 build 退出 0 后才显式 commit。
 - 数据库回读为唯一 `replit` 实体、`published + monitor`，下次复查日 2026-10-09；全站审计为 55 条工具、43 条 published、13
   条可索引，sitemap 134 URL，遗漏、越界、重复与 43 个页面冲突均为 0。
+
+## Otter.ai 发布前 alias 收口（2026-09-09）
+
+- 将工具 alias 从 Anthropic 单例硬编码改为通用 middleware 308；新增 `otter -> otter-ai`，英文和中文均保留同一 locale。
+- 本地 production 实际请求确认 `/ai/otter`、`/cn/ai/otter` 分别 308 到唯一 canonical；`otter-ai` 双语页均为 200、self-canonical
+  和 noindex。此动作不创建数据库实体、不增加 sitemap URL，也不提前填写 09-10 发布事实。
+- 修复旧 sitemap 测试从未导出模块读取 allowlist 的问题，并注册 `pnpm run test:sitemap`；8 项结构、重复、noindex 排除、Guide
+  覆盖和 metadata 一致性检查全部通过。

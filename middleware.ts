@@ -1,7 +1,11 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 
-import { getLocalizedToolPath, shouldRedirectExplicitEnglishToolPath } from './lib/config/toolRouteAliases';
+import {
+  getLocalizedToolPath,
+  isLegacyToolSlug,
+  shouldRedirectExplicitEnglishToolPath,
+} from './lib/config/toolRouteAliases';
 import { BASE_URL } from './lib/env';
 import { repairRepeatedLocalePath } from './lib/navigation/localizedPaths';
 import { INDEXABLE_GUIDE_PATHS } from './lib/seo/guideIndexing';
@@ -178,12 +182,15 @@ export async function middleware(request: NextRequest) {
   }
   const { locale, pathWithoutLocale } = getPathParts(pathname);
 
-  // Resolve legacy tool entities before locale rewriting so crawlers receive
-  // a real HTTP 308 rather than a streamed client-side redirect marker.
-  if (pathWithoutLocale === '/ai/anthropic') {
-    const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = getLocalizedToolPath('anthropic', locale || 'en');
-    return NextResponse.redirect(redirectUrl, 308);
+  // Resolve tool aliases before locale rewriting so crawlers receive a real
+  // HTTP 308 instead of a streamed client-side redirect marker.
+  if (pathWithoutLocale.startsWith('/ai/')) {
+    const toolSlug = pathWithoutLocale.slice('/ai/'.length);
+    if (isLegacyToolSlug(toolSlug)) {
+      const redirectUrl = request.nextUrl.clone();
+      redirectUrl.pathname = getLocalizedToolPath(toolSlug, locale || 'en');
+      return NextResponse.redirect(redirectUrl, 308);
+    }
   }
 
   if (locale === 'en' && pathWithoutLocale.startsWith('/ai/')) {

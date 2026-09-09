@@ -12,8 +12,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import dotenv from 'dotenv';
 
-import sitemap, { INDEXABLE_GUIDE_PATHS } from '../app/sitemap';
+import sitemap from '../app/sitemap';
 import { GUIDE_PAGES } from '../lib/content/guides';
+import { INDEXABLE_GUIDE_PATHS } from '../lib/seo/guideIndexing';
 
 for (const envPath of ['.env.local', '.env.production']) {
   const resolved = path.join(process.cwd(), envPath);

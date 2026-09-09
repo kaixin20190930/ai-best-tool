@@ -83,8 +83,9 @@ TypeScript、数据库 rollback/commit/status 与完整 build 均通过，提交
 
 2026-09-07 持续收录准备：已建立 [下周成熟工具候选与发布节奏](./NEXT_WEEK_MATURE_TOOL_INTAKE_2026-09-07_CN.md)。候选顺序为
 Synthesia、Replit、Otter.ai、Lovable 与 Midjourney；五个候选均已完成结构化预审与生产查重。Synthesia 与 Replit 已分别在
-09-08、09-09 通过当日门禁并以 `monitor/noindex` 发布。下一槽为 Otter.ai，已完成查重、双 fallback 风险审计和结构化预审，最
-早排在 2026-09-10；发布前必须把 `/ai/otter` 收口到唯一 `/ai/otter-ai` canonical。当前
+09-08、09-09 通过当日门禁并以 `monitor/noindex` 发布。下一槽为 Otter.ai，已完成查重、结构化预审和 alias 代码收口：旧
+`/ai/otter` 及本地化路径统一 308 到唯一 `/ai/otter-ai` canonical；生产发布仍最早为 2026-09-10，必须先完成部署后 alias 验收
+及当日价格、额度和隐私复核。当前
 Lovable 的旧双余额冲突也已通过实时官方文档解决：当前为 Build/Cloud/AI 统一 credits，旧口径仅作历史或过渡账户提示；其预审
 最早排在 2026-09-11。Midjourney 的价格、GPU 计费、Web/Discord、编辑、视频、默认公开、Stealth 与商业权利边界已补齐，最早
 排在 2026-09-12。当前没有配置 DataForSEO，因

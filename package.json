@@ -115,6 +115,7 @@
     "stack:production-smoke": "tsx scripts/production-stack-privacy-smoke.ts",
     "verify:trial-reminder-migration": "tsx scripts/verify-trial-reminder-migration.ts",
     "test:tool-route-aliases": "tsx scripts/test-tool-route-aliases.ts",
+    "test:sitemap": "tsx scripts/test-sitemap.ts",
     "collection:plan-three-days": "tsx scripts/plan-three-day-candidate-pool.ts",
     "intelligence:discover-pages": "tsx scripts/discover-product-intelligence-pages.ts",
     "intelligence:classify-page": "tsx scripts/classify-product-intelligence-page.ts",
