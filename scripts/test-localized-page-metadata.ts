@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 
+import { CATEGORY_METADATA_PROFILES } from '../lib/seo/categoryMetadataProfiles';
 import { buildLocalizedPageMetadata, generateLocalizedPath } from '@/lib/seo/metadata';
 
 const baseUrl = 'https://aibesttool.com';
@@ -62,5 +63,13 @@ assert.equal(
   unsupportedLocale.robots && 'index' in unsupportedLocale.robots ? unsupportedLocale.robots.index : undefined,
   false,
 );
+
+for (const slug of ['design-art', 'life-assistant', 'other']) {
+  const profile = CATEGORY_METADATA_PROFILES[slug];
+  assert(profile, `${slug}: localized category metadata is missing`);
+  assert.notEqual(profile.en.title, profile.cn.title, `${slug}: Chinese title must not reuse English metadata`);
+  assert(/[\u4e00-\u9fff]/.test(profile.cn.title), `${slug}: Chinese title must be localized`);
+  assert(/[\u4e00-\u9fff]/.test(profile.cn.description), `${slug}: Chinese description must be localized`);
+}
 
 console.log('Localized page metadata tests passed.');

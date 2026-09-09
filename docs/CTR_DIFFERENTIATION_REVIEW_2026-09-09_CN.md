@@ -117,6 +117,9 @@ Google 官方规则要求 title 简洁、独特并与主标题一致；snippet �
   Gemini 四个实体，完整保存改前/改后双语 snippet、意图、变更日、14 天首次判断日和 28 天完整判断日；当前导出没有这四条的稳定
   URL 指标，因此 baseline 明确为 `null`，禁止伪造。Fathom、Web3 Guide、Automation Guide、DeepL 虽有 Week 7 展示，但现有摘要
   已经具体，暂列 hold 候选，不为了完成任务重复改写。
+- 双语重复审计确认 Best 主题英文产品术语和产品品牌名不能机械翻译；真正的本地化缺口只有 `design-art`、`life-assistant`、
+  `other` 三个分类。三项已补独立中英文 metadata，其中 `other` 的搜索表达改为“专项 AI 工具 / 实用工具与新兴场景”；URL、
+  canonical、robots、分类索引门槛和 sitemap 规则均未改变。
 
 ## 发布前验收
 
