@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 
 import { BASE_URL } from '@/lib/env';
+import { getEditorialReviewRecord } from '@/lib/seo/contentReviewDates';
 import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { getAllCategories } from '@/lib/services/categories';
 import { getAllTags } from '@/lib/services/tags';
@@ -48,7 +49,7 @@ export default async function Page({ params, searchParams }: PageProps) {
   const categories = categoriesResult.status === 'fulfilled' ? categoriesResult.value : [];
   const tags = tagsResult.status === 'fulfilled' ? tagsResult.value : [];
   const isChinese = params.locale === 'cn' || params.locale === 'tw';
-  const checkedAt = '2026-08-03';
+  const checkedAt = getEditorialReviewRecord('explore').reviewedAt;
   const taskFirstEntryPoints = [
     {
       href: '/guides/ai-writing-tools',

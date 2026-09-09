@@ -1,0 +1,112 @@
+{
+  "slug": "heygen",
+  "title": "HeyGen AI Avatar Video Platform",
+  "officialUrl": "https://www.heygen.com/",
+  "existingRoute": "/ai/heygen",
+  "action": "migrate_existing_fallback",
+  "status": "ready_for_next_slot",
+  "reviewedAt": "2026-09-09",
+  "publishNotBefore": "2026-09-14",
+  "sitemapChangeApproved": false,
+  "productionWriteApproved": false,
+  "category": {
+    "discoverySlug": "video",
+    "storageSlug": "video"
+  },
+  "positioning": "An AI-native avatar video platform for generating presenter-led business videos, digital twins, localization, translation, lip sync, reusable templates, and API-driven video workflows without a traditional studio shoot.",
+  "decisionAngles": [
+    "Fast avatar-led production versus live filming, traditional editing, and bespoke motion design",
+    "Digital twins and stock avatars versus consent, likeness control, disclosure, and brand authenticity",
+    "Web-plan credits versus separate API wallet pricing and output-duration economics",
+    "Rapid multilingual translation and lip sync versus pronunciation, timing, cultural, and factual review",
+    "Template reuse and batch API generation versus creative differentiation and repetitive output",
+    "All-in-one creation convenience versus 4K, proofread, concurrency, collaboration, and enterprise feature gates",
+    "Enterprise security controls versus the different data-use defaults and opt-out process on non-enterprise plans"
+  ],
+  "pricingSnapshot": {
+    "checkedAt": "2026-09-09",
+    "billingUnit": "The web application uses plan credits and feature entitlements, while self-serve API-key usage is billed separately from a prepaid USD wallet based mainly on generated output duration and operation type; OAuth can charge the connected web plan instead.",
+    "plans": [
+      "Free: limited web creation for evaluation with plan-specific resolution, duration, and feature boundaries",
+      "Creator and Pro: paid individual tiers with higher creation allowances, quality, avatar, translation, and workflow access",
+      "Business and Enterprise: team, scale, governance, security, collaboration, and negotiated-volume capabilities",
+      "Developer API: separate pay-as-you-go wallet pricing when authenticated by API key, with operation-specific duration rates"
+    ],
+    "volatileFields": [
+      "web-plan prices, annual discounts, credits, duration, resolution, avatar, translation, and collaboration limits",
+      "API rates by avatar generation, translation, lip sync, text-to-speech, avatar creation, and output resolution",
+      "API-key wallet versus OAuth web-plan billing behavior, concurrency, and batch limits",
+      "proofread, digital-twin consent, training-data, enterprise security, and support entitlements"
+    ],
+    "releaseGuard": "Recheck the live web pricing, developer pricing, API authentication, security, and terms pages on release day; do not publish exact plan prices, API rates, credits, duration, resolution, or entitlement limits from this snapshot without that recheck."
+  },
+  "policyBoundaries": [
+    {
+      "label": "Digital twins and identifiable avatars require explicit authorization",
+      "summary": "Creating and operating a digital likeness requires valid consent, authorized source material, controlled access, and appropriate disclosure to viewers.",
+      "releaseGuard": "Never describe possession of footage, an avatar slot, or an API credential as proof of likeness permission; require documented consent and prohibit deceptive impersonation."
+    },
+    {
+      "label": "Web and API billing are distinct systems",
+      "summary": "API-key use draws from a separate prepaid API wallet, while OAuth usage can draw from the connected user's web subscription, producing different costs and operational responsibilities.",
+      "releaseGuard": "Do not combine web credits and API wallet value into one allowance; document authentication mode, payer, limits, balance monitoring, and failure handling."
+    },
+    {
+      "label": "Data-use defaults depend on plan and configuration",
+      "summary": "HeyGen states that enterprise data is not used for training by default, while non-enterprise customers may need to exercise an opt-out path and review current controls.",
+      "releaseGuard": "Do not generalize enterprise privacy defaults to every plan; require a current plan-specific security, retention, training-use, and subprocessors review."
+    }
+  ],
+  "limitations": [
+    "Avatar realism, lip sync, gestures, eye contact, pacing, and emotional delivery can still appear synthetic or inconsistent.",
+    "Translation and generated speech require review for names, numbers, technical terms, timing, cultural tone, and factual accuracy.",
+    "Credit and duration limits can make long-form, high-resolution, multi-language, or revision-heavy projects materially more expensive.",
+    "Web-plan credits and API-key wallet balances are separate, while OAuth can change which balance pays for generation.",
+    "Digital twins and identifiable avatars create consent, publicity-right, employment, disclosure, and misuse risks.",
+    "Proofreading, 4K, concurrency, collaboration, security, and support features may be plan-gated or enterprise-only.",
+    "Template-based scale can create repetitive brand output and does not replace script, accessibility, legal, or creative review.",
+    "Non-enterprise teams must verify current training-data, opt-out, retention, deletion, and access-control settings rather than assume enterprise defaults."
+  ],
+  "marketValidation": {
+    "score": 97,
+    "verdict": "validated",
+    "rationale": "HeyGen has sustained product development, broad business-video adoption, an established review footprint, and a mature web and developer platform. It has a clear decision role for presenter-led video and localization without studio production. Recommendation remains conditional because visual quality, credits, separate API billing, avatar consent, plan-specific privacy defaults, and human review can materially affect value and risk.",
+    "strongSignals": [
+      "HeyGen maintains a current production platform for avatars, digital twins, translation, lip sync, templates, interactive video, and developer APIs",
+      "G2 and other independent software-review channels maintain substantial verified feedback for business-video use cases",
+      "The current developer platform documents self-serve and enterprise paths, batch APIs, webhooks, typed schemas, MCP access, and multiple generation operations",
+      "Independent creator and business communities continue to compare HeyGen with other leading AI avatar-video platforms"
+    ],
+    "recurringUserFriction": [
+      "Users repeatedly report inconsistent avatar realism, lip sync, rendering quality, and support outcomes across projects",
+      "Credits, duration, resolution, retries, translation, and API charges can be difficult to forecast before final approval",
+      "Digital-twin consent and brand authenticity require organizational controls beyond choosing an avatar",
+      "Teams can misunderstand separate web-plan and API billing or assume enterprise privacy behavior applies to lower tiers"
+    ]
+  },
+  "sources": {
+    "official": [
+      "https://www.heygen.com/pricing",
+      "https://developers.heygen.com/",
+      "https://developers.heygen.com/docs/quick-start",
+      "https://developers.heygen.com/docs/pricing",
+      "https://www.heygen.com/security",
+      "https://www.heygen.com/terms"
+    ],
+    "independent": [
+      "https://www.g2.com/products/heygen/reviews",
+      "https://www.reddit.com/r/heygen/comments/1qgz3vp/i_am_honestly_done_with_heygen_right_now_we_are/",
+      "https://www.reddit.com/r/heygen/comments/1vg558y/i_tested_14_ai_video_generators_heres_the/",
+      "https://www.reddit.com/r/AI_generated_ads/comments/1rhx03u/zeely_ai_and_heygen_users_are_just_frustrated/"
+    ]
+  },
+  "nextSlotChecklist": [
+    "Confirm there is still no production tools row using the heygen, hey-gen, or heygen.com identity",
+    "Recheck web prices, credits, duration, resolution, avatar, translation, API rates, authentication billing, and concurrency",
+    "Verify official logo and thumbnail sources and confirm both locales render them without fallback media",
+    "Keep the page centered on avatar-led business video and localization rather than an unsupported general video-editor claim",
+    "Preserve consent, privacy-default, synthetic-quality, credit-cost, API-wallet, and human-review boundaries in both languages",
+    "Replace only the existing /ai/heygen fallback and publish as monitor/noindex",
+    "Run evidence, canonical, sitemap, TypeScript, full build, and production smoke checks before any later index decision"
+  ]
+}

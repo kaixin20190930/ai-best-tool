@@ -153,8 +153,8 @@ Gamma 验收补充：`33e65beb` 部署成功后发现新简版提示被官方快
   [本轮维护](./CONSENSUS_GAMMA_MAINTENANCE_2026-09-04_CN.md)。
 - P1：Emdash 已依既有 9 月 1 日核验 +30 天补齐生产复查日期 10 月 1 日；未改正文、验证日期或索引状态。缺排期从 23 降为 22
   是该阶段历史快照；后续对象复核与安全收口已将缺排期降至 0，未用补日期冒充事实核验。分类与完整执行记录见
-  [历史工具排期审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。MAINT-04 与 MAINT-05 均已完
-  成；Adobe、Salesforce Einstein 的 URL/索引处置也已由 RC-05C 于 09-08 关闭，不再归入排期补齐任务。
+  [历史工具排期审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。MAINT-04 与 MAINT-05 均已完成；Adobe、Salesforce
+  Einstein 的 URL/索引处置也已由 RC-05C 于 09-08 关闭，不再归入排期补齐任务。
 - P1：CHG-02 已完成10/10。Fathom、Claude、Consensus、Gamma、Luma Dream Machine、n8n、OpenRouter、Runway、Dune、The Graph
   均有真实幂等`fact`基线；The Graph以官网产品名和定位完成最后一条。基线主锚点固定按产品名、官网定位、其他事实排序，同步
   脚本统一从Supabase验证工具owner，提取器限制站点身份只取首页并拦截假套餐。ElevenLabs/Descript/Perplexity/Make按robots停
@@ -221,9 +221,9 @@ CTR 实验台账。完整结论见 [CTR 与差异化复核](./CTR_DIFFERENTIATIO
 
 2026-09-09 成熟工具日更 SLA：公开与索引正式拆成两个速度。通过全部准入的成熟工具每天至少公开 1 个、最多 2 个，先进入
 `monitor/noindex`；成熟工具 48-72 小时后可进入独立索引评审，当前索引运营上限为每天 1 个、每周 3 个。现有五条队列已经发布
-Synthesia 与 Replit，只剩 Otter.ai、Lovable 和 Midjourney，低于至少 7 条的安全缓冲。`INTAKE-BUF-01` 因此列为下一项 P0：
-在不改变 09-10 至 09-12 发布顺序的前提下，补充并预审下一批至少 7 个成熟候选；没有合格项时记录 SLA 异常，不得发布弱页凑
-数。
+Synthesia 与 Replit 后原本只剩 Otter.ai、Lovable 和 Midjourney，低于至少 7 条的安全缓冲。`INTAKE-BUF-01` 已在不改变 09-10
+至 09-12 发布顺序的前提下，补充 ElevenLabs、HeyGen、Glean 和 Fireflies.ai，形成连续 7 天的成熟候选缓冲。四项均已通过机器预
+审，但不构成生产写入或 sitemap 授权；Windsurf 因正在更名为 Devin Desktop 暂缓，避免实体身份冲突。
 
 ## 已完成能力
 
@@ -252,6 +252,7 @@ Synthesia 与 Replit，只剩 Otter.ai、Lovable 和 Midjourney，低于至少 7
 | IDX-07 | 四周证据驱动目录计划                            | 第 1-3 周开发项已完成；W4 三期 GSC 决策报告已实现，等待同期数据验证后执行扩大或收口                             | 进行中（W4）                           | Codex + 用户 |
 | IDX-08 | 工具页发布与索引解耦                            | `page_quality_status` 同时控制 robots 与 sitemap；新工具默认 monitor；每天最多放开 1 个、每周 5 个              | 已完成；首批逐日复核队列执行中         | Codex        |
 | POS-01 | SEO 安全的差异化表达                            | 保留 AI 工具目录主题、索引与结构化数据；首页突出证据、限制和变化，商业入口不干扰编辑判断                        | 已完成；专项测试、tsc、完整 build 通过 | Codex        |
+| INTAKE-BUF-01 | 补足成熟工具连续发布缓冲池                | 队列含 Otter.ai、Lovable、Midjourney、ElevenLabs、HeyGen、Glean、Fireflies.ai；每项均有完整证据、边界和日期门禁 | 已完成（7/7，不写生产、不改 sitemap） | Codex        |
 
 ### P1：让已获得展示的页面变成更可点击的答案（第 2-4 周）
 
@@ -263,7 +264,7 @@ Synthesia 与 Replit，只剩 Otter.ai、Lovable 和 Midjourney，低于至少 7
 | CTR-04   | 强化已有展示的详情页               | Fathom、Anthropic、DeepL、Gamma、Lindy、Cursor、The Graph                                          | 每页保留至少两个官方来源和一个真实选择限制；禁止通用 AI 改写                                                                                     | 已完成                      | Codex        |
 | CTR-05   | 真实编辑/owner 信号回填            | 本轮先选 5 页                                                                                      | 每页至少一条有来源的更新、纠错、owner 补充或真实使用记录                                                                                         | 需要数据                    | 用户 + Codex |
 | CTR-06   | 首批成熟工具内容缺口               | Claude/Anthropic、Fathom、Gamma、Consensus、DeepL、Runway、Luma AI、Pipedream、Cursor、The Graph   | 10 个既有 canonical URL 已完成合并、数据库迁移或决策内容增强，全程未新增 canonical URL                                                           | 已完成（10/10）             | Codex        |
-| CTR-DIFF | 搜索摘要与首屏差异信号收口         | 全站 metadata 清单、Best/Home 可信文案、4 个工具页试点与所有工具首屏判断摘要                       | 134 个 sitemap URL 已盘点；Guide canonical 本地异常 18 -> 0；n8n/OpenRouter/Poe/Gemini 小批量试点；专项门禁、类型检查和完整 build 通过           | 已完成首批；待 14/28 天数据 | Codex + 数据 |
+| CTR-DIFF | 搜索摘要与首屏差异信号收口         | 全站 metadata 清单、Best/Home 可信文案、4 个工具页试点、工具首屏判断摘要与可信复核日期来源          | CTR-DIFF-01~05 已完成；134 个 sitemap URL 已盘点；4 个 metadata 试点保持观察；核心入口日期登记和专项门禁已落地                              | 进行中；待小批量实验与 14/28 天数据 | Codex + 数据 |
 | EVD-01   | Evidence Ledger 数据模型           | 所有 claim 统一来源类型、核查状态、复查日、冲突和失效边界；机器提取不自动成为已核验事实            | 已完成；Supabase 迁移、只读验收、专项测试和 build 通过                                                                                           | Codex + 用户                |
 | EVD-02   | 工具页 Evidence Ledger UI          | Decision Card 后可展开核对已验证 claim；候选证据不公开，不以单一分数代替解释                       | 已完成；有效工具身份产生 verified 数据后自动展示                                                                                                 | Codex                       |
 | EVD-03   | 后台证据编辑与冲突处理             | 状态受控流转；冲突不自动覆盖；核验人、日期、复查、失效和适用范围可追踪；所有保存操作有中间态       | 已完成；首条真实人工核验已回读确认，专项测试、tsc、完整 build 通过                                                                               | Codex                       |

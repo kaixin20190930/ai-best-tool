@@ -1,0 +1,112 @@
+{
+  "slug": "glean",
+  "title": "Glean Enterprise Search and Work AI",
+  "officialUrl": "https://www.glean.com/",
+  "existingRoute": "/ai/glean",
+  "action": "migrate_existing_fallback",
+  "status": "ready_for_next_slot",
+  "reviewedAt": "2026-09-09",
+  "publishNotBefore": "2026-09-15",
+  "sitemapChangeApproved": false,
+  "productionWriteApproved": false,
+  "category": {
+    "discoverySlug": "productivity",
+    "storageSlug": "productivity"
+  },
+  "positioning": "An AI-native enterprise search, assistant, agent, and knowledge platform that connects workplace systems, applies source permissions, builds a company knowledge graph, and helps employees find or act on organizational context.",
+  "decisionAngles": [
+    "Unified enterprise search and assistants versus separate application search, knowledge bases, and workflow tools",
+    "Permission-aware retrieval versus connector completeness, source ACL quality, identity mapping, and stale content",
+    "Company knowledge graph and enterprise context versus deployment time, taxonomy, governance, and tuning work",
+    "Managed agents and workflow automation versus business-process ownership, approvals, auditability, and failure handling",
+    "Broad connector ecosystem versus custom-source coverage, sync latency, API limits, and maintenance responsibility",
+    "Enterprise security and model flexibility versus legal, regional, hosting, retention, and procurement requirements",
+    "Custom enterprise pricing versus measurable adoption, search success, time saved, and total implementation cost"
+  ],
+  "pricingSnapshot": {
+    "checkedAt": "2026-09-09",
+    "billingUnit": "Public pages do not provide a self-serve price card; commercial terms are enterprise-led and can depend on users, products, connectors, deployment scope, services, support, hosting, model choices, and contract commitments.",
+    "plans": [
+      "Enterprise Search and Assistant: organization-wide discovery and AI assistance across connected workplace sources",
+      "Agents and automation: configurable workflows and actions built on enterprise context and permissions",
+      "Platform and developer capabilities: APIs, connectors, administration, governance, and extensibility",
+      "Commercial package: custom quote, implementation, security review, and contract rather than a public self-serve tier"
+    ],
+    "volatileFields": [
+      "per-user, platform, product, connector, services, support, and contract pricing",
+      "connector availability, sync behavior, API access, agent, assistant, and model entitlements",
+      "hosting, region, retention, compliance, support, procurement, and implementation terms",
+      "usage, seat, indexing, storage, action, and third-party model cost boundaries"
+    ],
+    "releaseGuard": "Recheck the live platform, connector, security, legal, and commercial-contact pages on release day; do not invent a public price, free plan, trial, deployment duration, connector SLA, or implementation cost where Glean provides no stable public figure."
+  },
+  "policyBoundaries": [
+    {
+      "label": "Permission-aware retrieval depends on source and identity integrity",
+      "summary": "Glean is designed to respect source permissions, but correct results still depend on connector configuration, identity mapping, inherited access, source ACLs, and organizational offboarding.",
+      "releaseGuard": "Never describe permission awareness as a substitute for source-system access review; require connector-by-connector ACL, identity, group, guest, and offboarding validation."
+    },
+    {
+      "label": "Enterprise context does not make generated answers authoritative",
+      "summary": "Answers and agent actions can combine retrieved context with model reasoning, while sources may be incomplete, stale, conflicting, or misunderstood.",
+      "releaseGuard": "Require citations, source inspection, approval gates, and rollback for consequential answers or actions; do not equate connected context with verified truth."
+    },
+    {
+      "label": "Public pricing is intentionally insufficient for cost comparison",
+      "summary": "Glean uses enterprise sales and contractual packaging rather than a stable public self-serve price table.",
+      "releaseGuard": "Mark pricing as custom and compare total deployment scope, not an inferred seat price or unverified third-party quote."
+    }
+  ],
+  "limitations": [
+    "Value depends on connector coverage, source cleanliness, permissions, identity mapping, indexing freshness, and employee adoption.",
+    "Stale, duplicated, contradictory, or poorly governed workplace content can produce confident but unhelpful answers.",
+    "Permission-aware retrieval cannot repair incorrect access controls or guest exposure in the underlying source systems.",
+    "Enterprise deployment requires security, legal, procurement, integration, taxonomy, change-management, and ownership work.",
+    "Public pricing is not available, so total cost and return cannot be assessed without a scoped quote and implementation plan.",
+    "Agent actions need approvals, audit logs, least privilege, exception handling, rollback, and accountable process owners.",
+    "Custom connectors and less common systems can add engineering work, synchronization delays, API constraints, and maintenance burden.",
+    "Search quality and adoption require ongoing query analysis, source curation, feedback loops, training, and governance rather than a one-time rollout."
+  ],
+  "marketValidation": {
+    "score": 96,
+    "verdict": "validated",
+    "rationale": "Glean has strong enterprise adoption signals, substantial company-reported recurring revenue, broad connector and platform depth, and independent analyst and customer feedback. It has a clear decision role for organizations seeking permission-aware workplace search and AI. Recommendation remains conditional because pricing is opaque, deployment is organizational rather than self-serve, and outcomes depend on source governance, connectors, permissions, adoption, and measurable search quality.",
+    "strongSignals": [
+      "Glean reported surpassing USD 300 million in annual recurring revenue and broad expansion within large enterprises; these figures are company-reported",
+      "Gartner Peer Insights maintains verified enterprise customer reviews for Glean in knowledge-management software",
+      "The official platform documents enterprise search, assistant, agents, governance, APIs, connectors, security, and model flexibility rather than a narrow experimental chatbot",
+      "Independent business reporting has covered Glean's enterprise AI adoption and the implementation work required to make workplace context useful"
+    ],
+    "recurringUserFriction": [
+      "Organizations report that connector freshness, indexing gaps, source quality, and search tuning strongly affect usefulness",
+      "Enterprise pricing and implementation scope are difficult to compare without procurement and a detailed quote",
+      "Employees can receive incomplete or misleading answers when source content is stale, duplicated, or poorly governed",
+      "Successful rollout requires change management, ownership, permissions cleanup, measurement, and ongoing administration"
+    ]
+  },
+  "sources": {
+    "official": [
+      "https://www.glean.com/platform",
+      "https://www.glean.com/platform/security",
+      "https://www.glean.com/enterprise-search",
+      "https://www.glean.com/connectors",
+      "https://www.glean.com/legal",
+      "https://www.glean.com/website-terms",
+      "https://www.glean.com/press/glean-surpasses-300m-arr-unrivaled-enterprise-context-fuels-ai-adoption"
+    ],
+    "independent": [
+      "https://www.gartner.com/reviews/market/knowledge-management-software/vendor/glean/product/glean",
+      "https://www.axios.com/2024/12/19/axios-event-ai-investment-glean-ceo",
+      "https://www.reddit.com/r/AI_Agents/comments/1soffbv/anyone_tried_good_glean_alternatives_for/"
+    ]
+  },
+  "nextSlotChecklist": [
+    "Confirm there is still no production tools row using the glean, glean-search, or glean.com identity",
+    "Recheck connector coverage, security, model, hosting, legal, procurement, implementation, and custom-pricing boundaries",
+    "Verify official logo and thumbnail sources and confirm both locales render them without fallback media",
+    "Keep the page centered on enterprise search, context, assistant, and agents rather than a generic consumer-search claim",
+    "Preserve permission, source-quality, stale-data, agent-action, deployment, and custom-cost boundaries in both languages",
+    "Replace only the existing /ai/glean fallback and publish as monitor/noindex",
+    "Run evidence, canonical, sitemap, TypeScript, full build, and production smoke checks before any later index decision"
+  ]
+}

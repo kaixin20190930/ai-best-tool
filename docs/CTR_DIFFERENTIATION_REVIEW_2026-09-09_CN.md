@@ -45,7 +45,7 @@ SaaS。
 | CTR-DIFF-02 | P0     | 工具页决策型 metadata 规则       | 标题保留产品名与核心任务；描述优先写适合谁、关键限制和核查价值，不杜撰价格或评分           | 已完成（4 个试点） |
 | CTR-DIFF-03 | P0     | 首屏差异信号前移                 | 首屏可见任务结论、一个关键限制、核查状态和“查看依据”；没有 verified 证据时诚实显示覆盖状态 | 已完成             |
 | CTR-DIFF-04 | P0     | 修正可信度文案                   | `Indexed tools` 改为准确的公开工具口径；移除 Best 页内部转化语言和首层 Pricing CTA         | 已完成             |
-| CTR-DIFF-05 | P1     | 核查日期统一来源                 | 日期来自真实编辑/事实复核，不在 build 时自动刷新，不再长期硬编码旧日期                     | 待执行             |
+| CTR-DIFF-05 | P1     | 核查日期统一来源                 | 日期来自真实编辑/事实复核，不在 build 时自动刷新，不再长期硬编码旧日期                     | 已完成             |
 | CTR-DIFF-06 | P1     | 高展示页面小批量实验             | 每周只改 3-5 个有展示页面；记录旧/新 snippet、query 意图和变更日                           | 待执行             |
 | CTR-DIFF-07 | P1     | 14/28 天效果复盘                 | 同页比较 CTR、排名、展示和 query；排名变化与文案变化分开解释                               | 需要数据           |
 
@@ -108,11 +108,16 @@ Google 官方规则要求 title 简洁、独特并与主标题一致；snippet �
 - 所有工具页首屏新增“任务适配、关键权衡、证据覆盖”摘要和 Decision Card 锚点；没有 V2 证据时显示缺口，不伪造 verified。
 - 新增 `seo:metadata-inventory` 与 `test:ctr-differentiation`，并让门禁保护 4 个试点范围、可信文案、首屏摘要和 9 个
   Guide canonical。
+- `CTR-DIFF-05` 新增 `lib/seo/contentReviewDates.ts` 作为核心入口的编辑复核登记表。Explore、Best 总入口和动态 Best 主题模板不再
+  各自写死日期，也不会在 build 时自动刷新；每条记录同时保存复核范围和证据。2026-09-09 的复核只覆盖筛选、主题库存、榜单解释、
+  工具资格与决策路径，不冒充所有榜单内工具的事实都在当天重验。其他 Guide 保留各自历史事实日期，后续只能在对应页面真实复核后
+  逐页迁移。
+- 动态 Best 模板最后一处“更容易转化 / 付费路径”内部运营话术已改为“下一步明确 / 核对详情、限制和官方来源”。
 
 ## 发布前验收
 
 - `test:ctr-differentiation`、`test:home-positioning`、`test:localized-metadata`、`test:seo-architecture`、
-  `test:tool-indexing`、`test:sitemap` 与 `test:plan-consistency` 全部通过。
+  `test:tool-indexing`、`test:sitemap`、`test:editorial-review-dates` 与 `test:plan-consistency` 全部通过。
 - TypeScript `--noEmit` 通过；完整 `pnpm run build` 明确完成，44/44 静态页生成，AdSense 标准组件校验继续通过。
 - 本地 production server 对 sitemap 134 个 URL 逐页审计通过：结构性异常 18 -> 0；通用工具标题 20 -> 12，减少的 8 个 URL
   对应 n8n、OpenRouter、Poe、Gemini 四个实体的中英文试点。

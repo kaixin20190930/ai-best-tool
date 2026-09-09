@@ -1,0 +1,112 @@
+{
+  "slug": "elevenlabs",
+  "title": "ElevenLabs AI Voice and Audio Platform",
+  "officialUrl": "https://elevenlabs.io/",
+  "existingRoute": "/ai/elevenlabs",
+  "action": "migrate_existing_fallback",
+  "status": "ready_for_next_slot",
+  "reviewedAt": "2026-09-09",
+  "publishNotBefore": "2026-09-13",
+  "sitemapChangeApproved": false,
+  "productionWriteApproved": false,
+  "category": {
+    "discoverySlug": "voice",
+    "storageSlug": "text-to-speech"
+  },
+  "positioning": "An AI-native voice and audio platform for text-to-speech, speech-to-speech, dubbing, transcription, music, sound effects, voice cloning, and conversational agents across creator and developer workflows.",
+  "decisionAngles": [
+    "Natural voice quality and multilingual range versus deterministic delivery, pronunciation control, and human review",
+    "One platform for narration, dubbing, agents, music, and sound effects versus selecting specialist tools for each medium",
+    "Credit-based subscriptions and usage pricing versus predictable per-minute or fixed-output budgets",
+    "Fast voice cloning and expressive models versus consent, impersonation, provenance, and account-security obligations",
+    "Creator web workflows versus API latency, concurrency, model choice, observability, and production reliability",
+    "Commercial usage on paid plans versus third-party rights in scripts, voices, music, likenesses, and source material",
+    "Shared workspace credits and enterprise controls versus individual creator simplicity and administrative overhead"
+  ],
+  "pricingSnapshot": {
+    "checkedAt": "2026-09-09",
+    "billingUnit": "Plans provide a shared monthly credit allowance whose output value varies by model and product; API and overage economics depend on character, minute, generation, voice, workspace, and concurrency usage.",
+    "plans": [
+      "Free: limited monthly credits for evaluation without the paid commercial-use entitlement",
+      "Starter and Creator: paid creator tiers with increasing credits, commercial use, voice features, and quality options",
+      "Pro and Scale: higher-volume tiers with more credits, production capacity, and workspace seats",
+      "Business and Enterprise: high-volume, low-latency, governance, support, and negotiated controls"
+    ],
+    "volatileFields": [
+      "monthly and annual plan prices, introductory promotions, and included seats",
+      "credit conversion by model, product, quality tier, language, and output format",
+      "rollover, overage, concurrency, voice cloning, commercial-use, and enterprise entitlements",
+      "API latency, rate limits, model availability, and regional or contractual terms"
+    ],
+    "releaseGuard": "Recheck the live pricing, billing, model, safety, and terms pages on release day; do not publish exact prices, promotional discounts, credit-to-minute estimates, rollover limits, or commercial entitlements from this snapshot without that recheck."
+  },
+  "policyBoundaries": [
+    {
+      "label": "Voice cloning and generated identity require permission and provenance controls",
+      "summary": "Realistic generated voices can reproduce or imitate identifiable people, so lawful consent, approved use, access control, disclosure, and incident handling remain workflow responsibilities.",
+      "releaseGuard": "Never imply that technical access to a voice, sample, or cloning feature establishes permission; require documented rights and prohibit deceptive impersonation."
+    },
+    {
+      "label": "Commercial-use access does not clear every underlying right",
+      "summary": "A paid-plan commercial entitlement governs platform output use but does not automatically clear scripts, music, source audio, trademarks, publicity rights, or third-party likenesses.",
+      "releaseGuard": "Describe platform commercial use separately from ownership and clearance of every input, performance, likeness, and distribution channel."
+    },
+    {
+      "label": "Generated audio remains nondeterministic and requires review",
+      "summary": "Voice delivery, pronunciation, timing, emotional tone, and regeneration results can vary even with the same text and settings.",
+      "releaseGuard": "Do not promise identical regeneration or publication-ready accuracy; require pronunciation, factual, brand, accessibility, and safety review before release."
+    }
+  ],
+  "limitations": [
+    "Pronunciation, names, acronyms, numbers, emotional tone, pauses, and multilingual delivery can require repeated prompting or manual correction.",
+    "Credit consumption varies across models and products, so a headline allowance does not map to one stable number of finished minutes.",
+    "Realistic voice cloning creates consent, impersonation, fraud, disclosure, moderation, and account-compromise risks.",
+    "Commercial-use rights on a paid plan do not remove third-party copyright, music, script, trademark, likeness, or publicity-right obligations.",
+    "Generated output is nondeterministic, and free regeneration eligibility is constrained rather than a guarantee of unlimited retries.",
+    "API production use requires capacity, latency, retry, rate-limit, logging, key rotation, content review, and fallback planning.",
+    "Long-form consistency and cross-language identity may vary by model, voice, source quality, and segmenting strategy.",
+    "Workspace rollover, overage, seat, concurrency, and enterprise controls can materially change total cost beyond the advertised base plan."
+  ],
+  "marketValidation": {
+    "score": 98,
+    "verdict": "validated",
+    "rationale": "ElevenLabs has sustained product development, broad creator and developer adoption, substantial independent review coverage, a mature API surface, and company-reported scale. It has a clear decision role for teams choosing realistic generated speech and audio infrastructure. Recommendation must remain conditional because credits, cloning consent, commercial rights, nondeterministic output, and production API requirements materially affect suitability.",
+    "strongSignals": [
+      "ElevenLabs maintains a broad production platform spanning speech, dubbing, transcription, agents, music, sound effects, web creation, and APIs",
+      "G2 maintains a substantial verified-review profile for ElevenLabs across business and creator use cases",
+      "ElevenLabs reported reaching USD 500 million in annual recurring revenue in May 2026; this is a company-reported scale signal",
+      "Independent reporting and public safety scrutiny show both widespread adoption and material governance consequences for realistic generated audio"
+    ],
+    "recurringUserFriction": [
+      "Users repeatedly report that pronunciation, consistency, emotional control, and repeated generations consume time and credits",
+      "Credit-based pricing is difficult to translate into a stable cost per approved minute across models and products",
+      "Support, billing, rollover, failed-output, and refund expectations can diverge from platform rules",
+      "Voice cloning and high-fidelity audio require stronger consent, access, disclosure, and misuse controls than ordinary narration software"
+    ]
+  },
+  "sources": {
+    "official": [
+      "https://elevenlabs.io/pricing",
+      "https://elevenlabs.io/docs/overview/capabilities/text-to-speech",
+      "https://elevenlabs.io/docs/overview/administration/billing",
+      "https://elevenlabs.io/safety",
+      "https://elevenlabs.io/terms-of-use",
+      "https://elevenlabs.io/blog/500m-arr-and-new-investors"
+    ],
+    "independent": [
+      "https://www.g2.com/products/elevenlabs/reviews",
+      "https://www.axios.com/2026/04/16/hassan-congress-scams-audio-deepfakes",
+      "https://www.reddit.com/r/ArtificialInteligence/comments/1uxjvst/elevenlabs_review_2026_why_i_rate_it_an_8110_and/",
+      "https://www.reddit.com/r/ElevenLabs/comments/1r8avkq/eleven_labs_never_help_paying_customers_beware/"
+    ]
+  },
+  "nextSlotChecklist": [
+    "Confirm there is still no production tools row using the elevenlabs, eleven-labs, or elevenlabs.io identity",
+    "Recheck live prices, credits, model conversion, rollover, overage, concurrency, seats, commercial use, and enterprise entitlements",
+    "Verify official logo and thumbnail sources and confirm both locales render them without fallback media",
+    "Keep the page focused on AI voice and audio production rather than an unsupported universal creative-suite claim",
+    "Preserve consent, impersonation, rights, nondeterminism, credit-cost, and API operations boundaries in both languages",
+    "Replace only the existing /ai/elevenlabs fallback and publish as monitor/noindex",
+    "Run evidence, canonical, sitemap, TypeScript, full build, and production smoke checks before any later index decision"
+  ]
+}

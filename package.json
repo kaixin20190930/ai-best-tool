@@ -70,6 +70,7 @@
     "test:notebooklm-pages": "tsx scripts/test-notebooklm-pages.ts",
     "test:home-positioning": "tsx scripts/test-home-positioning.ts",
     "test:ctr-differentiation": "tsx scripts/test-ctr-differentiation.ts",
+    "test:editorial-review-dates": "tsx scripts/test-editorial-review-dates.ts",
     "test:localized-metadata": "tsx scripts/test-localized-page-metadata.ts",
     "test:localized-navigation": "tsx scripts/test-localized-navigation.ts",
     "test:plan-consistency": "tsx scripts/test-plan-consistency.ts",

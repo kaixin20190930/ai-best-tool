@@ -7,6 +7,7 @@ import { unstable_setRequestLocale } from 'next-intl/server';
 
 import { getTopListTopic } from '@/lib/data/topLists';
 import { BASE_URL } from '@/lib/env';
+import { getEditorialReviewRecord } from '@/lib/seo/contentReviewDates';
 import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { generateFAQSchema } from '@/lib/seo/schema';
 import { getCategoryBySlug } from '@/lib/services/categories';
@@ -135,12 +136,12 @@ export default async function BestAiToolsTopicPage({
     } else if (toolsResult.status === 'fulfilled') {
       toolCount = Number(toolsResult.value.total || 0);
     }
-    const checkedAt = '2026-07-18';
+    const checkedAt = getEditorialReviewRecord('best-topic-template').reviewedAt;
     const checkedAtLabel = new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
-    }).format(new Date(checkedAt));
+    }).format(new Date(`${checkedAt}T00:00:00Z`));
 
     const categoryName = category ? getLocalizedField(category.name, locale) : topic.title;
     const faqSchema = generateFAQSchema([
@@ -784,8 +785,8 @@ export default async function BestAiToolsTopicPage({
                   text: isChinese ? '把用户送到详情页和官网' : 'Pushes users toward detail and official site',
                 },
                 {
-                  title: isChinese ? '更容易转化' : 'Higher conversion',
-                  text: isChinese ? '再往下能接提交和付费路径' : 'Naturally leads into submit and pricing',
+                  title: isChinese ? '下一步明确' : 'Clear next step',
+                  text: isChinese ? '继续核对详情、限制和官方来源' : 'Continue with details, limits, and official sources',
                 },
               ].map((item) => (
                 <div key={item.title} className='rounded-xl border border-slate-200 bg-slate-50 p-4'>

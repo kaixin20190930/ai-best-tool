@@ -1,0 +1,112 @@
+{
+  "slug": "fireflies-ai",
+  "title": "Fireflies.ai Meeting Notes and Conversation Intelligence",
+  "officialUrl": "https://fireflies.ai/",
+  "existingRoute": "/ai/fireflies-ai",
+  "action": "migrate_existing_fallback",
+  "status": "ready_for_next_slot",
+  "reviewedAt": "2026-09-09",
+  "publishNotBefore": "2026-09-16",
+  "sitemapChangeApproved": false,
+  "productionWriteApproved": false,
+  "category": {
+    "discoverySlug": "voice",
+    "storageSlug": "productivity"
+  },
+  "positioning": "An AI-native meeting assistant and conversation-intelligence platform for joining or uploading calls, producing transcripts, summaries and action items, searching conversations, analyzing speakers and topics, and sending meeting knowledge into team systems.",
+  "decisionAngles": [
+    "Automated meeting capture and notes versus bot-free, local, manual, or platform-native recording",
+    "Transcripts, summaries, topic tracking, and conversation intelligence versus accuracy and context review",
+    "Broad integrations and workflow automation versus permission scope, data duplication, sync reliability, and maintenance",
+    "Plan seats, transcription, storage, AI features, and team controls versus a simple note-taking subscription",
+    "Automatic joining and sharing versus participant consent, client expectations, and confidential-meeting exclusions",
+    "Searchable team meeting memory versus retention, ownership, deletion, export, and employee-offboarding governance",
+    "General meeting notes versus sales, recruiting, support, coaching, API, compliance, and enterprise requirements"
+  ],
+  "pricingSnapshot": {
+    "checkedAt": "2026-09-09",
+    "billingUnit": "Plans combine per-seat subscription access with plan-specific transcription, storage, AI summaries and apps, conversation intelligence, integrations, API, administration, security, and enterprise controls.",
+    "plans": [
+      "Free: limited evaluation with plan-specific transcription, storage, summary, and integration boundaries",
+      "Pro: individual and small-team workflow tier with expanded transcription, summaries, downloads, and integrations",
+      "Business: team tier with broader intelligence, administration, storage, and workflow capabilities",
+      "Enterprise: custom security, compliance, support, identity, retention, and deployment controls"
+    ],
+    "volatileFields": [
+      "monthly and annual per-seat prices and any promotions",
+      "transcription, storage, upload, AI summary, topic, conversation-intelligence, and integration limits",
+      "API, CRM, dialer, video, administrator, retention, security, and compliance entitlements",
+      "bot behavior, language support, meeting-platform compatibility, and enterprise terms"
+    ],
+    "releaseGuard": "Recheck the live pricing, security, integration, privacy, and terms pages on release day; do not publish exact prices, discounts, transcription or storage allowances, AI entitlements, or enterprise controls from this snapshot without that recheck."
+  },
+  "policyBoundaries": [
+    {
+      "label": "Meeting recording and participant notice remain the customer's responsibility",
+      "summary": "Automatic or invited bots can record and process conversations, but legal consent, workplace policy, client agreements, and acceptable notice differ by meeting and jurisdiction.",
+      "releaseGuard": "Never imply that a calendar invitation, visible bot, or platform notification alone satisfies every consent, privacy, employment, or contractual requirement."
+    },
+    {
+      "label": "Generated meeting intelligence is not a verified record",
+      "summary": "Transcripts, summaries, action items, sentiment, topic extraction, and coaching insights can omit context, misidentify speakers, or infer meaning incorrectly.",
+      "releaseGuard": "Require transcript and recording review before using generated output for commitments, performance decisions, customer disputes, legal matters, or regulated workflows."
+    },
+    {
+      "label": "Integration breadth increases the data-governance surface",
+      "summary": "Sending meeting content into CRMs, collaboration tools, storage, and automation systems can duplicate sensitive data and extend retention or access beyond the meeting workspace.",
+      "releaseGuard": "Require least-privilege integration scopes, destination-specific retention and deletion mapping, audit ownership, and offboarding tests before broad rollout."
+    }
+  ],
+  "limitations": [
+    "Transcription and speaker attribution can degrade with accents, noise, overlap, poor microphones, jargon, names, and multilingual switching.",
+    "Summaries, action items, sentiment, coaching, and topic analytics can omit context or create misleading inferences.",
+    "Automatic bots can join inappropriate internal, client, recruiting, legal, medical, or confidential meetings unless exclusions are configured.",
+    "Recording creates consent, notice, workplace-policy, contractual, privacy, and jurisdiction-specific obligations.",
+    "Plan value depends on seats, storage, transcription, uploads, AI features, intelligence, integrations, administration, and enterprise controls rather than price alone.",
+    "CRM and collaboration integrations can duplicate meeting data, expand access, and make deletion or retention harder to enforce.",
+    "Teams need ownership, export, retention, deletion, account-offboarding, guest-access, and incident-response procedures before centralizing meeting memory.",
+    "Support quality, bot reliability, recording availability, and integration behavior can vary across meeting platforms and account configurations."
+  ],
+  "marketValidation": {
+    "score": 95,
+    "verdict": "validated",
+    "rationale": "Fireflies.ai has a mature meeting-assistant product, broad integrations, substantial verified review volume, and sustained use across transcription and conversation-intelligence workflows. It creates a useful decision comparison with Otter.ai and platform-native meeting tools. Recommendation remains conditional because accuracy, consent, auto-join behavior, plan complexity, support, and downstream data governance materially affect adoption.",
+    "strongSignals": [
+      "G2 maintains hundreds of verified Fireflies.ai reviews covering transcription, summaries, integrations, and team workflows",
+      "The official product supports major meeting platforms, uploads, search, summaries, conversation intelligence, integrations, and enterprise controls",
+      "Independent hands-on evaluations continue to include Fireflies.ai among established AI meeting assistants",
+      "The breadth of CRM, collaboration, storage, automation, and video integrations indicates a mature workflow product rather than a single transcription demo"
+    ],
+    "recurringUserFriction": [
+      "Users repeatedly report transcription or speaker-label errors and the need to verify summaries or action items",
+      "Automatic bot attendance and recording can surprise participants or create consent and confidentiality problems",
+      "Reviews describe inconsistent support, billing, recording, and integration experiences in failure cases",
+      "Teams can underestimate the data-retention and access consequences of syncing meeting content into many downstream systems"
+    ]
+  },
+  "sources": {
+    "official": [
+      "https://fireflies.ai/pricing",
+      "https://fireflies.ai/security",
+      "https://fireflies.ai/integrations",
+      "https://fireflies.ai/privacy",
+      "https://fireflies.ai/terms-of-service",
+      "https://guide.fireflies.ai/articles/6892479029-fireflies-ai-updates-to-our-privacy-policy-terms-of-service-data-processing-addendum"
+    ],
+    "independent": [
+      "https://www.g2.com/products/fireflies-ai/reviews",
+      "https://www.trustpilot.com/review/fireflies.ai",
+      "https://www.techradar.com/best/best-ai-tools",
+      "https://t3technologyhub.com/wp-content/uploads/2026/03/2026-T3-Inside-Information-Software-Survey.pdf"
+    ]
+  },
+  "nextSlotChecklist": [
+    "Confirm there is still no production tools row using the fireflies-ai, fireflies, or fireflies.ai identity",
+    "Recheck prices, seats, transcription, storage, uploads, AI summaries, intelligence, integrations, API, and enterprise controls",
+    "Verify official logo and thumbnail sources and confirm both locales render them without fallback media",
+    "Keep the page centered on meeting capture and conversation intelligence rather than an unsupported universal productivity claim",
+    "Preserve accuracy, consent, auto-join, downstream-data, retention, support, and plan-complexity boundaries in both languages",
+    "Replace only the existing /ai/fireflies-ai fallback and publish as monitor/noindex",
+    "Run evidence, canonical, sitemap, TypeScript, full build, and production smoke checks before any later index decision"
+  ]
+}
