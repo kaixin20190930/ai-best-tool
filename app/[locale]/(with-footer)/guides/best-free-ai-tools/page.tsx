@@ -3,6 +3,7 @@ import { ArrowRight, CheckCircle2, ExternalLink, Star } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
+import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import { toolToListRow } from '@/lib/services/toolPresenter';
@@ -19,14 +20,17 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     namespace: 'Metadata.home',
   });
 
-  return {
+  return buildLocalizedPageMetadata({
+    locale,
+    path: '/guides/best-free-ai-tools',
     title:
       locale === 'cn' || locale === 'tw' ? '最佳免费 AI 工具 | AI Best Tool' : `Best free AI tools | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
         ? '一份按实际可用性整理的免费 AI 工具榜单。'
         : 'A practical ranking of free AI tools based on real usefulness.',
-  };
+    baseUrl: BASE_URL,
+  });
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {

@@ -3,6 +3,7 @@ import { ArrowRight, Code2, ExternalLink, Layers3, Workflow } from 'lucide-react
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
+import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -14,7 +15,9 @@ import { Link } from '@/app/navigation';
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Metadata.home' });
 
-  return {
+  return buildLocalizedPageMetadata({
+    locale,
+    path: '/guides/ai-tools-for-developers',
     title:
       locale === 'cn' || locale === 'tw'
         ? 'AI 开发者工具推荐 | AI Best Tool'
@@ -23,7 +26,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '面向编码、模型接入、API 工作流、调试和自动化的 AI 开发者工具指南，先看榜单再进对比。'
         : 'A practical guide to AI tools for developers, including coding, model access, APIs, debugging, and automation, with a path from guide to ranking and comparison.',
-  };
+    baseUrl: BASE_URL,
+  });
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {

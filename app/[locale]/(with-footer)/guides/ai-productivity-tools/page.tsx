@@ -3,6 +3,7 @@ import { ArrowRight, CheckCircle2, ExternalLink, Timer, Workflow } from 'lucide-
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
+import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -17,7 +18,9 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     namespace: 'Metadata.home',
   });
 
-  return {
+  return buildLocalizedPageMetadata({
+    locale,
+    path: '/guides/ai-productivity-tools',
     title:
       locale === 'cn' || locale === 'tw'
         ? 'AI 生产力工具推荐 | AI Best Tool'
@@ -26,7 +29,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '面向效率提升、任务管理、写作协作和知识整理的 AI 生产力工具选型指南。'
         : 'A practical guide to AI productivity tools for efficiency, task management, writing collaboration, and knowledge organization.',
-  };
+    baseUrl: BASE_URL,
+  });
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {

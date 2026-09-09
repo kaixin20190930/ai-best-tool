@@ -103,7 +103,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     : 'Start with the task, then inspect official sources, fit boundaries, last-checked dates, and what to compare next. We help you rule out poor fits rather than name one winner for everyone.';
   const stats = [
     {
-      label: isChinese ? '已收录工具' : 'Indexed tools',
+      label: isChinese ? '公开工具' : 'Published tools',
       value: `${totalVisibleTools}+`,
       icon: Compass,
     },

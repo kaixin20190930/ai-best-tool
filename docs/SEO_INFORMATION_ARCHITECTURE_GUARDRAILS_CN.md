@@ -2,8 +2,8 @@
 
 创建日期：2026-09-02
 
-状态：SEO-IA-01 至 SEO-IA-08 已完成，并通过本地与生产发布门禁
-上位计划：[收录与搜索质量主计划](./MASTER_OPTIMIZATION_TRACKER_CN.md)
+状态：SEO-IA-01 至 SEO-IA-08 已完成，并通过本地与生产发布门禁上位计
+划：[收录与搜索质量主计划](./MASTER_OPTIMIZATION_TRACKER_CN.md)
 
 ## 一、审计结论
 
@@ -106,6 +106,40 @@ buildLocalizedPageMetadata({
 
 禁止为了长度机械追加站名或关键词；title 和 description 必须与页面可见内容一致。
 
+### Metadata 稳定契约（2026-09-09 冻结）
+
+本节是站点级 SEO 契约，不是普通运营文案。任何批量 title、description、H1 或首屏定位变更，都必须先更新本节、完成生产清单
+和小批量验证；不得因为单日 GSC 波动或主观偏好直接全站替换。
+
+| 页面类型   | 主搜索意图                       | Title 契约                                                     | Description 与首屏契约                                                 |
+| ---------- | -------------------------------- | -------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| Home       | 发现并比较精选 AI 工具           | `AI Tools Directory` 为主题，差异主张只保留一个                | 明确证据、限制、核查与变化；对应内容必须在首页真实可见                 |
+| Explore    | 按任务、类别、价格探索           | `Explore AI Tools` + 主要筛选维度                              | 说明用户如何缩小选择，不承诺未实现的实时排名                           |
+| Category   | 比较一个稳定类别                 | 具体类别 + `AI Tools`                                          | 说明代表任务、关键限制和实际维护方式                                   |
+| Guide      | 解决一个具体任务或选择问题       | 使用自然问题/任务词，不机械追加 `best`                         | 说明方法、边界和候选路径，且正文必须完整回答                           |
+| Best topic | 为一个场景选择维护过的 shortlist | `Best AI Tools for [task]` 仅用于有真实方法和候选复核的页面    | 说明选择标准、核查日期和会改变结论的限制                               |
+| Tool       | 判断一个产品是否适合             | 产品名 + 首要任务/决策角度；无证据时不得伪造评分、价格或“最佳” | 优先写最适合谁、关键限制和已核查信息；承诺必须在首屏决策摘要或正文可见 |
+
+强制规则：
+
+- Title 简洁、独特、自然，避免关键词堆砌、重复模板和每页机械追加长品牌尾巴；H1 与 title 的主意图必须一致。
+- Description 必须逐页准确、可读、非拼接词库；目录规模较大时允许程序化生成，但输入必须来自该页面的真实字段和已审核判断。
+- Google 可能改写 title/snippet，因此优化目标是让页面主标题、首屏正文和 metadata 对同一问题给出一致答案，而不是只改 meta
+  标签。
+- 未核验价格、评分、使用量、评论、发布日期、限制或“当前/最新”状态不得进入 metadata；未知应省略而不是补默认值。
+- `checked/reviewed` 日期只在人工或自动证据复核真实完成时更新，不因 build、deploy 或修改样式自动刷新。
+- Schema 只能表达页面可见且可验证的内容；metadata 实验不得同时改 canonical、hreflang、robots、sitemap 或实体 URL。
+- 新模板先在 3-5 个已有曝光、证据完整的页面试行；至少观察同 query/page 的 14-28 天趋势，再决定是否扩展。
+- 每次变更记录旧值、新值、目标 query/意图、页面证据、上线日期和回滚条件；没有记录不得批量发布。
+- CTR 判断同时看平均排名、展示 query 和页面类型；平均排名较低时，不把低 CTR 单独归因于标题。
+
+变更门禁：
+
+1. 运行 `pnpm run seo:metadata-inventory`，确认 sitemap 内无缺失 metadata、canonical 漂移或 noindex 冲突。
+2. 明确本次只修改哪个页面类型、哪些 URL、对应什么搜索意图；不得同时改所有页面类型。
+3. 运行 metadata 契约、SEO 架构、索引一致性、TypeScript 和完整 build。
+4. 部署后核对真实 `<head>` 与首屏内容，再将实验加入 GSC 复盘台账。
+
 ## 五、Canonical 与 hreflang 规则
 
 - 默认语言 `en` 使用无前缀 URL，例如 `https://aibesttool.com/ai/fathom`。
@@ -189,23 +223,25 @@ Tool -> Category / 2-4 个关系明确的 Tool / 对应 Guide
 ## 九、抓取与发布边界
 
 - sitemap 与 robots 对 Tool 必须共同调用 `getToolIndexDecision`。
-- 新工具公开 1-2 个/日，但默认 `monitor/noindex`；最多 1 个/日、5 个/周批准索引。
+- 成熟且证据完整的工具每天至少公开 1 个、最多 2 个；公开与索引分离，默认先进入 `monitor/noindex`。
+- 强证据、无冲突的成熟工具可在公开 48-72 小时后进入索引复核；普通工具观察 7-14 天，高风险或事实冲突工具至少 30 天。
+- 当前运营索引批准上限为 1 个/日、3 个/周；数据库 5 个/周硬门禁仅作为异常安全上限，不是日常额度。
 - Category 少于 3 个合格工具不进 sitemap；即使 URL 可访问也 noindex。
 - 新 Finder/Stack/Trial/Watch 不改变索引总量。
 - GSC 出现批量 Crawled/Discovered not indexed、重复 canonical 或非首页展示恶化时，暂停新增索引，而不是删除整个目录。
 
 ## 十、架构实施任务
 
-| ID        | 优先级 | 任务                                 | 验收标准                                                 | 状态            |
-| --------- | ------ | ------------------------------------ | -------------------------------------------------------- | --------------- |
-| SEO-IA-01 | P0     | 建立统一 metadata builder            | canonical/hreflang/OG/robots 单一实现                    | 已完成          |
-| SEO-IA-02 | P0     | 修复手写 locale 与相对 canonical     | 英文无 `/en`；无 `./new`；测试覆盖                       | 已完成          |
-| SEO-IA-03 | P0     | Best topic 和核心模板补统一 hreflang | self、alternate、x-default 一致                          | 已完成          |
-| SEO-IA-04 | P0     | 新增 SEO 架构静态门禁                | CI 阻断手写 canonical 和 sitemap 越界                    | 已完成          |
-| SEO-IA-05 | P1     | 共享可见 Breadcrumb + JSON-LD        | 五类核心模板同源渲染                                     | 已完成          |
-| SEO-IA-06 | P1     | Guide 高意图内链收口                 | 首要路径指向 indexable 实体；noindex comparison 降为次级 | 已完成          |
-| SEO-IA-07 | P1     | Tool 关系内链接入 reviewed 数据      | 2-4 个明确关系，无随机/商业干预                          | 已完成          |
-| SEO-IA-08 | P0     | 本地/生产架构 smoke                  | sitemap、robots、canonical、hreflang、breadcrumb 全通过  | 已完成          |
+| ID        | 优先级 | 任务                                 | 验收标准                                                 | 状态   |
+| --------- | ------ | ------------------------------------ | -------------------------------------------------------- | ------ |
+| SEO-IA-01 | P0     | 建立统一 metadata builder            | canonical/hreflang/OG/robots 单一实现                    | 已完成 |
+| SEO-IA-02 | P0     | 修复手写 locale 与相对 canonical     | 英文无 `/en`；无 `./new`；测试覆盖                       | 已完成 |
+| SEO-IA-03 | P0     | Best topic 和核心模板补统一 hreflang | self、alternate、x-default 一致                          | 已完成 |
+| SEO-IA-04 | P0     | 新增 SEO 架构静态门禁                | CI 阻断手写 canonical 和 sitemap 越界                    | 已完成 |
+| SEO-IA-05 | P1     | 共享可见 Breadcrumb + JSON-LD        | 五类核心模板同源渲染                                     | 已完成 |
+| SEO-IA-06 | P1     | Guide 高意图内链收口                 | 首要路径指向 indexable 实体；noindex comparison 降为次级 | 已完成 |
+| SEO-IA-07 | P1     | Tool 关系内链接入 reviewed 数据      | 2-4 个明确关系，无随机/商业干预                          | 已完成 |
+| SEO-IA-08 | P0     | 本地/生产架构 smoke                  | sitemap、robots、canonical、hreflang、breadcrumb 全通过  | 已完成 |
 
 ## 十一、SEO 架构变更流程
 
@@ -267,22 +303,22 @@ Tool -> Category / 2-4 个关系明确的 Tool / 对应 Guide
 
 ## 十五、SEO-IA-07 实施记录（2026-09-02）
 
-- 公开 Tool 页原先调用 `getRecommendedTools`，按分类、标签、评分和浏览量自动选择 6 个“相似工具”；该算法不再参与关系内
-  链或 Decision Card 的 `Compare next`。
-- 新增 `reviewedToolRelationships` 人工白名单。每条关系必须包含方向、`alternative/complements/overlaps/replaces` 类型、中
-  英文理由、复核日期和下次复查日期；单个来源工具限制为 2-4 条。
-- 首批覆盖 Claude、Gemini、GPT-4o、ChatGPT Mac、Poe、Adobe、Shutterstock 和 FastImage。真实目录回读确认 8 个来源工具
-  均能解析 2-3 个目标，不存在缺失 slug。
-- 公开读取层会再次验证目标工具为 `published`，并通过统一 `getToolIndexDecision`；`monitor/noindex`、质量不足、被拒绝或归档的
-  目标不会出现在关系模块和 Decision Card。
+- 公开 Tool 页原先调用 `getRecommendedTools`，按分类、标签、评分和浏览量自动选择 6 个“相似工具”；该算法不再参与关系内链
+  或 Decision Card 的 `Compare next`。
+- 新增 `reviewedToolRelationships` 人工白名单。每条关系必须包含方向、`alternative/complements/overlaps/replaces` 类型、
+  中英文理由、复核日期和下次复查日期；单个来源工具限制为 2-4 条。
+- 首批覆盖 Claude、Gemini、GPT-4o、ChatGPT Mac、Poe、Adobe、Shutterstock 和 FastImage。真实目录回读确认 8 个来源工具均能
+  解析 2-3 个目标，不存在缺失 slug。
+- 公开读取层会再次验证目标工具为 `published`，并通过统一 `getToolIndexDecision`；`monitor/noindex`、质量不足、被拒绝或归
+  档的目标不会出现在关系模块和 Decision Card。
 - Tool 页 Decision Card 与“接下来比较哪些工具”模块消费同一份 reviewed 数据；没有审核关系时不伪造推荐，用户仍可通过
   Category 和 Guide 继续探索。
 - 关系卡明确展示“可替代/可配合/部分重合/可替换”、理由和复核日期，并直接进入目标 Tool 的 Decision Card；链接不受
   Featured、流量、评分或随机标签控制。
 - 这份人工白名单是 DCF-01/06 数据库与后台审核上线前的受控桥接，不代表 DCF 已完成。未来迁移到 `tool_relationships` 时必须
   保留相同公开读取门槛和自动测试。
-- 新增 `pnpm run test:reviewed-tool-relationships`，阻止自链、重复、超过 4 条、缺少双语理由、无复查日期、重新调用算法推荐或
-  绕过索引门禁。
+- 新增 `pnpm run test:reviewed-tool-relationships`，阻止自链、重复、超过 4 条、缺少双语理由、无复查日期、重新调用算法推
+  荐或绕过索引门禁。
 
 ## 十六、SEO-IA-08 生产验收记录（2026-09-02）
 

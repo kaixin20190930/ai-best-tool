@@ -4,7 +4,7 @@ import { ArrowRight, Layers3, Sparkles, Star, Target } from 'lucide-react';
 
 import { topListTopics } from '@/lib/data/topLists';
 import { BASE_URL } from '@/lib/env';
-import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
+import { buildLocalizedPageMetadata, generateLocalizedPath } from '@/lib/seo/metadata';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import SeoBreadcrumbs from '@/components/seo/SeoBreadcrumbs';
 
@@ -70,8 +70,8 @@ export default function BestAiToolsPage({ params: { locale } }: { params: { loca
               </h1>
               <p className='max-w-2xl text-base leading-7 text-slate-200 lg:text-lg'>
                 {isChinese
-                  ? '这些榜单页会把用户带到更窄、更有意图的选择页，再往下接到详情页、提交页和付费页。'
-                  : 'These ranking pages narrow the choice, then route people into detail pages, submission, and paid upgrades.'}
+                  ? '每个榜单只回答一个选择问题，并把候选工具的适用场景、限制和核查依据放在同一条决策路径上。'
+                  : 'Each list answers one selection question and connects candidate tools with their fit, limits, and reviewed evidence.'}
               </p>
             </div>
 
@@ -83,11 +83,11 @@ export default function BestAiToolsPage({ params: { locale } }: { params: { loca
                 },
                 {
                   title: isChinese ? '高意图主题' : 'High-intent topics',
-                  text: isChinese ? '优先放最容易转化的榜单' : 'Front-load the lists most likely to convert',
+                  text: isChinese ? '从具体任务开始缩小候选' : 'Start with a concrete task',
                 },
                 {
-                  title: isChinese ? '可转化' : 'Conversion-friendly',
-                  text: isChinese ? '每页都有下一步 CTA' : 'Every page has a next step',
+                  title: isChinese ? '依据可查' : 'Evidence-aware',
+                  text: isChinese ? '先看限制、核查和比较依据' : 'Check limits, reviews, and evidence',
                 },
               ].map((item) => (
                 <div key={item.title} className='rounded-xl border border-white/10 bg-white/5 p-4'>
@@ -99,13 +99,13 @@ export default function BestAiToolsPage({ params: { locale } }: { params: { loca
 
             <div className='flex flex-wrap gap-3'>
               <Link
-                href={`/${locale}/pricing`}
+                href={generateLocalizedPath('/guides/how-to-choose-ai-tools', locale)}
                 className='inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/15'
               >
-                {isChinese ? '查看定价' : 'View pricing'}
+                {isChinese ? '查看选型方法' : 'See the selection method'}
               </Link>
               <Link
-                href={`/${locale}/best-ai-tools/${priorityTopics[0]?.key || 'ai-coding-tools'}`}
+                href={generateLocalizedPath(`/best-ai-tools/${priorityTopics[0]?.key || 'ai-coding-tools'}`, locale)}
                 className='inline-flex items-center justify-center rounded-lg bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-cyan-400'
               >
                 {isChinese ? '先看高意图榜单' : 'Start with a priority list'}
@@ -135,7 +135,7 @@ export default function BestAiToolsPage({ params: { locale } }: { params: { loca
                 {priorityTopics.map((topic) => (
                   <Link
                     key={topic.key}
-                    href={`/${locale}/best-ai-tools/${topic.key}`}
+                    href={generateLocalizedPath(`/best-ai-tools/${topic.key}`, locale)}
                     className='rounded-xl border border-cyan-100 bg-white p-4 transition hover:border-cyan-300 hover:shadow-sm'
                   >
                     <p className='text-sm font-semibold text-slate-950'>{topic.title}</p>
@@ -181,7 +181,7 @@ export default function BestAiToolsPage({ params: { locale } }: { params: { loca
               {topListTopics.map((topic) => (
                 <Link
                   key={topic.key}
-                  href={`/${locale}/best-ai-tools/${topic.key}`}
+                  href={generateLocalizedPath(`/best-ai-tools/${topic.key}`, locale)}
                   className='group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-cyan-200 hover:shadow-md'
                 >
                   <div className='flex items-start justify-between gap-3'>
@@ -211,8 +211,8 @@ export default function BestAiToolsPage({ params: { locale } }: { params: { loca
                   </p>
                   <p className='mt-1 text-sm leading-6 text-slate-600'>
                     {isChinese
-                      ? '先看榜单，再进详情页比较关键差异，最后再去提交、认领或付费。'
-                      : 'Scan the list, compare the key differences in detail pages, then move into submit or paid options.'}
+                      ? '先按任务进入榜单，再到详情页核对适用对象、关键限制、来源和可替代方案。'
+                      : 'Start with a task list, then use detail pages to verify fit, key limits, sources, and alternatives.'}
                   </p>
                 </div>
               </div>
@@ -225,8 +225,8 @@ export default function BestAiToolsPage({ params: { locale } }: { params: { loca
               <p className='mt-2 text-xl font-bold text-slate-950'>{checkedAtLabel}</p>
               <p className='mt-2 text-sm leading-6 text-slate-600'>
                 {isChinese
-                  ? '这个榜单入口会持续把你导向更窄的榜单、详情页和提交路径，而不是只停留在主题卡片。'
-                  : 'This ranking hub keeps routing people into narrower lists, detail pages, and submission paths instead of stopping at topic cards.'}
+                  ? '这个入口把你导向更具体的榜单和工具判断页；核查日期只在内容完成真实复核后更新。'
+                  : 'This hub leads to narrower lists and tool decision pages; its checked date changes only after a real content review.'}
               </p>
             </div>
 

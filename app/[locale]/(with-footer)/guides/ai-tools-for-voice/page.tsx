@@ -3,6 +3,7 @@ import { ArrowRight, AudioLines, ExternalLink, Mic, MicVocal } from 'lucide-reac
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
+import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -13,13 +14,16 @@ import { Link } from '@/app/navigation';
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Metadata.home' });
 
-  return {
+  return buildLocalizedPageMetadata({
+    locale,
+    path: '/guides/ai-tools-for-voice',
     title: locale === 'cn' || locale === 'tw' ? 'AI 语音工具推荐 | AI Best Tool' : `AI voice tools | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
         ? '适合语音合成、转写、配音和对话助手的 AI 工具推荐与选型指南。'
         : 'A practical guide to AI voice tools for voice synthesis, transcription, dubbing, and conversational assistants.',
-  };
+    baseUrl: BASE_URL,
+  });
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {

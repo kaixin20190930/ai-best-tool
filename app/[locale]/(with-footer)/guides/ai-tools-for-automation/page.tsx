@@ -3,6 +3,7 @@ import { Bot, ExternalLink, RefreshCw, Workflow } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
+import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -16,7 +17,9 @@ import { Link } from '@/app/navigation';
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Metadata.home' });
 
-  return {
+  return buildLocalizedPageMetadata({
+    locale,
+    path: '/guides/ai-tools-for-automation',
     title:
       locale === 'cn' || locale === 'tw'
         ? 'AI 自动化工具推荐 | AI Best Tool'
@@ -25,7 +28,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '面向工作流编排、Agent 任务、重复流程和跨工具自动化的 AI 工具指南，先看榜单再进对比页。'
         : 'A practical guide to AI tools for workflow orchestration, agent tasks, repeatable processes, and cross-tool automation, with a path from guide to ranking and comparison.',
-  };
+    baseUrl: BASE_URL,
+  });
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {

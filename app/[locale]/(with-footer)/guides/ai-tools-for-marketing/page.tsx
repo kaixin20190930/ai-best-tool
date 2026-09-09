@@ -3,6 +3,7 @@ import { ArrowRight, CheckCircle2, ExternalLink, Megaphone, TrendingUp } from 'l
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
+import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -16,14 +17,17 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     namespace: 'Metadata.home',
   });
 
-  return {
+  return buildLocalizedPageMetadata({
+    locale,
+    path: '/guides/ai-tools-for-marketing',
     title:
       locale === 'cn' || locale === 'tw' ? 'AI 营销工具推荐 | AI Best Tool' : `AI tools for marketing | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
         ? '面向广告、增长、社媒和营销团队的 AI 工具选型指南。'
         : 'A practical guide to AI tools for ads, growth, social, and marketing teams.',
-  };
+    baseUrl: BASE_URL,
+  });
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {

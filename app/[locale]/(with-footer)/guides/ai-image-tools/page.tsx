@@ -3,6 +3,7 @@ import { ArrowRight, CheckCircle2, ExternalLink, Image as ImageIcon, Palette } f
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
+import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -17,7 +18,9 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     namespace: 'Metadata.home',
   });
 
-  return {
+  return buildLocalizedPageMetadata({
+    locale,
+    path: '/guides/ai-image-tools',
     title:
       locale === 'cn' || locale === 'tw'
         ? 'AI 图像工具推荐 | AI Best Tool'
@@ -26,7 +29,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '面向生成、修图、设计和创意工作的 AI 图像工具选型指南。'
         : 'A practical guide to AI tools for generation, editing, design, and creative image workflows.',
-  };
+    baseUrl: BASE_URL,
+  });
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {

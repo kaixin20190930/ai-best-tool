@@ -3,6 +3,7 @@ import { CheckCircle2, Clapperboard, ExternalLink, Film } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
+import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -17,7 +18,9 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     namespace: 'Metadata.home',
   });
 
-  return {
+  return buildLocalizedPageMetadata({
+    locale,
+    path: '/guides/ai-video-tools',
     title:
       locale === 'cn' || locale === 'tw'
         ? 'AI 视频工具推荐 | AI Best Tool'
@@ -26,7 +29,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '面向剪辑、生成、配音和营销视频的 AI 工具选型指南。'
         : 'A practical guide to AI tools for editing, generation, voiceover, and marketing videos.',
-  };
+    baseUrl: BASE_URL,
+  });
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {

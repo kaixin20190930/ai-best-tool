@@ -3,6 +3,7 @@ import { ArrowRight, CheckCircle2, ExternalLink, MessageSquare, Users } from 'lu
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
+import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -17,7 +18,9 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     namespace: 'Metadata.home',
   });
 
-  return {
+  return buildLocalizedPageMetadata({
+    locale,
+    path: '/guides/ai-chatbot-tools',
     title:
       locale === 'cn' || locale === 'tw'
         ? 'AI 聊天机器人推荐 | AI Best Tool'
@@ -26,7 +29,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
       locale === 'cn' || locale === 'tw'
         ? '面向问答、写作、知识检索和工作协作的 AI 聊天机器人选型指南，先看榜单再看对比。'
         : 'A practical guide to AI chatbots for Q&A, writing, knowledge retrieval, and collaboration, with a path from guide to ranking and comparison.',
-  };
+    baseUrl: BASE_URL,
+  });
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {

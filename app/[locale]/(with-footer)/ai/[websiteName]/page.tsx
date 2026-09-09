@@ -37,6 +37,7 @@ import {
   generateToolTitle,
 } from '@/lib/seo/metadata';
 import { generateSoftwareSchema } from '@/lib/seo/schema';
+import { getToolDecisionMetadataPilot } from '@/lib/seo/toolDecisionMetadata';
 import { getToolIndexDecision } from '@/lib/seo/toolIndexing';
 import { getCategoryById, getLocalizedField as getCategoryLocalizedField } from '@/lib/services/categories';
 import { getToolDecisionCardV2, type DecisionCardV2Model } from '@/lib/services/decision/card';
@@ -3366,9 +3367,13 @@ export async function generateMetadata({
 
     // Generate optimized title and description using SEO utilities
     const priorityIntent = getPriorityToolSearchIntent(canonicalSlug, locale);
-    const optimizedTitle = priorityIntent?.metadataTitle || generateToolTitle(toolTitle, toolCategory);
+    const decisionMetadataPilot = getToolDecisionMetadataPilot(canonicalSlug, locale);
+    const optimizedTitle =
+      priorityIntent?.metadataTitle || decisionMetadataPilot?.title || generateToolTitle(toolTitle, toolCategory);
     const optimizedDescription =
-      priorityIntent?.metadataDescription || generateToolDescription(toolTitle, toolDescription, toolCategory);
+      priorityIntent?.metadataDescription ||
+      decisionMetadataPilot?.description ||
+      generateToolDescription(toolTitle, toolDescription, toolCategory);
 
     // Generate optimized social image URL
     const toolImage = data?.thumbnailUrl || data?.imageUrl || SEO_CONFIG.defaultImage;
@@ -3446,6 +3451,7 @@ export default async function Page({
 
     const claimTool = dbTool as (typeof dbTool & DetailClaimSignals) | null;
     const prioritySearchIntent = getPriorityToolSearchIntent(canonicalSlug, locale);
+    const decisionMetadataPilot = getToolDecisionMetadataPilot(canonicalSlug, locale);
     const priorityOfficialEvidence = getPriorityToolOfficialEvidence(canonicalSlug, locale);
 
     // Get current user
@@ -4161,6 +4167,34 @@ export default async function Page({
       decisionCard.reviewSchedule.decisionReviewDue,
       locale,
     );
+    const supportedDecisionFieldCount = decisionCardV2
+      ? [
+          decisionCardV2.trueCost,
+          decisionCardV2.setup,
+          decisionCardV2.dataUse,
+          decisionCardV2.exitPath,
+          decisionCardV2.whyNot,
+        ].filter((field) => field.state === 'supported').length
+      : null;
+    const aboveFoldTask =
+      decisionMetadataPilot?.primaryTask ||
+      prioritySearchIntent?.summary ||
+      bestFitList[0] ||
+      (isChinese ? `判断 ${data.title} 是否适合你的任务` : `Decide whether ${data.title} fits your task`);
+    const aboveFoldLimit =
+      decisionMetadataPilot?.decisionAngle ||
+      visibleDecisionRisks[0] ||
+      (isChinese
+        ? '关键限制仍需结合官网与实际试用核对。'
+        : 'Key limits still need an official-source and trial check.');
+    const aboveFoldEvidence = decisionCardV2
+      ? isChinese
+        ? `${supportedDecisionFieldCount}/5 个决策字段已有当前证据`
+        : `${supportedDecisionFieldCount}/5 decision fields have current evidence`
+      : decisionEvidenceStatusLabel;
+    const aboveFoldReviewedAt = decisionCardV2?.reviewedAt
+      ? formatReviewScheduleDate(decisionCardV2.reviewedAt, false, locale)
+      : lastCheckedScheduleLabel;
     let commentSnapshotNote = isChinese
       ? '评论还少，欢迎先留一条真实体验。'
       : 'Comments are light, so the first real experience is especially useful.';
@@ -4357,6 +4391,44 @@ export default async function Page({
                     </div>
                   </section>
                 )}
+
+                <section
+                  data-above-fold-decision-summary
+                  className='rounded-[18px] border border-slate-200 bg-white p-5 shadow-sm'
+                >
+                  <div className='flex flex-wrap items-start justify-between gap-3'>
+                    <div>
+                      <p className='text-xs font-semibold uppercase tracking-[0.16em] text-cyan-700'>
+                        {isChinese ? '先看结论，再看功能' : 'Decision first, features second'}
+                      </p>
+                      <h2 className='mt-2 text-xl font-bold text-slate-950'>
+                        {isChinese ? '这页帮你判断三件事' : 'Three checks before you choose'}
+                      </h2>
+                    </div>
+                    <span className='rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600'>
+                      {isChinese ? '最近核查' : 'Last checked'} {aboveFoldReviewedAt}
+                    </span>
+                  </div>
+                  <div className='mt-4 grid gap-3 md:grid-cols-3'>
+                    {[
+                      { label: isChinese ? '适合的任务' : 'Task fit', value: aboveFoldTask },
+                      { label: isChinese ? '选择前要权衡' : 'Key trade-off', value: aboveFoldLimit },
+                      { label: isChinese ? '证据覆盖' : 'Evidence coverage', value: aboveFoldEvidence },
+                    ].map((item) => (
+                      <div key={item.label} className='rounded-xl bg-slate-50 p-4 ring-1 ring-slate-200'>
+                        <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>{item.label}</p>
+                        <p className='mt-2 text-sm font-semibold leading-6 text-slate-900'>{item.value}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <a
+                    href='#decision-card'
+                    className='mt-4 inline-flex items-center gap-2 text-sm font-semibold text-cyan-800 hover:text-cyan-950'
+                  >
+                    {isChinese ? '查看完整判断与依据' : 'See the full decision and evidence'}
+                    <CircleArrowRight className='size-4' />
+                  </a>
+                </section>
 
                 <div className='grid gap-3 md:grid-cols-3'>
                   {categorySlug ? (

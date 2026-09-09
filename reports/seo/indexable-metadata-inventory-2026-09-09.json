@@ -1,0 +1,1963 @@
+{
+  "auditedAt": "2026-09-09T07:23:29.880Z",
+  "baseUrl": "https://aibesttool.com",
+  "sitemapUrlCount": 134,
+  "success": false,
+  "summary": {
+    "byType": {
+      "best-root": {
+        "intent": "Choose a use-case shortlist and understand the ranking method",
+        "count": 2,
+        "issuePages": 2
+      },
+      "best-topic": {
+        "intent": "Compare a maintained shortlist for one concrete use case",
+        "count": 56,
+        "issuePages": 56
+      },
+      "category": {
+        "intent": "Compare tools within one stable category",
+        "count": 8,
+        "issuePages": 6
+      },
+      "explore": {
+        "intent": "Filter AI tools by task, category, and pricing",
+        "count": 2,
+        "issuePages": 0
+      },
+      "guide": {
+        "intent": "Solve one task or learn one selection method",
+        "count": 38,
+        "issuePages": 26
+      },
+      "home": {
+        "intent": "Discover and compare a curated AI tools directory",
+        "count": 2,
+        "issuePages": 0
+      },
+      "tool": {
+        "intent": "Decide whether one product fits, based on evidence and limitations",
+        "count": 26,
+        "issuePages": 20
+      }
+    },
+    "issueCounts": {
+      "duplicate_title": 82,
+      "long_title_review": 16,
+      "missing_canonical": 18,
+      "duplicate_description": 54,
+      "generic_tool_title": 20
+    },
+    "structuralIssuePages": 18
+  },
+  "pages": [
+    {
+      "url": "https://aibesttool.com",
+      "pathname": "/",
+      "pageType": "home",
+      "status": 200,
+      "title": "AI Tools Directory: Compare Curated AI Tools | AI Best Tool",
+      "description": "Browse an AI tools directory by real use case, then compare sources, pricing, limits, review dates, and material changes before choosing.",
+      "canonical": "https://aibesttool.com",
+      "robots": null,
+      "h1": "Compare AI tools with evidence, limits, and real changes",
+      "issues": []
+    },
+    {
+      "url": "https://aibesttool.com/cn",
+      "pathname": "/cn",
+      "pageType": "home",
+      "status": 200,
+      "title": "AI 工具目录：按场景比较精选 AI 工具 | AI Best Tool",
+      "description": "按写作、研究、开发、自动化和 Web3 等真实场景浏览 AI 工具，通过来源、价格、限制、核查日期与变化记录判断哪款更适合。",
+      "canonical": "https://aibesttool.com/cn",
+      "robots": null,
+      "h1": "用证据、限制和真实变化比较 AI 工具",
+      "issues": []
+    },
+    {
+      "url": "https://aibesttool.com/explore",
+      "pathname": "/explore",
+      "pageType": "explore",
+      "status": 200,
+      "title": "Explore AI Tools Directory by Use Case, Pricing & Category",
+      "description": "Browse and filter a curated AI tools directory by task, category, pricing, tags, and freshness, then compare features, limits, and real signals on detail pages.",
+      "canonical": "https://aibesttool.com/explore",
+      "robots": null,
+      "h1": "Explore the AI tools directory by task, pricing, and category",
+      "issues": []
+    },
+    {
+      "url": "https://aibesttool.com/cn/explore",
+      "pathname": "/cn/explore",
+      "pageType": "explore",
+      "status": 200,
+      "title": "探索 AI 工具目录：按场景、价格和分类筛选",
+      "description": "浏览和筛选精选 AI 工具目录，按任务、分类、价格、标签和最近更新缩小范围，再进入详情页比较功能、限制与真实信号。",
+      "canonical": "https://aibesttool.com/cn/explore",
+      "robots": null,
+      "h1": "按任务、价格和分类探索 AI 工具目录",
+      "issues": []
+    },
+    {
+      "url": "https://aibesttool.com/guides",
+      "pathname": "/guides",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI Tool Selection Guides | AI Best Tool",
+      "description": "Read curated AI tool guides by task, then continue into indexable rankings, categories, and tool profiles to make a decision.",
+      "canonical": "https://aibesttool.com/guides",
+      "robots": null,
+      "h1": "Set your decision criteria before opening a tool list",
+      "issues": []
+    },
+    {
+      "url": "https://aibesttool.com/cn/guides",
+      "pathname": "/cn/guides",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI 工具选择指南 | AI Best Tool",
+      "description": "按任务阅读经过筛选的 AI 工具指南，再进入可索引榜单、分类和工具详情页完成判断。",
+      "canonical": "https://aibesttool.com/cn/guides",
+      "robots": null,
+      "h1": "先建立判断标准，再打开工具列表",
+      "issues": []
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools",
+      "pathname": "/best-ai-tools",
+      "pageType": "best-root",
+      "status": 200,
+      "title": "Best AI Tools by Use Case | AI Best Tool",
+      "description": "Purpose-driven AI tool rankings for agents, observability, coding, model routing, research, writing, and video with clear next-step guidance.",
+      "canonical": "https://aibesttool.com/best-ai-tools",
+      "robots": null,
+      "h1": "Pick AI tools by use case, not by hype",
+      "issues": [
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools",
+      "pathname": "/cn/best-ai-tools",
+      "pageType": "best-root",
+      "status": 200,
+      "title": "Best AI Tools by Use Case | AI Best Tool",
+      "description": "按用途整理的 AI 工具榜单：Agent、可观测、写作、开发、模型路由、研究和视频，并明确下一步该看什么。",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools",
+      "robots": null,
+      "h1": "按真实使用场景挑 AI 工具，而不是按名气挑",
+      "issues": [
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/guides/how-to-choose-ai-tools",
+      "pathname": "/guides/how-to-choose-ai-tools",
+      "pageType": "guide",
+      "status": 200,
+      "title": "How to choose AI tools | AI Best Tool - Explore Curated AI Tools and Apps",
+      "description": "A practical guide to choosing AI tools: start with use case, then check pricing, freshness, screenshots, and comments.",
+      "canonical": "https://aibesttool.com/guides/how-to-choose-ai-tools",
+      "robots": null,
+      "h1": "How to choose an AI tool that actually fits your workflow",
+      "issues": [
+        "long_title_review"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/guides/how-to-choose-ai-tools",
+      "pathname": "/cn/guides/how-to-choose-ai-tools",
+      "pageType": "guide",
+      "status": 200,
+      "title": "如何选择 AI 工具 | AI Best Tool",
+      "description": "一个实用的 AI 工具选型指南：先看场景，再看价格、更新、截图和评论。",
+      "canonical": "https://aibesttool.com/cn/guides/how-to-choose-ai-tools",
+      "robots": null,
+      "h1": "如何选择一个真正适合你的 AI 工具",
+      "issues": []
+    },
+    {
+      "url": "https://aibesttool.com/guides/free-ai-tools",
+      "pathname": "/guides/free-ai-tools",
+      "pageType": "guide",
+      "status": 200,
+      "title": "Best free AI tools | AI Best Tool - Explore Curated AI Tools and Apps",
+      "description": "A practical guide to choosing free AI tools: check use case, limits, updates, and comments first.",
+      "canonical": "https://aibesttool.com/guides/free-ai-tools",
+      "robots": null,
+      "h1": "How to choose free AI tools without wasting time",
+      "issues": [
+        "long_title_review",
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/guides/free-ai-tools",
+      "pathname": "/cn/guides/free-ai-tools",
+      "pageType": "guide",
+      "status": 200,
+      "title": "免费 AI 工具怎么选 | AI Best Tool",
+      "description": "帮你挑选真正值得试的免费 AI 工具：先看场景，再看限制、更新和评论。",
+      "canonical": "https://aibesttool.com/cn/guides/free-ai-tools",
+      "robots": null,
+      "h1": "免费 AI 工具怎么选，才不会白花时间",
+      "issues": []
+    },
+    {
+      "url": "https://aibesttool.com/guides/best-free-ai-tools",
+      "pathname": "/guides/best-free-ai-tools",
+      "pageType": "guide",
+      "status": 200,
+      "title": "Best free AI tools | AI Best Tool - Explore Curated AI Tools and Apps",
+      "description": "A practical ranking of free AI tools based on real usefulness.",
+      "canonical": null,
+      "robots": null,
+      "h1": "Best free AI tools",
+      "issues": [
+        "missing_canonical",
+        "long_title_review",
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/guides/best-free-ai-tools",
+      "pathname": "/cn/guides/best-free-ai-tools",
+      "pageType": "guide",
+      "status": 200,
+      "title": "最佳免费 AI 工具 | AI Best Tool",
+      "description": "一份按实际可用性整理的免费 AI 工具榜单。",
+      "canonical": null,
+      "robots": null,
+      "h1": "最佳免费 AI 工具",
+      "issues": [
+        "missing_canonical"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/guides/ai-writing-tools",
+      "pathname": "/guides/ai-writing-tools",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI writing tools recommendations | AI Best Tool - Explore Curated AI Tools and Apps",
+      "description": "A practical guide to AI writing tools for content creation, SEO, marketing, and everyday writing.",
+      "canonical": "https://aibesttool.com/guides/ai-writing-tools",
+      "robots": null,
+      "h1": "AI writing tools: how to choose one that fits your content workflow",
+      "issues": [
+        "long_title_review"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/guides/ai-writing-tools",
+      "pathname": "/cn/guides/ai-writing-tools",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI 写作工具推荐 | AI Best Tool",
+      "description": "适合内容创作、SEO、营销和日常写作的 AI 工具推荐与选型指南。",
+      "canonical": "https://aibesttool.com/cn/guides/ai-writing-tools",
+      "robots": null,
+      "h1": "AI 写作工具推荐：怎么选才适合你的内容工作流",
+      "issues": []
+    },
+    {
+      "url": "https://aibesttool.com/guides/ai-seo-tools",
+      "pathname": "/guides/ai-seo-tools",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI SEO tools | AI Best Tool - Explore Curated AI Tools and Apps",
+      "description": "A practical guide to AI SEO tools for keyword research, content optimization, and rank tracking.",
+      "canonical": "https://aibesttool.com/guides/ai-seo-tools",
+      "robots": null,
+      "h1": "AI SEO tools: how to choose for keywords and rank tracking",
+      "issues": []
+    },
+    {
+      "url": "https://aibesttool.com/cn/guides/ai-seo-tools",
+      "pathname": "/cn/guides/ai-seo-tools",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI SEO 工具推荐 | AI Best Tool",
+      "description": "适合关键词研究、内容优化和排名跟踪的 AI 工具推荐与选型指南。",
+      "canonical": "https://aibesttool.com/cn/guides/ai-seo-tools",
+      "robots": null,
+      "h1": "AI SEO 工具推荐：从关键词到排名跟踪，怎么选更合适",
+      "issues": []
+    },
+    {
+      "url": "https://aibesttool.com/guides/ai-video-tools",
+      "pathname": "/guides/ai-video-tools",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI video tools recommendations | AI Best Tool - Explore Curated AI Tools and Apps",
+      "description": "A practical guide to AI tools for editing, generation, voiceover, and marketing videos.",
+      "canonical": null,
+      "robots": null,
+      "h1": "AI video tools: how to choose one that fits your content workflow",
+      "issues": [
+        "missing_canonical",
+        "long_title_review"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/guides/ai-video-tools",
+      "pathname": "/cn/guides/ai-video-tools",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI 视频工具推荐 | AI Best Tool",
+      "description": "面向剪辑、生成、配音和营销视频的 AI 工具选型指南。",
+      "canonical": null,
+      "robots": null,
+      "h1": "AI 视频工具推荐：怎么选更适合你的内容流程",
+      "issues": [
+        "missing_canonical"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/guides/ai-image-tools",
+      "pathname": "/guides/ai-image-tools",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI image tools recommendations | AI Best Tool - Explore Curated AI Tools and Apps",
+      "description": "A practical guide to AI tools for generation, editing, design, and creative image workflows.",
+      "canonical": null,
+      "robots": null,
+      "h1": "AI image tools: how to choose one that fits your creative workflow",
+      "issues": [
+        "missing_canonical",
+        "long_title_review"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/guides/ai-image-tools",
+      "pathname": "/cn/guides/ai-image-tools",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI 图像工具推荐 | AI Best Tool",
+      "description": "面向生成、修图、设计和创意工作的 AI 图像工具选型指南。",
+      "canonical": null,
+      "robots": null,
+      "h1": "AI 图像工具推荐：怎么选更适合你的创作流程",
+      "issues": [
+        "missing_canonical"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/guides/ai-coding-tools",
+      "pathname": "/guides/ai-coding-tools",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI coding tools recommendations | AI Best Tool - Explore Curated AI Tools and Apps",
+      "description": "A practical guide to AI tools for code completion, debugging, generation, and workflow automation, with a path from guide to ranking and comparison.",
+      "canonical": "https://aibesttool.com/guides/ai-coding-tools",
+      "robots": null,
+      "h1": "AI coding tools: how to choose one that fits your development workflow",
+      "issues": [
+        "long_title_review"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/guides/ai-coding-tools",
+      "pathname": "/cn/guides/ai-coding-tools",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI 编程工具推荐 | AI Best Tool",
+      "description": "面向代码补全、调试、生成和工作流自动化的 AI 编程工具选型指南，先看榜单再进对比。",
+      "canonical": "https://aibesttool.com/cn/guides/ai-coding-tools",
+      "robots": null,
+      "h1": "AI 编程工具推荐：怎么选更适合你的开发流程",
+      "issues": []
+    },
+    {
+      "url": "https://aibesttool.com/guides/ai-chatbot-tools",
+      "pathname": "/guides/ai-chatbot-tools",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI chatbot tools recommendations | AI Best Tool - Explore Curated AI Tools and Apps",
+      "description": "A practical guide to AI chatbots for Q&A, writing, knowledge retrieval, and collaboration, with a path from guide to ranking and comparison.",
+      "canonical": null,
+      "robots": null,
+      "h1": "AI chatbots: how to choose one that fits your daily workflow",
+      "issues": [
+        "missing_canonical",
+        "long_title_review"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/guides/ai-chatbot-tools",
+      "pathname": "/cn/guides/ai-chatbot-tools",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI 聊天机器人推荐 | AI Best Tool",
+      "description": "面向问答、写作、知识检索和工作协作的 AI 聊天机器人选型指南，先看榜单再看对比。",
+      "canonical": null,
+      "robots": null,
+      "h1": "AI 聊天机器人推荐：怎么选更适合你的日常工作流",
+      "issues": [
+        "missing_canonical"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/guides/ai-productivity-tools",
+      "pathname": "/guides/ai-productivity-tools",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI productivity tools recommendations | AI Best Tool - Explore Curated AI Tools and Apps",
+      "description": "A practical guide to AI productivity tools for efficiency, task management, writing collaboration, and knowledge organization.",
+      "canonical": null,
+      "robots": null,
+      "h1": "AI productivity tools: how to choose one that actually saves time",
+      "issues": [
+        "missing_canonical",
+        "long_title_review"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/guides/ai-productivity-tools",
+      "pathname": "/cn/guides/ai-productivity-tools",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI 生产力工具推荐 | AI Best Tool",
+      "description": "面向效率提升、任务管理、写作协作和知识整理的 AI 生产力工具选型指南。",
+      "canonical": null,
+      "robots": null,
+      "h1": "AI 生产力工具推荐：怎么选才真正省时间",
+      "issues": [
+        "missing_canonical"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/guides/ai-tools-for-research",
+      "pathname": "/guides/ai-tools-for-research",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI tools for research | AI Best Tool - Explore Curated AI Tools and Apps",
+      "description": "A practical guide to AI tools for research, evidence-checking, analysis, and information discovery, with a path from guide to ranking and comparison.",
+      "canonical": "https://aibesttool.com/guides/ai-tools-for-research",
+      "robots": null,
+      "h1": "AI tools for research: how to choose for discovery and evidence-checking",
+      "issues": [
+        "long_title_review"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/guides/ai-tools-for-research",
+      "pathname": "/cn/guides/ai-tools-for-research",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI 研究工具推荐 | AI Best Tool",
+      "description": "面向资料检索、信息核对、证据整理和研究工作流的 AI 工具指南，先看榜单再进对比页。",
+      "canonical": "https://aibesttool.com/cn/guides/ai-tools-for-research",
+      "robots": null,
+      "h1": "AI 研究工具推荐：怎么选更适合资料发现和证据核对",
+      "issues": []
+    },
+    {
+      "url": "https://aibesttool.com/guides/ai-tools-for-developers",
+      "pathname": "/guides/ai-tools-for-developers",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI tools for developers | AI Best Tool - Explore Curated AI Tools and Apps",
+      "description": "A practical guide to AI tools for developers, including coding, model access, APIs, debugging, and automation, with a path from guide to ranking and comparison.",
+      "canonical": null,
+      "robots": null,
+      "h1": "AI tools for developers: how to choose for your build workflow",
+      "issues": [
+        "missing_canonical",
+        "long_title_review"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/guides/ai-tools-for-developers",
+      "pathname": "/cn/guides/ai-tools-for-developers",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI 开发者工具推荐 | AI Best Tool",
+      "description": "面向编码、模型接入、API 工作流、调试和自动化的 AI 开发者工具指南，先看榜单再进对比。",
+      "canonical": null,
+      "robots": null,
+      "h1": "AI 开发者工具推荐：怎么选更适合你的构建工作流",
+      "issues": [
+        "missing_canonical"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/guides/ai-tools-for-automation",
+      "pathname": "/guides/ai-tools-for-automation",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI tools for automation | AI Best Tool - Explore Curated AI Tools and Apps",
+      "description": "A practical guide to AI tools for workflow orchestration, agent tasks, repeatable processes, and cross-tool automation, with a path from guide to ranking and comparison.",
+      "canonical": null,
+      "robots": null,
+      "h1": "AI tools for automation: how to choose for repeatable workflows",
+      "issues": [
+        "missing_canonical",
+        "long_title_review"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/guides/ai-tools-for-automation",
+      "pathname": "/cn/guides/ai-tools-for-automation",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI 自动化工具推荐 | AI Best Tool",
+      "description": "面向工作流编排、Agent 任务、重复流程和跨工具自动化的 AI 工具指南，先看榜单再进对比页。",
+      "canonical": null,
+      "robots": null,
+      "h1": "AI 自动化工具推荐：怎么选更适合你的重复流程",
+      "issues": [
+        "missing_canonical"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/guides/ai-tools-for-marketing",
+      "pathname": "/guides/ai-tools-for-marketing",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI tools for marketing | AI Best Tool - Explore Curated AI Tools and Apps",
+      "description": "A practical guide to AI tools for ads, growth, social, and marketing teams.",
+      "canonical": null,
+      "robots": null,
+      "h1": "AI tools for marketing: how to choose one that fits your growth workflow",
+      "issues": [
+        "missing_canonical",
+        "long_title_review"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/guides/ai-tools-for-marketing",
+      "pathname": "/cn/guides/ai-tools-for-marketing",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI 营销工具推荐 | AI Best Tool",
+      "description": "面向广告、增长、社媒和营销团队的 AI 工具选型指南。",
+      "canonical": null,
+      "robots": null,
+      "h1": "AI 营销工具推荐：怎么选更适合你的增长工作流",
+      "issues": [
+        "missing_canonical"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/guides/ai-tools-for-sales",
+      "pathname": "/guides/ai-tools-for-sales",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI tools for sales | AI Best Tool - Explore Curated AI Tools and Apps",
+      "description": "A practical guide to AI tools for sales, lead follow-up, and customer communication.",
+      "canonical": "https://aibesttool.com/guides/ai-tools-for-sales",
+      "robots": null,
+      "h1": "AI tools for sales: how to choose one that fits your follow-up workflow",
+      "issues": [
+        "long_title_review"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/guides/ai-tools-for-sales",
+      "pathname": "/cn/guides/ai-tools-for-sales",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI 销售工具推荐 | AI Best Tool",
+      "description": "面向销售、线索跟进和客户沟通的 AI 工具选型指南。",
+      "canonical": "https://aibesttool.com/cn/guides/ai-tools-for-sales",
+      "robots": null,
+      "h1": "AI 销售工具推荐：怎么选更适合你的跟进流程",
+      "issues": []
+    },
+    {
+      "url": "https://aibesttool.com/guides/ai-tools-for-web3",
+      "pathname": "/guides/ai-tools-for-web3",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI tools for Web3 | AI Best Tool - Explore Curated AI Tools and Apps",
+      "description": "A practical guide to AI tools for Web3, on-chain data, wallets, and crypto workflows, with a path from guide to ranking and comparison.",
+      "canonical": "https://aibesttool.com/guides/ai-tools-for-web3",
+      "robots": null,
+      "h1": "AI tools for Web3: how to choose for on-chain data, wallets, and workflows",
+      "issues": [
+        "long_title_review"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/guides/ai-tools-for-web3",
+      "pathname": "/cn/guides/ai-tools-for-web3",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI Web3 工具推荐 | AI Best Tool",
+      "description": "面向 Web3、链上数据、钱包和 Crypto 工作流的 AI 工具选型指南，先看榜单再进对比页。",
+      "canonical": "https://aibesttool.com/cn/guides/ai-tools-for-web3",
+      "robots": null,
+      "h1": "AI Web3 工具推荐：从链上数据到钱包工作流，怎么选更合适",
+      "issues": []
+    },
+    {
+      "url": "https://aibesttool.com/guides/ai-note-taking-tools",
+      "pathname": "/guides/ai-note-taking-tools",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI note taking tools | AI Best Tool - Explore Curated AI Tools and Apps",
+      "description": "A practical guide to AI note taking tools for note taking, meeting assistance, and information organization.",
+      "canonical": "https://aibesttool.com/guides/ai-note-taking-tools",
+      "robots": null,
+      "h1": "AI note taking tools: how to choose for meetings and idea capture",
+      "issues": [
+        "long_title_review"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/guides/ai-note-taking-tools",
+      "pathname": "/cn/guides/ai-note-taking-tools",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI 记笔记工具推荐 | AI Best Tool",
+      "description": "适合记笔记、会议助手和信息整理的 AI 工具推荐与选型指南。",
+      "canonical": "https://aibesttool.com/cn/guides/ai-note-taking-tools",
+      "robots": null,
+      "h1": "AI 记笔记工具推荐：从会议到灵感记录，怎么选更合适",
+      "issues": []
+    },
+    {
+      "url": "https://aibesttool.com/guides/ai-tools-for-voice",
+      "pathname": "/guides/ai-tools-for-voice",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI voice tools | AI Best Tool - Explore Curated AI Tools and Apps",
+      "description": "A practical guide to AI voice tools for voice synthesis, transcription, dubbing, and conversational assistants.",
+      "canonical": null,
+      "robots": null,
+      "h1": "AI voice tools: how to choose for transcription, dubbing, and assistants",
+      "issues": [
+        "missing_canonical"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/guides/ai-tools-for-voice",
+      "pathname": "/cn/guides/ai-tools-for-voice",
+      "pageType": "guide",
+      "status": 200,
+      "title": "AI 语音工具推荐 | AI Best Tool",
+      "description": "适合语音合成、转写、配音和对话助手的 AI 工具推荐与选型指南。",
+      "canonical": null,
+      "robots": null,
+      "h1": "AI 语音工具推荐：从转写到配音，怎么选更适合你的工作流",
+      "issues": [
+        "missing_canonical"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-agency-tools",
+      "pathname": "/best-ai-tools/ai-agency-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Agency Tools",
+      "description": "The most useful tools for agency delivery, client collaboration, content production, and service-team workflows.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-agency-tools",
+      "robots": null,
+      "h1": "Best AI Agency Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-agency-tools",
+      "pathname": "/cn/best-ai-tools/ai-agency-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Agency Tools",
+      "description": "The most useful tools for agency delivery, client collaboration, content production, and service-team workflows.",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-agency-tools",
+      "robots": null,
+      "h1": "Best AI Agency Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-api-observability-tools",
+      "pathname": "/best-ai-tools/ai-api-observability-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI API Observability Tools",
+      "description": "The most useful tools for request logs, tracing, cost visibility, and quality monitoring.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-api-observability-tools",
+      "robots": null,
+      "h1": "Best AI API Observability Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-api-observability-tools",
+      "pathname": "/cn/best-ai-tools/ai-api-observability-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI API Observability Tools",
+      "description": "The most useful tools for request logs, tracing, cost visibility, and quality monitoring.",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-api-observability-tools",
+      "robots": null,
+      "h1": "Best AI API Observability Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-agent-tools",
+      "pathname": "/best-ai-tools/ai-agent-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Agent Tools",
+      "description": "The most useful tools for agent workflows, tool use, orchestration, and runtime control.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-agent-tools",
+      "robots": null,
+      "h1": "Best AI Agent Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-agent-tools",
+      "pathname": "/cn/best-ai-tools/ai-agent-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Agent Tools",
+      "description": "The most useful tools for agent workflows, tool use, orchestration, and runtime control.",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-agent-tools",
+      "robots": null,
+      "h1": "Best AI Agent Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-automation-tools",
+      "pathname": "/best-ai-tools/ai-automation-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Automation Tools",
+      "description": "AI automation tools ranking for workflow orchestration, triggers, cross-tool connections, and maintainable repeatable processes.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-automation-tools",
+      "robots": null,
+      "h1": "Best AI Automation Tools",
+      "issues": [
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-automation-tools",
+      "pathname": "/cn/best-ai-tools/ai-automation-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Automation Tools",
+      "description": "AI 自动化工具榜单，覆盖工作流编排、触发器、跨工具连接和可维护的重复流程。",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-automation-tools",
+      "robots": null,
+      "h1": "Best AI Automation Tools",
+      "issues": [
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-chatbot-tools",
+      "pathname": "/best-ai-tools/ai-chatbot-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Chatbot Tools",
+      "description": "AI chatbot tools ranking for Q&A, writing assistance, knowledge retrieval, and daily collaboration entry points.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-chatbot-tools",
+      "robots": null,
+      "h1": "Best AI Chatbot Tools",
+      "issues": [
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-chatbot-tools",
+      "pathname": "/cn/best-ai-tools/ai-chatbot-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Chatbot Tools",
+      "description": "AI 聊天机器人榜单，覆盖问答、写作辅助、知识检索和日常协作入口。",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-chatbot-tools",
+      "robots": null,
+      "h1": "Best AI Chatbot Tools",
+      "issues": [
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-coding-tools",
+      "pathname": "/best-ai-tools/ai-coding-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Coding Tools",
+      "description": "AI coding tools ranking for coding assistance, debugging, refactoring, editor experience, and development workflows.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-coding-tools",
+      "robots": null,
+      "h1": "Best AI Coding Tools",
+      "issues": [
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-coding-tools",
+      "pathname": "/cn/best-ai-tools/ai-coding-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Coding Tools",
+      "description": "AI 编程工具榜单，覆盖编码辅助、调试、重构、编辑器体验和开发工作流。",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-coding-tools",
+      "robots": null,
+      "h1": "Best AI Coding Tools",
+      "issues": [
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-code-review-tools",
+      "pathname": "/best-ai-tools/ai-code-review-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Code Review Tools",
+      "description": "The most useful tools for PR understanding, risk checks, review feedback, and team review workflows.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-code-review-tools",
+      "robots": null,
+      "h1": "Best AI Code Review Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-code-review-tools",
+      "pathname": "/cn/best-ai-tools/ai-code-review-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Code Review Tools",
+      "description": "The most useful tools for PR understanding, risk checks, review feedback, and team review workflows.",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-code-review-tools",
+      "robots": null,
+      "h1": "Best AI Code Review Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-content-creation-tools",
+      "pathname": "/best-ai-tools/ai-content-creation-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Content Creation Tools",
+      "description": "The most useful tools for scripts, thumbnails, rewriting, editing, and multi-channel publishing.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-content-creation-tools",
+      "robots": null,
+      "h1": "Best AI Content Creation Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-content-creation-tools",
+      "pathname": "/cn/best-ai-tools/ai-content-creation-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Content Creation Tools",
+      "description": "The most useful tools for scripts, thumbnails, rewriting, editing, and multi-channel publishing.",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-content-creation-tools",
+      "robots": null,
+      "h1": "Best AI Content Creation Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-creator-tools",
+      "pathname": "/best-ai-tools/ai-creator-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Creator Tools",
+      "description": "The most useful tools for content planning, scripting, thumbnails, editing, repurposing, and creator workflows.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-creator-tools",
+      "robots": null,
+      "h1": "Best AI Creator Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-creator-tools",
+      "pathname": "/cn/best-ai-tools/ai-creator-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Creator Tools",
+      "description": "The most useful tools for content planning, scripting, thumbnails, editing, repurposing, and creator workflows.",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-creator-tools",
+      "robots": null,
+      "h1": "Best AI Creator Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-ecommerce-tools",
+      "pathname": "/best-ai-tools/ai-ecommerce-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Ecommerce Tools",
+      "description": "The most useful tools for product copy, merchandising, support, store operations, and conversion workflows.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-ecommerce-tools",
+      "robots": null,
+      "h1": "Best AI Ecommerce Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-ecommerce-tools",
+      "pathname": "/cn/best-ai-tools/ai-ecommerce-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Ecommerce Tools",
+      "description": "The most useful tools for product copy, merchandising, support, store operations, and conversion workflows.",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-ecommerce-tools",
+      "robots": null,
+      "h1": "Best AI Ecommerce Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-evals-tools",
+      "pathname": "/best-ai-tools/ai-evals-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Evals Tools",
+      "description": "The most useful tools for output scoring, dataset evaluation, regression checks, and release acceptance.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-evals-tools",
+      "robots": null,
+      "h1": "Best AI Evals Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-evals-tools",
+      "pathname": "/cn/best-ai-tools/ai-evals-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Evals Tools",
+      "description": "The most useful tools for output scoring, dataset evaluation, regression checks, and release acceptance.",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-evals-tools",
+      "robots": null,
+      "h1": "Best AI Evals Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-image-tools",
+      "pathname": "/best-ai-tools/ai-image-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Image Tools",
+      "description": "The most useful tools for image generation, editing, background removal, design assets, and creative workflows.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-image-tools",
+      "robots": null,
+      "h1": "Best AI Image Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-image-tools",
+      "pathname": "/cn/best-ai-tools/ai-image-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Image Tools",
+      "description": "The most useful tools for image generation, editing, background removal, design assets, and creative workflows.",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-image-tools",
+      "robots": null,
+      "h1": "Best AI Image Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-lead-generation-tools",
+      "pathname": "/best-ai-tools/ai-lead-generation-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Lead Generation Tools",
+      "description": "The most useful tools for list discovery, enrichment, filtering, and early lead qualification.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-lead-generation-tools",
+      "robots": null,
+      "h1": "Best AI Lead Generation Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-lead-generation-tools",
+      "pathname": "/cn/best-ai-tools/ai-lead-generation-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Lead Generation Tools",
+      "description": "The most useful tools for list discovery, enrichment, filtering, and early lead qualification.",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-lead-generation-tools",
+      "robots": null,
+      "h1": "Best AI Lead Generation Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-marketing-tools",
+      "pathname": "/best-ai-tools/ai-marketing-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Marketing Tools",
+      "description": "The most useful tools for ads, email, social content, growth workflows, and marketing operations.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-marketing-tools",
+      "robots": null,
+      "h1": "Best AI Marketing Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-marketing-tools",
+      "pathname": "/cn/best-ai-tools/ai-marketing-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Marketing Tools",
+      "description": "The most useful tools for ads, email, social content, growth workflows, and marketing operations.",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-marketing-tools",
+      "robots": null,
+      "h1": "Best AI Marketing Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-meeting-notes-tools",
+      "pathname": "/best-ai-tools/ai-meeting-notes-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Meeting Notes Tools",
+      "description": "The most useful tools for meeting transcription, note cleanup, action items, and follow-up workflows.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-meeting-notes-tools",
+      "robots": null,
+      "h1": "Best AI Meeting Notes Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-meeting-notes-tools",
+      "pathname": "/cn/best-ai-tools/ai-meeting-notes-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Meeting Notes Tools",
+      "description": "The most useful tools for meeting transcription, note cleanup, action items, and follow-up workflows.",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-meeting-notes-tools",
+      "robots": null,
+      "h1": "Best AI Meeting Notes Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-model-routing-tools",
+      "pathname": "/best-ai-tools/ai-model-routing-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Model Routing Tools",
+      "description": "The most useful tools for multi-model access, fallbacks, routing strategy, and cost governance.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-model-routing-tools",
+      "robots": null,
+      "h1": "Best AI Model Routing Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-model-routing-tools",
+      "pathname": "/cn/best-ai-tools/ai-model-routing-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Model Routing Tools",
+      "description": "The most useful tools for multi-model access, fallbacks, routing strategy, and cost governance.",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-model-routing-tools",
+      "robots": null,
+      "h1": "Best AI Model Routing Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-note-taking-tools",
+      "pathname": "/best-ai-tools/ai-note-taking-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Note Taking Tools",
+      "description": "The most useful tools for meeting capture, idea logging, searchable notes, and knowledge organization.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-note-taking-tools",
+      "robots": null,
+      "h1": "Best AI Note Taking Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-note-taking-tools",
+      "pathname": "/cn/best-ai-tools/ai-note-taking-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Note Taking Tools",
+      "description": "The most useful tools for meeting capture, idea logging, searchable notes, and knowledge organization.",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-note-taking-tools",
+      "robots": null,
+      "h1": "Best AI Note Taking Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-productivity-tools",
+      "pathname": "/best-ai-tools/ai-productivity-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Productivity Tools",
+      "description": "The most useful tools for daily efficiency, task management, knowledge work, collaboration, and lightweight automation.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-productivity-tools",
+      "robots": null,
+      "h1": "Best AI Productivity Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-productivity-tools",
+      "pathname": "/cn/best-ai-tools/ai-productivity-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Productivity Tools",
+      "description": "The most useful tools for daily efficiency, task management, knowledge work, collaboration, and lightweight automation.",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-productivity-tools",
+      "robots": null,
+      "h1": "Best AI Productivity Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-prompt-testing-tools",
+      "pathname": "/best-ai-tools/ai-prompt-testing-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Prompt Testing Tools",
+      "description": "The most useful tools for prompt evaluation, A/B tests, regression checks, and validation workflows.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-prompt-testing-tools",
+      "robots": null,
+      "h1": "Best AI Prompt Testing Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-prompt-testing-tools",
+      "pathname": "/cn/best-ai-tools/ai-prompt-testing-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Prompt Testing Tools",
+      "description": "The most useful tools for prompt evaluation, A/B tests, regression checks, and validation workflows.",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-prompt-testing-tools",
+      "robots": null,
+      "h1": "Best AI Prompt Testing Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-sales-prospecting-tools",
+      "pathname": "/best-ai-tools/ai-sales-prospecting-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Sales Prospecting Tools",
+      "description": "The most useful tools for outreach prep, personalization, contact prioritization, and outbound workflow support.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-sales-prospecting-tools",
+      "robots": null,
+      "h1": "Best AI Sales Prospecting Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-sales-prospecting-tools",
+      "pathname": "/cn/best-ai-tools/ai-sales-prospecting-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Sales Prospecting Tools",
+      "description": "The most useful tools for outreach prep, personalization, contact prioritization, and outbound workflow support.",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-sales-prospecting-tools",
+      "robots": null,
+      "h1": "Best AI Sales Prospecting Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-small-business-tools",
+      "pathname": "/best-ai-tools/ai-small-business-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Small Business Tools",
+      "description": "The most useful tools for small-team operations, customer support, content, automation, and everyday business workflows.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-small-business-tools",
+      "robots": null,
+      "h1": "Best AI Small Business Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-small-business-tools",
+      "pathname": "/cn/best-ai-tools/ai-small-business-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Small Business Tools",
+      "description": "The most useful tools for small-team operations, customer support, content, automation, and everyday business workflows.",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-small-business-tools",
+      "robots": null,
+      "h1": "Best AI Small Business Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-student-tools",
+      "pathname": "/best-ai-tools/ai-student-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Student Tools",
+      "description": "The most useful tools for learning, writing, summarizing, note organization, and study collaboration.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-student-tools",
+      "robots": null,
+      "h1": "Best AI Student Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-student-tools",
+      "pathname": "/cn/best-ai-tools/ai-student-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Student Tools",
+      "description": "The most useful tools for learning, writing, summarizing, note organization, and study collaboration.",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-student-tools",
+      "robots": null,
+      "h1": "Best AI Student Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-web3-tools",
+      "pathname": "/best-ai-tools/ai-web3-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Web3 Tools",
+      "description": "AI Web3 tools ranking for on-chain data, wallet monitoring, protocol research, alerts, and crypto workflows.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-web3-tools",
+      "robots": null,
+      "h1": "Best AI Web3 Tools",
+      "issues": [
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-web3-tools",
+      "pathname": "/cn/best-ai-tools/ai-web3-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Web3 Tools",
+      "description": "AI Web3 工具榜单，覆盖链上数据、钱包监控、协议研究、告警和 Crypto 工作流。",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-web3-tools",
+      "robots": null,
+      "h1": "Best AI Web3 Tools",
+      "issues": [
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-voice-tools",
+      "pathname": "/best-ai-tools/ai-voice-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Voice Tools",
+      "description": "The most useful tools for voice synthesis, transcription, dubbing, meeting capture, and conversational voice.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-voice-tools",
+      "robots": null,
+      "h1": "Best AI Voice Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-voice-tools",
+      "pathname": "/cn/best-ai-tools/ai-voice-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Voice Tools",
+      "description": "The most useful tools for voice synthesis, transcription, dubbing, meeting capture, and conversational voice.",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-voice-tools",
+      "robots": null,
+      "h1": "Best AI Voice Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-video-tools",
+      "pathname": "/best-ai-tools/ai-video-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Video Tools",
+      "description": "The most useful AI video editors, generators, and production helpers.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-video-tools",
+      "robots": null,
+      "h1": "Best AI Video Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-video-tools",
+      "pathname": "/cn/best-ai-tools/ai-video-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Video Tools",
+      "description": "The most useful AI video editors, generators, and production helpers.",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-video-tools",
+      "robots": null,
+      "h1": "Best AI Video Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-research-tools",
+      "pathname": "/best-ai-tools/ai-research-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Research Tools",
+      "description": "AI research tools ranking for discovery, evidence-checking, quick overviews, and deeper analysis workflows.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-research-tools",
+      "robots": null,
+      "h1": "Best AI Research Tools",
+      "issues": [
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-research-tools",
+      "pathname": "/cn/best-ai-tools/ai-research-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Research Tools",
+      "description": "AI 研究工具榜单，覆盖资料发现、证据核对、快速概览和更深的研究工作流。",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-research-tools",
+      "robots": null,
+      "h1": "Best AI Research Tools",
+      "issues": [
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-seo-tools",
+      "pathname": "/best-ai-tools/ai-seo-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI SEO Tools",
+      "description": "The most useful tools for keyword research, content briefs, optimization workflows, and rank tracking.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-seo-tools",
+      "robots": null,
+      "h1": "Best AI SEO Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-seo-tools",
+      "pathname": "/cn/best-ai-tools/ai-seo-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI SEO Tools",
+      "description": "The most useful tools for keyword research, content briefs, optimization workflows, and rank tracking.",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-seo-tools",
+      "robots": null,
+      "h1": "Best AI SEO Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/best-ai-tools/ai-writing-tools",
+      "pathname": "/best-ai-tools/ai-writing-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Writing Tools",
+      "description": "The strongest AI writing tools for drafting, editing, and workflow support.",
+      "canonical": "https://aibesttool.com/best-ai-tools/ai-writing-tools",
+      "robots": null,
+      "h1": "Best AI Writing Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/best-ai-tools/ai-writing-tools",
+      "pathname": "/cn/best-ai-tools/ai-writing-tools",
+      "pageType": "best-topic",
+      "status": 200,
+      "title": "Best AI Writing Tools",
+      "description": "The strongest AI writing tools for drafting, editing, and workflow support.",
+      "canonical": "https://aibesttool.com/cn/best-ai-tools/ai-writing-tools",
+      "robots": null,
+      "h1": "Best AI Writing Tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/ai/n8n",
+      "pathname": "/ai/n8n",
+      "pageType": "tool",
+      "status": 200,
+      "title": "n8n Workflow Automation - Productivity AI Tool",
+      "description": "Build visual workflows with code, APIs, and AI steps using Cloud or self-hosting. Compare execution costs, governance, license boundaries, and maintenance...",
+      "canonical": "https://aibesttool.com/ai/n8n",
+      "robots": null,
+      "h1": "n8n Workflow Automation",
+      "issues": [
+        "generic_tool_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/ai/n8n",
+      "pathname": "/cn/ai/n8n",
+      "pageType": "tool",
+      "status": 200,
+      "title": "n8n 工作流自动化 - Productivity AI Tool",
+      "description": "使用 Cloud 或自托管，通过可视化流程连接代码、API 和 AI 步骤。选择前比较执行成本、治理能力、许可证边界和维护责任。 Explore n8n 工作流自动化 in the Productivity category and discover how it can help you.",
+      "canonical": "https://aibesttool.com/cn/ai/n8n",
+      "robots": null,
+      "h1": "n8n 工作流自动化",
+      "issues": [
+        "generic_tool_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/ai/openrouter",
+      "pathname": "/ai/openrouter",
+      "pageType": "tool",
+      "status": 200,
+      "title": "OpenRouter Unified AI Model API - Productivity AI Tool",
+      "description": "Compare model providers through one API with centralized billing, routing, and fallbacks. Review endpoint capabilities, total cost, privacy, and the extra...",
+      "canonical": "https://aibesttool.com/ai/openrouter",
+      "robots": null,
+      "h1": "OpenRouter Unified AI Model API",
+      "issues": [
+        "generic_tool_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/ai/openrouter",
+      "pathname": "/cn/ai/openrouter",
+      "pageType": "tool",
+      "status": 200,
+      "title": "OpenRouter 统一 AI 模型 API - Productivity AI Tool",
+      "description": "通过统一 API 比较模型供应商，集中管理账单、路由和 fallback。生产使用前应核对 endpoint 能力、总成本、隐私及额外网关依赖。 Explore OpenRouter 统一 AI 模型 API in the Productivity category and discover how it...",
+      "canonical": "https://aibesttool.com/cn/ai/openrouter",
+      "robots": null,
+      "h1": "OpenRouter 统一 AI 模型 API",
+      "issues": [
+        "generic_tool_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/ai/fathom",
+      "pathname": "/ai/fathom",
+      "pageType": "tool",
+      "status": 200,
+      "title": "Fathom AI Meeting Assistant: Features, Pricing & Limits",
+      "description": "Review Fathom for meeting transcription, AI summaries, action items, and follow-through, including compatibility, team workflow, pricing limits, and data risks.",
+      "canonical": "https://aibesttool.com/ai/fathom",
+      "robots": null,
+      "h1": "Fathom AI Meeting Assistant",
+      "issues": []
+    },
+    {
+      "url": "https://aibesttool.com/cn/ai/fathom",
+      "pathname": "/cn/ai/fathom",
+      "pageType": "tool",
+      "status": 200,
+      "title": "Fathom AI 会议助手：功能、价格与限制",
+      "description": "了解 Fathom 的会议转录、AI 摘要、行动项和会后跟进能力，并比较会议兼容性、团队协作、价格限制与数据处理风险。",
+      "canonical": "https://aibesttool.com/cn/ai/fathom",
+      "robots": null,
+      "h1": "Fathom AI 会议助手",
+      "issues": []
+    },
+    {
+      "url": "https://aibesttool.com/ai/emdash",
+      "pathname": "/ai/emdash",
+      "pageType": "tool",
+      "status": 200,
+      "title": "Emdash - Productivity AI Tool | AI Best Tool",
+      "description": "Emdash is a free, open-source desktop environment for running multiple CLI coding agents in parallel. Each task can use an isolated Git worktree and retain...",
+      "canonical": "https://aibesttool.com/ai/emdash",
+      "robots": null,
+      "h1": "Emdash",
+      "issues": [
+        "generic_tool_title",
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/ai/emdash",
+      "pathname": "/cn/ai/emdash",
+      "pageType": "tool",
+      "status": 200,
+      "title": "Emdash - Productivity AI Tool | AI Best Tool",
+      "description": "Emdash is a free, open-source desktop environment for running multiple CLI coding agents in parallel. Each task can use an isolated Git worktree and retain...",
+      "canonical": "https://aibesttool.com/cn/ai/emdash",
+      "robots": null,
+      "h1": "Emdash",
+      "issues": [
+        "generic_tool_title",
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/ai/viggle",
+      "pathname": "/ai/viggle",
+      "pageType": "tool",
+      "status": 200,
+      "title": "Viggle AI - Design & Art AI Tool",
+      "description": "Viggle AI is a video-generation and character-animation platform with motion transfer, real-time swap and API workflows. Plan limits materially affect...",
+      "canonical": "https://aibesttool.com/ai/viggle",
+      "robots": null,
+      "h1": "Viggle AI",
+      "issues": [
+        "generic_tool_title",
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/ai/viggle",
+      "pathname": "/cn/ai/viggle",
+      "pageType": "tool",
+      "status": 200,
+      "title": "Viggle AI - Design & Art AI Tool",
+      "description": "Viggle AI 是提供动作迁移、实时换人和 API 工作流的视频生成与角色动画平台。套餐会显著影响水印、存储、并发和模型权限。 Explore Viggle AI in the Design & Art category and discover how it can help you.",
+      "canonical": "https://aibesttool.com/cn/ai/viggle",
+      "robots": null,
+      "h1": "Viggle AI",
+      "issues": [
+        "generic_tool_title",
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/ai/character_ai",
+      "pathname": "/ai/character_ai",
+      "pageType": "tool",
+      "status": 200,
+      "title": "Character.AI - Other AI Tool | AI Best Tool",
+      "description": "Character.AI is an AI entertainment platform for creating characters, role-playing and interactive storytelling. It should not be treated as a factual...",
+      "canonical": "https://aibesttool.com/ai/character_ai",
+      "robots": null,
+      "h1": "Character.AI",
+      "issues": [
+        "generic_tool_title",
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/ai/character_ai",
+      "pathname": "/cn/ai/character_ai",
+      "pageType": "tool",
+      "status": 200,
+      "title": "Character.AI - Other AI Tool | AI Best Tool",
+      "description": "Character.AI 是用于创建角色、角色扮演和互动叙事的 AI 娱乐平台。它不应被当作事实研究助手：官方明确提醒角色可能编造信息。 Explore Character.AI in the Other category and discover how it can help you.",
+      "canonical": "https://aibesttool.com/cn/ai/character_ai",
+      "robots": null,
+      "h1": "Character.AI",
+      "issues": [
+        "generic_tool_title",
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/ai/suno_ai",
+      "pathname": "/ai/suno_ai",
+      "pageType": "tool",
+      "status": 200,
+      "title": "Suno - Other AI Tool | AI Best Tool",
+      "description": "Suno is an AI music creation service for generating and editing songs from prompts and uploaded audio. Commercial rights and downloads depend on the plan...",
+      "canonical": "https://aibesttool.com/ai/suno_ai",
+      "robots": null,
+      "h1": "Suno",
+      "issues": [
+        "generic_tool_title",
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/ai/suno_ai",
+      "pathname": "/cn/ai/suno_ai",
+      "pageType": "tool",
+      "status": 200,
+      "title": "Suno - Other AI Tool | AI Best Tool",
+      "description": "Suno 是通过提示词和上传音频生成、编辑歌曲的 AI 音乐服务。商业使用权与下载能力取决于套餐，以及歌曲创建和下载时的订阅状态。 Explore Suno in the Other category and discover how it can help you.",
+      "canonical": "https://aibesttool.com/cn/ai/suno_ai",
+      "robots": null,
+      "h1": "Suno",
+      "issues": [
+        "generic_tool_title",
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/ai/poe",
+      "pathname": "/ai/poe",
+      "pageType": "tool",
+      "status": 200,
+      "title": "Poe - Chatbot AI Tool | AI Best Tool",
+      "description": "Poe provides access to multiple AI bots through web and mobile apps. Compare useful output per compute point, subscription management and each bot's privacy...",
+      "canonical": "https://aibesttool.com/ai/poe",
+      "robots": null,
+      "h1": "Poe",
+      "issues": [
+        "generic_tool_title",
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/ai/poe",
+      "pathname": "/cn/ai/poe",
+      "pageType": "tool",
+      "status": 200,
+      "title": "Poe - Chatbot AI Tool | AI Best Tool",
+      "description": "Poe 提供网页与移动应用中的多个 AI Bot 入口。日常使用前，应比较每点算力换来的有效输出、订阅管理方式，以及各 Bot 的隐私盾牌边界。 Explore Poe in the Chatbot category and discover how it can help you.",
+      "canonical": "https://aibesttool.com/cn/ai/poe",
+      "robots": null,
+      "h1": "Poe",
+      "issues": [
+        "generic_tool_title",
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/ai/shutterstock",
+      "pathname": "/ai/shutterstock",
+      "pageType": "tool",
+      "status": 200,
+      "title": "Shutterstock GenAI - Productivity AI Tool",
+      "description": "Shutterstock GenAI combines image and video generation, editing and licensed stock assets in one creative workflow. The listing is scoped to the GenAI...",
+      "canonical": "https://aibesttool.com/ai/shutterstock",
+      "robots": null,
+      "h1": "Shutterstock GenAI",
+      "issues": [
+        "generic_tool_title",
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/ai/shutterstock",
+      "pathname": "/cn/ai/shutterstock",
+      "pageType": "tool",
+      "status": 200,
+      "title": "Shutterstock GenAI - Productivity AI Tool",
+      "description": "Shutterstock GenAI 把图像与视频生成、编辑和授权素材整合到一个创作流程。本条目限定为 GenAI 产品，不代表 Shutterstock 全部业务。 Explore Shutterstock GenAI in the Productivity category and discover how...",
+      "canonical": "https://aibesttool.com/cn/ai/shutterstock",
+      "robots": null,
+      "h1": "Shutterstock GenAI",
+      "issues": [
+        "generic_tool_title",
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/ai/claude",
+      "pathname": "/ai/claude",
+      "pageType": "tool",
+      "status": 200,
+      "title": "Claude AI Review: Features, Pricing, Usage & Privacy Limits",
+      "description": "Evaluate Claude for writing, research, file analysis, and coding, including Pro and Max pricing, variable usage, separate API billing, data retention, and alternatives.",
+      "canonical": "https://aibesttool.com/ai/claude",
+      "robots": null,
+      "h1": "Claude by Anthropic",
+      "issues": []
+    },
+    {
+      "url": "https://aibesttool.com/cn/ai/claude",
+      "pathname": "/cn/ai/claude",
+      "pageType": "tool",
+      "status": 200,
+      "title": "Claude AI：功能、价格、用量与隐私限制",
+      "description": "评估 Claude 在写作、研究、文件分析和编程中的适用性，并核对 Pro/Max 价格、动态用量、API 单独计费、数据保留与替代方案。",
+      "canonical": "https://aibesttool.com/cn/ai/claude",
+      "robots": null,
+      "h1": "Claude（Anthropic）",
+      "issues": []
+    },
+    {
+      "url": "https://aibesttool.com/ai/notion",
+      "pathname": "/ai/notion",
+      "pageType": "tool",
+      "status": 200,
+      "title": "Notion - Productivity AI Tool | AI Best Tool",
+      "description": "Notion combines documents, project tracking and a knowledge workspace. Evaluate its integrated AI by workspace context, plan allowances, permissions and the...",
+      "canonical": "https://aibesttool.com/ai/notion",
+      "robots": null,
+      "h1": "Notion",
+      "issues": [
+        "generic_tool_title",
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/ai/notion",
+      "pathname": "/cn/ai/notion",
+      "pageType": "tool",
+      "status": 200,
+      "title": "Notion - Productivity AI Tool | AI Best Tool",
+      "description": "Notion 将文档、项目跟踪和知识工作区结合起来。选择其内置 AI 时，应核对工作区上下文、套餐额度、权限，以及核验回答所需的时间。 Explore Notion in the Productivity category and discover how it can help you.",
+      "canonical": "https://aibesttool.com/cn/ai/notion",
+      "robots": null,
+      "h1": "Notion",
+      "issues": [
+        "generic_tool_title",
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/ai/deepl",
+      "pathname": "/ai/deepl",
+      "pageType": "tool",
+      "status": 200,
+      "title": "DeepL Translator, Write & API: Plans, Limits & Privacy",
+      "description": "Evaluate DeepL Translator, Write, and API by workflow, including subscription separation, document formats, character allowances, data security, and team administration.",
+      "canonical": "https://aibesttool.com/ai/deepl",
+      "robots": null,
+      "h1": "DeepL Translator, Write & API",
+      "issues": []
+    },
+    {
+      "url": "https://aibesttool.com/cn/ai/deepl",
+      "pathname": "/cn/ai/deepl",
+      "pageType": "tool",
+      "status": 200,
+      "title": "DeepL 翻译、Write 与 API：套餐、额度与隐私",
+      "description": "评估 DeepL Translator、Write 和 API 的适用场景，并核对订阅关系、文档格式、字符额度、数据安全与团队管理边界。",
+      "canonical": "https://aibesttool.com/cn/ai/deepl",
+      "robots": null,
+      "h1": "DeepL 翻译、Write 与 API",
+      "issues": []
+    },
+    {
+      "url": "https://aibesttool.com/ai/gemini",
+      "pathname": "/ai/gemini",
+      "pageType": "tool",
+      "status": 200,
+      "title": "Gemini - Productivity AI Tool | AI Best Tool",
+      "description": "Google Gemini Apps provides web and mobile AI assistance for writing, learning and planning. Choose by account eligibility, real task quality, usage limits...",
+      "canonical": "https://aibesttool.com/ai/gemini",
+      "robots": null,
+      "h1": "Gemini",
+      "issues": [
+        "generic_tool_title",
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/ai/gemini",
+      "pathname": "/cn/ai/gemini",
+      "pageType": "tool",
+      "status": 200,
+      "title": "Gemini - Productivity AI Tool | AI Best Tool",
+      "description": "Google Gemini Apps 提供网页与移动端 AI 助手，用于写作、学习和规划。选择前应核对账号资格、真实任务表现、用量限制和数据设置，而不是把付费等同于无限使用。 Explore Gemini in the Productivity category and discover how it can...",
+      "canonical": "https://aibesttool.com/cn/ai/gemini",
+      "robots": null,
+      "h1": "Gemini",
+      "issues": [
+        "generic_tool_title",
+        "duplicate_title"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/categories/productivity",
+      "pathname": "/categories/productivity",
+      "pageType": "category",
+      "status": 200,
+      "title": "AI Productivity Tools: Meetings, Tasks & Team Workflows",
+      "description": "Compare AI productivity tools for meetings, notes, scheduling, tasks, and team workflows, including pricing, collaboration limits, freshness, and real usage signals.",
+      "canonical": "https://aibesttool.com/categories/productivity",
+      "robots": null,
+      "h1": "Best Productivity AI tools",
+      "issues": []
+    },
+    {
+      "url": "https://aibesttool.com/cn/categories/productivity",
+      "pathname": "/cn/categories/productivity",
+      "pageType": "category",
+      "status": 200,
+      "title": "AI 生产力工具：会议、任务与团队工作流 | AI Best Tool",
+      "description": "比较会议纪要、日程、任务管理和团队协作类 AI 工具，查看价格、席位限制、工作流适配、最近更新和真实使用信号。",
+      "canonical": "https://aibesttool.com/cn/categories/productivity",
+      "robots": null,
+      "h1": "Best Productivity AI 工具",
+      "issues": []
+    },
+    {
+      "url": "https://aibesttool.com/categories/design-art",
+      "pathname": "/categories/design-art",
+      "pageType": "category",
+      "status": 200,
+      "title": "Best Design & Art AI Tools | AI Best Tool",
+      "description": "Design & Art tools",
+      "canonical": "https://aibesttool.com/categories/design-art",
+      "robots": null,
+      "h1": "Best Design & Art AI tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/categories/design-art",
+      "pathname": "/cn/categories/design-art",
+      "pageType": "category",
+      "status": 200,
+      "title": "Best Design & Art AI Tools | AI Best Tool",
+      "description": "Design & Art tools",
+      "canonical": "https://aibesttool.com/cn/categories/design-art",
+      "robots": null,
+      "h1": "Best Design & Art AI 工具",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/categories/life-assistant",
+      "pathname": "/categories/life-assistant",
+      "pageType": "category",
+      "status": 200,
+      "title": "Best Life Assistant AI Tools | AI Best Tool",
+      "description": "Life Assistant tools",
+      "canonical": "https://aibesttool.com/categories/life-assistant",
+      "robots": null,
+      "h1": "Best Life Assistant AI tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/categories/life-assistant",
+      "pathname": "/cn/categories/life-assistant",
+      "pageType": "category",
+      "status": 200,
+      "title": "Best Life Assistant AI Tools | AI Best Tool",
+      "description": "Life Assistant tools",
+      "canonical": "https://aibesttool.com/cn/categories/life-assistant",
+      "robots": null,
+      "h1": "Best Life Assistant AI 工具",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/categories/other",
+      "pathname": "/categories/other",
+      "pageType": "category",
+      "status": 200,
+      "title": "Best Other AI Tools | AI Best Tool",
+      "description": "Other tools",
+      "canonical": "https://aibesttool.com/categories/other",
+      "robots": null,
+      "h1": "Best Other AI tools",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    },
+    {
+      "url": "https://aibesttool.com/cn/categories/other",
+      "pathname": "/cn/categories/other",
+      "pageType": "category",
+      "status": 200,
+      "title": "Best Other AI Tools | AI Best Tool",
+      "description": "Other tools",
+      "canonical": "https://aibesttool.com/cn/categories/other",
+      "robots": null,
+      "h1": "Best Other AI 工具",
+      "issues": [
+        "duplicate_title",
+        "duplicate_description"
+      ]
+    }
+  ]
+}
