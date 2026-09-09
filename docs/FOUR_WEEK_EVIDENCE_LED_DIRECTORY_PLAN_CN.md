@@ -26,6 +26,9 @@ RC-08 准备真实样本，不新增 sitemap URL、不批准索引，也不直�
 `monitor/noindex` 并退出 sitemap，保留历史 URL，2026-10-08 复查。此前附带导航问题仍由独立提交 `373d2336` 的生产验收关闭，
 不并入本次索引处置；该质量子方案完成不改变本表 10/13 统计。
 
+2026-09-09 持续运营：Replit 经当日官网价格与计费复核、生产查重、在线 fallback、事务 rollback 和完整 build 后发布为
+`published + monitor/noindex`，复查日 2026-10-09。该动作迁移既有 fallback，不批准新索引或扩大 sitemap，四周一级比例不变。
+
 2026-09-04 规范更新完成：候选与历史复核统一执行 [收录对象及八项硬门槛](./BEST_DIRECTORY_POSITIONING_AND_INTAKE_CN.md)。Adobe / Salesforce Einstein 当前条目未通过完整准入，转入对象复核及处置，不以维护日期代替核验。本次没有实施页面/数据库/索引变更，也没有新增自动校验功能；执行队列见 [历史工具审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。
 
 2026-09-04 最新维护：Notion、Poe 本轮双语正文、官方证据、用量和隐私边界完成生产更新，下次 9 月 18 日。历史缺排期降至 19；四个语言页面本地/线上验收通过，sitemap 仍 162，无新增 URL、索引批准或市场评分。详见 [Notion/Poe 维护](./NOTION_POE_MAINTENANCE_2026-09-04_CN.md)。

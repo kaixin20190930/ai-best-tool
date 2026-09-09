@@ -32,14 +32,24 @@ const replitPrep = JSON.parse(fs.readFileSync('data/collection/replit-release-pr
   sources: string[];
 };
 assert.equal(replitPrep.slug, 'replit');
-assert.equal(replitPrep.status, 'prepared_pending_release_day_recheck');
+assert.equal(replitPrep.status, 'completed_release_day_recheck');
 assert(replitPrep.preparedAt < replitPrep.publishNotBefore, 'Replit prep must not impersonate its release-day review');
 assert(replitPrep.releaseDayChecks.length >= 5 && replitPrep.sources.length >= 5, 'Replit release prep is incomplete');
 for (const asset of [replitPrep.media.imageUrl, replitPrep.media.thumbnailUrl]) {
   assert(asset.startsWith('/'), `Replit prep asset must be local: ${asset}`);
   assert(fs.existsSync(path.join('public', asset.slice(1))), `Replit prep asset is missing: ${asset}`);
 }
-assert(!fs.existsSync('data/collection/replit-release.json'), 'Replit executable payload must wait for its release day');
+const replitRelease = JSON.parse(fs.readFileSync('data/collection/replit-release.json', 'utf8')) as {
+  slug: string;
+  reviewedAt: string;
+  nextReviewDate: string;
+  features: { editorial?: { reviewedAt?: string }; pricingSnapshot?: { checkedAt?: string } };
+};
+assert.equal(replitRelease.slug, 'replit');
+assert.equal(replitRelease.reviewedAt, '2026-09-09');
+assert(replitRelease.nextReviewDate > replitRelease.reviewedAt);
+assert.equal(replitRelease.features.editorial?.reviewedAt, replitRelease.reviewedAt);
+assert.equal(replitRelease.features.pricingSnapshot?.checkedAt, replitRelease.reviewedAt);
 
 const run = (args: string[]) =>
   spawnSync(process.execPath, ['--import', 'tsx', 'scripts/candidate-release-pipeline.ts', ...args], {
@@ -51,9 +61,9 @@ assert.equal(validation.status, 0, validation.stderr || validation.stdout);
 const earlyPreflight = run(['--candidate=replit', '--phase=preflight', '--as-of=2026-09-08']);
 assert.notEqual(earlyPreflight.status, 0, 'Preflight must fail before the release window');
 assert.match(earlyPreflight.stderr, /release window opens 2026-09-09/);
-const prematureVerify = run(['--candidate=replit', '--phase=verify', '--as-of=2026-09-09']);
-assert.notEqual(prematureVerify.status, 0, 'Verify must fail before the audit is marked released');
-assert.match(prematureVerify.stderr, /verify requires a released audit record/);
+const repeatedReplitRelease = run(['--candidate=replit', '--phase=release', '--as-of=2026-09-09']);
+assert.notEqual(repeatedReplitRelease.status, 0, 'Release must fail after Replit is marked released');
+assert.match(repeatedReplitRelease.stderr, /candidate is already released/);
 const repeatedRelease = run(['--candidate=synthesia', '--phase=release', '--as-of=2026-09-08']);
 assert.notEqual(repeatedRelease.status, 0, 'Release must fail after the audit is marked released');
 assert.match(repeatedRelease.stderr, /candidate is already released/);

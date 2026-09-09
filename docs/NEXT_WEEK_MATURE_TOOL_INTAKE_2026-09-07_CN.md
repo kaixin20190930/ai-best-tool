@@ -13,7 +13,7 @@
 | 顺序 | 候选 | AI 核心性与站内价值 | 当前状态 | 最早处理日 | 放行前缺口 |
 | --- | --- | --- | --- | --- | --- |
 | 1 | Synthesia | AI 原生商务视频生成；可补“演示型商务视频”而非泛视频生成的决策边界 | 已于 09-08 按 `monitor/noindex` 发布 | 09-08 | 10-08 复核证据与页面表现；索引仍需独立批准 |
-| 2 | Replit | AI 原生软件构建与 Agent 工作流；可比较托管便利、成本、可控性和生产责任 | 09-08 已完成发布前准备，待 09-09 当日门禁 | 09-09 | 当日重验套餐、effort-based 计费和云资源费用，再生成正式 payload |
+| 2 | Replit | AI 原生软件构建与 Agent 工作流；可比较托管便利、成本、可控性和生产责任 | 已于 09-09 按 `monitor/noindex` 发布 | 09-09 | 10-09 复核证据与页面表现；索引仍需独立批准 |
 | 3 | Otter.ai | AI 原生会议转录与会议助手；高评论量且有清晰免费/团队决策 | 已完成完整预审，待发布槽 | 09-10 | 当日复核价格/额度/隐私；迁移 `otter-ai` 并同步处理 `/ai/otter` alias |
 | 4 | Lovable | AI 原生全栈应用构建；用户需求强，须拆分原型速度与生产就绪 | 已完成完整预审，待发布槽 | 09-11 | 当日复核统一 credits、账户过渡状态、安全、RLS 与官方素材 |
 | 5 | Midjourney | AI 原生图像与短视频创作；品牌成熟且用户决策边界明显 | 已完成完整预审，待发布槽 | 09-12 | 当日复核 GPU 计费、隐私/Stealth、商业权利、Web/Discord 与官方素材 |
@@ -61,6 +61,7 @@ Synthesia 达到成熟工具预审门槛，完整机器可验收记录见
 | 2026-09-07 | Synthesia 完整预审 | 待自动门禁与完整 build；不写生产、不改 sitemap |
 | 2026-09-08 | Synthesia 发布日复核与生产迁移 | 当日价格、credits、license、consent、API 已复核；rollback/commit 回读通过，保持 monitor/noindex，不改 sitemap |
 | 2026-09-08 | Replit 发布前准备 | 定位、适合/不适合、试用协议、媒体和当前计费快照已结构化；正式 reviewedAt、生产写入与 sitemap 门禁保持关闭至 09-09 |
+| 2026-09-09 | Replit 发布日复核与生产迁移 | 当日套餐、effort-based Agent 计费、共享 credits、Starter 限制与发布边界已复核；rollback/commit 回读通过，保持 monitor/noindex，不改 sitemap |
 | 2026-09-07 | Replit 生产查重与完整预审 | 名称、标题、官网域名均无实体记录；最早 09-09，不写生产、不改 sitemap |
 | 2026-09-07 | Otter.ai 查重、双 fallback 与完整预审 | 无实体记录；两路由均为 noindex self-canonical，发布前必须统一到 `otter-ai` |
 | 2026-09-07 | Lovable 计费冲突复核、查重与完整预审 | 实时官方页面已统一；旧双余额为历史/过渡口径，无实体重复，最早 09-11 |

@@ -79,18 +79,18 @@ TypeScript、数据库 rollback/commit/status 与完整 build 均通过，提交
 差异化、证据账本、变化追踪与商业化触发条件见
 [AI 工具决策平台差异化与商业化实施路线图](./EVIDENCE_DECISION_PLATFORM_ROADMAP_CN.md)。
 
-### 当前维护优先级（更新至 2026-09-06）
+### 当前维护优先级（更新至 2026-09-09）
 
 2026-09-07 持续收录准备：已建立 [下周成熟工具候选与发布节奏](./NEXT_WEEK_MATURE_TOOL_INTAKE_2026-09-07_CN.md)。候选顺序为
-Synthesia、Replit、Otter.ai、Lovable 与 Midjourney；五个候选均已完成结构化预审与生产查重。Synthesia 最早
-2026-09-08 才能进入生产迁移复核；Replit 也已完成生产查重与结构化预审，最早排在 2026-09-09；Otter.ai 已完成查重、双
-fallback 风险审计和结构化预审，最早排在 2026-09-10，发布前必须把 `/ai/otter` 收口到唯一 `/ai/otter-ai` canonical。当前
+Synthesia、Replit、Otter.ai、Lovable 与 Midjourney；五个候选均已完成结构化预审与生产查重。Synthesia 与 Replit 已分别在
+09-08、09-09 通过当日门禁并以 `monitor/noindex` 发布。下一槽为 Otter.ai，已完成查重、双 fallback 风险审计和结构化预审，最
+早排在 2026-09-10；发布前必须把 `/ai/otter` 收口到唯一 `/ai/otter-ai` canonical。当前
 Lovable 的旧双余额冲突也已通过实时官方文档解决：当前为 Build/Cloud/AI 统一 credits，旧口径仅作历史或过渡账户提示；其预审
 最早排在 2026-09-11。Midjourney 的价格、GPU 计费、Web/Discord、编辑、视频、默认公开、Stealth 与商业权利边界已补齐，最早
 排在 2026-09-12。当前没有配置 DataForSEO，因
 此不伪造搜索量；审核可以并行，但公开默认每天 1 个，全部先
-`monitor / noindex`，索引仍需单独批准。本轮只新增文档和门禁数据，不写生产、不改变 sitemap，四周一级进度仍为 10/13
-（76.9%）。
+`monitor / noindex`，索引仍需单独批准。准备阶段没有写生产；后续 Synthesia/Replit 的独立发布也没有改变 sitemap，四周一级
+进度仍为 10/13（76.9%）。
 
 2026-09-07 发布与索引防回退：已完成五候选统一发布流水线和首轮全站索引一致性审计。流水线将预审、生产查重、发布载荷、事务
 回滚/提交和发布后页面验收统一，但首次发布固定为 `published + monitor`，不能自动批准索引；命令级测试确认日期和缺失载荷会
@@ -103,10 +103,9 @@ URL 完全一致，遗漏、越界、重复、canonical 和 robots 冲突均为 
 `published + monitor`；索引审批保持关闭，双语页面继续 noindex 且不进入 sitemap。统一流水线同时补齐 released/monitor 状态契约，
 避免数据库发布成功后验证器仍按未发布状态运行。该项属于 W2-02F 持续运营，不提高四周一级进度，仍为 10/13（76.9%）。
 
-2026-09-08 下一发布槽准备：Replit 已完成非波动发布材料，记录当前 Starter/Core/Pro/Enterprise 结构、effort-based Agent 计费、
-共享 credits、云服务费用、成本控制及使用数据延迟，并补齐本地品牌媒体、适合/不适合和真实试用协议。为避免把 09-08 快照冒充
-发布日事实，没有提前创建可执行的 `replit-release.json`，也没有写生产或批准 sitemap；09-09 必须重新打开官方价格与计费文档后
-才能通过统一流水线。
+2026-09-09 持续收录执行：Replit 已重新核对当天官方价格、Starter/Core/Pro 权益、effort-based Agent 计费、共享云 credits、
+Starter 发布限制和用量延迟。生产查重、在线 fallback、事务 rollback、完整 build 和显式 commit 通过，固定实体发布为
+`published + monitor`，复查日 2026-10-09；不批准索引、不进入 sitemap。09-08 的准备快照保留为发布前证据，不冒充发布日事实。
 
 RC-05 已完成：Adobe/Salesforce 的范围正文、列表/静态兜底、metadata、数据库原文及生产页面已统一，通用价格/评分/比较卡、单
 软件 schema 和等价替代暗示均已撤下。2026-09-08 RC-05C 又确认两个 canonical 未进入最近 GSC Top Pages，但未把缺行写成 0

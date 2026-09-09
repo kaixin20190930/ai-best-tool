@@ -75,3 +75,13 @@
 - 生产 preflight、事务 rollback 演练及显式 commit 均通过；数据库回读为 `published + monitor`，下次复核日为 2026-10-08。
 - 修正状态机：`ready_for_next_slot` 只允许 preflight/release，`released + releaseIndexState=monitor` 才允许 verify；monitor 发布明确禁止 sitemap approval。
 - 本次没有批准索引或增加 sitemap URL。代码部署后仍须通过双语 noindex/self-canonical、sitemap 排除及全站索引一致性验收。
+
+## 第二次真实执行（2026-09-09）
+
+- Replit 当日重新打开官方价格、AI Billing、Starter/Core 和 Publishing 文档，确认 Starter 免费、Core `$20` 月付参考价或年付折
+  算 `$17/月`、Pro `$100` 月付参考价或年付折算 `$95/月`，以及 effort-based Agent 计费和共享云 credits 边界。
+- 独立 payload 明确订阅价不是总成本，付费 Plan Mode 可能在无代码变更时计费；发布、数据库、存储、网络和部分第三方 AI 服务可
+  消耗同一 credits 预算。官方发布单价表未返回数字的字段没有写入页面。
+- 生产查重、双语 fallback、自 canonical、noindex 和 sitemap 排除通过；事务先 rollback，完整 build 退出 0 后才显式 commit。
+- 数据库回读为唯一 `replit` 实体、`published + monitor`，下次复查日 2026-10-09；全站审计为 55 条工具、43 条 published、13
+  条可索引，sitemap 134 URL，遗漏、越界、重复与 43 个页面冲突均为 0。

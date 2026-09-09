@@ -4,11 +4,13 @@
   "officialUrl": "https://replit.com/",
   "existingRoute": "/ai/replit",
   "action": "migrate_existing_fallback",
-  "status": "ready_for_next_slot",
+  "status": "released",
   "reviewedAt": "2026-09-07",
   "publishNotBefore": "2026-09-09",
+  "releasedAt": "2026-09-09",
+  "releaseIndexState": "monitor",
   "sitemapChangeApproved": false,
-  "productionWriteApproved": false,
+  "productionWriteApproved": true,
   "category": {
     "discoverySlug": "developer-tools",
     "storageSlug": "productivity"

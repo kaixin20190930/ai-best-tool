@@ -1,0 +1,110 @@
+{
+  "id": "b14c8fe0-3dc5-47ed-8dd8-9d16c9892f85",
+  "slug": "replit",
+  "officialUrl": "https://replit.com/",
+  "reviewedAt": "2026-09-09",
+  "nextReviewDate": "2026-10-09",
+  "categorySlug": "productivity",
+  "pricing": "freemium",
+  "title": {
+    "en": "Replit AI App Builder and Cloud Development Platform",
+    "zh": "Replit AI 应用构建与云开发平台"
+  },
+  "content": {
+    "en": "Replit combines an AI coding Agent, browser development workspace, version control, managed data services, collaboration, and application publishing. It is strongest for taking a bounded idea to a working deployed application quickly, while teams still own code review, security, cost control, operations, and portability decisions.",
+    "zh": "Replit 将 AI 编程 Agent、浏览器开发环境、版本控制、托管数据服务、协作与应用发布整合在一起。它适合快速把边界清晰的想法做成可运行并上线的应用，但代码审查、安全、成本、运维和迁移责任仍需由团队承担。"
+  },
+  "detail": {
+    "en": "Decision summary: choose Replit when a founder, product team, or small engineering group wants one browser workspace for requirements, Agent-led implementation, source changes, managed services, collaboration, and publishing. Its advantage is reducing setup and handoff time between an AI builder, editor, database, secrets, and deployment. It is a weaker fit when infrastructure independence, deterministic cost, deep performance tuning, regulated data controls, or an established repository and deployment platform matter more than integrated convenience.\n\nCurrent commercial boundary, reviewed September 9, 2026: Starter is free and provides daily Agent credits, Free Mode within its allowance, Lite build, and one published app that expires after 30 days. Full build, Plan Mode, connectors, Replit AI Integrations, additional published apps, and badge removal require a paid plan. The live pricing page shows Core at a $20 monthly reference price or $17 per month when billed annually, with $20 toward the most powerful models, up to five collaborators, one active background task, and unlimited workspaces and published apps. Pro is shown at a $100 monthly reference price or $95 per month when billed annually, with $100 toward the most powerful models, up to 15 collaborators, 10 parallel agents, premium support, and database rollback up to 28 days. Enterprise uses custom terms. Taxes and current checkout terms can vary, so confirm the official page before purchase.\n\nTotal-cost warning: paid Agent modes use effort-based pricing based on request complexity. Replit asks for confirmation before paid work starts, but paid Plan Mode reasoning can still be billable even when it makes no code change. Some managed third-party AI services are charged at the provider's public API rate. Subscription credits also cover publishing, databases, storage, network transfer, and other cloud services, so the plan price is not a complete application budget. Usage information can take up to 30 minutes to appear. Set alerts and hard budget limits before a substantial build.\n\nEngineering boundary: a completed Agent checkpoint or successful preview is not proof that an application is correct, secure, maintainable, scalable, or ready for regulated production. Connect a repository, inspect every generated dependency and change, run automated tests, verify authentication and authorization, rotate and scope secrets, review database migrations, and test failure and rollback paths. Replit checkpoints help recovery inside the workspace but do not replace independent backups, code review, staged deployment, observability, incident response, or accountable technical ownership.\n\nPlatform boundary: publishing may consume credits and uses different deployment types for variable, steady, scheduled, or static workloads. Managed databases and platform services simplify setup but increase the work needed to leave. Before adoption, test how to export code, data, secrets, domains, scheduled jobs, background work, and deployment configuration. Performance-sensitive, highly customized, or compliance-heavy systems should compare a conventional repository plus separately selected cloud infrastructure.\n\nA useful trial is one bounded internal workflow, not the final production system. Set a spending cap, connect Git, record Agent and cloud costs, review generated code, test access controls and failure paths, and export the result. Keep Replit only if faster delivery remains valuable after repair time, escaped defects, operating cost, security work, and migration effort are included.",
+    "zh": "决策结论：当创始人、产品团队或小型工程团队希望在同一个浏览器工作区完成需求梳理、Agent 实现、代码修改、托管服务、协作和发布时，可以优先试用 Replit。它的主要价值是减少 AI 构建器、编辑器、数据库、密钥和部署之间的配置与交接时间。如果团队更看重基础设施独立性、确定成本、深度性能调优、受监管数据控制，或已经有成熟的代码仓库和发布平台，Replit 的集成便利未必是最佳选择。\n\n截至 2026 年 9 月 9 日的商业边界：Starter 免费，提供每日 Agent credits、额度内的 Free Mode、Lite build，以及一个 30 天后到期的已发布应用。Full build、Plan Mode、连接器、Replit AI Integrations、更多发布应用和移除品牌需要付费方案。当前价格页显示 Core 的月付参考价为 20 美元，年付折算为每月 17 美元，包含 20 美元的高能力模型额度、最多 5 名协作者、1 个活动后台任务，以及不限数量的 workspace 和已发布应用。Pro 的月付参考价为 100 美元，年付折算为每月 95 美元，包含 100 美元的高能力模型额度、最多 15 名协作者、10 个并行 Agent、优先支持和最长 28 天数据库回滚。Enterprise 为定制条款。税费和结账条件可能因地区变化，购买前仍应核对官网。\n\n总成本提醒：付费 Agent 模式按请求复杂度实行 effort-based pricing。付费工作开始前会要求确认，但 Plan Mode 即使没有修改代码，也可能因推理过程产生费用。部分托管的第三方 AI 服务按供应商公开 API 价格扣除。订阅 credits 还会共同覆盖发布、数据库、存储、网络传输和其他云服务，因此套餐价格不是应用总预算。用量数据最多可能延迟 30 分钟显示，正式构建前应设置提醒和硬预算上限。\n\n工程边界：Agent 完成 checkpoint 或预览成功，不代表应用已经正确、安全、可维护、可扩展或适合受监管生产。团队仍应连接代码仓库，检查生成的依赖和变更，运行自动测试，核验认证与授权，限制并轮换密钥，审查数据库迁移，测试失败与回滚路径。Replit checkpoint 有助于恢复工作区状态，但不能替代独立备份、代码审查、分阶段发布、可观测性、事故响应和明确的技术责任人。\n\n平台边界：发布会消耗 credits，并根据流量型、固定资源型、定时任务或静态站点选择不同部署方式。托管数据库和平台服务降低了搭建成本，也会增加迁移工作。采用前应实际测试代码、数据、密钥、域名、定时任务、后台任务和部署配置如何导出。性能敏感、高度定制或合规要求高的系统，应同时比较传统代码仓库与独立云基础设施方案。\n\n建议先用一个边界明确的内部工作流试用，而不是直接构建最终生产系统。提前设置消费上限，连接 Git，记录 Agent 与云服务成本，审查生成代码，测试权限和失败路径，并完成一次导出。只有在把修复时间、遗漏缺陷、运行成本、安全工作和迁移成本都算进去后，交付速度优势仍然明显，才适合继续采用。"
+  },
+  "imageUrl": "/icons/tool-logos/replit.svg",
+  "thumbnailUrl": "/images/tool-media/replit-cover.svg",
+  "tags": [
+    "ai-app-builder",
+    "coding-agent",
+    "cloud-development",
+    "deployment"
+  ],
+  "features": {
+    "audience": {
+      "bestFit": {
+        "en": [
+          "Founders and small teams validating a bounded web application quickly",
+          "Teams that value an integrated Agent, editor, Git, database, secrets, and publishing path",
+          "Projects with an accountable technical owner and measurable AI and cloud budgets"
+        ],
+        "zh": [
+          "需要快速验证边界明确 Web 应用的创始人和小团队",
+          "重视 Agent、编辑器、Git、数据库、密钥和发布一体化的团队",
+          "具备明确技术负责人并能衡量 AI 与云成本的项目"
+        ]
+      },
+      "notIdealFor": {
+        "en": [
+          "Regulated or high-risk systems without independent architecture and security review",
+          "Teams requiring fully predictable seat-only cost or provider-independent infrastructure",
+          "Performance-sensitive applications that need deeply customized operations"
+        ],
+        "zh": [
+          "没有独立架构与安全审查的受监管或高风险系统",
+          "要求完全确定的席位成本或供应商独立基础设施的团队",
+          "需要深度定制运维的性能敏感应用"
+        ]
+      }
+    },
+    "editorial": {
+      "reviewedAt": "2026-09-09",
+      "reviewedBy": "AI Best Tool editorial",
+      "sourceUrl": "https://replit.com/pricing",
+      "summary": "Release-day review reconciled current plans, effort-based Agent billing, shared cloud credits, Starter limitations, collaboration, and publishing boundaries across official documentation.",
+      "trustNote": "The page remains monitor/noindex until its evidence, rendering, and independent search intent are reviewed after release."
+    },
+    "marketValidation": {
+      "reviewedAt": "2026-09-09",
+      "score": 98,
+      "scores": {
+        "marketDurability": 25,
+        "independentAdoption": 25,
+        "decisionValue": 24,
+        "evidenceQuality": 24
+      },
+      "verdict": "validated",
+      "rationale": "Long operating history, substantial independent review volume, current commercial documentation, and independently reported scale support inclusion. The recommendation remains conditional on effort-based cost, generated-code verification, cloud limits, security ownership, and platform dependency.",
+      "strongSignals": [
+        "More than 400 G2 reviews across Replit seller profiles at preaudit time",
+        "Reuters-reported 2025 funding at a USD 3 billion valuation and USD 150 million annualized revenue",
+        "Current official documentation spans Agent workflows, version control, publishing, databases, billing controls, and enterprise governance"
+      ],
+      "evidenceUrls": [
+        "https://replit.com/pricing",
+        "https://docs.replit.com/billing/ai-billing",
+        "https://docs.replit.com/billing/deployment-pricing",
+        "https://docs.replit.com/billing/plans/starter-plan",
+        "https://docs.replit.com/billing/plans/replit-core",
+        "https://www.g2.com/products/replit/reviews",
+        "https://www.investing.com/news/stock-market-news/ai-software-developer-replit-raises-250-million-at-3-billion-valuation-4234041"
+      ]
+    },
+    "pricingSnapshot": {
+      "checkedAt": "2026-09-09",
+      "starter": "Free; daily Agent credits; Lite build; one published app for 30 days",
+      "core": "$20 monthly reference price or $17/month billed annually; $20 toward most powerful models; up to 5 collaborators",
+      "pro": "$100 monthly reference price or $95/month billed annually; $100 toward most powerful models; up to 15 collaborators; 10 parallel agents",
+      "enterprise": "Custom pricing and controls",
+      "warning": "Paid Agent modes use effort-based pricing, and shared credits also cover publishing, databases, storage, network transfer, and some third-party AI services."
+    }
+  },
+  "useCases": {
+    "en": [
+      "Prototype and publish a bounded internal web workflow in one browser workspace",
+      "Use Agent for implementation while reviewing every generated change through Git",
+      "Compare integrated development and hosting against a conventional repository and cloud stack"
+    ],
+    "zh": [
+      "在一个浏览器工作区中原型设计并发布边界明确的内部 Web 流程",
+      "使用 Agent 实现功能，同时通过 Git 审查每一项生成变更",
+      "将集成式开发与托管和传统代码仓库及云技术栈进行比较"
+    ]
+  }
+}

@@ -1,8 +1,10 @@
 {
   "slug": "replit",
-  "status": "prepared_pending_release_day_recheck",
+  "status": "completed_release_day_recheck",
   "preparedAt": "2026-09-08",
   "publishNotBefore": "2026-09-09",
+  "releasedAt": "2026-09-09",
+  "releasePayload": "data/collection/replit-release.json",
   "officialUrl": "https://replit.com/",
   "categorySlug": "productivity",
   "pricing": "freemium",
