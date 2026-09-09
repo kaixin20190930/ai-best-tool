@@ -1,0 +1,135 @@
+{
+  "createdAt": "2026-09-09",
+  "baselineSource": "reports/seo/indexable-metadata-inventory-2026-09-09.json",
+  "gscBaselineSource": "docs/GSC_WEEKLY_OBSERVATION_LOG_CN.md#week-7-复盘",
+  "minimumObservationDays": 14,
+  "firstDecisionDate": "2026-09-23",
+  "fullDecisionDate": "2026-10-07",
+  "status": "collecting_data",
+  "rules": [
+    "Do not change the experiment metadata during the 14-day observation window.",
+    "Compare each route by query, impressions, clicks, CTR, and average position.",
+    "Do not attribute a CTR change to copy when average position or query mix changed materially.",
+    "Do not expand the cohort before the first same-route review."
+  ],
+  "experiments": [
+    {
+      "slug": "n8n",
+      "changedAt": "2026-09-09",
+      "intent": "Choose an AI workflow automation platform by deployment, cost, governance, and maintenance trade-offs.",
+      "routes": {
+        "en": "/ai/n8n",
+        "cn": "/cn/ai/n8n"
+      },
+      "before": {
+        "enTitle": "n8n Workflow Automation - Productivity AI Tool",
+        "enDescription": "Build visual workflows with code, APIs, and AI steps using Cloud or self-hosting. Compare execution costs, governance, license boundaries, and maintenance...",
+        "cnTitle": "n8n 工作流自动化 - Productivity AI Tool",
+        "cnDescription": "使用 Cloud 或自托管，通过可视化流程连接代码、API 和 AI 步骤。选择前比较执行成本、治理能力、许可证边界和维护责任。 Explore n8n 工作流自动化 in the Productivity category and discover how it can help you."
+      },
+      "after": {
+        "enTitle": "n8n for AI Workflow Automation: Costs & Limits",
+        "enDescription": "Assess n8n for visual AI and API workflows. Compare cloud versus self-hosting, execution costs, governance, license limits, and maintenance trade-offs.",
+        "cnTitle": "n8n AI 工作流自动化：成本、自托管与限制",
+        "cnDescription": "判断 n8n 是否适合可视化 AI 与 API 工作流，比较云端和自托管、执行成本、治理、许可证边界与维护责任。"
+      },
+      "baselineMetrics": null,
+      "result": null
+    },
+    {
+      "slug": "openrouter",
+      "changedAt": "2026-09-09",
+      "intent": "Choose a multi-model API gateway by routing, cost, endpoint support, privacy, and dependency.",
+      "routes": {
+        "en": "/ai/openrouter",
+        "cn": "/cn/ai/openrouter"
+      },
+      "before": {
+        "enTitle": "OpenRouter Unified AI Model API - Productivity AI Tool",
+        "enDescription": "Compare model providers through one API with centralized billing, routing, and fallbacks. Review endpoint capabilities, total cost, privacy, and the extra...",
+        "cnTitle": "OpenRouter 统一 AI 模型 API - Productivity AI Tool",
+        "cnDescription": "通过统一 API 比较模型供应商，集中管理账单、路由和 fallback。生产使用前应核对 endpoint 能力、总成本、隐私及额外网关依赖。 Explore OpenRouter 统一 AI 模型 API in the Productivity category and discover how it..."
+      },
+      "after": {
+        "enTitle": "OpenRouter for Multi-Model APIs: Cost, Privacy & Limits",
+        "enDescription": "Assess OpenRouter for one API across model providers. Compare routing, fallbacks, total cost, privacy boundaries, endpoint support, and gateway dependency.",
+        "cnTitle": "OpenRouter 多模型 API：成本、隐私与限制",
+        "cnDescription": "判断 OpenRouter 是否适合统一接入多个模型供应商，比较路由、fallback、总成本、隐私边界、endpoint 支持和网关依赖。"
+      },
+      "baselineMetrics": null,
+      "result": null
+    },
+    {
+      "slug": "poe",
+      "changedAt": "2026-09-09",
+      "intent": "Choose a multi-bot AI interface by useful output, compute points, subscription management, and privacy.",
+      "routes": {
+        "en": "/ai/poe",
+        "cn": "/cn/ai/poe"
+      },
+      "before": {
+        "enTitle": "Poe - Chatbot AI Tool | AI Best Tool",
+        "enDescription": "Poe provides access to multiple AI bots through web and mobile apps. Compare useful output per compute point, subscription management and each bot's privacy...",
+        "cnTitle": "Poe - Chatbot AI Tool | AI Best Tool",
+        "cnDescription": "Poe 提供网页与移动应用中的多个 AI Bot 入口。日常使用前，应比较每点算力换来的有效输出、订阅管理方式，以及各 Bot 的隐私盾牌边界。 Explore Poe in the Chatbot category and discover how it can help you."
+      },
+      "after": {
+        "enTitle": "Poe for Multi-Bot AI: Points, Privacy & Limits",
+        "enDescription": "Assess Poe for using multiple AI bots in one app. Compare useful output per compute point, bot-specific privacy controls, subscriptions, and usage limits.",
+        "cnTitle": "Poe 多 Bot AI 平台：算力点、隐私与限制",
+        "cnDescription": "判断 Poe 是否适合在一个应用中使用多个 AI Bot，比较每点算力的有效输出、各 Bot 隐私设置、订阅管理和用量限制。"
+      },
+      "baselineMetrics": null,
+      "result": null
+    },
+    {
+      "slug": "gemini",
+      "changedAt": "2026-09-09",
+      "intent": "Choose Gemini for everyday work by account eligibility, task quality, usage limits, and data settings.",
+      "routes": {
+        "en": "/ai/gemini",
+        "cn": "/cn/ai/gemini"
+      },
+      "before": {
+        "enTitle": "Gemini - Productivity AI Tool | AI Best Tool",
+        "enDescription": "Google Gemini Apps provides web and mobile AI assistance for writing, learning and planning. Choose by account eligibility, real task quality, usage limits...",
+        "cnTitle": "Gemini - Productivity AI Tool | AI Best Tool",
+        "cnDescription": "Google Gemini Apps 提供网页与移动端 AI 助手，用于写作、学习和规划。选择前应核对账号资格、真实任务表现、用量限制和数据设置，而不是把付费等同于无限使用。 Explore Gemini in the Productivity category and discover how it can..."
+      },
+      "after": {
+        "enTitle": "Google Gemini for Daily AI Work: Plans, Data & Limits",
+        "enDescription": "Assess Gemini for writing, learning, and planning across web and mobile. Compare account eligibility, real task quality, usage limits, and data settings.",
+        "cnTitle": "Google Gemini 日常 AI 助手：套餐、数据与限制",
+        "cnDescription": "判断 Gemini 是否适合网页与移动端写作、学习和规划，比较账号资格、真实任务表现、用量限制和数据设置。"
+      },
+      "baselineMetrics": null,
+      "result": null
+    }
+  ],
+  "nextCohort": [
+    {
+      "path": "/ai/fathom",
+      "week7Impressions": 55,
+      "decision": "hold_existing_specific_copy",
+      "reason": "Current metadata already states the meeting task, pricing limits, compatibility, team workflow, and data risk."
+    },
+    {
+      "path": "/guides/ai-tools-for-web3",
+      "week7Impressions": 52,
+      "decision": "hold_existing_specific_copy",
+      "reason": "Current page is already strengthened around Web3, on-chain, wallet, protocol, and research intent."
+    },
+    {
+      "path": "/guides/ai-tools-for-automation",
+      "week7Impressions": 40,
+      "decision": "hold_existing_specific_copy",
+      "reason": "Current page is already strengthened around orchestration, agents, repeatable processes, and cross-tool automation."
+    },
+    {
+      "path": "/ai/deepl",
+      "week7Impressions": 16,
+      "decision": "hold_existing_specific_copy",
+      "reason": "Current metadata already separates Translator, Write, API, plans, format limits, privacy, and administration."
+    }
+  ]
+}
