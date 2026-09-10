@@ -98,9 +98,11 @@ const cache = new Cache(1000);
 
 // Clean expired entries every 5 minutes
 if (typeof window === 'undefined') {
-  setInterval(() => {
+  const cleanupTimer = setInterval(() => {
     cache.cleanExpired();
   }, 5 * 60 * 1000);
+  // Cache maintenance must not keep completed CLI audits or tests alive.
+  cleanupTimer.unref?.();
 }
 
 /**

@@ -6,10 +6,11 @@ import { renderToStaticMarkup } from 'react-dom/server';
 
 import sitemap from '../app/sitemap';
 import GuideEvidencePanel from '../components/guides/GuideEvidencePanel';
-import { TOPIC_TOOL_NAMES } from '../lib/data/topicToolSources';
+import { MIN_TOPIC_CANDIDATES, TOPIC_TOOL_NAMES } from '../lib/data/topicToolSources';
 import { getTopListTopic, topListTopics } from '../lib/data/topLists';
 import { getEditorialReviewRecord } from '../lib/seo/contentReviewDates';
 import { buildLocalizedPageMetadata } from '../lib/seo/metadata';
+import { getSourceLastModified } from '../lib/seo/sitemapDates';
 import { BEST_TOPIC_EDIT, getStaticPageLastModified, STATIC_PAGE_EDITS } from '../lib/seo/staticPageDates';
 import type { Category } from '../lib/services/categories';
 import type { Tool } from '../lib/services/tools';
@@ -32,14 +33,24 @@ const tool = (name: string, changes: Partial<Tool> = {}): Tool =>
 const automation = getTopListTopic('ai-automation-tools')!;
 const fixtureTools = [
   tool('n8n'),
-  tool('make'),
+  tool('make', {
+    createdAt: undefined,
+    updatedAt: undefined,
+    pageQualityStatus: 'continue_index',
+    content: { en: 'Automation workflow details. '.repeat(8) },
+    detail: { en: 'Verified workflow capabilities and limits. '.repeat(12) },
+    imageUrl: 'https://example.com/logo.png',
+    thumbnailUrl: 'https://example.com/screenshot.png',
+    pricing: 'freemium',
+    tags: ['automation'],
+  }),
   tool('unrelated-productivity'),
   tool('pipedream', { status: 'draft' }),
   tool('zapier', { pageQualityStatus: 'archive' }),
 ];
 
 async function main() {
-  const selected = selectTopicTools(automation, fixtureTools, [category]);
+  const selected = selectTopicTools(automation, fixtureTools);
   assert.deepEqual(
     selected.tools.map((item) => item.name),
     ['n8n', 'make'],
@@ -55,24 +66,69 @@ async function main() {
     { status: 'pending' },
     { pageQualityStatus: 'archive' },
   ]) {
-    assert.equal(selectTopicTools(automation, [tool('n8n', changes as Partial<Tool>)], [category]).indexable, false);
+    assert.equal(selectTopicTools(automation, [tool('n8n', changes as Partial<Tool>)]).indexable, false);
   }
-  assert.equal(selectTopicTools(automation, [tool('n8n'), tool('n8n')], [category]).toolCount, 1);
-  assert.equal(selectTopicTools(automation, [], [category]).indexable, false);
-  assert.equal(selectTopicTools(automation, [tool('unrelated-productivity')], [category]).indexable, false);
-  assert.equal(selectTopicTools(getTopListTopic('ai-productivity-tools')!, fixtureTools, [category]).toolCount, 3);
-  const many = Array.from({ length: 12 }, (_, i) => tool(`tool-${i}`));
-  const physical = selectTopicTools(getTopListTopic('ai-productivity-tools')!, many, [category]);
-  assert.equal(physical.tools.length, 8);
-  assert.equal(physical.toolCount, 12);
+  assert.equal(selectTopicTools(automation, [tool('n8n'), tool('n8n')]).toolCount, 1);
+  assert.equal(selectTopicTools(automation, []).indexable, false);
+  assert.equal(selectTopicTools(automation, [tool('unrelated-productivity')]).indexable, false);
+  assert.equal(selectTopicTools(getTopListTopic('ai-productivity-tools')!, fixtureTools).toolCount, 2);
+  assert.equal(
+    selectTopicTools(automation, [tool('n8n')]).indexable,
+    false,
+    'One accurate candidate is not a comparison shortlist.',
+  );
+  assert.equal(MIN_TOPIC_CANDIDATES, 2);
   assert.equal(getTopListTopic('unknown'), null);
-  for (const topic of topListTopics.filter((item) =>
-    ['automation', 'developer-tools', 'ecommerce', 'marketing', 'web3', 'voice', 'video', 'research'].includes(
-      item.categorySlug,
-    ),
-  )) {
-    assert(TOPIC_TOOL_NAMES[topic.key]?.length, `${topic.key}: virtual topic lacks an explicit source.`);
+  assert.deepEqual(Object.keys(TOPIC_TOOL_NAMES).sort(), topListTopics.map((topic) => topic.key).sort());
+  for (const topic of topListTopics) {
+    // Adversarial same-category records: every one used to enter generic lists.
+    const noise = [
+      'unrelated-productivity',
+      'otter-ai',
+      'sora',
+      'adobe',
+      'salesforce_einstein',
+      'openai',
+      'woy-ai',
+    ].map((name) => tool(name));
+    const roster = TOPIC_TOOL_NAMES[topic.key].map((name) => tool(name));
+    const result = selectTopicTools(topic, [...roster, ...noise]);
+    assert.deepEqual(
+      result.tools.map((item) => item.name).sort(),
+      [...TOPIC_TOOL_NAMES[topic.key]].sort(),
+      `${topic.key}: category noise entered roster.`,
+    );
+    assert.equal(result.indexable, roster.length >= 2, `${topic.key}: readiness`);
+    assert.equal(
+      selectTopicTools(topic, [tool('unrelated-productivity')]).indexable,
+      false,
+      `${topic.key}: generic fallback`,
+    );
   }
+  const forbidden: Record<string, string[]> = {
+    'ai-student-tools': ['fathom', 'otter-ai', 'make', 'salesforce_einstein'],
+    'ai-meeting-notes-tools': ['gemini', 'notion', 'perplexity', 'shutterstock'],
+    'ai-lead-generation-tools': ['gemini', 'notebooklm', 'fathom', 'gamma'],
+    'ai-image-tools': ['sora', 'synthesia', 'viggle', 'runway', 'adobe'],
+    'ai-chatbot-tools': ['otter-ai', 'fathom'],
+    'ai-seo-tools': ['deepl', 'claude', 'gemini'],
+    'ai-writing-tools': ['otter-ai', 'runway', 'synthesia'],
+  };
+  for (const [key, names] of Object.entries(forbidden)) {
+    assert.equal(
+      selectTopicTools(
+        getTopListTopic(key)!,
+        names.map((name) => tool(name)),
+      ).toolCount,
+      0,
+      `${key}: known cross-topic mismatch`,
+    );
+  }
+  assert.deepEqual(TOPIC_TOOL_NAMES['ai-meeting-notes-tools'], ['otter-ai', 'fathom']);
+  assert.deepEqual(TOPIC_TOOL_NAMES['ai-student-tools'], ['notebooklm', 'consensus', 'gemini']);
+  assert.deepEqual(TOPIC_TOOL_NAMES['ai-lead-generation-tools'], []);
+  const unregistered = { ...automation, key: 'unregistered-topic' } as typeof automation;
+  assert.equal(selectTopicTools(unregistered, fixtureTools).toolCount, 0);
 
   const checkedAt = getEditorialReviewRecord('best-topic-template').reviewedAt;
   for (const locale of ['en', 'cn']) {
@@ -140,6 +196,28 @@ async function main() {
   }) as typeof Pool.prototype.query;
   const catalog = await loadTopicCatalog();
   const entries = await sitemap();
+  await new Promise((resolve) => setTimeout(resolve, 25));
+  assert.deepEqual(
+    await sitemap(),
+    entries,
+    'Same-process regeneration must remain completely stable with missing source timestamps.',
+  );
+  const missingToolDates = entries.filter((entry) => new URL(entry.url).pathname.endsWith('/ai/make'));
+  assert.equal(missingToolDates.length, 2);
+  assert(missingToolDates.every((entry) => entry.lastModified === undefined));
+  const missingCategoryDates = entries.filter((entry) =>
+    new URL(entry.url).pathname.includes('/categories/productivity'),
+  );
+  assert.equal(missingCategoryDates.length, 2);
+  assert(missingCategoryDates.every((entry) => entry.lastModified === undefined));
+  assert.equal(getSourceLastModified(undefined, null, new Date('invalid')), undefined);
+  assert.deepEqual(getSourceLastModified(new Date('invalid'), '2026-07-18'), new Date('2026-07-18'));
+  assert.equal(getStaticPageLastModified('/guides/ai-video-tools').toISOString().slice(0, 10), '2026-07-18');
+  assert.equal(getStaticPageLastModified('/guides/ai-tools-for-voice').toISOString().slice(0, 10), '2026-07-18');
+  assert.equal(
+    getStaticPageLastModified('/best-ai-tools').toISOString().slice(0, 10),
+    getEditorialReviewRecord('best-index').reviewedAt,
+  );
   for (const topic of topListTopics) {
     const data = catalog.topics.get(topic.key)!;
     for (const locale of ['en', 'cn']) {

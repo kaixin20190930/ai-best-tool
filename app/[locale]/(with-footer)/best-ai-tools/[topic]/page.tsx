@@ -5,12 +5,12 @@ import { notFound } from 'next/navigation';
 import { ArrowRight, CheckCircle2, Sparkles, Star, Target } from 'lucide-react';
 import { unstable_setRequestLocale } from 'next-intl/server';
 
+import { getCanonicalToolSlug } from '@/lib/config/toolRouteAliases';
 import { getTopListTopic } from '@/lib/data/topLists';
 import { BASE_URL } from '@/lib/env';
 import { getEditorialReviewRecord } from '@/lib/seo/contentReviewDates';
 import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { generateFAQSchema } from '@/lib/seo/schema';
-import { getLocalizedField } from '@/lib/services/tools';
 import { getTopicCatalog } from '@/lib/services/topicTools';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
@@ -115,7 +115,10 @@ export default async function BestAiToolsTopicPage({
     }
 
     const topicData = (await getTopicCatalog()).topics.get(topic.key)!;
-    const { category, tools, toolCount } = topicData;
+    const { tools, toolCount } = topicData;
+    const candidateSlugs = new Set(tools.map((tool) => getCanonicalToolSlug(tool.name)));
+    const isListedExample = (example: { href: string }) =>
+      candidateSlugs.has(example.href.split('/').pop() || '');
     const checkedAt = getEditorialReviewRecord('best-topic-template').reviewedAt;
     const checkedAtLabel = new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
       year: 'numeric',
@@ -123,13 +126,13 @@ export default async function BestAiToolsTopicPage({
       day: 'numeric',
     }).format(new Date(`${checkedAt}T00:00:00Z`));
 
-    const categoryName = category ? getLocalizedField(category.name, locale) : topic.title;
+    const categoryName = topic.title;
     const faqSchema = generateFAQSchema([
       {
         question: isChinese ? '这个榜单是怎么选出来的？' : 'How is this ranking selected?',
         answer: isChinese
-          ? '候选来自站内已发布工具，按主题用途或所属分类筛选。顺序沿用目录的热门排序，可能包含推广优先项，并不代表独立测评得分。'
-          : 'Candidates are published directory tools selected for the topic or its category. Order follows directory popularity, which can prioritize sponsored placements; it is not an independent review score.',
+          ? '候选来自站内已发布工具，按主题用途筛选。顺序沿用目录的热门排序，可能包含推广优先项，并不代表独立测评得分。'
+          : 'Candidates are published directory tools selected for the topic. Order follows directory popularity, which can prioritize sponsored placements; it is not an independent review score.',
       },
       {
         question: isChinese
@@ -317,7 +320,7 @@ export default async function BestAiToolsTopicPage({
     ];
 
     return (
-      <div className='theme-page mx-auto max-w-pc px-4 py-8 lg:px-0'>
+      <div data-topic={topic.key} className='theme-page mx-auto max-w-pc px-4 py-8 lg:px-0'>
         <StructuredDataServer data={faqSchema} />
         <SeoBreadcrumbs
           locale={locale}
@@ -360,7 +363,7 @@ export default async function BestAiToolsTopicPage({
                     {isChinese ? '常见自动化入口' : 'Common automation starting points'}
                   </p>
                   <div className='mt-3 grid gap-3 sm:grid-cols-2'>
-                    {automationExamples.map((tool) => (
+                    {automationExamples.filter(isListedExample).map((tool) => (
                       <Link
                         key={tool.name}
                         href={tool.href}
@@ -380,7 +383,7 @@ export default async function BestAiToolsTopicPage({
                     {isChinese ? '常见研究入口' : 'Common research starting points'}
                   </p>
                   <div className='mt-3 grid gap-3 sm:grid-cols-2'>
-                    {researchExamples.map((tool) => (
+                    {researchExamples.filter(isListedExample).map((tool) => (
                       <Link
                         key={tool.name}
                         href={tool.href}
@@ -400,7 +403,7 @@ export default async function BestAiToolsTopicPage({
                     {isChinese ? '常见聊天机器人入口' : 'Common chatbot starting points'}
                   </p>
                   <div className='mt-3 grid gap-3 sm:grid-cols-2'>
-                    {chatbotExamples.map((tool) => (
+                    {chatbotExamples.filter(isListedExample).map((tool) => (
                       <Link
                         key={tool.name}
                         href={tool.href}
@@ -420,7 +423,7 @@ export default async function BestAiToolsTopicPage({
                     {isChinese ? '常见 Web3 入口' : 'Common Web3 starting points'}
                   </p>
                   <div className='mt-3 grid gap-3 sm:grid-cols-2'>
-                    {web3Examples.map((tool) => (
+                    {web3Examples.filter(isListedExample).map((tool) => (
                       <Link
                         key={tool.name}
                         href={tool.href}
@@ -440,7 +443,7 @@ export default async function BestAiToolsTopicPage({
                     {isChinese ? '常见编程入口' : 'Common coding starting points'}
                   </p>
                   <div className='mt-3 grid gap-3 sm:grid-cols-2'>
-                    {codingExamples.map((tool) => (
+                    {codingExamples.filter(isListedExample).map((tool) => (
                       <Link
                         key={tool.name}
                         href={tool.href}
@@ -460,7 +463,7 @@ export default async function BestAiToolsTopicPage({
                     {isChinese ? '常见可观测入口' : 'Common observability starting points'}
                   </p>
                   <div className='mt-3 grid gap-3 sm:grid-cols-2'>
-                    {observabilityExamples.map((tool) => (
+                    {observabilityExamples.filter(isListedExample).map((tool) => (
                       <Link
                         key={tool.name}
                         href={tool.href}
@@ -480,7 +483,7 @@ export default async function BestAiToolsTopicPage({
                     {isChinese ? '常见 SEO 入口' : 'Common SEO starting points'}
                   </p>
                   <div className='mt-3 grid gap-3 sm:grid-cols-2'>
-                    {seoExamples.map((tool) => (
+                    {seoExamples.filter(isListedExample).map((tool) => (
                       <Link
                         key={tool.name}
                         href={tool.href}
@@ -600,8 +603,8 @@ export default async function BestAiToolsTopicPage({
                     <p className='text-sm font-semibold text-slate-950'>{isChinese ? '筛选规则' : 'Selection rules'}</p>
                     <p className='mt-1 text-sm leading-6 text-slate-600'>
                       {isChinese
-                        ? '按主题用途或所属分类筛选已发布工具，沿用目录热门排序（含推广优先项）；次序不是独立测评评分。'
-                        : 'Published tools are selected by use case or category, then use directory popularity order, including sponsored priority. Order is not an independent review score.'}
+                        ? '按主题用途筛选已发布工具，沿用目录热门排序（含推广优先项）；次序不是独立测评评分。'
+                        : 'Published tools are selected by use case, then use directory popularity order, including sponsored priority. Order is not an independent review score.'}
                     </p>
                   </div>
                 </div>

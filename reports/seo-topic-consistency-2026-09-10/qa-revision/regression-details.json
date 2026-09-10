@@ -1,0 +1,101 @@
+{
+  "timestamp": "2026-09-10T05:31:38.855Z",
+  "totalTests": 13,
+  "passed": 13,
+  "failed": 0,
+  "criticalFailed": 0,
+  "duration": 28431,
+  "results": [
+    {
+      "name": "SEO 健康检查",
+      "passed": true,
+      "critical": true,
+      "duration": 582,
+      "exitCode": 0
+    },
+    {
+      "name": "SEO 元数据验证",
+      "passed": true,
+      "critical": true,
+      "duration": 529,
+      "exitCode": 0
+    },
+    {
+      "name": "Hreflang 标签验证",
+      "passed": true,
+      "critical": true,
+      "duration": 717,
+      "exitCode": 0
+    },
+    {
+      "name": "结构化数据验证",
+      "passed": true,
+      "critical": true,
+      "duration": 512,
+      "exitCode": 0
+    },
+    {
+      "name": "面包屑导航验证",
+      "passed": true,
+      "critical": true,
+      "duration": 490,
+      "exitCode": 0
+    },
+    {
+      "name": "图片优化验证",
+      "passed": true,
+      "critical": false,
+      "duration": 2516,
+      "exitCode": 0
+    },
+    {
+      "name": "懒加载验证",
+      "passed": true,
+      "critical": false,
+      "duration": 1701,
+      "exitCode": 0
+    },
+    {
+      "name": "认证流程测试",
+      "passed": true,
+      "critical": true,
+      "duration": 536,
+      "exitCode": 0
+    },
+    {
+      "name": "数据访问测试",
+      "passed": true,
+      "critical": true,
+      "duration": 6642,
+      "exitCode": 0
+    },
+    {
+      "name": "筛选系统测试",
+      "passed": true,
+      "critical": true,
+      "duration": 8159,
+      "exitCode": 0
+    },
+    {
+      "name": "首页元数据验证",
+      "passed": true,
+      "critical": true,
+      "duration": 486,
+      "exitCode": 0
+    },
+    {
+      "name": "工具详情页验证",
+      "passed": true,
+      "critical": true,
+      "duration": 4990,
+      "exitCode": 0
+    },
+    {
+      "name": "列表页元数据验证",
+      "passed": true,
+      "critical": true,
+      "duration": 565,
+      "exitCode": 0
+    }
+  ]
+}

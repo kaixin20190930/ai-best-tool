@@ -1,0 +1,248 @@
+[
+  {
+    "key": "ai-agency-tools",
+    "indexable": true,
+    "count": 3,
+    "names": [
+      "notion",
+      "gamma",
+      "make"
+    ]
+  },
+  {
+    "key": "ai-api-observability-tools",
+    "indexable": false,
+    "count": 0,
+    "names": []
+  },
+  {
+    "key": "ai-agent-tools",
+    "indexable": true,
+    "count": 3,
+    "names": [
+      "n8n",
+      "emdash",
+      "codex"
+    ]
+  },
+  {
+    "key": "ai-automation-tools",
+    "indexable": true,
+    "count": 3,
+    "names": [
+      "n8n",
+      "make",
+      "pipedream"
+    ]
+  },
+  {
+    "key": "ai-chatbot-tools",
+    "indexable": true,
+    "count": 3,
+    "names": [
+      "gemini",
+      "claude",
+      "poe"
+    ]
+  },
+  {
+    "key": "ai-coding-tools",
+    "indexable": true,
+    "count": 5,
+    "names": [
+      "cursor",
+      "emdash",
+      "replit",
+      "codex",
+      "github-copilot"
+    ]
+  },
+  {
+    "key": "ai-code-review-tools",
+    "indexable": true,
+    "count": 3,
+    "names": [
+      "cursor",
+      "codex",
+      "github-copilot"
+    ]
+  },
+  {
+    "key": "ai-content-creation-tools",
+    "indexable": true,
+    "count": 3,
+    "names": [
+      "claude",
+      "gamma",
+      "synthesia"
+    ]
+  },
+  {
+    "key": "ai-creator-tools",
+    "indexable": true,
+    "count": 3,
+    "names": [
+      "viggle",
+      "gamma",
+      "runway"
+    ]
+  },
+  {
+    "key": "ai-ecommerce-tools",
+    "indexable": false,
+    "count": 0,
+    "names": []
+  },
+  {
+    "key": "ai-evals-tools",
+    "indexable": false,
+    "count": 0,
+    "names": []
+  },
+  {
+    "key": "ai-image-tools",
+    "indexable": true,
+    "count": 2,
+    "names": [
+      "shutterstock",
+      "fastimage-ai-sketch-to-image"
+    ]
+  },
+  {
+    "key": "ai-lead-generation-tools",
+    "indexable": false,
+    "count": 0,
+    "names": []
+  },
+  {
+    "key": "ai-marketing-tools",
+    "indexable": false,
+    "count": 0,
+    "names": []
+  },
+  {
+    "key": "ai-meeting-notes-tools",
+    "indexable": true,
+    "count": 2,
+    "names": [
+      "otter-ai",
+      "fathom"
+    ]
+  },
+  {
+    "key": "ai-model-routing-tools",
+    "indexable": false,
+    "count": 1,
+    "names": [
+      "openrouter"
+    ]
+  },
+  {
+    "key": "ai-note-taking-tools",
+    "indexable": true,
+    "count": 2,
+    "names": [
+      "notion",
+      "notebooklm"
+    ]
+  },
+  {
+    "key": "ai-productivity-tools",
+    "indexable": true,
+    "count": 4,
+    "names": [
+      "notion",
+      "n8n",
+      "gamma",
+      "make"
+    ]
+  },
+  {
+    "key": "ai-prompt-testing-tools",
+    "indexable": false,
+    "count": 0,
+    "names": []
+  },
+  {
+    "key": "ai-sales-prospecting-tools",
+    "indexable": false,
+    "count": 0,
+    "names": []
+  },
+  {
+    "key": "ai-small-business-tools",
+    "indexable": true,
+    "count": 4,
+    "names": [
+      "notion",
+      "fathom",
+      "gamma",
+      "make"
+    ]
+  },
+  {
+    "key": "ai-student-tools",
+    "indexable": true,
+    "count": 3,
+    "names": [
+      "gemini",
+      "notebooklm",
+      "consensus"
+    ]
+  },
+  {
+    "key": "ai-web3-tools",
+    "indexable": true,
+    "count": 2,
+    "names": [
+      "dune",
+      "the-graph"
+    ]
+  },
+  {
+    "key": "ai-voice-tools",
+    "indexable": true,
+    "count": 2,
+    "names": [
+      "otter-ai",
+      "fathom"
+    ]
+  },
+  {
+    "key": "ai-video-tools",
+    "indexable": true,
+    "count": 4,
+    "names": [
+      "viggle",
+      "synthesia",
+      "runway",
+      "luma-ai"
+    ]
+  },
+  {
+    "key": "ai-research-tools",
+    "indexable": true,
+    "count": 3,
+    "names": [
+      "perplexity",
+      "notebooklm",
+      "consensus"
+    ]
+  },
+  {
+    "key": "ai-seo-tools",
+    "indexable": false,
+    "count": 0,
+    "names": []
+  },
+  {
+    "key": "ai-writing-tools",
+    "indexable": true,
+    "count": 3,
+    "names": [
+      "gemini",
+      "deepl",
+      "claude"
+    ]
+  }
+]

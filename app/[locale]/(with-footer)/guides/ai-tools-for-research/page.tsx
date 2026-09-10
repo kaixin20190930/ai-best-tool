@@ -3,7 +3,7 @@ import { ArrowRight, ExternalLink, FileSearch, Search, ShieldCheck } from 'lucid
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
-import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
+import { buildLocalizedPageMetadata, generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -16,17 +16,17 @@ import { Link } from '@/app/navigation';
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Metadata.home' });
 
-  return {
+  return buildLocalizedPageMetadata({
+    locale,
+    path: '/guides/ai-tools-for-research',
+    baseUrl: BASE_URL,
     title:
       locale === 'cn' || locale === 'tw' ? 'AI 研究工具推荐 | AI Best Tool' : `AI tools for research | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
         ? '面向资料检索、信息核对、证据整理和研究工作流的 AI 工具指南，先看榜单再进对比页。'
         : 'A practical guide to AI tools for research, evidence-checking, analysis, and information discovery, with a path from guide to ranking and comparison.',
-    alternates: {
-      canonical: generateLocalizedCanonicalUrl('/guides/ai-tools-for-research', locale, BASE_URL),
-    },
-  };
+  });
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {

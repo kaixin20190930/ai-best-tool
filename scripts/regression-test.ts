@@ -11,6 +11,8 @@ interface TestResult {
   passed: boolean;
   error?: string;
   duration: number;
+  exitCode: number | null;
+  signal?: string;
 }
 
 const tests: Array<{ name: string; command: string; critical: boolean }> = [
@@ -53,6 +55,7 @@ async function runTest(test: { name: string; command: string; critical: boolean 
       name: test.name,
       passed: true,
       duration,
+      exitCode: 0,
     };
   } catch (error: any) {
     const duration = Date.now() - startTime;
@@ -69,6 +72,8 @@ async function runTest(test: { name: string; command: string; critical: boolean 
     return {
       name: test.name,
       passed: false,
+      exitCode: typeof error.status === 'number' ? error.status : null,
+      signal: error.signal || undefined,
       error: errorMessage,
       duration,
     };
@@ -133,6 +138,8 @@ async function main() {
       passed: r.passed,
       critical: tests.find(t => t.name === r.name)?.critical,
       duration: r.duration,
+      exitCode: r.exitCode,
+      signal: r.signal,
       error: r.error,
     })),
   };
@@ -143,16 +150,10 @@ async function main() {
   fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
   console.log(`\n📄 详细报告已保存到: ${reportPath}`);
   
-  // 如果有关键测试失败，退出码为 1
-  if (criticalFailed > 0) {
-    console.log('\n🚨 关键测试失败，请修复后再继续！');
+  // Every registered regression check is a gate, including images and lazy loading.
+  if (failed > 0) {
+    console.log('\n🚨 回归测试失败，请修复后再继续！');
     process.exit(1);
-  }
-  
-  // 如果有非关键测试失败，给出警告但不阻止
-  if (failed > 0 && criticalFailed === 0) {
-    console.log('\n⚠️  有非关键测试失败，建议修复');
-    process.exit(0);
   }
   
   console.log('\n✨ 所有测试通过！');

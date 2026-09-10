@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import Link from 'next/link';
+import BaseImage from '@/components/image/BaseImage';
 import {
   ArrowRight,
   ArrowUpRight,
@@ -2106,8 +2107,11 @@ export default function DistributionDashboard({
                   className='overflow-hidden rounded-xl border border-slate-200 bg-white hover:border-cyan-300 hover:shadow-sm'
                 >
                   <div className='flex h-36 items-center justify-center border-b border-slate-100 bg-[linear-gradient(45deg,#f1f5f9_25%,transparent_25%),linear-gradient(-45deg,#f1f5f9_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#f1f5f9_75%),linear-gradient(-45deg,transparent_75%,#f1f5f9_75%)] bg-[length:16px_16px] bg-[position:0_0,0_8px,8px_-8px,-8px_0px] p-3'>
-                    <img
+                    <BaseImage
                       src={asset.url}
+                      width={320}
+                      height={144}
+                      unoptimized
                       alt={`${data.project?.name || 'Product'} ${asset.assetType}`}
                       className='h-full w-full object-contain'
                       loading='lazy'

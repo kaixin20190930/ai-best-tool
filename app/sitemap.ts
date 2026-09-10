@@ -6,6 +6,7 @@ import { INDEXABLE_GUIDE_PAGES } from '@/lib/content/guides';
 import { topListTopics } from '@/lib/data/topLists';
 import { BASE_URL } from '@/lib/env';
 import { INDEXABLE_LOCALES } from '@/lib/seo/indexing';
+import { getSourceLastModified } from '@/lib/seo/sitemapDates';
 import { getStaticPageLastModified } from '@/lib/seo/staticPageDates';
 import { getToolIndexDecision } from '@/lib/seo/toolIndexing';
 import { getAllCategories, type CategoryWithCount } from '@/lib/services/categories';
@@ -86,7 +87,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         const lang = locale === 'en' ? '' : `/${locale}`;
         return {
           url: `${BASE_URL}${lang}/ai/${getCanonicalToolSlug(tool.name)}`,
-          lastModified: tool.updatedAt || tool.createdAt || new Date(),
+          lastModified: getSourceLastModified(tool.updatedAt, tool.createdAt),
           changeFrequency: 'weekly' as const,
           priority: 0.8,
         };
@@ -107,7 +108,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         const lang = locale === 'en' ? '' : `/${locale}`;
         return {
           url: `${BASE_URL}${lang}/categories/${category.slug}`,
-          lastModified: category.updatedAt || category.createdAt || new Date(),
+          lastModified: getSourceLastModified(category.updatedAt, category.createdAt),
           changeFrequency: 'daily' as const,
           priority: 0.7,
         };

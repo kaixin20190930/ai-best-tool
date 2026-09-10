@@ -3,7 +3,7 @@ import { CheckCircle2, ExternalLink, FileText, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
-import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
+import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -18,15 +18,17 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     namespace: 'Metadata.home',
   });
 
-  return {
+  return buildLocalizedPageMetadata({
+    locale,
+    path: '/guides/free-ai-tools',
+    baseUrl: BASE_URL,
     title:
       locale === 'cn' || locale === 'tw' ? '免费 AI 工具怎么选 | AI Best Tool' : `Best free AI tools | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
         ? '帮你挑选真正值得试的免费 AI 工具：先看场景，再看限制、更新和评论。'
         : 'A practical guide to choosing free AI tools: check use case, limits, updates, and comments first.',
-    alternates: { canonical: generateLocalizedCanonicalUrl('/guides/free-ai-tools', locale, BASE_URL) },
-  };
+  });
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {

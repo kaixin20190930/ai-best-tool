@@ -1,0 +1,54 @@
+[
+  {
+    "command": "pnpm run test:topic-consistency",
+    "exitCode": 0
+  },
+  {
+    "command": "pnpm run test:hreflang",
+    "exitCode": 0
+  },
+  {
+    "command": "pnpm run test:seo-architecture",
+    "exitCode": 0
+  },
+  {
+    "command": "pnpm run test:seo-breadcrumbs",
+    "exitCode": 0
+  },
+  {
+    "command": "pnpm run test:localized-metadata",
+    "exitCode": 0
+  },
+  {
+    "command": "pnpm run test:editorial-review-dates",
+    "exitCode": 0
+  },
+  {
+    "command": "pnpm run test:virtual-category-hubs",
+    "exitCode": 0
+  },
+  {
+    "command": "pnpm run test:guide-link-boundaries",
+    "exitCode": 0
+  },
+  {
+    "command": "pnpm run test:guide-decision-paths",
+    "exitCode": 0
+  },
+  {
+    "command": "pnpm run test:tool-indexing",
+    "exitCode": 0
+  },
+  {
+    "command": "pnpm run test:index-consistency",
+    "exitCode": 0
+  },
+  {
+    "command": "pnpm run test:tool-route-aliases",
+    "exitCode": 0
+  },
+  {
+    "command": "pnpm run test:sitemap",
+    "exitCode": 0
+  }
+]

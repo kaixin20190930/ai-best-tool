@@ -11,6 +11,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import { verifyBaseImageBehavior } from './verify-base-image-behavior';
 
 interface VerificationResult {
   passed: boolean;
@@ -75,6 +76,7 @@ function verifyBaseImageComponent(): VerificationResult {
     const componentPath = path.join(process.cwd(), 'components/image/BaseImage.tsx');
     const componentContent = fs.readFileSync(componentPath, 'utf-8');
     
+    verifyBaseImageBehavior();
     const checks = [
       { pattern: /import Image from ['"]next\/image['"]/, name: 'Next.js Image import' },
       { pattern: /loading.*lazy/, name: 'Lazy loading support' },
@@ -178,6 +180,7 @@ function verifyBaseImageUsage(): VerificationResult {
   
   const keyComponents = [
     'components/webNav/WebNavCard.tsx',
+    'components/webNav/ToolCardMedia.tsx',
     'components/home/Navigation.tsx',
     'components/MediaGallery.tsx',
     'components/image/Icon.tsx',
@@ -197,7 +200,10 @@ function verifyBaseImageUsage(): VerificationResult {
       
       const content = fs.readFileSync(fullPath, 'utf-8');
       
-      if (content.includes('BaseImage') || content.includes('from \'next/image\'')) {
+      const usesCardMedia = componentPath === 'components/webNav/WebNavCard.tsx' &&
+        content.includes("import ToolCardMedia from './ToolCardMedia'") && /<ToolCardMedia\b/.test(content) &&
+        /<BaseImage\b/.test(fs.readFileSync(path.join(process.cwd(), 'components/webNav/ToolCardMedia.tsx'), 'utf8'));
+      if (content.includes('BaseImage') || content.includes('from \'next/image\'') || usesCardMedia) {
         details.push(`✅ ${componentPath} - Uses optimized images`);
       } else {
         details.push(`❌ ${componentPath} - Not using BaseImage`);
@@ -222,14 +228,14 @@ function verifyBaseImageUsage(): VerificationResult {
 function verifyDocumentation(): VerificationResult {
   console.log('\n📋 Test 5: Checking Documentation...');
   
-  const docPath = path.join(process.cwd(), 'docs/WEBP_IMAGE_OPTIMIZATION.md');
+  const docPath = path.join(process.cwd(), 'docs/archive/WEBP_IMAGE_OPTIMIZATION.md');
   
   try {
     if (!fs.existsSync(docPath)) {
       return {
         passed: false,
         message: 'WebP documentation not found',
-        details: ['❌ docs/WEBP_IMAGE_OPTIMIZATION.md does not exist']
+        details: ['❌ docs/archive/WEBP_IMAGE_OPTIMIZATION.md does not exist']
       };
     }
     
@@ -312,7 +318,7 @@ async function runVerification() {
     console.log('⚠️  Some issues were found. Please review the details above.');
   }
   
-  console.log('\n📚 Documentation: docs/WEBP_IMAGE_OPTIMIZATION.md');
+  console.log('\n📚 Documentation: docs/archive/WEBP_IMAGE_OPTIMIZATION.md');
   console.log('🔧 Configuration: next.config.mjs');
   console.log('🖼️  Component: components/image/BaseImage.tsx\n');
   

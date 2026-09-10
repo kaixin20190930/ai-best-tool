@@ -28,8 +28,9 @@ export const STATIC_PAGE_EDITS: Record<string, ContentEditRecord> = {
     evidence: 'e05d25ea: app/[locale]/(with-footer)/guides/ai-seo-tools/page.tsx',
   },
   '/guides/ai-video-tools': {
-    modifiedAt: '2026-09-10',
-    evidence: 'Shared evidence panel default-date removal; docs/SEO_TOPIC_CONSISTENCY_2026-09-10_CN.md',
+    modifiedAt: '2026-07-18',
+    evidence:
+      'Existing checkedAt review in app/[locale]/(with-footer)/guides/ai-video-tools/page.tsx; no new content review in this repair.',
   },
   '/guides/ai-image-tools': {
     modifiedAt: '2026-09-09',
@@ -76,22 +77,24 @@ export const STATIC_PAGE_EDITS: Record<string, ContentEditRecord> = {
     evidence: 'e05d25ea: app/[locale]/(with-footer)/guides/ai-note-taking-tools/page.tsx',
   },
   '/guides/ai-tools-for-voice': {
-    modifiedAt: '2026-09-10',
-    evidence: 'Shared evidence panel default-date removal; docs/SEO_TOPIC_CONSISTENCY_2026-09-10_CN.md',
+    modifiedAt: '2026-07-18',
+    evidence:
+      'Existing checkedAt review in app/[locale]/(with-footer)/guides/ai-tools-for-voice/page.tsx; no new content review in this repair.',
   },
   '/explore': {
     modifiedAt: getEditorialReviewRecord('explore').reviewedAt,
     evidence: 'CTR-DIFF-05; lib/seo/contentReviewDates.ts',
   },
   '/best-ai-tools': {
-    modifiedAt: '2026-09-10',
-    evidence: 'Shared topic next-step copy edit; docs/SEO_TOPIC_CONSISTENCY_2026-09-10_CN.md',
+    modifiedAt: getEditorialReviewRecord('best-index').reviewedAt,
+    evidence: 'Existing CTR-DIFF-05 editorial review; lib/seo/contentReviewDates.ts',
   },
 };
 
 export const BEST_TOPIC_EDIT: ContentEditRecord = {
-  modifiedAt: '2026-09-10',
-  evidence: 'Topic data mapping and shared template correction; docs/SEO_TOPIC_CONSISTENCY_2026-09-10_CN.md',
+  modifiedAt: getEditorialReviewRecord('best-topic-template').reviewedAt,
+  evidence:
+    'Existing shared template review; lib/seo/contentReviewDates.ts. Mapping repair is not a new tool-fact review.',
 };
 
 export function getStaticPageLastModified(path: string): Date {

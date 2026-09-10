@@ -22,7 +22,7 @@ async function verifySitemapXML() {
     for (const entry of sitemapEntries.slice(0, 5)) { // Show first 5 entries
       xmlContent += '  <url>\n';
       xmlContent += `    <loc>${entry.url}</loc>\n`;
-      xmlContent += `    <lastmod>${entry.lastModified.toISOString()}</lastmod>\n`;
+      if (entry.lastModified) xmlContent += `    <lastmod>${new Date(entry.lastModified).toISOString()}</lastmod>\n`;
       xmlContent += `    <changefreq>${entry.changeFrequency}</changefreq>\n`;
       xmlContent += `    <priority>${entry.priority.toFixed(1)}</priority>\n`;
       xmlContent += '  </url>\n';
@@ -43,7 +43,7 @@ async function verifySitemapXML() {
     const checks = [
       { name: 'All URLs are absolute', pass: sitemapEntries.every(e => e.url.startsWith('http')) },
       { name: 'All URLs are properly encoded', pass: sitemapEntries.every(e => !e.url.includes(' ')) },
-      { name: 'All dates are ISO 8601 format', pass: sitemapEntries.every(e => e.lastModified instanceof Date) },
+      { name: 'All dates are ISO 8601 format', pass: sitemapEntries.every(e => e.lastModified === undefined || (e.lastModified instanceof Date && Number.isFinite(e.lastModified.getTime()))) },
       { name: 'All changefreq values are valid', pass: sitemapEntries.every(e => 
         ['always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never'].includes(e.changeFrequency)
       ) },

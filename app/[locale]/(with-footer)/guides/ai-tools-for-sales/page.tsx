@@ -3,7 +3,7 @@ import { BadgeDollarSign, CheckCircle2, ExternalLink, Target } from 'lucide-reac
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
-import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
+import { buildLocalizedPageMetadata, generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -15,16 +15,16 @@ import { Link } from '@/app/navigation';
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Metadata.home' });
 
-  return {
+  return buildLocalizedPageMetadata({
+    locale,
+    path: '/guides/ai-tools-for-sales',
+    baseUrl: BASE_URL,
     title: locale === 'cn' || locale === 'tw' ? 'AI 销售工具推荐 | AI Best Tool' : `AI tools for sales | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
         ? '面向销售、线索跟进和客户沟通的 AI 工具选型指南。'
         : 'A practical guide to AI tools for sales, lead follow-up, and customer communication.',
-    alternates: {
-      canonical: generateLocalizedCanonicalUrl('/guides/ai-tools-for-sales', locale, BASE_URL),
-    },
-  };
+  });
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {

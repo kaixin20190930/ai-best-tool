@@ -10,6 +10,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import { verifyBaseImageBehavior } from './verify-base-image-behavior';
 
 interface TestResult {
   test: string;
@@ -55,7 +56,7 @@ function testNextConfigImageOptimization() {
   
   addResult(
     'Next.js config has image optimization enabled',
-    hasWebPFormat && hasAVIFFormat,
+    hasWebPFormat && hasAVIFFormat && notUnoptimized,
     `WebP: ${hasWebPFormat}, AVIF: ${hasAVIFFormat}, Optimized: ${notUnoptimized || !content.includes('unoptimized: true')}`
   );
 }
@@ -110,14 +111,8 @@ function testBlurPlaceholder() {
   const baseImagePath = path.join(process.cwd(), 'components/image/BaseImage.tsx');
   const content = fs.readFileSync(baseImagePath, 'utf-8');
   
-  const hasBlurPlaceholder = content.includes("placeholder={props.placeholder ?? 'blur'}");
-  const hasBlurDataURL = content.includes('blurDataURL');
-  
-  addResult(
-    'BaseImage has blur placeholder for better UX',
-    hasBlurPlaceholder && hasBlurDataURL,
-    `Placeholder: ${hasBlurPlaceholder}, BlurDataURL: ${hasBlurDataURL}`
-  );
+  verifyBaseImageBehavior();
+  addResult('Raster blur and SVG placeholders behave correctly', true, 'Rendered raster blur, SVG empty placeholder, lazy/eager loading, and explicit overrides passed.');
 }
 
 // Test 5: Check that priority is only used appropriately
