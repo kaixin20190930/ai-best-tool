@@ -6,7 +6,7 @@
 import type { Metadata } from 'next';
 
 import { SEO_CONFIG, SEO_CONSTRAINTS, TITLE_SEPARATOR } from './constants';
-import { getNoindexMetadata, INDEXABLE_LOCALES, isIndexableLocale } from './indexing';
+import { getNoindexMetadata, INDEXABLE_HREFLANG, INDEXABLE_LOCALES, isIndexableLocale } from './indexing';
 
 export interface LocalizedPageMetadataInput {
   locale: string;
@@ -226,8 +226,9 @@ export function generateAlternateLocales(
   currentLocale: string,
   baseUrl: string = SEO_CONFIG.siteUrl,
 ): Array<{ locale: string; url: string }> {
+  if (!isIndexableLocale(currentLocale)) return [];
   return INDEXABLE_LOCALES.filter((locale) => locale !== currentLocale).map((locale) => ({
-    locale,
+    locale: INDEXABLE_HREFLANG[locale],
     url: generateLocalizedCanonicalUrl(path, locale, baseUrl),
   }));
 }
@@ -246,11 +247,12 @@ export function generateHreflangLinks(
   currentLocale: string,
   baseUrl: string = SEO_CONFIG.siteUrl,
 ): Record<string, string> {
+  if (!isIndexableLocale(currentLocale)) return {};
   const hreflangLinks: Record<string, string> = {};
 
   // Add all locales including current one
   INDEXABLE_LOCALES.forEach((locale) => {
-    hreflangLinks[locale] = generateLocalizedCanonicalUrl(path, locale, baseUrl);
+    hreflangLinks[INDEXABLE_HREFLANG[locale]] = generateLocalizedCanonicalUrl(path, locale, baseUrl);
   });
 
   // Add x-default pointing to the default locale

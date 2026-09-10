@@ -10,8 +10,8 @@ import { BASE_URL } from '@/lib/env';
 import { getEditorialReviewRecord } from '@/lib/seo/contentReviewDates';
 import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { generateFAQSchema } from '@/lib/seo/schema';
-import { getCategoryBySlug } from '@/lib/services/categories';
-import { getLocalizedField, getTools } from '@/lib/services/tools';
+import { getLocalizedField } from '@/lib/services/tools';
+import { getTopicCatalog } from '@/lib/services/topicTools';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import SeoBreadcrumbs from '@/components/seo/SeoBreadcrumbs';
@@ -30,16 +30,6 @@ function getLocalizedText(value: Record<string, string> | null | undefined, loca
   return value[locale] || value.en || value.zh || Object.values(value)[0] || '';
 }
 
-function isValidTopicTool(tool: {
-  id?: string;
-  name?: string;
-  url?: string;
-  title?: unknown;
-  content?: unknown;
-}): boolean {
-  return Boolean(tool?.id && tool?.name && tool?.url && tool?.title && tool?.content);
-}
-
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({
@@ -55,6 +45,7 @@ export async function generateMetadata({
   try {
     const topic = getTopListTopic(params.topic);
     const isChinese = params.locale === 'cn' || params.locale === 'tw';
+    const topicData = topic ? (await getTopicCatalog()).topics.get(topic.key) : null;
     const title = topic?.title || (isChinese ? 'AI 工具榜单' : 'Best AI tools');
     let description = topic?.description;
     if (topic?.key === 'ai-automation-tools') {
@@ -89,7 +80,7 @@ export async function generateMetadata({
       title,
       description,
       baseUrl: BASE_URL,
-      indexable: Boolean(topic),
+      indexable: Boolean(topicData?.indexable),
     });
   } catch (error) {
     console.error('Best AI tools topic metadata failed to render:', error);
@@ -123,19 +114,8 @@ export default async function BestAiToolsTopicPage({
       notFound();
     }
 
-    const [categoryResult, toolsResult] = await Promise.allSettled([
-      getCategoryBySlug(topic.categorySlug, true),
-      getTools({ category: topic.categorySlug, status: 'published' }, { page: 1, pageSize: 8 }, 'popular'),
-    ]);
-
-    const category = categoryResult.status === 'fulfilled' ? categoryResult.value : null;
-    const tools = toolsResult.status === 'fulfilled' ? toolsResult.value.data.filter(isValidTopicTool) : [];
-    let toolCount = 0;
-    if (category && 'toolCount' in category) {
-      toolCount = Number(category.toolCount || 0);
-    } else if (toolsResult.status === 'fulfilled') {
-      toolCount = Number(toolsResult.value.total || 0);
-    }
+    const topicData = (await getTopicCatalog()).topics.get(topic.key)!;
+    const { category, tools, toolCount } = topicData;
     const checkedAt = getEditorialReviewRecord('best-topic-template').reviewedAt;
     const checkedAtLabel = new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
       year: 'numeric',
@@ -148,8 +128,8 @@ export default async function BestAiToolsTopicPage({
       {
         question: isChinese ? '这个榜单是怎么选出来的？' : 'How is this ranking selected?',
         answer: isChinese
-          ? '我们优先看分类匹配度、实际使用强度、详情页可读性，以及用户下一步是否容易继续比较或提交。'
-          : 'We prioritize category fit, practical usage strength, detail-page clarity, and whether the page naturally leads to comparison or submission.',
+          ? '候选来自站内已发布工具，按主题用途或所属分类筛选。顺序沿用目录的热门排序，可能包含推广优先项，并不代表独立测评得分。'
+          : 'Candidates are published directory tools selected for the topic or its category. Order follows directory popularity, which can prioritize sponsored placements; it is not an independent review score.',
       },
       {
         question: isChinese
@@ -162,23 +142,23 @@ export default async function BestAiToolsTopicPage({
       {
         question: isChinese ? '下一步通常该做什么？' : 'What is the usual next step?',
         answer: isChinese
-          ? '先比较几个候选，再打开详情页和官网；如果你是工具方，则可以继续提交、认领或查看定价。'
-          : 'Compare a few candidates, then open detail pages and the official site; if you are the tool owner, continue to submit, claim, or review pricing.',
+          ? '先比较几个候选，再打开详情页和官网，核对价格、使用限制和适合自己的任务。'
+          : 'Compare a few candidates, then check pricing, usage limits, and task fit on detail pages and official sites.',
       },
     ]);
-    let nextStepCardValue = 'Compare then submit';
+    let nextStepCardValue = 'Compare fit and limits';
     if (topic.key === 'ai-agent-tools') {
       nextStepCardValue = isChinese ? '先对比 Agent，再进详情' : 'Compare agents, then inspect details';
     } else if (isChinese) {
-      nextStepCardValue = '先对比，再提交';
+      nextStepCardValue = '对比适用场景和限制';
     }
 
     let nextStepDescription = topic.nextStep;
     if (isChinese) {
       nextStepDescription =
         topic.key === 'ai-agent-tools'
-          ? 'Agent 榜单页不是终点，它最适合把你送进 Agent 对比页、详情页和提交页。'
-          : '榜单页不是终点，它的作用是把你带到更窄的选择页。';
+          ? '先比较 Agent 的权限、集成和人工确认要求，再用自己的任务验证候选。'
+          : '先比较候选的适用场景与限制，再查阅详情和官方来源。';
     }
     const isAutomationTopic = topic.key === 'ai-automation-tools';
     const automationExamples = [
@@ -364,13 +344,13 @@ export default async function BestAiToolsTopicPage({
 
               <div className='rounded-2xl border border-white/10 bg-white/5 p-4'>
                 <p className='text-xs font-semibold uppercase tracking-wide text-cyan-100/80'>
-                  {isChinese ? '最近核查' : 'Last checked'}
+                  {isChinese ? '模板复核' : 'Template reviewed'}
                 </p>
                 <p className='mt-2 text-xl font-bold text-white'>{checkedAtLabel}</p>
                 <p className='mt-2 text-sm leading-6 text-slate-200'>
                   {isChinese
-                    ? '这个榜单页会继续把你导向更窄的比较页、详情页和提交路径，而不是只停在主题列表。'
-                    : 'This list keeps routing people into narrower comparison pages, detail pages, and submission paths instead of stopping at the topic list.'}
+                    ? '此日期记录共享模板的复核。各工具的价格、限制和来源日期请到详情页分别核对。'
+                    : 'This date records the shared template review. Check each tool detail page for pricing, limits, and source review dates.'}
                 </p>
               </div>
 
@@ -521,7 +501,7 @@ export default async function BestAiToolsTopicPage({
                     value: categoryName,
                   },
                   {
-                    label: isChinese ? '工具数' : 'Tools',
+                    label: isChinese ? '匹配工具数' : 'Matching tools',
                     value: toolCount.toString(),
                   },
                   {
@@ -529,7 +509,7 @@ export default async function BestAiToolsTopicPage({
                     value: nextStepCardValue,
                   },
                   {
-                    label: isChinese ? '最近检查' : 'Last checked',
+                    label: isChinese ? '模板复核' : 'Template reviewed',
                     value: checkedAtLabel,
                   },
                 ].map((item) => (
@@ -557,8 +537,8 @@ export default async function BestAiToolsTopicPage({
                   {
                     title: isChinese ? '下一步去哪' : 'Where to go next',
                     text: isChinese
-                      ? '看完榜单就进详情页、评论区，或者直接去提交 / 认领。'
-                      : 'After the list, go to detail pages, comments, or submit / claim.',
+                      ? '到详情页和官网核对价格、限制、来源与适用场景。'
+                      : 'Check pricing, limits, sources, and task fit on detail pages and official sites.',
                   },
                 ].map((item) => (
                   <div key={item.title} className='rounded-2xl border border-white/10 bg-white/5 p-4'>
@@ -620,8 +600,8 @@ export default async function BestAiToolsTopicPage({
                     <p className='text-sm font-semibold text-slate-950'>{isChinese ? '筛选规则' : 'Selection rules'}</p>
                     <p className='mt-1 text-sm leading-6 text-slate-600'>
                       {isChinese
-                        ? '优先按真实使用强度、分类相关度和可比较性排序。'
-                        : 'Ranked by practical usage strength, category fit, and how easy the tools are to compare.'}
+                        ? '按主题用途或所属分类筛选已发布工具，沿用目录热门排序（含推广优先项）；次序不是独立测评评分。'
+                        : 'Published tools are selected by use case or category, then use directory popularity order, including sponsored priority. Order is not an independent review score.'}
                     </p>
                   </div>
                 </div>
@@ -695,8 +675,8 @@ export default async function BestAiToolsTopicPage({
                 {tools.length === 0 && (
                   <div className='rounded-2xl border border-dashed border-slate-300 bg-white p-5 text-sm leading-6 text-slate-600'>
                     {isChinese
-                      ? '当前没有可展示的工具数据，但这个榜单页仍可正常打开。'
-                      : 'No tool data is available right now, but the list page still opens safely.'}
+                      ? '当前尚无符合此主题的已发布候选。可以查看选型指南，了解评估时需要核对的条件。'
+                      : 'There are currently no published candidates matching this topic. The guide explains what to check when evaluating options.'}
                   </div>
                 )}
               </div>
@@ -706,30 +686,34 @@ export default async function BestAiToolsTopicPage({
 
         <GuideEvidencePanel
           locale={locale}
+          checkedAt={checkedAt}
+          checkedAtLabel={isChinese ? '模板复核' : 'Template reviewed'}
           scope={
             isChinese
-              ? '这个榜单页先说明排序依据、用途边界和下一步怎么继续比较，避免用户把榜单当成纯流量页。'
-              : 'This ranking page explains the sorting basis, use-case boundaries, and the next comparison step so users do not treat it as a pure traffic page.'
+              ? '复核范围是共享榜单模板的筛选说明、用途边界和比较步骤；此日期不代表每个工具的事实均已重新核验。'
+              : 'The review covers the shared ranking template, selection explanation, use-case boundaries, and comparison steps. It does not reverify every tool fact.'
           }
           items={[
             {
               label: isChinese ? '验证范围' : 'Checked scope',
               value: isChinese ? '排序、边界、下一步' : 'Ranking, boundaries, next step',
               note: isChinese
-                ? '先让榜单页说清楚自己为什么这样排。'
-                : 'Make the ranking page explain why it is ordered this way.',
+                ? '了解候选来源和排序含义，再判断是否适合自己的任务。'
+                : 'Understand candidate selection and ordering before judging fit for your task.',
             },
             {
-              label: isChinese ? '索引策略' : 'Indexing strategy',
-              value: isChinese ? '榜单页保留索引' : 'Ranking page kept indexable',
+              label: isChinese ? '候选来源' : 'Candidate source',
+              value: isChinese ? '已发布的工具记录' : 'Published tool records',
               note: isChinese
-                ? '承接高意图主题搜索，不要让它变成空壳页。'
-                : 'Capture high-intent topic searches instead of leaving it as a thin shell page.',
+                ? '候选须匹配主题，并提供可读的名称、简介和官网。'
+                : 'Candidates must match the topic and provide a readable name, summary, and official website.',
             },
             {
-              label: isChinese ? '下一步增强' : 'Next enrichment',
-              value: isChinese ? '补方法、评论和筛选说明' : 'Add method notes, comments, and filtering notes',
-              note: isChinese ? '让榜单更像决策页。' : 'Make the ranking feel like a decision page.',
+              label: isChinese ? '使用前核对' : 'Before trying a tool',
+              value: isChinese ? '核对价格、限制和来源' : 'Check pricing, limits, and sources',
+              note: isChinese
+                ? '用自己的任务测试候选能否满足需求。'
+                : 'Try your own task to see whether a candidate meets your needs.',
             },
           ]}
           decisionSteps={[
@@ -738,30 +722,30 @@ export default async function BestAiToolsTopicPage({
               ? '再筛掉价格、更新或场景不合适的。'
               : 'Then filter out mismatches in price, freshness, or use case.',
             isChinese
-              ? '最后进入详情、官网或提交路径。'
-              : 'Finally move into detail, the official site, or submission paths.',
+              ? '最后在详情页和官网核对条件，再决定是否试用。'
+              : 'Finally confirm the terms on detail pages and official sites before deciding to try a tool.',
           ]}
           signalCards={[
             {
               label: isChinese ? '排序信号' : 'Ranking signal',
               value: isChinese ? '先看最接近任务的候选' : 'Start with the closest match to the task',
               note: isChinese
-                ? '榜单的目标不是制造热度，而是更快缩短 shortlist。'
-                : 'The goal is not to create hype, but to shorten the shortlist faster.',
+                ? '先排除不能完成核心任务的工具。'
+                : 'First remove tools that cannot complete your core task.',
             },
             {
               label: isChinese ? '更新信号' : 'Freshness signal',
-              value: isChinese ? '优先保留最近核查过的主题' : 'Prioritize topics checked most recently',
+              value: isChinese ? '分别核对每个工具的来源日期' : 'Check source dates for each tool',
               note: isChinese
-                ? '如果榜单本身不更新，后面的详情和官网跳转就会变得不可靠。'
-                : 'If the ranking itself is not updated, detail and official-site jumps become less trustworthy.',
+                ? '模板复核日期与工具事实核验日期不同；价格和限制以相关来源为准。'
+                : 'Template review and tool fact verification have separate dates; check the relevant sources for pricing and limits.',
             },
             {
               label: isChinese ? '风险信号' : 'Risk signal',
               value: isChinese ? '不适合的条目要尽早踢掉' : 'Drop mismatched entries early',
               note: isChinese
-                ? '榜单越快排除错误方向，用户越容易继续点下去。'
-                : 'The faster the page removes mismatched options, the more likely users are to keep clicking.',
+                ? '尽早排除权限、预算或集成不合适的选项，减少试错成本。'
+                : 'Rule out mismatches in permissions, budget, or integrations early to reduce wasted trials.',
             },
           ]}
         />
@@ -772,7 +756,7 @@ export default async function BestAiToolsTopicPage({
               {isChinese ? '为什么这页有用' : 'Why this page matters'}
             </p>
             <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-              {isChinese ? '它把流量往更接近转化的地方推' : 'It routes traffic closer to conversion'}
+              {isChinese ? '缩小候选范围，核对适用场景和限制' : 'Narrow your options and check fit and limits'}
             </h2>
             <div className='mt-4 grid gap-3 md:grid-cols-3'>
               {[
@@ -782,11 +766,15 @@ export default async function BestAiToolsTopicPage({
                 },
                 {
                   title: isChinese ? '更快决策' : 'Faster decisions',
-                  text: isChinese ? '把用户送到详情页和官网' : 'Pushes users toward detail and official site',
+                  text: isChinese
+                    ? '对照详情与官方来源确认限制'
+                    : 'Confirm limits against details and official sources',
                 },
                 {
                   title: isChinese ? '下一步明确' : 'Clear next step',
-                  text: isChinese ? '继续核对详情、限制和官方来源' : 'Continue with details, limits, and official sources',
+                  text: isChinese
+                    ? '继续核对详情、限制和官方来源'
+                    : 'Continue with details, limits, and official sources',
                 },
               ].map((item) => (
                 <div key={item.title} className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
@@ -797,8 +785,8 @@ export default async function BestAiToolsTopicPage({
             </div>
             <p className='mt-4 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? `这组榜单会按最近检查时间 ${checkedAtLabel} 持续更新，优先保留能接到详情页、官网和提交路径的主题。`
-                : `This list was last checked on ${checkedAtLabel}, and we keep prioritizing topics that connect into detail pages, official sites, and submission paths.`}
+                ? `共享模板复核日期为 ${checkedAtLabel}。选择工具时仍需分别核对其价格、限制与来源日期。`
+                : `The shared template was reviewed on ${checkedAtLabel}. Check each tool’s pricing, limits, and source dates separately.`}
             </p>
           </div>
 
@@ -807,7 +795,7 @@ export default async function BestAiToolsTopicPage({
               {isChinese ? '下一步' : 'Next step'}
             </p>
             <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-              {isChinese ? '从榜单进到详情，再进到提交' : 'Move from ranking into detail, then into submission'}
+              {isChinese ? '对照详情与官方来源，确定试用候选' : 'Check details and official sources before a trial'}
             </h2>
             <p className='mt-2 text-sm leading-6 text-slate-700'>{nextStepDescription}</p>
             <div className='mt-4 flex flex-wrap gap-3'>
@@ -845,30 +833,6 @@ export default async function BestAiToolsTopicPage({
     );
   } catch (error) {
     console.error('Best AI tools topic page failed to render:', error);
-    return (
-      <div className='theme-page mx-auto max-w-pc px-4 py-8 lg:px-0'>
-        <section className='rounded-[28px] border border-slate-200 bg-white p-8 shadow-sm'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>Best AI tools</p>
-          <h1 className='mt-2 text-3xl font-bold text-slate-950'>This ranking page is temporarily unavailable</h1>
-          <p className='mt-3 max-w-2xl text-sm leading-6 text-slate-600'>
-            The topic page could not finish loading right now, but the rest of the site remains available.
-          </p>
-          <div className='mt-6 flex flex-wrap gap-3'>
-            <Link
-              href={`/${params.locale || 'en'}/best-ai-tools`}
-              className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              Back to rankings
-            </Link>
-            <Link
-              href={`/${params.locale || 'en'}/submit`}
-              className='inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              Submit a tool
-            </Link>
-          </div>
-        </section>
-      </div>
-    );
+    throw error;
   }
 }

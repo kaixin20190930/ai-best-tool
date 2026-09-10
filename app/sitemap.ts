@@ -1,14 +1,19 @@
 import { type MetadataRoute } from 'next';
 import { locales } from '@/i18n';
 
+import { getCanonicalToolSlug } from '@/lib/config/toolRouteAliases';
 import { INDEXABLE_GUIDE_PAGES } from '@/lib/content/guides';
 import { topListTopics } from '@/lib/data/topLists';
-import { getCanonicalToolSlug } from '@/lib/config/toolRouteAliases';
 import { BASE_URL } from '@/lib/env';
 import { INDEXABLE_LOCALES } from '@/lib/seo/indexing';
+import { getStaticPageLastModified } from '@/lib/seo/staticPageDates';
 import { getToolIndexDecision } from '@/lib/seo/toolIndexing';
 import { getAllCategories, type CategoryWithCount } from '@/lib/services/categories';
-import { getTools } from '@/lib/services/tools';
+import { getTopicCatalog } from '@/lib/services/topicTools';
+
+// Topic eligibility is data-dependent, just like its page metadata. A build
+// snapshot can keep advertising a topic after its last candidate is removed.
+export const dynamic = 'force-dynamic';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const sitemapLocales = locales.filter((locale) =>
@@ -49,11 +54,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency,
   }));
 
-  const topListRoutes = topListTopics.map((topic) => ({
-    url: `best-ai-tools/${topic.key}`,
-    priority: 0.8,
-    changeFrequency: 'weekly' as const,
-  }));
+  const catalog = await getTopicCatalog();
+  const topListRoutes = topListTopics
+    .filter((topic) => catalog.topics.get(topic.key)?.indexable)
+    .map((topic) => ({
+      url: `best-ai-tools/${topic.key}`,
+      priority: 0.8,
+      changeFrequency: 'weekly' as const,
+    }));
 
   const staticSitemapEntries = [...staticRoutes, ...guideRoutes, ...topListRoutes].flatMap((route) =>
     sitemapLocales.map((locale) => {
@@ -61,7 +69,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const routeUrl = route.url === '' ? '' : `/${route.url}`;
       return {
         url: `${BASE_URL}${lang}${routeUrl}`,
-        lastModified: new Date(),
+        lastModified: getStaticPageLastModified(route.url ? `/${route.url}` : '/'),
         changeFrequency: route.changeFrequency,
         priority: route.priority,
       };
@@ -71,13 +79,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fetch all published tools for dynamic routes
   let toolSitemapEntries: MetadataRoute.Sitemap = [];
   try {
-    const toolsResult = await getTools(
-      { status: 'published' },
-      { page: 1, pageSize: 10000 }, // Get all tools
-      'latest',
-    );
-
-    const eligibleTools = toolsResult.data.filter((tool) => getToolIndexDecision(tool).indexable);
+    const eligibleTools = catalog.tools.filter((tool) => getToolIndexDecision(tool).indexable);
 
     toolSitemapEntries = eligibleTools.flatMap((tool) =>
       sitemapLocales.map((locale) => {

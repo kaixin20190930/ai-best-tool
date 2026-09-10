@@ -1,0 +1,111 @@
+{
+  "baseline": "f29b7dc3",
+  "branch": "codex/seo-topic-consistency-2026-09-10",
+  "completedAt": "2026-09-10T03:35:37.401Z",
+  "finalChecks": [
+    {
+      "command": "pnpm run test:topic-consistency",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:hreflang",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:seo-architecture",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:seo-breadcrumbs",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:localized-metadata",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:editorial-review-dates",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:virtual-category-hubs",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:guide-link-boundaries",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:guide-decision-paths",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:tool-indexing",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:index-consistency",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:tool-route-aliases",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:sitemap",
+      "exitCode": 0
+    },
+    {
+      "command": "./node_modules/.bin/tsc --noEmit",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run build",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:topic-consistency:live",
+      "exitCode": 0
+    },
+    {
+      "command": "scripts/verify-sitemap-xml.ts (node --import tsx; .env.local loaded)",
+      "exitCode": 0
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0
+    }
+  ],
+  "developmentAttempts": [
+    {
+      "check": "Standalone catalog probe",
+      "exitCode": 1,
+      "reason": "React 18 CLI runtime does not expose cache; added uncached CLI loader while retaining Next request memoization.",
+      "resolved": true
+    },
+    {
+      "check": "Initial tsc --noEmit",
+      "exitCode": 2,
+      "reason": "Safety slug tuple includes typing; changed to a type-safe equality predicate.",
+      "resolved": true
+    },
+    {
+      "check": "Initial virtual-category hub test",
+      "exitCode": 1,
+      "reason": "Existing test searched page-local metadata after baseline moved profiles to a central module; fixed the reference guard.",
+      "resolved": true
+    },
+    {
+      "check": "Expanded legacy hreflang helper test",
+      "exitCode": 1,
+      "reason": "Test passed an absolute canonical URL to a path-based legacy API; corrected the test argument.",
+      "resolved": true
+    },
+    {
+      "check": "Initial live HTTP probe",
+      "exitCode": 1,
+      "reason": "Unknown-topic notFound can stream HTTP 200 in Next; adjusted assertion to its noindex/error boundary. The 56 known topic pages already passed.",
+      "resolved": true
+    }
+  ]
+}
