@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 export const INDEXABLE_LOCALES = ['en', 'cn'] as const;
+export const INDEXABLE_HREFLANG = { en: 'en', cn: 'zh-CN' } as const;
 
 export function isIndexableLocale(locale: string): boolean {
   return INDEXABLE_LOCALES.includes(locale as (typeof INDEXABLE_LOCALES)[number]);
@@ -18,4 +19,3 @@ export function getNoindexMetadata(): Pick<Metadata, 'robots'> {
     },
   };
 }
-

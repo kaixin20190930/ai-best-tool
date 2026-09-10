@@ -9,6 +9,7 @@ import {
   generateTitle,
   generateDescription,
   generateCanonicalUrl,
+  generateLocalizedCanonicalUrl,
   generateSocialImageUrl,
   generateAlternateLocales,
   generateHreflangLinks,
@@ -118,35 +119,12 @@ export function generateSEOMetadata(props: SEOHeadProps): Metadata {
     }),
   };
 
-  // Add alternate language links (hreflang tags)
-  if (alternateLocales && alternateLocales.length > 0 && canonicalUrl) {
-    // Build languages object from alternateLocales
-    const languages = alternateLocales.reduce(
-      (acc, alt) => {
-        acc[alt.locale] = alt.url;
-        return acc;
-      },
-      {} as Record<string, string>,
-    );
-
-    // Add current locale
-    languages[locale] = canonicalUrl;
-
-    // Add x-default pointing to default locale
-    const defaultLocaleUrl = locale === SEO_CONFIG.defaultLocale 
-      ? canonicalUrl 
-      : alternateLocales.find(alt => alt.locale === SEO_CONFIG.defaultLocale)?.url || canonicalUrl;
-    
-    languages['x-default'] = defaultLocaleUrl;
-
+  if (canonicalUrl) {
+    const canonical = new URL(canonicalUrl, SEO_CONFIG.siteUrl);
+    const languages = noindex ? {} : generateHreflangLinks(canonical.pathname, locale, canonical.origin);
     metadata.alternates = {
       canonical: canonicalUrl,
-      languages,
-    };
-  } else if (canonicalUrl) {
-    // Even without alternateLocales, set up basic alternates with canonical
-    metadata.alternates = {
-      canonical: canonicalUrl,
+      ...(alternateLocales?.length && Object.keys(languages).length ? { languages } : {}),
     };
   }
 
@@ -186,12 +164,12 @@ export function generateHreflangMetadata(
   path: string,
 ): Pick<Metadata, 'alternates'> {
   const hreflangLinks = generateHreflangLinks(path, locale);
-  const canonicalUrl = hreflangLinks[locale];
+  const canonicalUrl = generateLocalizedCanonicalUrl(path, locale);
 
   return {
     alternates: {
       canonical: canonicalUrl,
-      languages: hreflangLinks,
+      ...(Object.keys(hreflangLinks).length ? { languages: hreflangLinks } : {}),
     },
   };
 }

@@ -1,0 +1,283 @@
+[
+  {
+    "key": "ai-agency-tools",
+    "count": 24,
+    "names": [
+      "gemini",
+      "shutterstock",
+      "chatgpt-mac",
+      "openai",
+      "claude",
+      "notion",
+      "gpt_4o",
+      "salesforce_einstein"
+    ]
+  },
+  {
+    "key": "ai-api-observability-tools",
+    "count": 0,
+    "names": []
+  },
+  {
+    "key": "ai-agent-tools",
+    "count": 2,
+    "names": [
+      "n8n",
+      "pipedream"
+    ]
+  },
+  {
+    "key": "ai-automation-tools",
+    "count": 3,
+    "names": [
+      "n8n",
+      "make",
+      "pipedream"
+    ]
+  },
+  {
+    "key": "ai-chatbot-tools",
+    "count": 2,
+    "names": [
+      "poe",
+      "otter-ai"
+    ]
+  },
+  {
+    "key": "ai-coding-tools",
+    "count": 4,
+    "names": [
+      "cursor",
+      "replit",
+      "codex",
+      "github-copilot"
+    ]
+  },
+  {
+    "key": "ai-code-review-tools",
+    "count": 3,
+    "names": [
+      "cursor",
+      "codex",
+      "github-copilot"
+    ]
+  },
+  {
+    "key": "ai-content-creation-tools",
+    "count": 24,
+    "names": [
+      "gemini",
+      "shutterstock",
+      "chatgpt-mac",
+      "openai",
+      "claude",
+      "notion",
+      "gpt_4o",
+      "salesforce_einstein"
+    ]
+  },
+  {
+    "key": "ai-creator-tools",
+    "count": 24,
+    "names": [
+      "gemini",
+      "shutterstock",
+      "chatgpt-mac",
+      "openai",
+      "claude",
+      "notion",
+      "gpt_4o",
+      "salesforce_einstein"
+    ]
+  },
+  {
+    "key": "ai-ecommerce-tools",
+    "count": 0,
+    "names": []
+  },
+  {
+    "key": "ai-evals-tools",
+    "count": 0,
+    "names": []
+  },
+  {
+    "key": "ai-image-tools",
+    "count": 7,
+    "names": [
+      "viggle",
+      "sora",
+      "adobe",
+      "fastimage-ai-sketch-to-image",
+      "synthesia",
+      "runway",
+      "luma-ai"
+    ]
+  },
+  {
+    "key": "ai-lead-generation-tools",
+    "count": 24,
+    "names": [
+      "gemini",
+      "shutterstock",
+      "chatgpt-mac",
+      "openai",
+      "claude",
+      "notion",
+      "gpt_4o",
+      "salesforce_einstein"
+    ]
+  },
+  {
+    "key": "ai-marketing-tools",
+    "count": 1,
+    "names": [
+      "salesforce_einstein"
+    ]
+  },
+  {
+    "key": "ai-meeting-notes-tools",
+    "count": 24,
+    "names": [
+      "gemini",
+      "shutterstock",
+      "chatgpt-mac",
+      "openai",
+      "claude",
+      "notion",
+      "gpt_4o",
+      "salesforce_einstein"
+    ]
+  },
+  {
+    "key": "ai-model-routing-tools",
+    "count": 1,
+    "names": [
+      "openrouter"
+    ]
+  },
+  {
+    "key": "ai-note-taking-tools",
+    "count": 24,
+    "names": [
+      "gemini",
+      "shutterstock",
+      "chatgpt-mac",
+      "openai",
+      "claude",
+      "notion",
+      "gpt_4o",
+      "salesforce_einstein"
+    ]
+  },
+  {
+    "key": "ai-productivity-tools",
+    "count": 24,
+    "names": [
+      "gemini",
+      "shutterstock",
+      "chatgpt-mac",
+      "openai",
+      "claude",
+      "notion",
+      "gpt_4o",
+      "salesforce_einstein"
+    ]
+  },
+  {
+    "key": "ai-prompt-testing-tools",
+    "count": 0,
+    "names": []
+  },
+  {
+    "key": "ai-sales-prospecting-tools",
+    "count": 24,
+    "names": [
+      "gemini",
+      "shutterstock",
+      "chatgpt-mac",
+      "openai",
+      "claude",
+      "notion",
+      "gpt_4o",
+      "salesforce_einstein"
+    ]
+  },
+  {
+    "key": "ai-small-business-tools",
+    "count": 24,
+    "names": [
+      "gemini",
+      "shutterstock",
+      "chatgpt-mac",
+      "openai",
+      "claude",
+      "notion",
+      "gpt_4o",
+      "salesforce_einstein"
+    ]
+  },
+  {
+    "key": "ai-student-tools",
+    "count": 24,
+    "names": [
+      "gemini",
+      "shutterstock",
+      "chatgpt-mac",
+      "openai",
+      "claude",
+      "notion",
+      "gpt_4o",
+      "salesforce_einstein"
+    ]
+  },
+  {
+    "key": "ai-web3-tools",
+    "count": 2,
+    "names": [
+      "dune",
+      "the-graph"
+    ]
+  },
+  {
+    "key": "ai-voice-tools",
+    "count": 2,
+    "names": [
+      "otter-ai",
+      "fathom"
+    ]
+  },
+  {
+    "key": "ai-video-tools",
+    "count": 5,
+    "names": [
+      "viggle",
+      "sora",
+      "synthesia",
+      "runway",
+      "luma-ai"
+    ]
+  },
+  {
+    "key": "ai-research-tools",
+    "count": 3,
+    "names": [
+      "perplexity",
+      "notebooklm",
+      "consensus"
+    ]
+  },
+  {
+    "key": "ai-seo-tools",
+    "count": 1,
+    "names": [
+      "deepl"
+    ]
+  },
+  {
+    "key": "ai-writing-tools",
+    "count": 1,
+    "names": [
+      "deepl"
+    ]
+  }
+]

@@ -59,7 +59,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to agency guide',
     comparisonHref: '/guides/ai-tools-for-agencies-comparison',
     comparisonLabel: 'Compare agency tools',
-    nextStep: 'Compare agency tools, inspect detail pages, then move into submission or pricing.',
+    nextStep: 'Compare agency tools, inspect detail pages, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-api-observability-tools',
@@ -75,7 +75,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to observability guide',
     comparisonHref: '/guides/ai-tools-for-api-observability-comparison',
     comparisonLabel: 'Compare observability tools',
-    nextStep: 'Compare observability tools, inspect detail pages, then move into submission or pricing.',
+    nextStep: 'Compare observability tools, inspect detail pages, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-agent-tools',
@@ -90,7 +90,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to agent guide',
     comparisonHref: '/guides/ai-tools-for-agents-comparison',
     comparisonLabel: 'Compare agent tools',
-    nextStep: 'Compare agent tools, inspect details, then move into submission or pricing.',
+    nextStep: 'Compare agent tools, inspect details, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-automation-tools',
@@ -107,7 +107,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to automation guide',
     comparisonHref: '/guides/ai-tools-for-automation-comparison',
     comparisonLabel: 'Compare automation tools',
-    nextStep: 'Compare automation tools, inspect detail pages, then move into submission or pricing.',
+    nextStep: 'Compare automation tools, inspect detail pages, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-chatbot-tools',
@@ -124,7 +124,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to chatbot guide',
     comparisonHref: '/guides/ai-chatbot-tools-comparison',
     comparisonLabel: 'Compare chatbot tools',
-    nextStep: 'Compare chatbot tools, inspect detail pages, then move into submission or pricing.',
+    nextStep: 'Compare chatbot tools, inspect detail pages, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-coding-tools',
@@ -138,7 +138,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to coding guide',
     comparisonHref: '/guides/ai-coding-tools-comparison',
     comparisonLabel: 'Compare coding tools',
-    nextStep: 'Compare coding tools, inspect product pages, then move into submission or pricing.',
+    nextStep: 'Compare coding tools, inspect product pages, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-code-review-tools',
@@ -154,7 +154,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to code review guide',
     comparisonHref: '/guides/ai-tools-for-code-review-comparison',
     comparisonLabel: 'Compare code review tools',
-    nextStep: 'Compare code review tools, inspect detail pages, then move into submission or pricing.',
+    nextStep: 'Compare code review tools, inspect detail pages, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-content-creation-tools',
@@ -170,7 +170,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to content creation guide',
     comparisonHref: '/guides/ai-tools-for-content-creation-comparison',
     comparisonLabel: 'Compare content creation tools',
-    nextStep: 'Compare content creation tools, inspect detail pages, then move into submission or pricing.',
+    nextStep: 'Compare content creation tools, inspect detail pages, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-creator-tools',
@@ -187,7 +187,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to creator guide',
     comparisonHref: '/guides/ai-tools-for-creators-comparison',
     comparisonLabel: 'Compare creator tools',
-    nextStep: 'Compare creator tools, inspect detail pages, then move into submission or pricing.',
+    nextStep: 'Compare creator tools, inspect detail pages, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-ecommerce-tools',
@@ -204,7 +204,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to ecommerce guide',
     comparisonHref: '/guides/ai-tools-for-ecommerce-comparison',
     comparisonLabel: 'Compare ecommerce tools',
-    nextStep: 'Compare ecommerce tools, inspect detail pages, then move into submission or pricing.',
+    nextStep: 'Compare ecommerce tools, inspect detail pages, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-evals-tools',
@@ -221,7 +221,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to evals guide',
     comparisonHref: '/guides/ai-tools-for-evals-comparison',
     comparisonLabel: 'Compare evals tools',
-    nextStep: 'Compare evals tools, inspect detail pages, then move into submission or pricing.',
+    nextStep: 'Compare evals tools, inspect detail pages, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-image-tools',
@@ -238,7 +238,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to image guide',
     comparisonHref: '/guides/ai-image-tools-comparison',
     comparisonLabel: 'Compare image tools',
-    nextStep: 'Compare image tools, inspect detail pages, then move into submission or pricing.',
+    nextStep: 'Compare image tools, inspect detail pages, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-lead-generation-tools',
@@ -254,7 +254,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to lead-gen guide',
     comparisonHref: '/guides/ai-tools-for-lead-generation-comparison',
     comparisonLabel: 'Compare lead generation tools',
-    nextStep: 'Compare lead generation tools, inspect detail pages, then move into submission or pricing.',
+    nextStep: 'Compare lead generation tools, inspect detail pages, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-marketing-tools',
@@ -270,7 +270,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to marketing guide',
     comparisonHref: '/guides/ai-tools-for-marketing-comparison',
     comparisonLabel: 'Compare marketing tools',
-    nextStep: 'Compare marketing tools, inspect detail pages, then move into submission or pricing.',
+    nextStep: 'Compare marketing tools, inspect detail pages, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-meeting-notes-tools',
@@ -287,7 +287,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to meeting notes guide',
     comparisonHref: '/guides/ai-tools-for-meeting-notes-comparison',
     comparisonLabel: 'Compare meeting notes tools',
-    nextStep: 'Compare meeting notes tools, inspect detail pages, then move into submission or pricing.',
+    nextStep: 'Compare meeting notes tools, inspect detail pages, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-model-routing-tools',
@@ -302,7 +302,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to model routing guide',
     comparisonHref: '/guides/ai-tools-for-model-routing-comparison',
     comparisonLabel: 'Compare model routing tools',
-    nextStep: 'Compare model routing tools, inspect detail pages, then move into submission or pricing.',
+    nextStep: 'Compare model routing tools, inspect detail pages, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-note-taking-tools',
@@ -318,7 +318,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to note taking guide',
     comparisonHref: '/guides/ai-note-taking-tools-comparison',
     comparisonLabel: 'Compare note taking tools',
-    nextStep: 'Compare note taking tools, inspect detail pages, then move into submission or pricing.',
+    nextStep: 'Compare note taking tools, inspect detail pages, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-productivity-tools',
@@ -335,7 +335,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to productivity guide',
     comparisonHref: '/guides/ai-productivity-tools-comparison',
     comparisonLabel: 'Compare productivity tools',
-    nextStep: 'Compare productivity tools, inspect detail pages, then move into submission or pricing.',
+    nextStep: 'Compare productivity tools, inspect detail pages, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-prompt-testing-tools',
@@ -351,7 +351,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to prompt testing guide',
     comparisonHref: '/guides/ai-tools-for-prompt-testing-comparison',
     comparisonLabel: 'Compare prompt testing tools',
-    nextStep: 'Compare prompt testing tools, inspect detail pages, then move into submission or pricing.',
+    nextStep: 'Compare prompt testing tools, inspect detail pages, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-sales-prospecting-tools',
@@ -368,7 +368,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to sales prospecting guide',
     comparisonHref: '/guides/ai-tools-for-sales-prospecting-comparison',
     comparisonLabel: 'Compare sales prospecting tools',
-    nextStep: 'Compare sales prospecting tools, inspect detail pages, then move into submission or pricing.',
+    nextStep: 'Compare sales prospecting tools, inspect detail pages, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-small-business-tools',
@@ -385,7 +385,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to small-business guide',
     comparisonHref: '/guides/ai-tools-for-small-business-comparison',
     comparisonLabel: 'Compare small-business tools',
-    nextStep: 'Compare small-business tools, inspect detail pages, then move into submission or pricing.',
+    nextStep: 'Compare small-business tools, inspect detail pages, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-student-tools',
@@ -402,7 +402,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to student guide',
     comparisonHref: '/guides/ai-tools-for-students-comparison',
     comparisonLabel: 'Compare student tools',
-    nextStep: 'Compare student tools, inspect detail pages, then move into submission or pricing.',
+    nextStep: 'Compare student tools, inspect detail pages, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-web3-tools',
@@ -419,7 +419,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to Web3 guide',
     comparisonHref: '/guides/ai-tools-for-web3-comparison',
     comparisonLabel: 'Compare Web3 tools',
-    nextStep: 'Compare Web3 tools, inspect detail pages, then move into submission or pricing.',
+    nextStep: 'Compare Web3 tools, inspect detail pages, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-voice-tools',
@@ -436,7 +436,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to voice guide',
     comparisonHref: '/guides/ai-tools-for-voice-comparison',
     comparisonLabel: 'Compare voice tools',
-    nextStep: 'Compare voice tools, inspect detail pages, then move into submission or pricing.',
+    nextStep: 'Compare voice tools, inspect detail pages, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-video-tools',
@@ -450,7 +450,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to video guide',
     comparisonHref: '/guides/ai-video-tools-comparison',
     comparisonLabel: 'Compare video tools',
-    nextStep: 'Compare video tools, inspect product pages, then move into submission or pricing.',
+    nextStep: 'Compare video tools, inspect product pages, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-research-tools',
@@ -464,7 +464,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to research guide',
     comparisonHref: '/guides/ai-tools-for-research-comparison',
     comparisonLabel: 'Compare research tools',
-    nextStep: 'Compare research tools, inspect product pages, then move into submission or pricing.',
+    nextStep: 'Compare research tools, inspect product pages, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-seo-tools',
@@ -481,7 +481,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to SEO guide',
     comparisonHref: '/guides/ai-seo-tools-comparison',
     comparisonLabel: 'Compare SEO tools',
-    nextStep: 'Compare SEO tools, inspect detail pages, then move into submission or pricing.',
+    nextStep: 'Compare SEO tools, inspect detail pages, then verify limits and official sources before choosing.',
   },
   {
     key: 'ai-writing-tools',
@@ -495,7 +495,7 @@ export const topListTopics: TopListTopicConfig[] = [
     guideLabel: 'Back to writing guide',
     comparisonHref: '/guides/ai-writing-tools-comparison',
     comparisonLabel: 'Compare writing tools',
-    nextStep: 'Compare writing tools, inspect product pages, then move into submission or pricing.',
+    nextStep: 'Compare writing tools, inspect product pages, then verify limits and official sources before choosing.',
   },
 ];
 

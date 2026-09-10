@@ -141,7 +141,10 @@
     "test:distribution-closure": "tsx scripts/test-distribution-closure.ts",
     "test:regression": "tsx scripts/regression-test.ts",
     "theme:audit": "bash scripts/theme-audit.sh",
-    "adsense:verify": "node scripts/verify-adsense.mjs"
+    "adsense:verify": "node scripts/verify-adsense.mjs",
+    "test:topic-consistency": "tsx scripts/test-topic-consistency.ts",
+    "test:hreflang": "tsx scripts/test-hreflang-rendering.ts",
+    "test:topic-consistency:live": "tsx scripts/test-topic-consistency-live.ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

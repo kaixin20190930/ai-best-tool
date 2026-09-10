@@ -1,3 +1,5 @@
+import React from 'react';
+
 type EvidenceItem = {
   label: string;
   value: string;
@@ -14,6 +16,7 @@ type SignalCard = {
 type GuideEvidencePanelProps = {
   locale: string;
   checkedAt?: string;
+  checkedAtLabel?: string;
   scope: string;
   items: EvidenceItem[];
   decisionSteps?: string[];
@@ -22,7 +25,8 @@ type GuideEvidencePanelProps = {
 
 export default function GuideEvidencePanel({
   locale,
-  checkedAt = '2026-07-15',
+  checkedAt,
+  checkedAtLabel,
   scope,
   items,
   decisionSteps,
@@ -66,10 +70,14 @@ export default function GuideEvidencePanel({
           </h2>
           <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-700'>{scope}</p>
         </div>
-        <div className='rounded-2xl border border-emerald-200 bg-white px-4 py-3 text-sm shadow-sm'>
-          <p className='font-semibold text-slate-950'>{isChinese ? '最近检查' : 'Last checked'}</p>
-          <p className='mt-1 text-slate-600'>{checkedAt}</p>
-        </div>
+        {checkedAt ? (
+          <div className='rounded-2xl border border-emerald-200 bg-white px-4 py-3 text-sm shadow-sm'>
+            <p className='font-semibold text-slate-950'>
+              {checkedAtLabel || (isChinese ? '最近检查' : 'Last checked')}
+            </p>
+            <p className='mt-1 text-slate-600'>{checkedAt}</p>
+          </div>
+        ) : null}
       </div>
 
       <div className='mt-5 grid gap-3 md:grid-cols-3'>

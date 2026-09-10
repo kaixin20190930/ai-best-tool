@@ -20,7 +20,7 @@ const english = buildLocalizedPageMetadata({
 assert.equal(english.alternates?.canonical, `${baseUrl}/guides/ai-writing-tools`);
 assert.deepEqual(english.alternates?.languages, {
   en: `${baseUrl}/guides/ai-writing-tools`,
-  cn: `${baseUrl}/cn/guides/ai-writing-tools`,
+  'zh-CN': `${baseUrl}/cn/guides/ai-writing-tools`,
   'x-default': `${baseUrl}/guides/ai-writing-tools`,
 });
 assert.equal(english.openGraph?.url, english.alternates?.canonical);
@@ -34,7 +34,7 @@ const chinese = buildLocalizedPageMetadata({
 });
 
 assert.equal(chinese.alternates?.canonical, `${baseUrl}/cn/ai/fathom`);
-assert.equal(chinese.alternates?.languages?.cn, `${baseUrl}/cn/ai/fathom`);
+assert.equal(chinese.alternates?.languages?.['zh-CN'], `${baseUrl}/cn/ai/fathom`);
 
 const privatePage = buildLocalizedPageMetadata({
   locale: 'en',
