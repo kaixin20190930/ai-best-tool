@@ -9,7 +9,7 @@
 
 四周实施排期见 [证据驱动目录优化计划](./FOUR_WEEK_EVIDENCE_LED_DIRECTORY_PLAN_CN.md)。
 
-项目迭代统一遵循 [AI Best Tool 总控协作协议](./AI_PM_ORCHESTRATION_PROTOCOL_CN.md)：用户只向总控下达目标；每个交付单元固定创建一个开发任务和一个独立验收任务；开发不得直推 `main`，QA PASS、本地完整 build 与生产验证完成后才允许关闭，完成任务随后归档。2026-09-10 Best 页面与 SEO 边界修复是该协议下的首个正式交付单元：首次独立验收为 FAIL，同一开发任务完成修复后，候选 `09cafe79` 已通过第二轮独立验收，现等待总控主分支 build 与生产验证。
+项目迭代统一遵循 [AI Best Tool 总控协作协议](./AI_PM_ORCHESTRATION_PROTOCOL_CN.md)：用户只向总控下达目标；每个交付单元固定创建一个开发任务和一个独立验收任务；开发不得直推 `main`，QA PASS、本地完整 build 与生产验证完成后才允许关闭，完成任务随后归档。2026-09-10 Best 页面与 SEO 边界修复是该协议下的首个正式闭环交付单元：首次独立验收为 FAIL，同一开发任务完成修复并由同一 QA 复验；总控完成主分支回归、完整 build、部署和线上 smoke，最终 `main` 为 `ede3fec7`，状态为 `PROD_VERIFIED / CLOSED`。
 
 当前收尾执行见 [质量收尾与状态校正子方案](./QUALITY_CLOSEOUT_IMPLEMENTATION_2026-09-04_CN.md)，不是新主线。四周一级任务
 10/13完成（76.9%）；持续运营、内容覆盖、生产验收与效果验证分别统计。

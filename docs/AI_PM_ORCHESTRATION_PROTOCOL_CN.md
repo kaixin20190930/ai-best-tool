@@ -130,5 +130,6 @@ Otter.ai 任务属于协议生效前的旧流程：它独立完成并直接推�
 
 - 开发：`2026-09-10 11:11｜开发｜Best 页面与 SEO 边界一致性修复`
 - 验收：`2026-09-10 11:11｜验收｜Best 页面与 SEO 边界独立验证`
-- 状态：首次 QA 为 `FAIL`；开发在同一分支修复后，候选 `09cafe790f64f7d654fba5c8d8cf9e6ac9d9173b` 已通过第二轮独立验收，等待总控主分支 build 与生产验证。
+- 状态：`PROD_VERIFIED / CLOSED`。首次 QA 为 `FAIL`；同一开发任务修复后，`09cafe790f64f7d654fba5c8d8cf9e6ac9d9173b` 通过第二轮验收；生产 smoke 契约修复 `0f898fbcfd1e58c142725a84dac08ba0874ba896` 再次通过同一 QA 独立验收，并由总控合并为 `ede3fec7` 推送 `main`。
 - 已关闭阻断项：Best topic 语义映射、完整 sitemap HTML hreflang、回归门禁、真实稳定的 `lastModified`。
+- 总控门禁：13/13 回归测试、TypeScript 与完整 production build 通过；线上 smoke 通过，sitemap 为 116 个 URL；弱主题保持 `noindex` 且不进 sitemap，Guide 输出 `en / zh-CN / x-default`。
