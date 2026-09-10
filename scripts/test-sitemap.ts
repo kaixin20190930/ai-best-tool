@@ -63,13 +63,13 @@ async function testSitemap() {
     let invalidEntries = 0;
 
     for (const entry of sitemapEntries) {
-      if (!entry.url || !entry.lastModified || !entry.changeFrequency || entry.priority === undefined) {
+      if (!entry.url || !entry.changeFrequency || entry.priority === undefined) {
         invalidEntries++;
       }
     }
 
     if (invalidEntries === 0) {
-      console.log('✅ All entries have required fields (url, lastModified, changeFrequency, priority)\n');
+      console.log('✅ All entries have required fields (url, changeFrequency, priority); lastModified is optional for undated dynamic records\n');
     } else {
       console.log(`❌ ${invalidEntries} entries are missing required fields\n`);
     }
@@ -79,7 +79,7 @@ async function testSitemap() {
     let invalidDates = 0;
 
     for (const entry of sitemapEntries) {
-      if (!(entry.lastModified instanceof Date) || isNaN(entry.lastModified.getTime())) {
+      if (entry.lastModified !== undefined && (!(entry.lastModified instanceof Date) || isNaN(entry.lastModified.getTime()))) {
         invalidDates++;
       }
     }

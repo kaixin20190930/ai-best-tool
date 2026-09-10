@@ -144,7 +144,8 @@
     "adsense:verify": "node scripts/verify-adsense.mjs",
     "test:topic-consistency": "tsx scripts/test-topic-consistency.ts",
     "test:hreflang": "tsx scripts/test-hreflang-rendering.ts",
-    "test:topic-consistency:live": "tsx scripts/test-topic-consistency-live.ts"
+    "test:topic-consistency:live": "tsx scripts/test-topic-consistency-live.ts",
+    "test:sitemap-pages": "tsx scripts/test-sitemap-pages.ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

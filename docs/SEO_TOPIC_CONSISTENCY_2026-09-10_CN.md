@@ -1,4 +1,6 @@
-# Best topic SEO 一致性修复（2026-09-10）
+# Best topic SEO 一致性修复（2026-09-10，初版历史）
+
+> 本初版已被独立 QA 判定 FAIL；当前策略与修复以 [QA 修订说明](SEO_TOPIC_QA_REVISION_2026-09-10_CN.md) 为准。
 
 基线：`main@f29b7dc3`。开发分支：`codex/seo-topic-consistency-2026-09-10`。
 本任务仅修改代码和测试；未部署、未向 main 推送、未更改生产数据库。

@@ -3,7 +3,7 @@ import { CheckCircle2, ExternalLink, FileText, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
-import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
+import { buildLocalizedPageMetadata, generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -18,17 +18,17 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     namespace: 'Metadata.home',
   });
 
-  return {
+  return buildLocalizedPageMetadata({
+    locale,
+    path: '/guides/how-to-choose-ai-tools',
+    baseUrl: BASE_URL,
     title:
       locale === 'cn' || locale === 'tw' ? '如何选择 AI 工具 | AI Best Tool' : `How to choose AI tools | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
         ? '一个实用的 AI 工具选型指南：先看场景，再看价格、更新、截图和评论。'
         : 'A practical guide to choosing AI tools: start with use case, then check pricing, freshness, screenshots, and comments.',
-    alternates: {
-      canonical: generateLocalizedCanonicalUrl('/guides/how-to-choose-ai-tools', locale, BASE_URL),
-    },
-  };
+  });
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {

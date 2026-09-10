@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import dotenv from 'dotenv';
 import { JSDOM } from 'jsdom';
 
+import { getCanonicalToolSlug } from '../lib/config/toolRouteAliases';
 import { topListTopics } from '../lib/data/topLists';
 import { getEditorialReviewRecord } from '../lib/seo/contentReviewDates';
 import { getStaticPageLastModified } from '../lib/seo/staticPageDates';
@@ -70,7 +71,16 @@ async function main() {
         assert.equal(countLabel?.nextElementSibling?.textContent, String(data.toolCount), `${path}: count`);
         const cards = [...document.querySelectorAll('p')].filter((node) => /^#\d+$/.test(node.textContent || ''));
         assert.equal(cards.length, data.tools.length, `${path}: visible tool cards`);
-        if (data.indexable) assert(cards.length > 0, `${path}: indexable empty list`);
+        if (data.indexable) assert(cards.length >= 2, `${path}: indexable list needs two candidates`);
+        const topicSection = document.querySelector(`[data-topic="${topic.key}"]`)!;
+        assert(topicSection, `${path}: topic content missing`);
+        const allowedToolSlugs = data.tools.map((tool) => getCanonicalToolSlug(tool.name));
+        for (const link of topicSection.querySelectorAll('a[href]')) {
+          const href = link.getAttribute('href')!;
+          if (/\/ai\//.test(href) && href.startsWith('/')) {
+            assert(allowedToolSlugs.includes(getCanonicalToolSlug(decodeURIComponent(href.split('/').pop()!))), `${path}: unreviewed example link ${href}`);
+          }
+        }
         assert(text.includes(getEditorialReviewRecord('best-topic-template').reviewedAt), `${path}: panel date`);
         assert(
           !/2026-07-15|转化|routes traffic|pure traffic|keep clicking/.test(text),
@@ -99,7 +109,7 @@ async function main() {
   assert(!sitemapPaths.has('/best-ai-tools/unknown-topic'));
   const second = await read('/sitemap.xml');
   assert.equal(second.html, sitemap.html, 'Repeated sitemap requests must have stable lastmod.');
-  fs.writeFileSync('reports/seo-topic-consistency-2026-09-10/live-pages.json', JSON.stringify(results, null, 2) + '\n');
+  fs.writeFileSync('reports/seo-topic-consistency-2026-09-10/qa-revision/live-pages.json', JSON.stringify(results, null, 2) + '\n');
   console.log(
     `Live checks passed: ${results.length} topic pages, 3 historical locales, unknown-topic noindex, and actual sitemap XML.`,
   );

@@ -1,0 +1,466 @@
+[
+  {
+    "url": "https://aibesttool.com/cn",
+    "error": "Incomplete or incorrect alternate set\n+ actual - expected\n\n  {\n+   'x-default': 'https://aibesttool.com',\n-   'x-default': 'https://aibesttool.com/',\n    'zh-CN': 'https://aibesttool.com/cn',\n+   en: 'https://aibesttool.com'\n-   en: 'https://aibesttool.com/'\n  }\n"
+  },
+  {
+    "url": "https://aibesttool.com/",
+    "error": "Incomplete or incorrect alternate set\n+ actual - expected\n\n  {\n+   'x-default': 'https://aibesttool.com',\n-   'x-default': 'https://aibesttool.com/',\n    'zh-CN': 'https://aibesttool.com/cn',\n+   en: 'https://aibesttool.com'\n-   en: 'https://aibesttool.com/'\n  }\n"
+  },
+  {
+    "url": "https://aibesttool.com/explore",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/explore",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/guides",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/guides",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/best-ai-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/best-ai-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/guides/how-to-choose-ai-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/guides/how-to-choose-ai-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/guides/free-ai-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/guides/free-ai-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/guides/best-free-ai-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/guides/best-free-ai-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/guides/ai-writing-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/guides/ai-seo-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/guides/ai-seo-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/guides/ai-video-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/guides/ai-video-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/guides/ai-image-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/guides/ai-image-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/guides/ai-coding-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/guides/ai-coding-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/guides/ai-chatbot-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/guides/ai-chatbot-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/guides/ai-productivity-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/guides/ai-productivity-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/guides/ai-writing-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/guides/ai-tools-for-research",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/guides/ai-tools-for-research",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/guides/ai-tools-for-developers",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/guides/ai-tools-for-developers",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/guides/ai-tools-for-automation",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/guides/ai-tools-for-marketing",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/guides/ai-tools-for-marketing",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/guides/ai-tools-for-automation",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/guides/ai-tools-for-sales",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/guides/ai-tools-for-sales",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/guides/ai-tools-for-web3",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/guides/ai-tools-for-web3",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/guides/ai-note-taking-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/guides/ai-note-taking-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/guides/ai-tools-for-voice",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/guides/ai-tools-for-voice",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/best-ai-tools/ai-agency-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/best-ai-tools/ai-agency-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/best-ai-tools/ai-agent-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/best-ai-tools/ai-agent-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/best-ai-tools/ai-automation-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/best-ai-tools/ai-automation-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/best-ai-tools/ai-chatbot-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/best-ai-tools/ai-chatbot-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/best-ai-tools/ai-coding-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/best-ai-tools/ai-coding-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/best-ai-tools/ai-code-review-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/best-ai-tools/ai-code-review-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/best-ai-tools/ai-content-creation-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/best-ai-tools/ai-content-creation-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/best-ai-tools/ai-creator-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/best-ai-tools/ai-creator-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/best-ai-tools/ai-image-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/best-ai-tools/ai-image-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/best-ai-tools/ai-meeting-notes-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/best-ai-tools/ai-meeting-notes-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/best-ai-tools/ai-note-taking-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/best-ai-tools/ai-note-taking-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/best-ai-tools/ai-productivity-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/best-ai-tools/ai-productivity-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/best-ai-tools/ai-small-business-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/best-ai-tools/ai-small-business-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/best-ai-tools/ai-student-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/best-ai-tools/ai-student-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/best-ai-tools/ai-web3-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/best-ai-tools/ai-web3-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/best-ai-tools/ai-voice-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/best-ai-tools/ai-voice-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/best-ai-tools/ai-video-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/best-ai-tools/ai-video-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/best-ai-tools/ai-research-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/best-ai-tools/ai-research-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/best-ai-tools/ai-writing-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/best-ai-tools/ai-writing-tools",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/ai/viggle",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/ai/viggle",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/ai/character_ai",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/ai/character_ai",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/ai/gemini",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/ai/gemini",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/ai/shutterstock",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/ai/shutterstock",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/ai/deepl",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/ai/deepl",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/ai/claude",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/ai/claude",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/ai/notion",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/ai/notion",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/ai/poe",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/ai/poe",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/ai/suno_ai",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/ai/suno_ai",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/ai/n8n",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/ai/n8n",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/ai/fathom",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/ai/fathom",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/ai/emdash",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/ai/emdash",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/ai/openrouter",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/ai/openrouter",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/categories/productivity",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/categories/productivity",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/categories/design-art",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/categories/design-art",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/categories/life-assistant",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/categories/life-assistant",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/categories/other",
+    "status": 200
+  },
+  {
+    "url": "https://aibesttool.com/cn/categories/other",
+    "status": 200
+  }
+]

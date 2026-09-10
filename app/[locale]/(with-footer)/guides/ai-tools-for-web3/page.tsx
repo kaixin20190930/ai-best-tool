@@ -3,7 +3,7 @@ import { CircleDollarSign, ExternalLink, Globe, Layers3 } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
-import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
+import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -17,14 +17,16 @@ import { Link } from '@/app/navigation';
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Metadata.home' });
 
-  return {
+  return buildLocalizedPageMetadata({
+    locale,
+    path: '/guides/ai-tools-for-web3',
+    baseUrl: BASE_URL,
     title: locale === 'cn' || locale === 'tw' ? 'AI Web3 工具推荐 | AI Best Tool' : `AI tools for Web3 | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
         ? '面向 Web3、链上数据、钱包和 Crypto 工作流的 AI 工具选型指南，先看榜单再进对比页。'
         : 'A practical guide to AI tools for Web3, on-chain data, wallets, and crypto workflows, with a path from guide to ranking and comparison.',
-    alternates: { canonical: generateLocalizedCanonicalUrl('/guides/ai-tools-for-web3', locale, BASE_URL) },
-  };
+  });
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {

@@ -1,0 +1,116 @@
+{
+  "baseline": "68f9338dc031a04f88f1c28080b98b2e66005664",
+  "branch": "codex/seo-topic-consistency-2026-09-10",
+  "completedAt": "2026-09-10T05:36:17.532Z",
+  "finalChecks": [
+    {
+      "command": "pnpm run test:topic-consistency",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:hreflang",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:seo-architecture",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:seo-breadcrumbs",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:localized-metadata",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:editorial-review-dates",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:virtual-category-hubs",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:guide-link-boundaries",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:guide-decision-paths",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:tool-indexing",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:index-consistency",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:tool-route-aliases",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:sitemap",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:regression",
+      "exitCode": 0
+    },
+    {
+      "command": "./node_modules/.bin/tsc --noEmit",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run build",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:sitemap-pages",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:topic-consistency:live",
+      "exitCode": 0
+    },
+    {
+      "command": "scripts/verify-sitemap-xml.ts (with local environment)",
+      "exitCode": 0
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0
+    }
+  ],
+  "developmentAttempts": [
+    {
+      "command": "pnpm run test:regression (68f9338d baseline)",
+      "exitCode": 1,
+      "detail": "9/13 passed; old hreflang, raw-image/delegation/docs guard, SVG placeholder string guard, and cache timer keeping completed data-access process alive."
+    },
+    {
+      "command": "pnpm exec tsx scripts/verify-webp-support.ts (intermediate)",
+      "exitCode": 1,
+      "detail": "WebNavCard delegated to ToolCardMedia; added verification of the full renderer chain."
+    },
+    {
+      "command": "pnpm run test:sitemap-pages (first full scan)",
+      "exitCode": 1,
+      "detail": "114/116 passed; root href with/without trailing slash is the same URL. Compare parsed URL href while preserving exact alternate counts, locales and paths."
+    },
+    {
+      "command": "HTTP runner (first scan + topic probe)",
+      "exitCode": 1,
+      "detail": "Full scan returned 1; all 56 topic probes returned 0. Final full scan returned 0."
+    }
+  ],
+  "coverage": {
+    "sitemapUrls": 116,
+    "guideUrls": 36,
+    "topicPages": 56,
+    "indexableTopics": 19,
+    "noindexTopics": 9
+  }
+}

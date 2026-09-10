@@ -3,7 +3,7 @@ import { ArrowRight, CheckCircle2, ExternalLink, Search, Sparkles } from 'lucide
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
-import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
+import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
@@ -18,14 +18,16 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     namespace: 'Metadata.home',
   });
 
-  return {
+  return buildLocalizedPageMetadata({
+    locale,
+    path: '/guides/ai-seo-tools',
+    baseUrl: BASE_URL,
     title: locale === 'cn' || locale === 'tw' ? 'AI SEO 工具推荐 | AI Best Tool' : `AI SEO tools | ${t('title')}`,
     description:
       locale === 'cn' || locale === 'tw'
         ? '适合关键词研究、内容优化和排名跟踪的 AI 工具推荐与选型指南。'
         : 'A practical guide to AI SEO tools for keyword research, content optimization, and rank tracking.',
-    alternates: { canonical: generateLocalizedCanonicalUrl('/guides/ai-seo-tools', locale, BASE_URL) },
-  };
+  });
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {

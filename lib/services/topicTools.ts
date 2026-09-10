@@ -1,9 +1,8 @@
 import { cache } from 'react';
 
 import { SAFETY_TOOL_SLUGS } from '@/lib/config/safetyToolReviews';
-import { TOPIC_TOOL_NAMES } from '@/lib/data/topicToolSources';
+import { MIN_TOPIC_CANDIDATES, TOPIC_TOOL_NAMES } from '@/lib/data/topicToolSources';
 import { topListTopics, type TopListTopicConfig } from '@/lib/data/topLists';
-import { getAllCategories, type Category } from '@/lib/services/categories';
 import { getTools, type Tool } from '@/lib/services/tools';
 
 function hasText(value: Record<string, string> | null | undefined): boolean {
@@ -23,35 +22,31 @@ export function isEligibleTopicTool(tool: Tool): boolean {
   );
 }
 
-export function selectTopicTools(topic: TopListTopicConfig, tools: Tool[], categories: Category[]) {
-  const names = TOPIC_TOOL_NAMES[topic.key];
-  const category = categories.find((item) => item.slug === topic.categorySlug) || null;
+export function selectTopicTools(topic: TopListTopicConfig, tools: Tool[]) {
+  const names = TOPIC_TOOL_NAMES[topic.key] || []; // Fail closed for unregistered runtime keys.
   const seen = new Set<string>();
   const candidates = tools.filter((tool) => {
-    const matches = names ? names.includes(tool.name) : Boolean(category && tool.categoryId === category.id);
+    const matches = names.includes(tool.name);
     if (!matches || !isEligibleTopicTool(tool) || seen.has(tool.id)) return false;
     seen.add(tool.id);
     return true;
   });
   return {
-    category: names ? null : category,
+    category: null,
     tools: candidates.slice(0, 8),
     toolCount: candidates.length,
-    indexable: candidates.length > 0,
+    indexable: candidates.length >= MIN_TOPIC_CANDIDATES,
   };
 }
 
 // One request snapshot for metadata and page rendering. Database failure must
 // propagate, so a temporary outage cannot publish a successful empty sitemap.
 export async function loadTopicCatalog() {
-  const [result, categories] = await Promise.all([
-    getTools({ status: 'published' }, { page: 1, pageSize: 10000 }, 'popular'),
-    getAllCategories(),
-  ]);
+  const result = await getTools({ status: 'published' }, { page: 1, pageSize: 10000 }, 'popular');
   if (result.total > result.data.length) throw new Error('Topic catalog is incomplete; pagination required.');
   return {
     tools: result.data,
-    topics: new Map(topListTopics.map((topic) => [topic.key, selectTopicTools(topic, result.data, categories)])),
+    topics: new Map(topListTopics.map((topic) => [topic.key, selectTopicTools(topic, result.data)])),
   };
 }
 

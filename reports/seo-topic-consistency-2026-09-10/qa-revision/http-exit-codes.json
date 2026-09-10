@@ -1,0 +1,10 @@
+[
+  {
+    "command": "pnpm run test:sitemap-pages",
+    "exitCode": 0
+  },
+  {
+    "command": "pnpm run test:topic-consistency:live",
+    "exitCode": 0
+  }
+]
