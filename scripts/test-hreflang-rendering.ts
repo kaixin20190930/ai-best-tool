@@ -5,6 +5,7 @@ import { generateHreflangMetadata, generateSEOMetadataWithLocales } from '../com
 import { locales } from '../i18n';
 import { buildLocalizedPageMetadata, generateHreflangLinks } from '../lib/seo/metadata';
 import intlMiddleware from '../middlewares/intlMiddleware';
+import { hasExpectedMetadata } from './production-seo-smoke';
 
 const baseUrl = 'https://aibesttool.com';
 for (const locale of locales) {
@@ -52,6 +53,35 @@ for (const path of ['/pricing', '/guides/ai-tools-for-ecommerce', '/profile/deci
   const response = intlMiddleware(new NextRequest(`${baseUrl}${path}`));
   assert(!response.headers.get('link')?.includes('hreflang='), `${path}: noindex route emitted HTTP alternates.`);
 }
+// Test the actual production smoke validator, including the old cn-label failure.
+// Both en and /cn pages use zh-CN as the language code while keeping /cn URLs.
+for (const path of ['/ai/claude', '/cn', '/cn/best-ai-tools/ai-writing-tools']) {
+  const enPath = path.replace(/^\/cn(?=\/|$)/, '') || '/';
+  const enUrl = `${baseUrl}${enPath === '/' ? '' : enPath}`;
+  const cnUrl = `${baseUrl}/cn${enPath === '/' ? '' : enPath}`;
+  const html =
+    `<link rel="canonical" href="${baseUrl}${path}"/>` +
+    `<link rel="alternate" hrefLang="en" href="${enUrl}"/>` +
+    `<link rel="alternate" hrefLang="zh-CN" href="${cnUrl}"/>` +
+    `<link rel="alternate" hrefLang="x-default" href="${enUrl}"/>`;
+  assert(hasExpectedMetadata(html, path), `${path}: valid production language contract rejected`);
+  assert(
+    !hasExpectedMetadata(html.replace('hrefLang="zh-CN"', 'hrefLang="cn"'), path),
+    `${path}: legacy cn label accepted`,
+  );
+  assert(
+    !hasExpectedMetadata(html.replace('hrefLang="x-default"', 'hrefLang="fr"'), path),
+    `${path}: missing x-default accepted`,
+  );
+  assert(
+    !hasExpectedMetadata(
+      html.replace(`hrefLang="zh-CN" href="${cnUrl}"`, `hrefLang="zh-CN" href="${baseUrl}/zh-CN${enPath}"`),
+      path,
+    ),
+    `${path}: incorrect Chinese route accepted`,
+  );
+}
+
 console.log(
   'Hreflang passed: en / zh-CN / x-default only; /cn URLs; no alternates for noindex languages or competing HTTP declarations.',
 );

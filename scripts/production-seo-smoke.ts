@@ -1,3 +1,5 @@
+import { INDEXABLE_HREFLANG } from '../lib/seo/indexing';
+
 const requestBaseUrl = (process.env.SEO_BASE_URL || 'https://aibesttool.com').replace(/\/$/, '');
 const canonicalBaseUrl = (process.env.SEO_CANONICAL_BASE_URL || 'https://aibesttool.com').replace(/\/$/, '');
 const isCanonicalHostCheck = new URL(requestBaseUrl).hostname === new URL(canonicalBaseUrl).hostname;
@@ -36,12 +38,12 @@ function getLinkHref(body: string, rel: 'canonical' | 'alternate', hrefLang?: st
   return tag?.match(/href="([^"]+)"/)?.[1] || null;
 }
 
-function hasExpectedMetadata(body: string, path: string) {
+export function hasExpectedMetadata(body: string, path: string) {
   const expected = getExpectedAlternates(path);
   return (
     getLinkHref(body, 'canonical') === expected.canonical &&
-    getLinkHref(body, 'alternate', 'en') === expected.en &&
-    getLinkHref(body, 'alternate', 'cn') === expected.cn &&
+    getLinkHref(body, 'alternate', INDEXABLE_HREFLANG.en) === expected.en &&
+    getLinkHref(body, 'alternate', INDEXABLE_HREFLANG.cn) === expected.cn &&
     getLinkHref(body, 'alternate', 'x-default') === expected.xDefault
   );
 }
@@ -57,14 +59,14 @@ function isNoindexResponse(response: Response, body: string) {
 }
 
 function getDecisionCardLinks(body: string) {
-  return Array.from(new Set([...body.matchAll(/href="([^"]+?#decision-card)"/g)].map((match) => match[1])));
+  return Array.from(new Set(Array.from(body.matchAll(/href="([^"]+?#decision-card)"/g), (match) => match[1])));
 }
 
 function hasSingleBreadcrumbPair(body: string) {
   const visibleCount = (body.match(/<nav aria-label="Breadcrumb"/g) || []).length;
-  const breadcrumbSchemaCount = [
-    ...body.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g),
-  ].filter((match) => match[1].includes('BreadcrumbList')).length;
+  const breadcrumbSchemaCount = Array.from(
+    body.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g),
+  ).filter((match) => match[1].includes('BreadcrumbList')).length;
 
   return visibleCount === 1 && breadcrumbSchemaCount === 1;
 }
@@ -139,7 +141,7 @@ async function runSmokeCheck() {
       } else if (isNoindexResponse(response, body)) {
         console.log(`✅ ${path}: canonical aligned and noindex boundary explicit`);
       } else if (hasExpectedMetadata(body, path)) {
-        console.log(`✅ ${path}: canonical and en/cn/x-default alternates are aligned`);
+        console.log(`✅ ${path}: canonical and en/zh-CN/x-default alternates are aligned`);
       } else {
         failures++;
         console.error(`❌ ${path}: indexable page hreflang alternates are not aligned`);
@@ -219,7 +221,7 @@ async function runSmokeCheck() {
 
   try {
     const { response: sitemapResponse, body: sitemap } = await fetchText('/sitemap.xml');
-    const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+    const urls = Array.from(sitemap.matchAll(/<loc>([^<]+)<\/loc>/g), (match) => match[1]);
     const internalUrls = urls.filter((url) =>
       /\/(admin|login|register|profile|pricing|submit|developer\/listing|find-tools|decision|new|startup)(\/|$)/.test(
         new URL(url).pathname,
@@ -247,7 +249,10 @@ async function runSmokeCheck() {
   console.log(`\n✅ Production SEO smoke check passed for ${requestBaseUrl}`);
 }
 
-runSmokeCheck().catch((error) => {
-  console.error(error instanceof Error ? error.message : String(error));
-  process.exitCode = 1;
-});
+// Keep imports network-free so tests exercise this exact production validator.
+if (require.main === module) {
+  runSmokeCheck().catch((error) => {
+    console.error(error instanceof Error ? error.message : String(error));
+    process.exitCode = 1;
+  });
+}
