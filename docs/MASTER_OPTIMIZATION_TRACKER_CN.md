@@ -80,14 +80,15 @@ sitemap。专项内容、身份链接、TypeScript、数据库 rollback/commit/s
 差异化、证据账本、变化追踪与商业化触发条件见
 [AI 工具决策平台差异化与商业化实施路线图](./EVIDENCE_DECISION_PLATFORM_ROADMAP_CN.md)。
 
-### 当前维护优先级（更新至 2026-09-09）
+### 当前维护优先级（更新至 2026-09-10）
 
 2026-09-07 持续收录准备：已建立 [下周成熟工具候选与发布节奏](./NEXT_WEEK_MATURE_TOOL_INTAKE_2026-09-07_CN.md)。候选顺序
 为 Synthesia、Replit、Otter.ai、Lovable 与 Midjourney；五个候选均已完成结构化预审与生产查重。Synthesia 与 Replit 已分别
 在 09-08、09-09 通过当日门禁并以 `monitor/noindex` 发布。下一槽为 Otter.ai，已完成查重、结构化预审和 alias 代码收口：旧
 `/ai/otter` 及本地化路径统一 308 到唯一 `/ai/otter-ai` canonical，部署后双语路径、canonical、noindex 和 sitemap 排除均已
-验收；09-09 又完成发布前材料包与自动日期门禁。生产发布仍最早为 2026-09-10，届时必须重新核对价格、额度和隐私，且区分月
-付、年付、促销和地区价格后才能生成正式 release payload。当前 Lovable 的旧双余额冲突也已通过实时官方文档解决：当前为
+验收；09-09 又完成发布前材料包与自动日期门禁。2026-09-10 已完成当天官方复核并发布：标准月付与年付价格、首次订阅促销、
+地区/教育折扣已隔离，分钟、导入、历史、并发、自动加入、共享、隐私和企业 API 边界均已回写。生产记录为 `published +
+monitor`，双语页面继续 noindex、sitemap 未扩张，下一次复核为 2026-10-10。当前 Lovable 的旧双余额冲突也已通过实时官方文档解决：当前为
 Build/Cloud/AI 统一 credits，旧口径仅作历史或过渡账户提示；其预审最早排在 2026-09-11。Midjourney 的价格、GPU 计
 费、Web/Discord、编辑、视频、默认公开、Stealth 与商业权利边界已补齐，最早排在 2026-09-12。当前没有配置 DataForSEO，因此
 不伪造搜索量；审核可以并行，但公开默认每天 1 个，全部先 `monitor / noindex`，索引仍需单独批准。准备阶段没有写生产；后续

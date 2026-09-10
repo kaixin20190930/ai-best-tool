@@ -1,0 +1,64 @@
+{
+  "id": "b8d6a9bd-d9cd-4690-b801-15b1c1fe0a49",
+  "slug": "otter-ai",
+  "officialUrl": "https://otter.ai/",
+  "reviewedAt": "2026-09-10",
+  "nextReviewDate": "2026-10-10",
+  "categorySlug": "chatbot",
+  "pricing": "freemium",
+  "title": {
+    "en": "Otter.ai AI Meeting Transcription and Knowledge Assistant",
+    "zh": "Otter.ai AI 会议转录与会议知识助手"
+  },
+  "content": {
+    "en": "Otter.ai records or imports meetings, produces live transcripts, speaker labels, summaries, action items, searchable history, and team meeting workflows. It is strongest for meeting-heavy teams that can review accuracy, notify participants, and govern auto-join, sharing, ownership, retention, and plan limits.",
+    "zh": "Otter.ai 可录制或导入会议，生成实时转录、说话人标记、摘要、行动项、可搜索历史和团队会议工作流。它适合能复核准确性、告知参会者，并治理自动入会、共享、归属、留存和套餐限制的高会议频率团队。"
+  },
+  "detail": {
+    "en": "Decision summary: choose Otter.ai when an individual or team wants calendar-connected meeting capture, live transcription, searchable history, summaries, action items, and collaboration in one workflow. It is most useful when the cost of repeatedly finding decisions across calls is higher than the time needed to review a transcript. It is a weaker fit when meetings cannot be recorded, participant notice or data handling remains unresolved, an exact legal or contractual record is required without review, or the organization cannot govern automated joining, sharing, ownership, retention, and offboarding.\n\nCommercial boundary reviewed September 10, 2026: Basic is free, with 300 monthly transcription minutes, a 30-minute maximum per conversation, three lifetime audio or video imports, and access to the 25 most recent conversations. The current standard monthly page shows Pro at $16.99 per user per month and Business at $30 per user per month before a first-time-subscriber Business promotion. The annual view shows Pro at $8.33 per user per month billed annually and Business at $19.99 per user per month billed annually. Those are distinct billing contexts: the page also renders India-card and education discounts, which are not standard reference prices. Pro includes 1,200 monthly shared transcription minutes, ten monthly imports, 90-minute conversations, unlimited history, and two concurrent meetings. Business permits unlimited meeting and in-app recording transcription, but imported-file transcription is capped at 6,000 minutes per user per month; it supports four-hour conversations and three concurrent meetings. Minutes do not roll over. Confirm the live checkout, tax, region, promotion eligibility, and current plan page before purchase.\n\nAccuracy boundary: transcription, speaker labels, summaries, action items, and AI Chat are assistance, not a verified record. Names, acronyms, accents, background noise, overlapping speech, inferred commitments, and missing context require review against the transcript and, where available, the recording. Test one internal meeting first and record correction time, missed decisions, false action items, minutes used, imports, and whether the meeting history actually improves later retrieval. Do not use a generated answer as a quote, professional advice, or a final decision without checking the underlying meeting material.\n\nPrivacy and participation boundary: Otter Notetaker can join Zoom, Google Meet, and Microsoft Teams meetings through synced calendar events. Turning off the default auto-join setting does not undo event-level choices previously changed by a user, so review upcoming events after changing it. Before connecting a calendar or using external meetings, define who may enable joining, how participants are notified, which audience can receive a conversation, whether public links are permitted, and what owners, administrators, guests, or collaborators can export. A host invitation, calendar connection, or product notification does not itself satisfy every consent, workplace, contractual, privacy, or jurisdiction-specific requirement.\n\nTeam and enterprise boundary: conversation ownership and permissions affect access after a downgrade, workspace change, or offboarding. Older Basic conversations can be archived rather than deleted, and deleting a conversation does not restore consumed minutes. Establish an export, retention, deletion, access-review, and incident process before making meeting history an organizational knowledge base. Enterprise-only or contract-led capabilities include API and webhooks, SSO, SCIM, domain capture, and HIPAA compliance as an add-on; do not infer them from an individual plan. A practical trial is a noticed internal meeting, followed by transcript review, auto-join and sharing checks, one export, and a documented ownership and deletion path.",
+    "zh": "决策结论：当个人或团队希望把日历关联的会议采集、实时转录、可搜索历史、摘要、行动项和协作放在同一工作流中时，可以考虑 Otter.ai。它最适合反复从大量会议中寻找决策的成本，高于复核转录所花时间的场景。如果会议不能录制、参会者告知或数据处理尚未解决、需要未经人工核查的法律或合同级准确记录，或组织无法治理自动入会、共享、归属、留存和离职交接，则不适合直接采用。\n\n截至 2026 年 9 月 10 日的商业边界：Basic 免费，含每月 300 分钟转录、单次最多 30 分钟、终身 3 次音视频导入和最近 25 条会话访问。标准月付页面显示 Pro 为每用户每月 16.99 美元，Business 为每用户每月 30 美元，后者另有仅限首次订阅者的促销。年付页面显示 Pro 每用户每月 8.33 美元、Business 每用户每月 19.99 美元，均按年计费。这些不是同一计费条件；页面还同时展示印度银行卡及教育折扣，不能作为标准参考价。Pro 包含每月 1,200 分钟共享转录额度、10 次月度导入、单次 90 分钟、不限历史和 2 个并发会议。Business 的会议及应用内录制转录不限量，但导入文件每用户每月上限为 6,000 分钟；单次最长 4 小时、3 个并发会议。分钟不结转。购买前应再次确认官网结账页、税费、地区、促销资格和当前套餐。\n\n准确性边界：转录、说话人标签、摘要、行动项和 AI Chat 都是辅助信息，不是经核验的会议记录。姓名、缩写、口音、噪音、多人重叠、推断出的承诺和遗漏上下文都需要对照转录及录音复核。建议先用一场已告知参会者的内部会议试用，记录修正时间、漏掉的决策、错误行动项、额度消耗、导入限制以及是否真的改善后续检索。生成内容不能在未核查原始会议材料的情况下被当作引用、专业建议或最终决定。\n\n隐私与参会边界：Otter Notetaker 可通过同步日历加入 Zoom、Google Meet 和 Microsoft Teams 会议。关闭默认自动加入不会撤销用户此前单独修改过的事件设置，因此调整后仍要检查即将到来的会议。连接日历或用于外部会议前，应定义谁能启用加入、如何告知参会者、哪些人可收到会话、是否允许公开链接，以及拥有者、管理员、访客和协作者的导出权限。主持人邀请、日历连接或产品提示本身，并不自动满足所有同意、工作场所、合同、隐私或不同司法辖区的要求。\n\n团队与企业边界：会话归属和权限会影响降级、工作区变更或离职后的访问。Basic 的旧会话可能被归档而非删除，删除会话也不会恢复已消耗分钟。把会议历史作为组织知识库前，应先明确导出、留存、删除、访问复核和事件响应流程。API、webhook、SSO、SCIM、域名捕获以及 HIPAA 合规附加项属于 Enterprise 或合同范围，不能从个人套餐推断。实用的试用方式是一场已通知的内部会议，随后复核转录、自动加入和共享设置，完成一次导出，并记录归属与删除路径。"
+  },
+  "imageUrl": "/icons/tool-logos/otter.svg",
+  "thumbnailUrl": "/images/tool-media/otter-cover.svg",
+  "tags": ["ai-meeting-assistant", "meeting-transcription", "meeting-notes", "conversation-intelligence"],
+  "features": {
+    "audience": {
+      "bestFit": {
+        "en": ["Meeting-heavy teams that can notify participants and review generated notes", "Teams comparing searchable meeting history, action items, and collaboration workflows", "Organizations prepared to govern ownership, sharing, retention, and offboarding"],
+        "zh": ["能够告知参会者并复核生成笔记的高会议频率团队", "比较可搜索会议历史、行动项和协作工作流的团队", "准备治理归属、共享、留存和离职交接的组织"]
+      },
+      "notIdealFor": {
+        "en": ["Sensitive meetings with unresolved recording permission or data-handling rules", "Workflows that require transcripts or AI answers to be authoritative without review", "Teams unable to control calendar auto-join, sharing, ownership, and retention"],
+        "zh": ["录制许可或数据处理规则尚未解决的敏感会议", "要求转录或 AI 回答无需复核即可作为权威记录的工作流", "无法控制日历自动加入、共享、归属和留存的团队"]
+      }
+    },
+    "editorial": {
+      "reviewedAt": "2026-09-10",
+      "reviewedBy": "AI Best Tool editorial",
+      "sourceUrl": "https://otter.ai/pricing",
+      "summary": "Release-day review separated standard monthly and annual pricing from eligibility-limited promotions and reconciled minutes, imports, history, concurrency, auto-join, sharing, and enterprise boundaries against official documentation.",
+      "trustNote": "The page remains monitor/noindex until its evidence, rendering, and independent search intent are reviewed after release."
+    },
+    "marketValidation": {
+      "reviewedAt": "2026-09-10",
+      "score": 96,
+      "scores": {"marketDurability": 25, "independentAdoption": 24, "decisionValue": 24, "evidenceQuality": 23},
+      "verdict": "validated",
+      "rationale": "Independent review volume, sustained product operation, broad meeting-platform support, and current official documentation support inclusion. Recommendation remains conditional on accuracy review, consent, auto-join and sharing controls, plan limits, and organizational governance.",
+      "strongSignals": ["More than 500 G2 reviews at preaudit time", "Long-running cross-platform meeting transcription product with current official plan and help documentation", "Clear decision value where teams need searchable meeting history rather than another generic productivity tool"],
+      "evidenceUrls": ["https://otter.ai/pricing", "https://help.otter.ai/hc/en-us/articles/360047538094-Conversation-import-and-app-limits-on-the-Basic-free-plan", "https://help.otter.ai/hc/en-us/articles/12906714508823-Stop-Otter-Notetaker-from-automatically-joining-your-meetings", "https://help.otter.ai/hc/en-us/articles/14952683922711-Turn-off-auto-share-for-conversations-meetings", "https://www.g2.com/products/otter-ai/reviews"]
+    },
+    "pricingSnapshot": {
+      "checkedAt": "2026-09-10",
+      "basic": "Free; 300 shared monthly transcription minutes, 30 minutes per conversation, 3 lifetime imports, and 25 recent conversations",
+      "pro": "$16.99 per user/month on the standard monthly view, or $8.33 per user/month billed annually; 1,200 shared monthly minutes, 10 monthly imports, 90 minutes per conversation, unlimited history, and 2 concurrent meetings",
+      "business": "$30 per user/month standard monthly reference before the first-time-subscriber promotion, or $19.99 per user/month billed annually; unlimited meeting and in-app recording transcription, 6,000 imported-file minutes per user/month, 4 hours per conversation, and 3 concurrent meetings",
+      "enterprise": "Custom terms; API, webhooks, SSO, SCIM, domain capture, and HIPAA add-on are enterprise or contract-led boundaries",
+      "warning": "Monthly, annual, region-specific, student, and promotional values are separate billing contexts. Shared transcription minutes do not roll over; verify live checkout, eligibility, tax, and current entitlements before purchase."
+    }
+  },
+  "useCases": {
+    "en": ["Capture and review noticed internal meetings before enabling calendar-wide automation", "Compare meeting-history retrieval and action-item workflows against manual notes", "Test ownership, sharing, export, retention, deletion, and downgrade procedures for a team workspace"],
+    "zh": ["在开启全日历自动化前，先采集并复核已告知参会者的内部会议", "将会议历史检索和行动项工作流与手工笔记进行比较", "为团队工作区测试归属、共享、导出、留存、删除和降级流程"]
+  }
+}

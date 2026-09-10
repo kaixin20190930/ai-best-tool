@@ -4,11 +4,13 @@
   "officialUrl": "https://otter.ai/",
   "existingRoute": "/ai/otter-ai",
   "action": "migrate_existing_fallback",
-  "status": "ready_for_next_slot",
+  "status": "released",
   "reviewedAt": "2026-09-07",
   "publishNotBefore": "2026-09-10",
   "sitemapChangeApproved": false,
-  "productionWriteApproved": false,
+  "productionWriteApproved": true,
+  "releasedAt": "2026-09-10",
+  "releaseIndexState": "monitor",
   "category": {
     "discoverySlug": "voice",
     "storageSlug": "chatbot"

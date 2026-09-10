@@ -12,13 +12,16 @@ for (const slug of ['synthesia', 'replit', 'otter-ai', 'lovable', 'midjourney'])
 assert(source.includes("'published','monitor'"), 'Initial release must be published + monitor');
 assert(!source.includes("'published','continue_index'"), 'Release pipeline must not approve indexing');
 assert(source.includes("phase === 'release' && selected.length !== 1"), 'Bulk release must be blocked');
-assert(source.includes("release window opens"), 'Date gate must be explicit');
-assert(source.includes("ON CONFLICT (id) DO NOTHING"), 'Idempotent ID boundary is required');
-assert(source.includes("conflicting entity exists"), 'Slug/domain conflicts must block release');
-assert(source.includes("initial release must remain noindex"), 'Post-release noindex check is required');
-assert(source.includes("monitor page leaked into sitemap"), 'Post-release sitemap exclusion is required');
+assert(source.includes('release window opens'), 'Date gate must be explicit');
+assert(source.includes('ON CONFLICT (id) DO NOTHING'), 'Idempotent ID boundary is required');
+assert(source.includes('conflicting entity exists'), 'Slug/domain conflicts must block release');
+assert(source.includes('initial release must remain noindex'), 'Post-release noindex check is required');
+assert(source.includes('monitor page leaked into sitemap'), 'Post-release sitemap exclusion is required');
 assert(source.includes("releaseIndexState, 'monitor'"), 'Released audit must preserve the monitor state');
-assert(source.includes('monitor release cannot approve sitemap inclusion'), 'Monitor release must not approve sitemap inclusion');
+assert(
+  source.includes('monitor release cannot approve sitemap inclusion'),
+  'Monitor release must not approve sitemap inclusion',
+);
 assert.equal(packageJson.scripts['tools:candidate-release'], 'tsx scripts/candidate-release-pipeline.ts');
 assert.equal(packageJson.scripts['test:candidate-release'], 'tsx scripts/test-candidate-release-pipeline.ts');
 
@@ -62,7 +65,7 @@ const otterPrep = JSON.parse(fs.readFileSync('data/collection/otter-ai-release-p
   sources: string[];
 };
 assert.equal(otterPrep.slug, 'otter-ai');
-assert.equal(otterPrep.status, 'prepared_for_release_day_recheck');
+assert.equal(otterPrep.status, 'completed_release_day_recheck');
 assert(otterPrep.preparedAt < otterPrep.publishNotBefore, 'Otter prep must not impersonate its release-day review');
 assert.match(otterPrep.observedOnPreparationDay.displayWarning, /No price.*release payload/i);
 assert(otterPrep.releaseDayChecks.length >= 7 && otterPrep.sources.length >= 7, 'Otter release prep is incomplete');
@@ -81,12 +84,15 @@ assert.equal(validation.status, 0, validation.stderr || validation.stdout);
 const earlyPreflight = run(['--candidate=replit', '--phase=preflight', '--as-of=2026-09-08']);
 assert.notEqual(earlyPreflight.status, 0, 'Preflight must fail before the release window');
 assert.match(earlyPreflight.stderr, /release window opens 2026-09-09/);
-const earlyOtterPreflight = run(['--candidate=otter-ai', '--phase=preflight', '--as-of=2026-09-09']);
-assert.notEqual(earlyOtterPreflight.status, 0, 'Otter preflight must fail before the release window');
-assert.match(earlyOtterPreflight.stderr, /release window opens 2026-09-10/);
-const earlyOtterRelease = run(['--candidate=otter-ai', '--phase=release', '--as-of=2026-09-09']);
-assert.notEqual(earlyOtterRelease.status, 0, 'Otter release must fail before the release window');
-assert.match(earlyOtterRelease.stderr, /release window opens 2026-09-10/);
+const earlyLovablePreflight = run(['--candidate=lovable', '--phase=preflight', '--as-of=2026-09-10']);
+assert.notEqual(earlyLovablePreflight.status, 0, 'Lovable preflight must fail before the release window');
+assert.match(earlyLovablePreflight.stderr, /release window opens 2026-09-11/);
+const earlyLovableRelease = run(['--candidate=lovable', '--phase=release', '--as-of=2026-09-10']);
+assert.notEqual(earlyLovableRelease.status, 0, 'Lovable release must fail before the release window');
+assert.match(earlyLovableRelease.stderr, /release window opens 2026-09-11/);
+const repeatedOtterRelease = run(['--candidate=otter-ai', '--phase=release', '--as-of=2026-09-10']);
+assert.notEqual(repeatedOtterRelease.status, 0, 'Release must fail after Otter is marked released');
+assert.match(repeatedOtterRelease.stderr, /candidate is already released/);
 const repeatedReplitRelease = run(['--candidate=replit', '--phase=release', '--as-of=2026-09-09']);
 assert.notEqual(repeatedReplitRelease.status, 0, 'Release must fail after Replit is marked released');
 assert.match(repeatedReplitRelease.stderr, /candidate is already released/);
