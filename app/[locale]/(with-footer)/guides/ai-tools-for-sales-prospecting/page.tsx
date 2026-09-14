@@ -1,14 +1,12 @@
 import { Metadata } from 'next';
-import { ExternalLink, Mail, SearchCheck, Send } from 'lucide-react';
+import { Mail, SearchCheck, Send } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
 import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
-import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
 
@@ -31,8 +29,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
-  const checkedAt = '2026-07-18';
-  const categoryCount = categories.length;
+
   const siteUrl = BASE_URL;
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -107,46 +104,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '销售拓客工具真正要解决的，不是帮你发出更多消息，而是帮助你在联系前更快判断谁值得触达、用什么角度切入更合理。'
               : 'Sales-prospecting tools are not mainly about sending more messages. The real job is deciding who is worth contacting and what angle gives the outreach a better chance of landing.'}
           </p>
-
-          <div className='mt-6 flex flex-wrap gap-3'>
-            <TrackableCtaLink
-              href='/explore?search=sales&sort=popular'
-              ctaId='sales_prospecting_guide_browse_tools'
-              ctaLabel='Sales prospecting guide browse tools'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
-            >
-              {isChinese ? '看销售相关工具' : 'Browse sales-related tools'}
-              <ExternalLink className='size-4' />
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-tools-for-sales'
-              ctaId='sales_prospecting_guide_sales'
-              ctaLabel='Sales prospecting guide sales'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              {isChinese ? '回到销售工具指南' : 'Back to sales guide'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-tools-for-sales-prospecting-comparison'
-              ctaId='sales_prospecting_guide_comparison'
-              ctaLabel='Sales prospecting guide comparison'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              {isChinese ? '看销售拓客对比页' : 'Prospecting comparison'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/best-ai-tools/ai-sales-prospecting-tools'
-              ctaId='sales_prospecting_guide_top_list'
-              ctaLabel='Sales prospecting guide top list'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
-            >
-              {isChinese ? '看销售拓客榜单' : 'Open prospecting ranking'}
-            </TrackableCtaLink>
-          </div>
         </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
@@ -198,92 +155,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </aside>
         </section>
 
-        <GuideEvidencePanel
-          locale={locale}
-          checkedAt={checkedAt}
-          scope={
-            isChinese
-              ? '销售拓客页要围绕触达准备、个性化和外呼前判断来做，不要只输出模板化外联。这个页继续可索引，但会把获客、销售和更窄的 prospecting 路径分层。'
-              : 'This sales prospecting page should stay centered on outreach prep, personalization, and pre-contact judgment rather than template-heavy outbound copy. Keep it indexable, but layer lead-gen, sales, and narrower prospecting paths clearly.'
-          }
-          decisionSteps={
-            isChinese
-              ? [
-                  '先判断你要的是线索筛选，还是外联前的个性化准备。',
-                  '如果目标已经明确，先去更窄的销售榜单或对比页缩小 shortlist。',
-                  '如果还要和销售团队对齐，再回到这里看回复率、模板和真实案例。',
-                ]
-              : [
-                  'First decide whether you need lead filtering or outreach personalization prep.',
-                  'If the goal is already clear, move to a narrower sales ranking or comparison page to shrink the shortlist.',
-                  'If you still need sales-team alignment, come back here for reply rates, templates, and real cases.',
-                ]
-          }
-          items={[
-            {
-              label: isChinese ? '验证重点' : 'Validation focus',
-              value: isChinese ? '触达准备、个性化' : 'Outreach prep, personalization',
-              note: isChinese
-                ? `确认它是不是在提高回复质量。当前可用分类数：${categoryCount}。`
-                : `Confirm it improves reply quality. Current category count: ${categoryCount}.`,
-            },
-            {
-              label: isChinese ? '合并策略' : 'Merge strategy',
-              value: isChinese ? '分流到获客/销售' : 'Route to lead gen/sales',
-              note: isChinese
-                ? '如果需求更像找线索，就转到获客页。'
-                : 'If the need is more about finding leads, move to lead-gen pages.',
-            },
-            {
-              label: isChinese ? '后续增量' : 'Next increments',
-              value: isChinese ? '案例、回复率、模板' : 'Cases, reply rates, templates',
-              note: isChinese
-                ? `补真实触达案例和个性化样本，并保持 ${checkedAt} 的核对记录。`
-                : `Add real outreach cases and personalization samples while keeping the ${checkedAt} verification record.`,
-            },
-          ]}
-        />
-
-        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '最近验证' : 'Last checked'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? `这页已按真实销售拓客路径重新核对，保留触达、个性化和分流入口，目前覆盖 ${categoryCount} 个分类。`
-                : `This page has been rechecked against a real sales prospecting workflow and keeps outreach, personalization, and routing entry points visible across ${categoryCount} categories.`}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '当前判断' : 'Current judgment'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>
-              {isChinese ? '保留索引，补真实拓客证据' : 'Keep it indexable and add real prospecting evidence'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '用个性化、回复率和真人评论把它和泛外联页区分开。'
-                : 'Use personalization, response rates, and real comments to differentiate it from generic outreach pages.'}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '下一步' : 'Next step'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>
-              {isChinese ? '补真实拓客场景和反馈' : 'Add real prospecting scenarios and feedback'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '后续优先补触达案例、模板样例和真人评论。'
-                : 'Next, prioritize outreach cases, template examples, and real comments.'}
-            </p>
-          </div>
-        </section>
-
         <GuideActionSection
           locale={locale}
           eyebrow={isChinese ? '继续缩小范围' : 'Narrow next'}
@@ -298,43 +169,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               : 'Once the workflow has reached outbound contact, the real decision points are usually context, personalization, and cadence rather than broad feature catalogs.'
           }
           toolNames={['lemlist', 'outreach', 'salesloft', 'smartlead']}
-          compareEyebrow={isChinese ? '高意图入口' : 'High-intent paths'}
-          compareTitle={isChinese ? '下一步更值得开的 comparison 页面' : 'The comparison pages worth opening next'}
-          compareDescription={
-            isChinese
-              ? '如果你已经进入触达准备、邮件开场或联系人优先级这类任务，直接进入这些页会更有效。'
-              : 'If the work is already about outreach prep, message openers, or contact prioritization, these pages will be more useful immediately.'
-          }
-          compareLinks={[
-            {
-              href: '/guides/ai-tools-for-sales-prospecting-comparison',
-              title: isChinese ? '销售拓客工具对比' : 'Sales prospecting comparison',
-              description: isChinese
-                ? '适合横向看外联准备、个性化和触达前判断。'
-                : 'Best for comparing outreach prep, personalization, and pre-contact judgment.',
-            },
-            {
-              href: '/best-ai-tools/ai-sales-prospecting-tools',
-              title: isChinese ? '销售拓客榜单' : 'Prospecting ranking',
-              description: isChinese
-                ? '适合已经确认方向、只想快速缩小 shortlist 的用户。'
-                : 'Useful when the direction is clear and the goal is to narrow the shortlist faster.',
-            },
-            {
-              href: '/guides/ai-tools-for-lead-generation-comparison',
-              title: isChinese ? '获客工具对比' : 'Lead generation comparison',
-              description: isChinese
-                ? '如果真实问题更偏名单来源和线索补全，回到这页更合适。'
-                : 'More useful if the real issue is list sourcing and lead enrichment.',
-            },
-            {
-              href: '/guides/ai-tools-for-sales-comparison',
-              title: isChinese ? '销售工具对比' : 'Sales tools comparison',
-              description: isChinese
-                ? '如果流程已经进入跟进和成交，就继续走这里。'
-                : 'Continue here once the work has moved into follow-up and pipeline management.',
-            },
-          ]}
           nextEyebrow={isChinese ? '先看这些条目' : 'Start with these listings'}
           nextTitle={
             isChinese ? '当前更贴近 prospecting 的真实候选' : 'Current listings closer to real prospecting work'
@@ -359,91 +193,12 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 ? '更贴近 cadence 管理、序列维护和团队级 outbound 运营。'
                 : 'Closer to cadence management, sequence upkeep, and team-level outbound operations.',
             },
-            {
-              href: '/ai/lemlist',
-              title: 'Lemlist',
-              description: isChinese
-                ? '如果你更在意个性化外联和回应率，这个入口更自然。'
-                : 'A more natural path when reply quality and personalized outreach matter more.',
-            },
           ]}
         />
 
-        <div className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
-          <section className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '高意图榜单' : 'High-intent ranking'}
-            </p>
-            <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-              {isChinese
-                ? '先用榜单缩小 prospecting shortlist'
-                : 'Use the ranking to narrow your prospecting shortlist first'}
-            </h2>
-            <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '如果你已经知道自己要比的是外联准备、个性化触达和联系优先级，榜单页会比泛销售目录更快进入决策。'
-                : 'If the decision is already about outreach prep, personalization, and contact prioritization, the ranking page gets to a decision faster than a broad sales directory.'}
-            </p>
-            <div className='mt-5 flex flex-wrap gap-3'>
-              <TrackableCtaLink
-                href='/best-ai-tools/ai-sales-prospecting-tools'
-                ctaId='sales_prospecting_guide_ranking_primary'
-                ctaLabel='Sales prospecting guide ranking primary'
-                pageType='guide'
-                className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
-              >
-                {isChinese ? '进入销售拓客榜单' : 'Open prospecting ranking'}
-              </TrackableCtaLink>
-              <TrackableCtaLink
-                href='/guides/ai-tools-for-sales-prospecting-comparison'
-                ctaId='sales_prospecting_guide_ranking_secondary'
-                ctaLabel='Sales prospecting guide ranking secondary'
-                pageType='guide'
-                className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
-              >
-                {isChinese ? '继续看对比页' : 'Continue to comparison'}
-              </TrackableCtaLink>
-            </div>
-          </section>
-        </div>
+        <div className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'></div>
 
-        <div className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
-          <section className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '高意图路径' : 'High-intent path'}
-            </p>
-            <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-              {isChinese
-                ? '如果这是你的工具，下一步就去提交或认领'
-                : 'If this is your tool, the next step is submission or claiming'}
-            </h2>
-            <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '已经比较到这一步，说明你大概率是在认真筛选或准备上架。把工具提交进来，或者先认领条目，后面再决定是否加速审核。'
-                : 'If you are this far into comparison, you are likely filtering seriously or preparing a listing. Submit your tool, or claim the listing first and decide later whether faster review is needed.'}
-            </p>
-            <div className='mt-5 flex flex-wrap gap-3'>
-              <TrackableCtaLink
-                href='/submit'
-                ctaId='sales_prospecting_submit'
-                ctaLabel='Sales prospecting submit'
-                pageType='guide'
-                className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
-              >
-                {isChinese ? '提交你的工具' : 'Submit your tool'}
-              </TrackableCtaLink>
-              <TrackableCtaLink
-                href='/developer/listing'
-                ctaId='sales_prospecting_claim'
-                ctaLabel='Sales prospecting claim'
-                pageType='guide'
-                className='inline-flex items-center justify-center rounded-lg border border-emerald-200 bg-white px-4 py-3 text-sm font-semibold text-emerald-800 hover:bg-emerald-50'
-              >
-                {isChinese ? '认领条目' : 'Claim listing'}
-              </TrackableCtaLink>
-            </div>
-          </section>
-        </div>
+        <div className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'></div>
       </div>
     </>
   );

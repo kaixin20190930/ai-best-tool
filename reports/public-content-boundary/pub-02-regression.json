@@ -1,0 +1,46 @@
+[
+  {
+    "script": "test:seo-architecture",
+    "pass": true
+  },
+  {
+    "script": "test:localized-metadata",
+    "pass": true
+  },
+  {
+    "script": "test:guide-link-boundaries",
+    "pass": true
+  },
+  {
+    "script": "test:tool-indexing",
+    "pass": true
+  },
+  {
+    "script": "test:sitemap",
+    "pass": true
+  },
+  {
+    "script": "test:ctr-differentiation",
+    "pass": true
+  },
+  {
+    "script": "test:guide-decision-paths",
+    "pass": true
+  },
+  {
+    "script": "test:localized-navigation",
+    "pass": true
+  },
+  {
+    "script": "test:editorial-review-dates",
+    "pass": true
+  },
+  {
+    "script": "test:category-fact-boundaries",
+    "pass": true
+  },
+  {
+    "script": "test:tool-decision-card-structure",
+    "pass": true
+  }
+]

@@ -1,0 +1,238 @@
+{
+  "checkedAt": "2026-09-14T09:52:03.568Z",
+  "readOnly": true,
+  "tools": [
+    {
+      "name": "adobe",
+      "status": "published"
+    },
+    {
+      "name": "aigirl-best",
+      "status": "published"
+    },
+    {
+      "name": "anime-girl-studio",
+      "status": "published"
+    },
+    {
+      "name": "artiversehub-ai",
+      "status": "published"
+    },
+    {
+      "name": "character_ai",
+      "status": "published"
+    },
+    {
+      "name": "chatgpt-mac",
+      "status": "published"
+    },
+    {
+      "name": "claude",
+      "status": "published"
+    },
+    {
+      "name": "codex",
+      "status": "published"
+    },
+    {
+      "name": "consensus",
+      "status": "published"
+    },
+    {
+      "name": "contextberg",
+      "status": "draft"
+    },
+    {
+      "name": "cursor",
+      "status": "published"
+    },
+    {
+      "name": "deepl",
+      "status": "published"
+    },
+    {
+      "name": "dune",
+      "status": "published"
+    },
+    {
+      "name": "emdash",
+      "status": "published"
+    },
+    {
+      "name": "fastimage-ai-sketch-to-image",
+      "status": "published"
+    },
+    {
+      "name": "fathom",
+      "status": "published"
+    },
+    {
+      "name": "gamma",
+      "status": "published"
+    },
+    {
+      "name": "gemini",
+      "status": "published"
+    },
+    {
+      "name": "github-copilot",
+      "status": "published"
+    },
+    {
+      "name": "gpt_4o",
+      "status": "published"
+    },
+    {
+      "name": "honeydo",
+      "status": "published"
+    },
+    {
+      "name": "invenio",
+      "status": "draft"
+    },
+    {
+      "name": "lovable",
+      "status": "published"
+    },
+    {
+      "name": "luma-ai",
+      "status": "published"
+    },
+    {
+      "name": "make",
+      "status": "published"
+    },
+    {
+      "name": "midjourney",
+      "status": "published"
+    },
+    {
+      "name": "motion",
+      "status": "draft"
+    },
+    {
+      "name": "n8n",
+      "status": "published"
+    },
+    {
+      "name": "notebooklm",
+      "status": "published"
+    },
+    {
+      "name": "notion",
+      "status": "published"
+    },
+    {
+      "name": "openai",
+      "status": "published"
+    },
+    {
+      "name": "openrouter",
+      "status": "published"
+    },
+    {
+      "name": "otter-ai",
+      "status": "published"
+    },
+    {
+      "name": "owlish",
+      "status": "draft"
+    },
+    {
+      "name": "perplexity",
+      "status": "published"
+    },
+    {
+      "name": "pipedream",
+      "status": "published"
+    },
+    {
+      "name": "poe",
+      "status": "published"
+    },
+    {
+      "name": "pollyreach",
+      "status": "draft"
+    },
+    {
+      "name": "re-gent",
+      "status": "draft"
+    },
+    {
+      "name": "reachiq",
+      "status": "rejected"
+    },
+    {
+      "name": "reachiq-2",
+      "status": "rejected"
+    },
+    {
+      "name": "replit",
+      "status": "published"
+    },
+    {
+      "name": "runtime",
+      "status": "draft"
+    },
+    {
+      "name": "runway",
+      "status": "published"
+    },
+    {
+      "name": "salesforce_einstein",
+      "status": "published"
+    },
+    {
+      "name": "shop_your_ai_powered_Shopping_assistant",
+      "status": "published"
+    },
+    {
+      "name": "shutterstock",
+      "status": "published"
+    },
+    {
+      "name": "sora",
+      "status": "published"
+    },
+    {
+      "name": "suno_ai",
+      "status": "published"
+    },
+    {
+      "name": "synthesia",
+      "status": "published"
+    },
+    {
+      "name": "tattooai-design",
+      "status": "published"
+    },
+    {
+      "name": "the-graph",
+      "status": "published"
+    },
+    {
+      "name": "thinnest-ai",
+      "status": "draft"
+    },
+    {
+      "name": "transcribe-text",
+      "status": "rejected"
+    },
+    {
+      "name": "undressing_ai",
+      "status": "published"
+    },
+    {
+      "name": "viggle",
+      "status": "published"
+    },
+    {
+      "name": "voker",
+      "status": "draft"
+    },
+    {
+      "name": "woy-ai",
+      "status": "published"
+    }
+  ]
+}

@@ -10,7 +10,13 @@ import VerifiedComparisonPage from '../components/guides/VerifiedComparisonPage'
 import { validateVerifiedComparison } from '../lib/content/verifiedComparison';
 import { web3Comparison, web3ComparisonFaqs } from '../lib/content/web3Comparison';
 import { generateFAQSchema } from '../lib/seo/schema';
-import { copyViolations, publicSourceFiles, scanRepository, scanSource, type Finding } from './lib/public-content-boundary';
+import {
+  copyViolations,
+  publicSourceFiles,
+  scanRepository,
+  scanSource,
+  type Finding,
+} from './lib/public-content-boundary';
 
 const baseline = JSON.parse(readFileSync('reports/public-content-boundary/pub-01-baseline.json', 'utf8')) as {
   findings: Finding[];
@@ -22,6 +28,7 @@ for (const finding of baseline.findings) {
   budget.set(finding.fingerprint, (budget.get(finding.fingerprint) || 0) + 1);
 }
 const current = scanRepository(process.cwd());
+assert.ok(current.length <= 1502, 'PUB-01 exact historical ceiling must never increase');
 for (const finding of current) {
   const remaining = budget.get(finding.fingerprint) || 0;
   assert.ok(
@@ -128,10 +135,14 @@ for (const locale of ['cn', 'en']) {
   }
   assert.equal(validateVerifiedComparison(web3Comparison, ['dune']), false);
 }
-// Freeze the opt-in scope: no route can silently join the pilot.
-assert.deepEqual(publicSourceFiles(process.cwd()).filter((file) => file.startsWith('app/') &&
-  /verifiedComparison\s*:/.test(readFileSync(file, 'utf8'))), [pilot]);
-assert.ok(readFileSync(pilot, 'utf8').includes('verifiedComparison: web3Comparison'));
+// Only the sourced Web3 comparison is verified; other callers explicitly fail closed.
+assert.deepEqual(
+  publicSourceFiles(process.cwd()).filter(
+    (file) => file.startsWith('app/') && /comparison\s*:\s*web3Comparison/.test(readFileSync(file, 'utf8')),
+  ),
+  [pilot],
+);
+assert.ok(readFileSync(pilot, 'utf8').includes('comparison: web3Comparison'));
 assert.ok(!readFileSync(pilot, 'utf8').includes('GuideSubmissionPath'));
 console.log(
   `Public content boundary PASS: ${current.length} exact legacy findings tracked, no new violations; bilingual six-section sample, citations, FAQ/schema equality and fail-closed probes passed.`,

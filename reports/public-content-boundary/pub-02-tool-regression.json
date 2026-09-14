@@ -1,0 +1,95 @@
+{
+  "pass": true,
+  "results": [
+    {
+      "path": "/ai/claude",
+      "status": 200,
+      "h1": 1,
+      "canonical": "https://aibesttool.com/ai/claude",
+      "decisionCards": 1,
+      "evidence": 0,
+      "legacyCopyMaintained": true
+    },
+    {
+      "path": "/cn/ai/claude",
+      "status": 200,
+      "h1": 1,
+      "canonical": "https://aibesttool.com/cn/ai/claude",
+      "decisionCards": 1,
+      "evidence": 0,
+      "legacyCopyMaintained": true
+    },
+    {
+      "path": "/ai/notion",
+      "status": 200,
+      "h1": 1,
+      "canonical": "https://aibesttool.com/ai/notion",
+      "decisionCards": 1,
+      "evidence": 0,
+      "legacyCopyMaintained": true
+    },
+    {
+      "path": "/cn/ai/notion",
+      "status": 200,
+      "h1": 1,
+      "canonical": "https://aibesttool.com/cn/ai/notion",
+      "decisionCards": 1,
+      "evidence": 0,
+      "legacyCopyMaintained": true
+    },
+    {
+      "path": "/ai/n8n",
+      "status": 200,
+      "h1": 1,
+      "canonical": "https://aibesttool.com/ai/n8n",
+      "decisionCards": 1,
+      "evidence": 0,
+      "legacyCopyMaintained": true
+    },
+    {
+      "path": "/cn/ai/n8n",
+      "status": 200,
+      "h1": 1,
+      "canonical": "https://aibesttool.com/cn/ai/n8n",
+      "decisionCards": 1,
+      "evidence": 0,
+      "legacyCopyMaintained": true
+    },
+    {
+      "path": "/ai/dune",
+      "status": 200,
+      "h1": 1,
+      "canonical": "https://aibesttool.com/ai/dune",
+      "decisionCards": 1,
+      "evidence": 0,
+      "legacyCopyMaintained": true
+    },
+    {
+      "path": "/cn/ai/dune",
+      "status": 200,
+      "h1": 1,
+      "canonical": "https://aibesttool.com/cn/ai/dune",
+      "decisionCards": 1,
+      "evidence": 0,
+      "legacyCopyMaintained": true
+    },
+    {
+      "path": "/ai/runway",
+      "status": 200,
+      "h1": 1,
+      "canonical": "https://aibesttool.com/ai/runway",
+      "decisionCards": 1,
+      "evidence": 0,
+      "legacyCopyMaintained": true
+    },
+    {
+      "path": "/cn/ai/runway",
+      "status": 200,
+      "h1": 1,
+      "canonical": "https://aibesttool.com/cn/ai/runway",
+      "decisionCards": 1,
+      "evidence": 0,
+      "legacyCopyMaintained": true
+    }
+  ]
+}

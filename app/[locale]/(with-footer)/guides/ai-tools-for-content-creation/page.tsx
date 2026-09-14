@@ -1,14 +1,11 @@
 import { Metadata } from 'next';
-import { CheckCircle2, ExternalLink, Film, Sparkles } from 'lucide-react';
+import { CheckCircle2, Film, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
 import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
-import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
-import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
 
@@ -34,8 +31,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
-  const checkedAt = '2026-07-18';
-  const categoryCount = categories.length;
+
   const siteUrl = BASE_URL;
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -85,28 +81,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         'Check whether it saves time on scripts, thumbnails, editing, or repurposing.',
         'If you publish regularly, prioritize batch workflows, templates, brand consistency, and export limits.',
       ];
-  const highIntentPaths = [
-    {
-      href: '/best-ai-tools/ai-content-creation-tools',
-      title: isChinese ? '先看内容创作榜单' : 'Start with content ranking',
-      desc: isChinese ? '先用 shortlist 缩小范围。' : 'Use the shortlist to narrow the field first.',
-    },
-    {
-      href: '/guides/ai-tools-for-content-creation-comparison',
-      title: isChinese ? '内容创作对比页' : 'Content creation comparison',
-      desc: isChinese ? '脚本、封面和发布一起看。' : 'Compare scripts, thumbnails, and publishing together.',
-    },
-    {
-      href: '/guides/ai-writing-tools-comparison',
-      title: isChinese ? '写作工具对比' : 'Writing tools comparison',
-      desc: isChinese ? '如果你的核心是文案和脚本。' : 'Best when copy and scripting are the focus.',
-    },
-    {
-      href: '/guides/ai-video-tools-comparison',
-      title: isChinese ? '视频工具对比' : 'Video tools comparison',
-      desc: isChinese ? '如果重点转向剪辑和视频生产。' : 'Use this when editing and video production matter more.',
-    },
-  ];
 
   return (
     <>
@@ -135,46 +109,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '真正能帮上忙的内容创作工具，不只是会写字，而是能把脚本、封面、改写和多渠道发布串成一个更稳定的流程。'
               : 'The useful tools do more than write. They connect scripts, thumbnails, rewriting, and multi-channel publishing into a stable workflow.'}
           </p>
-
-          <div className='mt-6 flex flex-wrap gap-3'>
-            <TrackableCtaLink
-              href='/explore?search=content&sort=popular'
-              ctaId='content_creation_guide_browse_tools'
-              ctaLabel='Content creation guide browse tools'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
-            >
-              {isChinese ? '看内容创作工具' : 'Browse content creation tools'}
-              <ExternalLink className='size-4' />
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-writing-tools'
-              ctaId='content_creation_guide_writing'
-              ctaLabel='Content creation guide writing'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              {isChinese ? '看写作工具' : 'Writing tools'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-tools-for-content-creation-comparison'
-              ctaId='content_creation_guide_comparison'
-              ctaLabel='Content creation guide comparison'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              {isChinese ? '看内容创作工具对比' : 'Compare content creation tools'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/best-ai-tools/ai-content-creation-tools'
-              ctaId='content_creation_guide_top_list'
-              ctaLabel='Content creation guide top list'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
-            >
-              {isChinese ? '看内容创作榜单' : 'Open content creation ranking'}
-            </TrackableCtaLink>
-          </div>
         </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
@@ -221,113 +155,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </aside>
         </section>
 
-        <GuideEvidencePanel
-          locale={locale}
-          checkedAt={checkedAt}
-          scope={
-            isChinese
-              ? '这页优先检查页面是否能帮助用户完成真实内容创作决策：是否有明确内容格式、批量发布、品牌一致性、导出限制和后续进入对比页的路径。'
-              : 'This page prioritizes whether the guide helps with a real content-creation decision: content format, batch publishing, brand consistency, export limits, and next steps into comparison pages.'
-          }
-          signalCards={[
-            {
-              label: isChinese ? '价格信号' : 'Pricing signal',
-              value: isChinese ? '先看额度和导出限制' : 'Check quotas and export limits first',
-              note: isChinese
-                ? '内容创作工具很容易在导出、席位和模板上分层。'
-                : 'Content tools often tier exports, seats, and templates.',
-            },
-            {
-              label: isChinese ? '更新信号' : 'Freshness signal',
-              value: isChinese ? '模板和发布能力要跟上' : 'Templates and publishing need freshness',
-              note: isChinese
-                ? '如果模板久不更新，品牌输出很快会跑偏。'
-                : 'If templates do not evolve, brand output drifts quickly.',
-            },
-            {
-              label: isChinese ? '风险信号' : 'Risk signal',
-              value: isChinese ? '只会写文案不够' : 'Copy alone is not enough',
-              note: isChinese
-                ? '如果没有批量发布、品牌控制和真实案例，先降低优先级。'
-                : 'If there is no batch publishing, brand control, or real cases, lower the priority.',
-            },
-          ]}
-          items={[
-            {
-              label: isChinese ? '判断维度' : 'Decision signals',
-              value: isChinese ? '格式、批量、品牌、导出' : 'Format, batch, brand, export',
-              note: isChinese
-                ? `重点看工具是否能把脚本、封面和发布串成稳定流程。当前可用分类数：${categoryCount}。`
-                : `We care about whether the tool turns scripts, thumbnails, and publishing into a stable workflow. Current category count: ${categoryCount}.`,
-            },
-            {
-              label: isChinese ? '索引策略' : 'Indexing strategy',
-              value: isChinese ? '保持可索引' : 'Keep it indexable',
-              note: isChinese
-                ? '让内容创作意图清晰，减少和写作、视频页的重复。'
-                : 'Keep the content-creation intent clear and reduce overlap with writing or video pages.',
-            },
-            {
-              label: isChinese ? '下一步补强' : 'Next enrichment',
-              value: isChinese ? '补真实工作流' : 'Add real workflows',
-              note: isChinese
-                ? `后续优先补真实案例、品牌模板和批量发布经验，并保持 ${checkedAt} 的核对记录。`
-                : `Next, priority additions are real use cases, brand templates, and batch-publishing notes while keeping the ${checkedAt} verification record.`,
-            },
-          ]}
-          decisionSteps={[
-            isChinese
-              ? '先判断你要做的是脚本、封面还是批量发布。'
-              : 'First decide whether you need scripts, thumbnails, or batch publishing.',
-            isChinese
-              ? '如果内容类型已经明确，就先去对应对比页。'
-              : 'If the content type is clear, go to the matching comparison page first.',
-            isChinese
-              ? '如果要团队长期使用，再回来补品牌模板和导出边界。'
-              : 'If the team will use it long term, come back for brand templates and export boundaries.',
-          ]}
-        />
-
-        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '最近验证' : 'Last checked'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? `这页已按真实内容创作决策重新核对，优先保留高意图入口和可索引主体，目前覆盖 ${categoryCount} 个分类。`
-                : `This page has been rechecked against a real content-creation decision and keeps the high-intent entry points indexable across ${categoryCount} categories.`}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '当前判断' : 'Current judgment'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>
-              {isChinese ? '保留索引，强化真实工作流证据' : 'Keep it indexable and strengthen workflow evidence'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '用批量发布、品牌模板和导出限制来区分这页与写作页、视频页。'
-                : 'Use batch publishing, brand templates, and export limits to distinguish this page from writing and video pages.'}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '下一步' : 'Next step'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>
-              {isChinese ? '补真实案例和发布经验' : 'Add real cases and publishing notes'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '后续优先补真实创作流程、模板示例和多渠道发布经验。'
-                : 'Next, prioritize real production workflows, template examples, and multi-channel publishing notes.'}
-            </p>
-          </div>
-        </section>
-
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
             <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
@@ -365,71 +192,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 </div>
               ))}
             </div>
-          </div>
-        </section>
-
-        <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '高意图路径' : 'High-intent path'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '先看榜单和对比，再回到内容创作页' : 'Compare first, then come back to content creation pages'}
-          </h2>
-          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-            {isChinese
-              ? '如果你已经知道自己在找脚本、封面、批量发布或视频生产工具，就直接去更窄的榜单和对比页。'
-              : 'If you already know you are looking for scripts, thumbnails, batch publishing, or video production tools, move straight into the narrower ranking and comparison pages.'}
-          </p>
-          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
-            {highIntentPaths.map((item) => (
-              <TrackableCtaLink
-                key={item.href}
-                href={item.href}
-                ctaId={`content_creation_guide_${item.href.split('/').pop()}`}
-                ctaLabel={item.title}
-                pageType='guide'
-                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-              >
-                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
-                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
-              </TrackableCtaLink>
-            ))}
-          </div>
-        </section>
-
-        <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '高意图榜单' : 'High-intent ranking'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese
-              ? '先用榜单缩小 content creation shortlist'
-              : 'Use the ranking to narrow your content creation shortlist first'}
-          </h2>
-          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-            {isChinese
-              ? '如果你已经知道自己在比脚本、封面、改写和多渠道发布，榜单页会比泛目录更快进入决策。'
-              : 'If the decision is already about scripts, thumbnails, rewriting, and multi-channel publishing, the ranking page gets to a decision faster than a broad directory.'}
-          </p>
-          <div className='mt-5 flex flex-wrap gap-3'>
-            <TrackableCtaLink
-              href='/best-ai-tools/ai-creator-tools'
-              ctaId='content_creation_guide_ranking_primary'
-              ctaLabel='Content creation guide ranking primary'
-              pageType='guide'
-              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
-            >
-              {isChinese ? '进入创作者榜单' : 'Open creator ranking'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-tools-for-content-creation-comparison'
-              ctaId='content_creation_guide_ranking_secondary'
-              ctaLabel='Content creation guide ranking secondary'
-              pageType='guide'
-              className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
-            >
-              {isChinese ? '继续看对比页' : 'Continue to comparison'}
-            </TrackableCtaLink>
           </div>
         </section>
 
@@ -489,8 +251,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </Link>
         </section>
-
-        <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_content_creation' />
       </div>
     </>
   );

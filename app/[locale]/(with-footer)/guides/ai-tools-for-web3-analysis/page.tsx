@@ -1,15 +1,12 @@
 import { Metadata } from 'next';
-import { Activity, BarChart3, ExternalLink, Wallet } from 'lucide-react';
+import { Activity, BarChart3, Wallet } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
 import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
-import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
-import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
 
@@ -32,8 +29,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
-  const checkedAt = '2026-07-18';
-  const categoryCount = categories.length;
+
   const siteUrl = BASE_URL;
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -80,30 +76,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         'Prioritize depth, coverage, history, and monitoring.',
         'If your conclusions need to be reused by a team, focus on exports, sharing, and follow-up tracking.',
       ];
-  const highIntentPaths = [
-    {
-      href: '/best-ai-tools/ai-web3-tools',
-      title: isChinese ? '先看 Web3 榜单' : 'Start with Web3 ranking',
-      desc: isChinese ? '先用 shortlist 缩小范围。' : 'Use the shortlist to narrow the field first.',
-    },
-    {
-      href: '/guides/ai-tools-for-web3-analysis-comparison',
-      title: isChinese ? 'Web3 分析对比' : 'Web3 analysis comparison',
-      desc: isChinese ? '链上研究、监控和观察一起看。' : 'Compare research, monitoring, and observation together.',
-    },
-    {
-      href: '/guides/ai-tools-for-defi-analytics-comparison',
-      title: isChinese ? 'DeFi 对比页' : 'DeFi comparison',
-      desc: isChinese ? '如果重点是 TVL 和资金流。' : 'Best when TVL and fund flow matter most.',
-    },
-    {
-      href: '/guides/ai-tools-for-on-chain-analysis-comparison',
-      title: isChinese ? '链上分析对比' : 'On-chain analysis comparison',
-      desc: isChinese
-        ? '如果你更偏地址和交易观察。'
-        : 'Use this when address- and transaction-level work matters more.',
-    },
-  ];
 
   return (
     <>
@@ -132,46 +104,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? 'Web3 分析工具真正的价值，在于它能不能帮你更快看见链上变化、理解协议状态，并把这些观察变成可持续的研究流程。'
               : 'The real value of Web3 analysis tools is whether they help you spot on-chain changes faster, understand protocol health, and turn those observations into repeatable research workflows.'}
           </p>
-
-          <div className='mt-6 flex flex-wrap gap-3'>
-            <TrackableCtaLink
-              href='/explore?search=web3&sort=popular'
-              ctaId='web3_analysis_guide_browse_tools'
-              ctaLabel='Web3 analysis guide browse tools'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
-            >
-              {isChinese ? '看 Web3 工具' : 'Browse Web3 tools'}
-              <ExternalLink className='size-4' />
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/best-ai-tools/ai-web3-tools'
-              ctaId='web3_analysis_guide_top_list'
-              ctaLabel='Web3 analysis guide Web3 top list'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
-            >
-              {isChinese ? '看 Web3 榜单' : 'Open Web3 ranking'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-tools-for-on-chain-analysis'
-              ctaId='web3_analysis_guide_on_chain'
-              ctaLabel='Web3 analysis guide on-chain guide'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              {isChinese ? '看链上分析工具' : 'On-chain analysis'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-tools-for-defi-analytics'
-              ctaId='web3_analysis_guide_defi'
-              ctaLabel='Web3 analysis guide DeFi guide'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              {isChinese ? '看 DeFi 分析工具' : 'DeFi analytics'}
-            </TrackableCtaLink>
-          </div>
         </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
@@ -221,177 +153,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </aside>
         </section>
 
-        <GuideEvidencePanel
-          locale={locale}
-          checkedAt={checkedAt}
-          scope={
-            isChinese
-              ? '这页优先判断 Web3 分析工具是否真的能让链上变化、协议状态和风险观察更清晰，而不是只看图表数量。'
-              : 'This page checks whether Web3 analysis tools truly make on-chain changes, protocol state, and risk observation clearer rather than only offering more charts.'
-          }
-          items={[
-            {
-              label: isChinese ? '验证范围' : 'Checked scope',
-              value: isChinese ? '链上、协议、风险、追踪' : 'On-chain, protocol, risk, tracking',
-              note: isChinese
-                ? `重点看能否支撑持续观察；当前分类数 ${categoryCount} 个。`
-                : `Focus on whether it supports ongoing observation; current category count is ${categoryCount}.`,
-            },
-            {
-              label: isChinese ? '索引策略' : 'Indexing strategy',
-              value: isChinese ? '核心页保留索引' : 'Core page kept indexable',
-              note: isChinese
-                ? '与 DEX、DeFi 和钱包页形成清晰分工。'
-                : 'Keep a clear split from DEX, DeFi, and wallet pages.',
-            },
-            {
-              label: isChinese ? '下一步补强' : 'Next enrichment',
-              value: isChinese ? '补真实研究与监控案例' : 'Add real research and monitoring cases',
-              note: isChinese
-                ? `后续优先补链上样本、监控面板和研究笔记，并保持 ${checkedAt} 的核对记录。`
-                : `Next, add on-chain examples, monitoring panels, and research notes while keeping the ${checkedAt} verification record.`,
-            },
-          ]}
-          decisionSteps={[
-            isChinese
-              ? '先判断你要的是链上变化、协议状态，还是风险观察。'
-              : 'First decide whether you need on-chain changes, protocol state, or risk observation.',
-            isChinese
-              ? '如果目标已经明确，就先去更窄的 DEX、DeFi 和钱包页。'
-              : 'If the goal is already clear, start with the narrower DEX, DeFi, and wallet pages.',
-            isChinese
-              ? '如果还要给团队沉淀证据，再回到 Web3 分析页补真实样例、面板和研究笔记。'
-              : 'If you still need evidence for a team, come back for real examples, panels, and research notes.',
-          ]}
-        />
-
-        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '最近验证' : 'Last checked'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? `这页已按真实 Web3 分析决策重新核对，优先保留链上变化、协议状态和风险入口；当前分类数 ${categoryCount} 个。`
-                : `This page has been rechecked against a real Web3 analysis decision and keeps on-chain changes, protocol state, and risk entry points visible; current category count is ${categoryCount}.`}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '当前判断' : 'Current judgment'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>
-              {isChinese ? '保留索引，强化分析证据' : 'Keep it indexable and strengthen analysis evidence'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? `用链上样例、监控面板和研究笔记区分它与 DEX、DeFi 页，并持续保留 ${checkedAt} 的核对痕迹。`
-                : `Use on-chain examples, monitoring panels, and research notes to distinguish it from DEX and DeFi pages while preserving the ${checkedAt} check trail.`}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '下一步' : 'Next step'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>
-              {isChinese ? '补真实研究与监控案例' : 'Add real research and monitoring cases'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? `后续优先补链上样本、监控面板和研究笔记，并持续保留 ${checkedAt} 的核对痕迹。`
-                : `Next, prioritize on-chain examples, monitoring panels, and research notes while keeping the ${checkedAt} check trail up to date.`}
-            </p>
-          </div>
-        </section>
-
-        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '高意图路径' : 'High-intent path'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '先看榜单和对比，再回到 Web3 页面' : 'Compare first, then come back to Web3 pages'}
-          </h2>
-          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-            {isChinese
-              ? '如果你已经知道自己是在做链上研究，就别在总览页停太久，直接去更窄的榜单和对比页。'
-              : 'If on-chain research is already the real task, move straight into the narrower ranking and comparison pages.'}
-          </p>
-          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
-            {highIntentPaths.map((item) => (
-              <TrackableCtaLink
-                key={item.href}
-                href={item.href}
-                ctaId={`web3_analysis_guide_${item.href.split('/').pop()}`}
-                ctaLabel={item.title}
-                pageType='guide'
-                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-              >
-                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
-                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
-              </TrackableCtaLink>
-            ))}
-          </div>
-        </section>
-
-        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '高意图榜单' : 'High-intent ranking'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese
-              ? '先用榜单缩小 Web3 analysis shortlist'
-              : 'Use the ranking to narrow your Web3 analysis shortlist first'}
-          </h2>
-          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-            {isChinese
-              ? '如果你已经明确是在比链上研究、协议监控和钱包追踪，先看榜单会比泛目录更快进入决策。'
-              : 'If the decision is already about on-chain research, protocol monitoring, and wallet tracking, the ranking gets you to a decision faster than a broad directory.'}
-          </p>
-          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
-            {[
-              {
-                href: '/best-ai-tools/ai-web3-tools',
-                title: isChinese ? 'Web3 工具榜单' : 'Web3 tools ranking',
-                desc: isChinese
-                  ? '先收窄到更高相关的 Web3 候选。'
-                  : 'Start with the highest-fit Web3 candidates first.',
-              },
-              {
-                href: '/guides/ai-tools-for-web3-analysis-comparison',
-                title: isChinese ? 'Web3 分析对比' : 'Web3 analysis comparison',
-                desc: isChinese
-                  ? '研究、监控和观察一起看。'
-                  : 'Compare research, monitoring, and observation together.',
-              },
-              {
-                href: '/guides/ai-tools-for-defi-analytics-comparison',
-                title: isChinese ? 'DeFi 对比页' : 'DeFi comparison',
-                desc: isChinese ? '如果重点是 TVL 和资金流。' : 'Best when TVL and fund flow matter most.',
-              },
-              {
-                href: '/guides/ai-tools-for-on-chain-analysis-comparison',
-                title: isChinese ? '链上分析对比' : 'On-chain analysis comparison',
-                desc: isChinese
-                  ? '如果你更偏地址和交易观察。'
-                  : 'Use this when address- and transaction-level work matters more.',
-              },
-            ].map((item) => (
-              <TrackableCtaLink
-                key={item.href}
-                href={item.href}
-                ctaId={`web3_analysis_guide_ranking_${item.href.split('/').pop()}`}
-                ctaLabel={item.title}
-                pageType='guide'
-                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-              >
-                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
-                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
-              </TrackableCtaLink>
-            ))}
-          </div>
-        </section>
-
         <GuideActionSection
           locale={locale}
           eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}
@@ -404,57 +165,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               : 'If you care more about protocols, wallets, TVL, fund flow, and historical change, these tools get you into the real work faster than a general Web3 page.'
           }
           toolNames={['dune', 'messari', 'debank', 'bubblemaps']}
-          compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
-          compareTitle={isChinese ? '继续深入的对比入口' : 'Next comparison paths'}
-          compareDescription={
-            isChinese
-              ? '当你已经知道自己更偏 DeFi、协议还是链上分析时，继续进入更细的对比页会更有效。'
-              : 'Once you know whether your focus is DeFi, protocol monitoring, or on-chain research, narrower compare pages work better.'
-          }
-          compareLinks={[
-            {
-              href: '/best-ai-tools/ai-web3-tools',
-              title: isChinese ? 'Web3 工具榜单' : 'Web3 tools ranking',
-              description: isChinese
-                ? '先把更高相关的 Web3 候选看一遍，再决定进入哪条更窄的分析对比路径。'
-                : 'Review the highest-fit Web3 candidates first, then choose the narrower analysis path that fits.',
-            },
-            {
-              href: '/guides/ai-tools-for-defi-analytics-comparison',
-              title: isChinese ? 'DeFi 分析工具对比' : 'DeFi analytics comparison',
-              description: isChinese
-                ? '更适合 TVL、协议变化和资金流研究。'
-                : 'Useful for TVL, protocol shifts, and capital-flow research.',
-            },
-            {
-              href: '/guides/ai-tools-for-web3-analysis-comparison',
-              title: isChinese ? 'Web3 分析工具对比' : 'Web3 analysis comparison',
-              description: isChinese
-                ? '更适合链上研究、协议监控、钱包追踪和异常观察。'
-                : 'Better for on-chain research, protocol monitoring, wallet tracking, and anomaly observation.',
-            },
-            {
-              href: '/guides/ai-tools-for-on-chain-analysis-comparison',
-              title: isChinese ? '链上分析工具对比' : 'On-chain analysis comparison',
-              description: isChinese
-                ? '更适合地址、交易和异常活动观察。'
-                : 'Better for address-level, transaction-level, and anomaly-focused work.',
-            },
-            {
-              href: '/guides/ai-tools-for-protocol-analytics-comparison',
-              title: isChinese ? '协议分析工具对比' : 'Protocol analytics comparison',
-              description: isChinese
-                ? '更适合协议健康、增长和使用情况跟踪。'
-                : 'Useful for protocol health, growth, and usage tracking.',
-            },
-            {
-              href: '/guides/ai-tools-for-web3-analysis-comparison',
-              title: isChinese ? 'Web3 分析工具对比' : 'Web3 analysis comparison',
-              description: isChinese
-                ? '当你已经锁定 Web3 分析方向，这里是更窄的比较入口。'
-                : 'A narrower comparison path once Web3 analysis is your clear direction.',
-            },
-          ]}
           nextEyebrow={isChinese ? '下一步入口' : 'Where to go next'}
           nextTitle={
             isChinese ? 'Web3 分析方向确定后，下一步看这里' : 'Where to go once Web3 analysis is the clear direction'
@@ -478,13 +188,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               description: isChinese
                 ? '直接进入 Web3 目录，继续比较真实候选。'
                 : 'Jump into the Web3 category to compare real listings.',
-            },
-            {
-              href: '/explore?search=web3&sort=popular',
-              title: isChinese ? '搜索更多 Web3 工具' : 'Search more Web3 tools',
-              description: isChinese
-                ? '回到 Explore，用 Web3 关键词扩大候选范围。'
-                : 'Return to Explore and widen the shortlist with a Web3-focused search.',
             },
           ]}
         />
@@ -528,7 +231,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </div>
         </section>
-        <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_web3_analysis' />
       </div>
     </>
   );

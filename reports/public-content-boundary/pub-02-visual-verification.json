@@ -1,0 +1,567 @@
+{
+  "checkedAt": "2026-09-14",
+  "pass": true,
+  "samples": 10,
+  "screenshots": 20,
+  "independentQA": false,
+  "results": [
+    {
+      "slug": "ai-writing-tools",
+      "locale": "cn",
+      "viewport": "390x844x1,mobile,touch",
+      "screenshot": "reports/public-content-boundary/pub-02-visuals/cn-mobile-ai-writing-tools.jpg",
+      "sha256": "ed19b197cdbf1c050a3ae35091d416bf2d9cfb15daf8cef8f68977b638c43d4a",
+      "metrics": {
+        "path": "/cn/guides/ai-writing-tools",
+        "width": 390,
+        "documentWidth": 390,
+        "h1": "AI 写作工具推荐：怎么选才适合你的内容工作流",
+        "checks": "用一篇真实稿件检查写作工具下面是你可以执行的检查步骤，并非本站的产品实测结果。准备含事实来源、读者和语气要求的简报。对照原始来源检查数字、引文和专有名词。分别记录起草和人工编辑时间，再检查最终导出格式。来源与核查日期[1] Google Search: generative AI contentGoogle 的生成内容指南要求关注准确性、质量与相关性。复核引用与事实后再发布；生成数量不是验收标准。官方文档核查：2026-09-14继续核对查看 Claude 的适用边界与来源核对选型步骤",
+        "table": [],
+        "next": [
+          {
+            "text": "查看 Claude 的适用边界与来源",
+            "href": "/cn/ai/claude#decision-card"
+          },
+          {
+            "text": "核对选型步骤",
+            "href": "/cn/guides/how-to-choose-ai-tools"
+          }
+        ]
+      },
+      "visuallyInspected": true,
+      "overlapOrPageOverflow": false,
+      "reviewer": "development agent"
+    },
+    {
+      "slug": "ai-video-tools",
+      "locale": "cn",
+      "viewport": "390x844x1,mobile,touch",
+      "screenshot": "reports/public-content-boundary/pub-02-visuals/cn-mobile-ai-video-tools.jpg",
+      "sha256": "3be9784f8022b2ed70306b96cef50336a5ea3ed7bf5b3b6956ddc37df84c13f4",
+      "metrics": {
+        "path": "/cn/guides/ai-video-tools",
+        "width": 390,
+        "documentWidth": 390,
+        "h1": "AI 视频工具推荐：怎么选更适合你的内容流程",
+        "checks": "验证镜头能否进入最终成片下面是你可以执行的检查步骤，并非本站的产品实测结果。用同一分镜生成短片，检查主体连续性和动作。把结果放进实际剪辑软件，检查帧率、比例和音画同步。区分生成分辨率、放大和导出设置，记录废片与重试成本。来源与核查日期[1] Runway: video resolutionRunway 的 Video Editor Project 选择 4K 导出不会放大非 4K 素材。在实际交付尺寸检查素材，单看导出选项不足以判断画质。官方文档核查：2026-09-14继续核对查看 Runway 的适用边界与来源核对选型步骤",
+        "table": [],
+        "next": [
+          {
+            "text": "查看 Runway 的适用边界与来源",
+            "href": "/cn/ai/runway#decision-card"
+          },
+          {
+            "text": "核对选型步骤",
+            "href": "/cn/guides/how-to-choose-ai-tools"
+          }
+        ]
+      },
+      "visuallyInspected": true,
+      "overlapOrPageOverflow": false,
+      "reviewer": "development agent"
+    },
+    {
+      "slug": "ai-coding-tools",
+      "locale": "cn",
+      "viewport": "390x844x1,mobile,touch",
+      "screenshot": "reports/public-content-boundary/pub-02-visuals/cn-mobile-ai-coding-tools.jpg",
+      "sha256": "b5019255ede110e45f46dc0e058297b251e0b04e10eeea1f7a143076ff9aa6da",
+      "metrics": {
+        "path": "/cn/guides/ai-coding-tools",
+        "width": 390,
+        "documentWidth": 390,
+        "h1": "AI 编程工具推荐：怎么选更适合你的开发流程",
+        "checks": "用一个可复现的问题试编码助手下面是你可以执行的检查步骤，并非本站的产品实测结果。选择有失败用例的缺陷，让工具解释相关代码。检查 diff、依赖和权限，运行能复现原缺陷的测试。记录审查和返工时间；代码能编译不代表行为正确。来源与核查日期[1] GitHub Copilot: responsible useGitHub 将 Copilot 代码审查定位为人工审查的补充，并说明反馈可能产生幻觉。保留人工 diff 审查和行为测试，不把自动反馈视为合并保证。官方文档核查：2026-09-14继续核对查看 GitHub Copilot 的适用边界与来源核对选型步骤",
+        "table": [],
+        "next": [
+          {
+            "text": "查看 GitHub Copilot 的适用边界与来源",
+            "href": "/cn/ai/github-copilot#decision-card"
+          },
+          {
+            "text": "核对选型步骤",
+            "href": "/cn/guides/how-to-choose-ai-tools"
+          }
+        ]
+      },
+      "visuallyInspected": true,
+      "overlapOrPageOverflow": false,
+      "reviewer": "development agent"
+    },
+    {
+      "slug": "ai-tools-for-research",
+      "locale": "cn",
+      "viewport": "390x844x1,mobile,touch",
+      "screenshot": "reports/public-content-boundary/pub-02-visuals/cn-mobile-ai-tools-for-research.jpg",
+      "sha256": "f0ae081cd174608e8913e83932beda0b81a2003d630b6d5f84061ae9fda0d2f4",
+      "metrics": {
+        "path": "/cn/guides/ai-tools-for-research",
+        "width": 390,
+        "documentWidth": 390,
+        "h1": "AI 研究工具推荐：怎么选更适合资料发现和证据核对",
+        "checks": "让每项结论都能回到来源下面是你可以执行的检查步骤，并非本站的产品实测结果。区分开放资料发现与已有文献问答，先选对任务。检查作者、日期、方法和引用段落是否支持结论。加入相互矛盾的资料，记录被忽略的证据与适用边界。来源与核查日期[1] Google: notebooks and source scopeGoogle 的 notebook 帮助说明每个笔记本相互独立，无法同时访问多个笔记本的信息。先确认回答使用了哪组资料，避免把局部文档问答当成完整研究。官方文档核查：2026-09-14继续核对查看 NotebookLM 的适用边界与来源核对选型步骤",
+        "table": [],
+        "next": [
+          {
+            "text": "查看 NotebookLM 的适用边界与来源",
+            "href": "/cn/ai/notebooklm#decision-card"
+          },
+          {
+            "text": "核对选型步骤",
+            "href": "/cn/guides/how-to-choose-ai-tools"
+          }
+        ]
+      },
+      "visuallyInspected": true,
+      "overlapOrPageOverflow": false,
+      "reviewer": "development agent"
+    },
+    {
+      "slug": "ai-tools-for-automation",
+      "locale": "cn",
+      "viewport": "390x844x1,mobile,touch",
+      "screenshot": "reports/public-content-boundary/pub-02-visuals/cn-mobile-ai-tools-for-automation.jpg",
+      "sha256": "51dc68adbc9fce5d3536034914a74c3e7e12e28edcc54c7f68e29f0f848170cc",
+      "metrics": {
+        "path": "/cn/guides/ai-tools-for-automation",
+        "width": 390,
+        "documentWidth": 390,
+        "h1": "AI 自动化工具推荐：怎么选更适合你的重复流程",
+        "checks": "先验证失败后的恢复下面是你可以执行的检查步骤，并非本站的产品实测结果。在测试环境使用脱敏样本跑通触发到输出。模拟超时、缺字段和重复输入，确认重试不会重复写入。检查错误通知、执行日志和人工接管，再开启定时执行。来源与核查日期[1] n8n: handle errorsn8n 可用错误工作流处理执行失败；错误触发信息取决于工作流在哪里失败。分别测试触发与后续步骤失败，确认能够找回输入并恢复。官方文档核查：2026-09-14继续核对查看 n8n 的适用边界与来源核对选型步骤",
+        "table": [],
+        "next": [
+          {
+            "text": "查看 n8n 的适用边界与来源",
+            "href": "/cn/ai/n8n#decision-card"
+          },
+          {
+            "text": "核对选型步骤",
+            "href": "/cn/guides/how-to-choose-ai-tools"
+          }
+        ]
+      },
+      "visuallyInspected": true,
+      "overlapOrPageOverflow": false,
+      "reviewer": "development agent"
+    },
+    {
+      "slug": "ai-tools-for-web3-comparison",
+      "locale": "cn",
+      "viewport": "390x844x1,mobile,touch",
+      "screenshot": "reports/public-content-boundary/pub-02-visuals/cn-mobile-ai-tools-for-web3-comparison.jpg",
+      "sha256": "2f7f5d94c2b891810eedefe554181dbfdcafc5e57417b2571a1f843e25539b37",
+      "metrics": {
+        "path": "/cn/guides/ai-tools-for-web3-comparison",
+        "width": 390,
+        "documentWidth": 390,
+        "h1": "Dune vs The Graph：链上分析还是应用数据接口？",
+        "state": "verified",
+        "table": [
+          {
+            "width": 680,
+            "containerWidth": 316
+          }
+        ],
+        "next": [
+          {
+            "text": "查看 Web3 选型指南",
+            "href": "/cn/guides/ai-tools-for-web3"
+          }
+        ]
+      },
+      "visuallyInspected": true,
+      "overlapOrPageOverflow": false,
+      "reviewer": "development agent"
+    },
+    {
+      "slug": "ai-tools-for-sales-comparison",
+      "locale": "cn",
+      "viewport": "390x844x1,mobile,touch",
+      "screenshot": "reports/public-content-boundary/pub-02-visuals/cn-mobile-ai-tools-for-sales-comparison.jpg",
+      "sha256": "735d6ccd983bfb5a36181447e44da9463285e7a1e1ad85550b6e20b1f466facb",
+      "metrics": {
+        "path": "/cn/guides/ai-tools-for-sales-comparison",
+        "width": 390,
+        "documentWidth": 390,
+        "h1": "AI 销售工具对比",
+        "state": "unavailable",
+        "table": [],
+        "next": [
+          {
+            "text": "回到销售指南",
+            "href": "/cn/guides/ai-tools-for-sales"
+          }
+        ]
+      },
+      "visuallyInspected": true,
+      "overlapOrPageOverflow": false,
+      "reviewer": "development agent"
+    },
+    {
+      "slug": "ai-coding-tools-comparison",
+      "locale": "cn",
+      "viewport": "390x844x1,mobile,touch",
+      "screenshot": "reports/public-content-boundary/pub-02-visuals/cn-mobile-ai-coding-tools-comparison.jpg",
+      "sha256": "83e77e1da022e90db7825910d116fbb31f9ca1dbaf2a2c3c2d282c8f1f80c645",
+      "metrics": {
+        "path": "/cn/guides/ai-coding-tools-comparison",
+        "width": 390,
+        "documentWidth": 390,
+        "h1": "AI 编程工具对比",
+        "state": "unavailable",
+        "table": [],
+        "next": [
+          {
+            "text": "查看任务指南",
+            "href": "/cn/guides/ai-coding-tools"
+          }
+        ]
+      },
+      "visuallyInspected": true,
+      "overlapOrPageOverflow": false,
+      "reviewer": "development agent"
+    },
+    {
+      "slug": "ai-tools-for-research-comparison",
+      "locale": "cn",
+      "viewport": "390x844x1,mobile,touch",
+      "screenshot": "reports/public-content-boundary/pub-02-visuals/cn-mobile-ai-tools-for-research-comparison.jpg",
+      "sha256": "c5f1ea129a74c56980828a682006526761116f86b13d33c77a5d1a70a4161049",
+      "metrics": {
+        "path": "/cn/guides/ai-tools-for-research-comparison",
+        "width": 390,
+        "documentWidth": 390,
+        "h1": "AI 研究工具对比",
+        "state": "unavailable",
+        "table": [],
+        "next": [
+          {
+            "text": "回到研究工具指南",
+            "href": "/cn/guides/ai-tools-for-research"
+          }
+        ]
+      },
+      "visuallyInspected": true,
+      "overlapOrPageOverflow": false,
+      "reviewer": "development agent"
+    },
+    {
+      "slug": "ai-tools-for-voice-comparison",
+      "locale": "cn",
+      "viewport": "390x844x1,mobile,touch",
+      "screenshot": "reports/public-content-boundary/pub-02-visuals/cn-mobile-ai-tools-for-voice-comparison.jpg",
+      "sha256": "3a3eb1bdf26568cd956df16efde896b50e7f5c79b72b1a205d5854501b0047ba",
+      "metrics": {
+        "path": "/cn/guides/ai-tools-for-voice-comparison",
+        "width": 390,
+        "documentWidth": 390,
+        "h1": "AI 语音工具对比",
+        "state": "unavailable",
+        "table": [],
+        "next": [
+          {
+            "text": "回到语音指南",
+            "href": "/cn/guides/ai-tools-for-voice"
+          }
+        ]
+      },
+      "visuallyInspected": true,
+      "overlapOrPageOverflow": false,
+      "reviewer": "development agent"
+    },
+    {
+      "slug": "ai-writing-tools",
+      "locale": "en",
+      "viewport": "1440x1000x1",
+      "screenshot": "reports/public-content-boundary/pub-02-visuals/en-desktop-ai-writing-tools.jpg",
+      "sha256": "ba09021b64d97d6f0ed0e5f442ce194fa82e63328bfa5efb52303292874176c0",
+      "metrics": {
+        "path": "/guides/ai-writing-tools",
+        "width": 1440,
+        "documentWidth": 1440,
+        "h1": "AI writing tools: how to choose one that fits your content workflow",
+        "checks": "Test a writing tool on one real draft\n\nThese are checks you can run, not product test results from this site.\n\nPrepare a brief with factual sources, an audience and tone requirements.\nCheck numbers, quotations and names against the original sources.\nRecord drafting and editing time separately, then check the export format.\nSources and check dates\n[1] Google Search: generative AI content\n\nGoogle’s guidance for generated content emphasizes accuracy, quality and relevance.\n\nReview facts and citations before publishing; volume is not an acceptance criterion.\n\nOfficial docs checked: 2026-09-14\n\nContinue checking\nReview Claude fit and sources\nReview the selection steps",
+        "table": [],
+        "next": [
+          {
+            "text": "Review Claude fit and sources",
+            "href": "/ai/claude#decision-card"
+          },
+          {
+            "text": "Review the selection steps",
+            "href": "/guides/how-to-choose-ai-tools"
+          }
+        ]
+      },
+      "visuallyInspected": true,
+      "overlapOrPageOverflow": false,
+      "reviewer": "development agent"
+    },
+    {
+      "slug": "ai-video-tools",
+      "locale": "en",
+      "viewport": "1440x1000x1",
+      "screenshot": "reports/public-content-boundary/pub-02-visuals/en-desktop-ai-video-tools.jpg",
+      "sha256": "49486cd8452c1bf80368d3b70d9c72bba700ec26b0231a1532e4d69cd71bf09f",
+      "metrics": {
+        "path": "/guides/ai-video-tools",
+        "width": 1440,
+        "documentWidth": 1440,
+        "h1": "AI video tools: how to choose one that fits your content workflow",
+        "checks": "Check whether a shot can enter the final edit\n\nThese are checks you can run, not product test results from this site.\n\nGenerate a short shot from a fixed storyboard and inspect identity and motion.\nImport it into your editor and check frame rate, aspect ratio and audio sync.\nSeparate generation resolution, upscaling and export settings; count failed takes and retries.\nSources and check dates\n[1] Runway: video resolution\n\nA 4K export from a Runway Video Editor Project does not upscale non-4K footage.\n\nInspect footage at the delivery size rather than relying on the export setting.\n\nOfficial docs checked: 2026-09-14\n\nContinue checking\nReview Runway fit and sources\nReview the selection steps",
+        "table": [],
+        "next": [
+          {
+            "text": "Review Runway fit and sources",
+            "href": "/ai/runway#decision-card"
+          },
+          {
+            "text": "Review the selection steps",
+            "href": "/guides/how-to-choose-ai-tools"
+          }
+        ]
+      },
+      "visuallyInspected": true,
+      "overlapOrPageOverflow": false,
+      "reviewer": "development agent"
+    },
+    {
+      "slug": "ai-coding-tools",
+      "locale": "en",
+      "viewport": "1440x1000x1",
+      "screenshot": "reports/public-content-boundary/pub-02-visuals/en-desktop-ai-coding-tools.jpg",
+      "sha256": "0132ad81dc5c6154b5bb224337220ca03b9c9585782bd92352318da7f2670fba",
+      "metrics": {
+        "path": "/guides/ai-coding-tools",
+        "width": 1440,
+        "documentWidth": 1440,
+        "h1": "AI coding tools: how to choose one that fits your development workflow",
+        "checks": "Test a coding assistant on a reproducible issue\n\nThese are checks you can run, not product test results from this site.\n\nChoose a defect with a failing case and ask the tool to explain the relevant code.\nInspect the diff, dependencies and permissions; run the test that reproduces the defect.\nRecord review and rework time; compilation alone does not establish correctness.\nSources and check dates\n[1] GitHub Copilot: responsible use\n\nGitHub positions Copilot code review as a supplement to human review and describes possible hallucinated feedback.\n\nKeep human diff review and behavior tests; automated feedback is not a merge guarantee.\n\nOfficial docs checked: 2026-09-14\n\nContinue checking\nReview GitHub Copilot fit and sources\nReview the selection steps",
+        "table": [],
+        "next": [
+          {
+            "text": "Review GitHub Copilot fit and sources",
+            "href": "/ai/github-copilot#decision-card"
+          },
+          {
+            "text": "Review the selection steps",
+            "href": "/guides/how-to-choose-ai-tools"
+          }
+        ]
+      },
+      "visuallyInspected": true,
+      "overlapOrPageOverflow": false,
+      "reviewer": "development agent"
+    },
+    {
+      "slug": "ai-tools-for-research",
+      "locale": "en",
+      "viewport": "1440x1000x1",
+      "screenshot": "reports/public-content-boundary/pub-02-visuals/en-desktop-ai-tools-for-research.jpg",
+      "sha256": "c53115a04c85136c98f67949880326f9277f0e9868624fc1e1c3d4624f514b77",
+      "metrics": {
+        "path": "/guides/ai-tools-for-research",
+        "width": 1440,
+        "documentWidth": 1440,
+        "h1": "AI tools for research: how to choose for discovery and evidence-checking",
+        "checks": "Trace each conclusion to its source\n\nThese are checks you can run, not product test results from this site.\n\nSeparate open discovery from questions about an existing source collection.\nCheck authors, dates, methods and whether the cited passage supports the conclusion.\nInclude conflicting sources and record omitted evidence and scope limitations.\nSources and check dates\n[1] Google: notebooks and source scope\n\nGoogle’s notebook help says notebooks are independent and cannot access multiple notebooks at once.\n\nConfirm the source collection used for an answer before treating it as comprehensive research.\n\nOfficial docs checked: 2026-09-14\n\nContinue checking\nReview NotebookLM fit and sources\nReview the selection steps",
+        "table": [],
+        "next": [
+          {
+            "text": "Review NotebookLM fit and sources",
+            "href": "/ai/notebooklm#decision-card"
+          },
+          {
+            "text": "Review the selection steps",
+            "href": "/guides/how-to-choose-ai-tools"
+          }
+        ]
+      },
+      "visuallyInspected": true,
+      "overlapOrPageOverflow": false,
+      "reviewer": "development agent"
+    },
+    {
+      "slug": "ai-tools-for-automation",
+      "locale": "en",
+      "viewport": "1440x1000x1",
+      "screenshot": "reports/public-content-boundary/pub-02-visuals/en-desktop-ai-tools-for-automation.jpg",
+      "sha256": "fcda816f11af973a8b76b63e35f019605c17182e18ceac1e7f40ee415c58ef75",
+      "metrics": {
+        "path": "/guides/ai-tools-for-automation",
+        "width": 1440,
+        "documentWidth": 1440,
+        "h1": "AI tools for automation: how to choose for repeatable workflows",
+        "checks": "Test recovery after failure\n\nThese are checks you can run, not product test results from this site.\n\nRun a sanitized input from trigger to output in a test environment.\nSimulate timeouts, missing fields and duplicate inputs; check that retries do not duplicate writes.\nCheck error alerts, execution logs and human recovery before scheduling runs.\nSources and check dates\n[1] n8n: handle errors\n\nn8n can handle execution failures with error workflows; the error data depends on where execution failed.\n\nTest trigger and downstream failures separately so inputs can be recovered.\n\nOfficial docs checked: 2026-09-14\n\nContinue checking\nReview n8n fit and sources\nReview the selection steps",
+        "table": [],
+        "next": [
+          {
+            "text": "Review n8n fit and sources",
+            "href": "/ai/n8n#decision-card"
+          },
+          {
+            "text": "Review the selection steps",
+            "href": "/guides/how-to-choose-ai-tools"
+          }
+        ]
+      },
+      "visuallyInspected": true,
+      "overlapOrPageOverflow": false,
+      "reviewer": "development agent"
+    },
+    {
+      "slug": "ai-tools-for-web3-comparison",
+      "locale": "en",
+      "viewport": "1440x1000x1",
+      "screenshot": "reports/public-content-boundary/pub-02-visuals/en-desktop-ai-tools-for-web3-comparison.jpg",
+      "sha256": "78f7b910e559d27d2391c6157bdcd3d008d8ae8145afbc51213e6569e6984dc4",
+      "metrics": {
+        "path": "/guides/ai-tools-for-web3-comparison",
+        "width": 1440,
+        "documentWidth": 1440,
+        "h1": "Dune vs The Graph: dashboards or data APIs?",
+        "state": "verified",
+        "table": [
+          {
+            "width": 1038,
+            "containerWidth": 1038
+          }
+        ],
+        "next": [
+          {
+            "text": "Read the Web3 selection guide",
+            "href": "/guides/ai-tools-for-web3"
+          }
+        ]
+      },
+      "visuallyInspected": true,
+      "overlapOrPageOverflow": false,
+      "reviewer": "development agent"
+    },
+    {
+      "slug": "ai-tools-for-sales-comparison",
+      "locale": "en",
+      "viewport": "1440x1000x1",
+      "screenshot": "reports/public-content-boundary/pub-02-visuals/en-desktop-ai-tools-for-sales-comparison.jpg",
+      "sha256": "572113641afd0c922e469928241439f518f8aa4077bdc711e5e5470137be451a",
+      "metrics": {
+        "path": "/guides/ai-tools-for-sales-comparison",
+        "width": 1440,
+        "documentWidth": 1440,
+        "h1": "AI sales tools comparison",
+        "state": "unavailable",
+        "table": [],
+        "next": [
+          {
+            "text": "Back to sales guide",
+            "href": "/guides/ai-tools-for-sales"
+          }
+        ]
+      },
+      "visuallyInspected": true,
+      "overlapOrPageOverflow": false,
+      "reviewer": "development agent"
+    },
+    {
+      "slug": "ai-coding-tools-comparison",
+      "locale": "en",
+      "viewport": "1440x1000x1",
+      "screenshot": "reports/public-content-boundary/pub-02-visuals/en-desktop-ai-coding-tools-comparison.jpg",
+      "sha256": "c5681cb62d15d4474d80335ad2af0639f8557dd4ca55b170f1616a63e0959483",
+      "metrics": {
+        "path": "/guides/ai-coding-tools-comparison",
+        "width": 1440,
+        "documentWidth": 1440,
+        "h1": "AI coding tools comparison",
+        "state": "unavailable",
+        "table": [],
+        "next": [
+          {
+            "text": "Read the task guide",
+            "href": "/guides/ai-coding-tools"
+          }
+        ]
+      },
+      "visuallyInspected": true,
+      "overlapOrPageOverflow": false,
+      "reviewer": "development agent"
+    },
+    {
+      "slug": "ai-tools-for-research-comparison",
+      "locale": "en",
+      "viewport": "1440x1000x1",
+      "screenshot": "reports/public-content-boundary/pub-02-visuals/en-desktop-ai-tools-for-research-comparison.jpg",
+      "sha256": "957d5d1518529273b37024cc73fd2a5e9d93b3a8f318ca5283c828e3e254ff47",
+      "metrics": {
+        "path": "/guides/ai-tools-for-research-comparison",
+        "width": 1440,
+        "documentWidth": 1440,
+        "h1": "AI tools for research comparison",
+        "state": "unavailable",
+        "table": [],
+        "next": [
+          {
+            "text": "Back to research guide",
+            "href": "/guides/ai-tools-for-research"
+          }
+        ]
+      },
+      "visuallyInspected": true,
+      "overlapOrPageOverflow": false,
+      "reviewer": "development agent"
+    },
+    {
+      "slug": "ai-tools-for-voice-comparison",
+      "locale": "en",
+      "viewport": "1440x1000x1",
+      "screenshot": "reports/public-content-boundary/pub-02-visuals/en-desktop-ai-tools-for-voice-comparison.jpg",
+      "sha256": "4ca8288a24fc62e7ed8b4cf63f0b7d9b08e0b2742ec1a7fb11598bfa6725ffdb",
+      "metrics": {
+        "path": "/guides/ai-tools-for-voice-comparison",
+        "width": 1440,
+        "documentWidth": 1440,
+        "h1": "AI voice tools comparison",
+        "state": "unavailable",
+        "table": [],
+        "next": [
+          {
+            "text": "Back to voice guide",
+            "href": "/guides/ai-tools-for-voice"
+          }
+        ]
+      },
+      "visuallyInspected": true,
+      "overlapOrPageOverflow": false,
+      "reviewer": "development agent"
+    }
+  ],
+  "interactionChecks": [
+    {
+      "action": "Click first matrix source citation",
+      "href": "#evidence-dune-workspace",
+      "hashAfterClick": "#evidence-dune-workspace",
+      "targetExists": true,
+      "targetSource": "Dune · Data Hub",
+      "pass": true
+    },
+    {
+      "action": "Scroll mobile comparison table fully right",
+      "viewportWidth": 390,
+      "documentWidth": 390,
+      "containerWidth": 316,
+      "contentWidth": 680,
+      "scrollLeft": 364,
+      "rightmostVisible": true,
+      "overflowX": "auto",
+      "pass": true
+    }
+  ],
+  "browserIsolation": {
+    "origin": "http://127.0.0.1:3027",
+    "internalAnalyticsRequestsBlocked": 37,
+    "upstreamWriteRequestsForwarded": 0,
+    "finalProxyCsp": "connect-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+    "thirdPartyAnalyticsNote": "CSP isolation was added before the final English desktop pass. Earlier mobile captures had internal API/write blocking but did not guarantee blocking external analytics; GA cookies were observed. No claim of zero external analytics events."
+  }
+}

@@ -1,14 +1,13 @@
 import { Metadata } from 'next';
-import { ArrowRight, CheckCircle2, ExternalLink, Search, Sparkles } from 'lucide-react';
+import { CheckCircle2, Search, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
 import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
-import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
+import GuideTaskChecks from '@/components/guides/GuideTaskChecks';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
 
@@ -33,8 +32,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
-  const checkedAt = '2026-07-18';
-  const categoryCount = categories.length;
+
   const siteUrl = BASE_URL;
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -100,34 +98,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       desc: isChinese ? '更偏稳定的内容优化。' : 'More focused on consistent content optimization.',
     },
   ];
-  const highIntentPaths = [
-    {
-      href: '/best-ai-tools/ai-seo-tools',
-      title: isChinese ? '先看 SEO 榜单' : 'Start with SEO ranking',
-      desc: isChinese
-        ? '先用 shortlist 缩小候选，再回到对比页。'
-        : 'Use the shortlist first, then return to comparison.',
-    },
-    {
-      href: '/guides/ai-seo-tools-comparison',
-      title: isChinese ? '再看 SEO 对比页' : 'Open SEO comparison',
-      desc: isChinese
-        ? '关键词、内容和排名能力一页收敛。'
-        : 'Narrow keywords, content, and rank tracking in one place.',
-    },
-    {
-      href: '/guides/ai-writing-tools-comparison',
-      title: isChinese ? '写作工具对比' : 'Writing tools comparison',
-      desc: isChinese
-        ? '如果内容生产也是主线，先看这页更顺。'
-        : 'Useful when content production is part of the SEO workflow.',
-    },
-    {
-      href: '/categories/text-writing?sort=popular',
-      title: isChinese ? '进入写作分类' : 'Open writing category',
-      desc: isChinese ? '直接看更接近内容增长工作的真实条目。' : 'Inspect real listings closer to content growth work.',
-    },
-  ];
 
   return (
     <>
@@ -156,153 +126,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? 'SEO 工具重点不是“报告多”，而是能不能稳定帮你做关键词研究、内容优化和排名跟踪。'
               : 'SEO tools are not just about reports. They need to reliably support keyword research, content optimization, and rank tracking.'}
           </p>
-
-          <div className='mt-6 flex flex-wrap gap-3'>
-            <TrackableCtaLink
-              href='/explore?search=seo&sort=popular'
-              ctaId='seo_guide_browse_tools'
-              ctaLabel='SEO guide browse tools'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
-            >
-              {isChinese ? '看 SEO 工具' : 'Browse SEO tools'}
-              <ExternalLink className='size-4' />
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-writing-tools'
-              ctaId='seo_guide_writing'
-              ctaLabel='SEO guide writing'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              {isChinese ? '回到写作指南' : 'Back to writing guide'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-seo-tools-comparison'
-              ctaId='seo_guide_compare'
-              ctaLabel='SEO guide compare'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              {isChinese ? '看 SEO 对比页' : 'SEO comparison'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/best-ai-tools/ai-seo-tools'
-              ctaId='seo_guide_top_list'
-              ctaLabel='SEO guide top list'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
-            >
-              {isChinese ? '看 SEO 榜单' : 'Open SEO ranking'}
-            </TrackableCtaLink>
-          </div>
-        </section>
-
-        <GuideEvidencePanel
-          locale={locale}
-          checkedAt={checkedAt}
-          scope={
-            isChinese
-              ? '这页优先判断 SEO 工具是否能覆盖真实增长工作流：关键词研究、内容优化、排名跟踪、导出协作和数据更新频率。'
-              : 'This page focuses on whether an SEO tool supports a real growth workflow: keyword research, content optimization, rank tracking, exports, collaboration, and data freshness.'
-          }
-          signalCards={[
-            {
-              label: isChinese ? '价格信号' : 'Pricing signal',
-              value: isChinese ? '先看试用，再看升级成本' : 'Check trial first, then upgrade cost',
-              note: isChinese
-                ? 'SEO 工具很容易在导出、席位和监控上突然抬门槛。'
-                : 'SEO tools often raise the bar suddenly on exports, seats, or monitoring.',
-            },
-            {
-              label: isChinese ? '更新信号' : 'Freshness signal',
-              value: isChinese ? '数据更新频率很关键' : 'Data freshness matters a lot',
-              note: isChinese
-                ? '排名、关键词和内容建议如果不够新，决策很容易失真。'
-                : 'If rankings, keywords, or content guidance are stale, decisions quickly get distorted.',
-            },
-            {
-              label: isChinese ? '风险信号' : 'Risk signal',
-              value: isChinese ? '薄 SEO 页要警惕' : 'Be careful with thin SEO pages',
-              note: isChinese
-                ? '如果页面只会讲“AI SEO”但没有工作流证据，就先降权。'
-                : 'If a page only says "AI SEO" without workflow evidence, treat it cautiously.',
-            },
-          ]}
-          items={[
-            {
-              label: isChinese ? '验证范围' : 'Checked scope',
-              value: isChinese ? '关键词、内容、排名、协作' : 'Keywords, content, ranking, collaboration',
-              note: isChinese
-                ? `当前可参考分类信号有 ${categoryCount} 个，把 SEO 工具拆成具体工作流，而不是按“AI SEO”这个大词泛泛推荐。`
-                : `${categoryCount} category signals are available, so we split SEO tools by workflow instead of recommending broadly around the generic AI SEO label.`,
-            },
-            {
-              label: isChinese ? '优先入口' : 'Priority paths',
-              value: isChinese ? '榜单、对比、写作分类' : 'Ranking, comparison, writing category',
-              note: isChinese
-                ? '用户可以从指南进入更高意图的榜单和对比页，减少空泛浏览。'
-                : 'Users can move from guide to ranking and comparison pages instead of staying in broad browsing.',
-            },
-            {
-              label: isChinese ? '质量风险' : 'Quality risk',
-              value: isChinese ? '避免薄 SEO 内容' : 'Avoid thin SEO content',
-              note: isChinese
-                ? `这页已于 ${checkedAt} 重新核对，后续会把真实 GSC 观察、页面表现和评论信号接入这类页面。`
-                : `This page was rechecked on ${checkedAt}, and next iterations should connect GSC observations, page performance, and feedback signals to this guide.`,
-            },
-          ]}
-          decisionSteps={[
-            isChinese
-              ? '先判断你是做关键词、内容还是排名监控。'
-              : 'First decide whether you need keywords, content, or rank monitoring.',
-            isChinese
-              ? '如果方向已经明确，就先去对应对比页。'
-              : 'If the direction is clear, go to the matching comparison page first.',
-            isChinese
-              ? '如果还不确定，再回来核对工作流和数据更新频率。'
-              : 'If you are still unsure, come back to check workflow fit and data freshness.',
-          ]}
-        />
-
-        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '最近验证' : 'Last checked'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? `SEO 入口已与榜单、对比页和写作路径收口，当前可参考分类信号 ${categoryCount} 个。`
-                : `The SEO entry now aligns with ranking, comparison, and writing paths, with ${categoryCount} category signals available.`}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '当前判断' : 'Current judgment'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>
-              {isChinese ? '保留索引，继续补真实增长证据' : 'Keep it indexable and keep adding real growth evidence'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '用 GSC、评论和页面表现把它从泛 SEO 页面里拉出来。'
-                : 'Use GSC, comments, and page performance to separate it from generic SEO pages.'}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '下一步' : 'Next step'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>
-              {isChinese ? '补真实 SEO 工作流案例' : 'Add a real SEO workflow case'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '先补关键词、内容和排名三段式案例。'
-                : 'Start with keyword, content, and rank-tracking cases.'}
-            </p>
-          </div>
         </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
@@ -358,134 +181,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </aside>
         </section>
 
-        <section className='mt-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '下一步怎么走' : 'Next step'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese
-              ? '把 SEO 入口接到榜单、比较页和真实条目'
-              : 'Move from the SEO guide into rankings, comparisons, and real listings'}
-          </h2>
-          <div className='mt-4 grid gap-4 lg:grid-cols-3'>
-            <TrackableCtaLink
-              href='/best-ai-tools/ai-seo-tools'
-              ctaId='seo_guide_ranking_next'
-              ctaLabel='SEO guide ranking next'
-              pageType='guide'
-              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
-            >
-              <div className='flex items-start justify-between gap-3'>
-                <div>
-                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
-                    {isChinese ? '看 SEO 榜单' : 'Open SEO ranking'}
-                  </p>
-                  <p className='mt-2 text-sm leading-6 text-slate-600'>
-                    {isChinese
-                      ? '如果你已经是高意图筛选，直接看 shortlist 会更快。'
-                      : 'If intent is already high, the shortlist is the fastest next step.'}
-                  </p>
-                </div>
-                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
-              </div>
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-seo-tools-comparison'
-              ctaId='seo_guide_compare_next'
-              ctaLabel='SEO guide compare next'
-              pageType='guide'
-              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
-            >
-              <div className='flex items-start justify-between gap-3'>
-                <div>
-                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
-                    {isChinese ? '看 SEO 工具对比' : 'Compare SEO tools'}
-                  </p>
-                  <p className='mt-2 text-sm leading-6 text-slate-600'>
-                    {isChinese
-                      ? '当关键词和内容方向清楚后，就进入横向对比。'
-                      : 'Once the keyword and content direction is clear, move into side-by-side comparison.'}
-                  </p>
-                </div>
-                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
-              </div>
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/categories/text-writing?sort=popular'
-              ctaId='seo_guide_category'
-              ctaLabel='SEO guide category'
-              pageType='guide'
-              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
-            >
-              <div className='flex items-start justify-between gap-3'>
-                <div>
-                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
-                    {isChinese ? '进入写作分类' : 'Open the writing category'}
-                  </p>
-                  <p className='mt-2 text-sm leading-6 text-slate-600'>
-                    {isChinese
-                      ? '如果你想先看更接近内容生产的真实条目，这里更顺手。'
-                      : 'If you want to inspect real listings closer to content work first, this is a cleaner stop.'}
-                  </p>
-                </div>
-                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
-              </div>
-            </TrackableCtaLink>
-          </div>
-        </section>
-
-        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '高意图榜单' : 'High-intent ranking'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '先用榜单缩小 SEO shortlist' : 'Use the ranking to narrow your SEO shortlist first'}
-          </h2>
-          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-            {isChinese
-              ? '如果你已经明确自己是在找关键词研究、内容优化或排名跟踪工具，先看榜单会比泛目录更快进入决策。'
-              : 'If the decision is already about keyword research, content optimization, or rank tracking, the ranking gets you to a decision faster than a broad directory.'}
-          </p>
-          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
-            {[
-              {
-                href: '/best-ai-tools/ai-seo-tools',
-                title: isChinese ? 'SEO 榜单' : 'SEO ranking',
-                desc: isChinese ? '先看最值得试的候选。' : 'Start with the most relevant candidates first.',
-              },
-              {
-                href: '/guides/ai-seo-tools-comparison',
-                title: isChinese ? 'SEO 对比' : 'SEO comparison',
-                desc: isChinese ? '关键词、内容和排名一起比。' : 'Compare keywords, content, and ranking together.',
-              },
-              {
-                href: '/guides/ai-writing-tools-comparison',
-                title: isChinese ? '写作对比' : 'Writing comparison',
-                desc: isChinese ? '如果内容生产也是重点。' : 'Useful when content production is also a core task.',
-              },
-              {
-                href: '/categories/text-writing?sort=popular',
-                title: isChinese ? '写作分类' : 'Writing category',
-                desc: isChinese
-                  ? '直接看更接近内容增长工作的条目。'
-                  : 'Inspect listings closer to content growth work.',
-              },
-            ].map((item) => (
-              <TrackableCtaLink
-                key={item.href}
-                href={item.href}
-                ctaId={`seo_guide_ranking_${item.href.split('/').pop()}`}
-                ctaLabel={item.title}
-                pageType='guide'
-                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-              >
-                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
-                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
-              </TrackableCtaLink>
-            ))}
-          </div>
-        </section>
-
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '先看这些入口' : 'Start here'}
@@ -509,34 +204,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </div>
         </section>
 
-        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '高意图路径' : 'High-intent paths'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese
-              ? '先走最短路径，再决定要不要继续细比'
-              : 'Take the shortest path first, then decide whether to compare deeper'}
-          </h2>
-          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-            {isChinese
-              ? '如果你已经确定自己在做 SEO，这里会把你更快送到榜单、对比页和更接近内容工作的分类页。'
-              : 'If SEO is already the lane, this section gets you faster to the ranking, comparison, and content-adjacent category pages.'}
-          </p>
-          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
-            {highIntentPaths.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:border-cyan-200 hover:bg-cyan-50/60'
-              >
-                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
-                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
-              </Link>
-            ))}
-          </div>
-        </section>
-
         <GuideActionSection
           locale={locale}
           eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}
@@ -547,73 +214,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               : 'If keywords, content briefs, page optimization, and topic planning matter most, these tools get you to the real work faster than a general writing page.'
           }
           toolNames={['surfer', 'frase', 'clearscope', 'marketmuse']}
-          compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
-          compareTitle={isChinese ? '继续缩小 SEO 候选范围' : 'Next SEO comparison paths'}
-          compareDescription={
-            isChinese
-              ? '当你已经知道自己更偏内容优化、brief 生成还是主题规划时，继续进入对比页会更有效。'
-              : 'Once you know whether content optimization, brief generation, or topic planning matters most, narrower compare pages work better.'
-          }
-          compareLinks={[
-            {
-              href: '/best-ai-tools/ai-seo-tools',
-              title: isChinese ? 'SEO 榜单' : 'SEO ranking',
-              description: isChinese
-                ? '直接进高意图 shortlist，再决定要不要细比。'
-                : 'Jump into the high-intent shortlist before deciding whether to compare deeper.',
-            },
-            {
-              href: '/guides/ai-seo-tools-comparison',
-              title: isChinese ? 'SEO 工具总对比' : 'SEO tools comparison',
-              description: isChinese
-                ? '适合快速横向看常见 SEO 工具。'
-                : 'A fast side-by-side view of common SEO tools.',
-            },
-            {
-              href: '/guides/ai-writing-tools-comparison',
-              title: isChinese ? '写作工具对比' : 'Writing tools comparison',
-              description: isChinese
-                ? '如果你还在 SEO 与通用写作工具之间犹豫，这里更有参考价值。'
-                : 'Useful if you are still deciding between SEO-first and broader writing tools.',
-            },
-            {
-              href: '/guides/ai-tools-for-research-comparison',
-              title: isChinese ? '研究工具对比' : 'Research tools comparison',
-              description: isChinese
-                ? '更适合先做调研、再决定内容方向的人。'
-                : 'Better for teams that start with research before content production.',
-            },
-          ]}
-          nextEyebrow={isChinese ? '下一步入口' : 'Where to go next'}
-          nextTitle={isChinese ? '确定 SEO 方向后，下一步看这里' : 'Where to go once SEO is clearly the right lane'}
-          nextDescription={
-            isChinese
-              ? '如果你已经明确自己在做搜索流量和内容增长，下一步就去榜单、写作分类和搜索结果看真实条目。'
-              : 'If search traffic and content growth are clearly the focus, the next step is to use the ranking, writing category, and targeted search.'
-          }
-          nextLinks={[
-            {
-              href: '/best-ai-tools/ai-seo-tools',
-              title: isChinese ? '打开 SEO 榜单' : 'Open SEO ranking',
-              description: isChinese
-                ? '先看 shortlist，再回到分类或对比页收敛。'
-                : 'Start with the shortlist, then return to category or comparison pages to narrow further.',
-            },
-            {
-              href: '/categories/text-writing?sort=popular',
-              title: isChinese ? '进入写作分类' : 'Open the writing category',
-              description: isChinese
-                ? '从最接近 SEO 内容工作的分类页继续筛选。'
-                : 'Keep filtering inside the category that maps most closely to SEO content workflows.',
-            },
-            {
-              href: '/explore?search=seo&sort=popular',
-              title: isChinese ? '搜索更多 SEO 工具' : 'Search more SEO tools',
-              description: isChinese
-                ? '回到 Explore，用 SEO 关键词扩大候选范围。'
-                : 'Return to Explore and widen the shortlist with an SEO-focused search.',
-            },
-          ]}
         />
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
@@ -656,43 +256,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </div>
         </section>
 
-        <div className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
-          <section className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-            <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '高意图路径' : 'High-intent path'}
-            </p>
-            <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-              {isChinese
-                ? '如果这是你的工具，下一步就去提交或认领'
-                : 'If this is your tool, the next step is submission or claiming'}
-            </h2>
-            <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '已经比较到这一步，说明你大概率是在认真筛选或准备上架。把工具提交进来，或者先认领条目，后面再决定是否加速审核。'
-                : 'If you are this far into comparison, you are likely filtering seriously or preparing a listing. Submit your tool, or claim the listing first and decide later whether faster review is needed.'}
-            </p>
-            <div className='mt-5 flex flex-wrap gap-3'>
-              <TrackableCtaLink
-                href='/submit'
-                ctaId='seo_guide_submit'
-                ctaLabel='SEO guide submit'
-                pageType='guide'
-                className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
-              >
-                {isChinese ? '提交你的工具' : 'Submit your tool'}
-              </TrackableCtaLink>
-              <TrackableCtaLink
-                href='/developer/listing'
-                ctaId='seo_guide_claim'
-                ctaLabel='SEO guide claim'
-                pageType='guide'
-                className='inline-flex items-center justify-center rounded-lg border border-emerald-200 bg-white px-4 py-3 text-sm font-semibold text-emerald-800 hover:bg-emerald-50'
-              >
-                {isChinese ? '认领条目' : 'Claim listing'}
-              </TrackableCtaLink>
-            </div>
-          </section>
-        </div>
+        <div className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'></div>
+        <GuideTaskChecks slug='ai-seo-tools' locale={locale} />
       </div>
     </>
   );

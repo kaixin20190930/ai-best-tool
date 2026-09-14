@@ -1,15 +1,12 @@
 import { Metadata } from 'next';
-import { ClipboardCheck, ExternalLink, Layers3, Scale } from 'lucide-react';
+import { ClipboardCheck, Layers3, Scale } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
 import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
-import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
-import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
 
@@ -30,8 +27,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
-  const checkedAt = '2026-07-18';
-  const categoryCount = categories.length;
+
   const siteUrl = BASE_URL;
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -78,34 +74,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         'Look for tools that bind outputs, scoring rules, and samples together for review.',
         'If the work feeds team process, prioritize sharing, signoff, and fit with CI or release flow.',
       ];
-  const highIntentPaths = [
-    {
-      href: '/best-ai-tools/ai-evals-tools',
-      title: isChinese ? '先看 evals 榜单' : 'Start with evals ranking',
-      desc: isChinese ? '先用 shortlist 缩小范围。' : 'Use the shortlist to narrow the field first.',
-    },
-    {
-      href: '/guides/ai-tools-for-evals-comparison',
-      title: isChinese ? 'Evals 对比页' : 'Evals comparison',
-      desc: isChinese
-        ? '评分、数据集和验收流程一起看。'
-        : 'Compare scoring, datasets, and acceptance workflows together.',
-    },
-    {
-      href: '/guides/ai-tools-for-prompt-testing-comparison',
-      title: isChinese ? 'Prompt 测试对比' : 'Prompt testing comparison',
-      desc: isChinese
-        ? '如果你更关注提示词版本和 A/B 对比。'
-        : 'Useful when prompt versions and A/B comparisons matter more.',
-    },
-    {
-      href: '/guides/ai-tools-for-api-observability-comparison',
-      title: isChinese ? 'API 可观测对比' : 'API observability comparison',
-      desc: isChinese
-        ? '如果你要把质量和线上请求一起看。'
-        : 'Use this when quality and production requests belong together.',
-    },
-  ];
 
   return (
     <>
@@ -134,46 +102,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? 'Evals 工具真正要解决的，不是“能不能看一堆样本”，而是能不能把质量标准、样本结果和版本变化连起来，变成稳定判断。'
               : 'Evals tools are not mainly about browsing samples. The real job is connecting quality standards, sample results, and version changes into a stable decision process.'}
           </p>
-
-          <div className='mt-6 flex flex-wrap gap-3'>
-            <TrackableCtaLink
-              href='/explore?search=eval&sort=popular'
-              ctaId='evals_guide_browse_tools'
-              ctaLabel='Evals guide browse tools'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
-            >
-              {isChinese ? '看 evals 工具' : 'Browse evals tools'}
-              <ExternalLink className='size-4' />
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-tools-for-developers'
-              ctaId='evals_guide_developers'
-              ctaLabel='Evals guide developers'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              {isChinese ? '回到开发者指南' : 'Back to developer guide'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-tools-for-evals-comparison'
-              ctaId='evals_guide_comparison'
-              ctaLabel='Evals guide comparison'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              {isChinese ? '看 evals 对比页' : 'Evals comparison'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/best-ai-tools/ai-evals-tools'
-              ctaId='evals_guide_top_list'
-              ctaLabel='Evals guide top list'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
-            >
-              {isChinese ? '看 evals 榜单' : 'Open evals ranking'}
-            </TrackableCtaLink>
-          </div>
         </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
@@ -223,123 +151,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </aside>
         </section>
 
-        <GuideEvidencePanel
-          locale={locale}
-          checkedAt={checkedAt}
-          scope={
-            isChinese
-              ? '这页优先检查页面是否能帮助用户完成真实 evals 判断：是否有明确评分标准、数据集、验收门槛、版本回归路径，以及是否能继续进入对比页或榜单页。'
-              : 'This page prioritizes whether the guide helps with a real evals decision: clear scoring rules, datasets, acceptance thresholds, regression paths, and next steps into comparison or ranking pages.'
-          }
-          decisionSteps={
-            isChinese
-              ? [
-                  '先判断你是在做评分标准、数据集设计，还是上线验收。',
-                  '如果目标已经明确，先去更聚焦的对比页或榜单页看候选工具。',
-                  '如果还要给团队留证据，再回到这页补样本、模板和复盘记录。',
-                ]
-              : [
-                  'First decide whether you are working on scoring rules, dataset design, or release acceptance.',
-                  'If the goal is already clear, move to the more focused comparison or ranking pages for candidates.',
-                  'If you still need team evidence, come back here for samples, templates, and retrospective notes.',
-                ]
-          }
-          items={[
-            {
-              label: isChinese ? '判断维度' : 'Decision signals',
-              value: isChinese ? '评分标准、数据集、验收、回归' : 'Scoring, datasets, acceptance, regression',
-              note: isChinese
-                ? `不只看工具功能，而是看它能否把结果质量变成可重复判断。当前可用分类数：${categoryCount}。`
-                : `We focus on whether the tool turns output quality into a repeatable decision. Current category count: ${categoryCount}.`,
-            },
-            {
-              label: isChinese ? '索引策略' : 'Indexing strategy',
-              value: isChinese ? '核心指南保留索引' : 'Core guide kept indexable',
-              note: isChinese
-                ? '薄内容或重复内容避免抢占同类页面的抓取预算。'
-                : 'Thin or repetitive content should not compete for crawl budget with stronger pages.',
-            },
-            {
-              label: isChinese ? '下一步补强' : 'Next enrichment',
-              value: isChinese ? '补真实样本与复盘' : 'Add real samples and retros',
-              note: isChinese
-                ? `后续优先补评估样本、评分模板、验收清单和复盘笔记，并保持 ${checkedAt} 的核对记录。`
-                : `Next, priority additions are evaluation samples, scoring templates, acceptance checklists, and retrospective notes while keeping the ${checkedAt} verification record.`,
-            },
-          ]}
-        />
-
-        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '最近验证' : 'Last checked'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? `这页已按真实 evals 决策重新核对，优先保留评分、数据集和回归入口，目前覆盖 ${categoryCount} 个分类。`
-                : `This page has been rechecked against a real evals decision and keeps scoring, datasets, and regression entry points visible across ${categoryCount} categories.`}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '当前判断' : 'Current judgment'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>
-              {isChinese
-                ? '保留索引，强化评估门槛证据'
-                : 'Keep it indexable and strengthen evaluation-threshold evidence'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '用评分样本、验收清单和复盘记录区分它与可观测页。'
-                : 'Use scoring samples, acceptance checklists, and retros to distinguish it from observability pages.'}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '下一步' : 'Next step'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>
-              {isChinese ? '补真实样本和验收模板' : 'Add real samples and acceptance templates'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '后续优先补评估样本、模板和复盘。'
-                : 'Next, prioritize evaluation samples, templates, and retros.'}
-            </p>
-          </div>
-        </section>
-
-        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '高意图路径' : 'High-intent path'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '先看榜单和对比，再回到 evals 页' : 'Compare first, then come back to evals pages'}
-          </h2>
-          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-            {isChinese
-              ? '如果你已经知道自己要做的是输出评分、数据集验证或上线验收，就直接去更窄的榜单和对比页。'
-              : 'If the real job is output scoring, dataset validation, or release acceptance, move straight into the narrower ranking and comparison pages.'}
-          </p>
-          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
-            {highIntentPaths.map((item) => (
-              <TrackableCtaLink
-                key={item.href}
-                href={item.href}
-                ctaId={`evals_guide_${item.href.split('/').pop()}`}
-                ctaLabel={item.title}
-                pageType='guide'
-                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-              >
-                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
-                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
-              </TrackableCtaLink>
-            ))}
-          </div>
-        </section>
-
         <GuideActionSection
           locale={locale}
           eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}
@@ -354,80 +165,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               : 'If output scoring, dataset validation, and release acceptance matter most, these tools get to the core problem faster than a broad developer page.'
           }
           toolNames={['langfuse', 'langsmith', 'helicone', 'portkey']}
-          compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
-          compareTitle={isChinese ? 'Evals 意图更强的下一步入口' : 'Next paths for stronger evals intent'}
-          compareDescription={
-            isChinese
-              ? '当你已经明确自己在找结果评估工具，而不是泛调试或 prompt 对比工具，继续进入更窄的比较页会更有效。'
-              : 'Once the real job is output evaluation rather than broad debugging or prompt comparison, narrower comparison pages work better.'
-          }
-          compareLinks={[
-            {
-              href: '/guides/ai-tools-for-evals-comparison',
-              title: isChinese ? 'Evals 工具对比' : 'Evals comparison',
-              description: isChinese
-                ? '适合直接横向看评分、数据集和验收流程。'
-                : 'A direct side-by-side path for scoring, datasets, and acceptance workflows.',
-            },
-            {
-              href: '/best-ai-tools/ai-evals-tools',
-              title: isChinese ? 'Evals 榜单' : 'Evals ranking',
-              description: isChinese
-                ? '适合已经确认方向、只想快速缩小 shortlist 的用户。'
-                : 'Useful when the direction is clear and the goal is to narrow the shortlist faster.',
-            },
-            {
-              href: '/guides/ai-tools-for-prompt-testing-comparison',
-              title: isChinese ? 'Prompt 测试工具对比' : 'Prompt testing comparison',
-              description: isChinese
-                ? '如果你发现真正决策点更偏提示词版本和 A/B 对比，这页更合适。'
-                : 'More useful if the real decision is shifting toward prompt versions and A/B comparisons.',
-            },
-            {
-              href: '/guides/ai-tools-for-api-observability-comparison',
-              title: isChinese ? 'API 可观测工具对比' : 'API observability comparison',
-              description: isChinese
-                ? '如果你更关心线上请求与质量观察，这页更贴近目标。'
-                : 'Move there if the real job is more about production requests and quality visibility.',
-            },
-          ]}
         />
-
-        <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '高意图榜单' : 'High-intent ranking'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '先用榜单缩小 evals shortlist' : 'Use the ranking to narrow your evals shortlist first'}
-          </h2>
-          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-            {isChinese
-              ? '如果你已经知道自己要比的是输出评分、数据集验证和上线验收，榜单页会比泛目录更快进入决策。'
-              : 'If the decision is already about output scoring, dataset validation, and release acceptance, the ranking page gets to a decision faster than a broad directory.'}
-          </p>
-          <div className='mt-5 flex flex-wrap gap-3'>
-            <TrackableCtaLink
-              href='/best-ai-tools/ai-evals-tools'
-              ctaId='evals_guide_ranking_primary'
-              ctaLabel='Evals guide ranking primary'
-              pageType='guide'
-              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
-            >
-              {isChinese ? '进入 evals 榜单' : 'Open evals ranking'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-tools-for-evals-comparison'
-              ctaId='evals_guide_ranking_secondary'
-              ctaLabel='Evals guide ranking secondary'
-              pageType='guide'
-              className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
-            >
-              {isChinese ? '继续看对比页' : 'Continue to comparison'}
-            </TrackableCtaLink>
-          </div>
-        </section>
-
-        <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_evals' />
       </div>
     </>
   );
