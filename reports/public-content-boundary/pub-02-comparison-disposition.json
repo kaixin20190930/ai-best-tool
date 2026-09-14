@@ -1,0 +1,1538 @@
+{
+  "base": "8500684567561675697b6814bff8e376d5944320",
+  "scope": "All 76 existing comparison routes. No redirect or index change authorized.",
+  "pages": [
+    {
+      "path": "/guides/adobe-alternatives-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "adobe",
+        "shutterstock",
+        "sora",
+        "viggle"
+      ],
+      "availablePublishedCandidates": [
+        "adobe",
+        "shutterstock",
+        "sora",
+        "viggle"
+      ],
+      "unavailableCandidates": [],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-creators",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-agent-tools-comparison",
+      "implementation": "wrapper",
+      "disposition": "merge-redirect",
+      "reason": "Wrapper renders the same target page; no independent comparison task. Record merge candidate only.",
+      "candidateNames": [],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [],
+      "mergeTarget": "/guides/ai-tools-for-agents-comparison",
+      "nextGuide": "/guides/ai-agent-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-api-observability-tools-comparison",
+      "implementation": "wrapper",
+      "disposition": "merge-redirect",
+      "reason": "Wrapper renders the same target page; no independent comparison task. Record merge candidate only.",
+      "candidateNames": [],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [],
+      "mergeTarget": "/guides/ai-tools-for-api-observability-comparison",
+      "nextGuide": "/guides/ai-api-observability-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-automation-tools-comparison",
+      "implementation": "wrapper",
+      "disposition": "merge-redirect",
+      "reason": "Wrapper renders the same target page; no independent comparison task. Record merge candidate only.",
+      "candidateNames": [],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [],
+      "mergeTarget": "/guides/ai-tools-for-automation-comparison",
+      "nextGuide": "/guides/ai-automation-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-chatbot-tools-comparison",
+      "implementation": "independent",
+      "disposition": "repair",
+      "reason": "No explicit candidate pair; existing search results do not establish a comparison.",
+      "candidateNames": [],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-chatbot-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-code-review-tools-comparison",
+      "implementation": "wrapper",
+      "disposition": "merge-redirect",
+      "reason": "Wrapper renders the same target page; no independent comparison task. Record merge candidate only.",
+      "candidateNames": [],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [],
+      "mergeTarget": "/guides/ai-tools-for-code-review-comparison",
+      "nextGuide": "/guides/ai-code-review-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-coding-tools-comparison",
+      "implementation": "independent",
+      "disposition": "repair",
+      "reason": "No explicit candidate pair; existing search results do not establish a comparison.",
+      "candidateNames": [],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-coding-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-evals-tools-comparison",
+      "implementation": "wrapper",
+      "disposition": "merge-redirect",
+      "reason": "Wrapper renders the same target page; no independent comparison task. Record merge candidate only.",
+      "candidateNames": [],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [],
+      "mergeTarget": "/guides/ai-tools-for-evals-comparison",
+      "nextGuide": "/guides/ai-evals-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-image-tools-comparison",
+      "implementation": "independent",
+      "disposition": "repair",
+      "reason": "No explicit candidate pair; existing search results do not establish a comparison.",
+      "candidateNames": [],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-image-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-marketing-tools-comparison",
+      "implementation": "wrapper",
+      "disposition": "merge-redirect",
+      "reason": "Wrapper renders the same target page; no independent comparison task. Record merge candidate only.",
+      "candidateNames": [],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [],
+      "mergeTarget": "/guides/ai-tools-for-marketing-comparison",
+      "nextGuide": "/guides/ai-marketing-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-model-routing-tools-comparison",
+      "implementation": "wrapper",
+      "disposition": "merge-redirect",
+      "reason": "Wrapper renders the same target page; no independent comparison task. Record merge candidate only.",
+      "candidateNames": [],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [],
+      "mergeTarget": "/guides/ai-tools-for-model-routing-comparison",
+      "nextGuide": "/guides/ai-model-routing-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-note-taking-tools-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "No explicit candidate pair; existing search results do not establish a comparison.",
+      "candidateNames": [],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-note-taking-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-productivity-tools-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "No explicit candidate pair; existing search results do not establish a comparison.",
+      "candidateNames": [],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-productivity-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-research-tools-comparison",
+      "implementation": "wrapper",
+      "disposition": "merge-redirect",
+      "reason": "Wrapper renders the same target page; no independent comparison task. Record merge candidate only.",
+      "candidateNames": [],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [],
+      "mergeTarget": "/guides/ai-tools-for-research-comparison",
+      "nextGuide": "/guides/ai-research-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-sales-tools-comparison",
+      "implementation": "wrapper",
+      "disposition": "merge-redirect",
+      "reason": "Wrapper renders the same target page; no independent comparison task. Record merge candidate only.",
+      "candidateNames": [],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [],
+      "mergeTarget": "/guides/ai-tools-for-sales-comparison",
+      "nextGuide": "/guides/ai-sales-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-seo-tools-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "surfer",
+        "frase",
+        "clearscope",
+        "marketmuse"
+      ],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [
+        "surfer",
+        "frase",
+        "clearscope",
+        "marketmuse"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-seo-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-agencies-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "No explicit candidate pair; existing search results do not establish a comparison.",
+      "candidateNames": [],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-agencies",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-agents-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "n8n",
+        "openrouter",
+        "langfuse",
+        "portkey"
+      ],
+      "availablePublishedCandidates": [
+        "n8n",
+        "openrouter"
+      ],
+      "unavailableCandidates": [
+        "langfuse",
+        "portkey"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-agents",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-api-observability-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "langfuse",
+        "helicone",
+        "portkey",
+        "langsmith"
+      ],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [
+        "langfuse",
+        "helicone",
+        "portkey",
+        "langsmith"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-api-observability",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-automation-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "n8n",
+        "make",
+        "zapier",
+        "pipedream"
+      ],
+      "availablePublishedCandidates": [
+        "n8n",
+        "make",
+        "pipedream"
+      ],
+      "unavailableCandidates": [
+        "zapier"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-automation",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-code-review-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "cursor",
+        "claude",
+        "phind",
+        "chatgpt"
+      ],
+      "availablePublishedCandidates": [
+        "cursor",
+        "claude"
+      ],
+      "unavailableCandidates": [
+        "phind",
+        "chatgpt"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-code-review",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-content-creation-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "jasper",
+        "copy-ai",
+        "chatgpt",
+        "canva"
+      ],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [
+        "jasper",
+        "copy-ai",
+        "chatgpt",
+        "canva"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-content-creation",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-creators-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "No explicit candidate pair; existing search results do not establish a comparison.",
+      "candidateNames": [],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-creators",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-crypto-portfolio-tracking-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "debank",
+        "zerion",
+        "zapper",
+        "nansen"
+      ],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [
+        "debank",
+        "zerion",
+        "zapper",
+        "nansen"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-crypto-portfolio-tracking",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-crypto-research-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "messari",
+        "defillama",
+        "dune",
+        "nansen"
+      ],
+      "availablePublishedCandidates": [
+        "dune"
+      ],
+      "unavailableCandidates": [
+        "messari",
+        "defillama",
+        "nansen"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-crypto-research",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-customer-support-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "chatgpt-mac",
+        "anthropic",
+        "gemini",
+        "notion"
+      ],
+      "availablePublishedCandidates": [
+        "chatgpt-mac",
+        "gemini",
+        "notion"
+      ],
+      "unavailableCandidates": [
+        "anthropic"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-customer-support",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-defi-analytics-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "defillama",
+        "dune",
+        "token-terminal",
+        "nansen"
+      ],
+      "availablePublishedCandidates": [
+        "dune"
+      ],
+      "unavailableCandidates": [
+        "defillama",
+        "token-terminal",
+        "nansen"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-defi-analytics",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-designers-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "No explicit candidate pair; existing search results do not establish a comparison.",
+      "candidateNames": [],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-designers",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-developers-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "cursor",
+        "openrouter",
+        "modal",
+        "langfuse"
+      ],
+      "availablePublishedCandidates": [
+        "cursor",
+        "openrouter"
+      ],
+      "unavailableCandidates": [
+        "modal",
+        "langfuse"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-developers",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-dex-analytics-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "No explicit candidate pair; existing search results do not establish a comparison.",
+      "candidateNames": [],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-dex-analytics",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-ecommerce-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "No explicit candidate pair; existing search results do not establish a comparison.",
+      "candidateNames": [],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-ecommerce",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-evals-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "langfuse",
+        "langsmith",
+        "helicone",
+        "portkey"
+      ],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [
+        "langfuse",
+        "langsmith",
+        "helicone",
+        "portkey"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-evals",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-lead-generation-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "hunter-io",
+        "apollo-io",
+        "zoominfo",
+        "clay"
+      ],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [
+        "hunter-io",
+        "apollo-io",
+        "zoominfo",
+        "clay"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-lead-generation",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-marketing-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "jasper",
+        "copy-ai",
+        "hubspot",
+        "mailchimp"
+      ],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [
+        "jasper",
+        "copy-ai",
+        "hubspot",
+        "mailchimp"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-marketing",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-meeting-notes-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "No explicit candidate pair; existing search results do not establish a comparison.",
+      "candidateNames": [],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-meeting-notes",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-model-routing-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "openrouter",
+        "portkey",
+        "together-ai",
+        "helicone"
+      ],
+      "availablePublishedCandidates": [
+        "openrouter"
+      ],
+      "unavailableCandidates": [
+        "portkey",
+        "together-ai",
+        "helicone"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-model-routing",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-on-chain-analysis-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "dune",
+        "nansen",
+        "defillama",
+        "arkham"
+      ],
+      "availablePublishedCandidates": [
+        "dune"
+      ],
+      "unavailableCandidates": [
+        "nansen",
+        "defillama",
+        "arkham"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-on-chain-analysis",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-prompt-testing-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "langfuse",
+        "langsmith",
+        "helicone",
+        "portkey"
+      ],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [
+        "langfuse",
+        "langsmith",
+        "helicone",
+        "portkey"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-prompt-testing",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-protocol-analytics-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "messari",
+        "footprint",
+        "token-terminal",
+        "defillama"
+      ],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [
+        "messari",
+        "footprint",
+        "token-terminal",
+        "defillama"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-protocol-analytics",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-research-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "perplexity",
+        "consensus",
+        "scite",
+        "notebooklm"
+      ],
+      "availablePublishedCandidates": [
+        "perplexity",
+        "consensus",
+        "notebooklm"
+      ],
+      "unavailableCandidates": [
+        "scite"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-research",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-sales-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "apollo-io",
+        "clay",
+        "outreach",
+        "lemlist"
+      ],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [
+        "apollo-io",
+        "clay",
+        "outreach",
+        "lemlist"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-sales",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-sales-prospecting-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "outreach",
+        "salesloft",
+        "lemlist",
+        "smartlead"
+      ],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [
+        "outreach",
+        "salesloft",
+        "lemlist",
+        "smartlead"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-sales-prospecting",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-small-business-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "No explicit candidate pair; existing search results do not establish a comparison.",
+      "candidateNames": [],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-small-business",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-students-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "No explicit candidate pair; existing search results do not establish a comparison.",
+      "candidateNames": [],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-students",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-token-research-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "messari",
+        "token-terminal",
+        "defillama",
+        "nansen"
+      ],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [
+        "messari",
+        "token-terminal",
+        "defillama",
+        "nansen"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-token-research",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-voice-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "elevenlabs",
+        "descript",
+        "notta",
+        "elevenlabs-conversational-ai"
+      ],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [
+        "elevenlabs",
+        "descript",
+        "notta",
+        "elevenlabs-conversational-ai"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-voice",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-wallet-monitoring-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "debank",
+        "nansen",
+        "arkham",
+        "bubblemaps"
+      ],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [
+        "debank",
+        "nansen",
+        "arkham",
+        "bubblemaps"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-wallet-monitoring",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-wallet-research-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "arkham",
+        "nansen",
+        "debank",
+        "bubblemaps"
+      ],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [
+        "arkham",
+        "nansen",
+        "debank",
+        "bubblemaps"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-wallet-research",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-web3-analysis-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "dune",
+        "nansen",
+        "debank",
+        "bubblemaps"
+      ],
+      "availablePublishedCandidates": [
+        "dune"
+      ],
+      "unavailableCandidates": [
+        "nansen",
+        "debank",
+        "bubblemaps"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-web3-analysis",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-tools-for-web3-comparison",
+      "implementation": "shared",
+      "disposition": "keep-noindex",
+      "reason": "Existing sourced Dune vs The Graph comparison; preserve noindex.",
+      "candidateNames": [
+        "dune",
+        "the-graph"
+      ],
+      "availablePublishedCandidates": [
+        "dune",
+        "the-graph"
+      ],
+      "unavailableCandidates": [],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-web3",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-video-tools-comparison",
+      "implementation": "independent",
+      "disposition": "repair",
+      "reason": "No explicit candidate pair; existing search results do not establish a comparison.",
+      "candidateNames": [],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-video-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-web3-tools-comparison",
+      "implementation": "wrapper",
+      "disposition": "merge-redirect",
+      "reason": "Wrapper renders the same target page; no independent comparison task. Record merge candidate only.",
+      "candidateNames": [],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [],
+      "mergeTarget": "/guides/ai-tools-for-web3-comparison",
+      "nextGuide": "/guides/ai-web3-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/ai-writing-tools-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "grammarly",
+        "frase",
+        "rytr",
+        "sudowrite"
+      ],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [
+        "grammarly",
+        "frase",
+        "rytr",
+        "sudowrite"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-writing-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/best-free-ai-tools-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "chatgpt",
+        "gemini",
+        "claude",
+        "perplexity",
+        "poe",
+        "copilot"
+      ],
+      "availablePublishedCandidates": [
+        "gemini",
+        "claude",
+        "perplexity",
+        "poe"
+      ],
+      "unavailableCandidates": [
+        "chatgpt",
+        "copilot"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/best-free-ai-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/character-ai-alternatives-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "character_ai",
+        "chatgpt-mac",
+        "poe",
+        "anthropic"
+      ],
+      "availablePublishedCandidates": [
+        "character_ai",
+        "chatgpt-mac",
+        "poe"
+      ],
+      "unavailableCandidates": [
+        "anthropic"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-chatbot-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/chatgpt-alternatives-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "chatgpt-mac",
+        "gemini",
+        "poe",
+        "anthropic"
+      ],
+      "availablePublishedCandidates": [
+        "chatgpt-mac",
+        "gemini",
+        "poe"
+      ],
+      "unavailableCandidates": [
+        "anthropic"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-chatbot-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/claude-alternatives-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "anthropic",
+        "chatgpt-mac",
+        "gemini",
+        "poe"
+      ],
+      "availablePublishedCandidates": [
+        "chatgpt-mac",
+        "gemini",
+        "poe"
+      ],
+      "unavailableCandidates": [
+        "anthropic"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-chatbot-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/copy-ai-alternatives-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "copy-ai",
+        "jasper",
+        "hubspot",
+        "mailchimp"
+      ],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [
+        "copy-ai",
+        "jasper",
+        "hubspot",
+        "mailchimp"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-marketing",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/cursor-alternatives-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "cursor",
+        "claude",
+        "phind",
+        "chatgpt"
+      ],
+      "availablePublishedCandidates": [
+        "cursor",
+        "claude"
+      ],
+      "unavailableCandidates": [
+        "phind",
+        "chatgpt"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-coding-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/descript-alternatives-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "descript",
+        "notta",
+        "elevenlabs",
+        "elevenlabs-conversational-ai"
+      ],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [
+        "descript",
+        "notta",
+        "elevenlabs",
+        "elevenlabs-conversational-ai"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-voice",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/elevenlabs-alternatives-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "elevenlabs",
+        "descript",
+        "notta",
+        "elevenlabs-conversational-ai"
+      ],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [
+        "elevenlabs",
+        "descript",
+        "notta",
+        "elevenlabs-conversational-ai"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-voice",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/gemini-alternatives-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "gemini",
+        "poe",
+        "chatgpt-mac",
+        "anthropic"
+      ],
+      "availablePublishedCandidates": [
+        "gemini",
+        "poe",
+        "chatgpt-mac"
+      ],
+      "unavailableCandidates": [
+        "anthropic"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-chatbot-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/grammarly-alternatives-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "grammarly",
+        "frase",
+        "rytr",
+        "sudowrite"
+      ],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [
+        "grammarly",
+        "frase",
+        "rytr",
+        "sudowrite"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-writing-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/hubspot-alternatives-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "hubspot",
+        "mailchimp",
+        "jasper",
+        "copy-ai"
+      ],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [
+        "hubspot",
+        "mailchimp",
+        "jasper",
+        "copy-ai"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-marketing",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/jasper-alternatives-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "jasper",
+        "copy-ai",
+        "hubspot",
+        "mailchimp"
+      ],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [
+        "jasper",
+        "copy-ai",
+        "hubspot",
+        "mailchimp"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-marketing",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/mailchimp-alternatives-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "mailchimp",
+        "hubspot",
+        "jasper",
+        "copy-ai"
+      ],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [
+        "mailchimp",
+        "hubspot",
+        "jasper",
+        "copy-ai"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-marketing",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/make-alternatives-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "make",
+        "zapier",
+        "n8n",
+        "pipedream"
+      ],
+      "availablePublishedCandidates": [
+        "make",
+        "n8n",
+        "pipedream"
+      ],
+      "unavailableCandidates": [
+        "zapier"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-automation",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/n8n-alternatives-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "n8n",
+        "make",
+        "zapier",
+        "pipedream"
+      ],
+      "availablePublishedCandidates": [
+        "n8n",
+        "make",
+        "pipedream"
+      ],
+      "unavailableCandidates": [
+        "zapier"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-automation",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/notion-alternatives-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "notion",
+        "anthropic",
+        "chatgpt-mac",
+        "gemini"
+      ],
+      "availablePublishedCandidates": [
+        "notion",
+        "chatgpt-mac",
+        "gemini"
+      ],
+      "unavailableCandidates": [
+        "anthropic"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-productivity-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/notta-alternatives-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "notta",
+        "descript",
+        "elevenlabs-conversational-ai",
+        "elevenlabs"
+      ],
+      "availablePublishedCandidates": [],
+      "unavailableCandidates": [
+        "notta",
+        "descript",
+        "elevenlabs-conversational-ai",
+        "elevenlabs"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-meeting-notes",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/perplexity-alternatives-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "perplexity",
+        "consensus",
+        "scite",
+        "notebooklm"
+      ],
+      "availablePublishedCandidates": [
+        "perplexity",
+        "consensus",
+        "notebooklm"
+      ],
+      "unavailableCandidates": [
+        "scite"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-research",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/poe-alternatives-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "poe",
+        "gemini",
+        "anthropic",
+        "chatgpt-mac"
+      ],
+      "availablePublishedCandidates": [
+        "poe",
+        "gemini",
+        "chatgpt-mac"
+      ],
+      "unavailableCandidates": [
+        "anthropic"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-chatbot-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/salesforce-einstein-alternatives-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "salesforce_einstein",
+        "hubspot",
+        "apollo-io",
+        "clay"
+      ],
+      "availablePublishedCandidates": [
+        "salesforce_einstein"
+      ],
+      "unavailableCandidates": [
+        "hubspot",
+        "apollo-io",
+        "clay"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-sales",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/sora-alternatives-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "sora",
+        "viggle",
+        "gpt_4o",
+        "adobe"
+      ],
+      "availablePublishedCandidates": [
+        "sora",
+        "viggle",
+        "gpt_4o",
+        "adobe"
+      ],
+      "unavailableCandidates": [],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-video-tools",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/suno-alternatives-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "suno_ai",
+        "gpt_4o",
+        "chatgpt-mac",
+        "character_ai"
+      ],
+      "availablePublishedCandidates": [
+        "suno_ai",
+        "gpt_4o",
+        "chatgpt-mac",
+        "character_ai"
+      ],
+      "unavailableCandidates": [],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-creators",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    },
+    {
+      "path": "/guides/zapier-alternatives-comparison",
+      "implementation": "shared",
+      "disposition": "repair",
+      "reason": "Candidate names exist, but no sourced dimension-by-candidate comparison rows or verified choice conclusions.",
+      "candidateNames": [
+        "zapier",
+        "make",
+        "n8n",
+        "pipedream"
+      ],
+      "availablePublishedCandidates": [
+        "make",
+        "n8n",
+        "pipedream"
+      ],
+      "unavailableCandidates": [
+        "zapier"
+      ],
+      "mergeTarget": null,
+      "nextGuide": "/guides/ai-tools-for-automation",
+      "redirectApproved": false,
+      "indexReleaseApproved": false
+    }
+  ]
+}

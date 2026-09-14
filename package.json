@@ -150,7 +150,9 @@
     "test:elevenlabs-release": "tsx scripts/test-elevenlabs-release.ts",
     "test:public-content-boundary": "tsx scripts/test-public-content-boundary.tsx",
     "audit:public-content-boundary": "tsx scripts/audit-public-content-boundary.ts",
-    "test:public-content-boundary:html": "tsx scripts/test-public-content-boundary-html.ts"
+    "test:public-content-boundary:html": "tsx scripts/test-public-content-boundary-html.ts",
+    "test:pub-02-content": "tsx scripts/test-pub-02-content.tsx",
+    "test:pub-02-html": "tsx scripts/audit-pub-02-seo.ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

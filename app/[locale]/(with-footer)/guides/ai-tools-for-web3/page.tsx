@@ -6,11 +6,8 @@ import { BASE_URL } from '@/lib/env';
 import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
-import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
-import GuideActionSection from '@/components/guides/GuideActionSection';
 import GuideDecisionPath from '@/components/guides/GuideDecisionPath';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
-import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
+import GuideTaskChecks from '@/components/guides/GuideTaskChecks';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
 
@@ -32,7 +29,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
-  const checkedAt = '2026-07-18';
+
   const siteUrl = BASE_URL;
   const faqs = [
     {
@@ -128,45 +125,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               : 'Web3 tools are not only about features. They need reliable on-chain data, a fit for your research or trading workflow, and clear pricing and permissions.'}
           </p>
 
-          <div className='mt-6 flex flex-wrap gap-3'>
-            <TrackableCtaLink
-              href='/explore?search=web3&sort=popular'
-              ctaId='web3_guide_browse_tools'
-              ctaLabel='Web3 guide browse tools'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
-            >
-              {isChinese ? '看 Web3 工具' : 'Browse Web3 tools'}
-              <ExternalLink className='size-4' />
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/best-ai-tools/ai-web3-tools'
-              ctaId='web3_guide_top_list'
-              ctaLabel='Web3 guide top list'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
-            >
-              {isChinese ? '看 Web3 榜单' : 'Open Web3 ranking'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/how-to-choose-ai-tools'
-              ctaId='web3_guide_selection_guide'
-              ctaLabel='Web3 guide selection guide'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              {isChinese ? '回到选型指南' : 'Back to selection guide'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-tools-for-web3-comparison'
-              ctaId='web3_guide_comparison'
-              ctaLabel='Web3 guide comparison'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              {isChinese ? '看 Web3 对比页' : 'Web3 comparison'}
-            </TrackableCtaLink>
-          </div>
           <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
             {quickStarts.map((item) => (
               <Link
@@ -178,116 +136,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
               </Link>
             ))}
-          </div>
-        </section>
-
-        <GuideEvidencePanel
-          locale={locale}
-          checkedAt={checkedAt}
-          scope={
-            isChinese
-              ? '这页优先判断 Web3 工具是否真的能接入链上数据、钱包、协议研究和团队工作流，而不是只看概念。'
-              : 'This page checks whether a Web3 tool truly fits on-chain data, wallets, protocol research, and team workflows instead of just sounding promising.'
-          }
-          decisionSteps={
-            isChinese
-              ? [
-                  '先判断你要的是链上分析、钱包监控，还是协议研究。',
-                  '如果方向已经清楚，先去更窄的 Web3 榜单或对比页收缩 shortlist。',
-                  '如果还要和团队确认数据源和使用方式，再回到这里看导出、历史和价格层。',
-                ]
-              : [
-                  'First decide whether you need on-chain analysis, wallet monitoring, or protocol research.',
-                  'If the direction is already clear, move to a narrower Web3 ranking or comparison page to shrink the shortlist.',
-                  'If you still need team sign-off on data sources and usage, come back here for exports, history, and pricing tiers.',
-                ]
-          }
-          items={[
-            {
-              label: isChinese ? '验证范围' : 'Checked scope',
-              value: isChinese
-                ? '链上数据、钱包、协议、API + 榜单'
-                : 'On-chain data, wallets, protocols, APIs + rankings',
-              note: isChinese
-                ? `当前可参考分类信号有 ${categories.length} 个，继续把真实链上流程放前面。`
-                : `${categories.length} category signals are available, and real on-chain workflow should stay up front.`,
-            },
-            {
-              label: isChinese ? '索引策略' : 'Indexing strategy',
-              value: isChinese ? '核心 Web3 入口保留索引' : 'Core Web3 entry kept indexable',
-              note: isChinese
-                ? '它和 Web3 榜单、对比页一起，组成差异化搜索入口。'
-                : 'It works with rankings and comparisons as a differentiated search entry path.',
-            },
-            {
-              label: isChinese ? '下一步补强' : 'Next enrichment',
-              value: isChinese
-                ? '补真实链上场景、验证、最近检查'
-                : 'Add real on-chain scenarios, verification, and recent checks',
-              note: isChinese
-                ? '后续会继续补评论、收藏和 owner 认领信号。'
-                : 'Next, comments, saves, and owner-claim signals should be added.',
-            },
-          ]}
-          signalCards={[
-            {
-              label: isChinese ? '价格信号' : 'Pricing signal',
-              value: isChinese
-                ? '先看 API、历史数据和导出是否单独收费'
-                : 'Check whether API, history, and exports are separately billed',
-              note: isChinese
-                ? 'Web3 工具最容易把关键能力放在更高价层。'
-                : 'Web3 tools often place the most important capabilities in higher tiers.',
-            },
-            {
-              label: isChinese ? '更新信号' : 'Freshness signal',
-              value: isChinese
-                ? '看链支持、研究模板和告警是否持续更新'
-                : 'Check whether chain support, research templates, and alerts are actively updated',
-              note: isChinese
-                ? '链上数据和协议变化快，过期很容易误导。'
-                : 'On-chain data and protocols move fast, so stale tools can mislead quickly.',
-            },
-            {
-              label: isChinese ? '风险信号' : 'Risk signal',
-              value: isChinese
-                ? '来源不清、覆盖不稳就先降级'
-                : 'If sources are unclear or coverage is unstable, downgrade it',
-              note: isChinese ? '数据可信度比界面更重要。' : 'Data trust matters more than the interface.',
-            },
-          ]}
-        />
-        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '最近验证' : 'Last checked'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>2026-07-18</p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? `Web3 入口已按真实链上数据、钱包和协议工作流重新核对，当前可参考分类信号 ${categories.length} 个。`
-                : `The Web3 entry has been rechecked against real on-chain data, wallet, and protocol workflows, with ${categories.length} category signals available.`}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '当前判断' : 'Current judgment'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-700'>
-              {isChinese
-                ? '保留索引，继续强调链上数据和团队工作流。'
-                : 'Keep it indexable and keep emphasizing on-chain data and team workflows.'}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '下一步' : 'Next step'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-700'>
-              {isChinese
-                ? '补一个真实链上研究或钱包监控案例。'
-                : 'Add one real on-chain research or wallet monitoring case.'}
-            </p>
           </div>
         </section>
 
@@ -340,158 +188,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 ))}
             </div>
           </aside>
-        </section>
-
-        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '高意图入口' : 'High-intent path'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese
-              ? '如果你已经确认要找 Web3 工具，先走榜单再进对比'
-              : 'If Web3 is already the lane, open the ranking before the comparison'}
-          </h2>
-          <div className='mt-4 grid gap-3 md:grid-cols-3'>
-            <Link
-              href='/best-ai-tools/ai-web3-tools'
-              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-            >
-              <p className='text-sm font-semibold text-slate-950'>{isChinese ? 'Web3 榜单' : 'Web3 ranking'}</p>
-              <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '先看高相关候选，再决定要不要进入更细的研究、监控和分析对比。'
-                  : 'Start with the highest-fit candidates, then decide whether you need narrower research, monitoring, or analytics comparisons.'}
-              </p>
-            </Link>
-            <Link
-              href='/guides/ai-tools-for-web3-comparison'
-              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-            >
-              <p className='text-sm font-semibold text-slate-950'>{isChinese ? 'Web3 对比页' : 'Web3 comparison'}</p>
-              <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '当你已经有几款候选，直接横向比较研究、钱包和协议相关能力。'
-                  : 'Once you already have a few candidates, compare research, wallet, and protocol capabilities side by side.'}
-              </p>
-            </Link>
-            <Link
-              href='/categories/web3?sort=popular'
-              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-            >
-              <p className='text-sm font-semibold text-slate-950'>{isChinese ? 'Web3 分类' : 'Web3 category'}</p>
-              <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '如果你更想直接刷真实条目，就从分类页继续扩 shortlist。'
-                  : 'If you prefer browsing real listings first, use the category page to widen the shortlist.'}
-              </p>
-            </Link>
-          </div>
-        </section>
-
-        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '高意图榜单' : 'High-intent ranking'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese
-              ? '先看榜单，再决定是链上分析、钱包还是研究'
-              : 'Start with the ranking, then decide whether analytics, wallets, or research is the lane'}
-          </h2>
-          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-            {isChinese
-              ? '如果你已经知道 Web3 是主方向，先看榜单会比直接翻分类更快收窄 shortlist。'
-              : 'If Web3 is already the main direction, the ranking gets you to a shorter shortlist faster than browsing categories first.'}
-          </p>
-          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
-            {[
-              {
-                href: '/best-ai-tools/ai-web3-tools',
-                title: isChinese ? 'Web3 工具榜单' : 'Web3 tools ranking',
-                desc: isChinese ? '先收窄到更高相关候选。' : 'Start with the most relevant candidates first.',
-              },
-              {
-                href: '/guides/ai-tools-for-web3-comparison',
-                title: isChinese ? 'Web3 工具对比' : 'Web3 tools comparison',
-                desc: isChinese
-                  ? '链上数据、钱包和协议一起看。'
-                  : 'Compare on-chain data, wallets, and protocols together.',
-              },
-              {
-                href: '/guides/ai-tools-for-on-chain-analysis-comparison',
-                title: isChinese ? '链上分析对比' : 'On-chain analysis comparison',
-                desc: isChinese
-                  ? '如果重点是地址、资金流和协议行为。'
-                  : 'Best when addresses, fund flow, and protocol behavior matter.',
-              },
-              {
-                href: '/guides/ai-tools-for-crypto-research-comparison',
-                title: isChinese ? 'Crypto 研究对比' : 'Crypto research comparison',
-                desc: isChinese
-                  ? '如果重点偏项目判断和研究整合。'
-                  : 'Useful when project analysis and synthesis are the real need.',
-              },
-            ].map((item) => (
-              <TrackableCtaLink
-                key={item.href}
-                href={item.href}
-                ctaId={`web3_tools_ranking_${item.href.split('/').pop()}`}
-                ctaLabel={item.title}
-                pageType='guide'
-                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-              >
-                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
-                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
-              </TrackableCtaLink>
-            ))}
-          </div>
-        </section>
-
-        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '直接进入对比' : 'Jump into comparison'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese
-              ? '如果你已经知道自己要比什么，就直接进下一页'
-              : 'If you already know what to compare, go straight to the next page'}
-          </h2>
-          <div className='mt-4 grid gap-3 md:grid-cols-3'>
-            <Link
-              href='/best-ai-tools/ai-web3-tools'
-              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-            >
-              <p className='text-sm font-semibold text-slate-950'>{isChinese ? 'Web3 榜单' : 'Web3 ranking'}</p>
-              <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '先把高相关候选看一遍，再决定进入哪种更窄的 Web3 对比。'
-                  : 'Review the highest-fit candidates first, then decide which narrower Web3 comparison to open.'}
-              </p>
-            </Link>
-            <Link
-              href='/guides/ai-tools-for-web3-comparison'
-              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-            >
-              <p className='text-sm font-semibold text-slate-950'>{isChinese ? 'Web3 总对比' : 'Web3 comparison'}</p>
-              <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '适合还没完全确定自己更偏链上分析、钱包监控还是研究。'
-                  : 'Best if you still need a broad side-by-side view across research, wallet, and protocol workflows.'}
-              </p>
-            </Link>
-            <Link
-              href='/guides/ai-tools-for-on-chain-analysis-comparison'
-              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-            >
-              <p className='text-sm font-semibold text-slate-950'>
-                {isChinese ? '链上分析对比' : 'On-chain analysis comparison'}
-              </p>
-              <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '当你的核心问题已经是地址、流向和协议行为时，这页更高意图。'
-                  : 'A better fit once the real need is addresses, fund flow, and protocol behavior.'}
-              </p>
-            </Link>
-          </div>
         </section>
 
         <section className='mt-8 rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
@@ -606,87 +302,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           ]}
         />
 
-        <GuideActionSection
-          locale={locale}
-          eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}
-          title={isChinese ? '更贴近 Web3 决策的真实入口' : 'Real entry points for Web3 decisions'}
-          description={
-            isChinese
-              ? '如果你已经知道自己关心的是链上数据、协议研究、钱包监控或资产变化，这几款工具会比泛 AI 列表更快把范围收窄。'
-              : 'If you already know the work is about on-chain data, protocol research, wallet monitoring, or asset movement, these tools narrow the space much faster than a broad AI list.'
-          }
-          toolNames={['dune', 'defillama', 'debank', 'messari']}
-          compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
-          compareTitle={isChinese ? 'Web3 方向更明确后的下一步' : 'Next paths once the Web3 direction is clearer'}
-          compareDescription={
-            isChinese
-              ? '当你已经不是在泛泛看榜单，而是真的要决定研究、监控或分析工具时，继续进入更窄的对比页会更有效。'
-              : 'Once you are not just browsing but actually choosing research, monitoring, or analytics tooling, narrower comparison pages become much more useful.'
-          }
-          compareLinks={[
-            {
-              href: '/best-ai-tools/ai-web3-tools',
-              title: isChinese ? 'Web3 工具榜单' : 'Web3 tools ranking',
-              description: isChinese
-                ? '先快速收窄到更高相关的候选，再决定进入哪条对比路径。'
-                : 'Narrow to the most relevant candidates first, then choose the comparison path that fits.',
-            },
-            {
-              href: '/guides/ai-tools-for-web3-comparison',
-              title: isChinese ? 'Web3 工具总对比' : 'Web3 tools comparison',
-              description: isChinese
-                ? '适合还没完全确定自己更偏协议、钱包还是研究。'
-                : 'Best when you still need a broad side-by-side look across research, wallet, and protocol workflows.',
-            },
-            {
-              href: '/guides/ai-tools-for-on-chain-analysis-comparison',
-              title: isChinese ? '链上分析工具对比' : 'On-chain analysis comparison',
-              description: isChinese
-                ? '如果你已经明确要看地址、资金流和链上行为，这页更高意图。'
-                : 'A stronger fit when the real decision is about addresses, fund flow, and on-chain behavior.',
-            },
-            {
-              href: '/guides/ai-tools-for-crypto-research-comparison',
-              title: isChinese ? 'Crypto 研究工具对比' : 'Crypto research comparison',
-              description: isChinese
-                ? '如果你更偏项目判断、叙事追踪和资料整合，这页更贴近目标。'
-                : 'A better path when project analysis, narrative tracking, and information synthesis matter more.',
-            },
-          ]}
-          nextEyebrow={isChinese ? '下一步入口' : 'Where to go next'}
-          nextTitle={
-            isChinese ? '确定是 Web3 之后，继续这样收窄' : 'How to narrow the space once Web3 is clearly the lane'
-          }
-          nextDescription={
-            isChinese
-              ? '如果你已经确认自己要找的是 Web3 工具，下一步就进入榜单、分类和精准搜索，开始比较真实候选。'
-              : 'Once Web3 is clearly the lane, the next step is to use the ranking, category, and focused search to compare real candidates.'
-          }
-          nextLinks={[
-            {
-              href: '/best-ai-tools/ai-web3-tools',
-              title: isChinese ? '进入 Web3 榜单' : 'Open the Web3 ranking',
-              description: isChinese
-                ? '直接看更高相关的 Web3 候选集合。'
-                : 'Start with the highest-fit Web3 shortlist.',
-            },
-            {
-              href: '/categories/web3?sort=popular',
-              title: isChinese ? '进入 Web3 分类' : 'Open the Web3 category',
-              description: isChinese
-                ? '直接进入 Web3 目录，继续看真实条目。'
-                : 'Jump into the Web3 category and compare actual listings.',
-            },
-            {
-              href: '/explore?search=web3&sort=popular',
-              title: isChinese ? '搜索更多 Web3 工具' : 'Search more Web3 tools',
-              description: isChinese
-                ? '回到 Explore，用更窄的 Web3 关键词继续扩大 shortlist。'
-                : 'Return to Explore and widen the shortlist with tighter Web3 queries.',
-            },
-          ]}
-        />
-
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
             <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
@@ -726,7 +341,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </div>
         </section>
-        <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_web3' />
+
+        <GuideTaskChecks slug='ai-tools-for-web3' locale={locale} />
       </div>
     </>
   );

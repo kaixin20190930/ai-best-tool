@@ -7,7 +7,6 @@ import { topListTopics } from '@/lib/data/topLists';
 import { BASE_URL } from '@/lib/env';
 import { buildLocalizedPageMetadata, generateLocalizedPath } from '@/lib/seo/metadata';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import SeoBreadcrumbs from '@/components/seo/SeoBreadcrumbs';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
@@ -200,42 +199,6 @@ export default function GuidesPage({ params: { locale } }: { params: { locale: s
           </div>
         </div>
       </section>
-
-      <GuideEvidencePanel
-        locale={locale}
-        checkedAt='2026-09-02'
-        scope={
-          isChinese
-            ? '总入口只把可索引指南、榜单、分类和工具实体放在主路径；noindex comparison 仅保留一个明确的次级入口。'
-            : 'Primary paths now use only indexable guides, rankings, categories, and tool entities; one clearly secondary noindex comparison path remains.'
-        }
-        items={[
-          {
-            label: isChinese ? '可索引指南' : 'Indexable guides',
-            value: `${INDEXABLE_GUIDE_PAGES.length}`,
-            note: isChinese ? '与 sitemap 使用同一份白名单。' : 'Uses the same allowlist as the sitemap.',
-          },
-          {
-            label: isChinese ? '首要 comparison' : 'Primary comparison links',
-            value: '0',
-            note: isChinese
-              ? '首屏和主要卡片不再导向 noindex 页面。'
-              : 'Hero and primary cards no longer point to noindex pages.',
-          },
-          {
-            label: isChinese ? '次级 comparison' : 'Secondary comparison links',
-            value: '1',
-            note: isChinese
-              ? '只作为用户明确需要并排比较时的辅助入口。'
-              : 'Kept only for an explicit side-by-side need.',
-          },
-        ]}
-        decisionSteps={[
-          isChinese ? '先从任务指南建立标准。' : 'Start with a task guide to set criteria.',
-          isChinese ? '再进入榜单或分类缩小候选。' : 'Then narrow candidates through a ranking or category.',
-          isChinese ? '最后到工具页核对真实信息。' : 'Finally verify real information on tool profiles.',
-        ]}
-      />
 
       <section className='mt-8'>
         <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>

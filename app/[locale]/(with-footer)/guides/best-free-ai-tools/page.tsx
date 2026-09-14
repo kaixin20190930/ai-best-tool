@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { ArrowRight, CheckCircle2, ExternalLink, Star } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Star } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
@@ -8,9 +8,7 @@ import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
 import { toolToListRow } from '@/lib/services/toolPresenter';
 import { getTools } from '@/lib/services/tools';
-import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
-import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
+import GuideTaskChecks from '@/components/guides/GuideTaskChecks';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
 
@@ -72,8 +70,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
   const totalTools = result.status === 'fulfilled' ? result.value.total : 0;
   const categories = categoriesResult.status === 'fulfilled' ? categoriesResult.value : [];
-  const checkedAt = '2026-07-18';
-  const categoryCount = categories.length;
+
   const categoryMap = new Map(categories.map((category) => [category.id, category]));
 
   const tools = result.status === 'fulfilled' ? result.value.data : [];
@@ -128,263 +125,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '这份榜单只看免费版本的实际可用性，不看花哨宣传。你可以先从这里开始，再进入分类和详情页做进一步判断。'
               : 'This ranking focuses on the actual usefulness of free tiers, not hype. Start here, then use categories and detail pages to decide what to try next.'}
           </p>
-
-          <div className='mt-6 flex flex-wrap gap-3'>
-            <TrackableCtaLink
-              href='/guides/free-ai-tools'
-              ctaId='best_free_tools_guide_intro'
-              ctaLabel='Best free tools guide intro'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
-            >
-              {isChinese ? '看免费工具指南' : 'Read the free tools guide'}
-              <ExternalLink className='size-4' />
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/explore?pricing=free&sort=popular'
-              ctaId='best_free_tools_browse'
-              ctaLabel='Best free tools browse'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              {isChinese ? '浏览免费工具' : 'Browse free tools'}
-              <ArrowRight className='size-4' />
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/best-free-ai-tools-comparison'
-              ctaId='best_free_tools_compare'
-              ctaLabel='Best free tools comparison'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              {isChinese ? '看免费工具对比' : 'Compare free tools'}
-              <ArrowRight className='size-4' />
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/best-ai-tools/'
-              ctaId='best_free_tools_rankings_hub'
-              ctaLabel='Best free tools rankings hub'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
-            >
-              {isChinese ? '看总榜单' : 'Open rankings hub'}
-              <ArrowRight className='size-4' />
-            </TrackableCtaLink>
-          </div>
-        </section>
-
-        <GuideEvidencePanel
-          locale={locale}
-          checkedAt={checkedAt}
-          scope={
-            isChinese
-              ? '这页优先检查免费工具的真实可用性：是否真的免费、限制是否清晰、更新是否还在继续、评分和评论是否可信。'
-              : 'This page checks whether free tools are actually usable: whether they are truly free, whether limits are clear, whether updates are still active, and whether ratings and comments are trustworthy.'
-          }
-          decisionSteps={
-            isChinese
-              ? [
-                  '先判断你是在找真正免费的工具，还是先想试用再决定。',
-                  '如果目标已经明确，先去更具体的榜单、分类或工具页看候选。',
-                  '如果还要给团队留证据，再回到这页补评论、收藏和更新时间。',
-                ]
-              : [
-                  'First decide whether you need truly free tools or just something to try first.',
-                  'If the goal is already clear, move to the more specific ranking, category, or tool pages for candidates.',
-                  'If you still need team evidence, come back here for comments, saves, and update dates.',
-                ]
-          }
-          signalCards={[
-            {
-              label: isChinese ? '价格信号' : 'Pricing signal',
-              value: isChinese ? '免费不是“随便用”' : 'Free does not mean unlimited',
-              note: isChinese
-                ? '先看免费额度和限制，再看是否值得继续试。'
-                : 'Check the quota and limits first, then decide whether it is worth trying.',
-            },
-            {
-              label: isChinese ? '更新信号' : 'Freshness signal',
-              value: isChinese ? '保持活跃更新才更可信' : 'Active updates are a better sign',
-              note: isChinese
-                ? '免费工具变化快，更新停了往往就是风险。'
-                : 'Free tools change fast, and stalled updates are often a warning sign.',
-            },
-            {
-              label: isChinese ? '风险信号' : 'Risk signal',
-              value: isChinese ? '只看免费容易踩坑' : 'Free-only browsing can mislead',
-              note: isChinese
-                ? '评论、收藏和 owner 认领能帮你把“能试”与“能长期用”分开。'
-                : 'Comments, saves, and owner claims help separate "can try" from "can rely on long term".',
-            },
-          ]}
-          items={[
-            {
-              label: isChinese ? '验证范围' : 'Checked scope',
-              value: isChinese ? '免费额度、限制、更新、评分' : 'Free quota, limits, freshness, ratings',
-              note: isChinese
-                ? `当前可参考分类信号有 ${categoryCount} 个，“免费”必须和“可长期用”区分开。`
-                : `${categoryCount} category signals are available, and "free" needs to be separated from "usable long term".`,
-            },
-            {
-              label: isChinese ? '索引策略' : 'Indexing strategy',
-              value: isChinese ? '核心免费榜单保留索引' : 'Core free ranking kept indexable',
-              note: isChinese
-                ? '这页和免费工具指南一起，构成重要的高意图入口。'
-                : 'Together with the free-tools guide, this forms a high-intent entry path.',
-            },
-            {
-              label: isChinese ? '下一步补强' : 'Next enrichment',
-              value: isChinese ? '补真实评论和更新时间' : 'Add real comments and update dates',
-              note: isChinese
-                ? `这页已于 ${checkedAt} 重新核对，后续会把用户反馈、收藏和 owner 认领信号继续补上。`
-                : `This page was rechecked on ${checkedAt}, and next user feedback, saves, and owner-claim signals should be added.`,
-            },
-          ]}
-        />
-
-        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '最近验证' : 'Last checked'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? `免费榜单已和判断页、筛选页和类目入口收口，当前可参考分类信号 ${categoryCount} 个。`
-                : `The free ranking now aligns with the guide, filters, and category paths, with ${categoryCount} category signals available.`}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '当前判断' : 'Current judgment'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>
-              {isChinese ? '保留索引，继续补真实评论证据' : 'Keep it indexable and keep adding real comment evidence'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '用更新时间、评论和收藏信号把它和泛免费页区分开。'
-                : 'Use update dates, comments, and saves to distinguish it from generic free pages.'}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '下一步' : 'Next step'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>
-              {isChinese ? '补真实免费工具对比样例' : 'Add a real free-tool comparison example'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese ? '先补一个可验证的对比结论。' : 'Start with one verifiable comparison conclusion.'}
-            </p>
-          </div>
-        </section>
-
-        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '高意图入口' : 'High-intent path'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '从免费榜单走向真实候选的下一步' : 'The next step after the free ranking'}
-          </h2>
-          <div className='mt-4 grid gap-3 md:grid-cols-3'>
-            <Link
-              href='/explore?pricing=free&sort=popular'
-              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-            >
-              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '免费筛选页' : 'Free filter'}</p>
-              <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '当榜单不够细时，继续用免费过滤后的 Explore 扩大候选。'
-                  : 'If the ranking is still too broad, widen the shortlist in Explore with the free filter applied.'}
-              </p>
-            </Link>
-            <Link
-              href='/guides/best-free-ai-tools-comparison'
-              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-            >
-              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '免费对比页' : 'Free comparison'}</p>
-              <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '如果你已经有几个候选，这一页能帮你直接横向比较。'
-                  : 'If you already have a shortlist, this page helps you compare side by side.'}
-              </p>
-            </Link>
-            <Link
-              href='/guides/free-ai-tools'
-              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-            >
-              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '免费指南' : 'Free tools guide'}</p>
-              <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '回到判断页，再看限制、更新和评论这些筛选标准。'
-                  : 'Return to the judging guide for limits, freshness, and review-based filtering criteria.'}
-              </p>
-            </Link>
-            <Link
-              href='/categories/productivity?sort=popular'
-              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-            >
-              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '常见类目' : 'Popular category'}</p>
-              <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '如果你已经知道场景，直接进入最贴近的类目更快。'
-                  : 'If the use case is already clear, jumping into the closest category is faster.'}
-              </p>
-            </Link>
-          </div>
-        </section>
-
-        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '高意图榜单' : 'High-intent ranking'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese
-              ? '先看榜单，再决定要不要继续看免费工具'
-              : 'Start with the ranking, then decide whether to keep exploring free tools'}
-          </h2>
-          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-            {isChinese
-              ? '如果你已经确定自己要先从免费方案开始，先用榜单缩小 shortlist，会比直接翻分类更快。'
-              : 'If you already know you want to start with free options, using the ranking to narrow the shortlist is faster than browsing categories first.'}
-          </p>
-          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
-            {[
-              {
-                href: '/best-ai-tools/ai-free-tools',
-                title: isChinese ? '免费工具榜单' : 'Free tools ranking',
-                desc: isChinese ? '先锁定值得试的 shortlist。' : 'Start with the tools worth trying first.',
-              },
-              {
-                href: '/guides/free-ai-tools',
-                title: isChinese ? '免费工具指南' : 'Free tools guide',
-                desc: isChinese ? '看限制、更新和使用场景。' : 'Review limits, freshness, and use cases.',
-              },
-              {
-                href: '/guides/best-free-ai-tools-comparison',
-                title: isChinese ? '免费工具对比' : 'Free tools comparison',
-                desc: isChinese ? '横向对比几个候选。' : 'Compare a few candidates side by side.',
-              },
-              {
-                href: '/categories/productivity?sort=popular',
-                title: isChinese ? '生产力分类' : 'Productivity category',
-                desc: isChinese ? '如果想直接看相关类目。' : 'Useful when you want the closest category first.',
-              },
-            ].map((item) => (
-              <TrackableCtaLink
-                key={item.href}
-                href={item.href}
-                ctaId={`best_free_ai_tools_ranking_${item.href.split('/').pop()}`}
-                ctaLabel={item.title}
-                pageType='guide'
-                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-              >
-                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
-                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
-              </TrackableCtaLink>
-            ))}
-          </div>
         </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
@@ -486,7 +226,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             })}
           </div>
         </section>
-        <GuideSubmissionPath locale={locale} ctaPrefix='best_free_ai_tools' />
+
+        <GuideTaskChecks slug='best-free-ai-tools' locale={locale} />
       </div>
     </>
   );

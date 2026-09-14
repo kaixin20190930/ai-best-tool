@@ -57,7 +57,8 @@ async function main() {
     document.querySelectorAll('script,style,noscript').forEach((el) => el.remove());
     const violations = copyViolations(document.body.textContent || '');
     if (sample) assert.deepEqual(violations, [], `${pathname}: public internal copy`);
-    else assert.deepEqual(violations, previous.violations, `${pathname}: legacy rendering changed outside the pilot`);
+    else if (pathname.includes('/guides/')) assert.deepEqual(violations, [], `${pathname}: Guide public copy`);
+    else assert.deepEqual(violations, previous.violations, `${pathname}: PUB-03 rendering remains frozen`);
     results.push({ pathname, status: response.status, seoFrozen: true, sample, violations });
   }
   const sitemap = await fetch(`${baseUrl}/sitemap.xml`, { signal: AbortSignal.timeout(60_000) });

@@ -1,13 +1,12 @@
 import { Metadata } from 'next';
-import { ArrowRight, AudioLines, ExternalLink, Mic, MicVocal } from 'lucide-react';
+import { AudioLines, Mic, MicVocal } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
 import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
-import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
+import GuideTaskChecks from '@/components/guides/GuideTaskChecks';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
 
@@ -29,8 +28,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
-  const checkedAt = '2026-07-18';
-  const categoryCount = categories.length;
+
   const siteUrl = BASE_URL;
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -74,28 +72,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         'Check language support, voice styles, and export formats.',
         'For long-term use, prioritize latency, accuracy, and bulk workflows over demo polish.',
       ];
-  const highIntentPaths = [
-    {
-      href: '/best-ai-tools/ai-voice-tools',
-      title: isChinese ? '先看语音榜单' : 'Start with voice ranking',
-      desc: isChinese ? '先用 shortlist 缩小范围。' : 'Use the shortlist to narrow the field first.',
-    },
-    {
-      href: '/guides/ai-tools-for-voice-comparison',
-      title: isChinese ? '语音工具对比' : 'Voice tools comparison',
-      desc: isChinese ? '转写、配音、对话一起看。' : 'Compare transcription, dubbing, and conversation together.',
-    },
-    {
-      href: '/guides/elevenlabs-alternatives-comparison',
-      title: isChinese ? 'ElevenLabs 替代对比' : 'ElevenLabs alternatives',
-      desc: isChinese ? '如果你更关注合成和声音质量。' : 'Best when synthesis and voice quality are the focus.',
-    },
-    {
-      href: '/guides/notta-alternatives-comparison',
-      title: isChinese ? 'Notta 替代对比' : 'Notta alternatives',
-      desc: isChinese ? '如果重点是转写和会议记录。' : 'Use this when transcription and meeting notes matter more.',
-    },
-  ];
 
   return (
     <>
@@ -125,244 +101,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '语音工具真正重要的不是“声音好不好听”，而是能不能稳定适配你的内容、会议和对话工作流。这个页面会从音质、准确度、延迟和批量能力几个方向帮你判断。'
               : 'Voice tools are not just about sounding good. They need to fit your content, meeting, and conversational workflows reliably. This page helps you judge by quality, accuracy, latency, and bulk use.'}
           </p>
-
-          <div className='mt-6 flex flex-wrap gap-3'>
-            <TrackableCtaLink
-              href='/explore?search=voice&sort=popular'
-              ctaId='voice_guide_browse_tools'
-              ctaLabel='Voice guide browse tools'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
-            >
-              {isChinese ? '看语音类工具' : 'Browse voice tools'}
-              <ExternalLink className='size-4' />
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-tools-for-meeting-notes'
-              ctaId='voice_guide_meeting_notes'
-              ctaLabel='Voice guide meeting notes'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              {isChinese ? '回到会议纪要指南' : 'Back to meeting notes'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-tools-for-voice-comparison'
-              ctaId='voice_guide_compare'
-              ctaLabel='Voice guide compare'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              {isChinese ? '看语音工具对比' : 'Compare voice tools'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/best-ai-tools/ai-voice-tools'
-              ctaId='voice_guide_top_list'
-              ctaLabel='Voice guide top list'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
-            >
-              {isChinese ? '看语音榜单' : 'Open voice ranking'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/submit'
-              ctaId='voice_guide_submit'
-              ctaLabel='Voice guide submit'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
-            >
-              {isChinese ? '提交你的工具' : 'Submit your tool'}
-            </TrackableCtaLink>
-          </div>
-        </section>
-
-        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '高意图路径' : 'High-intent path'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '先看对比，再回到工具页和提交页' : 'Compare first, then move into tool pages and submission'}
-          </h2>
-          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-            {isChinese
-              ? '如果你已经知道自己是在做转写、配音或语音对话，就别在总览页停太久，直接去更窄的对比页。'
-              : 'If you already know you are working on transcription, dubbing, or conversational voice, do not spend too long on the overview. Move straight into the narrower comparison pages.'}
-          </p>
-          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
-            {[
-              {
-                href: '/best-ai-tools/ai-voice-tools',
-                title: isChinese ? '语音工具榜单' : 'Voice tools ranking',
-                desc: isChinese ? '直接看高意图 shortlist。' : 'Go straight to the high-intent shortlist.',
-              },
-              {
-                href: '/guides/ai-tools-for-voice-comparison',
-                title: isChinese ? '语音工具对比' : 'Voice tools comparison',
-                desc: isChinese
-                  ? '合成、转写和对话一起看。'
-                  : 'Compare synthesis, transcription, and conversation together.',
-              },
-              {
-                href: '/guides/ai-tools-for-meeting-notes-comparison',
-                title: isChinese ? '会议纪要对比' : 'Meeting notes comparison',
-                desc: isChinese ? '会议记录和跟进优先。' : 'Prioritize meeting capture and follow-through.',
-              },
-              {
-                href: '/guides/ai-video-tools-comparison',
-                title: isChinese ? '视频工具对比' : 'Video tools comparison',
-                desc: isChinese ? '配音和多媒体输出。' : 'Dubbing and multimedia output.',
-              },
-              {
-                href: '/guides/ai-note-taking-tools-comparison',
-                title: isChinese ? '笔记工具对比' : 'Note taking comparison',
-                desc: isChinese ? '记录、整理和沉淀。' : 'Capture, organize, and synthesize.',
-              },
-            ].map((item) => (
-              <TrackableCtaLink
-                key={item.href}
-                href={item.href}
-                ctaId={`voice_guide_${item.href.split('/').pop()}`}
-                ctaLabel={item.title}
-                pageType='guide'
-                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-              >
-                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
-                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
-              </TrackableCtaLink>
-            ))}
-          </div>
-          <div className='mt-5 flex flex-wrap gap-3'>
-            <TrackableCtaLink
-              href='/best-ai-tools/ai-voice-tools'
-              ctaId='voice_guide_top_list_secondary'
-              ctaLabel='Voice guide top list secondary'
-              pageType='guide'
-              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
-            >
-              {isChinese ? '打开语音榜单' : 'Open voice ranking'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/submit'
-              ctaId='voice_guide_submit_secondary'
-              ctaLabel='Voice guide submit secondary'
-              pageType='guide'
-              className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
-            >
-              {isChinese ? '提交你的工具' : 'Submit your tool'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/developer/listing'
-              ctaId='voice_guide_claim'
-              ctaLabel='Voice guide claim'
-              pageType='guide'
-              className='inline-flex items-center justify-center rounded-lg border border-emerald-200 bg-white px-4 py-3 text-sm font-semibold text-emerald-800 hover:bg-emerald-50'
-            >
-              {isChinese ? '认领条目' : 'Claim listing'}
-            </TrackableCtaLink>
-          </div>
-        </section>
-
-        <GuideEvidencePanel
-          locale={locale}
-          scope={
-            isChinese
-              ? '这页优先判断语音工具是否真的能帮你完成转写、配音、对话和导出，而不是只听起来好听。'
-              : 'This page checks whether voice tools truly help with transcription, dubbing, conversation, and export rather than only sounding good.'
-          }
-          checkedAt={checkedAt}
-          decisionSteps={[
-            isChinese
-              ? '先判断你要的是转写、配音，还是语音对话。'
-              : 'First decide whether you need transcription, dubbing, or conversational voice.',
-            isChinese
-              ? '如果方向清楚，就先去对应的语音对比页。'
-              : 'If the direction is clear, go to the matching voice comparison page first.',
-            isChinese
-              ? '如果要长期用，再回来补样例音频、字幕和语言覆盖。'
-              : 'If you will use it long term, come back for sample audio, captions, and language coverage.',
-          ]}
-          items={[
-            {
-              label: isChinese ? '验证范围' : 'Checked scope',
-              value: isChinese ? '转写、配音、对话、导出' : 'Transcription, dubbing, conversation, export',
-              note: isChinese
-                ? `先看它是否能稳定进入工作流；当前分类数 ${categoryCount} 个。`
-                : `First see whether it fits your workflow reliably; current category count is ${categoryCount}.`,
-            },
-            {
-              label: isChinese ? '索引策略' : 'Indexing strategy',
-              value: isChinese ? '核心页保留索引' : 'Core page kept indexable',
-              note: isChinese
-                ? '让语音意图清楚，和会议纪要页分开。'
-                : 'Keep the voice intent clear and separate from meeting-notes pages.',
-            },
-            {
-              label: isChinese ? '下一步补强' : 'Next enrichment',
-              value: isChinese ? '补真实配音与转写案例' : 'Add real dubbing and transcription cases',
-              note: isChinese
-                ? `后续优先补样例音频、字幕样例和语言覆盖，并保留 ${checkedAt} 的核对记录。`
-                : `Next, add sample audio, caption examples, and language coverage notes while keeping the ${checkedAt} verification record.`,
-            },
-          ]}
-          signalCards={[
-            {
-              label: isChinese ? '价格信号' : 'Pricing signal',
-              value: isChinese ? '先看分钟数、席位和商用导出' : 'Check minutes, seats, and commercial export first',
-              note: isChinese
-                ? '语音工具最容易在使用量和商用权限上出现限制。'
-                : 'Voice tools often limit usage volume and commercial rights first.',
-            },
-            {
-              label: isChinese ? '更新信号' : 'Freshness signal',
-              value: isChinese
-                ? '看音色、语言和集成是否还在更新'
-                : 'Check whether voices, languages, and integrations keep evolving',
-              note: isChinese
-                ? '如果更新停在 demo 阶段，长期使用价值通常不足。'
-                : 'If updates stop at demo polish, long-term value is usually weak.',
-            },
-            {
-              label: isChinese ? '风险信号' : 'Risk signal',
-              value: isChinese ? '没有低延迟 / 稳定输出就先降级' : 'Downgrade it without low latency or stable output',
-              note: isChinese
-                ? '转写、配音和对话一旦不稳，真实工作流会马上受影响。'
-                : 'Once transcription, dubbing, or conversation becomes unstable, the workflow breaks quickly.',
-            },
-          ]}
-        />
-
-        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '最近验证' : 'Last checked'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? `语音入口已和榜单、对比页和提交路径收口；当前分类数 ${categoryCount} 个。`
-                : `The voice entry now aligns with ranking, comparison, and submission paths; current category count is ${categoryCount}.`}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '当前判断' : 'Current judgment'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-700'>
-              {isChinese
-                ? `保留索引，继续补真实配音与转写案例，并持续保留 ${checkedAt} 的核对痕迹。`
-                : `Keep indexable and continue adding real dubbing and transcription cases while preserving the ${checkedAt} check trail.`}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '下一步' : 'Next step'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-700'>
-              {isChinese
-                ? `补一个真实语音导出样例，并把 ${checkedAt} 之后的反馈也记下来。`
-                : `Add one real voice export example and capture feedback after ${checkedAt}.`}
-            </p>
-          </div>
         </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
@@ -417,165 +155,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </aside>
         </section>
 
-        <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '高意图路径' : 'High-intent path'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '先看榜单和对比，再回到语音页' : 'Compare first, then come back to voice pages'}
-          </h2>
-          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-            {isChinese
-              ? '如果你已经知道自己在找转写、配音或对话工具，就直接去更窄的榜单和对比页。'
-              : 'If you already know you are looking for transcription, dubbing, or conversational tools, move straight into the narrower ranking and comparison pages.'}
-          </p>
-          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
-            {highIntentPaths.map((item) => (
-              <TrackableCtaLink
-                key={item.href}
-                href={item.href}
-                ctaId={`voice_guide_${item.href.split('/').pop()}`}
-                ctaLabel={item.title}
-                pageType='guide'
-                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-              >
-                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
-                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
-              </TrackableCtaLink>
-            ))}
-          </div>
-        </section>
-
-        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '高意图榜单' : 'High-intent ranking'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '先用榜单缩小语音 shortlist' : 'Use the ranking to narrow your voice shortlist first'}
-          </h2>
-          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-            {isChinese
-              ? '如果你已经知道自己更偏转写、配音或语音对话，榜单页会比泛目录更快进入决策。'
-              : 'If the decision is already about transcription, dubbing, or conversational voice, the ranking page gets to a decision faster than a broad directory.'}
-          </p>
-          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
-            {[
-              {
-                href: '/best-ai-tools/ai-voice-tools',
-                title: isChinese ? '语音工具榜单' : 'Voice tools ranking',
-                desc: isChinese ? '直接看高意图 shortlist。' : 'Go straight to the high-intent shortlist.',
-              },
-              {
-                href: '/best-ai-tools/ai-video-tools',
-                title: isChinese ? '视频工具榜单' : 'Video tools ranking',
-                desc: isChinese ? '如果配音还会进视频工作流。' : 'Useful when dubbing feeds into video workflows.',
-              },
-              {
-                href: '/guides/ai-tools-for-voice-comparison',
-                title: isChinese ? '语音工具对比' : 'Voice tools comparison',
-                desc: isChinese
-                  ? '转写、配音、对话一起看。'
-                  : 'Compare transcription, dubbing, and conversation together.',
-              },
-              {
-                href: '/guides/ai-tools-for-meeting-notes-comparison',
-                title: isChinese ? '会议纪要对比' : 'Meeting notes comparison',
-                desc: isChinese
-                  ? '如果重点偏会议记录与整理。'
-                  : 'Better when meeting capture and organization are the core need.',
-              },
-            ].map((item) => (
-              <TrackableCtaLink
-                key={item.href}
-                href={item.href}
-                ctaId={`voice_guide_${item.href.split('/').pop()}`}
-                ctaLabel={item.title}
-                pageType='guide'
-                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-              >
-                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
-                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
-              </TrackableCtaLink>
-            ))}
-          </div>
-        </section>
-
-        <section className='mt-8 rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '下一步怎么走' : 'Next step'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese
-              ? '把语音入口接到榜单、比较页和真实条目'
-              : 'Move from the voice guide into rankings, comparisons, and real listings'}
-          </h2>
-          <div className='mt-4 grid gap-4 lg:grid-cols-3'>
-            <TrackableCtaLink
-              href='/best-ai-tools/ai-voice-tools'
-              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
-              ctaId='voice_guide_ranking_next'
-              ctaLabel='Voice guide ranking next'
-              pageType='guide'
-            >
-              <div className='flex items-start justify-between gap-3'>
-                <div>
-                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
-                    {isChinese ? '看语音工具榜单' : 'Open voice ranking'}
-                  </p>
-                  <p className='mt-2 text-sm leading-6 text-slate-600'>
-                    {isChinese
-                      ? '如果你已经是高意图筛选，直接看 shortlist 会更快。'
-                      : 'If intent is already high, the shortlist is the fastest next step.'}
-                  </p>
-                </div>
-                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
-              </div>
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-tools-for-voice-comparison'
-              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
-              ctaId='voice_guide_compare_next'
-              ctaLabel='Voice guide compare next'
-              pageType='guide'
-            >
-              <div className='flex items-start justify-between gap-3'>
-                <div>
-                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
-                    {isChinese ? '看语音工具对比' : 'Compare voice tools'}
-                  </p>
-                  <p className='mt-2 text-sm leading-6 text-slate-600'>
-                    {isChinese
-                      ? '如果你已经知道自己在做转写、配音或对话，就直接横向比较。'
-                      : 'If transcription, dubbing, or conversation is already clear, move straight into comparison.'}
-                  </p>
-                </div>
-                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
-              </div>
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/categories/voice?sort=popular'
-              className='group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-white hover:shadow-sm'
-              ctaId='voice_guide_category'
-              ctaLabel='Voice guide category'
-              pageType='guide'
-            >
-              <div className='flex items-start justify-between gap-3'>
-                <div>
-                  <p className='text-base font-semibold text-slate-950 group-hover:text-cyan-700'>
-                    {isChinese ? '进入 Voice 分类' : 'Open the voice category'}
-                  </p>
-                  <p className='mt-2 text-sm leading-6 text-slate-600'>
-                    {isChinese
-                      ? '先看真实条目，再回来收敛到更窄的候选。'
-                      : 'Browse real listings first, then come back to narrow the shortlist.'}
-                  </p>
-                </div>
-                <ArrowRight className='mt-1 size-4 shrink-0 text-slate-400 group-hover:text-cyan-700' />
-              </div>
-            </TrackableCtaLink>
-          </div>
-        </section>
-
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
             <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
@@ -615,6 +194,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </div>
         </section>
+        <GuideTaskChecks slug='ai-tools-for-voice' locale={locale} />
       </div>
     </>
   );

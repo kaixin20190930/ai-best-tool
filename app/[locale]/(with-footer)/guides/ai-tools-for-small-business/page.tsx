@@ -1,14 +1,11 @@
 import { Metadata } from 'next';
-import { BriefcaseBusiness, CheckCircle2, ExternalLink, TrendingUp } from 'lucide-react';
+import { BriefcaseBusiness, CheckCircle2, TrendingUp } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
 import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
-import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
-import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
 
@@ -34,8 +31,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
-  const checkedAt = '2026-07-18';
-  const categoryCount = categories.length;
+
   const siteUrl = BASE_URL;
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -85,30 +81,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     'If multiple people will use it, prioritize permissions, sharing, and admin features.',
   ];
   const tips = isChinese ? chineseTips : englishTips;
-  const highIntentPaths = [
-    {
-      href: '/guides/ai-tools-for-marketing-comparison',
-      title: isChinese ? '营销工具对比' : 'Marketing tools comparison',
-      desc: isChinese ? '如果你最先要解决获客和文案。' : 'Best when acquisition and copy are the first concern.',
-    },
-    {
-      href: '/guides/ai-tools-for-automation-comparison',
-      title: isChinese ? '自动化工具对比' : 'Automation tools comparison',
-      desc: isChinese
-        ? '如果你更关心省时间和接流程。'
-        : 'Useful when saving time and connecting workflows matter most.',
-    },
-    {
-      href: '/guides/ai-tools-for-customer-support-comparison',
-      title: isChinese ? '客服工具对比' : 'Customer support comparison',
-      desc: isChinese ? '如果你要先处理回复和支持问题。' : 'Best when replies and support workflows come first.',
-    },
-    {
-      href: '/best-ai-tools/ai-small-business-tools',
-      title: isChinese ? '小企业榜单' : 'Small-business ranking',
-      desc: isChinese ? '先用 shortlist 缩小范围。' : 'Use the shortlist to narrow the field first.',
-    },
-  ];
 
   return (
     <>
@@ -137,46 +109,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '小企业最需要的是能帮你节省时间、降低人工成本，并且适合团队协作的工具。这个页面会帮你从工作流、协作和自动化几个角度判断。'
               : 'Small businesses need tools that save time, reduce manual work, and fit team collaboration. This page helps you judge by workflow, collaboration, and automation.'}
           </p>
-
-          <div className='mt-6 flex flex-wrap gap-3'>
-            <TrackableCtaLink
-              href='/explore?search=business&sort=popular'
-              ctaId='small_business_guide_browse_tools'
-              ctaLabel='Small business guide browse tools'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
-            >
-              {isChinese ? '看小企业相关工具' : 'Browse business tools'}
-              <ExternalLink className='size-4' />
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/how-to-choose-ai-tools'
-              ctaId='small_business_guide_choose'
-              ctaLabel='Small business guide choose'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              {isChinese ? '回到选型指南' : 'Back to selection guide'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-tools-for-small-business-comparison'
-              ctaId='small_business_guide_comparison'
-              ctaLabel='Small business guide comparison'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              {isChinese ? '看小企业工具对比' : 'Compare small-business tools'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/best-ai-tools/ai-small-business-tools'
-              ctaId='small_business_guide_top_list'
-              ctaLabel='Small business guide top list'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
-            >
-              {isChinese ? '看小企业榜单' : 'Open small-business ranking'}
-            </TrackableCtaLink>
-          </div>
         </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
@@ -262,182 +194,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </div>
         </section>
-
-        <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '高意图榜单' : 'High-intent ranking'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese
-              ? '先用榜单缩小 small-business shortlist'
-              : 'Use the ranking to narrow your small-business shortlist first'}
-          </h2>
-          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-            {isChinese
-              ? '如果你已经知道自己在比效率、协作、客服和轻量自动化，榜单页会比泛目录更快进入决策。'
-              : 'If the decision is already about efficiency, collaboration, support, and lightweight automation, the ranking page gets to a decision faster than a broad directory.'}
-          </p>
-          <div className='mt-5 flex flex-wrap gap-3'>
-            <TrackableCtaLink
-              href='/best-ai-tools/ai-small-business-tools'
-              ctaId='small_business_guide_ranking_primary'
-              ctaLabel='Small business guide ranking primary'
-              pageType='guide'
-              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
-            >
-              {isChinese ? '进入小企业榜单' : 'Open small-business ranking'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-tools-for-small-business-comparison'
-              ctaId='small_business_guide_ranking_secondary'
-              ctaLabel='Small business guide ranking secondary'
-              pageType='guide'
-              className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
-            >
-              {isChinese ? '继续看对比页' : 'Continue to comparison'}
-            </TrackableCtaLink>
-          </div>
-        </section>
-
-        <GuideEvidencePanel
-          locale={locale}
-          checkedAt={checkedAt}
-          scope={
-            isChinese
-              ? '小企业页要围绕协作、自动化、支持和效率来做，不是把所有企业工具都混在一起。这个页继续可索引，但会把营销、客服和自动化的更窄入口优先露出，减少和泛生产力页的重复。'
-              : 'This small-business page should stay focused on collaboration, automation, support, and efficiency rather than blending every business tool together. Keep it indexable, but surface the narrower marketing, support, and automation paths first to reduce overlap with generic productivity pages.'
-          }
-          decisionSteps={[
-            isChinese
-              ? '先判断你要先解决营销、客服、自动化还是团队协作。'
-              : 'First decide whether marketing, support, automation, or team collaboration comes first.',
-            isChinese
-              ? '如果方向清楚，就先去对应的小企业对比页。'
-              : 'If the direction is clear, go to the matching small-business comparison page first.',
-            isChinese
-              ? '如果要长期用，再回来补真实流程和团队管理案例。'
-              : 'If you will use it long term, come back for real workflows and team-management cases.',
-          ]}
-          items={[
-            {
-              label: isChinese ? '验证重点' : 'Validation focus',
-              value: isChinese ? '协作、自动化、支持' : 'Collaboration, automation, support',
-              note: isChinese
-                ? `确认它是不是解决了团队日常工作。当前可用分类数：${categoryCount}。`
-                : `Confirm it solves day-to-day team work. Current category count: ${categoryCount}.`,
-            },
-            {
-              label: isChinese ? '合并策略' : 'Merge strategy',
-              value: isChinese ? '分流到营销/客服/自动化' : 'Route to marketing/support/automation',
-              note: isChinese
-                ? '如果目标更窄，就交给对应专题页。'
-                : 'If the need is narrower, hand it to the matching topic page.',
-            },
-            {
-              label: isChinese ? '后续增量' : 'Next increments',
-              value: isChinese ? '真实团队案例、权限、截图' : 'Real team cases, permissions, screenshots',
-              note: isChinese
-                ? `补真实团队流程，减少模板化表述，并保持 ${checkedAt} 的核对记录。`
-                : `Add real team workflows to reduce templated wording while keeping the ${checkedAt} verification record.`,
-            },
-          ]}
-          signalCards={[
-            {
-              label: isChinese ? '价格信号' : 'Pricing signal',
-              value: isChinese ? '先看团队席位和自动化限制' : 'Check team seats and automation limits first',
-              note: isChinese
-                ? '小企业通常很快会碰到席位、权限和工作流配额。'
-                : 'Small businesses often hit seat, permission, and workflow quotas quickly.',
-            },
-            {
-              label: isChinese ? '更新信号' : 'Freshness signal',
-              value: isChinese
-                ? '看集成和后台能力是否在更新'
-                : 'Check whether integrations and admin features are still evolving',
-              note: isChinese
-                ? '如果更新停在演示层，后续协作功能往往不稳。'
-                : 'If updates stop at demo polish, collaboration features usually lag behind.',
-            },
-            {
-              label: isChinese ? '风险信号' : 'Risk signal',
-              value: isChinese
-                ? '没有权限 / 导出 / 支持就先降级'
-                : 'Downgrade it without permissions, export, or support',
-              note: isChinese
-                ? '这三项缺一项，都说明它还不够适合真正的小团队长期用。'
-                : 'If any of those are missing, it is not ready for sustained small-team use.',
-            },
-          ]}
-        />
-
-        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '最近验证' : 'Last checked'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? `这页已按真实小企业工作流重新核对，优先保留协作、自动化和支持入口，目前覆盖 ${categoryCount} 个分类。`
-                : `This page has been rechecked against a real small-business workflow and keeps collaboration, automation, and support entry points visible across ${categoryCount} categories.`}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '当前判断' : 'Current judgment'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>
-              {isChinese ? '保留索引，强化团队工作流证据' : 'Keep it indexable and strengthen team-workflow evidence'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '用真实团队案例、权限和截图区分它与泛生产力页。'
-                : 'Use real team cases, permissions, and screenshots to distinguish it from generic productivity pages.'}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '下一步' : 'Next step'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>
-              {isChinese ? '补真实团队案例和权限设置' : 'Add real team cases and permission setup'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '后续优先补真实团队流程、权限和协作截图。'
-                : 'Next, prioritize team workflows, permissions, and collaboration screenshots.'}
-            </p>
-          </div>
-        </section>
-
-        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '高意图路径' : 'High-intent paths'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese
-              ? '先走最短路径，再决定要不要继续细比'
-              : 'Take the shortest path first, then decide whether to compare deeper'}
-          </h2>
-          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-            {isChinese
-              ? '如果你已经知道自己更偏营销、自动化、客服或小企业 shortlist，就直接去更窄的页。'
-              : 'If you already know the work leans toward marketing, automation, support, or a small-business shortlist, move directly into the narrower pages.'}
-          </p>
-          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
-            {highIntentPaths.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:border-cyan-200 hover:bg-cyan-50/60'
-              >
-                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
-                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
-              </Link>
-            ))}
-          </div>
-        </section>
-        <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_small_business' />
       </div>
     </>
   );

@@ -1,0 +1,41 @@
+{
+  "results": [
+    {
+      "slug": "ai-tools-for-web3-comparison",
+      "locale": "cn",
+      "state": "verified",
+      "pass": true
+    },
+    {
+      "slug": "ai-tools-for-web3-comparison",
+      "locale": "en",
+      "state": "verified",
+      "pass": true
+    },
+    {
+      "slug": "ai-tools-for-sales-comparison",
+      "locale": "cn",
+      "state": "unavailable",
+      "pass": true
+    },
+    {
+      "slug": "ai-tools-for-sales-comparison",
+      "locale": "en",
+      "state": "unavailable",
+      "pass": true
+    },
+    {
+      "slug": "ai-note-taking-tools-comparison",
+      "locale": "cn",
+      "state": "unavailable",
+      "pass": true
+    },
+    {
+      "slug": "ai-note-taking-tools-comparison",
+      "locale": "en",
+      "state": "unavailable",
+      "pass": true
+    }
+  ],
+  "pass": true
+}

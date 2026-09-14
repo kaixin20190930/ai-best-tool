@@ -1,15 +1,12 @@
 import { Metadata } from 'next';
-import { Activity, ExternalLink, Layers3, ScrollText } from 'lucide-react';
+import { Activity, Layers3, ScrollText } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
 import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
-import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
-import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
 
@@ -32,8 +29,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
-  const checkedAt = '2026-07-18';
-  const categoryCount = categories.length;
+
   const siteUrl = BASE_URL;
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -102,28 +98,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       desc: isChinese ? '成本可见性和请求分析。' : 'Cost visibility and request analysis.',
     },
   ];
-  const highIntentPaths = [
-    {
-      href: '/best-ai-tools/ai-api-observability-tools',
-      title: isChinese ? '先看可观测榜单' : 'Start with observability ranking',
-      desc: isChinese ? '先用 shortlist 缩小范围。' : 'Use the shortlist to narrow the field first.',
-    },
-    {
-      href: '/guides/ai-tools-for-api-observability-comparison',
-      title: isChinese ? '可观测对比页' : 'Observability comparison',
-      desc: isChinese ? '日志、成本和质量追踪一起看。' : 'Compare logs, cost, and quality tracking together.',
-    },
-    {
-      href: '/guides/ai-tools-for-model-routing-comparison',
-      title: isChinese ? '模型路由对比' : 'Model routing comparison',
-      desc: isChinese ? '如果你同时在看接入和治理。' : 'Useful when access and governance overlap.',
-    },
-    {
-      href: '/guides/ai-tools-for-developers-comparison',
-      title: isChinese ? '开发者工具对比' : 'Developer tools comparison',
-      desc: isChinese ? '更广的开发者工作流入口。' : 'A broader developer workflow entry point.',
-    },
-  ];
 
   return (
     <>
@@ -152,46 +126,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? 'API 可观测工具真正的价值，不是“图多”，而是能不能帮你看清调用、成本、错误和质量，支撑生产决策。'
               : 'The real value of API observability tools is not more charts, but clearer visibility into requests, cost, errors, and quality for production decisions.'}
           </p>
-
-          <div className='mt-6 flex flex-wrap gap-3'>
-            <TrackableCtaLink
-              href='/explore?search=observability&sort=popular'
-              ctaId='api_observability_guide_browse_tools'
-              ctaLabel='API observability guide browse tools'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
-            >
-              {isChinese ? '看可观测工具' : 'Browse observability tools'}
-              <ExternalLink className='size-4' />
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-tools-for-developers'
-              ctaId='api_observability_guide_developers'
-              ctaLabel='API observability guide developers'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              {isChinese ? '回到开发者指南' : 'Back to developer guide'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-tools-for-api-observability-comparison'
-              ctaId='api_observability_guide_comparison'
-              ctaLabel='API observability guide comparison'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              {isChinese ? '看 API 可观测对比页' : 'API observability comparison'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/best-ai-tools/ai-api-observability-tools'
-              ctaId='api_observability_guide_top_list'
-              ctaLabel='API observability guide top list'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
-            >
-              {isChinese ? '看可观测榜单' : 'Open observability ranking'}
-            </TrackableCtaLink>
-          </div>
         </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
@@ -241,113 +175,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </aside>
         </section>
 
-        <GuideEvidencePanel
-          locale={locale}
-          checkedAt={checkedAt}
-          scope={
-            isChinese
-              ? '这页优先检查页面是否能帮助用户完成真实可观测判断：日志、调用追踪、成本分析、质量追踪和生产决策，而不是只看图表数量。'
-              : 'This page prioritizes whether the guide helps with a real observability decision: logs, request tracing, cost analysis, quality tracking, and production decisions rather than chart count.'
-          }
-          decisionSteps={[
-            isChinese
-              ? '先判断你更需要日志、追踪、成本还是质量信号。'
-              : 'First decide whether logs, tracing, cost, or quality signals matter most.',
-            isChinese
-              ? '如果目标清楚，就先去对应的对比页。'
-              : 'If the goal is clear, go to the matching comparison page first.',
-            isChinese
-              ? '如果是长期生产使用，再回来补真实监控案例和告警配置。'
-              : 'If it will be used in production long term, come back for real monitoring cases and alert setup.',
-          ]}
-          signalCards={[
-            {
-              label: isChinese ? '价格信号' : 'Pricing signal',
-              value: isChinese ? '先看试用和保留周期' : 'Check trial and retention limits',
-              note: isChinese
-                ? '可观测工具往往在保留时长、席位和团队权限上分层。'
-                : 'Observability tools often tier retention, seats, and team permissions.',
-            },
-            {
-              label: isChinese ? '更新信号' : 'Freshness signal',
-              value: isChinese ? '请求和成本视图要够新' : 'Request and cost views need freshness',
-              note: isChinese
-                ? '数据一旧，排查和决策都会失真。'
-                : 'Stale data quickly distorts debugging and decisions.',
-            },
-            {
-              label: isChinese ? '风险信号' : 'Risk signal',
-              value: isChinese ? '只有图表没有证据不够' : 'Charts without evidence are not enough',
-              note: isChinese
-                ? '如果没有请求级追踪和实际复盘，优先降低权重。'
-                : 'If there is no request-level tracing and real retros, reduce the priority.',
-            },
-          ]}
-          items={[
-            {
-              label: isChinese ? '判断维度' : 'Decision signals',
-              value: isChinese ? '日志、追踪、成本、质量' : 'Logs, traces, cost, quality',
-              note: isChinese
-                ? `重点看它是否能把生产请求变成可判断的证据。当前可用分类数：${categoryCount}。`
-                : `We care about whether production requests become decision-ready evidence. Current category count: ${categoryCount}.`,
-            },
-            {
-              label: isChinese ? '索引策略' : 'Indexing strategy',
-              value: isChinese ? '保留可索引' : 'Keep it indexable',
-              note: isChinese
-                ? '把可观测目标写清楚，减少和模型路由页的重复。'
-                : 'Make the observability intent explicit so it overlaps less with routing pages.',
-            },
-            {
-              label: isChinese ? '下一步补强' : 'Next enrichment',
-              value: isChinese ? '补真实监控案例' : 'Add real monitoring cases',
-              note: isChinese
-                ? `后续优先补生产日志样例、告警规则和团队复盘，并保持 ${checkedAt} 的核对记录。`
-                : `Next, priority additions are production log examples, alert rules, and team retros while keeping the ${checkedAt} verification record.`,
-            },
-          ]}
-        />
-
-        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '最近验证' : 'Last checked'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? `这页已按真实可观测决策重新核对，优先保留日志、追踪和成本证据，目前覆盖 ${categoryCount} 个分类。`
-                : `This page has been rechecked against a real observability decision and keeps logs, tracing, and cost evidence visible across ${categoryCount} categories.`}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '当前判断' : 'Current judgment'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>
-              {isChinese ? '保留索引，强化生产证据' : 'Keep it indexable and strengthen production evidence'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '用生产日志样例、告警规则和复盘记录把它和模型路由页分开。'
-                : 'Use production log samples, alert rules, and retros to separate it from routing pages.'}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '下一步' : 'Next step'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>
-              {isChinese ? '补真实监控案例和告警配置' : 'Add real monitoring cases and alert setup'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '后续优先补生产日志、质量告警和团队排障记录。'
-                : 'Next, prioritize production logs, quality alerts, and team debugging notes.'}
-            </p>
-          </div>
-        </section>
-
         <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
           <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
             {isChinese ? '先看这些入口' : 'Start here'}
@@ -383,80 +210,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               : 'If request logs, cost, quality, and debugging matter most, these tools get you to the real decision faster than a broad developer page.'
           }
           toolNames={['langfuse', 'helicone', 'portkey', 'langsmith']}
-          compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
-          compareTitle={isChinese ? '可观测意图更强的下一步入口' : 'Next paths for stronger observability intent'}
-          compareDescription={
-            isChinese
-              ? '当你已经知道自己在找日志、追踪和成本分析，而不是单纯模型接入，继续进入更窄的比较页会更有效。'
-              : 'Once the real need is logs, tracing, and cost analysis rather than pure model access, narrower comparison pages work better.'
-          }
-          compareLinks={[
-            {
-              href: '/guides/ai-tools-for-api-observability-comparison',
-              title: isChinese ? 'API 可观测工具对比' : 'API observability comparison',
-              description: isChinese
-                ? '适合直接横向看日志、成本和质量追踪能力。'
-                : 'A direct side-by-side path for logs, cost, and quality tracking.',
-            },
-            {
-              href: '/best-ai-tools/ai-api-observability-tools',
-              title: isChinese ? 'API 可观测榜单' : 'Observability ranking',
-              description: isChinese
-                ? '适合已经确认方向、只想快速缩小 shortlist 的用户。'
-                : 'Useful when the direction is clear and the goal is to narrow the shortlist faster.',
-            },
-            {
-              href: '/guides/ai-tools-for-model-routing-comparison',
-              title: isChinese ? '模型路由工具对比' : 'Model routing comparison',
-              description: isChinese
-                ? '如果你也在看统一出口和回退策略，这页更相关。'
-                : 'More useful when unified access and fallback strategy are also in scope.',
-            },
-            {
-              href: '/guides/ai-tools-for-developers-comparison',
-              title: isChinese ? '开发者工具总对比' : 'Developer tools comparison',
-              description: isChinese
-                ? '适合还没完全确定自己在选可观测还是更广的开发工具。'
-                : 'Good when you are not yet fully narrowed into observability versus broader developer tooling.',
-            },
-          ]}
         />
-
-        <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '高意图榜单' : 'High-intent ranking'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese
-              ? '先用榜单缩小可观测 shortlist'
-              : 'Use the ranking to narrow your observability shortlist first'}
-          </h2>
-          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-            {isChinese
-              ? '如果你已经知道自己要比的是日志、追踪和成本治理，榜单页会比泛目录更快进入决策。'
-              : 'If the decision is already about logs, tracing, and cost governance, the ranking page gets to a decision faster than a broad directory.'}
-          </p>
-          <div className='mt-5 flex flex-wrap gap-3'>
-            <TrackableCtaLink
-              href='/best-ai-tools/ai-api-observability-tools'
-              ctaId='api_observability_guide_ranking_primary'
-              ctaLabel='API observability guide ranking primary'
-              pageType='guide'
-              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
-            >
-              {isChinese ? '进入可观测榜单' : 'Open observability ranking'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-tools-for-api-observability-comparison'
-              ctaId='api_observability_guide_ranking_secondary'
-              ctaLabel='API observability guide ranking secondary'
-              pageType='guide'
-              className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
-            >
-              {isChinese ? '继续看对比页' : 'Continue to comparison'}
-            </TrackableCtaLink>
-          </div>
-        </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
@@ -497,36 +251,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </div>
         </section>
-
-        <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '高意图路径' : 'High-intent path'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '先看榜单和对比，再回到可观测页' : 'Compare first, then come back to observability pages'}
-          </h2>
-          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-            {isChinese
-              ? '如果你已经知道自己要看日志、追踪、成本和质量治理，就直接去更窄的榜单和对比页。'
-              : 'If the real focus is logs, tracing, cost, and quality governance, move straight into the narrower ranking and comparison pages.'}
-          </p>
-          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
-            {highIntentPaths.map((item) => (
-              <TrackableCtaLink
-                key={item.href}
-                href={item.href}
-                ctaId={`api_observability_guide_${item.href.split('/').pop()}`}
-                ctaLabel={item.title}
-                pageType='guide'
-                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-              >
-                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
-                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
-              </TrackableCtaLink>
-            ))}
-          </div>
-        </section>
-        <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_api_observability' />
       </div>
     </>
   );

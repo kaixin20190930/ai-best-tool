@@ -1,15 +1,12 @@
 import { Metadata } from 'next';
-import { ExternalLink, FlaskConical, Layers3, TestTube2 } from 'lucide-react';
+import { FlaskConical, Layers3, TestTube2 } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
 import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
-import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
-import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
 
@@ -32,8 +29,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
-  const checkedAt = '2026-07-18';
-  const categoryCount = categories.length;
+
   const siteUrl = BASE_URL;
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -108,46 +104,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? 'Prompt 测试工具真正要解决的，不是“能不能跑一次结果”，而是能不能帮你系统地比较、复现和判断哪些 prompt 版本真的更好。'
               : 'Prompt testing tools are not mainly about running one output once. The real job is helping you compare, reproduce, and judge which prompt versions are actually better.'}
           </p>
-
-          <div className='mt-6 flex flex-wrap gap-3'>
-            <TrackableCtaLink
-              href='/explore?search=prompt&sort=popular'
-              ctaId='prompt_testing_guide_browse_tools'
-              ctaLabel='Prompt testing guide browse tools'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
-            >
-              {isChinese ? '看 prompt 测试工具' : 'Browse prompt testing tools'}
-              <ExternalLink className='size-4' />
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-tools-for-developers'
-              ctaId='prompt_testing_guide_developers'
-              ctaLabel='Prompt testing guide developers'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              {isChinese ? '回到开发者指南' : 'Back to developer guide'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-tools-for-prompt-testing-comparison'
-              ctaId='prompt_testing_guide_comparison'
-              ctaLabel='Prompt testing guide comparison'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              {isChinese ? '看 prompt 测试对比页' : 'Prompt testing comparison'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/best-ai-tools/ai-prompt-testing-tools'
-              ctaId='prompt_testing_guide_top_list'
-              ctaLabel='Prompt testing guide top list'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
-            >
-              {isChinese ? '看 prompt 测试榜单' : 'Open prompt testing ranking'}
-            </TrackableCtaLink>
-          </div>
         </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
@@ -197,115 +153,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </aside>
         </section>
 
-        <GuideEvidencePanel
-          locale={locale}
-          checkedAt={checkedAt}
-          scope={
-            isChinese
-              ? '这页优先检查页面是否能帮助用户完成真实 prompt 测试判断：版本对比、评估数据集、回归验证和团队复盘，而不是只看单次输出。'
-              : 'This page prioritizes whether the guide helps with a real prompt-testing decision: version comparison, eval datasets, regression checks, and team retros rather than a single output.'
-          }
-          decisionSteps={
-            isChinese
-              ? [
-                  '先判断你是在做 prompt 版本比较、评估集设计，还是回归验证。',
-                  '如果决策已经明确，先去更聚焦的比较页或评估页看方法。',
-                  '如果还需要团队共识，再回到这页补样本、评分和复盘记录。',
-                ]
-              : [
-                  'First decide whether you are comparing prompt versions, designing eval sets, or running regression checks.',
-                  'If the decision is already clear, move to the more focused comparison or evaluation pages for method details.',
-                  'If you still need team alignment, come back here for samples, scoring, and retrospective notes.',
-                ]
-          }
-          items={[
-            {
-              label: isChinese ? '判断维度' : 'Decision signals',
-              value: isChinese ? '版本、数据集、回归、复盘' : 'Versioning, datasets, regression, retros',
-              note: isChinese
-                ? `重点看是否能把 prompt 测试变成可复现、可讨论的流程。当前可用分类数：${categoryCount}。`
-                : `We care about whether prompt testing becomes repeatable and reviewable. Current category count: ${categoryCount}.`,
-            },
-            {
-              label: isChinese ? '索引策略' : 'Indexing strategy',
-              value: isChinese ? '保留可索引' : 'Keep it indexable',
-              note: isChinese
-                ? '让 prompt 测试意图清楚，避免和可观测页抢相似意图。'
-                : 'Make the prompt-testing intent explicit so it overlaps less with observability pages.',
-            },
-            {
-              label: isChinese ? '下一步补强' : 'Next enrichment',
-              value: isChinese ? '补真实测试样本' : 'Add real test samples',
-              note: isChinese
-                ? `后续优先补 prompt 版本、评分案例和复盘记录，并保持 ${checkedAt} 的核对记录。`
-                : `Next, priority additions are prompt versions, scoring examples, and retrospective notes while keeping the ${checkedAt} verification record.`,
-            },
-          ]}
-          signalCards={[
-            {
-              label: isChinese ? '版本信号' : 'Version signal',
-              value: isChinese ? '优先看可复现的版本差异' : 'Prioritize reproducible version deltas',
-              note: isChinese
-                ? '如果不能稳定比较不同 prompt 版本，这类工具很难真正帮你做决策。'
-                : 'If different prompt versions cannot be compared reliably, the tool will not help you decide much.',
-            },
-            {
-              label: isChinese ? '样本信号' : 'Sample signal',
-              value: isChinese ? '评估集要能代表真实场景' : 'Eval sets must reflect real scenarios',
-              note: isChinese
-                ? '只跑一两个例子很容易失真，最好有接近真实任务的样本集。'
-                : 'A couple of examples can mislead; close-to-real task samples are much better.',
-            },
-            {
-              label: isChinese ? '复盘信号' : 'Retrospective signal',
-              value: isChinese ? '看团队是否能回看结果' : 'Check whether teams can review results',
-              note: isChinese
-                ? '能否把结论沉淀下来，比“跑出一版结果”更重要。'
-                : 'Being able to preserve conclusions matters more than just producing one result.',
-            },
-          ]}
-        />
-
-        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '最近验证' : 'Last checked'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? `这页已按真实 prompt 测试决策重新核对，优先保留版本、数据集和回归入口，目前覆盖 ${categoryCount} 个分类。`
-                : `This page has been rechecked against a real prompt-testing decision and keeps versions, datasets, and regression entry points visible across ${categoryCount} categories.`}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '当前判断' : 'Current judgment'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>
-              {isChinese ? '保留索引，强化评估流程证据' : 'Keep it indexable and strengthen eval workflow evidence'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '用版本对比、评分样例和复盘记录区分它与可观测页。'
-                : 'Use version comparisons, scoring examples, and retrospective notes to distinguish it from observability pages.'}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '下一步' : 'Next step'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>
-              {isChinese ? '补真实测试样本和复盘' : 'Add real test samples and retros'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '后续优先补 prompt 版本、评分案例和团队复盘。'
-                : 'Next, prioritize prompt versions, scoring cases, and team retros.'}
-            </p>
-          </div>
-        </section>
-
         <GuideActionSection
           locale={locale}
           eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}
@@ -318,116 +165,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               : 'If prompt versions, eval datasets, and regression checks matter most, these tools narrow the field faster than a broad developer page.'
           }
           toolNames={['langfuse', 'langsmith', 'helicone', 'portkey']}
-          compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
-          compareTitle={isChinese ? 'Prompt 测试意图更强的下一步入口' : 'Next paths for stronger prompt-testing intent'}
-          compareDescription={
-            isChinese
-              ? '当你已经明确自己在找 prompt 验证工具，而不是泛 API 或调试工具，继续进入更窄的比较页会更有效。'
-              : 'Once the real job is prompt validation rather than broad API or debugging tooling, narrower comparison pages work better.'
-          }
-          compareLinks={[
-            {
-              href: '/guides/ai-tools-for-prompt-testing-comparison',
-              title: isChinese ? 'Prompt 测试工具对比' : 'Prompt testing comparison',
-              description: isChinese
-                ? '适合直接横向看评估、版本和回归能力。'
-                : 'A direct side-by-side path for evals, versioning, and regression capability.',
-            },
-            {
-              href: '/best-ai-tools/ai-prompt-testing-tools',
-              title: isChinese ? 'Prompt 测试榜单' : 'Prompt testing ranking',
-              description: isChinese
-                ? '适合已经确认方向、只想快速缩小 shortlist 的用户。'
-                : 'Useful when the direction is clear and the goal is to narrow the shortlist faster.',
-            },
-            {
-              href: '/guides/ai-tools-for-api-observability-comparison',
-              title: isChinese ? 'API 可观测工具对比' : 'API observability comparison',
-              description: isChinese
-                ? '如果你发现真正需求更偏请求日志和质量观察，这页更合适。'
-                : 'More useful if the real decision shifts toward request logs and quality visibility.',
-            },
-            {
-              href: '/guides/ai-tools-for-model-routing-comparison',
-              title: isChinese ? '模型路由工具对比' : 'Model routing comparison',
-              description: isChinese
-                ? '如果你发现问题在模型切换与成本治理，这页更贴近目标。'
-                : 'Move there if the real decision is more about model switching and cost governance.',
-            },
-          ]}
         />
-
-        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '高意图榜单' : 'High-intent ranking'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese
-              ? '先用榜单缩小 prompt testing shortlist'
-              : 'Use the ranking to narrow your prompt testing shortlist first'}
-          </h2>
-          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-            {isChinese
-              ? '如果你已经知道自己要比的是 prompt 版本、回归和评估流程，榜单页会比泛目录更快进入决策。'
-              : 'If the decision is already about prompt versions, regression checks, and eval workflow, the ranking page gets to a decision faster than a broad directory.'}
-          </p>
-          <div className='mt-5 flex flex-wrap gap-3'>
-            <TrackableCtaLink
-              href='/best-ai-tools/ai-prompt-testing-tools'
-              ctaId='prompt_testing_guide_ranking_primary'
-              ctaLabel='Prompt testing guide ranking primary'
-              pageType='guide'
-              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
-            >
-              {isChinese ? '进入 prompt 测试榜单' : 'Open prompt testing ranking'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-tools-for-prompt-testing-comparison'
-              ctaId='prompt_testing_guide_ranking_secondary'
-              ctaLabel='Prompt testing guide ranking secondary'
-              pageType='guide'
-              className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
-            >
-              {isChinese ? '继续看对比页' : 'Continue to comparison'}
-            </TrackableCtaLink>
-          </div>
-        </section>
-
-        <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '高意图榜单' : 'High-intent ranking'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese
-              ? '先用榜单缩小 prompt testing shortlist'
-              : 'Use the ranking to narrow your prompt testing shortlist first'}
-          </h2>
-          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-            {isChinese
-              ? '如果你已经知道自己要比的是 prompt 版本、回归和评估流程，榜单页会比泛目录更快进入决策。'
-              : 'If the decision is already about prompt versions, regression checks, and eval workflow, the ranking page gets to a decision faster than a broad directory.'}
-          </p>
-          <div className='mt-5 flex flex-wrap gap-3'>
-            <TrackableCtaLink
-              href='/best-ai-tools/ai-prompt-testing-tools'
-              ctaId='prompt_testing_guide_ranking_primary'
-              ctaLabel='Prompt testing guide ranking primary'
-              pageType='guide'
-              className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
-            >
-              {isChinese ? '进入 prompt 测试榜单' : 'Open prompt testing ranking'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-tools-for-prompt-testing-comparison'
-              ctaId='prompt_testing_guide_ranking_secondary'
-              ctaLabel='Prompt testing guide ranking secondary'
-              pageType='guide'
-              className='inline-flex items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-50'
-            >
-              {isChinese ? '继续看对比页' : 'Continue to comparison'}
-            </TrackableCtaLink>
-          </div>
-        </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
@@ -468,7 +206,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </div>
         </section>
-        <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_prompt_testing' />
       </div>
     </>
   );

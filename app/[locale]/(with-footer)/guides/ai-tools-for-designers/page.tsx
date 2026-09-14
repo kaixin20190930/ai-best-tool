@@ -1,14 +1,11 @@
 import { Metadata } from 'next';
-import { CheckCircle2, ExternalLink, Paintbrush, Sparkles } from 'lucide-react';
+import { CheckCircle2, Paintbrush, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
 import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
-import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
-import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
 
@@ -31,8 +28,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
-  const checkedAt = '2026-07-18';
-  const categoryCount = categories.length;
+
   const siteUrl = BASE_URL;
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -77,28 +73,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         'Check whether it can keep styles consistent.',
         'If you use it commercially, prioritize licensing, resolution, and batch workflows.',
       ];
-  const highIntentPaths = [
-    {
-      href: '/best-ai-tools/ai-image-tools',
-      title: isChinese ? '先看图像榜单' : 'Start with image ranking',
-      desc: isChinese ? '先用 shortlist 缩小范围。' : 'Use the shortlist to narrow the field first.',
-    },
-    {
-      href: '/guides/ai-image-tools',
-      title: isChinese ? '图像工具指南' : 'Image tools guide',
-      desc: isChinese ? '生成、编辑和素材处理一起看。' : 'Compare generation, editing, and asset workflows together.',
-    },
-    {
-      href: '/guides/ai-tools-for-content-creation-comparison',
-      title: isChinese ? '内容创作对比' : 'Content creation comparison',
-      desc: isChinese ? '如果设计和内容生产交叉。' : 'Useful when design and content production overlap.',
-    },
-    {
-      href: '/guides/ai-video-tools-comparison',
-      title: isChinese ? '视频工具对比' : 'Video tools comparison',
-      desc: isChinese ? '如果重点转向视频素材和剪辑。' : 'Use this when video assets and editing matter more.',
-    },
-  ];
 
   return (
     <>
@@ -127,153 +101,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '设计工作看重的不只是“能出图”，而是能不能保持品牌一致性、输出质量和商业授权。这个页面会帮你从输出类型和视觉控制两个角度判断。'
               : 'Design work is not only about making images. It is about brand consistency, quality, and commercial rights. This page helps you judge by output type and visual control.'}
           </p>
-
-          <div className='mt-6 flex flex-wrap gap-3'>
-            <TrackableCtaLink
-              href='/explore?search=design&sort=popular'
-              ctaId='designers_guide_browse_tools'
-              ctaLabel='Designers guide browse tools'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
-            >
-              {isChinese ? '看设计工具' : 'Browse design tools'}
-              <ExternalLink className='size-4' />
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/best-ai-tools/ai-image-tools'
-              ctaId='designers_guide_top_list'
-              ctaLabel='Designers guide image top list'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
-            >
-              {isChinese ? '看图像榜单' : 'Open image ranking'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/how-to-choose-ai-tools'
-              ctaId='designers_guide_selection_guide'
-              ctaLabel='Designers guide selection guide'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              {isChinese ? '回到选型指南' : 'Back to selection guide'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-image-tools'
-              ctaId='designers_guide_image_guide'
-              ctaLabel='Designers guide image guide'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              {isChinese ? '看图像工具' : 'Image tools'}
-            </TrackableCtaLink>
-          </div>
-        </section>
-
-        <GuideEvidencePanel
-          locale={locale}
-          checkedAt={checkedAt}
-          scope={
-            isChinese
-              ? '设计页要围绕品牌、视觉控制、输出类型和商业授权来做，不要只看“能不能出图”。这个页继续可索引，但会把图像、视频和内容创作路径优先分层。'
-              : 'This design page should stay centered on brand, visual control, output type, and commercial rights rather than only asking whether it can make images. Keep it indexable, but layer image, video, and content-creation paths separately.'
-          }
-          signalCards={[
-            {
-              label: isChinese ? '价格信号' : 'Pricing signal',
-              value: isChinese ? '先看商用版和团队席位' : 'Check commercial tiers and team seats',
-              note: isChinese
-                ? '设计工具常在高清导出、授权和协作能力上分层。'
-                : 'Design tools often tier high-res export, licensing, and collaboration.',
-            },
-            {
-              label: isChinese ? '更新信号' : 'Freshness signal',
-              value: isChinese ? '看样式库和工作流是否常更新' : 'Watch style libraries and workflows',
-              note: isChinese
-                ? '样式库停更，设计输出就很容易落后。'
-                : 'Stalled style libraries make output feel outdated quickly.',
-            },
-            {
-              label: isChinese ? '风险信号' : 'Risk signal',
-              value: isChinese ? '只会出图不够' : 'Making images alone is not enough',
-              note: isChinese
-                ? '如果没有授权、品牌案例和样片，先别当成首选。'
-                : 'If there is no licensing, brand case, or sample evidence, do not treat it as the first choice yet.',
-            },
-          ]}
-          items={[
-            {
-              label: isChinese ? '验证重点' : 'Validation focus',
-              value: isChinese ? '品牌、视觉、授权' : 'Brand, visuals, licensing',
-              note: isChinese
-                ? `确认它是不是能稳定输出可商用视觉。当前可用分类数：${categoryCount}。`
-                : `Confirm it can reliably produce commercially usable visuals. Current category count: ${categoryCount}.`,
-            },
-            {
-              label: isChinese ? '合并策略' : 'Merge strategy',
-              value: isChinese ? '分流到图像/视频' : 'Route to image/video',
-              note: isChinese
-                ? '如果目标更偏生成和编辑，就去更窄页。'
-                : 'If the goal is mostly generation and editing, move to narrower pages.',
-            },
-            {
-              label: isChinese ? '后续增量' : 'Next increments',
-              value: isChinese ? '品牌案例、样片、授权' : 'Brand cases, samples, licensing',
-              note: isChinese
-                ? `补真实品牌和设计交付样例，并保持 ${checkedAt} 的核对记录。`
-                : `Add real brand and delivery examples while keeping the ${checkedAt} verification record.`,
-            },
-          ]}
-          decisionSteps={[
-            isChinese
-              ? '先判断你要的是品牌视觉、样片还是授权交付。'
-              : 'First decide whether you need brand visuals, samples, or licensed delivery.',
-            isChinese
-              ? '如果目标明确，就先去对应的对比页。'
-              : 'If the goal is clear, go to the matching comparison page first.',
-            isChinese
-              ? '如果要长期交付，再回来补品牌案例和授权边界。'
-              : 'If it will be used for long-term delivery, come back for brand cases and licensing boundaries.',
-          ]}
-        />
-
-        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '最近验证' : 'Last checked'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? `这页已按真实设计决策重新核对，优先保留品牌、视觉和授权入口，目前覆盖 ${categoryCount} 个分类。`
-                : `This page has been rechecked against a real design decision and keeps brand, visual, and licensing entry points visible across ${categoryCount} categories.`}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '当前判断' : 'Current judgment'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>
-              {isChinese ? '保留索引，强化设计交付证据' : 'Keep it indexable and strengthen design-delivery evidence'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '用品牌案例、样片和授权说明区分它与图像页。'
-                : 'Use brand cases, samples, and licensing notes to distinguish it from image pages.'}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '下一步' : 'Next step'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>
-              {isChinese ? '补真实品牌与交付案例' : 'Add real brand and delivery cases'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? '后续优先补真实品牌素材、授权说明和交付样例。'
-                : 'Next, prioritize real brand assets, licensing notes, and delivery examples.'}
-            </p>
-          </div>
         </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
@@ -320,135 +147,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </aside>
         </section>
 
-        <section className='mt-8 rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '高意图路径' : 'High-intent path'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '先看榜单和对比，再回到设计页' : 'Compare first, then come back to design pages'}
-          </h2>
-          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-            {isChinese
-              ? '如果你已经知道自己要做品牌、海报、UI 或社媒视觉，就直接去更窄的榜单和对比页。'
-              : 'If the real need is brand visuals, posters, UI, or social assets, move straight into the narrower ranking and comparison pages.'}
-          </p>
-          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
-            {highIntentPaths.map((item) => (
-              <TrackableCtaLink
-                key={item.href}
-                href={item.href}
-                ctaId={`designers_guide_${item.href.split('/').pop()}`}
-                ctaLabel={item.title}
-                pageType='guide'
-                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-              >
-                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
-                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
-              </TrackableCtaLink>
-            ))}
-          </div>
-        </section>
-
-        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '高意图榜单' : 'High-intent ranking'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '先用榜单缩小设计 shortlist' : 'Use the ranking to narrow your design shortlist first'}
-          </h2>
-          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-            {isChinese
-              ? '如果你已经明确是在比品牌、海报、UI 或社媒视觉，先看榜单会比泛目录更快进入决策。'
-              : 'If the decision is already about brand work, posters, UI, or social visuals, the ranking gets you to a decision faster than a broad directory.'}
-          </p>
-          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
-            {[
-              {
-                href: '/best-ai-tools/ai-image-tools',
-                title: isChinese ? '图像工具榜单' : 'Image ranking',
-                desc: isChinese
-                  ? '先收窄到更高相关的视觉候选。'
-                  : 'Start with the highest-fit visual candidates first.',
-              },
-              {
-                href: '/guides/ai-image-tools',
-                title: isChinese ? '图像工具指南' : 'Image tools guide',
-                desc: isChinese ? '生成、编辑和素材处理一起看。' : 'Compare generation, editing, and assets together.',
-              },
-              {
-                href: '/guides/ai-tools-for-content-creation-comparison',
-                title: isChinese ? '内容创作对比' : 'Content creation comparison',
-                desc: isChinese ? '如果设计和内容生产交叉。' : 'Useful when design and content production overlap.',
-              },
-              {
-                href: '/guides/ai-video-tools-comparison',
-                title: isChinese ? '视频工具对比' : 'Video tools comparison',
-                desc: isChinese
-                  ? '如果重点转向视频素材和剪辑。'
-                  : 'Use this when video assets and editing matter more.',
-              },
-            ].map((item) => (
-              <TrackableCtaLink
-                key={item.href}
-                href={item.href}
-                ctaId={`designers_guide_ranking_${item.href.split('/').pop()}`}
-                ctaLabel={item.title}
-                pageType='guide'
-                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-              >
-                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
-                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
-              </TrackableCtaLink>
-            ))}
-          </div>
-        </section>
-
-        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '高意图入口' : 'High-intent path'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese
-              ? '如果你已经知道自己在找设计工具，先看图像榜单'
-              : 'If design is already the lane, open the image ranking first'}
-          </h2>
-          <div className='mt-4 grid gap-3 md:grid-cols-3'>
-            <Link
-              href='/best-ai-tools/ai-image-tools'
-              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-            >
-              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '图像榜单' : 'Image ranking'}</p>
-              <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '先收窄到更高相关的视觉候选，再决定具体走品牌、海报还是素材流程。'
-                  : 'Start with the highest-fit visual candidates, then decide whether your workflow is more about brand, posters, or assets.'}
-              </p>
-            </Link>
-            <Link
-              href='/guides/ai-image-tools'
-              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-            >
-              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '图像工具指南' : 'Image tools guide'}</p>
-              <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '如果你更偏生成、编辑和素材处理，这条路径更直接。'
-                  : 'A better path if generation, editing, and asset production are the real needs.'}
-              </p>
-            </Link>
-            <Link
-              href='/categories/design-art?sort=popular'
-              className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-            >
-              <p className='text-sm font-semibold text-slate-950'>{isChinese ? '设计分类' : 'Design category'}</p>
-              <p className='mt-2 text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '直接浏览真实设计条目，再回头比较高相关候选。'
-                  : 'Browse real design listings first, then come back to compare the stronger candidates.'}
-              </p>
-            </Link>
-          </div>
-        </section>
-
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_1fr]'>
           <div className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm'>
             <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
@@ -488,7 +186,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
           </div>
         </section>
-        <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_designers' />
       </div>
     </>
   );

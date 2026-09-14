@@ -1,0 +1,77 @@
+{
+  "base": "8500684567561675697b6814bff8e376d5944320",
+  "pub01HistoricalCeiling": 1502,
+  "currentFindings": 51,
+  "newFindings": 0,
+  "guideComparisonFindings": 0,
+  "indexableGuideCount": 18,
+  "sharedCallers": 62,
+  "comparisonRoutes": 76,
+  "classifications": {
+    "keep-noindex": 1,
+    "merge-redirect": 10,
+    "repair": 65
+  },
+  "httpLanguagePages": 188,
+  "sitemapUrls": 116,
+  "schemaLanguagePagesChanged": 148,
+  "schemaRemoved": {
+    "FAQPage": 148,
+    "ItemList": 148
+  },
+  "sourceReferencesCheckedAt": "2026-09-14",
+  "productionDatabaseWrites": 0,
+  "mainPushed": false,
+  "deployed": false,
+  "developmentStatus": "DEV_READY",
+  "independentQA": false,
+  "semanticGuideSamples": 5,
+  "semanticComparisonSamples": 5,
+  "visualScreenshots": 20,
+  "visualViewports": [
+    "390x844x1,mobile,touch",
+    "1440x1000x1"
+  ],
+  "fullBuildPass": true,
+  "typescriptPass": true,
+  "regressionTestsPassed": 11,
+  "toolLanguagePagesPassed": 10,
+  "logs": {
+    "build": {
+      "path": "/tmp/pub-02-build.log",
+      "sha256": "7dd22783b0e8d04e04ed87467c67da087db8eaff04c1dc4345287f6050d9d88e",
+      "bytes": 25602
+    },
+    "typescript": {
+      "path": "/tmp/pub-02-typescript.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "local-smoke": {
+      "path": "/tmp/pub-02-local-smoke.log",
+      "sha256": "66bcbbba520c59cdea3649022bfb9f36493ac1674f3cce55c4d6ea6a9943c8b1",
+      "bytes": 2302
+    },
+    "html": {
+      "path": "/tmp/pub-02-html.log",
+      "sha256": "cbb210fee93499edf35f9f15b01b542c7aac24b4a8e0e47bead40e79deacad05",
+      "bytes": 340
+    },
+    "pilot-html": {
+      "path": "/tmp/pub-02-pilot-html.log",
+      "sha256": "616604a5202fdf52c11cfb32789362bcfcac754b4dad327aa32c11a6c2e97507",
+      "bytes": 1195
+    },
+    "tool-regression": {
+      "path": "/tmp/pub-02-tool-regression.log",
+      "sha256": "7202db19900c36bd3e0b206dcab744563bb9e305214c6bbd4b81f9d1afba684c",
+      "bytes": 28
+    },
+    "index-consistency": {
+      "path": "/tmp/pub-02-index-consistency.log",
+      "sha256": "322f2e2cc68ca5a813b28160fc9c8a57b1da442bc95420bc98f453f43dd063d5",
+      "bytes": 697
+    }
+  },
+  "externalAnalyticsIsolation": "Final desktop pass blocked external scripts and connections; earlier mobile pass did not guarantee zero external analytics events."
+}

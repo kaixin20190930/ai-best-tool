@@ -1,15 +1,12 @@
 import { Metadata } from 'next';
-import { ExternalLink, Layers3, SearchCheck, Wallet } from 'lucide-react';
+import { Layers3, SearchCheck, Wallet } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { BASE_URL } from '@/lib/env';
 import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema } from '@/lib/seo/schema';
 import { getAllCategories, getLocalizedField } from '@/lib/services/categories';
-import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideActionSection from '@/components/guides/GuideActionSection';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
-import GuideSubmissionPath from '@/components/guides/GuideSubmissionPath';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
 
@@ -32,8 +29,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const categories = await getAllCategories(true).catch(() => []);
-  const checkedAt = '2026-07-18';
-  const categoryCount = categories.length;
+
   const siteUrl = BASE_URL;
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: `${siteUrl}/${locale}` },
@@ -80,28 +76,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
         'Look for strong labeling systems rather than only raw transaction data.',
         'If you track wallet clusters over time, prioritize history depth, search, and note-taking efficiency.',
       ];
-  const highIntentPaths = [
-    {
-      href: '/best-ai-tools/ai-web3-tools',
-      title: isChinese ? '先看 Web3 榜单' : 'Start with Web3 ranking',
-      desc: isChinese ? '先用 shortlist 缩小范围。' : 'Use the shortlist to narrow the field first.',
-    },
-    {
-      href: '/guides/ai-tools-for-wallet-research-comparison',
-      title: isChinese ? '钱包研究对比' : 'Wallet research comparison',
-      desc: isChinese ? '画像、标签和关系线索一起看。' : 'Compare profiling, labels, and clues together.',
-    },
-    {
-      href: '/guides/ai-tools-for-wallet-monitoring-comparison',
-      title: isChinese ? '钱包监控对比' : 'Wallet monitoring comparison',
-      desc: isChinese ? '如果重点转向提醒和异动。' : 'Best when alerts and anomalies matter more.',
-    },
-    {
-      href: '/guides/ai-tools-for-crypto-portfolio-tracking-comparison',
-      title: isChinese ? '资产追踪对比' : 'Portfolio tracking comparison',
-      desc: isChinese ? '如果重点转向组合和持仓视图。' : 'Useful when the real job is portfolio and holdings views.',
-    },
-  ];
 
   return (
     <>
@@ -130,46 +104,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '钱包研究工具真正要解决的，不是“看到了哪些交易”，而是能不能把地址行为、关系和上下文慢慢拼成一个更可靠的判断。'
               : 'Wallet research tools are not mainly about seeing transactions. The real job is turning behavior, relationships, and context into a more reliable interpretation.'}
           </p>
-
-          <div className='mt-6 flex flex-wrap gap-3'>
-            <TrackableCtaLink
-              href='/explore?search=wallet&sort=popular'
-              ctaId='wallet_research_guide_browse_tools'
-              ctaLabel='Wallet research guide browse tools'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
-            >
-              {isChinese ? '看钱包研究工具' : 'Browse wallet research tools'}
-              <ExternalLink className='size-4' />
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/best-ai-tools/ai-web3-tools'
-              ctaId='wallet_research_guide_top_list'
-              ctaLabel='Wallet research guide Web3 top list'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-800 hover:bg-cyan-100'
-            >
-              {isChinese ? '看 Web3 榜单' : 'Open Web3 ranking'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-tools-for-web3'
-              ctaId='wallet_research_guide_web3'
-              ctaLabel='Wallet research guide Web3 guide'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              {isChinese ? '回到 Web3 指南' : 'Back to Web3 guide'}
-            </TrackableCtaLink>
-            <TrackableCtaLink
-              href='/guides/ai-tools-for-wallet-research-comparison'
-              ctaId='wallet_research_guide_comparison'
-              ctaLabel='Wallet research guide comparison'
-              pageType='guide'
-              className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-            >
-              {isChinese ? '看钱包研究对比页' : 'Wallet research comparison'}
-            </TrackableCtaLink>
-          </div>
         </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>
@@ -221,202 +155,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
           </aside>
         </section>
 
-        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '高意图路径' : 'High-intent path'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese ? '先看榜单和对比，再回到钱包研究页' : 'Compare first, then come back to wallet research pages'}
-          </h2>
-          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-            {isChinese
-              ? '如果你已经知道自己是在做地址研究，就别在总览页停太久，直接去更窄的榜单和对比页。'
-              : 'If wallet research is already the real task, move straight into the narrower ranking and comparison pages.'}
-          </p>
-          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
-            {highIntentPaths.map((item) => (
-              <TrackableCtaLink
-                key={item.href}
-                href={item.href}
-                ctaId={`wallet_research_guide_${item.href.split('/').pop()}`}
-                ctaLabel={item.title}
-                pageType='guide'
-                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-              >
-                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
-                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
-              </TrackableCtaLink>
-            ))}
-          </div>
-        </section>
-
-        <section className='mt-8 rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
-          <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-            {isChinese ? '高意图榜单' : 'High-intent ranking'}
-          </p>
-          <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-            {isChinese
-              ? '先用榜单缩小钱包研究 shortlist'
-              : 'Use the ranking to narrow your wallet research shortlist first'}
-          </h2>
-          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
-            {isChinese
-              ? '如果你已经明确是在比地址画像、关系线索和行为判断，先看榜单会比泛 Web3 目录更快进入决策。'
-              : 'If the decision is already about address profiling, relationship clues, and behavior interpretation, the ranking gets you to a decision faster than a broad Web3 directory.'}
-          </p>
-          <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
-            {[
-              {
-                href: '/best-ai-tools/ai-web3-tools',
-                title: isChinese ? 'Web3 工具榜单' : 'Web3 tools ranking',
-                desc: isChinese
-                  ? '先从更高相关的 Web3 候选开始。'
-                  : 'Start with the highest-fit Web3 candidates first.',
-              },
-              {
-                href: '/guides/ai-tools-for-wallet-research-comparison',
-                title: isChinese ? '钱包研究对比' : 'Wallet research comparison',
-                desc: isChinese ? '画像、标签和线索一起看。' : 'Compare profiling, labels, and clues together.',
-              },
-              {
-                href: '/guides/ai-tools-for-wallet-monitoring-comparison',
-                title: isChinese ? '钱包监控对比' : 'Wallet monitoring comparison',
-                desc: isChinese ? '如果你开始更关心提醒和异动。' : 'Useful when alerts and anomalies matter more.',
-              },
-              {
-                href: '/guides/ai-tools-for-crypto-portfolio-tracking-comparison',
-                title: isChinese ? '资产追踪对比' : 'Portfolio tracking comparison',
-                desc: isChinese
-                  ? '如果你想把研究和组合看板一起看。'
-                  : 'Helpful when research and portfolio views overlap.',
-              },
-            ].map((item) => (
-              <TrackableCtaLink
-                key={item.href}
-                href={item.href}
-                ctaId={`wallet_research_guide_ranking_${item.href.split('/').pop()}`}
-                ctaLabel={item.title}
-                pageType='guide'
-                className='rounded-xl border border-white bg-white p-4 shadow-sm hover:bg-slate-50'
-              >
-                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
-                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
-              </TrackableCtaLink>
-            ))}
-          </div>
-        </section>
-
-        <GuideEvidencePanel
-          locale={locale}
-          checkedAt={checkedAt}
-          scope={
-            isChinese
-              ? '钱包研究页要围绕地址画像、关系线索、资金路径和历史判断来做，不是把所有 Web3 工具都平铺出来。这个页继续保留可索引，但会优先把更窄的钱包研究、钱包监控和资产追踪入口分流出去。'
-              : 'This wallet research page should stay focused on address profiling, relationship clues, fund paths, and historical interpretation rather than flattening every Web3 tool into one list. Keep it indexable, but route people toward narrower wallet research, wallet monitoring, and portfolio tracking paths first.'
-          }
-          items={[
-            {
-              label: isChinese ? '验证重点' : 'Validation focus',
-              value: isChinese ? '画像、线索、历史' : 'Profiles, clues, history',
-              note: isChinese
-                ? `先验证它是否真能把地址行为和上下文拼起来；当前分类数 ${categoryCount} 个。`
-                : `Check whether it really connects behavior with context; current category count is ${categoryCount}.`,
-            },
-            {
-              label: isChinese ? '合并策略' : 'Merge strategy',
-              value: isChinese ? '分流到更窄对比页' : 'Route to narrower comparisons',
-              note: isChinese
-                ? '如果需求更偏提醒或看板，就转去对应页面。'
-                : 'If the need leans toward alerts or dashboards, move to the matching page.',
-            },
-            {
-              label: isChinese ? '后续增量' : 'Next increments',
-              value: isChinese ? '真实案例、标签、笔记' : 'Real cases, labels, notes',
-              note: isChinese
-                ? `补真实地址案例和研究记录，减少纯 AI 口径，并保留 ${checkedAt} 的核对记录。`
-                : `Add real address cases and research notes to reduce AI-only phrasing while keeping the ${checkedAt} verification record.`,
-            },
-          ]}
-          signalCards={[
-            {
-              label: isChinese ? '价格信号' : 'Pricing signal',
-              value: isChinese ? '先看历史深度和多链覆盖' : 'Check history depth and multichain coverage first',
-              note: isChinese
-                ? '钱包研究常按历史跨度、查询量和团队协作定价。'
-                : 'Wallet research tools often price by history depth, query volume, and team collaboration.',
-            },
-            {
-              label: isChinese ? '更新信号' : 'Freshness signal',
-              value: isChinese
-                ? '看标签、关系和搜索能力是否更新'
-                : 'Check whether labels, relationships, and search keep improving',
-              note: isChinese
-                ? '如果标签体系停了，研究链路很快就失真。'
-                : 'If labeling stagnates, the research chain quickly becomes unreliable.',
-            },
-            {
-              label: isChinese ? '风险信号' : 'Risk signal',
-              value: isChinese
-                ? '没有标签 / 历史 / 关系就先降级'
-                : 'Downgrade it without labels, history, or relationships',
-              note: isChinese
-                ? '三项缺一项，都会让研究结论变薄。'
-                : 'Missing any of those three weakens the research conclusion.',
-            },
-          ]}
-          decisionSteps={[
-            isChinese
-              ? '先判断你要的是地址画像、资金线索，还是历史轨迹。'
-              : 'First decide whether you need address profiling, fund clues, or historical trails.',
-            isChinese
-              ? '如果目标已经清楚，就先看更窄的钱包监控和资产追踪页。'
-              : 'If the goal is already clear, start with the narrower wallet monitoring and portfolio tracking pages.',
-            isChinese
-              ? '如果还要给团队留证据，再回到钱包研究页补真实案例、标签和笔记。'
-              : 'If you still need evidence for a team, come back for real cases, labels, and notes.',
-          ]}
-        />
-
-        <section className='mt-6 grid gap-4 rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-6 shadow-sm md:grid-cols-3'>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '最近验证' : 'Last checked'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>{checkedAt}</p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? `这页已按真实钱包研究决策重新核对，优先保留画像、关系线索和历史入口；当前分类数 ${categoryCount} 个。`
-                : `This page has been rechecked against a real wallet-research decision and keeps profiles, relationship clues, and historical entry points visible; current category count is ${categoryCount}.`}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '当前判断' : 'Current judgment'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>
-              {isChinese ? '保留索引，强化地址研究证据' : 'Keep it indexable and strengthen address-research evidence'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? `用真实案例、标签和研究笔记来区分它与监控页，并持续保留 ${checkedAt} 的核对痕迹。`
-                : `Use real cases, labels, and research notes to distinguish it from monitoring pages while preserving the ${checkedAt} check trail.`}
-            </p>
-          </div>
-          <div>
-            <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-              {isChinese ? '下一步' : 'Next step'}
-            </p>
-            <p className='mt-2 text-lg font-bold text-slate-950'>
-              {isChinese ? '补真实案例和研究记录' : 'Add real cases and research notes'}
-            </p>
-            <p className='mt-2 text-sm leading-6 text-slate-600'>
-              {isChinese
-                ? `后续优先补真实地址案例、标签和结论记录，并持续保留 ${checkedAt} 的核对痕迹。`
-                : `Next, prioritize real address cases, labels, and conclusion notes while keeping the ${checkedAt} check trail up to date.`}
-            </p>
-          </div>
-        </section>
-
         <GuideActionSection
           locale={locale}
           eyebrow={isChinese ? '先看这些工具' : 'Recommended tools'}
@@ -429,43 +167,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               : 'If address profiles, on-chain relationships, and behavioral interpretation matter most, these tools narrow the field faster than a broad Web3 page.'
           }
           toolNames={['arkham', 'nansen', 'debank', 'bubblemaps']}
-          compareEyebrow={isChinese ? '继续比较' : 'Compare next'}
-          compareTitle={isChinese ? '钱包研究意图更强的下一步入口' : 'Next paths for stronger wallet-research intent'}
-          compareDescription={
-            isChinese
-              ? '当你已经明确自己是在做地址研究，而不是异动提醒或组合看板，继续进入更窄的比较页会更有效。'
-              : 'Once the real job is address research rather than alerts or portfolio dashboards, narrower comparison pages work better.'
-          }
-          compareLinks={[
-            {
-              href: '/best-ai-tools/ai-web3-tools',
-              title: isChinese ? 'Web3 工具榜单' : 'Web3 tools ranking',
-              description: isChinese
-                ? '先看更高相关的 Web3 候选，再决定是否进入钱包研究的窄对比。'
-                : 'Start with the highest-fit Web3 candidates, then decide whether you need the narrower wallet-research comparison.',
-            },
-            {
-              href: '/guides/ai-tools-for-wallet-research-comparison',
-              title: isChinese ? '钱包研究工具对比' : 'Wallet research comparison',
-              description: isChinese
-                ? '适合直接横向看画像、标签和链上线索能力。'
-                : 'A direct side-by-side path for profiling, labeling, and on-chain clue discovery.',
-            },
-            {
-              href: '/guides/ai-tools-for-wallet-monitoring-comparison',
-              title: isChinese ? '钱包监控工具对比' : 'Wallet monitoring comparison',
-              description: isChinese
-                ? '如果你发现真正需求更偏提醒和异动，这页更合适。'
-                : 'More useful if the real decision shifts toward alerts and anomalies.',
-            },
-            {
-              href: '/guides/ai-tools-for-crypto-portfolio-tracking-comparison',
-              title: isChinese ? '资产追踪工具对比' : 'Portfolio tracking comparison',
-              description: isChinese
-                ? '如果你更关心组合和持仓看板，这页更贴近目标。'
-                : 'Move there if the real decision is more about holdings and portfolio views.',
-            },
-          ]}
           nextEyebrow={isChinese ? '下一步入口' : 'Where to go next'}
           nextTitle={
             isChinese
@@ -492,16 +193,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 ? '回到 Web3 目录继续看真实钱包研究条目。'
                 : 'Return to the Web3 directory for real wallet-research candidates.',
             },
-            {
-              href: '/explore?search=wallet&sort=popular',
-              title: isChinese ? '搜索更多钱包工具' : 'Search more wallet tools',
-              description: isChinese
-                ? '回到 Explore，用更窄的钱包关键词扩大 shortlist。'
-                : 'Return to Explore and widen the shortlist with wallet-specific search.',
-            },
           ]}
         />
-        <GuideSubmissionPath locale={locale} ctaPrefix='ai_tools_for_wallet_research' />
       </div>
     </>
   );
