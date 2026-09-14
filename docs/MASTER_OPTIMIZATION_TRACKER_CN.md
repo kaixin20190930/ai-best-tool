@@ -282,11 +282,13 @@ Synthesia 与 Replit 后原本只剩 Otter.ai、Lovable 和 Midjourney，低于�
 | DCF      | Finder + Decision Card 2.0         | 10 个核心工具和 6-8 个任务形成证据可追溯、最多三项的可解释推荐                                     | DCF-01~07 已完成：数据、证据、规则、前台、后台审核、SEO 与自动发布门禁全部闭环                                                                   | Codex                       |
 | STK      | Stack Audit + 7-Day Trial          | 私有工具栈、Keep/Replace/Remove/Missing 与试用到期决策闭环                                         | 已完成（6/6）；双用户真实 RLS、匿名边界、service-only 审计输出、私有路由 noindex/sitemap 排除、生产 smoke、持续监控、类型检查与完整 build 均通过 | Codex                       |
 | SIG      | Verified Usage + Change Watch      | 审核后的结构化使用信号和已确认变化通知，不公开低样本或利益相关数据                                 | 等待阶段二真实使用门槛；SIG/WAT 未开始                                                                                                           | Codex + 用户                |
-| PUB-UX   | 公开内容边界与页面简化             | 清除 Guide/comparison 等公开页面中的索引策略、编辑计划和转化目标；以真实比较矩阵、限制和证据替代内部说明 | PUB-01 已完成开发、独立 QA、部署与生产验证；Web3 样板上线，边界基线 1512→1502；下一项 PUB-02，后续 PUB-03~04 串行执行                         | Codex                       |
+| PUB-UX   | 公开内容边界与页面简化             | 清除 Guide/comparison 等公开页面中的索引策略、编辑计划和转化目标；以真实比较矩阵、限制和证据替代内部说明 | PUB-01、PUB-02 已完成开发、独立 QA、部署与生产验证；边界基线 1512→51，Guide/comparison 归零；下一项 PUB-03，随后 PUB-04 串行执行           | Codex                       |
 
 2026-09-14 新增公开内容边界治理：生产 Web3 comparison 暴露“保留索引、补真实证据”等内部编辑语言，且共享 Guide 模板将同类内容扩散到大量页面。该问题不改变既有 SEO 架构结论，但会削弱用户体验、可信度和差异化表达。完整基线、页面契约、分四个交付单元的实施计划、自动验收与反向评审见 [公开内容边界与页面简化实施方案](./PUBLIC_CONTENT_BOUNDARY_AND_PAGE_SIMPLIFICATION_PLAN_CN.md)。实施期间冻结 URL、metadata、canonical、hreflang、robots、schema 和 sitemap，先完成 PUB-01 门禁与 Web3 样板，生产通过后再扩到其他页面。
 
 2026-09-14 PUB-01 已关闭：候选 `4c262fe8be109bad1beffbd88cfd3cda2a463a64` 独立 QA PASS，main 提交 `834e1295` 已部署。生产 Web3 中英文样板、公开内容边界、SEO smoke、索引一致性和 sitemap 验收通过；comparison 仍为 `noindex, follow`，sitemap 保持 116 条。开发视觉测试曾因既有 PageViewTracker 产生 6 条无 `tool_id` 的测试 page-view，已记录且不清理；后续本地视觉验收必须拦截统计写请求并使用只读数据连接。
+
+2026-09-14 PUB-02 已关闭：候选 `15e16ec34f081688420516149c0adc278db5f24b` 独立 QA PASS，main 提交 `f73fcef5` 已部署。18 个主 Guide、76 个 comparison 和 188 个双语生产页面通过验收；公开边界命中从 1502 降至 51，Guide/comparison 范围为 0。comparison 分类为 1 keep-noindex、10 merge-redirect 候选、65 repair；未执行 redirect 或索引放开。148 个无依据语言页已撤下 FAQPage/ItemList，Web3 的 4 个真实 schema 保留；sitemap 继续为 116 条。剩余 51 条转入 PUB-03，65 个 repair 只能在补足真实候选与证据后升级。
 
 ### P2：只在数据证明后扩展（第 4-6 周）
 

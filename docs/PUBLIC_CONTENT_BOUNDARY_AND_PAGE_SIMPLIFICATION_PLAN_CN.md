@@ -2,7 +2,7 @@
 
 创建日期：2026-09-14
 
-状态：方案已复核；PUB-01 已完成开发、独立 QA、部署与生产验证，下一项为 PUB-02
+状态：方案已复核；PUB-01、PUB-02 已完成开发、独立 QA、部署与生产验证，下一项为 PUB-03
 
 上位计划：[收录与搜索质量主计划](./MASTER_OPTIMIZATION_TRACKER_CN.md)
 
@@ -244,11 +244,13 @@ PUB-01 于 2026-09-14 关闭：开发候选 `4c262fe8be109bad1beffbd88cfd3cda2a4
 
 | ID | 任务 | 实施范围 | 验收 | 状态 |
 | --- | --- | --- | --- | --- |
-| PUB-02A | 18 个主 Guide 清理 | indexable Guide 白名单 | 删除内部语言，保留任务方法和真实证据 | 待执行 |
-| PUB-02B | 其余 comparison 分类 | keep-noindex / merge-redirect / repair | 每页有明确处置，不批量放开索引 | 待执行 |
-| PUB-02C | 共享模板调用方迁移 | 62 个模板页面 | 新结构可构建，无旧属性静默丢失 | 待执行 |
-| PUB-02D | 非共享页面清理 | 独立 comparison/guide | 禁用词归零，重复模块归零 | 待执行 |
-| PUB-02E | 抽样语义 QA | 5 Guide + 5 comparison | 页面目的、结论、下一步清晰 | 待执行 |
+| PUB-02A | 18 个主 Guide 清理 | indexable Guide 白名单 | 删除内部语言，保留任务方法和真实证据 | 已完成 |
+| PUB-02B | 其余 comparison 分类 | keep-noindex / merge-redirect / repair | 每页有明确处置，不批量放开索引 | 已完成 |
+| PUB-02C | 共享模板调用方迁移 | 62 个模板页面 | 新结构可构建，无旧属性静默丢失 | 已完成 |
+| PUB-02D | 非共享页面清理 | 独立 comparison/guide | 禁用词归零，重复模块归零 | 已完成 |
+| PUB-02E | 抽样语义 QA | 5 Guide + 5 comparison | 页面目的、结论、下一步清晰 | 已完成 |
+
+PUB-02 于 2026-09-14 关闭：开发候选 `15e16ec34f081688420516149c0adc278db5f24b` 经独立 QA PASS 后以 `f73fcef5` 合入并推送 main。18 个主 Guide、76 个 comparison 路由和 188 个双语生产页面完成核验；历史公开边界命中由 1502 降至 51，Guide/comparison 范围归零且无新增。处置分类为 1 个 keep-noindex、10 个 merge-redirect 候选和 65 个 repair；redirect 与索引均未放行。148 个无依据 comparison 语言页撤下 FAQPage/ItemList，4 个 Web3 页面保留真实 schema；Breadcrumb、head、robots 与 116 条 sitemap 保持稳定。65 个 repair 页面仍需未来补真实候选和证据，不能视为已完成真实比较。
 
 ### 交付单元 PUB-03：Tool、发现页与商业边界（P1，预计 2 天）
 
