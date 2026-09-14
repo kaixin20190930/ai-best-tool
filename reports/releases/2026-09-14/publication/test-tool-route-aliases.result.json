@@ -1,0 +1,11 @@
+{
+  "command": [
+    "pnpm",
+    "run",
+    "test:tool-route-aliases"
+  ],
+  "exitCode": 0,
+  "startedAt": "2026-09-14T03:23:56.268949+00:00",
+  "finishedAt": "2026-09-14T03:23:56.866506+00:00",
+  "seconds": 0.6
+}

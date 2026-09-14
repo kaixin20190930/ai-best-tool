@@ -1,0 +1,15 @@
+{
+  "command": [
+    "pnpm",
+    "exec",
+    "tsx",
+    "scripts/audit-delayed-candidate-release.ts",
+    "--phase=released",
+    "--candidate=lovable",
+    "--output=reports/releases/2026-09-14/publication/lovable-released.json"
+  ],
+  "exitCode": 1,
+  "startedAt": "2026-09-14T03:15:50.073150+00:00",
+  "finishedAt": "2026-09-14T03:16:01.555532+00:00",
+  "seconds": 11.48
+}

@@ -1,0 +1,11 @@
+{
+  "command": [
+    "pnpm",
+    "run",
+    "seo:production-smoke"
+  ],
+  "exitCode": 0,
+  "startedAt": "2026-09-14T03:21:06.195370+00:00",
+  "finishedAt": "2026-09-14T03:21:22.601402+00:00",
+  "seconds": 16.41
+}

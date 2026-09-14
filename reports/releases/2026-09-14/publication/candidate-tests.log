@@ -1,0 +1,5 @@
+
+> tap4-ai@0.1.0 test:candidate-release /Users/liukai/.codex/worktrees/f013/ai-best-tool
+> tsx scripts/test-candidate-release-pipeline.ts
+
+✅ Candidate release pipeline contract passed.

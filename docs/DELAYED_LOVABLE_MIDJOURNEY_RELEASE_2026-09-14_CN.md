@@ -1,6 +1,6 @@
 # Lovable / Midjourney 延期补发交付（2026-09-14）
 
-状态：开发材料已完成，生产素材门禁阻断；尚未发布，不得关闭交付单元。
+状态：Lovable 已于 09-14 独立生产提交；完整 DOM 验收发现 Decision Card 限制列表被截为前两条，修复待总控部署。Midjourney 尚未提交，按停止条件暂停；不得关闭交付单元。
 
 基线：GitHub `main` 的 `62604cb5c9f411fe0aad59f59d7bfa92dc206aca`（本次已 fetch 核实）。
 功能分支：`codex/lovable-midjourney-delayed-release-20260914`。唯一候选以该分支最终交付 SHA 为准；禁止本开发任务推 main 或部署。
@@ -9,15 +9,15 @@
 
 | 工具 | 原计划发布槽 | 本次事实复核 | 实际发布日 | 下次事实复核 |
 | --- | --- | --- | --- | --- |
-| Lovable | 2026-09-11 | 2026-09-14 | 未发布，留空 | 2026-10-14 |
+| Lovable | 2026-09-11 | 2026-09-14 | 2026-09-14 | 2026-10-14 |
 | Midjourney | 2026-09-12 | 2026-09-14 | 未发布，留空 | 2026-10-14 |
 
 两槽均为 SLA 逾期补做，记录为“延期补发”；不得把 09-07 预审或 09-14 核验日写作已经发生的生产发布日期。
 预审文件保留历史 `reviewedAt=2026-09-07`，正式 payload 的 `reviewedAt`、editorial、pricingSnapshot、evidence 均为 09-14。
-预审仍为 `ready_for_next_slot`、`productionWriteApproved=false`、`sitemapChangeApproved=false`，`releasedAt` 未填写。
-总控已授权在全部门禁通过后逐个受控生产 commit；素材尚未上线，当前不满足该条件。
+Lovable 预审已据真实提交更新为 `released`、`releasedAt/actualPublishedAt=2026-09-14`、`productionWriteApproved=true`、`releaseIndexState=monitor`。Midjourney 仍未发布，实际发布日留空；两者 `sitemapChangeApproved=false`。
+总控已合并并部署首轮候选（main `61eec3101f8e0f7f59d7e80de85b32b55f71fe0f`），四项生产媒体门禁已通过。下文基线与首轮验证保留为历史记录，当前状态以末尾生产执行记录为准。
 
-## 实际生产基线
+## 首轮生产基线（发布前历史）
 
 只读报告：`reports/releases/2026-09-14/production-baseline.json`。
 
@@ -84,4 +84,21 @@
 
 本地 production server 的四个图片响应均为 200、正确图片类型且与源文件哈希一致，见 `local-media.json`；它不能替代生产素材门禁或未发布工具的真实页面验收。
 
-当前生产 commit 数为 0；数据库 rollback 不等于已发布。页面与素材的发布后验收仍是明确未完成项，不能写为 PROD_VERIFIED / CLOSED。
+首轮交付时生产 commit 数为 0；该历史记录不等于当前执行状态。
+
+
+## 生产执行与阻断修复（09-14）
+
+- 四项线上媒体图片类型及 SHA256 与本地一致，见 `publication/production-media.json`。
+- Lovable 重新逐项 validate、preflight、rollback 均退出 0；独立 `--commit` 于 `2026-09-14T03:14:21.572Z` 成功，唯一实体 ID `8fee5c8b-f284-41d4-b691-c099e5bb230b`。事务回读完整 en/zh/cn、features、媒体和 `nextReviewDate=2026-10-14`；实际发布日期记录为 09-14，索引状态保持 monitor。
+- 统一发布器 online verify 退出 0。增强 released audit 去除 script/style/noscript 后比较真实 DOM，确认双语完整 Markdown、简介和图片均正确；同时发现 Card 的 7 条限制仅前 2 条可见。`publication/lovable-released.json` 保留退出 1 的真实报告，不能当作最终通过。
+- 根因是详情页 `visibleDecisionRisks` 固定 `.slice(0, 2)`。本候选移除截断，完整展示已复核限制。审计保留每一条 audience、比较维度和限制的断言，并增强唯一 ID、完整 features、三语言标题正文、媒体字段和复查日比较；支持逐候选核验，避免先发布第二项才发现第一项的问题。
+- 发布测试改用独立临时未发布样本验证日期/媒体阻断，不修改真实预审文件，不读取生产环境文件，数据库地址固定为无效本地地址；另对真实 released 记录检查实际日期、monitor/sitemap 状态和重复提交拦截。
+- Lovable 提交后全站索引一致性及 production SEO smoke 均退出 0：57 条实体、45 条 published、13 条可索引；sitemap 116 条/26 个工具 URL；重复、遗漏、越界和 45 项页面检查问题均为 0。
+- 已按总控“任一门禁失败立即停止第二个提交”执行，Midjourney 未写入。待总控部署本次页面修复后，先重跑 Lovable 全量线上审计；通过后再重新逐个执行 Midjourney validate/preflight/rollback、独立 commit 与完整回读，最后更新两项实际发布状态及最终全站验收。
+
+本阶段证据位于 `reports/releases/2026-09-14/publication/`，每条命令记录独立退出码、时间和原始日志。本开发任务未推 main、未部署。
+
+修复候选验证：专项测试、脚本 scoped ESLint、串行 TypeScript 和完整 build 已通过；构建后本地 `http://127.0.0.1:3108` 的 Lovable 中英文全量审计退出 0，完整正文、所有 Card 项目及媒体匹配，见 `publication/lovable-local-fixed.json`。此本地证明不替代尚待部署后的生产全量验收。
+
+额外构建后 sitemap 全页验证退出 0：116/116 URL 的状态、robots、自 canonical 和精确三项 hreflang 全通过，含全部 36 个 guide URL。首次调用因本地服务未启动出现连接拒绝，启动服务后完整重跑通过；历史失败未删除。汇总见 `publication/checks.json`。

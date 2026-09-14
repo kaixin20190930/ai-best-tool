@@ -131,9 +131,9 @@
     "scheduledSlot": "2026-09-12",
     "recheckedAt": "2026-09-14",
     "label": "延期补发",
-    "status": "blocked_production_media_not_deployed",
+    "status": "blocked_previous_candidate_decision_card",
     "releasePayload": "midjourney-release.json",
     "actualPublishedAt": null,
-    "note": "Original preaudit reviewedAt is historical. Only a successful production commit may populate releasedAt; new local media must first be present in production."
+    "note": "Production media passed after the parent deployment. The second production commit is paused because the preceding Lovable full DOM audit found its Decision Card truncated limitations to two entries. Resume only after the rendering fix is deployed and Lovable passes the complete released audit."
   }
 }

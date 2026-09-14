@@ -84,7 +84,7 @@ sitemap。专项内容、身份链接、TypeScript、数据库 rollback/commit/s
 
 ### 当前维护优先级（更新至 2026-09-14）
 
-2026-09-14 延期补发：Lovable（原 09-11）与 Midjourney（原 09-12）已重新核验官方事实、形成正式双语 payload、来源明确的品牌素材及复查日期。生产同名/同域/双语标题实体均为 0；原 URL 为 200/noindex 错误占位，不能当作完整 fallback。新素材尚未部署（4 个生产 URL 为 404），因此受控 commit 阻断，仍未发布，不改变索引及 sitemap。逐项门禁、测试与总控后续部署顺序见 [延期补发交付](./DELAYED_LOVABLE_MIDJOURNEY_RELEASE_2026-09-14_CN.md)。原预审日、计划槽与实际发布日严格分开；四周一级进度不因材料准备而提高。
+2026-09-14 延期补发：首轮候选已由总控合并部署，四个生产媒体通过图片类型与 SHA256 门禁。Lovable 已独立 commit 为 published/monitor，实际发布日期 09-14、复查日 10-14；完整 DOM 验收发现 Decision Card 只显示前两条限制，修复待总控部署。Midjourney 按停止条件暂停，尚未 commit。Lovable 双语正文、媒体、200/self-canonical/noindex 及全站索引检查正常，sitemap 仍为 116 条。证据和恢复顺序见 [延期补发交付](./DELAYED_LOVABLE_MIDJOURNEY_RELEASE_2026-09-14_CN.md)，未达到全部 PROD_VERIFIED/CLOSED。
 
 2026-09-07 持续收录准备：已建立 [下周成熟工具候选与发布节奏](./NEXT_WEEK_MATURE_TOOL_INTAKE_2026-09-07_CN.md)。候选顺序
 为 Synthesia、Replit、Otter.ai、Lovable 与 Midjourney；五个候选均已完成结构化预审与生产查重。Synthesia 与 Replit 已分别

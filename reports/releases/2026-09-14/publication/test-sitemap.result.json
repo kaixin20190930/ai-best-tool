@@ -1,0 +1,11 @@
+{
+  "command": [
+    "pnpm",
+    "run",
+    "test:sitemap"
+  ],
+  "exitCode": 0,
+  "startedAt": "2026-09-14T03:23:56.902595+00:00",
+  "finishedAt": "2026-09-14T03:24:01.639348+00:00",
+  "seconds": 4.74
+}

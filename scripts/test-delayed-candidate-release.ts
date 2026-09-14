@@ -7,11 +7,28 @@ import path from 'node:path';
 import { getCanonicalToolSlug } from '../lib/config/toolRouteAliases';
 import { getToolIndexDecision } from '../lib/seo/toolIndexing';
 
+import runUnreleasedCandidate from './candidate-release-test-fixture';
+
 for (const slug of ['lovable', 'midjourney']) {
   const payload = JSON.parse(fs.readFileSync(`data/collection/${slug}-release.json`, 'utf8'));
   const audit = JSON.parse(fs.readFileSync(`data/collection/${slug}-preaudit-2026-09-07.json`, 'utf8'));
   assert.equal(getCanonicalToolSlug(slug), slug);
   assert.equal(audit.reviewedAt, '2026-09-07', 'Keep the historical preaudit date');
+  if (audit.status === 'released') {
+    assert.equal(audit.releasedAt, '2026-09-14');
+    assert.equal(audit.actualPublishedAt, '2026-09-14');
+    assert.equal(audit.delayedRelease.actualPublishedAt, '2026-09-14');
+    assert.equal(audit.delayedRelease.status, 'released');
+    assert.equal(audit.releaseIndexState, 'monitor');
+    assert.equal(audit.sitemapChangeApproved, false);
+    assert.equal(audit.productionWriteApproved, true);
+    const repeated = spawnSync(process.execPath, [
+      '--import', 'tsx', 'scripts/candidate-release-pipeline.ts', `--candidate=${slug}`,
+      '--phase=release', '--as-of=2026-09-14', '--commit',
+    ], { encoding: 'utf8', env: { ...process.env, POSTGRES_URL: 'postgres://invalid:invalid@127.0.0.1:1/invalid' } });
+    assert.equal(repeated.status, 1);
+    assert.match(repeated.stderr, /candidate is already released/);
+  }
   assert.equal(payload.reviewedAt, '2026-09-14');
   assert.equal(payload.features.release.scheduledSlot, audit.publishNotBefore);
   assert.equal(payload.features.release.executionType, 'delayed_makeup');
@@ -65,35 +82,14 @@ for (const slug of ['lovable', 'midjourney']) {
   });
   assert.equal(decision.indexable, false, 'Complete release content still must remain noindex');
   const beforeSlot = slug === 'lovable' ? '2026-09-10' : '2026-09-11';
-  const early = spawnSync(
-    process.execPath,
-    [
-      '--import',
-      'tsx',
-      'scripts/candidate-release-pipeline.ts',
-      `--candidate=${slug}`,
-      '--phase=release',
-      `--as-of=${beforeSlot}`,
-    ],
-    { encoding: 'utf8' },
-  );
+  const early = runUnreleasedCandidate(slug, ['--phase=release', `--as-of=${beforeSlot}`]);
   assert.equal(early.status, 1);
   assert.match(early.stderr, /release window opens/);
   // The real entry point must stop before a DB connection if production media is missing.
-  const mediaMissing = spawnSync(
-    process.execPath,
-    [
-      '--import',
-      'tsx',
-      '--import',
-      'data:text/javascript,globalThis.fetch=async()=>new Response("missing",{status:404})',
-      'scripts/candidate-release-pipeline.ts',
-      `--candidate=${slug}`,
-      '--phase=release',
-      '--as-of=2026-09-14',
-      '--commit',
-    ],
-    { encoding: 'utf8', env: { ...process.env, POSTGRES_URL: 'postgres://invalid:invalid@127.0.0.1:1/invalid' } },
+  const mediaMissing = runUnreleasedCandidate(
+    slug,
+    ['--phase=release', '--as-of=2026-09-14', '--commit'],
+    'data:text/javascript,globalThis.fetch=async()=>new Response("missing",{status:404})',
   );
   assert.equal(mediaMissing.status, 1);
   assert.match(mediaMissing.stderr, /production media unavailable/);
