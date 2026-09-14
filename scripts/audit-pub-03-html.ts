@@ -110,26 +110,26 @@ async function main() {
   );
   const allPaths: string[] = capture
     ? [
-        ...new Set([
-          ...sitemap.map((url) => new URL(url).pathname),
-          ...[
-            ...inventory.tools.map((t: { name: string }) => `/ai/${getCanonicalToolSlug(t.name)}`),
-            ...inventory.fallbacks.map((slug: string) => `/ai/${slug}`),
-            ...inventory.unavailable.map((slug: string) => `/ai/${slug}`),
-            ...inventory.categories
-              .concat(['web3', 'voice', 'research', 'automation', 'developer-tools'])
-              .map((s: string) => `/categories/${s}`),
-            ...topListTopics.map((t) => `/best-ai-tools/${t.key}`),
-            ...comparison,
-            '/new',
-            '/submit',
-            '/pricing',
-            '/developer/listing',
-            '/distribution',
-            '/find-tools',
-          ].flatMap((p) => [p, `/cn${p}`]),
-        ]),
-      ].sort()
+      ...new Set([
+        ...sitemap.map((url) => new URL(url).pathname),
+        ...[
+          ...inventory.tools.map((t: { name: string }) => `/ai/${getCanonicalToolSlug(t.name)}`),
+          ...inventory.fallbacks.map((slug: string) => `/ai/${slug}`),
+          ...inventory.unavailable.map((slug: string) => `/ai/${slug}`),
+          ...inventory.categories
+            .concat(['web3', 'voice', 'research', 'automation', 'developer-tools'])
+            .map((s: string) => `/categories/${s}`),
+          ...topListTopics.map((t) => `/best-ai-tools/${t.key}`),
+          ...comparison,
+          '/new',
+          '/submit',
+          '/pricing',
+          '/developer/listing',
+          '/distribution',
+          '/find-tools',
+        ].flatMap((p) => [p, `/cn${p}`]),
+      ]),
+    ].sort()
     : before.results.map((r: { path: string }) => r.path);
   const previous = refreshPaths ? JSON.parse(readFileSync(`${dir}pub-03-html-verification.json`, 'utf8')) : null;
   if (refreshPaths) for (const path of refreshPaths) assert(allPaths.includes(path), `Unknown refresh path ${path}`);
@@ -143,8 +143,7 @@ async function main() {
     Array.from({ length: 4 }, async () => {
       while (next < paths.length) {
         results.push(await inspect(paths[next++]));
-        if ((results.length - initialResults) % 25 === 0)
-          console.log(`Scanned ${results.length - initialResults}/${paths.length}`);
+        if ((results.length - initialResults) % 25 === 0) console.log(`Scanned ${results.length - initialResults}/${paths.length}`);
       }
     }),
   );
@@ -154,20 +153,14 @@ async function main() {
     if (JSON.stringify(sitemap) !== JSON.stringify(before.sitemap)) failures.push('sitemap set drift');
     for (const r of results) {
       const old = before.results.find((x: { path: string }) => x.path === r.path);
-      if (r.status !== old.status || r.resolvedPath !== old.resolvedPath)
-        failures.push(`${r.path}: status/redirect drift`);
+      if (r.status !== old.status || r.resolvedPath !== old.resolvedPath) failures.push(`${r.path}: status/redirect drift`);
       if (JSON.stringify(r.seo) !== JSON.stringify(old.seo)) failures.push(`${r.path}: frozen SEO drift`);
       if (r.bodyViolations.length) failures.push(`${r.path}: ${r.bodyViolations.join(',')}`);
-      if (r.status === 200 && !/\/(distribution|find-tools)$/.test(r.path) && r.h1 !== 1)
-        failures.push(`${r.path}: H1 count ${r.h1}`);
-      if (/\/(?:cn\/)?ai\//.test(r.path) && old.decisionCards > 0 && r.decisionCards !== 1)
-        failures.push(`${r.path}: decision count ${r.decisionCards}`);
-      if (r.evidenceLedgers !== old.evidenceLedgers || r.timelines !== old.timelines)
-        failures.push(`${r.path}: evidence/timeline lost`);
-      if (/^\/(?:cn\/)?(?:$|explore|new|best-ai-tools|categories)/.test(r.path) && r.commercial.length)
-        failures.push(`${r.path}: commercial CTA in discovery`);
-      if (/\/(?:cn\/)?ai\//.test(r.path) && r.commercial.some((c) => !c.owner))
-        failures.push(`${r.path}: commercial CTA outside owner area`);
+      if (r.status === 200 && !/\/(distribution|find-tools)$/.test(r.path) && r.h1 !== 1) failures.push(`${r.path}: H1 count ${r.h1}`);
+      if (/\/(?:cn\/)?ai\//.test(r.path) && old.decisionCards > 0 && r.decisionCards !== 1) failures.push(`${r.path}: decision count ${r.decisionCards}`);
+      if (r.evidenceLedgers !== old.evidenceLedgers || r.timelines !== old.timelines) failures.push(`${r.path}: evidence/timeline lost`);
+      if (/^\/(?:cn\/)?(?:$|explore|new|best-ai-tools|categories)/.test(r.path) && r.commercial.length) failures.push(`${r.path}: commercial CTA in discovery`);
+      if (/\/(?:cn\/)?ai\//.test(r.path) && r.commercial.some((c) => !c.owner)) failures.push(`${r.path}: commercial CTA outside owner area`);
     }
   }
   const report = {

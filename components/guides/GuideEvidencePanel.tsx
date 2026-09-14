@@ -5,9 +5,9 @@ import { validComparisonEvidence, type ComparisonEvidence } from '@/lib/content/
 type GuideEvidencePanelProps = { locale: string; variant: 'verified'; evidence: ComparisonEvidence[] };
 
 export default function GuideEvidencePanel(props: GuideEvidencePanelProps) {
-  const { locale, evidence } = props;
+  const { locale, variant, evidence } = props;
   const language = locale === 'cn' || locale === 'tw' ? 'cn' : 'en';
-  if (props.variant !== 'verified' || !evidence.length || !evidence.every(validComparisonEvidence)) return null;
+  if (variant !== 'verified' || !evidence.length || !evidence.every(validComparisonEvidence)) return null;
   return (
     <div data-comparison-evidence>
       <h2 className='text-2xl font-bold text-slate-950'>

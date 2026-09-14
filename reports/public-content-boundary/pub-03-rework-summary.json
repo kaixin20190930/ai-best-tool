@@ -1,0 +1,36 @@
+{
+  "status": "DEV_READY_PENDING_INDEPENDENT_RECHECK",
+  "checkedAt": "2026-09-14T15:42:22.209Z",
+  "base": "e51642b613031ba40c2556fced97de5091931433",
+  "oldCandidate": "80b450a49fcaf0938159c176ba7288ee984d3d0c",
+  "branch": "codex/pub-03-tool-discovery-boundary",
+  "changedCodeFiles": 10,
+  "lint": {
+    "baselineErrors": 1612,
+    "oldCandidateErrors": 1642,
+    "candidateErrors": 1572,
+    "oldAddedErrors": 70,
+    "candidateAddedErrors": 0,
+    "newScriptsErrors": 0,
+    "scopedCleanFiles": 6,
+    "scopedExitCode": 0
+  },
+  "regression": {
+    "passed": 24,
+    "total": 24
+  },
+  "typescript": {
+    "command": "tsc --noEmit",
+    "exitCode": 0
+  },
+  "build": {
+    "command": "pnpm run build (read-only runner)",
+    "exitCode": 0,
+    "id": "XFIPDWmSisJB3z9jDuCh1",
+    "log": "pub-03-rework-build.txt"
+  },
+  "htmlAndVisual": "No rerun in this lint-only follow-up; original candidate reports retained as prior evidence.",
+  "productionDatabaseWrites": 0,
+  "mainPushed": false,
+  "deployed": false
+}

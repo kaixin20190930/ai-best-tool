@@ -1,0 +1,224 @@
+diff --git a/app/[locale]/(with-footer)/ai/[websiteName]/page.tsx b/app/[locale]/(with-footer)/ai/[websiteName]/page.tsx
+index f2e944ac..1fb2822e 100644
+--- a/app/[locale]/(with-footer)/ai/[websiteName]/page.tsx
++++ b/app/[locale]/(with-footer)/ai/[websiteName]/page.tsx
+@@ -3682 +3682 @@ export default async function Page({
+-                    {claimedAtLabel ? ' · ' + claimedAtLabel : ''}
++                    {claimedAtLabel ? ` · ${claimedAtLabel}` : ''}
+diff --git a/app/[locale]/(with-footer)/categories/[slug]/CategoryContent.tsx b/app/[locale]/(with-footer)/categories/[slug]/CategoryContent.tsx
+index 542ce97d..f1d0b0d7 100644
+--- a/app/[locale]/(with-footer)/categories/[slug]/CategoryContent.tsx
++++ b/app/[locale]/(with-footer)/categories/[slug]/CategoryContent.tsx
+@@ -572,0 +573,6 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
++  let toolCountLabel = isChinese ? `${categoryToolCount} 个已发布工具` : `${categoryToolCount} published tools`;
++  if (isVirtualCategory) {
++    toolCountLabel = isChinese
++      ? `${representativeTools.length} 个精选入口`
++      : `${representativeTools.length} curated entries`;
++  }
+@@ -593,9 +599 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
+-          <p className='mt-3 text-sm text-slate-500'>
+-            {isVirtualCategory
+-              ? isChinese
+-                ? `${representativeTools.length} 个精选入口`
+-                : `${representativeTools.length} curated entries`
+-              : isChinese
+-                ? `${categoryToolCount} 个已发布工具`
+-                : `${categoryToolCount} published tools`}
+-          </p>
++          <p className='mt-3 text-sm text-slate-500'>{toolCountLabel}</p>
+diff --git a/app/[locale]/(with-footer)/profile/submissions/page.tsx b/app/[locale]/(with-footer)/profile/submissions/page.tsx
+index eb1a4463..3fd5aa6f 100644
+--- a/app/[locale]/(with-footer)/profile/submissions/page.tsx
++++ b/app/[locale]/(with-footer)/profile/submissions/page.tsx
+@@ -723 +723 @@ export default async function SubmissionsPage({
+-                              )}
++                            )}
+diff --git a/components/decision/DecisionCardV2.tsx b/components/decision/DecisionCardV2.tsx
+index 19802992..2e391a0f 100644
+--- a/components/decision/DecisionCardV2.tsx
++++ b/components/decision/DecisionCardV2.tsx
+@@ -154,6 +154,6 @@ function formatDataUse(model: DecisionCardV2Model, isChinese: boolean): string |
+-        no: '不用于训练',
+-        opt_in: '主动加入后用于训练',
+-        opt_out: '需主动退出训练',
+-        yes: '可能用于训练',
+-        unknown: '未知',
+-      }
++      no: '不用于训练',
++      opt_in: '主动加入后用于训练',
++      opt_out: '需主动退出训练',
++      yes: '可能用于训练',
++      unknown: '未知',
++    }
+@@ -161,6 +161,6 @@ function formatDataUse(model: DecisionCardV2Model, isChinese: boolean): string |
+-        no: 'Not used for training',
+-        opt_in: 'Training is opt-in',
+-        opt_out: 'Training requires opt-out',
+-        yes: 'May be used for training',
+-        unknown: 'Unknown',
+-      };
++      no: 'Not used for training',
++      opt_in: 'Training is opt-in',
++      opt_out: 'Training requires opt-out',
++      yes: 'May be used for training',
++      unknown: 'Unknown',
++    };
+diff --git a/components/guides/GuideEvidencePanel.tsx b/components/guides/GuideEvidencePanel.tsx
+index 7f458404..f76b7f8b 100644
+--- a/components/guides/GuideEvidencePanel.tsx
++++ b/components/guides/GuideEvidencePanel.tsx
+@@ -8 +8 @@ export default function GuideEvidencePanel(props: GuideEvidencePanelProps) {
+-  const { locale, evidence } = props;
++  const { locale, variant, evidence } = props;
+@@ -10 +10 @@ export default function GuideEvidencePanel(props: GuideEvidencePanelProps) {
+-  if (props.variant !== 'verified' || !evidence.length || !evidence.every(validComparisonEvidence)) return null;
++  if (variant !== 'verified' || !evidence.length || !evidence.every(validComparisonEvidence)) return null;
+diff --git a/components/tools/SafetyToolArchivePage.tsx b/components/tools/SafetyToolArchivePage.tsx
+index dfb80bf7..193eedd6 100644
+--- a/components/tools/SafetyToolArchivePage.tsx
++++ b/components/tools/SafetyToolArchivePage.tsx
+@@ -11,0 +12,11 @@ export default function SafetyToolArchivePage({ slug, locale }: { slug: string;
++  let choosingNotice = chinese
++    ? '使用前请核对商业使用权、上传内容留存、套餐限制和内容安全措施，并用非敏感内容检查结果。'
++    : 'Before use, check commercial rights, upload retention, plan limits, and content safeguards, and evaluate results with non-sensitive content.';
++  if (archived) {
++    choosingNotice = chinese
++      ? '请勿上传个人照片或敏感资料。当前服务状态、安全措施和年龄限制无法可靠确认。'
++      : 'Avoid uploading personal photographs or sensitive data. The current service, safeguards, and age controls cannot be reliably confirmed.';
++  }
++  if (slug === 'undressing_ai') {
++    choosingNotice = review.reason;
++  }
+@@ -39,11 +50 @@ export default function SafetyToolArchivePage({ slug, locale }: { slug: string;
+-          <p className='mt-2 text-sm leading-6 text-slate-700'>
+-            {slug === 'undressing_ai'
+-              ? review.reason
+-              : archived
+-                ? chinese
+-                  ? '请勿上传个人照片或敏感资料。当前服务状态、安全措施和年龄限制无法可靠确认。'
+-                  : 'Avoid uploading personal photographs or sensitive data. The current service, safeguards, and age controls cannot be reliably confirmed.'
+-                : chinese
+-                  ? '使用前请核对商业使用权、上传内容留存、套餐限制和内容安全措施，并用非敏感内容检查结果。'
+-                  : 'Before use, check commercial rights, upload retention, plan limits, and content safeguards, and evaluate results with non-sensitive content.'}
+-          </p>
++          <p className='mt-2 text-sm leading-6 text-slate-700'>{choosingNotice}</p>
+diff --git a/scripts/audit-pub-03-html.ts b/scripts/audit-pub-03-html.ts
+index 3953276d..c6fa3781 100644
+--- a/scripts/audit-pub-03-html.ts
++++ b/scripts/audit-pub-03-html.ts
+@@ -113,20 +113,20 @@ async function main() {
+-        ...new Set([
+-          ...sitemap.map((url) => new URL(url).pathname),
+-          ...[
+-            ...inventory.tools.map((t: { name: string }) => `/ai/${getCanonicalToolSlug(t.name)}`),
+-            ...inventory.fallbacks.map((slug: string) => `/ai/${slug}`),
+-            ...inventory.unavailable.map((slug: string) => `/ai/${slug}`),
+-            ...inventory.categories
+-              .concat(['web3', 'voice', 'research', 'automation', 'developer-tools'])
+-              .map((s: string) => `/categories/${s}`),
+-            ...topListTopics.map((t) => `/best-ai-tools/${t.key}`),
+-            ...comparison,
+-            '/new',
+-            '/submit',
+-            '/pricing',
+-            '/developer/listing',
+-            '/distribution',
+-            '/find-tools',
+-          ].flatMap((p) => [p, `/cn${p}`]),
+-        ]),
+-      ].sort()
++      ...new Set([
++        ...sitemap.map((url) => new URL(url).pathname),
++        ...[
++          ...inventory.tools.map((t: { name: string }) => `/ai/${getCanonicalToolSlug(t.name)}`),
++          ...inventory.fallbacks.map((slug: string) => `/ai/${slug}`),
++          ...inventory.unavailable.map((slug: string) => `/ai/${slug}`),
++          ...inventory.categories
++            .concat(['web3', 'voice', 'research', 'automation', 'developer-tools'])
++            .map((s: string) => `/categories/${s}`),
++          ...topListTopics.map((t) => `/best-ai-tools/${t.key}`),
++          ...comparison,
++          '/new',
++          '/submit',
++          '/pricing',
++          '/developer/listing',
++          '/distribution',
++          '/find-tools',
++        ].flatMap((p) => [p, `/cn${p}`]),
++      ]),
++    ].sort()
+@@ -146,2 +146 @@ async function main() {
+-        if ((results.length - initialResults) % 25 === 0)
+-          console.log(`Scanned ${results.length - initialResults}/${paths.length}`);
++        if ((results.length - initialResults) % 25 === 0) console.log(`Scanned ${results.length - initialResults}/${paths.length}`);
+@@ -157,2 +156 @@ async function main() {
+-      if (r.status !== old.status || r.resolvedPath !== old.resolvedPath)
+-        failures.push(`${r.path}: status/redirect drift`);
++      if (r.status !== old.status || r.resolvedPath !== old.resolvedPath) failures.push(`${r.path}: status/redirect drift`);
+@@ -161,10 +159,5 @@ async function main() {
+-      if (r.status === 200 && !/\/(distribution|find-tools)$/.test(r.path) && r.h1 !== 1)
+-        failures.push(`${r.path}: H1 count ${r.h1}`);
+-      if (/\/(?:cn\/)?ai\//.test(r.path) && old.decisionCards > 0 && r.decisionCards !== 1)
+-        failures.push(`${r.path}: decision count ${r.decisionCards}`);
+-      if (r.evidenceLedgers !== old.evidenceLedgers || r.timelines !== old.timelines)
+-        failures.push(`${r.path}: evidence/timeline lost`);
+-      if (/^\/(?:cn\/)?(?:$|explore|new|best-ai-tools|categories)/.test(r.path) && r.commercial.length)
+-        failures.push(`${r.path}: commercial CTA in discovery`);
+-      if (/\/(?:cn\/)?ai\//.test(r.path) && r.commercial.some((c) => !c.owner))
+-        failures.push(`${r.path}: commercial CTA outside owner area`);
++      if (r.status === 200 && !/\/(distribution|find-tools)$/.test(r.path) && r.h1 !== 1) failures.push(`${r.path}: H1 count ${r.h1}`);
++      if (/\/(?:cn\/)?ai\//.test(r.path) && old.decisionCards > 0 && r.decisionCards !== 1) failures.push(`${r.path}: decision count ${r.decisionCards}`);
++      if (r.evidenceLedgers !== old.evidenceLedgers || r.timelines !== old.timelines) failures.push(`${r.path}: evidence/timeline lost`);
++      if (/^\/(?:cn\/)?(?:$|explore|new|best-ai-tools|categories)/.test(r.path) && r.commercial.length) failures.push(`${r.path}: commercial CTA in discovery`);
++      if (/\/(?:cn\/)?ai\//.test(r.path) && r.commercial.some((c) => !c.owner)) failures.push(`${r.path}: commercial CTA outside owner area`);
+diff --git a/scripts/test-decision-card-v2.ts b/scripts/test-decision-card-v2.ts
+index 98b07be4..1209b8ac 100644
+--- a/scripts/test-decision-card-v2.ts
++++ b/scripts/test-decision-card-v2.ts
+@@ -115,2 +115 @@ for (const locale of ['en', 'cn']) {
+-  for (const ref of [costEvidence, setupEvidence, limitationEvidence, replacementEvidence])
+-    assert(html.includes(ref.sourceUrl));
++  for (const ref of [costEvidence, setupEvidence, limitationEvidence, replacementEvidence]) assert(html.includes(ref.sourceUrl));
+diff --git a/scripts/test-pub-03-freeze.ts b/scripts/test-pub-03-freeze.ts
+index bb59d4b7..c8c77c97 100644
+--- a/scripts/test-pub-03-freeze.ts
++++ b/scripts/test-pub-03-freeze.ts
+@@ -50,2 +50 @@ function retainedEvidence(source: string) {
+-    )
+-      result[node.name!.text] = tokens(node.getText(tree));
++    ) result[node.name!.text] = tokens(node.getText(tree));
+@@ -55,3 +54,2 @@ function retainedEvidence(source: string) {
+-    )
+-      result[node.tagName.getText(tree)] = tokens(node.getText(tree));
+-    if (ts.isJsxElement(node))
++    ) result[node.tagName.getText(tree)] = tokens(node.getText(tree));
++    if (ts.isJsxElement(node)) {
+@@ -62,2 +60 @@ function retainedEvidence(source: string) {
+-        )
+-          result[attribute.name.getText(tree)] = tokens(node.getText(tree));
++        ) result[attribute.name.getText(tree)] = tokens(node.getText(tree));
+@@ -64,0 +62 @@ function retainedEvidence(source: string) {
++    }
+@@ -93,2 +91 @@ for (const locale of ['en', 'cn']) {
+-  for (const slug of ['woy-ai', 'adobe', 'salesforce_einstein', 'chatgpt-mac', 'gpt_4o', 'openai', 'sora'])
+-    assert(!/index scope|隔离|索引|next enrichment/i.test(getPublicToolSummary(slug, locale, 'index scope')));
++  for (const slug of ['woy-ai', 'adobe', 'salesforce_einstein', 'chatgpt-mac', 'gpt_4o', 'openai', 'sora']) assert(!/index scope|隔离|索引|next enrichment/i.test(getPublicToolSummary(slug, locale, 'index scope')));
+@@ -109 +106 @@ const baselineHtml = JSON.parse(readFileSync('reports/public-content-boundary/pu
+-for (const locale of ['en', 'cn'])
++for (const locale of ['en', 'cn']) {
+@@ -121,0 +119 @@ for (const locale of ['en', 'cn'])
++}
+diff --git a/scripts/test-tool-decision-card.ts b/scripts/test-tool-decision-card.ts
+index 14b6d1bf..7b5cc149 100644
+--- a/scripts/test-tool-decision-card.ts
++++ b/scripts/test-tool-decision-card.ts
+@@ -94 +94 @@ console.log('Tool Decision Card model test passed.');
+-for (const card of [result, reviewedResult])
++for (const card of [result, reviewedResult]) {
+@@ -116,2 +116 @@ for (const card of [result, reviewedResult])
+-    ])
+-      assert(html.includes(copy));
++    ]) assert(html.includes(copy));
+@@ -124,0 +124 @@ for (const card of [result, reviewedResult])
++}

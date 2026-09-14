@@ -3679,7 +3679,7 @@ export default async function Page({
                   </summary>
                   <p className='mt-3 text-slate-600'>
                     {claimLabel}
-                    {claimedAtLabel ? ' · ' + claimedAtLabel : ''}
+                    {claimedAtLabel ? ` · ${claimedAtLabel}` : ''}
                   </p>
                   <p className='mt-2 text-slate-600'>{claimSummary}</p>
                   <Link
