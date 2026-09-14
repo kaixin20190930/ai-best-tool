@@ -4,11 +4,11 @@
   "officialUrl": "https://www.midjourney.com/",
   "existingRoute": "/ai/midjourney",
   "action": "migrate_existing_fallback",
-  "status": "ready_for_next_slot",
+  "status": "released",
   "reviewedAt": "2026-09-07",
   "publishNotBefore": "2026-09-12",
   "sitemapChangeApproved": false,
-  "productionWriteApproved": false,
+  "productionWriteApproved": true,
   "category": {
     "discoverySlug": "image-generator",
     "storageSlug": "design-art"
@@ -131,9 +131,15 @@
     "scheduledSlot": "2026-09-12",
     "recheckedAt": "2026-09-14",
     "label": "延期补发",
-    "status": "blocked_previous_candidate_decision_card",
+    "status": "released",
     "releasePayload": "midjourney-release.json",
-    "actualPublishedAt": null,
-    "note": "Production media passed after the parent deployment. The second production commit is paused because the preceding Lovable full DOM audit found its Decision Card truncated limitations to two entries. Resume only after the rendering fix is deployed and Lovable passes the complete released audit."
-  }
+    "actualPublishedAt": "2026-09-14",
+    "note": "Published by the unified publisher in an independent production transaction on 2026-09-14 after the parent deployed the complete Decision Card fix, Lovable passed the full production audit, and Midjourney passed validate, preflight and rollback. Original reviewedAt and scheduledSlot remain historical; monitor/noindex and sitemap exclusion remain required.",
+    "productionCommitCompletedAt": "2026-09-14T05:09:05.773399+00:00",
+    "productionRecordCreatedAt": "2026-09-14T05:09:02.771Z",
+    "productionVerifiedAt": "2026-09-14T05:09:37.636265+00:00"
+  },
+  "releasedAt": "2026-09-14",
+  "actualPublishedAt": "2026-09-14",
+  "releaseIndexState": "monitor"
 }

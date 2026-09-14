@@ -1,0 +1,5 @@
+
+> tap4-ai@0.1.0 test:tool-decision-card-structure /Users/liukai/.codex/worktrees/f013/ai-best-tool
+> node scripts/verify-tool-decision-card-structure.mjs
+
+Tool detail Decision Card structure verification passed.

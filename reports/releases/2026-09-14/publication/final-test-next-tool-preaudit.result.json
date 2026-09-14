@@ -1,0 +1,11 @@
+{
+  "command": [
+    "pnpm",
+    "run",
+    "test:next-tool-preaudit"
+  ],
+  "exitCode": 0,
+  "startedAt": "2026-09-14T05:09:44.156373+00:00",
+  "finishedAt": "2026-09-14T05:09:44.768411+00:00",
+  "seconds": 0.61
+}

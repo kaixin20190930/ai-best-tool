@@ -1,0 +1,13 @@
+{
+  "command": [
+    "pnpm",
+    "run",
+    "seo:index-consistency",
+    "--",
+    "--output=reports/releases/2026-09-14/publication/final-index-consistency.json"
+  ],
+  "exitCode": 0,
+  "startedAt": "2026-09-14T05:09:39.810446+00:00",
+  "finishedAt": "2026-09-14T05:09:56.964645+00:00",
+  "seconds": 17.15
+}

@@ -1,0 +1,362 @@
+{
+  "checkedAt": "2026-09-14T05:09:22.757Z",
+  "requestBaseUrl": "https://aibesttool.com",
+  "phase": "released",
+  "productionWrites": 0,
+  "candidates": [
+    {
+      "slug": "lovable",
+      "canonicalSlug": "lovable",
+      "identityQuery": "slug, aliases, official domain and localized title",
+      "rows": [
+        {
+          "id": "8fee5c8b-f284-41d4-b691-c099e5bb230b",
+          "name": "lovable",
+          "url": "https://lovable.dev/",
+          "status": "published",
+          "pageQualityStatus": "monitor",
+          "reviewedAt": "2026-09-14",
+          "nextReviewDate": "2026-10-14",
+          "createdAt": "2026-09-14T03:14:21.572Z",
+          "updatedAt": "2026-09-14T03:14:21.572Z",
+          "identityMatchesPayload": true,
+          "featuresMatchPayload": true,
+          "mediaMatchPayload": true,
+          "contentMatchesPayload": true,
+          "indexDecision": {
+            "indexable": false,
+            "qualityScore": 100,
+            "reason": "indexing_paused"
+          }
+        }
+      ],
+      "pages": [
+        {
+          "pathname": "/ai/lovable",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/ai/lovable",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "Lovable AI App Builder",
+          "hasDecisionCard": true,
+          "hasPayloadCopy": true,
+          "fullArticleMatchesPayload": true,
+          "missingDecisionCardItems": [],
+          "imagePaths": [
+            "/images/aitools.svg",
+            "/images/Aileron.svg",
+            "/icons/global.svg",
+            "/images/tool-media/lovable-release-cover.svg"
+          ],
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "b1d05786e78f5c551833f00f023b85ec1b2a6b0d442e117ec711bd42744cb1cc"
+        },
+        {
+          "pathname": "/ai/lovable-dev",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/ai/lovable-dev",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "fullArticleMatchesPayload": false,
+          "missingDecisionCardItems": [
+            "Founders validating a web-app workflow with an accountable developer",
+            "Small teams testing UI, authentication and a backend together",
+            "Teams able to budget shared build and running costs",
+            "Unattended production handling sensitive data or payments",
+            "Teams requiring fixed all-in costs without usage monitoring",
+            "Projects without a backup, maintenance and migration owner",
+            "Prototype speed and repair effort",
+            "Shared credits and runtime spend",
+            "Authentication and RLS isolation",
+            "Source, data and deployment portability",
+            "Security review and operating ownership",
+            "Workspace collaboration and governance",
+            "A working preview does not validate authorization, RLS or payment logic.",
+            "Build, Cloud and app AI share credits; member limits only cap building.",
+            "Planning research can add usage beyond the base Plan mode message charge.",
+            "Credit expiry and cancellation can restrict access to unused paid credits.",
+            "Built-in scans do not certify application security.",
+            "Code ownership does not migrate data, secrets, domains or managed services.",
+            "Grant eligibility and regional terms must be checked in the actual workspace."
+          ],
+          "imagePaths": [
+            "/images/aitools.svg",
+            "/images/Aileron.svg",
+            "/icons/global.svg"
+          ],
+          "hasReviewedDate": false,
+          "inSitemap": false,
+          "htmlSha256": "4afff9839f08313150516b271c0ed93a153c0bb174a7f8020b1878d631b388fb"
+        },
+        {
+          "pathname": "/cn/ai/lovable",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/cn/ai/lovable",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "Lovable AI 应用构建工具",
+          "hasDecisionCard": true,
+          "hasPayloadCopy": true,
+          "fullArticleMatchesPayload": true,
+          "missingDecisionCardItems": [],
+          "imagePaths": [
+            "/images/aitools.svg",
+            "/images/Aileron.svg",
+            "/icons/global.svg",
+            "/images/tool-media/lovable-release-cover.svg"
+          ],
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "8fd509f660605a6235d96ada7a7e1c918c0bbd3cb801a4c5dd496c5c3db06ce4"
+        },
+        {
+          "pathname": "/cn/ai/lovable-dev",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/cn/ai/lovable-dev",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "fullArticleMatchesPayload": false,
+          "missingDecisionCardItems": [
+            "有开发维护责任人的 Web 应用验证团队",
+            "需要一起验证界面、登录与后端的小团队",
+            "能管理共享构建及运行费用的团队",
+            "无人维护却处理敏感数据或支付的生产应用",
+            "不监测用量却要求总费用固定的团队",
+            "没有备份、维护与迁移责任人的项目",
+            "原型速度与修复成本",
+            "共享 credits 与运行支出",
+            "身份认证与 RLS 隔离",
+            "源码、数据及部署迁移",
+            "安全复核与维护责任",
+            "工作区协作与治理",
+            "预览可用不能证明授权、RLS 或支付逻辑正确。",
+            "构建、Cloud 和应用 AI 共用 credits；成员限额只管构建。",
+            "Plan mode 研究可在基础消息费用之外增加消耗。",
+            "credits 到期及取消订阅会限制剩余付费额度的使用。",
+            "内置扫描不能认证应用安全。",
+            "代码归属不等于数据、密钥、域名及托管服务已迁移。",
+            "赠送额度及地区条件应以实际工作区核验为准。"
+          ],
+          "imagePaths": [
+            "/images/aitools.svg",
+            "/images/Aileron.svg",
+            "/icons/global.svg"
+          ],
+          "hasReviewedDate": false,
+          "inSitemap": false,
+          "htmlSha256": "23cc7b9ad91b12f1752483c7d6108cc199b2af94435a4ef74eb46cd3233196b6"
+        }
+      ],
+      "media": [
+        {
+          "path": "/icons/tool-logos/lovable.svg",
+          "status": 200,
+          "contentType": "image/svg+xml",
+          "sha256": "39382dce432255c49d31403ca532be204b2d72da0d0a14dce4708d6952fce972",
+          "expectedSha256": "39382dce432255c49d31403ca532be204b2d72da0d0a14dce4708d6952fce972",
+          "ready": true
+        },
+        {
+          "path": "/images/tool-media/lovable-release-cover.svg",
+          "status": 200,
+          "contentType": "image/svg+xml",
+          "sha256": "257fbbf448fae44bb732fe3dcce01632b04c9c232fcd66f6e34eb13f4fe1893a",
+          "expectedSha256": "257fbbf448fae44bb732fe3dcce01632b04c9c232fcd66f6e34eb13f4fe1893a",
+          "ready": true
+        }
+      ]
+    },
+    {
+      "slug": "midjourney",
+      "canonicalSlug": "midjourney",
+      "identityQuery": "slug, aliases, official domain and localized title",
+      "rows": [
+        {
+          "id": "f008c10a-7f0d-4b21-827e-724b305c1b73",
+          "name": "midjourney",
+          "url": "https://www.midjourney.com/",
+          "status": "published",
+          "pageQualityStatus": "monitor",
+          "reviewedAt": "2026-09-14",
+          "nextReviewDate": "2026-10-14",
+          "createdAt": "2026-09-14T05:09:02.771Z",
+          "updatedAt": "2026-09-14T05:09:02.771Z",
+          "identityMatchesPayload": true,
+          "featuresMatchPayload": true,
+          "mediaMatchPayload": true,
+          "contentMatchesPayload": true,
+          "indexDecision": {
+            "indexable": false,
+            "qualityScore": 100,
+            "reason": "indexing_paused"
+          }
+        }
+      ],
+      "pages": [
+        {
+          "pathname": "/ai/midjourney",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/ai/midjourney",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "Midjourney™ AI Image and Video Creator",
+          "hasDecisionCard": true,
+          "hasPayloadCopy": true,
+          "fullArticleMatchesPayload": true,
+          "missingDecisionCardItems": [],
+          "imagePaths": [
+            "/images/aitools.svg",
+            "/images/Aileron.svg",
+            "/icons/global.svg",
+            "/images/tool-media/midjourney-release-cover.svg"
+          ],
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "6b3474104342d564cf9ffdd97bb68da4791baa158168dd8860e1b2f6c84a09d9"
+        },
+        {
+          "pathname": "/ai/mid-journey",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/ai/mid-journey",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "fullArticleMatchesPayload": false,
+          "missingDecisionCardItems": [
+            "Designers exploring composition, style and mood",
+            "Teams willing to iterate and inspect finished assets",
+            "Creators testing short image animation within a GPU budget",
+            "Confidential projects using default public settings",
+            "Work requiring guaranteed typography, geometry or repeatable output",
+            "Long-form timeline, audio and finishing workflows",
+            "Art direction and exact output requirements",
+            "Web and Discord workflow",
+            "Fast time, edits, reruns and video cost",
+            "Default visibility and Stealth",
+            "Input rights and commercial eligibility",
+            "Image editing versus short video animation",
+            "GPU hours are not a guaranteed output count.",
+            "Included Fast time resets rather than rolling over.",
+            "Relax trades latency for capacity and varies by task and plan.",
+            "Stealth requires Pro or Mega and cannot hide shared Discord posts.",
+            "Changing the visibility default does not privatize old assets.",
+            "Commercial eligibility does not establish copyrightability or clear input rights.",
+            "Editor, references and video support different parameters; retest the workflow.",
+            "Image animation does not supply a full video production workflow."
+          ],
+          "imagePaths": [
+            "/images/aitools.svg",
+            "/images/Aileron.svg",
+            "/icons/global.svg"
+          ],
+          "hasReviewedDate": false,
+          "inSitemap": false,
+          "htmlSha256": "69dd5998bd0f2435037b878f5809f6c56d6794342cdf63f569ad9f3acce3f8dd"
+        },
+        {
+          "pathname": "/cn/ai/midjourney",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/cn/ai/midjourney",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "Midjourney™ AI 图像与短视频创作工具",
+          "hasDecisionCard": true,
+          "hasPayloadCopy": true,
+          "fullArticleMatchesPayload": true,
+          "missingDecisionCardItems": [],
+          "imagePaths": [
+            "/images/aitools.svg",
+            "/images/Aileron.svg",
+            "/icons/global.svg",
+            "/images/tool-media/midjourney-release-cover.svg"
+          ],
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "85184ca8c91527973890cfed6fcbf524f962ff5a16f6df8baaa9353feade446b"
+        },
+        {
+          "pathname": "/cn/ai/mid-journey",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/cn/ai/mid-journey",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "fullArticleMatchesPayload": false,
+          "missingDecisionCardItems": [
+            "探索构图、风格与氛围的设计师",
+            "愿意迭代并逐项检查成品的团队",
+            "以 GPU 预算试验短图像动画的创作者",
+            "沿用默认公开设置的保密项目",
+            "要求文字、几何及重复输出完全确定的工作",
+            "长片时间线、音频与完整后期工作流",
+            "美术指导与精确成品要求",
+            "Web 与 Discord 工作流",
+            "Fast 时间、编辑、重跑及视频成本",
+            "默认可见性与 Stealth",
+            "输入权利与商业资格",
+            "图像编辑与短视频动画",
+            "GPU 小时不能换算为保底成品数量。",
+            "套餐 Fast 时间会重置，不自动结转。",
+            "Relax 以排队换容量，并受任务及套餐限制。",
+            "Stealth 需 Pro 或 Mega，且不能隐藏共享 Discord 内的作品。",
+            "修改默认可见性不会自动隐藏旧作品。",
+            "商业使用资格不能证明版权成立或输入权利已清理。",
+            "编辑器、参考与视频支持的参数不同，须重测流程。",
+            "图像动画不能代替完整视频制作工作流。"
+          ],
+          "imagePaths": [
+            "/images/aitools.svg",
+            "/images/Aileron.svg",
+            "/icons/global.svg"
+          ],
+          "hasReviewedDate": false,
+          "inSitemap": false,
+          "htmlSha256": "175cd6fec387af2e6982064d37f17a69d7dee71f2cdd03783f2cd00126b57eb2"
+        }
+      ],
+      "media": [
+        {
+          "path": "/icons/tool-logos/midjourney.jpg",
+          "status": 200,
+          "contentType": "image/jpeg",
+          "sha256": "33024615c808beb9b91ada21d8b604b509c633c7a26a3ae044e704649b083870",
+          "expectedSha256": "33024615c808beb9b91ada21d8b604b509c633c7a26a3ae044e704649b083870",
+          "ready": true
+        },
+        {
+          "path": "/images/tool-media/midjourney-release-cover.svg",
+          "status": 200,
+          "contentType": "image/svg+xml",
+          "sha256": "0df58d98cd698cde883321af72fa2cdbe19acb74105b919536d035a5458f6387",
+          "expectedSha256": "0df58d98cd698cde883321af72fa2cdbe19acb74105b919536d035a5458f6387",
+          "ready": true
+        }
+      ]
+    }
+  ],
+  "failures": [],
+  "sitemap": {
+    "status": 200,
+    "urlCount": 116,
+    "sha256": "542b83ce429181dd19327324e4897c05b04f7348ca6ca9aba096fa5ed7d673cb"
+  }
+}

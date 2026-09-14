@@ -1,0 +1,15 @@
+
+> tap4-ai@0.1.0 test:next-tool-preaudit /Users/liukai/.codex/worktrees/f013/ai-best-tool
+> tsx scripts/test-next-tool-preaudit.ts
+
+✅ elevenlabs preaudit passed: evidence complete, release guarded.
+✅ fireflies-ai preaudit passed: evidence complete, release guarded.
+✅ glean preaudit passed: evidence complete, release guarded.
+✅ heygen preaudit passed: evidence complete, release guarded.
+✅ lovable preaudit passed: evidence complete, released 2026-09-14.
+✅ midjourney preaudit passed: evidence complete, released 2026-09-14.
+✅ n8n preaudit passed: evidence complete, released 2026-09-04.
+✅ openrouter preaudit passed: evidence complete, released 2026-09-04.
+✅ otter-ai preaudit passed: evidence complete, released 2026-09-10.
+✅ replit preaudit passed: evidence complete, released 2026-09-09.
+✅ synthesia preaudit passed: evidence complete, released 2026-09-08.

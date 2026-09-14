@@ -1,0 +1,11 @@
+{
+  "command": [
+    "pnpm",
+    "run",
+    "test:delayed-candidate-release"
+  ],
+  "exitCode": 0,
+  "startedAt": "2026-09-14T05:09:42.214609+00:00",
+  "finishedAt": "2026-09-14T05:09:44.116028+00:00",
+  "seconds": 1.9
+}

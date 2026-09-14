@@ -1,6 +1,6 @@
 # Lovable / Midjourney 延期补发交付（2026-09-14）
 
-状态：Lovable 已于 09-14 独立生产提交；完整 DOM 验收发现 Decision Card 限制列表被截为前两条，修复待总控部署。Midjourney 尚未提交，按停止条件暂停；不得关闭交付单元。
+状态：Lovable、Midjourney 均已于 09-14 分别独立生产提交，完整生产验收通过。两者保持 published + monitor/noindex，未进入 sitemap；最终记录提交总控复核归档。
 
 基线：GitHub `main` 的 `62604cb5c9f411fe0aad59f59d7bfa92dc206aca`（本次已 fetch 核实）。
 功能分支：`codex/lovable-midjourney-delayed-release-20260914`。唯一候选以该分支最终交付 SHA 为准；禁止本开发任务推 main 或部署。
@@ -10,12 +10,12 @@
 | 工具 | 原计划发布槽 | 本次事实复核 | 实际发布日 | 下次事实复核 |
 | --- | --- | --- | --- | --- |
 | Lovable | 2026-09-11 | 2026-09-14 | 2026-09-14 | 2026-10-14 |
-| Midjourney | 2026-09-12 | 2026-09-14 | 未发布，留空 | 2026-10-14 |
+| Midjourney | 2026-09-12 | 2026-09-14 | 2026-09-14 | 2026-10-14 |
 
-两槽均为 SLA 逾期补做，记录为“延期补发”；不得把 09-07 预审或 09-14 核验日写作已经发生的生产发布日期。
+两槽均为 SLA 逾期补做，记录为“延期补发”；实际发布日期依据成功生产事务与数据库回读填写，不能以预审、计划槽或材料核验替代。
 预审文件保留历史 `reviewedAt=2026-09-07`，正式 payload 的 `reviewedAt`、editorial、pricingSnapshot、evidence 均为 09-14。
-Lovable 预审已据真实提交更新为 `released`、`releasedAt/actualPublishedAt=2026-09-14`、`productionWriteApproved=true`、`releaseIndexState=monitor`。Midjourney 仍未发布，实际发布日留空；两者 `sitemapChangeApproved=false`。
-总控已合并并部署首轮候选（main `61eec3101f8e0f7f59d7e80de85b32b55f71fe0f`），四项生产媒体门禁已通过。下文基线与首轮验证保留为历史记录，当前状态以末尾生产执行记录为准。
+两份预审均据各自真实提交更新为 `released`、`releasedAt/actualPublishedAt=2026-09-14`、`productionWriteApproved=true`、`releaseIndexState=monitor`、`sitemapChangeApproved=false`；精确数据库创建时间及提交命令完成时间另存于 delayedRelease，避免把日期字段冒充精确事务时刻。
+总控先部署首轮候选 `61eec3101f8e0f7f59d7e80de85b32b55f71fe0f`，再部署完整 Card 修复 `9083540b240c6a16fb0b27a6230628af23e2d0d9`。本任务核实远端 main 与 Lovable 完整生产审计后，完成 Midjourney 独立提交。下文基线与中途阻断保留为历史记录，最终状态以末节为准。
 
 ## 首轮生产基线（发布前历史）
 
@@ -65,9 +65,9 @@ Lovable 预审已据真实提交更新为 `released`、`releasedAt/actualPublish
 - 发布器查重增加标题匹配；rollback 回读完整 `en/zh/cn` 正文、features、媒体与复查日。commit 前确认生产图片内容类型及字节哈希，verify 检查实际标题/Decision Card。
 - 新增只读审计支持 baseline、media、released 三种模式，released 还核对生产数据库全文与 payload 一致；不会把空页或缺图当作发布完成。
 
-## 验证和后续顺序
+## 首轮验证与执行计划（历史）
 
-当前专项测试、TypeScript、完整 `pnpm build`、全站索引一致性与生产 SEO smoke 均通过。全站数据库 56 条、published 44 条、可索引 13 条；sitemap 116 条，其中工具 URL 26 条；遗漏、越界、重复 canonical 与页面索引冲突均为 0。
+首轮专项测试、TypeScript、完整 `pnpm build`、全站索引一致性与生产 SEO smoke 均通过。当时全站数据库 56 条、published 44 条、可索引 13 条；sitemap 116 条，其中工具 URL 26 条；遗漏、越界、重复 canonical 与页面索引冲突均为 0。
 
 额外直接 lint 检查发现原工具详情页基线已有 1,515 个 error / 6 个 warning；对 `62604cb5` 与当前页面逐规则比较，数量及分布完全一致，新增为 0。新增/修改发布脚本的 scoped ESLint 退出 0。Next 配置沿用基线的 build 跳过 lint 行为，因此不把 build 通过冒充全仓 lint 干净。证据为 `page-lint-baseline.json`。
 
@@ -87,18 +87,38 @@ Lovable 预审已据真实提交更新为 `released`、`releasedAt/actualPublish
 首轮交付时生产 commit 数为 0；该历史记录不等于当前执行状态。
 
 
-## 生产执行与阻断修复（09-14）
+## 第一项生产执行与中途阻断修复（09-14 历史）
 
 - 四项线上媒体图片类型及 SHA256 与本地一致，见 `publication/production-media.json`。
-- Lovable 重新逐项 validate、preflight、rollback 均退出 0；独立 `--commit` 于 `2026-09-14T03:14:21.572Z` 成功，唯一实体 ID `8fee5c8b-f284-41d4-b691-c099e5bb230b`。事务回读完整 en/zh/cn、features、媒体和 `nextReviewDate=2026-10-14`；实际发布日期记录为 09-14，索引状态保持 monitor。
+- Lovable 重新逐项 validate、preflight、rollback 均退出 0；独立 `--commit` 成功，数据库 created_at 为 `2026-09-14T03:14:21.572Z`，唯一实体 ID `8fee5c8b-f284-41d4-b691-c099e5bb230b`。事务回读完整 en/zh/cn、features、媒体和 `nextReviewDate=2026-10-14`；实际发布日期记录为 09-14，索引状态保持 monitor。
 - 统一发布器 online verify 退出 0。增强 released audit 去除 script/style/noscript 后比较真实 DOM，确认双语完整 Markdown、简介和图片均正确；同时发现 Card 的 7 条限制仅前 2 条可见。`publication/lovable-released.json` 保留退出 1 的真实报告，不能当作最终通过。
 - 根因是详情页 `visibleDecisionRisks` 固定 `.slice(0, 2)`。本候选移除截断，完整展示已复核限制。审计保留每一条 audience、比较维度和限制的断言，并增强唯一 ID、完整 features、三语言标题正文、媒体字段和复查日比较；支持逐候选核验，避免先发布第二项才发现第一项的问题。
 - 发布测试改用独立临时未发布样本验证日期/媒体阻断，不修改真实预审文件，不读取生产环境文件，数据库地址固定为无效本地地址；另对真实 released 记录检查实际日期、monitor/sitemap 状态和重复提交拦截。
 - Lovable 提交后全站索引一致性及 production SEO smoke 均退出 0：57 条实体、45 条 published、13 条可索引；sitemap 116 条/26 个工具 URL；重复、遗漏、越界和 45 项页面检查问题均为 0。
-- 已按总控“任一门禁失败立即停止第二个提交”执行，Midjourney 未写入。待总控部署本次页面修复后，先重跑 Lovable 全量线上审计；通过后再重新逐个执行 Midjourney validate/preflight/rollback、独立 commit 与完整回读，最后更新两项实际发布状态及最终全站验收。
+- 当时按总控“任一门禁失败立即停止第二个提交”暂停 Midjourney。恢复条件为总控部署修复且 Lovable 全量线上审计通过；该条件在最终发布阶段已满足。
 
 本阶段证据位于 `reports/releases/2026-09-14/publication/`，每条命令记录独立退出码、时间和原始日志。本开发任务未推 main、未部署。
 
-修复候选验证：专项测试、脚本 scoped ESLint、串行 TypeScript 和完整 build 已通过；构建后本地 `http://127.0.0.1:3108` 的 Lovable 中英文全量审计退出 0，完整正文、所有 Card 项目及媒体匹配，见 `publication/lovable-local-fixed.json`。此本地证明不替代尚待部署后的生产全量验收。
+修复候选验证：专项测试、脚本 scoped ESLint、串行 TypeScript 和完整 build 已通过；构建后本地 `http://127.0.0.1:3108` 的 Lovable 中英文全量审计退出 0，完整正文、所有 Card 项目及媒体匹配，见 `publication/lovable-local-fixed.json`。该本地证明仅用于修复候选，最终生产证据另见末节。
 
 额外构建后 sitemap 全页验证退出 0：116/116 URL 的状态、robots、自 canonical 和精确三项 hreflang 全通过，含全部 36 个 guide URL。首次调用因本地服务未启动出现连接拒绝，启动服务后完整重跑通过；历史失败未删除。汇总见 `publication/checks.json`。
+
+
+## 最终生产发布与验收（09-14）
+
+总控部署 `9083540b` 后，本任务重跑 Lovable 全量生产审计退出 0，再严格按顺序执行 Midjourney validate → preflight → rollback → 独立 `--commit`，全部退出 0；没有批量写入。随后 Midjourney online verify 与两项合并 released audit 均退出 0。
+
+| 工具 | 唯一生产记录 ID | 数据库 created_at（UTC） | 实际发布日期 | 下次事实复核 |
+| --- | --- | --- | --- | --- |
+| Lovable | `8fee5c8b-f284-41d4-b691-c099e5bb230b` | `2026-09-14T03:14:21.572Z` | 2026-09-14 | 2026-10-14 |
+| Midjourney | `f008c10a-7f0d-4b21-827e-724b305c1b73` | `2026-09-14T05:09:02.771Z` | 2026-09-14 | 2026-10-14 |
+
+- 每个工具按 slug、别名、官网域名和双语标题查询均恰好一个实体；完整 en/zh/cn title/content/detail、features、媒体路径和复查日与正式 payload 一致。
+- 四个中英文 canonical 页面均为 200、自 canonical、`noindex, follow`，真实 DOM 完整正文与 Markdown payload 一致，Decision Card 的适合/不适合、比较维度与全部限制均无缺项。
+- 四个素材 URL 均为真实图片，SHA256 与本地完全一致；页面使用正式 cover。别名占位 URL 仍排除于 sitemap，没有建立重复实体或新增同义 canonical。
+- 全站索引一致性通过：58 条实体、46 条 published、13 条可索引；sitemap 116 条/26 个工具 URL，重复、遗漏、越界及 46 项工具页面索引问题均为 0。生产 SEO smoke 通过。
+- 两项保持 `published + monitor`；实际发布日为 09-14。Lovable 按至少 7–14 天、Midjourney 按至少 48–72 小时观察后才可进入独立索引评审；本次不批准 continue_index 或 sitemap 扩张。
+
+完整生产证据：`publication/lovable-production-fixed.json`、`publication/final-released.json`、`publication/final-index-consistency.json`、`publication/final-production-seo-smoke.log`。最终命令汇总见 `publication/final-checks.json`。旧失败和本地验证报告继续保留，不覆盖为生产成功；本次不再有未解决的发布门禁。
+
+最终 released 状态下的 candidate-release、delayed-candidate-release、next-tool-preaudit、Card 模型/结构、tool-indexing、tool-route-aliases、sitemap、index-consistency 专项均退出 0，随后串行 TypeScript 与完整 build 退出 0。最终阶段所有门禁命令退出 0；发布顺序与每个命令的开始/完成时间见 `publication/final-checks.json`。

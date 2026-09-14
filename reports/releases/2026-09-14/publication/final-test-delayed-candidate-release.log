@@ -1,0 +1,7 @@
+
+> tap4-ai@0.1.0 test:delayed-candidate-release /Users/liukai/.codex/worktrees/f013/ai-best-tool
+> tsx scripts/test-delayed-candidate-release.ts
+
+PASS lovable: dated bilingual evidence, policy boundaries, media integrity and fail-closed release
+PASS midjourney: dated bilingual evidence, policy boundaries, media integrity and fail-closed release
+PASS delayed candidate release checks

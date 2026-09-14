@@ -108,4 +108,4 @@ OpenRouter 与 n8n 同日从未批准索引的 fallback 转为 continue_index，
 
 ## 2026-09-14 延期补发边界记录
 
-Lovable 于 09-14 已真实独立生产提交为 published + monitor，双语继续 noindex、sitemap 排除。完整 Card 展示验收发现列表截断，修复待部署；Midjourney 尚未提交，观察期不能起算。本次不批准索引，不消耗索引额度，sitemap 仍为 116 条。观察期从每个工具真实发布日计算，不从 09-07 预审或材料核验日提前起算。见 [延期补发交付记录](./DELAYED_LOVABLE_MIDJOURNEY_RELEASE_2026-09-14_CN.md)。
+Lovable 与 Midjourney 均于 09-14 分别独立生产提交并完成全量线上验收，保持 published + monitor、双语 noindex、自 canonical、sitemap 排除。两项真实发布日均为 09-14，nextReviewDate=10-14；观察期分别按 Lovable 至少 7–14 天、Midjourney 至少 48–72 小时计算，结束后仍需单独索引审批。本次不批准索引、不消耗索引额度，sitemap 仍为 116 条。见 [延期补发交付记录](./DELAYED_LOVABLE_MIDJOURNEY_RELEASE_2026-09-14_CN.md)。

@@ -1,0 +1,293 @@
+{
+  "recordedAt": "2026-09-14T05:13:24.961247+00:00",
+  "status": "passed",
+  "parentCommit": "7a09c05429d39e8070bb67c937973d612a5f3fe7",
+  "deployedMainVerified": "9083540b240c6a16fb0b27a6230628af23e2d0d9",
+  "productionWritesThisStage": 1,
+  "independentProductionCommitsAcrossDelivery": 2,
+  "productionRecords": [
+    {
+      "slug": "lovable",
+      "id": "8fee5c8b-f284-41d4-b691-c099e5bb230b",
+      "status": "published",
+      "pageQualityStatus": "monitor",
+      "actualPublishedAt": "2026-09-14",
+      "databaseCreatedAtUtc": "2026-09-14T03:14:21.572Z",
+      "publisherCompletedAt": "2026-09-14T03:14:24.040054+00:00",
+      "nextReviewDate": "2026-10-14"
+    },
+    {
+      "slug": "midjourney",
+      "id": "f008c10a-7f0d-4b21-827e-724b305c1b73",
+      "status": "published",
+      "pageQualityStatus": "monitor",
+      "actualPublishedAt": "2026-09-14",
+      "databaseCreatedAtUtc": "2026-09-14T05:09:02.771Z",
+      "publisherCompletedAt": "2026-09-14T05:09:05.773399+00:00",
+      "nextReviewDate": "2026-10-14"
+    }
+  ],
+  "midjourneyGateOrderVerified": [
+    "midjourney-validate",
+    "midjourney-preflight",
+    "midjourney-rollback",
+    "midjourney-commit",
+    "midjourney-verify"
+  ],
+  "checks": {
+    "final-build": {
+      "command": [
+        "pnpm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T05:11:55.331497+00:00",
+      "finishedAt": "2026-09-14T05:12:19.502765+00:00",
+      "seconds": 24.17
+    },
+    "final-index-consistency": {
+      "command": [
+        "pnpm",
+        "run",
+        "seo:index-consistency",
+        "--",
+        "--output=reports/releases/2026-09-14/publication/final-index-consistency.json"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T05:09:39.810446+00:00",
+      "finishedAt": "2026-09-14T05:09:56.964645+00:00",
+      "seconds": 17.15
+    },
+    "final-production-seo-smoke": {
+      "command": [
+        "pnpm",
+        "run",
+        "seo:production-smoke"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T05:09:39.814926+00:00",
+      "finishedAt": "2026-09-14T05:09:55.113134+00:00",
+      "seconds": 15.3
+    },
+    "final-released-audit": {
+      "command": [
+        "pnpm",
+        "exec",
+        "tsx",
+        "scripts/audit-delayed-candidate-release.ts",
+        "--phase=released",
+        "--output=reports/releases/2026-09-14/publication/final-released.json"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T05:09:21.267571+00:00",
+      "finishedAt": "2026-09-14T05:09:37.636265+00:00",
+      "seconds": 16.37
+    },
+    "final-test-candidate-release": {
+      "command": [
+        "pnpm",
+        "run",
+        "test:candidate-release"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T05:09:39.862430+00:00",
+      "finishedAt": "2026-09-14T05:09:42.174254+00:00",
+      "seconds": 2.31
+    },
+    "final-test-delayed-candidate-release": {
+      "command": [
+        "pnpm",
+        "run",
+        "test:delayed-candidate-release"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T05:09:42.214609+00:00",
+      "finishedAt": "2026-09-14T05:09:44.116028+00:00",
+      "seconds": 1.9
+    },
+    "final-test-index-consistency": {
+      "command": [
+        "pnpm",
+        "run",
+        "test:index-consistency"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T05:09:51.686680+00:00",
+      "finishedAt": "2026-09-14T05:09:52.280948+00:00",
+      "seconds": 0.59
+    },
+    "final-test-next-tool-preaudit": {
+      "command": [
+        "pnpm",
+        "run",
+        "test:next-tool-preaudit"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T05:09:44.156373+00:00",
+      "finishedAt": "2026-09-14T05:09:44.768411+00:00",
+      "seconds": 0.61
+    },
+    "final-test-sitemap": {
+      "command": [
+        "pnpm",
+        "run",
+        "test:sitemap"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T05:09:47.195064+00:00",
+      "finishedAt": "2026-09-14T05:09:51.643762+00:00",
+      "seconds": 4.45
+    },
+    "final-test-tool-decision-card-structure": {
+      "command": [
+        "pnpm",
+        "run",
+        "test:tool-decision-card-structure"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T05:09:45.518435+00:00",
+      "finishedAt": "2026-09-14T05:09:45.904206+00:00",
+      "seconds": 0.39
+    },
+    "final-test-tool-decision-card": {
+      "command": [
+        "pnpm",
+        "run",
+        "test:tool-decision-card"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T05:09:44.804781+00:00",
+      "finishedAt": "2026-09-14T05:09:45.483816+00:00",
+      "seconds": 0.68
+    },
+    "final-test-tool-indexing": {
+      "command": [
+        "pnpm",
+        "run",
+        "test:tool-indexing"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T05:09:45.939702+00:00",
+      "finishedAt": "2026-09-14T05:09:46.517839+00:00",
+      "seconds": 0.58
+    },
+    "final-test-tool-route-aliases": {
+      "command": [
+        "pnpm",
+        "run",
+        "test:tool-route-aliases"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T05:09:46.553514+00:00",
+      "finishedAt": "2026-09-14T05:09:47.159768+00:00",
+      "seconds": 0.61
+    },
+    "final-typescript": {
+      "command": [
+        "pnpm",
+        "exec",
+        "tsc",
+        "--noEmit"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T05:09:39.810609+00:00",
+      "finishedAt": "2026-09-14T05:09:42.930058+00:00",
+      "seconds": 3.12
+    },
+    "lovable-production-fixed": {
+      "command": [
+        "pnpm",
+        "exec",
+        "tsx",
+        "scripts/audit-delayed-candidate-release.ts",
+        "--phase=released",
+        "--candidate=lovable",
+        "--output=reports/releases/2026-09-14/publication/lovable-production-fixed.json"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T05:07:47.145901+00:00",
+      "finishedAt": "2026-09-14T05:07:59.839251+00:00",
+      "seconds": 12.69
+    },
+    "midjourney-commit": {
+      "command": [
+        "pnpm",
+        "run",
+        "tools:candidate-release",
+        "--",
+        "--candidate=midjourney",
+        "--phase=release",
+        "--as-of=2026-09-14",
+        "--commit"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T05:08:57.457720+00:00",
+      "finishedAt": "2026-09-14T05:09:05.773399+00:00",
+      "seconds": 8.32
+    },
+    "midjourney-preflight": {
+      "command": [
+        "pnpm",
+        "run",
+        "tools:candidate-release",
+        "--",
+        "--candidate=midjourney",
+        "--phase=preflight",
+        "--as-of=2026-09-14",
+        "--online"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T05:08:12.020450+00:00",
+      "finishedAt": "2026-09-14T05:08:17.721355+00:00",
+      "seconds": 5.7
+    },
+    "midjourney-rollback": {
+      "command": [
+        "pnpm",
+        "run",
+        "tools:candidate-release",
+        "--",
+        "--candidate=midjourney",
+        "--phase=release",
+        "--as-of=2026-09-14"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T05:08:37.933989+00:00",
+      "finishedAt": "2026-09-14T05:08:43.777060+00:00",
+      "seconds": 5.84
+    },
+    "midjourney-validate": {
+      "command": [
+        "pnpm",
+        "run",
+        "tools:candidate-release",
+        "--",
+        "--candidate=midjourney",
+        "--phase=validate",
+        "--as-of=2026-09-14"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T05:07:58.715571+00:00",
+      "finishedAt": "2026-09-14T05:07:59.382325+00:00",
+      "seconds": 0.67
+    },
+    "midjourney-verify": {
+      "command": [
+        "pnpm",
+        "run",
+        "tools:candidate-release",
+        "--",
+        "--candidate=midjourney",
+        "--phase=verify",
+        "--as-of=2026-09-14",
+        "--online"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T05:09:20.090316+00:00",
+      "finishedAt": "2026-09-14T05:09:27.592549+00:00",
+      "seconds": 7.5
+    }
+  },
+  "historicalFailures": "Preserved separately in checks.json and lovable-released.json; final-released.json is the production success evidence."
+}

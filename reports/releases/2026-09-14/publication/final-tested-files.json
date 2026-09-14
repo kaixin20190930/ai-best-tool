@@ -1,0 +1,20 @@
+{
+  "parentCommit": "7a09c05429d39e8070bb67c937973d612a5f3fe7",
+  "files": {
+    "app/[locale]/(with-footer)/ai/[websiteName]/page.tsx": "a648e3705f0533d385063ecf1d981ece957ffac1ee84903242589df2704ad08f",
+    "data/collection/lovable-preaudit-2026-09-07.json": "4bfb619c2cfe64cb4cbe0572386033940609cb4cd603b62a18a5b95f81e28408",
+    "data/collection/lovable-release.json": "7515fe8238febfa32f1d338a434fb59fbd5828147071363697a8fcc065ad18ca",
+    "data/collection/midjourney-preaudit-2026-09-07.json": "18af2698c6d8fb5141dc9f32b0e97f2c65ecb8e21aa6303673f523804f12da75",
+    "data/collection/midjourney-release.json": "57bc612191f0e46d1a57e05b63e8eab47304373a6390f3612e4b1af1e84e5d79",
+    "docs/CANDIDATE_RELEASE_AND_INDEX_AUDIT_PLAN_CN.md": "ab94746c9bba397192c7890c49301769010e254a25e648ace86652d9e1c0ecb6",
+    "docs/DELAYED_LOVABLE_MIDJOURNEY_RELEASE_2026-09-14_CN.md": "bb84f76f4b29fa73375cae7816fcc77652327a5e1c315d965adff68800bda853",
+    "docs/MASTER_OPTIMIZATION_TRACKER_CN.md": "446a323f77a08a6c30756122b090600729ba2d705e555d39739ee3f4ce9ee4b0",
+    "docs/NEXT_WEEK_MATURE_TOOL_INTAKE_2026-09-07_CN.md": "265d927963d1f0dc9442775c529528def1b95c2c9d55bca2beee19a8facc29aa",
+    "docs/TOOL_INDEX_RELEASE_POLICY_CN.md": "526c06a6966f5384f018d57280728b8688205d0d171c139770da5ee15b06c792",
+    "scripts/audit-delayed-candidate-release.ts": "aa5d06fd770d6845cb20dddd93d42ba7f0b801e14a924d3df107ae4da982cfbc",
+    "scripts/candidate-release-pipeline.ts": "34f11cf240d8a2df9670fb0ccce81b3510df9237ad38e50ccea89b401ab79efa",
+    "scripts/candidate-release-test-fixture.ts": "0e3db6c1d6a0e0078a66466328f6ce15a65812798f176d4b4c4c76bc857a3bb9",
+    "scripts/test-candidate-release-pipeline.ts": "8f3775f669fe59b1ae4b34067d799753199f08c62a6d5365959d7d340e3a86c7",
+    "scripts/test-delayed-candidate-release.ts": "fc3dd7d29ab642bbfc20a7719fdbbb7cb580d7ceb1e1d8713731b38499a614b2"
+  }
+}

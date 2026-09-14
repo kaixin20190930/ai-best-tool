@@ -1,0 +1,6 @@
+
+> tap4-ai@0.1.0 tools:candidate-release /Users/liukai/.codex/worktrees/f013/ai-best-tool
+> tsx scripts/candidate-release-pipeline.ts -- --candidate\=midjourney --phase\=release --as-of\=2026-09-14
+
+✅ midjourney: rollback verified as published + monitor
+{"id":"f008c10a-7f0d-4b21-827e-724b305c1b73","reviewedAt":"2026-09-14","nextReviewDate":"2026-10-14","localizedPayloadReadback":["en","zh","cn"],"transaction":"ROLLBACK"}

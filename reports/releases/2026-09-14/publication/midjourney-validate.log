@@ -1,0 +1,5 @@
+
+> tap4-ai@0.1.0 tools:candidate-release /Users/liukai/.codex/worktrees/f013/ai-best-tool
+> tsx scripts/candidate-release-pipeline.ts -- --candidate\=midjourney --phase\=validate --as-of\=2026-09-14
+
+✅ midjourney: preaudit valid; release window 2026-09-12

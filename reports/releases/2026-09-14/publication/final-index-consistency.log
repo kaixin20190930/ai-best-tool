@@ -1,0 +1,32 @@
+
+> tap4-ai@0.1.0 seo:index-consistency /Users/liukai/.codex/worktrees/f013/ai-best-tool
+> tsx scripts/audit-index-consistency.ts -- --output\=reports/releases/2026-09-14/publication/final-index-consistency.json
+
+{
+  "auditedAt": "2026-09-14T05:09:56.942Z",
+  "baseUrl": "https://aibesttool.com",
+  "success": true,
+  "database": {
+    "total": 58,
+    "published": 46,
+    "indexable": 13,
+    "reasonCounts": {
+      "indexing_paused": 33,
+      "published_and_approved": 13,
+      "not_published": 12
+    }
+  },
+  "sitemap": {
+    "totalUrls": 116,
+    "toolUrls": 26,
+    "duplicateUrls": [],
+    "missingToolUrls": [],
+    "unexpectedToolUrls": []
+  },
+  "duplicateCanonicalEntities": [],
+  "pageChecks": {
+    "checkedTools": 46,
+    "issueCount": 0,
+    "issues": []
+  }
+}
