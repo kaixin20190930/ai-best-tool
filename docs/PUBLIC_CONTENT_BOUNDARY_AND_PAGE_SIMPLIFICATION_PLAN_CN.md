@@ -2,7 +2,7 @@
 
 创建日期：2026-09-14
 
-状态：方案已复核，等待开发实施
+状态：方案已复核；PUB-01 已完成开发、独立 QA、部署与生产验证，下一项为 PUB-02
 
 上位计划：[收录与搜索质量主计划](./MASTER_OPTIMIZATION_TRACKER_CN.md)
 
@@ -229,14 +229,16 @@ Web3 comparison 还存在四个语义问题：
 
 | ID | 任务 | 实施范围 | 验收 | 状态 |
 | --- | --- | --- | --- | --- |
-| PUB-01A | 建立公开内容基线报告 | 扫描公开 TSX、共享组件和生产代表页 | 输出按页面类型、词汇、组件的基线 JSON | 待执行 |
-| PUB-01B | 新增公开内容边界测试 | `scripts/`、`package.json` | 禁用词在前台失败，在 admin/docs 允许 | 待执行 |
-| PUB-01C | 简化 comparison 共享模板 | `comparison-template.tsx` | 去除内部说明和重复路径，保留 SEO 契约 | 待执行 |
-| PUB-01D | 收口 Evidence/Submission 组件 | 两个共享组件及调用方 | 无通用默认证据；Guide 不再批量提交/认领 | 待执行 |
-| PUB-01E | 重构 Web3 comparison 样板 | 指定 Web3 页面 | 真实 A vs B 矩阵、六段结构、一个 CTA | 待执行 |
-| PUB-01F | 独立 QA 与生产验证 | 测试、build、DOM、robots、sitemap | QA PASS、生产 smoke PASS | 待执行 |
+| PUB-01A | 建立公开内容基线报告 | 扫描公开 TSX、共享组件和生产代表页 | 输出按页面类型、词汇、组件的基线 JSON | 已完成 |
+| PUB-01B | 新增公开内容边界测试 | `scripts/`、`package.json` | 禁用词在前台失败，在 admin/docs 允许 | 已完成 |
+| PUB-01C | 简化 comparison 共享模板 | `comparison-template.tsx` | 去除内部说明和重复路径，保留 SEO 契约 | 已完成（样板显式启用） |
+| PUB-01D | 收口 Evidence/Submission 组件 | 两个共享组件及调用方 | 无通用默认证据；Guide 不再批量提交/认领 | 已完成（新契约，旧调用方冻结） |
+| PUB-01E | 重构 Web3 comparison 样板 | 指定 Web3 页面 | 真实 A vs B 矩阵、六段结构、一个 CTA | 已完成 |
+| PUB-01F | 独立 QA 与生产验证 | 测试、build、DOM、robots、sitemap | QA PASS、生产 smoke PASS | 已完成 |
 
 PUB-01 完成前，不批量修改其余 145 个 Guide。
+
+PUB-01 于 2026-09-14 关闭：开发候选 `4c262fe8be109bad1beffbd88cfd3cda2a463a64` 经独立 QA PASS 后合入并以 `834e1295` 推送 main。生产 HTML 边界测试、SEO smoke、索引一致性与 116 条 sitemap 均通过；Web3 comparison 继续 `noindex, follow` 且不进入 sitemap。历史基线由 1512 条降至 1502 条，PUB-02 只能继续减少，不得新增。
 
 ### 交付单元 PUB-02：Guide 与 comparison 批量治理（P0/P1，预计 2-3 天）
 
