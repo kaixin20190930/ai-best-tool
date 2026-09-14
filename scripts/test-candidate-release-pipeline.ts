@@ -8,7 +8,7 @@ import runUnreleasedCandidate from './candidate-release-test-fixture';
 const source = fs.readFileSync('scripts/candidate-release-pipeline.ts', 'utf8');
 const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8')) as { scripts: Record<string, string> };
 
-for (const slug of ['synthesia', 'replit', 'otter-ai', 'lovable', 'midjourney']) {
+for (const slug of ['synthesia', 'replit', 'otter-ai', 'lovable', 'midjourney', 'elevenlabs']) {
   assert(source.includes(`slug: '${slug}'`), `${slug}: missing pipeline registration`);
 }
 assert(source.includes("'published','monitor'"), 'Initial release must be published + monitor');

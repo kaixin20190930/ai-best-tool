@@ -77,6 +77,12 @@ const candidates: Candidate[] = [
     domain: 'midjourney.com',
     preauditFile: 'midjourney-preaudit-2026-09-07.json',
   },
+  {
+    slug: 'elevenlabs',
+    aliases: ['elevenlabs', 'eleven-labs'],
+    domain: 'elevenlabs.io',
+    preauditFile: 'elevenlabs-preaudit-2026-09-09.json',
+  },
 ];
 
 function parseArgs(args: string[]) {
@@ -315,7 +321,15 @@ async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, c
     assert.equal(row.rows[0].next_review_date, payload.nextReviewDate);
     await client.query(commit ? 'COMMIT' : 'ROLLBACK');
     console.log(`✅ ${candidate.slug}: ${commit ? 'committed' : 'rollback verified'} as published + monitor`);
-    console.log(JSON.stringify({ id: payload.id, reviewedAt: payload.reviewedAt, nextReviewDate: payload.nextReviewDate, localizedPayloadReadback: ['en', 'zh', 'cn'], transaction: commit ? 'COMMIT' : 'ROLLBACK' }));
+    console.log(
+      JSON.stringify({
+        id: payload.id,
+        reviewedAt: payload.reviewedAt,
+        nextReviewDate: payload.nextReviewDate,
+        localizedPayloadReadback: ['en', 'zh', 'cn'],
+        transaction: commit ? 'COMMIT' : 'ROLLBACK',
+      }),
+    );
   } catch (error) {
     await client.query('ROLLBACK');
     throw error;

@@ -1,0 +1,33 @@
+{
+  "checkedAt": "2026-09-14T06:20:51Z",
+  "baseCommit": "31f79ffc6a398d736c295ab0b119f58658936efe",
+  "branch": "codex/elevenlabs-mature-tool-release",
+  "productionWrites": 0,
+  "sitemapChangeApproved": false,
+  "checks": {
+    "test:elevenlabs-release": "passed",
+    "test:candidate-release": "passed",
+    "test:delayed-candidate-release": "passed",
+    "test:next-tool-preaudit": "passed",
+    "test:tool-decision-card": "passed",
+    "test:tool-decision-card-structure": "passed",
+    "test:tool-indexing": "passed",
+    "test:tool-route-aliases": "passed",
+    "test:sitemap": "passed with production connection loaded; 116 entries, 8/8 checks",
+    "test:index-consistency": "passed",
+    "scoped-eslint": "passed",
+    "typescript": "passed",
+    "full-build": "passed",
+    "production-index-consistency": "passed; 58 total, 46 published, 13 indexable, 116 sitemap URLs, 0 issues",
+    "production-seo-smoke": "passed",
+    "candidate-validate": "passed",
+    "candidate-preflight-online": "passed; no production entity, canonical fallback noindex and excluded from sitemap",
+    "candidate-release-rollback": "passed; full en/zh/cn readback as published + monitor, then ROLLBACK",
+    "media-visual-qa": "passed at 1400x800; full official wordmark, correct aspect ratio and clear space"
+  },
+  "expectedPendingGate": "Production media returns 404 until this branch is deployed; release --commit therefore remains fail-closed.",
+  "historicalFailures": [
+    "test:sitemap first run lacked the worktree-external database environment; the full test passed after loading the existing environment without copying credentials.",
+    "First release rollback found that text-to-speech is not a production category; the payload was corrected to the existing voice-to-chatbot storage mapping and the rollback then passed."
+  ]
+}
