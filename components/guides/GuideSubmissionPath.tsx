@@ -3,9 +3,12 @@ import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 type GuideSubmissionPathProps = {
   locale: string;
   ctaPrefix: string;
+  /** PUB-01 pilot opts out; legacy callers are migrated in PUB-02. */
+  audience?: 'reader' | 'tool-owner';
 };
 
-export default function GuideSubmissionPath({ locale, ctaPrefix }: GuideSubmissionPathProps) {
+export default function GuideSubmissionPath({ locale, ctaPrefix, audience }: GuideSubmissionPathProps) {
+  if (audience === 'reader') return null;
   const isChinese = locale === 'cn' || locale === 'tw';
 
   return (

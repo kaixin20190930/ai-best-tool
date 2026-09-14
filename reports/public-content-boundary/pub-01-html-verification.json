@@ -1,0 +1,60 @@
+{
+  "checkedAt": "2026-09-14T07:54:06.028Z",
+  "baseUrl": "http://localhost:3017",
+  "results": [
+    {
+      "pathname": "/guides/ai-tools-for-web3-comparison",
+      "status": 200,
+      "seoFrozen": true,
+      "sample": true,
+      "violations": []
+    },
+    {
+      "pathname": "/cn/guides/ai-tools-for-web3-comparison",
+      "status": 200,
+      "seoFrozen": true,
+      "sample": true,
+      "violations": []
+    },
+    {
+      "pathname": "/cn/guides/ai-tools-for-web3",
+      "status": 200,
+      "seoFrozen": true,
+      "sample": false,
+      "violations": [
+        "indexing-strategy",
+        "keep-indexable",
+        "editorial-evidence",
+        "high-intent"
+      ]
+    },
+    {
+      "pathname": "/cn/guides/ai-automation-tools-comparison",
+      "status": 200,
+      "seoFrozen": true,
+      "sample": false,
+      "violations": [
+        "indexing-strategy",
+        "keep-indexable",
+        "enrichment",
+        "editorial-evidence",
+        "traffic",
+        "high-intent"
+      ]
+    },
+    {
+      "pathname": "/cn/ai/dune",
+      "status": 200,
+      "seoFrozen": true,
+      "sample": false,
+      "violations": [
+        "indexing-strategy",
+        "keep-indexable",
+        "enrichment",
+        "editorial-evidence"
+      ]
+    }
+  ],
+  "sitemapCount": 116,
+  "pass": true
+}

@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { ArrowRight, CheckCircle2, Clock3, Columns3, ExternalLink, Globe2, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { validateVerifiedComparison, type VerifiedComparison } from '@/lib/content/verifiedComparison';
 import { BASE_URL } from '@/lib/env';
 import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema, generateItemListSchema } from '@/lib/seo/schema';
@@ -10,10 +11,12 @@ import { toolToListRow } from '@/lib/services/toolPresenter';
 import { getPopularTools, getToolByNameCached, getTools, type Tool } from '@/lib/services/tools';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
+import VerifiedComparisonPage from '@/components/guides/VerifiedComparisonPage';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import { Link } from '@/app/navigation';
 
 type ComparisonConfig = {
+  verifiedComparison?: VerifiedComparison;
   categoryLabel: {
     cn: string;
     en: string;
@@ -451,7 +454,7 @@ export async function buildComparisonMetadata(locale: string, title: string, des
 
 export async function buildComparisonPageData(locale: string, config: ComparisonConfig) {
   const isChinese = locale === 'cn' || locale === 'tw';
-  const categories = await getAllCategories(true).catch(() => []);
+  const categories = config.verifiedComparison ? [] : await getAllCategories(true).catch(() => []);
   const siteUrl = BASE_URL;
   const comparisonPath = config.guideHref.endsWith('-comparison') ? config.guideHref : `${config.guideHref}-comparison`;
   const breadcrumbSchema = generateBreadcrumbSchema([
@@ -474,10 +477,12 @@ export async function buildComparisonPageData(locale: string, config: Comparison
     config.preferredToolNames?.length
       ? Promise.all(config.preferredToolNames.map((toolName) => getToolByNameCached(toolName).catch(() => null)))
       : Promise.resolve([]),
-    getTools({ search: config.searchQuery, status: 'published' }, { page: 1, pageSize: 4 }, 'popular').catch(
-      () => null,
-    ),
-    getPopularTools(4).catch(() => []),
+    config.verifiedComparison
+      ? Promise.resolve(null)
+      : getTools({ search: config.searchQuery, status: 'published' }, { page: 1, pageSize: 4 }, 'popular').catch(
+          () => null,
+        ),
+    config.verifiedComparison ? Promise.resolve([]) : getPopularTools(4).catch(() => []),
   ]);
 
   const preferredList = preferredTools.filter((tool): tool is Tool => Boolean(tool));
@@ -492,7 +497,12 @@ export async function buildComparisonPageData(locale: string, config: Comparison
     }
     return acc;
   }, []);
-  const sourceTools = mergedTools.slice(0, 4);
+  const sourceTools = config.verifiedComparison
+    ? preferredList.filter(
+        (tool) =>
+          tool.status === 'published' && config.verifiedComparison!.candidates.some((item) => item.slug === tool.name),
+      )
+    : mergedTools.slice(0, 4);
   const categoryMap = new Map(categories.map((category) => [category.id, category]));
   const tools: ComparisonTool[] = sourceTools.map((tool, index) => {
     const row = toolToListRow(tool, locale);
@@ -639,6 +649,26 @@ export function ComparisonPage({
   config,
   locale,
 }: ComparisonPageProps) {
+  if (config.verifiedComparison) {
+    const valid = validateVerifiedComparison(
+      config.verifiedComparison,
+      tools.map((tool) => tool.name),
+    );
+    return (
+      <>
+        <StructuredDataServer data={breadcrumbSchema} />
+        {valid ? <StructuredDataServer data={faqSchema} /> : null}
+        {valid ? <StructuredDataServer data={itemListSchema} /> : null}
+        <VerifiedComparisonPage
+          comparison={config.verifiedComparison}
+          locale={locale}
+          tools={tools}
+          guideHref={config.guideHref}
+          faqs={config.faqs}
+        />
+      </>
+    );
+  }
   const checkedAt = '2026-07-15';
   const categoryCount = categories.length;
   const firstTool = tools[0] || null;

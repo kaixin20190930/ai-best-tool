@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "checkedAt": "2026-09-14T07:50:14.394Z",
+  "baselineSha": "00dcbff8e8b9e8c6a12712de7cb5b1a8c914746c",
+  "scope": "PUB-01 sample-first; unchanged exact legacy findings remain debt for PUB-02/03.",
+  "internalDirectories": [
+    "docs/",
+    "reports/",
+    "scripts/",
+    "tests/",
+    "lib/config/",
+    "lib/seo/",
+    "components/admin/",
+    "app/[locale]/(with-footer)/admin/",
+    "app/[locale]/(no-footer)/admin/",
+    "app/api/"
+  ],
+  "scannedFiles": 357,
+  "byPageType": {
+    "other-public": 42,
+    "tool": 7,
+    "comparison": 634,
+    "guide": 817,
+    "shared-component": 2
+  },
+  "byRule": {
+    "high-intent": 522,
+    "indexing-strategy": 76,
+    "keep-indexable": 369,
+    "enrichment": 54,
+    "editorial-evidence": 476,
+    "traffic": 3,
+    "quality-state": 2
+  },
+  "baselineFindings": 1512,
+  "remainingFindings": 1502,
+  "newFindings": 0,
+  "sampleSourceFindings": 0,
+  "notes": "Exact legacy findings remain frozen for PUB-02/03; PUB-01 is not a whole-site zero finding release."
+}

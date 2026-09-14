@@ -1,0 +1,58 @@
+{
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "languages": [
+    "cn",
+    "en"
+  ],
+  "mobileDocumentWidth": 390,
+  "englishMobileDecisionBottom": 812,
+  "checks": [
+    "single H1 and task conclusion before fold",
+    "six sections",
+    "table scroll stays inside its region",
+    "source anchor resolves",
+    "candidate cards and source text wrap",
+    "single primary CTA"
+  ],
+  "screenshots": [
+    {
+      "path": "/tmp/pub-01-visuals/cn-desktop.png",
+      "bytes": 179830,
+      "sha256": "428ed2ee14c073ac7fc3592510b7a5a50b3b97ca3857a919e47e172aa5d2031c"
+    },
+    {
+      "path": "/tmp/pub-01-visuals/cn-mobile-sources.png",
+      "bytes": 45616,
+      "sha256": "c3e05a296f13a418c1cf02b473c741491c16cba64a1b6efff694eafc8621daf8"
+    },
+    {
+      "path": "/tmp/pub-01-visuals/cn-mobile.png",
+      "bytes": 143494,
+      "sha256": "bc7383bacb426204bd8f993a2c8b70a87f51a772bae1ae1680b07a0904c1db36"
+    },
+    {
+      "path": "/tmp/pub-01-visuals/en-desktop.png",
+      "bytes": 223167,
+      "sha256": "f56c12198d393cabf830715f90fb21aaef27cbf8bd25426c8c2207a5669c20df"
+    },
+    {
+      "path": "/tmp/pub-01-visuals/en-mobile-matrix.png",
+      "bytes": 53460,
+      "sha256": "ce168a276094e08cedc3c0e8e9e1a80b0e105332a8bf527889c80ae496e661c5"
+    },
+    {
+      "path": "/tmp/pub-01-visuals/en-mobile.png",
+      "bytes": 180506,
+      "sha256": "1db6025d95e1db5f4e9b5aef642a182ae969808d3a93b12af3562c7eb8438635"
+    }
+  ]
+}
