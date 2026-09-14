@@ -720,7 +720,7 @@ export default async function SubmissionsPage({
                                 >
                                   {commercialStatus === 'payment_failed' ? 'Retry payment' : 'Complete payment'}
                                 </a>
-                              )}
+                            )}
                             {commercialStatus === 'paid_published' && (
                               <div className='flex flex-wrap justify-end gap-1'>
                                 {commercialDetails.sponsored ? (

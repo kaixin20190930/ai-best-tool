@@ -47,21 +47,19 @@ function retainedEvidence(source: string) {
     if (
       ts.isFunctionDeclaration(node) &&
       ['getPriorityToolOfficialEvidence', 'getPriorityToolFallbackDetail'].includes(node.name?.text || '')
-    )
-      result[node.name!.text] = tokens(node.getText(tree));
+    ) result[node.name!.text] = tokens(node.getText(tree));
     if (
       ts.isJsxSelfClosingElement(node) &&
       ['CommentList', 'EvidenceLedgerPanel', 'ChangeTimelinePanel'].includes(node.tagName.getText(tree))
-    )
-      result[node.tagName.getText(tree)] = tokens(node.getText(tree));
-    if (ts.isJsxElement(node))
+    ) result[node.tagName.getText(tree)] = tokens(node.getText(tree));
+    if (ts.isJsxElement(node)) {
       for (const attribute of node.openingElement.attributes.properties) {
         if (
           ts.isJsxAttribute(attribute) &&
           ['data-official-evidence', 'data-priority-tool-evidence'].includes(attribute.name.getText(tree))
-        )
-          result[attribute.name.getText(tree)] = tokens(node.getText(tree));
+        ) result[attribute.name.getText(tree)] = tokens(node.getText(tree));
       }
+    }
     ts.forEachChild(node, walk);
   }
   walk(tree);
@@ -90,8 +88,7 @@ assert.equal(
   'Source-based review, not a hands-on benchmark.',
 );
 for (const locale of ['en', 'cn']) {
-  for (const slug of ['woy-ai', 'adobe', 'salesforce_einstein', 'chatgpt-mac', 'gpt_4o', 'openai', 'sora'])
-    assert(!/index scope|隔离|索引|next enrichment/i.test(getPublicToolSummary(slug, locale, 'index scope')));
+  for (const slug of ['woy-ai', 'adobe', 'salesforce_einstein', 'chatgpt-mac', 'gpt_4o', 'openai', 'sora']) assert(!/index scope|隔离|索引|next enrichment/i.test(getPublicToolSummary(slug, locale, 'index scope')));
   const detail = getPublicToolDetail('woy-ai', locale, 'Why it is monitored');
   assert(detail.includes('2026-09-06') && detail.includes('https://woy.ai/tags'));
 }
@@ -106,7 +103,7 @@ assert.equal(
   '核验于 2026-09-14。',
 );
 const baselineHtml = JSON.parse(readFileSync('reports/public-content-boundary/pub-03-html-before.json', 'utf8'));
-for (const locale of ['en', 'cn'])
+for (const locale of ['en', 'cn']) {
   for (const slug of ['artiversehub-ai', 'fastimage-ai-sketch-to-image', 'honeydo', 'tattooai-design']) {
     const page = baselineHtml.results.find(
       (p: { path: string }) => p.path === `${locale === 'cn' ? '/cn' : ''}/ai/${slug}`,
@@ -119,6 +116,7 @@ for (const locale of ['en', 'cn'])
     for (const url of urls) assert(visible.includes(url), `${slug}: source was lost`);
     if (slug === 'tattooai-design') assert(visible.includes(locale === 'cn' ? '合格纹身师' : 'qualified artist'));
   }
+}
 const svgFiles = readdirSync('public/images/tool-media').filter((file) => file.endsWith('.svg'));
 for (const file of svgFiles) {
   const xml = readFileSync(`public/images/tool-media/${file}`, 'utf8');

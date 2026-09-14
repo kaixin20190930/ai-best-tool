@@ -91,7 +91,7 @@ assert.equal(reviewedResult.reviewSchedule.factReviewDue, false);
 console.log('Tool Decision Card model test passed.');
 
 (globalThis as unknown as { React: typeof React }).React = React;
-for (const card of [result, reviewedResult])
+for (const card of [result, reviewedResult]) {
   for (const locale of ['en', 'cn']) {
     const html = renderToStaticMarkup(
       React.createElement(PublicToolDecision, {
@@ -113,8 +113,7 @@ for (const card of [result, reviewedResult])
       'Limited feedback',
       'Freemium',
       '2026-01-01',
-    ])
-      assert(html.includes(copy));
+    ]) assert(html.includes(copy));
     assert(!/Evidence readiness|Next fact check|Next decision review|待补|Pending/.test(html));
     assert.equal(
       dom.window.document.querySelectorAll('a[href="https://example.com/docs"]').length,
@@ -122,3 +121,4 @@ for (const card of [result, reviewedResult])
     );
     dom.window.close();
   }
+}

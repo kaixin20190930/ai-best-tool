@@ -151,19 +151,19 @@ function formatDataUse(model: DecisionCardV2Model, isChinese: boolean): string |
   if (!value) return null;
   const labels = isChinese
     ? {
-        no: '不用于训练',
-        opt_in: '主动加入后用于训练',
-        opt_out: '需主动退出训练',
-        yes: '可能用于训练',
-        unknown: '未知',
-      }
+      no: '不用于训练',
+      opt_in: '主动加入后用于训练',
+      opt_out: '需主动退出训练',
+      yes: '可能用于训练',
+      unknown: '未知',
+    }
     : {
-        no: 'Not used for training',
-        opt_in: 'Training is opt-in',
-        opt_out: 'Training requires opt-out',
-        yes: 'May be used for training',
-        unknown: 'Unknown',
-      };
+      no: 'Not used for training',
+      opt_in: 'Training is opt-in',
+      opt_out: 'Training requires opt-out',
+      yes: 'May be used for training',
+      unknown: 'Unknown',
+    };
   return labels[value];
 }
 

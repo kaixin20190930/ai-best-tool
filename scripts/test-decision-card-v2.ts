@@ -112,8 +112,7 @@ for (const locale of ['en', 'cn']) {
   const html = renderToStaticMarkup(React.createElement(DecisionCardV2, { model, locale, embedded: true }));
   assert(!html.includes('id="decision-card"'), 'Embedded facts cannot create a second decision anchor.');
   assert(!html.includes('<h2'), 'Embedded facts cannot create a second decision heading.');
-  for (const ref of [costEvidence, setupEvidence, limitationEvidence, replacementEvidence])
-    assert(html.includes(ref.sourceUrl));
+  for (const ref of [costEvidence, setupEvidence, limitationEvidence, replacementEvidence]) assert(html.includes(ref.sourceUrl));
   assert(html.includes('USD 120/year') || html.includes('USD 120/年'));
   assert(!html.includes('Unknown') && !html.includes('待补') && !html.includes('暂无已核验'));
   assert(!html.includes('Unsupported Complement'));

@@ -570,6 +570,12 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
   ];
   const basePath = `/categories/${category.slug}`;
   const faqSchema = generateFAQSchema(faqs);
+  let toolCountLabel = isChinese ? `${categoryToolCount} 个已发布工具` : `${categoryToolCount} published tools`;
+  if (isVirtualCategory) {
+    toolCountLabel = isChinese
+      ? `${representativeTools.length} 个精选入口`
+      : `${representativeTools.length} curated entries`;
+  }
 
   return (
     <>
@@ -590,15 +596,7 @@ export default async function CategoryContent({ params, pageNum, searchParams }:
             {isChinese ? `Best ${categoryName} AI 工具` : `Best ${categoryName} AI tools`}
           </h1>
           <p className='mt-3 text-slate-600'>{categoryDescription}</p>
-          <p className='mt-3 text-sm text-slate-500'>
-            {isVirtualCategory
-              ? isChinese
-                ? `${representativeTools.length} 个精选入口`
-                : `${representativeTools.length} curated entries`
-              : isChinese
-                ? `${categoryToolCount} 个已发布工具`
-                : `${categoryToolCount} published tools`}
-          </p>
+          <p className='mt-3 text-sm text-slate-500'>{toolCountLabel}</p>
           <Search
             placeholder={isChinese ? '搜索工具、场景或产品名...' : 'Search tools, use cases, or product names...'}
             taskHint={isChinese ? '先按任务找' : 'Search by task'}
