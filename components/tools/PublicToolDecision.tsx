@@ -106,7 +106,7 @@ export default function PublicToolDecision({
         </details>
       )}
       {card.comparison.alternatives.length > 0 && (
-        <div className='mt-4 border-t border-slate-200 pt-4'>
+        <div data-reviewed-tool-relationships className='mt-4 border-t border-slate-200 pt-4'>
           <h3 className='text-sm font-semibold text-slate-950'>{cn ? '接下来比较' : 'Compare next'}</h3>
           <p className='mt-2 text-sm leading-6 text-slate-600'>{card.comparison.summary}</p>
           <div className='mt-3 grid gap-3 sm:grid-cols-2'>
