@@ -1,0 +1,5 @@
+
+> tap4-ai@0.1.0 test:tool-decision-card /Users/liukai/.codex/worktrees/f013/ai-best-tool
+> tsx scripts/test-tool-decision-card.ts
+
+Tool Decision Card model test passed.

@@ -1,0 +1,187 @@
+{
+  "checkedAt": "2026-09-14T05:07:49.114Z",
+  "requestBaseUrl": "https://aibesttool.com",
+  "phase": "released",
+  "productionWrites": 0,
+  "candidates": [
+    {
+      "slug": "lovable",
+      "canonicalSlug": "lovable",
+      "identityQuery": "slug, aliases, official domain and localized title",
+      "rows": [
+        {
+          "id": "8fee5c8b-f284-41d4-b691-c099e5bb230b",
+          "name": "lovable",
+          "url": "https://lovable.dev/",
+          "status": "published",
+          "pageQualityStatus": "monitor",
+          "reviewedAt": "2026-09-14",
+          "nextReviewDate": "2026-10-14",
+          "createdAt": "2026-09-14T03:14:21.572Z",
+          "updatedAt": "2026-09-14T03:14:21.572Z",
+          "identityMatchesPayload": true,
+          "featuresMatchPayload": true,
+          "mediaMatchPayload": true,
+          "contentMatchesPayload": true,
+          "indexDecision": {
+            "indexable": false,
+            "qualityScore": 100,
+            "reason": "indexing_paused"
+          }
+        }
+      ],
+      "pages": [
+        {
+          "pathname": "/ai/lovable",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/ai/lovable",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "Lovable AI App Builder",
+          "hasDecisionCard": true,
+          "hasPayloadCopy": true,
+          "fullArticleMatchesPayload": true,
+          "missingDecisionCardItems": [],
+          "imagePaths": [
+            "/images/aitools.svg",
+            "/images/Aileron.svg",
+            "/icons/global.svg",
+            "/images/tool-media/lovable-release-cover.svg"
+          ],
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "0db09026f6b68a969e4c2f73035e6986dd43cc3ef23f05ddbbbca3a2362506b3"
+        },
+        {
+          "pathname": "/ai/lovable-dev",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/ai/lovable-dev",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "fullArticleMatchesPayload": false,
+          "missingDecisionCardItems": [
+            "Founders validating a web-app workflow with an accountable developer",
+            "Small teams testing UI, authentication and a backend together",
+            "Teams able to budget shared build and running costs",
+            "Unattended production handling sensitive data or payments",
+            "Teams requiring fixed all-in costs without usage monitoring",
+            "Projects without a backup, maintenance and migration owner",
+            "Prototype speed and repair effort",
+            "Shared credits and runtime spend",
+            "Authentication and RLS isolation",
+            "Source, data and deployment portability",
+            "Security review and operating ownership",
+            "Workspace collaboration and governance",
+            "A working preview does not validate authorization, RLS or payment logic.",
+            "Build, Cloud and app AI share credits; member limits only cap building.",
+            "Planning research can add usage beyond the base Plan mode message charge.",
+            "Credit expiry and cancellation can restrict access to unused paid credits.",
+            "Built-in scans do not certify application security.",
+            "Code ownership does not migrate data, secrets, domains or managed services.",
+            "Grant eligibility and regional terms must be checked in the actual workspace."
+          ],
+          "imagePaths": [
+            "/images/aitools.svg",
+            "/images/Aileron.svg",
+            "/icons/global.svg"
+          ],
+          "hasReviewedDate": false,
+          "inSitemap": false,
+          "htmlSha256": "d7d3a2fe6d5847485d2fed166f5375ea51a624aeb157015f372a4d97d47a1af5"
+        },
+        {
+          "pathname": "/cn/ai/lovable",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/cn/ai/lovable",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "Lovable AI 应用构建工具",
+          "hasDecisionCard": true,
+          "hasPayloadCopy": true,
+          "fullArticleMatchesPayload": true,
+          "missingDecisionCardItems": [],
+          "imagePaths": [
+            "/images/aitools.svg",
+            "/images/Aileron.svg",
+            "/icons/global.svg",
+            "/images/tool-media/lovable-release-cover.svg"
+          ],
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "373a1334068ae2a9ddd6bc2e13385665a7f08b76424a043a57907b1894014a34"
+        },
+        {
+          "pathname": "/cn/ai/lovable-dev",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/cn/ai/lovable-dev",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "fullArticleMatchesPayload": false,
+          "missingDecisionCardItems": [
+            "有开发维护责任人的 Web 应用验证团队",
+            "需要一起验证界面、登录与后端的小团队",
+            "能管理共享构建及运行费用的团队",
+            "无人维护却处理敏感数据或支付的生产应用",
+            "不监测用量却要求总费用固定的团队",
+            "没有备份、维护与迁移责任人的项目",
+            "原型速度与修复成本",
+            "共享 credits 与运行支出",
+            "身份认证与 RLS 隔离",
+            "源码、数据及部署迁移",
+            "安全复核与维护责任",
+            "工作区协作与治理",
+            "预览可用不能证明授权、RLS 或支付逻辑正确。",
+            "构建、Cloud 和应用 AI 共用 credits；成员限额只管构建。",
+            "Plan mode 研究可在基础消息费用之外增加消耗。",
+            "credits 到期及取消订阅会限制剩余付费额度的使用。",
+            "内置扫描不能认证应用安全。",
+            "代码归属不等于数据、密钥、域名及托管服务已迁移。",
+            "赠送额度及地区条件应以实际工作区核验为准。"
+          ],
+          "imagePaths": [
+            "/images/aitools.svg",
+            "/images/Aileron.svg",
+            "/icons/global.svg"
+          ],
+          "hasReviewedDate": false,
+          "inSitemap": false,
+          "htmlSha256": "8baa1cdddbbd2836813a0bb81f2f4dbc752182d83c43ad3ac027ecf0698515f8"
+        }
+      ],
+      "media": [
+        {
+          "path": "/icons/tool-logos/lovable.svg",
+          "status": 200,
+          "contentType": "image/svg+xml",
+          "sha256": "39382dce432255c49d31403ca532be204b2d72da0d0a14dce4708d6952fce972",
+          "expectedSha256": "39382dce432255c49d31403ca532be204b2d72da0d0a14dce4708d6952fce972",
+          "ready": true
+        },
+        {
+          "path": "/images/tool-media/lovable-release-cover.svg",
+          "status": 200,
+          "contentType": "image/svg+xml",
+          "sha256": "257fbbf448fae44bb732fe3dcce01632b04c9c232fcd66f6e34eb13f4fe1893a",
+          "expectedSha256": "257fbbf448fae44bb732fe3dcce01632b04c9c232fcd66f6e34eb13f4fe1893a",
+          "ready": true
+        }
+      ]
+    }
+  ],
+  "failures": [],
+  "sitemap": {
+    "status": 200,
+    "urlCount": 116,
+    "sha256": "defcf8a12a906a051f5f9075ee15797a903eee9635e7cd406980a2ce5b6f0441"
+  }
+}

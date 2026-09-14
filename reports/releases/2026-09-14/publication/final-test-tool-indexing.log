@@ -1,0 +1,5 @@
+
+> tap4-ai@0.1.0 test:tool-indexing /Users/liukai/.codex/worktrees/f013/ai-best-tool
+> tsx scripts/test-tool-indexing.ts
+
+Tool indexing gate tests passed.

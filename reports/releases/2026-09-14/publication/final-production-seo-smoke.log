@@ -1,0 +1,45 @@
+
+> tap4-ai@0.1.0 seo:production-smoke /Users/liukai/.codex/worktrees/f013/ai-best-tool
+> tsx scripts/production-seo-smoke.ts
+
+✅ /ai/claude: 200
+✅ /ai/claude: visible breadcrumb and JSON-LD are aligned
+✅ /ai/claude: canonical and en/zh-CN/x-default alternates are aligned
+✅ /ai/claude: 2 reviewed relationship links are locale-safe
+✅ /cn: 200
+✅ /cn: canonical and en/zh-CN/x-default alternates are aligned
+✅ /cn/explore: 200
+✅ /cn/explore: visible breadcrumb and JSON-LD are aligned
+✅ /cn/explore: canonical and en/zh-CN/x-default alternates are aligned
+✅ /cn/guides: 200
+✅ /cn/guides: visible breadcrumb and JSON-LD are aligned
+✅ /cn/guides: canonical and en/zh-CN/x-default alternates are aligned
+✅ /cn/best-ai-tools: 200
+✅ /cn/best-ai-tools: visible breadcrumb and JSON-LD are aligned
+✅ /cn/best-ai-tools: canonical and en/zh-CN/x-default alternates are aligned
+✅ /cn/find-tools: 200
+✅ /cn/find-tools: visible breadcrumb and JSON-LD are aligned
+✅ /cn/find-tools: canonical aligned and noindex boundary explicit
+✅ /cn/best-ai-tools/ai-writing-tools: 200
+✅ /cn/best-ai-tools/ai-writing-tools: visible breadcrumb and JSON-LD are aligned
+✅ /cn/best-ai-tools/ai-writing-tools: canonical and en/zh-CN/x-default alternates are aligned
+✅ /cn/categories/developer-tools: 200
+✅ /cn/categories/developer-tools: visible breadcrumb and JSON-LD are aligned
+✅ /cn/categories/developer-tools: canonical aligned and noindex boundary explicit
+✅ /cn/ai/fathom: 200
+✅ /cn/ai/fathom: visible breadcrumb and JSON-LD are aligned
+✅ /cn/ai/fathom: canonical and en/zh-CN/x-default alternates are aligned
+✅ /cn/ai/pipedream: 200
+✅ /cn/ai/pipedream: visible breadcrumb and JSON-LD are aligned
+✅ /cn/ai/pipedream: canonical aligned and noindex boundary explicit
+✅ /cn/ai/claude: 200
+✅ /cn/ai/claude: visible breadcrumb and JSON-LD are aligned
+✅ /cn/ai/claude: canonical and en/zh-CN/x-default alternates are aligned
+✅ /cn/ai/claude: 2 reviewed relationship links are locale-safe
+✅ comparison guide: 200 with X-Robots-Tag noindex
+✅ www canonical redirect: 308 -> https://aibesttool.com/cn
+✅ http canonical redirect: 308 -> https://aibesttool.com/cn
+✅ /robots.txt: sitemap directive present
+✅ /sitemap.xml: 116 URLs, no internal or comparison paths
+
+✅ Production SEO smoke check passed for https://aibesttool.com

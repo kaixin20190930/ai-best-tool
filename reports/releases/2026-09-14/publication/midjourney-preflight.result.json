@@ -1,0 +1,16 @@
+{
+  "command": [
+    "pnpm",
+    "run",
+    "tools:candidate-release",
+    "--",
+    "--candidate=midjourney",
+    "--phase=preflight",
+    "--as-of=2026-09-14",
+    "--online"
+  ],
+  "exitCode": 0,
+  "startedAt": "2026-09-14T05:08:12.020450+00:00",
+  "finishedAt": "2026-09-14T05:08:17.721355+00:00",
+  "seconds": 5.7
+}

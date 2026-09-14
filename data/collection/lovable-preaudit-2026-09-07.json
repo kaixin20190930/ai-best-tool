@@ -136,7 +136,10 @@
     "status": "released",
     "releasePayload": "lovable-release.json",
     "actualPublishedAt": "2026-09-14",
-    "note": "Published by the unified publisher in an independent production transaction on 2026-09-14 after deployed media, validate, preflight and rollback gates passed. Original reviewedAt and scheduledSlot remain historical; monitor/noindex and sitemap exclusion remain required."
+    "note": "Published by the unified publisher in an independent production transaction on 2026-09-14 after deployed media, validate, preflight and rollback gates passed. Original reviewedAt and scheduledSlot remain historical; monitor/noindex and sitemap exclusion remain required.",
+    "productionRecordCreatedAt": "2026-09-14T03:14:21.572Z",
+    "productionCommitCompletedAt": "2026-09-14T03:14:24.040054+00:00",
+    "productionVerifiedAt": "2026-09-14T05:09:37.636265+00:00"
   },
   "releasedAt": "2026-09-14",
   "actualPublishedAt": "2026-09-14",

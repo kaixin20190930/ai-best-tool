@@ -1,0 +1,8 @@
+
+> tap4-ai@0.1.0 tools:candidate-release /Users/liukai/.codex/worktrees/f013/ai-best-tool
+> tsx scripts/candidate-release-pipeline.ts -- --candidate\=midjourney --phase\=preflight --as-of\=2026-09-14 --online
+
+✅ midjourney: database preflight passed
+midjourney: reserved route /ai/midjourney; heading=This tool page is temporarily unavailable
+midjourney: reserved route /cn/ai/midjourney; heading=This tool page is temporarily unavailable
+✅ midjourney: reserved route is 200, self-canonical, noindex, and outside sitemap; heading reported separately

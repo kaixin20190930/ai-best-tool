@@ -16,8 +16,8 @@
 | 1 | Synthesia | AI 原生商务视频生成；可补“演示型商务视频”而非泛视频生成的决策边界 | 已于 09-08 按 `monitor/noindex` 发布 | 09-08 | 10-08 复核证据与页面表现；索引仍需独立批准 |
 | 2 | Replit | AI 原生软件构建与 Agent 工作流；可比较托管便利、成本、可控性和生产责任 | 已于 09-09 按 `monitor/noindex` 发布 | 09-09 | 10-09 复核证据与页面表现；索引仍需独立批准 |
 | 3 | Otter.ai | AI 原生会议转录与会议助手；高评论量且有清晰免费/团队决策 | 已于 09-10 完成发布日复核并按 `monitor/noindex` 发布 | 09-10 | 10-10 复核证据与页面表现；索引仍需独立批准 |
-| 4 | Lovable | AI 原生全栈应用构建；须拆分原型速度与生产就绪 | 09-14 已 commit，Card 完整展示修复待上线 | 原 09-11；实际 09-14 | monitor/noindex；先完成全量 DOM 验收 |
-| 5 | Midjourney | AI 原生图像与短视频创作；品牌成熟且决策边界明显 | 素材门禁通过，前序候选 DOM 门禁阻断，未发布 | 原 09-12 | Lovable 全量验收通过后才可独立 commit |
+| 4 | Lovable | AI 原生全栈应用构建；须拆分原型速度与生产就绪 | 09-14 独立发布并完成全量生产验收 | 原 09-11；实际 09-14 | monitor/noindex；下次事实复核 10-14 |
+| 5 | Midjourney | AI 原生图像与短视频创作；品牌成熟且决策边界明显 | 09-14 独立发布并完成全量生产验收 | 原 09-12；实际 09-14 | monitor/noindex；下次事实复核 10-14 |
 | 6 | ElevenLabs | AI 原生语音与音频平台；成熟采用信号强，适合比较质量、credits、克隆同意与商业权利 | 已完成完整预审，进入缓冲池 | 09-13 | 当日复核 credits 换算、促销、rollover、商业使用、克隆与 API 边界 |
 | 7 | HeyGen | AI 原生数字人商务视频平台；可补演示、翻译与 API 视频的决策边界 | 已完成完整预审，进入缓冲池 | 09-14 | 当日复核 Web/API 分账、credits、时长、同意、训练数据与素材 |
 | 8 | Glean | AI 原生企业搜索与工作助手；独立企业采用信号强，补组织级知识检索判断 | 已完成完整预审，进入缓冲池 | 09-15 | 当日复核 connectors、权限、部署、企业合同与公开价格缺失边界 |
@@ -82,4 +82,4 @@ Synthesia 达到成熟工具预审门槛，完整机器可验收记录见
 
 ## 2026-09-14 SLA 异常与延期补发
 
-Lovable 09-11、Midjourney 09-12 发布槽均逾期，本次事实核验日为 09-14。总控已部署首轮候选与媒体；Lovable 于 09-14 独立 commit 成功，nextReviewDate=2026-10-14，monitor/noindex。完整 DOM 验收发现 Card 限制列表截断，修复待部署；Midjourney 尚未 commit，按前序门禁失败停止第二次写入。预审保留历史 09-07，只有 Lovable 填写真实 releasedAt。详见 [延期补发交付](./DELAYED_LOVABLE_MIDJOURNEY_RELEASE_2026-09-14_CN.md)。
+Lovable 09-11、Midjourney 09-12 发布槽均按实际 09-14 延期补发完成。两项分别通过 validate/preflight/rollback 后独立 commit，预审保留历史 09-07，并据生产事务填写 releasedAt/actualPublishedAt=09-14、nextReviewDate=10-14。中途发现的 Card 列表截断在总控部署后解除，两项完整生产审计已通过；均保持 published/monitor/noindex，sitemap 不扩张。详见 [延期补发交付](./DELAYED_LOVABLE_MIDJOURNEY_RELEASE_2026-09-14_CN.md)。
