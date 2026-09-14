@@ -1,6 +1,6 @@
 # 收录与搜索质量主计划
 
-更新时间：2026-09-10
+更新时间：2026-09-14
 
 执行状态：进行中；索引保护及本周可证实历史补账完成，本周至少 12 次放行、剩余额度 0，新增索引批准保持暂停。
 
@@ -82,7 +82,9 @@ sitemap。专项内容、身份链接、TypeScript、数据库 rollback/commit/s
 差异化、证据账本、变化追踪与商业化触发条件见
 [AI 工具决策平台差异化与商业化实施路线图](./EVIDENCE_DECISION_PLATFORM_ROADMAP_CN.md)。
 
-### 当前维护优先级（更新至 2026-09-10）
+### 当前维护优先级（更新至 2026-09-14）
+
+2026-09-14 延期补发：Lovable（原 09-11）与 Midjourney（原 09-12）已重新核验官方事实、形成正式双语 payload、来源明确的品牌素材及复查日期。生产同名/同域/双语标题实体均为 0；原 URL 为 200/noindex 错误占位，不能当作完整 fallback。新素材尚未部署（4 个生产 URL 为 404），因此受控 commit 阻断，仍未发布，不改变索引及 sitemap。逐项门禁、测试与总控后续部署顺序见 [延期补发交付](./DELAYED_LOVABLE_MIDJOURNEY_RELEASE_2026-09-14_CN.md)。原预审日、计划槽与实际发布日严格分开；四周一级进度不因材料准备而提高。
 
 2026-09-07 持续收录准备：已建立 [下周成熟工具候选与发布节奏](./NEXT_WEEK_MATURE_TOOL_INTAKE_2026-09-07_CN.md)。候选顺序
 为 Synthesia、Replit、Otter.ai、Lovable 与 Midjourney；五个候选均已完成结构化预审与生产查重。Synthesia 与 Replit 已分别

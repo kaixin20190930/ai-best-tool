@@ -1,0 +1,351 @@
+{
+  "asOf": "2026-09-14",
+  "baselineSha": "62604cb5c9f411fe0aad59f59d7bfa92dc206aca",
+  "branch": "codex/lovable-midjourney-delayed-release-20260914",
+  "requiredLocalChecksPassed": true,
+  "productionMediaReady": false,
+  "productionCommits": 0,
+  "productionVerify": "not_run_unreleased",
+  "deployments": 0,
+  "sitemapChangeApproved": false,
+  "checks": [
+    {
+      "command": [
+        "pnpm",
+        "exec",
+        "tsx",
+        "scripts/audit-delayed-candidate-release.ts",
+        "--phase=baseline",
+        "--output=reports/releases/2026-09-14/production-after-rollback.json"
+      ],
+      "exitCode": 0,
+      "seconds": 15.71,
+      "name": "after-rollback-audit",
+      "classification": "final_check",
+      "outputSha256": "c7cc3b79029253f1226a5ef7cb28a952ff3d60f01daa3f56cc822a1ede088d56"
+    },
+    {
+      "command": [
+        "pnpm",
+        "run",
+        "test:tool-route-aliases"
+      ],
+      "exitCode": 0,
+      "seconds": 3.59,
+      "name": "alias-tests",
+      "classification": "final_check",
+      "outputSha256": "c7a5e230d40217e9987b90745f77de088b0a215a96135c9bfd9238d6c5084da2"
+    },
+    {
+      "command": [
+        "pnpm",
+        "exec",
+        "tsx",
+        "scripts/audit-delayed-candidate-release.ts",
+        "--phase=baseline"
+      ],
+      "exitCode": 0,
+      "seconds": 16.46,
+      "name": "baseline-audit",
+      "classification": "final_check",
+      "outputSha256": "65a6d867a3f6403c6bc323cd797bbaa2e5d4001e0db6073bb27f9ac21dcfc84b"
+    },
+    {
+      "command": [
+        "pnpm",
+        "build"
+      ],
+      "exitCode": 0,
+      "seconds": 25.1,
+      "name": "build",
+      "classification": "final_check",
+      "outputSha256": "ecb119f3960460e242d1bf6ecc91eb52ba285f60b5515682b0fd1d2a9e0c2b0d"
+    },
+    {
+      "command": [
+        "pnpm",
+        "run",
+        "test:candidate-release"
+      ],
+      "exitCode": 0,
+      "seconds": 1.98,
+      "name": "candidate-tests",
+      "classification": "final_check",
+      "outputSha256": "0f6866f33da7e4e380c6cc1d082c2e2ce5e9c93598c854389256cea1635ebbde"
+    },
+    {
+      "command": [
+        "pnpm",
+        "run",
+        "test:tool-decision-card"
+      ],
+      "exitCode": 0,
+      "seconds": 3.41,
+      "name": "decision-tests",
+      "classification": "final_check",
+      "outputSha256": "9536f68e77d5f563bd3233983eeef3608118fee431400d87829fb30ca77a03bf"
+    },
+    {
+      "command": [
+        "pnpm",
+        "run",
+        "test:delayed-candidate-release"
+      ],
+      "exitCode": 0,
+      "seconds": 1.5,
+      "name": "delayed-tests",
+      "classification": "final_check",
+      "outputSha256": "70cc7805032a4edbc195d0d96fff16dae6cddad3c764c6effc0a5edb85f50a91"
+    },
+    {
+      "command": [
+        "pnpm",
+        "run",
+        "seo:index-consistency",
+        "--",
+        "--output=reports/releases/2026-09-14/index-consistency.json"
+      ],
+      "exitCode": 0,
+      "seconds": 17.24,
+      "name": "index-consistency",
+      "classification": "final_check",
+      "outputSha256": "31b4b9260bb6cead8e7b91744ccd0dc703c0cc4220f80b1c820317c14f7e2191"
+    },
+    {
+      "command": [
+        "pnpm",
+        "run",
+        "test:tool-indexing"
+      ],
+      "exitCode": 0,
+      "seconds": 3.45,
+      "name": "index-tests",
+      "classification": "final_check",
+      "outputSha256": "16d43f3fbd4be975008d5a691cf295325bad19507eee39d3616c78957f9da680"
+    },
+    {
+      "command": [
+        "pnpm",
+        "exec",
+        "eslint",
+        "scripts/candidate-release-pipeline.ts",
+        "scripts/test-delayed-candidate-release.ts",
+        "scripts/audit-delayed-candidate-release.ts",
+        "app/[locale]/(with-footer)/ai/[websiteName]/page.tsx"
+      ],
+      "exitCode": 1,
+      "seconds": 10.76,
+      "name": "lint",
+      "classification": "historical_lint_attempt",
+      "outputSha256": "ee8c5618bef8de5c5ed8524726fd8203d721e1042c1bdc4d36f0ec5448549640"
+    },
+    {
+      "command": [
+        "pnpm",
+        "run",
+        "tools:candidate-release",
+        "--",
+        "--candidate=lovable",
+        "--phase=preflight",
+        "--as-of=2026-09-14",
+        "--online"
+      ],
+      "exitCode": 0,
+      "seconds": 5.88,
+      "name": "lovable-preflight",
+      "classification": "final_check",
+      "outputSha256": "b19c0ce75d7fbb018a8b5a155d46f6d77f469f85468534320112064d5151fed3"
+    },
+    {
+      "command": [
+        "pnpm",
+        "run",
+        "tools:candidate-release",
+        "--",
+        "--candidate=lovable",
+        "--phase=release",
+        "--as-of=2026-09-14"
+      ],
+      "exitCode": 1,
+      "seconds": 5.74,
+      "name": "lovable-rollback-date-attempt",
+      "classification": "historical_failure_fixed",
+      "outputSha256": "1978a6ab961a635e69e7e0f3b10deca2d7e846c5b5f44e810a3df4685d9a6f8c"
+    },
+    {
+      "command": [
+        "pnpm",
+        "run",
+        "tools:candidate-release",
+        "--",
+        "--candidate=lovable",
+        "--phase=release",
+        "--as-of=2026-09-14"
+      ],
+      "exitCode": 0,
+      "seconds": 6.84,
+      "name": "lovable-rollback",
+      "classification": "final_check",
+      "outputSha256": "05b64e58369f38dce2c47d7c52960e33c83759014c8090873d9bfb9533a5e727"
+    },
+    {
+      "command": [
+        "pnpm",
+        "run",
+        "tools:candidate-release",
+        "--",
+        "--candidate=lovable",
+        "--phase=validate",
+        "--as-of=2026-09-14"
+      ],
+      "exitCode": 0,
+      "seconds": 1.13,
+      "name": "lovable-validate",
+      "classification": "final_check",
+      "outputSha256": "80cc09aa8bb80ff880059da440b2792b6e97ce84f05a99d24e18dc5c9627ed2b"
+    },
+    {
+      "command": [
+        "pnpm",
+        "exec",
+        "tsx",
+        "scripts/audit-delayed-candidate-release.ts",
+        "--phase=media"
+      ],
+      "exitCode": 1,
+      "seconds": 13.07,
+      "name": "media-audit",
+      "classification": "production_blocker",
+      "outputSha256": "16aac8605809850b1c0d9d8df1ddcfdf65572b83015ea8434c0658985c759780"
+    },
+    {
+      "command": [
+        "pnpm",
+        "run",
+        "tools:candidate-release",
+        "--",
+        "--candidate=midjourney",
+        "--phase=preflight",
+        "--as-of=2026-09-14",
+        "--online"
+      ],
+      "exitCode": 0,
+      "seconds": 6.34,
+      "name": "midjourney-preflight",
+      "classification": "final_check",
+      "outputSha256": "3ed53e0ca937e325c4e4108916d3f574af037e5e7974f29b0f1ac6bd0f142e35"
+    },
+    {
+      "command": [
+        "pnpm",
+        "run",
+        "tools:candidate-release",
+        "--",
+        "--candidate=midjourney",
+        "--phase=release",
+        "--as-of=2026-09-14"
+      ],
+      "exitCode": 0,
+      "seconds": 6.58,
+      "name": "midjourney-rollback",
+      "classification": "final_check",
+      "outputSha256": "d8dc2c343b8f0e004b49e0c86799942aa804c80d762e510c8833ac445c0ff9c6"
+    },
+    {
+      "command": [
+        "pnpm",
+        "run",
+        "tools:candidate-release",
+        "--",
+        "--candidate=midjourney",
+        "--phase=validate",
+        "--as-of=2026-09-14"
+      ],
+      "exitCode": 0,
+      "seconds": 0.9,
+      "name": "midjourney-validate",
+      "classification": "final_check",
+      "outputSha256": "ab22904c6ad174f686337b745b2a27f38c588e6aa6e294d51e78fdb64429ba2a"
+    },
+    {
+      "command": [
+        "pnpm",
+        "run",
+        "test:next-tool-preaudit"
+      ],
+      "exitCode": 0,
+      "seconds": 3.27,
+      "name": "preaudit-tests",
+      "classification": "final_check",
+      "outputSha256": "944d631af3c6f4b755f08698c8a82dcd5821c191bcf21a519c1e9059eab98599"
+    },
+    {
+      "command": [
+        "pnpm",
+        "run",
+        "seo:production-smoke"
+      ],
+      "exitCode": 0,
+      "seconds": 15.55,
+      "name": "production-smoke",
+      "classification": "final_check",
+      "outputSha256": "3bc716b9d69e374b6595d56c5ad5f5254a72ca10a1b5a61f9729ea8deef2c75b"
+    },
+    {
+      "command": [
+        "pnpm",
+        "exec",
+        "eslint",
+        "scripts/candidate-release-pipeline.ts",
+        "scripts/test-delayed-candidate-release.ts",
+        "scripts/audit-delayed-candidate-release.ts"
+      ],
+      "exitCode": 0,
+      "seconds": 5.24,
+      "name": "scoped-lint",
+      "classification": "final_check",
+      "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "pnpm",
+        "run",
+        "test:sitemap"
+      ],
+      "exitCode": 0,
+      "seconds": 8.26,
+      "name": "sitemap-tests",
+      "classification": "final_check",
+      "outputSha256": "a59f6536c3bd87d929eb3138931d01636f368431b79d54d1ea5161acf9bf2861"
+    },
+    {
+      "command": [
+        "pnpm",
+        "exec",
+        "tsc",
+        "--noEmit"
+      ],
+      "exitCode": 0,
+      "seconds": 2.5,
+      "name": "tsc",
+      "classification": "final_check",
+      "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "pnpm",
+        "run",
+        "tools:candidate-release",
+        "--",
+        "--phase=validate",
+        "--as-of=2026-09-14"
+      ],
+      "exitCode": 0,
+      "seconds": 3.53,
+      "name": "validate",
+      "classification": "final_check",
+      "outputSha256": "99eae1a6677b5208091244b8f2b8f2c3553e2300a79fa78bddf3122cef95ea56"
+    }
+  ],
+  "logNormalization": "checks.log strips trailing whitespace; outputSha256 values refer to original process output."
+}

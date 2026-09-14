@@ -1,0 +1,35 @@
+{
+  "checkedAt": "2026-09-14T02:25:38.618Z",
+  "baseUrl": "http://localhost:3047",
+  "exitCode": 0,
+  "checks": [
+    {
+      "path": "/icons/tool-logos/lovable.svg",
+      "status": 200,
+      "contentType": "image/svg+xml",
+      "sha256": "39382dce432255c49d31403ca532be204b2d72da0d0a14dce4708d6952fce972",
+      "localFileMatches": true
+    },
+    {
+      "path": "/images/tool-media/lovable-release-cover.svg",
+      "status": 200,
+      "contentType": "image/svg+xml",
+      "sha256": "257fbbf448fae44bb732fe3dcce01632b04c9c232fcd66f6e34eb13f4fe1893a",
+      "localFileMatches": true
+    },
+    {
+      "path": "/icons/tool-logos/midjourney.jpg",
+      "status": 200,
+      "contentType": "image/jpeg",
+      "sha256": "33024615c808beb9b91ada21d8b604b509c633c7a26a3ae044e704649b083870",
+      "localFileMatches": true
+    },
+    {
+      "path": "/images/tool-media/midjourney-release-cover.svg",
+      "status": 200,
+      "contentType": "image/svg+xml",
+      "sha256": "0df58d98cd698cde883321af72fa2cdbe19acb74105b919536d035a5458f6387",
+      "localFileMatches": true
+    }
+  ]
+}

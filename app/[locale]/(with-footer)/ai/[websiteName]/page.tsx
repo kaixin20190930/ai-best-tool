@@ -3771,7 +3771,8 @@ export default async function Page({
     }
     const freshnessSummary = decisionFreshnessSummary || getFreshnessSummary(updatedAt || null, locale);
     const pricingSummary = decisionPricingSummary || getPricingSummary(dbTool?.pricing, locale);
-    const riskPoints: string[] = [];
+    const decisionFeatures = dbTool?.features?.decision as Record<string, unknown> | undefined;
+    const riskPoints: string[] = getStringList(decisionFeatures?.limitations, locale);
     if (dbTool?.status !== 'published') {
       riskPoints.push(
         isChinese

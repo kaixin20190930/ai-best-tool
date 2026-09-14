@@ -1,0 +1,8 @@
+{
+  "scripts/candidate-release-pipeline.ts": "34f11cf240d8a2df9670fb0ccce81b3510df9237ad38e50ccea89b401ab79efa",
+  "scripts/test-delayed-candidate-release.ts": "108d01132f1e7bc074b3ac1b5e310995a8942eb666ca0570e66f25cc306f8d3f",
+  "scripts/audit-delayed-candidate-release.ts": "b40cea7e4cd159579c8007a316dd4325dd845f5549920d77b3627ef358e2911c",
+  "app/[locale]/(with-footer)/ai/[websiteName]/page.tsx": "fb2c019acebcac589d9f3a057a63da9b5162a6a7e32e1efd57f19a358f1b27a8",
+  "data/collection/lovable-release.json": "7515fe8238febfa32f1d338a434fb59fbd5828147071363697a8fcc065ad18ca",
+  "data/collection/midjourney-release.json": "57bc612191f0e46d1a57e05b63e8eab47304373a6390f3612e4b1af1e84e5d79"
+}

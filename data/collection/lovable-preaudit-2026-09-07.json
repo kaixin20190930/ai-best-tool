@@ -128,5 +128,14 @@
     "Keep the page focused on rapid full-stack web application creation and separate prototype speed from production readiness",
     "Preserve security, RLS, generated-code review, ongoing cost, portability, ownership, and maintenance boundaries in both languages",
     "Replace only the existing /ai/lovable fallback and publish as monitor/noindex; run evidence, alias, sitemap, TypeScript, full build, and production smoke before any later index decision"
-  ]
+  ],
+  "delayedRelease": {
+    "scheduledSlot": "2026-09-11",
+    "recheckedAt": "2026-09-14",
+    "label": "延期补发",
+    "status": "blocked_production_media_not_deployed",
+    "releasePayload": "lovable-release.json",
+    "actualPublishedAt": null,
+    "note": "Original preaudit reviewedAt is historical. Only a successful production commit may populate releasedAt; new local media must first be present in production."
+  }
 }

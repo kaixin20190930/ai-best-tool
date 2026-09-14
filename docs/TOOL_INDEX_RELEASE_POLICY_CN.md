@@ -1,6 +1,6 @@
 # 工具页索引发布与节奏控制
 
-更新时间：2026-09-09
+更新时间：2026-09-14
 状态：统一保护已实施；成熟工具公开改为每日 SLA，索引按风险分层、小批量放行
 上位计划：[收录与搜索质量主计划](./MASTER_OPTIMIZATION_TRACKER_CN.md)
 
@@ -105,3 +105,7 @@ OpenRouter 与 n8n 同日从未批准索引的 fallback 转为 continue_index，
 - 质量不足、市场验证不足、来源冲突、重复意图或待补素材的工具页。
 
 核心首页、Explore、18 个白名单 Guide、28 个 Best topic、合格分类页和逐个批准的工具页继续作为索引面。
+
+## 2026-09-14 延期补发边界记录
+
+Lovable 与 Midjourney 的逾期公开槽已补做当日事实核验及正式材料，当前因生产素材 404 尚未 commit。本次不批准索引，不消耗索引额度，不改变 sitemap。后续公开仍只能 `published + monitor + noindex`；观察期从真实发布日计算，不能从 09-07 预审或 09-14 材料核验日提前起算。见 [延期补发交付记录](./DELAYED_LOVABLE_MIDJOURNEY_RELEASE_2026-09-14_CN.md)。

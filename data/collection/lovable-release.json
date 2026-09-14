@@ -1,0 +1,293 @@
+{
+  "id": "8fee5c8b-f284-41d4-b691-c099e5bb230b",
+  "slug": "lovable",
+  "officialUrl": "https://lovable.dev/",
+  "reviewedAt": "2026-09-14",
+  "nextReviewDate": "2026-10-14",
+  "categorySlug": "productivity",
+  "pricing": "freemium",
+  "title": {
+    "en": "Lovable AI App Builder",
+    "zh": "Lovable AI 应用构建工具"
+  },
+  "content": {
+    "en": "Build and review web applications with shared usage credits, generated source and managed backend services. Compare prototype speed with security, operating cost and maintenance responsibility.",
+    "zh": "通过共享用量 credits、生成源码及托管后端构建并复核 Web 应用；比较原型速度、安全、运行成本与维护责任。"
+  },
+  "detail": {
+    "en": "Choose Lovable for a small, testable web application with a named maintainer. Use a prototype to discover requirements; require engineering review before external users, payments or sensitive records. Compare the cost of a complete workflow, including corrections and operations, with a developer-owned implementation.\n\nPlans checked September 14, 2026: Free is available. The official subscription table lists the 100-credit Pro tier at $25 monthly or $250 yearly, and Business at $50 monthly or $500 yearly. Annual totals are upfront commitments, not monthly payment offers. Larger credit tiers and Enterprise terms differ. Pro supports code editing and custom domains; Business adds governance such as SSO, with Enterprise-only controls requiring a separate check. Verify the checkout, region and tax before purchase. [Official plan table](https://docs.lovable.dev/introduction/subscription-plans).\n\nBuilding, managed Cloud and AI inside deployed apps consume one workspace credit system. Grants apply to specific usage before general credits. Free currently grants 5 build credits daily up to 30 monthly, plus 20 monthly Cloud credits and 4 monthly app-AI credits. The pricing FAQ and detailed tables differ in how paid AI grants and regional daily caps are described; this page does not promise a universal paid grant. Plan mode has a 1-credit base message charge plus any subagent research, while building varies with work. Inspect actual usage instead of treating one prompt as one fixed-price result. [Usage mechanics](https://docs.lovable.dev/introduction/credits-and-usage) · [Pricing FAQ](https://lovable.dev/pricing).\n\nThe June billing announcement documents migration from separate balances. Current usage documentation still warns that some accounts may display the older view; no specific account migration was inspected here. Confirm converted credit history and auto-top-up settings in that workspace. Member limits apply to build usage only, so they do not cap project Cloud or AI spending. Monthly credits expire two months after issue; annual-plan credits expire one month after the annual period, and top-ups after twelve months. Cancellation freezes remaining paid credits after the billing period without extending expiry; refunds are subject to the terms and applicable law. [Migration](https://lovable.dev/blog/simplifying-billing) · [Admin controls](https://docs.lovable.dev/features/workspace-admin-settings) · [Terms](https://lovable.dev/terms).\n\nBasic and Deep scans assist security review; a publish action can still allow unresolved critical findings unless stronger controls are enforced. For a connected Supabase backend, review per-table RLS, storage permissions and server endpoints. Test anonymous access and two different users against read and write operations, keep service secrets server-side, and review payment authorization separately. A passing scan or successful preview is not production certification. [Security](https://docs.lovable.dev/features/security) · [Supabase](https://docs.lovable.dev/integrations/supabase).\n\nOwnership of generated code and output remains subject to third-party rights. Git sync does not move every database, file, credential, domain or managed service. Before launch, rehearse backup and restore, an export path and rollback; assign monitoring and dependency maintenance. Trial one non-sensitive workflow and record build credits, running usage, repair time and authorization failures. This is an editorial trial proposal, not a hands-on result.\n\nIndependent evidence: [Hands-on review (TechRadar)](https://www.techradar.com/pro/software-services/lovable-review) · [Adoption reporting (TechCrunch; vendor self-report)](https://techcrunch.com/2026/06/09/lovable-says-it-has-hit-500m-in-annualized-revenue-with-1-million-new-projects-a-week/)\n\nOfficial evidence: [Plans](https://docs.lovable.dev/introduction/subscription-plans) · [Credits and usage](https://docs.lovable.dev/introduction/credits-and-usage) · [Pricing](https://lovable.dev/pricing) · [Workspace administration](https://docs.lovable.dev/features/workspace-admin-settings) · [Security](https://docs.lovable.dev/features/security) · [Supabase integration](https://docs.lovable.dev/integrations/supabase) · [Billing migration](https://lovable.dev/blog/simplifying-billing) · [Terms](https://lovable.dev/terms) · [Brand resources](https://lovable.dev/brand)\n\nMedia: official brand artwork for identification, not a product screenshot or a trial result. [Source](https://lovablebrand.lovable.app/brand/logo).\n\nComparison paths: [replit](/ai/replit#decision-card) · [cursor](/ai/cursor#decision-card)",
+    "zh": "Lovable 适合范围明确、可验证且有维护责任人的小型 Web 应用。先用原型发现需求，在接入外部用户、支付或敏感记录前安排工程复核。应把修正与运营都计入完整工作流成本，再与开发者维护的实现比较。\n\n2026-09-14 套餐核验：提供 Free。官方订阅表中，100 credits 档 Pro 为月付 25 美元或年付 250 美元；Business 为月付 50 美元或年付 500 美元。年费总额是预先承诺，不是每月扣款报价。更多额度档及 Enterprise 合同另计。Pro 支持代码编辑与自定义域名；Business 增加 SSO 等治理能力，Enterprise 专属控制需另行确认。购买前核对结账、地区及税费。[官方套餐表](https://docs.lovable.dev/introduction/subscription-plans)。\n\n构建、托管 Cloud 与已部署应用中的 AI 使用统一工作区 credits 体系。专用赠送额度先于通用额度消耗。Free 当前每天赠送 5 个构建 credits、每月最多 30，另有每月 20 个 Cloud credits 与 4 个应用 AI credits。价格 FAQ 与详细表对付费 AI 赠送及地区每日额度上限的说明不完全相同，本页不承诺所有付费账户都有同一赠送额度。Plan mode 每条基础费用为 1 credit，子代理研究另计；构建按实际工作变化。应检查真实用量，不能将一次提示视为固定价格成品。[用量规则](https://docs.lovable.dev/introduction/credits-and-usage) · [价格 FAQ](https://lovable.dev/pricing)。\n\n6 月计费公告记录了从双余额迁移的过程；当前用量文档仍提醒部分账户可能看到旧界面，本次没有检查任何特定账户的迁移完成情况。需在实际工作区核对转换记录与自动充值设置。成员限额只约束构建，不封顶项目 Cloud 或 AI 运行费。月付 credits 发放两个月后到期；年付额度在年度结束一个月后到期，充值额度十二个月后到期。取消后，剩余付费 credits 在当前计费期结束后冻结，且不会延长有效期；退款依条款及适用法律处理。[迁移公告](https://lovable.dev/blog/simplifying-billing) · [管理控制](https://docs.lovable.dev/features/workspace-admin-settings) · [条款](https://lovable.dev/terms)。\n\nBasic 与 Deep 扫描辅助安全复核；如果没有强制更严格的控制，仍可能带着未解决的严重问题发布。连接 Supabase 时要逐表核对 RLS、存储权限及服务端接口。分别用匿名用户及两个不同账户测试读写隔离，服务密钥只放服务端，支付授权另行检查。扫描通过或预览正常均不等于生产安全认证。[安全文档](https://docs.lovable.dev/features/security) · [Supabase](https://docs.lovable.dev/integrations/supabase)。\n\n生成代码与输出的归属仍受第三方权利约束。Git 同步不会搬走所有数据库、文件、凭证、域名或托管服务。上线前演练备份恢复、导出与回滚，并指定监控及依赖维护人员。先以非敏感流程试用，记录构建额度、运行用量、修复时间及授权失败。这是编辑建议的试用方案，并非本站实测结论。\n\n独立证据：[Hands-on review (TechRadar)](https://www.techradar.com/pro/software-services/lovable-review) · [Adoption reporting (TechCrunch; vendor self-report)](https://techcrunch.com/2026/06/09/lovable-says-it-has-hit-500m-in-annualized-revenue-with-1-million-new-projects-a-week/)\n\n官方证据：[Plans](https://docs.lovable.dev/introduction/subscription-plans) · [Credits and usage](https://docs.lovable.dev/introduction/credits-and-usage) · [Pricing](https://lovable.dev/pricing) · [Workspace administration](https://docs.lovable.dev/features/workspace-admin-settings) · [Security](https://docs.lovable.dev/features/security) · [Supabase integration](https://docs.lovable.dev/integrations/supabase) · [Billing migration](https://lovable.dev/blog/simplifying-billing) · [Terms](https://lovable.dev/terms) · [Brand resources](https://lovable.dev/brand)\n\n媒体：用于产品识别的官方品牌图，不是产品截图或本站试用结果。[Source](https://lovablebrand.lovable.app/brand/logo).\n\n比较路径：[replit](/cn/ai/replit#decision-card) · [cursor](/cn/ai/cursor#decision-card)"
+  },
+  "imageUrl": "/icons/tool-logos/lovable.svg",
+  "thumbnailUrl": "/images/tool-media/lovable-release-cover.svg",
+  "tags": [
+    "ai-app-builder",
+    "ai-coding",
+    "full-stack-development"
+  ],
+  "features": {
+    "audience": {
+      "bestFit": {
+        "en": [
+          "Founders validating a web-app workflow with an accountable developer",
+          "Small teams testing UI, authentication and a backend together",
+          "Teams able to budget shared build and running costs"
+        ],
+        "zh": [
+          "有开发维护责任人的 Web 应用验证团队",
+          "需要一起验证界面、登录与后端的小团队",
+          "能管理共享构建及运行费用的团队"
+        ]
+      },
+      "notIdealFor": {
+        "en": [
+          "Unattended production handling sensitive data or payments",
+          "Teams requiring fixed all-in costs without usage monitoring",
+          "Projects without a backup, maintenance and migration owner"
+        ],
+        "zh": [
+          "无人维护却处理敏感数据或支付的生产应用",
+          "不监测用量却要求总费用固定的团队",
+          "没有备份、维护与迁移责任人的项目"
+        ]
+      }
+    },
+    "editorial": {
+      "reviewedAt": "2026-09-14",
+      "reviewedBy": "AI Best Tool editorial",
+      "sourceUrl": "https://docs.lovable.dev/introduction/subscription-plans",
+      "summary": {
+        "en": "Official facts rechecked on September 14, 2026; independent coverage supports editorial inclusion, not a performance guarantee.",
+        "zh": "2026-09-14 已重新核验官方事实；独立报道支持编辑收录，不构成效果保证。"
+      },
+      "trustNote": {
+        "en": "Public documentation review only. No account-level or hands-on trial was performed.",
+        "zh": "本次是公开文档复核，未进行账户级检查或亲手试用。"
+      }
+    },
+    "decision": {
+      "compareAxes": {
+        "en": [
+          "Prototype speed and repair effort",
+          "Shared credits and runtime spend",
+          "Authentication and RLS isolation",
+          "Source, data and deployment portability",
+          "Security review and operating ownership",
+          "Workspace collaboration and governance"
+        ],
+        "zh": [
+          "原型速度与修复成本",
+          "共享 credits 与运行支出",
+          "身份认证与 RLS 隔离",
+          "源码、数据及部署迁移",
+          "安全复核与维护责任",
+          "工作区协作与治理"
+        ]
+      },
+      "limitations": {
+        "en": [
+          "A working preview does not validate authorization, RLS or payment logic.",
+          "Build, Cloud and app AI share credits; member limits only cap building.",
+          "Planning research can add usage beyond the base Plan mode message charge.",
+          "Credit expiry and cancellation can restrict access to unused paid credits.",
+          "Built-in scans do not certify application security.",
+          "Code ownership does not migrate data, secrets, domains or managed services.",
+          "Grant eligibility and regional terms must be checked in the actual workspace."
+        ],
+        "zh": [
+          "预览可用不能证明授权、RLS 或支付逻辑正确。",
+          "构建、Cloud 和应用 AI 共用 credits；成员限额只管构建。",
+          "Plan mode 研究可在基础消息费用之外增加消耗。",
+          "credits 到期及取消订阅会限制剩余付费额度的使用。",
+          "内置扫描不能认证应用安全。",
+          "代码归属不等于数据、密钥、域名及托管服务已迁移。",
+          "赠送额度及地区条件应以实际工作区核验为准。"
+        ]
+      },
+      "pricingSummary": {
+        "en": "Compare the chosen credit tier, build iterations and running usage; the plan fee alone is not the total application cost.",
+        "zh": "比较所选 credits 档、构建迭代及运行用量，套餐费不是应用总成本。"
+      },
+      "officialSummary": {
+        "en": "Use the linked plan, usage and policy documents to check this workflow before purchase.",
+        "zh": "购买前通过所链接的套餐、用量与政策文档核验目标工作流。"
+      },
+      "freshnessSummary": {
+        "en": "Reviewed September 14, 2026. Next fact review: October 14, 2026; changes or conflicts trigger earlier review.",
+        "zh": "核验于 2026-09-14；下次事实复核为 2026-10-14，变化或冲突会触发提前复核。"
+      },
+      "mediaSummary": {
+        "en": "Official brand artwork used for identification, not screenshots or evidence of tested output.",
+        "zh": "官方品牌素材用于识别，不作为产品截图或本站实测证据。"
+      },
+      "communitySummary": {
+        "en": "Independent coverage is linked in the evidence section. No live review count or keyword volume is claimed.",
+        "zh": "证据部分链接独立报道；不声称已核实实时评论量或关键词搜索量。"
+      },
+      "alternatives": [
+        {
+          "slug": "replit",
+          "reason": {
+            "en": "Compare another integrated app-building workflow with the same trial.",
+            "zh": "用相同试用比较另一种集成应用构建流程。"
+          }
+        },
+        {
+          "slug": "cursor",
+          "reason": {
+            "en": "Compare a developer-led coding workflow and maintenance responsibility.",
+            "zh": "比较开发者主导的编码流程与维护责任。"
+          }
+        }
+      ]
+    },
+    "pricingSnapshot": {
+      "checkedAt": "2026-09-14",
+      "sourceUrls": [
+        "https://docs.lovable.dev/introduction/subscription-plans",
+        "https://docs.lovable.dev/introduction/credits-and-usage",
+        "https://lovable.dev/pricing"
+      ],
+      "summary": {
+        "en": "Compare the chosen credit tier, build iterations and running usage; the plan fee alone is not the total application cost.",
+        "zh": "比较所选 credits 档、构建迭代及运行用量，套餐费不是应用总成本。"
+      },
+      "conflicts": [
+        "Pricing FAQ simplifies Plan mode to 1 credit; detailed usage documentation additionally bills subagent research.",
+        "Paid AI grants and regional daily caps are described differently across official tables/FAQ; no universal paid grant is promised."
+      ]
+    },
+    "evidence": {
+      "checkedAt": "2026-09-14",
+      "official": [
+        {
+          "label": "Plans",
+          "url": "https://docs.lovable.dev/introduction/subscription-plans",
+          "checkedAt": "2026-09-14"
+        },
+        {
+          "label": "Credits and usage",
+          "url": "https://docs.lovable.dev/introduction/credits-and-usage",
+          "checkedAt": "2026-09-14"
+        },
+        {
+          "label": "Pricing",
+          "url": "https://lovable.dev/pricing",
+          "checkedAt": "2026-09-14"
+        },
+        {
+          "label": "Workspace administration",
+          "url": "https://docs.lovable.dev/features/workspace-admin-settings",
+          "checkedAt": "2026-09-14"
+        },
+        {
+          "label": "Security",
+          "url": "https://docs.lovable.dev/features/security",
+          "checkedAt": "2026-09-14"
+        },
+        {
+          "label": "Supabase integration",
+          "url": "https://docs.lovable.dev/integrations/supabase",
+          "checkedAt": "2026-09-14"
+        },
+        {
+          "label": "Billing migration",
+          "url": "https://lovable.dev/blog/simplifying-billing",
+          "checkedAt": "2026-09-14"
+        },
+        {
+          "label": "Terms",
+          "url": "https://lovable.dev/terms",
+          "checkedAt": "2026-09-14"
+        },
+        {
+          "label": "Brand resources",
+          "url": "https://lovable.dev/brand",
+          "checkedAt": "2026-09-14"
+        }
+      ],
+      "independent": [
+        {
+          "label": "Hands-on review (TechRadar)",
+          "url": "https://www.techradar.com/pro/software-services/lovable-review",
+          "checkedAt": "2026-09-14"
+        },
+        {
+          "label": "Adoption reporting (TechCrunch; vendor self-report)",
+          "url": "https://techcrunch.com/2026/06/09/lovable-says-it-has-hit-500m-in-annualized-revenue-with-1-million-new-projects-a-week/",
+          "checkedAt": "2026-09-14"
+        }
+      ]
+    },
+    "media": {
+      "assets": [
+        {
+          "path": "/icons/tool-logos/lovable.svg",
+          "url": "https://lovablebrand.lovable.app/logos/logomark-color.svg",
+          "sourcePage": "https://lovablebrand.lovable.app/brand/logo",
+          "checkedAt": "2026-09-14",
+          "sha256": "39382dce432255c49d31403ca532be204b2d72da0d0a14dce4708d6952fce972",
+          "usageBasis": "Official brand hub linked from lovable.dev/brand offers approved downloads. Preserve artwork, color, aspect ratio and clear space; descriptive identification only.",
+          "type": "official_brand_asset",
+          "isProductScreenshot": false
+        },
+        {
+          "path": "/images/tool-media/lovable-release-cover.svg",
+          "url": "https://lovablebrand.lovable.app/logos/lockup-black.svg",
+          "sourcePage": "https://lovablebrand.lovable.app/brand/logo",
+          "checkedAt": "2026-09-14",
+          "sha256": "257fbbf448fae44bb732fe3dcce01632b04c9c232fcd66f6e34eb13f4fe1893a",
+          "usageBasis": "Official black lockup; unchanged artwork on a plain light background. Brand identity image, not a screenshot or proof of app quality.",
+          "type": "official_brand_asset",
+          "isProductScreenshot": false,
+          "originalPath": "/images/tool-media/lovable-brand.svg",
+          "originalSha256": "781e6698236acab08c1300a41d5840e4a881fa903ddde1de52e465ed5612b597",
+          "presentation": "Unmodified brand artwork centered on a plain white 1400x800 SVG canvas, with clear space; no product screenshot."
+        }
+      ]
+    },
+    "marketValidation": {
+      "reviewedAt": "2026-09-14",
+      "score": 90,
+      "scores": {
+        "marketDurability": 23,
+        "independentAdoption": 22,
+        "decisionValue": 23,
+        "evidenceQuality": 22
+      },
+      "verdict": "validated",
+      "rationale": {
+        "en": "Independent product coverage and a sustained documented workflow support inclusion. This editorial assessment does not approve search indexing.",
+        "zh": "独立产品报道与持续维护的完整工作流支持收录；此编辑判断不批准搜索索引。"
+      },
+      "strongSignals": [
+        "TechRadar reports a hands-on app-building test.",
+        "TechCrunch reports vendor adoption claims (self-reported, not audited).",
+        "Official plan, security and integration documentation supports a maintained full-stack product."
+      ],
+      "evidenceUrls": [
+        "https://www.techradar.com/pro/software-services/lovable-review",
+        "https://techcrunch.com/2026/06/09/lovable-says-it-has-hit-500m-in-annualized-revenue-with-1-million-new-projects-a-week/"
+      ]
+    },
+    "release": {
+      "scheduledSlot": "2026-09-11",
+      "reviewedAt": "2026-09-14",
+      "executionType": "delayed_makeup",
+      "label": "延期补发",
+      "indexState": "monitor",
+      "sitemapChangeApproved": false,
+      "nextReviewDate": "2026-10-14"
+    }
+  },
+  "useCases": {
+    "en": [
+      "Evaluate one representative workflow with explicit acceptance criteria",
+      "Record costs, failed attempts and recovery steps before committing"
+    ],
+    "zh": [
+      "用明确验收标准验证一条代表性工作流",
+      "投入前记录成本、失败尝试及恢复步骤"
+    ]
+  }
+}

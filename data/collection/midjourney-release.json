@@ -1,0 +1,291 @@
+{
+  "id": "f008c10a-7f0d-4b21-827e-724b305c1b73",
+  "slug": "midjourney",
+  "officialUrl": "https://www.midjourney.com/",
+  "reviewedAt": "2026-09-14",
+  "nextReviewDate": "2026-10-14",
+  "categorySlug": "design-art",
+  "pricing": "paid",
+  "title": {
+    "en": "Midjourney™ AI Image and Video Creator",
+    "zh": "Midjourney™ AI 图像与短视频创作工具"
+  },
+  "content": {
+    "en": "Explore image styles, edit visual assets and animate starting images through Web or Discord. Compare GPU budgets, public visibility, commercial terms and the precision your deliverable requires.",
+    "zh": "通过 Web 或 Discord 探索图像风格、编辑视觉素材及制作起始图像动画；比较 GPU 预算、公开可见性、商业条款及交付精度。"
+  },
+  "detail": {
+    "en": "Choose Midjourney for visual exploration when you can iterate and inspect results. Compare final accepted assets, including rejected generations, edits and upscales. For exact product geometry, text or repeated characters, use an acceptance checklist; artistic appeal alone does not establish production accuracy.\n\nPlans checked September 14, 2026: Basic / Standard / Pro / Mega cost $10 / $30 / $60 / $120 monthly. Annual totals are $96 / $288 / $576 / $1,152 paid upfront. Included monthly Fast time is 200 minutes / 15 hours / 30 hours / 60 hours; extra Fast time is listed at $4 per hour. Standard and above provide Relax images; Pro and Mega also allow SD Relax video and Stealth. Confirm tax and checkout terms. [Official plans](https://docs.midjourney.com/hc/en-us/articles/27870484040333-Comparing-Midjourney-Plans).\n\nGPU time measures computation, not time spent in the app or a guaranteed image count. Included Fast time resets without rollover. Model, resolution, edit, upscale, batch and mode change consumption; Relax uses a queue. The speed documentation flags Turbo as unsupported in V8.1, so verify the selected version before relying on acceleration. [GPU accounting](https://docs.midjourney.com/hc/en-us/articles/32016412137741-GPU-Speed-Fast-Relax-Turbo).\n\nUse the website Create and Organize workflow or Discord. Account linking matters when keeping existing Discord history. The web Editor supports uploaded images, masking, inpainting, outpainting and layers; current documentation uses the V8.X Edit Model. Omni Reference gallery images have a specific Edit-tab workflow and the reference and --ow must be removed before submission. Feature and parameter compatibility should be tested rather than inferred from another model. [Web](https://docs.midjourney.com/hc/en-us/articles/33390732264589-Creating-on-Web) · [Editor](https://docs.midjourney.com/hc/en-us/articles/32764383466893-Editor).\n\nCreations are public and remixable by default. Pro/Mega Stealth affects website visibility, but people in a shared Discord channel can still see work posted there. Changing the default only affects later prompts; make earlier assets private separately. For confidential material, check account, visibility, surface and contract before uploading; Stealth is not a blanket confidentiality guarantee. [Stealth](https://docs.midjourney.com/hc/en-us/articles/32019750070669-Stealth-Mode) · [Terms](https://docs.midjourney.com/hc/en-us/articles/32083055291277-Terms-of-Service).\n\nCommercial rights remain conditional: a company or employee of a company exceeding $1 million annual revenue needs Pro or Mega under the current terms. Upscaling another person’s creation does not transfer its ownership. Input permissions, copyrightability, trademarks, likeness and client requirements need separate clearance. Midjourney retains a broad license to submitted content and outputs; subscription ownership language does not establish exclusivity. [Commercial use](https://docs.midjourney.com/hc/en-us/articles/27870375276557-Using-Images-Videos-Commercially) · [Terms](https://docs.midjourney.com/hc/en-us/articles/32083055291277-Terms-of-Service).\n\nVideo animates a starting image into 5 seconds, extendable four times by 4 seconds to 21 seconds. A four-video batch is listed at 8 GPU minutes in SD or 26 in HD; extensions cost another generation. All plans allow Fast video, HD requires Standard or above, and Relax video is SD on Pro/Mega only. Image references and parameters do not all carry into video. Treat this as short animation; plan a separate workflow for timeline editing, sound and delivery. Trial one permitted image, one edit and one animation and record accepted output, visibility and actual GPU use. [Video](https://docs.midjourney.com/hc/en-us/articles/37460773864589-Video).\n\nIndependent evidence: [Company profile (Forbes; cites PitchBook)](https://www.forbes.com/companies/midjourney/) · [Hands-on comparison (Tom’s Guide)](https://www.tomsguide.com/best-picks/best-ai-image-generators)\n\nOfficial evidence: [Plan comparison](https://docs.midjourney.com/hc/en-us/articles/27870484040333-Comparing-Midjourney-Plans) · [GPU accounting](https://docs.midjourney.com/hc/en-us/articles/32016412137741-GPU-Speed-Fast-Relax-Turbo) · [Web workflow](https://docs.midjourney.com/hc/en-us/articles/33390732264589-Creating-on-Web) · [Editor](https://docs.midjourney.com/hc/en-us/articles/32764383466893-Editor) · [Video](https://docs.midjourney.com/hc/en-us/articles/37460773864589-Video) · [Stealth](https://docs.midjourney.com/hc/en-us/articles/32019750070669-Stealth-Mode) · [Commercial use](https://docs.midjourney.com/hc/en-us/articles/27870375276557-Using-Images-Videos-Commercially) · [Terms](https://docs.midjourney.com/hc/en-us/articles/32083055291277-Terms-of-Service) · [Trademark policy](https://docs.midjourney.com/hc/en-us/articles/32084281102349-Midjourney-Trademark-Policy)\n\nMedia: official brand artwork for identification, not a product screenshot or a trial result. [Source](https://docs.midjourney.com/hc/en-us/articles/32084281102349-Midjourney-Trademark-Policy). Midjourney™ is a trademark of Midjourney, Inc. We are not endorsed by or affiliated with Midjourney, Inc.\n\nComparison paths: [adobe-firefly](/ai/adobe-firefly#decision-card) · [runway](/ai/runway#decision-card)",
+    "zh": "Midjourney 适合允许迭代与检查结果的视觉探索。比较应以最终验收素材为准，并计入废稿、编辑与放大成本。产品几何、文字及重复角色需要明确验收清单，画面美感不能单独证明生产准确性。\n\n2026-09-14 套餐核验：Basic / Standard / Pro / Mega 月付依次为 10 / 30 / 60 / 120 美元；年付总额依次为 96 / 288 / 576 / 1,152 美元，预先支付。每月 Fast 时间依次为 200 分钟 / 15 小时 / 30 小时 / 60 小时；额外 Fast 时间标价每小时 4 美元。Standard 及以上支持 Relax 图像；Pro 和 Mega 另支持 SD Relax 视频及 Stealth。需再核对税费与结账条件。[官方套餐](https://docs.midjourney.com/hc/en-us/articles/27870484040333-Comparing-Midjourney-Plans)。\n\nGPU 时间衡量计算消耗，不是停留在应用里的时长，也不能保证固定图像数量。套餐 Fast 时间到期重置，不结转。模型、分辨率、编辑、放大、批量及模式都会改变消耗；Relax 会排队。速度文档注明 V8.1 不支持 Turbo，因此不能不看所选版本就承诺加速。[GPU 计费](https://docs.midjourney.com/hc/en-us/articles/32016412137741-GPU-Speed-Fast-Relax-Turbo)。\n\n可选择网站 Create、Organize 工作流或 Discord；保留已有 Discord 历史时应正确关联账户。Web Editor 支持上传图像、蒙版、局部重绘、扩图及图层；当前文档使用 V8.X Edit Model。带 Omni Reference 的图库图像需走 Edit 标签页，并在提交前移除该参考及 --ow。应实际验证功能与参数兼容性，不能从其他模型推断。[Web](https://docs.midjourney.com/hc/en-us/articles/33390732264589-Creating-on-Web) · [编辑器](https://docs.midjourney.com/hc/en-us/articles/32764383466893-Editor)。\n\n作品默认公开且可被混编。Pro/Mega 的 Stealth 控制网站可见性，但共享 Discord 频道成员仍能看到频道内作品。更改默认设置只作用于之后的提示，旧作品需要单独设为私密。保密素材上传前须核对账户、可见性、操作入口及合同；Stealth 不是全面保密保证。[Stealth](https://docs.midjourney.com/hc/en-us/articles/32019750070669-Stealth-Mode) · [条款](https://docs.midjourney.com/hc/en-us/articles/32083055291277-Terms-of-Service)。\n\n商业权利有条件：现行条款要求年收入超过 100 万美元的公司或其员工使用 Pro 或 Mega。放大他人的作品不会转移作品归属。输入授权、版权成立、商标、肖像及客户要求需要分别核实。Midjourney 保留对输入及输出的广泛许可，订阅条款中的归属表述不意味着独占。[商业使用](https://docs.midjourney.com/hc/en-us/articles/27870375276557-Using-Images-Videos-Commercially) · [条款](https://docs.midjourney.com/hc/en-us/articles/32083055291277-Terms-of-Service)。\n\n视频将起始图像动画化为 5 秒，可每次延长 4 秒、最多延长四次至 21 秒。四条视频批次标示消耗为 SD 8 GPU 分钟或 HD 26 分钟；延长另收一次生成费用。所有套餐可用 Fast 视频，HD 需 Standard 或以上；Relax 视频仅限 Pro/Mega 的 SD。图像参考及参数不能全部沿用到视频。应将其作为短动画，为时间线、声音与交付安排独立流程。试用一张有权使用的图像、一次编辑与一次动画，并记录合格输出、可见性及实际 GPU 消耗。[视频](https://docs.midjourney.com/hc/en-us/articles/37460773864589-Video)。\n\n独立证据：[Company profile (Forbes; cites PitchBook)](https://www.forbes.com/companies/midjourney/) · [Hands-on comparison (Tom’s Guide)](https://www.tomsguide.com/best-picks/best-ai-image-generators)\n\n官方证据：[Plan comparison](https://docs.midjourney.com/hc/en-us/articles/27870484040333-Comparing-Midjourney-Plans) · [GPU accounting](https://docs.midjourney.com/hc/en-us/articles/32016412137741-GPU-Speed-Fast-Relax-Turbo) · [Web workflow](https://docs.midjourney.com/hc/en-us/articles/33390732264589-Creating-on-Web) · [Editor](https://docs.midjourney.com/hc/en-us/articles/32764383466893-Editor) · [Video](https://docs.midjourney.com/hc/en-us/articles/37460773864589-Video) · [Stealth](https://docs.midjourney.com/hc/en-us/articles/32019750070669-Stealth-Mode) · [Commercial use](https://docs.midjourney.com/hc/en-us/articles/27870375276557-Using-Images-Videos-Commercially) · [Terms](https://docs.midjourney.com/hc/en-us/articles/32083055291277-Terms-of-Service) · [Trademark policy](https://docs.midjourney.com/hc/en-us/articles/32084281102349-Midjourney-Trademark-Policy)\n\n媒体：用于产品识别的官方品牌图，不是产品截图或本站试用结果。[Source](https://docs.midjourney.com/hc/en-us/articles/32084281102349-Midjourney-Trademark-Policy). Midjourney™ 为 Midjourney, Inc. 的商标。本站与 Midjourney, Inc. 无关联，也未获其背书。\n\n比较路径：[adobe-firefly](/cn/ai/adobe-firefly#decision-card) · [runway](/cn/ai/runway#decision-card)"
+  },
+  "imageUrl": "/icons/tool-logos/midjourney.jpg",
+  "thumbnailUrl": "/images/tool-media/midjourney-release-cover.svg",
+  "tags": [
+    "ai-image-generator",
+    "image-editing",
+    "image-to-video"
+  ],
+  "features": {
+    "audience": {
+      "bestFit": {
+        "en": [
+          "Designers exploring composition, style and mood",
+          "Teams willing to iterate and inspect finished assets",
+          "Creators testing short image animation within a GPU budget"
+        ],
+        "zh": [
+          "探索构图、风格与氛围的设计师",
+          "愿意迭代并逐项检查成品的团队",
+          "以 GPU 预算试验短图像动画的创作者"
+        ]
+      },
+      "notIdealFor": {
+        "en": [
+          "Confidential projects using default public settings",
+          "Work requiring guaranteed typography, geometry or repeatable output",
+          "Long-form timeline, audio and finishing workflows"
+        ],
+        "zh": [
+          "沿用默认公开设置的保密项目",
+          "要求文字、几何及重复输出完全确定的工作",
+          "长片时间线、音频与完整后期工作流"
+        ]
+      }
+    },
+    "editorial": {
+      "reviewedAt": "2026-09-14",
+      "reviewedBy": "AI Best Tool editorial",
+      "sourceUrl": "https://docs.midjourney.com/hc/en-us/articles/27870484040333-Comparing-Midjourney-Plans",
+      "summary": {
+        "en": "Official facts rechecked on September 14, 2026; independent coverage supports editorial inclusion, not a performance guarantee.",
+        "zh": "2026-09-14 已重新核验官方事实；独立报道支持编辑收录，不构成效果保证。"
+      },
+      "trustNote": {
+        "en": "Public documentation review only. No account-level or hands-on trial was performed.",
+        "zh": "本次是公开文档复核，未进行账户级检查或亲手试用。"
+      }
+    },
+    "decision": {
+      "compareAxes": {
+        "en": [
+          "Art direction and exact output requirements",
+          "Web and Discord workflow",
+          "Fast time, edits, reruns and video cost",
+          "Default visibility and Stealth",
+          "Input rights and commercial eligibility",
+          "Image editing versus short video animation"
+        ],
+        "zh": [
+          "美术指导与精确成品要求",
+          "Web 与 Discord 工作流",
+          "Fast 时间、编辑、重跑及视频成本",
+          "默认可见性与 Stealth",
+          "输入权利与商业资格",
+          "图像编辑与短视频动画"
+        ]
+      },
+      "limitations": {
+        "en": [
+          "GPU hours are not a guaranteed output count.",
+          "Included Fast time resets rather than rolling over.",
+          "Relax trades latency for capacity and varies by task and plan.",
+          "Stealth requires Pro or Mega and cannot hide shared Discord posts.",
+          "Changing the visibility default does not privatize old assets.",
+          "Commercial eligibility does not establish copyrightability or clear input rights.",
+          "Editor, references and video support different parameters; retest the workflow.",
+          "Image animation does not supply a full video production workflow."
+        ],
+        "zh": [
+          "GPU 小时不能换算为保底成品数量。",
+          "套餐 Fast 时间会重置，不自动结转。",
+          "Relax 以排队换容量，并受任务及套餐限制。",
+          "Stealth 需 Pro 或 Mega，且不能隐藏共享 Discord 内的作品。",
+          "修改默认可见性不会自动隐藏旧作品。",
+          "商业使用资格不能证明版权成立或输入权利已清理。",
+          "编辑器、参考与视频支持的参数不同，须重测流程。",
+          "图像动画不能代替完整视频制作工作流。"
+        ]
+      },
+      "pricingSummary": {
+        "en": "Buy a GPU budget matched to edits, reruns and animation; include privacy-plan requirements in the cost comparison.",
+        "zh": "按编辑、重跑与动画选择 GPU 预算，并将隐私套餐要求计入费用比较。"
+      },
+      "officialSummary": {
+        "en": "Use the linked plan, usage and policy documents to check this workflow before purchase.",
+        "zh": "购买前通过所链接的套餐、用量与政策文档核验目标工作流。"
+      },
+      "freshnessSummary": {
+        "en": "Reviewed September 14, 2026. Next fact review: October 14, 2026; changes or conflicts trigger earlier review.",
+        "zh": "核验于 2026-09-14；下次事实复核为 2026-10-14，变化或冲突会触发提前复核。"
+      },
+      "mediaSummary": {
+        "en": "Official brand artwork used for identification, not screenshots or evidence of tested output.",
+        "zh": "官方品牌素材用于识别，不作为产品截图或本站实测证据。"
+      },
+      "communitySummary": {
+        "en": "Independent coverage is linked in the evidence section. No live review count or keyword volume is claimed.",
+        "zh": "证据部分链接独立报道；不声称已核实实时评论量或关键词搜索量。"
+      },
+      "alternatives": [
+        {
+          "slug": "adobe-firefly",
+          "reason": {
+            "en": "Compare image creation against the same rights and output checklist.",
+            "zh": "按相同权利与输出清单比较图像创作。"
+          }
+        },
+        {
+          "slug": "runway",
+          "reason": {
+            "en": "Compare a video-focused workflow when animation becomes the main task.",
+            "zh": "当动画成为主要任务时比较视频工作流。"
+          }
+        }
+      ]
+    },
+    "pricingSnapshot": {
+      "checkedAt": "2026-09-14",
+      "sourceUrls": [
+        "https://docs.midjourney.com/hc/en-us/articles/27870484040333-Comparing-Midjourney-Plans",
+        "https://docs.midjourney.com/hc/en-us/articles/32016412137741-GPU-Speed-Fast-Relax-Turbo",
+        "https://docs.midjourney.com/hc/en-us/articles/33390732264589-Creating-on-Web"
+      ],
+      "summary": {
+        "en": "Buy a GPU budget matched to edits, reruns and animation; include privacy-plan requirements in the cost comparison.",
+        "zh": "按编辑、重跑与动画选择 GPU 预算，并将隐私套餐要求计入费用比较。"
+      }
+    },
+    "evidence": {
+      "checkedAt": "2026-09-14",
+      "official": [
+        {
+          "label": "Plan comparison",
+          "url": "https://docs.midjourney.com/hc/en-us/articles/27870484040333-Comparing-Midjourney-Plans",
+          "checkedAt": "2026-09-14"
+        },
+        {
+          "label": "GPU accounting",
+          "url": "https://docs.midjourney.com/hc/en-us/articles/32016412137741-GPU-Speed-Fast-Relax-Turbo",
+          "checkedAt": "2026-09-14"
+        },
+        {
+          "label": "Web workflow",
+          "url": "https://docs.midjourney.com/hc/en-us/articles/33390732264589-Creating-on-Web",
+          "checkedAt": "2026-09-14"
+        },
+        {
+          "label": "Editor",
+          "url": "https://docs.midjourney.com/hc/en-us/articles/32764383466893-Editor",
+          "checkedAt": "2026-09-14"
+        },
+        {
+          "label": "Video",
+          "url": "https://docs.midjourney.com/hc/en-us/articles/37460773864589-Video",
+          "checkedAt": "2026-09-14"
+        },
+        {
+          "label": "Stealth",
+          "url": "https://docs.midjourney.com/hc/en-us/articles/32019750070669-Stealth-Mode",
+          "checkedAt": "2026-09-14"
+        },
+        {
+          "label": "Commercial use",
+          "url": "https://docs.midjourney.com/hc/en-us/articles/27870375276557-Using-Images-Videos-Commercially",
+          "checkedAt": "2026-09-14"
+        },
+        {
+          "label": "Terms",
+          "url": "https://docs.midjourney.com/hc/en-us/articles/32083055291277-Terms-of-Service",
+          "checkedAt": "2026-09-14"
+        },
+        {
+          "label": "Trademark policy",
+          "url": "https://docs.midjourney.com/hc/en-us/articles/32084281102349-Midjourney-Trademark-Policy",
+          "checkedAt": "2026-09-14"
+        }
+      ],
+      "independent": [
+        {
+          "label": "Company profile (Forbes; cites PitchBook)",
+          "url": "https://www.forbes.com/companies/midjourney/",
+          "checkedAt": "2026-09-14"
+        },
+        {
+          "label": "Hands-on comparison (Tom’s Guide)",
+          "url": "https://www.tomsguide.com/best-picks/best-ai-image-generators",
+          "checkedAt": "2026-09-14"
+        }
+      ]
+    },
+    "media": {
+      "assets": [
+        {
+          "path": "/icons/tool-logos/midjourney.jpg",
+          "url": "https://docs.midjourney.com/hc/article_attachments/32084281099149",
+          "sourcePage": "https://docs.midjourney.com/hc/en-us/articles/32084281102349-Midjourney-Trademark-Policy",
+          "checkedAt": "2026-09-14",
+          "sha256": "33024615c808beb9b91ada21d8b604b509c633c7a26a3ae044e704649b083870",
+          "usageBasis": "Official trademark-policy illustration; truthful descriptive reference with attribution and no affiliation claim. Not a general reuse license.",
+          "type": "official_brand_asset",
+          "isProductScreenshot": false
+        },
+        {
+          "path": "/images/tool-media/midjourney-release-cover.svg",
+          "url": "https://docs.midjourney.com/hc/article_attachments/32084251703949",
+          "sourcePage": "https://docs.midjourney.com/hc/en-us/articles/32084281102349-Midjourney-Trademark-Policy",
+          "checkedAt": "2026-09-14",
+          "sha256": "0df58d98cd698cde883321af72fa2cdbe19acb74105b919536d035a5458f6387",
+          "usageBasis": "Unmodified official wordmark; nominative editorial identification under the linked policy, with visible trademark attribution. Not a generated work or screenshot.",
+          "type": "official_brand_asset",
+          "isProductScreenshot": false,
+          "originalPath": "/images/tool-media/midjourney-brand.jpg",
+          "originalSha256": "ba48ca896f7a367fe67d4c65afdb39aac9f60e0fc76c5c3f0ea9841ffbf5577a",
+          "presentation": "Unmodified brand artwork centered on a plain white 1400x800 SVG canvas, with clear space; no product screenshot."
+        }
+      ]
+    },
+    "marketValidation": {
+      "reviewedAt": "2026-09-14",
+      "score": 90,
+      "scores": {
+        "marketDurability": 23,
+        "independentAdoption": 22,
+        "decisionValue": 23,
+        "evidenceQuality": 22
+      },
+      "verdict": "validated",
+      "rationale": {
+        "en": "Independent product coverage and a sustained documented workflow support inclusion. This editorial assessment does not approve search indexing.",
+        "zh": "独立产品报道与持续维护的完整工作流支持收录；此编辑判断不批准搜索索引。"
+      },
+      "strongSignals": [
+        "Forbes reports established commercial operation, citing PitchBook.",
+        "Tom’s Guide independently compares visual control and the learning curve.",
+        "Official documentation covers maintained Web, Discord, editing and video workflows."
+      ],
+      "evidenceUrls": [
+        "https://www.forbes.com/companies/midjourney/",
+        "https://www.tomsguide.com/best-picks/best-ai-image-generators"
+      ]
+    },
+    "release": {
+      "scheduledSlot": "2026-09-12",
+      "reviewedAt": "2026-09-14",
+      "executionType": "delayed_makeup",
+      "label": "延期补发",
+      "indexState": "monitor",
+      "sitemapChangeApproved": false,
+      "nextReviewDate": "2026-10-14"
+    }
+  },
+  "useCases": {
+    "en": [
+      "Evaluate one representative workflow with explicit acceptance criteria",
+      "Record costs, failed attempts and recovery steps before committing"
+    ],
+    "zh": [
+      "用明确验收标准验证一条代表性工作流",
+      "投入前记录成本、失败尝试及恢复步骤"
+    ]
+  }
+}
