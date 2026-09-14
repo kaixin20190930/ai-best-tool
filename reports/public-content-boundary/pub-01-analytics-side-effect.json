@@ -1,0 +1,17 @@
+{
+  "observedAt": "2026-09-14T07:53:00.712Z",
+  "filter": {
+    "referrer": "http://localhost:3017/%",
+    "since": "2026-09-14T00:00:00Z"
+  },
+  "records": [
+    {
+      "path": "/guides/ai-tools-for-web3-comparison",
+      "count": 6,
+      "first_at": "2026-09-14T07:43:54.331Z",
+      "last_at": "2026-09-14T07:50:38.569Z",
+      "with_tool_id": 0
+    }
+  ],
+  "resolution": "Coordinator approved retaining test analytics; no cleanup writes. Local browser/server stopped."
+}
