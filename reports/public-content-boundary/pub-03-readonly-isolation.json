@@ -1,0 +1,41 @@
+{
+  "checkedAt": "2026-09-14T14:51:23.668Z",
+  "postgresDefaultTransactionReadOnly": "on (verified by production inventory query)",
+  "serverFetch": {
+    "forwardedReadRequests": 908,
+    "forwardedWrites": 0,
+    "blocked": 52
+  },
+  "proxy": {
+    "blockedRequests": 42,
+    "forwardedBlockedRequests": 0,
+    "contentSecurityPolicy": "connect-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'"
+  },
+  "probes": [
+    {
+      "method": "POST",
+      "path": "/rest/v1/tools",
+      "blockedBeforeNetwork": true
+    },
+    {
+      "method": "PATCH",
+      "path": "/rest/v1/tools",
+      "blockedBeforeNetwork": true
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/v1/tools",
+      "blockedBeforeNetwork": true
+    },
+    {
+      "method": "PUT",
+      "path": "/rest/v1/tools",
+      "blockedBeforeNetwork": true
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/rpc/any_function",
+      "blockedBeforeNetwork": true
+    }
+  ]
+}

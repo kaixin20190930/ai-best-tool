@@ -61,7 +61,7 @@ export default async function GuideActionSection({
 
       {toolCards.length > 0 && (
         <div className='mt-6'>
-          <WebNavCardList dataList={toolCards} contextLabel='popular' />
+          <WebNavCardList locale={locale} dataList={toolCards} contextLabel='popular' />
         </div>
       )}
 
@@ -107,9 +107,7 @@ export default async function GuideActionSection({
                 <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>{nextEyebrow}</p>
               ) : null}
               <h3 className='text-xl font-bold text-slate-950'>{nextTitle}</h3>
-              {nextDescription ? (
-                <p className='max-w-3xl text-sm leading-6 text-slate-600'>{nextDescription}</p>
-              ) : null}
+              {nextDescription ? <p className='max-w-3xl text-sm leading-6 text-slate-600'>{nextDescription}</p> : null}
             </div>
           ) : null}
 

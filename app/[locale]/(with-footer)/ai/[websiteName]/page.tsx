@@ -8,12 +8,9 @@ import {
   CircleArrowRight,
   DollarSign,
   ExternalLink,
-  Eye,
   FolderOpen,
-  Heart,
   Lightbulb,
   MessageSquare,
-  MousePointerClick,
   ShieldCheck,
   Sparkles,
   Star,
@@ -27,6 +24,7 @@ import { PRIORITY_TOOL_FALLBACK_PROFILES } from '@/lib/config/priorityToolFallba
 import { getSafetyToolReview } from '@/lib/config/safetyToolReviews';
 import TOOL_MAINTENANCE_REVIEWS from '@/lib/config/toolMaintenanceReviews';
 import { getCanonicalToolSlug, getLocalizedToolPath, isLegacyToolSlug } from '@/lib/config/toolRouteAliases';
+import { getPublicToolDetail, getPublicToolSummary } from '@/lib/content/publicToolScope';
 import { BASE_URL } from '@/lib/env';
 import { buildLoginHref } from '@/lib/navigation/localizedPaths';
 import { SEO_CONFIG, ToolMetadata } from '@/lib/seo/constants';
@@ -45,28 +43,26 @@ import { getPublicToolChangeTimeline } from '@/lib/services/intelligence/publicC
 import { getPublicToolEvidenceLedger } from '@/lib/services/intelligence/publicEvidence';
 import { getReviewedToolRelationships } from '@/lib/services/reviewedToolRelationships';
 import { getLocalizedField as getTagLocalizedField, getTagsBySlugs, humanizeTagSlug } from '@/lib/services/tags';
-import { buildToolDecisionCard, DecisionEvidenceRequirementKey } from '@/lib/services/toolDecisionCard';
+import { buildToolDecisionCard } from '@/lib/services/toolDecisionCard';
 import { toolToDetailData } from '@/lib/services/toolPresenter';
 import { getLocalizedField, getToolByName } from '@/lib/services/tools';
 import { createClient } from '@/lib/supabase/server';
 import { Separator } from '@/components/ui/separator';
 import PageViewTracker from '@/components/analytics/PageViewTracker';
 import CommentList from '@/components/comments/CommentList';
-import DecisionCardV2 from '@/components/decision/DecisionCardV2';
 import FavoriteButton from '@/components/FavoriteButton';
-import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 import BaseImage from '@/components/image/BaseImage';
 import ChangeTimelinePanel from '@/components/intelligence/ChangeTimelinePanel';
 import EvidenceLedgerPanel from '@/components/intelligence/EvidenceLedgerPanel';
 import MarkdownProse from '@/components/MarkdownProse';
 import MediaGallery from '@/components/MediaGallery';
 import RatingStars from '@/components/RatingStars';
-import RecommendedTools from '@/components/RecommendedTools';
 import SeoBreadcrumbs from '@/components/seo/SeoBreadcrumbs';
 import { StructuredDataServer } from '@/components/seo/StructuredData';
 import ShareButton from '@/components/ShareButton';
 import ToolFeedbackBar from '@/components/ToolFeedbackBar';
 import LegacyToolScopePage from '@/components/tools/LegacyToolScopePage';
+import PublicToolDecision from '@/components/tools/PublicToolDecision';
 import SafetyToolArchivePage from '@/components/tools/SafetyToolArchivePage';
 import TrackableLink from '@/components/TrackableLink';
 import { getToolStats } from '@/app/actions/analytics';
@@ -370,20 +366,6 @@ function getDecisionList(input: unknown, field: 'compareAxes', locale: string, f
   return getStringList((decision as Record<string, unknown>)[field], locale, fallback);
 }
 
-function getEvidenceRequirementLabel(key: DecisionEvidenceRequirementKey, locale: string): string {
-  const labels: Record<DecisionEvidenceRequirementKey, { cn: string; en: string }> = {
-    official_source: { cn: '可追溯官方来源', en: 'Traceable official source' },
-    reviewed_at: { cn: '编辑核查日期', en: 'Editorial review date' },
-    limitations: { cn: '限制与风险', en: 'Limits and risks' },
-    media: { cn: '产品素材', en: 'Product media' },
-    best_fit: { cn: '适合人群', en: 'Best-fit audience' },
-    not_ideal_for: { cn: '不适合人群', en: 'Less-ideal audience' },
-    comparison_path: { cn: '比较路径', en: 'Comparison path' },
-  };
-
-  return locale === 'cn' ? labels[key].cn : labels[key].en;
-}
-
 function formatReviewScheduleDate(value: string | null, due: boolean, locale: string): string {
   if (!value) {
     return locale === 'cn' ? '需要首次复核' : 'Initial review required';
@@ -679,115 +661,6 @@ function getCommunitySignalSummary({
   };
 }
 
-function getMarketDemandSummary({
-  locale,
-  viewCount,
-  clickCount,
-}: {
-  locale: string;
-  viewCount: number;
-  clickCount: number;
-}) {
-  const isChinese = locale === 'cn';
-  const clickRate = viewCount > 0 ? clickCount / viewCount : 0;
-
-  if (clickCount >= 50 || clickRate >= 0.08) {
-    return {
-      label: isChinese ? '需求很强' : 'Strong demand',
-      summary: isChinese
-        ? '浏览和官网点击都比较活跃，说明这条工具已经吸引到明显的关注。'
-        : 'Views and outbound clicks are active enough to show clear user interest.',
-      evidence: isChinese
-        ? `${viewCount.toLocaleString()} 次浏览 · ${clickCount.toLocaleString()} 次官网点击`
-        : `${viewCount.toLocaleString()} views · ${clickCount.toLocaleString()} website clicks`,
-    };
-  }
-
-  if (clickCount >= 10 || clickRate >= 0.03) {
-    return {
-      label: isChinese ? '开始有需求' : 'Early demand',
-      summary: isChinese
-        ? '已经能看到一定点击意愿，适合继续观察它能不能转成更稳定的访问。'
-        : 'There is enough click-through to suggest the listing is starting to earn attention.',
-      evidence: isChinese
-        ? `${viewCount.toLocaleString()} 次浏览 · ${clickCount.toLocaleString()} 次官网点击`
-        : `${viewCount.toLocaleString()} views · ${clickCount.toLocaleString()} website clicks`,
-    };
-  }
-
-  return {
-    label: isChinese ? '需求还早' : 'Early signal',
-    summary: isChinese
-      ? '目前还处于早期信号阶段，更适合先把内容、截图和对比页补完整。'
-      : 'This is still early signal territory, so keep improving the page, screenshots, and comparison paths.',
-    evidence: isChinese
-      ? `${viewCount.toLocaleString()} 次浏览 · ${clickCount.toLocaleString()} 次官网点击`
-      : `${viewCount.toLocaleString()} views · ${clickCount.toLocaleString()} website clicks`,
-  };
-}
-
-function getMarketMomentumSummary({
-  locale,
-  updatedAt,
-  screenshotCount,
-  hasVideo,
-}: {
-  locale: string;
-  updatedAt: Date | string | null | undefined;
-  screenshotCount: number;
-  hasVideo: boolean;
-}) {
-  const isChinese = locale === 'cn';
-
-  if (!updatedAt) {
-    return {
-      label: isChinese ? '更新时间待补' : 'Refresh signal missing',
-      summary: isChinese
-        ? '还没有明确的更新时间信号，建议先把最新资料和媒体补齐。'
-        : 'There is no clear freshness signal yet, so the next improvement is to refresh the listing materials.',
-      evidence: isChinese
-        ? `${screenshotCount.toLocaleString()} 张截图${hasVideo ? ' · 含视频' : ''}`
-        : `${screenshotCount.toLocaleString()} screenshots${hasVideo ? ' · video included' : ''}`,
-    };
-  }
-
-  const diffDays = Math.max(0, Math.floor((Date.now() - new Date(updatedAt).getTime()) / (1000 * 60 * 60 * 24)));
-
-  if (diffDays <= 14 || screenshotCount >= 3 || hasVideo) {
-    return {
-      label: isChinese ? '维护活跃' : 'Actively maintained',
-      summary: isChinese
-        ? '最近有更新，且媒体覆盖也更完整，通常说明这页还在持续维护。'
-        : 'Recent updates and broader media coverage suggest the listing is still being maintained.',
-      evidence: isChinese
-        ? `${diffDays} 天内更新 · ${screenshotCount.toLocaleString()} 张截图${hasVideo ? ' · 含视频' : ''}`
-        : `Updated ${diffDays} days ago · ${screenshotCount.toLocaleString()} screenshots${hasVideo ? ' · video included' : ''}`,
-    };
-  }
-
-  if (diffDays <= 60) {
-    return {
-      label: isChinese ? '有一定新鲜度' : 'Moderately fresh',
-      summary: isChinese
-        ? '资料还不算旧，但最终判断前最好再确认官网是否有变化。'
-        : 'The listing is not stale, but it is still worth checking the official site for changes.',
-      evidence: isChinese
-        ? `${diffDays} 天前更新 · ${screenshotCount.toLocaleString()} 张截图`
-        : `Updated ${diffDays} days ago · ${screenshotCount.toLocaleString()} screenshots`,
-    };
-  }
-
-  return {
-    label: isChinese ? '更新偏旧' : 'Stale signal',
-    summary: isChinese
-      ? '这页资料相对久了，建议把它放在相似工具和官网核对之后再判断。'
-      : 'The page is relatively old, so compare it with similar tools and the official site before deciding.',
-    evidence: isChinese
-      ? `${diffDays} 天前更新 · ${screenshotCount.toLocaleString()} 张截图`
-      : `Updated ${diffDays} days ago · ${screenshotCount.toLocaleString()} screenshots`,
-  };
-}
-
 function getComparisonSummary(categorySlug: string | undefined, locale: string) {
   const isChinese = locale === 'cn';
 
@@ -819,586 +692,8 @@ function getComparisonSummary(categorySlug: string | undefined, locale: string) 
   }
 }
 
-function getCategoryGuideLink(categorySlug: string | undefined, locale: string) {
-  const isChinese = locale === 'cn';
-
-  switch (categorySlug) {
-    case 'web3':
-      return {
-        href: '/guides/ai-tools-for-web3',
-        title: isChinese ? '看 Web3 工具指南' : 'Open the Web3 tools guide',
-        description: isChinese
-          ? '如果你还在筛选方向，先看 Web3 分类工具怎么分层。'
-          : 'Use the guide to understand the main Web3 tool buckets before comparing products.',
-      };
-    case 'text-writing':
-      return {
-        href: '/guides/ai-writing-tools',
-        title: isChinese ? '看 AI 写作工具指南' : 'Open the AI writing guide',
-        description: isChinese
-          ? '先看常见写作场景和工具差异，再决定要试哪一类。'
-          : 'Review common writing workflows and tool differences before picking one.',
-      };
-    case 'developer-tools':
-      return {
-        href: '/guides/ai-tools-for-developers',
-        title: isChinese ? '看开发者工具指南' : 'Open the developer tools guide',
-        description: isChinese
-          ? '更适合先从集成、模型覆盖和工作流角度建立判断。'
-          : 'Start with integration, model coverage, and workflow fit before comparing products.',
-      };
-    case 'automation':
-      return {
-        href: '/guides/ai-tools-for-automation',
-        title: isChinese ? '看自动化工具指南' : 'Open the automation guide',
-        description: isChinese
-          ? '先看自动化工具适合接什么流程，再决定值不值得接入。'
-          : 'Review which workflows are worth automating before evaluating tools one by one.',
-      };
-    case 'research':
-      return {
-        href: '/guides/ai-tools-for-research',
-        title: isChinese ? '看研究工具指南' : 'Open the research tools guide',
-        description: isChinese
-          ? '先看资料来源、证据链和研究速度这几个关键维度。'
-          : 'Start with source quality, evidence trails, and research speed.',
-      };
-    case 'productivity':
-      return {
-        href: '/guides/ai-productivity-tools',
-        title: isChinese ? '看生产力工具指南' : 'Open the productivity guide',
-        description: isChinese
-          ? '先明确你要提效的是会议、任务还是知识整理。'
-          : 'Clarify whether you need meeting support, task follow-through, or knowledge organization first.',
-      };
-    case 'chatbot':
-      return {
-        href: '/guides/ai-chatbot-tools',
-        title: isChinese ? '看聊天工具指南' : 'Open the chatbot guide',
-        description: isChinese
-          ? '如果你还没决定要哪种助手，先看聊天工具的分工。'
-          : 'Review chatbot roles first if you are not yet sure which assistant style you need.',
-      };
-    case 'design-art':
-      return {
-        href: '/guides/ai-image-tools',
-        title: isChinese ? '看图像工具指南' : 'Open the image tools guide',
-        description: isChinese
-          ? '先看生成、修图和设计提案这几类工作流的差异。'
-          : 'Compare generation, editing, and design workflows before narrowing down tools.',
-      };
-    case 'voice':
-      return {
-        href: '/guides/ai-tools-for-meeting-notes',
-        title: isChinese ? '看语音与会议记录入口' : 'Open the voice and notes entry',
-        description: isChinese
-          ? '先从转录、会议纪要和语音工作流切入会更容易判断。'
-          : 'Start from transcription, meeting notes, and voice workflows to compare with more context.',
-      };
-    default:
-      return null;
-  }
-}
-
 // Legacy copy reference only. Public relationship links must never call this inferred mapping.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function getNextComparisonLinks(categorySlug: string | undefined, tagSlugs: string[], locale: string) {
-  const isChinese = locale === 'cn';
-  const tagSet = new Set(tagSlugs);
-  const hasAnyTag = (candidates: string[]) => candidates.some((tag) => tagSet.has(tag));
-
-  if (hasAnyTag(['sales', 'lead-generation', 'prospecting', 'sales-prospecting', 'outreach', 'cold-email', 'crm'])) {
-    if (hasAnyTag(['lead-generation', 'enrichment', 'lead-enrichment', 'contact-data', 'intent-data'])) {
-      return [
-        {
-          href: '/guides/ai-tools-for-lead-generation-comparison',
-          title: isChinese ? '获客工具对比' : 'Lead generation comparison',
-          description: isChinese
-            ? '适合继续比较找线索、补全联系人数据和筛选目标账户的效率。'
-            : 'Best for comparing prospect discovery, contact enrichment, and target-account filtering.',
-        },
-        {
-          href: '/guides/ai-tools-for-sales-prospecting-comparison',
-          title: isChinese ? '销售拓客工具对比' : 'Sales prospecting comparison',
-          description: isChinese
-            ? '如果工作已经进入外联准备、个性化和批量触达，这页更贴近目标。'
-            : 'Move here once the workflow shifts into outreach prep, personalization, and campaign execution.',
-        },
-        {
-          href: '/guides/ai-tools-for-sales-comparison',
-          title: isChinese ? '销售工具总对比' : 'Sales tools comparison',
-          description: isChinese
-            ? '回到更宽的销售工作流视角继续缩小 shortlist。'
-            : 'Return to the broader sales comparison to narrow the shortlist across workflows.',
-        },
-      ];
-    }
-
-    if (hasAnyTag(['prospecting', 'sales-prospecting', 'outreach', 'cold-email', 'personalization', 'sequencing'])) {
-      return [
-        {
-          href: '/guides/ai-tools-for-sales-prospecting-comparison',
-          title: isChinese ? '销售拓客工具对比' : 'Sales prospecting comparison',
-          description: isChinese
-            ? '适合继续比较个性化、邮件序列、外联节奏和团队执行效率。'
-            : 'Best for comparing personalization, email sequences, outreach cadence, and team execution.',
-        },
-        {
-          href: '/guides/ai-tools-for-lead-generation-comparison',
-          title: isChinese ? '获客工具对比' : 'Lead generation comparison',
-          description: isChinese
-            ? '如果你发现瓶颈更早，在线索发现和联系人补全，这页更适合。'
-            : 'Use this if the real bottleneck is earlier in the funnel around lead discovery and enrichment.',
-        },
-        {
-          href: '/guides/ai-tools-for-sales-comparison',
-          title: isChinese ? '销售工具总对比' : 'Sales tools comparison',
-          description: isChinese
-            ? '回到更宽的销售工具页继续看 CRM、跟进和转化工作流。'
-            : 'Return to the broader sales comparison for CRM, follow-up, and conversion workflows.',
-        },
-      ];
-    }
-
-    return [
-      {
-        href: '/guides/ai-tools-for-sales-comparison',
-        title: isChinese ? '销售工具总对比' : 'Sales tools comparison',
-        description: isChinese
-          ? '先从更宽的销售工作流视角比较，再决定要不要往线索或外联方向收窄。'
-          : 'Start from the wider sales workflow view before narrowing into lead-gen or prospecting.',
-      },
-      {
-        href: '/guides/ai-tools-for-lead-generation-comparison',
-        title: isChinese ? '获客工具对比' : 'Lead generation comparison',
-        description: isChinese
-          ? '如果你的核心问题是“先找到谁”，这条路径更自然。'
-          : 'A better path when the real question is who to target first.',
-      },
-      {
-        href: '/guides/ai-tools-for-sales-prospecting-comparison',
-        title: isChinese ? '销售拓客工具对比' : 'Sales prospecting comparison',
-        description: isChinese
-          ? '如果你的核心问题是“怎么触达和转化”，顺着这条走。'
-          : 'Use this if the core question is how to reach out and convert effectively.',
-      },
-    ];
-  }
-
-  if (categorySlug === 'web3') {
-    if (hasAnyTag(['token-research', 'fundamentals', 'narrative', 'crypto-research', 'market-research'])) {
-      return [
-        {
-          href: '/guides/ai-tools-for-token-research-comparison',
-          title: isChinese ? '代币研究工具对比' : 'Token research comparison',
-          description: isChinese
-            ? '适合继续看项目比较、指标框架和研究深度。'
-            : 'Best for project comparison, fundamentals framing, and research depth.',
-        },
-        {
-          href: '/guides/ai-tools-for-crypto-research-comparison',
-          title: isChinese ? 'Crypto 研究工具对比' : 'Crypto research comparison',
-          description: isChinese
-            ? '如果你的问题开始变宽，涉及市场叙事和情报整合，就走这条。'
-            : 'Move here once the job expands into broader market narratives and research synthesis.',
-        },
-        {
-          href: '/guides/ai-tools-for-protocol-analytics-comparison',
-          title: isChinese ? '协议分析工具对比' : 'Protocol analytics comparison',
-          description: isChinese
-            ? '更适合把 token 判断继续拉到协议健康和使用趋势。'
-            : 'A better next step if the decision shifts toward protocol health and usage trends.',
-        },
-      ];
-    }
-
-    if (hasAnyTag(['wallet-tracking', 'wallet-monitoring', 'smart-money', 'address-analysis', 'on-chain'])) {
-      return [
-        {
-          href: '/guides/ai-tools-for-wallet-monitoring-comparison',
-          title: isChinese ? '钱包监控工具对比' : 'Wallet monitoring comparison',
-          description: isChinese
-            ? '继续比较提醒能力、地址覆盖和持续跟踪效率。'
-            : 'Compare alerting, address coverage, and long-term monitoring fit.',
-        },
-        {
-          href: '/guides/ai-tools-for-wallet-research-comparison',
-          title: isChinese ? '钱包研究工具对比' : 'Wallet research comparison',
-          description: isChinese
-            ? '更适合看地址画像、资金路径和研究深度。'
-            : 'A stronger fit for address profiling, fund paths, and wallet-level research.',
-        },
-        {
-          href: '/guides/ai-tools-for-on-chain-analysis-comparison',
-          title: isChinese ? '链上分析工具对比' : 'On-chain analysis comparison',
-          description: isChinese
-            ? '如果你想把视角放大到交易和链上行为，这页更合适。'
-            : 'Use this when the scope expands toward transaction and on-chain behavior analysis.',
-        },
-      ];
-    }
-
-    return [
-      {
-        href: '/guides/ai-tools-for-web3-comparison',
-        title: isChinese ? 'Web3 工具总对比' : 'Web3 tools comparison',
-        description: isChinese
-          ? '先从更宽的 Web3 视角继续缩小 shortlist。'
-          : 'Start from a broader Web3 comparison to narrow the shortlist.',
-      },
-      {
-        href: '/guides/ai-tools-for-protocol-analytics-comparison',
-        title: isChinese ? '协议分析工具对比' : 'Protocol analytics comparison',
-        description: isChinese
-          ? '适合把判断收敛到协议层数据和趋势。'
-          : 'Good for narrowing the decision into protocol-level data and trends.',
-      },
-      {
-        href: '/guides/ai-tools-for-crypto-portfolio-tracking-comparison',
-        title: isChinese ? '加密资产追踪工具对比' : 'Crypto portfolio tracking comparison',
-        description: isChinese
-          ? '如果你的目标更偏资产监控和持仓整理，可以顺着这条走。'
-          : 'Follow this path if the job is more about holdings, monitoring, and portfolio workflows.',
-      },
-    ];
-  }
-
-  if (categorySlug === 'developer-tools') {
-    if (hasAnyTag(['observability', 'tracing', 'logs', 'monitoring', 'evals'])) {
-      return [
-        {
-          href: '/guides/ai-tools-for-api-observability-comparison',
-          title: isChinese ? 'API 可观测性工具对比' : 'API observability comparison',
-          description: isChinese
-            ? '重点比较 tracing、日志、调用监控和排障效率。'
-            : 'Compare tracing, logs, request monitoring, and debugging fit.',
-        },
-        {
-          href: '/guides/ai-tools-for-prompt-testing-comparison',
-          title: isChinese ? 'Prompt 测试工具对比' : 'Prompt testing comparison',
-          description: isChinese
-            ? '更适合继续看评测、回归测试和 prompt 迭代。'
-            : 'A stronger next step for evals, regression testing, and prompt iteration.',
-        },
-        {
-          href: '/guides/ai-tools-for-developers-comparison',
-          title: isChinese ? '开发者工具总对比' : 'Developer tools comparison',
-          description: isChinese
-            ? '回到更宽的开发者工具页继续缩小范围。'
-            : 'Jump back to the broader developer-tools comparison to narrow the field.',
-        },
-      ];
-    }
-
-    if (hasAnyTag(['routing', 'gateway', 'llm-gateway', 'model-routing', 'api-layer'])) {
-      return [
-        {
-          href: '/guides/ai-tools-for-model-routing-comparison',
-          title: isChinese ? '模型路由工具对比' : 'Model routing comparison',
-          description: isChinese
-            ? '适合继续比较供应商切换、回退策略和成本控制。'
-            : 'Best for comparing provider failover, routing strategy, and cost control.',
-        },
-        {
-          href: '/guides/ai-tools-for-api-observability-comparison',
-          title: isChinese ? 'API 可观测性工具对比' : 'API observability comparison',
-          description: isChinese
-            ? '如果你已经开始关心调用质量和稳定性，顺着这里走。'
-            : 'Move here when request quality and runtime visibility start to matter more.',
-        },
-        {
-          href: '/guides/ai-tools-for-developers-comparison',
-          title: isChinese ? '开发者工具总对比' : 'Developer tools comparison',
-          description: isChinese
-            ? '如果还没确定方向，先回到更宽的开发者对比页。'
-            : 'Use the broader developer comparison if the exact direction is still unclear.',
-        },
-      ];
-    }
-
-    if (hasAnyTag(['automation', 'workflow', 'agents', 'background-jobs', 'orchestration'])) {
-      return [
-        {
-          href: '/guides/ai-tools-for-automation-comparison',
-          title: isChinese ? '自动化工具对比' : 'Automation tools comparison',
-          description: isChinese
-            ? '继续比较触发方式、流程编排和可维护性。'
-            : 'Compare triggers, orchestration style, and maintainability next.',
-        },
-        {
-          href: '/guides/ai-tools-for-developers-comparison',
-          title: isChinese ? '开发者工具总对比' : 'Developer tools comparison',
-          description: isChinese
-            ? '把它放回更宽的开发者工作流里一起比较。'
-            : 'Put it back into the wider developer workflow comparison.',
-        },
-        {
-          href: '/guides/ai-tools-for-prompt-testing-comparison',
-          title: isChinese ? 'Prompt 测试工具对比' : 'Prompt testing comparison',
-          description: isChinese
-            ? '如果你更在意上线前验证质量，也可以继续走这条。'
-            : 'Use this if pre-launch validation and quality checks are the real job.',
-        },
-      ];
-    }
-
-    return [
-      {
-        href: '/guides/ai-tools-for-developers-comparison',
-        title: isChinese ? '开发者工具总对比' : 'Developer tools comparison',
-        description: isChinese
-          ? '先从更宽的开发者工具视角继续筛选。'
-          : 'Start from a broader developer-tools comparison to keep narrowing down.',
-      },
-      {
-        href: '/guides/ai-tools-for-api-observability-comparison',
-        title: isChinese ? 'API 可观测性工具对比' : 'API observability comparison',
-        description: isChinese
-          ? '适合继续比调用监控、日志和排障。'
-          : 'Useful if the next decision is about logs, tracing, and debugging.',
-      },
-      {
-        href: '/guides/ai-tools-for-model-routing-comparison',
-        title: isChinese ? '模型路由工具对比' : 'Model routing comparison',
-        description: isChinese
-          ? '适合继续比模型切换、供应商策略和成本。'
-          : 'Useful if the next choice is model routing, provider strategy, and cost.',
-      },
-    ];
-  }
-
-  if (categorySlug === 'text-writing') {
-    if (hasAnyTag(['seo', 'keyword-research', 'content-seo', 'blog-seo', 'serp-research'])) {
-      return [
-        {
-          href: '/guides/ai-seo-tools-comparison',
-          title: isChinese ? 'AI SEO 工具对比' : 'AI SEO tools comparison',
-          description: isChinese
-            ? '适合继续比较关键词研究、内容规划和站点结构判断。'
-            : 'Best for comparing keyword research, content planning, and site-structure workflows.',
-        },
-        {
-          href: '/guides/ai-writing-tools-comparison',
-          title: isChinese ? 'AI 写作工具对比' : 'AI writing tools comparison',
-          description: isChinese
-            ? '如果你还在比较写作体验、输出质量和升级门槛，继续走这里。'
-            : 'Use this if the next decision is about writing quality, workflow friction, and pricing tiers.',
-        },
-        {
-          href: '/guides/ai-tools-for-research-comparison',
-          title: isChinese ? '研究工具对比' : 'Research tools comparison',
-          description: isChinese
-            ? '当写作开始依赖资料整理、证据链和调研效率时，这页更贴近目标。'
-            : 'Move here when writing starts to depend on source gathering, evidence trails, and research speed.',
-        },
-      ];
-    }
-
-    return [
-      {
-        href: '/guides/ai-writing-tools-comparison',
-        title: isChinese ? 'AI 写作工具对比' : 'AI writing tools comparison',
-        description: isChinese
-          ? '继续比较写作任务适配度、输出质量和免费额度。'
-          : 'Compare writing-task fit, output quality, and free-tier limits next.',
-      },
-      {
-        href: '/guides/ai-seo-tools-comparison',
-        title: isChinese ? 'AI SEO 工具对比' : 'AI SEO tools comparison',
-        description: isChinese
-          ? '如果你的目标更偏自然搜索和内容规划，可以顺着这条走。'
-          : 'Follow this path if the real job is search traffic and content planning.',
-      },
-      {
-        href: '/guides/ai-tools-for-research-comparison',
-        title: isChinese ? '研究工具对比' : 'Research tools comparison',
-        description: isChinese
-          ? '当写作前的资料收集和核对变重要时，这页更合适。'
-          : 'A better next step once source gathering and verification matter more.',
-      },
-    ];
-  }
-
-  if (categorySlug === 'research') {
-    if (hasAnyTag(['seo', 'keyword-research', 'content-seo', 'search-intelligence'])) {
-      return [
-        {
-          href: '/guides/ai-seo-tools-comparison',
-          title: isChinese ? 'AI SEO 工具对比' : 'AI SEO tools comparison',
-          description: isChinese
-            ? '适合继续比较关键词、SERP 和内容结构判断。'
-            : 'Best for comparing keywords, SERP workflows, and content-structure planning.',
-        },
-        {
-          href: '/guides/ai-tools-for-research-comparison',
-          title: isChinese ? '研究工具对比' : 'Research tools comparison',
-          description: isChinese
-            ? '回到更宽的研究工具页继续看来源质量和证据链能力。'
-            : 'Return to the broader research comparison for source quality and evidence-trail fit.',
-        },
-        {
-          href: '/guides/ai-writing-tools-comparison',
-          title: isChinese ? 'AI 写作工具对比' : 'AI writing tools comparison',
-          description: isChinese
-            ? '如果研究的下一步是产出文章或页面，这页更贴近执行。'
-            : 'Useful when the research output becomes articles, briefs, or landing pages.',
-        },
-      ];
-    }
-
-    return [
-      {
-        href: '/guides/ai-tools-for-research-comparison',
-        title: isChinese ? '研究工具对比' : 'Research tools comparison',
-        description: isChinese
-          ? '继续比较资料来源、搜索效率和证据链完整度。'
-          : 'Compare source quality, research speed, and evidence trails next.',
-      },
-      {
-        href: '/guides/ai-writing-tools-comparison',
-        title: isChinese ? 'AI 写作工具对比' : 'AI writing tools comparison',
-        description: isChinese
-          ? '如果研究后要快速落稿或整理输出，可以继续走这里。'
-          : 'Use this if the next step is turning research into drafts or summaries.',
-      },
-      {
-        href: '/guides/ai-seo-tools-comparison',
-        title: isChinese ? 'AI SEO 工具对比' : 'AI SEO tools comparison',
-        description: isChinese
-          ? '当研究目标更偏搜索机会和内容布局，这页更合适。'
-          : 'A better fit when the real question is search opportunity and content structure.',
-      },
-    ];
-  }
-
-  if (categorySlug === 'automation') {
-    if (hasAnyTag(['routing', 'gateway', 'api-layer', 'llm-gateway', 'provider-routing'])) {
-      return [
-        {
-          href: '/guides/ai-tools-for-model-routing-comparison',
-          title: isChinese ? '模型路由工具对比' : 'Model routing comparison',
-          description: isChinese
-            ? '适合继续比较供应商切换、成本控制和失败回退策略。'
-            : 'Compare provider routing, fallback strategy, and cost control next.',
-        },
-        {
-          href: '/guides/ai-tools-for-automation-comparison',
-          title: isChinese ? '自动化工具对比' : 'Automation tools comparison',
-          description: isChinese
-            ? '回到更宽的自动化对比页继续看触发方式和可维护性。'
-            : 'Return to the broader automation comparison for triggers and maintainability.',
-        },
-        {
-          href: '/guides/ai-tools-for-api-observability-comparison',
-          title: isChinese ? 'API 可观测性工具对比' : 'API observability comparison',
-          description: isChinese
-            ? '如果你已经开始关心调用质量和稳定性，顺着这里走。'
-            : 'Move here when runtime quality and request visibility become more important.',
-        },
-      ];
-    }
-
-    return [
-      {
-        href: '/guides/ai-tools-for-automation-comparison',
-        title: isChinese ? '自动化工具对比' : 'Automation tools comparison',
-        description: isChinese
-          ? '继续比较触发方式、流程编排和长期维护成本。'
-          : 'Compare triggers, orchestration style, and long-term maintenance cost.',
-      },
-      {
-        href: '/guides/ai-tools-for-developers-comparison',
-        title: isChinese ? '开发者工具总对比' : 'Developer tools comparison',
-        description: isChinese
-          ? '如果这条自动化链路更偏工程化接入，回到开发者对比页。'
-          : 'Go here if the automation workflow is really an engineering integration problem.',
-      },
-      {
-        href: '/guides/ai-tools-for-model-routing-comparison',
-        title: isChinese ? '模型路由工具对比' : 'Model routing comparison',
-        description: isChinese
-          ? '当你的自动化开始依赖多模型与多供应商切换时，这页更贴近目标。'
-          : 'A better fit once the workflow depends on multi-model and multi-provider routing.',
-      },
-    ];
-  }
-
-  if (categorySlug === 'productivity') {
-    if (hasAnyTag(['meeting-notes', 'transcription', 'note-taking', 'meetings', 'voice-notes'])) {
-      return [
-        {
-          href: '/guides/ai-tools-for-meeting-notes-comparison',
-          title: isChinese ? '会议纪要工具对比' : 'Meeting notes comparison',
-          description: isChinese
-            ? '适合继续比较转录质量、摘要结构和会议后的执行效率。'
-            : 'Best for comparing transcription quality, summary structure, and follow-through after meetings.',
-        },
-        {
-          href: '/guides/ai-note-taking-tools-comparison',
-          title: isChinese ? 'AI 笔记工具对比' : 'AI note taking comparison',
-          description: isChinese
-            ? '如果你更在意笔记整理、知识沉淀和回顾效率，继续走这里。'
-            : 'Use this if the real job is note organization, knowledge capture, and review speed.',
-        },
-        {
-          href: '/guides/ai-productivity-tools-comparison',
-          title: isChinese ? 'AI 生产力工具对比' : 'AI productivity tools comparison',
-          description: isChinese
-            ? '回到更宽的生产力工具视角继续比较。'
-            : 'Return to the broader productivity comparison to compare across workflows.',
-        },
-      ];
-    }
-
-    return [
-      {
-        href: '/guides/ai-productivity-tools-comparison',
-        title: isChinese ? 'AI 生产力工具对比' : 'AI productivity tools comparison',
-        description: isChinese
-          ? '继续比较会议、任务推进和知识整理这几类工作流。'
-          : 'Compare meetings, task follow-through, and knowledge workflows next.',
-      },
-      {
-        href: '/guides/ai-note-taking-tools-comparison',
-        title: isChinese ? 'AI 笔记工具对比' : 'AI note taking comparison',
-        description: isChinese
-          ? '如果你更偏笔记和知识回顾，顺着这条走更自然。'
-          : 'A stronger fit when the job leans toward notes and knowledge review.',
-      },
-      {
-        href: '/guides/ai-tools-for-meeting-notes-comparison',
-        title: isChinese ? '会议纪要工具对比' : 'Meeting notes comparison',
-        description: isChinese
-          ? '如果目标更偏录音整理和会后追踪，这页更合适。'
-          : 'More useful when the real job is meeting capture and post-meeting follow-up.',
-      },
-    ];
-  }
-
-  return [
-    {
-      href: '/guides/how-to-choose-ai-tools',
-      title: isChinese ? 'AI 工具选型指南' : 'AI tool selection guide',
-      description: isChinese
-        ? '如果比较维度还不够明确，先回到选型指南更高效。'
-        : 'Return to the selection guide if your comparison criteria are still fuzzy.',
-    },
-    {
-      href: '/explore?sort=popular',
-      title: isChinese ? '热门工具探索页' : 'Popular tools explore page',
-      description: isChinese
-        ? '回到全站继续横向看同类条目。'
-        : 'Return to the directory and compare more listings side by side.',
-    },
-    {
-      href: '/new',
-      title: isChinese ? '本周新增工具' : 'New this week',
-      description: isChinese
-        ? '看看最近新增和最近补厚的工具页。'
-        : 'See recently added and recently improved listings.',
-    },
-  ];
-}
 
 function getPricingLabel(pricing: string | null | undefined): string {
   if (pricing === 'free') return 'Free';
@@ -3635,10 +2930,6 @@ export default async function Page({
           day: 'numeric',
         }).format(new Date(updatedAt))
       : recentlyCheckedLabel;
-    let statusLabel = isChinese ? '已收录' : 'Listed';
-    if (dbTool?.status === 'published') {
-      statusLabel = isChinese ? '已公开' : 'Published';
-    }
     let ratingLabel = isChinese ? '暂无评分' : 'No ratings yet';
     if (ratingStats.ratingCount > 0) {
       ratingLabel = `${ratingStats.averageRating.toFixed(1)} / 5`;
@@ -3657,23 +2948,6 @@ export default async function Page({
         }).format(new Date(claimedAt))
       : null;
     const marketValidation = getMarketValidation(dbTool?.features, locale);
-    const marketReviewedLabel = marketValidation?.reviewedAt
-      ? new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-        }).format(new Date(marketValidation.reviewedAt))
-      : null;
-    let marketValidationTone = 'text-slate-700 bg-slate-100';
-    if (marketValidation?.verdict === 'validated') {
-      marketValidationTone = 'text-emerald-700 bg-emerald-50';
-    } else if (marketValidation?.verdict === 'emerging') {
-      marketValidationTone = 'text-amber-700 bg-amber-50';
-    }
-    let marketReviewStatusLabel = isChinese ? '复核日期待补' : 'Review date pending';
-    if (marketReviewedLabel) {
-      marketReviewStatusLabel = `${isChinese ? '复核于' : 'Reviewed'} ${marketReviewedLabel}`;
-    }
     const quickFacts = [
       {
         label: isChinese ? '分类' : 'Category',
@@ -3705,16 +2979,6 @@ export default async function Page({
         icon: ShieldCheck,
         tone: claimTone,
       },
-      ...(marketValidation
-        ? [
-            {
-              label: isChinese ? '市场验证' : 'Validation',
-              value: marketValidation.label,
-              icon: ShieldCheck,
-              tone: marketValidationTone,
-            },
-          ]
-        : []),
     ];
     const commentPromptLabel = isChinese ? '可以直接点一个开头' : 'Start with one of these';
     const commentStarterPrompts = isChinese
@@ -3729,11 +2993,7 @@ export default async function Page({
       commentLabel = `${commentCount} ${isChinese ? '条讨论' : 'comments'}`;
     }
     const categorySlug = category?.slug;
-    const categoryGuideLink = getCategoryGuideLink(categorySlug, locale);
-    const tagLabels =
-      tags.length > 0
-        ? tags.map((tag) => getDisplayTagLabel(tag)).filter(Boolean)
-        : tagSlugsForDisplay.map((tagSlug) => humanizeTagSlug(tagSlug)).filter(Boolean);
+
     const featureEntries = getFeatureEntries(dbTool?.features, locale);
     const useCaseList = getStringList(dbTool?.useCases, locale);
     const bestFitOverride = getAudienceEntries(dbTool?.features, 'bestFit', locale);
@@ -3787,13 +3047,6 @@ export default async function Page({
           : `The latest update was ${updatedAgeDays} days ago, so it is worth confirming the site is still maintained.`,
       );
     }
-    if (!ownerEmail && claimStatus === 'unclaimed') {
-      riskPoints.push(
-        isChinese
-          ? '还没有 owner 信号，出问题时不一定能快速联系到工具方。'
-          : 'There is no owner signal yet, so it may be harder to reach the team if something looks off.',
-      );
-    }
     if (dbTool?.pricing === 'free') {
       riskPoints.push(
         isChinese
@@ -3833,17 +3086,7 @@ export default async function Page({
     const communitySignalWithOverride = decisionCommunitySummary
       ? { ...communitySignal, summary: decisionCommunitySummary }
       : communitySignal;
-    const marketDemand = getMarketDemandSummary({
-      locale,
-      viewCount: toolStats.viewCount,
-      clickCount: toolStats.clickCount,
-    });
-    const marketMomentum = getMarketMomentumSummary({
-      locale,
-      updatedAt,
-      screenshotCount,
-      hasVideo,
-    });
+
     const comparisonSummary = getComparisonSummary(categorySlug, locale);
     const compareAxes = decisionCompareAxesOverride.length > 0 ? decisionCompareAxesOverride : [comparisonSummary];
     const nextComparisonLinks = reviewedToolRelationships.map((relationship) => ({
@@ -3851,218 +3094,10 @@ export default async function Page({
       href: `${getLocalizedToolPath(relationship.tool.name, locale)}#decision-card`,
       title: getLocalizedField(relationship.tool.title, locale),
     }));
-    const checkedAt = editorialReview?.reviewedAt || null;
-    let checkedAtLabel = isChinese ? '待补复核时间' : 'Review time pending';
-    if (checkedAt) {
-      checkedAtLabel = new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      }).format(new Date(checkedAt));
-    }
     failureStage = 'page render';
-    let detailSignalCards: Array<{ label: string; value: string; note: string }>;
+
     const websiteNameKey = websiteName.toLowerCase();
     const priorityEvidence = PRIORITY_TOOL_EVIDENCE[websiteNameKey] || null;
-    if (websiteNameKey === 'fathom') {
-      detailSignalCards = [
-        {
-          label: isChinese ? '价格信号' : 'Pricing signal',
-          value: isChinese ? '先看会议记录额度和团队席位' : 'Check meeting limits and team seats first',
-          note: isChinese
-            ? '先判断免费层能不能覆盖你的会议量，再看团队协作是否需要升级。'
-            : 'Check whether the free tier covers your meeting volume before worrying about team upgrades.',
-        },
-        {
-          label: isChinese ? '更新信号' : 'Freshness signal',
-          value: isChinese
-            ? '看转写和跟进功能是否持续更新'
-            : 'Check whether transcription and follow-up still move forward',
-          note: isChinese
-            ? '如果会后流程和导出体验都没跟进，通常说明真实团队流程已经变弱。'
-            : 'If the post-meeting workflow and exports are stale, the real team workflow may already be weakening.',
-        },
-        {
-          label: isChinese ? '风险信号' : 'Risk signal',
-          value: isChinese ? '先确认是否真能省会后整理时间' : 'Confirm it really saves cleanup time',
-          note: isChinese
-            ? '如果只是转写更漂亮，但不减少整理和跟进成本，就不算强价值。'
-            : 'If transcription looks nicer but does not reduce cleanup or follow-up cost, the value is weak.',
-        },
-      ];
-    } else if (websiteNameKey === 'pipedream') {
-      detailSignalCards = [
-        {
-          label: isChinese ? '价格信号' : 'Pricing signal',
-          value: isChinese ? '先看任务次数、workflow 限制' : 'Check task runs and workflow limits first',
-          note: isChinese
-            ? '先判断免费层能不能跑你的真实工作流，再看高级能力是否值得升级。'
-            : 'Check whether the free tier can run your real workflow before you care about advanced upgrades.',
-        },
-        {
-          label: isChinese ? '更新信号' : 'Freshness signal',
-          value: isChinese ? '看触发器和集成是否在更新' : 'Check whether triggers and integrations stay current',
-          note: isChinese
-            ? '如果集成说明和触发器文档久不更新，真实工作流通常会先出问题。'
-            : 'If integration docs and trigger notes are stale, real workflows usually break first.',
-        },
-        {
-          label: isChinese ? '风险信号' : 'Risk signal',
-          value: isChinese ? '先确认稳定性和失败重试' : 'Confirm stability and retries first',
-          note: isChinese
-            ? '自动化工具只要不稳定，后面的工作流就会很难持续。'
-            : 'If an automation tool is unstable, downstream workflows become hard to trust.',
-        },
-      ];
-    } else if (websiteNameKey === 'lindy') {
-      detailSignalCards = [
-        {
-          label: isChinese ? '价格信号' : 'Pricing signal',
-          value: isChinese ? '先看执行次数与权限模型' : 'Check execution limits and permission model first',
-          note: isChinese
-            ? '先确认 AI 任务运行额度、是否可控的多步骤执行，再看高级能力。'
-            : 'Check workflow execution quotas and permission controls before weighing advanced capabilities.',
-        },
-        {
-          label: isChinese ? '更新信号' : 'Freshness signal',
-          value: isChinese
-            ? '看触发器和执行链路是否持续维护'
-            : 'Check whether trigger and execution pipelines are maintained',
-          note: isChinese
-            ? '当触发器和鉴权链路长期不更新时，自动化链路最容易积累沉没成本。'
-            : 'When trigger and auth chains stay stale, automation usually accumulates hidden maintenance costs.',
-        },
-        {
-          label: isChinese ? '风险信号' : 'Risk signal',
-          value: isChinese ? '先确认人工介入与回滚路径' : 'Confirm human-in-the-loop and rollback flow',
-          note: isChinese
-            ? '有清晰的人工审查和回滚才算可持续的 Agent 编排。'
-            : 'Agent automation needs dependable human review and rollback to stay trustworthy over time.',
-        },
-      ];
-    } else if (websiteNameKey === 'chatgpt') {
-      detailSignalCards = [
-        {
-          label: isChinese ? '价格信号' : 'Pricing signal',
-          value: isChinese ? '先看额度和并行场景' : 'Check plan limits and parallel usage first',
-          note: isChinese
-            ? '先确认额度是否适配你真实写作、研究或协作节奏，再决定是否换到替代方案。'
-            : 'Validate whether usage limits match your writing, research, and collaboration cadence before replacing with another option.',
-        },
-        {
-          label: isChinese ? '更新信号' : 'Freshness signal',
-          value: isChinese ? '看官方更新与模型能力变化' : 'Track official updates and model capability changes',
-          note: isChinese
-            ? 'ChatGPT 的体验变化主要来自模型与策略更新，周期性复核很关键。'
-            : 'ChatGPT value often shifts with model and policy updates, so periodic recheck is critical.',
-        },
-        {
-          label: isChinese ? '风险信号' : 'Risk signal',
-          value: isChinese ? '先确认替代门槛和数据边界' : 'Confirm migration cost and data boundaries first',
-          note: isChinese
-            ? '看清替代难度和数据留痕要求后再决定是否升级。'
-            : 'Decision should depend on migration cost and data-handling requirements, not just feature headlines.',
-        },
-      ];
-    } else if (websiteNameKey === 'cursor') {
-      detailSignalCards = [
-        {
-          label: isChinese ? '价格信号' : 'Pricing signal',
-          value: isChinese ? '先看套餐额度与项目规模' : 'Check plan limits against project scale',
-          note: isChinese
-            ? '先确认并发、上下文长度和项目规模是否足够，不要被单次补全体验带偏。'
-            : 'Start by validating concurrency, context length, and team size before trusting only completion UX.',
-        },
-        {
-          label: isChinese ? '更新信号' : 'Freshness signal',
-          value: isChinese
-            ? '看规则提示、模型更新和协作链路'
-            : 'Check rule hints, model updates, and collaboration flow',
-          note: isChinese
-            ? 'Cursor 的价值依赖稳定更新和代码变更闭环，长时间不更新会迅速出现漂移。'
-            : 'Cursor value depends on steady updates and a stable editing loop, not just short-term demos.',
-        },
-        {
-          label: isChinese ? '风险信号' : 'Risk signal',
-          value: isChinese ? '先确认 diff 审核和回滚能力' : 'Verify diff review and rollback first',
-          note: isChinese
-            ? '有可审查的差异和回滚路径，才适合上生产代码库。'
-            : 'Production code should only move forward with clear diff review and rollback options.',
-        },
-      ];
-    } else if (websiteNameKey === 'the-graph') {
-      detailSignalCards = [
-        {
-          label: isChinese ? '价格信号' : 'Pricing signal',
-          value: isChinese ? '先看查询额度与长期成本' : 'Check query quotas and long-term costs first',
-          note: isChinese
-            ? '先确认主查询量是否可支撑你的频率和分析规模。'
-            : 'Validate whether your expected query volume can be sustained over time.',
-        },
-        {
-          label: isChinese ? '更新信号' : 'Freshness signal',
-          value: isChinese ? '看链上索引和 subgraph 覆盖' : 'Check chain indexing and subgraph coverage',
-          note: isChinese
-            ? '如果索引滞后，任何看板都可能偏离真实业务决策。'
-            : 'If indexing is delayed, even polished dashboards can mislead business decisions.',
-        },
-        {
-          label: isChinese ? '风险信号' : 'Risk signal',
-          value: isChinese ? '先确认数据模型和时效风险' : 'Validate schema assumptions and freshness risk',
-          note: isChinese
-            ? '确认链上数据模型是否稳定，避免查询后期因接口变化失效。'
-            : 'Confirm schema stability to avoid later breakage when query interfaces change.',
-        },
-      ];
-    } else if (websiteNameKey === 'dune') {
-      detailSignalCards = [
-        {
-          label: isChinese ? '价格信号' : 'Pricing signal',
-          value: isChinese ? '先看查询额度与查询延迟' : 'Check query quotas and query latency',
-          note: isChinese
-            ? '先确认工作流里的 SQL 频率和大查询频率，避免后续被配额限制断流。'
-            : 'Validate SQL frequency and large-query cadence to avoid surprise quota throttling.',
-        },
-        {
-          label: isChinese ? '更新信号' : 'Freshness signal',
-          value: isChinese ? '看刷新策略和刷新延迟' : 'Check refresh strategy and lag',
-          note: isChinese
-            ? '仪表盘看起来不够稳时，先看刷新周期和手工刷新路径。'
-            : 'If dashboards look unstable, first check refresh scheduling and manual refresh steps.',
-        },
-        {
-          label: isChinese ? '风险信号' : 'Risk signal',
-          value: isChinese ? '先确认结果可解释性与复用成本' : 'Validate interpretability and reuse cost',
-          note: isChinese
-            ? '链上图表能否被团队复用更重要，别只看单张报表效果。'
-            : 'Reusability and clarity across team members matters more than one-off charts.',
-        },
-      ];
-    } else {
-      detailSignalCards = [
-        {
-          label: isChinese ? '价格信号' : 'Pricing signal',
-          value: isChinese ? '先看免费、试用和升级门槛' : 'Check free, trial, and upgrade thresholds first',
-          note: isChinese
-            ? '先知道门槛，再决定要不要继续深入比较。'
-            : 'Know the threshold before deciding whether to keep comparing.',
-        },
-        {
-          label: isChinese ? '更新信号' : 'Freshness signal',
-          value: isChinese ? '先看最近检查日期' : 'Check the last-checked date first',
-          note: isChinese
-            ? '越新的页面越容易和真实使用体验对齐。'
-            : 'Newer pages are more likely to match real-world usage and pricing changes.',
-        },
-        {
-          label: isChinese ? '风险信号' : 'Risk signal',
-          value: isChinese ? '先排除不适合的场景' : 'Filter out mismatched scenarios early',
-          note: isChinese
-            ? '不适合谁，往往比适合谁更能帮人做决定。'
-            : 'Knowing who it is not for often helps decisions more than another list of fit cases.',
-        },
-      ];
-    }
     let mediaChecklistItem = 'Preview media is still limited, so check the official screenshots before deciding.';
     if (heroImage) {
       mediaChecklistItem = isChinese
@@ -4143,39 +3178,7 @@ export default async function Page({
       risks: riskPoints,
       verificationChecklist,
     });
-    const visibleDecisionRisks =
-      decisionCard.risks.length > 0
-        ? decisionCard.risks
-        : [isChinese ? '暂时没有明显风险信号。' : 'No strong risk signal right now.'];
-    const decisionEvidenceMissingLabels = decisionCard.evidenceCompleteness.missing.map((key) =>
-      getEvidenceRequirementLabel(key, locale),
-    );
-    let decisionEvidenceStatusLabel = `${decisionEvidenceMissingLabels.length} gaps`;
-    if (decisionCard.evidenceCompleteness.complete) {
-      decisionEvidenceStatusLabel = locale === 'cn' ? '证据已齐' : 'Evidence complete';
-    } else if (locale === 'cn') {
-      decisionEvidenceStatusLabel = `待补 ${decisionEvidenceMissingLabels.length} 项`;
-    }
     const lastCheckedScheduleLabel = formatReviewScheduleDate(decisionCard.reviewSchedule.lastCheckedAt, false, locale);
-    const nextFactReviewLabel = formatReviewScheduleDate(
-      decisionCard.reviewSchedule.nextFactReviewAt,
-      decisionCard.reviewSchedule.factReviewDue,
-      locale,
-    );
-    const nextDecisionReviewLabel = formatReviewScheduleDate(
-      decisionCard.reviewSchedule.nextDecisionReviewAt,
-      decisionCard.reviewSchedule.decisionReviewDue,
-      locale,
-    );
-    const supportedDecisionFieldCount = decisionCardV2
-      ? [
-          decisionCardV2.trueCost,
-          decisionCardV2.setup,
-          decisionCardV2.dataUse,
-          decisionCardV2.exitPath,
-          decisionCardV2.whyNot,
-        ].filter((field) => field.state === 'supported').length
-      : null;
     const aboveFoldTask =
       decisionMetadataPilot?.primaryTask ||
       prioritySearchIntent?.summary ||
@@ -4183,69 +3186,15 @@ export default async function Page({
       (isChinese ? `判断 ${data.title} 是否适合你的任务` : `Decide whether ${data.title} fits your task`);
     const aboveFoldLimit =
       decisionMetadataPilot?.decisionAngle ||
-      visibleDecisionRisks[0] ||
+      (priorityEvidence ? (isChinese ? priorityEvidence.limitation.zh : priorityEvidence.limitation.en) : null) ||
+      decisionCard.audience.notIdealFor[0] ||
+      decisionCard.risks[0] ||
       (isChinese
         ? '关键限制仍需结合官网与实际试用核对。'
         : 'Key limits still need an official-source and trial check.');
-    const aboveFoldEvidence = decisionCardV2
-      ? isChinese
-        ? `${supportedDecisionFieldCount}/5 个决策字段已有当前证据`
-        : `${supportedDecisionFieldCount}/5 decision fields have current evidence`
-      : decisionEvidenceStatusLabel;
     const aboveFoldReviewedAt = decisionCardV2?.reviewedAt
       ? formatReviewScheduleDate(decisionCardV2.reviewedAt, false, locale)
       : lastCheckedScheduleLabel;
-    let commentSnapshotNote = isChinese
-      ? '评论还少，欢迎先留一条真实体验。'
-      : 'Comments are light, so the first real experience is especially useful.';
-    if (commentCount > 0) {
-      commentSnapshotNote = isChinese
-        ? `已有 ${commentCount} 条讨论，可直接看真实反馈。`
-        : `${commentCount} comments can surface real-world trade-offs quickly.`;
-    }
-    let discussionCountText = locale === 'cn' ? '还没有讨论' : 'No comments yet';
-    if (commentCount > 0) {
-      discussionCountText = `${commentCount} ${locale === 'cn' ? '条讨论' : 'comments'}`;
-    }
-    let nextActionText = locale === 'cn' ? '先认领再补更新' : 'Claim first, then add updates';
-    if (claimStatus === 'claimed') {
-      nextActionText = locale === 'cn' ? '认领后补更新说明' : 'Add update notes after claiming';
-    }
-    const trustSnapshotItems = [
-      {
-        label: isChinese ? '最近核查' : 'Last checked',
-        value: checkedAtLabel,
-        note: isChinese
-          ? '这次复核不是单纯看页面文本，而是把官网、截图、评论和认领信号一起重新对齐。'
-          : 'This review rechecks the official site, screenshots, comments, and claim signals together.',
-      },
-      {
-        label: isChinese ? 'Owner 状态' : 'Owner status',
-        value: claimLabel,
-        note: claimSummary,
-      },
-      {
-        label: isChinese ? '编辑复核' : 'Editorial review',
-        value: editorialReviewedLabel || (isChinese ? '待补复核时间' : 'Review time pending'),
-        note:
-          editorialReview?.summary ||
-          (isChinese ? '先把复核时间、复核说明和可信度备注补齐。' : 'Add review timing, notes, and trust context.'),
-      },
-      {
-        label: isChinese ? '讨论活跃度' : 'Discussion',
-        value: commentLabel,
-        note: commentSnapshotNote,
-      },
-    ];
-    let discussionPrompt = 'Leave the first real comment, then connect the owner claim and update notes.';
-    if (locale === 'cn') {
-      discussionPrompt =
-        commentCount > 0
-          ? `已有 ${commentCount} 条讨论，欢迎继续补充体验、限制和替代方案。`
-          : '先留一条真实评论，再把 owner 认领和更新说明接上。';
-    } else if (commentCount > 0) {
-      discussionPrompt = `${commentCount} comments are already visible, so add your usage notes, limits, or alternatives.`;
-    }
     let heroPreview = (
       <div className='flex aspect-video items-center justify-center bg-slate-100 text-5xl font-bold text-slate-300'>
         {data.title.slice(0, 1).toUpperCase()}
@@ -4323,287 +3272,157 @@ export default async function Page({
                   <h1 className='max-w-4xl text-4xl font-bold leading-tight text-slate-950 lg:text-6xl'>
                     {data.title}
                   </h1>
-                  <p className='max-w-3xl text-base leading-7 text-slate-600 lg:text-lg'>{data.content}</p>
+                  <p className='max-w-3xl text-base leading-7 text-slate-600 lg:text-lg'>
+                    {getPublicToolSummary(canonicalSlug, locale, data.content)}
+                  </p>
                 </div>
 
-                {prioritySearchIntent && (
-                  <div className='rounded-[18px] border border-cyan-200 bg-cyan-50/70 p-5 shadow-sm'>
-                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                      {prioritySearchIntent.label}
-                    </p>
-                    <p className='mt-2 max-w-3xl text-base font-semibold leading-7 text-slate-950'>
-                      {prioritySearchIntent.summary}
-                    </p>
-                    <div className='mt-4 grid gap-3 md:grid-cols-3'>
-                      {prioritySearchIntent.checkpoints.map((checkpoint) => (
-                        <div key={checkpoint} className='flex gap-2 rounded-xl border border-white bg-white p-3'>
-                          <CheckCircle className='mt-0.5 size-4 shrink-0 text-emerald-600' />
-                          <p className='text-sm leading-6 text-slate-700'>{checkpoint}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {priorityOfficialEvidence && (
-                  <section
-                    data-official-evidence='true'
-                    className='rounded-[18px] border border-emerald-200 bg-emerald-50/60 p-5 shadow-sm'
-                  >
-                    <div className='flex flex-wrap items-start justify-between gap-3'>
-                      <div>
-                        <p className='text-xs font-semibold uppercase tracking-wide text-emerald-700'>
-                          {priorityOfficialEvidence.label}
-                        </p>
-                        <h2 className='mt-2 text-xl font-bold text-slate-950'>{priorityOfficialEvidence.title}</h2>
-                      </div>
-                      <span className='rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-600 ring-1 ring-emerald-200'>
-                        {isChinese ? '核查于' : 'Checked'} {priorityOfficialEvidence.checkedAt}
-                      </span>
-                    </div>
-                    <p className='mt-3 max-w-4xl text-sm leading-6 text-slate-600'>
-                      {priorityOfficialEvidence.summary}
-                    </p>
-                    <div className='mt-4 grid gap-3 md:grid-cols-3'>
-                      {priorityOfficialEvidence.facts.map((fact) => (
-                        <div key={fact.label} className='rounded-xl border border-white bg-white p-4'>
-                          <p className='text-xs font-semibold uppercase tracking-wide text-emerald-700'>{fact.label}</p>
-                          <p className='mt-2 text-sm leading-6 text-slate-700'>{fact.value}</p>
-                        </div>
-                      ))}
-                    </div>
-                    <div className='mt-4 flex flex-wrap items-center gap-2 border-t border-emerald-200 pt-4'>
-                      <span className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                        {isChinese ? '官方来源' : 'Official sources'}
-                      </span>
-                      {priorityOfficialEvidence.sources.map((source) => (
-                        <a
-                          key={source.href}
-                          href={source.href}
-                          target='_blank'
-                          rel='noreferrer'
-                          className='inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-emerald-800 ring-1 ring-emerald-200 transition hover:bg-emerald-100'
-                        >
-                          {source.label}
-                          <ExternalLink className='size-3.5' />
-                        </a>
-                      ))}
-                    </div>
-                  </section>
-                )}
-
-                <section
-                  data-above-fold-decision-summary
-                  className='rounded-[18px] border border-slate-200 bg-white p-5 shadow-sm'
-                >
-                  <div className='flex flex-wrap items-start justify-between gap-3'>
-                    <div>
-                      <p className='text-xs font-semibold uppercase tracking-[0.16em] text-cyan-700'>
-                        {isChinese ? '先看结论，再看功能' : 'Decision first, features second'}
-                      </p>
-                      <h2 className='mt-2 text-xl font-bold text-slate-950'>
-                        {isChinese ? '这页帮你判断三件事' : 'Three checks before you choose'}
-                      </h2>
-                    </div>
-                    <span className='rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600'>
-                      {isChinese ? '最近核查' : 'Last checked'} {aboveFoldReviewedAt}
-                    </span>
-                  </div>
-                  <div className='mt-4 grid gap-3 md:grid-cols-3'>
-                    {[
-                      { label: isChinese ? '适合的任务' : 'Task fit', value: aboveFoldTask },
-                      { label: isChinese ? '选择前要权衡' : 'Key trade-off', value: aboveFoldLimit },
-                      { label: isChinese ? '证据覆盖' : 'Evidence coverage', value: aboveFoldEvidence },
-                    ].map((item) => (
-                      <div key={item.label} className='rounded-xl bg-slate-50 p-4 ring-1 ring-slate-200'>
-                        <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>{item.label}</p>
-                        <p className='mt-2 text-sm font-semibold leading-6 text-slate-900'>{item.value}</p>
-                      </div>
-                    ))}
-                  </div>
+                <div className='flex flex-col gap-3 sm:flex-row sm:items-center'>
+                  {toolId ? (
+                    <TrackableLink
+                      href={data.url}
+                      toolId={toolId}
+                      userId={user?.id}
+                      className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50'
+                    >
+                      {t('visitWebsite')} <ArrowUpRight className='size-4' />
+                    </TrackableLink>
+                  ) : (
+                    <a
+                      href={data.url}
+                      target='_blank'
+                      rel='noreferrer'
+                      className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50'
+                    >
+                      {t('visitWebsite')} <ArrowUpRight className='size-4' />
+                    </a>
+                  )}
                   <a
-                    href='#decision-card'
-                    className='mt-4 inline-flex items-center gap-2 text-sm font-semibold text-cyan-800 hover:text-cyan-950'
+                    href={`/${locale}/explore?search=${encodeURIComponent(data.title)}`}
+                    className='inline-flex items-center justify-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-medium text-slate-700 ring-1 ring-slate-200 transition hover:bg-slate-100'
                   >
-                    {isChinese ? '查看完整判断与依据' : 'See the full decision and evidence'}
-                    <CircleArrowRight className='size-4' />
+                    {isChinese ? '找相似工具' : 'Find similar tools'} <CircleArrowRight className='size-4' />
                   </a>
-                </section>
-
-                <div className='grid gap-3 md:grid-cols-3'>
-                  {categorySlug ? (
-                    <Link
-                      href={`/categories/${categorySlug}?sort=latest`}
-                      className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
-                    >
-                      <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                        {isChinese ? '继续看分类' : 'Browse the category'}
-                      </p>
-                      <p className='mt-2 text-base font-semibold text-slate-950'>{categoryName}</p>
-                      <p className='mt-2 text-sm leading-6 text-slate-600'>
-                        {isChinese
-                          ? '回到这个分类，继续按时间或热门度筛选相似工具。'
-                          : 'Jump back to the category and keep comparing similar tools by latest or popularity.'}
-                      </p>
-                    </Link>
-                  ) : (
-                    <Link
-                      href='/explore?sort=latest'
-                      className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
-                    >
-                      <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                        {isChinese ? '继续探索' : 'Keep exploring'}
-                      </p>
-                      <p className='mt-2 text-base font-semibold text-slate-950'>
-                        {isChinese ? '查看最新工具' : 'Browse the latest tools'}
-                      </p>
-                      <p className='mt-2 text-sm leading-6 text-slate-600'>
-                        {isChinese
-                          ? '如果还没确定方向，先回到最新收录页继续看。'
-                          : 'If you are still comparing directions, return to the latest tools index first.'}
-                      </p>
-                    </Link>
-                  )}
-
-                  {categoryGuideLink ? (
-                    <Link
-                      href={categoryGuideLink.href}
-                      className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
-                    >
-                      <p className='text-xs font-semibold uppercase tracking-wide text-emerald-700'>
-                        {isChinese ? '先看指南' : 'Read the guide first'}
-                      </p>
-                      <p className='mt-2 text-base font-semibold text-slate-950'>{categoryGuideLink.title}</p>
-                      <p className='mt-2 text-sm leading-6 text-slate-600'>{categoryGuideLink.description}</p>
-                    </Link>
-                  ) : (
-                    <Link
-                      href='/guides/how-to-choose-ai-tools'
-                      className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
-                    >
-                      <p className='text-xs font-semibold uppercase tracking-wide text-emerald-700'>
-                        {isChinese ? '先看指南' : 'Read the guide first'}
-                      </p>
-                      <p className='mt-2 text-base font-semibold text-slate-950'>
-                        {isChinese ? '看 AI 工具选型指南' : 'Open the AI tool selection guide'}
-                      </p>
-                      <p className='mt-2 text-sm leading-6 text-slate-600'>
-                        {isChinese
-                          ? '如果你还没想清楚比较维度，先回到选型指南会更高效。'
-                          : 'If your comparison criteria are still fuzzy, the selection guide is the best next stop.'}
-                      </p>
-                    </Link>
-                  )}
-
-                  <Link
-                    href='/new'
-                    className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
-                  >
-                    <p className='text-xs font-semibold uppercase tracking-wide text-sky-700'>
-                      {isChinese ? '本周新增' : 'New this week'}
-                    </p>
-                    <p className='mt-2 text-base font-semibold text-slate-950'>
-                      {isChinese ? '回看最近补进的工具' : 'See what was added this week'}
-                    </p>
-                    <p className='mt-2 text-sm leading-6 text-slate-600'>
-                      {isChinese
-                        ? '从本周新增页继续走，可以更快发现最近补货和最近补厚的页面。'
-                        : 'Use the weekly additions page to discover recently added and recently improved listings.'}
-                    </p>
-                  </Link>
+                  {/* Discussion anchor is now surfaced in the action panel above */}
                 </div>
-
-                <GuideEvidencePanel
+                <PublicToolDecision
+                  card={decisionCard}
+                  model={decisionCardV2}
                   locale={locale}
-                  checkedAt={checkedAt || undefined}
-                  scope={
-                    isChinese
-                      ? '这页优先说明这个工具到底适合什么真实工作流，并把最近核查、评分、讨论、收藏、点击和更新时间一起摆出来，而不是只展示营销式简介。'
-                      : 'This page focuses on what real workflow the tool fits and surfaces last checked, ratings, discussions, saves, clicks, and freshness instead of only a marketing-style summary.'
+                  task={aboveFoldTask}
+                  tradeOff={aboveFoldLimit}
+                  checkedAt={
+                    decisionCardV2?.reviewedAt || decisionCard.reviewSchedule.lastCheckedAt ? aboveFoldReviewedAt : null
                   }
-                  decisionSteps={[
-                    isChinese
-                      ? '先判断这个工具是否真的对应你的当前工作流。'
-                      : 'First decide whether this tool really matches your current workflow.',
-                    isChinese
-                      ? '再看价格、更新和截图，确认它是不是还能稳定工作。'
-                      : 'Then check pricing, freshness, and screenshots to see whether it still works reliably.',
-                    isChinese
-                      ? '最后结合评论、认领和同类工具对比，决定是继续看官网还是换成更窄的候选。'
-                      : 'Finally use comments, claims, and similar-tool comparisons to decide whether to open the official site or switch to a narrower candidate.',
-                  ]}
-                  items={[
-                    {
-                      label: isChinese ? '验证范围' : 'Checked scope',
-                      value: isChinese
-                        ? '最近核查、用途、评论、截图 + 互动'
-                        : 'Last checked, use case, comments, screenshots + engagement',
-                      note: isChinese
-                        ? `当前 ${ratingStats.ratingCount} 条评分、${commentCount} 条讨论、${toolStats.favoriteCount} 次收藏，${checkedAtLabel} 已复核。`
-                        : `${ratingStats.ratingCount} ratings, ${commentCount} comments, and ${toolStats.favoriteCount} saves are visible right now, last checked on ${checkedAtLabel}.`,
-                    },
-                    {
-                      label: isChinese ? '索引策略' : 'Indexing strategy',
-                      value: isChinese ? '详情页保留索引' : 'Tool detail kept indexable',
-                      note: isChinese
-                        ? '让 Google 更容易理解这个工具页的真实主题。'
-                        : 'Helps Google better understand the real topic of the page.',
-                    },
-                    {
-                      label: isChinese ? '下一步增强' : 'Next enrichment',
-                      value: isChinese
-                        ? '补真实使用场景、owner 认领、最近验证'
-                        : 'Add real usage cases, owner claims, and recent verification',
-                      note: isChinese
-                        ? `最近更新时间 ${freshnessSummary}，继续把实际使用痕迹和认领信号放进页面。`
-                        : `Freshness reads as ${freshnessSummary}, and the page should keep gaining usage and claim signals.`,
-                    },
-                  ]}
-                  signalCards={detailSignalCards}
-                />
-
-                <div className='grid gap-3 md:grid-cols-3'>
-                  {trustSnapshotItems.map((item) => (
-                    <div key={item.label} className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm'>
-                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>{item.label}</p>
-                      <p className='mt-2 text-lg font-semibold text-slate-950'>{item.value}</p>
-                      <p className='mt-2 text-sm leading-6 text-slate-600'>{item.note}</p>
-                    </div>
-                  ))}
-                </div>
-
-                <div className='rounded-lg border border-cyan-100 bg-cyan-50/70 p-4 shadow-sm'>
-                  <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
-                    <div className='min-w-0'>
-                      <p className='text-sm font-semibold text-cyan-900'>
-                        {locale === 'cn' ? '把真实使用痕迹补进来' : 'Add real usage signals'}
+                >
+                  {priorityOfficialEvidence && (
+                    <section
+                      data-official-evidence='true'
+                      className='rounded-[18px] border border-emerald-200 bg-emerald-50/60 p-5 shadow-sm'
+                    >
+                      <div className='flex flex-wrap items-start justify-between gap-3'>
+                        <div>
+                          <p className='text-xs font-semibold uppercase tracking-wide text-emerald-700'>
+                            {priorityOfficialEvidence.label}
+                          </p>
+                          <h2 className='mt-2 text-xl font-bold text-slate-950'>{priorityOfficialEvidence.title}</h2>
+                        </div>
+                        <span className='rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-600 ring-1 ring-emerald-200'>
+                          {isChinese ? '核查于' : 'Checked'} {priorityOfficialEvidence.checkedAt}
+                        </span>
+                      </div>
+                      <p className='mt-3 max-w-4xl text-sm leading-6 text-slate-600'>
+                        {priorityOfficialEvidence.summary}
                       </p>
-                      <p className='mt-1 text-sm leading-6 text-cyan-900/80'>{discussionPrompt}</p>
+                      <div className='mt-4 grid gap-3 md:grid-cols-3'>
+                        {priorityOfficialEvidence.facts.map((fact) => (
+                          <div key={fact.label} className='rounded-xl border border-white bg-white p-4'>
+                            <p className='text-xs font-semibold uppercase tracking-wide text-emerald-700'>
+                              {fact.label}
+                            </p>
+                            <p className='mt-2 text-sm leading-6 text-slate-700'>{fact.value}</p>
+                          </div>
+                        ))}
+                      </div>
+                      <div className='mt-4 flex flex-wrap items-center gap-2 border-t border-emerald-200 pt-4'>
+                        <span className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
+                          {isChinese ? '官方来源' : 'Official sources'}
+                        </span>
+                        {priorityOfficialEvidence.sources.map((source) => (
+                          <a
+                            key={source.href}
+                            href={source.href}
+                            target='_blank'
+                            rel='noreferrer'
+                            className='inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-emerald-800 ring-1 ring-emerald-200 transition hover:bg-emerald-100'
+                          >
+                            {source.label}
+                            <ExternalLink className='size-3.5' />
+                          </a>
+                        ))}
+                      </div>
+                    </section>
+                  )}
+
+                  {priorityEvidence && !priorityOfficialEvidence ? (
+                    <div
+                      data-priority-tool-evidence
+                      className='mb-5 rounded-xl border border-cyan-200 bg-cyan-50 p-4 sm:p-5'
+                    >
+                      <div className='flex flex-wrap items-start justify-between gap-3'>
+                        <div>
+                          <p className='text-xs font-semibold uppercase tracking-[0.16em] text-cyan-700'>
+                            {locale === 'cn' ? '官方证据快照' : 'Official evidence snapshot'}
+                          </p>
+                          <h3 className='mt-1 text-base font-bold text-slate-950'>
+                            {locale === 'cn'
+                              ? '先核验真实限制，再决定是否采用'
+                              : 'Verify the real limit before adopting'}
+                          </h3>
+                        </div>
+                        <span className='rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-600'>
+                          {locale === 'cn' ? '核查于' : 'Checked'} {priorityEvidence.checkedAt}
+                        </span>
+                      </div>
+                      <p className='mt-3 text-sm leading-6 text-slate-700'>
+                        {locale === 'cn' ? priorityEvidence.limitation.zh : priorityEvidence.limitation.en}
+                      </p>
+                      <div className='mt-4 flex flex-wrap gap-2'>
+                        {priorityEvidence.sources.map((source) => (
+                          <a
+                            key={source.url}
+                            href={source.url}
+                            target='_blank'
+                            rel='noreferrer'
+                            className='inline-flex items-center rounded-lg border border-cyan-200 bg-white px-3 py-2 text-xs font-semibold text-cyan-800 hover:border-cyan-300 hover:bg-cyan-100'
+                          >
+                            {source.label}
+                          </a>
+                        ))}
+                      </div>
                     </div>
-                    <div className='flex flex-wrap gap-2'>
-                      <a
-                        href='#comments'
-                        className='inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-                      >
-                        <MessageSquare className='size-4' />
-                        {locale === 'cn' ? '去评论' : 'Jump to comments'}
-                      </a>
-                      <Link
-                        href='/developer/listing'
-                        className='inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-                      >
-                        <ShieldCheck className='size-4' />
-                        {locale === 'cn' ? '认领条目' : 'Claim listing'}
-                      </Link>
-                    </div>
-                  </div>
-                </div>
+                  ) : null}
+                  {marketValidation && marketValidation.evidenceUrls.length > 0 && (
+                    <details className='mt-4 border-t border-slate-200 pt-4 text-sm'>
+                      <summary className='cursor-pointer font-semibold text-cyan-800'>
+                        {isChinese ? '其他参考资料' : 'Additional references'}
+                      </summary>
+                      <div className='mt-3 flex flex-wrap gap-3'>
+                        {marketValidation.evidenceUrls.map((url, index) => (
+                          <a key={url} href={url} target='_blank' rel='noreferrer' className='text-cyan-800 underline'>
+                            {isChinese ? `参考资料 ${index + 1}` : `Reference ${index + 1}`}
+                          </a>
+                        ))}
+                      </div>
+                    </details>
+                  )}
+                </PublicToolDecision>
 
                 {toolId && (
                   <div className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm'>
                     <div className='mb-3 flex flex-wrap items-center gap-2'>
                       <span className='inline-flex items-center rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-700'>
-                        {locale === 'cn' ? '互动面板' : 'Action rail'}
+                        {locale === 'cn' ? '收藏与讨论' : 'Save and discuss'}
                       </span>
                       <span className='text-sm text-slate-500'>
                         {locale === 'cn'
@@ -4623,7 +3442,7 @@ export default async function Page({
                               <RatingStars
                                 toolId={toolId}
                                 currentRating={userRating}
-                                averageRating={ratingStats.averageRating}
+                                averageRating={ratingStats.ratingCount > 0 ? ratingStats.averageRating : 0}
                                 ratingCount={ratingStats.ratingCount}
                                 readonly={false}
                                 size='md'
@@ -4676,34 +3495,6 @@ export default async function Page({
                   </div>
                 )}
 
-                <div className='flex flex-col gap-3 sm:flex-row sm:items-center'>
-                  {toolId ? (
-                    <TrackableLink
-                      href={data.url}
-                      toolId={toolId}
-                      userId={user?.id}
-                      className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50'
-                    >
-                      {t('visitWebsite')} <ArrowUpRight className='size-4' />
-                    </TrackableLink>
-                  ) : (
-                    <a
-                      href={data.url}
-                      target='_blank'
-                      rel='noreferrer'
-                      className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50'
-                    >
-                      {t('visitWebsite')} <ArrowUpRight className='size-4' />
-                    </a>
-                  )}
-                  <a
-                    href={`/${locale}/explore?search=${encodeURIComponent(data.title)}`}
-                    className='inline-flex items-center justify-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-medium text-slate-700 ring-1 ring-slate-200 transition hover:bg-slate-100'
-                  >
-                    {isChinese ? '找相似工具' : 'Find similar tools'} <CircleArrowRight className='size-4' />
-                  </a>
-                  {/* Discussion anchor is now surfaced in the action panel above */}
-                </div>
                 <p className='max-w-3xl text-sm leading-6 text-slate-500'>
                   {locale === 'cn'
                     ? '最稳的下一步：先看官网，再拿相似工具和评论做对比。'
@@ -4727,27 +3518,6 @@ export default async function Page({
                       <p className='text-xs text-slate-500'>{isChinese ? '收藏' : 'Saved'}</p>
                       <p className='font-semibold text-slate-950'>{toolStats.favoriteCount.toLocaleString()}</p>
                     </div>
-                  </div>
-
-                  <div className='mt-3 rounded-lg border border-cyan-100 bg-cyan-50 px-4 py-3'>
-                    <div className='flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
-                      <p className='text-sm text-cyan-900'>
-                        {locale === 'cn'
-                          ? '如果这是你的工具，可以查看提交与展示方案，补充资料并管理曝光方式。'
-                          : 'If this is your tool, review the listing options to submit updates and manage visibility.'}
-                      </p>
-                      <Link
-                        href='/developer/listing'
-                        className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-3 py-2 text-sm font-semibold text-white hover:bg-cyan-800'
-                      >
-                        {locale === 'cn' ? '查看提交方案' : 'View listing options'}
-                      </Link>
-                    </div>
-                    <p className='mt-2 text-xs text-cyan-900/70'>
-                      {locale === 'cn'
-                        ? '审核时效与展示方式会根据你选择的方案而定。'
-                        : 'Review timing and visibility depend on the option you choose.'}
-                    </p>
                   </div>
                 </div>
 
@@ -4796,474 +3566,17 @@ export default async function Page({
                   <ShieldCheck className='size-6 text-emerald-600' />
                   <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>{t('introduction')}</h2>
                 </div>
-                <MarkdownProse markdown={detailMarkdown} className='text-base leading-7 text-slate-700' />
+                <MarkdownProse
+                  markdown={getPublicToolDetail(canonicalSlug, locale, detailMarkdown)}
+                  className='text-base leading-7 text-slate-700'
+                />
               </section>
-
-              {decisionCardV2 ? (
-                <DecisionCardV2 model={decisionCardV2} locale={locale} />
-              ) : (
-                <section
-                  id='decision-card'
-                  data-tool-decision-card
-                  className='scroll-mt-28 rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'
-                >
-                  <div className='mb-5 flex items-center gap-3'>
-                    <ShieldCheck className='size-6 text-cyan-600' />
-                    <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>
-                      {locale === 'cn' ? '选择判断卡' : 'Decision Card'}
-                    </h2>
-                  </div>
-                  <p className='mb-5 max-w-3xl text-sm leading-6 text-slate-600'>
-                    {locale === 'cn'
-                      ? '先用这一张卡确认任务匹配、限制、证据和替代路径，再决定是否试用、付费或继续比较。'
-                      : 'Use this one card to check fit, limits, evidence, and alternatives before you trial, pay, or keep comparing.'}
-                  </p>
-                  {marketValidation ? (
-                    <div className='mb-5 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5'>
-                      <div className='flex flex-wrap items-start justify-between gap-3'>
-                        <div>
-                          <p className='text-xs font-semibold uppercase tracking-[0.16em] text-slate-500'>
-                            {isChinese ? '市场成熟度判断' : 'Market maturity review'}
-                          </p>
-                          <div className='mt-2 flex flex-wrap items-center gap-2'>
-                            <span
-                              className={`rounded-full px-3 py-1 text-xs font-semibold ring-1 ${marketValidation.tone}`}
-                            >
-                              {marketValidation.label}
-                            </span>
-                            {marketValidation.score !== null ? (
-                              <span className='rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-700 ring-1 ring-slate-200'>
-                                {isChinese ? '产品价值分' : 'Product value'} {marketValidation.score}/100
-                              </span>
-                            ) : null}
-                          </div>
-                        </div>
-                        <div className='text-right text-xs text-slate-500'>
-                          <p>{marketReviewStatusLabel}</p>
-                          <p className='mt-1'>
-                            {isChinese
-                              ? `${marketValidation.strongSignalCount} 个强信号 · ${marketValidation.signalCount} 个总信号`
-                              : `${marketValidation.strongSignalCount} strong · ${marketValidation.signalCount} total signals`}
-                          </p>
-                        </div>
-                      </div>
-                      <p className='mt-3 text-sm leading-6 text-slate-700'>
-                        {marketValidation.rationale || marketValidation.summary}
-                      </p>
-                      {marketValidation.evidenceUrls.length > 0 ? (
-                        <div className='mt-4 flex flex-wrap gap-2'>
-                          {marketValidation.evidenceUrls.slice(0, 4).map((url, index) => (
-                            <a
-                              key={url}
-                              href={url}
-                              target='_blank'
-                              rel='noreferrer'
-                              className='inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:border-cyan-300 hover:text-cyan-800'
-                            >
-                              {isChinese ? `独立证据 ${index + 1}` : `Independent evidence ${index + 1}`}
-                              <ExternalLink className='size-3.5' />
-                            </a>
-                          ))}
-                        </div>
-                      ) : null}
-                    </div>
-                  ) : null}
-                  {priorityEvidence && !priorityOfficialEvidence ? (
-                    <div
-                      data-priority-tool-evidence
-                      className='mb-5 rounded-xl border border-cyan-200 bg-cyan-50 p-4 sm:p-5'
-                    >
-                      <div className='flex flex-wrap items-start justify-between gap-3'>
-                        <div>
-                          <p className='text-xs font-semibold uppercase tracking-[0.16em] text-cyan-700'>
-                            {locale === 'cn' ? '官方证据快照' : 'Official evidence snapshot'}
-                          </p>
-                          <h3 className='mt-1 text-base font-bold text-slate-950'>
-                            {locale === 'cn'
-                              ? '先核验真实限制，再决定是否采用'
-                              : 'Verify the real limit before adopting'}
-                          </h3>
-                        </div>
-                        <span className='rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-600'>
-                          {locale === 'cn' ? '核查于' : 'Checked'} {priorityEvidence.checkedAt}
-                        </span>
-                      </div>
-                      <p className='mt-3 text-sm leading-6 text-slate-700'>
-                        {locale === 'cn' ? priorityEvidence.limitation.zh : priorityEvidence.limitation.en}
-                      </p>
-                      <div className='mt-4 flex flex-wrap gap-2'>
-                        {priorityEvidence.sources.map((source) => (
-                          <a
-                            key={source.url}
-                            href={source.url}
-                            target='_blank'
-                            rel='noreferrer'
-                            className='inline-flex items-center rounded-lg border border-cyan-200 bg-white px-3 py-2 text-xs font-semibold text-cyan-800 hover:border-cyan-300 hover:bg-cyan-100'
-                          >
-                            {source.label}
-                          </a>
-                        ))}
-                      </div>
-                    </div>
-                  ) : null}
-                  <div className='space-y-5'>
-                    <div
-                      data-decision-evidence-status
-                      className='rounded-lg border border-slate-200 bg-slate-950 p-4 text-white sm:p-5'
-                    >
-                      <div className='flex flex-wrap items-start justify-between gap-4'>
-                        <div>
-                          <p className='text-xs font-semibold uppercase tracking-wide text-cyan-300'>
-                            {locale === 'cn' ? '证据准备度' : 'Evidence readiness'}
-                          </p>
-                          <p className='mt-2 text-2xl font-bold'>{decisionCard.evidenceCompleteness.score}%</p>
-                        </div>
-                        <span
-                          className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                            decisionCard.evidenceCompleteness.complete
-                              ? 'bg-emerald-400/15 text-emerald-200'
-                              : 'bg-amber-400/15 text-amber-200'
-                          }`}
-                        >
-                          {decisionEvidenceStatusLabel}
-                        </span>
-                      </div>
-                      <div className='mt-4 grid gap-3 sm:grid-cols-3'>
-                        <div className='rounded-lg bg-white/5 p-3'>
-                          <p className='text-xs text-slate-400'>{locale === 'cn' ? '最近核查' : 'Last checked'}</p>
-                          <p className='mt-1 text-sm font-semibold text-white'>{lastCheckedScheduleLabel}</p>
-                        </div>
-                        <div className='rounded-lg bg-white/5 p-3'>
-                          <p className='text-xs text-slate-400'>
-                            {locale === 'cn' ? '下次事实复查（30 天）' : 'Next fact check (30 days)'}
-                          </p>
-                          <p className='mt-1 text-sm font-semibold text-white'>{nextFactReviewLabel}</p>
-                        </div>
-                        <div className='rounded-lg bg-white/5 p-3'>
-                          <p className='text-xs text-slate-400'>
-                            {locale === 'cn' ? '下次判断复核（90 天）' : 'Next decision review (90 days)'}
-                          </p>
-                          <p className='mt-1 text-sm font-semibold text-white'>{nextDecisionReviewLabel}</p>
-                        </div>
-                      </div>
-                      {decisionEvidenceMissingLabels.length > 0 && (
-                        <div className='mt-4'>
-                          <p className='text-xs font-semibold text-slate-300'>
-                            {locale === 'cn' ? '公开判断仍需补齐' : 'Still needed for a complete decision'}
-                          </p>
-                          <div className='mt-2 flex flex-wrap gap-2'>
-                            {decisionEvidenceMissingLabels.map((label) => (
-                              <span key={label} className='rounded-full bg-white/10 px-2.5 py-1 text-xs text-slate-200'>
-                                {label}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className='grid gap-4 xl:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]'>
-                      <div className='rounded-lg border border-slate-200 bg-slate-50 p-4 sm:p-5'>
-                        <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                          {locale === 'cn' ? '先看这三个判断' : 'Start with these three signals'}
-                        </p>
-                        <div className='mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4'>
-                          <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
-                            <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                              {locale === 'cn' ? '官方网站状态' : 'Official website status'}
-                            </p>
-                            <p className='mt-2 text-base font-semibold text-slate-950'>
-                              {decisionCard.officialSite.hostname}
-                            </p>
-                            <div className='mt-2 flex flex-wrap items-center gap-2'>
-                              <span className='rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700'>
-                                {decisionCard.officialSite.secureLabel}
-                              </span>
-                              <span className='rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700'>
-                                {decisionCard.officialSite.statusLabel}
-                              </span>
-                            </div>
-                            <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.officialSite.summary}</p>
-                          </div>
-
-                          <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
-                            <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                              {locale === 'cn' ? '最近更新信息' : 'Recent update'}
-                            </p>
-                            <p className='mt-2 text-base font-semibold text-slate-950'>
-                              {decisionCard.freshness.label}
-                            </p>
-                            <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.freshness.summary}</p>
-                          </div>
-
-                          <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
-                            <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                              {locale === 'cn' ? 'Owner 信号' : 'Owner signal'}
-                            </p>
-                            <p className='mt-2 text-base font-semibold text-slate-950'>{decisionCard.owner.label}</p>
-                            <div className='mt-2 flex flex-wrap gap-2'>
-                              <span
-                                className={`rounded-full px-2.5 py-1 text-xs font-semibold ${decisionCard.owner.tone}`}
-                              >
-                                {decisionCard.owner.label}
-                              </span>
-                              {decisionCard.owner.claimedAtLabel && (
-                                <span className='rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700'>
-                                  {isChinese
-                                    ? `认领于 ${decisionCard.owner.claimedAtLabel}`
-                                    : `Claimed ${decisionCard.owner.claimedAtLabel}`}
-                                </span>
-                              )}
-                            </div>
-                            <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.owner.summary}</p>
-                          </div>
-
-                          <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
-                            <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                              {locale === 'cn' ? '定价快照' : 'Pricing snapshot'}
-                            </p>
-                            <p className='mt-2 text-base font-semibold text-slate-950'>{decisionCard.pricing.label}</p>
-                            <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.pricing.summary}</p>
-                          </div>
-
-                          <div className='rounded-lg bg-white p-4 ring-1 ring-slate-200'>
-                            <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                              {locale === 'cn' ? '风险与限制' : 'Risks and limits'}
-                            </p>
-                            <div className='mt-2 space-y-2'>
-                              {visibleDecisionRisks.map((item) => (
-                                <p
-                                  key={item}
-                                  className='rounded-lg bg-slate-50 px-3 py-2 text-sm leading-6 text-slate-600'
-                                >
-                                  {item}
-                                </p>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className='grid gap-4'>
-                        <div className='rounded-lg border border-slate-200 p-4'>
-                          <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                            {locale === 'cn' ? '真实反馈信号' : 'User signal'}
-                          </p>
-                          <p className='mt-2 text-lg font-semibold text-slate-950'>{decisionCard.community.label}</p>
-                          <p className='mt-2 text-xs font-medium text-slate-500'>{decisionCard.community.evidence}</p>
-                          <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.community.summary}</p>
-                        </div>
-
-                        <div className='rounded-lg border border-slate-200 p-4'>
-                          <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                            {locale === 'cn' ? '预览覆盖' : 'Preview coverage'}
-                          </p>
-                          <p className='mt-2 text-lg font-semibold text-slate-950'>{decisionCard.media.label}</p>
-                          <p className='mt-2 text-xs font-medium text-slate-500'>{decisionCard.media.evidence}</p>
-                          <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.media.summary}</p>
-                        </div>
-
-                        <div className='rounded-lg border border-slate-200 p-4'>
-                          <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                            {locale === 'cn' ? '编辑复核' : 'Editorial review'}
-                          </p>
-                          <p className='mt-2 text-lg font-semibold text-slate-950'>
-                            {decisionCard.editorial.reviewedLabel || (locale === 'cn' ? '待补复核' : 'Review pending')}
-                          </p>
-                          <p className='mt-1 text-xs font-medium text-slate-500'>
-                            {decisionCard.editorial.reviewerLabel}
-                          </p>
-                          {!decisionCard.editorial.sourceUrl ? (
-                            <p className='mt-2 text-sm leading-6 text-slate-600'>
-                              {locale === 'cn'
-                                ? '目前还没有该条目的编辑复核记录。你可以先提交评论反馈，再发起“请求更新”让官方信息可追溯。'
-                                : 'No editorial review has been recorded yet. Please leave feedback first and request an update so we can bind source evidence.'}
-                            </p>
-                          ) : (
-                            <>
-                              {decisionCard.editorial.stale && (
-                                <p className='mt-2 text-sm font-medium text-amber-700'>
-                                  {locale === 'cn'
-                                    ? '该复核已超过 90 天，建议重新核查官网信息。'
-                                    : 'This review is over 90 days old. Recheck the official source before relying on it.'}
-                                </p>
-                              )}
-                              {decisionCard.editorial.summary && (
-                                <p className='mt-3 text-sm leading-6 text-slate-600'>
-                                  {decisionCard.editorial.summary}
-                                </p>
-                              )}
-                              {decisionCard.editorial.trustNote && (
-                                <p className='mt-2 text-sm leading-6 text-slate-600'>
-                                  {decisionCard.editorial.trustNote}
-                                </p>
-                              )}
-                              <a
-                                href={decisionCard.editorial.sourceUrl}
-                                target='_blank'
-                                rel='noreferrer'
-                                className='mt-3 inline-flex items-center gap-1 text-sm font-semibold text-cyan-700 hover:text-cyan-900'
-                              >
-                                {locale === 'cn' ? '查看证据来源' : 'View evidence source'}
-                                <ExternalLink className='size-3.5' />
-                              </a>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className='rounded-lg border border-cyan-100 bg-cyan-50 p-4 sm:p-5'>
-                      <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                        {locale === 'cn' ? '和相似工具怎么比' : 'How to compare it next'}
-                      </p>
-                      <p className='mt-2 text-lg font-semibold text-slate-950'>
-                        {locale === 'cn' ? '先横向看关键差异' : 'Compare the decision points first'}
-                      </p>
-                      <div className='mt-3 flex flex-wrap gap-2'>
-                        {decisionCard.comparison.axes.map((axis) => (
-                          <span
-                            key={axis}
-                            className='inline-flex rounded-full bg-white px-3 py-1 text-sm font-medium text-cyan-900 ring-1 ring-cyan-100'
-                          >
-                            {axis}
-                          </span>
-                        ))}
-                      </div>
-                      <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.comparison.summary}</p>
-                    </div>
-
-                    <div className='rounded-lg border border-slate-200 bg-white p-4 sm:p-5'>
-                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                        {locale === 'cn' ? '替代方案' : 'Alternatives'}
-                      </p>
-                      <p className='mt-2 text-lg font-semibold text-slate-950'>
-                        {locale === 'cn'
-                          ? '如果这款不合适，直接看更窄的比较页'
-                          : 'If this is not the right fit, open a reviewed related tool'}
-                      </p>
-                      <p className='mt-2 text-sm leading-6 text-slate-600'>
-                        {locale === 'cn'
-                          ? '这些人工复核关系可帮助你替换或补充当前 shortlist，而不是继续围着同一个工具打转。'
-                          : 'Use these reviewed relationships to replace or complement the shortlist instead of circling the same tool.'}
-                      </p>
-                      <div className='mt-4 grid gap-3 lg:grid-cols-3'>
-                        {decisionCard.comparison.alternatives.map((item) => (
-                          <a
-                            key={item.href}
-                            href={item.href}
-                            className='rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:-translate-y-0.5 hover:bg-slate-100'
-                          >
-                            <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
-                            <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
-                          </a>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className='grid gap-4 lg:grid-cols-3'>
-                      <div className='rounded-lg border border-slate-200 p-4'>
-                        <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                          {locale === 'cn' ? '适合谁' : 'Best fit'}
-                        </p>
-                        <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
-                          {decisionCard.audience.bestFit.map((item) => (
-                            <li key={item} className='flex gap-2'>
-                              <CheckCircle className='mt-1 size-4 shrink-0 text-emerald-600' />
-                              <span>{item}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      <div className='rounded-lg border border-slate-200 p-4'>
-                        <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                          {locale === 'cn' ? '不太适合' : 'Less ideal for'}
-                        </p>
-                        <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
-                          {decisionCard.audience.notIdealFor.map((item) => (
-                            <li key={item} className='flex gap-2'>
-                              <CircleArrowRight className='mt-1 size-4 shrink-0 text-slate-500' />
-                              <span>{item}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      <div className='rounded-lg border border-slate-200 p-4'>
-                        <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                          {locale === 'cn' ? '选择前先核对' : 'Verify before choosing'}
-                        </p>
-                        <ul className='mt-3 space-y-2 text-sm leading-6 text-slate-700'>
-                          {decisionCard.verificationChecklist.map((item) => (
-                            <li key={item} className='flex gap-2'>
-                              <ShieldCheck className='mt-1 size-4 shrink-0 text-cyan-600' />
-                              <span>{item}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-              )}
 
               {publicEvidenceLedger ? <EvidenceLedgerPanel ledger={publicEvidenceLedger} locale={locale} /> : null}
 
               {publicChangeTimeline.length > 0 ? (
                 <ChangeTimelinePanel events={publicChangeTimeline} locale={locale} />
               ) : null}
-
-              <section className='rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'>
-                <div className='mb-5 flex items-center gap-3'>
-                  <Sparkles className='size-6 text-emerald-600' />
-                  <h2 className='text-2xl font-bold text-slate-950 lg:text-3xl'>
-                    {locale === 'cn' ? '市场信号' : 'Market Signals'}
-                  </h2>
-                </div>
-                <p className='max-w-3xl text-sm leading-6 text-slate-600'>
-                  {locale === 'cn'
-                    ? '这组信号不是在替你下结论，而是告诉你：这个条目现在是“值得继续看”，还是“先放一放”。'
-                    : 'These signals do not make the decision for you; they tell you whether this listing deserves another look or can wait.'}
-                </p>
-                <div className='mt-5 grid gap-4 lg:grid-cols-3'>
-                  <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
-                    <div className='flex items-center gap-2'>
-                      <Eye className='size-4 text-slate-500' />
-                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                        {locale === 'cn' ? '需求热度' : 'Demand pulse'}
-                      </p>
-                    </div>
-                    <p className='mt-3 text-lg font-semibold text-slate-950'>{marketDemand.label}</p>
-                    <p className='mt-2 text-xs font-medium text-slate-500'>{marketDemand.evidence}</p>
-                    <p className='mt-3 text-sm leading-6 text-slate-600'>{marketDemand.summary}</p>
-                  </div>
-
-                  <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
-                    <div className='flex items-center gap-2'>
-                      <Heart className='size-4 text-slate-500' />
-                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                        {locale === 'cn' ? '真实互动' : 'Community traction'}
-                      </p>
-                    </div>
-                    <p className='mt-3 text-lg font-semibold text-slate-950'>{decisionCard.community.label}</p>
-                    <p className='mt-2 text-xs font-medium text-slate-500'>{decisionCard.community.evidence}</p>
-                    <p className='mt-3 text-sm leading-6 text-slate-600'>{decisionCard.community.summary}</p>
-                  </div>
-
-                  <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
-                    <div className='flex items-center gap-2'>
-                      <CalendarDays className='size-4 text-slate-500' />
-                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                        {locale === 'cn' ? '维护节奏' : 'Maintenance rhythm'}
-                      </p>
-                    </div>
-                    <p className='mt-3 text-lg font-semibold text-slate-950'>{marketMomentum.label}</p>
-                    <p className='mt-2 text-xs font-medium text-slate-500'>{marketMomentum.evidence}</p>
-                    <p className='mt-3 text-sm leading-6 text-slate-600'>{marketMomentum.summary}</p>
-                  </div>
-                </div>
-              </section>
 
               {featureEntries.length > 0 && (
                 <section className='rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'>
@@ -5310,113 +3623,9 @@ export default async function Page({
                   <MediaGallery screenshots={dbTool.screenshots || []} videoUrl={dbTool.videoUrl} title={data.title} />
                 </section>
               )}
-
-              {toolId && (
-                <>
-                  <RecommendedTools
-                    locale={locale}
-                    categoryName={categoryName}
-                    categorySlug={categorySlug}
-                    compareAxes={compareAxes}
-                    pricingLabel={pricingLabel}
-                    tagLabels={tagLabels}
-                    relationships={reviewedToolRelationships}
-                  />
-                  <div className='my-14 flex items-center gap-3 lg:my-16'>
-                    <span className='h-px flex-1 bg-slate-200' />
-                    <span className='whitespace-nowrap text-xs font-semibold uppercase tracking-[0.2em] text-slate-400'>
-                      {locale === 'cn' ? '对比后继续看真实反馈' : 'Compare first, then read real feedback'}
-                    </span>
-                    <span className='h-px flex-1 bg-slate-200' />
-                  </div>
-                </>
-              )}
             </main>
 
             <aside className='space-y-4 lg:sticky lg:top-24 lg:self-start'>
-              <div className='rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200'>
-                <h2 className='text-base font-bold text-slate-950'>
-                  {locale === 'cn' ? '可信度快照' : 'Trust Snapshot'}
-                </h2>
-                <dl className='mt-4 space-y-3 text-sm'>
-                  <div className='flex items-center justify-between gap-4'>
-                    <dt className='text-slate-500'>{locale === 'cn' ? '官网域名' : 'Official domain'}</dt>
-                    <dd className='text-right font-semibold text-slate-950'>{decisionCard.officialSite.hostname}</dd>
-                  </div>
-                  <div className='flex items-center justify-between gap-4'>
-                    <dt className='text-slate-500'>{locale === 'cn' ? '链接安全' : 'Connection'}</dt>
-                    <dd className='font-semibold text-slate-950'>{decisionCard.officialSite.secureLabel}</dd>
-                  </div>
-                  <div className='flex items-center justify-between gap-4'>
-                    <dt className='text-slate-500'>{locale === 'cn' ? '定价' : 'Pricing'}</dt>
-                    <dd className='font-semibold text-slate-950'>{decisionCard.pricing.label}</dd>
-                  </div>
-                  <div className='flex items-center justify-between gap-4'>
-                    <dt className='text-slate-500'>{locale === 'cn' ? '分类' : 'Category'}</dt>
-                    <dd className='text-right font-semibold text-slate-950'>{categoryName}</dd>
-                  </div>
-                  <div className='flex items-center justify-between gap-4'>
-                    <dt className='text-slate-500'>{locale === 'cn' ? '状态' : 'Status'}</dt>
-                    <dd className='font-semibold text-emerald-700'>{statusLabel}</dd>
-                  </div>
-                  <div className='flex items-center justify-between gap-4'>
-                    <dt className='text-slate-500'>{locale === 'cn' ? '最近更新' : 'Last update'}</dt>
-                    <dd className='text-right font-semibold text-slate-950'>{updatedLabel}</dd>
-                  </div>
-                </dl>
-                <p className='mt-4 rounded-lg bg-slate-50 px-3 py-2 text-xs leading-5 text-slate-600'>
-                  {locale === 'cn'
-                    ? '如果还在犹豫，先收藏，再去看 2 个相似工具。'
-                    : 'If you are still unsure, save it first, then review two similar tools.'}
-                </p>
-                <p className='mt-2 text-xs leading-5 text-slate-500'>
-                  {locale === 'cn'
-                    ? '收藏后回访，比较会轻松很多。'
-                    : 'Saving it now makes the later comparison much easier.'}
-                </p>
-                {toolId ? (
-                  <TrackableLink
-                    href={data.url}
-                    toolId={toolId}
-                    userId={user?.id}
-                    className='mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700'
-                  >
-                    {locale === 'cn' ? '打开官网' : 'Open official site'} <ArrowUpRight className='size-4' />
-                  </TrackableLink>
-                ) : (
-                  <a
-                    href={data.url}
-                    target='_blank'
-                    rel='noreferrer'
-                    className='mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700'
-                  >
-                    {locale === 'cn' ? '打开官网' : 'Open official site'} <ArrowUpRight className='size-4' />
-                  </a>
-                )}
-              </div>
-
-              <div className='rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200'>
-                <h2 className='text-base font-bold text-slate-950'>{locale === 'cn' ? '互动数据' : 'Engagement'}</h2>
-                <div className='mt-4 space-y-3 text-sm text-slate-700'>
-                  <p className='flex items-center gap-2'>
-                    <Eye className='size-4 text-slate-500' /> {toolStats.viewCount.toLocaleString()}{' '}
-                    {locale === 'cn' ? '次浏览' : 'views'}
-                  </p>
-                  <p className='flex items-center gap-2'>
-                    <MousePointerClick className='size-4 text-slate-500' /> {toolStats.clickCount.toLocaleString()}{' '}
-                    {locale === 'cn' ? '次官网点击' : 'website clicks'}
-                  </p>
-                  <p className='flex items-center gap-2'>
-                    <Heart className='size-4 text-slate-500' /> {toolStats.favoriteCount.toLocaleString()}{' '}
-                    {locale === 'cn' ? '次收藏' : 'saves'}
-                  </p>
-                  <p className='flex items-center gap-2'>
-                    <Star className='size-4 text-slate-500' /> {ratingStats.ratingCount.toLocaleString()}{' '}
-                    {locale === 'cn' ? '条评分' : 'ratings'}
-                  </p>
-                </div>
-              </div>
-
               {toolId && (
                 <div className='rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200'>
                   <ToolFeedbackBar toolId={toolId} userId={user?.id} locale={locale} />
@@ -5464,99 +3673,22 @@ export default async function Page({
                     )}
                   </div>
                 </div>
-                <div className='mt-4 grid gap-3 rounded-xl border border-slate-200 bg-white p-4 md:grid-cols-3'>
-                  <div className='rounded-lg bg-slate-50 p-4'>
-                    <p className='text-sm font-semibold text-slate-950'>
-                      {locale === 'cn' ? '先看官网和相似工具' : 'Start with the official site and similar tools'}
-                    </p>
-                    <p className='mt-2 text-sm leading-6 text-slate-600'>
-                      {locale === 'cn'
-                        ? '先确认产品真的解决你的任务，再回来留下反馈。'
-                        : 'Confirm the product really solves the job before you leave feedback.'}
-                    </p>
-                  </div>
-                  <div className='rounded-lg bg-slate-50 p-4'>
-                    <p className='text-sm font-semibold text-slate-950'>
-                      {locale === 'cn' ? '如果这是你的工具' : 'If this is your tool'}
-                    </p>
-                    <p className='mt-2 text-sm leading-6 text-slate-600'>
-                      {locale === 'cn'
-                        ? '先认领条目，再补评论、官网链接和最新更新说明。'
-                        : 'Claim the listing first, then add comments, the official link, and the latest update notes.'}
-                    </p>
-                    <Link
-                      href='/developer/listing?intent=claim'
-                      className='mt-3 inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-                    >
-                      {locale === 'cn' ? '去认领条目' : 'Claim listing'}
-                    </Link>
-                  </div>
-                  <div className='rounded-lg bg-slate-50 p-4'>
-                    <p className='text-sm font-semibold text-slate-950'>
-                      {locale === 'cn' ? '如果你只是用户' : 'If you are a user'}
-                    </p>
-                    <p className='mt-2 text-sm leading-6 text-slate-600'>
-                      {locale === 'cn'
-                        ? '先留评论和真实体验，再回到相似工具和对比页继续筛选。'
-                        : 'Leave a real comment, then return to similar tools and comparison pages to keep narrowing the shortlist.'}
-                    </p>
-                  </div>
-                </div>
-                <div className='mt-4 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900'>
-                  {locale === 'cn'
-                    ? '如果你发现价格、截图、文案或功能已经过时，先点右侧“请求更新”，再在评论里写清楚是哪一项需要修正。'
-                    : 'If pricing, screenshots, copy, or features are stale, tap request update on the right, then leave a comment that says exactly what needs fixing.'}
-                </div>
-                <div className='mt-4 rounded-xl border border-cyan-100 bg-cyan-50/70 p-4'>
-                  <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between'>
-                    <div>
-                      <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                        {locale === 'cn' ? '当前处理状态' : 'Current status'}
-                      </p>
-                      <h4 className='mt-1 text-sm font-semibold text-slate-950'>
-                        {locale === 'cn'
-                          ? '先确认 owner，再用评论和更新请求补证据'
-                          : 'Confirm the owner, then use comments and update requests to add evidence'}
-                      </h4>
-                    </div>
-                    <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${claimTone}`}>{claimLabel}</span>
-                  </div>
-                  <div className='mt-3 grid gap-3 md:grid-cols-3'>
-                    <div className='rounded-lg border border-white bg-white p-3'>
-                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                        {locale === 'cn' ? '最近更新' : 'Last update'}
-                      </p>
-                      <p className='mt-1 text-sm font-semibold text-slate-950'>{updatedLabel}</p>
-                      <p className='mt-1 text-xs leading-5 text-slate-500'>
-                        {locale === 'cn'
-                          ? '如果时间久了，优先点“请求更新”。'
-                          : 'If it is old, tap request update first.'}
-                      </p>
-                    </div>
-                    <div className='rounded-lg border border-white bg-white p-3'>
-                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                        {locale === 'cn' ? '讨论数量' : 'Discussion count'}
-                      </p>
-                      <p className='mt-1 text-sm font-semibold text-slate-950'>{discussionCountText}</p>
-                      <p className='mt-1 text-xs leading-5 text-slate-500'>
-                        {locale === 'cn'
-                          ? '先留一个真实体验，后面的人会更容易判断。'
-                          : 'Leave one real usage note first to help the next visitor judge faster.'}
-                      </p>
-                    </div>
-                    <div className='rounded-lg border border-white bg-white p-3'>
-                      <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>
-                        {locale === 'cn' ? '下一步动作' : 'Next action'}
-                      </p>
-                      <p className='mt-1 text-sm font-semibold text-slate-950'>{nextActionText}</p>
-                      <p className='mt-1 text-xs leading-5 text-slate-500'>
-                        {locale === 'cn'
-                          ? '把 owner、更新请求和评论串起来，页面才会越来越厚。'
-                          : 'Connect owner, update requests, and comments so the page keeps getting richer.'}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                <details data-tool-owner-actions className='mt-4 rounded-lg border border-slate-200 p-4 text-sm'>
+                  <summary className='cursor-pointer font-semibold text-slate-700'>
+                    {isChinese ? '如果这是你的工具' : 'If this is your tool'}
+                  </summary>
+                  <p className='mt-3 text-slate-600'>
+                    {claimLabel}
+                    {claimedAtLabel ? ' · ' + claimedAtLabel : ''}
+                  </p>
+                  <p className='mt-2 text-slate-600'>{claimSummary}</p>
+                  <Link
+                    href='/developer/listing?intent=claim'
+                    className='mt-3 inline-block font-semibold text-cyan-800 underline'
+                  >
+                    {isChinese ? '认领或维护此条目' : 'Claim or maintain this listing'}
+                  </Link>
+                </details>
                 <div className='mt-6'>
                   <CommentList
                     toolId={toolId}

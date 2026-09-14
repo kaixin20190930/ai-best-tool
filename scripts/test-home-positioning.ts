@@ -13,16 +13,12 @@ const requiredSignals = [
   'AI Tools Directory: Compare Curated AI Tools | AI Best Tool',
   '用证据、限制和真实变化比较 AI 工具',
   'Compare AI tools with evidence, limits, and real changes',
-  '重要事实带来源和核查日期',
-  'Important claims carry sources and review dates',
-  '推荐之前先说明不适合谁',
-  'Know who should not choose it before the recommendation',
-  '有变化才更新判断，不伪造新鲜度',
-  'Update decisions when facts change, not to fake freshness',
+  'Sources + limits',
+  'Sources + dates',
   'generateWebSiteSchema',
   "href='/explore'",
   "href='/guides/how-to-choose-ai-tools'",
-  "href='/ai/chatgpt'",
+  "href='/find-tools'",
 ];
 
 for (const signal of requiredSignals) {
@@ -60,12 +56,9 @@ if (
 }
 
 const latestInventoryIndex = source.indexOf("title={t('latestTools')}");
-const commercialBoundaryIndex = source.indexOf(
-  'Paid options only affect review timing or clearly labeled visibility, never the editorial conclusion',
-);
-
-if (latestInventoryIndex === -1 || commercialBoundaryIndex < latestInventoryIndex) {
-  throw new Error('Paid visibility must stay below the main discovery and inventory experience.');
+if (latestInventoryIndex === -1 || source.includes("href='/submit'") || source.includes("href='/pricing'")) {
+  throw new Error('Homepage must put tool selection before commercial paths.');
 }
+if (!footerSource.includes("'/developer/listing'")) throw new Error('Owner entry must remain available in the footer.');
 
 console.log('✅ Homepage positioning passed: directory topic, evidence method, and commercial boundary are intact.');

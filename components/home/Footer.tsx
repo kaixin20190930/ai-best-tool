@@ -1,8 +1,9 @@
 import { HTMLAttributeAnchorTarget } from 'react';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 import { CONTACT_US_EMAIL } from '@/lib/env';
+import { generateLocalizedPath } from '@/lib/seo/metadata';
 
 function InfoLink({
   href,
@@ -30,6 +31,8 @@ function InfoLink({
 
 export default function Footer() {
   const t = useTranslations('Footer');
+  const locale = useLocale();
+  const isChinese = locale === 'cn' || locale === 'tw';
 
   const SupportLinks = [
     {
@@ -77,6 +80,10 @@ export default function Footer() {
             ))}
           </div>
           <div className='grid grid-cols-2 gap-x-10 gap-y-5 lg:grid-cols-1 lg:gap-3'>
+            <InfoLink
+              href={generateLocalizedPath('/developer/listing', locale)}
+              title={isChinese ? '工具方：提交与认领' : 'Tool owners: submit or claim'}
+            />
             {INFO_LIST.map((item) => (
               <InfoLink key={item.href} href={item.href} title={item.title} />
             ))}

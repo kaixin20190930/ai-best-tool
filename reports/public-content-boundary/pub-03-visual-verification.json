@@ -1,0 +1,702 @@
+{
+  "checkedAt": "2026-09-14T14:49:54.857Z",
+  "screenshots": [
+    {
+      "path": "/",
+      "file": "reports/public-content-boundary/pub-03-visual/home-mobile.png",
+      "decisionCards": 0,
+      "h1": "Compare AI tools with evidence, limits, and real changes",
+      "h1Count": 1,
+      "headings": [
+        "Latest AI Tools",
+        "Start with the lists that make the decision easier",
+        "Trending now",
+        "Browse by use case",
+        "Learn how to choose before browsing tools",
+        "Frequently Asked Questions",
+        "Support"
+      ],
+      "height": 7947,
+      "ledgers": 0,
+      "scrollWidth": 390,
+      "timelines": 0,
+      "width": 390,
+      "sha256": "0486e5c333568fc3903d19525fa5ed05dc53fa0bc3d5f84654f1cd8a2e6319ad"
+    },
+    {
+      "path": "/",
+      "file": "reports/public-content-boundary/pub-03-visual/home-desktop.png",
+      "decisionCards": 0,
+      "h1": "Compare AI tools with evidence, limits, and real changes",
+      "h1Count": 1,
+      "headings": [
+        "Latest AI Tools",
+        "Start with the lists that make the decision easier",
+        "Trending now",
+        "Browse by use case",
+        "Learn how to choose before browsing tools",
+        "Frequently Asked Questions",
+        "Support"
+      ],
+      "height": 4658,
+      "ledgers": 0,
+      "scrollWidth": 1468,
+      "timelines": 0,
+      "width": 1440,
+      "sha256": "a45966edbf3a0785304c5d2f123446243921e0a7f689918f16943ee170416657"
+    },
+    {
+      "path": "/explore",
+      "file": "reports/public-content-boundary/pub-03-visual/explore-desktop.png",
+      "decisionCards": 0,
+      "h1": "Explore the AI tools directory by task, pricing, and category",
+      "h1Count": 1,
+      "headings": [
+        "Frequently Asked Questions",
+        "Support"
+      ],
+      "height": 4864,
+      "ledgers": 0,
+      "scrollWidth": 1468,
+      "timelines": 0,
+      "width": 1440,
+      "sha256": "2320dced6742b2bcf92f428c421d855cd1f3e9a94703a268cbcce592201e2418"
+    },
+    {
+      "path": "/explore",
+      "file": "reports/public-content-boundary/pub-03-visual/explore-mobile.png",
+      "decisionCards": 0,
+      "h1": "Explore the AI tools directory by task, pricing, and category",
+      "h1Count": 1,
+      "headings": [
+        "Frequently Asked Questions",
+        "Support"
+      ],
+      "height": 7016,
+      "ledgers": 0,
+      "scrollWidth": 390,
+      "timelines": 0,
+      "width": 390,
+      "sha256": "2f49fb7d2a3c243d0029b0b6f910e6a7c59997dc43096ae8916198c3eefe979a"
+    },
+    {
+      "path": "/cn/categories/productivity",
+      "file": "reports/public-content-boundary/pub-03-visual/category-cn-desktop.png",
+      "decisionCards": 0,
+      "h1": "Best Productivity AI 工具",
+      "h1Count": 1,
+      "headings": [
+        "先看这几个 Productivity 代表页",
+        "这个分类页最常见的问题",
+        "支持"
+      ],
+      "height": 5414,
+      "ledgers": 0,
+      "scrollWidth": 1440,
+      "timelines": 0,
+      "width": 1440,
+      "sha256": "ee34833716d05cbe5c20f0e24941bb8ddfc31c7397ceaae3bed53b9ae78555e5"
+    },
+    {
+      "path": "/cn/categories/productivity",
+      "file": "reports/public-content-boundary/pub-03-visual/category-cn-mobile.png",
+      "decisionCards": 0,
+      "h1": "Best Productivity AI 工具",
+      "h1Count": 1,
+      "headings": [
+        "先看这几个 Productivity 代表页",
+        "这个分类页最常见的问题",
+        "支持"
+      ],
+      "height": 6578,
+      "ledgers": 0,
+      "scrollWidth": 390,
+      "timelines": 0,
+      "width": 390,
+      "sha256": "90fec009be8c2c6a566970e641243b0c0951a1d75200644bfc491929d07ddde5"
+    },
+    {
+      "path": "/cn/best-ai-tools",
+      "file": "reports/public-content-boundary/pub-03-visual/best-cn-mobile.png",
+      "decisionCards": 0,
+      "h1": "按真实使用场景挑 AI 工具，而不是按名气挑",
+      "h1Count": 1,
+      "headings": [
+        "Best AI Coding Tools",
+        "Best AI Agent Tools",
+        "Best AI Chatbot Tools",
+        "Best AI Image Tools",
+        "Best AI API Observability Tools",
+        "Best AI Model Routing Tools",
+        "Best AI Research Tools",
+        "Best AI Content Creation Tools",
+        "Best AI Video Tools",
+        "Best AI Writing Tools",
+        "Best AI Agency Tools",
+        "Best AI Automation Tools",
+        "Best AI Code Review Tools",
+        "Best AI Creator Tools",
+        "Best AI Ecommerce Tools",
+        "Best AI Evals Tools",
+        "Best AI Lead Generation Tools",
+        "Best AI Marketing Tools",
+        "Best AI Meeting Notes Tools",
+        "Best AI Note Taking Tools",
+        "Best AI Productivity Tools",
+        "Best AI Prompt Testing Tools",
+        "Best AI Sales Prospecting Tools",
+        "Best AI Small Business Tools",
+        "Best AI Student Tools",
+        "Best AI Web3 Tools",
+        "Best AI Voice Tools",
+        "Best AI SEO Tools",
+        "支持"
+      ],
+      "height": 6460,
+      "ledgers": 0,
+      "scrollWidth": 390,
+      "timelines": 0,
+      "width": 390,
+      "sha256": "0901040cfe454dce43639a5d789e849f044a0145f9bb8472c630ea77414c6a04"
+    },
+    {
+      "path": "/cn/best-ai-tools",
+      "file": "reports/public-content-boundary/pub-03-visual/best-cn-desktop.png",
+      "decisionCards": 0,
+      "h1": "按真实使用场景挑 AI 工具，而不是按名气挑",
+      "h1Count": 1,
+      "headings": [
+        "Best AI Coding Tools",
+        "Best AI Agent Tools",
+        "Best AI Chatbot Tools",
+        "Best AI Image Tools",
+        "Best AI API Observability Tools",
+        "Best AI Model Routing Tools",
+        "Best AI Research Tools",
+        "Best AI Content Creation Tools",
+        "Best AI Video Tools",
+        "Best AI Writing Tools",
+        "Best AI Agency Tools",
+        "Best AI Automation Tools",
+        "Best AI Code Review Tools",
+        "Best AI Creator Tools",
+        "Best AI Ecommerce Tools",
+        "Best AI Evals Tools",
+        "Best AI Lead Generation Tools",
+        "Best AI Marketing Tools",
+        "Best AI Meeting Notes Tools",
+        "Best AI Note Taking Tools",
+        "Best AI Productivity Tools",
+        "Best AI Prompt Testing Tools",
+        "Best AI Sales Prospecting Tools",
+        "Best AI Small Business Tools",
+        "Best AI Student Tools",
+        "Best AI Web3 Tools",
+        "Best AI Voice Tools",
+        "Best AI SEO Tools",
+        "支持"
+      ],
+      "height": 2757,
+      "ledgers": 0,
+      "scrollWidth": 1440,
+      "timelines": 0,
+      "width": 1440,
+      "sha256": "0bb4a904ca8241ba731f28ac5bbf46aa6dfdcda2a28aeb3220dbf035892da328"
+    },
+    {
+      "path": "/cn/new",
+      "file": "reports/public-content-boundary/pub-03-visual/new-cn-desktop.png",
+      "decisionCards": 0,
+      "h1": "本周新增",
+      "h1Count": 1,
+      "headings": [
+        "最近 7 天新增",
+        "按分类看本周新增",
+        "此前加入的工具",
+        "支持"
+      ],
+      "height": 4461,
+      "ledgers": 0,
+      "scrollWidth": 1440,
+      "timelines": 0,
+      "width": 1440,
+      "sha256": "ece14f6a03bbb112dc4097b610b96aa1113f6b53956ecb55429dcb7eb2cac0cc"
+    },
+    {
+      "path": "/cn/new",
+      "file": "reports/public-content-boundary/pub-03-visual/new-cn-mobile.png",
+      "decisionCards": 0,
+      "h1": "本周新增",
+      "h1Count": 1,
+      "headings": [
+        "最近 7 天新增",
+        "按分类看本周新增",
+        "此前加入的工具",
+        "支持"
+      ],
+      "height": 5358,
+      "ledgers": 0,
+      "scrollWidth": 390,
+      "timelines": 0,
+      "width": 390,
+      "sha256": "a7b65dcc8465c19c0375f536e2b770d1c955a8903435b58f2ee32f1528513e86"
+    },
+    {
+      "path": "/cn/best-ai-tools/ai-automation-tools",
+      "file": "reports/public-content-boundary/pub-03-visual/topic-cn-mobile.png",
+      "decisionCards": 0,
+      "h1": "Best AI Automation Tools",
+      "h1Count": 1,
+      "headings": [
+        "支持"
+      ],
+      "height": 2135,
+      "ledgers": 0,
+      "scrollWidth": 390,
+      "timelines": 0,
+      "width": 390,
+      "sha256": "c0c55a4b9fd127a478559d378e3c31ecaa9fa6785e8d2e70415f9b4b71b10fa5"
+    },
+    {
+      "path": "/cn/best-ai-tools/ai-automation-tools",
+      "file": "reports/public-content-boundary/pub-03-visual/topic-cn-desktop.png",
+      "h1": "Best AI Automation Tools",
+      "h1Count": 1,
+      "headings": [
+        "支持"
+      ],
+      "height": 1374,
+      "scrollWidth": 1440,
+      "width": 1440,
+      "sha256": "88a479f3fa73eaa0e7d926c0ff91282a9be644022bf346d8d585d068aaaa199a"
+    },
+    {
+      "path": "/ai/claude",
+      "file": "reports/public-content-boundary/pub-03-visual/claude-desktop.png",
+      "decisionCards": 1,
+      "h1": "Claude by Anthropic",
+      "h1Count": 1,
+      "headings": [
+        "Decision Card",
+        "Plan pricing, variable usage, and data retention",
+        "Introduction",
+        "What Claude is",
+        "Best fit",
+        "Check before choosing",
+        "Decision summary",
+        "Evidence Ledger",
+        "Review & Change Timeline",
+        "Use Cases",
+        "Support"
+      ],
+      "height": 5381,
+      "ledgers": 1,
+      "scrollWidth": 1468,
+      "timelines": 1,
+      "width": 1440,
+      "sha256": "58f1d5eb1aa3820f1bcf09161c3e6a946e2afba57a2625b8eb7a6bf9ba132827"
+    },
+    {
+      "path": "/ai/claude",
+      "file": "reports/public-content-boundary/pub-03-visual/claude-mobile.png",
+      "decisionCards": 1,
+      "h1": "Claude by Anthropic",
+      "h1Count": 1,
+      "headings": [
+        "Decision Card",
+        "Plan pricing, variable usage, and data retention",
+        "Introduction",
+        "What Claude is",
+        "Best fit",
+        "Check before choosing",
+        "Decision summary",
+        "Evidence Ledger",
+        "Review & Change Timeline",
+        "Use Cases",
+        "Support"
+      ],
+      "height": 9104,
+      "ledgers": 1,
+      "scrollWidth": 390,
+      "timelines": 1,
+      "width": 390,
+      "sha256": "5dce828bf681b61cffda46199f483d1feb2ee06ee95849fd4af30a8c42d3434f"
+    },
+    {
+      "path": "/ai/n8n",
+      "file": "reports/public-content-boundary/pub-03-visual/n8n-mobile.png",
+      "decisionCards": 1,
+      "h1": "n8n Workflow Automation",
+      "h1Count": 1,
+      "headings": [
+        "Decision Card",
+        "Execution cost, deployment ownership, and license boundaries",
+        "Introduction",
+        "What n8n is",
+        "Best fit",
+        "Check before choosing",
+        "Decision summary",
+        "Evidence and sources",
+        "Evidence Ledger",
+        "Review & Change Timeline",
+        "Use Cases",
+        "Support"
+      ],
+      "height": 11587,
+      "ledgers": 1,
+      "scrollWidth": 390,
+      "timelines": 1,
+      "width": 390,
+      "sha256": "97c5d265518c7d84a59b608f72db998126d78d7a45bbbddd1b61a5cee1a3385b"
+    },
+    {
+      "path": "/ai/n8n",
+      "file": "reports/public-content-boundary/pub-03-visual/n8n-desktop.png",
+      "decisionCards": 1,
+      "h1": "n8n Workflow Automation",
+      "h1Count": 1,
+      "headings": [
+        "Decision Card",
+        "Execution cost, deployment ownership, and license boundaries",
+        "Introduction",
+        "What n8n is",
+        "Best fit",
+        "Check before choosing",
+        "Decision summary",
+        "Evidence and sources",
+        "Evidence Ledger",
+        "Review & Change Timeline",
+        "Use Cases",
+        "Support"
+      ],
+      "height": 6740,
+      "ledgers": 1,
+      "scrollWidth": 1468,
+      "timelines": 1,
+      "width": 1440,
+      "sha256": "b59f774d8dbbb339aef7e82a22b9ffa1c5c7bda4678e7abfb7b860283b2c6d99"
+    },
+    {
+      "path": "/ai/dune",
+      "file": "reports/public-content-boundary/pub-03-visual/dune-desktop.png",
+      "decisionCards": 1,
+      "h1": "Dune Onchain Data & SQL Analytics",
+      "h1Count": 1,
+      "headings": [
+        "Decision Card",
+        "Credits, query cost, and data-refresh boundaries",
+        "Introduction",
+        "What Dune is",
+        "Best fit",
+        "Check before choosing",
+        "Decision summary",
+        "Sources",
+        "Evidence Ledger",
+        "Review & Change Timeline",
+        "Key Features",
+        "Use Cases",
+        "Support"
+      ],
+      "height": 6461,
+      "ledgers": 1,
+      "scrollWidth": 1468,
+      "timelines": 1,
+      "width": 1440,
+      "sha256": "f509152aeda814ab93309bc2ef4111a6c427bafe1417bd0d5b9b66bd9a5fa68d"
+    },
+    {
+      "path": "/ai/dune",
+      "file": "reports/public-content-boundary/pub-03-visual/dune-mobile.png",
+      "decisionCards": 1,
+      "h1": "Dune Onchain Data & SQL Analytics",
+      "h1Count": 1,
+      "headings": [
+        "Decision Card",
+        "Credits, query cost, and data-refresh boundaries",
+        "Introduction",
+        "What Dune is",
+        "Best fit",
+        "Check before choosing",
+        "Decision summary",
+        "Sources",
+        "Evidence Ledger",
+        "Review & Change Timeline",
+        "Key Features",
+        "Use Cases",
+        "Support"
+      ],
+      "height": 11112,
+      "ledgers": 1,
+      "scrollWidth": 390,
+      "timelines": 1,
+      "width": 390,
+      "sha256": "2c43e12292b3625e3d091bf34d2718ff3d97f10f7353b808e60797a28b64d8e1"
+    },
+    {
+      "path": "/ai/chatgpt",
+      "file": "reports/public-content-boundary/pub-03-visual/chatgpt-fallback-desktop.png",
+      "decisionCards": 1,
+      "h1": "ChatGPT",
+      "h1Count": 1,
+      "headings": [
+        "Decision Card",
+        "Plan choice, data controls, and workspace boundaries",
+        "Introduction",
+        "Support"
+      ],
+      "height": 2623,
+      "ledgers": 0,
+      "scrollWidth": 1468,
+      "timelines": 0,
+      "width": 1440,
+      "sha256": "02841ad40d0d6b64a019969f1c9320eca6c61d9a97c0847f1fa23d5cb7b812a8"
+    },
+    {
+      "path": "/ai/chatgpt",
+      "file": "reports/public-content-boundary/pub-03-visual/chatgpt-fallback-mobile.png",
+      "decisionCards": 1,
+      "h1": "ChatGPT",
+      "h1Count": 1,
+      "headings": [
+        "Decision Card",
+        "Plan choice, data controls, and workspace boundaries",
+        "Introduction",
+        "Support"
+      ],
+      "height": 4525,
+      "ledgers": 0,
+      "scrollWidth": 390,
+      "timelines": 0,
+      "width": 390,
+      "sha256": "9f8e810716dabe2a75fcec3369c826278286b92fd80f908bb4c369f9a9b3d0eb"
+    },
+    {
+      "path": "/cn/ai/woy-ai",
+      "file": "reports/public-content-boundary/pub-03-visual/woy-cn-mobile.png",
+      "decisionCards": 1,
+      "h1": "Woy.ai (AI tools directory)",
+      "h1Count": 1,
+      "headings": [
+        "选择判断卡",
+        "介绍",
+        "支持"
+      ],
+      "height": 4570,
+      "ledgers": 0,
+      "scrollWidth": 390,
+      "timelines": 0,
+      "width": 390,
+      "sha256": "db8295aae1bc140a37bf357fddb5031ebeea7a21a4cf906b8b0a4eb7ab4534e7"
+    },
+    {
+      "path": "/cn/ai/woy-ai",
+      "file": "reports/public-content-boundary/pub-03-visual/woy-cn-desktop.png",
+      "decisionCards": 1,
+      "h1": "Woy.ai (AI tools directory)",
+      "h1Count": 1,
+      "headings": [
+        "选择判断卡",
+        "介绍",
+        "支持"
+      ],
+      "height": 2843,
+      "ledgers": 0,
+      "scrollWidth": 1440,
+      "timelines": 0,
+      "width": 1440,
+      "sha256": "d17c98e9c70111d29ebb822bcde93d9d738580cf56487efc753dbd264c13bdfd"
+    },
+    {
+      "path": "/cn/guides/how-to-choose-ai-tools",
+      "file": "reports/public-content-boundary/pub-03-visual/guide-selection.png",
+      "h1": "如何选择一个真正适合你的 AI 工具",
+      "h1Count": 1,
+      "headings": [
+        "先看场景，再看内容细节",
+        "适合先看的分类",
+        "不是越贵越好，而是越贴近你的需求越好",
+        "你可能会问的几个问题",
+        "完成一件可交付的工作",
+        "来源与核查日期",
+        "支持"
+      ],
+      "height": 2549,
+      "scrollWidth": 1440,
+      "width": 1440,
+      "sha256": "9548d9c80031a06df89e31cafad0e8de2bcd71f09e709511248371fd28805ff4"
+    },
+    {
+      "path": "/cn/guides/ai-writing-tools",
+      "file": "reports/public-content-boundary/pub-03-visual/guide-writing.png",
+      "h1": "AI 写作工具推荐：怎么选才适合你的内容工作流",
+      "h1Count": 1,
+      "headings": [
+        "先看写什么，再看怎么写",
+        "写作类工具通常在这些分类里",
+        "能不能稳定写出你想要的内容",
+        "写作类工具最常见的问题",
+        "用一篇真实稿件检查写作工具",
+        "来源与核查日期",
+        "支持"
+      ],
+      "height": 2339,
+      "scrollWidth": 1440,
+      "width": 1440,
+      "sha256": "ed5c85887f31e442b1989663983dc55ce19e6b120382c0213e5d5302f971a1b9"
+    },
+    {
+      "path": "/cn/guides/ai-coding-tools",
+      "file": "reports/public-content-boundary/pub-03-visual/guide-coding.png",
+      "h1": "AI 编程工具推荐：怎么选更适合你的开发流程",
+      "h1Count": 1,
+      "headings": [
+        "先看任务，再看工作流适配",
+        "编程类工具通常在这些分类里",
+        "更贴近真实编码工作的入口",
+        "能不能真正减少你的开发摩擦",
+        "编程工具最常见的问题",
+        "用一个可复现的问题试编码助手",
+        "来源与核查日期",
+        "支持"
+      ],
+      "height": 3130,
+      "scrollWidth": 1440,
+      "width": 1440,
+      "sha256": "d119b013ef749aebb917193f69ea2ddb3d36a47ab798b6a01af044eba3279b30"
+    },
+    {
+      "path": "/cn/guides/ai-tools-for-research",
+      "file": "reports/public-content-boundary/pub-03-visual/guide-research.png",
+      "h1": "AI 研究工具推荐：怎么选更适合资料发现和证据核对",
+      "h1Count": 1,
+      "headings": [
+        "先看来源，再看输出",
+        "研究类工具通常在这些分类里",
+        "按证据任务选择研究工具",
+        "能不能帮你更快得到可信结论",
+        "研究工具最常见的问题",
+        "让每项结论都能回到来源",
+        "来源与核查日期",
+        "支持"
+      ],
+      "height": 2863,
+      "scrollWidth": 1440,
+      "width": 1440,
+      "sha256": "157843f97ae1ea942e44934e2b194f8e338c5e7762b65ea635eff16a99b2fca4"
+    },
+    {
+      "path": "/cn/guides/ai-tools-for-web3",
+      "file": "reports/public-content-boundary/pub-03-visual/guide-web3.png",
+      "h1": "AI Web3 工具推荐：从链上数据到钱包工作流，怎么选更合适",
+      "h1Count": 1,
+      "headings": [
+        "先看数据源，再看工作流",
+        "Web3 工具通常在这些分类里",
+        "先判断你真正要解决的 Web3 工作",
+        "先按真实 Web3 任务选入口，再看完整工具页",
+        "能不能稳定帮你做链上工作",
+        "Web3 工具最常见的问题",
+        "先对齐链、时间和指标口径",
+        "来源与核查日期",
+        "支持"
+      ],
+      "height": 3243,
+      "scrollWidth": 1440,
+      "width": 1440,
+      "sha256": "27c5e06620312f23e2d03402e2408625e9cee1494693ac81f7c8834573d994b9"
+    },
+    {
+      "path": "/cn/guides/ai-tools-for-web3-comparison",
+      "file": "reports/public-content-boundary/pub-03-visual/comparison-web3.png",
+      "h1": "Dune vs The Graph：链上分析还是应用数据接口？",
+      "h1Count": 1,
+      "headings": [
+        "按需求选谁",
+        "关键差异与选择结论",
+        "优势与关键限制",
+        "适合谁、不适合谁",
+        "来源与核查日期",
+        "支持"
+      ],
+      "height": 4695,
+      "robots": "noindex, follow",
+      "scrollWidth": 390,
+      "width": 390,
+      "sha256": "87837cff78d4468d628146c05306fc706abd6950d65b0b03f384d5bd12ec5287"
+    },
+    {
+      "path": "/cn/guides/ai-tools-for-research-comparison",
+      "file": "reports/public-content-boundary/pub-03-visual/comparison-research.png",
+      "h1": "AI 研究工具对比",
+      "h1Count": 1,
+      "headings": [
+        "支持"
+      ],
+      "height": 844,
+      "robots": "noindex, follow",
+      "scrollWidth": 390,
+      "width": 390,
+      "sha256": "654d31f38b8e942b0b82f362d479486f8944fba32217d3b5961cd1ab219dcb42"
+    },
+    {
+      "path": "/cn/guides/ai-tools-for-meeting-notes-comparison",
+      "file": "reports/public-content-boundary/pub-03-visual/comparison-meetings.png",
+      "h1": "AI 会议纪要工具对比",
+      "h1Count": 1,
+      "headings": [
+        "支持"
+      ],
+      "height": 844,
+      "robots": "noindex, follow",
+      "scrollWidth": 390,
+      "width": 390,
+      "sha256": "471d3ea12177c994dc156d42fd6f3c4be8f87213defa9280d319eedcde8ac28c"
+    },
+    {
+      "path": "/cn/guides/adobe-alternatives-comparison",
+      "file": "reports/public-content-boundary/pub-03-visual/comparison-adobe.png",
+      "h1": "Adobe 替代方案对比",
+      "h1Count": 1,
+      "headings": [
+        "支持"
+      ],
+      "height": 844,
+      "robots": "noindex, follow",
+      "scrollWidth": 390,
+      "width": 390,
+      "sha256": "932534dd53b49e3a0cd0f8b7c8d8e5c8df01baf33066c3fa933537f6979a1d57"
+    },
+    {
+      "path": "/cn/guides/ai-coding-tools-comparison",
+      "file": "reports/public-content-boundary/pub-03-visual/comparison-coding.png",
+      "h1": "AI 编程工具对比",
+      "h1Count": 1,
+      "headings": [
+        "支持"
+      ],
+      "height": 844,
+      "robots": "noindex, follow",
+      "scrollWidth": 390,
+      "width": 390,
+      "sha256": "7448f3b98d89ebbb480ade2226bfd5323be4ffc1fbe1fe5c40d34fa0366353a6"
+    }
+  ],
+  "interactions": [
+    {
+      "page": "/ai/claude",
+      "action": "Expand owner area",
+      "result": "Unclaimed, owner email status and claim link visible; no submission"
+    },
+    {
+      "page": "/explore",
+      "action": "Free pricing quick filter",
+      "url": "http://127.0.0.1:3037/explore?pricing=free",
+      "result": "Showing 3 of 3 tools"
+    }
+  ],
+  "limitations": [
+    "Only read operations tested. No comment, login, claim or payment submission.",
+    "Desktop English offcanvas navigation contributes scrollWidth 1468 at viewport 1440; visible main content remains within viewport."
+  ],
+  "pass": true
+}

@@ -1,0 +1,85 @@
+{
+  "status": "DEV_READY_PENDING_INDEPENDENT_QA",
+  "checkedAt": "2026-09-14T14:55:23.781647+00:00",
+  "base": "e51642b613031ba40c2556fced97de5091931433",
+  "branch": "codex/pub-03-tool-discovery-boundary",
+  "build": {
+    "command": "pnpm run build (read-only runner)",
+    "exitCode": 0,
+    "id": "s4nI4d4hPXMdmzN4FR32Y",
+    "logSHA256": "eb61d7de231b946b4d54b02c83efb4319eb3b78c95c1a3f899b5d8c465bb5e51",
+    "log": "pub-03-build.txt (terminal trailing whitespace normalized)"
+  },
+  "typescript": {
+    "command": "tsc --noEmit",
+    "exitCode": 0
+  },
+  "regression": {
+    "passed": 24,
+    "total": 24
+  },
+  "legacyHtmlGate": {
+    "command": "test:public-content-boundary:html",
+    "pass": true
+  },
+  "html": {
+    "pages": 390,
+    "baselinePagesWithViolations": 124,
+    "pagesWithViolations": 0,
+    "failures": [],
+    "pass": true
+  },
+  "coverage": {
+    "publishedRecords": 46,
+    "fallbacks": 5,
+    "sitemapURLs": 116,
+    "decisionCardPages": 82,
+    "evidenceLedgers": 20,
+    "changeTimelines": 20,
+    "batches": [
+      390,
+      106
+    ]
+  },
+  "source": {
+    "base": "e51642b6",
+    "checkedAt": "2026-09-14T14:52:21.982Z",
+    "metadataFiles": [
+      "app/[locale]/(with-footer)/(home)/page.tsx",
+      "app/[locale]/(with-footer)/ai/[websiteName]/page.tsx",
+      "app/[locale]/(with-footer)/best-ai-tools/[topic]/page.tsx",
+      "app/[locale]/(with-footer)/best-ai-tools/page.tsx",
+      "app/[locale]/(with-footer)/categories/[slug]/CategoryContent.tsx",
+      "app/[locale]/(with-footer)/developer/listing/page.tsx",
+      "app/[locale]/(with-footer)/distribution/page.tsx",
+      "app/[locale]/(with-footer)/explore/ExploreList.tsx",
+      "app/[locale]/(with-footer)/explore/page.tsx",
+      "app/[locale]/(with-footer)/new/page.tsx",
+      "app/[locale]/(with-footer)/pricing/page.tsx",
+      "app/[locale]/(with-footer)/profile/submissions/page.tsx",
+      "app/[locale]/(with-footer)/submit/page.tsx"
+    ],
+    "frozenDirectoriesChanged": [],
+    "sourceFindings": 0,
+    "svgAssetsScanned": 111,
+    "assetFindings": 0,
+    "retainedEvidence": [
+      "getPriorityToolOfficialEvidence",
+      "getPriorityToolFallbackDetail",
+      "data-official-evidence",
+      "data-priority-tool-evidence",
+      "EvidenceLedgerPanel",
+      "ChangeTimelinePanel",
+      "CommentList"
+    ],
+    "pass": true
+  },
+  "visual": {
+    "screenshots": 32,
+    "pass": true
+  },
+  "eslint": "Not passed; see pub-03-eslint-comparison.json. Existing formatting/configuration issues remain.",
+  "productionDatabaseWrites": 0,
+  "deployed": false,
+  "mainPushed": false
+}

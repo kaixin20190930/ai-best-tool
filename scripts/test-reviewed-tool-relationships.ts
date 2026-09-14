@@ -71,7 +71,7 @@ function assertAlternativeAnchors(text: string) {
   assert(matched > 0, 'Decision Card relationship anchors are missing');
 }
 
-assertAlternativeAnchors(detailPage);
+assertAlternativeAnchors(readFileSync('components/tools/PublicToolDecision.tsx', 'utf8'));
 assertAlternativeAnchors('<a href={item.href} key={item.href}>OK</a>');
 assertAlternativeAnchors('<a\n key={ item.href }\n href={ item.href }\n>OK</a>');
 assert.throws(() => assertAlternativeAnchors('<Link key={item.href} href={item.href}>Bad</Link>'));

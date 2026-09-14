@@ -15,15 +15,28 @@ export const INTERNAL_DIRECTORIES = [
   'app/[locale]/(with-footer)/admin/',
   'app/[locale]/(no-footer)/admin/',
   'app/api/',
+  'app/[locale]/(admin)/admin/',
+  'app/actions/admin/',
 ];
 export const FORBIDDEN_PUBLIC_COPY = [
-  ['indexing-strategy', /索引策略|indexing strategy/gi],
+  [
+    'indexing-strategy',
+    /索引策略|indexing strategy|优先收录入口|Priority indexing paths|推给搜索引擎|excluded from indexing|不参与索引|停止索引|开放索引|index release|monitor-only|single-tool index scope|why it is monitored|为什么观察|directory-comparison policy|目录对比政策/gi,
+  ],
   ['keep-indexable', /保留索引|keep (?:it |the page )?indexable|kept indexable/gi],
   ['enrichment', /下一步增强|next enrichment/gi],
   ['editorial-evidence', /补真实|add real (?:\w+ ){0,3}(?:evidence|samples|scenarios)/gi],
   ['traffic', /承接流量|承接高意图|capture high-intent/gi],
   ['high-intent', /高意图|high[- ]intent/gi],
-  ['conversion', /转化路径|转化目标|conversion path|conversion goal/gi],
+  ['conversion', /转化路径|转化目标|conversion path|conversion goal|最容易转化|highest-converting|承接大盘流量/gi],
+  [
+    'editorial-planning',
+    /证据准备度|Evidence readiness|产品价值分|Product value.*?\/100|Next fact check|Next decision review|公开判断仍需补齐|Still needed for a complete decision|Next enrichment|下次事实复查|下次事实复核|下次判断复核|next fact review/gi,
+  ],
+  [
+    'implementation-copy',
+    /Stable editorial preview|Local media avoids broken external previews|consistent across deploys|Editorial media ready|Local media (?:avoids|keeps)|Static media ready|Editorial preview|Editorial media|stable local media|guide-driven traffic|Richer visual media|Editorial (?:coverage|research) ready|Decision page ready|Localized (?:detail copy|summary)|Monitor before index|Published seed|research wave|category-aligned tool positioning/gi,
+  ],
   ['quality-state', /页面质量|page_quality_status|continue_index|sitemap eligibility|^monitor$/gi],
 ] as const;
 

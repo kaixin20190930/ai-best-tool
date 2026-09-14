@@ -1,24 +1,9 @@
 import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import { getWebNavigationList } from '@/network/webNavigation';
-import {
-  ArrowRight,
-  BadgeCheck,
-  CircleChevronRight,
-  Clock3,
-  Compass,
-  FolderOpen,
-  Heart,
-  MessageSquare,
-  Rocket,
-  Search as SearchIcon,
-  Share2,
-  Sparkles,
-  TrendingUp,
-} from 'lucide-react';
+import { ArrowRight, BadgeCheck, Clock3, Compass, FolderOpen, Search as SearchIcon, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { listingConfig } from '@/lib/config/listing';
 import { FEATURED_GUIDE_HREFS, GUIDE_PAGES } from '@/lib/content/guides';
 import { topListTopics } from '@/lib/data/topLists';
 import { BASE_URL } from '@/lib/env';
@@ -27,8 +12,6 @@ import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { generateOrganizationSchema, generateWebSiteSchema } from '@/lib/seo/schema';
 import { getLocalizedField as getCategoryLocalizedField, getPopularCategories } from '@/lib/services/categories';
 import { getCommunityHighlights, getRecentDiscussions, getRisingTools } from '@/lib/services/community';
-import { toolToListRow } from '@/lib/services/toolPresenter';
-import { getPopularTools } from '@/lib/services/tools';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import Faq from '@/components/Faq';
 import CommunityPulse from '@/components/home/CommunityPulse';
@@ -77,19 +60,14 @@ function SectionHeader({ title, description }: { title: string; description: str
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const t = await getTranslations('Home');
   const isChinese = locale === 'cn' || locale === 'tw';
-  const [latestToolsResult, popularToolsResult, popularCategoriesResult] = await Promise.allSettled([
+  const [latestToolsResult, popularCategoriesResult] = await Promise.allSettled([
     getWebNavigationList({ locale, pageNum: 1, pageSize: 12 }),
-    getPopularTools(6),
     getPopularCategories(8),
   ]);
   const latestTools =
     latestToolsResult.status === 'fulfilled'
       ? latestToolsResult.value
       : { code: 200, msg: 'success', rows: [], total: 0 };
-  const popularTools =
-    popularToolsResult.status === 'fulfilled'
-      ? popularToolsResult.value.map((tool) => toolToListRow(tool, locale))
-      : [];
   const popularCategories = popularCategoriesResult.status === 'fulfilled' ? popularCategoriesResult.value : [];
   const communityHighlights = await getCommunityHighlights(3).catch(() => []);
   const recentDiscussions = await getRecentDiscussions(3).catch(() => []);
@@ -104,7 +82,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const stats = [
     {
       label: isChinese ? '公开工具' : 'Published tools',
-      value: `${totalVisibleTools}+`,
+      value: `${totalVisibleTools}`,
       icon: Compass,
     },
     {
@@ -113,56 +91,12 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       icon: BadgeCheck,
     },
     {
-      label: isChinese ? '复查框架' : 'Review cadence',
-      value: isChinese ? '事实 30 天 / 判断 90 天' : '30d facts / 90d fit',
+      label: isChinese ? '变化记录' : 'Change history',
+      value: isChinese ? '查看来源与日期' : 'Sources + dates',
       icon: Clock3,
     },
   ];
-  const evidenceMethod = [
-    {
-      label: isChinese ? '打开证据' : 'Open the evidence',
-      title: isChinese ? '重要事实带来源和核查日期' : 'Important claims carry sources and review dates',
-      description: isChinese
-        ? '优先引用官网、定价、文档和独立采用信号；无法确认的内容明确标记待核查。'
-        : 'We prioritize official product, pricing, and documentation sources plus independent adoption signals. Unconfirmed claims stay marked for review.',
-    },
-    {
-      label: isChinese ? '先看限制' : 'Read the limits first',
-      title: isChinese ? '推荐之前先说明不适合谁' : 'Know who should not choose it before the recommendation',
-      description: isChinese
-        ? '价格、额度、隐私、部署和兼容性会改变选择结果，不能藏在功能列表后面。'
-        : 'Pricing, quotas, privacy, deployment, and compatibility can change the decision, so they do not stay buried behind a feature list.',
-    },
-    {
-      label: isChinese ? '记录真实变化' : 'Track material changes',
-      title: isChinese ? '有变化才更新判断，不伪造新鲜度' : 'Update decisions when facts change, not to fake freshness',
-      description: isChinese
-        ? '事实复查和判断复核分开记录；没有变化时只保留复查记录，不批量改写正文日期。'
-        : 'Fact checks and fit reviews are tracked separately. A no-change review does not trigger a cosmetic rewrite or a fresh date.',
-    },
-  ];
-  const quickSearches = [
-    {
-      label: isChinese ? '写内容' : 'Write content',
-      query: 'writing',
-    },
-    {
-      label: isChinese ? '做开发' : 'Build or code',
-      query: 'coding',
-    },
-    {
-      label: isChinese ? '做研究' : 'Do research',
-      query: 'research',
-    },
-    {
-      label: isChinese ? '做视频' : 'Create video',
-      query: 'video',
-    },
-    {
-      label: isChinese ? '看 Web3' : 'Work on Web3',
-      query: 'web3',
-    },
-  ];
+
   const quickFilters = [
     {
       label: isChinese ? '免费工具' : 'Free tools',
@@ -214,53 +148,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const featuredGuidePages = FEATURED_GUIDE_HREFS.map((href) => GUIDE_PAGES.find((page) => page.href === href)).filter(
     (page): page is (typeof GUIDE_PAGES)[number] => Boolean(page),
   );
-  const comparisonGuideHrefs = [
-    '/guides/ai-tools-for-content-creation-comparison',
-    '/guides/chatgpt-alternatives-comparison',
-    '/guides/claude-alternatives-comparison',
-    '/guides/cursor-alternatives-comparison',
-    '/guides/gemini-alternatives-comparison',
-    '/guides/perplexity-alternatives-comparison',
-    '/guides/poe-alternatives-comparison',
-    '/guides/ai-writing-tools-comparison',
-    '/guides/ai-seo-tools-comparison',
-    '/guides/ai-tools-for-marketing-comparison',
-    '/guides/ai-tools-for-sales-comparison',
-    '/guides/ai-tools-for-lead-generation-comparison',
-    '/guides/ai-tools-for-sales-prospecting-comparison',
-    '/guides/ai-tools-for-research-comparison',
-    '/guides/ai-tools-for-developers-comparison',
-    '/guides/ai-tools-for-code-review-comparison',
-    '/guides/ai-tools-for-prompt-testing-comparison',
-    '/guides/ai-tools-for-evals-comparison',
-    '/guides/ai-tools-for-web3-comparison',
-    '/guides/ai-tools-for-web3-analysis-comparison',
-    '/guides/ai-tools-for-crypto-research-comparison',
-    '/guides/ai-tools-for-token-research-comparison',
-    '/guides/ai-tools-for-wallet-research-comparison',
-    '/guides/ai-tools-for-wallet-monitoring-comparison',
-    '/guides/ai-tools-for-crypto-portfolio-tracking-comparison',
-    '/guides/ai-tools-for-on-chain-analysis-comparison',
-    '/guides/ai-tools-for-defi-analytics-comparison',
-    '/guides/ai-tools-for-dex-analytics-comparison',
-    '/guides/ai-tools-for-protocol-analytics-comparison',
-    '/guides/ai-tools-for-agencies-comparison',
-    '/guides/ai-tools-for-api-observability-comparison',
-    '/guides/ai-tools-for-model-routing-comparison',
-    '/guides/ai-productivity-tools-comparison',
-    '/guides/ai-tools-for-small-business-comparison',
-    '/guides/ai-tools-for-ecommerce-comparison',
-    '/guides/ai-tools-for-students-comparison',
-    '/guides/ai-tools-for-creators-comparison',
-    '/guides/ai-image-tools-comparison',
-    '/guides/ai-video-tools-comparison',
-    '/guides/ai-tools-for-designers-comparison',
-    '/guides/ai-tools-for-meeting-notes-comparison',
-    '/guides/ai-tools-for-voice-comparison',
-  ] as const;
-  const comparisonGuidePages = comparisonGuideHrefs
-    .map((href) => GUIDE_PAGES.find((page) => page.href === href))
-    .filter((page): page is (typeof GUIDE_PAGES)[number] => Boolean(page));
+
   const priorityTopListKeys = [
     'ai-coding-tools',
     'ai-agent-tools',
@@ -274,121 +162,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const priorityTopListTopics = priorityTopListKeys
     .map((key) => topListTopics.find((topic) => topic.key === key))
     .filter((topic): topic is (typeof topListTopics)[number] => Boolean(topic));
-  const startHereLinks = [
-    {
-      href: '/new',
-      title: isChinese ? '查看本周新增' : 'See what is new this week',
-      description: isChinese
-        ? '如果你想最快知道这周补了哪些工具，这个入口最直接。'
-        : 'The fastest way to catch up on what we actually added this week.',
-    },
-    {
-      href: '/guides/ai-tools-for-content-creation-comparison',
-      title: isChinese ? '看内容创作对比' : 'Open content creation comparison',
-      description: isChinese
-        ? '如果你已经在做脚本、封面或多渠道发布，这里会更快进入决策。'
-        : 'If you are already working on scripts, thumbnails, or multi-channel publishing, this gets to a decision faster.',
-    },
-    {
-      href: '/guides/how-to-choose-ai-tools',
-      title: isChinese ? '先看选型指南' : 'Start with the selection guide',
-      description: isChinese
-        ? '先确认场景、价格和更新频率，再决定哪些工具值得继续比较。'
-        : 'Use case, pricing, and freshness first—then decide which tools are worth comparing.',
-    },
-    {
-      href: '/explore?sort=popular',
-      title: isChinese ? '浏览高关注工具' : 'Browse the most-visited tools',
-      description: isChinese
-        ? '从当前最常被浏览和讨论的工具开始，更容易快速建立判断。'
-        : 'Start from the tools people visit and discuss most to build context quickly.',
-    },
-    {
-      href: '/categories/productivity?sort=popular',
-      title: isChinese ? '看生产力分类' : 'Open the productivity category',
-      description: isChinese
-        ? '目前内容最厚、也最容易开始筛选的一类。'
-        : 'One of the densest categories, and the easiest place to begin narrowing down.',
-    },
-    {
-      href: '/categories/web3?sort=popular',
-      title: isChinese ? '看 Web3 分类' : 'Open the Web3 category',
-      description: isChinese
-        ? '如果你关心链上分析、研究或基础设施，这里最值得先看。'
-        : 'If you care about on-chain analysis, research, or infrastructure, start here.',
-    },
-    {
-      href: '/ai/chatgpt',
-      title: isChinese ? '查看一个完整详情页' : 'Review a complete tool page',
-      description: isChinese
-        ? '先看一条完整工具详情页长什么样，再决定后续比较方向。'
-        : 'See what a complete decision-ready tool page looks like before comparing others.',
-    },
-  ];
-  const focusedCategoryLinks = [
-    {
-      href: '/categories/research?sort=popular',
-      title: isChinese ? '看研究分类' : 'Open research',
-      description: isChinese
-        ? '适合模型发现、资料检索和更重研究型的工作流。'
-        : 'A better fit for model discovery, source gathering, and deeper research workflows.',
-    },
-    {
-      href: '/categories/voice?sort=popular',
-      title: isChinese ? '看语音分类' : 'Open voice',
-      description: isChinese
-        ? '适合转录、播客、配音和语音优先的场景。'
-        : 'A better fit for transcription, podcasting, dubbing, and audio-first workflows.',
-    },
-    {
-      href: '/categories/automation?sort=popular',
-      title: isChinese ? '看自动化分类' : 'Open automation',
-      description: isChinese
-        ? '适合工作流编排、Agent 和重复任务自动执行。'
-        : 'A better fit for orchestration, agents, and repeatable task automation.',
-    },
-    {
-      href: '/categories/developer-tools?sort=popular',
-      title: isChinese ? '看开发者工具分类' : 'Open developer tools',
-      description: isChinese
-        ? '适合 API、模型基础设施和开发型工作流。'
-        : 'A better fit for APIs, model infrastructure, and developer workflows.',
-    },
-  ];
-  const highIntentLanes = [
-    {
-      href: '/best-ai-tools/ai-coding-tools',
-      comparisonHref: '/guides/ai-coding-tools-comparison',
-      title: isChinese ? '编程工具' : 'Coding tools',
-      description: isChinese
-        ? '适合补全、调试、重构和编辑器工作流。'
-        : 'Best for completion, debugging, refactoring, and editor workflows.',
-    },
-    {
-      href: '/best-ai-tools/ai-research-tools',
-      comparisonHref: '/guides/ai-tools-for-research-comparison',
-      title: isChinese ? '研究工具' : 'Research tools',
-      description: isChinese
-        ? '适合资料发现、证据核对和研究沉淀。'
-        : 'Best for discovery, evidence-checking, and research synthesis.',
-    },
-    {
-      href: '/best-ai-tools/ai-web3-tools',
-      comparisonHref: '/guides/ai-tools-for-web3-comparison',
-      title: isChinese ? 'Web3 工具' : 'Web3 tools',
-      description: isChinese
-        ? '适合链上分析、钱包监控和协议研究。'
-        : 'Best for on-chain analysis, wallet monitoring, and protocol research.',
-    },
-    {
-      href: '/best-ai-tools/ai-automation-tools',
-      comparisonHref: '/guides/ai-tools-for-automation-comparison',
-      title: isChinese ? '自动化工具' : 'Automation tools',
-      description: isChinese
-        ? '适合重复流程、触发器和跨工具联动。'
-        : 'Best for repeatable workflows, triggers, and cross-tool orchestration.',
-    },
-  ];
 
   // Generate Organization schema for homepage
   const organizationSchema = generateOrganizationSchema({
@@ -446,42 +219,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 />
               </div>
 
-              <div className='mt-5 rounded-[18px] border border-cyan-100 bg-cyan-50/60 p-4 shadow-sm'>
-                <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-                  {isChinese ? '先按任务开始' : 'Start by task'}
-                </p>
-                <h2 className='mt-1 text-lg font-bold text-slate-950'>
-                  {isChinese ? '你现在最想解决什么问题？' : 'What problem are you trying to solve?'}
-                </h2>
-                <div className='mt-4 grid gap-3 md:grid-cols-2'>
-                  {taskFirstEntryPoints.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className='rounded-xl border border-white bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
-                    >
-                      <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
-                      <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-              <div className='mt-4 flex flex-wrap items-center gap-2'>
-                <span className='text-sm font-medium text-slate-500'>
-                  {isChinese ? '快速搜索：' : 'Popular searches:'}
-                </span>
-                {quickSearches.map((item) => (
-                  <Link
-                    key={item.query}
-                    href={`/explore?search=${item.query}`}
-                    className='rounded-full bg-white px-3 py-1 text-sm font-medium text-slate-700 ring-1 ring-slate-200 hover:bg-slate-100'
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
-
               <div className='mt-3 flex flex-wrap items-center gap-2'>
                 <span className='text-sm font-medium text-slate-500'>
                   {isChinese ? '快捷筛选：' : 'Quick filters:'}
@@ -499,6 +236,12 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
               <div className='mt-7 flex flex-col gap-3 sm:flex-row'>
                 <Link
+                  href='/find-tools'
+                  className='inline-flex items-center justify-center rounded-lg bg-cyan-700 px-5 py-3 text-sm font-semibold text-white hover:bg-cyan-800'
+                >
+                  {isChinese ? '按需求帮我选' : 'Find tools for my task'}
+                </Link>
+                <Link
                   href='/explore'
                   className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50'
                 >
@@ -506,51 +249,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   <ArrowRight className='size-4' />
                 </Link>
               </div>
-
-              <div className='mt-3 flex flex-wrap items-center gap-3 text-sm'>
-                <span className='font-medium text-slate-500'>
-                  {isChinese ? '如果你是工具方：' : 'If you are a tool owner:'}
-                </span>
-                <Link
-                  href='/submit'
-                  className='inline-flex items-center gap-1 text-slate-400 underline-offset-4 hover:text-slate-300 hover:underline'
-                >
-                  {isChinese ? '提交/入驻工具' : 'Submit a tool'}
-                  <Rocket className='size-3.5' />
-                </Link>
-                <Link
-                  href='/developer/listing'
-                  className='inline-flex items-center gap-1 text-slate-400 underline-offset-4 hover:text-slate-300 hover:underline'
-                >
-                  {isChinese ? '开发者入驻' : 'Developer listing'}
-                  <BadgeCheck className='size-3.5' />
-                </Link>
-              </div>
-
-              {comparisonGuidePages.length > 0 && (
-                <div className='mt-4 rounded-lg border border-slate-200 bg-white p-4 shadow-sm'>
-                  <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-                    {isChinese ? '先看对比' : 'Compare first'}
-                  </p>
-                  <p className='mt-1 text-sm leading-6 text-slate-600'>
-                    {isChinese
-                      ? '如果你已经知道大方向，先从这些比较页开始会更快。'
-                      : 'If the direction is already clear, these comparison pages are the faster start.'}
-                  </p>
-                  <div className='mt-3 flex flex-wrap gap-2'>
-                    {comparisonGuidePages.map((guide) => (
-                      <Link
-                        key={guide.href}
-                        href={guide.href}
-                        className='inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 text-sm font-medium text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50'
-                      >
-                        {guide.title[isChinese ? 'cn' : 'en']}
-                        <ArrowRight className='size-4' />
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
 
             <aside className='grid content-start gap-3'>
@@ -568,299 +266,27 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </aside>
           </div>
         </section>
-
-        <section className='mx-auto mt-4 w-full max-w-7xl px-4 lg:px-6'>
-          <div className='rounded-[20px] border border-emerald-200 bg-emerald-50/70 p-5 shadow-sm lg:p-7'>
-            <div className='flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between'>
-              <div>
-                <p className='text-sm font-semibold uppercase tracking-wide text-emerald-700'>
-                  {isChinese ? '我们如何做判断' : 'How decisions are built'}
-                </p>
-                <h2 className='mt-1 text-2xl font-bold text-slate-950'>
-                  {isChinese ? '不是再给你一张更长的工具清单' : 'Not another longer list of AI tools'}
-                </h2>
-              </div>
-              <p className='max-w-2xl text-sm leading-6 text-slate-700'>
-                {isChinese
-                  ? '每个公开工具页都应该帮助你核对事实、提前看到限制，并知道下一步该比较什么。'
-                  : 'Every public tool page should help you verify the facts, see decision-changing limits early, and know what to compare next.'}
-              </p>
-            </div>
-            <div className='mt-5 grid gap-3 lg:grid-cols-3'>
-              {evidenceMethod.map((item, index) => (
-                <div key={item.label} className='rounded-2xl border border-white bg-white p-5 shadow-sm'>
-                  <div className='flex items-center justify-between gap-3'>
-                    <p className='text-xs font-semibold uppercase tracking-wide text-emerald-700'>{item.label}</p>
-                    <span className='inline-flex size-7 items-center justify-center rounded-full bg-emerald-50 text-xs font-bold text-emerald-700 ring-1 ring-emerald-200'>
-                      {index + 1}
-                    </span>
-                  </div>
-                  <h3 className='mt-3 text-base font-semibold text-slate-950'>{item.title}</h3>
-                  <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
-                </div>
-              ))}
-            </div>
-            <div className='mt-5 flex flex-wrap gap-3'>
+        <div className='mx-auto max-w-7xl px-4 py-8 lg:px-6'>
+          <section>
+            <div className='mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between'>
+              <SectionHeader title={t('latestTools')} description={t('latestToolsDescription')} />
               <Link
-                href='/guides/how-to-choose-ai-tools'
-                className='inline-flex items-center gap-2 rounded-lg bg-emerald-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-emerald-800'
+                href='/new'
+                className='inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-slate-950'
               >
-                {isChinese ? '查看选型方法' : 'See the selection method'}
-                <ArrowRight className='size-4' />
-              </Link>
-              <Link
-                href='/ai/chatgpt'
-                className='inline-flex items-center gap-2 rounded-lg border border-emerald-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-emerald-50'
-              >
-                {isChinese ? '查看完整工具页' : 'Open a complete tool page'}
-                <ArrowRight className='size-4' />
+                {isChinese ? '查看本周新增' : 'View new this week'}
+                <Clock3 className='size-4' />
               </Link>
             </div>
-          </div>
-        </section>
+            <WebNavCardList locale={locale} dataList={latestTools.rows.slice(0, 6)} contextLabel='latest' />
+          </section>
+        </div>
 
-        <section className='mx-auto mt-4 w-full max-w-7xl px-4 lg:px-6'>
-          <div className='rounded-[18px] border border-cyan-200 bg-cyan-50/60 p-5 shadow-sm lg:p-6'>
-            <div className='flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between'>
-              <div>
-                <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-                  {isChinese ? '高意图主线' : 'High-intent lanes'}
-                </p>
-                <h2 className='mt-1 text-xl font-bold text-slate-950 lg:text-2xl'>
-                  {isChinese ? '先看最容易转化的四条主题线' : 'Start with the four highest-converting themes'}
-                </h2>
-              </div>
-              <p className='max-w-2xl text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '这几条线最适合先收窄到榜单，再去指南和对比页。'
-                  : 'These are the easiest paths to narrow down from ranking into guides and comparison pages.'}
-              </p>
-            </div>
-            <div className='mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
-              {highIntentLanes.map((lane) => (
-                <div key={lane.href} className='rounded-xl border border-white bg-white p-4 shadow-sm'>
-                  <p className='text-sm font-semibold text-slate-950'>{lane.title}</p>
-                  <p className='mt-2 text-sm leading-6 text-slate-600'>{lane.description}</p>
-                  <div className='mt-4 flex flex-wrap gap-2'>
-                    <Link
-                      href={lane.href}
-                      className='inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50'
-                    >
-                      {isChinese ? '看榜单' : 'Open ranking'}
-                      <ArrowRight className='size-3.5' />
-                    </Link>
-                    <Link
-                      href={lane.comparisonHref}
-                      className='inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50'
-                    >
-                      {isChinese ? '看对比' : 'Compare'}
-                      <ArrowRight className='size-3.5' />
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className='mx-auto -mt-2 w-full max-w-7xl px-4 lg:px-6'>
-          <div className='rounded-[18px] border border-slate-200 bg-white p-5 shadow-sm lg:p-6'>
-            <div className='flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between'>
-              <div>
-                <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-                  {isChinese ? '优先收录入口' : 'Priority indexing paths'}
-                </p>
-                <h2 className='mt-1 text-xl font-bold text-slate-950 lg:text-2xl'>
-                  {isChinese ? '先把最该收录的页面推给搜索引擎' : 'Send the most important pages to search first'}
-                </h2>
-              </div>
-              <p className='max-w-2xl text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '这里优先放更能代表站点主题的内容页，帮助 Google 先理解你真正想做的目录和指南。'
-                  : 'These are the pages that best represent the site so crawlers understand the directory and guide structure first.'}
-              </p>
-            </div>
-
-            <div className='mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3'>
-              {featuredGuidePages.slice(0, 6).map((page) => (
-                <Link
-                  key={page.href}
-                  href={page.href}
-                  className='group rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-cyan-50/40'
-                >
-                  <div className='flex items-start justify-between gap-3'>
-                    <div>
-                      <p className='text-sm font-semibold text-slate-950'>{page.title[isChinese ? 'cn' : 'en']}</p>
-                      <p className='mt-2 text-sm leading-6 text-slate-600'>{page.desc[isChinese ? 'cn' : 'en']}</p>
-                    </div>
-                    <CircleChevronRight className='mt-0.5 size-5 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-slate-700' />
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className='mx-auto grid w-full max-w-7xl gap-3 px-4 py-0 lg:grid-cols-3 lg:px-6'>
-          <Link
-            href='/profile/favorites'
-            className='rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-md'
-          >
-            <div className='flex items-start gap-3'>
-              <span className='inline-flex rounded-lg bg-rose-50 p-2 text-rose-600'>
-                <Heart className='size-5' />
-              </span>
-              <div>
-                <p className='text-sm font-semibold text-slate-950'>
-                  {isChinese ? '收藏你喜欢的工具' : 'Save the tools you like'}
-                </p>
-                <p className='mt-1 text-sm leading-6 text-slate-600'>
-                  {isChinese
-                    ? '登录后即可收藏、回看和管理清单。'
-                    : 'Log in to save, revisit, and manage your shortlist.'}
-                </p>
-              </div>
-            </div>
-          </Link>
-          <Link
-            href='/explore?sort=popular'
-            className='rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-md'
-          >
-            <div className='flex items-start gap-3'>
-              <span className='inline-flex rounded-lg bg-cyan-50 p-2 text-cyan-700'>
-                <Share2 className='size-5' />
-              </span>
-              <div>
-                <p className='text-sm font-semibold text-slate-950'>
-                  {isChinese ? '分享给团队或朋友' : 'Share with your team'}
-                </p>
-                <p className='mt-1 text-sm leading-6 text-slate-600'>
-                  {isChinese ? '每个详情页都支持一键分享。' : 'Every tool detail page supports quick sharing.'}
-                </p>
-              </div>
-            </div>
-          </Link>
-          <Link
-            href='/developer/listing'
-            className='rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-md'
-          >
-            <div className='flex items-start gap-3'>
-              <span className='inline-flex rounded-lg bg-emerald-50 p-2 text-emerald-700'>
-                <MessageSquare className='size-5' />
-              </span>
-              <div>
-                <p className='text-sm font-semibold text-slate-950'>
-                  {isChinese ? '加入讨论和入驻' : 'Join the discussion and listing'}
-                </p>
-                <p className='mt-1 text-sm leading-6 text-slate-600'>
-                  {isChinese
-                    ? '查看提交说明，按你的节奏提交工具或补充信息。'
-                    : 'Review the listing details, then submit your tool or add more information when ready.'}
-                </p>
-              </div>
-            </div>
-          </Link>
-        </section>
-
-        <section className='mx-auto mt-10 w-full max-w-7xl px-4 lg:px-6'>
-          <SectionHeader
-            title={isChinese ? '按分类找工具' : 'Browse by category'}
-            description={
-              isChinese
-                ? '如果你还没有明确目标，可以先从这些更容易建立判断的分类入口开始。'
-                : 'If you do not have a specific goal yet, start from category pages to narrow the field first.'
-            }
-          />
-          <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-5'>
-            {startHereLinks.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className='group rounded-[18px] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
-              >
-                <div className='flex items-start justify-between gap-3'>
-                  <div>
-                    <h3 className='text-base font-semibold text-slate-950'>{item.title}</h3>
-                    <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
-                  </div>
-                  <CircleChevronRight className='mt-0.5 size-5 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-slate-700' />
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        <section className='mx-auto mt-10 w-full max-w-7xl px-4 lg:px-6'>
-          <SectionHeader
-            title={isChinese ? '更细的分类入口' : 'More focused categories'}
-            description={
-              isChinese
-                ? '如果你已经知道自己更偏研究、语音、自动化或开发者工具，可以直接从这里进入。'
-                : 'If you already know you are closer to research, voice, automation, or developer tooling, jump in here.'
-            }
-          />
-          <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
-            {focusedCategoryLinks.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className='group rounded-[18px] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
-              >
-                <div className='flex items-start justify-between gap-3'>
-                  <div>
-                    <h3 className='text-base font-semibold text-slate-950'>{item.title}</h3>
-                    <p className='mt-2 text-sm leading-6 text-slate-600'>{item.description}</p>
-                  </div>
-                  <CircleChevronRight className='mt-0.5 size-5 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-slate-700' />
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        <section className='rounded-[18px] border border-slate-200 bg-white px-4 py-6 shadow-sm lg:px-6'>
-          <SectionHeader
-            title={isChinese ? '按任务比较' : 'Compare by task'}
-            description={
-              isChinese
-                ? '如果你已经知道大概方向，直接从这些高意图对比页开始，会更快做出判断。'
-                : 'If you already know the rough direction, start from these high-intent comparison pages and decide faster.'
-            }
-          />
-          <p className='-mt-2 mb-4 text-sm leading-6 text-slate-600'>
-            {isChinese
-              ? '先比定价、场景和真实反馈，再决定要不要点进单个工具。'
-              : 'Compare pricing, use case, and real feedback first, then decide whether to open a single tool page.'}
-          </p>
-          <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-3'>
-            {comparisonGuidePages.map((guide) => (
-              <Link
-                key={guide.href}
-                href={guide.href}
-                className='group rounded-[18px] border border-slate-200 bg-gradient-to-br from-white to-slate-50 p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md'
-              >
-                <div className='flex items-start justify-between gap-3'>
-                  <div className='min-w-0'>
-                    <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-                      {isChinese ? '先做对比' : 'Compare first'}
-                    </p>
-                    <h3 className='mt-1 text-base font-semibold text-slate-950'>
-                      {guide.title[isChinese ? 'cn' : 'en']}
-                    </h3>
-                    <p className='mt-2 text-sm leading-6 text-slate-600'>{guide.desc[isChinese ? 'cn' : 'en']}</p>
-                  </div>
-                  <ArrowRight className='mt-1 size-5 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-slate-700' />
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        <section className='rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
+        <section className='mx-auto my-8 max-w-7xl rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8'>
           <div className='flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between'>
             <div>
               <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-                {isChinese ? '高意图榜单' : 'High-intent top lists'}
+                {isChinese ? '按任务看榜单' : 'Lists by task'}
               </p>
               <h2 className='mt-1 text-2xl font-bold text-slate-950'>
                 {isChinese ? '先看最容易做决定的榜单' : 'Start with the lists that make the decision easier'}
@@ -868,13 +294,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             </div>
             <p className='max-w-3xl text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '如果用户已经知道自己要找编程、Agent、研究、视频或写作工具，先看榜单会比先看总目录更快。'
-                : 'When visitors already know they need coding, agent, research, video, or writing tools, a ranked list gets them there faster than the full directory.'}
+                ? '按编程、Agent、研究、视频或写作等任务，查看相关候选的适用场景与限制。'
+                : 'Choose a task such as coding, agents, research, video, or writing to compare relevant candidates and their limits.'}
             </p>
           </div>
 
           <div className='mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-3'>
-            {priorityTopListTopics.map((topic) => (
+            {priorityTopListTopics.slice(0, 4).map((topic) => (
               <TrackableCtaLink
                 key={topic.key}
                 href={`/${locale}/best-ai-tools/${topic.key}`}
@@ -963,7 +389,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 {isChinese ? '打开选型指南' : 'Open guide'}
                 <ArrowRight className='size-4' />
               </Link>
-              {featuredGuidePages.slice(1).map((guide) => (
+              {featuredGuidePages.slice(1, 3).map((guide) => (
                 <Link
                   key={guide.href}
                   href={guide.href}
@@ -973,66 +399,6 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                   <ArrowRight className='size-4' />
                 </Link>
               ))}
-            </div>
-          </section>
-
-          <section>
-            <div className='mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between'>
-              <SectionHeader title={t('latestTools')} description={t('latestToolsDescription')} />
-              <Link
-                href='/new'
-                className='inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-slate-950'
-              >
-                {isChinese ? '查看本周新增' : 'View new this week'}
-                <Clock3 className='size-4' />
-              </Link>
-            </div>
-            <WebNavCardList dataList={latestTools.rows} contextLabel='latest' />
-          </section>
-
-          {popularTools.length > 0 && (
-            <section>
-              <div className='mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between'>
-                <SectionHeader title={t('popularTools')} description={t('popularToolsDescription')} />
-                <Link
-                  href='/explore?sort=popular'
-                  className='inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-slate-950'
-                >
-                  {isChinese ? '查看热门' : 'View popular'}
-                  <TrendingUp className='size-4' />
-                </Link>
-              </div>
-              <WebNavCardList dataList={popularTools} contextLabel='popular' />
-            </section>
-          )}
-
-          <section className='grid gap-4 rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:p-8'>
-            <div>
-              <h2 className='text-2xl font-bold text-slate-950'>
-                {isChinese ? '开发者想让产品被更多人发现？' : 'Want your AI product discovered?'}
-              </h2>
-              <p className='mt-2 max-w-2xl text-sm leading-6 text-slate-600'>
-                {isChinese
-                  ? '提交工具、认领已有页面或补充真实变化。付费选项只改变审核时效或标注清楚的展示窗口，不影响编辑结论和公开资格。'
-                  : 'Submit a tool, claim an existing page, or report a real change. Paid options only affect review timing or clearly labeled visibility, never the editorial conclusion or publication eligibility.'}
-              </p>
-            </div>
-            <div className='flex flex-col gap-2 sm:flex-row lg:flex-col'>
-              <Link
-                href='/submit'
-                className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50'
-              >
-                {isChinese ? '提交工具' : 'Submit tool'}
-                <CircleChevronRight className='size-4' />
-              </Link>
-              <Link
-                href='/pricing'
-                className='inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold text-slate-500 hover:text-slate-800'
-              >
-                {isChinese
-                  ? `${listingConfig.plans.standard_paid.label}（可选）`
-                  : 'Optional review and visibility plans'}
-              </Link>
             </div>
           </section>
 

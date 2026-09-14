@@ -221,12 +221,12 @@ export default async function ExploreList({
             <h2 className='text-sm font-semibold uppercase tracking-wide text-fuchsia-700'>Sponsored Picks</h2>
             <span className='text-xs text-slate-500'>Promoted listings</span>
           </div>
-          <WebNavCardList dataList={featuredList} />
+          <WebNavCardList locale={locale} dataList={featuredList} />
         </section>
       )}
 
       {/* Tool cards */}
-      <WebNavCardList dataList={visibleList} contextLabel={contextLabel} />
+      <WebNavCardList locale={locale} dataList={visibleList} contextLabel={contextLabel} />
 
       {/* Pagination */}
       {visibleTotal > WEB_PAGE_SIZE && (

@@ -6,7 +6,7 @@ const detailPath = path.join(root, 'app/[locale]/(with-footer)/ai/[websiteName]/
 const componentPath = path.join(root, 'components/guides/GuideDecisionPath.tsx');
 const guides = ['web3', 'automation', 'research'];
 
-const detailSource = fs.readFileSync(detailPath, 'utf8');
+const detailSource = fs.readFileSync(path.join(root, 'components/tools/PublicToolDecision.tsx'), 'utf8');
 const componentSource = fs.readFileSync(componentPath, 'utf8');
 
 if (!detailSource.includes("id='decision-card'")) {
@@ -15,7 +15,7 @@ if (!detailSource.includes("id='decision-card'")) {
 
 const anchoredSection = detailSource.slice(
   detailSource.indexOf("id='decision-card'"),
-  detailSource.indexOf("id='decision-card'") + 700,
+  detailSource.indexOf("id='decision-card'") + 1100,
 );
 if (!anchoredSection.includes("'Decision Card'")) {
   throw new Error('The decision-card anchor is not attached to the main Decision Card section.');

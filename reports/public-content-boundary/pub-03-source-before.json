@@ -1,0 +1,363 @@
+{
+  "base": "e51642b6",
+  "count": 51,
+  "findings": [
+    {
+      "file": "app/[locale]/(admin)/admin/analytics/page.tsx",
+      "line": 546,
+      "rule": "high-intent",
+      "text": "This is a good place to add more high-intent decision pages.",
+      "fingerprint": "32e582253619366e7124ee471f4827fc414aa54e50ff49f911751a459f9f3e6c"
+    },
+    {
+      "file": "app/[locale]/(admin)/admin/analytics/page.tsx",
+      "line": 1383,
+      "rule": "high-intent",
+      "text": "High-Intent Page Funnel",
+      "fingerprint": "c8f562200c943a9e2844e705adff2041860f6770a9c599596b5995b94f687dcf"
+    },
+    {
+      "file": "app/[locale]/(admin)/admin/analytics/page.tsx",
+      "line": 1548,
+      "rule": "high-intent",
+      "text": "No high-intent page family data has been recorded in this range.",
+      "fingerprint": "e00d52f4f531de9cc2e8a6e3587d2f9cb0c3b8aff34e201558588da796408022"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/(home)/page.tsx",
+      "line": 627,
+      "rule": "high-intent",
+      "text": "高意图主线",
+      "fingerprint": "e1aa59fc391bde55619e275265a290bac17863afd8778b14b59da706d6d15803"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/(home)/page.tsx",
+      "line": 627,
+      "rule": "high-intent",
+      "text": "High-intent lanes",
+      "fingerprint": "b7175fe43f97f15e6d4c773cc58842803fd28cb212ff96329a442abf6eb80d24"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/(home)/page.tsx",
+      "line": 826,
+      "rule": "high-intent",
+      "text": "如果你已经知道大概方向，直接从这些高意图对比页开始，会更快做出判断。",
+      "fingerprint": "5d52e4d5969ff4e175ae9b3f6e243876aafd3da0086358958c44944798f114d8"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/(home)/page.tsx",
+      "line": 827,
+      "rule": "high-intent",
+      "text": "If you already know the rough direction, start from these high-intent comparison pages and decide faster.",
+      "fingerprint": "db9340676cb6fb425f70b15b0c2642fe0fe439a5850b09dca58fe0ff73e64939"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/(home)/page.tsx",
+      "line": 863,
+      "rule": "high-intent",
+      "text": "高意图榜单",
+      "fingerprint": "b8e2962e3f6eefb16cb13888006b65894f92621dd6266404d61248172f2b15b9"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/(home)/page.tsx",
+      "line": 863,
+      "rule": "high-intent",
+      "text": "High-intent top lists",
+      "fingerprint": "7c3b8461b8406fc939b0201954386d096a510dee753d779db7dd602203dddcd3"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/ai/[websiteName]/page.tsx",
+      "line": 4546,
+      "rule": "indexing-strategy",
+      "text": "索引策略",
+      "fingerprint": "297c8d3f3fe3334db5c98301fe1baa0c8b26792216d29740ecce1d534b80037b"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/ai/[websiteName]/page.tsx",
+      "line": 4546,
+      "rule": "indexing-strategy",
+      "text": "Indexing strategy",
+      "fingerprint": "4761b8d7167f6b5dafc9f357c76f43dd61f470dc6d63af24547fff0281f560a1"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/ai/[websiteName]/page.tsx",
+      "line": 4547,
+      "rule": "keep-indexable",
+      "text": "详情页保留索引",
+      "fingerprint": "24a15f00b6d8fca66c926ee1ca93e9026fb829a0b83ec343cd304c3433c68a9c"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/ai/[websiteName]/page.tsx",
+      "line": 4547,
+      "rule": "keep-indexable",
+      "text": "Tool detail kept indexable",
+      "fingerprint": "9c80d9ee07bc6bb25fb090d322b2cb75d68e92f11ac1403b9ebe3c5da7b9ec31"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/ai/[websiteName]/page.tsx",
+      "line": 4553,
+      "rule": "enrichment",
+      "text": "下一步增强",
+      "fingerprint": "78efea272cf9f4a24be6b23cc1582159f583896da23e2bedccc315d08717f392"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/ai/[websiteName]/page.tsx",
+      "line": 4553,
+      "rule": "enrichment",
+      "text": "Next enrichment",
+      "fingerprint": "9272bfd880b28273cd847b6fb8ec73658c6cd7f05087800a219785e56d68295b"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/ai/[websiteName]/page.tsx",
+      "line": 4555,
+      "rule": "editorial-evidence",
+      "text": "补真实使用场景、owner 认领、最近验证",
+      "fingerprint": "d3a7acf270ace9e25b83265d56db7e4ebdf36cff39beecf053574bf7c11ed1f1"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/best-ai-tools/page.tsx",
+      "line": 86,
+      "rule": "high-intent",
+      "text": "高意图主题",
+      "fingerprint": "8dd834a48c0286ca26da2da2c45aee00861c91cf7f998bb680f1c59611e64a11"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/best-ai-tools/page.tsx",
+      "line": 86,
+      "rule": "high-intent",
+      "text": "High-intent topics",
+      "fingerprint": "28daca52fcefabbee163e2e46f42faac60718b206b2b667f65efd9357e720266"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/best-ai-tools/page.tsx",
+      "line": 112,
+      "rule": "high-intent",
+      "text": "先看高意图榜单",
+      "fingerprint": "dadde7dbe44b013af6d3b659c8044abd6c6d24adbb7b7e380462f1a6b68d4102"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/best-ai-tools/page.tsx",
+      "line": 131,
+      "rule": "high-intent",
+      "text": "先看这几个高意图榜单",
+      "fingerprint": "ca90ad421048263501cdfc86fa6041f7314916c8d442bf798da48f02be340554"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/best-ai-tools/page.tsx",
+      "line": 239,
+      "rule": "high-intent",
+      "text": "先把方向收窄到一个高意图主题，再去看详情和官网更省时间。",
+      "fingerprint": "e0b3f4e982791d4c69a0658d127a6c17fff4432a8934e151b479f95783f992c2"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/best-ai-tools/page.tsx",
+      "line": 240,
+      "rule": "high-intent",
+      "text": "Narrow the direction into one high-intent topic before opening details and official sites.",
+      "fingerprint": "6f82f14cc15eb97b87dbb58687ff1ed594fe9e796dc50e6b36999d2d5135a494"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/best-ai-tools/page.tsx",
+      "line": 303,
+      "rule": "indexing-strategy",
+      "text": "索引策略",
+      "fingerprint": "b921b22cb869ac47330de7a5ca2052fda249070416c77e803b13a1646f8b7faa"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/best-ai-tools/page.tsx",
+      "line": 303,
+      "rule": "indexing-strategy",
+      "text": "Indexing strategy",
+      "fingerprint": "ce625b9eb5e22a1bfd0ac55278c876bc213f75f640af0bdb6858e30092d8da8f"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/best-ai-tools/page.tsx",
+      "line": 304,
+      "rule": "keep-indexable",
+      "text": "Keep indexable",
+      "fingerprint": "09f552b05394bbc314d54484f17ba85e986a1aa997d1189bade233df62f581df"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/best-ai-tools/page.tsx",
+      "line": 308,
+      "rule": "enrichment",
+      "text": "下一步增强",
+      "fingerprint": "61b96c85ac8c01f361aa10d5843dcb2884f3c93a06745451c8be963e437bca3e"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/best-ai-tools/page.tsx",
+      "line": 308,
+      "rule": "enrichment",
+      "text": "Next enrichment",
+      "fingerprint": "94c90c710638b56b75084f3eb018c7be31a3f130c77d8f39959346cae1815c64"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/categories/[slug]/CategoryContent.tsx",
+      "line": 577,
+      "rule": "keep-indexable",
+      "text": "分类页保留索引，但会继续把真实工具页、指南页和对比页串起来。",
+      "fingerprint": "0aebb138e416d4e9950c3cb3a4f811942afe34741da8971af3215639872bfe30"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/categories/[slug]/CategoryContent.tsx",
+      "line": 1250,
+      "rule": "indexing-strategy",
+      "text": "索引策略",
+      "fingerprint": "d79af58ca34d1105ac310f361e3d532ef03d99386c69d5838ad2235cb8b95190"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/categories/[slug]/CategoryContent.tsx",
+      "line": 1250,
+      "rule": "indexing-strategy",
+      "text": "Indexing strategy",
+      "fingerprint": "f7b34aeec329224d19b6d2d09877b04163cff01d3a5bd442e8d7b7df04c595e0"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/categories/[slug]/CategoryContent.tsx",
+      "line": 1251,
+      "rule": "keep-indexable",
+      "text": "分类页保留索引",
+      "fingerprint": "287162638c3e004165e8d90f6afba9d8fc178436a0bc5e013360824c1f34f0cb"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/categories/[slug]/CategoryContent.tsx",
+      "line": 1251,
+      "rule": "keep-indexable",
+      "text": "Category page kept indexable",
+      "fingerprint": "9964af8e85cddf2ea5759cefb0336bcb7a7690615bc533b76fa98dc1b6fe4ac3"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/categories/[slug]/CategoryContent.tsx",
+      "line": 1253,
+      "rule": "traffic",
+      "text": "承接高意图分类搜索与探索流量。",
+      "fingerprint": "f899a58bbbb85b7c1e5930030d9f962b7fc0c82266391c6145d8e0e582e5b5c3"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/categories/[slug]/CategoryContent.tsx",
+      "line": 1253,
+      "rule": "high-intent",
+      "text": "承接高意图分类搜索与探索流量。",
+      "fingerprint": "604be72e783ab857b83d9ca3abfd314c925d864bfaa22e6fcbff267d6a3b53d4"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/categories/[slug]/CategoryContent.tsx",
+      "line": 1254,
+      "rule": "high-intent",
+      "text": "Captures high-intent category search and exploration traffic.",
+      "fingerprint": "d4e7a20bed82bc8b8aa5225c54df42f5677561c23cc835135452632c5981f718"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/categories/[slug]/CategoryContent.tsx",
+      "line": 1257,
+      "rule": "enrichment",
+      "text": "下一步增强",
+      "fingerprint": "e8df137d64842f2a8d77c0b5fd51e022a8a1dc3cf473eb3ec4b68a08dbcb1b43"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/categories/[slug]/CategoryContent.tsx",
+      "line": 1257,
+      "rule": "enrichment",
+      "text": "Next enrichment",
+      "fingerprint": "360f66f0ca768dcf3ba9448923c415fc29c59db3686ca9a86e6fef1b795556b8"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/categories/[slug]/CategoryContent.tsx",
+      "line": 1382,
+      "rule": "high-intent",
+      "text": "更高意图路径",
+      "fingerprint": "d1d6e3d073ab3ea76dc6796fab3269acbb1116416748dcf659e94baeb966a479"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/distribution/page.tsx",
+      "line": 385,
+      "rule": "quality-state",
+      "text": "Monitor",
+      "fingerprint": "31c4a3aa4715e03bbaadc55f897a3d42f8cba33ff29e561b24d7a7b821448b73"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/explore/page.tsx",
+      "line": 180,
+      "rule": "enrichment",
+      "text": "Next enrichment",
+      "fingerprint": "06b0c93195e7f45cc60b8151b663fbe6acf91483a66c54420d49ed188cf35c53"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/explore/page.tsx",
+      "line": 265,
+      "rule": "indexing-strategy",
+      "text": "索引策略",
+      "fingerprint": "0c904a90c0e948afe6e37975405b67dcc1c1d9471f126a3472df4615a77d9c2c"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/explore/page.tsx",
+      "line": 265,
+      "rule": "indexing-strategy",
+      "text": "Indexing strategy",
+      "fingerprint": "ba18856521d29ef8b2d2fc30c5ba802911cf7d8863a84b58c6ee726fc65a19a1"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/explore/page.tsx",
+      "line": 266,
+      "rule": "keep-indexable",
+      "text": "探索页保留索引",
+      "fingerprint": "5a2a9144c2374b3a019cafc49be6b89ef0ec8d5a92789cf8f116b60866b06fa7"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/explore/page.tsx",
+      "line": 266,
+      "rule": "keep-indexable",
+      "text": "Explore page kept indexable",
+      "fingerprint": "9b734a401e41595b1955d0e690e25c1c4c354117af5bef4da80f150db25db311"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/explore/page.tsx",
+      "line": 270,
+      "rule": "enrichment",
+      "text": "下一步增强",
+      "fingerprint": "6baab564914874ea1a47ac156f9b4eaf0e46a9a13834ae957968f69871153c77"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/explore/page.tsx",
+      "line": 270,
+      "rule": "enrichment",
+      "text": "Next enrichment",
+      "fingerprint": "06b0c93195e7f45cc60b8151b663fbe6acf91483a66c54420d49ed188cf35c53"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/explore/page.tsx",
+      "line": 324,
+      "rule": "high-intent",
+      "text": "Research、Voice、Automation 和 Web3 这些分类更适合高意图筛选，不必先在大类里绕一圈。",
+      "fingerprint": "40212b444ee2da92536ccb5dd9edb8c377ee5f969a82c842277da1ec66003716"
+    },
+    {
+      "file": "app/[locale]/(with-footer)/explore/page.tsx",
+      "line": 325,
+      "rule": "high-intent",
+      "text": "Research, Voice, Automation, and Web3 are stronger for high-intent browsing, so you do not need to stay in the broad buckets first.",
+      "fingerprint": "d133f952407c8ea67367afc9a531fc4e70bb931f9acd793e26716ad4fd479445"
+    },
+    {
+      "file": "app/actions/admin/tools.ts",
+      "line": 1441,
+      "rule": "quality-state",
+      "text": "page_quality_status = $",
+      "fingerprint": "afddebbe572cfdfb21d9e8e4c89bc36aa267d6dbf9a38198602df54a51a48889"
+    },
+    {
+      "file": "components/guides/GuideSubmissionPath.tsx",
+      "line": 18,
+      "rule": "high-intent",
+      "text": "高意图路径",
+      "fingerprint": "4b5610929c4d89c893cb9b8af24ec483fe9292743b81b34ad12ebf5515c09792"
+    },
+    {
+      "file": "components/guides/GuideSubmissionPath.tsx",
+      "line": 18,
+      "rule": "high-intent",
+      "text": "High-intent path",
+      "fingerprint": "054aee031db56ffe940e3a4f40d82b173080761d4f12b029e90393c7970e2a09"
+    }
+  ]
+}

@@ -16,12 +16,12 @@
   <text x="118" y="410" font-family="Arial, sans-serif" font-size="31" font-weight="500" fill="#52525B">Compare build speed with usage cost, engineering control,</text>
   <text x="118" y="452" font-family="Arial, sans-serif" font-size="31" font-weight="500" fill="#52525B">security ownership, and platform portability.</text>
   <rect x="118" y="520" width="612" height="122" rx="28" fill="#FFF7ED" stroke="#FED7AA" stroke-width="2"/>
-  <text x="154" y="570" font-family="Arial, sans-serif" font-size="23" font-weight="700" fill="#18181B">Decision-first review</text>
+  <text x="154" y="570" font-family="Arial, sans-serif" font-size="23" font-weight="700" fill="#18181B">Compare before choosing</text>
   <text x="154" y="610" font-family="Arial, sans-serif" font-size="21" font-weight="500" fill="#71717A">Agent output still needs tests, security review, and an owner.</text>
   <rect x="890" y="172" width="340" height="340" rx="48" fill="#FFF7ED"/>
   <rect x="946" y="234" width="104" height="76" rx="12" fill="#F26207"/>
   <rect x="1050" y="234" width="76" height="104" rx="12" fill="#F26207"/>
   <rect x="1022" y="338" width="104" height="76" rx="12" fill="#F26207"/>
   <rect x="890" y="554" width="340" height="80" rx="26" fill="#FFEDD5"/>
-  <text x="1060" y="604" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#C2410C">Monitor before index</text>
+  <text x="1060" y="604" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#C2410C">Check product limits</text>
 </svg>

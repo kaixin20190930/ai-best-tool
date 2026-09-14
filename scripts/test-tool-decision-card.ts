@@ -1,6 +1,11 @@
+import React from 'react';
 import assert from 'node:assert/strict';
+import { JSDOM } from 'jsdom';
+import { renderToStaticMarkup } from 'react-dom/server';
 
 import { buildToolDecisionCard } from '@/lib/services/toolDecisionCard';
+
+import PublicToolDecision from '../components/tools/PublicToolDecision';
 
 const input = {
   audience: {
@@ -71,6 +76,7 @@ const reviewedResult = buildToolDecisionCard(
       ...input.editorial,
       reviewedAt: '2026-01-01T00:00:00.000Z',
       sourceUrl: 'https://example.com/docs',
+      reviewerLabel: 'Editorial team',
     },
   },
   new Date('2026-01-15T00:00:00.000Z'),
@@ -83,3 +89,36 @@ assert.equal(reviewedResult.reviewSchedule.nextDecisionReviewAt, '2026-04-01T00:
 assert.equal(reviewedResult.reviewSchedule.factReviewDue, false);
 
 console.log('Tool Decision Card model test passed.');
+
+(globalThis as unknown as { React: typeof React }).React = React;
+for (const card of [result, reviewedResult])
+  for (const locale of ['en', 'cn']) {
+    const html = renderToStaticMarkup(
+      React.createElement(PublicToolDecision, {
+        card,
+        model: null,
+        locale,
+        task: 'Research notes',
+        tradeOff: 'Limited export',
+        checkedAt: '2026-01-01',
+      }),
+    );
+    const dom = new JSDOM(html);
+    assert.equal(dom.window.document.querySelectorAll('#decision-card').length, 1);
+    for (const copy of [
+      'Research notes',
+      'Limited export',
+      'Research teams',
+      'One-off use',
+      'Limited feedback',
+      'Freemium',
+      '2026-01-01',
+    ])
+      assert(html.includes(copy));
+    assert(!/Evidence readiness|Next fact check|Next decision review|待补|Pending/.test(html));
+    assert.equal(
+      dom.window.document.querySelectorAll('a[href="https://example.com/docs"]').length,
+      card.editorial.sourceUrl ? 1 : 0,
+    );
+    dom.window.close();
+  }
