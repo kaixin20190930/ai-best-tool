@@ -2,7 +2,7 @@
 
 创建日期：2026-09-14
 
-状态：方案已复核；PUB-01、PUB-02 已完成开发、独立 QA、部署与生产验证，下一项为 PUB-03
+状态：方案已复核；PUB-01、PUB-02、PUB-03 已完成开发、独立 QA、部署与生产验证，下一项为 PUB-04
 
 上位计划：[收录与搜索质量主计划](./MASTER_OPTIMIZATION_TRACKER_CN.md)
 
@@ -256,10 +256,12 @@ PUB-02 于 2026-09-14 关闭：开发候选 `15e16ec34f081688420516149c0adc278db
 
 | ID | 任务 | 实施范围 | 验收 | 状态 |
 | --- | --- | --- | --- | --- |
-| PUB-03A | Tool 模块重复审计 | 所有已发布 Tool + 代表 fallback | 一个主 Decision Card，无内部状态 |
-| PUB-03B | Home/Explore/Best/Category 清理 | 五类模板 | 用户任务优先，无运营目标语言 |
-| PUB-03C | CTA 归位 | Guide、Tool、商业页 | 提交/认领/付费不打断普通选择路径 |
-| PUB-03D | 全站生产 HTML 扫描 | sitemap + noindex 代表页 | 禁用词 0，SEO 边界 0 回归 |
+| PUB-03A | Tool 模块重复审计 | 所有已发布 Tool + 代表 fallback | 一个主 Decision Card，无内部状态 | 已完成 |
+| PUB-03B | Home/Explore/Best/Category 清理 | 五类模板 | 用户任务优先，无运营目标语言 | 已完成 |
+| PUB-03C | CTA 归位 | Guide、Tool、商业页 | 提交/认领/付费不打断普通选择路径 | 已完成 |
+| PUB-03D | 全站生产 HTML 扫描 | sitemap + noindex 代表页 | 禁用词 0，SEO 边界 0 回归 | 已完成 |
+
+PUB-03 于 2026-09-15 关闭：开发候选经首轮独立 QA 发现 70 条新增 lint 后返工，最终候选 `0fa51b21db3ed2c26000df7edc47a40287e533e7` 通过差分 lint（新增 0）、24/24 回归、TypeScript 与完整 build；对应 main 提交为 `30d68533`、`92988f1a`。生产 smoke 首轮发现新版人工复核关系容器缺少稳定验收标记，链接和锚点本身存在；补丁 `8561e21d` 恢复 `data-reviewed-tool-relationships` 后再次通过目标 lint、关系测试、类型检查、完整 build 与生产 smoke。最终生产 HTML 审计覆盖 390 个页面，违规页面 0；索引一致性审计覆盖 58 条工具记录、46 个已发布工具页，13 条工具可索引，页面问题 0；sitemap 保持 116 条且无缺失、异常或重复 URL。源码公开边界由 PUB-02 后的 51 条降至 0。仓库仍有 1572 条 PUB-03 之前已存在的 lint 债务，当前 Next build 跳过全仓 lint；本单元未新增 lint，历史债务另行治理，不能冒充 PUB-03 回归。
 
 ### 交付单元 PUB-04：差异化模块注册与实验机制（P1，预计 1-2 天）
 
