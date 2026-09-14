@@ -1,0 +1,177 @@
+{
+  "checkedAt": "2026-09-14T03:08:52.719Z",
+  "phase": "media",
+  "productionWrites": 0,
+  "candidates": [
+    {
+      "slug": "lovable",
+      "canonicalSlug": "lovable",
+      "identityQuery": "slug, aliases, official domain and localized title",
+      "rows": [],
+      "pages": [
+        {
+          "pathname": "/ai/lovable",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/ai/lovable",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "fda19d804f4a237385156bcc23cc850975dcce4925c798fd9884cbb07b4d3d64"
+        },
+        {
+          "pathname": "/ai/lovable-dev",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/ai/lovable-dev",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "d503fcb4adc9766cff63cf85d3e45cf0923c44e2970b3c50b2a00e8a0189dfe0"
+        },
+        {
+          "pathname": "/cn/ai/lovable",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/cn/ai/lovable",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "7b80548ba898b0e62ad8f140b988dfd9e6b695a5eadd25d51c4408926983b0fb"
+        },
+        {
+          "pathname": "/cn/ai/lovable-dev",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/cn/ai/lovable-dev",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "f90b9e945bdbc120120ee680bcdc708b5f20021a13e4fb6f92749e3a8c31f383"
+        }
+      ],
+      "media": [
+        {
+          "path": "/icons/tool-logos/lovable.svg",
+          "status": 200,
+          "contentType": "image/svg+xml",
+          "sha256": "39382dce432255c49d31403ca532be204b2d72da0d0a14dce4708d6952fce972",
+          "expectedSha256": "39382dce432255c49d31403ca532be204b2d72da0d0a14dce4708d6952fce972",
+          "ready": true
+        },
+        {
+          "path": "/images/tool-media/lovable-release-cover.svg",
+          "status": 200,
+          "contentType": "image/svg+xml",
+          "sha256": "257fbbf448fae44bb732fe3dcce01632b04c9c232fcd66f6e34eb13f4fe1893a",
+          "expectedSha256": "257fbbf448fae44bb732fe3dcce01632b04c9c232fcd66f6e34eb13f4fe1893a",
+          "ready": true
+        }
+      ]
+    },
+    {
+      "slug": "midjourney",
+      "canonicalSlug": "midjourney",
+      "identityQuery": "slug, aliases, official domain and localized title",
+      "rows": [],
+      "pages": [
+        {
+          "pathname": "/ai/midjourney",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/ai/midjourney",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "8d2fd477b8f491d7f87e05b16a1ebba0e41ef3f034aa1b29e23ad1508b3941e6"
+        },
+        {
+          "pathname": "/ai/mid-journey",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/ai/mid-journey",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "977b15074e6beefad5e6a064e5333426ada42ff94a2a1dfd0ba339fc6fb735e6"
+        },
+        {
+          "pathname": "/cn/ai/midjourney",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/cn/ai/midjourney",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "d9d639e4c48c64f664826d85b1ca7ff49e42e19b06a5304d4df271a5c2be8bd4"
+        },
+        {
+          "pathname": "/cn/ai/mid-journey",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/cn/ai/mid-journey",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "2bcf6d5c0612aeaf926a92e30d8c89a6ca9059b1dacc0240c3288c591040ced6"
+        }
+      ],
+      "media": [
+        {
+          "path": "/icons/tool-logos/midjourney.jpg",
+          "status": 200,
+          "contentType": "image/jpeg",
+          "sha256": "33024615c808beb9b91ada21d8b604b509c633c7a26a3ae044e704649b083870",
+          "expectedSha256": "33024615c808beb9b91ada21d8b604b509c633c7a26a3ae044e704649b083870",
+          "ready": true
+        },
+        {
+          "path": "/images/tool-media/midjourney-release-cover.svg",
+          "status": 200,
+          "contentType": "image/svg+xml",
+          "sha256": "0df58d98cd698cde883321af72fa2cdbe19acb74105b919536d035a5458f6387",
+          "expectedSha256": "0df58d98cd698cde883321af72fa2cdbe19acb74105b919536d035a5458f6387",
+          "ready": true
+        }
+      ]
+    }
+  ],
+  "failures": [],
+  "sitemap": {
+    "status": 200,
+    "urlCount": 116,
+    "sha256": "53fdc2440f82715a3aedf843e7211cf2e1d8c5951739c56f38d7e4a7087624bd"
+  }
+}

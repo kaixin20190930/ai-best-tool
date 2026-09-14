@@ -1,0 +1,8 @@
+
+/Users/liukai/.codex/worktrees/f013/ai-best-tool/scripts/audit-delayed-candidate-release.ts
+  103:44  error  Do not pass children as props. Instead, pass them as additional arguments to React.createElement  react/no-children-prop
+
+/Users/liukai/.codex/worktrees/f013/ai-best-tool/scripts/candidate-release-test-fixture.ts
+  7:1  error  Prefer default export on a file with single export  import/prefer-default-export
+
+✖ 2 problems (2 errors, 0 warnings)

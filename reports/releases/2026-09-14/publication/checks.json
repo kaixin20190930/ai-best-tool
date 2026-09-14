@@ -1,0 +1,367 @@
+{
+  "recordedAt": "2026-09-14T03:27:31.913504+00:00",
+  "checks": {
+    "build": {
+      "command": [
+        "pnpm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T03:22:01.117071+00:00",
+      "finishedAt": "2026-09-14T03:22:46.359334+00:00",
+      "seconds": 45.24
+    },
+    "candidate-tests": {
+      "command": [
+        "pnpm",
+        "run",
+        "test:candidate-release"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T03:20:52.537698+00:00",
+      "finishedAt": "2026-09-14T03:20:55.257062+00:00",
+      "seconds": 2.72
+    },
+    "index-consistency": {
+      "command": [
+        "pnpm",
+        "run",
+        "seo:index-consistency",
+        "--",
+        "--output=reports/releases/2026-09-14/publication/index-consistency.json"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T03:21:06.162901+00:00",
+      "finishedAt": "2026-09-14T03:21:23.671226+00:00",
+      "seconds": 17.51
+    },
+    "lovable-commit": {
+      "command": [
+        "pnpm",
+        "run",
+        "tools:candidate-release",
+        "--",
+        "--candidate=lovable",
+        "--phase=release",
+        "--as-of=2026-09-14",
+        "--commit"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T03:14:16.655525+00:00",
+      "finishedAt": "2026-09-14T03:14:24.040054+00:00",
+      "seconds": 7.38
+    },
+    "lovable-local-fixed": {
+      "command": [
+        "pnpm",
+        "exec",
+        "tsx",
+        "scripts/audit-delayed-candidate-release.ts",
+        "--phase=released",
+        "--candidate=lovable",
+        "--output=reports/releases/2026-09-14/publication/lovable-local-fixed.json"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T03:24:33.900026+00:00",
+      "finishedAt": "2026-09-14T03:24:50.446843+00:00",
+      "seconds": 16.55
+    },
+    "lovable-preflight": {
+      "command": [
+        "pnpm",
+        "run",
+        "tools:candidate-release",
+        "--",
+        "--candidate=lovable",
+        "--phase=preflight",
+        "--as-of=2026-09-14",
+        "--online"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T03:10:05.540084+00:00",
+      "finishedAt": "2026-09-14T03:10:10.992573+00:00",
+      "seconds": 5.45
+    },
+    "lovable-released-audit": {
+      "command": [
+        "pnpm",
+        "exec",
+        "tsx",
+        "scripts/audit-delayed-candidate-release.ts",
+        "--phase=released",
+        "--candidate=lovable",
+        "--output=reports/releases/2026-09-14/publication/lovable-released.json"
+      ],
+      "exitCode": 1,
+      "startedAt": "2026-09-14T03:15:50.073150+00:00",
+      "finishedAt": "2026-09-14T03:16:01.555532+00:00",
+      "seconds": 11.48
+    },
+    "lovable-rollback": {
+      "command": [
+        "pnpm",
+        "run",
+        "tools:candidate-release",
+        "--",
+        "--candidate=lovable",
+        "--phase=release",
+        "--as-of=2026-09-14"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T03:10:11.037600+00:00",
+      "finishedAt": "2026-09-14T03:10:17.766769+00:00",
+      "seconds": 6.73
+    },
+    "lovable-validate": {
+      "command": [
+        "pnpm",
+        "run",
+        "tools:candidate-release",
+        "--",
+        "--candidate=lovable",
+        "--phase=validate",
+        "--as-of=2026-09-14"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T03:10:04.806370+00:00",
+      "finishedAt": "2026-09-14T03:10:05.504869+00:00",
+      "seconds": 0.7
+    },
+    "lovable-verify": {
+      "command": [
+        "pnpm",
+        "run",
+        "tools:candidate-release",
+        "--",
+        "--candidate=lovable",
+        "--phase=verify",
+        "--as-of=2026-09-14",
+        "--online"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T03:14:47.118210+00:00",
+      "finishedAt": "2026-09-14T03:14:55.492436+00:00",
+      "seconds": 8.37
+    },
+    "media": {
+      "command": [
+        "pnpm",
+        "exec",
+        "tsx",
+        "scripts/audit-delayed-candidate-release.ts",
+        "--phase=media",
+        "--output=reports/releases/2026-09-14/publication/production-media.json"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T03:08:51.177675+00:00",
+      "finishedAt": "2026-09-14T03:09:04.726671+00:00",
+      "seconds": 13.55
+    },
+    "production-seo-smoke": {
+      "command": [
+        "pnpm",
+        "run",
+        "seo:production-smoke"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T03:21:06.195370+00:00",
+      "finishedAt": "2026-09-14T03:21:22.601402+00:00",
+      "seconds": 16.41
+    },
+    "regression": {
+      "command": [
+        "pnpm",
+        "run",
+        "test:delayed-candidate-release"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T03:20:36.941509+00:00",
+      "finishedAt": "2026-09-14T03:20:39.260478+00:00",
+      "seconds": 2.32
+    },
+    "script-lint-final": {
+      "command": [
+        "pnpm",
+        "exec",
+        "eslint",
+        "scripts/audit-delayed-candidate-release.ts",
+        "scripts/candidate-release-test-fixture.ts",
+        "scripts/test-candidate-release-pipeline.ts",
+        "scripts/test-delayed-candidate-release.ts"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T03:24:33.928297+00:00",
+      "finishedAt": "2026-09-14T03:24:39.667449+00:00",
+      "seconds": 5.74
+    },
+    "script-lint-fixed": {
+      "command": [
+        "pnpm",
+        "exec",
+        "eslint",
+        "scripts/audit-delayed-candidate-release.ts",
+        "scripts/candidate-release-test-fixture.ts",
+        "scripts/test-candidate-release-pipeline.ts",
+        "scripts/test-delayed-candidate-release.ts"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T03:21:29.521698+00:00",
+      "finishedAt": "2026-09-14T03:21:36.663491+00:00",
+      "seconds": 7.14
+    },
+    "script-lint": {
+      "command": [
+        "pnpm",
+        "exec",
+        "eslint",
+        "scripts/audit-delayed-candidate-release.ts",
+        "scripts/candidate-release-test-fixture.ts",
+        "scripts/test-candidate-release-pipeline.ts",
+        "scripts/test-delayed-candidate-release.ts"
+      ],
+      "exitCode": 1,
+      "startedAt": "2026-09-14T03:20:52.537698+00:00",
+      "finishedAt": "2026-09-14T03:20:59.700723+00:00",
+      "seconds": 7.16
+    },
+    "test-candidate-release": {
+      "command": [
+        "pnpm",
+        "run",
+        "test:candidate-release"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T03:23:50.158746+00:00",
+      "finishedAt": "2026-09-14T03:23:52.243395+00:00",
+      "seconds": 2.08
+    },
+    "test-delayed-candidate-release": {
+      "command": [
+        "pnpm",
+        "run",
+        "test:delayed-candidate-release"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T03:23:52.287283+00:00",
+      "finishedAt": "2026-09-14T03:23:53.950839+00:00",
+      "seconds": 1.66
+    },
+    "test-index-consistency": {
+      "command": [
+        "pnpm",
+        "run",
+        "test:index-consistency"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T03:24:33.913411+00:00",
+      "finishedAt": "2026-09-14T03:24:34.683650+00:00",
+      "seconds": 0.77
+    },
+    "test-next-tool-preaudit": {
+      "command": [
+        "pnpm",
+        "run",
+        "test:next-tool-preaudit"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T03:23:53.986688+00:00",
+      "finishedAt": "2026-09-14T03:23:54.591269+00:00",
+      "seconds": 0.6
+    },
+    "test-sitemap-pages-server": {
+      "command": [
+        "pnpm",
+        "run",
+        "test:sitemap-pages"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T03:24:33.926958+00:00",
+      "finishedAt": "2026-09-14T03:25:48.743990+00:00",
+      "seconds": 74.82
+    },
+    "test-sitemap-pages": {
+      "command": [
+        "pnpm",
+        "run",
+        "test:sitemap-pages"
+      ],
+      "exitCode": 1,
+      "startedAt": "2026-09-14T03:24:01.677029+00:00",
+      "finishedAt": "2026-09-14T03:24:03.041920+00:00",
+      "seconds": 1.36
+    },
+    "test-sitemap": {
+      "command": [
+        "pnpm",
+        "run",
+        "test:sitemap"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T03:23:56.902595+00:00",
+      "finishedAt": "2026-09-14T03:24:01.639348+00:00",
+      "seconds": 4.74
+    },
+    "test-tool-decision-card-structure": {
+      "command": [
+        "pnpm",
+        "run",
+        "test:tool-decision-card-structure"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T03:23:55.240291+00:00",
+      "finishedAt": "2026-09-14T03:23:55.617295+00:00",
+      "seconds": 0.38
+    },
+    "test-tool-decision-card": {
+      "command": [
+        "pnpm",
+        "run",
+        "test:tool-decision-card"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T03:23:54.625668+00:00",
+      "finishedAt": "2026-09-14T03:23:55.206971+00:00",
+      "seconds": 0.58
+    },
+    "test-tool-indexing": {
+      "command": [
+        "pnpm",
+        "run",
+        "test:tool-indexing"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T03:23:55.652631+00:00",
+      "finishedAt": "2026-09-14T03:23:56.233815+00:00",
+      "seconds": 0.58
+    },
+    "test-tool-route-aliases": {
+      "command": [
+        "pnpm",
+        "run",
+        "test:tool-route-aliases"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T03:23:56.268949+00:00",
+      "finishedAt": "2026-09-14T03:23:56.866506+00:00",
+      "seconds": 0.6
+    },
+    "typescript": {
+      "command": [
+        "pnpm",
+        "exec",
+        "tsc",
+        "--noEmit"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-14T03:21:06.171594+00:00",
+      "finishedAt": "2026-09-14T03:21:15.085755+00:00",
+      "seconds": 8.91
+    }
+  },
+  "knownFailures": {
+    "lovable-released-audit": "Production risk-list truncation; second commit stopped. Local fix passed; production awaits parent deployment.",
+    "script-lint": "Two style issues fixed; script-lint-final passed.",
+    "test-sitemap-pages": "Local server not started; after starting port 3108, all 116 URLs passed."
+  }
+}

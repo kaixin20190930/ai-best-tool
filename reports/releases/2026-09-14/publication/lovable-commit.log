@@ -1,0 +1,6 @@
+
+> tap4-ai@0.1.0 tools:candidate-release /Users/liukai/.codex/worktrees/f013/ai-best-tool
+> tsx scripts/candidate-release-pipeline.ts -- --candidate\=lovable --phase\=release --as-of\=2026-09-14 --commit
+
+✅ lovable: committed as published + monitor
+{"id":"8fee5c8b-f284-41d4-b691-c099e5bb230b","reviewedAt":"2026-09-14","nextReviewDate":"2026-10-14","localizedPayloadReadback":["en","zh","cn"],"transaction":"COMMIT"}

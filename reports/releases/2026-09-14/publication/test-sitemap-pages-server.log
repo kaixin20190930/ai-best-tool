@@ -1,0 +1,5 @@
+
+> tap4-ai@0.1.0 test:sitemap-pages /Users/liukai/.codex/worktrees/f013/ai-best-tool
+> tsx scripts/test-sitemap-pages.ts
+
+All 116 sitemap URLs passed HTTP/HTML robots, canonical and exact en/zh-CN/x-default alternates; all 36 guide URLs included.

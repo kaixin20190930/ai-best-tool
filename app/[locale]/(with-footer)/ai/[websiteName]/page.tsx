@@ -4143,11 +4143,10 @@ export default async function Page({
       risks: riskPoints,
       verificationChecklist,
     });
-    const visibleDecisionRisks = (
+    const visibleDecisionRisks =
       decisionCard.risks.length > 0
         ? decisionCard.risks
-        : [isChinese ? '暂时没有明显风险信号。' : 'No strong risk signal right now.']
-    ).slice(0, 2);
+        : [isChinese ? '暂时没有明显风险信号。' : 'No strong risk signal right now.'];
     const decisionEvidenceMissingLabels = decisionCard.evidenceCompleteness.missing.map((key) =>
       getEvidenceRequirementLabel(key, locale),
     );

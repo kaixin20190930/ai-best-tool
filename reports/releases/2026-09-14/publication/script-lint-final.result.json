@@ -1,0 +1,15 @@
+{
+  "command": [
+    "pnpm",
+    "exec",
+    "eslint",
+    "scripts/audit-delayed-candidate-release.ts",
+    "scripts/candidate-release-test-fixture.ts",
+    "scripts/test-candidate-release-pipeline.ts",
+    "scripts/test-delayed-candidate-release.ts"
+  ],
+  "exitCode": 0,
+  "startedAt": "2026-09-14T03:24:33.928297+00:00",
+  "finishedAt": "2026-09-14T03:24:39.667449+00:00",
+  "seconds": 5.74
+}

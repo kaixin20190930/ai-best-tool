@@ -4,11 +4,11 @@
   "officialUrl": "https://lovable.dev/",
   "existingRoute": "/ai/lovable",
   "action": "migrate_existing_fallback",
-  "status": "ready_for_next_slot",
+  "status": "released",
   "reviewedAt": "2026-09-07",
   "publishNotBefore": "2026-09-11",
   "sitemapChangeApproved": false,
-  "productionWriteApproved": false,
+  "productionWriteApproved": true,
   "category": {
     "discoverySlug": "developer-tools",
     "storageSlug": "productivity"
@@ -133,9 +133,12 @@
     "scheduledSlot": "2026-09-11",
     "recheckedAt": "2026-09-14",
     "label": "延期补发",
-    "status": "blocked_production_media_not_deployed",
+    "status": "released",
     "releasePayload": "lovable-release.json",
-    "actualPublishedAt": null,
-    "note": "Original preaudit reviewedAt is historical. Only a successful production commit may populate releasedAt; new local media must first be present in production."
-  }
+    "actualPublishedAt": "2026-09-14",
+    "note": "Published by the unified publisher in an independent production transaction on 2026-09-14 after deployed media, validate, preflight and rollback gates passed. Original reviewedAt and scheduledSlot remain historical; monitor/noindex and sitemap exclusion remain required."
+  },
+  "releasedAt": "2026-09-14",
+  "actualPublishedAt": "2026-09-14",
+  "releaseIndexState": "monitor"
 }

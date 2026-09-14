@@ -1,0 +1,11 @@
+{
+  "command": [
+    "pnpm",
+    "run",
+    "build"
+  ],
+  "exitCode": 0,
+  "startedAt": "2026-09-14T03:22:01.117071+00:00",
+  "finishedAt": "2026-09-14T03:22:46.359334+00:00",
+  "seconds": 45.24
+}

@@ -1,9 +1,13 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
+import { isDeepStrictEqual } from 'node:util';
 import { config } from 'dotenv';
 import { JSDOM } from 'jsdom';
 import { Client } from 'pg';
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import Markdown from 'react-markdown';
 
 import { getCanonicalToolSlug } from '../lib/config/toolRouteAliases';
 import { getDatabaseConnectionString } from '../lib/database/connection';
@@ -14,23 +18,28 @@ const output =
   process.argv.find((arg) => arg.startsWith('--output='))?.slice(9) ||
   `reports/releases/2026-09-14/production-${phase}.json`;
 assert(['baseline', 'media', 'released'].includes(phase));
+const selectedCandidate = process.argv.find((arg) => arg.startsWith('--candidate='))?.split('=')[1];
+assert(!selectedCandidate || ['lovable', 'midjourney'].includes(selectedCandidate));
+const requestBaseUrl = (process.env.SEO_BASE_URL || 'https://aibesttool.com').replace(/\/$/, '');
 const hash = (value: Buffer | string) => createHash('sha256').update(value).digest('hex');
+const normalizeText = (value: string) => value.replace(/\s+/g, ' ').trim();
 
 async function main() {
   config({ path: '.env.local', quiet: true });
   const client = new Client({ connectionString: getDatabaseConnectionString() });
   const report: {
     checkedAt: string;
+    requestBaseUrl: string;
     phase: string;
     productionWrites: number;
     candidates: unknown[];
     failures: string[];
     sitemap?: unknown;
-  } = { checkedAt: new Date().toISOString(), phase, productionWrites: 0, candidates: [], failures: [] };
+  } = { checkedAt: new Date().toISOString(), requestBaseUrl, phase, productionWrites: 0, candidates: [], failures: [] };
   await client.connect();
   try {
     await client.query('BEGIN READ ONLY');
-    const sitemapResponse = await fetch('https://aibesttool.com/sitemap.xml', { signal: AbortSignal.timeout(20_000) });
+    const sitemapResponse = await fetch(`${requestBaseUrl}/sitemap.xml`, { signal: AbortSignal.timeout(20_000) });
     assert(sitemapResponse.ok);
     const sitemap = await sitemapResponse.text();
     report.sitemap = {
@@ -38,7 +47,7 @@ async function main() {
       urlCount: (sitemap.match(/<loc>/g) || []).length,
       sha256: hash(sitemap),
     };
-    for (const slug of ['lovable', 'midjourney']) {
+    for (const slug of selectedCandidate ? [selectedCandidate] : ['lovable', 'midjourney']) {
       const payload = JSON.parse(fs.readFileSync(`data/collection/${slug}-release.json`, 'utf8'));
       const aliases =
         slug === 'lovable'
@@ -58,8 +67,12 @@ async function main() {
         nextReviewDate: row.next_review_date,
         createdAt: row.created_at,
         updatedAt: row.updated_at,
+        identityMatchesPayload: row.id === payload.id && row.name === slug && row.url === payload.officialUrl,
+        featuresMatchPayload: isDeepStrictEqual(row.features, payload.features),
+        mediaMatchPayload: row.image_url === payload.imageUrl && row.thumbnail_url === payload.thumbnailUrl,
         contentMatchesPayload: ['en', 'zh', 'cn'].every(
           (lang) =>
+            row.title?.[lang] === payload.title[lang === 'cn' ? 'zh' : lang] &&
             row.content?.[lang] === payload.content[lang === 'cn' ? 'zh' : lang] &&
             row.detail?.[lang] === payload.detail[lang === 'cn' ? 'zh' : lang],
         ),
@@ -79,13 +92,26 @@ async function main() {
       for (const prefix of ['', '/cn']) {
         for (const routeSlug of [slug, aliases[1]]) {
           const pathname = `${prefix}/ai/${routeSlug}`;
-          const response = await fetch(`https://aibesttool.com${pathname}`, {
+          const response = await fetch(`${requestBaseUrl}${pathname}`, {
             redirect: 'manual',
             signal: AbortSignal.timeout(20_000),
           });
           const html = await response.text();
           const document = new JSDOM(html).window.document;
+          document.querySelectorAll('script,style,noscript').forEach((node) => node.remove());
           const body = document.body.textContent || '';
+          const locale = prefix ? 'zh' : 'en';
+          const expectedArticle = normalizeText(
+            new JSDOM(renderToStaticMarkup(createElement(Markdown, null, payload.detail[locale])))
+              .window.document.body.textContent || '',
+          );
+          const cardText = normalizeText(document.querySelector('#decision-card')?.textContent || '');
+          const requiredCardItems: string[] = [
+            ...payload.features.audience.bestFit[locale],
+            ...payload.features.audience.notIdealFor[locale],
+            ...payload.features.decision.compareAxes[locale],
+            ...payload.features.decision.limitations[locale],
+          ];
           const h1 = document.querySelector('h1')?.textContent || '';
           const inSitemap = sitemap.includes(`<loc>https://aibesttool.com${pathname}</loc>`);
           const page = {
@@ -98,6 +124,14 @@ async function main() {
             h1,
             hasDecisionCard: Boolean(document.querySelector('#decision-card')),
             hasPayloadCopy: body.includes(payload.content[prefix ? 'zh' : 'en']),
+            fullArticleMatchesPayload: Array.from(document.querySelectorAll('article')).some(
+              (article) => normalizeText(article.textContent || '') === expectedArticle,
+            ),
+            missingDecisionCardItems: requiredCardItems.filter((item) => !cardText.includes(normalizeText(item))),
+            imagePaths: Array.from(document.querySelectorAll('img')).map((img) => {
+              const url = new URL(img.getAttribute('src') || '', 'https://aibesttool.com');
+              return url.searchParams.get('url') || url.pathname;
+            }),
             hasReviewedDate:
               body.includes('2026') &&
               (body.includes('Sep 14') || body.includes('9月14') || body.includes('2026-09-14')),
@@ -114,14 +148,16 @@ async function main() {
             ) report.failures.push(`${pathname}: route/index boundary failed`);
             if (
               phase === 'released' &&
-              (!page.hasDecisionCard || !page.hasPayloadCopy || !h1.toLowerCase().includes(slug))
+              (!page.hasDecisionCard || !page.hasPayloadCopy || !h1.toLowerCase().includes(slug) ||
+                !page.fullArticleMatchesPayload || page.missingDecisionCardItems.length > 0 ||
+                !page.imagePaths.includes(payload.thumbnailUrl))
             ) report.failures.push(`${pathname}: released content missing`);
           } else if (inSitemap) report.failures.push(`${pathname}: alias entered sitemap`);
         }
       }
       const media = [];
       for (const assetPath of [payload.imageUrl, payload.thumbnailUrl]) {
-        const response = await fetch(`https://aibesttool.com${assetPath}`, { signal: AbortSignal.timeout(20_000) });
+        const response = await fetch(`${requestBaseUrl}${assetPath}`, { signal: AbortSignal.timeout(20_000) });
         const bytes = Buffer.from(await response.arrayBuffer());
         const localHash = hash(fs.readFileSync(`public${assetPath}`));
         const item = {
@@ -145,7 +181,11 @@ async function main() {
           rows[0].status !== 'published' ||
           rows[0].pageQualityStatus !== 'monitor' ||
           !rows[0].contentMatchesPayload ||
+          !rows[0].identityMatchesPayload ||
+          !rows[0].featuresMatchPayload ||
+          !rows[0].mediaMatchPayload ||
           rows[0].indexDecision.indexable ||
+          rows[0].nextReviewDate !== payload.nextReviewDate ||
           rows[0].reviewedAt !== payload.reviewedAt)
       ) report.failures.push(`${slug}: database release contract failed`);
       report.candidates.push({

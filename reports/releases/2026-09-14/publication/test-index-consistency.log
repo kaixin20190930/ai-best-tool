@@ -1,0 +1,5 @@
+
+> tap4-ai@0.1.0 test:index-consistency /Users/liukai/.codex/worktrees/f013/ai-best-tool
+> tsx scripts/test-index-consistency-audit.ts
+
+✅ Index consistency audit contract passed.

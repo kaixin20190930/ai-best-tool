@@ -1,0 +1,11 @@
+{
+  "command": [
+    "pnpm",
+    "run",
+    "test:index-consistency"
+  ],
+  "exitCode": 0,
+  "startedAt": "2026-09-14T03:24:33.913411+00:00",
+  "finishedAt": "2026-09-14T03:24:34.683650+00:00",
+  "seconds": 0.77
+}

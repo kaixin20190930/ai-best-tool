@@ -3,6 +3,8 @@ import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 
+import runUnreleasedCandidate from './candidate-release-test-fixture';
+
 const source = fs.readFileSync('scripts/candidate-release-pipeline.ts', 'utf8');
 const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8')) as { scripts: Record<string, string> };
 
@@ -87,7 +89,7 @@ assert.match(earlyPreflight.stderr, /release window opens 2026-09-09/);
 const earlyLovablePreflight = run(['--candidate=lovable', '--phase=preflight', '--as-of=2026-09-10']);
 assert.notEqual(earlyLovablePreflight.status, 0, 'Lovable preflight must fail before the release window');
 assert.match(earlyLovablePreflight.stderr, /release window opens 2026-09-11/);
-const earlyLovableRelease = run(['--candidate=lovable', '--phase=release', '--as-of=2026-09-10']);
+const earlyLovableRelease = runUnreleasedCandidate('lovable', ['--phase=release', '--as-of=2026-09-10']);
 assert.notEqual(earlyLovableRelease.status, 0, 'Lovable release must fail before the release window');
 assert.match(earlyLovableRelease.stderr, /release window opens 2026-09-11/);
 const repeatedOtterRelease = run(['--candidate=otter-ai', '--phase=release', '--as-of=2026-09-10']);

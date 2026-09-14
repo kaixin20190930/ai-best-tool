@@ -1,0 +1,14 @@
+{
+  "command": [
+    "pnpm",
+    "exec",
+    "tsx",
+    "scripts/audit-delayed-candidate-release.ts",
+    "--phase=media",
+    "--output=reports/releases/2026-09-14/publication/production-media.json"
+  ],
+  "exitCode": 0,
+  "startedAt": "2026-09-14T03:08:51.177675+00:00",
+  "finishedAt": "2026-09-14T03:09:04.726671+00:00",
+  "seconds": 13.55
+}

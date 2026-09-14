@@ -1,0 +1,5 @@
+
+> tap4-ai@0.1.0 test:tool-route-aliases /Users/liukai/.codex/worktrees/f013/ai-best-tool
+> tsx scripts/test-tool-route-aliases.ts
+
+✅ Tool aliases keep Claude and Otter.ai canonical with generic redirect-only aliases.

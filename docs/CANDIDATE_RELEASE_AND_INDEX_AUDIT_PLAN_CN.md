@@ -103,3 +103,5 @@
 Lovable/Midjourney 正式 payload 已按当日官方资料生成，原 09-11/09-12 槽位标记为延期补发，尚未 commit。生产预检揭示两个既有 URL 是 200/noindex 错误占位，并非完整 fallback；新素材未部署，生产素材门禁失败。因此不把 rollback 成功记作发布成功。
 
 通用发布器现在同时查双语标题；显式 commit 连接写事务前，必须核对本地素材对应的生产 HTTP 图片响应与 SHA256。事务内回读完整双语字段、features、媒体与复查日；在线 verify 新增实际标题和 Decision Card 检查。只读审计 `scripts/audit-delayed-candidate-release.ts` 提供 baseline、media 和 released 阶段报告。步骤及退出码见 [交付记录](./DELAYED_LOVABLE_MIDJOURNEY_RELEASE_2026-09-14_CN.md)。本开发任务禁止部署，待总控 QA/部署后同一任务复核并执行受控 commit。
+
+09-14 生产执行更新：素材门禁在总控部署后通过，Lovable 独立提交并 online verify 通过；增强 DOM released audit 暴露 Card 仅显示两条限制，因此停止 Midjourney 提交。当前修复移除列表截断，审计逐条核对 Card、完整正文、唯一实体、features、媒体及复查日，不降低发布断言。实际状态与重试顺序以延期补发交付记录末节为准。
