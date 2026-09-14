@@ -28,7 +28,7 @@ for (const finding of baseline.findings) {
   budget.set(finding.fingerprint, (budget.get(finding.fingerprint) || 0) + 1);
 }
 const current = scanRepository(process.cwd());
-assert.ok(current.length <= 1502, 'PUB-01 exact historical ceiling must never increase');
+assert.equal(current.length, 0, 'PUB-03: public copy must remain free of internal language');
 for (const finding of current) {
   const remaining = budget.get(finding.fingerprint) || 0;
   assert.ok(
@@ -55,6 +55,8 @@ for (const file of [
   'scripts/fixtures/copy.tsx',
   'components/admin/Test.tsx',
   'app/[locale]/(with-footer)/admin/page.tsx',
+  'app/[locale]/(admin)/admin/analytics/page.tsx',
+  'app/actions/admin/tools.ts',
   'lib/config/status.ts',
 ]) {
   assert.equal(scanSource(file, '<p>索引策略 continue_index</p>').length, 0);

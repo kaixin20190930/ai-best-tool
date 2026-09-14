@@ -8,14 +8,14 @@ type GuideSubmissionPathProps = {
 };
 
 export default function GuideSubmissionPath({ locale, ctaPrefix, audience }: GuideSubmissionPathProps) {
-  if (audience === 'reader') return null;
+  if (audience !== 'tool-owner') return null;
   const isChinese = locale === 'cn' || locale === 'tw';
 
   return (
     <div className='mx-auto mt-8 max-w-6xl px-4 lg:px-6'>
       <section className='rounded-[20px] border border-cyan-200 bg-cyan-50/60 p-6 shadow-sm lg:p-8'>
         <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
-          {isChinese ? '高意图路径' : 'High-intent path'}
+          {isChinese ? '工具方入口' : 'For tool owners'}
         </p>
         <h2 className='mt-1 text-2xl font-bold text-slate-950'>
           {isChinese
@@ -24,8 +24,8 @@ export default function GuideSubmissionPath({ locale, ctaPrefix, audience }: Gui
         </h2>
         <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
           {isChinese
-            ? '已经比较到这一步，说明你大概率是在认真筛选或准备上架。把工具提交进来，或者先认领条目，后面再决定是否加速审核。'
-            : 'If you are this far into comparison, you are likely filtering seriously or preparing a listing. Submit your tool, or claim the listing first and decide later whether faster review is needed.'}
+            ? '提交新工具，或认领已有条目以维护产品信息。'
+            : 'Submit a new tool or claim an existing listing to maintain its product information.'}
         </p>
         <div className='mt-5 flex flex-wrap gap-3'>
           <TrackableCtaLink

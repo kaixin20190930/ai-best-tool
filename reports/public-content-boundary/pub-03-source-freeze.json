@@ -1,0 +1,33 @@
+{
+  "base": "e51642b6",
+  "checkedAt": "2026-09-14T14:52:21.982Z",
+  "metadataFiles": [
+    "app/[locale]/(with-footer)/(home)/page.tsx",
+    "app/[locale]/(with-footer)/ai/[websiteName]/page.tsx",
+    "app/[locale]/(with-footer)/best-ai-tools/[topic]/page.tsx",
+    "app/[locale]/(with-footer)/best-ai-tools/page.tsx",
+    "app/[locale]/(with-footer)/categories/[slug]/CategoryContent.tsx",
+    "app/[locale]/(with-footer)/developer/listing/page.tsx",
+    "app/[locale]/(with-footer)/distribution/page.tsx",
+    "app/[locale]/(with-footer)/explore/ExploreList.tsx",
+    "app/[locale]/(with-footer)/explore/page.tsx",
+    "app/[locale]/(with-footer)/new/page.tsx",
+    "app/[locale]/(with-footer)/pricing/page.tsx",
+    "app/[locale]/(with-footer)/profile/submissions/page.tsx",
+    "app/[locale]/(with-footer)/submit/page.tsx"
+  ],
+  "frozenDirectoriesChanged": [],
+  "sourceFindings": 0,
+  "svgAssetsScanned": 111,
+  "assetFindings": 0,
+  "retainedEvidence": [
+    "getPriorityToolOfficialEvidence",
+    "getPriorityToolFallbackDetail",
+    "data-official-evidence",
+    "data-priority-tool-evidence",
+    "EvidenceLedgerPanel",
+    "ChangeTimelinePanel",
+    "CommentList"
+  ],
+  "pass": true
+}

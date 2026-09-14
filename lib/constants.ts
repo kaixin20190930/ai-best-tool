@@ -11,14 +11,6 @@ export const NAV_LINKS = [
     code: 'guides',
     href: '/guides',
   },
-  {
-    code: 'submit',
-    href: '/submit',
-  },
-  {
-    code: 'pricing',
-    href: '/pricing',
-  },
 ];
 
 export const PAGE_SIZE = 20;

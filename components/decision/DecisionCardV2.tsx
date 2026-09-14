@@ -1,4 +1,4 @@
-import { ArrowRight, CheckCircle2, CircleHelp, ExternalLink, ShieldCheck } from 'lucide-react';
+import { ArrowRight, CheckCircle2, ExternalLink, ShieldCheck } from 'lucide-react';
 
 import type {
   DecisionCardField,
@@ -74,60 +74,49 @@ function FactCard({
 }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const supported = field.state === 'supported' && value;
-  const unknownLabel = isChinese ? '待核验，暂不作判断' : 'Unknown until verified';
+  if (!supported) return null;
   return (
     <div className='rounded-xl border border-slate-200 bg-slate-50 p-4'>
       <div className='flex items-center justify-between gap-2'>
         <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>{title}</p>
-        {supported ? (
-          <CheckCircle2 className='size-4 shrink-0 text-emerald-600' aria-label={isChinese ? '已核验' : 'Verified'} />
-        ) : (
-          <CircleHelp className='size-4 shrink-0 text-amber-600' aria-label={isChinese ? '待核验' : 'Unknown'} />
-        )}
+        <CheckCircle2 className='size-4 shrink-0 text-emerald-600' aria-label={isChinese ? '已核验' : 'Verified'} />
       </div>
-      <p className={`mt-2 text-sm font-semibold leading-6 ${supported ? 'text-slate-950' : 'text-amber-800'}`}>
-        {supported ? value : unknownLabel}
-      </p>
-      {supported ? <EvidenceSources evidence={field.evidence} locale={locale} /> : null}
+      <p className='mt-2 text-sm font-semibold leading-6 text-slate-950'>{value}</p>
+      <EvidenceSources evidence={field.evidence} locale={locale} />
     </div>
   );
 }
 
 function RelationshipGroup({
   title,
-  emptyLabel,
   items,
   locale,
 }: {
   title: string;
-  emptyLabel: string;
   items: DecisionCardRelationshipItem[];
   locale: string;
 }) {
+  if (!items.length) return null;
   return (
     <div className='rounded-xl border border-slate-200 bg-white p-4'>
       <p className='text-xs font-semibold uppercase tracking-wide text-slate-500'>{title}</p>
-      {items.length > 0 ? (
-        <div className='mt-3 space-y-3'>
-          {items.map((item) => (
-            <div key={item.id} className='rounded-lg bg-slate-50 p-3 ring-1 ring-slate-200'>
-              <a
-                href={item.href}
-                className='flex items-center justify-between gap-3 font-semibold text-slate-950 hover:text-cyan-800'
-              >
-                <span>{item.title}</span>
-                <ArrowRight className='size-4 shrink-0' />
-              </a>
-              {localizedText(item.rationale, locale) ? (
-                <p className='mt-2 text-sm leading-6 text-slate-600'>{localizedText(item.rationale, locale)}</p>
-              ) : null}
-              <EvidenceSources evidence={item.evidence} locale={locale} />
-            </div>
-          ))}
-        </div>
-      ) : (
-        <p className='mt-3 text-sm font-medium text-amber-800'>{emptyLabel}</p>
-      )}
+      <div className='mt-3 space-y-3'>
+        {items.map((item) => (
+          <div key={item.id} className='rounded-lg bg-slate-50 p-3 ring-1 ring-slate-200'>
+            <a
+              href={item.href}
+              className='flex items-center justify-between gap-3 font-semibold text-slate-950 hover:text-cyan-800'
+            >
+              <span>{item.title}</span>
+              <ArrowRight className='size-4 shrink-0' />
+            </a>
+            {localizedText(item.rationale, locale) ? (
+              <p className='mt-2 text-sm leading-6 text-slate-600'>{localizedText(item.rationale, locale)}</p>
+            ) : null}
+            <EvidenceSources evidence={item.evidence} locale={locale} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -162,19 +151,19 @@ function formatDataUse(model: DecisionCardV2Model, isChinese: boolean): string |
   if (!value) return null;
   const labels = isChinese
     ? {
-      no: '不用于训练',
-      opt_in: '主动加入后用于训练',
-      opt_out: '需主动退出训练',
-      yes: '可能用于训练',
-      unknown: '未知',
-    }
+        no: '不用于训练',
+        opt_in: '主动加入后用于训练',
+        opt_out: '需主动退出训练',
+        yes: '可能用于训练',
+        unknown: '未知',
+      }
     : {
-      no: 'Not used for training',
-      opt_in: 'Training is opt-in',
-      opt_out: 'Training requires opt-out',
-      yes: 'May be used for training',
-      unknown: 'Unknown',
-    };
+        no: 'Not used for training',
+        opt_in: 'Training is opt-in',
+        opt_out: 'Training requires opt-out',
+        yes: 'May be used for training',
+        unknown: 'Unknown',
+      };
   return labels[value];
 }
 
@@ -196,36 +185,46 @@ function formatWhyNot(model: DecisionCardV2Model, locale: string): string | null
   );
 }
 
-export default function DecisionCardV2({ model, locale }: { model: DecisionCardV2Model; locale: string }) {
+export default function DecisionCardV2({
+  model,
+  locale,
+  embedded = false,
+}: {
+  model: DecisionCardV2Model;
+  locale: string;
+  embedded?: boolean;
+}) {
   const isChinese = locale === 'cn' || locale === 'tw';
 
   return (
     <section
-      id='decision-card'
+      id={embedded ? undefined : 'decision-card'}
       data-tool-decision-card-v2
       className='scroll-mt-28 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-slate-200'
     >
-      <div className='bg-slate-950 px-6 py-6 text-white lg:px-8'>
-        <div className='flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between'>
-          <div>
-            <div className='flex items-center gap-3'>
-              <ShieldCheck className='size-6 text-cyan-300' />
-              <h2 className='text-2xl font-bold lg:text-3xl'>{isChinese ? '选择判断卡 2.0' : 'Decision Card 2.0'}</h2>
+      {!embedded && (
+        <div className='bg-slate-950 px-6 py-6 text-white lg:px-8'>
+          <div className='flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between'>
+            <div>
+              <div className='flex items-center gap-3'>
+                <ShieldCheck className='size-6 text-cyan-300' />
+                <h2 className='text-2xl font-bold lg:text-3xl'>{isChinese ? '选择判断卡' : 'Decision Card'}</h2>
+              </div>
+              <p className='mt-3 max-w-3xl text-sm leading-6 text-slate-300'>
+                {isChinese
+                  ? '比较成本、部署、数据使用与退出条件，并展开来源核对。'
+                  : 'Compare cost, setup, data use, and exit conditions, and expand the sources to verify them.'}
+              </p>
             </div>
-            <p className='mt-3 max-w-3xl text-sm leading-6 text-slate-300'>
-              {isChinese
-                ? '只展示已核验且未过期的证据。没有来源支持的字段明确保留为未知。'
-                : 'Only verified, current evidence is shown. Fields without source support remain explicitly unknown.'}
-            </p>
-          </div>
-          <div className='shrink-0 rounded-lg bg-white/10 px-3 py-2 text-xs text-slate-200'>
-            {isChinese ? '复核于' : 'Reviewed'} {formatDate(model.reviewedAt, locale)}
+            <div className='shrink-0 rounded-lg bg-white/10 px-3 py-2 text-xs text-slate-200'>
+              {isChinese ? '复核于' : 'Reviewed'} {formatDate(model.reviewedAt, locale)}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
-      <div className='p-6 lg:p-8'>
-        <div className='grid gap-4 sm:grid-cols-2 xl:grid-cols-5'>
+      <div className={embedded ? 'mt-4' : 'p-6 lg:p-8'}>
+        <div className='grid gap-4 sm:grid-cols-2'>
           <FactCard
             title={isChinese ? '真实成本' : 'True cost'}
             value={formatTrueCost(model, isChinese)}
@@ -259,15 +258,9 @@ export default function DecisionCardV2({ model, locale }: { model: DecisionCardV
         </div>
 
         <div className='mt-5 grid gap-4 lg:grid-cols-2'>
-          <RelationshipGroup
-            title={isChinese ? '可以替换谁' : 'Replaces'}
-            emptyLabel={isChinese ? '暂无已核验的替代关系' : 'No verified replacement relationship yet'}
-            items={model.replaces}
-            locale={locale}
-          />
+          <RelationshipGroup title={isChinese ? '可以替换谁' : 'Replaces'} items={model.replaces} locale={locale} />
           <RelationshipGroup
             title={isChinese ? '可以和谁配合' : 'Works with'}
-            emptyLabel={isChinese ? '暂无已核验的互补关系' : 'No verified complementary relationship yet'}
             items={model.worksWith}
             locale={locale}
           />

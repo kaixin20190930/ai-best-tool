@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { getLegacyToolScopeContent } from '@/lib/config/legacyToolScopeReviews';
 import { buildLoginHref } from '@/lib/navigation/localizedPaths';
 import { generateLocalizedPath } from '@/lib/seo/metadata';
-import MarkdownProse from '@/components/MarkdownProse';
 import SeoBreadcrumbs from '@/components/seo/SeoBreadcrumbs';
 import LegacyToolScopeNotice from '@/components/tools/LegacyToolScopeNotice';
 
@@ -24,23 +23,23 @@ export default function LegacyToolScopePage({ slug, title, locale }: { slug: str
         />
         <h1 className='text-4xl font-bold text-slate-950'>{title}</h1>
         <LegacyToolScopeNotice slug={slug} locale={locale} />
-        <div className='rounded-xl bg-white p-6 ring-1 ring-slate-200'>
-          <MarkdownProse markdown={copy.detail} className='text-base leading-7 text-slate-700 prose-a:text-cyan-800' />
-        </div>
-        <p className='text-sm text-slate-600'>
-          {chinese
-            ? '该历史范围页不展示通用评分、适用建议和比较卡，也不参与索引或 sitemap。原有账户记录未删除。'
-            : 'This historical scope page withholds generic ratings, fit suggestions and comparison cards, and is excluded from indexing and the sitemap. Existing account records have not been deleted.'}
-        </p>
         <div className='flex flex-wrap gap-4 text-sm font-semibold text-cyan-800'>
-          <Link href={generateLocalizedPath('/developer/listing?intent=claim', locale)}>
-            {chinese ? '认领并提供具体产品资料' : 'Claim and clarify the product'}
-          </Link>
           <Link href={generateLocalizedPath('/explore', locale)}>{chinese ? '继续查找工具' : 'Explore tools'}</Link>
           <Link href={generateLocalizedPath(buildLoginHref(`/ai/${slug}`, locale), locale)}>
             {chinese ? '登录' : 'Log in'}
           </Link>
         </div>
+        <details data-tool-owner-actions className='rounded-lg border border-slate-200 p-4 text-sm'>
+          <summary className='cursor-pointer font-semibold text-slate-700'>
+            {chinese ? '如果这是你的产品' : 'If this is your product'}
+          </summary>
+          <div className='mt-3 font-semibold text-cyan-800'>
+            {' '}
+            <Link href={generateLocalizedPath('/developer/listing?intent=claim', locale)}>
+              {chinese ? '认领并提供具体产品资料' : 'Claim and clarify the product'}
+            </Link>
+          </div>
+        </details>
       </div>
     </div>
   );

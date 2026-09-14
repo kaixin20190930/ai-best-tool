@@ -44,7 +44,7 @@ const detailPage = fs.readFileSync(
   path.join(process.cwd(), 'app/[locale]/(with-footer)/ai/[websiteName]/page.tsx'),
   'utf8',
 );
-const fallbackUseCount = detailPage.match(/getPriorityToolFallbackDetail\(websiteName, locale\)/g)?.length || 0;
+const fallbackUseCount = detailPage.match(/getPriorityToolFallbackDetail\(canonicalSlug, locale\)/g)?.length || 0;
 
 if (fallbackUseCount !== 2) {
   throw new Error('Priority fallback must be used by both metadata and page rendering.');

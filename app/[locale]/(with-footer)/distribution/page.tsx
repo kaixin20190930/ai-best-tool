@@ -382,7 +382,7 @@ export default async function DistributionPage({
           <div className='flex items-center justify-between'>
             <div className='text-sm font-bold text-slate-900'>{localize(locale, '工作提醒', 'Critical reminders')}</div>
             <Link href={`/${locale}/distribution/monitoring${projectId ? `?project=${encodeURIComponent(projectId)}` : ''}`} className='text-xs font-semibold text-cyan-700'>
-              {localize(locale, '去监控', 'Monitor')}
+              {localize(locale, '去监控', 'Track changes')}
             </Link>
           </div>
           <div className='mt-3 space-y-2'>

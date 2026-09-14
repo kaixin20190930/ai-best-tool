@@ -1,0 +1,286 @@
+> tap4-ai@0.1.0 prebuild /Users/liukai/.codex/worktrees/ce87/ai-best-tool
+> node scripts/verify-adsense.mjs
+
+AdSense verification passed for ca-pub-5252543031076112
+
+> tap4-ai@0.1.0 build /Users/liukai/.codex/worktrees/ce87/ai-best-tool
+> next build
+
+   ▲ Next.js 14.1.4
+   - Environments: .env.production
+
+   Creating an optimized production build ...
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ ✓ Compiled successfully
+   Skipping linting
+   Checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/43) ...
+
+   Generating static pages (10/43)
+
+   Generating static pages (21/43)
+
+   Generating static pages (32/43)
+
+ ✓ Generating static pages (43/43)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                                             Size     First Load JS
+┌ ○ /_not-found                                                         892 B          85.6 kB
+├ λ /[locale]                                                           5.31 kB         130 kB
+├ λ /[locale]/[...rest]                                                 172 B          84.9 kB
+├ λ /[locale]/admin                                                     172 B          84.9 kB
+├ λ /[locale]/admin/analytics                                           210 B           121 kB
+├ λ /[locale]/admin/claims                                              3.58 kB         111 kB
+├ λ /[locale]/admin/cleanup                                             3.98 kB         111 kB
+├ λ /[locale]/admin/collection                                          11.2 kB         118 kB
+├ λ /[locale]/admin/comments                                            2.8 kB          110 kB
+├ λ /[locale]/admin/dashboard                                           207 B          91.6 kB
+├ λ /[locale]/admin/decision                                            1.37 kB         109 kB
+├ λ /[locale]/admin/distribution                                        208 B          91.6 kB
+├ λ /[locale]/admin/email-ops                                           1.87 kB        95.7 kB
+├ λ /[locale]/admin/email-test                                          5.25 kB        96.7 kB
+├ λ /[locale]/admin/intelligence                                        4.12 kB         111 kB
+├ λ /[locale]/admin/outreach                                            203 B           118 kB
+├ λ /[locale]/admin/owners                                              207 B          91.6 kB
+├ λ /[locale]/admin/payment-callbacks                                   208 B          91.6 kB
+├ λ /[locale]/admin/search-console                                      204 B          91.6 kB
+├ λ /[locale]/admin/settings                                            205 B          91.6 kB
+├ λ /[locale]/admin/targets                                             207 B          91.6 kB
+├ λ /[locale]/admin/tools                                               11.8 kB         127 kB
+├ λ /[locale]/admin/tools/[id]/edit                                     15.2 kB         122 kB
+├ λ /[locale]/admin/users                                               172 B          84.9 kB
+├ λ /[locale]/ai/[websiteName]                                          16.8 kB         155 kB
+├ λ /[locale]/best-ai-tools                                             1.01 kB        93.2 kB
+├ λ /[locale]/best-ai-tools/[topic]                                     1.65 kB        93.8 kB
+├ λ /[locale]/categories/[slug]                                         2.23 kB         143 kB
+├ λ /[locale]/categories/[slug]/page/[pageNum]                          2.23 kB         143 kB
+├ λ /[locale]/developer/listing                                         3.74 kB         118 kB
+├ λ /[locale]/distribution                                              2.42 kB        93.8 kB
+├ λ /[locale]/distribution/monitoring                                   2.35 kB         110 kB
+├ λ /[locale]/distribution/opportunities                                2.35 kB         110 kB
+├ λ /[locale]/distribution/products                                     3.7 kB          111 kB
+├ λ /[locale]/distribution/reports                                      207 B          91.6 kB
+├ λ /[locale]/distribution/settings                                     207 B          91.6 kB
+├ λ /[locale]/distribution/tasks                                        2.35 kB         110 kB
+├ λ /[locale]/distribution/tasks/[taskId]                               3.02 kB         110 kB
+├ λ /[locale]/explore                                                   3.23 kB         144 kB
+├ λ /[locale]/explore/page/[pageNum]                                    2.22 kB         138 kB
+├ λ /[locale]/find-tools                                                12.4 kB         111 kB
+├ λ /[locale]/forgot-password                                           6.75 kB         129 kB
+├ λ /[locale]/guides                                                    1.93 kB        94.1 kB
+├ λ /[locale]/guides/adobe-alternatives-comparison                      1.24 kB        86.7 kB
+├ λ /[locale]/guides/agent-tools                                        2.44 kB         123 kB
+├ λ /[locale]/guides/ai-agent-tools                                     2.44 kB         123 kB
+├ λ /[locale]/guides/ai-agent-tools-comparison                          1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-api-observability-tools                         2.44 kB         123 kB
+├ λ /[locale]/guides/ai-api-observability-tools-comparison              1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-automation-tools                                1.31 kB        97.7 kB
+├ λ /[locale]/guides/ai-automation-tools-comparison                     1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-chatbot-tools                                   713 B          97.1 kB
+├ λ /[locale]/guides/ai-chatbot-tools-comparison                        1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-code-review-tools                               2.43 kB         123 kB
+├ λ /[locale]/guides/ai-code-review-tools-comparison                    1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-coding-tools                                    2.43 kB         123 kB
+├ λ /[locale]/guides/ai-coding-tools-comparison                         1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-evals-tools                                     2.43 kB         123 kB
+├ λ /[locale]/guides/ai-evals-tools-comparison                          1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-image-tools                                     713 B          97.1 kB
+├ λ /[locale]/guides/ai-image-tools-comparison                          1.25 kB        86.7 kB
+├ λ /[locale]/guides/ai-marketing-tools                                 713 B          97.1 kB
+├ λ /[locale]/guides/ai-marketing-tools-comparison                      1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-model-routing-tools                             2.44 kB         123 kB
+├ λ /[locale]/guides/ai-model-routing-tools-comparison                  1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-note-taking-tools                               712 B          97.1 kB
+├ λ /[locale]/guides/ai-note-taking-tools-comparison                    1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-productivity-tools                              711 B          97.1 kB
+├ λ /[locale]/guides/ai-productivity-tools-comparison                   1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-research-tools                                  1.31 kB        97.7 kB
+├ λ /[locale]/guides/ai-research-tools-comparison                       1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-sales-tools                                     2.43 kB         123 kB
+├ λ /[locale]/guides/ai-sales-tools-comparison                          1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-seo-tools                                       2.43 kB         123 kB
+├ λ /[locale]/guides/ai-seo-tools-comparison                            1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-agencies                              678 B            97 kB
+├ λ /[locale]/guides/ai-tools-for-agencies-comparison                   1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-agents                                2.44 kB         123 kB
+├ λ /[locale]/guides/ai-tools-for-agents-comparison                     1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-api-observability                     2.44 kB         123 kB
+├ λ /[locale]/guides/ai-tools-for-api-observability-comparison          1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-automation                            1.31 kB        97.7 kB
+├ λ /[locale]/guides/ai-tools-for-automation-comparison                 1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-code-review                           2.43 kB         123 kB
+├ λ /[locale]/guides/ai-tools-for-code-review-comparison                1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-content-creation                      678 B            97 kB
+├ λ /[locale]/guides/ai-tools-for-content-creation-comparison           1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-creators                              678 B            97 kB
+├ λ /[locale]/guides/ai-tools-for-creators-comparison                   1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-crypto-portfolio-tracking             2.43 kB         123 kB
+├ λ /[locale]/guides/ai-tools-for-crypto-portfolio-tracking-comparison  1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-crypto-research                       2.43 kB         123 kB
+├ λ /[locale]/guides/ai-tools-for-crypto-research-comparison            1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-customer-support                      2.44 kB         123 kB
+├ λ /[locale]/guides/ai-tools-for-customer-support-comparison           1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-defi-analytics                        2.44 kB         123 kB
+├ λ /[locale]/guides/ai-tools-for-defi-analytics-comparison             1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-designers                             678 B            97 kB
+├ λ /[locale]/guides/ai-tools-for-designers-comparison                  1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-developers                            2.43 kB         123 kB
+├ λ /[locale]/guides/ai-tools-for-developers-comparison                 1.25 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-dex-analytics                         678 B            97 kB
+├ λ /[locale]/guides/ai-tools-for-dex-analytics-comparison              1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-ecommerce                             678 B            97 kB
+├ λ /[locale]/guides/ai-tools-for-ecommerce-comparison                  1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-evals                                 2.44 kB         123 kB
+├ λ /[locale]/guides/ai-tools-for-evals-comparison                      1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-lead-generation                       2.44 kB         123 kB
+├ λ /[locale]/guides/ai-tools-for-lead-generation-comparison            1.25 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-marketing                             713 B          97.1 kB
+├ λ /[locale]/guides/ai-tools-for-marketing-comparison                  1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-meeting-notes                         678 B            97 kB
+├ λ /[locale]/guides/ai-tools-for-meeting-notes-comparison              1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-model-routing                         2.43 kB         123 kB
+├ λ /[locale]/guides/ai-tools-for-model-routing-comparison              1.25 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-on-chain-analysis                     2.43 kB         123 kB
+├ λ /[locale]/guides/ai-tools-for-on-chain-analysis-comparison          1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-prompt-testing                        2.43 kB         123 kB
+├ λ /[locale]/guides/ai-tools-for-prompt-testing-comparison             1.25 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-protocol-analytics                    2.44 kB         123 kB
+├ λ /[locale]/guides/ai-tools-for-protocol-analytics-comparison         1.25 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-research                              1.31 kB        97.7 kB
+├ λ /[locale]/guides/ai-tools-for-research-comparison                   1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-sales                                 2.43 kB         123 kB
+├ λ /[locale]/guides/ai-tools-for-sales-comparison                      1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-sales-prospecting                     2.43 kB         123 kB
+├ λ /[locale]/guides/ai-tools-for-sales-prospecting-comparison          1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-small-business                        678 B            97 kB
+├ λ /[locale]/guides/ai-tools-for-small-business-comparison             1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-students                              678 B            97 kB
+├ λ /[locale]/guides/ai-tools-for-students-comparison                   1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-token-research                        2.44 kB         123 kB
+├ λ /[locale]/guides/ai-tools-for-token-research-comparison             1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-voice                                 714 B          97.1 kB
+├ λ /[locale]/guides/ai-tools-for-voice-comparison                      1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-wallet-monitoring                     2.43 kB         123 kB
+├ λ /[locale]/guides/ai-tools-for-wallet-monitoring-comparison          1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-wallet-research                       2.44 kB         123 kB
+├ λ /[locale]/guides/ai-tools-for-wallet-research-comparison            1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-web3                                  1.31 kB        97.7 kB
+├ λ /[locale]/guides/ai-tools-for-web3-analysis                         2.44 kB         123 kB
+├ λ /[locale]/guides/ai-tools-for-web3-analysis-comparison              1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-tools-for-web3-comparison                       1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-video-tools                                     713 B          97.1 kB
+├ λ /[locale]/guides/ai-video-tools-comparison                          1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-web3-tools                                      1.31 kB        97.7 kB
+├ λ /[locale]/guides/ai-web3-tools-comparison                           1.24 kB        86.7 kB
+├ λ /[locale]/guides/ai-writing-tools                                   2.44 kB         123 kB
+├ λ /[locale]/guides/ai-writing-tools-comparison                        1.24 kB        86.7 kB
+├ λ /[locale]/guides/automation-tools                                   1.31 kB        97.7 kB
+├ λ /[locale]/guides/best-free-ai-tools                                 713 B          97.1 kB
+├ λ /[locale]/guides/best-free-ai-tools-comparison                      1.24 kB        86.7 kB
+├ λ /[locale]/guides/character-ai-alternatives-comparison               1.24 kB        86.7 kB
+├ λ /[locale]/guides/chatbot-tools                                      713 B          97.1 kB
+├ λ /[locale]/guides/chatgpt-alternatives-comparison                    1.24 kB        86.7 kB
+├ λ /[locale]/guides/claude-alternatives-comparison                     1.24 kB        86.7 kB
+├ λ /[locale]/guides/copy-ai-alternatives-comparison                    1.24 kB        86.7 kB
+├ λ /[locale]/guides/cursor-alternatives-comparison                     1.24 kB        86.7 kB
+├ λ /[locale]/guides/descript-alternatives-comparison                   1.24 kB        86.7 kB
+├ λ /[locale]/guides/developer-tools                                    2.43 kB         123 kB
+├ λ /[locale]/guides/elevenlabs-alternatives-comparison                 1.24 kB        86.7 kB
+├ λ /[locale]/guides/free-ai-tools                                      714 B          97.1 kB
+├ λ /[locale]/guides/gemini-alternatives-comparison                     1.24 kB        86.7 kB
+├ λ /[locale]/guides/grammarly-alternatives-comparison                  1.24 kB        86.7 kB
+├ λ /[locale]/guides/how-to-choose-ai-tools                             713 B          97.1 kB
+├ λ /[locale]/guides/hubspot-alternatives-comparison                    1.24 kB        86.7 kB
+├ λ /[locale]/guides/image-tools                                        712 B          97.1 kB
+├ λ /[locale]/guides/jasper-alternatives-comparison                     1.24 kB        86.7 kB
+├ λ /[locale]/guides/mailchimp-alternatives-comparison                  1.24 kB        86.7 kB
+├ λ /[locale]/guides/make-alternatives-comparison                       1.24 kB        86.7 kB
+├ λ /[locale]/guides/marketing-tools                                    713 B          97.1 kB
+├ λ /[locale]/guides/n8n-alternatives-comparison                        1.24 kB        86.7 kB
+├ λ /[locale]/guides/note-taking-tools                                  713 B          97.1 kB
+├ λ /[locale]/guides/notion-alternatives-comparison                     1.24 kB        86.7 kB
+├ λ /[locale]/guides/notta-alternatives-comparison                      1.24 kB        86.7 kB
+├ λ /[locale]/guides/perplexity-alternatives-comparison                 1.24 kB        86.7 kB
+├ λ /[locale]/guides/poe-alternatives-comparison                        1.24 kB        86.7 kB
+├ λ /[locale]/guides/productivity-tools                                 713 B          97.1 kB
+├ λ /[locale]/guides/research-tools                                     1.31 kB        97.7 kB
+├ λ /[locale]/guides/sales-tools                                        2.44 kB         123 kB
+├ λ /[locale]/guides/salesforce-einstein-alternatives-comparison        1.24 kB        86.7 kB
+├ λ /[locale]/guides/seo-tools                                          2.44 kB         123 kB
+├ λ /[locale]/guides/sora-alternatives-comparison                       1.24 kB        86.7 kB
+├ λ /[locale]/guides/suno-alternatives-comparison                       1.24 kB        86.7 kB
+├ λ /[locale]/guides/video-tools                                        712 B          97.1 kB
+├ λ /[locale]/guides/voice-tools                                        714 B          97.1 kB
+├ λ /[locale]/guides/writing-tools                                      2.44 kB         123 kB
+├ λ /[locale]/guides/zapier-alternatives-comparison                     1.24 kB        86.7 kB
+├ λ /[locale]/login                                                     5.48 kB         159 kB
+├ λ /[locale]/new                                                       1.57 kB         121 kB
+├ λ /[locale]/pricing                                                   1.38 kB        92.8 kB
+├ λ /[locale]/privacy-policy                                            995 B          85.7 kB
+├ λ /[locale]/profile                                                   3.81 kB        95.2 kB
+├ λ /[locale]/profile/favorites                                         2.14 kB         122 kB
+├ λ /[locale]/profile/stack                                             8.27 kB         120 kB
+├ λ /[locale]/profile/submissions                                       4.6 kB           96 kB
+├ λ /[locale]/profile/trials                                            4.18 kB         116 kB
+├ λ /[locale]/profile/trials/[id]                                       7.5 kB          115 kB
+├ λ /[locale]/register                                                  5.48 kB         159 kB
+├ λ /[locale]/settings                                                  1.02 kB        85.7 kB
+├ λ /[locale]/startup                                                   1.75 kB        87.2 kB
+├ λ /[locale]/submit                                                    15.2 kB         168 kB
+├ λ /[locale]/terms-of-service                                          142 B          95.8 kB
+├ λ /[locale]/verify-email                                              7.14 kB         105 kB
+├ ○ /ads.txt                                                            0 B                0 B
+├ λ /api/admin/distribution/report                                      0 B                0 B
+├ λ /api/analytics/commerce-view                                        0 B                0 B
+├ λ /api/analytics/distribution                                         0 B                0 B
+├ λ /api/analytics/page-view                                            0 B                0 B
+├ λ /api/collection/run-due                                             0 B                0 B
+├ ○ /api/health                                                         0 B                0 B
+├ ○ /api/healthz                                                        0 B                0 B
+├ λ /api/monitor                                                        0 B                0 B
+├ λ /api/monitor/claim-invites                                          0 B                0 B
+├ λ /api/monitor/cleanup-sponsored                                      0 B                0 B
+├ λ /api/monitor/comment-moderation-report                              0 B                0 B
+├ λ /api/monitor/commercial-payment-confirmed                           0 B                0 B
+├ λ /api/monitor/featured-renewal-reminders                             0 B                0 B
+├ λ /api/monitor/google-search-console                                  0 B                0 B
+├ λ /api/monitor/profile-update-reminders                               0 B                0 B
+├ λ /api/monitor/trial-reminders                                        0 B                0 B
+├ λ /api/payments/stripe/checkout                                       0 B                0 B
+├ λ /api/payments/stripe/distribution/checkout                          0 B                0 B
+├ λ /api/stripe/distribution-webhook                                    0 B                0 B
+├ λ /api/stripe/webhook                                                 0 B                0 B
+├ ○ /auth/auth-code-error                                               207 B          91.6 kB
+├ λ /auth/callback                                                      0 B                0 B
+├ ○ /auth/reset-password                                                2.67 kB         118 kB
+├ λ /developer/listing                                                  0 B                0 B
+├ λ /explore                                                            0 B                0 B
+├ λ /favorites                                                          0 B                0 B
+├ λ /forgot-password                                                    0 B                0 B
+├ λ /guides                                                             0 B                0 B
+├ λ /login                                                              0 B                0 B
+├ λ /new                                                                0 B                0 B
+├ λ /pricing                                                            0 B                0 B
+├ λ /privacy-policy                                                     0 B                0 B
+├ λ /profile                                                            0 B                0 B
+├ λ /profile/favorites                                                  0 B                0 B
+├ λ /profile/submissions                                                0 B                0 B
+├ λ /register                                                           0 B                0 B
+├ λ /sitemap.xml                                                        0 B                0 B
+├ λ /submit                                                             0 B                0 B
+└ λ /terms-of-service                                                   0 B                0 B
++ First Load JS shared by all                                           84.7 kB
+  ├ chunks/2973-5121338d0a7ba827.js                                     29.1 kB
+  ├ chunks/ed01e529-4ed83f9d0f54d979.js                                 53.4 kB
+  └ other shared chunks (total)                                         2.18 kB
+
+
+ƒ Middleware                                                            111 kB
+
+○  (Static)   prerendered as static content
+λ  (Dynamic)  server-rendered on demand using Node.js

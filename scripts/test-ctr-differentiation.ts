@@ -6,7 +6,7 @@ import { getToolDecisionMetadataPilot, TOOL_DECISION_METADATA_PILOT_SLUGS } from
 const root = process.cwd();
 const homeSource = fs.readFileSync(path.join(root, 'app/[locale]/(with-footer)/(home)/page.tsx'), 'utf8');
 const bestSource = fs.readFileSync(path.join(root, 'app/[locale]/(with-footer)/best-ai-tools/page.tsx'), 'utf8');
-const toolSource = fs.readFileSync(path.join(root, 'app/[locale]/(with-footer)/ai/[websiteName]/page.tsx'), 'utf8');
+const toolSource = fs.readFileSync(path.join(root, 'components/tools/PublicToolDecision.tsx'), 'utf8');
 
 if (TOOL_DECISION_METADATA_PILOT_SLUGS.length !== 4) {
   throw new Error('CTR metadata changes must remain limited to the four reviewed pilot tools.');
@@ -45,8 +45,8 @@ for (const required of [
   'Decision first, features second',
   'Task fit',
   'Key trade-off',
-  'Evidence coverage',
-  "href='#decision-card'",
+  'Source and review record',
+  "id='decision-card'",
 ]) {
   if (!toolSource.includes(required))
     throw new Error(`Tool page is missing the above-fold decision signal: ${required}`);

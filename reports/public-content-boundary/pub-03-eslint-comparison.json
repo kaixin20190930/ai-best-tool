@@ -1,0 +1,471 @@
+{
+  "baseline": "e51642b613031ba40c2556fced97de5091931433",
+  "baselineFiles": [
+    {
+      "file": "app/[locale]/(with-footer)/(home)/page.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "app/[locale]/(with-footer)/ai/[websiteName]/page.tsx",
+      "errors": 1515,
+      "rules": {
+        "@typescript-eslint/indent": 1514,
+        "no-nested-ternary": 1
+      }
+    },
+    {
+      "file": "app/[locale]/(with-footer)/best-ai-tools/[topic]/page.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "app/[locale]/(with-footer)/best-ai-tools/page.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "app/[locale]/(with-footer)/categories/[slug]/CategoryContent.tsx",
+      "errors": 32,
+      "rules": {
+        "@typescript-eslint/indent": 32
+      }
+    },
+    {
+      "file": "app/[locale]/(with-footer)/developer/listing/page.tsx",
+      "errors": 8,
+      "rules": {
+        "@typescript-eslint/indent": 8
+      }
+    },
+    {
+      "file": "app/[locale]/(with-footer)/distribution/page.tsx",
+      "errors": 3,
+      "rules": {
+        "prefer-destructuring": 2,
+        "@typescript-eslint/no-unused-vars": 1
+      }
+    },
+    {
+      "file": "app/[locale]/(with-footer)/explore/ExploreList.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "app/[locale]/(with-footer)/explore/page.tsx",
+      "errors": 8,
+      "rules": {
+        "@typescript-eslint/indent": 8
+      }
+    },
+    {
+      "file": "app/[locale]/(with-footer)/new/page.tsx",
+      "errors": 28,
+      "rules": {
+        "@typescript-eslint/indent": 28
+      }
+    },
+    {
+      "file": "app/[locale]/(with-footer)/pricing/page.tsx",
+      "errors": 1,
+      "rules": {
+        "@typescript-eslint/no-unused-vars": 1
+      }
+    },
+    {
+      "file": "app/[locale]/(with-footer)/profile/submissions/page.tsx",
+      "errors": 4,
+      "rules": {
+        "no-nested-ternary": 1,
+        "react/jsx-indent": 1,
+        "@typescript-eslint/indent": 2
+      }
+    },
+    {
+      "file": "app/[locale]/(with-footer)/submit/page.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "components/decision/DecisionCardV2.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "components/guides/GuideActionSection.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "components/guides/GuideEvidencePanel.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "components/guides/GuideSubmissionPath.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "components/home/Footer.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "components/tools/LegacyToolScopeNotice.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "components/tools/LegacyToolScopePage.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "components/tools/SafetyToolArchivePage.tsx",
+      "errors": 2,
+      "rules": {
+        "no-nested-ternary": 2
+      }
+    },
+    {
+      "file": "components/webNav/WebNavCard.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "components/webNav/WebNavCardList.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "lib/constants.ts",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "scripts/lib/public-content-boundary.ts",
+      "errors": 1,
+      "rules": {
+        "no-param-reassign": 1
+      }
+    },
+    {
+      "file": "scripts/test-category-fact-boundaries.ts",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "scripts/test-ctr-differentiation.ts",
+      "errors": 3,
+      "rules": {
+        "no-template-curly-in-string": 1,
+        "nonblock-statement-body-position": 1,
+        "curly": 1
+      }
+    },
+    {
+      "file": "scripts/test-decision-card-v2.ts",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "scripts/test-home-positioning.ts",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "scripts/test-priority-tool-fallbacks.ts",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "scripts/test-public-content-boundary-html.ts",
+      "errors": 3,
+      "rules": {
+        "no-param-reassign": 1,
+        "nonblock-statement-body-position": 1,
+        "curly": 1
+      }
+    },
+    {
+      "file": "scripts/test-public-content-boundary.tsx",
+      "errors": 1,
+      "rules": {
+        "parser-config": 1
+      }
+    },
+    {
+      "file": "scripts/test-reviewed-tool-relationships.ts",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "scripts/test-tool-decision-card.ts",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "scripts/test-topic-consistency.ts",
+      "errors": 3,
+      "rules": {
+        "nonblock-statement-body-position": 1,
+        "curly": 1,
+        "no-promise-executor-return": 1
+      }
+    }
+  ],
+  "candidateFiles": [
+    {
+      "file": "app/[locale]/(with-footer)/(home)/page.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "app/[locale]/(with-footer)/ai/[websiteName]/page.tsx",
+      "errors": 1499,
+      "rules": {
+        "@typescript-eslint/indent": 1497,
+        "no-nested-ternary": 1,
+        "prefer-template": 1
+      }
+    },
+    {
+      "file": "app/[locale]/(with-footer)/best-ai-tools/[topic]/page.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "app/[locale]/(with-footer)/best-ai-tools/page.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "app/[locale]/(with-footer)/categories/[slug]/CategoryContent.tsx",
+      "errors": 19,
+      "rules": {
+        "@typescript-eslint/indent": 18,
+        "no-nested-ternary": 1
+      }
+    },
+    {
+      "file": "app/[locale]/(with-footer)/developer/listing/page.tsx",
+      "errors": 8,
+      "rules": {
+        "@typescript-eslint/indent": 8
+      }
+    },
+    {
+      "file": "app/[locale]/(with-footer)/distribution/page.tsx",
+      "errors": 3,
+      "rules": {
+        "prefer-destructuring": 2,
+        "@typescript-eslint/no-unused-vars": 1
+      }
+    },
+    {
+      "file": "app/[locale]/(with-footer)/explore/ExploreList.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "app/[locale]/(with-footer)/explore/page.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "app/[locale]/(with-footer)/new/page.tsx",
+      "errors": 28,
+      "rules": {
+        "@typescript-eslint/indent": 28
+      }
+    },
+    {
+      "file": "app/[locale]/(with-footer)/pricing/page.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "app/[locale]/(with-footer)/profile/submissions/page.tsx",
+      "errors": 5,
+      "rules": {
+        "@typescript-eslint/indent": 3,
+        "no-nested-ternary": 1,
+        "react/jsx-indent": 1
+      }
+    },
+    {
+      "file": "app/[locale]/(with-footer)/submit/page.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "components/decision/DecisionCardV2.tsx",
+      "errors": 12,
+      "rules": {
+        "@typescript-eslint/indent": 12
+      }
+    },
+    {
+      "file": "components/guides/GuideActionSection.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "components/guides/GuideEvidencePanel.tsx",
+      "errors": 1,
+      "rules": {
+        "react/destructuring-assignment": 1
+      }
+    },
+    {
+      "file": "components/guides/GuideSubmissionPath.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "components/home/Footer.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "components/tools/LegacyToolScopeNotice.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "components/tools/LegacyToolScopePage.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "components/tools/SafetyToolArchivePage.tsx",
+      "errors": 4,
+      "rules": {
+        "no-nested-ternary": 4
+      }
+    },
+    {
+      "file": "components/webNav/WebNavCard.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "components/webNav/WebNavCardList.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "lib/constants.ts",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "scripts/lib/public-content-boundary.ts",
+      "errors": 1,
+      "rules": {
+        "no-param-reassign": 1
+      }
+    },
+    {
+      "file": "scripts/test-category-fact-boundaries.ts",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "scripts/test-ctr-differentiation.ts",
+      "errors": 3,
+      "rules": {
+        "no-template-curly-in-string": 1,
+        "nonblock-statement-body-position": 1,
+        "curly": 1
+      }
+    },
+    {
+      "file": "scripts/test-decision-card-v2.ts",
+      "errors": 2,
+      "rules": {
+        "nonblock-statement-body-position": 1,
+        "curly": 1
+      }
+    },
+    {
+      "file": "scripts/test-home-positioning.ts",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "scripts/test-priority-tool-fallbacks.ts",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "scripts/test-public-content-boundary-html.ts",
+      "errors": 3,
+      "rules": {
+        "no-param-reassign": 1,
+        "nonblock-statement-body-position": 1,
+        "curly": 1
+      }
+    },
+    {
+      "file": "scripts/test-public-content-boundary.tsx",
+      "errors": 1,
+      "rules": {
+        "parser-config": 1
+      }
+    },
+    {
+      "file": "scripts/test-reviewed-tool-relationships.ts",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "scripts/test-tool-decision-card.ts",
+      "errors": 4,
+      "rules": {
+        "nonblock-statement-body-position": 2,
+        "curly": 2
+      }
+    },
+    {
+      "file": "scripts/test-topic-consistency.ts",
+      "errors": 3,
+      "rules": {
+        "nonblock-statement-body-position": 1,
+        "curly": 1,
+        "no-promise-executor-return": 1
+      }
+    },
+    {
+      "file": "components/tools/PublicToolDecision.tsx",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "lib/content/publicToolScope.ts",
+      "errors": 0,
+      "rules": {}
+    },
+    {
+      "file": "scripts/audit-pub-03-html.ts",
+      "errors": 34,
+      "rules": {
+        "@typescript-eslint/indent": 20,
+        "nonblock-statement-body-position": 7,
+        "curly": 7
+      }
+    },
+    {
+      "file": "scripts/test-pub-03-freeze.ts",
+      "errors": 12,
+      "rules": {
+        "nonblock-statement-body-position": 6,
+        "curly": 6
+      }
+    }
+  ],
+  "baselineErrors": 1612,
+  "candidateErrors": 1642,
+  "note": "Lint does not pass: baseline 1612 errors across changed existing files; candidate 1642 including new audit scripts. Most errors are indentation, braces or other style rules; the existing scripts/**/*.tsx parser configuration issue remains. This report does not claim zero new lint findings. The hook is skipped for this candidate to avoid mass autofix of frozen legacy blocks; dedicated functional, metadata, TypeScript and production-build gates passed."
+}

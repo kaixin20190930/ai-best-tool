@@ -130,29 +130,17 @@ async function main() {
   const unregistered = { ...automation, key: 'unregistered-topic' } as typeof automation;
   assert.equal(selectTopicTools(unregistered, fixtureTools).toolCount, 0);
 
-  const checkedAt = getEditorialReviewRecord('best-topic-template').reviewedAt;
   for (const locale of ['en', 'cn']) {
-    const html = renderToStaticMarkup(
-      React.createElement(GuideEvidencePanel, {
-        locale,
-        checkedAt,
-        checkedAtLabel: 'Template reviewed',
-        scope: 'Shared template only',
-        items: [],
-      }),
+    const empty = renderToStaticMarkup(
+      React.createElement(GuideEvidencePanel, { locale, variant: 'verified', evidence: [] }),
     );
-    assert(html.includes(checkedAt));
-    assert(!html.includes('2026-07-15'));
-    const undated = renderToStaticMarkup(
-      React.createElement(GuideEvidencePanel, { locale, scope: 'Undated', items: [] }),
-    );
-    assert(
-      !/\d{4}-\d{2}-\d{2}|Last checked|最近检查/.test(undated),
-      'Missing evidence must not acquire a default review date.',
-    );
+    assert.equal(empty, '', 'Missing evidence must not render generic claims or a default review date.');
   }
   const source = fs.readFileSync('app/[locale]/(with-footer)/best-ai-tools/[topic]/page.tsx', 'utf8');
-  assert.match(source, /<GuideEvidencePanel\s+locale=\{locale\}\s+checkedAt=\{checkedAt\}/);
+  assert(source.includes("'Directory navigation checked'"));
+  assert(source.includes('{checkedAtLabel}'));
+  assert(!source.includes('<GuideEvidencePanel'));
+  assert(source.includes('faqs.map'));
   assert.match(source, /indexable: Boolean\(topicData\?\.indexable\)/);
   assert.match(source, /throw error;/, 'Do not turn a database outage or notFound into a successful fallback page.');
   assert.match(

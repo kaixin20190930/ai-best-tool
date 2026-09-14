@@ -58,7 +58,7 @@ async function main() {
     const violations = copyViolations(document.body.textContent || '');
     if (sample) assert.deepEqual(violations, [], `${pathname}: public internal copy`);
     else if (pathname.includes('/guides/')) assert.deepEqual(violations, [], `${pathname}: Guide public copy`);
-    else assert.deepEqual(violations, previous.violations, `${pathname}: PUB-03 rendering remains frozen`);
+    else assert.deepEqual(violations, [], `${pathname}: PUB-03 Tool copy must be clean`);
     results.push({ pathname, status: response.status, seoFrozen: true, sample, violations });
   }
   const sitemap = await fetch(`${baseUrl}/sitemap.xml`, { signal: AbortSignal.timeout(60_000) });

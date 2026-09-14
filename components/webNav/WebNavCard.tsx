@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Flame, Megaphone, Sparkles } from 'lucide-react';
 
 import { getLocalizedToolPath } from '@/lib/config/toolRouteAliases';
+import { getPublicToolSummary } from '@/lib/content/publicToolScope';
 import { WebNavigationListRow } from '@/lib/data';
 
 import FavoriteButton from '../FavoriteButton';
@@ -120,7 +121,7 @@ export default function WebNavCard({
           </span>
         )}
         <p className={`break-words text-sm leading-6 text-slate-600 ${isCompact ? 'line-clamp-2' : 'line-clamp-3'}`}>
-          {content}
+          {getPublicToolSummary(name, locale, content)}
         </p>
         <div className='flex flex-wrap gap-2'>
           {toolId ? (
