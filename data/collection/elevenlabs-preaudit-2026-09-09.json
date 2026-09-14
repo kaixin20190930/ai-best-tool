@@ -11,7 +11,8 @@
   "productionWriteApproved": false,
   "category": {
     "discoverySlug": "voice",
-    "storageSlug": "text-to-speech"
+    "storageSlug": "chatbot",
+    "releaseCorrection": "Production has no text-to-speech category; the existing voice discovery mapping stores voice tools under chatbot. Corrected during the 2026-09-14 rollback gate without creating a category."
   },
   "positioning": "An AI-native voice and audio platform for text-to-speech, speech-to-speech, dubbing, transcription, music, sound effects, voice cloning, and conversational agents across creator and developer workflows.",
   "decisionAngles": [

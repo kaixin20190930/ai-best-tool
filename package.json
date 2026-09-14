@@ -146,7 +146,8 @@
     "test:hreflang": "tsx scripts/test-hreflang-rendering.ts",
     "test:topic-consistency:live": "tsx scripts/test-topic-consistency-live.ts",
     "test:sitemap-pages": "tsx scripts/test-sitemap-pages.ts",
-    "test:delayed-candidate-release": "tsx scripts/test-delayed-candidate-release.ts"
+    "test:delayed-candidate-release": "tsx scripts/test-delayed-candidate-release.ts",
+    "test:elevenlabs-release": "tsx scripts/test-elevenlabs-release.ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

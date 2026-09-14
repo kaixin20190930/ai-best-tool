@@ -1,3 +1,4 @@
+import { createElement } from 'react';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
@@ -5,7 +6,6 @@ import { isDeepStrictEqual } from 'node:util';
 import { config } from 'dotenv';
 import { JSDOM } from 'jsdom';
 import { Client } from 'pg';
-import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import Markdown from 'react-markdown';
 
@@ -19,10 +19,15 @@ const output =
   `reports/releases/2026-09-14/production-${phase}.json`;
 assert(['baseline', 'media', 'released'].includes(phase));
 const selectedCandidate = process.argv.find((arg) => arg.startsWith('--candidate='))?.split('=')[1];
-assert(!selectedCandidate || ['lovable', 'midjourney'].includes(selectedCandidate));
+assert(!selectedCandidate || ['lovable', 'midjourney', 'elevenlabs'].includes(selectedCandidate));
 const requestBaseUrl = (process.env.SEO_BASE_URL || 'https://aibesttool.com').replace(/\/$/, '');
 const hash = (value: Buffer | string) => createHash('sha256').update(value).digest('hex');
 const normalizeText = (value: string) => value.replace(/\s+/g, ' ').trim();
+const candidateAliases: Record<string, string[]> = {
+  lovable: ['lovable', 'lovable-dev', 'lovable.dev'],
+  midjourney: ['midjourney', 'mid-journey', 'midjourney.com'],
+  elevenlabs: ['elevenlabs', 'eleven-labs', 'elevenlabs.io'],
+};
 
 async function main() {
   config({ path: '.env.local', quiet: true });
@@ -49,10 +54,7 @@ async function main() {
     };
     for (const slug of selectedCandidate ? [selectedCandidate] : ['lovable', 'midjourney']) {
       const payload = JSON.parse(fs.readFileSync(`data/collection/${slug}-release.json`, 'utf8'));
-      const aliases =
-        slug === 'lovable'
-          ? ['lovable', 'lovable-dev', 'lovable.dev']
-          : ['midjourney', 'mid-journey', 'midjourney.com'];
+      const aliases = candidateAliases[slug];
       const result = await client.query(
         'SELECT id,name,url,status,page_quality_status,category_id,title,content,detail,features,image_url,thumbnail_url,pricing,tags,next_review_date::text AS next_review_date,created_at,updated_at FROM tools WHERE lower(name)=ANY($1::text[]) OR url ILIKE $2 OR title::text ILIKE $3',
         [aliases, `%${new URL(payload.officialUrl).hostname.replace(/^www\./, '')}%`, `%${slug}%`],
@@ -102,8 +104,8 @@ async function main() {
           const body = document.body.textContent || '';
           const locale = prefix ? 'zh' : 'en';
           const expectedArticle = normalizeText(
-            new JSDOM(renderToStaticMarkup(createElement(Markdown, null, payload.detail[locale])))
-              .window.document.body.textContent || '',
+            new JSDOM(renderToStaticMarkup(createElement(Markdown, null, payload.detail[locale]))).window.document.body
+              .textContent || '',
           );
           const cardText = normalizeText(document.querySelector('#decision-card')?.textContent || '');
           const requiredCardItems: string[] = [
@@ -148,8 +150,11 @@ async function main() {
             ) report.failures.push(`${pathname}: route/index boundary failed`);
             if (
               phase === 'released' &&
-              (!page.hasDecisionCard || !page.hasPayloadCopy || !h1.toLowerCase().includes(slug) ||
-                !page.fullArticleMatchesPayload || page.missingDecisionCardItems.length > 0 ||
+              (!page.hasDecisionCard ||
+                !page.hasPayloadCopy ||
+                !h1.toLowerCase().includes(slug) ||
+                !page.fullArticleMatchesPayload ||
+                page.missingDecisionCardItems.length > 0 ||
                 !page.imagePaths.includes(payload.thumbnailUrl))
             ) report.failures.push(`${pathname}: released content missing`);
           } else if (inSitemap) report.failures.push(`${pathname}: alias entered sitemap`);

@@ -18,7 +18,7 @@
 | 3 | Otter.ai | AI 原生会议转录与会议助手；高评论量且有清晰免费/团队决策 | 已于 09-10 完成发布日复核并按 `monitor/noindex` 发布 | 09-10 | 10-10 复核证据与页面表现；索引仍需独立批准 |
 | 4 | Lovable | AI 原生全栈应用构建；须拆分原型速度与生产就绪 | 09-14 独立发布并完成全量生产验收 | 原 09-11；实际 09-14 | monitor/noindex；下次事实复核 10-14 |
 | 5 | Midjourney | AI 原生图像与短视频创作；品牌成熟且决策边界明显 | 09-14 独立发布并完成全量生产验收 | 原 09-12；实际 09-14 | monitor/noindex；下次事实复核 10-14 |
-| 6 | ElevenLabs | AI 原生语音与音频平台；成熟采用信号强，适合比较质量、credits、克隆同意与商业权利 | 已完成完整预审，进入缓冲池 | 09-13 | 当日复核 credits 换算、促销、rollover、商业使用、克隆与 API 边界 |
+| 6 | ElevenLabs | AI 原生语音与音频平台；成熟采用信号强，适合比较质量、credits、克隆同意与商业权利 | 09-14 已完成延期补发材料、真实环境 preflight 与事务 rollback；等待总控生产写入授权 | 原 09-13 | 合并部署官方素材后重跑 media 门禁；逐项生产 commit 仍需总控明确授权，索引门禁保持关闭 |
 | 7 | HeyGen | AI 原生数字人商务视频平台；可补演示、翻译与 API 视频的决策边界 | 已完成完整预审，进入缓冲池 | 09-14 | 当日复核 Web/API 分账、credits、时长、同意、训练数据与素材 |
 | 8 | Glean | AI 原生企业搜索与工作助手；独立企业采用信号强，补组织级知识检索判断 | 已完成完整预审，进入缓冲池 | 09-15 | 当日复核 connectors、权限、部署、企业合同与公开价格缺失边界 |
 | 9 | Fireflies.ai | AI 原生会议助手与会话智能；与 Otter 形成真实选择场景 | 已完成完整预审，进入缓冲池 | 09-16 | 当日复核套餐额度、自动入会、同意、集成、留存和素材 |
@@ -83,3 +83,5 @@ Synthesia 达到成熟工具预审门槛，完整机器可验收记录见
 ## 2026-09-14 SLA 异常与延期补发
 
 Lovable 09-11、Midjourney 09-12 发布槽均按实际 09-14 延期补发完成。两项分别通过 validate/preflight/rollback 后独立 commit，预审保留历史 09-07，并据生产事务填写 releasedAt/actualPublishedAt=09-14、nextReviewDate=10-14。中途发现的 Card 列表截断在总控部署后解除，两项完整生产审计已通过；均保持 published/monitor/noindex，sitemap 不扩张。详见 [延期补发交付](./DELAYED_LOVABLE_MIDJOURNEY_RELEASE_2026-09-14_CN.md)。
+
+ElevenLabs 原 09-13 发布槽也已构成 SLA 延期。09-14 已重新核验价格、跨产品 credits 换算、首月促销、最多两个月 rollover、取消/降级失效、商业使用、声音克隆授权、默认留存与 Enterprise API-only ZRM、并发和 429 边界；完成官方 press 素材、en/zh/cn payload 与完整 Decision Card。生产查重为 0，双语 canonical fallback 为 200/self-canonical/noindex 且不在 116 条 sitemap 中；validate、online preflight 与事务 rollback 通过。当前仍为未发布候选，未执行 `--commit`，未修改 sitemap；详见 [ElevenLabs 延期补发交付](./DELAYED_ELEVENLABS_RELEASE_2026-09-14_CN.md)。

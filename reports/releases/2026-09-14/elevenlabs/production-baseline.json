@@ -1,0 +1,208 @@
+{
+  "checkedAt": "2026-09-14T06:19:35.078Z",
+  "requestBaseUrl": "https://aibesttool.com",
+  "phase": "baseline",
+  "productionWrites": 0,
+  "candidates": [
+    {
+      "slug": "elevenlabs",
+      "canonicalSlug": "elevenlabs",
+      "identityQuery": "slug, aliases, official domain and localized title",
+      "rows": [],
+      "pages": [
+        {
+          "pathname": "/ai/elevenlabs",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/ai/elevenlabs",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "fullArticleMatchesPayload": false,
+          "missingDecisionCardItems": [
+            "Creators who review expressive narration before publishing",
+            "Localization teams comparing dubbing quality and rights",
+            "Developers able to operate metered audio APIs with fallbacks",
+            "Teams unable to document consent for cloned or licensed voices",
+            "Sensitive workflows assuming zero retention on every product",
+            "Projects requiring fixed approved-minute cost before testing",
+            "Accepted voice quality and correction effort",
+            "Credits per approved output across models and products",
+            "Voice consent, verification and access control",
+            "Commercial rights and input clearance",
+            "Retention, training and regional data controls",
+            "API latency, concurrency, retries and fallback",
+            "Shared credits do not map to one stable number of approved minutes.",
+            "Limited free regenerations differ between web and API workflows.",
+            "Voice verification cannot replace documented authorization and disclosure.",
+            "Paid commercial rights do not clear scripts, music, recordings or likenesses.",
+            "Default processing is not zero retention; ZRM has product and plan exclusions.",
+            "Model, language and source quality can change pronunciation and identity consistency.",
+            "Concurrency figures do not guarantee simultaneous calls or delivery latency.",
+            "Cancellation or downgrade ends rollover and unused paid credits expire."
+          ],
+          "imagePaths": [
+            "/images/aitools.svg",
+            "/images/Aileron.svg",
+            "/icons/global.svg"
+          ],
+          "hasReviewedDate": false,
+          "inSitemap": false,
+          "htmlSha256": "82a7e521e954d285e4808e8a895daf5077c9e769bf1dbaecc2e9043da699aeaa"
+        },
+        {
+          "pathname": "/ai/eleven-labs",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/ai/eleven-labs",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "fullArticleMatchesPayload": false,
+          "missingDecisionCardItems": [
+            "Creators who review expressive narration before publishing",
+            "Localization teams comparing dubbing quality and rights",
+            "Developers able to operate metered audio APIs with fallbacks",
+            "Teams unable to document consent for cloned or licensed voices",
+            "Sensitive workflows assuming zero retention on every product",
+            "Projects requiring fixed approved-minute cost before testing",
+            "Accepted voice quality and correction effort",
+            "Credits per approved output across models and products",
+            "Voice consent, verification and access control",
+            "Commercial rights and input clearance",
+            "Retention, training and regional data controls",
+            "API latency, concurrency, retries and fallback",
+            "Shared credits do not map to one stable number of approved minutes.",
+            "Limited free regenerations differ between web and API workflows.",
+            "Voice verification cannot replace documented authorization and disclosure.",
+            "Paid commercial rights do not clear scripts, music, recordings or likenesses.",
+            "Default processing is not zero retention; ZRM has product and plan exclusions.",
+            "Model, language and source quality can change pronunciation and identity consistency.",
+            "Concurrency figures do not guarantee simultaneous calls or delivery latency.",
+            "Cancellation or downgrade ends rollover and unused paid credits expire."
+          ],
+          "imagePaths": [
+            "/images/aitools.svg",
+            "/images/Aileron.svg",
+            "/icons/global.svg"
+          ],
+          "hasReviewedDate": false,
+          "inSitemap": false,
+          "htmlSha256": "8832d8e8b6a34e6bef3f4d824b7d2dbe4abbbc2f8611e945da49ac2ef6c4cb82"
+        },
+        {
+          "pathname": "/cn/ai/elevenlabs",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/cn/ai/elevenlabs",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "fullArticleMatchesPayload": false,
+          "missingDecisionCardItems": [
+            "发布前会复核表现力旁白的创作者",
+            "同时比较配音质量与权利的本地化团队",
+            "能运营计量式音频 API 及备用路径的开发团队",
+            "无法记录克隆或许可声音同意的团队",
+            "假定所有产品默认零留存的敏感工作流",
+            "测试前就要求成品分钟成本完全固定的项目",
+            "验收声音质量与修正成本",
+            "不同模型及产品的成品 credits",
+            "声音同意、验证与访问控制",
+            "商业权利与输入素材清权",
+            "留存、训练及地区数据控制",
+            "API 延迟、并发、重试与备用路径",
+            "共享 credits 不能稳定换算成固定的验收成品分钟数。",
+            "有限免费重生成在网页端与 API 工作流中的规则不同。",
+            "声音验证不能替代可追溯授权与必要披露。",
+            "付费商业权利不自动清除脚本、音乐、录音或肖像权。",
+            "默认处理并非零留存；ZRM 存在套餐及产品排除。",
+            "模型、语言及源素材质量会影响发音与声音身份一致性。",
+            "并发数字不保证同时通话数或交付延迟。",
+            "取消或降级会终止结转，未用付费 credits 将失效。"
+          ],
+          "imagePaths": [
+            "/images/aitools.svg",
+            "/images/Aileron.svg",
+            "/icons/global.svg"
+          ],
+          "hasReviewedDate": false,
+          "inSitemap": false,
+          "htmlSha256": "8129d1823ebc02ba2dcbcf86d8e8a5fe2322c72ad4d015d1bbeecb8915383d5c"
+        },
+        {
+          "pathname": "/cn/ai/eleven-labs",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/cn/ai/eleven-labs",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "fullArticleMatchesPayload": false,
+          "missingDecisionCardItems": [
+            "发布前会复核表现力旁白的创作者",
+            "同时比较配音质量与权利的本地化团队",
+            "能运营计量式音频 API 及备用路径的开发团队",
+            "无法记录克隆或许可声音同意的团队",
+            "假定所有产品默认零留存的敏感工作流",
+            "测试前就要求成品分钟成本完全固定的项目",
+            "验收声音质量与修正成本",
+            "不同模型及产品的成品 credits",
+            "声音同意、验证与访问控制",
+            "商业权利与输入素材清权",
+            "留存、训练及地区数据控制",
+            "API 延迟、并发、重试与备用路径",
+            "共享 credits 不能稳定换算成固定的验收成品分钟数。",
+            "有限免费重生成在网页端与 API 工作流中的规则不同。",
+            "声音验证不能替代可追溯授权与必要披露。",
+            "付费商业权利不自动清除脚本、音乐、录音或肖像权。",
+            "默认处理并非零留存；ZRM 存在套餐及产品排除。",
+            "模型、语言及源素材质量会影响发音与声音身份一致性。",
+            "并发数字不保证同时通话数或交付延迟。",
+            "取消或降级会终止结转，未用付费 credits 将失效。"
+          ],
+          "imagePaths": [
+            "/images/aitools.svg",
+            "/images/Aileron.svg",
+            "/icons/global.svg"
+          ],
+          "hasReviewedDate": false,
+          "inSitemap": false,
+          "htmlSha256": "5a099d27fffa2178ac9d5b4c6827ee4391e9d8b39835596e6210683d1031fcc5"
+        }
+      ],
+      "media": [
+        {
+          "path": "/icons/tool-logos/elevenlabs.svg",
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "sha256": "abe5bcaeb39b43ea6d9781765e706f0507cf0cd6d31d357f80a77e80cfaba890",
+          "expectedSha256": "7a41b7f26b6286f607d34c80a658ef06e5cb6c094a1b087b563c8508e15f2178",
+          "ready": false
+        },
+        {
+          "path": "/images/tool-media/elevenlabs-release-cover.svg",
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "sha256": "b8718c9d45a42f6df4247bd69ab546fea2cca81284619311fb261d23064f38b8",
+          "expectedSha256": "4fb6529e6bf2b7057f310a5ac2daf66003cc696d2a14c3c7c976c471e0bb23f4",
+          "ready": false
+        }
+      ]
+    }
+  ],
+  "failures": [],
+  "sitemap": {
+    "status": 200,
+    "urlCount": 116,
+    "sha256": "542b83ce429181dd19327324e4897c05b04f7348ca6ca9aba096fa5ed7d673cb"
+  }
+}
