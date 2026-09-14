@@ -1,0 +1,182 @@
+{
+  "checkedAt": "2026-09-14T02:18:49.278Z",
+  "phase": "media",
+  "productionWrites": 0,
+  "candidates": [
+    {
+      "slug": "lovable",
+      "canonicalSlug": "lovable",
+      "identityQuery": "slug, aliases, official domain and localized title",
+      "rows": [],
+      "pages": [
+        {
+          "pathname": "/ai/lovable",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/ai/lovable",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "2bf479d78ac126c9c4378cef20df8e5e536c10e5382400aafb38c8134dae0c54"
+        },
+        {
+          "pathname": "/ai/lovable-dev",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/ai/lovable-dev",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "7936e3b4993bdd4761b1940daae1a719315f26e26a5b293c4151206d844ab6a8"
+        },
+        {
+          "pathname": "/cn/ai/lovable",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/cn/ai/lovable",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "81f07f5a1ea71d574f028b1cf43824a89b5964f16684abb42f4d77b933925122"
+        },
+        {
+          "pathname": "/cn/ai/lovable-dev",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/cn/ai/lovable-dev",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "c0a0988f6ca7882825f09c5d7f9d25807879911ca60ba068d624c23cf2de3d08"
+        }
+      ],
+      "media": [
+        {
+          "path": "/icons/tool-logos/lovable.svg",
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "sha256": "3b13b857773b2382c5b52b2d764a277d890b14a08aa212a256c160a7ac0821cd",
+          "expectedSha256": "39382dce432255c49d31403ca532be204b2d72da0d0a14dce4708d6952fce972",
+          "ready": false
+        },
+        {
+          "path": "/images/tool-media/lovable-release-cover.svg",
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "sha256": "0a80a0d1a25569b455da23fa5e474b30a120b82685e0831e71fe88c6feb96891",
+          "expectedSha256": "257fbbf448fae44bb732fe3dcce01632b04c9c232fcd66f6e34eb13f4fe1893a",
+          "ready": false
+        }
+      ]
+    },
+    {
+      "slug": "midjourney",
+      "canonicalSlug": "midjourney",
+      "identityQuery": "slug, aliases, official domain and localized title",
+      "rows": [],
+      "pages": [
+        {
+          "pathname": "/ai/midjourney",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/ai/midjourney",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "80ec03f15eb2aeb5ad254b04d5954c392bb384931e781a17faa0123cd6d9224a"
+        },
+        {
+          "pathname": "/ai/mid-journey",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/ai/mid-journey",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "7300c1b9b4a826128518b9a13474311a540e6eaa919d4b92ae395689b1bafe68"
+        },
+        {
+          "pathname": "/cn/ai/midjourney",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/cn/ai/midjourney",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "d5c8144c3070124dde7142e7dcd08b76eaf5cdef60ce8e35d1b4976a2af444d8"
+        },
+        {
+          "pathname": "/cn/ai/mid-journey",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/cn/ai/mid-journey",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "e2d6f06c1f48ed86d5c003bb44f4a8258c84d9421dc29518ff331b2ea7665bb1"
+        }
+      ],
+      "media": [
+        {
+          "path": "/icons/tool-logos/midjourney.jpg",
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "sha256": "3998dd42048b0f01eefa264313f4e7bc31e66ab7528e0a1517a216cd834b1faa",
+          "expectedSha256": "33024615c808beb9b91ada21d8b604b509c633c7a26a3ae044e704649b083870",
+          "ready": false
+        },
+        {
+          "path": "/images/tool-media/midjourney-release-cover.svg",
+          "status": 404,
+          "contentType": "text/html; charset=utf-8",
+          "sha256": "d7c990055af36cec219c4a2d82863121b9ebb34be14da9e74e2592200a548144",
+          "expectedSha256": "0df58d98cd698cde883321af72fa2cdbe19acb74105b919536d035a5458f6387",
+          "ready": false
+        }
+      ]
+    }
+  ],
+  "failures": [
+    "lovable: production media unavailable or different: /icons/tool-logos/lovable.svg",
+    "lovable: production media unavailable or different: /images/tool-media/lovable-release-cover.svg",
+    "midjourney: production media unavailable or different: /icons/tool-logos/midjourney.jpg",
+    "midjourney: production media unavailable or different: /images/tool-media/midjourney-release-cover.svg"
+  ],
+  "sitemap": {
+    "status": 200,
+    "urlCount": 116,
+    "sha256": "53fdc2440f82715a3aedf843e7211cf2e1d8c5951739c56f38d7e4a7087624bd"
+  }
+}

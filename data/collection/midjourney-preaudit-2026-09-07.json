@@ -126,5 +126,14 @@
     "Keep the recommendation centered on visual exploration and art direction rather than claiming universal prompt accuracy or deterministic production output",
     "Preserve public-by-default, Stealth, remixing, GPU economics, exact-control, commercial-rights, copyright, and image-to-video boundaries in both languages",
     "Replace only the existing /ai/midjourney fallback and publish as monitor/noindex; run evidence, alias, sitemap, TypeScript, full build, and production smoke before any later index decision"
-  ]
+  ],
+  "delayedRelease": {
+    "scheduledSlot": "2026-09-12",
+    "recheckedAt": "2026-09-14",
+    "label": "延期补发",
+    "status": "blocked_production_media_not_deployed",
+    "releasePayload": "midjourney-release.json",
+    "actualPublishedAt": null,
+    "note": "Original preaudit reviewedAt is historical. Only a successful production commit may populate releasedAt; new local media must first be present in production."
+  }
 }

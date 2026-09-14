@@ -1,0 +1,25 @@
+{
+  "baselineSha": "62604cb5c9f411fe0aad59f59d7bfa92dc206aca",
+  "file": "app/[locale]/(with-footer)/ai/[websiteName]/page.tsx",
+  "baseline": {
+    "exitCode": 1,
+    "errorCount": 1515,
+    "warningCount": 6,
+    "rules": {
+      "@typescript-eslint/indent": 1514,
+      "no-console": 6,
+      "no-nested-ternary": 1
+    }
+  },
+  "current": {
+    "exitCode": 1,
+    "errorCount": 1515,
+    "warningCount": 6,
+    "rules": {
+      "@typescript-eslint/indent": 1514,
+      "no-console": 6,
+      "no-nested-ternary": 1
+    }
+  },
+  "newFindings": 0
+}

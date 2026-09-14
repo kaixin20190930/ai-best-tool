@@ -1,0 +1,28 @@
+{
+  "auditedAt": "2026-09-14T02:19:58.404Z",
+  "baseUrl": "https://aibesttool.com",
+  "success": true,
+  "database": {
+    "total": 56,
+    "published": 44,
+    "indexable": 13,
+    "reasonCounts": {
+      "indexing_paused": 31,
+      "published_and_approved": 13,
+      "not_published": 12
+    }
+  },
+  "sitemap": {
+    "totalUrls": 116,
+    "toolUrls": 26,
+    "duplicateUrls": [],
+    "missingToolUrls": [],
+    "unexpectedToolUrls": []
+  },
+  "duplicateCanonicalEntities": [],
+  "pageChecks": {
+    "checkedTools": 44,
+    "issueCount": 0,
+    "issues": []
+  }
+}
