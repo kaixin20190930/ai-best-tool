@@ -257,6 +257,16 @@ Tool -> Category / 2-4 个关系明确的 Tool / 对应 Guide
 没有上述记录不得进入 main。该规则用于保护 Google 已形成的“AI 工具目录”认知，同时允许产品能力在 noindex 工作区和现有工具
 页内继续升级。
 
+## 公开内容与内部控制边界（2026-09-14 冻结）
+
+- 公开页面只能展示产品事实、用户任务、适用/不适用边界、会改变选择的限制、已核验证据、核查日期、真实变化和明确下一步。
+- `monitor`、`continue_index`、索引策略、sitemap 资格、内容缺口、下一步增强、市场验证分、发布槽位和转化目标只允许存在于后台、报告、文档或非渲染配置。
+- noindex 页面同样遵守公开内容质量要求；noindex 不是暴露内部规划、重复模块或通用 AI 文案的豁免。
+- Guide 和 comparison 不得批量渲染“提交/认领”主 CTA；商业转化集中在 Tool、Submit、Developer Listing 和 Pricing 页面。
+- 通用组件不得在缺少具体事实时自动生成“价格/更新/风险”证据卡。没有证据时应省略或明确事实缺口，不得用方法论填充页面。
+- 新公开模块必须先记录用户问题、证据要求、页面类型、最大实例数、索引影响、试点范围、成功指标和回滚方式；默认只在 3-5 个已有页面试点。
+- 公开源码和生产 HTML 必须通过内部语言扫描，详细门禁、实施顺序和验收见 [公开内容边界与页面简化实施方案](./PUBLIC_CONTENT_BOUNDARY_AND_PAGE_SIMPLIFICATION_PLAN_CN.md)。
+
 ## 十二、SEO-IA-01 至 SEO-IA-04 实施记录（2026-09-02）
 
 - 新增 `buildLocalizedPageMetadata`，统一 canonical、`en/cn/x-default` hreflang、robots、Open Graph、Twitter 和绝对图片
