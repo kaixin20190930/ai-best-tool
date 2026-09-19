@@ -154,7 +154,10 @@
     "test:pub-02-content": "tsx scripts/test-pub-02-content.tsx",
     "test:pub-02-html": "tsx scripts/audit-pub-02-seo.ts",
     "test:pub-03-content": "tsx scripts/test-pub-03-freeze.ts",
-    "test:pub-03-html": "tsx scripts/audit-pub-03-html.ts"
+    "test:pub-03-html": "tsx scripts/audit-pub-03-html.ts",
+    "test:public-module-registry": "tsx scripts/test-public-module-registry.ts",
+    "test:pub-04-freeze": "tsx scripts/test-pub-04-freeze.ts",
+    "typecheck:public-modules": "tsc --noEmit --project scripts/tsconfig.public-modules.json"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

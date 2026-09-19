@@ -1,0 +1,5 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": { "incremental": false },
+  "include": ["test-public-module-registry.ts", "test-pub-04-freeze.ts"]
+}

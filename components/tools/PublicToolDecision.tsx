@@ -4,6 +4,7 @@ import { publicToolNarrative } from '@/lib/content/publicToolScope';
 import type { DecisionCardV2Model } from '@/lib/services/decision/card';
 import type { ToolDecisionCardModel } from '@/lib/services/toolDecisionCard';
 import DecisionCardV2 from '@/components/decision/DecisionCardV2';
+import PublicModuleArea, { type PublicModuleAreaProps } from '@/components/public-modules/PublicModuleArea';
 
 export default function PublicToolDecision({
   card,
@@ -13,6 +14,7 @@ export default function PublicToolDecision({
   tradeOff,
   checkedAt,
   children,
+  experimentalModules,
 }: {
   card: ToolDecisionCardModel;
   model: DecisionCardV2Model | null;
@@ -21,6 +23,7 @@ export default function PublicToolDecision({
   tradeOff: string;
   checkedAt: string | null;
   children?: ReactNode;
+  experimentalModules?: Omit<PublicModuleAreaProps, 'page' | 'placement'> & { page: { path: string; pageType: 'tool' } };
 }) {
   const cn = locale === 'cn' || locale === 'tw';
   return (
@@ -123,6 +126,7 @@ export default function PublicToolDecision({
           </div>
         </div>
       )}
+      {experimentalModules && <PublicModuleArea page={experimentalModules.page} placement='after-decision' modules={experimentalModules.modules} />}
     </section>
   );
 }
