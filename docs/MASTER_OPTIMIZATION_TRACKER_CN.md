@@ -7,7 +7,7 @@
 当前范围：SEO 收录、搜索可见性、核心页面质量与真实编辑信号。产品分发/外链工作台暂不作为本轮执行目标，保留代码与数据，并
 已隐藏公开导航、价格页和后台侧栏入口；相关历史方案已移至 `docs/archive/`。
 
-2026-09-20 规模化口径更新：生产基线为 61 条工具记录、48 条已公开、13 条获准索引；技术和 SEO 护栏稳定，当前增长瓶颈转为高质量工具库存和差异化覆盖。后续每天发现 10-20 个、深审 4-6 个，目标公开 2 个且上限 3 个；索引仍逐页审批，每天最多 1 个、目标每周 4 个且硬上限 5 个。完整阶段目标、维护频率和暂停门禁见 [高质量工具规模化与分层维护路线图](./CONTENT_SCALE_AND_MAINTENANCE_ROADMAP_2026-09-20_CN.md)。
+2026-09-20 规模化口径更新：生产基线为 63 条工具记录、50 条已公开、13 条获准索引；技术和 SEO 护栏稳定，当前增长瓶颈转为高质量工具库存和差异化覆盖。后续每天发现 10-20 个、深审 4-6 个，目标公开 2 个且上限 3 个；索引仍逐页审批，每天最多 1 个、目标每周 4 个且硬上限 5 个。完整阶段目标、维护频率和暂停门禁见 [高质量工具规模化与分层维护路线图](./CONTENT_SCALE_AND_MAINTENANCE_ROADMAP_2026-09-20_CN.md)。
 
 四周实施排期见 [证据驱动目录优化计划](./FOUR_WEEK_EVIDENCE_LED_DIRECTORY_PLAN_CN.md)。
 
@@ -329,3 +329,11 @@ query、Top 20 page、已抓取未编入索引与软 404 数量。
 - 本轮唯一的执行依据是本文
   件、[四周证据驱动目录计划](./FOUR_WEEK_EVIDENCE_LED_DIRECTORY_PLAN_CN.md)、[GSC 周度观察台账](./GSC_WEEKLY_OBSERVATION_LOG_CN.md)、[Coverage URL 审计](./COVERAGE_URL_AUDIT_2026-08-31_CN.md)、[SEO 内容准入清单](./SEO_CONTENT_CHECKLIST.md)、[核心页面信号审计](./PRIORITY_PAGE_SIGNAL_AUDIT_CN.md)
   与 [重点工具详情说明](./PRIORITY_TOOL_DETAIL_PLAYBOOK_CN.md)。
+## 2026-09-20 成熟候选缓冲池
+
+- 状态：完成。
+- 对生产 63 条工具记录完成只读去重，建立 14 条候选缓冲；候选只进入深审队列，不创建页面、不进入 sitemap、不批准索引。
+- 组合：10 条成熟高需求、3 条快速增长且有证据基础、1 条专业差异化工具。
+- 自动门禁覆盖数量、唯一性、来源、决策维度、风险披露及公开/索引批准关闭状态。
+- 生命周期异常的 Sourcegraph Cody 和 Amazon Q Developer IDE plugins 已排除，避免以历史热度制造失效页面。
+- 详情：[成熟高需求工具候选缓冲池](./MATURE_CANDIDATE_BUFFER_2026-09-20_CN.md)。下一项：Grammarly 深审。
