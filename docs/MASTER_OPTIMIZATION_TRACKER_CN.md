@@ -234,6 +234,8 @@ Synthesia 与 Replit 后原本只剩 Otter.ai、Lovable 和 Midjourney，低于�
 
 2026-09-20 ElevenLabs 延期补发完成：已重新核验价格、PAYG/legacy 计费边界、商业使用、隐私、ZRM 与 API 限制，并以唯一实体 `d7b63bf2-63c8-4015-b59d-2f627450813f` 完成生产事务发布。en/zh/cn 数据回读、双语言页面、Decision Card、比较维度、素材、数据库契约、全站索引一致性和生产 SEO smoke 均通过；独立发布审计 0 个失败。当前严格保持 `published + monitor/noindex`，不在 sitemap，2026-10-20 复核事实；最短 48–72 小时后才可进入独立索引评审。详见 [ElevenLabs 延期补发交付](./DELAYED_ELEVENLABS_RELEASE_2026-09-14_CN.md)。
 
+2026-09-20 HeyGen 延期补发完成：网页套餐与共享 credits、网页/API 分账、并发和输入限制、Digital Twin 同意、非 Enterprise 训练退出、Free 输出权利与编辑素材性质均已复核；生产事务先 rollback 后 commit，唯一实体 `4f26ce1c-08fd-4f99-97c9-21864c35bf94` 回读为 `published + monitor`。英中双语及 `zh/cn` 兼容内容、Decision Card、媒体、canonical、noindex、sitemap 和独立生产审计全部通过。生产基线为 62 条工具、49 条公开、13 条索引、36 条暂停索引，sitemap 仍为 118 条；下次事实复核 2026-10-20，索引仍需独立审批。详见 [HeyGen 延期补发交付](./DELAYED_HEYGEN_RELEASE_2026-09-20_CN.md)。
+
 ## 已完成能力
 
 | 优先级 | 已完成项                                                   | 当前价值                                 |

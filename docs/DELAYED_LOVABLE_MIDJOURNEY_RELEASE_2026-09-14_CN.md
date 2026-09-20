@@ -92,7 +92,7 @@
 - 四项线上媒体图片类型及 SHA256 与本地一致，见 `publication/production-media.json`。
 - Lovable 重新逐项 validate、preflight、rollback 均退出 0；独立 `--commit` 成功，数据库 created_at 为 `2026-09-14T03:14:21.572Z`，唯一实体 ID `8fee5c8b-f284-41d4-b691-c099e5bb230b`。事务回读完整 en/zh/cn、features、媒体和 `nextReviewDate=2026-10-14`；实际发布日期记录为 09-14，索引状态保持 monitor。
 - 统一发布器 online verify 退出 0。增强 released audit 去除 script/style/noscript 后比较真实 DOM，确认双语完整 Markdown、简介和图片均正确；同时发现 Card 的 7 条限制仅前 2 条可见。`publication/lovable-released.json` 保留退出 1 的真实报告，不能当作最终通过。
-- 根因是详情页 `visibleDecisionRisks` 固定 `.slice(0, 2)`。本候选移除截断，完整展示已复核限制。审计保留每一条 audience、比较维度和限制的断言，并增强唯一 ID、完整 features、三语言标题正文、媒体字段和复查日比较；支持逐候选核验，避免先发布第二项才发现第一项的问题。
+- 根因是详情页 `visibleDecisionRisks` 固定 `.slice(0, 2)`。本候选移除截断，完整展示已复核限制。审计保留每一条 audience、比较维度和限制的断言，并增强唯一 ID、完整 features、英中双语及 `zh/cn` 兼容标题正文、媒体字段和复查日比较；支持逐候选核验，避免先发布第二项才发现第一项的问题。
 - 发布测试改用独立临时未发布样本验证日期/媒体阻断，不修改真实预审文件，不读取生产环境文件，数据库地址固定为无效本地地址；另对真实 released 记录检查实际日期、monitor/sitemap 状态和重复提交拦截。
 - Lovable 提交后全站索引一致性及 production SEO smoke 均退出 0：57 条实体、45 条 published、13 条可索引；sitemap 116 条/26 个工具 URL；重复、遗漏、越界和 45 项页面检查问题均为 0。
 - 当时按总控“任一门禁失败立即停止第二个提交”暂停 Midjourney。恢复条件为总控部署修复且 Lovable 全量线上审计通过；该条件在最终发布阶段已满足。

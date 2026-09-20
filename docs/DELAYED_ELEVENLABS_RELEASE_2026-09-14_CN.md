@@ -59,7 +59,7 @@
 
 独立依据支持“值得建立决策页”和风险解释，不替代官方当日价格、条款或账户级实测。
 
-## 媒体、三语言与 Decision Card
+## 媒体、英中双语与 `zh/cn` 兼容
 
 - Logo 采用 [ElevenLabs 官方 press 页面](https://elevenlabs.io/press)提供的黑色 SVG 字标，原始路径为
   `/icons/tool-logos/elevenlabs.svg`，SHA256 `7a41b7f26b6286f607d34c80a658ef06e5cb6c094a1b087b563c8508e15f2178`。

@@ -113,8 +113,8 @@ assert(
   'LNK-01 must retain its full Guide, relationship, and category acceptance evidence',
 );
 for (const contract of [
-  '数据库工具记录 | 61',
-  '已公开工具 | 48',
+  '数据库工具记录 | 62',
+  '已公开工具 | 49',
   '获准索引工具 | 13',
   '目标 2 个、上限 3 个/自然日',
   '目标每周 4 个、硬上限 5 个',

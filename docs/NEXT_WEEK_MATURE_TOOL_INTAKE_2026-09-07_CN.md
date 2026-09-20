@@ -19,7 +19,7 @@
 | 4 | Lovable | AI 原生全栈应用构建；须拆分原型速度与生产就绪 | 09-14 独立发布并完成全量生产验收 | 原 09-11；实际 09-14 | monitor/noindex；下次事实复核 10-14 |
 | 5 | Midjourney | AI 原生图像与短视频创作；品牌成熟且决策边界明显 | 09-14 独立发布并完成全量生产验收 | 原 09-12；实际 09-14 | monitor/noindex；下次事实复核 10-14 |
 | 6 | ElevenLabs | AI 原生语音与音频平台；成熟采用信号强，适合比较质量、credits、克隆同意与商业权利 | 09-20 已完成生产发布和独立验收，保持 `published + monitor/noindex` | 原 09-13；实际 09-20 | 10-20 复核事实；最短观察期后仍须独立索引审批 |
-| 7 | HeyGen | AI 原生数字人商务视频平台；可补演示、翻译与 API 视频的决策边界 | 已完成完整预审，进入缓冲池 | 09-14 | 当日复核 Web/API 分账、credits、时长、同意、训练数据与素材 |
+| 7 | HeyGen | AI 原生数字人商务视频平台；可补演示、翻译与 API 视频的决策边界 | 09-20 延期补发完成，保持 `monitor/noindex` | 原 09-14；实际 09-20 | 10-20 复核事实；索引仍需独立批准 |
 | 8 | Glean | AI 原生企业搜索与工作助手；独立企业采用信号强，补组织级知识检索判断 | 已完成完整预审，进入缓冲池 | 09-15 | 当日复核 connectors、权限、部署、企业合同与公开价格缺失边界 |
 | 9 | Fireflies.ai | AI 原生会议助手与会话智能；与 Otter 形成真实选择场景 | 已完成完整预审，进入缓冲池 | 09-16 | 当日复核套餐额度、自动入会、同意、集成、留存和素材 |
 
@@ -79,9 +79,12 @@ Synthesia 达到成熟工具预审门槛，完整机器可验收记录见
 | 2026-09-07 | Midjourney 查重、fallback 与完整预审 | 无实体记录；fallback 为 noindex self-canonical；价格、GPU、隐私、商业权利与视频边界已补齐，最早 09-12 |
 | 2026-09-09 | 连续发布候选池补充 | ElevenLabs、HeyGen、Glean、Fireflies.ai 完成完整预审；缓冲池由 3 个增至 7 个，均不写生产、不改 sitemap |
 | 2026-09-09 | Windsurf 身份风险复核 | 官网正将 Windsurf 更名为 Devin Desktop；暂缓收录，待 canonical 与市场身份稳定后重审 |
+| 2026-09-20 | HeyGen 发布日复核与生产迁移 | 网页套餐、credits、API 分账、同意、训练默认值、输出权利和运行限制已复核；rollback/commit 回读通过，保持 monitor/noindex，不改 sitemap |
 
 ## 2026-09-14 SLA 异常与延期补发
 
 Lovable 09-11、Midjourney 09-12 发布槽均按实际 09-14 延期补发完成。两项分别通过 validate/preflight/rollback 后独立 commit，预审保留历史 09-07，并据生产事务填写 releasedAt/actualPublishedAt=09-14、nextReviewDate=10-14。中途发现的 Card 列表截断在总控部署后解除，两项完整生产审计已通过；均保持 published/monitor/noindex，sitemap 不扩张。详见 [延期补发交付](./DELAYED_LOVABLE_MIDJOURNEY_RELEASE_2026-09-14_CN.md)。
 
-ElevenLabs 原 09-13 发布槽构成 SLA 延期，并于 09-20 完成重新核验和生产补发。价格、PAYG/legacy 计费、商业使用、声音克隆授权、默认留存、ZRM、并发和 API 边界均已回写；生产事务、三语言回读、双语页面、Decision Card、比较维度、素材、索引一致性和独立审计全部通过。当前保持 `published + monitor/noindex`，不进入 sitemap；详见 [ElevenLabs 延期补发交付](./DELAYED_ELEVENLABS_RELEASE_2026-09-14_CN.md)。
+ElevenLabs 原 09-13 发布槽构成 SLA 延期，并于 09-20 完成重新核验和生产补发。价格、PAYG/legacy 计费、商业使用、声音克隆授权、默认留存、ZRM、并发和 API 边界均已回写；生产事务、英中双语及 `zh/cn` 兼容回读、Decision Card、比较维度、素材、索引一致性和独立审计全部通过。当前保持 `published + monitor/noindex`，不进入 sitemap；详见 [ElevenLabs 延期补发交付](./DELAYED_ELEVENLABS_RELEASE_2026-09-14_CN.md)。
+
+HeyGen 原 09-14 发布槽构成 SLA 延期，并于 09-20 完成重新核验和生产补发。网页套餐与 credits、网页/API 付款边界、并发、Digital Twin 同意、非 Enterprise 训练退出、Free 输出权利和编辑素材性质均已回写；采用英中双语内容并以 `zh/cn` 兼容存储，不代表三种独立语言。当前保持 `published + monitor/noindex`，不进入 sitemap。

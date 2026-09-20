@@ -1,0 +1,189 @@
+{
+  "checkedAt": "2026-09-20T13:02:49.283Z",
+  "requestBaseUrl": "https://aibesttool.com",
+  "phase": "released",
+  "productionWrites": 0,
+  "candidates": [
+    {
+      "slug": "heygen",
+      "canonicalSlug": "heygen",
+      "identityQuery": "slug, aliases, official domain and localized title",
+      "rows": [
+        {
+          "id": "4f26ce1c-08fd-4f99-97c9-21864c35bf94",
+          "name": "heygen",
+          "url": "https://www.heygen.com/",
+          "status": "published",
+          "pageQualityStatus": "monitor",
+          "reviewedAt": "2026-09-20",
+          "nextReviewDate": "2026-10-20",
+          "createdAt": "2026-09-20T13:00:45.707Z",
+          "updatedAt": "2026-09-20T13:00:45.707Z",
+          "identityMatchesPayload": true,
+          "featuresMatchPayload": true,
+          "mediaMatchPayload": true,
+          "contentMatchesPayload": true,
+          "indexDecision": {
+            "indexable": false,
+            "qualityScore": 100,
+            "reason": "indexing_paused"
+          }
+        }
+      ],
+      "pages": [
+        {
+          "pathname": "/ai/heygen",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/ai/heygen",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "HeyGen AI Avatar Video Platform",
+          "hasDecisionCard": true,
+          "hasPayloadCopy": true,
+          "fullArticleMatchesPayload": true,
+          "missingDecisionCardItems": [],
+          "imagePaths": [
+            "/images/aitools.svg",
+            "/images/Aileron.svg",
+            "/icons/global.svg",
+            "/images/tool-media/heygen-cover.svg"
+          ],
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "1736459e358f6459a736ae9c569bc74110c06ede7b1f76779c723f01318d403f"
+        },
+        {
+          "pathname": "/ai/hey-gen",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/ai/hey-gen",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "fullArticleMatchesPayload": false,
+          "missingDecisionCardItems": [
+            "Teams producing repeatable presenter-led business videos",
+            "Localization teams able to review every translated output",
+            "Developers operating metered asynchronous video workflows",
+            "Teams unable to document likeness and voice permission",
+            "One-off messages that are faster to record with a real presenter",
+            "Projects requiring fixed approved-minute cost before model testing",
+            "Accepted avatar quality and correction effort",
+            "Credits per approved minute by model",
+            "Likeness consent and access controls",
+            "Translation review and pronunciation",
+            "Web subscription versus API payer",
+            "Training, retention and Enterprise controls",
+            "Credits do not map to one fixed amount of approved video.",
+            "Web and API billing must be budgeted separately.",
+            "A platform consent step does not replace documented likeness permission.",
+            "Photo and prompt avatars can lack an API consent step but still require rights.",
+            "Non-Enterprise content may be used for model improvement unless opted out.",
+            "Free output is not licensed for commercial use under the current Terms.",
+            "Translation, pronunciation, lip sync and factual claims require human review.",
+            "Concurrency is a ceiling, not a render-time guarantee."
+          ],
+          "imagePaths": [
+            "/images/aitools.svg",
+            "/images/Aileron.svg",
+            "/icons/global.svg"
+          ],
+          "hasReviewedDate": false,
+          "inSitemap": false,
+          "htmlSha256": "d9817720bc917ef3a7276502476a8a2d58c1ee93235f3433602018697b615251"
+        },
+        {
+          "pathname": "/cn/ai/heygen",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/cn/ai/heygen",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "HeyGen AI 数字人与视频平台",
+          "hasDecisionCard": true,
+          "hasPayloadCopy": true,
+          "fullArticleMatchesPayload": true,
+          "missingDecisionCardItems": [],
+          "imagePaths": [
+            "/images/aitools.svg",
+            "/images/Aileron.svg",
+            "/icons/global.svg",
+            "/images/tool-media/heygen-cover.svg"
+          ],
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "5d6424cd513588e62056b2831343828b6eb2d88de198dbfeb9c7484616b95d8b"
+        },
+        {
+          "pathname": "/cn/ai/hey-gen",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/cn/ai/hey-gen",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "fullArticleMatchesPayload": false,
+          "missingDecisionCardItems": [
+            "持续制作数字人商务视频的团队",
+            "能够逐条复核翻译成品的本地化团队",
+            "能运营计量式异步视频工作流的开发团队",
+            "无法记录肖像和声音授权的团队",
+            "真人直接录制更快的一次性消息",
+            "模型测试前就要求锁定成品分钟成本的项目",
+            "验收数字人质量与修正成本",
+            "不同模型的成品分钟 credits",
+            "肖像同意与访问控制",
+            "翻译复核与发音",
+            "网页订阅与 API 付款方",
+            "训练、留存与 Enterprise 控制",
+            "credits 不能稳定换算为固定数量的验收视频。",
+            "网页端与 API 计费必须分别预算。",
+            "平台同意步骤不能替代可追溯肖像授权。",
+            "照片和提示词数字人即使没有 API 同意步骤也仍需权利。",
+            "非 Enterprise 内容可能用于模型改进，除非完成退出。",
+            "当前条款下 Free 输出不得商业使用。",
+            "翻译、发音、口型与事实主张需要人工复核。",
+            "并发只是上限，不是渲染时间保证。"
+          ],
+          "imagePaths": [
+            "/images/aitools.svg",
+            "/images/Aileron.svg",
+            "/icons/global.svg"
+          ],
+          "hasReviewedDate": false,
+          "inSitemap": false,
+          "htmlSha256": "79898eea14c4369be976face98ba6911f0fdbfb98516ad661d56da880473e9e6"
+        }
+      ],
+      "media": [
+        {
+          "path": "/icons/tool-logos/heygen.svg",
+          "status": 200,
+          "contentType": "image/svg+xml",
+          "sha256": "029cbc240a853261c961406847db47cce6862dea4ef427ba64b9f5fe95a86c5a",
+          "expectedSha256": "029cbc240a853261c961406847db47cce6862dea4ef427ba64b9f5fe95a86c5a",
+          "ready": true
+        },
+        {
+          "path": "/images/tool-media/heygen-cover.svg",
+          "status": 200,
+          "contentType": "image/svg+xml",
+          "sha256": "c6d184958f4acb72259603f708a977bb810aaa4fdc6b90bcc63db304427385bb",
+          "expectedSha256": "c6d184958f4acb72259603f708a977bb810aaa4fdc6b90bcc63db304427385bb",
+          "ready": true
+        }
+      ]
+    }
+  ],
+  "failures": [],
+  "sitemap": {
+    "status": 200,
+    "urlCount": 118,
+    "sha256": "8023da1510bbe81aead85012c68d1e3d180541476033fcb4ddc17213aa718683"
+  }
+}
