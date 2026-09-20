@@ -163,6 +163,7 @@
     "test:measure-01-freeze": "tsx scripts/test-measure-01-freeze.ts",
     "typecheck:decision-events": "tsc --noEmit --project scripts/tsconfig.decision-events.json",
     "test:meeting-notes-pilot-seed": "tsx scripts/test-meeting-notes-pilot-seed.ts",
+    "test:decision-editorial-trigger-fix": "tsx scripts/test-decision-editorial-trigger-fix.ts",
     "tools:migrate-fireflies": "tsx scripts/migrate-fireflies-tool.ts"
   },
   "lint-staged": {

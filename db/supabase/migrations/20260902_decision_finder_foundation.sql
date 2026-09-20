@@ -331,7 +331,11 @@ AS $$
 DECLARE
   has_evidence BOOLEAN;
 BEGIN
-  IF TG_TABLE_NAME = 'tool_decision_profiles' AND NEW.editorial_status = 'published' THEN
+  IF TG_TABLE_NAME = 'tool_decision_profiles' THEN
+    IF NEW.editorial_status <> 'published' THEN
+      RETURN NEW;
+    END IF;
+
     SELECT EXISTS (
       SELECT 1
       FROM tool_decision_profile_claims link
@@ -343,7 +347,11 @@ BEGIN
         AND (claim.review_due_at IS NULL OR claim.review_due_at > NOW())
         AND claim.conflict_status = 'none'
     ) INTO has_evidence;
-  ELSIF TG_TABLE_NAME = 'tool_task_fits' AND NEW.status = 'published' THEN
+  ELSIF TG_TABLE_NAME = 'tool_task_fits' THEN
+    IF NEW.status <> 'published' THEN
+      RETURN NEW;
+    END IF;
+
     SELECT EXISTS (
       SELECT 1
       FROM tool_task_fit_claims link
@@ -355,7 +363,11 @@ BEGIN
         AND (claim.review_due_at IS NULL OR claim.review_due_at > NOW())
         AND claim.conflict_status = 'none'
     ) INTO has_evidence;
-  ELSIF TG_TABLE_NAME = 'tool_relationships' AND NEW.status = 'published' THEN
+  ELSIF TG_TABLE_NAME = 'tool_relationships' THEN
+    IF NEW.status <> 'published' THEN
+      RETURN NEW;
+    END IF;
+
     SELECT EXISTS (
       SELECT 1
       FROM tool_relationship_claims link
