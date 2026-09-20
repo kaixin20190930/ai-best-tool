@@ -1,0 +1,110 @@
+{
+  "slug": "jasper",
+  "title": "Jasper Marketing AI Platform",
+  "officialUrl": "https://www.jasper.ai/",
+  "existingRoute": "/ai/jasper",
+  "action": "migrate_existing_fallback",
+  "status": "deep_review_complete",
+  "reviewedAt": "2026-09-20",
+  "publishNotBefore": "2026-09-22",
+  "sitemapChangeApproved": false,
+  "productionWriteApproved": false,
+  "releaseIndexState": "monitor",
+  "routeAudit": {"english": "200_self_canonical_noindex", "chinese": "200_self_canonical_noindex", "sitemapMatches": 0, "productionEntityMatches": 0},
+  "category": {"discoverySlug": "writing", "storageSlug": "text-writing"},
+  "identityDecision": {
+    "canonicalProduct": "Jasper",
+    "company": "Jasper AI, Inc.",
+    "scope": "Treat Jasper as one marketing AI platform centered on Jasper IQ, Canvas, Agents, Studio, Grid and governed brand context. Do not reduce it to a generic long-form writer or split named capabilities into separate tool pages.",
+    "reason": "Current product and pricing surfaces sell one marketing platform. Pro serves one user with bounded brand context, while Business adds team, governance, API and credit-metered capabilities."
+  },
+  "positioning": "A marketing AI platform for governed brand context, repeatable campaign production, agents and scaled workflows, with a one-seat Pro plan and custom Business economics that combine platform access with credits for selected actions.",
+  "decisionAngles": [
+    "Jasper brand-governed marketing workflows versus general-purpose AI drafting",
+    "Pro single-seat economics versus custom Business commitments",
+    "Unlimited core Chat, Agents, Studio and IQ versus credit-metered premium actions",
+    "Two Pro Brand Voices and five Knowledge assets versus unlimited Business IQ customization",
+    "Human editorial review and brand consistency versus fully automated publishing",
+    "Customer-property protections, third-party processing, DPA and deployment location",
+    "Workspace-wide credit pools, per-user controls and unlogged overage-setting changes"
+  ],
+  "pricingSnapshot": {
+    "checkedAt": "2026-09-20",
+    "plans": [
+      "Pro: USD 69 per month per seat on monthly billing or USD 59 per month per seat billed yearly, with one included seat and a seven-day trial",
+      "Pro context limits: two Brand Voices, five Knowledge assets and three Audiences",
+      "Business: custom pricing, generally a 12-month commitment, additional users, unlimited IQ customization, custom agents, Grid, API, SSO and governance",
+      "Business credits: included base credits plus prepaid packs or PAYG for API/MCP, Grid output rows and selected advanced Agent/GEO actions",
+      "Standard Chat and Canvas creation are not identified as the drivers of credit usage"
+    ],
+    "volatileFields": ["Pro monthly and annual prices, trial conversion and currency conversion", "Business platform fee, included credits and commitments", "credit rate card, charged actions and expiration terms", "Pro Brand Voice, Knowledge and Audience limits"],
+    "releaseGuard": "Recheck pricing, live credit rates, charged actions, plan limits and cancellation terms on release day. Never combine seat price and credits into an invented effective price."
+  },
+  "policyBoundaries": [
+    {
+      "label": "Customer property is excluded from model training under the EULA",
+      "summary": "Jasper states it and third parties may not use Customer Property to train AI models used by the service; it can still use de-identified Usage Information and authorized service providers can process Customer Property.",
+      "releaseGuard": "Do not turn a non-training commitment into a claim that content is never processed by third parties or never hosted outside the customer's region."
+    },
+    {
+      "label": "Personal data requires the applicable contract path",
+      "summary": "The EULA says effective use does not require personal data and directs customers that submit personal data for processing to execute the DPA. Default hosting may include the US, EEA or UK unless otherwise agreed.",
+      "releaseGuard": "Do not claim a DPA, hosting region or control is active without checking the contract and configuration."
+    },
+    {
+      "label": "Brand controls reduce drift but do not remove review",
+      "summary": "Brand Voice learns from examples, can be workspace-visible or private, and can be overridden; Style Guides are Business-only. Jasper's ethics page describes AI as assisting rather than fully automating content creation.",
+      "releaseGuard": "Do not promise factual accuracy, perfect brand compliance or publication-ready output without human review."
+    },
+    {
+      "label": "Credits create an operational-governance layer",
+      "summary": "All workspace users can spend credits by default. Admins can disable access and set monthly limits, but overage-setting changes are not currently recorded in the audit log.",
+      "releaseGuard": "Expose shared-pool, expiration, PAYG cap and audit-log limitations instead of calling Business usage unlimited."
+    }
+  ],
+  "limitations": [
+    "Pro is a one-seat plan; additional users require a customized Business path.",
+    "The USD 59 figure is billed yearly, while flexible monthly billing is USD 69 per seat.",
+    "Business pricing, included credits and commitment details are not publicly fixed.",
+    "Credits are separate from the platform fee and apply to API/MCP, Grid output rows and selected advanced Agent/GEO actions.",
+    "Prepaid credits expire at renewal or another contract-defined date.",
+    "All workspace users can spend credits by default unless an administrator changes access or limits.",
+    "Changes to overage settings are not currently recorded in the audit log.",
+    "Pro has two Brand Voices, five Knowledge assets and three Audiences; Style Guides are Business-only.",
+    "Workspace-visible Brand Voices can be used by members and users can override a default voice.",
+    "Brand and knowledge controls do not guarantee factual accuracy, voice preservation or publication-ready output.",
+    "Authorized third parties can process Customer Property even though training is prohibited.",
+    "Personal-data processing, DPA coverage and hosting location require contract verification.",
+    "Independent feedback includes generic-output, heavy-editing, cancellation, renewal and refund friction."
+  ],
+  "marketValidation": {
+    "score": 94,
+    "verdict": "validated",
+    "rationale": "Jasper has a durable marketing-AI identity and substantial independent review volume. G2 shows roughly 1.3 thousand reviews and a strong average, while Trustpilot shows more than 4 thousand reviews but a materially lower 3.2 score and recurring billing or editing complaints. The disagreement creates decision value but is not a controlled performance test.",
+    "strongSignals": ["G2 reports roughly 1.3 thousand reviews across several AI categories", "Trustpilot reports more than 4 thousand reviews", "Official documentation supports a distinct marketing workflow and brand-governance decision"],
+    "recurringUserFriction": ["Value compared with general-purpose assistants", "Generic drafts or heavy editing", "Cancellation, auto-renewal and refund complaints", "Hybrid platform-plus-credit forecasting", "Brand Voice and Knowledge setup work"]
+  },
+  "sources": {
+    "official": [
+      "https://www.jasper.ai/pricing",
+      "https://help.jasper.ai/hc/en-us/articles/46644376016923-Credits-Based-Pricing",
+      "https://help.jasper.ai/hc/en-us/articles/18618693085339-Brand-Voice",
+      "https://help.jasper.ai/hc/en-us/articles/18618707176347-Knowledge-Base",
+      "https://www.jasper.ai/legal/eula",
+      "https://www.jasper.ai/legal/dpa",
+      "https://www.jasper.ai/legal/sub-processors",
+      "https://www.jasper.ai/trust",
+      "https://www.jasper.ai/ethics"
+    ],
+    "independent": ["https://www.g2.com/sellers/jasper", "https://www.trustpilot.com/review/www.jasper.ai"]
+  },
+  "nextSlotChecklist": [
+    "Create one database-backed Jasper entity while preserving /ai/jasper as the only canonical route",
+    "Recheck prices, trial conversion, Business commitment and credit rates on 2026-09-22",
+    "Keep Jasper as one platform rather than child pages for IQ, Agents, Studio, Grid or Canvas",
+    "Create local editorial identifiers disclosed as non-official",
+    "Write complete en, zh and cn decision content covering seats, credits, brand controls, privacy and review",
+    "Run duplicate, route, metadata, canonical, noindex, sitemap, type and build checks",
+    "Release only as published + monitor/noindex; index approval remains independent"
+  ]
+}

@@ -108,3 +108,5 @@ Review 通过。该文档自 2026-09-20 起作为工具规模化、分层维护�
 2026-09-20 候选缓冲池更新：已对生产 63 条记录完成只读身份去重，并建立 14 条机器可验收的成熟候选池，构成为 10 条成熟高需求、3 条快速增长且有证据基础、1 条专业差异化工具。所有候选均保持 `screened_for_deep_review`，公开与索引批准均关闭，没有新增页面或 sitemap URL。Sourcegraph Cody 与 Amazon Q Developer IDE plugins 因生命周期变化被明确排除。详见 [成熟候选缓冲池](./MATURE_CANDIDATE_BUFFER_2026-09-20_CN.md)；下一项为 Grammarly 身份范围与证据深审。
 
 2026-09-20 Grammarly 发布准备更新：生产无重复实体、唯一 canonical 保持 `/ai/grammarly`；三语言数据库发布包、Decision Card、本地编辑素材、市场信号、价格/提示额度/训练控制/隐私边界和候选流水线均已完成。静态兜底事实已从 2026-08-03 更新为 2026-09-20，仍为 `noindex` 且不在 sitemap。候选状态为 `ready_for_next_slot`，硬日期门禁会阻止 2026-09-21 前的生产写入；届时先运行生产只读 preflight，再做 rollback、commit 与在线验收，发布后仍保持 `monitor/noindex`。
+
+2026-09-20 Jasper 深审更新：生产数据库无 Jasper 实体，双语 canonical 静态页均为 `noindex`，sitemap 无匹配。现有泛化“AI 写作”描述不足以表达当前产品；深审已固化 `$69` 月付、`$59` 年付月均、单 Pro 席位、Business 定制合同、平台费与 credits 双层成本、品牌上下文、DPA/第三方处理及人工复核边界。候选仍不批准公开或索引，最早发布日为 2026-09-22；下一项是 Jasper 三语言发布包和本地编辑素材。

@@ -338,3 +338,4 @@ query、Top 20 page、已抓取未编入索引与软 404 数量。
 - 生命周期异常的 Sourcegraph Cody 和 Amazon Q Developer IDE plugins 已排除，避免以历史热度制造失效页面。
 - 详情：[成熟高需求工具候选缓冲池](./MATURE_CANDIDATE_BUFFER_2026-09-20_CN.md)。下一项：Grammarly 受控发布。
 - Grammarly 发布包已完成：保留现有 canonical，分离母品牌 Superhuman、写作产品 Grammarly 与助手 Go；旧静态快照已更新，三语言 Decision Card、本地编辑素材、候选流水线和日期门禁均通过自动验收。当前仍为 noindex 且不在 sitemap，没有生产写入或索引批准；2026-09-21 先做只读 preflight，再按 rollback -> commit -> verify 发布。
+- Jasper 深审已完成：生产无实体，现有 canonical 静态页维持 `noindex` 且不在 sitemap；产品范围从泛化 AI 写作收口为品牌治理与营销生产平台，Pro 单席位、Business 定制合同、credits、品牌上下文、数据处理和人工复核边界均已核验。当前没有生产写入或索引批准；下一项为 Jasper 发布包，最早发布日 2026-09-22。

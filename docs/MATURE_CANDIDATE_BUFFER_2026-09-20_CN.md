@@ -21,7 +21,7 @@
 | 顺序 | 工具 | 类型 | 主要决策价值 | 当前状态 |
 | ---: | --- | --- | --- | --- |
 | 1 | Grammarly | 成熟高需求 | 免费/付费、通用 AI 替代、Superhuman Go 迁移 | 发布包完成，等待 2026-09-21 受控发布 |
-| 2 | Jasper | 成熟高需求 | 席位费、credits、品牌治理 | 待深审 |
+| 2 | Jasper | 成熟高需求 | 席位费、credits、品牌治理 | 深审完成，待发布包 |
 | 3 | Descript | 成熟高需求 | 文本式剪辑、媒体时长、AI credits | 待深审 |
 | 4 | Canva Magic Studio | 成熟高需求 | AI 套件范围、套餐限制、商业使用 | 待深审 |
 | 5 | Zapier Agents | 成熟高需求 | Agent 与 Zap、activity 计费、可靠性 | 待深审 |
@@ -54,6 +54,8 @@
 6. 页面经过相应观察期并再次通过独立索引评审后，才可能改为 `continue_index`；观察期结束不自动索引。
 
 首个对象 Grammarly 已完成身份、价格、提示额度、训练控制、隐私、独立市场信号和三语言 Decision Card 核验。结论是保留 Grammarly 作为写作产品 canonical；Superhuman 是母品牌与套件，Go 是相关但不同范围的助手，不能合并成同一工具页。发布包、本地编辑素材、候选流水线和日期门禁已完成，静态兜底页也已替换 2026-08-03 旧快照。最早生产日期仍为 `2026-09-21`；届时只允许写入 `published + monitor/noindex`，不进入 sitemap，也不消耗索引额度。详见 `data/collection/grammarly-preaudit-2026-09-20.json` 与 `data/collection/grammarly-release.json`。
+
+第二个对象 Jasper 已完成深审。现有 `/ai/jasper` 与 `/cn/ai/jasper` 是 `200 + self-canonical + noindex` 的静态兜底页，生产数据库没有实体且 sitemap 匹配为 0。当前 Jasper 应定义为营销 AI 平台，而不是通用长文写手；采购判断必须同时覆盖 Pro 单席位费、Business 定制合同、共享 credits、Brand Voice/Knowledge/Style Guide 边界、第三方处理与人工编辑。最早发布日为 `2026-09-22`，不会与 Grammarly 的 9 月 21 日槽位重叠。下一项为 Jasper 发布包。
 
 ## 五、验收结论
 
