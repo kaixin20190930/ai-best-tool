@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Fireflies editorial identifier</title>
+  <desc id="desc">AI Best Tool-created Fi identifier, not the official Fireflies.ai logo.</desc>
   <defs>
     <linearGradient id="bg-fireflies" x1="24" y1="24" x2="224" y2="228" gradientUnits="userSpaceOnUse">
       <stop stop-color="#ccfbf1"/>

@@ -150,6 +150,7 @@
     "test:elevenlabs-release": "tsx scripts/test-elevenlabs-release.ts",
     "test:heygen-release": "tsx scripts/test-heygen-release.ts",
     "test:glean-release": "tsx scripts/test-glean-release.ts",
+    "test:fireflies-release": "tsx scripts/test-fireflies-release.ts",
     "test:public-content-boundary": "tsx scripts/test-public-content-boundary.tsx",
     "audit:public-content-boundary": "tsx scripts/audit-public-content-boundary.ts",
     "test:public-content-boundary:html": "tsx scripts/test-public-content-boundary-html.ts",

@@ -12,6 +12,7 @@ type Candidate = {
   aliases: string[];
   domain: string;
   preauditFile: string;
+  existingEntityExpected?: boolean;
 };
 
 type Preaudit = {
@@ -95,6 +96,13 @@ const candidates: Candidate[] = [
     domain: 'glean.com',
     preauditFile: 'glean-preaudit-2026-09-09.json',
   },
+  {
+    slug: 'fireflies',
+    aliases: ['fireflies', 'fireflies-ai', 'fireflies.ai'],
+    domain: 'fireflies.ai',
+    preauditFile: 'fireflies-ai-preaudit-2026-09-09.json',
+    existingEntityExpected: true,
+  },
 ];
 
 function parseArgs(args: string[]) {
@@ -119,7 +127,10 @@ function loadPreaudit(candidate: Candidate): Preaudit {
   const audit = readJson<Preaudit>(path.join(root, 'data', 'collection', candidate.preauditFile));
   assert.equal(audit.slug, candidate.slug);
   assert.equal(audit.existingRoute, `/ai/${candidate.slug}`);
-  assert.equal(audit.action, 'migrate_existing_fallback');
+  assert.equal(
+    audit.action,
+    candidate.existingEntityExpected ? 'refresh_existing_entity' : 'migrate_existing_fallback',
+  );
   assert(['ready_for_next_slot', 'released'].includes(audit.status), `${candidate.slug}: unsupported release status`);
   if (audit.status === 'ready_for_next_slot') {
     assert.equal(audit.productionWriteApproved, false);
@@ -295,7 +306,12 @@ async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, c
        (id, name, title, content, detail, url, image_url, thumbnail_url, category_id, tags, pricing,
         features, use_cases, screenshots, status, page_quality_status, next_review_date, created_at, updated_at)
        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,ARRAY[]::text[],'published','monitor',$14,NOW(),NOW())
-       ON CONFLICT (id) DO NOTHING`,
+       ON CONFLICT (id) DO UPDATE SET
+         name=EXCLUDED.name,title=EXCLUDED.title,content=EXCLUDED.content,detail=EXCLUDED.detail,
+         url=EXCLUDED.url,image_url=EXCLUDED.image_url,thumbnail_url=EXCLUDED.thumbnail_url,
+         category_id=EXCLUDED.category_id,tags=EXCLUDED.tags,pricing=EXCLUDED.pricing,
+         features=EXCLUDED.features,use_cases=EXCLUDED.use_cases,status='published',
+         page_quality_status='monitor',next_review_date=EXCLUDED.next_review_date,updated_at=NOW()`,
       [
         payload.id,
         candidate.slug,
@@ -385,7 +401,18 @@ async function main() {
     const client = await openDatabase();
     try {
       const matches = await findMatches(client, candidate);
-      if (options.phase === 'preflight') assert.equal(matches.rowCount, 0, `${candidate.slug}: existing entity requires manual review`);
+      if (options.phase === 'preflight') {
+        if (candidate.existingEntityExpected) {
+          const payload = loadPayload(candidate, audit, options.asOf);
+          assert.equal(matches.rowCount, 1, `${candidate.slug}: expected exactly one refreshable entity`);
+          assert.equal(matches.rows[0].id, payload.id, `${candidate.slug}: existing entity id mismatch`);
+          assert.equal(matches.rows[0].name, candidate.slug, `${candidate.slug}: existing canonical slug mismatch`);
+          assert.equal(matches.rows[0].status, 'published', `${candidate.slug}: existing entity is not published`);
+          assert.equal(matches.rows[0].page_quality_status, 'monitor', `${candidate.slug}: existing entity is not monitor`);
+        } else {
+          assert.equal(matches.rowCount, 0, `${candidate.slug}: existing entity requires manual review`);
+        }
+      }
       if (options.phase === 'verify') {
         assert.equal(matches.rowCount, 1, `${candidate.slug}: expected exactly one released entity`);
         assert.equal(matches.rows[0].name, candidate.slug);

@@ -135,9 +135,13 @@ async function main() {
     assert(fs.existsSync(asset), `${asset}: asset missing`);
   }
   if (args.includes('--check')) {
-    console.log('PASS Fireflies identity, current official evidence, decision boundaries and local assets');
+    console.log('PASS legacy Fireflies migration is retained for historical checks only');
     return;
   }
+
+  throw new Error(
+    'This one-off migration is retired. Use candidate-release-pipeline.ts --candidate=fireflies instead.',
+  );
 
   config({ path: '.env.local', quiet: true });
   const client = new Client({ connectionString: getDatabaseConnectionString() });

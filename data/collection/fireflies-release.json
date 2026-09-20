@@ -1,0 +1,151 @@
+{
+  "id": "57b270b9-78cf-41f8-8b74-dec46400cd65",
+  "slug": "fireflies",
+  "officialUrl": "https://fireflies.ai/",
+  "reviewedAt": "2026-09-20",
+  "nextReviewDate": "2026-10-20",
+  "categorySlug": "productivity",
+  "pricing": "freemium",
+  "title": {
+    "en": "Fireflies AI Meeting Notes and Conversation Intelligence",
+    "zh": "Fireflies AI 会议笔记与对话智能",
+    "cn": "Fireflies AI 会议笔记与对话智能"
+  },
+  "content": {
+    "en": "Record or upload meetings, produce searchable transcripts and summaries, and move reviewed follow-ups into team systems. Compare seat price, AI-credit billing, storage, auto-join consent and downstream data governance before rollout.",
+    "zh": "记录或上传会议，生成可搜索的转录与摘要，并把复核后的跟进事项同步到团队系统。部署前应比较席位价格、AI credits、存储、自动入会同意与下游数据治理。",
+    "cn": "记录或上传会议，生成可搜索的转录与摘要，并把复核后的跟进事项同步到团队系统。部署前应比较席位价格、AI credits、存储、自动入会同意与下游数据治理。"
+  },
+  "detail": {
+    "en": "Choose Fireflies when recurring meetings create enough retrieval and follow-up work to justify a governed meeting-memory system. It can join calls, capture through extensions or apps, import recordings, produce transcripts and summaries, search history and connect meeting output to other systems. Start with representative internal and customer calls, then measure accepted transcript segments, corrected speakers, usable action items, recap delivery and downstream data copies. It is less suitable when meetings cannot be recorded, generated notes would be treated as authoritative, or the team cannot govern auto-join and sharing. [Pricing](https://fireflies.ai/pricing) · [Integrations](https://fireflies.ai/integrations).\n\nPricing checked September 20, 2026: Free is $0. Pro is $10 per seat per month billed annually or $18 billed monthly; Business is $19 annually or $29 monthly; Enterprise is $39 per seat per month and annual only. A seat is created when an admin or member joins the workspace. Removing a teammate reduces future seat count but does not refund the current cycle. Verify checkout, taxes and account-specific offers because public displays can change. [Current billing terms](https://guide.fireflies.ai/articles/9606045468-fireflies-billing-terms).\n\nThe core plan and advanced AI credits are separate decisions. Current documentation gives one-time signup credits by plan and says advanced features use dynamic per-query credits based on sources, meetings and complexity; transcription, summaries and recap emails are not charged in those credits. A seven-day AI-credit trial converts after seven days to a paid subscription, and Auto-Upgrade is enabled by default for that flow. Purchased credits are pooled across the team, do not increase with seats, do not roll over, and are non-refundable. Budget alerts, named billing ownership and a disabled auto-upgrade state should be checked before a team rollout. [AI-credit and auto-upgrade rules](https://guide.fireflies.ai/articles/9606045468-fireflies-billing-terms).\n\nStorage and uploads have another boundary. The current guide lists 400 stored meeting minutes per Free user, 8,000 per Pro user and unlimited team-wide storage for Business and Enterprise. External uploads, API or Zapier uploads, cloud-drive imports, dialer calls and past-meeting imports have a 3,000 minutes per source per month individual limit; team allowance multiplies by users up to 150,000 minutes per source, with $0.01 per-minute overage. Live bot meetings, Chrome-extension capture and mobile recordings are excluded from that upload rate limit. [Storage and upload limits](https://guide.fireflies.ai/articles/2631950139-learn-about-transcription-credits-storage-and-rate-limits-for-meetings).\n\nFireflies can enter through Auto-Join, a calendar invitation or Add to Live Meeting. It appears as a notetaker and may require host admission; bot-free capture is also available through the Chrome extension, mobile app and desktop workflows. A visible bot, calendar invite or optional consent message does not automatically satisfy every jurisdiction, employment policy, client agreement or confidential-meeting rule. Configure title and participant exclusions, default sharing, recap recipients and a manual removal path; notify participants and obtain the required permission before recording. [Join and recording FAQ](https://guide.fireflies.ai/articles/9554534786-how-fireflies-joins-and-records-your-meetings-faqs).\n\nPrivacy claims must be read with their exact scope. Fireflies states meeting content and personal data are not used to train internal or external models, vendors are contractually prohibited from training on it, and third-party vendors do not retain meeting audio, video, transcripts or summaries after processing. The policy distinguishes meeting content from service data and provides additional processor commitments for Business and Enterprise customers. Confirm the actual plan, DPA, retention, deletion, subprocessors, data region, integration destinations and administrator access rather than treating a security page as configuration proof. [2026 policy update](https://guide.fireflies.ai/articles/6892479029-fireflies-ai-updates-to-our-privacy-policy-terms-of-service-data-processing-addendum) · [Security](https://fireflies.ai/security) · [Privacy](https://fireflies.ai/privacy-policy).\n\nOfficial terms state that inputs and outputs are user content and that outputs can be biased, inaccurate or offensive; detailed output can still contain material inaccuracies and must be independently evaluated. Review names, numbers, speakers, decisions, commitments, sentiment and action owners against the recording before sending data to a CRM, evaluating an employee or resolving a dispute. Integrations increase utility and also duplicate sensitive meeting data across systems with different access and deletion rules. [Terms](https://fireflies.ai/terms-of-service).\n\nIndependent evidence supports a real decision problem, not guaranteed performance. G2 has a large current review set, TechRadar's hands-on assessment praises structured recaps while still noting crosstalk and poor-audio edits, and practitioners describe speaker-label and transcript-delay friction. Use those signals to build pilot cases rather than to copy ratings or promise accuracy. [G2 reviews](https://www.g2.com/sellers/fireflies-ai) · [TechRadar hands-on review](https://www.techradar.com/best/best-ai-tools) · [Practitioner report](https://www.reddit.com/r/LovedByCreators/comments/1ldfznh/i_used_firefliesai_for_33_meetings_in_30_days/).\n\nRun a time-boxed pilot across quiet audio, accents, overlap, mixed languages and sensitive meeting exclusions. Compare Fireflies with Otter.ai, Fathom and the meeting platform's native notes on accepted transcript accuracy, review minutes, action-item precision, bot behavior, sharing safety, integration success and total seat-plus-credit cost. The Fi artwork on this page is an AI Best Tool editorial identifier, not Fireflies.ai's official logo or a product screenshot.\n\nComparison path: [otter-ai](/ai/otter-ai#decision-card) · [fathom](/ai/fathom#decision-card)",
+    "zh": "当重复会议带来的检索和跟进工作足以证明一个受治理的会议记忆系统有价值时，可以考虑 Fireflies。它可通过机器人、扩展或应用采集会议，也可导入录音，生成转录与摘要、搜索历史，并把会议结果连接到其他系统。应先用代表性的内部和客户会议测试，记录可接受转录片段、说话人修正、可执行行动项、摘要交付与下游数据副本。若会议不能录制、团队会把生成笔记直接当作权威记录，或无法治理自动入会和共享，则不适合。[价格](https://fireflies.ai/pricing) · [集成](https://fireflies.ai/integrations)。\n\n2026-09-20 价格核验：Free 为 0 美元；Pro 年付折算每席每月 10 美元，月付 18 美元；Business 年付 19 美元，月付 29 美元；Enterprise 每席每月 39 美元且仅支持年付。管理员或成员加入 workspace 时即产生席位；移除成员只减少后续席位，不退还当前周期。公开价格、税费和账户优惠可能变化，应以结账页为准。[当前计费条款](https://guide.fireflies.ai/articles/9606045468-fireflies-billing-terms)。\n\n核心套餐与高级 AI credits 是两个独立决策。当前文档按套餐赠送一次性注册 credits，高级功能按引用来源、分析会议数和查询复杂度动态扣费；转录、摘要和 recap 邮件不消耗这些 credits。AI-credit 试用会在 7 天后转为付费订阅，且该流程默认启用 Auto-Upgrade。购买的 credits 由团队共享，不随席位增加、不结转且不退款。团队部署前应设置预算告警、明确账单责任人并确认关闭自动升级。[AI credits 与自动升级规则](https://guide.fireflies.ai/articles/9606045468-fireflies-billing-terms)。\n\n存储和上传还有单独边界。当前指南列出 Free 每用户 400 分钟存储、Pro 每用户 8,000 分钟，Business 和 Enterprise 为团队级无限存储。外部文件、API/Zapier、云盘、dialer 和历史会议上传的个人限制是每个来源每月 3,000 分钟；团队按用户数增加但每来源上限 150,000 分钟，超额每分钟 0.01 美元。实时机器人会议、Chrome 扩展与移动端录音不计入该上传 rate limit。[存储与上传限制](https://guide.fireflies.ai/articles/2631950139-learn-about-transcription-credits-storage-and-rate-limits-for-meetings)。\n\nFireflies 可以通过 Auto-Join、日历邀请或 Add to Live Meeting 入会，显示为 notetaker，并可能需要主持人准入；Chrome 扩展、移动应用和桌面工作流也提供无机器人采集。可见机器人、日历邀请或可选同意提示不会自动满足所有司法辖区的同意要求，也不能替代雇佣政策、客户合同或保密会议规则。必须配置标题和参会人排除、默认共享、recap 收件人及人工移除路径，并在录制前完成必要告知与许可。[入会与录制 FAQ](https://guide.fireflies.ai/articles/9554534786-how-fireflies-joins-and-records-your-meetings-faqs)。\n\n隐私承诺必须按准确范围理解。Fireflies 表示会议内容和个人数据不用于训练内部或外部模型，供应商在合同上不得训练，第三方处理后不保留会议音频、视频、转录和摘要。政策区分会议内容与 service data，并为 Business 和 Enterprise 客户提供额外 processor 承诺。仍需按实际套餐确认 DPA、留存、删除、子处理商、数据地区、集成目标和管理员访问，不能把安全页当作配置已正确的证明。[2026 政策更新](https://guide.fireflies.ai/articles/6892479029-fireflies-ai-updates-to-our-privacy-policy-terms-of-service-data-processing-addendum) · [安全](https://fireflies.ai/security) · [隐私](https://fireflies.ai/privacy-policy)。\n\n官方条款说明输入与输出属于用户内容，但输出可能有偏差、不准确或令人不适；即使细节看起来可信，输出可能存在重大不准确，必须独立评估。把内容发送到 CRM、用于员工评价或争议处理前，应对照录音复核姓名、数字、说话人、决定、承诺、情绪和行动责任人。集成提升使用价值，也会把敏感会议数据复制到访问和删除规则不同的系统。[条款](https://fireflies.ai/terms-of-service)。\n\n独立证据说明它存在真实选择问题，但不保证效果。G2 有大量当前评论；TechRadar 实测认可结构化 recap，同时指出多人重叠和差音频需要编辑；从业者还报告说话人标签与转录延迟摩擦。应把这些信号转为试点用例，而不是复制评分或承诺准确率。[G2 评论](https://www.g2.com/sellers/fireflies-ai) · [TechRadar 实测](https://www.techradar.com/best/best-ai-tools) · [从业者报告](https://www.reddit.com/r/LovedByCreators/comments/1ldfznh/i_used_firefliesai_for_33_meetings_in_30_days/)。\n\n建议在安静音频、口音、抢话、混合语言和敏感会议排除等场景做限时试点，并与 Otter.ai、Fathom 及会议平台原生笔记比较验收转录准确性、复核分钟、行动项准确性、机器人行为、共享安全、集成成功率与席位加 credits 总成本。页面 Fi 图形是 AI Best Tool 自制编辑识别图，不是 Fireflies.ai 官方 Logo 或产品截图。\n\n比较路径：[otter-ai](/cn/ai/otter-ai#decision-card) · [fathom](/cn/ai/fathom#decision-card)",
+    "cn": "当重复会议带来的检索和跟进工作足以证明一个受治理的会议记忆系统有价值时，可以考虑 Fireflies。它可通过机器人、扩展或应用采集会议，也可导入录音，生成转录与摘要、搜索历史，并把会议结果连接到其他系统。应先用代表性的内部和客户会议测试，记录可接受转录片段、说话人修正、可执行行动项、摘要交付与下游数据副本。若会议不能录制、团队会把生成笔记直接当作权威记录，或无法治理自动入会和共享，则不适合。[价格](https://fireflies.ai/pricing) · [集成](https://fireflies.ai/integrations)。\n\n2026-09-20 价格核验：Free 为 0 美元；Pro 年付折算每席每月 10 美元，月付 18 美元；Business 年付 19 美元，月付 29 美元；Enterprise 每席每月 39 美元且仅支持年付。管理员或成员加入 workspace 时即产生席位；移除成员只减少后续席位，不退还当前周期。公开价格、税费和账户优惠可能变化，应以结账页为准。[当前计费条款](https://guide.fireflies.ai/articles/9606045468-fireflies-billing-terms)。\n\n核心套餐与高级 AI credits 是两个独立决策。当前文档按套餐赠送一次性注册 credits，高级功能按引用来源、分析会议数和查询复杂度动态扣费；转录、摘要和 recap 邮件不消耗这些 credits。AI-credit 试用会在 7 天后转为付费订阅，且该流程默认启用 Auto-Upgrade。购买的 credits 由团队共享，不随席位增加、不结转且不退款。团队部署前应设置预算告警、明确账单责任人并确认关闭自动升级。[AI credits 与自动升级规则](https://guide.fireflies.ai/articles/9606045468-fireflies-billing-terms)。\n\n存储和上传还有单独边界。当前指南列出 Free 每用户 400 分钟存储、Pro 每用户 8,000 分钟，Business 和 Enterprise 为团队级无限存储。外部文件、API/Zapier、云盘、dialer 和历史会议上传的个人限制是每个来源每月 3,000 分钟；团队按用户数增加但每来源上限 150,000 分钟，超额每分钟 0.01 美元。实时机器人会议、Chrome 扩展与移动端录音不计入该上传 rate limit。[存储与上传限制](https://guide.fireflies.ai/articles/2631950139-learn-about-transcription-credits-storage-and-rate-limits-for-meetings)。\n\nFireflies 可以通过 Auto-Join、日历邀请或 Add to Live Meeting 入会，显示为 notetaker，并可能需要主持人准入；Chrome 扩展、移动应用和桌面工作流也提供无机器人采集。可见机器人、日历邀请或可选同意提示不会自动满足所有司法辖区的同意要求，也不能替代雇佣政策、客户合同或保密会议规则。必须配置标题和参会人排除、默认共享、recap 收件人及人工移除路径，并在录制前完成必要告知与许可。[入会与录制 FAQ](https://guide.fireflies.ai/articles/9554534786-how-fireflies-joins-and-records-your-meetings-faqs)。\n\n隐私承诺必须按准确范围理解。Fireflies 表示会议内容和个人数据不用于训练内部或外部模型，供应商在合同上不得训练，第三方处理后不保留会议音频、视频、转录和摘要。政策区分会议内容与 service data，并为 Business 和 Enterprise 客户提供额外 processor 承诺。仍需按实际套餐确认 DPA、留存、删除、子处理商、数据地区、集成目标和管理员访问，不能把安全页当作配置已正确的证明。[2026 政策更新](https://guide.fireflies.ai/articles/6892479029-fireflies-ai-updates-to-our-privacy-policy-terms-of-service-data-processing-addendum) · [安全](https://fireflies.ai/security) · [隐私](https://fireflies.ai/privacy-policy)。\n\n官方条款说明输入与输出属于用户内容，但输出可能有偏差、不准确或令人不适；即使细节看起来可信，输出可能存在重大不准确，必须独立评估。把内容发送到 CRM、用于员工评价或争议处理前，应对照录音复核姓名、数字、说话人、决定、承诺、情绪和行动责任人。集成提升使用价值，也会把敏感会议数据复制到访问和删除规则不同的系统。[条款](https://fireflies.ai/terms-of-service)。\n\n独立证据说明它存在真实选择问题，但不保证效果。G2 有大量当前评论；TechRadar 实测认可结构化 recap，同时指出多人重叠和差音频需要编辑；从业者还报告说话人标签与转录延迟摩擦。应把这些信号转为试点用例，而不是复制评分或承诺准确率。[G2 评论](https://www.g2.com/sellers/fireflies-ai) · [TechRadar 实测](https://www.techradar.com/best/best-ai-tools) · [从业者报告](https://www.reddit.com/r/LovedByCreators/comments/1ldfznh/i_used_firefliesai_for_33_meetings_in_30_days/)。\n\n建议在安静音频、口音、抢话、混合语言和敏感会议排除等场景做限时试点，并与 Otter.ai、Fathom 及会议平台原生笔记比较验收转录准确性、复核分钟、行动项准确性、机器人行为、共享安全、集成成功率与席位加 credits 总成本。页面 Fi 图形是 AI Best Tool 自制编辑识别图，不是 Fireflies.ai 官方 Logo 或产品截图。\n\n比较路径：[otter-ai](/cn/ai/otter-ai#decision-card) · [fathom](/cn/ai/fathom#decision-card)"
+  },
+  "imageUrl": "/icons/tool-logos/fireflies.svg",
+  "thumbnailUrl": "/images/tool-media/fireflies-cover.svg",
+  "tags": ["ai-meeting-assistant", "meeting-notes", "conversation-intelligence"],
+  "features": {
+    "audience": {
+      "bestFit": {
+        "en": ["Meeting-heavy teams that reuse transcripts and follow-ups", "Organizations able to govern auto-join, sharing and retention", "Buyers willing to measure seat, storage and AI-credit cost together"],
+        "zh": ["需要复用转录和跟进事项的高会议频率团队", "能治理自动入会、共享和留存的组织", "愿意综合衡量席位、存储和 AI credits 成本的采购者"],
+        "cn": ["需要复用转录和跟进事项的高会议频率团队", "能治理自动入会、共享和留存的组织", "愿意综合衡量席位、存储和 AI credits 成本的采购者"]
+      },
+      "notIdealFor": {
+        "en": ["Meetings that cannot be recorded with valid notice and permission", "Teams treating generated transcripts as authoritative without review", "Organizations unable to control bots, recipients and downstream copies"],
+        "zh": ["无法完成有效告知和许可的会议", "把生成转录直接作为权威记录的团队", "无法控制机器人、收件人与下游副本的组织"],
+        "cn": ["无法完成有效告知和许可的会议", "把生成转录直接作为权威记录的团队", "无法控制机器人、收件人与下游副本的组织"]
+      }
+    },
+    "editorial": {
+      "reviewedAt": "2026-09-20",
+      "reviewedBy": "AI Best Tool editorial",
+      "sourceUrl": "https://guide.fireflies.ai/articles/9606045468-fireflies-billing-terms",
+      "summary": {
+        "en": "Seat pricing, AI credits, auto-upgrade, storage, uploads, joining, privacy and output-review boundaries were rechecked on September 20, 2026.",
+        "zh": "已于 2026-09-20 复核席位价格、AI credits、自动升级、存储、上传、入会、隐私与输出复核边界。",
+        "cn": "已于 2026-09-20 复核席位价格、AI credits、自动升级、存储、上传、入会、隐私与输出复核边界。"
+      },
+      "trustNote": {
+        "en": "Public-document review only. No paid workspace, recording or downstream integration was tested.",
+        "zh": "本次仅复核公开资料，未实测付费 workspace、会议录制或下游集成。",
+        "cn": "本次仅复核公开资料，未实测付费 workspace、会议录制或下游集成。"
+      }
+    },
+    "decision": {
+      "compareAxes": {
+        "en": ["Accepted transcript and speaker accuracy", "Review time and action-item precision", "Bot, extension and in-person capture", "Seat plus AI-credit total cost", "Auto-join consent and exclusion controls", "Sharing, retention and downstream deletion", "Integration success and failure recovery"],
+        "zh": ["验收转录与说话人准确性", "复核时间与行动项准确性", "机器人、扩展和线下采集", "席位加 AI credits 总成本", "自动入会同意与排除控制", "共享、留存和下游删除", "集成成功与失败恢复"],
+        "cn": ["验收转录与说话人准确性", "复核时间与行动项准确性", "机器人、扩展和线下采集", "席位加 AI credits 总成本", "自动入会同意与排除控制", "共享、留存和下游删除", "集成成功与失败恢复"]
+      },
+      "limitations": {
+        "en": ["Transcripts degrade with noise, overlap, accents and jargon.", "Speaker labels, summaries and action items require review.", "Visible bots do not satisfy every consent requirement.", "Auto-join can enter inappropriate meetings without exclusions.", "AI credits are separate from the core subscription.", "AI-credit trial and auto-upgrade settings can create charges.", "External uploads have source-specific monthly limits and overage.", "Integrations duplicate meeting content under other retention rules.", "Business controls do not prove the customer's configuration is safe."],
+        "zh": ["噪音、抢话、口音和术语会降低转录质量。", "说话人标签、摘要和行动项需要复核。", "可见机器人不能满足所有同意要求。", "没有排除规则时自动入会可能进入不合适的会议。", "AI credits 与核心订阅分开计费。", "AI-credit 试用与自动升级设置可能产生费用。", "外部上传有按来源计算的月度限制和超额费。", "集成会在其他留存规则下复制会议内容。", "Business 控制不证明客户配置天然安全。"],
+        "cn": ["噪音、抢话、口音和术语会降低转录质量。", "说话人标签、摘要和行动项需要复核。", "可见机器人不能满足所有同意要求。", "没有排除规则时自动入会可能进入不合适的会议。", "AI credits 与核心订阅分开计费。", "AI-credit 试用与自动升级设置可能产生费用。", "外部上传有按来源计算的月度限制和超额费。", "集成会在其他留存规则下复制会议内容。", "Business 控制不证明客户配置天然安全。"]
+      },
+      "pricingSummary": {
+        "en": "Compare seat subscription, pooled AI credits, storage and upload overage as one operating cost.",
+        "zh": "把席位订阅、团队共享 AI credits、存储和上传超额费作为一个运营成本比较。",
+        "cn": "把席位订阅、团队共享 AI credits、存储和上传超额费作为一个运营成本比较。"
+      },
+      "officialSummary": {
+        "en": "Verify joining method, consent, recipients, retention and AI-credit settings for the actual workspace.",
+        "zh": "按实际 workspace 核对入会方式、同意、收件人、留存与 AI-credit 设置。",
+        "cn": "按实际 workspace 核对入会方式、同意、收件人、留存与 AI-credit 设置。"
+      },
+      "freshnessSummary": {
+        "en": "Reviewed September 20, 2026. Next fact review: October 20, 2026.",
+        "zh": "核验于 2026-09-20；下次事实复核为 2026-10-20。",
+        "cn": "核验于 2026-09-20；下次事实复核为 2026-10-20。"
+      },
+      "mediaSummary": {
+        "en": "Editorial identifier only; not an official logo or product screenshot.",
+        "zh": "仅为编辑识别图，不是官方 Logo 或产品截图。",
+        "cn": "仅为编辑识别图，不是官方 Logo 或产品截图。"
+      },
+      "communitySummary": {
+        "en": "Independent reports shape accuracy and workflow test cases; they do not establish official limits or guaranteed results.",
+        "zh": "独立报告用于形成准确性和工作流测试，不代表官方限制或效果保证。",
+        "cn": "独立报告用于形成准确性和工作流测试，不代表官方限制或效果保证。"
+      },
+      "alternatives": [
+        {"slug": "otter-ai", "reason": {"en": "Compare meeting capture, transcript workflow and team sharing.", "zh": "比较会议采集、转录工作流与团队共享。", "cn": "比较会议采集、转录工作流与团队共享。"}},
+        {"slug": "fathom", "reason": {"en": "Compare a lighter meeting recap workflow and bot behavior.", "zh": "比较更轻量的会议 recap 工作流和机器人行为。", "cn": "比较更轻量的会议 recap 工作流和机器人行为。"}}
+      ]
+    },
+    "pricingSnapshot": {
+      "checkedAt": "2026-09-20",
+      "sourceUrls": ["https://fireflies.ai/pricing", "https://guide.fireflies.ai/articles/9606045468-fireflies-billing-terms", "https://guide.fireflies.ai/articles/2631950139-learn-about-transcription-credits-storage-and-rate-limits-for-meetings"],
+      "summary": {
+        "en": "Core plans are per-seat; advanced AI credits are pooled, dynamic and separately billed, while uploads can create overage.",
+        "zh": "核心套餐按席位计费；高级 AI credits 由团队共享、动态扣费且独立计费，上传还可能产生超额费。",
+        "cn": "核心套餐按席位计费；高级 AI credits 由团队共享、动态扣费且独立计费，上传还可能产生超额费。"
+      },
+      "conflicts": ["Pricing-page comparison markup can be ambiguous; the billing guide is used for monthly versus annual values.", "Unlimited transcription or summaries do not imply unlimited advanced AI-credit features or external uploads."]
+    },
+    "evidence": {
+      "checkedAt": "2026-09-20",
+      "official": [
+        {"label": "Pricing", "url": "https://fireflies.ai/pricing", "checkedAt": "2026-09-20"},
+        {"label": "Billing and AI credits", "url": "https://guide.fireflies.ai/articles/9606045468-fireflies-billing-terms", "checkedAt": "2026-09-20"},
+        {"label": "Storage and upload limits", "url": "https://guide.fireflies.ai/articles/2631950139-learn-about-transcription-credits-storage-and-rate-limits-for-meetings", "checkedAt": "2026-09-20"},
+        {"label": "Joining and recording", "url": "https://guide.fireflies.ai/articles/9554534786-how-fireflies-joins-and-records-your-meetings-faqs", "checkedAt": "2026-09-20"},
+        {"label": "Policy update", "url": "https://guide.fireflies.ai/articles/6892479029-fireflies-ai-updates-to-our-privacy-policy-terms-of-service-data-processing-addendum", "checkedAt": "2026-09-20"},
+        {"label": "Security", "url": "https://fireflies.ai/security", "checkedAt": "2026-09-20"},
+        {"label": "Privacy", "url": "https://fireflies.ai/privacy-policy", "checkedAt": "2026-09-20"},
+        {"label": "Integrations", "url": "https://fireflies.ai/integrations", "checkedAt": "2026-09-20"},
+        {"label": "Terms", "url": "https://fireflies.ai/terms-of-service", "checkedAt": "2026-09-20"}
+      ],
+      "independent": [
+        {"label": "G2 reviews", "url": "https://www.g2.com/sellers/fireflies-ai", "checkedAt": "2026-09-20"},
+        {"label": "TechRadar hands-on review", "url": "https://www.techradar.com/best/best-ai-tools", "checkedAt": "2026-09-20"},
+        {"label": "Practitioner report", "url": "https://www.reddit.com/r/LovedByCreators/comments/1ldfznh/i_used_firefliesai_for_33_meetings_in_30_days/", "checkedAt": "2026-09-20"}
+      ]
+    },
+    "media": {
+      "assets": [
+        {"path": "/icons/tool-logos/fireflies.svg", "url": "local-editorial-asset", "sourcePage": "https://fireflies.ai/", "checkedAt": "2026-09-20", "sha256": "a72722137f80874fb1dc4c1c571e698f5b7e37a6624245c7a25009190f22fb56", "usageBasis": "AI Best Tool-created Fi identifier used to avoid copying or implying permission to use official brand artwork; it is explicitly disclosed as non-official.", "type": "editorial_identifier", "isProductScreenshot": false},
+        {"path": "/images/tool-media/fireflies-cover.svg", "url": "local-editorial-asset", "sourcePage": "https://fireflies.ai/", "checkedAt": "2026-09-20", "sha256": "086f7abbb0603ccf689c1b5743937f0fdb2c4efd98b10f6e7524ecb0b304ed25", "usageBasis": "AI Best Tool-created meeting-memory overview with no copied product UI; it is a neutral listing image and is not treated as product evidence.", "type": "editorial_identifier", "isProductScreenshot": false}
+      ]
+    },
+    "marketValidation": {
+      "reviewedAt": "2026-09-20",
+      "score": 95,
+      "scores": {"marketDurability": 24, "independentAdoption": 24, "decisionValue": 24, "evidenceQuality": 23},
+      "verdict": "validated",
+      "rationale": {
+        "en": "Current official billing and policy documentation plus broad independent review coverage support a decision page; accuracy, consent, billing and downstream governance still require monitor/noindex.",
+        "zh": "当前官方计费和政策文档及广泛独立评论支持建立决策页；准确性、同意、计费和下游治理仍要求 monitor/noindex。",
+        "cn": "当前官方计费和政策文档及广泛独立评论支持建立决策页；准确性、同意、计费和下游治理仍要求 monitor/noindex。"
+      },
+      "strongSignals": ["Current official plan, billing, storage and recording documentation", "Large independent review surface", "Meaningful workflow comparison with Otter.ai, Fathom and native meeting notes"],
+      "evidenceUrls": ["https://www.g2.com/sellers/fireflies-ai", "https://www.techradar.com/best/best-ai-tools", "https://www.reddit.com/r/LovedByCreators/comments/1ldfznh/i_used_firefliesai_for_33_meetings_in_30_days/"]
+    },
+    "release": {"scheduledSlot": "2026-09-16", "reviewedAt": "2026-09-20", "executionType": "existing_entity_regularization", "label": "既有实体正规化", "indexState": "monitor", "sitemapChangeApproved": false, "nextReviewDate": "2026-10-20"}
+  },
+  "useCases": {
+    "en": ["Pilot recurring internal and customer meetings with reviewed transcripts", "Measure follow-up quality, sharing safety and seat-plus-credit operating cost"],
+    "zh": ["用重复内部和客户会议试点并人工复核转录", "衡量跟进质量、共享安全和席位加 credits 运营成本"],
+    "cn": ["用重复内部和客户会议试点并人工复核转录", "衡量跟进质量、共享安全和席位加 credits 运营成本"]
+  }
+}

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="1400" height="800" viewBox="0 0 1400 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="1400" height="800" viewBox="0 0 1400 800" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Fireflies meeting memory editorial cover</title>
+  <desc id="desc">AI Best Tool-created meeting workflow graphic, not a Fireflies.ai product screenshot.</desc>
   <defs>
     <linearGradient id="canvas-fireflies" x1="80" y1="56" x2="1286" y2="748" gradientUnits="userSpaceOnUse">
       <stop stop-color="#f3fffd"/>

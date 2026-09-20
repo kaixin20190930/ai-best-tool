@@ -1,9 +1,9 @@
 {
-  "slug": "fireflies-ai",
+  "slug": "fireflies",
   "title": "Fireflies.ai Meeting Notes and Conversation Intelligence",
   "officialUrl": "https://fireflies.ai/",
-  "existingRoute": "/ai/fireflies-ai",
-  "action": "migrate_existing_fallback",
+  "existingRoute": "/ai/fireflies",
+  "action": "refresh_existing_entity",
   "status": "ready_for_next_slot",
   "reviewedAt": "2026-09-09",
   "publishNotBefore": "2026-09-16",
