@@ -1,0 +1,141 @@
+{
+  "slug": "descript",
+  "title": "Descript AI Audio and Video Editor",
+  "officialUrl": "https://www.descript.com/",
+  "existingRoute": "/ai/descript",
+  "action": "migrate_existing_fallback",
+  "status": "deep_review_complete",
+  "reviewedAt": "2026-09-20",
+  "publishNotBefore": "2026-09-23",
+  "sitemapChangeApproved": false,
+  "productionWriteApproved": false,
+  "releaseIndexState": "monitor",
+  "routeAudit": {
+    "english": "200_self_canonical_noindex",
+    "chinese": "200_self_canonical_noindex",
+    "sitemapMatches": 0,
+    "productionEntityMatches": 0
+  },
+  "category": {
+    "discoverySlug": "video",
+    "storageSlug": "design-art"
+  },
+  "identityDecision": {
+    "canonicalProduct": "Descript",
+    "company": "Descript, Inc.",
+    "scope": "Treat Descript as one text-based audio and video editing workspace. Underlord, AI Speakers, voice cloning, avatars, dubbing and generative media are capabilities inside that product, not separate tool pages.",
+    "reason": "The current product and pricing surfaces package recording, transcription, editing and generative features in one workspace with shared media-hour and AI-credit limits. Splitting named capabilities would duplicate one buyer decision."
+  },
+  "positioning": "A text-based audio and video editor for creators and teams who want transcript-led editing, recording and assisted media generation in one workflow, with separate media-hour and AI-credit constraints that must be forecast independently.",
+  "decisionAngles": [
+    "Transcript-led editing versus a traditional timeline-first editor",
+    "Media hours versus AI credits as separate usage constraints",
+    "Hobbyist, Creator and Business limits versus team size and output needs",
+    "Underlord assistance versus manual editing control",
+    "AI Speakers, voice cloning and avatar consent obligations",
+    "Commercial use permissions versus non-unique or potentially infringing output",
+    "Training opt-out, human access and third-party AI processing boundaries",
+    "Descript versus dedicated transcription, podcast and generative-video tools"
+  ],
+  "pricingSnapshot": {
+    "checkedAt": "2026-09-20",
+    "plans": [
+      "Free: USD 0, one media hour per month and 100 AI credits granted one time",
+      "Hobbyist: USD 16 per person per month billed annually or USD 24 monthly, with 10 media hours and 400 AI credits per month",
+      "Creator: USD 24 per person per month billed annually or USD 35 monthly, with 30 media hours and 800 AI credits per month, 4K export and credit top-ups",
+      "Business: USD 50 per person per month billed annually or USD 65 monthly, with 40 media hours and 1,500 AI credits per month, Brand Studio, translation and dubbing, custom avatars and priority support",
+      "Enterprise: custom pricing and limits, with SSO, SCIM, audit logs, custom retention and a contractual training opt-out path"
+    ],
+    "volatileFields": [
+      "monthly and annual seat prices, taxes and regional checkout currency",
+      "media hours and AI credits included per plan",
+      "AI feature credit rates and model-dependent costs",
+      "team-size, top-up, translation, avatar and enterprise entitlements"
+    ],
+    "releaseGuard": "Recheck the live pricing page and usage article on release day. Never collapse media hours and AI credits into one quota, and never describe annual effective prices as flexible monthly charges."
+  },
+  "usageModel": {
+    "mediaHours": "Imported or recorded media consumes the Drive's media-minute pool even when transcription is not the user's primary goal. Unused media minutes do not roll over.",
+    "aiCredits": "AI actions consume a separate shared Drive pool. Current examples range from a few credits for an image to approximately 67 credits per avatar minute; model choice can change cost.",
+    "teamBoundary": "Eligible Editor seats add allowance to a shared Drive pool. Viewers and project-level Editors do not add or consume that allowance in the same way.",
+    "forecastingGuard": "Do not estimate a universal cost per finished video. Source duration, regeneration count, model, dubbing, avatars and team behavior change both meters."
+  },
+  "policyBoundaries": [
+    {
+      "label": "Voice cloning requires speaker consent",
+      "summary": "Descript requires an authorization statement for a custom AI Speaker and prohibits creating a voice model from a speaker who has not consented.",
+      "releaseGuard": "Do not present access to a recording as permission to clone, synthesize or commercially deploy that person's voice."
+    },
+    {
+      "label": "Commercial use is not a blanket rights guarantee",
+      "summary": "Descript permits commercial use of a user's own authorized clone and stock speakers, while its terms state AI output can be non-unique, inaccurate, unreliable or potentially infringing and remains the user's responsibility to review.",
+      "releaseGuard": "Separate product permission from third-party rights, publicity rights, copyrightability and factual review."
+    },
+    {
+      "label": "Service processing, training and human access are distinct controls",
+      "summary": "Project information is processed to provide the service. Users can disable Share Data with Descript for product improvement, while AI Speaker training audio may be de-identified for research and can be listened to by staff or contractors for quality and misuse review under the stated terms.",
+      "releaseGuard": "Do not claim zero training, zero human access or zero third-party processing without checking the feature and account configuration."
+    },
+    {
+      "label": "Enterprise controls are not default consumer guarantees",
+      "summary": "Custom retention, SSO, SCIM, audit logs and contractual controls are Enterprise capabilities rather than defaults for every plan.",
+      "releaseGuard": "Name the applicable plan and configuration whenever describing governance or retention."
+    }
+  ],
+  "limitations": [
+    "Free includes only one media hour per month and its 100 AI credits are a one-time grant rather than a recurring monthly allowance.",
+    "Hobbyist, Creator and Business prices are per person; adding collaborators can change the real workspace cost.",
+    "The lower displayed prices require annual billing, while monthly billing is higher.",
+    "Media hours and AI credits are separate pools, so remaining capacity in one does not remove a shortage in the other.",
+    "Unused media minutes do not roll over to the next month.",
+    "AI credit consumption varies by action and model; regeneration, avatars, dubbing and video generation can consume credits quickly.",
+    "The Drive shares eligible seat allowances, so one member's activity can affect the remaining pool for others.",
+    "Text-based editing does not replace every timeline, color, motion-graphics or advanced audio workflow.",
+    "A custom AI Speaker requires the actual speaker's authorization and cannot be inferred from possession of source audio.",
+    "Commercial-use permission does not guarantee exclusive, copyrightable, accurate or non-infringing output.",
+    "Disabling product-improvement sharing does not mean content is never processed to provide the service or by approved subprocessors.",
+    "AI Speaker training data has separate research, de-identification and human-review disclosures that users should evaluate before enrollment.",
+    "Enterprise retention and governance controls require plan and contract verification.",
+    "Independent feedback indicates recurring friction around credit predictability, support and value, which should be tested against the buyer's actual workflow."
+  ],
+  "marketValidation": {
+    "score": 94,
+    "verdict": "validated",
+    "rationale": "Descript has a mature, distinct transcript-led editing workflow and substantial independent review volume. G2 lists more than 900 seller reviews, while Trustpilot's materially lower rating highlights support and credit friction. The disagreement creates useful decision value but does not establish performance for a specific workflow.",
+    "strongSignals": [
+      "G2 lists more than 900 Descript reviews",
+      "Official pricing and help documentation expose concrete media-hour and AI-credit tradeoffs",
+      "The transcript-led editor, recording workflow and consent-controlled AI Speakers form a distinct product decision"
+    ],
+    "recurringUserFriction": [
+      "Forecasting AI credits separately from media hours",
+      "Support responsiveness and subscription value",
+      "Regeneration quality and the need for manual correction",
+      "Voice, avatar, training and commercial-use consent boundaries"
+    ]
+  },
+  "sources": {
+    "official": [
+      "https://www.descript.com/pricing",
+      "https://help.descript.com/hc/en-us/articles/27841674958221-Track-and-understand-your-Media-minutes-and-AI-Credits",
+      "https://help.descript.com/hc/en-us/articles/17372069745293-AI-Speakers-overview",
+      "https://www.descript.com/terms",
+      "https://www.descript.com/privacy",
+      "https://www.descript.com/security",
+      "https://www.descript.com/ethics"
+    ],
+    "independent": [
+      "https://www.g2.com/sellers/descript",
+      "https://www.trustpilot.com/review/descript.com"
+    ]
+  },
+  "nextSlotChecklist": [
+    "Create one database-backed Descript entity while preserving /ai/descript as the only canonical route",
+    "Recheck plan prices, media hours, AI credits and current per-action credit examples on 2026-09-23",
+    "Keep Underlord, AI Speakers, avatars and dubbing as capabilities rather than child tool pages",
+    "Create local editorial identifiers disclosed as non-official",
+    "Write complete en, zh and cn decision content covering both meters, workflow fit, consent, privacy and rights",
+    "Run duplicate, route, metadata, canonical, noindex, sitemap, type and build checks",
+    "Release only as published + monitor/noindex; index approval remains independent"
+  ]
+}

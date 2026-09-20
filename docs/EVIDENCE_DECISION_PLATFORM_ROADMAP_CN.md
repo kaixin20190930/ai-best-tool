@@ -352,3 +352,12 @@ Review 结论：方案可实施。P0 不改变 URL 和索引面，先增强主�
   扩张。
 - 后续候选审计：Perplexity、Make受robots阻止；n8n误把FAQ/套餐识别为free；OpenRouter混入Documentation身份；Poe仅产生“存在
   定价页”一条事实。均未被计入第6条，下一步先修正采集范围/提取质量或选用更完整的官方证据。
+
+## 十六、成熟工具受控发布队列（2026-09-20）
+
+- 候选池只负责研究排队，不等于页面发布或索引批准。Grammarly 与 Jasper 已完成发布包，分别锁定 2026-09-21、2026-09-22；Descript 已完成深审并锁定最早 2026-09-23。
+- Descript 生产数据库实体为 0，英文和中文静态 fallback 均为 `200 + self-canonical + noindex`，sitemap 匹配为 0；下一步采用 `migrate_existing_fallback`，不得新建第二个 canonical。
+- Descript 的产品边界固定为一个文本式音视频编辑工作区；Underlord、AI Speakers、voice clone、avatar 与 dubbing 只作为功能，不派生独立工具页。
+- Decision Card 必须分开呈现 media hours 与 AI credits，解释共享 Drive 池、额度不结转和动作/模型导致的消耗差异；禁止拼成一个虚构的“统一额度”或“每条视频成本”。
+- AI Speaker 与商业使用必须同时展示说话人授权、训练与人工复核披露、第三方权利和输出非唯一性边界；产品允许商用不等于平台保证版权、准确性或不侵权。
+- Descript 当前仍是 `deep_review_complete`，没有生产写入、公开发布批准、sitemap 变更或索引批准。必须先完成三语言发布包、本地编辑标识和专项验收，再进入 2026-09-23 发布日 preflight。

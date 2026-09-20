@@ -155,6 +155,7 @@
     "test:grammarly-release": "tsx scripts/test-grammarly-preaudit.ts",
     "test:grammarly-preaudit": "tsx scripts/test-grammarly-preaudit.ts",
     "test:jasper-preaudit": "tsx scripts/test-jasper-preaudit.ts",
+    "test:descript-preaudit": "tsx scripts/test-descript-preaudit.ts",
     "test:public-content-boundary": "tsx scripts/test-public-content-boundary.tsx",
     "audit:public-content-boundary": "tsx scripts/audit-public-content-boundary.ts",
     "test:public-content-boundary:html": "tsx scripts/test-public-content-boundary-html.ts",
