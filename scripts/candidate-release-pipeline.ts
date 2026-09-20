@@ -115,6 +115,12 @@ const candidates: Candidate[] = [
     domain: 'jasper.ai',
     preauditFile: 'jasper-preaudit-2026-09-20.json',
   },
+  {
+    slug: 'descript',
+    aliases: ['descript'],
+    domain: 'descript.com',
+    preauditFile: 'descript-preaudit-2026-09-20.json',
+  },
 ];
 
 function parseArgs(args: string[]) {
