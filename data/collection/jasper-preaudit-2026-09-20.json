@@ -4,7 +4,7 @@
   "officialUrl": "https://www.jasper.ai/",
   "existingRoute": "/ai/jasper",
   "action": "migrate_existing_fallback",
-  "status": "deep_review_complete",
+  "status": "ready_for_next_slot",
   "reviewedAt": "2026-09-20",
   "publishNotBefore": "2026-09-22",
   "sitemapChangeApproved": false,

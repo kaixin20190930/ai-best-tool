@@ -109,6 +109,12 @@ const candidates: Candidate[] = [
     domain: 'grammarly.com',
     preauditFile: 'grammarly-preaudit-2026-09-20.json',
   },
+  {
+    slug: 'jasper',
+    aliases: ['jasper', 'jasper-ai'],
+    domain: 'jasper.ai',
+    preauditFile: 'jasper-preaudit-2026-09-20.json',
+  },
 ];
 
 function parseArgs(args: string[]) {

@@ -47,7 +47,9 @@ for (const [index, candidate] of payload.candidates.entries()) {
   domains.add(domain);
 
   assert(
-    ['screened_for_deep_review', 'deep_review_complete'].includes(candidate.status),
+    ['screened_for_deep_review', 'deep_review_complete', 'ready_for_next_slot', 'released'].includes(
+      candidate.status,
+    ),
     `${candidate.slug}: invalid candidate status`,
   );
   assert(candidate.officialSources.length >= 2, `${candidate.slug}: official source gap`);
@@ -60,7 +62,8 @@ for (const [index, candidate] of payload.candidates.entries()) {
 }
 
 assert.deepEqual(classCounts, payload.composition);
-assert.equal(payload.candidates[0].status, 'deep_review_complete');
+assert.equal(payload.candidates[0].status, 'ready_for_next_slot');
+assert.equal(payload.candidates[1].status, 'ready_for_next_slot');
 assert(payload.excluded.some((item) => item.product === 'Sourcegraph Cody'));
 assert(payload.excluded.some((item) => item.product.includes('Amazon Q Developer')));
 
