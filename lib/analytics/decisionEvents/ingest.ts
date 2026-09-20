@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/indent */
 
-import { createHash, createHmac, timingSafeEqual } from 'node:crypto';
+import { createHmac } from 'node:crypto';
 
 import {
   getDecisionEventObjectId,
@@ -9,6 +9,7 @@ import {
   type DecisionEventName,
   type DecisionTrafficQuality,
 } from './contract';
+import { decisionInternalTrafficTokenMatches } from './internalTraffic';
 
 const IDEMPOTENCY_BUCKET_MS = 30 * 60 * 1000;
 
@@ -100,12 +101,6 @@ export function getDecisionEventRuntimeConfig(
   };
 }
 
-function safeTokenMatches(token: string, expectedHash: string): boolean {
-  const actual = Buffer.from(createHash('sha256').update(token).digest('hex'));
-  const expected = Buffer.from(expectedHash);
-  return actual.length === expected.length && timingSafeEqual(actual, expected);
-}
-
 export function classifyDecisionEventTraffic(
   context: DecisionEventRequestContext,
   config: Pick<DecisionEventRuntimeConfig, 'internalTokenHashes'>,
@@ -135,7 +130,9 @@ export function classifyDecisionEventTraffic(
   }
   if (
     context.internalTrafficToken &&
-    config.internalTokenHashes.some((expected) => safeTokenMatches(context.internalTrafficToken as string, expected))
+    config.internalTokenHashes.some((expected) =>
+      decisionInternalTrafficTokenMatches(context.internalTrafficToken as string, expected),
+    )
   ) {
     return { accepted: false, reason: 'internal' };
   }

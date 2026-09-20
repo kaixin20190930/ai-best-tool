@@ -285,7 +285,7 @@ Synthesia 与 Replit 后原本只剩 Otter.ai、Lovable 和 Midjourney，低于�
 | PUB-UX   | 公开内容边界与页面简化             | 清除公开页面中的索引策略、编辑计划和转化目标；以真实判断、限制和证据替代内部说明 | PUB-01 至 PUB-04 均已完成独立 QA、部署与生产验证并关闭；真实 Pilot 尚未启动，需单独满足数据和审批门槛 | Codex                       |
 | PH0-01 | 产品假设、能力与指标审计 | 六个假设、现有能力、严格事件契约、任务簇评分与 Pilot/Gate 依赖均有仓库证据；不新增事件、URL 或生产写入 | `CLOSED`；[审计与指标契约](./PH0_01_PRODUCT_HYPOTHESES_METRICS_AUDIT_CN.md)已完成，未声称真实数据或 Pilot 上线 | Codex + Owner |
 | MEASURE-01 | 决策事件隐私基础层 | 固定事件/字段 allowlist、30 分钟易失 flow、服务端幂等、流量排除、默认关闭、最小权限迁移与 SEO 零差分 | `PROD_VERIFIED / CLOSED`；[专项文档](./MEASURE_01_DECISION_EVENT_FOUNDATION_CN.md)，独立 QA、主分支 build 与生产 smoke 通过；2026-09-20 迁移和原始表最小权限验证完成，生产采集仍关闭 | Codex + Owner |
-| MEASURE-02 | 数据治理与 Pilot 边界 | 原始 35 天、聚合 400 天、审计 90 天、20-flow 最小样本、最小权限、内部流量轮换和会议任务簇 Pilot allowlist | `MIGRATED / DATA_READY / PREFLIGHT_BLOCKED / DISABLED`；[治理与 Pilot 文档](./MEASURE_02_DATA_GOVERNANCE_AND_PILOT_CN.md)，active task、3 个 published 档案、3 个 task fit、6 条证据关系、5/5 路由、Fireflies noindex/sitemap 边界均通过生产只读 preflight；仅剩每日调度、内部 token 和采集/UI 开关，当前仍关闭 | Codex + Owner |
+| MEASURE-02 | 数据治理与 Pilot 边界 | 原始 35 天、聚合 400 天、审计 90 天、20-flow 最小样本、最小权限、内部流量轮换和会议任务簇 Pilot allowlist | `MIGRATED / DATA_READY / RETENTION_READY / PREFLIGHT_BLOCKED / DISABLED`；[治理与 Pilot 文档](./MEASURE_02_DATA_GOVERNANCE_AND_PILOT_CN.md)，数据、路由、证据、每日维护和 48 小时 freshness 告警均通过；仅剩内部 token 哈希和采集/UI 开关，当前仍关闭 | Codex + Owner |
 
 2026-09-14 新增公开内容边界治理：生产 Web3 comparison 暴露“保留索引、补真实证据”等内部编辑语言，且共享 Guide 模板将同类内容扩散到大量页面。该问题不改变既有 SEO 架构结论，但会削弱用户体验、可信度和差异化表达。完整基线、页面契约、分四个交付单元的实施计划、自动验收与反向评审见 [公开内容边界与页面简化实施方案](./PUBLIC_CONTENT_BOUNDARY_AND_PAGE_SIMPLIFICATION_PLAN_CN.md)。实施期间冻结 URL、metadata、canonical、hreflang、robots、schema 和 sitemap，先完成 PUB-01 门禁与 Web3 样板，生产通过后再扩到其他页面。
 

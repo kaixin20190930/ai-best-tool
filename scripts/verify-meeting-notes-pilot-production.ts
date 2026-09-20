@@ -139,7 +139,7 @@ async function main() {
     collectionEnabled: false,
     foundationMigrationApplied: true,
     governanceMigrationApplied: true,
-    retentionOperationConfigured: false,
+    retentionOperationConfigured: true,
     aggregateReaderConfigured: true,
     internalTrafficExclusionReady: false,
     activeTaskSlugs: ['meeting-notes'],
@@ -173,7 +173,6 @@ async function main() {
   });
   assert.deepEqual(preflight.blockers, [
     { code: 'collection_not_enabled' },
-    { code: 'retention_operation_missing' },
     { code: 'internal_traffic_exclusion_missing' },
   ]);
 
