@@ -101,6 +101,7 @@ const maintenanceAudit = read('MAINTENANCE_AUDIT_2026-09-04_CN.md');
 assert(maintenanceAudit.includes('已完成 10/10；最后由 The Graph 完成'), 'Maintenance audit must match CHG-02');
 assert(maintenanceAudit.includes('MAINT-06 最终状态校正'), 'Maintenance audit must expose the current baseline state');
 const roadmap = read('EVIDENCE_DECISION_PLATFORM_ROADMAP_CN.md');
+const scaleRoadmap = read('CONTENT_SCALE_AND_MAINTENANCE_ROADMAP_2026-09-20_CN.md');
 const mon = roadmap.split('\n').find((line) => line.startsWith('| MON-01')) || '';
 const lnk = roadmap.split('\n').find((line) => line.startsWith('| LNK-01')) || '';
 assert(
@@ -111,6 +112,23 @@ assert(
   lnk.includes('已完成') && lnk.includes('18个可索引Guide') && lnk.includes('24个分类代表入口'),
   'LNK-01 must retain its full Guide, relationship, and category acceptance evidence',
 );
+for (const contract of [
+  '数据库工具记录 | 61',
+  '已公开工具 | 48',
+  '获准索引工具 | 13',
+  '目标 2 个、上限 3 个/自然日',
+  '目标每周 4 个、硬上限 5 个',
+  '14-21 个',
+  '公开和索引继续分离',
+]) {
+  assert(scaleRoadmap.includes(contract), `Scale roadmap contract is missing: ${contract}`);
+}
+for (const document of [main, weekly, roadmap, read('TOOL_INDEX_RELEASE_POLICY_CN.md')]) {
+  assert(
+    document.includes('CONTENT_SCALE_AND_MAINTENANCE_ROADMAP_2026-09-20_CN.md'),
+    'Active plans must link to the current scale roadmap',
+  );
+}
 assert(read(planName).includes('Review结论'), 'Implementation plan must retain its review record');
 assert(
   read('LOCALIZED_NAVIGATION_AUDIT_2026-09-04_CN.md').includes('发布后补记'),
