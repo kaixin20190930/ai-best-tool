@@ -2,7 +2,7 @@
 
 日期：2026-09-20
 
-状态：`MIGRATED / PREFLIGHT_BLOCKED / DISABLED`（两份生产迁移与最小权限验证已完成；业务数据和运行门禁未满足，未接 UI、未开启生产采集、未启动 Pilot）
+状态：`MIGRATED / DATA_READY / PREFLIGHT_BLOCKED / DISABLED`（生产迁移、最小权限、任务簇与证据 preflight 已完成；运行门禁仍未满足，未接 UI、未开启生产采集、未启动 Pilot）
 
 上位契
 约：[MEASURE-01 决策事件隐私基础层](./MEASURE_01_DECISION_EVENT_FOUNDATION_CN.md)、[PH0-01 产品假设与指标审计](./PH0_01_PRODUCT_HYPOTHESES_METRICS_AUDIT_CN.md)。
@@ -46,7 +46,7 @@
 
 ## 4. Pilot 页面
 
-首个受控任务簇定为“会议记录与会后行动”，Pilot ID 为 `meeting-follow-up-v1`，任务 slug 候选为 `meeting-notes`。这是一
+首个受控任务簇定为“会议记录与会后行动”，Pilot ID 为 `meeting-follow-up-v1`，active task slug 为 `meeting-notes`。这是一
 项**操作选择**，不是声称评分模型已得到完整生产数据证明。
 
 | 页面                                 | 角色                     | 激活前要求                                         |
@@ -78,14 +78,14 @@ blocker；不得降级为“先采集再补证据”，也不得用新增页面�
 - `pnpm run test:measure-02-governance`：保留期常量、20-flow 阈值、Pilot allowlist、缺实体/证据 blocker、SQL RLS/授权与
   敏感字段边界。
 - `pnpm run test:decision-events`：继承 MEASURE-01 的 payload、PII、流量分类、HMAC 和默认关闭测试。
+- `pnpm run verify:meeting-notes-pilot:production`：在 PostgreSQL 只读事务和 Supabase GET-only 防护下核验唯一工具实体、任务、决策档案、任务适配、证据链、生产路由、别名、noindex 与 sitemap 边界。
 - `pnpm run typecheck:decision-events`、目标 lint、`test:seo-architecture`、`test:plan-consistency` 和完整 build。
 
 ## 7. 仍需 Owner 执行的生产动作
 
 1. 配置每日保留期作业和 48 小时陈旧告警。
 2. 配置 service-role 接收/维护/汇总运行环境及内部 token 哈希；不得提交 token 原值。
-3. 创建或发布 active `meeting-notes` 任务，并补齐 Fathom、Otter.ai、Fireflies 和会议指南的 verified decision evidence；Fireflies 还缺生产 published 实体。
-4. 等后续 UI 接入和独立验收完成后，才决定是否开启采集。
+3. 等后续 UI 接入和独立验收完成后，才决定是否开启采集。
 
 ## 8. 验收记录
 
@@ -95,3 +95,5 @@ blocker；不得降级为“先采集再补证据”，也不得用新增页面�
 - 目标 ESLint、MEASURE-01/02 专项测试、冻结测试、专项与全仓 TypeScript、SEO 架构、计划一致性和完整 build 全部通过；build 完成 43/43 静态页面。
 - 2026-09-20 两份 SQL 已在生产项目 `qqpbdzvidcgkmtbleqnl` 按顺序执行；原始事件、日聚合和操作审计三张表均拒绝 service-role 直接读取，受控汇总 RPC 可调用且返回 0 行。
 - 同日生产只读 preflight 确认 5 个 allowlist 路由均为 200，Fathom 与 Otter.ai 为 published 实体；但 `meeting-notes` active task、三个工具的 verified decision evidence、会议指南证据和 Fireflies published 实体缺失。每日清理调度与内部流量 token 也未配置，故状态为 `PREFLIGHT_BLOCKED / DISABLED`，不能开启采集或声称 Pilot 已启动。
+- 同日补齐 Fireflies 唯一生产实体（`published + monitor/noindex`）、active `meeting-notes`、Fathom/Otter.ai/Fireflies 三份 published 决策档案、三份 published task fit 和 6 条 verified evidence 关系。共享发布触发器曾因跨表读取不存在的 `NEW.status` 使事务安全回滚，已通过分表字段分支修复并重新执行成功。
+- `verify:meeting-notes-pilot:production` 在生产只读边界下通过：5/5 路由为 200，`/ai/fireflies-ai` 为 308 到唯一 canonical，Fireflies 不在 sitemap；preflight 现在仅剩 `collection_not_enabled`、`retention_operation_missing`、`internal_traffic_exclusion_missing`。这三个 blocker 均为刻意保留的运行门禁。
