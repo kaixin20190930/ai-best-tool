@@ -15,7 +15,8 @@ assert(source.includes("'published','monitor'"), 'Initial release must be publis
 assert(!source.includes("'published','continue_index'"), 'Release pipeline must not approve indexing');
 assert(source.includes("phase === 'release' && selected.length !== 1"), 'Bulk release must be blocked');
 assert(source.includes('release window opens'), 'Date gate must be explicit');
-assert(source.includes('ON CONFLICT (id) DO NOTHING'), 'Idempotent ID boundary is required');
+assert(source.includes('ON CONFLICT (id) DO UPDATE SET'), 'Idempotent fixed-ID upsert boundary is required');
+assert(source.includes('pg_advisory_xact_lock'), 'Concurrent releases must share a transaction lock');
 assert(source.includes('conflicting entity exists'), 'Slug/domain conflicts must block release');
 assert(source.includes('initial release must remain noindex'), 'Post-release noindex check is required');
 assert(source.includes('monitor page leaked into sitemap'), 'Post-release sitemap exclusion is required');

@@ -2120,24 +2120,24 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
     return isChinese
       ? {
           label: '官方事实快照',
-          title: 'Pro 价格、生成提示额度和内容控制',
+          title: 'Pro 计费、提示额度与账号级训练控制',
           summary:
-            '以下信息来自 Grammarly 官方支持与 Trust Center；产品正并入 Superhuman 套件，购买前应核对当前结账页与账号类型。',
-          checkedAt: '2026-08-03',
+            'Grammarly 仍是 Superhuman 旗下独立写作产品；购买前应分开核对计费周期、prompt 额度及实际账号的训练控制。',
+          checkedAt: '2026-09-20',
           facts: [
             {
               label: 'Pro 价格',
-              value: 'Grammarly Pro 为 $30/月、$60/季度或 $144/年（平均 $12/月），最多支持 149 个席位。',
+              value: 'Free 为 $0；Pro 为 $30/月、$60/季度或 $144/年（年付折算 $12/月），公开套餐页含 7 天试用；地区结账价格可能不同。',
             },
             {
               label: '生成式提示',
               value:
-                'Free 每月 100 prompts，Premium 每月 1,000，Pro/Plus/Business/Education 每月 2,000；额度用尽不影响普通下划线写作建议。',
+                'Free 每月 100 prompts，Pro 每位成员每月 2,000；Enterprise 每位成员不限量。套餐与产品命名变化时应重新核验。',
             },
             {
               label: '内容与训练',
               value:
-                'Grammarly 不出售用户内容；可关闭 Product Improvement and Training。保存在 Grammarly Editor 的文档会持续存储到用户删除文档或账号。',
+                '个人和直接购买的多人 Pro 默认开启 Product Improvement and Training，可主动关闭；销售管理的组织与教育账号默认关闭。Editor 文档保留到删除或账号/合同终止。',
             },
           ],
           sources: [
@@ -2146,33 +2146,36 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
               href: 'https://support.grammarly.com/hc/en-us/articles/115000090011-How-much-does-Grammarly-Pro-cost',
             },
             {
-              label: '生成式提示额度',
-              href: 'https://support.grammarly.com/hc/en-us/articles/17776038294285-Error-message-You-re-out-of-prompts',
+              label: 'Grammarly 套餐',
+              href: 'https://www.grammarly.com/plans',
             },
-            { label: 'Trust Center', href: 'https://www.grammarly.com/trust' },
+            {
+              label: '训练控制',
+              href: 'https://support.grammarly.com/hc/en-us/articles/25555503115277-Product-Improvement-and-Training-Control',
+            },
           ],
         }
       : {
           label: 'Official fact snapshot',
-          title: 'Pro pricing, generative prompt limits, and content controls',
+          title: 'Pro billing, prompt limits, and account-level training controls',
           summary:
-            'These facts come from Grammarly support and its Trust Center. The product is joining the Superhuman suite, so verify the current checkout and account type before buying.',
-          checkedAt: '2026-08-03',
+            'Grammarly remains a distinct writing product within Superhuman. Verify billing cadence, prompt allowance, and the actual account training control before buying.',
+          checkedAt: '2026-09-20',
           facts: [
             {
               label: 'Pro pricing',
               value:
-                'Grammarly Pro costs $30 monthly, $60 quarterly, or $144 annually ($12 monthly average) and supports up to 149 seats.',
+                'Free is $0. Pro costs $30 monthly, $60 quarterly, or $144 annually ($12 monthly average); the public plan includes a seven-day trial and regional checkout can differ.',
             },
             {
               label: 'Generative prompts',
               value:
-                'Free includes 100 prompts monthly, Premium 1,000, and Pro, Plus, Business, and Education 2,000; exhausting prompts does not disable standard underlined writing suggestions.',
+                'Free includes 100 prompts monthly, Pro 2,000 per member monthly, and Enterprise unlimited prompts per member. Recheck when plan or product names change.',
             },
             {
               label: 'Content and training',
               value:
-                'Grammarly does not sell user content and offers a Product Improvement and Training opt-out; Editor documents remain stored until the document or account is deleted.',
+                'Training is on by default for individual and directly purchased multi-user Pro accounts with opt-out, but off by default for sales-managed organization and Education accounts. Editor documents persist until deletion or account or contract termination.',
             },
           ],
           sources: [
@@ -2181,10 +2184,13 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
               href: 'https://support.grammarly.com/hc/en-us/articles/115000090011-How-much-does-Grammarly-Pro-cost',
             },
             {
-              label: 'Generative prompt limits',
-              href: 'https://support.grammarly.com/hc/en-us/articles/17776038294285-Error-message-You-re-out-of-prompts',
+              label: 'Grammarly plans',
+              href: 'https://www.grammarly.com/plans',
             },
-            { label: 'Trust Center', href: 'https://www.grammarly.com/trust' },
+            {
+              label: 'Training control',
+              href: 'https://support.grammarly.com/hc/en-us/articles/25555503115277-Product-Improvement-and-Training-Control',
+            },
           ],
         };
   }

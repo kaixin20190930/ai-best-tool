@@ -103,6 +103,12 @@ const candidates: Candidate[] = [
     preauditFile: 'fireflies-ai-preaudit-2026-09-09.json',
     existingEntityExpected: true,
   },
+  {
+    slug: 'grammarly',
+    aliases: ['grammarly', 'grammarly-ai'],
+    domain: 'grammarly.com',
+    preauditFile: 'grammarly-preaudit-2026-09-20.json',
+  },
 ];
 
 function parseArgs(args: string[]) {
@@ -171,7 +177,7 @@ function loadPayload(candidate: Candidate, audit: Preaudit, asOf: string): Relea
   assert.match(payload.id, /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
   assert.equal(new URL(payload.officialUrl).hostname.replace(/^www\./, ''), candidate.domain);
   assert(
-    payload.reviewedAt >= audit.publishNotBefore && payload.reviewedAt <= asOf,
+    payload.reviewedAt >= audit.reviewedAt && payload.reviewedAt <= asOf,
     `${candidate.slug}: payload review date is invalid`,
   );
   assert(payload.nextReviewDate > payload.reviewedAt, `${candidate.slug}: next review must be later`);

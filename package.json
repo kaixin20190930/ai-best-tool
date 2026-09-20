@@ -152,6 +152,7 @@
     "test:glean-release": "tsx scripts/test-glean-release.ts",
     "test:fireflies-release": "tsx scripts/test-fireflies-release.ts",
     "test:mature-candidate-buffer": "tsx scripts/test-mature-candidate-buffer.ts",
+    "test:grammarly-release": "tsx scripts/test-grammarly-preaudit.ts",
     "test:grammarly-preaudit": "tsx scripts/test-grammarly-preaudit.ts",
     "test:public-content-boundary": "tsx scripts/test-public-content-boundary.tsx",
     "audit:public-content-boundary": "tsx scripts/audit-public-content-boundary.ts",

@@ -89,7 +89,7 @@ Stack、Trial、owner 更新和用户纠错用于产生非 AI 的真实增量信
 
 1. HeyGen、Glean 当日事实复核与受控发布，以及 Fireflies 既有实体正规化已完成，均保持 `monitor/noindex`。
 2. 已生成 14 个成熟候选缓冲，覆盖会议、视频、开发、研究、自动化和企业知识分类。
-3. 从 Grammarly 开始逐条完成身份查重、证据、决策边界、素材与发布日期门禁，不因缓冲池规模降低标准。
+3. Grammarly 已完成身份查重、证据、决策边界、素材、发布包与日期门禁；2026-09-21 通过生产 preflight 后才可受控发布。下一候选为 Jasper，但不能占用 Grammarly 的当日发布槽。
 4. 从已公开成熟工具中每周选择 4 个完成独立索引评审。
 5. 每周增强 1-2 个已有 Best / Guide，不新增同义页面。
 6. 导入下一期同期 GSC 数据，完成 W4-01 至 W4-03，再决定是否扩大索引上限。
@@ -107,4 +107,4 @@ Review 通过。该文档自 2026-09-20 起作为工具规模化、分层维护�
 
 2026-09-20 候选缓冲池更新：已对生产 63 条记录完成只读身份去重，并建立 14 条机器可验收的成熟候选池，构成为 10 条成熟高需求、3 条快速增长且有证据基础、1 条专业差异化工具。所有候选均保持 `screened_for_deep_review`，公开与索引批准均关闭，没有新增页面或 sitemap URL。Sourcegraph Cody 与 Amazon Q Developer IDE plugins 因生命周期变化被明确排除。详见 [成熟候选缓冲池](./MATURE_CANDIDATE_BUFFER_2026-09-20_CN.md)；下一项为 Grammarly 身份范围与证据深审。
 
-2026-09-20 Grammarly 深审更新：确认生产数据库无 Grammarly 实体，但现有双语静态兜底页均为 `200 + self-canonical + noindex`，且 sitemap 匹配为 0。官方资料确认 Superhuman 是母品牌/套件、Grammarly 仍是独立写作产品、Go 是相关助手体验；当前 Free/Pro/Enterprise 提示额度和不同账号类型的训练默认值均已固化，Chrome Web Store、G2 与 Trustpilot 独立信号已纳入。候选状态升级为 `deep_review_complete`，公开与索引批准仍关闭；下一项是制作数据库发布包并替换 2026-08-03 旧兜底快照。
+2026-09-20 Grammarly 发布准备更新：生产无重复实体、唯一 canonical 保持 `/ai/grammarly`；三语言数据库发布包、Decision Card、本地编辑素材、市场信号、价格/提示额度/训练控制/隐私边界和候选流水线均已完成。静态兜底事实已从 2026-08-03 更新为 2026-09-20，仍为 `noindex` 且不在 sitemap。候选状态为 `ready_for_next_slot`，硬日期门禁会阻止 2026-09-21 前的生产写入；届时先运行生产只读 preflight，再做 rollback、commit 与在线验收，发布后仍保持 `monitor/noindex`。

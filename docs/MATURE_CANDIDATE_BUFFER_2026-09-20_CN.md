@@ -20,7 +20,7 @@
 
 | 顺序 | 工具 | 类型 | 主要决策价值 | 当前状态 |
 | ---: | --- | --- | --- | --- |
-| 1 | Grammarly | 成熟高需求 | 免费/付费、通用 AI 替代、Superhuman Go 迁移 | 深审完成，待发布包 |
+| 1 | Grammarly | 成熟高需求 | 免费/付费、通用 AI 替代、Superhuman Go 迁移 | 发布包完成，等待 2026-09-21 受控发布 |
 | 2 | Jasper | 成熟高需求 | 席位费、credits、品牌治理 | 待深审 |
 | 3 | Descript | 成熟高需求 | 文本式剪辑、媒体时长、AI credits | 待深审 |
 | 4 | Canva Magic Studio | 成熟高需求 | AI 套件范围、套餐限制、商业使用 | 待深审 |
@@ -53,7 +53,7 @@
 5. 自动测试通过后，才允许生成 `published + monitor/noindex` 页面。
 6. 页面经过相应观察期并再次通过独立索引评审后，才可能改为 `continue_index`；观察期结束不自动索引。
 
-首个深审对象 Grammarly 已完成身份、价格、提示额度、训练控制、隐私和独立市场信号核验。结论是保留 Grammarly 作为写作产品 canonical；Superhuman 是母品牌与套件，Go 是相关但不同范围的助手，不能合并成同一工具页。现有静态兜底页为 `200 + self-canonical + noindex` 且不在 sitemap，但仍展示 2026-08-03 旧快照，因此下一步是制作完整数据库发布包并替换旧快照，而不是新增 URL。详见 `data/collection/grammarly-preaudit-2026-09-20.json`。
+首个对象 Grammarly 已完成身份、价格、提示额度、训练控制、隐私、独立市场信号和三语言 Decision Card 核验。结论是保留 Grammarly 作为写作产品 canonical；Superhuman 是母品牌与套件，Go 是相关但不同范围的助手，不能合并成同一工具页。发布包、本地编辑素材、候选流水线和日期门禁已完成，静态兜底页也已替换 2026-08-03 旧快照。最早生产日期仍为 `2026-09-21`；届时只允许写入 `published + monitor/noindex`，不进入 sitemap，也不消耗索引额度。详见 `data/collection/grammarly-preaudit-2026-09-20.json` 与 `data/collection/grammarly-release.json`。
 
 ## 五、验收结论
 
