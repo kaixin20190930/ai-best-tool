@@ -2,7 +2,7 @@
 
 日期：2026-09-20
 
-状态：`DEV_READY`（仅代码候选；默认关闭、迁移未执行、未接入 UI、未采集真实数据、未启动 Pilot）
+状态：`PROD_VERIFIED / CLOSED`（基础层已部署但默认关闭；迁移未执行、未接入 UI、未采集真实数据、未启动 Pilot）
 
 基线：`bb8c6b57faf69727d8672c92914bc859172c112f`。上位契
 约：[PH0-01 产品假设、能力与指标审计](./PH0_01_PRODUCT_HYPOTHESES_METRICS_AUDIT_CN.md)。本单元不新增 URL，不修改

@@ -5,23 +5,27 @@ import { readFileSync } from 'node:fs';
 const fallbackBase = 'bb8c6b57faf69727d8672c92914bc859172c112f';
 const scopeAnchor = 'docs/MEASURE_01_DECISION_EVENT_FOUNDATION_CN.md';
 
-function resolveMeasureBase(): string {
-  const introduction = execFileSync('git', ['log', '--diff-filter=A', '--reverse', '--format=%H', '--', scopeAnchor], {
+function resolveMeasureScope(): { base: string; head: string } {
+  const commits = execFileSync('git', ['log', '--diff-filter=AM', '--reverse', '--format=%H', '--', scopeAnchor], {
     encoding: 'utf8',
   })
     .trim()
     .split('\n')
-    .find(Boolean);
-  if (!introduction) return fallbackBase;
+    .filter(Boolean);
+  const introduction = commits[0];
+  if (!introduction) return { base: fallbackBase, head: 'HEAD' };
 
   try {
-    return execFileSync('git', ['rev-parse', `${introduction}^`], { encoding: 'utf8' }).trim();
+    return {
+      base: execFileSync('git', ['rev-parse', `${introduction}^`], { encoding: 'utf8' }).trim(),
+      head: commits.at(-1) || introduction,
+    };
   } catch {
-    return fallbackBase;
+    return { base: fallbackBase, head: 'HEAD' };
   }
 }
 
-const base = resolveMeasureBase();
+const { base, head } = resolveMeasureScope();
 const allowed = new Set([
   'app/actions/decisionMetrics.ts',
   'db/supabase/migrations/20260920_decision_metric_events.sql',
@@ -37,9 +41,10 @@ const allowed = new Set([
   'scripts/test-measure-01-freeze.ts',
   'scripts/tsconfig.decision-events.json',
 ]);
-const tracked = execFileSync('git', ['diff', '--name-only', base, '--'], { encoding: 'utf8' });
+const tracked = execFileSync('git', ['diff', '--name-only', base, head, '--'], { encoding: 'utf8' });
+const working = execFileSync('git', ['diff', '--name-only', 'HEAD', '--'], { encoding: 'utf8' });
 const untracked = execFileSync('git', ['ls-files', '--others', '--exclude-standard'], { encoding: 'utf8' });
-const changed = Array.from(new Set(`${tracked}\n${untracked}`.split('\n').filter(Boolean)));
+const changed = Array.from(new Set(`${tracked}\n${working}\n${untracked}`.split('\n').filter(Boolean)));
 assert.deepEqual(
   changed.filter((file) => !allowed.has(file)),
   [],
@@ -52,7 +57,7 @@ for (const file of changed) {
   assert(!/metadata|canonical|hreflang|schema/i.test(file), `${file}: SEO contract files frozen`);
 }
 for (const frozen of ['app/sitemap.ts', 'middleware.ts', 'lib/seo']) {
-  const diff = execFileSync('git', ['diff', '--name-only', base, '--', frozen], { encoding: 'utf8' }).trim();
+  const diff = execFileSync('git', ['diff', '--name-only', base, head, '--', frozen], { encoding: 'utf8' }).trim();
   assert.equal(diff, '', `${frozen} must have zero diff.`);
 }
 
@@ -66,7 +71,7 @@ assert.deepEqual(currentPackage, originalPackage, 'Only MEASURE-01 verification 
 const action = readFileSync('app/actions/decisionMetrics.ts', 'utf8');
 assert.doesNotMatch(action, /cookies\(|NextResponse|route\.ts/);
 const doc = readFileSync('docs/MEASURE_01_DECISION_EVENT_FOUNDATION_CN.md', 'utf8');
-assert.match(doc, /DEV_READY/);
+assert.match(doc, /PROD_VERIFIED \/ CLOSED/);
 assert.match(doc, /默认关闭/);
 assert.match(doc, /未执行/);
 assert.match(doc, /Owner/);
