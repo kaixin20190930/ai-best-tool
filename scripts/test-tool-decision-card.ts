@@ -111,6 +111,8 @@ for (const card of [result, reviewedResult]) {
       'Research teams',
       'One-off use',
       'Limited feedback',
+      'Sources',
+      'Pricing',
       'Freemium',
       '2026-01-01',
     ]) assert(html.includes(copy));

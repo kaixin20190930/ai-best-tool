@@ -18,8 +18,11 @@ assert(pipeline.includes("slug: 'elevenlabs'"), 'ElevenLabs must use the shared 
 assert(releaseAudit.includes("'elevenlabs'"), 'Read-only release audit must accept ElevenLabs');
 assert.equal(audit.reviewedAt, '2026-09-09', 'Keep the historical preaudit date');
 assert.equal(audit.publishNotBefore, '2026-09-13');
-assert.equal(audit.status, 'ready_for_next_slot');
-assert.equal(audit.productionWriteApproved, false);
+assert.equal(audit.status, 'released');
+assert.equal(audit.productionWriteApproved, true);
+assert.equal(audit.releasedAt, '2026-09-20');
+assert.equal(audit.actualPublishedAt, '2026-09-20');
+assert.equal(audit.releaseIndexState, 'monitor');
 assert.equal(audit.sitemapChangeApproved, false);
 assert.equal(audit.category.discoverySlug, 'voice');
 assert.equal(audit.category.storageSlug, 'chatbot');
@@ -105,7 +108,7 @@ const decision = getToolIndexDecision({
 });
 assert.equal(decision.indexable, false, 'Complete ElevenLabs content must remain noindex');
 
-const early = spawnSync(
+const duplicateRelease = spawnSync(
   'tsx',
   ['scripts/candidate-release-pipeline.ts', '--candidate=elevenlabs', '--phase=release', '--as-of=2026-09-12'],
   {
@@ -114,31 +117,7 @@ const early = spawnSync(
     env: { ...process.env, POSTGRES_URL: 'postgres://invalid:invalid@127.0.0.1:1/invalid' },
   },
 );
-assert.equal(early.status, 1);
-assert.match(early.stderr, /release window opens 2026-09-13/);
-
-const commitGate = spawnSync(
-  'tsx',
-  [
-    'scripts/candidate-release-pipeline.ts',
-    '--candidate=elevenlabs',
-    '--phase=release',
-    '--as-of=2026-09-20',
-    '--commit',
-  ],
-  {
-    cwd: process.cwd(),
-    encoding: 'utf8',
-    env: { ...process.env, POSTGRES_URL: 'postgres://invalid:invalid@127.0.0.1:1/invalid' },
-  },
-);
-assert.equal(commitGate.status, 1);
-assert.match(commitGate.stderr, /production media unavailable|production media differs|ECONNREFUSED/);
-if (commitGate.stderr.includes('ECONNREFUSED')) {
-  assert(
-    !commitGate.stderr.includes('production media unavailable') && !commitGate.stderr.includes('production media differs'),
-    'The database gate is reachable only after deployed media passes verification',
-  );
-}
+assert.equal(duplicateRelease.status, 1);
+assert.match(duplicateRelease.stderr, /candidate is already released/);
 
 console.log('PASS ElevenLabs: dated en/zh/cn evidence, pricing, rights, cloning, privacy, API and noindex gates');

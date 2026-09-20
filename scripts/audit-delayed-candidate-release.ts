@@ -134,9 +134,7 @@ async function main() {
               const url = new URL(img.getAttribute('src') || '', 'https://aibesttool.com');
               return url.searchParams.get('url') || url.pathname;
             }),
-            hasReviewedDate:
-              body.includes('2026') &&
-              (body.includes('Sep 14') || body.includes('9月14') || body.includes('2026-09-14')),
+            hasReviewedDate: body.includes(payload.reviewedAt),
             inSitemap,
             htmlSha256: hash(html),
           };
@@ -154,6 +152,7 @@ async function main() {
                 !page.hasPayloadCopy ||
                 !h1.toLowerCase().includes(slug) ||
                 !page.fullArticleMatchesPayload ||
+                !page.hasReviewedDate ||
                 page.missingDecisionCardItems.length > 0 ||
                 !page.imagePaths.includes(payload.thumbnailUrl))
             ) report.failures.push(`${pathname}: released content missing`);

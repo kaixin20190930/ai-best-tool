@@ -80,6 +80,18 @@ export default function PublicToolDecision({
             </div>
           ))}
       </div>
+      {card.comparison.axes.length > 0 && (
+        <div className='mt-4 rounded-lg border border-slate-200 p-4'>
+          <h3 className='text-sm font-semibold text-slate-950'>
+            {cn ? '横向比较时重点看' : 'What to compare'}
+          </h3>
+          <ul className='mt-2 grid list-disc gap-x-6 gap-y-2 pl-4 text-sm leading-6 text-slate-700 sm:grid-cols-2'>
+            {card.comparison.axes.map((axis) => (
+              <li key={axis}>{axis}</li>
+            ))}
+          </ul>
+        </div>
+      )}
       {model && <DecisionCardV2 model={model} locale={locale} embedded />}
       {children}
       {card.editorial.sourceUrl && (
