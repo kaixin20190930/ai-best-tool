@@ -2,7 +2,7 @@
 
 日期：2026-09-20
 
-状态：`LOCAL_VERIFIED / DORMANT / COLLECTION_DISABLED`
+状态：`PROD_VERIFIED / DORMANT / COLLECTION_DISABLED`
 
 上位契约：[MEASURE-01 决策事件隐私基础层](./MEASURE_01_DECISION_EVENT_FOUNDATION_CN.md)、[MEASURE-02 数据治理与 Pilot 边界](./MEASURE_02_DATA_GOVERNANCE_AND_PILOT_CN.md)。
 
@@ -36,3 +36,10 @@ Owner 明确选择暂不配置 `DECISION_EVENT_INTERNAL_TOKEN_HASHES`、`DECISIO
 ## 后续门禁
 
 本单元完成后仍不启动 Pilot。只有 Owner 将来重新批准环境配置、内部流量排除、独立 QA 和生产 preflight 全部通过，才允许讨论开启采集。其余四类事件必须分独立任务接入，不能借本单元扩大范围。
+
+## 生产验收记录
+
+- 实现提交 `4abab03c` 已推送 `main`，Vercel 状态为 `Deployment has completed`。
+- 完整 Next.js build 通过，43/43 静态页面生成完成；专项事件、Finder UI、治理、SEO 架构、计划一致性和 TypeScript 均通过。
+- 生产 `/cn/find-tools` 返回 200，robots 继续为 `noindex, follow`；全站 production SEO smoke 通过，sitemap 保持 116 条且没有 internal 或 comparison URL。
+- 未配置采集环境变量，专项测试确认休眠状态下 server action 调用数为 0；没有真实事件或生产数据写入。
