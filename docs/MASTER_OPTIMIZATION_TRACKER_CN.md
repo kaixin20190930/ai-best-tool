@@ -236,6 +236,8 @@ Synthesia 与 Replit 后原本只剩 Otter.ai、Lovable 和 Midjourney，低于�
 
 2026-09-20 HeyGen 延期补发完成：网页套餐与共享 credits、网页/API 分账、并发和输入限制、Digital Twin 同意、非 Enterprise 训练退出、Free 输出权利与编辑素材性质均已复核；生产事务先 rollback 后 commit，唯一实体 `4f26ce1c-08fd-4f99-97c9-21864c35bf94` 回读为 `published + monitor`。英中双语及 `zh/cn` 兼容内容、Decision Card、媒体、canonical、noindex、sitemap 和独立生产审计全部通过。生产基线为 62 条工具、49 条公开、13 条索引、36 条暂停索引，sitemap 仍为 118 条；下次事实复核 2026-10-20，索引仍需独立审批。详见 [HeyGen 延期补发交付](./DELAYED_HEYGEN_RELEASE_2026-09-20_CN.md)。
 
+2026-09-20 Glean 延期补发完成：企业搜索、275+ 连接器、源权限继承、开发能力、安全资料、定制报价缺失和公司自报采用信号均已按发布日证据复核；生产事务先 rollback 后 commit，唯一实体 `fd861409-8228-4deb-9802-a9f807d66256` 回读为 `published + monitor`。英中双语及 `zh/cn` 兼容内容、Decision Card、编辑媒体、canonical、noindex、sitemap 和独立生产审计全部通过。生产基线为 63 条工具、50 条公开、13 条索引、37 条暂停索引，sitemap 仍为 118 条；下次事实复核 2026-10-20，索引仍需独立审批。详见 [Glean 延期补发交付](./DELAYED_GLEAN_RELEASE_2026-09-20_CN.md)。
+
 ## 已完成能力
 
 | 优先级 | 已完成项                                                   | 当前价值                                 |

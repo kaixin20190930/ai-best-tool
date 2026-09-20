@@ -1,0 +1,189 @@
+{
+  "checkedAt": "2026-09-20T13:27:36.966Z",
+  "requestBaseUrl": "https://aibesttool.com",
+  "phase": "released",
+  "productionWrites": 0,
+  "candidates": [
+    {
+      "slug": "glean",
+      "canonicalSlug": "glean",
+      "identityQuery": "slug, aliases, official domain and localized title",
+      "rows": [
+        {
+          "id": "fd861409-8228-4deb-9802-a9f807d66256",
+          "name": "glean",
+          "url": "https://www.glean.com/",
+          "status": "published",
+          "pageQualityStatus": "monitor",
+          "reviewedAt": "2026-09-20",
+          "nextReviewDate": "2026-10-20",
+          "createdAt": "2026-09-20T13:27:02.635Z",
+          "updatedAt": "2026-09-20T13:27:02.635Z",
+          "identityMatchesPayload": true,
+          "featuresMatchPayload": true,
+          "mediaMatchPayload": true,
+          "contentMatchesPayload": true,
+          "indexDecision": {
+            "indexable": false,
+            "qualityScore": 100,
+            "reason": "indexing_paused"
+          }
+        }
+      ],
+      "pages": [
+        {
+          "pathname": "/ai/glean",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/ai/glean",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "Glean Enterprise Search and Work AI",
+          "hasDecisionCard": true,
+          "hasPayloadCopy": true,
+          "fullArticleMatchesPayload": true,
+          "missingDecisionCardItems": [],
+          "imagePaths": [
+            "/images/aitools.svg",
+            "/images/Aileron.svg",
+            "/icons/global.svg",
+            "/images/tool-media/glean-release-cover.svg"
+          ],
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "031c909970c762e4390eb6cb93d788488b9e3d7f20d99a2f2a819015771ed850"
+        },
+        {
+          "pathname": "/ai/glean-search",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/ai/glean-search",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "fullArticleMatchesPayload": false,
+          "missingDecisionCardItems": [
+            "Enterprises with knowledge fragmented across governed workplace systems",
+            "Teams able to run permission and known-answer evaluations",
+            "Organizations with owners for adoption, source quality and AI actions",
+            "Small teams needing instant self-serve pricing and setup",
+            "Organizations unable to repair source permissions or stale content",
+            "Projects treating generated answers as authoritative without review",
+            "Known-answer search success",
+            "Permission and identity fidelity",
+            "Connector object coverage and freshness",
+            "Answer citation and approval workflow",
+            "Implementation and administration effort",
+            "Custom quote and measured total cost",
+            "Source ACL errors remain source ACL errors.",
+            "Stale and duplicate content can reduce answer quality.",
+            "Connector counts do not prove required object coverage.",
+            "Custom connectors add engineering and maintenance work.",
+            "Generated answers still require source review.",
+            "Agent actions need approval, audit and rollback.",
+            "Public pages do not provide a stable self-serve price.",
+            "Adoption and search tuning require ongoing ownership."
+          ],
+          "imagePaths": [
+            "/images/aitools.svg",
+            "/images/Aileron.svg",
+            "/icons/global.svg"
+          ],
+          "hasReviewedDate": false,
+          "inSitemap": false,
+          "htmlSha256": "662ee1b0ea6d59017f6af1e25e1cab232eee422ba68e266e1aeec317692b3146"
+        },
+        {
+          "pathname": "/cn/ai/glean",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/cn/ai/glean",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "Glean 企业搜索与工作 AI 平台",
+          "hasDecisionCard": true,
+          "hasPayloadCopy": true,
+          "fullArticleMatchesPayload": true,
+          "missingDecisionCardItems": [],
+          "imagePaths": [
+            "/images/aitools.svg",
+            "/images/Aileron.svg",
+            "/icons/global.svg",
+            "/images/tool-media/glean-release-cover.svg"
+          ],
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "82934a73dd151432f5842929ad6601e43c16a40b14f01acfa8bc48d26c2c4b0f"
+        },
+        {
+          "pathname": "/cn/ai/glean-search",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/cn/ai/glean-search",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "This tool page is temporarily unavailable",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "fullArticleMatchesPayload": false,
+          "missingDecisionCardItems": [
+            "知识分散在多个受治理工作系统的企业",
+            "能执行权限与已知答案评估的团队",
+            "有采用、源质量和 AI 动作责任人的组织",
+            "需要即时自助定价和部署的小团队",
+            "无法治理源权限或陈旧内容的组织",
+            "把生成答案直接当作权威事实的项目",
+            "已知答案搜索成功率",
+            "权限与身份一致性",
+            "连接器对象覆盖与新鲜度",
+            "答案引用和审批流程",
+            "实施与管理工作量",
+            "定制报价与实测总成本",
+            "源系统 ACL 错误不会被平台自动修复。",
+            "陈旧和重复内容会降低答案质量。",
+            "连接器数量不能证明所需对象已覆盖。",
+            "自定义连接器会增加工程和维护工作。",
+            "生成答案仍需要检查原始来源。",
+            "Agent 动作需要审批、审计和回滚。",
+            "公开页面没有稳定的自助价格。",
+            "采用和搜索调优需要持续责任人。"
+          ],
+          "imagePaths": [
+            "/images/aitools.svg",
+            "/images/Aileron.svg",
+            "/icons/global.svg"
+          ],
+          "hasReviewedDate": false,
+          "inSitemap": false,
+          "htmlSha256": "e65296c337720c563adc353d398d07f39b6399aabfc9549c87d3dabc4309f7d3"
+        }
+      ],
+      "media": [
+        {
+          "path": "/icons/tool-logos/glean.svg",
+          "status": 200,
+          "contentType": "image/svg+xml",
+          "sha256": "26314d584c58c5786a5b10413c02d88c35711e09e3ad61d85b9bee68661505ec",
+          "expectedSha256": "26314d584c58c5786a5b10413c02d88c35711e09e3ad61d85b9bee68661505ec",
+          "ready": true
+        },
+        {
+          "path": "/images/tool-media/glean-release-cover.svg",
+          "status": 200,
+          "contentType": "image/svg+xml",
+          "sha256": "5b04b2f6d37b3096291c39c6116d5fa71c995f63bfa55c3b2f0b8976091d2cbd",
+          "expectedSha256": "5b04b2f6d37b3096291c39c6116d5fa71c995f63bfa55c3b2f0b8976091d2cbd",
+          "ready": true
+        }
+      ]
+    }
+  ],
+  "failures": [],
+  "sitemap": {
+    "status": 200,
+    "urlCount": 118,
+    "sha256": "c6198d3fe6c8121ee3d1a6f533b4005003e5cb1ee1d1990d4e659558674ed41b"
+  }
+}
