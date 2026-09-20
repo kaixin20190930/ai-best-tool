@@ -2,7 +2,7 @@
 
 日期：2026-09-20
 
-状态：`IMPLEMENTED / DISABLED`（政策与未执行迁移已形成；未接 UI、未执行迁移、未开启生产采集、未启动 Pilot）
+状态：`QA_PASS / DISABLED`（政策与未执行迁移已形成并通过独立验收；未接 UI、未执行迁移、未开启生产采集、未启动 Pilot）
 
 上位契
 约：[MEASURE-01 决策事件隐私基础层](./MEASURE_01_DECISION_EVENT_FOUNDATION_CN.md)、[PH0-01 产品假设与指标审计](./PH0_01_PRODUCT_HYPOTHESES_METRICS_AUDIT_CN.md)。
@@ -87,3 +87,11 @@ blocker；不得降级为“先采集再补证据”，也不得用新增页面�
 3. 配置 service-role 接收/维护/汇总运行环境及内部 token 哈希；不得提交 token 原值。
 4. 提供生产只读 preflight 结果。若 Fireflies 或任务 slug 不满足条件，从 Pilot 移除或修复证据，不能假报 READY。
 5. 等后续 UI 接入和独立验收完成后，才决定是否开启采集。
+
+## 8. 验收记录
+
+- 开发提交：`04d81ecf`；QA 定点修复：`74c93549`。
+- 首轮独立 QA 发现完整自然日覆盖、调用者可控清理时钟、失败路径审计清理和缺失证据 fail-open 四项 P1；均已修复。
+- 同一 QA 复验结论：`QA_PASS`，P0/P1 均为 0。
+- 目标 ESLint、MEASURE-01/02 专项测试、冻结测试、专项与全仓 TypeScript、SEO 架构、计划一致性和完整 build 全部通过；build 完成 43/43 静态页面。
+- SQL 未执行、生产配置未修改、真实事件为 0、Pilot 未启动；因此当前只能标记 `QA_PASS / DISABLED`，不能标为生产验证完成。

@@ -66,13 +66,11 @@ metadata、canonical、hreflang、robots、schema 或 sitemap。
 - `pnpm run typecheck:decision-events`、站点 TypeScript、目标
   ESLint、`pnpm run test:seo-architecture`、`pnpm run test:plan-consistency` 和完整 build 作为 DEV_READY 门禁。
 
-## 5. Owner 尚未批准 / 不得推断为已批准
+## 5. 后续治理状态
 
-1. 真实保留天数、到期删除机制、删除作业身份、失败告警与删除审计。
-2. 内部流量 token 的签发/轮换流程，以及 bot 规则维护责任；UA spoofing 无法被本基础层完全消除。
-3. 迁移执行、service-role 运行环境、原始表读取主体、聚合视图和最小样本阈值。
-4. 事件 UI 接入、3–5 个既有 Pilot 页面、首个任务簇、官方域名 code 的服务器映射和 Pilot 启动时间。
-5. `unknown` 流量的质量复核。主指标只能使用 `human`，不能把 unknown 重新解释为人类流量。
+MEASURE-02 已确定原始事件 35 天、日级聚合 400 天、操作审计 90 天、20 个 human flow 最小报告样本、内部 token 轮换规则及“会议记录与会后行动”Pilot allowlist，详见[数据治理与 Pilot 边界](./MEASURE_02_DATA_GOVERNANCE_AND_PILOT_CN.md)。这些是已审查的政策和未执行实现，不等于生产已启用。
+
+仍待生产执行：两份迁移、service-role 运行环境、每日清理与 48 小时陈旧告警、内部 token 签发、生产 preflight、UI 事件接入和最终启用审批。`unknown` 流量继续只用于质量诊断，不能重新解释为人类流量或进入主指标。
 
 本状态只表示实现候选已经具备独立 QA 条件。它不表示迁移已执行、生产开关已开启、真实数据存在、Pilot 已上线或任何产品假设得
 到验证。
