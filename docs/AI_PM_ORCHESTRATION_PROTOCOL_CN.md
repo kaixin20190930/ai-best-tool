@@ -156,6 +156,6 @@ Otter.ai 任务属于协议生效前的旧流程：它独立完成并直接推�
 
 - 开发：`2026-09-20 | 开发 | MEASURE-01 隐私安全事件基础层`
 - 验收：`2026-09-20 | 验收 | MEASURE-01 独立隐私门禁`
-- 状态：`DEV_ACTIVE`。当前只实现默认关闭的事件契约、allowlist、幂等、流量排除和自动测试；不接真实页面、不执行迁移、不写生产数据、不选择 Pilot。
-- 范围门禁：开发只运行目标 lint、专项测试、专项 TypeScript、SEO architecture、plan consistency 和一次完整 build；QA 只验证候选差分及上述契约，不修改文件或追加无关测试。
-- 上一交付单元：PUB-04 已于 2026-09-20 完成同一开发返工、同一 QA 复验、主分支 build、推送和生产 smoke，状态为 `PROD_VERIFIED / CLOSED`。
+- 状态：`PROD_VERIFIED / CLOSED`。候选 `067ca41c` 独立 QA PASS；主分支集成发现冻结测试基线漂移后由同一开发任务以 `1bbe5689` 定点修复，并由同一 QA 复验 PASS。main 提交 `bad2b160`、`86485c52` 已通过目标 lint、专项测试、专项 TypeScript、SEO architecture、plan consistency、完整 build 和生产 smoke。
+- 已交付边界：默认关闭的事件契约、allowlist、幂等、流量排除、未执行迁移和自动测试；未接真实页面、未写生产数据、未选择 Pilot。
+- 下一阶段门禁：迁移执行、保留期、删除审计、service-role 运行环境、内部 token、官方域名映射和 Pilot 页面必须由 Owner 明确批准后另立交付单元，不能从 MEASURE-01 自动延伸。
