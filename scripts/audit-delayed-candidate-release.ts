@@ -19,7 +19,7 @@ const output =
   `reports/releases/2026-09-14/production-${phase}.json`;
 assert(['baseline', 'media', 'released'].includes(phase));
 const selectedCandidate = process.argv.find((arg) => arg.startsWith('--candidate='))?.split('=')[1];
-assert(!selectedCandidate || ['lovable', 'midjourney', 'elevenlabs', 'heygen'].includes(selectedCandidate));
+assert(!selectedCandidate || ['lovable', 'midjourney', 'elevenlabs', 'heygen', 'glean'].includes(selectedCandidate));
 const requestBaseUrl = (process.env.SEO_BASE_URL || 'https://aibesttool.com').replace(/\/$/, '');
 const hash = (value: Buffer | string) => createHash('sha256').update(value).digest('hex');
 const normalizeText = (value: string) => value.replace(/\s+/g, ' ').trim();
@@ -28,6 +28,7 @@ const candidateAliases: Record<string, string[]> = {
   midjourney: ['midjourney', 'mid-journey', 'midjourney.com'],
   elevenlabs: ['elevenlabs', 'eleven-labs', 'elevenlabs.io'],
   heygen: ['heygen', 'hey-gen', 'heygen.com'],
+  glean: ['glean', 'glean-search', 'glean.com'],
 };
 
 async function main() {

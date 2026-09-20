@@ -1,0 +1,149 @@
+{
+  "id": "fd861409-8228-4deb-9802-a9f807d66256",
+  "slug": "glean",
+  "officialUrl": "https://www.glean.com/",
+  "reviewedAt": "2026-09-20",
+  "nextReviewDate": "2026-10-20",
+  "categorySlug": "productivity",
+  "pricing": "paid",
+  "title": {
+    "en": "Glean Enterprise Search and Work AI",
+    "zh": "Glean 企业搜索与工作 AI 平台",
+    "cn": "Glean 企业搜索与工作 AI 平台"
+  },
+  "content": {
+    "en": "Search connected workplace systems, ask permission-aware questions and build agents on enterprise context. Evaluate source ACL integrity, connector freshness, answer quality, rollout ownership and the custom enterprise quote before buying.",
+    "zh": "连接企业工作系统，进行权限感知搜索与问答，并基于组织上下文构建 agents。采购前应验证源系统 ACL、连接器新鲜度、答案质量、推广责任人和企业定制报价。",
+    "cn": "连接企业工作系统，进行权限感知搜索与问答，并基于组织上下文构建 agents。采购前应验证源系统 ACL、连接器新鲜度、答案质量、推广责任人和企业定制报价。"
+  },
+  "detail": {
+    "en": "Choose Glean when an organization has knowledge fragmented across approved workplace systems and can assign owners for identity, source quality, security, adoption and outcome measurement. It combines enterprise search, assistant and agent capabilities around company context. A useful evaluation starts with 30 representative questions across roles, records whether the correct source was found, and checks whether every result respects the same access rules as the underlying system. It is not a lightweight consumer search app or a substitute for cleaning source permissions and stale content. [Platform](https://www.glean.com/platform) · [Enterprise search](https://www.glean.com/enterprise-search).\n\nThe enterprise-search page currently states 275+ app connectors and describes real-time indexing, personalized results and permission enforcement. Connector count alone is not sufficient: verify the exact object types, comments, attachments, deleted content, groups, guests, sync interval and error monitoring needed for each source. Glean's connector documentation says connectors fetch both content and permission maps. That architecture can preserve source permissions, but it cannot repair an incorrectly shared document or broken identity mapping in the source. [Connector directory](https://www.glean.com/connectors) · [Connector documentation](https://docs.glean.com/connectors/about).\n\nSecurity and procurement are organization-level decisions. Glean's legal hub lists SOC 2 Type II, ISO 27001, ISO 42001, encryption and contractual documents, while the privacy statement covers business and website personal information. Confirm the signed order, data-processing terms, hosting and region, retention, subprocessors, model choices, support and incident obligations for the actual package. Public certifications are useful evidence, not proof that a customer's own configuration is safe. [Legal and security](https://www.glean.com/legal) · [Privacy](https://www.glean.com/privacy).\n\nGlean also exposes developer capabilities for search, chat, agents, skills, indexing, Web SDK and MCP integrations. Teams should test authentication, user impersonation, least privilege, auditability, rate and failure handling, custom-source maintenance and action approvals before embedding these capabilities in production. An answer assembled from connected content is not automatically authoritative: citations, source review and human approval remain necessary for consequential decisions and agent actions. [Developer platform](https://developers.glean.com/).\n\nPricing checked September 20, 2026: the reviewed public product pages do not publish a stable self-serve plan table or per-seat rate. Treat Glean as a custom enterprise quote covering selected products, users, connectors, implementation, services, support, hosting and contract terms. Do not use anecdotal prices as a quote. Compare total deployment cost against measured search success, accepted answers, time saved, adoption and administration effort.\n\nThe durable market signal is meaningful but must be labeled correctly. Glean reported $200 million ARR in December 2025 and named large enterprise customers; this is company-reported adoption evidence, not independently audited performance or guaranteed ROI. Gartner Peer Insights provides a separate enterprise-review surface, while a recent practitioner discussion describes implementation coordination, source quality and cost as evaluation concerns. Those reports are directional and should not replace a controlled pilot. [Company-reported $200 million ARR](https://www.glean.com/press/glean-surpasses-200m-in-arr-for-enterprise-ai-doubling-revenue-in-nine-months) · [Gartner reviews](https://www.gartner.com/reviews/market/knowledge-management-software/vendor/glean/product/glean) · [Practitioner evaluation](https://www.reddit.com/r/SaaS/comments/1tnz9lm/we_evaluated_glean_60x_and_guru_for_internal/).\n\nRun a time-boxed pilot with known-answer queries, permission-edge cases, stale and duplicate documents, cross-source questions and a small number of reversible agent actions. Measure source precision, permission violations, freshness, accepted answer rate, fallback behavior, adoption and administrator hours. Expand only when the organization can name the authoritative sources, owners and rollback path. The green Gl artwork on this page is an AI Best Tool editorial identifier, not Glean's official logo or a product screenshot.\n\nComparison path: [notion](/ai/notion#decision-card) · [perplexity-ai](/ai/perplexity-ai#decision-card)",
+    "zh": "当组织知识分散在多个获批工作系统中，并且能够明确身份、内容质量、安全、推广和效果衡量责任人时，可以考虑 Glean。它围绕企业上下文组合搜索、助手和 agent 能力。有效评估应从覆盖不同角色的 30 个代表性问题开始，记录是否找到正确来源，并验证每条结果是否遵循底层系统相同的访问规则。它不是轻量个人搜索工具，也不能替代源权限和陈旧内容治理。[平台](https://www.glean.com/platform) · [企业搜索](https://www.glean.com/enterprise-search)。\n\n企业搜索页目前写明 275+ app connectors，并介绍实时索引、个性化结果与权限执行。连接器数量本身不够，应逐一验证所需对象类型、评论、附件、已删除内容、群组、访客、同步间隔和错误监控。Glean 连接器文档说明连接器会获取内容与权限映射；这种架构可以继承源权限，但不能修复源系统中错误的权限、错误共享文档或身份映射。[连接器目录](https://www.glean.com/connectors) · [连接器文档](https://docs.glean.com/connectors/about)。\n\n安全与采购属于组织级决策。Glean 法律中心列出 SOC 2 Type II、ISO 27001、ISO 42001、加密和合同文档，隐私声明覆盖业务及网站个人信息。必须针对实际套餐核对签署订单、数据处理条款、托管地区、留存、子处理商、模型选择、支持和事故义务。公开认证是有用证据，但不代表客户自身配置天然安全。[法律与安全](https://www.glean.com/legal) · [隐私](https://www.glean.com/privacy)。\n\nGlean 还提供搜索、聊天、agents、skills、索引、Web SDK 与 MCP 等开发能力。嵌入生产前应验证认证、用户代理、最小权限、审计、限流与失败处理、自定义数据源维护和动作审批。基于连接内容生成的回答不会自动成为权威事实；重要决策和 agent 动作仍需引用、源检查与人工批准。[开发者平台](https://developers.glean.com/)。\n\n2026-09-20 价格核验：已审阅的公开产品页面没有公开稳定的自助价格表或每席价格。应把 Glean 视为 custom enterprise quote，范围可能包含产品、用户、连接器、实施、服务、支持、托管和合同条款；不能把第三方传闻当作报价。应以搜索成功率、被接受答案、节省时间、采用率和管理工时衡量总部署成本。\n\n市场信号较强，但必须准确标注。Glean 于 2025 年 12 月自报达到 2 亿美元 ARR 并列出大型企业客户；这是 company-reported $200 million ARR 的采用信号，不是独立审计的效果或 ROI 保证。Gartner Peer Insights 提供独立企业评论入口，近期从业者讨论则把实施协调、源质量和成本列为评估问题。这些信号只用于确定值得评估，不能替代受控试点。[公司自报 2 亿美元 ARR](https://www.glean.com/press/glean-surpasses-200m-in-arr-for-enterprise-ai-doubling-revenue-in-nine-months) · [Gartner 评论](https://www.gartner.com/reviews/market/knowledge-management-software/vendor/glean/product/glean) · [从业者评估](https://www.reddit.com/r/SaaS/comments/1tnz9lm/we_evaluated_glean_60x_and_guru_for_internal/)。\n\n建议用已知答案问题、权限边界、陈旧和重复文档、跨源问题及少量可回滚 agent 动作进行限时试点，衡量来源准确性、权限违规、新鲜度、答案接受率、降级行为、采用率和管理员工时。只有在组织能明确权威来源、责任人与回滚路径时再扩大。页面绿色 Gl 图形是 AI Best Tool 自制编辑识别图，不是 Glean 官方 Logo 或产品截图。\n\n比较路径：[notion](/cn/ai/notion#decision-card) · [perplexity-ai](/cn/ai/perplexity-ai#decision-card)",
+    "cn": "当组织知识分散在多个获批工作系统中，并且能够明确身份、内容质量、安全、推广和效果衡量责任人时，可以考虑 Glean。它围绕企业上下文组合搜索、助手和 agent 能力。有效评估应从覆盖不同角色的 30 个代表性问题开始，记录是否找到正确来源，并验证每条结果是否遵循底层系统相同的访问规则。它不是轻量个人搜索工具，也不能替代源权限和陈旧内容治理。[平台](https://www.glean.com/platform) · [企业搜索](https://www.glean.com/enterprise-search)。\n\n企业搜索页目前写明 275+ app connectors，并介绍实时索引、个性化结果与权限执行。连接器数量本身不够，应逐一验证所需对象类型、评论、附件、已删除内容、群组、访客、同步间隔和错误监控。Glean 连接器文档说明连接器会获取内容与权限映射；这种架构可以继承源权限，但不能修复源系统中错误的权限、错误共享文档或身份映射。[连接器目录](https://www.glean.com/connectors) · [连接器文档](https://docs.glean.com/connectors/about)。\n\n安全与采购属于组织级决策。Glean 法律中心列出 SOC 2 Type II、ISO 27001、ISO 42001、加密和合同文档，隐私声明覆盖业务及网站个人信息。必须针对实际套餐核对签署订单、数据处理条款、托管地区、留存、子处理商、模型选择、支持和事故义务。公开认证是有用证据，但不代表客户自身配置天然安全。[法律与安全](https://www.glean.com/legal) · [隐私](https://www.glean.com/privacy)。\n\nGlean 还提供搜索、聊天、agents、skills、索引、Web SDK 与 MCP 等开发能力。嵌入生产前应验证认证、用户代理、最小权限、审计、限流与失败处理、自定义数据源维护和动作审批。基于连接内容生成的回答不会自动成为权威事实；重要决策和 agent 动作仍需引用、源检查与人工批准。[开发者平台](https://developers.glean.com/)。\n\n2026-09-20 价格核验：已审阅的公开产品页面没有公开稳定的自助价格表或每席价格。应把 Glean 视为 custom enterprise quote，范围可能包含产品、用户、连接器、实施、服务、支持、托管和合同条款；不能把第三方传闻当作报价。应以搜索成功率、被接受答案、节省时间、采用率和管理工时衡量总部署成本。\n\n市场信号较强，但必须准确标注。Glean 于 2025 年 12 月自报达到 2 亿美元 ARR 并列出大型企业客户；这是 company-reported $200 million ARR 的采用信号，不是独立审计的效果或 ROI 保证。Gartner Peer Insights 提供独立企业评论入口，近期从业者讨论则把实施协调、源质量和成本列为评估问题。这些信号只用于确定值得评估，不能替代受控试点。[公司自报 2 亿美元 ARR](https://www.glean.com/press/glean-surpasses-200m-in-arr-for-enterprise-ai-doubling-revenue-in-nine-months) · [Gartner 评论](https://www.gartner.com/reviews/market/knowledge-management-software/vendor/glean/product/glean) · [从业者评估](https://www.reddit.com/r/SaaS/comments/1tnz9lm/we_evaluated_glean_60x_and_guru_for_internal/)。\n\n建议用已知答案问题、权限边界、陈旧和重复文档、跨源问题及少量可回滚 agent 动作进行限时试点，衡量来源准确性、权限违规、新鲜度、答案接受率、降级行为、采用率和管理员工时。只有在组织能明确权威来源、责任人与回滚路径时再扩大。页面绿色 Gl 图形是 AI Best Tool 自制编辑识别图，不是 Glean 官方 Logo 或产品截图。\n\n比较路径：[notion](/cn/ai/notion#decision-card) · [perplexity-ai](/cn/ai/perplexity-ai#decision-card)"
+  },
+  "imageUrl": "/icons/tool-logos/glean.svg",
+  "thumbnailUrl": "/images/tool-media/glean-release-cover.svg",
+  "tags": ["enterprise-search", "knowledge-management", "ai-agents"],
+  "features": {
+    "audience": {
+      "bestFit": {
+        "en": ["Enterprises with knowledge fragmented across governed workplace systems", "Teams able to run permission and known-answer evaluations", "Organizations with owners for adoption, source quality and AI actions"],
+        "zh": ["知识分散在多个受治理工作系统的企业", "能执行权限与已知答案评估的团队", "有采用、源质量和 AI 动作责任人的组织"],
+        "cn": ["知识分散在多个受治理工作系统的企业", "能执行权限与已知答案评估的团队", "有采用、源质量和 AI 动作责任人的组织"]
+      },
+      "notIdealFor": {
+        "en": ["Small teams needing instant self-serve pricing and setup", "Organizations unable to repair source permissions or stale content", "Projects treating generated answers as authoritative without review"],
+        "zh": ["需要即时自助定价和部署的小团队", "无法治理源权限或陈旧内容的组织", "把生成答案直接当作权威事实的项目"],
+        "cn": ["需要即时自助定价和部署的小团队", "无法治理源权限或陈旧内容的组织", "把生成答案直接当作权威事实的项目"]
+      }
+    },
+    "editorial": {
+      "reviewedAt": "2026-09-20",
+      "reviewedBy": "AI Best Tool editorial",
+      "sourceUrl": "https://www.glean.com/enterprise-search",
+      "summary": {
+        "en": "Enterprise search, connectors, permissions, developer surface, security, adoption and custom-pricing boundaries were rechecked on September 20, 2026.",
+        "zh": "已于 2026-09-20 复核企业搜索、连接器、权限、开发能力、安全、采用与定制价格边界。",
+        "cn": "已于 2026-09-20 复核企业搜索、连接器、权限、开发能力、安全、采用与定制价格边界。"
+      },
+      "trustNote": {
+        "en": "Public-document review only. No enterprise tenant, procurement quote or connector deployment was tested.",
+        "zh": "本次仅复核公开资料，未实测企业租户、采购报价或连接器部署。",
+        "cn": "本次仅复核公开资料，未实测企业租户、采购报价或连接器部署。"
+      }
+    },
+    "decision": {
+      "compareAxes": {
+        "en": ["Known-answer search success", "Permission and identity fidelity", "Connector object coverage and freshness", "Answer citation and approval workflow", "Implementation and administration effort", "Custom quote and measured total cost"],
+        "zh": ["已知答案搜索成功率", "权限与身份一致性", "连接器对象覆盖与新鲜度", "答案引用和审批流程", "实施与管理工作量", "定制报价与实测总成本"],
+        "cn": ["已知答案搜索成功率", "权限与身份一致性", "连接器对象覆盖与新鲜度", "答案引用和审批流程", "实施与管理工作量", "定制报价与实测总成本"]
+      },
+      "limitations": {
+        "en": ["Source ACL errors remain source ACL errors.", "Stale and duplicate content can reduce answer quality.", "Connector counts do not prove required object coverage.", "Custom connectors add engineering and maintenance work.", "Generated answers still require source review.", "Agent actions need approval, audit and rollback.", "Public pages do not provide a stable self-serve price.", "Adoption and search tuning require ongoing ownership."],
+        "zh": ["源系统 ACL 错误不会被平台自动修复。", "陈旧和重复内容会降低答案质量。", "连接器数量不能证明所需对象已覆盖。", "自定义连接器会增加工程和维护工作。", "生成答案仍需要检查原始来源。", "Agent 动作需要审批、审计和回滚。", "公开页面没有稳定的自助价格。", "采用和搜索调优需要持续责任人。"],
+        "cn": ["源系统 ACL 错误不会被平台自动修复。", "陈旧和重复内容会降低答案质量。", "连接器数量不能证明所需对象已覆盖。", "自定义连接器会增加工程和维护工作。", "生成答案仍需要检查原始来源。", "Agent 动作需要审批、审计和回滚。", "公开页面没有稳定的自助价格。", "采用和搜索调优需要持续责任人。"]
+      },
+      "pricingSummary": {
+        "en": "Custom enterprise quote; measure the full rollout rather than infer a public seat price.",
+        "zh": "企业定制报价；应衡量完整部署，不推测公开席位价格。",
+        "cn": "企业定制报价；应衡量完整部署，不推测公开席位价格。"
+      },
+      "officialSummary": {
+        "en": "Verify exact connectors, source permissions, contract controls and action approvals for the chosen deployment.",
+        "zh": "按实际部署核对连接器、源权限、合同控制和动作审批。",
+        "cn": "按实际部署核对连接器、源权限、合同控制和动作审批。"
+      },
+      "freshnessSummary": {
+        "en": "Reviewed September 20, 2026. Next fact review: October 20, 2026.",
+        "zh": "核验于 2026-09-20；下次事实复核为 2026-10-20。",
+        "cn": "核验于 2026-09-20；下次事实复核为 2026-10-20。"
+      },
+      "mediaSummary": {
+        "en": "Editorial identifier only; not an official logo or product screenshot.",
+        "zh": "仅为编辑识别图，不是官方 Logo 或产品截图。",
+        "cn": "仅为编辑识别图，不是官方 Logo 或产品截图。"
+      },
+      "communitySummary": {
+        "en": "Independent reviews and practitioner reports inform pilot questions, not official pricing or guaranteed outcomes.",
+        "zh": "独立评论和从业者报告用于形成试点问题，不代表官方价格或效果保证。",
+        "cn": "独立评论和从业者报告用于形成试点问题，不代表官方价格或效果保证。"
+      },
+      "alternatives": [
+        {"slug": "notion", "reason": {"en": "Compare a workspace-centered knowledge system with cross-application enterprise search.", "zh": "比较工作空间知识系统与跨应用企业搜索。", "cn": "比较工作空间知识系统与跨应用企业搜索。"}},
+        {"slug": "perplexity-ai", "reason": {"en": "Compare public-web answer research with governed internal-company retrieval.", "zh": "比较公开网页答案研究与受治理的企业内部检索。", "cn": "比较公开网页答案研究与受治理的企业内部检索。"}}
+      ]
+    },
+    "pricingSnapshot": {
+      "checkedAt": "2026-09-20",
+      "sourceUrls": ["https://www.glean.com/platform", "https://www.glean.com/legal"],
+      "summary": {
+        "en": "No stable public self-serve price card was found; commercial scope requires an enterprise quote and implementation review.",
+        "zh": "未发现稳定公开的自助价格表；商业范围需要企业报价和实施评审。",
+        "cn": "未发现稳定公开的自助价格表；商业范围需要企业报价和实施评审。"
+      },
+      "conflicts": ["Third-party seat-price anecdotes are not treated as official quotes.", "Package, connector, service, hosting and contract scope can change total cost."]
+    },
+    "evidence": {
+      "checkedAt": "2026-09-20",
+      "official": [
+        {"label": "Platform", "url": "https://www.glean.com/platform", "checkedAt": "2026-09-20"},
+        {"label": "Enterprise search", "url": "https://www.glean.com/enterprise-search", "checkedAt": "2026-09-20"},
+        {"label": "Connector directory", "url": "https://www.glean.com/connectors", "checkedAt": "2026-09-20"},
+        {"label": "Connector documentation", "url": "https://docs.glean.com/connectors/about", "checkedAt": "2026-09-20"},
+        {"label": "Legal and security", "url": "https://www.glean.com/legal", "checkedAt": "2026-09-20"},
+        {"label": "Privacy", "url": "https://www.glean.com/privacy", "checkedAt": "2026-09-20"},
+        {"label": "Developer platform", "url": "https://developers.glean.com/", "checkedAt": "2026-09-20"},
+        {"label": "Company-reported ARR", "url": "https://www.glean.com/press/glean-surpasses-200m-in-arr-for-enterprise-ai-doubling-revenue-in-nine-months", "checkedAt": "2026-09-20"}
+      ],
+      "independent": [
+        {"label": "Gartner Peer Insights", "url": "https://www.gartner.com/reviews/market/knowledge-management-software/vendor/glean/product/glean", "checkedAt": "2026-09-20"},
+        {"label": "Practitioner evaluation", "url": "https://www.reddit.com/r/SaaS/comments/1tnz9lm/we_evaluated_glean_60x_and_guru_for_internal/", "checkedAt": "2026-09-20"}
+      ]
+    },
+    "media": {
+      "assets": [
+        {"path": "/icons/tool-logos/glean.svg", "url": "local-editorial-asset", "sourcePage": "https://www.glean.com/", "checkedAt": "2026-09-20", "sha256": "26314d584c58c5786a5b10413c02d88c35711e09e3ad61d85b9bee68661505ec", "usageBasis": "AI Best Tool-created Gl identifier used to avoid copying or implying permission to use official brand artwork; the page explicitly discloses that it is non-official.", "type": "editorial_identifier", "isProductScreenshot": false},
+        {"path": "/images/tool-media/glean-release-cover.svg", "url": "local-editorial-asset", "sourcePage": "https://www.glean.com/", "checkedAt": "2026-09-20", "sha256": "5b04b2f6d37b3096291c39c6116d5fa71c995f63bfa55c3b2f0b8976091d2cbd", "usageBasis": "AI Best Tool-created enterprise-search overview graphic with no copied product UI; it is a neutral listing image and is not treated as product evidence.", "type": "editorial_identifier", "isProductScreenshot": false}
+      ]
+    },
+    "marketValidation": {
+      "reviewedAt": "2026-09-20",
+      "score": 96,
+      "scores": {"marketDurability": 25, "independentAdoption": 24, "decisionValue": 24, "evidenceQuality": 23},
+      "verdict": "validated",
+      "rationale": {
+        "en": "Maintained enterprise product surfaces, company-reported adoption and independent enterprise reviews support a decision page; custom pricing and organizational deployment keep it under monitor/noindex.",
+        "zh": "持续维护的企业产品、公司自报采用和独立企业评论支持建立决策页；定制价格与组织级部署使其继续 monitor/noindex。",
+        "cn": "持续维护的企业产品、公司自报采用和独立企业评论支持建立决策页；定制价格与组织级部署使其继续 monitor/noindex。"
+      },
+      "strongSignals": ["Current official platform, connector, security and developer documentation", "Company-reported enterprise adoption and ARR", "Independent enterprise review and practitioner evaluation surfaces"],
+      "evidenceUrls": ["https://www.gartner.com/reviews/market/knowledge-management-software/vendor/glean/product/glean", "https://www.reddit.com/r/SaaS/comments/1tnz9lm/we_evaluated_glean_60x_and_guru_for_internal/"]
+    },
+    "release": {"scheduledSlot": "2026-09-15", "reviewedAt": "2026-09-20", "executionType": "delayed_makeup", "label": "延期补发", "indexState": "monitor", "sitemapChangeApproved": false, "nextReviewDate": "2026-10-20"}
+  },
+  "useCases": {
+    "en": ["Pilot known-answer and permission-edge queries across approved workplace systems", "Measure accepted answers, freshness, adoption and administration effort before expansion"],
+    "zh": ["跨获批工作系统试点已知答案与权限边界查询", "扩大前衡量答案接受率、新鲜度、采用率与管理工作量"],
+    "cn": ["跨获批工作系统试点已知答案与权限边界查询", "扩大前衡量答案接受率、新鲜度、采用率与管理工作量"]
+  }
+}

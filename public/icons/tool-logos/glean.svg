@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Glean editorial identifier</title>
+  <desc id="desc">AI Best Tool-created green Gl identifier, not the official Glean logo.</desc>
+  <defs>
+    <linearGradient id="bg" x1="16" y1="12" x2="112" y2="116" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#064e3b"/>
+      <stop offset="1" stop-color="#0f766e"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="30" fill="url(#bg)"/>
+  <circle cx="100" cy="28" r="10" fill="#fbbf24"/>
+  <text x="64" y="80" fill="#ecfdf5" font-family="Georgia,serif" font-size="54" font-weight="700" text-anchor="middle">Gl</text>
+</svg>

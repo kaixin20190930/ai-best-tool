@@ -89,6 +89,12 @@ const candidates: Candidate[] = [
     domain: 'heygen.com',
     preauditFile: 'heygen-preaudit-2026-09-09.json',
   },
+  {
+    slug: 'glean',
+    aliases: ['glean', 'glean-search'],
+    domain: 'glean.com',
+    preauditFile: 'glean-preaudit-2026-09-09.json',
+  },
 ];
 
 function parseArgs(args: string[]) {
