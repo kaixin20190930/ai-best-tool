@@ -2,8 +2,8 @@
   "id": "d7b63bf2-63c8-4015-b59d-2f627450813f",
   "slug": "elevenlabs",
   "officialUrl": "https://elevenlabs.io/",
-  "reviewedAt": "2026-09-14",
-  "nextReviewDate": "2026-10-14",
+  "reviewedAt": "2026-09-20",
+  "nextReviewDate": "2026-10-20",
   "categorySlug": "chatbot",
   "pricing": "freemium",
   "title": {
@@ -17,9 +17,9 @@
     "cn": "在一个平台中生成语音、克隆声音、配音及其他音频；同时比较声音质量、共享 credits 成本、同意、商业使用、隐私与生产 API 控制。"
   },
   "detail": {
-    "en": "Choose ElevenLabs when expressive speech quality, multilingual delivery, voice cloning or an API-based audio workflow matters enough to justify per-generation review. Start with one representative script and distribution channel; record accepted minutes, rejected takes, latency and total credits rather than judging a polished demo alone. It is less suitable when flat narration is sufficient, costs must be fixed before testing, or a team cannot document voice permission and human review.\n\nPlans checked September 14, 2026: Free is $0 with 10,000 credits per month; Starter is $6 with 30,000; Creator is $22 with 121,000 and currently shows a first-month 50% promotion at $11; Pro is $99 with 600,000; Scale is $299 with 1.8 million and three seats; Business is $990 with 6 million and ten seats; Enterprise is custom. Prices exclude taxes, and annual billing charges ten monthly prices upfront. Treat the Creator promotion as temporary, not the normal price. [Official pricing](https://elevenlabs.io/pricing).\n\nAll products draw from the same credit pool. The pricing page currently estimates TTS around one credit per character, Speech to Text at 330 credits per minute, Music at 900 per minute, Sound Effects at 200 per generation, Voice Changer or Voice Isolator at 1,000 per minute, and dubbing from 2,000 to 10,000 per minute depending on workflow and watermark. Flash/Turbo API text may cost 0.5–1 credit per character while Multilingual v2 uses one. These are input or generation units, not guaranteed approved minutes. Credits are charged per request; only limited eligible regenerations are free, and web regeneration rules do not apply to the API. [Pricing conversions](https://elevenlabs.io/pricing) · [Billing and regeneration rules](https://elevenlabs.io/docs/overview/administration/billing).\n\nUnused paid credits may roll over up to two months while the account remains on an eligible plan. Canceling or downgrading ends rollover and unused paid credits expire after the current cycle. Paid plans include commercial rights for eligible output, while Free is non-commercial and requires attribution. Commercial use still requires rights in scripts, recordings, voices, music and likenesses, compliance with law and the prohibited-use rules, and a check of service-specific terms. Beta output is not cleared for commercial or production use. [Publishing and commercial use](https://help.elevenlabs.io/hc/en-us/articles/13313564601361-Can-I-publish-the-content-I-generate-on-the-platform) · [Terms](https://elevenlabs.io/terms-of-use).\n\nInstant and Professional Voice Cloning are different production choices. IVC is available from Starter and works from short samples but can be less consistent outside the reference style. PVC requires Creator or above, substantially more clean single-speaker audio and a verification process. ElevenLabs says both paths include verification, while also acknowledging verification cannot prove every recording belongs to the requester; authorized use remains the creator's responsibility. Do not treat access to a clip, a checkbox or a successful clone as consent. Keep written permission, restrict voice and API access, disclose synthetic use where required, and prepare an impersonation incident response. [Voice-cloning concepts](https://elevenlabs.io/docs/eleven-api/concepts/voice-cloning) · [Safety controls](https://elevenlabs.io/safety).\n\nVoice and audio inputs can be personal or biometric data. The May 20, 2026 privacy policy describes processing content and Voice Data for service delivery, safety and model improvement, a prospective training opt-out, and voice-derived data retention up to three years after the last interaction except where law requires otherwise. Default use is not zero retention. Zero Retention Mode is limited to selected Enterprise customers and eligible API products; web UI traffic, voice-cloning samples, dubbing, Music and Studio are not covered. ZRM also reduces troubleshooting evidence. Confirm the actual workspace, region, product and request settings before sending sensitive data. [Privacy policy](https://elevenlabs.io/privacy-policy) · [Zero Retention Mode](https://elevenlabs.io/docs/eleven-api/resources/zero-retention-mode).\n\nFor API production, model, endpoint and connection type affect cost, latency and capacity. HTTP and TTS WebSocket requests use concurrency differently, while Text to Dialogue WebSockets reserve sessions; a plan's concurrency number is not a promise of simultaneous calls. Implement timeouts, 429 backoff, idempotent job handling where possible, key rotation, usage alerts, caching, observability and an alternate delivery path. Test noisy text, names, numbers, abbreviations, code-switching and long-form segmentation with human acceptance criteria. [Models and concurrency](https://elevenlabs.io/docs/overview/models) · [Text-to-speech capabilities](https://elevenlabs.io/docs/overview/capabilities/text-to-speech).\n\nIndependent evidence supports both the product's decision value and its risk boundaries. Zapier's hands-on review reports broad audio workflows but a learning curve and uneven prompt results. Consumer Reports documented that its 2025 test could create an unauthorized ElevenLabs clone from public audio and found self-attestation insufficient; current official controls should therefore be verified in the chosen cloning flow rather than assumed. Axios reported continuing US congressional scrutiny of consent and scam safeguards in April 2026. [Hands-on review (Zapier)](https://zapier.com/blog/elevenlabs/) · [Voice-cloning safeguards assessment (Consumer Reports)](https://www.consumerreports.org/media-room/press-releases/2025/03/consumer-reports-assessment-of-ai-voice-cloning-products/) · [Independent safety scrutiny (Axios)](https://www.axios.com/2026/04/16/hassan-congress-scams-audio-deepfakes).\n\nOfficial evidence: [Pricing](https://elevenlabs.io/pricing) · [Billing](https://elevenlabs.io/docs/overview/administration/billing) · [Commercial use](https://help.elevenlabs.io/hc/en-us/articles/13313564601361-Can-I-publish-the-content-I-generate-on-the-platform) · [Voice cloning](https://elevenlabs.io/docs/eleven-api/concepts/voice-cloning) · [Safety](https://elevenlabs.io/safety) · [Terms](https://elevenlabs.io/terms-of-use) · [Privacy](https://elevenlabs.io/privacy-policy) · [Zero retention](https://elevenlabs.io/docs/eleven-api/resources/zero-retention-mode) · [Models](https://elevenlabs.io/docs/overview/models) · [TTS](https://elevenlabs.io/docs/overview/capabilities/text-to-speech) · [Press assets](https://elevenlabs.io/press).\n\nMedia: the official black wordmark from ElevenLabs' press page is used only for identification, not as a screenshot or proof of tested output. [Source](https://elevenlabs.io/press).\n\nComparison paths: [descript](/ai/descript#decision-card) · [murf-ai](/ai/murf-ai#decision-card)",
-    "zh": "当你重视有表现力的语音、多语言表达、声音克隆或 API 音频工作流，并能承担逐次审核时，可考虑 ElevenLabs。先用一份代表性脚本和一个发布渠道试用，记录验收通过的分钟数、废弃生成、延迟与总 credits，不要只凭精修演示判断。若普通旁白已经够用、测试前必须锁定成本，或团队无法保存声音授权与人工复核记录，则不太适合。\n\n2026-09-14 套餐核验：Free 每月 0 美元/10,000 credits；Starter 为 6 美元/30,000；Creator 标准月价 22 美元/121,000，当前首月 5 折促销显示 11 美元；Pro 为 99 美元/600,000；Scale 为 299 美元/180 万并含 3 席；Business 为 990 美元/600 万并含 10 席；Enterprise 议价。报价不含税，年付按十个月月价一次性支付。Creator 首月折扣应视为临时促销，不是标准价。[官方价格](https://elevenlabs.io/pricing)。\n\n所有产品共用一个 credits 池。价格页当前估算：TTS 约每字符 1 credit；Speech to Text 每分钟 330；Music 每分钟 900；Sound Effects 每次生成 200；Voice Changer 或 Voice Isolator 每分钟 1,000；dubbing 依流程及水印每分钟 2,000–10,000。Flash/Turbo API 文本可能为每字符 0.5–1 credit，Multilingual v2 为 1。它们是输入或生成计量，不保证能得到相同的成品分钟数。credits 按生成请求扣除，只有有限且符合条件的重新生成免费，网页端免费重生成规则不适用于 API。[换算与套餐](https://elevenlabs.io/pricing) · [计费与重生成规则](https://elevenlabs.io/docs/overview/administration/billing)。\n\n在持续使用合格付费套餐时，未用 credits 最多可结转两个月；取消或降级会终止结转，当前周期结束后未用付费额度失效。合格付费套餐为相应输出提供商业使用权；Free 仅限非商业用途且公开时需署名。商业使用仍要求你拥有脚本、录音、声音、音乐及肖像等底层权利，遵守法律、禁止使用规则与专项条款；Beta 输出不得用于商业或生产环境。[发布与商业使用](https://help.elevenlabs.io/hc/en-us/articles/13313564601361-Can-I-publish-the-content-I-generate-on-the-platform) · [条款](https://elevenlabs.io/terms-of-use)。\n\nInstant 与 Professional Voice Cloning 是不同的生产选择。IVC 从 Starter 起提供，短样本即可使用，但偏离参考风格时一致性可能较弱。PVC 需要 Creator 或更高套餐、更多干净的单人录音，并经过验证流程。ElevenLabs 称两条路径都含验证，同时承认验证无法证明每份录音一定属于申请人；授权使用责任仍在创建者。拿到音频、勾选声明或成功生成克隆都不等于获得同意。应保存书面授权，限制声音和 API 访问，按要求披露合成内容，并准备冒充事件响应。[声音克隆原理](https://elevenlabs.io/docs/eleven-api/concepts/voice-cloning) · [安全控制](https://elevenlabs.io/safety)。\n\n声音与音频输入可能构成个人或生物识别数据。2026-05-20 更新的隐私政策说明，内容和 Voice Data 可用于提供服务、安全及模型改进；训练退出只对之后提供的数据生效；除法律另有要求外，声音衍生数据最长可保留至最后互动后三年。默认使用并不是零留存。Zero Retention Mode 仅向部分 Enterprise 客户和符合条件的 API 产品提供；网页 UI、声音克隆样本、dubbing、Music 与 Studio 不在覆盖范围内，且 ZRM 会削弱故障排查证据。传送敏感数据前，应核对真实工作区、地区、产品与请求设置。[隐私政策](https://elevenlabs.io/privacy-policy) · [Zero Retention Mode](https://elevenlabs.io/docs/eleven-api/resources/zero-retention-mode)。\n\nAPI 生产使用中，模型、端点及连接类型会影响成本、延迟与容量。HTTP 与 TTS WebSocket 的并发计算不同，Text to Dialogue WebSocket 则会占用会话；套餐并发数不是同时通话数量的承诺。应实现超时、429 退避、尽可能幂等的任务处理、密钥轮换、用量预警、缓存、可观测性及替代交付路径。用带噪文本、姓名、数字、缩写、语言切换及长内容分段，按人工验收标准测试。[模型与并发](https://elevenlabs.io/docs/overview/models) · [TTS 能力](https://elevenlabs.io/docs/overview/capabilities/text-to-speech)。\n\n独立依据同时支持产品的决策价值及风险边界。Zapier 的亲测评测记录了较广的音频流程，也指出学习成本与提示结果不稳定。Consumer Reports 在 2025 年测试中从公开音频创建了未获授权的 ElevenLabs 克隆，并认为仅自我声明不足；因此即便官方现已描述更多验证，也应在所选克隆流程中实际确认。Axios 记录了 2026 年 4 月美国国会对同意及诈骗防护的持续审查。[亲测评测（Zapier）](https://zapier.com/blog/elevenlabs/) · [声音克隆防护评估（Consumer Reports）](https://www.consumerreports.org/media-room/press-releases/2025/03/consumer-reports-assessment-of-ai-voice-cloning-products/) · [独立安全审查（Axios）](https://www.axios.com/2026/04/16/hassan-congress-scams-audio-deepfakes)。\n\n官方证据：[Pricing](https://elevenlabs.io/pricing) · [Billing](https://elevenlabs.io/docs/overview/administration/billing) · [Commercial use](https://help.elevenlabs.io/hc/en-us/articles/13313564601361-Can-I-publish-the-content-I-generate-on-the-platform) · [Voice cloning](https://elevenlabs.io/docs/eleven-api/concepts/voice-cloning) · [Safety](https://elevenlabs.io/safety) · [Terms](https://elevenlabs.io/terms-of-use) · [Privacy](https://elevenlabs.io/privacy-policy) · [Zero retention](https://elevenlabs.io/docs/eleven-api/resources/zero-retention-mode) · [Models](https://elevenlabs.io/docs/overview/models) · [TTS](https://elevenlabs.io/docs/overview/capabilities/text-to-speech) · [Press assets](https://elevenlabs.io/press)。\n\n媒体：ElevenLabs 官方 press 页面提供的黑色字标仅用于产品识别，不是产品截图或本站实测证明。[来源](https://elevenlabs.io/press)。\n\n比较路径：[descript](/cn/ai/descript#decision-card) · [murf-ai](/cn/ai/murf-ai#decision-card)",
-    "cn": "当你重视有表现力的语音、多语言表达、声音克隆或 API 音频工作流，并能承担逐次审核时，可考虑 ElevenLabs。先用一份代表性脚本和一个发布渠道试用，记录验收通过的分钟数、废弃生成、延迟与总 credits，不要只凭精修演示判断。若普通旁白已经够用、测试前必须锁定成本，或团队无法保存声音授权与人工复核记录，则不太适合。\n\n2026-09-14 套餐核验：Free 每月 0 美元/10,000 credits；Starter 为 6 美元/30,000；Creator 标准月价 22 美元/121,000，当前首月 5 折促销显示 11 美元；Pro 为 99 美元/600,000；Scale 为 299 美元/180 万并含 3 席；Business 为 990 美元/600 万并含 10 席；Enterprise 议价。报价不含税，年付按十个月月价一次性支付。Creator 首月折扣应视为临时促销，不是标准价。[官方价格](https://elevenlabs.io/pricing)。\n\n所有产品共用一个 credits 池。价格页当前估算：TTS 约每字符 1 credit；Speech to Text 每分钟 330；Music 每分钟 900；Sound Effects 每次生成 200；Voice Changer 或 Voice Isolator 每分钟 1,000；dubbing 依流程及水印每分钟 2,000–10,000。Flash/Turbo API 文本可能为每字符 0.5–1 credit，Multilingual v2 为 1。它们是输入或生成计量，不保证能得到相同的成品分钟数。credits 按生成请求扣除，只有有限且符合条件的重新生成免费，网页端免费重生成规则不适用于 API。[换算与套餐](https://elevenlabs.io/pricing) · [计费与重生成规则](https://elevenlabs.io/docs/overview/administration/billing)。\n\n在持续使用合格付费套餐时，未用 credits 最多可结转两个月；取消或降级会终止结转，当前周期结束后未用付费额度失效。合格付费套餐为相应输出提供商业使用权；Free 仅限非商业用途且公开时需署名。商业使用仍要求你拥有脚本、录音、声音、音乐及肖像等底层权利，遵守法律、禁止使用规则与专项条款；Beta 输出不得用于商业或生产环境。[发布与商业使用](https://help.elevenlabs.io/hc/en-us/articles/13313564601361-Can-I-publish-the-content-I-generate-on-the-platform) · [条款](https://elevenlabs.io/terms-of-use)。\n\nInstant 与 Professional Voice Cloning 是不同的生产选择。IVC 从 Starter 起提供，短样本即可使用，但偏离参考风格时一致性可能较弱。PVC 需要 Creator 或更高套餐、更多干净的单人录音，并经过验证流程。ElevenLabs 称两条路径都含验证，同时承认验证无法证明每份录音一定属于申请人；授权使用责任仍在创建者。拿到音频、勾选声明或成功生成克隆都不等于获得同意。应保存书面授权，限制声音和 API 访问，按要求披露合成内容，并准备冒充事件响应。[声音克隆原理](https://elevenlabs.io/docs/eleven-api/concepts/voice-cloning) · [安全控制](https://elevenlabs.io/safety)。\n\n声音与音频输入可能构成个人或生物识别数据。2026-05-20 更新的隐私政策说明，内容和 Voice Data 可用于提供服务、安全及模型改进；训练退出只对之后提供的数据生效；除法律另有要求外，声音衍生数据最长可保留至最后互动后三年。默认使用并不是零留存。Zero Retention Mode 仅向部分 Enterprise 客户和符合条件的 API 产品提供；网页 UI、声音克隆样本、dubbing、Music 与 Studio 不在覆盖范围内，且 ZRM 会削弱故障排查证据。传送敏感数据前，应核对真实工作区、地区、产品与请求设置。[隐私政策](https://elevenlabs.io/privacy-policy) · [Zero Retention Mode](https://elevenlabs.io/docs/eleven-api/resources/zero-retention-mode)。\n\nAPI 生产使用中，模型、端点及连接类型会影响成本、延迟与容量。HTTP 与 TTS WebSocket 的并发计算不同，Text to Dialogue WebSocket 则会占用会话；套餐并发数不是同时通话数量的承诺。应实现超时、429 退避、尽可能幂等的任务处理、密钥轮换、用量预警、缓存、可观测性及替代交付路径。用带噪文本、姓名、数字、缩写、语言切换及长内容分段，按人工验收标准测试。[模型与并发](https://elevenlabs.io/docs/overview/models) · [TTS 能力](https://elevenlabs.io/docs/overview/capabilities/text-to-speech)。\n\n独立依据同时支持产品的决策价值及风险边界。Zapier 的亲测评测记录了较广的音频流程，也指出学习成本与提示结果不稳定。Consumer Reports 在 2025 年测试中从公开音频创建了未获授权的 ElevenLabs 克隆，并认为仅自我声明不足；因此即便官方现已描述更多验证，也应在所选克隆流程中实际确认。Axios 记录了 2026 年 4 月美国国会对同意及诈骗防护的持续审查。[亲测评测（Zapier）](https://zapier.com/blog/elevenlabs/) · [声音克隆防护评估（Consumer Reports）](https://www.consumerreports.org/media-room/press-releases/2025/03/consumer-reports-assessment-of-ai-voice-cloning-products/) · [独立安全审查（Axios）](https://www.axios.com/2026/04/16/hassan-congress-scams-audio-deepfakes)。\n\n官方证据：[Pricing](https://elevenlabs.io/pricing) · [Billing](https://elevenlabs.io/docs/overview/administration/billing) · [Commercial use](https://help.elevenlabs.io/hc/en-us/articles/13313564601361-Can-I-publish-the-content-I-generate-on-the-platform) · [Voice cloning](https://elevenlabs.io/docs/eleven-api/concepts/voice-cloning) · [Safety](https://elevenlabs.io/safety) · [Terms](https://elevenlabs.io/terms-of-use) · [Privacy](https://elevenlabs.io/privacy-policy) · [Zero retention](https://elevenlabs.io/docs/eleven-api/resources/zero-retention-mode) · [Models](https://elevenlabs.io/docs/overview/models) · [TTS](https://elevenlabs.io/docs/overview/capabilities/text-to-speech) · [Press assets](https://elevenlabs.io/press)。\n\n媒体：ElevenLabs 官方 press 页面提供的黑色字标仅用于产品识别，不是产品截图或本站实测证明。[来源](https://elevenlabs.io/press)。\n\n比较路径：[descript](/cn/ai/descript#decision-card) · [murf-ai](/cn/ai/murf-ai#decision-card)"
+    "en": "Choose ElevenLabs when expressive speech quality, multilingual delivery, voice cloning or an API-based audio workflow matters enough to justify per-generation review. Start with one representative script and distribution channel; record accepted minutes, rejected takes, latency and total credits rather than judging a polished demo alone. It is less suitable when flat narration is sufficient, costs must be fixed before testing, or a team cannot document voice permission and human review.\n\nPlans checked September 20, 2026: Free is $0 with 10,000 credits per month; Starter is $6 with 30,000; Creator is $22 with 121,000 and currently shows a first-month 50% promotion at $11; Pro is $99 with 600,000; Scale is $299 with 1.8 million and three seats; Business is $990 with 6 million and ten seats; Enterprise is custom. Prices exclude taxes, and annual billing charges ten monthly prices upfront. Treat the Creator promotion as temporary, not the normal price. [Official pricing](https://elevenlabs.io/pricing).\n\nAll products draw from the same credit pool. The pricing page currently estimates TTS around one credit per character, Speech to Text at 330 credits per minute, Music at 900 per minute, Sound Effects at 200 per generation, Voice Changer or Voice Isolator at 1,000 per minute, and dubbing from 2,000 to 10,000 per minute depending on workflow and watermark. Flash/Turbo API text may cost 0.5–1 credit per character while Multilingual v2 uses one. These are input or generation units, not guaranteed approved minutes. Credits are charged per request; only limited eligible regenerations are free, and web regeneration rules do not apply to the API. [Pricing conversions](https://elevenlabs.io/pricing) · [Billing and regeneration rules](https://elevenlabs.io/docs/overview/administration/billing).\n\nUnused paid credits may roll over up to two months while the account remains on an eligible plan. Canceling or downgrading ends rollover and unused paid credits expire after the current cycle. Paid plans include commercial rights for eligible output, while Free is non-commercial and requires attribution. Commercial use still requires rights in scripts, recordings, voices, music and likenesses, compliance with law and the prohibited-use rules, and a check of service-specific terms. Beta output is not cleared for commercial or production use. [Publishing and commercial use](https://help.elevenlabs.io/hc/en-us/articles/13313564601361-Can-I-publish-the-content-I-generate-on-the-platform) · [Terms](https://elevenlabs.io/terms-of-use).\n\nInstant and Professional Voice Cloning are different production choices. IVC is available from Starter and works from short samples but can be less consistent outside the reference style. PVC requires Creator or above, substantially more clean single-speaker audio and a verification process. ElevenLabs says both paths include verification, while also acknowledging verification cannot prove every recording belongs to the requester; authorized use remains the creator's responsibility. Do not treat access to a clip, a checkbox or a successful clone as consent. Keep written permission, restrict voice and API access, disclose synthetic use where required, and prepare an impersonation incident response. [Voice-cloning concepts](https://elevenlabs.io/docs/eleven-api/concepts/voice-cloning) · [Safety controls](https://elevenlabs.io/safety).\n\nVoice and audio inputs can be personal or biometric data. The May 20, 2026 privacy policy describes processing content and Voice Data for service delivery, safety and model improvement, a prospective training opt-out, and voice-derived data retention up to three years after the last interaction except where law requires otherwise. Default use is not zero retention. Zero Retention Mode is limited to selected Enterprise customers and eligible API products; web UI traffic, voice-cloning samples, dubbing, Music and Studio are not covered. ZRM also reduces troubleshooting evidence. Confirm the actual workspace, region, product and request settings before sending sensitive data. [Privacy policy](https://elevenlabs.io/privacy-policy) · [Zero Retention Mode](https://elevenlabs.io/docs/eleven-api/resources/zero-retention-mode).\n\nFor API production, model, endpoint and connection type affect cost, latency and capacity. HTTP and TTS WebSocket requests use concurrency differently, while Text to Dialogue WebSockets reserve sessions; a plan's concurrency number is not a promise of simultaneous calls. Implement timeouts, 429 backoff, idempotent job handling where possible, key rotation, usage alerts, caching, observability and an alternate delivery path. Test noisy text, names, numbers, abbreviations, code-switching and long-form segmentation with human acceptance criteria. [Models and concurrency](https://elevenlabs.io/docs/overview/models) · [Text-to-speech capabilities](https://elevenlabs.io/docs/overview/capabilities/text-to-speech).\n\nIndependent evidence supports both the product's decision value and its risk boundaries. Zapier's hands-on review reports broad audio workflows but a learning curve and uneven prompt results. Consumer Reports documented that its 2025 test could create an unauthorized ElevenLabs clone from public audio and found self-attestation insufficient; current official controls should therefore be verified in the chosen cloning flow rather than assumed. Axios reported continuing US congressional scrutiny of consent and scam safeguards in April 2026. [Hands-on review (Zapier)](https://zapier.com/blog/elevenlabs/) · [Voice-cloning safeguards assessment (Consumer Reports)](https://www.consumerreports.org/media-room/press-releases/2025/03/consumer-reports-assessment-of-ai-voice-cloning-products/) · [Independent safety scrutiny (Axios)](https://www.axios.com/2026/04/16/hassan-congress-scams-audio-deepfakes).\n\nOfficial evidence: [Pricing](https://elevenlabs.io/pricing) · [Billing](https://elevenlabs.io/docs/overview/administration/billing) · [Commercial use](https://help.elevenlabs.io/hc/en-us/articles/13313564601361-Can-I-publish-the-content-I-generate-on-the-platform) · [Voice cloning](https://elevenlabs.io/docs/eleven-api/concepts/voice-cloning) · [Safety](https://elevenlabs.io/safety) · [Terms](https://elevenlabs.io/terms-of-use) · [Privacy](https://elevenlabs.io/privacy-policy) · [Zero retention](https://elevenlabs.io/docs/eleven-api/resources/zero-retention-mode) · [Models](https://elevenlabs.io/docs/overview/models) · [TTS](https://elevenlabs.io/docs/overview/capabilities/text-to-speech) · [Press assets](https://elevenlabs.io/press).\n\nMedia: the official black wordmark from ElevenLabs' press page is used only for identification, not as a screenshot or proof of tested output. [Source](https://elevenlabs.io/press).\n\nComparison paths: [descript](/ai/descript#decision-card) · [murf-ai](/ai/murf-ai#decision-card)",
+    "zh": "当你重视有表现力的语音、多语言表达、声音克隆或 API 音频工作流，并能承担逐次审核时，可考虑 ElevenLabs。先用一份代表性脚本和一个发布渠道试用，记录验收通过的分钟数、废弃生成、延迟与总 credits，不要只凭精修演示判断。若普通旁白已经够用、测试前必须锁定成本，或团队无法保存声音授权与人工复核记录，则不太适合。\n\n2026-09-20 套餐核验：Free 每月 0 美元/10,000 credits；Starter 为 6 美元/30,000；Creator 标准月价 22 美元/121,000，当前首月 5 折促销显示 11 美元；Pro 为 99 美元/600,000；Scale 为 299 美元/180 万并含 3 席；Business 为 990 美元/600 万并含 10 席；Enterprise 议价。报价不含税，年付按十个月月价一次性支付。Creator 首月折扣应视为临时促销，不是标准价。[官方价格](https://elevenlabs.io/pricing)。\n\n所有产品共用一个 credits 池。价格页当前估算：TTS 约每字符 1 credit；Speech to Text 每分钟 330；Music 每分钟 900；Sound Effects 每次生成 200；Voice Changer 或 Voice Isolator 每分钟 1,000；dubbing 依流程及水印每分钟 2,000–10,000。Flash/Turbo API 文本可能为每字符 0.5–1 credit，Multilingual v2 为 1。它们是输入或生成计量，不保证能得到相同的成品分钟数。credits 按生成请求扣除，只有有限且符合条件的重新生成免费，网页端免费重生成规则不适用于 API。[换算与套餐](https://elevenlabs.io/pricing) · [计费与重生成规则](https://elevenlabs.io/docs/overview/administration/billing)。\n\n在持续使用合格付费套餐时，未用 credits 最多可结转两个月；取消或降级会终止结转，当前周期结束后未用付费额度失效。合格付费套餐为相应输出提供商业使用权；Free 仅限非商业用途且公开时需署名。商业使用仍要求你拥有脚本、录音、声音、音乐及肖像等底层权利，遵守法律、禁止使用规则与专项条款；Beta 输出不得用于商业或生产环境。[发布与商业使用](https://help.elevenlabs.io/hc/en-us/articles/13313564601361-Can-I-publish-the-content-I-generate-on-the-platform) · [条款](https://elevenlabs.io/terms-of-use)。\n\nInstant 与 Professional Voice Cloning 是不同的生产选择。IVC 从 Starter 起提供，短样本即可使用，但偏离参考风格时一致性可能较弱。PVC 需要 Creator 或更高套餐、更多干净的单人录音，并经过验证流程。ElevenLabs 称两条路径都含验证，同时承认验证无法证明每份录音一定属于申请人；授权使用责任仍在创建者。拿到音频、勾选声明或成功生成克隆都不等于获得同意。应保存书面授权，限制声音和 API 访问，按要求披露合成内容，并准备冒充事件响应。[声音克隆原理](https://elevenlabs.io/docs/eleven-api/concepts/voice-cloning) · [安全控制](https://elevenlabs.io/safety)。\n\n声音与音频输入可能构成个人或生物识别数据。2026-05-20 更新的隐私政策说明，内容和 Voice Data 可用于提供服务、安全及模型改进；训练退出只对之后提供的数据生效；除法律另有要求外，声音衍生数据最长可保留至最后互动后三年。默认使用并不是零留存。Zero Retention Mode 仅向部分 Enterprise 客户和符合条件的 API 产品提供；网页 UI、声音克隆样本、dubbing、Music 与 Studio 不在覆盖范围内，且 ZRM 会削弱故障排查证据。传送敏感数据前，应核对真实工作区、地区、产品与请求设置。[隐私政策](https://elevenlabs.io/privacy-policy) · [Zero Retention Mode](https://elevenlabs.io/docs/eleven-api/resources/zero-retention-mode)。\n\nAPI 生产使用中，模型、端点及连接类型会影响成本、延迟与容量。HTTP 与 TTS WebSocket 的并发计算不同，Text to Dialogue WebSocket 则会占用会话；套餐并发数不是同时通话数量的承诺。应实现超时、429 退避、尽可能幂等的任务处理、密钥轮换、用量预警、缓存、可观测性及替代交付路径。用带噪文本、姓名、数字、缩写、语言切换及长内容分段，按人工验收标准测试。[模型与并发](https://elevenlabs.io/docs/overview/models) · [TTS 能力](https://elevenlabs.io/docs/overview/capabilities/text-to-speech)。\n\n独立依据同时支持产品的决策价值及风险边界。Zapier 的亲测评测记录了较广的音频流程，也指出学习成本与提示结果不稳定。Consumer Reports 在 2025 年测试中从公开音频创建了未获授权的 ElevenLabs 克隆，并认为仅自我声明不足；因此即便官方现已描述更多验证，也应在所选克隆流程中实际确认。Axios 记录了 2026 年 4 月美国国会对同意及诈骗防护的持续审查。[亲测评测（Zapier）](https://zapier.com/blog/elevenlabs/) · [声音克隆防护评估（Consumer Reports）](https://www.consumerreports.org/media-room/press-releases/2025/03/consumer-reports-assessment-of-ai-voice-cloning-products/) · [独立安全审查（Axios）](https://www.axios.com/2026/04/16/hassan-congress-scams-audio-deepfakes)。\n\n官方证据：[Pricing](https://elevenlabs.io/pricing) · [Billing](https://elevenlabs.io/docs/overview/administration/billing) · [Commercial use](https://help.elevenlabs.io/hc/en-us/articles/13313564601361-Can-I-publish-the-content-I-generate-on-the-platform) · [Voice cloning](https://elevenlabs.io/docs/eleven-api/concepts/voice-cloning) · [Safety](https://elevenlabs.io/safety) · [Terms](https://elevenlabs.io/terms-of-use) · [Privacy](https://elevenlabs.io/privacy-policy) · [Zero retention](https://elevenlabs.io/docs/eleven-api/resources/zero-retention-mode) · [Models](https://elevenlabs.io/docs/overview/models) · [TTS](https://elevenlabs.io/docs/overview/capabilities/text-to-speech) · [Press assets](https://elevenlabs.io/press)。\n\n媒体：ElevenLabs 官方 press 页面提供的黑色字标仅用于产品识别，不是产品截图或本站实测证明。[来源](https://elevenlabs.io/press)。\n\n比较路径：[descript](/cn/ai/descript#decision-card) · [murf-ai](/cn/ai/murf-ai#decision-card)",
+    "cn": "当你重视有表现力的语音、多语言表达、声音克隆或 API 音频工作流，并能承担逐次审核时，可考虑 ElevenLabs。先用一份代表性脚本和一个发布渠道试用，记录验收通过的分钟数、废弃生成、延迟与总 credits，不要只凭精修演示判断。若普通旁白已经够用、测试前必须锁定成本，或团队无法保存声音授权与人工复核记录，则不太适合。\n\n2026-09-20 套餐核验：Free 每月 0 美元/10,000 credits；Starter 为 6 美元/30,000；Creator 标准月价 22 美元/121,000，当前首月 5 折促销显示 11 美元；Pro 为 99 美元/600,000；Scale 为 299 美元/180 万并含 3 席；Business 为 990 美元/600 万并含 10 席；Enterprise 议价。报价不含税，年付按十个月月价一次性支付。Creator 首月折扣应视为临时促销，不是标准价。[官方价格](https://elevenlabs.io/pricing)。\n\n所有产品共用一个 credits 池。价格页当前估算：TTS 约每字符 1 credit；Speech to Text 每分钟 330；Music 每分钟 900；Sound Effects 每次生成 200；Voice Changer 或 Voice Isolator 每分钟 1,000；dubbing 依流程及水印每分钟 2,000–10,000。Flash/Turbo API 文本可能为每字符 0.5–1 credit，Multilingual v2 为 1。它们是输入或生成计量，不保证能得到相同的成品分钟数。credits 按生成请求扣除，只有有限且符合条件的重新生成免费，网页端免费重生成规则不适用于 API。[换算与套餐](https://elevenlabs.io/pricing) · [计费与重生成规则](https://elevenlabs.io/docs/overview/administration/billing)。\n\n在持续使用合格付费套餐时，未用 credits 最多可结转两个月；取消或降级会终止结转，当前周期结束后未用付费额度失效。合格付费套餐为相应输出提供商业使用权；Free 仅限非商业用途且公开时需署名。商业使用仍要求你拥有脚本、录音、声音、音乐及肖像等底层权利，遵守法律、禁止使用规则与专项条款；Beta 输出不得用于商业或生产环境。[发布与商业使用](https://help.elevenlabs.io/hc/en-us/articles/13313564601361-Can-I-publish-the-content-I-generate-on-the-platform) · [条款](https://elevenlabs.io/terms-of-use)。\n\nInstant 与 Professional Voice Cloning 是不同的生产选择。IVC 从 Starter 起提供，短样本即可使用，但偏离参考风格时一致性可能较弱。PVC 需要 Creator 或更高套餐、更多干净的单人录音，并经过验证流程。ElevenLabs 称两条路径都含验证，同时承认验证无法证明每份录音一定属于申请人；授权使用责任仍在创建者。拿到音频、勾选声明或成功生成克隆都不等于获得同意。应保存书面授权，限制声音和 API 访问，按要求披露合成内容，并准备冒充事件响应。[声音克隆原理](https://elevenlabs.io/docs/eleven-api/concepts/voice-cloning) · [安全控制](https://elevenlabs.io/safety)。\n\n声音与音频输入可能构成个人或生物识别数据。2026-05-20 更新的隐私政策说明，内容和 Voice Data 可用于提供服务、安全及模型改进；训练退出只对之后提供的数据生效；除法律另有要求外，声音衍生数据最长可保留至最后互动后三年。默认使用并不是零留存。Zero Retention Mode 仅向部分 Enterprise 客户和符合条件的 API 产品提供；网页 UI、声音克隆样本、dubbing、Music 与 Studio 不在覆盖范围内，且 ZRM 会削弱故障排查证据。传送敏感数据前，应核对真实工作区、地区、产品与请求设置。[隐私政策](https://elevenlabs.io/privacy-policy) · [Zero Retention Mode](https://elevenlabs.io/docs/eleven-api/resources/zero-retention-mode)。\n\nAPI 生产使用中，模型、端点及连接类型会影响成本、延迟与容量。HTTP 与 TTS WebSocket 的并发计算不同，Text to Dialogue WebSocket 则会占用会话；套餐并发数不是同时通话数量的承诺。应实现超时、429 退避、尽可能幂等的任务处理、密钥轮换、用量预警、缓存、可观测性及替代交付路径。用带噪文本、姓名、数字、缩写、语言切换及长内容分段，按人工验收标准测试。[模型与并发](https://elevenlabs.io/docs/overview/models) · [TTS 能力](https://elevenlabs.io/docs/overview/capabilities/text-to-speech)。\n\n独立依据同时支持产品的决策价值及风险边界。Zapier 的亲测评测记录了较广的音频流程，也指出学习成本与提示结果不稳定。Consumer Reports 在 2025 年测试中从公开音频创建了未获授权的 ElevenLabs 克隆，并认为仅自我声明不足；因此即便官方现已描述更多验证，也应在所选克隆流程中实际确认。Axios 记录了 2026 年 4 月美国国会对同意及诈骗防护的持续审查。[亲测评测（Zapier）](https://zapier.com/blog/elevenlabs/) · [声音克隆防护评估（Consumer Reports）](https://www.consumerreports.org/media-room/press-releases/2025/03/consumer-reports-assessment-of-ai-voice-cloning-products/) · [独立安全审查（Axios）](https://www.axios.com/2026/04/16/hassan-congress-scams-audio-deepfakes)。\n\n官方证据：[Pricing](https://elevenlabs.io/pricing) · [Billing](https://elevenlabs.io/docs/overview/administration/billing) · [Commercial use](https://help.elevenlabs.io/hc/en-us/articles/13313564601361-Can-I-publish-the-content-I-generate-on-the-platform) · [Voice cloning](https://elevenlabs.io/docs/eleven-api/concepts/voice-cloning) · [Safety](https://elevenlabs.io/safety) · [Terms](https://elevenlabs.io/terms-of-use) · [Privacy](https://elevenlabs.io/privacy-policy) · [Zero retention](https://elevenlabs.io/docs/eleven-api/resources/zero-retention-mode) · [Models](https://elevenlabs.io/docs/overview/models) · [TTS](https://elevenlabs.io/docs/overview/capabilities/text-to-speech) · [Press assets](https://elevenlabs.io/press)。\n\n媒体：ElevenLabs 官方 press 页面提供的黑色字标仅用于产品识别，不是产品截图或本站实测证明。[来源](https://elevenlabs.io/press)。\n\n比较路径：[descript](/cn/ai/descript#decision-card) · [murf-ai](/cn/ai/murf-ai#decision-card)"
   },
   "imageUrl": "/icons/tool-logos/elevenlabs.svg",
   "thumbnailUrl": "/images/tool-media/elevenlabs-release-cover.svg",
@@ -62,13 +62,13 @@
       }
     },
     "editorial": {
-      "reviewedAt": "2026-09-14",
+      "reviewedAt": "2026-09-20",
       "reviewedBy": "AI Best Tool editorial",
       "sourceUrl": "https://elevenlabs.io/pricing",
       "summary": {
-        "en": "Pricing, credits, commercial use, cloning, privacy, safety and API limits were rechecked on September 14, 2026; independent evidence supports inclusion, not guaranteed performance.",
-        "zh": "已于 2026-09-14 复核价格、credits、商业使用、克隆、隐私、安全及 API 限制；独立依据支持收录，不保证效果。",
-        "cn": "已于 2026-09-14 复核价格、credits、商业使用、克隆、隐私、安全及 API 限制；独立依据支持收录，不保证效果。"
+        "en": "Pricing, credits, PAYG, commercial use, cloning, privacy, safety and API limits were rechecked on September 20, 2026; independent evidence supports inclusion, not guaranteed performance.",
+        "zh": "已于 2026-09-20 复核价格、credits、PAYG、商业使用、克隆、隐私、安全及 API 限制；独立依据支持收录，不保证效果。",
+        "cn": "已于 2026-09-20 复核价格、credits、PAYG、商业使用、克隆、隐私、安全及 API 限制；独立依据支持收录，不保证效果。"
       },
       "trustNote": {
         "en": "Public-document review only. No account-level checkout, voice clone or production load test was performed.",
@@ -112,7 +112,8 @@
           "Default processing is not zero retention; ZRM has product and plan exclusions.",
           "Model, language and source quality can change pronunciation and identity consistency.",
           "Concurrency figures do not guarantee simultaneous calls or delivery latency.",
-          "Cancellation or downgrade ends rollover and unused paid credits expire."
+          "Cancellation or downgrade ends rollover and unused paid credits expire.",
+          "New self-serve subscriptions use prepaid PAYG credits; usage-based billing is limited to legacy or Enterprise accounts."
         ],
         "zh": [
           "共享 credits 不能稳定换算成固定的验收成品分钟数。",
@@ -122,7 +123,8 @@
           "默认处理并非零留存；ZRM 存在套餐及产品排除。",
           "模型、语言及源素材质量会影响发音与声音身份一致性。",
           "并发数字不保证同时通话数或交付延迟。",
-          "取消或降级会终止结转，未用付费 credits 将失效。"
+          "取消或降级会终止结转，未用付费 credits 将失效。",
+          "新自助订阅使用预付 PAYG credits；usage-based billing 仅适用于 legacy 或 Enterprise 账户。"
         ],
         "cn": [
           "共享 credits 不能稳定换算成固定的验收成品分钟数。",
@@ -132,7 +134,8 @@
           "默认处理并非零留存；ZRM 存在套餐及产品排除。",
           "模型、语言及源素材质量会影响发音与声音身份一致性。",
           "并发数字不保证同时通话数或交付延迟。",
-          "取消或降级会终止结转，未用付费 credits 将失效。"
+          "取消或降级会终止结转，未用付费 credits 将失效。",
+          "新自助订阅使用预付 PAYG credits；usage-based billing 仅适用于 legacy 或 Enterprise 账户。"
         ]
       },
       "pricingSummary": {
@@ -146,9 +149,9 @@
         "cn": "购买前应按具体工作流核对所链接的价格、计费、克隆、权利、隐私与 API 文档。"
       },
       "freshnessSummary": {
-        "en": "Reviewed September 14, 2026. Next fact review: October 14, 2026; pricing, policy or model changes trigger earlier review.",
-        "zh": "核验于 2026-09-14；下次事实复核为 2026-10-14，价格、政策或模型变化会触发提前复核。",
-        "cn": "核验于 2026-09-14；下次事实复核为 2026-10-14，价格、政策或模型变化会触发提前复核。"
+        "en": "Reviewed September 20, 2026. Next fact review: October 20, 2026; pricing, policy or model changes trigger earlier review.",
+        "zh": "核验于 2026-09-20；下次事实复核为 2026-10-20，价格、政策或模型变化会触发提前复核。",
+        "cn": "核验于 2026-09-20；下次事实复核为 2026-10-20，价格、政策或模型变化会触发提前复核。"
       },
       "mediaSummary": {
         "en": "Official press-kit wordmark used for identification, not a screenshot or tested-output evidence.",
@@ -180,16 +183,16 @@
       ]
     },
     "pricingSnapshot": {
-      "checkedAt": "2026-09-14",
+      "checkedAt": "2026-09-20",
       "sourceUrls": [
         "https://elevenlabs.io/pricing",
         "https://elevenlabs.io/docs/overview/administration/billing",
         "https://help.elevenlabs.io/hc/en-us/articles/13313564601361-Can-I-publish-the-content-I-generate-on-the-platform"
       ],
       "summary": {
-        "en": "Monthly self-serve tiers run from Free to Business with one shared cross-product credit pool; Creator's $11 display is a first-month promotion against a $22 standard monthly price.",
-        "zh": "月付自助套餐从 Free 到 Business，共用跨产品 credits 池；Creator 页面显示的 11 美元是相对 22 美元标准月价的首月促销。",
-        "cn": "月付自助套餐从 Free 到 Business，共用跨产品 credits 池；Creator 页面显示的 11 美元是相对 22 美元标准月价的首月促销。"
+        "en": "Monthly self-serve tiers run from Free to Business with one shared cross-product credit pool; Creator's $11 display is a first-month promotion against a $22 standard monthly price. New self-serve accounts use prepaid PAYG credits after the included pool, while usage-based billing is a legacy or Enterprise path.",
+        "zh": "月付自助套餐从 Free 到 Business，共用跨产品 credits 池；Creator 页面显示的 11 美元是相对 22 美元标准月价的首月促销。新自助账户在包含额度之外使用预付 PAYG credits，usage-based billing 属于 legacy 或 Enterprise 路径。",
+        "cn": "月付自助套餐从 Free 到 Business，共用跨产品 credits 池；Creator 页面显示的 11 美元是相对 22 美元标准月价的首月促销。新自助账户在包含额度之外使用预付 PAYG credits，usage-based billing 属于 legacy 或 Enterprise 路径。"
       },
       "conflicts": [
         "Pricing labels the Creator card with both the $22 standard price and a $11 first-month promotion; release copy separates them.",
@@ -197,59 +200,59 @@
       ]
     },
     "evidence": {
-      "checkedAt": "2026-09-14",
+      "checkedAt": "2026-09-20",
       "official": [
-        { "label": "Pricing", "url": "https://elevenlabs.io/pricing", "checkedAt": "2026-09-14" },
+        { "label": "Pricing", "url": "https://elevenlabs.io/pricing", "checkedAt": "2026-09-20" },
         {
           "label": "Billing",
           "url": "https://elevenlabs.io/docs/overview/administration/billing",
-          "checkedAt": "2026-09-14"
+          "checkedAt": "2026-09-20"
         },
         {
           "label": "Commercial use",
           "url": "https://help.elevenlabs.io/hc/en-us/articles/13313564601361-Can-I-publish-the-content-I-generate-on-the-platform",
-          "checkedAt": "2026-09-14"
+          "checkedAt": "2026-09-20"
         },
         {
           "label": "Voice cloning",
           "url": "https://elevenlabs.io/docs/eleven-api/concepts/voice-cloning",
-          "checkedAt": "2026-09-14"
+          "checkedAt": "2026-09-20"
         },
-        { "label": "Safety", "url": "https://elevenlabs.io/safety", "checkedAt": "2026-09-14" },
-        { "label": "Terms", "url": "https://elevenlabs.io/terms-of-use", "checkedAt": "2026-09-14" },
-        { "label": "Privacy", "url": "https://elevenlabs.io/privacy-policy", "checkedAt": "2026-09-14" },
+        { "label": "Safety", "url": "https://elevenlabs.io/safety", "checkedAt": "2026-09-20" },
+        { "label": "Terms", "url": "https://elevenlabs.io/terms-of-use", "checkedAt": "2026-09-20" },
+        { "label": "Privacy", "url": "https://elevenlabs.io/privacy-policy", "checkedAt": "2026-09-20" },
         {
           "label": "Zero retention",
           "url": "https://elevenlabs.io/docs/eleven-api/resources/zero-retention-mode",
-          "checkedAt": "2026-09-14"
+          "checkedAt": "2026-09-20"
         },
         {
           "label": "Models and concurrency",
           "url": "https://elevenlabs.io/docs/overview/models",
-          "checkedAt": "2026-09-14"
+          "checkedAt": "2026-09-20"
         },
         {
           "label": "Text to speech",
           "url": "https://elevenlabs.io/docs/overview/capabilities/text-to-speech",
-          "checkedAt": "2026-09-14"
+          "checkedAt": "2026-09-20"
         },
-        { "label": "Press assets", "url": "https://elevenlabs.io/press", "checkedAt": "2026-09-14" }
+        { "label": "Press assets", "url": "https://elevenlabs.io/press", "checkedAt": "2026-09-20" }
       ],
       "independent": [
         {
           "label": "Hands-on review (Zapier)",
           "url": "https://zapier.com/blog/elevenlabs/",
-          "checkedAt": "2026-09-14"
+          "checkedAt": "2026-09-20"
         },
         {
           "label": "Voice-cloning safeguards assessment (Consumer Reports)",
           "url": "https://www.consumerreports.org/media-room/press-releases/2025/03/consumer-reports-assessment-of-ai-voice-cloning-products/",
-          "checkedAt": "2026-09-14"
+          "checkedAt": "2026-09-20"
         },
         {
           "label": "Independent safety scrutiny (Axios)",
           "url": "https://www.axios.com/2026/04/16/hassan-congress-scams-audio-deepfakes",
-          "checkedAt": "2026-09-14"
+          "checkedAt": "2026-09-20"
         }
       ]
     },
@@ -259,7 +262,7 @@
           "path": "/icons/tool-logos/elevenlabs.svg",
           "url": "https://11labs-nonprd-15f22c1d.s3.eu-west-3.amazonaws.com/0b9cd3e1-9fad-4a5b-b3a0-c96b0a1f1d2b/elevenlabs-logo-black.svg",
           "sourcePage": "https://elevenlabs.io/press",
-          "checkedAt": "2026-09-14",
+          "checkedAt": "2026-09-20",
           "sha256": "7a41b7f26b6286f607d34c80a658ef06e5cb6c094a1b087b563c8508e15f2178",
           "usageBasis": "Unmodified official black wordmark supplied by the ElevenLabs press page; used only for truthful editorial identification without an affiliation claim.",
           "type": "official_brand_asset",
@@ -269,7 +272,7 @@
           "path": "/images/tool-media/elevenlabs-release-cover.svg",
           "url": "https://11labs-nonprd-15f22c1d.s3.eu-west-3.amazonaws.com/0b9cd3e1-9fad-4a5b-b3a0-c96b0a1f1d2b/elevenlabs-logo-black.svg",
           "sourcePage": "https://elevenlabs.io/press",
-          "checkedAt": "2026-09-14",
+          "checkedAt": "2026-09-20",
           "sha256": "4fb6529e6bf2b7057f310a5ac2daf66003cc696d2a14c3c7c976c471e0bb23f4",
           "usageBasis": "The unmodified official wordmark is centered with clear space on a plain white SVG canvas for reliable page cropping; it is not a product screenshot or performance evidence.",
           "type": "official_brand_asset",
@@ -281,7 +284,7 @@
       ]
     },
     "marketValidation": {
-      "reviewedAt": "2026-09-14",
+      "reviewedAt": "2026-09-20",
       "score": 94,
       "scores": {
         "marketDurability": 24,
@@ -308,12 +311,12 @@
     },
     "release": {
       "scheduledSlot": "2026-09-13",
-      "reviewedAt": "2026-09-14",
+      "reviewedAt": "2026-09-20",
       "executionType": "delayed_makeup",
       "label": "延期补发",
       "indexState": "monitor",
       "sitemapChangeApproved": false,
-      "nextReviewDate": "2026-10-14"
+      "nextReviewDate": "2026-10-20"
     }
   },
   "useCases": {

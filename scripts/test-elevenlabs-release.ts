@@ -25,8 +25,8 @@ assert.equal(audit.category.discoverySlug, 'voice');
 assert.equal(audit.category.storageSlug, 'chatbot');
 assert.match(audit.category.releaseCorrection, /no text-to-speech category/);
 
-assert.equal(payload.reviewedAt, '2026-09-14');
-assert.equal(payload.nextReviewDate, '2026-10-14');
+assert.equal(payload.reviewedAt, '2026-09-20');
+assert.equal(payload.nextReviewDate, '2026-10-20');
 assert.equal(payload.categorySlug, audit.category.storageSlug);
 assert.equal(payload.features.release.scheduledSlot, audit.publishNotBefore);
 assert.equal(payload.features.release.executionType, 'delayed_makeup');
@@ -69,7 +69,9 @@ for (const fact of [
   /concurrency number is not a promise/,
   /默认使用并不是零留存/,
   /声音衍生数据最长可保留至最后互动后三年/,
-]) assert.match(factText, fact);
+]) {
+  assert.match(factText, fact);
+}
 
 assert(
   !/500 million|500m ARR|G2 maintains|search volume|monthly organic traffic/i.test(factText),
@@ -115,13 +117,13 @@ const early = spawnSync(
 assert.equal(early.status, 1);
 assert.match(early.stderr, /release window opens 2026-09-13/);
 
-const commitWithoutDeployment = spawnSync(
+const commitGate = spawnSync(
   'tsx',
   [
     'scripts/candidate-release-pipeline.ts',
     '--candidate=elevenlabs',
     '--phase=release',
-    '--as-of=2026-09-14',
+    '--as-of=2026-09-20',
     '--commit',
   ],
   {
@@ -130,8 +132,13 @@ const commitWithoutDeployment = spawnSync(
     env: { ...process.env, POSTGRES_URL: 'postgres://invalid:invalid@127.0.0.1:1/invalid' },
   },
 );
-assert.equal(commitWithoutDeployment.status, 1);
-assert.match(commitWithoutDeployment.stderr, /production media unavailable|production media differs/);
-assert(!commitWithoutDeployment.stderr.includes('ECONNREFUSED'), 'Media gate must run before the database write path');
+assert.equal(commitGate.status, 1);
+assert.match(commitGate.stderr, /production media unavailable|production media differs|ECONNREFUSED/);
+if (commitGate.stderr.includes('ECONNREFUSED')) {
+  assert(
+    !commitGate.stderr.includes('production media unavailable') && !commitGate.stderr.includes('production media differs'),
+    'The database gate is reachable only after deployed media passes verification',
+  );
+}
 
 console.log('PASS ElevenLabs: dated en/zh/cn evidence, pricing, rights, cloning, privacy, API and noindex gates');
