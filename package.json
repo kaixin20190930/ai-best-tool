@@ -165,6 +165,7 @@
     "test:meeting-notes-pilot-seed": "tsx scripts/test-meeting-notes-pilot-seed.ts",
     "test:decision-editorial-trigger-fix": "tsx scripts/test-decision-editorial-trigger-fix.ts",
     "verify:meeting-notes-pilot:production": "node scripts/pub-03-readonly-run.mjs pnpm exec tsx scripts/verify-meeting-notes-pilot-production.ts",
+    "test:decision-metric-maintenance": "tsx scripts/test-decision-metric-maintenance.ts",
     "tools:migrate-fireflies": "tsx scripts/migrate-fireflies-tool.ts"
   },
   "lint-staged": {

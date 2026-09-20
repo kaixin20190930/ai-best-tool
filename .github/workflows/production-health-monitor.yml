@@ -47,6 +47,21 @@ jobs:
           test "$HTTP_CODE" = "200"
           grep -q '"ok":true' /tmp/monitor.json
 
+      - name: Check decision metric retention freshness
+        run: |
+          set -euo pipefail
+          BASE_URL="${MONITOR_BASE_URL%/}"
+          if [ -z "${MONITOR_API_TOKEN}" ]; then
+            echo "MONITOR_API_TOKEN is not set; skipping protected retention freshness check."
+            exit 0
+          fi
+          curl --fail-with-body --silent --show-error \
+            -H "Authorization: Bearer ${MONITOR_API_TOKEN}" \
+            "$BASE_URL/api/monitor/decision-metrics-maintenance" \
+            --output /tmp/decision-metric-maintenance-status.json
+          grep -q '"ok":true' /tmp/decision-metric-maintenance-status.json
+          grep -q '"freshnessStatus":"fresh"' /tmp/decision-metric-maintenance-status.json
+
       - name: Check /api/health
         run: |
           set -e
