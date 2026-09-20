@@ -230,7 +230,7 @@ Synthesia 与 Replit 后原本只剩 Otter.ai、Lovable 和 Midjourney，低于�
 至 09-12 发布顺序的前提下，补充 ElevenLabs、HeyGen、Glean 和 Fireflies.ai，形成连续 7 天的成熟候选缓冲。四项均已通过机器预
 审，但不构成生产写入或 sitemap 授权；Windsurf 因正在更名为 Devin Desktop 暂缓，避免实体身份冲突。
 
-2026-09-20 ElevenLabs 延期补发：已重新核验价格、PAYG/legacy 计费边界、商业使用、隐私、ZRM 与 API 限制，并统一 en/zh/cn payload、Decision Card 与 2026-10-20 复核日期。专项测试、完整 TypeScript/build、线上 preflight 及真实生产事务 rollback 均通过；生产重复实体为 0，既有 fallback 保持 self-canonical/noindex 且不在 116 条 sitemap 中。分类继续采用既有 voice -> `chatbot` 存储映射，未新建分类。当前等待本候选版本部署后执行最终 media/preflight 门禁及单项生产事务；索引和 sitemap 仍未放开。详见 [ElevenLabs 延期补发交付](./DELAYED_ELEVENLABS_RELEASE_2026-09-14_CN.md)。
+2026-09-20 ElevenLabs 延期补发完成：已重新核验价格、PAYG/legacy 计费边界、商业使用、隐私、ZRM 与 API 限制，并以唯一实体 `d7b63bf2-63c8-4015-b59d-2f627450813f` 完成生产事务发布。en/zh/cn 数据回读、双语言页面、Decision Card、比较维度、素材、数据库契约、全站索引一致性和生产 SEO smoke 均通过；独立发布审计 0 个失败。当前严格保持 `published + monitor/noindex`，不在 sitemap，2026-10-20 复核事实；最短 48–72 小时后才可进入独立索引评审。详见 [ElevenLabs 延期补发交付](./DELAYED_ELEVENLABS_RELEASE_2026-09-14_CN.md)。
 
 ## 已完成能力
 

@@ -1,7 +1,7 @@
 # ElevenLabs 延期补发交付（2026-09-14）
 
-状态：2026-09-20 已重新核验官方价格、计费、ZRM 和发布边界；生产写入等待本轮门禁完成。未执行 `--commit`，未批准索引或
-sitemap 扩张。
+状态：2026-09-20 已完成官方事实复核、生产事务发布、数据库回读和线上独立验收。当前为 `published + monitor/noindex`，未批准
+索引或 sitemap 扩张。
 
 本轮基线：`origin/main` 的 `6db15474`。候选在当前主线工作区完成复核；生产写入仍由发布器事务门禁控制。
 
@@ -11,7 +11,7 @@ sitemap 扩张。
 | ---------------- | ------------------------------------------ |
 | 原计划发布槽     | 2026-09-13                                 |
 | 当日事实复核     | 2026-09-20（9 月 14 日候选于本日重新核验） |
-| 当前状态         | 延期补发候选；等待生产写入授权             |
+| 当前状态         | 已发布；进入 48–72 小时技术观察            |
 | 允许的生产状态   | `published + monitor`                      |
 | robots / sitemap | `noindex,follow` / 排除                    |
 | 下次事实复核     | 2026-10-20                                 |
@@ -86,9 +86,9 @@ sitemap 扩张。
 
 ## 下一步（必须由总控推进）
 
-1. 提交并部署 2026-09-20 复核后的唯一候选版本。
-2. 部署后重跑只读 `media` 与 `preflight --online` 门禁，两个素材必须返回真实图片类型且 SHA256 与候选一致。
-3. 复跑 `validate -> preflight --online -> release rollback`；任何波动事实、重复实体或路由边界变化都必须中止写入。
-4. 门禁全部通过后，执行单项 `--candidate=elevenlabs --phase=release --commit`。完成后依据真实事务更新预审
-   released 状态，再运行 online verify、released audit、全站索引一致性及 production SEO smoke。
-5. 发布后仍保持 `published + monitor/noindex`，不进入 sitemap。最短 48–72 小时后只能进入独立索引评审，不能自动放开索引。
+1. 2026-09-20 生产事务已提交，唯一实体 ID 为 `d7b63bf2-63c8-4015-b59d-2f627450813f`；en/zh/cn 回读完整。
+2. 双语言 canonical 页面均为 200，展示完整正文、Decision Card、比较维度和官方素材；数据库质量状态为 `monitor`。
+3. 全站索引一致性审计通过：48 个 published 工具中 13 个可索引、35 个暂停索引，页面检查 0 个问题；ElevenLabs 不在 sitemap。
+4. 独立发布报告为 [production-release.json](../reports/releases/2026-09-20/elevenlabs/production-release.json)，0 个失败且无生产写入。
+5. 继续保持 `published + monitor/noindex`。最短 48–72 小时后只能进入独立索引评审，不能自动放开索引；下次事实复核为
+   2026-10-20。

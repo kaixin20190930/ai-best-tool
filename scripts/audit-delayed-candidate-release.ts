@@ -108,6 +108,12 @@ async function main() {
               .textContent || '',
           );
           const cardText = normalizeText(document.querySelector('#decision-card')?.textContent || '');
+          const reviewedDate = new Date(`${payload.reviewedAt}T00:00:00Z`);
+          const reviewedDateVariants = [
+            payload.reviewedAt,
+            new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeZone: 'UTC' }).format(reviewedDate),
+            new Intl.DateTimeFormat('zh-CN', { dateStyle: 'long', timeZone: 'UTC' }).format(reviewedDate),
+          ];
           const requiredCardItems: string[] = [
             ...payload.features.audience.bestFit[locale],
             ...payload.features.audience.notIdealFor[locale],
@@ -134,7 +140,7 @@ async function main() {
               const url = new URL(img.getAttribute('src') || '', 'https://aibesttool.com');
               return url.searchParams.get('url') || url.pathname;
             }),
-            hasReviewedDate: body.includes(payload.reviewedAt),
+            hasReviewedDate: reviewedDateVariants.some((value) => body.includes(value)),
             inSitemap,
             htmlSha256: hash(html),
           };
