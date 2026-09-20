@@ -11,7 +11,8 @@
   "productionWriteApproved": false,
   "category": {
     "discoverySlug": "video",
-    "storageSlug": "video"
+    "storageSlug": "design-art",
+    "releaseCorrection": "Production has no video storage category; use the established design-art category shared by Synthesia, Runway and Midjourney while preserving video as a discovery tag."
   },
   "positioning": "An AI-native avatar video platform for generating presenter-led business videos, digital twins, localization, translation, lip sync, reusable templates, and API-driven video workflows without a traditional studio shoot.",
   "decisionAngles": [

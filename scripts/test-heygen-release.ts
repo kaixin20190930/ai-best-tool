@@ -21,6 +21,7 @@ assert.equal(audit.publishNotBefore, '2026-09-14');
 assert.equal(payload.reviewedAt, '2026-09-20');
 assert.equal(payload.nextReviewDate, '2026-10-20');
 assert.equal(payload.categorySlug, audit.category.storageSlug);
+assert.match(audit.category.releaseCorrection, /no video storage category/);
 assert.equal(payload.features.release.indexState, 'monitor');
 assert.equal(payload.features.release.sitemapChangeApproved, false);
 assert.equal(payload.features.editorial.reviewedAt, payload.reviewedAt);
