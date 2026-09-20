@@ -2,7 +2,26 @@ import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 
-const base = 'bb8c6b57faf69727d8672c92914bc859172c112f';
+const fallbackBase = 'bb8c6b57faf69727d8672c92914bc859172c112f';
+const scopeAnchor = 'docs/MEASURE_01_DECISION_EVENT_FOUNDATION_CN.md';
+
+function resolveMeasureBase(): string {
+  const introduction = execFileSync('git', ['log', '--diff-filter=A', '--reverse', '--format=%H', '--', scopeAnchor], {
+    encoding: 'utf8',
+  })
+    .trim()
+    .split('\n')
+    .find(Boolean);
+  if (!introduction) return fallbackBase;
+
+  try {
+    return execFileSync('git', ['rev-parse', `${introduction}^`], { encoding: 'utf8' }).trim();
+  } catch {
+    return fallbackBase;
+  }
+}
+
+const base = resolveMeasureBase();
 const allowed = new Set([
   'app/actions/decisionMetrics.ts',
   'db/supabase/migrations/20260920_decision_metric_events.sql',
