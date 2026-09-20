@@ -1,0 +1,151 @@
+{
+  "id": "4f26ce1c-08fd-4f99-97c9-21864c35bf94",
+  "slug": "heygen",
+  "officialUrl": "https://www.heygen.com/",
+  "reviewedAt": "2026-09-20",
+  "nextReviewDate": "2026-10-20",
+  "categorySlug": "video",
+  "pricing": "freemium",
+  "title": {
+    "en": "HeyGen AI Avatar Video Platform",
+    "zh": "HeyGen AI 数字人与视频平台",
+    "cn": "HeyGen AI 数字人与视频平台"
+  },
+  "content": {
+    "en": "Create presenter-led videos, digital twins and localized versions without a studio shoot. Compare accepted output, credit cost, likeness consent, data-use defaults and separate web/API operations before committing.",
+    "zh": "无需棚拍即可制作数字人讲解视频、数字分身及本地化版本；购买前应比较验收成品、credits 成本、肖像同意、数据使用默认值，以及网页端与 API 的独立运营方式。",
+    "cn": "无需棚拍即可制作数字人讲解视频、数字分身及本地化版本；购买前应比较验收成品、credits 成本、肖像同意、数据使用默认值，以及网页端与 API 的独立运营方式。"
+  },
+  "detail": {
+    "en": "Choose HeyGen when a team repeatedly needs presenter-led marketing, training, sales or localization videos and can review every output before publication. Start with one representative script, one approved likeness and one target language; record accepted minutes, rerenders, corrections, turnaround time and credits. It is less suitable when a real presenter is faster, the team cannot document likeness permission, or cost must be fixed before testing different avatar models.\n\nPlans checked September 20, 2026: Free is $0 with three videos per month up to one minute. Creator is $29 monthly with 600 credits, videos up to 30 minutes, 1080p export, voice cloning and 175+ languages and dialects; the official page shows a $24 monthly equivalent on annual billing. Pro starts at $49 monthly with 1,000 credits, 4K export and translation-script editing. Business is $149 monthly with 1,500 credits, videos up to 60 minutes, five custom video avatars, SAML/SSO and additional seats at $20 per seat per month. Enterprise is contact-sales. Prices, taxes, regional displays and credit tiers can change, so verify checkout rather than treating this snapshot as a quote. [Official pricing](https://www.heygen.com/pricing).\n\nPaid web plans now use credits as a shared currency across video and asset creation. Credit use varies by model, duration and complexity, so 600 or 1,000 credits is not a guaranteed number of approved minutes. Monthly unused credits roll over for one additional month while the subscription remains active; annual credits accumulate until renewal; cancellation ends rollover. The pricing page also states Pro tiers can scale from 1,000 credits at $49 to 100,000 credits at $4,300, while Business can buy top-ups or enable auto-reload. Budget from accepted output and usage history, not the marketing label alone. [Pricing and credit FAQ](https://www.heygen.com/pricing).\n\nWeb subscriptions and developer API operations are not one interchangeable allowance. API-key workflows use self-serve pay-as-you-go or Enterprise API billing, while OAuth or connected product surfaces can draw from the user's web subscription credits. The public API dashboard is the source for per-operation prices and starts with a $5 self-serve entry point; exact operation rates are account-visible and volatile, so this page does not copy them as a durable rate card. Confirm authentication mode, payer, wallet alerts and failure handling before production. [Developer quick start](https://developers.heygen.com/docs/quick-start) · [API pricing](https://app.heygen.com/developers/api?modal=pricing).\n\nThe API currently documents 10 concurrent workflows for pay-as-you-go and 20 for Enterprise, with optional Enterprise burst capacity up to 50 extra workflows billed at 1.5 times the contract rate. A 429 response includes Retry-After. Input and output limits also vary: avatar scripts allow up to 5,000 characters, audio input up to 10 minutes, and a single avatar or image scene up to 30 minutes. Treat concurrency as a capacity ceiling, not a latency promise; implement polling or webhooks, idempotent job records, backoff, budget alerts and a fallback delivery path. [Usage limits](https://developers.heygen.com/docs/usage-limits).\n\nA video-based Digital Twin requires consent from the depicted person. HeyGen's hosted flow asks that person to record a consent statement; an Enterprise account may upload a prerecorded consent video, and a narrower Enterprise path can waive the platform flow under an indemnity agreement. Photo or prompt avatars do not expose the same API consent step, but the documentation explicitly says that absence of a step is not permission to use someone's likeness. Keep external written authorization, restrict avatar and API access, disclose synthetic output when required, and maintain an impersonation response process. [Avatar consent API](https://developers.heygen.com/docs/avatar-consent) · [Consent recording guide](https://help.heygen.com/en/articles/12092609-recording-your-consent-video).\n\nPrivacy defaults differ by plan. HeyGen says Enterprise customer data is excluded from model training by default; non-Enterprise customer data may be used to improve models unless the customer opts out by contacting the stated privacy address. The Terms also grant a broad service, improvement and model-development license over customer content while keeping responsibility for underlying rights with the user. Do not generalize Enterprise controls to Creator, Pro or Business. Review the selected plan, opt-out record, retention, deletion, subprocessors and regional requirements before uploading employees, customers or confidential material. [Security](https://www.heygen.com/security) · [Privacy](https://www.heygen.com/privacy) · [Terms](https://www.heygen.com/terms).\n\nPaid Creator, Pro and Business users retain their rights in inputs and outputs and may use eligible output commercially, but they remain responsible for scripts, images, recordings, music, trademarks and likeness permissions. Free-plan output is limited to personal, non-commercial and internal evaluation use under the current Terms. Output may not be unique, accurate or error-free, and distributed synthetic output may require disclosure. Human review remains necessary for names, numbers, pronunciation, lip sync, timing, gestures, accessibility, claims and cultural context. [Terms and output rights](https://www.heygen.com/terms).\n\nIndependent evidence supports a real comparison need without guaranteeing performance. G2 maintains a substantial body of customer reviews, while an Axios hands-on account found the avatar convincing but noted name-pronunciation problems and broader deepfake risk. Recent user reports also describe confusion about credits and region- or account-specific Avatar V charges; those reports are not treated as official prices, but they support checking the in-account usage history before scaling. [G2 reviews](https://www.g2.com/products/heygen/reviews) · [Axios hands-on report](https://www.axios.com/2023/09/01/personal-deepfake-ai-video-avatar) · [Recent credit discrepancy report](https://www.reddit.com/r/heygen/comments/1wi838j/update_heygen_says_my_70_creditsminute_avatar_v/).\n\nMedia note: the blue Hg artwork on this listing is an AI Best Tool editorial identifier, not an official HeyGen logo, product screenshot or tested-output sample. Official product facts should be checked through the linked HeyGen pages.\n\nComparison paths: [synthesia](/ai/synthesia#decision-card) · [runway](/ai/runway#decision-card)",
+    "zh": "如果团队持续制作数字人营销、培训、销售或本地化视频，并能在发布前逐条人工验收，可以考虑 HeyGen。先用一份代表性脚本、一个已获授权的肖像和一种目标语言试用，记录通过验收的分钟数、重生成、修正、交付时间与 credits。若真人直接录制更快、团队无法保存肖像授权，或在测试不同数字人模型前就必须锁定成本，则不太适合。\n\n2026-09-20 套餐核验：Free 为 0 美元，每月 3 个视频且每个最长 1 分钟；Creator 月付 29 美元、600 credits、最长 30 分钟、1080p、声音克隆和 175+ 语言及方言，官方页面显示年付折算每月 24 美元；Pro 月付从 49 美元起、1,000 credits、4K 并支持编辑翻译脚本；Business 月付 149 美元、1,500 credits、最长 60 分钟、5 个自定义视频数字人、SAML/SSO，额外席位每月每席 20 美元；Enterprise 询价。价格、税费、地区显示和 credits 档位可能变化，应以结账页为准，不能把本快照视为报价。[官方价格](https://www.heygen.com/pricing)。\n\n付费网页套餐目前把 credits 作为视频和素材生成的共享计量单位。不同模型、时长和复杂度的消耗不同，因此 600 或 1,000 credits 不能直接等于固定的验收成品分钟数。月付未用 credits 在订阅持续有效时可再结转一个月；年付 credits 可累积到续费日；取消后不再结转。价格页还说明 Pro 可从每月 49 美元/1,000 credits 扩到 4,300 美元/100,000 credits，Business 可购买一次性补充包或自动充值。应按验收成品和使用记录核算，不要只看套餐名称。[价格与 credits FAQ](https://www.heygen.com/pricing)。\n\n网页订阅和开发者 API 不是可互换的一份额度。API key 工作流使用自助 PAYG 或 Enterprise API 计费，而 OAuth 或连接后的产品入口可能消耗用户网页订阅 credits。公开 API 仪表盘是逐操作价格来源，自助入口最低 5 美元；由于具体费率在账户内展示且容易变化，本页不把它复制成长期费率表。生产前必须确认认证方式、实际付款方、钱包告警和失败处理。[开发者快速开始](https://developers.heygen.com/docs/quick-start) · [API 价格](https://app.heygen.com/developers/api?modal=pricing)。\n\nAPI 当前文档写明 PAYG 包含 10 个并发工作流，Enterprise 包含 20 个，并可按合同价 1.5 倍启用最多额外 50 个 burst 工作流；超过限制会返回含 Retry-After 的 429。输入输出也有边界：数字人脚本最多 5,000 字符、音频输入最长 10 分钟、单个 avatar 或 image 场景最长 30 分钟。并发上限不等于延迟承诺，应实现轮询或 webhook、幂等任务记录、退避、预算告警与备用交付路径。[使用限制](https://developers.heygen.com/docs/usage-limits)。\n\n基于视频的 Digital Twin 需要被展示者同意。HeyGen 托管流程要求本人录制同意声明；Enterprise 可上传预录同意视频，更窄的 Enterprise 路径可在签署 indemnity agreement 后跳过平台流程。照片或提示词数字人没有相同 API 同意步骤，但官方文档明确说明，没有步骤并不代表获得肖像使用许可。仍需保存站外书面授权，限制数字人与 API 访问，按要求披露合成内容，并准备冒充事件响应。[数字人同意 API](https://developers.heygen.com/docs/avatar-consent) · [同意录制指南](https://help.heygen.com/en/articles/12092609-recording-your-consent-video)。\n\n不同套餐的数据默认值不同。HeyGen 表示 Enterprise 客户数据默认不用于模型训练；非 Enterprise 客户数据可能用于模型改进，除非通过指定隐私邮箱退出。条款同时授予平台为提供、改进服务和开发模型而处理客户内容的广泛许可，底层权利责任仍由用户承担。不能把 Enterprise 控制泛化到 Creator、Pro 或 Business。上传员工、客户或机密素材前，应核对所选套餐、退出记录、留存、删除、子处理商及地区要求。[安全](https://www.heygen.com/security) · [隐私](https://www.heygen.com/privacy) · [条款](https://www.heygen.com/terms)。\n\n当前条款下，Creator、Pro 与 Business 用户保留输入和输出权利，并可商业使用符合条件的输出，但仍需负责脚本、图片、录音、音乐、商标和肖像授权；Free 输出仅限个人、非商业及内部评估。生成内容不保证唯一、准确或无错误，对外分发合成内容时可能需要披露。姓名、数字、发音、口型、时序、动作、无障碍、事实主张和文化语境仍必须人工复核。[条款与输出权利](https://www.heygen.com/terms)。\n\n独立证据说明它存在真实选择价值，但不保证效果。G2 有大量客户反馈；Axios 的亲测认为数字人有说服力，同时记录了姓名发音问题与深度伪造风险。近期用户还报告 credits 以及地区或账户特定的 Avatar V 扣费差异；这些报告不作为官方价格，但支持团队在扩大使用前检查账户内 Usage History。[G2 评论](https://www.g2.com/products/heygen/reviews) · [Axios 亲测](https://www.axios.com/2023/09/01/personal-deepfake-ai-video-avatar) · [近期 credits 差异报告](https://www.reddit.com/r/heygen/comments/1wi838j/update_heygen_says_my_70_creditsminute_avatar_v/)。\n\n素材说明：本条目的蓝色 Hg 图形由 AI Best Tool 制作，只是编辑识别图，不是 HeyGen 官方 Logo、产品截图或本站实测输出。产品事实应以链接的 HeyGen 官方页面为准。\n\n比较路径：[synthesia](/cn/ai/synthesia#decision-card) · [runway](/cn/ai/runway#decision-card)",
+    "cn": "如果团队持续制作数字人营销、培训、销售或本地化视频，并能在发布前逐条人工验收，可以考虑 HeyGen。先用一份代表性脚本、一个已获授权的肖像和一种目标语言试用，记录通过验收的分钟数、重生成、修正、交付时间与 credits。若真人直接录制更快、团队无法保存肖像授权，或在测试不同数字人模型前就必须锁定成本，则不太适合。\n\n2026-09-20 套餐核验：Free 为 0 美元，每月 3 个视频且每个最长 1 分钟；Creator 月付 29 美元、600 credits、最长 30 分钟、1080p、声音克隆和 175+ 语言及方言，官方页面显示年付折算每月 24 美元；Pro 月付从 49 美元起、1,000 credits、4K 并支持编辑翻译脚本；Business 月付 149 美元、1,500 credits、最长 60 分钟、5 个自定义视频数字人、SAML/SSO，额外席位每月每席 20 美元；Enterprise 询价。价格、税费、地区显示和 credits 档位可能变化，应以结账页为准，不能把本快照视为报价。[官方价格](https://www.heygen.com/pricing)。\n\n付费网页套餐目前把 credits 作为视频和素材生成的共享计量单位。不同模型、时长和复杂度的消耗不同，因此 600 或 1,000 credits 不能直接等于固定的验收成品分钟数。月付未用 credits 在订阅持续有效时可再结转一个月；年付 credits 可累积到续费日；取消后不再结转。价格页还说明 Pro 可从每月 49 美元/1,000 credits 扩到 4,300 美元/100,000 credits，Business 可购买一次性补充包或自动充值。应按验收成品和使用记录核算，不要只看套餐名称。[价格与 credits FAQ](https://www.heygen.com/pricing)。\n\n网页订阅和开发者 API 不是可互换的一份额度。API key 工作流使用自助 PAYG 或 Enterprise API 计费，而 OAuth 或连接后的产品入口可能消耗用户网页订阅 credits。公开 API 仪表盘是逐操作价格来源，自助入口最低 5 美元；由于具体费率在账户内展示且容易变化，本页不把它复制成长期费率表。生产前必须确认认证方式、实际付款方、钱包告警和失败处理。[开发者快速开始](https://developers.heygen.com/docs/quick-start) · [API 价格](https://app.heygen.com/developers/api?modal=pricing)。\n\nAPI 当前文档写明 PAYG 包含 10 个并发工作流，Enterprise 包含 20 个，并可按合同价 1.5 倍启用最多额外 50 个 burst 工作流；超过限制会返回含 Retry-After 的 429。输入输出也有边界：数字人脚本最多 5,000 字符、音频输入最长 10 分钟、单个 avatar 或 image 场景最长 30 分钟。并发上限不等于延迟承诺，应实现轮询或 webhook、幂等任务记录、退避、预算告警与备用交付路径。[使用限制](https://developers.heygen.com/docs/usage-limits)。\n\n基于视频的 Digital Twin 需要被展示者同意。HeyGen 托管流程要求本人录制同意声明；Enterprise 可上传预录同意视频，更窄的 Enterprise 路径可在签署 indemnity agreement 后跳过平台流程。照片或提示词数字人没有相同 API 同意步骤，但官方文档明确说明，没有步骤并不代表获得肖像使用许可。仍需保存站外书面授权，限制数字人与 API 访问，按要求披露合成内容，并准备冒充事件响应。[数字人同意 API](https://developers.heygen.com/docs/avatar-consent) · [同意录制指南](https://help.heygen.com/en/articles/12092609-recording-your-consent-video)。\n\n不同套餐的数据默认值不同。HeyGen 表示 Enterprise 客户数据默认不用于模型训练；非 Enterprise 客户数据可能用于模型改进，除非通过指定隐私邮箱退出。条款同时授予平台为提供、改进服务和开发模型而处理客户内容的广泛许可，底层权利责任仍由用户承担。不能把 Enterprise 控制泛化到 Creator、Pro 或 Business。上传员工、客户或机密素材前，应核对所选套餐、退出记录、留存、删除、子处理商及地区要求。[安全](https://www.heygen.com/security) · [隐私](https://www.heygen.com/privacy) · [条款](https://www.heygen.com/terms)。\n\n当前条款下，Creator、Pro 与 Business 用户保留输入和输出权利，并可商业使用符合条件的输出，但仍需负责脚本、图片、录音、音乐、商标和肖像授权；Free 输出仅限个人、非商业及内部评估。生成内容不保证唯一、准确或无错误，对外分发合成内容时可能需要披露。姓名、数字、发音、口型、时序、动作、无障碍、事实主张和文化语境仍必须人工复核。[条款与输出权利](https://www.heygen.com/terms)。\n\n独立证据说明它存在真实选择价值，但不保证效果。G2 有大量客户反馈；Axios 的亲测认为数字人有说服力，同时记录了姓名发音问题与深度伪造风险。近期用户还报告 credits 以及地区或账户特定的 Avatar V 扣费差异；这些报告不作为官方价格，但支持团队在扩大使用前检查账户内 Usage History。[G2 评论](https://www.g2.com/products/heygen/reviews) · [Axios 亲测](https://www.axios.com/2023/09/01/personal-deepfake-ai-video-avatar) · [近期 credits 差异报告](https://www.reddit.com/r/heygen/comments/1wi838j/update_heygen_says_my_70_creditsminute_avatar_v/)。\n\n素材说明：本条目的蓝色 Hg 图形由 AI Best Tool 制作，只是编辑识别图，不是 HeyGen 官方 Logo、产品截图或本站实测输出。产品事实应以链接的 HeyGen 官方页面为准。\n\n比较路径：[synthesia](/cn/ai/synthesia#decision-card) · [runway](/cn/ai/runway#decision-card)"
+  },
+  "imageUrl": "/icons/tool-logos/heygen.svg",
+  "thumbnailUrl": "/images/tool-media/heygen-cover.svg",
+  "tags": ["ai-avatar", "video-generation", "video-translation"],
+  "features": {
+    "audience": {
+      "bestFit": {
+        "en": ["Teams producing repeatable presenter-led business videos", "Localization teams able to review every translated output", "Developers operating metered asynchronous video workflows"],
+        "zh": ["持续制作数字人商务视频的团队", "能够逐条复核翻译成品的本地化团队", "能运营计量式异步视频工作流的开发团队"],
+        "cn": ["持续制作数字人商务视频的团队", "能够逐条复核翻译成品的本地化团队", "能运营计量式异步视频工作流的开发团队"]
+      },
+      "notIdealFor": {
+        "en": ["Teams unable to document likeness and voice permission", "One-off messages that are faster to record with a real presenter", "Projects requiring fixed approved-minute cost before model testing"],
+        "zh": ["无法记录肖像和声音授权的团队", "真人直接录制更快的一次性消息", "模型测试前就要求锁定成品分钟成本的项目"],
+        "cn": ["无法记录肖像和声音授权的团队", "真人直接录制更快的一次性消息", "模型测试前就要求锁定成品分钟成本的项目"]
+      }
+    },
+    "editorial": {
+      "reviewedAt": "2026-09-20",
+      "reviewedBy": "AI Best Tool editorial",
+      "sourceUrl": "https://www.heygen.com/pricing",
+      "summary": {
+        "en": "Web pricing, credits, API separation, consent, training defaults, rights and production limits were rechecked on September 20, 2026.",
+        "zh": "已于 2026-09-20 复核网页价格、credits、API 分账、同意、训练默认值、权利与生产限制。",
+        "cn": "已于 2026-09-20 复核网页价格、credits、API 分账、同意、训练默认值、权利与生产限制。"
+      },
+      "trustNote": {
+        "en": "Public-document review only. No account checkout, avatar training or production render test was performed.",
+        "zh": "本次仅复核公开资料，未进行账户结账、数字人训练或生产渲染实测。",
+        "cn": "本次仅复核公开资料，未进行账户结账、数字人训练或生产渲染实测。"
+      }
+    },
+    "decision": {
+      "compareAxes": {
+        "en": ["Accepted avatar quality and correction effort", "Credits per approved minute by model", "Likeness consent and access controls", "Translation review and pronunciation", "Web subscription versus API payer", "Training, retention and Enterprise controls"],
+        "zh": ["验收数字人质量与修正成本", "不同模型的成品分钟 credits", "肖像同意与访问控制", "翻译复核与发音", "网页订阅与 API 付款方", "训练、留存与 Enterprise 控制"],
+        "cn": ["验收数字人质量与修正成本", "不同模型的成品分钟 credits", "肖像同意与访问控制", "翻译复核与发音", "网页订阅与 API 付款方", "训练、留存与 Enterprise 控制"]
+      },
+      "limitations": {
+        "en": ["Credits do not map to one fixed amount of approved video.", "Web and API billing must be budgeted separately.", "A platform consent step does not replace documented likeness permission.", "Photo and prompt avatars can lack an API consent step but still require rights.", "Non-Enterprise content may be used for model improvement unless opted out.", "Free output is not licensed for commercial use under the current Terms.", "Translation, pronunciation, lip sync and factual claims require human review.", "Concurrency is a ceiling, not a render-time guarantee."],
+        "zh": ["credits 不能稳定换算为固定数量的验收视频。", "网页端与 API 计费必须分别预算。", "平台同意步骤不能替代可追溯肖像授权。", "照片和提示词数字人即使没有 API 同意步骤也仍需权利。", "非 Enterprise 内容可能用于模型改进，除非完成退出。", "当前条款下 Free 输出不得商业使用。", "翻译、发音、口型与事实主张需要人工复核。", "并发只是上限，不是渲染时间保证。"],
+        "cn": ["credits 不能稳定换算为固定数量的验收视频。", "网页端与 API 计费必须分别预算。", "平台同意步骤不能替代可追溯肖像授权。", "照片和提示词数字人即使没有 API 同意步骤也仍需权利。", "非 Enterprise 内容可能用于模型改进，除非完成退出。", "当前条款下 Free 输出不得商业使用。", "翻译、发音、口型与事实主张需要人工复核。", "并发只是上限，不是渲染时间保证。"]
+      },
+      "pricingSummary": {
+        "en": "Measure credits against accepted output; keep web subscription and API billing separate.",
+        "zh": "按验收成品核算 credits，并将网页订阅与 API 计费分开。",
+        "cn": "按验收成品核算 credits，并将网页订阅与 API 计费分开。"
+      },
+      "officialSummary": {
+        "en": "Verify the linked plan, API, consent, security, privacy and terms pages for the chosen workflow.",
+        "zh": "按具体工作流核对所链接的套餐、API、同意、安全、隐私与条款页面。",
+        "cn": "按具体工作流核对所链接的套餐、API、同意、安全、隐私与条款页面。"
+      },
+      "freshnessSummary": {
+        "en": "Reviewed September 20, 2026. Next fact review: October 20, 2026.",
+        "zh": "核验于 2026-09-20；下次事实复核为 2026-10-20。",
+        "cn": "核验于 2026-09-20；下次事实复核为 2026-10-20。"
+      },
+      "mediaSummary": {
+        "en": "Editorial identifier only; not an official logo, screenshot or tested-output sample.",
+        "zh": "仅为编辑识别图，不是官方 Logo、截图或本站实测输出。",
+        "cn": "仅为编辑识别图，不是官方 Logo、截图或本站实测输出。"
+      },
+      "communitySummary": {
+        "en": "Independent review and user reports support the decision boundaries, not guaranteed performance or official pricing.",
+        "zh": "独立评论与用户报告只支持决策边界，不代表效果保证或官方价格。",
+        "cn": "独立评论与用户报告只支持决策边界，不代表效果保证或官方价格。"
+      },
+      "alternatives": [
+        {"slug": "synthesia", "reason": {"en": "Compare training and enterprise localization governance.", "zh": "比较培训与企业本地化治理。", "cn": "比较培训与企业本地化治理。"}},
+        {"slug": "runway", "reason": {"en": "Compare generative scene control against presenter-led production.", "zh": "比较生成式镜头控制与数字人讲解生产。", "cn": "比较生成式镜头控制与数字人讲解生产。"}}
+      ]
+    },
+    "pricingSnapshot": {
+      "checkedAt": "2026-09-20",
+      "sourceUrls": ["https://www.heygen.com/pricing", "https://app.heygen.com/developers/api?modal=pricing", "https://developers.heygen.com/docs/usage-limits"],
+      "summary": {
+        "en": "Web plans use shared credits; API-key production uses separate self-serve PAYG or Enterprise billing, while OAuth can draw on web subscription credits.",
+        "zh": "网页套餐使用共享 credits；API key 生产使用独立自助 PAYG 或 Enterprise 计费，OAuth 则可能消耗网页订阅 credits。",
+        "cn": "网页套餐使用共享 credits；API key 生产使用独立自助 PAYG 或 Enterprise 计费，OAuth 则可能消耗网页订阅 credits。"
+      },
+      "conflicts": ["Account or regional Avatar V charges reported by users can differ from public documentation; treat usage history as the operational source.", "Per-operation API rates are account-visible and volatile, so they are linked rather than copied as a durable table."]
+    },
+    "evidence": {
+      "checkedAt": "2026-09-20",
+      "official": [
+        {"label": "Pricing", "url": "https://www.heygen.com/pricing", "checkedAt": "2026-09-20"},
+        {"label": "Developer quick start", "url": "https://developers.heygen.com/docs/quick-start", "checkedAt": "2026-09-20"},
+        {"label": "API pricing", "url": "https://app.heygen.com/developers/api?modal=pricing", "checkedAt": "2026-09-20"},
+        {"label": "Usage limits", "url": "https://developers.heygen.com/docs/usage-limits", "checkedAt": "2026-09-20"},
+        {"label": "Avatar consent", "url": "https://developers.heygen.com/docs/avatar-consent", "checkedAt": "2026-09-20"},
+        {"label": "Consent recording", "url": "https://help.heygen.com/en/articles/12092609-recording-your-consent-video", "checkedAt": "2026-09-20"},
+        {"label": "Security", "url": "https://www.heygen.com/security", "checkedAt": "2026-09-20"},
+        {"label": "Privacy", "url": "https://www.heygen.com/privacy", "checkedAt": "2026-09-20"},
+        {"label": "Terms", "url": "https://www.heygen.com/terms", "checkedAt": "2026-09-20"}
+      ],
+      "independent": [
+        {"label": "G2 reviews", "url": "https://www.g2.com/products/heygen/reviews", "checkedAt": "2026-09-20"},
+        {"label": "Axios hands-on report", "url": "https://www.axios.com/2023/09/01/personal-deepfake-ai-video-avatar", "checkedAt": "2026-09-20"},
+        {"label": "Recent credit discrepancy report", "url": "https://www.reddit.com/r/heygen/comments/1wi838j/update_heygen_says_my_70_creditsminute_avatar_v/", "checkedAt": "2026-09-20"}
+      ]
+    },
+    "media": {
+      "assets": [
+        {"path": "/icons/tool-logos/heygen.svg", "url": "local-editorial-asset", "sourcePage": "https://www.heygen.com/", "checkedAt": "2026-09-20", "sha256": "029cbc240a853261c961406847db47cce6862dea4ef427ba64b9f5fe95a86c5a", "usageBasis": "AI Best Tool-created Hg identifier used to avoid copying or implying permission to use official brand artwork; it is explicitly disclosed as non-official.", "type": "editorial_identifier", "isProductScreenshot": false},
+        {"path": "/images/tool-media/heygen-cover.svg", "url": "local-editorial-asset", "sourcePage": "https://www.heygen.com/", "checkedAt": "2026-09-20", "sha256": "c6d184958f4acb72259603f708a977bb810aaa4fdc6b90bcc63db304427385bb", "usageBasis": "AI Best Tool-created overview card with no copied product UI; used only as a neutral listing image and explicitly not treated as output evidence.", "type": "editorial_identifier", "isProductScreenshot": false}
+      ]
+    },
+    "marketValidation": {
+      "reviewedAt": "2026-09-20",
+      "score": 94,
+      "scores": {"marketDurability": 24, "independentAdoption": 23, "decisionValue": 24, "evidenceQuality": 23},
+      "verdict": "validated",
+      "rationale": {
+        "en": "Maintained web and developer products, broad independent feedback and material consent, billing and governance choices support an editorial decision page; this does not approve indexing.",
+        "zh": "持续维护的网页端和开发者产品、广泛独立反馈，以及重要的同意、计费和治理选择支持建立编辑决策页；此结论不批准索引。",
+        "cn": "持续维护的网页端和开发者产品、广泛独立反馈，以及重要的同意、计费和治理选择支持建立编辑决策页；此结论不批准索引。"
+      },
+      "strongSignals": ["Current official web and developer documentation covers multiple maintained video workflows.", "Independent review channels contain sustained business and creator feedback.", "Pricing, consent, privacy and API boundaries create meaningful pre-purchase decisions."],
+      "evidenceUrls": ["https://www.g2.com/products/heygen/reviews", "https://www.axios.com/2023/09/01/personal-deepfake-ai-video-avatar", "https://www.reddit.com/r/heygen/comments/1wi838j/update_heygen_says_my_70_creditsminute_avatar_v/"]
+    },
+    "release": {"scheduledSlot": "2026-09-14", "reviewedAt": "2026-09-20", "executionType": "delayed_makeup", "label": "延期补发", "indexState": "monitor", "sitemapChangeApproved": false, "nextReviewDate": "2026-10-20"}
+  },
+  "useCases": {
+    "en": ["Trial one approved presenter script and compare accepted output, revisions and credits", "Validate translation, consent, privacy and API payer before production scale"],
+    "zh": ["用一份已授权讲解脚本比较验收成品、修改与 credits", "扩大生产前核验翻译、同意、隐私与 API 付款方"],
+    "cn": ["用一份已授权讲解脚本比较验收成品、修改与 credits", "扩大生产前核验翻译、同意、隐私与 API 付款方"]
+  }
+}

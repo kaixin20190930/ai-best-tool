@@ -83,6 +83,12 @@ const candidates: Candidate[] = [
     domain: 'elevenlabs.io',
     preauditFile: 'elevenlabs-preaudit-2026-09-09.json',
   },
+  {
+    slug: 'heygen',
+    aliases: ['heygen', 'hey-gen'],
+    domain: 'heygen.com',
+    preauditFile: 'heygen-preaudit-2026-09-09.json',
+  },
 ];
 
 function parseArgs(args: string[]) {
