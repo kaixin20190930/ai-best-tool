@@ -52,7 +52,7 @@ REVOKE ALL ON TABLE public.decision_metric_daily_rollups FROM PUBLIC, anon, auth
 REVOKE ALL ON TABLE public.decision_metric_operation_audits FROM PUBLIC, anon, authenticated, service_role;
 REVOKE ALL ON SEQUENCE public.decision_metric_operation_audits_id_seq FROM PUBLIC, anon, authenticated, service_role;
 
-CREATE OR REPLACE FUNCTION public.maintain_decision_metric_events(p_now TIMESTAMPTZ DEFAULT NOW())
+CREATE OR REPLACE FUNCTION public.maintain_decision_metric_events()
 RETURNS TABLE (
   status_code TEXT,
   rolled_up_rows BIGINT,
@@ -64,8 +64,10 @@ SECURITY DEFINER
 SET search_path = public, pg_temp
 AS $$
 DECLARE
-  v_started_at TIMESTAMPTZ := clock_timestamp();
-  v_raw_window_end TIMESTAMPTZ := p_now - INTERVAL '35 days';
+  v_now TIMESTAMPTZ := clock_timestamp();
+  v_started_at TIMESTAMPTZ := v_now;
+  v_raw_window_end TIMESTAMPTZ :=
+    date_trunc('day', v_now AT TIME ZONE 'UTC' - INTERVAL '35 days') AT TIME ZONE 'UTC';
   v_rolled_up BIGINT := 0;
   v_deleted_raw BIGINT := 0;
   v_deleted_rollups BIGINT := 0;
@@ -84,7 +86,7 @@ BEGIN
     updated_at
   )
   SELECT
-    received_at::DATE,
+    (received_at AT TIME ZONE 'UTC')::DATE,
     event_name,
     event_version,
     locale,
@@ -93,12 +95,12 @@ BEGIN
     tool_id,
     COUNT(*),
     COUNT(DISTINCT flow_instance_hash),
-    (received_at::DATE + INTERVAL '400 days'),
-    p_now
+    ((received_at AT TIME ZONE 'UTC')::DATE + INTERVAL '400 days') AT TIME ZONE 'UTC',
+    v_now
   FROM public.decision_metric_events
   WHERE traffic_quality = 'human'
-    AND received_at <= v_raw_window_end
-  GROUP BY received_at::DATE, event_name, event_version, locale, surface, task_id, tool_id
+    AND received_at < v_raw_window_end
+  GROUP BY (received_at AT TIME ZONE 'UTC')::DATE, event_name, event_version, locale, surface, task_id, tool_id
   ON CONFLICT (
     metric_day,
     event_name,
@@ -114,14 +116,14 @@ BEGIN
     updated_at = EXCLUDED.updated_at;
   GET DIAGNOSTICS v_rolled_up = ROW_COUNT;
 
-  DELETE FROM public.decision_metric_events WHERE received_at <= v_raw_window_end;
+  DELETE FROM public.decision_metric_events WHERE received_at < v_raw_window_end;
   GET DIAGNOSTICS v_deleted_raw = ROW_COUNT;
 
-  DELETE FROM public.decision_metric_daily_rollups WHERE expires_at <= p_now;
+  DELETE FROM public.decision_metric_daily_rollups WHERE expires_at <= v_now;
   GET DIAGNOSTICS v_deleted_rollups = ROW_COUNT;
 
   DELETE FROM public.decision_metric_operation_audits
-  WHERE started_at < p_now - INTERVAL '90 days';
+  WHERE started_at < v_now - INTERVAL '90 days';
 
   INSERT INTO public.decision_metric_operation_audits (
     started_at,
@@ -143,6 +145,9 @@ BEGIN
 
   RETURN QUERY SELECT 'completed'::TEXT, v_rolled_up, v_deleted_raw, v_deleted_rollups;
 EXCEPTION WHEN OTHERS THEN
+  DELETE FROM public.decision_metric_operation_audits
+  WHERE started_at < v_now - INTERVAL '90 days';
+
   INSERT INTO public.decision_metric_operation_audits (
     started_at,
     completed_at,
@@ -180,7 +185,7 @@ SET search_path = public, pg_temp
 AS $$
   WITH combined AS (
     SELECT
-      received_at::DATE AS metric_day,
+      (received_at AT TIME ZONE 'UTC')::DATE AS metric_day,
       event_name,
       locale,
       surface,
@@ -190,8 +195,8 @@ AS $$
       COUNT(DISTINCT flow_instance_hash)::BIGINT AS unique_human_flows
     FROM public.decision_metric_events
     WHERE traffic_quality = 'human'
-      AND received_at::DATE BETWEEN p_start_date AND p_end_date
-    GROUP BY received_at::DATE, event_name, locale, surface, task_id, tool_id
+      AND (received_at AT TIME ZONE 'UTC')::DATE BETWEEN p_start_date AND p_end_date
+    GROUP BY (received_at AT TIME ZONE 'UTC')::DATE, event_name, locale, surface, task_id, tool_id
     UNION ALL
     SELECT
       metric_day,
@@ -238,14 +243,14 @@ AS $$
   ORDER BY totals.metric_day, totals.event_name, totals.locale, totals.surface, totals.task_id, totals.tool_id;
 $$;
 
-REVOKE ALL ON FUNCTION public.maintain_decision_metric_events(TIMESTAMPTZ) FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.maintain_decision_metric_events() FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION public.read_decision_metric_daily_summary(DATE, DATE) FROM PUBLIC, anon, authenticated;
-GRANT EXECUTE ON FUNCTION public.maintain_decision_metric_events(TIMESTAMPTZ) TO service_role;
+GRANT EXECUTE ON FUNCTION public.maintain_decision_metric_events() TO service_role;
 GRANT EXECUTE ON FUNCTION public.read_decision_metric_daily_summary(DATE, DATE) TO service_role;
 
 COMMENT ON TABLE public.decision_metric_daily_rollups IS
   'MEASURE-02 daily human-only aggregates. Contains no flow hash or visitor identifier; retained for 400 days.';
 COMMENT ON TABLE public.decision_metric_operation_audits IS
   'MEASURE-02 bounded operation audit. Stores status codes and row counts only; retained for 90 days.';
-COMMENT ON FUNCTION public.maintain_decision_metric_events(TIMESTAMPTZ) IS
+COMMENT ON FUNCTION public.maintain_decision_metric_events() IS
   'Roll up expired human events, delete raw events after 35 days, and prune aggregate/audit retention.';

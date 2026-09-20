@@ -68,6 +68,36 @@ assert.deepEqual(blockedPage.blockers, [
   { code: 'verified_evidence_missing', path: '/ai/fireflies' },
 ]);
 
+const missingEvidenceCount = evaluateDecisionEventPilot({
+  collectionEnabled: true,
+  foundationMigrationApplied: true,
+  governanceMigrationApplied: true,
+  retentionOperationConfigured: true,
+  aggregateReaderConfigured: true,
+  internalTrafficExclusionReady: true,
+  activeTaskSlugs: ['meeting-notes'],
+  pages: {
+    ...pageEvidence,
+    '/ai/fireflies': { routeExists: true, publishedEntity: true } as never,
+  },
+});
+assert.deepEqual(missingEvidenceCount.blockers, [{ code: 'verified_evidence_missing', path: '/ai/fireflies' }]);
+
+const invalidEvidenceCount = evaluateDecisionEventPilot({
+  collectionEnabled: true,
+  foundationMigrationApplied: true,
+  governanceMigrationApplied: true,
+  retentionOperationConfigured: true,
+  aggregateReaderConfigured: true,
+  internalTrafficExclusionReady: true,
+  activeTaskSlugs: ['meeting-notes'],
+  pages: {
+    ...pageEvidence,
+    '/ai/fireflies': { routeExists: true, publishedEntity: true, verifiedEvidenceCount: Number.NaN },
+  },
+});
+assert.deepEqual(invalidEvidenceCount.blockers, [{ code: 'verified_evidence_missing', path: '/ai/fireflies' }]);
+
 const ready = evaluateDecisionEventPilot({
   collectionEnabled: true,
   foundationMigrationApplied: true,
@@ -83,18 +113,31 @@ assert.deepEqual(ready.blockers, []);
 
 for (const requiredSql of [
   "INTERVAL '35 days'",
+  "date_trunc('day', v_now AT TIME ZONE 'UTC'",
+  "(received_at AT TIME ZONE 'UTC')::DATE",
   "INTERVAL '400 days'",
   "INTERVAL '90 days'",
   "traffic_quality = 'human'",
-  'received_at <= v_raw_window_end',
+  'received_at < v_raw_window_end',
   'unique_human_flows >= 20',
   "'insufficient_data'",
   'FORCE ROW LEVEL SECURITY',
   'REVOKE ALL ON TABLE public.decision_metric_daily_rollups FROM PUBLIC, anon, authenticated, service_role',
-  'GRANT EXECUTE ON FUNCTION public.maintain_decision_metric_events(TIMESTAMPTZ) TO service_role',
+  'GRANT EXECUTE ON FUNCTION public.maintain_decision_metric_events() TO service_role',
 ]) {
   assert.ok(migration.includes(requiredSql), `Governance migration is missing: ${requiredSql}`);
 }
+
+assert.equal(
+  migration.includes('maintain_decision_metric_events(p_now'),
+  false,
+  'The service-role maintenance entry point must not accept a caller-controlled clock.',
+);
+assert.equal(
+  migration.match(/started_at < v_now - INTERVAL '90 days'/g)?.length,
+  2,
+  'Both success and failure paths must prune operation audits.',
+);
 
 for (const forbiddenSql of ['user_agent', 'referrer', 'ip_address', 'flow_instance_hash TEXT']) {
   assert.equal(

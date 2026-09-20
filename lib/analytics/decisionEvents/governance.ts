@@ -118,7 +118,10 @@ export function evaluateDecisionEventPilot(input: DecisionEventPilotPreflightInp
       if (page.requiresPublishedEntity && !evidence.publishedEntity) {
         pageBlockers.push({ code: 'published_entity_missing', path: page.path });
       }
-      if (page.requiresVerifiedEvidence && evidence.verifiedEvidenceCount < 1) {
+      if (
+        page.requiresVerifiedEvidence &&
+        (!Number.isSafeInteger(evidence.verifiedEvidenceCount) || evidence.verifiedEvidenceCount < 1)
+      ) {
         pageBlockers.push({ code: 'verified_evidence_missing', path: page.path });
       }
       return pageBlockers;
