@@ -5,6 +5,7 @@
     "../app/actions/decisionMetrics.ts",
     "../lib/analytics/decisionEvents/**/*.ts",
     "test-decision-event-foundation.ts",
+    "test-measure-02-governance.ts",
     "test-measure-01-freeze.ts"
   ]
 }

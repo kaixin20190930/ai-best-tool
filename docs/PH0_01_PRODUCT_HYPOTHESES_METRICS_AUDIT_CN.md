@@ -43,7 +43,7 @@
 
 MEASURE-01 已按本节建立默认关闭的强类型接收、内存 flow、服务端幂等、流量排除与未执行迁移候选，详见[决策事件隐私基础层](./MEASURE_01_DECISION_EVENT_FOUNDATION_CN.md)。该状态不改变 PH0-01 的审计结论：页面尚未接入事件，迁移未执行，生产采集关闭，没有真实样本或 Pilot 结果。
 
-共同规则：事件名固定小写；仅接受 allowlist 字段；客户端先生成 30 分钟滚动的内存 `flow_instance_id`（刷新即失效，不持久化、不写 cookie）；服务端按 `event_name + flow_instance_id + object_id + 30 分钟 bucket` 幂等。事件接收端在入库前丢弃已知 bot UA、预览/本地/health 请求和内部 allowlist 流量；对无法可靠识别的自动流量标为 `traffic_quality=unknown` 并排除主指标。主指标分母只含 `traffic_quality=human`。保留期、访问权和聚合阈值须由 Privacy Owner 在实施前确认。
+共同规则：事件名固定小写；仅接受 allowlist 字段；客户端先生成 30 分钟滚动的内存 `flow_instance_id`（刷新即失效，不持久化、不写 cookie）；服务端按 `event_name + flow_instance_id + object_id + 30 分钟 bucket` 幂等。事件接收端在入库前丢弃已知 bot UA、预览/本地/health 请求和内部 allowlist 流量；对无法可靠识别的自动流量标为 `traffic_quality=unknown` 并排除主指标。主指标分母只含 `traffic_quality=human`。MEASURE-02 已将治理边界确定为原始 35 天、日聚合 400 天、操作审计 90 天和至少 20 个 human flow 才可报告；详见[治理与 Pilot 边界](./MEASURE_02_DATA_GOVERNANCE_AND_PILOT_CN.md)。迁移仍未执行，生产采集仍关闭。
 
 | 事件 | 触发条件与分子 / 分母 | 必要字段（均为枚举或 ID） | 来源页面 | 去重与验收 |
 | --- | --- | --- | --- | --- |
@@ -70,7 +70,7 @@ MEASURE-01 已按本节建立默认关闭的强类型接收、内存 flow、服�
 | 结构化能力 | 有已审核 `decision_task`、constraint schema 与 fit 的必要字段完成率 | 需任务/fit 只读导出；当前 **unknown**。 |
 | Evidence 可得性 | 可支撑 cost/setup/privacy/export/limitation 中至少三类的有效 verified claim 工具占比 | 需 Evidence Ledger 只读导出；当前 **unknown**。 |
 
-因此首个簇结论为 **unknown / BLOCKED**；不能因项目存在 AI Coding 页面、Codex Trial 或历史候选而擅自选择“AI Coding”。
+因此评分模型的首个簇结论仍为 **unknown / BLOCKED**；不能因项目存在 AI Coding 页面、Codex Trial 或历史候选而擅自声称数据证明某簇。MEASURE-02 仅把“会议记录与会后行动”登记为受控操作 Pilot 候选，必须通过 active task、实体和 verified evidence 生产 preflight 后才可启动；这不是评分结论。
 
 ## 6. 依赖图、Pilot 与 14/28 天 Gate
 

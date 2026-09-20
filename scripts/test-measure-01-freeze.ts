@@ -29,16 +29,20 @@ const { base, head } = resolveMeasureScope();
 const allowed = new Set([
   'app/actions/decisionMetrics.ts',
   'db/supabase/migrations/20260920_decision_metric_events.sql',
+  'db/supabase/migrations/20260920_decision_metric_governance.sql',
   'docs/MASTER_OPTIMIZATION_TRACKER_CN.md',
   'docs/MEASURE_01_DECISION_EVENT_FOUNDATION_CN.md',
+  'docs/MEASURE_02_DATA_GOVERNANCE_AND_PILOT_CN.md',
   'docs/PH0_01_PRODUCT_HYPOTHESES_METRICS_AUDIT_CN.md',
   'lib/analytics/decisionEvents/contract.ts',
   'lib/analytics/decisionEvents/flow.ts',
   'lib/analytics/decisionEvents/ingest.ts',
+  'lib/analytics/decisionEvents/governance.ts',
   'lib/analytics/decisionEvents/repository.ts',
   'package.json',
   'scripts/test-decision-event-foundation.ts',
   'scripts/test-measure-01-freeze.ts',
+  'scripts/test-measure-02-governance.ts',
   'scripts/tsconfig.decision-events.json',
 ]);
 const tracked = execFileSync('git', ['diff', '--name-only', base, head, '--'], { encoding: 'utf8' });
@@ -63,7 +67,12 @@ for (const frozen of ['app/sitemap.ts', 'middleware.ts', 'lib/seo']) {
 
 const originalPackage = JSON.parse(execFileSync('git', ['show', `${base}:package.json`], { encoding: 'utf8' }));
 const currentPackage = JSON.parse(readFileSync('package.json', 'utf8'));
-for (const name of ['test:decision-events', 'test:measure-01-freeze', 'typecheck:decision-events']) {
+for (const name of [
+  'test:decision-events',
+  'test:measure-01-freeze',
+  'test:measure-02-governance',
+  'typecheck:decision-events',
+]) {
   delete currentPackage.scripts[name];
 }
 assert.deepEqual(currentPackage, originalPackage, 'Only MEASURE-01 verification scripts may change package.json.');
