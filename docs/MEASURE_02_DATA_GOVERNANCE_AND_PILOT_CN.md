@@ -83,8 +83,8 @@ blocker；不得降级为“先采集再补证据”，也不得用新增页面�
 
 ## 7. 仍需 Owner 执行的生产动作
 
-1. 运行 `pnpm run decision-events:generate-internal-token`，把原始 token 存入受控密码管理工具，只把 `sha256Hash` 配置到 Vercel 的 `DECISION_EVENT_INTERNAL_TOKEN_HASHES`；登记 30 天轮换日。
-2. 等后续 UI 接入和独立验收完成后，才决定是否开启采集。
+1. 2026-09-20 Owner 决定暂不配置内部 token、保留期和采集开关；该项维持 blocker，不重复催促，也不得开启采集。
+2. Finder 的最小 UI 事件接入由 MEASURE-03 以默认休眠方式实现；未配置开关时客户端不调用采集 action。若未来重新批准 Pilot，仍需先完成内部流量排除和生产 preflight。
 
 ## 8. 验收记录
 

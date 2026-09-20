@@ -62,7 +62,11 @@ export default async function FindToolsPage({ params }: { params: { locale: stri
               : 'Decision tasks are temporarily unavailable. Please refresh later.'}
           </div>
         ) : (
-          <DecisionFinder locale={params.locale} tasks={tasks} />
+          <DecisionFinder
+            locale={params.locale}
+            tasks={tasks}
+            decisionMetricsEnabled={process.env.DECISION_EVENT_COLLECTION_ENABLED === 'true'}
+          />
         )}
       </div>
     </main>

@@ -16,26 +16,28 @@ import {
 
 export type DecisionFinderActionResult =
   | {
-      success: true;
-      data: {
-        rulesVersion: string;
-        taskId: string;
-        recommendations: Array<{
-          role: DecisionRecommendationRole;
-          rankOrder: number;
-          toolId: string;
-          toolName: string;
-          toolSlug: string;
-          matchedConditions: string[];
-          unresolvedUnknowns: string[];
-          evidenceClaimIds: string[];
-          monthlyCost: number | null;
-          currency: string | null;
-        }>;
-        needsVerification: number;
-        excluded: number;
-      };
-    }
+    success: true;
+    data: {
+      resultId: string;
+      rulesVersion: string;
+      taskId: string;
+      recommendations: Array<{
+        role: DecisionRecommendationRole;
+        rankOrder: number;
+        toolId: string;
+        toolName: string;
+        toolSlug: string;
+        matchedConditions: string[];
+        unresolvedUnknowns: string[];
+        evidenceClaimIds: string[];
+        monthlyCost: number | null;
+        currency: string | null;
+      }>;
+      needsVerification: number;
+      excluded: number;
+      zeroReasonCode: 'no_published_fit' | 'no_candidate_after_rules' | null;
+    };
+  }
   | { success: false; code: string; message: string; retryable: boolean };
 
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -57,8 +59,8 @@ function normalizeConstraints(input: DecisionFinderConstraints, task: DecisionTa
     currency: /^[A-Z]{3}$/.test(input.currency || '') ? input.currency : 'USD',
     integrationKeys: enabled('integrations')
       ? Array.from(
-          new Set((input.integrationKeys || []).map((value) => value.trim().toLowerCase()).filter(Boolean)),
-        ).slice(0, 20)
+        new Set((input.integrationKeys || []).map((value) => value.trim().toLowerCase()).filter(Boolean)),
+      ).slice(0, 20)
       : [],
     dataSensitivity: enabled('data_sensitivity') ? input.dataSensitivity || 'low' : 'low',
     selfHostRequired: enabled('self_host') && Boolean(input.selfHostRequired),
@@ -76,6 +78,7 @@ export async function runDecisionFinderAction(input: {
   }
 
   try {
+    const resultId = crypto.randomUUID();
     const activeTasks = await getActiveDecisionTasks();
     const activeTask = activeTasks.find((task) => task.id === input.taskId);
     if (!activeTask) {
@@ -87,11 +90,13 @@ export async function runDecisionFinderAction(input: {
       return {
         success: true,
         data: {
+          resultId,
           rulesVersion: 'decision-v1',
           taskId: input.taskId,
           recommendations: [],
           needsVerification: 0,
           excluded: 0,
+          zeroReasonCode: 'no_published_fit',
         },
       };
     }
@@ -124,6 +129,7 @@ export async function runDecisionFinderAction(input: {
     return {
       success: true,
       data: {
+        resultId,
         rulesVersion: result.rulesVersion,
         taskId: result.taskId,
         recommendations: result.recommendations.map((recommendation) => ({
@@ -140,6 +146,7 @@ export async function runDecisionFinderAction(input: {
         })),
         needsVerification: result.evaluations.filter((evaluation) => evaluation.state === 'needs_verification').length,
         excluded: result.evaluations.filter((evaluation) => evaluation.state === 'excluded').length,
+        zeroReasonCode: result.recommendations.length === 0 ? 'no_candidate_after_rules' : null,
       },
     };
   } catch {

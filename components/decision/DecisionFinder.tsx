@@ -1,15 +1,17 @@
 'use client';
 
-import { useEffect, useState, useTransition } from 'react';
+import { useEffect, useRef, useState, useTransition } from 'react';
 import { ArrowRight, CheckCircle2, CircleDollarSign, Loader2, RotateCcw, ShieldCheck, Sparkles } from 'lucide-react';
 
+import { createDecisionEventDispatcher, type DecisionEventDispatcher } from '@/lib/analytics/decisionEvents/client';
 import type { DecisionTaskOption } from '@/lib/services/decision/repository';
 import type { DecisionFinderConstraints } from '@/lib/services/decision/rules';
 import { Button } from '@/components/ui/button';
 import { runDecisionFinderAction, type DecisionFinderActionResult } from '@/app/actions/decision';
+import { collectDecisionMetricEvent } from '@/app/actions/decisionMetrics';
 import { Link } from '@/app/navigation';
 
-const STORAGE_KEY = 'aibesttool:decision-finder:v1';
+const STORAGE_KEY = 'aibesttool:decision-finder:v2';
 const STORAGE_TTL_MS = 24 * 60 * 60 * 1000;
 
 interface FinderState {
@@ -55,8 +57,25 @@ function localized(value: Record<string, string>, locale: string): string {
   );
 }
 
-export default function DecisionFinder({ locale, tasks }: { locale: string; tasks: DecisionTaskOption[] }) {
+export default function DecisionFinder({
+  locale,
+  tasks,
+  decisionMetricsEnabled,
+}: {
+  locale: string;
+  tasks: DecisionTaskOption[];
+  decisionMetricsEnabled: boolean;
+}) {
   const isChinese = locale === 'cn' || locale === 'tw';
+  const metricLocale = isChinese ? 'cn' : 'en';
+  const metricsRef = useRef<DecisionEventDispatcher | null>(null);
+  if (!metricsRef.current) {
+    metricsRef.current = createDecisionEventDispatcher({
+      enabled: decisionMetricsEnabled,
+      send: collectDecisionMetricEvent,
+    });
+  }
+  const metrics = metricsRef.current;
   const [state, setState] = useState<FinderState>({ taskId: '', constraints: defaultConstraints, result: null });
   const [hydrated, setHydrated] = useState(false);
   const [feedback, setFeedback] = useState<{ tone: 'success' | 'error'; message: string } | null>(null);
@@ -66,7 +85,14 @@ export default function DecisionFinder({ locale, tasks }: { locale: string; task
     const stored = readStoredState();
     if (stored && tasks.some((task) => task.id === stored.taskId)) setState(stored);
     setHydrated(true);
-  }, [tasks]);
+    metrics.track((flowInstanceId) => ({
+      eventName: 'find_tools_view',
+      eventVersion: 1,
+      flowInstanceId,
+      locale: metricLocale,
+      surface: 'find_tools',
+    }));
+  }, [metricLocale, metrics, tasks]);
 
   useEffect(() => {
     if (!hydrated) return;
@@ -93,6 +119,48 @@ export default function DecisionFinder({ locale, tasks }: { locale: string; task
       setFeedback({ tone: 'error', message: isChinese ? '请先选择一个任务。' : 'Choose a task first.' });
       return;
     }
+    const trackConstraint = (
+      constraintKey:
+      | 'role'
+      | 'team_size'
+      | 'budget'
+      | 'budget_period'
+      | 'integrations'
+      | 'data_sensitivity'
+      | 'self_host'
+      | 'export',
+      constraintValueCode: string,
+    ) =>
+      metrics.track((flowInstanceId) => ({
+        eventName: 'constraint_selected',
+        eventVersion: 1,
+        flowInstanceId,
+        locale: metricLocale,
+        surface: 'find_tools',
+        constraintKey,
+        constraintValueCode,
+      }));
+
+    if (constraintEnabled('role') && state.constraints.roleKey) trackConstraint('role', 'redacted');
+    if (constraintEnabled('team_size')) {
+      trackConstraint('team_size', state.constraints.teamSizeBand || 'unknown');
+    }
+    if (constraintEnabled('budget') && state.constraints.budgetMax !== null && state.constraints.budgetMax !== undefined) {
+      trackConstraint('budget', 'redacted');
+      trackConstraint('budget_period', state.constraints.budgetPeriod || 'unknown');
+    }
+    if (constraintEnabled('integrations') && (state.constraints.integrationKeys || []).some(Boolean)) {
+      trackConstraint('integrations', 'redacted');
+    }
+    if (constraintEnabled('data_sensitivity')) {
+      trackConstraint('data_sensitivity', state.constraints.dataSensitivity || 'low');
+    }
+    if (constraintEnabled('self_host')) {
+      trackConstraint('self_host', state.constraints.selfHostRequired ? 'required' : 'not_required');
+    }
+    if (constraintEnabled('export')) {
+      trackConstraint('export', state.constraints.exportRequired ? 'required' : 'not_required');
+    }
     setFeedback(null);
     startTransition(async () => {
       const response = await runDecisionFinderAction({
@@ -110,6 +178,32 @@ export default function DecisionFinder({ locale, tasks }: { locale: string; task
             : response.message,
         });
         return;
+      }
+      if (response.data.recommendations.length === 0) {
+        metrics.track((flowInstanceId) => ({
+          eventName: 'task_zero_result',
+          eventVersion: 1,
+          flowInstanceId,
+          locale: metricLocale,
+          surface: 'find_tools',
+          taskId: response.data.taskId,
+          rulesVersion: 'decision-v1',
+          resultId: response.data.resultId,
+          zeroReasonCode: response.data.zeroReasonCode || 'no_candidate_after_rules',
+        }));
+      } else {
+        metrics.track((flowInstanceId) => ({
+          eventName: 'task_results_shown',
+          eventVersion: 1,
+          flowInstanceId,
+          locale: metricLocale,
+          surface: 'find_tools',
+          taskId: response.data.taskId,
+          rulesVersion: 'decision-v1',
+          resultId: response.data.resultId,
+          resultCount: response.data.recommendations.length as 1 | 2 | 3,
+          hasUnknown: response.data.recommendations.some((item) => item.unresolvedUnknowns.length > 0),
+        }));
       }
       setState((current) => ({ ...current, result: response.data }));
       setFeedback({
@@ -192,6 +286,14 @@ export default function DecisionFinder({ locale, tasks }: { locale: string; task
                 onClick={() => {
                   setState({ taskId: task.id, constraints: defaultConstraints, result: null });
                   setFeedback(null);
+                  metrics.track((flowInstanceId) => ({
+                    eventName: 'task_start',
+                    eventVersion: 1,
+                    flowInstanceId,
+                    locale: metricLocale,
+                    surface: 'find_tools',
+                    taskId: task.id,
+                  }));
                 }}
                 className={`rounded-2xl border p-4 text-left transition ${
                   active
@@ -235,8 +337,7 @@ export default function DecisionFinder({ locale, tasks }: { locale: string; task
                 <select
                   value={state.constraints.teamSizeBand}
                   onChange={(event) =>
-                    updateConstraints({ teamSizeBand: event.target.value as DecisionFinderConstraints['teamSizeBand'] })
-                  }
+                    updateConstraints({ teamSizeBand: event.target.value as DecisionFinderConstraints['teamSizeBand'] })}
                   className='h-11 rounded-xl border border-slate-300 bg-white px-3 text-slate-950'
                 >
                   <option value='unknown'>{isChinese ? '暂不确定' : 'Not sure'}</option>
@@ -257,8 +358,7 @@ export default function DecisionFinder({ locale, tasks }: { locale: string; task
                     step='1'
                     value={state.constraints.budgetMax ?? ''}
                     onChange={(event) =>
-                      updateConstraints({ budgetMax: event.target.value ? Number(event.target.value) : null })
-                    }
+                      updateConstraints({ budgetMax: event.target.value ? Number(event.target.value) : null })}
                     placeholder={isChinese ? '不限制' : 'No cap'}
                     className='h-11 min-w-0 rounded-xl border border-slate-300 bg-white px-3 text-slate-950'
                   />
@@ -267,8 +367,7 @@ export default function DecisionFinder({ locale, tasks }: { locale: string; task
                     onChange={(event) =>
                       updateConstraints({
                         budgetPeriod: event.target.value as DecisionFinderConstraints['budgetPeriod'],
-                      })
-                    }
+                      })}
                     className='h-11 rounded-xl border border-slate-300 bg-white px-2 text-slate-950'
                   >
                     <option value='month'>{isChinese ? '每月' : 'Month'}</option>
@@ -286,8 +385,7 @@ export default function DecisionFinder({ locale, tasks }: { locale: string; task
                   onChange={(event) =>
                     updateConstraints({
                       dataSensitivity: event.target.value as DecisionFinderConstraints['dataSensitivity'],
-                    })
-                  }
+                    })}
                   className='h-11 rounded-xl border border-slate-300 bg-white px-3 text-slate-950'
                 >
                   <option value='low'>{isChinese ? '普通' : 'Low'}</option>
@@ -304,8 +402,7 @@ export default function DecisionFinder({ locale, tasks }: { locale: string; task
                   type='text'
                   value={(state.constraints.integrationKeys || []).join(', ')}
                   onChange={(event) =>
-                    updateConstraints({ integrationKeys: event.target.value.split(',').map((value) => value.trim()) })
-                  }
+                    updateConstraints({ integrationKeys: event.target.value.split(',').map((value) => value.trim()) })}
                   placeholder='Slack, Notion'
                   className='h-11 rounded-xl border border-slate-300 bg-white px-3 text-slate-950'
                 />
@@ -449,6 +546,17 @@ export default function DecisionFinder({ locale, tasks }: { locale: string; task
                     {recommendation.toolSlug ? (
                       <Link
                         href={`/ai/${recommendation.toolSlug}`}
+                        onClick={() =>
+                          metrics.track((flowInstanceId) => ({
+                            eventName: 'tool_detail_open',
+                            eventVersion: 1,
+                            flowInstanceId,
+                            locale: metricLocale,
+                            surface: 'tool_detail',
+                            resultId: state.result?.resultId || '',
+                            toolId: recommendation.toolId,
+                            entryPoint: 'finder_result',
+                          }))}
                         className='text-sm font-semibold text-cyan-800 hover:text-cyan-950'
                       >
                         {isChinese ? '查看工具判断' : 'Open tool decision'} →

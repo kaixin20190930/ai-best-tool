@@ -167,6 +167,7 @@
     "verify:meeting-notes-pilot:production": "node scripts/pub-03-readonly-run.mjs pnpm exec tsx scripts/verify-meeting-notes-pilot-production.ts",
     "test:decision-metric-maintenance": "tsx scripts/test-decision-metric-maintenance.ts",
     "test:decision-internal-traffic-token": "tsx scripts/test-decision-internal-traffic-token.ts",
+    "test:decision-event-ui": "tsx scripts/test-decision-event-ui-integration.ts",
     "decision-events:generate-internal-token": "tsx scripts/generate-decision-internal-traffic-token.ts",
     "tools:migrate-fireflies": "tsx scripts/migrate-fireflies-tool.ts"
   },
