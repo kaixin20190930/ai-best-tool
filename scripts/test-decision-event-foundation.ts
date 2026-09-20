@@ -403,7 +403,10 @@ async function main() {
   }
   assert.match(migration, /ENABLE ROW LEVEL SECURITY/);
   assert.match(migration, /FORCE ROW LEVEL SECURITY/);
-  assert.match(migration, /REVOKE ALL ON TABLE public\.decision_metric_events FROM PUBLIC, anon, authenticated/);
+  assert.match(
+    migration,
+    /REVOKE ALL ON TABLE public\.decision_metric_events FROM PUBLIC, anon, authenticated, service_role/,
+  );
   assert.match(migration, /GRANT INSERT ON TABLE public\.decision_metric_events TO service_role/);
   assert.doesNotMatch(migration, /CREATE POLICY/);
   assert.match(migration, /No retention duration or deletion job is approved/);

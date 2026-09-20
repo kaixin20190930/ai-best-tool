@@ -2,7 +2,7 @@
 
 日期：2026-09-20
 
-状态：`QA_PASS / DISABLED`（政策与未执行迁移已形成并通过独立验收；未接 UI、未执行迁移、未开启生产采集、未启动 Pilot）
+状态：`MIGRATED / PREFLIGHT_BLOCKED / DISABLED`（两份生产迁移与最小权限验证已完成；业务数据和运行门禁未满足，未接 UI、未开启生产采集、未启动 Pilot）
 
 上位契
 约：[MEASURE-01 决策事件隐私基础层](./MEASURE_01_DECISION_EVENT_FOUNDATION_CN.md)、[PH0-01 产品假设与指标审计](./PH0_01_PRODUCT_HYPOTHESES_METRICS_AUDIT_CN.md)。
@@ -16,7 +16,7 @@
 | 日级聚合            | 400 天 | 支持同周期、季节性和 GSC 长周期对照 | 到期删除；不含 flow hash、用户 ID、URL、UA、IP、referrer 或自由文本  |
 | 操作审计            |  90 天 | 核对清理是否按期运行                | 只保存执行时间、窗口、状态代码和行数；不保存错误文本或用户数据       |
 
-`20260920_decision_metric_governance.sql` 只提供受控 rollup/清理函数与汇总读取函数，当前**未执行**。生产调度必须每天运
+`20260920_decision_metric_governance.sql` 只提供受控 rollup/清理函数与汇总读取函数，已于 2026-09-20 在生产执行。生产调度必须每天运
 行；上次成功清理超过 48 小时即停止 Pilot 并告警，不能继续采集后假装保留期有效。
 
 ## 2. 权限矩阵
@@ -82,11 +82,10 @@ blocker；不得降级为“先采集再补证据”，也不得用新增页面�
 
 ## 7. 仍需 Owner 执行的生产动作
 
-1. 审阅并执行两份 SQL 迁移。
-2. 配置每日保留期作业和 48 小时陈旧告警。
-3. 配置 service-role 接收/维护/汇总运行环境及内部 token 哈希；不得提交 token 原值。
-4. 提供生产只读 preflight 结果。若 Fireflies 或任务 slug 不满足条件，从 Pilot 移除或修复证据，不能假报 READY。
-5. 等后续 UI 接入和独立验收完成后，才决定是否开启采集。
+1. 配置每日保留期作业和 48 小时陈旧告警。
+2. 配置 service-role 接收/维护/汇总运行环境及内部 token 哈希；不得提交 token 原值。
+3. 创建或发布 active `meeting-notes` 任务，并补齐 Fathom、Otter.ai、Fireflies 和会议指南的 verified decision evidence；Fireflies 还缺生产 published 实体。
+4. 等后续 UI 接入和独立验收完成后，才决定是否开启采集。
 
 ## 8. 验收记录
 
@@ -94,4 +93,5 @@ blocker；不得降级为“先采集再补证据”，也不得用新增页面�
 - 首轮独立 QA 发现完整自然日覆盖、调用者可控清理时钟、失败路径审计清理和缺失证据 fail-open 四项 P1；均已修复。
 - 同一 QA 复验结论：`QA_PASS`，P0/P1 均为 0。
 - 目标 ESLint、MEASURE-01/02 专项测试、冻结测试、专项与全仓 TypeScript、SEO 架构、计划一致性和完整 build 全部通过；build 完成 43/43 静态页面。
-- SQL 未执行、生产配置未修改、真实事件为 0、Pilot 未启动；因此当前只能标记 `QA_PASS / DISABLED`，不能标为生产验证完成。
+- 2026-09-20 两份 SQL 已在生产项目 `qqpbdzvidcgkmtbleqnl` 按顺序执行；原始事件、日聚合和操作审计三张表均拒绝 service-role 直接读取，受控汇总 RPC 可调用且返回 0 行。
+- 同日生产只读 preflight 确认 5 个 allowlist 路由均为 200，Fathom 与 Otter.ai 为 published 实体；但 `meeting-notes` active task、三个工具的 verified decision evidence、会议指南证据和 Fireflies published 实体缺失。每日清理调度与内部流量 token 也未配置，故状态为 `PREFLIGHT_BLOCKED / DISABLED`，不能开启采集或声称 Pilot 已启动。

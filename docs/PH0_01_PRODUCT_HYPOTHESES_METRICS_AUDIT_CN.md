@@ -41,7 +41,7 @@
 
 ## 4. PH0 事件契约（审计冻结；基础层由 MEASURE-01 独立实现）
 
-MEASURE-01 已按本节建立默认关闭的强类型接收、内存 flow、服务端幂等、流量排除与未执行迁移候选，详见[决策事件隐私基础层](./MEASURE_01_DECISION_EVENT_FOUNDATION_CN.md)。该状态不改变 PH0-01 的审计结论：页面尚未接入事件，迁移未执行，生产采集关闭，没有真实样本或 Pilot 结果。
+MEASURE-01 已按本节建立默认关闭的强类型接收、内存 flow、服务端幂等与流量排除，详见[决策事件隐私基础层](./MEASURE_01_DECISION_EVENT_FOUNDATION_CN.md)。两份迁移已于 2026-09-20 在生产执行并通过最小权限只读验证；该状态不改变 PH0-01 的审计结论：页面尚未接入事件，生产采集关闭，没有真实样本或 Pilot 结果，且生产 preflight 仍被任务、证据、Fireflies 实体和运行配置阻塞。
 
 共同规则：事件名固定小写；仅接受 allowlist 字段；客户端先生成 30 分钟滚动的内存 `flow_instance_id`（刷新即失效，不持久化、不写 cookie）；服务端按 `event_name + flow_instance_id + object_id + 30 分钟 bucket` 幂等。事件接收端在入库前丢弃已知 bot UA、预览/本地/health 请求和内部 allowlist 流量；对无法可靠识别的自动流量标为 `traffic_quality=unknown` 并排除主指标。主指标分母只含 `traffic_quality=human`。MEASURE-02 已将治理边界确定为原始 35 天、日聚合 400 天、操作审计 90 天和至少 20 个 human flow 才可报告；详见[治理与 Pilot 边界](./MEASURE_02_DATA_GOVERNANCE_AND_PILOT_CN.md)。迁移仍未执行，生产采集仍关闭。
 

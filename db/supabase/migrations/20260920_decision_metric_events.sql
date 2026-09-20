@@ -113,7 +113,7 @@ ALTER TABLE public.decision_metric_events FORCE ROW LEVEL SECURITY;
 
 -- Browser roles receive no policy and no table privileges. The server-side service role can only insert;
 -- reporting, retention deletion, and raw-row reads require a separate Owner-approved operation or migration.
-REVOKE ALL ON TABLE public.decision_metric_events FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON TABLE public.decision_metric_events FROM PUBLIC, anon, authenticated, service_role;
 REVOKE ALL ON SEQUENCE public.decision_metric_events_id_seq FROM PUBLIC, anon, authenticated;
 GRANT INSERT ON TABLE public.decision_metric_events TO service_role;
 GRANT USAGE, SELECT ON SEQUENCE public.decision_metric_events_id_seq TO service_role;

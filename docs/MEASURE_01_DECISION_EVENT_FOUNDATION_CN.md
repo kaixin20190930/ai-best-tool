@@ -2,7 +2,7 @@
 
 日期：2026-09-20
 
-状态：`PROD_VERIFIED / CLOSED`（基础层已部署但默认关闭；迁移未执行、未接入 UI、未采集真实数据、未启动 Pilot）
+状态：`PROD_VERIFIED / CLOSED`（事件迁移已在生产执行并完成最小权限只读验证；默认关闭、未接入 UI、未采集真实数据、未启动 Pilot）
 
 基线：`bb8c6b57faf69727d8672c92914bc859172c112f`。上位契
 约：[PH0-01 产品假设、能力与指标审计](./PH0_01_PRODUCT_HYPOTHESES_METRICS_AUDIT_CN.md)。本单元不新增 URL，不修改
@@ -70,7 +70,7 @@ metadata、canonical、hreflang、robots、schema 或 sitemap。
 
 MEASURE-02 已确定原始事件 35 天、日级聚合 400 天、操作审计 90 天、20 个 human flow 最小报告样本、内部 token 轮换规则及“会议记录与会后行动”Pilot allowlist，详见[数据治理与 Pilot 边界](./MEASURE_02_DATA_GOVERNANCE_AND_PILOT_CN.md)。这些是已审查的政策和未执行实现，不等于生产已启用。
 
-仍待生产执行：两份迁移、service-role 运行环境、每日清理与 48 小时陈旧告警、内部 token 签发、生产 preflight、UI 事件接入和最终启用审批。`unknown` 流量继续只用于质量诊断，不能重新解释为人类流量或进入主指标。
+2026-09-20 已在生产执行两份迁移，并确认 service role 无法直接读取原始事件、日聚合或操作审计表；受控汇总 RPC 可调用且当前返回 0 行。仍待生产执行：每日清理与 48 小时陈旧告警、内部 token 签发、Pilot 数据门禁修复、UI 事件接入和最终启用审批。`unknown` 流量继续只用于质量诊断，不能重新解释为人类流量或进入主指标。
 
 本状态只表示实现候选已经具备独立 QA 条件。它不表示迁移已执行、生产开关已开启、真实数据存在、Pilot 已上线或任何产品假设得
 到验证。
