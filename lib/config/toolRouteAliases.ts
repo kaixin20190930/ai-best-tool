@@ -1,5 +1,6 @@
 const TOOL_ROUTE_ALIASES: Record<string, string> = {
   anthropic: 'claude',
+  'fireflies-ai': 'fireflies',
   otter: 'otter-ai',
 };
 

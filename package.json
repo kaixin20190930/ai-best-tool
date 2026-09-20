@@ -161,7 +161,9 @@
     "test:decision-events": "tsx scripts/test-decision-event-foundation.ts",
     "test:measure-02-governance": "tsx scripts/test-measure-02-governance.ts",
     "test:measure-01-freeze": "tsx scripts/test-measure-01-freeze.ts",
-    "typecheck:decision-events": "tsc --noEmit --project scripts/tsconfig.decision-events.json"
+    "typecheck:decision-events": "tsc --noEmit --project scripts/tsconfig.decision-events.json",
+    "test:meeting-notes-pilot-seed": "tsx scripts/test-meeting-notes-pilot-seed.ts",
+    "tools:migrate-fireflies": "tsx scripts/migrate-fireflies-tool.ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
