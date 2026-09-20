@@ -106,3 +106,5 @@ Review 通过。该文档自 2026-09-20 起作为工具规模化、分层维护�
 2026-09-20 执行更新：Fireflies 已存在于生产，本轮没有重复新增，而是完成 canonical 身份、当日价格、AI credits、自动升级、存储、上传、录制同意、隐私和输出复核边界的正规化更新。生产基线保持 63 条工具、50 条公开、13 条索引和 37 条 `monitor/noindex`；sitemap 仍为 118 条。下一项为补充新的 14-21 个成熟候选缓冲池。
 
 2026-09-20 候选缓冲池更新：已对生产 63 条记录完成只读身份去重，并建立 14 条机器可验收的成熟候选池，构成为 10 条成熟高需求、3 条快速增长且有证据基础、1 条专业差异化工具。所有候选均保持 `screened_for_deep_review`，公开与索引批准均关闭，没有新增页面或 sitemap URL。Sourcegraph Cody 与 Amazon Q Developer IDE plugins 因生命周期变化被明确排除。详见 [成熟候选缓冲池](./MATURE_CANDIDATE_BUFFER_2026-09-20_CN.md)；下一项为 Grammarly 身份范围与证据深审。
+
+2026-09-20 Grammarly 深审更新：确认生产数据库无 Grammarly 实体，但现有双语静态兜底页均为 `200 + self-canonical + noindex`，且 sitemap 匹配为 0。官方资料确认 Superhuman 是母品牌/套件、Grammarly 仍是独立写作产品、Go 是相关助手体验；当前 Free/Pro/Enterprise 提示额度和不同账号类型的训练默认值均已固化，Chrome Web Store、G2 与 Trustpilot 独立信号已纳入。候选状态升级为 `deep_review_complete`，公开与索引批准仍关闭；下一项是制作数据库发布包并替换 2026-08-03 旧兜底快照。

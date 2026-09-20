@@ -1,0 +1,125 @@
+{
+  "slug": "grammarly",
+  "title": "Grammarly AI Writing Assistant",
+  "officialUrl": "https://www.grammarly.com/",
+  "existingRoute": "/ai/grammarly",
+  "action": "migrate_existing_fallback",
+  "status": "deep_review_complete",
+  "reviewedAt": "2026-09-20",
+  "publishNotBefore": "2026-09-21",
+  "sitemapChangeApproved": false,
+  "productionWriteApproved": false,
+  "releaseIndexState": "monitor",
+  "routeAudit": {
+    "english": "200_self_canonical_noindex",
+    "chinese": "200_self_canonical_noindex",
+    "sitemapMatches": 0,
+    "productionEntityMatches": 0
+  },
+  "category": {
+    "discoverySlug": "writing",
+    "storageSlug": "text-writing"
+  },
+  "identityDecision": {
+    "canonicalProduct": "Grammarly",
+    "company": "Superhuman Platform Inc.",
+    "scope": "Keep Grammarly as the canonical writing-assistance product. Treat Superhuman as the parent suite and Superhuman Go as a related assistant experience, not aliases for the same product page.",
+    "reason": "Official support says the company became Superhuman while Grammarly remains one of four products in the suite. Existing Grammarly functionality and subscriptions largely continue, while users can opt into Superhuman Go and bundle purchases separately."
+  },
+  "positioning": "An AI writing-assistance product for grammar, clarity, tone, rewriting, plagiarism and AI-content checks across writing surfaces, with separate Free, Pro and Enterprise boundaries and an optional transition into the broader Superhuman Go experience.",
+  "decisionAngles": [
+    "Grammarly writing assistance versus Superhuman Go's broader contextual assistant",
+    "Free versus Pro prompt, rewriting, plagiarism, AI-detection and team limits",
+    "Individual, website-purchased team and sales-managed Enterprise training defaults",
+    "Inline editing across apps versus open-ended drafting in a general AI chat",
+    "Content processing, third-party LLM providers, stored documents and deletion controls",
+    "Grammarly versus lower-cost writing assistants and general-purpose models"
+  ],
+  "pricingSnapshot": {
+    "checkedAt": "2026-09-20",
+    "plans": [
+      "Free: USD 0, core grammar and tone help, and 100 AI prompts per month",
+      "Pro: official plan page displays USD 12 as the annual effective monthly price, with a seven-day trial and 2,000 AI prompts per member per month",
+      "Pro alternate billing: official support lists USD 30 monthly, USD 60 quarterly, or USD 144 annually; regional pricing can differ at checkout",
+      "Enterprise: contact sales, with unlimited prompts per member plus SAML, SCIM, managed mode, DLP, audit logs, BYOK and advanced administration",
+      "Superhuman suite bundle: separate purchase path; do not merge its price or entitlements into the standalone Grammarly page"
+    ],
+    "volatileFields": [
+      "monthly, quarterly, annual, trial, regional and tax-adjusted checkout prices",
+      "AI prompt limits and which features consume them",
+      "Grammarly Pro team limits and Enterprise entitlements",
+      "Superhuman suite bundle pricing and product availability"
+    ],
+    "releaseGuard": "Recheck the live Grammarly plans page, Pro pricing support article and Superhuman plans page on release day. Keep annual effective price, total annual charge, monthly and quarterly billing separate."
+  },
+  "policyBoundaries": [
+    {
+      "label": "Training defaults vary by account type",
+      "summary": "Product Improvement and Training is on by default for individual accounts and directly purchased multi-user Pro accounts, with user or admin opt-out. Sales-managed Enterprise, Business, Pro and Education accounts have it off by default.",
+      "releaseGuard": "Do not state that Grammarly never uses customer content for product improvement without naming the account type and control state."
+    },
+    {
+      "label": "Service processing and model training are separate questions",
+      "summary": "Prompts and relevant context can be shared with vetted LLM service providers to deliver generative features, while Grammarly says those providers may not train their models on that content.",
+      "releaseGuard": "Do not turn the no-provider-training statement into a claim that content never leaves Grammarly or is never processed by a third party."
+    },
+    {
+      "label": "Grammarly and Superhuman Go remain distinct scopes",
+      "summary": "The company name changed and the products can be bundled, but Grammarly remains the writing product. Go is a broader contextual assistant that users can enable and that can replace Grammarly's generative interface in supported clients.",
+      "releaseGuard": "Preserve one Grammarly canonical page and mention Go as a related product state; do not rename the page to Superhuman or combine all four suite products."
+    }
+  ],
+  "limitations": [
+    "The USD 12 Pro figure is an annual effective monthly price rather than the flexible monthly charge; checkout cadence and regional price must be verified.",
+    "Free is limited to 100 AI prompts per month and Pro to 2,000 prompts per member per month on the reviewed plan page.",
+    "Product Improvement and Training is enabled by default for individual and directly purchased multi-user Pro accounts unless the user or admin opts out.",
+    "Sales-managed organization and Education accounts have different default training controls from self-serve accounts.",
+    "Generative prompts and context can be processed by vetted LLM service providers even though Grammarly says those providers cannot train on the content.",
+    "Documents created in the Grammarly Editor remain stored until the user deletes them or the account or contract is terminated.",
+    "Sensitive-field exclusion is described as best effort, not an absolute guarantee that Grammarly can never access sensitive text.",
+    "Grammarly and Superhuman Go cannot both be the active desktop experience at the same time, and Go availability varies by client.",
+    "AI detection, plagiarism checks, rewrites and generated text still require human review; the page must not present them as authoritative proof.",
+    "The current static fallback is dated 2026-08-03 and contains legacy plan labels and prompt wording, so it must be replaced rather than reused unchanged."
+  ],
+  "marketValidation": {
+    "score": 98,
+    "verdict": "validated",
+    "rationale": "Grammarly has exceptional durability and adoption evidence: the Chrome Web Store independently shows 40 million users, 43.1 thousand ratings and a 4.5 score; G2 shows more than 13 thousand reviews. The product has a clear recurring writing-assistance role. The recommendation remains conditional because pricing cadence is easy to misread, user feedback includes billing and product-change friction, and privacy defaults differ materially by account type.",
+    "strongSignals": [
+      "Chrome Web Store independently reports 40 million extension users and 43.1 thousand ratings",
+      "G2 reports more than 13 thousand Grammarly reviews",
+      "The product has operated since 2009 and continues as a distinct product within the Superhuman suite"
+    ],
+    "recurringUserFriction": [
+      "Independent reviews repeatedly question subscription value relative to general-purpose AI alternatives",
+      "Trustpilot feedback includes cancellation, renewal and refund friction",
+      "Users report that aggressive suggestions or rewrites can change voice or context and still require judgment",
+      "The transition from Grammarly generative features to Superhuman Go can make product scope and controls harder to understand"
+    ]
+  },
+  "sources": {
+    "official": [
+      "https://www.grammarly.com/plans",
+      "https://support.grammarly.com/hc/en-us/articles/115000090011-How-much-does-Grammarly-Pro-cost",
+      "https://support.grammarly.com/hc/en-us/articles/40707200788493-What-is-Superhuman",
+      "https://support.grammarly.com/hc/en-us/articles/25555503115277-Product-Improvement-and-Training-Control",
+      "https://support.grammarly.com/hc/en-us/articles/20916119474829-Privacy-and-security-FAQs",
+      "https://www.grammarly.com/ai-writing-assistant",
+      "https://support.grammarly.com/hc/en-us/articles/45976306096781-How-to-use-Grammarly-and-Superhuman-Go-for-Windows-and-Mac-together"
+    ],
+    "independent": [
+      "https://chromewebstore.google.com/detail/grammarly-ai-writing-assi/kbfnbcaeplbcioakkpcpgfkobkghlhen",
+      "https://www.g2.com/de/products/grammarly/reviews",
+      "https://www.trustpilot.com/review/www.grammarly.com"
+    ]
+  },
+  "nextSlotChecklist": [
+    "Create one database-backed Grammarly entity while preserving /ai/grammarly as the only canonical route",
+    "Replace the dated 2026-08-03 fallback facts with the 2026-09-20 identity, plan, prompt and training-control snapshot",
+    "Keep Grammarly, Superhuman Go, Docs and Mail as separate products and scopes",
+    "Verify official logo and thumbnail usage basis and store local reviewed assets",
+    "Write complete English, Chinese and cn decision content with best-fit, not-ideal, comparison and limitation sections",
+    "Run production duplicate, fallback, metadata, canonical, noindex, sitemap, type and full-build checks",
+    "Release only as published + monitor/noindex; index approval remains a later independent decision"
+  ]
+}

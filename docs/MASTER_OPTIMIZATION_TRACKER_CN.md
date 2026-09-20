@@ -337,3 +337,4 @@ query、Top 20 page、已抓取未编入索引与软 404 数量。
 - 自动门禁覆盖数量、唯一性、来源、决策维度、风险披露及公开/索引批准关闭状态。
 - 生命周期异常的 Sourcegraph Cody 和 Amazon Q Developer IDE plugins 已排除，避免以历史热度制造失效页面。
 - 详情：[成熟高需求工具候选缓冲池](./MATURE_CANDIDATE_BUFFER_2026-09-20_CN.md)。下一项：Grammarly 深审。
+- Grammarly 深审已完成：现有 canonical 页面保留，母品牌 Superhuman、写作产品 Grammarly 与助手 Go 的范围已分离；旧静态快照需由数据库发布包替换。当前仍为 noindex 且不在 sitemap，没有生产写入或索引批准。下一项：Grammarly 发布包。
