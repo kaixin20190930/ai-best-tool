@@ -2,7 +2,7 @@
 
 日期：2026-09-20
 
-状态：`DEV_READY`（仅机制与测试；未启动真实 Pilot、未新增分析事件）
+状态：`PROD_VERIFIED / CLOSED`（机制已部署且默认关闭；未启动真实 Pilot、未新增分析事件）
 
 基线：`8038cae93198f3ad6437a7542bc3ec20394d0f1f`。仅实现 PUB-04，不启动试点、不新增页面或工具，不调整任何 SEO 契约。
 
@@ -73,5 +73,12 @@
 - `MONITOR_API_TOKEN=pub04-build-only pnpm run build`：退出 0，AdSense、编译、类型检查和 43/43 静态页面生成通过。首次不带该构建期占位 token 时，基线的 trial-reminders GET 路由被 Next 预执行并因缺少 Supabase 管理密钥失败；占位 token 只让无授权构建请求在路由入口 fail closed，未提供 Supabase 密钥、未连接或写入生产数据库。既有 Browserslist 数据过期提醒未涉及本次修改。
 
 基线遗留失败：`pnpm run test:decision-seo-release` 在第 27 行失败，因为旧测试仍要求 Tool 路由源码直接包含 `decisionCardV2 ?`，当前 main 已通过 `PublicToolDecision` 封装渲染；该测试及被断言路由本任务均未修改。`pnpm run test:evidence-ledger` 在第 272 行同样仍从 Tool 路由源码寻找 `id='decision-card'`，而该标记已位于 `PublicToolDecision`。`pnpm run test:sitemap` 因此 worktree 未配置 Postgres URL 而无法执行数据型检查；静态 `test:seo-architecture`、`test:tool-indexing`、`test:index-consistency` 和完整 build 均已通过。上述结果未在 PUB-04 中掩盖或扩展修复。
+
+## 独立验收与发布记录（2026-09-20）
+
+- 首次独立 QA 对候选 `fa1952a546680020fecf46c7cacc1f110f87a572` 判定 `QA_FAIL`，唯一候选回归为 `scripts/test-pub-04-freeze.ts` 的两处 ESLint 花括号错误；核心机制、13 项专项测试和 SEO 冻结边界均已通过。
+- 原开发任务仅修复该 lint，形成候选 `448d342f8e721bfcbf2111f14aaceb5b5490d87e`；同一 QA 复验确认差分只有该测试脚本，目标 ESLint、冻结测试、13/13 注册测试、专项类型检查和 SEO 架构均通过，最终结论 `QA_PASS`。
+- 总控以 `4edcc369`、`c88c625d` 合入 `main`。清理并发构建产物后，主分支完整 `pnpm run build` 退出 0，AdSense 校验、编译、类型检查和 43/43 静态页面生成通过。
+- GitHub `main` 已推送至 `c88c625d`；生产 SEO smoke 通过核心页面、canonical、hreflang、Breadcrumb、noindex、robots 和 116 条 sitemap URL。由于生产注册、Pilot 页面和实验状态仍为空/关闭，本次部署不改变公开模块输出。
 
 剩余范围：未启用真实试点，未采集或声称指标改善；启用前仍需提供真实模块、3–5 个现有页面、证据、健康判断与复核报告。日常开关调整仍按代码发布流程执行。本单元不包含后台热开关或新埋点。

@@ -282,7 +282,7 @@ Synthesia 与 Replit 后原本只剩 Otter.ai、Lovable 和 Midjourney，低于�
 | DCF      | Finder + Decision Card 2.0         | 10 个核心工具和 6-8 个任务形成证据可追溯、最多三项的可解释推荐                                     | DCF-01~07 已完成：数据、证据、规则、前台、后台审核、SEO 与自动发布门禁全部闭环                                                                   | Codex                       |
 | STK      | Stack Audit + 7-Day Trial          | 私有工具栈、Keep/Replace/Remove/Missing 与试用到期决策闭环                                         | 已完成（6/6）；双用户真实 RLS、匿名边界、service-only 审计输出、私有路由 noindex/sitemap 排除、生产 smoke、持续监控、类型检查与完整 build 均通过 | Codex                       |
 | SIG      | Verified Usage + Change Watch      | 审核后的结构化使用信号和已确认变化通知，不公开低样本或利益相关数据                                 | 等待阶段二真实使用门槛；SIG/WAT 未开始                                                                                                           | Codex + 用户                |
-| PUB-UX   | 公开内容边界与页面简化             | 清除公开页面中的索引策略、编辑计划和转化目标；以真实判断、限制和证据替代内部说明 | PUB-01 至 PUB-03 已关闭；PUB-04 `DEV_READY`：仅注册/实验门禁与测试，真实 Pilot、独立 QA、部署和生产验证均未开始 | Codex                       |
+| PUB-UX   | 公开内容边界与页面简化             | 清除公开页面中的索引策略、编辑计划和转化目标；以真实判断、限制和证据替代内部说明 | PUB-01 至 PUB-04 均已完成独立 QA、部署与生产验证并关闭；真实 Pilot 尚未启动，需单独满足数据和审批门槛 | Codex                       |
 | PH0-01 | 产品假设、能力与指标审计 | 六个假设、现有能力、严格事件契约、任务簇评分与 Pilot/Gate 依赖均有仓库证据；不新增事件、URL 或生产写入 | [审计与指标契约](./PH0_01_PRODUCT_HYPOTHESES_METRICS_AUDIT_CN.md)已完成，等待 Owner 提供聚合数据、隐私治理与 Pilot 页面名单 | Codex + Owner |
 
 2026-09-14 新增公开内容边界治理：生产 Web3 comparison 暴露“保留索引、补真实证据”等内部编辑语言，且共享 Guide 模板将同类内容扩散到大量页面。该问题不改变既有 SEO 架构结论，但会削弱用户体验、可信度和差异化表达。完整基线、页面契约、分四个交付单元的实施计划、自动验收与反向评审见 [公开内容边界与页面简化实施方案](./PUBLIC_CONTENT_BOUNDARY_AND_PAGE_SIMPLIFICATION_PLAN_CN.md)。实施期间冻结 URL、metadata、canonical、hreflang、robots、schema 和 sitemap，先完成 PUB-01 门禁与 Web3 样板，生产通过后再扩到其他页面。
@@ -293,7 +293,7 @@ Synthesia 与 Replit 后原本只剩 Otter.ai、Lovable 和 Midjourney，低于�
 
 2026-09-15 PUB-03 已关闭：最终开发候选 `0fa51b21db3ed2c26000df7edc47a40287e533e7` 经 QA 返工后实现新增 lint 0，并以 `30d68533`、`92988f1a` 合入 main；生产 smoke 契约补丁 `8561e21d` 已部署并复验。Tool、Home、Explore、Best、Category 与商业 CTA 的公开边界完成收口，源码命中 51→0；390 个生产页面 0 违规。索引审计为 58 条工具、46 条已发布、13 条可索引、46 个页面 0 问题；sitemap 保持 116 条且无缺失、异常或重复 URL。仓库仍有 1572 条历史 lint 债务且 Next build 当前跳过全仓 lint，本单元没有新增 lint；下一项只执行 PUB-04，不并行扩 URL 或修改 SEO 冻结项。
 
-2026-09-20 PUB-04 为 `DEV_READY`：已建立强类型、运行时严格校验且默认关闭的公开模块注册与实验门禁，并覆盖注册字段、Evidence、页面/位置/实例、rollout、停止、14/28 天复核及仅隐藏展示并保留数据的回滚契约。生产注册、Pilot 页面和实验状态为空/关闭；未选择首个任务簇，未新增 URL、分析事件或 SEO 变更。候选仍须独立 QA，总控决定真实任务簇、3–5 个既有 Pilot 页面、指标治理与后续发布。
+2026-09-20 PUB-04 已关闭：首轮候选 `fa1952a546680020fecf46c7cacc1f110f87a572` 因新增测试脚本两处 lint 被独立 QA 退回；原开发任务定点修复后形成 `448d342f8e721bfcbf2111f14aaceb5b5490d87e`，同一 QA 复验 `QA_PASS`。main 提交 `4edcc369`、`c88c625d` 已推送，主分支目标 lint、13/13 注册测试、冻结测试、专项类型检查、SEO 架构、计划一致性和完整 build 全部通过；生产 smoke 验证 canonical、hreflang、Breadcrumb、noindex、robots 与 116 条 sitemap 正常。生产注册、Pilot 页面和实验状态保持为空/关闭，未新增 URL、分析事件或 SEO 变更；真实任务簇、3–5 个既有 Pilot 页面及指标治理属于下一独立阶段，不能冒充 PUB-04 已验证效果。
 
 ### P2：只在数据证明后扩展（第 4-6 周）
 
