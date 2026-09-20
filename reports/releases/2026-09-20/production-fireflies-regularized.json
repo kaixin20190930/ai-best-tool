@@ -1,0 +1,181 @@
+{
+  "checkedAt": "2026-09-20T14:04:23.939Z",
+  "requestBaseUrl": "https://aibesttool.com",
+  "phase": "released",
+  "productionWrites": 0,
+  "candidates": [
+    {
+      "slug": "fireflies",
+      "canonicalSlug": "fireflies",
+      "identityQuery": "slug, aliases, official domain and localized title",
+      "rows": [
+        {
+          "id": "57b270b9-78cf-41f8-8b74-dec46400cd65",
+          "name": "fireflies",
+          "url": "https://fireflies.ai/",
+          "status": "published",
+          "pageQualityStatus": "monitor",
+          "reviewedAt": "2026-09-20",
+          "nextReviewDate": "2026-10-20",
+          "createdAt": "2026-09-20T08:33:32.088Z",
+          "updatedAt": "2026-09-20T14:03:49.068Z",
+          "identityMatchesPayload": true,
+          "featuresMatchPayload": true,
+          "mediaMatchPayload": true,
+          "contentMatchesPayload": true,
+          "indexDecision": {
+            "indexable": false,
+            "qualityScore": 100,
+            "reason": "indexing_paused"
+          }
+        }
+      ],
+      "pages": [
+        {
+          "pathname": "/ai/fireflies",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/ai/fireflies",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "Fireflies AI Meeting Notes and Conversation Intelligence",
+          "hasDecisionCard": true,
+          "hasPayloadCopy": true,
+          "fullArticleMatchesPayload": true,
+          "missingDecisionCardItems": [],
+          "imagePaths": [
+            "/images/aitools.svg",
+            "/images/Aileron.svg",
+            "/icons/global.svg",
+            "/images/tool-media/fireflies-cover.svg"
+          ],
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "cf8371af88e7da5f3472e1c2291a71d7eb127f11a9c3b4100ed8e2b05ecb7837"
+        },
+        {
+          "pathname": "/ai/fireflies-ai",
+          "status": 308,
+          "location": "/ai/fireflies",
+          "xRobotsTag": null,
+          "h1": "",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "fullArticleMatchesPayload": false,
+          "missingDecisionCardItems": [
+            "Meeting-heavy teams that reuse transcripts and follow-ups",
+            "Organizations able to govern auto-join, sharing and retention",
+            "Buyers willing to measure seat, storage and AI-credit cost together",
+            "Meetings that cannot be recorded with valid notice and permission",
+            "Teams treating generated transcripts as authoritative without review",
+            "Organizations unable to control bots, recipients and downstream copies",
+            "Accepted transcript and speaker accuracy",
+            "Review time and action-item precision",
+            "Bot, extension and in-person capture",
+            "Seat plus AI-credit total cost",
+            "Auto-join consent and exclusion controls",
+            "Sharing, retention and downstream deletion",
+            "Integration success and failure recovery",
+            "Transcripts degrade with noise, overlap, accents and jargon.",
+            "Speaker labels, summaries and action items require review.",
+            "Visible bots do not satisfy every consent requirement.",
+            "Auto-join can enter inappropriate meetings without exclusions.",
+            "AI credits are separate from the core subscription.",
+            "AI-credit trial and auto-upgrade settings can create charges.",
+            "External uploads have source-specific monthly limits and overage.",
+            "Integrations duplicate meeting content under other retention rules.",
+            "Business controls do not prove the customer's configuration is safe."
+          ],
+          "imagePaths": [],
+          "hasReviewedDate": false,
+          "inSitemap": false,
+          "htmlSha256": "7c040f8633b8823d72ed63da9b3b2dfe9846e912c66a64c9433ec9c4815d76c2"
+        },
+        {
+          "pathname": "/cn/ai/fireflies",
+          "status": 200,
+          "location": null,
+          "canonical": "https://aibesttool.com/cn/ai/fireflies",
+          "robots": "noindex, follow",
+          "xRobotsTag": null,
+          "h1": "Fireflies AI 会议笔记与对话智能",
+          "hasDecisionCard": true,
+          "hasPayloadCopy": true,
+          "fullArticleMatchesPayload": true,
+          "missingDecisionCardItems": [],
+          "imagePaths": [
+            "/images/aitools.svg",
+            "/images/Aileron.svg",
+            "/icons/global.svg",
+            "/images/tool-media/fireflies-cover.svg"
+          ],
+          "hasReviewedDate": true,
+          "inSitemap": false,
+          "htmlSha256": "1f9c410354a1cfa1133b5d25932965c36fac7567dcb5d83b69c2356057a69c37"
+        },
+        {
+          "pathname": "/cn/ai/fireflies-ai",
+          "status": 308,
+          "location": "/cn/ai/fireflies",
+          "xRobotsTag": null,
+          "h1": "",
+          "hasDecisionCard": false,
+          "hasPayloadCopy": false,
+          "fullArticleMatchesPayload": false,
+          "missingDecisionCardItems": [
+            "需要复用转录和跟进事项的高会议频率团队",
+            "能治理自动入会、共享和留存的组织",
+            "愿意综合衡量席位、存储和 AI credits 成本的采购者",
+            "无法完成有效告知和许可的会议",
+            "把生成转录直接作为权威记录的团队",
+            "无法控制机器人、收件人与下游副本的组织",
+            "验收转录与说话人准确性",
+            "复核时间与行动项准确性",
+            "机器人、扩展和线下采集",
+            "席位加 AI credits 总成本",
+            "自动入会同意与排除控制",
+            "共享、留存和下游删除",
+            "集成成功与失败恢复",
+            "噪音、抢话、口音和术语会降低转录质量。",
+            "说话人标签、摘要和行动项需要复核。",
+            "可见机器人不能满足所有同意要求。",
+            "没有排除规则时自动入会可能进入不合适的会议。",
+            "AI credits 与核心订阅分开计费。",
+            "AI-credit 试用与自动升级设置可能产生费用。",
+            "外部上传有按来源计算的月度限制和超额费。",
+            "集成会在其他留存规则下复制会议内容。",
+            "Business 控制不证明客户配置天然安全。"
+          ],
+          "imagePaths": [],
+          "hasReviewedDate": false,
+          "inSitemap": false,
+          "htmlSha256": "7c040f8633b8823d72ed63da9b3b2dfe9846e912c66a64c9433ec9c4815d76c2"
+        }
+      ],
+      "media": [
+        {
+          "path": "/icons/tool-logos/fireflies.svg",
+          "status": 200,
+          "contentType": "image/svg+xml",
+          "sha256": "a72722137f80874fb1dc4c1c571e698f5b7e37a6624245c7a25009190f22fb56",
+          "expectedSha256": "a72722137f80874fb1dc4c1c571e698f5b7e37a6624245c7a25009190f22fb56",
+          "ready": true
+        },
+        {
+          "path": "/images/tool-media/fireflies-cover.svg",
+          "status": 200,
+          "contentType": "image/svg+xml",
+          "sha256": "086f7abbb0603ccf689c1b5743937f0fdb2c4efd98b10f6e7524ecb0b304ed25",
+          "expectedSha256": "086f7abbb0603ccf689c1b5743937f0fdb2c4efd98b10f6e7524ecb0b304ed25",
+          "ready": true
+        }
+      ]
+    }
+  ],
+  "failures": [],
+  "sitemap": {
+    "status": 200,
+    "urlCount": 118,
+    "sha256": "c6198d3fe6c8121ee3d1a6f533b4005003e5cb1ee1d1990d4e659558674ed41b"
+  }
+}

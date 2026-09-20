@@ -238,6 +238,8 @@ Synthesia 与 Replit 后原本只剩 Otter.ai、Lovable 和 Midjourney，低于�
 
 2026-09-20 Glean 延期补发完成：企业搜索、275+ 连接器、源权限继承、开发能力、安全资料、定制报价缺失和公司自报采用信号均已按发布日证据复核；生产事务先 rollback 后 commit，唯一实体 `fd861409-8228-4deb-9802-a9f807d66256` 回读为 `published + monitor`。英中双语及 `zh/cn` 兼容内容、Decision Card、编辑媒体、canonical、noindex、sitemap 和独立生产审计全部通过。生产基线为 63 条工具、50 条公开、13 条索引、37 条暂停索引，sitemap 仍为 118 条；下次事实复核 2026-10-20，索引仍需独立审批。详见 [Glean 延期补发交付](./DELAYED_GLEAN_RELEASE_2026-09-20_CN.md)。
 
+2026-09-20 Fireflies 既有实体正规化完成：生产查重确认实体 `57b270b9-78cf-41f8-8b74-dec46400cd65` 已由会议笔记 Pilot 提前建立，本轮没有增加工具数量。统一流水线已支持身份完全匹配的受控刷新，旧一次性迁移写入口退休；席位价格、AI credits 与默认 Auto-Upgrade、存储和上传限额、入会同意、隐私范围、输出复核及下游数据边界全部更新。rollback、commit、在线 verify、会议 Pilot 关系、独立生产审计、SEO smoke 和索引一致性均通过；基线保持 63/50/13/37，sitemap 保持 118。详见 [Fireflies 正规化交付](./FIREFLIES_REGULARIZATION_2026-09-20_CN.md)。
+
 ## 已完成能力
 
 | 优先级 | 已完成项                                                   | 当前价值                                 |

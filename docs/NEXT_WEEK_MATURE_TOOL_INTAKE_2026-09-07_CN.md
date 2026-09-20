@@ -21,7 +21,7 @@
 | 6 | ElevenLabs | AI 原生语音与音频平台；成熟采用信号强，适合比较质量、credits、克隆同意与商业权利 | 09-20 已完成生产发布和独立验收，保持 `published + monitor/noindex` | 原 09-13；实际 09-20 | 10-20 复核事实；最短观察期后仍须独立索引审批 |
 | 7 | HeyGen | AI 原生数字人商务视频平台；可补演示、翻译与 API 视频的决策边界 | 09-20 延期补发完成，保持 `monitor/noindex` | 原 09-14；实际 09-20 | 10-20 复核事实；索引仍需独立批准 |
 | 8 | Glean | AI 原生企业搜索与工作助手；独立企业采用信号强，补组织级知识检索判断 | 09-20 延期补发完成，保持 `monitor/noindex` | 原 09-15；实际 09-20 | 10-20 复核事实；索引仍需独立批准 |
-| 9 | Fireflies.ai | AI 原生会议助手与会话智能；与 Otter 形成真实选择场景 | 已完成完整预审，进入缓冲池 | 09-16 | 当日复核套餐额度、自动入会、同意、集成、留存和素材 |
+| 9 | Fireflies.ai | AI 原生会议助手与会话智能；与 Otter 形成真实选择场景 | 09-20 既有实体正规化完成，保持 `monitor/noindex` | 原 09-16；实际 09-20 | 10-20 复核事实；索引仍需独立批准 |
 
 截至 2026-09-09，连续发布缓冲池已从 3 个补足为 7 个（Otter.ai、Lovable、Midjourney、ElevenLabs、HeyGen、Glean、
 Fireflies.ai），满足至少 7 天不中断的运营要求。Glean 的公开价格和实施范围不透明已被明确写为决策边界，不再用推测价格弥补资料
@@ -81,6 +81,7 @@ Synthesia 达到成熟工具预审门槛，完整机器可验收记录见
 | 2026-09-09 | Windsurf 身份风险复核 | 官网正将 Windsurf 更名为 Devin Desktop；暂缓收录，待 canonical 与市场身份稳定后重审 |
 | 2026-09-20 | HeyGen 发布日复核与生产迁移 | 网页套餐、credits、API 分账、同意、训练默认值、输出权利和运行限制已复核；rollback/commit 回读通过，保持 monitor/noindex，不改 sitemap |
 | 2026-09-20 | Glean 发布日复核与生产迁移 | 企业搜索、275+ 连接器、源权限、开发能力、安全、定制报价和采用信号已复核；rollback/commit 回读通过，保持 monitor/noindex，不改 sitemap |
+| 2026-09-20 | Fireflies 既有实体正规化 | 确认唯一实体早前已为会议 Pilot 建立；补齐当日套餐、AI credits、自动升级、存储、上传、同意、隐私和输出复核边界，未新增记录、不改 sitemap |
 
 ## 2026-09-14 SLA 异常与延期补发
 
@@ -91,3 +92,5 @@ ElevenLabs 原 09-13 发布槽构成 SLA 延期，并于 09-20 完成重新核�
 HeyGen 原 09-14 发布槽构成 SLA 延期，并于 09-20 完成重新核验和生产补发。网页套餐与 credits、网页/API 付款边界、并发、Digital Twin 同意、非 Enterprise 训练退出、Free 输出权利和编辑素材性质均已回写；采用英中双语内容并以 `zh/cn` 兼容存储，不代表三种独立语言。当前保持 `published + monitor/noindex`，不进入 sitemap。
 
 Glean 原 09-15 发布槽构成 SLA 延期，并于 09-20 完成重新核验和生产补发。企业搜索、连接器与权限继承、开发能力、公开安全资料、定制报价缺失和公司自报采用信号均已回写；页面明确源 ACL 错误、陈旧内容、组织部署与生成答案人审边界。生产事务和独立审计通过，当前保持 `published + monitor/noindex`，不进入 sitemap；详见 [Glean 延期补发交付](./DELAYED_GLEAN_RELEASE_2026-09-20_CN.md)。
+
+Fireflies 原 09-16 发布槽在执行前发现实体已由会议笔记 Pilot 提前建立，因此没有重复插入。09-20 通过统一流水线对同一 ID 做受控刷新，补齐席位价格、动态 AI credits、7 天试用转付费、默认 Auto-Upgrade、存储与上传限额、自动入会同意、隐私范围和输出人审边界；旧一次性迁移写入口已退休。会议 Pilot 关系、canonical、308 alias、noindex 和 sitemap 边界复验通过；详见 [Fireflies 既有实体正规化交付](./FIREFLIES_REGULARIZATION_2026-09-20_CN.md)。
