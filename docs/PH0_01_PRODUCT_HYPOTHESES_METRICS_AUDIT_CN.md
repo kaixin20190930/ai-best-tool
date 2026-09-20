@@ -2,7 +2,7 @@
 
 日期：2026-09-19
 
-状态：`DEV_READY`（仅审计与指标契约；未写生产数据、未新增分析事件）
+状态：`DEV_READY`（PH0-01 仅审计与指标契约已完成；未写生产数据、未启动 Pilot）
 
 上位计划：[收录与搜索质量主计划](./MASTER_OPTIMIZATION_TRACKER_CN.md)
 关联规格：[三阶段实施方案](./DECISION_PLATFORM_THREE_PHASE_IMPLEMENTATION_CN.md)、[自动验收](./DECISION_PLATFORM_AUTOMATED_ACCEPTANCE_CN.md)、[SEO 护栏](./SEO_INFORMATION_ARCHITECTURE_GUARDRAILS_CN.md)
@@ -39,7 +39,9 @@
 | `cta_click` | `components/analytics/TrackableCtaLink.tsx` -> `trackCtaClick` | 带 `cta_id`、label、页面类型、href、来源路径/locale 的 CTA 点击 | 使用范围主要在商业/提交等页面；href 可能是站内或非官网，且无 bot/internal 过滤；不得混作产品决策指标。 |
 | `analytics` 表定义 | `db/supabase/schema.sql`；实际写路径导入 `db/neon/client` | 定义含 event、tool、metadata、时间、session、UA/referrer 字段 | 表定义与运行时连接位置不一致；未做只读生产回查，物理部署、保留期、RLS 与历史可用性均为 **unknown**。 |
 
-## 4. PH0 事件契约（供后续独立实现；本提交未实现）
+## 4. PH0 事件契约（审计冻结；基础层由 MEASURE-01 独立实现）
+
+MEASURE-01 已按本节建立默认关闭的强类型接收、内存 flow、服务端幂等、流量排除与未执行迁移候选，详见[决策事件隐私基础层](./MEASURE_01_DECISION_EVENT_FOUNDATION_CN.md)。该状态不改变 PH0-01 的审计结论：页面尚未接入事件，迁移未执行，生产采集关闭，没有真实样本或 Pilot 结果。
 
 共同规则：事件名固定小写；仅接受 allowlist 字段；客户端先生成 30 分钟滚动的内存 `flow_instance_id`（刷新即失效，不持久化、不写 cookie）；服务端按 `event_name + flow_instance_id + object_id + 30 分钟 bucket` 幂等。事件接收端在入库前丢弃已知 bot UA、预览/本地/health 请求和内部 allowlist 流量；对无法可靠识别的自动流量标为 `traffic_quality=unknown` 并排除主指标。主指标分母只含 `traffic_quality=human`。保留期、访问权和聚合阈值须由 Privacy Owner 在实施前确认。
 

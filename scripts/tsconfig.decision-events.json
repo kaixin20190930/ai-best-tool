@@ -1,0 +1,10 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": { "incremental": false },
+  "include": [
+    "../app/actions/decisionMetrics.ts",
+    "../lib/analytics/decisionEvents/**/*.ts",
+    "test-decision-event-foundation.ts",
+    "test-measure-01-freeze.ts"
+  ]
+}

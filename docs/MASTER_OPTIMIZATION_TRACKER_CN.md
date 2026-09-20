@@ -283,7 +283,8 @@ Synthesia 与 Replit 后原本只剩 Otter.ai、Lovable 和 Midjourney，低于�
 | STK      | Stack Audit + 7-Day Trial          | 私有工具栈、Keep/Replace/Remove/Missing 与试用到期决策闭环                                         | 已完成（6/6）；双用户真实 RLS、匿名边界、service-only 审计输出、私有路由 noindex/sitemap 排除、生产 smoke、持续监控、类型检查与完整 build 均通过 | Codex                       |
 | SIG      | Verified Usage + Change Watch      | 审核后的结构化使用信号和已确认变化通知，不公开低样本或利益相关数据                                 | 等待阶段二真实使用门槛；SIG/WAT 未开始                                                                                                           | Codex + 用户                |
 | PUB-UX   | 公开内容边界与页面简化             | 清除公开页面中的索引策略、编辑计划和转化目标；以真实判断、限制和证据替代内部说明 | PUB-01 至 PUB-04 均已完成独立 QA、部署与生产验证并关闭；真实 Pilot 尚未启动，需单独满足数据和审批门槛 | Codex                       |
-| PH0-01 | 产品假设、能力与指标审计 | 六个假设、现有能力、严格事件契约、任务簇评分与 Pilot/Gate 依赖均有仓库证据；不新增事件、URL 或生产写入 | [审计与指标契约](./PH0_01_PRODUCT_HYPOTHESES_METRICS_AUDIT_CN.md)已完成，等待 Owner 提供聚合数据、隐私治理与 Pilot 页面名单 | Codex + Owner |
+| PH0-01 | 产品假设、能力与指标审计 | 六个假设、现有能力、严格事件契约、任务簇评分与 Pilot/Gate 依赖均有仓库证据；不新增事件、URL 或生产写入 | 审计已完成；[审计与指标契约](./PH0_01_PRODUCT_HYPOTHESES_METRICS_AUDIT_CN.md)保持 DEV_READY，未声称真实数据或 Pilot 上线 | Codex + Owner |
+| MEASURE-01 | 决策事件隐私基础层 | 固定事件/字段 allowlist、30 分钟易失 flow、服务端幂等、流量排除、默认关闭、最小权限未执行迁移与 SEO 零差分 | `DEV_READY`；[专项文档](./MEASURE_01_DECISION_EVENT_FOUNDATION_CN.md)，待独立 QA；生产采集仍关闭，保留期与数据治理待 Owner 批准 | Codex + Owner |
 
 2026-09-14 新增公开内容边界治理：生产 Web3 comparison 暴露“保留索引、补真实证据”等内部编辑语言，且共享 Guide 模板将同类内容扩散到大量页面。该问题不改变既有 SEO 架构结论，但会削弱用户体验、可信度和差异化表达。完整基线、页面契约、分四个交付单元的实施计划、自动验收与反向评审见 [公开内容边界与页面简化实施方案](./PUBLIC_CONTENT_BOUNDARY_AND_PAGE_SIMPLIFICATION_PLAN_CN.md)。实施期间冻结 URL、metadata、canonical、hreflang、robots、schema 和 sitemap，先完成 PUB-01 门禁与 Web3 样板，生产通过后再扩到其他页面。
 

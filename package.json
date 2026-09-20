@@ -157,7 +157,10 @@
     "test:pub-03-html": "tsx scripts/audit-pub-03-html.ts",
     "test:public-module-registry": "tsx scripts/test-public-module-registry.ts",
     "test:pub-04-freeze": "tsx scripts/test-pub-04-freeze.ts",
-    "typecheck:public-modules": "tsc --noEmit --project scripts/tsconfig.public-modules.json"
+    "typecheck:public-modules": "tsc --noEmit --project scripts/tsconfig.public-modules.json",
+    "test:decision-events": "tsx scripts/test-decision-event-foundation.ts",
+    "test:measure-01-freeze": "tsx scripts/test-measure-01-freeze.ts",
+    "typecheck:decision-events": "tsc --noEmit --project scripts/tsconfig.decision-events.json"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
