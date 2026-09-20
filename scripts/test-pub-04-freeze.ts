@@ -27,8 +27,9 @@ assert.deepEqual(
 const before = (file: string) => execFileSync('git', ['show', `${base}:${file}`], { encoding: 'utf8' });
 const originalPackage = JSON.parse(before('package.json'));
 const currentPackage = JSON.parse(readFileSync('package.json', 'utf8'));
-for (const name of ['test:public-module-registry', 'test:pub-04-freeze', 'typecheck:public-modules'])
+for (const name of ['test:public-module-registry', 'test:pub-04-freeze', 'typecheck:public-modules']) {
   delete currentPackage.scripts[name];
+}
 assert.deepEqual(currentPackage, originalPackage, 'No dependencies, build or lint exemptions may change.');
 
 // The sole existing component edit is an optional area. Its complete original body is retained.
