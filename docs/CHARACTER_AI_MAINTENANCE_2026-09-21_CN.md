@@ -1,7 +1,7 @@
 # Character.AI 索引页维护交付
 
 日期：2026-09-21  
-状态：生产数据已提交，完整 build 与索引审计通过；等待代码部署与线上回读  
+状态：已完成并通过生产验收  
 范围：既有 `/ai/character_ai` canonical 对应实体；不新增 URL，不修改 sitemap 或索引批准
 
 ## 为什么优先维护
@@ -31,3 +31,11 @@
 - 数据库默认回滚演练，并断言所有受保护字段不变。
 - TypeScript、完整生产 build、索引一致性和生产 SEO smoke。
 - commit 后回读数据库与中英文生产页；确认 canonical、index 状态与 sitemap 边界不变。
+
+## 生产验收结果
+
+- 生产数据库回读：`published + continue_index`，下次复核 `2026-10-21`。
+- 索引一致性：64 条记录、51 条公开、13 条索引；26 个工具 sitemap URL，0 缺失、0 越界、0 重复 canonical、0 页面问题。
+- `/ai/character_ai` 与 `/cn/ai/character_ai` 均显示 Reading Mode、新复核日期和当前数据库正文，没有 `noindex`，canonical 正常。
+- 全站 production SEO smoke 通过；sitemap 保持 118 条，没有 internal 或 comparison URL。
+- 代码提交：`f3f5bd12 Refresh Character AI decision evidence`。
