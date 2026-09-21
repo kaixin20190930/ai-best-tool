@@ -12,20 +12,28 @@ import { getEditorialReviewRecord } from '../lib/seo/contentReviewDates';
 import { buildLocalizedPageMetadata } from '../lib/seo/metadata';
 import { getSourceLastModified } from '../lib/seo/sitemapDates';
 import { BEST_TOPIC_EDIT, getStaticPageLastModified, STATIC_PAGE_EDITS } from '../lib/seo/staticPageDates';
+import { getToolIndexDecision } from '../lib/seo/toolIndexing';
 import type { Category } from '../lib/services/categories';
 import type { Tool } from '../lib/services/tools';
 import { loadTopicCatalog, selectTopicTools } from '../lib/services/topicTools';
 
 const category = { id: 'productivity-id', slug: 'productivity', toolCount: 20 } as unknown as Category;
+const monitorOnlyCategory = { id: 'text-writing-id', slug: 'text-writing', toolCount: 3 } as unknown as Category;
 const tool = (name: string, changes: Partial<Tool> = {}): Tool =>
   ({
     id: name,
     name,
     title: { en: name },
-    content: { en: 'A real tool summary.' },
+    content: { en: 'A real tool summary with enough verified context to clear the indexing quality gate. '.repeat(2) },
+    detail: { en: 'Verified workflow capabilities, pricing boundaries, and practical limitations. '.repeat(4) },
     url: `https://example.com/${name}`,
     status: 'published',
+    pageQualityStatus: 'continue_index',
     categoryId: category.id,
+    imageUrl: 'https://example.com/logo.png',
+    thumbnailUrl: 'https://example.com/screenshot.png',
+    pricing: 'freemium',
+    tags: ['automation'],
     createdAt: new Date('2026-08-01'),
     updatedAt: new Date('2026-09-01'),
     ...changes,
@@ -47,6 +55,7 @@ const fixtureTools = [
   tool('unrelated-productivity'),
   tool('pipedream', { status: 'draft' }),
   tool('zapier', { pageQualityStatus: 'archive' }),
+  tool('jasper', { categoryId: monitorOnlyCategory.id, pageQualityStatus: 'monitor' }),
 ];
 
 async function main() {
@@ -76,6 +85,14 @@ async function main() {
     selectTopicTools(automation, [tool('n8n')]).indexable,
     false,
     'One accurate candidate is not a comparison shortlist.',
+  );
+  assert.equal(
+    selectTopicTools(automation, [
+      tool('n8n', { pageQualityStatus: 'monitor' }),
+      tool('make', { pageQualityStatus: 'monitor' }),
+    ]).indexable,
+    false,
+    'Monitor-only topic candidates must not make a topic indexable.',
   );
   assert.equal(MIN_TOPIC_CANDIDATES, 2);
   assert.equal(getTopListTopic('unknown'), null);
@@ -176,15 +193,18 @@ async function main() {
   Pool.prototype.query = (async (sql: string) => {
     assert.match(sql.trim(), /^SELECT\b/);
     if (fail) throw new Error('Fixture database unavailable');
-    if (sql.includes('COUNT(*) as total'))
+    if (sql.includes('COUNT(*) as total')) {
       return { rows: [{ total: String(fixtureTools.length + (incomplete ? 1 : 0)) }] };
+    }
     if (sql.includes('FROM tools')) return { rows: fixtureTools };
-    if (sql.includes('FROM categories')) return { rows: [category] };
+    if (sql.includes('FROM categories')) return { rows: [category, monitorOnlyCategory] };
     throw new Error(`Unexpected SQL: ${sql}`);
   }) as typeof Pool.prototype.query;
   const catalog = await loadTopicCatalog();
   const entries = await sitemap();
-  await new Promise((resolve) => setTimeout(resolve, 25));
+  await new Promise<void>((resolve) => {
+    setTimeout(resolve, 25);
+  });
   assert.deepEqual(
     await sitemap(),
     entries,
@@ -198,6 +218,25 @@ async function main() {
   );
   assert.equal(missingCategoryDates.length, 2);
   assert(missingCategoryDates.every((entry) => entry.lastModified === undefined));
+  assert.equal(
+    entries.some((entry) => new URL(entry.url).pathname.includes('/categories/text-writing')),
+    false,
+    'A category with only monitor/noindex tools must stay out of the sitemap.',
+  );
+  assert.equal(
+    entries.filter((entry) => new URL(entry.url).pathname.includes('/categories/productivity')).length,
+    2,
+    'An existing category with an indexable tool must remain in the sitemap.',
+  );
+  const expectedToolPaths = fixtureTools
+    .filter((item) => getToolIndexDecision(item).indexable)
+    .flatMap((item) => ['/', '/cn/'].map((prefix) => `${prefix}ai/${item.name}`));
+  for (const expectedPath of expectedToolPaths) {
+    assert(
+      entries.some((entry) => new URL(entry.url).pathname === expectedPath),
+      `${expectedPath}: indexable tool URL must remain in the sitemap.`,
+    );
+  }
   assert.equal(getSourceLastModified(undefined, null, new Date('invalid')), undefined);
   assert.deepEqual(getSourceLastModified(new Date('invalid'), '2026-07-18'), new Date('2026-07-18'));
   assert.equal(getStaticPageLastModified('/guides/ai-video-tools').toISOString().slice(0, 10), '2026-07-18');

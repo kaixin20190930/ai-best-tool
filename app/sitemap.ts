@@ -101,7 +101,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let categorySitemapEntries: MetadataRoute.Sitemap = [];
   try {
     const categories = (await getAllCategories(true)) as CategoryWithCount[];
-    const eligibleCategories = categories.filter((category) => category.toolCount >= 3);
+    const indexableCategoryIds = new Set(
+      catalog.tools.filter((tool) => getToolIndexDecision(tool).indexable).map((tool) => tool.categoryId),
+    );
+    const eligibleCategories = categories.filter(
+      (category) => category.toolCount >= 3 && indexableCategoryIds.has(category.id),
+    );
 
     categorySitemapEntries = eligibleCategories.flatMap((category) =>
       sitemapLocales.map((locale) => {
