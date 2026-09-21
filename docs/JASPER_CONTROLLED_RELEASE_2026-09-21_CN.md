@@ -1,6 +1,6 @@
 # Jasper 受控发布交付（2026-09-21）
 
-状态：发布准备完成；本交付未执行 `--commit`、推送或部署。生产数据库连接未配置，因此生产只读 preflight 与默认回滚演练均在连接前安全停止。
+状态：已受控发布；总控已完成生产只读 preflight、默认 rollback 与一次显式 `--commit`。本交付不执行新的生产写入、推送或部署；线上 verify 待本次审计状态同步进入部署环境后复跑。
 
 ## 一次性日期授权
 
@@ -34,12 +34,13 @@ Jasper 的原始 `publishNotBefore` 保持为 `2026-09-22`，不改写历史门�
 
 | 检查 | 结果 |
 | --- | --- |
+| Jasper production preflight、默认 rollback、显式 `--commit` | 总控已通过；唯一 ID `5a0c7e91-9a5c-4f84-923a-d8345edaa918` 回读为 `published + monitor`，`reviewedAt=2026-09-20`、`nextReviewDate=2026-10-20` |
 | `test:jasper-preaudit`、`test:candidate-release` | 通过 |
 | Jasper `validate` | 通过；显示有效窗口 `2026-09-21` 与原始日期 `2026-09-22` |
 | TypeScript、索引一致性契约、工具索引门禁、SEO 架构 | 通过 |
 | 完整 Next.js build | 通过；仅为构建图使用进程内无功能 Supabase secret 占位值，未写配置或访问生产数据 |
 | 生产 SEO smoke | 通过；sitemap 118 URL |
 | Jasper 线上路由 | 英中均为 200、自 canonical、`noindex`，并排除在 sitemap 外 |
-| 生产数据库身份 preflight、release rollback、数据库 sitemap 一致性审计 | 未执行完成：当前工作树没有有效 `POSTGRES_URL` / 等价连接变量；发布器在连接前停止，零写入 |
+| online verify | 尚未通过：commit 后预审仍是 `ready_for_next_slot`，而 verify 要求 `released`。本次仅同步本地审计状态；不伪造 verify 成功，待部署该状态同步后由总控以只读 verify 复跑。 |
 
 残余风险：Business 合同、包含 credits、费率、PAYG 上限、地区/税费、DPA 与托管/子处理商选择均依客户合同和配置；本站没有付费 workspace、Business 合同或性能/输出准确性实测。提前授权也不构成索引批准。

@@ -4,7 +4,7 @@
   "officialUrl": "https://www.jasper.ai/",
   "existingRoute": "/ai/jasper",
   "action": "migrate_existing_fallback",
-  "status": "ready_for_next_slot",
+  "status": "released",
   "reviewedAt": "2026-09-20",
   "publishNotBefore": "2026-09-22",
   "ownerEarlyReleaseOverride": {
@@ -24,7 +24,9 @@
     ]
   },
   "sitemapChangeApproved": false,
-  "productionWriteApproved": false,
+  "productionWriteApproved": true,
+  "releasedAt": "2026-09-21",
+  "actualPublishedAt": "2026-09-21",
   "releaseIndexState": "monitor",
   "routeAudit": {"english": "200_self_canonical_noindex", "chinese": "200_self_canonical_noindex", "sitemapMatches": 0, "productionEntityMatches": 0},
   "category": {"discoverySlug": "writing", "storageSlug": "text-writing"},

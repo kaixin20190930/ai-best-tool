@@ -166,7 +166,7 @@ function loadPreaudit(candidate: Candidate): Preaudit {
   } else {
     assert.equal(audit.productionWriteApproved, true, `${candidate.slug}: released row needs production approval`);
     assert(
-      audit.releasedAt && audit.releasedAt >= audit.publishNotBefore,
+      audit.releasedAt && audit.releasedAt >= releaseNotBefore(candidate, audit),
       `${candidate.slug}: released date is invalid`,
     );
     assert.equal(audit.releaseIndexState, 'monitor', `${candidate.slug}: controlled release must remain monitor`);
