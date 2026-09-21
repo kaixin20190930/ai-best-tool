@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 
 import { BASE_URL } from '@/lib/env';
 import { getEditorialReviewRecord } from '@/lib/seo/contentReviewDates';
+import { hasActiveExploreFilters } from '@/lib/seo/exploreIndexing';
 import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { getAllCategories } from '@/lib/services/categories';
 import { getAllTags } from '@/lib/services/tags';
@@ -26,7 +27,7 @@ interface PageProps {
   };
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: PageProps): Promise<Metadata> {
   const isChinese = params.locale === 'cn' || params.locale === 'tw';
 
   return buildLocalizedPageMetadata({
@@ -38,6 +39,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description: isChinese
       ? '浏览和筛选精选 AI 工具目录，按任务、分类、价格、标签和最近更新缩小范围，再进入详情页比较功能、限制与真实信号。'
       : 'Browse and filter a curated AI tools directory by task, category, pricing, tags, and freshness, then compare features, limits, and real signals on detail pages.',
+    indexable: !hasActiveExploreFilters(searchParams),
     baseUrl: BASE_URL,
   });
 }
