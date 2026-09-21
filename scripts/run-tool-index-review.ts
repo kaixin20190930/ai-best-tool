@@ -3,7 +3,11 @@ import { config } from 'dotenv';
 import { Client } from 'pg';
 
 import { getDatabaseConnectionString } from '../lib/database/connection';
-import { evaluateToolIndexReview, type SiteSearchHealth } from '../lib/services/toolIndexReview';
+import {
+  deriveIndexReviewEvidence,
+  evaluateToolIndexReview,
+  type SiteSearchHealth,
+} from '../lib/services/toolIndexReview';
 import { getToolQuality } from '../lib/services/toolQuality';
 
 type Options = {
@@ -44,14 +48,6 @@ function parseArgs(args: string[]): Options {
   };
 }
 
-function record(value: unknown): Record<string, unknown> {
-  return value && typeof value === 'object' && !Array.isArray(value) ? (value as Record<string, unknown>) : {};
-}
-
-function list(value: unknown): unknown[] {
-  return Array.isArray(value) ? value : [];
-}
-
 async function main() {
   config({ path: '.env.local', quiet: true });
   const options = parseArgs(process.argv.slice(2));
@@ -66,12 +62,7 @@ async function main() {
     );
     assert.equal(toolResult.rowCount, 1, `Expected exactly one tool named ${options.slug}`);
     const tool = toolResult.rows[0];
-    const features = record(tool.features);
-    const editorial = record(features.editorial);
-    const market = record(features.marketValidation);
-    const decision = record(features.decision);
-    const sourceUrls = list(editorial.sourceUrls).concat(list(features.sourceUrls));
-    const independentSignals = list(market.strongSignals).concat(list(market.supportingSignals));
+    const evidence = deriveIndexReviewEvidence(tool.features);
     const quality = getToolQuality(tool);
     const policyResult = await client.query(
       `SELECT paused, daily_limit, weekly_limit FROM tool_index_release_policy WHERE singleton=true`,
@@ -92,14 +83,11 @@ async function main() {
       mediaComplete: quality.checks
         .filter((check) => ['logo', 'screenshot'].includes(check.key))
         .every((check) => check.passed),
-      marketValidated: market.verdict === 'validated',
-      officialSourceCount: new Set(sourceUrls.filter((item): item is string => typeof item === 'string')).size,
-      independentSignalCount: independentSignals.length,
-      decisionContentComplete:
-        list(decision.bestFor).length > 0 &&
-        list(decision.notIdealFor).length > 0 &&
-        list(decision.compareAxes).length > 0,
-      editorialDatesComplete: typeof editorial.reviewedAt === 'string' && Boolean(tool.next_review_date),
+      marketValidated: evidence.marketValidated,
+      officialSourceCount: evidence.officialSourceCount,
+      independentSignalCount: evidence.independentSignalCount,
+      decisionContentComplete: evidence.decisionContentComplete,
+      editorialDatesComplete: evidence.editorialReviewed && Boolean(tool.next_review_date),
       canonicalUnique: options.canonicalUnique,
       intentUnique: options.intentUnique,
       automatedSeoPassed: options.seoPassed,

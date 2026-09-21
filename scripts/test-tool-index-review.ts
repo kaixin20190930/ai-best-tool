@@ -1,6 +1,10 @@
 import assert from 'node:assert/strict';
 
-import { evaluateToolIndexReview, type IndexReviewInput } from '../lib/services/toolIndexReview';
+import {
+  deriveIndexReviewEvidence,
+  evaluateToolIndexReview,
+  type IndexReviewInput,
+} from '../lib/services/toolIndexReview';
 
 const passing: IndexReviewInput = {
   published: true,
@@ -36,4 +40,21 @@ assert.equal(
   'approve_continue_index',
   'Pre-index review must not require impossible page-level GSC metrics',
 );
+const releasedPayloadEvidence = deriveIndexReviewEvidence({
+  audience: { bestFit: { en: ['Writers'] }, notIdealFor: { en: ['Unreviewed automation'] } },
+  editorial: { reviewedAt: '2026-09-20' },
+  decision: { compareAxes: { en: ['Cost'] }, limitations: { en: ['Usage limits'] } },
+  evidence: {
+    official: [{ url: 'https://example.com/pricing' }, { url: 'https://example.com/privacy' }],
+    independent: [{ url: 'https://reviews.example/tool' }, { url: 'https://store.example/tool' }],
+  },
+  marketValidation: { verdict: 'validated', strongSignals: ['adoption', 'reviews'] },
+});
+assert.deepEqual(releasedPayloadEvidence, {
+  officialSourceCount: 2,
+  independentSignalCount: 2,
+  decisionContentComplete: true,
+  marketValidated: true,
+  editorialReviewed: true,
+});
 console.log('PASS: index review decisions, precedence, freshness, and pre-index GSC boundary');

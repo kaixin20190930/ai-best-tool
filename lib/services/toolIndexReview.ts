@@ -44,6 +44,61 @@ export interface IndexReviewResult {
   gscSnapshotAgeDays: number | null;
 }
 
+function record(value: unknown): Record<string, unknown> {
+  return value && typeof value === 'object' && !Array.isArray(value) ? (value as Record<string, unknown>) : {};
+}
+
+function localizedList(value: unknown): unknown[] {
+  if (Array.isArray(value)) return value;
+  const localized = record(value);
+  for (const locale of ['en', 'zh', 'cn']) {
+    const items = localized[locale];
+    if (Array.isArray(items) && items.length > 0) return items;
+  }
+  return [];
+}
+
+export function deriveIndexReviewEvidence(featuresValue: unknown): {
+  officialSourceCount: number;
+  independentSignalCount: number;
+  decisionContentComplete: boolean;
+  marketValidated: boolean;
+  editorialReviewed: boolean;
+} {
+  const features = record(featuresValue);
+  const evidence = record(features.evidence);
+  const market = record(features.marketValidation);
+  const audience = record(features.audience);
+  const decision = record(features.decision);
+  const editorial = record(features.editorial);
+  const officialUrls = (Array.isArray(evidence.official) ? evidence.official : [])
+    .map((item) => record(item).url)
+    .filter((url): url is string => typeof url === 'string' && url.length > 0);
+  const independentUrls = (Array.isArray(evidence.independent) ? evidence.independent : [])
+    .map((item) => record(item).url)
+    .filter((url): url is string => typeof url === 'string' && url.length > 0);
+  const marketUrls = Array.isArray(market.evidenceUrls)
+    ? market.evidenceUrls.filter((url): url is string => typeof url === 'string' && url.length > 0)
+    : [];
+  const strongSignals = Array.isArray(market.strongSignals) ? market.strongSignals : [];
+  const supportingSignals = Array.isArray(market.supportingSignals) ? market.supportingSignals : [];
+
+  return {
+    officialSourceCount: new Set(officialUrls).size,
+    independentSignalCount: Math.max(
+      new Set([...independentUrls, ...marketUrls]).size,
+      strongSignals.length + supportingSignals.length,
+    ),
+    decisionContentComplete:
+      localizedList(audience.bestFit).length > 0 &&
+      localizedList(audience.notIdealFor).length > 0 &&
+      localizedList(decision.compareAxes).length > 0 &&
+      localizedList(decision.limitations).length > 0,
+    marketValidated: market.verdict === 'validated',
+    editorialReviewed: typeof editorial.reviewedAt === 'string' && editorial.reviewedAt.length > 0,
+  };
+}
+
 function dateAgeDays(asOfDate: string, snapshotDate: string | null): number | null {
   if (!snapshotDate) return null;
   const age = Math.floor((Date.parse(`${asOfDate}T00:00:00Z`) - Date.parse(`${snapshotDate}T00:00:00Z`)) / 86400000);
