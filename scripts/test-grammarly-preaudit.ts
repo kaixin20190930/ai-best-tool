@@ -15,10 +15,11 @@ const pipeline = fs.readFileSync('scripts/candidate-release-pipeline.ts', 'utf8'
 assert.equal(audit.slug, 'grammarly');
 assert.equal(audit.existingRoute, '/ai/grammarly');
 assert.equal(audit.action, 'migrate_existing_fallback');
-assert.equal(audit.status, 'ready_for_next_slot');
+assert.equal(audit.status, 'released');
 assert.equal(audit.reviewedAt, '2026-09-20');
 assert.equal(audit.publishNotBefore, '2026-09-21');
-assert.equal(audit.productionWriteApproved, false);
+assert.equal(audit.productionWriteApproved, true);
+assert.equal(audit.releasedAt, '2026-09-21');
 assert.equal(audit.sitemapChangeApproved, false);
 assert.equal(audit.releaseIndexState, 'monitor');
 assert.equal(audit.routeAudit.productionEntityMatches, 0);
@@ -95,13 +96,13 @@ const decision = getToolIndexDecision({
   tags: payload.tags,
 });
 assert.equal(decision.indexable, false);
-const earlyRelease = spawnSync(
+const duplicateRelease = spawnSync(
   'tsx',
-  ['scripts/candidate-release-pipeline.ts', '--candidate=grammarly', '--phase=release', '--as-of=2026-09-20'],
+  ['scripts/candidate-release-pipeline.ts', '--candidate=grammarly', '--phase=release', '--as-of=2026-09-21'],
   { cwd: process.cwd(), encoding: 'utf8', env: { ...process.env, POSTGRES_URL: 'postgres://invalid:invalid@127.0.0.1:1/invalid' } },
 );
-assert.equal(earlyRelease.status, 1);
-assert.match(earlyRelease.stderr, /release window opens 2026-09-21/);
+assert.equal(duplicateRelease.status, 1);
+assert.match(duplicateRelease.stderr, /candidate is already released/);
 assert.match(detailPage, /checkedAt: '2026-09-20'/);
 assert.doesNotMatch(detailPage, /17776038294285-Error-message-You-re-out-of-prompts/);
 assert.match(detailPage, /if \(key === 'grammarly'\)/);

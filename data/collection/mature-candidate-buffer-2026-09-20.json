@@ -28,7 +28,7 @@
       "officialUrl": "https://www.grammarly.com/",
       "categorySlug": "text-writing",
       "candidateClass": "mature_high_demand",
-      "status": "ready_for_next_slot",
+      "status": "released_monitor_noindex",
       "whyNow": "A durable writing-assistant category leader whose current transition toward Superhuman Go creates real plan, product-scope and migration questions.",
       "officialSources": [
         "https://www.grammarly.com/business/enterprise",
@@ -40,7 +40,7 @@
       ],
       "decisionAngles": ["Free versus paid writing help", "Grammarly versus general AI chat", "Superhuman Go migration scope", "team governance and data controls"],
       "risks": ["Product naming and packaging are changing", "Consumer and enterprise entitlements must not be mixed"],
-      "publicReleaseApproved": false,
+      "publicReleaseApproved": true,
       "indexReleaseApproved": false
     },
     {

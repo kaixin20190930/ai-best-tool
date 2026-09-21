@@ -47,24 +47,22 @@ for (const [index, candidate] of payload.candidates.entries()) {
   domains.add(domain);
 
   assert(
-    ['screened_for_deep_review', 'deep_review_complete', 'ready_for_next_slot', 'released'].includes(
-      candidate.status,
-    ),
+    ['screened_for_deep_review', 'deep_review_complete', 'ready_for_next_slot', 'released_monitor_noindex'].includes(candidate.status),
     `${candidate.slug}: invalid candidate status`,
   );
   assert(candidate.officialSources.length >= 2, `${candidate.slug}: official source gap`);
   assert(candidate.independentSources.length >= 1, `${candidate.slug}: independent source gap`);
   assert(candidate.decisionAngles.length >= 4, `${candidate.slug}: decision-angle gap`);
   assert(candidate.risks.length >= 2, `${candidate.slug}: risk disclosure gap`);
-  assert.equal(candidate.publicReleaseApproved, false);
+  assert.equal(candidate.publicReleaseApproved, candidate.status === 'released_monitor_noindex');
   assert.equal(candidate.indexReleaseApproved, false);
   classCounts[candidate.candidateClass] += 1;
 }
 
 assert.deepEqual(classCounts, payload.composition);
-assert.equal(payload.candidates[0].status, 'ready_for_next_slot');
+assert.equal(payload.candidates[0].status, 'released_monitor_noindex');
 assert.equal(payload.candidates[1].status, 'ready_for_next_slot');
 assert(payload.excluded.some((item) => item.product === 'Sourcegraph Cody'));
 assert(payload.excluded.some((item) => item.product.includes('Amazon Q Developer')));
 
-console.log(`PASS mature candidate buffer: ${payload.candidates.length} unique candidates, release and index gates closed`);
+console.log(`PASS mature candidate buffer: ${payload.candidates.length} unique candidates, controlled release and index gates valid`);

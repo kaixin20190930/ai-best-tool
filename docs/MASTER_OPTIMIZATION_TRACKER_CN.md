@@ -337,6 +337,6 @@ query、Top 20 page、已抓取未编入索引与软 404 数量。
 - 自动门禁覆盖数量、唯一性、来源、决策维度、风险披露及公开/索引批准关闭状态。
 - 生命周期异常的 Sourcegraph Cody 和 Amazon Q Developer IDE plugins 已排除，避免以历史热度制造失效页面。
 - 详情：[成熟高需求工具候选缓冲池](./MATURE_CANDIDATE_BUFFER_2026-09-20_CN.md)。下一项：Grammarly 受控发布。
-- Grammarly 发布包已完成：保留现有 canonical，分离母品牌 Superhuman、写作产品 Grammarly 与助手 Go；旧静态快照已更新，三语言 Decision Card、本地编辑素材、候选流水线和日期门禁均通过自动验收。当前仍为 noindex 且不在 sitemap，没有生产写入或索引批准；2026-09-21 先做只读 preflight，再按 rollback -> commit -> verify 发布。
+- Grammarly 已于 2026-09-21 完成受控发布：官方价格和训练边界复核、生产只读 preflight、rollback、完整 build、commit 与三语言回读均通过。生产唯一实体为 `published + monitor/noindex`，保留现有 canonical，不进入 sitemap，也没有索引批准；下一次事实复核为 2026-10-20。
 - Jasper 发布包已完成：生产无实体，现有 canonical 静态页维持 `noindex` 且不在 sitemap；三语言 Decision Card、本地编辑素材、候选流水线和日期门禁覆盖 Pro 单席位、Business 定制合同、credits、品牌上下文、数据处理和人工复核边界。当前没有生产写入或索引批准；最早于 2026-09-22 执行只读 preflight 与受控发布。
 - Descript 发布包已完成：生产无实体，现有英中 canonical 静态页继续 `noindex` 且不在 sitemap；三语言 Decision Card、自制编辑素材和统一流水线覆盖逐席位定价、media hours、AI credits、团队共享池、AI Speaker 同意、训练与人工访问及输出权利边界。当前不写生产、不开放索引；最早 2026-09-23 执行只读 preflight 与受控发布。

@@ -355,7 +355,7 @@ Review 结论：方案可实施。P0 不改变 URL 和索引面，先增强主�
 
 ## 十六、成熟工具受控发布队列（2026-09-20）
 
-- 候选池只负责研究排队，不等于页面发布或索引批准。Grammarly、Jasper 与 Descript 已完成发布包，分别锁定 2026-09-21、2026-09-22、2026-09-23。
+- 候选池只负责研究排队，不等于索引批准。Grammarly 已于 2026-09-21 以 `published + monitor/noindex` 受控发布；Jasper 与 Descript 发布包分别锁定 2026-09-22、2026-09-23。
 - Descript 生产数据库实体为 0，英文和中文静态 fallback 均为 `200 + self-canonical + noindex`，sitemap 匹配为 0；下一步采用 `migrate_existing_fallback`，不得新建第二个 canonical。
 - Descript 的产品边界固定为一个文本式音视频编辑工作区；Underlord、AI Speakers、voice clone、avatar 与 dubbing 只作为功能，不派生独立工具页。
 - Decision Card 必须分开呈现 media hours 与 AI credits，解释共享 Drive 池、额度不结转和动作/模型导致的消耗差异；禁止拼成一个虚构的“统一额度”或“每条视频成本”。
