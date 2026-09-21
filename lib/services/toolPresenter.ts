@@ -52,9 +52,19 @@ function getToolStringArray(value: unknown): string[] {
     : [];
 }
 
+function hasStructuredEditorialReview(features: unknown): boolean {
+  if (!features || typeof features !== 'object' || Array.isArray(features)) return false;
+  const editorial = (features as Record<string, unknown>).editorial;
+  if (!editorial || typeof editorial !== 'object' || Array.isArray(editorial)) return false;
+  const reviewedAt = (editorial as Record<string, unknown>).reviewedAt;
+  return typeof reviewedAt === 'string' && reviewedAt.trim().length > 0;
+}
+
 export function toolToListRow(tool: Tool, locale = 'en'): WebNavigationListRow {
   const scopeCorrection = getLegacyToolScopeContent(tool.name, locale);
-  const factReview = getHistoricalToolFactReview(tool.name, locale);
+  const factReview = hasStructuredEditorialReview(tool.features)
+    ? null
+    : getHistoricalToolFactReview(tool.name, locale);
   const safetyReview = getSafetyToolReview(tool.name, locale);
   const featureRecord =
     tool.features && typeof tool.features === 'object' ? (tool.features as Record<string, unknown>) : {};
@@ -93,7 +103,9 @@ export function toolToListRow(tool: Tool, locale = 'en'): WebNavigationListRow {
 
 export function toolToDetailData(tool: Tool, locale = 'en'): WebNavigationDetailData {
   const correction = getLegacyToolScopeContent(tool.name, locale);
-  const factReview = getHistoricalToolFactReview(tool.name, locale);
+  const factReview = hasStructuredEditorialReview(tool.features)
+    ? null
+    : getHistoricalToolFactReview(tool.name, locale);
   const safetyReview = getSafetyToolReview(tool.name, locale);
   const content = safetyReview?.content || correction?.content || factReview?.content || getLocalizedToolValue(tool.content, locale);
   const detail = safetyReview?.detail || correction?.detail || factReview?.detail || getLocalizedToolValue(tool.detail, locale);

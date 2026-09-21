@@ -41,6 +41,17 @@ assert(!getHistoricalToolFactReview('artiversehub-ai', 'en')?.detail.includes('T
 assert(getHistoricalToolFactReview('woy-ai', 'en')?.detail.includes('directory'));
 assert(getHistoricalToolFactReview('shop_your_ai_powered_Shopping_assistant', 'en')?.detail.includes('standalone AI assistant'));
 assert.equal(getHistoricalToolFactReview('claude', 'en'), null);
+const modernCharacter = {
+  name: 'character_ai',
+  title: { en: 'Current Character title' },
+  content: { en: 'Current Character summary' },
+  detail: { en: 'Current Character detail' },
+  url: 'https://character.ai/',
+  tags: [],
+  features: { editorial: { reviewedAt: '2026-09-21' } },
+} as unknown as Tool;
+assert.equal(toolToListRow(modernCharacter, 'en').content, 'Current Character summary');
+assert.equal(toolToDetailData(modernCharacter, 'en').detail, 'Current Character detail');
 const sitemapSource = readFileSync('app/sitemap.ts', 'utf8');
 assert(sitemapSource.includes('getCanonicalToolSlug(tool.name)'), 'Sitemap must never emit raw historical slugs');
 
