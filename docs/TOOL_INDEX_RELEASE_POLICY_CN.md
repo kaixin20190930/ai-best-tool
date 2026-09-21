@@ -84,6 +84,55 @@ OpenRouter 与 n8n 同日从未批准索引的 fallback 转为 continue_index，
 
 观察期结束只代表可以评审，不会自动把状态改成 `continue_index`。Synthesia、Replit、Otter.ai、Midjourney 等成熟候选可使用快速通道；Lovable 等计费或产品边界变化较快的候选至少观察 7-14 天。
 
+## 固定评审系统、责任与数据边界
+
+这不是“先 noindex，等它自己出现 GSC 数据”的流程。`monitor/noindex` 页面不会产生正常的 Google 展示和 query 数据，因此发布前阶段只能评估页面质量、证据、身份、重复意图和站点整体搜索健康；候选页自己的 GSC 表现只能在单项批准 `continue_index` 后观察。
+
+| 阶段 | 固定频率 | 自动化负责 | 总控负责 | 用户负责 |
+| --- | --- | --- | --- | --- |
+| 新工具公开验收 | 每天 09:00，最多一个到期发布槽 | 查重、事实复核、测试、build、rollback/commit、线上 smoke | 判断冲突、风险和是否允许继续 | 只处理外部账号、重大方向或不可逆风险授权 |
+| `monitor` 技术观察 | 发布后按 48-72 小时、7-14 天或 30 天分层 | HTTP、双语渲染、canonical、robots、sitemap、素材、Decision Card、日期与来源检查 | 判定产品身份、重复意图和证据是否足够 | 通常无需操作 |
+| 索引资格评审 | 每周五一次；每天最多批准一个 | 生成到期候选与逐门槛结果，读取索引策略和最近 GSC/Coverage 基线 | 仅在全部硬门槛通过、策略未暂停时执行单项批准 | 仅在改变全站索引节奏或接受高风险例外时授权 |
+| 放开索引后观察 | 第 7、14、28 天 | 检查 URL Inspection、sitemap、Coverage 与可用 GSC 页面/query 数据 | 决定保持、增强、退回 monitor、合并或归档 | 提供系统无法自动读取的 GSC 导出或业务事实 |
+| 全站健康复盘 | 每周技术复盘；每个 28 天窗口做趋势复盘 | build、SEO smoke、索引一致性、未收录与重复异常检查 | 决定暂停或恢复下一批索引 | 只批准重大策略变化 |
+
+### 发布前可观察的五个维度
+
+1. **技术完整性**：页面 200、英中 self-canonical、`noindex,follow`、不在 sitemap、素材可访问、结构化数据与可见内容一致。
+2. **内容完整性**：质量分至少 80，且 Decision Card、Best for、Not ideal for、比较维度、价格/额度、真实限制、最近核查和下次复查均非占位内容。
+3. **证据与市场真实性**：`marketValidation.verdict = validated`，至少两条互补官方来源、一条强独立采用信号和另一条强/辅助信号；厂商自述、品牌知名度或付费不能单独通过。
+4. **身份与搜索意图**：只有一个 canonical 产品实体；不与现有 Tool、Best、Guide、comparison、alias 争夺同一意图；功能名不得被拆成重复产品页。
+5. **站点级搜索健康**：使用最近可用的 7/28 天 GSC 与 Coverage 判断全站非品牌展示、详情页覆盖、批量未收录、软 404 和 canonical 异常。它是站点放量门槛，不冒充候选页自身表现。
+
+### 单项索引批准判定
+
+只有以下条件全部为真，结果才可为 `approve_continue_index`：
+
+- 达到对应风险层的最短观察期；
+- 本节五个维度全部通过，且没有 unresolved 冲突；
+- 最近一次站点级 GSC/Coverage 基线足够新，可用于本周决策；数据过期或缺失时结果只能是 `hold_monitor`；
+- `tool_index_release_policy.paused = false`；
+- 当日与当周数据库额度可用；
+- 单项事务能同时写入 `continue_index` 和索引批准账本，随后线上 robots 与 sitemap 验证通过。
+
+评审结果固定为以下五种之一：
+
+- `approve_continue_index`：全部通过，单项放行。
+- `hold_monitor`：质量合格但仍在观察、数据不足、策略暂停或额度不足。
+- `repair_monitor`：页面、证据、素材或内容需要修复，修复后重新评审。
+- `permanent_noindex`：有站内价值但没有独立搜索意图。
+- `merge_or_archive`：重复、身份错误、失效或不值得维持独立页面。
+
+### 放开索引后的评判
+
+- 第 7 天首先确认 Google 可发现、canonical 正确且无技术异常；没有展示不自动判失败。
+- 第 14 天查看是否开始获得与产品身份一致的 query、页面展示和有效抓取；排名较低时不把低 CTR 单独归因于 title。
+- 第 28 天结合展示、query 相关性、CTR/排名关系、详情页覆盖和站点总体趋势，决定保持、增强或退回 `monitor`。
+- 单页零展示只有在同时确认无独立搜索意图、与既有页面重复或长期无法被索引时，才支持合并/noindex；不能仅凭零点击删除页面。
+- 新增索引页实际索引率低于 50%、批量未收录上升、非品牌展示持续下降、重复意图增加或生产异常时，全站暂停下一批至少一周。
+
+当前生产策略状态必须以数据库为准。2026-09-21 只读检查仍为 `paused = true`，原因是历史批准账本尚未正式解除暂停；当前任何候选即使内容合格，也只能得到 `hold_monitor`，不能批准 `continue_index`。
+
 ## 从 `monitor` 升级为 `continue_index` 的硬门槛
 
 必须同时满足：
