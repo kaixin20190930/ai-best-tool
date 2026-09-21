@@ -17,7 +17,7 @@ import type { Category } from '../lib/services/categories';
 import type { Tool } from '../lib/services/tools';
 import { loadTopicCatalog, selectTopicTools } from '../lib/services/topicTools';
 
-const category = { id: 'productivity-id', slug: 'productivity', toolCount: 20 } as unknown as Category;
+const category = { id: 'productivity-id', slug: 'productivity', toolCount: 3 } as unknown as Category;
 const monitorOnlyCategory = { id: 'text-writing-id', slug: 'text-writing', toolCount: 3 } as unknown as Category;
 const tool = (name: string, changes: Partial<Tool> = {}): Tool =>
   ({
@@ -55,7 +55,9 @@ const fixtureTools = [
   tool('unrelated-productivity'),
   tool('pipedream', { status: 'draft' }),
   tool('zapier', { pageQualityStatus: 'archive' }),
+  tool('deepl', { categoryId: monitorOnlyCategory.id }),
   tool('jasper', { categoryId: monitorOnlyCategory.id, pageQualityStatus: 'monitor' }),
+  tool('copy-ai', { categoryId: monitorOnlyCategory.id, pageQualityStatus: 'monitor' }),
 ];
 
 async function main() {
@@ -221,12 +223,12 @@ async function main() {
   assert.equal(
     entries.some((entry) => new URL(entry.url).pathname.includes('/categories/text-writing')),
     false,
-    'A category with only monitor/noindex tools must stay out of the sitemap.',
+    'A category with one indexable and multiple monitor/noindex tools must stay out of the sitemap.',
   );
   assert.equal(
     entries.filter((entry) => new URL(entry.url).pathname.includes('/categories/productivity')).length,
     2,
-    'An existing category with an indexable tool must remain in the sitemap.',
+    'An existing category with three indexable tools must remain in the sitemap.',
   );
   const expectedToolPaths = fixtureTools
     .filter((item) => getToolIndexDecision(item).indexable)

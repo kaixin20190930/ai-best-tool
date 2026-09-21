@@ -101,11 +101,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let categorySitemapEntries: MetadataRoute.Sitemap = [];
   try {
     const categories = (await getAllCategories(true)) as CategoryWithCount[];
-    const indexableCategoryIds = new Set(
-      catalog.tools.filter((tool) => getToolIndexDecision(tool).indexable).map((tool) => tool.categoryId),
-    );
+    const indexableToolCounts = catalog.tools.reduce((counts, tool) => {
+      if (!tool.categoryId || !getToolIndexDecision(tool).indexable) return counts;
+      counts.set(tool.categoryId, (counts.get(tool.categoryId) || 0) + 1);
+      return counts;
+    }, new Map<string, number>());
     const eligibleCategories = categories.filter(
-      (category) => category.toolCount >= 3 && indexableCategoryIds.has(category.id),
+      (category) => category.toolCount >= 3 && (indexableToolCounts.get(category.id) || 0) >= 3,
     );
 
     categorySitemapEntries = eligibleCategories.flatMap((category) =>
