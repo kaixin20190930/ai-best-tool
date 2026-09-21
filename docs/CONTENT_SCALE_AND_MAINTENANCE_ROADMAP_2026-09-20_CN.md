@@ -111,6 +111,8 @@ Review 通过。该文档自 2026-09-20 起作为工具规模化、分层维护�
 
 2026-09-20 Jasper 发布准备更新：生产数据库无 Jasper 实体，双语 canonical 静态页均为 `noindex`，sitemap 无匹配。三语言发布包、本地编辑素材、候选流水线和专项验收已固化 `$69` 月付、`$59` 年付月均、单 Pro 席位、Business 定制合同、平台费与 credits 双层成本、品牌上下文、DPA/第三方处理及人工复核边界。候选状态为 `ready_for_next_slot`，日期门禁阻止 2026-09-22 前生产写入；发布后仍保持 `monitor/noindex`。
 
+2026-09-21 Jasper 一次性提前执行授权更新：Owner 明确授权 Jasper 在当天受控执行，但没有重写或伪造原定 2026-09-22 门禁。预审载荷以 `ownerEarlyReleaseOverride` 保存原日期、授权日期、有效日期、候选范围和保留门禁；发布器只接受 Jasper 的该例外，并继续默认 rollback、仅 `--commit` 可写生产。当天官方价格、credits、品牌控制、EULA/DPA/sub-processors 与人工复核边界复查无实质变化，因此保留 09-20 实质 payload；一切结果仍须为 `published + monitor/noindex`、sitemap 排除、独立索引审批关闭。详见 [Jasper 受控发布交付](./JASPER_CONTROLLED_RELEASE_2026-09-21_CN.md)。
+
 2026-09-21 既有索引页维护更新：Character.AI 被选为首个到期修复对象。该页已有 10 次展示、平均排名约 9.1，但数据库缺少统一 Evidence / Decision 结构。维护范围只补齐当前年龄访问、c.ai+、训练数据、适用边界、独立市场证据与复核日期，保留 canonical、媒体、分类和索引批准，不扩 sitemap。旧历史兜底同步改为仅在缺少结构化 editorial 数据时生效，避免覆盖后续数据库维护结果。详见 [Character.AI 维护交付](./CHARACTER_AI_MAINTENANCE_2026-09-21_CN.md)。
 
 2026-09-21 第二个到期索引页进入维护：Shutterstock GenAI 的继续收录依据充分，但原记录缺少结构化 Evidence / Decision 数据。本轮明确区分生成、许可、人工审核与赔偿保护：许可不自动等于赔偿，后者取决于适用套餐与资产审核结果。只补齐证据、决策边界、用例、标签和复核日期，保护正文、canonical、媒体、分类及 `continue_index`，不扩 sitemap。

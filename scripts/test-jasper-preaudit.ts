@@ -18,6 +18,14 @@ assert.equal(audit.action, 'migrate_existing_fallback');
 assert.equal(audit.status, 'ready_for_next_slot');
 assert.equal(audit.reviewedAt, '2026-09-20');
 assert.equal(audit.publishNotBefore, '2026-09-22');
+assert.equal(audit.ownerEarlyReleaseOverride.candidate, 'jasper');
+assert.equal(audit.ownerEarlyReleaseOverride.authorizedOn, '2026-09-21');
+assert.equal(audit.ownerEarlyReleaseOverride.originalPublishNotBefore, '2026-09-22');
+assert.equal(audit.ownerEarlyReleaseOverride.effectiveReleaseNotBefore, '2026-09-21');
+assert.match(audit.ownerEarlyReleaseOverride.scope, /jasper controlled release only/);
+assert(audit.ownerEarlyReleaseOverride.preservedGates.includes('published + monitor/noindex'));
+assert(audit.ownerEarlyReleaseOverride.preservedGates.includes('sitemap excluded'));
+assert(audit.ownerEarlyReleaseOverride.preservedGates.includes('explicit --commit required for production write'));
 assert.equal(audit.productionWriteApproved, false);
 assert.equal(audit.sitemapChangeApproved, false);
 assert.equal(audit.releaseIndexState, 'monitor');
@@ -56,6 +64,9 @@ assert.equal(payload.categorySlug, audit.category.storageSlug);
 assert.equal(payload.reviewedAt, audit.reviewedAt);
 assert.equal(payload.nextReviewDate, '2026-10-20');
 assert.equal(payload.features.release.scheduledSlot, audit.publishNotBefore);
+assert.equal(payload.features.release.executionType, 'owner_authorized_early_release');
+assert.equal(payload.features.release.ownerEarlyReleaseOverride.effectiveReleaseNotBefore, '2026-09-21');
+assert.equal(payload.features.release.releaseDayReview.checkedAt, '2026-09-21');
 assert.equal(payload.features.release.indexState, 'monitor');
 assert.equal(payload.features.release.sitemapChangeApproved, false);
 assert.equal(payload.features.marketValidation.verdict, 'validated');
@@ -103,9 +114,12 @@ const decision = getToolIndexDecision({
 assert.equal(decision.indexable, false);
 const earlyRelease = spawnSync(
   'tsx',
-  ['scripts/candidate-release-pipeline.ts', '--candidate=jasper', '--phase=release', '--as-of=2026-09-21'],
+  ['scripts/candidate-release-pipeline.ts', '--candidate=jasper', '--phase=release', '--as-of=2026-09-20'],
   { cwd: process.cwd(), encoding: 'utf8', env: { ...process.env, POSTGRES_URL: 'postgres://invalid:invalid@127.0.0.1:1/invalid' } },
 );
 assert.equal(earlyRelease.status, 1);
-assert.match(earlyRelease.stderr, /release window opens 2026-09-22/);
-console.log('PASS Jasper release: identity, pricing, credits, governance, media and noindex date gates');
+assert.match(earlyRelease.stderr, /release window opens 2026-09-21/);
+assert(pipeline.includes('ownerEarlyReleaseOverride'), 'Pipeline must audit owner overrides explicitly');
+assert(pipeline.includes('owner override cannot authorize another candidate'), 'Override must remain candidate-specific');
+assert(pipeline.includes('explicit --commit required for production write'), 'Override must preserve explicit production writes');
+console.log('PASS Jasper release: identity, pricing, credits, governance, media, owner override and noindex gates');

@@ -347,4 +347,5 @@ query、Top 20 page、已抓取未编入索引与软 404 数量。
 - 详情：[成熟高需求工具候选缓冲池](./MATURE_CANDIDATE_BUFFER_2026-09-20_CN.md)。下一项：Grammarly 受控发布。
 - Grammarly 已于 2026-09-21 完成受控发布：官方价格和训练边界复核、生产只读 preflight、rollback、完整 build、commit 与三语言回读均通过。生产唯一实体为 `published + monitor/noindex`，保留现有 canonical，不进入 sitemap，也没有索引批准；下一次事实复核为 2026-10-20。
 - Jasper 发布包已完成：生产无实体，现有 canonical 静态页维持 `noindex` 且不在 sitemap；三语言 Decision Card、本地编辑素材、候选流水线和日期门禁覆盖 Pro 单席位、Business 定制合同、credits、品牌上下文、数据处理和人工复核边界。当前没有生产写入或索引批准；最早于 2026-09-22 执行只读 preflight 与受控发布。
+- 2026-09-21 Owner 对 Jasper 作出一次性、候选限定的提前执行授权：原 `2026-09-22` 门禁保留在预审记录中，统一发布器只在 `2026-09-21` 对 `jasper` 认定有效，且仍要求生产身份 preflight、默认 rollback、显式 `--commit`、`published + monitor/noindex`、sitemap 排除和独立索引审批。当天官方价格、credits、Brand Voice、EULA/DPA/sub-processors 与 ethics 复核无实质变化；详见 [Jasper 受控发布交付](./JASPER_CONTROLLED_RELEASE_2026-09-21_CN.md)。
 - Descript 发布包已完成：生产无实体，现有英中 canonical 静态页继续 `noindex` 且不在 sitemap；三语言 Decision Card、自制编辑素材和统一流水线覆盖逐席位定价、media hours、AI credits、团队共享池、AI Speaker 同意、训练与人工访问及输出权利边界。当前不写生产、不开放索引；最早 2026-09-23 执行只读 preflight 与受控发布。

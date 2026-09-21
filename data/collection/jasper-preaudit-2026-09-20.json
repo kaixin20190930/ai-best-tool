@@ -7,6 +7,22 @@
   "status": "ready_for_next_slot",
   "reviewedAt": "2026-09-20",
   "publishNotBefore": "2026-09-22",
+  "ownerEarlyReleaseOverride": {
+    "candidate": "jasper",
+    "authorizedOn": "2026-09-21",
+    "originalPublishNotBefore": "2026-09-22",
+    "effectiveReleaseNotBefore": "2026-09-21",
+    "scope": "jasper controlled release only; this is not a reusable release-date exception",
+    "authorization": "Owner explicitly authorized Jasper execution on 2026-09-21, superseding only its 2026-09-22 date gate.",
+    "preservedGates": [
+      "published + monitor/noindex",
+      "sitemap excluded",
+      "explicit --commit required for production write",
+      "production identity preflight",
+      "rollback rehearsal",
+      "independent index approval remains closed"
+    ]
+  },
   "sitemapChangeApproved": false,
   "productionWriteApproved": false,
   "releaseIndexState": "monitor",
@@ -98,9 +114,28 @@
     ],
     "independent": ["https://www.g2.com/sellers/jasper", "https://www.trustpilot.com/review/www.jasper.ai"]
   },
+  "releaseDayReview": {
+    "checkedAt": "2026-09-21",
+    "result": "No material change found in the current official price, Pro seat/context limits, shared-credit rules, Brand Voice controls, EULA data-use boundary, DPA path, sub-processor availability, or human-review boundary; the 2026-09-20 substantive payload remains valid.",
+    "officialSources": [
+      "https://www.jasper.ai/pricing",
+      "https://help.jasper.ai/hc/en-us/articles/46644376016923-Credits-Based-Pricing",
+      "https://help.jasper.ai/hc/en-us/articles/18618693085339-Brand-Voice",
+      "https://www.jasper.ai/legal/eula",
+      "https://www.jasper.ai/legal/dpa",
+      "https://www.jasper.ai/legal/sub-processors",
+      "https://www.jasper.ai/ethics"
+    ],
+    "unchangedFacts": [
+      "Pro is USD 69 monthly or USD 59 monthly when billed yearly, with one seat, two Brand Voices, five Knowledge assets and three Audiences.",
+      "Business pricing is custom; core Chat, Agents, Studio and IQ are included, while selected API/MCP, Grid and advanced Agent/GEO actions use shared workspace credits.",
+      "Customer Property is not used to train service models, but authorized providers may process it; personal-data processing requires the DPA path and hosting requires contract verification.",
+      "Brand controls can be overridden and do not replace human factual, legal or publication review."
+    ]
+  },
   "nextSlotChecklist": [
     "Create one database-backed Jasper entity while preserving /ai/jasper as the only canonical route",
-    "Recheck prices, trial conversion, Business commitment and credit rates on 2026-09-22",
+    "Recheck prices, trial conversion, Business commitment and credit rates on the actual controlled release day",
     "Keep Jasper as one platform rather than child pages for IQ, Agents, Studio, Grid or Canvas",
     "Create local editorial identifiers disclosed as non-official",
     "Write complete en, zh and cn decision content covering seats, credits, brand controls, privacy and review",

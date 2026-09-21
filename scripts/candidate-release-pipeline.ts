@@ -28,6 +28,15 @@ type Preaudit = {
   sitemapChangeApproved: boolean;
   sources: { official: string[]; independent: string[] };
   nextSlotChecklist: string[];
+  ownerEarlyReleaseOverride?: {
+    candidate: string;
+    authorizedOn: string;
+    originalPublishNotBefore: string;
+    effectiveReleaseNotBefore: string;
+    scope: string;
+    authorization: string;
+    preservedGates: string[];
+  };
 };
 
 type Localized = { en: string; zh: string; cn?: string };
@@ -172,7 +181,33 @@ function loadPreaudit(candidate: Candidate): Preaudit {
     `${candidate.slug}: evidence incomplete`,
   );
   assert(audit.nextSlotChecklist.length >= 5, `${candidate.slug}: release checklist incomplete`);
+  if (audit.ownerEarlyReleaseOverride) {
+    const override = audit.ownerEarlyReleaseOverride;
+    assert.equal(override.candidate, candidate.slug, `${candidate.slug}: owner override cannot authorize another candidate`);
+    assert.equal(
+      override.originalPublishNotBefore,
+      audit.publishNotBefore,
+      `${candidate.slug}: owner override must preserve the original date gate`,
+    );
+    assert(override.effectiveReleaseNotBefore >= override.authorizedOn, `${candidate.slug}: override predates authorization`);
+    assert(
+      override.effectiveReleaseNotBefore < override.originalPublishNotBefore,
+      `${candidate.slug}: owner override must be an earlier, one-time release window`,
+    );
+    assert(override.scope.includes(candidate.slug), `${candidate.slug}: owner override scope is not candidate-specific`);
+    assert(
+      override.preservedGates.includes('published + monitor/noindex') &&
+        override.preservedGates.includes('sitemap excluded') &&
+        override.preservedGates.includes('explicit --commit required for production write'),
+      `${candidate.slug}: owner override must preserve publication, sitemap, and write gates`,
+    );
+  }
   return audit;
+}
+
+function releaseNotBefore(candidate: Candidate, audit: Preaudit) {
+  const override = audit.ownerEarlyReleaseOverride;
+  return override && override.candidate === candidate.slug ? override.effectiveReleaseNotBefore : audit.publishNotBefore;
 }
 
 function validatePublicAsset(assetPath: string) {
@@ -181,7 +216,8 @@ function validatePublicAsset(assetPath: string) {
 }
 
 function loadPayload(candidate: Candidate, audit: Preaudit, asOf: string): ReleasePayload {
-  assert(asOf >= audit.publishNotBefore, `${candidate.slug}: release window opens ${audit.publishNotBefore}`);
+  const notBefore = releaseNotBefore(candidate, audit);
+  assert(asOf >= notBefore, `${candidate.slug}: release window opens ${notBefore}`);
   const payloadPath = path.join(root, 'data', 'collection', `${candidate.slug}-release.json`);
   assert(fs.existsSync(payloadPath), `${candidate.slug}: release payload is not ready`);
   const payload = readJson<ReleasePayload>(payloadPath);
@@ -397,7 +433,9 @@ async function main() {
         `✅ ${candidate.slug}: preaudit valid; ${
           audit.status === 'released'
             ? `released ${audit.releasedAt} as monitor`
-            : `release window ${audit.publishNotBefore}`
+            : `release window ${releaseNotBefore(candidate, audit)}${
+                audit.ownerEarlyReleaseOverride ? ` (owner override; original ${audit.publishNotBefore})` : ''
+              }`
         }`,
       );
       continue;
@@ -406,7 +444,8 @@ async function main() {
       await runRelease(candidate, audit, options.asOf, options.commit);
       continue;
     }
-    assert(options.asOf >= audit.publishNotBefore, `${candidate.slug}: release window opens ${audit.publishNotBefore}`);
+    const notBefore = releaseNotBefore(candidate, audit);
+    assert(options.asOf >= notBefore, `${candidate.slug}: release window opens ${notBefore}`);
     if (options.phase === 'preflight') {
       assert.equal(
         audit.status,
