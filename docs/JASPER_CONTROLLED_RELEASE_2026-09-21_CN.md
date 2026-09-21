@@ -1,6 +1,6 @@
 # Jasper 受控发布交付（2026-09-21）
 
-状态：已受控发布；总控已完成生产只读 preflight、默认 rollback 与一次显式 `--commit`。本交付不执行新的生产写入、推送或部署；线上 verify 待本次审计状态同步进入部署环境后复跑。
+状态：已受控发布并完成独立 QA 的线上 verify。总控已完成生产只读 preflight、默认 rollback 与一次显式 `--commit`；本交付不执行新的生产写入、推送或部署。
 
 ## 一次性日期授权
 
@@ -39,8 +39,7 @@ Jasper 的原始 `publishNotBefore` 保持为 `2026-09-22`，不改写历史门�
 | Jasper `validate` | 通过；显示有效窗口 `2026-09-21` 与原始日期 `2026-09-22` |
 | TypeScript、索引一致性契约、工具索引门禁、SEO 架构 | 通过 |
 | 完整 Next.js build | 通过；仅为构建图使用进程内无功能 Supabase secret 占位值，未写配置或访问生产数据 |
-| 生产 SEO smoke | 通过；sitemap 118 URL |
-| Jasper 线上路由 | 英中均为 200、自 canonical、`noindex`，并排除在 sitemap 外 |
-| online verify | 尚未通过：commit 后预审仍是 `ready_for_next_slot`，而 verify 要求 `released`。本次仅同步本地审计状态；不伪造 verify 成功，待部署该状态同步后由总控以只读 verify 复跑。 |
+| 生产唯一性与 online verify | 独立 QA 已通过：生产仅一条 Jasper 实体，状态为 `published + monitor`；`/ai/jasper` 与 `/cn/ai/jasper` 均为 200、自 canonical、`noindex, follow`，均有 Decision Card，且不在 sitemap。 |
+| 生产索引与 sitemap 门禁 | 独立 QA 已通过：索引一致性、生产 SEO smoke 均为 PASS；sitemap 页面级检查 `120/120` PASS。 |
 
 残余风险：Business 合同、包含 credits、费率、PAYG 上限、地区/税费、DPA 与托管/子处理商选择均依客户合同和配置；本站没有付费 workspace、Business 合同或性能/输出准确性实测。提前授权也不构成索引批准。
