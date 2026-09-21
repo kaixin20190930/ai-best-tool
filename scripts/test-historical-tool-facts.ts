@@ -35,7 +35,8 @@ for (const slug of Object.keys(REVIEWS)) {
 
 assert(getHistoricalToolFactReview('character_ai', 'en')?.detail.includes('make things up'));
 assert(getHistoricalToolFactReview('shutterstock', 'en')?.title.includes('GenAI'));
-assert(getHistoricalToolFactReview('suno_ai', 'en')?.detail.includes('does not automatically grant retroactive'));
+assert(getHistoricalToolFactReview('suno_ai', 'en')?.detail.includes('separate timing checks'));
+assert.equal(getHistoricalToolFactReview('suno_ai', 'en')?.nextReviewDate, '2026-10-21');
 assert(getHistoricalToolFactReview('viggle', 'en')?.detail.includes('seven-day storage'));
 assert(!getHistoricalToolFactReview('artiversehub-ai', 'en')?.detail.includes('TurboTax'));
 assert(getHistoricalToolFactReview('woy-ai', 'en')?.detail.includes('directory'));

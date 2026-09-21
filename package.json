@@ -90,6 +90,8 @@
     "isolate:openai-family-scope": "tsx scripts/isolate-openai-family-scope.ts",
     "refresh:historical-tool-facts": "tsx scripts/refresh-historical-tool-facts.ts",
     "test:historical-tool-facts": "tsx scripts/test-historical-tool-facts.ts",
+    "refresh:suno-decision-evidence": "tsx scripts/refresh-suno-decision-evidence.ts",
+    "test:suno-decision-evidence": "tsx scripts/test-suno-decision-evidence.ts",
     "normalize:suno-slug": "tsx scripts/normalize-suno-slug.ts",
     "monitor:unverified-historical-tools": "tsx scripts/monitor-unverified-historical-tools.ts",
     "isolate:safety-tool-records": "tsx scripts/isolate-safety-tool-records.ts",
