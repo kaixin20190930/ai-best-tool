@@ -226,6 +226,8 @@ Gamma 验收补充：`33e65beb` 部署成功后发现新简版提示被官方快
 
 2026-09-21 既有索引页维护：Character.AI 已完成受控维护与生产验收。专项脚本补齐 Reading Mode、c.ai+ 真实权益、训练数据地区边界、Decision Card、Evidence Ledger、用例与市场验证，并保护原 canonical、媒体、分类和 `continue_index`；同时修复历史事实兜底无条件覆盖数据库新内容的问题。中英文页面回读、索引一致性与 production SEO smoke 全部通过；该任务没有新增 URL 或扩大 sitemap。完整验收见 [Character.AI 维护交付](./CHARACTER_AI_MAINTENANCE_2026-09-21_CN.md)。
 
+2026-09-21 后续维护：Shutterstock GenAI 已完成当前许可、人工审核、赔偿保护、所有权和市场成熟度核验。受控脚本只更新 Evidence / Decision、用例、标签和下次复核日，并断言 canonical、正文、媒体、分类、价格及 `continue_index` 不变；不新增 URL 或 sitemap 条目。
+
 2026-09-09 CTR 与差异化复核：战略定位“证据、限制、变化和可执行决策”继续成立，也不会改变 Google 对 AI 工具目录的基础理
 解；当前问题是差异能力没有稳定进入搜索摘要和所有首屏。首页 metadata 已能表达目录与比较，但通用工具 metadata 仍可能退回
 `<产品名> - <分类> AI Tool` 和产品简介；Best 总入口还混入“转化/付费升级”等站内运营语言；部分页面的核查日期陈旧，Evidence
