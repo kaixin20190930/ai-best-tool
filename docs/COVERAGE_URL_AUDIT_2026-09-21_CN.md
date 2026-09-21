@@ -50,7 +50,7 @@ URL。
 
 ## 后续判断
 
-1. 部署后验证 `/explore?pricing=freemium&sort=popular` 输出 `noindex,follow`，canonical 仍为 `/explore`。
+1. 已完成生产验证：`/explore?pricing=freemium&sort=popular` 输出 `noindex,follow`，canonical 仍为 `/explore`；无参数 `/explore` 保持可索引。
 2. 7–14 天后看 45 条是否逐步从 Crawled-not-indexed 迁移到 noindex、redirect 或 canonical 分类；GSC 分类存在滞后，不以立
    即归零为验收。
 3. `/cn` 和选型 Guide 若仍长期未索引，使用 URL Inspection 查看 Google 选定 canonical 与最近抓取，不直接新建替代 URL。
