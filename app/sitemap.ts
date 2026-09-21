@@ -5,6 +5,7 @@ import { getCanonicalToolSlug } from '@/lib/config/toolRouteAliases';
 import { INDEXABLE_GUIDE_PAGES } from '@/lib/content/guides';
 import { topListTopics } from '@/lib/data/topLists';
 import { BASE_URL } from '@/lib/env';
+import EDITORIALLY_APPROVED_CATEGORY_SITEMAP_SLUGS from '@/lib/seo/categorySitemapApproval';
 import { INDEXABLE_LOCALES } from '@/lib/seo/indexing';
 import { getSourceLastModified } from '@/lib/seo/sitemapDates';
 import { getStaticPageLastModified } from '@/lib/seo/staticPageDates';
@@ -101,13 +102,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let categorySitemapEntries: MetadataRoute.Sitemap = [];
   try {
     const categories = (await getAllCategories(true)) as CategoryWithCount[];
-    const indexableToolCounts = catalog.tools.reduce((counts, tool) => {
-      if (!tool.categoryId || !getToolIndexDecision(tool).indexable) return counts;
-      counts.set(tool.categoryId, (counts.get(tool.categoryId) || 0) + 1);
-      return counts;
-    }, new Map<string, number>());
-    const eligibleCategories = categories.filter(
-      (category) => category.toolCount >= 3 && (indexableToolCounts.get(category.id) || 0) >= 3,
+    const eligibleCategories = categories.filter((category) =>
+      EDITORIALLY_APPROVED_CATEGORY_SITEMAP_SLUGS.has(category.slug),
     );
 
     categorySitemapEntries = eligibleCategories.flatMap((category) =>

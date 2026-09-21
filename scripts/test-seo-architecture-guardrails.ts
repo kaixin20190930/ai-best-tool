@@ -71,8 +71,7 @@ for (const expected of [
   'INDEXABLE_LOCALES',
   'getToolIndexDecision(tool).indexable',
   'INDEXABLE_GUIDE_PAGES.map',
-  'category.toolCount >= 3',
-  'indexableToolCounts.get(category.id)',
+  'EDITORIALLY_APPROVED_CATEGORY_SITEMAP_SLUGS.has(category.slug)',
 ]) {
   if (!sitemapSource.includes(expected)) {
     failures.push(`app/sitemap.ts: missing sitemap boundary ${expected}`);

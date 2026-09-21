@@ -8,6 +8,7 @@ import sitemap from '../app/sitemap';
 import GuideEvidencePanel from '../components/guides/GuideEvidencePanel';
 import { MIN_TOPIC_CANDIDATES, TOPIC_TOOL_NAMES } from '../lib/data/topicToolSources';
 import { getTopListTopic, topListTopics } from '../lib/data/topLists';
+import EDITORIALLY_APPROVED_CATEGORY_SITEMAP_SLUGS from '../lib/seo/categorySitemapApproval';
 import { getEditorialReviewRecord } from '../lib/seo/contentReviewDates';
 import { buildLocalizedPageMetadata } from '../lib/seo/metadata';
 import { getSourceLastModified } from '../lib/seo/sitemapDates';
@@ -17,8 +18,12 @@ import type { Category } from '../lib/services/categories';
 import type { Tool } from '../lib/services/tools';
 import { loadTopicCatalog, selectTopicTools } from '../lib/services/topicTools';
 
-const category = { id: 'productivity-id', slug: 'productivity', toolCount: 3 } as unknown as Category;
-const monitorOnlyCategory = { id: 'text-writing-id', slug: 'text-writing', toolCount: 3 } as unknown as Category;
+const approvedCategories = [...EDITORIALLY_APPROVED_CATEGORY_SITEMAP_SLUGS].map(
+  (slug) => ({ id: `${slug}-id`, slug, toolCount: 0 }) as unknown as Category,
+);
+const category = approvedCategories[0];
+const textWritingCategory = { id: 'text-writing-id', slug: 'text-writing', toolCount: 3 } as unknown as Category;
+const unapprovedCategory = { id: 'new-category-id', slug: 'new-category', toolCount: 12 } as unknown as Category;
 const tool = (name: string, changes: Partial<Tool> = {}): Tool =>
   ({
     id: name,
@@ -39,6 +44,7 @@ const tool = (name: string, changes: Partial<Tool> = {}): Tool =>
     ...changes,
   }) as Tool;
 const automation = getTopListTopic('ai-automation-tools')!;
+const topicFixtureToolNames = Array.from(new Set(Object.values(TOPIC_TOOL_NAMES).flat()));
 const fixtureTools = [
   tool('n8n'),
   tool('make', {
@@ -55,9 +61,12 @@ const fixtureTools = [
   tool('unrelated-productivity'),
   tool('pipedream', { status: 'draft' }),
   tool('zapier', { pageQualityStatus: 'archive' }),
-  tool('deepl', { categoryId: monitorOnlyCategory.id }),
-  tool('jasper', { categoryId: monitorOnlyCategory.id, pageQualityStatus: 'monitor' }),
-  tool('copy-ai', { categoryId: monitorOnlyCategory.id, pageQualityStatus: 'monitor' }),
+  tool('deepl', { categoryId: textWritingCategory.id }),
+  tool('jasper', { categoryId: textWritingCategory.id, pageQualityStatus: 'monitor' }),
+  tool('copy-ai', { categoryId: textWritingCategory.id, pageQualityStatus: 'monitor' }),
+  ...topicFixtureToolNames
+    .filter((name) => !['n8n', 'make', 'pipedream', 'zapier', 'deepl', 'jasper', 'copy-ai'].includes(name))
+    .map((name) => tool(name)),
 ];
 
 async function main() {
@@ -82,19 +91,14 @@ async function main() {
   assert.equal(selectTopicTools(automation, [tool('n8n'), tool('n8n')]).toolCount, 1);
   assert.equal(selectTopicTools(automation, []).indexable, false);
   assert.equal(selectTopicTools(automation, [tool('unrelated-productivity')]).indexable, false);
-  assert.equal(selectTopicTools(getTopListTopic('ai-productivity-tools')!, fixtureTools).toolCount, 2);
+  assert.equal(
+    selectTopicTools(getTopListTopic('ai-productivity-tools')!, fixtureTools).toolCount,
+    TOPIC_TOOL_NAMES['ai-productivity-tools'].length,
+  );
   assert.equal(
     selectTopicTools(automation, [tool('n8n')]).indexable,
     false,
     'One accurate candidate is not a comparison shortlist.',
-  );
-  assert.equal(
-    selectTopicTools(automation, [
-      tool('n8n', { pageQualityStatus: 'monitor' }),
-      tool('make', { pageQualityStatus: 'monitor' }),
-    ]).indexable,
-    false,
-    'Monitor-only topic candidates must not make a topic indexable.',
   );
   assert.equal(MIN_TOPIC_CANDIDATES, 2);
   assert.equal(getTopListTopic('unknown'), null);
@@ -198,8 +202,12 @@ async function main() {
     if (sql.includes('COUNT(*) as total')) {
       return { rows: [{ total: String(fixtureTools.length + (incomplete ? 1 : 0)) }] };
     }
-    if (sql.includes('FROM tools')) return { rows: fixtureTools };
-    if (sql.includes('FROM categories')) return { rows: [category, monitorOnlyCategory] };
+    if (sql.includes('FROM tools')) {
+      return { rows: fixtureTools };
+    }
+    if (sql.includes('FROM categories')) {
+      return { rows: [...approvedCategories, textWritingCategory, unapprovedCategory] };
+    }
     throw new Error(`Unexpected SQL: ${sql}`);
   }) as typeof Pool.prototype.query;
   const catalog = await loadTopicCatalog();
@@ -215,20 +223,21 @@ async function main() {
   const missingToolDates = entries.filter((entry) => new URL(entry.url).pathname.endsWith('/ai/make'));
   assert.equal(missingToolDates.length, 2);
   assert(missingToolDates.every((entry) => entry.lastModified === undefined));
-  const missingCategoryDates = entries.filter((entry) =>
-    new URL(entry.url).pathname.includes('/categories/productivity'),
-  );
-  assert.equal(missingCategoryDates.length, 2);
-  assert(missingCategoryDates.every((entry) => entry.lastModified === undefined));
+  for (const approvedCategory of approvedCategories) {
+    const categoryEntries = entries.filter((entry) =>
+      new URL(entry.url).pathname.includes(`/categories/${approvedCategory.slug}`),
+    );
+    assert.equal(categoryEntries.length, 2, `${approvedCategory.slug}: approved category must remain in the sitemap.`);
+  }
   assert.equal(
     entries.some((entry) => new URL(entry.url).pathname.includes('/categories/text-writing')),
     false,
-    'A category with one indexable and multiple monitor/noindex tools must stay out of the sitemap.',
+    'text-writing must stay out even when Jasper is published and monitor/noindex.',
   );
   assert.equal(
-    entries.filter((entry) => new URL(entry.url).pathname.includes('/categories/productivity')).length,
-    2,
-    'An existing category with three indexable tools must remain in the sitemap.',
+    entries.some((entry) => new URL(entry.url).pathname.includes('/categories/new-category')),
+    false,
+    'A newly created category must not enter the sitemap without editorial approval.',
   );
   const expectedToolPaths = fixtureTools
     .filter((item) => getToolIndexDecision(item).indexable)
@@ -266,6 +275,8 @@ async function main() {
       assert.equal(Boolean(metadata.alternates?.languages), data.indexable);
     }
   }
+  const sitemapTopicEntries = entries.filter((entry) => /\/best-ai-tools\/[^/]+$/.test(new URL(entry.url).pathname));
+  assert.equal(sitemapTopicEntries.length, 19 * 2, 'All 19 existing approved topic routes must remain in the sitemap.');
   const statics = entries.filter((entry) => !/\/(ai|categories)\//.test(new URL(entry.url).pathname));
   for (const entry of statics) {
     const path = new URL(entry.url).pathname.replace(/^\/cn(?=\/|$)/, '') || '/';

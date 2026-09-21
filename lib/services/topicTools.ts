@@ -3,7 +3,6 @@ import { cache } from 'react';
 import { SAFETY_TOOL_SLUGS } from '@/lib/config/safetyToolReviews';
 import { MIN_TOPIC_CANDIDATES, TOPIC_TOOL_NAMES } from '@/lib/data/topicToolSources';
 import { topListTopics, type TopListTopicConfig } from '@/lib/data/topLists';
-import { getToolIndexDecision } from '@/lib/seo/toolIndexing';
 import { getTools, type Tool } from '@/lib/services/tools';
 
 function hasText(value: Record<string, string> | null | undefined): boolean {
@@ -19,7 +18,6 @@ export function isEligibleTopicTool(tool: Tool): boolean {
       hasText(tool.content) &&
       tool.status === 'published' &&
       tool.pageQualityStatus !== 'archive' &&
-      getToolIndexDecision(tool).indexable &&
       !SAFETY_TOOL_SLUGS.some((name) => name === tool.name),
   );
 }
