@@ -5,10 +5,7 @@
 
 ## 2026-09-21 生产验证
 
-生产表和 RLS 验证通过。Grammarly 首次真实资格复核已写入：内容、素材、市场验证、官方来源、独立采用信号、Decision Card、日
-期、canonical、意图与自动 SEO 检查全部通过；结果为 `hold_monitor`，阻塞项是最近真实 GSC 快照仍为 2026-08-31（已过 21
-天）、站点健康无法用过期数据判为 healthy，以及索引策略仍处于暂停状态。此次记录没有修改 `page_quality_status` 或
-sitemap。
+生产表和 RLS 验证通过。Grammarly 首次真实资格复核已写入：内容、素材、市场验证、官方来源、独立采用信号、Decision Card、日期、canonical、意图与自动 SEO 检查全部通过。收到 2026-09-21 GSC 后，同日幂等记录已更新为最新快照；结果仍为 `hold_monitor`，阻塞项是站点搜索健康为 `blocked`，且索引策略保持暂停。此次记录没有修改 `page_quality_status` 或 sitemap。
 
 ## 目标与安全边界
 
