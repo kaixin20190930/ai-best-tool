@@ -61,6 +61,35 @@ assert.equal(
   'repair_monitor',
   'The mature track must never bypass identity and intent checks',
 );
+assert.equal(
+  evaluateToolIndexReview({
+    ...passing,
+    observationComplete: false,
+    releaseTrack: 'mature_high_demand',
+    siteSearchHealth: 'warning',
+  }).decision,
+  'approve_continue_index',
+  'A small mature-tool release may proceed while site health is warning',
+);
+assert.equal(
+  evaluateToolIndexReview({
+    ...passing,
+    releaseTrack: 'standard',
+    siteSearchHealth: 'warning',
+  }).decision,
+  'hold_monitor',
+  'Standard tools still require healthy site search status',
+);
+assert.equal(
+  evaluateToolIndexReview({
+    ...passing,
+    observationComplete: false,
+    releaseTrack: 'mature_high_demand',
+    siteSearchHealth: 'blocked',
+  }).decision,
+  'hold_monitor',
+  'Blocked site health must stop every release track',
+);
 
 const noPageMetrics = evaluateToolIndexReview(passing);
 assert.equal(

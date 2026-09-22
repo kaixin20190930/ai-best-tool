@@ -109,10 +109,11 @@ async function main() {
       await client.query(
         `INSERT INTO tool_index_review_runs
          (tool_id, tool_slug, decision, gsc_snapshot_date, gsc_snapshot_age_days, site_search_health,
-          checks, blockers, input_snapshot, reviewed_by, event_key)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+          release_track, checks, blockers, input_snapshot, reviewed_by, event_key)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
          ON CONFLICT (event_key) DO UPDATE SET decision=EXCLUDED.decision, gsc_snapshot_date=EXCLUDED.gsc_snapshot_date,
            gsc_snapshot_age_days=EXCLUDED.gsc_snapshot_age_days, site_search_health=EXCLUDED.site_search_health,
+           release_track=EXCLUDED.release_track,
            checks=EXCLUDED.checks, blockers=EXCLUDED.blockers, input_snapshot=EXCLUDED.input_snapshot,
            reviewed_by=EXCLUDED.reviewed_by, observed_at=now()`,
         [
@@ -122,6 +123,7 @@ async function main() {
           options.gscSnapshotDate,
           result.gscSnapshotAgeDays,
           options.siteHealth,
+          options.releaseTrack,
           JSON.stringify(result.checks),
           result.blockers,
           JSON.stringify({ options, qualityScore: quality.score, policy, quota }),

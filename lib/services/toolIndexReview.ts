@@ -109,7 +109,11 @@ function dateAgeDays(asOfDate: string, snapshotDate: string | null): number | nu
 
 export function evaluateToolIndexReview(input: IndexReviewInput): IndexReviewResult {
   const gscSnapshotAgeDays = dateAgeDays(input.asOfDate, input.gscSnapshotDate);
-  const observationRequired = (input.releaseTrack || 'standard') !== 'mature_high_demand';
+  const releaseTrack = input.releaseTrack || 'standard';
+  const observationRequired = releaseTrack !== 'mature_high_demand';
+  const siteHealthAccepted =
+    input.siteSearchHealth === 'healthy' ||
+    (releaseTrack === 'mature_high_demand' && input.siteSearchHealth === 'warning');
   const checks: IndexReviewCheck[] = [
     { key: 'published', label: 'Tool is published', passed: input.published, kind: 'quality' },
     { key: 'monitor', label: 'Tool remains in monitor', passed: input.monitor, kind: 'quality' },
@@ -159,8 +163,11 @@ export function evaluateToolIndexReview(input: IndexReviewInput): IndexReviewRes
     },
     {
       key: 'site_health',
-      label: 'Site-level search health is healthy',
-      passed: input.siteSearchHealth === 'healthy',
+      label:
+        releaseTrack === 'mature_high_demand'
+          ? 'Site-level search health is healthy or warning'
+          : 'Site-level search health is healthy',
+      passed: siteHealthAccepted,
       kind: 'hold',
     },
     { key: 'policy', label: 'Index release policy is active', passed: !input.policyPaused, kind: 'hold' },
