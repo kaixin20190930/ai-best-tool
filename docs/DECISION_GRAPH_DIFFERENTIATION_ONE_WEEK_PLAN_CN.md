@@ -179,8 +179,9 @@ INTAKE 与上述排期并行：09-23 Descript 到期发布槽继续执行；其�
 5. 20×6 不是强制填满 120 个关系；没有真实适配或证据时明确缺失，避免伪造覆盖率。
 6. Decision Assistant 按覆盖率门槛启动，不按日历硬上线，避免成为 ChatGPT wrapper。
 7. INTAKE 与 DIFF 按文件、数据库对象和发布门禁隔离，日常收录不阻塞平台升级。
-8. DIFF-01 发布约束在事务提交时复核：删除或更新唯一 claim、将 claim 移至错误 owner、失效、冲突或过期都不能让
-   `published` Tool Capability 残留；Capability 或 Task 被归档时公开 RLS 立即停止返回相应关系。公开层不暴露 raw claim
+8. DIFF-01 发布约束在事务提交时复核：删除或更新唯一 claim、将 claim 移至错误 owner、失效或冲突都不能让
+   `published` Tool Capability 保留无有效证据状态；时间自然到期时公开 RLS 立即停止返回该关系。Capability 或 Task 被归档时
+   公开 RLS 也立即停止返回相应关系。公开层不暴露 raw claim
    links，DIFF-02 必须以服务端安全读模型组合证据。
 
 ## 11. 完成定义
