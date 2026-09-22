@@ -57,6 +57,8 @@ pnpm run tools:index-review -- \
   --seo-passed
 ```
 
+成熟高需求工具在发布、页面门禁和生产查重全部通过后，可使用 `--release-track=mature_high_demand` 进行同日评审，不需要再传入 `--observation-complete`。普通、快速增长或边界不稳定工具继续使用默认 `standard`，并保留观察期。快速通道不会绕过 GSC 新鲜度、站点健康、策略暂停、额度、canonical、独立意图或证据门槛。
+
 确认输出后增加 `--commit` 才写入账本。相同工具、阶段和日期使用同一个 `event_key`，重复运行会更新原记录而不是制造重复记
 录。
 

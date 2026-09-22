@@ -6,6 +6,7 @@ import { getDatabaseConnectionString } from '../lib/database/connection';
 import {
   deriveIndexReviewEvidence,
   evaluateToolIndexReview,
+  type IndexReleaseTrack,
   type SiteSearchHealth,
 } from '../lib/services/toolIndexReview';
 import { getToolQuality } from '../lib/services/toolQuality';
@@ -16,6 +17,7 @@ type Options = {
   gscSnapshotDate: string | null;
   siteHealth: SiteSearchHealth;
   observationComplete: boolean;
+  releaseTrack: IndexReleaseTrack;
   canonicalUnique: boolean;
   intentUnique: boolean;
   seoPassed: boolean;
@@ -34,12 +36,15 @@ function parseArgs(args: string[]): Options {
   assert(slug, 'Required: --slug=<tool-slug>');
   const siteHealth = (value('site-health') || 'unknown') as SiteSearchHealth;
   assert(['healthy', 'warning', 'blocked', 'unknown'].includes(siteHealth), 'Invalid --site-health');
+  const releaseTrack = (value('release-track') || 'standard') as IndexReleaseTrack;
+  assert(['standard', 'mature_high_demand'].includes(releaseTrack), 'Invalid --release-track');
   return {
     slug,
     asOf: value('as-of') || new Date().toISOString().slice(0, 10),
     gscSnapshotDate: value('gsc-snapshot-date') || null,
     siteHealth,
     observationComplete: args.includes('--observation-complete'),
+    releaseTrack,
     canonicalUnique: args.includes('--canonical-unique'),
     intentUnique: args.includes('--intent-unique'),
     seoPassed: args.includes('--seo-passed'),
@@ -92,6 +97,7 @@ async function main() {
       intentUnique: options.intentUnique,
       automatedSeoPassed: options.seoPassed,
       observationComplete: options.observationComplete,
+      releaseTrack: options.releaseTrack,
       gscSnapshotDate: options.gscSnapshotDate,
       asOfDate: options.asOf,
       siteSearchHealth: options.siteHealth,

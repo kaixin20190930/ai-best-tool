@@ -61,7 +61,11 @@ for (const [index, candidate] of payload.candidates.entries()) {
 
 assert.deepEqual(classCounts, payload.composition);
 assert.equal(payload.candidates[0].status, 'released_monitor_noindex');
-assert.equal(payload.candidates[1].status, 'ready_for_next_slot');
+assert.equal(payload.candidates[1].status, 'released_monitor_noindex');
+const canva = payload.candidates.find((candidate) => candidate.slug === 'canva');
+assert(canva, 'Canva must remain one canonical candidate identity');
+assert.equal(new URL(canva.officialUrl).hostname.replace(/^www\./, ''), 'canva.com');
+assert(!payload.candidates.some((candidate) => candidate.slug === 'canva-magic-studio'));
 assert(payload.excluded.some((item) => item.product === 'Sourcegraph Cody'));
 assert(payload.excluded.some((item) => item.product.includes('Amazon Q Developer')));
 

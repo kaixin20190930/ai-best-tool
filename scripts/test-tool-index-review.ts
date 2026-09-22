@@ -33,6 +33,34 @@ assert.equal(evaluateToolIndexReview({ ...passing, gscSnapshotDate: '2026-08-01'
 assert.equal(evaluateToolIndexReview({ ...passing, independentSignalCount: 0 }).decision, 'repair_monitor');
 assert.equal(evaluateToolIndexReview({ ...passing, mergeOrArchive: true }).decision, 'merge_or_archive');
 assert.equal(evaluateToolIndexReview({ ...passing, permanentNoindex: true }).decision, 'permanent_noindex');
+assert.equal(
+  evaluateToolIndexReview({
+    ...passing,
+    observationComplete: false,
+    releaseTrack: 'mature_high_demand',
+  }).decision,
+  'approve_continue_index',
+  'Mature high-demand tools may be approved without an artificial waiting period',
+);
+assert.equal(
+  evaluateToolIndexReview({
+    ...passing,
+    observationComplete: false,
+    releaseTrack: 'standard',
+  }).decision,
+  'hold_monitor',
+  'Standard tools must retain the observation gate',
+);
+assert.equal(
+  evaluateToolIndexReview({
+    ...passing,
+    observationComplete: false,
+    releaseTrack: 'mature_high_demand',
+    intentUnique: false,
+  }).decision,
+  'repair_monitor',
+  'The mature track must never bypass identity and intent checks',
+);
 
 const noPageMetrics = evaluateToolIndexReview(passing);
 assert.equal(

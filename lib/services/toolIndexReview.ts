@@ -6,6 +6,7 @@ export type IndexReviewDecision =
   | 'merge_or_archive';
 
 export type SiteSearchHealth = 'healthy' | 'warning' | 'blocked' | 'unknown';
+export type IndexReleaseTrack = 'standard' | 'mature_high_demand';
 
 export interface IndexReviewCheck {
   key: string;
@@ -28,6 +29,7 @@ export interface IndexReviewInput {
   intentUnique: boolean;
   automatedSeoPassed: boolean;
   observationComplete: boolean;
+  releaseTrack?: IndexReleaseTrack;
   gscSnapshotDate: string | null;
   asOfDate: string;
   siteSearchHealth: SiteSearchHealth;
@@ -107,6 +109,7 @@ function dateAgeDays(asOfDate: string, snapshotDate: string | null): number | nu
 
 export function evaluateToolIndexReview(input: IndexReviewInput): IndexReviewResult {
   const gscSnapshotAgeDays = dateAgeDays(input.asOfDate, input.gscSnapshotDate);
+  const observationRequired = (input.releaseTrack || 'standard') !== 'mature_high_demand';
   const checks: IndexReviewCheck[] = [
     { key: 'published', label: 'Tool is published', passed: input.published, kind: 'quality' },
     { key: 'monitor', label: 'Tool remains in monitor', passed: input.monitor, kind: 'quality' },
@@ -142,8 +145,10 @@ export function evaluateToolIndexReview(input: IndexReviewInput): IndexReviewRes
     { key: 'seo', label: 'Automated SEO checks passed', passed: input.automatedSeoPassed, kind: 'quality' },
     {
       key: 'observation',
-      label: 'Minimum observation period is complete',
-      passed: input.observationComplete,
+      label: observationRequired
+        ? 'Minimum observation period is complete'
+        : 'Mature high-demand tool may use same-day quality review',
+      passed: !observationRequired || input.observationComplete,
       kind: 'hold',
     },
     {

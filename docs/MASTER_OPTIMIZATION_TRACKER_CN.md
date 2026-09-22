@@ -349,3 +349,10 @@ query、Top 20 page、已抓取未编入索引与软 404 数量。
 - Jasper 发布包已完成：生产无实体，现有 canonical 静态页维持 `noindex` 且不在 sitemap；三语言 Decision Card、本地编辑素材、候选流水线和日期门禁覆盖 Pro 单席位、Business 定制合同、credits、品牌上下文、数据处理和人工复核边界。当前没有生产写入或索引批准；最早于 2026-09-22 执行只读 preflight 与受控发布。
 - 2026-09-21 Owner 对 Jasper 作出一次性、候选限定的提前执行授权：原 `2026-09-22` 门禁保留在预审记录中，统一发布器只在 `2026-09-21` 对 `jasper` 认定有效，且仍要求生产身份 preflight、默认 rollback、显式 `--commit`、`published + monitor/noindex`、sitemap 排除和独立索引审批。当天官方价格、credits、Brand Voice、EULA/DPA/sub-processors 与 ethics 复核无实质变化；详见 [Jasper 受控发布交付](./JASPER_CONTROLLED_RELEASE_2026-09-21_CN.md)。
 - Descript 发布包已完成：生产无实体，现有英中 canonical 静态页继续 `noindex` 且不在 sitemap；三语言 Decision Card、自制编辑素材和统一流水线覆盖逐席位定价、media hours、AI credits、团队共享池、AI Speaker 同意、训练与人工访问及输出权利边界。当前不写生产、不开放索引；最早 2026-09-23 执行只读 preflight 与受控发布。
+
+## 2026-09-22 成熟工具即时质量门禁
+
+- 成熟高需求工具不再为“证明市场成熟”强制等待 48-72 小时：统一发布器仍先写 `published + monitor`，随后可在同一天运行独立索引评审。
+- 快速通道只豁免时间，不豁免质量分、非占位素材、validated 市场证据、互补官方来源、真实限制、Decision Card、日期、唯一 canonical、独立搜索意图、自动 SEO、最新站点级 GSC、搜索健康、策略状态和额度。
+- 当前生产策略仍为 paused，09-21 GSC 健康为 blocked，因此规则部署不会自动把 Grammarly、Jasper 或其他 monitor 页面加入 sitemap；恢复必须另行满足站点级门禁。
+- Canva 候选已归并到唯一 `canva` 身份；Magic Studio 仅作为 Canva 页面能力模块，禁止生成第二个 canonical 页面。

@@ -21,9 +21,9 @@
 | 顺序 | 工具 | 类型 | 主要决策价值 | 当前状态 |
 | ---: | --- | --- | --- | --- |
 | 1 | Grammarly | 成熟高需求 | 免费/付费、通用 AI 替代、Superhuman Go 迁移 | 已于 2026-09-21 受控发布，monitor/noindex |
-| 2 | Jasper | 成熟高需求 | 席位费、credits、品牌治理 | 发布包完成，等待 2026-09-22 受控发布 |
+| 2 | Jasper | 成熟高需求 | 席位费、credits、品牌治理 | 已于 2026-09-21 提前授权受控发布，monitor/noindex |
 | 3 | Descript | 成熟高需求 | 文本式剪辑、媒体时长、AI credits | 发布包完成，等待 2026-09-23 受控发布 |
-| 4 | Canva Magic Studio | 成熟高需求 | AI 套件范围、套餐限制、商业使用 | 待深审 |
+| 4 | Canva（含 Magic Studio） | 成熟高需求 | AI 套件范围、套餐限制、商业使用 | 合并到唯一 Canva canonical，不新建 Magic Studio 页面 |
 | 5 | Zapier Agents | 成熟高需求 | Agent 与 Zap、activity 计费、可靠性 | 待深审 |
 | 6 | Microsoft Copilot Studio | 成熟高需求 | 消息包、按量计费、Power Platform 依赖 | 待深审 |
 | 7 | Tabnine | 成熟高需求 | 私有部署、编码助手与 Agent、收购后连续性 | 待深审 |
@@ -50,12 +50,14 @@
 2. 核验至少两条互补官方来源，不把同一价格页的不同段落当作多来源。
 3. 核验至少一条强独立信号和另一条强信号或支持信号。
 4. 写清价格、免费额度、限制、隐私、适合与不适合人群、比较维度和素材使用依据。
-5. 自动测试通过后，才允许生成 `published + monitor/noindex` 页面。
-6. 页面经过相应观察期并再次通过独立索引评审后，才可能改为 `continue_index`；观察期结束不自动索引。
+5. 自动测试通过后，统一发布器先生成 `published + monitor/noindex` 页面。
+6. `mature_high_demand` 可在同日紧接着运行独立索引质量门禁；其他类型保留观察期。无论哪条路径，策略暂停、站点健康、额度或任一质量门槛不通过时都保持 monitor。
 
 首个对象 Grammarly 已于 `2026-09-21` 完成受控发布。生产唯一实体完成三语言回读，状态为 `published + monitor/noindex`，仍不进入 sitemap，也不消耗索引额度。身份、价格、提示额度、训练控制、隐私、独立市场信号和 Decision Card 均已核验；Grammarly 保持写作产品 canonical，Superhuman 是母品牌与套件，Go 是相关但不同范围的助手。详见 `data/collection/grammarly-preaudit-2026-09-20.json` 与 `data/collection/grammarly-release.json`。
 
-第二个对象 Jasper 已完成发布准备。现有 `/ai/jasper` 与 `/cn/ai/jasper` 是 `200 + self-canonical + noindex` 的静态兜底页，生产数据库没有实体且 sitemap 匹配为 0。三语言 Decision Card、本地编辑素材、发布流水线和日期门禁已覆盖 Pro 单席位费、Business 定制合同、共享 credits、Brand Voice/Knowledge/Style Guide、第三方处理与人工编辑。最早发布日为 `2026-09-22`，届时仍只允许 `published + monitor/noindex`，不会与 Grammarly 的 9 月 21 日槽位重叠。
+第二个对象 Jasper 已于 2026-09-21 经 Owner 候选限定授权提前完成受控发布，生产唯一实体保持 `published + monitor/noindex`。发布事实、价格、credits、品牌治理、数据处理和人工编辑边界均已回读；当前索引策略仍暂停，因此没有进入 sitemap。
+
+Canva 身份已收口：候选 slug 固定为 `canva`，Magic Studio 是 Canva 的 AI 能力集合，不是第二个独立产品。后续只能增强唯一 `/ai/canva` 页面，禁止创建 `/ai/canva-magic-studio` 或竞争同一意图的页面。
 
 第三个对象 Descript 已完成深审与发布包。生产数据库没有 Descript 实体，`/ai/descript` 与 `/cn/ai/descript` 均为 `200 + self-canonical + noindex` 的静态兜底页，sitemap 匹配为 0。身份范围固定为一个文本式音视频编辑工作区，Underlord、AI Speakers、voice clone、avatar 与 dubbing 均为能力，不拆成重复页面。三语言 Decision Card、自制编辑标识和统一流水线明确分离 media hours 与 AI credits 两套额度，并记录逐席位价格、团队共享池、额度不结转、语音同意、训练开关、人工访问和商业使用边界。最早发布槽为 `2026-09-23`；当前没有生产写入或索引批准。
 
