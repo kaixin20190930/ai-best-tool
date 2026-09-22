@@ -156,7 +156,7 @@ sitemap。2026-09-01 一次创建了 11 个成熟工具实体，它们此前全�
 
 2026-09-21 GSC 更新后，暂停继续保留且原因已更新：最近 7 天仅 170 展示 / 0 点击，Coverage 已索引为 140，已抓取未收录升至 45，同时 28 条旧批准的具体日期仍不可证实。当前阻塞不再只是历史账本问题；即使完成历史核对，也必须先恢复站点级搜索健康，详见 [09-21 GSC 复盘](./GSC_REVIEW_2026-09-21_CN.md)。
 
-2026-09-22 根据实际索引面重新评估：当前 sitemap 仅 118 条 URL，成熟工具小批次不会构成 programmatic 页面激增。策略允许把站点级 `warning` 作为成熟高需求轨道的受控条件，但 `blocked` 仍阻断全部放行。首批仅限 Grammarly、Jasper、ElevenLabs、Midjourney 四个已通过全部质量门槛的实体；Perplexity 因官方来源与 Decision Card 缺口继续 monitor。批次后恢复每日 1 个、每周 5 个硬上限。
+2026-09-22 根据实际索引面重新评估并完成首批执行：原 sitemap 仅 118 条 URL，成熟工具小批次不构成 programmatic 页面激增。策略允许把站点级 `warning` 作为成熟高需求轨道的受控条件，但 `blocked` 仍阻断全部放行。Grammarly、Jasper、ElevenLabs、Midjourney 四个实体通过全部质量门槛后进入索引面；生产 sitemap 为 126 条、可索引工具 17 个，审计 0 异常。Perplexity 因官方来源与 Decision Card 缺口继续 monitor。批次后已恢复每日 1 个、每周 5 个硬上限。
 
 ### Index Review Run 审计账本
 

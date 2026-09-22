@@ -356,4 +356,4 @@ query、Top 20 page、已抓取未编入索引与软 404 数量。
 - 快速通道只豁免时间，不豁免质量分、非占位素材、validated 市场证据、互补官方来源、真实限制、Decision Card、日期、唯一 canonical、独立搜索意图、自动 SEO、最新站点级 GSC、搜索健康、策略状态和额度。
 - 当前生产策略仍为 paused，09-21 GSC 健康为 blocked，因此规则部署不会自动把 Grammarly、Jasper 或其他 monitor 页面加入 sitemap；恢复必须另行满足站点级门禁。
 - Canva 候选已归并到唯一 `canva` 身份；Magic Studio 仅作为 Canva 页面能力模块，禁止生成第二个 canonical 页面。
-- 2026-09-22 成熟工具索引首批确定为 Grammarly、Jasper、ElevenLabs、Midjourney：四项质量、素材、市场验证、来源、Decision Card、日期、canonical、意图与 SEO 门禁均通过，只增加 8 条英中 URL。Perplexity 因第二官方来源和 Decision Card 缺口未纳入。执行采用可回滚、固定 allowlist 的生产批次，完成后恢复每日 1、每周 5 的常态额度。
+- 2026-09-22 成熟工具索引首批已完成：Grammarly、Jasper、ElevenLabs、Midjourney 四项质量、素材、市场验证、来源、Decision Card、日期、canonical、意图与 SEO 门禁均通过，并通过固定 allowlist、事务 rollback 后正式提交。生产可索引工具由 13 增至 17，sitemap 由 118 增至 126，仅增加 8 条英中 URL；重复、遗漏、越界和页面异常均为 0。Perplexity 因第二官方来源和 Decision Card 缺口未纳入。策略已恢复每日 1、每周 5 的常态额度。
