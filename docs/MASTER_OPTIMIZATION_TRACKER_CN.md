@@ -1,17 +1,36 @@
 # 收录与搜索质量主计划
 
-更新时间：2026-09-14
+更新时间：2026-09-22
 
 执行状态：进行中；索引保护及本周可证实历史补账完成，本周至少 12 次放行、剩余额度 0，新增索引批准保持暂停。
 
 当前范围：SEO 收录、搜索可见性、核心页面质量与真实编辑信号。产品分发/外链工作台暂不作为本轮执行目标，保留代码与数据，并
 已隐藏公开导航、价格页和后台侧栏入口；相关历史方案已移至 `docs/archive/`。
 
-2026-09-20 规模化口径更新：生产基线为 63 条工具记录、50 条已公开、13 条获准索引；技术和 SEO 护栏稳定，当前增长瓶颈转为高质量工具库存和差异化覆盖。后续每天发现 10-20 个、深审 4-6 个，目标公开 2 个且上限 3 个；索引仍逐页审批，每天最多 1 个、目标每周 4 个且硬上限 5 个。完整阶段目标、维护频率和暂停门禁见 [高质量工具规模化与分层维护路线图](./CONTENT_SCALE_AND_MAINTENANCE_ROADMAP_2026-09-20_CN.md)。
+2026-09-22 主线升级：平台在保持 AI 工具目录主题和受控收录的同时，正式并行建设 AI Tool Decision & Discovery 差异化基础。
+现有 Task、Evidence Ledger、Decision Finder、Decision Card、关系表和变化时间线全部复用，不另建第二套事实系统；本周新增
+Capability、Tool Capability、Task Capability 数据层，并依次交付首批 20 个成熟工具 × 6 个 Task 真实关系、独立 Task Page、
+统一 Tool Intelligence 和 Structured Comparison。自然语言 Decision Assistant 只有在覆盖率与证据门槛通过后才启动。唯一实
+施依据见 [差异化基础能力一周实施计划](./DECISION_GRAPH_DIFFERENTIATION_ONE_WEEK_PLAN_CN.md)。
+
+2026-09-22 DIFF-00/01 本地交付完成：差异化计划已收敛为唯一实施依据；新增的 Supabase migration 仅建立
+`decision_capabilities`、`tool_capabilities`、`task_capabilities` 及其 claim links，继续把 Neon `tool_id` 作为逻辑引用，未写入
+工具数据、未改变 URL、sitemap 或索引策略。发布门禁要求 active Capability/Task、人工 reviewer、当前 review window 与同 owner 的
+verified、未失效、未冲突 claim；事务末会阻止删除或修改唯一有效证据后仍保留 `published`。公开 RLS 也按实时有效性和 active 状态
+过滤，raw claim links 不对浏览器开放。状态为“待生产迁移与只读回读”，不得在迁移前启动 DIFF-02。
+
+2026-09-20 规模化口径更新：生产基线为 63 条工具记录、50 条已公开、13 条获准索引；技术和 SEO 护栏稳定，当前增长瓶颈转为高
+质量工具库存和差异化覆盖。后续每天发现 10-20 个、深审 4-6 个，目标公开 2 个且上限 3 个；索引仍逐页审批，每天最多 1 个、
+目标每周 4 个且硬上限 5 个。完整阶段目标、维护频率和暂停门禁见
+[高质量工具规模化与分层维护路线图](./CONTENT_SCALE_AND_MAINTENANCE_ROADMAP_2026-09-20_CN.md)。
 
 四周实施排期见 [证据驱动目录优化计划](./FOUR_WEEK_EVIDENCE_LED_DIRECTORY_PLAN_CN.md)。
 
-项目迭代统一遵循 [AI Best Tool 总控协作协议](./AI_PM_ORCHESTRATION_PROTOCOL_CN.md)：用户只向总控下达目标；每个交付单元固定创建一个开发任务和一个独立验收任务；开发不得直推 `main`，QA PASS、本地完整 build 与生产验证完成后才允许关闭，完成任务随后归档。2026-09-10 Best 页面与 SEO 边界修复是该协议下的首个正式闭环交付单元：首次独立验收为 FAIL，同一开发任务完成修复并由同一 QA 复验；总控完成主分支回归、完整 build、部署和线上 smoke，最终 `main` 为 `ede3fec7`，状态为 `PROD_VERIFIED / CLOSED`。
+项目迭代统一遵循 [AI Best Tool 总控协作协议](./AI_PM_ORCHESTRATION_PROTOCOL_CN.md)：用户只向总控下达目标；每个交付单元固
+定创建一个开发任务和一个独立验收任务；开发不得直推 `main`，QA PASS、本地完整 build 与生产验证完成后才允许关闭，完成任务
+随后归档。2026-09-10 Best 页面与 SEO 边界修复是该协议下的首个正式闭环交付单元：首次独立验收为 FAIL，同一开发任务完成修复
+并由同一 QA 复验；总控完成主分支回归、完整 build、部署和线上 smoke，最终 `main` 为 `ede3fec7`，状态为
+`PROD_VERIFIED / CLOSED`。
 
 当前收尾执行见 [质量收尾与状态校正子方案](./QUALITY_CLOSEOUT_IMPLEMENTATION_2026-09-04_CN.md)，不是新主线。四周一级任务
 10/13完成（76.9%）；持续运营、内容覆盖、生产验收与效果验证分别统计。
@@ -86,19 +105,25 @@ sitemap。专项内容、身份链接、TypeScript、数据库 rollback/commit/s
 
 ### 当前维护优先级（更新至 2026-09-14）
 
-2026-09-14 延期补发：Lovable（原 09-11）与 Midjourney（原 09-12）已分别独立 commit，实际发布日期均为 09-14，nextReviewDate=2026-10-14。总控部署完整 Card 修复后，两项生产全量审计均通过：唯一实体、完整 en/zh/cn 正文、全部 Card 条目、媒体与双语 200/self-canonical/noindex；全站 58 实体/46 published/13 indexable，sitemap 仍为 116 条/26 个工具 URL，无重复、遗漏或越界。两项保持 published/monitor，不增加索引额度。最终证据见 [延期补发交付](./DELAYED_LOVABLE_MIDJOURNEY_RELEASE_2026-09-14_CN.md)，提交总控复核归档；本次持续运营不提高四周一级进度。
+2026-09-14 延期补发：Lovable（原 09-11）与 Midjourney（原 09-12）已分别独立 commit，实际发布日期均为
+09-14，nextReviewDate=2026-10-14。总控部署完整 Card 修复后，两项生产全量审计均通过：唯一实体、完整 en/zh/cn 正文、全部
+Card 条目、媒体与双语 200/self-canonical/noindex；全站 58 实体/46 published/13 indexable，sitemap 仍为 116 条/26 个工具
+URL，无重复、遗漏或越界。两项保持 published/monitor，不增加索引额度。最终证据见
+[延期补发交付](./DELAYED_LOVABLE_MIDJOURNEY_RELEASE_2026-09-14_CN.md)，提交总控复核归档；本次持续运营不提高四周一级进
+度。
 
 2026-09-07 持续收录准备：已建立 [下周成熟工具候选与发布节奏](./NEXT_WEEK_MATURE_TOOL_INTAKE_2026-09-07_CN.md)。候选顺序
 为 Synthesia、Replit、Otter.ai、Lovable 与 Midjourney；五个候选均已完成结构化预审与生产查重。Synthesia 与 Replit 已分别
 在 09-08、09-09 通过当日门禁并以 `monitor/noindex` 发布。下一槽为 Otter.ai，已完成查重、结构化预审和 alias 代码收口：旧
 `/ai/otter` 及本地化路径统一 308 到唯一 `/ai/otter-ai` canonical，部署后双语路径、canonical、noindex 和 sitemap 排除均已
-验收；09-09 又完成发布前材料包与自动日期门禁。2026-09-10 已完成当天官方复核并发布：标准月付与年付价格、首次订阅促销、
-地区/教育折扣已隔离，分钟、导入、历史、并发、自动加入、共享、隐私和企业 API 边界均已回写。生产记录为 `published +
-monitor`，双语页面继续 noindex、sitemap 未扩张，下一次复核为 2026-10-10。当前 Lovable 的旧双余额冲突也已通过实时官方文档解决：当前为
-Build/Cloud/AI 统一 credits，旧口径仅作历史或过渡账户提示；其预审最早排在 2026-09-11。Midjourney 的价格、GPU 计
-费、Web/Discord、编辑、视频、默认公开、Stealth 与商业权利边界已补齐，最早排在 2026-09-12。当前没有配置 DataForSEO，因此
-不伪造搜索量；审核可以并行，但公开默认每天 1 个，全部先 `monitor / noindex`，索引仍需单独批准。准备阶段没有写生产；后续
-Synthesia/Replit 的独立发布也没有改变 sitemap，四周一级进度仍为 10/13（76.9%）。
+验收；09-09 又完成发布前材料包与自动日期门禁。2026-09-10 已完成当天官方复核并发布：标准月付与年付价格、首次订阅促销、地
+区/教育折扣已隔离，分钟、导入、历史、并发、自动加入、共享、隐私和企业 API 边界均已回写。生产记录为
+`published + monitor`，双语页面继续 noindex、sitemap 未扩张，下一次复核为 2026-10-10。当前 Lovable 的旧双余额冲突也已通
+过实时官方文档解决：当前为 Build/Cloud/AI 统一 credits，旧口径仅作历史或过渡账户提示；其预审最早排在
+2026-09-11。Midjourney 的价格、GPU 计费、Web/Discord、编辑、视频、默认公开、Stealth 与商业权利边界已补齐，最早排在
+2026-09-12。当前没有配置 DataForSEO，因此不伪造搜索量；审核可以并行，但公开默认每天 1 个，全部先 `monitor / noindex`，索
+引仍需单独批准。准备阶段没有写生产；后续 Synthesia/Replit 的独立发布也没有改变 sitemap，四周一级进度仍为
+10/13（76.9%）。
 
 2026-09-07 发布与索引防回退：已完成五候选统一发布流水线和首轮全站索引一致性审计。流水线将预审、生产查重、发布载荷、事务
 回滚/提交和发布后页面验收统一，但首次发布固定为 `published + monitor`，不能自动批准索引；命令级测试确认日期和缺失载荷会
@@ -160,8 +185,8 @@ Gamma 验收补充：`33e65beb` 部署成功后发现新简版提示被官方快
   [本轮维护](./CONSENSUS_GAMMA_MAINTENANCE_2026-09-04_CN.md)。
 - P1：Emdash 已依既有 9 月 1 日核验 +30 天补齐生产复查日期 10 月 1 日；未改正文、验证日期或索引状态。缺排期从 23 降为 22
   是该阶段历史快照；后续对象复核与安全收口已将缺排期降至 0，未用补日期冒充事实核验。分类与完整执行记录见
-  [历史工具排期审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。MAINT-04 与 MAINT-05 均已完成；Adobe、Salesforce
-  Einstein 的 URL/索引处置也已由 RC-05C 于 09-08 关闭，不再归入排期补齐任务。
+  [历史工具排期审计](./LEGACY_TOOL_REVIEW_SCHEDULE_AUDIT_2026-09-04_CN.md)。MAINT-04 与 MAINT-05 均已完
+  成；Adobe、Salesforce Einstein 的 URL/索引处置也已由 RC-05C 于 09-08 关闭，不再归入排期补齐任务。
 - P1：CHG-02 已完成10/10。Fathom、Claude、Consensus、Gamma、Luma Dream Machine、n8n、OpenRouter、Runway、Dune、The Graph
   均有真实幂等`fact`基线；The Graph以官网产品名和定位完成最后一条。基线主锚点固定按产品名、官网定位、其他事实排序，同步
   脚本统一从Supabase验证工具owner，提取器限制站点身份只取首页并拦截假套餐。ElevenLabs/Descript/Perplexity/Make按robots停
@@ -194,9 +219,8 @@ Gamma 验收补充：`33e65beb` 部署成功后发现新简版提示被官方快
 
 - 不批量新增同义 guide、comparison 或 alternatives URL。成熟候选保持 14-21 条缓冲，每天目标新增并公开 2 个、最多 3 个通
   过全部门槛的成熟工具，新工具默认 `monitor / noindex`。成熟工具在 48-72 小时技术观察后可进入独立索引评审；当前每天最多
-  批准 1 个、目标每周 4 个且硬上限 5 个。只有同时通过资料完整度、独立市场验证和索引复核的条目才进入
-  sitemap；没有合格项时记录 SLA 异常并补池，不发布弱页凑数。详见
-  [工具页索引发布与节奏控制](./TOOL_INDEX_RELEASE_POLICY_CN.md)。
+  批准 1 个、目标每周 4 个且硬上限 5 个。只有同时通过资料完整度、独立市场验证和索引复核的条目才进入 sitemap；没有合格项
+  时记录 SLA 异常并补池，不发布弱页凑数。详见 [工具页索引发布与节奏控制](./TOOL_INDEX_RELEASE_POLICY_CN.md)。
 - 不为了“更新日期”批量改写内容；每次更新必须对应真实来源、编辑核查或用户反馈。
 - 不把外链数量作为 SEO 成功指标；分发模块只保留维护，不继续扩功能或执行站外投放。
 
@@ -222,11 +246,19 @@ Gamma 验收补充：`33e65beb` 部署成功后发现新简版提示被官方快
 
 ## 2026-09-21 GSC 复盘
 
-新 28 天窗口为 2,837 展示、19 点击、0.67% CTR、平均排名 28.97，表面上高于 08-31；但最近 14 天只有 476 展示 / 2 点击，最近 7 天只有 170 / 0。Coverage 已索引从 167 降至 140，已抓取未编入索引从 24 增至 45。生产索引一致性与 SEO smoke 全部通过，因此当前保持索引策略暂停，优先取得 45 个 URL 的 drilldown 并逐条分类；成熟工具可以继续以 `monitor/noindex` 公开维护，但不得扩大 sitemap。完整分析见 [2026-09-21 GSC 复盘](./GSC_REVIEW_2026-09-21_CN.md)。
+新 28 天窗口为 2,837 展示、19 点击、0.67% CTR、平均排名 28.97，表面上高于 08-31；但最近 14 天只有 476 展示 / 2 点击，最
+近 7 天只有 170 / 0。Coverage 已索引从 167 降至 140，已抓取未编入索引从 24 增至 45。生产索引一致性与 SEO smoke 全部通
+过，因此当前保持索引策略暂停，优先取得 45 个 URL 的 drilldown 并逐条分类；成熟工具可以继续以 `monitor/noindex` 公开维
+护，但不得扩大 sitemap。完整分析见 [2026-09-21 GSC 复盘](./GSC_REVIEW_2026-09-21_CN.md)。
 
-2026-09-21 既有索引页维护：Character.AI 已完成受控维护与生产验收。专项脚本补齐 Reading Mode、c.ai+ 真实权益、训练数据地区边界、Decision Card、Evidence Ledger、用例与市场验证，并保护原 canonical、媒体、分类和 `continue_index`；同时修复历史事实兜底无条件覆盖数据库新内容的问题。中英文页面回读、索引一致性与 production SEO smoke 全部通过；该任务没有新增 URL 或扩大 sitemap。完整验收见 [Character.AI 维护交付](./CHARACTER_AI_MAINTENANCE_2026-09-21_CN.md)。
+2026-09-21 既有索引页维护：Character.AI 已完成受控维护与生产验收。专项脚本补齐 Reading Mode、c.ai+ 真实权益、训练数据地
+区边界、Decision Card、Evidence Ledger、用例与市场验证，并保护原 canonical、媒体、分类和 `continue_index`；同时修复历史
+事实兜底无条件覆盖数据库新内容的问题。中英文页面回读、索引一致性与 production SEO smoke 全部通过；该任务没有新增 URL 或
+扩大 sitemap。完整验收见 [Character.AI 维护交付](./CHARACTER_AI_MAINTENANCE_2026-09-21_CN.md)。
 
-2026-09-21 后续维护：Shutterstock GenAI 已完成当前许可、人工审核、赔偿保护、所有权和市场成熟度核验。受控脚本只更新 Evidence / Decision、用例、标签和下次复核日，并断言 canonical、正文、媒体、分类、价格及 `continue_index` 不变；不新增 URL 或 sitemap 条目。
+2026-09-21 后续维护：Shutterstock GenAI 已完成当前许可、人工审核、赔偿保护、所有权和市场成熟度核验。受控脚本只更新
+Evidence / Decision、用例、标签和下次复核日，并断言 canonical、正文、媒体、分类、价格及 `continue_index` 不变；不新增
+URL 或 sitemap 条目。
 
 2026-09-09 CTR 与差异化复核：战略定位“证据、限制、变化和可执行决策”继续成立，也不会改变 Google 对 AI 工具目录的基础理
 解；当前问题是差异能力没有稳定进入搜索摘要和所有首屏。首页 metadata 已能表达目录与比较，但通用工具 metadata 仍可能退回
@@ -235,18 +267,36 @@ Ledger 又只在 verified claim 存在时展示。下一轮不改 URL 架构，�
 CTR 实验台账。完整结论见 [CTR 与差异化复核](./CTR_DIFFERENTIATION_REVIEW_2026-09-09_CN.md)。
 
 2026-09-09 成熟工具日更 SLA 历史基线：当时将公开与索引拆成两个速度，通过全部准入的成熟工具每天公开 1-2 个并先进入
-`monitor/noindex`，索引上限为每天 1 个、每周 3 个。该产能口径已由 2026-09-20 的规模化路线图替代，但公开/索引分离原则继续有效。现有五条队列已经发布
-Synthesia 与 Replit 后原本只剩 Otter.ai、Lovable 和 Midjourney，低于至少 7 条的安全缓冲。`INTAKE-BUF-01` 已在不改变 09-10
-至 09-12 发布顺序的前提下，补充 ElevenLabs、HeyGen、Glean 和 Fireflies.ai，形成连续 7 天的成熟候选缓冲。四项均已通过机器预
-审，但不构成生产写入或 sitemap 授权；Windsurf 因正在更名为 Devin Desktop 暂缓，避免实体身份冲突。
+`monitor/noindex`，索引上限为每天 1 个、每周 3 个。该产能口径已由 2026-09-20 的规模化路线图替代，但公开/索引分离原则继续
+有效。现有五条队列已经发布 Synthesia 与 Replit 后原本只剩 Otter.ai、Lovable 和 Midjourney，低于至少 7 条的安全缓
+冲。`INTAKE-BUF-01` 已在不改变 09-10 至 09-12 发布顺序的前提下，补充 ElevenLabs、HeyGen、Glean 和 Fireflies.ai，形成连续
+7 天的成熟候选缓冲。四项均已通过机器预审，但不构成生产写入或 sitemap 授权；Windsurf 因正在更名为 Devin Desktop 暂缓，避
+免实体身份冲突。
 
-2026-09-20 ElevenLabs 延期补发完成：已重新核验价格、PAYG/legacy 计费边界、商业使用、隐私、ZRM 与 API 限制，并以唯一实体 `d7b63bf2-63c8-4015-b59d-2f627450813f` 完成生产事务发布。en/zh/cn 数据回读、双语言页面、Decision Card、比较维度、素材、数据库契约、全站索引一致性和生产 SEO smoke 均通过；独立发布审计 0 个失败。当前严格保持 `published + monitor/noindex`，不在 sitemap，2026-10-20 复核事实；最短 48–72 小时后才可进入独立索引评审。详见 [ElevenLabs 延期补发交付](./DELAYED_ELEVENLABS_RELEASE_2026-09-14_CN.md)。
+2026-09-20 ElevenLabs 延期补发完成：已重新核验价格、PAYG/legacy 计费边界、商业使用、隐私、ZRM 与 API 限制，并以唯一实体
+`d7b63bf2-63c8-4015-b59d-2f627450813f` 完成生产事务发布。en/zh/cn 数据回读、双语言页面、Decision Card、比较维度、素材、
+数据库契约、全站索引一致性和生产 SEO smoke 均通过；独立发布审计 0 个失败。当前严格保持 `published + monitor/noindex`，不
+在 sitemap，2026-10-20 复核事实；最短 48–72 小时后才可进入独立索引评审。详见
+[ElevenLabs 延期补发交付](./DELAYED_ELEVENLABS_RELEASE_2026-09-14_CN.md)。
 
-2026-09-20 HeyGen 延期补发完成：网页套餐与共享 credits、网页/API 分账、并发和输入限制、Digital Twin 同意、非 Enterprise 训练退出、Free 输出权利与编辑素材性质均已复核；生产事务先 rollback 后 commit，唯一实体 `4f26ce1c-08fd-4f99-97c9-21864c35bf94` 回读为 `published + monitor`。英中双语及 `zh/cn` 兼容内容、Decision Card、媒体、canonical、noindex、sitemap 和独立生产审计全部通过。生产基线为 62 条工具、49 条公开、13 条索引、36 条暂停索引，sitemap 仍为 118 条；下次事实复核 2026-10-20，索引仍需独立审批。详见 [HeyGen 延期补发交付](./DELAYED_HEYGEN_RELEASE_2026-09-20_CN.md)。
+2026-09-20 HeyGen 延期补发完成：网页套餐与共享 credits、网页/API 分账、并发和输入限制、Digital Twin 同意、非 Enterprise
+训练退出、Free 输出权利与编辑素材性质均已复核；生产事务先 rollback 后 commit，唯一实体
+`4f26ce1c-08fd-4f99-97c9-21864c35bf94` 回读为 `published + monitor`。英中双语及 `zh/cn` 兼容内容、Decision Card、媒
+体、canonical、noindex、sitemap 和独立生产审计全部通过。生产基线为 62 条工具、49 条公开、13 条索引、36 条暂停索
+引，sitemap 仍为 118 条；下次事实复核 2026-10-20，索引仍需独立审批。详见
+[HeyGen 延期补发交付](./DELAYED_HEYGEN_RELEASE_2026-09-20_CN.md)。
 
-2026-09-20 Glean 延期补发完成：企业搜索、275+ 连接器、源权限继承、开发能力、安全资料、定制报价缺失和公司自报采用信号均已按发布日证据复核；生产事务先 rollback 后 commit，唯一实体 `fd861409-8228-4deb-9802-a9f807d66256` 回读为 `published + monitor`。英中双语及 `zh/cn` 兼容内容、Decision Card、编辑媒体、canonical、noindex、sitemap 和独立生产审计全部通过。生产基线为 63 条工具、50 条公开、13 条索引、37 条暂停索引，sitemap 仍为 118 条；下次事实复核 2026-10-20，索引仍需独立审批。详见 [Glean 延期补发交付](./DELAYED_GLEAN_RELEASE_2026-09-20_CN.md)。
+2026-09-20 Glean 延期补发完成：企业搜索、275+ 连接器、源权限继承、开发能力、安全资料、定制报价缺失和公司自报采用信号均已
+按发布日证据复核；生产事务先 rollback 后 commit，唯一实体 `fd861409-8228-4deb-9802-a9f807d66256` 回读为
+`published + monitor`。英中双语及 `zh/cn` 兼容内容、Decision Card、编辑媒体、canonical、noindex、sitemap 和独立生产审计
+全部通过。生产基线为 63 条工具、50 条公开、13 条索引、37 条暂停索引，sitemap 仍为 118 条；下次事实复核 2026-10-20，索引
+仍需独立审批。详见 [Glean 延期补发交付](./DELAYED_GLEAN_RELEASE_2026-09-20_CN.md)。
 
-2026-09-20 Fireflies 既有实体正规化完成：生产查重确认实体 `57b270b9-78cf-41f8-8b74-dec46400cd65` 已由会议笔记 Pilot 提前建立，本轮没有增加工具数量。统一流水线已支持身份完全匹配的受控刷新，旧一次性迁移写入口退休；席位价格、AI credits 与默认 Auto-Upgrade、存储和上传限额、入会同意、隐私范围、输出复核及下游数据边界全部更新。rollback、commit、在线 verify、会议 Pilot 关系、独立生产审计、SEO smoke 和索引一致性均通过；基线保持 63/50/13/37，sitemap 保持 118。详见 [Fireflies 正规化交付](./FIREFLIES_REGULARIZATION_2026-09-20_CN.md)。
+2026-09-20 Fireflies 既有实体正规化完成：生产查重确认实体 `57b270b9-78cf-41f8-8b74-dec46400cd65` 已由会议笔记 Pilot 提前
+建立，本轮没有增加工具数量。统一流水线已支持身份完全匹配的受控刷新，旧一次性迁移写入口退休；席位价格、AI credits 与默认
+Auto-Upgrade、存储和上传限额、入会同意、隐私范围、输出复核及下游数据边界全部更新。rollback、commit、在线 verify、会议
+Pilot 关系、独立生产审计、SEO smoke 和索引一致性均通过；基线保持 63/50/13/37，sitemap 保持 118。详见
+[Fireflies 正规化交付](./FIREFLIES_REGULARIZATION_2026-09-20_CN.md)。
 
 ## 已完成能力
 
@@ -264,55 +314,76 @@ Synthesia 与 Replit 后原本只剩 Otter.ai、Lovable 和 Midjourney，低于�
 
 ### P0：保护索引面并修复异常（第 1-2 周）
 
-| ID     | 任务                                            | 验收标准                                                                                                        | 状态                                   | 负责人       |
-| ------ | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | -------------------------------------- | ------------ |
-| IDX-01 | 更新 GSC 周度台账与基线                         | 已写入本次 28 天、7 天、Coverage 和结论                                                                         | 已完成                                 | Codex        |
-| IDX-02 | 核对 24 个“已抓取未编入索引”URL                 | 已完成逐条分类，详见 [Coverage URL 审计](./COVERAGE_URL_AUDIT_2026-08-31_CN.md)；不做盲目 Request Indexing      | 已完成                                 | Codex        |
-| IDX-03 | 核对 22 个软 404 与 4 个未指定 canonical 重复页 | `how-to-choose-ai-tools` 的英文 canonical 已统一；软 404 URL 明细尚未导出，收到后逐条决定 404、合并或补实质内容 | 进行中                                 | Codex        |
-| IDX-04 | 每周生产 SEO smoke                              | 首页、Explore、核心详情、robots、sitemap、canonical 均通过                                                      | 持续                                   | Codex        |
-| IDX-05 | 索引准入门槛持续执行                            | 所有新 URL 均通过 [SEO 内容准入清单](./SEO_CONTENT_CHECKLIST.md)                                                | 持续                                   | 共同         |
-| IDX-06 | 高质量收录候选池与 "Best Decision Card"         | 首批 10 个成熟工具缺口全部完成实体迁移、合并或决策信号收口；未新增 canonical URL，下一批必须等待 W4 数据触发    | 已完成（成熟工具队列 10/10）           | Codex + 用户 |
-| IDX-07 | 四周证据驱动目录计划                            | 第 1-3 周开发项已完成；W4 三期 GSC 决策报告已实现，等待同期数据验证后执行扩大或收口                             | 进行中（W4）                           | Codex + 用户 |
-| IDX-08 | 工具页发布与索引解耦                            | `page_quality_status` 同时控制 robots 与 sitemap；新工具默认 monitor；每天最多放开 1 个、每周 5 个              | 已完成；首批逐日复核队列执行中         | Codex        |
-| POS-01 | SEO 安全的差异化表达                            | 保留 AI 工具目录主题、索引与结构化数据；首页突出证据、限制和变化，商业入口不干扰编辑判断                        | 已完成；专项测试、tsc、完整 build 通过 | Codex        |
-| INTAKE-BUF-01 | 补足成熟工具连续发布缓冲池                | 队列含 Otter.ai、Lovable、Midjourney、ElevenLabs、HeyGen、Glean、Fireflies.ai；每项均有完整证据、边界和日期门禁 | 已完成（7/7，不写生产、不改 sitemap） | Codex        |
+| ID            | 任务                                            | 验收标准                                                                                                        | 状态                                   | 负责人       |
+| ------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | -------------------------------------- | ------------ |
+| IDX-01        | 更新 GSC 周度台账与基线                         | 已写入本次 28 天、7 天、Coverage 和结论                                                                         | 已完成                                 | Codex        |
+| IDX-02        | 核对 24 个“已抓取未编入索引”URL                 | 已完成逐条分类，详见 [Coverage URL 审计](./COVERAGE_URL_AUDIT_2026-08-31_CN.md)；不做盲目 Request Indexing      | 已完成                                 | Codex        |
+| IDX-03        | 核对 22 个软 404 与 4 个未指定 canonical 重复页 | `how-to-choose-ai-tools` 的英文 canonical 已统一；软 404 URL 明细尚未导出，收到后逐条决定 404、合并或补实质内容 | 进行中                                 | Codex        |
+| IDX-04        | 每周生产 SEO smoke                              | 首页、Explore、核心详情、robots、sitemap、canonical 均通过                                                      | 持续                                   | Codex        |
+| IDX-05        | 索引准入门槛持续执行                            | 所有新 URL 均通过 [SEO 内容准入清单](./SEO_CONTENT_CHECKLIST.md)                                                | 持续                                   | 共同         |
+| IDX-06        | 高质量收录候选池与 "Best Decision Card"         | 首批 10 个成熟工具缺口全部完成实体迁移、合并或决策信号收口；未新增 canonical URL，下一批必须等待 W4 数据触发    | 已完成（成熟工具队列 10/10）           | Codex + 用户 |
+| IDX-07        | 四周证据驱动目录计划                            | 第 1-3 周开发项已完成；W4 三期 GSC 决策报告已实现，等待同期数据验证后执行扩大或收口                             | 进行中（W4）                           | Codex + 用户 |
+| IDX-08        | 工具页发布与索引解耦                            | `page_quality_status` 同时控制 robots 与 sitemap；新工具默认 monitor；每天最多放开 1 个、每周 5 个              | 已完成；首批逐日复核队列执行中         | Codex        |
+| POS-01        | SEO 安全的差异化表达                            | 保留 AI 工具目录主题、索引与结构化数据；首页突出证据、限制和变化，商业入口不干扰编辑判断                        | 已完成；专项测试、tsc、完整 build 通过 | Codex        |
+| INTAKE-BUF-01 | 补足成熟工具连续发布缓冲池                      | 队列含 Otter.ai、Lovable、Midjourney、ElevenLabs、HeyGen、Glean、Fireflies.ai；每项均有完整证据、边界和日期门禁 | 已完成（7/7，不写生产、不改 sitemap）  | Codex        |
 
 ### P1：让已获得展示的页面变成更可点击的答案（第 2-4 周）
 
-| ID       | 任务                               | 优先页面 / 查询意图                                                                                | 验收标准                                                                                                                                         | 状态                        | 负责人       |
-| -------- | ---------------------------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------- | ------------ |
-| CTR-01   | 首页标题、描述、首屏与 schema 复核 | `ai tools directory`、`ai tool directory`、`ai top tools`                                          | 文案已与目录词和可见内容一致；英文 canonical 首页已补 WebSite/SearchAction schema                                                                | 已完成                      | Codex        |
-| CTR-02   | 首页 -> Explore -> 分类的分流审计  | 目录通用词                                                                                         | 14 个机会详情页已补证据驱动 fallback，5 个无数据库记录的分类入口已改为虚拟决策中心；生产严格审计 33/33、官方事实块 16/16 通过                    | 已完成                      | Codex        |
-| CTR-03   | 强化已有展示的 Guide               | Web3、Automation、Research                                                                         | 三页均已补 3 条任务、适用边界、核验风险和直达工具 Decision Card 的路径；提交 `de1504e6`                                                          | 已完成                      | Codex        |
-| CTR-04   | 强化已有展示的详情页               | Fathom、Anthropic、DeepL、Gamma、Lindy、Cursor、The Graph                                          | 每页保留至少两个官方来源和一个真实选择限制；禁止通用 AI 改写                                                                                     | 已完成                      | Codex        |
-| CTR-05   | 真实编辑/owner 信号回填            | 本轮先选 5 页                                                                                      | 每页至少一条有来源的更新、纠错、owner 补充或真实使用记录                                                                                         | 需要数据                    | 用户 + Codex |
-| CTR-06   | 首批成熟工具内容缺口               | Claude/Anthropic、Fathom、Gamma、Consensus、DeepL、Runway、Luma AI、Pipedream、Cursor、The Graph   | 10 个既有 canonical URL 已完成合并、数据库迁移或决策内容增强，全程未新增 canonical URL                                                           | 已完成（10/10）             | Codex        |
-| CTR-DIFF | 搜索摘要与首屏差异信号收口         | 全站 metadata 清单、Best/Home 可信文案、4 个工具页试点、工具首屏判断摘要与可信复核日期来源          | CTR-DIFF-01~05 已完成；CTR-DIFF-06 四实体实验登记已启动且禁止观察期改写；134 个 sitemap URL 已盘点                                           | 进行中；待 14/28 天同页数据 | Codex + 数据 |
-| EVD-01   | Evidence Ledger 数据模型           | 所有 claim 统一来源类型、核查状态、复查日、冲突和失效边界；机器提取不自动成为已核验事实            | 已完成；Supabase 迁移、只读验收、专项测试和 build 通过                                                                                           | Codex + 用户                |
-| EVD-02   | 工具页 Evidence Ledger UI          | Decision Card 后可展开核对已验证 claim；候选证据不公开，不以单一分数代替解释                       | 已完成；有效工具身份产生 verified 数据后自动展示                                                                                                 | Codex                       |
-| EVD-03   | 后台证据编辑与冲突处理             | 状态受控流转；冲突不自动覆盖；核验人、日期、复查、失效和适用范围可追踪；所有保存操作有中间态       | 已完成；首条真实人工核验已回读确认，专项测试、tsc、完整 build 通过                                                                               | Codex                       |
-| EVD-04   | 情报档案身份映射收口               | `tool` 类型 owner_id 必须对应目录真实工具；存量错误身份重新归类后再公开                            | 已完成；site 迁移、3 个档案缓存重算、Fathom 真实 UUID -> verified -> 生产公开链路全部通过                                                        | Codex + 用户                |
-| CHG-01   | Change Timeline 模型与读取         | 正式历史与机器待审差异分离；事实变化与“复核无变化”分开；公开只读数据仅来自真实 tool 和 public 事件 | 已完成；迁移可读，受控写入、后台/工具页读取、专项测试和类型检查均通过                                                                            | Codex + 用户                |
-| CHG-02   | 首批核心工具变化基线               | 10-20 个核心工具拥有真实基线复核；没有变化时只记录 `reviewed_no_change`，禁止伪造变化              | 已完成（10/10）；Fathom、Claude、Consensus、Gamma、Luma Dream Machine、n8n、OpenRouter、Runway、Dune、The Graph 均完成真实基线                   | Codex + 用户                |
-| SEO-IA   | SEO 信息架构统一与门禁             | 修复历史 canonical/hreflang，统一 Breadcrumb，并让工具关系内链只消费 reviewed 数据                 | SEO-IA-01~08 已完成；本地/生产 smoke、完整 build 和 reviewed 关系验收全部通过                                                                    | Codex                       |
-| DCF      | Finder + Decision Card 2.0         | 10 个核心工具和 6-8 个任务形成证据可追溯、最多三项的可解释推荐                                     | DCF-01~07 已完成：数据、证据、规则、前台、后台审核、SEO 与自动发布门禁全部闭环                                                                   | Codex                       |
-| STK      | Stack Audit + 7-Day Trial          | 私有工具栈、Keep/Replace/Remove/Missing 与试用到期决策闭环                                         | 已完成（6/6）；双用户真实 RLS、匿名边界、service-only 审计输出、私有路由 noindex/sitemap 排除、生产 smoke、持续监控、类型检查与完整 build 均通过 | Codex                       |
-| SIG      | Verified Usage + Change Watch      | 审核后的结构化使用信号和已确认变化通知，不公开低样本或利益相关数据                                 | 等待阶段二真实使用门槛；SIG/WAT 未开始                                                                                                           | Codex + 用户                |
-| PUB-UX   | 公开内容边界与页面简化             | 清除公开页面中的索引策略、编辑计划和转化目标；以真实判断、限制和证据替代内部说明 | PUB-01 至 PUB-04 均已完成独立 QA、部署与生产验证并关闭；真实 Pilot 尚未启动，需单独满足数据和审批门槛 | Codex                       |
-| PH0-01 | 产品假设、能力与指标审计 | 六个假设、现有能力、严格事件契约、任务簇评分与 Pilot/Gate 依赖均有仓库证据；不新增事件、URL 或生产写入 | `CLOSED`；[审计与指标契约](./PH0_01_PRODUCT_HYPOTHESES_METRICS_AUDIT_CN.md)已完成，未声称真实数据或 Pilot 上线 | Codex + Owner |
-| MEASURE-01 | 决策事件隐私基础层 | 固定事件/字段 allowlist、30 分钟易失 flow、服务端幂等、流量排除、默认关闭、最小权限迁移与 SEO 零差分 | `PROD_VERIFIED / CLOSED`；[专项文档](./MEASURE_01_DECISION_EVENT_FOUNDATION_CN.md)，独立 QA、主分支 build 与生产 smoke 通过；2026-09-20 迁移和原始表最小权限验证完成，生产采集仍关闭 | Codex + Owner |
-| MEASURE-02 | 数据治理与 Pilot 边界 | 原始 35 天、聚合 400 天、审计 90 天、20-flow 最小样本、最小权限、内部流量轮换和会议任务簇 Pilot allowlist | `MIGRATED / DATA_READY / RETENTION_READY / PREFLIGHT_BLOCKED / DISABLED`；[治理与 Pilot 文档](./MEASURE_02_DATA_GOVERNANCE_AND_PILOT_CN.md)，数据、路由、证据、每日维护和 48 小时 freshness 告警均通过；仅剩内部 token 哈希和采集/UI 开关，当前仍关闭 | Codex + Owner |
-| MEASURE-03 | Finder 事件最小接入 | 六类既有 allowlist 事件接入，未配置时零请求；敏感条件只发 `redacted`，不改变页面与 SEO | `PROD_VERIFIED / DORMANT / COLLECTION_DISABLED`；提交 `4abab03c` 已部署并通过生产 SEO smoke，Owner 决定暂不配置环境变量，代码保持休眠，详见 [MEASURE-03](./MEASURE_03_DORMANT_UI_INTEGRATION_CN.md) | Codex |
+| ID         | 任务                               | 优先页面 / 查询意图                                                                                       | 验收标准                                                                                                                                                                                                                                              | 状态                        | 负责人       |
+| ---------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- | ------------ |
+| CTR-01     | 首页标题、描述、首屏与 schema 复核 | `ai tools directory`、`ai tool directory`、`ai top tools`                                                 | 文案已与目录词和可见内容一致；英文 canonical 首页已补 WebSite/SearchAction schema                                                                                                                                                                     | 已完成                      | Codex        |
+| CTR-02     | 首页 -> Explore -> 分类的分流审计  | 目录通用词                                                                                                | 14 个机会详情页已补证据驱动 fallback，5 个无数据库记录的分类入口已改为虚拟决策中心；生产严格审计 33/33、官方事实块 16/16 通过                                                                                                                         | 已完成                      | Codex        |
+| CTR-03     | 强化已有展示的 Guide               | Web3、Automation、Research                                                                                | 三页均已补 3 条任务、适用边界、核验风险和直达工具 Decision Card 的路径；提交 `de1504e6`                                                                                                                                                               | 已完成                      | Codex        |
+| CTR-04     | 强化已有展示的详情页               | Fathom、Anthropic、DeepL、Gamma、Lindy、Cursor、The Graph                                                 | 每页保留至少两个官方来源和一个真实选择限制；禁止通用 AI 改写                                                                                                                                                                                          | 已完成                      | Codex        |
+| CTR-05     | 真实编辑/owner 信号回填            | 本轮先选 5 页                                                                                             | 每页至少一条有来源的更新、纠错、owner 补充或真实使用记录                                                                                                                                                                                              | 需要数据                    | 用户 + Codex |
+| CTR-06     | 首批成熟工具内容缺口               | Claude/Anthropic、Fathom、Gamma、Consensus、DeepL、Runway、Luma AI、Pipedream、Cursor、The Graph          | 10 个既有 canonical URL 已完成合并、数据库迁移或决策内容增强，全程未新增 canonical URL                                                                                                                                                                | 已完成（10/10）             | Codex        |
+| CTR-DIFF   | 搜索摘要与首屏差异信号收口         | 全站 metadata 清单、Best/Home 可信文案、4 个工具页试点、工具首屏判断摘要与可信复核日期来源                | CTR-DIFF-01~05 已完成；CTR-DIFF-06 四实体实验登记已启动且禁止观察期改写；134 个 sitemap URL 已盘点                                                                                                                                                    | 进行中；待 14/28 天同页数据 | Codex + 数据 |
+| EVD-01     | Evidence Ledger 数据模型           | 所有 claim 统一来源类型、核查状态、复查日、冲突和失效边界；机器提取不自动成为已核验事实                   | 已完成；Supabase 迁移、只读验收、专项测试和 build 通过                                                                                                                                                                                                | Codex + 用户                |
+| EVD-02     | 工具页 Evidence Ledger UI          | Decision Card 后可展开核对已验证 claim；候选证据不公开，不以单一分数代替解释                              | 已完成；有效工具身份产生 verified 数据后自动展示                                                                                                                                                                                                      | Codex                       |
+| EVD-03     | 后台证据编辑与冲突处理             | 状态受控流转；冲突不自动覆盖；核验人、日期、复查、失效和适用范围可追踪；所有保存操作有中间态              | 已完成；首条真实人工核验已回读确认，专项测试、tsc、完整 build 通过                                                                                                                                                                                    | Codex                       |
+| EVD-04     | 情报档案身份映射收口               | `tool` 类型 owner_id 必须对应目录真实工具；存量错误身份重新归类后再公开                                   | 已完成；site 迁移、3 个档案缓存重算、Fathom 真实 UUID -> verified -> 生产公开链路全部通过                                                                                                                                                             | Codex + 用户                |
+| CHG-01     | Change Timeline 模型与读取         | 正式历史与机器待审差异分离；事实变化与“复核无变化”分开；公开只读数据仅来自真实 tool 和 public 事件        | 已完成；迁移可读，受控写入、后台/工具页读取、专项测试和类型检查均通过                                                                                                                                                                                 | Codex + 用户                |
+| CHG-02     | 首批核心工具变化基线               | 10-20 个核心工具拥有真实基线复核；没有变化时只记录 `reviewed_no_change`，禁止伪造变化                     | 已完成（10/10）；Fathom、Claude、Consensus、Gamma、Luma Dream Machine、n8n、OpenRouter、Runway、Dune、The Graph 均完成真实基线                                                                                                                        | Codex + 用户                |
+| SEO-IA     | SEO 信息架构统一与门禁             | 修复历史 canonical/hreflang，统一 Breadcrumb，并让工具关系内链只消费 reviewed 数据                        | SEO-IA-01~08 已完成；本地/生产 smoke、完整 build 和 reviewed 关系验收全部通过                                                                                                                                                                         | Codex                       |
+| DCF        | Finder + Decision Card 2.0         | 10 个核心工具和 6-8 个任务形成证据可追溯、最多三项的可解释推荐                                            | DCF-01~07 已完成：数据、证据、规则、前台、后台审核、SEO 与自动发布门禁全部闭环                                                                                                                                                                        | Codex                       |
+| STK        | Stack Audit + 7-Day Trial          | 私有工具栈、Keep/Replace/Remove/Missing 与试用到期决策闭环                                                | 已完成（6/6）；双用户真实 RLS、匿名边界、service-only 审计输出、私有路由 noindex/sitemap 排除、生产 smoke、持续监控、类型检查与完整 build 均通过                                                                                                      | Codex                       |
+| SIG        | Verified Usage + Change Watch      | 审核后的结构化使用信号和已确认变化通知，不公开低样本或利益相关数据                                        | 等待阶段二真实使用门槛；SIG/WAT 未开始                                                                                                                                                                                                                | Codex + 用户                |
+| PUB-UX     | 公开内容边界与页面简化             | 清除公开页面中的索引策略、编辑计划和转化目标；以真实判断、限制和证据替代内部说明                          | PUB-01 至 PUB-04 均已完成独立 QA、部署与生产验证并关闭；真实 Pilot 尚未启动，需单独满足数据和审批门槛                                                                                                                                                 | Codex                       |
+| PH0-01     | 产品假设、能力与指标审计           | 六个假设、现有能力、严格事件契约、任务簇评分与 Pilot/Gate 依赖均有仓库证据；不新增事件、URL 或生产写入    | `CLOSED`；[审计与指标契约](./PH0_01_PRODUCT_HYPOTHESES_METRICS_AUDIT_CN.md)已完成，未声称真实数据或 Pilot 上线                                                                                                                                        | Codex + Owner               |
+| MEASURE-01 | 决策事件隐私基础层                 | 固定事件/字段 allowlist、30 分钟易失 flow、服务端幂等、流量排除、默认关闭、最小权限迁移与 SEO 零差分      | `PROD_VERIFIED / CLOSED`；[专项文档](./MEASURE_01_DECISION_EVENT_FOUNDATION_CN.md)，独立 QA、主分支 build 与生产 smoke 通过；2026-09-20 迁移和原始表最小权限验证完成，生产采集仍关闭                                                                  | Codex + Owner               |
+| MEASURE-02 | 数据治理与 Pilot 边界              | 原始 35 天、聚合 400 天、审计 90 天、20-flow 最小样本、最小权限、内部流量轮换和会议任务簇 Pilot allowlist | `MIGRATED / DATA_READY / RETENTION_READY / PREFLIGHT_BLOCKED / DISABLED`；[治理与 Pilot 文档](./MEASURE_02_DATA_GOVERNANCE_AND_PILOT_CN.md)，数据、路由、证据、每日维护和 48 小时 freshness 告警均通过；仅剩内部 token 哈希和采集/UI 开关，当前仍关闭 | Codex + Owner               |
+| MEASURE-03 | Finder 事件最小接入                | 六类既有 allowlist 事件接入，未配置时零请求；敏感条件只发 `redacted`，不改变页面与 SEO                    | `PROD_VERIFIED / DORMANT / COLLECTION_DISABLED`；提交 `4abab03c` 已部署并通过生产 SEO smoke，Owner 决定暂不配置环境变量，代码保持休眠，详见 [MEASURE-03](./MEASURE_03_DORMANT_UI_INTEGRATION_CN.md)                                                   | Codex                       |
 
-2026-09-14 新增公开内容边界治理：生产 Web3 comparison 暴露“保留索引、补真实证据”等内部编辑语言，且共享 Guide 模板将同类内容扩散到大量页面。该问题不改变既有 SEO 架构结论，但会削弱用户体验、可信度和差异化表达。完整基线、页面契约、分四个交付单元的实施计划、自动验收与反向评审见 [公开内容边界与页面简化实施方案](./PUBLIC_CONTENT_BOUNDARY_AND_PAGE_SIMPLIFICATION_PLAN_CN.md)。实施期间冻结 URL、metadata、canonical、hreflang、robots、schema 和 sitemap，先完成 PUB-01 门禁与 Web3 样板，生产通过后再扩到其他页面。
+2026-09-14 新增公开内容边界治理：生产 Web3 comparison 暴露“保留索引、补真实证据”等内部编辑语言，且共享 Guide 模板将同类
+内容扩散到大量页面。该问题不改变既有 SEO 架构结论，但会削弱用户体验、可信度和差异化表达。完整基线、页面契约、分四个交付
+单元的实施计划、自动验收与反向评审见
+[公开内容边界与页面简化实施方案](./PUBLIC_CONTENT_BOUNDARY_AND_PAGE_SIMPLIFICATION_PLAN_CN.md)。实施期间冻结
+URL、metadata、canonical、hreflang、robots、schema 和 sitemap，先完成 PUB-01 门禁与 Web3 样板，生产通过后再扩到其他页
+面。
 
-2026-09-14 PUB-01 已关闭：候选 `4c262fe8be109bad1beffbd88cfd3cda2a463a64` 独立 QA PASS，main 提交 `834e1295` 已部署。生产 Web3 中英文样板、公开内容边界、SEO smoke、索引一致性和 sitemap 验收通过；comparison 仍为 `noindex, follow`，sitemap 保持 116 条。开发视觉测试曾因既有 PageViewTracker 产生 6 条无 `tool_id` 的测试 page-view，已记录且不清理；后续本地视觉验收必须拦截统计写请求并使用只读数据连接。
+2026-09-14 PUB-01 已关闭：候选 `4c262fe8be109bad1beffbd88cfd3cda2a463a64` 独立 QA PASS，main 提交 `834e1295` 已部署。生
+产 Web3 中英文样板、公开内容边界、SEO smoke、索引一致性和 sitemap 验收通过；comparison 仍为 `noindex, follow`，sitemap
+保持 116 条。开发视觉测试曾因既有 PageViewTracker 产生 6 条无 `tool_id` 的测试 page-view，已记录且不清理；后续本地视觉验
+收必须拦截统计写请求并使用只读数据连接。
 
-2026-09-14 PUB-02 已关闭：候选 `15e16ec34f081688420516149c0adc278db5f24b` 独立 QA PASS，main 提交 `f73fcef5` 已部署。18 个主 Guide、76 个 comparison 和 188 个双语生产页面通过验收；公开边界命中从 1502 降至 51，Guide/comparison 范围为 0。comparison 分类为 1 keep-noindex、10 merge-redirect 候选、65 repair；未执行 redirect 或索引放开。148 个无依据语言页已撤下 FAQPage/ItemList，Web3 的 4 个真实 schema 保留；sitemap 继续为 116 条。剩余 51 条转入 PUB-03，65 个 repair 只能在补足真实候选与证据后升级。
+2026-09-14 PUB-02 已关闭：候选 `15e16ec34f081688420516149c0adc278db5f24b` 独立 QA PASS，main 提交 `f73fcef5` 已部署。18
+个主 Guide、76 个 comparison 和 188 个双语生产页面通过验收；公开边界命中从 1502 降至 51，Guide/comparison 范围为
+0。comparison 分类为 1 keep-noindex、10 merge-redirect 候选、65 repair；未执行 redirect 或索引放开。148 个无依据语言页已
+撤下 FAQPage/ItemList，Web3 的 4 个真实 schema 保留；sitemap 继续为 116 条。剩余 51 条转入 PUB-03，65 个 repair 只能在补
+足真实候选与证据后升级。
 
-2026-09-15 PUB-03 已关闭：最终开发候选 `0fa51b21db3ed2c26000df7edc47a40287e533e7` 经 QA 返工后实现新增 lint 0，并以 `30d68533`、`92988f1a` 合入 main；生产 smoke 契约补丁 `8561e21d` 已部署并复验。Tool、Home、Explore、Best、Category 与商业 CTA 的公开边界完成收口，源码命中 51→0；390 个生产页面 0 违规。索引审计为 58 条工具、46 条已发布、13 条可索引、46 个页面 0 问题；sitemap 保持 116 条且无缺失、异常或重复 URL。仓库仍有 1572 条历史 lint 债务且 Next build 当前跳过全仓 lint，本单元没有新增 lint；下一项只执行 PUB-04，不并行扩 URL 或修改 SEO 冻结项。
+2026-09-15 PUB-03 已关闭：最终开发候选 `0fa51b21db3ed2c26000df7edc47a40287e533e7` 经 QA 返工后实现新增 lint 0，并以
+`30d68533`、`92988f1a` 合入 main；生产 smoke 契约补丁 `8561e21d` 已部署并复验。Tool、Home、Explore、Best、Category 与商
+业 CTA 的公开边界完成收口，源码命中 51→0；390 个生产页面 0 违规。索引审计为 58 条工具、46 条已发布、13 条可索引、46 个页
+面 0 问题；sitemap 保持 116 条且无缺失、异常或重复 URL。仓库仍有 1572 条历史 lint 债务且 Next build 当前跳过全仓 lint，
+本单元没有新增 lint；下一项只执行 PUB-04，不并行扩 URL 或修改 SEO 冻结项。
 
-2026-09-20 PUB-04 已关闭：首轮候选 `fa1952a546680020fecf46c7cacc1f110f87a572` 因新增测试脚本两处 lint 被独立 QA 退回；原开发任务定点修复后形成 `448d342f8e721bfcbf2111f14aaceb5b5490d87e`，同一 QA 复验 `QA_PASS`。main 提交 `4edcc369`、`c88c625d` 已推送，主分支目标 lint、13/13 注册测试、冻结测试、专项类型检查、SEO 架构、计划一致性和完整 build 全部通过；生产 smoke 验证 canonical、hreflang、Breadcrumb、noindex、robots 与 116 条 sitemap 正常。生产注册、Pilot 页面和实验状态保持为空/关闭，未新增 URL、分析事件或 SEO 变更；真实任务簇、3–5 个既有 Pilot 页面及指标治理属于下一独立阶段，不能冒充 PUB-04 已验证效果。
+2026-09-20 PUB-04 已关闭：首轮候选 `fa1952a546680020fecf46c7cacc1f110f87a572` 因新增测试脚本两处 lint 被独立 QA 退回；原
+开发任务定点修复后形成 `448d342f8e721bfcbf2111f14aaceb5b5490d87e`，同一 QA 复验 `QA_PASS`。main 提交
+`4edcc369`、`c88c625d` 已推送，主分支目标 lint、13/13 注册测试、冻结测试、专项类型检查、SEO 架构、计划一致性和完整 build
+全部通过；生产 smoke 验证 canonical、hreflang、Breadcrumb、noindex、robots 与 116 条 sitemap 正常。生产注册、Pilot 页面
+和实验状态保持为空/关闭，未新增 URL、分析事件或 SEO 变更；真实任务簇、3–5 个既有 Pilot 页面及指标治理属于下一独立阶段，
+不能冒充 PUB-04 已验证效果。
 
 ### P2：只在数据证明后扩展（第 4-6 周）
 
@@ -337,6 +408,7 @@ query、Top 20 page、已抓取未编入索引与软 404 数量。
 - 本轮唯一的执行依据是本文
   件、[四周证据驱动目录计划](./FOUR_WEEK_EVIDENCE_LED_DIRECTORY_PLAN_CN.md)、[GSC 周度观察台账](./GSC_WEEKLY_OBSERVATION_LOG_CN.md)、[Coverage URL 审计](./COVERAGE_URL_AUDIT_2026-08-31_CN.md)、[SEO 内容准入清单](./SEO_CONTENT_CHECKLIST.md)、[核心页面信号审计](./PRIORITY_PAGE_SIGNAL_AUDIT_CN.md)
   与 [重点工具详情说明](./PRIORITY_TOOL_DETAIL_PLAYBOOK_CN.md)。
+
 ## 2026-09-20 成熟候选缓冲池
 
 - 状态：完成。
@@ -345,15 +417,31 @@ query、Top 20 page、已抓取未编入索引与软 404 数量。
 - 自动门禁覆盖数量、唯一性、来源、决策维度、风险披露及公开/索引批准关闭状态。
 - 生命周期异常的 Sourcegraph Cody 和 Amazon Q Developer IDE plugins 已排除，避免以历史热度制造失效页面。
 - 详情：[成熟高需求工具候选缓冲池](./MATURE_CANDIDATE_BUFFER_2026-09-20_CN.md)。下一项：Grammarly 受控发布。
-- Grammarly 已于 2026-09-21 完成受控发布：官方价格和训练边界复核、生产只读 preflight、rollback、完整 build、commit 与三语言回读均通过。生产唯一实体为 `published + monitor/noindex`，保留现有 canonical，不进入 sitemap，也没有索引批准；下一次事实复核为 2026-10-20。
-- Jasper 发布包已完成：生产无实体，现有 canonical 静态页维持 `noindex` 且不在 sitemap；三语言 Decision Card、本地编辑素材、候选流水线和日期门禁覆盖 Pro 单席位、Business 定制合同、credits、品牌上下文、数据处理和人工复核边界。当前没有生产写入或索引批准；最早于 2026-09-22 执行只读 preflight 与受控发布。
-- 2026-09-21 Owner 对 Jasper 作出一次性、候选限定的提前执行授权：原 `2026-09-22` 门禁保留在预审记录中，统一发布器只在 `2026-09-21` 对 `jasper` 认定有效，且仍要求生产身份 preflight、默认 rollback、显式 `--commit`、`published + monitor/noindex`、sitemap 排除和独立索引审批。当天官方价格、credits、Brand Voice、EULA/DPA/sub-processors 与 ethics 复核无实质变化；详见 [Jasper 受控发布交付](./JASPER_CONTROLLED_RELEASE_2026-09-21_CN.md)。
-- Descript 发布包已完成：生产无实体，现有英中 canonical 静态页继续 `noindex` 且不在 sitemap；三语言 Decision Card、自制编辑素材和统一流水线覆盖逐席位定价、media hours、AI credits、团队共享池、AI Speaker 同意、训练与人工访问及输出权利边界。当前不写生产、不开放索引；最早 2026-09-23 执行只读 preflight 与受控发布。
+- Grammarly 已于 2026-09-21 完成受控发布：官方价格和训练边界复核、生产只读 preflight、rollback、完整 build、commit 与三
+  语言回读均通过。生产唯一实体为 `published + monitor/noindex`，保留现有 canonical，不进入 sitemap，也没有索引批准；下一
+  次事实复核为 2026-10-20。
+- Jasper 发布包已完成：生产无实体，现有 canonical 静态页维持 `noindex` 且不在 sitemap；三语言 Decision Card、本地编辑素
+  材、候选流水线和日期门禁覆盖 Pro 单席位、Business 定制合同、credits、品牌上下文、数据处理和人工复核边界。当前没有生产
+  写入或索引批准；最早于 2026-09-22 执行只读 preflight 与受控发布。
+- 2026-09-21 Owner 对 Jasper 作出一次性、候选限定的提前执行授权：原 `2026-09-22` 门禁保留在预审记录中，统一发布器只在
+  `2026-09-21` 对 `jasper` 认定有效，且仍要求生产身份 preflight、默认 rollback、显式
+  `--commit`、`published + monitor/noindex`、sitemap 排除和独立索引审批。当天官方价格、credits、Brand
+  Voice、EULA/DPA/sub-processors 与 ethics 复核无实质变化；详见
+  [Jasper 受控发布交付](./JASPER_CONTROLLED_RELEASE_2026-09-21_CN.md)。
+- Descript 发布包已完成：生产无实体，现有英中 canonical 静态页继续 `noindex` 且不在 sitemap；三语言 Decision Card、自制
+  编辑素材和统一流水线覆盖逐席位定价、media hours、AI credits、团队共享池、AI Speaker 同意、训练与人工访问及输出权利边
+  界。当前不写生产、不开放索引；最早 2026-09-23 执行只读 preflight 与受控发布。
 
 ## 2026-09-22 成熟工具即时质量门禁
 
-- 成熟高需求工具不再为“证明市场成熟”强制等待 48-72 小时：统一发布器仍先写 `published + monitor`，随后可在同一天运行独立索引评审。
-- 快速通道只豁免时间，不豁免质量分、非占位素材、validated 市场证据、互补官方来源、真实限制、Decision Card、日期、唯一 canonical、独立搜索意图、自动 SEO、最新站点级 GSC、搜索健康、策略状态和额度。
-- 当前生产策略仍为 paused，09-21 GSC 健康为 blocked，因此规则部署不会自动把 Grammarly、Jasper 或其他 monitor 页面加入 sitemap；恢复必须另行满足站点级门禁。
+- 成熟高需求工具不再为“证明市场成熟”强制等待 48-72 小时：统一发布器仍先写 `published + monitor`，随后可在同一天运行独立
+  索引评审。
+- 快速通道只豁免时间，不豁免质量分、非占位素材、validated 市场证据、互补官方来源、真实限制、Decision Card、日期、唯一
+  canonical、独立搜索意图、自动 SEO、最新站点级 GSC、搜索健康、策略状态和额度。
+- 当前生产策略仍为 paused，09-21 GSC 健康为 blocked，因此规则部署不会自动把 Grammarly、Jasper 或其他 monitor 页面加入
+  sitemap；恢复必须另行满足站点级门禁。
 - Canva 候选已归并到唯一 `canva` 身份；Magic Studio 仅作为 Canva 页面能力模块，禁止生成第二个 canonical 页面。
-- 2026-09-22 成熟工具索引首批已完成：Grammarly、Jasper、ElevenLabs、Midjourney 四项质量、素材、市场验证、来源、Decision Card、日期、canonical、意图与 SEO 门禁均通过，并通过固定 allowlist、事务 rollback 后正式提交。生产可索引工具由 13 增至 17，sitemap 由 118 增至 126，仅增加 8 条英中 URL；重复、遗漏、越界和页面异常均为 0。Perplexity 因第二官方来源和 Decision Card 缺口未纳入。策略已恢复每日 1、每周 5 的常态额度。
+- 2026-09-22 成熟工具索引首批已完成：Grammarly、Jasper、ElevenLabs、Midjourney 四项质量、素材、市场验证、来源、Decision
+  Card、日期、canonical、意图与 SEO 门禁均通过，并通过固定 allowlist、事务 rollback 后正式提交。生产可索引工具由 13 增至
+  17，sitemap 由 118 增至 126，仅增加 8 条英中 URL；重复、遗漏、越界和页面异常均为 0。Perplexity 因第二官方来源和
+  Decision Card 缺口未纳入。策略已恢复每日 1、每周 5 的常态额度。
