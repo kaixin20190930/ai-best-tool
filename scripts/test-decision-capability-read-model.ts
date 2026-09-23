@@ -9,6 +9,7 @@ import {
 
 const now = new Date('2026-09-23T00:00:00.000Z');
 const future = '2026-10-23T00:00:00.000Z';
+const futureReviewedAt = '2026-09-24T00:00:00.000Z';
 const validToolId = '11111111-1111-4111-8111-111111111111';
 const otherToolId = '22222222-2222-4222-8222-222222222222';
 const validClaimId = '33333333-3333-4333-8333-333333333333';
@@ -62,6 +63,18 @@ const model = derivePublicDecisionCapabilityReadModel(
         reviewed_at: '2026-09-01T00:00:00.000Z',
         review_due_at: future,
       },
+      {
+        id: 'tool-cap-future-reviewed',
+        tool_id: validToolId,
+        capability_id: 'cap-video',
+        support_level: 'strong',
+        availability: 'all_plans',
+        plan_requirement: {},
+        limitations: [],
+        status: 'published',
+        reviewed_at: futureReviewedAt,
+        review_due_at: future,
+      },
       ...(['reviewed', 'stale'] as const).map((status) => ({
         id: `tool-cap-${status}`,
         tool_id: validToolId,
@@ -97,10 +110,20 @@ const model = derivePublicDecisionCapabilityReadModel(
         reviewed_at: '2026-09-01T00:00:00.000Z',
         review_due_at: future,
       },
+      {
+        task_id: 'task-video',
+        capability_id: 'cap-video',
+        importance: 'preferred',
+        rationale: { en: 'Future review must not be public yet.' },
+        status: 'published',
+        reviewed_at: futureReviewedAt,
+        review_due_at: future,
+      },
     ],
     claimLinks: [
       { tool_capability_id: 'tool-cap-valid', claim_id: validClaimId },
       { tool_capability_id: 'tool-cap-wrong-owner', claim_id: 'claim-wrong-owner' },
+      { tool_capability_id: 'tool-cap-future-reviewed', claim_id: validClaimId },
       { tool_capability_id: 'tool-cap-reviewed', claim_id: validClaimId },
       { tool_capability_id: 'tool-cap-stale', claim_id: validClaimId },
       { tool_capability_id: 'tool-cap-expired-review', claim_id: validClaimId },
@@ -151,11 +174,21 @@ const model = derivePublicDecisionCapabilityReadModel(
 
 assert.equal(model.capabilities.length, 1, 'only active capabilities are public');
 assert.equal(model.toolCapabilities.length, 1, 'wrong-owner evidence cannot support a public Tool Capability');
+assert.equal(
+  model.toolCapabilities.some((capability) => capability.id === 'tool-cap-future-reviewed'),
+  false,
+  'future-reviewed Tool Capability stays private despite valid evidence and review due date',
+);
 assert.equal(model.toolCapabilities[0]?.supportLevel, 'unknown', 'unknown remains unknown and is never inferred');
 assert.deepEqual(model.toolCapabilities[0]?.evidence, [
   { sourceUrl: 'https://example.com/pricing', verifiedAt: '2026-09-01T00:00:00.000Z', reviewDueAt: future },
 ]);
 assert.equal(model.taskCapabilities.length, 1, 'current published Task Capability is retained');
+assert.equal(
+  model.taskCapabilities.some((capability) => capability.importance === 'preferred'),
+  false,
+  'future-reviewed Task Capability stays private',
+);
 assert.equal(JSON.stringify(model).includes('claim_value'), false, 'raw claim values are never returned');
 assert.equal(JSON.stringify(model).includes(validClaimId), false, 'raw claim IDs are never returned');
 const summary = derivePublicToolCapabilitySummaries(model, validToolId);

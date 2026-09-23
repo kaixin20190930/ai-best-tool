@@ -93,6 +93,12 @@ function current(value: unknown, now: Date): value is string {
   return Number.isFinite(timestamp) && timestamp > now.getTime();
 }
 
+function reviewedAtCurrent(value: unknown, now: Date): value is string {
+  if (typeof value !== 'string') return false;
+  const timestamp = new Date(value).getTime();
+  return Number.isFinite(timestamp) && timestamp <= now.getTime();
+}
+
 function activeClaimForTool(claim: Row, profile: Row | undefined, toolId: string, now: Date): boolean {
   return Boolean(
     profile &&
@@ -145,7 +151,7 @@ export function derivePublicDecisionCapabilityReadModel(
       !toolId ||
       !activeCapabilityIds.has(capabilityId) ||
       !current(row.review_due_at, now) ||
-      typeof row.reviewed_at !== 'string'
+      !reviewedAtCurrent(row.reviewed_at, now)
     ) {
       return [];
     }
@@ -197,7 +203,7 @@ export function derivePublicDecisionCapabilityReadModel(
         !task ||
         !activeCapabilityIds.has(String(row.capability_id || '')) ||
         !current(row.review_due_at, now) ||
-        typeof row.reviewed_at !== 'string'
+        !reviewedAtCurrent(row.reviewed_at, now)
       ) {
         return [];
       }
