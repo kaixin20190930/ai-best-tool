@@ -124,7 +124,7 @@ Graph、n8n、OpenRouter、Grammarly、Jasper、ElevenLabs、Midjourney、Otter.
 | 09-25      | DIFF-04 | 独立 Task Page                                              | 至少 3 个 published fit 才可公开；默认 noindex；无薄页扩张             | 代码完成；发布注册表为空；待首个 Task 编辑批准 |
 | 09-26      | DIFF-05 | 统一 Tool Intelligence                                      | Best for、Not ideal、Capability、Pricing、Evidence、Last verified 同源 | 代码完成；待 Tool Capability 编辑批准 |
 | 09-27      | DIFF-06 | Structured Comparison                                       | 同图谱比较 2-4 个工具；unknown 明示；默认 noindex                      | 代码与独立 QA 完成；生产 Tool Capability 仍为 reviewed，矩阵未公开；待编辑批准 |
-| 09-28      | DIFF-07 | 全链路自动验收与生产收口                                    | migration、tsc、build、SEO、页面、RLS、证据门禁全部通过                | 未开始   |
+| 09-28      | DIFF-07 | 全链路自动验收与生产收口                                    | migration、tsc、build、SEO、页面、RLS、证据门禁全部通过                | 只读收口与独立 QA 完成；无关系自动发布；内容修复后再编辑批准 |
 | 覆盖达标后 | DIFF-08 | 自然语言 Decision Assistant                                 | 满足第 8 节门槛后才能开始                                              | 条件阻塞 |
 
 INTAKE 与上述排期并行：09-23 Descript 到期发布槽继续执行；其余成熟工具按队列每日一个，不因 DIFF 暂停，也不允许为追赶数量
@@ -133,6 +133,8 @@ INTAKE 与上述排期并行：09-23 Descript 到期发布槽继续执行；其�
 执行规则：每项先写清用户价值与风险，默认选择能满足门禁的最小实现。dormant/noindex 功能不得新增网络服务；验证以专项测试、
 `tsc`、完整 build 和一次生产模式 smoke 为默认金字塔。单项超过 60 分钟或连续两次 QA FAIL，返回总控重新选方案；仅安全、
 支付或数据一致性 P0 可扩大测试范围。
+
+DIFF-07 发布审计见 [2026-09-23 只读收口记录](./DECISION_GRAPH_DIFF07_RELEASE_AUDIT_2026-09-23_CN.md)：技术门禁通过不等于内容可发布；独立 QA 仅将 5 条 Task Capability 留作编辑候选，其余 7 条 Tool Capability 与 4 条 reviewed fit 均须先修复。Task Page 继续关闭，DIFF-08 仍为条件阻塞。
 
 ## 7. 页面与 SEO 边界
 

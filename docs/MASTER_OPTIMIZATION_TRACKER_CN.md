@@ -40,6 +40,8 @@ Otter.ai、Fireflies 的 3 条既有 published meeting fit 保持原 status、�
 
 2026-09-23 DIFF-06 代码与独立 QA 完成、待 Tool Capability 编辑批准：仅在既有受控 verified comparison 页面，为 2-4 个候选追加结构化 Capability 差异矩阵；数据复用 DIFF-05 的安全读模型，只呈现当前 published、active、同 owner verified、无冲突且未过期的关系与来源摘要。缺少关系明确显示“未知”，不推断“不支持”；无合格关系或辅助读取失败时不显示矩阵，原有选择结论、限制、静态官方证据及 CTA 保持可用。页面继续 noindex，不新增组合 URL 或 sitemap 条目，也不下发 raw claim/profile/link/capability ID、值或摘录。当前生产 Tool Capability 仍全为 reviewed，矩阵尚未公开，关系发布仍需独立编辑批准。
 
+2026-09-23 DIFF-07 只读收口与独立 QA 完成，未自动发布关系：生产回读为 6 Task、12 Capability、12 Task Capability、7 Tool Capability、7 Tool Task Fit，其中 3 条 fit 为既有 published。技术专项、TypeScript 及已完成的 DIFF-06 build/生产 SEO smoke 通过，但内容 QA 仅将 5 条 Task Capability 留作逐条编辑候选；其余 7 条 Tool Capability 与 4 条 reviewed fit 因支持范围、套餐限制或适配理由不足全部 hold。3 条既有 meeting-notes fit 的 `reviewed_by` 为 NULL，需核实历史编辑复核；现有门禁并未因此判为失效。所有 Task Page 继续关闭。下一步优先修复 meeting-notes 组，重新核对临近到期的官方来源，再做独立内容 QA 与编辑批准；不得为覆盖率制造关系。详见 [DIFF-07 发布审计](./DECISION_GRAPH_DIFF07_RELEASE_AUDIT_2026-09-23_CN.md)。DIFF-08 Decision Assistant 仍为条件阻塞。
+
 差异化开发执行规则：先定义用户价值和风险，默认最小实现；dormant/noindex 功能不新增网络服务。默认验证为专项测试、`tsc`、完整 build 与一次生产模式 smoke；单项超过 60 分钟或连续两次 QA FAIL，交总控重新选方案。仅安全、支付、数据一致性 P0 可扩大测试范围。
 
 2026-09-20 规模化口径更新：生产基线为 63 条工具记录、50 条已公开、13 条获准索引；技术和 SEO 护栏稳定，当前增长瓶颈转为高
