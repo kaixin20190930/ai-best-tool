@@ -117,6 +117,8 @@
     "test:decision-graph-seed": "tsx scripts/test-decision-graph-seed.ts",
     "test:decision-graph-sql-export": "tsx scripts/test-decision-graph-sql-export.ts",
     "test:decision-graph-production-conflict-fix": "tsx scripts/test-decision-graph-production-conflict-fix.ts",
+    "test:decision-graph-sql-editor-lifecycle": "tsx scripts/test-decision-graph-sql-editor-lifecycle.ts",
+    "test:decision-graph-sql-editor-local": "tsx scripts/test-decision-graph-sql-editor-local.ts",
     "test:decision-evidence": "tsx scripts/test-decision-evidence-contract.ts",
     "verify:decision-evidence-read-layer": "tsx scripts/verify-decision-evidence-read-layer.ts",
     "test:decision-rules": "tsx scripts/test-decision-finder-rules.ts",

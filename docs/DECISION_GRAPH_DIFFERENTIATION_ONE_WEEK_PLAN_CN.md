@@ -194,6 +194,9 @@ INTAKE 与上述排期并行：09-23 Descript 到期发布槽继续执行；其�
     published 关系、URL 或索引副作用。
     首次用户执行因三个既有 published meeting fit 触发守卫并整体回滚；修订版只会保留 task/fit level 一致的既有 published 关系，
     不改其 rationale、reviewer 或 claim links，语义不一致仍失败。状态保持“待用户执行 SQL”。
+    第二次 SQL Editor 报 `42P01`：旧版临时表在跨语句提交后消失。只读回读已见完整目标批次（6/12/12/7/7 及每类 7 条 claim
+    link），无法仅由该错误断言本次之前的执行历史。再修订版把所有守卫和写入放进单条原子 `DO` 语句，临时表只在语句内部存在，
+    同 session 残留先清理，最后一条 claim link 后显式删除。待用户重新执行并回读。
 
 ## 11. 完成定义
 

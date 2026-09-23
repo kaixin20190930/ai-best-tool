@@ -13,8 +13,10 @@ assert.match(planner, /--commit and --emit-sql cannot be used together/);
 assert.match(planner, /fs\.writeFileSync\(resolvedPath, emitSeedSql\(plan, reviewerId\), 'utf8'\)/);
 assert.match(planner, /mode: 'dry-run-no-write'/, 'default execution must remain read-only.');
 
-assert.match(sql, /^-- DIFF-03 decision graph first batch[\s\S]*^BEGIN;$/m);
-assert.match(sql, /\nCOMMIT;\n$/);
+assert.match(sql, /^-- DIFF-03 decision graph first batch[\s\S]*^DO \$decision_graph_seed\$$/m);
+assert.match(sql, /\n\$decision_graph_seed\$;\n$/);
+assert.equal((sql.match(/^DO \$decision_graph_seed\$$/gm) || []).length, 1);
+assert.doesNotMatch(sql, /^BEGIN;|^COMMIT;|ON COMMIT DROP/gm);
 assert.match(sql, /FROM auth\.users WHERE id = '2b8177ac-70b3-4475-a1ee-509ff8b4b622'::uuid/);
 assert.match(sql, /'public\.decision_capabilities'/);
 assert.match(sql, /'public\.tool_capabilities'/);

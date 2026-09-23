@@ -39,6 +39,13 @@ Tool Capability。修订后的同一路径 SQL 会锁定并保留这些兼容的
 新增/修改其 claim link；若 Task Capability importance、Tool Capability support level 或 Tool Task Fit level 不一致，仍整体失败。
 状态仍为“待用户执行 SQL”，仅可由批准后的用户流程重试。
 
+2026-09-23 DIFF-03 第二次 SQL Editor 执行报告 `42P01 decision_graph_seed_task_capabilities does not exist`。旧导出跨多条顶层语句使用
+`ON COMMIT DROP` 临时表，一旦 SQL Editor 在语句之间提交事务，后续语句即失去该表；错误文本本身无法区分事务提交与换连接。
+生产只读回读现见完整的 6 Task、12 Capability、12 Task Capability、7 Tool Capability、7 Tool Task Fit 及每类 7 个 claim link；
+新增记录的 `created_at` 集中在 2026-09-23 06:06 UTC。故不能把当前生产状态记为“全部回滚”，也无法仅凭本次错误归因这些记录来自哪次执行。
+同路径 SQL 已改为单条原子 `DO` 语句，临时表在语句内清理、创建、使用和显式删除；本地 PostgreSQL 验证成功路径与异常回滚。
+状态为“待用户重新执行 SQL 并回读”，执行仍由用户流程负责。
+
 2026-09-20 规模化口径更新：生产基线为 63 条工具记录、50 条已公开、13 条获准索引；技术和 SEO 护栏稳定，当前增长瓶颈转为高
 质量工具库存和差异化覆盖。后续每天发现 10-20 个、深审 4-6 个，目标公开 2 个且上限 3 个；索引仍逐页审批，每天最多 1 个、
 目标每周 4 个且硬上限 5 个。完整阶段目标、维护频率和暂停门禁见

@@ -527,13 +527,15 @@ export function emitSeedSql(plan: ReturnType<typeof buildSeedPlan>, reviewerId: 
   ]);
 
   return `-- DIFF-03 decision graph first batch. Generated from a read-only inventory; do not edit around guards.
--- This transaction intentionally creates reviewed relations only. It does not write directory records or public-discovery configuration.
-BEGIN;
-
-DO $$
+-- One top-level DO statement is atomic even when SQL Editor uses a new connection for each statement.
+-- This statement intentionally creates reviewed relations only. It does not write directory records or public-discovery configuration.
+DO $decision_graph_seed$
 DECLARE
   required_relation TEXT;
 BEGIN
+  DROP TABLE IF EXISTS pg_temp.decision_graph_seed_task_capabilities;
+  DROP TABLE IF EXISTS pg_temp.decision_graph_seed_relations;
+
   FOREACH required_relation IN ARRAY ARRAY[
     'auth.users',
     'public.decision_tasks',
@@ -554,8 +556,6 @@ BEGIN
   IF NOT EXISTS (SELECT 1 FROM auth.users WHERE id = ${sqlLiteral(reviewerId)}::uuid) THEN
     RAISE EXCEPTION 'Seed reviewer does not exist in auth.users.';
   END IF;
-END
-$$;
 
 CREATE TEMP TABLE decision_graph_seed_task_capabilities (
   task_slug TEXT NOT NULL,
@@ -563,7 +563,7 @@ CREATE TEMP TABLE decision_graph_seed_task_capabilities (
   importance TEXT NOT NULL,
   rationale JSONB NOT NULL,
   PRIMARY KEY (task_slug, capability_slug)
-) ON COMMIT DROP;
+) ON COMMIT PRESERVE ROWS;
 
 INSERT INTO decision_graph_seed_task_capabilities (task_slug, capability_slug, importance, rationale)
 VALUES
@@ -576,13 +576,12 @@ CREATE TEMP TABLE decision_graph_seed_relations (
   claim_id UUID NOT NULL,
   fit_level TEXT NOT NULL,
   PRIMARY KEY (tool_id, task_slug, capability_slug, claim_id)
-) ON COMMIT DROP;
+) ON COMMIT PRESERVE ROWS;
 
 INSERT INTO decision_graph_seed_relations (tool_id, task_slug, capability_slug, claim_id, fit_level)
 VALUES
 ${sqlValues(relationRows)};
 
-DO $$
 BEGIN
   IF (SELECT count(*) FROM decision_graph_seed_relations) <> (
     SELECT count(*)
@@ -612,8 +611,7 @@ BEGIN
     AND (claim.expires_at IS NULL OR claim.expires_at > NOW())
     AND (claim.review_due_at IS NULL OR claim.review_due_at > NOW())
   FOR SHARE OF claim, profile;
-END
-$$;
+END;
 
 INSERT INTO public.decision_tasks (slug, name, description, status, display_order, constraint_schema)
 VALUES
@@ -625,7 +623,6 @@ VALUES
 ${sqlValues(capabilityRows)}
 ON CONFLICT (slug) DO NOTHING;
 
-DO $$
 BEGIN
   IF (SELECT count(*) FROM public.decision_tasks WHERE slug IN (
     SELECT task_slug FROM decision_graph_seed_task_capabilities
@@ -638,10 +635,8 @@ BEGIN
   )) <> (SELECT count(DISTINCT capability_slug) FROM decision_graph_seed_task_capabilities) THEN
     RAISE EXCEPTION 'Seed capability resolution failed after insert.';
   END IF;
-END
-$$;
+END;
 
-DO $$
 BEGIN
   PERFORM 1
   FROM public.task_capabilities task_capability
@@ -714,8 +709,7 @@ BEGIN
   IF FOUND THEN
     RAISE EXCEPTION 'Published Tool Task Fit conflicts with the planned fit level or mapped evidence and requires a manual editorial change.';
   END IF;
-END
-$$;
+END;
 
 INSERT INTO public.task_capabilities (
   task_id, capability_id, importance, rationale, status, reviewed_at, review_due_at, reviewed_by
@@ -786,7 +780,6 @@ ON CONFLICT (tool_id, task_id) DO UPDATE SET
   reviewed_by = EXCLUDED.reviewed_by
 WHERE public.tool_task_fits.status <> 'published';
 
-DO $$
 BEGIN
   IF (SELECT count(*) FROM public.task_capabilities task_capability
       JOIN public.decision_tasks task ON task.id = task_capability.task_id
@@ -812,8 +805,7 @@ BEGIN
       WHERE fit.status IN ('reviewed', 'published')) <> (SELECT count(*) FROM decision_graph_seed_relations) THEN
     RAISE EXCEPTION 'Seed Tool Task Fit resolution was not completely reviewed or compatibly preserved as published.';
   END IF;
-END
-$$;
+END;
 
 INSERT INTO public.tool_task_fit_claims (fit_id, claim_id, purpose)
 SELECT fit.id, seed.claim_id, 'fit'
@@ -822,7 +814,10 @@ JOIN public.decision_tasks task ON task.slug = seed.task_slug
 JOIN public.tool_task_fits fit ON fit.tool_id = seed.tool_id AND fit.task_id = task.id AND fit.status <> 'published'
 ON CONFLICT DO NOTHING;
 
-COMMIT;
+DROP TABLE pg_temp.decision_graph_seed_relations;
+DROP TABLE pg_temp.decision_graph_seed_task_capabilities;
+END
+$decision_graph_seed$;
 `;
 }
 
