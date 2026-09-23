@@ -3,8 +3,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { Client } from 'pg';
 
-// Local PostgreSQL only. This exercises the same one-statement temporary-table
-// lifecycle as the export without creating any persistent database object.
+// Local PostgreSQL only. The fixture and all export writes stay inside a
+// transaction that is rolled back before this test exits.
 const client = new Client({ host: '127.0.0.1', port: 5432, database: 'postgres' });
 const exportSql = fs.readFileSync(
   path.join(process.cwd(), 'db/supabase/manual/20260923_seed_decision_graph_first_batch.sql'),
@@ -25,50 +25,42 @@ async function count(table: string): Promise<number> {
   return Number(result.rows[0].count);
 }
 
+const auditedTables = [
+  'decision_tasks',
+  'decision_capabilities',
+  'task_capabilities',
+  'tool_capabilities',
+  'tool_capability_claims',
+  'tool_task_fits',
+  'tool_task_fit_claims',
+  'product_intelligence_profiles',
+  'product_intelligence_claims',
+] as const;
+
+async function snapshotPublicTables(): Promise<Record<string, unknown[]>> {
+  const snapshots = await Promise.all(
+    auditedTables.map(async (table) => {
+      const result = await client.query<{ value: unknown }>(
+        `SELECT to_jsonb(record) AS value FROM public.${table} record ORDER BY to_jsonb(record)::text`,
+      );
+      return [table, result.rows.map((row) => row.value)] as const;
+    }),
+  );
+  return Object.fromEntries(snapshots);
+}
+
+async function assertNoSeedTempTables() {
+  const result = await client.query<{ task: string | null; relation: string | null }>(
+    "SELECT to_regclass('pg_temp.decision_graph_seed_task_capabilities')::text AS task, " +
+      "to_regclass('pg_temp.decision_graph_seed_relations')::text AS relation",
+  );
+  assert.equal(result.rows[0].task, null);
+  assert.equal(result.rows[0].relation, null);
+}
+
 async function main() {
   await client.connect();
   try {
-    await client.query(`
-      DO $seed_lifecycle_probe$
-      DECLARE
-        row_count INTEGER;
-      BEGIN
-        DROP TABLE IF EXISTS pg_temp.decision_graph_seed_lifecycle_probe;
-        CREATE TEMP TABLE decision_graph_seed_lifecycle_probe (id INTEGER PRIMARY KEY)
-          ON COMMIT PRESERVE ROWS;
-        INSERT INTO decision_graph_seed_lifecycle_probe VALUES (1);
-        SELECT count(*) INTO row_count FROM decision_graph_seed_lifecycle_probe;
-        IF row_count <> 1 THEN
-          RAISE EXCEPTION 'Local seed lifecycle probe lost its temporary row.';
-        END IF;
-        DROP TABLE pg_temp.decision_graph_seed_lifecycle_probe;
-      END
-      $seed_lifecycle_probe$;
-    `);
-
-    const afterSuccess = await client.query<{ present: string | null }>(
-      "SELECT to_regclass('pg_temp.decision_graph_seed_lifecycle_probe')::text AS present",
-    );
-    assert.equal(afterSuccess.rows[0].present, null);
-
-    await assert.rejects(
-      client.query(`
-        DO $seed_lifecycle_probe$
-        BEGIN
-          CREATE TEMP TABLE decision_graph_seed_lifecycle_probe (id INTEGER PRIMARY KEY)
-            ON COMMIT PRESERVE ROWS;
-          INSERT INTO decision_graph_seed_lifecycle_probe VALUES (2);
-          RAISE EXCEPTION 'Expected local rollback probe.';
-        END
-        $seed_lifecycle_probe$;
-      `),
-      /Expected local rollback probe/,
-    );
-    const afterFailure = await client.query<{ present: string | null }>(
-      "SELECT to_regclass('pg_temp.decision_graph_seed_lifecycle_probe')::text AS present",
-    );
-    assert.equal(afterFailure.rows[0].present, null);
-
     const existing = await client.query<{ present: string | null }>(
       "SELECT to_regclass('auth.users')::text AS present UNION ALL SELECT to_regclass('public.decision_tasks')::text",
     );
@@ -152,6 +144,33 @@ async function main() {
         );
       }
 
+      const cleanupAnchor = '\nDROP TABLE pg_temp.decision_graph_seed_relations;';
+      assert.equal(exportSql.split(cleanupAnchor).length, 2, 'the export must have one final cleanup point');
+      const finalClaimLink = exportSql.lastIndexOf('INSERT INTO public.tool_task_fit_claims');
+      assert.ok(
+        finalClaimLink >= 0 && finalClaimLink < exportSql.indexOf(cleanupAnchor),
+        'the injected failure must occur after the final permanent write',
+      );
+      const lateFailureSql = exportSql.replace(
+        cleanupAnchor,
+        "\nRAISE EXCEPTION 'DIFF-03_LOCAL_LATE_FAILURE';" + cleanupAnchor,
+      );
+      const beforeFailure = await snapshotPublicTables();
+      assert.deepEqual(
+        auditedTables.slice(0, 7).map((table) => beforeFailure[table].length),
+        [1, 0, 0, 0, 0, 3, 3],
+        'the failure fixture must start before the exported public writes',
+      );
+      await client.query('SAVEPOINT decision_graph_late_failure');
+      try {
+        await assert.rejects(client.query(lateFailureSql), /DIFF-03_LOCAL_LATE_FAILURE/);
+      } finally {
+        await client.query('ROLLBACK TO SAVEPOINT decision_graph_late_failure');
+        await client.query('RELEASE SAVEPOINT decision_graph_late_failure');
+      }
+      assert.deepEqual(await snapshotPublicTables(), beforeFailure, 'the full late-failing export must roll back');
+      await assertNoSeedTempTables();
+
       await client.query(exportSql);
       assert.deepEqual(
         await Promise.all([
@@ -174,17 +193,14 @@ async function main() {
         "SELECT count(*) FROM public.tool_task_fits WHERE status = 'published'",
       );
       assert.equal(Number(preserved.rows[0].count), 3);
-      const temp = await client.query<{ task: string | null; relation: string | null }>(
-        "SELECT to_regclass('pg_temp.decision_graph_seed_task_capabilities')::text AS task, " +
-          "to_regclass('pg_temp.decision_graph_seed_relations')::text AS relation",
-      );
-      assert.equal(temp.rows[0].task, null);
-      assert.equal(temp.rows[0].relation, null);
+      await assertNoSeedTempTables();
     } finally {
       await client.query('ROLLBACK');
     }
 
-    console.log(JSON.stringify({ success: true, localPostgres: true, fullExportExecutedTwice: true }, null, 2));
+    console.log(
+      JSON.stringify({ success: true, localPostgres: true, lateFailureRolledBack: true, fullExportExecutedTwice: true }, null, 2),
+    );
   } finally {
     await client.end();
   }
