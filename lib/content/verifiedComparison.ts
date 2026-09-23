@@ -50,12 +50,19 @@ export function validComparisonEvidence(evidence: ComparisonEvidence) {
 // A missing candidate, value or citation invalidates the whole comparison, never just a table cell.
 export function validateVerifiedComparison(comparison: VerifiedComparison, availableSlugs: string[]): boolean {
   const { candidates, comparisonRows, evidence } = comparison;
-  if (candidates.length < 2 || new Set(candidates.map((item) => item.slug)).size !== candidates.length) return false;
+  if (
+    candidates.length < 2 ||
+    candidates.length > 4 ||
+    new Set(candidates.map((item) => item.slug)).size !== candidates.length
+  ) {
+    return false;
+  }
   if (!hasCopy(comparison.title) || !hasCopy(comparison.scope)) return false;
   if (
     candidates.length === 2 &&
     !Object.values(comparison.title).every((title) => title.includes(`${candidates[0].name} vs ${candidates[1].name}`))
-  ) return false;
+  )
+    return false;
   if (!evidence.length || !evidence.every(validComparisonEvidence)) return false;
   const ids = new Set(evidence.map((item) => item.id));
   if (ids.size !== evidence.length) return false;
@@ -69,7 +76,8 @@ export function validateVerifiedComparison(comparison: VerifiedComparison, avail
         [item.chooseWhen, item.strength, item.limitation, item.fit, item.notFor].every(hasCopy) &&
         validRefs(item.evidenceRefs),
     )
-  ) return false;
+  )
+    return false;
   if (
     !comparisonRows.length ||
     !comparisonRows.every(
@@ -84,7 +92,8 @@ export function validateVerifiedComparison(comparison: VerifiedComparison, avail
           (locale) => new Set(candidates.map((item) => row.values[item.slug][locale as 'cn' | 'en'])).size > 1,
         ),
     )
-  ) return false;
+  )
+    return false;
   return (
     /^\/(?:ai|guides)\/[a-z0-9-]+(?:#[a-z0-9-]+)?$/.test(comparison.next.href) &&
     hasCopy(comparison.next.label) &&

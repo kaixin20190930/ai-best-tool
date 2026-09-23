@@ -7,17 +7,63 @@ import {
   type VerifiedComparison,
 } from '@/lib/content/verifiedComparison';
 import { generateLocalizedPath } from '@/lib/seo/metadata';
+import type {
+  PublicComparisonCapabilityRow,
+  PublicToolCapabilitySummary,
+} from '@/lib/services/decision/capabilityReadModel';
 import GuideEvidencePanel from '@/components/guides/GuideEvidencePanel';
 
 type Props = {
   comparison: VerifiedComparison;
   locale: string;
   tools: { name: string; title: string }[];
+  capabilityRows?: PublicComparisonCapabilityRow[];
   guideHref: string;
   faqs: { question: BilingualCopy; answer: BilingualCopy }[];
 };
 
-export default function VerifiedComparisonPage({ comparison, locale, tools, guideHref, faqs }: Props) {
+function detailText(value: unknown, locale: string): string {
+  if (typeof value === 'string') return value.trim();
+  if (typeof value === 'number' || typeof value === 'boolean') return String(value);
+  if (Array.isArray(value))
+    return value
+      .map((item) => detailText(item, locale))
+      .filter(Boolean)
+      .join('; ');
+  if (!value || typeof value !== 'object') return '';
+  const record = value as Record<string, unknown>;
+  const localized = record[locale] || record[locale === 'tw' ? 'cn' : 'en'] || record.en;
+  if (typeof localized === 'string') return localized.trim();
+  return Object.entries(record)
+    .map(([key, item]) => `${key.replace(/[_-]/g, ' ')}: ${detailText(item, locale)}`)
+    .filter((item) => !item.endsWith(': '))
+    .join('; ');
+}
+
+const supportLabels: Record<PublicToolCapabilitySummary['supportLevel'], BilingualCopy> = {
+  strong: { cn: '强支持', en: 'Strong' },
+  partial: { cn: '部分支持', en: 'Partial' },
+  limited: { cn: '有限支持', en: 'Limited' },
+  not_supported: { cn: '不支持', en: 'Not supported' },
+  unknown: { cn: '未知', en: 'Unknown' },
+};
+
+const availabilityLabels: Record<PublicToolCapabilitySummary['availability'], BilingualCopy> = {
+  all_plans: { cn: '所有套餐', en: 'All plans' },
+  paid_only: { cn: '付费套餐', en: 'Paid only' },
+  enterprise_only: { cn: '企业套餐', en: 'Enterprise only' },
+  add_on: { cn: '附加购买', en: 'Add-on' },
+  unknown: { cn: '未知', en: 'Unknown' },
+};
+
+export default function VerifiedComparisonPage({
+  comparison,
+  locale,
+  tools,
+  capabilityRows = [],
+  guideHref,
+  faqs,
+}: Props) {
   const language = locale === 'cn' || locale === 'tw' ? 'cn' : 'en';
   const cn = language === 'cn';
   const copy = (value: BilingualCopy) => value[language];
@@ -129,6 +175,107 @@ export default function VerifiedComparisonPage({ comparison, locale, tools, guid
           {cn ? '左右滑动查看两款工具与选择结论。' : 'Swipe across to read both tools and the decision.'}
         </p>
       </section>
+      {capabilityRows.length > 0 && (
+        <section data-comparison-section='capabilities' className={sectionClass}>
+          <h2 className='text-2xl font-bold text-slate-950'>
+            {cn ? '已核验能力差异' : 'Verified capability differences'}
+          </h2>
+          <p className='mt-2 text-sm text-slate-600'>
+            {cn
+              ? '未知表示目前没有符合公开条件的能力证据，不能据此判断工具不支持。'
+              : 'Unknown means no qualifying public capability evidence is available; it does not mean the tool lacks the capability.'}
+          </p>
+          <div
+            className='mt-5 overflow-x-auto'
+            tabIndex={0}
+            role='region'
+            aria-label={
+              cn ? '已核验能力比较表，可横向滚动' : 'Verified capability comparison table, scroll horizontally'
+            }
+          >
+            <table className='w-full min-w-[680px] border-collapse text-left text-sm leading-6'>
+              <caption className='sr-only'>{cn ? '已核验能力差异' : 'Verified capability differences'}</caption>
+              <thead>
+                <tr className='bg-slate-100'>
+                  <th scope='col' className='p-3'>
+                    {cn ? '能力' : 'Capability'}
+                  </th>
+                  {comparison.candidates.map((candidate) => (
+                    <th scope='col' key={candidate.slug} className='p-3'>
+                      {candidate.name}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {capabilityRows.map((row) => (
+                  <tr key={`${row.group}-${row.name.en}`} className='border-b border-slate-200 align-top'>
+                    <th scope='row' className='p-3 font-semibold text-slate-950'>
+                      {row.name[locale] || row.name[language] || row.name.en}
+                      {(row.description[locale] || row.description[language] || row.description.en) && (
+                        <p className='mt-1 font-normal text-slate-600'>
+                          {row.description[locale] || row.description[language] || row.description.en}
+                        </p>
+                      )}
+                    </th>
+                    {comparison.candidates.map((candidate) => {
+                      const capability = row.cells[candidate.slug];
+                      return (
+                        <td key={candidate.slug} className='p-3 text-slate-700'>
+                          {capability ? (
+                            <>
+                              <p className='font-semibold text-slate-950'>
+                                {supportLabels[capability.supportLevel][language]}
+                              </p>
+                              <p>
+                                {cn ? '可用范围' : 'Availability'}:{' '}
+                                {availabilityLabels[capability.availability][language]}
+                              </p>
+                              {Object.keys(capability.planRequirement).length > 0 && (
+                                <p>
+                                  {cn ? '套餐要求' : 'Plan requirement'}:{' '}
+                                  {detailText(capability.planRequirement, locale)}
+                                </p>
+                              )}
+                              {capability.limitations.length > 0 && (
+                                <p>
+                                  {cn ? '限制' : 'Limitations'}: {detailText(capability.limitations, locale)}
+                                </p>
+                              )}
+                              <ul className='mt-2 space-y-1 text-xs'>
+                                {capability.evidence.map((item) => (
+                                  <li key={`${item.sourceUrl}:${item.verifiedAt}`}>
+                                    <a
+                                      href={item.sourceUrl}
+                                      target='_blank'
+                                      rel='noopener noreferrer'
+                                      className='break-all text-cyan-800 underline'
+                                    >
+                                      {item.sourceUrl}
+                                    </a>
+                                    {item.verifiedAt
+                                      ? ` · ${cn ? '核验' : 'Verified'} ${item.verifiedAt.slice(0, 10)}`
+                                      : ''}
+                                    {item.reviewDueAt
+                                      ? ` · ${cn ? '复查期限' : 'Review due'} ${item.reviewDueAt.slice(0, 10)}`
+                                      : ''}
+                                  </li>
+                                ))}
+                              </ul>
+                            </>
+                          ) : (
+                            <span>{cn ? '未知' : 'Unknown'}</span>
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
       <section data-comparison-section='candidates' className={sectionClass}>
         <h2 className='text-2xl font-bold text-slate-950'>{cn ? '优势与关键限制' : 'Strengths and limits'}</h2>
         <div className='mt-5 grid gap-4 md:grid-cols-2'>

@@ -71,6 +71,15 @@ export interface PublicToolCapabilitySummary {
   evidence: PublicEvidenceSummary[];
 }
 
+export interface PublicComparisonCapabilityRow {
+  name: Record<string, string>;
+  description: Record<string, string>;
+  group: CapabilityGroup;
+  cells: Record<string, PublicToolCapabilitySummary | null>;
+}
+
+export type ComparisonCapabilityCandidate = { slug: string; toolId: string };
+
 type Row = Record<string, unknown>;
 
 function asObject(value: unknown): Record<string, unknown> {
@@ -346,4 +355,70 @@ export function derivePublicToolCapabilitySummaries(
 export async function getPublicToolCapabilitySummaries(toolId: string): Promise<PublicToolCapabilitySummary[]> {
   if (!/^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i.test(toolId)) return [];
   return derivePublicToolCapabilitySummaries(await getPublicDecisionCapabilityReadModel(toolId), toolId);
+}
+
+/** Project only public summaries; a missing relation is unknown, never an inferred negative. */
+export function derivePublicComparisonCapabilityRows(
+  model: PublicDecisionCapabilityReadModel,
+  candidates: ComparisonCapabilityCandidate[],
+): PublicComparisonCapabilityRow[] {
+  if (
+    candidates.length < 2 ||
+    candidates.length > 4 ||
+    new Set(candidates.map((candidate) => candidate.slug)).size !== candidates.length ||
+    new Set(candidates.map((candidate) => candidate.toolId)).size !== candidates.length
+  )
+    return [];
+
+  const candidateByToolId = new Map(candidates.map((candidate) => [candidate.toolId, candidate.slug]));
+  const relations = new Map<string, Map<string, PublicToolCapability>>();
+  model.toolCapabilities.forEach((relation) => {
+    const slug = candidateByToolId.get(relation.toolId);
+    if (!slug) return;
+    const byCapability = relations.get(relation.capabilityId) || new Map<string, PublicToolCapability>();
+    byCapability.set(slug, relation);
+    relations.set(relation.capabilityId, byCapability);
+  });
+
+  return model.capabilities
+    .filter((capability) => relations.has(capability.id))
+    .sort((left, right) => left.displayOrder - right.displayOrder)
+    .map((capability) => ({
+      name: capability.name,
+      description: capability.description,
+      group: capability.group,
+      cells: Object.fromEntries(
+        candidates.map((candidate) => {
+          const relation = relations.get(capability.id)?.get(candidate.slug);
+          return [
+            candidate.slug,
+            relation
+              ? {
+                  name: capability.name,
+                  description: capability.description,
+                  group: capability.group,
+                  supportLevel: relation.supportLevel,
+                  availability: relation.availability,
+                  planRequirement: relation.planRequirement,
+                  limitations: relation.limitations,
+                  evidence: relation.evidence,
+                }
+              : null,
+          ];
+        }),
+      ),
+    }));
+}
+
+/** Capability data is optional; an unavailable auxiliary read must not hide the verified comparison. */
+export async function loadPublicComparisonCapabilityRows(
+  candidates: ComparisonCapabilityCandidate[],
+  readModel: () => Promise<PublicDecisionCapabilityReadModel> = getPublicDecisionCapabilityReadModel,
+): Promise<PublicComparisonCapabilityRow[]> {
+  if (candidates.length < 2 || candidates.length > 4) return [];
+  try {
+    return derivePublicComparisonCapabilityRows(await readModel(), candidates);
+  } catch {
+    return [];
+  }
 }

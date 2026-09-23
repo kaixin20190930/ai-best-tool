@@ -10,6 +10,7 @@ import {
 import { BASE_URL } from '@/lib/env';
 import { getNoindexMetadata } from '@/lib/seo/indexing';
 import { generateBreadcrumbSchema, generateFAQSchema, generateItemListSchema } from '@/lib/seo/schema';
+import { loadPublicComparisonCapabilityRows } from '@/lib/services/decision/capabilityReadModel';
 import { getToolByNameCached } from '@/lib/services/tools';
 import UnavailableComparisonPage from '@/components/guides/UnavailableComparisonPage';
 import VerifiedComparisonPage from '@/components/guides/VerifiedComparisonPage';
@@ -53,7 +54,7 @@ export async function buildComparisonPageData(locale: string, config: Comparison
   ]);
   // Unavailable pages never query search/popularity or emit unsupported optional schemas.
   if (config.content.kind === 'unavailable')
-    return { config, breadcrumbSchema, tools: [], faqSchema: null, itemListSchema: null };
+    return { config, breadcrumbSchema, tools: [], capabilityRows: [], faqSchema: null, itemListSchema: null };
   const { comparison, faqs } = config.content;
   const requestedTools = await Promise.all(
     comparison.candidates.map((candidate) => getToolByNameCached(candidate.slug).catch(() => null)),
@@ -67,10 +68,19 @@ export async function buildComparisonPageData(locale: string, config: Comparison
     comparison,
     tools.map((tool) => tool.name),
   );
+  const capabilityRows = valid
+    ? await loadPublicComparisonCapabilityRows(
+        comparison.candidates.map((candidate) => ({
+          slug: candidate.slug,
+          toolId: requestedTools.find((tool) => tool?.status === 'published' && tool.name === candidate.slug)?.id || '',
+        })),
+      )
+    : [];
   return {
     config,
     breadcrumbSchema,
     tools,
+    capabilityRows,
     faqSchema: valid
       ? generateFAQSchema(
           faqs.map((faq) => ({
@@ -92,6 +102,7 @@ export function ComparisonPage({
   config,
   breadcrumbSchema,
   tools,
+  capabilityRows,
   faqSchema,
   itemListSchema,
   locale,
@@ -106,6 +117,7 @@ export function ComparisonPage({
           comparison={config.content.comparison}
           locale={locale}
           tools={tools}
+          capabilityRows={capabilityRows}
           guideHref={config.guideHref}
           faqs={config.content.faqs}
         />
