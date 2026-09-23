@@ -16,8 +16,9 @@ Capability、Tool Capability、Task Capability 数据层，并依次交付首批
 2026-09-22 DIFF-00/01 本地交付完成：差异化计划已收敛为唯一实施依据；新增的 Supabase migration 仅建立
 `decision_capabilities`、`tool_capabilities`、`task_capabilities` 及其 claim links，继续把 Neon `tool_id` 作为逻辑引用，未写入
 工具数据、未改变 URL、sitemap 或索引策略。发布门禁要求 active Capability/Task、人工 reviewer、当前 review window 与同 owner 的
-verified、未失效、未冲突 claim；事务末会阻止删除或修改唯一有效证据后仍保留 `published`。时间自然到期时公开 RLS 按实时有效性
-和 active 状态立即过滤，raw claim links 不对浏览器开放。状态为“待生产迁移与只读回读”，不得在迁移前启动 DIFF-02。
+verified、未失效、未冲突 claim；事务末会阻止删除、修改、错配 claim 或重分配其 owner profile 后仍保留 `published`。时间自然到期
+时公开 RLS 按实时有效性和 active 状态立即过滤，raw claim links 不对浏览器开放。状态为“待生产迁移与只读回读”，不得在迁移前
+启动 DIFF-02。
 
 2026-09-20 规模化口径更新：生产基线为 63 条工具记录、50 条已公开、13 条获准索引；技术和 SEO 护栏稳定，当前增长瓶颈转为高
 质量工具库存和差异化覆盖。后续每天发现 10-20 个、深审 4-6 个，目标公开 2 个且上限 3 个；索引仍逐页审批，每天最多 1 个、

@@ -277,6 +277,51 @@ CREATE CONSTRAINT TRIGGER claim_change_must_keep_tool_capabilities_publishable
   DEFERRABLE INITIALLY DEFERRED
   FOR EACH ROW EXECUTE FUNCTION assert_claim_change_keeps_tool_capabilities_publishable();
 
+-- Claims remain attached to their profile when a profile is reclassified or
+-- reassigned. Recheck every linked published capability at commit time so that
+-- an owner_type/owner_id change cannot bypass the claim-row trigger above.
+CREATE OR REPLACE FUNCTION assert_profile_owner_change_keeps_tool_capabilities_publishable()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SET search_path = public
+AS $$
+BEGIN
+  IF EXISTS (
+    SELECT 1
+    FROM product_intelligence_claims changed_claim
+    JOIN tool_capability_claims changed_link ON changed_link.claim_id = changed_claim.id
+    JOIN tool_capabilities capability ON capability.id = changed_link.tool_capability_id
+    WHERE changed_claim.profile_id = NEW.id
+      AND capability.status = 'published'
+      AND NOT EXISTS (
+        SELECT 1
+        FROM tool_capability_claims link
+        JOIN product_intelligence_claims claim ON claim.id = link.claim_id
+        JOIN product_intelligence_profiles profile ON profile.id = claim.profile_id
+        WHERE link.tool_capability_id = capability.id
+          AND profile.owner_type = 'tool'
+          AND profile.owner_id = capability.tool_id
+          AND claim.verification_status = 'verified'
+          AND claim.invalidated_at IS NULL
+          AND (claim.expires_at IS NULL OR claim.expires_at > NOW())
+          AND (claim.review_due_at IS NULL OR claim.review_due_at > NOW())
+          AND claim.conflict_status = 'none'
+      )
+  ) THEN
+    RAISE EXCEPTION 'Profile owner changes cannot leave a published tool capability without verified evidence.'
+      USING ERRCODE = '23514';
+  END IF;
+
+  RETURN NULL;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS profile_owner_change_must_keep_tool_capabilities_publishable ON product_intelligence_profiles;
+CREATE CONSTRAINT TRIGGER profile_owner_change_must_keep_tool_capabilities_publishable
+  AFTER UPDATE OF owner_type, owner_id ON product_intelligence_profiles
+  DEFERRABLE INITIALLY DEFERRED
+  FOR EACH ROW EXECUTE FUNCTION assert_profile_owner_change_keeps_tool_capabilities_publishable();
+
 CREATE OR REPLACE FUNCTION assert_task_capability_publishable()
 RETURNS TRIGGER
 LANGUAGE plpgsql

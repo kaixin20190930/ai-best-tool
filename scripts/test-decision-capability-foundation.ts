@@ -43,6 +43,10 @@ assert.match(
   sql,
   /AFTER UPDATE OF profile_id, verification_status, invalidated_at, expires_at, review_due_at, conflict_status/,
 );
+assert.match(sql, /CREATE OR REPLACE FUNCTION assert_profile_owner_change_keeps_tool_capabilities_publishable/);
+assert.match(sql, /CREATE CONSTRAINT TRIGGER profile_owner_change_must_keep_tool_capabilities_publishable/);
+assert.match(sql, /AFTER UPDATE OF owner_type, owner_id ON product_intelligence_profiles/);
+assert.match(sql, /Profile owner changes cannot leave a published tool capability without verified evidence/);
 assert.match(sql, /CREATE OR REPLACE FUNCTION tool_capability_has_current_verified_claim/);
 assert.match(sql, /SECURITY DEFINER/);
 assert.match(sql, /tool_capability_has_current_verified_claim\(tool_capabilities\.id, tool_capabilities\.tool_id\)/);
