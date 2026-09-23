@@ -131,9 +131,28 @@ denied((x) => {
 }, 'duplicate Neon tool slug');
 
 const route = readFileSync(resolve('app/[locale]/(with-footer)/tasks/[slug]/page.tsx'), 'utf8');
+const metadataSource = route.slice(
+  route.indexOf('export async function generateMetadata'),
+  route.indexOf('export default async function TaskPage'),
+);
 const read = readFileSync(resolve('lib/services/decision/taskPage.ts'), 'utf8');
 const sitemap = readFileSync(resolve('app/sitemap.ts'), 'utf8');
 assert.match(route, /if \(!model\) notFound\(\)/);
+assert.match(
+  metadataSource,
+  /const model = await getPublicTaskPage[\s\S]*if \(!model\) notFound\(\)/,
+  'ineligible Task metadata must throw Next notFound before a fallback head is returned',
+);
+assert.doesNotMatch(metadataSource, /Task unavailable|任务页不可用/);
+const middleware = readFileSync(resolve('middleware.ts'), 'utf8');
+const eligibilityRoute = readFileSync(resolve('app/api/task-page-eligibility/[slug]/route.ts'), 'utf8');
+assert.match(
+  middleware,
+  /taskPageMatch[\s\S]*api\/task-page-eligibility[\s\S]*status: 404/,
+  'middleware must preflight task eligibility before the locale loading boundary streams',
+);
+assert.match(middleware, /'\/tasks\/:slug'/, 'file-like unknown Task slugs must still reach the preflight');
+assert.match(eligibilityRoute, /status: eligible \? 204 : 404/);
 assert.match(route, /indexable: false/);
 assert.match(route, /buildLocalizedPageMetadata/);
 assert.match(route, /SeoBreadcrumbs/);

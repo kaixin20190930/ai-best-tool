@@ -50,14 +50,12 @@ function constraints(model: TaskPageModel, isChinese: boolean): string[] {
 
 export async function generateMetadata({ params }: { params: { locale: string; slug: string } }): Promise<Metadata> {
   const model = await getPublicTaskPage(params.slug, params.locale);
-  const isChinese = params.locale === 'cn' || params.locale === 'tw';
+  if (!model) notFound();
   return buildLocalizedPageMetadata({
     locale: params.locale,
     path: `/tasks/${params.slug}`,
-    title: model ? text(model.name, params.locale) : label(isChinese, 'Task unavailable', '任务页不可用'),
-    description: model
-      ? text(model.description, params.locale)
-      : label(isChinese, 'This task is not yet available.', '该任务尚未达到公开门槛。'),
+    title: text(model.name, params.locale),
+    description: text(model.description, params.locale),
     indexable: false,
   });
 }

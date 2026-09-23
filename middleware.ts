@@ -182,6 +182,35 @@ export async function middleware(request: NextRequest) {
   }
   const { locale, pathWithoutLocale } = getPathParts(pathname);
 
+  // App Router streams the parent locale loading boundary before a page-level
+  // notFound() can set the HTTP status. Preflight task eligibility through a
+  // server-only, no-store endpoint so crawlers receive an actual 404 first.
+  const isTaskPagePath = pathWithoutLocale === '/tasks' || pathWithoutLocale.startsWith('/tasks/');
+  if (isTaskPagePath && (request.method === 'GET' || request.method === 'HEAD')) {
+    const taskPageMatch = pathWithoutLocale.match(/^\/tasks\/([^/]+)\/?$/);
+    if (!taskPageMatch) {
+      return new NextResponse(null, {
+        status: 404,
+        headers: { 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex, follow' },
+      });
+    }
+    try {
+      const preflightUrl = new URL(`/api/task-page-eligibility/${encodeURIComponent(taskPageMatch[1])}`, request.url);
+      const preflight = await fetch(preflightUrl, { method: 'GET', cache: 'no-store', redirect: 'manual' });
+      if (preflight.status !== 204) {
+        return new NextResponse(null, {
+          status: 404,
+          headers: { 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex, follow' },
+        });
+      }
+    } catch {
+      return new NextResponse(null, {
+        status: 404,
+        headers: { 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex, follow' },
+      });
+    }
+  }
+
   // Resolve tool aliases before locale rewriting so crawlers receive a real
   // HTTP 308 instead of a streamed client-side redirect marker.
   if (pathWithoutLocale.startsWith('/ai/')) {
@@ -265,5 +294,16 @@ export const config = {
     // - … if they start with `/api`, `/_next` or `/_vercel`
     // - … the ones containing a dot (e.g. `favicon.ico`)
     '/((?!api|_next|_vercel|.*\\..*).*)',
+    // Task routes also need the hard-404 preflight when their slug contains a dot.
+    '/tasks/:slug',
+    '/en/tasks/:slug',
+    '/cn/tasks/:slug',
+    '/jp/tasks/:slug',
+    '/de/tasks/:slug',
+    '/es/tasks/:slug',
+    '/fr/tasks/:slug',
+    '/pt/tasks/:slug',
+    '/ru/tasks/:slug',
+    '/tw/tasks/:slug',
   ],
 };
