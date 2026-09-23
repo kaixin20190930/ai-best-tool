@@ -38,9 +38,13 @@ import { generateSoftwareSchema } from '@/lib/seo/schema';
 import { getToolDecisionMetadataPilot } from '@/lib/seo/toolDecisionMetadata';
 import { getToolIndexDecision } from '@/lib/seo/toolIndexing';
 import { getCategoryById, getLocalizedField as getCategoryLocalizedField } from '@/lib/services/categories';
+import {
+  getPublicToolCapabilitySummaries,
+  type PublicToolCapabilitySummary,
+} from '@/lib/services/decision/capabilityReadModel';
 import { getToolDecisionCardV2, type DecisionCardV2Model } from '@/lib/services/decision/card';
 import { getPublicToolChangeTimeline } from '@/lib/services/intelligence/publicChangeTimeline';
-import { getPublicToolEvidenceLedger } from '@/lib/services/intelligence/publicEvidence';
+import { getPublicToolEvidenceLedger, summarizePublicToolEvidence } from '@/lib/services/intelligence/publicEvidence';
 import { getReviewedToolRelationships } from '@/lib/services/reviewedToolRelationships';
 import { getLocalizedField as getTagLocalizedField, getTagsBySlugs, humanizeTagSlug } from '@/lib/services/tags';
 import { buildToolDecisionCard } from '@/lib/services/toolDecisionCard';
@@ -2127,7 +2131,8 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           facts: [
             {
               label: 'Pro 价格',
-              value: 'Free 为 $0；Pro 为 $30/月、$60/季度或 $144/年（年付折算 $12/月），公开套餐页含 7 天试用；地区结账价格可能不同。',
+              value:
+                'Free 为 $0；Pro 为 $30/月、$60/季度或 $144/年（年付折算 $12/月），公开套餐页含 7 天试用；地区结账价格可能不同。',
             },
             {
               label: '生成式提示',
@@ -2785,6 +2790,7 @@ export default async function Page({
     let publicChangeTimeline: Awaited<ReturnType<typeof getPublicToolChangeTimeline>> = [];
     let reviewedToolRelationships: Awaited<ReturnType<typeof getReviewedToolRelationships>> = [];
     let decisionCardV2: DecisionCardV2Model | null = null;
+    let publicCapabilitySummaries: PublicToolCapabilitySummary[] = [];
 
     // Get category and tags information
     let category = null;
@@ -2842,6 +2848,7 @@ export default async function Page({
           nextChangeTimeline,
           nextReviewedToolRelationships,
           nextDecisionCardV2,
+          nextCapabilitySummaries,
         ] = await Promise.all([
           getUserRating(toolId).catch(() => null),
           isFavorited(toolId).catch(() => false),
@@ -2858,6 +2865,7 @@ export default async function Page({
           getPublicToolChangeTimeline(toolId, canonicalSlug).catch(() => []),
           getReviewedToolRelationships(canonicalSlug, locale).catch(() => []),
           getToolDecisionCardV2(toolId, locale).catch(() => null),
+          getPublicToolCapabilitySummaries(toolId).catch(() => []),
         ]);
         userRating = nextUserRating;
         isFavoritedByUser = nextIsFavoritedByUser;
@@ -2867,6 +2875,7 @@ export default async function Page({
         publicChangeTimeline = nextChangeTimeline;
         reviewedToolRelationships = nextReviewedToolRelationships;
         decisionCardV2 = nextDecisionCardV2;
+        publicCapabilitySummaries = nextCapabilitySummaries;
         ratingStats = {
           averageRating: toolStats.averageRating,
           ratingCount: toolStats.ratingCount,
@@ -3314,6 +3323,8 @@ export default async function Page({
                 <PublicToolDecision
                   card={decisionCard}
                   model={decisionCardV2}
+                  capabilities={publicCapabilitySummaries}
+                  evidenceSummary={summarizePublicToolEvidence(publicEvidenceLedger)}
                   locale={locale}
                   task={aboveFoldTask}
                   tradeOff={aboveFoldLimit}

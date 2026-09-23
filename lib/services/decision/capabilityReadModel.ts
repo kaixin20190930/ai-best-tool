@@ -60,6 +60,17 @@ export interface PublicDecisionCapabilityReadModel {
   taskCapabilities: PublicTaskCapability[];
 }
 
+export interface PublicToolCapabilitySummary {
+  name: Record<string, string>;
+  description: Record<string, string>;
+  group: CapabilityGroup;
+  supportLevel: CapabilitySupportLevel;
+  availability: CapabilityAvailability;
+  planRequirement: Record<string, unknown>;
+  limitations: unknown[];
+  evidence: PublicEvidenceSummary[];
+}
+
 type Row = Record<string, unknown>;
 
 function asObject(value: unknown): Record<string, unknown> {
@@ -210,7 +221,9 @@ export function derivePublicDecisionCapabilityReadModel(
  * Server-only data access for future Tool Intelligence, Task and Comparison
  * views. It deliberately returns summaries, never raw claim rows or link IDs.
  */
-export async function getPublicDecisionCapabilityReadModel(): Promise<PublicDecisionCapabilityReadModel> {
+export async function getPublicDecisionCapabilityReadModel(
+  toolId?: string,
+): Promise<PublicDecisionCapabilityReadModel> {
   const now = new Date();
   const supabase = createAdminClient();
   const [capabilitiesResult, tasksResult] = await Promise.all([
@@ -221,26 +234,28 @@ export async function getPublicDecisionCapabilityReadModel(): Promise<PublicDeci
       .order('capability_group')
       .order('display_order')
       .order('slug'),
-    supabase.from('decision_tasks').select('id, slug, name, status').eq('status', 'active').order('display_order'),
+    toolId
+      ? Promise.resolve({ data: [], error: null })
+      : supabase.from('decision_tasks').select('id, slug, name, status').eq('status', 'active').order('display_order'),
   ]);
   if (capabilitiesResult.error || tasksResult.error) throw new Error('CAPABILITY_READ_UNAVAILABLE');
 
   const capabilities = (capabilitiesResult.data || []) as Row[];
   const capabilityIds = capabilities.map((row) => String(row.id));
   const nowIso = now.toISOString();
+  const toolCapabilityQuery = supabase
+    .from('tool_capabilities')
+    .select(
+      'id, tool_id, capability_id, support_level, availability, plan_requirement, limitations, status, reviewed_at, review_due_at',
+    )
+    .in('capability_id', capabilityIds)
+    .eq('status', 'published')
+    .not('reviewed_at', 'is', null)
+    .gt('review_due_at', nowIso);
+  const filteredToolCapabilityQuery = toolId ? toolCapabilityQuery.eq('tool_id', toolId) : toolCapabilityQuery;
   const [toolCapabilitiesResult, taskCapabilitiesResult] = await Promise.all([
-    capabilityIds.length
-      ? supabase
-          .from('tool_capabilities')
-          .select(
-            'id, tool_id, capability_id, support_level, availability, plan_requirement, limitations, status, reviewed_at, review_due_at',
-          )
-          .in('capability_id', capabilityIds)
-          .eq('status', 'published')
-          .not('reviewed_at', 'is', null)
-          .gt('review_due_at', nowIso)
-      : Promise.resolve({ data: [], error: null }),
-    capabilityIds.length
+    capabilityIds.length ? filteredToolCapabilityQuery : Promise.resolve({ data: [], error: null }),
+    capabilityIds.length && !toolId
       ? supabase
           .from('task_capabilities')
           .select('task_id, capability_id, importance, rationale, status, reviewed_at, review_due_at')
@@ -289,4 +304,40 @@ export async function getPublicDecisionCapabilityReadModel(): Promise<PublicDeci
     },
     now,
   );
+}
+
+/** A single-tool public projection: no claim, profile, link, or capability IDs leave this function. */
+export function derivePublicToolCapabilitySummaries(
+  model: PublicDecisionCapabilityReadModel,
+  toolId: string,
+): PublicToolCapabilitySummary[] {
+  const capabilities = new Map(model.capabilities.map((capability) => [capability.id, capability]));
+  return model.toolCapabilities
+    .filter((relation) => relation.toolId === toolId)
+    .sort(
+      (left, right) =>
+        (capabilities.get(left.capabilityId)?.displayOrder || 0) -
+        (capabilities.get(right.capabilityId)?.displayOrder || 0),
+    )
+    .flatMap((relation): PublicToolCapabilitySummary[] => {
+      const capability = capabilities.get(relation.capabilityId);
+      if (!capability) return [];
+      return [
+        {
+          name: capability.name,
+          description: capability.description,
+          group: capability.group,
+          supportLevel: relation.supportLevel,
+          availability: relation.availability,
+          planRequirement: relation.planRequirement,
+          limitations: relation.limitations,
+          evidence: relation.evidence,
+        },
+      ];
+    });
+}
+
+export async function getPublicToolCapabilitySummaries(toolId: string): Promise<PublicToolCapabilitySummary[]> {
+  if (!/^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i.test(toolId)) return [];
+  return derivePublicToolCapabilitySummaries(await getPublicDecisionCapabilityReadModel(toolId), toolId);
 }

@@ -2,7 +2,10 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { derivePublicDecisionCapabilityReadModel } from '@/lib/services/decision/capabilityReadModel';
+import {
+  derivePublicDecisionCapabilityReadModel,
+  derivePublicToolCapabilitySummaries,
+} from '@/lib/services/decision/capabilityReadModel';
 
 const now = new Date('2026-09-23T00:00:00.000Z');
 const future = '2026-10-23T00:00:00.000Z';
@@ -59,6 +62,30 @@ const model = derivePublicDecisionCapabilityReadModel(
         reviewed_at: '2026-09-01T00:00:00.000Z',
         review_due_at: future,
       },
+      ...(['reviewed', 'stale'] as const).map((status) => ({
+        id: `tool-cap-${status}`,
+        tool_id: validToolId,
+        capability_id: 'cap-video',
+        status,
+        reviewed_at: '2026-09-01T00:00:00.000Z',
+        review_due_at: future,
+      })),
+      {
+        id: 'tool-cap-expired-review',
+        tool_id: validToolId,
+        capability_id: 'cap-video',
+        status: 'published',
+        reviewed_at: '2026-09-01T00:00:00.000Z',
+        review_due_at: '2026-09-22T00:00:00.000Z',
+      },
+      {
+        id: 'tool-cap-expired-claim',
+        tool_id: validToolId,
+        capability_id: 'cap-video',
+        status: 'published',
+        reviewed_at: '2026-09-01T00:00:00.000Z',
+        review_due_at: future,
+      },
     ],
     taskCapabilities: [
       {
@@ -74,6 +101,10 @@ const model = derivePublicDecisionCapabilityReadModel(
     claimLinks: [
       { tool_capability_id: 'tool-cap-valid', claim_id: validClaimId },
       { tool_capability_id: 'tool-cap-wrong-owner', claim_id: 'claim-wrong-owner' },
+      { tool_capability_id: 'tool-cap-reviewed', claim_id: validClaimId },
+      { tool_capability_id: 'tool-cap-stale', claim_id: validClaimId },
+      { tool_capability_id: 'tool-cap-expired-review', claim_id: validClaimId },
+      { tool_capability_id: 'tool-cap-expired-claim', claim_id: 'claim-expired' },
     ],
     claims: [
       {
@@ -98,6 +129,17 @@ const model = derivePublicDecisionCapabilityReadModel(
         expires_at: null,
         review_due_at: future,
       },
+      {
+        id: 'claim-expired',
+        profile_id: 'profile-valid',
+        source_url: 'https://example.com/old',
+        verified_at: '2026-09-01T00:00:00.000Z',
+        verification_status: 'verified',
+        conflict_status: 'none',
+        invalidated_at: null,
+        expires_at: '2026-09-22T00:00:00.000Z',
+        review_due_at: future,
+      },
     ],
     profiles: [
       { id: 'profile-valid', owner_type: 'tool', owner_id: validToolId },
@@ -116,6 +158,15 @@ assert.deepEqual(model.toolCapabilities[0]?.evidence, [
 assert.equal(model.taskCapabilities.length, 1, 'current published Task Capability is retained');
 assert.equal(JSON.stringify(model).includes('claim_value'), false, 'raw claim values are never returned');
 assert.equal(JSON.stringify(model).includes(validClaimId), false, 'raw claim IDs are never returned');
+const summary = derivePublicToolCapabilitySummaries(model, validToolId);
+assert.equal(summary.length, 1, 'only current published exact-owner evidence reaches the single-tool summary');
+assert.equal(summary[0].name.en, 'Video generation');
+assert.equal(summary[0].supportLevel, 'unknown', 'unknown is not converted into false');
+assert.deepEqual(summary[0].evidence, model.toolCapabilities[0].evidence);
+assert.equal(JSON.stringify(summary).includes(validClaimId), false);
+assert.equal(JSON.stringify(summary).includes('tool-cap-valid'), false);
+assert.equal(JSON.stringify(summary).includes('claim_value'), false);
+assert.deepEqual(derivePublicToolCapabilitySummaries(model, otherToolId), []);
 
 const readSource = fs.readFileSync(path.join(process.cwd(), 'lib/services/decision/capabilityReadModel.ts'), 'utf8');
 assert.match(readSource, /createAdminClient/);

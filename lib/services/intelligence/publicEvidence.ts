@@ -18,6 +18,35 @@ export interface PublicToolEvidenceLedger {
   };
 }
 
+export interface PublicToolEvidenceSummary {
+  verified: number;
+  decisionReady: number;
+  latestVerifiedAt: string | null;
+  nextReviewDueAt: string | null;
+}
+
+/** Counts and dates only; the ledger remains the sole place that renders claim detail. */
+export function summarizePublicToolEvidence(ledger: PublicToolEvidenceLedger | null): PublicToolEvidenceSummary | null {
+  if (!ledger) return null;
+  const latestVerifiedAt =
+    ledger.entries
+      .filter((entry) => entry.verificationStatus === 'verified' && entry.verifiedAt)
+      .map((entry) => entry.verifiedAt as string)
+      .sort()
+      .at(-1) || null;
+  const nextReviewDueAt =
+    ledger.entries
+      .filter((entry) => entry.canSupportDecision && entry.freshness === 'fresh' && entry.reviewDueAt)
+      .map((entry) => entry.reviewDueAt as string)
+      .sort()[0] || null;
+  return {
+    verified: ledger.summary.verified,
+    decisionReady: ledger.summary.decisionReady,
+    latestVerifiedAt,
+    nextReviewDueAt,
+  };
+}
+
 function normalizeDate(value: unknown): string | null {
   if (typeof value !== 'string' || !value.trim()) return null;
   const parsed = new Date(value);

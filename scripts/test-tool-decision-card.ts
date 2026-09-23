@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import { JSDOM } from 'jsdom';
 import { renderToStaticMarkup } from 'react-dom/server';
 
+import type { PublicToolCapabilitySummary } from '@/lib/services/decision/capabilityReadModel';
+import { summarizePublicToolEvidence, type PublicToolEvidenceLedger } from '@/lib/services/intelligence/publicEvidence';
 import { buildToolDecisionCard } from '@/lib/services/toolDecisionCard';
 
 import PublicToolDecision from '../components/tools/PublicToolDecision';
@@ -105,6 +107,8 @@ for (const card of [result, reviewedResult]) {
     );
     const dom = new JSDOM(html);
     assert.equal(dom.window.document.querySelectorAll('#decision-card').length, 1);
+    assert.equal(dom.window.document.querySelectorAll('[data-tool-verified-capabilities]').length, 0);
+    assert.equal(dom.window.document.querySelectorAll('[data-tool-evidence-summary]').length, 0);
     for (const copy of [
       'Research notes',
       'Limited export',
@@ -115,7 +119,9 @@ for (const card of [result, reviewedResult]) {
       'Pricing',
       'Freemium',
       '2026-01-01',
-    ]) assert(html.includes(copy));
+    ]) {
+      assert(html.includes(copy));
+    }
     assert(!/Evidence readiness|Next fact check|Next decision review|待补|Pending/.test(html));
     assert.equal(
       dom.window.document.querySelectorAll('a[href="https://example.com/docs"]').length,
@@ -123,4 +129,74 @@ for (const card of [result, reviewedResult]) {
     );
     dom.window.close();
   }
+}
+
+const capabilities: PublicToolCapabilitySummary[] = [
+  {
+    name: { en: 'Video generation', cn: '视频生成' },
+    description: { en: 'Create short clips.' },
+    group: 'creation',
+    supportLevel: 'unknown',
+    availability: 'paid_only',
+    planRequirement: { en: 'Business plan' },
+    limitations: [{ en: 'No offline export' }],
+    evidence: [
+      {
+        sourceUrl: 'https://example.com/verified-feature',
+        verifiedAt: '2026-09-05T00:00:00.000Z',
+        reviewDueAt: '2026-12-05T00:00:00.000Z',
+      },
+    ],
+  },
+];
+const ledger = {
+  summary: { verified: 1, decisionReady: 1 },
+  entries: [
+    {
+      claimId: 'secret-claim-id',
+      claimValue: 'secret-raw-value',
+      sourceExcerpt: 'secret-excerpt',
+      verificationStatus: 'verified',
+      verifiedAt: '2026-09-05T00:00:00.000Z',
+      reviewDueAt: '2026-12-05T00:00:00.000Z',
+      canSupportDecision: true,
+      freshness: 'fresh',
+    },
+  ],
+} as unknown as PublicToolEvidenceLedger;
+const evidenceSummary = summarizePublicToolEvidence(ledger);
+assert.deepEqual(evidenceSummary, {
+  verified: 1,
+  decisionReady: 1,
+  latestVerifiedAt: '2026-09-05T00:00:00.000Z',
+  nextReviewDueAt: '2026-12-05T00:00:00.000Z',
+});
+const intelligenceHtml = renderToStaticMarkup(
+  React.createElement(
+    PublicToolDecision,
+    {
+      card: reviewedResult,
+      model: null,
+      locale: 'en',
+      task: 'Research notes',
+      tradeOff: 'Limited export',
+      checkedAt: null,
+      capabilities,
+      evidenceSummary,
+    },
+    React.createElement('span', null, 'Existing official evidence child'),
+  ),
+);
+assert(intelligenceHtml.includes('Tool Intelligence / Decision Card'));
+assert(intelligenceHtml.includes('Verified capabilities'));
+assert(intelligenceHtml.includes('Unknown'));
+assert(intelligenceHtml.includes('Paid only'));
+assert(intelligenceHtml.includes('Business plan'));
+assert(intelligenceHtml.includes('No offline export'));
+assert(intelligenceHtml.includes('https://example.com/verified-feature'));
+assert(intelligenceHtml.includes('Last verified'));
+assert(intelligenceHtml.includes('href="#evidence-ledger"'));
+assert(intelligenceHtml.includes('Existing official evidence child'));
+for (const secret of ['secret-claim-id', 'secret-raw-value', 'secret-excerpt']) {
+  assert(!intelligenceHtml.includes(secret));
 }

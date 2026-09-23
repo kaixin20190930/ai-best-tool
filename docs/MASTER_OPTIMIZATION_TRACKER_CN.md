@@ -36,6 +36,8 @@ Otter.ai、Fireflies 的 3 条既有 published meeting fit 保持原 status、�
 
 2026-09-23 DIFF-04 代码完成，发布注册表为空，待首个 Task 编辑批准：新增 `/<locale>/tasks/<slug>` 独立 Task Page，限首批 6 Task。静态注册表先拦截未批准 slug 并返回硬 404；获批准的页面仍由服务端读模型复核 active Task、完整的当前 published required/preferred Task Capability、至少 3 个不同的已发布 Neon 工具及其当前 published、同 owner claim-backed fit。数据临时失效时页面继续 `notFound` + `noindex`。页面提供任务定义、约束、能力、3 个候选的适配/限制、证据来源与日期，以及已有 Finder/工具详情入口，不向浏览器输出 raw claim。页面始终 `noindex, follow`，沿用 canonical 规则，未加入 sitemap。注册表须随 freshness 监控或发布撤回同步移除 slug；当前注册表为空，所有 Task Page 均为硬 404。生产 12 条 Task Capability 仍为 reviewed，不构成编辑批准。
 
+2026-09-23 DIFF-05 代码完成、待独立编辑批准：现有 Tool Decision 扩展为 Tool Intelligence / Decision Card，复用安全 Capability 读模型与已加载的 Evidence Ledger。只有 active/current/published、同 owner verified claim 支撑的 Tool Capability 才显示支持程度、可用范围、套餐要求、限制与安全来源日期；Evidence Ledger 只向判断卡传递计数及真实 claim 的最近核验/下次复查日期，不复制原始账本条目。辅助数据读取失败时工具页继续打开。当前生产 7 条 Tool Capability 均为 reviewed，所以 Capability 区域暂不公开；这不是内容已上线或关系获发布授权。
+
 差异化开发执行规则：先定义用户价值和风险，默认最小实现；dormant/noindex 功能不新增网络服务。默认验证为专项测试、`tsc`、完整 build 与一次生产模式 smoke；单项超过 60 分钟或连续两次 QA FAIL，交总控重新选方案。仅安全、支付、数据一致性 P0 可扩大测试范围。
 
 2026-09-20 规模化口径更新：生产基线为 63 条工具记录、50 条已公开、13 条获准索引；技术和 SEO 护栏稳定，当前增长瓶颈转为高
