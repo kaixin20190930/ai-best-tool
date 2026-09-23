@@ -38,7 +38,7 @@ Otter.ai、Fireflies 的 3 条既有 published meeting fit 保持原 status、�
 
 2026-09-23 DIFF-05 代码完成、待独立编辑批准：现有 Tool Decision 扩展为 Tool Intelligence / Decision Card，复用安全 Capability 读模型与已加载的 Evidence Ledger。只有 active/current/published、同 owner verified claim 支撑的 Tool Capability 才显示支持程度、可用范围、套餐要求、限制与安全来源日期；Evidence Ledger 只向判断卡传递计数及真实 claim 的最近核验/下次复查日期，不复制原始账本条目。辅助数据读取失败时工具页继续打开。当前生产 7 条 Tool Capability 均为 reviewed，所以 Capability 区域暂不公开；这不是内容已上线或关系获发布授权。
 
-2026-09-23 DIFF-06 代码完成、待独立 QA 与 Tool Capability 编辑批准：仅在既有受控 verified comparison 页面，为 2-4 个候选追加结构化 Capability 差异矩阵；数据复用 DIFF-05 的安全读模型，只呈现当前 published、active、同 owner verified、无冲突且未过期的关系与来源摘要。缺少关系明确显示“未知”，不推断“不支持”；无合格关系或辅助读取失败时不显示矩阵，原有选择结论、限制、静态官方证据及 CTA 保持可用。页面继续 noindex，不新增组合 URL 或 sitemap 条目，也不下发 raw claim/profile/link/capability ID、值或摘录。当前生产 Tool Capability 仍全为 reviewed，代码完成不代表 Capability 内容已公开，关系发布仍需独立编辑批准。
+2026-09-23 DIFF-06 代码与独立 QA 完成、待 Tool Capability 编辑批准：仅在既有受控 verified comparison 页面，为 2-4 个候选追加结构化 Capability 差异矩阵；数据复用 DIFF-05 的安全读模型，只呈现当前 published、active、同 owner verified、无冲突且未过期的关系与来源摘要。缺少关系明确显示“未知”，不推断“不支持”；无合格关系或辅助读取失败时不显示矩阵，原有选择结论、限制、静态官方证据及 CTA 保持可用。页面继续 noindex，不新增组合 URL 或 sitemap 条目，也不下发 raw claim/profile/link/capability ID、值或摘录。当前生产 Tool Capability 仍全为 reviewed，矩阵尚未公开，关系发布仍需独立编辑批准。
 
 差异化开发执行规则：先定义用户价值和风险，默认最小实现；dormant/noindex 功能不新增网络服务。默认验证为专项测试、`tsc`、完整 build 与一次生产模式 smoke；单项超过 60 分钟或连续两次 QA FAIL，交总控重新选方案。仅安全、支付、数据一致性 P0 可扩大测试范围。
 

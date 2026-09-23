@@ -123,7 +123,7 @@ Graph、n8n、OpenRouter、Grammarly、Jasper、ElevenLabs、Midjourney、Otter.
 | 09-24      | DIFF-03 | 6 Task + 20 工具首批真实关系数据                            | 生产完整回读、published 保留、SQL Editor 原子执行修复与 QA 验收通过    | 已完成   |
 | 09-25      | DIFF-04 | 独立 Task Page                                              | 至少 3 个 published fit 才可公开；默认 noindex；无薄页扩张             | 代码完成；发布注册表为空；待首个 Task 编辑批准 |
 | 09-26      | DIFF-05 | 统一 Tool Intelligence                                      | Best for、Not ideal、Capability、Pricing、Evidence、Last verified 同源 | 代码完成；待 Tool Capability 编辑批准 |
-| 09-27      | DIFF-06 | Structured Comparison                                       | 同图谱比较 2-4 个工具；unknown 明示；默认 noindex                      | 代码完成；待独立 QA 与 Tool Capability 编辑批准 |
+| 09-27      | DIFF-06 | Structured Comparison                                       | 同图谱比较 2-4 个工具；unknown 明示；默认 noindex                      | 代码与独立 QA 完成；生产 Tool Capability 仍为 reviewed，矩阵未公开；待编辑批准 |
 | 09-28      | DIFF-07 | 全链路自动验收与生产收口                                    | migration、tsc、build、SEO、页面、RLS、证据门禁全部通过                | 未开始   |
 | 覆盖达标后 | DIFF-08 | 自然语言 Decision Assistant                                 | 满足第 8 节门槛后才能开始                                              | 条件阻塞 |
 
@@ -143,7 +143,7 @@ INTAKE 与上述排期并行：09-23 Descript 到期发布槽继续执行；其�
 - DIFF-04 Task Page 固定 `noindex, follow` 且不进入 sitemap；若未来考虑索引，须另立计划和审批，不在本次放行范围。
 - Tool Intelligence 复用现有 canonical Tool Page，不新增第二套工具 URL。
 - DIFF-05 只扩展既有 Tool Decision：安全读模型按单工具输出当前 published、active 且由同 owner verified claim 支撑的 Capability 摘要；现有 Evidence Ledger 只提供计数与真实 verified 日期的轻量摘要。当前生产 7 条 Tool Capability 都是 reviewed，故 Capability 区域暂不公开；代码完成不等于内容上线，须独立编辑批准后才能显示。
-- DIFF-06 只扩展现有受控 verified comparison 页面：保留原有选择结论、限制、静态官方证据、CTA 与 metadata；2-4 个候选的 Capability 矩阵复用 DIFF-05 安全读模型，仅展示当前 published、active、同 owner verified 且无冲突的证据支持关系。缺关系显示“未知”，绝不推断“不支持”；没有合格关系或辅助读取失败时不显示新矩阵，原页面继续可用。现有页面保持 noindex，组合页不进入 sitemap。当前生产 Tool Capability 仍全为 reviewed，故代码完成不代表 Capability 内容已公开，仍须独立编辑批准。
+- DIFF-06 代码与独立 QA 已完成，只扩展现有受控 verified comparison 页面：保留原有选择结论、限制、静态官方证据、CTA 与 metadata；2-4 个候选的 Capability 矩阵复用 DIFF-05 安全读模型，仅展示当前 published、active、同 owner verified 且无冲突的证据支持关系。缺关系显示“未知”，绝不推断“不支持”；没有合格关系或辅助读取失败时不显示新矩阵，原页面继续可用。现有页面保持 noindex，组合页不进入 sitemap。当前生产 Tool Capability 仍全为 reviewed，故矩阵尚未公开，仍须独立编辑批准。
 - metadata 继续遵守既有 SEO 架构冻结规则，不因差异化改写站点主题。
 
 ## 8. Decision Assistant 启动门槛
