@@ -120,7 +120,7 @@ Graph、n8n、OpenRouter、Grammarly、Jasper、ElevenLabs、Midjourney、Otter.
 | 09-22      | DIFF-00 | 战略、范围、双线产能和门禁写入唯一计划                      | 与现有 DCF/EVD 不重复，风险 review 完成                                | 已完成   |
 | 09-22      | DIFF-01 | Capability、Tool Capability、Task Capability 与 claim links | RLS、跨库边界、证据和发布门禁测试通过；待生产迁移与只读回读             | 本地完成 |
 | 09-23      | DIFF-02 | 后台编辑与统一服务读模型                                    | 不允许客户端读/写 raw claim；保存有 loading/success/error；待生产迁移回读 | 本地完成 |
-| 09-24      | DIFF-03 | 6 Task + 20 工具首批真实关系数据                            | 生产只读盘点、幂等 dry-run 与事务 SQL 导出守卫完成；待用户执行 SQL      | 待用户执行 SQL |
+| 09-24      | DIFF-03 | 6 Task + 20 工具首批真实关系数据                            | 生产完整回读、published 保留、SQL Editor 原子执行修复与 QA 验收通过    | 已完成   |
 | 09-25      | DIFF-04 | 独立 Task Page                                              | 至少 3 个 published fit 才可公开；默认 noindex；无薄页扩张             | 未开始   |
 | 09-26      | DIFF-05 | 统一 Tool Intelligence                                      | Best for、Not ideal、Capability、Pricing、Evidence、Last verified 同源 | 未开始   |
 | 09-27      | DIFF-06 | Structured Comparison                                       | 同图谱比较 2-4 个工具；unknown 明示；默认 noindex                      | 未开始   |
@@ -186,17 +186,11 @@ INTAKE 与上述排期并行：09-23 Descript 到期发布槽继续执行；其�
 9. DIFF-02 的公共读模型只输出 active Capability、当前 published Tool/Task Capability 和来源 URL、核验/复查日期摘要；不输出
    claim ID、claim value、excerpt 或 raw link。后台操作仅经管理员 server action，输入先校验；Tool Capability 证据链接只能在
    draft/reviewed 状态按 UUID 增删，published 记录仍由数据库门禁保护。
-10. DIFF-03 生产只读盘点（2026-09-23）确认 20 个目标中 18 个目录实体唯一、ChatGPT 与 Descript 缺失，9 个目标工具有当前
-    verified claim；人工映射只为 Fathom、Otter.ai、Fireflies、Luma AI、Consensus、n8n 与 OpenRouter 预备 reviewed 关系。
-    默认工具只 dry-run、不写入；已导出固定事务 SQL
-    `db/supabase/manual/20260923_seed_decision_graph_first_batch.sql`，执行前会复核 reviewer、DIFF-01 表、claim 的当前 verified/
-    same-owner 状态，并拒绝覆盖任何 published 关系。当前为“待用户执行 SQL”，其余对象保持缺口，不以 20×6 补齐数量；本批不创建
-    published 关系、URL 或索引副作用。
-    首次用户执行因三个既有 published meeting fit 触发守卫并整体回滚；修订版只会保留 task/fit level 一致的既有 published 关系，
-    不改其 rationale、reviewer 或 claim links，语义不一致仍失败。状态保持“待用户执行 SQL”。
-    第二次 SQL Editor 报 `42P01`：旧版临时表在跨语句提交后消失。只读回读已见完整目标批次（6/12/12/7/7 及每类 7 条 claim
-    link），无法仅由该错误断言本次之前的执行历史。再修订版把所有守卫和写入放进单条原子 `DO` 语句，临时表只在语句内部存在，
-    同 session 残留先清理，最后一条 claim link 后显式删除。待用户重新执行并回读。
+10. DIFF-03 于 2026-09-23 完成。旧 SQL Editor 导出将多条顶层语句分段提交，导致 `ON COMMIT DROP` 临时表在后续语句中不可见；
+    修复版把所有 guard、upsert、claim links 与 postcondition 放入一条原子 `DO` 语句。生产只读 verifier 与 QA 已确认完整数据：
+    6 Task（复用既有 `meeting-notes`）、12 Capability、12 Task Capability、7 Tool Capability、7 Tool Task Fit，以及两类各 7 条
+    claim links。3 条既有 published meeting fit 保持原状态及证据链接；其余本批关系为 reviewed。生产完整回读与 SQL Editor 修复均已
+    验收，无需再次执行 SQL。未改 URL、工具目录、sitemap 或索引策略。
 
 ## 11. 完成定义
 

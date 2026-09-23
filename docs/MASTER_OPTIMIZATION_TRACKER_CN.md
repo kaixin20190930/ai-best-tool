@@ -25,26 +25,14 @@ Tool Capability、Task Capability 和经 UUID 验证的 evidence association；�
 loading/success/error 状态。统一服务端读模型只返回 active/current 关系及来源 URL、核验/复查日期摘要，过滤错误 owner、候选、冲突、
 失效和过期 claim，且不把 raw claim/link/claim ID 下发给浏览器。状态为“待 DIFF-01/02 生产迁移与只读回读”，不构成 seed 或公开页面授权。
 
-2026-09-23 DIFF-03 已完成生产只读盘点与可审查 SQL 导出：20 个范围目标中 18 个唯一目录实体，ChatGPT 与 Descript 缺失；仅 9 个对象有
-当前 verified claim，人工证据映射仅预备 Fathom、Otter.ai、Fireflies、Luma AI、Consensus、n8n 和 OpenRouter 的 reviewed
-关系。默认 seed 仍是 dry-run/no-write；固定 SQL 位于 `db/supabase/manual/20260923_seed_decision_graph_first_batch.sql`，含 reviewer、
-DIFF-01 表、current verified/same-owner claim 和 published 覆盖拒绝断言，并以单一事务执行。当前状态为“待用户执行 SQL”：不得由本地
-脚本、自动化或未经 QA PASS/总控批准的流程执行。预计提交为 6 Task（复用已有 `meeting-notes`）、12 Capability、12 Task
-Capability、最多 7 Tool Capability + 7 Tool Task Fit 及各 7 claim link，所有新关系均保持 reviewed；不写工具、URL、sitemap、
-index 或公开页面。
+2026-09-23 DIFF-03 已完成并通过生产只读 verifier 与 QA。生产当前完整回读为 6 Task（复用已有 `meeting-notes`）、12 Capability、
+12 Task Capability、7 Tool Capability、7 Tool Task Fit，以及 Tool Capability 与 Tool Task Fit 两类各 7 条 claim links。Fathom、
+Otter.ai、Fireflies 的 3 条既有 published meeting fit 保持原 status、语义与证据链接；本批其余关系均为 reviewed。
 
-2026-09-23 DIFF-03 首次用户执行固定 SQL 已被事务守卫安全回滚：`meeting-notes` 既有的 Fathom、Otter.ai 与 Fireflies 三条
-Tool Task Fit 均为 `published`，且 task/fit level 与本批映射一致；本次失败没有新增 Task、Capability、Task Capability 或
-Tool Capability。修订后的同一路径 SQL 会锁定并保留这些兼容的 published 关系，既不降级其 status、rationale、reviewer，也不
-新增/修改其 claim link；若 Task Capability importance、Tool Capability support level 或 Tool Task Fit level 不一致，仍整体失败。
-状态仍为“待用户执行 SQL”，仅可由批准后的用户流程重试。
-
-2026-09-23 DIFF-03 第二次 SQL Editor 执行报告 `42P01 decision_graph_seed_task_capabilities does not exist`。旧导出跨多条顶层语句使用
-`ON COMMIT DROP` 临时表，一旦 SQL Editor 在语句之间提交事务，后续语句即失去该表；错误文本本身无法区分事务提交与换连接。
-生产只读回读现见完整的 6 Task、12 Capability、12 Task Capability、7 Tool Capability、7 Tool Task Fit 及每类 7 个 claim link；
-新增记录的 `created_at` 集中在 2026-09-23 06:06 UTC。故不能把当前生产状态记为“全部回滚”，也无法仅凭本次错误归因这些记录来自哪次执行。
-同路径 SQL 已改为单条原子 `DO` 语句，临时表在语句内清理、创建、使用和显式删除；本地 PostgreSQL 验证成功路径与异常回滚。
-状态为“待用户重新执行 SQL 并回读”，执行仍由用户流程负责。
+执行过程中，旧 SQL Editor 导出跨顶层语句提交，导致 `ON COMMIT DROP` 临时表在后续语句中不可见并报 `42P01`。修复版将 guard、
+写入、claim links、postcondition 和临时表清理合并为单条原子 `DO` 语句；修复提交 `1ae1b431` 与完整导出晚期失败回滚测试提交
+`55308042` 已进入 main。生产完整回读和 QA 已确认数据正确，无需再次执行 SQL。DIFF-03 状态为“已完成”，下一项为 DIFF-04 Task Page。
+本阶段未改工具目录记录、URL、sitemap 或索引策略。
 
 2026-09-20 规模化口径更新：生产基线为 63 条工具记录、50 条已公开、13 条获准索引；技术和 SEO 护栏稳定，当前增长瓶颈转为高
 质量工具库存和差异化覆盖。后续每天发现 10-20 个、深审 4-6 个，目标公开 2 个且上限 3 个；索引仍逐页审批，每天最多 1 个、
