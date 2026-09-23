@@ -25,6 +25,13 @@ Tool Capability、Task Capability 和经 UUID 验证的 evidence association；�
 loading/success/error 状态。统一服务端读模型只返回 active/current 关系及来源 URL、核验/复查日期摘要，过滤错误 owner、候选、冲突、
 失效和过期 claim，且不把 raw claim/link/claim ID 下发给浏览器。状态为“待 DIFF-01/02 生产迁移与只读回读”，不构成 seed 或公开页面授权。
 
+2026-09-23 DIFF-03 本地计划与生产只读盘点完成：20 个范围目标中 18 个唯一目录实体，ChatGPT 与 Descript 缺失；仅 9 个对象有
+当前 verified claim，人工证据映射仅预备 Fathom、Otter.ai、Fireflies、Luma AI、Consensus、n8n 和 OpenRouter 的 reviewed
+关系。幂等 seed 默认 dry-run/no-write，显式 `--commit --reviewer-id` 还要求 Supabase 专用事务连接，并在现有 published
+关系处拒绝覆盖；无 QA PASS 和总控批准不得执行。预计提交为 6 Task（复用已有 `meeting-notes`）、12 Capability、12 Task
+Capability、最多 7 Tool Capability + 7 Tool Task Fit 及各 7 claim link，所有新关系均保持 reviewed；不写工具、URL、sitemap、
+index 或公开页面。
+
 2026-09-20 规模化口径更新：生产基线为 63 条工具记录、50 条已公开、13 条获准索引；技术和 SEO 护栏稳定，当前增长瓶颈转为高
 质量工具库存和差异化覆盖。后续每天发现 10-20 个、深审 4-6 个，目标公开 2 个且上限 3 个；索引仍逐页审批，每天最多 1 个、
 目标每周 4 个且硬上限 5 个。完整阶段目标、维护频率和暂停门禁见
