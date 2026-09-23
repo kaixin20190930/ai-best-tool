@@ -120,7 +120,7 @@ Graph、n8n、OpenRouter、Grammarly、Jasper、ElevenLabs、Midjourney、Otter.
 | 09-22      | DIFF-00 | 战略、范围、双线产能和门禁写入唯一计划                      | 与现有 DCF/EVD 不重复，风险 review 完成                                | 已完成   |
 | 09-22      | DIFF-01 | Capability、Tool Capability、Task Capability 与 claim links | RLS、跨库边界、证据和发布门禁测试通过；待生产迁移与只读回读             | 本地完成 |
 | 09-23      | DIFF-02 | 后台编辑与统一服务读模型                                    | 不允许客户端读/写 raw claim；保存有 loading/success/error；待生产迁移回读 | 本地完成 |
-| 09-24      | DIFF-03 | 6 Task + 20 工具首批真实关系数据                            | 生产只读盘点、幂等 dry-run 与事务 commit 守卫完成；待 QA/批准后显式写入 | 本地完成 |
+| 09-24      | DIFF-03 | 6 Task + 20 工具首批真实关系数据                            | 生产只读盘点、幂等 dry-run 与事务 SQL 导出守卫完成；待用户执行 SQL      | 待用户执行 SQL |
 | 09-25      | DIFF-04 | 独立 Task Page                                              | 至少 3 个 published fit 才可公开；默认 noindex；无薄页扩张             | 未开始   |
 | 09-26      | DIFF-05 | 统一 Tool Intelligence                                      | Best for、Not ideal、Capability、Pricing、Evidence、Last verified 同源 | 未开始   |
 | 09-27      | DIFF-06 | Structured Comparison                                       | 同图谱比较 2-4 个工具；unknown 明示；默认 noindex                      | 未开始   |
@@ -188,8 +188,10 @@ INTAKE 与上述排期并行：09-23 Descript 到期发布槽继续执行；其�
    draft/reviewed 状态按 UUID 增删，published 记录仍由数据库门禁保护。
 10. DIFF-03 生产只读盘点（2026-09-23）确认 20 个目标中 18 个目录实体唯一、ChatGPT 与 Descript 缺失，9 个目标工具有当前
     verified claim；人工映射只为 Fathom、Otter.ai、Fireflies、Luma AI、Consensus、n8n 与 OpenRouter 预备 reviewed 关系。
-    默认工具只 dry-run、不写入；仅 QA PASS 后以 `--commit --reviewer-id=<auth UUID>`、Supabase 专用事务连接执行。其余对象保持
-    缺口，不以 20×6 补齐数量；本批不创建 published 关系、URL 或索引副作用。
+    默认工具只 dry-run、不写入；已导出固定事务 SQL
+    `db/supabase/manual/20260923_seed_decision_graph_first_batch.sql`，执行前会复核 reviewer、DIFF-01 表、claim 的当前 verified/
+    same-owner 状态，并拒绝覆盖任何 published 关系。当前为“待用户执行 SQL”，其余对象保持缺口，不以 20×6 补齐数量；本批不创建
+    published 关系、URL 或索引副作用。
 
 ## 11. 完成定义
 

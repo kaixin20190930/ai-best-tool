@@ -11,6 +11,9 @@ assert.equal((seed.match(/slug: '/g) || []).length >= 18, true, 'six Tasks and t
 assert.equal((seed.match(/\['[a-z0-9-]+', \[/g) || []).length, 20, 'all twenty target tools must be inventoried');
 assert.match(seed, /BEGIN READ ONLY/);
 assert.match(seed, /mode: 'dry-run-no-write'/);
+assert.match(seed, /--emit-sql=<path>/);
+assert.match(seed, /mode: 'emit-sql-read-only'/);
+assert.match(seed, /function emitSeedSql/);
 assert.match(seed, /args\.includes\('--commit'\)/);
 assert.match(seed, /--commit requires a real --reviewer-id auth UUID/);
 assert.match(seed, /SUPABASE_DB_URL is required for an explicit transactional --commit/);

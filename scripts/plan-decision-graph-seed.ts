@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
 import { loadEnvConfig } from '@next/env';
 import { Client } from 'pg';
 
@@ -476,6 +478,315 @@ function buildSeedPlan(inventoryResult: InventoryResult) {
   };
 }
 
+function sqlLiteral(value: string): string {
+  return `'${value.replace(/'/g, "''")}'`;
+}
+
+function sqlJson(value: unknown): string {
+  return `${sqlLiteral(JSON.stringify(value))}::jsonb`;
+}
+
+function sqlValues(rows: string[][]): string {
+  return rows.map((row) => `  (${row.join(', ')})`).join(',\n');
+}
+
+/**
+ * Produces a reviewable, manually executable transaction from the exact
+ * read-only inventory used to plan the seed. This function never connects to
+ * the database and deliberately contains no connection configuration.
+ */
+export function emitSeedSql(plan: ReturnType<typeof buildSeedPlan>, reviewerId: string): string {
+  const taskRows = plan.tasks.map((task, index) => [
+    sqlLiteral(task.slug),
+    sqlJson(task.name),
+    sqlJson(task.description),
+    "'active'",
+    String(index),
+    sqlJson(task.constraintSchema),
+  ]);
+  const capabilityRows = plan.capabilities.map((capability, index) => [
+    sqlLiteral(capability.slug),
+    sqlJson(capability.name),
+    sqlJson(capability.description),
+    sqlLiteral(capability.group),
+    "'active'",
+    String(index),
+  ]);
+  const taskCapabilityRows = plan.taskCapabilities.map((relation) => [
+    sqlLiteral(relation.task),
+    sqlLiteral(relation.capability),
+    sqlLiteral(relation.importance),
+    sqlJson(relation.rationale),
+  ]);
+  const relationRows = plan.eligibleRelations.map((relation) => [
+    `${sqlLiteral(relation.toolId)}::uuid`,
+    sqlLiteral(relation.task),
+    sqlLiteral(relation.capability),
+    `${sqlLiteral(relation.claimId)}::uuid`,
+    sqlLiteral(relation.fit),
+  ]);
+
+  return `-- DIFF-03 decision graph first batch. Generated from a read-only inventory; do not edit around guards.
+-- This transaction intentionally creates reviewed relations only. It does not write directory records or public-discovery configuration.
+BEGIN;
+
+DO $$
+DECLARE
+  required_relation TEXT;
+BEGIN
+  FOREACH required_relation IN ARRAY ARRAY[
+    'auth.users',
+    'public.decision_tasks',
+    'public.decision_capabilities',
+    'public.task_capabilities',
+    'public.tool_capabilities',
+    'public.tool_capability_claims',
+    'public.tool_task_fits',
+    'public.tool_task_fit_claims',
+    'public.product_intelligence_profiles',
+    'public.product_intelligence_claims'
+  ] LOOP
+    IF to_regclass(required_relation) IS NULL THEN
+      RAISE EXCEPTION 'DIFF-01/Decision Finder prerequisite relation is missing: %', required_relation;
+    END IF;
+  END LOOP;
+
+  IF NOT EXISTS (SELECT 1 FROM auth.users WHERE id = ${sqlLiteral(reviewerId)}::uuid) THEN
+    RAISE EXCEPTION 'Seed reviewer does not exist in auth.users.';
+  END IF;
+END
+$$;
+
+CREATE TEMP TABLE decision_graph_seed_task_capabilities (
+  task_slug TEXT NOT NULL,
+  capability_slug TEXT NOT NULL,
+  importance TEXT NOT NULL,
+  rationale JSONB NOT NULL,
+  PRIMARY KEY (task_slug, capability_slug)
+) ON COMMIT DROP;
+
+INSERT INTO decision_graph_seed_task_capabilities (task_slug, capability_slug, importance, rationale)
+VALUES
+${sqlValues(taskCapabilityRows)};
+
+CREATE TEMP TABLE decision_graph_seed_relations (
+  tool_id UUID NOT NULL,
+  task_slug TEXT NOT NULL,
+  capability_slug TEXT NOT NULL,
+  claim_id UUID NOT NULL,
+  fit_level TEXT NOT NULL,
+  PRIMARY KEY (tool_id, task_slug, capability_slug, claim_id)
+) ON COMMIT DROP;
+
+INSERT INTO decision_graph_seed_relations (tool_id, task_slug, capability_slug, claim_id, fit_level)
+VALUES
+${sqlValues(relationRows)};
+
+DO $$
+BEGIN
+  IF (SELECT count(*) FROM decision_graph_seed_relations) <> (
+    SELECT count(*)
+    FROM decision_graph_seed_relations relation
+    JOIN public.product_intelligence_claims claim ON claim.id = relation.claim_id
+    JOIN public.product_intelligence_profiles profile ON profile.id = claim.profile_id
+    WHERE profile.owner_type = 'tool'
+      AND profile.owner_id = relation.tool_id
+      AND claim.verification_status = 'verified'
+      AND claim.conflict_status = 'none'
+      AND claim.invalidated_at IS NULL
+      AND (claim.expires_at IS NULL OR claim.expires_at > NOW())
+      AND (claim.review_due_at IS NULL OR claim.review_due_at > NOW())
+  ) THEN
+    RAISE EXCEPTION 'Seed snapshot is no longer current: a mapped claim is missing, invalid, conflicted, expired, or owned by another tool.';
+  END IF;
+
+  PERFORM claim.id
+  FROM decision_graph_seed_relations relation
+  JOIN public.product_intelligence_claims claim ON claim.id = relation.claim_id
+  JOIN public.product_intelligence_profiles profile ON profile.id = claim.profile_id
+  WHERE profile.owner_type = 'tool'
+    AND profile.owner_id = relation.tool_id
+    AND claim.verification_status = 'verified'
+    AND claim.conflict_status = 'none'
+    AND claim.invalidated_at IS NULL
+    AND (claim.expires_at IS NULL OR claim.expires_at > NOW())
+    AND (claim.review_due_at IS NULL OR claim.review_due_at > NOW())
+  FOR SHARE OF claim, profile;
+END
+$$;
+
+INSERT INTO public.decision_tasks (slug, name, description, status, display_order, constraint_schema)
+VALUES
+${sqlValues(taskRows)}
+ON CONFLICT (slug) DO NOTHING;
+
+INSERT INTO public.decision_capabilities (slug, name, description, capability_group, status, display_order)
+VALUES
+${sqlValues(capabilityRows)}
+ON CONFLICT (slug) DO NOTHING;
+
+DO $$
+BEGIN
+  IF (SELECT count(*) FROM public.decision_tasks WHERE slug IN (
+    SELECT task_slug FROM decision_graph_seed_task_capabilities
+  )) <> (SELECT count(DISTINCT task_slug) FROM decision_graph_seed_task_capabilities) THEN
+    RAISE EXCEPTION 'Seed task resolution failed after insert.';
+  END IF;
+
+  IF (SELECT count(*) FROM public.decision_capabilities WHERE slug IN (
+    SELECT capability_slug FROM decision_graph_seed_task_capabilities
+  )) <> (SELECT count(DISTINCT capability_slug) FROM decision_graph_seed_task_capabilities) THEN
+    RAISE EXCEPTION 'Seed capability resolution failed after insert.';
+  END IF;
+END
+$$;
+
+DO $$
+BEGIN
+  PERFORM 1
+  FROM public.task_capabilities task_capability
+  JOIN public.decision_tasks task ON task.id = task_capability.task_id
+  JOIN public.decision_capabilities capability ON capability.id = task_capability.capability_id
+  JOIN decision_graph_seed_task_capabilities seed
+    ON seed.task_slug = task.slug AND seed.capability_slug = capability.slug
+  WHERE task_capability.status = 'published'
+  FOR UPDATE OF task_capability;
+  IF FOUND THEN
+    RAISE EXCEPTION 'Published Task Capability requires a manual editorial change.';
+  END IF;
+
+  PERFORM 1
+  FROM public.tool_capabilities tool_capability
+  JOIN public.decision_capabilities capability ON capability.id = tool_capability.capability_id
+  JOIN decision_graph_seed_relations seed
+    ON seed.tool_id = tool_capability.tool_id AND seed.capability_slug = capability.slug
+  WHERE tool_capability.status = 'published'
+  FOR UPDATE OF tool_capability;
+  IF FOUND THEN
+    RAISE EXCEPTION 'Published Tool Capability requires a manual editorial change.';
+  END IF;
+
+  PERFORM 1
+  FROM public.tool_task_fits fit
+  JOIN public.decision_tasks task ON task.id = fit.task_id
+  JOIN decision_graph_seed_relations seed
+    ON seed.tool_id = fit.tool_id AND seed.task_slug = task.slug
+  WHERE fit.status = 'published'
+  FOR UPDATE OF fit;
+  IF FOUND THEN
+    RAISE EXCEPTION 'Published Tool Task Fit requires a manual editorial change.';
+  END IF;
+END
+$$;
+
+INSERT INTO public.task_capabilities (
+  task_id, capability_id, importance, rationale, status, reviewed_at, review_due_at, reviewed_by
+)
+SELECT
+  task.id, capability.id, seed.importance, seed.rationale, 'reviewed', NOW(), NOW() + INTERVAL '90 days', ${sqlLiteral(reviewerId)}::uuid
+FROM decision_graph_seed_task_capabilities seed
+JOIN public.decision_tasks task ON task.slug = seed.task_slug
+JOIN public.decision_capabilities capability ON capability.slug = seed.capability_slug
+ON CONFLICT (task_id, capability_id) DO UPDATE SET
+  importance = EXCLUDED.importance,
+  rationale = EXCLUDED.rationale,
+  status = 'reviewed',
+  reviewed_at = EXCLUDED.reviewed_at,
+  review_due_at = EXCLUDED.review_due_at,
+  reviewed_by = EXCLUDED.reviewed_by
+WHERE public.task_capabilities.status <> 'published';
+
+INSERT INTO public.tool_capabilities (
+  tool_id, capability_id, support_level, availability, plan_requirement, limitations, status, reviewed_at, review_due_at, reviewed_by
+)
+SELECT
+  seed.tool_id, capability.id, 'partial', 'unknown', '{}'::jsonb, '[]'::jsonb, 'reviewed', NOW(), NOW() + INTERVAL '90 days', ${sqlLiteral(reviewerId)}::uuid
+FROM decision_graph_seed_relations seed
+JOIN public.decision_capabilities capability ON capability.slug = seed.capability_slug
+ON CONFLICT (tool_id, capability_id) DO UPDATE SET
+  support_level = EXCLUDED.support_level,
+  availability = EXCLUDED.availability,
+  plan_requirement = EXCLUDED.plan_requirement,
+  limitations = EXCLUDED.limitations,
+  status = 'reviewed',
+  reviewed_at = EXCLUDED.reviewed_at,
+  review_due_at = EXCLUDED.review_due_at,
+  reviewed_by = EXCLUDED.reviewed_by
+WHERE public.tool_capabilities.status <> 'published';
+
+INSERT INTO public.tool_capability_claims (tool_capability_id, claim_id, purpose)
+SELECT tool_capability.id, seed.claim_id, 'support'
+FROM decision_graph_seed_relations seed
+JOIN public.decision_capabilities capability ON capability.slug = seed.capability_slug
+JOIN public.tool_capabilities tool_capability
+  ON tool_capability.tool_id = seed.tool_id AND tool_capability.capability_id = capability.id
+ON CONFLICT DO NOTHING;
+
+INSERT INTO public.tool_task_fits (
+  tool_id, task_id, fit_level, rationale, required_conditions, disqualifiers, status, reviewed_at, review_due_at, reviewed_by
+)
+SELECT
+  seed.tool_id,
+  task.id,
+  seed.fit_level,
+  '{"en":"Editorially mapped from the linked verified claim; review limitations before publication.","cn":"由关联的已核验 claim 经编辑映射；发布前须审核限制。"}'::jsonb,
+  '[]'::jsonb,
+  '[]'::jsonb,
+  'reviewed',
+  NOW(),
+  NOW() + INTERVAL '90 days',
+  ${sqlLiteral(reviewerId)}::uuid
+FROM decision_graph_seed_relations seed
+JOIN public.decision_tasks task ON task.slug = seed.task_slug
+ON CONFLICT (tool_id, task_id) DO UPDATE SET
+  fit_level = EXCLUDED.fit_level,
+  rationale = EXCLUDED.rationale,
+  status = 'reviewed',
+  reviewed_at = EXCLUDED.reviewed_at,
+  review_due_at = EXCLUDED.review_due_at,
+  reviewed_by = EXCLUDED.reviewed_by
+WHERE public.tool_task_fits.status <> 'published';
+
+DO $$
+BEGIN
+  IF (SELECT count(*) FROM public.task_capabilities task_capability
+      JOIN public.decision_tasks task ON task.id = task_capability.task_id
+      JOIN public.decision_capabilities capability ON capability.id = task_capability.capability_id
+      JOIN decision_graph_seed_task_capabilities seed
+        ON seed.task_slug = task.slug AND seed.capability_slug = capability.slug
+      WHERE task_capability.status = 'reviewed') <> (SELECT count(*) FROM decision_graph_seed_task_capabilities) THEN
+    RAISE EXCEPTION 'Seed Task Capability resolution was not completely reviewed.';
+  END IF;
+
+  IF (SELECT count(*) FROM public.tool_capabilities tool_capability
+      JOIN public.decision_capabilities capability ON capability.id = tool_capability.capability_id
+      JOIN decision_graph_seed_relations seed
+        ON seed.tool_id = tool_capability.tool_id AND seed.capability_slug = capability.slug
+      WHERE tool_capability.status = 'reviewed') <> (SELECT count(*) FROM decision_graph_seed_relations) THEN
+    RAISE EXCEPTION 'Seed Tool Capability resolution was not completely reviewed.';
+  END IF;
+
+  IF (SELECT count(*) FROM public.tool_task_fits fit
+      JOIN public.decision_tasks task ON task.id = fit.task_id
+      JOIN decision_graph_seed_relations seed
+        ON seed.tool_id = fit.tool_id AND seed.task_slug = task.slug
+      WHERE fit.status = 'reviewed') <> (SELECT count(*) FROM decision_graph_seed_relations) THEN
+    RAISE EXCEPTION 'Seed Tool Task Fit resolution was not completely reviewed.';
+  END IF;
+END
+$$;
+
+INSERT INTO public.tool_task_fit_claims (fit_id, claim_id, purpose)
+SELECT fit.id, seed.claim_id, 'fit'
+FROM decision_graph_seed_relations seed
+JOIN public.decision_tasks task ON task.slug = seed.task_slug
+JOIN public.tool_task_fits fit ON fit.tool_id = seed.tool_id AND fit.task_id = task.id
+ON CONFLICT DO NOTHING;
+
+COMMIT;
+`;
+}
+
 async function executeCommit(plan: ReturnType<typeof buildSeedPlan>, reviewerId: string) {
   const connectionString = process.env.SUPABASE_DB_URL?.trim();
   if (!connectionString) {
@@ -633,13 +944,38 @@ async function executeCommit(plan: ReturnType<typeof buildSeedPlan>, reviewerId:
 async function main() {
   const args = process.argv.slice(2).filter((arg) => arg !== '--');
   assert(
-    args.every((arg) => arg === '--inventory' || arg === '--commit' || arg.startsWith('--reviewer-id=')),
-    'Use --inventory (default) or explicit --commit --reviewer-id=<auth-user-uuid>.',
+    args.every(
+      (arg) =>
+        arg === '--inventory' ||
+        arg === '--commit' ||
+        arg.startsWith('--reviewer-id=') ||
+        arg.startsWith('--emit-sql='),
+    ),
+    'Use --inventory (default), explicit --commit --reviewer-id=<auth-user-uuid>, or --emit-sql=<path> --reviewer-id=<auth-user-uuid>.',
   );
   const inventoryResult = await inventory();
   const plan = buildSeedPlan(inventoryResult);
   const commit = args.includes('--commit');
   const reviewerId = args.find((arg) => arg.startsWith('--reviewer-id='))?.slice('--reviewer-id='.length) || '';
+  const emitSqlPath = args.find((arg) => arg.startsWith('--emit-sql='))?.slice('--emit-sql='.length) || '';
+  assert(!(commit && emitSqlPath), '--commit and --emit-sql cannot be used together.');
+  if (emitSqlPath) {
+    assert(/^[0-9a-f-]{36}$/i.test(reviewerId), '--emit-sql requires a real --reviewer-id auth UUID.');
+    const resolvedPath = path.resolve(process.cwd(), emitSqlPath);
+    const workspaceRoot = `${process.cwd()}${path.sep}`;
+    assert(resolvedPath.startsWith(workspaceRoot), '--emit-sql path must stay inside the workspace.');
+    assert(resolvedPath.endsWith('.sql'), '--emit-sql path must end in .sql.');
+    fs.mkdirSync(path.dirname(resolvedPath), { recursive: true });
+    fs.writeFileSync(resolvedPath, emitSeedSql(plan, reviewerId), 'utf8');
+    console.log(
+      JSON.stringify(
+        { success: true, mode: 'emit-sql-read-only', path: resolvedPath, inventory: inventoryResult, plan },
+        null,
+        2,
+      ),
+    );
+    return;
+  }
   if (commit) {
     assert(/^[0-9a-f-]{36}$/i.test(reviewerId), '--commit requires a real --reviewer-id auth UUID.');
     const result = await executeCommit(plan, reviewerId);

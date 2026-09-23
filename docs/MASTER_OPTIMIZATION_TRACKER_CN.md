@@ -25,10 +25,11 @@ Tool Capability、Task Capability 和经 UUID 验证的 evidence association；�
 loading/success/error 状态。统一服务端读模型只返回 active/current 关系及来源 URL、核验/复查日期摘要，过滤错误 owner、候选、冲突、
 失效和过期 claim，且不把 raw claim/link/claim ID 下发给浏览器。状态为“待 DIFF-01/02 生产迁移与只读回读”，不构成 seed 或公开页面授权。
 
-2026-09-23 DIFF-03 本地计划与生产只读盘点完成：20 个范围目标中 18 个唯一目录实体，ChatGPT 与 Descript 缺失；仅 9 个对象有
+2026-09-23 DIFF-03 已完成生产只读盘点与可审查 SQL 导出：20 个范围目标中 18 个唯一目录实体，ChatGPT 与 Descript 缺失；仅 9 个对象有
 当前 verified claim，人工证据映射仅预备 Fathom、Otter.ai、Fireflies、Luma AI、Consensus、n8n 和 OpenRouter 的 reviewed
-关系。幂等 seed 默认 dry-run/no-write，显式 `--commit --reviewer-id` 还要求 Supabase 专用事务连接，并在现有 published
-关系处拒绝覆盖；无 QA PASS 和总控批准不得执行。预计提交为 6 Task（复用已有 `meeting-notes`）、12 Capability、12 Task
+关系。默认 seed 仍是 dry-run/no-write；固定 SQL 位于 `db/supabase/manual/20260923_seed_decision_graph_first_batch.sql`，含 reviewer、
+DIFF-01 表、current verified/same-owner claim 和 published 覆盖拒绝断言，并以单一事务执行。当前状态为“待用户执行 SQL”：不得由本地
+脚本、自动化或未经 QA PASS/总控批准的流程执行。预计提交为 6 Task（复用已有 `meeting-notes`）、12 Capability、12 Task
 Capability、最多 7 Tool Capability + 7 Tool Task Fit 及各 7 claim link，所有新关系均保持 reviewed；不写工具、URL、sitemap、
 index 或公开页面。
 
