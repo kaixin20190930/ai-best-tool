@@ -33,6 +33,12 @@ DIFF-01 表、current verified/same-owner claim 和 published 覆盖拒绝断言
 Capability、最多 7 Tool Capability + 7 Tool Task Fit 及各 7 claim link，所有新关系均保持 reviewed；不写工具、URL、sitemap、
 index 或公开页面。
 
+2026-09-23 DIFF-03 首次用户执行固定 SQL 已被事务守卫安全回滚：`meeting-notes` 既有的 Fathom、Otter.ai 与 Fireflies 三条
+Tool Task Fit 均为 `published`，且 task/fit level 与本批映射一致；本次失败没有新增 Task、Capability、Task Capability 或
+Tool Capability。修订后的同一路径 SQL 会锁定并保留这些兼容的 published 关系，既不降级其 status、rationale、reviewer，也不
+新增/修改其 claim link；若 Task Capability importance、Tool Capability support level 或 Tool Task Fit level 不一致，仍整体失败。
+状态仍为“待用户执行 SQL”，仅可由批准后的用户流程重试。
+
 2026-09-20 规模化口径更新：生产基线为 63 条工具记录、50 条已公开、13 条获准索引；技术和 SEO 护栏稳定，当前增长瓶颈转为高
 质量工具库存和差异化覆盖。后续每天发现 10-20 个、深审 4-6 个，目标公开 2 个且上限 3 个；索引仍逐页审批，每天最多 1 个、
 目标每周 4 个且硬上限 5 个。完整阶段目标、维护频率和暂停门禁见

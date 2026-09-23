@@ -69,16 +69,16 @@ async function main() {
   const fits = fitsResult.data || [];
   assert.equal(taskCapabilities.length, 12, 'The seed must create exactly the 12 planned Task Capability relations.');
   assert.ok(
-    taskCapabilities.every((relation) => relation.status === 'reviewed'),
-    'Task Capability seed must not publish records.',
+    taskCapabilities.every((relation) => relation.status === 'reviewed' || relation.status === 'published'),
+    'Task Capability seed must resolve to reviewed records or compatible pre-existing published records.',
   );
   assert.ok(
-    toolCapabilities.every((relation) => relation.status === 'reviewed'),
-    'Tool Capability seed must not publish records.',
+    toolCapabilities.every((relation) => relation.status === 'reviewed' || relation.status === 'published'),
+    'Tool Capability seed must resolve to reviewed records or compatible pre-existing published records.',
   );
   assert.ok(
-    fits.every((relation) => relation.status === 'reviewed'),
-    'Tool Task Fit seed must not publish records.',
+    fits.every((relation) => relation.status === 'reviewed' || relation.status === 'published'),
+    'Tool Task Fit seed must resolve to reviewed records or compatible pre-existing published records.',
   );
   assert.ok(
     toolCapabilities.length <= 7 && fits.length <= 7,
@@ -94,6 +94,9 @@ async function main() {
         taskCapabilities: taskCapabilities.length,
         toolCapabilities: toolCapabilities.length,
         toolTaskFits: fits.length,
+        preservedPublishedRelations: [...taskCapabilities, ...toolCapabilities, ...fits].filter(
+          (relation) => relation.status === 'published',
+        ).length,
         publicRelationsCreated: 0,
       },
       null,

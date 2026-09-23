@@ -156,8 +156,16 @@ BEGIN
     ON seed.task_slug = task.slug AND seed.capability_slug = capability.slug
   WHERE task_capability.status = 'published'
   FOR UPDATE OF task_capability;
+  PERFORM 1
+  FROM public.task_capabilities task_capability
+  JOIN public.decision_tasks task ON task.id = task_capability.task_id
+  JOIN public.decision_capabilities capability ON capability.id = task_capability.capability_id
+  JOIN decision_graph_seed_task_capabilities seed
+    ON seed.task_slug = task.slug AND seed.capability_slug = capability.slug
+  WHERE task_capability.status = 'published'
+    AND task_capability.importance <> seed.importance;
   IF FOUND THEN
-    RAISE EXCEPTION 'Published Task Capability requires a manual editorial change.';
+    RAISE EXCEPTION 'Published Task Capability conflicts with the planned importance and requires a manual editorial change.';
   END IF;
 
   PERFORM 1
@@ -167,8 +175,23 @@ BEGIN
     ON seed.tool_id = tool_capability.tool_id AND seed.capability_slug = capability.slug
   WHERE tool_capability.status = 'published'
   FOR UPDATE OF tool_capability;
+  PERFORM 1
+  FROM public.tool_capabilities tool_capability
+  JOIN public.decision_capabilities capability ON capability.id = tool_capability.capability_id
+  JOIN decision_graph_seed_relations seed
+    ON seed.tool_id = tool_capability.tool_id AND seed.capability_slug = capability.slug
+  WHERE tool_capability.status = 'published'
+    AND (
+      tool_capability.support_level NOT IN ('strong', 'partial')
+      OR NOT EXISTS (
+        SELECT 1
+        FROM public.tool_capability_claims claim_link
+        WHERE claim_link.tool_capability_id = tool_capability.id
+          AND claim_link.claim_id = seed.claim_id
+      )
+    );
   IF FOUND THEN
-    RAISE EXCEPTION 'Published Tool Capability requires a manual editorial change.';
+    RAISE EXCEPTION 'Published Tool Capability conflicts with the planned supported capability or mapped evidence and requires a manual editorial change.';
   END IF;
 
   PERFORM 1
@@ -178,8 +201,23 @@ BEGIN
     ON seed.tool_id = fit.tool_id AND seed.task_slug = task.slug
   WHERE fit.status = 'published'
   FOR UPDATE OF fit;
+  PERFORM 1
+  FROM public.tool_task_fits fit
+  JOIN public.decision_tasks task ON task.id = fit.task_id
+  JOIN decision_graph_seed_relations seed
+    ON seed.tool_id = fit.tool_id AND seed.task_slug = task.slug
+  WHERE fit.status = 'published'
+    AND (
+      fit.fit_level <> seed.fit_level
+      OR NOT EXISTS (
+        SELECT 1
+        FROM public.tool_task_fit_claims claim_link
+        WHERE claim_link.fit_id = fit.id
+          AND claim_link.claim_id = seed.claim_id
+      )
+    );
   IF FOUND THEN
-    RAISE EXCEPTION 'Published Tool Task Fit requires a manual editorial change.';
+    RAISE EXCEPTION 'Published Tool Task Fit conflicts with the planned fit level or mapped evidence and requires a manual editorial change.';
   END IF;
 END
 $$;
@@ -225,6 +263,7 @@ FROM decision_graph_seed_relations seed
 JOIN public.decision_capabilities capability ON capability.slug = seed.capability_slug
 JOIN public.tool_capabilities tool_capability
   ON tool_capability.tool_id = seed.tool_id AND tool_capability.capability_id = capability.id
+  AND tool_capability.status <> 'published'
 ON CONFLICT DO NOTHING;
 
 INSERT INTO public.tool_task_fits (
@@ -259,24 +298,24 @@ BEGIN
       JOIN public.decision_capabilities capability ON capability.id = task_capability.capability_id
       JOIN decision_graph_seed_task_capabilities seed
         ON seed.task_slug = task.slug AND seed.capability_slug = capability.slug
-      WHERE task_capability.status = 'reviewed') <> (SELECT count(*) FROM decision_graph_seed_task_capabilities) THEN
-    RAISE EXCEPTION 'Seed Task Capability resolution was not completely reviewed.';
+      WHERE task_capability.status IN ('reviewed', 'published')) <> (SELECT count(*) FROM decision_graph_seed_task_capabilities) THEN
+    RAISE EXCEPTION 'Seed Task Capability resolution was not completely reviewed or compatibly preserved as published.';
   END IF;
 
   IF (SELECT count(*) FROM public.tool_capabilities tool_capability
       JOIN public.decision_capabilities capability ON capability.id = tool_capability.capability_id
       JOIN decision_graph_seed_relations seed
         ON seed.tool_id = tool_capability.tool_id AND seed.capability_slug = capability.slug
-      WHERE tool_capability.status = 'reviewed') <> (SELECT count(*) FROM decision_graph_seed_relations) THEN
-    RAISE EXCEPTION 'Seed Tool Capability resolution was not completely reviewed.';
+      WHERE tool_capability.status IN ('reviewed', 'published')) <> (SELECT count(*) FROM decision_graph_seed_relations) THEN
+    RAISE EXCEPTION 'Seed Tool Capability resolution was not completely reviewed or compatibly preserved as published.';
   END IF;
 
   IF (SELECT count(*) FROM public.tool_task_fits fit
       JOIN public.decision_tasks task ON task.id = fit.task_id
       JOIN decision_graph_seed_relations seed
         ON seed.tool_id = fit.tool_id AND seed.task_slug = task.slug
-      WHERE fit.status = 'reviewed') <> (SELECT count(*) FROM decision_graph_seed_relations) THEN
-    RAISE EXCEPTION 'Seed Tool Task Fit resolution was not completely reviewed.';
+      WHERE fit.status IN ('reviewed', 'published')) <> (SELECT count(*) FROM decision_graph_seed_relations) THEN
+    RAISE EXCEPTION 'Seed Tool Task Fit resolution was not completely reviewed or compatibly preserved as published.';
   END IF;
 END
 $$;
@@ -285,7 +324,7 @@ INSERT INTO public.tool_task_fit_claims (fit_id, claim_id, purpose)
 SELECT fit.id, seed.claim_id, 'fit'
 FROM decision_graph_seed_relations seed
 JOIN public.decision_tasks task ON task.slug = seed.task_slug
-JOIN public.tool_task_fits fit ON fit.tool_id = seed.tool_id AND fit.task_id = task.id
+JOIN public.tool_task_fits fit ON fit.tool_id = seed.tool_id AND fit.task_id = task.id AND fit.status <> 'published'
 ON CONFLICT DO NOTHING;
 
 COMMIT;

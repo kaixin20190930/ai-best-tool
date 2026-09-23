@@ -23,16 +23,21 @@ assert.match(seed, /await client\.query\('ROLLBACK'\)/);
 assert.match(seed, /FOR UPDATE/);
 assert.match(
   seed,
-  /SELECT task_id, status FROM task_capabilities WHERE task_id = \$1 AND capability_id = \$2 FOR UPDATE/,
+  /SELECT task_id, status, importance FROM task_capabilities WHERE task_id = \$1 AND capability_id = \$2 FOR UPDATE/,
 );
-assert.match(seed, /Published Task Capability .* requires a manual editorial change/);
-assert.match(seed, /Published Tool Capability .* requires a manual editorial change/);
-assert.match(seed, /Published Tool Task Fit .* requires a manual editorial change/);
+assert.match(seed, /Published Task Capability .* conflicts with the planned importance/);
+assert.match(seed, /Published Tool Capability .* conflicts with the planned supported capability or mapped evidence/);
+assert.match(seed, /Published Tool Task Fit .* conflicts with the planned fit level or mapped evidence/);
+assert.match(seed, /fit_level <> seed\.fit_level/);
+assert.match(seed, /support_level NOT IN \('strong', 'partial'\)/);
+assert.match(seed, /claim_link\.claim_id = seed\.claim_id/);
 assert.match(seed, /eligibleRelations/);
 assert.match(seed, /evidenceGaps/);
 assert.doesNotMatch(seed, /sitemap|page_quality_status\s*=|INSERT INTO tools|UPDATE tools/i);
 assert.match(verifier, /All six DIFF-03 Tasks must exist exactly once/);
 assert.match(verifier, /Sparse evidence plan must not manufacture bulk relations/);
+assert.match(verifier, /compatible pre-existing published records/);
+assert.match(verifier, /preservedPublishedRelations/);
 assert.match(verifier, /publicRelationsCreated: 0/);
 
 console.log(

@@ -651,8 +651,16 @@ BEGIN
     ON seed.task_slug = task.slug AND seed.capability_slug = capability.slug
   WHERE task_capability.status = 'published'
   FOR UPDATE OF task_capability;
+  PERFORM 1
+  FROM public.task_capabilities task_capability
+  JOIN public.decision_tasks task ON task.id = task_capability.task_id
+  JOIN public.decision_capabilities capability ON capability.id = task_capability.capability_id
+  JOIN decision_graph_seed_task_capabilities seed
+    ON seed.task_slug = task.slug AND seed.capability_slug = capability.slug
+  WHERE task_capability.status = 'published'
+    AND task_capability.importance <> seed.importance;
   IF FOUND THEN
-    RAISE EXCEPTION 'Published Task Capability requires a manual editorial change.';
+    RAISE EXCEPTION 'Published Task Capability conflicts with the planned importance and requires a manual editorial change.';
   END IF;
 
   PERFORM 1
@@ -662,8 +670,23 @@ BEGIN
     ON seed.tool_id = tool_capability.tool_id AND seed.capability_slug = capability.slug
   WHERE tool_capability.status = 'published'
   FOR UPDATE OF tool_capability;
+  PERFORM 1
+  FROM public.tool_capabilities tool_capability
+  JOIN public.decision_capabilities capability ON capability.id = tool_capability.capability_id
+  JOIN decision_graph_seed_relations seed
+    ON seed.tool_id = tool_capability.tool_id AND seed.capability_slug = capability.slug
+  WHERE tool_capability.status = 'published'
+    AND (
+      tool_capability.support_level NOT IN ('strong', 'partial')
+      OR NOT EXISTS (
+        SELECT 1
+        FROM public.tool_capability_claims claim_link
+        WHERE claim_link.tool_capability_id = tool_capability.id
+          AND claim_link.claim_id = seed.claim_id
+      )
+    );
   IF FOUND THEN
-    RAISE EXCEPTION 'Published Tool Capability requires a manual editorial change.';
+    RAISE EXCEPTION 'Published Tool Capability conflicts with the planned supported capability or mapped evidence and requires a manual editorial change.';
   END IF;
 
   PERFORM 1
@@ -673,8 +696,23 @@ BEGIN
     ON seed.tool_id = fit.tool_id AND seed.task_slug = task.slug
   WHERE fit.status = 'published'
   FOR UPDATE OF fit;
+  PERFORM 1
+  FROM public.tool_task_fits fit
+  JOIN public.decision_tasks task ON task.id = fit.task_id
+  JOIN decision_graph_seed_relations seed
+    ON seed.tool_id = fit.tool_id AND seed.task_slug = task.slug
+  WHERE fit.status = 'published'
+    AND (
+      fit.fit_level <> seed.fit_level
+      OR NOT EXISTS (
+        SELECT 1
+        FROM public.tool_task_fit_claims claim_link
+        WHERE claim_link.fit_id = fit.id
+          AND claim_link.claim_id = seed.claim_id
+      )
+    );
   IF FOUND THEN
-    RAISE EXCEPTION 'Published Tool Task Fit requires a manual editorial change.';
+    RAISE EXCEPTION 'Published Tool Task Fit conflicts with the planned fit level or mapped evidence and requires a manual editorial change.';
   END IF;
 END
 $$;
@@ -720,6 +758,7 @@ FROM decision_graph_seed_relations seed
 JOIN public.decision_capabilities capability ON capability.slug = seed.capability_slug
 JOIN public.tool_capabilities tool_capability
   ON tool_capability.tool_id = seed.tool_id AND tool_capability.capability_id = capability.id
+  AND tool_capability.status <> 'published'
 ON CONFLICT DO NOTHING;
 
 INSERT INTO public.tool_task_fits (
@@ -754,24 +793,24 @@ BEGIN
       JOIN public.decision_capabilities capability ON capability.id = task_capability.capability_id
       JOIN decision_graph_seed_task_capabilities seed
         ON seed.task_slug = task.slug AND seed.capability_slug = capability.slug
-      WHERE task_capability.status = 'reviewed') <> (SELECT count(*) FROM decision_graph_seed_task_capabilities) THEN
-    RAISE EXCEPTION 'Seed Task Capability resolution was not completely reviewed.';
+      WHERE task_capability.status IN ('reviewed', 'published')) <> (SELECT count(*) FROM decision_graph_seed_task_capabilities) THEN
+    RAISE EXCEPTION 'Seed Task Capability resolution was not completely reviewed or compatibly preserved as published.';
   END IF;
 
   IF (SELECT count(*) FROM public.tool_capabilities tool_capability
       JOIN public.decision_capabilities capability ON capability.id = tool_capability.capability_id
       JOIN decision_graph_seed_relations seed
         ON seed.tool_id = tool_capability.tool_id AND seed.capability_slug = capability.slug
-      WHERE tool_capability.status = 'reviewed') <> (SELECT count(*) FROM decision_graph_seed_relations) THEN
-    RAISE EXCEPTION 'Seed Tool Capability resolution was not completely reviewed.';
+      WHERE tool_capability.status IN ('reviewed', 'published')) <> (SELECT count(*) FROM decision_graph_seed_relations) THEN
+    RAISE EXCEPTION 'Seed Tool Capability resolution was not completely reviewed or compatibly preserved as published.';
   END IF;
 
   IF (SELECT count(*) FROM public.tool_task_fits fit
       JOIN public.decision_tasks task ON task.id = fit.task_id
       JOIN decision_graph_seed_relations seed
         ON seed.tool_id = fit.tool_id AND seed.task_slug = task.slug
-      WHERE fit.status = 'reviewed') <> (SELECT count(*) FROM decision_graph_seed_relations) THEN
-    RAISE EXCEPTION 'Seed Tool Task Fit resolution was not completely reviewed.';
+      WHERE fit.status IN ('reviewed', 'published')) <> (SELECT count(*) FROM decision_graph_seed_relations) THEN
+    RAISE EXCEPTION 'Seed Tool Task Fit resolution was not completely reviewed or compatibly preserved as published.';
   END IF;
 END
 $$;
@@ -780,7 +819,7 @@ INSERT INTO public.tool_task_fit_claims (fit_id, claim_id, purpose)
 SELECT fit.id, seed.claim_id, 'fit'
 FROM decision_graph_seed_relations seed
 JOIN public.decision_tasks task ON task.slug = seed.task_slug
-JOIN public.tool_task_fits fit ON fit.tool_id = seed.tool_id AND fit.task_id = task.id
+JOIN public.tool_task_fits fit ON fit.tool_id = seed.tool_id AND fit.task_id = task.id AND fit.status <> 'published'
 ON CONFLICT DO NOTHING;
 
 COMMIT;
@@ -844,14 +883,17 @@ async function executeCommit(plan: ReturnType<typeof buildSeedPlan>, reviewerId:
     const reviewedAt = new Date();
     const reviewDueAt = new Date(reviewedAt.getTime() + 90 * 24 * 60 * 60 * 1000);
     for (const relation of plan.taskCapabilities) {
-      const existingTaskCapability = await client.query<{ task_id: string; status: string }>(
-        'SELECT task_id, status FROM task_capabilities WHERE task_id = $1 AND capability_id = $2 FOR UPDATE',
+      const existingTaskCapability = await client.query<{ task_id: string; status: string; importance: string }>(
+        'SELECT task_id, status, importance FROM task_capabilities WHERE task_id = $1 AND capability_id = $2 FOR UPDATE',
         [taskIds.get(relation.task), capabilityIds.get(relation.capability)],
       );
       if (existingTaskCapability.rows[0]?.status === 'published') {
-        throw new Error(
-          `Published Task Capability ${existingTaskCapability.rows[0].task_id}:${relation.capability} requires a manual editorial change.`,
-        );
+        if (existingTaskCapability.rows[0].importance !== relation.importance) {
+          throw new Error(
+            `Published Task Capability ${existingTaskCapability.rows[0].task_id}:${relation.capability} conflicts with the planned importance and requires a manual editorial change.`,
+          );
+        }
+        continue;
       }
       await client.query(
         `INSERT INTO task_capabilities (task_id, capability_id, importance, rationale, status, reviewed_at, review_due_at, reviewed_by)
@@ -872,64 +914,80 @@ async function executeCommit(plan: ReturnType<typeof buildSeedPlan>, reviewerId:
     }
 
     for (const relation of plan.eligibleRelations) {
-      const existingToolCapability = await client.query<{ id: string; status: string }>(
-        'SELECT id, status FROM tool_capabilities WHERE tool_id = $1 AND capability_id = $2 FOR UPDATE',
+      const existingToolCapability = await client.query<{ id: string; status: string; support_level: string }>(
+        'SELECT id, status, support_level FROM tool_capabilities WHERE tool_id = $1 AND capability_id = $2 FOR UPDATE',
         [relation.toolId, capabilityIds.get(relation.capability)],
       );
       if (existingToolCapability.rows[0]?.status === 'published') {
-        throw new Error(
-          `Published Tool Capability ${existingToolCapability.rows[0].id} requires a manual editorial change.`,
+        const existingClaimLink = await client.query(
+          'SELECT 1 FROM tool_capability_claims WHERE tool_capability_id = $1 AND claim_id = $2',
+          [existingToolCapability.rows[0].id, relation.claimId],
+        );
+        if (!['strong', 'partial'].includes(existingToolCapability.rows[0].support_level) || existingClaimLink.rowCount !== 1) {
+          throw new Error(
+            `Published Tool Capability ${existingToolCapability.rows[0].id} conflicts with the planned supported capability or mapped evidence and requires a manual editorial change.`,
+          );
+        }
+      } else {
+        const toolCapabilityResult = await client.query<{ id: string }>(
+          `INSERT INTO tool_capabilities (tool_id, capability_id, support_level, availability, plan_requirement, limitations, status, reviewed_at, review_due_at, reviewed_by)
+           VALUES ($1, $2, 'partial', 'unknown', '{}'::jsonb, '[]'::jsonb, 'reviewed', $3, $4, $5)
+           ON CONFLICT (tool_id, capability_id) DO UPDATE SET
+             support_level = EXCLUDED.support_level, availability = EXCLUDED.availability, plan_requirement = EXCLUDED.plan_requirement,
+             limitations = EXCLUDED.limitations, status = 'reviewed', reviewed_at = EXCLUDED.reviewed_at,
+             review_due_at = EXCLUDED.review_due_at, reviewed_by = EXCLUDED.reviewed_by
+           RETURNING id`,
+          [relation.toolId, capabilityIds.get(relation.capability), reviewedAt, reviewDueAt, reviewerId],
+        );
+        const toolCapabilityId = toolCapabilityResult.rows[0].id;
+        await client.query(
+          `INSERT INTO tool_capability_claims (tool_capability_id, claim_id, purpose)
+           VALUES ($1, $2, 'support') ON CONFLICT DO NOTHING`,
+          [toolCapabilityId, relation.claimId],
         );
       }
-      const toolCapabilityResult = await client.query<{ id: string }>(
-        `INSERT INTO tool_capabilities (tool_id, capability_id, support_level, availability, plan_requirement, limitations, status, reviewed_at, review_due_at, reviewed_by)
-         VALUES ($1, $2, 'partial', 'unknown', '{}'::jsonb, '[]'::jsonb, 'reviewed', $3, $4, $5)
-         ON CONFLICT (tool_id, capability_id) DO UPDATE SET
-           support_level = EXCLUDED.support_level, availability = EXCLUDED.availability, plan_requirement = EXCLUDED.plan_requirement,
-           limitations = EXCLUDED.limitations, status = 'reviewed', reviewed_at = EXCLUDED.reviewed_at,
-           review_due_at = EXCLUDED.review_due_at, reviewed_by = EXCLUDED.reviewed_by
-         RETURNING id`,
-        [relation.toolId, capabilityIds.get(relation.capability), reviewedAt, reviewDueAt, reviewerId],
-      );
-      const toolCapabilityId = toolCapabilityResult.rows[0].id;
-      await client.query(
-        `INSERT INTO tool_capability_claims (tool_capability_id, claim_id, purpose)
-         VALUES ($1, $2, 'support') ON CONFLICT DO NOTHING`,
-        [toolCapabilityId, relation.claimId],
-      );
 
-      const existingFit = await client.query<{ id: string; status: string }>(
-        'SELECT id, status FROM tool_task_fits WHERE tool_id = $1 AND task_id = $2 FOR UPDATE',
+      const existingFit = await client.query<{ id: string; status: string; fit_level: string }>(
+        'SELECT id, status, fit_level FROM tool_task_fits WHERE tool_id = $1 AND task_id = $2 FOR UPDATE',
         [relation.toolId, taskIds.get(relation.task)],
       );
       if (existingFit.rows[0]?.status === 'published') {
-        throw new Error(`Published Tool Task Fit ${existingFit.rows[0].id} requires a manual editorial change.`);
+        const existingClaimLink = await client.query(
+          'SELECT 1 FROM tool_task_fit_claims WHERE fit_id = $1 AND claim_id = $2',
+          [existingFit.rows[0].id, relation.claimId],
+        );
+        if (existingFit.rows[0].fit_level !== relation.fit || existingClaimLink.rowCount !== 1) {
+          throw new Error(
+            `Published Tool Task Fit ${existingFit.rows[0].id} conflicts with the planned fit level or mapped evidence and requires a manual editorial change.`,
+          );
+        }
+      } else {
+        const fitResult = await client.query<{ id: string }>(
+          `INSERT INTO tool_task_fits (tool_id, task_id, fit_level, rationale, required_conditions, disqualifiers, status, reviewed_at, review_due_at, reviewed_by)
+           VALUES ($1, $2, $3, $4::jsonb, '[]'::jsonb, '[]'::jsonb, 'reviewed', $5, $6, $7)
+           ON CONFLICT (tool_id, task_id) DO UPDATE SET
+             fit_level = EXCLUDED.fit_level, rationale = EXCLUDED.rationale, status = 'reviewed', reviewed_at = EXCLUDED.reviewed_at,
+             review_due_at = EXCLUDED.review_due_at, reviewed_by = EXCLUDED.reviewed_by
+           RETURNING id`,
+          [
+            relation.toolId,
+            taskIds.get(relation.task),
+            relation.fit,
+            JSON.stringify({
+              en: 'Editorially mapped from the linked verified claim; review limitations before publication.',
+              cn: '由关联的已核验 claim 经编辑映射；发布前须审核限制。',
+            }),
+            reviewedAt,
+            reviewDueAt,
+            reviewerId,
+          ],
+        );
+        await client.query(
+          `INSERT INTO tool_task_fit_claims (fit_id, claim_id, purpose)
+           VALUES ($1, $2, 'fit') ON CONFLICT DO NOTHING`,
+          [fitResult.rows[0].id, relation.claimId],
+        );
       }
-      const fitResult = await client.query<{ id: string }>(
-        `INSERT INTO tool_task_fits (tool_id, task_id, fit_level, rationale, required_conditions, disqualifiers, status, reviewed_at, review_due_at, reviewed_by)
-         VALUES ($1, $2, $3, $4::jsonb, '[]'::jsonb, '[]'::jsonb, 'reviewed', $5, $6, $7)
-         ON CONFLICT (tool_id, task_id) DO UPDATE SET
-           fit_level = EXCLUDED.fit_level, rationale = EXCLUDED.rationale, status = 'reviewed', reviewed_at = EXCLUDED.reviewed_at,
-           review_due_at = EXCLUDED.review_due_at, reviewed_by = EXCLUDED.reviewed_by
-         RETURNING id`,
-        [
-          relation.toolId,
-          taskIds.get(relation.task),
-          relation.fit,
-          JSON.stringify({
-            en: 'Editorially mapped from the linked verified claim; review limitations before publication.',
-            cn: '由关联的已核验 claim 经编辑映射；发布前须审核限制。',
-          }),
-          reviewedAt,
-          reviewDueAt,
-          reviewerId,
-        ],
-      );
-      await client.query(
-        `INSERT INTO tool_task_fit_claims (fit_id, claim_id, purpose)
-         VALUES ($1, $2, 'fit') ON CONFLICT DO NOTHING`,
-        [fitResult.rows[0].id, relation.claimId],
-      );
     }
     await client.query('COMMIT');
     return { committed: true };

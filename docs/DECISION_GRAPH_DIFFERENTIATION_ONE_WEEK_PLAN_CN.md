@@ -192,6 +192,8 @@ INTAKE 与上述排期并行：09-23 Descript 到期发布槽继续执行；其�
     `db/supabase/manual/20260923_seed_decision_graph_first_batch.sql`，执行前会复核 reviewer、DIFF-01 表、claim 的当前 verified/
     same-owner 状态，并拒绝覆盖任何 published 关系。当前为“待用户执行 SQL”，其余对象保持缺口，不以 20×6 补齐数量；本批不创建
     published 关系、URL 或索引副作用。
+    首次用户执行因三个既有 published meeting fit 触发守卫并整体回滚；修订版只会保留 task/fit level 一致的既有 published 关系，
+    不改其 rationale、reviewer 或 claim links，语义不一致仍失败。状态保持“待用户执行 SQL”。
 
 ## 11. 完成定义
 
