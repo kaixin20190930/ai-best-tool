@@ -1,6 +1,6 @@
 # 收录与搜索质量主计划
 
-更新时间：2026-09-22
+更新时间：2026-09-23
 
 执行状态：进行中；索引保护及本周可证实历史补账完成，本周至少 12 次放行、剩余额度 0，新增索引批准保持暂停。
 
@@ -33,6 +33,8 @@ Otter.ai、Fireflies 的 3 条既有 published meeting fit 保持原 status、�
 写入、claim links、postcondition 和临时表清理合并为单条原子 `DO` 语句；修复提交 `1ae1b431` 与完整导出晚期失败回滚测试提交
 `55308042` 已进入 main。生产完整回读和 QA 已确认数据正确，无需再次执行 SQL。DIFF-03 状态为“已完成”，下一项为 DIFF-04 Task Page。
 本阶段未改工具目录记录、URL、sitemap 或索引策略。
+
+2026-09-23 DIFF-04 本地实现完成、待独立 QA 与生产门禁：新增 `/<locale>/tasks/<slug>` 独立 Task Page，限首批 6 Task，要求 active Task、完整的当前 published required/preferred Task Capability、至少 3 个不同的已发布 Neon 工具及其当前 published、同 owner claim-backed fit；不满足或读取失败一律 404。页面提供任务定义、约束、能力、3 个候选的适配/限制、证据来源与日期，以及已有 Finder/工具详情入口，不向浏览器输出 raw claim。页面始终 `noindex, follow`，沿用 canonical 规则，未加入 sitemap。当前生产 12 条 Task Capability 均为 reviewed，尚不满足页面门禁，故目前没有可公开 Task Page；本地交付不授权发布这些关系或放开索引，仍需 QA 与生产只读验证。
 
 2026-09-20 规模化口径更新：生产基线为 63 条工具记录、50 条已公开、13 条获准索引；技术和 SEO 护栏稳定，当前增长瓶颈转为高
 质量工具库存和差异化覆盖。后续每天发现 10-20 个、深审 4-6 个，目标公开 2 个且上限 3 个；索引仍逐页审批，每天最多 1 个、

@@ -121,7 +121,7 @@ Graph、n8n、OpenRouter、Grammarly、Jasper、ElevenLabs、Midjourney、Otter.
 | 09-22      | DIFF-01 | Capability、Tool Capability、Task Capability 与 claim links | RLS、跨库边界、证据和发布门禁测试通过；待生产迁移与只读回读             | 本地完成 |
 | 09-23      | DIFF-02 | 后台编辑与统一服务读模型                                    | 不允许客户端读/写 raw claim；保存有 loading/success/error；待生产迁移回读 | 本地完成 |
 | 09-24      | DIFF-03 | 6 Task + 20 工具首批真实关系数据                            | 生产完整回读、published 保留、SQL Editor 原子执行修复与 QA 验收通过    | 已完成   |
-| 09-25      | DIFF-04 | 独立 Task Page                                              | 至少 3 个 published fit 才可公开；默认 noindex；无薄页扩张             | 未开始   |
+| 09-25      | DIFF-04 | 独立 Task Page                                              | 至少 3 个 published fit 才可公开；默认 noindex；无薄页扩张             | 本地完成；待生产门禁 |
 | 09-26      | DIFF-05 | 统一 Tool Intelligence                                      | Best for、Not ideal、Capability、Pricing、Evidence、Last verified 同源 | 未开始   |
 | 09-27      | DIFF-06 | Structured Comparison                                       | 同图谱比较 2-4 个工具；unknown 明示；默认 noindex                      | 未开始   |
 | 09-28      | DIFF-07 | 全链路自动验收与生产收口                                    | migration、tsc、build、SEO、页面、RLS、证据门禁全部通过                | 未开始   |
@@ -133,6 +133,7 @@ INTAKE 与上述排期并行：09-23 Descript 到期发布槽继续执行；其�
 ## 7. 页面与 SEO 边界
 
 - Task Page 是用户决策入口，不是自动生成关键词页面。
+- DIFF-04 本地实现仅覆盖首批 6 Task slug；读取 active Task、完整且当前 published 的 required/preferred Task Capability、至少 3 个不同的已发布 Neon 工具及其当前 published Tool Task Fit，并实时验证 fit claim 的同 owner、verified、无冲突、未失效及来源 URL。任一门禁不足直接 404。仅输出精简来源 URL 与核验/复查日期，不输出 raw claim。当前生产 Task Capability 仍为 reviewed，故生产不会出现公开 Task Page；发布能力关系需另经人工审核和生产门禁，不由本开发任务改写。
 - 首版 Task Page 只覆盖本计划 6 个 Task；每页至少 3 个已发布 Tool Fit、required/preferred Capability、明确限制、证据日期
   和可比较候选。
 - 新 Task Page 默认 `noindex, follow` 且不进入 sitemap。只有内容完整、意图独立、内部链接合理、站点级 GSC 健康和独立索引
