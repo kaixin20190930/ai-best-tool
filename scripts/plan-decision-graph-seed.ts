@@ -533,6 +533,15 @@ async function executeCommit(plan: ReturnType<typeof buildSeedPlan>, reviewerId:
     const reviewedAt = new Date();
     const reviewDueAt = new Date(reviewedAt.getTime() + 90 * 24 * 60 * 60 * 1000);
     for (const relation of plan.taskCapabilities) {
+      const existingTaskCapability = await client.query<{ task_id: string; status: string }>(
+        'SELECT task_id, status FROM task_capabilities WHERE task_id = $1 AND capability_id = $2 FOR UPDATE',
+        [taskIds.get(relation.task), capabilityIds.get(relation.capability)],
+      );
+      if (existingTaskCapability.rows[0]?.status === 'published') {
+        throw new Error(
+          `Published Task Capability ${existingTaskCapability.rows[0].task_id}:${relation.capability} requires a manual editorial change.`,
+        );
+      }
       await client.query(
         `INSERT INTO task_capabilities (task_id, capability_id, importance, rationale, status, reviewed_at, review_due_at, reviewed_by)
          VALUES ($1, $2, $3, $4::jsonb, 'reviewed', $5, $6, $7)

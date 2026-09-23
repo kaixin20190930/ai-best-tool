@@ -18,6 +18,11 @@ assert.match(seed, /await client\.query\('BEGIN'\)/);
 assert.match(seed, /await client\.query\('COMMIT'\)/);
 assert.match(seed, /await client\.query\('ROLLBACK'\)/);
 assert.match(seed, /FOR UPDATE/);
+assert.match(
+  seed,
+  /SELECT task_id, status FROM task_capabilities WHERE task_id = \$1 AND capability_id = \$2 FOR UPDATE/,
+);
+assert.match(seed, /Published Task Capability .* requires a manual editorial change/);
 assert.match(seed, /Published Tool Capability .* requires a manual editorial change/);
 assert.match(seed, /Published Tool Task Fit .* requires a manual editorial change/);
 assert.match(seed, /eligibleRelations/);
