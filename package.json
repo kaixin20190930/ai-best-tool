@@ -112,7 +112,6 @@
     "verify:decision-capability-foundation": "tsx scripts/verify-decision-capability-foundation.ts",
     "test:decision-capability-read-model": "tsx scripts/test-decision-capability-read-model.ts",
     "test:decision-task-page": "tsx scripts/test-decision-task-page.ts",
-    "test:decision-task-page-http": "tsx scripts/test-decision-task-page-http.ts",
     "test:decision-capability-admin": "tsx scripts/test-decision-capability-admin.ts",
     "plan:decision-graph-seed": "tsx scripts/plan-decision-graph-seed.ts --inventory",
     "verify:decision-graph-seed": "tsx scripts/verify-decision-graph-seed.ts",

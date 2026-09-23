@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
+import { APPROVED_TASK_PAGE_SLUGS, getTaskPageRouteDecision } from '@/lib/seo/taskPageApproval';
 import { deriveTaskPageReadModel } from '@/lib/services/decision/taskPageReadModel';
 
 /* eslint-disable no-param-reassign -- Gate fixtures are deliberately mutated one field at a time. */
@@ -145,14 +146,20 @@ assert.match(
 );
 assert.doesNotMatch(metadataSource, /Task unavailable|任务页不可用/);
 const middleware = readFileSync(resolve('middleware.ts'), 'utf8');
-const eligibilityRoute = readFileSync(resolve('app/api/task-page-eligibility/[slug]/route.ts'), 'utf8');
-assert.match(
-  middleware,
-  /taskPageMatch[\s\S]*api\/task-page-eligibility[\s\S]*status: 404/,
-  'middleware must preflight task eligibility before the locale loading boundary streams',
-);
-assert.match(middleware, /'\/tasks\/:slug'/, 'file-like unknown Task slugs must still reach the preflight');
-assert.match(eligibilityRoute, /status: eligible \? 204 : 404/);
+assert.deepEqual(APPROVED_TASK_PAGE_SLUGS, [], 'no Task Page has editorial release approval yet');
+assert.equal(getTaskPageRouteDecision('/tasks/meeting-notes'), 'closed', 'default English Task path is closed');
+assert.equal(getTaskPageRouteDecision('/en/tasks/meeting-notes'), 'closed');
+assert.equal(getTaskPageRouteDecision('/cn/tasks/meeting-notes'), 'closed');
+assert.equal(getTaskPageRouteDecision('/tasks/not-real'), 'closed');
+assert.equal(getTaskPageRouteDecision('/tasks/not-real/child'), 'closed');
+assert.equal(getTaskPageRouteDecision('/cn/tasks/not-real.html'), 'closed');
+assert.equal(getTaskPageRouteDecision('/find-tools'), 'other', 'other routes retain existing middleware behavior');
+const futureApproval = ['meeting-notes'];
+assert.equal(getTaskPageRouteDecision('/tasks/meeting-notes', futureApproval), 'approved');
+assert.equal(getTaskPageRouteDecision('/cn/tasks/meeting-notes', futureApproval), 'approved');
+assert.match(middleware, /getTaskPageRouteDecision\(pathname\) === 'closed'[\s\S]*status: 404/);
+assert.match(middleware, /'X-Robots-Tag': 'noindex, follow'/);
+assert.doesNotMatch(middleware, /fetch\(/, 'Task middleware must not make a network request');
 assert.match(route, /indexable: false/);
 assert.match(route, /buildLocalizedPageMetadata/);
 assert.match(route, /SeoBreadcrumbs/);

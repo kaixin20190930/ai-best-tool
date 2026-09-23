@@ -34,7 +34,9 @@ Otter.ai、Fireflies 的 3 条既有 published meeting fit 保持原 status、�
 `55308042` 已进入 main。生产完整回读和 QA 已确认数据正确，无需再次执行 SQL。DIFF-03 状态为“已完成”，下一项为 DIFF-04 Task Page。
 本阶段未改工具目录记录、URL、sitemap 或索引策略。
 
-2026-09-23 DIFF-04 本地实现完成、待独立 QA 与生产门禁：新增 `/<locale>/tasks/<slug>` 独立 Task Page，限首批 6 Task，要求 active Task、完整的当前 published required/preferred Task Capability、至少 3 个不同的已发布 Neon 工具及其当前 published、同 owner claim-backed fit；不满足或读取失败一律 404。页面提供任务定义、约束、能力、3 个候选的适配/限制、证据来源与日期，以及已有 Finder/工具详情入口，不向浏览器输出 raw claim。页面始终 `noindex, follow`，沿用 canonical 规则，未加入 sitemap。当前生产 12 条 Task Capability 均为 reviewed，尚不满足页面门禁，故目前没有可公开 Task Page；本地交付不授权发布这些关系或放开索引，仍需 QA 与生产只读验证。
+2026-09-23 DIFF-04 代码完成，发布注册表为空，待首个 Task 编辑批准：新增 `/<locale>/tasks/<slug>` 独立 Task Page，限首批 6 Task。静态注册表先拦截未批准 slug 并返回硬 404；获批准的页面仍由服务端读模型复核 active Task、完整的当前 published required/preferred Task Capability、至少 3 个不同的已发布 Neon 工具及其当前 published、同 owner claim-backed fit。数据临时失效时页面继续 `notFound` + `noindex`。页面提供任务定义、约束、能力、3 个候选的适配/限制、证据来源与日期，以及已有 Finder/工具详情入口，不向浏览器输出 raw claim。页面始终 `noindex, follow`，沿用 canonical 规则，未加入 sitemap。注册表须随 freshness 监控或发布撤回同步移除 slug；当前注册表为空，所有 Task Page 均为硬 404。生产 12 条 Task Capability 仍为 reviewed，不构成编辑批准。
+
+差异化开发执行规则：先定义用户价值和风险，默认最小实现；dormant/noindex 功能不新增网络服务。默认验证为专项测试、`tsc`、完整 build 与一次生产模式 smoke；单项超过 60 分钟或连续两次 QA FAIL，交总控重新选方案。仅安全、支付、数据一致性 P0 可扩大测试范围。
 
 2026-09-20 规模化口径更新：生产基线为 63 条工具记录、50 条已公开、13 条获准索引；技术和 SEO 护栏稳定，当前增长瓶颈转为高
 质量工具库存和差异化覆盖。后续每天发现 10-20 个、深审 4-6 个，目标公开 2 个且上限 3 个；索引仍逐页审批，每天最多 1 个、

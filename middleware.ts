@@ -9,6 +9,7 @@ import {
 import { BASE_URL } from './lib/env';
 import { repairRepeatedLocalePath } from './lib/navigation/localizedPaths';
 import { INDEXABLE_GUIDE_PATHS } from './lib/seo/guideIndexing';
+import { getTaskPageRouteDecision } from './lib/seo/taskPageApproval';
 import intlMiddleware from './middlewares/intlMiddleware';
 
 const localePattern = /^\/(en|cn|jp|de|es|fr|pt|ru|tw)(?=\/|$)/;
@@ -182,28 +183,10 @@ export async function middleware(request: NextRequest) {
   }
   const { locale, pathWithoutLocale } = getPathParts(pathname);
 
-  // App Router streams the parent locale loading boundary before a page-level
-  // notFound() can set the HTTP status. Preflight task eligibility through a
-  // server-only, no-store endpoint so crawlers receive an actual 404 first.
-  const isTaskPagePath = pathWithoutLocale === '/tasks' || pathWithoutLocale.startsWith('/tasks/');
-  if (isTaskPagePath && (request.method === 'GET' || request.method === 'HEAD')) {
-    const taskPageMatch = pathWithoutLocale.match(/^\/tasks\/([^/]+)\/?$/);
-    if (!taskPageMatch) {
-      return new NextResponse(null, {
-        status: 404,
-        headers: { 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex, follow' },
-      });
-    }
-    try {
-      const preflightUrl = new URL(`/api/task-page-eligibility/${encodeURIComponent(taskPageMatch[1])}`, request.url);
-      const preflight = await fetch(preflightUrl, { method: 'GET', cache: 'no-store', redirect: 'manual' });
-      if (preflight.status !== 204) {
-        return new NextResponse(null, {
-          status: 404,
-          headers: { 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex, follow' },
-        });
-      }
-    } catch {
+  // next-intl rewrites the bare /tasks path to its default English locale.
+  // Close unapproved Task paths before the locale loading boundary can stream.
+  if (request.method === 'GET' || request.method === 'HEAD') {
+    if (getTaskPageRouteDecision(pathname) === 'closed') {
       return new NextResponse(null, {
         status: 404,
         headers: { 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex, follow' },
@@ -294,16 +277,7 @@ export const config = {
     // - … if they start with `/api`, `/_next` or `/_vercel`
     // - … the ones containing a dot (e.g. `favicon.ico`)
     '/((?!api|_next|_vercel|.*\\..*).*)',
-    // Task routes also need the hard-404 preflight when their slug contains a dot.
-    '/tasks/:slug',
-    '/en/tasks/:slug',
-    '/cn/tasks/:slug',
-    '/jp/tasks/:slug',
-    '/de/tasks/:slug',
-    '/es/tasks/:slug',
-    '/fr/tasks/:slug',
-    '/pt/tasks/:slug',
-    '/ru/tasks/:slug',
-    '/tw/tasks/:slug',
+    // Include file-like Task paths while leaving other dotted paths untouched.
+    '/((?:tasks|(?:en|cn|jp|de|es|fr|pt|ru|tw)/tasks)/.*)',
   ],
 };

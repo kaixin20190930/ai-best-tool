@@ -121,7 +121,7 @@ Graph、n8n、OpenRouter、Grammarly、Jasper、ElevenLabs、Midjourney、Otter.
 | 09-22      | DIFF-01 | Capability、Tool Capability、Task Capability 与 claim links | RLS、跨库边界、证据和发布门禁测试通过；待生产迁移与只读回读             | 本地完成 |
 | 09-23      | DIFF-02 | 后台编辑与统一服务读模型                                    | 不允许客户端读/写 raw claim；保存有 loading/success/error；待生产迁移回读 | 本地完成 |
 | 09-24      | DIFF-03 | 6 Task + 20 工具首批真实关系数据                            | 生产完整回读、published 保留、SQL Editor 原子执行修复与 QA 验收通过    | 已完成   |
-| 09-25      | DIFF-04 | 独立 Task Page                                              | 至少 3 个 published fit 才可公开；默认 noindex；无薄页扩张             | 本地完成；待生产门禁 |
+| 09-25      | DIFF-04 | 独立 Task Page                                              | 至少 3 个 published fit 才可公开；默认 noindex；无薄页扩张             | 代码完成；发布注册表为空；待首个 Task 编辑批准 |
 | 09-26      | DIFF-05 | 统一 Tool Intelligence                                      | Best for、Not ideal、Capability、Pricing、Evidence、Last verified 同源 | 未开始   |
 | 09-27      | DIFF-06 | Structured Comparison                                       | 同图谱比较 2-4 个工具；unknown 明示；默认 noindex                      | 未开始   |
 | 09-28      | DIFF-07 | 全链路自动验收与生产收口                                    | migration、tsc、build、SEO、页面、RLS、证据门禁全部通过                | 未开始   |
@@ -130,14 +130,17 @@ Graph、n8n、OpenRouter、Grammarly、Jasper、ElevenLabs、Midjourney、Otter.
 INTAKE 与上述排期并行：09-23 Descript 到期发布槽继续执行；其余成熟工具按队列每日一个，不因 DIFF 暂停，也不允许为追赶数量
 绕过现有门禁。
 
+执行规则：每项先写清用户价值与风险，默认选择能满足门禁的最小实现。dormant/noindex 功能不得新增网络服务；验证以专项测试、
+`tsc`、完整 build 和一次生产模式 smoke 为默认金字塔。单项超过 60 分钟或连续两次 QA FAIL，返回总控重新选方案；仅安全、
+支付或数据一致性 P0 可扩大测试范围。
+
 ## 7. 页面与 SEO 边界
 
 - Task Page 是用户决策入口，不是自动生成关键词页面。
-- DIFF-04 本地实现仅覆盖首批 6 Task slug；读取 active Task、完整且当前 published 的 required/preferred Task Capability、至少 3 个不同的已发布 Neon 工具及其当前 published Tool Task Fit，并实时验证 fit claim 的同 owner、verified、无冲突、未失效及来源 URL。任一门禁不足直接 404。仅输出精简来源 URL 与核验/复查日期，不输出 raw claim。当前生产 Task Capability 仍为 reviewed，故生产不会出现公开 Task Page；发布能力关系需另经人工审核和生产门禁，不由本开发任务改写。
+- DIFF-04 采用双门禁：Edge-safe 静态 Task Page 发布注册表先按 slug 拦截，未批准路径直接返回 HTTP 404；已批准路径仍由服务端读模型复核 active Task、完整且当前 published 的 required/preferred Task Capability、至少 3 个不同的已发布 Neon 工具及其当前 published Tool Task Fit，并实时验证 fit claim 的同 owner、verified、无冲突、未失效及来源 URL。数据临时失效时页面继续 `notFound` + `noindex`。注册表只随编辑批准的代码变更加入 slug；freshness 监控或发布流程撤回批准时，须同步从注册表移除并发布。当前注册表为空，所以生产所有 Task Page 都是硬 404；当前生产 Task Capability 仍为 reviewed，不得据此跳过编辑批准。仅输出精简来源 URL 与核验/复查日期，不输出 raw claim。
 - 首版 Task Page 只覆盖本计划 6 个 Task；每页至少 3 个已发布 Tool Fit、required/preferred Capability、明确限制、证据日期
   和可比较候选。
-- 新 Task Page 默认 `noindex, follow` 且不进入 sitemap。只有内容完整、意图独立、内部链接合理、站点级 GSC 健康和独立索引
-  审批全部通过后才能放行。
+- DIFF-04 Task Page 固定 `noindex, follow` 且不进入 sitemap；若未来考虑索引，须另立计划和审批，不在本次放行范围。
 - Tool Intelligence 复用现有 canonical Tool Page，不新增第二套工具 URL。
 - Structured Comparison 首版是用户选择后的动态视图或受控页面，默认 noindex；禁止把工具排列组合批量写入 sitemap。
 - metadata 继续遵守既有 SEO 架构冻结规则，不因差异化改写站点主题。
