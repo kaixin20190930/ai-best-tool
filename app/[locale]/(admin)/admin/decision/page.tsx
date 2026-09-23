@@ -1,6 +1,8 @@
 import Link from 'next/link';
 
+import { getCapabilityAdminOverview } from '@/lib/services/admin/capabilities';
 import { getDecisionReviewOverview, type DecisionReviewEntity } from '@/lib/services/admin/decision';
+import CapabilityManager from '@/components/admin/CapabilityManager';
 import DecisionReviewBoard from '@/components/admin/DecisionReviewBoard';
 
 export default async function AdminDecisionPage({
@@ -8,7 +10,7 @@ export default async function AdminDecisionPage({
 }: {
   searchParams: { entity?: string; status?: string };
 }) {
-  const overview = await getDecisionReviewOverview();
+  const [overview, capabilityOverview] = await Promise.all([getDecisionReviewOverview(), getCapabilityAdminOverview()]);
   const entity = searchParams.entity || 'all';
   const status = searchParams.status || 'all';
   const items = overview.items.filter(
@@ -62,6 +64,18 @@ export default async function AdminDecisionPage({
       </div>
 
       <DecisionReviewBoard items={items} />
+
+      <section className='border-t border-slate-200 pt-8'>
+        <div className='mb-5'>
+          <p className='text-xs font-bold uppercase tracking-[0.18em] text-cyan-700'>Decision graph</p>
+          <h2 className='mt-2 text-2xl font-bold text-slate-950'>Capability management</h2>
+          <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>
+            Maintain the Capability taxonomy and draft/reviewed Tool and Task relationships. Raw evidence remains
+            server-side; the database is the final publication gate.
+          </p>
+        </div>
+        <CapabilityManager overview={capabilityOverview} />
+      </section>
     </div>
   );
 }

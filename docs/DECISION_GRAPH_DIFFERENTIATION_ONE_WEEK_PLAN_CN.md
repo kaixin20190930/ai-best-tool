@@ -119,7 +119,7 @@ Graph、n8n、OpenRouter、Grammarly、Jasper、ElevenLabs、Midjourney、Otter.
 | ---------- | ------- | ----------------------------------------------------------- | ---------------------------------------------------------------------- | -------- |
 | 09-22      | DIFF-00 | 战略、范围、双线产能和门禁写入唯一计划                      | 与现有 DCF/EVD 不重复，风险 review 完成                                | 已完成   |
 | 09-22      | DIFF-01 | Capability、Tool Capability、Task Capability 与 claim links | RLS、跨库边界、证据和发布门禁测试通过；待生产迁移与只读回读             | 本地完成 |
-| 09-23      | DIFF-02 | 后台编辑与统一服务读模型                                    | 不允许客户端写 raw claim link；保存有 loading/success/error            | 未开始   |
+| 09-23      | DIFF-02 | 后台编辑与统一服务读模型                                    | 不允许客户端读/写 raw claim；保存有 loading/success/error；待生产迁移回读 | 本地完成 |
 | 09-24      | DIFF-03 | 6 Task + 20 工具首批真实关系数据                            | 每个已发布关系有来源和复查日；不凑数                                   | 未开始   |
 | 09-25      | DIFF-04 | 独立 Task Page                                              | 至少 3 个 published fit 才可公开；默认 noindex；无薄页扩张             | 未开始   |
 | 09-26      | DIFF-05 | 统一 Tool Intelligence                                      | Best for、Not ideal、Capability、Pricing、Evidence、Last verified 同源 | 未开始   |
@@ -183,6 +183,9 @@ INTAKE 与上述排期并行：09-23 Descript 到期发布槽继续执行；其�
    都不能让 `published` Tool Capability 保留无有效证据状态；时间自然到期时公开 RLS 立即停止返回该关系。Capability 或 Task 被
    归档时公开 RLS 也立即停止返回相应关系。公开层不暴露 raw claim
    links，DIFF-02 必须以服务端安全读模型组合证据。
+9. DIFF-02 的公共读模型只输出 active Capability、当前 published Tool/Task Capability 和来源 URL、核验/复查日期摘要；不输出
+   claim ID、claim value、excerpt 或 raw link。后台操作仅经管理员 server action，输入先校验；Tool Capability 证据链接只能在
+   draft/reviewed 状态按 UUID 增删，published 记录仍由数据库门禁保护。
 
 ## 11. 完成定义
 

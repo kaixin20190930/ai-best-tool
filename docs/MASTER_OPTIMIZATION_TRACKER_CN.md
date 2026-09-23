@@ -20,6 +20,11 @@ verified、未失效、未冲突 claim；事务末会阻止删除、修改、错
 时公开 RLS 按实时有效性和 active 状态立即过滤，raw claim links 不对浏览器开放。状态为“待生产迁移与只读回读”，不得在迁移前
 启动 DIFF-02。
 
+2026-09-23 DIFF-02 本地交付完成：`/[locale]/admin/decision` 新增最小 Capability 管理模块，可维护 Capability、draft/reviewed
+Tool Capability、Task Capability 和经 UUID 验证的 evidence association；所有写入均经管理员 server action，含输入校验与
+loading/success/error 状态。统一服务端读模型只返回 active/current 关系及来源 URL、核验/复查日期摘要，过滤错误 owner、候选、冲突、
+失效和过期 claim，且不把 raw claim/link/claim ID 下发给浏览器。状态为“待 DIFF-01/02 生产迁移与只读回读”，不构成 seed 或公开页面授权。
+
 2026-09-20 规模化口径更新：生产基线为 63 条工具记录、50 条已公开、13 条获准索引；技术和 SEO 护栏稳定，当前增长瓶颈转为高
 质量工具库存和差异化覆盖。后续每天发现 10-20 个、深审 4-6 个，目标公开 2 个且上限 3 个；索引仍逐页审批，每天最多 1 个、
 目标每周 4 个且硬上限 5 个。完整阶段目标、维护频率和暂停门禁见
