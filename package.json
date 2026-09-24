@@ -117,6 +117,7 @@
     "plan:decision-graph-seed": "tsx scripts/plan-decision-graph-seed.ts --inventory",
     "verify:decision-graph-seed": "tsx scripts/verify-decision-graph-seed.ts",
     "test:decision-graph-seed": "tsx scripts/test-decision-graph-seed.ts",
+    "test:meeting-notes-remediation": "tsx scripts/test-meeting-notes-remediation.ts",
     "test:decision-graph-sql-export": "tsx scripts/test-decision-graph-sql-export.ts",
     "test:decision-graph-production-conflict-fix": "tsx scripts/test-decision-graph-production-conflict-fix.ts",
     "test:decision-graph-sql-editor-lifecycle": "tsx scripts/test-decision-graph-sql-editor-lifecycle.ts",

@@ -39,3 +39,13 @@ published fit，却只有 2 条 required、没有 preferred Task Capability；�
 
 DIFF-08 Decision Assistant 仍为**条件阻塞**：6 Task 的 published fit 覆盖、20 工具核心 Capability 覆
 盖、required/preferred 完整性和低 unknown 比例等启动门槛均未由本次只读审计满足；不得因 DIFF-07 技术 PASS 提前启动。
+
+## 2026-09-25 meeting-notes 整改准备（未执行）
+
+手工脚本 `db/supabase/manual/20260925_remediate_meeting_notes_capabilities.sql` 已准备，**待生产执行与独立验收**。本节更新的是整改方案和开发侧来源核对，不改变上文 2026-09-23 的生产快照，也不表示关系已在生产发布。
+
+- 范围严格限定为 `meeting-notes`、`meeting-transcription` / `meeting-summary-and-actions`，以及 Fathom、Otter.ai、Fireflies 的 3 条 Tool Capability 和原有 3 条 published fit。脚本以单条 `DO` 语句校验 reviewer、Task、Capability、tool/profile、原有 claim/link 身份和有效期；插入或刷新 6 条直接官方来源与 claim，补足 support、availability、plan、limitation 证据目的，最后做 postcondition。任一条件失败整段回滚；同一批次重跑不续写复核时间，过期须另起真实复核批次。
+- 开发侧于 2026-09-25 核对 [Fathom Free/Premium](https://help.fathom.video/en/articles/5290881) 与[定价](https://fathom.video/pricing)：Free 有无限录制、存储及 38 种语言转录；高级摘要每月前 5 次，之后为 General/Enhanced；Premium 才有无限高级摘要、AI 行动项、跟进邮件和自定义摘要。
+- 核对 [Otter Basic 限额](https://help.otter.ai/hc/en-us/articles/360047538094-Conversation-import-and-app-limits-on-the-Basic-free-plan) 与[会议摘要](https://help.otter.ai/hc/en-us/articles/9156381229079-Meeting-Summary-Overview)：Basic 每月 300 分钟、每次可访问 30 分钟转录、每账号累计 3 次导入、最近 25 场对话可见；会议摘要邮件有日历同步和共享条件。
+- 核对 [Fireflies Free 指南](https://guide.fireflies.ai/articles/4027724828-learn-about-the-fireflies-free-plan) 与[定价](https://fireflies.ai/pricing)：Free 的无限转录依赖符合条件的 auto-join，普通默认 3 场；每席位 400 分钟存储，每月 20 个 AI 积分；上传和会议摘要消耗转录积分，下载转录及更多摘要能力受套餐限制。脚本保留这些条件，不将其写成无条件能力。
+- 执行前，指定 reviewer 必须亲自复核以上页面与关系内容；脚本只在执行时记录当前 `reviewed_by/reviewed_at/review_due_at`，不回填或虚构 3 条 legacy fit 的历史 provenance。生产执行后仍须由独立验收回读精确行、证据链接、时间窗口及 Task Page 门禁。审批注册表、Task Page、URL、sitemap、`continue_index` 和工具索引状态均保持原状，DIFF-08 继续阻塞。
