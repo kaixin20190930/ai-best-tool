@@ -44,6 +44,8 @@ Otter.ai、Fireflies 的 3 条既有 published meeting fit 保持原 status、�
 
 2026-09-25 DIFF-07 meeting-notes 整改已在生产执行并通过总控独立只读验收：2/2 Task Capability、3/3 Tool Capability 为 published/current，3/3 既有 fit 为 published/current 且有 reviewer；6/6 官方 source 为 current，6/6 claim 为 verified/current，Capability 证据覆盖 support/availability/plan/limitation，fit 证据覆盖 fit/limitation。Decision foundation 与 graph seed verifier 均 PASS（后者回读 8 条 published 关系），生产 SEO smoke PASS，sitemap 共 126 个 URL。`/cn/tasks/meeting-notes` 仍为 404，sitemap Task URL 为 0；Task Page 注册表继续关闭，未放开 URL、`continue_index` 或工具索引。**仅 meeting-notes 组完成本次整改**；DIFF-07 其余 cluster 转入编辑整改与独立验收，DIFF-08 Decision Assistant 继续 blocked。详见 [DIFF-07 发布审计](./DECISION_GRAPH_DIFF07_RELEASE_AUDIT_2026-09-23_CN.md)。
 
+2026-09-25 剩余五个 Task cluster 的编辑整改方案已形成，**待独立 review**；执行顺序、Admin 常规编辑闭环、逐组原子发布和 Task Page 独立门禁见 [剩余 cluster 整改计划](./DECISION_GRAPH_REMAINING_CLUSTER_REMEDIATION_PLAN_CN.md)。本条仅链接计划，不代表任何新增关系获批或发布。
+
 差异化开发执行规则：先定义用户价值和风险，默认最小实现；dormant/noindex 功能不新增网络服务。默认验证为专项测试、`tsc`、完整 build 与一次生产模式 smoke；单项超过 60 分钟或连续两次 QA FAIL，交总控重新选方案。仅安全、支付、数据一致性 P0 可扩大测试范围。
 
 2026-09-20 规模化口径更新：生产基线为 63 条工具记录、50 条已公开、13 条获准索引；技术和 SEO 护栏稳定，当前增长瓶颈转为高
