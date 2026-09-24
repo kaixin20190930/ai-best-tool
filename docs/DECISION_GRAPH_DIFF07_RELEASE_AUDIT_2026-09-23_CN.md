@@ -1,6 +1,8 @@
 # DIFF-07 只读收口与发布审计（2026-09-23）
 
-状态：技术门禁与独立 QA 均 PASS；**未自动批准或发布任何关系**。这里的 PASS 表示只读验收完成，不表示内容可公开。生产快照
+当前状态（2026-09-25）：**meeting-notes 整改已在生产执行并通过独立只读验收**；Task Page 仍关闭。DIFF-07 其他 cluster 尚未完成编辑整改，DIFF-08 仍阻塞。下文先保留 2026-09-23 历史快照，再记录本次生产结果。
+
+2026-09-23 状态：技术门禁与独立 QA 均 PASS；**当时未自动批准或发布任何关系**。这里的 PASS 表示当时的只读验收完成，不表示内容可公开。生产快照
 为 2026-09-23 15:42–15:46 UTC；发布前必须重新核对来源有效期并取得编辑批准。
 
 ## 技术与生产基线
@@ -12,7 +14,7 @@
 - 23 条 reviewed 关系在检查时具备有效关系复核窗口；工具侧关联来源通过同 owner、verified、未冲突/失效与当前有效性检查。这
   只是技术候选池：开发侧的 `approve_candidate` 不等于编辑侧 `publish_ready`。
 
-## 独立 QA 内容结论
+## 独立 QA 内容结论（2026-09-23 快照）
 
 | 范围                                 | 结论                         | 主要原因或待办                                                                                                                                                                                                                                                |
 | ------------------------------------ | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -26,7 +28,7 @@
 2026-10-05；Otter.ai、Fireflies 为 2026-10-20。编辑批准时须以当时的官方资料重新确认，不能仅看关系本身的 2026-12-22 期
 限。审计不记录原始 claim 值、摘录、内部 ID 或密钥。
 
-## 页面与下一步
+## 页面与下一步（2026-09-23 当时结论）
 
 所有 Task Page 继续关闭：静态编辑批准注册表为空，生产 Task Capability 均为 reviewed。`meeting-notes` 虽有 3 条既有
 published fit，却只有 2 条 required、没有 preferred Task Capability；其他 Task 的 fit 数也不足 3。单条关系即使将来获批，
@@ -40,12 +42,13 @@ published fit，却只有 2 条 required、没有 preferred Task Capability；�
 DIFF-08 Decision Assistant 仍为**条件阻塞**：6 Task 的 published fit 覆盖、20 工具核心 Capability 覆
 盖、required/preferred 完整性和低 unknown 比例等启动门槛均未由本次只读审计满足；不得因 DIFF-07 技术 PASS 提前启动。
 
-## 2026-09-25 meeting-notes 整改准备（未执行）
+## 2026-09-25 meeting-notes 整改生产执行与只读验收
 
-手工脚本 `db/supabase/manual/20260925_remediate_meeting_notes_capabilities.sql` 已准备，**待生产执行与独立验收**。本节更新的是整改方案和开发侧来源核对，不改变上文 2026-09-23 的生产快照，也不表示关系已在生产发布。
+手工脚本 `db/supabase/manual/20260925_remediate_meeting_notes_capabilities.sql` 已在生产成功执行；总控独立只读验收通过。上文 2026-09-23 快照保留为历史记录，以下为本次 meeting-notes 组的当前结果；**不表示 DIFF-07 其他 cluster 已发布**。
 
 - 范围严格限定为 `meeting-notes`、`meeting-transcription` / `meeting-summary-and-actions`，以及 Fathom、Otter.ai、Fireflies 的 3 条 Tool Capability 和原有 3 条 published fit。脚本以单条 `DO` 语句校验 reviewer、Task、Capability、tool/profile、原有 claim/link 身份和有效期；插入或刷新 6 条直接官方来源与 claim，补足 support、availability、plan、limitation 证据目的，最后做 postcondition。任一条件失败整段回滚；同一批次重跑不续写复核时间，过期须另起真实复核批次。
 - 开发侧于 2026-09-25 核对 [Fathom Free/Premium](https://help.fathom.video/en/articles/5290881) 与[定价](https://fathom.video/pricing)：Free 有无限录制、存储及 38 种语言转录；高级摘要每月前 5 次，之后为 General/Enhanced；Premium 才有无限高级摘要、AI 行动项、跟进邮件和自定义摘要。
 - 核对 [Otter Basic 限额](https://help.otter.ai/hc/en-us/articles/360047538094-Conversation-import-and-app-limits-on-the-Basic-free-plan) 与[会议摘要](https://help.otter.ai/hc/en-us/articles/9156381229079-Meeting-Summary-Overview)：Basic 每月 300 分钟、每次可访问 30 分钟转录、每账号累计 3 次导入、最近 25 场对话可见；会议摘要邮件有日历同步和共享条件。
 - 核对 [Fireflies Free 指南](https://guide.fireflies.ai/articles/4027724828-learn-about-the-fireflies-free-plan) 与[定价](https://fireflies.ai/pricing)：Free 的无限转录依赖符合条件的 auto-join；未使用 auto-join 时，转录积分按注册来源分配（网站 3、Chrome 扩展 5、移动端新用户 10、老用户 5）。每席位 400 分钟存储，每月 20 个 AI 积分；上传和会议摘要消耗转录积分，下载转录及更多摘要能力受套餐限制。脚本保留这些条件，不将其写成无条件能力。
-- 执行前，指定 reviewer 必须亲自复核以上页面与关系内容；脚本只在执行时记录当前 `reviewed_by/reviewed_at/review_due_at`，不回填或虚构 3 条 legacy fit 的历史 provenance。生产执行后仍须由独立验收回读精确行、证据链接、时间窗口及 Task Page 门禁。审批注册表、Task Page、URL、sitemap、`continue_index` 和工具索引状态均保持原状，DIFF-08 继续阻塞。
+- 脚本在执行时记录当前 `reviewed_by/reviewed_at/review_due_at`，未回填或虚构 3 条 legacy fit 的历史 provenance。总控生产只读回读确认：meeting-notes 的 2/2 Task Capability、3/3 Tool Capability 均为 published/current；3/3 既有 fit 为 published/current 且有 reviewer；6/6 官方 source 为 current，6/6 claim 为 verified/current。Capability 证据目的覆盖 support、availability、plan、limitation；fit 证据覆盖 fit、limitation。Decision foundation verifier PASS，graph seed verifier PASS（8 条 published 关系）。
+- 生产 SEO smoke PASS，sitemap 共 126 个 URL；`/cn/tasks/meeting-notes` 仍返回 404，sitemap 中 Task URL 为 0。Task Page 审批注册表仍为空，URL、sitemap、`continue_index` 和工具索引状态未因本次整改放开。下一步转向其余 cluster 的编辑整改与独立验收；DIFF-08 Decision Assistant 继续 blocked。
