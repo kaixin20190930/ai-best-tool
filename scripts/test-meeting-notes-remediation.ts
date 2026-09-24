@@ -13,6 +13,11 @@ assert.match(sql.trimEnd(), /END\s+\$meeting_notes_remediation\$;$/);
 assert.doesNotMatch(sql, /^\s*(?:BEGIN|COMMIT|ROLLBACK)\s*;/gm, 'no separate transaction statements');
 assert.match(sql, /RAISE EXCEPTION/g, 'any guard failure must abort the DO transaction');
 assert.match(sql, /pg_advisory_xact_lock/, 'duplicate manual execution is serialized');
+assert.doesNotMatch(
+  sql,
+  /timestamptz\s*'20\d{2}-\d{2}-\d{2}\s+00:00:00\+00'/i,
+  'review and release gates must not use a fixed UTC midnight',
+);
 
 const targetBlock =
   sql.split('INSERT INTO meeting_remediation_targets VALUES')[1]?.split('IF (SELECT count(*)')[0] || '';

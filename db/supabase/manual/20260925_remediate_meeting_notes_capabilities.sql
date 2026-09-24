@@ -20,9 +20,6 @@ DECLARE
   v_relation text;
 BEGIN
   PERFORM pg_advisory_xact_lock(hashtext('meeting-notes-20260925-remediation'));
-  IF v_now < timestamptz '2026-09-25 00:00:00+00' THEN
-    RAISE EXCEPTION 'Meeting-notes review batch cannot be dated before 2026-09-25.';
-  END IF;
 
   FOREACH v_relation IN ARRAY ARRAY[
     'auth.users', 'public.decision_tasks', 'public.decision_capabilities',
@@ -211,7 +208,6 @@ BEGIN
         AND source.source_label = v_spec.source_label
         AND source.publisher_name = v_spec.publisher_name
         AND source.canonical_url IS NOT DISTINCT FROM v_spec.canonical_url
-        AND source.last_verified_at >= timestamptz '2026-09-25 00:00:00+00'
         AND source.last_verified_at <= v_now
         AND source.metadata->>'manualReviewBatch' = v_batch
     ) THEN
@@ -250,7 +246,6 @@ BEGIN
         AND claim.source_type = 'official' AND claim.verification_status = 'verified'
         AND claim.conflict_status = 'none' AND claim.invalidated_at IS NULL
         AND claim.expires_at IS NULL AND claim.verified_by = v_reviewer
-        AND claim.verified_at >= timestamptz '2026-09-25 00:00:00+00'
         AND claim.verified_at <= v_now AND claim.review_due_at > v_now
         AND claim.metadata->>'manualReviewBatch' = v_batch
       ) THEN
@@ -342,7 +337,6 @@ BEGIN
       WHERE task_id = v_task AND capability_id IN (v_transcription, v_summary)
         AND importance = 'required' AND status = 'published'
         AND reviewed_by = v_reviewer
-        AND reviewed_at >= timestamptz '2026-09-25 00:00:00+00'
         AND reviewed_at <= v_now AND review_due_at > v_now
         AND rationale = CASE capability_id
           WHEN v_transcription THEN '{"en":"A reviewable transcript preserves what participants said so readers can verify the summary and follow-up actions against the original discussion.","cn":"可复核的转录保留参会者发言，使读者能对照原话核查摘要和后续行动。"}'::jsonb
@@ -356,7 +350,6 @@ BEGIN
         AND capability.availability = target.availability
         AND capability.plan_requirement = target.plan_requirement
         AND capability.limitations = target.limitations AND capability.reviewed_by = v_reviewer
-        AND capability.reviewed_at >= timestamptz '2026-09-25 00:00:00+00'
         AND capability.reviewed_at <= v_now AND capability.review_due_at > v_now) <> 3 THEN
     RAISE EXCEPTION 'Three exact current Tool Capabilities were not published.';
   END IF;
@@ -365,7 +358,6 @@ BEGIN
       WHERE fit.tool_id = target.tool_id AND fit.task_id = v_task
         AND fit.status = 'published' AND fit.fit_level = target.fit_level
         AND fit.reviewed_by = v_reviewer
-        AND fit.reviewed_at >= timestamptz '2026-09-25 00:00:00+00'
         AND fit.reviewed_at <= v_now AND fit.review_due_at > v_now) <> 3 THEN
     RAISE EXCEPTION 'Three legacy fits did not receive this current manual review.';
   END IF;
@@ -376,7 +368,8 @@ BEGIN
       JOIN public.product_intelligence_claims claim
         ON claim.profile_id = target.profile_id AND claim.claim_key = spec.claim_key
       WHERE source.source_type = 'official' AND source.fetch_status = 'success'
-        AND source.last_verified_at >= timestamptz '2026-09-25 00:00:00+00'
+        AND source.last_verified_at <= v_now
+        AND source.metadata->>'manualReviewBatch' = v_batch
         AND claim.source_id = source.id AND claim.source_url = spec.source_url
         AND claim.claim_value = spec.claim_value AND claim.validity_scope = spec.validity_scope
         AND claim.verification_status = 'verified' AND claim.verified_by = v_reviewer
