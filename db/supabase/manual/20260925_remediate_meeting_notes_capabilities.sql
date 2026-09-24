@@ -85,7 +85,7 @@ BEGIN
       v_transcription, '6ef8f10b-7b03-4ae4-988d-997cc8f4f2ca',
       '0ea08626-0d94-4773-a27e-3b5ce8fbd09b',
       '32e5934f-bc33-415c-9d98-e88529155855', 'conditional', 'partial', 'all_plans',
-      '{"en":"Free allows unlimited transcription for eligible auto-joined meetings; without auto-join the default includes three meetings. Free includes 400 storage minutes per seat and 20 monthly AI credits for advanced features. Paid plans expand summaries, storage, and downloads.","cn":"免费版对符合条件的自动加入会议提供无限转录；关闭自动加入时默认包含 3 场会议。免费版每席位有 400 分钟存储，并有每月 20 个供高级功能使用的 AI 积分；付费套餐扩展摘要、存储与下载。"}',
+      '{"en":"Free allows unlimited transcription for eligible auto-joined meetings; without auto-join, transcription credits depend on sign-up source: website 3, Chrome extension 5, new mobile user 10, existing mobile user 5. Free includes 400 storage minutes per seat and 20 monthly AI credits for advanced features. Paid plans expand summaries, storage, and downloads.","cn":"免费版对符合条件的自动加入会议提供无限转录；未使用自动加入时，转录积分按注册来源分配：网站 3、Chrome 扩展 5、移动端新用户 10、移动端老用户 5。免费版每席位有 400 分钟存储，并有每月 20 个供高级功能使用的 AI 积分；付费套餐扩展摘要、存储与下载。"}',
       '[{"en":"Unlimited Free transcription depends on auto-join. Uploaded files and meeting summaries consume transcription credits; the 20 monthly AI credits apply to advanced features. Free transcript downloads require a paid plan; summaries and action items remain subject to plan limits.","cn":"免费版无限转录以自动加入为条件。上传文件和会议摘要消耗转录积分；每月 20 个 AI 积分用于高级功能。下载转录需付费套餐；摘要和行动项仍受套餐限制。"}]'
     );
 
@@ -162,7 +162,7 @@ BEGIN
      '{"scope":"calendar-connected meeting summary workflow"}'),
     ('57b270b9-78cf-41f8-8b74-dec46400cd65', 'meeting-notes-20260925:fireflies-free-guide', 'free_limit',
      'https://guide.fireflies.ai/articles/4027724828-learn-about-the-fireflies-free-plan', NULL, 'help', 'Fireflies Free plan guide', 'Fireflies',
-     '{"free":{"unlimited_transcription_requires_auto_join":true,"default_meetings_without_auto_join":3,"storage_minutes_per_seat":400,"ai_credits_per_month":20,"uploads_consume_transcription_credits":true,"transcript_download_requires_paid_plan":true}}',
+     '{"free":{"unlimited_transcription_requires_auto_join":true,"signup_transcription_credits":{"website":3,"chrome_extension":5,"mobile_new_user":10,"mobile_existing_user":5},"storage_minutes_per_seat":400,"ai_credits_per_month":20,"uploads_consume_transcription_credits":true,"transcript_download_requires_paid_plan":true}}',
      '{"plan":"Free","scope":"eligible auto-joined meetings and credit-limited summaries"}'),
     ('57b270b9-78cf-41f8-8b74-dec46400cd65', 'meeting-notes-20260925:fireflies-pricing', 'pricing_plan',
      'https://fireflies.ai/pricing', NULL, 'pricing', 'Fireflies pricing', 'Fireflies',

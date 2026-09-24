@@ -52,7 +52,11 @@ assert.match(sql, /"accessible_minutes_per_conversation_or_import":30/);
 assert.match(sql, /"file_imports_per_account":3/);
 assert.match(sql, /"recent_conversations_visible":25/);
 assert.match(sql, /"unlimited_transcription_requires_auto_join":true/);
-assert.match(sql, /"default_meetings_without_auto_join":3/);
+assert.doesNotMatch(sql, /"default_meetings_without_auto_join"/);
+assert.match(
+  sql,
+  /"signup_transcription_credits":\{"website":3,"chrome_extension":5,"mobile_new_user":10,"mobile_existing_user":5\}/,
+);
 assert.match(sql, /"storage_minutes_per_seat":400/);
 assert.match(sql, /"ai_credits_per_month":20/);
 assert.match(sql, /Uploaded files and meeting summaries consume transcription credits/);
