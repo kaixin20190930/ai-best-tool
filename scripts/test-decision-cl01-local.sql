@@ -135,12 +135,37 @@ BEGIN
     RAISE EXCEPTION 'stale review rejection missing';
   EXCEPTION WHEN check_violation THEN NULL;
   END;
+  INSERT INTO product_intelligence_sources
+    (profile_id, url, canonical_url, source_type, source_label)
+  VALUES ('77777777-7777-4777-8777-777777777777',
+    'https://example.com/features', 'https://unofficial.test/elsewhere',
+    'official', 'Existing official source');
+  BEGIN
+    PERFORM decision_official_evidence_intake('77777777-7777-4777-8777-777777777777',
+      'https://example.com/features', 'Official features', 'feature', 'support',
+      '"Supported feature"', 'The feature is directly supported on this page.',
+      '{"plan":"pro"}', now() + interval '30 days', '11111111-1111-4111-8111-111111111111');
+    RAISE EXCEPTION 'off-domain canonical URL rejection missing';
+  EXCEPTION WHEN check_violation THEN NULL;
+  END;
+  IF EXISTS (SELECT 1 FROM product_intelligence_claims WHERE claim_key = 'support') THEN
+    RAISE EXCEPTION 'off-domain canonical URL created a claim';
+  END IF;
+  UPDATE product_intelligence_sources SET canonical_url = 'https://docs.example.com/features'
+    WHERE profile_id = '77777777-7777-4777-8777-777777777777'
+      AND url = 'https://example.com/features';
   v_id := decision_official_evidence_intake('77777777-7777-4777-8777-777777777777',
     'https://example.com/features', 'Official features', 'feature', 'support',
     '"Supported feature"', 'The feature is directly supported on this page.',
     '{"plan":"pro"}', now() + interval '30 days', '11111111-1111-4111-8111-111111111111');
   IF NOT EXISTS (SELECT 1 FROM product_intelligence_claims WHERE id = v_id AND verified_by IS NOT NULL)
     THEN RAISE EXCEPTION 'verified claim missing'; END IF;
+  IF NOT EXISTS (SELECT 1 FROM product_intelligence_sources
+      WHERE profile_id = '77777777-7777-4777-8777-777777777777'
+        AND url = 'https://example.com/features'
+        AND canonical_url = 'https://docs.example.com/features') THEN
+    RAISE EXCEPTION 'trusted same-domain canonical URL was overwritten';
+  END IF;
   UPDATE product_intelligence_claims SET expires_at = now() - interval '1 day' WHERE id = v_id;
   BEGIN
     PERFORM decision_official_evidence_intake('77777777-7777-4777-8777-777777777777',
@@ -180,6 +205,7 @@ CREATE TEMP TABLE cl01_manifest AS
 
 DO $$
 DECLARE m cl01_manifest%ROWTYPE;
+        v_preflight jsonb;
 BEGIN
   SELECT * INTO m FROM cl01_manifest;
   PERFORM set_config('request.jwt.claim.role', 'authenticated', true);
@@ -191,9 +217,18 @@ BEGIN
   EXCEPTION WHEN insufficient_privilege THEN NULL;
   END;
   PERFORM set_config('request.jwt.claim.role', 'service_role', true);
-  IF (decision_cluster_transition('22222222-2222-4222-8222-222222222222',
+  v_preflight := decision_cluster_transition('22222222-2222-4222-8222-222222222222',
       m.tasks, m.tools, m.fits, 'publish', '11111111-1111-4111-8111-111111111111',
-      '', true)->>'ok') <> 'true' THEN RAISE EXCEPTION 'preflight failed'; END IF;
+      '', true);
+  IF v_preflight->>'ok' <> 'true' OR jsonb_array_length(v_preflight->'evidence') <> 6
+    OR EXISTS (SELECT 1 FROM jsonb_array_elements(v_preflight->'evidence') item
+       WHERE item->>'claimId' IS NULL OR item->>'sourceUrl' IS NULL
+         OR item->>'purpose' IS NULL OR item->>'reviewDueAt' IS NULL
+         OR item->>'verifiedAt' IS NULL OR item->'validityScope' IS NULL
+         OR item->>'officialSource' <> 'true' OR item ? 'claimValue'
+         OR item ? 'sourceExcerpt') THEN
+    RAISE EXCEPTION 'preflight evidence summary is incomplete or exposes raw claim content';
+  END IF;
   BEGIN
     PERFORM decision_cluster_transition('22222222-2222-4222-8222-222222222223',
       m.tasks, m.tools, m.fits, 'publish', '11111111-1111-4111-8111-111111111111',

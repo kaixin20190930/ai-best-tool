@@ -56,6 +56,22 @@ export type ClusterManifest = {
   operation: 'publish' | 'withdraw';
   qaReference: string;
 };
+export type ClusterEvidenceSummary = {
+  entity: 'tool_capability' | 'fit';
+  relationId: string;
+  claimId: string;
+  purpose: string;
+  sourceUrl: string;
+  canonicalUrl: string | null;
+  sourceType: string;
+  officialSource: boolean;
+  verificationStatus: string;
+  verifiedAt: string | null;
+  reviewDueAt: string | null;
+  expiresAt: string | null;
+  validityScope: Record<string, unknown>;
+  ownerMatches: boolean;
+};
 
 function isUuid(value: string): boolean {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
@@ -322,7 +338,7 @@ function validateManifest(input: ClusterManifest): string | null {
 
 export async function transitionDecisionCluster(
   input: ClusterManifest & { preflight: boolean },
-): Promise<{ success: boolean; error?: string; summary?: string }> {
+): Promise<{ success: boolean; error?: string; summary?: string; evidence?: ClusterEvidenceSummary[] }> {
   try {
     const user = await requireAdmin();
     const problem = validateManifest(input);
@@ -346,7 +362,39 @@ export async function transitionDecisionCluster(
       revalidatePath('/[locale]/find-tools', 'page');
       revalidatePath('/[locale]/ai/[websiteName]', 'page');
     }
-    return { success: true, summary: JSON.stringify(data) };
+    const result = data && typeof data === 'object' ? (data as Record<string, unknown>) : {};
+    const evidence: ClusterEvidenceSummary[] =
+      input.preflight && Array.isArray(result.evidence)
+        ? result.evidence
+            .filter(
+              (item): item is Record<string, unknown> =>
+                Boolean(item) && typeof item === 'object' && !Array.isArray(item),
+            )
+            .map((item) => ({
+              entity: item.entity === 'fit' ? 'fit' : 'tool_capability',
+              relationId: String(item.relationId || ''),
+              claimId: String(item.claimId || ''),
+              purpose: String(item.purpose || ''),
+              sourceUrl: String(item.sourceUrl || ''),
+              canonicalUrl: typeof item.canonicalUrl === 'string' ? item.canonicalUrl : null,
+              sourceType: String(item.sourceType || ''),
+              officialSource: item.officialSource === true,
+              verificationStatus: String(item.verificationStatus || ''),
+              verifiedAt: typeof item.verifiedAt === 'string' ? item.verifiedAt : null,
+              reviewDueAt: typeof item.reviewDueAt === 'string' ? item.reviewDueAt : null,
+              expiresAt: typeof item.expiresAt === 'string' ? item.expiresAt : null,
+              validityScope:
+                item.validityScope && typeof item.validityScope === 'object' && !Array.isArray(item.validityScope)
+                  ? (item.validityScope as Record<string, unknown>)
+                  : {},
+              ownerMatches: item.ownerMatches === true,
+            }))
+        : [];
+    return {
+      success: true,
+      summary: input.preflight ? `${evidence.length} selected evidence links checked` : `${input.operation} complete`,
+      evidence,
+    };
   } catch (error) {
     return stableCapabilityError(error, 'Unable to transition Task cluster.');
   }

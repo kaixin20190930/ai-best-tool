@@ -30,6 +30,13 @@ assert.match(ui, /qaReference\.trim\(\)\.length < 8/);
 assert.match(ui, /router\.refresh\(\)/);
 assert.match(ui, /saveClusterFit\(/);
 assert.match(ui, /changeClusterFitEvidenceLink\(/);
+assert.match(ui, /Evidence bound to this exact manifest/);
+assert.match(ui, /item\.sourceUrl/);
+assert.match(ui, /item\.purpose/);
+assert.match(ui, /item\.validityScope/);
+for (const control of ui.matchAll(/<(input|select|textarea)\b[^>]*>/gs)) {
+  assert.match(control[0], /aria-label=|id=/, `missing accessible name: ${control[0]}`);
+}
 assert.doesNotMatch(ui, /\.from\('/, 'client UI must not query raw Supabase data');
 assert.doesNotMatch(ui, /claim_value|source_excerpt/, 'raw claim columns must stay server-side');
 assert.match(reviewBoard, /item\.entity === 'fit' && item\.clusterScoped/);
@@ -46,6 +53,9 @@ for (const pattern of [
   /GET DIAGNOSTICS v_count = ROW_COUNT/,
   /task_capability_editorial_history/,
   /cl01_fit_evidence_lock/,
+  /v_existing_source\.canonical_url/,
+  /FOR UPDATE/,
+  /'evidence', v_evidence/,
   /decision_withdrawal/,
   /GRANT EXECUTE ON FUNCTION decision_cluster_transition[\s\S]*TO service_role/,
 ])

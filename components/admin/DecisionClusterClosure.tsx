@@ -11,6 +11,7 @@ import {
   rereviewDecisionCapability,
   saveClusterFit,
   transitionDecisionCluster,
+  type ClusterEvidenceSummary,
   type ClusterManifest,
 } from '@/app/actions/admin/decision';
 
@@ -28,6 +29,7 @@ export default function DecisionClusterClosure({ overview }: { overview: Capabil
   const [chosen, setChosen] = useState<string[]>([]);
   const [qaReference, setQaReference] = useState('');
   const [preflightKey, setPreflightKey] = useState('');
+  const [preflightEvidence, setPreflightEvidence] = useState<ClusterEvidenceSummary[]>([]);
 
   const execute = (
     work: () => Promise<{ success: boolean; error?: string; id?: string; summary?: string }>,
@@ -44,7 +46,13 @@ export default function DecisionClusterClosure({ overview }: { overview: Capabil
             ? `${label} complete${result.id ? ` · claim ${result.id}` : ''}${result.summary ? ` · ${result.summary}` : ''}`
             : `Error: ${result.error || `${label} failed`}`,
         );
-        if (result.success) router.refresh();
+        if (result.success) {
+          if (label !== 'Cluster preflight') {
+            setPreflightKey('');
+            setPreflightEvidence([]);
+          }
+          router.refresh();
+        }
       } catch (error) {
         setMessage(`Error: ${error instanceof Error ? error.message : `${label} failed`}`);
       } finally {
@@ -84,6 +92,7 @@ export default function DecisionClusterClosure({ overview }: { overview: Capabil
   const toggle = (id: string) => {
     setChosen((current) => (current.includes(id) ? current.filter((item) => item !== id) : [...current, id]));
     setPreflightKey('');
+    setPreflightEvidence([]);
   };
 
   return (
@@ -123,6 +132,7 @@ export default function DecisionClusterClosure({ overview }: { overview: Capabil
         <h3 className='font-semibold sm:col-span-2'>Manual official evidence</h3>
         <input
           name='profileId'
+          aria-label='Existing tool profile UUID'
           required
           placeholder='Existing tool profile UUID'
           disabled={pending}
@@ -130,6 +140,7 @@ export default function DecisionClusterClosure({ overview }: { overview: Capabil
         />
         <input
           name='url'
+          aria-label='Official source URL'
           required
           type='url'
           placeholder='https://official-domain.example/features'
@@ -138,6 +149,7 @@ export default function DecisionClusterClosure({ overview }: { overview: Capabil
         />
         <input
           name='label'
+          aria-label='Official source label'
           required
           placeholder='Official source label'
           disabled={pending}
@@ -145,6 +157,7 @@ export default function DecisionClusterClosure({ overview }: { overview: Capabil
         />
         <input
           name='claimType'
+          aria-label='Claim type'
           required
           placeholder='Claim type, e.g. feature'
           disabled={pending}
@@ -152,6 +165,7 @@ export default function DecisionClusterClosure({ overview }: { overview: Capabil
         />
         <input
           name='claimKey'
+          aria-label='Stable claim key'
           required
           placeholder='Stable claim key'
           disabled={pending}
@@ -159,6 +173,7 @@ export default function DecisionClusterClosure({ overview }: { overview: Capabil
         />
         <input
           name='claimValue'
+          aria-label='Direct fact claim value'
           required
           placeholder='Direct fact / claim value'
           disabled={pending}
@@ -166,6 +181,7 @@ export default function DecisionClusterClosure({ overview }: { overview: Capabil
         />
         <textarea
           name='excerpt'
+          aria-label='Exact official source passage'
           required
           placeholder='Exact source passage reviewed by editor'
           disabled={pending}
@@ -198,11 +214,13 @@ export default function DecisionClusterClosure({ overview }: { overview: Capabil
 
       <div className='grid gap-2 sm:grid-cols-2'>
         <select
+          aria-label='Task cluster'
           value={taskId}
           onChange={(event) => {
             setTaskId(event.target.value);
             setChosen([]);
             setPreflightKey('');
+            setPreflightEvidence([]);
           }}
           disabled={pending}
           className='rounded border p-2 text-sm'
@@ -217,11 +235,13 @@ export default function DecisionClusterClosure({ overview }: { overview: Capabil
             ))}
         </select>
         <select
+          aria-label='Cluster operation'
           value={operation}
           onChange={(event) => {
             setOperation(event.target.value as 'publish' | 'withdraw');
             setChosen([]);
             setPreflightKey('');
+            setPreflightEvidence([]);
           }}
           disabled={pending}
           className='rounded border p-2 text-sm'
@@ -256,12 +276,14 @@ export default function DecisionClusterClosure({ overview }: { overview: Capabil
             <h3 className='text-sm font-semibold'>Fit content</h3>
             <input
               name='fitId'
+              aria-label='Existing Fit UUID or blank to create'
               placeholder='Fit UUID (blank to create)'
               disabled={pending}
               className='rounded border p-2 text-xs'
             />
             <input
               name='toolId'
+              aria-label='Directory Tool UUID for Fit'
               required
               placeholder='Directory Tool UUID'
               disabled={pending}
@@ -270,6 +292,7 @@ export default function DecisionClusterClosure({ overview }: { overview: Capabil
             <div className='grid grid-cols-2 gap-2'>
               <select
                 name='fitLevel'
+                aria-label='Fit level'
                 defaultValue='conditional'
                 disabled={pending}
                 className='rounded border p-2 text-xs'
@@ -278,7 +301,13 @@ export default function DecisionClusterClosure({ overview }: { overview: Capabil
                   <option key={level}>{level}</option>
                 ))}
               </select>
-              <select name='status' defaultValue='reviewed' disabled={pending} className='rounded border p-2 text-xs'>
+              <select
+                name='status'
+                aria-label='Fit editorial status'
+                defaultValue='reviewed'
+                disabled={pending}
+                className='rounded border p-2 text-xs'
+              >
                 {['draft', 'reviewed'].map((status) => (
                   <option key={status}>{status}</option>
                 ))}
@@ -340,6 +369,7 @@ export default function DecisionClusterClosure({ overview }: { overview: Capabil
             </p>
             <input
               name='fitId'
+              aria-label='Fit UUID for evidence association'
               required
               placeholder='Fit UUID'
               disabled={pending}
@@ -347,18 +377,31 @@ export default function DecisionClusterClosure({ overview }: { overview: Capabil
             />
             <input
               name='claimId'
+              aria-label='Verified claim UUID for Fit'
               required
               placeholder='Claim UUID'
               disabled={pending}
               className='rounded border p-2 text-xs'
             />
             <div className='grid grid-cols-2 gap-2'>
-              <select name='purpose' defaultValue='fit' disabled={pending} className='rounded border p-2 text-xs'>
+              <select
+                name='purpose'
+                aria-label='Fit evidence purpose'
+                defaultValue='fit'
+                disabled={pending}
+                className='rounded border p-2 text-xs'
+              >
                 {['fit', 'limitation', 'cost', 'setup', 'privacy', 'export', 'replacement', 'other'].map((purpose) => (
                   <option key={purpose}>{purpose}</option>
                 ))}
               </select>
-              <select name='mode' defaultValue='add' disabled={pending} className='rounded border p-2 text-xs'>
+              <select
+                name='mode'
+                aria-label='Add or remove Fit evidence association'
+                defaultValue='add'
+                disabled={pending}
+                className='rounded border p-2 text-xs'
+              >
                 <option value='add'>Add</option>
                 <option value='remove'>Remove</option>
               </select>
@@ -412,12 +455,54 @@ export default function DecisionClusterClosure({ overview }: { overview: Capabil
         ))}
       </div>
       <input
+        aria-label='Independent QA report reference'
         value={qaReference}
         onChange={(event) => setQaReference(event.target.value)}
         placeholder='Independent QA report reference (publication)'
         disabled={pending}
         className='w-full rounded border p-2 text-sm'
       />
+      {preflightKey === key ? (
+        <section
+          className='space-y-3 rounded-lg border border-cyan-300 bg-cyan-50 p-3 text-xs text-slate-800'
+          aria-label='Selected evidence preflight'
+        >
+          <h3 className='text-sm font-semibold'>Evidence bound to this exact manifest</h3>
+          <p>
+            Task Capability IDs:{' '}
+            {manifest()
+              .taskCapabilities.map((item) => item.id)
+              .join(', ')}
+            . Task Capability has no claim-link table; review its rationale separately.
+          </p>
+          {preflightEvidence.length ? (
+            <ul className='space-y-2'>
+              {preflightEvidence.map((item) => (
+                <li
+                  key={`${item.entity}:${item.relationId}:${item.claimId}:${item.purpose}`}
+                  className='break-all rounded border border-cyan-200 bg-white p-2'
+                >
+                  <p>
+                    <strong>{item.entity}</strong> {item.relationId} · purpose <strong>{item.purpose}</strong> · claim{' '}
+                    {item.claimId}
+                  </p>
+                  <p>
+                    Official source URL: {item.sourceUrl} · canonical: {item.canonicalUrl || 'missing'} · official:{' '}
+                    {item.officialSource ? 'yes' : 'no'} · owner matches: {item.ownerMatches ? 'yes' : 'no'}
+                  </p>
+                  <p>
+                    Verification: {item.verificationStatus} · verified: {item.verifiedAt || 'missing'} · review due:{' '}
+                    {item.reviewDueAt || 'missing'} · expires: {item.expiresAt || 'not set'}
+                  </p>
+                  <p>Validity scope: {JSON.stringify(item.validityScope)}</p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No linked claim evidence is present in this selected manifest.</p>
+          )}
+        </section>
+      ) : null}
       <div className='flex flex-wrap gap-2'>
         <button
           type='button'
@@ -427,6 +512,7 @@ export default function DecisionClusterClosure({ overview }: { overview: Capabil
             execute(async () => {
               const result = await transitionDecisionCluster({ ...manifest(), preflight: true });
               setPreflightKey(result.success ? snapshot : '');
+              setPreflightEvidence(result.success ? result.evidence || [] : []);
               return result;
             }, 'Cluster preflight');
           }}

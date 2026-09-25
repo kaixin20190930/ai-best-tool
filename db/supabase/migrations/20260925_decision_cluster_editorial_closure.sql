@@ -117,9 +117,11 @@ CREATE OR REPLACE FUNCTION decision_official_evidence_intake(
 LANGUAGE plpgsql SECURITY DEFINER SET search_path = pg_catalog, public AS $$
 DECLARE
   v_profile product_intelligence_profiles%ROWTYPE;
+  v_existing_source product_intelligence_sources%ROWTYPE;
   v_source_id uuid;
   v_claim product_intelligence_claims%ROWTYPE;
   v_host text;
+  v_canonical_host text;
   v_domain text;
   v_now timestamptz := clock_timestamp();
   v_claim_id uuid;
@@ -167,9 +169,26 @@ BEGIN
         AND invalidated_at IS NULL AND verification_status IN ('candidate', 'verified')) > 1 THEN
     RAISE EXCEPTION 'Duplicate active claim key requires reconciliation' USING ERRCODE = '23505';
   END IF;
-  IF EXISTS (SELECT 1 FROM product_intelligence_sources
-             WHERE profile_id = p_profile_id AND url = p_url AND source_type <> 'official') THEN
-    RAISE EXCEPTION 'Existing source type conflicts with official intake' USING ERRCODE = '23514';
+  SELECT * INTO v_existing_source FROM product_intelligence_sources
+    WHERE profile_id = p_profile_id AND url = p_url FOR UPDATE;
+  IF FOUND THEN
+    IF v_existing_source.source_type <> 'official' THEN
+      RAISE EXCEPTION 'Existing source type conflicts with official intake; reconcile manually'
+        USING ERRCODE = '23514';
+    END IF;
+    IF v_existing_source.canonical_url IS NULL OR
+       v_existing_source.canonical_url !~* '^https://[a-z0-9.-]+(:[0-9]{1,5})?(/[^[:space:]]*)?$' THEN
+      RAISE EXCEPTION 'Existing source canonical URL is missing or invalid; reconcile manually'
+        USING ERRCODE = '23514';
+    END IF;
+    v_canonical_host := lower(split_part(split_part(substring(v_existing_source.canonical_url from 9), '/', 1), ':', 1));
+    IF v_existing_source.canonical_url <> p_url
+       AND v_canonical_host <> v_domain
+       AND v_canonical_host <> 'www.' || v_domain
+       AND right(v_canonical_host, length(v_domain) + 1) <> '.' || v_domain THEN
+      RAISE EXCEPTION 'Existing source canonical URL conflicts with official domain; reconcile manually'
+        USING ERRCODE = '23514';
+    END IF;
   END IF;
   INSERT INTO product_intelligence_sources
     (profile_id, url, canonical_url, source_type, source_label, last_verified_at,
@@ -244,6 +263,7 @@ DECLARE
   v_profile_id uuid;
   v_tool_id uuid;
   v_count integer;
+  v_evidence jsonb := '[]'::jsonb;
   v_now timestamptz := clock_timestamp();
   v_seen uuid[] := ARRAY[]::uuid[];
 BEGIN
@@ -417,10 +437,59 @@ BEGIN
     END IF;
   END LOOP;
   IF p_preflight THEN
+    SELECT COALESCE(jsonb_agg(jsonb_build_object(
+      'entity', evidence.entity,
+      'relationId', evidence.relation_id,
+      'claimId', evidence.claim_id,
+      'purpose', evidence.purpose,
+      'sourceUrl', evidence.source_url,
+      'canonicalUrl', evidence.canonical_url,
+      'sourceType', evidence.source_type,
+      'officialSource', evidence.official_source,
+      'verificationStatus', evidence.verification_status,
+      'verifiedAt', evidence.verified_at,
+      'reviewDueAt', evidence.review_due_at,
+      'expiresAt', evidence.expires_at,
+      'validityScope', evidence.validity_scope,
+      'ownerMatches', evidence.owner_matches
+    ) ORDER BY evidence.entity, evidence.relation_id, evidence.purpose, evidence.claim_id), '[]'::jsonb)
+    INTO v_evidence
+    FROM (
+      SELECT 'tool_capability'::text AS entity, capability.id AS relation_id,
+        claim.id AS claim_id, link.purpose, claim.source_url,
+        source.canonical_url, claim.source_type,
+        (claim.source_type = 'official' AND source.source_type = 'official'
+          AND source.url = claim.source_url) AS official_source,
+        claim.verification_status, claim.verified_at, claim.review_due_at,
+        claim.expires_at, claim.validity_scope,
+        (profile.owner_type = 'tool' AND profile.owner_id = capability.tool_id) AS owner_matches
+      FROM tool_capabilities capability
+      JOIN tool_capability_claims link ON link.tool_capability_id = capability.id
+      JOIN product_intelligence_claims claim ON claim.id = link.claim_id
+      JOIN product_intelligence_profiles profile ON profile.id = claim.profile_id
+      LEFT JOIN product_intelligence_sources source ON source.id = claim.source_id
+      WHERE capability.id IN
+        (SELECT (value->>'id')::uuid FROM jsonb_array_elements(p_tool_capabilities))
+      UNION ALL
+      SELECT 'fit'::text AS entity, fit.id AS relation_id,
+        claim.id AS claim_id, link.purpose, claim.source_url,
+        source.canonical_url, claim.source_type,
+        (claim.source_type = 'official' AND source.source_type = 'official'
+          AND source.url = claim.source_url) AS official_source,
+        claim.verification_status, claim.verified_at, claim.review_due_at,
+        claim.expires_at, claim.validity_scope,
+        (profile.owner_type = 'tool' AND profile.owner_id = fit.tool_id) AS owner_matches
+      FROM tool_task_fits fit
+      JOIN tool_task_fit_claims link ON link.fit_id = fit.id
+      JOIN product_intelligence_claims claim ON claim.id = link.claim_id
+      JOIN product_intelligence_profiles profile ON profile.id = claim.profile_id
+      LEFT JOIN product_intelligence_sources source ON source.id = claim.source_id
+      WHERE fit.id IN (SELECT (value->>'id')::uuid FROM jsonb_array_elements(p_fits))
+    ) evidence;
     RETURN jsonb_build_object('ok', true, 'taskId', p_task_id, 'operation', p_operation,
       'taskCapabilities', jsonb_array_length(p_task_capabilities),
       'toolCapabilities', jsonb_array_length(p_tool_capabilities),
-      'fits', jsonb_array_length(p_fits));
+      'fits', jsonb_array_length(p_fits), 'evidence', v_evidence);
   END IF;
 
   UPDATE task_capabilities SET status = v_next, last_edited_by = p_reviewer WHERE task_id = p_task_id
