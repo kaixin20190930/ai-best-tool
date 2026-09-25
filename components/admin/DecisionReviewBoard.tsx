@@ -12,6 +12,10 @@ function actions(item: DecisionReviewItem): DecisionReviewStatus[] {
     if (item.status === 'active') return ['archived'];
     return ['draft'];
   }
+  if (item.entity === 'fit' && item.clusterScoped) {
+    if (item.status === 'reviewed') return ['draft'];
+    if (item.status === 'published') return [];
+  }
   if (item.status === 'draft') return ['reviewed'];
   if (item.status === 'reviewed') return ['published', 'draft'];
   if (item.status === 'published') return ['stale'];
@@ -58,6 +62,11 @@ export default function DecisionReviewBoard({ items }: { items: DecisionReviewIt
                 Reviewed: {item.reviewedAt ? new Date(item.reviewedAt).toLocaleDateString() : 'not yet'} · Due:{' '}
                 {item.reviewDueAt ? new Date(item.reviewDueAt).toLocaleDateString() : 'not scheduled'}
               </p>
+              {item.entity === 'fit' && item.clusterScoped ? (
+                <p className='mt-1 text-xs text-cyan-800'>
+                  Publish or withdraw this Fit with the single Task cluster below.
+                </p>
+              ) : null}
             </div>
             <div className='flex flex-wrap gap-2'>
               {actions(item).map((nextStatus) => {

@@ -1,6 +1,6 @@
 import type {
-  IntelligenceConflictStatus,
   IntelligenceClaimType,
+  IntelligenceConflictStatus,
   IntelligenceTimelineEventType,
   IntelligenceTimelineReviewScope,
   IntelligenceTimelineVisibility,
@@ -54,6 +54,9 @@ function normalizeHttpUrl(value: string | null | undefined): string | null {
 }
 
 export function prepareTimelineEventInsert(input: PrepareTimelineEventInput, reviewerId: string | null) {
+  if (input.eventType === 'decision_publication' || input.eventType === 'decision_withdrawal') {
+    throw new Error('Decision release history is written only by the cluster transaction.');
+  }
   const title = input.title.trim();
   const summary = input.summary.trim();
   if (title.length < 4 || title.length > 240) throw new Error('Timeline title must be 4-240 characters.');
@@ -137,5 +140,5 @@ export function mapIntelligenceTimelineRow(row: Record<string, unknown>): Produc
 }
 
 export function isFactChangeTimelineEvent(event: ProductIntelligenceTimelineEvent): boolean {
-  return event.eventType !== 'reviewed_no_change';
+  return ['fact_added', 'fact_changed', 'fact_removed'].includes(event.eventType);
 }

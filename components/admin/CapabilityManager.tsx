@@ -75,8 +75,8 @@ export default function CapabilityManager({ overview }: { overview: CapabilityAd
   return (
     <section className='space-y-6'>
       <div className='rounded-xl border border-cyan-200 bg-cyan-50 p-4 text-sm text-cyan-950'>
-        These editors only create or revise draft/reviewed records. Publication remains a database-enforced editorial
-        gate. Evidence uses IDs only here: raw claim links and claim contents are never read by the browser.
+        These editors create or revise draft/reviewed records. Use the single Task closure below to publish or withdraw
+        a reviewed group. Stored raw claims are not loaded into this browser view; link evidence by Claim ID.
       </div>
       <FormStatus message={message} />
 

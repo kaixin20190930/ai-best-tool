@@ -1,4 +1,5 @@
 import { requireAdmin } from '@/lib/auth/middleware';
+import CL01_TASK_SLUGS from '@/lib/services/decision/cl01Scope';
 import { getDecisionToolIdentities } from '@/lib/services/decision/repository';
 import { createAdminClient } from '@/lib/supabase/admin';
 
@@ -15,6 +16,7 @@ export interface DecisionReviewItem {
   reviewedAt: string | null;
   reviewDueAt: string | null;
   updatedAt: string;
+  clusterScoped?: boolean;
 }
 
 export interface DecisionReviewOverview {
@@ -127,6 +129,7 @@ export async function getDecisionReviewOverview(): Promise<DecisionReviewOvervie
       reviewedAt: (row.reviewed_at as string | null) || null,
       reviewDueAt: (row.review_due_at as string | null) || null,
       updatedAt: String(row.updated_at),
+      clusterScoped: CL01_TASK_SLUGS.has(String(tasks.find((task) => task.id === row.task_id)?.slug || '')),
     })),
     ...relationships.map((row) => ({
       entity: 'relationship' as const,

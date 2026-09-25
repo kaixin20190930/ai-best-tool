@@ -28,7 +28,13 @@ export type IntelligenceSourceType = 'official' | 'independent' | 'owner' | 'use
 
 export type IntelligenceVerificationStatus = 'candidate' | 'verified' | 'rejected' | 'superseded';
 
-export type IntelligenceTimelineEventType = 'fact_added' | 'fact_changed' | 'fact_removed' | 'reviewed_no_change';
+export type IntelligenceTimelineEventType =
+  | 'fact_added'
+  | 'fact_changed'
+  | 'fact_removed'
+  | 'reviewed_no_change'
+  | 'decision_publication'
+  | 'decision_withdrawal';
 
 export type IntelligenceTimelineReviewScope = 'fact' | 'decision' | 'full';
 

@@ -114,6 +114,7 @@
     "test:structured-comparison": "tsx scripts/test-structured-comparison.ts",
     "test:decision-task-page": "tsx scripts/test-decision-task-page.ts",
     "test:decision-capability-admin": "tsx scripts/test-decision-capability-admin.ts",
+    "test:decision-cl01-structure": "tsx scripts/test-decision-cl01-structure.ts",
     "plan:decision-graph-seed": "tsx scripts/plan-decision-graph-seed.ts --inventory",
     "verify:decision-graph-seed": "tsx scripts/verify-decision-graph-seed.ts",
     "test:decision-graph-seed": "tsx scripts/test-decision-graph-seed.ts",

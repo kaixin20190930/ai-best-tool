@@ -155,7 +155,7 @@ DIFF-08 Decision Assistant 继续 **blocked**。首批 20 工具核心 Capabilit
 | ID                          | 依赖                          | 交付                                                                   | 验收                                                           | 状态          | 估算            |
 | --------------------------- | ----------------------------- | ---------------------------------------------------------------------- | -------------------------------------------------------------- | ------------- | --------------- |
 | CL-00 独立 review           | 无                            | 评审本计划、优先级、原子发布边界                                       | 范围/门禁/负责人确认，无默认发布授权                           | 已完成        | 0.5–1 人日      |
-| CL-01 Admin closure         | CL-00                         | Capability transition、最小 evidence intake、单 Task 原子发布/撤回入口 | 权限/证据/DB trigger/回滚专项通过，管理员可无手工 SQL 完成一组 | 未开始        | 3–5 人日        |
+| CL-01 Admin closure         | CL-00                         | Capability transition、最小 evidence intake、单 Task 原子发布/撤回入口 | 权限/证据/DB trigger/回滚专项通过，管理员可无手工 SQL 完成一组 | 本地开发完成；待 migration、独立 QA、生产验收 | 3–5 人日        |
 | CL-02 Research              | CL-01                         | Consensus 与两条 Task Capability 的编辑整改                            | 直接官方证据、字段与 QA 通过；单组发布和只读回读，或明确 hold  | 未开始        | 1–2 人日        |
 | CL-03 Image-video           | CL-02                         | Ray3.2 身份/来源纠正和 Luma 关系整改                                   | 旧事实撤回，输入/输出/套餐边界核实，单组验收或 hold            | 未开始        | 1–2 人日        |
 | CL-04 App-build eligibility | CL-03                         | n8n/OpenRouter 资格结论与 Task 定义修订                                | 先给可发布/conditional/contextual/撤回结论，再决定是否发布     | 未开始        | 1–2 人日        |
@@ -165,3 +165,6 @@ DIFF-08 Decision Assistant 继续 **blocked**。首批 20 工具核心 Capabilit
 
 按五组均走完 closeout 粗估约 12–23 人日，取决于官方证据与候选资格；独立 QA 和管理员审批需另排人员时段。hold/撤回也是合格
 结论，不以估算强制发布。
+
+CL-01 本地实现只提供编辑闭环与事务门禁，不授权任何 cluster 发布。部署前须独立审查并应用
+`20260925_decision_cluster_editorial_closure.sql`，随后做独立内容/技术 QA；生产验收须由管理员对单 Task 精确清单预检、批准、发布和只读回读。

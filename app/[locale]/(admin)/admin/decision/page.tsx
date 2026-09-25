@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { getCapabilityAdminOverview } from '@/lib/services/admin/capabilities';
 import { getDecisionReviewOverview, type DecisionReviewEntity } from '@/lib/services/admin/decision';
 import CapabilityManager from '@/components/admin/CapabilityManager';
+import DecisionClusterClosure from '@/components/admin/DecisionClusterClosure';
 import DecisionReviewBoard from '@/components/admin/DecisionReviewBoard';
 
 export default async function AdminDecisionPage({
@@ -75,6 +76,7 @@ export default async function AdminDecisionPage({
           </p>
         </div>
         <CapabilityManager overview={capabilityOverview} />
+        <DecisionClusterClosure overview={capabilityOverview} />
       </section>
     </div>
   );
