@@ -86,7 +86,7 @@ for (const locale of ['en', 'zh']) {
 
 for (const [officialSnapshotSlug, expectedDate] of Object.entries({
   cursor: '2026-09-01',
-  'luma-ai': '2026-09-01',
+  'luma-ai': '2026-09-25',
   make: '2026-09-06',
   openrouter: '2026-09-04',
   n8n: '2026-09-04',

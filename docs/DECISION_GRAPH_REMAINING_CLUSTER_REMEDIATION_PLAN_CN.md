@@ -1,6 +1,6 @@
 # Decision Graph 剩余 Task cluster 编辑整改方案
 
-状态：**CL-02 已于 2026-09-25 完成生产关系发布与独立生产 QA_PASS；CL-03 只读审计及编辑证据包已准备，因 Luma 工具/profile 旧域身份冲突处于 BLOCKED、待独立 QA，未发布**。这是编辑与开发执行计划，不授权后续 cluster 或 Task Page 发布；不设强制发布日期。`meeting-notes` 已在生产完成整改和只读验收，本计划不重复执行该组。
+状态：**CL-02 已于 2026-09-25 完成生产关系发布与独立生产 QA_PASS；CL-03 内容/身份修复包待独立 QA，未写生产、未发布**。这是编辑与开发执行计划，不授权后续 cluster 或 Task Page 发布；不设强制发布日期。`meeting-notes` 已在生产完成整改和只读验收，本计划不重复执行该组。
 
 ## 1. 目标、边界与现状缺口
 
@@ -158,7 +158,7 @@ DIFF-08 Decision Assistant 继续 **blocked**。首批 20 工具核心 Capabilit
 | CL-00 独立 review           | 无                            | 评审本计划、优先级、原子发布边界                                       | 范围/门禁/负责人确认，无默认发布授权                           | 已完成        | 0.5–1 人日      |
 | CL-01 Admin closure         | CL-00                         | Capability transition、最小 evidence intake、单 Task 原子发布/撤回入口 | 权限/证据/DB trigger/回滚专项通过，管理员可无手工 SQL 完成一组 | 生产 schema cache 已生效；CL-02 路径已使用 | 3–5 人日        |
 | CL-02 Research              | CL-01                         | [Consensus 与两条 Task Capability 编辑证据包](./DECISION_GRAPH_CL02_RESEARCH_EDITORIAL_PACKET_2026-09-25_CN.md) | 直接官方证据、字段与 QA 通过；单组发布和只读回读，或明确 hold | 已完成：生产关系发布，独立生产 QA_PASS（2026-09-25） | 1–2 人日 |
-| CL-03 Image-video           | CL-02                         | [Ray3.2/Luma 编辑证据包](./DECISION_GRAPH_CL03_LUMA_EDITORIAL_PACKET_2026-09-25_CN.md)；身份/来源纠正和关系整改 | 旧事实撤回，输入/输出/套餐边界核实，单组验收或 hold | 证据包已准备；旧域身份冲突 BLOCKED，待独立 QA；未发布 | 1–2 人日        |
+| CL-03 Image-video           | CL-02                         | [Ray3.2/Luma 编辑证据包](./DECISION_GRAPH_CL03_LUMA_EDITORIAL_PACKET_2026-09-25_CN.md)；身份/来源纠正和关系整改 | 旧事实撤回，输入/输出/套餐边界核实，单组验收或 hold | 内容/身份修复包待独立 QA；未写生产、未发布 | 1–2 人日        |
 | CL-04 App-build eligibility | CL-03                         | n8n/OpenRouter 资格结论与 Task 定义修订                                | 先给可发布/conditional/contextual/撤回结论，再决定是否发布     | 未开始        | 1–2 人日        |
 | CL-05 Voice                 | CL-04                         | 两条 Task rationale 与经验证的候选工具提案                             | 权利/导出/套餐证据充分才新建关系并单组验收                     | 未开始        | 1.5–3 人日      |
 | CL-06 Brand                 | CL-05                         | 两条 Task rationale 与经验证的候选工具提案                             | 品牌控制非营销推断，直接证据和单组验收                         | 未开始        | 1.5–3 人日      |

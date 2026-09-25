@@ -103,15 +103,15 @@ export const PRIORITY_TOOL_EVIDENCE: Record<string, PriorityToolEvidence> = {
     ],
   },
   'luma-ai': {
-    checkedAt: '2026-09-01',
+    checkedAt: '2026-09-25',
     limitation: {
-      en: 'Dream Machine web subscriptions and API credits are separate; Free and Lite outputs remain watermarked and non-commercial, and monthly credits do not roll over.',
-      zh: 'Dream Machine 网页订阅与 API credits 互相独立；Free 与 Lite 输出保留水印且仅限非商业使用，月度 credits 也不会结转。',
+      en: 'Luma App and Luma API have separate access and billing. Confirm model availability, credit cost, output rights, and export options for the selected surface and account; a product image does not guarantee exact packaging or text in every video frame.',
+      zh: 'Luma App 与 Luma API 的访问和计费分开。应按所选产品表面与账号核对模型可用性、credits 成本、输出权利和导出选项；产品图不能保证视频每帧的包装或文字完全一致。',
     },
     sources: [
-      { label: 'Plans and subscription boundaries', url: 'https://lumalabs.ai/learning-hub/payments-subscriptions' },
-      { label: 'Credit system and current rates', url: 'https://lumalabs.ai/learning-hub/dream-machine-credit-system' },
-      { label: 'Commercial licensing rules', url: 'https://lumalabs.ai/learning-hub/licensing' },
+      { label: 'Official Luma identity and product surfaces', url: 'https://lumalabs.ai/llm-info' },
+      { label: 'Current Luma pricing', url: 'https://lumalabs.ai/pricing' },
+      { label: 'Product consistency guidance', url: 'https://lumalabs.ai/learning-hub/keep-character-product-consistency-in-luma-reference-guide' },
     ],
   },
   notebooklm: {

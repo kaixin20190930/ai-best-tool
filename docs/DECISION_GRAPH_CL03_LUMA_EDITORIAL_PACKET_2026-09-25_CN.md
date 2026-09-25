@@ -1,6 +1,6 @@
 # CL-03 · `product-image-to-short-video` 编辑证据包
 
-状态：**BLOCKED；只读审计与候选文案已准备，待工具身份校正和独立 QA**（2026-09-25）。本包不是生产写入、发布清单或管理员批准。只涉及既有 Task、两条 Task Capability、Luma 的一条 Tool Capability 和一条 Fit；不创建实体、不进入 CL-04，也不触及 Task Page。
+状态：**内容/身份修复包待独立 QA；未写生产、未发布关系**（2026-09-25）。本包不是生产写入、发布清单或管理员批准。只涉及既有 Task、两条 Task Capability、Luma 的一条 Tool Capability 和一条 Fit；不创建实体、不进入 CL-04，也不触及 Task Page。
 
 ## 1. 生产只读身份与版本快照
 
@@ -99,4 +99,10 @@ Fit `disqualifiers` 候选数组：
 
 ## 6. QA 与继续执行的门禁
 
-当前结论是 **hold/BLOCKED**。解除顺序：①核对并校正既有 Neon 工具 URL 与 ready profile canonical domain 的身份一致性（保留相同 UUID），明确当前 App/API 的官方归属；②只读回读 IDs、版本、旧 link 和 source/claim 状态；③独立 QA 核实冲突项、精简 claim/excerpt、确认 App 访问与商用交付，给出 partial、hold 或 withdraw 的逐行结论；④获批后才可通过 CL-01 Admin 录入证据、解除旧 links、编辑 reviewed 关系并按精确 manifest 申请单 Task 原子发布；⑤发布后另做只读验收。任何身份、来源、权限或版本冲突仍在时维持 hold；无需为了 Task Page 或覆盖率强行发布。
+当前结论是 **内容/身份修复包待独立 QA，生产仍 hold**。硬顺序：①仓库双语公开页及 Neon 内容候选先做独立事实 QA；②本地页面变更上线后，受控 Neon 内容更新并回读 `/en/ai/luma-ai`、`/cn/ai/luma-ai`，确认广义 Luma 文案与目标根域一致；③双库 fresh preflight，完整捕获该 profile 的全部 source、claim 状态/来源关联及每条 Tool Capability/Fit link；④Neon URL 更新并回读；⑤Supabase profile 域更新并回读；⑥两语言页面目的地与完整非敏感 evidence baseline 回读。受控模板见 `/tmp/ai-best-tool-cl03-identity-operation.json`；快照清单见 `/tmp/ai-best-tool-cl03-production-snapshot.json`。若跨库中途失败，先恢复已变更的 Supabase 域，再恢复 Neon URL，最后恢复 Neon 公开内容；每步须以精确写入版本和当前值守卫，发现并发改动即停下交独立 QA。此包不处理旧 claim 失效/解绑，不录入 Ray3.2 evidence，也不发布关系。后续证据与关系仍需独立 QA 和另行授权。
+
+### 公开内容来源与本次修复范围
+
+线上 `/ai/luma-ai` 的旧事实来自运行时 Neon `tools.title/content/detail/features/use_cases/pricing/url`，历史来源是 `20260901_migrate_luma_ai_tool.sql`；页面另有 `page.tsx` 的双语官方事实快照和 metadata/决策要点，以及 `priorityToolEvidence.ts` 的限制文案。旧的用户可见断言包括 Dream Machine 作为当前产品范围、Photon 图片模型、Ray3.14 草稿、Lite/Unlimited 套餐与旧价格/credits、水印和商用权边界、月度 credits 不结转、旧 API 商用结论、Dream Machine 与 API 余额关系。这些均须在内容 QA 中逐项消除或重新证实。历史 migration 和 collection 记录只作审计，不重新运行。`/cn` 与 `/en` 使用同一双语字段；其他 locale 的后备文案也须在回读时检查。
+
+仓库代码已准备根域导向的双语快照、metadata 与优先限制文案；Neon 内容仅提供带精确 ID、旧值、`updated_at` 守卫和 rollback 的 operator 模板，未写生产。候选定位为广义 Luma 平台：App 与 API 分表面；Ray3.2 为当前视频模型，UNI-1.1 为当前图片模型；App 个人档为 Plus/Pro/Ultra；具体可用模型、credits、商用权及导出按账号/表面确认。API 参数不推断 App 能力，产品图不承诺包装或文字逐帧一致。官方依据：[身份页](https://lumalabs.ai/llm-info)、[当前定价](https://lumalabs.ai/pricing)、[产品一致性指南](https://lumalabs.ai/learning-hub/keep-character-product-consistency-in-luma-reference-guide)。

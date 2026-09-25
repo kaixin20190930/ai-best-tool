@@ -1376,60 +1376,60 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
     return isChinese
       ? {
           label: '官方事实快照',
-          title: 'Dream Machine 套餐、Credits 与商业授权',
+          title: 'Luma 产品范围、套餐与交付边界',
           summary:
-            '以下信息来自 Luma Dream Machine 当前帮助文档；模型和 credits 费率变化较快，商业项目生成前应再次复核。',
-          checkedAt: '2026-09-01',
+            'Luma 提供 App 创意工作区与独立 API。以下为官方产品范围；具体模型权限、费用和商用条款应以所用表面及账号为准。',
+          checkedAt: '2026-09-25',
           facts: [
             {
               label: '产品范围',
               value:
-                '本页评估 Dream Machine 的视频、图片和 Modify 工作流，不把 Luma 的 Capture、Genie、Agents 或研究平台混成同一个产品。',
+                '本页评估广义 Luma 平台。官方将 Ray3.2 列为当前视频模型、UNI-1.1 列为当前图片/多模态模型；App 与 API 的具体功能须分别核对。',
             },
             {
               label: '套餐与额度',
               value:
-                'Web 端 Lite 为 $9.99/月、3,200 credits；Plus 为 $29.99/月、10,000 credits；Unlimited 为 $94.99/月，含 10,000 fast credits 和 relaxed generation。月度 credits 不结转。',
+                '官方将个人 App 套餐列为 Plus、Pro、Ultra，企业另有 Enterprise；API 采用独立的按用量计费方式。具体 credits 消耗取决于模型和输出设置。',
             },
             {
               label: '商业与 API 边界',
               value:
-                'Free 与 Lite 输出带水印且仅限个人非商业用途；Plus、Unlimited 与 Enterprise 才提供商业权利。Dream Machine 网页订阅和 API credits 不互通。',
+                '不要把 API 的 Ray3.2 参数或输出选项当成所有 App 账号都具备的功能。商用权、导出格式及产品外观一致性须按实际工作流核验。',
             },
           ],
           sources: [
-            { label: '套餐与订阅', href: 'https://lumalabs.ai/learning-hub/payments-subscriptions' },
-            { label: 'Credits 规则', href: 'https://lumalabs.ai/learning-hub/dream-machine-credit-system' },
-            { label: '商业授权', href: 'https://lumalabs.ai/learning-hub/licensing' },
+            { label: '官方身份与产品范围', href: 'https://lumalabs.ai/llm-info' },
+            { label: '当前套餐', href: 'https://lumalabs.ai/pricing' },
+            { label: '产品一致性指南', href: 'https://lumalabs.ai/learning-hub/keep-character-product-consistency-in-luma-reference-guide' },
           ],
         }
       : {
           label: 'Official fact snapshot',
-          title: 'Dream Machine plans, credits, and commercial licensing',
+          title: 'Luma product scope, plans, and delivery boundaries',
           summary:
-            'These facts come from current Luma Dream Machine documentation. Model and credit rates change quickly, so recheck them before generating assets for commercial work.',
-          checkedAt: '2026-09-01',
+            'Luma offers an App creative workspace and a separate API. Check model access, cost, and output rights for the chosen surface and account.',
+          checkedAt: '2026-09-25',
           facts: [
             {
               label: 'Product scope',
               value:
-                'This page evaluates Dream Machine video, image, and Modify workflows rather than combining Luma Capture, Genie, Agents, and research into one product.',
+                'This page covers the broader Luma platform. Luma lists Ray3.2 as its current video model and UNI-1.1 as its current image and multimodal model; App and API features need separate checks.',
             },
             {
               label: 'Plans and allowance',
               value:
-                'Web Lite is $9.99 monthly with 3,200 credits, Plus $29.99 with 10,000, and Unlimited $94.99 with 10,000 fast credits plus relaxed generation. Monthly credits do not roll over.',
+                'Luma lists Plus, Pro, and Ultra individual App plans and Enterprise for business. The API uses separate usage-based billing; credit cost varies with the model and output settings.',
             },
             {
               label: 'Commercial and API boundary',
               value:
-                'Free and Lite outputs remain watermarked and personal-use only. Plus, Unlimited, and Enterprise provide commercial rights. Web subscriptions and API credits do not transfer.',
+                'Do not assume Ray3.2 API parameters or output options are available to every App account. Verify commercial rights, export format, and product consistency for the actual workflow.',
             },
           ],
           sources: [
-            { label: 'Plans and subscriptions', href: 'https://lumalabs.ai/learning-hub/payments-subscriptions' },
-            { label: 'Credit system', href: 'https://lumalabs.ai/learning-hub/dream-machine-credit-system' },
-            { label: 'Commercial licensing', href: 'https://lumalabs.ai/learning-hub/licensing' },
+            { label: 'Official identity and product scope', href: 'https://lumalabs.ai/llm-info' },
+            { label: 'Current plans', href: 'https://lumalabs.ai/pricing' },
+            { label: 'Product consistency guidance', href: 'https://lumalabs.ai/learning-hub/keep-character-product-consistency-in-luma-reference-guide' },
           ],
         };
   }
@@ -2421,29 +2421,29 @@ function getPriorityToolSearchIntent(websiteName: string, locale: string): Prior
   if (key === 'luma-ai') {
     return isChinese
       ? {
-          metadataTitle: 'Luma Dream Machine：AI 视频、Credits、价格与商用限制',
+          metadataTitle: 'Luma AI：视频与图片创作、套餐和使用边界',
           metadataDescription:
-            '评估 Luma Dream Machine 的 Ray 视频、Photon 图片和 Modify 工作流，核对 Lite/Plus/Unlimited credits、水印、商业授权与 API 独立计费。',
-          label: 'Dream Machine 判断重点',
+            '评估 Luma 的 App 与 API 工作流，区分当前 Ray3.2 视频、UNI-1.1 图片模型及 Plus/Pro/Ultra 套餐，并核对实际权限与成本。',
+          label: 'Luma AI 判断重点',
           summary:
-            'Dream Machine 更适合镜头探索和生成式修改；真正的选择标准是模型费率、可用镜头成本和当前套餐是否允许商业交付。',
+            'Luma 适合探索视频镜头和图片创意。选择前应确认所用 App 或 API 表面的模型、额度、交付选项及产品细节是否满足任务。',
           checkpoints: [
-            '视频生成、图片生成或 Modify 是否对应真实任务',
-            '模型、分辨率、时长和失败重试后的可用镜头成本',
-            '水印、商业授权、月度 credits 与 API 隔离是否可接受',
+            'App 与 API 哪个工作流对应真实任务',
+            '所选模型、时长、分辨率和重试后的可用镜头成本',
+            '产品细节核验、商用条款与导出路径是否满足交付',
           ],
         }
       : {
-          metadataTitle: 'Luma Dream Machine: AI Video, Credits, Pricing & Commercial Use',
+          metadataTitle: 'Luma AI: Video, Images, Plans & Workflow Limits',
           metadataDescription:
-            'Evaluate Luma Dream Machine for Ray video, Photon images, and Modify workflows, including Lite, Plus and Unlimited credits, watermarks, commercial rights, and separate API billing.',
-          label: 'Dream Machine decision priorities',
+            'Evaluate Luma App and API workflows, current Ray3.2 video and UNI-1.1 image models, Plus/Pro/Ultra plans, access, cost, and delivery limits.',
+          label: 'Luma AI decision priorities',
           summary:
-            'Dream Machine is strongest for shot exploration and generative modification; the decision depends on model rates, usable-shot economics, and whether the active plan permits commercial delivery.',
+            'Luma supports video shot and image concept exploration. Check the selected App or API surface for model access, credits, delivery options, and product-detail needs.',
           checkpoints: [
-            'Fit across video generation, image generation, and Modify workflows',
-            'Usable-shot cost by model, resolution, duration, and retries',
-            'Watermarks, commercial rights, monthly credits, and API separation',
+            'Whether the App or API workflow fits the task',
+            'Usable-shot cost by model, duration, resolution, and retries',
+            'Product-detail review, commercial terms, and export path',
           ],
         };
   }
