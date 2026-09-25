@@ -9,7 +9,7 @@
 | `chatgpt-mac` | 非官方 DMG、陈旧套餐/隐私声明，把客户端当独立工具 | ChatGPT 的 macOS 桌面入口 | 官方下载页；`monitor`；后续评估并入 ChatGPT 主记录 | 2026-10-06 |
 | `gpt_4o` | 把模型当 ChatGPT 产品，旧价格及无依据支持/合规声明 | OpenAI API 模型；已退出 ChatGPT、API 仍可用 | 官方模型页；`monitor`；不作为活跃 ChatGPT 产品推荐 | 2026-10-06 |
 | `openai` | 把公司/品牌包装成单一工具 | 公司及产品家族记录 | 保留历史说明；`monitor`；引导用户选择具体产品 | 2026-10-06 |
-| `sora` | 2024 发布文案仍按活跃工具展示 | 已停止网站/应用服务的历史产品；API 有停止排期 | 停服说明；`monitor`；不参与活跃推荐 | 2026-09-25 |
+| `sora` | 2024 发布文案仍按活跃工具展示 | 已停止网站/应用服务的历史产品；Videos API 与 Sora 2 API 模型也已停止 | 停服说明；`monitor`；不参与活跃推荐 | 2026-12-25 |
 
 本次保留四个原 slug 和历史账户关系，不创建新 canonical、不做 301、不删除记录。`monitor` 通过既有索引门禁产生 noindex、退出 sitemap 和 reviewed 推荐；不是把事实纠错等同于市场验证。
 
@@ -18,7 +18,7 @@
 - ChatGPT 官方下载：`https://chatgpt.com/download/`；macOS 帮助：`https://help.openai.com/en/articles/9275200-downloading-the-chatgpt-macos-app`。
 - GPT-4o API 模型：`https://developers.openai.com/api/docs/models/gpt-4o`；退出 ChatGPT：`https://help.openai.com/en/articles/20001051`。
 - OpenAI 公司入口：`https://openai.com/`。
-- Sora 当前状态：`https://openai.com/sora/`；安全说明：`https://openai.com/index/creating-with-sora-safely/`。
+- Sora 当前状态：`https://openai.com/sora/`；API 停止记录：`https://developers.openai.com/api/docs/deprecations`。2026-09-25 到期复核确认 Videos API、`sora-2`、`sora-2-pro` 及列出的 snapshots 已于 2026-09-24 停止；记录继续保持 `monitor/noindex`，下次复核为 2026-12-25。
 
 来源只支持对应范围。未执行真实付费账户操作，不填写效果、市场分数、HIPAA/ISO 或人工支持承诺。
 

@@ -29,8 +29,8 @@ const records = [
   {
     id: '3b03eb5b-0cf6-4466-bfba-3fb66e07d8d6',
     slug: 'sora',
-    baseline: '4183012fcc043335f2aa46077317832a',
-    nextReviewDate: '2026-09-25',
+    baseline: '5f64e0c68a131821fcbec35c5cc729b9',
+    nextReviewDate: '2026-12-25',
   },
 ] as const;
 
@@ -72,6 +72,8 @@ async function main() {
   assert(!localizedPayload('chatgpt-mac').detail.en.includes('artiversehub.ai'));
   assert(!localizedPayload('gpt_4o').detail.en.includes('HIPAA compliant'));
   assert(localizedPayload('sora').detail.en.includes('discontinued'));
+  assert(localizedPayload('sora').detail.en.includes('shut down on September 24, 2026'));
+  assert(localizedPayload('sora').detail.en.includes('developers.openai.com/api/docs/deprecations'));
   if (args.includes('--check')) {
     console.log('PASS four bilingual corrections, official URLs and unsafe legacy-claim exclusions');
     return;
@@ -113,7 +115,11 @@ async function main() {
       }
       if (!alreadyApplied) {
         assert.equal(before.baseline, record.baseline, `${record.slug}: source changed; audit instead of overwriting`);
-        assert.equal(getToolIndexDecision(indexInput(before)).indexable, true, `${record.slug}: unexpected pre-index state`);
+        assert.equal(
+          getToolIndexDecision(indexInput(before)).indexable,
+          before.page_quality_status !== 'monitor',
+          `${record.slug}: unexpected pre-index state`,
+        );
         await client.query(
           `UPDATE public.tools SET title=$2::jsonb,url=$3,content=$4::jsonb,detail=$5::jsonb,
             page_quality_status='monitor',next_review_date=$6::date,updated_at=now() WHERE id=$1`,

@@ -95,12 +95,12 @@ const REVIEWS = {
     sources: [{ label: 'OpenAI', url: 'https://openai.com/' }],
   },
   sora: {
-    checkedAt: '2026-09-06',
+    checkedAt: '2026-09-25',
     title: { cn: 'Sora（已停止服务）', en: 'Sora (discontinued)' },
     officialUrl: 'https://openai.com/sora/',
     summary: {
-      cn: '这条历史 Sora 产品记录已不适合作为活跃工具推荐。OpenAI 官方说明 Sora 网站和应用已于 2026 年 4 月 26 日停止服务，Sora API 计划于 2026 年 9 月 24 日停止。',
-      en: 'This historical Sora product record is no longer suitable for active-tool recommendations. OpenAI states that the Sora website and app were discontinued on April 26, 2026, with the Sora API scheduled to shut down on September 24, 2026.',
+      cn: '这条历史 Sora 产品记录已不适合作为活跃工具推荐。OpenAI 官方说明 Sora 网站和应用已于 2026 年 4 月 26 日停止服务，Videos API、sora-2 与 sora-2-pro 也已于 2026 年 9 月 24 日停止。',
+      en: 'This historical Sora product record is no longer suitable for active-tool recommendations. OpenAI states that the Sora website and app were discontinued on April 26, 2026; the Videos API, sora-2 and sora-2-pro also shut down on September 24, 2026.',
     },
     next: {
       cn: '不要为新工作流选择本条已停止服务的产品。页面仅保留为状态说明；如需视频生成工具，应从仍在运营且完成核验的产品中重新选择。',
@@ -108,7 +108,7 @@ const REVIEWS = {
     },
     sources: [
       { label: 'Sora status', url: 'https://openai.com/sora/' },
-      { label: 'Creating with Sora safely', url: 'https://openai.com/index/creating-with-sora-safely/' },
+      { label: 'OpenAI API deprecations', url: 'https://developers.openai.com/api/docs/deprecations' },
     ],
   },
 } as const;
