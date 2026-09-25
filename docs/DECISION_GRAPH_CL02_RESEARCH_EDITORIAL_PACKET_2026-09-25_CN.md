@@ -1,6 +1,6 @@
 # CL-02 · `research-with-citations` 编辑证据包
 
-状态：**内容冲突已修正；待独立 QA 与生产执行**。本文件是 2026-09-25 的候选编辑清单，不是录入、复核、发布或 Task Page 批准。范围仅限两条既有 Task Capability、Consensus 的一条既有 Tool Capability 和一条既有 Fit。生产核对均为只读；本文件不包含现有 claim 原文、密钥或用户数据。
+状态：**生产关系已发布；独立生产 QA_PASS（2026-09-25）**。本文件保留编辑依据、最终 claim 范围和发布前快照，并记录发布后的只读验收。范围仅限两条既有 Task Capability、Consensus 的一条既有 Tool Capability 和一条既有 Fit；Task Page 仍未获批。
 
 ## 1. 产品身份与官方事实
 
@@ -16,7 +16,7 @@
 | [How to Chat With Full Text](https://help.consensus.app/en/articles/10068241-how-to-chat-with-full-text) | 对论文、Collection 或 Library 的全文聊天须使用 Pro 或 Deep search mode；单篇上传/聊天有单独入口。不得从“可检索全文”推断免费无限全文聊天。 | 套餐和功能边界 |
 | [Responsible AI & Limitations](https://help.consensus.app/en/articles/10046838-responsible-ai-limitations) | 引用可点开查看全文或摘要中的支持片段；产品承认搜索库不涵盖全部研究，AI 仍可能误读真实论文，重要来源应人工审阅。 | 引用支持、人工复核限制 |
 
-**数字口径待内容 QA 明确。** Help 的 220M+ 指产品所述“同行评审论文”检索库；夏季文章的 400M+ 指范围更广的“学术来源”。两者并非同一计量对象，且同站部分页脚仍保留 220M+ 文案。候选关系文案只写“在 Consensus 收录的学术文献中检索”，不写具体总量或“覆盖全部论文”。若 QA 需要公开数字，须先让官方资料给出一致的对象、日期和范围。
+**数字口径边界。** Help 的 220M+ 指产品所述“同行评审论文”检索库；夏季文章的 400M+ 指范围更广的“学术来源”。两者并非同一计量对象，且同站部分页脚仍保留 220M+ 文案。已发布关系文案不承诺具体总量或“覆盖全部论文”；今后若需公开数字，仍须核对对象、日期和范围。
 
 ## 2. 候选字段（EN/CN）
 
@@ -57,26 +57,26 @@ Fit `disqualifiers` 候选数组：
 
 `research-discovery` 是本组**唯一既有 Consensus Tool Capability**；`citation-traceability` 是既有 Task Capability，引用追溯证据用于 Fit 和任务理由复核。本包不建议自动新建第二条 Tool Capability。
 
-## 3. 官方 source / claim 录入草案
+## 3. 已验收的官方 claim 范围
 
-以下为拟通过 CL-01 Admin 手工核验并录入的**新 claim 草案**，不是现有生产 claim 的导出。`source_type=official`；每条均需填人工核验者、来源的短证据片段、真实 `observed_at/verified_at` 和不超过 Admin 允许窗口的 `review_due_at`。示例 `claim_value` 与 `validity_scope` 是结构草案，录入前按页面现状复查；不要复制旧 claim 的复核时间或用首页替代具体页。取相同 key 时先查重，同 key 异来源/冲突须停下协调。
+下表同步最终独立内容 QA 通过的六条收窄 claim 范围，与生产 verified key 一一对应；不是从生产导出的 claim 原文。每条均由具体官方页直接支持，未用首页替代。生产只读 QA 已核对六条 claim 均为 `verified`、无冲突、reviewer 与复核窗口有效。
 
-| 拟用 `claim_key` / `claim_type` | 直接官方 source | `claim_value` 草案；`validity_scope` 草案 | 证据目的 |
+| 已验证 `claim_key` / `claim_type` | 直接官方 source | 收窄的 `claim_value`；`validity_scope` | 证据目的 |
 | --- | --- | --- | --- |
-| `consensus:research:paper-search-2026-09` / `feature` | [Research Database](https://help.consensus.app/en/articles/10055108-consensus-research-database)、[How Consensus Works](https://help.consensus.app/en/articles/9922673-how-consensus-works)；**单条 claim 只选一页作直接 source** | `{"feature":"scholarly_paper_search","methods":["semantic","keyword"],"dataset":"Consensus All"}`；`{"product":"Consensus web app","dataset":"All","asOf":"2026-09-25"}` | Tool `support`；Fit `fit` |
-| `consensus:research:citation-grounding-2026-09` / `feature` | [夏季更新](https://consensus.app/home/blog/what-has-changed-in-consensus-summer-26/) | `{"feature":"citation_grounding","evidence":"quote_from_paper_full_text_or_abstract","pdf_highlight":"when_available"}`；`{"product":"Consensus web app","output":"AI summaries","asOf":"2026-09-25"}` | Fit `fit`；Task 理由的编辑核验 |
-| `consensus:research:fulltext-conditions-2026-09` / `limitation` | [Research Database](https://help.consensus.app/en/articles/10055108-consensus-research-database) | `{"full_text":"paper_dependent","paywalled_view_download":"user_access_required","fallback":"abstract_or_metadata"}`；`{"product":"Consensus web app","paperAccess":"varies","asOf":"2026-09-25"}` | Tool `support`/`limitation`；Fit `limitation` |
-| `consensus:research:papers-plan-2026-09` / `plan` | [Subscription Plans](https://help.consensus.app/en/articles/10087865-subscription-plans) | `{"papers_search":"unlimited_on_listed_tiers","free_pro_messages":"limited"}`；`{"plans":["Free","Pro","Deep"],"asOf":"2026-09-25"}`。不固化 Free Pro message 数字；独立 QA 按官方套餐页核对直接片段。 | Tool `availability`/`plan`；Fit `fit`（额度条件） |
-| `consensus:research:fulltext-chat-mode-2026-09` / `plan` | [How to Chat With Full Text](https://help.consensus.app/en/articles/10068241-how-to-chat-with-full-text) | `{"feature":"chat_with_full_text_across_papers_collections_library","requiredMode":"Pro_or_Deep_search"}`；`{"product":"Consensus web app","feature":"full_text_chat","asOf":"2026-09-25"}` | Tool `plan`/`limitation`；Fit `limitation` |
-| `consensus:research:manual-review-2026-09` / `limitation` | [Responsible AI & Limitations](https://help.consensus.app/en/articles/10046838-responsible-ai-limitations) | `{"risk":"AI_can_misread_real_paper","response":"human_source_review","coverage":"not_exhaustive"}`；`{"product":"Consensus web app","output":"AI analysis","asOf":"2026-09-25"}` | Tool `limitation`；Fit `limitation` |
+| `consensus:research:paper-search-2026-09` / `feature` | [How Consensus Works](https://help.consensus.app/en/articles/9922673-how-consensus-works) | `{"search_method":"semantic","query_support":"natural_language"}`；`{"product":"Consensus web app","function":"paper search","asOf":"2026-09-25"}` | Tool `support`；Fit `fit` |
+| `consensus:research:citation-grounding-2026-09` / `feature` | [夏季更新](https://consensus.app/home/blog/what-has-changed-in-consensus-summer-26/) | `{"feature":"citation_grounding","evidence":"exact_quote_from_full_text_or_abstract"}`；`{"product":"Consensus web app","output":"AI summaries","asOf":"2026-09-25"}` | Fit `fit`；Task 理由的编辑核验 |
+| `consensus:research:fulltext-conditions-2026-09` / `limitation` | [Research Database](https://help.consensus.app/en/articles/10055108-consensus-research-database) | `{"paywalled_view_download":"user_access_required"}`；`{"product":"Consensus web app","paperAccess":"varies","asOf":"2026-09-25"}` | Tool `limitation`；Fit `limitation` |
+| `consensus:research:papers-plan-2026-09` / `plan` | [Subscription Plans](https://help.consensus.app/en/articles/10087865-subscription-plans) | `{"free_papers_search":"unlimited","free_pro_messages":"limited"}`；`{"plan":"Free","asOf":"2026-09-25"}`。不固化 Free Pro message 数字，也不把该 claim 扩展至其他档位。 | Tool `availability`/`plan`；Fit `fit` |
+| `consensus:research:fulltext-chat-mode-2026-09` / `plan` | [How to Chat With Full Text](https://help.consensus.app/en/articles/10068241-how-to-chat-with-full-text) | `{"feature":"full_text_chat_across_papers_collections_library","requiredMode":"Pro_or_Deep_search"}`；`{"product":"Consensus web app","feature":"full_text_chat","asOf":"2026-09-25"}` | Tool `plan`/`limitation`；Fit `limitation` |
+| `consensus:research:manual-review-2026-09` / `limitation` | [Responsible AI & Limitations](https://help.consensus.app/en/articles/10046838-responsible-ai-limitations) | `{"risk":"AI_can_misread_real_paper"}`；`{"product":"Consensus web app","output":"AI analysis","asOf":"2026-09-25"}` | Tool `limitation`；Fit `limitation` |
 
-源页的“引用可见原句”与“有 PDF 时高亮”须分开，不承诺每篇论文都能打开 PDF。来源/claim owner 必须为上文核对的 Consensus tool profile，且每条用于发布的 claim 为 `verified`、无冲突、未失效、在复核窗口内。Tool Capability links 覆盖 `support`、`availability`、`plan`、`limitation`；Fit links 覆盖 `fit`、`limitation`。单条 claim 可在事实范围恰当时映射多个目的，不能用一个泛化首页 claim 填满所有目的。
+源页的“引用可见原句”与“有 PDF 时高亮”仍须分开，不承诺每篇论文都能打开 PDF。六条 claim 属于同一 ready Consensus tool profile，生产 QA 已核对同 owner、official source、verified/current 与复核窗口。Tool Capability links 覆盖 `support`、`availability`、`plan`、`limitation`；Fit links 覆盖 `fit`、`limitation`。
 
-## 4. 生产只读身份快照与预检版本
+## 4. 发布前快照与生产只读验收
 
-快照时间：2026-09-25；下列 UUID 是操作定位符，不是发布授权。管理员在任何编辑、QA 或发布前重新只读回查 `status` 和 `updated_at`，变动则废弃此清单并重新审定。两条 Task Capability 用复合主键定位；Tool Capability 和 Fit 用其行 ID 定位。
+下表是 **2026-09-25 发布前的历史快照**，其中 `reviewed` 与 `updated_at` 不再代表当前生产状态。两条 Task Capability 用复合主键定位；Tool Capability 和 Fit 用其行 ID 定位。
 
-| 对象 | 精确 ID / 复合键 | 当前状态与 `updated_at`（UTC） | 本包预期 |
+| 对象 | 精确 ID / 复合键 | 发布前状态与 `updated_at`（UTC） | 历史预期 |
 | --- | --- | --- | --- |
 | Task `research-with-citations` | `527fe8b7-c171-4c50-ab1f-9404d7536e7c` | `active`; `2026-09-23T06:06:52.904308+00:00` | active 不变 |
 | Capability `research-discovery` | `50288b6e-a968-4bcf-9e55-911df203e0c7` | `active`; `2026-09-23T06:06:52.904308+00:00` | active 不变 |
@@ -88,12 +88,16 @@ Fit `disqualifiers` 候选数组：
 | Tool Capability：discovery | `5e6f6ba6-8587-4c59-977a-ed74672dee5c` | `reviewed`; `2026-09-23T06:06:52.904308+00:00` | 编辑、证据链与 QA 后才可申请组发布 |
 | Consensus Fit | `d52cc53b-6e5f-4b0b-809b-140076d4d7d2` | `reviewed`; `2026-09-23T06:06:52.904308+00:00` | 编辑、证据链与 QA 后才可申请组发布 |
 
-只读查重观察：该 profile 现有 **1 条 official source（首页）**、2 条 claim（1 candidate、1 verified）；Tool Capability 仅有 `support` link，Fit 仅有 `fit` link。本包不复用或输出其 claim 内容。此快照仍须在每次编辑和发布前重新读取；总控已另行只读确认 CL-01 migration 的 `editorial_history` 与两个 RPC 进入生产 schema cache，本包不代替独立技术 QA。
+发布前只读查重观察：该 profile 当时有 **1 条 official source（首页）**、2 条 claim（1 candidate、1 verified）；Tool Capability 仅有 `support` link，Fit 仅有 `fit` link。该观察只用于解释本次变更，不是当前计数；本包不输出旧 claim 原文。
 
-## 5. 发布、hold、撤回判定
+生产事务于 **2026-09-25T03:01:41.254Z** 完成；独立生产只读 QA 于 2026-09-25 给出 **QA_PASS**。目标两条 Task Capability、唯一 Consensus Tool Capability 和唯一 Fit 共 **2+1+1** 条关系均为 `published`，四条关系的 `updated_at` 均为 `2026-09-25T03:01:40.609866+00:00`，`review_due_at` 均为 `2026-12-23T03:00:04.892+00:00`。Task 仍 `active`，Consensus profile 仍 `ready`。
 
-- **Publish 候选：** CL-01 migration 已完成生产独立技术 QA；本次内容修正另经独立 QA 逐页核对官方事实、套餐时点、双语字符串、claim owner/current 状态和所有目的链接；管理员用最新精确 ID/`updated_at` 做单 Task 原子预检并批准；事务发布后只读回查目标和非目标行。此条件成立也只表示关系可发布。
-- **Hold：** 全文可用性、引用片段对应、套餐额度或 220M/400M 口径不能按范围表达；任一必要目的缺少直接官方 claim；owner、版本、复核窗口或独立 QA 不通过。保持 `reviewed`，记录问题和下次核验来源。
-- **Withdraw：** 后续发现官方证据否定已发布能力、产品身份错误、关键 claim 失效或 AI 引用不能满足可核查任务定义，管理员按 CL-01 单 Task 撤回受影响关系为 `stale` 并回读；不重写历史核验日期掩盖问题。
+六条新 claim 均为 `verified`，无冲突、未失效且复核窗口有效。目标关系共有 **13 条 evidence links**：Tool Capability 的 `support=1`、`availability=1`、`plan=2`、`limitation=3`；Fit 的 `fit=3`、`limitation=3`。链接均通过同 owner、official source、current/verified 门禁。两条旧 link 已解除，旧 claim 保留；没有删改其内容。非目标 cluster 未随此次发布改变。
 
-此组只有一个既有 Fit；**Task Page 继续关闭**，不改审批注册表、URL、sitemap 或索引策略。CL-02 只有在独立内容 QA 与生产关系验收或明确 hold/撤回结论完成后才可标完成；本证据包本身不满足该退出条件。执行顺序和共同门禁见[剩余 cluster 整改计划](./DECISION_GRAPH_REMAINING_CLUSTER_REMEDIATION_PLAN_CN.md)。
+## 5. 发布后的边界与撤回判定
+
+- **已发布：** 单 Task 原子事务和独立生产只读 QA 均通过；此结论仅覆盖上述四条数据关系。
+- **持续复核：** 套餐、全文可用性、引用对应关系和 220M/400M 对象口径若变化，按当前官方来源重新审定，不能靠延长旧复核日期维持证据有效。
+- **Withdraw：** 后续发现官方证据否定已发布能力、产品身份错误、关键 claim 失效或 AI 引用不能满足可核查任务定义，管理员按 CL-01 单 Task 撤回受影响关系为 `stale` 并回读。
+
+此组只有一个 Fit；**Task Page 继续关闭**。独立生产 QA 核对支持的 `/en`、`/cn`、`/tw` Task URL 仍为 404，Task URL 不在 sitemap；不改审批注册表、URL 或索引策略。CL-02 关系整改与独立生产验收已完成，下一顺位为 CL-03；执行顺序见[剩余 cluster 整改计划](./DECISION_GRAPH_REMAINING_CLUSTER_REMEDIATION_PLAN_CN.md)。

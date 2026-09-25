@@ -1,21 +1,20 @@
 # Decision Graph 剩余 Task cluster 编辑整改方案
 
-状态：**CL-00 独立 review 已通过（QA_PASS）**。这是编辑与开发执行计划，不授权任何关系发布；不设强制发布日期。`meeting-notes` 已在生产完成整改
-和只读验收，本计划不重复执行该组。
+状态：**CL-02 已于 2026-09-25 完成生产关系发布与独立生产 QA_PASS；CL-03 是下一项，尚未开始或发布**。这是编辑与开发执行计划，不授权后续 cluster 或 Task Page 发布；不设强制发布日期。`meeting-notes` 已在生产完成整改和只读验收，本计划不重复执行该组。
 
 ## 1. 目标、边界与现状缺口
 
-目标是在真实官方证据和逐条编辑判断下，修复其余五个 Task cluster 的理由、适用边界、套餐及证据链；让日常编辑通过既有 Admin
+目标是在真实官方证据和逐条编辑判断下，修复规划时剩余五个 Task cluster 的理由、适用边界、套餐及证据链；让日常编辑通过既有 Admin
 完成，而非每组交给用户执行手工 SQL。每组独立验收，保留数据库 trigger 的最终约束。
 
 本轮不建立第二套事实系统、不做通用爬虫或新增网络服务、不批量自动发布、不为数量制造工具关系、不改变 Task Page 审批注册
 表、URL、sitemap、`continue_index` 或工具索引。Schema 变化才走迁移；一次性 SQL 仅用于历史修复或紧急恢复。
 
-截至 2026-09-25：`meeting-notes` 的 2 条 Task Capability、3 条 Tool Capability、3 条既有 fit 已 published/current 且通过
-生产只读验收；页面仍为 404。其余五组沿用 DIFF-07 的 hold/候选结论。现有 Capability Manager 只允许 Task/Tool Capability
+规划基线：`meeting-notes` 的 2 条 Task Capability、3 条 Tool Capability、3 条既有 fit 已 published/current 且通过
+生产只读验收；页面仍为 404。当时其余五组沿用 DIFF-07 的 hold/候选结论。以下 P0 缺口描述保留为实施前基线：Capability Manager 当时只允许 Task/Tool Capability
 保存为 `draft` 或 `reviewed`，能关联已有 claim UUID，但没有受控的 `published`/`stale` 操作；Fit 的
 `reviewed → published → stale` 已有 review board。当前 Admin action 未见安全创建/刷新官方 source/claim 的入口，不能把手
-工 SQL 当作常规录入流程。上述判断以当前仓库代码为准，P0 实施前再次核对。
+工 SQL 当作常规录入流程。P0 已进入生产 schema cache，CL-02 的受控发布路径已实际使用；当前状态见第 6 节。
 
 ## 2. 严格顺序
 
@@ -65,8 +64,10 @@ owner 与目的、非目标行不变，以及页面/索引门禁。
 
 ### P1 · `research-with-citations`
 
-- **候选/现状：** 两条 Task Capability `research-discovery`、`citation-traceability` 的理由可进入编辑复核；Consensus 既
-  有 Tool Capability 与 Fit 仍 hold。优先核对
+**执行结果：** 2026-09-25，两条 Task Capability、Consensus 的一条 Tool Capability 和一条 Fit 已发布，独立生产 QA_PASS；六条 verified claim 与 13 条 evidence links 通过门禁，Task Page 仍关闭。以下条目保留为当时编辑核验标准。
+
+- **原候选/现状：** 两条 Task Capability `research-discovery`、`citation-traceability` 的理由可进入编辑复核；Consensus 既
+  有 Tool Capability 与 Fit 当时仍 hold。优先核对
   [官方搜索说明](https://help.consensus.app/en/articles/10073509-faqs)、[全文功能](https://consensus.app/home/features/full-text/)、[引用定位更新](https://consensus.app/home/blog/what-has-changed-in-consensus-summer-26/)及[套餐说明](https://help.consensus.app/en/articles/10087865-subscription-plans)：
   搜索覆盖与索引边界、全文或仅摘要的可用条件、引用与原文的对应方式、免费/付费额度。各页面可能更新，录入前按当时官方资料
   重新核对。
@@ -155,9 +156,9 @@ DIFF-08 Decision Assistant 继续 **blocked**。首批 20 工具核心 Capabilit
 | ID                          | 依赖                          | 交付                                                                   | 验收                                                           | 状态          | 估算            |
 | --------------------------- | ----------------------------- | ---------------------------------------------------------------------- | -------------------------------------------------------------- | ------------- | --------------- |
 | CL-00 独立 review           | 无                            | 评审本计划、优先级、原子发布边界                                       | 范围/门禁/负责人确认，无默认发布授权                           | 已完成        | 0.5–1 人日      |
-| CL-01 Admin closure         | CL-00                         | Capability transition、最小 evidence intake、单 Task 原子发布/撤回入口 | 权限/证据/DB trigger/回滚专项通过，管理员可无手工 SQL 完成一组 | 本地开发完成；待 migration、独立 QA、生产验收 | 3–5 人日        |
-| CL-02 Research              | CL-01                         | [Consensus 与两条 Task Capability 编辑证据包](./DECISION_GRAPH_CL02_RESEARCH_EDITORIAL_PACKET_2026-09-25_CN.md) | 直接官方证据、字段与 QA 通过；单组发布和只读回读，或明确 hold | 内容冲突已修正，待独立 QA 与生产执行 | 1–2 人日 |
-| CL-03 Image-video           | CL-02                         | Ray3.2 身份/来源纠正和 Luma 关系整改                                   | 旧事实撤回，输入/输出/套餐边界核实，单组验收或 hold            | 未开始        | 1–2 人日        |
+| CL-01 Admin closure         | CL-00                         | Capability transition、最小 evidence intake、单 Task 原子发布/撤回入口 | 权限/证据/DB trigger/回滚专项通过，管理员可无手工 SQL 完成一组 | 生产 schema cache 已生效；CL-02 路径已使用 | 3–5 人日        |
+| CL-02 Research              | CL-01                         | [Consensus 与两条 Task Capability 编辑证据包](./DECISION_GRAPH_CL02_RESEARCH_EDITORIAL_PACKET_2026-09-25_CN.md) | 直接官方证据、字段与 QA 通过；单组发布和只读回读，或明确 hold | 已完成：生产关系发布，独立生产 QA_PASS（2026-09-25） | 1–2 人日 |
+| CL-03 Image-video           | CL-02                         | Ray3.2 身份/来源纠正和 Luma 关系整改                                   | 旧事实撤回，输入/输出/套餐边界核实，单组验收或 hold            | 下一项；未开始、未发布 | 1–2 人日        |
 | CL-04 App-build eligibility | CL-03                         | n8n/OpenRouter 资格结论与 Task 定义修订                                | 先给可发布/conditional/contextual/撤回结论，再决定是否发布     | 未开始        | 1–2 人日        |
 | CL-05 Voice                 | CL-04                         | 两条 Task rationale 与经验证的候选工具提案                             | 权利/导出/套餐证据充分才新建关系并单组验收                     | 未开始        | 1.5–3 人日      |
 | CL-06 Brand                 | CL-05                         | 两条 Task rationale 与经验证的候选工具提案                             | 品牌控制非营销推断，直接证据和单组验收                         | 未开始        | 1.5–3 人日      |
@@ -166,5 +167,4 @@ DIFF-08 Decision Assistant 继续 **blocked**。首批 20 工具核心 Capabilit
 按五组均走完 closeout 粗估约 12–23 人日，取决于官方证据与候选资格；独立 QA 和管理员审批需另排人员时段。hold/撤回也是合格
 结论，不以估算强制发布。
 
-CL-01 本地实现只提供编辑闭环与事务门禁，不授权任何 cluster 发布。部署前须独立审查并应用
-`20260925_decision_cluster_editorial_closure.sql`，随后做独立内容/技术 QA；生产验收须由管理员对单 Task 精确清单预检、批准、发布和只读回读。
+CL-01 编辑闭环与事务门禁已用于 CL-02 单 Task 生产发布并完成独立只读回读。此项验收不授权 CL-03 或后续 cluster 发布；它们仍须各自完成独立内容 QA、管理员批准和单 Task 生产回读。
