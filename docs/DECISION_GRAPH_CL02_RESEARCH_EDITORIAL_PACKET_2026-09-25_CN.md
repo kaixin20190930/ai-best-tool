@@ -1,6 +1,6 @@
 # CL-02 · `research-with-citations` 编辑证据包
 
-状态：**证据包已准备；待 CL-01 生产迁移与独立内容 QA**。本文件是 2026-09-25 的候选编辑清单，不是录入、复核、发布或 Task Page 批准。范围仅限两条既有 Task Capability、Consensus 的一条既有 Tool Capability 和一条既有 Fit。生产核对均为只读；本文件不包含现有 claim 原文、密钥或用户数据。
+状态：**内容冲突已修正；待独立 QA 与生产执行**。本文件是 2026-09-25 的候选编辑清单，不是录入、复核、发布或 Task Page 批准。范围仅限两条既有 Task Capability、Consensus 的一条既有 Tool Capability 和一条既有 Fit。生产核对均为只读；本文件不包含现有 claim 原文、密钥或用户数据。
 
 ## 1. 产品身份与官方事实
 
@@ -12,7 +12,7 @@
 | [How Consensus Works](https://help.consensus.app/en/articles/9922673-how-consensus-works) | 支持自然语言、关键词等检索；结合语义和关键词搜索、质量信号与重排。AI 综合以检索到的论文为基础。 | `research-discovery` 支持、Fit |
 | [2026 夏季更新](https://consensus.app/home/blog/what-has-changed-in-consensus-summer-26/) | 2026-09-09 文章另称 **400M+ scholarly sources**，并提到非期刊类型扩展；Citation Grounding 把 AI 摘要中的引用映射到论文原句，可显示出处章节，有 PDF 时可高亮。 | 引用追溯；口径差异 |
 | [Full Text 功能页](https://consensus.app/home/features/full-text/) | 开放获取论文的 PDF 可在产品内查看并定位片段；Citation Graph 的论文页有摘要，PDF 仅在可用时提供。 | 原文跳转与可见性边界 |
-| [Subscription Plans](https://help.consensus.app/en/articles/10087865-subscription-plans) | Free：无限 Papers 搜索、每月 10 条 Pro message、3 次 Deep review；Pro：无限 Papers/Pro message、每月 15 次 Deep review；Deep：每月 200 次 Deep review。套餐和额度在录入时复查。 | 可用性、套餐 |
+| [Subscription Plans](https://help.consensus.app/en/articles/10087865-subscription-plans) | Free、Pro、Deep 均列出不限量 Papers 搜索；Free 的 Pro message 有额度限制，Pro/Deep 的高级能力与 Deep review 额度依套餐而定。该页未列出 Free Pro message 的具体数量；其他官方帮助页有不同数字，本包不固化该数量。录入时重新核对套餐与额度。 | 可用性、套餐 |
 | [How to Chat With Full Text](https://help.consensus.app/en/articles/10068241-how-to-chat-with-full-text) | 对论文、Collection 或 Library 的全文聊天须使用 Pro 或 Deep search mode；单篇上传/聊天有单独入口。不得从“可检索全文”推断免费无限全文聊天。 | 套餐和功能边界 |
 | [Responsible AI & Limitations](https://help.consensus.app/en/articles/10046838-responsible-ai-limitations) | 引用可点开查看全文或摘要中的支持片段；产品承认搜索库不涵盖全部研究，AI 仍可能误读真实论文，重要来源应人工审阅。 | 引用支持、人工复核限制 |
 
@@ -30,18 +30,18 @@
 | Task → `citation-traceability` | `rationale.cn` | 让每条被引用的结论都能追溯到支持它的论文，并在可用时定位原文片段，便于读者结合上下文核查。 |
 | Consensus → `research-discovery` | `support_level` | 候选 `strong`：官方说明直接支持学术论文发现与相关性排序；强度仅适用于已收录资料，不代表穷尽性文献综述。独立 QA 可因检索覆盖或实际使用边界改为 `partial`。 |
 | Consensus → `research-discovery` | `availability` | 候选 `all_plans`：Papers 搜索在 Free、Pro、Deep 均列为无限；AI 综合、Deep review 和全文聊天受模式及额度约束。 |
-| Consensus → `research-discovery` | `plan_requirement.en` | Papers search is available on Free, Pro, and Deep. Free includes 10 Pro messages and 3 Deep reviews per month; Pro includes unlimited Pro messages and 15 Deep reviews; Deep includes 200 Deep reviews. Full-text chat across papers, Collections, or Library requires Pro or Deep search mode. |
-| Consensus → `research-discovery` | `plan_requirement.cn` | Free、Pro、Deep 均可使用 Papers 搜索。Free 每月含 10 条 Pro message、3 次 Deep review；Pro 的 Pro message 不限量、每月 15 次 Deep review；Deep 每月 200 次 Deep review。跨论文、Collection 或 Library 的全文聊天需使用 Pro 或 Deep 搜索模式。 |
-| Consensus → `research-discovery` | `limitations` | 下方双语三条数组；录入时按现有 Admin JSON 结构确认。 |
+| Consensus → `research-discovery` | `plan_requirement.en` | Papers search is listed as unlimited on Free, Pro, and Deep. Free Pro messages are limited; advanced analysis and Deep reviews depend on the plan's current allowance. Full-text chat across papers, Collections, or Library requires Pro or Deep search mode. Check current allowances on the official plan page before use. |
+| Consensus → `research-discovery` | `plan_requirement.cn` | Free、Pro、Deep 均列出不限量 Papers 搜索。Free 的 Pro message 有额度限制；高级分析和 Deep review 依套餐当前额度使用。跨论文、Collection 或 Library 的全文聊天需使用 Pro 或 Deep 搜索模式；使用前核对官方套餐页的当前额度。 |
+| Consensus → `research-discovery` | `limitations` | 下方双语字符串数组；每个元素符合 CL-01 RPC 的字符串与长度约束。 |
 | Consensus → Task Fit | `fit_level` | 候选保持 `strong`，限“在收录学术资料中发现、综合并人工核验带引用的研究”这一任务定义。 |
 | Consensus → Task Fit | `rationale.en` | Consensus searches scholarly papers, grounds AI summaries in cited sources, and exposes supporting passages for citation review, making it a strong fit for source-based research within its indexed corpus. |
 | Consensus → Task Fit | `rationale.cn` | Consensus 可检索学术论文、用来源支撑 AI 摘要，并展示引用依据片段；在其收录范围内，适合需要核查来源的研究任务。 |
 
-`limitations` 候选数组：
+`limitations` 候选数组（每项为一个 JSON 字符串，录入时组成数组）：
 
-1. `{"en":"The indexed corpus is not exhaustive; search results and summaries are a subset of available research.","cn":"收录库并非全部研究；搜索结果与摘要只覆盖可检索资料的一部分。"}`
-2. `{"en":"Full-text analysis varies by paper. Publisher access for analysis does not guarantee that the user can view or download a paywalled article; some evidence is abstract-based.","cn":"全文分析依论文而异。平台可分析合作出版社内容，不等于用户可查看或下载付费论文；部分证据只来自摘要。"}`
-3. `{"en":"AI may misread a real paper. Check the cited passage, methods, population, and conclusion in the source before relying on the synthesis.","cn":"AI 可能误读真实论文；采纳综合结论前，应核对引用片段、方法、研究对象及原文结论。"}`
+1. `"EN: The indexed corpus is not exhaustive; search results and summaries cover only available research. CN: 收录库并非全部研究；搜索结果与摘要只覆盖可检索资料的一部分。"`
+2. `"EN: Full-text analysis varies by paper. Publisher access for analysis does not guarantee that the user can view or download a paywalled article; some evidence is abstract-based. CN: 全文分析依论文而异。平台可分析合作出版社内容，不等于用户可查看或下载付费论文；部分证据只来自摘要。"`
+3. `"EN: AI may misread a real paper. Check the cited passage, methods, population, and conclusion in the source before relying on the synthesis. CN: AI 可能误读真实论文；采纳综合结论前，应核对引用片段、方法、研究对象及原文结论。"`
 
 Fit `required_conditions` 候选数组：
 
@@ -66,7 +66,7 @@ Fit `disqualifiers` 候选数组：
 | `consensus:research:paper-search-2026-09` / `feature` | [Research Database](https://help.consensus.app/en/articles/10055108-consensus-research-database)、[How Consensus Works](https://help.consensus.app/en/articles/9922673-how-consensus-works)；**单条 claim 只选一页作直接 source** | `{"feature":"scholarly_paper_search","methods":["semantic","keyword"],"dataset":"Consensus All"}`；`{"product":"Consensus web app","dataset":"All","asOf":"2026-09-25"}` | Tool `support`；Fit `fit` |
 | `consensus:research:citation-grounding-2026-09` / `feature` | [夏季更新](https://consensus.app/home/blog/what-has-changed-in-consensus-summer-26/) | `{"feature":"citation_grounding","evidence":"quote_from_paper_full_text_or_abstract","pdf_highlight":"when_available"}`；`{"product":"Consensus web app","output":"AI summaries","asOf":"2026-09-25"}` | Fit `fit`；Task 理由的编辑核验 |
 | `consensus:research:fulltext-conditions-2026-09` / `limitation` | [Research Database](https://help.consensus.app/en/articles/10055108-consensus-research-database) | `{"full_text":"paper_dependent","paywalled_view_download":"user_access_required","fallback":"abstract_or_metadata"}`；`{"product":"Consensus web app","paperAccess":"varies","asOf":"2026-09-25"}` | Tool `support`/`limitation`；Fit `limitation` |
-| `consensus:research:papers-plan-2026-09` / `plan` | [Subscription Plans](https://help.consensus.app/en/articles/10087865-subscription-plans) | `{"papers_search":"unlimited_on_listed_tiers","free_pro_messages_monthly":10,"free_deep_reviews_monthly":3,"pro_deep_reviews_monthly":15,"deep_deep_reviews_monthly":200}`；`{"plans":["Free","Pro","Deep"],"billingPeriod":"month","asOf":"2026-09-25"}` | Tool `availability`/`plan`；Fit `fit`（额度条件） |
+| `consensus:research:papers-plan-2026-09` / `plan` | [Subscription Plans](https://help.consensus.app/en/articles/10087865-subscription-plans) | `{"papers_search":"unlimited_on_listed_tiers","free_pro_messages":"limited"}`；`{"plans":["Free","Pro","Deep"],"asOf":"2026-09-25"}`。不固化 Free Pro message 数字；独立 QA 按官方套餐页核对直接片段。 | Tool `availability`/`plan`；Fit `fit`（额度条件） |
 | `consensus:research:fulltext-chat-mode-2026-09` / `plan` | [How to Chat With Full Text](https://help.consensus.app/en/articles/10068241-how-to-chat-with-full-text) | `{"feature":"chat_with_full_text_across_papers_collections_library","requiredMode":"Pro_or_Deep_search"}`；`{"product":"Consensus web app","feature":"full_text_chat","asOf":"2026-09-25"}` | Tool `plan`/`limitation`；Fit `limitation` |
 | `consensus:research:manual-review-2026-09` / `limitation` | [Responsible AI & Limitations](https://help.consensus.app/en/articles/10046838-responsible-ai-limitations) | `{"risk":"AI_can_misread_real_paper","response":"human_source_review","coverage":"not_exhaustive"}`；`{"product":"Consensus web app","output":"AI analysis","asOf":"2026-09-25"}` | Tool `limitation`；Fit `limitation` |
 
@@ -88,11 +88,11 @@ Fit `disqualifiers` 候选数组：
 | Tool Capability：discovery | `5e6f6ba6-8587-4c59-977a-ed74672dee5c` | `reviewed`; `2026-09-23T06:06:52.904308+00:00` | 编辑、证据链与 QA 后才可申请组发布 |
 | Consensus Fit | `d52cc53b-6e5f-4b0b-809b-140076d4d7d2` | `reviewed`; `2026-09-23T06:06:52.904308+00:00` | 编辑、证据链与 QA 后才可申请组发布 |
 
-只读查重观察：该 profile 现有 **1 条 official source（首页）**、2 条 claim（1 candidate、1 verified）；Tool Capability 仅有 `support` link，Fit 仅有 `fit` link。本包不复用或输出其 claim 内容。CL-01 migration 尚未在生产执行；不能把本快照当作新 Admin/RPC 已可用的证据。
+只读查重观察：该 profile 现有 **1 条 official source（首页）**、2 条 claim（1 candidate、1 verified）；Tool Capability 仅有 `support` link，Fit 仅有 `fit` link。本包不复用或输出其 claim 内容。此快照仍须在每次编辑和发布前重新读取；总控已另行只读确认 CL-01 migration 的 `editorial_history` 与两个 RPC 进入生产 schema cache，本包不代替独立技术 QA。
 
 ## 5. 发布、hold、撤回判定
 
-- **Publish 候选：** CL-01 migration 已完成生产独立技术 QA；独立内容 QA 逐页核对官方事实、数值对象和套餐时点，核对双语字段、claim owner/current 状态和所有目的链接；管理员用最新精确 ID/`updated_at` 做单 Task 原子预检并批准；事务发布后只读回查目标和非目标行。此条件成立也只表示关系可发布。
+- **Publish 候选：** CL-01 migration 已完成生产独立技术 QA；本次内容修正另经独立 QA 逐页核对官方事实、套餐时点、双语字符串、claim owner/current 状态和所有目的链接；管理员用最新精确 ID/`updated_at` 做单 Task 原子预检并批准；事务发布后只读回查目标和非目标行。此条件成立也只表示关系可发布。
 - **Hold：** 全文可用性、引用片段对应、套餐额度或 220M/400M 口径不能按范围表达；任一必要目的缺少直接官方 claim；owner、版本、复核窗口或独立 QA 不通过。保持 `reviewed`，记录问题和下次核验来源。
 - **Withdraw：** 后续发现官方证据否定已发布能力、产品身份错误、关键 claim 失效或 AI 引用不能满足可核查任务定义，管理员按 CL-01 单 Task 撤回受影响关系为 `stale` 并回读；不重写历史核验日期掩盖问题。
 
