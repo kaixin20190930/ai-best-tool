@@ -1,10 +1,10 @@
 # CL-03 · `product-image-to-short-video` 编辑证据包
 
-状态：**Neon 公开内容已受控更正；身份与公开 timeline 修复包待独立 QA，关系未发布**（2026-09-25）。本包不是生产写入、发布清单或管理员批准。只涉及既有 Task、两条 Task Capability、Luma 的一条 Tool Capability 和一条 Fit；不创建实体、不进入 CL-04，也不触及 Task Page。
+状态：**Luma 公开内容、工具/profile 身份及两条公开 timeline 事件已在生产修复并回读通过；CL-03 evidence 与关系工作未完成**（2026-09-25）。本包不是生产写入、发布清单或管理员批准。只涉及既有 Task、两条 Task Capability、Luma 的一条 Tool Capability 和一条 Fit；不创建实体、不进入 CL-04，也不触及 Task Page。
 
-## 1. 生产只读身份与版本快照
+## 1. 修复前生产只读身份与版本快照（历史基线）
 
-只读读取 Supabase 关系及 Neon 工具；未读取、记录或转述旧 claim 的 `claim_value`、`source_excerpt`。所有时间为 UTC，发布或编辑前须重新回读 `updated_at` 与复核字段。
+下表保留修复前状态作审计，不代表当前生产值。只读读取 Supabase 关系及 Neon 工具；未读取、记录或转述旧 claim 的 `claim_value`、`source_excerpt`。所有时间为 UTC，发布或编辑前须重新回读 `updated_at` 与复核字段。
 
 | 对象 | 精确 ID / 键 | 当前状态、版本与 reviewer |
 | --- | --- | --- |
@@ -18,7 +18,7 @@
 | Tool Capability：图片转视频 | `3fd95416-f1a7-4c43-8614-b5e6dd8051d3` | `partial`、`availability=unknown`、plan `{}`、limitations `[]`、`reviewed`；`updated_at/reviewed_at=2026-09-23T06:06:52.904308+00:00`；reviewer 同上 |
 | Luma Fit | `2e5a0e13-ce68-4216-b315-0c6aa3e39937` | `conditional`、`reviewed`；空 conditions/disqualifiers；`updated_at/reviewed_at=2026-09-23T06:06:52.904308+00:00`；reviewer 同上 |
 
-**阻塞项。** [Luma 官方身份页](https://lumalabs.ai/llm-info)把当前视频模型标为 Ray3.2，区分旧 Dream Machine/Ray2，并以 `lumalabs.ai` 为官方站；[当前产品页](https://lumalabs.ai/ray)和[发布说明](https://lumalabs.ai/news/introducing-ray-3-2)同样指向 Ray3.2。生产工具 URL 和 profile 域仍为旧 Dream Machine 子域。CL-01 intake 校验 source host 必须匹配 profile `canonical_domain` 或其下级域；`lumalabs.ai`、`docs.agents.lumalabs.ai` 均不匹配 `dream-machine.lumalabs.ai`。因此不得借旧域链接、新建第二个 profile/tool、改 claim 来源或跳过校验来录入当前证据。须先由独立身份审查确认既有工具是否应更新为 Luma 当前 canonical URL、profile 域是否需同步调整，并核对跨库 owner；完成后重新只读快照、再进独立内容 QA。官方其他 FAQ 仍用 Dream Machine 称呼消费端，说明品牌用语也须单独核定；本包只把 Ray3.2 作为被审模型，不假定所有 App 工作流都采用同一 API 行为。
+**修复前阻塞项（现已解除）。** [Luma 官方身份页](https://lumalabs.ai/llm-info)把当前视频模型标为 Ray3.2，区分旧 Dream Machine/Ray2，并以 `lumalabs.ai` 为官方站；[当前产品页](https://lumalabs.ai/ray)和[发布说明](https://lumalabs.ai/news/introducing-ray-3-2)同样指向 Ray3.2。当时生产工具 URL 和 profile 域为旧 Dream Machine 子域。CL-01 intake 校验 source host 必须匹配 profile `canonical_domain` 或其下级域；`lumalabs.ai`、`docs.agents.lumalabs.ai` 均不匹配 `dream-machine.lumalabs.ai`。当时不得借旧域链接、新建第二个 profile/tool、改 claim 来源或跳过校验来录入当前证据；身份与跨库 owner 后经受控修复和回读，后续 evidence intake 仍须独立 QA。官方其他 FAQ 仍用 Dream Machine 称呼消费端，说明品牌用语也须单独核定；本包只把 Ray3.2 作为被审模型，不假定所有 App 工作流都采用同一 API 行为。
 
 ## 2. 旧证据查重与处置
 
@@ -95,18 +95,19 @@ Fit `disqualifiers` 候选数组：
 | `luma:ray32:app-credit-rate-2026-09` / `plan` | [当前定价](https://lumalabs.ai/pricing)；“20 credits / 5 sec 60 credits / 10 sec” | `{"ray32_draft_video_credits":{"5s":20,"10s":60}}`；`{"surface":"Luma App pricing table","model":"Ray3.2 SDR","action":"text_or_image_to_video","resolution":"Draft","asOf":"2026-09-25"}` | Tool `availability`/`plan`；Fit `fit`；仅 draft，其他费率另核 |
 | `luma:product:consistency-risk-2026-09` / `limitation` | [产品一致性指南](https://lumalabs.ai/learning-hub/keep-character-product-consistency-in-luma-reference-guide)；“your character or product keeps subtly changing” | `{"product_consistency":"may_drift"}`；`{"surface":"Luma Agent reference workflow","asOf":"2026-09-25"}` | Tool `limitation`；Fit `limitation`；不能写成 Ray3.2 专属测试结论 |
 
-**value–excerpt 自检：** 身份、图片锚、API 5/10 秒/分辨率、局部 edit、MP4、Plus 商用及产品漂移分别可由对应片段直接支持；credit claim 只陈述定价表的 Ray3.2 SDR Draft 5/10 秒数，不外推 540p/720p/1080p。QA 仍须在原页确认表格列与引文连续性，尤其商业套餐行；若不能直接定位则删掉该 key。`api-output` 与 `api-mp4` 同 source 的摘录可合并为一个 claim 以减少冗余，QA 须校对最终 purpose 覆盖。上述草案不能在域冲突解决前执行 intake；`availability=paid_only` 和 App Ray3.2 权限仍须直接来源，故即使其他草案通过也暂不具备 Tool Capability 四目的完整发布证据。
+**value–excerpt 自检：** 身份、图片锚、API 5/10 秒/分辨率、局部 edit、MP4、Plus 商用及产品漂移分别可由对应片段直接支持；credit claim 只陈述定价表的 Ray3.2 SDR Draft 5/10 秒数，不外推 540p/720p/1080p。QA 仍须在原页确认表格列与引文连续性，尤其商业套餐行；若不能直接定位则删掉该 key。`api-output` 与 `api-mp4` 同 source 的摘录可合并为一个 claim 以减少冗余，QA 须校对最终 purpose 覆盖。上述草案在域冲突解决前不能执行 intake；当前身份冲突已解除，但仍须独立内容 QA 和 fresh evidence preflight；`availability=paid_only` 和 App Ray3.2 权限仍须直接来源，故即使其他草案通过也暂不具备 Tool Capability 四目的完整发布证据。
 
 ## 6. QA 与继续执行的门禁
 
-当前结论是 **Neon 内容已更正；身份与公开 timeline 修复包待独立 QA，后续写入仍 hold**。硬顺序：①仓库双语公开页及 Neon 内容候选先做独立事实 QA；②本地页面变更上线后，受控 Neon 内容更新并回读 `/en/ai/luma-ai`、`/cn/ai/luma-ai`，确认广义 Luma 文案与目标根域一致；③双库 fresh preflight，完整捕获该 profile 的全部 source、claim 状态/来源关联及每条 Tool Capability/Fit link；④Neon URL 更新并回读；⑤Supabase profile 域更新并回读；⑥两语言页面目的地与完整非敏感 evidence baseline 回读。受控模板见 `/tmp/ai-best-tool-cl03-identity-operation.json`；快照清单见 `/tmp/ai-best-tool-cl03-production-snapshot.json`。若跨库中途失败，先恢复已变更的 Supabase 域，再恢复 Neon URL，最后恢复 Neon 公开内容；每步须以精确写入版本和当前值守卫，发现并发改动即停下交独立 QA。此包不处理旧 claim 失效/解绑，不录入 Ray3.2 evidence，也不发布关系。后续证据与关系仍需独立 QA 和另行授权。
+**身份修复已完成并通过生产回读，关系整改仍 hold。** 总控已验证：Neon tool `711df152-fdcf-4a19-930c-ab866b67605f` 为 `published`、`url=https://lumalabs.ai/`、`updated_at::text=2026-09-25 14:10:18.62758+00`，已验收内容字段保持；Supabase profile `4501f2f9-4579-4675-9a16-0ef800fe8385` 为 `ready`/version 2、`canonical_domain=lumalabs.ai`、`product_name=Luma AI`。decision event `0c92d051-bf36-4300-9585-79f8dc6c28ae` 与 fact event `2b07082c-5b63-470e-a096-6046b3d7446e` 已更正为 Luma AI 与当前官方来源，event type、scope、visibility、occurred_at 未变。完整 evidence projection 未变：4 sources、2 claims、1 Tool Capability link、1 Fit link。`/en`、`/cn`、`/jp` 的旧当前断言（Dream Machine/Photon/Ray3.14/Free-Lite/Unlimited）为 0，Ray3.2/UNI-1.1/Luma AI 可见，根域出站链接均存在。主分支已包含 `e84ad342`。这些验收只覆盖公开内容与身份，不代表 Ray3.2 evidence intake 或关系发布。
 
+**下一项唯一范围：**对 Ray3.2 新 evidence intake、旧 claim/link 处置，以及 Tool Capability/Fit 的候选编辑与发布做独立 QA。不得以本次身份回读直接录入证据、失效/解绑旧 claim、改 reviewed 关系或发布 Task；Task Page、sitemap/index 保持不变。
 ### 公开内容来源与本次修复范围
 
-线上 `/ai/luma-ai` 的旧事实来自运行时 Neon `tools.title/content/detail/features/use_cases/pricing/url`，历史来源是 `20260901_migrate_luma_ai_tool.sql`；页面另有 `page.tsx` 的双语官方事实快照和 metadata/决策要点，以及 `priorityToolEvidence.ts` 的限制文案。旧的用户可见断言包括 Dream Machine 作为当前产品范围、Photon 图片模型、Ray3.14 草稿、Lite/Unlimited 套餐与旧价格/credits、水印和商用权边界、月度 credits 不结转、旧 API 商用结论、Dream Machine 与 API 余额关系。这些均须在内容 QA 中逐项消除或重新证实。历史 migration 和 collection 记录只作审计，不重新运行。`/cn` 与 `/en` 使用同一双语字段；其他 locale 的后备文案也须在回读时检查。
+线上 `/ai/luma-ai` 的旧事实来自运行时 Neon `tools.title/content/detail/features/use_cases/pricing/url`，历史来源是 `20260901_migrate_luma_ai_tool.sql`；页面另有 `page.tsx` 的双语官方事实快照和 metadata/决策要点，以及 `priorityToolEvidence.ts` 的限制文案。旧的用户可见断言包括 Dream Machine 作为当前产品范围、Photon 图片模型、Ray3.14 草稿、Lite/Unlimited 套餐与旧价格/credits、水印和商用权边界、月度 credits 不结转、旧 API 商用结论、Dream Machine 与 API 余额关系。这些旧当前断言已在 `/en`、`/cn`、`/jp` 的生产页面 QA 中消除；后续新 evidence 仍须逐条证实。历史 migration 和 collection 记录只作审计，不重新运行。`/cn` 与 `/en` 使用同一双语字段；其他 locale 的后备文案也须在回读时检查。
 
-仓库双语快照、metadata 与优先限制文案已提交，Neon 内容经两次受控更正；当前 URL 仍为旧子域，profile 域/名称及两条公开 timeline 事件尚未修复。候选定位为广义 Luma 平台：App 与 API 分表面；Ray3.2 为当前视频模型，UNI-1.1 为当前图片模型；App 个人档为 Plus/Pro/Ultra；具体可用模型、credits、商用权及导出按账号/表面确认。API 参数不推断 App 能力，产品图不承诺包装或文字逐帧一致。官方依据：[身份页](https://lumalabs.ai/llm-info)、[当前定价](https://lumalabs.ai/pricing)、[产品一致性指南](https://lumalabs.ai/learning-hub/keep-character-product-consistency-in-luma-reference-guide)。
+仓库双语快照、metadata 与优先限制文案已提交，Neon 内容经两次受控更正；工具 URL、profile 域/名称及两条公开 timeline 事件随后完成生产修复并回读通过。候选定位为广义 Luma 平台：App 与 API 分表面；Ray3.2 为当前视频模型，UNI-1.1 为当前图片模型；App 个人档为 Plus/Pro/Ultra；具体可用模型、credits、商用权及导出按账号/表面确认。API 参数不推断 App 能力，产品图不承诺包装或文字逐帧一致。官方依据：[身份页](https://lumalabs.ai/llm-info)、[当前定价](https://lumalabs.ai/pricing)、[产品一致性指南](https://lumalabs.ai/learning-hub/keep-character-product-consistency-in-luma-reference-guide)。
 
 ### 公开 timeline 身份补充门禁（2026-09-25）
 
-页面 QA 发现旧品牌还来自 Supabase profile `product_name` 与两条公开 timeline 事件，而非 Neon features。当前 profile `4501f2f9-4579-4675-9a16-0ef800fe8385` 为 `Luma Dream Machine`/旧域、`profile_version=2`；decision event `0c92d051-bf36-4300-9585-79f8dc6c28ae` 与 fact event `2b07082c-5b63-470e-a096-6046b3d7446e` 仍带旧表述。受控身份包现要求：fresh 双库与完整 evidence baseline → Neon URL 精确版本更新 → **单个 Supabase SQL 事务**同时更正 profile 域/名称和两条 event 的摘要、来源及 decision metadata → 页面与完整 evidence 回读。事务中任一守卫失配即整体回滚；若 Supabase 阶段失败，按最新 `updated_at` 精确守卫补偿 Neon URL；若提交后 QA 失败，先逆序回滚 Supabase 三行，再补偿 Neon URL。保持 event 类型、复核范围、可见性、发生时间及 claims/sources/links 不变。操作模板见 `/tmp/ai-best-tool-cl03-identity-operation.json`；本次未执行身份写入。
+页面 QA 曾发现旧品牌还来自 Supabase profile `product_name` 与两条公开 timeline 事件，而非 Neon features。修复前 profile `4501f2f9-4579-4675-9a16-0ef800fe8385` 为 `Luma Dream Machine`/旧域、`profile_version=2`；修复前 decision event `0c92d051-bf36-4300-9585-79f8dc6c28ae` 与 fact event `2b07082c-5b63-470e-a096-6046b3d7446e` 曾带旧表述。已执行的受控身份顺序为：fresh 双库与完整 evidence baseline → Neon URL 精确版本更新 → **单个 Supabase SQL 事务**同时更正 profile 域/名称和两条 event 的摘要、来源及 decision metadata → 页面与完整 evidence 回读。事务中任一守卫失配即整体回滚；若 Supabase 阶段失败，按最新 `updated_at` 精确守卫补偿 Neon URL；若提交后 QA 失败，先逆序回滚 Supabase 三行，再补偿 Neon URL。保持 event 类型、复核范围、可见性、发生时间及 claims/sources/links 不变。操作模板见 `/tmp/ai-best-tool-cl03-identity-operation.json`；本次文档收口不执行任何生产写入。
