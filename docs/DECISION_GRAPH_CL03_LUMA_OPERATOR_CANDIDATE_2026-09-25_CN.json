@@ -1,0 +1,209 @@
+{
+  "cluster": "product-image-to-short-video",
+  "status": "candidate_pending_independent_qa_hold",
+  "checkedAtUtc": "2026-09-25T14:46:37.371Z",
+  "productionWrites": 0,
+  "scope": {
+    "taskId": "241ae23f-50b8-4cad-b93a-3eda29dc3dfe",
+    "toolId": "711df152-fdcf-4a19-930c-ab866b67605f",
+    "profileId": "4501f2f9-4579-4675-9a16-0ef800fe8385",
+    "toolCapabilityId": "3fd95416-f1a7-4c43-8614-b5e6dd8051d3",
+    "fitId": "2e5a0e13-ce68-4216-b315-0c6aa3e39937",
+    "createEntities": false
+  },
+  "readOnlyBaseline": {
+    "neonTool": {
+      "status": "published",
+      "url": "https://lumalabs.ai/",
+      "updatedAt": "2026-09-25 14:10:18.62758+00"
+    },
+    "profile": {
+      "status": "ready",
+      "version": 2,
+      "ownerId": "711df152-fdcf-4a19-930c-ab866b67605f",
+      "productName": "Luma AI",
+      "canonicalDomain": "lumalabs.ai",
+      "updatedAt": "2026-09-25T14:24:50.839828+00:00",
+      "nextReviewAt": "2026-10-05T00:00:00+00:00"
+    },
+    "sourceCount": 4,
+    "sourceUrls": [
+      "https://dream-machine.lumalabs.ai/",
+      "https://dream-machine.lumalabs.ai/help",
+      "https://dream-machine.lumalabs.ai/pricing",
+      "https://dream-machine.lumalabs.ai/product"
+    ],
+    "sourceIds": [
+      "04fb983e-dbb3-47a0-b3b5-51a5f433a6f2",
+      "d5b2260d-4869-4398-b4cb-c37e29036ebb",
+      "64de4cbd-b06a-4e1f-906a-d48c818aae30",
+      "ca31241b-4b6b-4af2-9b60-2a6da5e73ff3"
+    ],
+    "claimCount": 2,
+    "oldVerifiedClaimId": "4cf9edb2-8b6d-49dd-bc36-ccbc32f7a939",
+    "oldVerifiedClaim": {
+      "key": "one_line_positioning:342f63fda46faaa7",
+      "sourceId": null,
+      "verifiedBy": null,
+      "status": "verified",
+      "reviewDueAt": "2026-10-05T00:00:00+00:00"
+    },
+    "oldRejectedClaimId": "ba3f00b1-cb72-4383-827e-685b0c18d2d8",
+    "oldRejectedClaim": {
+      "key": "product_name:76688799c6345607",
+      "sourceId": null,
+      "status": "rejected"
+    },
+    "toolCapability": {
+      "status": "reviewed",
+      "supportLevel": "partial",
+      "availability": "unknown",
+      "reviewedBy": "2b8177ac-70b3-4475-a1ee-509ff8b4b622",
+      "updatedAt": "2026-09-23T06:06:52.904308+00:00"
+    },
+    "fit": {
+      "status": "reviewed",
+      "fitLevel": "conditional",
+      "reviewedBy": "2b8177ac-70b3-4475-a1ee-509ff8b4b622",
+      "updatedAt": "2026-09-23T06:06:52.904308+00:00"
+    },
+    "oldLinks": [
+      {
+        "entity": "tool_capability",
+        "claimId": "4cf9edb2-8b6d-49dd-bc36-ccbc32f7a939",
+        "purpose": "support"
+      },
+      {
+        "entity": "fit",
+        "claimId": "4cf9edb2-8b6d-49dd-bc36-ccbc32f7a939",
+        "purpose": "fit"
+      }
+    ]
+  },
+  "evidenceIntakeCandidates": [
+    {
+      "key": "luma:ray32:identity-2026-09",
+      "type": "feature",
+      "url": "https://lumalabs.ai/llm-info",
+      "excerpt": "The current video model is Ray3.2",
+      "value": { "current_video_model": "Ray3.2" },
+      "scope": { "surface": "Luma platform identity", "asOf": "2026-09-25" },
+      "candidateLinks": ["tool:support", "fit:fit"]
+    },
+    {
+      "key": "luma:ray32:api-anchor-2026-09",
+      "type": "feature",
+      "url": "https://docs.agents.lumalabs.ai/guides/model",
+      "excerpt": "Image-to-video (`video.start_frame` / `video.end_frame`)",
+      "value": { "api_image_to_video": "start_or_end_frame" },
+      "scope": { "surface": "Luma Agents API", "model": "ray-3.2", "asOf": "2026-09-25" },
+      "candidateLinks": ["tool:support", "fit:fit"]
+    },
+    {
+      "key": "luma:ray32:api-duration-2026-09",
+      "type": "limitation",
+      "url": "https://docs.agents.lumalabs.ai/guides/model",
+      "excerpt": "Resolutions: `540p`, `720p`, `1080p`. Durations: `5s`, `10s`.",
+      "value": { "api_duration": ["5s", "10s"], "api_resolution": ["540p", "720p", "1080p"] },
+      "scope": { "surface": "Luma Agents API", "model": "ray-3.2", "type": "video", "asOf": "2026-09-25" },
+      "candidateLinks": ["tool:limitation", "fit:limitation"]
+    },
+    {
+      "key": "luma:ray32:api-billing-2026-09",
+      "type": "plan",
+      "url": "https://docs.agents.lumalabs.ai/guides/pricing",
+      "excerpt": "Pay-as-you-go — pay per generation.",
+      "value": { "api_pay_as_you_go": "per_generation" },
+      "scope": { "surface": "Luma Agents API", "asOf": "2026-09-25" },
+      "candidateLinks": ["tool:plan"]
+    },
+    {
+      "key": "luma:product:consistency-risk-2026-09",
+      "type": "limitation",
+      "url": "https://lumalabs.ai/learning-hub/keep-character-product-consistency-in-luma-reference-guide",
+      "excerpt": "If your character or product keeps subtly changing",
+      "value": { "product_consistency": "may_drift" },
+      "scope": { "surface": "Luma Agent reference workflow", "asOf": "2026-09-25" },
+      "candidateLinks": ["tool:limitation", "fit:limitation"]
+    }
+  ],
+  "relationshipCandidates": {
+    "toolCapability": {
+      "supportLevel": "partial",
+      "availability": "unknown",
+      "planRequirement": {
+        "en": "For the Luma Agents API, confirm account access and pay-per-generation cost before use. Verify App plan access, credits, and commercial terms separately.",
+        "cn": "使用 Luma Agents API 前确认账号权限与按次生成费用；App 套餐权限、credits 和商用条款须单独核实。"
+      },
+      "limitations": [
+        "EN: An input image can guide generation but exact packaging, marks, and text need human frame review. CN: 输入图可引导生成，但包装、标识和文字仍须人工逐帧核验。",
+        "EN: The Agents API model page lists 5s and 10s for video. Do not promise a single 20s image-to-video output. CN: Agents API 模型页列视频 5/10 秒；不得承诺单次 20 秒图片转视频。",
+        "EN: API video edits and reframing do not establish a full timeline editor or the same App controls. CN: API 局部改片和改比例不证明完整时间线编辑器或 App 具有相同控制项。"
+      ],
+      "status": "reviewed"
+    },
+    "fit": {
+      "fitLevel": "conditional",
+      "rationale": {
+        "en": "Ray3.2 on the Agents API accepts image anchors for short video generation. Luma is a conditional fit when a person can verify the product's visual identity and the selected App or API workflow is confirmed separately.",
+        "cn": "Agents API 的 Ray3.2 可用图片锚生成短视频；只有可人工核验产品外观，并单独确认所选 App 或 API 工作流时，Luma 才是有条件适配。"
+      },
+      "requiredConditions": [
+        {
+          "en": "The user has rights to the source image and any marks or people shown.",
+          "cn": "用户有权使用源图片及其中的标识或人物。"
+        },
+        {
+          "en": "A reviewer can check product identity, text, color, and shape in the resulting frames.",
+          "cn": "审核者可核查生成画面中的产品身份、文字、颜色和形状。"
+        },
+        {
+          "en": "The selected App or API account has confirmed access, budget, duration, output, and commercial terms.",
+          "cn": "所选 App 或 API 账号的权限、预算、时长、输出和商用条款均已确认。"
+        }
+      ],
+      "disqualifiers": [
+        {
+          "en": "The deliverable requires guaranteed frame-perfect packaging, marks, or text without review.",
+          "cn": "交付要求未经人工核验也保证每帧包装、标识或文字完全一致。"
+        },
+        {
+          "en": "The work requires a full timeline editor, captions, music mixing, or multi-shot assembly inside Luma.",
+          "cn": "工作要求在 Luma 内完成完整时间线剪辑、字幕、配乐混音或多镜头装配。"
+        },
+        {
+          "en": "Required App or API access, duration, output, or commercial terms cannot be confirmed.",
+          "cn": "所需 App 或 API 权限、时长、输出或商用条款无法确认。"
+        }
+      ],
+      "status": "reviewed"
+    }
+  },
+  "purposeCoverage": {
+    "tool": { "support": true, "availability": false, "plan": true, "limitation": true },
+    "fit": { "fit": true, "limitation": true }
+  },
+  "holdReasons": [
+    "No direct Ray3.2 App-plan entitlement and no justified non-unknown availability enum for the existing broad Luma Tool Capability.",
+    "Official API 5s/10s generation parameters and separate 20s video-to-video wording cannot be merged into one image-to-video limit.",
+    "App export and commercial terms must not be inferred from Agents API behavior or legacy API FAQ.",
+    "Independent source excerpt, DOM/table context, reviewer, expiry, and current-production preflight are still required."
+  ],
+  "proposedOldEvidenceDisposition": {
+    "onlyAfterIndependentQa": true,
+    "unlink": "Both old links to the old homepage claim, after checking the exact link set has not changed.",
+    "claim": "Keep both old claims and all four old sources for audit. Mark the old verified claim superseded or invalidated only after independent review; leave the rejected claim unchanged. Never restore the old homepage claim as current evidence."
+  },
+  "operatorGuards": [
+    "No production writes from this artifact; no publish manifest while availability evidence is missing.",
+    "Before any later write, re-read the exact IDs, status, reviewer, updated_at, claim IDs, link set, source counts, and profile owner/domain; abort on any mismatch.",
+    "Require an identified auth.users reviewer, fresh official excerpts, direct value support, review_due_at within 90 days, and domain under lumalabs.ai before calling decision_official_evidence_intake.",
+    "Keep Tool Capability and Fit reviewed during independent QA; require Tool purposes support/availability/plan/limitation and Fit purposes fit/limitation before decision_cluster_transition preflight.",
+    "Do not run SQL or transition a Task, Capability, Tool Capability, or Fit from this candidate without a separately approved QA result."
+  ],
+  "rollbackPlan": [
+    "If a later guarded transaction fails, roll it back and verify the old IDs, statuses, and link counts are unchanged.",
+    "If a later publication commits and QA fails, use the CL-01 exact-manifest withdrawal to move the cluster to stale, then read back every affected relation and link.",
+    "Do not resurrect the old homepage claim or delete claim/source audit history; prepare a new reviewed candidate from a fresh baseline."
+  ]
+}

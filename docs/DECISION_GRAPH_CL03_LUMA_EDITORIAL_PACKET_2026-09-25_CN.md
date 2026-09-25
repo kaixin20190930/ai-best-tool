@@ -1,6 +1,6 @@
 # CL-03 · `product-image-to-short-video` 编辑证据包
 
-状态：**Luma 公开内容、工具/profile 身份及两条公开 timeline 事件已在生产修复并回读通过；CL-03 evidence 与关系工作未完成**（2026-09-25）。本包不是生产写入、发布清单或管理员批准。只涉及既有 Task、两条 Task Capability、Luma 的一条 Tool Capability 和一条 Fit；不创建实体、不进入 CL-04，也不触及 Task Page。
+状态：**Luma 公开内容与身份已修复；Ray3.2 evidence/关系为候选待独立 QA，当前 hold，未发布**（2026-09-25）。本包不是生产写入、发布清单或管理员批准。只涉及既有 Task、两条 Task Capability、Luma 的一条 Tool Capability 和一条 Fit；不创建实体、不进入 CL-04，也不触及 Task Page。精确只读基线、最小 intake、旧证据处置、版本守卫与回滚见 [operator candidate](./DECISION_GRAPH_CL03_LUMA_OPERATOR_CANDIDATE_2026-09-25_CN.json)。
 
 ## 1. 修复前生产只读身份与版本快照（历史基线）
 
@@ -52,13 +52,13 @@
 | 同上 | `rationale.en` | Revise the generated shot when framing or visual details need correction, then export a reviewable video file in the required delivery format. |
 | 同上 | `rationale.cn` | 构图或细节需要修正时调整生成片段，再以交付所需格式导出可审核的视频文件。 |
 | Luma → `image-to-video-generation` | `support_level` | 候选 `partial`：图片锚生成有直接证据，但产品保真无保证；精确产品识别是本 Task 核心要求。 |
-| 同上 | `availability` | 候选 `paid_only` **待 QA**：以需要商用交付的 App Plus/Pro/Ultra 流程为范围；若无证据证明 Ray3.2 具体 App 档可用，则保持 `unknown`/hold，不发布。 |
+| 同上 | `availability` | **保持 `unknown` / hold**：当前 Plus 页面说明可用 Luma 图像/视频模型，未直接把 Ray3.2 的特定 App 权限映射到本关系；Agents API 的按次付费也不能填充 App 可用性。不得仅凭付费定价表推断 `paid_only`。 |
 | 同上 | `plan_requirement.en` | For commercial App delivery, verify current Plus, Pro, or Ultra access and available credits before generating. Ray3.2 credit cost varies by duration, resolution, and HDR/EXR. API usage is billed separately; confirm API access and terms for that workflow. |
 | 同上 | `plan_requirement.cn` | 商用 App 交付前核对当前 Plus、Pro 或 Ultra 访问权限与可用 credits。Ray3.2 消耗随时长、分辨率及 HDR/EXR 改变；API 单独计费，须另核 API 权限及条款。 |
 | 同上 | `limitations` | 见下方双语数组。 |
 | Luma Fit | `fit_level` | 候选 `conditional`；仅在可人工验收主体细节、且局部改片与导出足够时适用。 |
-| 同上 | `rationale.en` | Ray3.2 can animate an input image and provide targeted video modification, reframing, and file output, so Luma can support a short product shot when the product's visual identity is checked by a human. |
-| 同上 | `rationale.cn` | Ray3.2 可用图片生成视频，并提供局部改片、改比例及文件输出；产品外观经人工核验时，Luma 可用于短产品镜头。 |
+| 同上 | `rationale.en` | Ray3.2 on the Agents API accepts image anchors for short video generation. Luma is a conditional fit when a person can verify the product's visual identity and the selected App or API workflow is confirmed separately. |
+| 同上 | `rationale.cn` | Agents API 的 Ray3.2 可用图片锚生成短视频；只有可人工核验产品外观，并单独确认所选 App 或 API 工作流时，Luma 才是有条件适配。 |
 
 Tool `limitations` 候选数组：
 
@@ -95,13 +95,13 @@ Fit `disqualifiers` 候选数组：
 | `luma:ray32:app-credit-rate-2026-09` / `plan` | [当前定价](https://lumalabs.ai/pricing)；“20 credits / 5 sec 60 credits / 10 sec” | `{"ray32_draft_video_credits":{"5s":20,"10s":60}}`；`{"surface":"Luma App pricing table","model":"Ray3.2 SDR","action":"text_or_image_to_video","resolution":"Draft","asOf":"2026-09-25"}` | Tool `availability`/`plan`；Fit `fit`；仅 draft，其他费率另核 |
 | `luma:product:consistency-risk-2026-09` / `limitation` | [产品一致性指南](https://lumalabs.ai/learning-hub/keep-character-product-consistency-in-luma-reference-guide)；“your character or product keeps subtly changing” | `{"product_consistency":"may_drift"}`；`{"surface":"Luma Agent reference workflow","asOf":"2026-09-25"}` | Tool `limitation`；Fit `limitation`；不能写成 Ray3.2 专属测试结论 |
 
-**value–excerpt 自检：** 身份、图片锚、API 5/10 秒/分辨率、局部 edit、MP4、Plus 商用及产品漂移分别可由对应片段直接支持；credit claim 只陈述定价表的 Ray3.2 SDR Draft 5/10 秒数，不外推 540p/720p/1080p。QA 仍须在原页确认表格列与引文连续性，尤其商业套餐行；若不能直接定位则删掉该 key。`api-output` 与 `api-mp4` 同 source 的摘录可合并为一个 claim 以减少冗余，QA 须校对最终 purpose 覆盖。上述草案在域冲突解决前不能执行 intake；当前身份冲突已解除，但仍须独立内容 QA 和 fresh evidence preflight；`availability=paid_only` 和 App Ray3.2 权限仍须直接来源，故即使其他草案通过也暂不具备 Tool Capability 四目的完整发布证据。
+**本表是较宽的编辑研究记录，不是 operator intake 清单。** 收窄后的最小五条 claim 候选在 JSON artifact 中，每条 `claim_value` 只陈述引文直接支持的事实，且分别标明 App/API 表面。旧表中的 App Plus 商用与 credits 行需独立 QA 核对页面 DOM/表格归属后才可考虑 intake；API 输出、局部编辑也不得推断 App 行为。当前生产域冲突已解除，但 Tool Capability 的 `availability` 无直接可映射证据，四目的覆盖只有 `support/plan/limitation`，故关系保持 reviewed/hold，不构造发布 manifest。
 
 ## 6. QA 与继续执行的门禁
 
 **身份修复已完成并通过生产回读，关系整改仍 hold。** 总控已验证：Neon tool `711df152-fdcf-4a19-930c-ab866b67605f` 为 `published`、`url=https://lumalabs.ai/`、`updated_at::text=2026-09-25 14:10:18.62758+00`，已验收内容字段保持；Supabase profile `4501f2f9-4579-4675-9a16-0ef800fe8385` 为 `ready`/version 2、`canonical_domain=lumalabs.ai`、`product_name=Luma AI`。decision event `0c92d051-bf36-4300-9585-79f8dc6c28ae` 与 fact event `2b07082c-5b63-470e-a096-6046b3d7446e` 已更正为 Luma AI 与当前官方来源，event type、scope、visibility、occurred_at 未变。完整 evidence projection 未变：4 sources、2 claims、1 Tool Capability link、1 Fit link。`/en`、`/cn`、`/jp` 的旧当前断言（Dream Machine/Photon/Ray3.14/Free-Lite/Unlimited）为 0，Ray3.2/UNI-1.1/Luma AI 可见，根域出站链接均存在。主分支已包含 `e84ad342`。这些验收只覆盖公开内容与身份，不代表 Ray3.2 evidence intake 或关系发布。
 
-**下一项唯一范围：**对 Ray3.2 新 evidence intake、旧 claim/link 处置，以及 Tool Capability/Fit 的候选编辑与发布做独立 QA。不得以本次身份回读直接录入证据、失效/解绑旧 claim、改 reviewed 关系或发布 Task；Task Page、sitemap/index 保持不变。
+**下一项唯一范围：** 独立 QA 核对 JSON 候选引文与 App/API 权限，补足直接支持的 `availability`、fresh production preflight 和管理员 reviewer 后，才决定是否执行 Ray3.2 intake、旧 claim/link 处置及 Tool Capability/Fit 编辑。2026-09-25T14:46:37.371Z 的只读回读仍为 4 sources、2 claims、1 Tool link、1 Fit link；Tool Capability 与 Fit 均 reviewed，生产写入为零。不得以身份回读直接录入证据、失效/解绑旧 claim、改 reviewed 关系或发布 Task；Task Page、sitemap/index 保持不变。
 ### 公开内容来源与本次修复范围
 
 线上 `/ai/luma-ai` 的旧事实来自运行时 Neon `tools.title/content/detail/features/use_cases/pricing/url`，历史来源是 `20260901_migrate_luma_ai_tool.sql`；页面另有 `page.tsx` 的双语官方事实快照和 metadata/决策要点，以及 `priorityToolEvidence.ts` 的限制文案。旧的用户可见断言包括 Dream Machine 作为当前产品范围、Photon 图片模型、Ray3.14 草稿、Lite/Unlimited 套餐与旧价格/credits、水印和商用权边界、月度 credits 不结转、旧 API 商用结论、Dream Machine 与 API 余额关系。这些旧当前断言已在 `/en`、`/cn`、`/jp` 的生产页面 QA 中消除；后续新 evidence 仍须逐条证实。历史 migration 和 collection 记录只作审计，不重新运行。`/cn` 与 `/en` 使用同一双语字段；其他 locale 的后备文案也须在回读时检查。
