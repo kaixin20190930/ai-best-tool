@@ -168,4 +168,4 @@ CL-01 编辑闭环与事务门禁已用于 CL-02 单 Task 生产发布并完成�
 
 ### CL-04 Fit 撤回实施进度（2026-09-28）
 
-CL-04 的 n8n/OpenRouter 两条 Fit `withdraw` 已形成[精确 manifest 与 Fit-only 管理员事务](./DECISION_GRAPH_CL04_APP_BUILD_ELIGIBILITY_2026-09-27_CN.md#5-cl-04-fit-only-撤回实施附记2026-09-28)，本地原子回滚与恢复测试通过。由于原 CL-01 管理员事务只处理完整三类已发布关系，而本组 Fit 仍为 reviewed、新事务尚未部署且独立 QA reference 未填，生产仍为 reviewed/HOLD、写入 0，状态为 **DEV_BLOCKED**。后续部署与 QA 后先预演，再成对撤回，只读回查目标及非目标关系；Tool Capability 保留 reviewed/HOLD，不处理 Task Page 或索引。
+CL-04 的 n8n/OpenRouter 两条 Fit `withdraw` 已形成[精确 manifest 与 Fit-only 管理员事务](./DECISION_GRAPH_CL04_APP_BUILD_ELIGIBILITY_2026-09-27_CN.md#5-cl-04-fit-only-撤回实施附记2026-09-28)，本地原子回滚与恢复测试通过，开发状态为 **DEV_COMPLETE（implementation ready for QA）**。原 CL-01 管理员事务只处理完整三类已发布关系，而本组 Fit 仍为 reviewed；新事务尚未部署且独立 QA reference 未填，因此生产变更留待后续执行，关系仍为 reviewed/HOLD、写入 0。后续部署与 QA 后先预演，再成对撤回，只读回查目标及非目标关系；Tool Capability 保留 reviewed/HOLD，不处理 Task Page 或索引。

@@ -61,7 +61,7 @@
 
 ## 5. CL-04 Fit-only 撤回实施附记（2026-09-28）
 
-**DEV_BLOCKED / 生产写入 0。** 2026-09-27T23:41:55Z 再次以只读包装器回读生产：Task、两条 Task Capability、两条 Tool Capability 和两条 Fit 的身份、状态、`updated_at` 与原包一致。两条 Fit 仍为 `reviewed`（n8n `strong`、OpenRouter `conditional`）；各自的旧首页 claim `fit` link 保留。两条 Tool Capability 仍为 `reviewed/partial/unknown`，各自仅有旧首页 `support` link。同两工具在其他 Task 的 Fit 为 0。生产没有新增 source/claim/link 或关系。GET 复查 `/cn/tasks/build-app-with-ai` 为 404，sitemap 中 `/tasks/` URL 为 0。
+**DEV_COMPLETE（implementation ready for QA）/ 生产写入 0。** 2026-09-27T23:41:55Z 再次以只读包装器回读生产：Task、两条 Task Capability、两条 Tool Capability 和两条 Fit 的身份、状态、`updated_at` 与原包一致。两条 Fit 仍为 `reviewed`（n8n `strong`、OpenRouter `conditional`）；各自的旧首页 claim `fit` link 保留。两条 Tool Capability 仍为 `reviewed/partial/unknown`，各自仅有旧首页 `support` link。同两工具在其他 Task 的 Fit 为 0。生产没有新增 source/claim/link 或关系。GET 复查 `/cn/tasks/build-app-with-ai` 为 404，sitemap 中 `/tasks/` URL 为 0。
 
 现有 CL-01 `decision_cluster_transition` 的撤回只接受三类非空清单且要求均为 `published`；用于本组会触及无撤回决定的 Capability，不能调用。新增 [Fit-only 事务](../db/supabase/migrations/20260928_decision_cl04_fit_withdrawal.sql) 与管理员 action `transitionCl04Fits`，仅接受两个固定 Fit ID、对应工具 ID、`reviewed` 状态及精确版本，单事务置为 `stale`。原 Fit 行、`fit_level`、旧 claim link 与 editorial history 保留；两工具各写一条内部 timeline 审计。预演返回 0 更新；提交若任一行、版本或触发器失败则整体回滚。成对 `restore` 仅回到 `reviewed`/HOLD，须另有 QA reference，不代表重新取得发布资格。
 
