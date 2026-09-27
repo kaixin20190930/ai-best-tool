@@ -66,13 +66,13 @@
       "officialUrl": "https://www.descript.com/",
       "categorySlug": "design-art",
       "candidateClass": "mature_high_demand",
-      "status": "ready_for_next_slot",
+      "status": "released_monitor_noindex",
       "whyNow": "Descript combines transcription, text-based editing and generative video in one mature product, producing clear workflow and credit tradeoffs.",
       "officialSources": ["https://www.descript.com/pricing", "https://www.descript.com/underlord"],
       "independentSources": ["https://ai.g2.com/product/descript", "https://www.g2.com/sellers/descript"],
       "decisionAngles": ["text editing versus timeline editing", "media hours versus AI credits", "voice and avatar consent", "Descript versus dedicated video generators"],
       "risks": ["Plan limits combine several meters", "AI-generated media rights and consent need current verification"],
-      "publicReleaseApproved": false,
+      "publicReleaseApproved": true,
       "indexReleaseApproved": false
     },
     {

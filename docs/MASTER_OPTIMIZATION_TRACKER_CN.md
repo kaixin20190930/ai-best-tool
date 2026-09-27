@@ -457,9 +457,10 @@ query、Top 20 page、已抓取未编入索引与软 404 数量。
   `--commit`、`published + monitor/noindex`、sitemap 排除和独立索引审批。当天官方价格、credits、Brand
   Voice、EULA/DPA/sub-processors 与 ethics 复核无实质变化；详见
   [Jasper 受控发布交付](./JASPER_CONTROLLED_RELEASE_2026-09-21_CN.md)。
-- Descript 发布包已完成：生产无实体，现有英中 canonical 静态页继续 `noindex` 且不在 sitemap；三语言 Decision Card、自制
-  编辑素材和统一流水线覆盖逐席位定价、media hours、AI credits、团队共享池、AI Speaker 同意、训练与人工访问及输出权利边
-  界。当前不写生产、不开放索引；最早 2026-09-23 执行只读 preflight 与受控发布。
+- Descript 已于 2026-09-27 完成单项受控发布：官方事实复核后移除过时的固定 avatar credit 示例；生产只读 preflight、
+  rollback、专项测试、TypeScript、完整 build 和显式 commit 均通过。唯一实体为 `published + monitor/noindex`，英中页面保留
+  self-canonical，不进入 sitemap，也没有索引批准；下次事实复核为 2026-10-27。详见
+  [Descript 受控发布交付](./DESCRIPT_CONTROLLED_RELEASE_2026-09-27_CN.md)。
 
 ## 2026-09-22 成熟工具即时质量门禁
 

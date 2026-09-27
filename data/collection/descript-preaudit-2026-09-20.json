@@ -4,11 +4,13 @@
   "officialUrl": "https://www.descript.com/",
   "existingRoute": "/ai/descript",
   "action": "migrate_existing_fallback",
-  "status": "ready_for_next_slot",
+  "status": "released",
   "reviewedAt": "2026-09-20",
   "publishNotBefore": "2026-09-23",
   "sitemapChangeApproved": false,
-  "productionWriteApproved": false,
+  "productionWriteApproved": true,
+  "releasedAt": "2026-09-27",
+  "actualPublishedAt": "2026-09-27",
   "releaseIndexState": "monitor",
   "routeAudit": {
     "english": "200_self_canonical_noindex",
@@ -56,7 +58,7 @@
   },
   "usageModel": {
     "mediaHours": "Imported or recorded media consumes the Drive's media-minute pool even when transcription is not the user's primary goal. Unused media minutes do not roll over.",
-    "aiCredits": "AI actions consume a separate shared Drive pool. Current examples range from a few credits for an image to approximately 67 credits per avatar minute; model choice can change cost.",
+    "aiCredits": "AI actions consume a separate shared Drive pool. Manual feature costs can scale with the job, while Underlord requests can vary with model and work performed; there is no reliable universal per-action or per-video credit price.",
     "teamBoundary": "Eligible Editor seats add allowance to a shared Drive pool. Viewers and project-level Editors do not add or consume that allowance in the same way.",
     "forecastingGuard": "Do not estimate a universal cost per finished video. Source duration, regeneration count, model, dubbing, avatars and team behavior change both meters."
   },

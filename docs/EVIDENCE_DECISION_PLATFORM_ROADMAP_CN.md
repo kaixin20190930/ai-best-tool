@@ -360,4 +360,4 @@ Review 结论：方案可实施。P0 不改变 URL 和索引面，先增强主�
 - Descript 的产品边界固定为一个文本式音视频编辑工作区；Underlord、AI Speakers、voice clone、avatar 与 dubbing 只作为功能，不派生独立工具页。
 - Decision Card 必须分开呈现 media hours 与 AI credits，解释共享 Drive 池、额度不结转和动作/模型导致的消耗差异；禁止拼成一个虚构的“统一额度”或“每条视频成本”。
 - AI Speaker 与商业使用必须同时展示说话人授权、训练与人工复核披露、第三方权利和输出非唯一性边界；产品允许商用不等于平台保证版权、准确性或不侵权。
-- Descript 当前为 `ready_for_next_slot`，三语言发布包、本地编辑标识和专项门禁已完成；仍没有生产写入、sitemap 变更或索引批准。2026-09-23 必须先执行发布日事实复核与只读 preflight，再允许 rollback、commit 和线上验证。
+- Descript 于 2026-09-27 完成发布日事实复核、只读 preflight、rollback、完整 build、单项 commit 与线上验证；生产唯一实体为 `published + monitor/noindex`，英中 canonical 保持唯一且 sitemap 排除。旧版固定 avatar credit 示例已按现行官方文档移除；没有索引批准。

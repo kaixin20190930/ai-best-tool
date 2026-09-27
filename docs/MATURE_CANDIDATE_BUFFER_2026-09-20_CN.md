@@ -22,7 +22,7 @@
 | ---: | --- | --- | --- | --- |
 | 1 | Grammarly | 成熟高需求 | 免费/付费、通用 AI 替代、Superhuman Go 迁移 | 已于 2026-09-21 受控发布，monitor/noindex |
 | 2 | Jasper | 成熟高需求 | 席位费、credits、品牌治理 | 已于 2026-09-21 提前授权受控发布，monitor/noindex |
-| 3 | Descript | 成熟高需求 | 文本式剪辑、媒体时长、AI credits | 发布包完成，等待 2026-09-23 受控发布 |
+| 3 | Descript | 成熟高需求 | 文本式剪辑、媒体时长、AI credits | 已于 2026-09-27 受控发布，monitor/noindex |
 | 4 | Canva（含 Magic Studio） | 成熟高需求 | AI 套件范围、套餐限制、商业使用 | 合并到唯一 Canva canonical，不新建 Magic Studio 页面 |
 | 5 | Zapier Agents | 成熟高需求 | Agent 与 Zap、activity 计费、可靠性 | 待深审 |
 | 6 | Microsoft Copilot Studio | 成熟高需求 | 消息包、按量计费、Power Platform 依赖 | 待深审 |
@@ -59,7 +59,7 @@
 
 Canva 身份已收口：候选 slug 固定为 `canva`，Magic Studio 是 Canva 的 AI 能力集合，不是第二个独立产品。后续只能增强唯一 `/ai/canva` 页面，禁止创建 `/ai/canva-magic-studio` 或竞争同一意图的页面。
 
-第三个对象 Descript 已完成深审与发布包。生产数据库没有 Descript 实体，`/ai/descript` 与 `/cn/ai/descript` 均为 `200 + self-canonical + noindex` 的静态兜底页，sitemap 匹配为 0。身份范围固定为一个文本式音视频编辑工作区，Underlord、AI Speakers、voice clone、avatar 与 dubbing 均为能力，不拆成重复页面。三语言 Decision Card、自制编辑标识和统一流水线明确分离 media hours 与 AI credits 两套额度，并记录逐席位价格、团队共享池、额度不结转、语音同意、训练开关、人工访问和商业使用边界。最早发布槽为 `2026-09-23`；当前没有生产写入或索引批准。
+第三个对象 Descript 已于 `2026-09-27` 完成单项受控发布。生产唯一实体为 `published + monitor/noindex`；`/ai/descript` 与 `/cn/ai/descript` 均为 `200 + self-canonical + noindex`，带 Decision Card，sitemap 匹配为 0。身份范围固定为一个文本式音视频编辑工作区，Underlord、AI Speakers、voice clone、avatar 与 dubbing 均为能力，不拆成重复页面。三语言内容分别呈现 media hours 与 AI credits、逐席位价格、团队共享池、额度不结转、语音同意、训练开关、人工访问和输出权利边界。旧版固定 avatar credit 示例已删除；现行官方文档说明实际消耗随模型及任务变化。原定最早发布槽 `2026-09-23` 保留为历史门禁；本次没有索引批准。
 
 ## 五、验收结论
 

@@ -13,10 +13,12 @@ const payload = JSON.parse(fs.readFileSync('data/collection/descript-release.jso
 assert.equal(audit.slug, 'descript');
 assert.equal(audit.existingRoute, '/ai/descript');
 assert.equal(audit.action, 'migrate_existing_fallback');
-assert.equal(audit.status, 'ready_for_next_slot');
+assert.equal(audit.status, 'released');
 assert.equal(audit.reviewedAt, '2026-09-20');
 assert.equal(audit.publishNotBefore, '2026-09-23');
-assert.equal(audit.productionWriteApproved, false);
+assert.equal(audit.productionWriteApproved, true);
+assert.equal(audit.releasedAt, '2026-09-27');
+assert.equal(audit.actualPublishedAt, '2026-09-27');
 assert.equal(audit.sitemapChangeApproved, false);
 assert.equal(audit.releaseIndexState, 'monitor');
 assert.equal(audit.routeAudit.productionEntityMatches, 0);
@@ -33,8 +35,8 @@ assert(audit.marketValidation.score >= 90);
 
 const candidate = buffer.candidates.find((item: { slug: string }) => item.slug === 'descript');
 assert(candidate);
-assert.equal(candidate.status, 'ready_for_next_slot');
-assert.equal(candidate.publicReleaseApproved, false);
+assert.equal(candidate.status, 'released_monitor_noindex');
+assert.equal(candidate.publicReleaseApproved, true);
 assert.equal(candidate.indexReleaseApproved, false);
 
 const facts = JSON.stringify(audit);
@@ -51,9 +53,12 @@ for (const pattern of [
 
 assert(!/unlimited AI|guaranteed commercial rights|never uses customer data/i.test(facts));
 assert.equal(payload.slug, 'descript');
+assert.equal(payload.reviewedAt, '2026-09-27');
+assert.equal(payload.nextReviewDate, '2026-10-27');
 assert.equal(payload.categorySlug, audit.category.storageSlug);
 assert.equal(payload.features.release.scheduledSlot, audit.publishNotBefore);
 assert.equal(payload.features.release.indexState, 'monitor');
+assert(!/67 (?:AI )?credits|67 credits per avatar minute/i.test(JSON.stringify({ audit, payload })), 'Removed credit estimates must not return');
 for (const locale of ['en', 'zh', 'cn']) {
   assert(payload.title[locale].length > 10);
   assert(payload.content[locale].length > 40);
@@ -67,7 +72,7 @@ for (const media of payload.features.media.assets) {
 }
 const decision = getToolIndexDecision({status: 'published', pageQualityStatus: 'monitor', categoryId: 'reviewed-category', imageUrl: payload.imageUrl, thumbnailUrl: payload.thumbnailUrl, content: payload.content, detail: payload.detail, pricing: payload.pricing, tags: payload.tags});
 assert.equal(decision.indexable, false);
-const earlyRelease = spawnSync('tsx', ['scripts/candidate-release-pipeline.ts', '--candidate=descript', '--phase=release', '--as-of=2026-09-22'], {cwd: process.cwd(), encoding: 'utf8', env: {...process.env, POSTGRES_URL: 'postgres://invalid:invalid@127.0.0.1:1/invalid'}});
+const earlyRelease = spawnSync('tsx', ['scripts/candidate-release-pipeline.ts', '--candidate=descript', '--phase=preflight', '--as-of=2026-09-22'], {cwd: process.cwd(), encoding: 'utf8', env: {...process.env, POSTGRES_URL: 'postgres://invalid:invalid@127.0.0.1:1/invalid'}});
 assert.equal(earlyRelease.status, 1);
 assert.match(earlyRelease.stderr, /release window opens 2026-09-23/);
 console.log('PASS Descript release: identity, pricing, usage meters, consent, rights, media and noindex date gates');
