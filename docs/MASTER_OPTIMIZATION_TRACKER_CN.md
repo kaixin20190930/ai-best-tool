@@ -46,6 +46,8 @@ Otter.ai、Fireflies 的 3 条既有 published meeting fit 保持原 status、�
 
 2026-09-25 剩余五个 Task cluster 的编辑整改方案已通过 CL-00 独立 review（QA_PASS）；下一步为 CL-01 Admin closure。执行顺序、Admin 常规编辑闭环、逐组原子发布和 Task Page 独立门禁见 [剩余 cluster 整改计划](./DECISION_GRAPH_REMAINING_CLUSTER_REMEDIATION_PLAN_CN.md)。本条仅链接计划，不代表任何新增关系获批或发布。
 
+2026-09-27 CL-03 Ray3.2 evidence/关系候选获独立 QA_PASS，允许保留候选包；`availability` 直接证据仍缺，生产关系继续 HOLD、未发布。CL-04 对既有 `build-app-with-ai`、n8n、OpenRouter 完成资格审查与字段级本地候选，两条现有 Task Fit 均建议 withdraw；没有生产关系写入或 Task Page、索引放行。详见[CL-04 资格审查](./DECISION_GRAPH_CL04_APP_BUILD_ELIGIBILITY_2026-09-27_CN.md)。
+
 差异化开发执行规则：先定义用户价值和风险，默认最小实现；dormant/noindex 功能不新增网络服务。默认验证为专项测试、`tsc`、完整 build 与一次生产模式 smoke；单项超过 60 分钟或连续两次 QA FAIL，交总控重新选方案。仅安全、支付、数据一致性 P0 可扩大测试范围。
 
 2026-09-20 规模化口径更新：生产基线为 63 条工具记录、50 条已公开、13 条获准索引；技术和 SEO 护栏稳定，当前增长瓶颈转为高

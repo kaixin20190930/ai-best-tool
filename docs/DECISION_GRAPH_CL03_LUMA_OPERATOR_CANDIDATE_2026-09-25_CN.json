@@ -1,6 +1,12 @@
 {
   "cluster": "product-image-to-short-video",
-  "status": "candidate_pending_independent_qa_hold",
+  "status": "candidate_qa_pass_production_hold",
+  "independentQa": {
+    "result": "QA_PASS",
+    "candidateRetentionAllowed": true,
+    "productionRelation": "HOLD",
+    "reason": "Direct Ray3.2 App availability evidence remains missing."
+  },
   "checkedAtUtc": "2026-09-25T14:46:37.371Z",
   "productionWrites": 0,
   "scope": {

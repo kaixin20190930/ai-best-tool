@@ -5,7 +5,10 @@ const artifact = JSON.parse(
   readFileSync('docs/DECISION_GRAPH_CL03_LUMA_OPERATOR_CANDIDATE_2026-09-25_CN.json', 'utf8'),
 );
 
-assert.equal(artifact.status, 'candidate_pending_independent_qa_hold');
+assert.equal(artifact.status, 'candidate_qa_pass_production_hold');
+assert.equal(artifact.independentQa.result, 'QA_PASS');
+assert.equal(artifact.independentQa.candidateRetentionAllowed, true);
+assert.equal(artifact.independentQa.productionRelation, 'HOLD');
 assert.equal(artifact.productionWrites, 0);
 assert.equal(artifact.scope.createEntities, false);
 assert.equal(artifact.readOnlyBaseline.sourceCount, 4);

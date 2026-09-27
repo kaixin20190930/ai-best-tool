@@ -1,6 +1,6 @@
 # CL-03 · `product-image-to-short-video` 编辑证据包
 
-状态：**Luma 公开内容与身份已修复；Ray3.2 evidence/关系为候选待独立 QA，当前 hold，未发布**（2026-09-25）。本包不是生产写入、发布清单或管理员批准。只涉及既有 Task、两条 Task Capability、Luma 的一条 Tool Capability 和一条 Fit；不创建实体、不进入 CL-04，也不触及 Task Page。精确只读基线、最小 intake、旧证据处置、版本守卫与回滚见 [operator candidate](./DECISION_GRAPH_CL03_LUMA_OPERATOR_CANDIDATE_2026-09-25_CN.json)。
+状态：**Luma 公开内容与身份已修复；Ray3.2 evidence/关系候选于 2026-09-27 获独立 QA_PASS、允许保留候选包；`availability` 直接证据缺口仍在，生产关系继续 HOLD、未发布**。本包不是生产写入、发布清单或管理员批准。只涉及既有 Task、两条 Task Capability、Luma 的一条 Tool Capability 和一条 Fit；不创建实体、不进入 CL-04，也不触及 Task Page。精确只读基线、最小 intake、旧证据处置、版本守卫与回滚见 [operator candidate](./DECISION_GRAPH_CL03_LUMA_OPERATOR_CANDIDATE_2026-09-25_CN.json)。
 
 ## 1. 修复前生产只读身份与版本快照（历史基线）
 
@@ -101,7 +101,7 @@ Fit `disqualifiers` 候选数组：
 
 **身份修复已完成并通过生产回读，关系整改仍 hold。** 总控已验证：Neon tool `711df152-fdcf-4a19-930c-ab866b67605f` 为 `published`、`url=https://lumalabs.ai/`、`updated_at::text=2026-09-25 14:10:18.62758+00`，已验收内容字段保持；Supabase profile `4501f2f9-4579-4675-9a16-0ef800fe8385` 为 `ready`/version 2、`canonical_domain=lumalabs.ai`、`product_name=Luma AI`。decision event `0c92d051-bf36-4300-9585-79f8dc6c28ae` 与 fact event `2b07082c-5b63-470e-a096-6046b3d7446e` 已更正为 Luma AI 与当前官方来源，event type、scope、visibility、occurred_at 未变。完整 evidence projection 未变：4 sources、2 claims、1 Tool Capability link、1 Fit link。`/en`、`/cn`、`/jp` 的旧当前断言（Dream Machine/Photon/Ray3.14/Free-Lite/Unlimited）为 0，Ray3.2/UNI-1.1/Luma AI 可见，根域出站链接均存在。主分支已包含 `e84ad342`。这些验收只覆盖公开内容与身份，不代表 Ray3.2 evidence intake 或关系发布。
 
-**下一项唯一范围：** 独立 QA 核对 JSON 候选引文与 App/API 权限，补足直接支持的 `availability`、fresh production preflight 和管理员 reviewer 后，才决定是否执行 Ray3.2 intake、旧 claim/link 处置及 Tool Capability/Fit 编辑。2026-09-25T14:46:37.371Z 的只读回读仍为 4 sources、2 claims、1 Tool link、1 Fit link；Tool Capability 与 Fit 均 reviewed，生产写入为零。不得以身份回读直接录入证据、失效/解绑旧 claim、改 reviewed 关系或发布 Task；Task Page、sitemap/index 保持不变。
+**候选 QA 收口：** 候选包已获独立 QA_PASS、允许保留；这不是 evidence intake、关系发布或 App 权限确认。后续仍须补足直接支持的 `availability`、fresh production preflight 和管理员 reviewer，才决定是否执行 Ray3.2 intake、旧 claim/link 处置及 Tool Capability/Fit 编辑。2026-09-25T14:46:37.371Z 的只读回读仍为 4 sources、2 claims、1 Tool link、1 Fit link；Tool Capability 与 Fit 均 reviewed，生产写入为零。不得以身份回读直接录入证据、失效/解绑旧 claim、改 reviewed 关系或发布 Task；Task Page、sitemap/index 保持不变。
 ### 公开内容来源与本次修复范围
 
 线上 `/ai/luma-ai` 的旧事实来自运行时 Neon `tools.title/content/detail/features/use_cases/pricing/url`，历史来源是 `20260901_migrate_luma_ai_tool.sql`；页面另有 `page.tsx` 的双语官方事实快照和 metadata/决策要点，以及 `priorityToolEvidence.ts` 的限制文案。旧的用户可见断言包括 Dream Machine 作为当前产品范围、Photon 图片模型、Ray3.14 草稿、Lite/Unlimited 套餐与旧价格/credits、水印和商用权边界、月度 credits 不结转、旧 API 商用结论、Dream Machine 与 API 余额关系。这些旧当前断言已在 `/en`、`/cn`、`/jp` 的生产页面 QA 中消除；后续新 evidence 仍须逐条证实。历史 migration 和 collection 记录只作审计，不重新运行。`/cn` 与 `/en` 使用同一双语字段；其他 locale 的后备文案也须在回读时检查。

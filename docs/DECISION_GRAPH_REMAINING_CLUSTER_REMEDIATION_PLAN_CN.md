@@ -1,6 +1,6 @@
 # Decision Graph 剩余 Task cluster 编辑整改方案
 
-状态：**CL-02 已于 2026-09-25 完成生产关系发布与独立生产 QA_PASS；CL-03 内容/身份/timeline 生产修复与回读已完成，Ray3.2 evidence/关系候选待独立 QA，当前 hold、未发布**。这是编辑与开发执行计划，不授权后续 cluster 或 Task Page 发布；不设强制发布日期。`meeting-notes` 已在生产完成整改和只读验收，本计划不重复执行该组。
+状态：**CL-02 已于 2026-09-25 完成生产关系发布与独立生产 QA_PASS；CL-03 内容/身份/timeline 生产修复与回读已完成，Ray3.2 evidence/关系候选于 2026-09-27 获独立 QA_PASS、允许保留候选包；`availability` 直接证据仍缺，生产关系继续 HOLD、未发布**。这是编辑与开发执行计划，不授权后续 cluster 或 Task Page 发布；不设强制发布日期。`meeting-notes` 已在生产完成整改和只读验收，本计划不重复执行该组。
 
 ## 1. 目标、边界与现状缺口
 
@@ -158,8 +158,8 @@ DIFF-08 Decision Assistant 继续 **blocked**。首批 20 工具核心 Capabilit
 | CL-00 独立 review           | 无                            | 评审本计划、优先级、原子发布边界                                       | 范围/门禁/负责人确认，无默认发布授权                           | 已完成        | 0.5–1 人日      |
 | CL-01 Admin closure         | CL-00                         | Capability transition、最小 evidence intake、单 Task 原子发布/撤回入口 | 权限/证据/DB trigger/回滚专项通过，管理员可无手工 SQL 完成一组 | 生产 schema cache 已生效；CL-02 路径已使用 | 3–5 人日        |
 | CL-02 Research              | CL-01                         | [Consensus 与两条 Task Capability 编辑证据包](./DECISION_GRAPH_CL02_RESEARCH_EDITORIAL_PACKET_2026-09-25_CN.md) | 直接官方证据、字段与 QA 通过；单组发布和只读回读，或明确 hold | 已完成：生产关系发布，独立生产 QA_PASS（2026-09-25） | 1–2 人日 |
-| CL-03 Image-video           | CL-02                         | [Ray3.2/Luma 编辑证据包](./DECISION_GRAPH_CL03_LUMA_EDITORIAL_PACKET_2026-09-25_CN.md)及 [operator candidate](./DECISION_GRAPH_CL03_LUMA_OPERATOR_CANDIDATE_2026-09-25_CN.json) | 旧事实撤回，输入/输出/套餐边界核实，单组验收或 hold | 内容/身份/timeline 已修复并回读；最小 evidence/关系候选待独立 QA，`availability` 直接证据缺口使关系 hold；生产未发布 | 1–2 人日        |
-| CL-04 App-build eligibility | CL-03                         | n8n/OpenRouter 资格结论与 Task 定义修订                                | 先给可发布/conditional/contextual/撤回结论，再决定是否发布     | 未开始        | 1–2 人日        |
+| CL-03 Image-video           | CL-02                         | [Ray3.2/Luma 编辑证据包](./DECISION_GRAPH_CL03_LUMA_EDITORIAL_PACKET_2026-09-25_CN.md)及 [operator candidate](./DECISION_GRAPH_CL03_LUMA_OPERATOR_CANDIDATE_2026-09-25_CN.json) | 旧事实撤回，输入/输出/套餐边界核实，单组验收或 hold | 内容/身份/timeline 已修复并回读；候选包独立 QA_PASS、可保留；`availability` 直接证据缺口使生产关系继续 HOLD，未发布 | 1–2 人日        |
+| CL-04 App-build eligibility | CL-03                         | [n8n/OpenRouter 资格审查与字段候选包](./DECISION_GRAPH_CL04_APP_BUILD_ELIGIBILITY_2026-09-27_CN.md) | 先给可发布/conditional/contextual/撤回结论，再决定是否发布 | 本地资格审查完成；两条 Task Fit 建议 withdraw，生产关系 HOLD、未发布 | 1–2 人日 |
 | CL-05 Voice                 | CL-04                         | 两条 Task rationale 与经验证的候选工具提案                             | 权利/导出/套餐证据充分才新建关系并单组验收                     | 未开始        | 1.5–3 人日      |
 | CL-06 Brand                 | CL-05                         | 两条 Task rationale 与经验证的候选工具提案                             | 品牌控制非营销推断，直接证据和单组验收                         | 未开始        | 1.5–3 人日      |
 | CL-07 Production closeout   | 每组发布后；最终依赖 CL-02–06 | 每组独立只读回执与汇总审计                                             | 目标/非目标、页面/SEO 门禁、DIFF-08 状态完整记录               | 未开始        | 每组 0.5–1 人日 |
