@@ -1,6 +1,6 @@
 # Decision Graph 剩余 Task cluster 编辑整改方案
 
-状态：**CL-02 已于 2026-09-25 完成生产关系发布与独立生产 QA_PASS；CL-03 内容/身份/timeline 生产修复与回读已完成，Ray3.2 evidence/关系候选于 2026-09-27 获独立 QA_PASS、允许保留候选包；`availability` 直接证据仍缺，生产关系继续 HOLD、未发布**。这是编辑与开发执行计划，不授权后续 cluster 或 Task Page 发布；不设强制发布日期。`meeting-notes` 已在生产完成整改和只读验收，本计划不重复执行该组。
+状态：**CL-07 于 2026-09-27 完成 CL-02–06 生产只读汇总收口；仅 CL-02 关系已发布，CL-03–06 均未新增发布，全部 Task Page 仍为 404**。CL-03 内容/身份/timeline 生产修复与回读已完成，Ray3.2 evidence/关系候选获独立 QA_PASS、允许保留；`availability` 直接证据仍缺，关系 HOLD。这是编辑与开发执行计划，不授权后续 cluster 或 Task Page 发布；不设强制发布日期。`meeting-notes` 已在生产完成整改和只读验收，本计划不重复执行该组。[CL-07 汇总审计](./DECISION_GRAPH_CL07_PRODUCTION_CLOSEOUT_2026-09-27_CN.md)为当前只读状态依据。
 
 ## 1. 目标、边界与现状缺口
 
@@ -159,7 +159,7 @@ DIFF-08 Decision Assistant 继续 **blocked**。首批 20 工具核心 Capabilit
 | CL-04 App-build eligibility | CL-03                         | [n8n/OpenRouter 资格审查与字段候选包](./DECISION_GRAPH_CL04_APP_BUILD_ELIGIBILITY_2026-09-27_CN.md) | 先给可发布/conditional/contextual/撤回结论，再决定是否发布 | 本地资格审查完成；两条 Task Fit 建议 withdraw，生产关系 HOLD、未发布 | 1–2 人日 |
 | CL-05 Voice                 | CL-04                         | [两条 Task rationale 与 ElevenLabs/Descript 字段级候选](./DECISION_GRAPH_CL05_VOICE_EDITORIAL_PACKET_2026-09-27_CN.md) | 权利/导出/套餐证据充分才新建关系并单组验收 | 本地编辑候选完成；两工具 conditional，生产关系 HOLD、未创建 | 1.5–3 人日 |
 | CL-06 Brand                 | CL-05                         | [两条 Task rationale 与 Jasper/Grammarly/Claude 字段级候选](./DECISION_GRAPH_CL06_BRAND_EDITORIAL_PACKET_2026-09-27_CN.md) | 品牌控制非营销推断，直接证据和单组验收 | 本地编辑候选完成；Jasper/Grammarly conditional、Claude contextual；生产关系 HOLD、未创建 | 1.5–3 人日 |
-| CL-07 Production closeout   | 每组发布后；最终依赖 CL-02–06 | 每组独立只读回执与汇总审计                                             | 目标/非目标、页面/SEO 门禁、DIFF-08 状态完整记录               | 未开始        | 每组 0.5–1 人日 |
+| CL-07 Production closeout   | CL-02–06 状态收口 | [生产只读汇总审计](./DECISION_GRAPH_CL07_PRODUCTION_CLOSEOUT_2026-09-27_CN.md)与自动 verifier | 关系/evidence 边界、页面/SEO 门禁、DIFF-08 状态完整记录 | 已完成：只读回读，未新增发布（2026-09-27） | 每组 0.5–1 人日 |
 
 按五组均走完 closeout 粗估约 12–23 人日，取决于官方证据与候选资格；独立 QA 和管理员审批需另排人员时段。hold/撤回也是合格
 结论，不以估算强制发布。

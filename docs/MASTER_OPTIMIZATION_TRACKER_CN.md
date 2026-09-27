@@ -48,6 +48,8 @@ Otter.ai、Fireflies 的 3 条既有 published meeting fit 保持原 status、�
 
 2026-09-27 CL-03 Ray3.2 evidence/关系候选获独立 QA_PASS，允许保留候选包；`availability` 直接证据仍缺，生产关系继续 HOLD、未发布。CL-04 对既有 `build-app-with-ai`、n8n、OpenRouter 完成资格审查与字段级本地候选，两条现有 Task Fit 均建议 withdraw；没有生产关系写入或 Task Page、索引放行。详见[CL-04 资格审查](./DECISION_GRAPH_CL04_APP_BUILD_ELIGIBILITY_2026-09-27_CN.md)。
 
+2026-09-27 CL-07 剩余五组生产只读 closeout 完成：[汇总审计](./DECISION_GRAPH_CL07_PRODUCTION_CLOSEOUT_2026-09-27_CN.md)确认 CL-02 的 2 Task Capability + 1 Consensus Tool Capability + 1 Fit 仍为 published/current、13 条目标 evidence link 通过 owner/source/claim 门禁；CL-03 Ray3.2 候选 QA_PASS 但 availability 缺口继续 HOLD；CL-04 n8n/OpenRouter 两条 Fit 仅建议 withdraw、生产仍 reviewed，Tool Capability contextual/HOLD；CL-05 Voice 两条 Task rationale 候选、ElevenLabs/Descript conditional/HOLD；CL-06 Brand 两条 Task rationale 候选、Jasper/Grammarly conditional 与 Claude contextual/HOLD。CL-05/06 Tool Capability/Fit 均未创建。五个 Task URL 仍为 404，robots/sitemap 正常，sitemap 126 URL、0 Task URL；Decision 专项、tsc、完整 build 和生产 SEO smoke 通过。没有生产写入、发布、部署或索引改动。DIFF-08 的每 Task 至少 3 条真实 published Fit 等硬条件未达，继续 blocked；后续按各编辑包补证据、独立 QA 与受控单组审批。
+
 差异化开发执行规则：先定义用户价值和风险，默认最小实现；dormant/noindex 功能不新增网络服务。默认验证为专项测试、`tsc`、完整 build 与一次生产模式 smoke；单项超过 60 分钟或连续两次 QA FAIL，交总控重新选方案。仅安全、支付、数据一致性 P0 可扩大测试范围。
 
 2026-09-20 规模化口径更新：生产基线为 63 条工具记录、50 条已公开、13 条获准索引；技术和 SEO 护栏稳定，当前增长瓶颈转为高
