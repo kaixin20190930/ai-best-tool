@@ -10,6 +10,7 @@ const finder = source('app/[locale]/(with-footer)/find-tools/page.tsx');
 const sitemap = source('app/sitemap.ts');
 const robots = source('public/robots.txt');
 const detail = source('app/[locale]/(with-footer)/ai/[websiteName]/page.tsx');
+const publicToolDecision = source('components/tools/PublicToolDecision.tsx');
 const card = source('components/decision/DecisionCardV2.tsx');
 const adminPage = source('app/[locale]/(admin)/admin/decision/page.tsx');
 const adminLayout = source('app/[locale]/(admin)/layout.tsx');
@@ -24,8 +25,27 @@ assert.ok(!sitemap.includes("url: 'find-tools'"), 'Finder must not be added to s
 assert.ok(!sitemap.includes('/admin/decision'), 'Admin review must never enter the sitemap');
 assert.ok(robots.includes('Sitemap: https://aibesttool.com/sitemap.xml'), 'robots must retain the canonical sitemap');
 
-assert.ok(detail.includes('decisionCardV2 ?'), 'tool detail must explicitly gate Decision Card 2.0');
-assert.ok(detail.includes('data-tool-decision-card'), 'tool detail must retain the legacy fallback');
+assert.match(
+  detail,
+  /import PublicToolDecision from ['"]@\/components\/tools\/PublicToolDecision['"]/,
+  'tool detail must import the shared public decision component',
+);
+const publicDecisionElement = detail.match(/<PublicToolDecision\b[\s\S]*?<\/PublicToolDecision>/)?.[0];
+assert.ok(publicDecisionElement, 'tool detail must render PublicToolDecision');
+assert.match(
+  publicDecisionElement,
+  /\bmodel=\{decisionCardV2\}/,
+  'tool detail must pass its loaded Decision Card V2 model to PublicToolDecision',
+);
+assert.match(
+  publicToolDecision,
+  /\{model\s*&&\s*<DecisionCardV2\b(?=[^>]*\bmodel=\{model\})(?=[^>]*\blocale=\{locale\})(?=[^>]*\bembedded\s*\/?\s*>)[^>]*\/>\s*\}/,
+  'PublicToolDecision must render the embedded DecisionCardV2 from the supplied model',
+);
+assert.ok(
+  publicToolDecision.includes('data-tool-decision-card'),
+  'shared decision component must retain its legacy marker',
+);
 assert.ok(card.includes('data-tool-decision-card-v2'), 'Decision Card 2.0 needs a stable smoke-test marker');
 assert.ok(card.includes('reference.sourceUrl'), 'Decision Card facts must expose evidence source URLs');
 assert.ok(!card.includes('generateMetadata'), 'Decision Card must remain an embedded module, not a new SEO route');
