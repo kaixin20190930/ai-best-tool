@@ -1,6 +1,6 @@
 # CL-03 · `product-image-to-short-video` 编辑证据包
 
-状态：**Luma 公开内容与身份已修复；Ray3.2 evidence/关系候选于 2026-09-27 获独立 QA_PASS、允许保留候选包；`availability` 直接证据缺口仍在，生产关系继续 HOLD、未发布**。本包不是生产写入、发布清单或管理员批准。只涉及既有 Task、两条 Task Capability、Luma 的一条 Tool Capability 和一条 Fit；不创建实体、不进入 CL-04，也不触及 Task Page。精确只读基线、最小 intake、旧证据处置、版本守卫与回滚见 [operator candidate](./DECISION_GRAPH_CL03_LUMA_OPERATOR_CANDIDATE_2026-09-25_CN.json)。
+状态：**Luma 公开内容与身份已修复；Ray3.2 evidence/关系候选于 2026-09-27 获独立 QA_PASS、允许保留候选包；2026-09-27 补查已找到 App 入口及图片转视频定价直接证据，但逐套餐权限与可填写的 `availability` 枚举仍缺；新增候选待独立 QA，生产关系继续 HOLD、未发布**。本包不是生产写入、发布清单或管理员批准。只涉及既有 Task、两条 Task Capability、Luma 的一条 Tool Capability 和一条 Fit；不创建实体、不进入 CL-04，也不触及 Task Page。精确只读基线、最小 intake、旧证据处置、版本守卫与回滚见 [operator candidate](./DECISION_GRAPH_CL03_LUMA_OPERATOR_CANDIDATE_2026-09-25_CN.json)。
 
 ## 1. 修复前生产只读身份与版本快照（历史基线）
 
@@ -39,7 +39,21 @@
 | 套餐与 credits | [Luma 定价](https://lumalabs.ai/pricing)、[API 定价](https://docs.agents.lumalabs.ai/guides/pricing)、[身份页](https://lumalabs.ai/llm-info) | App 个人档为 Plus/Pro/Ultra；定价表列 Ray3.2 图片转视频按时长、分辨率和 HDR/EXR 消耗 credits。API 是独立按量计费表面，不能把 App 套餐、credits 直接套用 API；额度、单价录入前重新核对。 |
 | 商用权与表面 | [Luma 定价](https://lumalabs.ai/pricing)、[身份页](https://lumalabs.ai/llm-info)、[旧 API FAQ](https://docs.lumalabs.ai/docs/faq) | 当前 App Plus 页列 commercial use；旧 API FAQ 称 API 生成可商用，但属旧 API 文档。当前 Agents API 的商用条款未由同一当前文档直接确认，**API 商用权 hold**。付费套餐也不替用户解决输入产品图、标识和人物授权。 |
 
-另有版本冲突：发布说明/产品页写最多 16 个 keyframe，当前 API 模型页写最多 64 anchors。此包不固化 keyframe 上限；QA 须先确认相同表面、模型版本和可用参数。旧 Learning Hub 套餐/credit 页含 Ray2 与不同档名，不作为 Ray3.2 当前套餐 claim。当前 App 页面可用性、实际导出流程和 API 权限需要独立 QA 实测或更直接官方说明；不以 API 能力自动覆盖 App。
+另有版本冲突：发布说明/产品页写最多 16 个 keyframe，当前 API 模型页写最多 64 anchors。此包不固化 keyframe 上限；QA 须先确认相同表面、模型版本和可用参数。旧 Learning Hub 套餐/credit 页含 Ray2 与不同档名，不作为 Ray3.2 当前套餐 claim。Ray3.2 的 App 入口已由 2026-09-27 官方页面直接确认；逐套餐权限、实际图片输入/输出及导出流程仍需独立 QA 实测或更直接官方说明；不以 API 能力自动覆盖 App。
+
+### 2026-09-27 Ray3.2 App availability 专项补查
+
+以下为同日官方页面 HTML/链接及表格上下文的直接核验；原 2026-09-25 候选 QA_PASS 不覆盖这些新来源。精确研究记录及两条待审 intake 候选见 [operator candidate](./DECISION_GRAPH_CL03_LUMA_OPERATOR_CANDIDATE_2026-09-25_CN.json) 的 `availabilityFollowUp`。`checkedAtUtc=2026-09-27T13:38:04Z`。
+
+| 官方 URL、表面 | 直接片段或可核验语义 | evidence purpose | 适用限制 |
+| --- | --- | --- | --- |
+| [Luma App](https://lumalabs.ai/app)，浏览器 App 入口 | “Try Ray3.2” 的链接指向 `https://app.lumalabs.ai/`；同页列 Ray3.2 | App 内模型入口、Tool `support`/Fit `fit` 候选 | “Try Luma free”不等于免费账户可用 Ray3.2；页面不列 Ray3.2 逐套餐权限。 |
+| [Luma 定价](https://lumalabs.ai/pricing)，App 公开套餐与 credits 表 | Plus/Pro/Ultra 档名及继承关系；“Cost Per Video Generation”中 Ray3.2 的 “Text-to-Video / Image-to-Video” Draft SDR 为 “20 credits/5 sec / 60 credits/10 sec” | App 图片转视频计费、Tool `plan`/Fit `fit` 候选 | 费率表不表明各档或免费试用能否选择 Ray3.2；列出的 5/10 秒价格不是所有 App 操作的时长上限。 |
+| [Ray3.2 产品页](https://lumalabs.ai/ray)，产品营销页 | “Try in Luma” 指向 App，“Build with API”是另一个入口 | App/API 表面分离的交叉验证 | “Up to 20 seconds”在当前页面描述 Modify Video V2，不证明单次图片转视频 20 秒。 |
+| [官方身份页](https://lumalabs.ai/llm-info)，身份/表面说明 | “Luma App is the consumer creative workspace at app.lumalabs.ai.”；另列 API、Plus/Pro/Ultra 和 free trial credits | 表面与档名定义 | 未给 Ray3.2 的逐套餐或试用权限。 |
+| [旧 Luma Agents App FAQ](https://lumalabs.ai/learning-hub/frequently-asked-questions-about-the-new-luma-agents-app)，2026-03 | 视频模型列表只有 Ray3/Ray3.14 等，且旧套餐名称/金额与当前页冲突 | 旧来源排除 | 不能用来否定当前 Ray3.2 App 入口，也不能填当前权限。 |
+
+结论：**Ray3.2 的 App/Web App 入口和公开图片转视频 credit 费率可直接确认；`all_plans`、`paid_only`、`enterprise_only`、`add_on` 均无直接逐账号/逐套餐依据，字段仍为 `unknown`。** 当前 Plus 的广义“Luma and third-party image and video models”、Pro/Ultra 的继承关系不等于 Ray3.2 的专属 entitlement；试用入口使 `paid_only` 更不能靠定价表推出。还需官方 Ray3.2 套餐权限矩阵，或按 Plus/Pro/Ultra/试用账号在已登录 App 中核验模型选择、图片输入、输出与导出控制。Agents API 的模型参数、按次计费及 5/10 秒请求值只适用于 API。未在本次创建 source/claim/link 或修改生产关系。
 
 ## 4. 候选编辑字段（未写生产）
 
@@ -52,7 +66,7 @@
 | 同上 | `rationale.en` | Revise the generated shot when framing or visual details need correction, then export a reviewable video file in the required delivery format. |
 | 同上 | `rationale.cn` | 构图或细节需要修正时调整生成片段，再以交付所需格式导出可审核的视频文件。 |
 | Luma → `image-to-video-generation` | `support_level` | 候选 `partial`：图片锚生成有直接证据，但产品保真无保证；精确产品识别是本 Task 核心要求。 |
-| 同上 | `availability` | **保持 `unknown` / hold**：当前 Plus 页面说明可用 Luma 图像/视频模型，未直接把 Ray3.2 的特定 App 权限映射到本关系；Agents API 的按次付费也不能填充 App 可用性。不得仅凭付费定价表推断 `paid_only`。 |
+| 同上 | `availability` | **保持 `unknown` / hold**：2026-09-27 已找到 Ray3.2 App 入口及 App 图片转视频 credits 表，但仍无 Ray3.2 逐套餐/免费试用权限映射；Agents API 的按次付费也不能填充 App 可用性。不得仅凭付费定价表推断 `paid_only`。 |
 | 同上 | `plan_requirement.en` | For commercial App delivery, verify current Plus, Pro, or Ultra access and available credits before generating. Ray3.2 credit cost varies by duration, resolution, and HDR/EXR. API usage is billed separately; confirm API access and terms for that workflow. |
 | 同上 | `plan_requirement.cn` | 商用 App 交付前核对当前 Plus、Pro 或 Ultra 访问权限与可用 credits。Ray3.2 消耗随时长、分辨率及 HDR/EXR 改变；API 单独计费，须另核 API 权限及条款。 |
 | 同上 | `limitations` | 见下方双语数组。 |
@@ -95,7 +109,11 @@ Fit `disqualifiers` 候选数组：
 | `luma:ray32:app-credit-rate-2026-09` / `plan` | [当前定价](https://lumalabs.ai/pricing)；“20 credits / 5 sec 60 credits / 10 sec” | `{"ray32_draft_video_credits":{"5s":20,"10s":60}}`；`{"surface":"Luma App pricing table","model":"Ray3.2 SDR","action":"text_or_image_to_video","resolution":"Draft","asOf":"2026-09-25"}` | Tool `availability`/`plan`；Fit `fit`；仅 draft，其他费率另核 |
 | `luma:product:consistency-risk-2026-09` / `limitation` | [产品一致性指南](https://lumalabs.ai/learning-hub/keep-character-product-consistency-in-luma-reference-guide)；“your character or product keeps subtly changing” | `{"product_consistency":"may_drift"}`；`{"surface":"Luma Agent reference workflow","asOf":"2026-09-25"}` | Tool `limitation`；Fit `limitation`；不能写成 Ray3.2 专属测试结论 |
 
-**本表是较宽的编辑研究记录，不是 operator intake 清单。** 收窄后的最小五条 claim 候选在 JSON artifact 中，每条 `claim_value` 只陈述引文直接支持的事实，且分别标明 App/API 表面。旧表中的 App Plus 商用与 credits 行需独立 QA 核对页面 DOM/表格归属后才可考虑 intake；API 输出、局部编辑也不得推断 App 行为。当前生产域冲突已解除，但 Tool Capability 的 `availability` 无直接可映射证据，四目的覆盖只有 `support/plan/limitation`，故关系保持 reviewed/hold，不构造发布 manifest。
+**本表是较宽的编辑研究记录，不是 operator intake 清单。** 原收窄后的最小五条 claim 候选在 JSON artifact 中，每条 `claim_value` 只陈述引文直接支持的事实，且分别标明 App/API 表面。旧表中的 App Plus 商用与 credits 行需独立 QA 核对页面 DOM/表格归属后才可考虑 intake；API 输出、局部编辑也不得推断 App 行为。当前生产域冲突已解除，但 Tool Capability 的 `availability` 无直接可映射证据，四目的覆盖只有 `support/plan/limitation`，故关系保持 reviewed/hold，不构造发布 manifest。
+
+2026-09-27 增补的两条**待独立 QA** 最小 intake 候选：`luma:ray32:app-entry-2026-09` 只记 App 页 “Try Ray3.2” 链接及其 `app.lumalabs.ai` 目标；`luma:ray32:app-i2v-pricing-2026-09` 只记定价页 Ray3.2 / Image-to-Video / Draft SDR 的 5 秒与 10 秒 credits。两条均不得链接为 Tool `availability` 或改写枚举，且不自动继承原候选的 QA_PASS。operator JSON 的完整 `evidenceIntakeCandidates` 现为七条；这只是本地候选数，生产 evidence projection 仍按只读回读为 4 source/2 claim/2 旧 link。
+
+CL-03 专用只读 verifier 于 2026-09-27T13:44:25Z 通过：官方 App 入口、Ray 产品页 App/API 双入口与 Ray3.2 图片转视频价格行可核验；生产仍为 4 source、2 claim、Tool/Fit 各 1 条旧 link，Tool `availability=unknown`、两关系 reviewed，`/cn/tasks/product-image-to-short-video` 为 404。运行方式：`node scripts/pub-03-readonly-run.mjs pnpm exec tsx scripts/verify-decision-cl03-luma-readonly.ts`。同日 CL-03/CL-07 候选回归、Decision evidence/review gate、`pnpm exec tsc --noEmit` 与完整 `pnpm run build` 均通过。本次没有写生产；后续仍需新增候选独立 QA、逐套餐直接证据和 fresh production preflight。
 
 ## 6. QA 与继续执行的门禁
 

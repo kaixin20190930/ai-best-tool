@@ -3,11 +3,69 @@
   "status": "candidate_qa_pass_production_hold",
   "independentQa": {
     "result": "QA_PASS",
+    "scope": "Original 2026-09-25 candidate only; 2026-09-27 App evidence candidates are pending independent QA.",
     "candidateRetentionAllowed": true,
     "productionRelation": "HOLD",
     "reason": "Direct Ray3.2 App availability evidence remains missing."
   },
   "checkedAtUtc": "2026-09-25T14:46:37.371Z",
+  "availabilityFollowUp": {
+    "checkedAtUtc": "2026-09-27T13:38:04Z",
+    "finding": "Ray3.2 is advertised on the Luma App page with a Try Ray3.2 link to https://app.lumalabs.ai/. The current pricing page lists Ray3.2 image-to-video credit costs in the App plan context. Neither page directly maps Ray3.2 entitlement by Plus, Pro, Ultra, or free-trial account, so all_plans and paid_only are both unproven.",
+    "checkedSources": [
+      {
+        "url": "https://lumalabs.ai/app",
+        "excerpt": "Try Ray3.2",
+        "verifiedSemantic": "The Try Ray3.2 anchor in the Luma App marketing page points to https://app.lumalabs.ai/.",
+        "purpose": "App/Web App model entry, not plan entitlement",
+        "surface": "Luma App on browser",
+        "limitation": "The page also says Try Luma free but does not state that a free account may generate with Ray3.2.",
+        "checkedDate": "2026-09-27"
+      },
+      {
+        "url": "https://lumalabs.ai/pricing",
+        "excerpt": "20 credits/5 sec\n60 credits/10 sec",
+        "verifiedSemantic": "The Cost Per Video Generation table has a Ray3.2 row for text-to-video and image-to-video; the Draft SDR row lists 20 credits for 5 seconds and 60 credits for 10 seconds.",
+        "purpose": "App credit cost and listed generation options, not account entitlement",
+        "surface": "Luma App public pricing table",
+        "limitation": "The cost table does not identify which plan or free-trial account can select Ray3.2; 5/10-second prices are listed options, not a universal clip-duration limit.",
+        "checkedDate": "2026-09-27"
+      },
+      {
+        "url": "https://lumalabs.ai/ray",
+        "excerpt": "Try in Luma",
+        "verifiedSemantic": "The Ray3.2 product page separates the Luma App entry from the API entry; Try in Luma points to https://app.lumalabs.ai/.",
+        "purpose": "App versus API surface corroboration",
+        "surface": "Ray3.2 product page",
+        "limitation": "The page does not state Plus/Pro/Ultra or free-trial entitlement. Its 20-second wording concerns Modify Video V2, not a single image-to-video generation.",
+        "checkedDate": "2026-09-27"
+      },
+      {
+        "url": "https://lumalabs.ai/llm-info",
+        "excerpt": "Luma App is the consumer creative workspace at app.lumalabs.ai.",
+        "verifiedSemantic": "The official identity page distinguishes Luma App from Luma API and names Plus, Pro, Ultra as individual plans.",
+        "purpose": "Surface and plan-name identity",
+        "surface": "Luma identity page",
+        "limitation": "It does not map Ray3.2 to a specific App plan or free trial.",
+        "checkedDate": "2026-09-27"
+      },
+      {
+        "url": "https://lumalabs.ai/learning-hub/frequently-asked-questions-about-the-new-luma-agents-app",
+        "excerpt": "Available models: Ray3, Ray3.14, Kling 2.6, Sora 2, Veo3, and Veo3.1.",
+        "verifiedSemantic": "The March 2026 App FAQ predates Ray3.2 and retains older plan names and amounts.",
+        "purpose": "Stale-source exclusion",
+        "surface": "Older Luma Agents App FAQ",
+        "limitation": "Do not use it to deny current Ray3.2 access or establish current plan limits.",
+        "checkedDate": "2026-09-27"
+      }
+    ],
+    "availabilityEnum": "unknown",
+    "missing": [
+      "Direct current official Ray3.2 entitlement matrix for Plus, Pro, Ultra and free-trial accounts, or a scoped authenticated App verification by plan.",
+      "Confirmation of actual App image input, selected Ray3.2 output and export controls for the target account; public price rows do not establish the authenticated workflow."
+    ],
+    "productionRelation": "HOLD"
+  },
   "productionWrites": 0,
   "scope": {
     "taskId": "241ae23f-50b8-4cad-b93a-3eda29dc3dfe",
@@ -88,49 +146,143 @@
   },
   "evidenceIntakeCandidates": [
     {
+      "key": "luma:ray32:app-entry-2026-09",
+      "type": "feature",
+      "url": "https://lumalabs.ai/app",
+      "excerpt": "Try Ray3.2",
+      "value": {
+        "ray32_app_entry": "https://app.lumalabs.ai/"
+      },
+      "scope": {
+        "surface": "Luma App on browser",
+        "asOf": "2026-09-27"
+      },
+      "candidateLinks": [
+        "tool:support",
+        "fit:fit"
+      ],
+      "reviewStatus": "pending_independent_qa",
+      "notSufficientForAvailabilityEnum": true
+    },
+    {
+      "key": "luma:ray32:app-i2v-pricing-2026-09",
+      "type": "plan",
+      "url": "https://lumalabs.ai/pricing",
+      "excerpt": "20 credits/5 sec\n60 credits/10 sec",
+      "value": {
+        "ray32_sdr_draft_image_to_video_credits": {
+          "5s": 20,
+          "10s": 60
+        }
+      },
+      "scope": {
+        "surface": "Luma App public pricing table",
+        "model": "Ray3.2",
+        "action": "image-to-video",
+        "resolution": "Draft SDR",
+        "asOf": "2026-09-27"
+      },
+      "candidateLinks": [
+        "tool:plan",
+        "fit:fit"
+      ],
+      "reviewStatus": "pending_independent_qa",
+      "notSufficientForAvailabilityEnum": true
+    },
+    {
       "key": "luma:ray32:identity-2026-09",
       "type": "feature",
       "url": "https://lumalabs.ai/llm-info",
       "excerpt": "The current video model is Ray3.2",
-      "value": { "current_video_model": "Ray3.2" },
-      "scope": { "surface": "Luma platform identity", "asOf": "2026-09-25" },
-      "candidateLinks": ["tool:support", "fit:fit"]
+      "value": {
+        "current_video_model": "Ray3.2"
+      },
+      "scope": {
+        "surface": "Luma platform identity",
+        "asOf": "2026-09-25"
+      },
+      "candidateLinks": [
+        "tool:support",
+        "fit:fit"
+      ]
     },
     {
       "key": "luma:ray32:api-anchor-2026-09",
       "type": "feature",
       "url": "https://docs.agents.lumalabs.ai/guides/model",
       "excerpt": "Image-to-video (`video.start_frame` / `video.end_frame`)",
-      "value": { "api_image_to_video": "start_or_end_frame" },
-      "scope": { "surface": "Luma Agents API", "model": "ray-3.2", "asOf": "2026-09-25" },
-      "candidateLinks": ["tool:support", "fit:fit"]
+      "value": {
+        "api_image_to_video": "start_or_end_frame"
+      },
+      "scope": {
+        "surface": "Luma Agents API",
+        "model": "ray-3.2",
+        "asOf": "2026-09-25"
+      },
+      "candidateLinks": [
+        "tool:support",
+        "fit:fit"
+      ]
     },
     {
       "key": "luma:ray32:api-duration-2026-09",
       "type": "limitation",
       "url": "https://docs.agents.lumalabs.ai/guides/model",
       "excerpt": "Resolutions: `540p`, `720p`, `1080p`. Durations: `5s`, `10s`.",
-      "value": { "api_duration": ["5s", "10s"], "api_resolution": ["540p", "720p", "1080p"] },
-      "scope": { "surface": "Luma Agents API", "model": "ray-3.2", "type": "video", "asOf": "2026-09-25" },
-      "candidateLinks": ["tool:limitation", "fit:limitation"]
+      "value": {
+        "api_duration": [
+          "5s",
+          "10s"
+        ],
+        "api_resolution": [
+          "540p",
+          "720p",
+          "1080p"
+        ]
+      },
+      "scope": {
+        "surface": "Luma Agents API",
+        "model": "ray-3.2",
+        "type": "video",
+        "asOf": "2026-09-25"
+      },
+      "candidateLinks": [
+        "tool:limitation",
+        "fit:limitation"
+      ]
     },
     {
       "key": "luma:ray32:api-billing-2026-09",
       "type": "plan",
       "url": "https://docs.agents.lumalabs.ai/guides/pricing",
       "excerpt": "Pay-as-you-go — pay per generation.",
-      "value": { "api_pay_as_you_go": "per_generation" },
-      "scope": { "surface": "Luma Agents API", "asOf": "2026-09-25" },
-      "candidateLinks": ["tool:plan"]
+      "value": {
+        "api_pay_as_you_go": "per_generation"
+      },
+      "scope": {
+        "surface": "Luma Agents API",
+        "asOf": "2026-09-25"
+      },
+      "candidateLinks": [
+        "tool:plan"
+      ]
     },
     {
       "key": "luma:product:consistency-risk-2026-09",
       "type": "limitation",
       "url": "https://lumalabs.ai/learning-hub/keep-character-product-consistency-in-luma-reference-guide",
       "excerpt": "If your character or product keeps subtly changing",
-      "value": { "product_consistency": "may_drift" },
-      "scope": { "surface": "Luma Agent reference workflow", "asOf": "2026-09-25" },
-      "candidateLinks": ["tool:limitation", "fit:limitation"]
+      "value": {
+        "product_consistency": "may_drift"
+      },
+      "scope": {
+        "surface": "Luma Agent reference workflow",
+        "asOf": "2026-09-25"
+      },
+      "candidateLinks": [
+        "tool:limitation",
+        "fit:limitation"
+      ]
     }
   ],
   "relationshipCandidates": {
@@ -186,14 +338,22 @@
     }
   },
   "purposeCoverage": {
-    "tool": { "support": true, "availability": false, "plan": true, "limitation": true },
-    "fit": { "fit": true, "limitation": true }
+    "tool": {
+      "support": true,
+      "availability": false,
+      "plan": true,
+      "limitation": true
+    },
+    "fit": {
+      "fit": true,
+      "limitation": true
+    }
   },
   "holdReasons": [
-    "No direct Ray3.2 App-plan entitlement and no justified non-unknown availability enum for the existing broad Luma Tool Capability.",
+    "Direct App entry and Ray3.2 image-to-video credit pricing were found, but no Ray3.2 entitlement by Plus/Pro/Ultra/free-trial account and no justified non-unknown availability enum for the existing broad Luma Tool Capability.",
     "Official API 5s/10s generation parameters and separate 20s video-to-video wording cannot be merged into one image-to-video limit.",
     "App export and commercial terms must not be inferred from Agents API behavior or legacy API FAQ.",
-    "Independent source excerpt, DOM/table context, reviewer, expiry, and current-production preflight are still required."
+    "Independent QA must approve the new source excerpts and DOM/table context; an identified reviewer, expiry, and fresh production preflight are still required before any intake."
   ],
   "proposedOldEvidenceDisposition": {
     "onlyAfterIndependentQa": true,

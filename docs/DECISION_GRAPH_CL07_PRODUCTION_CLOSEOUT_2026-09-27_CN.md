@@ -37,3 +37,7 @@
 - `node scripts/pub-03-readonly-run.mjs pnpm run seo:production-smoke` PASS；生产没有写入、部署或新发布。
 
 下一阶段按各编辑包补直接官方证据及独立内容 QA。CL-03 优先补 Ray3.2 availability；CL-04 先审定 withdraw 处置；CL-05/06 先处理 profile、权利/品牌治理及同 owner claim/link 缺口。每组若获批准，再单独创建精确 manifest 和管理员事务，发布后回读目标与非目标行。Task Page 与 DIFF-08 分别走独立门禁。
+
+### CL-03 专项补查附记（2026-09-27）
+
+本节是上述 13:07:48Z 生产基线之后的 **CL-03 编辑证据增量**，不改写该时点五组审计数。Luma 官方 [App 页](https://lumalabs.ai/app) 的 “Try Ray3.2” 直接连到 `app.lumalabs.ai`；[Ray 产品页](https://lumalabs.ai/ray)把 “Try in Luma” 与 “Build with API”分成两个入口；[定价页](https://lumalabs.ai/pricing)在 Ray3.2 的图片转视频行列出 Draft SDR 5/10 秒 credit 费率。这些来源证明公开 App 入口与计费表，不给出 Ray3.2 的 Plus/Pro/Ultra/免费试用逐档权限，不能把 `availability` 改为 `all_plans` 或 `paid_only`。详见 [CL-03 编辑包专项表](./DECISION_GRAPH_CL03_LUMA_EDITORIAL_PACKET_2026-09-25_CN.md)和 [operator candidate](./DECISION_GRAPH_CL03_LUMA_OPERATOR_CANDIDATE_2026-09-25_CN.json)。新增两条本地 intake 候选待独立 QA；CL-03 专用只读 verifier 于 13:44:25Z 确认生产仍为 reviewed/unknown、4 source/2 claim/2 旧 link、Task Page 404。运行方式为 `node scripts/pub-03-readonly-run.mjs pnpm exec tsx scripts/verify-decision-cl03-luma-readonly.ts`。同日 CL-03/CL-07 候选回归、Decision evidence/review gate、tsc 与完整 build 均通过；无 source/claim/link 写入、manifest、发布或页面/索引改动。

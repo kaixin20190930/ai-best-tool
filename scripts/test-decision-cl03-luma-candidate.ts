@@ -9,6 +9,16 @@ assert.equal(artifact.status, 'candidate_qa_pass_production_hold');
 assert.equal(artifact.independentQa.result, 'QA_PASS');
 assert.equal(artifact.independentQa.candidateRetentionAllowed, true);
 assert.equal(artifact.independentQa.productionRelation, 'HOLD');
+assert.equal(artifact.availabilityFollowUp.productionRelation, 'HOLD');
+assert.equal(artifact.availabilityFollowUp.availabilityEnum, 'unknown');
+assert.equal(artifact.availabilityFollowUp.checkedSources.length, 5);
+assert.ok(artifact.availabilityFollowUp.missing.some((gap: string) => gap.includes('entitlement')));
+for (const source of artifact.availabilityFollowUp.checkedSources) {
+  assert.equal(source.checkedDate, '2026-09-27');
+  assert.ok(source.excerpt.length >= 8);
+  assert.ok(source.purpose && source.surface && source.limitation);
+  assert.equal(new URL(source.url).hostname, 'lumalabs.ai');
+}
 assert.equal(artifact.productionWrites, 0);
 assert.equal(artifact.scope.createEntities, false);
 assert.equal(artifact.readOnlyBaseline.sourceCount, 4);
@@ -32,9 +42,9 @@ for (const candidate of artifact.evidenceIntakeCandidates) {
   assert.match(candidate.key, /^[a-z0-9][a-z0-9:_./-]{2,}$/);
   assert.equal(keys.has(candidate.key), false);
   keys.add(candidate.key);
-  assert.ok(candidate.excerpt.length >= 12);
+  assert.ok(candidate.excerpt.length >= 8);
   assert.ok(Object.keys(candidate.value).length > 0);
-  assert.equal(candidate.scope.asOf, '2026-09-25');
+  assert.ok(['2026-09-25', '2026-09-27'].includes(candidate.scope.asOf));
   const hostname = new URL(candidate.url).hostname;
   assert.ok(hostname === 'lumalabs.ai' || hostname.endsWith('.lumalabs.ai'));
   for (const purpose of candidate.candidateLinks) linkedPurposes.add(purpose);
@@ -43,6 +53,20 @@ for (const purpose of ['tool:support', 'tool:plan', 'tool:limitation', 'fit:fit'
   assert.ok(linkedPurposes.has(purpose));
 }
 assert.equal(linkedPurposes.has('tool:availability'), false);
+const appEntry = artifact.evidenceIntakeCandidates.find(
+  (candidate: { key: string }) => candidate.key === 'luma:ray32:app-entry-2026-09',
+);
+const appPricing = artifact.evidenceIntakeCandidates.find(
+  (candidate: { key: string }) => candidate.key === 'luma:ray32:app-i2v-pricing-2026-09',
+);
+assert.equal(appEntry?.value.ray32_app_entry, 'https://app.lumalabs.ai/');
+assert.equal(appPricing?.value.ray32_sdr_draft_image_to_video_credits['5s'], 20);
+assert.equal(appPricing?.value.ray32_sdr_draft_image_to_video_credits['10s'], 60);
+for (const candidate of [appEntry, appPricing]) {
+  assert.equal(candidate?.reviewStatus, 'pending_independent_qa');
+  assert.equal(candidate?.notSufficientForAvailabilityEnum, true);
+  assert.equal(candidate?.candidateLinks.includes('tool:availability'), false);
+}
 assert.ok(artifact.holdReasons.some((reason: string) => reason.includes('availability')));
 assert.ok(artifact.operatorGuards.some((guard: string) => guard.includes('updated_at')));
 assert.ok(artifact.rollbackPlan.some((step: string) => step.includes('withdrawal')));
