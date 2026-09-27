@@ -4,6 +4,10 @@ import { readFileSync } from 'node:fs';
 const seed = readFileSync('db/supabase/manual/20260923_seed_decision_graph_first_batch.sql', 'utf8');
 const packet = readFileSync('docs/DECISION_GRAPH_CL04_APP_BUILD_ELIGIBILITY_2026-09-27_CN.md', 'utf8');
 const verifier = readFileSync('scripts/verify-decision-cl04-app-build-readonly.ts', 'utf8');
+const withdrawal = readFileSync('db/supabase/migrations/20260928_decision_cl04_fit_withdrawal.sql', 'utf8');
+const manifest = JSON.parse(
+  readFileSync('docs/DECISION_GRAPH_CL04_FIT_WITHDRAWAL_MANIFEST_2026-09-28_CN.json', 'utf8'),
+);
 
 assert.match(seed, /'build-app-with-ai'[^\n]*'ai-assisted-app-development'[^\n]*'required'/);
 assert.match(seed, /'build-app-with-ai'[^\n]*'developer-workflow-integration'[^\n]*'preferred'/);
@@ -32,5 +36,15 @@ assert.doesNotMatch(packet, /production manifest|发布清单\s*[:：]\s*\[/i);
 assert.match(verifier, /BEGIN READ ONLY/);
 assert.match(verifier, /productionWrites: 0/);
 assert.doesNotMatch(verifier, /\.insert\(|\.update\(|\.delete\(|\.upsert\(|\.rpc\(/);
+assert.equal(manifest.taskId, '10ffdf04-6885-4a28-949d-0723038c6954');
+assert.equal(manifest.operation, 'withdraw');
+assert.deepEqual(
+  new Set(manifest.fits.map((fit: { id: string }) => fit.id)),
+  new Set(['692f9115-2d1d-487b-b02b-392fa55d2d34', 'bb6bb5aa-df5e-4113-bb76-8d4910911b28']),
+);
+assert.ok(manifest.fits.every((fit: { status: string }) => fit.status === 'reviewed'));
+assert.equal(manifest.qaReference, '', 'No independent QA reference may be invented');
+assert.match(withdrawal, /UPDATE tool_task_fits SET status = v_after/);
+assert.doesNotMatch(withdrawal, /UPDATE (?:task_capabilities|tool_capabilities) SET/i);
 
 console.log('PASS CL-04 app-build eligibility boundaries and read-only verifier');

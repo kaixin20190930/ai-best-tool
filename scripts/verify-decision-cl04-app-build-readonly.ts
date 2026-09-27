@@ -8,6 +8,7 @@ import { createAdminClient } from '../lib/supabase/admin';
 loadEnvConfig(process.env.CL04_ENV_DIR || process.cwd());
 
 const taskSlug = 'build-app-with-ai';
+const afterWithdrawal = process.argv.includes('--after-withdrawal');
 const capabilitySlugs = ['ai-assisted-app-development', 'developer-workflow-integration'];
 const tools = [
   {
@@ -81,7 +82,7 @@ async function main() {
   assert.ok(capabilities.every((capability) => capability.status === 'active'));
   const capabilityIds = capabilities.map((capability) => capability.id);
   const toolIds = tools.map((tool) => tool.id);
-  const [taskCapabilities, toolCapabilities, fits, profiles] = await Promise.all([
+  const [taskCapabilities, toolCapabilities, fits, otherFits, profiles] = await Promise.all([
     read<any>(
       'task capabilities',
       db
@@ -111,6 +112,14 @@ async function main() {
         .eq('task_id', task.id),
     ),
     read<any>(
+      'other fits for target tools',
+      db
+        .from('tool_task_fits')
+        .select('id, tool_id, task_id, status, updated_at')
+        .in('tool_id', toolIds)
+        .neq('task_id', task.id),
+    ),
+    read<any>(
       'profiles',
       db
         .from('product_intelligence_profiles')
@@ -123,10 +132,15 @@ async function main() {
   assert.equal(taskCapabilities.length, 2, 'Expected exactly two Task Capabilities');
   assert.equal(toolCapabilities.length, 2, 'Expected exactly two Tool Capabilities');
   assert.equal(fits.length, 2, 'Expected exactly two Fits');
+  assert.equal(otherFits.length, 0, 'Target tools must have no non-target Fit drift');
   assert.equal(profiles.length, 2, 'Expected exactly two intelligence profiles');
   assert.ok(
-    [...taskCapabilities, ...toolCapabilities, ...fits].every((row) => row.status === 'reviewed'),
-    'CL-04 relations must remain reviewed',
+    [...taskCapabilities, ...toolCapabilities].every((row) => row.status === 'reviewed'),
+    'CL-04 Capability relations must remain reviewed',
+  );
+  assert.ok(
+    fits.every((row) => row.status === (afterWithdrawal ? 'stale' : 'reviewed')),
+    `CL-04 Fits must be ${afterWithdrawal ? 'stale' : 'reviewed'}`,
   );
   for (const expected of tools) {
     const profile = profiles.find((row) => row.owner_id === expected.id);
@@ -217,6 +231,7 @@ async function main() {
         taskCapabilities,
         toolCapabilities,
         fits,
+        otherFits,
         profiles,
         sources,
         claims,

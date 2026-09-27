@@ -47,7 +47,7 @@ const fitEvidencePurposes = [
 const fitLevels = ['strong', 'conditional', 'weak', 'not_fit'] as const;
 
 export type CapabilityActionResult = { success: true; id?: string } | { success: false; error: string };
-export type ClusterManifestEntry = { id: string; updated_at: string; status: 'reviewed' | 'published' };
+export type ClusterManifestEntry = { id: string; updated_at: string; status: 'reviewed' | 'published' | 'stale' };
 export type ClusterManifest = {
   taskId: string;
   taskCapabilities: ClusterManifestEntry[];
@@ -55,6 +55,12 @@ export type ClusterManifest = {
   fits: ClusterManifestEntry[];
   operation: 'publish' | 'withdraw';
   qaReference: string;
+};
+export type Cl04FitManifest = {
+  operation: 'withdraw' | 'restore';
+  fits: ClusterManifestEntry[];
+  qaReference: string;
+  preflight: boolean;
 };
 export type ClusterEvidenceSummary = {
   entity: 'tool_capability' | 'fit';
@@ -334,6 +340,63 @@ function validateManifest(input: ClusterManifest): string | null {
     return 'Invalid manifest row or expected status.';
   }
   return null;
+}
+
+// CL-04 requires a Fit-only path: the existing cluster RPC would also change
+// Task/Tool Capabilities, which have no withdrawal decision in this packet.
+export async function transitionCl04Fits(
+  input: Cl04FitManifest,
+): Promise<{ success: boolean; error?: string; summary?: string; fitIds?: string[] }> {
+  try {
+    const user = await requireAdmin();
+    const expected = input.operation === 'withdraw' ? 'reviewed' : 'stale';
+    const ids = new Set(['692f9115-2d1d-487b-b02b-392fa55d2d34', 'bb6bb5aa-df5e-4113-bb76-8d4910911b28']);
+    if (
+      !['withdraw', 'restore'].includes(input.operation) ||
+      typeof input.preflight !== 'boolean' ||
+      !Array.isArray(input.fits) ||
+      input.fits.length !== 2 ||
+      input.fits.some(
+        (fit) => !ids.delete(fit.id) || fit.status !== expected || Number.isNaN(Date.parse(fit.updated_at)),
+      ) ||
+      ids.size !== 0 ||
+      input.qaReference.trim().length < 8
+    ) {
+      return { success: false, error: 'Exact CL-04 Fit versions and QA reference required.' };
+    }
+    const { data, error } = await createAdminClient().rpc('decision_cl04_fit_transition', {
+      p_fits: input.fits,
+      p_operation: input.operation,
+      p_reviewer: user.id,
+      p_qa_reference: input.qaReference.trim(),
+      p_preflight: input.preflight,
+    });
+    if (error) return { success: false, error: error.message };
+    if (!input.preflight) {
+      revalidatePath('/[locale]/admin/decision', 'page');
+      revalidatePath('/[locale]/find-tools', 'page');
+      revalidatePath('/[locale]/ai/[websiteName]', 'page');
+    }
+    const result = data && typeof data === 'object' ? (data as Record<string, unknown>) : {};
+    const fitIds = Array.isArray(result.fitIds) ? result.fitIds.map(String) : [];
+    if (
+      result.ok !== true ||
+      (input.preflight &&
+        (fitIds.length !== 2 ||
+          fitIds.some(
+            (id) => !['692f9115-2d1d-487b-b02b-392fa55d2d34', 'bb6bb5aa-df5e-4113-bb76-8d4910911b28'].includes(id),
+          )))
+    ) {
+      return { success: false, error: 'CL-04 preflight response did not match the exact Fits.' };
+    }
+    return {
+      success: true,
+      summary: `${input.operation}: ${String(result.fitUpdates ?? 0)} Fits; 0 Capability rows`,
+      fitIds: input.preflight ? fitIds : undefined,
+    };
+  } catch (error) {
+    return { success: false, error: error instanceof Error ? error.message : 'CL-04 Fit transition failed.' };
+  }
 }
 
 export async function transitionDecisionCluster(

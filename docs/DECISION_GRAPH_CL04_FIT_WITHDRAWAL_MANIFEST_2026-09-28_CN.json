@@ -1,0 +1,18 @@
+{
+  "taskId": "10ffdf04-6885-4a28-949d-0723038c6954",
+  "operation": "withdraw",
+  "fits": [
+    {
+      "id": "692f9115-2d1d-487b-b02b-392fa55d2d34",
+      "status": "reviewed",
+      "updated_at": "2026-09-23T06:06:52.904308+00:00"
+    },
+    {
+      "id": "bb6bb5aa-df5e-4113-bb76-8d4910911b28",
+      "status": "reviewed",
+      "updated_at": "2026-09-23T06:06:52.904308+00:00"
+    }
+  ],
+  "qaReference": "",
+  "preflight": true
+}
