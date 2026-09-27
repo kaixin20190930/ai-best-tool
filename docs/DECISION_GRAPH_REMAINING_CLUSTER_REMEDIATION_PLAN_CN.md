@@ -95,17 +95,14 @@ owner 与目的、非目标行不变，以及页面/索引门禁。
 
 ### P3 · `build-app-with-ai`（先资格审查）
 
-- **候选/现状：** `ai-assisted-app-development`、`developer-workflow-integration` 两条 Task rationale 太
-  泛；n8n/OpenRouter 的 Capability/Fit 均 hold。[n8n 官方文档](https://docs.n8n.io/)定位工作流自动
-  化，[OpenRouter 官方文档](https://openrouter.ai/docs/quickstart)定位模型 API/路由；这些是审查线索，不等于完整 app
-  builder 资格。先界定 Task 是否要求生成可运行应用，以及两工具能否独立满足该输出。
-- **字段：** Task rationale 具体区分“构建应用”与“接入工作流/模型”。若官方证据仅支持集成能力，相关 Task Capability 可改
-  contextual，Tool `support_level`/Fit 降为 conditional，或改 Task 归属、保持 reviewed/撤回；不得给
-  `ai-assisted-app-development` 编造强支持。核对官方集成能力、部署/运行责任、价格和 API 限额，写入
-  availability、plan、limitations；Fit required conditions 指向已有开发环境与集成责任，disqualifiers 包括需要开箱即用的
-  完整应用交付，证据目的按共同标准覆盖。
-- **判定：** 只有产品确实满足 Task 定义且限制明确才发布；资格未定 hold；确认只是基础设施而 Task 仍是完整 app builder
-  时，撤回该 Task 下不适配的 Fit/Capability。不得为 3-fit 门槛硬塞工具。
+- **候选/现状：** CL-04 已完成资格审查：`build-app-with-ai` 的输出仍是完整应用，n8n/OpenRouter 在此 Task 下的 Fit
+  均建议 `withdraw`，生产关系保持 reviewed/HOLD。两条 `developer-workflow-integration` Tool Capability 仅保留
+  `contextual`/HOLD 研究线索，不保留 `support_level`、`availability`、`plan_requirement` 或 `limitations` 的可写候选；
+  现有官方工作流与模型 API 资料不足以作为这些关系字段的直接证据。
+- **字段：** Task rationale 可作为独立修订候选，具体区分“构建应用”与“接入工作流/模型”；不改变 Task 定义或输出。
+  Tool Capability 的字段需待同 owner、当前 verified 的官方 claim links 覆盖 support、availability、plan、limitation 后另行
+  审定；Fit 不在本轮补写条件或限制。既有 ID、claim links 与关系状态以 CL-04 只读审查包为准。
+- **判定：** 当前不发布关系或 Task Page；任何后续字段修改、撤回或发布须按独立编辑审核及管理员门禁处理。不得为 3-fit 门槛硬塞工具。
 
 ### P4 · `ai-voiceover`
 
