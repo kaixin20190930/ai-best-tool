@@ -19,6 +19,11 @@ assert.deepEqual(
 
 assert.match(packet, /n8n \| \*\*`withdraw`\*\*/);
 assert.match(packet, /OpenRouter \| \*\*`withdraw`\*\*/);
+const toolCandidates = packet.split('## 3. 字段级候选（均未写生产）')[1].split('## 4. HOLD 与后续门禁')[0];
+assert.equal((toolCandidates.match(/Tool Capability \| \*\*`contextual` \/ HOLD\*\*/g) || []).length, 2);
+assert.equal((toolCandidates.match(/均不提出写入值/g) || []).length, 2);
+assert.doesNotMatch(toolCandidates, /候选 `partial`|候选 `all_plans`|候选 `unknown`|`availability` \| 候选/);
+assert.doesNotMatch(packet, /`all_plans`/);
 assert.match(packet, /`availability\/plan\/limitation`/);
 assert.match(packet, /生产关系 HOLD、未发布/);
 assert.match(packet, /Task Page 继续 404/);

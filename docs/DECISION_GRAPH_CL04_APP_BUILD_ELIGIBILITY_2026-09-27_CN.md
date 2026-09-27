@@ -41,21 +41,17 @@
 | Task → `developer-workflow-integration` `importance` | 保持 `preferred` | 集成可改善交付流程，但不能代替 required 能力。 |
 | 同上 `rationale.en` / `.cn` | `When the app depends on external services or automation, the team should connect and test those integrations in its development and deployment workflow.` / `应用依赖外部服务或自动化时，团队应在开发和部署流程中接入并测试这些集成。` | 明确依赖情形，不把集成当作应用。 |
 | 两条 Task Capability `status` | 保持 `reviewed` | 文案须独立编辑 QA，未获发布批准。 |
-| n8n → `developer-workflow-integration` `support_level` / `availability` | 候选 `partial` / `unknown` | 工作流与 Webhook 集成直接可证；Cloud、自托管与授权表面不同，当前旧 claim 不足以支持单一可用性枚举。 |
-| 同上 `plan_requirement.en` / `.cn` | `Confirm the selected n8n Cloud or self-hosted edition, workflow-execution and AI-credit allowance, external service costs, and any embedding license before use.` / `使用前确认所选 n8n Cloud 或自托管版本、工作流执行与 AI credits 额度、外部服务费用及嵌入授权。` | [定价](https://n8n.io/pricing/)与[自托管说明](https://github.com/n8n-io/n8n-docs/blob/main/docs/deploy/host-n8n/README.md)。 |
-| 同上 `limitations` | `EN: AI Workflow Builder creates workflows, not a complete application codebase or frontend. CN: AI Workflow Builder 生成工作流，不生成完整应用代码库或前端。`；`EN: Webhooks expose workflow endpoints; the team must build and host the application and secure its integrations. CN: Webhook 暴露工作流端点；团队仍需构建、托管应用并保护集成安全。` | [AI Builder 指南](https://blog.n8n.io/ai-workflow-builder-best-practices/)与[Webhook](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.webhook/)。 |
-| OpenRouter → `developer-workflow-integration` `support_level` / `availability` | 候选 `partial` / `all_plans`，仅限模型 API 接入 | 免费与付费档都有 API；不表示所有模型/路由/速率同等可用。该枚举须由新 claim 直接支撑。 |
-| 同上 `plan_requirement.en` / `.cn` | `Provide an API key; verify selected model/provider pricing, credits, rate limits, routing controls, and BYOK costs for the chosen account.` / `需提供 API key，并按账号核对所选模型与 provider 价格、credits、速率限制、路由控制及 BYOK 成本。` | [Quickstart](https://openrouter.ai/docs/quickstart)、[定价](https://openrouter.ai/pricing)、[BYOK](https://openrouter.ai/docs/guides/overview/auth/byok)。 |
-| 同上 `limitations` | `EN: Model API access and routing do not create, test, deploy, or host the application. CN: 模型 API 接入和路由不负责创建、测试、部署或托管应用。`；`EN: Model/provider behavior, cost, rate limits, and retention policy can differ; validate the selected route. CN: 模型与 provider 的行为、费用、速率限制和数据保留政策可能不同；须验证所选路由。` | [Quickstart](https://openrouter.ai/docs/quickstart)、[定价](https://openrouter.ai/pricing)、[provider logging](https://openrouter.ai/docs/guides/privacy/provider-logging)。 |
+| n8n → `developer-workflow-integration` Tool Capability | **`contextual` / HOLD**；`support_level`、`availability`、`plan_requirement`、`limitations` 均不提出写入值 | 工作流与 Webhook 只能作为应用集成线索；Cloud、自托管、执行额度、AI credits 与授权边界尚不能映射为本关系的字段证据。 |
+| OpenRouter → `developer-workflow-integration` Tool Capability | **`contextual` / HOLD**；`support_level`、`availability`、`plan_requirement`、`limitations` 均不提出写入值 | 模型 API 接入只能作为应用集成线索；模型/provider、额度、BYOK 与数据边界尚不能映射为本关系的字段证据。 |
 | n8n Fit `fit_level` / `status` | 建议从待发布候选撤出；当前 `reviewed` 不动 | 原 `strong` 与完整 app Task 冲突；不制作 publish manifest。若日后另案处理 status/`not_fit`，须按 CL-01 门禁审定，不能把 `not_fit` 当推荐。 |
 | OpenRouter Fit `fit_level` / `status` | 建议从待发布候选撤出；当前 `reviewed` 不动 | 原 `conditional` 也不能弥补 required app 能力。 |
 | 两条 Fit `rationale` / `required_conditions` / `disqualifiers` | 不为当前 Task 填充可发布字段；保持原 reviewed 数据直到独立编辑处置 | 给已判 `withdraw` 的 Fit 编写“看似充分”的条件会重新引入误推荐。若未来另有适配的集成 Task，必须单独审定，不在 CL-04 创建。 |
 
-上述 Tool Capability 字段只说明各自可作为**应用开发中的集成组件**，并不使任一 Tool Task Fit 在本 Task 重新取得资格。当前两条 Tool Capability 同样保持 reviewed/HOLD；若将来拟发布其通用能力，必须先建立当前官方、同 owner、verified 的 `support/availability/plan/limitation` claim links，独立 QA 后再走管理员门禁。现有两条 Fit 的旧 `fit` link 不得沿用作完整应用适配证据。
+`contextual` 是编辑资格判断，不是 Tool Capability 数据库枚举或可写字段值。上述研究线索只说明两工具可作为**应用开发中的集成组件**，并不使任一 Tool Task Fit 在本 Task 重新取得资格。当前两条 Tool Capability 保持 reviewed/HOLD；若将来拟发布其通用能力，必须先建立当前官方、同 owner、verified 的 `support/availability/plan/limitation` claim links，独立 QA 后再走管理员门禁。现有两条 Fit 的旧 `fit` link 不得沿用作完整应用适配证据。
 
 ## 4. HOLD 与后续门禁
 
-- **本轮明确建议：** 两条现有 `build-app-with-ai` Fit 均 `withdraw`，从 CL-04 发布候选清单排除；两条 Tool Capability 仅保留字段草案，Task 定义与两条 Task rationale 仅保留修订候选。所有生产关系保持 reviewed，Task Page 继续 404，sitemap 不增加 Task URL。
+- **本轮明确建议：** 两条现有 `build-app-with-ai` Fit 均 `withdraw`，从 CL-04 发布候选清单排除；两条 Tool Capability 仅保留 `contextual`/HOLD 研究线索，不保留可写字段候选；Task 定义与两条 Task rationale 仍为修订候选。所有生产关系保持 reviewed，Task Page 继续 404，sitemap 不增加 Task URL。
 - **证据差额：** 当前 Tool 每条仅 `support` 首页 claim，Fit 每条仅 `fit` 首页 claim；缺直接功能、可用性、套餐及限制 claim/link。不可刷新旧 claim 日期来补差。正式编辑动作前须读取最新版本、复查官方页面、确认 reviewer 与 owner，独立内容/技术 QA 后才可考虑字段写入或撤回操作。
 - **只读验证：** `pnpm exec tsx scripts/verify-decision-cl04-app-build-readonly.ts` 输出精确 Task/Capability/Tool/Fit、source/claim/link 与版本；对身份、数量、reviewed 状态、owner/domain、旧 link 进行断言。该脚本不调用 mutation 或发布 RPC。
 - **页面回读：** 2026-09-27 只读请求确认生产 `/cn/tasks/build-app-with-ai` 为 404，sitemap 中该 Task URL 为 0；这是当前门禁观察，不构成页面批准。
