@@ -43,7 +43,7 @@ assert.deepEqual(
   new Set(['692f9115-2d1d-487b-b02b-392fa55d2d34', 'bb6bb5aa-df5e-4113-bb76-8d4910911b28']),
 );
 assert.ok(manifest.fits.every((fit: { status: string }) => fit.status === 'reviewed'));
-assert.equal(manifest.qaReference, '', 'No independent QA reference may be invented');
+assert.equal(manifest.qaReference, 'codex-thread:01a0e549-64bb-72f0-acb5-aac41c4f7c0f');
 assert.match(withdrawal, /UPDATE tool_task_fits SET status = v_after/);
 assert.doesNotMatch(withdrawal, /UPDATE (?:task_capabilities|tool_capabilities) SET/i);
 
