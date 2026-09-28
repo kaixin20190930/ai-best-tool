@@ -519,3 +519,8 @@ query、Top 20 page、已抓取未编入索引与软 404 数量。
 - [Canva/Grammarly 官方事实审计](./CANVA_GRAMMARLY_N6_EXISTING_FACTS_AUDIT_2026-09-28_CN.md)及[字段级候选 patch](./CANVA_GRAMMARLY_N6_CANDIDATE_PATCH_2026-09-28_CN.json)完成。两者继续列在 14 项台账的 `HOLD_DUPLICATE_INTENT` 研究轨道，不占新工具发布槽；本轮没有批准新的 Tool Intelligence/Evidence Ledger claim、Task Fit 或工具页更新。
 - 生产 `tools` 共 67 条，`BEGIN READ ONLY → SELECT → ROLLBACK` 仅有唯一 Grammarly 实体，状态 `published + continue_index`；其双语真实页和两条 sitemap URL 保持。**Canva 实体为 0**，双语 `/ai/canva` 是不可用 `noindex` 壳且 sitemap 为 0；此前“只增强既有 Canva canonical”的表述只是旧研究假设，现由 `HOLD-CONFLICT` 覆盖。Canva Magic Studio 仍不能另建页面；本任务不以缺失实体为由创建工具。
 - Grammarly 现有价格、prompt、训练和隐私字段标 `NO_CHANGE`；组织品牌语调/风格规则对**已有草稿的建议式审阅**可作安全事实增量，旧 Business/Plus 权益待账户核验，AI 初稿自动继承组织规则仍 `unknown/HOLD`。Canva 的 AI 功能、权限、商用与数据处理已分层记入证据候选，但 Free Premium 资格存在官方同页冲突，实际套餐/地区额度、输出素材许可及预览功能可用性待核。下次事实复核 2026-10-05；未改生产数据库、页面、metadata、canonical、robots、sitemap、index、关系、自动化，也未 push/deploy。
+
+## 2026-09-28 N7 既有事实复核候选
+
+- [Jasper/Descript 官方事实审计](./JASPER_DESCRIPT_N7_EXISTING_FACTS_AUDIT_2026-09-28_CN.md)和[字段级候选 manifest](./JASPER_DESCRIPT_N7_CANDIDATE_PATCH_2026-09-28_CN.json)完成。生产只读事务核对两项唯一实体：Jasper 为 `published + continue_index`、双语页面可索引且 sitemap 两条；Descript 为 `published + monitor/noindex`、双语页面 noindex 且 sitemap 0 条。`features.release.indexState=monitor` 仅为 Jasper 受控发布历史，不覆盖当前资格。
+- 既有正确的身份、价格/额度、隐私/训练、同意、商用及人审叙述均 `NO_CHANGE`。安全候选只补 Jasper Business Style Guide 的生成作用、单 guide 与 beta 人工复核，以及 Descript AI credits 不结转、Free 水印、本地导出与 API 发布路径；Jasper IQ 的 Pro/Business 表述冲突、实际工作区权限和 Descript 付费 Drive/Enterprise 权益保持 `unknown/HOLD`。N7 属既有工具事实维护，不占新工具发布槽；CL-05/06 关系继续未发布。下次候选事实复核 2026-10-05；没有生产、页面、metadata、canonical、robots、sitemap、index、关系、自动化、push 或 deploy 写入。

@@ -1,0 +1,157 @@
+{
+  "type": "non_executable_existing_facts_candidate",
+  "checkedDate": "2026-09-28",
+  "nextFactReviewDate": "2026-10-05",
+  "productionWrites": 0,
+  "createEntities": false,
+  "changeCanonicalOrIndex": false,
+  "tools": [
+    {
+      "slug": "jasper",
+      "toolId": "5a0c7e91-9a5c-4f84-923a-d8345edaa918",
+      "expectedStatus": "published",
+      "expectedPageQualityStatus": "continue_index",
+      "expectedOfficialUrl": "https://www.jasper.ai/",
+      "nextReviewDateNoChange": "2026-10-20",
+      "noChange": [
+        { "paths": ["name", "url", "title.en", "title.zh", "title.cn", "content.en", "content.zh", "content.cn", "pricing", "tags", "use_cases.en", "use_cases.zh", "use_cases.cn", "status", "page_quality_status", "next_review_date"], "reason": "Unique identity, paid classification, task framing, index eligibility and existing review calendar remain correct." },
+        { "paths": ["detail.en", "detail.zh", "detail.cn"], "scope": "Existing Pro price and counts, Business custom price and credits, Brand Voice, privacy/training, commercial rights and human-review paragraphs", "reason": "Direct official sources support the existing text; append only missing Style Guide boundaries." },
+        { "paths": ["features.pricingSnapshot", "features.release", "features.editorial", "features.decision.pricingSummary", "features.evidence", "features.marketValidation"], "reason": "Price facts remain supported; evidence, market, editorial and release values are historical snapshots, not renewed by this official-facts review. release.indexState is historical monitor while page_quality_status records current indexing." },
+        { "paths": ["category_id", "image_url", "thumbnail_url", "screenshots", "video_url", "features.media", "features.audience", "features.decision.compareAxes", "features.decision.alternatives", "features.decision.limitations"], "reason": "No category, media, audience, comparison, alternative or existing limitation change is supported by this bounded review." }
+      ],
+      "candidatePatch": [
+        {
+          "classification": "SAFE_UPDATE_CANDIDATE",
+          "operation": "append_paragraph_if_absent",
+          "path": "detail.en",
+          "oldValueSummary": "The Brand Voice paragraph says Style Guides are Business-only and defaults can be overridden; it does not explain the active guide's generation surface, one-guide limit or beta setup review.",
+          "newValueCandidate": "For a Business workspace with an active Style Guide, Jasper documents generation-time style rules in Chat, Apps, Canvas editing and Public API output. Only one guide can be active at a time. Automatic setup from brand documents is an open beta and its extracted rules need human review. These controls guide drafts; they are not a mandatory publication approval or a guarantee of accurate claims. Confirm workspace permissions before relying on a rule. [Style Guide](https://help.jasper.ai/hc/en-us/articles/25925092890011-Style-Guide) · [Permission Settings](https://help.jasper.ai/hc/en-us/articles/34717759798683-Permission-Settings).",
+          "sources": ["https://help.jasper.ai/hc/en-us/articles/25925092890011-Style-Guide", "https://help.jasper.ai/hc/en-us/articles/34717759798683-Permission-Settings"],
+          "reason": "Adds the missing operational limit without restating price or claiming enforceable approval.",
+          "checkedDate": "2026-09-28",
+          "nextReviewDate": "2026-10-05"
+        },
+        {
+          "classification": "SAFE_UPDATE_CANDIDATE",
+          "operation": "append_paragraph_if_absent",
+          "path": "detail.zh",
+          "oldValueSummary": "品牌段仅称 Style Guide 限 Business、默认 Brand Voice 可覆盖，缺生成作用面、单 guide 限制与 beta 抽取审查。",
+          "newValueCandidate": "在已启用 Style Guide 的 Business 工作区，Jasper 文档称风格规则会在 Chat、Apps、Canvas 编辑及 Public API 输出生成时应用。一次只能启用一个 guide。从品牌文档自动建立规则仍为 open beta，抽取结果需要人工复核。这些控制用于指导草稿，不是强制发布审批，也不保证事实陈述准确；依赖具体规则前须核对工作区权限。[Style Guide](https://help.jasper.ai/hc/en-us/articles/25925092890011-Style-Guide) · [权限设置](https://help.jasper.ai/hc/en-us/articles/34717759798683-Permission-Settings)。",
+          "sources": ["https://help.jasper.ai/hc/en-us/articles/25925092890011-Style-Guide", "https://help.jasper.ai/hc/en-us/articles/34717759798683-Permission-Settings"],
+          "reason": "仅补生成与治理边界，不重复现有价格或声称强制审批。",
+          "checkedDate": "2026-09-28",
+          "nextReviewDate": "2026-10-05"
+        },
+        {
+          "classification": "SAFE_UPDATE_CANDIDATE",
+          "operation": "append_paragraph_if_absent",
+          "path": "detail.cn",
+          "oldValueSummary": "品牌段仅称 Style Guide 限 Business、默认 Brand Voice 可覆盖，缺生成作用面、单 guide 限制与 beta 抽取审查。",
+          "newValueCandidate": "在已启用 Style Guide 的 Business 工作区，Jasper 文档称风格规则会在 Chat、Apps、Canvas 编辑及 Public API 输出生成时应用。一次只能启用一个 guide。从品牌文档自动建立规则仍为 open beta，抽取结果需要人工复核。这些控制用于指导草稿，不是强制发布审批，也不保证事实陈述准确；依赖具体规则前须核对工作区权限。[Style Guide](https://help.jasper.ai/hc/en-us/articles/25925092890011-Style-Guide) · [权限设置](https://help.jasper.ai/hc/en-us/articles/34717759798683-Permission-Settings)。",
+          "sources": ["https://help.jasper.ai/hc/en-us/articles/25925092890011-Style-Guide", "https://help.jasper.ai/hc/en-us/articles/34717759798683-Permission-Settings"],
+          "reason": "仅补生成与治理边界，不重复现有价格或声称强制审批。",
+          "checkedDate": "2026-09-28",
+          "nextReviewDate": "2026-10-05"
+        }
+      ],
+      "accountOrPlanValidation": [
+        { "paths": ["detail.en", "detail.zh", "detail.cn", "features.pricingSnapshot"], "question": "Business included credits, rate card, PAYG/overage, API and Grid access depend on the actual order and workspace." },
+        { "paths": ["detail.en", "detail.zh", "detail.cn"], "question": "Brand Voice, Knowledge, Style Guide and Product IQ access and editing permissions require the target account and actual configuration." }
+      ],
+      "holdConflict": [
+        { "paths": ["detail.en", "detail.zh", "detail.cn"], "claim": "A single settled Pro-versus-Business Jasper IQ entitlement", "reason": "Current pricing and component help show Pro counts, while the Jasper IQ overview says IQ is Business-only; do not resolve by inference.", "sources": ["https://www.jasper.ai/pricing", "https://help.jasper.ai/hc/en-us/articles/18618654325787-Jasper-IQ"] },
+        { "paths": ["detail.en", "detail.zh", "detail.cn"], "claim": "An unbypassable organization approval or universally admin-only Style Guide editing", "reason": "Style Guide and permission-toggle wording differ; neither source proves a publication gate.", "sources": ["https://help.jasper.ai/hc/en-us/articles/25925092890011-Style-Guide", "https://help.jasper.ai/hc/en-us/articles/34717759798683-Permission-Settings"] }
+      ]
+    },
+    {
+      "slug": "descript",
+      "toolId": "a8c41d20-6b48-4f75-9f17-7e34c84619d2",
+      "expectedStatus": "published",
+      "expectedPageQualityStatus": "monitor",
+      "expectedOfficialUrl": "https://www.descript.com/",
+      "nextReviewDateNoChange": "2026-10-27",
+      "noChange": [
+        { "paths": ["name", "url", "title.en", "title.zh", "title.cn", "content.en", "content.zh", "content.cn", "pricing", "tags", "use_cases.en", "use_cases.zh", "use_cases.cn", "status", "page_quality_status", "next_review_date"], "reason": "Unique identity, freemium classification, transcript-led task framing, monitor/noindex eligibility and review calendar remain correct." },
+        { "paths": ["detail.en", "detail.zh", "detail.cn"], "scope": "Existing Free/Hobbyist/Creator/Business prices and allowances, two meters, variable AI cost, voice consent, privacy/training and commercial-rights paragraphs", "reason": "Current official sources support these existing statements; add only missing rollover/export/API boundaries." },
+        { "paths": ["features.release", "features.editorial", "features.decision.pricingSummary", "features.evidence", "features.marketValidation"], "reason": "Current monitor status and public-document-only warning remain correct; historical evidence and independent market signals were not reverified." },
+        { "paths": ["category_id", "image_url", "thumbnail_url", "screenshots", "video_url", "features.media", "features.audience", "features.decision.compareAxes"], "reason": "No category, media, audience or comparison-axis change is supported by this bounded review." }
+      ],
+      "candidatePatch": [
+        {
+          "classification": "SAFE_UPDATE_CANDIDATE",
+          "operation": "append_paragraph_if_absent",
+          "path": "detail.en",
+          "oldValueSummary": "Usage paragraph says media minutes do not roll over and AI cost varies; no statement that unused monthly AI credits also expire. Detail omits video watermark and API-versus-app rendered export boundary.",
+          "newValueCandidate": "Unused monthly AI credits also do not roll over. For delivery, current pricing lists Free video exports with a Descript watermark and watermark-free exports on paid Hobbyist, Creator and Business plans; check the actual Drive role before exporting. The app can export audio locally as MP3, WAV or M4A. The API can export transcript text, but a signed rendered audio/video URL requires publishing a Descript web link; direct rendered-file download without publishing is not supported through the API. API calls may spend the Drive's media minutes and AI credits. [Usage](https://help.descript.com/billing-payments-plans/track-and-understand-your-media-minutes-and-ai-credits) · [Pricing](https://www.descript.com/pricing) · [Local audio export](https://help.descript.com/export-and-share/audio) · [API](https://help.descript.com/api-and-mcp/api).",
+          "sources": ["https://help.descript.com/billing-payments-plans/track-and-understand-your-media-minutes-and-ai-credits", "https://www.descript.com/pricing", "https://help.descript.com/export-and-share/audio", "https://help.descript.com/api-and-mcp/api"],
+          "reason": "Adds decision-relevant delivery and rollover limits without inventing fixed AI-credit costs or an all-plan export entitlement.",
+          "checkedDate": "2026-09-28",
+          "nextReviewDate": "2026-10-05"
+        },
+        {
+          "classification": "SAFE_UPDATE_CANDIDATE",
+          "operation": "append_paragraph_if_absent",
+          "path": "detail.zh",
+          "oldValueSummary": "双计量段仅写媒体时长不结转、AI 消耗随任务变化；未写 AI credits 也不结转、水印与 API/本地导出边界。",
+          "newValueCandidate": "未用完的月度 AI credits 也不结转。交付时，现行价格页列 Free 视频导出带 Descript 水印，付费 Hobbyist、Creator 和 Business 可无水印导出；实际操作前仍须核对 Drive 成员角色。App 可在本地导出 MP3、WAV 或 M4A 音频。API 可导出转录文本，但取得渲染后音视频的 signed URL 需要先发布 Descript web link；API 不支持不发布就直接下载渲染文件。API 操作也可能消耗 Drive 的 media minutes 与 AI credits。[用量](https://help.descript.com/billing-payments-plans/track-and-understand-your-media-minutes-and-ai-credits) · [价格](https://www.descript.com/pricing) · [本地音频导出](https://help.descript.com/export-and-share/audio) · [API](https://help.descript.com/api-and-mcp/api)。",
+          "sources": ["https://help.descript.com/billing-payments-plans/track-and-understand-your-media-minutes-and-ai-credits", "https://www.descript.com/pricing", "https://help.descript.com/export-and-share/audio", "https://help.descript.com/api-and-mcp/api"],
+          "reason": "补交付与结转限制，不虚构固定 credits 成本或所有套餐导出权益。",
+          "checkedDate": "2026-09-28",
+          "nextReviewDate": "2026-10-05"
+        },
+        {
+          "classification": "SAFE_UPDATE_CANDIDATE",
+          "operation": "append_paragraph_if_absent",
+          "path": "detail.cn",
+          "oldValueSummary": "双计量段仅写媒体时长不结转、AI 消耗随任务变化；未写 AI credits 也不结转、水印与 API/本地导出边界。",
+          "newValueCandidate": "未用完的月度 AI credits 也不结转。交付时，现行价格页列 Free 视频导出带 Descript 水印，付费 Hobbyist、Creator 和 Business 可无水印导出；实际操作前仍须核对 Drive 成员角色。App 可在本地导出 MP3、WAV 或 M4A 音频。API 可导出转录文本，但取得渲染后音视频的 signed URL 需要先发布 Descript web link；API 不支持不发布就直接下载渲染文件。API 操作也可能消耗 Drive 的 media minutes 与 AI credits。[用量](https://help.descript.com/billing-payments-plans/track-and-understand-your-media-minutes-and-ai-credits) · [价格](https://www.descript.com/pricing) · [本地音频导出](https://help.descript.com/export-and-share/audio) · [API](https://help.descript.com/api-and-mcp/api)。",
+          "sources": ["https://help.descript.com/billing-payments-plans/track-and-understand-your-media-minutes-and-ai-credits", "https://www.descript.com/pricing", "https://help.descript.com/export-and-share/audio", "https://help.descript.com/api-and-mcp/api"],
+          "reason": "补交付与结转限制，不虚构固定 credits 成本或所有套餐导出权益。",
+          "checkedDate": "2026-09-28",
+          "nextReviewDate": "2026-10-05"
+        },
+        {
+          "classification": "SAFE_UPDATE_CANDIDATE",
+          "operation": "append_unique_items",
+          "path": "features.decision.limitations.en",
+          "oldValueSummary": "Existing 12 limitations include media-hour rollover, separate variable AI-credit pool and consent, but not AI-credit rollover, Free video watermark or the API render route.",
+          "newValueCandidate": ["Unused monthly AI credits do not roll over.", "Free video exports carry a watermark; paid plan and Drive role affect removal.", "API rendered-file download requires publishing a web link; local app export is separate."],
+          "sources": ["https://help.descript.com/billing-payments-plans/track-and-understand-your-media-minutes-and-ai-credits", "https://www.descript.com/pricing", "https://help.descript.com/api-and-mcp/api"],
+          "reason": "Makes the three missing restrictions visible in the Decision Card.",
+          "checkedDate": "2026-09-28",
+          "nextReviewDate": "2026-10-05"
+        },
+        {
+          "classification": "SAFE_UPDATE_CANDIDATE",
+          "operation": "append_unique_items",
+          "path": "features.decision.limitations.zh",
+          "oldValueSummary": "现有 12 项限制未写 AI credits 结转、Free 视频水印或 API 渲染文件路径。",
+          "newValueCandidate": ["未用完的月度 AI credits 不结转。", "Free 视频导出带水印；付费方案及 Drive 成员角色影响移除条件。", "API 下载渲染文件须先发布 web link；App 本地导出是另一条路径。"],
+          "sources": ["https://help.descript.com/billing-payments-plans/track-and-understand-your-media-minutes-and-ai-credits", "https://www.descript.com/pricing", "https://help.descript.com/api-and-mcp/api"],
+          "reason": "让决策卡呈现三条遗漏的限制。",
+          "checkedDate": "2026-09-28",
+          "nextReviewDate": "2026-10-05"
+        },
+        {
+          "classification": "SAFE_UPDATE_CANDIDATE",
+          "operation": "append_unique_items",
+          "path": "features.decision.limitations.cn",
+          "oldValueSummary": "现有 12 项限制未写 AI credits 结转、Free 视频水印或 API 渲染文件路径。",
+          "newValueCandidate": ["未用完的月度 AI credits 不结转。", "Free 视频导出带水印；付费方案及 Drive 成员角色影响移除条件。", "API 下载渲染文件须先发布 web link；App 本地导出是另一条路径。"],
+          "sources": ["https://help.descript.com/billing-payments-plans/track-and-understand-your-media-minutes-and-ai-credits", "https://www.descript.com/pricing", "https://help.descript.com/api-and-mcp/api"],
+          "reason": "让决策卡呈现三条遗漏的限制。",
+          "checkedDate": "2026-09-28",
+          "nextReviewDate": "2026-10-05"
+        }
+      ],
+      "accountOrPlanValidation": [
+        { "paths": ["detail.en", "detail.zh", "detail.cn", "features.decision.limitations.en", "features.decision.limitations.zh", "features.decision.limitations.cn"], "question": "Target Drive's plan, Editor roles, pooled allowances, watermark behavior and export formats must be checked in the account." },
+        { "paths": ["detail.en", "detail.zh", "detail.cn"], "question": "Enterprise training/retention terms and speaker's commercial distribution rights require the actual contract and consent records." }
+      ],
+      "holdConflict": [
+        { "paths": ["detail.en", "detail.zh", "detail.cn"], "claim": "A fixed credit cost per avatar, AI speaker, dubbed minute or finished video", "reason": "Current usage guidance makes Underlord consumption task/model-dependent; no paid Drive was tested.", "sources": ["https://help.descript.com/billing-payments-plans/track-and-understand-your-media-minutes-and-ai-credits"] },
+        { "paths": ["detail.en", "detail.zh", "detail.cn"], "claim": "A blanket commercial license for every stock/custom voice or guaranteed output rights", "reason": "Terms require speaker and input rights and user review; plan marketing does not establish per-voice rights.", "sources": ["https://www.descript.com/terms"] }
+      ]
+    }
+  ]
+}
