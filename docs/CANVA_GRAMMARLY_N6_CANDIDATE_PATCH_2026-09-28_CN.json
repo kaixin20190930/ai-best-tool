@@ -1,0 +1,78 @@
+{
+  "checkedDate": "2026-09-28",
+  "nextFactReviewDate": "2026-10-05",
+  "type": "non_executable_existing_facts_candidate",
+  "productionWrites": 0,
+  "createEntities": false,
+  "changeCanonicalOrIndex": false,
+  "canva": {
+    "candidateSlug": "canva",
+    "toolId": null,
+    "status": "HOLD-CONFLICT",
+    "productionMatchCount": 0,
+    "reason": "The 14-candidate ledger calls Canva an existing canonical, but the production tools table has no Canva name/title/domain row and both locale URLs are noindex unavailable shells.",
+    "patch": [],
+    "futureEvidenceOnly": [
+      {"classification": "safe factual update candidate", "claim": "Magic Studio and Canva AI features belong to Canva; ordinary templates, Brand Kit and manual design are not themselves generative AI.", "sources": ["https://www.canva.com/magic-studio/", "https://www.canva.com/help/use-magic-design/"], "checkedDate": "2026-09-28", "nextReviewDate": "2026-10-05"},
+      {"classification": "needs account-or-plan validation", "claim": "Standard/Premium/Ultra AI usage shares a complexity-dependent monthly allowance; actual plan, region, AI Pass, third-party app limits and export rights need account/design verification.", "sources": ["https://www.canva.com/pricing/", "https://www.canva.com/help/ai-access-variantb/", "https://www.canva.com/help/magic-features-admin-controls/"], "checkedDate": "2026-09-28", "nextReviewDate": "2026-10-05"},
+      {"classification": "HOLD-conflict", "claim": "Canva Free Premium AI eligibility cannot be asserted: one help page says Free may use Premium allowance but also lists Premium eligibility under paid and special plans.", "sources": ["https://www.canva.com/help/ai-access-variantb/", "https://www.canva.com/pricing/"], "checkedDate": "2026-09-28", "nextReviewDate": "2026-10-05"},
+      {"classification": "safe factual update candidate", "claim": "AI output may be used lawfully, subject to input rights and underlying Canva licensed content; Canva does not guarantee unique or copyrightable outputs. Free-account watermarks concern Pro library elements, not every AI output.", "sources": ["https://www.canva.com/policies/ai-product-terms/", "https://www.canva.com/help/using-canva-to-create-products-for-sale/", "https://www.canva.com/licensing-explained/"], "checkedDate": "2026-09-28", "nextReviewDate": "2026-10-05"},
+      {"classification": "safe factual update candidate", "claim": "Privacy Settings govern use of user content for AI improvement; technology partners may process inputs to provide features. Apps inside Canva, REST APIs and assistant MCP are distinct integration surfaces; marketplace AI apps may have separate limits.", "sources": ["https://www.canva.com/trust/privacy/", "https://www.canva.com/policies/ai-product-terms/", "https://www.canva.dev/docs/apps/", "https://www.canva.com/help/ai-access-variantb/"], "checkedDate": "2026-09-28", "nextReviewDate": "2026-10-05"},
+      {"classification": "HOLD-conflict", "claim": "Canva AI 2.0 and Magic Layers are announced preview/beta features, not proven general availability to all plans and regions.", "sources": ["https://www.canva.com/newsroom/news/canva-create-2026-ai/", "https://www.canva.com/newsroom/news/magic-layers/"], "checkedDate": "2026-09-28", "nextReviewDate": "2026-10-05"}
+    ]
+  },
+  "grammarly": {
+    "toolId": "4d0bbf38-6b7e-4c44-8e25-9fe73f60bb18",
+    "slug": "grammarly",
+    "expectedStatus": "published",
+    "expectedPageQualityStatus": "continue_index",
+    "expectedOfficialUrl": "https://www.grammarly.com/",
+    "nextReviewDateNoChange": "2026-10-20",
+    "noChange": [
+      {"paths": ["name", "url", "title", "content", "pricing", "category_id", "tags", "status", "page_quality_status", "next_review_date"], "reason": "Current identity, scope, decision framing, freemium status and production index eligibility remain correct."},
+      {"paths": ["detail.en", "detail.zh", "detail.cn"], "scope": "existing identity, Free/Pro/Enterprise price and prompt figures, training defaults, privacy/provider processing, Editor retention and Go coexistence paragraphs", "reason": "Current official sources support these existing statements; append only the missing brand-review boundary."},
+      {"paths": ["features.pricingSnapshot", "features.marketValidation", "features.release"], "reason": "Pricing remains supported; market review was not rerun; release.indexState is a historical 2026-09-21 snapshot rather than current page_quality_status."}
+    ],
+    "candidatePatch": [
+      {
+        "classification": "safe factual update candidate",
+        "operation": "append_paragraph_if_absent",
+        "path": "detail.en",
+        "value": "For an existing marketing draft, an organization can assign brand tones and style rules so writers see tone, terminology and formatting suggestions. Pro lists one style guide and brand tone; Enterprise offers broader organization controls. Suggestions can be accepted or dismissed, website scope and enabled clients affect coverage, and style rule suggestions are unavailable in the Grammarly Keyboard. These are review aids, not mandatory approval or proof that an AI first draft automatically inherits organization rules. Verify the actual account and surface before relying on them. [Brand tones](https://support.grammarly.com/hc/en-us/articles/4403544890253-Set-brand-tones) · [Style rules](https://support.grammarly.com/hc/en-us/articles/360043832652-Create-style-rules) · [Plans](https://www.grammarly.com/plans).",
+        "checkedDate": "2026-09-28",
+        "nextReviewDate": "2026-10-05"
+      },
+      {
+        "classification": "safe factual update candidate",
+        "operation": "append_paragraph_if_absent",
+        "path": "detail.zh",
+        "value": "对于已有的营销草稿，组织可以分配品牌语调和风格规则，让写作者收到语气、术语与格式建议。现行计划列 Pro 各一个 style guide 和 brand tone，Enterprise 有更广的组织控制。建议可接受或忽略，网站作用域和启用的客户端会影响覆盖，Grammarly Keyboard 不提供 style rule 建议。这些是审阅辅助，不是强制审批，也不证明 AI 初稿会自动继承组织规则。实际使用前须核对账号和客户端。[品牌语调](https://support.grammarly.com/hc/en-us/articles/4403544890253-Set-brand-tones) · [风格规则](https://support.grammarly.com/hc/en-us/articles/360043832652-Create-style-rules) · [套餐](https://www.grammarly.com/plans)。",
+        "checkedDate": "2026-09-28",
+        "nextReviewDate": "2026-10-05"
+      },
+      {
+        "classification": "safe factual update candidate",
+        "operation": "append_paragraph_if_absent",
+        "path": "detail.cn",
+        "value": "对于已有的营销草稿，组织可以分配品牌语调和风格规则，让写作者收到语气、术语与格式建议。现行计划列 Pro 各一个 style guide 和 brand tone，Enterprise 有更广的组织控制。建议可接受或忽略，网站作用域和启用的客户端会影响覆盖，Grammarly Keyboard 不提供 style rule 建议。这些是审阅辅助，不是强制审批，也不证明 AI 初稿会自动继承组织规则。实际使用前须核对账号和客户端。[品牌语调](https://support.grammarly.com/hc/en-us/articles/4403544890253-Set-brand-tones) · [风格规则](https://support.grammarly.com/hc/en-us/articles/360043832652-Create-style-rules) · [套餐](https://www.grammarly.com/plans)。",
+        "checkedDate": "2026-09-28",
+        "nextReviewDate": "2026-10-05"
+      },
+      {
+        "classification": "safe factual update candidate",
+        "operation": "append_unique_by_url",
+        "path": "features.evidence.official",
+        "items": [
+          {"label": "Brand tones", "url": "https://support.grammarly.com/hc/en-us/articles/4403544890253-Set-brand-tones", "checkedAt": "2026-09-28"},
+          {"label": "Style rules", "url": "https://support.grammarly.com/hc/en-us/articles/360043832652-Create-style-rules", "checkedAt": "2026-09-28"}
+        ],
+        "nextReviewDate": "2026-10-05"
+      }
+    ],
+    "hold": [
+      {"classification": "HOLD-conflict", "path": "CL-06 brand-guided-content-generation", "value": null, "reason": "Official pages do not prove automatic application of assigned organization rules to AI first drafts; support and availability remain unknown.", "sources": ["https://www.grammarly.com/business/styleguide", "https://support.grammarly.com/hc/en-us/articles/360043832652-Create-style-rules"], "checkedDate": "2026-09-28", "nextReviewDate": "2026-10-05"},
+      {"classification": "needs account-or-plan validation", "path": "legacy Business/Plus entitlements", "value": null, "reason": "Current Pro support says it replaces Business, while older Business/Plus help material and the current plan FAQ still mention Business. Check the target contract before assigning historic rule-set counts or organization controls.", "sources": ["https://www.grammarly.com/plans", "https://support.grammarly.com/hc/en-us/articles/115000090011-How-much-does-Grammarly-Pro-cost", "https://support.grammarly.com/hc/en-us/articles/360043832652-Create-style-rules"], "checkedDate": "2026-09-28", "nextReviewDate": "2026-10-05"}
+    ]
+  },
+  "guards": ["No SQL or production update is authorized by this file.", "Re-read exact target row and source pages before a later patch.", "Keep current canonical, index/noindex, sitemap, Task Page and relations unchanged.", "Independent editorial QA and same-owner verified claim/link workflow are separate gates."]
+}
