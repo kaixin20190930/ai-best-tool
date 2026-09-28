@@ -40,7 +40,7 @@
 
 ### CL-04 后续撤回准备附记（2026-09-28）
 
-CL-04 两条 `withdraw` 仍只是编辑结论。2026-09-27T23:41:55Z 生产只读回读确认目标 Fit 均仍为 `reviewed`，两条 Task Capability 与两条 Tool Capability 均仍为 `reviewed`，n8n/OpenRouter 在其他 Task 没有 Fit；生产写入 0。CL-01 原事务要求完整三类已发布关系，不能在保留 Capability 的前提下撤回这两条 reviewed Fit。专用 [CL-04 Fit-only 实施包](./DECISION_GRAPH_CL04_APP_BUILD_ELIGIBILITY_2026-09-27_CN.md#5-cl-04-fit-only-撤回实施附记2026-09-28)已完成本地事务回滚测试，独立 QA_PASS 引用 `codex-thread:01a0e549-64bb-72f0-acb5-aac41c4f7c0f` 已写入 manifest；migration/action 未部署，生产撤回尚未执行。此附记不改写上文 CL-07 的历史收口基线，也不启动页面或 DIFF-08。
+CL-04 两条 `withdraw` 仍只是编辑结论。2026-09-27T23:41:55Z 生产只读回读确认目标 Fit 均仍为 `reviewed`，两条 Task Capability 与两条 Tool Capability 均仍为 `reviewed`，n8n/OpenRouter 在其他 Task 没有 Fit；生产写入 0。CL-01 原事务要求完整三类已发布关系，不能在保留 Capability 的前提下撤回这两条 reviewed Fit。专用 [CL-04 Fit-only 实施包](./DECISION_GRAPH_CL04_APP_BUILD_ELIGIBILITY_2026-09-27_CN.md#5-cl-04-fit-only-撤回实施附记2026-09-28)已完成本地事务回滚测试，但 migration/action 未部署，独立 QA reference 未填写；生产撤回尚未执行。此附记不改写上文 CL-07 的历史收口基线，也不启动页面或 DIFF-08。
 
 ### CL-03 专项补查附记（2026-09-27）
 
