@@ -44,8 +44,9 @@ assert.equal(audit.marketValidation.verdict, 'validated');
 assert(audit.marketValidation.score >= 90);
 const candidate = buffer.candidates.find((item: { slug: string }) => item.slug === 'jasper');
 assert(candidate);
-assert.equal(candidate.status, 'ready_for_next_slot');
-assert.equal(candidate.publicReleaseApproved, false);
+assert.equal(candidate.status, 'released_monitor_noindex');
+assert.equal(candidate.publicReleaseApproved, true);
+// This is the candidate release snapshot; later production continue_index requires a separate index approval.
 assert.equal(candidate.indexReleaseApproved, false);
 const facts = JSON.stringify(audit);
 for (const pattern of [
