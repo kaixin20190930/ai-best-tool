@@ -29,8 +29,25 @@ assert.equal((toolCandidates.match(/均不提出写入值/g) || []).length, 2);
 assert.doesNotMatch(toolCandidates, /候选 `partial`|候选 `all_plans`|候选 `unknown`|`availability` \| 候选/);
 assert.doesNotMatch(packet, /`all_plans`/);
 assert.match(packet, /`availability\/plan\/limitation`/);
-assert.match(packet, /生产关系 HOLD、未发布/);
-assert.match(packet, /Task Page 继续 404/);
+const assertWithdrawalContract = (document: string) => {
+  assert.match(document, /n8n 与 OpenRouter 在当前 Task 下的 Fit 已受控撤回为 `stale`/);
+  assert.match(document, /两条 CL-04 Fit 已由 reviewer .* 原子地从 `reviewed` 撤回为 `stale`/);
+  assert.match(
+    document,
+    /n8n Fit `692f9115-2d1d-487b-b02b-392fa55d2d34` 与 OpenRouter Fit `bb6bb5aa-df5e-4113-bb76-8d4910911b28` 各更新一行/,
+  );
+  assert.match(document, /fitUpdates=2\/taskCapabilityUpdates=0\/toolCapabilityUpdates=0/);
+  assert.match(document, /两条 Tool Capability 仍为 `reviewed`/);
+  assert.match(document, /Task Page 仍关闭/);
+  assert.match(document, /复查 `\/cn\/tasks\/build-app-with-ai` 为 404，sitemap Task URL 为 0/);
+  assert.match(document, /自动 verifier 于 00:35:26Z/);
+  assert.match(document, /总控独立 verifier 于 00:37:59Z 均通过/);
+  assert.match(document, /本组状态为\*\*已完成\/受控撤回\*\*/);
+  assert.match(document, /不构成页面开放或 DIFF-08 启动批准/);
+};
+assertWithdrawalContract(packet);
+assert.throws(() => assertWithdrawalContract(packet.replace('已受控撤回为 `stale`', '仍处于 HOLD')));
+assert.throws(() => assertWithdrawalContract(packet.replace('已受控撤回为 `stale`', '已发布')));
 assert.doesNotMatch(packet, /production manifest|发布清单\s*[:：]\s*\[/i);
 
 assert.match(verifier, /BEGIN READ ONLY/);
