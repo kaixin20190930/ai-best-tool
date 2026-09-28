@@ -3,6 +3,8 @@ import { loadEnvConfig } from '@next/env';
 
 import { createAdminClient } from '@/lib/supabase/admin';
 
+import { assertSeedFitStatuses, cl04WithdrawalScope } from './decision-graph-seed-fit-guard';
+
 loadEnvConfig(process.cwd());
 
 const taskSlugs = [
@@ -60,7 +62,10 @@ async function main() {
       .in('task_id', taskIds)
       .in('capability_id', capabilityIds),
     supabase.from('tool_capabilities').select('id, tool_id, capability_id, status').in('capability_id', capabilityIds),
-    supabase.from('tool_task_fits').select('id, tool_id, task_id, status').in('task_id', taskIds),
+    supabase
+      .from('tool_task_fits')
+      .select('id, tool_id, task_id, status, last_edited_by, updated_at')
+      .in('task_id', taskIds),
   ]);
   const relationError = taskCapabilitiesResult.error || toolCapabilitiesResult.error || fitsResult.error;
   if (relationError) throw new Error(`Decision Graph relation verification unavailable: ${relationError.message}`);
@@ -76,9 +81,40 @@ async function main() {
     toolCapabilities.every((relation) => relation.status === 'reviewed' || relation.status === 'published'),
     'Tool Capability seed must resolve to reviewed records or compatible pre-existing published records.',
   );
-  assert.ok(
-    fits.every((relation) => relation.status === 'reviewed' || relation.status === 'published'),
-    'Tool Task Fit seed must resolve to reviewed records or compatible pre-existing published records.',
+  let withdrawalEvidence;
+  if (fits.some((fit) => fit.status === 'stale')) {
+    const [profilesResult, fitLinksResult, auditsResult] = await Promise.all([
+      supabase
+        .from('product_intelligence_profiles')
+        .select('id, owner_type, owner_id')
+        .in('owner_id', cl04WithdrawalScope.toolIds),
+      supabase
+        .from('tool_task_fit_claims')
+        .select('fit_id, claim_id, purpose')
+        .in('fit_id', cl04WithdrawalScope.fitIds),
+      supabase
+        .from('product_intelligence_timeline_events')
+        .select(
+          'profile_id, event_type, review_scope, claim_type, claim_key, old_value, new_value, visibility, occurred_at, verified_at, verified_by, metadata',
+        )
+        .eq('claim_key', cl04WithdrawalScope.taskId)
+        .in('event_type', ['decision_withdrawal', 'decision_restoration']),
+    ]);
+    const evidenceError = profilesResult.error || fitLinksResult.error || auditsResult.error;
+    if (evidenceError) throw new Error(`CL-04 withdrawal verification unavailable: ${evidenceError.message}`);
+    withdrawalEvidence = {
+      profiles: profilesResult.data || [],
+      fitLinks: fitLinksResult.data || [],
+      audits: auditsResult.data || [],
+      capabilities,
+      taskCapabilities,
+      toolCapabilities,
+    };
+  }
+  assertSeedFitStatuses(
+    fits,
+    tasks.find((task) => task.slug === 'build-app-with-ai'),
+    withdrawalEvidence,
   );
   assert.ok(
     toolCapabilities.length <= 7 && fits.length <= 7,

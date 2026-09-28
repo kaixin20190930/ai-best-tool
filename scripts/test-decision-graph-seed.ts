@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { assertSeedFitStatuses, type SeedFit, type WithdrawalAudit } from './decision-graph-seed-fit-guard';
+
 const seed = fs.readFileSync(path.join(process.cwd(), 'scripts/plan-decision-graph-seed.ts'), 'utf8');
 const verifier = fs.readFileSync(path.join(process.cwd(), 'scripts/verify-decision-graph-seed.ts'), 'utf8');
 
@@ -39,6 +41,135 @@ assert.match(verifier, /Sparse evidence plan must not manufacture bulk relations
 assert.match(verifier, /compatible pre-existing published records/);
 assert.match(verifier, /preservedPublishedRelations/);
 assert.match(verifier, /publicRelationsCreated: 0/);
+
+const manifest = JSON.parse(
+  fs.readFileSync(
+    path.join(process.cwd(), 'docs/DECISION_GRAPH_CL04_FIT_WITHDRAWAL_MANIFEST_2026-09-28_CN.json'),
+    'utf8',
+  ),
+);
+const task = { id: manifest.taskId, slug: 'build-app-with-ai', status: 'active' };
+const reviewer = '2b8177ac-70b3-4475-a1ee-509ff8b4b622';
+const changedAt = '2026-09-28T00:35:17.31865Z';
+const fitIds = manifest.fits.map((fit: { id: string }) => fit.id);
+const toolIds = ['23bb3601-a5ac-42c3-bff3-64b06a063959', 'f77fb817-e8dc-4c22-b7cd-8edc2e5b0a5e'];
+const claimIds = ['806bedca-c1e4-4fd1-ae57-e4db06567e47', '76cf5413-ce8c-424d-9a6b-21584758cf72'];
+const fits: SeedFit[] = fitIds.map((id: string, index: number) => ({
+  id,
+  tool_id: toolIds[index],
+  task_id: task.id,
+  status: 'stale',
+  last_edited_by: reviewer,
+  updated_at: changedAt,
+}));
+const otherFits: SeedFit[] = Array.from({ length: 5 }, (_, index) => ({
+  id: `other-fit-${index}`,
+  tool_id: `other-tool-${index}`,
+  task_id: `other-task-${index}`,
+  status: 'reviewed',
+  last_edited_by: reviewer,
+  updated_at: changedAt,
+}));
+const seedFits = [...fits, ...otherFits];
+const evidence = {
+  profiles: toolIds.map((owner_id, index) => ({ id: `profile-${index}`, owner_type: 'tool', owner_id })),
+  fitLinks: fitIds.map((fit_id: string, index: number) => ({ fit_id, claim_id: claimIds[index], purpose: 'fit' })),
+  capabilities: [
+    { id: 'app-capability', slug: 'ai-assisted-app-development' },
+    { id: 'workflow-capability', slug: 'developer-workflow-integration' },
+  ],
+  taskCapabilities: ['app-capability', 'workflow-capability'].map((capability_id) => ({
+    task_id: task.id,
+    capability_id,
+    status: 'reviewed',
+  })),
+  toolCapabilities: toolIds.map((tool_id, index) => ({
+    id: ['4ebad72c-d03e-4a54-9a2c-f5024f7da9ac', 'ac4c1009-feaf-4544-bbaf-086e56089bdc'][index],
+    tool_id,
+    capability_id: 'workflow-capability',
+    status: 'reviewed',
+  })),
+  audits: toolIds.map(
+    (_, index): WithdrawalAudit => ({
+      profile_id: `profile-${index}`,
+      event_type: 'decision_withdrawal',
+      review_scope: 'decision',
+      claim_type: 'decision_cluster',
+      claim_key: task.id,
+      old_value: { status: 'reviewed' },
+      new_value: { status: 'stale' },
+      visibility: 'internal',
+      occurred_at: changedAt,
+      verified_at: changedAt,
+      verified_by: reviewer,
+      metadata: { taskId: task.id, operation: 'withdraw', qaReference: manifest.qaReference, fits: manifest.fits },
+    }),
+  ),
+};
+assert.doesNotThrow(() => assertSeedFitStatuses(seedFits, task, evidence));
+assert.doesNotThrow(() =>
+  assertSeedFitStatuses(
+    seedFits.map((fit) => ({ ...fit, status: 'reviewed' })),
+    task,
+  ),
+);
+assert.throws(() => assertSeedFitStatuses(seedFits.slice(0, -1), task, evidence));
+assert.throws(() =>
+  assertSeedFitStatuses(
+    seedFits.filter((fit) => fit.id !== fitIds[0]),
+    task,
+    evidence,
+  ),
+);
+assert.throws(() =>
+  assertSeedFitStatuses(
+    seedFits.map((fit) => (fit.id === fitIds[0] ? { ...fit, id: 'unexpected' } : fit)),
+    task,
+    evidence,
+  ),
+);
+assert.throws(() =>
+  assertSeedFitStatuses(
+    seedFits.map((fit) => (fit.id === otherFits[0].id ? { ...fit, status: 'stale' } : fit)),
+    task,
+    evidence,
+  ),
+);
+assert.throws(() =>
+  assertSeedFitStatuses(
+    seedFits.map((fit) => (fit.id === otherFits[0].id ? { ...fit, status: 'draft' } : fit)),
+    task,
+    evidence,
+  ),
+);
+assert.throws(() =>
+  assertSeedFitStatuses(
+    seedFits.map((fit) => (fit.id === fitIds[0] ? { ...fit, task_id: 'wrong-task' } : fit)),
+    task,
+    evidence,
+  ),
+);
+assert.throws(() => assertSeedFitStatuses(seedFits, task));
+assert.throws(() => assertSeedFitStatuses(seedFits, task, { ...evidence, fitLinks: evidence.fitLinks.slice(0, 1) }));
+assert.throws(() => assertSeedFitStatuses(seedFits, task, { ...evidence, audits: evidence.audits.slice(0, 1) }));
+assert.throws(() =>
+  assertSeedFitStatuses(seedFits, task, {
+    ...evidence,
+    audits: evidence.audits.map((audit) => ({ ...audit, metadata: { ...audit.metadata, qaReference: 'wrong' } })),
+  }),
+);
+assert.throws(() =>
+  assertSeedFitStatuses(seedFits, task, {
+    ...evidence,
+    audits: evidence.audits.map((audit) => ({ ...audit, occurred_at: '2026-09-29T00:35:17Z' })),
+  }),
+);
+assert.throws(() =>
+  assertSeedFitStatuses(seedFits, task, { ...evidence, taskCapabilities: evidence.taskCapabilities.slice(0, 1) }),
+);
+assert.throws(() =>
+  assertSeedFitStatuses(seedFits, task, { ...evidence, toolCapabilities: evidence.toolCapabilities.slice(0, 1) }),
+);
 
 console.log(
   JSON.stringify(
