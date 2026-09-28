@@ -33,11 +33,11 @@
 | 7 | Tabnine | 成熟高需求 | 私有部署、编码助手与 Agent、收购后连续性 | N4 官方深审完成；`HOLD_EVIDENCE` |
 | 8 | Elicit | 成熟高需求 | 检索与系统综述、语料和导出限制 | N1 官方深审完成；`HOLD_EVIDENCE` |
 | 9 | Avoma | 成熟高需求 | 录制席位、免费协作者、CRM 工作流 | N1 官方深审完成；`HOLD_EVIDENCE` |
-| 10 | Copy.ai | 成熟高需求 | Copywriter 到 GTM 平台的身份变化 | 待深审 |
+| 10 | Copy.ai | 成熟高需求 | Copywriter 到 GTM 平台的身份变化 | N5 官方深审完成；`HOLD_EVIDENCE` |
 | 11 | Read AI | 快速增长 | 会议额度、跨来源检索、回放、工作区与留存 | N3 官方深审完成；`HOLD_EVIDENCE` |
 | 12 | Granola | 快速增长 | Botless 会议记录、用户笔记与 AI 增强 | N4 官方深审完成；`HOLD_EVIDENCE` |
 | 13 | Ideogram | 快速增长 | 订阅/API 分账、免费资格、公开作品与授权 | N2 官方深审完成；`HOLD_EVIDENCE` |
-| 14 | Scite | 专业差异化 | Smart Citation、检索与证据判断 | 待深审 |
+| 14 | Scite | 专业差异化 | Smart Citation、检索与证据判断 | N5 官方深审完成；`HOLD_EVIDENCE` |
 
 ## 三、明确排除的对象
 
@@ -86,27 +86,27 @@ Canva 身份已收口：候选 slug 固定为 `canva`，Magic Studio 是 Canva �
 | 7 [Tabnine](https://www.tabnine.com/) | N4 官方深审完成；`HOLD_EVIDENCE` | `build-app-with-ai` **资格待定**；secondary：开发助手（未注册）；Alternative（暂定） | `ai-assisted-app-development` **Fit 待定**；官方文档可证 Agent/CLI/Review、IDE 矩阵及 SaaS/VPC/on-prem 选择；**定价页实时跳转，现行 SKU/价格/试用、模型与 CI 费用、实际数据路径、完整应用交付和独立采用待核** | 相对 Cursor，保留现有 IDE、部署与组织权限是候选差异；[N4 审计](./GRANOLA_TABNINE_N4_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)禁止借旧套餐或将编码助手自动算入完整应用 Task。先消费 Tool Intelligence。 |
 | 8 [Elicit](https://elicit.com/) | N1 官方深审完成；`HOLD_EVIDENCE` | `research-with-citations`；secondary：系统综述（未注册）；Alternative | `research-discovery`；`citation-traceability` 仅作有来源回查的候选。已证语料、筛选/提取、分层导出；**定价页多组金额、实际月度额度和独立采用未核清** | 相对 Consensus，专用综述的筛选/抽取/导出链是候选差异；不泛化为所有研究任务。先补 [N1 审计](./ELICIT_AVOMA_N1_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md) 缺口，再进发布 preflight。 |
 | 9 [Avoma](https://www.avoma.com/) | N1 官方深审完成；`HOLD_EVIDENCE` | `meeting-notes`；secondary：销售会话/CRM（未注册）；Gap-filler | `meeting-transcription`、`meeting-summary-and-actions`；已证 Recorder/免费只读协作者及附加模块分层；**Organization 价与 CRM 套餐资格冲突，留存/同意套餐边界和独立采用待核** | 相对 Fathom/Otter.ai/Fireflies.ai，分席位采购、CRM 配置和可选全局洞察是候选差异；不采信销售 ROI 数字。先补 [N1 审计](./ELICIT_AVOMA_N1_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md) 缺口，再进发布 preflight。 |
-| 10 [Copy.ai](https://www.copy.ai/) | 研究缓冲；`HOLD_EVIDENCE` | 编辑 Cluster：GTM 工作流（未注册 Task）；secondary：`brand-constrained-marketing-content` 仅待资格审查；Gap-filler（暂定） | —；当前 GTM 产品与旧 copywriter 评论的身份连续性、工作流 credits、独立产品级采用**待核验** | 与 Jasper 的品牌营销起草不是同一已证任务；现在先确定是否有可比较的 GTM 工作流对象与非旧版独立证据，避免重复营销文案意图。先消费 Tool Intelligence 身份审计。 |
+| 10 [Copy.ai](https://www.copy.ai/) | N5 官方深审完成；`HOLD_EVIDENCE` | 编辑 Cluster：GTM 工作流（未注册 Task）；secondary：`brand-constrained-marketing-content` 仅待资格审查；Gap-filler（暂定） | —；已证现行 Chat/Content Agents/Workflows/Tables GTM 平台与可变 workflow credits；**旧博客套餐冲突、实际 Agents/API 权益、账户成本、企业数据合同、旧评论的产品级独立采用待核** | 相对 Jasper 的品牌起草，跨 GTM 系统的可复用流程是候选差异；[N5 审计](./SCITE_COPY_AI_N5_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)限定现行层级与旧 copywriter 叙事。生产无同名实体，但已有 Copy.ai alternatives Guide/写作内链意图，发布前须消歧与复查唯一 canonical。先消费 Tool Intelligence。 |
 | 11 [Read AI](https://www.read.ai/) | N3 官方深审完成；`HOLD_EVIDENCE` | `meeting-notes`；secondary：跨会议资料检索（未注册）；Alternative | `meeting-transcription`、`meeting-summary-and-actions`；已证 Free 5 次/月、Ask Read 权限、回放分层和 API beta；**上传 credit、实际导出/留存、同意与产品级独立采用待核** | 相对 Fathom/Otter.ai/Fireflies.ai，个人可访问会议与已连接邮件/消息检索是候选差异；[N3 审计](./COPILOT_STUDIO_READ_AI_N3_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)限定高级连接、工作区权限及数据边界。先消费 Tool Intelligence，再比较。 |
 | 12 [Granola](https://www.granola.ai/) | N4 官方深审完成；`HOLD_EVIDENCE` | `meeting-notes`；secondary：个人笔记增强（未注册）；Gap-filler | `meeting-transcription`、`meeting-summary-and-actions` 仅候选；已证用户启动的无 bot 设备采集、手写笔记增强、Basic 30 天可见历史与 Business API；**实际告知/同意、音频缓存/转录与笔记留存、账户权益及独立采用待核** | 相对既有会议工具及 Read AI，主动设备采集与用户笔记引导是候选差异；[N4 审计](./GRANOLA_TABNINE_N4_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)限定共享范围，不能把无 bot 写成全本地或零保留。先消费 Tool Intelligence。 |
 | 13 [Ideogram](https://ideogram.ai/) | N2 官方深审完成；`HOLD_EVIDENCE` | 编辑 Cluster：AI 图片与文字排版（未注册 Task）；secondary：AI 辅助视觉设计（未注册）；Gap-filler（暂定） | —；已证网页/API 分账、公开默认与商业输出条款；**免费周额度资格、编辑 slow/priority 冲突、下载/水印矩阵、独立采用和文字质量待核** | 相对 Canva 的工作区，生成含文字图像和局部编辑是可研究差异；[N2 审计](./ZAPIER_AGENTS_IDEOGRAM_N2_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)限定能力/版权边界。不能借 Canva Task 建 Fit，先消费 Tool Intelligence。 |
-| 14 [Scite](https://scite.ai/) | 研究缓冲；`HOLD_EVIDENCE` | `research-with-citations`；secondary：引文上下文核验（未注册）；Gap-filler | `citation-traceability`；Smart Citation 覆盖、语境解释、套餐与独立采用**待核验** | 相对 Consensus 与 Elicit 拟补引文语境，而不是重复学术搜索；先确认当前产品范围与可追溯的独立采用，再排完整深审。先消费 Tool Intelligence 证据范围。 |
+| 14 [Scite](https://scite.ai/) | N5 官方深审完成；`HOLD_EVIDENCE` | `research-with-citations`；secondary：引文上下文核验（未注册）；Gap-filler | `citation-traceability` 仅限可回查引文语境；已证 Smart Citations 分类、Search/Assistant/Reference Check、MCP/API 分层；**分类误差/语料覆盖、促销后及机构价、导出/API 权益、独立采用待核** | 相对 Consensus/Elicit，引文陈述和参考文献警示是候选差异；[N5 审计](./SCITE_COPY_AI_N5_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)禁止将分类当真值或营销索引量当完整覆盖。先消费 Tool Intelligence。 |
 
-`HOLD_DUPLICATE_INTENT` 的 4 项不是被拒产品：Grammarly、Jasper、Descript 已有公开实体，Canva 只增强既有 canonical。N4 后 `READY_FOR_DEEP_REVIEW=0`、`HOLD_EVIDENCE=10`（其中 Elicit、Avoma、Zapier Agents、Ideogram、Microsoft Copilot Studio、Read AI、Granola、Tabnine 已完成官方深审）、`HOLD_DUPLICATE_INTENT=4`、`REJECT=0`。研究候选仍为 14 项，但**可考虑新增实体的仅 10 项，全部先补证据**；Zapier Agents 最终能否保持独立 canonical、Tabnine 能否纳入完整应用 Task 仍待消歧。上述角色是组合研究标签，不是对产品能力或生产关系的已核实断言。
+`HOLD_DUPLICATE_INTENT` 的 4 项不是被拒产品：Grammarly、Jasper、Descript 已有公开实体，Canva 只增强既有 canonical。N5 后 `READY_FOR_DEEP_REVIEW=0`、`HOLD_EVIDENCE=10`（十项均已完成官方深审）、`HOLD_DUPLICATE_INTENT=4`、`REJECT=0`。研究候选仍为 14 项，但**可考虑新增实体的仅 10 项，全部先补证据**；Zapier Agents 最终能否保持独立 canonical、Tabnine 能否纳入完整应用 Task 仍待消歧。上述角色是组合研究标签，不是对产品能力或生产关系的已核实断言。
 
 ## 七、按 Task Cluster 的组合检查与缺口
 
 | Primary Cluster | 本池候选与现有对照 | Anchor / Alternative / Gap-filler 目标检查；缺口 |
 | --- | --- | --- |
 | `meeting-notes` | 既有 Fathom、Otter.ai、Fireflies.ai；新研究 Avoma / Read AI / Granola | 既有成熟锚点可供复核；N1/N3/N4 分别确认 Avoma 的分席位 CRM、Read AI 的权限内跨来源搜索、Granola 的主动设备采集/用户笔记引导三种候选路线。三项均缺独立采用；不能据此发布 Fit 或视作等价摘要工具。 |
-| `research-with-citations` | 既有 Consensus；新研究 Elicit / Scite | Consensus 可作现有锚点；Elicit 拟作替代，Scite 拟补引文语境。Scite 证据 HOLD；三种路线不能互称同等引用能力。 |
+| `research-with-citations` | 既有 Consensus；新研究 Elicit / Scite | Consensus 可作现有锚点；Elicit 拟作替代，Scite 拟补引文语境与 Reference Check。N5 已确认 Scite 分类及检索范围，但真实覆盖/分类误差和独立采用仍 HOLD；三种路线不能互称同等引用能力。 |
 | `brand-constrained-marketing-content` | 既有 Jasper、Grammarly；Copy.ai 仅 secondary 待资格审查 | Jasper/Grammarly 为既有锚点/替代研究对象，但 CL-06 关系均 HOLD；**缺已核实的新 Gap-filler 与可发布 Task Fit**，不能以 Copy.ai 强补。 |
 | `ai-voiceover` | 既有 Descript、ElevenLabs | 生成与编辑交付可能互补；**缺第三项有证据的不同选择及已发布关系**。本池不增第 15 项。 |
 | `build-app-with-ai` | 既有 Cursor；Tabnine 仍 HOLD | Cursor 可作既有锚点；**缺已证完整应用场景的 Alternative 与 Gap-filler**。N4 已证 Tabnine 当前编码/Agent/私有部署范围，但未证完整应用交付，不得自动取得 Fit；CL-04 的 n8n/OpenRouter Fit 已撤回。 |
 | `product-image-to-short-video` | 本池无 primary；既有 Luma/Runway 属另线 | **本池空位**；不能把 Descript、Canva 或 Ideogram 的不同输出硬归类。CL-03 关系继续 HOLD。 |
 | 编辑 Cluster：业务 Agent 工作流（未注册 Task） | Zapier Agents / Microsoft Copilot Studio | N2/N3 已界定两种不同身份、渠道、治理与计量路径；Zapier Agents 正迁入 AI by Zapier，Studio 租户权益待按合同核，且两项独立采用均缺。**Gap-filler 与第三项仍缺**，不借 `build-app-with-ai` 解锁 Task Page。 |
 | 编辑 Cluster：AI 辅助视觉设计 / AI 图片与文字排版（均未注册 Task） | Canva 既有 canonical / Ideogram 新研究 | 可研究工作区与图片生成差异；两个 primary Cluster 不应为凑 3–5 项强行合并，**各自缺完整三角色组合与 Task 定义**。 |
-| 编辑 Cluster：GTM 工作流（未注册 Task） | Copy.ai 单项 HOLD | **Anchor、Alternative 和已证 Gap-filler 均缺**；先做对象与独立证据审查。 |
+| 编辑 Cluster：GTM 工作流（未注册 Task） | Copy.ai 单项 HOLD | N5 已界定 Copy.ai 当前 GTM 对象，但 **Anchor、Alternative 和已证 Gap-filler 均缺**；旧写作工具评论与现有 Guide 意图不得充当当前产品级验证。 |
 
 本表不把 secondary 计作另一 Cluster 的有效 Fit；“已有工具”只作对照，不代表其当前 Decision Graph 关系已发布。组合目标是每组 3–5 项且覆盖三个角色，但证据不足时保留空位。后续若用户体验或 GSC 提出真实新任务，应另案治理 Task taxonomy；本次没有新增候选或 Task。
 
@@ -120,7 +120,7 @@ Canva 身份已收口：候选 slug 固定为 `canva`，Magic Studio 是 Canva �
 | N2 | Zapier Agents；Ideogram | 2026-09-28 官方深审完成，均 `HOLD_EVIDENCE`；见 [N2 审计](./ZAPIER_AGENTS_IDEOGRAM_N2_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)。Zapier 独立版迁移与新旧计费冲突、Ideogram 免费/编辑/导出权益及两者产品级独立采用待核，未进 preflight。 |
 | N3 | Microsoft Copilot Studio；Read AI | 2026-09-28 官方深审完成，均 `HOLD_EVIDENCE`；见 [N3 审计](./COPILOT_STUDIO_READ_AI_N3_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)。实际租户授权/成本、账户留存/同意与两项独立市场验证待补，未进 preflight。 |
 | N4 | Granola；Tabnine（先补证据） | 2026-09-28 官方深审完成，均 `HOLD_EVIDENCE`；见 [N4 审计](./GRANOLA_TABNINE_N4_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)。Granola 的实际同意/留存、Tabnine 收购后的 SKU/数据路径及完整应用适配、两项独立采用待核，未进 preflight。 |
-| N5 | Scite（先补证据）；Copy.ai（先补证据） | 核引文覆盖与独立采用、当前 GTM 对象与旧评论区别；不得以弱来源转 READY。 |
+| N5 | Scite（先补证据）；Copy.ai（先补证据） | 2026-09-28 官方深审完成，均 `HOLD_EVIDENCE`；见 [N5 审计](./SCITE_COPY_AI_N5_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)。Scite 覆盖/分类误差、促销及机构权益，Copy.ai 新旧套餐、账户 credits/API/数据合同与 Guide 意图，以及两项独立市场验证仍待核；未进 preflight。 |
 | N6 | Canva 既有 canonical 身份/AI 模块复核；Grammarly 既有 CL-06 证据复核 | 只做现有工具事实与关系候选复核，不占新工具发布槽。 |
 | N7 | Jasper 既有 CL-06 权益冲突复核；Descript 既有 CL-05 权利复核 | 消解官方冲突或保持 HOLD；不重复创建实体。 |
 
