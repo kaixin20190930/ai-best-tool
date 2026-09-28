@@ -1,0 +1,82 @@
+{
+  "cluster": "brand-constrained-marketing-content",
+  "checkedDate": "2026-09-28",
+  "productionWrites": 0,
+  "status": "DEV_COMPLETE_INDEPENDENT_QA_PENDING_PRODUCTION_HOLD",
+  "scope": {
+    "taskId": "532b3a97-a6ec-40f7-a906-0d200ff11ffb",
+    "taskCapabilities": {
+      "brand-guided-content-generation": { "id": "41276fad-9e3e-4c06-acea-de5b182aca9f", "importance": "required", "status": "reviewed", "editorialDecision": "publishable" },
+      "brand-controls-and-style-guidance": { "id": "aa39a14e-ed51-4934-bb58-39621c290875", "importance": "preferred", "status": "reviewed", "editorialDecision": "publishable" }
+    },
+    "tools": {
+      "Jasper": { "id": "5a0c7e91-9a5c-4f84-923a-d8345edaa918", "decision": "conditional" },
+      "Grammarly": { "id": "4d0bbf38-6b7e-4c44-8e25-9fe73f60bb18", "decision": "conditional" },
+      "Claude": { "id": "149cf3e0-5f5c-4bdf-ac02-80ec5064fb92", "decision": "contextual" }
+    },
+    "createEntities": false
+  },
+  "readOnlyBaseline": {
+    "checkedAtUtc": "2026-09-28T08:36:10.113Z",
+    "taskStatus": "active",
+    "taskOutput": "marketing_draft",
+    "needsBrandGuidance": true,
+    "requiresReview": true,
+    "directoryToolStatuses": { "Jasper": "published", "Grammarly": "published", "Claude": "published" },
+    "toolCapabilityCount": 0,
+    "fitCount": 0,
+    "profiles": { "Jasper": 0, "Grammarly": 0, "Claude": 1 },
+    "claudeProfileStatus": "conflict",
+    "sources": { "Jasper": 0, "Grammarly": 0, "Claude": 3 },
+    "claims": { "Jasper": 0, "Grammarly": 0, "Claude": 16 },
+    "profileClaimLinkCount": 0,
+    "toolCapabilityClaimLinkCount": 0,
+    "fitClaimLinkCount": 0
+  },
+  "profileCandidates": [
+    { "owner": "Jasper", "ownerType": "tool", "ownerId": "5a0c7e91-9a5c-4f84-923a-d8345edaa918", "canonicalDomain": "jasper.ai", "profileId": null, "status": "pending_independent_qa" },
+    { "owner": "Grammarly", "ownerType": "tool", "ownerId": "4d0bbf38-6b7e-4c44-8e25-9fe73f60bb18", "canonicalDomain": "grammarly.com", "profileId": null, "status": "pending_independent_qa" },
+    { "owner": "Claude", "ownerType": "tool", "ownerId": "149cf3e0-5f5c-4bdf-ac02-80ec5064fb92", "canonicalDomain": "anthropic.com", "profileId": "41fc0131-208b-4f21-aa2e-2fde160b1232", "status": "conflict_hold", "identityNote": "Directory URL is claude.ai; profile canonical domain is anthropic.com. Reconcile ownership before any later intake." }
+  ],
+  "evidenceIntakeCandidates": [
+    { "key": "cl06:jasper:voice", "owner": "Jasper", "url": "https://help.jasper.ai/hc/en-us/articles/18618693085339-Brand-Voice", "surface": "Jasper IQ Brand Voice / Chat, editor, Agents", "sourceMeaning": "Writing samples produce a reusable Brand Voice. A workspace default can be selected, but users can override it. The page lists Pro two voices and Business unlimited.", "fieldUse": ["drafting.support", "drafting.plan", "drafting.limitation", "fit.fit"], "limitation": "A selectable or overridable voice is guidance, not an approval or policy enforcement gate; the Pro entitlement conflicts with the Jasper IQ overview.", "conflict": "Jasper IQ overview says IQ is Business only.", "checkedDate": "2026-09-28" },
+    { "key": "cl06:jasper:knowledge", "owner": "Jasper", "url": "https://help.jasper.ai/hc/en-us/articles/18618707176347-Knowledge-Base", "surface": "Jasper IQ Knowledge Base / Chat, Agents, Projects", "sourceMeaning": "Brand and product facts can be stored as assets; Chat or Agents may attach up to five knowledge or source items. URL content may be cached up to two days. This page lists Pro five assets and Business unlimited.", "fieldUse": ["drafting.support", "drafting.plan", "drafting.limitation", "fit.limitation"], "limitation": "Knowledge retrieval does not verify generated facts; Pro entitlement conflicts with the Jasper IQ overview.", "conflict": "Jasper IQ overview says IQ is Business only.", "checkedDate": "2026-09-28" },
+    { "key": "cl06:jasper:iq-overview", "owner": "Jasper", "url": "https://help.jasper.ai/hc/en-us/articles/18618654325787-Jasper-IQ", "surface": "Jasper IQ overview / public help", "sourceMeaning": "IQ includes Brand Voice, Knowledge Base, Style Guide and Product IQ; its availability section says Business plans.", "fieldUse": ["drafting.plan", "governance.plan"], "limitation": "Do not use this overview to erase the conflicting Pro allowances on the individual Brand Voice and Knowledge pages; obtain current account or contract entitlement before verification.", "conflict": "Individual feature pages list Pro allowances.", "checkedDate": "2026-09-28" },
+    { "key": "cl06:jasper:style-guide", "owner": "Jasper", "url": "https://help.jasper.ai/hc/en-us/articles/25925092890011-Style-Guide", "surface": "Jasper Business Style Guide / Chat, Apps, Canvas, Public API", "sourceMeaning": "Terminology and style rules are applied during generation; one guide is active at a time; workspace and Canvas project defaults are supported. Style Guide is Business only.", "fieldUse": ["governance.support", "governance.availability", "governance.plan", "governance.limitation"], "limitation": "Automatic document extraction is beta and requires review. Generated text still needs human brand, policy and factual approval.", "conflict": "This page says only Admins/Managers edit guides, while Permission Settings describes a toggle that may allow anyone to edit; target workspace behavior needs inspection.", "checkedDate": "2026-09-28" },
+    { "key": "cl06:jasper:permissions", "owner": "Jasper", "url": "https://help.jasper.ai/hc/en-us/articles/34717759798683-Permission-Settings", "surface": "Jasper Business Workspace Settings / permission toggles", "sourceMeaning": "Admins may restrict who creates or edits Brand Voice, Knowledge and Style Guide; all users can still view or use allowed assets.", "fieldUse": ["governance.support", "governance.plan", "governance.limitation"], "limitation": "Asset editing controls are not evidence of a mandatory marketing-copy approval state.", "conflict": "When the Style Guide toggle is off, this page says anyone may edit; the Style Guide page says only Admins/Managers can edit.", "checkedDate": "2026-09-28" },
+    { "key": "cl06:jasper:export", "owner": "Jasper", "url": "https://help.jasper.ai/hc/en-us/articles/18618604425883-Export-Content", "surface": "Jasper Canvas/Grid asset download and storage integrations", "sourceMeaning": "Local download offers DOCX, PDF, TXT and Markdown; Drive, SharePoint and Box export integrations require admin enablement.", "fieldUse": ["fit.fit", "fit.limitation"], "limitation": "Export is delivery to storage or file, not proof that content passed brand approval or was published to a CMS.", "conflict": null, "checkedDate": "2026-09-28" },
+    { "key": "cl06:grammarly:brand-tones", "owner": "Grammarly", "url": "https://support.grammarly.com/hc/en-us/articles/4403544890253-Set-brand-tones", "surface": "Grammarly organization/group brand tone feedback", "sourceMeaning": "Pro, Plus, Business and Enterprise can configure on-brand/off-brand tones; writers receive feedback as they write.", "fieldUse": ["governance.support", "governance.availability", "governance.plan", "fit.fit"], "limitation": "Feedback is advisory and can be scoped to selected websites; it is not a mandatory approval or proof that AI first drafts inherit brand settings.", "conflict": null, "checkedDate": "2026-09-28" },
+    { "key": "cl06:grammarly:style-rules", "owner": "Grammarly", "url": "https://support.grammarly.com/hc/en-us/articles/360043832652-Create-style-rules", "surface": "Grammarly organization/group style rule sets", "sourceMeaning": "Custom terminology, spelling and formatting rules produce suggestions. Pro supports one set; Business supports up to 50; group and organization assignment and suggestion statistics are documented.", "fieldUse": ["governance.support", "governance.availability", "governance.plan", "governance.limitation", "fit.limitation"], "limitation": "Suggestions can be accepted or dismissed; website scope and active setting affect coverage. The exact Plus/Enterprise quantity remains unknown.", "conflict": null, "checkedDate": "2026-09-28" },
+    { "key": "cl06:grammarly:business-style", "owner": "Grammarly", "url": "https://www.grammarly.com/business/styleguide", "surface": "Grammarly Business marketing page / style guide and generative AI", "sourceMeaning": "The page describes AI drafting and brand guidance and confirms style guide use in browser extension and desktop app, not mobile.", "fieldUse": ["drafting.limitation", "governance.limitation", "fit.limitation"], "limitation": "Marketing descriptions do not directly establish that a given AI draft automatically applies assigned organization tones/rules. Do not use this page for drafting.support or drafting.availability.", "conflict": null, "checkedDate": "2026-09-28" },
+    { "key": "cl06:grammarly:editor-download", "owner": "Grammarly", "url": "https://support.grammarly.com/hc/en-us/articles/115000091352-Create-upload-and-download-your-documents", "surface": "Grammarly Editor document import/download", "sourceMeaning": "Editor documents can be downloaded; uploaded DOCX remains DOCX on download, while uploaded TXT exports as DOCX.", "fieldUse": ["fit.fit", "fit.limitation"], "limitation": "This is local document delivery, not a CMS/API or approval workflow.", "conflict": null, "checkedDate": "2026-09-28" },
+    { "key": "cl06:claude:projects", "owner": "Claude", "url": "https://support.claude.com/en/articles/9519177-how-can-i-create-and-manage-projects", "surface": "Claude chat Projects", "sourceMeaning": "Project knowledge and instructions are reused across chats within a project; Free accounts can create five projects; Team/Enterprise offer visibility controls.", "fieldUse": ["contextual_research"], "limitation": "This is reusable context and prompt instruction, not a dedicated Brand Voice, enforceable style rule set or approval workflow; no Tool Capability link proposed.", "conflict": null, "checkedDate": "2026-09-28" },
+    { "key": "cl06:claude:organization-instructions", "owner": "Claude", "url": "https://support.claude.com/en/articles/14546867-set-organization-instructions", "surface": "Claude Team/Enterprise organization instructions", "sourceMeaning": "Owners can set organization-wide instructions; the page says instruction priority is prompt-level, may vary on contradictory inputs, and changes can take up to one hour.", "fieldUse": ["contextual_research"], "limitation": "Prompt priority is not deterministic brand policy enforcement, approval or a dedicated Brand Voice entitlement; no Tool Capability link proposed.", "conflict": null, "checkedDate": "2026-09-28" },
+    { "key": "cl06:claude:artifacts", "owner": "Claude", "url": "https://support.claude.com/en/articles/17153992-what-are-artifacts-and-how-do-i-use-them", "surface": "Claude chat Artifacts / template export", "sourceMeaning": "Docs made from templates can export to Word, PDF, Markdown and Google Docs.", "fieldUse": ["contextual_research"], "limitation": "Document templates and export show a delivery surface only; they do not establish brand-guided generation or governance.", "conflict": null, "checkedDate": "2026-09-28" }
+  ],
+  "relationshipCandidates": {
+    "Jasper": {
+      "brand-guided-content-generation": { "supportLevel": "strong", "availability": "unknown", "editorialDecision": "HOLD", "purposeCoverage": ["support", "plan", "limitation"], "missingPurpose": "availability: IQ Business-only overview conflicts with Pro feature pages" },
+      "brand-controls-and-style-guidance": { "supportLevel": "partial", "availability": "paid_only", "editorialDecision": "conditional_HOLD", "purposeCoverage": ["support", "availability", "plan", "limitation"] },
+      "fit": { "fitLevel": "conditional", "editorialDecision": "HOLD", "purposeCoverage": ["fit", "limitation"] }
+    },
+    "Grammarly": {
+      "brand-guided-content-generation": { "supportLevel": null, "availability": "unknown", "editorialDecision": "HOLD", "purposeCoverage": ["limitation"], "missingPurpose": "direct support and availability evidence for AI drafting with assigned organization brand rules" },
+      "brand-controls-and-style-guidance": { "supportLevel": "partial", "availability": "paid_only", "editorialDecision": "conditional_HOLD", "purposeCoverage": ["support", "availability", "plan", "limitation"] },
+      "fit": { "fitLevel": "conditional", "editorialDecision": "HOLD", "purposeCoverage": ["fit", "limitation"], "taskEligibilityCaveat": "Candidate only for editing an existing draft; withdraw if same-tool required brand-guided drafting is mandatory." }
+    },
+    "Claude": { "brand-guided-content-generation": null, "brand-controls-and-style-guidance": null, "fit": null, "editorialDecision": "contextual_HOLD" }
+  },
+  "holdReasons": [
+    "Jasper and Grammarly have no production profile/source/claim/link under their tool owner; Claude's generic profile is conflict and cannot support Brand relations.",
+    "Jasper IQ overview Business-only entitlement conflicts with individual Brand Voice and Knowledge Pro allowances; exact current account and contract scope is unresolved. Style Guide editing-role wording also differs between official pages.",
+    "Grammarly has direct evidence for advisory brand review, but not for automatic application of organization rules to its AI first-draft entry point.",
+    "Claude Projects, organization instructions, templates and export remain general-purpose context; they do not prove dedicated Brand Voice or mandatory brand approval.",
+    "No official source establishes a non-bypassable approval gate for every marketing draft; authorized human review remains a Task requirement.",
+    "Independent content QA, reviewer identity, current verified same-owner claim links, review windows and a fresh production preflight are required before any intake or relationship change."
+  ],
+  "operatorGuards": [
+    "This is not an executable production manifest: no new relation ID, source ID, claim ID or reviewer is allocated.",
+    "Keep unknown as unknown; do not infer plan entitlement from marketing cases or generic pricing copy.",
+    "Do not create Tool Capability/Fit, publish the Task Page, change sitemap or deploy from this candidate."
+  ]
+}

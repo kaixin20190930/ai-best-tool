@@ -50,7 +50,10 @@ async function main() {
   const db = createAdminClient();
   const tasks = await read<any>(
     'task',
-    db.from('decision_tasks').select('id, slug, name, description, constraint_schema, status, updated_at').eq('slug', taskSlug),
+    db
+      .from('decision_tasks')
+      .select('id, slug, name, description, constraint_schema, status, updated_at')
+      .eq('slug', taskSlug),
   );
   assert.equal(tasks.length, 1);
   const task = tasks[0];
@@ -73,25 +76,54 @@ async function main() {
   const [taskCapabilities, toolCapabilities, fits, profiles] = await Promise.all([
     read<any>(
       'task capabilities',
-      db.from('task_capabilities').select('task_id, capability_id, importance, rationale, status, reviewed_at, review_due_at, reviewed_by, updated_at').eq('task_id', task.id),
+      db
+        .from('task_capabilities')
+        .select(
+          'task_id, capability_id, importance, rationale, status, reviewed_at, review_due_at, reviewed_by, updated_at',
+        )
+        .eq('task_id', task.id),
     ),
     read<any>(
       'tool capabilities',
-      db.from('tool_capabilities').select('id, tool_id, capability_id, support_level, availability, plan_requirement, limitations, status, updated_at').in('tool_id', toolIds).in('capability_id', capabilityIds),
+      db
+        .from('tool_capabilities')
+        .select(
+          'id, tool_id, capability_id, support_level, availability, plan_requirement, limitations, status, updated_at',
+        )
+        .in('tool_id', toolIds)
+        .in('capability_id', capabilityIds),
     ),
     read<any>(
       'fits',
-      db.from('tool_task_fits').select('id, tool_id, task_id, fit_level, rationale, required_conditions, disqualifiers, status, updated_at').eq('task_id', task.id),
+      db
+        .from('tool_task_fits')
+        .select('id, tool_id, task_id, fit_level, rationale, required_conditions, disqualifiers, status, updated_at')
+        .eq('task_id', task.id),
     ),
     read<any>(
       'profiles',
-      db.from('product_intelligence_profiles').select('id, owner_type, owner_id, product_name, canonical_domain, profile_status, profile_version, next_review_at, updated_at').in('owner_id', toolIds),
+      db
+        .from('product_intelligence_profiles')
+        .select(
+          'id, owner_type, owner_id, product_name, canonical_domain, profile_status, profile_version, next_review_at, updated_at',
+        )
+        .in('owner_id', toolIds),
     ),
   ]);
   assert.equal(taskCapabilities.length, 2, 'Expected exactly two Brand Task Capabilities');
   assert.ok(taskCapabilities.every((row) => row.status === 'reviewed'));
-  assert.equal(taskCapabilities.find((row) => row.capability_id === capabilities.find((item) => item.slug === capabilitySlugs[0])?.id)?.importance, 'required');
-  assert.equal(taskCapabilities.find((row) => row.capability_id === capabilities.find((item) => item.slug === capabilitySlugs[1])?.id)?.importance, 'preferred');
+  assert.equal(
+    taskCapabilities.find(
+      (row) => row.capability_id === capabilities.find((item) => item.slug === capabilitySlugs[0])?.id,
+    )?.importance,
+    'required',
+  );
+  assert.equal(
+    taskCapabilities.find(
+      (row) => row.capability_id === capabilities.find((item) => item.slug === capabilitySlugs[1])?.id,
+    )?.importance,
+    'preferred',
+  );
   assert.equal(toolCapabilities.length, 0, 'Brand candidate Tool Capabilities must remain absent');
   assert.equal(fits.length, 0, 'Brand Fits must remain absent');
   assert.equal(profiles.length, 1, 'Expected only the pre-existing Claude intelligence profile');
@@ -102,8 +134,22 @@ async function main() {
   const profileIds = profiles.map((profile) => profile.id);
   const [sources, claims] = profileIds.length
     ? await Promise.all([
-        read<any>('sources', db.from('product_intelligence_sources').select('id, profile_id, url, fetch_status, updated_at').in('profile_id', profileIds)),
-        read<any>('claims', db.from('product_intelligence_claims').select('id, profile_id, source_id, source_url, claim_key, claim_type, verification_status, conflict_status, invalidated_at, verified_by, review_due_at, expires_at').in('profile_id', profileIds)),
+        read<any>(
+          'sources',
+          db
+            .from('product_intelligence_sources')
+            .select('id, profile_id, url, fetch_status, updated_at')
+            .in('profile_id', profileIds),
+        ),
+        read<any>(
+          'claims',
+          db
+            .from('product_intelligence_claims')
+            .select(
+              'id, profile_id, source_id, source_url, claim_key, claim_type, verification_status, conflict_status, invalidated_at, verified_by, review_due_at, expires_at',
+            )
+            .in('profile_id', profileIds),
+        ),
       ])
     : [[], []];
   for (const profile of profiles) {
@@ -116,19 +162,50 @@ async function main() {
   assert.ok(claims.every((claim) => claim.profile_id === ids.claudeProfile));
   assert.ok(claims.every((claim) => !['brand_guidance', 'brand_governance'].includes(claim.claim_type)));
 
-  console.log(JSON.stringify({
-    checkedAtUtc: new Date().toISOString(),
-    productionWrites: 0,
-    task,
-    capabilities,
-    directoryTools,
-    taskCapabilities,
-    toolCapabilities,
-    fits,
-    profiles,
-    sources,
-    claims,
-  }, null, 2));
+  const claimIds = claims.map((claim) => claim.id);
+  const [profileClaimLinks, toolCapabilityClaimLinks, fitClaimLinks] = await Promise.all([
+    read<any>(
+      'profile claim links',
+      db.from('tool_decision_profile_claims').select('tool_id, claim_id, purpose').in('tool_id', toolIds),
+    ),
+    claimIds.length
+      ? read<any>(
+          'tool capability claim links',
+          db.from('tool_capability_claims').select('tool_capability_id, claim_id, purpose').in('claim_id', claimIds),
+        )
+      : Promise.resolve([]),
+    claimIds.length
+      ? read<any>(
+          'fit claim links',
+          db.from('tool_task_fit_claims').select('fit_id, claim_id, purpose').in('claim_id', claimIds),
+        )
+      : Promise.resolve([]),
+  ]);
+  assert.equal(toolCapabilityClaimLinks.length, 0, 'No Claude generic claim may support a Brand Tool Capability');
+  assert.equal(fitClaimLinks.length, 0, 'No Claude generic claim may support a Brand Fit');
+
+  console.log(
+    JSON.stringify(
+      {
+        checkedAtUtc: new Date().toISOString(),
+        productionWrites: 0,
+        task,
+        capabilities,
+        directoryTools,
+        taskCapabilities,
+        toolCapabilities,
+        fits,
+        profiles,
+        sources,
+        claims,
+        profileClaimLinks,
+        toolCapabilityClaimLinks,
+        fitClaimLinks,
+      },
+      null,
+      2,
+    ),
+  );
 }
 
 main().catch((error) => {

@@ -84,3 +84,17 @@ Grammarly 的 Fit 候选只适用于**已有草稿的品牌审阅/修改**。若
 
 - 2026-09-27 只读生产 verifier 与 CL-06 专项测试通过。`test:decision-capability-foundation`、`test:decision-capability-read-model`、`test:decision-capability-admin`、`test:decision-review-gate`、`test:decision-task-page`、`test:decision-evidence`、`test:decision-graph-seed`、`test:decision-seo-release` 全部通过；`tsc --noEmit` 与完整 `pnpm run build` 通过。Build 在主 checkout 读取 `.env.local` 与 `.env.production`，未打印 secret；仅有已有 Browserslist 数据过期提示。
 - 生产 `/cn/tasks/brand-constrained-marketing-content` 返回 404，sitemap 中该 Task 精确 URL 匹配为 0。本包未执行生产写入、关系创建、发布或部署。
+
+## 6. 官方证据增量与当前候选（2026-09-28）
+
+[字段级官方证据候选 JSON](./DECISION_GRAPH_CL06_BRAND_EVIDENCE_CANDIDATE_2026-09-28_CN.json)记录逐条 URL、产品表面、核验日期、字段用途、限制与冲突。它是独立 QA 的输入，不是已 verified 的生产 source/claim，也不是可执行 manifest。
+
+2026-09-28T08:36:10.113Z 再次运行只读 verifier：Task active、两条 Task Capability reviewed；Jasper、Grammarly、Claude 目录均 published；本 Task 的 Tool Capability 与 Fit 仍各为 0。Jasper/Grammarly 各无 profile、source、claim；Claude 唯一 profile 仍为 conflict，附有 3 条通用 source、16 条通用 claim。本组 profile、Tool Capability、Fit claim links 各为 0。Neon 使用 `BEGIN READ ONLY`；Supabase 仅 select；生产写入 0。以上为当前快照，不覆盖第 1、5 节的历史时点。
+
+官方复核维持两条 Task rationale 的 `publishable` 编辑候选。Jasper 仍为 `conditional`，但 required 起草关系的 `availability` 保留 `unknown`：其 [Brand Voice](https://help.jasper.ai/hc/en-us/articles/18618693085339-Brand-Voice)和 [Knowledge Base](https://help.jasper.ai/hc/en-us/articles/18618707176347-Knowledge-Base)页列出 Pro 限额，而 2026-09-17 更新的 [Jasper IQ 总览](https://help.jasper.ai/hc/en-us/articles/18618654325787-Jasper-IQ)称 IQ 仅 Business。现有合同/目标账号资格未核实，不择一解释。Business [Style Guide](https://help.jasper.ai/hc/en-us/articles/25925092890011-Style-Guide)的生成时规则、单活动 guide、beta 抽取有直接证据；但其“仅 Admin/Manager 可编辑”与 [Permission Settings](https://help.jasper.ai/hc/en-us/articles/34717759798683-Permission-Settings)所述关闭限制后“任何人可编辑”的官方表述有差异，实际工作区权限须核。配置治理仍不证明不可绕过的发布审批。
+
+Grammarly 仍为 `conditional` 的**已有草稿审阅**候选。官方 [brand tones](https://support.grammarly.com/hc/en-us/articles/4403544890253-Set-brand-tones)和 [style rules](https://support.grammarly.com/hc/en-us/articles/360043832652-Create-style-rules)直接支持组织/组规则与实时建议；可接受/忽略、网站作用域和移动端缺口须写进限制。[营销页](https://www.grammarly.com/business/styleguide)同时提 AI 初稿与品牌指导，但没有直接证明该初稿自动受所分配组织规则约束，因此 required 起草关系的 `support_level` 在新候选包中改为无可写值、`availability=unknown`。若独立 QA 要求同一工具直接完成品牌资料约束的初稿，应撤掉 Grammarly Fit 候选。
+
+Claude 保持 `contextual`/HOLD。[Projects](https://support.claude.com/en/articles/9519177-how-can-i-create-and-manage-projects)可跨同一项目会话复用资料和指令，[组织指令](https://support.claude.com/en/articles/14546867-set-organization-instructions)仅是可能出现冲突变化的 prompt 层优先级，[Artifacts](https://support.claude.com/en/articles/17153992-what-are-artifacts-and-how-do-i-use-them)可导出模板文档。这些通用能力不能自动证明专用 Brand Voice、不可绕过的政策/审批或相关套餐 entitlement；既有 profile conflict 与 `claude.ai`/`anthropic.com` 身份映射仍须先解决。
+
+**专项 QA 重点：** 核实 Jasper 的实际 Business/Pro IQ 权限与授权素材范围；实测 Grammarly 生成入口是否继承组织 brand tones/style rules，且不把营销案例当 entitlement；核实所有建议可被忽略或覆盖的边界；逐项建立同 owner、当前 verified、覆盖 `support/availability/plan/limitation` 与 Fit `fit/limitation` 的 claim links，并设置真实 reviewer/review window。此轮只补候选和验证，关系、Task Page、sitemap 与生产发布仍 HOLD。
