@@ -3,6 +3,9 @@ import { readFileSync } from 'node:fs';
 
 const seed = readFileSync('db/supabase/manual/20260923_seed_decision_graph_first_batch.sql', 'utf8');
 const packet = readFileSync('docs/DECISION_GRAPH_CL05_VOICE_EDITORIAL_PACKET_2026-09-27_CN.md', 'utf8');
+const candidate = JSON.parse(
+  readFileSync('docs/DECISION_GRAPH_CL05_VOICE_EVIDENCE_CANDIDATE_2026-09-28_CN.json', 'utf8'),
+);
 const verifier = readFileSync('scripts/verify-decision-cl05-voice-readonly.ts', 'utf8');
 
 assert.match(seed, /'ai-voiceover'[^\n]*'text-to-speech-voice-generation'[^\n]*'required'/);
@@ -29,6 +32,36 @@ assert.match(packet, /不创建 Tool Capability\/Fit/);
 assert.match(packet, /继续 404/);
 assert.match(packet, /不改 sitemap、metadata 或索引/);
 assert.doesNotMatch(packet, /"profileId"\s*:\s*"[0-9a-f-]{36}"/);
+assert.equal(candidate.cluster, 'ai-voiceover');
+assert.equal(candidate.productionWrites, 0);
+assert.equal(candidate.scope.createEntities, false);
+assert.equal(candidate.readOnlyBaseline.profileCount, 0);
+assert.equal(candidate.readOnlyBaseline.linkCount, 0);
+assert.equal(candidate.profileCandidates.length, 2);
+assert.equal(candidate.evidenceIntakeCandidates.length, 16);
+for (const profile of candidate.profileCandidates) {
+  assert.equal(profile.profileId, null);
+  assert.equal(profile.ownerType, 'tool');
+  assert.equal(profile.status, 'pending_independent_qa');
+}
+for (const item of candidate.evidenceIntakeCandidates) {
+  const domain = new URL(item.url).hostname.replace(/^www\./, '');
+  assert.ok(
+    domain === (item.owner === 'ElevenLabs' ? 'elevenlabs.io' : 'descript.com') ||
+      (item.owner === 'Descript' && domain === 'help.descript.com'),
+    `Wrong official owner for ${item.key}`,
+  );
+  assert.equal(item.checkedDate, '2026-09-28');
+  assert.ok(item.surface && item.sourceMeaning && item.fieldUse.length && item.limitation);
+}
+for (const tool of ['ElevenLabs', 'Descript']) {
+  const mapping = candidate.relationshipCandidates[tool];
+  assert.equal(mapping['voice-consent-and-export'].availability, 'unknown');
+  assert.equal(mapping['voice-consent-and-export'].missingPurpose, 'availability');
+  assert.equal(mapping.fit.editorialDecision, 'HOLD');
+}
+assert.match(JSON.stringify(candidate.holdReasons), /commercial|商用/);
+assert.match(JSON.stringify(candidate.holdReasons), /192 kbps/);
 
 assert.match(verifier, /BEGIN READ ONLY/);
 assert.match(verifier, /productionWrites: 0/);

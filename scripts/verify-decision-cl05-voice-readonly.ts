@@ -111,14 +111,18 @@ async function main() {
   assert.equal(toolCapabilities.length, 0, 'Voice candidate Tool Capabilities must remain absent');
   assert.equal(fits.length, 0, 'Voice Fits must remain absent');
   assert.equal(profiles.length, 0, 'Voice candidates unexpectedly gained intelligence profiles');
+  assert.deepEqual(directoryTools.map((row) => new URL(row.url).hostname.replace(/^www\./, '')).sort(), [
+    'descript.com',
+    'elevenlabs.io',
+  ]);
   for (const profile of profiles) {
     assert.equal(profile.owner_type, 'tool');
     const tool = directoryTools.find((row) => row.id === profile.owner_id);
     assert.ok(tool, 'Profile owner must match a candidate tool');
     assert.equal(new URL(tool.url).hostname.replace(/^www\./, ''), profile.canonical_domain);
   }
-  const sources: any[] = [];
-  const claims: any[] = [];
+  // No profile means no same-owner source/claim. No relationship means no subject link.
+  const ownerEvidenceCounts = { profiles: profiles.length, sources: 0, claims: 0, links: 0 };
   console.log(
     JSON.stringify(
       {
@@ -131,8 +135,7 @@ async function main() {
         toolCapabilities,
         fits,
         profiles,
-        sources,
-        claims,
+        ownerEvidenceCounts,
       },
       null,
       2,

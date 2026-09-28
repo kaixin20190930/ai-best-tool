@@ -1,0 +1,227 @@
+{
+  "cluster": "ai-voiceover",
+  "checkedAtUtc": "2026-09-28T00:48:28.865Z",
+  "productionWrites": 0,
+  "status": "DEV_COMPLETE_INDEPENDENT_QA_PENDING_PRODUCTION_HOLD",
+  "scope": {
+    "taskId": "bb49bd6b-a968-4231-a505-5a79b5ffe8ad",
+    "capabilityIds": {
+      "text-to-speech-voice-generation": "9c70a590-5848-443b-88cc-203a8f446e18",
+      "voice-consent-and-export": "87457bc5-6c9e-4aee-b051-0d85fcb8baf9"
+    },
+    "toolIds": {
+      "ElevenLabs": "d7b63bf2-63c8-4015-b59d-2f627450813f",
+      "Descript": "a8c41d20-6b48-4f75-9f17-7e34c84619d2"
+    },
+    "createEntities": false
+  },
+  "readOnlyBaseline": {
+    "taskStatus": "active",
+    "taskOutput": "voiceover",
+    "requiresConsentReview": true,
+    "requiresExportReview": true,
+    "taskCapabilities": [
+      { "slug": "text-to-speech-voice-generation", "importance": "required", "status": "reviewed" },
+      { "slug": "voice-consent-and-export", "importance": "preferred", "status": "reviewed" }
+    ],
+    "directoryToolStatuses": { "ElevenLabs": "published", "Descript": "published" },
+    "toolCapabilityCount": 0,
+    "fitCount": 0,
+    "profileCount": 0,
+    "sourceCount": 0,
+    "claimCount": 0,
+    "linkCount": 0
+  },
+  "profileCandidates": [
+    { "ownerType": "tool", "ownerId": "d7b63bf2-63c8-4015-b59d-2f627450813f", "canonicalDomain": "elevenlabs.io", "productName": "ElevenLabs", "profileId": null, "status": "pending_independent_qa" },
+    { "ownerType": "tool", "ownerId": "a8c41d20-6b48-4f75-9f17-7e34c84619d2", "canonicalDomain": "descript.com", "productName": "Descript", "profileId": null, "status": "pending_independent_qa" }
+  ],
+  "evidenceIntakeCandidates": [
+    {
+      "key": "cl05:elevenlabs:tts-models:2026-09",
+      "owner": "ElevenLabs",
+      "url": "https://elevenlabs.io/docs/overview/capabilities/text-to-speech",
+      "surface": "ElevenLabs overview / TTS, with API and UI links separated",
+      "sourceMeaning": "TTS generates spoken audio; listed v3, Multilingual v2 and Flash v2.5 differ in language and character limits; output can vary.",
+      "fieldUse": ["tts.support", "tts.limitation", "fit.fit"],
+      "limitation": "Model-specific limits and API voice-library access do not establish every UI voice or every plan entitlement.",
+      "checkedDate": "2026-09-28"
+    },
+    {
+      "key": "cl05:elevenlabs:voice-types:2026-09",
+      "owner": "ElevenLabs",
+      "url": "https://elevenlabs.io/docs/help-center/product/voices/my-voices/what-is-my-voices",
+      "surface": "ElevenLabs My Voices / UI",
+      "sourceMeaning": "All users may use Voice Design; Instant Voice Cloning starts at Starter with permission; Professional Voice Cloning starts at Creator for one's own voice.",
+      "fieldUse": ["tts.plan", "governance.plan", "governance.limitation"],
+      "limitation": "Voice Design, IVC, PVC and community voices are distinct; permission is not supplied by plan purchase.",
+      "checkedDate": "2026-09-28"
+    },
+    {
+      "key": "cl05:elevenlabs:verification:2026-09",
+      "owner": "ElevenLabs",
+      "url": "https://elevenlabs.io/docs/eleven-api/concepts/voice-cloning",
+      "surface": "ElevenLabs voice cloning concept / API docs",
+      "sourceMeaning": "IVC and PVC include verification, but verification cannot guarantee that the supplied recording belongs to the requester.",
+      "fieldUse": ["governance.limitation", "fit.limitation"],
+      "limitation": "A verification step is no proof that the user owns voice or distribution rights.",
+      "checkedDate": "2026-09-28"
+    },
+    {
+      "key": "cl05:elevenlabs:commercial-terms:2026-09",
+      "owner": "ElevenLabs",
+      "url": "https://elevenlabs.io/terms-of-use",
+      "surface": "ElevenLabs non-EEA terms",
+      "sourceMeaning": "Free use is non-commercial; paid-plan commercial use remains subject to the terms and prohibited-use policy.",
+      "fieldUse": ["governance.plan", "governance.limitation", "fit.limitation"],
+      "limitation": "Region-specific terms and rights in script, recordings and identity require separate review; no blanket commercial clone license.",
+      "checkedDate": "2026-09-28"
+    },
+    {
+      "key": "cl05:elevenlabs:ui-download:2026-09",
+      "owner": "ElevenLabs",
+      "url": "https://elevenlabs.io/docs/eleven-creative/playground/text-to-speech",
+      "surface": "ElevenCreative TTS UI and history",
+      "sourceMeaning": "Generated audio can be downloaded immediately or from history; history offers MP3, WAV, M4A and FLAC choices.",
+      "fieldUse": ["governance.support", "fit.fit"],
+      "limitation": "This is rendered audio download, not a portable voice model or API entitlement.",
+      "checkedDate": "2026-09-28"
+    },
+    {
+      "key": "cl05:elevenlabs:api-format:2026-09",
+      "owner": "ElevenLabs",
+      "url": "https://elevenlabs.io/docs/api-reference/text-to-speech/convert",
+      "surface": "ElevenAPI TTS endpoint",
+      "sourceMeaning": "Default output is MP3; endpoint documentation lists Creator+ for 192 kbps MP3 and Pro+ for 44.1 kHz PCM/WAV.",
+      "fieldUse": ["governance.plan", "governance.limitation"],
+      "limitation": "API-only claim. Current pricing page places high-quality audio under Pro, so 192 kbps API tier is conflict-pending and must not become a verified entitlement claim.",
+      "checkedDate": "2026-09-28"
+    },
+    {
+      "key": "cl05:elevenlabs:pricing:2026-09",
+      "owner": "ElevenLabs",
+      "url": "https://elevenlabs.io/pricing",
+      "surface": "ElevenCreative current public pricing",
+      "sourceMeaning": "Free has TTS and 10k monthly credits; Starter has commercial license, IVC and 30k; Creator has PVC and 121k; Pro lists 44.1 kHz PCM API and 192 kbps quality.",
+      "fieldUse": ["tts.availability", "tts.plan", "governance.plan"],
+      "limitation": "Shared credits and model/channel cost vary; pricing is not a guarantee of usable minutes or a target-account API format.",
+      "checkedDate": "2026-09-28"
+    },
+    {
+      "key": "cl05:elevenlabs:clone-portability:2026-09",
+      "owner": "ElevenLabs",
+      "url": "https://elevenlabs.io/docs/eleven-creative/voices/voice-cloning/professional-voice-cloning",
+      "surface": "ElevenLabs voice cloning help FAQ",
+      "sourceMeaning": "A voice clone cannot be downloaded as a standalone file; it remains in the account and may be used through ElevenLabs API calls.",
+      "fieldUse": ["governance.limitation", "fit.limitation"],
+      "limitation": "Do not conflate rendered audio export with model export.",
+      "checkedDate": "2026-09-28"
+    },
+    {
+      "key": "cl05:descript:tts-workflow:2026-09",
+      "owner": "Descript",
+      "url": "https://help.descript.com/ai-speech/tts",
+      "surface": "Descript editor / TTS help",
+      "sourceMeaning": "Script-to-speech supports stock or custom speakers, selected Multilingual v2, ElevenLabs v3 or v4 models and multi-speaker sections.",
+      "fieldUse": ["tts.support", "tts.limitation", "fit.fit"],
+      "limitation": "Listed TTS languages do not establish dubbing languages or every voice/model pairing; timeline edits require conversion to a standard audio layer.",
+      "checkedDate": "2026-09-28"
+    },
+    {
+      "key": "cl05:descript:stock-voices:2026-09",
+      "owner": "Descript",
+      "url": "https://help.descript.com/ai-speech/stock-voices",
+      "surface": "Descript editor / stock AI voices",
+      "sourceMeaning": "Stock voices use the ElevenLabs Voice Library; community voice availability can change and matching voice language to script is recommended.",
+      "fieldUse": ["tts.limitation", "fit.limitation"],
+      "limitation": "Presence in library does not establish a per-voice commercial license or long-term availability.",
+      "checkedDate": "2026-09-28"
+    },
+    {
+      "key": "cl05:descript:custom-consent:2026-09",
+      "owner": "Descript",
+      "url": "https://help.descript.com/ai-speech/custom-speaker",
+      "surface": "Descript editor / custom voice clone",
+      "sourceMeaning": "A custom voice requires recorded authorization from the speaker, in English, including third-party speakers; deceased, non-consenting, unable-to-record and synthetic source voices are excluded.",
+      "fieldUse": ["governance.support", "governance.limitation", "fit.limitation"],
+      "limitation": "Authorization workflow does not independently prove scope of commercial distribution rights.",
+      "checkedDate": "2026-09-28"
+    },
+    {
+      "key": "cl05:descript:output-terms:2026-09",
+      "owner": "Descript",
+      "url": "https://www.descript.com/terms",
+      "surface": "Descript service terms / generated output and AI Speakers",
+      "sourceMeaning": "Input/output rights are allocated to the user only to the extent protectable by law; the user must vet generated output and obtain speaker permission.",
+      "fieldUse": ["governance.limitation", "fit.limitation"],
+      "limitation": "This is not a direct stock/custom voice commercial-use license matrix.",
+      "checkedDate": "2026-09-28"
+    },
+    {
+      "key": "cl05:descript:ui-export:2026-09",
+      "owner": "Descript",
+      "url": "https://help.descript.com/export-and-share/audio",
+      "surface": "Descript editor / local export",
+      "sourceMeaning": "The editor exports compositions or selections locally as MP3, WAV or M4A with audio settings.",
+      "fieldUse": ["governance.support", "fit.fit"],
+      "limitation": "UI local export does not prove an equivalent direct API download route or per-plan entitlement.",
+      "checkedDate": "2026-09-28"
+    },
+    {
+      "key": "cl05:descript:api-export:2026-09",
+      "owner": "Descript",
+      "url": "https://help.descript.com/api-and-mcp/api",
+      "surface": "Descript API",
+      "sourceMeaning": "The API can obtain signed rendered file URLs after publishing a Descript web link; direct rendered audio download without publishing is unsupported.",
+      "fieldUse": ["governance.limitation", "fit.limitation"],
+      "limitation": "API publishing is a separate workflow from editor local export.",
+      "checkedDate": "2026-09-28"
+    },
+    {
+      "key": "cl05:descript:pricing:2026-09",
+      "owner": "Descript",
+      "url": "https://www.descript.com/pricing",
+      "surface": "Descript current public plan comparison",
+      "sourceMeaning": "Free AI Speech and custom clones are limited; Hobbyist, Creator and Business list 400, 800 and 1500 monthly AI credits per editor respectively.",
+      "fieldUse": ["tts.availability", "tts.plan", "governance.plan"],
+      "limitation": "The table does not establish a complete consent/export entitlement by plan; Free AI credits are shown separately as one-time in the comparison.",
+      "checkedDate": "2026-09-28"
+    },
+    {
+      "key": "cl05:descript:usage:2026-09",
+      "owner": "Descript",
+      "url": "https://help.descript.com/billing-payments-plans/track-and-understand-your-media-minutes-and-ai-credits",
+      "surface": "Descript current plans / Drive usage",
+      "sourceMeaning": "Media minutes and AI credits are separate shared Drive pools; unused allowances do not roll over; Editor role is required for metered features; TTS cost varies with length and model.",
+      "fieldUse": ["tts.plan", "tts.limitation", "fit.limitation"],
+      "limitation": "No fixed credits-per-delivered-minute claim; legacy plans may differ.",
+      "checkedDate": "2026-09-28"
+    }
+  ],
+  "relationshipCandidates": {
+    "ElevenLabs": {
+      "text-to-speech-voice-generation": { "supportLevel": "strong", "availability": "all_plans", "editorialDecision": "conditional", "purposeCoverage": ["support", "availability", "plan", "limitation"] },
+      "voice-consent-and-export": { "supportLevel": "partial", "availability": "unknown", "editorialDecision": "HOLD", "purposeCoverage": ["support", "plan", "limitation"], "missingPurpose": "availability" },
+      "fit": { "fitLevel": "conditional", "editorialDecision": "HOLD", "purposeCoverage": ["fit", "limitation"] }
+    },
+    "Descript": {
+      "text-to-speech-voice-generation": { "supportLevel": "strong", "availability": "all_plans", "editorialDecision": "conditional", "purposeCoverage": ["support", "availability", "plan", "limitation"] },
+      "voice-consent-and-export": { "supportLevel": "partial", "availability": "unknown", "editorialDecision": "HOLD", "purposeCoverage": ["support", "plan", "limitation"], "missingPurpose": "availability" },
+      "fit": { "fitLevel": "conditional", "editorialDecision": "HOLD", "purposeCoverage": ["fit", "limitation"] }
+    }
+  },
+  "holdReasons": [
+    "No same-owner profile, source, verified/current claim or link exists for either tool in production; these are candidate records only.",
+    "The compound consent-and-export capability has no directly supported all_plans or paid_only mapping for either tool; unknown blocks reviewed/published relationship creation.",
+    "Descript current terms do not directly map stock and custom voices to commercial-use permission; older search snippets are excluded.",
+    "ElevenLabs API documentation and current pricing page differ on 192 kbps tier placement; authenticated target-plan QA is required for an entitlement claim.",
+    "Independent QA, identified reviewer, current official excerpts, review window and fresh production preflight are required before evidence intake or relations."
+  ],
+  "operatorGuards": [
+    "Do not use this candidate as an executable production manifest; no relation IDs, profile IDs, claim IDs or reviewer are allocated.",
+    "Before intake, re-read exact Task/Capability/Tool identities and all related rows; abort on drift.",
+    "Create profiles with the matching tool owner and official domain only after independent QA; intake source/claim with direct scoped meaning and current review due date.",
+    "Never change unknown to all_plans or paid_only without direct evidence for the entire compound capability.",
+    "Keep Task Page 404 and sitemap without this Task until its separate three-real-published-fits approval gate is met."
+  ]
+}

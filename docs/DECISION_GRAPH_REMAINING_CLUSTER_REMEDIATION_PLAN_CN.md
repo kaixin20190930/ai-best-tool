@@ -166,6 +166,10 @@ DIFF-08 Decision Assistant 继续 **blocked**。首批 20 工具核心 Capabilit
 
 CL-01 编辑闭环与事务门禁已用于 CL-02 单 Task 生产发布并完成独立只读回读。此项验收不授权 CL-03 或后续 cluster 发布；它们仍须各自完成独立内容 QA、管理员批准和单 Task 生产回读。
 
+### CL-05 Voice 官方证据候选增量（2026-09-28）
+
+CL-05 已补[同 owner profile/source/claim/link 语义候选](./DECISION_GRAPH_CL05_VOICE_EVIDENCE_CANDIDATE_2026-09-28_CN.json)并再次只读回读。Task active、两条 Task Capability reviewed、ElevenLabs/Descript 目录 published；两工具对本 Task 的 Tool Capability/Fit 仍为 0，profile/source/claim/link 均无。两条 Task rationale 可独立 QA；两工具基础 TTS 有直接官方功能和 Free 有限额证据，但治理/交付复合能力的 `availability` 仍为 `unknown`。Descript stock/custom voice 的当前直接商用许可矩阵缺失，ElevenLabs 192 kbps API 套餐资料出现官方表面差异。两工具仍 `conditional`/HOLD，不创建或发布关系，不启动 Task Page。原 CL-07 五组数字是 2026-09-27 历史快照；本增量不改其当时汇总。
+
 ### CL-04 Fit 撤回实施进度（2026-09-28）
 
 CL-04 n8n/OpenRouter 两条 Fit `withdraw` 已按[精确 manifest 与 Fit-only 管理员事务](./DECISION_GRAPH_CL04_APP_BUILD_ELIGIBILITY_2026-09-27_CN.md#5-cl-04-fit-only-撤回实施附记2026-09-28)于 2026-09-28T00:35:17.31865Z 由 reviewer `2b8177ac-70b3-4475-a1ee-509ff8b4b622` 原子撤回为 `stale`。结果为 `fitUpdates=2/taskCapabilityUpdates=0/toolCapabilityUpdates=0`；旧 evidence links 保留，`otherFits` 为空。自动 verifier（00:35:26Z）与总控独立 verifier（00:37:59Z）均通过，且均为只读验证（`productionWrites=0`）。此前“仍为 reviewed/尚未执行”是执行前历史状态，不再是当前状态。两条 Tool Capability 保持 `reviewed`；Task Page `/cn/tasks/build-app-with-ai` 仍为 404、sitemap Task URL 为 0。CL-04 标记**完成/已受控撤回**；DIFF-08 仍 **blocked**。

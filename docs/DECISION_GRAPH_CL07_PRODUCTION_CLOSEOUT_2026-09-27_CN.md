@@ -1,5 +1,7 @@
 # CL-07 · 剩余 Task cluster 生产只读收口
 
+后续增量：CL-05 于 2026-09-28 再次只读回读并形成[Voice 官方证据 intake 候选](./DECISION_GRAPH_CL05_VOICE_EVIDENCE_CANDIDATE_2026-09-28_CN.json)。目标关系、profile/source/claim/link 仍为 0，两个 Fit conditional/HOLD；此增量不重写下方 2026-09-27 五组历史快照，也无生产写入。
+
 状态：**历史只读审计完成；本文件另记录 CL-04 后续受控撤回**。本文件的五组生产回读及同日页面、SEO 与本地代码验证时点为 2026-09-27T13:07:48Z；其 CL-04 reviewed 数值是该时点历史快照。2026-09-28T00:35:17.31865Z 两条 CL-04 Fit 后续已受控转为 `stale`。此更新不改写历史审计数。CL-07 不启动 DIFF-08。
 
 ## 1. 范围与核验方式
