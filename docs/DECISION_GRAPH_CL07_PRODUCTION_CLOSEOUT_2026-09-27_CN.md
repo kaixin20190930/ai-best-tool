@@ -1,6 +1,6 @@
 # CL-07 · 剩余 Task cluster 生产只读收口
 
-状态：**只读审计完成；没有新增发布或生产写入**。本文件记录 2026-09-27T13:07:48Z 的五组生产回读及同日页面、SEO 与本地代码验证。编辑候选的 `QA_PASS`、`conditional`、`contextual`、`withdraw` 均不是数据库发布状态。CL-07 不创建 manifest、不执行 CL-01 管理员事务、不启动 DIFF-08。
+状态：**历史只读审计完成；本文件另记录 CL-04 后续受控撤回**。本文件的五组生产回读及同日页面、SEO 与本地代码验证时点为 2026-09-27T13:07:48Z；其 CL-04 reviewed 数值是该时点历史快照。2026-09-28T00:35:17.31865Z 两条 CL-04 Fit 后续已受控转为 `stale`。此更新不改写历史审计数。CL-07 不启动 DIFF-08。
 
 ## 1. 范围与核验方式
 
@@ -41,6 +41,10 @@
 ### CL-04 后续撤回准备附记（2026-09-28）
 
 CL-04 两条 `withdraw` 仍只是编辑结论。2026-09-27T23:41:55Z 生产只读回读确认目标 Fit 均仍为 `reviewed`，两条 Task Capability 与两条 Tool Capability 均仍为 `reviewed`，n8n/OpenRouter 在其他 Task 没有 Fit；生产写入 0。CL-01 原事务要求完整三类已发布关系，不能在保留 Capability 的前提下撤回这两条 reviewed Fit。专用 [CL-04 Fit-only 实施包](./DECISION_GRAPH_CL04_APP_BUILD_ELIGIBILITY_2026-09-27_CN.md#5-cl-04-fit-only-撤回实施附记2026-09-28)已完成本地事务回滚测试，但 migration/action 未部署，独立 QA reference 未填写；生产撤回尚未执行。此附记不改写上文 CL-07 的历史收口基线，也不启动页面或 DIFF-08。
+
+### CL-04 生产撤回完成附记（2026-09-28）
+
+更新：2026-09-28T00:35:17.31865Z，reviewer `2b8177ac-70b3-4475-a1ee-509ff8b4b622` 已将 n8n Fit `692f9115-2d1d-487b-b02b-392fa55d2d34` 与 OpenRouter Fit `bb6bb5aa-df5e-4113-bb76-8d4910911b28` 从 `reviewed` 原子撤回为 `stale`。结果为 `fitUpdates=2/taskCapabilityUpdates=0/toolCapabilityUpdates=0`；旧 evidence links 保留，`otherFits` 为空。自动 verifier 00:35:26Z 与总控独立 verifier 00:37:59Z 均通过（只读验证，`productionWrites=0`）。Task Page `/cn/tasks/build-app-with-ai` 仍为 404，sitemap Task URL 为 0。这里的零写入是 verifier 的写入计数，不代表 Fit 撤回没有执行。上方 CL-07 审计表与 23:41:55Z 准备附记均保留其历史时点；当前 CL-04 为**完成/已受控撤回**，两条 Tool Capability 仍 `reviewed`。DIFF-08 仍 **blocked**。
 
 ### CL-03 专项补查附记（2026-09-27）
 

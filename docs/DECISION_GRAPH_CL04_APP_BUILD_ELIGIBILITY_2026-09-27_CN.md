@@ -1,6 +1,6 @@
 # CL-04 · `build-app-with-ai` 资格审查与字段候选包
 
-状态：**本地资格审查完成；n8n 与 OpenRouter 在当前 Task 下的 Fit 结论均为 `withdraw`；生产关系 HOLD、未发布**（2026-09-27）。2026-09-28 已另备精确 Fit 撤回 manifest 与本地事务实现，生产仍为 `reviewed`，未写入。本文的资格结论不代替独立 QA 或管理员批准。
+状态：**资格审查完成；n8n 与 OpenRouter 在当前 Task 下的 Fit 已受控撤回为 `stale`**（生产操作 2026-09-28T00:35:17.31865Z）。Task Page 仍关闭；两条 Tool Capability 保持 `reviewed`。本文前述审计状态均为各自记录时点的历史快照，以下附记记录后续撤回，不改写历史数值。
 
 ## 1. 判断口径与生产只读基线
 
@@ -67,4 +67,10 @@
 
 [精确撤回 manifest](./DECISION_GRAPH_CL04_FIT_WITHDRAWAL_MANIFEST_2026-09-28_CN.json)记录当前生产版本，独立验收 **QA_PASS** 引用为 `codex-thread:01a0e549-64bb-72f0-acb5-aac41c4f7c0f`。唯一迁移路径为 `db/supabase/migrations/20260928_decision_cl04_fit_withdrawal.sql`。迁移部署后，管理员提供自己的 Auth UUID，先运行 `pnpm run decision:cl04-fit-withdrawal -- --reviewer=<admin-user-uuid>`；CLI 验证管理员邮箱白名单、固定 Task、两个 Fit 的 ID/status/精确版本及预演返回的两个 Fit ID、0 Capability 更新。只有显式追加 `--execute` 才提交撤回，提交后自动运行现有只读 verifier。若版本变化，停止并重审。生产写入后仍需复查 Task Page 404、sitemap Task URL 0。
 
-本地 `psql postgres -f scripts/test-decision-cl04-fit-transition-local.sql` 在空 public schema 的事务内通过权限、预演、错误版本、强制第二行失败的整体回滚、Fit-only 提交、审计及成对恢复，并最终 `ROLLBACK`。独立 QA 已通过；新 migration/action 尚未部署，生产撤回未执行。本任务不 push、不部署，不使用手工 SQL 绕过。待后续部署批准后执行。
+截至当时的实施准备记录：本地 `psql postgres -f scripts/test-decision-cl04-fit-transition-local.sql` 在空 public schema 的事务内通过权限、预演、错误版本、强制第二行失败的整体回滚、Fit-only 提交、审计及成对恢复，并最终 `ROLLBACK`。该记录形成时独立 QA 已通过，但 migration/action 尚未部署、生产撤回尚未执行；这是 00:35:17.31865Z 生产操作前的历史状态。其后的生产结果见下方状态更新。
+
+### 5.1 生产撤回状态更新（2026-09-28）
+
+**完成：两条 CL-04 Fit 已由 reviewer `2b8177ac-70b3-4475-a1ee-509ff8b4b622` 在 2026-09-28T00:35:17.31865Z 原子地从 `reviewed` 撤回为 `stale`。** n8n Fit `692f9115-2d1d-487b-b02b-392fa55d2d34` 与 OpenRouter Fit `bb6bb5aa-df5e-4113-bb76-8d4910911b28` 各更新一行；响应为 `fitUpdates=2/taskCapabilityUpdates=0/toolCapabilityUpdates=0`。旧 evidence links 保留，`otherFits` 为空。此前 23:41:55Z 的只读快照和“尚未执行”实施记录是历史时点，不能代表本次撤回后的状态。
+
+自动 verifier 于 00:35:26Z、总控独立 verifier 于 00:37:59Z 均通过；两者均为只读验证，`productionWrites=0`。复查 `/cn/tasks/build-app-with-ai` 为 404，sitemap Task URL 为 0。此处 `productionWrites=0` 指 verifier 不写生产；Fit 撤回是上述单独、已获执行的原子操作。两条 Tool Capability 仍为 `reviewed`，Task Capability 未变。本组状态为**已完成/受控撤回**；不构成页面开放或 DIFF-08 启动批准。
