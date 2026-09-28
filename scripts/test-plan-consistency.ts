@@ -77,7 +77,7 @@ function assertCurrentNavigation(document: string) {
 }
 
 function assertMaintenanceCloseout(document: string) {
-  assert(document.includes('MAINT-04 与 MAINT-05 均已完成'), 'Main plan must close both maintenance schedule tasks');
+  assert(/MAINT-04 与 MAINT-05 均已完\s*成/.test(document), 'Main plan must close both maintenance schedule tasks');
   assert(document.includes('CHG-02 已完成10/10'), 'Main plan must retain the completed timeline baseline');
 }
 
@@ -102,6 +102,7 @@ assert(maintenanceAudit.includes('已完成 10/10；最后由 The Graph 完成')
 assert(maintenanceAudit.includes('MAINT-06 最终状态校正'), 'Maintenance audit must expose the current baseline state');
 const roadmap = read('EVIDENCE_DECISION_PLATFORM_ROADMAP_CN.md');
 const scaleRoadmap = read('CONTENT_SCALE_AND_MAINTENANCE_ROADMAP_2026-09-20_CN.md');
+const normalizedScaleRoadmap = scaleRoadmap.replace(/\s+/g, ' ');
 const mon = roadmap.split('\n').find((line) => line.startsWith('| MON-01')) || '';
 const lnk = roadmap.split('\n').find((line) => line.startsWith('| LNK-01')) || '';
 assert(
@@ -116,12 +117,13 @@ for (const contract of [
   '数据库工具记录 | 63',
   '已公开工具 | 50',
   '获准索引工具 | 13',
-  '目标 2 个、上限 3 个/自然日',
+  '正常运营日每天至少 1 个、最多 2 个',
+  '每天最多 1 个、目标每周 4 个、硬上限 5 个',
   '目标每周 4 个、硬上限 5 个',
   '14-21 个',
   '公开和索引继续分离',
 ]) {
-  assert(scaleRoadmap.includes(contract), `Scale roadmap contract is missing: ${contract}`);
+  assert(normalizedScaleRoadmap.includes(contract), `Scale roadmap contract is missing: ${contract}`);
 }
 for (const document of [main, weekly, roadmap, read('TOOL_INDEX_RELEASE_POLICY_CN.md')]) {
   assert(
