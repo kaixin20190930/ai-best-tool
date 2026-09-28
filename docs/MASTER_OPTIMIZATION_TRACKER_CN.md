@@ -487,3 +487,9 @@ query、Top 20 page、已抓取未编入索引与软 404 数量。
 - 唯一规范事实源为[高质量收录与 Best 定位执行规范](./BEST_DIRECTORY_POSITIONING_AND_INTAKE_CN.md)；[成熟候选缓冲池](./MATURE_CANDIDATE_BUFFER_2026-09-20_CN.md)现为 14 项唯一执行台账，逐项记录 primary Cluster、角色、现有 Capability 术语、待核验约束/证据、决策差异、消费位置和研究/发布分轨。`READY_FOR_DEEP_REVIEW=7`、`HOLD_EVIDENCE=3`、`HOLD_DUPLICATE_INTENT=4`、`REJECT=0`；后者包含三个已公开实体与一个只增强既有 Canva canonical 的对象。现有 14 项中可考虑新增实体的仅 10 项，低于 14–21 条可用新工具缓冲目标；本轮只记缺口，不擅增第 15 项。未来 7 个正常运营日每天最多 2 项候选深审/补证，不承诺发布。未注册 Task 与证据缺口保持 HOLD，不代表任何新生产关系、Task Page 或索引获批。索引每日 1、每周目标 4 / 硬上限 5 及成熟工具快速通道继续以[索引政策](./TOOL_INDEX_RELEASE_POLICY_CN.md)为准。
 - 独立 QA 对提交 `b7d718d5` 给出 QA_FAIL，指出旧口径“每日目标 2、最多 3、允许 0”与用户最新明确要求冲突。本次按用户要求修正为成熟工具正常运营日每天至少公开 1 个、最多 2 个；只有证据冲突、重复实体、生产/构建故障、权限阻塞或候选缓冲确实没有合格对象时允许为 0，记录 blocker 并优先补候选包。通过提前维护 Task Cluster 候选缓冲保证大多数日期达标；已收录工具事实更新每日 5-10 个且不占新工具名额；索引仍每日最多 1 个、每周目标 4 个 / 硬上限 5 个，额外公开保持 monitor/noindex。此为独立验收后的文档政策修正。
 - 本次仅修改治理文档；没有更改业务代码、数据库、页面、自动化、发布数据或索引状态。
+
+## 2026-09-28 N1 候选官方深审
+
+- Elicit 与 Avoma 的官方证据深审完成，结论均为 `HOLD_EVIDENCE`，**待补证据后才可进入发布 preflight**；这不是发布完成。Elicit 的专用综述筛选/提取/导出链与 Consensus 有候选差异，但定价页多组金额、月度用量与独立采用未核清；Avoma 的录制/协作席位、CRM 配置与附加洞察有候选差异，但 Organization 金额、CRM 套餐资格、隐私功能分层及独立采用未核清。
+- 生产 `tools` 的只读姓名/URL/标题查重两项均为 0；两项英中预留 URL 均是 `200 + self-canonical + noindex` 的不可用壳，sitemap 匹配 0。下次发布前须重查别名/实体并复用唯一 canonical。
+- [N1 官方证据审计与候选包](./ELICIT_AVOMA_N1_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)记录官方来源、真实限制、`unknown`、Capability/Constraint/Evidence 建议及后续门禁；[14 项候选台账](./MATURE_CANDIDATE_BUFFER_2026-09-20_CN.md)已更新 readiness。没有生产实体、Decision Graph 关系、页面、sitemap、index、数据库或自动化写入。
