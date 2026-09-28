@@ -481,9 +481,9 @@ query、Top 20 page、已抓取未编入索引与软 404 数量。
 
 ## 2026-09-28 Task Cluster 收录组合治理
 
-- 状态：治理规则完成；候选池逐项映射是后续队列准入条件。
+- 状态：治理规则与现有 14 项候选映射完成；候选深审、公开发布和关系/索引批准均为后续独立门禁。
 - 已将 Task Cluster 作为新工具候选组合的基本选择单位，明确候选必须声明 Task、Capability、Constraint、Evidence 缺口、组合角色、决策差异和后续消费位置；建议每个首批 Cluster 形成 3–5 项 Anchor / Alternative / Gap-filler 组合，证据不足时保持候选/HOLD。
 - 已明确综合排序信号、新工具发布与既有工具更新分轨、成熟工具快速通道仍受质量门禁约束、公开与索引分离、最近 5 项队列的反同质化复盘及 Tool → Task/Capability/Constraint/Evidence → Task Page/Tool Intelligence/Structured Comparison → Decision Assistant 闭环。
-- 唯一规范事实源为[高质量收录与 Best 定位执行规范](./BEST_DIRECTORY_POSITIONING_AND_INTAKE_CN.md)；[成熟候选缓冲池](./MATURE_CANDIDATE_BUFFER_2026-09-20_CN.md)注明目前快照尚未逐条具备上述 Cluster 映射，因此只是研究缓冲，不代表任何新发布关系已准备或获批。索引每日 1、每周目标 4 / 硬上限 5 及成熟工具快速通道继续以[索引政策](./TOOL_INDEX_RELEASE_POLICY_CN.md)为准。
+- 唯一规范事实源为[高质量收录与 Best 定位执行规范](./BEST_DIRECTORY_POSITIONING_AND_INTAKE_CN.md)；[成熟候选缓冲池](./MATURE_CANDIDATE_BUFFER_2026-09-20_CN.md)现为 14 项唯一执行台账，逐项记录 primary Cluster、角色、现有 Capability 术语、待核验约束/证据、决策差异、消费位置和研究/发布分轨。`READY_FOR_DEEP_REVIEW=7`、`HOLD_EVIDENCE=3`、`HOLD_DUPLICATE_INTENT=4`、`REJECT=0`；后者包含三个已公开实体与一个只增强既有 Canva canonical 的对象。现有 14 项中可考虑新增实体的仅 10 项，低于 14–21 条可用新工具缓冲目标；本轮只记缺口，不擅增第 15 项。未来 7 个正常运营日每天最多 2 项候选深审/补证，不承诺发布。未注册 Task 与证据缺口保持 HOLD，不代表任何新生产关系、Task Page 或索引获批。索引每日 1、每周目标 4 / 硬上限 5 及成熟工具快速通道继续以[索引政策](./TOOL_INDEX_RELEASE_POLICY_CN.md)为准。
 - 独立 QA 对提交 `b7d718d5` 给出 QA_FAIL，指出旧口径“每日目标 2、最多 3、允许 0”与用户最新明确要求冲突。本次按用户要求修正为成熟工具正常运营日每天至少公开 1 个、最多 2 个；只有证据冲突、重复实体、生产/构建故障、权限阻塞或候选缓冲确实没有合格对象时允许为 0，记录 blocker 并优先补候选包。通过提前维护 Task Cluster 候选缓冲保证大多数日期达标；已收录工具事实更新每日 5-10 个且不占新工具名额；索引仍每日最多 1 个、每周目标 4 个 / 硬上限 5 个，额外公开保持 monitor/noindex。此为独立验收后的文档政策修正。
 - 本次仅修改治理文档；没有更改业务代码、数据库、页面、自动化、发布数据或索引状态。
