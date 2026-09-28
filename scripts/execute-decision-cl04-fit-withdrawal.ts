@@ -3,8 +3,9 @@ import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { loadEnvConfig } from '@next/env';
 
-import { getAdminEmails } from '../lib/auth/admin';
+import { isAdminUser } from '../lib/auth/admin';
 import { createAdminClient } from '../lib/supabase/admin';
+import type { User } from '@supabase/supabase-js';
 
 loadEnvConfig(process.env.CL04_ENV_DIR || process.cwd());
 
@@ -56,19 +57,19 @@ export function validateResponse(value: any, preflight: boolean) {
   if (preflight) assert.deepEqual([...value.fitIds].sort(), [...fitIds].sort());
 }
 
+export function assertAdminReviewer(user: User | null): asserts user is User {
+  assert.ok(user, 'Reviewer must be an existing user');
+  assert.ok(isAdminUser(user), 'Reviewer must be an administrator or moderator');
+}
+
 async function main() {
   const { execute, reviewer } = parseArgs(process.argv.slice(2));
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf8')) as Manifest;
   validateManifest(manifest);
   const db = createAdminClient();
-  const allowedEmails = getAdminEmails();
-  assert.ok(allowedEmails.length, 'ADMIN_EMAILS must identify approved administrators');
   const { data: reviewerResult, error: reviewerError } = await db.auth.admin.getUserById(reviewer);
   if (reviewerError) throw new Error(reviewerError.message);
-  assert.ok(
-    reviewerResult.user?.email && allowedEmails.includes(reviewerResult.user.email.toLowerCase()),
-    'Reviewer must be an existing administrator in ADMIN_EMAILS',
-  );
+  assertAdminReviewer(reviewerResult.user);
 
   const { data: tasks, error: taskError } = await db.from('decision_tasks').select('id,slug,status').eq('id', taskId);
   if (taskError) throw new Error(taskError.message);
