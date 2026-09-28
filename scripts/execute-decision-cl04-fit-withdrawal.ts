@@ -19,14 +19,15 @@ type Fit = { id: string; status: string; updated_at: string };
 type Manifest = { taskId: string; operation: string; fits: Fit[]; qaReference: string; preflight: boolean };
 
 export function parseArgs(args: string[]) {
-  const execute = args.includes('--execute');
-  const reviewerArgs = args.filter((arg) => arg.startsWith('--reviewer='));
+  const options = args[0] === '--' ? args.slice(1) : args;
+  const execute = options.includes('--execute');
+  const reviewerArgs = options.filter((arg) => arg.startsWith('--reviewer='));
   assert.ok(
-    args.every((arg) => arg === '--execute' || arg.startsWith('--reviewer=')),
+    options.every((arg) => arg === '--execute' || arg.startsWith('--reviewer=')),
     'Unknown argument',
   );
   assert.equal(reviewerArgs.length, 1, 'Exactly one --reviewer=<admin-user-uuid> is required');
-  assert.equal(args.filter((arg) => arg === '--execute').length, execute ? 1 : 0, 'Duplicate --execute');
+  assert.equal(options.filter((arg) => arg === '--execute').length, execute ? 1 : 0, 'Duplicate --execute');
   const reviewer = reviewerArgs[0].slice('--reviewer='.length);
   assert.match(reviewer, uuid, 'Reviewer must be a valid UUID');
   return { execute, reviewer };

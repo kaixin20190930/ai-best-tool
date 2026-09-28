@@ -5,6 +5,7 @@ import { parseArgs, validateManifest, validateResponse } from './execute-decisio
 
 const reviewer = '11111111-1111-4111-8111-111111111111';
 assert.deepEqual(parseArgs([`--reviewer=${reviewer}`]), { execute: false, reviewer });
+assert.deepEqual(parseArgs(['--', `--reviewer=${reviewer}`]), { execute: false, reviewer });
 assert.deepEqual(parseArgs(['--execute', `--reviewer=${reviewer}`]), { execute: true, reviewer });
 assert.throws(() => parseArgs([]));
 assert.throws(() => parseArgs(['--reviewer=bad']));
