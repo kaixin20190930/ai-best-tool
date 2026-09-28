@@ -493,3 +493,8 @@ query、Top 20 page、已抓取未编入索引与软 404 数量。
 - Elicit 与 Avoma 的官方证据深审完成，结论均为 `HOLD_EVIDENCE`，**待补证据后才可进入发布 preflight**；这不是发布完成。Elicit 的专用综述筛选/提取/导出链与 Consensus 有候选差异，但定价页多组金额、月度用量与独立采用未核清；Avoma 的录制/协作席位、CRM 配置与附加洞察有候选差异，但 Organization 金额、CRM 套餐资格、隐私功能分层及独立采用未核清。
 - 生产 `tools` 的只读姓名/URL/标题查重两项均为 0；两项英中预留 URL 均是 `200 + self-canonical + noindex` 的不可用壳，sitemap 匹配 0。下次发布前须重查别名/实体并复用唯一 canonical。
 - [N1 官方证据审计与候选包](./ELICIT_AVOMA_N1_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)记录官方来源、真实限制、`unknown`、Capability/Constraint/Evidence 建议及后续门禁；[14 项候选台账](./MATURE_CANDIDATE_BUFFER_2026-09-20_CN.md)已更新 readiness。没有生产实体、Decision Graph 关系、页面、sitemap、index、数据库或自动化写入。
+
+## 2026-09-28 N2 候选官方深审
+
+- Zapier Agents 与 Ideogram 官方证据深审完成，结论均为 `HOLD_EVIDENCE`，没有进入发布 preflight。Zapier 官方 09-07 迁移指南将独立 Agents 导向 AI by Zapier，旧 activity 定价/Enterprise FAQ 与新 task 计费和人审控制同时存在，独立产品的长期 canonical 与账户实际权益待消歧；不能借 Zapier 母品牌、Zaps、Chatbots 或 AI Actions 的能力和采用信号。Ideogram 已可界定图像生成、文字版面、编辑/Canvas、批量及独立 API 的边界与商用输出条款，但免费周额度资格、编辑 credit 路径、导出/水印和实际文字质量仍需核实；不能把官方示例当成功率证明。
+- 生产 `tools` 共 67 条，`BEGIN READ ONLY` 对两项 `name/title/url` 查重均为 0，随后 `ROLLBACK`；仓库工具 alias 无对应项。Zapier 宽泛路径与两项候选的英中线上 URL 均是 `200 + self-canonical + noindex` 的不可用壳，sitemap 匹配 0；已有宽泛 `/ai/zapier` 内链和 Zapier alternatives Guide 意图须在发布前复核。此只读检查不是完整发布 preflight。独立市场验证均未完成；[N2 官方证据审计与候选包](./ZAPIER_AGENTS_IDEOGRAM_N2_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)记录 Best for、Not ideal、真实限制、`unknown`、Capability/Constraint/Evidence 建议及来源。候选台账现为 `READY_FOR_DEEP_REVIEW=3`、`HOLD_EVIDENCE=7`、`HOLD_DUPLICATE_INTENT=4`、`REJECT=0`。本轮只改候选文档；没有生产工具、关系、页面、sitemap、index、数据库、自动化、push 或 deploy。
