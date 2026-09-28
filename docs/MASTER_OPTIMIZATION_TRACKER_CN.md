@@ -1,6 +1,6 @@
 # 收录与搜索质量主计划
 
-更新时间：2026-09-23
+更新时间：2026-09-28
 
 执行状态：进行中；索引保护及本周可证实历史补账完成，本周至少 12 次放行、剩余额度 0，新增索引批准保持暂停。
 
@@ -479,3 +479,11 @@ query、Top 20 page、已抓取未编入索引与软 404 数量。
   Card、日期、canonical、意图与 SEO 门禁均通过，并通过固定 allowlist、事务 rollback 后正式提交。生产可索引工具由 13 增至
   17，sitemap 由 118 增至 126，仅增加 8 条英中 URL；重复、遗漏、越界和页面异常均为 0。Perplexity 因第二官方来源和
   Decision Card 缺口未纳入。策略已恢复每日 1、每周 5 的常态额度。
+
+## 2026-09-28 Task Cluster 收录组合治理
+
+- 状态：治理规则完成；候选池逐项映射是后续队列准入条件。
+- 已将 Task Cluster 作为新工具候选组合的基本选择单位，明确候选必须声明 Task、Capability、Constraint、Evidence 缺口、组合角色、决策差异和后续消费位置；建议每个首批 Cluster 形成 3–5 项 Anchor / Alternative / Gap-filler 组合，证据不足时保持候选/HOLD。
+- 已明确综合排序信号、新工具发布与既有工具更新分轨、成熟工具快速通道仍受质量门禁约束、公开与索引分离、最近 5 项队列的反同质化复盘及 Tool → Task/Capability/Constraint/Evidence → Task Page/Tool Intelligence/Structured Comparison → Decision Assistant 闭环。
+- 唯一规范事实源为[高质量收录与 Best 定位执行规范](./BEST_DIRECTORY_POSITIONING_AND_INTAKE_CN.md)；[成熟候选缓冲池](./MATURE_CANDIDATE_BUFFER_2026-09-20_CN.md)注明目前快照尚未逐条具备上述 Cluster 映射，因此只是研究缓冲，不代表任何新发布关系已准备或获批。索引每日 1、每周目标 4 / 硬上限 5 及成熟工具快速通道继续以[索引政策](./TOOL_INDEX_RELEASE_POLICY_CN.md)为准。
+- 本次仅修改治理文档；没有更改业务代码、数据库、页面、自动化、发布数据或索引状态。
