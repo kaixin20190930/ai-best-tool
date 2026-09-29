@@ -1,0 +1,97 @@
+{
+  "candidate": "Elicit",
+  "slug": "elicit",
+  "checkedAt": "2026-09-29",
+  "baselineCommit": "cced15666269982bbf544859d09836bb936fe1b6",
+  "decision": "HOLD_EVIDENCE",
+  "publicReleaseApproved": false,
+  "indexReleaseApproved": false,
+  "proposedCanonical": {
+    "en": "https://aibesttool.com/ai/elicit",
+    "cn": "https://aibesttool.com/cn/ai/elicit",
+    "tw": "https://aibesttool.com/tw/ai/elicit"
+  },
+  "ifLaterReleased": "published + monitor/noindex; independent index review required",
+  "productionReadOnly": {
+    "toolsMatchCount": 0,
+    "matchedFields": ["name", "title", "url", "features", "tags"],
+    "supabaseProfileMatchCount": 0,
+    "routeAliasPresent": false,
+    "enShell": "200; self-canonical; noindex, follow; unavailable H1",
+    "cnShell": "200; self-canonical; noindex, follow; unavailable H1",
+    "robotsTxt": "200; Allow: /; sitemap declared",
+    "sitemapXml": "200; 126 URLs; 0 elicit matches"
+  },
+  "price": {
+    "exactAmount": null,
+    "monthlyAllowance": null,
+    "reason": "Official pricing HTML exposes multiple Pro/Scale amounts and usage multipliers without a verified selected billing view; no account checkout was inspected.",
+    "safeCopy": "Basic is free; dedicated systematic reviews and API access require eligible paid plans. Check the current plan and billing view before purchase."
+  },
+  "sources": [
+    {
+      "kind": "official",
+      "url": "https://elicit.com/pricing",
+      "checkedAt": "2026-09-29",
+      "scope": "Basic free, paid plan structure, Pro/Scale/Enterprise feature gates; conflicting rendered price and relative usage blocks"
+    },
+    {
+      "kind": "official",
+      "url": "https://support.elicit.com/en/articles/14759154-systematic-reviews-in-elicit",
+      "checkedAt": "2026-09-29",
+      "scope": "Gather, screening, extraction, per-review limits, monthly usage, full-text and figure constraints"
+    },
+    {
+      "kind": "official",
+      "url": "https://support.elicit.com/en/articles/14758040-elicit-s-source-for-papers",
+      "checkedAt": "2026-09-29",
+      "scope": "138M-paper corpus, source databases, update cadence, full-text access versus title/abstract"
+    },
+    {
+      "kind": "official",
+      "url": "https://support.elicit.com/en/articles/14758189-export-your-data-from-elicit",
+      "checkedAt": "2026-09-29",
+      "scope": "Plan-specific PDF/Word, table, RIS/BIB export"
+    },
+    {
+      "kind": "official",
+      "url": "https://elicit.com/operations/api-terms",
+      "checkedAt": "2026-09-29",
+      "scope": "API personal-data prohibition, API input training opt-in, output rights and third-party licensing, trademark restriction in API terms"
+    },
+    {
+      "kind": "independent_strong_use",
+      "url": "https://www.cambridge.org/core/services/aop-cambridge-core/content/view/C97DAEC70C3173A260F0B12E729E7250/S1759287926100805a.pdf/div-class-title-using-span-class-italic-elicit-span-ai-research-assistant-for-data-extraction-in-systematic-reviews-a-feasibility-study-across-environmental-and-life-sciences-div.pdf",
+      "checkedAt": "2026-09-29",
+      "visibleScope": "UNSW-led researchers actually used Elicit Plus to test extraction across seven systematic reviews; Elicit provided temporary free access but did not design or fund the study"
+    },
+    {
+      "kind": "independent_strong_use",
+      "url": "https://researchonline.lshtm.ac.uk/4673671/3/Appendix_A_Methodology_for_FEED.pdf",
+      "checkedAt": "2026-09-29",
+      "visibleScope": "LSHTM FEED methodology (June 2024) records actual Elicit extraction of interventions and outcomes with manual checking; historical, single project"
+    },
+    {
+      "kind": "independent_auxiliary",
+      "url": "https://chromewebstore.google.com/detail/elicit-ai-for-scientific/fdkcnfflaanlpehcmeekdjeknnokkhno?hl=en-US",
+      "checkedAt": "2026-09-29",
+      "visibleScope": "Elicit full-text browser extension: 30,000 users, 4.5/5 from 10 ratings; extension installs do not measure main app usage"
+    }
+  ],
+  "gateResults": {
+    "objectClear": "PASS",
+    "aiValueClear": "PASS",
+    "actuallyAvailable": "PASS",
+    "officialEvidenceComplete": "PASS",
+    "independentMarketBasis": "PASS",
+    "decisionValue": "PASS",
+    "realCompleteContent": "HOLD",
+    "uniqueAndMaintainable": "PASS"
+  },
+  "blockers": [
+    "Obtain a documented right to reuse an official Elicit logo and an actual product image or demo media; existing repository SVGs are editorial placeholders.",
+    "Finish and review genuine en/cn/tw decision copy with product media, source scope, and no unverified efficacy claim.",
+    "Before any precise price or quota claim, inspect an unambiguous selected monthly/yearly billing or checkout view; otherwise retain unknown and amount-free copy.",
+    "Reconfirm current language limitations, uploaded-document privacy and general workspace training scope; 2026-09-28 N1 audit is the latest direct check for these ancillary claims."
+  ]
+}

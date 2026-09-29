@@ -31,7 +31,7 @@
 | 5 | Zapier Agents | 成熟高需求 | 独立 Agents 迁入 AI by Zapier 的身份、activity/task 计费与权限 | N2 官方深审完成；`HOLD_EVIDENCE` |
 | 6 | Microsoft Copilot Studio | 成熟高需求 | Copilot Credits、租户授权、Power Platform 环境与外部渠道 | N3 官方深审完成；`HOLD_EVIDENCE` |
 | 7 | Tabnine | 成熟高需求 | 私有部署、编码助手与 Agent、收购后连续性 | N4 官方深审完成；`HOLD_EVIDENCE` |
-| 8 | Elicit | 成熟高需求 | 检索与系统综述、语料和导出限制 | N1 官方深审完成；`HOLD_EVIDENCE` |
+| 8 | Elicit | 成熟高需求 | 检索与系统综述、语料和导出限制 | 09-29 剩余门禁复核；`HOLD_EVIDENCE`（独立采用已通过，真实素材/本地化内容未通过） |
 | 9 | Avoma | 成熟高需求 | 录制席位、免费协作者、CRM 工作流 | N1 官方深审完成；`HOLD_EVIDENCE` |
 | 10 | Copy.ai | 成熟高需求 | Copywriter 到 GTM 平台的身份变化 | N5 官方深审完成；`HOLD_EVIDENCE` |
 | 11 | Read AI | 快速增长 | 会议额度、跨来源检索、回放、工作区与留存 | N3 官方深审完成；`HOLD_EVIDENCE` |
@@ -86,7 +86,7 @@ N7 于 2026-09-28 对 Jasper、Descript 作[既有事实只读复核](./JASPER_D
 | 5 [Zapier Agents](https://zapier.com/agents) | N2 官方深审完成；`HOLD_EVIDENCE` | 编辑 Cluster：业务 Agent 工作流（未注册 Task）；secondary：开发工作流集成（不等于构建完整应用）；Anchor（暂定，迁移后重评） | —；独立 Agents 400/1,500 activities 与迁入 AI by Zapier 的 task 倍率、免费资格、逐工具人审/Enterprise 策略分属不同路径；**迁移后 canonical、账户实际权益和 Agents 产品级独立采用待核** | 相对 n8n 的托管 Agent 差异仍是候选假设；[N2 审计](./ZAPIER_AGENTS_IDEOGRAM_N2_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)确认官方正迁入 Zap 编辑器，不能借 Zapier 母产品采用或 Zaps 能力。先消歧身份与计费，再消费 Tool Intelligence。 |
 | 6 [Microsoft Copilot Studio](https://www.microsoft.com/en-us/microsoft-copilot/microsoft-copilot-studio) | N3 官方深审完成；`HOLD_EVIDENCE` | 编辑 Cluster：业务 Agent 工作流（未注册 Task）；secondary：企业知识/部署（未注册）；Alternative | —；已证 Credits 包/预购/按量、渠道与 Power Platform 管理边界；**实际租户费率、M365 内含条件、Bing 数据边界和 Studio 产品级独立采用待核** | 相对 Zapier Agents，环境/Dataverse、DLP 与分项 Credit 是候选差异；[N3 审计](./COPILOT_STUDIO_READ_AI_N3_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)限定 Studio 与 M365/Azure 的关系。先补账户/合同及独立信号，再消费 Tool Intelligence。 |
 | 7 [Tabnine](https://www.tabnine.com/) | N4 官方深审完成；`HOLD_EVIDENCE` | `build-app-with-ai` **资格待定**；secondary：开发助手（未注册）；Alternative（暂定） | `ai-assisted-app-development` **Fit 待定**；官方文档可证 Agent/CLI/Review、IDE 矩阵及 SaaS/VPC/on-prem 选择；**定价页实时跳转，现行 SKU/价格/试用、模型与 CI 费用、实际数据路径、完整应用交付和独立采用待核** | 相对 Cursor，保留现有 IDE、部署与组织权限是候选差异；[N4 审计](./GRANOLA_TABNINE_N4_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)禁止借旧套餐或将编码助手自动算入完整应用 Task。先消费 Tool Intelligence。 |
-| 8 [Elicit](https://elicit.com/) | N1 官方深审完成；`HOLD_EVIDENCE` | `research-with-citations`；secondary：系统综述（未注册）；Alternative | `research-discovery`；`citation-traceability` 仅作有来源回查的候选。已证语料、筛选/提取、分层导出；**定价页多组金额、实际月度额度和独立采用未核清** | 相对 Consensus，专用综述的筛选/抽取/导出链是候选差异；不泛化为所有研究任务。先补 [N1 审计](./ELICIT_AVOMA_N1_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md) 缺口，再进发布 preflight。 |
+| 8 [Elicit](https://elicit.com/) | 09-29 剩余门禁复核；`HOLD_EVIDENCE` | `research-with-citations`；secondary：系统综述（未注册）；Alternative | `research-discovery`；`citation-traceability` 仅作有来源回查的候选。已证语料、筛选/提取、分层导出；两项独立机构实际使用通过市场门槛；**定价页多组金额、实际月度额度仍 unknown，官方素材授权和三语言内容未达门槛** | 相对 Consensus，专用综述的筛选/抽取/导出链是候选差异；不泛化为所有研究任务。[09-29 门禁包](./ELICIT_RELEASE_GATE_RECHECK_2026-09-29_CN.md)列八项结论与剩余 blocker；不进入发布 preflight。 |
 | 9 [Avoma](https://www.avoma.com/) | N1 官方深审完成；`HOLD_EVIDENCE` | `meeting-notes`；secondary：销售会话/CRM（未注册）；Gap-filler | `meeting-transcription`、`meeting-summary-and-actions`；已证 Recorder/免费只读协作者及附加模块分层；**Organization 价与 CRM 套餐资格冲突，留存/同意套餐边界和独立采用待核** | 相对 Fathom/Otter.ai/Fireflies.ai，分席位采购、CRM 配置和可选全局洞察是候选差异；不采信销售 ROI 数字。先补 [N1 审计](./ELICIT_AVOMA_N1_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md) 缺口，再进发布 preflight。 |
 | 10 [Copy.ai](https://www.copy.ai/) | N5 官方深审完成；`HOLD_EVIDENCE` | 编辑 Cluster：GTM 工作流（未注册 Task）；secondary：`brand-constrained-marketing-content` 仅待资格审查；Gap-filler（暂定） | —；已证现行 Chat/Content Agents/Workflows/Tables GTM 平台与可变 workflow credits；**旧博客套餐冲突、实际 Agents/API 权益、账户成本、企业数据合同、旧评论的产品级独立采用待核** | 相对 Jasper 的品牌起草，跨 GTM 系统的可复用流程是候选差异；[N5 审计](./SCITE_COPY_AI_N5_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)限定现行层级与旧 copywriter 叙事。生产无同名实体，但已有 Copy.ai alternatives Guide/写作内链意图，发布前须消歧与复查唯一 canonical。先消费 Tool Intelligence。 |
 | 11 [Read AI](https://www.read.ai/) | N3 官方深审完成；`HOLD_EVIDENCE` | `meeting-notes`；secondary：跨会议资料检索（未注册）；Alternative | `meeting-transcription`、`meeting-summary-and-actions`；已证 Free 5 次/月、Ask Read 权限、回放分层和 API beta；**上传 credit、实际导出/留存、同意与产品级独立采用待核** | 相对 Fathom/Otter.ai/Fireflies.ai，个人可访问会议与已连接邮件/消息检索是候选差异；[N3 审计](./COPILOT_STUDIO_READ_AI_N3_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)限定高级连接、工作区权限及数据边界。先消费 Tool Intelligence，再比较。 |
@@ -101,7 +101,7 @@ N7 于 2026-09-28 对 Jasper、Descript 作[既有事实只读复核](./JASPER_D
 | Primary Cluster | 本池候选与现有对照 | Anchor / Alternative / Gap-filler 目标检查；缺口 |
 | --- | --- | --- |
 | `meeting-notes` | 既有 Fathom、Otter.ai、Fireflies.ai；新研究 Avoma / Read AI / Granola | 既有成熟锚点可供复核；N1/N3/N4 分别确认 Avoma 的分席位 CRM、Read AI 的权限内跨来源搜索、Granola 的主动设备采集/用户笔记引导三种候选路线。三项均缺独立采用；不能据此发布 Fit 或视作等价摘要工具。 |
-| `research-with-citations` | 既有 Consensus；新研究 Elicit / Scite | Consensus 可作现有锚点；Elicit 拟作替代，Scite 拟补引文语境与 Reference Check。N5 已确认 Scite 分类及检索范围，但真实覆盖/分类误差和独立采用仍 HOLD；三种路线不能互称同等引用能力。 |
+| `research-with-citations` | 既有 Consensus；新研究 Elicit / Scite | Consensus 可作现有锚点；Elicit 的两项独立实际使用信号已核，但素材/内容仍 HOLD；Scite 拟补引文语境与 Reference Check，其真实覆盖/分类误差和独立采用仍 HOLD。三种路线不能互称同等引用能力。 |
 | `brand-constrained-marketing-content` | 既有 Jasper、Grammarly；Copy.ai 仅 secondary 待资格审查 | Jasper/Grammarly 为既有锚点/替代研究对象，但 CL-06 关系均 HOLD；**缺已核实的新 Gap-filler 与可发布 Task Fit**，不能以 Copy.ai 强补。 |
 | `ai-voiceover` | 既有 Descript、ElevenLabs | 生成与编辑交付可能互补；**缺第三项有证据的不同选择及已发布关系**。本池不增第 15 项。 |
 | `build-app-with-ai` | 既有 Cursor；Tabnine 仍 HOLD | Cursor 可作既有锚点；**缺已证完整应用场景的 Alternative 与 Gap-filler**。N4 已证 Tabnine 当前编码/Agent/私有部署范围，但未证完整应用交付，不得自动取得 Fit；CL-04 的 n8n/OpenRouter Fit 已撤回。 |
@@ -134,3 +134,7 @@ N7 于 2026-09-28 对 Jasper、Descript 作[既有事实只读复核](./JASPER_D
 - **同质化：**Avoma/Read AI/Granola 同属会议，但差异仅为待证假设；Elicit/Scite 不能重复解释为 Consensus 的换名搜索；Jasper/Grammarly/Copy.ai 不能以“营销 AI”泛词共享同一 Task Fit。缺少直接官方证据或独立采用就保持 HOLD。
 - **同厂商与同 Task 集中：**本池官方域名各异；Canva 与 Magic Studio 是唯一明确同厂商重复身份，已收口。研究日最多 2 项，并交错会议、研究、Agent、视觉。发布时按[唯一组合规则](./BEST_DIRECTORY_POSITIONING_AND_INTAKE_CN.md#容量反同质化与每周验收)审最近 5 个新工具与最近 5 个索引批准：同主 Task 或同厂商不得超过 3 个，连续 3 个不能同 Task、厂商或能力方向。研究排序本身不消耗发布/索引额度。
 - **消费边界：**Tool Intelligence 只能写已核实且有核查日期的事实；Task Page 需要真实 published Fit、required/preferred 能力及独立注册审批，目前不能由本表启动；Structured Comparison 只能比较同一任务中已证实的差异；Decision Assistant 仍受 [DIFF-08 启动门槛](./DECISION_GRAPH_DIFFERENTIATION_ONE_WEEK_PLAN_CN.md)阻断。`unknown/待核验` 不得在任一层自动补全或暗示产品具有能力。
+
+## 2026-09-29 Elicit 剩余门禁结论
+
+Elicit [专项只读证据包](./ELICIT_RELEASE_GATE_RECHECK_2026-09-29_CN.md)复核了生产身份/预留双语 shell、八页官方与独立证据、Consensus Task 边界和八项准入。UNSW 与 LSHTM 两项独立实际使用已满足市场门槛；无金额的 Basic 免费、综述/API 付费分层表述可用，精确价格和月度额度仍 `unknown`。仓库只有占位 logo/封面，没有可核验复用许可和真实产品媒体，三语言决策内容未审完，因此**内容真实完整 = HOLD，整体 `HOLD_EVIDENCE`**。候选发布顺位是条件排序，本次不消耗发布槽，也不授权生产实体、关系、页面、索引或 sitemap 变更。下次复核建议 2026-10-05，或素材/内容证据到齐时提前。原始候选 JSON 批准字段维持 `false`。

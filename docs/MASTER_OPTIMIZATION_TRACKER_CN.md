@@ -2,6 +2,8 @@
 
 更新时间：2026-09-29
 
+2026-09-29 Elicit 剩余发布门禁复核：生产只读查重为 0，双语预留页仍 `200 + self-canonical + noindex`，sitemap 无 Elicit；两项独立机构实际使用满足市场门槛，专用综述流程与 Consensus 引用问答的 Task 差异可说明。但官方价格页多组金额/额度未消歧，精确值维持 unknown；现有 Elicit 素材为占位图、缺可复用官方 logo/真实产品媒体及完成审校的三语言内容，八项中“内容真实完整” HOLD，整体维持 `HOLD_EVIDENCE`。无金额的 freemium/plan-gated 文案可作后续候选，不形成发布授权。详见[专项证据包](./ELICIT_RELEASE_GATE_RECHECK_2026-09-29_CN.md)；没有生产写入、页面/SEO/index/sitemap 修改、push 或 deploy。
+
 2026-09-29 N6/N7 SAFE 事实更新已在生产提交并完成候选验证。仅覆盖 Grammarly、Jasper、Descript 的审计候选；Canva/HOLD/NO_CHANGE 不进入计划。执行时间 2026-09-29 08:02（Asia/Shanghai）：只读状态与默认 dry-run 回读均为 `alreadyApplied=true`、`changedPaths=[]`，目标哈希分别为 Grammarly `0c3cb98119b9b836fbd700f4160e6dd46d7f8693035b8abcf0257c7a2be9eb96`、Jasper `ece814dd76b32e4e65da4aad8b3cc6433892cf4c779babb7f4cd33c014386abd`、Descript `8cbbf70731fdb2ef827e5e3cf6a91026a2cb9301de2cccf211a50e85749842a3`；dry-run 事务已 `ROLLBACK`。身份、状态、复查日期及保护字段断言通过，索引状态未变：Grammarly/Jasper `continue_index`、Descript `monitor`；线上双语页面、canonical、robots 与 sitemap 符合当前状态。Canva 仍为 `HOLD-CONFLICT` 且无生产实体；CL-05/06 的 Tool Capability/Fit 关系未发布，账户权益等既有 HOLD 继续。执行步骤与回读详见[专项运行与回滚文档](./N6_N7_SAFE_FACT_UPDATE_RUNBOOK_2026-09-29_CN.md)。
 
 执行状态：进行中；索引保护及本周可证实历史补账完成，本周至少 12 次放行、剩余额度 0，新增索引批准保持暂停。
