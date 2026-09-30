@@ -1,6 +1,6 @@
 # DIFF-07 只读收口与发布审计（2026-09-23）
 
-当前状态（2026-09-30）：Owner 已执行 `meeting-transcription` 从 required 调整为 preferred 的受控 SQL；生产只读回读与 Task Page 服务端读模型均通过。`meeting-notes` 已加入本地 Task Page 批准注册表，形成首个放行候选；**尚未 push/deploy，生产路径仍为 404，sitemap Task URL 仍为 0**。DIFF-07 其他 cluster 尚未完成编辑整改，DIFF-08 仍阻塞。下文保留历史快照并记录本次门禁闭环。
+当前状态（2026-09-30）：Owner 已执行 `meeting-transcription` 从 required 调整为 preferred 的受控 SQL；生产只读回读与 Task Page 服务端读模型均通过。批准提交 `97c4f400` 已进入 main 并完成生产验证：`/tasks/meeting-notes` 与 `/cn/tasks/meeting-notes` 均为 200、自指 canonical、`noindex, follow`；其他 Task 仍为 404，sitemap 仍排除所有 Task URL。DIFF-07 其他 cluster 尚未完成编辑整改，DIFF-08 仍阻塞。下文保留历史快照并记录本次门禁闭环。
 
 2026-09-23 状态：技术门禁与独立 QA 均 PASS；**当时未自动批准或发布任何关系**。这里的 PASS 表示当时的只读验收完成，不表示内容可公开。生产快照
 为 2026-09-23 15:42–15:46 UTC；发布前必须重新核对来源有效期并取得编辑批准。
@@ -59,4 +59,4 @@ DIFF-08 Decision Assistant 仍为**条件阻塞**：6 Task 的 published fit 覆
 
 Owner-only SQL 位于 `db/supabase/manual/20260930_set_meeting_notes_transcription_preferred.sql`，已于 2026-09-30 04:48:16 UTC 由 reviewer `2b8177ac-70b3-4475-a1ee-509ff8b4b622` 执行。生产回读确认：`meeting-summary-and-actions` 保持 required、review window 至 2026-10-24；`meeting-transcription` 为 preferred，新 review window 至 2026-10-30；二者均 published/current 且 reviewer-backed。三条 Fit 均 published/current，9/9 Fit evidence link 为同 owner、verified/current；Fathom、Otter.ai、Fireflies 均 published 且工具复查日期仍在未来。`getPublicTaskPage('meeting-notes', 'en')` 返回 Fathom、Otter.ai、Fireflies 三工具和完整 required/preferred Capability。
 
-最终放行候选仅将 `meeting-notes` 加入静态批准注册表；其他 Task 继续 fail closed。放行不改变页面既有 `noindex, follow`、canonical 规则或 sitemap 排除，也不批准工具索引或 Decision Assistant。提交前生产边界复核为 `/tasks/meeting-notes`、`/en/tasks/meeting-notes`、`/cn/tasks/meeting-notes` 均 404，sitemap Task URL 为 0；这些结果证明尚未部署，而不是页面资格不足。后续 freshness 监控或复核撤回时，必须在同一发布中移除注册表 slug。
+最终放行仅将 `meeting-notes` 加入静态批准注册表；其他 Task 继续 fail closed。main SHA `97c4f400` 的生产复核确认 `/tasks/meeting-notes` 与 `/cn/tasks/meeting-notes` 均为 200、自指 canonical、`noindex, follow`，页面可见 Fathom、Otter.ai、Fireflies，以及对应官方来源、核验日期与复查日期；其余五个首批 Task 的中文路径均为 404。生产 sitemap 共 126 URL、Task URL 为 0，production SEO smoke PASS。放行未改变 sitemap 生成器、工具索引或 Decision Assistant；后续 freshness 监控或复核撤回时，必须在同一发布中移除注册表 slug。
