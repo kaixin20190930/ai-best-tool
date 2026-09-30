@@ -2,9 +2,9 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 
 const linkedPages = [
-  'app/[locale]/(with-footer)/guides/ai-tools-for-research/page.tsx',
-  'app/[locale]/(with-footer)/guides/perplexity-alternatives-comparison/page.tsx',
   'app/[locale]/(with-footer)/guides/ai-tools-for-research-comparison/page.tsx',
+  'lib/content/guideTaskChecks.ts',
+  'lib/data/topicToolSources.ts',
 ];
 
 async function main() {
@@ -13,14 +13,15 @@ async function main() {
     'notebooklm:',
     '600 sources',
     '600 个来源',
-    'citation accuracy',
+    'cited passages',
     'Workspace for Education',
-    'support.google.com/notebooklm/answer/16164461',
-    'support.google.com/googleone/answer/16105039',
+    'support.google.com/gemininotebook/answer/16164461',
+    'support.google.com/gemininotebook/answer/16213268',
+    'blog.google/innovation-and-ai/products/gemini-notebook/notebooklm-gemini-notebook',
   ]) {
     assert(evidenceConfig.includes(term), `NotebookLM evidence snapshot: ${term} missing`);
   }
-  console.log('PASS NotebookLM official evidence snapshot retains limits and account boundaries');
+  console.log('PASS Gemini Notebook official evidence snapshot retains limits and account boundaries');
 
   for (const file of linkedPages) {
     const source = fs.readFileSync(file, 'utf8');
@@ -31,8 +32,8 @@ async function main() {
   const base = process.env.SEO_BASE_URL;
   if (!base) return;
   for (const [path, expected] of [
-    ['/ai/notebooklm', ['NotebookLM', '600 sources', 'citation accuracy', 'Workspace for Education']],
-    ['/cn/ai/notebooklm', ['NotebookLM', '600 个来源', '引用准确性', 'Workspace for Education']],
+    ['/ai/notebooklm', ['Gemini Notebook', '600 sources', 'cited passages', 'Workspace for Education']],
+    ['/cn/ai/notebooklm', ['Gemini Notebook', '600 个来源', '引文原段', 'Workspace for Education']],
   ] as const) {
     const response = await fetch(`${base}${path}`, { signal: AbortSignal.timeout(20000) });
     assert.equal(response.status, 200, path);

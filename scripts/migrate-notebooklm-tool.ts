@@ -128,7 +128,13 @@ const features = {
       '使用代表性的混合格式资料集，验证 NotebookLM 能否在保持引用准确性的同时减少重复阅读。',
     ),
     checks: localized(
-      ['Add a mixed-format source set', 'Test five factual questions', 'Test one conflicting claim', 'Inspect every cited passage', 'Record correction time and missing context'],
+      [
+        'Add a mixed-format source set',
+        'Test five factual questions',
+        'Test one conflicting claim',
+        'Inspect every cited passage',
+        'Record correction time and missing context',
+      ],
       ['加入混合格式资料集', '测试五个事实问题', '测试一组冲突说法', '检查每个引用段落', '记录修正时间和缺失上下文'],
     ),
   },
@@ -151,7 +157,11 @@ function indexInput(row: Record<string, unknown>) {
 async function main() {
   const args = process.argv.slice(2).filter((arg) => arg !== '--');
   assert(args.length <= 1 && args.every((arg) => ['--check', '--status', '--commit'].includes(arg)));
-  assert.equal(Object.values(features.marketValidation.scores).reduce((sum, value) => sum + value, 0), 90);
+  assert(!args.includes('--commit'), 'Historical NotebookLM seed cannot commit after the Gemini Notebook rename');
+  assert.equal(
+    Object.values(features.marketValidation.scores).reduce((sum, value) => sum + value, 0),
+    90,
+  );
   assert(detailEn.length > 2800 && detailZh.length > 1400);
   for (const source of [...officialSources, ...independentSources]) assert(detailEn.includes(source));
   for (const asset of ['public/icons/tool-logos/notebooklm.svg', 'public/images/tool-media/notebooklm-cover.svg']) {
@@ -175,7 +185,10 @@ async function main() {
        WHERE lower(name)='notebooklm'
           OR lower(url) ~ '^https?://notebooklm\\.google\\.com([/?#]|$)'`,
     );
-    assert(conflicts.rows.every((row) => row.id === id), 'Conflicting NotebookLM slug or URL');
+    assert(
+      conflicts.rows.every((row) => row.id === id),
+      'Conflicting NotebookLM slug or URL',
+    );
     // Research is a virtual hub; existing research tools use Productivity as their storage category.
     const category = await client.query("SELECT id FROM categories WHERE slug='productivity'");
     assert.equal(category.rowCount, 1, 'Productivity storage category must exist exactly once');
@@ -225,20 +238,26 @@ async function main() {
     assert.equal(indexDecision.indexable, false);
     assert.equal(indexDecision.reason, 'indexing_paused');
 
-    await client.query(args.includes('--commit') ? 'COMMIT' : 'ROLLBACK');
-    console.log(JSON.stringify({
-      success: true,
-      mode: args.includes('--commit') ? 'committed' : args.includes('--status') ? 'status' : 'dry-run-rollback',
-      id,
-      slug: 'notebooklm',
-      pricing: row.pricing,
-      status: row.status,
-      pageQualityStatus: row.page_quality_status,
-      nextReviewDate,
-      marketValidationScore: row.features.marketValidation.score,
-      indexable: indexDecision.indexable,
-      sitemapEligible: false,
-    }, null, 2));
+    await client.query('ROLLBACK');
+    console.log(
+      JSON.stringify(
+        {
+          success: true,
+          mode: args.includes('--status') ? 'status' : 'dry-run-rollback',
+          id,
+          slug: 'notebooklm',
+          pricing: row.pricing,
+          status: row.status,
+          pageQualityStatus: row.page_quality_status,
+          nextReviewDate,
+          marketValidationScore: row.features.marketValidation.score,
+          indexable: indexDecision.indexable,
+          sitemapEligible: false,
+        },
+        null,
+        2,
+      ),
+    );
   } catch (error) {
     await client.query('ROLLBACK');
     throw error;

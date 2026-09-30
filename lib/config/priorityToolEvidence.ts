@@ -111,23 +111,38 @@ export const PRIORITY_TOOL_EVIDENCE: Record<string, PriorityToolEvidence> = {
     sources: [
       { label: 'Official Luma identity and product surfaces', url: 'https://lumalabs.ai/llm-info' },
       { label: 'Current Luma pricing', url: 'https://lumalabs.ai/pricing' },
-      { label: 'Product consistency guidance', url: 'https://lumalabs.ai/learning-hub/keep-character-product-consistency-in-luma-reference-guide' },
+      {
+        label: 'Product consistency guidance',
+        url: 'https://lumalabs.ai/learning-hub/keep-character-product-consistency-in-luma-reference-guide',
+      },
     ],
   },
   notebooklm: {
-    checkedAt: '2026-09-06',
+    checkedAt: '2026-09-30',
     limitation: {
-      en: 'NotebookLM works from a bounded source set rather than discovering the open web. Google AI Plus, Pro, and Ultra currently allow up to 100, 300, and 600 sources per notebook; users should still check citation accuracy and source quality. Data handling also differs by account, including Workspace for Education protections.',
-      zh: 'NotebookLM 基于限定资料集工作，而不是检索开放网络。Google AI Plus、Pro 和 Ultra 目前每个笔记本最多支持 100、300 和 600 个来源；用户仍需核验引用准确性和来源质量。不同账户的数据处理规则也不同，包括 Workspace for Education 的保护条款。',
+      en: 'Gemini Notebook (formerly NotebookLM) answers from the sources selected for a notebook. It can discover web and Drive sources, but users choose what to import. Google AI Plus, Pro, and Ultra currently allow up to 100, 300, and 600 sources per notebook; compute-based usage limits also apply. Check citation accuracy against cited passages, import scope, account access, and data handling, including Workspace for Education protections.',
+      zh: 'Gemini Notebook（原 NotebookLM）依据笔记本中选定的来源回答。它可发现网页及云端硬盘资料，但导入范围由用户选择。Google AI Plus、Pro 和 Ultra 目前每个笔记本最多支持 100、300 和 600 个来源，另有按计算量计的用量限制。请对照引文原段核对引用准确性、导入范围、账号权限与数据处理规则，包括 Workspace for Education 的保护条款。',
     },
     sources: [
       {
+        label: 'Official rename announcement',
+        url: 'https://blog.google/innovation-and-ai/products/gemini-notebook/notebooklm-gemini-notebook/',
+      },
+      {
         label: 'Official product and data notice',
-        url: 'https://support.google.com/notebooklm/answer/16164461?hl=en',
+        url: 'https://support.google.com/gemininotebook/answer/16164461?hl=en',
       },
       {
         label: 'Official plans and source limits',
-        url: 'https://support.google.com/googleone/answer/16105039?hl=en',
+        url: 'https://support.google.com/gemininotebook/answer/16213268?hl=en',
+      },
+      {
+        label: 'Official source discovery and import limits',
+        url: 'https://support.google.com/gemininotebook/answer/16215270?hl=en',
+      },
+      {
+        label: 'Official compute-based usage limits',
+        url: 'https://support.google.com/gemininotebook/answer/17670842?hl=en',
       },
     ],
   },
