@@ -151,10 +151,10 @@
       "candidateClass": "mature_high_demand",
       "status": "screened_for_deep_review",
       "whyNow": "Elicit has a clear research-assistant identity and detailed corpus, screening, export and plan boundaries that support an evidence-led comparison page.",
-      "officialSources": ["https://elicit.com/pricing", "https://support.elicit.com/"],
-      "independentSources": ["https://www.producthunt.com/products/elicit", "https://www.g2.com/products/elicit/reviews"],
+      "officialSources": ["https://elicit.com/pricing", "https://support.elicit.com/en/articles/14759154-systematic-reviews-in-elicit"],
+      "independentSources": ["https://www.cambridge.org/core/journals/research-synthesis-methods/article/using-elicit-ai-research-assistant-for-data-extraction-in-systematic-reviews-a-feasibility-study-across-environmental-and-life-sciences/C97DAEC70C3173A260F0B12E729E7250", "https://researchonline.lshtm.ac.uk/id/eprint/4673679/22/Final_Report_Evidence_Collections_for_Climate_and%20Health.pdf"],
       "decisionAngles": ["search versus systematic review", "corpus and full-text boundaries", "screening scale", "export and API access"],
-      "risks": ["Pricing page can show different billing cadences", "Research outputs must not be presented as validated conclusions"],
+      "risks": ["Exact pricing and monthly allowance remain unknown across billing views", "Official logo and real product media lack documented reuse permission", "Research outputs must not be presented as validated conclusions"],
       "publicReleaseApproved": false,
       "indexReleaseApproved": false
     },

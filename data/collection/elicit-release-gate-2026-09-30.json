@@ -1,0 +1,64 @@
+{
+  "candidate": "Elicit",
+  "slug": "elicit",
+  "checkedAt": "2026-09-30",
+  "baselineCommit": "238b291e75335061024d93c1391d41d43770709c",
+  "decision": "HOLD_EVIDENCE",
+  "publicReleaseApproved": false,
+  "indexReleaseApproved": false,
+  "qaReleaseCandidateGenerated": false,
+  "databaseTransactionPrepared": false,
+  "ifLaterReleased": "published + monitor/noindex; excluded from sitemap; independent index approval required",
+  "identity": {
+    "neonReadOnlyTransaction": "BEGIN READ ONLY; matching tools 0; ROLLBACK",
+    "matchedFields": ["name", "title", "url", "features", "tags"],
+    "supabaseMatchingProfiles": 0,
+    "routeAliasPresent": false,
+    "enShell": "200; self-canonical; noindex, follow; unavailable H1",
+    "cnShell": "200; self-canonical; noindex, follow; unavailable H1",
+    "twShell": "200; self-canonical; noindex, follow; unavailable H1",
+    "sitemap": "200; 126 loc; 0 Elicit matches",
+    "canonicalIntent": "one Elicit product detail in three locale paths; existing research guide and comparison retain their distinct intent"
+  },
+  "factBoundaries": {
+    "pricing": "Basic free; dedicated Systematic Review Pro/Scale/Enterprise; API eligible paid opt-in; no exact amount or monthly quota claim",
+    "exactAmount": null,
+    "monthlyAllowance": null,
+    "review": "Gather, editable criteria, optional full-text screen after abstract screen, extraction and limited final report; human review required",
+    "corpus": "Elicit-reported 138M deduplicated records from Semantic Scholar, OpenAlex and PubMed; coverage and full-text rights vary",
+    "exports": "Report PDF/Word all plans; Find Papers/Paper Chat table Plus+; Systematic Review table Pro+; CSV/Excel and some RIS/BIB",
+    "privacy": "Uploaded PDFs described as account-private and absent from public corpus; deletion completion/retention unknown",
+    "training": "API input default no-training unless opt-in; Enterprise pricing copy says default no-training; general workspace cross-plan policy unknown",
+    "mediaRights": "No verifiable right found for this site to reproduce official logo and real product image or screenshot"
+  },
+  "sources": [
+    {"kind": "official", "url": "https://elicit.com/pricing", "checkedAt": "2026-09-30", "scope": "Basic, paid plan gates, conflicting price views"},
+    {"kind": "official", "url": "https://support.elicit.com/en/articles/14759154-systematic-reviews-in-elicit", "checkedAt": "2026-09-30", "scope": "review workflow, screen/extract/report limits and product screenshots without reuse license"},
+    {"kind": "official", "url": "https://support.elicit.com/en/articles/14758040-elicit-s-source-for-papers", "checkedAt": "2026-09-30", "scope": "corpus and coverage limits"},
+    {"kind": "official", "url": "https://support.elicit.com/en/articles/14758189-export-your-data-from-elicit", "checkedAt": "2026-09-30", "scope": "plan-scoped exports"},
+    {"kind": "official", "url": "https://support.elicit.com/en/articles/15646622-usage-limits-in-elicit", "checkedAt": "2026-09-30", "scope": "shared monthly usage and complexity"},
+    {"kind": "official", "url": "https://support.elicit.com/en/articles/14758084-languages-other-than-english", "checkedAt": "2026-09-30", "scope": "English optimization and variable non-English quality"},
+    {"kind": "official", "url": "https://support.elicit.com/en/articles/14757928-elicit-s-limitations", "checkedAt": "2026-09-30", "scope": "extraction and quality-assessment limits"},
+    {"kind": "official", "url": "https://support.elicit.com/en/articles/14758043-privacy-for-uploaded-papers", "checkedAt": "2026-09-30", "scope": "uploaded PDF privacy"},
+    {"kind": "official", "url": "https://elicit.com/operations/api-terms", "checkedAt": "2026-09-30", "scope": "API eligibility, data prohibition, training and IP terms"},
+    {"kind": "official", "url": "https://elicit.com/operations/terms", "checkedAt": "2026-09-30", "scope": "reserved platform image and design rights; no public reuse grant"},
+    {"kind": "independent_strong_use", "url": "https://www.cambridge.org/core/journals/research-synthesis-methods/article/using-elicit-ai-research-assistant-for-data-extraction-in-systematic-reviews-a-feasibility-study-across-environmental-and-life-sciences/C97DAEC70C3173A260F0B12E729E7250", "checkedAt": "2026-09-30", "scope": "UNSW-led actual extraction study over seven systematic reviews; human verification remains required"},
+    {"kind": "independent_strong_use", "url": "https://researchonline.lshtm.ac.uk/id/eprint/4673679/22/Final_Report_Evidence_Collections_for_Climate_and%20Health.pdf", "checkedAt": "2026-09-30", "scope": "LSHTM FEED actual extraction and 13-record manual subset check in 2024"},
+    {"kind": "independent_auxiliary", "url": "https://chromewebstore.google.com/detail/elicit-ai-for-scientific/fdkcnfflaanlpehcmeekdjeknnokkhno?hl=en-US", "checkedAt": "2026-09-30", "scope": "extension installs only, not main product active users"}
+  ],
+  "gateResults": {
+    "objectClear": "PASS",
+    "aiValueClear": "PASS",
+    "actuallyAvailable": "PASS",
+    "officialEvidenceComplete": "PASS",
+    "independentMarketBasis": "PASS",
+    "decisionValue": "PASS",
+    "realCompleteContent": "HOLD",
+    "uniqueAndMaintainable": "PASS"
+  },
+  "blockers": [
+    "Official logo and real product media lack documented reuse or embed permission, scope and attribution for this site.",
+    "Three-language Decision Card is an unpublished editorial draft pending independent QA and licensed media."
+  ],
+  "nextReviewBy": "2026-10-05"
+}
