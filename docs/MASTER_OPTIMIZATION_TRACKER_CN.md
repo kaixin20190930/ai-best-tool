@@ -2,6 +2,8 @@
 
 更新时间：2026-09-30
 
+2026-09-30 CL-02 `research-with-citations` 三工具只读盘点：Consensus、NotebookLM、Perplexity 三个既有 published 实体查重通过；目前仅 Consensus 的 1 条 Tool Capability/1 条 Fit 已 published，并有同 owner 的 7+6 evidence links。NotebookLM 与 Perplexity 均无 Decision profile/source/claim/关系；Google 官方已将 NotebookLM 更名 Gemini Notebook，旧目录 URL 301 至新域名。三种角色分别是学术论文检索与证据摘要、用户选定资料的溯源综合、开放网页检索与引用回答；来源链接不等于结论正确。结论 **HOLD_EVIDENCE_AND_IDENTITY**，不生成关系 SQL/manifest、不创建新 Task/工具页，不放开第二个 Task Page；当前 `/cn/tasks/research-with-citations` 为 404。详见[专项盘点](./DECISION_GRAPH_CL02_THREE_TOOL_HOLD_2026-09-30_CN.md)。生产写入 0，无 push/deploy。
+
 2026-09-30 Elicit 发布门禁再次收口：Neon `BEGIN READ ONLY` 的 `tools` 多字段匹配 0、Supabase profile 匹配 0；三语言预留壳均为 `200 + self-canonical + noindex`，sitemap 126 URL 且 Elicit 0。官方套餐、综述、API、语料、导出、隐私与限制重新回读，UNSW/LSHTM 双独立实际使用继续满足市场门槛；真实 EN/CN/TW Decision Card 已写为**未发布编辑稿**。官方 logo 与真实产品媒体缺本站可复用权利依据，内容门槛仍 HOLD，整体 `HOLD_EVIDENCE`。未生成 QA 发布候选、未注册发布器或准备数据库事务；无生产写入、页面/SEO/索引/sitemap 改动、push、deploy。详见[09-30 专项包](./ELICIT_RELEASE_GATE_RECHECK_2026-09-30_CN.md)。
 
 2026-09-29 Elicit 剩余发布门禁复核：生产只读查重为 0，双语预留页仍 `200 + self-canonical + noindex`，sitemap 无 Elicit；两项独立机构实际使用满足市场门槛，专用综述流程与 Consensus 引用问答的 Task 差异可说明。但官方价格页多组金额/额度未消歧，精确值维持 unknown；现有 Elicit 素材为占位图、缺可复用官方 logo/真实产品媒体及完成审校的三语言内容，八项中“内容真实完整” HOLD，整体维持 `HOLD_EVIDENCE`。无金额的 freemium/plan-gated 文案可作后续候选，不形成发布授权。详见[专项证据包](./ELICIT_RELEASE_GATE_RECHECK_2026-09-29_CN.md)；没有生产写入、页面/SEO/index/sitemap 修改、push 或 deploy。
