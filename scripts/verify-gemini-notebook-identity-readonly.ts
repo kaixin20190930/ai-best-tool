@@ -47,8 +47,9 @@ async function main() {
     rows = (
       await neon.query(
         `SELECT id, name, title, content, detail, url, features, status, page_quality_status,
-              next_review_date::text AS next_review_date, updated_at::text AS updated_at
-       FROM tools
+              next_review_date::text AS next_review_date, updated_at::text AS updated_at,
+              md5(to_jsonb(t)::text) AS row_md5
+       FROM tools t
        WHERE id = $1 OR lower(name) IN ('notebooklm', 'gemini-notebook', 'gemini notebook')
           OR lower(url) ~ '^https?://(notebooklm|notebook)\\.google\\.com([/?#]|$)'
           OR lower(title::text) LIKE '%gemini notebook%'
@@ -67,21 +68,19 @@ async function main() {
   assert.equal(tool.name, 'notebooklm', 'Historical slug must remain notebooklm');
   assert.equal(tool.status, 'published');
   assert.equal(tool.page_quality_status, 'monitor', 'Index gate changed');
-  assert.equal(
-    getToolIndexDecision({
-      status: tool.status,
-      pageQualityStatus: tool.page_quality_status,
-      categoryId: null,
-      imageUrl: null,
-      thumbnailUrl: null,
-      content: tool.content,
-      detail: tool.detail,
-      pricing: null,
-      tags: null,
-    }).indexable,
-    false,
-    'Index state changed',
-  );
+  const indexDecision = getToolIndexDecision({
+    status: tool.status,
+    pageQualityStatus: tool.page_quality_status,
+    categoryId: null,
+    imageUrl: null,
+    thumbnailUrl: null,
+    content: tool.content,
+    detail: tool.detail,
+    pricing: null,
+    tags: null,
+  });
+  assert.equal(indexDecision.indexable, false, 'Index state changed');
+  assert.equal(indexDecision.reason, 'indexing_paused', 'Sitemap/noindex gate changed');
 
   const db = createAdminClient();
   const [profiles, decisionProfiles, capabilities, fits, tasks, capabilityDefinitions] = await Promise.all([
@@ -199,20 +198,54 @@ async function main() {
 
   if (mode === '--baseline') {
     assert.equal(tool.url, 'https://notebooklm.google.com/');
-    assert.ok(Object.values(tool.title).every((value) => String(value).includes('NotebookLM')));
+    assert.deepEqual(tool.title, {
+      en: 'NotebookLM Source-Grounded Research',
+      cn: 'NotebookLM 资料锚定研究',
+      zh: 'NotebookLM 资料锚定研究',
+      tw: 'NotebookLM 资料锚定研究',
+    });
+    assert.equal(tool.features?.identity, undefined);
+    assert.equal(tool.next_review_date, '2026-09-20');
     assert.equal(profiles.length, 0, 'Baseline evidence changed');
   } else {
     assert.equal(tool.url, 'https://notebook.google.com/');
+    assert.deepEqual(tool.title, {
+      en: 'Gemini Notebook Source-Grounded Research',
+      cn: 'Gemini Notebook 资料锚定研究',
+      zh: 'Gemini Notebook 资料锚定研究',
+      tw: 'Gemini Notebook 資料錨定研究',
+    });
     for (const locale of ['en', 'cn', 'tw', 'zh']) {
-      assert.ok(String(tool.title?.[locale]).includes('Gemini Notebook'), `${locale} title not migrated`);
+      const detail = String(tool.detail?.[locale]);
+      assert.ok(detail.includes('Gemini Notebook') && detail.includes('NotebookLM'), `${locale} identity missing`);
+      assert.ok(detail.includes('500') && detail.includes('600'), `${locale} Ultra tiers missing`);
     }
+    assert.equal(tool.features?.identity?.currentName, 'Gemini Notebook');
     assert.equal(tool.features?.identity?.formerName, 'NotebookLM');
     assert.ok(tool.features.identity.aliases.includes('NotebookLM'));
     assert.equal(tool.features.identity.identityChangedAt, '2026-07-16');
     assert.equal(tool.features.identity.sourceUrl, identitySource);
+    assert.equal(tool.features.identity.legacyOfficialUrl, 'https://notebooklm.google.com/');
     assert.equal(
       tool.features?.editorial?.sourceUrl,
       'https://support.google.com/gemininotebook/answer/16164461?hl=en',
+    );
+    assert.equal(tool.features.editorial.reviewedAt, '2026-09-30');
+    assert.ok(
+      ['en', 'cn', 'tw', 'zh'].every((locale) =>
+        String(tool.features.editorial.summary?.[locale]).includes('Gemini Notebook'),
+      ),
+    );
+    assert.ok(
+      ['en', 'cn', 'tw', 'zh'].every((locale) =>
+        String(tool.features.trialTemplate?.targetOutcome?.[locale]).includes('Gemini Notebook'),
+      ),
+    );
+    assert.ok(tool.features.marketValidation?.evidenceUrls?.includes(identitySource));
+    assert.ok(
+      !tool.features.marketValidation?.evidenceUrls?.includes(
+        'https://support.google.com/notebooklm/answer/16164461?hl=en',
+      ),
     );
     assert.ok(Date.parse(tool.next_review_date) > now, 'Directory review expired');
   }
@@ -282,6 +315,10 @@ async function main() {
           title: tool.title,
           status: tool.status,
           pageQualityStatus: tool.page_quality_status,
+          updatedAtUtc: tool.updated_at,
+          rowMd5: tool.row_md5,
+          indexDecision: indexDecision.reason,
+          sitemapEligible: indexDecision.indexable,
           nextReviewDate: tool.next_review_date,
           editorial: tool.features?.editorial,
           identity: tool.features?.identity || null,

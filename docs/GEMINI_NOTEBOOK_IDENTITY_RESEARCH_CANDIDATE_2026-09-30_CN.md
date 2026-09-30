@@ -1,6 +1,6 @@
 # Gemini Notebook 身份迁移与 research-with-citations 候选包
 
-状态：**未执行；不得视为已上线或发布批准**。2026-09-30 只读核验；2026-10-01 回退了先行上线的 Gemini Notebook 可见文案，以保持生产页面与旧目录记录一致。此包仅为未来迁移候选。目录实体在 Neon，Decision 与证据在 Supabase，两个数据库没有跨库原子事务，Neon 目录写入也没有可核验的 Owner 身份边界。因此提供字段级 Owner 编辑包，不提供可绕开 Owner 审核的直连写库脚本。任何生产编辑前先留存精确行快照，完成后运行本文末尾的只读 verifier。
+状态：**Neon 第一阶段 Owner 手工 SQL 已备妥，未执行；不得视为已上线或发布批准**。2026-09-30 只读核验；2026-10-01 回退了先行上线的 Gemini Notebook 可见文案，以保持生产页面与旧目录记录一致。目录实体在 Neon，Decision 与证据在 Supabase，两个数据库没有跨库原子事务。本次仅交付 [Neon 前向 SQL](../db/neon/20261001_owner_gemini_notebook_identity.sql) 与 [精确回滚 SQL](../db/neon/20261001_owner_gemini_notebook_identity_rollback.sql)；两者默认预检并 `ROLLBACK`，须 Owner 私下保存快照、填写新鲜时间戳/全行哈希及明确闸门后，才可手工改为 `COMMIT`。SQL 闸门是操作确认和并发保护，不能证明执行者身份；Neon 控制台/数据库角色授权仍由 Owner 管理。本次不生成或写入任何 Supabase profile、claim 或关系。
 
 ## 1. 生产基线与身份决策
 
@@ -25,7 +25,7 @@ Google [2026-07-16 更名公告](https://blog.google/innovation-and-ai/products/
 - 待目录身份迁移完成后，指南中的可见操作标签才能改为 **Gemini Notebook**，链接仍指向 `/ai/notebooklm`。研究比较页当前使用未接入的 `quickStarts` 变量，不能把那里的字符串变更当成上线展示；Owner 应在现有产品数据字段完成身份更新后验证实际渲染。
 - `tools.content` 四语言当前未含旧名，可保留描述语义；Owner 检查可见摘要后再调整。`tools.detail` 四语言都含旧名，应把作为当前品牌的用法改为“Gemini Notebook（原 NotebookLM）”，首次出现之后用“Gemini Notebook”。不要全局替换历史更名事实。
 - 旧 detail 的“不是开放网页搜索引擎 / 不能发现网页”一类绝对表述须改成“可发现 Web/Drive 来源，用户选择导入；回答围绕当前 notebook 已选来源”。Deep Research 也能发现并导入资料，因此不能声称完全没有网页发现能力。[来源与发现说明](https://support.google.com/gemininotebook/answer/16215270?hl=en)
-- 套餐数字须以 [现行套餐页](https://support.google.com/gemininotebook/answer/16213268?hl=en) 为准：Standard/Plus/Pro/Ultra 的 notebook 与来源额度分层；另有 [2026-09 起的计算量用量限制](https://support.google.com/gemininotebook/answer/17670842?hl=en)，不能把每日 chat 数误写成唯一限制。保留地区、年龄、账户和 Workspace 管理员开放条件。[产品帮助](https://support.google.com/gemininotebook/answer/16164461?hl=en)
+- 套餐数字须以 [现行套餐页](https://support.google.com/gemininotebook/answer/16213268?hl=en) 为准：每 notebook 来源上限 Standard 50、Plus 100、Pro 300、Ultra 20 TB 500、Ultra 30 TB 600；另有 [2026-09 起的计算量用量限制](https://support.google.com/gemininotebook/answer/17670842?hl=en)，不能把每日 chat 数误写成唯一限制。保留地区、年龄、账户和 Workspace 管理员开放条件。[产品帮助](https://support.google.com/gemininotebook/answer/16164461?hl=en)
 - `features.trialTemplate.targetOutcome` 四语言中的当前产品名改为 Gemini Notebook；`features.marketValidation.evidenceUrls` 中旧 Help URL 换成现行 Help URL 并加入更名公告。其他评分与市场结论不因更名自动提高。
 - 更新 `features.editorial.summary` 四语言以覆盖更名、来源范围、引文、套餐与隐私边界；用户可见 detail 保留“引用可回查仍需人工核对、资料集可能不完整、本站未实测”的限定。
 
@@ -73,11 +73,12 @@ Owner 在 Supabase 先建一个 `product_intelligence_profiles`：`owner_type='t
 
 ## 4. Owner 操作、幂等与回滚
 
-1. **预检：**运行 `--baseline`；确认只一条固定 ID、`name='notebooklm'`、旧官网、`published/monitor`、四语言 title、无 Notebook Decision 证据。将这条 Neon `tools` 原行、相关 Supabase 行和更新时间保存为私有快照。若任一字段已变化，停止并重新审阅差异。
-2. **目录编辑：**Owner 只更新固定 ID 的上表字段和四语言 detail / features 语句。WHERE 同时约束固定 ID、旧 `name`、旧官网、`status='published'`、`page_quality_status='monitor'` 与预检 `updated_at`；更新行数必须恰为 1。重试时如果字段已是目标值则只复验，不重复追加 identity/history。不要改 `name`, `status`, `page_quality_status`、路由、canonical 或 sitemap。
-3. **证据编辑：**用上述 owner ID 做唯一 profile 键；来源用 `(profile_id,url)` 去重，claim 用 `(profile_id,claim_key)` 查重并拒绝多个活动版本。逐条官方原文复核和 reviewer 审核后，再建立 draft Decision profile、两条 draft Capability、一条 draft Fit 和同 owner links。来源或审核缺失即停止，不通过改 status 掩盖缺口。
-4. **回读：**目录字段完成后运行 `--identity`；所有证据和 reviewed 关系完成后运行 `--current`。命令只读；失败即保持 HOLD，不发布 Task Page。
-5. **回滚：**在尚未建立 Decision links 时，Owner 以固定 ID 与当前 `updated_at` 作条件，把 `title`, `url`, `detail`, `features`, `next_review_date` 精确恢复为步骤 1 私有快照；不要删除工具或改 slug。若已建立证据/关系，先按依赖逆序撤销 Notebook 的 draft/reviewed links、Fit/Capability/Decision profile，再处理该 owner 的 claims/sources/profile；保留审计快照和已确认的 Google 更名事实。任何行数或归属不符都停止人工核查。回滚后 `--baseline` 应再次通过。
+1. **预检与私有备份：**运行 `--baseline`，记录输出的 `updatedAtUtc` 和 `rowMd5`。在 Neon 私有 SQL 会话原样运行前向 SQL，保持三行 `SET LOCAL` 注释与结尾 `ROLLBACK`；预期 `private_rollback_snapshot` 为一条 JSON，通知为 `PRECHECK PASS; no write`。将完整 JSON、执行时间、审阅人和变更票据保存在 Owner 的私有审计位置。不得新建无 RLS 的公开备份表，也不要把快照提交到仓库。若预检或基线失败即 HOLD。
+2. **Neon 手工提交：**Owner 在新鲜 `--baseline` 后复制前向 SQL，填写三项 `SET LOCAL`：精确 `updatedAtUtc`、全行 `rowMd5`、文件内完整的 Owner gate 句；仅在审阅私有快照与目标文案后将最后一行改为 `COMMIT`，以单事务运行。SQL 固定 ID、旧 URL/标题、状态、review date、旧 editorial、时间戳及全行哈希；行数必须等于 1，任一差异抛错中止。重复执行仅在目标全行时间戳/哈希也匹配时无操作。保存通知中的 post timestamp/hash。不要改 `name`、路由、canonical 或 sitemap。
+3. **回读：**立即运行 `--identity`，核对只有一个实体、旧 slug、四语言现名/官网、identity/editorial/trialTemplate/marketValidation、`monitor` 导致的 noindex/sitemap 排除；`updatedAtUtc` 和 `rowMd5` 必须与步骤 2 的 post notice 一致。本阶段不运行 `--current` 作为通过门禁，因 Supabase Decision 尚未建立。
+4. **精确回滚：**仅在本阶段没有建立 Decision links 时，Owner 将步骤 1 的完整私有 JSON 粘贴到回滚 SQL 的 `set_config`、填写步骤 2 **原始 post notice** 的时间戳/哈希和完整 rollback gate；新鲜 `--identity` 回读必须再次匹配该 post notice，不能用发生漂移后的新哈希代替。先原样运行默认 `ROLLBACK` 预检，再在审阅后仅将结尾改成 `COMMIT`。SQL 要求当前目标值、时间戳及全行哈希完全相符，恢复原 `title/url/detail/features/next_review_date/updated_at`，并再次对比原全行哈希；任一不符即 HOLD。回滚后 `--baseline` 应通过。若后续另行建立了 Supabase 证据/关系，须先按独立审核计划处理跨库依赖，不能假装存在跨库原子回滚。
+
+专项本地事务测试：`pnpm exec tsx scripts/test-gemini-notebook-identity-sql.ts`（临时 PostgreSQL 集群，不连接生产）。
 
 只读命令：
 
