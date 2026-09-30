@@ -1,0 +1,107 @@
+{
+  "candidate": "Avoma",
+  "slug": "avoma",
+  "checkedAt": "2026-09-30",
+  "reviewer": "Codex",
+  "baselineCommit": "2dcea72b12406db674704306a3da94cee68da73f",
+  "decision": "HOLD_EVIDENCE",
+  "publicReleaseApproved": false,
+  "indexReleaseApproved": false,
+  "ifLaterReleased": "published + monitor/noindex; index requires separate review",
+  "productionReadOnly": {
+    "transaction": "BEGIN READ ONLY; SELECT; ROLLBACK",
+    "totalTools": 68,
+    "publishedTools": 53,
+    "avomaMatches": 0,
+    "matchedFields": ["name", "title", "url", "tags", "features"],
+    "toolSlugColumnExists": false,
+    "routeAliasPresent": false,
+    "enShell": "200; self-canonical; noindex, follow; unavailable H1",
+    "cnShell": "200; self-canonical; noindex, follow; unavailable H1",
+    "twShell": "not checked",
+    "robotsTxt": "200; Allow: /; sitemap declared",
+    "sitemapXml": "200; 126 loc; 0 Avoma matches"
+  },
+  "coreSources": [
+    {
+      "kind": "official",
+      "url": "https://www.avoma.com/pricing",
+      "checkedAt": "2026-09-30",
+      "scope": "Recorder plans, CI/RI add-on billing, recording and meeting features, retention and CRM feature labels; conflicting legacy/new tables"
+    },
+    {
+      "kind": "official",
+      "url": "https://help.avoma.com/avoma-pricing-recorder-seats-free-users-add-ons",
+      "checkedAt": "2026-09-30",
+      "scope": "Paid Recorder versus free collaborator, same base plan, per-user add-ons, billing-cycle and trial conditions"
+    },
+    {
+      "kind": "official",
+      "url": "https://help.avoma.com/what-do-i-get-in-the-organization-plan",
+      "checkedAt": "2026-09-30",
+      "scope": "Organization $39 annual-equivalent/$49 monthly conflicts with pricing comparison table $29/$39"
+    },
+    {
+      "kind": "official",
+      "url": "https://help.avoma.com/integration-with-salesforce",
+      "checkedAt": "2026-09-30",
+      "scope": "Paid Recorder, Salesforce admin authorization and Enhanced Notes, non-private auto sync, private manual sync; no exact base-tier entitlement"
+    },
+    {
+      "kind": "official",
+      "url": "https://help.avoma.com/consent-policy-for-local-recording-avoma-desktop-app",
+      "checkedAt": "2026-09-30",
+      "scope": "Bot-free local capture uploads to Avoma server; recorder obtains consent; no local audio copy after transmission"
+    },
+    {
+      "kind": "official",
+      "url": "https://help.avoma.com/getting-started-with-avoma-mcp-connector",
+      "checkedAt": "2026-09-30",
+      "scope": "Admin publication, individual account connection, meeting/CRM-context reads and meeting-outcome/privacy writes; tier and role scope unknown"
+    },
+    {
+      "kind": "independent_strong_use",
+      "url": "https://www.g2.com/sellers/avoma",
+      "checkedAt": "2026-09-30",
+      "visibleScope": "One Avoma product, 1,365 reviews, 4.6/5; September and August 2026 validated verified-current-user reviews; self-selected reviews do not show active or paying seats"
+    },
+    {
+      "kind": "independent_auxiliary",
+      "url": "https://chromewebstore.google.com/detail/avoma/llppmekagejbkddkfaccppnjgipglgne",
+      "checkedAt": "2026-09-30",
+      "visibleScope": "Avoma Chrome extension, 3,000 users, 5.0/5 from 8 ratings; extension count is not main-product adoption"
+    }
+  ],
+  "carriedForwardFrom20260928": [
+    "https://help.avoma.com/meeting-privacy",
+    "https://help.avoma.com/recording-consent-compliance",
+    "https://help.avoma.com/downloading-a-meeting",
+    "https://help.avoma.com/do-you-use-my-data-to-train-your-models"
+  ],
+  "unknown": [
+    "Organization and Enterprise effective prices, billing and checkout scope",
+    "Exact CRM entitlement by Startup/Organization/Enterprise and account configuration",
+    "Strict consent enforcement tiers and defaults",
+    "Actual retention defaults, deletion SLA and enterprise policy scope",
+    "MCP and download plan, role and third-party-data permissions",
+    "Reusable license for official logo and actual product media"
+  ],
+  "gateResults": {
+    "objectClear": "PASS",
+    "aiValueClear": "PASS",
+    "actuallyAvailable": "PASS",
+    "officialEvidenceComplete": "HOLD",
+    "independentMarketBasis": "PASS",
+    "decisionValue": "PASS",
+    "realCompleteContent": "HOLD",
+    "uniqueAndMaintainable": "PASS"
+  },
+  "blockers": [
+    "Resolve Organization/Enterprise price conflicts through a reproducible checkout or vendor clarification; do not choose the favorable number.",
+    "Confirm CRM sync, two-way updates, MCP/download and strict-consent entitlement by plan, role, admin and CRM permissions.",
+    "Confirm retention defaults, policy tier, deletion/export limits and contract-level training/data processing scope.",
+    "Document reuse rights for an official Avoma logo and real product media; finish reviewed English, Simplified Chinese and Traditional Chinese decision content.",
+    "Repeat production identity, alias, Guide/Comparison intent and locale/robots/sitemap read-only checks on any later release date."
+  ],
+  "nextReviewDate": "2026-10-05"
+}

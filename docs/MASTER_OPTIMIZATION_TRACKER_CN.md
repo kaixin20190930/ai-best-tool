@@ -498,6 +498,11 @@ query、Top 20 page、已抓取未编入索引与软 404 数量。
 - 生产 `tools` 的只读姓名/URL/标题查重两项均为 0；两项英中预留 URL 均是 `200 + self-canonical + noindex` 的不可用壳，sitemap 匹配 0。下次发布前须重查别名/实体并复用唯一 canonical。
 - [N1 官方证据审计与候选包](./ELICIT_AVOMA_N1_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)记录官方来源、真实限制、`unknown`、Capability/Constraint/Evidence 建议及后续门禁；[14 项候选台账](./MATURE_CANDIDATE_BUFFER_2026-09-20_CN.md)已更新 readiness。没有生产实体、Decision Graph 关系、页面、sitemap、index、数据库或自动化写入。
 
+## 2026-09-30 Avoma 剩余发布门禁
+
+- 唯一对象 Avoma 仍为 **`HOLD_EVIDENCE`，6 PASS / 2 HOLD**；[证据包与机器清单](./AVOMA_RELEASE_GATE_RECHECK_2026-09-30_CN.md)按 8 个核心页面复核。G2 的 Avoma 产品当前用户评论为强采用，Chrome 商店扩展计数为独立辅助，市场门槛已通过。Organization 定价比较表 `$29/$39` 与帮助页 `$39/$49` 冲突；Enterprise 页内旧/新报价并存，CRM 套餐资格、严格同意与留存细节仍影响购买判断。无金额文案不能解除这些权益阻塞；官方证据门槛 HOLD。仓库无可核验授权的 Avoma 真实媒体和三语言完成稿，内容门槛 HOLD。
+- 生产只读 `tools` 共 68 条、Avoma name/title/domain/tags/features 命中 0；英中 `/ai/avoma` 均为 `200 + self-canonical + noindex` 的不可用壳；`robots.txt` 200，sitemap 126 URL、Avoma 0。`meeting-notes` Guide/Comparison 意图与候选产品详情分离。仅更新本地证据、候选台账与主追踪；未创建实体、关系、页面、SEO/sitemap/index 变更或生产写入。公开/索引批准均 false，未进入发布 preflight。
+
 ## 2026-09-28 N2 候选官方深审
 
 - Zapier Agents 与 Ideogram 官方证据深审完成，结论均为 `HOLD_EVIDENCE`，没有进入发布 preflight。Zapier 官方 09-07 迁移指南将独立 Agents 导向 AI by Zapier，旧 activity 定价/Enterprise FAQ 与新 task 计费和人审控制同时存在，独立产品的长期 canonical 与账户实际权益待消歧；不能借 Zapier 母品牌、Zaps、Chatbots 或 AI Actions 的能力和采用信号。Ideogram 已可界定图像生成、文字版面、编辑/Canvas、批量及独立 API 的边界与商用输出条款，但免费周额度资格、编辑 credit 路径、导出/水印和实际文字质量仍需核实；不能把官方示例当成功率证明。
