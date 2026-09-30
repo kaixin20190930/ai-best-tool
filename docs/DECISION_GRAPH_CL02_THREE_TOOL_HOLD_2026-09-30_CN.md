@@ -32,3 +32,9 @@ Task `527fe8b7-c171-4c50-ab1f-9404d7536e7c` 为 active；两条 required Task Ca
 4. **页面门禁：** 只有三条真实 published Fit、完整证据与独立页面审批均通过后，才另案评估第二个 Task Page；当前 404 不变，未改注册表、SEO、metadata、sitemap 或 Decision Assistant。
 
 本轮生产写入 **0**，没有 push/deploy。HOLD 也不表示三个工具没有产品能力，只表示目前不能据此建立可发布的三工具 Decision 关系。
+
+## 4. 只读 verifier QA 修复（追加提交）
+
+首版 verifier 的数量断言不足以拦截已发布关系降级、跨 owner link 或过期 claim。修复后按固定 ID 校验唯一 Consensus Tool Capability/Fit 均为 `published`，两条 Task Capability 已审核且未过期；精确六个 research claim 必须 `verified/current`，有 `verified_by`、`verified_at`、有效 `review_due_at`，且 `expires_at` 未到期。全部 7 条 Tool link 与 6 条 Fit link 必须指向六条同 Consensus profile、同官方 source 的 claim，四类 Tool 与两类 Fit purpose 均存在。profile 需 ready、owner 与域名匹配、复核未过期。读事务和 GET/HEAD 限制仍由原包装器维持；输出 `productionWrites=0`。
+
+修复后生产只读 verifier、`test:decision-evidence`、`test:decision-review-gate`、`test:decision-task-page`、`pnpm exec tsc --noEmit` 与 `git diff --check` 均 PASS。此修复没有改变 HOLD 结论或任何生产数据。

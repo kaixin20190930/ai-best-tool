@@ -9,6 +9,18 @@ loadEnvConfig(process.cwd());
 
 const names = ['consensus', 'notebooklm', 'perplexity'];
 const taskId = '527fe8b7-c171-4c50-ab1f-9404d7536e7c';
+const consensusId = 'f15873ae-c6ef-4f0a-b811-b40c2aba76ab';
+const consensusProfileId = 'b72150af-7c8e-40dc-81f7-b41375afa6f4';
+const consensusToolCapabilityId = '5e6f6ba6-8587-4c59-977a-ed74672dee5c';
+const consensusFitId = 'd52cc53b-6e5f-4b0b-809b-140076d4d7d2';
+const researchClaimKeys = [
+  'consensus:research:paper-search-2026-09',
+  'consensus:research:citation-grounding-2026-09',
+  'consensus:research:fulltext-conditions-2026-09',
+  'consensus:research:papers-plan-2026-09',
+  'consensus:research:fulltext-chat-mode-2026-09',
+  'consensus:research:manual-review-2026-09',
+];
 
 async function read(label: string, request: PromiseLike<{ data: any[] | null; error: { message: string } | null }>) {
   const { data, error } = await request;
@@ -46,7 +58,7 @@ async function main() {
       'task capabilities',
       db
         .from('task_capabilities')
-        .select('task_id,capability_id,importance,status,updated_at,review_due_at')
+        .select('task_id,capability_id,importance,status,updated_at,reviewed_by,reviewed_at,review_due_at')
         .eq('task_id', taskId),
     ),
     read(
@@ -60,21 +72,23 @@ async function main() {
       'tool capabilities',
       db
         .from('tool_capabilities')
-        .select('id,tool_id,capability_id,status,support_level,availability,updated_at,review_due_at')
+        .select(
+          'id,tool_id,capability_id,status,support_level,availability,updated_at,reviewed_by,reviewed_at,review_due_at',
+        )
         .in('tool_id', ids),
     ),
     read(
       'fits',
       db
         .from('tool_task_fits')
-        .select('id,tool_id,task_id,status,fit_level,updated_at,review_due_at')
+        .select('id,tool_id,task_id,status,fit_level,updated_at,reviewed_by,reviewed_at,review_due_at')
         .eq('task_id', taskId),
     ),
     read(
       'profiles',
       db
         .from('product_intelligence_profiles')
-        .select('id,owner_type,owner_id,canonical_domain,profile_status,updated_at')
+        .select('id,owner_type,owner_id,canonical_domain,profile_status,next_review_at,updated_at')
         .in('owner_id', ids),
     ),
   ]);
@@ -93,7 +107,7 @@ async function main() {
           db
             .from('product_intelligence_claims')
             .select(
-              'id,profile_id,source_id,claim_key,verification_status,conflict_status,invalidated_at,review_due_at',
+              'id,profile_id,source_id,source_url,claim_key,verification_status,conflict_status,invalidated_at,verified_at,verified_by,review_due_at,expires_at',
             )
             .in('profile_id', profileIds),
         ),
@@ -119,28 +133,73 @@ async function main() {
   assert.equal(tasks[0].slug, 'research-with-citations');
   assert.equal(tasks[0].status, 'active');
   assert.equal(capabilities.length, 2, 'Existing Task Capability identity changed');
+  assert.deepEqual(capabilities.map((row) => row.slug).sort(), ['citation-traceability', 'research-discovery']);
+  assert.ok(capabilities.every((row) => row.status === 'active'));
   assert.equal(taskCapabilities.length, 2, 'Existing Task Capability count changed');
-  assert.ok(taskCapabilities.every((row) => row.status === 'published'));
-  assert.equal(
-    toolCapabilities.filter((row) => capabilities.some((capability) => capability.id === row.capability_id)).length,
-    1,
+  const now = Date.now();
+  const reviewedCurrent = (row: any) =>
+    Boolean(row.reviewed_by) &&
+    Number.isFinite(Date.parse(row.reviewed_at)) &&
+    Date.parse(row.reviewed_at) <= now &&
+    Date.parse(row.review_due_at) > now;
+  assert.ok(taskCapabilities.every((row) => row.status === 'published' && reviewedCurrent(row)));
+  const relevantToolCapabilities = toolCapabilities.filter((row) =>
+    capabilities.some((capability) => capability.id === row.capability_id),
   );
-  assert.equal(fits.filter((row) => ids.includes(row.tool_id)).length, 1);
+  assert.equal(relevantToolCapabilities.length, 1);
+  assert.equal(relevantToolCapabilities[0].id, consensusToolCapabilityId);
+  assert.equal(relevantToolCapabilities[0].tool_id, consensusId);
+  assert.equal(relevantToolCapabilities[0].capability_id, '50288b6e-a968-4bcf-9e55-911df203e0c7');
+  assert.equal(relevantToolCapabilities[0].status, 'published');
+  assert.ok(reviewedCurrent(relevantToolCapabilities[0]), 'Consensus Tool Capability review expired or absent');
+  assert.equal(fits.length, 1, 'Research Task Fit baseline changed');
+  const relevantFits = fits.filter((row) => ids.includes(row.tool_id));
+  assert.equal(relevantFits.length, 1);
+  assert.equal(relevantFits[0].id, consensusFitId);
+  assert.equal(relevantFits[0].tool_id, consensusId);
+  assert.equal(relevantFits[0].status, 'published');
+  assert.ok(reviewedCurrent(relevantFits[0]), 'Consensus Fit review expired or absent');
   assert.equal(profiles.length, 1, 'Decision evidence profile baseline changed');
-  assert.equal(profiles[0].owner_id, 'f15873ae-c6ef-4f0a-b811-b40c2aba76ab');
+  assert.equal(profiles[0].id, consensusProfileId);
+  assert.equal(profiles[0].owner_type, 'tool');
+  assert.equal(profiles[0].owner_id, consensusId);
+  assert.equal(profiles[0].canonical_domain, 'consensus.app');
+  assert.equal(profiles[0].profile_status, 'ready');
+  assert.ok(!profiles[0].next_review_at || Date.parse(profiles[0].next_review_at) > now);
   assert.equal(toolLinks.length, 7);
   assert.equal(fitLinks.length, 6);
-  assert.ok(
-    claims
-      .filter((row) => row.claim_key.startsWith('consensus:research:'))
-      .every(
-        (row) =>
-          row.verification_status === 'verified' &&
-          row.conflict_status === 'none' &&
-          !row.invalidated_at &&
-          Date.parse(row.review_due_at) > Date.now(),
-      ),
+  const currentClaims = claims.filter((row) => researchClaimKeys.includes(row.claim_key));
+  assert.deepEqual(currentClaims.map((row) => row.claim_key).sort(), [...researchClaimKeys].sort());
+  assert.equal(currentClaims.length, 6, 'Expected six current/verified Consensus research claims');
+  const claimById = new Map(currentClaims.map((row) => [row.id, row]));
+  const sourceById = new Map(sources.map((row) => [row.id, row]));
+  for (const claim of currentClaims) {
+    assert.equal(claim.profile_id, consensusProfileId, 'Consensus research claim owner changed');
+    assert.equal(claim.verification_status, 'verified');
+    assert.equal(claim.conflict_status, 'none');
+    assert.equal(claim.invalidated_at, null);
+    assert.ok(claim.verified_by, 'Verified claim lacks reviewer');
+    assert.ok(Number.isFinite(Date.parse(claim.verified_at)) && Date.parse(claim.verified_at) <= now);
+    assert.ok(Date.parse(claim.review_due_at) > now, 'Verified claim review expired');
+    assert.ok(!claim.expires_at || Date.parse(claim.expires_at) > now, 'Verified claim validity expired');
+    const source = sourceById.get(claim.source_id);
+    assert.ok(source && source.profile_id === consensusProfileId && source.url === claim.source_url);
+    assert.ok(['official', 'official_docs'].includes(source.source_type));
+  }
+  for (const link of toolLinks) {
+    assert.equal(link.tool_capability_id, consensusToolCapabilityId);
+    assert.ok(claimById.has(link.claim_id), 'Tool Capability link has missing, stale, or cross-owner claim');
+  }
+  for (const link of fitLinks) {
+    assert.equal(link.fit_id, consensusFitId);
+    assert.ok(claimById.has(link.claim_id), 'Fit link has missing, stale, or cross-owner claim');
+  }
+  assert.equal(new Set([...toolLinks, ...fitLinks].map((link) => link.claim_id)).size, 6);
+  assert.deepEqual(
+    new Set(toolLinks.map((row) => row.purpose)),
+    new Set(['support', 'availability', 'plan', 'limitation']),
   );
+  assert.deepEqual(new Set(fitLinks.map((row) => row.purpose)), new Set(['fit', 'limitation']));
   const profileById = new Map(profiles.map((row) => [row.id, row]));
   console.log(
     JSON.stringify(
