@@ -1,6 +1,6 @@
 # 收录与搜索质量主计划
 
-更新时间：2026-09-29
+更新时间：2026-09-30
 
 2026-09-29 Elicit 剩余发布门禁复核：生产只读查重为 0，双语预留页仍 `200 + self-canonical + noindex`，sitemap 无 Elicit；两项独立机构实际使用满足市场门槛，专用综述流程与 Consensus 引用问答的 Task 差异可说明。但官方价格页多组金额/额度未消歧，精确值维持 unknown；现有 Elicit 素材为占位图、缺可复用官方 logo/真实产品媒体及完成审校的三语言内容，八项中“内容真实完整” HOLD，整体维持 `HOLD_EVIDENCE`。无金额的 freemium/plan-gated 文案可作后续候选，不形成发布授权。详见[专项证据包](./ELICIT_RELEASE_GATE_RECHECK_2026-09-29_CN.md)；没有生产写入、页面/SEO/index/sitemap 修改、push 或 deploy。
 
@@ -47,6 +47,8 @@ Otter.ai、Fireflies 的 3 条既有 published meeting fit 保持原 status、�
 2026-09-23 DIFF-07 只读收口与独立 QA 完成，未自动发布关系：生产回读为 6 Task、12 Capability、12 Task Capability、7 Tool Capability、7 Tool Task Fit，其中 3 条 fit 为既有 published。技术专项、TypeScript 及已完成的 DIFF-06 build/生产 SEO smoke 通过，但内容 QA 仅将 5 条 Task Capability 留作逐条编辑候选；其余 7 条 Tool Capability 与 4 条 reviewed fit 因支持范围、套餐限制或适配理由不足全部 hold。3 条既有 meeting-notes fit 的 `reviewed_by` 为 NULL，需核实历史编辑复核；现有门禁并未因此判为失效。所有 Task Page 继续关闭。下一步优先修复 meeting-notes 组，重新核对临近到期的官方来源，再做独立内容 QA 与编辑批准；不得为覆盖率制造关系。详见 [DIFF-07 发布审计](./DECISION_GRAPH_DIFF07_RELEASE_AUDIT_2026-09-23_CN.md)。DIFF-08 Decision Assistant 仍为条件阻塞。
 
 2026-09-25 DIFF-07 meeting-notes 整改已在生产执行并通过总控独立只读验收：2/2 Task Capability、3/3 Tool Capability 为 published/current，3/3 既有 fit 为 published/current 且有 reviewer；6/6 官方 source 为 current，6/6 claim 为 verified/current，Capability 证据覆盖 support/availability/plan/limitation，fit 证据覆盖 fit/limitation。Decision foundation 与 graph seed verifier 均 PASS（后者回读 8 条 published 关系），生产 SEO smoke PASS，sitemap 共 126 个 URL。`/cn/tasks/meeting-notes` 仍为 404，sitemap Task URL 为 0；Task Page 注册表继续关闭，未放开 URL、`continue_index` 或工具索引。**仅 meeting-notes 组完成本次整改**；DIFF-07 其余 cluster 转入编辑整改与独立验收，DIFF-08 Decision Assistant 继续 blocked。详见 [DIFF-07 发布审计](./DECISION_GRAPH_DIFF07_RELEASE_AUDIT_2026-09-23_CN.md)。
+
+2026-09-30 meeting-notes 首个 Task Page 门禁复核确认：生产两条 Task Capability 当前均为 required，因此服务端 required/preferred 完整性读模型返回不合格；Task Page 注册表未放行。总控编辑决策将 `meeting-summary-and-actions` 保持 required，将 `meeting-transcription` 作为 preferred：核心结果仍是摘要与行动项，原生转录属于优选输入能力，允许导入既有录音或转录文本的场景。已新增 fail-closed、幂等、仅供 Owner 手工执行的最小 SQL 候选，并修正生产 verifier 为按三个 Fit 分别验证至少一条同 owner verified/current 证据，同时保留 fit/limitation purpose 覆盖。**SQL 尚未执行，数据库写入为 0；批准注册表仍为空，Task Page 继续 404，sitemap Task URL 仍为 0。** Owner 执行后必须重新生产只读回读并通过独立验收，方可另案考虑页面批准；本候选不授权 sitemap、索引、metadata/canonical 或 Decision Assistant 变更。详见 [DIFF-07 发布审计](./DECISION_GRAPH_DIFF07_RELEASE_AUDIT_2026-09-23_CN.md)。
 
 2026-09-25 剩余五个 Task cluster 的编辑整改方案已通过 CL-00 独立 review（QA_PASS）；下一步为 CL-01 Admin closure。执行顺序、Admin 常规编辑闭环、逐组原子发布和 Task Page 独立门禁见 [剩余 cluster 整改计划](./DECISION_GRAPH_REMAINING_CLUSTER_REMEDIATION_PLAN_CN.md)。本条仅链接计划，不代表任何新增关系获批或发布。
 

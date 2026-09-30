@@ -1,14 +1,10 @@
 import assert from 'node:assert/strict';
-
 import { loadEnvConfig } from '@next/env';
 import { Client } from 'pg';
 
-import { createAdminClient } from '../lib/supabase/admin';
-import {
-  decisionEventPilotPages,
-  evaluateDecisionEventPilot,
-} from '../lib/analytics/decisionEvents/governance';
+import { decisionEventPilotPages, evaluateDecisionEventPilot } from '../lib/analytics/decisionEvents/governance';
 import { getDatabaseConnectionString } from '../lib/database/connection';
+import { createAdminClient } from '../lib/supabase/admin';
 
 loadEnvConfig(process.cwd());
 
@@ -24,6 +20,16 @@ const claimIds = [
 ] as const;
 const taskId = 'e9c64181-9cad-40c5-979e-3af4bd9cc630';
 const baseUrl = (process.env.SEO_BASE_URL || 'https://aibesttool.com').replace(/\/$/, '');
+const now = Date.now();
+
+function isCurrentReview(reviewedAt: unknown, reviewDueAt: unknown) {
+  return (
+    typeof reviewedAt === 'string' &&
+    Date.parse(reviewedAt) <= now &&
+    typeof reviewDueAt === 'string' &&
+    Date.parse(reviewDueAt) > now
+  );
+}
 
 async function routeEvidence(path: string) {
   const response = await fetch(`${baseUrl}${path}`, { redirect: 'manual' });
@@ -68,7 +74,7 @@ async function main() {
       .in('tool_id', Object.values(toolIds)),
     supabase
       .from('tool_task_fits')
-      .select('id, tool_id, task_id, fit_level, status, reviewed_at, review_due_at')
+      .select('id, tool_id, task_id, fit_level, status, reviewed_at, review_due_at, reviewed_by')
       .eq('task_id', taskId)
       .in('tool_id', Object.values(toolIds)),
     supabase
@@ -93,9 +99,24 @@ async function main() {
   assert.equal(taskRows[0].id, taskId);
   assert.equal(taskRows[0].status, 'active');
   assert.equal(profiles.length, 3, 'Pilot requires three decision profiles');
-  assert.ok(profiles.every((row) => row.editorial_status === 'published' && row.reviewed_at));
+  assert.ok(
+    profiles.every(
+      (row) => row.editorial_status === 'published' && isCurrentReview(row.reviewed_at, row.review_due_at),
+    ),
+    'Pilot decision profiles must be published and current',
+  );
   assert.equal(fits.length, 3, 'Pilot requires three meeting-notes task fits');
-  assert.ok(fits.every((row) => row.status === 'published' && row.reviewed_at));
+  assert.deepEqual(
+    new Set(fits.map((row) => row.tool_id)),
+    new Set(Object.values(toolIds)),
+    'Pilot fits must cover the three exact tools',
+  );
+  assert.ok(
+    fits.every(
+      (row) => row.status === 'published' && row.reviewed_by && isCurrentReview(row.reviewed_at, row.review_due_at),
+    ),
+    'Pilot fits must be published, current, and reviewer-backed',
+  );
   assert.equal(profileLinks.length, 3, 'Each Pilot profile requires one evidence link');
   assert.equal(claims.length, 3, 'Each Pilot tool requires one verified current claim');
   assert.ok(
@@ -104,7 +125,8 @@ async function main() {
         claim.verification_status === 'verified' &&
         claim.conflict_status === 'none' &&
         claim.invalidated_at === null &&
-        claim.review_due_at,
+        typeof claim.review_due_at === 'string' &&
+        Date.parse(claim.review_due_at) > now,
     ),
   );
 
@@ -114,7 +136,63 @@ async function main() {
     .select('fit_id, claim_id, purpose')
     .in('fit_id', fitIds);
   if (fitLinksError) throw new Error(fitLinksError.message);
-  assert.equal(fitLinks.length, 3, 'Each Pilot task fit requires one evidence link');
+  assert.ok(fitLinks.length >= fits.length, 'Pilot task fits require nonempty evidence links');
+  assert.ok(
+    fitLinks.every((link) => fitIds.includes(link.fit_id)),
+    'Fit evidence links must stay inside the three Pilot fits',
+  );
+
+  const fitClaimIds = Array.from(new Set(fitLinks.map((link) => link.claim_id)));
+  const { data: fitClaims = [], error: fitClaimsError } = await supabase
+    .from('product_intelligence_claims')
+    .select(
+      'id, profile_id, verification_status, conflict_status, invalidated_at, verified_at, review_due_at, expires_at',
+    )
+    .in('id', fitClaimIds);
+  if (fitClaimsError) throw new Error(fitClaimsError.message);
+  assert.equal(fitClaims.length, fitClaimIds.length, 'Every Fit evidence link must resolve to one claim');
+
+  const fitProfileIds = Array.from(new Set(fitClaims.map((claim) => claim.profile_id)));
+  const { data: fitClaimProfiles = [], error: fitClaimProfilesError } = await supabase
+    .from('product_intelligence_profiles')
+    .select('id, owner_type, owner_id, profile_status')
+    .in('id', fitProfileIds);
+  if (fitClaimProfilesError) throw new Error(fitClaimProfilesError.message);
+  assert.equal(
+    fitClaimProfiles.length,
+    fitProfileIds.length,
+    'Every Fit evidence claim must resolve to one owner profile',
+  );
+
+  const fitClaimById = new Map(fitClaims.map((claim) => [claim.id, claim]));
+  const fitProfileById = new Map(fitClaimProfiles.map((profile) => [profile.id, profile]));
+  let validFitEvidenceLinks = 0;
+  for (const fit of fits) {
+    const links = fitLinks.filter((link) => link.fit_id === fit.id);
+    assert.ok(links.length > 0, `Fit ${fit.id} must have evidence`);
+    const purposes = new Set(links.map((link) => link.purpose));
+    assert.ok(purposes.has('fit'), `Fit ${fit.id} requires fit-purpose evidence`);
+    assert.ok(purposes.has('limitation'), `Fit ${fit.id} requires limitation-purpose evidence`);
+
+    const validLinks = links.filter((link) => {
+      const claim = fitClaimById.get(link.claim_id);
+      const profile = claim && fitProfileById.get(claim.profile_id);
+      const expiresAt = claim?.expires_at;
+      return Boolean(
+        claim &&
+          profile?.owner_type === 'tool' &&
+          profile.owner_id === fit.tool_id &&
+          profile.profile_status === 'ready' &&
+          claim.verification_status === 'verified' &&
+          claim.conflict_status === 'none' &&
+          claim.invalidated_at === null &&
+          isCurrentReview(claim.verified_at, claim.review_due_at) &&
+          (!expiresAt || (typeof expiresAt === 'string' && Date.parse(expiresAt) > now)),
+      );
+    });
+    assert.ok(validLinks.length > 0, `Fit ${fit.id} requires current same-owner verified evidence`);
+    validFitEvidenceLinks += validLinks.length;
+  }
 
   const routeResults = Object.fromEntries(
     await Promise.all(
@@ -187,9 +265,8 @@ async function main() {
         verifiedClaims: claims.length,
         profileEvidenceLinks: profileLinks.length,
         taskFitEvidenceLinks: fitLinks.length,
-        routeStatuses: Object.fromEntries(
-          Object.entries(routeResults).map(([path, result]) => [path, result.status]),
-        ),
+        validTaskFitEvidenceLinks: validFitEvidenceLinks,
+        routeStatuses: Object.fromEntries(Object.entries(routeResults).map(([path, result]) => [path, result.status])),
         aliasStatus: aliasResponse.status,
         firefliesInSitemap: false,
         preflight,
