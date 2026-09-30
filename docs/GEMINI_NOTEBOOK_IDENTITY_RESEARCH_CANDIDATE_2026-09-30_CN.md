@@ -1,6 +1,6 @@
 # Gemini Notebook 身份迁移与 research-with-citations 候选包
 
-状态：**LOCAL_CANDIDATE / PRODUCTION_UNCHANGED**。2026-09-30 只读核验。此包不是生产执行批准；目录实体在 Neon，Decision 与证据在 Supabase，两个数据库没有跨库原子事务，Neon 目录写入也没有可核验的 Owner 身份边界。因此提供字段级 Owner 编辑包，不提供可绕开 Owner 审核的直连写库脚本。任何生产编辑前先留存精确行快照，完成后运行本文末尾的只读 verifier。
+状态：**未执行；不得视为已上线或发布批准**。2026-09-30 只读核验；2026-10-01 回退了先行上线的 Gemini Notebook 可见文案，以保持生产页面与旧目录记录一致。此包仅为未来迁移候选。目录实体在 Neon，Decision 与证据在 Supabase，两个数据库没有跨库原子事务，Neon 目录写入也没有可核验的 Owner 身份边界。因此提供字段级 Owner 编辑包，不提供可绕开 Owner 审核的直连写库脚本。任何生产编辑前先留存精确行快照，完成后运行本文末尾的只读 verifier。
 
 ## 1. 生产基线与身份决策
 
@@ -22,7 +22,7 @@ Google [2026-07-16 更名公告](https://blog.google/innovation-and-ai/products/
 
 ### 本地文案处置
 
-- 指南中的可见操作标签改为 **Gemini Notebook**，链接仍指向 `/ai/notebooklm`。研究比较页当前使用未接入的 `quickStarts` 变量，不能把那里的字符串变更当成上线展示；Owner 应在现有产品数据字段完成身份更新后验证实际渲染。
+- 待目录身份迁移完成后，指南中的可见操作标签才能改为 **Gemini Notebook**，链接仍指向 `/ai/notebooklm`。研究比较页当前使用未接入的 `quickStarts` 变量，不能把那里的字符串变更当成上线展示；Owner 应在现有产品数据字段完成身份更新后验证实际渲染。
 - `tools.content` 四语言当前未含旧名，可保留描述语义；Owner 检查可见摘要后再调整。`tools.detail` 四语言都含旧名，应把作为当前品牌的用法改为“Gemini Notebook（原 NotebookLM）”，首次出现之后用“Gemini Notebook”。不要全局替换历史更名事实。
 - 旧 detail 的“不是开放网页搜索引擎 / 不能发现网页”一类绝对表述须改成“可发现 Web/Drive 来源，用户选择导入；回答围绕当前 notebook 已选来源”。Deep Research 也能发现并导入资料，因此不能声称完全没有网页发现能力。[来源与发现说明](https://support.google.com/gemininotebook/answer/16215270?hl=en)
 - 套餐数字须以 [现行套餐页](https://support.google.com/gemininotebook/answer/16213268?hl=en) 为准：Standard/Plus/Pro/Ultra 的 notebook 与来源额度分层；另有 [2026-09 起的计算量用量限制](https://support.google.com/gemininotebook/answer/17670842?hl=en)，不能把每日 chat 数误写成唯一限制。保留地区、年龄、账户和 Workspace 管理员开放条件。[产品帮助](https://support.google.com/gemininotebook/answer/16164461?hl=en)

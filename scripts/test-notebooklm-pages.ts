@@ -6,6 +6,8 @@ const linkedPages = [
   'lib/content/guideTaskChecks.ts',
   'lib/data/topicToolSources.ts',
 ];
+const researchGuide = 'app/[locale]/(with-footer)/guides/ai-tools-for-research/page.tsx';
+const perplexityComparison = 'app/[locale]/(with-footer)/guides/perplexity-alternatives-comparison/page.tsx';
 
 async function main() {
   const evidenceConfig = fs.readFileSync('lib/config/priorityToolEvidence.ts', 'utf8');
@@ -13,33 +15,45 @@ async function main() {
     'notebooklm:',
     '600 sources',
     '600 个来源',
-    'cited passages',
+    'citation accuracy',
     'Workspace for Education',
-    'support.google.com/gemininotebook/answer/16164461',
-    'support.google.com/gemininotebook/answer/16213268',
-    'blog.google/innovation-and-ai/products/gemini-notebook/notebooklm-gemini-notebook',
+    'support.google.com/notebooklm/answer/16164461',
+    'support.google.com/googleone/answer/16105039',
   ]) {
     assert(evidenceConfig.includes(term), `NotebookLM evidence snapshot: ${term} missing`);
   }
-  console.log('PASS Gemini Notebook official evidence snapshot retains limits and account boundaries');
+  assert(!evidenceConfig.includes('Gemini Notebook'), 'Unmigrated directory must retain NotebookLM display identity');
+  console.log('PASS NotebookLM evidence snapshot matches the unmigrated directory identity');
 
   for (const file of linkedPages) {
     const source = fs.readFileSync(file, 'utf8');
     assert(source.includes('notebooklm'), `${file}: NotebookLM relationship missing`);
   }
+  assert(fs.readFileSync(researchGuide, 'utf8').includes("href: '/guides/ai-tools-for-research-comparison'"));
+  const comparisonSource = fs.readFileSync(perplexityComparison, 'utf8');
+  assert(
+    comparisonSource.includes("guideHref: '/guides/ai-tools-for-research'"),
+    'Perplexity comparison must retain its research guide fallback',
+  );
+  assert(
+    comparisonSource.includes("content: { kind: 'unavailable'"),
+    'Perplexity comparison must retain its unavailable-content guard',
+  );
+  assert(fs.readFileSync('lib/content/guideTaskChecks.ts', 'utf8').includes('Review NotebookLM fit and sources'));
   console.log('PASS research entry points retain the NotebookLM relationship');
 
   const base = process.env.SEO_BASE_URL;
   if (!base) return;
   for (const [path, expected] of [
-    ['/ai/notebooklm', ['Gemini Notebook', '600 sources', 'cited passages', 'Workspace for Education']],
-    ['/cn/ai/notebooklm', ['Gemini Notebook', '600 个来源', '引文原段', 'Workspace for Education']],
+    ['/ai/notebooklm', ['NotebookLM', '600 sources', 'citation accuracy', 'Workspace for Education']],
+    ['/cn/ai/notebooklm', ['NotebookLM', '600 个来源', '引用准确性', 'Workspace for Education']],
   ] as const) {
     const response = await fetch(`${base}${path}`, { signal: AbortSignal.timeout(20000) });
     assert.equal(response.status, 200, path);
     const html = await response.text();
     const visible = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
     for (const term of expected) assert(visible.includes(term), `${path}: ${term} missing`);
+    assert(!visible.includes('Gemini Notebook'), `${path}: new display identity shown before database migration`);
     assert(/<meta[^>]*name="robots"[^>]*content="[^"]*noindex/.test(html), `${path}: noindex missing`);
     assert(html.includes(`<link rel="canonical" href="https://aibesttool.com${path}"`), `${path}: canonical changed`);
     console.log(`PASS ${path}: evidence, limits, canonical and noindex`);
