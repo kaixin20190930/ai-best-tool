@@ -1,6 +1,6 @@
 # DIFF-07 只读收口与发布审计（2026-09-23）
 
-当前状态（2026-09-30）：`meeting-transcription` 从 required 调整为 preferred 的 Owner-only SQL 候选已完成，**尚未执行**；Task Page 批准注册表仍为空，页面继续 404。2026-09-25 的 meeting-notes 生产整改与独立只读验收结论仍有效，但当时两条 Task Capability 均为 required，尚不满足 Task Page 的 required/preferred 完整性门禁。DIFF-07 其他 cluster 尚未完成编辑整改，DIFF-08 仍阻塞。下文保留历史快照并记录候选状态。
+当前状态（2026-09-30）：Owner 已执行 `meeting-transcription` 从 required 调整为 preferred 的受控 SQL；生产只读回读与 Task Page 服务端读模型均通过。`meeting-notes` 已加入本地 Task Page 批准注册表，形成首个放行候选；**尚未 push/deploy，生产路径仍为 404，sitemap Task URL 仍为 0**。DIFF-07 其他 cluster 尚未完成编辑整改，DIFF-08 仍阻塞。下文保留历史快照并记录本次门禁闭环。
 
 2026-09-23 状态：技术门禁与独立 QA 均 PASS；**当时未自动批准或发布任何关系**。这里的 PASS 表示当时的只读验收完成，不表示内容可公开。生产快照
 为 2026-09-23 15:42–15:46 UTC；发布前必须重新核对来源有效期并取得编辑批准。
@@ -53,10 +53,10 @@ DIFF-08 Decision Assistant 仍为**条件阻塞**：6 Task 的 published fit 覆
 - 脚本在执行时记录当前 `reviewed_by/reviewed_at/review_due_at`，未回填或虚构 3 条 legacy fit 的历史 provenance。总控生产只读回读确认：meeting-notes 的 2/2 Task Capability、3/3 Tool Capability 均为 published/current；3/3 既有 fit 为 published/current 且有 reviewer；6/6 官方 source 为 current，6/6 claim 为 verified/current。Capability 证据目的覆盖 support、availability、plan、limitation；fit 证据覆盖 fit、limitation。Decision foundation verifier PASS，graph seed verifier PASS（8 条 published 关系）。
 - 生产 SEO smoke PASS，sitemap 共 126 个 URL；`/cn/tasks/meeting-notes` 仍返回 404，sitemap 中 Task URL 为 0。Task Page 审批注册表仍为空，URL、sitemap、`continue_index` 和工具索引状态未因本次整改放开。下一步转向其余 cluster 的编辑整改与独立验收；DIFF-08 Decision Assistant 继续 blocked。
 
-## 2026-09-30 meeting-transcription preferred 调整候选（未执行）
+## 2026-09-30 meeting-transcription preferred 调整与 Task Page 放行候选
 
 总控编辑决策：`meeting-summary-and-actions` 保持 required，因为会议纪要的核心结果必须包含会议摘要与后续行动；`meeting-transcription` 调整为 preferred，因为原生转录是优选输入处理能力，导入既有录音或转录文本的场景不应被排除。该判断用于修正真实任务语义，不是为达到页面数量门槛制造关系。
 
-Owner-only 候选位于 `db/supabase/manual/20260930_set_meeting_notes_transcription_preferred.sql`。脚本默认因缺少事务级 `app.meeting_notes_reviewer_uuid` 参数而 fail closed；只允许 Owner 在同一显式事务中传入已存在的 `auth.users` reviewer UUID 后手工执行。脚本锁定并校验唯一 active Task、两个 exact active Capability、两条 published/current 且 reviewer-backed 的 Task Capability；只更新 `meeting-transcription` 的 importance、真实 review 时间、30 天复查期限和编辑人。`meeting-summary-and-actions` 的整行快照必须完全不变，否则事务回滚。已是同一 reviewer 的 current preferred 状态时不续期并安全 no-op，其他偏差全部中止。
+Owner-only SQL 位于 `db/supabase/manual/20260930_set_meeting_notes_transcription_preferred.sql`，已于 2026-09-30 04:48:16 UTC 由 reviewer `2b8177ac-70b3-4475-a1ee-509ff8b4b622` 执行。生产回读确认：`meeting-summary-and-actions` 保持 required、review window 至 2026-10-24；`meeting-transcription` 为 preferred，新 review window 至 2026-10-30；二者均 published/current 且 reviewer-backed。三条 Fit 均 published/current，9/9 Fit evidence link 为同 owner、verified/current；Fathom、Otter.ai、Fireflies 均 published 且工具复查日期仍在未来。`getPublicTaskPage('meeting-notes', 'en')` 返回 Fathom、Otter.ai、Fireflies 三工具和完整 required/preferred Capability。
 
-本候选未执行数据库写入，也未修改 Task Page 批准注册表。Owner 执行后仍须重新运行生产只读 verifier，确认 required/preferred、三个 Fit 的逐条同 owner verified/current 证据、Task 路径 404 与 sitemap Task URL=0；只有新一轮独立验收通过后，才能另开批准注册表变更。当前 Task Page、metadata/canonical、sitemap、索引状态和 Decision Assistant 均保持不变。
+最终放行候选仅将 `meeting-notes` 加入静态批准注册表；其他 Task 继续 fail closed。放行不改变页面既有 `noindex, follow`、canonical 规则或 sitemap 排除，也不批准工具索引或 Decision Assistant。提交前生产边界复核为 `/tasks/meeting-notes`、`/en/tasks/meeting-notes`、`/cn/tasks/meeting-notes` 均 404，sitemap Task URL 为 0；这些结果证明尚未部署，而不是页面资格不足。后续 freshness 监控或复核撤回时，必须在同一发布中移除注册表 slug。

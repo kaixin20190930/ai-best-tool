@@ -2,9 +2,9 @@
  * Task Pages need explicit editorial release in addition to their live data gate.
  * Add a slug here only after editorial approval and a current evidence check.
  * Remove it in the same release when freshness monitoring or review withdraws approval.
- * The empty registry keeps every Task Page closed while the first release awaits review.
+ * meeting-notes is the first editorially approved Task Page; all other slugs stay closed.
  */
-export const APPROVED_TASK_PAGE_SLUGS: readonly string[] = [];
+export const APPROVED_TASK_PAGE_SLUGS: readonly string[] = ['meeting-notes'];
 
 export type TaskPageRouteDecision = 'other' | 'approved' | 'closed';
 
