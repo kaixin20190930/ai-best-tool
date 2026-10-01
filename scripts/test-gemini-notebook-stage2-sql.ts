@@ -5,17 +5,23 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { Client } from 'pg';
 
+import { stage2StateMd5, postgresJsonbText, type Stage2State } from './gemini-notebook-stage2-state';
+
 const candidate = readFileSync('db/supabase/manual/20261001_gemini_notebook_stage2_candidate.sql','utf8');
 const review = readFileSync('db/supabase/manual/20261001_gemini_notebook_stage2_review_links.sql','utf8');
 const rollback = readFileSync('db/supabase/manual/20261001_gemini_notebook_stage2_rollback.sql','utf8');
 const verifier = readFileSync('scripts/verify-gemini-notebook-stage2-readonly.ts','utf8');
-for (const sql of [candidate,review,rollback]) {
+for (const sql of [review,rollback]) {
   assert.match(sql,/^BEGIN;/m);
   assert.match(sql,/^ROLLBACK;\s*$/m);
   assert.doesNotMatch(sql,/^COMMIT;/m);
   assert.doesNotMatch(sql,/CREATE\s+(?:UNLOGGED\s+)?TABLE\s+(?!pg_temp)/i);
   assert.doesNotMatch(sql,/decision_cluster_transition\s*\(/i);
 }
+assert.match(candidate,/^CREATE OR REPLACE FUNCTION pg_temp\.gemini_notebook_stage2_candidate\(p_mode text\)/m);
+assert.match(candidate,/stage2_preflight_rollback/);
+assert.match(candidate,/SELECT \* FROM pg_temp\.gemini_notebook_stage2_candidate\('ROLLBACK'\);\s*$/);
+assert.doesNotMatch(candidate,/^BEGIN;|^COMMIT;/m);
 assert.match(candidate,/verification_status='candidate'/);
 assert.match(candidate,/editorial_status='draft'/);
 assert.match(review,/reviewer.*auth\.users/s);
@@ -25,8 +31,19 @@ assert.match(candidate,/YouTube import depends on available captions and imports
 assert.doesNotMatch(candidate,/omit media, captions/i);
 assert.match(verifier,/Task Page opened/);
 assert.match(verifier,/\[406,'export'\]/);
+assert.match(verifier,/productionWrites:0/);
+assert.doesNotMatch(verifier,/\.insert\(|\.update\(|\.delete\(|\.upsert\(/);
+const hashExpression = (sql: string) => {
+  const match=[...sql.matchAll(/SELECT md5\(jsonb_build_object\(([\s\S]*?)\)\:\:text\) INTO v_[a-z]+_md5;/g)].at(-1);
+  assert.ok(match,'SQL postimage hash expression missing');
+  return match[1];
+};
+assert.equal(hashExpression(candidate),hashExpression(review),'candidate and review hash fields/order differ');
+assert.equal(hashExpression(candidate),hashExpression(rollback),'candidate and rollback hash fields/order differ');
 
 const commit = (sql: string) => sql.replace(/ROLLBACK;\s*$/, 'COMMIT;');
+const commitCandidate = candidate.replace(/gemini_notebook_stage2_candidate\('ROLLBACK'\);\s*$/,
+  "gemini_notebook_stage2_candidate('COMMIT');");
 const taskId='527fe8b7-c171-4c50-ab1f-9404d7536e7c';
 const reviewer='d7890701-0000-4000-8000-000000000001';
 const reviewerEmail='reviewer@example.test';
@@ -107,19 +124,47 @@ async function main() {
       ALTER TABLE tool_task_fit_claims ENABLE ROW LEVEL SECURITY;
     `);
     const count=async(table:string)=>Number((await db.query(`SELECT count(*)::int AS n FROM ${table}`)).rows[0].n);
-    await db.query(candidate);
+    const rows=async(table:string,where:string,order:string)=>
+      (await db.query(`SELECT to_jsonb(t) AS value FROM ${table} t ${where} ORDER BY ${order}`)).rows.map((x)=>x.value);
+    const state=async():Promise<Stage2State>=>({
+      profile:(await rows('product_intelligence_profiles',"WHERE id='c7890701-0000-4000-8000-000000000001'",'id'))[0]||null,
+      sources:await rows('product_intelligence_sources',"WHERE profile_id='c7890701-0000-4000-8000-000000000001'",'id'),
+      claims:await rows('product_intelligence_claims',"WHERE profile_id='c7890701-0000-4000-8000-000000000001'",'id'),
+      decision:(await rows('tool_decision_profiles',"WHERE tool_id='cec78907-e2a1-4eb7-853a-a58334026280'",'tool_id'))[0]||null,
+      capabilities:await rows('tool_capabilities',"WHERE tool_id='cec78907-e2a1-4eb7-853a-a58334026280'",'id'),
+      fit:(await rows('tool_task_fits',"WHERE id='c7890701-0000-4000-8000-000000000301'",'id'))[0]||null,
+      decisionLinks:await rows('tool_decision_profile_claims',"WHERE tool_id='cec78907-e2a1-4eb7-853a-a58334026280'",'claim_id,purpose'),
+      capabilityLinks:await rows('tool_capability_claims',"WHERE tool_capability_id IN ('c7890701-0000-4000-8000-000000000201','c7890701-0000-4000-8000-000000000202')",'tool_capability_id,claim_id,purpose'),
+      fitLinks:await rows('tool_task_fit_claims',"WHERE fit_id='c7890701-0000-4000-8000-000000000301'",'claim_id,purpose'),
+    });
+    const jsonbSample=(await db.query(`SELECT '{"zz": [1, {"a": "资料", "bbb": true}], "a": null}'::jsonb::text AS value`)).rows[0].value;
+    assert.equal(postgresJsonbText({zz:[1,{a:'资料',bbb:true}],a:null}),jsonbSample);
+    const resultRow=(result:any)=> (Array.isArray(result) ? result.at(-1) : result).rows[0];
+    const preview=resultRow(await db.query(candidate));
+    assert.equal(preview.mode,'preflight');
+    assert.equal(preview.preflight,true);
+    assert.deepEqual([preview.profiles,preview.sources,preview.claims,preview.decision,
+      preview.capabilities,preview.fit,preview.links],[1,7,10,1,2,1,0]);
+    assert.match(preview.post_md5,/^[0-9a-f]{32}$/);
     assert.equal(await count('product_intelligence_profiles'),0,'default preflight wrote data');
-    await db.query(commit(candidate));
+    await assert.rejects(db.query(`SELECT * FROM pg_temp.gemini_notebook_stage2_candidate(NULL)`),/Use ROLLBACK/);
+    await assert.rejects(db.query(`SELECT * FROM pg_temp.gemini_notebook_stage2_candidate('WRONG')`),/Use ROLLBACK/);
+    assert.equal(await count('product_intelligence_profiles'),0,'invalid mode wrote data');
+    const committed=resultRow(await db.query(commitCandidate));
+    assert.equal(committed.mode,'commit');
+    assert.equal(committed.preflight,false);
+    postHash=committed.post_md5;
     assert.equal(await count('product_intelligence_profiles'),1);
     assert.equal(await count('product_intelligence_sources'),7);
     assert.equal(await count('product_intelligence_claims'),10);
     assert.equal(await count('tool_capabilities'),2);
     assert.equal(await count('tool_task_fits'),1);
     const candidateHash=postHash;
-    await db.query(commit(candidate));
+    assert.equal(stage2StateMd5(await state()),candidateHash,'candidate verifier hash differs from SQL postimage');
+    postHash=resultRow(await db.query(commitCandidate)).post_md5;
     assert.equal(postHash,candidateHash,'candidate rerun changed postimage');
     await db.query(`UPDATE product_intelligence_claims SET claim_value='{"drift":true}' WHERE claim_key='gemini-notebook:research:grounding-2026-10'`);
-    await assert.rejects(db.query(commit(candidate)),/Ten exact candidate claims required/);
+    await assert.rejects(db.query(commitCandidate),/Ten exact candidate claims required/);
     await db.query('ROLLBACK');
     await db.query(`UPDATE product_intelligence_claims SET claim_value='{"summary":"Notebook chat answers from selected sources with inline citations; citation accuracy was not independently tested by this site."}' WHERE claim_key='gemini-notebook:research:grounding-2026-10'`);
     const keys=(await db.query('SELECT claim_key FROM product_intelligence_claims')).rows.map((x)=>x.claim_key.replace('gemini-notebook:research:',''));
@@ -176,6 +221,7 @@ async function main() {
     assert.equal(await count('tool_capability_claims'),9);
     assert.equal(await count('tool_task_fit_claims'),6);
     const reviewHash=postHash;
+    assert.equal(stage2StateMd5(await state()),reviewHash,'reviewed verifier hash differs from SQL postimage');
     await db.query(commit(configured.replace(candidateHash,reviewHash)));
     assert.equal(postHash,reviewHash,'review rerun changed postimage');
     const wrong=rollback.replace('REPLACE_WITH_ORIGINAL_COMMIT_POST_MD5','00000000000000000000000000000000');

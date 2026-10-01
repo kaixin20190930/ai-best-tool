@@ -1,9 +1,13 @@
--- Owner SQL Editor only. Default transaction is a preflight: inspect notices, then ROLLBACK.
--- After a fresh preflight, change only the final ROLLBACK to COMMIT to retain candidates.
+-- Owner SQL Editor only. The final SELECT always returns one result row.
+-- Default ROLLBACK mode undoes candidate writes inside a PL/pgSQL subtransaction.
+-- After a fresh preflight, change only the last line's mode to COMMIT.
+-- pg_temp helper exists only for this SQL Editor session; the last SELECT is the result row.
 -- This creates no verified claim, evidence link, published relation, or Task Page.
-BEGIN;
-SET LOCAL statement_timeout = '30s';
-DO $stage2$
+CREATE OR REPLACE FUNCTION pg_temp.gemini_notebook_stage2_candidate(p_mode text)
+RETURNS TABLE(mode text, preflight boolean, profiles integer, sources integer,
+  claims integer, decision integer, capabilities integer, fit integer,
+  links integer, post_md5 text)
+LANGUAGE plpgsql AS $stage2$
 DECLARE
   v_tool CONSTANT uuid := 'cec78907-e2a1-4eb7-853a-a58334026280';
   v_task CONSTANT uuid := '527fe8b7-c171-4c50-ab1f-9404d7536e7c';
@@ -17,6 +21,10 @@ DECLARE
   v_state jsonb;
   v_post_md5 text;
 BEGIN
+  IF p_mode IS NULL OR p_mode NOT IN ('ROLLBACK','COMMIT') THEN
+    RAISE EXCEPTION 'Use ROLLBACK for preview or COMMIT for candidate write';
+  END IF;
+  BEGIN
   IF current_user NOT IN ('postgres', 'supabase_admin', 'service_role') THEN
     RAISE EXCEPTION 'Owner SQL Editor or service role required';
   END IF;
@@ -208,8 +216,28 @@ BEGIN
     'capabilityLinks',(SELECT coalesce(jsonb_agg(to_jsonb(l) ORDER BY l.tool_capability_id,l.claim_id,l.purpose),'[]'::jsonb) FROM public.tool_capability_claims l JOIN public.tool_capabilities t ON t.id=l.tool_capability_id WHERE t.tool_id=v_tool),
     'fitLinks',(SELECT coalesce(jsonb_agg(to_jsonb(l) ORDER BY l.claim_id,l.purpose),'[]'::jsonb) FROM public.tool_task_fit_claims l WHERE l.fit_id=v_fit)
   )::text) INTO v_post_md5;
-  RAISE NOTICE 'POST_MD5 %',v_post_md5;
-  RAISE NOTICE 'POSTIMAGE candidate: profile=1 sources=7 claims=10 decision=1 tool_capabilities=2 fit=1 links=0; no publish';
+  mode := CASE WHEN p_mode='ROLLBACK' THEN 'preflight' ELSE 'commit' END;
+  preflight := p_mode='ROLLBACK';
+  SELECT count(*)::integer INTO profiles FROM public.product_intelligence_profiles WHERE id=v_profile;
+  SELECT count(*)::integer INTO sources FROM public.product_intelligence_sources WHERE profile_id=v_profile;
+  SELECT count(*)::integer INTO claims FROM public.product_intelligence_claims WHERE profile_id=v_profile;
+  SELECT count(*)::integer INTO decision FROM public.tool_decision_profiles WHERE tool_id=v_tool;
+  SELECT count(*)::integer INTO capabilities FROM public.tool_capabilities WHERE tool_id=v_tool;
+  SELECT count(*)::integer INTO fit FROM public.tool_task_fits WHERE id=v_fit;
+  SELECT ((SELECT count(*) FROM public.tool_decision_profile_claims WHERE tool_id=v_tool)+
+    (SELECT count(*) FROM public.tool_capability_claims l JOIN public.tool_capabilities t ON t.id=l.tool_capability_id WHERE t.tool_id=v_tool)+
+    (SELECT count(*) FROM public.tool_task_fit_claims WHERE fit_id=v_fit))::integer INTO links;
+  post_md5 := v_post_md5;
+  IF (profiles,sources,claims,decision,capabilities,fit,links)<>(1,7,10,1,2,1,0) THEN
+    RAISE EXCEPTION 'Candidate result row counts differ';
+  END IF;
+  IF preflight THEN
+    RAISE EXCEPTION 'stage2_preflight_rollback' USING ERRCODE='P0001';
+  END IF;
+  EXCEPTION WHEN SQLSTATE 'P0001' THEN
+    IF SQLERRM <> 'stage2_preflight_rollback' THEN RAISE; END IF;
+  END;
+  RETURN NEXT;
 END
 $stage2$;
-ROLLBACK;
+SELECT * FROM pg_temp.gemini_notebook_stage2_candidate('ROLLBACK');

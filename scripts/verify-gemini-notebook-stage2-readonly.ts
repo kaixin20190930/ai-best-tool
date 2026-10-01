@@ -6,6 +6,7 @@ import { getDatabaseConnectionString } from '../lib/database/connection';
 import { APPROVED_TASK_PAGE_SLUGS, getTaskPageRouteDecision } from '../lib/seo/taskPageApproval';
 import { getToolIndexDecision } from '../lib/seo/toolIndexing';
 import { createAdminClient } from '../lib/supabase/admin';
+import { stage2StateMd5 } from './gemini-notebook-stage2-state';
 
 loadEnvConfig(process.cwd());
 
@@ -202,8 +203,19 @@ async function main() {
   const xml = await sitemap.text();
   assert.ok(!xml.includes('/tasks/research-with-citations') && !xml.includes('/ai/notebooklm'),
     'Task Page or Notebook tool became sitemap-eligible');
+  const stateMd5 = stage2StateMd5({
+    profile: profiles[0] || null,
+    sources,
+    claims,
+    decision: decisions[0] || null,
+    capabilities,
+    fit: fits.find((x) => x.id === fitId) || null,
+    decisionLinks,
+    capabilityLinks,
+    fitLinks,
+  });
   console.log(JSON.stringify({ phase, checkedAtUtc:new Date().toISOString(), productionWrites:0,
-    ownerId:toolId, profile:profiles.length, sources:sources.length, claims:claims.length,
+    ownerId:toolId, stateMd5, profile:profiles.length, sources:sources.length, claims:claims.length,
     decision:decisions.length, capabilities:capabilities.length, fit:fits.length,
     links:{ decision:decisionLinks.length,capability:capabilityLinks.length,fit:fitLinks.length },
     taskPageStatus:taskPage.status, sitemapEligible:false, toolIndexReason:index.reason },null,2));
