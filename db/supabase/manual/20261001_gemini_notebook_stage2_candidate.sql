@@ -84,7 +84,7 @@ BEGIN
   CREATE TEMP TABLE stage2_source_spec (id uuid PRIMARY KEY, url text UNIQUE, page_type text, label text) ON COMMIT DROP;
   INSERT INTO stage2_source_spec VALUES
     ('c7890701-0000-4000-8000-000000000101','https://blog.google/innovation-and-ai/products/gemini-notebook/notebooklm-gemini-notebook/','product','Google Gemini Notebook rename'),
-    ('c7890701-0000-4000-8000-000000000102','https://support.google.com/gemininotebook/answer/16164461?hl=en','help','Learn about Gemini Notebook'),
+    ('c7890701-0000-4000-8000-000000000102','https://support.google.com/gemininotebook/answer/16164461','help','Learn about Gemini Notebook'),
     ('c7890701-0000-4000-8000-000000000103','https://support.google.com/gemininotebook/answer/16215270?hl=en','help','Add or discover sources'),
     ('c7890701-0000-4000-8000-000000000104','https://support.google.com/gemininotebook/answer/16206563?hl=en','help','Create a notebook'),
     ('c7890701-0000-4000-8000-000000000105','https://support.google.com/gemininotebook/answer/16213268?hl=en','help','Upgrade Gemini Notebook'),

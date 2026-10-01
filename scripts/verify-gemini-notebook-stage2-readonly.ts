@@ -28,7 +28,7 @@ const expectedClaimKeys = [
 ].map((key) => `gemini-notebook:research:${key}-2026-10`);
 const expectedUrls = [
   'https://blog.google/innovation-and-ai/products/gemini-notebook/notebooklm-gemini-notebook/',
-  'https://support.google.com/gemininotebook/answer/16164461?hl=en',
+  'https://support.google.com/gemininotebook/answer/16164461',
   'https://support.google.com/gemininotebook/answer/16215270?hl=en',
   'https://support.google.com/gemininotebook/answer/16206563?hl=en',
   'https://support.google.com/gemininotebook/answer/16213268?hl=en',

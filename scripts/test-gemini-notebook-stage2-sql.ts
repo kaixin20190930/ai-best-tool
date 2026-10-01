@@ -8,6 +8,7 @@ import { Client } from 'pg';
 import { stage2StateMd5, postgresJsonbText, type Stage2State } from './gemini-notebook-stage2-state';
 
 const candidate = readFileSync('db/supabase/manual/20261001_gemini_notebook_stage2_candidate.sql','utf8');
+const amendment = readFileSync('db/supabase/manual/20261001_gemini_notebook_stage2_source_url_amendment.sql','utf8');
 const review = readFileSync('db/supabase/manual/20261001_gemini_notebook_stage2_review_links.sql','utf8');
 const rollback = readFileSync('db/supabase/manual/20261001_gemini_notebook_stage2_rollback.sql','utf8');
 const verifier = readFileSync('scripts/verify-gemini-notebook-stage2-readonly.ts','utf8');
@@ -24,6 +25,14 @@ assert.match(candidate,/SELECT \* FROM pg_temp\.gemini_notebook_stage2_candidate
 assert.doesNotMatch(candidate,/^BEGIN;|^COMMIT;/m);
 assert.match(candidate,/verification_status='candidate'/);
 assert.match(candidate,/editorial_status='draft'/);
+assert.match(candidate,/answer\/16164461','help'/);
+assert.doesNotMatch(candidate,/answer\/16164461\?hl=en/);
+assert.match(verifier,/answer\/16164461',/);
+assert.doesNotMatch(verifier,/answer\/16164461\?hl=en/);
+assert.match(amendment,/v_prior_md5 <> '769d65d12796a59bc33dd66117ebbc74'/);
+assert.match(amendment,/stage2_source_url_preflight_rollback/);
+assert.match(amendment,/SELECT \* FROM pg_temp\.gemini_notebook_stage2_source_url_amendment\('ROLLBACK'\);\s*$/);
+assert.doesNotMatch(amendment,/^BEGIN;|^COMMIT;/m);
 assert.match(review,/reviewer.*auth\.users/s);
 assert.match(review,/Stage 2 requires RLS enabled on all nine Supabase tables/);
 assert.match(review,/000000000406','export'/);
@@ -40,10 +49,17 @@ const hashExpression = (sql: string) => {
 };
 assert.equal(hashExpression(candidate),hashExpression(review),'candidate and review hash fields/order differ');
 assert.equal(hashExpression(candidate),hashExpression(rollback),'candidate and rollback hash fields/order differ');
+assert.equal(hashExpression(candidate).replace(/\s+/g,' '),hashExpression(amendment).replace(/\s+/g,' '),
+  'candidate and amendment hash fields/order differ');
 
 const commit = (sql: string) => sql.replace(/ROLLBACK;\s*$/, 'COMMIT;');
-const commitCandidate = candidate.replace(/gemini_notebook_stage2_candidate\('ROLLBACK'\);\s*$/,
+const newUrl='https://support.google.com/gemininotebook/answer/16164461';
+const oldUrl=`${newUrl}?hl=en`;
+const legacyCandidate=candidate.replace(newUrl,oldUrl);
+const commitLegacyCandidate = legacyCandidate.replace(/gemini_notebook_stage2_candidate\('ROLLBACK'\);\s*$/,
   "gemini_notebook_stage2_candidate('COMMIT');");
+const commitAmendment = (sql: string) => sql.replace(/gemini_notebook_stage2_source_url_amendment\('ROLLBACK'\);\s*$/,
+  "gemini_notebook_stage2_source_url_amendment('COMMIT');");
 const taskId='527fe8b7-c171-4c50-ab1f-9404d7536e7c';
 const reviewer='d7890701-0000-4000-8000-000000000001';
 const reviewerEmail='reviewer@example.test';
@@ -150,7 +166,7 @@ async function main() {
     await assert.rejects(db.query(`SELECT * FROM pg_temp.gemini_notebook_stage2_candidate(NULL)`),/Use ROLLBACK/);
     await assert.rejects(db.query(`SELECT * FROM pg_temp.gemini_notebook_stage2_candidate('WRONG')`),/Use ROLLBACK/);
     assert.equal(await count('product_intelligence_profiles'),0,'invalid mode wrote data');
-    const committed=resultRow(await db.query(commitCandidate));
+    const committed=resultRow(await db.query(commitLegacyCandidate));
     assert.equal(committed.mode,'committed');
     assert.equal(committed.preflight,false);
     postHash=committed.post_md5;
@@ -161,12 +177,44 @@ async function main() {
     assert.equal(await count('tool_task_fits'),1);
     const candidateHash=postHash;
     assert.equal(stage2StateMd5(await state()),candidateHash,'candidate verifier hash differs from SQL postimage');
-    postHash=resultRow(await db.query(commitCandidate)).post_md5;
+    postHash=resultRow(await db.query(commitLegacyCandidate)).post_md5;
     assert.equal(postHash,candidateHash,'candidate rerun changed postimage');
     await db.query(`UPDATE product_intelligence_claims SET claim_value='{"drift":true}' WHERE claim_key='gemini-notebook:research:grounding-2026-10'`);
-    await assert.rejects(db.query(commitCandidate),/Ten exact candidate claims required/);
+    await assert.rejects(db.query(commitLegacyCandidate),/Ten exact candidate claims required/);
     await db.query('ROLLBACK');
     await db.query(`UPDATE product_intelligence_claims SET claim_value='{"summary":"Notebook chat answers from selected sources with inline citations; citation accuracy was not independently tested by this site."}' WHERE claim_key='gemini-notebook:research:grounding-2026-10'`);
+    assert.equal(stage2StateMd5(await state()),candidateHash);
+    await assert.rejects(db.query(amendment),/prior stateMd5 drift/,'literal production hash must reject fixture hash');
+    const fixtureAmendment=amendment.replaceAll('769d65d12796a59bc33dd66117ebbc74',candidateHash);
+    const beforeAmendment=await state();
+    const amendmentPreview=resultRow(await db.query(fixtureAmendment));
+    assert.deepEqual([amendmentPreview.mode,amendmentPreview.changed_sources,amendmentPreview.changed_claims],
+      ['preflight',1,2]);
+    assert.match(amendmentPreview.post_md5,/^[0-9a-f]{32}$/);
+    assert.deepEqual(await state(),beforeAmendment,'amendment preflight left writes');
+    await assert.rejects(db.query(`SELECT * FROM pg_temp.gemini_notebook_stage2_source_url_amendment('WRONG')`),/Use ROLLBACK/);
+    await db.query('ALTER TABLE product_intelligence_sources DISABLE ROW LEVEL SECURITY');
+    await assert.rejects(db.query(commitAmendment(fixtureAmendment)),/Stage 2 requires RLS enabled on all nine Supabase tables/);
+    await db.query('ALTER TABLE product_intelligence_sources ENABLE ROW LEVEL SECURITY');
+    await db.query(`UPDATE product_intelligence_claims SET claim_value='{"drift":true}' WHERE claim_key='gemini-notebook:research:identity-2026-10'`);
+    await assert.rejects(db.query(commitAmendment(fixtureAmendment)),/prior stateMd5 drift/);
+    await db.query(`UPDATE product_intelligence_claims SET claim_value='{"summary":"NotebookLM was renamed Gemini Notebook on 2026-07-16; it remains the same standalone product."}' WHERE claim_key='gemini-notebook:research:identity-2026-10'`);
+    assert.equal(stage2StateMd5(await state()),candidateHash);
+    const amended=resultRow(await db.query(commitAmendment(fixtureAmendment)));
+    assert.deepEqual([amended.mode,amended.changed_sources,amended.changed_claims],['committed',1,2]);
+    assert.equal(amended.post_md5,amendmentPreview.post_md5);
+    const expectedAmended:Stage2State=structuredClone(beforeAmendment);
+    const amendedSource=expectedAmended.sources.find((x)=>x.id==='c7890701-0000-4000-8000-000000000102');
+    assert.ok(amendedSource);
+    amendedSource.url=newUrl;
+    amendedSource.canonical_url=newUrl;
+    for(const claim of expectedAmended.claims.filter((x)=>
+      ['c7890701-0000-4000-8000-000000000402','c7890701-0000-4000-8000-000000000410'].includes(String(x.id)))) {
+      claim.source_url=newUrl;
+    }
+    assert.deepEqual(await state(),expectedAmended,'amendment changed fields beyond source 102 and claims 402/410');
+    assert.equal(stage2StateMd5(await state()),amended.post_md5,'candidate verifier hash differs from amendment postimage');
+    await assert.rejects(db.query(commitAmendment(fixtureAmendment)),/prior stateMd5 drift/,'repeat amendment must reject');
     const keys=(await db.query('SELECT claim_key FROM product_intelligence_claims')).rows.map((x)=>x.claim_key.replace('gemini-notebook:research:',''));
     const excerpts=Object.fromEntries(keys.map((key)=>[key,`Official passage checked for ${key} by the independent reviewer.`]));
     const ownerGate=`APPROVE_GEMINI_STAGE2:${reviewer}:${reviewerEmail}:USER_METADATA_ROLE`;
@@ -176,7 +224,7 @@ async function main() {
       .replace('REPLACE_WITH_USER_METADATA_ROLE_OR_ADMIN_EMAILS','USER_METADATA_ROLE')
       .replace('REPLACE_WITH_EXACT_OWNER_APPROVAL',ownerGate)
       .replace('REPLACE_WITH_INDEPENDENT_REVIEW_REFERENCE','QA-2026-10-01-independent')
-      .replace('REPLACE_WITH_ORIGINAL_PRIOR_POST_MD5',candidateHash)
+      .replace('REPLACE_WITH_ORIGINAL_PRIOR_POST_MD5',amended.post_md5)
       .replace("SET LOCAL gemini.stage2.excerpts = '{}';",`SET LOCAL gemini.stage2.excerpts = '${JSON.stringify(excerpts)}';`);
     const nonAdmin='d7890701-0000-4000-8000-000000000002';
     const nonAdminEmail='nonadmin@example.test';
@@ -205,7 +253,7 @@ async function main() {
       .replaceAll(reviewerEmail,nonAdminEmail);
     await db.query(allowlistConfig);
     assert.equal(await count('tool_decision_profile_claims'),0,'allowlist review dry-run wrote links');
-    await assert.rejects(db.query(commit(configured.replace(candidateHash,'00000000000000000000000000000000'))),/prior postimage drift/);
+    await assert.rejects(db.query(commit(configured.replace(amended.post_md5,'00000000000000000000000000000000'))),/prior postimage drift/);
     await db.query('ROLLBACK');
     await db.query(configured);
     assert.equal(await count('tool_capability_claims'),0,'review dry-run wrote links');
@@ -222,7 +270,7 @@ async function main() {
     assert.equal(await count('tool_task_fit_claims'),6);
     const reviewHash=postHash;
     assert.equal(stage2StateMd5(await state()),reviewHash,'reviewed verifier hash differs from SQL postimage');
-    await db.query(commit(configured.replace(candidateHash,reviewHash)));
+    await db.query(commit(configured.replace(amended.post_md5,reviewHash)));
     assert.equal(postHash,reviewHash,'review rerun changed postimage');
     const wrong=rollback.replace('REPLACE_WITH_ORIGINAL_COMMIT_POST_MD5','00000000000000000000000000000000');
     await assert.rejects(db.query(commit(wrong)),/postimage drift/);
@@ -234,7 +282,7 @@ async function main() {
     assert.equal(await count('product_intelligence_profiles'),0);
     assert.equal(await count('product_intelligence_claims'),0);
     assert.equal(await count('tool_capability_claims'),0);
-    console.log('Gemini Notebook Stage 2 SQL: preflight, commit, idempotence, drift, review links and exact rollback PASS');
+    console.log('Gemini Notebook Stage 2 SQL: candidate, source URL amendment 1+2, preflight, drift, review and rollback PASS');
   } finally {
     await db.end().catch(()=>{});
     if(started) execFileSync('pg_ctl',['-D',dir,'-m','immediate','-w','stop'],{stdio:'ignore'});
