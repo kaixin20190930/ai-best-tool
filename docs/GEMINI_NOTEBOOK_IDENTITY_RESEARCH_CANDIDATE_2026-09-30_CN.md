@@ -1,6 +1,6 @@
 # Gemini Notebook 身份迁移与 research-with-citations 候选包
 
-状态：**Neon 第一阶段身份迁移已由 Owner 在生产提交并独立只读回验；Supabase Decision 与 Task Page 仍为候选/HOLD**。目录实体在 Neon，Decision 与证据在 Supabase，两个数据库没有跨库原子事务。[Neon 前向 SQL](../db/neon/20261001_owner_gemini_notebook_identity.sql) 与 [精确回滚 SQL](../db/neon/20261001_owner_gemini_notebook_identity_rollback.sql) 均保留默认 `ROLLBACK`、私有快照及 Owner 闸门；快照未写入仓库或公开备份表。本阶段没有生成或写入任何 Supabase profile、claim 或关系。
+状态：**Neon 第一阶段身份迁移已由 Owner 在生产提交并独立只读回验；Supabase Decision 与 Task Page 仍为候选/HOLD**。目录实体在 Neon，Decision 与证据在 Supabase，两个数据库没有跨库原子事务。[Neon 前向 SQL](../db/neon/20261001_owner_gemini_notebook_identity.sql) 与 [精确回滚 SQL](../db/neon/20261001_owner_gemini_notebook_identity_rollback.sql) 均保留默认 `ROLLBACK`、私有快照及 Owner 闸门；快照未写入仓库或公开备份表。Stage 2 已提供[Supabase 候选/审核/回滚 SQL 与只读 verifier](./GEMINI_NOTEBOOK_STAGE2_SUPABASE_DELIVERY_2026-10-01_CN.md)，**尚未生产执行**；2026-10-01 只读基线仍为 profile、claim、关系 0。没有独立人工审核时，证据 link 受 verified claim trigger 阻挡，候选事务只保留 pending/candidate/draft。
 
 **第一阶段生产回执（2026-10-01）：**固定 ID `cec78907-e2a1-4eb7-853a-a58334026280` 提交后 `updated_at=2026-10-01 01:20:38.963207+00`，全行 `rowMd5=e46e55730afa5269df9d30c569507dee`，受管字段 `ownedMd5=6ad598a3691906ee6ca9e75d4500188a`。`--identity` 独立只读回验通过：唯一实体、旧 `notebooklm` slug、现名/官网、`published/monitor`、`next_review_date=2026-12-15`、`sitemapEligible=false`；`productionWrites=0` 指回验命令。生产 SEO smoke 通过，sitemap 为 126 条。EN/CN 生产页正文均显示 Gemini Notebook 及原 NotebookLM 语境，保持 `/ai/notebooklm` 自指 canonical、`noindex, follow` 且 sitemap 不收录。仓库中的静态证据卡片与指南标签已跟进现名；部署前生产卡片可能仍显示旧文案。
 

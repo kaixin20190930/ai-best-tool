@@ -2,7 +2,7 @@
 
 更新时间：2026-10-01
 
-2026-10-01 Gemini Notebook 第一阶段 Neon 身份迁移已由 Owner 在生产提交并独立只读回验：固定 ID/`notebooklm` slug 保持，现名与官网已更新，`published/monitor`、noindex/follow、旧 canonical 与 sitemap 排除保持；post `updated_at=2026-10-01 01:20:38.963207+00`、全行 MD5 `e46e55730afa5269df9d30c569507dee`。生产 SEO smoke 通过、sitemap 126；EN/CN 页面显示现名和原名语境。仓库静态证据与指南标签收口，尚未 push/deploy；Supabase Notebook Decision 数据仍为 0，Task Page 保持 HOLD。详见[专项记录与回滚步骤](./GEMINI_NOTEBOOK_IDENTITY_RESEARCH_CANDIDATE_2026-09-30_CN.md)。
+2026-10-01 Gemini Notebook 第一阶段 Neon 身份迁移已由 Owner 在生产提交并独立只读回验：固定 ID/`notebooklm` slug 保持，现名与官网已更新，`published/monitor`、noindex/follow、旧 canonical 与 sitemap 排除保持；post `updated_at=2026-10-01 01:20:38.963207+00`、全行 MD5 `e46e55730afa5269df9d30c569507dee`。生产 SEO smoke 通过、sitemap 126；EN/CN 页面显示现名和原名语境。仓库静态证据与指南标签收口，尚未 push/deploy；Supabase Notebook Decision 数据仍为 0，Task Page 保持 HOLD。Stage 2 候选/审核/回滚 SQL、只读 verifier 和本地事务测试已交付，**生产 SQL 尚未执行**；2026-10-01T02:02:27Z 只读基线仍为全 0，Task Page 404、sitemap/index 关闭。Owner 第一步仅做默认 ROLLBACK 预检；独立人工审核前不建立 verified link。详见[Stage 2 交付记录](./GEMINI_NOTEBOOK_STAGE2_SUPABASE_DELIVERY_2026-10-01_CN.md)与[身份专项记录](./GEMINI_NOTEBOOK_IDENTITY_RESEARCH_CANDIDATE_2026-09-30_CN.md)。
 
 2026-09-30 CL-02 `research-with-citations` 三工具只读盘点：Consensus、NotebookLM、Perplexity 三个既有 published 实体查重通过；目前仅 Consensus 的 1 条 Tool Capability/1 条 Fit 已 published，并有同 owner 的 7+6 evidence links。NotebookLM 与 Perplexity 均无 Decision profile/source/claim/关系；Google 官方已将 NotebookLM 更名 Gemini Notebook，旧目录 URL 301 至新域名。三种角色分别是学术论文检索与证据摘要、用户选定资料的溯源综合、开放网页检索与引用回答；来源链接不等于结论正确。结论 **HOLD_EVIDENCE_AND_IDENTITY**，不生成关系 SQL/manifest、不创建新 Task/工具页，不放开第二个 Task Page；当前 `/cn/tasks/research-with-citations` 为 404。详见[专项盘点](./DECISION_GRAPH_CL02_THREE_TOOL_HOLD_2026-09-30_CN.md)。生产写入 0，无 push/deploy。
 

@@ -1,0 +1,43 @@
+# Gemini Notebook Stage 2 Supabase 数据层交付
+
+状态：**代码与 Owner 手工 SQL 已本地提交；生产 Supabase 写入 0。** 2026-10-01T02:02:27Z 的只读基线为 Notebook profile/source/claim/Decision/Tool Capability/Fit/link 全部 0；`research-with-citations` Task 与两条 Capability 保持原 ID 和 active。`/cn/tasks/research-with-citations` 返回 404，`/ai/notebooklm` 不在 sitemap，工具 `published/monitor` 仍不可索引。Neon Stage 1 身份迁移已独立完成；本包不改 Neon slug、canonical 或页面。
+
+## 审计与状态契约
+
+- [证据 schema](../db/supabase/migrations/20260727_product_intelligence_evidence.sql) 对 tool owner 证据启用 RLS；浏览器仅能访问本人 distribution project 的证据。Decision profile、Tool Capability、Fit 和 link 表亦启用 RLS；原始 link 没有浏览器 SELECT policy。Owner 使用 Supabase SQL Editor 的受控数据库角色；[只读 verifier](../scripts/verify-gemini-notebook-stage2-readonly.ts) 用 service role 的 GET，并由 `pub-03-readonly-run.mjs` 限制数据库 read only 与 HTTP GET/HEAD。
+- [Decision link trigger](../db/supabase/migrations/20260922_decision_capability_foundation.sql) 与 Capability link trigger 要求 claim 已 `verified`、有效、无冲突且属于目标 tool。候选 claim 不能合法挂 link。因此候选事务先保留 `profile_status=pending`、`fetch_status=pending`、claim `candidate`、Decision/Tool Capability/Fit `draft`，所有 link 为 0；没有人工审核时此即最低安全状态。
+- `decision_official_evidence_intake` 的域名限制要求 URL 属于 `notebook.google.com`，而必要官方来源还包括 `blog.google` 与 `support.google.com`。本包用固定 URL 的 Owner SQL 事务，人工审核门禁仍逐条校验 reviewer、来源、引文、期限、owner 和 link trigger。没有扩大 intake 函数的全局信任范围。
+- Task `527fe8b7-c171-4c50-ab1f-9404d7536e7c`、Capability `50288b6e-a968-4bcf-9e55-911df203e0c7` 与 `04930ae8-4c78-487f-a6c9-25680b8da681` 仅复用，不更新 Task Capability，不触及其他工具。
+
+## 交付内容
+
+| 文件 | 作用 | 默认行为 |
+| --- | --- | --- |
+| [candidate.sql](../db/supabase/manual/20261001_gemini_notebook_stage2_candidate.sql) | 固定 owner 下 1 profile、7 Google 官方 URL、10 candidate claim、1 draft Decision、2 draft Tool Capability、1 draft Fit；旧状态、行数、RLS、重复 ID、字段 postimage 闸门 | 最后一行为 `ROLLBACK` |
+| [review_links.sql](../db/supabase/manual/20261001_gemini_notebook_stage2_review_links.sql) | **后续独立人工审核后**，10 claim 逐条核原文并填写真实摘录；验证 service-managed admin/moderator reviewer UUID 与 QA 引用；转 verified/ready/reviewed，新增同 owner 4+9+6 link | reviewer 与摘录为无效占位，且 `ROLLBACK` |
+| [rollback.sql](../db/supabase/manual/20261001_gemini_notebook_stage2_rollback.sql) | 用原始提交回执 `POST_MD5` 对完整行 postimage 精确核验后删除本批；检查外部关系与跨 owner link，恢复 Stage 2 前零状态 | 缺 post hash，且 `ROLLBACK` |
+| [verifier.ts](../scripts/verify-gemini-notebook-stage2-readonly.ts) | `--baseline`、`--candidate`、`--reviewed` 三状态只读回验；核对唯一 owner/source/claim/relation、来源和 claim 一致、期限、审核状态、跨工具 link、Task Page/index/sitemap | 只读 |
+
+固定 ID 与 `stage2Batch=gemini-notebook-20261001` 只属于此工具。前向重复执行只接受**完全一致**的候选 postimage；已有不同 ID、状态、字段或未知行会 HOLD。原始 `POST_MD5` 包含九组行的完整 JSON（包括时间戳和 link），须与私有审计回执一起保存。**不要把回执或官方摘录中的私有审核信息提交仓库。** 不创建无 RLS 的备份表。
+
+## Owner 操作顺序
+
+1. **第一步只预检：**先运行只读 `--baseline`；在 Supabase SQL Editor 原样执行 `20261001_gemini_notebook_stage2_candidate.sql`，保留末尾 `ROLLBACK`。检查 `PREIMAGE` 全为 0、`POSTIMAGE candidate` 的 1/7/10/1/2/1/0 行数与 `POST_MD5`。保存完整通知、执行时刻、票据至私有审计位置。任何不同即 HOLD。**此步不提交生产写入。**
+2. Owner 确认唯一实体及官方事实后，在新会话重跑第一步。仅把候选 SQL 最后一行改为 `COMMIT`，执行一次，并保存**该次提交**的原始 `POST_MD5`。立即运行 `--candidate` 回验。候选事务不构成独立人工审核；不要以此批准关系或页面。
+3. 只有真实独立编辑逐条打开七个官方 URL、核对十条 claim 与各自 scope/摘录、记录账号/地区/套餐/Workspace 条件，并且 reviewer UUID 在 `auth.users.raw_app_meta_data.role` 为 service-managed `admin`/`moderator` 时，才填写 review SQL 的 reviewer、QA reference、十条原文摘录及**步骤 2 原始 candidate `POST_MD5`**。先保留 `ROLLBACK` 预检，审阅 4/9/6 同 owner link 后另开新会话改为 `COMMIT`；保存该次 reviewed `POST_MD5`，运行 `--reviewed`。若需要无操作重跑，以原始 reviewed `POST_MD5` 作 prior 门禁；绝不可用漂移后新算的哈希替代原回执。若实际管理员仅由应用 `ADMIN_EMAILS` 或用户可改的 `user_metadata.role` 授权，**本 SQL 不认可**，须先建立可信的管理员身份审核路径，不能绕过闸门。
+4. 后续关系出版、Task Page 审批与 sitemap/index 属独立门禁。本包最多到 `reviewed`；`research-with-citations` Task Page 继续 404，工具保持 noindex/sitemap 排除。站内引文准确性没有受控实测；即使官方 claim 核验通过也不能把引文路径当作结论准确性的证明。
+5. 如需回滚 Stage 2，在回滚 SQL 填入**要撤销的那次原始提交** `POST_MD5`，保留 `ROLLBACK` 预检并检查零状态恢复通知，另开会话仅改末尾 `COMMIT`。发生任何数据漂移、跨工具依赖或其他关系时 HOLD，先制定独立处理方案。Neon Stage 1 不在此回滚事务内，两库没有原子提交。
+
+只读命令（本地环境由既有 wrapper 读取；不在命令行粘贴密钥）：
+
+```sh
+node scripts/pub-03-readonly-run.mjs pnpm exec tsx scripts/verify-gemini-notebook-stage2-readonly.ts --baseline
+node scripts/pub-03-readonly-run.mjs pnpm exec tsx scripts/verify-gemini-notebook-stage2-readonly.ts --candidate
+node scripts/pub-03-readonly-run.mjs pnpm exec tsx scripts/verify-gemini-notebook-stage2-readonly.ts --reviewed
+```
+
+## 待人工确认的事实与门禁
+
+Google 的[产品帮助](https://support.google.com/gemininotebook/answer/16164461?hl=en)支持已选来源聊天和行内引文，但本站未测准确率；[来源说明](https://support.google.com/gemininotebook/answer/16215270?hl=en)需逐项核对 Web/Drive 发现、用户选择导入及网页、视频、Google 文件、音频的导入损失；[创建 notebook](https://support.google.com/gemininotebook/answer/16206563?hl=en)需核对 notebook 隔离、分享/导出权限；[套餐](https://support.google.com/gemininotebook/answer/16213268?hl=en)和[计算量限制](https://support.google.com/gemininotebook/answer/17670842?hl=en)会变，需在审核当日按目标账号、地区和 Workspace 管理员设置再查；[隐私条款](https://support.google.com/gemininotebook/answer/17004255?hl=en)与产品帮助需分别核对一般账号、主动反馈、跨服务及合格 Workspace/Education 边界。发现/导入不能声称是系统性、穷尽、可复现的检索。更名身份以[Google 公告](https://blog.google/innovation-and-ai/products/gemini-notebook/notebooklm-gemini-notebook/)为准。若来源内容或状态改变，更新候选包并重新预检，不直接提升审核状态。
+
+本地验证：临时 PostgreSQL 测试覆盖默认回滚、候选提交/幂等、漂移拒绝、审核 link 与回滚精确哈希；`tsc --noEmit`、完整 build（设置仅供构建的 `MONITOR_API_TOKEN`）与 `git diff --check`。这不代替生产 SQL Editor 预检或独立事实审核。
