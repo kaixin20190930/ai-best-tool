@@ -590,8 +590,8 @@ export const guideTaskChecks: Record<string, GuideTaskCheck> = {
       {
         href: '/ai/notebooklm#decision-card',
         label: {
-          cn: '查看 NotebookLM 的适用边界与来源',
-          en: 'Review NotebookLM fit and sources',
+          cn: '查看 Gemini Notebook（原 NotebookLM）的适用边界与来源',
+          en: 'Review Gemini Notebook (formerly NotebookLM) fit and sources',
         },
       },
       {

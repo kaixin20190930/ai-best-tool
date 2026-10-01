@@ -13,17 +13,22 @@ async function main() {
   const evidenceConfig = fs.readFileSync('lib/config/priorityToolEvidence.ts', 'utf8');
   for (const term of [
     'notebooklm:',
-    '600 sources',
-    '600 个来源',
+    'Gemini Notebook (formerly NotebookLM)',
+    'Gemini Notebook（原 NotebookLM）',
+    'Ultra 20 TB 500',
+    'Ultra 30 TB 600',
     'citation accuracy',
     'Workspace for Education',
-    'support.google.com/notebooklm/answer/16164461',
-    'support.google.com/googleone/answer/16105039',
+    'support.google.com/gemininotebook/answer/16164461',
+    'support.google.com/gemininotebook/answer/16213268',
+    'support.google.com/gemininotebook/answer/16215270',
+    'blog.google/innovation-and-ai/products/gemini-notebook/notebooklm-gemini-notebook/',
   ]) {
-    assert(evidenceConfig.includes(term), `NotebookLM evidence snapshot: ${term} missing`);
+    assert(evidenceConfig.includes(term), `Gemini Notebook evidence snapshot: ${term} missing`);
   }
-  assert(!evidenceConfig.includes('Gemini Notebook'), 'Unmigrated directory must retain NotebookLM display identity');
-  console.log('PASS NotebookLM evidence snapshot matches the unmigrated directory identity');
+  assert(!evidenceConfig.includes('support.google.com/notebooklm/answer/16164461'));
+  assert(!evidenceConfig.includes('rather than discovering the open web'));
+  console.log('PASS Gemini Notebook source-backed evidence matches migrated identity');
 
   for (const file of linkedPages) {
     const source = fs.readFileSync(file, 'utf8');
@@ -39,29 +44,57 @@ async function main() {
     comparisonSource.includes("content: { kind: 'unavailable'"),
     'Perplexity comparison must retain its unavailable-content guard',
   );
-  assert(fs.readFileSync('lib/content/guideTaskChecks.ts', 'utf8').includes('Review NotebookLM fit and sources'));
-  console.log('PASS research entry points retain the NotebookLM relationship');
+  assert(
+    fs
+      .readFileSync('lib/content/guideTaskChecks.ts', 'utf8')
+      .includes('Review Gemini Notebook (formerly NotebookLM) fit and sources'),
+  );
+  console.log('PASS research entry points retain the historical notebooklm route');
 
   const base = process.env.SEO_BASE_URL;
   if (!base) return;
   for (const [path, expected] of [
-    ['/ai/notebooklm', ['NotebookLM', '600 sources', 'citation accuracy', 'Workspace for Education']],
-    ['/cn/ai/notebooklm', ['NotebookLM', '600 个来源', '引用准确性', 'Workspace for Education']],
+    [
+      '/ai/notebooklm',
+      [
+        'Gemini Notebook',
+        'formerly NotebookLM',
+        'Ultra 20 TB 500',
+        'Ultra 30 TB 600',
+        'citation accuracy',
+        'Workspace for Education',
+      ],
+    ],
+    [
+      '/cn/ai/notebooklm',
+      [
+        'Gemini Notebook',
+        '原 NotebookLM',
+        'Ultra 20 TB 500',
+        'Ultra 30 TB 600',
+        '引用准确性',
+        'Workspace for Education',
+      ],
+    ],
   ] as const) {
     const response = await fetch(`${base}${path}`, { signal: AbortSignal.timeout(20000) });
     assert.equal(response.status, 200, path);
     const html = await response.text();
     const visible = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
     for (const term of expected) assert(visible.includes(term), `${path}: ${term} missing`);
-    assert(!visible.includes('Gemini Notebook'), `${path}: new display identity shown before database migration`);
-    assert(/<meta[^>]*name="robots"[^>]*content="[^"]*noindex/.test(html), `${path}: noindex missing`);
+    assert(/<meta[^>]*name="robots"[^>]*content="noindex, follow"/.test(html), `${path}: noindex/follow missing`);
     assert(html.includes(`<link rel="canonical" href="https://aibesttool.com${path}"`), `${path}: canonical changed`);
-    console.log(`PASS ${path}: evidence, limits, canonical and noindex`);
+    console.log(`PASS ${path}: current/former identity, limits, canonical and noindex/follow`);
   }
   const sitemap = await fetch(`${base}/sitemap.xml`, { signal: AbortSignal.timeout(20000) });
   assert.equal(sitemap.status, 200);
-  assert(!/<loc>[^<]*\/ai\/notebooklm\/?<\/loc>/.test(await sitemap.text()), 'NotebookLM must stay outside sitemap');
-  console.log('PASS sitemap: NotebookLM excluded while monitored');
+  const sitemapXml = await sitemap.text();
+  assert(
+    !/<loc>[^<]*\/ai\/notebooklm\/?<\/loc>/.test(sitemapXml),
+    'Historical NotebookLM route must stay outside sitemap',
+  );
+  assert(!/<loc>[^<]*\/ai\/gemini-notebook\/?<\/loc>/.test(sitemapXml), 'No new Gemini Notebook sitemap route');
+  console.log('PASS sitemap: historical route excluded; no new Gemini Notebook entry');
 }
 
 main().catch((error) => {

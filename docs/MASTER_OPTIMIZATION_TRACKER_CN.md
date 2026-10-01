@@ -2,7 +2,7 @@
 
 更新时间：2026-10-01
 
-2026-10-01 Gemini Notebook 第一阶段身份迁移**仅交付 Owner 手工候选，未执行**：Neon 固定工具 ID 的前向/精确回滚 SQL 默认预检并 `ROLLBACK`，提交需私有快照、最新 `updated_at`/全行哈希及明确 Owner 闸门；只读 verifier 分 `--baseline`/`--identity`，本地临时 PostgreSQL 事务测试通过。生产只读基线仍为旧官网、旧标题、`notebooklm` slug、`published/monitor`；Supabase Notebook Decision 数据仍为 0，Task Page 保持 HOLD。详见[专项候选包](./GEMINI_NOTEBOOK_IDENTITY_RESEARCH_CANDIDATE_2026-09-30_CN.md)。生产写入 0，无 push/deploy。
+2026-10-01 Gemini Notebook 第一阶段 Neon 身份迁移已由 Owner 在生产提交并独立只读回验：固定 ID/`notebooklm` slug 保持，现名与官网已更新，`published/monitor`、noindex/follow、旧 canonical 与 sitemap 排除保持；post `updated_at=2026-10-01 01:20:38.963207+00`、全行 MD5 `e46e55730afa5269df9d30c569507dee`。生产 SEO smoke 通过、sitemap 126；EN/CN 页面显示现名和原名语境。仓库静态证据与指南标签收口，尚未 push/deploy；Supabase Notebook Decision 数据仍为 0，Task Page 保持 HOLD。详见[专项记录与回滚步骤](./GEMINI_NOTEBOOK_IDENTITY_RESEARCH_CANDIDATE_2026-09-30_CN.md)。
 
 2026-09-30 CL-02 `research-with-citations` 三工具只读盘点：Consensus、NotebookLM、Perplexity 三个既有 published 实体查重通过；目前仅 Consensus 的 1 条 Tool Capability/1 条 Fit 已 published，并有同 owner 的 7+6 evidence links。NotebookLM 与 Perplexity 均无 Decision profile/source/claim/关系；Google 官方已将 NotebookLM 更名 Gemini Notebook，旧目录 URL 301 至新域名。三种角色分别是学术论文检索与证据摘要、用户选定资料的溯源综合、开放网页检索与引用回答；来源链接不等于结论正确。结论 **HOLD_EVIDENCE_AND_IDENTITY**，不生成关系 SQL/manifest、不创建新 Task/工具页，不放开第二个 Task Page；当前 `/cn/tasks/research-with-citations` 为 404。详见[专项盘点](./DECISION_GRAPH_CL02_THREE_TOOL_HOLD_2026-09-30_CN.md)。生产写入 0，无 push/deploy。
 
