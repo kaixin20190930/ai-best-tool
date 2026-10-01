@@ -35,7 +35,7 @@ const expectedUrls = [
   'https://support.google.com/gemininotebook/answer/17004255?hl=en',
 ];
 const expectedDecisionLinks = [
-  [402,'fit'],[404,'limitation'],[407,'cost'],[409,'privacy'],
+  [402,'fit'],[404,'limitation'],[406,'export'],[407,'cost'],[409,'privacy'],
 ].map(([n,p]) => `${toolId}:c7890701-0000-4000-8000-${String(n).padStart(12,'0')}:${p}`).sort();
 const expectedCapabilityLinks = [
   [201,403,'support'],[201,407,'availability'],[201,408,'plan'],[201,404,'limitation'],[201,405,'limitation'],
@@ -186,7 +186,7 @@ async function main() {
       assert.ok(sources.every((x) => x.fetch_status==='success' && Date.parse(x.last_verified_at)<=now));
       assert.ok(claims.every((x) => x.verification_status==='verified' && x.verified_by &&
         Date.parse(x.verified_at)<=now && Date.parse(x.review_due_at)>now && x.source_excerpt));
-      assert.deepEqual([decisionLinks.length,capabilityLinks.length,fitLinks.length],[4,9,6]);
+      assert.deepEqual([decisionLinks.length,capabilityLinks.length,fitLinks.length],[5,9,6]);
       assert.deepEqual(decisionLinks.map((x) => `${x.tool_id}:${x.claim_id}:${x.purpose}`).sort(),expectedDecisionLinks);
       assert.deepEqual(capabilityLinks.map((x) => `${x.tool_capability_id}:${x.claim_id}:${x.purpose}`).sort(),expectedCapabilityLinks);
       assert.deepEqual(fitLinks.map((x) => `${x.fit_id}:${x.claim_id}:${x.purpose}`).sort(),expectedFitLinks);

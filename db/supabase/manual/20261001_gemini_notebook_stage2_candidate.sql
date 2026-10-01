@@ -109,7 +109,7 @@ BEGIN
     ('c7890701-0000-4000-8000-000000000403','c7890701-0000-4000-8000-000000000103','gemini-notebook:research:discovery-2026-10','workflow_feature',
       '{"summary":"Web and Drive sources can be discovered and selected for import; discovery is not an exhaustive systematic search."}','{"surface":"supported Web and Drive discovery","conditions":["account","region","source access"]}'),
     ('c7890701-0000-4000-8000-000000000404','c7890701-0000-4000-8000-000000000103','gemini-notebook:research:import-loss-2026-10','workflow_limit',
-      '{"summary":"Web imports extract HTML text, YouTube imports use captions, Google file footnotes and comments are omitted, and audio imports use transcripts."}','{"scope":"respective source types","requires":"check original against imported content"}'),
+      '{"summary":"Web imports extract HTML text; YouTube import depends on available captions and imports caption text, not embedded video or audio; Google file footnotes and comments are omitted, and audio imports use transcripts."}','{"scope":"respective source types","requires":"check original against imported content"}'),
     ('c7890701-0000-4000-8000-000000000405','c7890701-0000-4000-8000-000000000104','gemini-notebook:research:notebook-boundary-2026-10','workflow_limit',
       '{"summary":"Notebook content is scoped to each notebook; simultaneous retrieval across notebooks is unavailable."}','{"surface":"notebook chat"}'),
     ('c7890701-0000-4000-8000-000000000406','c7890701-0000-4000-8000-000000000104','gemini-notebook:research:sharing-export-2026-10','workflow_limit',
@@ -147,13 +147,13 @@ BEGIN
     (tool_id,setup_complexity,data_training_use,self_host_level,export_level,decision_summary,watch_outs,editorial_status)
   VALUES (v_tool,'unknown','unknown','no','limited',
     '{"en":"Suitable for synthesis within a selected source set with traceable citations. Discovery and import do not constitute exhaustive search; verify important citations against the originals.","cn":"适于对已选资料集进行可回查综合。发现与导入不等于穷尽检索；重要引文须打开原文核对。"}',
-    '[{"en":"Imports can omit media, captions, footnotes, comments or inaccessible pages; account, plan, region, compute, cross-service and Workspace privacy boundaries vary. Citation accuracy has not been independently tested by this site.","cn":"导入可能丢失媒体、字幕外内容、脚注、评论或无权限页面；账号、套餐、地区、计算量、跨服务和 Workspace 隐私边界不同。本站尚未独立实测引文准确性。"}]','draft')
+    '[{"en":"Imports can omit embedded media, content beyond available YouTube captions, footnotes, comments or inaccessible pages; account, plan, region, compute, cross-service and Workspace privacy boundaries vary. Citation accuracy has not been independently tested by this site.","cn":"导入可能遗漏嵌入媒体、YouTube 可用字幕未涵盖的内容、脚注、评论或无权限页面；账号、套餐、地区、计算量、跨服务和 Workspace 隐私边界不同。本站尚未独立实测引文准确性。"}]','draft')
   ON CONFLICT (tool_id) DO NOTHING;
   IF (SELECT count(*) FROM public.tool_decision_profiles WHERE tool_id=v_tool AND setup_complexity='unknown'
       AND data_training_use='unknown' AND self_host_level='no' AND export_level='limited'
       AND editorial_status='draft' AND reviewed_by IS NULL AND reviewed_at IS NULL
       AND decision_summary='{"en":"Suitable for synthesis within a selected source set with traceable citations. Discovery and import do not constitute exhaustive search; verify important citations against the originals.","cn":"适于对已选资料集进行可回查综合。发现与导入不等于穷尽检索；重要引文须打开原文核对。"}'::jsonb
-      AND watch_outs='[{"en":"Imports can omit media, captions, footnotes, comments or inaccessible pages; account, plan, region, compute, cross-service and Workspace privacy boundaries vary. Citation accuracy has not been independently tested by this site.","cn":"导入可能丢失媒体、字幕外内容、脚注、评论或无权限页面；账号、套餐、地区、计算量、跨服务和 Workspace 隐私边界不同。本站尚未独立实测引文准确性。"}]'::jsonb) <> 1 THEN
+      AND watch_outs='[{"en":"Imports can omit embedded media, content beyond available YouTube captions, footnotes, comments or inaccessible pages; account, plan, region, compute, cross-service and Workspace privacy boundaries vary. Citation accuracy has not been independently tested by this site.","cn":"导入可能遗漏嵌入媒体、YouTube 可用字幕未涵盖的内容、脚注、评论或无权限页面；账号、套餐、地区、计算量、跨服务和 Workspace 隐私边界不同。本站尚未独立实测引文准确性。"}]'::jsonb) <> 1 THEN
     RAISE EXCEPTION 'Decision profile postimage differs';
   END IF;
 

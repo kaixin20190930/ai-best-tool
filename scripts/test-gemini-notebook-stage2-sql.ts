@@ -19,11 +19,17 @@ for (const sql of [candidate,review,rollback]) {
 assert.match(candidate,/verification_status='candidate'/);
 assert.match(candidate,/editorial_status='draft'/);
 assert.match(review,/reviewer.*auth\.users/s);
+assert.match(review,/Stage 2 requires RLS enabled on all nine Supabase tables/);
+assert.match(review,/000000000406','export'/);
+assert.match(candidate,/YouTube import depends on available captions and imports caption text, not embedded video or audio/);
+assert.doesNotMatch(candidate,/omit media, captions/i);
 assert.match(verifier,/Task Page opened/);
+assert.match(verifier,/\[406,'export'\]/);
 
 const commit = (sql: string) => sql.replace(/ROLLBACK;\s*$/, 'COMMIT;');
 const taskId='527fe8b7-c171-4c50-ab1f-9404d7536e7c';
 const reviewer='d7890701-0000-4000-8000-000000000001';
+const reviewerEmail='reviewer@example.test';
 
 async function main() {
   const dir=mkdtempSync(join(tmpdir(),'gemini-stage2-pg-'));
@@ -38,8 +44,8 @@ async function main() {
     await db.connect();
     db.on('notice',(notice) => { const match=notice.message?.match(/POST_MD5 ([0-9a-f]{32})/); if(match) postHash=match[1]; });
     await db.query(`CREATE SCHEMA auth;
-      CREATE TABLE auth.users (id uuid PRIMARY KEY,raw_user_meta_data jsonb,raw_app_meta_data jsonb);
-      INSERT INTO auth.users VALUES ('${reviewer}','{}','{"role":"admin"}');
+      CREATE TABLE auth.users (id uuid PRIMARY KEY,email text,raw_user_meta_data jsonb,raw_app_meta_data jsonb);
+      INSERT INTO auth.users VALUES ('${reviewer}','${reviewerEmail}','{"role":"admin"}','{}');
       CREATE TABLE decision_tasks(id uuid PRIMARY KEY,slug text,status text);
       INSERT INTO decision_tasks VALUES ('${taskId}','research-with-citations','active');
       CREATE TABLE decision_capabilities(id uuid PRIMARY KEY,slug text,status text);
@@ -118,21 +124,55 @@ async function main() {
     await db.query(`UPDATE product_intelligence_claims SET claim_value='{"summary":"Notebook chat answers from selected sources with inline citations; citation accuracy was not independently tested by this site."}' WHERE claim_key='gemini-notebook:research:grounding-2026-10'`);
     const keys=(await db.query('SELECT claim_key FROM product_intelligence_claims')).rows.map((x)=>x.claim_key.replace('gemini-notebook:research:',''));
     const excerpts=Object.fromEntries(keys.map((key)=>[key,`Official passage checked for ${key} by the independent reviewer.`]));
+    const ownerGate=`APPROVE_GEMINI_STAGE2:${reviewer}:${reviewerEmail}:USER_METADATA_ROLE`;
     const configured=review
       .replace('00000000-0000-0000-0000-000000000000',reviewer)
+      .replace('REPLACE_WITH_EXACT_REVIEWER_EMAIL',reviewerEmail)
+      .replace('REPLACE_WITH_USER_METADATA_ROLE_OR_ADMIN_EMAILS','USER_METADATA_ROLE')
+      .replace('REPLACE_WITH_EXACT_OWNER_APPROVAL',ownerGate)
       .replace('REPLACE_WITH_INDEPENDENT_REVIEW_REFERENCE','QA-2026-10-01-independent')
       .replace('REPLACE_WITH_ORIGINAL_PRIOR_POST_MD5',candidateHash)
       .replace("SET LOCAL gemini.stage2.excerpts = '{}';",`SET LOCAL gemini.stage2.excerpts = '${JSON.stringify(excerpts)}';`);
     const nonAdmin='d7890701-0000-4000-8000-000000000002';
-    await db.query(`INSERT INTO auth.users VALUES ($1,'{"role":"admin"}','{}')`,[nonAdmin]);
-    await assert.rejects(db.query(commit(configured.replaceAll(reviewer,nonAdmin))),/lacks service-managed admin/);
+    const nonAdminEmail='nonadmin@example.test';
+    await db.query(`INSERT INTO auth.users VALUES ($1,$2,'{"role":"user"}','{}')`,[nonAdmin,nonAdminEmail]);
+    await assert.rejects(db.query(commit(configured.replaceAll(reviewer,nonAdmin))),/Reviewer UUID\/email mismatch or app admin basis missing/);
     await db.query('ROLLBACK');
+    const missingReviewer='d7890701-0000-4000-8000-000000000003';
+    await assert.rejects(db.query(commit(configured.replaceAll(reviewer,missingReviewer))),/Reviewer UUID\/email mismatch or app admin basis missing/);
+    await db.query('ROLLBACK');
+    await assert.rejects(db.query(commit(configured.replaceAll(reviewerEmail,'wrong@example.test'))),/Reviewer UUID\/email mismatch or app admin basis missing/);
+    await db.query('ROLLBACK');
+    await assert.rejects(db.query(commit(configured.replaceAll(reviewerEmail,''))),/Exact Owner approval/);
+    await db.query('ROLLBACK');
+    await assert.rejects(db.query(commit(configured.replace(ownerGate,'REPLACE_WITH_EXACT_OWNER_APPROVAL'))),/Exact Owner approval/);
+    await db.query('ROLLBACK');
+    await db.query(`ALTER TABLE tool_task_fit_claims DISABLE ROW LEVEL SECURITY`);
+    await assert.rejects(db.query(commit(configured)),/Stage 2 requires RLS enabled on all nine Supabase tables/);
+    await db.query('ROLLBACK');
+    await db.query(`ALTER TABLE tool_task_fit_claims ENABLE ROW LEVEL SECURITY`);
+    const allowlistGate=`APPROVE_GEMINI_STAGE2:${nonAdmin}:${nonAdminEmail}:ADMIN_EMAILS`;
+    const allowlistConfig=configured
+      .replace("SET LOCAL gemini.stage2.admin_basis = 'USER_METADATA_ROLE';",
+        "SET LOCAL gemini.stage2.admin_basis = 'ADMIN_EMAILS';")
+      .replace(ownerGate,allowlistGate)
+      .replaceAll(reviewer,nonAdmin)
+      .replaceAll(reviewerEmail,nonAdminEmail);
+    await db.query(allowlistConfig);
+    assert.equal(await count('tool_decision_profile_claims'),0,'allowlist review dry-run wrote links');
     await assert.rejects(db.query(commit(configured.replace(candidateHash,'00000000000000000000000000000000'))),/prior postimage drift/);
     await db.query('ROLLBACK');
     await db.query(configured);
     assert.equal(await count('tool_capability_claims'),0,'review dry-run wrote links');
     await db.query(commit(configured));
-    assert.equal(await count('tool_decision_profile_claims'),4);
+    assert.equal(await count('tool_decision_profile_claims'),5);
+    assert.equal(Number((await db.query(`SELECT count(*)::int AS n FROM tool_decision_profile_claims l
+      JOIN product_intelligence_claims c ON c.id=l.claim_id
+      JOIN product_intelligence_profiles p ON p.id=c.profile_id
+      WHERE l.tool_id='cec78907-e2a1-4eb7-853a-a58334026280'
+        AND c.id='c7890701-0000-4000-8000-000000000406' AND l.purpose='export'
+        AND c.verification_status='verified' AND p.owner_type='tool'
+        AND p.owner_id=l.tool_id`)).rows[0].n),1,'sharing/export claim must be verified and same-owner');
     assert.equal(await count('tool_capability_claims'),9);
     assert.equal(await count('tool_task_fit_claims'),6);
     const reviewHash=postHash;
