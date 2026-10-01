@@ -151,7 +151,7 @@ async function main() {
     await assert.rejects(db.query(`SELECT * FROM pg_temp.gemini_notebook_stage2_candidate('WRONG')`),/Use ROLLBACK/);
     assert.equal(await count('product_intelligence_profiles'),0,'invalid mode wrote data');
     const committed=resultRow(await db.query(commitCandidate));
-    assert.equal(committed.mode,'commit');
+    assert.equal(committed.mode,'committed');
     assert.equal(committed.preflight,false);
     postHash=committed.post_md5;
     assert.equal(await count('product_intelligence_profiles'),1);

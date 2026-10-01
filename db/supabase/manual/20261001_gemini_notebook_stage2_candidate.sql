@@ -216,7 +216,7 @@ BEGIN
     'capabilityLinks',(SELECT coalesce(jsonb_agg(to_jsonb(l) ORDER BY l.tool_capability_id,l.claim_id,l.purpose),'[]'::jsonb) FROM public.tool_capability_claims l JOIN public.tool_capabilities t ON t.id=l.tool_capability_id WHERE t.tool_id=v_tool),
     'fitLinks',(SELECT coalesce(jsonb_agg(to_jsonb(l) ORDER BY l.claim_id,l.purpose),'[]'::jsonb) FROM public.tool_task_fit_claims l WHERE l.fit_id=v_fit)
   )::text) INTO v_post_md5;
-  mode := CASE WHEN p_mode='ROLLBACK' THEN 'preflight' ELSE 'commit' END;
+  mode := CASE WHEN p_mode='ROLLBACK' THEN 'preflight' ELSE 'committed' END;
   preflight := p_mode='ROLLBACK';
   SELECT count(*)::integer INTO profiles FROM public.product_intelligence_profiles WHERE id=v_profile;
   SELECT count(*)::integer INTO sources FROM public.product_intelligence_sources WHERE profile_id=v_profile;
