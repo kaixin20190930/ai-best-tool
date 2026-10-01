@@ -7,8 +7,14 @@ import { Client } from 'pg';
 
 const forward = readFileSync('db/neon/20261001_owner_gemini_notebook_identity.sql', 'utf8');
 const rollback = readFileSync('db/neon/20261001_owner_gemini_notebook_identity_rollback.sql', 'utf8');
+const verifier = readFileSync('scripts/verify-gemini-notebook-identity-readonly.ts', 'utf8');
 const id = 'cec78907-e2a1-4eb7-853a-a58334026280';
 const quote = (value: string) => `'${value.replaceAll("'", "''")}'`;
+const extract = (source: string, regex: RegExp) => {
+  const match = source.match(regex);
+  assert.ok(match, `Missing ${regex}`);
+  return match[1];
+};
 
 for (const sql of [forward, rollback]) {
   assert.match(sql, /^BEGIN;/m);
@@ -26,6 +32,9 @@ assert.match(forward, /Ultra 20 TB 500 and Ultra 30 TB 600/);
 assert.match(forward, /Ultra 20 TB 500、Ultra 30 TB 600/);
 assert.match(forward, /v_old\.features \|\| jsonb_build_object/);
 assert.match(rollback, /v_snapshot->'detail'/);
+for (const source of [forward, rollback, verifier]) {
+  assert.match(source, /\(notebooklm\|notebook\)\[\.\]google\[\.\]com/);
+}
 
 async function main() {
   const workDir = mkdtempSync(join(tmpdir(), 'gemini-identity-pg-'));
@@ -54,6 +63,7 @@ async function main() {
       editorial: {
         reviewedAt: '2026-09-06',
         sourceUrl: 'https://support.google.com/notebooklm/answer/16164461?hl=en',
+        summary: { en: 'Original NotebookLM review.' },
         trustNote: { en: 'Citation accuracy not independently tested.' },
       },
       trialTemplate: { targetOutcome: { en: 'Verify NotebookLM.' }, checks: ['keep'] },
@@ -70,6 +80,49 @@ async function main() {
     VALUES ($1,'notebooklm',$2,'{}',$3,'https://notebooklm.google.com/',$4,'published','monitor','2026-09-20','2026-09-30T20:29:26.195266Z')`,
       [id, title, { en: 'NotebookLM' }, features],
     );
+    const ownedExpression = `md5(jsonb_build_object(
+      'title',title,'url',url,'detail',detail,
+      'identity',features->'identity','editorial',features->'editorial',
+      'trialTemplate',features->'trialTemplate',
+      'marketValidation',features->'marketValidation',
+      'next_review_date',next_review_date)::text)`;
+    const oldOwnedHash = (await client.query(`SELECT ${ownedExpression} AS hash FROM tools WHERE id=$1`, [id])).rows[0]
+      .hash;
+    const identitySource = 'https://blog.google/innovation-and-ai/products/gemini-notebook/notebooklm-gemini-notebook/';
+    const oldHelp = 'https://support.google.com/notebooklm/answer/16164461?hl=en';
+    const newHelp = 'https://support.google.com/gemininotebook/answer/16164461?hl=en';
+    const evidenceUrls = [
+      ...new Set([
+        ...features.marketValidation.evidenceUrls.map((url) => (url === oldHelp ? newHelp : url)),
+        identitySource,
+      ]),
+    ].sort();
+    const featureExpression = extract(forward, /v_features := ([\s\S]*?);\n  UPDATE tools/)
+      .replaceAll('v_old.features', '$1::jsonb')
+      .replaceAll('v_evidence_urls', '$2::jsonb');
+    const targetFeatures = (
+      await client.query(`SELECT ${featureExpression} AS features`, [features, JSON.stringify(evidenceUrls)])
+    ).rows[0].features;
+    const targetDetail = {
+      en: extract(forward, /v_detail_en constant text := \$en\$([\s\S]*?)\$en\$;/),
+      cn: extract(forward, /v_detail_cn constant text := \$cn\$([\s\S]*?)\$cn\$;/),
+      tw: extract(forward, /v_detail_tw constant text := \$tw\$([\s\S]*?)\$tw\$;/),
+    };
+    const targetOwned = {
+      title: JSON.parse(extract(forward, /v_title constant jsonb := '([^']+)'::jsonb;/)),
+      url: 'https://notebook.google.com/',
+      detail: { ...targetDetail, zh: targetDetail.cn },
+      identity: targetFeatures.identity,
+      editorial: targetFeatures.editorial,
+      trialTemplate: targetFeatures.trialTemplate,
+      marketValidation: targetFeatures.marketValidation,
+      next_review_date: '2026-12-15',
+    };
+    const targetOwnedHash = (await client.query('SELECT md5($1::jsonb::text) AS hash', [JSON.stringify(targetOwned)]))
+      .rows[0].hash;
+    const testForward = forward
+      .replaceAll('bd7f278e026f9ecb2d619b1789536ff9', oldOwnedHash)
+      .replaceAll('6ad598a3691906ee6ca9e75d4500188a', targetOwnedHash);
     const before = (
       await client.query(
         `SELECT updated_at::text AS at, md5(to_jsonb(t)::text) AS hash,
@@ -79,19 +132,48 @@ async function main() {
         [id],
       )
     ).rows[0];
-    await client.query(forward);
+    const duplicateId = '11111111-1111-4111-8111-111111111111';
+    await client.query(
+      `INSERT INTO tools (id,name,title,content,detail,url,features,status,page_quality_status,next_review_date,updated_at)
+      VALUES ($1,'unrelated-tool','{"en":"Other"}','{}','{}','https://notebook.google.com/',
+        '{}','published','monitor','2026-09-20',now())`,
+      [duplicateId],
+    );
+    const verifierUrlPattern = extract(verifier, /OR lower\(url\) ~ '([^']+)'/);
+    const matches = await client.query(`SELECT id FROM tools WHERE id=$1 OR lower(url) ~ $2`, [id, verifierUrlPattern]);
+    assert.equal(matches.rowCount, 2, 'verifier missed URL-only duplicate');
+    await assert.rejects(client.query(testForward), /Notebook identity collision or duplicate/);
+    await client.query('ROLLBACK');
+    await client.query('DELETE FROM tools WHERE id=$1', [duplicateId]);
+    const original = (await client.query('SELECT detail,features FROM tools WHERE id=$1', [id])).rows[0];
+    for (const mutation of [
+      `detail=jsonb_set(detail,'{en}','"partially edited detail"'::jsonb)`,
+      `features=jsonb_set(features,'{editorial,summary,en}','"partially edited summary"'::jsonb)`,
+      `features=jsonb_set(features,'{trialTemplate,targetOutcome,en}','"Partially edited NotebookLM"'::jsonb)`,
+      `features=jsonb_set(features,'{marketValidation,evidenceUrls}','[]'::jsonb)`,
+    ]) {
+      await client.query(`UPDATE tools SET ${mutation} WHERE id=$1`, [id]);
+      await assert.rejects(client.query(testForward), /baseline fields differ/, mutation);
+      await client.query('ROLLBACK');
+      await client.query('UPDATE tools SET detail=$1, features=$2 WHERE id=$3', [
+        original.detail,
+        original.features,
+        id,
+      ]);
+    }
+    await client.query(testForward);
     assert.equal(
       (await client.query('SELECT url FROM tools WHERE id=$1', [id])).rows[0].url,
       'https://notebooklm.google.com/',
       'default forward precheck wrote data',
     );
-    await client.query(forward.replace(/ROLLBACK;\s*$/, 'COMMIT;'));
+    await client.query(testForward.replace(/ROLLBACK;\s*$/, 'COMMIT;'));
     assert.equal(
       (await client.query('SELECT url FROM tools WHERE id=$1', [id])).rows[0].url,
       'https://notebooklm.google.com/',
       'a COMMIT without Owner gates wrote data',
     );
-    const gatedForward = forward
+    const gatedForward = testForward
       .replace(
         "-- SET LOCAL app.gemini_notebook_expected_updated_at = '<exact verifier updatedAtUtc>';",
         `SET LOCAL app.gemini_notebook_expected_updated_at = ${quote(before.at)};`,
@@ -153,6 +235,37 @@ async function main() {
       after.hash,
       'idempotent retry changed the row',
     );
+    for (const mutation of [
+      `detail=jsonb_set(detail,'{en}','"partial detail"'::jsonb)`,
+      `features=jsonb_set(features,'{identity,aliases}','[]'::jsonb)`,
+      `features=jsonb_set(features,'{editorial,summary,en}','"partial editorial"'::jsonb)`,
+      `features=jsonb_set(features,'{trialTemplate,targetOutcome,en}','"partial trial"'::jsonb)`,
+      `features=jsonb_set(features,'{marketValidation,evidenceUrls}','[]'::jsonb)`,
+    ]) {
+      await client.query(`UPDATE tools SET ${mutation} WHERE id=$1`, [id]);
+      const partialHash = (await client.query('SELECT md5(to_jsonb(t)::text) AS hash FROM tools t WHERE id=$1', [id]))
+        .rows[0].hash;
+      await assert.rejects(
+        client.query(
+          retry.replace(
+            `SET LOCAL app.gemini_notebook_expected_row_md5 = ${quote(after.hash)};`,
+            `SET LOCAL app.gemini_notebook_expected_row_md5 = ${quote(partialHash)};`,
+          ),
+        ),
+        /Already migrated but exact postimage gate missing or changed/,
+      );
+      await client.query('ROLLBACK');
+      await client.query('UPDATE tools SET detail=$1, features=$2 WHERE id=$3', [after.detail, after.features, id]);
+    }
+    await client.query(
+      `INSERT INTO tools (id,name,title,content,detail,url,features,status,page_quality_status,next_review_date,updated_at)
+      VALUES ($1,'unrelated-tool','{"en":"Other"}','{}','{}','https://notebooklm.google.com/',
+        '{}','published','monitor','2026-09-20',now())`,
+      [duplicateId],
+    );
+    await assert.rejects(client.query(rollback), /Notebook identity collision or duplicate/);
+    await client.query('ROLLBACK');
+    await client.query('DELETE FROM tools WHERE id=$1', [duplicateId]);
     await client.query(rollback);
     assert.equal(
       (await client.query('SELECT url FROM tools WHERE id=$1', [id])).rows[0].url,
@@ -188,7 +301,7 @@ async function main() {
       .rows[0];
     assert.equal(restored.url, 'https://notebooklm.google.com/');
     assert.equal(restored.hash, before.hash);
-    console.log('PASS Gemini Notebook SQL static, default rollback, gated forward, exact rollback');
+    console.log('PASS Gemini Notebook SQL: URL-only duplicates, partial states, gates, idempotence, exact rollback');
   } finally {
     await client.end().catch(() => undefined);
     if (started) execFileSync('pg_ctl', ['-D', workDir, '-m', 'immediate', '-w', 'stop'], { stdio: 'ignore' });

@@ -32,6 +32,7 @@ DECLARE
   v_expected_md5 text := nullif(current_setting('app.gemini_notebook_expected_row_md5', true), '');
   v_gate text := nullif(current_setting('app.gemini_notebook_owner_gate', true), '');
   v_count integer;
+  v_owned_md5 text;
   v_title constant jsonb := '{"en":"Gemini Notebook Source-Grounded Research","cn":"Gemini Notebook 资料锚定研究","zh":"Gemini Notebook 资料锚定研究","tw":"Gemini Notebook 資料錨定研究"}'::jsonb;
   v_detail_en constant text := $en$## Gemini Notebook (formerly NotebookLM)
 
@@ -76,16 +77,23 @@ BEGIN
   PERFORM pg_advisory_xact_lock(hashtext('directory:notebooklm'));
   SELECT * INTO STRICT v_old FROM tools WHERE id = v_id FOR UPDATE;
   IF (SELECT count(*) FROM tools WHERE lower(name) IN ('notebooklm','gemini-notebook','gemini notebook')
-      OR lower(url) ~ '^https?://(notebooklm|notebook)\.google\.com([/?#]|$)'
+      OR lower(url) ~ '^https?://(notebooklm|notebook)[.]google[.]com([/?#]|$)'
       OR lower(title::text) LIKE '%gemini notebook%') <> 1 THEN
     RAISE EXCEPTION 'Notebook identity collision or duplicate; HOLD';
   END IF;
+  v_owned_md5 := md5(jsonb_build_object(
+    'title',v_old.title,'url',v_old.url,'detail',v_old.detail,
+    'identity',v_old.features->'identity','editorial',v_old.features->'editorial',
+    'trialTemplate',v_old.features->'trialTemplate',
+    'marketValidation',v_old.features->'marketValidation',
+    'next_review_date',v_old.next_review_date)::text);
   IF v_old.name = 'notebooklm' AND v_old.url = 'https://notebook.google.com/'
     AND v_old.title = v_title AND v_old.features->'identity'->>'currentName' = 'Gemini Notebook'
     AND v_old.features->'identity'->>'sourceUrl' = 'https://blog.google/innovation-and-ai/products/gemini-notebook/notebooklm-gemini-notebook/'
     AND v_old.next_review_date = DATE '2026-12-15' AND v_old.status = 'published'
     AND v_old.page_quality_status = 'monitor' THEN
-    IF v_expected_at IS DISTINCT FROM v_old.updated_at::text
+    IF v_owned_md5 IS DISTINCT FROM '6ad598a3691906ee6ca9e75d4500188a'
+      OR v_expected_at IS DISTINCT FROM v_old.updated_at::text
       OR v_expected_md5 IS DISTINCT FROM md5(to_jsonb(v_old)::text) THEN
       RAISE EXCEPTION 'Already migrated but exact postimage gate missing or changed; HOLD';
     END IF;
@@ -100,7 +108,8 @@ BEGIN
     OR v_old.features->'editorial'->>'reviewedAt' IS DISTINCT FROM '2026-09-06'
     OR v_old.features->'editorial'->>'sourceUrl' IS DISTINCT FROM 'https://support.google.com/notebooklm/answer/16164461?hl=en'
     OR jsonb_typeof(v_old.features->'trialTemplate'->'targetOutcome') IS DISTINCT FROM 'object'
-    OR jsonb_typeof(v_old.features->'marketValidation'->'evidenceUrls') IS DISTINCT FROM 'array' THEN
+    OR jsonb_typeof(v_old.features->'marketValidation'->'evidenceUrls') IS DISTINCT FROM 'array'
+    OR v_owned_md5 IS DISTINCT FROM 'bd7f278e026f9ecb2d619b1789536ff9' THEN
     RAISE EXCEPTION 'Notebook baseline fields differ from reviewed candidate; HOLD';
   END IF;
   IF v_expected_at IS NOT NULL AND (v_old.updated_at::text <> v_expected_at
@@ -112,13 +121,15 @@ BEGIN
     RAISE NOTICE 'PRECHECK PASS; no write. Save the private snapshot, supply all three Owner gates, then rerun.';
     RETURN;
   END IF;
-  SELECT jsonb_agg(DISTINCT to_jsonb(CASE WHEN x.url = 'https://support.google.com/notebooklm/answer/16164461?hl=en'
-      THEN 'https://support.google.com/gemininotebook/answer/16164461?hl=en' ELSE x.url END))
-    INTO v_evidence_urls
+  SELECT jsonb_agg(to_jsonb(url) ORDER BY url) INTO v_evidence_urls
     FROM (
-      SELECT value AS url FROM jsonb_array_elements_text(v_old.features->'marketValidation'->'evidenceUrls')
-      UNION ALL SELECT 'https://blog.google/innovation-and-ai/products/gemini-notebook/notebooklm-gemini-notebook/'
-    ) x;
+      SELECT DISTINCT CASE WHEN x.url = 'https://support.google.com/notebooklm/answer/16164461?hl=en'
+        THEN 'https://support.google.com/gemininotebook/answer/16164461?hl=en' ELSE x.url END AS url
+      FROM (
+        SELECT value AS url FROM jsonb_array_elements_text(v_old.features->'marketValidation'->'evidenceUrls')
+        UNION ALL SELECT 'https://blog.google/innovation-and-ai/products/gemini-notebook/notebooklm-gemini-notebook/'
+      ) x
+    ) deduplicated;
   v_features := v_old.features || jsonb_build_object(
     'identity', jsonb_build_object('currentName','Gemini Notebook','formerName','NotebookLM',
       'aliases',jsonb_build_array('NotebookLM'),'identityChangedAt','2026-07-16',
@@ -148,11 +159,18 @@ BEGIN
   GET DIAGNOSTICS v_count = ROW_COUNT;
   IF v_count <> 1 THEN RAISE EXCEPTION 'Expected exactly one updated row, got %; HOLD',v_count; END IF;
   SELECT * INTO STRICT v_after FROM tools WHERE id = v_id;
+  v_owned_md5 := md5(jsonb_build_object(
+    'title',v_after.title,'url',v_after.url,'detail',v_after.detail,
+    'identity',v_after.features->'identity','editorial',v_after.features->'editorial',
+    'trialTemplate',v_after.features->'trialTemplate',
+    'marketValidation',v_after.features->'marketValidation',
+    'next_review_date',v_after.next_review_date)::text);
   IF v_after.name <> v_old.name OR v_after.status <> v_old.status
     OR v_after.page_quality_status <> v_old.page_quality_status
     OR v_after.content IS DISTINCT FROM v_old.content
     OR v_after.features - 'identity' - 'editorial' - 'trialTemplate' - 'marketValidation'
-       IS DISTINCT FROM v_old.features - 'identity' - 'editorial' - 'trialTemplate' - 'marketValidation' THEN
+       IS DISTINCT FROM v_old.features - 'identity' - 'editorial' - 'trialTemplate' - 'marketValidation'
+    OR v_owned_md5 IS DISTINCT FROM '6ad598a3691906ee6ca9e75d4500188a' THEN
     RAISE EXCEPTION 'Postcondition or unrelated field changed; HOLD';
   END IF;
   RAISE NOTICE 'UPDATED one row. post_updated_at=%, post_row_md5=%. Save both privately for rollback.',

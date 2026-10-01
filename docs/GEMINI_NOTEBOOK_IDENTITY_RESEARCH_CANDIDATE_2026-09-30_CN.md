@@ -74,7 +74,7 @@ Owner 在 Supabase 先建一个 `product_intelligence_profiles`：`owner_type='t
 ## 4. Owner 操作、幂等与回滚
 
 1. **预检与私有备份：**运行 `--baseline`，记录输出的 `updatedAtUtc` 和 `rowMd5`。在 Neon 私有 SQL 会话原样运行前向 SQL，保持三行 `SET LOCAL` 注释与结尾 `ROLLBACK`；预期 `private_rollback_snapshot` 为一条 JSON，通知为 `PRECHECK PASS; no write`。将完整 JSON、执行时间、审阅人和变更票据保存在 Owner 的私有审计位置。不得新建无 RLS 的公开备份表，也不要把快照提交到仓库。若预检或基线失败即 HOLD。
-2. **Neon 手工提交：**Owner 在新鲜 `--baseline` 后复制前向 SQL，填写三项 `SET LOCAL`：精确 `updatedAtUtc`、全行 `rowMd5`、文件内完整的 Owner gate 句；仅在审阅私有快照与目标文案后将最后一行改为 `COMMIT`，以单事务运行。SQL 固定 ID、旧 URL/标题、状态、review date、旧 editorial、时间戳及全行哈希；行数必须等于 1，任一差异抛错中止。重复执行仅在目标全行时间戳/哈希也匹配时无操作。保存通知中的 post timestamp/hash。不要改 `name`、路由、canonical 或 sitemap。
+2. **Neon 手工提交：**Owner 在新鲜 `--baseline` 后复制前向 SQL，填写三项 `SET LOCAL`：精确 `updatedAtUtc`、全行 `rowMd5`、文件内完整的 Owner gate 句；仅在审阅私有快照与目标文案后将最后一行改为 `COMMIT`，以单事务运行。SQL 固定 ID、旧 URL/标题、状态、review date、完整四语言 detail 与四个受管 features 子树的指纹、时间戳及全行哈希；行数必须等于 1，任一差异抛错中止。重复执行还须匹配完整目标受管字段指纹和目标全行时间戳/哈希，部分迁移会 HOLD。保存通知中的 post timestamp/hash。不要改 `name`、路由、canonical 或 sitemap。
 3. **回读：**立即运行 `--identity`，核对只有一个实体、旧 slug、四语言现名/官网、identity/editorial/trialTemplate/marketValidation、`monitor` 导致的 noindex/sitemap 排除；`updatedAtUtc` 和 `rowMd5` 必须与步骤 2 的 post notice 一致。本阶段不运行 `--current` 作为通过门禁，因 Supabase Decision 尚未建立。
 4. **精确回滚：**仅在本阶段没有建立 Decision links 时，Owner 将步骤 1 的完整私有 JSON 粘贴到回滚 SQL 的 `set_config`、填写步骤 2 **原始 post notice** 的时间戳/哈希和完整 rollback gate；新鲜 `--identity` 回读必须再次匹配该 post notice，不能用发生漂移后的新哈希代替。先原样运行默认 `ROLLBACK` 预检，再在审阅后仅将结尾改成 `COMMIT`。SQL 要求当前目标值、时间戳及全行哈希完全相符，恢复原 `title/url/detail/features/next_review_date/updated_at`，并再次对比原全行哈希；任一不符即 HOLD。回滚后 `--baseline` 应通过。若后续另行建立了 Supabase 证据/关系，须先按独立审核计划处理跨库依赖，不能假装存在跨库原子回滚。
 

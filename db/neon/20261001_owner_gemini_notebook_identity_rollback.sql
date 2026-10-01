@@ -28,7 +28,7 @@ BEGIN
   PERFORM pg_advisory_xact_lock(hashtext('directory:notebooklm'));
   SELECT * INTO STRICT v_current FROM tools WHERE id = v_id FOR UPDATE;
   IF (SELECT count(*) FROM tools WHERE lower(name) IN ('notebooklm','gemini-notebook','gemini notebook')
-      OR lower(url) ~ '^https?://(notebooklm|notebook)\.google\.com([/?#]|$)'
+      OR lower(url) ~ '^https?://(notebooklm|notebook)[.]google[.]com([/?#]|$)'
       OR lower(title::text) LIKE '%gemini notebook%') <> 1 THEN
     RAISE EXCEPTION 'Notebook identity collision or duplicate; HOLD';
   END IF;

@@ -48,10 +48,16 @@ async function main() {
       await neon.query(
         `SELECT id, name, title, content, detail, url, features, status, page_quality_status,
               next_review_date::text AS next_review_date, updated_at::text AS updated_at,
-              md5(to_jsonb(t)::text) AS row_md5
+              md5(to_jsonb(t)::text) AS row_md5,
+              md5(jsonb_build_object(
+                'title',title,'url',url,'detail',detail,
+                'identity',features->'identity','editorial',features->'editorial',
+                'trialTemplate',features->'trialTemplate',
+                'marketValidation',features->'marketValidation',
+                'next_review_date',next_review_date)::text) AS owned_md5
        FROM tools t
        WHERE id = $1 OR lower(name) IN ('notebooklm', 'gemini-notebook', 'gemini notebook')
-          OR lower(url) ~ '^https?://(notebooklm|notebook)\\.google\\.com([/?#]|$)'
+          OR lower(url) ~ '^https?://(notebooklm|notebook)[.]google[.]com([/?#]|$)'
           OR lower(title::text) LIKE '%gemini notebook%'
        ORDER BY id`,
         [toolId],
@@ -198,6 +204,7 @@ async function main() {
 
   if (mode === '--baseline') {
     assert.equal(tool.url, 'https://notebooklm.google.com/');
+    assert.equal(tool.owned_md5, 'bd7f278e026f9ecb2d619b1789536ff9', 'Owned baseline fields drifted');
     assert.deepEqual(tool.title, {
       en: 'NotebookLM Source-Grounded Research',
       cn: 'NotebookLM 资料锚定研究',
@@ -209,6 +216,7 @@ async function main() {
     assert.equal(profiles.length, 0, 'Baseline evidence changed');
   } else {
     assert.equal(tool.url, 'https://notebook.google.com/');
+    assert.equal(tool.owned_md5, '6ad598a3691906ee6ca9e75d4500188a', 'Owned identity fields drifted');
     assert.deepEqual(tool.title, {
       en: 'Gemini Notebook Source-Grounded Research',
       cn: 'Gemini Notebook 资料锚定研究',
@@ -317,6 +325,7 @@ async function main() {
           pageQualityStatus: tool.page_quality_status,
           updatedAtUtc: tool.updated_at,
           rowMd5: tool.row_md5,
+          ownedMd5: tool.owned_md5,
           indexDecision: indexDecision.reason,
           sitemapEligible: indexDecision.indexable,
           nextReviewDate: tool.next_review_date,
