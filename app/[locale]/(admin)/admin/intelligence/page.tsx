@@ -110,6 +110,7 @@ export default async function AdminIntelligencePage({
         >
           Back to tools <ArrowUpRight className='h-4 w-4' />
         </Link>
+        <Link href='/admin/intelligence/review' className='rounded-xl bg-cyan-700 px-4 py-2.5 text-sm font-bold text-white'>Evidence Review Queue</Link>
       </div>
 
       <section className='rounded-2xl border border-slate-200 bg-white p-4 shadow-sm'>
@@ -1082,7 +1083,12 @@ export default async function AdminIntelligencePage({
                               ) : null}
                             </div>
                           </summary>
-                          <IntelligenceClaimReviewForm claim={claim} />
+                          {selected.ownerType === 'tool' ? (
+                            <Link href={`/admin/intelligence/review?profileId=${selected.id}`}
+                              className='mt-3 inline-block rounded-lg bg-cyan-700 px-3 py-2 text-xs font-bold text-white'>
+                              Review source, excerpt and claim in queue
+                            </Link>
+                          ) : <IntelligenceClaimReviewForm claim={claim} />}
                         </details>
                       ))
                     ) : (

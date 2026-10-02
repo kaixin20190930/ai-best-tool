@@ -12,6 +12,13 @@ const amendment = readFileSync('db/supabase/manual/20261001_gemini_notebook_stag
 const review = readFileSync('db/supabase/manual/20261001_gemini_notebook_stage2_review_links.sql','utf8');
 const rollback = readFileSync('db/supabase/manual/20261001_gemini_notebook_stage2_rollback.sql','utf8');
 const verifier = readFileSync('scripts/verify-gemini-notebook-stage2-readonly.ts','utf8');
+const adminReviewMigration = readFileSync('db/supabase/migrations/20261003_admin_evidence_review.sql','utf8');
+assert.doesNotMatch(adminReviewMigration,/\b(?:UPDATE|INSERT INTO|DELETE FROM)\s+(?:public\.)?(?:decision_tasks|task_pages|tools|index_reviews)\b/i);
+assert.doesNotMatch(adminReviewMigration,/sitemap/i);
+const manualLinks=review.match(/INSERT INTO stage2_link_spec VALUES([\s\S]*?);/)?.[1];
+const adminLinks=adminReviewMigration.match(/INSERT INTO stage2_admin_links VALUES([\s\S]*?);/)?.[1];
+assert.ok(manualLinks && adminLinks,'Both Stage 2 link manifests must exist');
+assert.equal(adminLinks.replace(/\s+/g,''),manualLinks.replace(/\s+/g,''),'Admin links must exactly match the reviewed Stage 2 manifest');
 for (const sql of [review,rollback]) {
   assert.match(sql,/^BEGIN;/m);
   assert.match(sql,/^ROLLBACK;\s*$/m);
@@ -77,6 +84,10 @@ async function main() {
     await db.connect();
     db.on('notice',(notice) => { const match=notice.message?.match(/POST_MD5 ([0-9a-f]{32})/); if(match) postHash=match[1]; });
     await db.query(`CREATE SCHEMA auth;
+      CREATE ROLE service_role;
+      CREATE ROLE anon;
+      CREATE ROLE authenticated;
+      CREATE FUNCTION auth.role() RETURNS text LANGUAGE sql AS $$ SELECT current_setting('request.jwt.claim.role', true) $$;
       CREATE TABLE auth.users (id uuid PRIMARY KEY,email text,raw_user_meta_data jsonb,raw_app_meta_data jsonb);
       INSERT INTO auth.users VALUES ('${reviewer}','${reviewerEmail}','{"role":"admin"}','{}');
       CREATE TABLE decision_tasks(id uuid PRIMARY KEY,slug text,status text);
@@ -215,6 +226,63 @@ async function main() {
     assert.deepEqual(await state(),expectedAmended,'amendment changed fields beyond source 102 and claims 402/410');
     assert.equal(stage2StateMd5(await state()),amended.post_md5,'candidate verifier hash differs from amendment postimage');
     await assert.rejects(db.query(commitAmendment(fixtureAmendment)),/prior stateMd5 drift/,'repeat amendment must reject');
+    await db.query(adminReviewMigration);
+    await db.query("SET request.jwt.claim.role = 'service_role'");
+    await db.query('ALTER TABLE admin_evidence_review_audit DISABLE ROW LEVEL SECURITY');
+    await assert.rejects(db.query('SELECT public.admin_link_gemini_notebook_evidence($1)',[reviewer]),/requires RLS/);
+    await db.query('ALTER TABLE admin_evidence_review_audit ENABLE ROW LEVEL SECURITY');
+    const reviewClaim = (claimId:string, decision:string, excerpt:string, note='Independently reviewed official page', due='2099-01-01') =>
+      db.query('SELECT public.admin_review_evidence_claim($1,$2,$3,$4,$5,$6,$7)',
+        [claimId,reviewer,decision,excerpt,note,{},due]);
+    const claim402='c7890701-0000-4000-8000-000000000402';
+    const claim403='c7890701-0000-4000-8000-000000000403';
+    await db.query("SET request.jwt.claim.role = 'authenticated'");
+    await assert.rejects(reviewClaim(claim402,'HOLD','','Independent review',null as unknown as string),/Admin service role/);
+    await assert.rejects(db.query('SELECT public.admin_link_gemini_notebook_evidence($1)',[reviewer]),/Admin service role/);
+    await db.query("SET request.jwt.claim.role = 'service_role'");
+    await db.query('BEGIN');
+    const rejectsInTransaction=async(run:()=>Promise<unknown>,pattern:RegExp)=>{
+      await db.query('SAVEPOINT review_case');
+      await assert.rejects(run(),pattern);
+      await db.query('ROLLBACK TO SAVEPOINT review_case');
+    };
+    await rejectsInTransaction(()=>reviewClaim(claim402,'PASS','','Independent review', '2026-11-01'),/missing excerpt/);
+    await rejectsInTransaction(()=>db.query('SELECT public.admin_link_gemini_notebook_evidence($1)',[reviewer]),/All ten/);
+    await db.query("UPDATE product_intelligence_claims SET conflict_status='possible' WHERE id=$1",[claim402]);
+    await rejectsInTransaction(()=>reviewClaim(claim402,'PASS','Actual official passage',undefined,'2026-11-01'),/conflicted/);
+    await db.query("UPDATE product_intelligence_claims SET conflict_status='none',expires_at='2020-01-01' WHERE id=$1",[claim402]);
+    await rejectsInTransaction(()=>reviewClaim(claim402,'PASS','Actual official passage',undefined,'2026-11-01'),/expired/);
+    await db.query("UPDATE product_intelligence_claims SET expires_at=NULL WHERE id=$1",[claim402]);
+    await db.query("UPDATE product_intelligence_claims SET source_url='https://other.example.test' WHERE id=$1",[claim402]);
+    await rejectsInTransaction(()=>reviewClaim(claim402,'PASS','Actual official passage',undefined,'2026-11-01'),/Source or owner mismatch/);
+    await db.query("UPDATE product_intelligence_claims SET source_url=$1 WHERE id=$2",[newUrl,claim402]);
+    await db.query(`INSERT INTO product_intelligence_profiles(id,owner_type,owner_id,canonical_domain,product_name,profile_status)
+      VALUES('00000000-0000-0000-0000-000000000001','tool','00000000-0000-0000-0000-000000000002','other.example','Other','pending')`);
+    await db.query("UPDATE product_intelligence_claims SET profile_id='00000000-0000-0000-0000-000000000001' WHERE id=$1",[claim402]);
+    await rejectsInTransaction(()=>reviewClaim(claim402,'PASS','Actual official passage',undefined,'2026-11-01'),/Source or owner mismatch/);
+    await db.query('ROLLBACK');
+    await db.query('BEGIN');
+    await reviewClaim(claim403,'HOLD','','Official page needs more investigation',null as unknown as string);
+    assert.equal((await db.query('SELECT verification_status FROM product_intelligence_claims WHERE id=$1',[claim403])).rows[0].verification_status,'candidate');
+    await reviewClaim(claim402,'PASS','Actual official passage','Independently checked source','2026-11-01');
+    assert.equal((await db.query('SELECT verification_status FROM product_intelligence_claims WHERE id=$1',[claim402])).rows[0].verification_status,'verified');
+    await rejectsInTransaction(()=>db.query('SELECT public.admin_link_gemini_notebook_evidence($1)',[reviewer]),/All ten/);
+    assert.equal(await count('tool_decision_profile_claims'),0);
+    await db.query('ROLLBACK');
+    assert.equal((await db.query('SELECT verification_status FROM product_intelligence_claims WHERE id=$1',[claim402])).rows[0].verification_status,'candidate');
+    await db.query('BEGIN');
+    for (const row of (await db.query('SELECT id FROM product_intelligence_claims ORDER BY id')).rows) {
+      await reviewClaim(row.id,'PASS',`Verified official passage for ${row.id}`,'Independent official source check','2026-11-01');
+    }
+    const linked=(await db.query('SELECT public.admin_link_gemini_notebook_evidence($1) AS result',[reviewer])).rows[0].result;
+    assert.deepEqual([linked.decisionLinks,linked.capabilityLinks,linked.fitLinks],[5,9,6]);
+    assert.equal(await count('tool_decision_profile_claims'),5);
+    assert.equal(await count('tool_capability_claims'),9);
+    assert.equal(await count('tool_task_fit_claims'),6);
+    assert.equal((await db.query("SELECT editorial_status FROM tool_decision_profiles WHERE tool_id='cec78907-e2a1-4eb7-853a-a58334026280'")).rows[0].editorial_status,'reviewed');
+    assert.equal((await db.query("SELECT profile_status FROM product_intelligence_profiles WHERE id='c7890701-0000-4000-8000-000000000001'")).rows[0].profile_status,'ready');
+    await db.query('ROLLBACK');
+    assert.equal(await count('tool_decision_profile_claims'),0,'transaction rollback left links');
     const keys=(await db.query('SELECT claim_key FROM product_intelligence_claims')).rows.map((x)=>x.claim_key.replace('gemini-notebook:research:',''));
     const excerpts=Object.fromEntries(keys.map((key)=>[key,`Official passage checked for ${key} by the independent reviewer.`]));
     const ownerGate=`APPROVE_GEMINI_STAGE2:${reviewer}:${reviewerEmail}:USER_METADATA_ROLE`;
@@ -268,6 +336,10 @@ async function main() {
         AND p.owner_id=l.tool_id`)).rows[0].n),1,'sharing/export claim must be verified and same-owner');
     assert.equal(await count('tool_capability_claims'),9);
     assert.equal(await count('tool_task_fit_claims'),6);
+    const auditBefore=await count('admin_evidence_review_audit');
+    const repeat=(await db.query('SELECT public.admin_link_gemini_notebook_evidence($1) AS result',[reviewer])).rows[0].result;
+    assert.equal(repeat.unchanged,true,'exact link rerun must be idempotent');
+    assert.equal(await count('admin_evidence_review_audit'),auditBefore,'idempotent rerun must not append audit');
     const reviewHash=postHash;
     assert.equal(stage2StateMd5(await state()),reviewHash,'reviewed verifier hash differs from SQL postimage');
     await db.query(commit(configured.replace(amended.post_md5,reviewHash)));

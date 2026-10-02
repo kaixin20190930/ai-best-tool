@@ -1,10 +1,12 @@
 # Gemini Notebook Stage 2 Supabase 数据层交付
 
-状态：**生产 Supabase 已提交 Stage 2 candidate/draft；本次 source URL amendment 尚未在生产执行。** 原提交的完整 `stateMd5` / 回滚凭据为 `769d65d12796a59bc33dd66117ebbc74`。2026-10-01T06:46:37Z 的零状态只读基线是历史记录，不是当前生产状态。`research-with-citations` Task 与两条 Capability 保持原 ID 和 active；Task Page/index 仍有独立门禁。Neon Stage 1 身份迁移不在此 amendment 范围内。
+状态：**生产 Supabase 已提交 Stage 2 candidate/draft，source URL amendment 亦已执行。** 当前 candidate `stateMd5=5d5ea94b17511dce167e20cc28332c50`；原候选提交哈希 `769d65d12796a59bc33dd66117ebbc74` 仅作历史前像，不再用于当前回滚。十条 claim 仍是 candidate，Decision/Capability/Fit 仍是 draft，关系为 0。`research-with-citations` Task 与两条 Capability 保持原 ID 和 active；Task Page/index 仍有独立门禁。Neon Stage 1 身份迁移不在此 amendment 范围内。
 
-## 当前唯一 Owner 步骤：source URL amendment
+2026-10-03 代码交付新增 [Admin Evidence Review Queue](../app/%5Blocale%5D/%28admin%29/admin/intelligence/review/page.tsx) 与一次性[基础设施迁移](../db/supabase/migrations/20261003_admin_evidence_review.sql)。迁移部署前，UI 的审核动作会失败并显示错误；迁移部署后，管理员逐条打开来源、填真实摘录与 scope、选择 PASS/HOLD，十条全部通过后可在同一 UI 执行固定 5/9/6 草稿建链。管理员身份来自当前登录会话，不再为日常操作填写 UUID、邮箱、哈希或 SQL。迁移是一次性基础设施步骤，**不是日常审核流程**。本代码交付未执行该迁移、未审核生产 claim、未建立生产关系，也未放行 Task Page/index/sitemap。
 
-原 source 102 的 `16164461?hl=en` 候选链接进入 Google 验证页；[无参数官方页](https://support.google.com/gemininotebook/answer/16164461)为同一文章编号和标题，可读且支持 claim 402、410。使用专用 [amendment SQL](../db/supabase/manual/20261001_gemini_notebook_stage2_source_url_amendment.sql)，先在 Supabase SQL Editor 原样运行默认 `ROLLBACK`，要求仅一行 `mode=preflight`、`changed_sources=1`、`changed_claims=2` 和新 `post_md5`。此调用不会留下写入。Owner 核对该行后，在新会话只把最后一行的模式改成 `COMMIT` 并运行一次；要求 `mode=committed`、`1/2` 和新 `post_md5`。立即运行只读 `--candidate`，要求其 `stateMd5` 等于**提交返回的**新 `post_md5`。将新回执保存在私有审计位置；后续 review SQL 的 prior hash 与 Stage 2 rollback 的精确回滚凭据都应使用这个新提交哈希。旧 `769d65d12796a59bc33dd66117ebbc74` 只作为 amendment 的前像门禁。重复执行 amendment 会因旧前像不再匹配而安全拒绝。
+## 历史 Owner 步骤：source URL amendment（已执行）
+
+原 source 102 的 `16164461?hl=en` 候选链接进入 Google 验证页；[无参数官方页](https://support.google.com/gemininotebook/answer/16164461)为同一文章编号和标题，可读且支持 claim 402、410。专用 [amendment SQL](../db/supabase/manual/20261001_gemini_notebook_stage2_source_url_amendment.sql)已经执行，当前哈希为 `5d5ea94b17511dce167e20cc28332c50`。不得重跑 amendment；旧 `769d65d12796a59bc33dd66117ebbc74` 只作为其历史前像门禁。
 
 下面的原始 candidate 操作顺序保留为历史/新环境说明。**当前生产已存在 candidate，不得重跑原 candidate SQL，不得回滚整批来修 URL。** 此 URL 修正不填写 reviewer、不提升状态、不创建 link，也不开放 Task Page。
 
@@ -27,7 +29,7 @@
 
 固定 ID 与 `stage2Batch=gemini-notebook-20261001` 只属于此工具。前向重复执行只接受**完全一致**的候选 postimage；已有不同 ID、状态、字段或未知行会 HOLD。原始 `POST_MD5` 包含九组行的完整 JSON（包括时间戳和 link），须与私有审计回执一起保存。**不要把回执或官方摘录中的私有审核信息提交仓库。** 不创建无 RLS 的备份表。
 
-## Owner 操作顺序
+## 历史 SQL 操作顺序（被 Admin 日常流程取代）
 
 1. **第一步只预检：**先运行只读 `--baseline`；在 Supabase SQL Editor **原样执行同一份** `20261001_gemini_notebook_stage2_candidate.sql`。最后一行是 `SELECT * FROM pg_temp.gemini_notebook_stage2_candidate('ROLLBACK');`，会返回一行 `mode=preflight`、`preflight=true`、`profiles/sources/claims/decision/capabilities/fit/links=1/7/10/1/2/1/0` 和 `post_md5`；候选表写入在该调用的内部子事务撤销。**只看返回行，不依赖 NOTICE。** 保存结果、执行时刻、票据至私有审计位置。任何不同即 HOLD。此步生产数据写入为 0。预检的哈希对应本次临时 postimage，**不可作为将来回滚凭据**。
 2. Owner 确认唯一实体及官方事实后，在新会话将**同一文件最后一行中的模式字符串**从 `'ROLLBACK'` 改成 `'COMMIT'`，其他内容不改；执行一次，返回 `mode=committed`、`preflight=false` 与相同的行数。保存**这次提交返回行**的原始 `post_md5`，并回传总控；它才是 rollback SQL 的 `POST_MD5` 凭据。立即运行 `--candidate`，要求 `stateMd5` 与提交的 `post_md5` 完全相等。候选事务不构成独立人工审核；不要以此批准关系或页面。

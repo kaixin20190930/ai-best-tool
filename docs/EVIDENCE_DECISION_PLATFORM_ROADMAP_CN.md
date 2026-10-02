@@ -223,6 +223,8 @@ Review 结论：方案可实施。P0 不改变 URL 和索引面，先增强主�
 
 ## 十二、后台证据审核实施记录（2026-09-02）
 
+2026-10-03 增量：Admin 增加 Evidence Review Queue，按工具档案及 candidate/reviewed/overdue 查看 claim、来源、摘录、scope、冲突和复查日期。逐条 PASS/HOLD 由一次性安全迁移中的数据库事务验证来源、owner、摘录、冲突和期限，记录审核人及 audit；Gemini Notebook 仅在十条 claim 全部通过后，才可对预定义 draft Decision/Capability/Fit 建立固定 5/9/6 关系，仍不触碰 Task Page/index/sitemap。该迁移未在本代码交付中写入生产，Gemini 生产状态继续 candidate/draft。
+
 - 后台 Claims 支持 candidate、verified、rejected、superseded 的受控流转，并区分 official、independent、owner、user、
   editorial 来源。
 - possible 或 confirmed 冲突禁止直接核验，保存审核不会自动清除冲突；verified 转 superseded 必须填写失效原因。

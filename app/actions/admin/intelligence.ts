@@ -123,6 +123,14 @@ export async function reviewIntelligenceClaim(
 
     if (claimError) throw new Error(claimError.message);
     if (!claim) return { success: false, error: 'Evidence claim not found.' };
+    if (input.nextStatus === 'verified') {
+      const { data: profile, error: profileError } = await supabase
+        .from('product_intelligence_profiles').select('owner_type').eq('id', claim.profile_id).maybeSingle();
+      if (profileError) throw new Error(profileError.message);
+      if (profile?.owner_type === 'tool') {
+        return { success: false, error: 'Review tool claims in the Evidence Review Queue with a source excerpt.' };
+      }
+    }
 
     const update = prepareEvidenceReviewUpdate(
       {
