@@ -1,6 +1,6 @@
 # Perplexity · CL-02 Stage 2 候选交付
 
-状态：**生产候选已写入 / 待 7 条 claim 人工审核**。本次只写入候选数据，没有关系发布、Task Page、工具页、索引或 sitemap 修改。唯一候选 SQL 为 [20261003_perplexity_stage2_candidate.sql](../db/supabase/manual/20261003_perplexity_stage2_candidate.sql)；仓库没有为本批提供自动审核提升或发布 SQL。
+状态：**生产候选已写入 / 第一轮审核为 6 PASS + 1 HOLD**。本次只写入候选与审核记录，没有关系发布、Task Page、工具页、索引或 sitemap 修改。唯一候选 SQL 为 [20261003_perplexity_stage2_candidate.sql](../db/supabase/manual/20261003_perplexity_stage2_candidate.sql)；仓库没有为本批提供自动审核提升或发布 SQL。
 
 ## 范围与依据
 
@@ -20,4 +20,4 @@
 
 本地临时 PostgreSQL 专项测试覆盖默认预检无残留、提交、幂等、九表 RLS、跨 owner 固定 source ID 冲突、重复官方域名、claim 漂移、完整 postimage hash 与零 link；测试已通过。`pnpm exec tsc --noEmit`、完整 `pnpm run build`、`git diff --check` 均通过。本地构建后的 Task URL 返回 `404` 和 `x-robots-tag: noindex, follow`；本地 sitemap 因未配置 Postgres URL 返回 500，不作为生产 sitemap 结论。
 
-生产只读状态：独立 QA 已通过 `--baseline`；Owner 随后完成 ROLLBACK 预检和显式 COMMIT。2026-10-03T13:47:13.777Z 的 `--candidate` 回验确认 Consensus 保持 published 7/6、Gemini Notebook 保持 reviewed 5/9/6，Perplexity 为 1/5/7/1/2/1 且 links=0，`stateMd5=25bb15aa49c43382cd59ee90527645d8`。公开 Task 为 404 且 `x-robots-tag: noindex, follow`，生产 sitemap 对 Task 与 Perplexity 匹配为 0。下一阶段只允许独立核验七条 claim；在此之前不得审核或发布 Decision/Capability/Fit。
+生产只读状态：独立 QA 已通过 `--baseline`；Owner 随后完成 ROLLBACK 预检和显式 COMMIT。2026-10-03T13:47:13.777Z 的 `--candidate` 回验确认 Consensus 保持 published 7/6、Gemini Notebook 保持 reviewed 5/9/6，Perplexity 为 1/5/7/1/2/1 且 links=0，`stateMd5=25bb15aa49c43382cd59ee90527645d8`。公开 Task 为 404 且 `x-robots-tag: noindex, follow`，生产 sitemap 对 Task 与 Perplexity 匹配为 0。随后逐条复核五个官方来源：web synthesis、direct links、focus、API boundary、data boundary、source-label limitation 六条 PASS；plans claim 因官方比较表已明确 `3/day` 而 HOLD。最终回读为 6 verified + 1 candidate，7 条审计日志完整，links 仍为 0。下一阶段必须先编辑修正 plans claim，再独立复核；不得直接审核或发布 Decision/Capability/Fit。
