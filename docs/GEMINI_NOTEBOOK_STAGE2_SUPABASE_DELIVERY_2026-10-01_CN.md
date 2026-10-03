@@ -1,8 +1,8 @@
 # Gemini Notebook Stage 2 Supabase 数据层交付
 
-状态：**生产 Supabase 已提交 Stage 2 candidate/draft，source URL amendment 亦已执行。** 当前 candidate `stateMd5=5d5ea94b17511dce167e20cc28332c50`；原候选提交哈希 `769d65d12796a59bc33dd66117ebbc74` 仅作历史前像，不再用于当前回滚。十条 claim 仍是 candidate，Decision/Capability/Fit 仍是 draft，关系为 0。`research-with-citations` Task 与两条 Capability 保持原 ID 和 active；Task Page/index 仍有独立门禁。Neon Stage 1 身份迁移不在此 amendment 范围内。
+状态：**生产 Supabase Stage 2 已于 2026-10-03 完成独立审核与关系收口。** 当前 reviewed `stateMd5=486def34a4e7bae92811a42ed882804a`；1 个 profile 为 ready，7 个 Google official source 为 success，10 条 claim 为 verified，既有 1 个 Decision、2 个 Tool Capability 与 1 个 conditional Fit 均为 reviewed，并建立精确的 5/9/6 同 owner evidence links。原 candidate `stateMd5=5d5ea94b17511dce167e20cc28332c50` 与提交哈希 `769d65d12796a59bc33dd66117ebbc74` 仅作历史前像。`research-with-citations` Task 与两条 Capability 保持原 ID 和 active；Task Page 仍为 404，Gemini Notebook 仍为 `monitor/noindex`，Task 与工具均未进入 sitemap。Neon Stage 1 身份迁移不在本次关系审核范围内。
 
-2026-10-03 代码交付新增 [Admin Evidence Review Queue](../app/%5Blocale%5D/%28admin%29/admin/intelligence/review/page.tsx) 与一次性[基础设施迁移](../db/supabase/migrations/20261003_admin_evidence_review.sql)。迁移部署前，UI 的审核动作会失败并显示错误；迁移部署后，管理员逐条打开来源、填真实摘录与 scope、选择 PASS/HOLD，十条全部通过后可在同一 UI 执行固定 5/9/6 草稿建链。管理员身份来自当前登录会话，不再为日常操作填写 UUID、邮箱、哈希或 SQL。迁移是一次性基础设施步骤，**不是日常审核流程**。本代码交付未执行该迁移、未审核生产 claim、未建立生产关系，也未放行 Task Page/index/sitemap。
+2026-10-03 [Admin Evidence Review Queue](../app/%5Blocale%5D/%28admin%29/admin/intelligence/review/page.tsx) 与[基础设施迁移](../db/supabase/migrations/20261003_admin_evidence_review.sql)已部署。管理员已逐条核对来源、摘录与 scope 并通过 10 条 claim。首次关系收口暴露 RPC 未同步写入 Tool Capability `last_edited_by`，数据库触发器以 `Tool Capability editor required` 原子拒绝且没有留下部分状态；提交 `0b8eeec4` 补齐编辑责任并增加防回归断言，迁移重放后受控 RPC 成功返回 `decisionLinks=5`、`capabilityLinks=9`、`fitLinks=6`。管理员身份来自当前登录会话，后续日常审核不再填写 UUID、邮箱、哈希或 SQL。迁移是一次性基础设施步骤，**不是日常审核流程**；本次未放行 Task Page、index 或 sitemap。
 
 ## 历史 Owner 步骤：source URL amendment（已执行）
 
