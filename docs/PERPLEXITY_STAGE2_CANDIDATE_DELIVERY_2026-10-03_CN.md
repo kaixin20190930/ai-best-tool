@@ -20,4 +20,4 @@
 
 本地临时 PostgreSQL 专项测试覆盖默认预检无残留、提交、幂等、九表 RLS、跨 owner 固定 source ID 冲突、重复官方域名、claim 漂移、完整 postimage hash 与零 link；测试已通过。`pnpm exec tsc --noEmit`、完整 `pnpm run build`、`git diff --check` 均通过。本地构建后的 Task URL 返回 `404` 和 `x-robots-tag: noindex, follow`；本地 sitemap 因未配置 Postgres URL 返回 500，不作为生产 sitemap 结论。
 
-生产只读状态：脚本的 Neon/Supabase 三工具数据断言已执行到公开 HTTP 步骤；`https://aibesttool.com` 的 `fetch` 在当前执行环境报 `fetch failed`，提权重试结果相同，故**尚不能称全量生产 verifier PASS**。Owner 执行候选 SQL 前须补跑完整 `--baseline`，确认 Task 404/noindex 与 sitemap；不得把本地静态门禁当作生产 HTTP 回执。当前代码没有生产写入路径。
+生产只读状态：开发隔离环境访问 `https://aibesttool.com` 时曾出现 `fetch failed`，但后续独立 QA 已用只读包装器完整通过 `--baseline`：Consensus 保持 published 关系，Gemini Notebook 保持 reviewed 5/9/6，Perplexity 仍为空基线；公开 Task 为 404/noindex，sitemap 排除相关路径。该结果解除的是候选包的代码验收门禁，不等于授权生产候选写入。当前代码没有自动生产写入路径，Owner 仍须按上方 ROLLBACK 预检、显式 COMMIT 和 `--candidate` 回读三步执行。
