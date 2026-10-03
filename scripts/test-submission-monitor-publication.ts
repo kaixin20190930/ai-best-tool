@@ -29,7 +29,7 @@ assert.ok(getMonitorPublicationBlockers({ ...complete, image_url: 'https://www.g
 assert.ok(getMonitorPublicationBlockers({ ...complete, url: 'javascript:alert(1)' }).includes('Website URL'));
 assert.ok(getMonitorPublicationBlockers({ ...complete, pricing: 'unknown' }).includes('Pricing'));
 assert.ok(getMonitorPublicationBlockers({ ...complete, tags: ['  '] }).includes('Tags'));
-assert.ok(getMonitorPublicationBlockers({ ...complete, features: { mediaReview: { needed: true } } }).includes('Media review'));
+assert.deepEqual(getMonitorPublicationBlockers({ ...complete, features: { mediaReview: { needed: true } } }), [], 'Current complete media can clear a stale media-needed flag');
 assert.ok(getMonitorPublicationBlockers({ ...complete, features: { submission: { commercial: { plan: 'standard_paid', paymentConfirmed: false } } } }).includes('Priority review payment'));
 assert.deepEqual(getMonitorPublicationBlockers({ ...complete, features: { submission: { commercial: { plan: 'standard_paid', paymentConfirmed: true } } } }), []);
 

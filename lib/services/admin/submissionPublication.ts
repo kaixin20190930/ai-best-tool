@@ -49,9 +49,6 @@ export function getMonitorPublicationBlockers(tool: PublicationTool): string[] {
   }
   const features = tool.features && typeof tool.features === 'object'
     ? tool.features as Record<string, unknown> : {};
-  const mediaReview = features.mediaReview && typeof features.mediaReview === 'object'
-    ? features.mediaReview as Record<string, unknown> : {};
-  if (mediaReview.needed === true) blockers.push('Media review');
   const submission = features.submission && typeof features.submission === 'object'
     ? features.submission as Record<string, unknown> : {};
   const commercial = submission.commercial && typeof submission.commercial === 'object'
