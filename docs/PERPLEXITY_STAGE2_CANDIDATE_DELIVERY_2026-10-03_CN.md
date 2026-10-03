@@ -1,6 +1,6 @@
 # Perplexity · CL-02 Stage 2 候选交付
 
-状态：**候选待 Owner 执行 / 待人工审核**。本次没有生产写入、关系发布、Task Page、工具页、索引或 sitemap 修改。基线为 `main 49d92497`。唯一可供 Owner 在 Supabase SQL Editor 执行的文件为 [20261003_perplexity_stage2_candidate.sql](../db/supabase/manual/20261003_perplexity_stage2_candidate.sql)；仓库没有为本批提供审核提升或发布 SQL。
+状态：**生产候选已写入 / 待 7 条 claim 人工审核**。本次只写入候选数据，没有关系发布、Task Page、工具页、索引或 sitemap 修改。唯一候选 SQL 为 [20261003_perplexity_stage2_candidate.sql](../db/supabase/manual/20261003_perplexity_stage2_candidate.sql)；仓库没有为本批提供自动审核提升或发布 SQL。
 
 ## 范围与依据
 
@@ -20,4 +20,4 @@
 
 本地临时 PostgreSQL 专项测试覆盖默认预检无残留、提交、幂等、九表 RLS、跨 owner 固定 source ID 冲突、重复官方域名、claim 漂移、完整 postimage hash 与零 link；测试已通过。`pnpm exec tsc --noEmit`、完整 `pnpm run build`、`git diff --check` 均通过。本地构建后的 Task URL 返回 `404` 和 `x-robots-tag: noindex, follow`；本地 sitemap 因未配置 Postgres URL 返回 500，不作为生产 sitemap 结论。
 
-生产只读状态：开发隔离环境访问 `https://aibesttool.com` 时曾出现 `fetch failed`，但后续独立 QA 已用只读包装器完整通过 `--baseline`：Consensus 保持 published 关系，Gemini Notebook 保持 reviewed 5/9/6，Perplexity 仍为空基线；公开 Task 为 404/noindex，sitemap 排除相关路径。该结果解除的是候选包的代码验收门禁，不等于授权生产候选写入。当前代码没有自动生产写入路径，Owner 仍须按上方 ROLLBACK 预检、显式 COMMIT 和 `--candidate` 回读三步执行。
+生产只读状态：独立 QA 已通过 `--baseline`；Owner 随后完成 ROLLBACK 预检和显式 COMMIT。2026-10-03T13:47:13.777Z 的 `--candidate` 回验确认 Consensus 保持 published 7/6、Gemini Notebook 保持 reviewed 5/9/6，Perplexity 为 1/5/7/1/2/1 且 links=0，`stateMd5=25bb15aa49c43382cd59ee90527645d8`。公开 Task 为 404 且 `x-robots-tag: noindex, follow`，生产 sitemap 对 Task 与 Perplexity 匹配为 0。下一阶段只允许独立核验七条 claim；在此之前不得审核或发布 Decision/Capability/Fit。
