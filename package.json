@@ -46,6 +46,7 @@
     "test:tool-indexing": "tsx scripts/test-tool-indexing.ts",
     "test:index-release-guard": "tsx scripts/test-index-release-guard.ts",
     "test:tool-index-review": "tsx scripts/test-tool-index-review.ts",
+    "test:submission-monitor-publication": "tsx scripts/test-submission-monitor-publication.ts",
     "verify:tool-index-review-migration": "tsx scripts/verify-tool-index-review-migration.ts",
     "tools:index-review": "tsx scripts/run-tool-index-review.ts",
     "tools:index-release-mature-batch": "tsx scripts/release-mature-index-batch.ts",

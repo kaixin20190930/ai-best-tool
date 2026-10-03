@@ -423,7 +423,7 @@ export default async function AdminDashboard({
         color: 'gray',
       },
       {
-        name: 'Pending > 48h',
+        name: 'Pending past SLA',
         value: operationalStats.overduePendingSubmissions,
         subtext: 'Escalated pending submissions',
         href: '/admin/tools?status=pending&overdue=1&followedUp=0',

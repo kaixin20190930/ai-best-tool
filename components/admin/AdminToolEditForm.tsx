@@ -15,6 +15,7 @@ import {
 import type { AdminTool } from '@/app/actions/admin/tools';
 import { updateToolClaimInfo } from '@/app/actions/admin/claims';
 import { getPaidListingPublishGate, getToolQuality } from '@/lib/services/toolQuality';
+import { getSubmissionOwnershipLabel } from '@/lib/services/admin/submissionPublication';
 
 interface Category {
   id: string;
@@ -255,7 +256,7 @@ export default function AdminToolEditForm({
     setReviewLoading(null);
 
     if (result.success) {
-      toast.success('Tool approved and published');
+      toast.success('Published as monitor/noindex');
       router.push('/admin/tools?status=pending');
       router.refresh();
     } else {
@@ -500,7 +501,7 @@ export default function AdminToolEditForm({
                   : 'Draft review checklist'}
               </p>
               <p className="mt-1 text-sm">
-                Review content, category, media, pricing, and collection context before publishing.
+                Confirm AI scope and review content, category, media, and pricing before publishing as monitor/noindex.
               </p>
               {paidPublishBlocked && (
                 <p className="mt-2 text-sm font-medium text-yellow-900">
@@ -540,7 +541,7 @@ export default function AdminToolEditForm({
                       ? 'Publishing...'
                       : paidPublishBlocked
                         ? paymentBlocker || 'Save details before publish'
-                        : 'Approve & Publish'}
+                        : 'Publish as monitor/noindex'}
                   </button>
                 </div>
               </div>
@@ -752,8 +753,15 @@ export default function AdminToolEditForm({
           </div>
           <div className="flex flex-wrap gap-2">
             <span className="rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-700">
-              {ownerStatusLabel}
+              {ownerStatusLabel === 'Unclaimed'
+                ? getSubmissionOwnershipLabel(tool.submitted_by, tool.claimStatus)
+                : ownerStatusLabel}
             </span>
+            {tool.submitted_by && ownerStatusLabel !== 'Unclaimed' && ownerStatusLabel !== 'Claimed' && (
+              <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+                {getSubmissionOwnershipLabel(tool.submitted_by, tool.claimStatus)}
+              </span>
+            )}
             {claimTool.owner_email ? (
               <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
                 {claimTool.owner_email}
@@ -1015,7 +1023,7 @@ export default function AdminToolEditForm({
             >
               <option value="draft">Draft</option>
               <option value="pending">Pending</option>
-              <option value="published">Published</option>
+              <option value="published">Published (first publish: monitor/noindex)</option>
               <option value="rejected">Rejected</option>
             </select>
           </div>

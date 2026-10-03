@@ -2817,7 +2817,7 @@ export default async function AdminAnalyticsPage({
               </p>
             </div>
             <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>
-              <p className='text-sm font-medium text-slate-600'>Overdue (&gt;48h)</p>
+              <p className='text-sm font-medium text-slate-600'>Overdue (past submission SLA)</p>
               <p className='mt-2 text-3xl font-semibold text-red-600'>{operationalStats.overduePendingSubmissions}</p>
             </div>
             <div className='theme-surface rounded-lg border border-slate-200 p-6 shadow-sm'>

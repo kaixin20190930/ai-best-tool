@@ -7,6 +7,7 @@ import { Check, CheckCheck, Edit, ExternalLink, Trash2, X } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { getPaidListingPublishGate, getToolQuality } from '@/lib/services/toolQuality';
+import { getSubmissionOwnershipLabel, getSubmissionReviewSlaHours } from '@/lib/services/admin/submissionPublication';
 import BaseImage from '@/components/image/BaseImage';
 import {
   approveTool,
@@ -49,7 +50,7 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
     setLoading(null);
 
     if (result.success) {
-      toast.success('Tool approved successfully');
+      toast.success('Published as monitor/noindex');
       router.refresh();
     } else {
       toast.error(result.error || 'Failed to approve tool');
@@ -179,6 +180,7 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
     const features = getFeatureRecord(tool);
     const editorial = getNestedRecord(features.editorial);
     const decision = getNestedRecord(features.decision);
+    const market = getNestedRecord(features.marketValidation);
     const reviewedAt = typeof editorial.reviewedAt === 'string' ? editorial.reviewedAt.trim() : '';
     const sourceUrl = typeof editorial.sourceUrl === 'string' ? editorial.sourceUrl.trim() : '';
     const missing = [
@@ -190,6 +192,14 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
       getLocalizedList(features.notIdealFor).length > 0 ? null : 'not ideal for',
       getLocalizedList(decision.compareAxes).length > 0 ? null : 'comparison path',
     ].filter(Boolean) as string[];
+    const indexMissing = [
+      ...missing,
+      market.verdict === 'validated' ? null : 'validated market verdict',
+      typeof market.reviewedAt === 'string' && market.reviewedAt.trim() ? null : 'market review date',
+      Array.isArray(market.evidenceUrls) && market.evidenceUrls.length > 0 ? null : 'independent market evidence',
+      Array.isArray(market.strongSignals) && market.strongSignals.length > 0 ? null : 'strong market signal',
+      Number(market.score || 0) >= 75 ? null : 'market score',
+    ].filter(Boolean) as string[];
     const reviewedTime = reviewedAt ? new Date(reviewedAt).getTime() : Number.NaN;
     const nextFactReview = Number.isFinite(reviewedTime) ? new Date(reviewedTime + 30 * 24 * 60 * 60 * 1000) : null;
     const nextDecisionReview = Number.isFinite(reviewedTime)
@@ -198,10 +208,11 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
 
     return {
       complete: missing.length === 0,
-      missing,
+      indexReady: indexMissing.length === 0,
+      missing: indexMissing,
       nextDecisionReview,
       nextFactReview,
-      score: Math.round(((7 - missing.length) / 7) * 100),
+      score: Math.round(((12 - indexMissing.length) / 12) * 100),
     };
   };
 
@@ -275,9 +286,12 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
       });
     } else {
       signals.push({
-        label: 'Owner missing',
+        label: getSubmissionOwnershipLabel(tool.submitted_by, tool.claimStatus),
         className: 'bg-slate-100 text-slate-600',
       });
+    }
+    if (tool.submitted_by && claimStatus !== 'claimed' && claimStatus !== 'unclaimed') {
+      signals.push({ label: getSubmissionOwnershipLabel(tool.submitted_by, claimStatus), className: 'bg-slate-100 text-slate-600' });
     }
 
     if (isEditorialStale(tool)) {
@@ -473,7 +487,7 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
       return false;
     }
 
-    return Date.now() - createdAt >= 48 * 60 * 60 * 1000;
+    return Date.now() - createdAt >= getSubmissionReviewSlaHours(tool.features) * 60 * 60 * 1000;
   };
 
   const pageSize = 20;
@@ -829,19 +843,19 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
                     <div className='mt-2 flex flex-wrap gap-1.5'>
                       <span
                         className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${
-                          evidenceAdmission.complete
+                          evidenceAdmission.indexReady
                             ? 'bg-emerald-50 text-emerald-700'
                             : 'bg-amber-50 text-amber-700'
                         }`}
                       >
-                        Evidence {evidenceAdmission.score}%
+                        Index evidence {evidenceAdmission.score}%
                       </span>
                       <span
                         className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${
-                          evidenceAdmission.complete ? 'bg-cyan-50 text-cyan-700' : 'bg-rose-50 text-rose-700'
+                          evidenceAdmission.indexReady ? 'bg-cyan-50 text-cyan-700' : 'bg-rose-50 text-rose-700'
                         }`}
                       >
-                        {evidenceAdmission.complete ? 'Publication ready' : 'Hold for evidence'}
+                        {evidenceAdmission.indexReady ? 'Index evidence complete' : 'Not index-ready'}
                       </span>
                     </div>
                     <div className='mt-2 flex max-w-xs flex-wrap gap-1.5'>
@@ -859,7 +873,7 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
                     )}
                     {evidenceAdmission.missing.length > 0 && (
                       <div className='mt-2 max-w-xs text-xs text-rose-700'>
-                        Evidence gaps: {evidenceAdmission.missing.slice(0, 4).join(', ')}
+                        Index evidence gaps: {evidenceAdmission.missing.slice(0, 4).join(', ')}
                         {evidenceAdmission.missing.length > 4 ? '…' : ''}
                       </div>
                     )}
@@ -901,7 +915,7 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
                     )}
                     {pendingOverdue && (
                       <div className='mt-1 inline-flex rounded-full bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-700'>
-                        Overdue &gt; 48h
+                        Overdue &gt; {getSubmissionReviewSlaHours(tool.features)}h
                       </div>
                     )}
                     {hasFollowedUp(tool) && (
@@ -935,9 +949,9 @@ export default function AdminToolsTable({ tools, total, currentPage }: AdminTool
                             type='button'
                             onClick={() => handleApprove(tool.id)}
                             disabled={loading === tool.id}
-                            aria-label={`Approve ${getTitle(tool)}`}
+                            aria-label={`Publish ${getTitle(tool)} as monitor/noindex`}
                             className='rounded border border-emerald-200 bg-emerald-50 p-1 text-emerald-700 hover:bg-emerald-100 disabled:opacity-50'
-                            title='Approve'
+                            title='Publish as monitor/noindex'
                           >
                             <Check className='h-5 w-5' />
                           </button>

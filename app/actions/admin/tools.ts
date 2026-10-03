@@ -9,6 +9,7 @@ import { trackCommerceEvent } from '@/app/actions/analytics';
 import { sendTransactionalEmail } from '@/lib/services/mailer';
 import { shouldSendSubmissionStatusEmail } from '@/app/actions/userPreferences';
 import { getPaidListingPublishGate, getToolQuality } from '@/lib/services/toolQuality';
+import { getMonitorPublicationBlockers, getMonitorReviewDate, submissionReviewSlaHoursSql, withMonitorPublicationReview } from '@/lib/services/admin/submissionPublication';
 
 const publicLocales = ['en', 'cn', 'tw', 'jp', 'de', 'es', 'fr', 'pt', 'ru'];
 const validStatuses = ['draft', 'pending', 'published', 'rejected'] as const;
@@ -65,7 +66,7 @@ const evidenceCompleteSql = `
   AND ${localizedArrayCountSql("features->'notIdealFor'")} > 0
   AND ${localizedArrayCountSql("features->'decision'->'compareAxes'")} > 0`;
 
-const publishReadySql = `
+const evidenceReadyDraftSql = `
   (
     status = 'draft'
     AND ${toolQualityScoreSql} >= 80
@@ -321,66 +322,10 @@ function getStringArray(value: unknown): string[] {
     : [];
 }
 
-function getLocalizedStringArray(value: unknown): string[] {
-  const direct = getStringArray(value);
-  if (direct.length > 0) return direct;
-  const record = getRecord(value);
-  return Array.from(new Set([...getStringArray(record.en), ...getStringArray(record.zh)]));
-}
-
-function getEvidencePublishGateError(tool: {
-  features?: unknown;
-  image_url?: string | null;
-  thumbnail_url?: string | null;
-}): string | null {
-  const features = getRecord(tool.features);
-  const editorial = getRecord(features.editorial);
-  const decision = getRecord(features.decision);
-  const reviewedAt = typeof editorial.reviewedAt === 'string' ? editorial.reviewedAt.trim() : '';
-  const sourceUrl = typeof editorial.sourceUrl === 'string' ? editorial.sourceUrl.trim() : '';
-  const missing = [
-    /^https?:\/\//i.test(sourceUrl) ? null : 'official source',
-    reviewedAt ? null : 'review date',
-    getLocalizedStringArray(decision.limitations).length > 0 ? null : 'limitations',
-    tool.image_url || tool.thumbnail_url ? null : 'media',
-    getLocalizedStringArray(features.bestFit).length > 0 ? null : 'best fit',
-    getLocalizedStringArray(features.notIdealFor).length > 0 ? null : 'not ideal for',
-    getLocalizedStringArray(decision.compareAxes).length > 0 ? null : 'comparison path',
-  ].filter(Boolean) as string[];
-
-  return missing.length > 0 ? `Complete publication evidence first: ${missing.join(', ')}.` : null;
-}
-
-function getMarketValidationPublishGateError(tool: { features?: unknown }): string | null {
-  const features = getRecord(tool.features);
-  if (!features.collection) return null;
-
-  const validation = getRecord(features.marketValidation);
-  const evidenceUrls = getStringArray(validation.evidenceUrls);
-  const strongSignals = getStringArray(validation.strongSignals);
-  const supportingSignals = getStringArray(validation.supportingSignals);
-  const reviewedAt = typeof validation.reviewedAt === 'string' ? validation.reviewedAt.trim() : '';
-  const score = Number(validation.score || 0);
-  const missing = [
-    validation.verdict === 'validated' ? null : 'validated verdict',
-    reviewedAt ? null : 'market review date',
-    evidenceUrls.length > 0 ? null : 'independent evidence',
-    strongSignals.length > 0 ? null : 'strong market signal',
-    strongSignals.length + supportingSignals.length >= 2 ? null : 'second durability signal',
-    score >= 75 ? null : 'market score of at least 75',
-  ].filter(Boolean) as string[];
-
-  return missing.length > 0 ? `Complete market validation first: ${missing.join(', ')}.` : null;
-}
-
 function getCommercialFeature(features: unknown): Record<string, unknown> {
   const featureRecord = getRecord(features);
   const submission = getRecord(featureRecord.submission);
   return getRecord(submission.commercial);
-}
-
-function isStandardPaidSubmission(features: unknown): boolean {
-  return getCommercialFeature(features).plan === 'standard_paid';
 }
 
 function getFeaturedDurationDays(commercial: Record<string, unknown>): number {
@@ -391,29 +336,6 @@ function getFeaturedDurationDays(commercial: Record<string, unknown>): number {
       : Number.parseInt(String(requestedDaysRaw ?? 0), 10) || 0;
 
   return [3, 7, 14].includes(requestedDays) ? requestedDays : 0;
-}
-
-function getPaidListingGateError(tool: {
-  category_id?: string | null;
-  image_url?: string | null;
-  thumbnail_url?: string | null;
-  content?: unknown;
-  detail?: unknown;
-  pricing?: string | null;
-  tags?: string[] | null;
-  features?: unknown;
-}): string | null {
-  if (!isStandardPaidSubmission(tool.features)) {
-    return null;
-  }
-
-  const gate = getPaidListingPublishGate(tool);
-
-  if (gate.ready) {
-    return null;
-  }
-
-  return `Paid listing is missing required publish fields: ${gate.blockers.join(', ')}`;
 }
 
 function buildCommercialStateForCurrentStatus(
@@ -895,11 +817,11 @@ export async function getAdminTools(filters?: {
     }
 
     if (filters?.ready) {
-      query += ` AND ${publishReadySql}`;
+      query += ` AND ${evidenceReadyDraftSql}`;
     }
 
     if (filters?.overdue) {
-      query += ` AND status = 'pending' AND created_at <= NOW() - INTERVAL '48 hours'`;
+      query += ` AND status = 'pending' AND created_at <= NOW() - (${submissionReviewSlaHoursSql} * INTERVAL '1 hour')`;
     }
 
     if (filters?.followedUp === true) {
@@ -982,7 +904,7 @@ export async function getAdminToolById(id: string): Promise<AdminTool | null> {
 }
 
 /**
- * Publish draft tools only when they pass the publishing checklist.
+ * Publish internal drafts only when they pass the full evidence checklist.
  */
 export async function publishReadyTools(
   toolIds: string[]
@@ -1002,7 +924,7 @@ export async function publishReadyTools(
         UPDATE tools
         SET status = 'published', updated_at = NOW()
         WHERE id::text = ANY($1::text[])
-          AND ${publishReadySql}
+          AND ${evidenceReadyDraftSql}
         RETURNING name
       `,
       [ids]
@@ -1056,7 +978,7 @@ export async function markPendingFollowedUp(
         WHERE id::text = ANY($1::text[])
           AND status = 'pending'
           AND submitted_by IS NOT NULL
-          AND created_at <= NOW() - INTERVAL '48 hours'
+          AND created_at <= NOW() - (${submissionReviewSlaHoursSql} * INTERVAL '1 hour')
         RETURNING name
       `,
       [ids]
@@ -1085,12 +1007,13 @@ export async function approveTool(
   toolId: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    await requireAdmin();
+    const reviewer = await requireAdmin();
 
     const pool = getPool();
     const existingResult = await pool.query(
       `
-        SELECT id, name, submitted_by, title, features, category_id, image_url, thumbnail_url, content, detail, pricing, tags
+        SELECT id, name, submitted_by, title, features, url, next_review_date, status,
+          category_id, image_url, thumbnail_url, content, detail, pricing, tags
         FROM tools
         WHERE id = $1
         LIMIT 1
@@ -1103,43 +1026,30 @@ export async function approveTool(
     }
 
     const existingRow = existingResult.rows[0];
-    const gateError = getPaidListingGateError(existingRow);
-    if (gateError) {
-      return { success: false, error: gateError };
-    }
-    const evidenceGateError = getEvidencePublishGateError(existingRow);
-    if (evidenceGateError) {
-      return { success: false, error: evidenceGateError };
-    }
-    const marketGateError = getMarketValidationPublishGateError(existingRow);
-    if (marketGateError) {
-      return { success: false, error: marketGateError };
-    }
+    if (existingRow.status !== 'pending') return { success: false, error: 'Tool is not pending review' };
+    const blockers = getMonitorPublicationBlockers(existingRow);
+    if (blockers.length) return { success: false, error: `Complete monitor publication fields: ${blockers.join(', ')}.` };
 
     const existingFeatures = getRecord(existingRow.features);
     const submission = getRecord(existingFeatures.submission);
     const commercial = getCommercialFeature(existingRow.features);
-    if (commercial.plan === 'standard_paid' && commercial.paymentConfirmed !== true) {
-      return {
-        success: false,
-        error: 'Priority review payment is required before publishing this paid submission.',
-      };
-    }
-    const nextFeatures = {
+    const nextFeatures = withMonitorPublicationReview({
       ...existingFeatures,
       submission: {
         ...submission,
         commercial: buildCommercialStateForCurrentStatus(commercial, 'published'),
       },
-    };
+    }, reviewer.email || reviewer.id);
 
     const result = await pool.query(
       `UPDATE tools
-       SET status = $1, features = $2, updated_at = NOW()
-       WHERE id = $3
+       SET status = $1, features = $2, page_quality_status = 'monitor',
+           next_review_date = $4, updated_at = NOW()
+       WHERE id = $3 AND status = 'pending'
        RETURNING name, submitted_by, title, features`,
-      ['published', JSON.stringify(nextFeatures), toolId]
+      ['published', JSON.stringify(nextFeatures), toolId, getMonitorReviewDate(existingRow.next_review_date)]
     );
+    if (!result.rows[0]) return { success: false, error: 'Tool is no longer pending review' };
 
     if (result.rows[0]) {
       const row = result.rows[0];
@@ -1293,7 +1203,7 @@ export async function updateTool(
   }
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    await requireAdmin();
+    const reviewer = await requireAdmin();
 
     const pool = getPool();
     const existingResult = await pool.query(
@@ -1301,6 +1211,8 @@ export async function updateTool(
         SELECT
           name,
           status,
+          url,
+          next_review_date,
           submitted_by,
           title,
           features,
@@ -1336,6 +1248,7 @@ export async function updateTool(
         : getCommercialFeature(existingResult.rows[0].features).plan;
 
     const prospectiveTool = {
+      url: data.url !== undefined ? normalizeRequiredText(data.url, 'Website URL') : existingResult.rows[0].url,
       category_id:
         data.category_id !== undefined ? normalizeNullableText(data.category_id) : existingResult.rows[0].category_id,
       image_url:
@@ -1359,13 +1272,6 @@ export async function updateTool(
         },
       },
     };
-
-    if (nextStatus === 'published' && existingStatus !== 'published') {
-      const gateError = getPaidListingGateError(prospectiveTool);
-      if (gateError) {
-        return { success: false, error: gateError };
-      }
-    }
 
     const updates: string[] = [];
     const params: any[] = [];
@@ -1437,13 +1343,13 @@ export async function updateTool(
       paramIndex++;
     }
 
-    if (data.pageQualityStatus !== undefined) {
+    if (data.pageQualityStatus !== undefined && !(nextStatus === 'published' && existingStatus !== 'published')) {
       updates.push(`page_quality_status = $${paramIndex}`);
       params.push(normalizeRequiredText(data.pageQualityStatus, 'Page quality status'));
       paramIndex++;
     }
 
-    if (data.nextReviewDate !== undefined) {
+    if (data.nextReviewDate !== undefined && !(nextStatus === 'published' && existingStatus !== 'published')) {
       updates.push(`next_review_date = $${paramIndex}`);
       params.push(normalizeNullableDate(data.nextReviewDate));
       paramIndex++;
@@ -1607,21 +1513,6 @@ export async function updateTool(
       shouldUpdateFeatures = true;
     }
 
-    if (nextStatus === 'published' && existingStatus !== 'published') {
-      const evidenceGateError = getEvidencePublishGateError({
-        features: nextFeaturesForUpdate,
-        image_url: prospectiveTool.image_url,
-        thumbnail_url: prospectiveTool.thumbnail_url,
-      });
-      if (evidenceGateError) {
-        return { success: false, error: evidenceGateError };
-      }
-      const marketGateError = getMarketValidationPublishGateError({ features: nextFeaturesForUpdate });
-      if (marketGateError) {
-        return { success: false, error: marketGateError };
-      }
-    }
-
     const shouldUpdateCommercial =
       data.commercialPlan !== undefined ||
       data.commercialStatus !== undefined ||
@@ -1675,6 +1566,17 @@ export async function updateTool(
       shouldUpdateFeatures = true;
     }
 
+    if (nextStatus === 'published' && existingStatus !== 'published') {
+      const blockers = getMonitorPublicationBlockers({ ...prospectiveTool, features: nextFeaturesForUpdate });
+      if (blockers.length) return { success: false, error: `Complete monitor publication fields: ${blockers.join(', ')}.` };
+      nextFeaturesForUpdate = withMonitorPublicationReview(nextFeaturesForUpdate, reviewer.email || reviewer.id);
+      shouldUpdateFeatures = true;
+      updates.push(`page_quality_status = 'monitor'`);
+      updates.push(`next_review_date = $${paramIndex}`);
+      params.push(getMonitorReviewDate(existingResult.rows[0].next_review_date, data.nextReviewDate));
+      paramIndex++;
+    }
+
     if (shouldUpdateFeatures) {
       updates.push(`features = $${paramIndex}`);
       params.push(JSON.stringify(nextFeaturesForUpdate));
@@ -1688,8 +1590,9 @@ export async function updateTool(
     updates.push(`updated_at = NOW()`);
     params.push(toolId);
 
-    const query = `UPDATE tools SET ${updates.join(', ')} WHERE id = $${paramIndex} RETURNING status, name, title, features`;
+    const query = `UPDATE tools SET ${updates.join(', ')} WHERE id = $${paramIndex}${nextStatus === 'published' && existingStatus !== 'published' ? " AND status IN ('draft', 'pending')" : ''} RETURNING status, name, title, features`;
     const updated = await pool.query(query, params);
+    if (!updated.rows[0]) return { success: false, error: 'Tool status changed during review' };
 
     const finalStatus = (updated.rows[0]?.status as ToolStatus | undefined) || existingStatus;
     if (submittedBy && finalStatus !== existingStatus) {
@@ -2004,7 +1907,7 @@ export async function getOperationalStats(
             AND ${toolQualityScoreSql} < 55
         )::int AS low_quality_drafts,
         COUNT(*) FILTER (
-          WHERE ${publishReadySql}
+          WHERE ${evidenceReadyDraftSql}
         )::int AS ready_drafts,
         COUNT(*) FILTER (
           WHERE status = 'pending'
@@ -2014,14 +1917,14 @@ export async function getOperationalStats(
         COUNT(*) FILTER (
           WHERE status = 'pending'
             AND submitted_by IS NOT NULL
-            AND created_at <= NOW() - INTERVAL '48 hours'
+            AND created_at <= NOW() - (${submissionReviewSlaHoursSql} * INTERVAL '1 hour')
             ${createdAtFilter}
         )::int AS overdue_pending_submissions
         ,
         COUNT(*) FILTER (
           WHERE status = 'pending'
             AND submitted_by IS NOT NULL
-            AND created_at <= NOW() - INTERVAL '48 hours'
+            AND created_at <= NOW() - (${submissionReviewSlaHoursSql} * INTERVAL '1 hour')
             AND COALESCE(features->'followUp'->>'followedUp', 'false') = 'true'
             ${createdAtFilter}
         )::int AS followed_up_overdue_submissions

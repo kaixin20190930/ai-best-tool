@@ -232,9 +232,9 @@ export default function AdminToolsFilters({
 
         <div className='flex flex-wrap gap-2'>
           {[
-            { value: 'all', label: 'All evidence states' },
-            { value: 'complete', label: 'Evidence complete' },
-            { value: 'gaps', label: 'Evidence gaps' },
+            { value: 'all', label: 'All index evidence states' },
+            { value: 'complete', label: 'Index evidence complete' },
+            { value: 'gaps', label: 'Index evidence gaps' },
             { value: 'review_due', label: 'Fact review due' },
           ].map((evidence) => (
             <button
@@ -285,7 +285,7 @@ export default function AdminToolsFilters({
               currentOverdue ? toneClasses.amber : activeClasses
             }`}
           >
-            Pending &gt; 48h
+            Pending past SLA
           </button>
           <button
             type='button'
