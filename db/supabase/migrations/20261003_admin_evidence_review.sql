@@ -180,7 +180,7 @@ BEGIN
     WHERE id=v_profile AND profile_status='pending';
   UPDATE public.tool_decision_profiles SET editorial_status='reviewed',reviewed_at=v_now,review_due_at=v_due,reviewed_by=p_reviewer
     WHERE tool_id=v_tool AND editorial_status='draft';
-  UPDATE public.tool_capabilities SET status='reviewed',reviewed_at=v_now,review_due_at=v_due,reviewed_by=p_reviewer
+  UPDATE public.tool_capabilities SET status='reviewed',reviewed_at=v_now,review_due_at=v_due,reviewed_by=p_reviewer,last_edited_by=p_reviewer
     WHERE tool_id=v_tool AND status='draft' AND id IN ('c7890701-0000-4000-8000-000000000201','c7890701-0000-4000-8000-000000000202');
   UPDATE public.tool_task_fits SET status='reviewed',reviewed_at=v_now,review_due_at=v_due,reviewed_by=p_reviewer,last_edited_by=p_reviewer
     WHERE id=v_fit AND status='draft';

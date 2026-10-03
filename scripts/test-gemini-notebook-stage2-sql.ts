@@ -15,6 +15,10 @@ const verifier = readFileSync('scripts/verify-gemini-notebook-stage2-readonly.ts
 const adminReviewMigration = readFileSync('db/supabase/migrations/20261003_admin_evidence_review.sql','utf8');
 assert.doesNotMatch(adminReviewMigration,/\b(?:UPDATE|INSERT INTO|DELETE FROM)\s+(?:public\.)?(?:decision_tasks|task_pages|tools|index_reviews)\b/i);
 assert.doesNotMatch(adminReviewMigration,/sitemap/i);
+assert.match(adminReviewMigration,/UPDATE public\.tool_capabilities SET status='reviewed',reviewed_at=v_now,review_due_at=v_due,reviewed_by=p_reviewer,last_edited_by=p_reviewer\s+WHERE tool_id=v_tool/,
+  'Reviewing draft Tool Capabilities must record the reviewer as editor');
+assert.match(adminReviewMigration,/UPDATE public\.tool_task_fits SET status='reviewed',reviewed_at=v_now,review_due_at=v_due,reviewed_by=p_reviewer,last_edited_by=p_reviewer/,
+  'Reviewed Fits must continue recording the reviewer as editor');
 const manualLinks=review.match(/INSERT INTO stage2_link_spec VALUES([\s\S]*?);/)?.[1];
 const adminLinks=adminReviewMigration.match(/INSERT INTO stage2_admin_links VALUES([\s\S]*?);/)?.[1];
 assert.ok(manualLinks && adminLinks,'Both Stage 2 link manifests must exist');
