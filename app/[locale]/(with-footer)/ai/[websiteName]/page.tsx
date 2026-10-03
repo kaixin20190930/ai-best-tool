@@ -25,6 +25,11 @@ import { getSafetyToolReview } from '@/lib/config/safetyToolReviews';
 import TOOL_MAINTENANCE_REVIEWS from '@/lib/config/toolMaintenanceReviews';
 import { getCanonicalToolSlug, getLocalizedToolPath, isLegacyToolSlug } from '@/lib/config/toolRouteAliases';
 import { getPublicToolDetail, getPublicToolSummary } from '@/lib/content/publicToolScope';
+import {
+  getPublicToolDetailDisposition,
+  isNextNavigationError,
+  isPublicToolMetadataAllowed,
+} from '@/lib/content/publicToolDetailAccess';
 import { BASE_URL } from '@/lib/env';
 import { buildLoginHref } from '@/lib/navigation/localizedPaths';
 import { SEO_CONFIG, ToolMetadata } from '@/lib/seo/constants';
@@ -2634,6 +2639,16 @@ export async function generateMetadata({
   try {
     const canonicalSlug = getCanonicalToolSlug(websiteName);
     const rawDbTool = await getToolByName(canonicalSlug);
+    const scopeCorrection = getLegacyToolScopeContent(canonicalSlug, locale);
+    const safetyCorrection = getSafetyToolReview(canonicalSlug, locale);
+    const disposition = getPublicToolDetailDisposition({
+      hasDatabaseRecord: Boolean(rawDbTool),
+      status: rawDbTool?.status,
+      hasSafetyReview: Boolean(safetyCorrection),
+      hasLegacyScope: Boolean(scopeCorrection),
+    });
+    if (disposition === 'not-found') notFound();
+
     // Older imports can contain non-array JSON values; normalize at the page boundary
     // so an inconsistent record cannot take the entire public detail page down.
     const dbTool = rawDbTool
@@ -2643,28 +2658,29 @@ export async function generateMetadata({
           screenshots: getStringArray(rawDbTool.screenshots),
         }
       : null;
+    const metadataAllowed = isPublicToolMetadataAllowed(dbTool?.status);
     const data =
-      dbTool?.status === 'published'
+      metadataAllowed && dbTool
         ? toolToDetailData(dbTool, locale)
         : (await getWebNavigationDetail(canonicalSlug, locale)).data ||
           getPriorityToolFallbackDetail(canonicalSlug, locale);
 
     // Get localized content if available
-    const scopeCorrection = getLegacyToolScopeContent(canonicalSlug, locale);
-    const safetyCorrection = getSafetyToolReview(canonicalSlug, locale);
     const toolTitle =
       safetyCorrection?.title ||
       scopeCorrection?.title ||
-      (dbTool ? getLocalizedField(dbTool.title, locale) || data?.title || websiteName : data?.title || websiteName);
+      (metadataAllowed && dbTool
+        ? getLocalizedField(dbTool.title, locale) || data?.title || websiteName
+        : data?.title || websiteName);
 
-    const originalDescription = dbTool
+    const originalDescription = metadataAllowed && dbTool
       ? getLocalizedField(dbTool.content, locale) || data?.content || ''
       : data?.content || '';
     const toolDescription = safetyCorrection?.content || scopeCorrection?.content || originalDescription;
 
     // Get category name if available
     let toolCategory: string | undefined;
-    if (dbTool?.categoryId) {
+    if (metadataAllowed && dbTool?.categoryId) {
       const category = await getCategoryById(dbTool.categoryId);
       if (category) {
         toolCategory = getCategoryLocalizedField(category.name, locale);
@@ -2682,8 +2698,10 @@ export async function generateMetadata({
       generateToolDescription(toolTitle, toolDescription, toolCategory);
 
     // Generate optimized social image URL
-    const toolImage = data?.thumbnailUrl || data?.imageUrl || SEO_CONFIG.defaultImage;
-    const indexable = dbTool ? getToolIndexDecision(dbTool).indexable : false;
+    const toolImage = metadataAllowed
+      ? data?.thumbnailUrl || data?.imageUrl || SEO_CONFIG.defaultImage
+      : SEO_CONFIG.defaultImage;
+    const indexable = metadataAllowed && dbTool ? getToolIndexDecision(dbTool).indexable : false;
 
     return buildLocalizedPageMetadata({
       locale,
@@ -2694,6 +2712,7 @@ export async function generateMetadata({
       indexable,
     });
   } catch (error) {
+    if (isNextNavigationError(error)) throw error;
     console.error('Tool detail metadata failed to render:', error);
     return buildLocalizedPageMetadata({
       locale,
@@ -2723,6 +2742,16 @@ export default async function Page({
     failureStage = 'tool lookup';
     const canonicalSlug = getCanonicalToolSlug(websiteName);
     const rawDbTool = await getToolByName(canonicalSlug);
+    const scopeCorrection = getLegacyToolScopeContent(canonicalSlug, locale);
+    const safetyCorrection = getSafetyToolReview(canonicalSlug, locale);
+    const disposition = getPublicToolDetailDisposition({
+      hasDatabaseRecord: Boolean(rawDbTool),
+      status: rawDbTool?.status,
+      hasSafetyReview: Boolean(safetyCorrection),
+      hasLegacyScope: Boolean(scopeCorrection),
+    });
+    if (disposition === 'not-found') notFound();
+
     // Keep legacy imports from breaking the public page when JSON array fields are malformed.
     const dbTool = rawDbTool
       ? {
@@ -2741,16 +2770,16 @@ export default async function Page({
     if (!data) notFound();
 
     // Restricted historical records use a neutral audit page and never emit product schema or conversion UI.
-    if (getSafetyToolReview(canonicalSlug, locale)) {
+    if (safetyCorrection) {
       return <SafetyToolArchivePage slug={canonicalSlug} locale={locale} />;
     }
 
     // Unresolved brand/family records must not emit single-software ratings or inferred recommendations.
-    if (getLegacyToolScopeContent(canonicalSlug, locale)) {
+    if (scopeCorrection) {
       return (
         <>
           <PageViewTracker toolId={dbTool?.id} />
-          <LegacyToolScopePage slug={canonicalSlug} title={data.title} locale={locale} />
+          <LegacyToolScopePage slug={canonicalSlug} title={scopeCorrection.title || data.title} locale={locale} />
         </>
       );
     }
@@ -3736,6 +3765,7 @@ export default async function Page({
       </>
     );
   } catch (error) {
+    if (isNextNavigationError(error)) throw error;
     console.error('Tool detail page failed to render:', { websiteName, failureStage, error });
     return (
       <div className='mx-auto max-w-5xl px-4 py-12 lg:px-0' data-detail-failure-stage={failureStage}>
