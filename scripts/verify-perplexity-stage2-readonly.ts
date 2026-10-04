@@ -288,7 +288,11 @@ async function main() {
     assert.equal(plansClaim?.verification_status, 'candidate', 'Plans claim must remain candidate/HOLD');
     assert.equal(plansClaim?.verified_by, null);
     assert.equal(plansClaim?.verified_at, null);
-    assert.equal(plansClaim?.source_excerpt, null);
+    assert.equal(plansClaim?.source_excerpt, 'Pro Searches | 3/day');
+    assert.equal(
+      plansClaim?.verification_note,
+      'Current official comparison states Free Pro Searches are 3/day; rewrite the stale unknown/conflict premise before PASS.',
+    );
     assert.equal(reviewAudit[0]?.action, 'hold', 'Plans claim must remain under the latest HOLD review');
     assert.ok(
       Date.parse(reviewAudit[0]?.created_at) > now - 14 * 24 * 60 * 60 * 1000,
