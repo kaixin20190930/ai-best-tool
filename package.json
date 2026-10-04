@@ -114,6 +114,7 @@
     "test:decision-capability-read-model": "tsx scripts/test-decision-capability-read-model.ts",
     "test:structured-comparison": "tsx scripts/test-structured-comparison.ts",
     "test:decision-task-page": "tsx scripts/test-decision-task-page.ts",
+    "decision:task-page-editorial-preflight": "tsx scripts/verify-decision-task-page-editorial-gate.ts",
     "test:decision-capability-admin": "tsx scripts/test-decision-capability-admin.ts",
     "test:decision-cl01-structure": "tsx scripts/test-decision-cl01-structure.ts",
     "test:decision-cl04-fit-withdrawal-cli": "tsx scripts/test-decision-cl04-fit-withdrawal-cli.ts",

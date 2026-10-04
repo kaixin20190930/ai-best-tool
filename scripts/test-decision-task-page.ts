@@ -4,6 +4,7 @@ import { resolve } from 'node:path';
 
 import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { APPROVED_TASK_PAGE_SLUGS, getTaskPageRouteDecision } from '@/lib/seo/taskPageApproval';
+import { evaluateTaskPageEditorialGate } from '@/lib/services/decision/taskPageEditorialGate';
 import { deriveTaskPageReadModel } from '@/lib/services/decision/taskPageReadModel';
 
 /* eslint-disable no-param-reassign -- Gate fixtures are deliberately mutated one field at a time. */
@@ -79,6 +80,81 @@ function denied(change: (input: ReturnType<typeof fixture>) => void, message: st
   change(input);
   assert.equal(deriveTaskPageReadModel(input, now), null, message);
 }
+
+function editorialFixture() {
+  const source = fixture();
+  source.task.id = '527fe8b7-c171-4c50-ab1f-9404d7536e7c';
+  source.task.slug = 'research-with-citations';
+  source.taskCapabilities.forEach((row, index) => {
+    row.task_id = source.task.id;
+    row.capability_id = `cap-${index}`;
+    row.importance = index === 0 ? 'required' : 'preferred';
+    row.rationale = { en: 'Find scholarly papers and verify citations', cn: '发现学术论文并核查引用' };
+  });
+  source.capabilities.forEach((row, index) => {
+    row.slug = index === 0 ? 'research-discovery' : 'citation-traceability';
+  });
+  const roleRows = [
+    {
+      id: 'f15873ae-c6ef-4f0a-b811-b40c2aba76ab', slug: 'consensus',
+      rationale: { en: 'Search scholarly papers and inspect evidence summaries.', cn: '检索学术论文并检查证据摘要。' },
+    },
+    {
+      id: 'cec78907-e2a1-4eb7-853a-a58334026280', slug: 'notebooklm',
+      rationale: { en: 'Synthesize user-selected sources in a notebook.', cn: '综合用户选定的笔记本资料。' },
+    },
+    {
+      id: '3d018623-85f9-4df4-bd55-9a4a0e7a2d93', slug: 'perplexity',
+      rationale: { en: 'Search the open web and review cited pages.', cn: '检索开放网页并核读引用页面。' },
+    },
+  ];
+  source.fits = roleRows.map((role, index) => ({
+    ...source.fits[index], id: `role-fit-${index}`, task_id: source.task.id, tool_id: role.id,
+    rationale: role.rationale, status: 'published', reviewed_at: reviewed, review_due_at: future,
+  }));
+  source.fitClaimLinks = roleRows.map((_, index) => ({ fit_id: `role-fit-${index}`, claim_id: `role-claim-${index}` }));
+  source.claims = roleRows.map((role, index) => ({
+    id: `role-claim-${index}`, profile_id: `role-profile-${index}`, source_url: `https://official.example/${role.slug}`,
+    verified_at: reviewed, verified_by: 'reviewer-1', review_due_at: future, expires_at: null,
+    verification_status: 'verified', conflict_status: 'none', invalidated_at: null,
+  }));
+  source.profiles = roleRows.map((role, index) => ({
+    id: `role-profile-${index}`, owner_type: 'tool', owner_id: role.id,
+  }));
+  source.identities = roleRows.map((role) => ({ id: role.id, slug: role.slug, title: role.slug }));
+  return source;
+}
+
+const gateFixture = editorialFixture();
+assert.equal(evaluateTaskPageEditorialGate(gateFixture, now).decision, 'PASS');
+const heldGateFixture = editorialFixture();
+heldGateFixture.fits[1].status = 'reviewed';
+heldGateFixture.fits[2].status = 'reviewed';
+heldGateFixture.taskCapabilities[1].importance = 'required';
+const heldGate = evaluateTaskPageEditorialGate(heldGateFixture, now);
+assert.equal(heldGate.decision, 'HOLD');
+assert.ok(heldGate.blockers.some((blocker) => blocker.code === 'FIT_NOT_PUBLISHED' && blocker.subject === 'notebooklm'));
+assert.ok(heldGate.blockers.some((blocker) => blocker.code === 'FIT_NOT_PUBLISHED' && blocker.subject === 'perplexity'));
+assert.equal(heldGate.eligibleFitCount, 1, 'reviewed fits do not count toward the three-fit threshold');
+assert.ok(heldGate.blockers.some((blocker) => blocker.code === 'TASK_PREFERRED_CAPABILITY_MISSING'), 'public read model importance requirement is surfaced');
+const marketingOnly = editorialFixture();
+marketingOnly.fits[1].rationale = { en: 'The best research assistant for everyone.', cn: '人人都适用的最佳研究助手。' };
+assert.ok(
+  evaluateTaskPageEditorialGate(marketingOnly, now).blockers.some((blocker) => blocker.code === 'ROLE_RATIONALE_NOT_DISTINCT'),
+  'marketing copy cannot satisfy the source-role distinction',
+);
+const crossOwner = editorialFixture();
+crossOwner.profiles[1].owner_id = crossOwner.profiles[0].owner_id;
+assert.ok(
+  evaluateTaskPageEditorialGate(crossOwner, now).blockers.some((blocker) => blocker.code === 'FIT_EVIDENCE_NOT_CURRENT_SAME_OWNER'),
+  'evidence from a different tool owner is rejected',
+);
+const staleEvidence = editorialFixture();
+staleEvidence.claims[2].review_due_at = reviewed;
+assert.ok(
+  evaluateTaskPageEditorialGate(staleEvidence, now).blockers.some((blocker) => blocker.code === 'FIT_EVIDENCE_NOT_CURRENT_SAME_OWNER'),
+  'expired evidence review windows are rejected',
+);
 denied((x) => {
   x.task.status = 'draft';
 }, 'inactive task');
@@ -147,6 +223,7 @@ assert.match(
 assert.doesNotMatch(metadataSource, /Task unavailable|任务页不可用/);
 const middleware = readFileSync(resolve('middleware.ts'), 'utf8');
 assert.deepEqual(APPROVED_TASK_PAGE_SLUGS, ['meeting-notes'], 'only meeting-notes has editorial release approval');
+assert.equal(getTaskPageRouteDecision('/cn/tasks/research-with-citations'), 'closed', 'editorial preflight does not approve the public Task Page');
 assert.equal(getTaskPageRouteDecision('/tasks/meeting-notes'), 'approved', 'default English Task path is approved');
 assert.equal(getTaskPageRouteDecision('/en/tasks/meeting-notes'), 'approved');
 assert.equal(getTaskPageRouteDecision('/cn/tasks/meeting-notes'), 'approved');
