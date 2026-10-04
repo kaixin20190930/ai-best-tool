@@ -18,7 +18,9 @@ DECLARE
   v_profile CONSTANT uuid := 'd0186230-0000-4000-8000-000000000001';
   v_claim CONSTANT uuid := 'd0186230-0000-4000-8000-000000000404';
   v_old_value CONSTANT jsonb := '{"summary":"Standard has basic search and limited Pro Search; Pro, Max and Enterprise have differentiated access. Exact Free Pro Search quota remains unknown because official pages conflict."}'::jsonb;
-  v_old_scope CONSTANT jsonb := '{"scope":"Web/app subscription","exactFreeProSearchQuota":"unknown","requires":"recheck target account at review"}'::jsonb;
+  v_old_scope CONSTANT jsonb := '{"scope":"Web/app subscription","requires":"editorial rewrite and target-account recheck","currentOfficialTable":"3/day"}'::jsonb;
+  v_old_excerpt CONSTANT text := 'Pro Searches | 3/day';
+  v_old_note CONSTANT text := 'Current official comparison states Free Pro Searches are 3/day; rewrite the stale unknown/conflict premise before PASS.';
   v_new_value CONSTANT jsonb := '{"summary":"The current official plan comparison lists 3 Pro Searches per day for Free; Pro, Max and Enterprise have differentiated access."}'::jsonb;
   v_new_scope CONSTANT jsonb := '{"scope":"Web/app subscription","freePlanProSearchQuota":"3/day per current official plan comparison","requires":"recheck target account at review"}'::jsonb;
   v_hold_action text;
@@ -106,7 +108,8 @@ BEGIN
        v_source.url IS DISTINCT FROM 'https://www.perplexity.ai/help-center/en/articles/11187416-which-perplexity-subscription-plan-is-right-for-you' OR
        v_target.source_type IS DISTINCT FROM 'official' OR v_target.verification_status IS DISTINCT FROM 'candidate' OR
        v_target.conflict_status IS DISTINCT FROM 'none' OR v_target.invalidated_at IS NOT NULL OR
-       v_target.verified_at IS NOT NULL OR v_target.verified_by IS NOT NULL OR
+       v_target.verified_at IS NOT NULL OR v_target.verified_by IS NOT NULL OR v_target.review_due_at IS NOT NULL OR
+       v_target.source_excerpt IS DISTINCT FROM v_old_excerpt OR v_target.verification_note IS DISTINCT FROM v_old_note OR
        v_target.claim_value IS DISTINCT FROM v_old_value OR v_target.validity_scope IS DISTINCT FROM v_old_scope THEN
       RAISE EXCEPTION 'Target claim is not the exact stale candidate/HOLD preimage';
     END IF;

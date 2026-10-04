@@ -78,6 +78,11 @@ async function main() {
       ALTER TABLE admin_evidence_review_audit ENABLE ROW LEVEL SECURITY;
       INSERT INTO admin_evidence_review_audit(profile_id,claim_id,action,reviewer_id,note)
         VALUES('${profileId}','${targetId}','hold','d7890701-0000-4000-8000-000000000001','Official plan page now lists 3/day; candidate correction required.');
+      UPDATE product_intelligence_claims SET
+        validity_scope='{"scope":"Web/app subscription","requires":"editorial rewrite and target-account recheck","currentOfficialTable":"3/day"}',
+        source_excerpt='Pro Searches | 3/day',
+        verification_note='Current official comparison states Free Pro Searches are 3/day; rewrite the stale unknown/conflict premise before PASS.'
+        WHERE id='${targetId}';
       UPDATE product_intelligence_claims SET verification_status='verified',verified_by='d7890701-0000-4000-8000-000000000001',
         verified_at=now(),review_due_at=now()+interval '30 days',source_excerpt='Officially reviewed excerpt',verification_note='Verified against official source.'
         WHERE profile_id='${profileId}' AND id<>'${targetId}';
@@ -186,7 +191,7 @@ async function main() {
     });
     assert.equal(target.verification_status, 'candidate');
     assert.equal(target.verified_by, null);
-    assert.equal(target.source_excerpt, null);
+    assert.equal(target.source_excerpt, 'Pro Searches | 3/day');
     assert.deepEqual(await counts(), { verified: 6, links: 0 });
     const committedCorrection = validCorrection.replace(
       /perplexity_plans_claim_correction\('ROLLBACK'\);\s*$/,
