@@ -1,6 +1,6 @@
 # Perplexity · CL-02 Stage 2 候选交付
 
-状态：**7/7 官方 claim 已完成生产审核；Decision、Capability、Fit 仍为 draft 且 evidence links 为 0，关系发布继续 HOLD**。套餐 claim 已经受控修正并通过后台 Evidence Review RPC 标记为 verified；Task Page、工具页索引和 sitemap 均未改变。原始候选与单条修正 SQL 仅保留为历史审计，不再是日常执行步骤。
+状态：**7/7 官方 claim 已完成生产审核；后台关系审核已成功将现有 Decision、Capability、Fit 标记为 reviewed 并建立精确 links**。套餐 claim 已经受控修正并通过后台 Evidence Review RPC 标记为 verified；Task Page、工具页索引和 sitemap 均未改变。原始候选与单条修正 SQL 仅保留为历史审计，不再是日常执行步骤。
 
 ## 范围与依据
 
@@ -34,6 +34,10 @@ Evidence Review Queue 现为 Perplexity profile 提供专用 **Review and link**
 总计 **6 Decision + 10 Capability + 7 Fit = 23 links**。Admin 页面在选中 Perplexity profile 后显示按钮、pending 文案及成功/错误状态。只读 verifier 增加 `--relation-reviewed` 阶段，用于未来只读确认 reviewed 对象、精确 6/10/7 links、review audit、Task 404/noindex 与 sitemap 排除；本次未连接或写入生产，也未运行该生产阶段。
 
 专项本地测试在临时 PostgreSQL 中覆盖 service-role/reviewer 拒绝、RLS、精确关系集合、全量写入、幂等重放及不发布/不建 Task。部署需要**一次性**应用上述 migration；routine 审核无需 SQL Editor 操作。
+
+### 生产关系审核回读修正（2026-10-04）
+
+Owner 回报 migration 已应用，后台同一 RPC 成功返回 `reviewed`、Decision 6、Capability 10、Fit 7。随后只读 verifier 的 `--relation-reviewed` 阶段发现 verifier 本身两处断言缺口：已 PASS 的套餐 claim 在关系审核阶段仍应有 `verified_at`；sitemap 检查还须显式排除 Perplexity canonical 工具路由 `/ai/perplexity`。本 rework 只修正 verifier、加入本地静态回归断言，并更新此审计记录；没有再次写生产。修正后的生产 verifier 尚待只读重跑确认。
 
 ## 验证与限制
 

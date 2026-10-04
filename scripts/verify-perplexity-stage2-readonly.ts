@@ -307,7 +307,7 @@ async function main() {
       'Plans claim has an unexpected review state',
     );
     assert.equal(plansClaim?.verified_by, phase === '--candidate' ? null : reviewAudit[0]?.reviewer_id);
-    assert.equal(Boolean(plansClaim?.verified_at), phase === '--reviewed');
+    assert.equal(Boolean(plansClaim?.verified_at), phase !== '--candidate');
     assert.equal(plansClaim?.source_excerpt, 'Pro Searches | 3/day');
     assert.equal(
       plansClaim?.verification_note,
@@ -459,8 +459,10 @@ async function main() {
   assert.equal(sitemap.status, 200);
   const xml = await sitemap.text();
   assert.ok(
-    !xml.includes('/tasks/research-with-citations') && !xml.includes('/ai/notebooklm'),
-    'Task or Gemini Notebook entered sitemap',
+    !xml.includes('/tasks/research-with-citations') &&
+      !xml.includes('/ai/notebooklm') &&
+      !xml.includes('/ai/perplexity'),
+    'Task, Gemini Notebook or Perplexity entered sitemap',
   );
   const stateMd5 = stage2StateMd5({
     profile: perplexityProfiles[0] || null,

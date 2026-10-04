@@ -18,13 +18,15 @@ assert.match(sql, /Existing evidence links require separate reconciliation/);
 assert.match(verifier, /Task 404 lost noindex/);
 assert.match(verifier, /Cross-owner (?:Decision|Capability|Fit) link/);
 assert.match(verifier, /--relation-reviewed/);
+assert.match(verifier, /Boolean\(plansClaim\?\.verified_at\), phase !== '--candidate'/);
+assert.match(verifier, /!xml\.includes\('\/ai\/perplexity'\)/);
 assert.match(adminReview, /auth\.role\(\) <> 'service_role'/);
 assert.match(adminReview, /FROM auth\.users WHERE id = p_reviewer/);
 assert.match(adminReview, /Perplexity Stage 2 review requires RLS/);
 assert.match(adminReview, /All seven exact verified\/current same-owner Perplexity claims required/);
 assert.match(adminReview, /Unexpected existing Perplexity evidence links/);
 assert.equal(
-  [...adminReview.matchAll(/^    \('(decision|capability|fit)'/gm)].length,
+  [...adminReview.matchAll(/^[ ]{4}\('(decision|capability|fit)'/gm)].length,
   23,
   'Perplexity exact relation manifest changed',
 );
@@ -36,12 +38,12 @@ assert.doesNotMatch(adminReview, /status='published'|editorial_status='published
 assert.doesNotMatch(verifier, /\.insert\(|\.update\(|\.delete\(|\.upsert\(/);
 
 const sourceTest = readFileSync('scripts/test-gemini-notebook-stage2-sql.ts', 'utf8');
-const fixture = sourceTest.match(/await db\.query\(`CREATE SCHEMA auth;([\s\S]*?)\n    `\);/)?.[1];
+const fixture = sourceTest.match(/await db\.query\(`CREATE SCHEMA auth;([\s\S]*?)\n[ ]{4}`\);/)?.[1];
 assert.ok(fixture, 'Shared Stage 2 test schema fixture missing');
 const schema = `CREATE SCHEMA auth;${fixture}`
-  .replaceAll('${reviewer}', 'd7890701-0000-4000-8000-000000000001')
-  .replaceAll('${reviewerEmail}', 'reviewer@example.test')
-  .replaceAll('${taskId}', '527fe8b7-c171-4c50-ab1f-9404d7536e7c');
+  .replaceAll(/\$\{reviewer\}/g, 'd7890701-0000-4000-8000-000000000001')
+  .replaceAll(/\$\{reviewerEmail\}/g, 'reviewer@example.test')
+  .replaceAll(/\$\{taskId\}/g, '527fe8b7-c171-4c50-ab1f-9404d7536e7c');
 const commit = sql.replace(/perplexity_stage2_candidate\('ROLLBACK'\);\s*$/, "perplexity_stage2_candidate('COMMIT');");
 const profileId = 'd0186230-0000-4000-8000-000000000001';
 const toolId = '3d018623-85f9-4df4-bd55-9a4a0e7a2d93';
@@ -186,7 +188,7 @@ async function main() {
     );
     const claimId = (n: number) => `d0186230-0000-4000-8000-${String(n).padStart(12, '0')}`;
     const capabilityLinks = (
-      await db.query(`SELECT tool_capability_id,claim_id,purpose FROM tool_capability_claims ORDER BY 1,2,3`)
+      await db.query('SELECT tool_capability_id,claim_id,purpose FROM tool_capability_claims ORDER BY 1,2,3')
     ).rows.map((x) => `${x.tool_capability_id}:${x.claim_id}:${x.purpose}`);
     const expectedCapabilityLinks = [
       [201, 401, 'support'],
@@ -206,23 +208,33 @@ async function main() {
     const decisionLinks = (
       await db.query('SELECT claim_id,purpose FROM tool_decision_profile_claims ORDER BY 1,2')
     ).rows.map((x) => `${x.claim_id}:${x.purpose}`);
+    const decisionPurposes: Record<number, string> = {
+      401: 'fit',
+      402: 'fit',
+      404: 'limitation',
+      405: 'limitation',
+      406: 'privacy',
+      407: 'limitation',
+    };
     assert.deepEqual(
       decisionLinks,
-      [401, 402, 404, 405, 406, 407]
-        .map(
-          (n) =>
-            `${claimId(n)}:${n === 406 ? 'privacy' : n === 401 || n === 402 ? 'fit' : n === 404 || n === 405 || n === 407 ? 'limitation' : ''}`,
-        )
-        .sort(),
+      [401, 402, 404, 405, 406, 407].map((n) => `${claimId(n)}:${decisionPurposes[n]}`).sort(),
     );
     const fitLinks = (await db.query('SELECT claim_id,purpose FROM tool_task_fit_claims ORDER BY 1,2')).rows.map(
       (x) => `${x.claim_id}:${x.purpose}`,
     );
+    const fitPurposes: Record<number, string> = {
+      401: 'fit',
+      402: 'fit',
+      403: 'fit',
+      404: 'limitation',
+      405: 'limitation',
+      406: 'privacy',
+      407: 'limitation',
+    };
     assert.deepEqual(
       fitLinks,
-      [401, 402, 403, 404, 405, 406, 407]
-        .map((n) => `${claimId(n)}:${[401, 402, 403].includes(n) ? 'fit' : n === 406 ? 'privacy' : 'limitation'}`)
-        .sort(),
+      [401, 402, 403, 404, 405, 406, 407].map((n) => `${claimId(n)}:${fitPurposes[n]}`).sort(),
     );
     assert.equal(
       (await db.query(`SELECT profile_status FROM product_intelligence_profiles WHERE id='${profileId}'`)).rows[0]
