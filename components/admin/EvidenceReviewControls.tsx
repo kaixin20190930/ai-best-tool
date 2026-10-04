@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 import {
+  applyGeminiNotebookFitRationale,
   completeGeminiNotebookPlanPurposeLink,
   linkReviewedGeminiEvidence,
   linkReviewedPerplexityEvidence,
@@ -183,6 +184,40 @@ export function GeminiPlanPurposeLinkButton() {
         className='rounded-lg border border-cyan-800 px-4 py-2 text-sm font-bold text-cyan-900 disabled:opacity-50'
       >
         {pending ? 'Checking plan evidence…' : 'Complete reviewed plan evidence link'}
+      </button>
+      {feedback && (
+        <p role='status' className='text-xs text-slate-700'>
+          {feedback}
+        </p>
+      )}
+    </div>
+  );
+}
+
+export function GeminiNotebookFitRationaleButton() {
+  const router = useRouter();
+  const [pending, start] = useTransition();
+  const [feedback, setFeedback] = useState('');
+  return (
+    <div className='space-y-2'>
+      <button
+        type='button'
+        disabled={pending}
+        onClick={() =>
+          start(async () => {
+            const result = await applyGeminiNotebookFitRationale();
+            setFeedback(
+              result.success ? result.message || 'Fit rationale updated.' : result.error || 'Fit rationale update failed.',
+            );
+            if (result.success) {
+              toast.success(result.message);
+              router.refresh();
+            } else toast.error(result.error);
+          })
+        }
+        className='rounded-lg border border-cyan-800 px-4 py-2 text-sm font-bold text-cyan-900 disabled:opacity-50'
+      >
+        {pending ? 'Updating Fit rationale…' : 'Apply approved Gemini Notebook Fit rationale'}
       </button>
       {feedback && (
         <p role='status' className='text-xs text-slate-700'>

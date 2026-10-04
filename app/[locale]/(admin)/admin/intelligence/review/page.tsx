@@ -5,6 +5,7 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import {
   EvidenceReviewControls,
   GeminiLinkReviewButton,
+  GeminiNotebookFitRationaleButton,
   GeminiPlanPurposeLinkButton,
   PerplexityLinkReviewButton,
 } from '@/components/admin/EvidenceReviewControls';
@@ -124,6 +125,11 @@ export default async function EvidenceReviewQueue({
             Task Page, or change index/sitemap.
           </p>
           <GeminiLinkReviewButton />
+          <p className='my-2 text-xs text-slate-700'>
+            Apply the approved bilingual rationale to the existing reviewed Gemini Notebook Fit. The action preserves
+            its fit level, required conditions and disqualifiers.
+          </p>
+          <GeminiNotebookFitRationaleButton />
           <p className='my-2 text-xs text-slate-700'>
             Use the repair control only when the reviewed citation-traceability Capability has exactly the existing four
             links and needs its verified plan-purpose claim. The RPC rejects any other partial or drifted state.
