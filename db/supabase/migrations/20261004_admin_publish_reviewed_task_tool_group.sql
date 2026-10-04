@@ -120,7 +120,7 @@ BEGIN
              evidence->>'claimSourceUrl' IS DISTINCT FROM evidence->>'sourceUrl' OR
              evidence->>'claimSourceType'<>'official' OR evidence->>'sourceType'<>'official' OR
              evidence->>'sourceFetchStatus'<>'success' OR evidence->>'ownerType'<>'tool' OR
-             evidence->>'ownerId' IS DISTINCT FROM p_tool_id::text OR evidence->>'profileStatus'<>'ready')))
+             evidence->>'ownerId' IS DISTINCT FROM p_tool_id::text OR evidence->>'profileStatus'<>'ready'))
   THEN
     RETURN jsonb_build_object('ok',true,'preflight',false,'unchanged',true,'taskId',p_task_id,
       'toolId',p_tool_id,'toolCapabilityCount',jsonb_array_length(p_tool_capabilities),

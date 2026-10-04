@@ -29,6 +29,7 @@ assert.match(migration, /e\.metadata->'linkFingerprint'=v_link_fingerprint/);
 assert.match(migration, /e\.metadata->'toolCapabilities'=p_tool_capabilities/);
 assert.match(migration, /e\.metadata->'fits'=p_fits/);
 assert.match(migration, /Published group manifest preimage mismatch/);
+assert.doesNotMatch(migration, /profileStatus'<>'ready'\)\)\)/);
 assert.match(migration, /p\.profile_status<>'ready'/);
 assert.match(migration, /p\.owner_id<>p_tool_id/);
 assert.match(migration, /review_due_at<=v_now/);
@@ -152,8 +153,11 @@ async function main() {
         preflightOnly,
       ]);
     await db.query("UPDATE product_intelligence_sources SET profile_id='c7890701-0000-4000-8000-000000000002'");
-    await assert.rejects(call(true), /Linked claims must be current official same-owner evidence/,
-      'A source owned by another profile must block even read-only publication preflight');
+    await assert.rejects(
+      call(true),
+      /Linked claims must be current official same-owner evidence/,
+      'A source owned by another profile must block even read-only publication preflight',
+    );
     await db.query("UPDATE product_intelligence_sources SET profile_id='c7890701-0000-4000-8000-000000000001'");
     const checked = await call(true);
     assert.equal(checked.rows[0].value.preflight, true);
@@ -184,53 +188,114 @@ async function main() {
     assert.equal(replay.rows[0].value.unchanged, true);
     const wrongReplayTime = JSON.parse(capsJson);
     wrongReplayTime[0].updated_at = '2000-01-01T00:00:00.000Z';
-    await assert.rejects(call(false, JSON.stringify(wrongReplayTime)), /Published group manifest preimage mismatch/,
-      'A replay with a changed Tool Capability updated_at must be rejected');
+    await assert.rejects(
+      call(false, JSON.stringify(wrongReplayTime)),
+      /Published group manifest preimage mismatch/,
+      'A replay with a changed Tool Capability updated_at must be rejected',
+    );
     const wrongCapabilityStatus = JSON.parse(capsJson);
     wrongCapabilityStatus[0].status = 'published';
-    await assert.rejects(call(false, JSON.stringify(wrongCapabilityStatus)), /Published group manifest preimage mismatch/,
-      'A replay with a changed Tool Capability status must be rejected');
+    await assert.rejects(
+      call(false, JSON.stringify(wrongCapabilityStatus)),
+      /Published group manifest preimage mismatch/,
+      'A replay with a changed Tool Capability status must be rejected',
+    );
     const missingStatus = JSON.parse(capsJson);
     delete missingStatus[0].status;
-    await assert.rejects(call(false, JSON.stringify(missingStatus)), /Published group manifest preimage mismatch/,
-      'A replay missing Tool Capability status must be rejected');
+    await assert.rejects(
+      call(false, JSON.stringify(missingStatus)),
+      /Published group manifest preimage mismatch/,
+      'A replay missing Tool Capability status must be rejected',
+    );
     const missingUpdatedAt = JSON.parse(capsJson);
     delete missingUpdatedAt[0].updated_at;
-    await assert.rejects(call(false, JSON.stringify(missingUpdatedAt)), /Published group manifest preimage mismatch/,
-      'A replay missing Tool Capability updated_at must be rejected');
+    await assert.rejects(
+      call(false, JSON.stringify(missingUpdatedAt)),
+      /Published group manifest preimage mismatch/,
+      'A replay missing Tool Capability updated_at must be rejected',
+    );
     const wrongFitTime = JSON.parse(fitsJson);
     wrongFitTime[0].updated_at = '2000-01-01T00:00:00.000Z';
-    await assert.rejects(call(false, capsJson, JSON.stringify(wrongFitTime)), /Published group manifest preimage mismatch/,
-      'A replay with a changed Fit updated_at must be rejected');
+    await assert.rejects(
+      call(false, capsJson, JSON.stringify(wrongFitTime)),
+      /Published group manifest preimage mismatch/,
+      'A replay with a changed Fit updated_at must be rejected',
+    );
     const wrongFitStatus = JSON.parse(fitsJson);
     wrongFitStatus[0].status = 'published';
-    await assert.rejects(call(false, capsJson, JSON.stringify(wrongFitStatus)), /Published group manifest preimage mismatch/,
-      'A replay with a changed Fit status must be rejected');
+    await assert.rejects(
+      call(false, capsJson, JSON.stringify(wrongFitStatus)),
+      /Published group manifest preimage mismatch/,
+      'A replay with a changed Fit status must be rejected',
+    );
     const missingFitStatus = JSON.parse(fitsJson);
     delete missingFitStatus[0].status;
-    await assert.rejects(call(false, capsJson, JSON.stringify(missingFitStatus)), /Published group manifest preimage mismatch/,
-      'A replay missing Fit status must be rejected');
+    await assert.rejects(
+      call(false, capsJson, JSON.stringify(missingFitStatus)),
+      /Published group manifest preimage mismatch/,
+      'A replay missing Fit status must be rejected',
+    );
     const missingFitUpdatedAt = JSON.parse(fitsJson);
     delete missingFitUpdatedAt[0].updated_at;
-    await assert.rejects(call(false, capsJson, JSON.stringify(missingFitUpdatedAt)), /Published group manifest preimage mismatch/,
-      'A replay missing Fit updated_at must be rejected');
-    await db.query("UPDATE tool_capability_claims SET purpose='changed' WHERE tool_capability_id=$1 AND purpose='support'", [caps[0]]);
-    await assert.rejects(call(false), /Published group manifest preimage mismatch/,
-      'Changing a published evidence purpose must reject an otherwise identical publication replay');
-    await db.query("UPDATE tool_capability_claims SET purpose='support' WHERE tool_capability_id=$1 AND purpose='changed'", [caps[0]]);
-    await db.query('DELETE FROM tool_capability_claims WHERE tool_capability_id=$1 AND purpose=$2', [caps[0], 'support']);
-    await assert.rejects(call(false), /Published group manifest preimage mismatch/,
-      'Deleting a published evidence link must reject an otherwise identical publication replay');
-    await db.query("INSERT INTO tool_capability_claims VALUES ($1,'c7890701-0000-4000-8000-000000000401','support')", [caps[0]]);
-    await db.query("UPDATE tool_capability_claims SET claim_id='c7890701-0000-4000-8000-000000000402' WHERE tool_capability_id=$1 AND purpose='support'", [caps[0]]);
-    await assert.rejects(call(false), /Published group manifest preimage mismatch/,
-      'Replacing a published evidence claim must reject an otherwise identical publication replay');
-    await db.query("UPDATE tool_capability_claims SET claim_id='c7890701-0000-4000-8000-000000000401' WHERE tool_capability_id=$1 AND purpose='support'", [caps[0]]);
-    await db.query("UPDATE product_intelligence_claims SET invalidated_at=now() WHERE id='c7890701-0000-4000-8000-000000000401'");
-    await assert.rejects(call(false), /Published group manifest preimage mismatch/,
-      'Invalidated linked evidence must reject an otherwise identical publication replay');
-    await db.query("UPDATE product_intelligence_claims SET invalidated_at=NULL WHERE id='c7890701-0000-4000-8000-000000000401'");
-    assert.equal((await call(false)).rows[0].value.unchanged, true, 'Restored exact evidence manifest should replay unchanged');
+    await assert.rejects(
+      call(false, capsJson, JSON.stringify(missingFitUpdatedAt)),
+      /Published group manifest preimage mismatch/,
+      'A replay missing Fit updated_at must be rejected',
+    );
+    await db.query(
+      "UPDATE tool_capability_claims SET purpose='changed' WHERE tool_capability_id=$1 AND purpose='support'",
+      [caps[0]],
+    );
+    await assert.rejects(
+      call(false),
+      /Published group manifest preimage mismatch/,
+      'Changing a published evidence purpose must reject an otherwise identical publication replay',
+    );
+    await db.query(
+      "UPDATE tool_capability_claims SET purpose='support' WHERE tool_capability_id=$1 AND purpose='changed'",
+      [caps[0]],
+    );
+    await db.query('DELETE FROM tool_capability_claims WHERE tool_capability_id=$1 AND purpose=$2', [
+      caps[0],
+      'support',
+    ]);
+    await assert.rejects(
+      call(false),
+      /Published group manifest preimage mismatch/,
+      'Deleting a published evidence link must reject an otherwise identical publication replay',
+    );
+    await db.query("INSERT INTO tool_capability_claims VALUES ($1,'c7890701-0000-4000-8000-000000000401','support')", [
+      caps[0],
+    ]);
+    await db.query(
+      "UPDATE tool_capability_claims SET claim_id='c7890701-0000-4000-8000-000000000402' WHERE tool_capability_id=$1 AND purpose='support'",
+      [caps[0]],
+    );
+    await assert.rejects(
+      call(false),
+      /Published group manifest preimage mismatch/,
+      'Replacing a published evidence claim must reject an otherwise identical publication replay',
+    );
+    await db.query(
+      "UPDATE tool_capability_claims SET claim_id='c7890701-0000-4000-8000-000000000401' WHERE tool_capability_id=$1 AND purpose='support'",
+      [caps[0]],
+    );
+    await db.query(
+      "UPDATE product_intelligence_claims SET invalidated_at=now() WHERE id='c7890701-0000-4000-8000-000000000401'",
+    );
+    await assert.rejects(
+      call(false),
+      /Published group manifest preimage mismatch/,
+      'Invalidated linked evidence must reject an otherwise identical publication replay',
+    );
+    await db.query(
+      "UPDATE product_intelligence_claims SET invalidated_at=NULL WHERE id='c7890701-0000-4000-8000-000000000401'",
+    );
+    assert.equal(
+      (await call(false)).rows[0].value.unchanged,
+      true,
+      'Restored exact evidence manifest should replay unchanged',
+    );
     assert.equal(
       (await db.query('SELECT count(*)::int n FROM product_intelligence_timeline_events')).rows[0].n,
       1,
@@ -262,8 +327,11 @@ async function main() {
         preflightOnly,
       ]);
     const subset = JSON.stringify(JSON.parse(withdrawCapsJson).slice(0, 1));
-    await assert.rejects(withdrawal(false, subset), /Withdrawal manifest must cover every exact Tool Capability and Fit/,
-      'A subset withdrawal manifest must be rejected');
+    await assert.rejects(
+      withdrawal(false, subset),
+      /Withdrawal manifest must cover every exact Tool Capability and Fit/,
+      'A subset withdrawal manifest must be rejected',
+    );
     assert.equal((await withdrawal(true)).rows[0].value.preflight, true);
     assert.equal(
       (await db.query("SELECT count(*)::int n FROM tool_task_fits WHERE status='published'")).rows[0].n,
@@ -275,8 +343,11 @@ async function main() {
     await assert.rejects(withdrawal(false, JSON.stringify(staleWithdrawCaps)), /Tool Capability preimage drifted/);
     const withdrawn = await withdrawal(false);
     assert.equal(withdrawn.rows[0].value.ok, true);
-    assert.equal((await withdrawal(false)).rows[0].value.unchanged, true,
-      'Exact withdrawal replay with the same reference must return unchanged');
+    assert.equal(
+      (await withdrawal(false)).rows[0].value.unchanged,
+      true,
+      'Exact withdrawal replay with the same reference must return unchanged',
+    );
     assert.equal((await db.query("SELECT count(*)::int n FROM tool_capabilities WHERE status='stale'")).rows[0].n, 2);
     assert.equal((await db.query('SELECT status FROM tool_task_fits WHERE id=$1', [fitId])).rows[0].status, 'stale');
     assert.equal(
