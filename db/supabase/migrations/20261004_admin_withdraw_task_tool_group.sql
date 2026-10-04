@@ -32,11 +32,49 @@ BEGIN
   IF v_slug IS DISTINCT FROM 'research-with-citations' THEN
     RAISE EXCEPTION 'Task is outside this reviewed-group release scope' USING ERRCODE='23514';
   END IF;
-  IF (SELECT count(*) FROM public.tool_capabilities WHERE tool_id=p_tool_id AND id IN
-      (SELECT (value->>'id')::uuid FROM jsonb_array_elements(p_tool_capabilities)))<>jsonb_array_length(p_tool_capabilities) OR
-     (SELECT count(*) FROM public.tool_task_fits WHERE task_id=p_task_id AND tool_id=p_tool_id
-      AND id IN (SELECT (value->>'id')::uuid FROM jsonb_array_elements(p_fits)))<>jsonb_array_length(p_fits) THEN
-    RAISE EXCEPTION 'Withdrawal manifest must contain exact current Tool Capability and Fit IDs' USING ERRCODE='23514';
+  IF (SELECT count(*) FROM public.tool_capabilities c
+      JOIN public.task_capabilities tc ON tc.task_id=p_task_id AND tc.capability_id=c.capability_id
+      WHERE c.tool_id=p_tool_id)<>jsonb_array_length(p_tool_capabilities) OR
+     EXISTS (SELECT 1 FROM public.tool_capabilities c
+       JOIN public.task_capabilities tc ON tc.task_id=p_task_id AND tc.capability_id=c.capability_id
+       WHERE c.tool_id=p_tool_id AND NOT EXISTS (SELECT 1 FROM jsonb_array_elements(p_tool_capabilities) m
+         WHERE m->>'id'=c.id::text)) OR
+     EXISTS (SELECT 1 FROM jsonb_array_elements(p_tool_capabilities) m
+       WHERE NOT EXISTS (SELECT 1 FROM public.tool_capabilities c
+         JOIN public.task_capabilities tc ON tc.task_id=p_task_id AND tc.capability_id=c.capability_id
+         WHERE c.tool_id=p_tool_id AND c.id=(m->>'id')::uuid)) OR
+     (SELECT count(*) FROM public.tool_task_fits WHERE task_id=p_task_id AND tool_id=p_tool_id)
+       <>jsonb_array_length(p_fits) OR
+     EXISTS (SELECT 1 FROM public.tool_task_fits f WHERE f.task_id=p_task_id AND f.tool_id=p_tool_id
+       AND NOT EXISTS (SELECT 1 FROM jsonb_array_elements(p_fits) m WHERE m->>'id'=f.id::text)) OR
+     EXISTS (SELECT 1 FROM jsonb_array_elements(p_fits) m WHERE NOT EXISTS
+       (SELECT 1 FROM public.tool_task_fits f WHERE f.task_id=p_task_id AND f.tool_id=p_tool_id
+         AND f.id=(m->>'id')::uuid)) THEN
+    RAISE EXCEPTION 'Withdrawal manifest must cover every exact Tool Capability and Fit for this Task/tool' USING ERRCODE='23514';
+  END IF;
+  IF (SELECT count(DISTINCT (value->>'id')::uuid) FROM jsonb_array_elements(p_tool_capabilities))
+       <>jsonb_array_length(p_tool_capabilities) OR
+     (SELECT count(DISTINCT (value->>'id')::uuid) FROM jsonb_array_elements(p_fits))
+       <>jsonb_array_length(p_fits) THEN
+    RAISE EXCEPTION 'Withdrawal manifest contains duplicate relation IDs' USING ERRCODE='23514';
+  END IF;
+  IF NOT coalesce(p_preflight,false) AND EXISTS (
+    SELECT 1 FROM public.product_intelligence_timeline_events e
+    JOIN public.product_intelligence_profiles p ON p.id=e.profile_id
+    WHERE p.owner_type='tool' AND p.owner_id=p_tool_id AND e.event_type='decision_withdrawal'
+      AND e.review_scope='decision' AND e.claim_type='decision_cluster' AND e.claim_key=p_task_id::text
+      AND e.metadata->>'taskId'=p_task_id::text AND e.metadata->>'toolId'=p_tool_id::text
+      AND e.metadata->>'withdrawalReference'=btrim(p_withdrawal_reference)
+      AND e.metadata->'toolCapabilities'=p_tool_capabilities AND e.metadata->'fits'=p_fits
+      AND NOT EXISTS (SELECT 1 FROM public.tool_capabilities c
+        JOIN public.task_capabilities tc ON tc.task_id=p_task_id AND tc.capability_id=c.capability_id
+        WHERE c.tool_id=p_tool_id AND c.status<>'stale')
+      AND NOT EXISTS (SELECT 1 FROM public.tool_task_fits f
+        WHERE f.task_id=p_task_id AND f.tool_id=p_tool_id AND f.status<>'stale')
+  ) THEN
+    RETURN jsonb_build_object('ok',true,'preflight',false,'unchanged',true,'taskId',p_task_id,
+      'toolId',p_tool_id,'toolCapabilityCount',jsonb_array_length(p_tool_capabilities),
+      'fitCount',jsonb_array_length(p_fits));
   END IF;
   FOR v_entry IN SELECT value FROM jsonb_array_elements(p_tool_capabilities) LOOP
     IF v_entry->>'status'<>'published' OR coalesce(v_entry->>'updated_at','')='' OR

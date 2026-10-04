@@ -23,6 +23,9 @@ assert.match(migration, /ARRAY\['fit','limitation'\]/);
 assert.match(migration, /verification_status<>'verified'/);
 assert.match(migration, /conflict_status<>'none'/);
 assert.match(migration, /s\.source_type<>'official'/);
+assert.match(migration, /s\.profile_id IS DISTINCT FROM c\.profile_id/);
+assert.match(migration, /'linkFingerprint',v_link_fingerprint/);
+assert.match(migration, /e\.metadata->'linkFingerprint'=v_link_fingerprint/);
 assert.match(migration, /p\.profile_status<>'ready'/);
 assert.match(migration, /p\.owner_id<>p_tool_id/);
 assert.match(migration, /review_due_at<=v_now/);
@@ -39,6 +42,9 @@ assert.doesNotMatch(migration, /APPROVED_TASK_PAGE_SLUGS|sitemap|robots|index_re
 assert.match(withdrawalMigration, /admin_withdraw_task_tool_group/);
 assert.match(withdrawalMigration, /updated_at=\(v_entry->>'updated_at'\)::timestamptz/);
 assert.match(withdrawalMigration, /decision_withdrawal/);
+assert.match(withdrawalMigration, /Withdrawal manifest must cover every exact Tool Capability and Fit/);
+assert.match(withdrawalMigration, /e\.metadata->'toolCapabilities'=p_tool_capabilities/);
+assert.match(withdrawalMigration, /'unchanged',true/);
 assert.doesNotMatch(
   withdrawalMigration,
   /UPDATE public\.(?:decision_tasks|task_capabilities|tools|product_intelligence_profiles)/i,
@@ -56,6 +62,8 @@ assert.match(
   /Use Gemini Notebook to synthesize sources the user selects or supplies and imports into a notebook/,
 );
 assert.match(preflight, /不等同于开放网页检索/);
+assert.match(preflight, /geminiIndexUnchanged && perplexityIndexUnchanged/);
+assert.match(preflight, /PERPLEXITY_TOOL_INDEX_STATE_CHANGED/);
 
 const taskId = '527fe8b7-c171-4c50-ab1f-9404d7536e7c';
 const toolId = 'cec78907-e2a1-4eb7-853a-a58334026280';
@@ -103,8 +111,10 @@ async function main() {
       INSERT INTO task_capabilities VALUES ('${taskId}','50288b6e-a968-4bcf-9e55-911df203e0c7','published','${reviewer}',now(),now()+interval '30 days'),('${taskId}','04930ae8-4c78-487f-a6c9-25680b8da681','published','${reviewer}',now(),now()+interval '30 days');
       INSERT INTO tool_decision_profiles VALUES ('${toolId}','reviewed','${reviewer}',now(),now()+interval '30 days');
       INSERT INTO product_intelligence_profiles VALUES ('c7890701-0000-4000-8000-000000000001','tool','${toolId}','ready',now()+interval '30 days');
+      INSERT INTO product_intelligence_profiles VALUES ('c7890701-0000-4000-8000-000000000002','tool','${toolId}','ready',now()+interval '30 days');
       INSERT INTO product_intelligence_sources VALUES ('c7890701-0000-4000-8000-000000000101','c7890701-0000-4000-8000-000000000001','https://support.google.com/gemininotebook/answer/16164461','official','success',now());
       INSERT INTO product_intelligence_claims VALUES ('c7890701-0000-4000-8000-000000000401','c7890701-0000-4000-8000-000000000001','c7890701-0000-4000-8000-000000000101','https://support.google.com/gemininotebook/answer/16164461','official','verified','none',NULL,NULL,now(),'${reviewer}',now()+interval '30 days');
+      INSERT INTO product_intelligence_claims VALUES ('c7890701-0000-4000-8000-000000000402','c7890701-0000-4000-8000-000000000001','c7890701-0000-4000-8000-000000000101','https://support.google.com/gemininotebook/answer/16164461','official','verified','none',NULL,NULL,now(),'${reviewer}',now()+interval '30 days');
       INSERT INTO tool_capabilities VALUES
        ('${caps[0]}','${toolId}','50288b6e-a968-4bcf-9e55-911df203e0c7','strong','all_plans','{"en":"Available in current plan; recheck account access."}','["Current plan limits apply."]','reviewed','${reviewer}',now(),now()+interval '30 days',NULL,now()),
        ('${caps[1]}','${toolId}','04930ae8-4c78-487f-a6c9-25680b8da681','strong','all_plans','{"en":"Available in current plan; recheck account access."}','["Current plan limits apply."]','reviewed','${reviewer}',now(),now()+interval '30 days',NULL,now());
@@ -138,6 +148,10 @@ async function main() {
         'independent qa record 123',
         preflightOnly,
       ]);
+    await db.query("UPDATE product_intelligence_sources SET profile_id='c7890701-0000-4000-8000-000000000002'");
+    await assert.rejects(call(true), /Linked claims must be current official same-owner evidence/,
+      'A source owned by another profile must block even read-only publication preflight');
+    await db.query("UPDATE product_intelligence_sources SET profile_id='c7890701-0000-4000-8000-000000000001'");
     const checked = await call(true);
     assert.equal(checked.rows[0].value.preflight, true);
     assert.equal(
@@ -165,6 +179,23 @@ async function main() {
     );
     const replay = await call(false);
     assert.equal(replay.rows[0].value.unchanged, true);
+    await db.query("UPDATE tool_capability_claims SET purpose='changed' WHERE tool_capability_id=$1 AND purpose='support'", [caps[0]]);
+    await assert.rejects(call(false), /Tool Capability is stale, unreviewed, or incomplete/,
+      'Changing a published evidence purpose must reject an otherwise identical publication replay');
+    await db.query("UPDATE tool_capability_claims SET purpose='support' WHERE tool_capability_id=$1 AND purpose='changed'", [caps[0]]);
+    await db.query('DELETE FROM tool_capability_claims WHERE tool_capability_id=$1 AND purpose=$2', [caps[0], 'support']);
+    await assert.rejects(call(false), /Tool Capability is stale, unreviewed, or incomplete/,
+      'Deleting a published evidence link must reject an otherwise identical publication replay');
+    await db.query("INSERT INTO tool_capability_claims VALUES ($1,'c7890701-0000-4000-8000-000000000401','support')", [caps[0]]);
+    await db.query("UPDATE tool_capability_claims SET claim_id='c7890701-0000-4000-8000-000000000402' WHERE tool_capability_id=$1 AND purpose='support'", [caps[0]]);
+    await assert.rejects(call(false), /Tool Capability is stale, unreviewed, or incomplete/,
+      'Replacing a published evidence claim must reject an otherwise identical publication replay');
+    await db.query("UPDATE tool_capability_claims SET claim_id='c7890701-0000-4000-8000-000000000401' WHERE tool_capability_id=$1 AND purpose='support'", [caps[0]]);
+    await db.query("UPDATE product_intelligence_claims SET invalidated_at=now() WHERE id='c7890701-0000-4000-8000-000000000401'");
+    await assert.rejects(call(false), /stale|Linked claims must be current official same-owner evidence/,
+      'Invalidated linked evidence must reject an otherwise identical publication replay');
+    await db.query("UPDATE product_intelligence_claims SET invalidated_at=NULL WHERE id='c7890701-0000-4000-8000-000000000401'");
+    assert.equal((await call(false)).rows[0].value.unchanged, true, 'Restored exact evidence manifest should replay unchanged');
     assert.equal(
       (await db.query('SELECT count(*)::int n FROM product_intelligence_timeline_events')).rows[0].n,
       1,
@@ -195,6 +226,9 @@ async function main() {
         'rollback QA record 456',
         preflightOnly,
       ]);
+    const subset = JSON.stringify(JSON.parse(withdrawCapsJson).slice(0, 1));
+    await assert.rejects(withdrawal(false, subset), /Withdrawal manifest must cover every exact Tool Capability and Fit/,
+      'A subset withdrawal manifest must be rejected');
     assert.equal((await withdrawal(true)).rows[0].value.preflight, true);
     assert.equal(
       (await db.query("SELECT count(*)::int n FROM tool_task_fits WHERE status='published'")).rows[0].n,
@@ -206,6 +240,8 @@ async function main() {
     await assert.rejects(withdrawal(false, JSON.stringify(staleWithdrawCaps)), /Tool Capability preimage drifted/);
     const withdrawn = await withdrawal(false);
     assert.equal(withdrawn.rows[0].value.ok, true);
+    assert.equal((await withdrawal(false)).rows[0].value.unchanged, true,
+      'Exact withdrawal replay with the same reference must return unchanged');
     assert.equal((await db.query("SELECT count(*)::int n FROM tool_capabilities WHERE status='stale'")).rows[0].n, 2);
     assert.equal((await db.query('SELECT status FROM tool_task_fits WHERE id=$1', [fitId])).rows[0].status, 'stale');
     assert.equal(
@@ -220,6 +256,7 @@ async function main() {
         )
       ).rows[0].n,
       1,
+      'Idempotent withdrawal replay must not duplicate its audit event',
     );
     await db.query("SELECT set_config('request.jwt.claim.role','authenticated',false)");
     await assert.rejects(call(false), /service_role and a real reviewer are required/);

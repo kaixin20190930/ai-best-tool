@@ -18,6 +18,7 @@ DECLARE
   v_row record;
   v_due timestamptz;
   v_evidence jsonb := '[]'::jsonb;
+  v_link_fingerprint jsonb := '[]'::jsonb;
   v_seen uuid[] := ARRAY[]::uuid[];
   v_count integer;
 BEGIN
@@ -53,6 +54,39 @@ BEGIN
     RAISE EXCEPTION 'Tool Decision must have a current reviewed owner record' USING ERRCODE='23514';
   END IF;
 
+  SELECT COALESCE(jsonb_agg(jsonb_build_object('entity',x.entity,'relationId',x.relation_id,
+    'claimId',x.claim_id,'purpose',x.purpose,'claimProfileId',x.claim_profile_id,
+    'sourceProfileId',x.source_profile_id,'verificationStatus',x.verification_status,
+    'conflictStatus',x.conflict_status,'invalidatedAt',x.invalidated_at,'expiresAt',x.expires_at,
+    'reviewDueAt',x.review_due_at,'claimSourceUrl',x.source_url,'claimSourceType',x.source_type,
+    'sourceUrl',x.source_actual_url,'sourceType',x.source_actual_type,'sourceFetchStatus',x.fetch_status,
+    'sourceLastVerifiedAt',x.last_verified_at,'ownerType',x.owner_type,'ownerId',x.owner_id,
+    'profileStatus',x.profile_status,'profileReviewDueAt',x.profile_review_due_at)
+    ORDER BY x.entity,x.relation_id,x.purpose,x.claim_id),'[]'::jsonb) INTO v_link_fingerprint
+  FROM (
+    SELECT 'tool_capability'::text entity,l.tool_capability_id relation_id,l.claim_id,l.purpose,
+      c.profile_id claim_profile_id,s.profile_id source_profile_id,c.verification_status,c.conflict_status,
+      c.invalidated_at,c.expires_at,c.review_due_at,c.source_url,c.source_type,s.url source_actual_url,
+      s.source_type source_actual_type,s.fetch_status,s.last_verified_at,p.owner_type,p.owner_id,p.profile_status,
+      p.next_review_at profile_review_due_at
+    FROM public.tool_capability_claims l
+    JOIN public.tool_capabilities tc ON tc.id=l.tool_capability_id
+    LEFT JOIN public.product_intelligence_claims c ON c.id=l.claim_id
+    LEFT JOIN public.product_intelligence_sources s ON s.id=c.source_id
+    LEFT JOIN public.product_intelligence_profiles p ON p.id=c.profile_id
+    WHERE tc.id IN (SELECT (value->>'id')::uuid FROM jsonb_array_elements(p_tool_capabilities))
+    UNION ALL
+    SELECT 'fit',l.fit_id,l.claim_id,l.purpose,c.profile_id,s.profile_id,c.verification_status,c.conflict_status,
+      c.invalidated_at,c.expires_at,c.review_due_at,c.source_url,c.source_type,s.url,s.source_type,s.fetch_status,
+      s.last_verified_at,p.owner_type,p.owner_id,p.profile_status,p.next_review_at
+    FROM public.tool_task_fit_claims l
+    JOIN public.tool_task_fits f ON f.id=l.fit_id
+    LEFT JOIN public.product_intelligence_claims c ON c.id=l.claim_id
+    LEFT JOIN public.product_intelligence_sources s ON s.id=c.source_id
+    LEFT JOIN public.product_intelligence_profiles p ON p.id=c.profile_id
+    WHERE f.id IN (SELECT (value->>'id')::uuid FROM jsonb_array_elements(p_fits))
+  ) x;
+
   IF NOT coalesce(p_preflight,false) AND
      (SELECT count(*) FROM public.tool_capabilities tc
        WHERE tc.id IN (SELECT (value->>'id')::uuid FROM jsonb_array_elements(p_tool_capabilities))
@@ -60,6 +94,11 @@ BEGIN
      (SELECT count(*) FROM public.tool_task_fits f
        WHERE f.id IN (SELECT (value->>'id')::uuid FROM jsonb_array_elements(p_fits))
          AND f.task_id=p_task_id AND f.tool_id=p_tool_id AND f.status='published')=jsonb_array_length(p_fits) AND
+     (SELECT count(*) FROM public.tool_capabilities tc
+       JOIN public.task_capabilities taskc ON taskc.task_id=p_task_id AND taskc.capability_id=tc.capability_id
+       WHERE tc.tool_id=p_tool_id)=jsonb_array_length(p_tool_capabilities) AND
+     (SELECT count(*) FROM public.tool_task_fits f WHERE f.task_id=p_task_id AND f.tool_id=p_tool_id)
+       =jsonb_array_length(p_fits) AND
      EXISTS (SELECT 1 FROM public.product_intelligence_timeline_events e
        JOIN public.product_intelligence_profiles p ON p.id=e.profile_id
        WHERE p.owner_type='tool' AND p.owner_id=p_tool_id AND e.event_type='decision_publication'
@@ -67,12 +106,25 @@ BEGIN
          AND e.metadata->>'toolId'=p_tool_id::text AND e.metadata->>'qaReference'=btrim(p_qa_reference)
          AND (SELECT count(*) FROM jsonb_array_elements(e.metadata->'toolCapabilities'))=jsonb_array_length(p_tool_capabilities)
          AND (SELECT count(*) FROM jsonb_array_elements(e.metadata->'fits'))=jsonb_array_length(p_fits)
+         AND e.metadata->'linkFingerprint'=v_link_fingerprint
          AND NOT EXISTS (SELECT 1 FROM jsonb_array_elements(p_tool_capabilities) requested
            WHERE NOT EXISTS (SELECT 1 FROM jsonb_array_elements(e.metadata->'toolCapabilities') prior
-             WHERE prior->>'id'=requested->>'id' AND prior->>'updated_at'=requested->>'updated_at'))
+             WHERE prior->>'id'=requested->>'id'))
          AND NOT EXISTS (SELECT 1 FROM jsonb_array_elements(p_fits) requested
            WHERE NOT EXISTS (SELECT 1 FROM jsonb_array_elements(e.metadata->'fits') prior
-             WHERE prior->>'id'=requested->>'id' AND prior->>'updated_at'=requested->>'updated_at')))
+             WHERE prior->>'id'=requested->>'id'))
+         AND NOT EXISTS (
+           SELECT 1 FROM jsonb_array_elements(v_link_fingerprint) evidence
+           WHERE evidence->>'verificationStatus'<>'verified' OR evidence->>'conflictStatus'<>'none' OR
+             evidence->>'invalidatedAt' IS NOT NULL OR
+             (evidence->>'expiresAt' IS NOT NULL AND (evidence->>'expiresAt')::timestamptz<=v_now) OR
+             (evidence->>'reviewDueAt')::timestamptz<=v_now OR
+             (evidence->>'profileReviewDueAt')::timestamptz<=v_now OR
+             evidence->>'claimProfileId' IS DISTINCT FROM evidence->>'sourceProfileId' OR
+             evidence->>'claimSourceUrl' IS DISTINCT FROM evidence->>'sourceUrl' OR
+             evidence->>'claimSourceType'<>'official' OR evidence->>'sourceType'<>'official' OR
+             evidence->>'sourceFetchStatus'<>'success' OR evidence->>'ownerType'<>'tool' OR
+             evidence->>'ownerId' IS DISTINCT FROM p_tool_id::text OR evidence->>'profileStatus'<>'ready')))
   THEN
     RETURN jsonb_build_object('ok',true,'preflight',false,'unchanged',true,'taskId',p_task_id,
       'toolId',p_tool_id,'toolCapabilityCount',jsonb_array_length(p_tool_capabilities),
@@ -209,7 +261,8 @@ BEGIN
     WHERE tc.tool_id=p_tool_id AND tc.id IN
       (SELECT (value->>'id')::uuid FROM jsonb_array_elements(p_tool_capabilities))
       AND (c.id IS NULL OR p.owner_type<>'tool' OR p.owner_id<>p_tool_id OR p.profile_status<>'ready' OR
-        p.next_review_at IS NULL OR p.next_review_at<=v_now OR c.verification_status<>'verified' OR c.conflict_status<>'none' OR
+        p.next_review_at IS NULL OR p.next_review_at<=v_now OR s.profile_id IS DISTINCT FROM c.profile_id OR
+        c.verification_status<>'verified' OR c.conflict_status<>'none' OR
         c.invalidated_at IS NOT NULL OR (c.expires_at IS NOT NULL AND c.expires_at<=v_now) OR
         c.verified_at IS NULL OR c.verified_by IS NULL OR c.review_due_at IS NULL OR c.review_due_at<=v_now OR
         c.source_type<>'official' OR s.source_type<>'official' OR s.fetch_status<>'success' OR
@@ -222,7 +275,8 @@ BEGIN
     LEFT JOIN public.product_intelligence_sources s ON s.id=c.source_id
     WHERE f.id IN (SELECT (value->>'id')::uuid FROM jsonb_array_elements(p_fits))
       AND (c.id IS NULL OR p.owner_type<>'tool' OR p.owner_id<>p_tool_id OR p.profile_status<>'ready' OR
-        p.next_review_at IS NULL OR p.next_review_at<=v_now OR c.verification_status<>'verified' OR c.conflict_status<>'none' OR
+        p.next_review_at IS NULL OR p.next_review_at<=v_now OR s.profile_id IS DISTINCT FROM c.profile_id OR
+        c.verification_status<>'verified' OR c.conflict_status<>'none' OR
         c.invalidated_at IS NOT NULL OR (c.expires_at IS NOT NULL AND c.expires_at<=v_now) OR
         c.verified_at IS NULL OR c.verified_by IS NULL OR c.review_due_at IS NULL OR c.review_due_at<=v_now OR
         c.source_type<>'official' OR s.source_type<>'official' OR s.fetch_status<>'success' OR
@@ -239,12 +293,14 @@ BEGIN
     'claimId',e.claim_id,'purpose',e.purpose,'sourceUrl',e.source_url,'sourceType',e.source_type,
     'verificationStatus',e.verification_status,'conflictStatus',e.conflict_status,
     'verifiedAt',e.verified_at,'reviewDueAt',e.review_due_at,'expiresAt',e.expires_at,
+    'invalidatedAt',e.invalidated_at,'sourceProfileId',e.source_profile_id,'sourceLastVerifiedAt',e.source_last_verified_at,
     'officialSource',e.official_source,'ownerMatches',e.owner_matches)
     ORDER BY e.entity,e.relation_id,e.purpose,e.claim_id),'[]'::jsonb) INTO v_evidence FROM (
     SELECT 'tool_capability'::text entity,l.tool_capability_id relation_id,c.id claim_id,l.purpose,
       c.source_url,c.source_type,c.verification_status,c.conflict_status,c.verified_at,c.review_due_at,c.expires_at,
+      c.invalidated_at,s.profile_id source_profile_id,s.last_verified_at source_last_verified_at,
       (c.source_type='official' AND s.source_type='official' AND s.url=c.source_url AND s.fetch_status='success') official_source,
-      (p.owner_type='tool' AND p.owner_id=p_tool_id AND p.profile_status='ready') owner_matches
+      (p.owner_type='tool' AND p.owner_id=p_tool_id AND p.profile_status='ready' AND s.profile_id=c.profile_id) owner_matches
     FROM public.tool_capability_claims l JOIN public.tool_capabilities tc ON tc.id=l.tool_capability_id
     JOIN public.product_intelligence_claims c ON c.id=l.claim_id
     JOIN public.product_intelligence_profiles p ON p.id=c.profile_id
@@ -252,8 +308,9 @@ BEGIN
     WHERE tc.id IN (SELECT (value->>'id')::uuid FROM jsonb_array_elements(p_tool_capabilities))
     UNION ALL
     SELECT 'fit',l.fit_id,c.id,l.purpose,c.source_url,c.source_type,c.verification_status,c.conflict_status,c.verified_at,c.review_due_at,c.expires_at,
+      c.invalidated_at,s.profile_id,s.last_verified_at,
       (c.source_type='official' AND s.source_type='official' AND s.url=c.source_url AND s.fetch_status='success'),
-      (p.owner_type='tool' AND p.owner_id=p_tool_id AND p.profile_status='ready')
+      (p.owner_type='tool' AND p.owner_id=p_tool_id AND p.profile_status='ready' AND s.profile_id=c.profile_id)
     FROM public.tool_task_fit_claims l JOIN public.tool_task_fits f ON f.id=l.fit_id
     JOIN public.product_intelligence_claims c ON c.id=l.claim_id
     JOIN public.product_intelligence_profiles p ON p.id=c.profile_id
@@ -289,7 +346,7 @@ BEGIN
     'Reviewed tool group published','Exact Tool Capability and Fit manifest transitioned',
     jsonb_build_object('status','reviewed'),jsonb_build_object('status','published'),'internal',v_now,v_now,p_reviewer,
     jsonb_build_object('taskId',p_task_id,'toolId',p_tool_id,'toolCapabilities',p_tool_capabilities,
-      'fits',p_fits,'qaReference',btrim(p_qa_reference))
+      'fits',p_fits,'qaReference',btrim(p_qa_reference),'linkFingerprint',v_link_fingerprint)
   FROM public.product_intelligence_profiles p WHERE p.owner_type='tool' AND p.owner_id=p_tool_id;
   RETURN jsonb_build_object('ok',true,'preflight',false,'taskId',p_task_id,'toolId',p_tool_id,
     'toolCapabilityCount',jsonb_array_length(p_tool_capabilities),'fitCount',jsonb_array_length(p_fits));

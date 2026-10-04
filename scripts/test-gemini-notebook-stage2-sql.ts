@@ -5,130 +5,93 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { Client } from 'pg';
 
-import { postgresJsonbText, stage2StateMd5, type Stage2State } from './gemini-notebook-stage2-state';
+import { stage2StateMd5, postgresJsonbText, type Stage2State } from './gemini-notebook-stage2-state';
 
-const candidate = readFileSync('db/supabase/manual/20261001_gemini_notebook_stage2_candidate.sql', 'utf8');
-const amendment = readFileSync('db/supabase/manual/20261001_gemini_notebook_stage2_source_url_amendment.sql', 'utf8');
-const review = readFileSync('db/supabase/manual/20261001_gemini_notebook_stage2_review_links.sql', 'utf8');
-const rollback = readFileSync('db/supabase/manual/20261001_gemini_notebook_stage2_rollback.sql', 'utf8');
-const verifier = readFileSync('scripts/verify-gemini-notebook-stage2-readonly.ts', 'utf8');
-const adminReviewMigration = readFileSync('db/supabase/migrations/20261003_admin_evidence_review.sql', 'utf8');
-const geminiPlanRepairMigration = readFileSync(
-  'db/supabase/migrations/20261004_admin_gemini_plan_link_repair.sql',
-  'utf8',
-);
-assert.doesNotMatch(
-  adminReviewMigration,
-  /\b(?:UPDATE|INSERT INTO|DELETE FROM)\s+(?:public\.)?(?:decision_tasks|task_pages|tools|index_reviews)\b/i,
-);
-assert.doesNotMatch(adminReviewMigration, /sitemap/i);
-assert.match(geminiPlanRepairMigration, /admin_complete_gemini_notebook_plan_link/);
-assert.match(geminiPlanRepairMigration, /auth\.role\(\) IS DISTINCT FROM 'service_role'/);
-assert.match(geminiPlanRepairMigration, /exactly four current links before repair/);
-assert.match(
-  geminiPlanRepairMigration,
-  /INSERT INTO public\.tool_capability_claims\(tool_capability_id,claim_id,purpose\)/,
-);
-assert.doesNotMatch(
-  geminiPlanRepairMigration,
-  /UPDATE public\.(?:decision_tasks|task_capabilities|tools|product_intelligence_profiles)/i,
-);
-assert.match(
-  adminReviewMigration,
-  /UPDATE public\.tool_capabilities SET status='reviewed',reviewed_at=v_now,review_due_at=v_due,reviewed_by=p_reviewer,last_edited_by=p_reviewer\s+WHERE tool_id=v_tool/,
-  'Reviewing draft Tool Capabilities must record the reviewer as editor',
-);
-assert.match(
-  adminReviewMigration,
-  /UPDATE public\.tool_task_fits SET status='reviewed',reviewed_at=v_now,review_due_at=v_due,reviewed_by=p_reviewer,last_edited_by=p_reviewer/,
-  'Reviewed Fits must continue recording the reviewer as editor',
-);
-const manualLinks = review.match(/INSERT INTO stage2_link_spec VALUES([\s\S]*?);/)?.[1];
-const adminLinks = adminReviewMigration.match(/INSERT INTO stage2_admin_links VALUES([\s\S]*?);/)?.[1];
-assert.ok(manualLinks && adminLinks, 'Both Stage 2 link manifests must exist');
-assert.equal(
-  adminLinks.replace(/\s+/g, ''),
-  manualLinks.replace(/\s+/g, ''),
-  'Admin links must exactly match the reviewed Stage 2 manifest',
-);
-for (const sql of [review, rollback]) {
-  assert.match(sql, /^BEGIN;/m);
-  assert.match(sql, /^ROLLBACK;\s*$/m);
-  assert.doesNotMatch(sql, /^COMMIT;/m);
-  assert.doesNotMatch(sql, /CREATE\s+(?:UNLOGGED\s+)?TABLE\s+(?!pg_temp)/i);
-  assert.doesNotMatch(sql, /decision_cluster_transition\s*\(/i);
+const candidate = readFileSync('db/supabase/manual/20261001_gemini_notebook_stage2_candidate.sql','utf8');
+const amendment = readFileSync('db/supabase/manual/20261001_gemini_notebook_stage2_source_url_amendment.sql','utf8');
+const review = readFileSync('db/supabase/manual/20261001_gemini_notebook_stage2_review_links.sql','utf8');
+const rollback = readFileSync('db/supabase/manual/20261001_gemini_notebook_stage2_rollback.sql','utf8');
+const verifier = readFileSync('scripts/verify-gemini-notebook-stage2-readonly.ts','utf8');
+const adminReviewMigration = readFileSync('db/supabase/migrations/20261003_admin_evidence_review.sql','utf8');
+const geminiPlanRepairMigration = readFileSync('db/supabase/migrations/20261004_admin_gemini_plan_link_repair.sql','utf8');
+assert.match(geminiPlanRepairMigration,/admin_complete_gemini_notebook_plan_link/);
+assert.match(geminiPlanRepairMigration,/auth\.role\(\) IS DISTINCT FROM 'service_role'/);
+assert.match(geminiPlanRepairMigration,/exactly four current links before repair/);
+assert.match(geminiPlanRepairMigration,/INSERT INTO public\.tool_capability_claims\(tool_capability_id,claim_id,purpose\)/);
+assert.doesNotMatch(adminReviewMigration,/\b(?:UPDATE|INSERT INTO|DELETE FROM)\s+(?:public\.)?(?:decision_tasks|task_pages|tools|index_reviews)\b/i);
+assert.doesNotMatch(adminReviewMigration,/sitemap/i);
+assert.match(adminReviewMigration,/UPDATE public\.tool_capabilities SET status='reviewed',reviewed_at=v_now,review_due_at=v_due,reviewed_by=p_reviewer,last_edited_by=p_reviewer\s+WHERE tool_id=v_tool/,
+  'Reviewing draft Tool Capabilities must record the reviewer as editor');
+assert.match(adminReviewMigration,/UPDATE public\.tool_task_fits SET status='reviewed',reviewed_at=v_now,review_due_at=v_due,reviewed_by=p_reviewer,last_edited_by=p_reviewer/,
+  'Reviewed Fits must continue recording the reviewer as editor');
+const manualLinks=review.match(/INSERT INTO stage2_link_spec VALUES([\s\S]*?);/)?.[1];
+const adminLinks=adminReviewMigration.match(/INSERT INTO stage2_admin_links VALUES([\s\S]*?);/)?.[1];
+assert.ok(manualLinks && adminLinks,'Both Stage 2 link manifests must exist');
+assert.equal(adminLinks.replace(/\s+/g,''),manualLinks.replace(/\s+/g,''),'Admin links must exactly match the reviewed Stage 2 manifest');
+for (const sql of [review,rollback]) {
+  assert.match(sql,/^BEGIN;/m);
+  assert.match(sql,/^ROLLBACK;\s*$/m);
+  assert.doesNotMatch(sql,/^COMMIT;/m);
+  assert.doesNotMatch(sql,/CREATE\s+(?:UNLOGGED\s+)?TABLE\s+(?!pg_temp)/i);
+  assert.doesNotMatch(sql,/decision_cluster_transition\s*\(/i);
 }
-assert.match(candidate, /^CREATE OR REPLACE FUNCTION pg_temp\.gemini_notebook_stage2_candidate\(p_mode text\)/m);
-assert.match(candidate, /stage2_preflight_rollback/);
-assert.match(candidate, /SELECT \* FROM pg_temp\.gemini_notebook_stage2_candidate\('ROLLBACK'\);\s*$/);
-assert.doesNotMatch(candidate, /^BEGIN;|^COMMIT;/m);
-assert.match(candidate, /verification_status='candidate'/);
-assert.match(candidate, /editorial_status='draft'/);
-assert.match(candidate, /answer\/16164461','help'/);
-assert.doesNotMatch(candidate, /answer\/16164461\?hl=en/);
-assert.match(verifier, /answer\/16164461',/);
-assert.doesNotMatch(verifier, /answer\/16164461\?hl=en/);
-assert.match(amendment, /v_prior_md5 <> '769d65d12796a59bc33dd66117ebbc74'/);
-assert.match(amendment, /stage2_source_url_preflight_rollback/);
-assert.match(amendment, /SELECT \* FROM pg_temp\.gemini_notebook_stage2_source_url_amendment\('ROLLBACK'\);\s*$/);
-assert.doesNotMatch(amendment, /^BEGIN;|^COMMIT;/m);
-assert.match(review, /reviewer.*auth\.users/s);
-assert.match(review, /Stage 2 requires RLS enabled on all nine Supabase tables/);
-assert.match(review, /000000000406','export'/);
-assert.match(
-  candidate,
-  /YouTube import depends on available captions and imports caption text, not embedded video or audio/,
-);
-assert.doesNotMatch(candidate, /omit media, captions/i);
-assert.match(verifier, /Task Page opened/);
-assert.match(verifier, /\[406,'export'\]/);
-assert.match(verifier, /productionWrites:0/);
-assert.doesNotMatch(verifier, /\.insert\(|\.update\(|\.delete\(|\.upsert\(/);
+assert.match(candidate,/^CREATE OR REPLACE FUNCTION pg_temp\.gemini_notebook_stage2_candidate\(p_mode text\)/m);
+assert.match(candidate,/stage2_preflight_rollback/);
+assert.match(candidate,/SELECT \* FROM pg_temp\.gemini_notebook_stage2_candidate\('ROLLBACK'\);\s*$/);
+assert.doesNotMatch(candidate,/^BEGIN;|^COMMIT;/m);
+assert.match(candidate,/verification_status='candidate'/);
+assert.match(candidate,/editorial_status='draft'/);
+assert.match(candidate,/answer\/16164461','help'/);
+assert.doesNotMatch(candidate,/answer\/16164461\?hl=en/);
+assert.match(verifier,/answer\/16164461',/);
+assert.doesNotMatch(verifier,/answer\/16164461\?hl=en/);
+assert.match(amendment,/v_prior_md5 <> '769d65d12796a59bc33dd66117ebbc74'/);
+assert.match(amendment,/stage2_source_url_preflight_rollback/);
+assert.match(amendment,/SELECT \* FROM pg_temp\.gemini_notebook_stage2_source_url_amendment\('ROLLBACK'\);\s*$/);
+assert.doesNotMatch(amendment,/^BEGIN;|^COMMIT;/m);
+assert.match(review,/reviewer.*auth\.users/s);
+assert.match(review,/Stage 2 requires RLS enabled on all nine Supabase tables/);
+assert.match(review,/000000000406'\s*,\s*'export'/);
+assert.match(candidate,/YouTube import depends on available captions and imports caption text, not embedded video or audio/);
+assert.doesNotMatch(candidate,/omit media, captions/i);
+assert.match(verifier,/Task Page opened/);
+assert.match(verifier,/\[\s*406\s*,\s*'export'\s*\]/);
+assert.match(verifier,/productionWrites:0/);
+assert.doesNotMatch(verifier,/\.insert\(|\.update\(|\.delete\(|\.upsert\(/);
 const hashExpression = (sql: string) => {
-  const match = [...sql.matchAll(/SELECT md5\(jsonb_build_object\(([\s\S]*?)\)::text\) INTO v_[a-z]+_md5;/g)].at(-1);
-  assert.ok(match, 'SQL postimage hash expression missing');
+  const match=[...sql.matchAll(/SELECT md5\(jsonb_build_object\(([\s\S]*?)\)::text\) INTO v_[a-z]+_md5;/g)].at(-1);
+  assert.ok(match,'SQL postimage hash expression missing');
   return match[1];
 };
-assert.equal(hashExpression(candidate), hashExpression(review), 'candidate and review hash fields/order differ');
-assert.equal(hashExpression(candidate), hashExpression(rollback), 'candidate and rollback hash fields/order differ');
-assert.equal(
-  hashExpression(candidate).replace(/\s+/g, ' '),
-  hashExpression(amendment).replace(/\s+/g, ' '),
-  'candidate and amendment hash fields/order differ',
-);
+assert.equal(hashExpression(candidate),hashExpression(review),'candidate and review hash fields/order differ');
+assert.equal(hashExpression(candidate),hashExpression(rollback),'candidate and rollback hash fields/order differ');
+assert.equal(hashExpression(candidate).replace(/\s+/g,' '),hashExpression(amendment).replace(/\s+/g,' '),
+  'candidate and amendment hash fields/order differ');
 
 const commit = (sql: string) => sql.replace(/ROLLBACK;\s*$/, 'COMMIT;');
-const newUrl = 'https://support.google.com/gemininotebook/answer/16164461';
-const oldUrl = `${newUrl}?hl=en`;
-const legacyCandidate = candidate.replace(newUrl, oldUrl);
-const commitLegacyCandidate = legacyCandidate.replace(
-  /gemini_notebook_stage2_candidate\('ROLLBACK'\);\s*$/,
-  "gemini_notebook_stage2_candidate('COMMIT');",
-);
-const commitAmendment = (sql: string) =>
-  sql.replace(
-    /gemini_notebook_stage2_source_url_amendment\('ROLLBACK'\);\s*$/,
-    "gemini_notebook_stage2_source_url_amendment('COMMIT');",
-  );
-const taskId = '527fe8b7-c171-4c50-ab1f-9404d7536e7c';
-const reviewer = 'd7890701-0000-4000-8000-000000000001';
-const reviewerEmail = 'reviewer@example.test';
+const newUrl='https://support.google.com/gemininotebook/answer/16164461';
+const oldUrl=`${newUrl}?hl=en`;
+const legacyCandidate=candidate.replace(newUrl,oldUrl);
+const commitLegacyCandidate = legacyCandidate.replace(/gemini_notebook_stage2_candidate\('ROLLBACK'\);\s*$/,
+  "gemini_notebook_stage2_candidate('COMMIT');");
+const commitAmendment = (sql: string) => sql.replace(/gemini_notebook_stage2_source_url_amendment\('ROLLBACK'\);\s*$/,
+  "gemini_notebook_stage2_source_url_amendment('COMMIT');");
+const taskId='527fe8b7-c171-4c50-ab1f-9404d7536e7c';
+const reviewer='d7890701-0000-4000-8000-000000000001';
+const reviewerEmail='reviewer@example.test';
 
 async function main() {
-  const dir = mkdtempSync(join(tmpdir(), 'gemini-stage2-pg-'));
-  const port = 54000 + Math.floor(Math.random() * 9000);
-  const db = new Client({ host: dir, port, user: 'postgres', database: 'postgres' });
-  let started = false;
-  let postHash = '';
+  const dir=mkdtempSync(join(tmpdir(),'gemini-stage2-pg-'));
+  const port=54000+Math.floor(Math.random()*9000);
+  const db=new Client({host:dir,port,user:'postgres',database:'postgres'});
+  let started=false;
+  let postHash='';
   try {
-    execFileSync('initdb', ['-A', 'trust', '-U', 'postgres', '-D', dir], { stdio: 'ignore' });
-    execFileSync('pg_ctl', ['-D', dir, '-o', `-F -p ${port} -k ${dir}`, '-w', 'start'], { stdio: 'ignore' });
-    started = true;
+    execFileSync('initdb',['-A','trust','-U','postgres','-D',dir],{stdio:'ignore'});
+    execFileSync('pg_ctl',['-D',dir,'-o',`-F -p ${port} -k ${dir}`,'-w','start'],{stdio:'ignore'});
+    started=true;
     await db.connect();
-    db.on('notice', (notice) => {
-      const match = notice.message?.match(/POST_MD5 ([0-9a-f]{32})/);
-      if (match) postHash = match[1];
-    });
+    db.on('notice',(notice) => { const match=notice.message?.match(/POST_MD5 ([0-9a-f]{32})/); if(match) postHash=match[1]; });
     await db.query(`CREATE SCHEMA auth;
       CREATE ROLE service_role;
       CREATE ROLE anon;
@@ -196,427 +159,226 @@ async function main() {
       ALTER TABLE tool_capability_claims ENABLE ROW LEVEL SECURITY;
       ALTER TABLE tool_task_fit_claims ENABLE ROW LEVEL SECURITY;
     `);
-    const count = async (table: string) =>
-      Number((await db.query(`SELECT count(*)::int AS n FROM ${table}`)).rows[0].n);
-    const rows = async (table: string, where: string, order: string) =>
-      (await db.query(`SELECT to_jsonb(t) AS value FROM ${table} t ${where} ORDER BY ${order}`)).rows.map(
-        (x) => x.value,
-      );
-    const state = async (): Promise<Stage2State> => ({
-      profile:
-        (await rows('product_intelligence_profiles', "WHERE id='c7890701-0000-4000-8000-000000000001'", 'id'))[0] ||
-        null,
-      sources: await rows(
-        'product_intelligence_sources',
-        "WHERE profile_id='c7890701-0000-4000-8000-000000000001'",
-        'id',
-      ),
-      claims: await rows(
-        'product_intelligence_claims',
-        "WHERE profile_id='c7890701-0000-4000-8000-000000000001'",
-        'id',
-      ),
-      decision:
-        (await rows('tool_decision_profiles', "WHERE tool_id='cec78907-e2a1-4eb7-853a-a58334026280'", 'tool_id'))[0] ||
-        null,
-      capabilities: await rows('tool_capabilities', "WHERE tool_id='cec78907-e2a1-4eb7-853a-a58334026280'", 'id'),
-      fit: (await rows('tool_task_fits', "WHERE id='c7890701-0000-4000-8000-000000000301'", 'id'))[0] || null,
-      decisionLinks: await rows(
-        'tool_decision_profile_claims',
-        "WHERE tool_id='cec78907-e2a1-4eb7-853a-a58334026280'",
-        'claim_id,purpose',
-      ),
-      capabilityLinks: await rows(
-        'tool_capability_claims',
-        "WHERE tool_capability_id IN ('c7890701-0000-4000-8000-000000000201','c7890701-0000-4000-8000-000000000202')",
-        'tool_capability_id,claim_id,purpose',
-      ),
-      fitLinks: await rows(
-        'tool_task_fit_claims',
-        "WHERE fit_id='c7890701-0000-4000-8000-000000000301'",
-        'claim_id,purpose',
-      ),
+    const count=async(table:string)=>Number((await db.query(`SELECT count(*)::int AS n FROM ${table}`)).rows[0].n);
+    const rows=async(table:string,where:string,order:string)=>
+      (await db.query(`SELECT to_jsonb(t) AS value FROM ${table} t ${where} ORDER BY ${order}`)).rows.map((x)=>x.value);
+    const state=async():Promise<Stage2State>=>({
+      profile:(await rows('product_intelligence_profiles',"WHERE id='c7890701-0000-4000-8000-000000000001'",'id'))[0]||null,
+      sources:await rows('product_intelligence_sources',"WHERE profile_id='c7890701-0000-4000-8000-000000000001'",'id'),
+      claims:await rows('product_intelligence_claims',"WHERE profile_id='c7890701-0000-4000-8000-000000000001'",'id'),
+      decision:(await rows('tool_decision_profiles',"WHERE tool_id='cec78907-e2a1-4eb7-853a-a58334026280'",'tool_id'))[0]||null,
+      capabilities:await rows('tool_capabilities',"WHERE tool_id='cec78907-e2a1-4eb7-853a-a58334026280'",'id'),
+      fit:(await rows('tool_task_fits',"WHERE id='c7890701-0000-4000-8000-000000000301'",'id'))[0]||null,
+      decisionLinks:await rows('tool_decision_profile_claims',"WHERE tool_id='cec78907-e2a1-4eb7-853a-a58334026280'",'claim_id,purpose'),
+      capabilityLinks:await rows('tool_capability_claims',"WHERE tool_capability_id IN ('c7890701-0000-4000-8000-000000000201','c7890701-0000-4000-8000-000000000202')",'tool_capability_id,claim_id,purpose'),
+      fitLinks:await rows('tool_task_fit_claims',"WHERE fit_id='c7890701-0000-4000-8000-000000000301'",'claim_id,purpose'),
     });
-    const jsonbSample = (
-      await db.query('SELECT \'{"zz": [1, {"a": "资料", "bbb": true}], "a": null}\'::jsonb::text AS value')
-    ).rows[0].value;
-    assert.equal(postgresJsonbText({ zz: [1, { a: '资料', bbb: true }], a: null }), jsonbSample);
-    const resultRow = (result: any) => (Array.isArray(result) ? result.at(-1) : result).rows[0];
-    const preview = resultRow(await db.query(candidate));
-    assert.equal(preview.mode, 'preflight');
-    assert.equal(preview.preflight, true);
-    assert.deepEqual(
-      [
-        preview.profiles,
-        preview.sources,
-        preview.claims,
-        preview.decision,
-        preview.capabilities,
-        preview.fit,
-        preview.links,
-      ],
-      [1, 7, 10, 1, 2, 1, 0],
-    );
-    assert.match(preview.post_md5, /^[0-9a-f]{32}$/);
-    assert.equal(await count('product_intelligence_profiles'), 0, 'default preflight wrote data');
-    await assert.rejects(db.query('SELECT * FROM pg_temp.gemini_notebook_stage2_candidate(NULL)'), /Use ROLLBACK/);
-    await assert.rejects(db.query("SELECT * FROM pg_temp.gemini_notebook_stage2_candidate('WRONG')"), /Use ROLLBACK/);
-    assert.equal(await count('product_intelligence_profiles'), 0, 'invalid mode wrote data');
-    const committed = resultRow(await db.query(commitLegacyCandidate));
-    assert.equal(committed.mode, 'committed');
-    assert.equal(committed.preflight, false);
-    postHash = committed.post_md5;
-    assert.equal(await count('product_intelligence_profiles'), 1);
-    assert.equal(await count('product_intelligence_sources'), 7);
-    assert.equal(await count('product_intelligence_claims'), 10);
-    assert.equal(await count('tool_capabilities'), 2);
-    assert.equal(await count('tool_task_fits'), 1);
-    const candidateHash = postHash;
-    assert.equal(stage2StateMd5(await state()), candidateHash, 'candidate verifier hash differs from SQL postimage');
-    postHash = resultRow(await db.query(commitLegacyCandidate)).post_md5;
-    assert.equal(postHash, candidateHash, 'candidate rerun changed postimage');
-    await db.query(
-      "UPDATE product_intelligence_claims SET claim_value='{\"drift\":true}' WHERE claim_key='gemini-notebook:research:grounding-2026-10'",
-    );
-    await assert.rejects(db.query(commitLegacyCandidate), /Ten exact candidate claims required/);
+    const jsonbSample=(await db.query(`SELECT '{"zz": [1, {"a": "资料", "bbb": true}], "a": null}'::jsonb::text AS value`)).rows[0].value;
+    assert.equal(postgresJsonbText({zz:[1,{a:'资料',bbb:true}],a:null}),jsonbSample);
+    const resultRow=(result:any)=> (Array.isArray(result) ? result.at(-1) : result).rows[0];
+    const preview=resultRow(await db.query(candidate));
+    assert.equal(preview.mode,'preflight');
+    assert.equal(preview.preflight,true);
+    assert.deepEqual([preview.profiles,preview.sources,preview.claims,preview.decision,
+      preview.capabilities,preview.fit,preview.links],[1,7,10,1,2,1,0]);
+    assert.match(preview.post_md5,/^[0-9a-f]{32}$/);
+    assert.equal(await count('product_intelligence_profiles'),0,'default preflight wrote data');
+    await assert.rejects(db.query(`SELECT * FROM pg_temp.gemini_notebook_stage2_candidate(NULL)`),/Use ROLLBACK/);
+    await assert.rejects(db.query(`SELECT * FROM pg_temp.gemini_notebook_stage2_candidate('WRONG')`),/Use ROLLBACK/);
+    assert.equal(await count('product_intelligence_profiles'),0,'invalid mode wrote data');
+    const committed=resultRow(await db.query(commitLegacyCandidate));
+    assert.equal(committed.mode,'committed');
+    assert.equal(committed.preflight,false);
+    postHash=committed.post_md5;
+    assert.equal(await count('product_intelligence_profiles'),1);
+    assert.equal(await count('product_intelligence_sources'),7);
+    assert.equal(await count('product_intelligence_claims'),10);
+    assert.equal(await count('tool_capabilities'),2);
+    assert.equal(await count('tool_task_fits'),1);
+    const candidateHash=postHash;
+    assert.equal(stage2StateMd5(await state()),candidateHash,'candidate verifier hash differs from SQL postimage');
+    postHash=resultRow(await db.query(commitLegacyCandidate)).post_md5;
+    assert.equal(postHash,candidateHash,'candidate rerun changed postimage');
+    await db.query(`UPDATE product_intelligence_claims SET claim_value='{"drift":true}' WHERE claim_key='gemini-notebook:research:grounding-2026-10'`);
+    await assert.rejects(db.query(commitLegacyCandidate),/Ten exact candidate claims required/);
     await db.query('ROLLBACK');
-    await db.query(
-      'UPDATE product_intelligence_claims SET claim_value=\'{"summary":"Notebook chat answers from selected sources with inline citations; citation accuracy was not independently tested by this site."}\' WHERE claim_key=\'gemini-notebook:research:grounding-2026-10\'',
-    );
-    assert.equal(stage2StateMd5(await state()), candidateHash);
-    await assert.rejects(
-      db.query(amendment),
-      /prior stateMd5 drift/,
-      'literal production hash must reject fixture hash',
-    );
-    const fixtureAmendment = amendment.replaceAll('769d65d12796a59bc33dd66117ebbc74', candidateHash);
-    const beforeAmendment = await state();
-    const amendmentPreview = resultRow(await db.query(fixtureAmendment));
-    assert.deepEqual(
-      [amendmentPreview.mode, amendmentPreview.changed_sources, amendmentPreview.changed_claims],
-      ['preflight', 1, 2],
-    );
-    assert.match(amendmentPreview.post_md5, /^[0-9a-f]{32}$/);
-    assert.deepEqual(await state(), beforeAmendment, 'amendment preflight left writes');
-    await assert.rejects(
-      db.query("SELECT * FROM pg_temp.gemini_notebook_stage2_source_url_amendment('WRONG')"),
-      /Use ROLLBACK/,
-    );
+    await db.query(`UPDATE product_intelligence_claims SET claim_value='{"summary":"Notebook chat answers from selected sources with inline citations; citation accuracy was not independently tested by this site."}' WHERE claim_key='gemini-notebook:research:grounding-2026-10'`);
+    assert.equal(stage2StateMd5(await state()),candidateHash);
+    await assert.rejects(db.query(amendment),/prior stateMd5 drift/,'literal production hash must reject fixture hash');
+    const fixtureAmendment=amendment.replaceAll('769d65d12796a59bc33dd66117ebbc74',candidateHash);
+    const beforeAmendment=await state();
+    const amendmentPreview=resultRow(await db.query(fixtureAmendment));
+    assert.deepEqual([amendmentPreview.mode,amendmentPreview.changed_sources,amendmentPreview.changed_claims],
+      ['preflight',1,2]);
+    assert.match(amendmentPreview.post_md5,/^[0-9a-f]{32}$/);
+    assert.deepEqual(await state(),beforeAmendment,'amendment preflight left writes');
+    await assert.rejects(db.query(`SELECT * FROM pg_temp.gemini_notebook_stage2_source_url_amendment('WRONG')`),/Use ROLLBACK/);
     await db.query('ALTER TABLE product_intelligence_sources DISABLE ROW LEVEL SECURITY');
-    await assert.rejects(
-      db.query(commitAmendment(fixtureAmendment)),
-      /Stage 2 requires RLS enabled on all nine Supabase tables/,
-    );
+    await assert.rejects(db.query(commitAmendment(fixtureAmendment)),/Stage 2 requires RLS enabled on all nine Supabase tables/);
     await db.query('ALTER TABLE product_intelligence_sources ENABLE ROW LEVEL SECURITY');
-    await db.query(
-      "UPDATE product_intelligence_claims SET claim_value='{\"drift\":true}' WHERE claim_key='gemini-notebook:research:identity-2026-10'",
-    );
-    await assert.rejects(db.query(commitAmendment(fixtureAmendment)), /prior stateMd5 drift/);
-    await db.query(
-      'UPDATE product_intelligence_claims SET claim_value=\'{"summary":"NotebookLM was renamed Gemini Notebook on 2026-07-16; it remains the same standalone product."}\' WHERE claim_key=\'gemini-notebook:research:identity-2026-10\'',
-    );
-    assert.equal(stage2StateMd5(await state()), candidateHash);
-    const amended = resultRow(await db.query(commitAmendment(fixtureAmendment)));
-    assert.deepEqual([amended.mode, amended.changed_sources, amended.changed_claims], ['committed', 1, 2]);
-    assert.equal(amended.post_md5, amendmentPreview.post_md5);
-    const expectedAmended: Stage2State = structuredClone(beforeAmendment);
-    const amendedSource = expectedAmended.sources.find((x) => x.id === 'c7890701-0000-4000-8000-000000000102');
+    await db.query(`UPDATE product_intelligence_claims SET claim_value='{"drift":true}' WHERE claim_key='gemini-notebook:research:identity-2026-10'`);
+    await assert.rejects(db.query(commitAmendment(fixtureAmendment)),/prior stateMd5 drift/);
+    await db.query(`UPDATE product_intelligence_claims SET claim_value='{"summary":"NotebookLM was renamed Gemini Notebook on 2026-07-16; it remains the same standalone product."}' WHERE claim_key='gemini-notebook:research:identity-2026-10'`);
+    assert.equal(stage2StateMd5(await state()),candidateHash);
+    const amended=resultRow(await db.query(commitAmendment(fixtureAmendment)));
+    assert.deepEqual([amended.mode,amended.changed_sources,amended.changed_claims],['committed',1,2]);
+    assert.equal(amended.post_md5,amendmentPreview.post_md5);
+    const expectedAmended:Stage2State=structuredClone(beforeAmendment);
+    const amendedSource=expectedAmended.sources.find((x)=>x.id==='c7890701-0000-4000-8000-000000000102');
     assert.ok(amendedSource);
-    amendedSource.url = newUrl;
-    amendedSource.canonical_url = newUrl;
-    for (const claim of expectedAmended.claims.filter((x) =>
-      ['c7890701-0000-4000-8000-000000000402', 'c7890701-0000-4000-8000-000000000410'].includes(String(x.id)),
-    )) {
-      claim.source_url = newUrl;
+    amendedSource.url=newUrl;
+    amendedSource.canonical_url=newUrl;
+    for(const claim of expectedAmended.claims.filter((x)=>
+      ['c7890701-0000-4000-8000-000000000402','c7890701-0000-4000-8000-000000000410'].includes(String(x.id)))) {
+      claim.source_url=newUrl;
     }
-    assert.deepEqual(await state(), expectedAmended, 'amendment changed fields beyond source 102 and claims 402/410');
-    assert.equal(
-      stage2StateMd5(await state()),
-      amended.post_md5,
-      'candidate verifier hash differs from amendment postimage',
-    );
-    await assert.rejects(
-      db.query(commitAmendment(fixtureAmendment)),
-      /prior stateMd5 drift/,
-      'repeat amendment must reject',
-    );
+    assert.deepEqual(await state(),expectedAmended,'amendment changed fields beyond source 102 and claims 402/410');
+    assert.equal(stage2StateMd5(await state()),amended.post_md5,'candidate verifier hash differs from amendment postimage');
+    await assert.rejects(db.query(commitAmendment(fixtureAmendment)),/prior stateMd5 drift/,'repeat amendment must reject');
     await db.query(adminReviewMigration);
     await db.query(geminiPlanRepairMigration);
     await db.query("SET request.jwt.claim.role = 'service_role'");
     await db.query('ALTER TABLE admin_evidence_review_audit DISABLE ROW LEVEL SECURITY');
-    await assert.rejects(db.query('SELECT public.admin_link_gemini_notebook_evidence($1)', [reviewer]), /requires RLS/);
+    await assert.rejects(db.query('SELECT public.admin_link_gemini_notebook_evidence($1)',[reviewer]),/requires RLS/);
     await db.query('ALTER TABLE admin_evidence_review_audit ENABLE ROW LEVEL SECURITY');
-    const reviewClaim = (
-      claimId: string,
-      decision: string,
-      excerpt: string,
-      note = 'Independently reviewed official page',
-      due = '2099-01-01',
-    ) =>
-      db.query('SELECT public.admin_review_evidence_claim($1,$2,$3,$4,$5,$6,$7)', [
-        claimId,
-        reviewer,
-        decision,
-        excerpt,
-        note,
-        {},
-        due,
-      ]);
-    const claim402 = 'c7890701-0000-4000-8000-000000000402';
-    const claim403 = 'c7890701-0000-4000-8000-000000000403';
+    const reviewClaim = (claimId:string, decision:string, excerpt:string, note='Independently reviewed official page', due='2099-01-01') =>
+      db.query('SELECT public.admin_review_evidence_claim($1,$2,$3,$4,$5,$6,$7)',
+        [claimId,reviewer,decision,excerpt,note,{},due]);
+    const claim402='c7890701-0000-4000-8000-000000000402';
+    const claim403='c7890701-0000-4000-8000-000000000403';
     await db.query("SET request.jwt.claim.role = 'authenticated'");
-    await assert.rejects(
-      reviewClaim(claim402, 'HOLD', '', 'Independent review', null as unknown as string),
-      /Admin service role/,
-    );
-    await assert.rejects(
-      db.query('SELECT public.admin_link_gemini_notebook_evidence($1)', [reviewer]),
-      /Admin service role/,
-    );
+    await assert.rejects(reviewClaim(claim402,'HOLD','','Independent review',null as unknown as string),/Admin service role/);
+    await assert.rejects(db.query('SELECT public.admin_link_gemini_notebook_evidence($1)',[reviewer]),/Admin service role/);
     await db.query("SET request.jwt.claim.role = 'service_role'");
     await db.query('BEGIN');
-    const rejectsInTransaction = async (run: () => Promise<unknown>, pattern: RegExp) => {
+    const rejectsInTransaction=async(run:()=>Promise<unknown>,pattern:RegExp)=>{
       await db.query('SAVEPOINT review_case');
-      await assert.rejects(run(), pattern);
+      await assert.rejects(run(),pattern);
       await db.query('ROLLBACK TO SAVEPOINT review_case');
     };
-    await rejectsInTransaction(
-      () => reviewClaim(claim402, 'PASS', '', 'Independent review', '2026-11-01'),
-      /missing excerpt/,
-    );
-    await rejectsInTransaction(
-      () => db.query('SELECT public.admin_link_gemini_notebook_evidence($1)', [reviewer]),
-      /All ten/,
-    );
-    await db.query("UPDATE product_intelligence_claims SET conflict_status='possible' WHERE id=$1", [claim402]);
-    await rejectsInTransaction(
-      () => reviewClaim(claim402, 'PASS', 'Actual official passage', undefined, '2026-11-01'),
-      /conflicted/,
-    );
-    await db.query(
-      "UPDATE product_intelligence_claims SET conflict_status='none',expires_at='2020-01-01' WHERE id=$1",
-      [claim402],
-    );
-    await rejectsInTransaction(
-      () => reviewClaim(claim402, 'PASS', 'Actual official passage', undefined, '2026-11-01'),
-      /expired/,
-    );
-    await db.query('UPDATE product_intelligence_claims SET expires_at=NULL WHERE id=$1', [claim402]);
-    await db.query("UPDATE product_intelligence_claims SET source_url='https://other.example.test' WHERE id=$1", [
-      claim402,
-    ]);
-    await rejectsInTransaction(
-      () => reviewClaim(claim402, 'PASS', 'Actual official passage', undefined, '2026-11-01'),
-      /Source or owner mismatch/,
-    );
-    await db.query('UPDATE product_intelligence_claims SET source_url=$1 WHERE id=$2', [newUrl, claim402]);
+    await rejectsInTransaction(()=>reviewClaim(claim402,'PASS','','Independent review', '2026-11-01'),/missing excerpt/);
+    await rejectsInTransaction(()=>db.query('SELECT public.admin_link_gemini_notebook_evidence($1)',[reviewer]),/All ten/);
+    await db.query("UPDATE product_intelligence_claims SET conflict_status='possible' WHERE id=$1",[claim402]);
+    await rejectsInTransaction(()=>reviewClaim(claim402,'PASS','Actual official passage',undefined,'2026-11-01'),/conflicted/);
+    await db.query("UPDATE product_intelligence_claims SET conflict_status='none',expires_at='2020-01-01' WHERE id=$1",[claim402]);
+    await rejectsInTransaction(()=>reviewClaim(claim402,'PASS','Actual official passage',undefined,'2026-11-01'),/expired/);
+    await db.query("UPDATE product_intelligence_claims SET expires_at=NULL WHERE id=$1",[claim402]);
+    await db.query("UPDATE product_intelligence_claims SET source_url='https://other.example.test' WHERE id=$1",[claim402]);
+    await rejectsInTransaction(()=>reviewClaim(claim402,'PASS','Actual official passage',undefined,'2026-11-01'),/Source or owner mismatch/);
+    await db.query("UPDATE product_intelligence_claims SET source_url=$1 WHERE id=$2",[newUrl,claim402]);
     await db.query(`INSERT INTO product_intelligence_profiles(id,owner_type,owner_id,canonical_domain,product_name,profile_status)
       VALUES('00000000-0000-0000-0000-000000000001','tool','00000000-0000-0000-0000-000000000002','other.example','Other','pending')`);
-    await db.query(
-      "UPDATE product_intelligence_claims SET profile_id='00000000-0000-0000-0000-000000000001' WHERE id=$1",
-      [claim402],
-    );
-    await rejectsInTransaction(
-      () => reviewClaim(claim402, 'PASS', 'Actual official passage', undefined, '2026-11-01'),
-      /Source or owner mismatch/,
-    );
+    await db.query("UPDATE product_intelligence_claims SET profile_id='00000000-0000-0000-0000-000000000001' WHERE id=$1",[claim402]);
+    await rejectsInTransaction(()=>reviewClaim(claim402,'PASS','Actual official passage',undefined,'2026-11-01'),/Source or owner mismatch/);
     await db.query('ROLLBACK');
     await db.query('BEGIN');
-    await reviewClaim(claim403, 'HOLD', '', 'Official page needs more investigation', null as unknown as string);
-    assert.equal(
-      (await db.query('SELECT verification_status FROM product_intelligence_claims WHERE id=$1', [claim403])).rows[0]
-        .verification_status,
-      'candidate',
-    );
-    await reviewClaim(claim402, 'PASS', 'Actual official passage', 'Independently checked source', '2026-11-01');
-    assert.equal(
-      (await db.query('SELECT verification_status FROM product_intelligence_claims WHERE id=$1', [claim402])).rows[0]
-        .verification_status,
-      'verified',
-    );
-    await rejectsInTransaction(
-      () => db.query('SELECT public.admin_link_gemini_notebook_evidence($1)', [reviewer]),
-      /All ten/,
-    );
-    assert.equal(await count('tool_decision_profile_claims'), 0);
+    await reviewClaim(claim403,'HOLD','','Official page needs more investigation',null as unknown as string);
+    assert.equal((await db.query('SELECT verification_status FROM product_intelligence_claims WHERE id=$1',[claim403])).rows[0].verification_status,'candidate');
+    await reviewClaim(claim402,'PASS','Actual official passage','Independently checked source','2026-11-01');
+    assert.equal((await db.query('SELECT verification_status FROM product_intelligence_claims WHERE id=$1',[claim402])).rows[0].verification_status,'verified');
+    await rejectsInTransaction(()=>db.query('SELECT public.admin_link_gemini_notebook_evidence($1)',[reviewer]),/All ten/);
+    assert.equal(await count('tool_decision_profile_claims'),0);
     await db.query('ROLLBACK');
-    assert.equal(
-      (await db.query('SELECT verification_status FROM product_intelligence_claims WHERE id=$1', [claim402])).rows[0]
-        .verification_status,
-      'candidate',
-    );
+    assert.equal((await db.query('SELECT verification_status FROM product_intelligence_claims WHERE id=$1',[claim402])).rows[0].verification_status,'candidate');
     await db.query('BEGIN');
     for (const row of (await db.query('SELECT id FROM product_intelligence_claims ORDER BY id')).rows) {
-      await reviewClaim(
-        row.id,
-        'PASS',
-        `Verified official passage for ${row.id}`,
-        'Independent official source check',
-        '2026-11-01',
-      );
+      await reviewClaim(row.id,'PASS',`Verified official passage for ${row.id}`,'Independent official source check','2026-11-01');
     }
-    const linked = (await db.query('SELECT public.admin_link_gemini_notebook_evidence($1) AS result', [reviewer]))
-      .rows[0].result;
-    assert.deepEqual([linked.decisionLinks, linked.capabilityLinks, linked.fitLinks], [5, 9, 6]);
-    assert.equal(await count('tool_decision_profile_claims'), 5);
-    assert.equal(await count('tool_capability_claims'), 9);
-    assert.equal(await count('tool_task_fit_claims'), 6);
-    const repaired = (
-      await db.query('SELECT public.admin_complete_gemini_notebook_plan_link($1) AS result', [reviewer])
-    ).rows[0].result;
-    assert.deepEqual(
-      [repaired.status, repaired.capabilityLinks, repaired.claimId, repaired.purpose],
-      ['linked', 10, 'c7890701-0000-4000-8000-000000000407', 'plan'],
-    );
-    assert.equal(await count('tool_capability_claims'), 10, 'plan evidence repair must add exactly one link');
-    const repairAuditCount = await count('admin_evidence_review_audit');
-    const repairReplay = (
-      await db.query('SELECT public.admin_complete_gemini_notebook_plan_link($1) AS result', [reviewer])
-    ).rows[0].result;
-    assert.equal(repairReplay.status, 'unchanged', 'plan evidence repair must be idempotent');
-    assert.equal(
-      await count('admin_evidence_review_audit'),
-      repairAuditCount,
-      'idempotent repair must not duplicate audit',
-    );
-    assert.equal(
-      (await db.query("SELECT status FROM tool_capabilities WHERE id='c7890701-0000-4000-8000-000000000202'")).rows[0]
-        .status,
-      'reviewed',
-      'evidence repair must not publish the Tool Capability',
-    );
-    assert.equal(
-      (
-        await db.query(
-          "SELECT editorial_status FROM tool_decision_profiles WHERE tool_id='cec78907-e2a1-4eb7-853a-a58334026280'",
-        )
-      ).rows[0].editorial_status,
-      'reviewed',
-    );
-    assert.equal(
-      (
-        await db.query(
-          "SELECT profile_status FROM product_intelligence_profiles WHERE id='c7890701-0000-4000-8000-000000000001'",
-        )
-      ).rows[0].profile_status,
-      'ready',
-    );
+    const linked=(await db.query('SELECT public.admin_link_gemini_notebook_evidence($1) AS result',[reviewer])).rows[0].result;
+    assert.deepEqual([linked.decisionLinks,linked.capabilityLinks,linked.fitLinks],[5,9,6]);
+    assert.equal(await count('tool_decision_profile_claims'),5);
+    assert.equal(await count('tool_capability_claims'),9);
+    assert.equal(await count('tool_task_fit_claims'),6);
+    assert.equal((await db.query("SELECT editorial_status FROM tool_decision_profiles WHERE tool_id='cec78907-e2a1-4eb7-853a-a58334026280'")).rows[0].editorial_status,'reviewed');
+    assert.equal((await db.query("SELECT profile_status FROM product_intelligence_profiles WHERE id='c7890701-0000-4000-8000-000000000001'")).rows[0].profile_status,'ready');
+    const repaired=(await db.query('SELECT public.admin_complete_gemini_notebook_plan_link($1) AS result',[reviewer])).rows[0].result;
+    assert.deepEqual([repaired.status,repaired.capabilityLinks,repaired.claimId,repaired.purpose],
+      ['linked',10,'c7890701-0000-4000-8000-000000000407','plan']);
+    assert.equal(await count('tool_capability_claims'),10,'plan evidence repair must add exactly one link');
+    const repairAuditCount=await count('admin_evidence_review_audit');
+    const repairReplay=(await db.query('SELECT public.admin_complete_gemini_notebook_plan_link($1) AS result',[reviewer])).rows[0].result;
+    assert.equal(repairReplay.status,'unchanged','plan evidence repair must be idempotent');
+    assert.equal(await count('admin_evidence_review_audit'),repairAuditCount,'idempotent repair must not duplicate audit');
+    assert.equal((await db.query("SELECT status FROM tool_capabilities WHERE id='c7890701-0000-4000-8000-000000000202'")).rows[0].status,
+      'reviewed','evidence repair must not publish the Tool Capability');
     await db.query('ROLLBACK');
-    assert.equal(await count('tool_decision_profile_claims'), 0, 'transaction rollback left links');
-    const keys = (await db.query('SELECT claim_key FROM product_intelligence_claims')).rows.map((x) =>
-      x.claim_key.replace('gemini-notebook:research:', ''),
-    );
-    const excerpts = Object.fromEntries(
-      keys.map((key) => [key, `Official passage checked for ${key} by the independent reviewer.`]),
-    );
-    const ownerGate = `APPROVE_GEMINI_STAGE2:${reviewer}:${reviewerEmail}:USER_METADATA_ROLE`;
-    const configured = review
-      .replace('00000000-0000-0000-0000-000000000000', reviewer)
-      .replace('REPLACE_WITH_EXACT_REVIEWER_EMAIL', reviewerEmail)
-      .replace('REPLACE_WITH_USER_METADATA_ROLE_OR_ADMIN_EMAILS', 'USER_METADATA_ROLE')
-      .replace('REPLACE_WITH_EXACT_OWNER_APPROVAL', ownerGate)
-      .replace('REPLACE_WITH_INDEPENDENT_REVIEW_REFERENCE', 'QA-2026-10-01-independent')
-      .replace('REPLACE_WITH_ORIGINAL_PRIOR_POST_MD5', amended.post_md5)
-      .replace(
-        "SET LOCAL gemini.stage2.excerpts = '{}';",
-        `SET LOCAL gemini.stage2.excerpts = '${JSON.stringify(excerpts)}';`,
-      );
-    const nonAdmin = 'd7890701-0000-4000-8000-000000000002';
-    const nonAdminEmail = 'nonadmin@example.test';
-    await db.query('INSERT INTO auth.users VALUES ($1,$2,\'{"role":"user"}\',\'{}\')', [nonAdmin, nonAdminEmail]);
-    await assert.rejects(
-      db.query(commit(configured.replaceAll(reviewer, nonAdmin))),
-      /Reviewer UUID\/email mismatch or app admin basis missing/,
-    );
+    assert.equal(await count('tool_decision_profile_claims'),0,'transaction rollback left links');
+    const keys=(await db.query('SELECT claim_key FROM product_intelligence_claims')).rows.map((x)=>x.claim_key.replace('gemini-notebook:research:',''));
+    const excerpts=Object.fromEntries(keys.map((key)=>[key,`Official passage checked for ${key} by the independent reviewer.`]));
+    const ownerGate=`APPROVE_GEMINI_STAGE2:${reviewer}:${reviewerEmail}:USER_METADATA_ROLE`;
+    const configured=review
+      .replace('00000000-0000-0000-0000-000000000000',reviewer)
+      .replace('REPLACE_WITH_EXACT_REVIEWER_EMAIL',reviewerEmail)
+      .replace('REPLACE_WITH_USER_METADATA_ROLE_OR_ADMIN_EMAILS','USER_METADATA_ROLE')
+      .replace('REPLACE_WITH_EXACT_OWNER_APPROVAL',ownerGate)
+      .replace('REPLACE_WITH_INDEPENDENT_REVIEW_REFERENCE','QA-2026-10-01-independent')
+      .replace('REPLACE_WITH_ORIGINAL_PRIOR_POST_MD5',amended.post_md5)
+      .replace("SET LOCAL gemini.stage2.excerpts = '{}';",`SET LOCAL gemini.stage2.excerpts = '${JSON.stringify(excerpts)}';`);
+    const nonAdmin='d7890701-0000-4000-8000-000000000002';
+    const nonAdminEmail='nonadmin@example.test';
+    await db.query(`INSERT INTO auth.users VALUES ($1,$2,'{"role":"user"}','{}')`,[nonAdmin,nonAdminEmail]);
+    await assert.rejects(db.query(commit(configured.replaceAll(reviewer,nonAdmin))),/Reviewer UUID\/email mismatch or app admin basis missing/);
     await db.query('ROLLBACK');
-    const missingReviewer = 'd7890701-0000-4000-8000-000000000003';
-    await assert.rejects(
-      db.query(commit(configured.replaceAll(reviewer, missingReviewer))),
-      /Reviewer UUID\/email mismatch or app admin basis missing/,
-    );
+    const missingReviewer='d7890701-0000-4000-8000-000000000003';
+    await assert.rejects(db.query(commit(configured.replaceAll(reviewer,missingReviewer))),/Reviewer UUID\/email mismatch or app admin basis missing/);
     await db.query('ROLLBACK');
-    await assert.rejects(
-      db.query(commit(configured.replaceAll(reviewerEmail, 'wrong@example.test'))),
-      /Reviewer UUID\/email mismatch or app admin basis missing/,
-    );
+    await assert.rejects(db.query(commit(configured.replaceAll(reviewerEmail,'wrong@example.test'))),/Reviewer UUID\/email mismatch or app admin basis missing/);
     await db.query('ROLLBACK');
-    await assert.rejects(db.query(commit(configured.replaceAll(reviewerEmail, ''))), /Exact Owner approval/);
+    await assert.rejects(db.query(commit(configured.replaceAll(reviewerEmail,''))),/Exact Owner approval/);
     await db.query('ROLLBACK');
-    await assert.rejects(
-      db.query(commit(configured.replace(ownerGate, 'REPLACE_WITH_EXACT_OWNER_APPROVAL'))),
-      /Exact Owner approval/,
-    );
+    await assert.rejects(db.query(commit(configured.replace(ownerGate,'REPLACE_WITH_EXACT_OWNER_APPROVAL'))),/Exact Owner approval/);
     await db.query('ROLLBACK');
-    await db.query('ALTER TABLE tool_task_fit_claims DISABLE ROW LEVEL SECURITY');
-    await assert.rejects(db.query(commit(configured)), /Stage 2 requires RLS enabled on all nine Supabase tables/);
+    await db.query(`ALTER TABLE tool_task_fit_claims DISABLE ROW LEVEL SECURITY`);
+    await assert.rejects(db.query(commit(configured)),/Stage 2 requires RLS enabled on all nine Supabase tables/);
     await db.query('ROLLBACK');
-    await db.query('ALTER TABLE tool_task_fit_claims ENABLE ROW LEVEL SECURITY');
-    const allowlistGate = `APPROVE_GEMINI_STAGE2:${nonAdmin}:${nonAdminEmail}:ADMIN_EMAILS`;
-    const allowlistConfig = configured
-      .replace(
-        "SET LOCAL gemini.stage2.admin_basis = 'USER_METADATA_ROLE';",
-        "SET LOCAL gemini.stage2.admin_basis = 'ADMIN_EMAILS';",
-      )
-      .replace(ownerGate, allowlistGate)
-      .replaceAll(reviewer, nonAdmin)
-      .replaceAll(reviewerEmail, nonAdminEmail);
+    await db.query(`ALTER TABLE tool_task_fit_claims ENABLE ROW LEVEL SECURITY`);
+    const allowlistGate=`APPROVE_GEMINI_STAGE2:${nonAdmin}:${nonAdminEmail}:ADMIN_EMAILS`;
+    const allowlistConfig=configured
+      .replace("SET LOCAL gemini.stage2.admin_basis = 'USER_METADATA_ROLE';",
+        "SET LOCAL gemini.stage2.admin_basis = 'ADMIN_EMAILS';")
+      .replace(ownerGate,allowlistGate)
+      .replaceAll(reviewer,nonAdmin)
+      .replaceAll(reviewerEmail,nonAdminEmail);
     await db.query(allowlistConfig);
-    assert.equal(await count('tool_decision_profile_claims'), 0, 'allowlist review dry-run wrote links');
-    await assert.rejects(
-      db.query(commit(configured.replace(amended.post_md5, '00000000000000000000000000000000'))),
-      /prior postimage drift/,
-    );
+    assert.equal(await count('tool_decision_profile_claims'),0,'allowlist review dry-run wrote links');
+    await assert.rejects(db.query(commit(configured.replace(amended.post_md5,'00000000000000000000000000000000'))),/prior postimage drift/);
     await db.query('ROLLBACK');
     await db.query(configured);
-    assert.equal(await count('tool_capability_claims'), 0, 'review dry-run wrote links');
+    assert.equal(await count('tool_capability_claims'),0,'review dry-run wrote links');
     await db.query(commit(configured));
-    assert.equal(await count('tool_decision_profile_claims'), 5);
-    assert.equal(
-      Number(
-        (
-          await db.query(`SELECT count(*)::int AS n FROM tool_decision_profile_claims l
+    assert.equal(await count('tool_decision_profile_claims'),5);
+    assert.equal(Number((await db.query(`SELECT count(*)::int AS n FROM tool_decision_profile_claims l
       JOIN product_intelligence_claims c ON c.id=l.claim_id
       JOIN product_intelligence_profiles p ON p.id=c.profile_id
       WHERE l.tool_id='cec78907-e2a1-4eb7-853a-a58334026280'
         AND c.id='c7890701-0000-4000-8000-000000000406' AND l.purpose='export'
         AND c.verification_status='verified' AND p.owner_type='tool'
-        AND p.owner_id=l.tool_id`)
-        ).rows[0].n,
-      ),
-      1,
-      'sharing/export claim must be verified and same-owner',
-    );
-    assert.equal(await count('tool_capability_claims'), 9);
-    assert.equal(await count('tool_task_fit_claims'), 6);
-    const auditBefore = await count('admin_evidence_review_audit');
-    const repeat = (await db.query('SELECT public.admin_link_gemini_notebook_evidence($1) AS result', [reviewer]))
-      .rows[0].result;
-    assert.equal(repeat.unchanged, true, 'exact link rerun must be idempotent');
-    assert.equal(await count('admin_evidence_review_audit'), auditBefore, 'idempotent rerun must not append audit');
-    const reviewHash = postHash;
-    assert.equal(stage2StateMd5(await state()), reviewHash, 'reviewed verifier hash differs from SQL postimage');
-    await db.query(commit(configured.replace(amended.post_md5, reviewHash)));
-    assert.equal(postHash, reviewHash, 'review rerun changed postimage');
-    const wrong = rollback.replace('REPLACE_WITH_ORIGINAL_COMMIT_POST_MD5', '00000000000000000000000000000000');
-    await assert.rejects(db.query(commit(wrong)), /postimage drift/);
+        AND p.owner_id=l.tool_id`)).rows[0].n),1,'sharing/export claim must be verified and same-owner');
+    assert.equal(await count('tool_capability_claims'),9);
+    assert.equal(await count('tool_task_fit_claims'),6);
+    const auditBefore=await count('admin_evidence_review_audit');
+    const repeat=(await db.query('SELECT public.admin_link_gemini_notebook_evidence($1) AS result',[reviewer])).rows[0].result;
+    assert.equal(repeat.unchanged,true,'exact link rerun must be idempotent');
+    assert.equal(await count('admin_evidence_review_audit'),auditBefore,'idempotent rerun must not append audit');
+    const reviewHash=postHash;
+    assert.equal(stage2StateMd5(await state()),reviewHash,'reviewed verifier hash differs from SQL postimage');
+    await db.query(commit(configured.replace(amended.post_md5,reviewHash)));
+    assert.equal(postHash,reviewHash,'review rerun changed postimage');
+    const wrong=rollback.replace('REPLACE_WITH_ORIGINAL_COMMIT_POST_MD5','00000000000000000000000000000000');
+    await assert.rejects(db.query(commit(wrong)),/postimage drift/);
     await db.query('ROLLBACK');
-    const exact = rollback.replace('REPLACE_WITH_ORIGINAL_COMMIT_POST_MD5', reviewHash);
+    const exact=rollback.replace('REPLACE_WITH_ORIGINAL_COMMIT_POST_MD5',reviewHash);
     await db.query(exact);
-    assert.equal(await count('product_intelligence_profiles'), 1, 'rollback dry-run changed production fixture');
+    assert.equal(await count('product_intelligence_profiles'),1,'rollback dry-run changed production fixture');
     await db.query(commit(exact));
-    assert.equal(await count('product_intelligence_profiles'), 0);
-    assert.equal(await count('product_intelligence_claims'), 0);
-    assert.equal(await count('tool_capability_claims'), 0);
-    console.log(
-      'Gemini Notebook Stage 2 SQL: candidate, source URL amendment 1+2, preflight, drift, review and rollback PASS',
-    );
+    assert.equal(await count('product_intelligence_profiles'),0);
+    assert.equal(await count('product_intelligence_claims'),0);
+    assert.equal(await count('tool_capability_claims'),0);
+    console.log('Gemini Notebook Stage 2 SQL: candidate, source URL amendment 1+2, preflight, drift, review and rollback PASS');
   } finally {
-    await db.end().catch(() => {});
-    if (started) execFileSync('pg_ctl', ['-D', dir, '-m', 'immediate', '-w', 'stop'], { stdio: 'ignore' });
-    rmSync(dir, { recursive: true, force: true });
+    await db.end().catch(()=>{});
+    if(started) execFileSync('pg_ctl',['-D',dir,'-m','immediate','-w','stop'],{stdio:'ignore'});
+    rmSync(dir,{recursive:true,force:true});
   }
 }
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+main().catch((error)=>{ console.error(error); process.exitCode=1; });

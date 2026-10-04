@@ -321,14 +321,17 @@ async function main() {
     !APPROVED_TASK_PAGE_SLUGS.includes('research-with-citations') &&
     getTaskPageRouteDecision('/cn/tasks/research-with-citations') === 'closed' &&
     /noindex/i.test(`${taskPage.headers.get('x-robots-tag') || ''} ${taskPageHtml}`);
-  const indexUnchanged = notebookIndex.indexable === false && notebookIndex.reason === 'indexing_paused';
+  const geminiIndexUnchanged = notebookIndex.indexable === false && notebookIndex.reason === 'indexing_paused';
+  const perplexityIndexUnchanged = perplexityIndex.indexable === false && perplexityIndex.reason === 'indexing_paused';
+  const indexUnchanged = geminiIndexUnchanged && perplexityIndexUnchanged;
   const sitemapUnchanged =
     sitemap.status === 200 &&
     !sitemapText.includes('/tasks/research-with-citations') &&
     !sitemapText.includes('/ai/notebooklm') &&
     !sitemapText.includes('/ai/perplexity');
   if (!pageUnchanged) blockers.push('TASK_PAGE_OPEN_OR_APPROVED');
-  if (!indexUnchanged) blockers.push('GEMINI_TOOL_INDEX_STATE_CHANGED');
+  if (!geminiIndexUnchanged) blockers.push('GEMINI_TOOL_INDEX_STATE_CHANGED');
+  if (!perplexityIndexUnchanged) blockers.push('PERPLEXITY_TOOL_INDEX_STATE_CHANGED');
   if (!sitemapUnchanged) blockers.push('TASK_OR_TOOL_ROUTE_IN_SITEMAP');
   const output = {
     checkedAt: new Date().toISOString(),
@@ -339,6 +342,7 @@ async function main() {
       taskPageStatus: taskPage.status,
       taskPageNoindex: pageUnchanged,
       toolIndexDecisions: { geminiNotebook: notebookIndex.reason, perplexity: perplexityIndex.reason },
+      bothToolIndexesUnchanged: indexUnchanged,
       sitemapEligible: !sitemapUnchanged,
     },
     blockers: [...new Set(blockers)],
