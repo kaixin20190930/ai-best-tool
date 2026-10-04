@@ -463,6 +463,168 @@ export async function transitionDecisionCluster(
   }
 }
 
+export async function transitionReviewedTaskToolGroup(input: {
+  taskId: string;
+  toolId: string;
+  toolCapabilities: Array<{ id: string; updated_at: string; status: 'reviewed' }>;
+  fits: Array<{ id: string; updated_at: string; status: 'reviewed' }>;
+  qaReference: string;
+  preflight: boolean;
+}): Promise<{ success: boolean; error?: string; summary?: string; evidence?: ClusterEvidenceSummary[] }> {
+  try {
+    const user = await requireAdmin();
+    const exactToolCapabilities: Record<string, string[]> = {
+      'cec78907-e2a1-4eb7-853a-a58334026280': [
+        'c7890701-0000-4000-8000-000000000201',
+        'c7890701-0000-4000-8000-000000000202',
+      ],
+      '3d018623-85f9-4df4-bd55-9a4a0e7a2d93': [
+        'd0186230-0000-4000-8000-000000000201',
+        'd0186230-0000-4000-8000-000000000202',
+      ],
+    };
+    const exactFits: Record<string, string> = {
+      'cec78907-e2a1-4eb7-853a-a58334026280': 'c7890701-0000-4000-8000-000000000301',
+      '3d018623-85f9-4df4-bd55-9a4a0e7a2d93': 'd0186230-0000-4000-8000-000000000301',
+    };
+    if (
+      input.taskId !== '527fe8b7-c171-4c50-ab1f-9404d7536e7c' ||
+      !exactToolCapabilities[input.toolId] ||
+      input.toolCapabilities.some((entry) => !isUuid(entry.id) || !entry.updated_at || entry.status !== 'reviewed') ||
+      input.fits.some((entry) => !isUuid(entry.id) || !entry.updated_at || entry.status !== 'reviewed') ||
+      input.toolCapabilities
+        .map((entry) => entry.id)
+        .sort()
+        .join(',') !== exactToolCapabilities[input.toolId].slice().sort().join(',') ||
+      input.fits.length !== 1 ||
+      input.fits[0]?.id !== exactFits[input.toolId] ||
+      (!input.preflight && input.qaReference.trim().length < 8)
+    ) {
+      return { success: false, error: 'The reviewed CL-02 tool group manifest is incomplete or outside scope.' };
+    }
+    const { data, error } = await createAdminClient().rpc('admin_publish_reviewed_task_tool_group', {
+      p_task_id: input.taskId,
+      p_tool_id: input.toolId,
+      p_tool_capabilities: input.toolCapabilities,
+      p_fits: input.fits,
+      p_reviewer: user.id,
+      p_qa_reference: input.qaReference.trim(),
+      p_preflight: input.preflight,
+    });
+    if (error) return { success: false, error: error.message };
+    const result = data && typeof data === 'object' ? (data as Record<string, unknown>) : {};
+    if (result.ok !== true || result.preflight !== input.preflight) {
+      return { success: false, error: 'Reviewed group preflight response did not match the requested operation.' };
+    }
+    const evidence: ClusterEvidenceSummary[] =
+      input.preflight && Array.isArray(result.evidence)
+        ? result.evidence.map((item) => {
+            const row = item as Record<string, unknown>;
+            return {
+              entity: row.entity === 'fit' ? 'fit' : 'tool_capability',
+              relationId: String(row.relationId || ''),
+              claimId: String(row.claimId || ''),
+              purpose: String(row.purpose || ''),
+              sourceUrl: String(row.sourceUrl || ''),
+              canonicalUrl: null,
+              sourceType: String(row.sourceType || ''),
+              officialSource: row.officialSource === true,
+              verificationStatus: String(row.verificationStatus || ''),
+              verifiedAt: typeof row.verifiedAt === 'string' ? row.verifiedAt : null,
+              reviewDueAt: typeof row.reviewDueAt === 'string' ? row.reviewDueAt : null,
+              expiresAt: typeof row.expiresAt === 'string' ? row.expiresAt : null,
+              validityScope: {},
+              ownerMatches: row.ownerMatches === true,
+            };
+          })
+        : [];
+    if (!input.preflight) {
+      revalidatePath('/[locale]/admin/decision', 'page');
+      revalidatePath('/[locale]/find-tools', 'page');
+      revalidatePath('/[locale]/ai/[websiteName]', 'page');
+    }
+    return {
+      success: true,
+      summary: input.preflight
+        ? 'Reviewed group preflight passed.'
+        : 'Reviewed Tool Capability and Fit group published.',
+      evidence,
+    };
+  } catch (error) {
+    return { success: false, error: error instanceof Error ? error.message : 'Reviewed group transition failed.' };
+  }
+}
+
+export async function withdrawPublishedTaskToolGroup(input: {
+  taskId: string;
+  toolId: string;
+  toolCapabilities: Array<{ id: string; updated_at: string; status: 'published' }>;
+  fits: Array<{ id: string; updated_at: string; status: 'published' }>;
+  withdrawalReference: string;
+  preflight: boolean;
+}): Promise<{ success: boolean; error?: string; summary?: string }> {
+  try {
+    const user = await requireAdmin();
+    const expectedToolCapabilities: Record<string, string[]> = {
+      'cec78907-e2a1-4eb7-853a-a58334026280': [
+        'c7890701-0000-4000-8000-000000000201',
+        'c7890701-0000-4000-8000-000000000202',
+      ],
+      '3d018623-85f9-4df4-bd55-9a4a0e7a2d93': [
+        'd0186230-0000-4000-8000-000000000201',
+        'd0186230-0000-4000-8000-000000000202',
+      ],
+    };
+    const expectedFit: Record<string, string> = {
+      'cec78907-e2a1-4eb7-853a-a58334026280': 'c7890701-0000-4000-8000-000000000301',
+      '3d018623-85f9-4df4-bd55-9a4a0e7a2d93': 'd0186230-0000-4000-8000-000000000301',
+    };
+    if (
+      input.taskId !== '527fe8b7-c171-4c50-ab1f-9404d7536e7c' ||
+      !expectedToolCapabilities[input.toolId] ||
+      input.toolCapabilities
+        .map((entry) => entry.id)
+        .sort()
+        .join(',') !== expectedToolCapabilities[input.toolId].slice().sort().join(',') ||
+      input.toolCapabilities.some((entry) => !entry.updated_at || entry.status !== 'published') ||
+      input.fits.length !== 1 ||
+      input.fits[0]?.id !== expectedFit[input.toolId] ||
+      input.fits.some((entry) => !entry.updated_at || entry.status !== 'published') ||
+      input.withdrawalReference.trim().length < 8
+    ) {
+      return {
+        success: false,
+        error: 'The published CL-02 tool group withdrawal manifest is incomplete or outside scope.',
+      };
+    }
+    const { data, error } = await createAdminClient().rpc('admin_withdraw_task_tool_group', {
+      p_task_id: input.taskId,
+      p_tool_id: input.toolId,
+      p_tool_capabilities: input.toolCapabilities,
+      p_fits: input.fits,
+      p_reviewer: user.id,
+      p_withdrawal_reference: input.withdrawalReference.trim(),
+      p_preflight: input.preflight,
+    });
+    if (error) return { success: false, error: error.message };
+    const result = data && typeof data === 'object' ? (data as Record<string, unknown>) : {};
+    if (result.ok !== true || result.preflight !== input.preflight) {
+      return { success: false, error: 'Withdrawal preflight response did not match the requested operation.' };
+    }
+    if (!input.preflight) {
+      revalidatePath('/[locale]/admin/decision', 'page');
+      revalidatePath('/[locale]/find-tools', 'page');
+      revalidatePath('/[locale]/ai/[websiteName]', 'page');
+    }
+    return {
+      success: true,
+      summary: input.preflight ? 'Withdrawal preflight passed.' : 'Reviewed group withdrawn to stale.',
+    };
+  } catch (error) {
+    return { success: false, error: error instanceof Error ? error.message : 'Reviewed group withdrawal failed.' };
+  }
+}
+
 export async function intakeOfficialDecisionEvidence(input: {
   profileId: string;
   url: string;

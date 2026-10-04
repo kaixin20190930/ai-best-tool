@@ -5,6 +5,7 @@ import { getDecisionReviewOverview, type DecisionReviewEntity } from '@/lib/serv
 import CapabilityManager from '@/components/admin/CapabilityManager';
 import DecisionClusterClosure from '@/components/admin/DecisionClusterClosure';
 import DecisionReviewBoard from '@/components/admin/DecisionReviewBoard';
+import ReviewedTaskToolGroupRelease from '@/components/admin/ReviewedTaskToolGroupRelease';
 
 export default async function AdminDecisionPage({
   searchParams,
@@ -77,6 +78,7 @@ export default async function AdminDecisionPage({
         </div>
         <CapabilityManager overview={capabilityOverview} />
         <DecisionClusterClosure overview={capabilityOverview} />
+        <ReviewedTaskToolGroupRelease overview={capabilityOverview} />
       </section>
     </div>
   );

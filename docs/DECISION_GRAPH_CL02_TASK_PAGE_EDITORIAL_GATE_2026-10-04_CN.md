@@ -16,9 +16,9 @@
 
 ## 当前结论与下一步
 
-2026-10-04T12:28:15.024Z 的历史只读回读为：Task Capabilities 已发布且有效；Consensus Fit `published`，Gemini Notebook 与 Perplexity Fit `reviewed`，当时报告 **1/3，HOLD**。其中 `TASK_PREFERRED_CAPABILITY_MISSING` 是通用读模型语义误设产生的 blocker，现已通过通用语义修正移除；不要求把任一真实 required 改为 preferred。按同一组关系状态，当前编辑结论仍为 **1/3，HOLD**，实质未解 blocker 是 Gemini Notebook `FIT_NOT_PUBLISHED`、`ROLE_RATIONALE_NOT_DISTINCT`（双语理由尚未明确用户选择资料集边界）及 Perplexity `FIT_NOT_PUBLISHED`。两项 reviewed Fit 均不计入门槛。官方证据校验仍从 claim 现有 `source_type` 字段读取，非 official claim 不可计入。该代码修正不批准 Task Page，也不改变关系或生产状态。
+2026-10-04T12:28:15.024Z 的历史只读回读为 1/3、HOLD。`TASK_PREFERRED_CAPABILITY_MISSING` 已通过通用读模型语义修正移除，不要求把 required 改为 preferred。2026-10-04T14:47:29.385Z 后续生产只读 preflight 确认 Task Capabilities 仍 published/current、Consensus Fit published，Gemini/Perplexity Fit reviewed；公开 Task 仍 404 + noindex 且 sitemap excluded。Gemini rationale 与部分发布 purpose 仍是明确 blocker：Gemini citation-traceability Tool Capability 缺少 `plan` purpose，双语 Fit 理由仍未限定用户选择/提供并导入的 notebook 资料集。Perplexity 的逐项 purpose 与来源角色检查通过。完整 ID、`updated_at`、reviewer/期限前像及受控 Admin 操作见[CL-02 reviewed relation 发布候选审计](./CL02_REVIEWED_RELATION_RELEASE_CANDIDATE_2026-10-04_CN.md)。上述预检代码、迁移及按钮不写生产，不批准 Task Page。
 
-下一步：编辑修订 Gemini Notebook 现有 Fit 的双语 rationale，明确“用户选定 notebook 资料综合”，再由独立内容 QA 审核；管理员分别按现有关系审批流程完成 Gemini Notebook、Perplexity Fit QA 和受控发布。随后重新运行只读预检，再交 Task Page 独立 QA。任何缺失、过期或 owner 不匹配继续 HOLD。不得为门槛补造关系。
+下一步：在已部署 Admin 流程里补齐 Gemini citation-traceability 的 verified `plan` evidence link，并通过现有 Fit 编辑动作保存、重审双语 rationale；重新运行 relation preflight 生成新 `updated_at` manifest，全部门槛通过后交总控安排独立 QA。页面发布继续另行 HOLD。不得为门槛补造 claim 或关系。
 
 live 预检只执行数据库读取，在 Supabase 与 Neon 只读包装器下完成；没有写入或输出敏感字段或证据摘录。专项测试另以 Task Capability `published/current + required/required`、Fit `published / reviewed / reviewed` 复现上述 HOLD，并覆盖 `source_type=official` 可通过、`independent` 被拒、same-owner/current evidence、营销文案拒绝与页面未获批断言。
 

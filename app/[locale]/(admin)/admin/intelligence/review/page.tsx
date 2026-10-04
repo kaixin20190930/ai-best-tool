@@ -5,6 +5,7 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import {
   EvidenceReviewControls,
   GeminiLinkReviewButton,
+  GeminiPlanPurposeLinkButton,
   PerplexityLinkReviewButton,
 } from '@/components/admin/EvidenceReviewControls';
 
@@ -57,9 +58,9 @@ export default async function EvidenceReviewQueue({
     : { data: [], error: null };
   if (auditError) throw new Error(`Evidence review migration required: ${auditError.message}`);
   const lastDecision = new Map<string, string>();
-  for (const audit of audits || []) {
+  (audits || []).forEach((audit) => {
     if (audit.claim_id && !lastDecision.has(audit.claim_id)) lastDecision.set(audit.claim_id, audit.action);
-  }
+  });
   const today = Date.now();
   const stateOf = (claim: NonNullable<typeof claims>[number]) => {
     if (claim.verification_status === 'verified')
@@ -119,10 +120,15 @@ export default async function EvidenceReviewQueue({
           <h2 className='font-bold'>Gemini Notebook Stage 2</h2>
           <p className='my-2 text-sm'>
             After all ten official claims individually PASS, this action reviews only the existing draft Decision, two
-            Capabilities and Fit, and creates the predefined 5/9/6 same owner links. It does not publish a Task Page or
-            change index/sitemap.
+            Capabilities and Fit, and creates its original 5/9/6 same-owner links. It does not publish relations or a
+            Task Page, or change index/sitemap.
           </p>
           <GeminiLinkReviewButton />
+          <p className='my-2 text-xs text-slate-700'>
+            Use the repair control only when the reviewed citation-traceability Capability has exactly the existing four
+            links and needs its verified plan-purpose claim. The RPC rejects any other partial or drifted state.
+          </p>
+          <GeminiPlanPurposeLinkButton />
         </section>
       )}
       {selected?.id === PERPLEXITY_PROFILE && (

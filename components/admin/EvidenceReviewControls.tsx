@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 import {
+  completeGeminiNotebookPlanPurposeLink,
   linkReviewedGeminiEvidence,
   linkReviewedPerplexityEvidence,
   submitEvidenceDecision,
@@ -50,9 +51,10 @@ export function EvidenceReviewControls({
       }}
       className='mt-3 space-y-3'
     >
-      <label className='block text-xs font-semibold'>
+      <label htmlFor='verified-source-excerpt' className='block text-xs font-semibold'>
         Verified source excerpt
         <textarea
+          id='verified-source-excerpt'
           name='excerpt'
           defaultValue={claim.sourceExcerpt || ''}
           rows={3}
@@ -61,9 +63,10 @@ export function EvidenceReviewControls({
           placeholder='Paste the exact passage you checked on the source page.'
         />
       </label>
-      <label className='block text-xs font-semibold'>
+      <label htmlFor='evidence-review-scope' className='block text-xs font-semibold'>
         Scope (JSON)
         <textarea
+          id='evidence-review-scope'
           name='scope'
           defaultValue={JSON.stringify(claim.validityScope || {}, null, 2)}
           rows={2}
@@ -71,9 +74,10 @@ export function EvidenceReviewControls({
           className='mt-1 w-full rounded-lg border p-2 font-mono text-xs'
         />
       </label>
-      <label className='block text-xs font-semibold'>
+      <label htmlFor='evidence-review-note' className='block text-xs font-semibold'>
         Review note
         <textarea
+          id='evidence-review-note'
           name='note'
           defaultValue={claim.verificationNote || ''}
           rows={2}
@@ -82,9 +86,10 @@ export function EvidenceReviewControls({
           placeholder='Explain what you checked or why this remains on HOLD.'
         />
       </label>
-      <label className='block text-xs font-semibold'>
+      <label htmlFor='evidence-review-due' className='block text-xs font-semibold'>
         Next review
         <input
+          id='evidence-review-due'
           type='date'
           name='due'
           defaultValue={
@@ -142,6 +147,42 @@ export function GeminiLinkReviewButton() {
         className='rounded-lg bg-slate-950 px-4 py-2 text-sm font-bold text-white disabled:opacity-50'
       >
         {pending ? 'Reviewing and linking…' : '审核并建立关系 · Review and link'}
+      </button>
+      {feedback && (
+        <p role='status' className='text-xs text-slate-700'>
+          {feedback}
+        </p>
+      )}
+    </div>
+  );
+}
+
+export function GeminiPlanPurposeLinkButton() {
+  const router = useRouter();
+  const [pending, start] = useTransition();
+  const [feedback, setFeedback] = useState('');
+  return (
+    <div className='space-y-2'>
+      <button
+        type='button'
+        disabled={pending}
+        onClick={() =>
+          start(async () => {
+            const result = await completeGeminiNotebookPlanPurposeLink();
+            setFeedback(
+              result.success
+                ? result.message || 'Plan evidence link checked.'
+                : result.error || 'Plan evidence link failed.',
+            );
+            if (result.success) {
+              toast.success(result.message);
+              router.refresh();
+            } else toast.error(result.error);
+          })
+        }
+        className='rounded-lg border border-cyan-800 px-4 py-2 text-sm font-bold text-cyan-900 disabled:opacity-50'
+      >
+        {pending ? 'Checking plan evidence…' : 'Complete reviewed plan evidence link'}
       </button>
       {feedback && (
         <p role='status' className='text-xs text-slate-700'>

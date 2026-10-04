@@ -63,6 +63,22 @@ export async function linkReviewedGeminiEvidence(): Promise<Result> {
   }
 }
 
+export async function completeGeminiNotebookPlanPurposeLink(): Promise<Result> {
+  try {
+    const reviewer = await requireAdmin();
+    const { data, error } = await createAdminClient().rpc('admin_complete_gemini_notebook_plan_link', {
+      p_reviewer: reviewer.id,
+    });
+    if (error) return { success: false, error: error.message };
+    revalidatePath('/[locale]/admin/intelligence/review', 'page');
+    revalidatePath('/[locale]/admin/decision', 'page');
+    const result = data && typeof data === 'object' ? (data as Record<string, unknown>) : {};
+    return { success: true, message: `Gemini Notebook evidence link ${String(result.status || 'checked')}.` };
+  } catch (error) {
+    return { success: false, error: error instanceof Error ? error.message : 'Gemini evidence-link repair failed.' };
+  }
+}
+
 export async function linkReviewedPerplexityEvidence(): Promise<Result> {
   try {
     const reviewer = await requireAdmin();

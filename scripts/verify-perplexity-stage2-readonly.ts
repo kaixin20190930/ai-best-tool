@@ -243,7 +243,7 @@ async function main() {
       capabilityLinks.filter((x) => notebookCap.some((c) => c.id === x.tool_capability_id)).length,
       byOwner(fitLinks, 'fit_id', notebookFit[0].id).length,
     ],
-    [5, 9, 6],
+    [5, 10, 6],
   );
 
   const perplexityDecision = byOwner(decisions, 'tool_id', owners.perplexity);
@@ -482,7 +482,7 @@ async function main() {
         checkedAtUtc: new Date().toISOString(),
         productionWrites: 0,
         consensus: { status: 'published', capabilityLinks: 7, fitLinks: 6 },
-        geminiNotebook: { status: 'reviewed', links: [5, 9, 6], indexReason: notebookIndex.reason },
+        geminiNotebook: { status: 'reviewed', links: [5, 10, 6], indexReason: notebookIndex.reason },
         perplexity: {
           status: phase === '--relation-reviewed' ? 'relation-reviewed' : phase.slice(2),
           profile: perplexityProfiles.length,
