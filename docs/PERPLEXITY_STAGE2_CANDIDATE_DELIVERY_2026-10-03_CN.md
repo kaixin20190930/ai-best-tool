@@ -31,16 +31,16 @@ Evidence Review Queue 现为 Perplexity profile 提供专用 **Review and link**
 | `...0406` data-boundary | privacy | — | limitation | privacy |
 | `...0407` labels-limitation | limitation | limitation | limitation | limitation |
 
-总计 **6 Decision + 10 Capability + 7 Fit = 23 links**。Admin 页面在选中 Perplexity profile 后显示按钮、pending 文案及成功/错误状态。只读 verifier 增加 `--relation-reviewed` 阶段，用于未来只读确认 reviewed 对象、精确 6/10/7 links、review audit、Task 404/noindex 与 sitemap 排除；本次未连接或写入生产，也未运行该生产阶段。
+总计 **6 Decision + 10 Capability + 7 Fit = 23 links**。Admin 页面在选中 Perplexity profile 后显示按钮、pending 文案及成功/错误状态。只读 verifier 的 `--relation-reviewed` 阶段检查 reviewed 对象、精确 6/10/7 links、review audit、Task 404/noindex 与 sitemap 排除；生产只读回验结果见下方。
 
 专项本地测试在临时 PostgreSQL 中覆盖 service-role/reviewer 拒绝、RLS、精确关系集合、全量写入、幂等重放及不发布/不建 Task。部署需要**一次性**应用上述 migration；routine 审核无需 SQL Editor 操作。
 
 ### 生产关系审核回读修正（2026-10-04）
 
-Owner 回报 migration 已应用，后台同一 RPC 成功返回 `reviewed`、Decision 6、Capability 10、Fit 7。随后只读 verifier 的 `--relation-reviewed` 阶段发现 verifier 本身两处断言缺口：已 PASS 的套餐 claim 在关系审核阶段仍应有 `verified_at`；sitemap 检查还须显式排除 Perplexity canonical 工具路由 `/ai/perplexity`。本 rework 只修正 verifier、加入本地静态回归断言，并更新此审计记录；没有再次写生产。修正后的生产 verifier 尚待只读重跑确认。
+Owner 回报 migration 已应用，后台同一 RPC 成功返回 `reviewed`、Decision 6、Capability 10、Fit 7。首次只读 verifier 暴露两处断言缺口：已 PASS 的套餐 claim 在关系审核阶段仍应有 `verified_at`；sitemap 检查还须显式排除 Perplexity canonical 工具路由 `/ai/perplexity`。修正后 `--relation-reviewed` 于 `2026-10-04T10:36:43.616Z` **PASS**，输出 `productionWrites=0`、Perplexity profile/source/claim/Capability/Fit 数量 `1/5/7/2/1`、links `[6,10,7]`、`stateMd5=c26a02ce57093a9d33cdfd68a3c46469`。Task 为 `404 + noindex`、`sitemapEligible=false`，Consensus/Gemini 基线保持。此次只读回验没有生产写入。
 
 ## 验证与限制
 
 本次专项 PostgreSQL 测试使用临时本机数据库，验证 reviewer 缺失/非管理员/与最新 HOLD 不匹配、HOLD 超过 14 天、默认 ROLLBACK、只改两个允许字段、六条 verified 与受保护对象不变、零 links、pre/post hash 和旧前像重放拒绝；测试通过。`pnpm exec tsc --noEmit` 与 `git diff --check` 通过。完整 build 通过，并将 Supabase URL/key 覆盖为不可连接的本地占位值，避免构建过程触达生产；AdSense prebuild 校验通过。本地 sitemap 因未配置 Postgres URL 返回 500，不作为生产 sitemap 结论。生产 `--candidate` 回验须在 Owner 修正后执行；本次没有连接或写入生产。
 
-生产只读状态：独立 QA 已通过 `--baseline`；Owner 完成候选与套餐 claim 的受控 ROLLBACK/COMMIT。2026-10-04T06:48:16.596Z 的 `--reviewed` 回验确认 Consensus 保持 published 7/6、Gemini Notebook 保持 reviewed 5/9/6，Perplexity 为 1 profile、5 source、7 verified claim、1 draft Decision、2 draft Capability、1 draft conditional Fit，links=0，`stateMd5=48932b056eb7b4c74ca3729d83432e7d`。公开 Task 为 404 且 noindex，生产 sitemap 继续排除。下一门禁仅为 Decision/Capability/Fit 的证据链接和编辑关系独立评审；不得因 7/7 claim verified 自动发布关系、Task Page 或索引。
+此前生产只读状态：独立 QA 已通过 `--baseline`；Owner 完成候选与套餐 claim 的受控 ROLLBACK/COMMIT。2026-10-04T06:48:16.596Z 的 `--reviewed` 回验确认 Consensus 保持 published 7/6、Gemini Notebook 保持 reviewed 5/9/6，Perplexity 为 1 profile、5 source、7 verified claim、1 draft Decision、2 draft Capability、1 draft conditional Fit，links=0，`stateMd5=48932b056eb7b4c74ca3729d83432e7d`。其后关系审核已完成，最终状态以上述 `--relation-reviewed` 回验为准。公开 Task 为 404 且 noindex，生产 sitemap 继续排除；不得因关系审核自动发布 Task Page 或索引。
