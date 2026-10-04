@@ -106,13 +106,9 @@ BEGIN
          AND e.metadata->>'toolId'=p_tool_id::text AND e.metadata->>'qaReference'=btrim(p_qa_reference)
          AND (SELECT count(*) FROM jsonb_array_elements(e.metadata->'toolCapabilities'))=jsonb_array_length(p_tool_capabilities)
          AND (SELECT count(*) FROM jsonb_array_elements(e.metadata->'fits'))=jsonb_array_length(p_fits)
+         AND e.metadata->'toolCapabilities'=p_tool_capabilities
+         AND e.metadata->'fits'=p_fits
          AND e.metadata->'linkFingerprint'=v_link_fingerprint
-         AND NOT EXISTS (SELECT 1 FROM jsonb_array_elements(p_tool_capabilities) requested
-           WHERE NOT EXISTS (SELECT 1 FROM jsonb_array_elements(e.metadata->'toolCapabilities') prior
-             WHERE prior->>'id'=requested->>'id'))
-         AND NOT EXISTS (SELECT 1 FROM jsonb_array_elements(p_fits) requested
-           WHERE NOT EXISTS (SELECT 1 FROM jsonb_array_elements(e.metadata->'fits') prior
-             WHERE prior->>'id'=requested->>'id'))
          AND NOT EXISTS (
            SELECT 1 FROM jsonb_array_elements(v_link_fingerprint) evidence
            WHERE evidence->>'verificationStatus'<>'verified' OR evidence->>'conflictStatus'<>'none' OR
@@ -129,6 +125,15 @@ BEGIN
     RETURN jsonb_build_object('ok',true,'preflight',false,'unchanged',true,'taskId',p_task_id,
       'toolId',p_tool_id,'toolCapabilityCount',jsonb_array_length(p_tool_capabilities),
       'fitCount',jsonb_array_length(p_fits));
+  END IF;
+  IF NOT coalesce(p_preflight,false) AND
+     (SELECT count(*) FROM public.tool_capabilities tc
+       WHERE tc.id IN (SELECT (value->>'id')::uuid FROM jsonb_array_elements(p_tool_capabilities))
+         AND tc.tool_id=p_tool_id AND tc.status='published')=jsonb_array_length(p_tool_capabilities) AND
+     (SELECT count(*) FROM public.tool_task_fits f
+       WHERE f.id IN (SELECT (value->>'id')::uuid FROM jsonb_array_elements(p_fits))
+         AND f.task_id=p_task_id AND f.tool_id=p_tool_id AND f.status='published')=jsonb_array_length(p_fits) THEN
+    RAISE EXCEPTION 'Published group manifest preimage mismatch' USING ERRCODE='23514';
   END IF;
 
   -- The Task and its capabilities remain published and are checked, never changed.

@@ -26,6 +26,9 @@ assert.match(migration, /s\.source_type<>'official'/);
 assert.match(migration, /s\.profile_id IS DISTINCT FROM c\.profile_id/);
 assert.match(migration, /'linkFingerprint',v_link_fingerprint/);
 assert.match(migration, /e\.metadata->'linkFingerprint'=v_link_fingerprint/);
+assert.match(migration, /e\.metadata->'toolCapabilities'=p_tool_capabilities/);
+assert.match(migration, /e\.metadata->'fits'=p_fits/);
+assert.match(migration, /Published group manifest preimage mismatch/);
 assert.match(migration, /p\.profile_status<>'ready'/);
 assert.match(migration, /p\.owner_id<>p_tool_id/);
 assert.match(migration, /review_due_at<=v_now/);
@@ -138,12 +141,12 @@ async function main() {
     );
     const capsJson = JSON.stringify(manifest.rows[0].value);
     const fitsJson = JSON.stringify(fitManifest.rows[0].value);
-    const call = (preflightOnly: boolean, capabilityManifest = capsJson) =>
+    const call = (preflightOnly: boolean, capabilityManifest = capsJson, fitPreimage = fitsJson) =>
       db.query('SELECT public.admin_publish_reviewed_task_tool_group($1,$2,$3::jsonb,$4::jsonb,$5,$6,$7) value', [
         taskId,
         toolId,
         capabilityManifest,
-        fitsJson,
+        fitPreimage,
         reviewer,
         'independent qa record 123',
         preflightOnly,
@@ -179,20 +182,52 @@ async function main() {
     );
     const replay = await call(false);
     assert.equal(replay.rows[0].value.unchanged, true);
+    const wrongReplayTime = JSON.parse(capsJson);
+    wrongReplayTime[0].updated_at = '2000-01-01T00:00:00.000Z';
+    await assert.rejects(call(false, JSON.stringify(wrongReplayTime)), /Published group manifest preimage mismatch/,
+      'A replay with a changed Tool Capability updated_at must be rejected');
+    const wrongCapabilityStatus = JSON.parse(capsJson);
+    wrongCapabilityStatus[0].status = 'published';
+    await assert.rejects(call(false, JSON.stringify(wrongCapabilityStatus)), /Published group manifest preimage mismatch/,
+      'A replay with a changed Tool Capability status must be rejected');
+    const missingStatus = JSON.parse(capsJson);
+    delete missingStatus[0].status;
+    await assert.rejects(call(false, JSON.stringify(missingStatus)), /Published group manifest preimage mismatch/,
+      'A replay missing Tool Capability status must be rejected');
+    const missingUpdatedAt = JSON.parse(capsJson);
+    delete missingUpdatedAt[0].updated_at;
+    await assert.rejects(call(false, JSON.stringify(missingUpdatedAt)), /Published group manifest preimage mismatch/,
+      'A replay missing Tool Capability updated_at must be rejected');
+    const wrongFitTime = JSON.parse(fitsJson);
+    wrongFitTime[0].updated_at = '2000-01-01T00:00:00.000Z';
+    await assert.rejects(call(false, capsJson, JSON.stringify(wrongFitTime)), /Published group manifest preimage mismatch/,
+      'A replay with a changed Fit updated_at must be rejected');
+    const wrongFitStatus = JSON.parse(fitsJson);
+    wrongFitStatus[0].status = 'published';
+    await assert.rejects(call(false, capsJson, JSON.stringify(wrongFitStatus)), /Published group manifest preimage mismatch/,
+      'A replay with a changed Fit status must be rejected');
+    const missingFitStatus = JSON.parse(fitsJson);
+    delete missingFitStatus[0].status;
+    await assert.rejects(call(false, capsJson, JSON.stringify(missingFitStatus)), /Published group manifest preimage mismatch/,
+      'A replay missing Fit status must be rejected');
+    const missingFitUpdatedAt = JSON.parse(fitsJson);
+    delete missingFitUpdatedAt[0].updated_at;
+    await assert.rejects(call(false, capsJson, JSON.stringify(missingFitUpdatedAt)), /Published group manifest preimage mismatch/,
+      'A replay missing Fit updated_at must be rejected');
     await db.query("UPDATE tool_capability_claims SET purpose='changed' WHERE tool_capability_id=$1 AND purpose='support'", [caps[0]]);
-    await assert.rejects(call(false), /Tool Capability is stale, unreviewed, or incomplete/,
+    await assert.rejects(call(false), /Published group manifest preimage mismatch/,
       'Changing a published evidence purpose must reject an otherwise identical publication replay');
     await db.query("UPDATE tool_capability_claims SET purpose='support' WHERE tool_capability_id=$1 AND purpose='changed'", [caps[0]]);
     await db.query('DELETE FROM tool_capability_claims WHERE tool_capability_id=$1 AND purpose=$2', [caps[0], 'support']);
-    await assert.rejects(call(false), /Tool Capability is stale, unreviewed, or incomplete/,
+    await assert.rejects(call(false), /Published group manifest preimage mismatch/,
       'Deleting a published evidence link must reject an otherwise identical publication replay');
     await db.query("INSERT INTO tool_capability_claims VALUES ($1,'c7890701-0000-4000-8000-000000000401','support')", [caps[0]]);
     await db.query("UPDATE tool_capability_claims SET claim_id='c7890701-0000-4000-8000-000000000402' WHERE tool_capability_id=$1 AND purpose='support'", [caps[0]]);
-    await assert.rejects(call(false), /Tool Capability is stale, unreviewed, or incomplete/,
+    await assert.rejects(call(false), /Published group manifest preimage mismatch/,
       'Replacing a published evidence claim must reject an otherwise identical publication replay');
     await db.query("UPDATE tool_capability_claims SET claim_id='c7890701-0000-4000-8000-000000000401' WHERE tool_capability_id=$1 AND purpose='support'", [caps[0]]);
     await db.query("UPDATE product_intelligence_claims SET invalidated_at=now() WHERE id='c7890701-0000-4000-8000-000000000401'");
-    await assert.rejects(call(false), /stale|Linked claims must be current official same-owner evidence/,
+    await assert.rejects(call(false), /Published group manifest preimage mismatch/,
       'Invalidated linked evidence must reject an otherwise identical publication replay');
     await db.query("UPDATE product_intelligence_claims SET invalidated_at=NULL WHERE id='c7890701-0000-4000-8000-000000000401'");
     assert.equal((await call(false)).rows[0].value.unchanged, true, 'Restored exact evidence manifest should replay unchanged');
