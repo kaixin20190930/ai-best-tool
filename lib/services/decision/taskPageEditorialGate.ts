@@ -108,7 +108,6 @@ export function evaluateTaskPageEditorialGate(
     if (!actualSlugs.includes(slug)) add(blockers, 'TASK_CAPABILITY_MISSING', slug, 'The expected existing research capability is absent.', 'Resolve the existing Task Capability relation with the owner; do not add a substitute capability for this gate.');
   }
   if (!planned.some((row) => row.importance === 'required')) add(blockers, 'TASK_REQUIRED_CAPABILITY_MISSING', 'Task Capabilities', 'The public Task Page requires at least one required capability.', 'Resolve importance with the Task owner before independent page QA.');
-  if (!planned.some((row) => row.importance === 'preferred')) add(blockers, 'TASK_PREFERRED_CAPABILITY_MISSING', 'Task Capabilities', 'The existing public read model requires at least one preferred capability, but none is present.', 'Ask the Task owner to decide whether an existing capability is preferred; update only through the approved editorial workflow, then rerun preflight.');
 
   const identityById = new Map(input.identities.map((identity) => [identity.id, identity]));
   const fitsByTool = new Map<string, Row[]>();

@@ -74,6 +74,15 @@ const publicModel = deriveTaskPageReadModel(fixture(), now)!;
 assert.equal(JSON.stringify(publicModel).includes('claim_value'), false);
 assert.equal(JSON.stringify(publicModel).includes('source_excerpt'), false);
 assert.equal(JSON.stringify(publicModel).includes('claim-0'), false);
+const allRequired = fixture();
+allRequired.taskCapabilities.forEach((row) => {
+  row.importance = 'required';
+});
+assert.equal(
+  deriveTaskPageReadModel(allRequired, now)?.capabilities.every((capability) => capability.importance === 'required'),
+  true,
+  'all-required Task Pages are eligible',
+);
 
 function denied(change: (input: ReturnType<typeof fixture>) => void, message: string) {
   const input = fixture();
@@ -88,7 +97,7 @@ function editorialFixture() {
   source.taskCapabilities.forEach((row, index) => {
     row.task_id = source.task.id;
     row.capability_id = `cap-${index}`;
-    row.importance = index === 0 ? 'required' : 'preferred';
+    row.importance = 'required';
     row.rationale = { en: 'Find scholarly papers and verify citations', cn: '发现学术论文并核查引用' };
   });
   source.capabilities.forEach((row, index) => {
@@ -137,7 +146,8 @@ assert.equal(heldGate.decision, 'HOLD');
 assert.ok(heldGate.blockers.some((blocker) => blocker.code === 'FIT_NOT_PUBLISHED' && blocker.subject === 'notebooklm'));
 assert.ok(heldGate.blockers.some((blocker) => blocker.code === 'FIT_NOT_PUBLISHED' && blocker.subject === 'perplexity'));
 assert.equal(heldGate.eligibleFitCount, 1, 'reviewed fits do not count toward the three-fit threshold');
-assert.ok(heldGate.blockers.some((blocker) => blocker.code === 'TASK_PREFERRED_CAPABILITY_MISSING'), 'public read model importance requirement is surfaced');
+assert.ok(!heldGate.blockers.some((blocker) => blocker.code === 'TASK_PREFERRED_CAPABILITY_MISSING'), 'preferred capabilities are optional');
+assert.ok(!heldGate.blockers.some((blocker) => blocker.code === 'TASK_REQUIRED_CAPABILITY_MISSING'), 'both existing research capabilities may truthfully remain required');
 const marketingOnly = editorialFixture();
 marketingOnly.fits[1].rationale = { en: 'The best research assistant for everyone.', cn: '人人都适用的最佳研究助手。' };
 assert.ok(
@@ -174,8 +184,10 @@ denied((x) => {
   x.taskCapabilities[0].status = 'reviewed';
 }, 'unpublished required capability');
 denied((x) => {
-  x.taskCapabilities[1].importance = 'required';
-}, 'missing preferred capability');
+  x.taskCapabilities.forEach((row) => {
+    row.importance = 'preferred';
+  });
+}, 'only preferred capabilities cannot replace a required capability');
 denied((x) => {
   x.taskCapabilities[1].review_due_at = reviewed;
 }, 'expired task capability');

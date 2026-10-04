@@ -128,7 +128,7 @@ export function deriveTaskPageReadModel(
   const planned = input.taskCapabilities.filter(
     (row) => row.importance === 'required' || row.importance === 'preferred',
   );
-  if (!planned.some((row) => row.importance === 'required') || !planned.some((row) => row.importance === 'preferred')) {
+  if (!planned.some((row) => row.importance === 'required')) {
     return null;
   }
   if (
