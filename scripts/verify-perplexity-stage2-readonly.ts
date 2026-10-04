@@ -10,7 +10,7 @@ import { stage2StateMd5 } from './gemini-notebook-stage2-state';
 
 loadEnvConfig(process.cwd());
 const phase = process.argv[2] || '--baseline';
-assert.ok(['--baseline', '--candidate'].includes(phase), 'Choose --baseline or --candidate');
+assert.ok(['--baseline', '--candidate', '--reviewed'].includes(phase), 'Choose --baseline, --candidate or --reviewed');
 
 const taskId = '527fe8b7-c171-4c50-ab1f-9404d7536e7c';
 const owners = {
@@ -276,24 +276,37 @@ async function main() {
     );
     assert.ok(
       perplexitySources
-        .filter((x) => x.id !== perplexitySourceIds[1])
+        .filter((x) => phase !== '--candidate' || x.id !== perplexitySourceIds[1])
         .every((x) => x.fetch_status === 'success' && Boolean(x.last_verified_at)),
     );
-    assert.equal(perplexitySources.find((x) => x.id === perplexitySourceIds[1])?.fetch_status, 'pending');
+    assert.equal(
+      perplexitySources.find((x) => x.id === perplexitySourceIds[1])?.fetch_status,
+      phase === '--candidate' ? 'pending' : 'success',
+    );
     assert.deepEqual(perplexityClaims.map((x) => x.id).sort(), perplexityClaimIds);
     assert.deepEqual(perplexityClaims.map((x) => x.claim_key).sort(), expectedKeys.sort());
     const plansClaim = perplexityClaims.find((x) => x.id === perplexityClaimIds[3]);
     assert.deepEqual(plansClaim?.claim_value, correctedPlansValue, 'Plans candidate has stale or unexpected value');
     assert.deepEqual(plansClaim?.validity_scope, correctedPlansScope, 'Plans candidate has unexpected scope');
-    assert.equal(plansClaim?.verification_status, 'candidate', 'Plans claim must remain candidate/HOLD');
-    assert.equal(plansClaim?.verified_by, null);
-    assert.equal(plansClaim?.verified_at, null);
+    assert.equal(
+      plansClaim?.verification_status,
+      phase === '--candidate' ? 'candidate' : 'verified',
+      'Plans claim has an unexpected review state',
+    );
+    assert.equal(plansClaim?.verified_by, phase === '--candidate' ? null : reviewAudit[0]?.reviewer_id);
+    assert.equal(Boolean(plansClaim?.verified_at), phase === '--reviewed');
     assert.equal(plansClaim?.source_excerpt, 'Pro Searches | 3/day');
     assert.equal(
       plansClaim?.verification_note,
-      'Current official comparison states Free Pro Searches are 3/day; rewrite the stale unknown/conflict premise before PASS.',
+      phase === '--candidate'
+        ? 'Current official comparison states Free Pro Searches are 3/day; rewrite the stale unknown/conflict premise before PASS.'
+        : 'Official plan comparison, last modified 2026-10-02, lists Free Pro Searches as 3/day; applies to the web/app subscription table and does not imply API entitlement.',
     );
-    assert.equal(reviewAudit[0]?.action, 'hold', 'Plans claim must remain under the latest HOLD review');
+    assert.equal(
+      reviewAudit[0]?.action,
+      phase === '--candidate' ? 'hold' : 'pass',
+      'Plans claim review action drifted',
+    );
     assert.ok(
       Date.parse(reviewAudit[0]?.created_at) > now - 14 * 24 * 60 * 60 * 1000,
       'Plans HOLD review audit is stale',
@@ -306,10 +319,8 @@ async function main() {
       ['admin', 'moderator'].includes(reviewUser.user?.user_metadata?.role as string),
       'Plans HOLD reviewer is not an app admin or moderator',
     );
-    const verifiedClaims = perplexityClaims.filter(
-      (x) => x.id !== perplexityClaimIds[3] && x.verification_status === 'verified',
-    );
-    assert.equal(verifiedClaims.length, 6);
+    const verifiedClaims = perplexityClaims.filter((x) => x.verification_status === 'verified');
+    assert.equal(verifiedClaims.length, phase === '--candidate' ? 6 : 7);
     assert.ok(
       verifiedClaims.every(
         (x) => Boolean(x.verified_by && x.verified_at && x.source_excerpt) && Date.parse(x.review_due_at) > now,
