@@ -115,6 +115,7 @@ function editorialFixture() {
   source.fitClaimLinks = roleRows.map((_, index) => ({ fit_id: `role-fit-${index}`, claim_id: `role-claim-${index}` }));
   source.claims = roleRows.map((role, index) => ({
     id: `role-claim-${index}`, profile_id: `role-profile-${index}`, source_url: `https://official.example/${role.slug}`,
+    source_type: 'official',
     verified_at: reviewed, verified_by: 'reviewer-1', review_due_at: future, expires_at: null,
     verification_status: 'verified', conflict_status: 'none', invalidated_at: null,
   }));
@@ -154,6 +155,14 @@ staleEvidence.claims[2].review_due_at = reviewed;
 assert.ok(
   evaluateTaskPageEditorialGate(staleEvidence, now).blockers.some((blocker) => blocker.code === 'FIT_EVIDENCE_NOT_CURRENT_SAME_OWNER'),
   'expired evidence review windows are rejected',
+);
+const independentEvidence = editorialFixture();
+independentEvidence.claims[2].source_type = 'independent';
+const independentEvidenceGate = evaluateTaskPageEditorialGate(independentEvidence, now);
+assert.equal(independentEvidenceGate.decision, 'HOLD');
+assert.ok(
+  independentEvidenceGate.blockers.some((blocker) => blocker.code === 'FIT_EVIDENCE_NOT_OFFICIAL' && blocker.subject === 'perplexity'),
+  'a verified/current independent claim cannot satisfy the official evidence requirement',
 );
 denied((x) => {
   x.task.status = 'draft';

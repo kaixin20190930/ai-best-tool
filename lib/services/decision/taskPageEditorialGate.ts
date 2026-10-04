@@ -154,7 +154,7 @@ export function evaluateTaskPageEditorialGate(
       if (!expected.en.test(en) || !expected.zh.test(zh)) fail('ROLE_RATIONALE_NOT_DISTINCT', `Fit rationale does not explicitly ground the role in the expected source boundary: ${expected.role}.`, 'Edit the existing Fit rationale to describe the verified product role and its source boundary in English and Chinese; marketing adjectives do not satisfy this check.');
 
       const linkedClaims = (linksByFit.get(String(fit.id)) || []).map((link) => claimById.get(String(link.claim_id))).filter((claim): claim is Row => Boolean(claim));
-      const currentSameOwner = linkedClaims.some((claim) => {
+      const isCurrentSameOwner = (claim: Row) => {
         const profile = profileById.get(String(claim.profile_id));
         const verified = validDate(claim.verified_at);
         const due = validDate(claim.review_due_at);
@@ -170,8 +170,11 @@ export function evaluateTaskPageEditorialGate(
           Boolean(claim.verified_by) && verified !== null && verified <= now.getTime() && due !== null && due > now.getTime() &&
           (!claim.expires_at || (expiry !== null && expiry > now.getTime())) &&
           validSourceUrl;
-      });
+      };
+      const currentSameOwner = linkedClaims.some(isCurrentSameOwner);
+      const currentOfficialSameOwner = linkedClaims.some((claim) => claim.source_type === 'official' && isCurrentSameOwner(claim));
       if (!currentSameOwner) fail('FIT_EVIDENCE_NOT_CURRENT_SAME_OWNER', 'No linked claim is verified/current, conflict-free, unexpired, and owned by this tool through its own tool profile.', 'Use the existing Evidence Review workflow to verify current official evidence and link it to this Fit under the same tool owner; do not borrow another tool’s claims.');
+      else if (!currentOfficialSameOwner) fail('FIT_EVIDENCE_NOT_OFFICIAL', 'Current same-owner evidence exists, but no linked claim is classified as official.', 'Link a verified/current official claim from this tool’s own evidence profile; independent, owner, user, and editorial sources do not satisfy this gate.');
       if (eligible) {
         eligibleFitCount += 1;
         seenToolIds.add(expected.id);

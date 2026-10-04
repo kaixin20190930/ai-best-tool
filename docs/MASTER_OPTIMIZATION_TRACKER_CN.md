@@ -2,7 +2,7 @@
 
 更新时间：2026-10-04
 
-2026-10-04 CL02 Task Page 编辑预检已实现，并于 `2026-10-04T11:09:00.938Z` 通过 Supabase/Neon 只读包装器回读：Consensus Fit `published`，Gemini Notebook 与 Perplexity Fit `reviewed`，合格 **1/3，HOLD**；两条已发布 Task Capability 均 required，缺公开读模型需要的 preferred；Gemini Notebook 当前双语 rationale 未明确用户选择资料集边界。预检校验三种角色分别为学术论文发现、用户选择资料综合、开放网页检索，并输出逐项 blocker 与后续编辑/QA步骤。专项模拟测试、tsc、完整 build 通过；无生产写入、页面放行、push 或 deploy，Task Page 仍 404/noindex 且 sitemap excluded。详见[Task Page 编辑预检审计](./DECISION_GRAPH_CL02_TASK_PAGE_EDITORIAL_GATE_2026-10-04_CN.md)。交付状态：**开发实现完成，待独立 QA**。
+2026-10-04 CL02 Task Page 编辑预检经 QA 补正并于 `2026-10-04T12:28:15.024Z` 完成 Supabase/Neon 只读回读：claim 的现有 `source_type` 必须为 `official` 才能满足 Fit 证据门槛；Consensus Fit `published`，Gemini Notebook 与 Perplexity Fit `reviewed`，合格仍为 **1/3，HOLD**。Task Capability preferred 缺口与 Gemini Notebook 双语 Fit 角色边界问题仍待 owner/编辑处理。专项模拟测试、tsc、完整 build 通过；无生产写入、页面放行、push 或 deploy，Task Page 仍 404/noindex 且 sitemap excluded。详见[Task Page 编辑预检审计](./DECISION_GRAPH_CL02_TASK_PAGE_EDITORIAL_GATE_2026-10-04_CN.md)。修复提交后等待同一独立 QA 复测。
 
 2026-10-04 Perplexity CL-02 Stage 2 **关系审核与生产只读回验均通过**。`--relation-reviewed` 于 `2026-10-04T10:36:43.616Z` 输出 `productionWrites=0`：profile 1、source 5、claim 7、Capability 2、Fit 1、Decision/Capability/Fit links `[6,10,7]`，`status=relation-reviewed`，`stateMd5=c26a02ce57093a9d33cdfd68a3c46469`。Task 仍 `404 + noindex`，`sitemapEligible=false`；Perplexity canonical 工具页也未进入 sitemap。Consensus/Gemini 基线保持。关系审核没有授权发布 Task 或工具索引。见[候选交付](./PERPLEXITY_STAGE2_CANDIDATE_DELIVERY_2026-10-03_CN.md)、[官方字段审计](./PERPLEXITY_STAGE2_OFFICIAL_FACT_AUDIT_2026-10-03_CN.md)。
 

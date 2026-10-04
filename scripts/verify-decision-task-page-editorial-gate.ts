@@ -56,7 +56,7 @@ async function main() {
         'Evidence claims',
         db
           .from('product_intelligence_claims')
-          .select('id,profile_id,source_url,verified_at,verified_by,review_due_at,expires_at,verification_status,conflict_status,invalidated_at')
+          .select('id,profile_id,source_url,source_type,verified_at,verified_by,review_due_at,expires_at,verification_status,conflict_status,invalidated_at')
           .in('id', claimIds),
       )
     : [];
