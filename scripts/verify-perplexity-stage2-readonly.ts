@@ -10,7 +10,10 @@ import { stage2StateMd5 } from './gemini-notebook-stage2-state';
 
 loadEnvConfig(process.cwd());
 const phase = process.argv[2] || '--baseline';
-assert.ok(['--baseline', '--candidate', '--reviewed'].includes(phase), 'Choose --baseline, --candidate or --reviewed');
+assert.ok(
+  ['--baseline', '--candidate', '--reviewed', '--relation-reviewed'].includes(phase),
+  'Choose --baseline, --candidate, --reviewed or --relation-reviewed',
+);
 
 const taskId = '527fe8b7-c171-4c50-ab1f-9404d7536e7c';
 const owners = {
@@ -102,7 +105,7 @@ async function main() {
 
   const db = createAdminClient();
   const ids = Object.values(owners);
-  const [tasks, definitions, taskCapabilities, profiles, decisions, capabilities, fits, reviewAudit] =
+  const [tasks, definitions, taskCapabilities, profiles, decisions, capabilities, fits, reviewAudit, relationAudit] =
     await Promise.all([
       read('task', db.from('decision_tasks').select('*').eq('id', taskId)),
       read(
@@ -123,6 +126,16 @@ async function main() {
           .from('admin_evidence_review_audit')
           .select('id,claim_id,action,reviewer_id,created_at')
           .eq('claim_id', perplexityClaimIds[3])
+          .order('id', { ascending: false })
+          .limit(1),
+      ),
+      read(
+        'Perplexity relation review audit',
+        db
+          .from('admin_evidence_review_audit')
+          .select('id,profile_id,action,reviewer_id,created_at,review_due_at')
+          .eq('profile_id', perplexityProfileId)
+          .eq('action', 'link')
           .order('id', { ascending: false })
           .limit(1),
       ),
@@ -267,7 +280,7 @@ async function main() {
     assert.equal(perplexityProfiles.length, 1);
     assert.equal(perplexityProfiles[0].id, perplexityProfileId);
     assert.equal(perplexityProfiles[0].canonical_domain, 'www.perplexity.ai');
-    assert.equal(perplexityProfiles[0].profile_status, 'pending');
+    assert.equal(perplexityProfiles[0].profile_status, phase === '--relation-reviewed' ? 'ready' : 'pending');
     assert.ok(Date.parse(perplexityProfiles[0].next_review_at) > now);
     assert.deepEqual(perplexitySources.map((x) => x.id).sort(), perplexitySourceIds);
     assert.deepEqual(perplexitySources.map((x) => x.url).sort(), expectedUrls.sort());
@@ -335,17 +348,71 @@ async function main() {
       ),
     );
     assert.equal(perplexityDecision.length, 1);
-    assert.equal(perplexityDecision[0].editorial_status, 'draft');
+    assert.equal(perplexityDecision[0].editorial_status, phase === '--relation-reviewed' ? 'reviewed' : 'draft');
     assert.deepEqual(perplexityCap.map((x) => x.id).sort(), perplexityCapabilityIds);
-    assert.ok(perplexityCap.every((x) => x.status === 'draft'));
+    assert.ok(perplexityCap.every((x) => x.status === (phase === '--relation-reviewed' ? 'reviewed' : 'draft')));
     assert.equal(perplexityFit.length, 1);
     assert.equal(perplexityFit[0].id, perplexityFitId);
     assert.equal(perplexityFit[0].fit_level, 'conditional');
-    assert.equal(perplexityFit[0].status, 'draft');
+    assert.equal(perplexityFit[0].status, phase === '--relation-reviewed' ? 'reviewed' : 'draft');
     assert.deepEqual(
       [perplexityDecisionLinks.length, perplexityCapabilityLinks.length, perplexityFitLinks.length],
-      [0, 0, 0],
+      phase === '--relation-reviewed' ? [6, 10, 7] : [0, 0, 0],
     );
+    if (phase === '--relation-reviewed') {
+      assert.equal(relationAudit.length, 1, 'Perplexity relation review audit missing');
+      assert.ok(relationAudit[0].reviewer_id, 'Perplexity relation review reviewer missing');
+      assert.ok(Date.parse(relationAudit[0].review_due_at) > now, 'Perplexity relation review is overdue');
+      assert.ok(Date.parse(relationAudit[0].created_at) <= now, 'Perplexity relation audit is future-dated');
+      const [decisionToolId, discoveryCapabilityId, citationCapabilityId] = [
+        owners.perplexity,
+        ...perplexityCapabilityIds,
+      ];
+      const expectedDecisionLinks = [
+        [401, 'fit'],
+        [402, 'fit'],
+        [404, 'limitation'],
+        [405, 'limitation'],
+        [406, 'privacy'],
+        [407, 'limitation'],
+      ].map(([claim, purpose]) => `${decisionToolId}:${perplexityClaimIds[Number(claim) - 401]}:${purpose}`);
+      const expectedCapabilityLinks = [
+        [discoveryCapabilityId, 401, 'support'],
+        [discoveryCapabilityId, 403, 'support'],
+        [discoveryCapabilityId, 404, 'availability'],
+        [discoveryCapabilityId, 404, 'plan'],
+        [discoveryCapabilityId, 407, 'limitation'],
+        [citationCapabilityId, 402, 'support'],
+        [citationCapabilityId, 403, 'availability'],
+        [citationCapabilityId, 404, 'plan'],
+        [citationCapabilityId, 406, 'limitation'],
+        [citationCapabilityId, 407, 'limitation'],
+      ].map(([capability, claim, purpose]) => `${capability}:${perplexityClaimIds[Number(claim) - 401]}:${purpose}`);
+      const expectedFitLinks = [
+        [401, 'fit'],
+        [402, 'fit'],
+        [403, 'fit'],
+        [404, 'limitation'],
+        [405, 'limitation'],
+        [406, 'privacy'],
+        [407, 'limitation'],
+      ].map(([claim, purpose]) => `${perplexityFitId}:${perplexityClaimIds[Number(claim) - 401]}:${purpose}`);
+      assert.deepEqual(
+        perplexityDecisionLinks.map((x) => `${x.tool_id}:${x.claim_id}:${x.purpose}`).sort(),
+        expectedDecisionLinks.sort(),
+        'Perplexity Decision links differ from the predefined manifest',
+      );
+      assert.deepEqual(
+        perplexityCapabilityLinks.map((x) => `${x.tool_capability_id}:${x.claim_id}:${x.purpose}`).sort(),
+        expectedCapabilityLinks.sort(),
+        'Perplexity Capability links differ from the predefined manifest',
+      );
+      assert.deepEqual(
+        perplexityFitLinks.map((x) => `${x.fit_id}:${x.claim_id}:${x.purpose}`).sort(),
+        expectedFitLinks.sort(),
+        'Perplexity Fit links differ from the predefined manifest',
+      );
+    }
   }
   const allClaimIds = claims.map((x) => x.id);
   const [allDecisionLinks, allCapabilityLinks, allFitLinks] = await Promise.all([
@@ -415,13 +482,13 @@ async function main() {
         consensus: { status: 'published', capabilityLinks: 7, fitLinks: 6 },
         geminiNotebook: { status: 'reviewed', links: [5, 9, 6], indexReason: notebookIndex.reason },
         perplexity: {
-          status: phase.slice(2),
+          status: phase === '--relation-reviewed' ? 'relation-reviewed' : phase.slice(2),
           profile: perplexityProfiles.length,
           sources: perplexitySources.length,
           claims: perplexityClaims.length,
           capabilities: perplexityCap.length,
           fit: perplexityFit.length,
-          links: 0,
+          links: [perplexityDecisionLinks.length, perplexityCapabilityLinks.length, perplexityFitLinks.length],
           stateMd5,
         },
         taskPageStatus: taskPage.status,

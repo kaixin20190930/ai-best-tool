@@ -62,3 +62,18 @@ export async function linkReviewedGeminiEvidence(): Promise<Result> {
     return { success: false, error: error instanceof Error ? error.message : 'Link review failed.' };
   }
 }
+
+export async function linkReviewedPerplexityEvidence(): Promise<Result> {
+  try {
+    const reviewer = await requireAdmin();
+    const { data, error } = await createAdminClient().rpc('admin_link_perplexity_stage2_evidence', {
+      p_reviewer: reviewer.id,
+    });
+    if (error) return { success: false, error: error.message };
+    revalidatePath('/[locale]/admin/intelligence/review', 'page');
+    revalidatePath('/[locale]/admin/decision', 'page');
+    return { success: true, message: `Reviewed draft graph: ${JSON.stringify(data)}.` };
+  } catch (error) {
+    return { success: false, error: error instanceof Error ? error.message : 'Link review failed.' };
+  }
+}

@@ -13,3 +13,5 @@
 | `labels-limitation` / `watch_outs` | [Understanding source labels](https://www.perplexity.ai/help-center/en/articles/20260806-understanding-source-labels)：标签评价整个网站，不逐页评价。 | 域名标签不能当作单篇文章、某个引用或单条主张准确性认证。仍须阅读原文。 |
 
 字段结论：可建立两个 **draft** Tool Capability（开放网页发现、来源回查）与一个 **draft/conditional** Fit；可建立 pending profile、pending official source 和 candidate claim。额度 claim 的修正文案仍是 candidate/HOLD，不能由候选修正直接推出 `verified`、`reviewed`、`published` 或任何 evidence link。分享/导出权限没有纳入本批候选字段；Enterprise 演示中的导出展示不代表消费套餐权益。用户任务页和索引仍单独受发布门禁控制。
+
+后台关系审核固定 manifest 与 gate 见[候选交付的关系审核章节](./PERPLEXITY_STAGE2_CANDIDATE_DELIVERY_2026-10-03_CN.md#后台关系审核与链接路径2026-10-04)。关系写入须在全部七条 claim verified/current 后由真实 admin reviewer 明确操作；claim 审核状态本身不自动建立链接或发布任何对象。

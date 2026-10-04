@@ -4,7 +4,11 @@ import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
-import { linkReviewedGeminiEvidence, submitEvidenceDecision } from '@/app/actions/admin/evidenceReview';
+import {
+  linkReviewedGeminiEvidence,
+  linkReviewedPerplexityEvidence,
+  submitEvidenceDecision,
+} from '@/app/actions/admin/evidenceReview';
 
 export function EvidenceReviewControls({
   claim,
@@ -128,6 +132,38 @@ export function GeminiLinkReviewButton() {
         onClick={() =>
           start(async () => {
             const result = await linkReviewedGeminiEvidence();
+            setFeedback(result.success ? result.message || 'Links reviewed.' : result.error || 'Link review failed.');
+            if (result.success) {
+              toast.success(result.message);
+              router.refresh();
+            } else toast.error(result.error);
+          })
+        }
+        className='rounded-lg bg-slate-950 px-4 py-2 text-sm font-bold text-white disabled:opacity-50'
+      >
+        {pending ? 'Reviewing and linking…' : '审核并建立关系 · Review and link'}
+      </button>
+      {feedback && (
+        <p role='status' className='text-xs text-slate-700'>
+          {feedback}
+        </p>
+      )}
+    </div>
+  );
+}
+
+export function PerplexityLinkReviewButton() {
+  const router = useRouter();
+  const [pending, start] = useTransition();
+  const [feedback, setFeedback] = useState('');
+  return (
+    <div className='space-y-2'>
+      <button
+        type='button'
+        disabled={pending}
+        onClick={() =>
+          start(async () => {
+            const result = await linkReviewedPerplexityEvidence();
             setFeedback(result.success ? result.message || 'Links reviewed.' : result.error || 'Link review failed.');
             if (result.success) {
               toast.success(result.message);

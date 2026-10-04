@@ -15,6 +15,26 @@
 2. 独立审核于 2026-10-04 重开官方套餐页，确认比较表仍列出 Free Pro Searches `3/day`，并通过现有 Admin Evidence Review RPC 执行 PASS；复核截止日为 2026-11-02。
 3. 日常 PASS/HOLD 后续只走后台 Evidence Review，不再要求 Owner 执行 routine SQL。Task Page、关系发布与 index/sitemap 仍须分别审批；当前 Task 404/noindex 和 sitemap 排除继续保持。
 
+## 后台关系审核与链接路径（2026-10-04）
+
+Evidence Review Queue 现为 Perplexity profile 提供专用 **Review and link** 操作。它调用一次性 migration `20261004_admin_perplexity_stage2_review.sql` 安装的 service-role RPC；Server Action 先要求真实后台 reviewer，RPC 再核实 service role、reviewer 用户、10 张相关表全部开启 RLS、profile/tool owner、5 个固定官方 URL、7 个固定 claim ID/key/source、claim 均为 verified/current 且来源成功核验，以及固定 Decision、两项 Capability 与 conditional Fit 的关系和状态。已有关系只能为 0 或完整 manifest；部分/额外关系会整体拒绝。成功时把 profile 从 pending 收口到 ready（若尚未 ready），只把三个草稿对象设为 reviewed，写入精确 evidence link 并追加审计。重复执行返回 unchanged，不重复审计。published 状态、Task、工具目录记录、SEO/index/sitemap 均不在 RPC 写范围。
+
+固定 manifest（关系 ID 使用候选包中的固定 ID）：
+
+| Claim | Decision `3d018623-85f9-4df4-bd55-9a4a0e7a2d93` | Capability `...0201` research-discovery | Capability `...0202` citation-traceability | Fit `...0301` |
+|---|---|---|---|
+| `...0401` web-synthesis | fit | support | — | fit |
+| `...0402` direct-links | fit | — | support | fit |
+| `...0403` focus | — | support | availability | fit |
+| `...0404` plans | limitation | availability + plan | plan | limitation |
+| `...0405` api-boundary | limitation | — | — | limitation |
+| `...0406` data-boundary | privacy | — | limitation | privacy |
+| `...0407` labels-limitation | limitation | limitation | limitation | limitation |
+
+总计 **6 Decision + 10 Capability + 7 Fit = 23 links**。Admin 页面在选中 Perplexity profile 后显示按钮、pending 文案及成功/错误状态。只读 verifier 增加 `--relation-reviewed` 阶段，用于未来只读确认 reviewed 对象、精确 6/10/7 links、review audit、Task 404/noindex 与 sitemap 排除；本次未连接或写入生产，也未运行该生产阶段。
+
+专项本地测试在临时 PostgreSQL 中覆盖 service-role/reviewer 拒绝、RLS、精确关系集合、全量写入、幂等重放及不发布/不建 Task。部署需要**一次性**应用上述 migration；routine 审核无需 SQL Editor 操作。
+
 ## 验证与限制
 
 本次专项 PostgreSQL 测试使用临时本机数据库，验证 reviewer 缺失/非管理员/与最新 HOLD 不匹配、HOLD 超过 14 天、默认 ROLLBACK、只改两个允许字段、六条 verified 与受保护对象不变、零 links、pre/post hash 和旧前像重放拒绝；测试通过。`pnpm exec tsc --noEmit` 与 `git diff --check` 通过。完整 build 通过，并将 Supabase URL/key 覆盖为不可连接的本地占位值，避免构建过程触达生产；AdSense prebuild 校验通过。本地 sitemap 因未配置 Postgres URL 返回 500，不作为生产 sitemap 结论。生产 `--candidate` 回验须在 Owner 修正后执行；本次没有连接或写入生产。

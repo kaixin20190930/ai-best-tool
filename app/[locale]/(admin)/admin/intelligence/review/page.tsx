@@ -2,9 +2,14 @@ import Link from 'next/link';
 
 import { requireAdmin } from '@/lib/auth/middleware';
 import { createAdminClient } from '@/lib/supabase/admin';
-import { EvidenceReviewControls, GeminiLinkReviewButton } from '@/components/admin/EvidenceReviewControls';
+import {
+  EvidenceReviewControls,
+  GeminiLinkReviewButton,
+  PerplexityLinkReviewButton,
+} from '@/components/admin/EvidenceReviewControls';
 
 const GEMINI_PROFILE = 'c7890701-0000-4000-8000-000000000001';
+const PERPLEXITY_PROFILE = 'd0186230-0000-4000-8000-000000000001';
 
 export default async function EvidenceReviewQueue({
   searchParams,
@@ -118,6 +123,17 @@ export default async function EvidenceReviewQueue({
             change index/sitemap.
           </p>
           <GeminiLinkReviewButton />
+        </section>
+      )}
+      {selected?.id === PERPLEXITY_PROFILE && (
+        <section className='rounded-xl border border-cyan-200 bg-cyan-50 p-4'>
+          <h2 className='font-bold'>Perplexity Stage 2</h2>
+          <p className='my-2 text-sm'>
+            After all seven official claims are verified and current, this action reviews only the existing draft
+            Decision, two Capabilities and conditional Fit, then creates the predefined 6/10/7 same-owner links. It does
+            not publish a relation or Task Page, or change tool and index state.
+          </p>
+          <PerplexityLinkReviewButton />
         </section>
       )}
       <div className='grid gap-4 xl:grid-cols-2'>
