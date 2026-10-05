@@ -203,8 +203,10 @@ export function GeminiNotebookFitRationaleButton() {
       <button
         type='button'
         disabled={pending}
+        aria-busy={pending}
         onClick={() =>
           start(async () => {
+            setFeedback('Checking reviewed evidence and updating the Fit…');
             const result = await applyGeminiNotebookFitRationale();
             setFeedback(
               result.success ? result.message || 'Fit rationale updated.' : result.error || 'Fit rationale update failed.',
@@ -220,7 +222,7 @@ export function GeminiNotebookFitRationaleButton() {
         {pending ? 'Updating Fit rationale…' : 'Apply approved Gemini Notebook Fit rationale'}
       </button>
       {feedback && (
-        <p role='status' className='text-xs text-slate-700'>
+        <p role='status' aria-live='polite' className='text-xs text-slate-700'>
           {feedback}
         </p>
       )}

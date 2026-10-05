@@ -4,6 +4,11 @@ import { revalidatePath } from 'next/cache';
 
 import { requireAdmin } from '@/lib/auth/middleware';
 import { createAdminClient } from '@/lib/supabase/admin';
+import {
+  GEMINI_NOTEBOOK_APPROVED_FIT_RATIONALE,
+  fitConditionalUpdateSucceeded,
+  validateGeminiNotebookFitRationaleSnapshot,
+} from '@/lib/services/admin/geminiNotebookFitRationale';
 
 type Result = { success: boolean; error?: string; message?: string };
 
@@ -11,10 +16,7 @@ const GEMINI_NOTEBOOK_FIT = {
   id: 'c7890701-0000-4000-8000-000000000301',
   taskId: '527fe8b7-c171-4c50-ab1f-9404d7536e7c',
   toolId: 'cec78907-e2a1-4eb7-853a-a58334026280',
-  rationale: {
-    en: 'Use Gemini Notebook to synthesize sources the user selects or supplies and imports into a notebook; it can discover some Web or Drive sources for selection, but it is not open-web search.',
-    cn: '用于综合用户选择/提供并导入 notebook 的资料；也可发现部分网页或云端硬盘来源供选择，不等同于开放网页检索。',
-  },
+  rationale: GEMINI_NOTEBOOK_APPROVED_FIT_RATIONALE,
 } as const;
 
 export async function submitEvidenceDecision(input: {
@@ -93,30 +95,56 @@ export async function applyGeminiNotebookFitRationale(): Promise<Result> {
   try {
     const reviewer = await requireAdmin();
     const db = createAdminClient();
-    const { data: fit, error: readError } = await db
-      .from('tool_task_fits')
-      .select('id, task_id, tool_id, status, rationale, updated_at')
-      .eq('id', GEMINI_NOTEBOOK_FIT.id)
-      .maybeSingle();
-    if (readError) return { success: false, error: readError.message };
-    if (
-      !fit ||
-      fit.id !== GEMINI_NOTEBOOK_FIT.id ||
-      fit.task_id !== GEMINI_NOTEBOOK_FIT.taskId ||
-      fit.tool_id !== GEMINI_NOTEBOOK_FIT.toolId
-    ) {
-      return { success: false, error: 'Gemini Notebook Fit identity drifted; no changes were made.' };
-    }
-    if (fit.status !== 'reviewed')
-      return { success: false, error: 'Gemini Notebook Fit must be reviewed before its rationale can be updated.' };
+    const capabilityIds = [
+      'c7890701-0000-4000-8000-000000000201',
+      'c7890701-0000-4000-8000-000000000202',
+    ];
+    const [fitResult, fitsResult, profileResult, decisionResult, capabilityResult, claimResult, sourceResult,
+      decisionLinkResult, capabilityLinkResult, fitLinkResult] = await Promise.all([
+      db.from('tool_task_fits').select('*').eq('id', GEMINI_NOTEBOOK_FIT.id).maybeSingle(),
+      db.from('tool_task_fits').select('id').eq('tool_id', GEMINI_NOTEBOOK_FIT.toolId),
+      db.from('product_intelligence_profiles').select('*').eq('id', 'c7890701-0000-4000-8000-000000000001').maybeSingle(),
+      db.from('tool_decision_profiles').select('*').eq('tool_id', GEMINI_NOTEBOOK_FIT.toolId),
+      db.from('tool_capabilities').select('*').eq('tool_id', GEMINI_NOTEBOOK_FIT.toolId),
+      db.from('product_intelligence_claims').select('*').eq('profile_id', 'c7890701-0000-4000-8000-000000000001'),
+      db.from('product_intelligence_sources').select('*').eq('profile_id', 'c7890701-0000-4000-8000-000000000001'),
+      db.from('tool_decision_profile_claims').select('*').eq('tool_id', GEMINI_NOTEBOOK_FIT.toolId),
+      db.from('tool_capability_claims').select('*').in('tool_capability_id', capabilityIds),
+      db.from('tool_task_fit_claims').select('*').eq('fit_id', GEMINI_NOTEBOOK_FIT.id),
+    ]);
+    const queryError = [fitResult, fitsResult, profileResult, decisionResult, capabilityResult, claimResult,
+      sourceResult, decisionLinkResult, capabilityLinkResult, fitLinkResult].find((result) => result.error)?.error;
+    if (queryError) return { success: false, error: queryError.message };
+
+    const fit = fitResult.data;
+    const gateError = validateGeminiNotebookFitRationaleSnapshot(
+      {
+        fit,
+        fitsForTool: fitsResult.data || [],
+        profile: profileResult.data,
+        decisions: decisionResult.data || [],
+        capabilities: capabilityResult.data || [],
+        claims: claimResult.data || [],
+        sources: sourceResult.data || [],
+        decisionLinks: decisionLinkResult.data || [],
+        capabilityLinks: capabilityLinkResult.data || [],
+        fitLinks: fitLinkResult.data || [],
+      },
+      Date.now(),
+    );
+    if (gateError) return { success: false, error: gateError };
+    if (!fit) return { success: false, error: 'Gemini Notebook Fit is missing; no changes were made.' };
 
     const rationale = fit.rationale && typeof fit.rationale === 'object' && !Array.isArray(fit.rationale)
       ? (fit.rationale as Record<string, unknown>)
       : {};
-    if (rationale.en === GEMINI_NOTEBOOK_FIT.rationale.en && rationale.cn === GEMINI_NOTEBOOK_FIT.rationale.cn) {
+    if (
+      fit.status === 'reviewed' &&
+      rationale.en === GEMINI_NOTEBOOK_FIT.rationale.en &&
+      rationale.cn === GEMINI_NOTEBOOK_FIT.rationale.cn
+    ) {
       return { success: true, message: 'Gemini Notebook Fit rationale is already current; unchanged.' };
     }
-    if (!fit.updated_at) return { success: false, error: 'Gemini Notebook Fit has no concurrency version; no changes were made.' };
 
     const reviewedAt = new Date();
     const reviewDueAt = new Date(reviewedAt.getTime() + 90 * 24 * 60 * 60 * 1000);
@@ -132,12 +160,13 @@ export async function applyGeminiNotebookFitRationale(): Promise<Result> {
       .eq('id', GEMINI_NOTEBOOK_FIT.id)
       .eq('task_id', GEMINI_NOTEBOOK_FIT.taskId)
       .eq('tool_id', GEMINI_NOTEBOOK_FIT.toolId)
-      .eq('status', 'reviewed')
+      .in('status', ['draft', 'reviewed'])
       .eq('updated_at', fit.updated_at)
       .select('id')
       .maybeSingle();
     if (updateError) return { success: false, error: updateError.message };
-    if (!updated) return { success: false, error: 'Gemini Notebook Fit changed during review; reload and retry.' };
+    if (!fitConditionalUpdateSucceeded(updated))
+      return { success: false, error: 'Gemini Notebook Fit changed during review; reload and retry.' };
 
     revalidatePath('/[locale]/admin/intelligence/review', 'page');
     revalidatePath('/[locale]/admin/decision', 'page');
