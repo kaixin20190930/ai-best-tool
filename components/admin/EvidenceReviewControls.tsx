@@ -209,7 +209,9 @@ export function GeminiNotebookFitRationaleButton() {
             setFeedback('Checking reviewed evidence and updating the Fit…');
             const result = await applyGeminiNotebookFitRationale();
             setFeedback(
-              result.success ? result.message || 'Fit rationale updated.' : result.error || 'Fit rationale update failed.',
+              result.success
+                ? result.message || 'Fit rationale updated.'
+                : result.error || 'Fit rationale update failed.',
             );
             if (result.success) {
               toast.success(result.message);

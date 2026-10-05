@@ -77,7 +77,7 @@
     "tools:migrate-notebooklm": "tsx scripts/migrate-notebooklm-tool.ts",
     "test:notebooklm-release": "tsx scripts/migrate-notebooklm-tool.ts --check",
     "test:notebooklm-pages": "tsx scripts/test-notebooklm-pages.ts",
-    "test:gemini-notebook-fit-rationale": "tsx scripts/test-gemini-notebook-fit-rationale.ts",
+    "test:gemini-notebook-fit-rationale": "tsx scripts/test-gemini-notebook-fit-rationale.ts && tsx scripts/test-gemini-notebook-fit-rationale-rpc.ts",
     "test:home-positioning": "tsx scripts/test-home-positioning.ts",
     "test:ctr-differentiation": "tsx scripts/test-ctr-differentiation.ts",
     "test:editorial-review-dates": "tsx scripts/test-editorial-review-dates.ts",
