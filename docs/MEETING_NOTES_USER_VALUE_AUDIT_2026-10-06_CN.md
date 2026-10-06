@@ -57,11 +57,11 @@
 为空泛提示；来源可区分用途且同 URL 不重复占行；三个详情链接和一个下一步均同语言有效。实施后才做 360/390px 真实视觉检查。
 无需新增页面类型、候选数量或基础设施。
 
-## MTN-UX-01 开发交付（2026-10-06，待独立 QA / owner 内容应用）
+## MTN-UX-01 交付收口（2026-10-07，已部署 / owner SQL 已应用 / 最终 QA_PASS）
 
-本节追加实施结果，保留上方原始生产审计。**未部署、未执行生产写入；不得将本地通过写成生产整改完成。**
+本节记录最新交付状态，保留上方 2026-10-06 原始审计及下方开发阶段复现记录。**根据总控最终 QA 确认，`origin/main ca9867d0` 已部署，owner SQL 已应用，生产只读 verifier 三条 Fit 均为 `candidate_applied`，最终 QA_PASS。** 2026-10-07 本轮仅做两份文档收口，未执行部署或生产写入。
 
-### 复现与根因
+### 开发阶段复现与根因（2026-10-06）
 
 再次 GET 英中生产页，复现中文三条英文理由、3/3 限制 fallback、8 个来源链接 / 6 个唯一 URL，以及空泛任务约束。Supabase 通过 `pub-03-readonly-run.mjs` 的 GET/HEAD 限制回读：
 
@@ -78,19 +78,28 @@
 4. 仅会议页按精确 URL 合并，显示来源用途，保留每个不同的真实核验/复查时间组合；不把较新日期扩展到旧 claim。
 5. 内部发布措辞改成来源与套餐边界说明。三个详情入口和底部一个后续筛选入口保留同语言路径；明确下一页需再次选择会议任务，CTA 为“按隐私和导出要求继续筛选”。
 
-### Owner 一次性操作与安全边界
+### Owner 操作完成与安全边界
 
-需要 owner 独立审核 SQL 内的中英文内容和官方证据，然后将候选内 `v_reviewer uuid := NULL` 替换成实际审核者 `auth.users.id`，执行整块 DO。**这是一份手动候选，不在自动 migrations 中，本轮没有执行。** 执行前可运行：
+**Owner 已完成受控 SQL 应用，无待执行的一次性操作，不应重复执行。** 仓库保留手动候选及其审核人占位符作为交付记录，不将其改成自动 migration。应用后只读验证命令：
 
 ```sh
 PUB03_ENV_FILE=/path/to/owner.env node scripts/pub-03-readonly-run.mjs pnpm exec tsx scripts/verify-meeting-notes-user-value-readonly.ts
 ```
 
-当前只读结果：3/3 `owner_action_pending`、6/6 指定证据为当前 verified / official / same-owner。SQL 要求精确原始 Fit 快照（含 `updated_at`）、同 owner 的原始事实/URL/核验日期及当前证据；加锁后任何漂移即整块失败。保留 fit_level/status/review_due_at、原有证据链接和数据库编辑历史触发器；新文案记录真实审核人及审核时刻，**不延长复查期限**。重复执行会安全拒绝。其他 Task、Tool Capability、任务配置、工具索引均不写入。
+2026-10-07 生产只读 verifier 结果：3/3 `candidate_applied`，替代开发阶段的 `owner_action_pending`；最终 QA_PASS。开发阶段已验证 6/6 指定证据为当前 verified / official / same-owner。SQL 要求精确原始 Fit 快照（含 `updated_at`）、同 owner 的原始事实/URL/核验日期及当前证据；加锁后任何漂移即整块失败。保留 fit_level/status/review_due_at、原有证据链接和数据库编辑历史触发器；新文案记录真实审核人及审核时刻，**不延长复查期限**。重复执行会安全拒绝。其他 Task、Tool Capability、任务配置、工具索引均不写入。
 
-代码上线可先修复旧 `zh` 文案显示、约束、来源及 CTA；三条完整差异化理由和限制需要 owner 应用 SQL 后才会全部可见。最终用户价值验收需在代码与内容均应用后进行。
+代码与内容均已应用；三条差异化双语理由、真实条件与限制、具体约束、来源用途/去重及单一下一步已通过最终 QA。
 
-### 验证结果
+### 最终生产验收（2026-10-07）
+
+根据总控最终 QA 回传记录：
+
+- 英文 `/tasks/meeting-notes` 与中文 `/cn/tasks/meeting-notes` 均为 **200**，各保留 **三候选 / 6 unique sources**。
+- 两页均为 **`noindex, follow` / self-canonical**；sitemap **126 URL / 0 Task URL**，工具索引和其他 Task cluster 不变。
+- 生产只读 verifier 三条 Fit 均为 **`candidate_applied`**；代码已部署、owner SQL 已应用，**最终 QA_PASS**。
+- **完整 360/390px 视觉仍为 N/A**；最终 QA_PASS 不代表移动端视觉已通过。
+
+### 开发阶段验证结果（2026-10-06）
 
 - `pnpm exec tsx scripts/test-meeting-notes-user-value.ts`：PASS（中英候选、治理要求保留、同 URL 合并且保留旧日期、来源用途、无来源不显示对应约束、其他 cluster 不变）。
 - `pnpm exec tsx scripts/test-meeting-notes-user-value-sql.ts`：PASS（空白本地 PostgreSQL，实际执行后回滚；审核人、漂移、过期、跨 owner、重复执行门禁；三行双语结果、原有状态/期限、编辑历史；不同时区执行）。
@@ -102,7 +111,7 @@ PUB03_ENV_FILE=/path/to/owner.env node scripts/pub-03-readonly-run.mjs pnpm exec
 
 ### 残余风险 / 不能宣称完成的项目
 
-- 未部署、未 push、未写生产。SQL 应用与应用后的独立内容 QA 仍待 owner；证据或原始行变化后应重新审核候选，不能跳过 drift guard。
+- 部署、owner SQL 应用及最终 QA 已完成，无待执行 owner 操作。后续证据或内容变更仍需重新审核，不能重复应用旧快照或跳过 drift guard。
 - 360/390px 真机/浏览器视觉、键盘/读屏验证仍为 **N/A**，不把结构测试或 HTML 检查冒充视觉 PASS。
 - Fathom 旧首页 claim 过期是已存在的范围外数据状态；现有 freshness 过滤保留，不延伸为证据清理任务。
 - 主工作区未提交的 `20261003_perplexity_plans_claim_correction.sql` 与 `20261005_admin_gemini_fit_rationale_recovery.sql` 未修改。
