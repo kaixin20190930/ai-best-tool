@@ -144,7 +144,7 @@
         "audit": "docs/ELICIT_PRERELEASE_2026-10-07_CN.md",
         "verdict": "HOLD_EVIDENCE",
         "content": "EN/CN/TW complete draft; independent QA pending",
-        "blockingGap": "Official logo/preview reuse permission and localized presentation unverified",
+        "blockingGap": "Official logo/preview reuse permission and localized presentation unverified; publication also blocked until a real correction/owner-update entry is connected and passes presentation acceptance",
         "nextReview": "2026-10-14"
       }
     },

@@ -349,7 +349,7 @@
       ],
       "notIdealFor": [
         "Projects expecting exhaustive literature coverage or reliable non-English results from one tool.",
-        "Teams needing automatic study-quality judgments or an unverified all-plan no-training guarantee."
+        "Teams needing automatic study-quality judgments or a clearly documented guarantee that their data will not be used for training on any plan."
       ],
       "limitations": [
         "Check numbers, context, screening decisions and citations manually; supplement searches with relevant databases.",
@@ -369,7 +369,7 @@
           "reason": "Compare synthesis of selected sources when systematic screening and extraction tables are not the main task."
         }
       ],
-      "liveSignal": "Before publication, connect the existing correction/owner-update entry; no user reviews or owner verification are claimed.",
+      "liveSignal": "Publication blocker: a real correction and owner-update entry must be connected and pass presentation acceptance before publication. This candidate does not establish that the entry is implemented; no user reviews or owner verification are claimed.",
       "verifiedDate": "2026-10-07",
       "nextReview": "2026-10-14",
       "evidence": [
@@ -425,7 +425,7 @@
         ],
         "verifiedDate": "2026-10-07",
         "nextReview": "2026-10-14",
-        "liveSignal": "Before publication, connect the existing correction/owner-update entry; no user reviews or owner verification are claimed."
+        "liveSignal": "Publication blocker: a real correction and owner-update entry must be connected and pass presentation acceptance before publication. This candidate does not establish that the entry is implemented; no user reviews or owner verification are claimed."
       }
     },
     "cn": {
@@ -457,7 +457,7 @@
           "reason": "主要需要综合已选资料，而非系统筛选和提取表时，可比较其资料综合路径。"
         }
       ],
-      "liveSignal": "公开前接入既有纠错和 owner 更新入口；不宣称已有用户评论或 owner 核验。",
+      "liveSignal": "发布阻塞项：公开前必须连接真实的纠错／owner 更新入口，并通过展示验收。本候选未证明入口已实现；不宣称已有用户评论或 owner 核验。",
       "verifiedDate": "2026-10-07",
       "nextReview": "2026-10-14",
       "evidence": [
@@ -513,7 +513,7 @@
         ],
         "verifiedDate": "2026-10-07",
         "nextReview": "2026-10-14",
-        "liveSignal": "公开前接入既有纠错和 owner 更新入口；不宣称已有用户评论或 owner 核验。"
+        "liveSignal": "发布阻塞项：公开前必须连接真实的纠错／owner 更新入口，并通过展示验收。本候选未证明入口已实现；不宣称已有用户评论或 owner 核验。"
       }
     },
     "tw": {
@@ -545,7 +545,7 @@
           "reason": "主要需要綜合已選資料，而非系統篩選與擷取表時，可比較其資料綜合方式。"
         }
       ],
-      "liveSignal": "公開前接上既有的更正與 owner 更新入口；不宣稱已有使用者評論或 owner 查核。",
+      "liveSignal": "發布阻塞項：公開前必須連接真實的更正／owner 更新入口，並通過展示驗收。本候選未證實入口已實作；不宣稱已有使用者評論或 owner 查核。",
       "verifiedDate": "2026-10-07",
       "nextReview": "2026-10-14",
       "evidence": [
@@ -601,7 +601,7 @@
         ],
         "verifiedDate": "2026-10-07",
         "nextReview": "2026-10-14",
-        "liveSignal": "公開前接上既有的更正與 owner 更新入口；不宣稱已有使用者評論或 owner 查核。"
+        "liveSignal": "發布阻塞項：公開前必須連接真實的更正／owner 更新入口，並通過展示驗收。本候選未證實入口已實作；不宣稱已有使用者評論或 owner 查核。"
       }
     }
   },
@@ -639,6 +639,7 @@
   ],
   "releaseExit": [
     "Resolve media rights and attach authorized real assets plus localized captions.",
+    "Publication blocker: connect a real correction/owner-update entry and pass presentation acceptance; implementation is not established by this candidate.",
     "Independent EN/CN/TW editorial QA including Research Agent migration and claim-source mapping.",
     "Re-run Neon/Supabase identity, aliases and canonical/intent checks on release day.",
     "Re-read volatile price/usage/privacy sources; either resolve account-specific figures or keep explicit bounded omission.",

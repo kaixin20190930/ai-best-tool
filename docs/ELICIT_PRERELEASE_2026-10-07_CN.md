@@ -116,3 +116,7 @@ Task/Capability/Constraint/Evidence 均为研究假设。优先补研究综述�
 - 生产只读查重、三语 canonical/noindex 与 sitemap 快照写入候选包；全站 `seo:production-smoke` PASS（126 URLs）。
 - 链接：16 个官方来源与 2 个独立来源通过 web 直接读取，来源 URL 语法及 16 个本地文档链接检查 PASS。
 - 本轮只改候选/审计/必要只读验证与测试文件；不改运行时，不需完整 build。无 push、部署、生产写入或公开批准。
+
+独立 QA 收口：`QA_PASS_HOLD_WITH_EXACT_GAPS` 允许合并 HOLD 研究包，不代表公开批准。英文不适用场景已明确为需要有清楚依
+据、覆盖所有套餐的不训练保证的团队。`liveSignal` 明确列为发布阻塞项：公开前必须连接真实纠错／owner 更新入口，并通过展示
+验收；本候选未证明入口已实现。八项门禁结论、证据日期、来源与候选顺位保持不变。
