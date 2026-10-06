@@ -136,6 +136,16 @@
         "scope": "Neon tools 全量 69 行 name/title/url 产品/域名审阅；不是跨库发布 preflight",
         "matches": [],
         "releaseDayRecheckRequired": true
+      },
+      "prereleaseReview": {
+        "unit": "ELICIT-PRERELEASE-01",
+        "verifiedDate": "2026-10-07",
+        "package": "data/collection/elicit-prerelease-2026-10-07.json",
+        "audit": "docs/ELICIT_PRERELEASE_2026-10-07_CN.md",
+        "verdict": "HOLD_EVIDENCE",
+        "content": "EN/CN/TW complete draft; independent QA pending",
+        "blockingGap": "Official logo/preview reuse permission and localized presentation unverified",
+        "nextReview": "2026-10-14"
       }
     },
     {

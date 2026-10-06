@@ -1,0 +1,731 @@
+{
+  "unit": "ELICIT-PRERELEASE-01",
+  "schemaPurpose": "editorial_candidate_only_not_release_pipeline_input",
+  "candidate": "Elicit",
+  "slug": "elicit",
+  "verifiedDate": "2026-10-07",
+  "nextReview": "2026-10-14",
+  "reviewer": "Codex research/editorial review; independent QA pending",
+  "baselineCommit": "3d660e6d951873d4a2168aca3a2be1dee3a4e060",
+  "baselineFiles": [
+    "data/collection/mature-candidate-buffer-2026-10-06.json",
+    "docs/OPS_RESET_CANDIDATE_BUFFER_2026-10-06_CN.md",
+    "docs/BEST_DIRECTORY_POSITIONING_AND_INTAKE_CN.md",
+    "docs/TOOL_INDEX_RELEASE_POLICY_CN.md"
+  ],
+  "verdict": "HOLD_EVIDENCE",
+  "publicReleaseApproved": false,
+  "indexReleaseApproved": false,
+  "relationshipCreationApproved": false,
+  "productionWrites": 0,
+  "executableReleasePackageCreated": false,
+  "canonical": {
+    "official": "https://elicit.com/",
+    "proposed": ["/ai/elicit", "/cn/ai/elicit", "/tw/ai/elicit"],
+    "intent": "Single product decision detail; research guide/comparison keeps task-selection intent. Research Agent and legacy tools are modules, not extra product slugs."
+  },
+  "evidence": [
+    {
+      "id": "home",
+      "url": "https://elicit.com/",
+      "scope": "Product and browser account entry",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "pricing",
+      "url": "https://elicit.com/pricing",
+      "scope": "Free tier and multiple price variants; not a checkout quote",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "workflow",
+      "url": "https://support.elicit.com/en/articles/14759154-systematic-reviews-in-elicit",
+      "scope": "Dedicated review workflow and per-review/report boundaries",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "usage",
+      "url": "https://support.elicit.com/en/articles/15646622-usage-limits-in-elicit",
+      "scope": "Shared monthly pool, complexity and optional extra usage",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "export",
+      "url": "https://support.elicit.com/en/articles/14758189-export-your-data-from-elicit",
+      "scope": "Plan-specific exports and legacy sessions",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "migration",
+      "url": "https://support.elicit.com/en/articles/17220397-where-did-find-papers-extract-data-and-chat-with-papers-go",
+      "scope": "2026-09-30 Research Agent migration",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "limitations",
+      "url": "https://support.elicit.com/en/articles/14757928-elicit-s-limitations",
+      "scope": "Human review and study quality limits",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "language",
+      "url": "https://support.elicit.com/en/articles/14758084-languages-other-than-english",
+      "scope": "English optimization; non-English quality and usage",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "corpus",
+      "url": "https://support.elicit.com/en/articles/14758040-elicit-s-source-for-papers",
+      "scope": "Corpus and full-text access are distinct",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "uploadPrivacy",
+      "url": "https://support.elicit.com/en/articles/14758043-privacy-for-uploaded-papers",
+      "scope": "Uploaded PDFs private until deletion; not a training promise",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "privacy",
+      "url": "https://elicit.com/operations/privacy",
+      "scope": "Retention, US servers, backups and legal exceptions",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "api",
+      "url": "https://elicit.com/operations/api-terms",
+      "scope": "API eligibility, personal-data prohibition, training opt-in and third-party rights",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "terms",
+      "url": "https://elicit.com/operations/terms",
+      "scope": "Reserved platform image/design rights",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "authorizedTerms",
+      "url": "https://elicit.com/operations/authorized-user-terms",
+      "scope": "Enterprise authorized users; not all consumer plans",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "policies",
+      "url": "https://elicit.com/operations/policies",
+      "scope": "Official policy discovery",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "extension",
+      "url": "https://support.elicit.com/en/articles/14759113-elicit-browser-extension",
+      "scope": "Chrome/Edge; dedicated reviews on Pro and above",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    }
+  ],
+  "independentEvidence": [
+    {
+      "url": "https://www.cambridge.org/core/journals/research-synthesis-methods/article/using-elicit-ai-research-assistant-for-data-extraction-in-systematic-reviews-a-feasibility-study-across-environmental-and-life-sciences/C97DAEC70C3173A260F0B12E729E7250",
+      "status": "direct_read",
+      "strength": "strong",
+      "observation": "Independent seven-review extraction experiment with human comparison. Methods §2 and §2.4 distinguish the 2024 plan snapshot and 2025 retest from 2026 publication. Historical use only; no present-day accuracy or adoption-scale guarantee.",
+      "checkedAt": "2026-10-07",
+      "id": "cambridge",
+      "publicationDate": "2026-05-29",
+      "researchDate": {
+        "planSnapshot": "2024-09-30",
+        "highAccuracyRetest": "2025-06-26",
+        "initialExtractionDates": "not precisely established from article body",
+        "underlyingReviewPublicationYears": [2019, 2020, 2024]
+      }
+    },
+    {
+      "url": "https://shura.shu.ac.uk/34504/1/Wolstenholme_2024_Student_experiences_of_using_Elicit.pdf",
+      "status": "direct_read",
+      "strength": "strong",
+      "observation": "Sheffield Hallam exploratory study: six participants asked to try Elicit for an assignment literature review; paid for research participation. Actual historical use, not institutional procurement or current active-user scale; small self-selected sample.",
+      "checkedAt": "2026-10-07",
+      "id": "sheffield",
+      "publicationDate": "2024 (repository filename; exact publication day unverified)",
+      "researchDate": {
+        "project": "2023-10 to 2024-08",
+        "focusGroup": "2024-03",
+        "interview": "2024-04"
+      }
+    }
+  ],
+  "gates": [
+    {
+      "id": "identity",
+      "name": "对象明确",
+      "status": "PASS",
+      "reason": "Elicit research application at elicit.com; modules are not separate entities."
+    },
+    {
+      "id": "aiValue",
+      "name": "AI 价值明确",
+      "status": "PASS",
+      "reason": "Research Agent and dedicated review screening/extraction with source inspection."
+    },
+    {
+      "id": "availability",
+      "name": "实际可用",
+      "status": "PASS",
+      "reason": "Public account entry, free Basic and paid workflow eligibility documented; no signed-in trial, regional universal availability or paid checkout claimed."
+    },
+    {
+      "id": "officialEvidence",
+      "name": "官方证据完整",
+      "status": "PASS",
+      "reason": "Complementary current official pages; unverified price variants and general workspace training explicitly excluded from affirmative claims."
+    },
+    {
+      "id": "market",
+      "name": "独立市场依据",
+      "status": "PASS",
+      "reason": "Two separate independent historical use studies, with publication/research dates separated."
+    },
+    {
+      "id": "decisionValue",
+      "name": "决策价值",
+      "status": "PASS",
+      "reason": "Review protocol, full-text rights, export tiers, English quality and human verification determine fit."
+    },
+    {
+      "id": "content",
+      "name": "内容真实完整",
+      "status": "HOLD",
+      "reason": "EN/CN/TW draft complete; reusable official logo/preview and independent content QA missing."
+    },
+    {
+      "id": "duplicateMaintenance",
+      "name": "不重复且可维护",
+      "status": "PASS",
+      "reason": "No Neon identity or Supabase profile matches in stated scope, no repository alias; existing guide/category links point to same product intent. Three locale routes 200/noindex/self-canonical, sitemap excludes Elicit. Recheck at actual release."
+    }
+  ],
+  "facts": {
+    "workflow": {
+      "value": "New discovery, extraction and paper chat now use Research Agent. Dedicated systematic reviews remain Pro/Scale/Enterprise: gather, optional screening, extraction, report; full-text screening depends on abstract screening.",
+      "evidence": ["migration", "workflow"]
+    },
+    "quota": {
+      "value": "Monthly usage is shared, not fixed review counts. Review input ceilings Pro/Scale/Enterprise: 5000/20000/40000; default final report 80 papers, plan maxima 135/200/200. Input ceiling is not monthly entitlement. Thorough screening, figure extraction and premium PDF parsing cost more usage.",
+      "evidence": ["workflow", "usage"]
+    },
+    "price": {
+      "value": "Basic free. Public DOM exposes Plus $11/user/month billed $132/year; Pro $39 billed $468/year and $49 billed $588/year; Scale $89 billed $1068/year and $169 billed $2028/year. Audience/checkout selection not resolved. Monthly checkout amount and exact monthly usage quantity unknown. No numeric paid price in public draft. Enterprise quote.",
+      "numericPublicationAllowed": false,
+      "evidence": ["pricing"]
+    },
+    "extraUsage": {
+      "value": "Pro/Scale opt-in extra usage with monthly spending cap; $100 charging increments and residual billed at cycle end. Not a per-review quote.",
+      "evidence": ["usage"]
+    },
+    "exports": {
+      "value": "Reports PDF/Word across plans; Research Agent tables Plus+; dedicated review tables Pro+. CSV/Excel and selected reference tables RIS/BIB; citation formats do not validate claims.",
+      "evidence": ["export"]
+    },
+    "legacy": {
+      "value": "Standalone Find Papers/Extract Data/Chat with Papers removed 2026-09-30. Legacy sessions view/export only, removal date in 2027 not yet fixed; migrate one at a time or export.",
+      "evidence": ["migration", "export"]
+    },
+    "privacy": {
+      "value": "Uploaded PDFs encrypted, account-private and outside public corpus until user deletion. General privacy policy retains personal data as needed, allows legal exceptions and backup isolation; no deletion SLA. Ordinary Basic/Plus/Pro/Scale training policy unknown. Enterprise no-training claim and API opt-in training rule must not be generalized.",
+      "evidence": ["uploadPrivacy", "privacy", "pricing", "api", "authorizedTerms"]
+    },
+    "platform": {
+      "value": "Browser-based account workflow. Chrome/Edge full-text extension only for dedicated reviews Pro+ and depends on user institutional sessions/rights. Native Windows/macOS/iOS/Android apps, offline use and exhaustive country support not verified; do not label supported.",
+      "evidence": ["home", "extension", "terms"]
+    },
+    "language": {
+      "value": "English-first; non-English results vary and consume usage faster; not intended for translation. Localized directory copy is not a promise of localized product UI.",
+      "evidence": ["language"]
+    },
+    "citations": {
+      "value": "Source quotes aid checking but may miss context or misread numbers; study-quality appraisal and final inclusion/extraction verification remain human responsibilities. No accuracy or time-saving percentage published.",
+      "evidence": ["limitations", "workflow"]
+    }
+  },
+  "media": {
+    "status": "HOLD",
+    "logo": null,
+    "preview": null,
+    "downloaded": false,
+    "reused": false,
+    "excludedLocalPlaceholders": ["public/icons/tool-logos/elicit.svg", "public/images/tool-media/elicit-cover.svg"],
+    "rightsEvidence": ["terms", "authorizedTerms", "api"],
+    "searchScope": "Official product/help/policies, site:elicit.com brand/logo/media-kit search. No verified public grant found in reviewed sources; this is not proof none exists. Excluded similarly named elicittechnology.com and elicit-plant.com.",
+    "required": [
+      "Official asset source URL and rights holder",
+      "Explicit scope for directory hosting or embedding, cropping/localization, attribution",
+      "Real current Research Agent/review screenshot or approved official preview",
+      "Independent review of all three localized captions and presentation"
+    ],
+    "nextAction": "Obtain official media grant or owner-supplied permission record; no outbound request sent."
+  },
+  "mappingHypotheses": {
+    "status": "research_hypotheses_only",
+    "primaryTask": "research-with-citations",
+    "role": "Gap-filler",
+    "category": "Research / literature review (existing category mapping to verify at release)",
+    "capabilities": [
+      {
+        "name": "research-discovery",
+        "evidence": ["home", "migration"]
+      },
+      {
+        "name": "protocol-screening-and-structured-extraction",
+        "evidence": ["workflow"]
+      },
+      {
+        "name": "citation-traceability",
+        "evidence": ["workflow", "export"]
+      }
+    ],
+    "constraints": [
+      {
+        "name": "human-verification",
+        "evidence": ["limitations"]
+      },
+      {
+        "name": "plan-and-usage",
+        "evidence": ["pricing", "usage"]
+      },
+      {
+        "name": "full-text-rights",
+        "evidence": ["extension"]
+      },
+      {
+        "name": "english-first",
+        "evidence": ["language"]
+      },
+      {
+        "name": "workspace-training-unknown",
+        "evidence": ["privacy", "pricing", "api"]
+      }
+    ],
+    "relationshipRows": [],
+    "consumer": "Tool Intelligence after tool admission; Task Page/Structured Comparison only after separate relationship evidence gates."
+  },
+  "content": {
+    "en": {
+      "summary": "Elicit helps researchers find papers, screen studies and build extraction tables that they can check against the original text.",
+      "detail": "Use Research Agent for new paper searches, extraction tables and questions about selected papers. Dedicated Systematic Reviews on Pro, Scale or Enterprise guide a defined question through gathering, screening, extraction and reporting. Source passages support checking each result; the final report covers a plan-limited subset of studies. This is an editorial review of public documentation and independent historical use, not a hands-on accuracy test.",
+      "bestFor": [
+        "Researchers with a defined review protocol who can verify extracted values against full text.",
+        "Teams comparing studies in structured tables and budgeting for paid review and export features."
+      ],
+      "notIdealFor": [
+        "Projects expecting exhaustive literature coverage or reliable non-English results from one tool.",
+        "Teams needing automatic study-quality judgments or an unverified all-plan no-training guarantee."
+      ],
+      "limitations": [
+        "Check numbers, context, screening decisions and citations manually; supplement searches with relevant databases.",
+        "Full-text work requires accessible or lawfully supplied papers. Figure extraction needs Scale/Enterprise plus premium parsing.",
+        "Legacy standalone sessions are read/export-only after 30 September 2026; export or migrate before their as-yet-unscheduled 2027 removal."
+      ],
+      "pricingBoundary": "Basic is free with limited Agent/Report usage. Dedicated reviews require Pro or above; Agent table export starts at Plus and review table export at Pro. Included monthly usage is shared and varies with task complexity. Paid price and exact allowance depend on the current account/billing view, which was not resolved here; verify checkout. Pro/Scale extra usage is optional and separately billed.",
+      "privacyBoundary": "Uploaded PDFs are described as encrypted, private and outside the public corpus. This does not establish a general no-training promise or deletion deadline for ordinary plans. API rules prohibit personal data and limit training of input to separate opt-in; Enterprise terms are separate.",
+      "platforms": "Web account; Chrome and Edge full-text extensions for eligible review plans. Native apps, offline operation and universal regional access are unverified.",
+      "compareNext": [
+        {
+          "target": "Consensus",
+          "reason": "Compare a paper discovery and cited-answer workflow when you mainly need to locate and read research; no superiority claim."
+        },
+        {
+          "target": "Gemini Notebook",
+          "reason": "Compare synthesis of selected sources when systematic screening and extraction tables are not the main task."
+        }
+      ],
+      "liveSignal": "Before publication, connect the existing correction/owner-update entry; no user reviews or owner verification are claimed.",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14",
+      "evidence": [
+        "home",
+        "migration",
+        "workflow",
+        "pricing",
+        "usage",
+        "export",
+        "limitations",
+        "language",
+        "uploadPrivacy",
+        "privacy",
+        "api",
+        "extension"
+      ],
+      "decisionCard": {
+        "taskPositioning": "Elicit helps researchers find papers, screen studies and build extraction tables that they can check against the original text.",
+        "bestFor": [
+          "Researchers with a defined review protocol who can verify extracted values against full text.",
+          "Teams comparing studies in structured tables and budgeting for paid review and export features."
+        ],
+        "watchOuts": [
+          "Check numbers, context, screening decisions and citations manually; supplement searches with relevant databases.",
+          "Full-text work requires accessible or lawfully supplied papers. Figure extraction needs Scale/Enterprise plus premium parsing.",
+          "Legacy standalone sessions are read/export-only after 30 September 2026; export or migrate before their as-yet-unscheduled 2027 removal.",
+          "Basic is free with limited Agent/Report usage. Dedicated reviews require Pro or above; Agent table export starts at Plus and review table export at Pro. Included monthly usage is shared and varies with task complexity. Paid price and exact allowance depend on the current account/billing view, which was not resolved here; verify checkout. Pro/Scale extra usage is optional and separately billed.",
+          "Uploaded PDFs are described as encrypted, private and outside the public corpus. This does not establish a general no-training promise or deletion deadline for ordinary plans. API rules prohibit personal data and limit training of input to separate opt-in; Enterprise terms are separate."
+        ],
+        "compareNext": [
+          {
+            "target": "Consensus",
+            "reason": "Compare a paper discovery and cited-answer workflow when you mainly need to locate and read research; no superiority claim."
+          },
+          {
+            "target": "Gemini Notebook",
+            "reason": "Compare synthesis of selected sources when systematic screening and extraction tables are not the main task."
+          }
+        ],
+        "evidence": [
+          "home",
+          "migration",
+          "workflow",
+          "pricing",
+          "usage",
+          "export",
+          "limitations",
+          "language",
+          "uploadPrivacy",
+          "privacy",
+          "api",
+          "extension"
+        ],
+        "verifiedDate": "2026-10-07",
+        "nextReview": "2026-10-14",
+        "liveSignal": "Before publication, connect the existing correction/owner-update entry; no user reviews or owner verification are claimed."
+      }
+    },
+    "cn": {
+      "summary": "Elicit 帮助研究者寻找论文、筛选研究并建立提取表，再对照原文逐项核查。",
+      "detail": "新论文检索、数据提取和论文问答通过 Research Agent 开展。Pro、Scale 或 Enterprise 的专用系统综述流程围绕明确问题收集、筛选、提取并生成报告。来源片段便于复核，但最终报告只覆盖套餐允许的一部分研究。本稿依据公开官方文档和独立历史使用研究，未进行账号内准确性实测。",
+      "bestFor": [
+        "已有明确综述方案，能够取得全文并逐项核对提取值的研究者。",
+        "需要用结构化表格比较研究，且能为专用综述和表格导出安排预算的团队。"
+      ],
+      "notIdealFor": [
+        "期待一个工具穷尽文献，或保证非英语检索与提取质量的项目。",
+        "希望自动判断研究质量，或要求所有套餐均有已证不训练承诺的团队。"
+      ],
+      "limitations": [
+        "数字、语境、筛选决定及引用仍需人工核对，并按研究问题补查专业数据库。",
+        "全文处理依赖合法访问或上传；图形提取需要 Scale/Enterprise 及高级 PDF 解析。",
+        "2026 年 9 月 30 日前的独立工具会话现仅可查看和导出；应在尚未确定日期的 2027 年移除前导出或逐一迁移。"
+      ],
+      "pricingBoundary": "Basic 免费，Agent/报告用量有限。专用综述需 Pro 起；Agent 表格导出需 Plus 起，综述表格导出需 Pro 起。月度用量池共享，消耗取决于任务复杂度。本轮未消歧目标账号和账期对应的价格及精确额度，采购时须核对结算页；Pro/Scale 可选额外付费用量。",
+      "privacyBoundary": "官方称上传 PDF 加密、仅账户可见且不进入公共语料；这不构成普通套餐统一不训练或限时彻底删除的承诺。API 禁止个人数据，输入训练须单独选择同意；Enterprise 条款另有范围。",
+      "platforms": "网页账号；符合综述套餐资格时可用 Chrome/Edge 全文扩展。原生客户端、离线使用及全球地区可用性未经证实。",
+      "compareNext": [
+        {
+          "target": "Consensus",
+          "reason": "主要需要发现论文并阅读带来源答案时，可比较该类流程，不作优劣排名。"
+        },
+        {
+          "target": "Gemini Notebook",
+          "reason": "主要需要综合已选资料，而非系统筛选和提取表时，可比较其资料综合路径。"
+        }
+      ],
+      "liveSignal": "公开前接入既有纠错和 owner 更新入口；不宣称已有用户评论或 owner 核验。",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14",
+      "evidence": [
+        "home",
+        "migration",
+        "workflow",
+        "pricing",
+        "usage",
+        "export",
+        "limitations",
+        "language",
+        "uploadPrivacy",
+        "privacy",
+        "api",
+        "extension"
+      ],
+      "decisionCard": {
+        "taskPositioning": "Elicit 帮助研究者寻找论文、筛选研究并建立提取表，再对照原文逐项核查。",
+        "bestFor": [
+          "已有明确综述方案，能够取得全文并逐项核对提取值的研究者。",
+          "需要用结构化表格比较研究，且能为专用综述和表格导出安排预算的团队。"
+        ],
+        "watchOuts": [
+          "数字、语境、筛选决定及引用仍需人工核对，并按研究问题补查专业数据库。",
+          "全文处理依赖合法访问或上传；图形提取需要 Scale/Enterprise 及高级 PDF 解析。",
+          "2026 年 9 月 30 日前的独立工具会话现仅可查看和导出；应在尚未确定日期的 2027 年移除前导出或逐一迁移。",
+          "Basic 免费，Agent/报告用量有限。专用综述需 Pro 起；Agent 表格导出需 Plus 起，综述表格导出需 Pro 起。月度用量池共享，消耗取决于任务复杂度。本轮未消歧目标账号和账期对应的价格及精确额度，采购时须核对结算页；Pro/Scale 可选额外付费用量。",
+          "官方称上传 PDF 加密、仅账户可见且不进入公共语料；这不构成普通套餐统一不训练或限时彻底删除的承诺。API 禁止个人数据，输入训练须单独选择同意；Enterprise 条款另有范围。"
+        ],
+        "compareNext": [
+          {
+            "target": "Consensus",
+            "reason": "主要需要发现论文并阅读带来源答案时，可比较该类流程，不作优劣排名。"
+          },
+          {
+            "target": "Gemini Notebook",
+            "reason": "主要需要综合已选资料，而非系统筛选和提取表时，可比较其资料综合路径。"
+          }
+        ],
+        "evidence": [
+          "home",
+          "migration",
+          "workflow",
+          "pricing",
+          "usage",
+          "export",
+          "limitations",
+          "language",
+          "uploadPrivacy",
+          "privacy",
+          "api",
+          "extension"
+        ],
+        "verifiedDate": "2026-10-07",
+        "nextReview": "2026-10-14",
+        "liveSignal": "公开前接入既有纠错和 owner 更新入口；不宣称已有用户评论或 owner 核验。"
+      }
+    },
+    "tw": {
+      "summary": "Elicit 協助研究者尋找論文、篩選研究並建立擷取表，再對照原文逐項查核。",
+      "detail": "新的論文搜尋、資料擷取與論文問答透過 Research Agent 進行。Pro、Scale 或 Enterprise 的專用系統綜述流程圍繞明確問題收集、篩選、擷取並產生報告。來源片段便於查核，但最終報告僅涵蓋方案允許的部分研究。本稿依據公開官方文件及獨立歷史使用研究，未進行帳號內準確性實測。",
+      "bestFor": [
+        "已有明確綜述方案，能取得全文並逐項查核擷取值的研究者。",
+        "需要以結構化表格比較研究，且能為專用綜述與表格匯出安排預算的團隊。"
+      ],
+      "notIdealFor": [
+        "期待單一工具完整涵蓋文獻，或保證非英語搜尋與擷取品質的專案。",
+        "希望自動判斷研究品質，或要求所有方案均有已證實不訓練承諾的團隊。"
+      ],
+      "limitations": [
+        "數字、語境、篩選決策及引文仍須人工核對，並依研究問題補查專業資料庫。",
+        "全文處理取決於合法存取或上傳；圖像擷取須使用 Scale/Enterprise 並啟用進階 PDF 解析。",
+        "2026 年 9 月 30 日前的獨立工具工作階段現僅供檢視及匯出；應在尚未確定日期的 2027 年移除前匯出或逐一遷移。"
+      ],
+      "pricingBoundary": "Basic 免費，Agent／報告用量有限。專用綜述須 Pro 起；Agent 表格匯出須 Plus 起，綜述表格匯出須 Pro 起。每月用量共用，消耗依任務複雜度而異。本次未確認目標帳號與帳期所對應的價格及確切額度，採購時須核對結帳頁；Pro/Scale 可選額外付費用量。",
+      "privacyBoundary": "官方說明上傳 PDF 經加密、僅帳戶可見且不納入公開語料；這不等於一般方案均不訓練，或承諾限時完整刪除。API 禁止提交個人資料，輸入訓練須另行選擇同意；Enterprise 條款適用範圍另計。",
+      "platforms": "網頁帳號；符合綜述方案資格時可使用 Chrome/Edge 全文擴充功能。原生應用程式、離線操作及全球地區可用性尚未證實。",
+      "compareNext": [
+        {
+          "target": "Consensus",
+          "reason": "主要需要發現論文並閱讀附來源的回答時，可比較此類流程，不作優劣排名。"
+        },
+        {
+          "target": "Gemini Notebook",
+          "reason": "主要需要綜合已選資料，而非系統篩選與擷取表時，可比較其資料綜合方式。"
+        }
+      ],
+      "liveSignal": "公開前接上既有的更正與 owner 更新入口；不宣稱已有使用者評論或 owner 查核。",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14",
+      "evidence": [
+        "home",
+        "migration",
+        "workflow",
+        "pricing",
+        "usage",
+        "export",
+        "limitations",
+        "language",
+        "uploadPrivacy",
+        "privacy",
+        "api",
+        "extension"
+      ],
+      "decisionCard": {
+        "taskPositioning": "Elicit 協助研究者尋找論文、篩選研究並建立擷取表，再對照原文逐項查核。",
+        "bestFor": [
+          "已有明確綜述方案，能取得全文並逐項查核擷取值的研究者。",
+          "需要以結構化表格比較研究，且能為專用綜述與表格匯出安排預算的團隊。"
+        ],
+        "watchOuts": [
+          "數字、語境、篩選決策及引文仍須人工核對，並依研究問題補查專業資料庫。",
+          "全文處理取決於合法存取或上傳；圖像擷取須使用 Scale/Enterprise 並啟用進階 PDF 解析。",
+          "2026 年 9 月 30 日前的獨立工具工作階段現僅供檢視及匯出；應在尚未確定日期的 2027 年移除前匯出或逐一遷移。",
+          "Basic 免費，Agent／報告用量有限。專用綜述須 Pro 起；Agent 表格匯出須 Plus 起，綜述表格匯出須 Pro 起。每月用量共用，消耗依任務複雜度而異。本次未確認目標帳號與帳期所對應的價格及確切額度，採購時須核對結帳頁；Pro/Scale 可選額外付費用量。",
+          "官方說明上傳 PDF 經加密、僅帳戶可見且不納入公開語料；這不等於一般方案均不訓練，或承諾限時完整刪除。API 禁止提交個人資料，輸入訓練須另行選擇同意；Enterprise 條款適用範圍另計。"
+        ],
+        "compareNext": [
+          {
+            "target": "Consensus",
+            "reason": "主要需要發現論文並閱讀附來源的回答時，可比較此類流程，不作優劣排名。"
+          },
+          {
+            "target": "Gemini Notebook",
+            "reason": "主要需要綜合已選資料，而非系統篩選與擷取表時，可比較其資料綜合方式。"
+          }
+        ],
+        "evidence": [
+          "home",
+          "migration",
+          "workflow",
+          "pricing",
+          "usage",
+          "export",
+          "limitations",
+          "language",
+          "uploadPrivacy",
+          "privacy",
+          "api",
+          "extension"
+        ],
+        "verifiedDate": "2026-10-07",
+        "nextReview": "2026-10-14",
+        "liveSignal": "公開前接上既有的更正與 owner 更新入口；不宣稱已有使用者評論或 owner 查核。"
+      }
+    }
+  },
+  "decisionDimensions": [
+    {
+      "dimension": "Workflow fit",
+      "evidence": ["workflow", "migration"],
+      "judgment": "Structured screening/extraction vs discovery or selected-source synthesis; editorial comparison hypothesis."
+    },
+    {
+      "dimension": "Verification burden",
+      "evidence": ["limitations"],
+      "judgment": "Human checking remains essential; quotes do not validate conclusions."
+    },
+    {
+      "dimension": "Cost and scale",
+      "evidence": ["pricing", "usage"],
+      "judgment": "Shared monthly pool and per-review ceilings differ; no universal price claim."
+    },
+    {
+      "dimension": "Portability",
+      "evidence": ["export", "migration"],
+      "judgment": "Plan-scoped exports; legacy export/migration required."
+    },
+    {
+      "dimension": "Privacy and access",
+      "evidence": ["privacy", "uploadPrivacy", "extension", "api"],
+      "judgment": "Full-text rights, account scope, training and deletion uncertainty."
+    },
+    {
+      "dimension": "Language/platform",
+      "evidence": ["language", "extension"],
+      "judgment": "English-first web; supported extensions do not prove native-app support."
+    }
+  ],
+  "releaseExit": [
+    "Resolve media rights and attach authorized real assets plus localized captions.",
+    "Independent EN/CN/TW editorial QA including Research Agent migration and claim-source mapping.",
+    "Re-run Neon/Supabase identity, aliases and canonical/intent checks on release day.",
+    "Re-read volatile price/usage/privacy sources; either resolve account-specific figures or keep explicit bounded omission.",
+    "Only after all eight gates pass and independent approval: prepare controlled candidate preflight and rollback using existing pipeline; no executable package now."
+  ],
+  "rollbackPreflight": {
+    "status": "NOT_PREPARED_HOLD",
+    "reason": "No production mutation or executable release input exists. No production rollback is needed for this research-only commit.",
+    "futureRequirements": [
+      "Snapshot target rows and identity in read-only preflight",
+      "Confirm permitted publication status monitor/noindex; no index or Task relation approval",
+      "Prepare row-scoped rollback and test dry-run before any separately authorized release"
+    ]
+  },
+  "productionReadback": {
+    "checkedAt": "2026-10-06T23:43:26.350Z",
+    "productionWrites": 0,
+    "transaction": "BEGIN READ ONLY; SELECT; ROLLBACK",
+    "identity": {
+      "matches": [],
+      "counts": [
+        {
+          "status": "draft",
+          "page_quality_status": "monitor",
+          "count": 9
+        },
+        {
+          "status": "published",
+          "page_quality_status": "archive",
+          "count": 2
+        },
+        {
+          "status": "published",
+          "page_quality_status": "continue_index",
+          "count": 17
+        },
+        {
+          "status": "published",
+          "page_quality_status": "monitor",
+          "count": 35
+        },
+        {
+          "status": "rejected",
+          "page_quality_status": "monitor",
+          "count": 6
+        }
+      ]
+    },
+    "profiles": [],
+    "pages": [
+      {
+        "path": "/ai/elicit",
+        "status": 200,
+        "canonical": "https://aibesttool.com/ai/elicit",
+        "robots": "noindex, follow"
+      },
+      {
+        "path": "/cn/ai/elicit",
+        "status": 200,
+        "canonical": "https://aibesttool.com/cn/ai/elicit",
+        "robots": "noindex, follow"
+      },
+      {
+        "path": "/tw/ai/elicit",
+        "status": 200,
+        "canonical": "https://aibesttool.com/tw/ai/elicit",
+        "robots": "noindex, follow"
+      },
+      {
+        "path": "/sitemap.xml",
+        "status": 200,
+        "locCount": 126,
+        "elicitMatches": 0
+      }
+    ],
+    "scope": "Neon tools name/title/url/features/tags elicit/ought.org search; Supabase profile product_name/canonical_domain search; repository aliases and app/lib/components intent scan. Not exhaustive off-repository historical alias discovery.",
+    "repositoryAliasMatches": 0,
+    "intentReferences": [
+      "app/[locale]/(with-footer)/guides/ai-tools-for-research/page.tsx",
+      "app/[locale]/(with-footer)/categories/[slug]/CategoryContent.tsx"
+    ]
+  },
+  "limitationsOfReview": [
+    "Public documentation only; no paid account, checkout, export or accuracy trial.",
+    "Price audience variants unresolved; old study plan prices cannot establish current pricing.",
+    "Ordinary workspace training, backup deletion deadline, native apps and exhaustive region support unverified.",
+    "No media grant identified within reviewed sources; independent editorial QA remains pending.",
+    "Canonical routes are existing unavailable shells, not proof of an already published tool; Neon/profile readback controls identity interpretation."
+  ]
+}
