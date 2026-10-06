@@ -1,6 +1,6 @@
 # Decision Graph 剩余 Task cluster 编辑整改方案
 
-状态：**CL-07 于 2026-09-27 完成 CL-02–06 生产只读汇总收口；仅 CL-02 关系已发布，CL-03–06 均未新增发布，全部 Task Page 仍为 404**。CL-03 内容/身份/timeline 生产修复与回读已完成，Ray3.2 evidence/关系候选获独立 QA_PASS、允许保留；`availability` 直接证据仍缺，关系 HOLD。这是编辑与开发执行计划，不授权后续 cluster 或 Task Page 发布；不设强制发布日期。`meeting-notes` 已在生产完成整改和只读验收，本计划不重复执行该组。[CL-07 汇总审计](./DECISION_GRAPH_CL07_PRODUCTION_CLOSEOUT_2026-09-27_CN.md)为当前只读状态依据。
+状态（2026-10-06 当前）：**CL02-PUBLISH-GATE-REMEDIATION 已 QA_PASS、main@e938d1c6 已部署、迁移已应用，生产验证为预期 HOLD**。只读回读 Gemini 5/10/6、Perplexity 6/10/7，剩余三个 `availability=unknown`，不再是未部署/待迁移问题。CL-02 已发布部分仍仅包含原 Consensus 组，Gemini/Perplexity 未发布；research-with-citations 与其余未批准 Task 保持 404/noindex，meeting-notes 双语页已于 09-30 放行 200/noindex，sitemap 仍 126/0 Task。当前转入[运营重启与候选缓冲](./OPS_RESET_CANDIDATE_BUFFER_2026-10-06_CN.md)，不新增基础设施或授权关系发布。下文 09-27 及更早阶段记录保留为历史，不作为当前全站页面状态；[CL-07 汇总审计](./DECISION_GRAPH_CL07_PRODUCTION_CLOSEOUT_2026-09-27_CN.md)仅代表其当日快照。
 
 ## 1. 目标、边界与现状缺口
 

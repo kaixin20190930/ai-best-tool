@@ -1,0 +1,1055 @@
+{
+  "generatedAt": "2026-10-06",
+  "unit": "OPS-RESET-01-CANDIDATE-BUFFER-AND-TASK-AUDIT",
+  "baselineCommit": "e938d1c61d0ddb8d9ebfcbafdb5768781f300060",
+  "productionBaseline": {
+    "checkedAt": "2026-10-06T06:06:06.408Z",
+    "totalTools": 69,
+    "publishedTools": 54,
+    "publishedQuality": {
+      "continue_index": 17,
+      "monitor": 35,
+      "archive": 2
+    },
+    "draft": 9,
+    "rejected": 6,
+    "sitemapUrls": 126,
+    "taskSitemapUrls": 0,
+    "productionWrites": 0
+  },
+  "scope": "成熟产品研究缓冲；不是已通过市场验证或发布预审的成品池。Role/Capability 是编辑假设，不是生产关系。",
+  "sourceStatusDefinitions": {
+    "direct_read": "本轮工具直接回读页面/PDF；不等于账号内验证",
+    "search_snapshot_only": "搜索快照可见，未完成直接全文核验；不得视为准入通过",
+    "unconfirmed_lead": "线索/发现入口，未确认；不计证据数量",
+    "fetch_failed": "本轮读取失败；HOLD",
+    "insufficient_body": "读取正文不足；HOLD",
+    "redirect_shell": "仅重定向及应用壳；HOLD"
+  },
+  "policy": {
+    "source": "docs/BEST_DIRECTORY_POSITIONING_AND_INTAKE_CN.md",
+    "publicReleaseApproved": false,
+    "indexReleaseApproved": false,
+    "targetSize": "14-21",
+    "productionWrites": 0
+  },
+  "topFive": ["elicit", "murf", "pika", "canva", "bolt"],
+  "nextReleaseCandidate": {
+    "slug": "elicit",
+    "status": "HOLD_EVIDENCE",
+    "meaning": "唯一下一发布候选；完成素材/内容等门禁后才进入独立发布预审，本单元不发布"
+  },
+  "counts": {
+    "candidates": 15,
+    "HOLD_EVIDENCE": 15,
+    "readyForRelease": 0,
+    "marketGatePass": 3,
+    "primaryClusters": {
+      "research-with-citations": 3,
+      "ai-voiceover": 2,
+      "product-image-to-short-video": 3,
+      "brand-constrained-marketing-content": 3,
+      "build-app-with-ai": 3,
+      "meeting-notes": 1
+    }
+  },
+  "excludedFromNewIntake": [
+    {
+      "product": "Lovable / Replit",
+      "reason": "本轮 Neon 已存在 published/monitor 实体，转既有工具证据维护，不计新增。"
+    },
+    {
+      "product": "Copy.ai",
+      "reason": "现行 GTM 工作流 primary 未注册，不能为填品牌 Task 强行映射；保留旧审计，不进本期池。"
+    },
+    {
+      "product": "Resemble AI",
+      "reason": "本轮主页/定价侧重 deepfake detection，语音生成当前范围需重新消歧，不凭历史品牌强塞配音池。"
+    },
+    {
+      "product": "Grammarly / Jasper / Descript / ElevenLabs",
+      "reason": "既有实体，作为比较基线，不能当新增候选重复计数。"
+    }
+  ],
+  "candidates": [
+    {
+      "rank": 1,
+      "slug": "elicit",
+      "product": "Elicit",
+      "vendor": "Elicit",
+      "identity": "elicit.com 的研究应用；非模型、非通用聊天工具",
+      "proposedCanonical": "/ai/elicit",
+      "primaryTaskCluster": "research-with-citations",
+      "roles": ["Gap-filler"],
+      "whyNow": "在 Consensus 发现论文、Gemini Notebook 选定资料综合、Perplexity 网页搜索之外，补筛选与结构化提取流程。",
+      "capabilityHypothesis": "文献筛选、提取表、逐项引文回查",
+      "constraint": "真实素材复用依据及 EN/CN/TW 完成稿仍未通过；继承 09-30 HOLD",
+      "marketMaturity": "成熟研究应用；2024/2025 两项独立实际使用研究，本轮重新读取；不外推当前付费规模。",
+      "officialSources": [
+        {
+          "url": "https://elicit.com/pricing",
+          "status": "direct_read",
+          "scope": "Basic/付费综述与提取边界；页面多组价格不固化",
+          "checkedAt": "2026-10-06"
+        },
+        {
+          "url": "https://support.elicit.com/en/articles/14757928-elicit-s-limitations",
+          "status": "direct_read",
+          "scope": "提取误差、语境与人工核验",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "independentSignals": [
+        {
+          "url": "https://www.cambridge.org/core/journals/research-synthesis-methods/article/using-elicit-ai-research-assistant-for-data-extraction-in-systematic-reviews-a-feasibility-study-across-environmental-and-life-sciences/C97DAEC70C3173A260F0B12E729E7250",
+          "status": "direct_read",
+          "strength": "strong",
+          "observation": "研究团队实际使用 Elicit 提取并与人工结果比较；不是工具广告。",
+          "checkedAt": "2026-10-06"
+        },
+        {
+          "url": "https://shura.shu.ac.uk/34504/1/Wolstenholme_2024_Student_experiences_of_using_Elicit.pdf",
+          "status": "direct_read",
+          "strength": "strong",
+          "observation": "独立学生研究记录 Elicit 文献综述使用经验；不作为引文准确性保证。",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "marketGate": "PASS",
+      "keyFactGaps": [
+        "真实素材复用依据及 EN/CN/TW 完成稿仍未通过；继承 09-30 HOLD",
+        "精确金额和配额多组展示；必须按目标套餐/账期复核，可省略未消歧数字",
+        "普通工作区训练/留存范围未知，不继承 Enterprise 或 API 保证"
+      ],
+      "duplicateIntent": "Neon 本轮无匹配；沿用 /ai/elicit；研究 Guide 比较意图与产品详情分离；不得新建同义 URL。",
+      "mediaAvailability": "官方帮助含真实界面；现有 elicit.svg/cover 是占位，不能当官方素材；授权/署名及最终稿 HOLD。",
+      "indexTrack": "HOLD/draft → 全部准入通过且独立批准后 monitor/noindex → 另案索引评审；当前无索引批准",
+      "verdict": "HOLD_EVIDENCE",
+      "releaseExit": "完成逐项缺口、八项准入、三语言内容与真实素材审核，发布日重查实体/alias/意图；独立 QA 后再审批",
+      "publicReleaseApproved": false,
+      "indexReleaseApproved": false,
+      "relationshipCreationApproved": false,
+      "consumer": "Tool Intelligence；Task Page / Structured Comparison 仅在关系门禁另行通过后消费",
+      "nextReview": "下一正常运营日；超过 7 个运营日未处理则重读官方波动字段",
+      "productionIdentityCheck": {
+        "checkedAt": "2026-10-06T06:06:06.408Z",
+        "scope": "Neon tools 全量 69 行 name/title/url 产品/域名审阅；不是跨库发布 preflight",
+        "matches": [],
+        "releaseDayRecheckRequired": true
+      }
+    },
+    {
+      "rank": 2,
+      "slug": "murf",
+      "product": "Murf Studio",
+      "vendor": "Murf",
+      "identity": "murf.ai 的 Studio 配音工作区；Murf API/Agent 不另算本条",
+      "proposedCanonical": "/ai/murf",
+      "primaryTaskCluster": "ai-voiceover",
+      "roles": ["Alternative"],
+      "whyNow": "补 ElevenLabs 语音生成与 Descript 编辑之外的课程旁白项目/同步工作流。",
+      "capabilityHypothesis": "脚本转旁白、分段修订、与视频同步",
+      "constraint": "Studio 商用、下载/广播权利和项目/席位权益须直接官方复核",
+      "marketMaturity": "有跨年课程配音使用线索；一项直接使用讨论已读，第二独立信号未直接回读，市场门槛 HOLD。",
+      "officialSources": [
+        {
+          "url": "https://murf.ai/",
+          "status": "direct_read",
+          "scope": "Studio 与 API/Agent 区分",
+          "checkedAt": "2026-10-06"
+        },
+        {
+          "url": "https://help.murf.ai/do-i-have-commercial-rights-over-the-voice-over-created",
+          "status": "direct_read",
+          "scope": "官方说明付费 Studio 商用，广播权利限定 Enterprise；不将该页面扩成全部权益保证",
+          "checkedAt": "2026-10-06"
+        },
+        {
+          "url": "https://murf.ai/pricing",
+          "status": "insufficient_body",
+          "scope": "定价正文抓取不足，不能确认价格",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "independentSignals": [
+        {
+          "url": "https://www.reddit.com/r/instructionaldesign/comments/1fonqvp/murf_is_not_being_truthful_about_their_pricing/",
+          "status": "direct_read",
+          "strength": "strong_candidate",
+          "observation": "作者描述企业课程项目续费与项目数摩擦；匿名经历仅证明使用线索，不证明现价。",
+          "checkedAt": "2026-10-06"
+        },
+        {
+          "url": "https://www.reddit.com/r/NewTubers/comments/1029lkt",
+          "status": "fetch_failed",
+          "strength": "unconfirmed",
+          "observation": "搜索显示使用 Murf 制作视频的自述；直接读取失败，不计第二项通过。",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "marketGate": "HOLD",
+      "keyFactGaps": [
+        "Studio 商用、下载/广播权利和项目/席位权益须直接官方复核",
+        "目标语言发音、时长、导出与项目额度待验证；不承诺自然度",
+        "补第二独立采用与本地化稿"
+      ],
+      "duplicateIntent": "Neon 无匹配；仅一个 /ai/murf；API 不新建平行详情。",
+      "mediaAvailability": "首页存在第一方展示，本站可复用 logo/界面文件与权利依据未核；HOLD。",
+      "indexTrack": "HOLD/draft → 全部准入通过且独立批准后 monitor/noindex → 另案索引评审；当前无索引批准",
+      "verdict": "HOLD_EVIDENCE",
+      "releaseExit": "完成逐项缺口、八项准入、三语言内容与真实素材审核，发布日重查实体/alias/意图；独立 QA 后再审批",
+      "publicReleaseApproved": false,
+      "indexReleaseApproved": false,
+      "relationshipCreationApproved": false,
+      "consumer": "Tool Intelligence；Task Page / Structured Comparison 仅在关系门禁另行通过后消费",
+      "nextReview": "下一正常运营日；超过 7 个运营日未处理则重读官方波动字段",
+      "productionIdentityCheck": {
+        "checkedAt": "2026-10-06T06:06:06.408Z",
+        "scope": "Neon tools 全量 69 行 name/title/url 产品/域名审阅；不是跨库发布 preflight",
+        "matches": [],
+        "releaseDayRecheckRequired": true
+      }
+    },
+    {
+      "rank": 3,
+      "slug": "pika",
+      "product": "Pika",
+      "vendor": "Pika",
+      "identity": "pika.art 应用及其 Video Studio；单个模型/第三方模型不是独立工具",
+      "proposedCanonical": "/ai/pika",
+      "primaryTaskCluster": "product-image-to-short-video",
+      "roles": ["Alternative"],
+      "whyNow": "给 Runway/Luma 补参考图驱动短片与编辑选择；商品标识稳定性须验证。",
+      "capabilityHypothesis": "参考图生成短片与受限编辑",
+      "constraint": "目标套餐的输入图、长度、分辨率、credits、水印/商用完整链待核",
+      "marketMaturity": "两家独立媒体实际输入/输出测试已直接回读，成熟应用采用门槛通过；不是本站实测，也不代表当前模型权益或商品保真通过。",
+      "officialSources": [
+        {
+          "url": "https://pika.art/",
+          "status": "direct_read",
+          "scope": "当前应用/Video Studio 与参考素材入口",
+          "checkedAt": "2026-10-06"
+        },
+        {
+          "url": "https://pika.art/pricing",
+          "status": "direct_read",
+          "scope": "套餐和 credits；具体商品流程需映射",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "independentSignals": [
+        {
+          "url": "https://www.tomsguide.com/ai/ai-image-video/i-just-pika-2-to-the-test-and-its-the-best-ai-video-generator-yet-and-better-than-sora",
+          "status": "direct_read",
+          "strength": "strong",
+          "observation": "作者实际测试参考图/ingredients 并报告失败；2024 历史使用，不外推当前套餐或商品一致性。",
+          "checkedAt": "2026-10-06"
+        },
+        {
+          "url": "https://mspoweruser.com/pika-ai-review/",
+          "status": "direct_read",
+          "strength": "strong",
+          "observation": "另一作者用图/文生成与修改短片并展示失败结果；独立上手来源，有媒体商业偏差，不采用评分/购买结论。",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "marketGate": "PASS",
+      "keyFactGaps": [
+        "目标套餐的输入图、长度、分辨率、credits、水印/商用完整链待核",
+        "历史产品采用已确认；当前多模型平台完整商品工作流仍需官方证据，不能以旧评测放行当前关系",
+        "logo/文字/包装一致性、生成失败成本与素材授权待核"
+      ],
+      "duplicateIntent": "Neon 无匹配；Pika 模型版本、Pikaffects 等能力不拆新实体；与视频 Guide 分开。",
+      "mediaAvailability": "官网有真实输出与界面线索；不把社区样片当本站可复用产品媒体；HOLD。",
+      "indexTrack": "HOLD/draft → 全部准入通过且独立批准后 monitor/noindex → 另案索引评审；当前无索引批准",
+      "verdict": "HOLD_EVIDENCE",
+      "releaseExit": "完成逐项缺口、八项准入、三语言内容与真实素材审核，发布日重查实体/alias/意图；独立 QA 后再审批",
+      "publicReleaseApproved": false,
+      "indexReleaseApproved": false,
+      "relationshipCreationApproved": false,
+      "consumer": "Tool Intelligence；Task Page / Structured Comparison 仅在关系门禁另行通过后消费",
+      "nextReview": "下一正常运营日；超过 7 个运营日未处理则重读官方波动字段",
+      "productionIdentityCheck": {
+        "checkedAt": "2026-10-06T06:06:06.408Z",
+        "scope": "Neon tools 全量 69 行 name/title/url 产品/域名审阅；不是跨库发布 preflight",
+        "matches": [],
+        "releaseDayRecheckRequired": true
+      }
+    },
+    {
+      "rank": 4,
+      "slug": "canva",
+      "product": "Canva",
+      "vendor": "Canva",
+      "identity": "Canva 主产品含 AI 与 Brand Kit；Magic Studio/Magic Write/Canva AI 不拆实体",
+      "proposedCanonical": "/ai/canva",
+      "primaryTaskCluster": "brand-constrained-marketing-content",
+      "roles": ["Anchor", "Gap-filler"],
+      "whyNow": "品牌文字与视觉模板约束，可与 Jasper 起草、Grammarly 审阅构成不同选择。",
+      "capabilityHypothesis": "品牌语气、颜色/字体和模板约束",
+      "constraint": "Brand Kit、Brand Controls、Brand Voice 的套餐/角色分界须逐项确认",
+      "marketMaturity": "成熟主产品；AI 工作流有独立教育机构演示；当前品牌控制采用仍待第二信号及套餐验证。",
+      "officialSources": [
+        {
+          "url": "https://www.canva.com/help/brand-kit/",
+          "status": "direct_read",
+          "scope": "Brand Kit、模板与 AI 品牌上下文",
+          "checkedAt": "2026-10-06"
+        },
+        {
+          "url": "https://www.canva.com/help/brand-voice/",
+          "status": "direct_read",
+          "scope": "品牌语气与角色/套餐边界",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "independentSignals": [
+        {
+          "url": "https://bccampus.ca/wp-content/uploads/2024/07/2024-11-06-EdTech-Sandbox-Canva-AI-Slides.pdf",
+          "status": "direct_read",
+          "strength": "auxiliary",
+          "observation": "独立机构 AI 工作坊含实际工具教学；不是企业品牌治理成效证明。",
+          "checkedAt": "2026-10-06"
+        },
+        {
+          "url": "https://www.g2.com/products/canva/reviews",
+          "status": "unconfirmed_lead",
+          "strength": "unconfirmed",
+          "observation": "需抽取 AI/Brand Kit 产品使用评价；不可沿用通用设计评分。",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "marketGate": "HOLD",
+      "keyFactGaps": [
+        "Brand Kit、Brand Controls、Brand Voice 的套餐/角色分界须逐项确认",
+        "独立 AI/品牌工作流强采用证据不足",
+        "新实体流程与旧 N6 “既有页增强”冲突已由 Neon 无实体澄清，但全层发布查重仍必需"
+      ],
+      "duplicateIntent": "Neon 无 Canva 实体；只保留 /ai/canva，不建 canva-magic-studio；已有 Guide 内链须复核。",
+      "mediaAvailability": "帮助页含第一方界面；授权资产/本地化处理尚未登记；HOLD。",
+      "indexTrack": "HOLD/draft → 全部准入通过且独立批准后 monitor/noindex → 另案索引评审；当前无索引批准",
+      "verdict": "HOLD_EVIDENCE",
+      "releaseExit": "完成逐项缺口、八项准入、三语言内容与真实素材审核，发布日重查实体/alias/意图；独立 QA 后再审批",
+      "publicReleaseApproved": false,
+      "indexReleaseApproved": false,
+      "relationshipCreationApproved": false,
+      "consumer": "Tool Intelligence；Task Page / Structured Comparison 仅在关系门禁另行通过后消费",
+      "nextReview": "下一正常运营日；超过 7 个运营日未处理则重读官方波动字段",
+      "productionIdentityCheck": {
+        "checkedAt": "2026-10-06T06:06:06.408Z",
+        "scope": "Neon tools 全量 69 行 name/title/url 产品/域名审阅；不是跨库发布 preflight",
+        "matches": [],
+        "releaseDayRecheckRequired": true
+      }
+    },
+    {
+      "rank": 5,
+      "slug": "bolt",
+      "product": "Bolt",
+      "vendor": "StackBlitz",
+      "identity": "bolt.new 应用；不把 StackBlitz 公司或 bolt.diy 社区分叉合并",
+      "proposedCanonical": "/ai/bolt",
+      "primaryTaskCluster": "build-app-with-ai",
+      "roles": ["Alternative"],
+      "whyNow": "现有 Lovable/Replit 已入库，补浏览器应用构建、代码与 GitHub 交付路径；避开 n8n/OpenRouter 不满足完整应用的问题。",
+      "capabilityHypothesis": "可运行应用、代码交付与部署",
+      "constraint": "目标应用是否完整可运行，数据库/认证/集成/代码审查责任需逐项验证",
+      "marketMaturity": "官方当前应用/托管文档可读；2026 独立上手报道已检索，直接文章回读失败，市场 HOLD。",
+      "officialSources": [
+        {
+          "url": "https://bolt.new/",
+          "status": "direct_read",
+          "scope": "AI 应用生成、代码/云服务入口",
+          "checkedAt": "2026-10-06"
+        },
+        {
+          "url": "https://support.bolt.new/",
+          "status": "direct_read",
+          "scope": "应用、版本控制、发布、集成文档索引",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "independentSignals": [
+        {
+          "url": "https://www.techradar.com/pro/software-services/bolt-no-code-review",
+          "status": "search_snapshot_only",
+          "strength": "strong_candidate",
+          "observation": "搜索快照记录作者实际生成 Web app；直接回读失败，不算完整通过。",
+          "checkedAt": "2026-10-06"
+        },
+        {
+          "url": "https://github.com/stackblitz/bolt.new",
+          "status": "unconfirmed_lead",
+          "strength": "auxiliary_pending",
+          "observation": "官方仓库可查持续性，外部 issue/贡献尚未核；不能单靠 stars 过市场门槛。",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "marketGate": "HOLD",
+      "keyFactGaps": [
+        "目标应用是否完整可运行，数据库/认证/集成/代码审查责任需逐项验证",
+        "tokens 与 hosting/database 费用及导出可迁移性需直接套餐文档",
+        "独立实用全文、第二信号和授权素材未闭环"
+      ],
+      "duplicateIntent": "Neon 无 Bolt；/ai/bolt 仅产品详情；不重复现有 Lovable/Replit，也不把 bolt.diy 作为同一 SaaS。",
+      "mediaAvailability": "官方帮助含产品流程线索；可复用截图/品牌文件未登记；HOLD。",
+      "indexTrack": "HOLD/draft → 全部准入通过且独立批准后 monitor/noindex → 另案索引评审；当前无索引批准",
+      "verdict": "HOLD_EVIDENCE",
+      "releaseExit": "完成逐项缺口、八项准入、三语言内容与真实素材审核，发布日重查实体/alias/意图；独立 QA 后再审批",
+      "publicReleaseApproved": false,
+      "indexReleaseApproved": false,
+      "relationshipCreationApproved": false,
+      "consumer": "Tool Intelligence；Task Page / Structured Comparison 仅在关系门禁另行通过后消费",
+      "nextReview": "下一正常运营日；超过 7 个运营日未处理则重读官方波动字段",
+      "productionIdentityCheck": {
+        "checkedAt": "2026-10-06T06:06:06.408Z",
+        "scope": "Neon tools 全量 69 行 name/title/url 产品/域名审阅；不是跨库发布 preflight",
+        "matches": [],
+        "releaseDayRecheckRequired": true
+      }
+    },
+    {
+      "rank": 6,
+      "slug": "scite",
+      "product": "Scite",
+      "vendor": "Scite",
+      "identity": "scite.ai 研究应用；Assistant/Smart Citations 属同产品",
+      "proposedCanonical": "/ai/scite",
+      "primaryTaskCluster": "research-with-citations",
+      "roles": ["Gap-filler"],
+      "whyNow": "用引文语境和支持/对照线索补引文回查，而非再加一个通用答案工具。",
+      "capabilityHypothesis": "引文语境、支持/反驳线索与参考文献警示",
+      "constraint": "引文分类误差、目标学科覆盖/全文权限及导出待核",
+      "marketMaturity": "成熟研究产品；本轮直接确认 PolyU 与 CUNI MFF 两个客户侧订阅，不以厂商声称人数代替采用。",
+      "officialSources": [
+        {
+          "url": "https://scite.ai/",
+          "status": "direct_read",
+          "scope": "Assistant/Smart Citations 与索引范围",
+          "checkedAt": "2026-10-06"
+        },
+        {
+          "url": "https://scite.ai/pricing",
+          "status": "direct_read",
+          "scope": "套餐选择；不把索引规模当质量",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "independentSignals": [
+        {
+          "url": "https://www.lib.polyu.edu.hk/databases/scite",
+          "status": "direct_read",
+          "strength": "strong",
+          "observation": "PolyU 图书馆确认订阅 premium 并提供身份访问流程，是客户侧采用；不证明当前所有产品功能。",
+          "checkedAt": "2026-10-06"
+        },
+        {
+          "url": "https://www.mff.cuni.cz/en/library/news/permanent-access-to-scite",
+          "status": "direct_read",
+          "strength": "strong",
+          "observation": "CUNI MFF 2026-04-01 公告说明机构网络和邮箱访问，当前订阅至 2027-03-30；独立第二机构采用。",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "marketGate": "PASS",
+      "keyFactGaps": [
+        "引文分类误差、目标学科覆盖/全文权限及导出待核",
+        "市场两项强信号已确认，但具体用途/套餐/内容门槛仍 HOLD",
+        "套餐/API/机构权限须按实际用途分开"
+      ],
+      "duplicateIntent": "Neon 无匹配；研究 Guide 提及不等于实体；保持 /ai/scite。",
+      "mediaAvailability": "官网可见示例，不代表复制许可；三语言与素材 HOLD。",
+      "indexTrack": "HOLD/draft → 全部准入通过且独立批准后 monitor/noindex → 另案索引评审；当前无索引批准",
+      "verdict": "HOLD_EVIDENCE",
+      "releaseExit": "完成逐项缺口、八项准入、三语言内容与真实素材审核，发布日重查实体/alias/意图；独立 QA 后再审批",
+      "publicReleaseApproved": false,
+      "indexReleaseApproved": false,
+      "relationshipCreationApproved": false,
+      "consumer": "Tool Intelligence；Task Page / Structured Comparison 仅在关系门禁另行通过后消费",
+      "nextReview": "下一正常运营日；超过 7 个运营日未处理则重读官方波动字段",
+      "productionIdentityCheck": {
+        "checkedAt": "2026-10-06T06:06:06.408Z",
+        "scope": "Neon tools 全量 69 行 name/title/url 产品/域名审阅；不是跨库发布 preflight",
+        "matches": [],
+        "releaseDayRecheckRequired": true
+      }
+    },
+    {
+      "rank": 7,
+      "slug": "wellsaid",
+      "product": "WellSaid Studio",
+      "vendor": "WellSaid",
+      "identity": "wellsaid.io Studio 应用；API 不独立计数，WellSaid Labs 是历史品牌线索",
+      "proposedCanonical": "/ai/wellsaid",
+      "primaryTaskCluster": "ai-voiceover",
+      "roles": ["Gap-filler"],
+      "whyNow": "企业课程旁白、发音与团队协作补位，不重复追求泛音色数量。",
+      "capabilityHypothesis": "课程旁白的发音和团队修订约束",
+      "constraint": "发音库、下载/商用、席位协作与语言/套餐的完整范围待核",
+      "marketMaturity": "有多年教学设计用户讨论和 G2 产品评论线索；独立全文与当前套餐需深审。",
+      "officialSources": [
+        {
+          "url": "https://www.wellsaid.io/",
+          "status": "direct_read",
+          "scope": "企业语音制作入口",
+          "checkedAt": "2026-10-06"
+        },
+        {
+          "url": "https://www.wellsaid.io/ai-voice-pricing",
+          "status": "direct_read",
+          "scope": "原 /pricing 重定向到当前 Studio 定价",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "independentSignals": [
+        {
+          "url": "https://www.g2.com/products/wellsaid-studio/reviews",
+          "status": "search_snapshot_only",
+          "strength": "strong_candidate",
+          "observation": "产品评论页可检索，未核具体评论身份/独立性。",
+          "checkedAt": "2026-10-06"
+        },
+        {
+          "url": "https://www.reddit.com/r/instructionaldesign/comments/11m3w5z",
+          "status": "search_snapshot_only",
+          "strength": "strong_candidate",
+          "observation": "用户描述历史工作中使用 WellSaid；需直接复核。",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "marketGate": "HOLD",
+      "keyFactGaps": [
+        "发音库、下载/商用、席位协作与语言/套餐的完整范围待核",
+        "补直接采用全文及第二信号判断",
+        "受控脚本复核与媒体权利未完成"
+      ],
+      "duplicateIntent": "Neon 无匹配；wellsaid/wellsaid-labs 同产品待 alias 终查。",
+      "mediaAvailability": "第一方界面/音频有线索；不能下载示例音频冒充授权资产；HOLD。",
+      "indexTrack": "HOLD/draft → 全部准入通过且独立批准后 monitor/noindex → 另案索引评审；当前无索引批准",
+      "verdict": "HOLD_EVIDENCE",
+      "releaseExit": "完成逐项缺口、八项准入、三语言内容与真实素材审核，发布日重查实体/alias/意图；独立 QA 后再审批",
+      "publicReleaseApproved": false,
+      "indexReleaseApproved": false,
+      "relationshipCreationApproved": false,
+      "consumer": "Tool Intelligence；Task Page / Structured Comparison 仅在关系门禁另行通过后消费",
+      "nextReview": "下一正常运营日；超过 7 个运营日未处理则重读官方波动字段",
+      "productionIdentityCheck": {
+        "checkedAt": "2026-10-06T06:06:06.408Z",
+        "scope": "Neon tools 全量 69 行 name/title/url 产品/域名审阅；不是跨库发布 preflight",
+        "matches": [],
+        "releaseDayRecheckRequired": true
+      }
+    },
+    {
+      "rank": 8,
+      "slug": "kling-ai",
+      "product": "Kling AI",
+      "vendor": "Kuaishou",
+      "identity": "Kling AI 应用；app.klingai.com/global 当前跳转 kling.ai/app；非单个 Kling 模型或第三方 API",
+      "proposedCanonical": "/ai/kling-ai",
+      "primaryTaskCluster": "product-image-to-short-video",
+      "roles": ["Anchor"],
+      "whyNow": "成熟视频选择线索，但官方可读性较差，排在 Pika 后补研究。",
+      "capabilityHypothesis": "产品参考图生成与元素保持（研究假设）",
+      "constraint": "唯一 canonical 官网迁移与当前应用/地区/账号可用范围需确认",
+      "marketMaturity": "2025 独立图生视频上手线索；当前应用迁移/套餐证据不足。",
+      "officialSources": [
+        {
+          "url": "https://app.klingai.com/global/",
+          "status": "redirect_shell",
+          "scope": "跳转 https://kling.ai/app/，仅 9 行可读正文",
+          "checkedAt": "2026-10-06"
+        },
+        {
+          "url": "https://klingai.com/",
+          "status": "fetch_failed",
+          "scope": "旧域本轮无法直接确认",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "independentSignals": [
+        {
+          "url": "https://www.tomsguide.com/ai/how-to-use-kling-ai-2",
+          "status": "search_snapshot_only",
+          "strength": "strong_candidate",
+          "observation": "2025 上手文记录输入图/编辑；不是当前版本权益证据。",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "marketGate": "HOLD",
+      "keyFactGaps": [
+        "唯一 canonical 官网迁移与当前应用/地区/账号可用范围需确认",
+        "缺第二互补可读官方来源及当前套餐/输出许可",
+        "独立第二采用、商品保真与素材权利待核"
+      ],
+      "duplicateIntent": "Neon 无 Kling 匹配；kling/kling-ai 与模型页禁止重复；slug 仅提案。",
+      "mediaAvailability": "可读应用壳不足以取得真实产品媒体；HOLD。",
+      "indexTrack": "HOLD/draft → 全部准入通过且独立批准后 monitor/noindex → 另案索引评审；当前无索引批准",
+      "verdict": "HOLD_EVIDENCE",
+      "releaseExit": "完成逐项缺口、八项准入、三语言内容与真实素材审核，发布日重查实体/alias/意图；独立 QA 后再审批",
+      "publicReleaseApproved": false,
+      "indexReleaseApproved": false,
+      "relationshipCreationApproved": false,
+      "consumer": "Tool Intelligence；Task Page / Structured Comparison 仅在关系门禁另行通过后消费",
+      "nextReview": "下一正常运营日；超过 7 个运营日未处理则重读官方波动字段",
+      "productionIdentityCheck": {
+        "checkedAt": "2026-10-06T06:06:06.408Z",
+        "scope": "Neon tools 全量 69 行 name/title/url 产品/域名审阅；不是跨库发布 preflight",
+        "matches": [],
+        "releaseDayRecheckRequired": true
+      }
+    },
+    {
+      "rank": 9,
+      "slug": "anyword",
+      "product": "Anyword",
+      "vendor": "Anyword",
+      "identity": "anyword.com 营销写作应用；不把营销效果预测写成已证转化",
+      "proposedCanonical": "/ai/anyword",
+      "primaryTaskCluster": "brand-constrained-marketing-content",
+      "roles": ["Alternative"],
+      "whyNow": "补品牌文案变体与预测评分选择；与 Jasper/Grammarly 比较实际约束。",
+      "capabilityHypothesis": "品牌文案约束与多版本选择",
+      "constraint": "目标套餐品牌规则、预测分数适用条件与连接数据范围待核",
+      "marketMaturity": "有多年产品评论线索；聚合评分不当作品牌 AI 工作流成效。",
+      "officialSources": [
+        {
+          "url": "https://www.anyword.com/",
+          "status": "direct_read",
+          "scope": "品牌/营销内容产品范围",
+          "checkedAt": "2026-10-06"
+        },
+        {
+          "url": "https://www.anyword.com/pricing",
+          "status": "direct_read",
+          "scope": "当前规范域定价正文可读；旧域路径失败不推定整个产品不可用，目标套餐仍待核",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "independentSignals": [
+        {
+          "url": "https://www.g2.com/sellers/anyword",
+          "status": "search_snapshot_only",
+          "strength": "strong_candidate",
+          "observation": "独立产品评论集合可检索；需具体使用评价与第二信号。",
+          "checkedAt": "2026-10-06"
+        },
+        {
+          "url": "https://www.trustpilot.com/review/anyword.com",
+          "status": "search_snapshot_only",
+          "strength": "auxiliary_pending",
+          "observation": "用户写作经历线索，未完成去重和激励评价审查。",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "marketGate": "HOLD",
+      "keyFactGaps": [
+        "目标套餐品牌规则、预测分数适用条件与连接数据范围待核",
+        "厂商 76% 等成效宣传不采用；需目标营销工作流证据",
+        "市场两信号/素材/本地化待审"
+      ],
+      "duplicateIntent": "Neon 无匹配；与写作 Guide 意图分离，仅 /ai/anyword。",
+      "mediaAvailability": "官网展示可作研究线索；资产与许可未登记；HOLD。",
+      "indexTrack": "HOLD/draft → 全部准入通过且独立批准后 monitor/noindex → 另案索引评审；当前无索引批准",
+      "verdict": "HOLD_EVIDENCE",
+      "releaseExit": "完成逐项缺口、八项准入、三语言内容与真实素材审核，发布日重查实体/alias/意图；独立 QA 后再审批",
+      "publicReleaseApproved": false,
+      "indexReleaseApproved": false,
+      "relationshipCreationApproved": false,
+      "consumer": "Tool Intelligence；Task Page / Structured Comparison 仅在关系门禁另行通过后消费",
+      "nextReview": "下一正常运营日；超过 7 个运营日未处理则重读官方波动字段",
+      "productionIdentityCheck": {
+        "checkedAt": "2026-10-06T06:06:06.408Z",
+        "scope": "Neon tools 全量 69 行 name/title/url 产品/域名审阅；不是跨库发布 preflight",
+        "matches": [],
+        "releaseDayRecheckRequired": true
+      }
+    },
+    {
+      "rank": 10,
+      "slug": "v0",
+      "product": "v0",
+      "vendor": "Vercel",
+      "identity": "v0.app 应用；历史 v0.dev 域名不是第二工具，Vercel 托管非同一计费承诺",
+      "proposedCanonical": "/ai/v0",
+      "primaryTaskCluster": "build-app-with-ai",
+      "roles": ["Gap-filler"],
+      "whyNow": "补设计到代码交接的开发者路线，与 Lovable/Replit/Bolt 的工作流约束比较。",
+      "capabilityHypothesis": "应用代码交付、界面与后端集成",
+      "constraint": "是否满足目标完整应用/持久化/认证与集成需按文档验证",
+      "marketMaturity": "现行官方 full-stack 文档和独立 2026 上手线索；不能借用 Vercel 母公司采用规模。",
+      "officialSources": [
+        {
+          "url": "https://v0.app/",
+          "status": "direct_read",
+          "scope": "当前应用身份/入口",
+          "checkedAt": "2026-10-06"
+        },
+        {
+          "url": "https://v0.app/docs",
+          "status": "direct_read",
+          "scope": "应用构建、集成与交付文档",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "independentSignals": [
+        {
+          "url": "https://www.techradar.com/pro/software-services/vercel-v0-no-code-review",
+          "status": "search_snapshot_only",
+          "strength": "strong_candidate",
+          "observation": "作者 Web app 测试线索；完整原文与第二独立信号未完成。",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "marketGate": "HOLD",
+      "keyFactGaps": [
+        "是否满足目标完整应用/持久化/认证与集成需按文档验证",
+        "模型 credits 与 Vercel 部署资源费用分离",
+        "导出、自托管及访问治理范围/市场/素材待核"
+      ],
+      "duplicateIntent": "Neon 无匹配；/ai/v0 唯一身份，不建 v0-dev 或 vercel-ai 平行页。",
+      "mediaAvailability": "官方文档界面存在；可再分发素材与三语言稿待审核；HOLD。",
+      "indexTrack": "HOLD/draft → 全部准入通过且独立批准后 monitor/noindex → 另案索引评审；当前无索引批准",
+      "verdict": "HOLD_EVIDENCE",
+      "releaseExit": "完成逐项缺口、八项准入、三语言内容与真实素材审核，发布日重查实体/alias/意图；独立 QA 后再审批",
+      "publicReleaseApproved": false,
+      "indexReleaseApproved": false,
+      "relationshipCreationApproved": false,
+      "consumer": "Tool Intelligence；Task Page / Structured Comparison 仅在关系门禁另行通过后消费",
+      "nextReview": "下一正常运营日；超过 7 个运营日未处理则重读官方波动字段",
+      "productionIdentityCheck": {
+        "checkedAt": "2026-10-06T06:06:06.408Z",
+        "scope": "Neon tools 全量 69 行 name/title/url 产品/域名审阅；不是跨库发布 preflight",
+        "matches": [],
+        "releaseDayRecheckRequired": true
+      }
+    },
+    {
+      "rank": 11,
+      "slug": "scispace",
+      "product": "SciSpace",
+      "vendor": "SciSpace",
+      "identity": "scispace.com 研究应用；typeset.io 历史身份需核，不把所有论文托管页计为产品",
+      "proposedCanonical": "/ai/scispace",
+      "primaryTaskCluster": "research-with-citations",
+      "roles": ["Alternative"],
+      "whyNow": "补论文阅读/解释入口；只有能说明与 Gemini Notebook/Consensus 差异才进入 shortlist。",
+      "capabilityHypothesis": "阅读论文、解释与来源回查",
+      "constraint": "学科/语种与全文权限、引用定位和输出准确性待核",
+      "marketMaturity": "有机构用户指南与持续产品/定价页；采用强度仍不足以过市场门槛。",
+      "officialSources": [
+        {
+          "url": "https://scispace.com/",
+          "status": "direct_read",
+          "scope": "研究应用范围",
+          "checkedAt": "2026-10-06"
+        },
+        {
+          "url": "https://scispace.com/pricing",
+          "status": "direct_read",
+          "scope": "产品套餐，具体额度待核",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "independentSignals": [
+        {
+          "url": "https://iimidr.ac.in/wp-content/uploads/2025/10/User-Guide-SciSpace-1.pdf",
+          "status": "search_snapshot_only",
+          "strength": "auxiliary_pending",
+          "observation": "机构托管指南；不能仅凭托管推断机构采购/实际采用。",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "marketGate": "HOLD",
+      "keyFactGaps": [
+        "学科/语种与全文权限、引用定位和输出准确性待核",
+        "独立实际采用强信号与第二信号缺失",
+        "typeset 历史身份、现行 AI 产品范围与素材需审"
+      ],
+      "duplicateIntent": "Neon 无 SciSpace/typeset 匹配；历史域名和论文内容 URL 不新建多个工具。",
+      "mediaAvailability": "官方产品入口可读；真实媒体/权利与本地化未完成；HOLD。",
+      "indexTrack": "HOLD/draft → 全部准入通过且独立批准后 monitor/noindex → 另案索引评审；当前无索引批准",
+      "verdict": "HOLD_EVIDENCE",
+      "releaseExit": "完成逐项缺口、八项准入、三语言内容与真实素材审核，发布日重查实体/alias/意图；独立 QA 后再审批",
+      "publicReleaseApproved": false,
+      "indexReleaseApproved": false,
+      "relationshipCreationApproved": false,
+      "consumer": "Tool Intelligence；Task Page / Structured Comparison 仅在关系门禁另行通过后消费",
+      "nextReview": "下一正常运营日；超过 7 个运营日未处理则重读官方波动字段",
+      "productionIdentityCheck": {
+        "checkedAt": "2026-10-06T06:06:06.408Z",
+        "scope": "Neon tools 全量 69 行 name/title/url 产品/域名审阅；不是跨库发布 preflight",
+        "matches": [],
+        "releaseDayRecheckRequired": true
+      }
+    },
+    {
+      "rank": 12,
+      "slug": "hailuo-ai",
+      "product": "Hailuo AI",
+      "vendor": "MiniMax",
+      "identity": "hailuoai.video 视频应用；不等同 MiniMax 公司或语音 API，H3 等模型不拆实体",
+      "proposedCanonical": "/ai/hailuo-ai",
+      "primaryTaskCluster": "product-image-to-short-video",
+      "roles": ["Gap-filler"],
+      "whyNow": "参考图与多素材约束研究备选；不把中国/全球站权益合并。",
+      "capabilityHypothesis": "商品参考图、多素材约束（研究假设）",
+      "constraint": "缺应用级互补套餐/条款来源与区域、credits/输出水印边界",
+      "marketMaturity": "持续产品入口与独立上手待核线索；当前 H3 套餐不能用旧模型评测推定。",
+      "officialSources": [
+        {
+          "url": "https://hailuoai.video/",
+          "status": "direct_read",
+          "scope": "当前 Hailuo 视频应用/参考素材入口",
+          "checkedAt": "2026-10-06"
+        },
+        {
+          "url": "https://www.minimax.io/",
+          "status": "direct_read",
+          "scope": "厂商与产品关联；非互补套餐证据",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "independentSignals": [
+        {
+          "url": "https://www.tomsguide.com/ai/this-ai-video-generator-is-going-viral-and-its-completely-free-to-use",
+          "status": "direct_read",
+          "strength": "strong_candidate",
+          "observation": "作者实际上手 Hailuo/MiniMax 视频；历史免费叙事不可当当前价格，尚缺第二独立信号。",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "marketGate": "HOLD",
+      "keyFactGaps": [
+        "缺应用级互补套餐/条款来源与区域、credits/输出水印边界",
+        "商品图参考保持/文字失真未测试",
+        "两项独立采用与授权素材未通过"
+      ],
+      "duplicateIntent": "Neon 无匹配；Hailuo/MiniMax 视频模型不重复计数，不收 MiniMax 品牌替代应用。",
+      "mediaAvailability": "应用入口与官方演示可见；真实截图/输出素材权利待核；HOLD。",
+      "indexTrack": "HOLD/draft → 全部准入通过且独立批准后 monitor/noindex → 另案索引评审；当前无索引批准",
+      "verdict": "HOLD_EVIDENCE",
+      "releaseExit": "完成逐项缺口、八项准入、三语言内容与真实素材审核，发布日重查实体/alias/意图；独立 QA 后再审批",
+      "publicReleaseApproved": false,
+      "indexReleaseApproved": false,
+      "relationshipCreationApproved": false,
+      "consumer": "Tool Intelligence；Task Page / Structured Comparison 仅在关系门禁另行通过后消费",
+      "nextReview": "下一正常运营日；超过 7 个运营日未处理则重读官方波动字段",
+      "productionIdentityCheck": {
+        "checkedAt": "2026-10-06T06:06:06.408Z",
+        "scope": "Neon tools 全量 69 行 name/title/url 产品/域名审阅；不是跨库发布 preflight",
+        "matches": [],
+        "releaseDayRecheckRequired": true
+      }
+    },
+    {
+      "rank": 13,
+      "slug": "writer",
+      "product": "WRITER",
+      "vendor": "WRITER",
+      "identity": "writer.com 企业平台，限定品牌内容工作流；Agent/Style Checker 不拆产品",
+      "proposedCanonical": "/ai/writer",
+      "primaryTaskCluster": "brand-constrained-marketing-content",
+      "roles": ["Gap-filler"],
+      "whyNow": "补企业术语、风格与角色治理，不按公司名望推定适配。",
+      "capabilityHypothesis": "企业品牌风格/术语控制与人工审核",
+      "constraint": "品牌工作流的购买/演示路径、套餐和角色约束需直接核对",
+      "marketMaturity": "多年品牌功能文档与现行企业产品；平台已扩到 Agent，旧写作评价不能整体复用。",
+      "officialSources": [
+        {
+          "url": "https://writer.com/",
+          "status": "direct_read",
+          "scope": "当前企业 Agent 平台范围",
+          "checkedAt": "2026-10-06"
+        },
+        {
+          "url": "https://writer.com/brand/",
+          "status": "direct_read",
+          "scope": "品牌语气、术语与规则；须直接复核套餐覆盖",
+          "checkedAt": "2026-10-06"
+        },
+        {
+          "url": "https://support.writer.com/articles/5831006655-understanding-roles-and-permissions-in-writer",
+          "status": "search_snapshot_only",
+          "scope": "角色/权限的文档线索",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "independentSignals": [
+        {
+          "url": "https://www.g2.com/products/writer/reviews",
+          "status": "search_snapshot_only",
+          "strength": "strong_candidate",
+          "observation": "独立评论检索可见；需品牌场景和当前产品的实际使用。",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "marketGate": "HOLD",
+      "keyFactGaps": [
+        "品牌工作流的购买/演示路径、套餐和角色约束需直接核对",
+        "当前平台强采用与第二信号未完成；不借旧写作模块声誉",
+        "生成规则一致性/留存/集成与素材未核"
+      ],
+      "duplicateIntent": "Neon 无 WRITER/writer.com 匹配；非泛称 AI writer，新详情不占写作 Guide 意图。",
+      "mediaAvailability": "官网有工作流图；产品截图与品牌媒体复用依据未登记；HOLD。",
+      "indexTrack": "HOLD/draft → 全部准入通过且独立批准后 monitor/noindex → 另案索引评审；当前无索引批准",
+      "verdict": "HOLD_EVIDENCE",
+      "releaseExit": "完成逐项缺口、八项准入、三语言内容与真实素材审核，发布日重查实体/alias/意图；独立 QA 后再审批",
+      "publicReleaseApproved": false,
+      "indexReleaseApproved": false,
+      "relationshipCreationApproved": false,
+      "consumer": "Tool Intelligence；Task Page / Structured Comparison 仅在关系门禁另行通过后消费",
+      "nextReview": "下一正常运营日；超过 7 个运营日未处理则重读官方波动字段",
+      "productionIdentityCheck": {
+        "checkedAt": "2026-10-06T06:06:06.408Z",
+        "scope": "Neon tools 全量 69 行 name/title/url 产品/域名审阅；不是跨库发布 preflight",
+        "matches": [],
+        "releaseDayRecheckRequired": true
+      }
+    },
+    {
+      "rank": 14,
+      "slug": "bubble",
+      "product": "Bubble",
+      "vendor": "Bubble",
+      "identity": "bubble.io 主产品含 AI App Builder；不把接入 AI API 的 Bubble 应用当作 AI 构建能力证明",
+      "proposedCanonical": "/ai/bubble",
+      "primaryTaskCluster": "build-app-with-ai",
+      "roles": ["Alternative"],
+      "whyNow": "补可视化应用编辑路线；与代码导出型 builder 的维护/迁移约束不同。",
+      "capabilityHypothesis": "可运行可视化应用与工作流人工修订",
+      "constraint": "AI 工作流能生成的数据库/逻辑范围与人工补全责任待核",
+      "marketMaturity": "成熟可视化平台，但 AI 构建能力的年龄/实际完整交付仍需独立证明，不继承母产品全部成熟度。",
+      "officialSources": [
+        {
+          "url": "https://bubble.io/ai-app-builder",
+          "status": "direct_read",
+          "scope": "AI 应用构建入口，/ai 已重定向",
+          "checkedAt": "2026-10-06"
+        },
+        {
+          "url": "https://bubble.io/pricing",
+          "status": "direct_read",
+          "scope": "应用/工作负载套餐，未核具体目标配置",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "independentSignals": [
+        {
+          "url": "https://www.reddit.com/r/Bubbleio/comments/1r7tmog/bubble_ai_just_started_generating_workflows_heres/",
+          "status": "search_snapshot_only",
+          "strength": "strong_candidate",
+          "observation": "用户自述修复 AI 生成应用的经历；需直接回读并核身份/利益关系。",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "marketGate": "HOLD",
+      "keyFactGaps": [
+        "AI 工作流能生成的数据库/逻辑范围与人工补全责任待核",
+        "迁移/导出、workload 计费、发布/隐私规则须核",
+        "AI 子能力市场采用、第二信号、素材未通过"
+      ],
+      "duplicateIntent": "Neon 无匹配；Bubble AI 仅能力，不另建 bubble-ai 实体。",
+      "mediaAvailability": "官方应用介绍存在；授权截图和本地化未审；HOLD。",
+      "indexTrack": "HOLD/draft → 全部准入通过且独立批准后 monitor/noindex → 另案索引评审；当前无索引批准",
+      "verdict": "HOLD_EVIDENCE",
+      "releaseExit": "完成逐项缺口、八项准入、三语言内容与真实素材审核，发布日重查实体/alias/意图；独立 QA 后再审批",
+      "publicReleaseApproved": false,
+      "indexReleaseApproved": false,
+      "relationshipCreationApproved": false,
+      "consumer": "Tool Intelligence；Task Page / Structured Comparison 仅在关系门禁另行通过后消费",
+      "nextReview": "下一正常运营日；超过 7 个运营日未处理则重读官方波动字段",
+      "productionIdentityCheck": {
+        "checkedAt": "2026-10-06T06:06:06.408Z",
+        "scope": "Neon tools 全量 69 行 name/title/url 产品/域名审阅；不是跨库发布 preflight",
+        "matches": [],
+        "releaseDayRecheckRequired": true
+      }
+    },
+    {
+      "rank": 15,
+      "slug": "avoma",
+      "product": "Avoma",
+      "vendor": "Avoma",
+      "identity": "avoma.com 应用；AI Meeting Assistant 与 CI/RI 附加模块不拆实体",
+      "proposedCanonical": "/ai/avoma",
+      "primaryTaskCluster": "meeting-notes",
+      "roles": ["Gap-filler"],
+      "whyNow": "仅保留销售会议/CRM 差异储备；meeting-notes 现有三工具不缺数量，本周不抢发布槽。",
+      "capabilityHypothesis": "CRM/销售会议复用，限定附加模块与治理条件",
+      "constraint": "延续 09-30 Organization/Enterprise 报价与 CRM 权益冲突",
+      "marketMaturity": "09-30 独立用户评价和持续产品已有审计；本轮未重新完成所有市场/权益核验。",
+      "officialSources": [
+        {
+          "url": "https://www.avoma.com/",
+          "status": "direct_read",
+          "scope": "会议/CRM 与附加模块",
+          "checkedAt": "2026-10-06"
+        },
+        {
+          "url": "https://www.avoma.com/pricing",
+          "status": "direct_read",
+          "scope": "当前多组席位/附加模块价格，未据此解除旧冲突",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "independentSignals": [
+        {
+          "url": "https://www.g2.com/sellers/avoma",
+          "status": "search_snapshot_only",
+          "strength": "strong_candidate",
+          "observation": "独立产品评论集合可检索，09-30 有已核实际用户；不刷新旧审核日期。",
+          "checkedAt": "2026-10-06"
+        },
+        {
+          "url": "https://www.infotech.com/software-reviews/products/avoma?c_id=254",
+          "status": "search_snapshot_only",
+          "strength": "auxiliary_pending",
+          "observation": "第二评价平台线索，具体用户内容待审。",
+          "checkedAt": "2026-10-06"
+        }
+      ],
+      "marketGate": "HOLD",
+      "keyFactGaps": [
+        "延续 09-30 Organization/Enterprise 报价与 CRM 权益冲突",
+        "同意、默认留存/删除与导出/角色边界待核",
+        "授权素材与三语言稿未完成"
+      ],
+      "duplicateIntent": "Neon 无匹配；销售会议详情与 meeting-notes/Guide 不重复；不得借补位连续发布会议类。",
+      "mediaAvailability": "09-30 无可用本地素材，官网展示不等于复用许可；HOLD。",
+      "indexTrack": "HOLD/draft → 全部准入通过且独立批准后 monitor/noindex → 另案索引评审；当前无索引批准",
+      "verdict": "HOLD_EVIDENCE",
+      "releaseExit": "完成逐项缺口、八项准入、三语言内容与真实素材审核，发布日重查实体/alias/意图；独立 QA 后再审批",
+      "publicReleaseApproved": false,
+      "indexReleaseApproved": false,
+      "relationshipCreationApproved": false,
+      "consumer": "Tool Intelligence；Task Page / Structured Comparison 仅在关系门禁另行通过后消费",
+      "nextReview": "下一正常运营日；超过 7 个运营日未处理则重读官方波动字段",
+      "productionIdentityCheck": {
+        "checkedAt": "2026-10-06T06:06:06.408Z",
+        "scope": "Neon tools 全量 69 行 name/title/url 产品/域名审阅；不是跨库发布 preflight",
+        "matches": [],
+        "releaseDayRecheckRequired": true
+      }
+    }
+  ],
+  "cl02Readback": {
+    "checkedAt": "2026-10-06T06:24:31.396Z",
+    "validationContract": "20261006-bilingual-publication-gate",
+    "productionWrites": 0,
+    "relationCounts": {
+      "gemini": [5, 10, 6],
+      "perplexity": [6, 10, 7]
+    },
+    "availabilityUnknownIds": [
+      "c7890701-0000-4000-8000-000000000201",
+      "d0186230-0000-4000-8000-000000000201",
+      "d0186230-0000-4000-8000-000000000202"
+    ],
+    "publication": "HOLD",
+    "taskHttp": 404,
+    "taskNoindex": true,
+    "toolIndexReason": "indexing_paused",
+    "sitemapEligible": false
+  }
+}
