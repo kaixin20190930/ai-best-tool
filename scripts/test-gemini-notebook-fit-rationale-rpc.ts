@@ -11,6 +11,9 @@ const taskId = '527fe8b7-c171-4c50-ab1f-9404d7536e7c';
 const profileId = 'c7890701-0000-4000-8000-000000000001';
 const fitId = 'c7890701-0000-4000-8000-000000000301';
 const reviewerId = 'd7890701-0000-4000-8000-000000000001';
+const historicalReviewerId = 'd7890701-0000-4000-8000-000000000002';
+const historicalEditorId = 'd7890701-0000-4000-8000-000000000003';
+const nonexistentUserId = 'd7890701-0000-4000-8000-000000000099';
 const capabilityIds = [201, 202].map((n) => `c7890701-0000-4000-8000-${String(n).padStart(12, '0')}`);
 const claimId = (n: number) => `c7890701-0000-4000-8000-${String(n).padStart(12, '0')}`;
 const sourceId = (n: number) => `c7890701-0000-4000-8000-${String(n).padStart(12, '0')}`;
@@ -92,7 +95,7 @@ const schema = `
   END $$;
   CREATE FUNCTION auth.role() RETURNS text LANGUAGE sql AS $$ SELECT current_setting('request.jwt.claim.role', true) $$;
   CREATE TABLE auth.users(id uuid PRIMARY KEY);
-  INSERT INTO auth.users VALUES ('${reviewerId}');
+  INSERT INTO auth.users VALUES ('${reviewerId}'), ('${historicalReviewerId}'), ('${historicalEditorId}');
   CREATE TABLE public.product_intelligence_profiles(
     id uuid PRIMARY KEY, owner_type text, owner_id uuid, profile_status text,
     next_review_at timestamptz, last_verified_at timestamptz);
@@ -313,6 +316,55 @@ async function main() {
       },
       /exact approved draft preimage/,
     );
+    const rejectHistoricalMetadata = (label: string, assignments: string, values: unknown[]) =>
+      rejectWithoutPartialWrite(
+        label,
+        async () => {
+          await db.query(`UPDATE tool_task_fits SET ${assignments} WHERE id=$${values.length + 1}`, [...values, fitId]);
+        },
+        /exact approved draft preimage/,
+      );
+    await rejectHistoricalMetadata(
+      'partially populated Fit review metadata',
+      "reviewed_by=$1,reviewed_at=now()-interval '1 day',review_due_at=now()+interval '30 days',last_edited_by=NULL",
+      [historicalReviewerId],
+    );
+    await rejectHistoricalMetadata(
+      'expired historical Fit review metadata',
+      "reviewed_by=$1,reviewed_at=now()-interval '90 days',review_due_at=now()-interval '1 day',last_edited_by=$2",
+      [historicalReviewerId, historicalEditorId],
+    );
+    await rejectHistoricalMetadata(
+      'future historical Fit reviewed_at',
+      "reviewed_by=$1,reviewed_at=now()+interval '1 minute',review_due_at=now()+interval '30 days',last_edited_by=$2",
+      [historicalReviewerId, historicalEditorId],
+    );
+    await rejectHistoricalMetadata(
+      'nonexistent historical Fit reviewer',
+      "reviewed_by=$1,reviewed_at=now()-interval '1 day',review_due_at=now()+interval '30 days',last_edited_by=$2",
+      [nonexistentUserId, historicalEditorId],
+    );
+    await rejectHistoricalMetadata(
+      'nonexistent historical Fit editor',
+      "reviewed_by=$1,reviewed_at=now()-interval '1 day',review_due_at=now()+interval '30 days',last_edited_by=$2",
+      [historicalReviewerId, nonexistentUserId],
+    );
+
+    await db.query('BEGIN');
+    await db.query(
+      `UPDATE tool_task_fits SET reviewed_by=$1,reviewed_at=now()-interval '1 day',
+      review_due_at=now()+interval '30 days',last_edited_by=$2 WHERE id=$3`,
+      [historicalReviewerId, historicalEditorId, fitId],
+    );
+    const historicalResult = (await rpc(db)).rows[0].result;
+    assert.deepEqual(historicalResult, { status: 'reviewed', fitId });
+    const recoveredHistoricalFit = await fit();
+    assert.equal(recoveredHistoricalFit.reviewed_by, reviewerId, 'historical reviewer was not replaced');
+    assert.equal(recoveredHistoricalFit.last_edited_by, reviewerId, 'historical editor was not replaced');
+    assert.ok(Date.parse(recoveredHistoricalFit.reviewed_at) <= Date.now());
+    assert.ok(Date.parse(recoveredHistoricalFit.review_due_at) > Date.now());
+    await db.query('ROLLBACK');
+    assert.equal((await fit()).status, 'draft', 'historical metadata transaction rollback did not restore draft Fit');
 
     await db.query('BEGIN');
     await db.query("UPDATE tool_task_fits SET fit_level='strong' WHERE id=$1", [fitId]);
@@ -392,6 +444,13 @@ async function main() {
           'wrong source URL',
           'unexpected Fit state',
           'Fit preimage drift',
+          'blank review metadata accepted',
+          'valid historical review metadata accepted and refreshed',
+          'partial review metadata rejected',
+          'expired historical review rejected',
+          'future reviewed_at rejected',
+          'nonexistent reviewer rejected',
+          'nonexistent last editor rejected',
           'concurrent Fit drift',
           'concurrent source drift',
           'serialized duplicate',

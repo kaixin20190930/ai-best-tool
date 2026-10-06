@@ -221,8 +221,16 @@ BEGIN
      v_fit_row.rationale IS DISTINCT FROM '{"en":"Works for source-grounded synthesis when users select a bounded source set and inspect each important citation.","cn":"用户选定有限资料集并逐条核查重要引用时，适于资料锚定的综合。"}'::jsonb OR
      v_fit_row.required_conditions IS DISTINCT FROM '[{"en":"Accept Google hosting, account and region limits; inspect imported sources and cited passages.","cn":"接受 Google 托管、账号和地区限制；核查导入资料和引文段落。"}]'::jsonb OR
      v_fit_row.disqualifiers IS DISTINCT FROM '[{"en":"Requires exhaustive reproducible literature search, simultaneous cross-notebook coverage, or unreviewed high-stakes conclusions.","cn":"要求穷尽可复现文献检索、同时覆盖多个 notebook，或未经复核的高风险结论。"}]'::jsonb OR
-     v_fit_row.reviewed_at IS NOT NULL OR v_fit_row.review_due_at IS NOT NULL OR
-     v_fit_row.reviewed_by IS NOT NULL OR v_fit_row.last_edited_by IS NOT NULL OR
+     NOT (
+       (v_fit_row.reviewed_by IS NULL AND v_fit_row.reviewed_at IS NULL AND
+        v_fit_row.review_due_at IS NULL AND v_fit_row.last_edited_by IS NULL) OR
+       (v_fit_row.reviewed_by IS NOT NULL AND EXISTS
+          (SELECT 1 FROM auth.users WHERE id = v_fit_row.reviewed_by) AND
+        v_fit_row.reviewed_at IS NOT NULL AND v_fit_row.reviewed_at <= v_now AND
+        v_fit_row.review_due_at IS NOT NULL AND v_fit_row.review_due_at > v_now AND
+        v_fit_row.last_edited_by IS NOT NULL AND EXISTS
+          (SELECT 1 FROM auth.users WHERE id = v_fit_row.last_edited_by))
+     ) OR
      v_fit_row.updated_at IS NULL THEN
     RAISE EXCEPTION 'Gemini Fit is not the exact approved draft preimage or reviewed target'
       USING ERRCODE = '23514';
