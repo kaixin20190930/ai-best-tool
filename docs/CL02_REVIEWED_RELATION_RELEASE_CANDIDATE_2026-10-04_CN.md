@@ -1,5 +1,7 @@
 # CL-02 · Gemini Notebook / Perplexity reviewed relation release candidate
 
+> 2026-10-06 superseding 候选：见[CL02 发布门禁修复审计](./CL02_PUBLISH_GATE_REMEDIATION_2026-10-06_CN.md)。旧前像仅留作历史；最新只读数量为 Gemini 5/10/6、Perplexity 6/10/7。三条 availability unknown 继续 HOLD；新版 RPC 迁移和 3/day 文案仅本地候选，尚未部署/应用/发布。
+
 状态：**受控候选已准备，生产仍只读；当前 preflight HOLD，待 Gemini 关系与文案修复后再交独立 QA。** 本文件不是生产执行回执，也不是 Task Page 或索引批准。
 
 ## 生产只读前镜像

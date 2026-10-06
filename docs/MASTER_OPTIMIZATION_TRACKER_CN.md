@@ -1,6 +1,8 @@
 # 收录与搜索质量主计划
 
-更新时间：2026-10-04
+更新时间：2026-10-06
+
+2026-10-06 CL02-PUBLISH-GATE-REMEDIATION **本地修复候选／生产发布 HOLD**：新增 superseding RPC migration，严格接受完整双语 limitations 对象数组，拒绝旧 string/单语/空短文/错误类型；预检同步 availability、plan_requirement 与 limitations，明确输出字段 blocker。官方复核确认 Perplexity Free Pro Search 3/day，Decision/两个 Capability 文案生成后台候选；目标账号与完整范围未核验，两条 availability 仍 unknown。Decision watch_outs 当前缺后台内容编辑入口，候选明确 HOLD，未冒充已应用。Gemini research-discovery 仍 unknown。只读回验关系数 Gemini 5/10/6、Perplexity 6/10/7，Task 404/noindex、两个工具 indexing_paused、sitemap excluded。没有生产写入、发布、push 或 deploy。验证与候选详见[门禁修复审计](./CL02_PUBLISH_GATE_REMEDIATION_2026-10-06_CN.md)。
 
 2026-10-04 通用 Task Page 语义修正：能力门禁统一为至少一条 required、preferred 可为 0..n；所有展示中的 required/preferred 关系仍须 published/current、定义 active 且有理由。CL-02 两条真实 Task Capability 继续均为 required，移除缺 preferred blocker 后 research-with-citations 仍因 Gemini Notebook 与 Perplexity Fit 未发布、Gemini 双语角色理由不清而为 **1/3，HOLD**。Task Page 专项、Capability read model 与 Decision review gate 测试通过，`tsc --noEmit` 通过；确认 `.env.local` 被忽略后用本机配置软链接重跑，完整 build 通过。`test:meeting-notes-remediation` 另有旧断言要求页面注册表为空，与现有 meeting-notes 审批状态不符；测试未改，留待独立 QA 作 baseline 归因。无生产写入、页面放行、push 或 deploy，Task Page 仍 404/noindex 且 sitemap excluded。该通用语义修正不是 Task Page 批准；交付提交后等待独立 QA。详见[Task Page 编辑预检审计](./DECISION_GRAPH_CL02_TASK_PAGE_EDITORIAL_GATE_2026-10-04_CN.md)。
 

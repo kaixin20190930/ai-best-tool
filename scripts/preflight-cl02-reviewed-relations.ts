@@ -3,6 +3,10 @@ import { loadEnvConfig } from '@next/env';
 import { Client } from 'pg';
 
 import { getDatabaseConnectionString } from '../lib/database/connection';
+import {
+  reviewedFitConditionsComplete,
+  reviewedToolCapabilityContentBlockers,
+} from '../lib/decision/reviewedToolCapabilityGate';
 import { APPROVED_TASK_PAGE_SLUGS, getTaskPageRouteDecision } from '../lib/seo/taskPageApproval';
 import { getToolIndexDecision } from '../lib/seo/toolIndexing';
 import { createAdminClient } from '../lib/supabase/admin';
@@ -193,6 +197,10 @@ async function main() {
         return hasPurposes(ownLinks, ['support', 'availability', 'plan', 'limitation']);
       });
     const fitPurposeCheck = hasPurposes(groupFitLinks, ['fit', 'limitation']);
+    const capabilityContentBlockers = targetCaps.flatMap((capability) =>
+      reviewedToolCapabilityContentBlockers(capability).map((reason) => `${capability.id}:${reason}`),
+    );
+    blockers.push(...capabilityContentBlockers);
     const reviewed = Boolean(
       profile &&
         profile.profile_status === 'ready' &&
@@ -212,12 +220,8 @@ async function main() {
         fit.fit_level === 'conditional' &&
         fit.rationale?.en &&
         fit.rationale?.cn &&
-        Array.isArray(fit.required_conditions) &&
-        fit.required_conditions.length &&
-        Array.isArray(fit.disqualifiers) &&
-        fit.disqualifiers.length &&
-        fit.required_conditions.every((x: Row) => x.en && x.cn) &&
-        fit.disqualifiers.every((x: Row) => x.en && x.cn),
+        reviewedFitConditionsComplete(fit.required_conditions) &&
+        reviewedFitConditionsComplete(fit.disqualifiers),
     );
     const manifest = {
       toolId: target.toolId,
@@ -231,12 +235,18 @@ async function main() {
         tool_id: decision.tool_id,
         updated_at: decision.updated_at,
         status: decision.editorial_status,
+        decision_summary: decision.decision_summary,
+        watch_outs: decision.watch_outs,
         reviewed_by: decision.reviewed_by,
         reviewed_at: decision.reviewed_at,
         review_due_at: decision.review_due_at,
       },
       toolCapabilities: targetCaps.map((x) => ({
         id: x.id,
+        support_level: x.support_level,
+        availability: x.availability,
+        plan_requirement: x.plan_requirement,
+        limitations: x.limitations,
         updated_at: x.updated_at,
         status: x.status,
         reviewed_by: x.reviewed_by,
@@ -265,6 +275,7 @@ async function main() {
       exactCounts,
       sameOwnerReadyEvidence: claimsCurrentOfficial,
       toolCapabilityPurposes: capPurposeChecks,
+      toolCapabilityContent: targetCaps.length === 2 && capabilityContentBlockers.length === 0,
       fitPurposes: fitPurposeCheck,
       rationaleConditionsDisqualifiers: fitContentComplete,
       sourceRole: fitRoleOk,
@@ -277,7 +288,7 @@ async function main() {
         );
       }
     }
-    return { name: target.name, checks, manifest };
+    return { name: target.name, checks, capabilityContentBlockers, manifest };
   });
 
   const neon = new Client({ connectionString: getDatabaseConnectionString() });
@@ -338,6 +349,7 @@ async function main() {
   const output = {
     checkedAt: new Date().toISOString(),
     readOnly: true,
+    validationContract: '20261006-bilingual-publication-gate',
     productionWrites: 0,
     groups: groupsOut,
     pageAndIndex: {

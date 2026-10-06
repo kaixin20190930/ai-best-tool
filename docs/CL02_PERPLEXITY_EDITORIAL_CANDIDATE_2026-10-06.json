@@ -1,0 +1,154 @@
+{
+  "deliveryUnit": "CL02-PUBLISH-GATE-REMEDIATION",
+  "status": "CANDIDATE_ONLY_HOLD",
+  "observedAt": "2026-10-06T04:27:06.894Z",
+  "productionWrites": 0,
+  "publishAllowed": false,
+  "toolId": "3d018623-85f9-4df4-bd55-9a4a0e7a2d93",
+  "officialSources": [
+    {
+      "url": "https://www.perplexity.ai/help-center/en/articles/11187416-which-perplexity-subscription-plan-is-right-for-you",
+      "lastModified": "2026-10-02"
+    },
+    {
+      "url": "https://www.perplexity.ai/help-center/en/articles/10352903-what-is-pro-search",
+      "lastModified": "2026-09-03"
+    }
+  ],
+  "decision": {
+    "executionStatus": "HOLD_ADMIN_CONTENT_EDITOR_REQUIRED",
+    "expectedPreimage": {
+      "tool_id": "3d018623-85f9-4df4-bd55-9a4a0e7a2d93",
+      "updated_at": "2026-10-04T08:00:20.416155+00:00",
+      "status": "reviewed",
+      "decision_summary": {
+        "cn": "适于开放网页发现与带来源综合，重要结论须核读原文。",
+        "en": "Useful for open-web discovery and cited synthesis when the reader checks important original sources."
+      },
+      "watch_outs": [
+        {
+          "cn": "范围与权益受搜索焦点、套餐和账号影响。来源链接及域名标签不证明准确；Free Pro Search 精确额度未消歧。Web 与 API 权益分离。",
+          "en": "Focus, plan and account change scope and access. Source links and domain labels do not prove accuracy; Free Pro Search exact quota is unresolved. Web and API entitlements differ."
+        }
+      ],
+      "reviewed_by": "2b8177ac-70b3-4475-a1ee-509ff8b4b622",
+      "reviewed_at": "2026-10-04T08:00:20.468514+00:00",
+      "review_due_at": "2026-11-02T00:00:00+00:00"
+    },
+    "patch": {
+      "watch_outs": [
+        {
+          "en": "Free Pro Search is listed at 3/day in the current official comparison. Check the target account and scope; source links do not guarantee accuracy. Web/app and API access are separate.",
+          "cn": "当前官方比较表列出 Free Pro Search 为每日 3 次。须核对目标账号及范围；来源链接不保证准确。Web/app 与 API 权益分离。"
+        }
+      ]
+    },
+    "allowedFields": [
+      "watch_outs"
+    ],
+    "requires": [
+      "Fresh updated_at and old-value match",
+      "Admin authentication and audit",
+      "Reset review on edit; independently re-review",
+      "No publication or relation-link changes"
+    ]
+  },
+  "toolCapabilities": [
+    {
+      "executionStatus": "ADMIN_FORM_CANDIDATE_NOT_APPLIED",
+      "expectedPreimage": {
+        "id": "d0186230-0000-4000-8000-000000000201",
+        "support_level": "strong",
+        "availability": "unknown",
+        "plan_requirement": {
+          "cn": "Standard 可用基础搜索；Pro Search 深度与限制依套餐变化。Free Pro Search 精确额度未知。",
+          "en": "Basic search is available on Standard; Pro Search depth and limits vary by plan. Exact Free Pro Search quota is unknown."
+        },
+        "limitations": [
+          {
+            "cn": "开放网页与选定焦点不等于穷尽文献检索；须核读原文。",
+            "en": "Open-web and selected focus are not an exhaustive literature search; inspect original sources."
+          }
+        ],
+        "updated_at": "2026-10-04T08:00:20.416155+00:00",
+        "status": "reviewed",
+        "reviewed_by": "2b8177ac-70b3-4475-a1ee-509ff8b4b622",
+        "reviewed_at": "2026-10-04T08:00:20.468514+00:00",
+        "review_due_at": "2026-11-02T00:00:00+00:00"
+      },
+      "form": {
+        "route": "/cn/admin/decision",
+        "action": "saveToolCapability",
+        "id": "d0186230-0000-4000-8000-000000000201",
+        "toolId": "3d018623-85f9-4df4-bd55-9a4a0e7a2d93",
+        "capabilityId": "50288b6e-a968-4bcf-9e55-911df203e0c7",
+        "supportLevel": "strong",
+        "availability": "unknown",
+        "planRequirement": {
+          "en": "Free basic search and 3/day Pro Search are documented. This relation covers open-web discovery, subject to account, focus and plan limits; Research mode and API access are separate.",
+          "cn": "官方列有 Free 基础搜索及每日 3 次 Pro Search。本关系限于开放网页发现，受账号、焦点与套餐约束；Research 模式和 API 权益另行核对。"
+        },
+        "limitations": [
+          {
+            "en": "Selected focus and web coverage do not provide exhaustive literature retrieval. Verify the intended account workflow and original sources.",
+            "cn": "选定焦点与网页覆盖不提供穷尽文献检索。须核验目标账号流程并核读原始来源。"
+          }
+        ],
+        "status": "draft"
+      },
+      "availabilityRationale": "Preserve unknown until the intended relation scope and target account are directly verified; one quota does not prove all_plans.",
+      "allowedContentFields": [
+        "plan_requirement",
+        "limitations"
+      ]
+    },
+    {
+      "executionStatus": "ADMIN_FORM_CANDIDATE_NOT_APPLIED",
+      "expectedPreimage": {
+        "id": "d0186230-0000-4000-8000-000000000202",
+        "support_level": "partial",
+        "availability": "unknown",
+        "plan_requirement": {
+          "cn": "官方说明 Pro Search 有直接来源链接；须按目标套餐及账号核对。",
+          "en": "Direct source links are documented for Pro Search; verify access on the target plan and account."
+        },
+        "limitations": [
+          {
+            "cn": "链接提供回查路径，不证明单篇或单条主张正确；本站未独立实测准确性。",
+            "en": "Links are a review path, not evidence of page-level or claim-level correctness; accuracy was not independently tested."
+          }
+        ],
+        "updated_at": "2026-10-04T08:00:20.416155+00:00",
+        "status": "reviewed",
+        "reviewed_by": "2b8177ac-70b3-4475-a1ee-509ff8b4b622",
+        "reviewed_at": "2026-10-04T08:00:20.468514+00:00",
+        "review_due_at": "2026-11-02T00:00:00+00:00"
+      },
+      "form": {
+        "route": "/cn/admin/decision",
+        "action": "saveToolCapability",
+        "id": "d0186230-0000-4000-8000-000000000202",
+        "toolId": "3d018623-85f9-4df4-bd55-9a4a0e7a2d93",
+        "capabilityId": "04930ae8-4c78-487f-a6c9-25680b8da681",
+        "supportLevel": "partial",
+        "availability": "unknown",
+        "planRequirement": {
+          "en": "Pro Search provides original-source links; Free currently has 3/day Pro Searches. This relation covers inspecting those links, not guaranteed claim-level accuracy; verify target-account access.",
+          "cn": "Pro Search 提供原始来源链接，Free 当前每日可用 3 次。本关系仅指链接回查，不保证逐条主张准确；须核验目标账号权限。"
+        },
+        "limitations": [
+          {
+            "en": "Source links are a review path, not proof that each claim is supported. This site has not independently tested citation accuracy; inspect context and methods.",
+            "cn": "来源链接提供回查路径，不证明每条主张都有支撑。本站未独立实测引文准确性；须核查语境与方法。"
+          }
+        ],
+        "status": "draft"
+      },
+      "availabilityRationale": "Preserve unknown until the intended relation scope and target account are directly verified; one quota does not prove all_plans.",
+      "allowedContentFields": [
+        "plan_requirement",
+        "limitations"
+      ]
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 # Perplexity · CL-02 Stage 2 官方事实字段审计
 
+> 2026-10-06 superseding 候选：见[CL02 发布门禁修复审计](./CL02_PUBLISH_GATE_REMEDIATION_2026-10-06_CN.md)。旧前像仅留作历史；最新只读数量为 Gemini 5/10/6、Perplexity 6/10/7。三条 availability unknown 继续 HOLD；新版 RPC 迁移和 3/day 文案仅本地候选，尚未部署/应用/发布。
+
 核查日期：2026-10-03。对象仅为既有 Perplexity 工具 `3d018623-85f9-4df4-bd55-9a4a0e7a2d93` 的 `research-with-citations` 候选。以下均为 Perplexity 官方一手网页；候选 SQL 只保存待核的摘要及 URL，不保存 verified 状态或人工摘录。审核人执行前须重新打开原文，核对页面更新时间、适用账户及实际界面。
 
 | 候选 claim / 字段 | 官方来源与可核事实 | 适用范围和不得外推之处 |
