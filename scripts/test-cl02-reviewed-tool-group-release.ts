@@ -10,6 +10,17 @@ const withdrawalMigration = readFileSync('db/supabase/migrations/20261004_admin_
 const action = readFileSync('app/actions/admin/decision.ts', 'utf8');
 const ui = readFileSync('components/admin/ReviewedTaskToolGroupRelease.tsx', 'utf8');
 const preflight = readFileSync('scripts/preflight-cl02-reviewed-relations.ts', 'utf8');
+for (const [name, expectedCounts] of [
+  ['Gemini Notebook', [5, 10, 6]],
+  ['Perplexity', [6, 10, 7]],
+] as const) {
+  const target = preflight.match(new RegExp(`name: '${name}',([\\s\\S]*?)expectedRationale:`))?.[1];
+  assert.ok(target, `${name}: preflight target must exist`);
+  const counts = ['decisionCapabilities', 'toolCapabilityLinks', 'fitLinks'].map((field) =>
+    Number(target.match(new RegExp(`${field}: (\\d+)`))?.[1]),
+  );
+  assert.deepEqual(counts, expectedCounts, `${name}: preflight must require exact reviewed relation counts`);
+}
 assert.match(migration, /auth\.role\(\) IS DISTINCT FROM 'service_role'/);
 assert.match(
   migration,

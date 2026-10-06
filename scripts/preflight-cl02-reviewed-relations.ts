@@ -18,7 +18,7 @@ const groups = [
     capabilityIds: ['c7890701-0000-4000-8000-000000000201', 'c7890701-0000-4000-8000-000000000202'],
     fitId: 'c7890701-0000-4000-8000-000000000301',
     decisionCapabilities: 5,
-    toolCapabilityLinks: 9,
+    toolCapabilityLinks: 10,
     fitLinks: 6,
     expectedRationale: {
       en: 'Use Gemini Notebook to synthesize sources the user selects or supplies and imports into a notebook; it can discover some Web or Drive sources for selection, but it is not open-web search.',
@@ -270,11 +270,13 @@ async function main() {
       sourceRole: fitRoleOk,
       candidateRationale: fitCandidateMatches,
     };
-    for (const [name, passed] of Object.entries(checks))
-      if (!passed)
+    for (const [name, passed] of Object.entries(checks)) {
+      if (!passed) {
         blockers.push(
           `${target.name.replaceAll(' ', '_').toUpperCase()}_${name.replace(/[A-Z]/g, (c) => `_${c.toLowerCase()}`).toUpperCase()}`,
         );
+      }
+    }
     return { name: target.name, checks, manifest };
   });
 
