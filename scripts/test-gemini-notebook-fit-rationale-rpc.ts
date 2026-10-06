@@ -5,7 +5,10 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { Client } from 'pg';
 
-const migration = readFileSync('db/supabase/migrations/20261005_admin_gemini_fit_rationale_recovery.sql', 'utf8');
+// Load V2 directly: the legacy migration can be absent or overwritten without
+// changing the function under test.
+const migrationPath = 'db/supabase/migrations/20261006_admin_gemini_fit_draft_recovery_v2.sql';
+const migration = readFileSync(migrationPath, 'utf8');
 const toolId = 'cec78907-e2a1-4eb7-853a-a58334026280';
 const taskId = '527fe8b7-c171-4c50-ab1f-9404d7536e7c';
 const profileId = 'c7890701-0000-4000-8000-000000000001';
@@ -170,7 +173,39 @@ async function main() {
     }
     await Promise.all([db.connect(), concurrent.connect()]);
     await db.query(schema);
+    // Model an already-installed obsolete RPC without reading the mutable legacy
+    // migration. V2 must replace this same signature, including its permissions.
+    await db.query(`CREATE FUNCTION public.admin_apply_gemini_notebook_fit_rationale(p_reviewer uuid)
+      RETURNS jsonb LANGUAGE plpgsql AS $$ BEGIN
+        RAISE EXCEPTION 'obsolete installed Gemini Fit RPC' USING ERRCODE = '23514';
+      END; $$;
+      GRANT EXECUTE ON FUNCTION public.admin_apply_gemini_notebook_fit_rationale(uuid) TO anon, authenticated;`);
+    await assert.rejects(
+      db.query('SELECT public.admin_apply_gemini_notebook_fit_rationale($1)', [reviewerId]),
+      /obsolete installed Gemini Fit RPC/,
+    );
+    const installedOid = (
+      await db.query("SELECT 'public.admin_apply_gemini_notebook_fit_rationale(uuid)'::regprocedure::oid AS oid")
+    ).rows[0].oid;
     await db.query(migration);
+    const installed = (
+      await db.query(`SELECT oid, prosecdef,
+      has_function_privilege('anon', oid, 'EXECUTE') AS anon_execute,
+      has_function_privilege('authenticated', oid, 'EXECUTE') AS authenticated_execute,
+      has_function_privilege('service_role', oid, 'EXECUTE') AS service_execute
+      FROM pg_proc WHERE oid='public.admin_apply_gemini_notebook_fit_rationale(uuid)'::regprocedure`)
+    ).rows[0];
+    assert.deepEqual(
+      installed,
+      {
+        oid: installedOid,
+        prosecdef: true,
+        anon_execute: false,
+        authenticated_execute: false,
+        service_execute: true,
+      },
+      'V2 must replace the existing RPC in place and restore service-only execution',
+    );
     await Promise.all([
       db.query("SET request.jwt.claim.role = 'service_role'"),
       concurrent.query("SET request.jwt.claim.role = 'service_role'"),
@@ -324,11 +359,20 @@ async function main() {
         },
         /exact approved draft preimage/,
       );
-    await rejectHistoricalMetadata(
-      'partially populated Fit review metadata',
-      "reviewed_by=$1,reviewed_at=now()-interval '1 day',review_due_at=now()+interval '30 days',last_edited_by=NULL",
-      [historicalReviewerId],
-    );
+    // All 14 partially populated combinations must fail; only all-null (0) and
+    // all-present (15) are permitted and exercised by the successful calls below.
+    for (let mask = 1; mask < 15; mask += 1) {
+      await rejectHistoricalMetadata(
+        `partially populated Fit review metadata (mask ${mask})`,
+        'reviewed_by=$1,reviewed_at=$2,review_due_at=$3,last_edited_by=$4',
+        [
+          mask & 1 ? historicalReviewerId : null,
+          mask & 2 ? new Date(Date.now() - 86400000) : null,
+          mask & 4 ? new Date(Date.now() + 30 * 86400000) : null,
+          mask & 8 ? historicalEditorId : null,
+        ],
+      );
+    }
     await rejectHistoricalMetadata(
       'expired historical Fit review metadata',
       "reviewed_by=$1,reviewed_at=now()-interval '90 days',review_due_at=now()-interval '1 day',last_edited_by=$2",
@@ -390,6 +434,11 @@ async function main() {
     await rpc(db);
     assert.notDeepEqual(await state(), beforeConcurrency, 'successful RPC did not review the Fit');
     const reviewedFit = await fit();
+    assert.deepEqual(
+      { ...(await state()), fits: beforeConcurrency.fits },
+      beforeConcurrency,
+      'successful recovery changed evidence outside the Fit',
+    );
     assert.equal(reviewedFit.status, 'reviewed');
     assert.deepEqual(reviewedFit.rationale, approvedRationale);
     assert.equal(reviewedFit.fit_level, 'conditional');
@@ -410,6 +459,10 @@ async function main() {
     const replay = (await rpc(db)).rows[0].result;
     assert.deepEqual(replay, { status: 'unchanged', fitId });
     assert.deepEqual(await state(), stateAfterReview, 'idempotent replay changed the reviewed postimage');
+    await db.query(migration);
+    assert.deepEqual(await state(), stateAfterReview, 'reapplying V2 changed data');
+    assert.deepEqual((await rpc(db)).rows[0].result, { status: 'unchanged', fitId });
+    assert.deepEqual(await state(), stateAfterReview, 'RPC replay after reinstall changed data');
 
     // A concurrent writer changes a locked official source while the RPC is
     // starting. The RPC waits on its table lock, sees the committed drift, and
@@ -437,8 +490,11 @@ async function main() {
     console.log(
       JSON.stringify({
         test: 'Gemini Notebook Fit rationale transactional RPC',
+        migration: migrationPath,
         result: 'PASS',
         cases: [
+          'V2 replaces an obsolete installed RPC without reading the legacy migration',
+          'service-only execution restored',
           'valid update',
           'missing claim/source/link',
           'wrong source URL',
@@ -446,7 +502,7 @@ async function main() {
           'Fit preimage drift',
           'blank review metadata accepted',
           'valid historical review metadata accepted and refreshed',
-          'partial review metadata rejected',
+          'all 14 partial review metadata combinations rejected',
           'expired historical review rejected',
           'future reviewed_at rejected',
           'nonexistent reviewer rejected',
@@ -456,6 +512,8 @@ async function main() {
           'serialized duplicate',
           'idempotent replay',
           'transaction rollback',
+          'non-Fit evidence unchanged',
+          'V2 migration reapplication and RPC replay preserve data',
         ],
         productionWrites,
       }),

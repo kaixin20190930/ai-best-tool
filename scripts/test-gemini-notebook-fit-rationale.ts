@@ -2,7 +2,8 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
 const action = readFileSync('app/actions/admin/evidenceReview.ts', 'utf8');
-const migration = readFileSync('db/supabase/migrations/20261005_admin_gemini_fit_rationale_recovery.sql', 'utf8');
+const migration = readFileSync('db/supabase/migrations/20261006_admin_gemini_fit_draft_recovery_v2.sql', 'utf8');
+assert.match(migration, /GEMINI-FIT-DRAFT-RECOVERY-V2/);
 const controls = readFileSync('components/admin/EvidenceReviewControls.tsx', 'utf8');
 const queue = readFileSync('app/[locale]/(admin)/admin/intelligence/review/page.tsx', 'utf8');
 const fitAction = action.match(
@@ -21,10 +22,7 @@ assert.match(migration, /IN SHARE ROW EXCLUSIVE MODE/);
 assert.match(migration, /updated_at = v_fit_row\.updated_at/);
 assert.match(migration, /status = 'reviewed'/);
 assert.match(migration, /last_edited_by = p_reviewer/);
-assert.match(
-  migration,
-  /Five exact current Google official Gemini sources are required|Seven exact current Google official Gemini sources are required/,
-);
+assert.match(migration, /Seven exact current Google official Gemini sources are required/);
 assert.match(migration, /Ten exact current verified Gemini official claims are required/);
 assert.match(migration, /evidence relationships must exactly match 5\/10\/6/);
 assert.match(migration, /status', 'unchanged'/);
@@ -39,4 +37,4 @@ assert.match(controls, /aria-busy=\{pending\}/);
 assert.match(controls, /role='status' aria-live='polite'/);
 assert.match(queue, /<GeminiNotebookFitRationaleButton \/>/);
 
-console.log('Gemini Notebook Fit rationale action, transactional RPC and UI contract: PASS');
+console.log('Gemini Notebook Fit rationale V2 migration, action, transactional RPC and UI contract: PASS');
