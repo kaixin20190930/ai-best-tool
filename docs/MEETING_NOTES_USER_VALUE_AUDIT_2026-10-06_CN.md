@@ -56,3 +56,53 @@
 另案只处理上述内容与必要映射，保持当前 noindex/sitemap 边界。验收要求：中英各三条具体理由、各有真实限制/条件；任务约束不
 为空泛提示；来源可区分用途且同 URL 不重复占行；三个详情链接和一个下一步均同语言有效。实施后才做 360/390px 真实视觉检查。
 无需新增页面类型、候选数量或基础设施。
+
+## MTN-UX-01 开发交付（2026-10-06，待独立 QA / owner 内容应用）
+
+本节追加实施结果，保留上方原始生产审计。**未部署、未执行生产写入；不得将本地通过写成生产整改完成。**
+
+### 复现与根因
+
+再次 GET 英中生产页，复现中文三条英文理由、3/3 限制 fallback、8 个来源链接 / 6 个唯一 URL，以及空泛任务约束。Supabase 通过 `pub-03-readonly-run.mjs` 的 GET/HEAD 限制回读：
+
+- 三条理由均有 `en` / `zh`，没有 `cn`；会议页读取只认 `cn`，不是数据库完全没有中文。
+- `required_conditions` 与 `disqualifiers` 各有两条英文字符串，读模型只接受本地化对象，因而全部丢弃。原有录音告知、人工复核、自动入会、共享、保留/删除前提不能在补文案时删除。
+- `constraint_schema` 实际是 role/export/team_size/data_sensitivity 的枚举；页面原先只读取布尔 key。会议 Finder **没有 budget 配置**，所以 CTA 不再承诺预算输入，也不承诺任务预选。
+- 9 个 Fit evidence links 中 Fathom 旧首页 claim 已过复查期，现有读模型正确排除；8 个当前可见来源来自 6 个唯一 URL。本轮未刷新或删除旧 claim。
+
+### 最小实现
+
+1. 仅 meeting-notes 兼容 `zh → cn`，其他 cluster 的本地化行为不变。
+2. [受控内容 SQL 候选](../db/supabase/manual/20261006_meeting_notes_user_value_candidate.sql)只更新现有三条 Fit 的双语理由、条件与排除项。每条增加具体套餐前提/限制，并将原有两条条件和两条排除要求转成 `en/cn/zh` 对象完整保留。Fathom 聚焦个人摘要及 Premium 跟进；Otter 聚焦日历摘要邮件及近期记录；Fireflies 聚焦自动入会及额度/存储管理。
+3. 会议页约束显示摘要需求、会议长度/历史查阅、自动入会/存储/下载、共享接收者四个选择条件。每项仅在相应当前来源仍存在时展示；来源仍就近放在候选卡片，不新增证据区。事实来自本轮再次核对的官方 [Fathom 免费/Premium](https://help.fathom.video/en/articles/5290881)、[Otter Basic 限制](https://help.otter.ai/hc/en-us/articles/360047538094-Conversation-import-and-app-limits-on-the-Basic-free-plan)、[Otter 摘要邮件](https://help.otter.ai/hc/en-us/articles/9156381229079-Meeting-Summary-Overview)、[Fireflies Free](https://guide.fireflies.ai/articles/4027724828-learn-about-the-fireflies-free-plan)。本次浏览未改数据库核验日期。
+4. 仅会议页按精确 URL 合并，显示来源用途，保留每个不同的真实核验/复查时间组合；不把较新日期扩展到旧 claim。
+5. 内部发布措辞改成来源与套餐边界说明。三个详情入口和底部一个后续筛选入口保留同语言路径；明确下一页需再次选择会议任务，CTA 为“按隐私和导出要求继续筛选”。
+
+### Owner 一次性操作与安全边界
+
+需要 owner 独立审核 SQL 内的中英文内容和官方证据，然后将候选内 `v_reviewer uuid := NULL` 替换成实际审核者 `auth.users.id`，执行整块 DO。**这是一份手动候选，不在自动 migrations 中，本轮没有执行。** 执行前可运行：
+
+```sh
+PUB03_ENV_FILE=/path/to/owner.env node scripts/pub-03-readonly-run.mjs pnpm exec tsx scripts/verify-meeting-notes-user-value-readonly.ts
+```
+
+当前只读结果：3/3 `owner_action_pending`、6/6 指定证据为当前 verified / official / same-owner。SQL 要求精确原始 Fit 快照（含 `updated_at`）、同 owner 的原始事实/URL/核验日期及当前证据；加锁后任何漂移即整块失败。保留 fit_level/status/review_due_at、原有证据链接和数据库编辑历史触发器；新文案记录真实审核人及审核时刻，**不延长复查期限**。重复执行会安全拒绝。其他 Task、Tool Capability、任务配置、工具索引均不写入。
+
+代码上线可先修复旧 `zh` 文案显示、约束、来源及 CTA；三条完整差异化理由和限制需要 owner 应用 SQL 后才会全部可见。最终用户价值验收需在代码与内容均应用后进行。
+
+### 验证结果
+
+- `pnpm exec tsx scripts/test-meeting-notes-user-value.ts`：PASS（中英候选、治理要求保留、同 URL 合并且保留旧日期、来源用途、无来源不显示对应约束、其他 cluster 不变）。
+- `pnpm exec tsx scripts/test-meeting-notes-user-value-sql.ts`：PASS（空白本地 PostgreSQL，实际执行后回滚；审核人、漂移、过期、跨 owner、重复执行门禁；三行双语结果、原有状态/期限、编辑历史；不同时区执行）。
+- `pnpm exec tsc --noEmit`：PASS。首轮 Map 迭代器兼容错误已修复；三个运行时代码文件 ESLint PASS。
+- `test:decision-task-page`、`test:decision-rules`、`test:decision-seo-release`、`test:tool-indexing`：全部 PASS。
+- 完整 `pnpm run build`（经生产只读包装器）：PASS。仅已有 Browserslist 数据过旧提示，无编译错误。
+- 本地 `next start` 以只读包装器连接现有数据，英中实际响应 HTML（JSDOM）检查 PASS：各 3 候选 / 6 唯一来源 / 中文理由可见 / 3 同语言详情 / 1 下一步，均 self-canonical + `noindex, follow`。这是 SQL 应用前的真实页面，不把候选限制文案冒充生产已生效。
+- `git diff --check`：PASS。
+
+### 残余风险 / 不能宣称完成的项目
+
+- 未部署、未 push、未写生产。SQL 应用与应用后的独立内容 QA 仍待 owner；证据或原始行变化后应重新审核候选，不能跳过 drift guard。
+- 360/390px 真机/浏览器视觉、键盘/读屏验证仍为 **N/A**，不把结构测试或 HTML 检查冒充视觉 PASS。
+- Fathom 旧首页 claim 过期是已存在的范围外数据状态；现有 freshness 过滤保留，不延伸为证据清理任务。
+- 主工作区未提交的 `20261003_perplexity_plans_claim_correction.sql` 与 `20261005_admin_gemini_fit_rationale_recovery.sql` 未修改。

@@ -2,6 +2,8 @@
 
 更新时间：2026-10-06
 
+2026-10-06 **MTN-UX-01 开发交付，待独立 QA / owner 一次性内容应用**：复现 meeting-notes 的 `zh/cn`、字符串条件数组、枚举约束与页面读取不匹配。已完成会议页专属中文兼容、证据支持的具体约束、6 URL 来源用途/去重且保留原日期、单一同语言隐私/导出下一步；三条差异化双语理由与真实限制以精确快照/证据门禁的手动 SQL 候选交付，保留既有录音/复核/治理要求，不执行生产写入。TypeScript、相关回归、本地 PostgreSQL 原子门禁测试与完整 build PASS。noindex/canonical/sitemap、候选数量、工具索引和其余 Task cluster 不变；未部署/未 push，360/390px 视觉 N/A，不宣布生产用户价值闭环。详见 [MTN-UX-01 实施与 owner 验收说明](./MEETING_NOTES_USER_VALUE_AUDIT_2026-10-06_CN.md)。
+
 2026-10-06 CL02-PUBLISH-GATE-REMEDIATION **已 QA_PASS、已部署、迁移已应用；生产验证 HOLD（仅三个 availability unknown）**：集成提交 `e938d1c6` 已推送 main，Vercel 部署成功，owner 已应用双语门禁迁移。总控已完成技术/生产收口；本轮 `2026-10-06T06:24:31.396Z` 只读预检确认 `productionWrites=0`、合约 `20261006-bilingual-publication-gate`、Gemini links **5/10/6**、Perplexity **6/10/7**。剩余仅 Gemini research-discovery 与 Perplexity 两项 Capability 的 `availability=unknown`；组级内容 blocker 是三字段的汇总。Task 仍 404/noindex，两个工具 indexing_paused、sitemap excluded；Perplexity `3/day` 文字仍为未应用编辑候选，不解除 availability。无需重复迁移或继续增加基础设施。当前执行状态和回读见[运营重启台账](./OPS_RESET_CANDIDATE_BUFFER_2026-10-06_CN.md)；[门禁修复审计](./CL02_PUBLISH_GATE_REMEDIATION_2026-10-06_CN.md)保留开发时历史原文。
 
 2026-10-06 OPS-RESET-01 **开发/编辑交付，待独立 QA**：生产只读回读 69 total、54 published（17 continue_index / 35 monitor / 2 archive）、9 draft、6 rejected；sitemap **126 URL / 0 Task URL**。新的[15 项成熟产品研究缓冲与七运营日排期](./OPS_RESET_CANDIDATE_BUFFER_2026-10-06_CN.md)覆盖六 Task，市场门槛通过 3 项，但整体 **15 HOLD / 0 ready**；Top 5 为 **Elicit、Murf Studio、Pika、Canva、Bolt**，唯一下一发布候选 **Elicit（素材/内容 HOLD）**。Lovable/Replit 等已存在实体不计新增；meeting-notes 仅保留 Avoma 储备，不安排本期新发布。[会议 Task 用户价值审计](./MEETING_NOTES_USER_VALUE_AUDIT_2026-10-06_CN.md)确认双语 200/noindex 与 Task-first 基础，但三卡具体限制缺失、中文理由英文、空泛约束及重复来源需最小整改；移动端视觉 N/A。本轮仅文档/候选 JSON，生产写入 0，未改页面、数据库、索引或 sitemap；独立 worktree 本地提交、不 push。

@@ -194,7 +194,10 @@ export function deriveTaskPageReadModel(
       {
         identity,
         fitLevel: fit.fit_level,
-        rationale: localized(fit.rationale),
+        rationale:
+          task.slug === 'meeting-notes'
+            ? { ...localized(fit.rationale), cn: localized(fit.rationale).cn || localized(fit.rationale).zh || '' }
+            : localized(fit.rationale),
         requiredConditions: localizedList(fit.required_conditions),
         disqualifiers: localizedList(fit.disqualifiers),
         reviewedAt: String(fit.reviewed_at),

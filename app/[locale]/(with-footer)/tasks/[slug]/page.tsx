@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 
 import { getLocalizedToolPath } from '@/lib/config/toolRouteAliases';
 import { buildLocalizedPageMetadata, generateLocalizedPath } from '@/lib/seo/metadata';
+import { meetingNotesConstraints, meetingNotesSources } from '@/lib/services/decision/meetingNotesPresentation';
 import getPublicTaskPage from '@/lib/services/decision/taskPage';
 import type { TaskPageModel } from '@/lib/services/decision/taskPageReadModel';
 import SeoBreadcrumbs from '@/components/seo/SeoBreadcrumbs';
@@ -66,7 +67,8 @@ export default async function TaskPage({ params }: { params: { locale: string; s
   const { locale } = params;
   const isChinese = locale === 'cn' || locale === 'tw';
   const name = text(model.name, locale);
-  const taskConstraints = constraints(model, isChinese);
+  const isMeetingNotes = model.slug === 'meeting-notes';
+  const taskConstraints = isMeetingNotes ? meetingNotesConstraints(model, isChinese) : constraints(model, isChinese);
 
   return (
     <main className='min-h-screen bg-slate-50'>
@@ -81,13 +83,15 @@ export default async function TaskPage({ params }: { params: { locale: string; s
           className='mb-8'
         />
         <header className='max-w-3xl'>
-          <p className='text-sm font-semibold uppercase tracking-widest text-cyan-700'>Task decision guide</p>
+          <p className='text-sm font-semibold uppercase tracking-widest text-cyan-700'>
+            {isMeetingNotes && isChinese ? '会议工具选择指南' : 'Task decision guide'}
+          </p>
           <h1 className='mt-3 text-4xl font-bold tracking-tight text-slate-950'>{name}</h1>
           <p className='mt-4 text-lg leading-8 text-slate-700'>{text(model.description, locale)}</p>
           <p className='mt-3 text-sm text-slate-600'>
-            {isChinese
-              ? '仅展示当前已发布、证据可核验的适配关系；排序不是评测分数。'
-              : 'Only current, published fits backed by verifiable evidence appear here. Order is not a review score.'}
+            {isMeetingNotes
+              ? label(isChinese, 'Compare conditions and plan limits using the official sources below. Order is not a review score.', '根据下方官方来源比较适用条件与套餐限制；排序不是评测分数。')
+              : label(isChinese, 'Only current, published fits backed by verifiable evidence appear here. Order is not a review score.', '仅展示当前已发布、证据可核验的适配关系；排序不是评测分数。')}
           </p>
         </header>
 
@@ -155,9 +159,9 @@ export default async function TaskPage({ params }: { params: { locale: string; s
                   </ul>
                 ) : (
                   <p className='mt-2 text-sm text-slate-600'>
-                    {isChinese
-                      ? '尚无已发布的具体限制；选择前请核对官方条款。'
-                      : 'No specific limitation is published yet; verify official terms before choosing.'}
+                    {isMeetingNotes
+                      ? label(isChinese, 'Check the plan limits in the sources below and confirm recording and sharing suit your meeting.', '选择前请核对下方来源中的套餐限制，并确认录音与共享符合你的会议要求。')
+                      : label(isChinese, 'No specific limitation is published yet; verify official terms before choosing.', '尚无已发布的具体限制；选择前请核对官方条款。')}
                   </p>
                 )}
                 <div className='mt-5 border-t border-slate-100 pt-4 text-xs text-slate-600'>
@@ -167,22 +171,43 @@ export default async function TaskPage({ params }: { params: { locale: string; s
                   </p>
                   <p className='mt-2 font-medium'>{isChinese ? '来源与核验日期' : 'Sources and verification dates'}</p>
                   <ul className='mt-1 space-y-1'>
-                    {tool.evidence.map((evidence) => (
-                      <li key={`${evidence.sourceUrl}:${evidence.verifiedAt}:${evidence.reviewDueAt}`}>
-                        <a
-                          href={evidence.sourceUrl}
-                          target='_blank'
-                          rel='noopener noreferrer'
-                          className='break-all text-cyan-700 underline'
-                        >
-                          {new URL(evidence.sourceUrl).hostname}
-                        </a>{' '}
-                        · {isChinese ? '核验' : 'Verified'} {date(evidence.verifiedAt, locale)}
-                        {evidence.reviewDueAt
-                          ? ` · ${isChinese ? '复查期限' : 'Review due'} ${date(evidence.reviewDueAt, locale)}`
-                          : ''}
-                      </li>
-                    ))}
+                    {isMeetingNotes
+                      ? meetingNotesSources(tool.evidence, isChinese).map((source) => (
+                        <li key={source.sourceUrl}>
+                          <a
+                            href={source.sourceUrl}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                            className='break-words text-cyan-700 underline'
+                          >
+                            {source.label}
+                          </a>
+                          {source.windows.map((window) => (
+                            <span className='block' key={`${window.verifiedAt}:${window.reviewDueAt}`}>
+                              {label(isChinese, 'Verified', '核验')} {date(window.verifiedAt, locale)}
+                              {window.reviewDueAt
+                                ? ` · ${label(isChinese, 'Review due', '复查期限')} ${date(window.reviewDueAt, locale)}`
+                                : ''}
+                            </span>
+                          ))}
+                        </li>
+                      ))
+                      : tool.evidence.map((evidence) => (
+                        <li key={`${evidence.sourceUrl}:${evidence.verifiedAt}:${evidence.reviewDueAt}`}>
+                          <a
+                            href={evidence.sourceUrl}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                            className='break-all text-cyan-700 underline'
+                          >
+                            {new URL(evidence.sourceUrl).hostname}
+                          </a>{' '}
+                          · {isChinese ? '核验' : 'Verified'} {date(evidence.verifiedAt, locale)}
+                          {evidence.reviewDueAt
+                            ? ` · ${isChinese ? '复查期限' : 'Review due'} ${date(evidence.reviewDueAt, locale)}`
+                            : ''}
+                        </li>
+                      ))}
                   </ul>
                 </div>
                 <Link
@@ -201,15 +226,17 @@ export default async function TaskPage({ params }: { params: { locale: string; s
             {isChinese ? '按你的硬性条件继续筛选' : 'Narrow the choice with your hard constraints'}
           </h2>
           <p className='mt-2 text-sm text-cyan-100'>
-            {isChinese
-              ? '在 Decision Finder 中选择此任务，再输入预算、隐私和导出要求。'
-              : 'Select this task in Decision Finder, then enter budget, privacy, and export requirements.'}
+            {isMeetingNotes
+              ? label(isChinese, 'On the next page, select the meeting-notes task again, then set data sensitivity and export requirements.', '进入筛选页后，请再次选择会议纪要任务，再设置数据敏感度和导出要求。')
+              : label(isChinese, 'Select this task in Decision Finder, then enter budget, privacy, and export requirements.', '在 Decision Finder 中选择此任务，再输入预算、隐私和导出要求。')}
           </p>
           <Link
             href={generateLocalizedPath('/find-tools', locale)}
             className='mt-4 inline-flex rounded-lg bg-white px-4 py-2 text-sm font-semibold text-cyan-950'
           >
-            {isChinese ? '打开 Decision Finder' : 'Open Decision Finder'}
+            {isMeetingNotes
+              ? label(isChinese, 'Filter by privacy and export needs', '按隐私和导出要求继续筛选')
+              : label(isChinese, 'Open Decision Finder', '打开 Decision Finder')}
           </Link>
         </div>
       </div>
