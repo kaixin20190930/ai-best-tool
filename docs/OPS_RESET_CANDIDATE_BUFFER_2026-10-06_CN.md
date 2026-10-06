@@ -107,7 +107,8 @@ availability。历史[修复审计](./CL02_PUBLISH_GATE_REMEDIATION_2026-10-06_C
 `research-with-citations`；角色 Gap-filler。在 Consensus 发现论文、Gemini Notebook 选定资料综合、Perplexity 网页搜索之
 外，补筛选与结构化提取流程。
 
-**成熟度 / 市场门槛 PASS：**成熟研究应用；2024/2025 两项独立实际使用研究，本轮重新读取；不外推当前付费规模。
+**成熟度 / 市场门槛 PASS：**成熟研究应用；两项独立实际使用研究，本轮重新读取。Cambridge 论文发表于 2026-05-29；研究实施
+或数据采集年份须另行核对，不能以发表年份代替；不外推当前付费规模。
 
 **Capability / Constraint：**文献筛选、提取表、逐项引文回查；真实素材复用依据及 EN/CN/TW 完成稿仍未通过；继承 09-30
 HOLD。
