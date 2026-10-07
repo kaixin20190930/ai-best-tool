@@ -9,17 +9,17 @@
   "title": {
     "en": "Elicit: Research Agent and systematic review workflow",
     "zh": "Elicit：Research Agent 与系统综述工作流",
-    "cn": "Elicit：Research Agent 與系統綜述工作流程"
+    "cn": "Elicit：Research Agent 与系统综述工作流"
   },
   "content": {
     "en": "Elicit helps researchers find papers, screen studies and build extraction tables that they can check against the original text.",
     "zh": "Elicit 帮助研究者寻找论文、筛选研究并建立提取表，再对照原文逐项核查。 来源片段便于复核，但最终报告只覆盖套餐允许的一部分研究。",
-    "cn": "Elicit 協助研究者尋找論文、篩選研究並建立擷取表，再對照原文逐項查核。 來源片段便於查核，但最終報告僅涵蓋方案允許的部分研究。"
+    "cn": "Elicit 帮助研究者寻找论文、筛选研究并建立提取表，再对照原文逐项核查。 来源片段便于复核，但最终报告只覆盖套餐允许的一部分研究。"
   },
   "detail": {
     "en": "Use Research Agent for new paper searches, extraction tables and questions about selected papers. Dedicated Systematic Reviews on Pro, Scale or Enterprise guide a defined question through gathering, screening, extraction and reporting. Source passages support checking each result; the final report covers a plan-limited subset of studies. This is an editorial review of public documentation and independent historical use, not a hands-on accuracy test.\n\nBest for: Researchers with a defined review protocol who can verify extracted values against full text.; Teams comparing studies in structured tables and budgeting for paid review and export features.\n\nNot ideal for: Projects expecting exhaustive literature coverage or reliable non-English results from one tool.; Teams needing automatic study-quality judgments or a clearly documented guarantee that their data will not be used for training on any plan.\n\nLimitations: Check numbers, context, screening decisions and citations manually; supplement searches with relevant databases.; Full-text work requires accessible or lawfully supplied papers. Figure extraction needs Scale/Enterprise plus premium parsing.; Legacy standalone sessions are read/export-only after 30 September 2026; export or migrate before their as-yet-unscheduled 2027 removal.\n\nPricing: Basic is free with limited Agent/Report usage. Dedicated reviews require Pro or above; Agent table export starts at Plus and review table export at Pro. Included monthly usage is shared and varies with task complexity. Paid price and exact allowance depend on the current account/billing view, which was not resolved here; verify checkout. Pro/Scale extra usage is optional and separately billed.\n\nPrivacy: Uploaded PDFs are described as encrypted, private and outside the public corpus. This does not establish a general no-training promise or deletion deadline for ordinary plans. API rules prohibit personal data and limit training of input to separate opt-in; Enterprise terms are separate.\n\nPlatforms: Web account; Chrome and Edge full-text extensions for eligible review plans. Native apps, offline operation and universal regional access are unverified.\n\nCompare next: Consensus: Compare a paper discovery and cited-answer workflow when you mainly need to locate and read research; no superiority claim.; Gemini Notebook: Compare synthesis of selected sources when systematic screening and extraction tables are not the main task.\n\nAI Best Tool provides public correction and owner-update entry points for this listing; submissions enter manual review. No user reviews or owner verification are claimed.\n\nPreview: Elicit’s official 45-second Research Agent video, published August 5, 2026, is embedded from its YouTube channel. The listing tile and cover are AI Best Tool editorial assets, not an Elicit logo or product screenshot.",
     "zh": "新论文检索、数据提取和论文问答通过 Research Agent 开展。Pro、Scale 或 Enterprise 的专用系统综述流程围绕明确问题收集、筛选、提取并生成报告。来源片段便于复核，但最终报告只覆盖套餐允许的一部分研究。本稿依据公开官方文档和独立历史使用研究，未进行账号内准确性实测。\n\n适合: 已有明确综述方案，能够取得全文并逐项核对提取值的研究者。; 需要用结构化表格比较研究，且能为专用综述和表格导出安排预算的团队。\n\n不适合: 期待一个工具穷尽文献，或保证非英语检索与提取质量的项目。; 希望自动判断研究质量，或要求所有套餐均有已证不训练承诺的团队。\n\n限制: 数字、语境、筛选决定及引用仍需人工核对，并按研究问题补查专业数据库。; 全文处理依赖合法访问或上传；图形提取需要 Scale/Enterprise 及高级 PDF 解析。; 2026 年 9 月 30 日前的独立工具会话现仅可查看和导出；应在尚未确定日期的 2027 年移除前导出或逐一迁移。\n\n定价边界: Basic 免费，Agent/报告用量有限。专用综述需 Pro 起；Agent 表格导出需 Plus 起，综述表格导出需 Pro 起。月度用量池共享，消耗取决于任务复杂度。本轮未消歧目标账号和账期对应的价格及精确额度，采购时须核对结算页；Pro/Scale 可选额外付费用量。\n\n隐私边界: 官方称上传 PDF 加密、仅账户可见且不进入公共语料；这不构成普通套餐统一不训练或限时彻底删除的承诺。API 禁止个人数据，输入训练须单独选择同意；Enterprise 条款另有范围。\n\n平台: 网页账号；符合综述套餐资格时可用 Chrome/Edge 全文扩展。原生客户端、离线使用及全球地区可用性未经证实。\n\n后续比较: Consensus: 主要需要发现论文并阅读带来源答案时，可比较该类流程，不作优劣排名。; Gemini Notebook: 主要需要综合已选资料，而非系统筛选和提取表时，可比较其资料综合路径。\n\n本站已上线条目纠错及 owner 更新入口，提交内容进入人工审核；不宣称已有用户评论或 owner 核验。\n\n预览：嵌入 Elicit 官方频道 2026-08-05 发布的 45 秒 Research Agent 视频。条目身份图和封面为 AI Best Tool 自有编辑素材，并非 Elicit 官方 logo 或产品截图。",
-    "cn": "新的論文搜尋、資料擷取與論文問答透過 Research Agent 進行。Pro、Scale 或 Enterprise 的專用系統綜述流程圍繞明確問題收集、篩選、擷取並產生報告。來源片段便於查核，但最終報告僅涵蓋方案允許的部分研究。本稿依據公開官方文件及獨立歷史使用研究，未進行帳號內準確性實測。\n\n適合: 已有明確綜述方案，能取得全文並逐項查核擷取值的研究者。; 需要以結構化表格比較研究，且能為專用綜述與表格匯出安排預算的團隊。\n\n不適合: 期待單一工具完整涵蓋文獻，或保證非英語搜尋與擷取品質的專案。; 希望自動判斷研究品質，或要求所有方案均有已證實不訓練承諾的團隊。\n\n限制: 數字、語境、篩選決策及引文仍須人工核對，並依研究問題補查專業資料庫。; 全文處理取決於合法存取或上傳；圖像擷取須使用 Scale/Enterprise 並啟用進階 PDF 解析。; 2026 年 9 月 30 日前的獨立工具工作階段現僅供檢視及匯出；應在尚未確定日期的 2027 年移除前匯出或逐一遷移。\n\n定價邊界: Basic 免費，Agent／報告用量有限。專用綜述須 Pro 起；Agent 表格匯出須 Plus 起，綜述表格匯出須 Pro 起。每月用量共用，消耗依任務複雜度而異。本次未確認目標帳號與帳期所對應的價格及確切額度，採購時須核對結帳頁；Pro/Scale 可選額外付費用量。\n\n隱私邊界: 官方說明上傳 PDF 經加密、僅帳戶可見且不納入公開語料；這不等於一般方案均不訓練，或承諾限時完整刪除。API 禁止提交個人資料，輸入訓練須另行選擇同意；Enterprise 條款適用範圍另計。\n\n平台: 網頁帳號；符合綜述方案資格時可使用 Chrome/Edge 全文擴充功能。原生應用程式、離線操作及全球地區可用性尚未證實。\n\n後續比較: Consensus: 主要需要發現論文並閱讀附來源的回答時，可比較此類流程，不作優劣排名。; Gemini Notebook: 主要需要綜合已選資料，而非系統篩選與擷取表時，可比較其資料綜合方式。\n\n本站已上線條目更正及 owner 更新入口，提交內容進入人工審核；不宣稱已有使用者評論或 owner 查核。\n\n預覽：嵌入 Elicit 官方頻道於 2026-08-05 發布的 45 秒 Research Agent 影片。條目識別圖與封面為 AI Best Tool 自有編輯素材，並非 Elicit 官方 logo 或產品截圖。"
+    "cn": "新论文检索、数据提取和论文问答通过 Research Agent 开展。Pro、Scale 或 Enterprise 的专用系统综述流程围绕明确问题收集、筛选、提取并生成报告。来源片段便于复核，但最终报告只覆盖套餐允许的一部分研究。本稿依据公开官方文档和独立历史使用研究，未进行账号内准确性实测。\n\n适合: 已有明确综述方案，能够取得全文并逐项核对提取值的研究者。; 需要用结构化表格比较研究，且能为专用综述和表格导出安排预算的团队。\n\n不适合: 期待一个工具穷尽文献，或保证非英语检索与提取质量的项目。; 希望自动判断研究质量，或要求所有套餐均有已证不训练承诺的团队。\n\n限制: 数字、语境、筛选决定及引用仍需人工核对，并按研究问题补查专业数据库。; 全文处理依赖合法访问或上传；图形提取需要 Scale/Enterprise 及高级 PDF 解析。; 2026 年 9 月 30 日前的独立工具会话现仅可查看和导出；应在尚未确定日期的 2027 年移除前导出或逐一迁移。\n\n定价边界: Basic 免费，Agent/报告用量有限。专用综述需 Pro 起；Agent 表格导出需 Plus 起，综述表格导出需 Pro 起。月度用量池共享，消耗取决于任务复杂度。本轮未消歧目标账号和账期对应的价格及精确额度，采购时须核对结算页；Pro/Scale 可选额外付费用量。\n\n隐私边界: 官方称上传 PDF 加密、仅账户可见且不进入公共语料；这不构成普通套餐统一不训练或限时彻底删除的承诺。API 禁止个人数据，输入训练须单独选择同意；Enterprise 条款另有范围。\n\n平台: 网页账号；符合综述套餐资格时可用 Chrome/Edge 全文扩展。原生客户端、离线使用及全球地区可用性未经证实。\n\n后续比较: Consensus: 主要需要发现论文并阅读带来源答案时，可比较该类流程，不作优劣排名。; Gemini Notebook: 主要需要综合已选资料，而非系统筛选和提取表时，可比较其资料综合路径。\n\n本站已上线条目纠错及 owner 更新入口，提交内容进入人工审核；不宣称已有用户评论或 owner 核验。\n\n预览：嵌入 Elicit 官方频道 2026-08-05 发布的 45 秒 Research Agent 视频。条目身份图和封面为 AI Best Tool 自有编辑素材，并非 Elicit 官方 logo 或产品截图。"
   },
   "imageUrl": "/icons/tool-logos/elicit-editorial-tile.svg",
   "thumbnailUrl": "/images/tool-media/elicit-editorial-cover.svg",
@@ -37,8 +37,8 @@
           "需要用结构化表格比较研究，且能为专用综述和表格导出安排预算的团队。"
         ],
         "cn": [
-          "已有明確綜述方案，能取得全文並逐項查核擷取值的研究者。",
-          "需要以結構化表格比較研究，且能為專用綜述與表格匯出安排預算的團隊。"
+          "已有明确综述方案，能够取得全文并逐项核对提取值的研究者。",
+          "需要用结构化表格比较研究，且能为专用综述和表格导出安排预算的团队。"
         ]
       },
       "notIdealFor": {
@@ -51,8 +51,8 @@
           "希望自动判断研究质量，或要求所有套餐均有已证不训练承诺的团队。"
         ],
         "cn": [
-          "期待單一工具完整涵蓋文獻，或保證非英語搜尋與擷取品質的專案。",
-          "希望自動判斷研究品質，或要求所有方案均有已證實不訓練承諾的團隊。"
+          "期待一个工具穷尽文献，或保证非英语检索与提取质量的项目。",
+          "希望自动判断研究质量，或要求所有套餐均有已证不训练承诺的团队。"
         ]
       }
     },
@@ -63,7 +63,7 @@
       "trustNote": {
         "en": "Public-source review; no account or paid workflow test.",
         "zh": "依据公开来源；未测试账号或付费工作流。",
-        "cn": "依據公開來源；未測試帳號或付費工作流程。"
+        "cn": "依据公开来源；未测试账号或付费工作流。"
       }
     },
     "evidence": {
@@ -220,9 +220,9 @@
           "2026 年 9 月 30 日前的独立工具会话现仅可查看和导出；应在尚未确定日期的 2027 年移除前导出或逐一迁移。"
         ],
         "cn": [
-          "數字、語境、篩選決策及引文仍須人工核對，並依研究問題補查專業資料庫。",
-          "全文處理取決於合法存取或上傳；圖像擷取須使用 Scale/Enterprise 並啟用進階 PDF 解析。",
-          "2026 年 9 月 30 日前的獨立工具工作階段現僅供檢視及匯出；應在尚未確定日期的 2027 年移除前匯出或逐一遷移。"
+          "数字、语境、筛选决定及引用仍需人工核对，并按研究问题补查专业数据库。",
+          "全文处理依赖合法访问或上传；图形提取需要 Scale/Enterprise 及高级 PDF 解析。",
+          "2026 年 9 月 30 日前的独立工具会话现仅可查看和导出；应在尚未确定日期的 2027 年移除前导出或逐一迁移。"
         ]
       },
       "compareNext": {
@@ -249,11 +249,11 @@
         "cn": [
           {
             "target": "Consensus",
-            "reason": "主要需要發現論文並閱讀附來源的回答時，可比較此類流程，不作優劣排名。"
+            "reason": "主要需要发现论文并阅读带来源答案时，可比较该类流程，不作优劣排名。"
           },
           {
             "target": "Gemini Notebook",
-            "reason": "主要需要綜合已選資料，而非系統篩選與擷取表時，可比較其資料綜合方式。"
+            "reason": "主要需要综合已选资料，而非系统筛选和提取表时，可比较其资料综合路径。"
           }
         ]
       }
@@ -276,8 +276,8 @@
       "需要用结构化表格比较研究，且能为专用综述和表格导出安排预算的团队。"
     ],
     "cn": [
-      "已有明確綜述方案，能取得全文並逐項查核擷取值的研究者。",
-      "需要以結構化表格比較研究，且能為專用綜述與表格匯出安排預算的團隊。"
+      "已有明确综述方案，能够取得全文并逐项核对提取值的研究者。",
+      "需要用结构化表格比较研究，且能为专用综述和表格导出安排预算的团队。"
     ]
   }
 }

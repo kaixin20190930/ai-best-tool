@@ -42,6 +42,25 @@ for (const locale of ['en', 'zh', 'cn']) {
   assert.match(payload.detail[locale], /AI Best Tool|本站/);
   assert(payload.detail[locale].length >= (locale === 'en' ? 900 : 450));
 }
+const verifyStoredChinese = (value: unknown, location = 'payload') => {
+  if (Array.isArray(value)) {
+    value.forEach((item, index) => verifyStoredChinese(item, `${location}[${index}]`));
+    return;
+  }
+  if (!value || typeof value !== 'object') return;
+  const fields = value as Record<string, unknown>;
+  assert(!('tw' in fields), `${location}: release storage has no tw locale`);
+  if ('cn' in fields) {
+    assert.deepEqual(fields.cn, fields.zh, `${location}.cn must follow the app's simplified Chinese storage contract`);
+    assert.doesNotMatch(
+      JSON.stringify(fields.cn),
+      /[與綜錄證據個頁審篩擷費隱預覽實體圖論學選對應員責務發佈]/,
+      `${location}.cn contains traditional Chinese`,
+    );
+  }
+  for (const [key, item] of Object.entries(fields)) verifyStoredChinese(item, `${location}.${key}`);
+};
+verifyStoredChinese(payload);
 assert.match(source, /thumbnail_url, video_url, category_id/);
 assert.match(source, /video_url=COALESCE\(EXCLUDED\.video_url,tools\.video_url\)/);
 assert.match(source, /thumbnail_url, video_url, next_review_date::text/);
