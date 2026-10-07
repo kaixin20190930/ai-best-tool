@@ -171,6 +171,15 @@ Elicit，公开/索引/关系批准均 false；无可执行发布包或 SQL。
 
 ### 3. Pika — `HOLD_EVIDENCE`
 
+**10-07 PIKA-PRERELEASE-01 更新：6 PASS / 2 HOLD（official、content），待独立 QA，不进入发布 preflight。**
+[候选包](../data/collection/pika-prerelease-2026-10-07.json)与[专项审计](./PIKA_PRERELEASE_2026-10-07_CN.md)已记录
+EN/CN/TW Tool Intelligence / Decision Card。新 Create 与旧 FAQ/迁移公告的套餐、credits 到期、商用、水印路径冲突保
+留；Pika 2.5 文档范围已核，商品文字保真、实际导出及失败成本仍未知。普通内容可能用于模型改进，不能套用 AI Self/企业例外；
+当前视频隐私范围待核。本轮跨库实体/profile/上下文匹配 0；pika/pika-ai/pika-labs 三语均为无实体自 canonical/noindex 壳，
+未批准别名；sitemap 126 / Pika 0。官方素材复用/处理/署名、当前真实预览、独立内容/视觉 QA 和纠错/owner 展示验收仍缺；下次
+复核 2026-10-14，发布日重查。唯一下一候选仍 Elicit；Pika 未获公开、索引或关系批准，productionWrites=0。下列初筛保留原核
+查范围，以专项包更新事实为准。
+
 **身份与组合：**pika.art 应用及其 Video Studio；单个模型/第三方模型不是独立工具。唯一拟用 `/ai/pika`；primary
 `product-image-to-short-video`；角色 Alternative。给 Runway/Luma 补参考图驱动短片与编辑选择；商品标识稳定性须验证。
 

@@ -1,0 +1,6 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": { "incremental": false },
+  "include": ["check-pika-prerelease-readonly.ts", "test-pika-prerelease.ts"],
+  "exclude": ["../node_modules"]
+}

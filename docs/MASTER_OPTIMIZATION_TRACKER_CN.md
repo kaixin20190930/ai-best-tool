@@ -2,6 +2,13 @@
 
 更新时间：2026-10-07
 
+2026-10-07 **PIKA-PRERELEASE-01 本地候选交付，待独立 QA**：Pika 八门禁 **6 PASS / 2 HOLD（official、content）**。新旧套
+餐/credits/水印/商用与迁移范围冲突保留；当前导出、失败成本、商品保真及视频隐私范围仍有 unknown。EN/CN/TW Tool
+Intelligence / Decision Card 已写入[候选包](../data/collection/pika-prerelease-2026-10-07.json)，素材权利、真实预览、独
+立内容/视觉 QA 和本站纠错/owner 入口验收继续 HOLD。生产只读实体/profile/上下文匹配 0，sitemap 126 / Pika 0；唯一下一发布
+候选仍 Elicit。仅本地提交、不 push，productionWrites=0，无工具/关系/Task Page、metadata/index/sitemap 改动。详
+见[专项审计](./PIKA_PRERELEASE_2026-10-07_CN.md)。
+
 2026-10-07 **MTN-UX-01 已部署、owner SQL 已应用、最终 QA_PASS**：基于 `origin/main ca9867d0` 的会议页整改已完成生产交付；生产只读 verifier 确认三条 Fit 均为 `candidate_applied`。英中页面均 200、各三候选 / 6 unique sources、`noindex, follow` / self-canonical；sitemap **126 URL / 0 Task URL**。双语差异化理由、真实条件与限制、证据支持的具体约束、来源用途/去重及单一同语言下一步已完成最终 QA；工具索引与其余 Task cluster 保持不变。**完整 360/390px 视觉仍为 N/A，未宣称视觉通过。** 本次仅更新两份交付状态文档，不新增生产写入。详见 [MTN-UX-01 实施与验收记录](./MEETING_NOTES_USER_VALUE_AUDIT_2026-10-06_CN.md)。
 
 2026-10-06 CL02-PUBLISH-GATE-REMEDIATION **已 QA_PASS、已部署、迁移已应用；生产验证 HOLD（仅三个 availability unknown）**：集成提交 `e938d1c6` 已推送 main，Vercel 部署成功，owner 已应用双语门禁迁移。总控已完成技术/生产收口；本轮 `2026-10-06T06:24:31.396Z` 只读预检确认 `productionWrites=0`、合约 `20261006-bilingual-publication-gate`、Gemini links **5/10/6**、Perplexity **6/10/7**。剩余仅 Gemini research-discovery 与 Perplexity 两项 Capability 的 `availability=unknown`；组级内容 blocker 是三字段的汇总。Task 仍 404/noindex，两个工具 indexing_paused、sitemap excluded；Perplexity `3/day` 文字仍为未应用编辑候选，不解除 availability。无需重复迁移或继续增加基础设施。当前执行状态和回读见[运营重启台账](./OPS_RESET_CANDIDATE_BUFFER_2026-10-06_CN.md)；[门禁修复审计](./CL02_PUBLISH_GATE_REMEDIATION_2026-10-06_CN.md)保留开发时历史原文。

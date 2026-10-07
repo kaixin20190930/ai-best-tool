@@ -1,0 +1,697 @@
+{
+  "schemaVersion": 1,
+  "unit": "PIKA-PRERELEASE-01",
+  "baseCommit": "21cf633fcfe7c2e9d3e4194776de12932a2213eb",
+  "slug": "pika",
+  "product": "Pika",
+  "reviewer": "Codex editorial research; independent QA pending",
+  "verifiedDate": "2026-10-07",
+  "nextReview": "2026-10-14",
+  "verdict": "HOLD_EVIDENCE",
+  "qaStatus": "pending_independent_QA",
+  "publicReleaseApproved": false,
+  "indexReleaseApproved": false,
+  "relationshipCreationApproved": false,
+  "executableReleasePackageCreated": false,
+  "productionWrites": 0,
+  "canonical": {
+    "official": "https://pika.art/",
+    "application": "https://create.pika.art/",
+    "operator": "Mellis, Inc.",
+    "proposed": ["/ai/pika", "/cn/ai/pika", "/tw/ai/pika"],
+    "scope": "One Pika browser creative application, with video focus. Pika 2.5, Product Ad and Video Studio are capabilities/entry points, not separate entities. API, MCP, iOS, old.pika.art and AI Self entitlements are not interchangeable."
+  },
+  "evidence": [
+    {
+      "id": "home",
+      "url": "https://pika.art/",
+      "status": "direct_read",
+      "method": "web public full-text read",
+      "scope": "Product identity, first-party app links and official Video Studio media provenance.",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "pricing",
+      "url": "https://pika.art/pricing",
+      "status": "direct_read",
+      "method": "web public full-text read",
+      "scope": "New Pika Create plan comparison, credits, channel exclusions, commercial and watermark columns; public page observation, no checkout.",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "faq",
+      "url": "https://pika.art/faq",
+      "status": "direct_read",
+      "method": "web public full-text read",
+      "scope": "Legacy Basic/Standard/Pro/Fancy and Pika 2.2 descriptions; conflicts retained, not presumed current Create entitlements.",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "terms",
+      "url": "https://pika.art/terms-of-service",
+      "status": "direct_read",
+      "method": "web public full-text read",
+      "scope": "Sections 3–8, 11–12: access, rights, training and third-party model boundaries. Displayed revision 08/04/2026 retained without date-format inference.",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "privacy",
+      "url": "https://pika.art/privacy-policy",
+      "status": "direct_read",
+      "method": "web public full-text read",
+      "scope": "Data use/training, disclosure, retention, minors and separate written agreements.",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "pika25",
+      "url": "https://create.pika.art/apps/pika-2-5",
+      "status": "direct_read",
+      "method": "web public full-text read",
+      "scope": "Official model-specific text/image/Frames durations, resolution exception and silent output.",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "product-ad",
+      "url": "https://create.pika.art/apps/product-ad",
+      "status": "direct_read",
+      "method": "web public full-text read",
+      "scope": "Product image plus brief; no auditable export/credit/fidelity guarantees on this public page.",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "migration",
+      "url": "https://pika.art/blog/welcome-to-the-new-pika",
+      "status": "direct_read",
+      "method": "web public full-text read",
+      "scope": "2026-09-17 transition announcement: same existing subscription, old interface, apps choose models; scope conflict with pricing.",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "studio",
+      "url": "https://create.pika.art/apps/create-video?tab=video-tools",
+      "status": "direct_read",
+      "method": "web public full-text read",
+      "scope": "Official Video Studio landing page; not authenticated workspace.",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "contact",
+      "url": "https://pika.art/contact",
+      "status": "direct_read",
+      "method": "web public full-text read",
+      "scope": "General inquiry and separate support form routes; no message sent.",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    }
+  ],
+  "excludedEvidence": [
+    {
+      "url": "https://create.pika.art/apps/pika-2-5",
+      "locator": "Try Free link",
+      "status": "linked_target_fetch_failed",
+      "reason": "Public description read successfully; linked entry failed web fetch. No claim of logged-in generation."
+    }
+  ],
+  "facts": {
+    "price": {
+      "evidence": ["pricing", "faq", "migration"],
+      "status": "HOLD_CONFLICT",
+      "numericPublicationAllowed": false,
+      "checkoutVerified": false,
+      "currency": "USD",
+      "observedNewCreatePlans": [
+        {
+          "plan": "Free",
+          "monthlyUSD": 0,
+          "monthlyCredits": 0
+        },
+        {
+          "plan": "Starter",
+          "monthlyUSD": 10,
+          "annualMonthlyEquivalentUSD": 8,
+          "monthlyCredits": 900
+        },
+        {
+          "plan": "Creator",
+          "monthlyUSD": 35,
+          "annualMonthlyEquivalentUSD": 28,
+          "monthlyCredits": 3150
+        },
+        {
+          "plan": "Fancy",
+          "monthlyUSDRange": [95, 880],
+          "annualMonthlyEquivalentUSDRange": [76, 704],
+          "monthlyCreditsFrom": 8550
+        },
+        {
+          "plan": "Enterprise",
+          "price": "custom",
+          "monthlyCredits": "custom"
+        }
+      ],
+      "note": "Annual equivalents are not month-to-month billing. Fancy slider base is not all tiers. Old subscribers may retain old plan/price; no mapping inferred."
+    },
+    "credits": {
+      "evidence": ["pricing", "faq"],
+      "status": "HOLD_CONFLICT",
+      "newCreate": "Recurring credits reset each billing period without rollover; purchased packs roll over but expire after 365 days. Packs excluded from API/MCP/iOS/old.pika.art. Free has no recurring credits, so Start free is not proof of free rendering.",
+      "legacyFAQ": "Basic/Standard/Pro/Fancy: 150/700/2300/6000 monthly credits; purchased paid-plan credits said never to expire.",
+      "newCreateExamples": [
+        {
+          "model": "Seedance 2.5",
+          "resolution": "720p",
+          "seconds": 5,
+          "credits": 122
+        },
+        {
+          "model": "Wan 3.0",
+          "resolution": "720p",
+          "seconds": 5,
+          "credits": 33
+        }
+      ],
+      "pika25Cost": "unknown",
+      "failedGenerationRefund": "unknown",
+      "retryCost": "unknown",
+      "note": "Example costs are not Pika 2.5 or Product Ad costs; no monthly clip count guarantee."
+    },
+    "generation": {
+      "evidence": ["pika25", "product-ad", "studio", "migration", "faq"],
+      "status": "documented_not_account_tested",
+      "pika25": {
+        "textSeconds": [5],
+        "imageSeconds": [5, 10],
+        "resolution": ["720p", "1080p"],
+        "keyframes": [2, 5],
+        "transitionSeconds": [1, 5],
+        "twoFrameTransitionMaximumSeconds": 10,
+        "fiveFrameResolution": "720p",
+        "audio": false
+      },
+      "productAd": "Image plus brief; selected model, input file types/size, output format, cost and fidelity unknown.",
+      "studio": "Migration post describes up to 50 references and 30-second multishot with sound; not equivalent to silent Pika 2.5 one-shot. Account/model selection not tested."
+    },
+    "export": {
+      "evidence": ["pricing", "faq", "pika25"],
+      "status": "HOLD_CONFLICT",
+      "pricing": "New Create marks no watermark for all plans.",
+      "faq": "Legacy Pro/Fancy downloads without watermark; direct sharing has watermark for every tier.",
+      "format": "unknown",
+      "codec": "unknown",
+      "downloadAndShareParity": "unknown",
+      "note": "Resolution is a generation setting, not proof of an exported file format; no download tested."
+    },
+    "rights": {
+      "evidence": ["terms", "pricing", "faq"],
+      "status": "HOLD_PLAN_SCOPE",
+      "ownership": "Inputs/Outputs retained as between user and Pika; not a copyright, uniqueness or noninfringement guarantee. Users clear uploads, people and third-party rights.",
+      "commercial": "Plan must expressly permit commercial use; current table excludes Free/Starter and includes Creator/Fancy/Enterprise. FAQ instead names Pro/Fancy; legacy transition mapping unknown.",
+      "thirdPartyModels": "Separate model terms apply; do not promise blanket license for every provider.",
+      "userContentLicense": "Broad license to operate, improve and promote; published/shared outputs become User Content.",
+      "mediaReuse": "Service/material rights reserved; no directory asset grant obtained."
+    },
+    "privacy": {
+      "evidence": ["terms", "privacy", "faq"],
+      "status": "training_permitted_scope_not_no_training",
+      "ordinaryCreate": "Terms allow anonymized/aggregated inputs, outputs, interactions and usage data for model development absent written agreement. Privacy allows content/model improvement where lawful or consented. No verified self-serve opt-out.",
+      "exceptions": "AI Self personal-data carve-out and separate enterprise/written contracts cannot be generalized to browser video. Third-party models have separate notices.",
+      "visibility": "Legacy FAQ allows videos in Templates; current Create visibility/private-mode scope unknown. No confidentiality promise.",
+      "deletion": "Account deletion does not undo training; terms allow continuing use of previously anonymized/aggregated content. Privacy retains by purpose/legal need; biometric upper limit up to three years after account deletion is distinct from AI Self deletion wording. General video/backup erasure SLA unknown."
+    },
+    "availability": {
+      "evidence": ["home", "pricing", "terms", "privacy", "migration"],
+      "status": "PASS_documented_access_path",
+      "scope": "Official browser app links and purchase path exist; account required, adult audience only; jurisdiction/sanctions and model restrictions apply. No region-wide availability, mobile parity, offline use or generation success tested. Terms parental-consent language and privacy under-18 prohibition remain unresolved for minors."
+    },
+    "cancellation": {
+      "evidence": ["pricing", "faq", "terms"],
+      "status": "documented_with_unknown_exit",
+      "scope": "Cancellation takes effect at current billing-period end, no prorated refund stated. Upgrade immediate, downgrade next period. Cancellation is not account deletion. Download retention after downgrade/termination and failed-generation credit restoration unknown."
+    }
+  },
+  "conflicts": [
+    {
+      "id": "plan-migration",
+      "sources": ["pricing", "faq", "migration"],
+      "observation": "New Free/Starter/Creator/Fancy quotas differ from FAQ Basic/Standard/Pro/Fancy. Migration retains existing plan/price; not an explicit mapping of allowances or rights.",
+      "resolution": "HOLD: confirm target account, channel, contract and billing period; retain both observations, withhold numeric public promises."
+    },
+    {
+      "id": "topup-expiry-channel",
+      "sources": ["pricing", "faq"],
+      "observation": "365-day Create top-up expiry and excluded channels versus legacy never-expire credits and Web/App parity.",
+      "resolution": "HOLD: distinguish new purchase and migrated balance; do not transfer credits or infer expiry for existing subscribers."
+    },
+    {
+      "id": "watermark-commercial",
+      "sources": ["pricing", "faq", "terms"],
+      "observation": "All-plan no-watermark Create table versus Pro/Fancy downloads and all-tier direct-share watermark in FAQ; Creator versus Pro commercial nomenclature.",
+      "resolution": "HOLD: confirm actual download/share path and plan commercial terms; paid alone is insufficient."
+    },
+    {
+      "id": "plan-differences",
+      "sources": ["migration", "pricing"],
+      "observation": "Launch post says plans differ only in credits/concurrency, but current pricing also differentiates commercial rights, priority and early access.",
+      "resolution": "HOLD: do not repeat launch generalization or assume all paid plans share rights."
+    },
+    {
+      "id": "legacy-duration",
+      "sources": ["faq", "pika25", "migration"],
+      "observation": "FAQ calls 2.2 latest and says Pikaframes 1–10 seconds in one section, up to 25 in another; 2.5 and Studio are different workflows.",
+      "resolution": "HOLD for legacy scope; retain 2.5 settings as attributed model documentation only, not a universal duration."
+    },
+    {
+      "id": "privacy-lifecycle",
+      "sources": ["terms", "privacy", "faq"],
+      "observation": "Legacy Templates visibility; terms AI Self deletion wording versus privacy biometric retention up to three years; no current browser video privacy/deletion SLA.",
+      "resolution": "HOLD: distinguish AI Self, ordinary video, biometrics, model incorporation and backups; no universal privacy/erasure claim."
+    },
+    {
+      "id": "minor-access",
+      "sources": ["terms", "privacy"],
+      "observation": "Terms include parental acceptance language; privacy prohibits under-18 provision of information.",
+      "resolution": "HOLD for minors; candidate audience restricted to adults, no parental-consent workaround asserted."
+    }
+  ],
+  "independentEvidence": [
+    {
+      "id": "toms-guide",
+      "url": "https://www.tomsguide.com/ai/ai-image-video/i-just-pika-2-to-the-test-and-its-the-best-ai-video-generator-yet-and-better-than-sora",
+      "author": "Ryan Morrison",
+      "publicationDate": "2024-12-18",
+      "status": "direct_read",
+      "strength": "strong_actual_use",
+      "observation": "Author compared text/image and ingredient paths, reporting an image-to-video weakness and clothing reference interpreted as a robot. Specific input/output examples and embedded demonstrations.",
+      "scope": "Historical Pika 2.0 use, not current Create rights, product-text fidelity, scale or a site-run test. Affiliate disclosure; comparative ranking excluded.",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "mspoweruser",
+      "url": "https://mspoweruser.com/pika-ai-review/",
+      "author": "Deyan Georgiev",
+      "updatedDate": "2025-11-04",
+      "actualTestDate": "unknown",
+      "status": "direct_read",
+      "strength": "strong_actual_use",
+      "observation": "Separate reviewer documents prompt retries, missing laptop, image animation mismatch and region edits with input/output examples.",
+      "scope": "Page update is not test date. Historical interface, media commercial bias; pricing, ratings and blanket quality conclusions excluded.",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    }
+  ],
+  "marketGate": {
+    "status": "PASS",
+    "basis": "Two named, separate firsthand historical reports, not syndication, vendor testimonials or current-product benchmark."
+  },
+  "media": {
+    "status": "HOLD",
+    "logo": null,
+    "preview": null,
+    "downloaded": false,
+    "reused": false,
+    "processed": false,
+    "logoSource": {
+      "sourcePage": "https://pika.art/",
+      "locator": "Pika brand/site masthead",
+      "assetUrl": null,
+      "rightsHolder": "Pika or licensors; exact asset holder not cleared",
+      "reuseBasis": null,
+      "processingPermission": null,
+      "attributionRequirement": "unknown"
+    },
+    "previewSource": {
+      "sourcePage": "https://pika.art/",
+      "locator": "Video Studio section, official cdn.pika.art image link",
+      "assetUrl": null,
+      "authenticity": "Official provenance only; current authenticated UI/pixels not validated",
+      "reuseBasis": null,
+      "processingPermission": null,
+      "attributionRequirement": "unknown"
+    },
+    "excludedPlaceholders": ["public/icons/tool-logos/pika.svg", "public/images/tool-media/pika-cover.svg"],
+    "exit": "Obtain official logo and current real product preview with directory display/hosting/embedding and modification scope, holder and attribution. Independent visual review required; community/third-party examples not cleared."
+  },
+  "productionReadback": {
+    "checkedAt": "2026-10-07T01:06:53.661Z",
+    "productionWrites": 0,
+    "transaction": "BEGIN READ ONLY; SELECT; ROLLBACK",
+    "identity": {
+      "matches": [],
+      "contextualMatches": [],
+      "counts": [
+        {
+          "status": "draft",
+          "page_quality_status": "monitor",
+          "count": 9
+        },
+        {
+          "status": "published",
+          "page_quality_status": "archive",
+          "count": 2
+        },
+        {
+          "status": "published",
+          "page_quality_status": "continue_index",
+          "count": 17
+        },
+        {
+          "status": "published",
+          "page_quality_status": "monitor",
+          "count": 35
+        },
+        {
+          "status": "rejected",
+          "page_quality_status": "monitor",
+          "count": 6
+        }
+      ]
+    },
+    "profiles": [],
+    "pages": [
+      {
+        "path": "/ai/pika",
+        "status": 200,
+        "canonical": "https://aibesttool.com/ai/pika",
+        "robots": "noindex, follow"
+      },
+      {
+        "path": "/cn/ai/pika",
+        "status": 200,
+        "canonical": "https://aibesttool.com/cn/ai/pika",
+        "robots": "noindex, follow"
+      },
+      {
+        "path": "/tw/ai/pika",
+        "status": 200,
+        "canonical": "https://aibesttool.com/tw/ai/pika",
+        "robots": "noindex, follow"
+      },
+      {
+        "path": "/ai/pika-ai",
+        "status": 200,
+        "canonical": "https://aibesttool.com/ai/pika-ai",
+        "robots": "noindex, follow"
+      },
+      {
+        "path": "/cn/ai/pika-ai",
+        "status": 200,
+        "canonical": "https://aibesttool.com/cn/ai/pika-ai",
+        "robots": "noindex, follow"
+      },
+      {
+        "path": "/tw/ai/pika-ai",
+        "status": 200,
+        "canonical": "https://aibesttool.com/tw/ai/pika-ai",
+        "robots": "noindex, follow"
+      },
+      {
+        "path": "/ai/pika-labs",
+        "status": 200,
+        "canonical": "https://aibesttool.com/ai/pika-labs",
+        "robots": "noindex, follow"
+      },
+      {
+        "path": "/cn/ai/pika-labs",
+        "status": 200,
+        "canonical": "https://aibesttool.com/cn/ai/pika-labs",
+        "robots": "noindex, follow"
+      },
+      {
+        "path": "/tw/ai/pika-labs",
+        "status": 200,
+        "canonical": "https://aibesttool.com/tw/ai/pika-labs",
+        "robots": "noindex, follow"
+      },
+      {
+        "path": "/sitemap.xml",
+        "status": 200,
+        "locCount": 126,
+        "pikaMatches": 0
+      }
+    ]
+  },
+  "deduplication": {
+    "status": "PASS_SCOPED",
+    "neonProductMatches": 0,
+    "neonContextualMatches": 0,
+    "supabaseProfileMatches": 0,
+    "repositoryScan": "No pika in app/lib/components or toolRouteAliases. Historical bootstrap/enrichment scripts target pika only; generated SVG logo/cover excluded.",
+    "shellObservation": "pika, pika-ai and pika-labs all return trilingual 200/self-canonical/noindex shells without product h1. No matching entity/profile/consumer was found. These generic unresolved routes are not evidence of three published products or approved aliases.",
+    "intent": "Only /ai/pika proposed; no new model/feature/Guide/alternative URL. No concrete competing product intent found within checked stores and repository; arbitrary shell routes are not certified canonical aliases.",
+    "releaseDayRecheckRequired": true,
+    "exit": "Repeat identity, alias/redirect and consumer/intent checks on release day; verify actual detail uses only proposed canonical and synonyms do not become separate indexed products."
+  },
+  "mappingHypotheses": {
+    "status": "research_only",
+    "category": "design-art",
+    "primaryTask": "product-image-to-short-video",
+    "role": "Alternative",
+    "capabilities": [
+      {
+        "slug": "reference-image-to-video",
+        "hypothesis": "Reviewable motion concepts from licensed reference image",
+        "evidence": ["pika25", "product-ad"]
+      },
+      {
+        "slug": "reference-consistency",
+        "hypothesis": "Packaging/text fidelity must be measured before advertising delivery",
+        "evidence": ["product-ad", "terms"]
+      }
+    ],
+    "constraints": [
+      "commercial-plan-scope",
+      "watermark-path-conflict",
+      "model-specific-credits",
+      "no-verified-product-fidelity",
+      "ordinary-content-training-permitted",
+      "third-party-model-terms",
+      "media-rights-unknown"
+    ],
+    "constraintsAreRegisteredOrVerifiedRelations": false,
+    "relationshipRows": [],
+    "consumptionOrder": [
+      "Tool Intelligence after editorial gates",
+      "Task Page after independent relation approval",
+      "Structured Comparison after evidence/relationship gates"
+    ]
+  },
+  "liveSignal": {
+    "status": "HOLD",
+    "releaseBlocker": true,
+    "vendorCorrection": "support@pika.art and official contact/support routes; no communication sent",
+    "siteCorrection": "Proposed canonical owner/correction entry must be connected and tested in real public presentation; no entity exists here to verify it.",
+    "exit": "Record functioning owner/correction route, visible evidence dates and update responsibility, then perform independent display acceptance."
+  },
+  "gates": [
+    {
+      "id": "identity",
+      "name": "对象明确",
+      "status": "PASS",
+      "basis": "Pika browser application identity and Mellis operator established; modules/models not separate products."
+    },
+    {
+      "id": "ai-value",
+      "name": "AI 价值明确",
+      "status": "PASS",
+      "basis": "Reference images/prompts become reviewable short motion output; direct impact on the proposed task."
+    },
+    {
+      "id": "availability",
+      "name": "实际可用",
+      "status": "PASS",
+      "basis": "Documented browser account/purchase path; limited to adult eligible users. Not a generation, regional or free-credit guarantee."
+    },
+    {
+      "id": "official",
+      "name": "官方证据完整",
+      "status": "HOLD",
+      "basis": "Plan migration, commercial/watermark paths, credit expiry, current export/failed-generation cost and privacy scope unresolved. Multiple complementary sources do not waive contradictions."
+    },
+    {
+      "id": "market",
+      "name": "独立市场依据",
+      "status": "PASS",
+      "basis": "Two independent firsthand historical use reports; current workflow efficacy not inferred."
+    },
+    {
+      "id": "decision",
+      "name": "决策价值",
+      "status": "PASS",
+      "basis": "Concrete selection/rejection criteria and Runway/Luma comparison paths, without superiority or product fidelity claims."
+    },
+    {
+      "id": "content",
+      "name": "内容真实完整",
+      "status": "HOLD",
+      "basis": "EN/CN/TW drafts ready for review; rights-cleared official media/current preview, independent content/visual QA and working correction/owner entry missing."
+    },
+    {
+      "id": "maintenance",
+      "name": "不重复且可维护",
+      "status": "PASS",
+      "basis": "No matching product/profile/contextual references; one proposed intent and review owner/date recorded. Generic synonym shells recorded, not approved aliases; release-day recheck mandatory."
+    }
+  ],
+  "releaseBoundary": {
+    "nextReleaseCandidateUnchanged": "elicit",
+    "readyForPreflight": false,
+    "preflight": "No executable release package or SQL. Resolve exact holds, independent QA, then separately authorize any future monitor/noindex release; no automatic index or relationship approval.",
+    "rollback": "No production mutations to undo. Future release requires before-state snapshots and separately verified restoration."
+  },
+  "content": {
+    "en": {
+      "summary": "Pika is a browser creative application for exploring short motion from images and prompts. For product visuals, shortlist it only when someone can inspect the result and confirm delivery rights.",
+      "detail": "Use a licensed product photo to explore a motion concept, then review every frame for packaging, labels and shape. Choose the specific model and save its settings so retries can be compared. Pika 2.5 has image and keyframe paths; Product Ad and Video Studio are separate workflows within the same application. Their limits must not be combined into a single promise.\n\nThis review read public documents and historical independent use reports. It did not generate, purchase or export a video. Treat the candidate as an option for supervised exploration; accuracy on your product and final delivery suitability remain untested.",
+      "bestFor": [
+        "Adults exploring motion concepts from cleared reference photos, with time for frame-by-frame review.",
+        "Creators able to compare model settings and retry costs before committing to a product campaign."
+      ],
+      "notIdealFor": [
+        "Catalog delivery requiring guaranteed exact logos, small text and package geometry.",
+        "Confidential unreleased products needing a verified no-training/private workspace.",
+        "Buyers assuming any paid subscription includes commercial use or every export/share is watermark-free."
+      ],
+      "limitations": [
+        "No product-fidelity benchmark was run; historical examples cannot validate current packaging accuracy.",
+        "Pika 2.5 renders silent video; Studio audio claims belong to a different workflow.",
+        "Actual input file limits, export format/codec and failed-generation refund behavior remain unknown.",
+        "Legacy and current plan documents conflict; verify the target account and delivery route before purchase."
+      ],
+      "pricingBoundary": "Credit-based plans and top-ups; current Free has no recurring credits. Current pricing and legacy FAQ disagree on quotas, expiry, commercial tiers and watermark paths. Migration preserves some existing subscriptions, without a complete entitlement mapping. Exact price/credit promises are withheld.",
+      "privacyBoundary": "Ordinary content may be used for model improvement and training. Do not transfer AI Self or enterprise exceptions to browser video. Current visibility, opt-out and video/backup deletion scope need confirmation; deleting an account does not establish removal from trained models.",
+      "platforms": "Browser account on the official Pika application. API, MCP, iOS and the old interface have separate entitlement scopes; no offline or region-wide access guarantee was verified.",
+      "decisionCard": {
+        "verdict": "Consider for supervised motion exploration after confirming the account and delivery conditions.",
+        "chooseIf": "You can inspect a representative product shot and reject distorted labels or shape.",
+        "skipIf": "Exact packaging or documented private/no-training handling is mandatory today.",
+        "firstCheck": "Use a cleared nonconfidential sample; record model, credits before/after, retries, export format, sound, download/share watermark and commercial scope. Inspect labels throughout the clip.",
+        "compareNext": [
+          {
+            "slug": "runway",
+            "reason": "Compare reference control and revision effort using the same cleared product photo."
+          },
+          {
+            "slug": "luma-ai",
+            "reason": "Compare motion and reference consistency under the same acceptance criteria; review its separate availability/rights."
+          }
+        ],
+        "evidenceBoundary": "Public-source research and historical third-party use; no site-run generation or quality ranking."
+      },
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14",
+      "evidence": ["home", "pricing", "faq", "terms", "privacy", "pika25", "product-ad", "migration", "studio"],
+      "independentEvidence": ["toms-guide", "mspoweruser"]
+    },
+    "cn": {
+      "summary": "Pika 是用图片与提示词探索短动态内容的浏览器创作应用。用于商品视觉时，只有在能人工检查结果并核对交付许可的条件下，才适合纳入候选。",
+      "detail": "用已清权的商品照片探索动态创意，再逐帧检查包装、标签文字与形状。先选定模型并记录设置，便于比较重试结果。Pika 2.5 提供参考图和关键帧路径；Product Ad 与 Video Studio 是同一应用内的不同工作流，不能把它们的上限拼成统一承诺。\n\n本次只读公开资料及历史独立使用报告，没有生成、购买或导出视频。这是适合人工监督的创意探索候选；你的商品能否准确呈现、能否直接交付广告仍未验证。",
+      "bestFor": [
+        "拥有已清权参考图、能逐帧审片的成年创作者。",
+        "愿意先比较模型设置与重试成本，再投入商品广告制作的团队。"
+      ],
+      "notIdealFor": [
+        "要求商标、小字和包装几何完全准确的商品目录交付。",
+        "必须有可核验不训练及私有工作区承诺的未公开商品项目。",
+        "把任意付费套餐当作自带商用许可，或假定所有下载及分享均无水印的用户。"
+      ],
+      "limitations": [
+        "未做商品保真测试；历史上手不能证明当前包装文字准确。",
+        "Pika 2.5 输出静音视频；Studio 的声音描述属于另一工作流。",
+        "实际输入文件限制、导出格式/编码及失败生成返还额度仍未知。",
+        "新旧套餐文档有冲突；购买前须核对目标账户与交付路径。"
+      ],
+      "pricingBoundary": "按 credits 计量，提供套餐及加购；当前 Free 没有周期赠送额度。现价页与旧 FAQ 在额度、有效期、商用档位和水印路径上不一致。迁移公告保留部分既有订阅，但未给出完整权益映射，本稿不承诺精确价格或额度。",
+      "privacyBoundary": "普通内容可能用于模型改进，不能把 AI Self 或企业协议例外外推到浏览器视频。当前可见性、退出训练、视频及备份删除范围待核；删除账户不代表从已训练模型中移除。",
+      "platforms": "官方 Pika 浏览器账户。API、MCP、iOS 与旧界面的权益范围分别核对；未验证离线或所有地区均可访问。",
+      "decisionCard": {
+        "verdict": "核对账户和交付条件后，可用于有人监督的动态创意探索。",
+        "chooseIf": "能检查代表性商品镜头，并淘汰标签或形状失真的结果。",
+        "skipIf": "目前就必须保证包装完全准确，或必须有明确私有/不训练处理。",
+        "firstCheck": "使用已清权且不保密的样图，记录模型、前后额度、重试、导出格式、声音、下载/分享水印与商用范围；逐帧核对标签。",
+        "compareNext": [
+          {
+            "slug": "runway",
+            "reason": "以同一张已清权商品图比较参考控制和返工量。"
+          },
+          {
+            "slug": "luma-ai",
+            "reason": "按同一验收条件比较运动和参考保持，并另核其可用性及权利。"
+          }
+        ],
+        "evidenceBoundary": "公开资料研究与历史第三方上手；没有本站生成测试或质量排名。"
+      },
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14",
+      "evidence": ["home", "pricing", "faq", "terms", "privacy", "pika25", "product-ad", "migration", "studio"],
+      "independentEvidence": ["toms-guide", "mspoweruser"]
+    },
+    "tw": {
+      "summary": "Pika 是以圖片與提示詞探索短動態內容的瀏覽器創作應用程式。用於商品視覺時，須能人工檢查結果並確認交付授權，才適合列入候選。",
+      "detail": "以已取得授權的商品照片探索動態構想，再逐格檢查包裝、標籤文字及形狀。先選定模型並記錄設定，方便比較重試結果。Pika 2.5 有參考圖與關鍵影格路徑；Product Ad 和 Video Studio 是同一應用程式內的不同工作流程，不能把各自上限合併成共同承諾。\n\n本次僅閱讀公開資料及歷史獨立使用報告，未生成、購買或匯出影片。這是供人工監督的創意探索候選；能否準確呈現你的商品及直接交付廣告，仍未驗證。",
+      "bestFor": [
+        "持有已授權參考圖，並能逐格審片的成年創作者。",
+        "願意先比較模型設定與重試成本，再投入商品廣告製作的團隊。"
+      ],
+      "notIdealFor": [
+        "要求商標、小字及包裝幾何完全準確的商品型錄交付。",
+        "必須有可核實不訓練及私有工作區承諾的未公開商品專案。",
+        "認為任何付費方案都含商用授權，或所有下載與分享都無浮水印的使用者。"
+      ],
+      "limitations": [
+        "未進行商品保真測試；歷史試用不能證明目前包裝文字準確。",
+        "Pika 2.5 輸出無聲影片；Studio 的音訊描述屬於另一工作流程。",
+        "實際輸入檔案限制、匯出格式/編碼及生成失敗退還點數仍未知。",
+        "新舊方案文件存在衝突；購買前須確認目標帳戶與交付路徑。"
+      ],
+      "pricingBoundary": "採 credits 計量，提供訂閱及加購；目前 Free 沒有定期贈送點數。現行價格頁與舊 FAQ 對額度、效期、商用級別及浮水印路徑的說明不同。遷移公告保留部分既有訂閱，但未提供完整權益對應，本稿不承諾精確價格或額度。",
+      "privacyBoundary": "一般內容可能用於模型改進，不能將 AI Self 或企業協議例外套用至瀏覽器影片。目前可見性、退出訓練、影片與備份刪除範圍待確認；刪除帳戶不代表能從已訓練模型中移除。",
+      "platforms": "官方 Pika 瀏覽器帳戶。API、MCP、iOS 及舊介面的權益須各別確認；未驗證離線或所有地區均可使用。",
+      "decisionCard": {
+        "verdict": "確認帳戶及交付條件後，可用於有人監督的動態創意探索。",
+        "chooseIf": "能檢查具代表性的商品鏡頭，並淘汰標籤或形狀失真的結果。",
+        "skipIf": "現在就必須確保包裝完全準確，或須有明確私有/不訓練處理。",
+        "firstCheck": "使用已授權且非機密的範例圖片，記錄模型、前後點數、重試、匯出格式、音訊、下載/分享浮水印及商用範圍；逐格核對標籤。",
+        "compareNext": [
+          {
+            "slug": "runway",
+            "reason": "以同一張已授權商品圖比較參考控制與修改工作量。"
+          },
+          {
+            "slug": "luma-ai",
+            "reason": "依相同驗收條件比較動作與參考保持，並另行確認可用性及授權。"
+          }
+        ],
+        "evidenceBoundary": "公開資料研究及歷史第三方試用；未進行本站生成測試或品質排名。"
+      },
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14",
+      "evidence": ["home", "pricing", "faq", "terms", "privacy", "pika25", "product-ad", "migration", "studio"],
+      "independentEvidence": ["toms-guide", "mspoweruser"]
+    }
+  },
+  "validation": {
+    "json": "PASS",
+    "scopedTests": "PASS",
+    "candidatePipeline": "PASS",
+    "matureBufferTest": "PASS (historical 14-item fixture; scoped test separately validates current 15)",
+    "sourceReads": "10 official + 2 independent direct reads; linked Try Free fetch failure excluded",
+    "auditLinks": "17 PASS",
+    "format": "PASS; existing master historical formatting preserved",
+    "typeScript": "PASS main and scripts/tsconfig.pika-prerelease.json",
+    "readOnlyProduction": "PASS; one transient fetch failure, immediate retry succeeded",
+    "seoProductionSmoke": "PASS; sitemap 126 URLs",
+    "fullBuild": "not run: no runtime changes",
+    "independentQA": "pending",
+    "productionWrites": 0
+  }
+}
