@@ -300,8 +300,14 @@ n8n/OpenRouter 不满足完整应用的问题。
 - [采用来源](https://www.mff.cuni.cz/en/library/news/permanent-access-to-scite)（`direct_read` / `strong`）：CUNI MFF
   2026-04-01 公告说明机构网络和邮箱访问，当前订阅至 2027-03-30；独立第二机构采用。
 
-**关键缺口：**引文分类误差、目标学科覆盖/全文权限及导出待核；市场两项强信号已确认，但具体用途/套餐/内容门槛仍 HOLD；套餐
-/API/机构权限须按实际用途分开。
+**2026-10-07 prerelease 更新：**完成 [SCITE-PRERELEASE-01](./SCITE_PRERELEASE_2026-10-07_CN.md)，八门禁 **6 PASS / 2
+HOLD**。两项独立机构采用信号复读；新增 2023 同行评审分类评估，并限定为药学系统综述中的撤稿论文引用样本，不外推当前模型表
+现。10-07 定价页改为 Basic/Pro/Team/Enterprise 页面观察；旧 09-28 促销价只保留历史范围。条款明确 Customer Data（含
+query/usage）不用于 AI 训练，隐私政策又允许分析服务使用以改进服务；账户关闭后保留期限最多十年，备份删除未知。具体计划
+/Checkout、目标学科当前覆盖/分类、API/导出及机构合同仍 HOLD。
+
+**关键缺口：**独立内容/视觉 QA、媒体复用权利、本站公开纠错入口展示验收未完成；official 与 content 门禁 HOLD。生产只读回
+读当前匹配为 0，九个三语 Scite/scite-ai/sciteai 壳页均 noindex/self-canonical，sitemap Scite 匹配 0；发布日仍需查重。
 
 **重复意图：**Neon 无匹配；研究 Guide 提及不等于实体；保持 /ai/scite。
 
