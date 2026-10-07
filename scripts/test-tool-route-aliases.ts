@@ -26,13 +26,29 @@ const assertions: Array<[boolean, string]> = [
   [getLocalizedToolPath('fireflies-ai', 'cn') === '/cn/ai/fireflies', 'Chinese Fireflies alias path is invalid.'],
   [isLegacyToolSlug('fireflies-ai'), 'Fireflies.ai must be recognized as a legacy slug.'],
   [!isLegacyToolSlug('fireflies'), 'Fireflies must remain the canonical slug.'],
+  [getCanonicalToolSlug('murf-ai') === 'murf', 'Murf Studio must have one canonical slug.'],
+  [
+    getLocalizedToolPath('murf-ai', 'en') === '/ai/murf',
+    'English Murf legacy path must resolve to the canonical path.',
+  ],
+  [
+    getLocalizedToolPath('murf-ai', 'cn') === '/cn/ai/murf',
+    'Chinese Murf legacy path must resolve to the canonical path.',
+  ],
+  [
+    getLocalizedToolPath('murf-ai', 'tw') === '/tw/ai/murf',
+    'Traditional Chinese Murf legacy path must resolve to the canonical path.',
+  ],
+  [isLegacyToolSlug('murf-ai'), 'Murf AI must be recognized as a legacy slug.'],
+  [!isLegacyToolSlug('murf'), 'Murf must remain the canonical slug.'],
   [shouldRedirectExplicitEnglishToolPath('fathom'), 'The explicit /en Fathom path must redirect.'],
   [!shouldRedirectExplicitEnglishToolPath('claude'), 'Claude does not need the explicit-English exception.'],
   [middleware.includes('isLegacyToolSlug(toolSlug)'), 'Middleware must redirect aliases generically.'],
+  [middleware.includes('NextResponse.redirect(redirectUrl, 308)'), 'Tool aliases must use a permanent 308 redirect.'],
 ];
 
 for (const [condition, message] of assertions) {
   if (!condition) throw new Error(message);
 }
 
-console.log('✅ Tool aliases keep Claude and Otter.ai canonical with generic redirect-only aliases.');
+console.log('✅ Tool aliases keep Claude, Otter.ai, Fireflies, and Murf canonical with permanent legacy redirects.');

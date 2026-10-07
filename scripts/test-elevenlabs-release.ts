@@ -55,6 +55,15 @@ for (const locale of ['en', 'zh', 'cn']) {
   }
 }
 
+assert(
+  ['en', 'zh', 'cn'].every((locale) => !payload.detail[locale].includes('/ai/murf-ai')),
+  'ElevenLabs release detail must link Murf comparisons to the canonical /ai/murf path',
+);
+assert(
+  payload.features.decision.alternatives.some((alternative: { slug: string }) => alternative.slug === 'murf'),
+  'ElevenLabs structured comparison must use the Murf canonical slug',
+);
+
 const factText = `${payload.detail.en}\n${payload.detail.zh}`;
 for (const fact of [
   /Free is \$0 with 10,000 credits/,

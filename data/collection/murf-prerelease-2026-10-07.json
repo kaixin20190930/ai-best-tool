@@ -226,7 +226,7 @@
     "official": "https://murf.ai/",
     "proposed": ["/ai/murf", "/cn/ai/murf", "/tw/ai/murf"],
     "legacyReference": "murf-ai",
-    "intent": "Single Studio product detail. API/Agents/Dub are excluded. No new aliases or Task URLs. Production ElevenLabs alternative references murf-ai; both English paths self-canonical noindex shells. Canonical consolidation remains a release blocker, not proof of a second published product."
+    "intent": "Single Murf Studio product detail. API, Agents and Dub are excluded. No new entities, Task URLs, or additional aliases. The local legacy murf-ai slug resolves to murf in each locale and comparison content uses murf; production redirects and references still require post-deploy QA."
   },
   "facts": {
     "identity": {
@@ -444,9 +444,16 @@
     "basis": "Independent named production case plus separate anonymous auxiliary use report; no vendor testimonials or brand scale counted."
   },
   "media": {
-    "status": "HOLD",
+    "status": "PREPARED_OFFICIAL_EMBED",
     "logo": null,
-    "preview": null,
+    "preview": {
+      "kind": "official_youtube_embed",
+      "url": "https://www.youtube-nocookie.com/embed/M2-5OhbVwaE",
+      "title": "Getting Started with Murf Studio",
+      "sourcePage": "https://murf.ai/academy/home",
+      "sourceCheckedAt": "2026-10-08",
+      "qualification": "Murf Academy publishes this Studio tutorial as an iframe embed. Platform-hosted tutorial only; it is not AI Best Tool hands-on output or an independently verified product screenshot."
+    },
     "downloaded": false,
     "reused": false,
     "processed": false,
@@ -460,17 +467,22 @@
       "attributionRequirement": "unknown"
     },
     "previewSource": {
-      "sourcePage": "https://help.murf.ai/murf-studio-basics",
-      "locator": "Play/Pause image labelled Murf-Paris-The-City-of-Light-and-Culture-03-18-2026_02_35_AM and official Arcade demo links",
-      "assetUrl": null,
-      "authenticity": "Official help provenance; pixels/current UI not validated",
-      "reuseBasis": null,
-      "processingPermission": null,
-      "attributionRequirement": "unknown"
+      "sourcePage": "https://murf.ai/academy/home",
+      "locator": "Featured: Getting Started with Murf Studio",
+      "assetUrl": "https://www.youtube.com/embed/M2-5OhbVwaE",
+      "authenticity": "First-party Murf Academy page publishes the exact iframe embed and title",
+      "reuseBasis": "Official page-provided YouTube embed; no video downloaded, copied, self-hosted, or thumbnail hotlinked",
+      "processingPermission": "Embed the official player without modifying the media",
+      "attributionRequirement": "Murf Academy source/title shown with preview"
     },
     "excludedPlaceholders": ["public/icons/tool-logos/murf.svg", "public/images/tool-media/murf-cover.svg"],
-    "rightsReview": "General terms reserve IP. Affiliate section 9 requires eligible program membership and authorized linked material; no evidence this directory qualifies. API mark grant identifies API output, not Studio directory marketing. Journal CC BY-NC-ND and third-party components do not clear commercial screenshot reuse. Do not download, crop, translate, host or embed absent an applicable permission.",
-    "exit": "Obtain official asset file/source, rights holder, explicit directory use and modification/embedding scope, attribution and current UI review; independent visual QA."
+    "rightsReview": "Official logo reuse remains unauthorized and is not used. The candidate embeds the Studio tutorial through the YouTube player URL that Murf Academy itself publishes; no media is downloaded, copied, self-hosted, altered, or thumbnail-hotlinked. The media remains a tutorial, not proof of AI Best Tool hands-on testing. The neutral cover is AI Best Tool-owned. Independent display QA remains outstanding.",
+    "exit": "Preview provenance and neutral owned cover are prepared. Independent content/visual QA and the real correction/owner-update entry display acceptance remain required; no official logo or product screenshot is used.",
+    "cover": {
+      "path": "/images/tool-media/murf-studio-editorial-cover.svg",
+      "owner": "AI Best Tool",
+      "qualification": "Neutral editorial identification artwork; explicitly not an official logo or product screenshot."
+    }
   },
   "productionReadback": {
     "checkedAt": "2026-10-07T00:23:22.072Z",
@@ -571,10 +583,10 @@
     "status": "HOLD",
     "neonProductMatches": 0,
     "supabaseProfileMatches": 0,
-    "contextualReference": "ElevenLabs features.decision.alternatives[1].slug = murf-ai",
-    "repositoryScan": "rg -n -i murf app lib components returned no matches; lib/config/toolRouteAliases.ts has no Murf alias. Historical enrichment scripts and placeholder files are not published entities.",
-    "canonicalConflict": "Both /ai/murf and /ai/murf-ai are 200 self-canonical noindex shells; only /ai/murf proposed, but legacy consumer mapping unresolved.",
-    "exit": "Separate authorized fix must reconcile existing reference and canonical/alias routing to one product intent, without creating another entity; read all three locales for both slugs and verify redirects/links before release.",
+    "contextualReference": "ElevenLabs features.decision.alternatives[1].slug = murf in the controlled release package; production consumer reconciliation is pending.",
+    "repositoryScan": "2026-10-07 baseline scan found no Murf alias in lib/config/toolRouteAliases.ts; this delivery adds murf-ai -> murf and updates the ElevenLabs package. Historical enrichment scripts and placeholders are not published entities.",
+    "canonicalConflict": "Local /ai/murf-ai, /cn/ai/murf-ai and /tw/ai/murf-ai resolve permanently to the matching /ai/murf locale path. Production redirect and canonical behavior must be verified after integration/deploy.",
+    "exit": "Post-deploy read each of the six locale paths, verify 308 destinations and confirm no production content consumer still emits murf-ai. Do not create a second entity.",
     "releaseDayRecheckRequired": true
   },
   "mappingHypotheses": {
@@ -635,7 +647,7 @@
       "id": "official",
       "name": "官方证据完整",
       "status": "HOLD",
-      "basis": "Unresolved official 30/90-day lifecycle scope and post-contract audio retrieval conflict; vendor confirmation needed for ordinary Studio. Complementary sources alone do not pass this gate."
+      "basis": "Unresolved official 30/90-day lifecycle scope and post-contract audio retrieval conflict; current account-specific Studio entitlements are unavailable."
     },
     {
       "id": "market",
@@ -653,13 +665,13 @@
       "id": "content",
       "name": "内容真实完整",
       "status": "HOLD",
-      "basis": "Three locales prepared; reusable official assets/current preview, independent content QA and live correction entry display acceptance missing."
+      "basis": "Three locales and a neutral owned cover plus first-party Academy embed are prepared; independent content/visual QA and live correction entry display acceptance remain missing."
     },
     {
       "id": "maintenance",
       "name": "不重复且可维护",
       "status": "HOLD",
-      "basis": "No product entity duplicate, but murf-ai reference and two self-canonical shells require convergence before release."
+      "basis": "Local legacy aliases and the ElevenLabs comparison slug now converge on murf; release-day production verification and production consumer reconciliation remain pending."
     }
   ],
   "liveSignal": {
@@ -867,6 +879,69 @@
       "sitemapUrls": 126,
       "productionWrites": 0,
       "status": "JSON, scoped regression, candidate pipeline, local/source links, TypeScript, read-only production and SEO smoke passed; independent QA pending"
+    }
+  },
+  "releaseDayRecheck": {
+    "checkedAt": "2026-10-08",
+    "purpose": "Recheck only release-sensitive identity, Studio entry/media, free-trial, pricing availability, deletion and embed sources; inherited independent market evidence and unaffected claims were not repeated.",
+    "sources": [
+      {
+        "id": "academy-embed",
+        "url": "https://murf.ai/academy/home",
+        "result": "PASS: official Academy lists Getting Started with Murf Studio at https://www.youtube.com/embed/M2-5OhbVwaE."
+      },
+      {
+        "id": "free-trial",
+        "url": "https://help.murf.ai/is-murf-free-to-use",
+        "result": "10 VGT minutes, no downloads, no card; matches the prior snapshot."
+      },
+      {
+        "id": "pricing",
+        "url": "https://murf.ai/pricing",
+        "result": "JavaScript-only in the available read path; account checkout and current plan amounts/allowances remain unverified and unpublished."
+      },
+      {
+        "id": "privacy",
+        "url": "https://murf.ai/legal/privacy-policy",
+        "result": "Still dated November 3, 2023; account-closure deletion within 30 days with exceptions remains in conflict with the Security lifecycle statement."
+      },
+      {
+        "id": "security-lifecycle",
+        "url": "https://murf.ai/security",
+        "result": "Current lifecycle still states up to 90 days for audio retrieval after agreement end and up to 90 days for complex requested deletion including backups; applicability versus cancellation/account termination remains unresolved."
+      },
+      {
+        "id": "studio-basics",
+        "url": "https://help.murf.ai/murf-studio-basics",
+        "result": "Current help article still describes Studio script, voice, media, timeline, preview and export workflow."
+      }
+    ],
+    "unresolved": [
+      "Current signed-in Studio account price, quotas, exact applicable plan rights, and subscription/termination/deletion scope.",
+      "Independent QA of the three-language display and acceptance of the correction/owner-update entry on the eventual public page.",
+      "Post-deploy 308 redirect and canonical/consumer checks; no production check was run in this development unit."
+    ]
+  },
+  "controlledReleasePackage": {
+    "created": true,
+    "entity": "Murf Studio",
+    "vendor": "Murf",
+    "canonicalPaths": ["/ai/murf", "/cn/ai/murf", "/tw/ai/murf"],
+    "legacyPaths": ["/ai/murf-ai", "/cn/ai/murf-ai", "/tw/ai/murf-ai"],
+    "legacyBehavior": "permanent 308 alias to the matching locale's Murf Studio canonical path",
+    "contentLocales": ["en", "cn", "tw"],
+    "cover": "/images/tool-media/murf-studio-editorial-cover.svg",
+    "officialPreview": "https://www.youtube-nocookie.com/embed/M2-5OhbVwaE",
+    "productionWrites": 0,
+    "publicReleaseApproved": false,
+    "indexReleaseApproved": false,
+    "relationshipCreationApproved": false,
+    "state": "HOLD_OFFICIAL_ACCOUNT_SCOPE_CONTENT_QA_AND_PRODUCTION_ALIAS_QA",
+    "presentation": {
+      "imageUrl": "/images/tool-media/murf-studio-editorial-cover.svg",
+      "thumbnailUrl": "/images/tool-media/murf-studio-editorial-cover.svg",
+      "videoUrl": "https://www.youtube-nocookie.com/embed/M2-5OhbVwaE",
+      "videoCaption": "Murf Academy · Getting Started with Murf Studio; official tutorial, not AI Best Tool hands-on output"
     }
   }
 }

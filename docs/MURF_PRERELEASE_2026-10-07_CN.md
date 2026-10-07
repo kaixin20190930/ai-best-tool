@@ -1,5 +1,8 @@
 # Murf Studio 发布前深审：MURF-PRERELEASE-01
 
+2026-10-08 身份/素材/别名增量交付见[收口记录](./MURF_STUDIO_IDENTITY_MATERIAL_CLOSEOUT_2026-10-08_CN.md)；原始 10-07 研
+究快照和生产读回保持历史记录。
+
 核查日：2026-10-07（Asia/Shanghai）；基线 `f1f0311a8be10e95a3c9f5873bab91038f590997`。结论：**HOLD_EVIDENCE，5 PASS / 3
 HOLD；另有 canonical/历史别名意图 HOLD。** 不进入可执行发布 preflight。
 

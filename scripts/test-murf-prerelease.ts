@@ -18,11 +18,26 @@ assert.deepEqual(
   p.gates.filter((g: any) => g.status === 'HOLD').map((g: any) => g.id),
   ['official', 'content', 'maintenance'],
 );
-assert.equal(p.media.status, 'HOLD');
+assert.equal(p.media.status, 'PREPARED_OFFICIAL_EMBED');
 for (const key of ['downloaded', 'reused', 'processed']) assert.equal(p.media[key], false);
 assert.equal(p.media.logo, null);
-assert.equal(p.media.preview, null);
+assert.equal(p.media.preview.url, 'https://www.youtube-nocookie.com/embed/M2-5OhbVwaE');
+assert.equal(p.media.preview.sourcePage, 'https://murf.ai/academy/home');
+assert.equal(p.media.cover.owner, 'AI Best Tool');
+assert.match(p.media.cover.qualification, /not an official logo or product screenshot/i);
 assert.equal(p.liveSignal.releaseBlocker, true);
+assert.equal(p.controlledReleasePackage.entity, 'Murf Studio');
+assert.equal(p.controlledReleasePackage.vendor, 'Murf');
+assert.equal(p.controlledReleasePackage.productionWrites, 0);
+assert.equal(p.controlledReleasePackage.publicReleaseApproved, false);
+assert.equal(p.controlledReleasePackage.indexReleaseApproved, false);
+assert.equal(p.controlledReleasePackage.relationshipCreationApproved, false);
+assert.deepEqual(p.controlledReleasePackage.canonicalPaths, ['/ai/murf', '/cn/ai/murf', '/tw/ai/murf']);
+assert.deepEqual(p.controlledReleasePackage.legacyPaths, ['/ai/murf-ai', '/cn/ai/murf-ai', '/tw/ai/murf-ai']);
+assert.equal(p.controlledReleasePackage.presentation.videoUrl, 'https://www.youtube-nocookie.com/embed/M2-5OhbVwaE');
+assert.equal(p.controlledReleasePackage.presentation.imageUrl, '/images/tool-media/murf-studio-editorial-cover.svg');
+assert.equal(p.releaseDayRecheck.checkedAt, '2026-10-08');
+assert(p.releaseDayRecheck.unresolved.length >= 3);
 assert.deepEqual(p.mappingHypotheses.relationshipRows, []);
 assert.equal(p.facts.price.numericPublicationAllowed, false);
 assert.equal(p.facts.price.checkoutVerified, false);
@@ -65,7 +80,7 @@ for (const page of r.pages.filter((x: any) => x.path !== '/sitemap.xml')) {
   assert.equal(page.canonical, `https://aibesttool.com${page.path}`);
   assert(page.robots.includes('noindex'));
 }
-assert.equal(p.deduplication.status, 'HOLD', 'Unresolved legacy canonical reference must block release');
+assert.equal(p.deduplication.status, 'HOLD', 'Production alias and consumer QA must block release');
 assert.equal(r.pages.find((x: any) => x.path === '/sitemap.xml').murfMatches, 0);
 const buffer = JSON.parse(fs.readFileSync('data/collection/mature-candidate-buffer-2026-10-06.json', 'utf8'));
 assert.equal(buffer.candidates.length, 15);
@@ -78,7 +93,7 @@ assert(
   ),
 );
 console.log(
-  'PASS Murf prerelease: source and locale integrity, independent-use scope, withheld numbers, media/canonical HOLD, zero release or relationship approvals',
+  'PASS Murf prerelease: source and locale integrity, owned cover/official embed provenance, withheld numbers, production QA HOLD, zero release or relationship approvals',
 );
 
 // QA regression: distinguish event triggers and preserve both conflicting source scopes.
