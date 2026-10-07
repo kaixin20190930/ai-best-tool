@@ -63,10 +63,10 @@ partners 等口径。分母、发布时间、语言/学科完整率及全文授�
 三方存储/再分发/销售/许可，及用这些内容或衍生数据训练/评估模型。API/MCP 是访问方式，不是批量再发布或商业转授权许可。导出
 格式、各套餐限额、API 计量/过量成本仍 unknown。
 
-[官方 API 页](https://scite.ai/api)列出六类 endpoint families：Assistant `POST /assistant`、Search `GET /search`、Smart Citations/tallies
-`GET /tallies/{doi}`、Reference Check `POST /reference-check`、Journal/Organization/Funder
-Metrics `GET /journals/{issn}`、Evidence Datasets `GET /evidence`。这些是页面公开支持的家族，不表示当前账户已开通或已实
-测。账户额度、费率/超额、导出格式与限额、机构合约和再分发权继续 `unknown/HOLD`。
+[官方 API 页](https://scite.ai/api)列出六类 endpoint families：Assistant `POST /assistant`、Search `GET /search`、Smart
+Citations/tallies `GET /tallies/{doi}`、Reference Check `POST /reference-check`、Journal/Organization/Funder Metrics
+`GET /journals/{issn}`、Evidence Datasets `GET /evidence`。这些是页面公开支持的家族，不表示当前账户已开通或已实测。账户
+额度、费率/超额、导出格式与限额、机构合约和再分发权继续 `unknown/HOLD`。
 
 ## 独立采用和使用限制
 
