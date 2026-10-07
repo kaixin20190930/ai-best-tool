@@ -46,14 +46,27 @@ partners 等口径。分母、发布时间、语言/学科完整率及全文授�
 仍须确认。09-28 旧审计记录的不同促销和套餐金额原样保留为历史观察，不能据此声称普遍价格冲突，也不能覆盖 10-07 页面当前显
 示。
 
+同一定价 FAQ 说明学生/学者若向所在机构推荐 Scite，可向 `customersupport@researchsolutions.com` 与 `sales@scite.ai` 发送
+并抄送双方的邮件，或把邮件转寄给双方，以申请折扣码。页面没有给资格条件、折扣金额和其他细则；本稿仅记录申请路径，不承诺符
+合资格或节省金额。
+
 [隐私政策](https://scite.ai/policy)生效日显示 2026-03-26；[服务条款](https://scite.ai/terms)定义 Customer Data 包含用户
 提交/上传/输入内容、输出、查询和互动产生的使用数据，并明确不会用这些 Customer Data 训练、微调或改进 AI 系统。政策又说明
 会分析服务使用以改进服务，二者是不同范围，必须同时展示。隐私政策称账户数据在账户关闭后可能保留十年，其他个人信息按目的和
 法律义务保留；备份清除时限与账户级合同控制未核。Enterprise enhanced confidentiality 不自动适用于个人套餐。
 
+该政策还称 Scite 多数运营在美国，个人信息可能在美国处理，并按适用法律为跨境传输提供保护；欧洲经济区来源传输举例采用欧盟
+委员会标准合同条款。面向中国大陆居民的专节另述个人信息可能在美国处理，并写明使用服务即同意个人信息传至中国大陆以外。这里
+按政策的地域章节记录，不扩展为对所有地区适用的法律结论。
+
 条款将引用文章、Classifier Results 和 AI Content 的使用置于第三方许可范围；禁止超出自身研究合理需求的大量/系统获取、向第
 三方存储/再分发/销售/许可，及用这些内容或衍生数据训练/评估模型。API/MCP 是访问方式，不是批量再发布或商业转授权许可。导出
 格式、各套餐限额、API 计量/过量成本仍 unknown。
+
+[官方 API 页](https://scite.ai/api)列出六类 endpoint families：Assistant `POST /assistant`、Search `GET /search`、Smart Citations/tallies
+`GET /tallies/{doi}`、Reference Check `POST /reference-check`、Journal/Organization/Funder
+Metrics `GET /journals/{issn}`、Evidence Datasets `GET /evidence`。这些是页面公开支持的家族，不表示当前账户已开通或已实
+测。账户额度、费率/超额、导出格式与限额、机构合约和再分发权继续 `unknown/HOLD`。
 
 ## 独立采用和使用限制
 

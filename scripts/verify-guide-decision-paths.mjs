@@ -17,8 +17,14 @@ const anchoredSection = detailSource.slice(
   detailSource.indexOf("id='decision-card'"),
   detailSource.indexOf("id='decision-card'") + 1100,
 );
-if (!anchoredSection.includes("'Decision Card'")) {
+if (!anchoredSection.includes('data-tool-decision-card') || !anchoredSection.includes('<h2')) {
   throw new Error('The decision-card anchor is not attached to the main Decision Card section.');
+}
+if (!/Tool Intelligence\s*\/\s*Decision Card/.test(anchoredSection)) {
+  throw new Error('The decision-card anchor is not attached to the main Decision Card section.');
+}
+if (!/工具决策情报\s*\/\s*选择判断卡/.test(anchoredSection)) {
+  throw new Error('The decision-card anchor is missing the localized Decision Card heading.');
 }
 if (anchoredSection.includes("t('introduction')")) {
   throw new Error('The decision-card anchor was attached to the Introduction section.');

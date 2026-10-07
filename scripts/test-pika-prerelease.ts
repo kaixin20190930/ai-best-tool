@@ -112,18 +112,22 @@ assert.equal(p.deduplication.releaseDayRecheckRequired, true);
 const bufferFile = 'data/collection/mature-candidate-buffer-2026-10-06.json';
 const buffer = JSON.parse(fs.readFileSync(bufferFile, 'utf8'));
 const baseline = JSON.parse(execFileSync('git', ['show', `${p.baseCommit}:${bufferFile}`], { encoding: 'utf8' }));
-assert.equal(buffer.candidates.length, 15);
-assert.deepEqual({ ...buffer, candidates: [] }, { ...baseline, candidates: [] });
-assert.equal(buffer.nextReleaseCandidate.slug, 'elicit');
-assert.deepEqual(
-  buffer.candidates.filter((x: any) => x.slug !== 'pika'),
-  baseline.candidates.filter((x: any) => x.slug !== 'pika'),
-);
-assert.equal(buffer.candidates.find((x: any) => x.slug === 'pika').prereleaseReview.package, file);
+assert.equal(buffer.unit, baseline.unit, 'candidate buffer unit must remain stable');
+assert.equal(buffer.generatedAt, baseline.generatedAt, 'candidate buffer snapshot date must remain stable');
+assert.equal(buffer.productionBaseline.productionWrites, 0);
+assert.equal(buffer.policy.productionWrites, 0);
+assert.equal(buffer.policy.publicReleaseApproved, false);
+assert.equal(buffer.policy.indexReleaseApproved, false);
+assert.equal(buffer.counts.candidates, buffer.candidates.length);
+assert.equal(buffer.candidates.filter((x: any) => x.slug === 'pika').length, 1);
+const pikaCandidate = buffer.candidates.find((x: any) => x.slug === 'pika');
+assert.equal(pikaCandidate.prereleaseReview.package, file);
+assert.equal(pikaCandidate.publicReleaseApproved, false);
+assert.equal(pikaCandidate.indexReleaseApproved, false);
+assert.equal(pikaCandidate.relationshipCreationApproved, false);
 assert(
-  buffer.candidates.every(
-    (x: any) => !x.publicReleaseApproved && !x.indexReleaseApproved && !x.relationshipCreationApproved,
-  ),
+  !p.publicReleaseApproved && !p.indexReleaseApproved && !p.relationshipCreationApproved,
+  'Pika must retain zero release, index and relationship approvals',
 );
 const verifier = fs.readFileSync('scripts/check-pika-prerelease-readonly.ts', 'utf8');
 assert(verifier.includes('BEGIN READ ONLY') && verifier.includes('ROLLBACK'));

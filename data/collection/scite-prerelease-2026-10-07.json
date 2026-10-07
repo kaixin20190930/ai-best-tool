@@ -36,7 +36,7 @@
       "url": "https://scite.ai/pricing",
       "status": "direct_read",
       "method": "Public official page read",
-      "scope": "Basic/Pro/Team/Enterprise displayed pricing and feature gates, yearly billing toggle, 7-day trial auto-enrollment, API/MCP allowances; no checkout or account testing.",
+      "scope": "Basic/Pro/Team/Enterprise displayed pricing and feature gates, yearly billing toggle, 7-day trial auto-enrollment, API/MCP allowances, student/academic discount application instructions; no checkout or account testing and no discount eligibility/amount confirmed.",
       "verifiedDate": "2026-10-07",
       "nextReview": "2026-10-14"
     },
@@ -54,7 +54,7 @@
       "url": "https://scite.ai/api",
       "status": "direct_read",
       "method": "Public official page read",
-      "scope": "API capability/availability boundary; account-specific limits, commercial data rights and overages not verified.",
+      "scope": "Official endpoint families: Assistant, Search, Smart Citations/tallies, Reference Check, Journal/Organization/Funder Metrics, Evidence Datasets; account-specific limits, export formats/limits, commercial data rights and overages not verified.",
       "verifiedDate": "2026-10-07",
       "nextReview": "2026-10-14"
     },
@@ -63,7 +63,7 @@
       "url": "https://scite.ai/policy",
       "status": "direct_read",
       "method": "Public official page read",
-      "scope": "Privacy policy effective 2026-03-26; searches/usage analytics are collected, Customer Data is not used to train/fine-tune/improve AI systems, retention varies by data purpose with account data potentially retained for ten years after account closure subject to applicable law.",
+      "scope": "Privacy policy effective 2026-03-26; searches/usage analytics are collected, Customer Data is not used to train/fine-tune/improve AI systems, US processing and cross-border-transfer statements differ by jurisdiction section, retention varies by data purpose with account data potentially retained for ten years after account closure subject to applicable law.",
       "verifiedDate": "2026-10-07",
       "nextReview": "2026-10-14"
     },
@@ -146,6 +146,11 @@
       ],
       "publication": "Do not state a universal price or entitlement without target-account checkout confirmation. Numbers are dated public-page observations only."
     },
+    "studentAcademicDiscount": {
+      "evidence": ["pricing"],
+      "status": "APPLICATION_PATH_DOCUMENTED_ELIGIBILITY_UNKNOWN",
+      "finding": "The current pricing FAQ says discounts are offered for students and academics if they recommend Scite to their institution. It instructs users to email while copying, or forward an email to, customersupport@researchsolutions.com and sales@scite.ai to receive a discount code. The page does not specify eligibility criteria, discount amount, or other terms; do not promise qualification or savings."
+    },
     "coverage": {
       "evidence": ["features", "home", "accuracy-study"],
       "status": "HOLD_SCOPE",
@@ -160,12 +165,27 @@
     "exportApi": {
       "evidence": ["pricing", "api", "terms"],
       "status": "PARTIAL_UNKNOWN",
-      "finding": "Pro page advertises API access; official home lists API, MCP, Zotero and browser extension. API scope, rate/overage schedule, bulk export formats/limits, retention, derived-data redistribution, commercial reuse and institutional entitlement are not confirmed by public evidence captured here. Terms restrict systematic/bulk access and redistribution; access is not a republication license."
+      "apiEndpointFamilies": [
+        { "family": "Assistant", "method": "POST", "path": "/assistant" },
+        { "family": "Search", "method": "GET", "path": "/search" },
+        { "family": "Smart Citations / tallies", "method": "GET", "path": "/tallies/{doi}" },
+        { "family": "Reference Check", "method": "POST", "path": "/reference-check" },
+        { "family": "Journal, Organization & Funder Metrics", "method": "GET", "path": "/journals/{issn}" },
+        { "family": "Evidence Datasets", "method": "GET", "path": "/evidence" }
+      ],
+      "unknowns": [
+        "Account-specific API usage quota, rate and overage costs",
+        "Bulk export formats and limits",
+        "Institutional/API contract entitlements",
+        "Any right to redistribute or sublicense articles, classifier results, AI content or derived datasets"
+      ],
+      "finding": "The current official API page lists Assistant, Search, Smart Citations/tallies, Reference Check, Journal/Organization/Funder Metrics and Evidence Datasets endpoint families. The Pro page advertises API access, but account-specific usage quota, rate/overage schedule, bulk export formats/limits, institutional entitlements, and any redistribution/sublicensing rights remain unknown/HOLD. Terms restrict systematic/bulk access and redistribution; API access is not a republication license."
     },
     "privacy": {
       "evidence": ["policy", "terms", "pricing"],
       "status": "PARTIAL_VERIFIED",
-      "finding": "The current Terms and Privacy Policy define Customer Data to include inputs, outputs, queries and usage data, and state it is not used to train, fine-tune or improve AI systems. The Privacy Policy also says searches/usage may be analyzed to improve the Service; these are distinct statements and must both be retained. Account data may be retained for up to ten years after account closure, with purpose-specific exceptions and rights under applicable law. Specific backups, deletion completion time and contractual/institutional controls remain unknown. Enterprise enhanced confidentiality remains a separate plan claim."
+      "crossBorder": "The Privacy Policy says most operations are in the United States and personal information may be processed there. It says cross-border transfers receive protections as required by applicable law; for EEA-originating transfers it gives European Commission standard contractual clauses as an example. Its PRC-resident section separately says personal information may be processed in the United States and that using the Service constitutes consent to transfer outside the PRC. These are the policy's jurisdiction-scoped statements, not an independent legal conclusion or a statement about every user's rights.",
+      "finding": "The current Terms and Privacy Policy define Customer Data to include inputs, outputs, queries and usage data, and state it is not used to train, fine-tune or improve AI systems. The Privacy Policy also says searches/usage may be analyzed to improve the Service; these are distinct statements and must both be retained. Account data may be retained for up to ten years after account closure, with purpose-specific exceptions and rights under applicable law. It states that most operations are in the United States, personal information may be processed there, and cross-border protections apply as required by law, with region-specific wording. Specific backups, deletion completion time and contractual/institutional controls remain unknown. Enterprise enhanced confidentiality remains a separate plan claim."
     },
     "commercialAcademicUse": {
       "evidence": ["terms", "pricing"],
@@ -342,7 +362,7 @@
         "A supporting/contrasting label does not establish truth, replication, quality or consensus.",
         "Current target-account billing, API/export limits, and backup/deletion timing remain unknown."
       ],
-      "pricingBoundary": "The public pricing page currently shows Basic, Pro, Team and custom Enterprise with yearly-billing labels and a limited-time API credit. Treat these as dated page observations, not checkout guarantees; monthly billing, taxes, institution rates and account entitlements need confirmation. The seven-day trial automatically enrolls in the selected plan unless canceled.",
+      "pricingBoundary": "The public pricing page currently shows Basic, Pro, Team and custom Enterprise with yearly-billing labels and a limited-time API credit. It also says student and academic discounts may be requested by recommending Scite to your institution and emailing with both customersupport@researchsolutions.com and sales@scite.ai copied (or forwarding an email to both). Eligibility, discount amount and terms are unspecified, so do not assume qualification or savings. Treat the plan display as a dated page observation, not a checkout guarantee; monthly billing, taxes, institution rates and account entitlements need confirmation. The seven-day trial automatically enrolls in the selected plan unless canceled.",
       "privacyBoundary": "Current Terms and Privacy Policy state that defined Customer Data, including inputs, outputs, queries and usage data, is not used to train or improve AI systems. The policy separately allows service-use analytics to improve the Service and says account data may be retained up to ten years after account closure, subject to applicable law. Backup purge and account-specific controls remain unknown; Enterprise confidentiality does not transfer to individual plans.",
       "platforms": "Browser application with listed Zotero, browser extension, MCP and API integrations. No account-level entitlement or operational integration test was performed.",
       "decisionCard": {
@@ -385,8 +405,8 @@
         "支持/对照标签不能证明真伪、重复验证、研究质量或共识。",
         "目标账户账单、API/导出限额与备份/删除时间仍未知。"
       ],
-      "pricingBoundary": "当前公开价格页显示 Basic、Pro、Team 与定制 Enterprise，并标有年付和限时 API credit。它们只是核查日页面观察，并非结账保证；月付、税费、机构价与账户权益需另行确认。七天试用结束后会自动转入所选套餐，除非提前取消。",
-      "privacyBoundary": "当前条款及隐私政策说明，定义范围内的 Customer Data（含输入、输出、查询和使用数据）不会用于训练或改进 AI 系统。政策另允许分析服务使用情况以改进服务，并称账户数据在关闭后可能保留最长十年，受适用法律约束。备份清除及账户专属控制仍未知；Enterprise 保密承诺不适用于个人套餐。",
+      "pricingBoundary": "当前公开价格页显示 Basic、Pro、Team 与定制 Enterprise，并标有年付和限时 API credit。页面也说明，学生及学者可在向所属机构推荐 Scite 后申请折扣：邮件需抄送 customersupport@researchsolutions.com 与 sales@scite.ai，或转寄给两方。页面未说明资格标准、折扣金额或其他条件，不应承诺可获资格或节省金额。这些套餐仅是核查日页面观察，并非结账保证；月付、税费、机构价与账户权益需另行确认。七天试用结束后会自动转入所选套餐，除非提前取消。",
+      "privacyBoundary": "当前条款及隐私政策说明，定义范围内的 Customer Data（含输入、输出、查询和使用数据）不会用于训练或改进 AI 系统。政策另允许分析服务使用情况以改进服务，并称账户数据在关闭后可能保留最长十年，受适用法律约束。政策称 Scite 多数运营位于美国，个人信息可能在美国处理，并按适用法律为跨境传输提供保护；欧洲经济区来源传输举例采用欧盟委员会标准合同条款。面向中国大陆居民的章节另述个人信息可能在美国处理，使用服务即同意个人信息传至中国大陆以外。以上是政策按地域表述，不是独立法律结论。备份清除及账户专属控制仍未知；Enterprise 保密承诺不适用于个人套餐。",
       "platforms": "浏览器应用，并列有 Zotero、浏览器扩展、MCP 与 API 集成。本次未登录账户验证权益或实际运行集成。",
       "decisionCard": {
         "verdict": "若有人逐篇核验原始论文，可把 Scite 作为引文语境与参考文献审阅辅助。",
@@ -425,8 +445,8 @@
         "支持/對照標籤不能證明真偽、重複驗證、研究品質或共識。",
         "目標帳戶計費、API/匯出限制及備份/刪除時間仍未知。"
       ],
-      "pricingBoundary": "目前公開價格頁列出 Basic、Pro、Team 與客製 Enterprise，並標示年繳及限時 API credit。這些只是查核日頁面觀察，並非結帳保證；月繳、稅費、機構價格與帳戶權益仍須確認。七天試用結束後會自動轉為所選方案，除非事先取消。",
-      "privacyBoundary": "目前條款及隱私政策說明，定義範圍內的 Customer Data（含輸入、輸出、查詢與使用資料）不會用於訓練或改進 AI 系統。政策另允許分析服務使用情況以改進服務，並稱帳戶資料在關閉後可能保留最長十年，受適用法律約束。備份清除及帳戶專屬控制仍未知；Enterprise 保密承諾不適用於個人方案。",
+      "pricingBoundary": "目前公開價格頁列出 Basic、Pro、Team 與客製 Enterprise，並標示年繳及限時 API credit。頁面也說明，學生與學者可在向所屬機構推薦 Scite 後申請折扣：寄信時副本給 customersupport@researchsolutions.com 與 sales@scite.ai，或將郵件轉寄給兩方。頁面未說明資格標準、折扣金額或其他條件，不應承諾可取得資格或省下多少。套餐僅是查核日頁面觀察，並非結帳保證；月繳、稅費、機構價格與帳戶權益仍須確認。七天試用結束後會自動轉為所選方案，除非事先取消。",
+      "privacyBoundary": "目前條款及隱私政策說明，定義範圍內的 Customer Data（含輸入、輸出、查詢與使用資料）不會用於訓練或改進 AI 系統。政策另允許分析服務使用情況以改進服務，並稱帳戶資料在關閉後可能保留最長十年，受適用法律約束。政策表示 Scite 多數營運位於美國，個人資料可能在美國處理，跨境傳輸依適用法律提供保護；歐洲經濟區來源傳輸舉例採用歐盟委員會標準合約條款。面向中國大陸居民的章節另述個人資料可能在美國處理，使用服務即同意個人資料傳至中國大陸以外。這些是政策按地域的敘述，並非獨立法律結論。備份清除及帳戶專屬控制仍未知；Enterprise 保密承諾不適用於個人方案。",
       "platforms": "瀏覽器應用程式，並列有 Zotero、瀏覽器擴充功能、MCP 與 API 整合。本次未登入帳戶確認權益或實際執行整合。",
       "decisionCard": {
         "verdict": "若有人逐篇核對原始論文，可把 Scite 作為引文脈絡與參考文獻審查輔助。",

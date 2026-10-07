@@ -187,6 +187,7 @@
     "test:glean-release": "tsx scripts/test-glean-release.ts",
     "test:fireflies-release": "tsx scripts/test-fireflies-release.ts",
     "test:mature-candidate-buffer": "tsx scripts/test-mature-candidate-buffer.ts",
+    "test:pika-prerelease": "tsx scripts/test-pika-prerelease.ts",
     "test:scite-prerelease": "tsx scripts/test-scite-prerelease.ts",
     "check:scite-prerelease:production": "node scripts/pub-03-readonly-run.mjs pnpm exec tsx scripts/check-scite-prerelease-readonly.ts",
     "typecheck:scite-prerelease": "tsc --noEmit --project scripts/tsconfig.scite-prerelease.json",

@@ -52,6 +52,27 @@ for (const conflict of p.conflicts) {
 assert.equal(p.facts.privacy.status, 'PARTIAL_VERIFIED');
 assert.match(p.facts.privacy.finding, /not used to train/i);
 assert.match(p.facts.privacy.finding, /ten years/i);
+assert.match(p.facts.privacy.crossBorder, /United States/i);
+assert.match(p.facts.privacy.crossBorder, /EEA-originating/i);
+assert.match(p.facts.privacy.crossBorder, /PRC-resident/i);
+assert.equal(p.facts.studentAcademicDiscount.status, 'APPLICATION_PATH_DOCUMENTED_ELIGIBILITY_UNKNOWN');
+assert.match(p.facts.studentAcademicDiscount.finding, /customersupport@researchsolutions\.com/);
+assert.match(p.facts.studentAcademicDiscount.finding, /sales@scite\.ai/);
+assert.match(p.facts.studentAcademicDiscount.finding, /do not promise qualification or savings/i);
+assert.equal(p.facts.exportApi.status, 'PARTIAL_UNKNOWN');
+assert.deepEqual(
+  p.facts.exportApi.apiEndpointFamilies.map((x: any) => x.family),
+  [
+    'Assistant',
+    'Search',
+    'Smart Citations / tallies',
+    'Reference Check',
+    'Journal, Organization & Funder Metrics',
+    'Evidence Datasets',
+  ],
+);
+assert(p.facts.exportApi.unknowns.some((x: string) => /export formats and limits/i.test(x)));
+assert(p.facts.exportApi.unknowns.some((x: string) => /redistribute/i.test(x)));
 assert.equal(p.independentEvidence.filter((e: any) => e.strength === 'strong_actual_adoption').length, 2);
 assert.notEqual(new URL(p.independentEvidence[0].url).hostname, new URL(p.independentEvidence[1].url).hostname);
 assert.equal(p.productionReadback.productionWrites, 0);
@@ -83,8 +104,15 @@ for (const locale of ['en', 'cn', 'tw']) {
     `${locale} must describe limits`,
   );
   assert.match(content.privacyBoundary, /Customer Data/);
+  assert.match(content.pricingBoundary, /customersupport@researchsolutions\.com/);
+  assert.match(content.pricingBoundary, /sales@scite\.ai/);
 }
 assert.notEqual(p.content.cn.summary, p.content.tw.summary);
+for (const locale of ['cn', 'tw']) {
+  assert.match(p.content[locale].privacyBoundary, /美国|美國/);
+  assert.match(p.content[locale].privacyBoundary, /跨境/);
+  assert.match(p.content[locale].privacyBoundary, /中国大陆|中國大陸/);
+}
 
 console.log(
   'PASS Scite prerelease: source and locale integrity, eight gates, bounded claims, explicit HOLDs and zero release/relationship/index approvals',
