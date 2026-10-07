@@ -1,0 +1,783 @@
+{
+  "unit": "MURF-PRERELEASE-01",
+  "schemaPurpose": "editorial_candidate_only_not_release_pipeline_input",
+  "candidate": "Murf Studio",
+  "slug": "murf",
+  "verifiedDate": "2026-10-07",
+  "nextReview": "2026-10-14",
+  "reviewer": "Codex research/editorial review; independent QA pending",
+  "baselineCommit": "f1f0311a8be10e95a3c9f5873bab91038f590997",
+  "baselineFiles": [
+    "data/collection/mature-candidate-buffer-2026-10-06.json",
+    "docs/OPS_RESET_CANDIDATE_BUFFER_2026-10-06_CN.md",
+    "docs/BEST_DIRECTORY_POSITIONING_AND_INTAKE_CN.md",
+    "docs/TOOL_INDEX_RELEASE_POLICY_CN.md"
+  ],
+  "verdict": "HOLD_EVIDENCE",
+  "additionalHolds": ["HOLD_DUPLICATE_INTENT"],
+  "publicReleaseApproved": false,
+  "indexReleaseApproved": false,
+  "relationshipCreationApproved": false,
+  "productionWrites": 0,
+  "executableReleasePackageCreated": false,
+  "evidence": [
+    {
+      "id": "home",
+      "url": "https://murf.ai/",
+      "scope": "Studio identity; API, Agents and Dub are separate offers; homepage collaboration claim conflicts with plan-specific docs",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "pricing",
+      "url": "https://murf.ai/pricing",
+      "scope": "Browser Studio tab, annual checked then monthly unchecked; card/feature table and license/annual FAQ read; no login or checkout",
+      "status": "browser_direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "commercial",
+      "url": "https://help.murf.ai/do-i-have-commercial-rights-over-the-voice-over-created",
+      "scope": "Paid Studio commercial rights; business recommendation; Enterprise broadcast scope",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "terms",
+      "url": "https://murf.ai/legal/terms-of-service",
+      "scope": "Sections 2-6: billing, content, confidentiality, cloning consent, commercial restrictions, third parties, IP",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "privacy",
+      "url": "https://murf.ai/legal/privacy-policy",
+      "scope": "Collection, providers, global processing, retention, deletion request response; page dated 2023-11-03",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "security",
+      "url": "https://murf.ai/security",
+      "scope": "Vendor security statements; not independently audited assurance or universal zero-retention",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "free",
+      "url": "https://help.murf.ai/is-murf-free-to-use",
+      "scope": "10-minute VGT and transcription trial, no downloads, no card; voice counts conflict",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "free-once",
+      "url": "https://help.murf.ai/how-can-i-get-more-vgt-during-my-free-trial",
+      "scope": "Free VGT is a one-time credit",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "workspace",
+      "url": "https://help.murf.ai/what-is-a-workspace",
+      "scope": "Conflicting legacy project/VGT tiers; do not propagate Growth as current",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "projects",
+      "url": "https://help.murf.ai/projects",
+      "scope": "Concurrent project slots, not monthly allocations; downgrade locks and trash",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "cancel",
+      "url": "https://help.murf.ai/what-happens-to-my-account-and-projects-after-canceling",
+      "scope": "End-of-cycle download/VGT expiry; project retention and downgrade",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "vgt",
+      "url": "https://help.murf.ai/what-is-voice-generation-time-vgt",
+      "scope": "New/changed text sub-block consumption; settings-only changes excluded per help",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "validity",
+      "url": "https://help.murf.ai/vgt-validity",
+      "scope": "One following billing-cycle carryover; cancellation loses unused credit",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "studio",
+      "url": "https://help.murf.ai/murf-studio-basics",
+      "scope": "Script, voice settings, media tracks, preview and export; official demo/image provenance only",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "language",
+      "url": "https://help.murf.ai/languages-and-accents",
+      "scope": "Mandarin/Cantonese listed; conflicting 200+/300+ voices and 33/40+ language counts",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "collaboration",
+      "url": "https://help.murf.ai/invite-users-to-project",
+      "scope": "Enterprise-only editor/viewer invitations",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "import",
+      "url": "https://help.murf.ai/import-limits",
+      "scope": "45-minute Audio to Text entry; 15000-word script upload; Add Media distinction",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "timeline",
+      "url": "https://help.murf.ai/timeline-introduction",
+      "scope": "Three tracks; media left-aligned without freely placed gaps",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "sync",
+      "url": "https://help.murf.ai/syncing-images-and-videos-with-voice-blocks",
+      "scope": "Adjust blocks for synchronization; cannot extend video past its source duration",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "voice-export",
+      "url": "https://help.murf.ai/voice-only",
+      "scope": "Paid voice exports MP3/WAV/FLAC/a-law/u-law and quality settings",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "music-export",
+      "url": "https://help.murf.ai/voice-music",
+      "scope": "Mixed audio single-file export, no music-only export",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "video-export",
+      "url": "https://help.murf.ai/video-export",
+      "scope": "MP4/MOV and script subtitles SRT/VTT or burned captions",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "youtube",
+      "url": "https://help.murf.ai/what-are-youtube-codes",
+      "scope": "Stock music code in YouTube description; not universal rights or monetization guarantee",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "affiliate",
+      "url": "https://murf.ai/legal/affiliate-program-terms-of-service",
+      "scope": "Section 9 conditional program license only; directory permission not established",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    },
+    {
+      "id": "api-terms",
+      "url": "https://murf.ai/legal/api-usage-agreement",
+      "scope": "API-only agreement, not ordinary Studio retention/training/logo license",
+      "status": "direct_read",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14"
+    }
+  ],
+  "canonical": {
+    "official": "https://murf.ai/",
+    "proposed": ["/ai/murf", "/cn/ai/murf", "/tw/ai/murf"],
+    "legacyReference": "murf-ai",
+    "intent": "Single Studio product detail. API/Agents/Dub are excluded. No new aliases or Task URLs. Production ElevenLabs alternative references murf-ai; both English paths self-canonical noindex shells. Canonical consolidation remains a release blocker, not proof of a second published product."
+  },
+  "facts": {
+    "identity": {
+      "statement": "Browser Studio produces editable narration from scripts with media alignment; API latency, agent telephony and Dub download rights do not apply. Account signup exists; no login, synthesis, purchase or regional availability test performed.",
+      "evidence": ["home", "studio", "pricing"]
+    },
+    "price": {
+      "statement": "Monthly and annual Studio views were separated in browser. Public candidate copy omits amounts and quota promises because checkout, account cohort, tax and conflicting help entries remain unverified. Annual monthly-equivalent is not a monthly charge.",
+      "evidence": ["pricing", "workspace"],
+      "numericPublicationAllowed": false,
+      "observedOnly": {
+        "currencySymbol": "$; currency/tax confirmation at checkout pending",
+        "monthly": {
+          "Creator": 29,
+          "Business": 99
+        },
+        "annual": {
+          "Creator": {
+            "monthlyEquivalent": 19,
+            "annualCharge": 228
+          },
+          "Business": {
+            "monthlyEquivalent": 66,
+            "annualCharge": 792
+          }
+        },
+        "enterprise": "Custom"
+      },
+      "checkoutVerified": false
+    },
+    "free": {
+      "statement": "Free trial: 10 one-time VGT minutes, 10 transcription minutes per help, no card, no download/export or commercial license. Preview/share/embed availability is not download entitlement.",
+      "evidence": ["free", "free-once", "pricing"]
+    },
+    "plans": {
+      "statement": "Observed Studio cards: Free 10 projects/1 editor; Creator 100/1, 2h monthly or 24h yearly; Business 500/1, 8h monthly or 96h yearly; Enterprise custom projects/editors and advertised unlimited generation. Exact entitlements require account confirmation. No Growth card observed.",
+      "evidence": ["pricing", "workspace", "projects"],
+      "observedOnly": true
+    },
+    "features": {
+      "statement": "Creator card has downloads/Canva/commercial rights. Business adds business license, emphasis, variability, Say It My Way, PowerPoint and transcription (table: 4h monthly/48h yearly). Enterprise adds invited collaboration, SSO, private access controls, translation, MSA and no-training statement; clones and full broadcast rights are add-ons. Shared preview is distinct from editing access.",
+      "evidence": ["pricing", "collaboration", "studio"]
+    },
+    "usage": {
+      "statement": "VGT measures newly generated or text-modified sub-block duration, not just final exported minutes. Help excludes settings-only changes. Project slots are concurrent holdings, not monthly credits. Annual FAQ says annual pool without monthly limits but uses legacy Basic example; verify account. Carryover lasts only the following billing cycle; cancellation forfeits unused VGT.",
+      "evidence": ["vgt", "projects", "validity", "pricing"]
+    },
+    "commercial": {
+      "statement": "Paid Studio includes commercial voiceover use; individual personal license covers small commercial work, business license is recommended for organizations. Broadcast TV/radio rights require Enterprise and current pricing marks them add-on: not automatic with Enterprise. Third-party platforms decide acceptance/monetization. Terms prohibit reselling Murf offerings and using its voices to train AI.",
+      "evidence": ["commercial", "pricing", "terms"]
+    },
+    "inputRights": {
+      "statement": "User must clear scripts/uploads and obtain written speaker consent for cloning. Stock media is described as royalty-free, not rights-free: YouTube stock music requires a one-use code in the description; no standalone music export. Exact third-party asset license, attribution, territories and post-subscription reuse were not independently established. Do not extend voiceover licensing to arbitrary music/images or Murf logos.",
+      "evidence": ["terms", "studio", "youtube", "music-export"]
+    },
+    "export": {
+      "statement": "Paid voice export: MP3/WAV/FLAC and telephony a-law/u-law; mixed voice+music is a single file, with OGG additionally listed. Video MP4/MOV supports subtitles and SRT/VTT scripts. Paid table says unlimited downloads, not unlimited generation; Full HD is observed, not tested. Downloads end with paid cycle; no promise of perpetual download access.",
+      "evidence": ["voice-export", "music-export", "video-export", "pricing", "cancel"]
+    },
+    "durationSync": {
+      "statement": "Import help distinguishes unrestricted Add Media uploads from 45-minute Audio to Text entry and 15000 words per script upload (SRT exception). These are entry limits, not final-runtime guarantees. Three tracks support block alignment; media is left-aligned and video cannot extend beyond its source length. No lip-sync, long-project SLA or per-plan final duration ceiling verified.",
+      "evidence": ["import", "timeline", "sync"]
+    },
+    "languages": {
+      "statement": "Language doc lists Mandarin and Cantonese; voice styles vary by voice. Official total counts conflict internally and across pages, so no exact catalog count or Taiwan-accent guarantee. EN/CN/TW below are editorial localizations, not proof of localized product UI.",
+      "evidence": ["language", "home", "free", "pricing"]
+    },
+    "privacy": {
+      "statement": "Studio inputs are collected to provide service; general terms protect confidential content with service-provider access/exceptions. Privacy policy allows global processing, account/service retention and legal/security exceptions. Deletion requests receive a response within 30 days, not guaranteed total deletion. Backup removal timing is unspecified. Enterprise no-training card is not a guarantee for ordinary Studio; their training/opt-out scope remains unknown.",
+      "evidence": ["privacy", "terms", "pricing", "security"]
+    },
+    "deletion": {
+      "statement": "Canceling does not itself delete projects; non-Enterprise trash is removed after 30 days per help. Enterprise table advertises 60-day recovery, which is not a universal retention schedule. Shared copies/backups and legal obligations are separate. No deletion exercise performed.",
+      "evidence": ["projects", "cancel", "privacy", "terms", "pricing"]
+    },
+    "apiBoundary": {
+      "statement": "API contract and API tab have separate pricing/data/mark provisions. Do not import their retention commitments, credit amounts, on-premise offer or origin-logo permission into Studio or this directory.",
+      "evidence": ["api-terms", "pricing"]
+    }
+  },
+  "conflicts": [
+    {
+      "id": "quota",
+      "sources": ["pricing", "workspace", "projects", "cancel"],
+      "observation": "Studio cards and cancellation help show Free/Creator/Business 10/100/500 projects, but workspace help gives 2/5/200 and Growth 50. Business VGT 8/96 versus workspace 20/240 hours.",
+      "resolution": "Do not promise numeric paid quota or resurrect Growth. Current card values remain dated observations; confirm account/order form before reliance."
+    },
+    {
+      "id": "collaboration",
+      "sources": ["home", "pricing", "collaboration"],
+      "observation": "Homepage says all paid plans collaborate; Studio table and invitation docs reserve invited editing/viewers for Enterprise.",
+      "resolution": "Use restrictive plan-specific statement; preview links do not imply seats."
+    },
+    {
+      "id": "catalog",
+      "sources": ["language", "free", "home", "pricing"],
+      "observation": "Official pages mix 200+/300+ voices and 30+/33/35+/40+ languages; language page itself mixes counts.",
+      "resolution": "Omit totals; test target voice/accent."
+    },
+    {
+      "id": "folders",
+      "sources": ["pricing"],
+      "additionalSource": "https://help.murf.ai/folders",
+      "additionalSourceStatus": "search_snapshot_only",
+      "observation": "Pricing table lists subfolders across plans; help search snapshot limits nesting to Enterprise.",
+      "resolution": "No self-serve nested/private-folder promise; not needed for candidate recommendation."
+    }
+  ],
+  "independentEvidence": [
+    {
+      "id": "ijdl",
+      "url": "https://scholarworks.iu.edu/journals/index.php/ijdl/article/download/42061/44044/125817",
+      "landingUrl": "https://scholarworks.iu.edu/journals/index.php/ijdl/article/view/42061",
+      "author": "Paula Marcelle, Independent Instructional Designer & Scholar",
+      "publicationDate": "2025-12-17",
+      "researchDate": "Exact production dates not established; historical design case, not 2026 current trial",
+      "status": "direct_read",
+      "strength": "strong_actual_use",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14",
+      "observation": "IJDL pp. 284-285 describes producing two-to-four-minute module podcasts with Murf Gen 2; Fig. 10 documents script/settings/phonetic editing. p. 287 describes pace and pronunciation corrections.",
+      "limitations": "Single designer/course, mentor-evaluated; student pilot still future at writing. No adoption scale, current price, controlled quality ranking or learning-effect claim. Published by IU Libraries/AECT is not IU institutional procurement. PDF text read; screenshot rendering failed (cache miss), so no visual or asset acceptance."
+    },
+    {
+      "id": "reddit-course",
+      "url": "https://www.reddit.com/r/instructionaldesign/comments/1fonqvp/murf_is_not_being_truthful_about_their_pricing/",
+      "publicationDate": "2024-09-24",
+      "researchDate": "Author reports purchase in prior fall and 2024 renewal; later comments are not current contractual evidence",
+      "status": "direct_read",
+      "strength": "auxiliary_anonymous_actual_use",
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14",
+      "observation": "Separate author describes using Murf for self-paced courses and project/seat/renewal friction.",
+      "limitations": "Anonymous unverified account, not proven buyer identity. Supports historical use/friction only; cannot establish current price, quality, market size or wrongdoing."
+    }
+  ],
+  "excludedEvidence": [
+    {
+      "url": "https://www.reddit.com/r/NewTubers/comments/1029lkt",
+      "status": "fetch_failed",
+      "reason": "Direct read failed again; does not count toward the two signals."
+    }
+  ],
+  "marketGate": {
+    "status": "PASS",
+    "basis": "Independent named production case plus separate anonymous auxiliary use report; no vendor testimonials or brand scale counted."
+  },
+  "media": {
+    "status": "HOLD",
+    "logo": null,
+    "preview": null,
+    "downloaded": false,
+    "reused": false,
+    "processed": false,
+    "logoSource": {
+      "sourcePage": "https://murf.ai/pricing",
+      "observedUrl": "https://murf.ai/public-assets/v2-assets/logos/murf-icon.svg",
+      "method": "Browser DOM img MURF src read only",
+      "rightsHolder": "Murf/respective trademark owner per general terms; exact grant not obtained",
+      "reuseBasis": null,
+      "processingPermission": null,
+      "attributionRequirement": "unknown"
+    },
+    "previewSource": {
+      "sourcePage": "https://help.murf.ai/murf-studio-basics",
+      "locator": "Play/Pause image labelled Murf-Paris-The-City-of-Light-and-Culture-03-18-2026_02_35_AM and official Arcade demo links",
+      "assetUrl": null,
+      "authenticity": "Official help provenance; pixels/current UI not validated",
+      "reuseBasis": null,
+      "processingPermission": null,
+      "attributionRequirement": "unknown"
+    },
+    "excludedPlaceholders": ["public/icons/tool-logos/murf.svg", "public/images/tool-media/murf-cover.svg"],
+    "rightsReview": "General terms reserve IP. Affiliate section 9 requires eligible program membership and authorized linked material; no evidence this directory qualifies. API mark grant identifies API output, not Studio directory marketing. Journal CC BY-NC-ND and third-party components do not clear commercial screenshot reuse. Do not download, crop, translate, host or embed absent an applicable permission.",
+    "exit": "Obtain official asset file/source, rights holder, explicit directory use and modification/embedding scope, attribution and current UI review; independent visual QA."
+  },
+  "productionReadback": {
+    "checkedAt": "2026-10-07T00:23:22.072Z",
+    "productionWrites": 0,
+    "transaction": "BEGIN READ ONLY; SELECT; ROLLBACK",
+    "identity": {
+      "matches": [],
+      "contextualMatches": [
+        {
+          "id": "d7b63bf2-63c8-4015-b59d-2f627450813f",
+          "name": "elevenlabs",
+          "title": {
+            "cn": "ElevenLabs AI 语音与音频平台",
+            "en": "ElevenLabs AI Voice and Audio Platform",
+            "zh": "ElevenLabs AI 语音与音频平台"
+          },
+          "url": "https://elevenlabs.io/",
+          "status": "published",
+          "page_quality_status": "continue_index",
+          "matchingAlternativeSlugs": ["murf-ai"]
+        }
+      ],
+      "counts": [
+        {
+          "status": "draft",
+          "page_quality_status": "monitor",
+          "count": 9
+        },
+        {
+          "status": "published",
+          "page_quality_status": "archive",
+          "count": 2
+        },
+        {
+          "status": "published",
+          "page_quality_status": "continue_index",
+          "count": 17
+        },
+        {
+          "status": "published",
+          "page_quality_status": "monitor",
+          "count": 35
+        },
+        {
+          "status": "rejected",
+          "page_quality_status": "monitor",
+          "count": 6
+        }
+      ]
+    },
+    "profiles": [],
+    "pages": [
+      {
+        "path": "/ai/murf",
+        "status": 200,
+        "canonical": "https://aibesttool.com/ai/murf",
+        "robots": "noindex, follow"
+      },
+      {
+        "path": "/cn/ai/murf",
+        "status": 200,
+        "canonical": "https://aibesttool.com/cn/ai/murf",
+        "robots": "noindex, follow"
+      },
+      {
+        "path": "/tw/ai/murf",
+        "status": 200,
+        "canonical": "https://aibesttool.com/tw/ai/murf",
+        "robots": "noindex, follow"
+      },
+      {
+        "path": "/ai/murf-ai",
+        "status": 200,
+        "canonical": "https://aibesttool.com/ai/murf-ai",
+        "robots": "noindex, follow"
+      },
+      {
+        "path": "/cn/ai/murf-ai",
+        "status": 200,
+        "canonical": "https://aibesttool.com/cn/ai/murf-ai",
+        "robots": "noindex, follow"
+      },
+      {
+        "path": "/tw/ai/murf-ai",
+        "status": 200,
+        "canonical": "https://aibesttool.com/tw/ai/murf-ai",
+        "robots": "noindex, follow"
+      },
+      {
+        "path": "/sitemap.xml",
+        "status": 200,
+        "locCount": 126,
+        "murfMatches": 0
+      }
+    ]
+  },
+  "deduplication": {
+    "status": "HOLD",
+    "neonProductMatches": 0,
+    "supabaseProfileMatches": 0,
+    "contextualReference": "ElevenLabs features.decision.alternatives[1].slug = murf-ai",
+    "repositoryScan": "rg -n -i murf app lib components returned no matches; lib/config/toolRouteAliases.ts has no Murf alias. Historical enrichment scripts and placeholder files are not published entities.",
+    "canonicalConflict": "Both /ai/murf and /ai/murf-ai are 200 self-canonical noindex shells; only /ai/murf proposed, but legacy consumer mapping unresolved.",
+    "exit": "Separate authorized fix must reconcile existing reference and canonical/alias routing to one product intent, without creating another entity; read all three locales for both slugs and verify redirects/links before release.",
+    "releaseDayRecheckRequired": true
+  },
+  "mappingHypotheses": {
+    "status": "research_only",
+    "primaryTask": "ai-voiceover",
+    "role": "Alternative",
+    "capabilities": [
+      {
+        "slug": "text-to-speech-voice-generation",
+        "hypothesis": "Script narration plus sub-block revision and media timing",
+        "evidence": ["studio", "timeline", "vgt"]
+      },
+      {
+        "slug": "voice-consent-and-export",
+        "hypothesis": "Plan, voice consent, broadcast and media-license review required",
+        "evidence": ["commercial", "terms", "pricing", "voice-export"]
+      }
+    ],
+    "constraints": [
+      "paid-export",
+      "one-editor-self-serve",
+      "enterprise-broadcast-add-on",
+      "target-accent-human-review",
+      "ordinary-studio-training-unknown",
+      "third-party-media-license",
+      "quota-conflicts",
+      "canonical-alias-consolidation"
+    ],
+    "constraintsAreRegisteredOrVerifiedRelations": false,
+    "relationshipRows": [],
+    "consumptionOrder": [
+      "Tool Intelligence after facts approval",
+      "Task Page eligibility independently reviewed",
+      "Structured Comparison after evidence/relationship gates",
+      "Decision Assistant separately gated"
+    ]
+  },
+  "gates": [
+    {
+      "id": "identity",
+      "name": "对象明确",
+      "status": "PASS",
+      "basis": "Single Studio narration workspace; API/Agents/Dub excluded."
+    },
+    {
+      "id": "ai-value",
+      "name": "AI 价值明确",
+      "status": "PASS",
+      "basis": "Script to reviewable narration with voice/media controls."
+    },
+    {
+      "id": "availability",
+      "name": "实际可用",
+      "status": "PASS",
+      "basis": "Public signup/free trial/paid path documented; no account synthesis or regional guarantee."
+    },
+    {
+      "id": "official",
+      "name": "官方证据完整",
+      "status": "PASS",
+      "basis": "Complementary official workflow, rights, exports and privacy sources. Contradictions explicitly excluded from affirmative public promises; no checkout verification."
+    },
+    {
+      "id": "market",
+      "name": "独立市场依据",
+      "status": "PASS",
+      "basis": "Named independent actual production case plus separate anonymous auxiliary use."
+    },
+    {
+      "id": "decision",
+      "name": "决策价值",
+      "status": "PASS",
+      "basis": "Use cases and rejection criteria address exports, rights, revisions, seats, privacy and comparison paths."
+    },
+    {
+      "id": "content",
+      "name": "内容真实完整",
+      "status": "HOLD",
+      "basis": "Three locales prepared; reusable official assets/current preview, independent content QA and live correction entry display acceptance missing."
+    },
+    {
+      "id": "maintenance",
+      "name": "不重复且可维护",
+      "status": "HOLD",
+      "basis": "No product entity duplicate, but murf-ai reference and two self-canonical shells require convergence before release."
+    }
+  ],
+  "liveSignal": {
+    "status": "HOLD",
+    "releaseBlocker": true,
+    "requirement": "Connect and verify a real correction/owner-update entry in the public presentation before release; this research package does not implement or prove that entry."
+  },
+  "releaseBoundary": {
+    "nextReleaseCandidateUnchanged": "elicit",
+    "readyForPreflight": false,
+    "preflight": "Not executable. After holds and independent QA close, repeat cross-store identity/alias/intent, rights, account quota, trilingual display, health and SEO checks; prepare one controlled monitor/noindex candidate only with separate authorization.",
+    "rollback": "No production changes to roll back. A future release requires row-level before snapshots and tested restoration of entity/aliases/consumers/assets; no SQL prepared or executed here."
+  },
+  "content": {
+    "en": {
+      "summary": "Murf Studio turns scripts into editable AI narration with a media timeline for lessons, explainers and product demos. Downloading and commercial delivery require a paid plan.",
+      "detail": "Use the browser Studio to split a script into blocks, choose a voice, adjust pronunciation and pacing, and align narration with video or images. This is a candidate for repeatable course narration when a person can review the finished audio. It is separate from Murf API, conversational Agents and Dub.\n\nTry a representative script before choosing a subscription. Changes to text can consume generation time again, and project slots differ from generation minutes. Paid download access does not imply unlimited synthesis or broadcast rights. Plan-specific documents put invited collaboration in Enterprise; a preview link is not another editor seat. No synthesis or account checkout was tested in this review.",
+      "bestFor": [
+        "Course authors who revise narration in sections and check pronunciation against the script.",
+        "Individuals producing explainers with licensed media who can pay for exports and review timing."
+      ],
+      "notIdealFor": [
+        "Anyone needing free downloadable commercial voiceovers.",
+        "Teams expecting multiple editors, TV/radio rights or a documented no-training commitment in every self-serve plan.",
+        "Real-time voice-agent/API projects or workflows requiring proven lip-sync and fully unattended multilingual quality."
+      ],
+      "limitations": [
+        "Text edits can consume VGT again; budget for revisions rather than only the final runtime.",
+        "Official pages disagree on project limits, voice/language totals and some plan features; confirm the actual account and order.",
+        "Broadcast rights are an Enterprise add-on; stock media and uploaded scripts require their own rights checks.",
+        "Review names, numbers, accents and synchronization; no quality benchmark was run here.",
+        "Cancellation ends paid rendering/download access at cycle end; it does not immediately delete retained projects."
+      ],
+      "pricingBoundary": "Free Studio offers a one-time 10-minute voice-generation trial with no downloads or commercial license. Paid Creator and Business plans have monthly and annual billing; annual headline monthly equivalents are paid yearly. Exact prices and quota promises are omitted pending account/checkout confirmation and reconciliation of help-page conflicts. Enterprise is custom; collaboration and broadcast add-ons need explicit scope.",
+      "privacyBoundary": "General terms treat submitted content as confidential, with limited service-provider access and exceptions. Personal data can be processed globally and retained for service or legal needs. A response to deletion requests within 30 days is not complete deletion within 30 days. Enterprise advertises no training on customer data; ordinary Studio training and opt-out scope remain unverified.",
+      "platforms": "Browser Studio account; this review covers its public documentation and pricing UI. No native app, offline operation, regional availability or mobile feature parity was validated.",
+      "decisionCard": {
+        "verdict": "Shortlist for reviewed script-to-narration work if paid exports and plan limits fit.",
+        "chooseIf": "You can test a course excerpt, revise it in small blocks, and verify delivery rights.",
+        "skipIf": "Free exports, shared editing on a self-serve plan, or included broadcast rights are mandatory.",
+        "firstCheck": "Test names, numbers and target accents; inspect VGT after text revisions and verify export format, project slots, seats and license on the intended account.",
+        "compareNext": [
+          {
+            "slug": "elevenlabs",
+            "reason": "Compare expressive narration and the revision effort for the same script; review its separate rights and credit model."
+          },
+          {
+            "slug": "descript",
+            "reason": "Compare an editing-first workflow when recorded media and transcript revisions dominate."
+          }
+        ],
+        "evidenceBoundary": "Official document/browser review plus historical independent use reports; no hands-on synthesis, market-size or quality guarantee."
+      },
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14",
+      "evidence": [
+        "pricing",
+        "commercial",
+        "terms",
+        "privacy",
+        "studio",
+        "vgt",
+        "projects",
+        "language",
+        "collaboration",
+        "voice-export",
+        "video-export",
+        "youtube",
+        "cancel"
+      ],
+      "independentEvidence": ["ijdl", "reddit-course"]
+    },
+    "cn": {
+      "summary": "Murf Studio 将脚本转为可编辑的 AI 旁白，并用媒体时间轴配合课程、讲解和产品演示。下载成品与商用交付需要付费套餐。",
+      "detail": "在浏览器 Studio 中分段输入脚本、选择声音、调整发音和节奏，再把旁白与视频或图片对齐。它适合有人审听、需要反复修订的课程配音；本条不包含 Murf API、对话 Agents 或 Dub 的权益。\n\n先用代表性脚本测试再选套餐。修改文本后重新生成可能再次消耗时长，项目槽位也不等于生成分钟数。付费可下载不代表无限生成或自动拥有广播权。套餐专属文档将邀请协作限定为 Enterprise，预览链接不是额外编辑席位。本次没有登录生成、购买或账户结账实测。",
+      "bestFor": [
+        "需要分段修订课程旁白，并能逐句复核发音的课程作者。",
+        "使用已清权媒体制作讲解视频，愿意付费导出并检查时间对齐的个人创作者。"
+      ],
+      "notIdealFor": [
+        "需要免费可下载且可商用配音的用户。",
+        "要求普通自助套餐自带多编辑席位、电视广播权或明确不训练保证的团队。",
+        "实时语音 Agent/API 项目，或要求已验证唇形同步及全自动多语言质量的流程。"
+      ],
+      "limitations": [
+        "改动文本可能再次消耗生成时长；预算应包含修订，不能只计算成品时长。",
+        "官方页面的项目数、语言/声音总数和部分套餐功能不一致，应核对目标账户及订单。",
+        "广播权为 Enterprise 加购范围；素材库音乐、上传脚本和其他媒体仍需分别清权。",
+        "人名、数字、口音和音画时间需人工检查；本次未做质量基准测试。",
+        "取消订阅后，账期结束即失去付费渲染/下载权限，但保留项目不会立即删除。"
+      ],
+      "pricingBoundary": "免费 Studio 提供一次性 10 分钟语音生成试用，不含下载和商用许可。Creator 与 Business 有月付和年付，年付页面的月均价不代表逐月付款。因账户/结账未验证且帮助页存在冲突，本稿不承诺精确价格和套餐额度。Enterprise 为定制报价，协作及广播加购范围需明确。",
+      "privacyBoundary": "一般条款将提交内容视为保密信息，但允许必要服务商访问并设有例外。个人数据可跨境处理，并因服务或法律需要保留。删除请求在 30 天内获得回复不等于全部数据在 30 天内删除。Enterprise 标示不以客户数据训练，普通 Studio 的训练与退出机制尚未核实。",
+      "platforms": "浏览器 Studio 账户；本次覆盖公开文档与定价界面。未验证原生应用、离线使用、地区可用性或移动端功能一致性。",
+      "decisionCard": {
+        "verdict": "若接受付费导出、套餐限制和人工审听，可纳入脚本配音候选。",
+        "chooseIf": "能以一段课程脚本试用，按小段修订并核对交付许可。",
+        "skipIf": "免费导出、普通套餐多人编辑或默认含广播权是硬要求。",
+        "firstCheck": "测试人名、数字及目标口音；观察改稿后的时长消耗，并在目标账户确认导出格式、项目槽位、席位和许可。",
+        "compareNext": [
+          {
+            "slug": "elevenlabs",
+            "reason": "用同一脚本比较表现力与修订成本，并另核其权利和计量规则。"
+          },
+          {
+            "slug": "descript",
+            "reason": "若工作重点是已有录音/视频及转录稿修改，可比较以编辑为主的流程。"
+          }
+        ],
+        "evidenceBoundary": "官方文档/浏览器核查及历史独立使用记录；未做账户语音生成，不承诺规模或质量。"
+      },
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14",
+      "evidence": [
+        "pricing",
+        "commercial",
+        "terms",
+        "privacy",
+        "studio",
+        "vgt",
+        "projects",
+        "language",
+        "collaboration",
+        "voice-export",
+        "video-export",
+        "youtube",
+        "cancel"
+      ],
+      "independentEvidence": ["ijdl", "reddit-course"]
+    },
+    "tw": {
+      "summary": "Murf Studio 將腳本轉為可編輯的 AI 旁白，並以媒體時間軸搭配課程、解說及產品展示。下載成品與商用交付需要付費方案。",
+      "detail": "在瀏覽器 Studio 中分段輸入腳本、選擇聲音、調整發音和節奏，再將旁白與影片或圖片對齊。它適合有人試聽、需要持續修改的課程配音；本條目不涵蓋 Murf API、對話 Agents 或 Dub 的權益。\n\n先用具代表性的腳本測試再選方案。修改文字後重新生成可能再次消耗時數，專案名額也不等於生成分鐘數。付費可下載不代表無限生成或自動取得廣播權。方案專屬文件將邀請協作限於 Enterprise，預覽連結不是額外編輯席次。本次未登入生成、購買或測試帳戶結帳。",
+      "bestFor": [
+        "需要分段修改課程旁白，且能逐句核對發音的課程製作者。",
+        "使用已取得授權的媒體製作解說影片，願意付費匯出並檢查時間對齊的個人創作者。"
+      ],
+      "notIdealFor": [
+        "需要免費下載且可商用配音的使用者。",
+        "要求一般自助方案內含多位編輯者、電視廣播權或明確不訓練保證的團隊。",
+        "即時語音 Agent/API 專案，或要求已驗證嘴形同步及全自動多語品質的流程。"
+      ],
+      "limitations": [
+        "修改文字可能再次消耗生成時數；預算須計入修改，不能只算成品長度。",
+        "官方頁面的專案數、語言/聲音總數及部分方案功能不一致，應核對目標帳戶及訂單。",
+        "廣播權屬 Enterprise 加購範圍；素材庫音樂、上傳腳本及其他媒體仍須分別確認授權。",
+        "人名、數字、口音及影音時間須人工檢查；本次未做品質基準測試。",
+        "取消訂閱後，計費週期結束即失去付費算繪/下載權限，但保留的專案不會立即刪除。"
+      ],
+      "pricingBoundary": "免費 Studio 提供一次性 10 分鐘語音生成試用，不含下載與商用授權。Creator 和 Business 有月繳與年繳，年繳頁面的月平均價格不代表逐月付款。因帳戶/結帳未驗證且說明頁存在衝突，本稿不承諾精確價格與方案額度。Enterprise 採客製報價，協作及廣播加購範圍須明確確認。",
+      "privacyBoundary": "一般條款將提交內容視為機密資訊，但允許必要服務商存取並設有例外。個人資料可能跨境處理，並因服務或法律需求保留。刪除請求在 30 天內獲得回覆，不等於所有資料在 30 天內刪除。Enterprise 標示不以客戶資料訓練；一般 Studio 的訓練及退出機制尚未核實。",
+      "platforms": "瀏覽器 Studio 帳戶；本次涵蓋公開文件與定價介面。未驗證原生應用程式、離線使用、地區可用性或行動版功能是否一致。",
+      "decisionCard": {
+        "verdict": "若接受付費匯出、方案限制與人工試聽，可列入腳本配音候選。",
+        "chooseIf": "能以一段課程腳本試用、分成小段修改，並確認交付授權。",
+        "skipIf": "免費匯出、一般方案多人編輯或預設內含廣播權是必要條件。",
+        "firstCheck": "測試人名、數字與目標口音；觀察修改腳本後的時數消耗，並在目標帳戶確認匯出格式、專案名額、席次與授權。",
+        "compareNext": [
+          {
+            "slug": "elevenlabs",
+            "reason": "以相同腳本比較表現力及修改成本，並另行確認其權利與計量方式。"
+          },
+          {
+            "slug": "descript",
+            "reason": "若主要處理既有錄音/影片及逐字稿修改，可比較以編輯為主的流程。"
+          }
+        ],
+        "evidenceBoundary": "官方文件/瀏覽器核查及歷史獨立使用紀錄；未進行帳戶語音生成，不承諾規模或品質。"
+      },
+      "verifiedDate": "2026-10-07",
+      "nextReview": "2026-10-14",
+      "evidence": [
+        "pricing",
+        "commercial",
+        "terms",
+        "privacy",
+        "studio",
+        "vgt",
+        "projects",
+        "language",
+        "collaboration",
+        "voice-export",
+        "video-export",
+        "youtube",
+        "cancel"
+      ],
+      "independentEvidence": ["ijdl", "reddit-course"]
+    }
+  }
+}

@@ -5,8 +5,8 @@
 
 **结论：15 项研究缓冲、6 个 primary Task，15 项 `HOLD_EVIDENCE`、0 项可立即发布。Top 5 为 Elicit、Murf
 Studio、Pika、Canva、Bolt。唯一下一发布候选为 Elicit，先解除素材与内容门禁，再独立预审。** “成熟候选”指优先研究已有持续
-产品和采用线索，不表示这 15 项已全部通过市场验证。市场门槛本轮通过 3 项：Elicit、Pika、Scite；其余缺项照实 HOLD。没有为
-了达到每日数量制造合格状态。
+产品和采用线索，不表示这 15 项已全部通过市场验证。10-07 深审后市场门槛通过 4 项：Elicit、Murf、Pika、Scite；其余缺项照实
+HOLD。没有为了达到每日数量制造合格状态。
 
 本文件与[机器候选清单](../data/collection/mature-candidate-buffer-2026-10-06.json)共同构成当前运营实例台账；旧
 [09-20 候选池](./MATURE_CANDIDATE_BUFFER_2026-09-20_CN.md)及专项包保持历史原文，不覆盖其当时结论。治理只引
@@ -60,7 +60,7 @@ availability。历史[修复审计](./CL02_PUBLISH_GATE_REMEDIATION_2026-10-06_C
 | 顺位 | 候选 / primary Task                         | 角色                | 相对既有工具的价值                                                       | 发布前最短闭环                                                               |
 | ---- | ------------------------------------------- | ------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------- |
 | 1    | Elicit / research-with-citations            | Gap-filler          | 文献筛选、结构化提取，补 Consensus 的发现/问答与 Notebook 的选定资料综合 | 继承 09-30 未完成素材权利/展示形式；重审三语言稿与真实账号范围，完成最终查重 |
-| 2    | Murf Studio / ai-voiceover                  | Alternative         | 课程旁白项目与视频同步，与 ElevenLabs/Descript 的工作方式不同            | Studio 套餐/下载/广播权、第二独立采用、真实媒体与编辑稿                      |
+| 2    | Murf Studio / ai-voiceover                  | Alternative         | 课程旁白项目与视频同步，与 ElevenLabs/Descript 的工作方式不同            | 素材授权/独立 QA、历史 murf-ai 引用与 canonical 收口                         |
 | 3    | Pika / product-image-to-short-video         | Alternative         | 参考图与编辑工作流；有真实失败记录，可形成条件式选择                     | 当前模型/套餐的图生视频范围、商品文字/包装保真、商用/水印、素材              |
 | 4    | Canva / brand-constrained-marketing-content | Anchor + Gap-filler | 将品牌语气与视觉模板连接，区别 Jasper 起草、Grammarly 改写               | AI/Brand Kit 强采用、套餐/角色边界、素材；只建一个 Canva 身份                |
 | 5    | Bolt / build-app-with-ai                    | Alternative         | 浏览器应用到代码/GitHub/部署路线，补已入库 Lovable/Replit                | 完整应用交付与成本边界、直接采用全文与第二信号、素材                         |
@@ -139,37 +139,31 @@ HOLD。
 
 ### 2. Murf Studio — `HOLD_EVIDENCE`
 
-**身份与组合：**murf.ai 的 Studio 配音工作区；Murf API/Agent 不另算本条。唯一拟用 `/ai/murf`；primary `ai-voiceover`；角
-色 Alternative。补 ElevenLabs 语音生成与 Descript 编辑之外的课程旁白项目/同步工作流。
+**10-07 MURF-PRERELEASE-01 更新：6 PASS / 2 HOLD，待独立 QA，不进入发布 preflight。** 完整 EN/CN/TW 字段、Decision
+Card、来源日期和研究假设见[候选包](../data/collection/murf-prerelease-2026-10-07.json)；
+[专项审计](./MURF_PRERELEASE_2026-10-07_CN.md)记录套餐冲突、权益和查重结果。
 
-**成熟度 / 市场门槛 HOLD：**有跨年课程配音使用线索；一项直接使用讨论已读，第二独立信号未直接回读，市场门槛 HOLD。
+**身份与组合：**仅 Studio 浏览器旁白工作区，排除 API/Agent/Dub；primary `ai-voiceover`、Alternative，未创建关系。
 
-**Capability / Constraint：**脚本转旁白、分段修订、与视频同步；Studio 商用、下载/广播权利和项目/席位权益须直接官方复核。
+**市场门槛 PASS：**新增直接回读的
+[IJDL 课程设计案例](https://scholarworks.iu.edu/journals/index.php/ijdl/article/view/42061) （2025-12-17 发表，具体制作
+日未知）记录 Murf Gen 2 音频实际制作，为强采用；
+[2024 匿名课程讨论](https://www.reddit.com/r/instructionaldesign/comments/1fonqvp/murf_is_not_being_truthful_about_their_pricing/)
+为不同作者/项目的辅助使用和摩擦信号，不证明现价、质量或市场规模。NewTubers 旧链接仍 fetch_failed，不计数。
 
-**官方证据：**
+**当前权益：**浏览器直接读取 Studio 月/年付卡片；免费一次性 10 分钟 VGT，无下载/商用；付费商用不等于广播许可，当前广播为
+Enterprise 加购。普通套餐单编辑者；邀请协作与不训练声明属于 Enterprise。项目槽位不按月重送，改稿可能再耗 VGT。帮助中心与
+卡片的项目数/用量、语言/声音总数存在冲突，三语稿不承诺金额、精确额度或自然度；普通 Studio 训练范围 unknown。
 
-- [官方来源](https://murf.ai/)（`direct_read`）：Studio 与 API/Agent 区分。
-- [官方来源](https://help.murf.ai/do-i-have-commercial-rights-over-the-voice-over-created)（`direct_read`）：官方说明付
-  费 Studio 商用，广播权利限定 Enterprise；不将该页面扩成全部权益保证。
-- [官方来源](https://murf.ai/pricing)（`insufficient_body`）：定价正文抓取不足，不能确认价格。
+**重复意图 HOLD：**Neon 产品匹配 0、Supabase profile 0；扩展 features 查询发现 ElevenLabs alternatives 引用 `murf-ai`。
+`/ai/murf` 与 `/ai/murf-ai` 均 200/self-canonical/noindex 壳页，不能再称只有一个意图入口。需另案统一历史引用与
+alias/canonical，本轮不生产修复、不创建第二实体。sitemap 126 URL、Murf 0。
 
-**独立采用：**
+**素材/内容 HOLD：**官方 logo URL 与帮助页预览出处可追溯，但本站复用、处理、署名依据未取得；不下载。现有占位文件排除。三
+语草稿齐全，但独立 QA、真实素材展示和纠错/owner 入口验收仍缺。下次复查 2026-10-14 或新依据到齐时；发布日重查。
 
-- [采用来源](https://www.reddit.com/r/instructionaldesign/comments/1fonqvp/murf_is_not_being_truthful_about_their_pricing/)（`direct_read`
-  / `strong_candidate`）：作者描述企业课程项目续费与项目数摩擦；匿名经历仅证明使用线索，不证明现价。
-- [采用来源](https://www.reddit.com/r/NewTubers/comments/1029lkt)（`fetch_failed` / `unconfirmed`）：搜索显示使用 Murf
-  制作视频的自述；直接读取失败，不计第二项通过。
-
-**关键缺口：**Studio 商用、下载/广播权利和项目/席位权益须直接官方复核；目标语言发音、时长、导出与项目额度待验证；不承诺
-自然度；补第二独立采用与本地化稿。
-
-**重复意图：**Neon 无匹配；仅一个 /ai/murf；API 不新建平行详情。
-
-**素材：**首页存在第一方展示，本站可复用 logo/界面文件与权利依据未核；HOLD。
-
-**消费 / 下一步：**Tool Intelligence；Task Page / Structured Comparison 仅在关系门禁另行通过后消费。完成逐项缺口、八项准
-入、三语言内容与真实素材审核，发布日重查实体/alias/意图；独立 QA 后再审批。预期 index 轨道和禁止提前批准均按本节共用口
-径，未建实体或关系。
+**消费 / 下一步：**仅 Tool Intelligence 编辑研究；Task Page / Structured Comparison 各自另行门禁。唯一下一候选仍为
+Elicit，公开/索引/关系批准均 false；无可执行发布包或 SQL。
 
 ### 3. Pika — `HOLD_EVIDENCE`
 
@@ -596,15 +590,15 @@ Notebook/Consensus 差异才进入 shortlist。
 禁容量与条件发布槽，不是七个发布承诺；没有创建提醒或定时任务。日常政策仍为合格时每天 1–2 个公开，事实维护 5–10 项另计；
 本交付自身公开数/维护写入数/索引批准数均为 0。
 
-| 运营日 | 研究与补证槽（主审 / 交错备选）                                                 | 条件发布槽（最多 1 主槽 + 1 已合格备槽）   | 退出条件与当前 blocker                                                                    |
-| ------ | ------------------------------------------------------------------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------- |
-| D1     | Elicit 素材/展示许可和三语言稿；Murf Studio 当前商用/导出权益                   | 仅 Elicit 可申请主槽；备槽空               | 八项逐一 PASS + 当日查重 + 独立 QA 才能发布；当前素材/内容 HOLD，因此现阶段可承诺发布数 0 |
-| D2     | Murf 第二独立采用/套餐；Pika 商品参考流程                                       | 主槽保留；Murf 只是研究优先对象            | Elicit 未完成不自动改唯一候选；任何补位必须先审核成品包。Murf 市场/内容 HOLD              |
-| D3     | Pika 当前定价/输出权和商品失真边界；Canva AI 强采用                             | 主槽保留；Pika 需门禁通过后再提议          | 历史采用 PASS 不能替代当前 Task/套餐及素材；仍 HOLD                                       |
-| D4     | Canva Brand Kit/Controls/Voice 权限；Bolt 完整应用与 hosting 成本               | 主槽保留；Canva 需身份/市场/内容通过       | 无 Canva 生产实体不等于已具备发布稿；不拆 Magic Studio                                    |
-| D5     | Bolt 独立上手全文、第二采用和代码交付；Scite 目标学科/套餐                      | 主槽保留；Bolt 需证据闭环后再提议          | 不把集成/原型截图当可运行应用；市场/内容 HOLD                                             |
-| D6     | Scite 套餐/媒体；WellSaid 发音/商用；复读旧素材缺口                             | 主槽保留；按已合格包与最近五次实际发布确定 | 任一不合格则空槽；不要为补前几日数量连发研究/同厂商                                       |
-| D7     | 复盘15项 verdict、freshness、独立证据；深审 Anyword/v0 的差异；Avoma 仅冲突复查 | 主槽保留；无合格包则 0 并登记原因          | 核对实际公开/更新/索引数量及最近五次集中度；未完成研究不写“发布完成”                      |
+| 运营日 | 研究与补证槽（主审 / 交错备选）                                                 | 条件发布槽（最多 1 主槽 + 1 已合格备槽）   | 退出条件与当前 blocker                                                                                |
+| ------ | ------------------------------------------------------------------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| D1     | Elicit 素材/展示许可和三语言稿；Murf Studio 当前商用/导出权益                   | 仅 Elicit 可申请主槽；备槽空               | 八项逐一 PASS + 当日查重 + 独立 QA 才能发布；当前素材/内容 HOLD，因此现阶段可承诺发布数 0             |
+| D2     | Murf 素材/历史别名收口、账户权益复核；Pika 商品参考流程                         | 主槽保留；Murf 只是研究优先对象            | Elicit 未完成不自动改唯一候选；任何补位必须先审核成品包。Murf 内容/别名意图 HOLD；市场已于 10-07 通过 |
+| D3     | Pika 当前定价/输出权和商品失真边界；Canva AI 强采用                             | 主槽保留；Pika 需门禁通过后再提议          | 历史采用 PASS 不能替代当前 Task/套餐及素材；仍 HOLD                                                   |
+| D4     | Canva Brand Kit/Controls/Voice 权限；Bolt 完整应用与 hosting 成本               | 主槽保留；Canva 需身份/市场/内容通过       | 无 Canva 生产实体不等于已具备发布稿；不拆 Magic Studio                                                |
+| D5     | Bolt 独立上手全文、第二采用和代码交付；Scite 目标学科/套餐                      | 主槽保留；Bolt 需证据闭环后再提议          | 不把集成/原型截图当可运行应用；市场/内容 HOLD                                                         |
+| D6     | Scite 套餐/媒体；WellSaid 发音/商用；复读旧素材缺口                             | 主槽保留；按已合格包与最近五次实际发布确定 | 任一不合格则空槽；不要为补前几日数量连发研究/同厂商                                                   |
+| D7     | 复盘15项 verdict、freshness、独立证据；深审 Anyword/v0 的差异；Avoma 仅冲突复查 | 主槽保留；无合格包则 0 并登记原因          | 核对实际公开/更新/索引数量及最近五次集中度；未完成研究不写“发布完成”                                  |
 
 每日开始检查合格成品池；目前成品池确为 0，是政策允许的 blocker，必须优先解除缺口而非常态化零发布。研究产物按具体事实/约
 束/来源/日期/差异更新台账，不能靠给现有内容统一刷新日期充数。若 D1/D2 仍无任何合格成品，D3 先复盘素材取得方式与编辑瓶
@@ -616,19 +610,19 @@ Notebook/Consensus 差异才进入 shortlist。
 
 ## 6. 验收与交付边界
 
-| 检查                                    | 本轮结果                                                                                                                                                                                                                                                                                 |
-| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 新池静态验证                            | PASS：15 个唯一身份/canonical，rank 连续，6 primary Cluster，Top 5 五 Task/厂商不同，meeting 仅 Avoma；必填证据/缺口/媒体/轨道完整；15 HOLD、0 公开/索引/关系批准；市场 PASS 仅 3 项且各有两条直接读取强信号；D1–D7 齐全。临时只读断言 `/tmp/ops-reset-01/validate.py`，不进入产品代码。 |
-| 文档链接/结构                           | PASS：4 份涉及文档共 108 个本地目标存在，代码围栏配对、无冲突标记；外部链接按逐项读取状态记账，未宣称失败/搜索线索全为有效证据。                                                                                                                                                         |
-| 新增文档与 JSON Prettier                | PASS；仅格式化本期新增文件，未批量重排历史主追踪。仓库旧 `jsxBracketSameLine` / `eslintIntegration` 配置警告不影响结果。                                                                                                                                                                 |
-| `pnpm run test:mature-candidate-buffer` | PASS；这是 **09-20 历史池** 的既有回归，不能冒充新15项验证；新池另见首行。                                                                                                                                                                                                               |
-| `pnpm run test:collection-admission`    | PASS                                                                                                                                                                                                                                                                                     |
-| `pnpm run test:collection-planning`     | PASS                                                                                                                                                                                                                                                                                     |
-| `pnpm run test:plan-consistency`        | PASS；已知 active-plan 合约，不替代本轮人工语义检查。                                                                                                                                                                                                                                    |
-| `pnpm run seo:production-smoke`         | PASS；126 sitemap URL，canonical、robots 与公开路径正常；HTTP GET 只读。                                                                                                                                                                                                                 |
-| meeting-notes 双语 HTML / 源码审计      | HTTP/SEO 边界 PASS；用户价值需五项整改；移动端视觉 **N/A**，不虚报截图验收。                                                                                                                                                                                                             |
-| CL-02 只读 preflight                    | 首次 `fetch failed`，不计通过；随后重跑得到 **预期 exit 1 / HOLD**（14:24），仅三 availability unknown，productionWrites=0、5/10/6 与 6/10/7 保持。另行 Supabase GET 回读三字段均 unknown。                                                                                              |
-| `git diff --check`                      | PASS                                                                                                                                                                                                                                                                                     |
+| 检查                                    | 本轮结果                                                                                                                                                                                                                                                                                                                                         |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 新池静态验证                            | PASS：15 个唯一身份/canonical，rank 连续，6 primary Cluster，Top 5 五 Task/厂商不同，meeting 仅 Avoma；必填证据/缺口/媒体/轨道完整；15 HOLD、0 公开/索引/关系批准；10-06 原验收市场 PASS 仅 3 项且各有两条直接读取强信号（10-07 Murf 深审后当前为 4 项，见专项测试）；D1–D7 齐全。临时只读断言 `/tmp/ops-reset-01/validate.py`，不进入产品代码。 |
+| 文档链接/结构                           | PASS：4 份涉及文档共 108 个本地目标存在，代码围栏配对、无冲突标记；外部链接按逐项读取状态记账，未宣称失败/搜索线索全为有效证据。                                                                                                                                                                                                                 |
+| 新增文档与 JSON Prettier                | PASS；仅格式化本期新增文件，未批量重排历史主追踪。仓库旧 `jsxBracketSameLine` / `eslintIntegration` 配置警告不影响结果。                                                                                                                                                                                                                         |
+| `pnpm run test:mature-candidate-buffer` | PASS；这是 **09-20 历史池** 的既有回归，不能冒充新15项验证；新池另见首行。                                                                                                                                                                                                                                                                       |
+| `pnpm run test:collection-admission`    | PASS                                                                                                                                                                                                                                                                                                                                             |
+| `pnpm run test:collection-planning`     | PASS                                                                                                                                                                                                                                                                                                                                             |
+| `pnpm run test:plan-consistency`        | PASS；已知 active-plan 合约，不替代本轮人工语义检查。                                                                                                                                                                                                                                                                                            |
+| `pnpm run seo:production-smoke`         | PASS；126 sitemap URL，canonical、robots 与公开路径正常；HTTP GET 只读。                                                                                                                                                                                                                                                                         |
+| meeting-notes 双语 HTML / 源码审计      | HTTP/SEO 边界 PASS；用户价值需五项整改；移动端视觉 **N/A**，不虚报截图验收。                                                                                                                                                                                                                                                                     |
+| CL-02 只读 preflight                    | 首次 `fetch failed`，不计通过；随后重跑得到 **预期 exit 1 / HOLD**（14:24），仅三 availability unknown，productionWrites=0、5/10/6 与 6/10/7 保持。另行 Supabase GET 回读三字段均 unknown。                                                                                                                                                      |
+| `git diff --check`                      | PASS                                                                                                                                                                                                                                                                                                                                             |
 
 未运行 build/tsc：本次只有文档与 JSON，不改应用代码或构建输入；与代码修复单元已完成的 build/QA 结果分开记账。
 

@@ -43,7 +43,7 @@
     "candidates": 15,
     "HOLD_EVIDENCE": 15,
     "readyForRelease": 0,
-    "marketGatePass": 3,
+    "marketGatePass": 4,
     "primaryClusters": {
       "research-with-citations": 3,
       "ai-voiceover": 2,
@@ -159,51 +159,93 @@
       "roles": ["Alternative"],
       "whyNow": "补 ElevenLabs 语音生成与 Descript 编辑之外的课程旁白项目/同步工作流。",
       "capabilityHypothesis": "脚本转旁白、分段修订、与视频同步",
-      "constraint": "Studio 商用、下载/广播权利和项目/席位权益须直接官方复核",
-      "marketMaturity": "有跨年课程配音使用线索；一项直接使用讨论已读，第二独立信号未直接回读，市场门槛 HOLD。",
+      "constraint": "付费导出；广播 Enterprise 加购；套餐额度/目录总数冲突不作承诺；普通 Studio 训练范围 unknown；素材与 canonical 收口 HOLD。",
+      "marketMaturity": "10-07：独立设计师 IJDL 课程音频制作案例（2025-12-17 发表）为强实际采用；2024 匿名课程使用讨论为另一项辅助信号，不证明现价、质量或市场规模。",
       "officialSources": [
         {
-          "url": "https://murf.ai/",
+          "url": "https://murf.ai/pricing",
           "status": "direct_read",
-          "scope": "Studio 与 API/Agent 区分",
-          "checkedAt": "2026-10-06"
+          "scope": "Browser Studio tab, annual checked then monthly unchecked; card/feature table and license/annual FAQ read; no login or checkout",
+          "checkedAt": "2026-10-07"
         },
         {
           "url": "https://help.murf.ai/do-i-have-commercial-rights-over-the-voice-over-created",
           "status": "direct_read",
-          "scope": "官方说明付费 Studio 商用，广播权利限定 Enterprise；不将该页面扩成全部权益保证",
-          "checkedAt": "2026-10-06"
+          "scope": "Paid Studio commercial rights; business recommendation; Enterprise broadcast scope",
+          "checkedAt": "2026-10-07"
         },
         {
-          "url": "https://murf.ai/pricing",
-          "status": "insufficient_body",
-          "scope": "定价正文抓取不足，不能确认价格",
-          "checkedAt": "2026-10-06"
+          "url": "https://murf.ai/legal/terms-of-service",
+          "status": "direct_read",
+          "scope": "Sections 2-6: billing, content, confidentiality, cloning consent, commercial restrictions, third parties, IP",
+          "checkedAt": "2026-10-07"
+        },
+        {
+          "url": "https://murf.ai/legal/privacy-policy",
+          "status": "direct_read",
+          "scope": "Collection, providers, global processing, retention, deletion request response; page dated 2023-11-03",
+          "checkedAt": "2026-10-07"
+        },
+        {
+          "url": "https://help.murf.ai/what-is-a-workspace",
+          "status": "direct_read",
+          "scope": "Conflicting legacy project/VGT tiers; do not propagate Growth as current",
+          "checkedAt": "2026-10-07"
+        },
+        {
+          "url": "https://help.murf.ai/projects",
+          "status": "direct_read",
+          "scope": "Concurrent project slots, not monthly allocations; downgrade locks and trash",
+          "checkedAt": "2026-10-07"
+        },
+        {
+          "url": "https://help.murf.ai/what-is-voice-generation-time-vgt",
+          "status": "direct_read",
+          "scope": "New/changed text sub-block consumption; settings-only changes excluded per help",
+          "checkedAt": "2026-10-07"
+        },
+        {
+          "url": "https://help.murf.ai/invite-users-to-project",
+          "status": "direct_read",
+          "scope": "Enterprise-only editor/viewer invitations",
+          "checkedAt": "2026-10-07"
+        },
+        {
+          "url": "https://help.murf.ai/voice-only",
+          "status": "direct_read",
+          "scope": "Paid voice exports MP3/WAV/FLAC/a-law/u-law and quality settings",
+          "checkedAt": "2026-10-07"
+        },
+        {
+          "url": "https://help.murf.ai/video-export",
+          "status": "direct_read",
+          "scope": "MP4/MOV and script subtitles SRT/VTT or burned captions",
+          "checkedAt": "2026-10-07"
         }
       ],
       "independentSignals": [
         {
-          "url": "https://www.reddit.com/r/instructionaldesign/comments/1fonqvp/murf_is_not_being_truthful_about_their_pricing/",
+          "url": "https://scholarworks.iu.edu/journals/index.php/ijdl/article/download/42061/44044/125817",
           "status": "direct_read",
-          "strength": "strong_candidate",
-          "observation": "作者描述企业课程项目续费与项目数摩擦；匿名经历仅证明使用线索，不证明现价。",
-          "checkedAt": "2026-10-06"
+          "strength": "strong_actual_use",
+          "observation": "IJDL pp. 284-285 describes producing two-to-four-minute module podcasts with Murf Gen 2; Fig. 10 documents script/settings/phonetic editing. p. 287 describes pace and pronunciation corrections. Single designer/course, mentor-evaluated; student pilot still future at writing. No adoption scale, current price, controlled quality ranking or learning-effect claim. Published by IU Libraries/AECT is not IU institutional procurement. PDF text read; screenshot rendering failed (cache miss), so no visual or asset acceptance.",
+          "checkedAt": "2026-10-07"
         },
         {
-          "url": "https://www.reddit.com/r/NewTubers/comments/1029lkt",
-          "status": "fetch_failed",
-          "strength": "unconfirmed",
-          "observation": "搜索显示使用 Murf 制作视频的自述；直接读取失败，不计第二项通过。",
-          "checkedAt": "2026-10-06"
+          "url": "https://www.reddit.com/r/instructionaldesign/comments/1fonqvp/murf_is_not_being_truthful_about_their_pricing/",
+          "status": "direct_read",
+          "strength": "auxiliary_anonymous_actual_use",
+          "observation": "Separate author describes using Murf for self-paced courses and project/seat/renewal friction. Anonymous unverified account, not proven buyer identity. Supports historical use/friction only; cannot establish current price, quality, market size or wrongdoing.",
+          "checkedAt": "2026-10-07"
         }
       ],
-      "marketGate": "HOLD",
+      "marketGate": "PASS",
       "keyFactGaps": [
-        "Studio 商用、下载/广播权利和项目/席位权益须直接官方复核",
-        "目标语言发音、时长、导出与项目额度待验证；不承诺自然度",
-        "补第二独立采用与本地化稿"
+        "官方 logo/真实预览复制处理及署名授权未取得；独立内容与纠错入口展示 QA 未完成",
+        "murf-ai 生产替代项引用与 /ai/murf 双自指壳页需另案统一；本轮不修改",
+        "账户结账、套餐额度冲突、目标口音与导出实测、普通 Studio 训练/删除边界需复核"
       ],
-      "duplicateIntent": "Neon 无匹配；仅一个 /ai/murf；API 不新建平行详情。",
+      "duplicateIntent": "Neon 产品身份匹配 0、Supabase profile 0；ElevenLabs alternatives 引用 murf-ai；两条英语路径均 200 self-canonical/noindex，门禁 HOLD，未建第二实体。",
       "mediaAvailability": "首页存在第一方展示，本站可复用 logo/界面文件与权利依据未核；HOLD。",
       "indexTrack": "HOLD/draft → 全部准入通过且独立批准后 monitor/noindex → 另案索引评审；当前无索引批准",
       "verdict": "HOLD_EVIDENCE",
@@ -212,12 +254,22 @@
       "indexReleaseApproved": false,
       "relationshipCreationApproved": false,
       "consumer": "Tool Intelligence；Task Page / Structured Comparison 仅在关系门禁另行通过后消费",
-      "nextReview": "下一正常运营日；超过 7 个运营日未处理则重读官方波动字段",
+      "nextReview": "2026-10-14",
       "productionIdentityCheck": {
-        "checkedAt": "2026-10-06T06:06:06.408Z",
-        "scope": "Neon tools 全量 69 行 name/title/url 产品/域名审阅；不是跨库发布 preflight",
+        "checkedAt": "2026-10-07T00:23:22.072Z",
+        "scope": "Neon read-only identity/context + Supabase profile GET + Murf and legacy canonical",
         "matches": [],
+        "contextualReference": "elevenlabs → murf-ai",
         "releaseDayRecheckRequired": true
+      },
+      "prereleaseReview": {
+        "unit": "MURF-PRERELEASE-01",
+        "package": "data/collection/murf-prerelease-2026-10-07.json",
+        "audit": "docs/MURF_PRERELEASE_2026-10-07_CN.md",
+        "checkedAt": "2026-10-07",
+        "verdict": "HOLD_EVIDENCE",
+        "gateSummary": "6 PASS / 2 HOLD (content, maintenance)",
+        "independentQA": "pending"
       }
     },
     {
