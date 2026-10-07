@@ -2,6 +2,8 @@
 
 更新时间：2026-10-07
 
+2026-10-07 **交付与验收流程改为增量风险分级**：每个候选/功能只保留一份权威证据快照，既有 PASS 仅在来源变化、复查到期、相关代码变化或生产异常时失效。任务先列 change set，再按 R/C/H 三级执行；纯研究不跑 TypeScript/build/smoke，运行时代码只跑受影响专项与必要 build，高风险数据库/安全/支付/SEO 边界才跑完整门禁。同一命令不再由开发、QA、总控重复执行，QA PASS 后无新差分不得再次复核。详细规则已写入[自动化测试与发布验收方案](./DECISION_PLATFORM_AUTOMATED_ACCEPTANCE_CN.md)，并同步到总控任务锁和每日自动化。后续 Elicit 只处理素材授权、真实展示和新上线纠错入口三个差分，不重验其已通过的七项准入。
+
 2026-10-07 **PIKA-PRERELEASE-01 本地候选交付，待独立 QA**：Pika 八门禁 **6 PASS / 2 HOLD（official、content）**。新旧套
 餐/credits/水印/商用与迁移范围冲突保留；当前导出、失败成本、商品保真及视频隐私范围仍有 unknown。EN/CN/TW Tool
 Intelligence / Decision Card 已写入[候选包](../data/collection/pika-prerelease-2026-10-07.json)，素材权利、真实预览、独

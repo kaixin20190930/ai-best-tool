@@ -5,9 +5,22 @@
 状态：最终方案
 实施规格：[AI 工具决策平台三阶段实施方案](./DECISION_PLATFORM_THREE_PHASE_IMPLEMENTATION_CN.md)
 
+## 2026-10-07 增量验收修订
+
+本修订优先于下方历史性的全链路命令清单。验收目标是覆盖本次差分和真实风险，不是让开发、QA、总控重复运行同一组命令。
+
+- 每个候选或功能只维护一份权威证据快照；已经 PASS 的字段只有在来源变化、复查到期、相关运行时代码变化或生产异常时才失效。
+- 每个交付先列出 change set，只验证变化字段、直接风险和受影响边界；禁止无差分重跑完整八门禁。
+- **R 级**：研究、文案、候选包只做来源、结构和格式检查，不运行 TypeScript、完整 build 或生产 smoke。
+- **C 级**：运行时代码、UI、Server Action 做专项测试与 TypeScript；只有渲染、路由、构建配置或发布路径变化时做一次完整 build；部署后做一次生产 smoke。
+- **H 级**：数据库/RLS、安全、支付、索引、canonical 或 sitemap 变更，才增加迁移幂等、权限负向、rollback、完整 build 和生产 smoke。
+- 同一命令在一个交付单元只由一个角色负责：开发跑专项测试，QA 审查精确 diff 和关键负向用例，总控在合并发布前跑一次 release gate。
+- 环境缺失形成的 N/A 记录一次即可；不得为形式绿灯重复安装、重建或重跑。
+- QA PASS 即关闭验收；只有新差分或生产异常才能重开。单项超过 60 分钟、同类流程问题连续两次 QA FAIL，或验收成本明显超过用户可见改动时，总控必须缩小范围。
+
 ## 一、质量门禁
 
-每个阶段使用同一发布顺序：
+涉及 H 级数据库、安全或发布边界变更时使用完整顺序；R/C 级按上面的增量规则裁剪：
 
 ```text
 迁移静态检查
@@ -23,7 +36,7 @@
 -> 生产 smoke
 ```
 
-任一 P0 用例失败即禁止 push/deploy。测试不能依赖“浏览器里看起来正常”作为唯一结论。
+受本次 change set 影响的任一 P0 用例失败即禁止 push/deploy。未受影响的历史 PASS 不机械重跑。测试不能依赖“浏览器里看起来正常”作为唯一结论。
 
 ## 二、测试分层
 
@@ -212,8 +225,8 @@ pnpm run build
 pnpm run seo:production-smoke
 ```
 
-CI 分为 `fast`（规则、契约、SEO、tsc）和 `release`（迁移、RLS、build、生产 smoke）。Vercel 只能部署已通过本地 release
-gate 的 commit。
+CI 分为 `fast`（受影响规则、契约、SEO、tsc）和 `release`（仅在 H 级或发布边界变化时包含迁移、RLS、build、生产 smoke）。
+Vercel 只能部署已通过其风险等级对应 gate 的 commit。
 
 ## 五、验收记录模板
 
