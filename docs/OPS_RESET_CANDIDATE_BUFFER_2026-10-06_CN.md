@@ -139,7 +139,7 @@ HOLD。
 
 ### 2. Murf Studio — `HOLD_EVIDENCE`
 
-**10-07 MURF-PRERELEASE-01 更新：6 PASS / 2 HOLD，待独立 QA，不进入发布 preflight。** 完整 EN/CN/TW 字段、Decision
+**10-07 MURF-PRERELEASE-01 更新：5 PASS / 3 HOLD，待独立 QA，不进入发布 preflight。** 完整 EN/CN/TW 字段、Decision
 Card、来源日期和研究假设见[候选包](../data/collection/murf-prerelease-2026-10-07.json)；
 [专项审计](./MURF_PRERELEASE_2026-10-07_CN.md)记录套餐冲突、权益和查重结果。
 
@@ -150,6 +150,10 @@ Card、来源日期和研究假设见[候选包](../data/collection/murf-prerele
 日未知）记录 Murf Gen 2 音频实际制作，为强采用；
 [2024 匿名课程讨论](https://www.reddit.com/r/instructionaldesign/comments/1fonqvp/murf_is_not_being_truthful_about_their_pricing/)
 为不同作者/项目的辅助使用和摩擦信号，不证明现价、质量或市场规模。NewTubers 旧链接仍 fetch_failed，不计数。
+
+**QA 返工 / 官方证据 HOLD：**原提交 `afa68524` QA_FAIL。已分开取消订阅、终止账户、删除请求和备份删除：隐私政策称终止后
+30 天及例外；安全页称无请求时 90 天自动删除，请求删除含备份、复杂情况最长 90 天。取消帮助的账期末下载截止与安全页协议结
+束后最长 90 天取回既有音频，适用范围及取回方式冲突待核。三语不作无条件承诺，待独立复核。
 
 **当前权益：**浏览器直接读取 Studio 月/年付卡片；免费一次性 10 分钟 VGT，无下载/商用；付费商用不等于广播许可，当前广播为
 Enterprise 加购。普通套餐单编辑者；邀请协作与不训练声明属于 Enterprise。项目槽位不按月重送，改稿可能再耗 VGT。帮助中心与

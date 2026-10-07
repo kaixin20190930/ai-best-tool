@@ -1,6 +1,6 @@
 # Murf Studio 发布前深审：MURF-PRERELEASE-01
 
-核查日：2026-10-07（Asia/Shanghai）；基线 `f1f0311a8be10e95a3c9f5873bab91038f590997`。结论：**HOLD_EVIDENCE，6 PASS / 2
+核查日：2026-10-07（Asia/Shanghai）；基线 `f1f0311a8be10e95a3c9f5873bab91038f590997`。结论：**HOLD_EVIDENCE，5 PASS / 3
 HOLD；另有 canonical/历史别名意图 HOLD。** 不进入可执行发布 preflight。
 
 完整 EN/CN/TW summary、detail、Best for、Not ideal for、limitations、pricing/privacy boundary、证据日期、Decision Card
@@ -84,22 +84,33 @@ FAQ 允许个人小规模商用，建议组织使用 Business License，并非�
 [纯语音导出](https://help.murf.ai/voice-only)列 MP3/WAV/FLAC 与电话 a-law/u-law；
 [混音导出](https://help.murf.ai/voice-music)只导一个混合文件，不单独导音乐，另列 OGG；
 [视频导出](https://help.murf.ai/video-export)为 MP4/MOV，可导 SRT/VTT 或烧录字幕。套餐表 Full HD 是文档事实，非实测。取
-消到期后不能继续渲染/下载，不承诺永久下载权；已下载素材后续权利范围须按原许可确认。
+消帮助的账期末下载截止与安全页的协议结束后既有音频取回存在范围冲突，详见下节；两者均不作无条件承诺。
 
 [导入限制](https://help.murf.ai/import-limits)将 Add Media 与 Audio to Text 的 45 分钟入口上限分开，脚本文档每次 15000
 词，SRT 例外。不能将上传宣称无上限当作任意成品时长保证。 [时间轴](https://help.murf.ai/timeline-introduction)有旁白、图
 像/视频、背景音乐三轨，媒体自动左对齐； [同步说明](https://help.murf.ai/syncing-images-and-videos-with-voice-blocks)不允
 许把视频伸长到源时长之外。没有证明自动唇形同步、长项目 SLA 或某套餐最终片长上限。
 
-## 隐私、训练与删除
+## 隐私、训练与删除（QA 返工）
 
-[隐私政策](https://murf.ai/legal/privacy-policy)页标 2023-11-03：收集脚本/媒体，必要服务商访问、跨境处理及服务/法定留
-存；删除请求 30 天内回复不等于全量删除 SLA。一般条款的保密与备份例外不是所有普通套餐不训练保证。Enterprise 卡片的不训练
-承诺不能外推 Free/Creator/Business；普通 Studio 训练和退出机制仍 unknown。
+`afa68524` 的独立 QA_FAIL 指出本节漏读安全页生命周期条款及无条件下载截止表述；本轮重新直接读取原有安全页、隐私政策及取消
+帮助，修正后待独立复核，不将返工自审记为 QA 通过。来源集合与采用证据不变。
 
-取消不会自动删除项目；非 Enterprise 项目入垃圾箱后 30 天删除是帮助页范围，Enterprise 比较表 60 天恢复不是通用留存期。共
-享副本、备份及法定保留另计。[安全页](https://murf.ai/security)是厂商声明，未独立审计。
-[API 合同](https://murf.ai/legal/api-usage-agreement)另有数据和品牌许可约定，不能移植到普通 Studio。
+| 场景     | 官方陈述与范围                                                                                                                                                                                                                                                          | 当前判定                                                             |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| 取消订阅 | [取消帮助](https://help.murf.ai/what-happens-to-my-account-and-projects-after-canceling)称账期结束停止付费渲染/下载，项目保留到手动删除；不是终止账户                                                                                                                   | 与既有音频取回条款的适用范围待核                                     |
+| 终止账户 | [隐私政策](https://murf.ai/legal/privacy-policy) Account Closure 称终止后 30 天内删除账户及上传项目/媒体/文本，但保留法律、监管、争议、安全、防欺诈、执行条款、退订请求等例外；[安全页](https://murf.ai/security)称无明确删除请求时终止后 90 天内自动删除 Customer Data | 数据范围、合同/套餐及 30/90 天关系冲突待核，不选一项作通用期限       |
+| 删除请求 | 隐私政策称 30 天内回复，可有拒绝/限制；安全页 Deletion of Customer Data 称收到请求后删除，复杂情况最长 90 天，并在终止账户后的删除完成时确认                                                                                                                            | 回复期限不等于完成期限；请求、终止是不同触发条件                     |
+| 备份删除 | 安全页明确永久删除范围包含备份，复杂情况最长 90 天；一般条款另列合理备份移除时间及共享副本例外                                                                                                                                                                          | 已有期限陈述，不能再称备份期限未说明；普通 Studio 适用范围与例外待核 |
+
+非 Enterprise 项目垃圾箱 30 天与 Enterprise 表格恢复 60 天属于项目操作场景，不合并为账户终止/请求删除期限。安全页 Return
+of Customer Data 又称**协议结束后最长 90 天可取回之前生成的音频**；这可能涉及与取消订阅不同的合同、数据或取回机制，但当
+前没有依据消歧。不能保证退订后继续下载 90 天，也不能无条件断言账期结束即无法取回任何已有音频。三语
+detail、limitations、Decision Card 均保留该冲突，要求取消/终止前确认目标账户范围和取回方式。
+
+普通 Studio 训练/退出机制仍 unknown，Enterprise 不训练声明不外
+推；[API 合同](https://murf.ai/legal/api-usage-agreement)也不能移植。官方证据门禁由 PASS 改为 **HOLD**，需厂商或适用合同
+明确四种触发条件、数据类别、例外、备份完成和音频取回机制。本轮没有操作取消、终止、删除或取回。
 
 ## 两项独立实际采用
 
@@ -127,16 +138,16 @@ FAQ 允许个人小规模商用，建议组织使用 Business License，并非�
 `logo=null`、`preview=null`；没有下载、处理或复用素材。仓库 `murf.svg` 的 Mu 字母和 `murf-cover.svg` 是占位，未修改且排
 除。公开前还需真实纠错/owner 更新入口接入与展示验收，候选 JSON `liveSignal` 明确为 blocker；本包不假定页面已实现。
 
-| 门禁           | 结论 | 判据                                             |
-| -------------- | ---- | ------------------------------------------------ |
-| 对象明确       | PASS | Studio 单一产品边界                              |
-| AI 价值明确    | PASS | 脚本到可复核旁白及媒体对齐                       |
-| 实际可用       | PASS | 公开试用/购买入口；未宣称实测/全地区可用         |
-| 官方证据完整   | PASS | 工作流、许可、导出、隐私互补；冲突字段不肯定承诺 |
-| 独立市场依据   | PASS | 具名实际制作加独立匿名辅助使用                   |
-| 决策价值       | PASS | 三语适合/不适合、限制和下一步比较                |
-| 内容真实完整   | HOLD | 素材权利/真实预览、独立 QA、纠错入口展示未通过   |
-| 不重复且可维护 | HOLD | murf-ai 历史引用与双自指壳页待另案收口           |
+| 门禁           | 结论 | 判据                                                 |
+| -------------- | ---- | ---------------------------------------------------- |
+| 对象明确       | PASS | Studio 单一产品边界                                  |
+| AI 价值明确    | PASS | 脚本到可复核旁白及媒体对齐                           |
+| 实际可用       | PASS | 公开试用/购买入口；未宣称实测/全地区可用             |
+| 官方证据完整   | HOLD | 删除 30/90 天及既有音频取回范围冲突，待厂商/合同核实 |
+| 独立市场依据   | PASS | 具名实际制作加独立匿名辅助使用                       |
+| 决策价值       | PASS | 三语适合/不适合、限制和下一步比较                    |
+| 内容真实完整   | HOLD | 素材权利/真实预览、独立 QA、纠错入口展示未通过       |
+| 不重复且可维护 | HOLD | murf-ai 历史引用与双自指壳页待另案收口               |
 
 下次复查 **2026-10-14** 或许可/冲突答复到齐时（较早者）；真实发布日重复核验。Task `ai-voiceover`、Capability
 `text-to-speech-voice-generation` / `voice-consent-and-export` 仅复用种子定义作研究假设；Constraint 为编辑核查问题，未宣
@@ -145,7 +156,7 @@ FAQ 允许个人小规模商用，建议组织使用 Business License，并非�
 只有门禁和独立 QA 全通过，才另行准备单项 monitor/noindex 输入、发布日 preflight 及行级 rollback；仍不自动执行。本轮无生
 产变更，无需生产回滚，也未编写可执行 SQL。公开/索引/关系批准全部 false；不改 metadata/index/sitemap/Task Page。
 
-## 验证记录
+## 初版验证记录
 
 - JSON 解析、专项 `pnpm exec tsx scripts/test-murf-prerelease.ts`、`pnpm run test:candidate-release` 与
   `pnpm run test:mature-candidate-buffer` PASS。最后一项仅覆盖 09-20 历史 14 项；专项测试覆盖当前 15 项及批准边界。
@@ -156,4 +167,12 @@ FAQ 允许个人小规模商用，建议组织使用 Business License，并非�
 - 生产只读脚本 PASS；`pnpm run seo:production-smoke` PASS，126 sitemap URL。测试只读，无生产 rollback 操作。
 - 非 Murf 候选对象及唯一下一候选与基线 JSON 逐值相同；仅市场 PASS 总数由 3 更新为 4。修改文件 Prettier check 与
   `git diff --check` PASS（仓库旧格式配置给出 deprecated/unknown-option 提示，不影响结果）。
-- 本地提交，不 push；文件范围仅候选 JSON、当前运营台账、专项审计及两个必要验证脚本。独立 QA 尚未执行。
+- 本地提交，不 push；文件范围仅候选 JSON、当前运营台账、专项审计及两个必要验证脚本。初版提交时独立 QA 尚未执行；后续
+  QA_FAIL 与返工见下节。
+
+### QA 最小返工验证
+
+原提交 QA_FAIL；本轮只修正生命周期/取回冲突及相关门禁。JSON、专项、候选管线、格式、链接、全项目与新增脚本 TypeScript、只
+读生产和 SEO smoke 重跑均 PASS。生产回读时间 `2026-10-07T00:44:37.182Z`：产品匹配 0、profile 0、sitemap 126 URL、生产写
+入 0。采用证据、来源 URL、素材/canonical HOLD 与非 Murf 候选逐值不变；未 push 或生产写入。返工包等待独立 QA，不提前恢复
+合并资格。

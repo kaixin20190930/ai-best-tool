@@ -16,7 +16,7 @@ assert.equal(p.productionWrites, 0);
 assert.equal(p.gates.length, 8);
 assert.deepEqual(
   p.gates.filter((g: any) => g.status === 'HOLD').map((g: any) => g.id),
-  ['content', 'maintenance'],
+  ['official', 'content', 'maintenance'],
 );
 assert.equal(p.media.status, 'HOLD');
 for (const key of ['downloaded', 'reused', 'processed']) assert.equal(p.media[key], false);
@@ -79,4 +79,49 @@ assert(
 );
 console.log(
   'PASS Murf prerelease: source and locale integrity, independent-use scope, withheld numbers, media/canonical HOLD, zero release or relationship approvals',
+);
+
+// QA regression: distinguish event triggers and preserve both conflicting source scopes.
+assert.deepEqual(
+  p.facts.deletion.scenarios.map((s: any) => s.id),
+  ['subscription-cancellation', 'account-termination', 'deletion-request', 'backup-deletion'],
+);
+assert(p.facts.deletion.scenarios.every((s: any) => s.scopeStatus === 'HOLD_CONFLICT'));
+const termination = p.facts.deletion.scenarios.find((s: any) => s.id === 'account-termination');
+assert.deepEqual(
+  termination.claims.map((c: any) => [c.source, c.days]),
+  [
+    ['privacy', 30],
+    ['security', 90],
+  ],
+);
+assert.equal(p.facts.deletion.scenarios.find((s: any) => s.id === 'backup-deletion').complexCaseUpperDays, 90);
+for (const id of ['lifecycle-deletion', 'post-contract-audio-retrieval']) {
+  const conflict = p.conflicts.find((c: any) => c.id === id);
+  assert(conflict && conflict.sources.includes('security') && conflict.resolution.startsWith('HOLD'));
+}
+assert(p.facts.export.evidence.includes('cancel') && p.facts.export.evidence.includes('security'));
+assert(!JSON.stringify(p.facts).includes('Backup removal timing is unspecified'));
+for (const locale of ['en', 'cn', 'tw']) {
+  const c = p.content[locale];
+  for (const text of [c.detail, c.limitations[c.limitations.length - 1], c.decisionCard.retentionAndExitCheck]) {
+    assert(text.includes('90'));
+    assert(/unresolved|冲突待核|衝突待核/.test(text));
+    assert(/security|安全頁|安全页/.test(text));
+    assert(/Cancellation help|取消帮助|取消說明/.test(text));
+  }
+  assert(/30/.test(c.privacyBoundary) && /90/.test(c.privacyBoundary));
+  assert(/backups|备份|備份/.test(c.privacyBoundary));
+  assert(c.evidence.includes('security') && c.evidence.includes('privacy') && c.evidence.includes('cancel'));
+}
+console.log(
+  'PASS QA lifecycle/retrieval conflicts: four triggers, scoped 30/90-day claims, official HOLD and three-language exit checks',
+);
+
+const audit = fs.readFileSync('docs/MURF_PRERELEASE_2026-10-07_CN.md', 'utf8');
+assert(!/6 PASS \/ 2\s+HOLD/.test(audit), 'Do not retain the superseded gate count');
+assert(/5 PASS \/ 3\s+HOLD/.test(audit));
+assert.equal(
+  buffer.candidates.find((x: any) => x.slug === 'murf').prereleaseReview.gateSummary,
+  '5 PASS / 3 HOLD (official, content, maintenance)',
 );

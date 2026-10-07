@@ -56,7 +56,7 @@
     {
       "id": "privacy",
       "url": "https://murf.ai/legal/privacy-policy",
-      "scope": "Collection, providers, global processing, retention, deletion request response; page dated 2023-11-03",
+      "scope": "Account Closure: account/project/media/text deletion within 30 days of termination with legal/security exceptions; deletion-request response within 30 days is separate. Page dated 2023-11-03.",
       "status": "direct_read",
       "verifiedDate": "2026-10-07",
       "nextReview": "2026-10-14"
@@ -64,7 +64,7 @@
     {
       "id": "security",
       "url": "https://murf.ai/security",
-      "scope": "Vendor security statements; not independently audited assurance or universal zero-retention",
+      "scope": "Customer Data Lifecycle: post-agreement audio retrieval up to 90 days; requested deletion includes backups, complex cases up to 90 days; automatic deletion within 90 days after termination without request. Scope conflicts unresolved.",
       "status": "direct_read",
       "verifiedDate": "2026-10-07",
       "nextReview": "2026-10-14"
@@ -283,8 +283,8 @@
       "evidence": ["terms", "studio", "youtube", "music-export"]
     },
     "export": {
-      "statement": "Paid voice export: MP3/WAV/FLAC and telephony a-law/u-law; mixed voice+music is a single file, with OGG additionally listed. Video MP4/MOV supports subtitles and SRT/VTT scripts. Paid table says unlimited downloads, not unlimited generation; Full HD is observed, not tested. Downloads end with paid cycle; no promise of perpetual download access.",
-      "evidence": ["voice-export", "music-export", "video-export", "pricing", "cancel"]
+      "statement": "Paid voice export: MP3/WAV/FLAC and telephony a-law/u-law; mixed voice+music is a single file, with OGG additionally listed. Video MP4/MOV supports subtitles and SRT/VTT scripts. Paid table says unlimited downloads, not unlimited generation; Full HD is observed, not tested. Cancellation help ends rendering/download access at billing-cycle end, whereas security describes retrieval of previously generated audio up to 90 days after agreement end. Applicability to ordinary Studio, cancellation versus termination and retrieval mechanism remain unresolved; neither is an unconditional entitlement or cutoff.",
+      "evidence": ["voice-export", "music-export", "video-export", "pricing", "cancel", "security"]
     },
     "durationSync": {
       "statement": "Import help distinguishes unrestricted Add Media uploads from 45-minute Audio to Text entry and 15000 words per script upload (SRT exception). These are entry limits, not final-runtime guarantees. Three tracks support block alignment; media is left-aligned and video cannot extend beyond its source length. No lip-sync, long-project SLA or per-plan final duration ceiling verified.",
@@ -295,12 +295,69 @@
       "evidence": ["language", "home", "free", "pricing"]
     },
     "privacy": {
-      "statement": "Studio inputs are collected to provide service; general terms protect confidential content with service-provider access/exceptions. Privacy policy allows global processing, account/service retention and legal/security exceptions. Deletion requests receive a response within 30 days, not guaranteed total deletion. Backup removal timing is unspecified. Enterprise no-training card is not a guarantee for ordinary Studio; their training/opt-out scope remains unknown.",
+      "statement": "Studio inputs are collected to provide service; general terms protect confidential content with service-provider access/exceptions. Privacy policy allows global processing, account/service retention and legal/security exceptions. Deletion requests receive a response within 30 days, not guaranteed total deletion. Security lifecycle statements specify backup deletion and complex-case timing; applicability differences are recorded under deletion scenarios, not treated as absent. Enterprise no-training card is not a guarantee for ordinary Studio; their training/opt-out scope remains unknown.",
       "evidence": ["privacy", "terms", "pricing", "security"]
     },
     "deletion": {
-      "statement": "Canceling does not itself delete projects; non-Enterprise trash is removed after 30 days per help. Enterprise table advertises 60-day recovery, which is not a universal retention schedule. Shared copies/backups and legal obligations are separate. No deletion exercise performed.",
-      "evidence": ["projects", "cancel", "privacy", "terms", "pricing"]
+      "statement": "Subscription cancellation, account termination, deletion requests and backup erasure have different triggers and data scopes. Official 30/90-day statements conflict in applicability; no unified deletion deadline or post-contract retrieval promise is verified. Project trash/recovery windows are not account deletion policies. No deletion or retrieval exercise performed.",
+      "evidence": ["cancel", "privacy", "security", "terms", "projects", "pricing"],
+      "scenarios": [
+        {
+          "id": "subscription-cancellation",
+          "trigger": "Cancel paid subscription; billing cycle ends",
+          "evidence": ["cancel"],
+          "claim": "Help ends paid render/download access at cycle end; projects remain until manually deleted. Cancellation is not account termination.",
+          "scopeStatus": "HOLD_CONFLICT"
+        },
+        {
+          "id": "account-termination",
+          "trigger": "Account termination, not merely canceling renewal",
+          "evidence": ["privacy", "security"],
+          "claims": [
+            {
+              "source": "privacy",
+              "section": "Account Closure",
+              "days": 30,
+              "scope": "Account information including uploaded projects/media/text; legal, regulatory, dispute, security, fraud, enforcement and unsubscribe exceptions."
+            },
+            {
+              "source": "security",
+              "section": "Deletion of Customer Data",
+              "days": 90,
+              "scope": "Automatic Customer Data deletion after account termination if no explicit request."
+            }
+          ],
+          "scopeStatus": "HOLD_CONFLICT"
+        },
+        {
+          "id": "deletion-request",
+          "trigger": "Explicit deletion request",
+          "evidence": ["privacy", "security"],
+          "claims": [
+            {
+              "source": "privacy",
+              "section": "Changing or deleting your personal information",
+              "responseDays": 30,
+              "scope": "Request response, not completion; limitations/rejection possible."
+            },
+            {
+              "source": "security",
+              "section": "Deletion of Customer Data",
+              "complexCaseUpperDays": 90,
+              "scope": "Customer Data deletion on request; confirmation when completed after termination."
+            }
+          ],
+          "scopeStatus": "HOLD_CONFLICT"
+        },
+        {
+          "id": "backup-deletion",
+          "trigger": "Erasure of backups under requested Customer Data deletion",
+          "evidence": ["security", "terms"],
+          "claim": "Security explicitly includes backups in permanent deletion, complex cases up to 90 days. General terms separately allow reasonable backup-removal time and shared-copy exceptions; no universal Studio deadline inferred.",
+          "complexCaseUpperDays": 90,
+          "scopeStatus": "HOLD_CONFLICT"
+        }
+      ]
     },
     "apiBoundary": {
       "statement": "API contract and API tab have separate pricing/data/mark provisions. Do not import their retention commitments, credit amounts, on-premise offer or origin-logo permission into Studio or this directory.",
@@ -333,6 +390,18 @@
       "additionalSourceStatus": "search_snapshot_only",
       "observation": "Pricing table lists subfolders across plans; help search snapshot limits nesting to Enterprise.",
       "resolution": "No self-serve nested/private-folder promise; not needed for candidate recommendation."
+    },
+    {
+      "id": "lifecycle-deletion",
+      "sources": ["privacy", "security", "terms", "cancel"],
+      "observation": "Privacy Account Closure states 30 days after termination with exceptions; security states automatic deletion within 90 days absent request and requested erasure including backups up to 90 days in complex cases. Request response is a separate 30-day statement.",
+      "resolution": "HOLD: distinguish four triggers/data scopes; obtain vendor confirmation for ordinary Studio/account contract, exceptions and backup completion before promising a deadline."
+    },
+    {
+      "id": "post-contract-audio-retrieval",
+      "sources": ["cancel", "security"],
+      "observation": "Cancellation help ends downloads at billing-cycle end; security Return of Customer Data allows up to 90 days after agreement ends to retrieve previously generated audio.",
+      "resolution": "HOLD: clarify cancellation versus agreement termination, applicable plan/data, retrieval mechanism and exact window. Neither unconditional continued downloads nor unconditional loss of all retrieval is established."
     }
   ],
   "independentEvidence": [
@@ -565,8 +634,8 @@
     {
       "id": "official",
       "name": "官方证据完整",
-      "status": "PASS",
-      "basis": "Complementary official workflow, rights, exports and privacy sources. Contradictions explicitly excluded from affirmative public promises; no checkout verification."
+      "status": "HOLD",
+      "basis": "Unresolved official 30/90-day lifecycle scope and post-contract audio retrieval conflict; vendor confirmation needed for ordinary Studio. Complementary sources alone do not pass this gate."
     },
     {
       "id": "market",
@@ -607,7 +676,7 @@
   "content": {
     "en": {
       "summary": "Murf Studio turns scripts into editable AI narration with a media timeline for lessons, explainers and product demos. Downloading and commercial delivery require a paid plan.",
-      "detail": "Use the browser Studio to split a script into blocks, choose a voice, adjust pronunciation and pacing, and align narration with video or images. This is a candidate for repeatable course narration when a person can review the finished audio. It is separate from Murf API, conversational Agents and Dub.\n\nTry a representative script before choosing a subscription. Changes to text can consume generation time again, and project slots differ from generation minutes. Paid download access does not imply unlimited synthesis or broadcast rights. Plan-specific documents put invited collaboration in Enterprise; a preview link is not another editor seat. No synthesis or account checkout was tested in this review.",
+      "detail": "Use the browser Studio to split a script into blocks, choose a voice, adjust pronunciation and pacing, and align narration with video or images. This is a candidate for repeatable course narration when a person can review the finished audio. It is separate from Murf API, conversational Agents and Dub.\n\nTry a representative script before choosing a subscription. Changes to text can consume generation time again, and project slots differ from generation minutes. Paid download access does not imply unlimited synthesis or broadcast rights. Plan-specific documents put invited collaboration in Enterprise; a preview link is not another editor seat. No synthesis or account checkout was tested in this review.\n\nCancellation help says download access ends at billing-cycle end; the security page describes up to 90 days after agreement end to retrieve existing audio. Their scope and retrieval method remain unresolved; do not assume either universal cutoff or guaranteed continued access.",
       "bestFor": [
         "Course authors who revise narration in sections and check pronunciation against the script.",
         "Individuals producing explainers with licensed media who can pay for exports and review timing."
@@ -622,16 +691,16 @@
         "Official pages disagree on project limits, voice/language totals and some plan features; confirm the actual account and order.",
         "Broadcast rights are an Enterprise add-on; stock media and uploaded scripts require their own rights checks.",
         "Review names, numbers, accents and synchronization; no quality benchmark was run here.",
-        "Cancellation ends paid rendering/download access at cycle end; it does not immediately delete retained projects."
+        "Cancellation help says download access ends at billing-cycle end; the security page describes up to 90 days after agreement end to retrieve existing audio. Their scope and retrieval method remain unresolved; do not assume either universal cutoff or guaranteed continued access."
       ],
       "pricingBoundary": "Free Studio offers a one-time 10-minute voice-generation trial with no downloads or commercial license. Paid Creator and Business plans have monthly and annual billing; annual headline monthly equivalents are paid yearly. Exact prices and quota promises are omitted pending account/checkout confirmation and reconciliation of help-page conflicts. Enterprise is custom; collaboration and broadcast add-ons need explicit scope.",
-      "privacyBoundary": "General terms treat submitted content as confidential, with limited service-provider access and exceptions. Personal data can be processed globally and retained for service or legal needs. A response to deletion requests within 30 days is not complete deletion within 30 days. Enterprise advertises no training on customer data; ordinary Studio training and opt-out scope remain unverified.",
+      "privacyBoundary": "Separate subscription cancellation, account termination, deletion requests and backup erasure. The privacy policy specifies account deletion within 30 days after termination with exceptions; security states automatic deletion within 90 days without a request and requested deletion including backups up to 90 days in complex cases. A 30-day request response is separate. These scopes remain unresolved, not a universal deadline. Ordinary Studio training/opt-out scope remains unverified; Enterprise commitments do not transfer.",
       "platforms": "Browser Studio account; this review covers its public documentation and pricing UI. No native app, offline operation, regional availability or mobile feature parity was validated.",
       "decisionCard": {
         "verdict": "Shortlist for reviewed script-to-narration work if paid exports and plan limits fit.",
         "chooseIf": "You can test a course excerpt, revise it in small blocks, and verify delivery rights.",
         "skipIf": "Free exports, shared editing on a self-serve plan, or included broadcast rights are mandatory.",
-        "firstCheck": "Test names, numbers and target accents; inspect VGT after text revisions and verify export format, project slots, seats and license on the intended account.",
+        "firstCheck": "Test names, numbers and target accents; inspect VGT after text revisions and verify export format, project slots, seats and license on the intended account. Before cancellation or termination, confirm existing-audio retrieval and deletion scope with Murf.",
         "compareNext": [
           {
             "slug": "elevenlabs",
@@ -642,7 +711,8 @@
             "reason": "Compare an editing-first workflow when recorded media and transcript revisions dominate."
           }
         ],
-        "evidenceBoundary": "Official document/browser review plus historical independent use reports; no hands-on synthesis, market-size or quality guarantee."
+        "evidenceBoundary": "Official document/browser review plus historical independent use reports; no hands-on synthesis, market-size or quality guarantee.",
+        "retentionAndExitCheck": "Cancellation help says download access ends at billing-cycle end; the security page describes up to 90 days after agreement end to retrieve existing audio. Their scope and retrieval method remain unresolved; do not assume either universal cutoff or guaranteed continued access."
       },
       "verifiedDate": "2026-10-07",
       "nextReview": "2026-10-14",
@@ -659,13 +729,14 @@
         "voice-export",
         "video-export",
         "youtube",
-        "cancel"
+        "cancel",
+        "security"
       ],
       "independentEvidence": ["ijdl", "reddit-course"]
     },
     "cn": {
       "summary": "Murf Studio 将脚本转为可编辑的 AI 旁白，并用媒体时间轴配合课程、讲解和产品演示。下载成品与商用交付需要付费套餐。",
-      "detail": "在浏览器 Studio 中分段输入脚本、选择声音、调整发音和节奏，再把旁白与视频或图片对齐。它适合有人审听、需要反复修订的课程配音；本条不包含 Murf API、对话 Agents 或 Dub 的权益。\n\n先用代表性脚本测试再选套餐。修改文本后重新生成可能再次消耗时长，项目槽位也不等于生成分钟数。付费可下载不代表无限生成或自动拥有广播权。套餐专属文档将邀请协作限定为 Enterprise，预览链接不是额外编辑席位。本次没有登录生成、购买或账户结账实测。",
+      "detail": "在浏览器 Studio 中分段输入脚本、选择声音、调整发音和节奏，再把旁白与视频或图片对齐。它适合有人审听、需要反复修订的课程配音；本条不包含 Murf API、对话 Agents 或 Dub 的权益。\n\n先用代表性脚本测试再选套餐。修改文本后重新生成可能再次消耗时长，项目槽位也不等于生成分钟数。付费可下载不代表无限生成或自动拥有广播权。套餐专属文档将邀请协作限定为 Enterprise，预览链接不是额外编辑席位。本次没有登录生成、购买或账户结账实测。\n\n取消帮助称账期结束下载权限终止；安全页称协议结束后最长 90 天可取回既有音频。适用范围与取回方式仍有冲突待核，不能假定一律无法取回或保证继续下载。",
       "bestFor": [
         "需要分段修订课程旁白，并能逐句复核发音的课程作者。",
         "使用已清权媒体制作讲解视频，愿意付费导出并检查时间对齐的个人创作者。"
@@ -680,16 +751,16 @@
         "官方页面的项目数、语言/声音总数和部分套餐功能不一致，应核对目标账户及订单。",
         "广播权为 Enterprise 加购范围；素材库音乐、上传脚本和其他媒体仍需分别清权。",
         "人名、数字、口音和音画时间需人工检查；本次未做质量基准测试。",
-        "取消订阅后，账期结束即失去付费渲染/下载权限，但保留项目不会立即删除。"
+        "取消帮助称账期结束下载权限终止；安全页称协议结束后最长 90 天可取回既有音频。适用范围与取回方式仍有冲突待核，不能假定一律无法取回或保证继续下载。"
       ],
       "pricingBoundary": "免费 Studio 提供一次性 10 分钟语音生成试用，不含下载和商用许可。Creator 与 Business 有月付和年付，年付页面的月均价不代表逐月付款。因账户/结账未验证且帮助页存在冲突，本稿不承诺精确价格和套餐额度。Enterprise 为定制报价，协作及广播加购范围需明确。",
-      "privacyBoundary": "一般条款将提交内容视为保密信息，但允许必要服务商访问并设有例外。个人数据可跨境处理，并因服务或法律需要保留。删除请求在 30 天内获得回复不等于全部数据在 30 天内删除。Enterprise 标示不以客户数据训练，普通 Studio 的训练与退出机制尚未核实。",
+      "privacyBoundary": "须分开取消订阅、终止账户、删除请求与备份删除。隐私政策称账户终止后 30 天内删除并列例外；安全页称无请求时 90 天内自动删除，请求删除包含备份，复杂情况最长 90 天。请求 30 天内回复另计。适用范围冲突待核，不能统一为删除期限。普通 Studio 训练/退出范围仍未核实，不外推 Enterprise 承诺。",
       "platforms": "浏览器 Studio 账户；本次覆盖公开文档与定价界面。未验证原生应用、离线使用、地区可用性或移动端功能一致性。",
       "decisionCard": {
         "verdict": "若接受付费导出、套餐限制和人工审听，可纳入脚本配音候选。",
         "chooseIf": "能以一段课程脚本试用，按小段修订并核对交付许可。",
         "skipIf": "免费导出、普通套餐多人编辑或默认含广播权是硬要求。",
-        "firstCheck": "测试人名、数字及目标口音；观察改稿后的时长消耗，并在目标账户确认导出格式、项目槽位、席位和许可。",
+        "firstCheck": "测试人名、数字及目标口音；观察改稿后的时长消耗，并在目标账户确认导出格式、项目槽位、席位和许可。 取消或终止前，向 Murf 确认既有音频取回与删除范围。",
         "compareNext": [
           {
             "slug": "elevenlabs",
@@ -700,7 +771,8 @@
             "reason": "若工作重点是已有录音/视频及转录稿修改，可比较以编辑为主的流程。"
           }
         ],
-        "evidenceBoundary": "官方文档/浏览器核查及历史独立使用记录；未做账户语音生成，不承诺规模或质量。"
+        "evidenceBoundary": "官方文档/浏览器核查及历史独立使用记录；未做账户语音生成，不承诺规模或质量。",
+        "retentionAndExitCheck": "取消帮助称账期结束下载权限终止；安全页称协议结束后最长 90 天可取回既有音频。适用范围与取回方式仍有冲突待核，不能假定一律无法取回或保证继续下载。"
       },
       "verifiedDate": "2026-10-07",
       "nextReview": "2026-10-14",
@@ -717,13 +789,14 @@
         "voice-export",
         "video-export",
         "youtube",
-        "cancel"
+        "cancel",
+        "security"
       ],
       "independentEvidence": ["ijdl", "reddit-course"]
     },
     "tw": {
       "summary": "Murf Studio 將腳本轉為可編輯的 AI 旁白，並以媒體時間軸搭配課程、解說及產品展示。下載成品與商用交付需要付費方案。",
-      "detail": "在瀏覽器 Studio 中分段輸入腳本、選擇聲音、調整發音和節奏，再將旁白與影片或圖片對齊。它適合有人試聽、需要持續修改的課程配音；本條目不涵蓋 Murf API、對話 Agents 或 Dub 的權益。\n\n先用具代表性的腳本測試再選方案。修改文字後重新生成可能再次消耗時數，專案名額也不等於生成分鐘數。付費可下載不代表無限生成或自動取得廣播權。方案專屬文件將邀請協作限於 Enterprise，預覽連結不是額外編輯席次。本次未登入生成、購買或測試帳戶結帳。",
+      "detail": "在瀏覽器 Studio 中分段輸入腳本、選擇聲音、調整發音和節奏，再將旁白與影片或圖片對齊。它適合有人試聽、需要持續修改的課程配音；本條目不涵蓋 Murf API、對話 Agents 或 Dub 的權益。\n\n先用具代表性的腳本測試再選方案。修改文字後重新生成可能再次消耗時數，專案名額也不等於生成分鐘數。付費可下載不代表無限生成或自動取得廣播權。方案專屬文件將邀請協作限於 Enterprise，預覽連結不是額外編輯席次。本次未登入生成、購買或測試帳戶結帳。\n\n取消說明稱計費週期結束即終止下載權限；安全頁稱協議結束後最長 90 天可取回既有音訊。適用範圍與取回方式仍有衝突待核，不能假定一律無法取回或保證繼續下載。",
       "bestFor": [
         "需要分段修改課程旁白，且能逐句核對發音的課程製作者。",
         "使用已取得授權的媒體製作解說影片，願意付費匯出並檢查時間對齊的個人創作者。"
@@ -738,16 +811,16 @@
         "官方頁面的專案數、語言/聲音總數及部分方案功能不一致，應核對目標帳戶及訂單。",
         "廣播權屬 Enterprise 加購範圍；素材庫音樂、上傳腳本及其他媒體仍須分別確認授權。",
         "人名、數字、口音及影音時間須人工檢查；本次未做品質基準測試。",
-        "取消訂閱後，計費週期結束即失去付費算繪/下載權限，但保留的專案不會立即刪除。"
+        "取消說明稱計費週期結束即終止下載權限；安全頁稱協議結束後最長 90 天可取回既有音訊。適用範圍與取回方式仍有衝突待核，不能假定一律無法取回或保證繼續下載。"
       ],
       "pricingBoundary": "免費 Studio 提供一次性 10 分鐘語音生成試用，不含下載與商用授權。Creator 和 Business 有月繳與年繳，年繳頁面的月平均價格不代表逐月付款。因帳戶/結帳未驗證且說明頁存在衝突，本稿不承諾精確價格與方案額度。Enterprise 採客製報價，協作及廣播加購範圍須明確確認。",
-      "privacyBoundary": "一般條款將提交內容視為機密資訊，但允許必要服務商存取並設有例外。個人資料可能跨境處理，並因服務或法律需求保留。刪除請求在 30 天內獲得回覆，不等於所有資料在 30 天內刪除。Enterprise 標示不以客戶資料訓練；一般 Studio 的訓練及退出機制尚未核實。",
+      "privacyBoundary": "須分開取消訂閱、終止帳戶、刪除請求與備份刪除。隱私政策稱帳戶終止後 30 天內刪除並列例外；安全頁稱無請求時 90 天內自動刪除，請求刪除包含備份，複雜情況最長 90 天。請求 30 天內回覆另計。適用範圍衝突待核，不能統一為刪除期限。一般 Studio 訓練/退出範圍仍未核實，不外推 Enterprise 承諾。",
       "platforms": "瀏覽器 Studio 帳戶；本次涵蓋公開文件與定價介面。未驗證原生應用程式、離線使用、地區可用性或行動版功能是否一致。",
       "decisionCard": {
         "verdict": "若接受付費匯出、方案限制與人工試聽，可列入腳本配音候選。",
         "chooseIf": "能以一段課程腳本試用、分成小段修改，並確認交付授權。",
         "skipIf": "免費匯出、一般方案多人編輯或預設內含廣播權是必要條件。",
-        "firstCheck": "測試人名、數字與目標口音；觀察修改腳本後的時數消耗，並在目標帳戶確認匯出格式、專案名額、席次與授權。",
+        "firstCheck": "測試人名、數字與目標口音；觀察修改腳本後的時數消耗，並在目標帳戶確認匯出格式、專案名額、席次與授權。 取消或終止前，向 Murf 確認既有音訊取回與刪除範圍。",
         "compareNext": [
           {
             "slug": "elevenlabs",
@@ -758,7 +831,8 @@
             "reason": "若主要處理既有錄音/影片及逐字稿修改，可比較以編輯為主的流程。"
           }
         ],
-        "evidenceBoundary": "官方文件/瀏覽器核查及歷史獨立使用紀錄；未進行帳戶語音生成，不承諾規模或品質。"
+        "evidenceBoundary": "官方文件/瀏覽器核查及歷史獨立使用紀錄；未進行帳戶語音生成，不承諾規模或品質。",
+        "retentionAndExitCheck": "取消說明稱計費週期結束即終止下載權限；安全頁稱協議結束後最長 90 天可取回既有音訊。適用範圍與取回方式仍有衝突待核，不能假定一律無法取回或保證繼續下載。"
       },
       "verifiedDate": "2026-10-07",
       "nextReview": "2026-10-14",
@@ -775,9 +849,24 @@
         "voice-export",
         "video-export",
         "youtube",
-        "cancel"
+        "cancel",
+        "security"
       ],
       "independentEvidence": ["ijdl", "reddit-course"]
+    }
+  },
+  "qaRework": {
+    "baselineCommit": "afa68524d12b1122760b9c263412fbf21a1e9986",
+    "reason": "Independent QA_FAIL: omitted security lifecycle statements and unconditional cancellation download claim",
+    "status": "reworked_pending_independent_QA",
+    "verifiedDate": "2026-10-07",
+    "verification": {
+      "productionCheckedAt": "2026-10-07T00:44:37.182Z",
+      "neonProductMatches": 0,
+      "supabaseProfileMatches": 0,
+      "sitemapUrls": 126,
+      "productionWrites": 0,
+      "status": "JSON, scoped regression, candidate pipeline, local/source links, TypeScript, read-only production and SEO smoke passed; independent QA pending"
     }
   }
 }

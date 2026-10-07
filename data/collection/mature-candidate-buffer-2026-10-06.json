@@ -159,7 +159,7 @@
       "roles": ["Alternative"],
       "whyNow": "补 ElevenLabs 语音生成与 Descript 编辑之外的课程旁白项目/同步工作流。",
       "capabilityHypothesis": "脚本转旁白、分段修订、与视频同步",
-      "constraint": "付费导出；广播 Enterprise 加购；套餐额度/目录总数冲突不作承诺；普通 Studio 训练范围 unknown；素材与 canonical 收口 HOLD。",
+      "constraint": "付费导出；广播 Enterprise 加购；套餐额度/目录总数冲突不作承诺；普通 Studio 训练范围 unknown；素材与 canonical 收口 HOLD。 删除及退订后音频取回范围存在官方冲突，官方证据 HOLD。",
       "marketMaturity": "10-07：独立设计师 IJDL 课程音频制作案例（2025-12-17 发表）为强实际采用；2024 匿名课程使用讨论为另一项辅助信号，不证明现价、质量或市场规模。",
       "officialSources": [
         {
@@ -183,7 +183,7 @@
         {
           "url": "https://murf.ai/legal/privacy-policy",
           "status": "direct_read",
-          "scope": "Collection, providers, global processing, retention, deletion request response; page dated 2023-11-03",
+          "scope": "Account Closure: account/project/media/text deletion within 30 days of termination with legal/security exceptions; deletion-request response within 30 days is separate. Page dated 2023-11-03.",
           "checkedAt": "2026-10-07"
         },
         {
@@ -243,7 +243,8 @@
       "keyFactGaps": [
         "官方 logo/真实预览复制处理及署名授权未取得；独立内容与纠错入口展示 QA 未完成",
         "murf-ai 生产替代项引用与 /ai/murf 双自指壳页需另案统一；本轮不修改",
-        "账户结账、套餐额度冲突、目标口音与导出实测、普通 Studio 训练/删除边界需复核"
+        "账户结账、套餐额度冲突、目标口音与导出实测、普通 Studio 训练/删除边界需复核",
+        "安全页/隐私/取消帮助的删除 30/90 天及既有音频取回范围冲突；官方证据门禁 HOLD，不作无条件承诺"
       ],
       "duplicateIntent": "Neon 产品身份匹配 0、Supabase profile 0；ElevenLabs alternatives 引用 murf-ai；两条英语路径均 200 self-canonical/noindex，门禁 HOLD，未建第二实体。",
       "mediaAvailability": "首页存在第一方展示，本站可复用 logo/界面文件与权利依据未核；HOLD。",
@@ -268,8 +269,8 @@
         "audit": "docs/MURF_PRERELEASE_2026-10-07_CN.md",
         "checkedAt": "2026-10-07",
         "verdict": "HOLD_EVIDENCE",
-        "gateSummary": "6 PASS / 2 HOLD (content, maintenance)",
-        "independentQA": "pending"
+        "gateSummary": "5 PASS / 3 HOLD (official, content, maintenance)",
+        "independentQA": "QA_FAIL on afa68524; two blockers reworked, independent recheck pending"
       }
     },
     {
