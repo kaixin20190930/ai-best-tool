@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import NextLink from 'next/link';
 import { notFound, permanentRedirect } from 'next/navigation';
 import { getWebNavigationDetail } from '@/network/webNavigation';
 import {
@@ -24,6 +25,7 @@ import { PRIORITY_TOOL_FALLBACK_PROFILES } from '@/lib/config/priorityToolFallba
 import { getSafetyToolReview } from '@/lib/config/safetyToolReviews';
 import TOOL_MAINTENANCE_REVIEWS from '@/lib/config/toolMaintenanceReviews';
 import { getCanonicalToolSlug, getLocalizedToolPath, isLegacyToolSlug } from '@/lib/config/toolRouteAliases';
+import { buildToolEntryHref } from '@/lib/claims/toolEntry';
 import { getPublicToolDetail, getPublicToolSummary } from '@/lib/content/publicToolScope';
 import {
   getPublicToolDetailDisposition,
@@ -3674,7 +3676,7 @@ export default async function Page({
             <aside className='space-y-4 lg:sticky lg:top-24 lg:self-start'>
               {toolId && (
                 <div className='rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200'>
-                  <ToolFeedbackBar toolId={toolId} userId={user?.id} locale={locale} />
+                  <ToolFeedbackBar toolId={toolId} userId={user?.id} locale={locale} slug={canonicalSlug} listingName={data.title} website={dbTool?.url || ''} />
                 </div>
               )}
             </aside>
@@ -3719,22 +3721,22 @@ export default async function Page({
                     )}
                   </div>
                 </div>
-                <details data-tool-owner-actions className='mt-4 rounded-lg border border-slate-200 p-4 text-sm'>
-                  <summary className='cursor-pointer font-semibold text-slate-700'>
+                <div data-tool-owner-actions className='mt-4 rounded-lg border border-slate-200 p-4 text-sm'>
+                  <h3 className='font-semibold text-slate-700'>
                     {isChinese ? '如果这是你的工具' : 'If this is your tool'}
-                  </summary>
+                  </h3>
                   <p className='mt-3 text-slate-600'>
                     {claimLabel}
                     {claimedAtLabel ? ` · ${claimedAtLabel}` : ''}
                   </p>
                   <p className='mt-2 text-slate-600'>{claimSummary}</p>
-                  <Link
-                    href='/developer/listing?intent=claim'
+                  <NextLink
+                    href={buildToolEntryHref({ intent: 'ownership_update', toolId, slug: canonicalSlug, listingName: data.title, website: dbTool?.url || '' }, locale)}
                     className='mt-3 inline-block font-semibold text-cyan-800 underline'
                   >
                     {isChinese ? '认领或维护此条目' : 'Claim or maintain this listing'}
-                  </Link>
-                </details>
+                  </NextLink>
+                </div>
                 <div className='mt-6'>
                   <CommentList
                     toolId={toolId}

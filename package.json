@@ -84,6 +84,7 @@
     "test:ctr-snippet-experiments": "tsx scripts/test-ctr-snippet-experiments.ts",
     "test:localized-metadata": "tsx scripts/test-localized-page-metadata.ts",
     "test:localized-navigation": "tsx scripts/test-localized-navigation.ts",
+    "test:tool-live-signal-entry": "tsx scripts/test-tool-live-signal-entry.ts",
     "test:plan-consistency": "tsx scripts/test-plan-consistency.ts",
     "test:legacy-tool-scope": "tsx scripts/test-legacy-tool-scope.ts",
     "refresh:legacy-tool-scope": "tsx scripts/refresh-legacy-tool-scope.ts",

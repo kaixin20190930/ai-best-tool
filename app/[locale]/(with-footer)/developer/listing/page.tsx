@@ -4,6 +4,7 @@ import { ArrowRight, CheckCircle2, Mail, ShieldCheck, Sparkles } from 'lucide-re
 import { getListingPaymentMailto } from '@/lib/config/listing';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import ClaimListingForm from '@/components/developer/ClaimListingForm';
+import { parseToolEntryContext } from '@/lib/claims/toolEntry';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const isChinese = locale === 'cn' || locale === 'tw';
@@ -25,11 +26,12 @@ export default function DeveloperListingPage({
   searchParams,
 }: {
   params: { locale: string };
-  searchParams?: { intent?: string };
+  searchParams?: Record<string, string | string[] | undefined>;
 }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const mailtoHref = getListingPaymentMailto('Claim listing interest');
   const sourcePath = `/${locale}/developer/listing`;
+  const toolContext = parseToolEntryContext(searchParams || {}, locale);
   const submitHref = `/${locale}/submit?intent=claim`;
   const pricingHref = `/${locale}/pricing`;
   let initialIntent: 'default' | 'claim' | 'paid' = 'default';
@@ -305,7 +307,7 @@ export default function DeveloperListingPage({
 
         <div>
           <div id='claim-form'>
-            <ClaimListingForm locale={locale} sourcePath={sourcePath} initialIntent={initialIntent} />
+            <ClaimListingForm locale={locale} sourcePath={toolContext?.sourcePath || sourcePath} initialIntent={initialIntent} toolContext={toolContext} />
           </div>
         </div>
       </section>

@@ -5,12 +5,17 @@ import { Flag, RefreshCw, ThumbsUp } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { trackFeedback } from '@/app/actions/analytics';
+import Link from 'next/link';
+import { buildToolEntryHref } from '@/lib/claims/toolEntry';
 
 interface ToolFeedbackBarProps {
   toolId: string;
   userId?: string;
   className?: string;
   locale?: string;
+  slug: string;
+  listingName: string;
+  website: string;
 }
 
 const feedbackOptions = [
@@ -43,16 +48,11 @@ const localizedLabels = {
   inaccurate: '内容有误',
 } as const;
 
-export default function ToolFeedbackBar({ toolId, userId, className = '', locale = 'en' }: ToolFeedbackBarProps) {
+export default function ToolFeedbackBar({ toolId, userId, slug, listingName, website, className = '', locale = 'en' }: ToolFeedbackBarProps) {
   const [selected, setSelected] = useState<string | null>(null);
   const [loading, setLoading] = useState<string | null>(null);
   const isChinese = locale === 'cn' || locale === 'tw';
-  const nextSteps = isChinese
-    ? ['点“请求更新”后，再在评论里写明价格、截图或文案哪里不对。', '如果你是工具方，可以先认领条目，再补最新更新说明。']
-    : [
-        'After tapping request update, leave a comment that says exactly what is stale.',
-        'If you own the tool, claim the listing first, then add the latest update notes.',
-      ];
+  const correctionHref = buildToolEntryHref({ intent: 'profile_correction', toolId, slug, listingName, website }, locale);
 
   const handleFeedback = async (feedbackType: (typeof feedbackOptions)[number]['type']) => {
     setLoading(feedbackType);
@@ -95,14 +95,9 @@ export default function ToolFeedbackBar({ toolId, userId, className = '', locale
             : 'If pricing, screenshots, copy, or features look stale, tap request update.'}
         </p>
       </div>
-      <div className='rounded-lg border border-slate-200 bg-slate-50 p-3 text-xs leading-5 text-slate-600'>
-        <p className='font-semibold text-slate-800'>{isChinese ? '下一步怎么做' : 'What happens next'}</p>
-        <ul className='mt-2 list-disc space-y-1 pl-4'>
-          {nextSteps.map((step) => (
-            <li key={step}>{step}</li>
-          ))}
-        </ul>
-      </div>
+      <Link href={correctionHref} className='block rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-cyan-900 hover:bg-cyan-100'>
+        {isChinese ? '说明哪里有误或需要更新 →' : 'Describe an error or request an update →'}
+      </Link>
       <div className='grid gap-3'>
         {feedbackOptions.map((option) => {
           const Icon = option.icon;
@@ -117,7 +112,8 @@ export default function ToolFeedbackBar({ toolId, userId, className = '', locale
               className={`flex min-h-[6.25rem] flex-row items-start gap-3 rounded-lg border px-4 py-3 text-left text-sm transition ${
                 isSelected ? option.className : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
               }`}
-              disabled={isLoading}
+              disabled={loading !== null}
+              aria-busy={isLoading}
             >
               <div
                 className={`flex size-10 shrink-0 items-center justify-center rounded-full ring-1 ${

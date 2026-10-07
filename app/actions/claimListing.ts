@@ -7,6 +7,7 @@ import { listingConfig } from '@/lib/config/listing';
 import { sendTransactionalEmail } from '@/lib/services/mailer';
 import { notifyAdminsOfClaimLead } from '@/app/actions/notifications';
 import { recordDistributionAttributionEvent } from '@/lib/services/distributionAttribution';
+import { matchesToolEntry, normalizeClaimSourcePath, officialHost, toolSourcePath } from '@/lib/claims/toolEntry';
 
 export interface ClaimListingInput {
   listingName: string;
@@ -17,6 +18,9 @@ export interface ClaimListingInput {
   note?: string;
   sourcePath?: string;
   sourceLocale?: string;
+  toolId?: string;
+  sourceSlug?: string;
+  sourceWebsite?: string;
 }
 
 export interface ClaimListingResult {
@@ -71,8 +75,24 @@ export async function submitClaimListing(input: ClaimListingInput): Promise<Clai
     const website = normalizeText(input.website);
     const claimReason = normalizeText(input.claimReason);
     const note = normalizeText(input.note);
-    const sourcePath = normalizeText(input.sourcePath);
-    const sourceLocale = normalizeText(input.sourceLocale);
+    const sourceLocale = ['en', 'cn', 'tw'].includes(input.sourceLocale || '') ? input.sourceLocale! : 'en';
+    let sourcePath = normalizeClaimSourcePath(normalizeText(input.sourcePath), sourceLocale);
+    const sourceSlug = normalizeText(input.sourceSlug);
+    let verifiedToolId: string | null = null;
+    if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(input.toolId || '') &&
+        /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(sourceSlug) && sourceSlug.length <= 100 &&
+        sourcePath === toolSourcePath(sourceLocale, sourceSlug) && officialHost(input.sourceWebsite || '')) {
+      const tool = await query<{ id: string; name: string; url: string }>(
+        `SELECT id::text, name, url FROM tools WHERE id = $1::uuid AND name = $2 AND status = 'published' LIMIT 1`,
+        [input.toolId, sourceSlug],
+      );
+      if (tool.rows[0] && matchesToolEntry({ toolId: input.toolId, slug: sourceSlug, website: input.sourceWebsite || '' }, tool.rows[0])) {
+        verifiedToolId = tool.rows[0].id;
+      }
+    }
+    if (sourcePath !== `${sourceLocale === 'en' ? '' : `/${sourceLocale}`}/developer/listing` && !verifiedToolId) {
+      sourcePath = `${sourceLocale === 'en' ? '' : `/${sourceLocale}`}/developer/listing`;
+    }
 
     if (listingName.length < 2) {
       return { success: false, error: 'Please enter the listing name.' };
@@ -82,6 +102,12 @@ export async function submitClaimListing(input: ClaimListingInput): Promise<Clai
     }
     if (website && !isValidUrl(website)) {
       return { success: false, error: 'Please enter a valid website URL.' };
+    }
+    if (!['ownership_update', 'profile_correction', 'duplicate_merge', 'agency_client', 'other'].includes(claimReason)) {
+      return { success: false, error: 'Please choose a valid claim reason.' };
+    }
+    if (listingName.length > 255 || email.length > 255 || company.length > 255 || website.length > 500 || note.length > 5000) {
+      return { success: false, error: 'Please shorten the submitted details.' };
     }
 
     const websiteHostname = website ? getUrlHostname(website) : '';
@@ -94,6 +120,7 @@ export async function submitClaimListing(input: ClaimListingInput): Promise<Clai
       `
         INSERT INTO tool_claims (
           listing_name,
+          tool_id,
           email,
           company,
           website,
@@ -105,11 +132,12 @@ export async function submitClaimListing(input: ClaimListingInput): Promise<Clai
           created_at,
           updated_at
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'new', NOW(), NOW())
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'new', NOW(), NOW())
         RETURNING id::text AS id
       `,
       [
         listingName,
+        verifiedToolId,
         email,
         company || null,
         website || null,
@@ -122,6 +150,7 @@ export async function submitClaimListing(input: ClaimListingInput): Promise<Clai
 
     const claimId = String(result.rows[0]?.id || '');
 
+    try {
     await query(
       `
         INSERT INTO analytics (event_type, metadata, timestamp, user_agent, referrer)
@@ -137,6 +166,7 @@ export async function submitClaimListing(input: ClaimListingInput): Promise<Clai
           sourcePath: sourcePath || null,
           sourceLocale: sourceLocale || null,
           claimId,
+          toolId: verifiedToolId,
         }),
         userAgent,
         referrer,
@@ -204,20 +234,23 @@ export async function submitClaimListing(input: ClaimListingInput): Promise<Clai
           `Note: ${note || '-'}`,
         ].join('\n'),
         html: `
-          <p><strong>Listing:</strong> ${listingName}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Company:</strong> ${company || '-'}</p>
-          <p><strong>Website:</strong> ${website || '-'}</p>
-          <p><strong>Website host:</strong> ${websiteHostname || '-'}</p>
-          <p><strong>Claim reason:</strong> ${claimReason || '-'}</p>
-          <p><strong>Source path:</strong> ${sourcePath || '-'}</p>
-          <p><strong>Source locale:</strong> ${sourceLocale || '-'}</p>
-          <p><strong>Note:</strong> ${note || '-'}</p>
+          <p><strong>Listing:</strong> ${escapeHtml(listingName)}</p>
+          <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+          <p><strong>Company:</strong> ${escapeHtml(company) || '-'}</p>
+          <p><strong>Website:</strong> ${escapeHtml(website) || '-'}</p>
+          <p><strong>Website host:</strong> ${escapeHtml(websiteHostname) || '-'}</p>
+          <p><strong>Claim reason:</strong> ${escapeHtml(claimReason) || '-'}</p>
+          <p><strong>Source path:</strong> ${escapeHtml(sourcePath) || '-'}</p>
+          <p><strong>Source locale:</strong> ${escapeHtml(sourceLocale) || '-'}</p>
+          <p><strong>Note:</strong> ${escapeHtml(note) || '-'}</p>
         `,
       });
     }
 
     await recordDistributionAttributionEvent('claim', null, { claimId, listingName });
+    } catch (notificationError) {
+      console.error('Claim saved, but a follow-up notification failed:', notificationError);
+    }
 
     return { success: true, claimId };
   } catch (error) {

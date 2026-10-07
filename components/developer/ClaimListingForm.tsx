@@ -6,11 +6,13 @@ import { toast } from 'sonner';
 
 import { cn } from '@/lib/utils';
 import { submitClaimListing } from '@/app/actions/claimListing';
+import type { ToolEntryContext } from '@/lib/claims/toolEntry';
 
 type ClaimListingFormProps = {
   locale: string;
   sourcePath: string;
   initialIntent?: 'default' | 'claim' | 'paid';
+  toolContext?: ToolEntryContext | null;
 };
 
 const claimReasonOptions = [
@@ -21,16 +23,17 @@ const claimReasonOptions = [
   { value: 'other', zh: '其他', en: 'Other' },
 ] as const;
 
-export default function ClaimListingForm({ locale, sourcePath, initialIntent = 'default' }: ClaimListingFormProps) {
+export default function ClaimListingForm({ locale, sourcePath, initialIntent = 'default', toolContext }: ClaimListingFormProps) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const [form, setForm] = useState({
-    listingName: '',
+    listingName: toolContext?.listingName || '',
     email: '',
     company: '',
-    website: '',
-    claimReason: initialIntent === 'paid' ? 'ownership_update' : 'profile_correction',
+    website: toolContext?.website || '',
+    claimReason: toolContext?.intent || (initialIntent === 'paid' || initialIntent === 'claim' ? 'ownership_update' : 'profile_correction'),
     note: '',
   });
 
@@ -45,6 +48,7 @@ export default function ClaimListingForm({ locale, sourcePath, initialIntent = '
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setSubmitError('');
     setLoading(true);
 
     try {
@@ -52,9 +56,13 @@ export default function ClaimListingForm({ locale, sourcePath, initialIntent = '
         ...form,
         sourcePath,
         sourceLocale: locale,
+        toolId: toolContext?.toolId,
+        sourceSlug: toolContext?.slug,
+        sourceWebsite: toolContext?.website,
       });
 
       if (!result.success) {
+        setSubmitError(result.error || (isChinese ? '提交失败，请稍后再试。' : 'Submission failed. Please try again.'));
         toast.error(result.error || (isChinese ? '提交失败，请稍后再试。' : 'Submission failed. Please try again.'));
         return;
       }
@@ -66,10 +74,11 @@ export default function ClaimListingForm({ locale, sourcePath, initialIntent = '
         email: '',
         company: '',
         website: '',
-        claimReason: initialIntent === 'paid' ? 'ownership_update' : 'profile_correction',
+        claimReason: toolContext?.intent || (initialIntent === 'paid' || initialIntent === 'claim' ? 'ownership_update' : 'profile_correction'),
         note: '',
       });
     } catch (error) {
+      setSubmitError(isChinese ? '提交失败，请稍后再试。' : 'Submission failed. Please try again.');
       toast.error(isChinese ? '提交失败，请稍后再试。' : 'Submission failed. Please try again.');
     } finally {
       setLoading(false);
@@ -122,6 +131,10 @@ export default function ClaimListingForm({ locale, sourcePath, initialIntent = '
 
   return (
     <form onSubmit={handleSubmit} className='space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
+      {toolContext && <p className='rounded-lg border border-cyan-200 bg-cyan-50 p-3 text-sm text-cyan-900'>
+        {isChinese ? `正在处理 ${toolContext.listingName} 的${toolContext.intent === 'ownership_update' ? '认领' : '资料纠错'}。请填写邮箱并核对以下资料。` :
+          `Submitting a ${toolContext.intent === 'ownership_update' ? 'claim' : 'correction'} for ${toolContext.listingName}. Add your email and review the details below.`}
+      </p>}
       <label htmlFor='claim-reason' className='block space-y-2 text-sm font-medium text-slate-700'>
         <span>{isChinese ? '认领原因' : 'Claim reason'}</span>
         <select
@@ -194,7 +207,7 @@ export default function ClaimListingForm({ locale, sourcePath, initialIntent = '
       </div>
 
       <label htmlFor='claim-note' className='block space-y-2 text-sm font-medium text-slate-700'>
-        <span>{isChinese ? '备注' : 'Note'}</span>
+        <span>{isChinese ? '备注 / 需要修正的内容' : 'Note / details to correct'}</span>
         <textarea
           id='claim-note'
           value={form.note}
@@ -222,6 +235,7 @@ export default function ClaimListingForm({ locale, sourcePath, initialIntent = '
             : 'We review claims manually before any public owner mapping.'}
         </p>
       </div>
+      {submitError && <p role='alert' className='text-sm text-rose-700'>{submitError}</p>}
     </form>
   );
 }
