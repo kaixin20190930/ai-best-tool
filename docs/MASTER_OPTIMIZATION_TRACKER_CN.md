@@ -2,12 +2,6 @@
 
 更新时间：2026-10-07
 
-2026-10-07 **交付与验收流程改为增量风险分级**：每个候选/功能只保留一份权威证据快照，既有 PASS 仅在来源变化、复查到期、相
-关代码变化或生产异常时失效。任务先列 change set，再按 R/C/H 三级执行；纯研究不跑 TypeScript/build/smoke，运行时代码只跑
-受影响专项与必要 build，高风险数据库/安全/支付/SEO 边界才跑完整门禁。同一命令不再由开发、QA、总控重复执行，QA PASS 后无
-新差分不得再次复核。详细规则已写入[自动化测试与发布验收方案](./DECISION_PLATFORM_AUTOMATED_ACCEPTANCE_CN.md)，并同步到总
-控任务锁和每日自动化。后续 Elicit 只处理素材授权、真实展示和新上线纠错入口三个差分，不重验其已通过的七项准入。
-
 2026-10-07 **PIKA-PRERELEASE-01 本地候选交付，待独立 QA**：Pika 八门禁 **6 PASS / 2 HOLD（official、content）**。新旧套
 餐/credits/水印/商用与迁移范围冲突保留；当前导出、失败成本、商品保真及视频隐私范围仍有 unknown。EN/CN/TW Tool
 Intelligence / Decision Card 已写入[候选包](../data/collection/pika-prerelease-2026-10-07.json)，素材权利、真实预览、独
@@ -15,97 +9,27 @@ Intelligence / Decision Card 已写入[候选包](../data/collection/pika-prerel
 候选仍 Elicit。仅本地提交、不 push，productionWrites=0，无工具/关系/Task Page、metadata/index/sitemap 改动。详
 见[专项审计](./PIKA_PRERELEASE_2026-10-07_CN.md)。
 
-2026-10-07 **MTN-UX-01 已部署、owner SQL 已应用、最终 QA_PASS**：基于 `origin/main ca9867d0` 的会议页整改已完成生产交
-付；生产只读 verifier 确认三条 Fit 均为 `candidate_applied`。英中页面均 200、各三候选 / 6 unique
-sources、`noindex, follow` / self-canonical；sitemap **126 URL / 0 Task URL**。双语差异化理由、真实条件与限制、证据支持
-的具体约束、来源用途/去重及单一同语言下一步已完成最终 QA；工具索引与其余 Task cluster 保持不变。**完整 360/390px 视觉仍
-为 N/A，未宣称视觉通过。** 本次仅更新两份交付状态文档，不新增生产写入。详见
-[MTN-UX-01 实施与验收记录](./MEETING_NOTES_USER_VALUE_AUDIT_2026-10-06_CN.md)。
+2026-10-07 **MTN-UX-01 已部署、owner SQL 已应用、最终 QA_PASS**：基于 `origin/main ca9867d0` 的会议页整改已完成生产交付；生产只读 verifier 确认三条 Fit 均为 `candidate_applied`。英中页面均 200、各三候选 / 6 unique sources、`noindex, follow` / self-canonical；sitemap **126 URL / 0 Task URL**。双语差异化理由、真实条件与限制、证据支持的具体约束、来源用途/去重及单一同语言下一步已完成最终 QA；工具索引与其余 Task cluster 保持不变。**完整 360/390px 视觉仍为 N/A，未宣称视觉通过。** 本次仅更新两份交付状态文档，不新增生产写入。详见 [MTN-UX-01 实施与验收记录](./MEETING_NOTES_USER_VALUE_AUDIT_2026-10-06_CN.md)。
 
-2026-10-06 CL02-PUBLISH-GATE-REMEDIATION **已 QA_PASS、已部署、迁移已应用；生产验证 HOLD（仅三个 availability
-unknown）**：集成提交 `e938d1c6` 已推送 main，Vercel 部署成功，owner 已应用双语门禁迁移。总控已完成技术/生产收口；本轮
-`2026-10-06T06:24:31.396Z` 只读预检确认 `productionWrites=0`、合约 `20261006-bilingual-publication-gate`、Gemini links
-**5/10/6**、Perplexity **6/10/7**。剩余仅 Gemini research-discovery 与 Perplexity 两项 Capability 的
-`availability=unknown`；组级内容 blocker 是三字段的汇总。Task 仍 404/noindex，两个工具 indexing_paused、sitemap
-excluded；Perplexity `3/day` 文字仍为未应用编辑候选，不解除 availability。无需重复迁移或继续增加基础设施。当前执行状态和
-回读
-见[运营重启台账](./OPS_RESET_CANDIDATE_BUFFER_2026-10-06_CN.md)；[门禁修复审计](./CL02_PUBLISH_GATE_REMEDIATION_2026-10-06_CN.md)保
-留开发时历史原文。
+2026-10-06 CL02-PUBLISH-GATE-REMEDIATION **已 QA_PASS、已部署、迁移已应用；生产验证 HOLD（仅三个 availability unknown）**：集成提交 `e938d1c6` 已推送 main，Vercel 部署成功，owner 已应用双语门禁迁移。总控已完成技术/生产收口；本轮 `2026-10-06T06:24:31.396Z` 只读预检确认 `productionWrites=0`、合约 `20261006-bilingual-publication-gate`、Gemini links **5/10/6**、Perplexity **6/10/7**。剩余仅 Gemini research-discovery 与 Perplexity 两项 Capability 的 `availability=unknown`；组级内容 blocker 是三字段的汇总。Task 仍 404/noindex，两个工具 indexing_paused、sitemap excluded；Perplexity `3/day` 文字仍为未应用编辑候选，不解除 availability。无需重复迁移或继续增加基础设施。当前执行状态和回读见[运营重启台账](./OPS_RESET_CANDIDATE_BUFFER_2026-10-06_CN.md)；[门禁修复审计](./CL02_PUBLISH_GATE_REMEDIATION_2026-10-06_CN.md)保留开发时历史原文。
 
-2026-10-06 OPS-RESET-01 **开发/编辑交付，待独立 QA**：生产只读回读 69 total、54 published（17 continue_index / 35
-monitor / 2 archive）、9 draft、6 rejected；sitemap **126 URL / 0 Task URL**。新
-的[15 项成熟产品研究缓冲与七运营日排期](./OPS_RESET_CANDIDATE_BUFFER_2026-10-06_CN.md)覆盖六 Task，市场门槛通过 3 项，但
-整体 **15 HOLD / 0 ready**；Top 5 为 **Elicit、Murf Studio、Pika、Canva、Bolt**，唯一下一发布候选 **Elicit（素材/内容
-HOLD）**。Lovable/Replit 等已存在实体不计新增；meeting-notes 仅保留 Avoma 储备，不安排本期新发
-布。[会议 Task 用户价值审计](./MEETING_NOTES_USER_VALUE_AUDIT_2026-10-06_CN.md)确认双语 200/noindex 与 Task-first 基础，
-但三卡具体限制缺失、中文理由英文、空泛约束及重复来源需最小整改；移动端视觉 N/A。本轮仅文档/候选 JSON，生产写入 0，未改页
-面、数据库、索引或 sitemap；独立 worktree 本地提交、不 push。
+2026-10-06 OPS-RESET-01 **开发/编辑交付，待独立 QA**：生产只读回读 69 total、54 published（17 continue_index / 35 monitor / 2 archive）、9 draft、6 rejected；sitemap **126 URL / 0 Task URL**。新的[15 项成熟产品研究缓冲与七运营日排期](./OPS_RESET_CANDIDATE_BUFFER_2026-10-06_CN.md)覆盖六 Task，市场门槛通过 3 项，但整体 **15 HOLD / 0 ready**；Top 5 为 **Elicit、Murf Studio、Pika、Canva、Bolt**，唯一下一发布候选 **Elicit（素材/内容 HOLD）**。Lovable/Replit 等已存在实体不计新增；meeting-notes 仅保留 Avoma 储备，不安排本期新发布。[会议 Task 用户价值审计](./MEETING_NOTES_USER_VALUE_AUDIT_2026-10-06_CN.md)确认双语 200/noindex 与 Task-first 基础，但三卡具体限制缺失、中文理由英文、空泛约束及重复来源需最小整改；移动端视觉 N/A。本轮仅文档/候选 JSON，生产写入 0，未改页面、数据库、索引或 sitemap；独立 worktree 本地提交、不 push。
 
-2026-10-04 通用 Task Page 语义修正：能力门禁统一为至少一条 required、preferred 可为 0..n；所有展示中的
-required/preferred 关系仍须 published/current、定义 active 且有理由。CL-02 两条真实 Task Capability 继续均为 required，
-移除缺 preferred blocker 后 research-with-citations 仍因 Gemini Notebook 与 Perplexity Fit 未发布、Gemini 双语角色理由不
-清而为 **1/3，HOLD**。Task Page 专项、Capability read model 与 Decision review gate 测试通过，`tsc --noEmit` 通过；确认
-`.env.local` 被忽略后用本机配置软链接重跑，完整 build 通过。`test:meeting-notes-remediation` 另有旧断言要求页面注册表为
-空，与现有 meeting-notes 审批状态不符；测试未改，留待独立 QA 作 baseline 归因。无生产写入、页面放行、push 或
-deploy，Task Page 仍 404/noindex 且 sitemap excluded。该通用语义修正不是 Task Page 批准；交付提交后等待独立 QA。详
-见[Task Page 编辑预检审计](./DECISION_GRAPH_CL02_TASK_PAGE_EDITORIAL_GATE_2026-10-04_CN.md)。
+2026-10-04 通用 Task Page 语义修正：能力门禁统一为至少一条 required、preferred 可为 0..n；所有展示中的 required/preferred 关系仍须 published/current、定义 active 且有理由。CL-02 两条真实 Task Capability 继续均为 required，移除缺 preferred blocker 后 research-with-citations 仍因 Gemini Notebook 与 Perplexity Fit 未发布、Gemini 双语角色理由不清而为 **1/3，HOLD**。Task Page 专项、Capability read model 与 Decision review gate 测试通过，`tsc --noEmit` 通过；确认 `.env.local` 被忽略后用本机配置软链接重跑，完整 build 通过。`test:meeting-notes-remediation` 另有旧断言要求页面注册表为空，与现有 meeting-notes 审批状态不符；测试未改，留待独立 QA 作 baseline 归因。无生产写入、页面放行、push 或 deploy，Task Page 仍 404/noindex 且 sitemap excluded。该通用语义修正不是 Task Page 批准；交付提交后等待独立 QA。详见[Task Page 编辑预检审计](./DECISION_GRAPH_CL02_TASK_PAGE_EDITORIAL_GATE_2026-10-04_CN.md)。
 
-2026-10-04 CL02 Task Page 编辑预检经 QA 补正并于 `2026-10-04T12:28:15.024Z` 完成 Supabase/Neon 只读回读：claim 的现有
-`source_type` 必须为 `official` 才能满足 Fit 证据门槛；Consensus Fit `published`，Gemini Notebook 与 Perplexity Fit
-`reviewed`，合格仍为 **1/3，HOLD**。当时报告的 Task Capability preferred 缺口现已确认为通用读模型门槛误设，不再要求改变
-两条真实 required 关系。专项模拟测试、tsc、完整 build 通过；无生产写入、页面放行、push 或 deploy，Task Page 仍
-404/noindex 且 sitemap excluded。详
-见[Task Page 编辑预检审计](./DECISION_GRAPH_CL02_TASK_PAGE_EDITORIAL_GATE_2026-10-04_CN.md)。
+2026-10-04 CL02 Task Page 编辑预检经 QA 补正并于 `2026-10-04T12:28:15.024Z` 完成 Supabase/Neon 只读回读：claim 的现有 `source_type` 必须为 `official` 才能满足 Fit 证据门槛；Consensus Fit `published`，Gemini Notebook 与 Perplexity Fit `reviewed`，合格仍为 **1/3，HOLD**。当时报告的 Task Capability preferred 缺口现已确认为通用读模型门槛误设，不再要求改变两条真实 required 关系。专项模拟测试、tsc、完整 build 通过；无生产写入、页面放行、push 或 deploy，Task Page 仍 404/noindex 且 sitemap excluded。详见[Task Page 编辑预检审计](./DECISION_GRAPH_CL02_TASK_PAGE_EDITORIAL_GATE_2026-10-04_CN.md)。
 
-2026-10-04 Perplexity CL-02 Stage 2 **关系审核与生产只读回验均通过**。`--relation-reviewed` 于
-`2026-10-04T10:36:43.616Z` 输出 `productionWrites=0`：profile 1、source 5、claim 7、Capability 2、Fit
-1、Decision/Capability/Fit links
-`[6,10,7]`，`status=relation-reviewed`，`stateMd5=c26a02ce57093a9d33cdfd68a3c46469`。Task 仍
-`404 + noindex`，`sitemapEligible=false`；Perplexity canonical 工具页也未进入 sitemap。Consensus/Gemini 基线保持。关系审
-核没有授权发布 Task 或工具索引。
-见[候选交付](./PERPLEXITY_STAGE2_CANDIDATE_DELIVERY_2026-10-03_CN.md)、[官方字段审计](./PERPLEXITY_STAGE2_OFFICIAL_FACT_AUDIT_2026-10-03_CN.md)。
+2026-10-04 Perplexity CL-02 Stage 2 **关系审核与生产只读回验均通过**。`--relation-reviewed` 于 `2026-10-04T10:36:43.616Z` 输出 `productionWrites=0`：profile 1、source 5、claim 7、Capability 2、Fit 1、Decision/Capability/Fit links `[6,10,7]`，`status=relation-reviewed`，`stateMd5=c26a02ce57093a9d33cdfd68a3c46469`。Task 仍 `404 + noindex`，`sitemapEligible=false`；Perplexity canonical 工具页也未进入 sitemap。Consensus/Gemini 基线保持。关系审核没有授权发布 Task 或工具索引。见[候选交付](./PERPLEXITY_STAGE2_CANDIDATE_DELIVERY_2026-10-03_CN.md)、[官方字段审计](./PERPLEXITY_STAGE2_OFFICIAL_FACT_AUDIT_2026-10-03_CN.md)。
 
-2026-10-03 Gemini Notebook Stage 2 已完成生产审核与关系收口。第一阶段 Neon 身份迁移继续保持固定 ID/`notebooklm` slug、现
-名与官网、`published/monitor`、`noindex, follow` 及 sitemap 排除。Admin Evidence Review Queue 基础设施已部署，10 条
-Google 官方 claim 已逐条审核为 verified；受控 RPC 已将既有草稿收口为 1 个 ready profile、7 个 official source、1 个
-reviewed Decision、2 个 reviewed Tool Capability、1 个 reviewed conditional Fit，并建立精确的 5 条 Decision、9 条
-Capability、6 条 Fit 同 owner evidence link。编辑责任缺失由提交 `0b8eeec4` 修复，专项测试、TypeScript 与完整 build 通
-过。2026-10-03T07:59:17.966Z 最终只读 verifier 输出
-`stateMd5=486def34a4e7bae92811a42ed882804a`、`productionWrites=0`；`/cn/tasks/research-with-citations` 仍为
-`404 + noindex`，Gemini Notebook 仍因 `indexing_paused` 不可索引，Task/工具均未进入 sitemap。Stage 2 状态为**已审核、关
-系已建立、公开发布门禁仍 HOLD**。详
-见[Stage 2 交付记录](./GEMINI_NOTEBOOK_STAGE2_SUPABASE_DELIVERY_2026-10-01_CN.md)与[身份专项记录](./GEMINI_NOTEBOOK_IDENTITY_RESEARCH_CANDIDATE_2026-09-30_CN.md)。
+2026-10-03 Gemini Notebook Stage 2 已完成生产审核与关系收口。第一阶段 Neon 身份迁移继续保持固定 ID/`notebooklm` slug、现名与官网、`published/monitor`、`noindex, follow` 及 sitemap 排除。Admin Evidence Review Queue 基础设施已部署，10 条 Google 官方 claim 已逐条审核为 verified；受控 RPC 已将既有草稿收口为 1 个 ready profile、7 个 official source、1 个 reviewed Decision、2 个 reviewed Tool Capability、1 个 reviewed conditional Fit，并建立精确的 5 条 Decision、9 条 Capability、6 条 Fit 同 owner evidence link。编辑责任缺失由提交 `0b8eeec4` 修复，专项测试、TypeScript 与完整 build 通过。2026-10-03T07:59:17.966Z 最终只读 verifier 输出 `stateMd5=486def34a4e7bae92811a42ed882804a`、`productionWrites=0`；`/cn/tasks/research-with-citations` 仍为 `404 + noindex`，Gemini Notebook 仍因 `indexing_paused` 不可索引，Task/工具均未进入 sitemap。Stage 2 状态为**已审核、关系已建立、公开发布门禁仍 HOLD**。详见[Stage 2 交付记录](./GEMINI_NOTEBOOK_STAGE2_SUPABASE_DELIVERY_2026-10-01_CN.md)与[身份专项记录](./GEMINI_NOTEBOOK_IDENTITY_RESEARCH_CANDIDATE_2026-09-30_CN.md)。
 
-2026-09-30 CL-02 `research-with-citations` 三工具只读盘点：Consensus、NotebookLM、Perplexity 三个既有 published 实体查重
-通过；目前仅 Consensus 的 1 条 Tool Capability/1 条 Fit 已 published，并有同 owner 的 7+6 evidence links。NotebookLM 与
-Perplexity 均无 Decision profile/source/claim/关系；Google 官方已将 NotebookLM 更名 Gemini Notebook，旧目录 URL 301 至新
-域名。三种角色分别是学术论文检索与证据摘要、用户选定资料的溯源综合、开放网页检索与引用回答；来源链接不等于结论正确。结论
-**HOLD_EVIDENCE_AND_IDENTITY**，不生成关系 SQL/manifest、不创建新 Task/工具页，不放开第二个 Task Page；当前
-`/cn/tasks/research-with-citations` 为 404。详见[专项盘点](./DECISION_GRAPH_CL02_THREE_TOOL_HOLD_2026-09-30_CN.md)。生产
-写入 0，无 push/deploy。
+2026-09-30 CL-02 `research-with-citations` 三工具只读盘点：Consensus、NotebookLM、Perplexity 三个既有 published 实体查重通过；目前仅 Consensus 的 1 条 Tool Capability/1 条 Fit 已 published，并有同 owner 的 7+6 evidence links。NotebookLM 与 Perplexity 均无 Decision profile/source/claim/关系；Google 官方已将 NotebookLM 更名 Gemini Notebook，旧目录 URL 301 至新域名。三种角色分别是学术论文检索与证据摘要、用户选定资料的溯源综合、开放网页检索与引用回答；来源链接不等于结论正确。结论 **HOLD_EVIDENCE_AND_IDENTITY**，不生成关系 SQL/manifest、不创建新 Task/工具页，不放开第二个 Task Page；当前 `/cn/tasks/research-with-citations` 为 404。详见[专项盘点](./DECISION_GRAPH_CL02_THREE_TOOL_HOLD_2026-09-30_CN.md)。生产写入 0，无 push/deploy。
 
-2026-09-30 Elicit 发布门禁再次收口：Neon `BEGIN READ ONLY` 的 `tools` 多字段匹配 0、Supabase profile 匹配 0；三语言预留
-壳均为 `200 + self-canonical + noindex`，sitemap 126 URL 且 Elicit 0。官方套餐、综述、API、语料、导出、隐私与限制重新回
-读，UNSW/LSHTM 双独立实际使用继续满足市场门槛；真实 EN/CN/TW Decision Card 已写为**未发布编辑稿**。官方 logo 与真实产品
-媒体缺本站可复用权利依据，内容门槛仍 HOLD，整体 `HOLD_EVIDENCE`。未生成 QA 发布候选、未注册发布器或准备数据库事务；无生
-产写入、页面/SEO/索引/sitemap 改动、push、deploy。详见[09-30 专项包](./ELICIT_RELEASE_GATE_RECHECK_2026-09-30_CN.md)。
+2026-09-30 Elicit 发布门禁再次收口：Neon `BEGIN READ ONLY` 的 `tools` 多字段匹配 0、Supabase profile 匹配 0；三语言预留壳均为 `200 + self-canonical + noindex`，sitemap 126 URL 且 Elicit 0。官方套餐、综述、API、语料、导出、隐私与限制重新回读，UNSW/LSHTM 双独立实际使用继续满足市场门槛；真实 EN/CN/TW Decision Card 已写为**未发布编辑稿**。官方 logo 与真实产品媒体缺本站可复用权利依据，内容门槛仍 HOLD，整体 `HOLD_EVIDENCE`。未生成 QA 发布候选、未注册发布器或准备数据库事务；无生产写入、页面/SEO/索引/sitemap 改动、push、deploy。详见[09-30 专项包](./ELICIT_RELEASE_GATE_RECHECK_2026-09-30_CN.md)。
 
-2026-09-29 Elicit 剩余发布门禁复核：生产只读查重为 0，双语预留页仍 `200 + self-canonical + noindex`，sitemap 无 Elicit；
-两项独立机构实际使用满足市场门槛，专用综述流程与 Consensus 引用问答的 Task 差异可说明。但官方价格页多组金额/额度未消歧，
-精确值维持 unknown；现有 Elicit 素材为占位图、缺可复用官方 logo/真实产品媒体及完成审校的三语言内容，八项中“内容真实完整”
-HOLD，整体维持 `HOLD_EVIDENCE`。无金额的 freemium/plan-gated 文案可作后续候选，不形成发布授权。详
-见[专项证据包](./ELICIT_RELEASE_GATE_RECHECK_2026-09-29_CN.md)；没有生产写入、页面/SEO/index/sitemap 修改、push 或
-deploy。
+2026-09-29 Elicit 剩余发布门禁复核：生产只读查重为 0，双语预留页仍 `200 + self-canonical + noindex`，sitemap 无 Elicit；两项独立机构实际使用满足市场门槛，专用综述流程与 Consensus 引用问答的 Task 差异可说明。但官方价格页多组金额/额度未消歧，精确值维持 unknown；现有 Elicit 素材为占位图、缺可复用官方 logo/真实产品媒体及完成审校的三语言内容，八项中“内容真实完整” HOLD，整体维持 `HOLD_EVIDENCE`。无金额的 freemium/plan-gated 文案可作后续候选，不形成发布授权。详见[专项证据包](./ELICIT_RELEASE_GATE_RECHECK_2026-09-29_CN.md)；没有生产写入、页面/SEO/index/sitemap 修改、push 或 deploy。
 
-2026-09-29 N6/N7 SAFE 事实更新已在生产提交并完成候选验证。仅覆盖 Grammarly、Jasper、Descript 的审计候
-选；Canva/HOLD/NO_CHANGE 不进入计划。执行时间 2026-09-29 08:02（Asia/Shanghai）：只读状态与默认 dry-run 回读均为
-`alreadyApplied=true`、`changedPaths=[]`，目标哈希分别为 Grammarly
-`0c3cb98119b9b836fbd700f4160e6dd46d7f8693035b8abcf0257c7a2be9eb96`、Jasper
-`ece814dd76b32e4e65da4aad8b3cc6433892cf4c779babb7f4cd33c014386abd`、Descript
-`8cbbf70731fdb2ef827e5e3cf6a91026a2cb9301de2cccf211a50e85749842a3`；dry-run 事务已 `ROLLBACK`。身份、状态、复查日期及保
-护字段断言通过，索引状态未变：Grammarly/Jasper `continue_index`、Descript `monitor`；线上双语页面、canonical、robots 与
-sitemap 符合当前状态。Canva 仍为 `HOLD-CONFLICT` 且无生产实体；CL-05/06 的 Tool Capability/Fit 关系未发布，账户权益等既
-有 HOLD 继续。执行步骤与回读详见[专项运行与回滚文档](./N6_N7_SAFE_FACT_UPDATE_RUNBOOK_2026-09-29_CN.md)。
+2026-09-29 N6/N7 SAFE 事实更新已在生产提交并完成候选验证。仅覆盖 Grammarly、Jasper、Descript 的审计候选；Canva/HOLD/NO_CHANGE 不进入计划。执行时间 2026-09-29 08:02（Asia/Shanghai）：只读状态与默认 dry-run 回读均为 `alreadyApplied=true`、`changedPaths=[]`，目标哈希分别为 Grammarly `0c3cb98119b9b836fbd700f4160e6dd46d7f8693035b8abcf0257c7a2be9eb96`、Jasper `ece814dd76b32e4e65da4aad8b3cc6433892cf4c779babb7f4cd33c014386abd`、Descript `8cbbf70731fdb2ef827e5e3cf6a91026a2cb9301de2cccf211a50e85749842a3`；dry-run 事务已 `ROLLBACK`。身份、状态、复查日期及保护字段断言通过，索引状态未变：Grammarly/Jasper `continue_index`、Descript `monitor`；线上双语页面、canonical、robots 与 sitemap 符合当前状态。Canva 仍为 `HOLD-CONFLICT` 且无生产实体；CL-05/06 的 Tool Capability/Fit 关系未发布，账户权益等既有 HOLD 继续。执行步骤与回读详见[专项运行与回滚文档](./N6_N7_SAFE_FACT_UPDATE_RUNBOOK_2026-09-29_CN.md)。
 
 执行状态：进行中；索引保护及本周可证实历史补账完成，本周至少 12 次放行、剩余额度 0，新增索引批准保持暂停。
 
@@ -119,102 +43,49 @@ Capability、Tool Capability、Task Capability 数据层，并依次交付首批
 施依据见 [差异化基础能力一周实施计划](./DECISION_GRAPH_DIFFERENTIATION_ONE_WEEK_PLAN_CN.md)。
 
 2026-09-22 DIFF-00/01 本地交付完成：差异化计划已收敛为唯一实施依据；新增的 Supabase migration 仅建立
-`decision_capabilities`、`tool_capabilities`、`task_capabilities` 及其 claim links，继续把 Neon `tool_id` 作为逻辑引用，
-未写入工具数据、未改变 URL、sitemap 或索引策略。发布门禁要求 active Capability/Task、人工 reviewer、当前 review window
-与同 owner 的 verified、未失效、未冲突 claim；事务末会阻止删除、修改、错配 claim 或重分配其 owner profile 后仍保留
-`published`。时间自然到期时公开 RLS 按实时有效性和 active 状态立即过滤，raw claim links 不对浏览器开放。状态为“待生产迁
-移与只读回读”，不得在迁移前启动 DIFF-02。
+`decision_capabilities`、`tool_capabilities`、`task_capabilities` 及其 claim links，继续把 Neon `tool_id` 作为逻辑引用，未写入
+工具数据、未改变 URL、sitemap 或索引策略。发布门禁要求 active Capability/Task、人工 reviewer、当前 review window 与同 owner 的
+verified、未失效、未冲突 claim；事务末会阻止删除、修改、错配 claim 或重分配其 owner profile 后仍保留 `published`。时间自然到期
+时公开 RLS 按实时有效性和 active 状态立即过滤，raw claim links 不对浏览器开放。状态为“待生产迁移与只读回读”，不得在迁移前
+启动 DIFF-02。
 
-2026-09-23 DIFF-02 本地交付完成：`/[locale]/admin/decision` 新增最小 Capability 管理模块，可维护
-Capability、draft/reviewed Tool Capability、Task Capability 和经 UUID 验证的 evidence association；所有写入均经管理员
-server action，含输入校验与 loading/success/error 状态。统一服务端读模型只返回 active/current 关系及来源 URL、核验/复查
-日期摘要，过滤错误 owner、候选、冲突、失效和过期 claim，且不把 raw claim/link/claim ID 下发给浏览器。状态为“待
-DIFF-01/02 生产迁移与只读回读”，不构成 seed 或公开页面授权。
+2026-09-23 DIFF-02 本地交付完成：`/[locale]/admin/decision` 新增最小 Capability 管理模块，可维护 Capability、draft/reviewed
+Tool Capability、Task Capability 和经 UUID 验证的 evidence association；所有写入均经管理员 server action，含输入校验与
+loading/success/error 状态。统一服务端读模型只返回 active/current 关系及来源 URL、核验/复查日期摘要，过滤错误 owner、候选、冲突、
+失效和过期 claim，且不把 raw claim/link/claim ID 下发给浏览器。状态为“待 DIFF-01/02 生产迁移与只读回读”，不构成 seed 或公开页面授权。
 
-2026-09-23 DIFF-03 已完成并通过生产只读 verifier 与 QA。生产当前完整回读为 6 Task（复用已有 `meeting-notes`）、12
-Capability、12 Task Capability、7 Tool Capability、7 Tool Task Fit，以及 Tool Capability 与 Tool Task Fit 两类各 7 条
-claim links。Fathom、Otter.ai、Fireflies 的 3 条既有 published meeting fit 保持原 status、语义与证据链接；本批其余关系均
-为 reviewed。
+2026-09-23 DIFF-03 已完成并通过生产只读 verifier 与 QA。生产当前完整回读为 6 Task（复用已有 `meeting-notes`）、12 Capability、
+12 Task Capability、7 Tool Capability、7 Tool Task Fit，以及 Tool Capability 与 Tool Task Fit 两类各 7 条 claim links。Fathom、
+Otter.ai、Fireflies 的 3 条既有 published meeting fit 保持原 status、语义与证据链接；本批其余关系均为 reviewed。
 
-执行过程中，旧 SQL Editor 导出跨顶层语句提交，导致 `ON COMMIT DROP` 临时表在后续语句中不可见并报 `42P01`。修复版将
-guard、写入、claim links、postcondition 和临时表清理合并为单条原子 `DO` 语句；修复提交 `1ae1b431` 与完整导出晚期失败回滚
-测试提交 `55308042` 已进入 main。生产完整回读和 QA 已确认数据正确，无需再次执行 SQL。DIFF-03 状态为“已完成”，下一项为
-DIFF-04 Task Page。本阶段未改工具目录记录、URL、sitemap 或索引策略。
+执行过程中，旧 SQL Editor 导出跨顶层语句提交，导致 `ON COMMIT DROP` 临时表在后续语句中不可见并报 `42P01`。修复版将 guard、
+写入、claim links、postcondition 和临时表清理合并为单条原子 `DO` 语句；修复提交 `1ae1b431` 与完整导出晚期失败回滚测试提交
+`55308042` 已进入 main。生产完整回读和 QA 已确认数据正确，无需再次执行 SQL。DIFF-03 状态为“已完成”，下一项为 DIFF-04 Task Page。
+本阶段未改工具目录记录、URL、sitemap 或索引策略。
 
-2026-09-23 DIFF-04 代码完成，发布注册表为空，待首个 Task 编辑批准：新增 `/<locale>/tasks/<slug>` 独立 Task Page，限首批
-6 Task。静态注册表先拦截未批准 slug 并返回硬 404；获批准的页面仍由服务端读模型复核 active Task、完整的当前 published
-required/preferred Task Capability、至少 3 个不同的已发布 Neon 工具及其当前 published、同 owner claim-backed fit。数据临
-时失效时页面继续 `notFound` + `noindex`。页面提供任务定义、约束、能力、3 个候选的适配/限制、证据来源与日期，以及已有
-Finder/工具详情入口，不向浏览器输出 raw claim。页面始终 `noindex, follow`，沿用 canonical 规则，未加入 sitemap。注册表须
-随 freshness 监控或发布撤回同步移除 slug；当前注册表为空，所有 Task Page 均为硬 404。生产 12 条 Task Capability 仍为
-reviewed，不构成编辑批准。
+2026-09-23 DIFF-04 代码完成，发布注册表为空，待首个 Task 编辑批准：新增 `/<locale>/tasks/<slug>` 独立 Task Page，限首批 6 Task。静态注册表先拦截未批准 slug 并返回硬 404；获批准的页面仍由服务端读模型复核 active Task、完整的当前 published required/preferred Task Capability、至少 3 个不同的已发布 Neon 工具及其当前 published、同 owner claim-backed fit。数据临时失效时页面继续 `notFound` + `noindex`。页面提供任务定义、约束、能力、3 个候选的适配/限制、证据来源与日期，以及已有 Finder/工具详情入口，不向浏览器输出 raw claim。页面始终 `noindex, follow`，沿用 canonical 规则，未加入 sitemap。注册表须随 freshness 监控或发布撤回同步移除 slug；当前注册表为空，所有 Task Page 均为硬 404。生产 12 条 Task Capability 仍为 reviewed，不构成编辑批准。
 
-2026-09-23 DIFF-05 代码完成、待独立编辑批准：现有 Tool Decision 扩展为 Tool Intelligence / Decision Card，复用安全
-Capability 读模型与已加载的 Evidence Ledger。只有 active/current/published、同 owner verified claim 支撑的 Tool
-Capability 才显示支持程度、可用范围、套餐要求、限制与安全来源日期；Evidence Ledger 只向判断卡传递计数及真实 claim 的最近
-核验/下次复查日期，不复制原始账本条目。辅助数据读取失败时工具页继续打开。当前生产 7 条 Tool Capability 均为 reviewed，所
-以 Capability 区域暂不公开；这不是内容已上线或关系获发布授权。
+2026-09-23 DIFF-05 代码完成、待独立编辑批准：现有 Tool Decision 扩展为 Tool Intelligence / Decision Card，复用安全 Capability 读模型与已加载的 Evidence Ledger。只有 active/current/published、同 owner verified claim 支撑的 Tool Capability 才显示支持程度、可用范围、套餐要求、限制与安全来源日期；Evidence Ledger 只向判断卡传递计数及真实 claim 的最近核验/下次复查日期，不复制原始账本条目。辅助数据读取失败时工具页继续打开。当前生产 7 条 Tool Capability 均为 reviewed，所以 Capability 区域暂不公开；这不是内容已上线或关系获发布授权。
 
-2026-09-23 DIFF-06 代码与独立 QA 完成、待 Tool Capability 编辑批准：仅在既有受控 verified comparison 页面，为 2-4 个候选
-追加结构化 Capability 差异矩阵；数据复用 DIFF-05 的安全读模型，只呈现当前 published、active、同 owner verified、无冲突且
-未过期的关系与来源摘要。缺少关系明确显示“未知”，不推断“不支持”；无合格关系或辅助读取失败时不显示矩阵，原有选择结论、限
-制、静态官方证据及 CTA 保持可用。页面继续 noindex，不新增组合 URL 或 sitemap 条目，也不下发 raw
-claim/profile/link/capability ID、值或摘录。当前生产 Tool Capability 仍全为 reviewed，矩阵尚未公开，关系发布仍需独立编辑
-批准。
+2026-09-23 DIFF-06 代码与独立 QA 完成、待 Tool Capability 编辑批准：仅在既有受控 verified comparison 页面，为 2-4 个候选追加结构化 Capability 差异矩阵；数据复用 DIFF-05 的安全读模型，只呈现当前 published、active、同 owner verified、无冲突且未过期的关系与来源摘要。缺少关系明确显示“未知”，不推断“不支持”；无合格关系或辅助读取失败时不显示矩阵，原有选择结论、限制、静态官方证据及 CTA 保持可用。页面继续 noindex，不新增组合 URL 或 sitemap 条目，也不下发 raw claim/profile/link/capability ID、值或摘录。当前生产 Tool Capability 仍全为 reviewed，矩阵尚未公开，关系发布仍需独立编辑批准。
 
-2026-09-23 DIFF-07 只读收口与独立 QA 完成，未自动发布关系：生产回读为 6 Task、12 Capability、12 Task Capability、7 Tool
-Capability、7 Tool Task Fit，其中 3 条 fit 为既有 published。技术专项、TypeScript 及已完成的 DIFF-06 build/生产 SEO
-smoke 通过，但内容 QA 仅将 5 条 Task Capability 留作逐条编辑候选；其余 7 条 Tool Capability 与 4 条 reviewed fit 因支持
-范围、套餐限制或适配理由不足全部 hold。3 条既有 meeting-notes fit 的 `reviewed_by` 为 NULL，需核实历史编辑复核；现有门禁
-并未因此判为失效。所有 Task Page 继续关闭。下一步优先修复 meeting-notes 组，重新核对临近到期的官方来源，再做独立内容 QA
-与编辑批准；不得为覆盖率制造关系。详见
-[DIFF-07 发布审计](./DECISION_GRAPH_DIFF07_RELEASE_AUDIT_2026-09-23_CN.md)。DIFF-08 Decision Assistant 仍为条件阻塞。
+2026-09-23 DIFF-07 只读收口与独立 QA 完成，未自动发布关系：生产回读为 6 Task、12 Capability、12 Task Capability、7 Tool Capability、7 Tool Task Fit，其中 3 条 fit 为既有 published。技术专项、TypeScript 及已完成的 DIFF-06 build/生产 SEO smoke 通过，但内容 QA 仅将 5 条 Task Capability 留作逐条编辑候选；其余 7 条 Tool Capability 与 4 条 reviewed fit 因支持范围、套餐限制或适配理由不足全部 hold。3 条既有 meeting-notes fit 的 `reviewed_by` 为 NULL，需核实历史编辑复核；现有门禁并未因此判为失效。所有 Task Page 继续关闭。下一步优先修复 meeting-notes 组，重新核对临近到期的官方来源，再做独立内容 QA 与编辑批准；不得为覆盖率制造关系。详见 [DIFF-07 发布审计](./DECISION_GRAPH_DIFF07_RELEASE_AUDIT_2026-09-23_CN.md)。DIFF-08 Decision Assistant 仍为条件阻塞。
 
-2026-09-25 DIFF-07 meeting-notes 整改已在生产执行并通过总控独立只读验收：2/2 Task Capability、3/3 Tool Capability 为
-published/current，3/3 既有 fit 为 published/current 且有 reviewer；6/6 官方 source 为 current，6/6 claim 为
-verified/current，Capability 证据覆盖 support/availability/plan/limitation，fit 证据覆盖 fit/limitation。Decision
-foundation 与 graph seed verifier 均 PASS（后者回读 8 条 published 关系），生产 SEO smoke PASS，sitemap 共 126 个
-URL。`/cn/tasks/meeting-notes` 仍为 404，sitemap Task URL 为 0；Task Page 注册表继续关闭，未放开 URL、`continue_index`
-或工具索引。**仅 meeting-notes 组完成本次整改**；DIFF-07 其余 cluster 转入编辑整改与独立验收，DIFF-08 Decision Assistant
-继续 blocked。详见 [DIFF-07 发布审计](./DECISION_GRAPH_DIFF07_RELEASE_AUDIT_2026-09-23_CN.md)。
+2026-09-25 DIFF-07 meeting-notes 整改已在生产执行并通过总控独立只读验收：2/2 Task Capability、3/3 Tool Capability 为 published/current，3/3 既有 fit 为 published/current 且有 reviewer；6/6 官方 source 为 current，6/6 claim 为 verified/current，Capability 证据覆盖 support/availability/plan/limitation，fit 证据覆盖 fit/limitation。Decision foundation 与 graph seed verifier 均 PASS（后者回读 8 条 published 关系），生产 SEO smoke PASS，sitemap 共 126 个 URL。`/cn/tasks/meeting-notes` 仍为 404，sitemap Task URL 为 0；Task Page 注册表继续关闭，未放开 URL、`continue_index` 或工具索引。**仅 meeting-notes 组完成本次整改**；DIFF-07 其余 cluster 转入编辑整改与独立验收，DIFF-08 Decision Assistant 继续 blocked。详见 [DIFF-07 发布审计](./DECISION_GRAPH_DIFF07_RELEASE_AUDIT_2026-09-23_CN.md)。
 
-2026-09-30 meeting-notes 首个 Task Page 最终门禁与生产验证完成：Owner 已执行受控
-SQL，`meeting-summary-and-actions=required`、`meeting-transcription=preferred`，二者均
-published/current/reviewer-backed；三条 Fit 均 published/current，9/9 evidence link 为同 owner verified/current。批准提
-交 `97c4f400` 已进入 main；生产 `/tasks/meeting-notes` 与 `/cn/tasks/meeting-notes` 均为 200、自指
-canonical、`noindex, follow`，页面可见 Fathom、Otter.ai、Fireflies 及其官方来源、核验/复查日期。其余五个首批 Task 仍为
-404；sitemap 共 126 URL、Task URL 为 0；production SEO smoke PASS。未改 sitemap 生成器、工具索引或 Decision
-Assistant；freshness 失效或审批撤回时必须同步移除注册表 slug。详见
-[DIFF-07 发布审计](./DECISION_GRAPH_DIFF07_RELEASE_AUDIT_2026-09-23_CN.md)。
+2026-09-30 meeting-notes 首个 Task Page 最终门禁与生产验证完成：Owner 已执行受控 SQL，`meeting-summary-and-actions=required`、`meeting-transcription=preferred`，二者均 published/current/reviewer-backed；三条 Fit 均 published/current，9/9 evidence link 为同 owner verified/current。批准提交 `97c4f400` 已进入 main；生产 `/tasks/meeting-notes` 与 `/cn/tasks/meeting-notes` 均为 200、自指 canonical、`noindex, follow`，页面可见 Fathom、Otter.ai、Fireflies 及其官方来源、核验/复查日期。其余五个首批 Task 仍为 404；sitemap 共 126 URL、Task URL 为 0；production SEO smoke PASS。未改 sitemap 生成器、工具索引或 Decision Assistant；freshness 失效或审批撤回时必须同步移除注册表 slug。详见 [DIFF-07 发布审计](./DECISION_GRAPH_DIFF07_RELEASE_AUDIT_2026-09-23_CN.md)。
 
-2026-09-25 剩余五个 Task cluster 的编辑整改方案已通过 CL-00 独立 review（QA_PASS）；下一步为 CL-01 Admin closure。执行顺
-序、Admin 常规编辑闭环、逐组原子发布和 Task Page 独立门禁见
-[剩余 cluster 整改计划](./DECISION_GRAPH_REMAINING_CLUSTER_REMEDIATION_PLAN_CN.md)。本条仅链接计划，不代表任何新增关系获
-批或发布。
+2026-09-25 剩余五个 Task cluster 的编辑整改方案已通过 CL-00 独立 review（QA_PASS）；下一步为 CL-01 Admin closure。执行顺序、Admin 常规编辑闭环、逐组原子发布和 Task Page 独立门禁见 [剩余 cluster 整改计划](./DECISION_GRAPH_REMAINING_CLUSTER_REMEDIATION_PLAN_CN.md)。本条仅链接计划，不代表任何新增关系获批或发布。
 
-2026-09-27 CL-03 Ray3.2 evidence/关系候选获独立 QA_PASS，允许保留候选包；`availability` 直接证据仍缺，生产关系继续
-HOLD、未发布。CL-04 对既有 `build-app-with-ai`、n8n、OpenRouter 完成资格审查与字段级本地候选，两条现有 Task Fit 均建议
-withdraw；没有生产关系写入或 Task Page、索引放行。详
-见[CL-04 资格审查](./DECISION_GRAPH_CL04_APP_BUILD_ELIGIBILITY_2026-09-27_CN.md)。
+2026-09-27 CL-03 Ray3.2 evidence/关系候选获独立 QA_PASS，允许保留候选包；`availability` 直接证据仍缺，生产关系继续 HOLD、未发布。CL-04 对既有 `build-app-with-ai`、n8n、OpenRouter 完成资格审查与字段级本地候选，两条现有 Task Fit 均建议 withdraw；没有生产关系写入或 Task Page、索引放行。详见[CL-04 资格审查](./DECISION_GRAPH_CL04_APP_BUILD_ELIGIBILITY_2026-09-27_CN.md)。
 
-2026-09-27 CL-07 剩余五组生产只读 closeout 完
-成：[汇总审计](./DECISION_GRAPH_CL07_PRODUCTION_CLOSEOUT_2026-09-27_CN.md)确认 CL-02 的 2 Task Capability + 1 Consensus
-Tool Capability + 1 Fit 仍为 published/current、13 条目标 evidence link 通过 owner/source/claim 门禁；CL-03 Ray3.2 候选
-QA_PASS 但 availability 缺口继续 HOLD；CL-04 n8n/OpenRouter 两条 Fit 仅建议 withdraw、生产仍 reviewed，Tool Capability
-contextual/HOLD；CL-05 Voice 两条 Task rationale 候选、ElevenLabs/Descript conditional/HOLD；CL-06 Brand 两条 Task
-rationale 候选、Jasper/Grammarly conditional 与 Claude contextual/HOLD。CL-05/06 Tool Capability/Fit 均未创建。五个 Task
-URL 仍为 404，robots/sitemap 正常，sitemap 126 URL、0 Task URL；Decision 专项、tsc、完整 build 和生产 SEO smoke 通过。没
-有生产写入、发布、部署或索引改动。DIFF-08 的每 Task 至少 3 条真实 published Fit 等硬条件未达，继续 blocked；后续按各编辑
-包补证据、独立 QA 与受控单组审批。
+2026-09-27 CL-07 剩余五组生产只读 closeout 完成：[汇总审计](./DECISION_GRAPH_CL07_PRODUCTION_CLOSEOUT_2026-09-27_CN.md)确认 CL-02 的 2 Task Capability + 1 Consensus Tool Capability + 1 Fit 仍为 published/current、13 条目标 evidence link 通过 owner/source/claim 门禁；CL-03 Ray3.2 候选 QA_PASS 但 availability 缺口继续 HOLD；CL-04 n8n/OpenRouter 两条 Fit 仅建议 withdraw、生产仍 reviewed，Tool Capability contextual/HOLD；CL-05 Voice 两条 Task rationale 候选、ElevenLabs/Descript conditional/HOLD；CL-06 Brand 两条 Task rationale 候选、Jasper/Grammarly conditional 与 Claude contextual/HOLD。CL-05/06 Tool Capability/Fit 均未创建。五个 Task URL 仍为 404，robots/sitemap 正常，sitemap 126 URL、0 Task URL；Decision 专项、tsc、完整 build 和生产 SEO smoke 通过。没有生产写入、发布、部署或索引改动。DIFF-08 的每 Task 至少 3 条真实 published Fit 等硬条件未达，继续 blocked；后续按各编辑包补证据、独立 QA 与受控单组审批。
 
-差异化开发执行规则：先定义用户价值和风险，默认最小实现；dormant/noindex 功能不新增网络服务。默认验证为专项测试、`tsc`、
-完整 build 与一次生产模式 smoke；单项超过 60 分钟或连续两次 QA FAIL，交总控重新选方案。仅安全、支付、数据一致性 P0 可扩
-大测试范围。
+差异化开发执行规则：先定义用户价值和风险，默认最小实现；dormant/noindex 功能不新增网络服务。默认验证为专项测试、`tsc`、完整 build 与一次生产模式 smoke；单项超过 60 分钟或连续两次 QA FAIL，交总控重新选方案。仅安全、支付、数据一致性 P0 可扩大测试范围。
 
 2026-09-20 规模化口径更新：生产基线为 63 条工具记录、50 条已公开、13 条获准索引；技术和 SEO 护栏稳定，当前增长瓶颈转为高
-质量工具库存和差异化覆盖。成熟工具正常运营日每天至少公开 1 个、最多 2 个；通过提前维护 Task Cluster 候选缓冲保证大多数日
-期达标。仅证据冲突、重复实体、生产/构建故障、权限阻塞或缓冲确实没有合格对象时可为 0，记录 blocker 并优先补充候选包。索引
-仍逐页审批，每天最多 1 个、目标每周 4 个且硬上限 5 个。完整阶段目标、维护频率和暂停门禁见
+质量工具库存和差异化覆盖。成熟工具正常运营日每天至少公开 1 个、最多 2 个；通过提前维护 Task Cluster 候选缓冲保证大多数日期达标。仅证据冲突、重复实体、生产/构建故障、权限阻塞或缓冲确实没有合格对象时可为 0，记录 blocker 并优先补充候选包。索引仍逐页审批，每天最多 1 个、
+目标每周 4 个且硬上限 5 个。完整阶段目标、维护频率和暂停门禁见
 [高质量工具规模化与分层维护路线图](./CONTENT_SCALE_AND_MAINTENANCE_ROADMAP_2026-09-20_CN.md)。
 
 四周实施排期见 [证据驱动目录优化计划](./FOUR_WEEK_EVIDENCE_LED_DIRECTORY_PLAN_CN.md)。
@@ -410,11 +281,9 @@ Gamma 验收补充：`33e65beb` 部署成功后发现新简版提示被官方快
 
 以下行为在本轮冻结：
 
-- 不批量新增同义 guide、comparison 或 alternatives URL。成熟候选保持 14-21 条 Task Cluster 缓冲；正常运营日每天至少公开
-  1 个、最多 2 个通过全部门槛的成熟工具，新工具默认 `monitor / noindex`。成熟工具在 48-72 小时技术观察后可进入独立索引评
-  审；当前每天最多批准 1 个、目标每周 4 个且硬上限 5 个。只有同时通过资料完整度、独立市场验证和索引复核的条目才进入
-  sitemap；没有合格项时记录 SLA 异常并补池，不发布弱页凑数。详见
-  [工具页索引发布与节奏控制](./TOOL_INDEX_RELEASE_POLICY_CN.md)。
+- 不批量新增同义 guide、comparison 或 alternatives URL。成熟候选保持 14-21 条 Task Cluster 缓冲；正常运营日每天至少公开 1 个、最多 2 个通过全部门槛的成熟工具，新工具默认 `monitor / noindex`。成熟工具在 48-72 小时技术观察后可进入独立索引评审；当前每天最多
+  批准 1 个、目标每周 4 个且硬上限 5 个。只有同时通过资料完整度、独立市场验证和索引复核的条目才进入 sitemap；没有合格项
+  时记录 SLA 异常并补池，不发布弱页凑数。详见 [工具页索引发布与节奏控制](./TOOL_INDEX_RELEASE_POLICY_CN.md)。
 - 不为了“更新日期”批量改写内容；每次更新必须对应真实来源、编辑核查或用户反馈。
 - 不把外链数量作为 SEO 成功指标；分发模块只保留维护，不继续扩功能或执行站外投放。
 
@@ -623,8 +492,8 @@ query、Top 20 page、已抓取未编入索引与软 404 数量。
   Voice、EULA/DPA/sub-processors 与 ethics 复核无实质变化；详见
   [Jasper 受控发布交付](./JASPER_CONTROLLED_RELEASE_2026-09-21_CN.md)。
 - Descript 已于 2026-09-27 完成单项受控发布：官方事实复核后移除过时的固定 avatar credit 示例；生产只读 preflight、
-  rollback、专项测试、TypeScript、完整 build 和显式 commit 均通过。唯一实体为 `published + monitor/noindex`，英中页面保
-  留 self-canonical，不进入 sitemap，也没有索引批准；下次事实复核为 2026-10-27。详见
+  rollback、专项测试、TypeScript、完整 build 和显式 commit 均通过。唯一实体为 `published + monitor/noindex`，英中页面保留
+  self-canonical，不进入 sitemap，也没有索引批准；下次事实复核为 2026-10-27。详见
   [Descript 受控发布交付](./DESCRIPT_CONTROLLED_RELEASE_2026-09-27_CN.md)。
 
 ## 2026-09-22 成熟工具即时质量门禁
@@ -644,139 +513,50 @@ query、Top 20 page、已抓取未编入索引与软 404 数量。
 ## 2026-09-28 Task Cluster 收录组合治理
 
 - 状态：治理规则与现有 14 项候选映射完成；候选深审、公开发布和关系/索引批准均为后续独立门禁。
-- 已将 Task Cluster 作为新工具候选组合的基本选择单位，明确候选必须声明 Task、Capability、Constraint、Evidence 缺口、组合
-  角色、决策差异和后续消费位置；建议每个首批 Cluster 形成 3–5 项 Anchor / Alternative / Gap-filler 组合，证据不足时保持
-  候选/HOLD。
-- 已明确综合排序信号、新工具发布与既有工具更新分轨、成熟工具快速通道仍受质量门禁约束、公开与索引分离、最近 5 项队列的反
-  同质化复盘及 Tool → Task/Capability/Constraint/Evidence → Task Page/Tool Intelligence/Structured Comparison → Decision
-  Assistant 闭环。
-- 唯一规范事实源
-  为[高质量收录与 Best 定位执行规范](./BEST_DIRECTORY_POSITIONING_AND_INTAKE_CN.md)；[成熟候选缓冲池](./MATURE_CANDIDATE_BUFFER_2026-09-20_CN.md)现
-  为 14 项唯一执行台账，逐项记录 primary Cluster、角色、现有 Capability 术语、待核验约束/证据、决策差异、消费位置和研究/
-  发布分轨。`READY_FOR_DEEP_REVIEW=7`、`HOLD_EVIDENCE=3`、`HOLD_DUPLICATE_INTENT=4`、`REJECT=0`；后者包含三个已公开实体
-  与一个只增强既有 Canva canonical 的对象。现有 14 项中可考虑新增实体的仅 10 项，低于 14–21 条可用新工具缓冲目标；本轮只
-  记缺口，不擅增第 15 项。未来 7 个正常运营日每天最多 2 项候选深审/补证，不承诺发布。未注册 Task 与证据缺口保持 HOLD，不
-  代表任何新生产关系、Task Page 或索引获批。索引每日 1、每周目标 4 / 硬上限 5 及成熟工具快速通道继续
-  以[索引政策](./TOOL_INDEX_RELEASE_POLICY_CN.md)为准。
-- 独立 QA 对提交 `b7d718d5` 给出 QA_FAIL，指出旧口径“每日目标 2、最多 3、允许 0”与用户最新明确要求冲突。本次按用户要求修
-  正为成熟工具正常运营日每天至少公开 1 个、最多 2 个；只有证据冲突、重复实体、生产/构建故障、权限阻塞或候选缓冲确实没有
-  合格对象时允许为 0，记录 blocker 并优先补候选包。通过提前维护 Task Cluster 候选缓冲保证大多数日期达标；已收录工具事实
-  更新每日 5-10 个且不占新工具名额；索引仍每日最多 1 个、每周目标 4 个 / 硬上限 5 个，额外公开保持 monitor/noindex。此为
-  独立验收后的文档政策修正。
+- 已将 Task Cluster 作为新工具候选组合的基本选择单位，明确候选必须声明 Task、Capability、Constraint、Evidence 缺口、组合角色、决策差异和后续消费位置；建议每个首批 Cluster 形成 3–5 项 Anchor / Alternative / Gap-filler 组合，证据不足时保持候选/HOLD。
+- 已明确综合排序信号、新工具发布与既有工具更新分轨、成熟工具快速通道仍受质量门禁约束、公开与索引分离、最近 5 项队列的反同质化复盘及 Tool → Task/Capability/Constraint/Evidence → Task Page/Tool Intelligence/Structured Comparison → Decision Assistant 闭环。
+- 唯一规范事实源为[高质量收录与 Best 定位执行规范](./BEST_DIRECTORY_POSITIONING_AND_INTAKE_CN.md)；[成熟候选缓冲池](./MATURE_CANDIDATE_BUFFER_2026-09-20_CN.md)现为 14 项唯一执行台账，逐项记录 primary Cluster、角色、现有 Capability 术语、待核验约束/证据、决策差异、消费位置和研究/发布分轨。`READY_FOR_DEEP_REVIEW=7`、`HOLD_EVIDENCE=3`、`HOLD_DUPLICATE_INTENT=4`、`REJECT=0`；后者包含三个已公开实体与一个只增强既有 Canva canonical 的对象。现有 14 项中可考虑新增实体的仅 10 项，低于 14–21 条可用新工具缓冲目标；本轮只记缺口，不擅增第 15 项。未来 7 个正常运营日每天最多 2 项候选深审/补证，不承诺发布。未注册 Task 与证据缺口保持 HOLD，不代表任何新生产关系、Task Page 或索引获批。索引每日 1、每周目标 4 / 硬上限 5 及成熟工具快速通道继续以[索引政策](./TOOL_INDEX_RELEASE_POLICY_CN.md)为准。
+- 独立 QA 对提交 `b7d718d5` 给出 QA_FAIL，指出旧口径“每日目标 2、最多 3、允许 0”与用户最新明确要求冲突。本次按用户要求修正为成熟工具正常运营日每天至少公开 1 个、最多 2 个；只有证据冲突、重复实体、生产/构建故障、权限阻塞或候选缓冲确实没有合格对象时允许为 0，记录 blocker 并优先补候选包。通过提前维护 Task Cluster 候选缓冲保证大多数日期达标；已收录工具事实更新每日 5-10 个且不占新工具名额；索引仍每日最多 1 个、每周目标 4 个 / 硬上限 5 个，额外公开保持 monitor/noindex。此为独立验收后的文档政策修正。
 - 本次仅修改治理文档；没有更改业务代码、数据库、页面、自动化、发布数据或索引状态。
 
 ## 2026-09-28 N1 候选官方深审
 
-- Elicit 与 Avoma 的官方证据深审完成，结论均为 `HOLD_EVIDENCE`，**待补证据后才可进入发布 preflight**；这不是发布完
-  成。Elicit 的专用综述筛选/提取/导出链与 Consensus 有候选差异，但定价页多组金额、月度用量与独立采用未核清；Avoma 的录制
-  /协作席位、CRM 配置与附加洞察有候选差异，但 Organization 金额、CRM 套餐资格、隐私功能分层及独立采用未核清。
-- 生产 `tools` 的只读姓名/URL/标题查重两项均为 0；两项英中预留 URL 均是 `200 + self-canonical + noindex` 的不可用
-  壳，sitemap 匹配 0。下次发布前须重查别名/实体并复用唯一 canonical。
-- [N1 官方证据审计与候选包](./ELICIT_AVOMA_N1_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)记录官方来源、真实限
-  制、`unknown`、Capability/Constraint/Evidence 建议及后续门
-  禁；[14 项候选台账](./MATURE_CANDIDATE_BUFFER_2026-09-20_CN.md)已更新 readiness。没有生产实体、Decision Graph 关系、页
-  面、sitemap、index、数据库或自动化写入。
+- Elicit 与 Avoma 的官方证据深审完成，结论均为 `HOLD_EVIDENCE`，**待补证据后才可进入发布 preflight**；这不是发布完成。Elicit 的专用综述筛选/提取/导出链与 Consensus 有候选差异，但定价页多组金额、月度用量与独立采用未核清；Avoma 的录制/协作席位、CRM 配置与附加洞察有候选差异，但 Organization 金额、CRM 套餐资格、隐私功能分层及独立采用未核清。
+- 生产 `tools` 的只读姓名/URL/标题查重两项均为 0；两项英中预留 URL 均是 `200 + self-canonical + noindex` 的不可用壳，sitemap 匹配 0。下次发布前须重查别名/实体并复用唯一 canonical。
+- [N1 官方证据审计与候选包](./ELICIT_AVOMA_N1_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)记录官方来源、真实限制、`unknown`、Capability/Constraint/Evidence 建议及后续门禁；[14 项候选台账](./MATURE_CANDIDATE_BUFFER_2026-09-20_CN.md)已更新 readiness。没有生产实体、Decision Graph 关系、页面、sitemap、index、数据库或自动化写入。
 
 ## 2026-09-30 Avoma 剩余发布门禁
 
-- 唯一对象 Avoma 仍为 **`HOLD_EVIDENCE`，6 PASS / 2
-  HOLD**；[证据包与机器清单](./AVOMA_RELEASE_GATE_RECHECK_2026-09-30_CN.md)按 8 个核心页面复核。G2 的 Avoma 产品当前用户
-  评论为强采用，Chrome 商店扩展计数为独立辅助，市场门槛已通过。Organization 定价比较表 `$29/$39` 与帮助页 `$39/$49` 冲
-  突；Enterprise 页内旧/新报价并存，CRM 套餐资格、严格同意与留存细节仍影响购买判断。无金额文案不能解除这些权益阻塞；官方
-  证据门槛 HOLD。仓库无可核验授权的 Avoma 真实媒体和三语言完成稿，内容门槛 HOLD。
-- 生产只读 `tools` 共 68 条、Avoma name/title/domain/tags/features 命中 0；英中 `/ai/avoma` 均为
-  `200 + self-canonical + noindex` 的不可用壳；`robots.txt` 200，sitemap 126 URL、Avoma 0。`meeting-notes`
-  Guide/Comparison 意图与候选产品详情分离。仅更新本地证据、候选台账与主追踪；未创建实体、关系、页面、SEO/sitemap/index
-  变更或生产写入。公开/索引批准均 false，未进入发布 preflight。
+- 唯一对象 Avoma 仍为 **`HOLD_EVIDENCE`，6 PASS / 2 HOLD**；[证据包与机器清单](./AVOMA_RELEASE_GATE_RECHECK_2026-09-30_CN.md)按 8 个核心页面复核。G2 的 Avoma 产品当前用户评论为强采用，Chrome 商店扩展计数为独立辅助，市场门槛已通过。Organization 定价比较表 `$29/$39` 与帮助页 `$39/$49` 冲突；Enterprise 页内旧/新报价并存，CRM 套餐资格、严格同意与留存细节仍影响购买判断。无金额文案不能解除这些权益阻塞；官方证据门槛 HOLD。仓库无可核验授权的 Avoma 真实媒体和三语言完成稿，内容门槛 HOLD。
+- 生产只读 `tools` 共 68 条、Avoma name/title/domain/tags/features 命中 0；英中 `/ai/avoma` 均为 `200 + self-canonical + noindex` 的不可用壳；`robots.txt` 200，sitemap 126 URL、Avoma 0。`meeting-notes` Guide/Comparison 意图与候选产品详情分离。仅更新本地证据、候选台账与主追踪；未创建实体、关系、页面、SEO/sitemap/index 变更或生产写入。公开/索引批准均 false，未进入发布 preflight。
 
 ## 2026-09-28 N2 候选官方深审
 
-- Zapier Agents 与 Ideogram 官方证据深审完成，结论均为 `HOLD_EVIDENCE`，没有进入发布 preflight。Zapier 官方 09-07 迁移指
-  南将独立 Agents 导向 AI by Zapier，旧 activity 定价/Enterprise FAQ 与新 task 计费和人审控制同时存在，独立产品的长期
-  canonical 与账户实际权益待消歧；不能借 Zapier 母品牌、Zaps、Chatbots 或 AI Actions 的能力和采用信号。Ideogram 已可界定
-  图像生成、文字版面、编辑/Canvas、批量及独立 API 的边界与商用输出条款，但免费周额度资格、编辑 credit 路径、导出/水印和
-  实际文字质量仍需核实；不能把官方示例当成功率证明。
-- 生产 `tools` 共 67 条，`BEGIN READ ONLY` 对两项 `name/title/url` 查重均为 0，随后 `ROLLBACK`；仓库工具 alias 无对应
-  项。Zapier 宽泛路径与两项候选的英中线上 URL 均是 `200 + self-canonical + noindex` 的不可用壳，sitemap 匹配 0；已有宽泛
-  `/ai/zapier` 内链和 Zapier alternatives Guide 意图须在发布前复核。此只读检查不是完整发布 preflight。独立市场验证均未完
-  成；[N2 官方证据审计与候选包](./ZAPIER_AGENTS_IDEOGRAM_N2_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)记录 Best for、Not
-  ideal、真实限制、`unknown`、Capability/Constraint/Evidence 建议及来源。候选台账现为
-  `READY_FOR_DEEP_REVIEW=3`、`HOLD_EVIDENCE=7`、`HOLD_DUPLICATE_INTENT=4`、`REJECT=0`。本轮只改候选文档；没有生产工具、
-  关系、页面、sitemap、index、数据库、自动化、push 或 deploy。
+- Zapier Agents 与 Ideogram 官方证据深审完成，结论均为 `HOLD_EVIDENCE`，没有进入发布 preflight。Zapier 官方 09-07 迁移指南将独立 Agents 导向 AI by Zapier，旧 activity 定价/Enterprise FAQ 与新 task 计费和人审控制同时存在，独立产品的长期 canonical 与账户实际权益待消歧；不能借 Zapier 母品牌、Zaps、Chatbots 或 AI Actions 的能力和采用信号。Ideogram 已可界定图像生成、文字版面、编辑/Canvas、批量及独立 API 的边界与商用输出条款，但免费周额度资格、编辑 credit 路径、导出/水印和实际文字质量仍需核实；不能把官方示例当成功率证明。
+- 生产 `tools` 共 67 条，`BEGIN READ ONLY` 对两项 `name/title/url` 查重均为 0，随后 `ROLLBACK`；仓库工具 alias 无对应项。Zapier 宽泛路径与两项候选的英中线上 URL 均是 `200 + self-canonical + noindex` 的不可用壳，sitemap 匹配 0；已有宽泛 `/ai/zapier` 内链和 Zapier alternatives Guide 意图须在发布前复核。此只读检查不是完整发布 preflight。独立市场验证均未完成；[N2 官方证据审计与候选包](./ZAPIER_AGENTS_IDEOGRAM_N2_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)记录 Best for、Not ideal、真实限制、`unknown`、Capability/Constraint/Evidence 建议及来源。候选台账现为 `READY_FOR_DEEP_REVIEW=3`、`HOLD_EVIDENCE=7`、`HOLD_DUPLICATE_INTENT=4`、`REJECT=0`。本轮只改候选文档；没有生产工具、关系、页面、sitemap、index、数据库、自动化、push 或 deploy。
 
 ## 2026-09-28 N3 候选官方深审
 
-- Microsoft Copilot Studio 与 Read AI 官方证据深审完成，结论均为 `HOLD_EVIDENCE`，没有进入发布 preflight。Studio 已按独
-  立产品核清构建/渠道、Power Platform 环境、tenant/maker 授权及 Copilot Credits 包/预购/按量路径，并与 Microsoft 365
-  Copilot 内含权益、Azure 模型和 Bing 数据边界分开；实际租户成本/权益、数据合同与独立产品级采用仍待核。Read AI 已核 Free
-  5 次会议/月、跨已授权会议/邮件/消息的 Ask Read、付费 CRM 连接、回放与 Workspace 层级，以及开放 beta API、录制同意和保
-  留差异；实际账户权限/导出、商用传播与独立产品级采用仍待核。两项厂商效率/质量宣传均未作为结果事实。
-- 生产 `tools` 共 67 条，`BEGIN READ ONLY` 查 Microsoft Copilot Studio/Read AI 姓名、标题、URL 为 0，广义比较对象仅为
-  GitHub Copilot 与现有三项会议工具，随后 `ROLLBACK`。仓库无候选 alias；两项英中 slug 和宽泛 Copilot 路径是
-  `200 + self-canonical + noindex` 的不可用壳，sitemap 对两项为 0。下次必须重查 canonical/意图，已有实体则事实更新/合
-  并。[N3 官方证据审计与候选包](./COPILOT_STUDIO_READ_AI_N3_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)记载来
-  源、`unknown`、Best for/Not ideal、真实限制及 Capability/Constraint/Evidence 建
-  议；[14 项候选台账](./MATURE_CANDIDATE_BUFFER_2026-09-20_CN.md)在 N3 后为
-  `READY_FOR_DEEP_REVIEW=1`、`HOLD_EVIDENCE=9`、`HOLD_DUPLICATE_INTENT=4`、`REJECT=0`。本轮仅候选文档，无生产实体、关
-  系、页面、sitemap、index、数据库、自动化、push 或 deploy 写入。
+- Microsoft Copilot Studio 与 Read AI 官方证据深审完成，结论均为 `HOLD_EVIDENCE`，没有进入发布 preflight。Studio 已按独立产品核清构建/渠道、Power Platform 环境、tenant/maker 授权及 Copilot Credits 包/预购/按量路径，并与 Microsoft 365 Copilot 内含权益、Azure 模型和 Bing 数据边界分开；实际租户成本/权益、数据合同与独立产品级采用仍待核。Read AI 已核 Free 5 次会议/月、跨已授权会议/邮件/消息的 Ask Read、付费 CRM 连接、回放与 Workspace 层级，以及开放 beta API、录制同意和保留差异；实际账户权限/导出、商用传播与独立产品级采用仍待核。两项厂商效率/质量宣传均未作为结果事实。
+- 生产 `tools` 共 67 条，`BEGIN READ ONLY` 查 Microsoft Copilot Studio/Read AI 姓名、标题、URL 为 0，广义比较对象仅为 GitHub Copilot 与现有三项会议工具，随后 `ROLLBACK`。仓库无候选 alias；两项英中 slug 和宽泛 Copilot 路径是 `200 + self-canonical + noindex` 的不可用壳，sitemap 对两项为 0。下次必须重查 canonical/意图，已有实体则事实更新/合并。[N3 官方证据审计与候选包](./COPILOT_STUDIO_READ_AI_N3_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)记载来源、`unknown`、Best for/Not ideal、真实限制及 Capability/Constraint/Evidence 建议；[14 项候选台账](./MATURE_CANDIDATE_BUFFER_2026-09-20_CN.md)在 N3 后为 `READY_FOR_DEEP_REVIEW=1`、`HOLD_EVIDENCE=9`、`HOLD_DUPLICATE_INTENT=4`、`REJECT=0`。本轮仅候选文档，无生产实体、关系、页面、sitemap、index、数据库、自动化、push 或 deploy 写入。
 
 ## 2026-09-28 N4 候选官方深审
 
-- Granola 与 Tabnine 官方证据深审完成，结论均为 `HOLD_EVIDENCE`，未进入发布 preflight。Granola 已确认主动无 bot 设备采
-  集、用户笔记引导、权限内跨会议/团队文件夹 Chat、Basic 30 天可见历史、Business API 及音频不保留但转录/笔记另有留存；实
-  际会议告知/同意、服务商/合同数据路径、账户导出和独立采用待核。Tabnine 官方文档可证 Agent/CLI/Review、主要 IDE 矩
-  阵、SaaS/VPC/on-prem 选择，以及收购后 09-28 仍发布更新；旧定价页实时跳转 Tricentis 联系页，搜索缓存金额不能视为现行报
-  价。当前 SKU/试用和采购、模型与 CI 成本、私有代码路径、收购后长期产品线及完整应用 Task 适配待核，旧版 Basic/Pro 价格和
-  厂商采用宣传不能沿用。
-- 生产 `tools` 共 67 条，`BEGIN READ ONLY` 查 Granola/Tabnine/Codota 的姓名、标题、URL 为 0，对照命中 Cursor 与既有三项
-  会议工具，随后 `ROLLBACK`。仓库无对应 alias；两项候选英中 slug、Granola AI 与 Codota 宽泛路径均为
-  `200 + self-canonical + noindex` 的不可用壳，sitemap 匹配 0。正式 preflight 必须重查身份、Guide/Comparison 意图与唯一
-  canonical，已有实体只更新/合
-  并。[N4 官方证据审计与候选包](./GRANOLA_TABNINE_N4_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)记录官方链接、来源边
-  界、`unknown`、Best for/Not ideal、限制与 Capability/Constraint/Evidence 建
-  议；[14 项候选台账](./MATURE_CANDIDATE_BUFFER_2026-09-20_CN.md)现为
-  `READY_FOR_DEEP_REVIEW=0`、`HOLD_EVIDENCE=10`、`HOLD_DUPLICATE_INTENT=4`、`REJECT=0`。两项独立产品级市场验证均未完成；
-  本轮仅候选文档，无生产实体、关系、页面、sitemap、index、数据库、自动化、push 或 deploy 写入。
+- Granola 与 Tabnine 官方证据深审完成，结论均为 `HOLD_EVIDENCE`，未进入发布 preflight。Granola 已确认主动无 bot 设备采集、用户笔记引导、权限内跨会议/团队文件夹 Chat、Basic 30 天可见历史、Business API 及音频不保留但转录/笔记另有留存；实际会议告知/同意、服务商/合同数据路径、账户导出和独立采用待核。Tabnine 官方文档可证 Agent/CLI/Review、主要 IDE 矩阵、SaaS/VPC/on-prem 选择，以及收购后 09-28 仍发布更新；旧定价页实时跳转 Tricentis 联系页，搜索缓存金额不能视为现行报价。当前 SKU/试用和采购、模型与 CI 成本、私有代码路径、收购后长期产品线及完整应用 Task 适配待核，旧版 Basic/Pro 价格和厂商采用宣传不能沿用。
+- 生产 `tools` 共 67 条，`BEGIN READ ONLY` 查 Granola/Tabnine/Codota 的姓名、标题、URL 为 0，对照命中 Cursor 与既有三项会议工具，随后 `ROLLBACK`。仓库无对应 alias；两项候选英中 slug、Granola AI 与 Codota 宽泛路径均为 `200 + self-canonical + noindex` 的不可用壳，sitemap 匹配 0。正式 preflight 必须重查身份、Guide/Comparison 意图与唯一 canonical，已有实体只更新/合并。[N4 官方证据审计与候选包](./GRANOLA_TABNINE_N4_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)记录官方链接、来源边界、`unknown`、Best for/Not ideal、限制与 Capability/Constraint/Evidence 建议；[14 项候选台账](./MATURE_CANDIDATE_BUFFER_2026-09-20_CN.md)现为 `READY_FOR_DEEP_REVIEW=0`、`HOLD_EVIDENCE=10`、`HOLD_DUPLICATE_INTENT=4`、`REJECT=0`。两项独立产品级市场验证均未完成；本轮仅候选文档，无生产实体、关系、页面、sitemap、index、数据库、自动化、push 或 deploy 写入。
 
 ## 2026-09-28 N5 候选官方深审
 
-- Scite 与 Copy.ai 的 09-28 官方证据审计当时均为 `HOLD_EVIDENCE`。10-07 Scite 完成独立 prerelease 深审：八门禁 6 PASS /
-  2 HOLD（official、content），两项大学图书馆机构采用信号、范围受限的 2023 独立分类评估、当前套餐页、训练/数据处理、导出
-  /API/版权限制和三语 Decision Card 已整理；生产只读查重为零。分类不判断真伪，计数不代表覆盖完整；目标账号账单/API/导出
-  及当前目标学科分类表现、媒体授权、独立内容 QA 与本站纠错入口仍 HOLD。详见
-  [SCITE-PRERELEASE-01](./SCITE_PRERELEASE_2026-10-07_CN.md)。Copy.ai 按现行 GTM AI Platform 的 Chat、Content
-  Agents、Workflows/Tables 审核；实时价格页与官网旧 Free/Starter/Advanced 博客/自评冲突，不能沿用旧 Copywriter 定价或评
-  价。实际 workflow credit 成本、Agents/API 权益、企业数据合同及当前 GTM 平台独立采用待核。
-- 09-28 历史只读审计共 67 条；10-07 Scite 专项只读复核共 69 条，Scite 产品/上下文及 profile 匹配 0。九个
-  `/ai/scite`、`scite-ai`、`sciteai` 三语路由均为 `200 + self-canonical + noindex` 壳，sitemap 126 条、Scite 匹配
-  0；Guide 的 Scite 提及是上下文，不是产品实体。发布日仍需重查 alias、Guide/Comparison 意图与 canonical。Copy.ai
-  alternatives Guide 与写作页内链保持旧审计范
-  围。[N5 历史官方审计](./SCITE_COPY_AI_N5_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)保留 09-28 日期与事实，不被新 Scite
-  包覆盖；本单元未写生产实体、关系、页面、sitemap、index、数据库或自动化，也未 push/deploy。
+- Scite 与 Copy.ai 的 09-28 官方证据审计当时均为 `HOLD_EVIDENCE`。10-07 Scite 完成独立 prerelease 深审：八门禁 6 PASS / 2 HOLD（official、content），两项大学图书馆机构采用信号、范围受限的 2023 独立分类评估、当前套餐页、训练/数据处理、导出/API/版权限制和三语 Decision Card 已整理；生产只读查重为零。分类不判断真伪，计数不代表覆盖完整；目标账号账单/API/导出及当前目标学科分类表现、媒体授权、独立内容 QA 与本站纠错入口仍 HOLD。详见 [SCITE-PRERELEASE-01](./SCITE_PRERELEASE_2026-10-07_CN.md)。Copy.ai 按现行 GTM AI Platform 的 Chat、Content Agents、Workflows/Tables 审核；实时价格页与官网旧 Free/Starter/Advanced 博客/自评冲突，不能沿用旧 Copywriter 定价或评价。实际 workflow credit 成本、Agents/API 权益、企业数据合同及当前 GTM 平台独立采用待核。
+- 09-28 历史只读审计共 67 条；10-07 Scite 专项只读复核共 69 条，Scite 产品/上下文及 profile 匹配 0。九个 `/ai/scite`、`scite-ai`、`sciteai` 三语路由均为 `200 + self-canonical + noindex` 壳，sitemap 126 条、Scite 匹配 0；Guide 的 Scite 提及是上下文，不是产品实体。发布日仍需重查 alias、Guide/Comparison 意图与 canonical。Copy.ai alternatives Guide 与写作页内链保持旧审计范围。[N5 历史官方审计](./SCITE_COPY_AI_N5_OFFICIAL_EVIDENCE_AUDIT_2026-09-28_CN.md)保留 09-28 日期与事实，不被新 Scite 包覆盖；本单元未写生产实体、关系、页面、sitemap、index、数据库或自动化，也未 push/deploy。
 
 ## 2026-09-28 N6 既有事实复核候选
 
-- [Canva/Grammarly 官方事实审计](./CANVA_GRAMMARLY_N6_EXISTING_FACTS_AUDIT_2026-09-28_CN.md)及[字段级候选 patch](./CANVA_GRAMMARLY_N6_CANDIDATE_PATCH_2026-09-28_CN.json)完
-  成。两者继续列在 14 项台账的 `HOLD_DUPLICATE_INTENT` 研究轨道，不占新工具发布槽；该审计未批准新的 Tool
-  Intelligence/Evidence Ledger claim、Task Fit，也未扩大已审计 SAFE patch 范围。
-- 生产 `tools` 共 67 条，`BEGIN READ ONLY → SELECT → ROLLBACK` 仅有唯一 Grammarly 实体，状态
-  `published + continue_index`；其双语真实页和两条 sitemap URL 保持。**Canva 实体为 0**，双语 `/ai/canva` 是不可用
-  `noindex` 壳且 sitemap 为 0；此前“只增强既有 Canva canonical”的表述只是旧研究假设，现由 `HOLD-CONFLICT` 覆盖。Canva
-  Magic Studio 仍不能另建页面；本任务不以缺失实体为由创建工具。
-- Grammarly 现有价格、prompt、训练和隐私字段标 `NO_CHANGE`；组织品牌语调/风格规则对**已有草稿的建议式审阅**可作安全事实
-  增量，旧 Business/Plus 权益待账户核验，AI 初稿自动继承组织规则仍 `unknown/HOLD`。Canva 的 AI 功能、权限、商用与数据处
-  理已分层记入证据候选，但 Free Premium 资格存在官方同页冲突，实际套餐/地区额度、输出素材许可及预览功能可用性待核。下次
-  事实复核 2026-10-05。N6/N7 候选已于 2026-09-29 提交生产；运行时页面已核到增量事实，双语页面与 sitemap 状态符合既有索引
-  判定，未改变索引、canonical、robots、关系或自动化，也未 push/deploy。
+- [Canva/Grammarly 官方事实审计](./CANVA_GRAMMARLY_N6_EXISTING_FACTS_AUDIT_2026-09-28_CN.md)及[字段级候选 patch](./CANVA_GRAMMARLY_N6_CANDIDATE_PATCH_2026-09-28_CN.json)完成。两者继续列在 14 项台账的 `HOLD_DUPLICATE_INTENT` 研究轨道，不占新工具发布槽；该审计未批准新的 Tool Intelligence/Evidence Ledger claim、Task Fit，也未扩大已审计 SAFE patch 范围。
+- 生产 `tools` 共 67 条，`BEGIN READ ONLY → SELECT → ROLLBACK` 仅有唯一 Grammarly 实体，状态 `published + continue_index`；其双语真实页和两条 sitemap URL 保持。**Canva 实体为 0**，双语 `/ai/canva` 是不可用 `noindex` 壳且 sitemap 为 0；此前“只增强既有 Canva canonical”的表述只是旧研究假设，现由 `HOLD-CONFLICT` 覆盖。Canva Magic Studio 仍不能另建页面；本任务不以缺失实体为由创建工具。
+- Grammarly 现有价格、prompt、训练和隐私字段标 `NO_CHANGE`；组织品牌语调/风格规则对**已有草稿的建议式审阅**可作安全事实增量，旧 Business/Plus 权益待账户核验，AI 初稿自动继承组织规则仍 `unknown/HOLD`。Canva 的 AI 功能、权限、商用与数据处理已分层记入证据候选，但 Free Premium 资格存在官方同页冲突，实际套餐/地区额度、输出素材许可及预览功能可用性待核。下次事实复核 2026-10-05。N6/N7 候选已于 2026-09-29 提交生产；运行时页面已核到增量事实，双语页面与 sitemap 状态符合既有索引判定，未改变索引、canonical、robots、关系或自动化，也未 push/deploy。
 
 ## 2026-09-28 N7 既有事实复核候选
 
-- [Jasper/Descript 官方事实审计](./JASPER_DESCRIPT_N7_EXISTING_FACTS_AUDIT_2026-09-28_CN.md)和[字段级候选 manifest](./JASPER_DESCRIPT_N7_CANDIDATE_PATCH_2026-09-28_CN.json)完
-  成。生产只读事务核对两项唯一实体：Jasper 为 `published + continue_index`、双语页面可索引且 sitemap 两条；Descript 为
-  `published + monitor/noindex`、双语页面 noindex 且 sitemap 0 条。`features.release.indexState=monitor` 仅为 Jasper 受
-  控发布历史，不覆盖当前资格。
-- 既有正确的身份、价格/额度、隐私/训练、同意、商用及人审叙述均 `NO_CHANGE`。安全候选只补 Jasper Business Style Guide 的
-  生成作用、单 guide 与 beta 人工复核，以及 Descript AI credits 不结转、Free 水印、本地导出与 API 发布路径；Jasper IQ 的
-  Pro/Business 表述冲突、实际工作区权限和 Descript 付费 Drive/Enterprise 权益保持 `unknown/HOLD`。N7 属既有工具事实维
-  护，不占新工具发布槽；CL-05/06 关系继续未发布。下次候选事实复核 2026-10-05。以上 2026-09-28 N7 候选审计本身没有写入生
-  产；其后 SAFE 事实更新的生产执行状态见本页主状态与运行回读。
+- [Jasper/Descript 官方事实审计](./JASPER_DESCRIPT_N7_EXISTING_FACTS_AUDIT_2026-09-28_CN.md)和[字段级候选 manifest](./JASPER_DESCRIPT_N7_CANDIDATE_PATCH_2026-09-28_CN.json)完成。生产只读事务核对两项唯一实体：Jasper 为 `published + continue_index`、双语页面可索引且 sitemap 两条；Descript 为 `published + monitor/noindex`、双语页面 noindex 且 sitemap 0 条。`features.release.indexState=monitor` 仅为 Jasper 受控发布历史，不覆盖当前资格。
+- 既有正确的身份、价格/额度、隐私/训练、同意、商用及人审叙述均 `NO_CHANGE`。安全候选只补 Jasper Business Style Guide 的生成作用、单 guide 与 beta 人工复核，以及 Descript AI credits 不结转、Free 水印、本地导出与 API 发布路径；Jasper IQ 的 Pro/Business 表述冲突、实际工作区权限和 Descript 付费 Drive/Enterprise 权益保持 `unknown/HOLD`。N7 属既有工具事实维护，不占新工具发布槽；CL-05/06 关系继续未发布。下次候选事实复核 2026-10-05。以上 2026-09-28 N7 候选审计本身没有写入生产；其后 SAFE 事实更新的生产执行状态见本页主状态与运行回读。
